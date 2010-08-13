@@ -2,7 +2,7 @@
 # Copyright (c) 2007-2008 Warzone 2100 Resurrection Project
 # Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
 # This file is distributed under the same license as the warzone2100 package.
-#
+# 
 # Dennis Schridde <devurandom@gna.org>, 2007.
 # Martin Koller <koller@etm.at>, 2007.
 # Martin Koller <m.koller@surfeu.at>, 2007.
@@ -11,20 +11,20 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-08-08 20:42+0200\n"
+"POT-Creation-Date: 2010-08-10 22:06+0200\n"
 "PO-Revision-Date: 2010-08-12 19:53+0200\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
-"X-Poedit-Language: German\n"
+"Language: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Basepath: ..\n"
+"X-Poedit-Language: German\n"
+"X-Generator: Launchpad (build Unknown)\n"
 
 #: data/base/messages/messages.rmsg:4
 msgid "Structure Research Completed"
@@ -140,8 +140,7 @@ msgstr "Waffenforschung abgeschlossen"
 #: data/mp/messages/resmessages1.rmsg:212
 #: data/mp/messages/resmessages1.rmsg:225
 #: data/mp/messages/resmessages23.rmsg:17
-#: data/mp/messages/resmessages2.rmsg:69
-#: data/mp/messages/resmessages2.rmsg:82
+#: data/mp/messages/resmessages2.rmsg:69 data/mp/messages/resmessages2.rmsg:82
 #: data/mp/messages/resmessages2.rmsg:95
 #: data/mp/messages/resmessages2.rmsg:108
 #: data/mp/messages/resmessages2.rmsg:121
@@ -308,8 +307,7 @@ msgstr "Wird automatisch dem nächsten Sensor- oder CB-Turm zugewiesen"
 #: data/mp/messages/resmessages1.rmsg:124
 #: data/mp/messages/resmessages1.rmsg:150
 #: data/mp/messages/resmessages1.rmsg:228
-#: data/mp/messages/resmessages2.rmsg:72
-#: data/mp/messages/resmessages2.rmsg:85
+#: data/mp/messages/resmessages2.rmsg:72 data/mp/messages/resmessages2.rmsg:85
 #: data/mp/messages/resmessages2.rmsg:98
 #: data/mp/messages/resmessages2.rmsg:111
 #: data/mp/messages/resmessages2.rmsg:124
@@ -542,8 +540,7 @@ msgstr "Alle LKW wurden automatisch aufgerüstet"
 
 #: data/base/messages/resmessages12.rmsg:69
 #: data/base/messages/resmessages1.rmsg:4
-#: data/mp/messages/resmessages12.rmsg:69
-#: data/mp/messages/resmessages1.rmsg:4
+#: data/mp/messages/resmessages12.rmsg:69 data/mp/messages/resmessages1.rmsg:4
 msgid "New Systems Turret Available for Design"
 msgstr "Neuer Systemturm verfügbar"
 
@@ -779,15 +776,12 @@ msgstr "Beste Ziele: Infanterie, Basisgebäude, Radfahrzeuge"
 #: data/base/messages/strings/resstrings.txt:688
 #: data/base/messages/strings/resstrings.txt:694
 #: data/mp/messages/resmessages12.rmsg:124
-#: data/mp/messages/resmessages1.rmsg:45
-#: data/mp/messages/resmessages1.rmsg:58
-#: data/mp/messages/resmessages1.rmsg:71
-#: data/mp/messages/resmessages1.rmsg:84
+#: data/mp/messages/resmessages1.rmsg:45 data/mp/messages/resmessages1.rmsg:58
+#: data/mp/messages/resmessages1.rmsg:71 data/mp/messages/resmessages1.rmsg:84
 #: data/mp/messages/resmessages1.rmsg:489
 #: data/mp/messages/resmessages1.rmsg:541
 #: data/mp/messages/resmessages1.rmsg:554
-#: data/mp/messages/resmessages2.rmsg:32
-#: data/mp/messages/resmessages2.rmsg:45
+#: data/mp/messages/resmessages2.rmsg:32 data/mp/messages/resmessages2.rmsg:45
 #: data/mp/messages/resmessages2.rmsg:592
 #: data/mp/messages/resmessages2.rmsg:605
 #: data/mp/messages/resmessages2.rmsg:618
@@ -1180,13 +1174,11 @@ msgstr "Verschießt Salven von Miniraketen"
 msgid "Best Targets: Base structures"
 msgstr "Beste Ziele: Basisgebäude"
 
-#: data/base/messages/resmessages1.rmsg:5
-#: data/mp/messages/resmessages1.rmsg:5
+#: data/base/messages/resmessages1.rmsg:5 data/mp/messages/resmessages1.rmsg:5
 msgid "New battlefield computer system"
 msgstr "Neues Schlachtfeldcomputersystem"
 
-#: data/base/messages/resmessages1.rmsg:6
-#: data/mp/messages/resmessages1.rmsg:6
+#: data/base/messages/resmessages1.rmsg:6 data/mp/messages/resmessages1.rmsg:6
 #: data/mp/messages/resmessagesall.rmsg:929
 #: data/mp/messages/resmessagesall.rmsg:942
 #: data/mp/messages/resmessagesall.rmsg:955
@@ -1199,8 +1191,7 @@ msgstr "Commander führen Gruppen und dienen als Fabrikauslieferungspunkt"
 #: data/base/messages/resmessages2.rmsg:761
 #: data/base/messages/resmessages3.rmsg:1229
 #: data/base/messages/strings/resstrings.txt:738
-#: data/mp/messages/resmessages1.rmsg:7
-#: data/mp/messages/resmessages1.rmsg:515
+#: data/mp/messages/resmessages1.rmsg:7 data/mp/messages/resmessages1.rmsg:515
 #: data/mp/messages/resmessages1.rmsg:567
 #: data/mp/messages/resmessages2.rmsg:761
 #: data/mp/messages/resmessages3.rmsg:1229
@@ -1215,8 +1206,7 @@ msgstr "Rumpfpunkte: hoch"
 #: data/base/messages/resmessages1.rmsg:17
 #: data/base/messages/resmessages3.rmsg:17
 #: data/base/messages/resmessages3.rmsg:30
-#: data/mp/messages/resmessages1.rmsg:17
-#: data/mp/messages/resmessages3.rmsg:17
+#: data/mp/messages/resmessages1.rmsg:17 data/mp/messages/resmessages3.rmsg:17
 #: data/mp/messages/resmessages3.rmsg:30
 msgid "Computer Technology Breakthrough"
 msgstr "Durchbruch in der Computertechnologie"
@@ -1241,10 +1231,8 @@ msgstr "Neue Forschung verfügbar"
 #: data/base/messages/resmessages3.rmsg:69
 #: data/base/messages/resmessages3.rmsg:82
 #: data/base/messages/strings/resstrings.txt:31
-#: data/mp/messages/resmessages1.rmsg:30
-#: data/mp/messages/resmessages2.rmsg:17
-#: data/mp/messages/resmessages3.rmsg:69
-#: data/mp/messages/resmessages3.rmsg:82
+#: data/mp/messages/resmessages1.rmsg:30 data/mp/messages/resmessages2.rmsg:17
+#: data/mp/messages/resmessages3.rmsg:69 data/mp/messages/resmessages3.rmsg:82
 #: data/mp/messages/strings/resstrings.txt:33
 msgid "Cyborg Materials Improved"
 msgstr "Cyborgmaterial verbessert"
@@ -1275,14 +1263,10 @@ msgstr "Erhöht kinetische Panzerung und Rumpfpunkte"
 #: data/base/messages/resmessages3.rmsg:85
 #: data/base/messages/strings/resstrings.txt:34
 #: data/base/messages/strings/resstrings.txt:44
-#: data/mp/messages/resmessages1.rmsg:33
-#: data/mp/messages/resmessages23.rmsg:7
-#: data/mp/messages/resmessages2.rmsg:7
-#: data/mp/messages/resmessages2.rmsg:20
-#: data/mp/messages/resmessages3.rmsg:7
-#: data/mp/messages/resmessages3.rmsg:59
-#: data/mp/messages/resmessages3.rmsg:72
-#: data/mp/messages/resmessages3.rmsg:85
+#: data/mp/messages/resmessages1.rmsg:33 data/mp/messages/resmessages23.rmsg:7
+#: data/mp/messages/resmessages2.rmsg:7 data/mp/messages/resmessages2.rmsg:20
+#: data/mp/messages/resmessages3.rmsg:7 data/mp/messages/resmessages3.rmsg:59
+#: data/mp/messages/resmessages3.rmsg:72 data/mp/messages/resmessages3.rmsg:85
 #: data/mp/messages/strings/resstrings.txt:36
 #: data/mp/messages/strings/resstrings.txt:46
 msgid "All Cyborgs upgraded automatically"
@@ -1300,12 +1284,9 @@ msgstr "Alle Cyborgs wurden automatisch aufgerüstet"
 #: data/base/messages/resmessages3.rmsg:134
 #: data/base/messages/strings/resstrings.txt:49
 #: data/base/messages/strings/resstrings.txt:65
-#: data/mp/messages/resmessages1.rmsg:43
-#: data/mp/messages/resmessages1.rmsg:56
-#: data/mp/messages/resmessages1.rmsg:69
-#: data/mp/messages/resmessages1.rmsg:82
-#: data/mp/messages/resmessages2.rmsg:30
-#: data/mp/messages/resmessages2.rmsg:43
+#: data/mp/messages/resmessages1.rmsg:43 data/mp/messages/resmessages1.rmsg:56
+#: data/mp/messages/resmessages1.rmsg:69 data/mp/messages/resmessages1.rmsg:82
+#: data/mp/messages/resmessages2.rmsg:30 data/mp/messages/resmessages2.rmsg:43
 #: data/mp/messages/resmessages3.rmsg:95
 #: data/mp/messages/resmessages3.rmsg:108
 #: data/mp/messages/resmessages3.rmsg:121
@@ -1349,12 +1330,9 @@ msgstr "Bewaffnet mit Cyborg-Maschinengewehr"
 #: data/base/messages/strings/resstrings.txt:68
 #: data/base/messages/strings/resstrings.txt:80
 #: data/base/messages/strings/resstrings.txt:86
-#: data/mp/messages/resmessages1.rmsg:46
-#: data/mp/messages/resmessages1.rmsg:59
-#: data/mp/messages/resmessages1.rmsg:72
-#: data/mp/messages/resmessages1.rmsg:85
-#: data/mp/messages/resmessages2.rmsg:33
-#: data/mp/messages/resmessages2.rmsg:46
+#: data/mp/messages/resmessages1.rmsg:46 data/mp/messages/resmessages1.rmsg:59
+#: data/mp/messages/resmessages1.rmsg:72 data/mp/messages/resmessages1.rmsg:85
+#: data/mp/messages/resmessages2.rmsg:33 data/mp/messages/resmessages2.rmsg:46
 #: data/mp/messages/resmessages3.rmsg:98
 #: data/mp/messages/resmessages3.rmsg:111
 #: data/mp/messages/resmessages3.rmsg:124
@@ -1401,8 +1379,7 @@ msgstr "Bewaffnet mit Lancer-Antipanzerrakete"
 #: data/base/messages/resmessages3.rmsg:212
 #: data/base/messages/resmessages3.rmsg:225
 #: data/base/messages/strings/resstrings.txt:103
-#: data/mp/messages/resmessages1.rmsg:95
-#: data/mp/messages/resmessages2.rmsg:56
+#: data/mp/messages/resmessages1.rmsg:95 data/mp/messages/resmessages2.rmsg:56
 #: data/mp/messages/resmessages3.rmsg:212
 #: data/mp/messages/resmessages3.rmsg:225
 #: data/mp/messages/strings/resstrings.txt:121
@@ -1423,8 +1400,7 @@ msgstr "Erhöht Panzerung und Rumpfpunkte"
 #: data/base/messages/resmessages3.rmsg:215
 #: data/base/messages/resmessages3.rmsg:228
 #: data/base/messages/strings/resstrings.txt:106
-#: data/mp/messages/resmessages1.rmsg:98
-#: data/mp/messages/resmessages2.rmsg:59
+#: data/mp/messages/resmessages1.rmsg:98 data/mp/messages/resmessages2.rmsg:59
 #: data/mp/messages/resmessages3.rmsg:215
 #: data/mp/messages/resmessages3.rmsg:228
 #: data/mp/messages/strings/resstrings.txt:124
@@ -2305,8 +2281,7 @@ msgstr "Erhöht Schaden von Raketen"
 
 #: data/base/messages/resmessages23.rmsg:4
 #: data/base/messages/resmessages3.rmsg:56
-#: data/mp/messages/resmessages23.rmsg:4
-#: data/mp/messages/resmessages3.rmsg:56
+#: data/mp/messages/resmessages23.rmsg:4 data/mp/messages/resmessages3.rmsg:56
 msgid "Cyborg Propulsion Improved"
 msgstr "Cyborgantrieb verbessert"
 
@@ -2709,8 +2684,7 @@ msgstr "Ersetzt alle Maschinengewehre"
 #: data/base/messages/resmessages2.rmsg:4
 #: data/base/messages/resmessages3.rmsg:4
 #: data/base/messages/strings/resstrings.txt:41
-#: data/mp/messages/resmessages2.rmsg:4
-#: data/mp/messages/resmessages3.rmsg:4
+#: data/mp/messages/resmessages2.rmsg:4 data/mp/messages/resmessages3.rmsg:4
 #: data/mp/messages/strings/resstrings.txt:43
 msgid "Cyborg Thermal Armor Improved"
 msgstr "Thermalpanzerung für Cyborgs verbessert"
@@ -2718,8 +2692,7 @@ msgstr "Thermalpanzerung für Cyborgs verbessert"
 #: data/base/messages/resmessages2.rmsg:5
 #: data/base/messages/resmessages3.rmsg:5
 #: data/base/messages/strings/resstrings.txt:42
-#: data/mp/messages/resmessages2.rmsg:5
-#: data/mp/messages/resmessages3.rmsg:5
+#: data/mp/messages/resmessages2.rmsg:5 data/mp/messages/resmessages3.rmsg:5
 #: data/mp/messages/strings/resstrings.txt:44
 msgid "Heat resistant armored layers"
 msgstr "Hitzebeständige, gepanzerte Schichten"
@@ -2780,8 +2753,7 @@ msgstr "Luftabwehrstellung mit Cyclone FLAK"
 #: data/base/messages/strings/resstrings.txt:115
 #: data/base/messages/strings/resstrings.txt:121
 #: data/base/messages/strings/resstrings.txt:133
-#: data/mp/messages/resmessages2.rmsg:71
-#: data/mp/messages/resmessages2.rmsg:97
+#: data/mp/messages/resmessages2.rmsg:71 data/mp/messages/resmessages2.rmsg:97
 #: data/mp/messages/resmessages2.rmsg:110
 #: data/mp/messages/resmessages3.rmsg:240
 #: data/mp/messages/resmessages3.rmsg:253
@@ -3654,8 +3626,7 @@ msgstr "Eindringlingsparasit isoliert"
 
 #: data/base/messages/resmessages3.rmsg:20
 #: data/base/messages/resmessages3.rmsg:33
-#: data/mp/messages/resmessages3.rmsg:20
-#: data/mp/messages/resmessages3.rmsg:33
+#: data/mp/messages/resmessages3.rmsg:20 data/mp/messages/resmessages3.rmsg:33
 msgid "Reduced chance of NEXUS take-over"
 msgstr "Reduziert Wahrscheinlichkeit einer Übernahme durch NEXUS"
 
@@ -3857,7 +3828,8 @@ msgstr "Fortschrittliche Reparaturtechniken"
 msgid "Vapor Turbine boosts power output"
 msgstr "Dampfturbine erhöht Leistungsabgabe"
 
-# Wenn man Brain als KI-gestütztes Forschungsorgan betrachtet, könnte die Übersetzung hinhauen -Kreuvf
+# Wenn man Brain als KI-gestütztes Forschungsorgan betrachtet, könnte die
+# Übersetzung hinhauen -Kreuvf
 #: data/base/messages/resmessages3.rmsg:447
 #: data/base/messages/strings/names.txt:838
 #: data/mp/messages/resmessages3.rmsg:447
@@ -3906,14 +3878,16 @@ msgstr "Fortschrittliches Beschussortungssystem"
 msgid "Advanced target recognition systems"
 msgstr "Fortschrittliche Zielerkennungssysteme"
 
-# Ist die Frage: Störtechnologie, die syn. Verb. nutzt oder die dagegen eingesetzt wird -Kreuvf
+# Ist die Frage: Störtechnologie, die syn. Verb. nutzt oder die dagegen
+# eingesetzt wird -Kreuvf
 #: data/base/messages/resmessages3.rmsg:564
 #: data/mp/messages/resmessages3.rmsg:564
 #: data/mp/messages/resmessagesall.rmsg:382
 msgid "Synaptic Link Scrambler technology"
 msgstr "Störtechnologie gegen synaptische Verbindungen"
 
-# eigentlich müsste es Greift [...] elektronisch an heißen, aber das klingt gestelzt -Kreuvf
+# eigentlich müsste es Greift [...] elektronisch an heißen, aber das klingt
+# gestelzt -Kreuvf
 #: data/base/messages/resmessages3.rmsg:565
 #: data/mp/messages/resmessages3.rmsg:565
 #: data/mp/messages/resmessagesall.rmsg:383
@@ -6317,7 +6291,8 @@ msgstr "VTOL-CB-Turm"
 msgid "NEXUS Link"
 msgstr "NEXUS Link"
 
-# Fachbegriff ist wohl Verwürfler im Deutschen, aber damit kann kaum jemand etwas anfangen -Kreuvf
+# Fachbegriff ist wohl Verwürfler im Deutschen, aber damit kann kaum jemand
+# etwas anfangen -Kreuvf
 #: data/base/messages/strings/names.txt:380
 #: data/base/messages/strings/names.txt:909
 msgid "Scrambler Turret"
@@ -6647,7 +6622,8 @@ msgstr "Panzerfallen"
 msgid "Dragon's Teeth"
 msgstr "Drachenzähne"
 
-# Diese Stationen reparieren und wiederbewaffnen VTOLs, von daher ist Servicestation sehr gut -Kreuvf
+# Diese Stationen reparieren und wiederbewaffnen VTOLs, von daher ist
+# Servicestation sehr gut -Kreuvf
 #: data/base/messages/strings/names.txt:460
 #: data/base/messages/strings/names.txt:842
 #: data/mp/messages/strings/names.txt:467
@@ -9278,28 +9254,23 @@ msgid "Increases Mini-Rocket ROF"
 msgstr "Erhöht Feuerrate von Miniraketen"
 
 #: data/base/script/fastplay/s-demo.slo:366
-#: data/base/script/text/cam1-1.slo:258
-#: data/base/script/text/cam1-2.slo:382
-#: data/base/script/text/cam1-4a.slo:590
-#: data/base/script/text/cam1-7.slo:506
+#: data/base/script/text/cam1-1.slo:258 data/base/script/text/cam1-2.slo:382
+#: data/base/script/text/cam1-4a.slo:590 data/base/script/text/cam1-7.slo:506
 #: data/base/script/text/genexp.slo:999
 msgid "Return to LZ"
 msgstr "Rückkehr zur Landezone"
 
-#: data/base/script/text/cam1-7.slo:913
-#: data/base/script/text/cam2cx.slo:270
+#: data/base/script/text/cam1-7.slo:913 data/base/script/text/cam2cx.slo:270
 #: data/base/script/text/genexp.slo:854
 msgid "Enemy Escaping"
 msgstr "Feind entkommt"
 
-#: data/base/script/text/cam2dx.slo:40
-#: data/base/script/text/cam3a-d1x.slo:99
+#: data/base/script/text/cam2dx.slo:40 data/base/script/text/cam3a-d1x.slo:99
 #: data/base/script/text/cam3a-d2x.slo:109
 msgid "Objective Destroyed"
 msgstr "Ziel zerstört"
 
-#: data/base/script/text/cam2dx.slo:63
-#: data/base/script/text/cam3a-d1x.slo:129
+#: data/base/script/text/cam2dx.slo:63 data/base/script/text/cam3a-d1x.slo:129
 msgid "Objective Captured"
 msgstr "Ziel gekapert"
 
@@ -11001,8 +10972,7 @@ msgstr "Geschützschaden +25%"
 msgid "Rocket accuracy +10%"
 msgstr "Raketengenauigkeit +10%"
 
-#: data/mp/messages/resmessages1.rmsg:32
-#: data/mp/messages/resmessages3.rmsg:71
+#: data/mp/messages/resmessages1.rmsg:32 data/mp/messages/resmessages3.rmsg:71
 #: data/mp/messages/resmessages3.rmsg:84
 msgid "Kinetic Armor +35%, Body Points +35%"
 msgstr "Kinetische Panzerung +35%, Rumpfpunkte +35%"
@@ -12229,13 +12199,11 @@ msgstr "Miniraketen-Anordnung Cobra Ketten"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Hochgeschwindigkeitsgeschütz Python Hover"
 
-#: lib/framework/i18n.c:89
-#: lib/framework/i18n.c:147
+#: lib/framework/i18n.c:90 lib/framework/i18n.c:149
 msgid "System locale"
 msgstr "Systemsprache"
 
-#: lib/netplay/netplay.c:1286
-#: lib/netplay/netplay.c:2159
+#: lib/netplay/netplay.c:1286 lib/netplay/netplay.c:2159
 msgid "Enter password here"
 msgstr "Passwort hier eingeben"
 
@@ -12249,20 +12217,10 @@ msgstr "Konnte Lobbyserver-Namen nicht auflösen (%s)!"
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Konnte nicht mit Lobbyserver kommunizieren! Ist der TCP-Port %u für ausgehenden Verkehr geöffnet?"
 
-#: src/challenge.c:188
-#: src/hci.c:1009
-#: src/hci.c:3820
-#: src/hci.c:3971
-#: src/hci.c:4425
-#: src/hci.c:5631
-#: src/intelmap.c:542
-#: src/intorder.c:787
-#: src/loadsave.c:267
-#: src/multimenu.c:479
-#: src/multimenu.c:1356
-#: src/transporter.c:286
-#: src/transporter.c:375
-#: src/transporter.c:840
+#: src/challenge.c:188 src/hci.c:1009 src/hci.c:3820 src/hci.c:3971
+#: src/hci.c:4425 src/hci.c:5631 src/intelmap.c:542 src/intorder.c:787
+#: src/loadsave.c:267 src/multimenu.c:479 src/multimenu.c:1356
+#: src/transporter.c:286 src/transporter.c:375 src/transporter.c:840
 msgid "Close"
 msgstr "Schließen"
 
@@ -12290,7 +12248,8 @@ msgstr "Setze Konfigurationsverzeichnis"
 msgid "configuration directory"
 msgstr "Konfigurationsverzeichnis"
 
-# Aus dem Source ist ersichtlich, was mit "level" gemeint ist, kA, ob Sektion gut übersetzt ist -Kreuvf
+# Aus dem Source ist ersichtlich, was mit "level" gemeint ist, kA, ob Sektion
+# gut übersetzt ist -Kreuvf
 #: src/clparse.c:84
 msgid "Show debug for given level"
 msgstr "Zeige die Debugdaten für die angeforderte Sektion"
@@ -12331,9 +12290,7 @@ msgstr "Diese Hilfenachricht anzeigen und Programm beenden"
 msgid "Enable a global mod"
 msgstr "Eine globale Mod aktivieren"
 
-#: src/clparse.c:90
-#: src/clparse.c:91
-#: src/clparse.c:92
+#: src/clparse.c:90 src/clparse.c:91 src/clparse.c:92
 msgid "mod"
 msgstr "Mod"
 
@@ -12409,15 +12366,11 @@ msgstr "Spielleiter"
 msgid "go directly to host screen"
 msgstr "Direkt zum Spielleiterschirm"
 
-#: src/configuration.c:452
-#: src/configuration.c:453
-#: src/multistat.c:130
+#: src/configuration.c:452 src/configuration.c:453 src/multistat.c:130
 msgid "Player"
 msgstr "Spieler"
 
-#: src/design.c:455
-#: src/design.c:476
-#: src/design.c:3565
+#: src/design.c:455 src/design.c:476 src/design.c:3565
 msgid "New Vehicle"
 msgstr "Neues Fahrzeug"
 
@@ -12429,9 +12382,7 @@ msgstr "Fahrzeugrumpf"
 msgid "Vehicle Propulsion"
 msgstr "Fahrzeugantrieb"
 
-#: src/design.c:568
-#: src/design.c:593
-#: src/design.c:619
+#: src/design.c:568 src/design.c:593 src/design.c:619
 msgid "Vehicle Turret"
 msgstr "Fahrzeugturm"
 
@@ -12439,50 +12390,34 @@ msgstr "Fahrzeugturm"
 msgid "Delete Design"
 msgstr "Entwurf löschen"
 
-#: src/design.c:694
-#: src/design.c:742
+#: src/design.c:694 src/design.c:742
 msgid "Kinetic Armour"
 msgstr "Kinetische Panzerung"
 
-#: src/design.c:703
-#: src/design.c:753
+#: src/design.c:703 src/design.c:753
 msgid "Thermal Armour"
 msgstr "Thermalpanzerung"
 
-#: src/design.c:719
-#: src/design.c:773
+#: src/design.c:719 src/design.c:773
 msgid "Engine Output"
 msgstr "Motorleistung"
 
-#: src/design.c:727
-#: src/design.c:782
-#: src/design.c:1591
-#: src/design.c:1628
-#: src/design.c:1649
-#: src/design.c:1667
-#: src/design.c:1688
-#: src/design.c:1706
-#: src/design.c:1744
-#: src/design.c:1779
-#: src/design.c:1914
-#: src/design.c:1931
-#: src/design.c:1966
-#: src/design.c:2002
+#: src/design.c:727 src/design.c:782 src/design.c:1591 src/design.c:1628
+#: src/design.c:1649 src/design.c:1667 src/design.c:1688 src/design.c:1706
+#: src/design.c:1744 src/design.c:1779 src/design.c:1914 src/design.c:1931
+#: src/design.c:1966 src/design.c:2002
 msgid "Weight"
 msgstr "Gewicht"
 
-#: src/design.c:813
-#: src/design.c:833
+#: src/design.c:813 src/design.c:833
 msgid "Total Power Required"
 msgstr "Benötigte Gesamtenergie"
 
-#: src/design.c:846
-#: src/design.c:867
+#: src/design.c:846 src/design.c:867
 msgid "Total Body Points"
 msgstr "Gesamte Rumpfpunkte"
 
-#: src/design.c:1063
-#: src/design.c:1095
+#: src/design.c:1063 src/design.c:1095
 msgid "Power Usage"
 msgstr "Energieverbrauch"
 
@@ -12506,45 +12441,35 @@ msgstr "Sensorstärke"
 msgid "ECM Power"
 msgstr "ECM-Stärke"
 
-#: src/design.c:1641
-#: src/design.c:1658
-#: src/design.c:1680
-#: src/design.c:1697
+#: src/design.c:1641 src/design.c:1658 src/design.c:1680 src/design.c:1697
 msgid "Build Points"
 msgstr "Konstruktionspunkte"
 
-#: src/design.c:1720
-#: src/design.c:1752
+#: src/design.c:1720 src/design.c:1752
 msgid "Range"
 msgstr "Reichweite"
 
-#: src/design.c:1728
-#: src/design.c:1761
+#: src/design.c:1728 src/design.c:1761
 msgid "Damage"
 msgstr "Schaden"
 
-#: src/design.c:1736
-#: src/design.c:1770
+#: src/design.c:1736 src/design.c:1770
 msgid "Rate-of-Fire"
 msgstr "Feuerrate"
 
-#: src/design.c:1906
-#: src/design.c:1922
+#: src/design.c:1906 src/design.c:1922
 msgid "Air Speed"
 msgstr "Fluggeschwindigkeit"
 
-#: src/design.c:1942
-#: src/design.c:1975
+#: src/design.c:1942 src/design.c:1975
 msgid "Road Speed"
 msgstr "Straßengeschwindigkeit"
 
-#: src/design.c:1950
-#: src/design.c:1984
+#: src/design.c:1950 src/design.c:1984
 msgid "Off-Road Speed"
 msgstr "Geländegeschwindigkeit"
 
-#: src/design.c:1958
-#: src/design.c:1993
+#: src/design.c:1958 src/design.c:1993
 msgid "Water Speed"
 msgstr "Wassergeschwindigkeit"
 
@@ -12568,8 +12493,7 @@ msgstr "Spieler ausgefallen"
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Bau nicht möglich. Ölquelle brennt."
 
-#: src/display.c:1907
-#: src/display.c:2522
+#: src/display.c:1907 src/display.c:2522
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Schaden %d%% - Erfahrung %d, %s"
@@ -12664,8 +12588,7 @@ msgstr "Einzelspieler"
 msgid "Multi Player"
 msgstr "Mehrspieler"
 
-#: src/frontend.c:99
-#: src/frontend.c:155
+#: src/frontend.c:99 src/frontend.c:155
 msgid "Tutorial"
 msgstr "Tutorial"
 
@@ -12693,16 +12616,11 @@ msgstr "Schnelles Spiel"
 msgid "TUTORIALS"
 msgstr "TUTORIALS"
 
-#. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
-#: src/frontend.c:159
-#: src/frontend.c:218
-#: src/frontend.c:351
-#: src/frontend.c:421
-#: src/frontend.c:555
-#: src/frontend.c:691
-#: src/frontend.c:798
-#: src/frontend.c:1017
-#: src/frontend.c:1178
+#. TRANSLATORS: "Return", in this context, means "return to previous
+#. screen/menu"
+#: src/frontend.c:159 src/frontend.c:218 src/frontend.c:351 src/frontend.c:421
+#: src/frontend.c:555 src/frontend.c:691 src/frontend.c:798
+#: src/frontend.c:1017 src/frontend.c:1178
 msgctxt "menu"
 msgid "Return"
 msgstr "Zurück"
@@ -12719,8 +12637,7 @@ msgstr "Geplänkel eröffnen"
 msgid "Challenges"
 msgstr "Herausforderungen"
 
-#: src/frontend.c:215
-#: src/ingameop.c:281
+#: src/frontend.c:215 src/ingameop.c:281
 msgid "Load Game"
 msgstr "Spielstand laden"
 
@@ -12728,10 +12645,7 @@ msgstr "Spielstand laden"
 msgid "SINGLE PLAYER"
 msgstr "Einzelspieler"
 
-#: src/frontend.c:294
-#: src/ingameop.c:507
-#: src/mission.c:2842
-#: src/mission.c:2947
+#: src/frontend.c:294 src/ingameop.c:507 src/mission.c:2842 src/mission.c:2947
 msgid "Load Saved Game"
 msgstr "Spielstand laden"
 
@@ -12747,8 +12661,7 @@ msgstr "Spiel eröffnen"
 msgid "Join Game"
 msgstr "Spiel beitreten"
 
-#: src/frontend.c:414
-#: src/multiint.c:1140
+#: src/frontend.c:414 src/multiint.c:1140
 msgid "OPTIONS"
 msgstr "OPTIONEN"
 
@@ -12764,8 +12677,7 @@ msgstr "Grafikeinstellungen"
 msgid "Video Options"
 msgstr "Videoeinstellungen"
 
-#: src/frontend.c:418
-#: src/ingameop.c:276
+#: src/frontend.c:418 src/ingameop.c:276
 msgid "Audio Options"
 msgstr "Audioeinstellungen"
 
@@ -12781,20 +12693,15 @@ msgstr "Tastenzuordnung"
 msgid "Video Playback"
 msgstr "Videowiedergabe"
 
-#: src/frontend.c:486
-#: src/frontend.c:645
+#: src/frontend.c:486 src/frontend.c:645
 msgid "1X"
 msgstr "1X"
 
-#: src/frontend.c:490
-#: src/frontend.c:635
+#: src/frontend.c:490 src/frontend.c:635
 msgid "2X"
 msgstr "2X"
 
-#: src/frontend.c:494
-#: src/frontend.c:640
-#: src/frontend.c:766
-#: src/frontend.c:820
+#: src/frontend.c:494 src/frontend.c:640 src/frontend.c:766 src/frontend.c:820
 msgid "Fullscreen"
 msgstr "Vollbild"
 
@@ -12802,59 +12709,31 @@ msgstr "Vollbild"
 msgid "Screen Shake"
 msgstr "Kameraerschütterungen"
 
-#: src/frontend.c:507
-#: src/frontend.c:535
-#: src/frontend.c:543
-#: src/frontend.c:578
-#: src/frontend.c:612
-#: src/frontend.c:621
-#: src/frontend.c:787
-#: src/frontend.c:881
-#: src/frontend.c:919
-#: src/frontend.c:958
-#: src/frontend.c:970
-#: src/frontend.c:982
-#: src/frontend.c:994
-#: src/frontend.c:1039
-#: src/frontend.c:1052
-#: src/frontend.c:1066
-#: src/frontend.c:1080
+#: src/frontend.c:507 src/frontend.c:535 src/frontend.c:543 src/frontend.c:578
+#: src/frontend.c:612 src/frontend.c:621 src/frontend.c:787 src/frontend.c:881
+#: src/frontend.c:919 src/frontend.c:958 src/frontend.c:970 src/frontend.c:982
+#: src/frontend.c:994 src/frontend.c:1039 src/frontend.c:1052
+#: src/frontend.c:1066 src/frontend.c:1080
 msgid "On"
 msgstr "An"
 
-#: src/frontend.c:511
-#: src/frontend.c:531
-#: src/frontend.c:547
-#: src/frontend.c:573
-#: src/frontend.c:607
-#: src/frontend.c:625
-#: src/frontend.c:791
-#: src/frontend.c:876
-#: src/frontend.c:914
-#: src/frontend.c:962
-#: src/frontend.c:974
-#: src/frontend.c:986
-#: src/frontend.c:998
-#: src/frontend.c:1034
-#: src/frontend.c:1047
-#: src/frontend.c:1061
-#: src/frontend.c:1075
+#: src/frontend.c:511 src/frontend.c:531 src/frontend.c:547 src/frontend.c:573
+#: src/frontend.c:607 src/frontend.c:625 src/frontend.c:791 src/frontend.c:876
+#: src/frontend.c:914 src/frontend.c:962 src/frontend.c:974 src/frontend.c:986
+#: src/frontend.c:998 src/frontend.c:1034 src/frontend.c:1047
+#: src/frontend.c:1061 src/frontend.c:1075
 msgid "Off"
 msgstr "Aus"
 
-#: src/frontend.c:516
-#: src/multiint.c:1210
+#: src/frontend.c:516 src/multiint.c:1210
 msgid "Fog"
 msgstr "Nebel"
 
-#: src/frontend.c:519
-#: src/frontend.c:594
+#: src/frontend.c:519 src/frontend.c:594
 msgid "Mist"
 msgstr "Dunst"
 
-#: src/frontend.c:523
-#: src/frontend.c:588
-#: src/multiint.c:1212
+#: src/frontend.c:523 src/frontend.c:588 src/multiint.c:1212
 msgid "Fog Of War"
 msgstr "Nebel des Krieges"
 
@@ -12870,18 +12749,15 @@ msgstr "Schatten"
 msgid "GRAPHICS OPTIONS"
 msgstr "GRAFIKOPTIONEN"
 
-#: src/frontend.c:679
-#: src/ingameop.c:179
+#: src/frontend.c:679 src/ingameop.c:179
 msgid "Voice Volume"
 msgstr "Sprachlautstärke"
 
-#: src/frontend.c:683
-#: src/ingameop.c:184
+#: src/frontend.c:683 src/ingameop.c:184
 msgid "FX Volume"
 msgstr "Effektlautstärke"
 
-#: src/frontend.c:687
-#: src/ingameop.c:189
+#: src/frontend.c:687 src/ingameop.c:189
 msgid "Music Volume"
 msgstr "Musiklautstärke"
 
@@ -12897,8 +12773,7 @@ msgstr "* Wirkt sich bei Spielneustart aus"
 msgid "Graphics Mode*"
 msgstr "Grafikmodus*"
 
-#: src/frontend.c:770
-#: src/frontend.c:815
+#: src/frontend.c:770 src/frontend.c:815
 msgid "Windowed"
 msgstr "Fenster"
 
@@ -12942,14 +12817,12 @@ msgstr "Maustasten vertauschen"
 msgid "Rotate Screen"
 msgstr "Bildschirm drehen"
 
-#: src/frontend.c:1006
-#: src/frontend.c:1094
+#: src/frontend.c:1006 src/frontend.c:1094
 msgctxt "middle mouse button"
 msgid "Middle Button"
 msgstr "Mittlere Maustaste"
 
-#: src/frontend.c:1010
-#: src/frontend.c:1089
+#: src/frontend.c:1010 src/frontend.c:1089
 msgctxt "right mouse button"
 msgid "Right Button"
 msgstr "Rechte Maustaste"
@@ -12958,41 +12831,31 @@ msgstr "Rechte Maustaste"
 msgid "MOUSE OPTIONS"
 msgstr "MAUSOPTIONEN"
 
-#: src/frontend.c:1129
-#: src/frontend.c:1199
+#: src/frontend.c:1129 src/frontend.c:1199
 msgid "Difficulty"
 msgstr "Schwierigkeitsgrad"
 
-#: src/frontend.c:1133
-#: src/frontend.c:1207
-#: src/frontend.c:1244
+#: src/frontend.c:1133 src/frontend.c:1207 src/frontend.c:1244
 msgid "Easy"
 msgstr "Einfach"
 
-#: src/frontend.c:1136
-#: src/frontend.c:1210
-#: src/frontend.c:1236
+#: src/frontend.c:1136 src/frontend.c:1210 src/frontend.c:1236
 msgid "Normal"
 msgstr "Normal"
 
-#: src/frontend.c:1140
-#: src/frontend.c:1213
-#: src/frontend.c:1240
+#: src/frontend.c:1140 src/frontend.c:1213 src/frontend.c:1240
 msgid "Hard"
 msgstr "Schwer"
 
-#: src/frontend.c:1145
-#: src/frontend.c:1200
+#: src/frontend.c:1145 src/frontend.c:1200
 msgid "Scroll Speed"
 msgstr "Scrollgeschwindigkeit"
 
-#: src/frontend.c:1159
-#: src/frontend.c:1197
+#: src/frontend.c:1159 src/frontend.c:1197
 msgid "Language"
 msgstr "Sprache"
 
-#: src/frontend.c:1171
-#: src/frontend.c:1198
+#: src/frontend.c:1171 src/frontend.c:1198
 msgid "Unit Colour"
 msgstr "Einheitenfarbe"
 
@@ -13000,23 +12863,19 @@ msgstr "Einheitenfarbe"
 msgid "Radar"
 msgstr "Radar"
 
-#: src/frontend.c:1175
-#: src/frontend.c:1224
+#: src/frontend.c:1175 src/frontend.c:1224
 msgid "Rotating"
 msgstr "Drehend"
 
-#: src/frontend.c:1175
-#: src/frontend.c:1224
+#: src/frontend.c:1175 src/frontend.c:1224
 msgid "Fixed"
 msgstr "Fest"
 
-#: src/frontend.c:1181
-#: src/frontend.c:1201
+#: src/frontend.c:1181 src/frontend.c:1201
 msgid "GAME OPTIONS"
 msgstr "SPIELOPTIONEN"
 
-#: src/frontend.c:1342
-#: src/multiint.c:2120
+#: src/frontend.c:1342 src/multiint.c:2120
 msgid "Mod: "
 msgstr "Mod: "
 
@@ -13024,10 +12883,7 @@ msgstr "Mod: "
 msgid "MAP SAVED!"
 msgstr "KARTE GESPEICHERT!"
 
-#: src/hci.c:1702
-#: src/loop.c:536
-#: src/loop.c:552
-#: src/mission.c:2913
+#: src/hci.c:1702 src/loop.c:536 src/loop.c:552 src/mission.c:2913
 msgid "GAME SAVED :"
 msgstr "SPIEL GESPEICHERT :"
 
@@ -13050,7 +12906,8 @@ msgstr "Spieler %u erschummelt (Debugmenü) sich ein neues Feature: %s."
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "Spieler %u erschummelt (Debugmenü) sich eine neue Einheit: %s."
 
-# Commander kann als Eigenname im Deutschen allerdings mit deutschem Plural stehen bleiben -Kreuvf
+# Commander kann als Eigenname im Deutschen allerdings mit deutschem Plural
+# stehen bleiben -Kreuvf
 #: src/hci.c:3722
 msgid "Commanders (F6)"
 msgstr "Commandermenü"
@@ -13075,9 +12932,7 @@ msgstr "Forschungsmenü"
 msgid "Build (F3)"
 msgstr "Konstruktionsmenü"
 
-#: src/hci.c:3882
-#: src/multiint.c:1257
-#: src/multimenu.c:763
+#: src/hci.c:3882 src/multiint.c:1257 src/multimenu.c:763
 msgid "Power"
 msgstr "Energie"
 
@@ -13122,10 +12977,7 @@ msgstr "Spiel pausieren oder fortsetzen"
 msgid "Align height of all map objects"
 msgstr "Höhe aller Kartenobjekte abgleichen"
 
-#: src/hci.c:4145
-#: src/ingameop.c:119
-#: src/ingameop.c:264
-#: src/ingameop.c:269
+#: src/hci.c:4145 src/ingameop.c:119 src/ingameop.c:264 src/ingameop.c:269
 msgid "Quit"
 msgstr "Beenden"
 
@@ -13133,9 +12985,7 @@ msgstr "Beenden"
 msgid "Exit Game"
 msgstr "Spiel verlassen"
 
-#: src/hci.c:4510
-#: src/intdisplay.c:209
-#: src/intdisplay.c:252
+#: src/hci.c:4510 src/intdisplay.c:209 src/intdisplay.c:252
 #: src/intdisplay.c:303
 msgid "Progress Bar"
 msgstr "Fortschrittsbalken"
@@ -13156,9 +13006,7 @@ msgstr "Reiter nach links durchschalten"
 msgid "Tab Scroll right"
 msgstr "Reiter nach rechts durchschalten"
 
-#: src/ingameop.c:118
-#: src/ingameop.c:176
-#: src/ingameop.c:273
+#: src/ingameop.c:118 src/ingameop.c:176 src/ingameop.c:273
 msgid "Resume Game"
 msgstr "Spiel fortsetzen"
 
@@ -13166,10 +13014,7 @@ msgstr "Spiel fortsetzen"
 msgid "WARNING: You're the host. If you quit, the game ends for everyone!"
 msgstr "Warnung: Sie sind Spielleiter. Wenn Sie das Spiel verlassen, endet es für alle!"
 
-#: src/ingameop.c:283
-#: src/ingameop.c:511
-#: src/mission.c:2829
-#: src/mission.c:2950
+#: src/ingameop.c:283 src/ingameop.c:511 src/mission.c:2829 src/mission.c:2950
 msgid "Save Game"
 msgstr "Spiel speichern"
 
@@ -13196,14 +13041,11 @@ msgstr ""
 "\n"
 "Warzone wird versuchen das Spiel ohne sie zu laden."
 
-#: src/intdisplay.c:199
-#: src/intdisplay.c:244
-#: src/intdisplay.c:296
+#: src/intdisplay.c:199 src/intdisplay.c:244 src/intdisplay.c:296
 msgid "Power Accrued"
 msgstr "Energie angesammelt"
 
-#: src/intelmap.c:246
-#: src/keybind.c:1528
+#: src/intelmap.c:246 src/keybind.c:1528
 msgid "PAUSED"
 msgstr "PAUSIERT"
 
@@ -13223,33 +13065,27 @@ msgstr "Aktuelles Missionsziel"
 msgid "New Intelligence Report"
 msgstr "Neuer Aufklärungsbericht"
 
-#: src/intorder.c:161
-#: src/keymap.c:390
+#: src/intorder.c:161 src/keymap.c:390
 msgid "Short Range"
 msgstr "Kurze Reichweite"
 
-#: src/intorder.c:162
-#: src/keymap.c:397
+#: src/intorder.c:162 src/keymap.c:397
 msgid "Long Range"
 msgstr "Hohe Reichweite"
 
-#: src/intorder.c:163
-#: src/keymap.c:389
+#: src/intorder.c:163 src/keymap.c:389
 msgid "Optimum Range"
 msgstr "Optimale Reichweite"
 
-#: src/intorder.c:164
-#: src/keymap.c:409
+#: src/intorder.c:164 src/keymap.c:409
 msgid "Retreat at Medium Damage"
 msgstr "Rückzug bei mittlerem Schaden"
 
-#: src/intorder.c:165
-#: src/keymap.c:410
+#: src/intorder.c:165 src/keymap.c:410
 msgid "Retreat at Heavy Damage"
 msgstr "Rückzug bei schwerem Schaden"
 
-#: src/intorder.c:166
-#: src/keymap.c:411
+#: src/intorder.c:166 src/keymap.c:411
 msgid "Do or Die!"
 msgstr "Sieg oder Tod!"
 
@@ -13257,38 +13093,31 @@ msgstr "Sieg oder Tod!"
 msgid "Fire-At-Will"
 msgstr "Feuer nach eigenem Ermessen"
 
-#: src/intorder.c:168
-#: src/keymap.c:385
+#: src/intorder.c:168 src/keymap.c:385
 msgid "Return Fire"
 msgstr "Feuer erwidern"
 
-#: src/intorder.c:169
-#: src/keymap.c:383
+#: src/intorder.c:169 src/keymap.c:383
 msgid "Hold Fire"
 msgstr "Feuer einstellen"
 
-#: src/intorder.c:170
-#: src/keymap.c:392
+#: src/intorder.c:170 src/keymap.c:392
 msgid "Patrol"
 msgstr "Patrouillieren"
 
-#: src/intorder.c:171
-#: src/keymap.c:391
+#: src/intorder.c:171 src/keymap.c:391
 msgid "Pursue"
 msgstr "Verfolgen"
 
-#: src/intorder.c:172
-#: src/keymap.c:387
+#: src/intorder.c:172 src/keymap.c:387
 msgid "Guard Position"
 msgstr "Position bewachen"
 
-#: src/intorder.c:173
-#: src/keymap.c:394
+#: src/intorder.c:173 src/keymap.c:394
 msgid "Hold Position"
 msgstr "Position halten"
 
-#: src/intorder.c:174
-#: src/keymap.c:393
+#: src/intorder.c:174 src/keymap.c:393
 msgid "Return For Repair"
 msgstr "Rückkehr zwecks Reparatur"
 
@@ -13296,13 +13125,11 @@ msgstr "Rückkehr zwecks Reparatur"
 msgid "Return To HQ"
 msgstr "Rückkehr zur Kommandozentrale"
 
-#: src/intorder.c:176
-#: src/keymap.c:395
+#: src/intorder.c:176 src/keymap.c:395
 msgid "Go to Transport"
 msgstr "Zum Transporter"
 
-#: src/intorder.c:177
-#: src/keymap.c:419
+#: src/intorder.c:177 src/keymap.c:419
 msgid "Return for Recycling"
 msgstr "Rückkehr zwecks Recycling"
 
@@ -13356,18 +13183,9 @@ msgstr "(Spieler %u) hat den Cyborg-\"Beine\"-Fehler! Bitte \"legs\" in die Chat
 msgid "Player %u is cheating him/herself a new droid army of %s(s)."
 msgstr "Spieler %u erschummelt sich eine neue Armee aus %s."
 
-#: src/keybind.c:530
-#: src/keybind.c:560
-#: src/keybind.c:577
-#: src/keybind.c:621
-#: src/keybind.c:729
-#: src/keybind.c:769
-#: src/keybind.c:875
-#: src/keybind.c:1418
-#: src/keybind.c:1475
-#: src/keybind.c:1577
-#: src/keybind.c:1674
-#: src/keybind.c:1985
+#: src/keybind.c:530 src/keybind.c:560 src/keybind.c:577 src/keybind.c:621
+#: src/keybind.c:729 src/keybind.c:769 src/keybind.c:875 src/keybind.c:1418
+#: src/keybind.c:1475 src/keybind.c:1577 src/keybind.c:1674 src/keybind.c:1985
 #: src/keybind.c:2026
 #, c-format
 msgid "(Player %u) is using cheat :%s"
@@ -13385,7 +13203,8 @@ msgstr "Die Dinge leicht nehmen!"
 msgid "1000 big ones!!!"
 msgstr "1000 Riesenviecher!!!"
 
-# Ursprünglich kenne ich das nur als Cheat aus StarCraft und das sollte imho nicht übersetzt werden -Kreuvf
+# Ursprünglich kenne ich das nur als Cheat aus StarCraft und das sollte imho
+# nicht übersetzt werden -Kreuvf
 #: src/keybind.c:578
 msgid "Power overwhelming"
 msgstr "Power overwhelming"
@@ -13567,14 +13386,11 @@ msgstr "Bildschirm wackelt bei Zerstörung: Aus"
 msgid "Screen shake when things die: On"
 msgstr "Bildschirm wackelt bei Zerstörung: An"
 
-#: src/keybind.c:2680
-#: src/keybind.c:2723
+#: src/keybind.c:2680 src/keybind.c:2723
 msgid "Sorry, but game speed cannot be changed in multiplayer."
 msgstr "Entschuldige, aber die Spielgeschwindigkeit kann im Mehrspielermodus nicht verändert werden."
 
-#: src/keybind.c:2701
-#: src/keybind.c:2744
-#: src/keybind.c:2766
+#: src/keybind.c:2701 src/keybind.c:2744 src/keybind.c:2766
 msgid "Game Speed Reset"
 msgstr "Spielgeschwindigkeit zurückgesetzt"
 
@@ -13628,10 +13444,7 @@ msgstr "Radar zeigt Höheninformation"
 msgid "KEY MAPPING"
 msgstr "TASTENZUORDNUNG"
 
-#: src/keyedit.c:374
-#: src/multiint.c:533
-#: src/multiint.c:958
-#: src/multiint.c:1343
+#: src/keyedit.c:374 src/multiint.c:533 src/multiint.c:958 src/multiint.c:1343
 msgid "Return To Previous Screen"
 msgstr "Zurück zum vorherigen Bildschirm"
 
@@ -14108,9 +13921,8 @@ msgid "Complete current research"
 msgstr "Erledige aktuelle Forschung"
 
 #: src/keymap.c:458
-#, fuzzy
 msgid "Toggle watch window"
-msgstr "Beobachtungsfenster umschalten"
+msgstr "Toggle Watchfenster"
 
 #: src/keymap.c:459
 msgid "Trace a game object"
@@ -14120,8 +13932,7 @@ msgstr "Spielobjekt verfolgen"
 msgid "Toggle Driving Mode"
 msgstr "Fahrmodus umschalten"
 
-#: src/loop.c:543
-#: src/loop.c:559
+#: src/loop.c:543 src/loop.c:559
 msgid "Could not save game!"
 msgstr "Konnte Spiel nicht speichern!"
 
@@ -14145,9 +13956,7 @@ msgstr "ZIEL NICHT ERREICHT--und Sie haben geschummelt!"
 msgid "OBJECTIVE FAILED"
 msgstr "ZIEL NICHT ERREICHT"
 
-#: src/mission.c:2808
-#: src/mission.c:2848
-#: src/mission.c:2966
+#: src/mission.c:2808 src/mission.c:2848 src/mission.c:2966
 msgid "Quit To Main Menu"
 msgstr "Zurück zum Hauptmenü"
 
@@ -14215,13 +14024,11 @@ msgstr "%s geht ein Bündnis mit %s ein"
 msgid "You Discover Blueprints For %s"
 msgstr "Sie haben Entwürfe für %s entdeckt"
 
-#: src/multiint.c:467
-#: src/multilimit.c:192
+#: src/multiint.c:467 src/multilimit.c:192
 msgid "Accept Settings"
 msgstr "Einstellungen annehmen"
 
-#: src/multiint.c:469
-#: src/multiint.c:1006
+#: src/multiint.c:469 src/multiint.c:1006
 msgid "Cancel"
 msgstr "Abbrechen"
 
@@ -14297,8 +14104,7 @@ msgstr "Passwort eingeben:"
 msgid "OK"
 msgstr "OK"
 
-#: src/multiint.c:1145
-#: src/multiint.c:1152
+#: src/multiint.c:1145 src/multiint.c:1152
 msgid "Select Game Name"
 msgstr "Spielname auswählen"
 
@@ -14314,8 +14120,7 @@ msgstr "Karte auswählen"
 msgid "Click to set Password"
 msgstr "Klicken zum Setzen eines Passworts"
 
-#: src/multiint.c:1173
-#: src/multiint.c:1174
+#: src/multiint.c:1173 src/multiint.c:1174
 msgid "Scavengers"
 msgstr "Scavenger"
 
@@ -14331,8 +14136,7 @@ msgstr "Spielernamen auswählen"
 msgid "Distance Fog"
 msgstr "Entfernungsnebel"
 
-#: src/multiint.c:1224
-#: src/multimenu.c:756
+#: src/multiint.c:1224 src/multimenu.c:756
 msgid "Alliances"
 msgstr "Bündnisse"
 
@@ -14454,8 +14258,7 @@ msgstr "Verzeihung! Spielerstellung fehlgeschlagen."
 msgid "'Locked Teams' mode enabled"
 msgstr "\"Feste Teams\"-Modus aktiviert"
 
-#: src/multiint.c:2659
-#: src/multiint.c:2709
+#: src/multiint.c:2659 src/multiint.c:2709
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "Der Spielleiter hat %s aus dem Spiel geworfen!"
@@ -14482,8 +14285,7 @@ msgstr "Karte: %d%% heruntergeladen"
 msgid "HOST"
 msgstr "SPIELLEITER"
 
-#: src/multijoin.c:98
-#: src/multijoin.c:99
+#: src/multijoin.c:98 src/multijoin.c:99
 msgid "Players Still Joining"
 msgstr "Es treten noch Spieler bei"
 
@@ -14555,8 +14357,7 @@ msgstr "Punktestand"
 msgid "Kills"
 msgstr "Abschüsse"
 
-#: src/multimenu.c:762
-#: src/multimenu.c:767
+#: src/multimenu.c:762 src/multimenu.c:767
 msgid "Units"
 msgstr "Einheiten"
 
@@ -14793,8 +14594,7 @@ msgid_plural "%u units selected"
 msgstr[0] "%u Einheit ausgewählt"
 msgstr[1] "%u Einheiten ausgewählt"
 
-#: src/selection.c:434
-#: src/selection.c:521
+#: src/selection.c:434 src/selection.c:521
 msgid "Unable to locate any repair units!"
 msgstr "Kann keine Reparatureinheit finden!"
 
@@ -14815,16 +14615,14 @@ msgid "Control Limit Reached - Production Halted"
 msgstr "Kontrollgrenze erreicht - Produktion eingestellt"
 
 # nix Gruppe! -Kreuvf
-#: src/structure.c:5947
-#: src/structure.c:5972
+#: src/structure.c:5947 src/structure.c:5972
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Einheit hinzugefügt"
 msgstr[1] "%s - %u Einheiten hinzugefügt"
 
-#: src/structure.c:5977
-#: src/structure.c:6041
+#: src/structure.c:5977 src/structure.c:6041
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Schaden %3.0f%%"
@@ -14834,8 +14632,7 @@ msgstr "%s - Schaden %3.0f%%"
 msgid "%s - Connected %u of %u"
 msgstr "%s - %u von %u verbunden"
 
-#: src/structure.c:6162
-#: src/structure.c:6211
+#: src/structure.c:6162 src/structure.c:6211
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektronisch beschädigt"
@@ -14869,8 +14666,7 @@ msgstr "Beute aus Reparatureinrichtung - Reparatur"
 msgid "Repair Facility Award - Nothing"
 msgstr "Beute aus Reparatureinrichtung - Nichts"
 
-#: src/transporter.c:397
-#: src/transporter.c:451
+#: src/transporter.c:397 src/transporter.c:451
 msgid "Launch Transport"
 msgstr "Transporter starten"
 
@@ -14900,7 +14696,8 @@ msgid " - Built %s"
 msgstr " - %s gebaut"
 
 #. TRANSLATORS: This string looks as follows when expanded.
-#. "Version <version name/number> <working copy state><BUILD DATE><BUILD TYPE>"
+#. "Version <version name/number> <working copy state><BUILD DATE><BUILD
+#. TYPE>"
 #: src/version.c:169
 #, c-format
 msgid "Version %s%s%s%s"
@@ -15011,7 +14808,6 @@ msgstr "Version %s%s%s%s"
 #~ msgid "Latin"
 #~ msgstr "Latein"
 
-#, fuzzy
 #~ msgid ", mod: "
 #~ msgstr ", Mods: "
 
@@ -15036,7 +14832,6 @@ msgstr "Version %s%s%s%s"
 #~ msgid "The ultimate in sensor technology"
 #~ msgstr "Ultimative Sensortechnologie"
 
-# Statt Formationsgeschwindigkeitsbegrenzungen AUS -Kreuvf
 #~ msgid "Formation speed limiting OFF"
 #~ msgstr "Geschwindigkeitsbegrenzung für Formationen deaktiviert"
 
@@ -15061,7 +14856,6 @@ msgstr "Version %s%s%s%s"
 #~ msgid "Player %u found %u power in an oil drum"
 #~ msgstr "Spieler %u hat %u Energie in einem Ölfass gefunden"
 
-# Das hat(te) Warzone damals schon, kA, ob noch nutzbar -Kreuvf
 #~ msgid "Start Multiplayer Audio"
 #~ msgstr "Starte Mehrspieler-Voice-Chat"
 
@@ -15233,71 +15027,54 @@ msgstr "Version %s%s%s%s"
 #~ msgid "Commander Python Tracks"
 #~ msgstr "Commander Python Ketten"
 
-#, fuzzy
 #~ msgid "Mini-Pod Artillery"
 #~ msgstr "Miniartillerieraketen"
 
-#, fuzzy
 #~ msgid "Mini-Pod Battery"
 #~ msgstr "Miniraketenbatterie"
 
-#, fuzzy
 #~ msgid "Stabilized Mini-Pods"
 #~ msgstr "Stabilisierte Miniraketen"
 
-#, fuzzy
 #~ msgid "Stabilized Mini-Pods Mk2"
 #~ msgstr "Stabilisierte Miniraketen Mk2"
 
-#, fuzzy
 #~ msgid "HE Mini-Pods"
 #~ msgstr "Miniraketen"
 
-#, fuzzy
 #~ msgid "HE Mini-Pods Mk2"
 #~ msgstr "Hochexplosive Miniraketen Mk2"
 
-#, fuzzy
 #~ msgid "HE Mini-Pods Mk3"
 #~ msgstr "Hochexplosive Miniraketen Mk3"
 
-#, fuzzy
 #~ msgid "HEAP Mini-Pods"
 #~ msgstr "Hochexplosive, panzerbrechende Miniraketen"
 
-#, fuzzy
 #~ msgid "HEAP Mini-Pods Mk2"
 #~ msgstr "Hochexplosive, panzerbrechende Miniraketen Mk2"
 
-#, fuzzy
 #~ msgid "HEAP Mini-Pods Mk3"
 #~ msgstr "Hochexplosive, panzerbrechende Miniraketen Mk3"
 
-#, fuzzy
 #~ msgid "Fast Fire Mini-Pods"
 #~ msgstr "Schnellfeuernde Miniraketen"
 
-#, fuzzy
 #~ msgid "Fast Fire Mini-Pods Mk2"
 #~ msgstr "Schnellfeuernde Miniraketen Mk2"
 
-#, fuzzy
 #~ msgid "Fast Fire Mini-Pods Mk3"
 #~ msgstr "Schnellfeuernde Miniraketen Mk3"
 
-#, fuzzy
 #~ msgid "Rapid Fire Mini-Pods"
 #~ msgstr "Schnellstfeuernde Miniraketen"
 
-#, fuzzy
 #~ msgid "Rapid Fire Mini-Pods Mk2"
 #~ msgstr "Schnellstfeuernde Miniraketen Mk2"
 
-#, fuzzy
 #~ msgid "Rapid Fire Mini-Pods Mk3"
 #~ msgstr "Schnellstfeuernde Miniraketen Mk3"
 
-#, fuzzy
 #~ msgid "Cluster Bombs Bug VTOL"
 #~ msgstr "Bug Streubomben VTOL"
 
