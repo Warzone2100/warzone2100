@@ -2526,11 +2526,14 @@ static BOOL NETprocessSystemMessage(void)
 				}
 				for (n = 0; n < indexLen; ++n)
 				{
+					bool wasAllocated = false;
+					char oldName[sizeof(NetPlay.players[index].name)];
+
 					// Retrieve the player's ID
 					NETuint32_t(&index);
 
 					// Bail out if the given ID number is out of range
-					if (index >= MAX_CONNECTED_PLAYERS || (NetMsg.source != NetPlay.hostPlayer && NetMsg.source != index))
+					if (index >= MAX_CONNECTED_PLAYERS || (NetMsg.source != NetPlay.hostPlayer && (NetMsg.source != index || !NetPlay.players[index].allocated)))
 					{
 						debug(LOG_ERROR, "MSG_PLAYER_INFO: Player ID (%u) out of range (max %u)", index, (unsigned int)MAX_CONNECTED_PLAYERS);
 						NETend();
@@ -2539,9 +2542,11 @@ static BOOL NETprocessSystemMessage(void)
 					}
 
 					// Retrieve the rest of the data
+					wasAllocated = NetPlay.players[index].allocated;
 					NETbool(&NetPlay.players[index].allocated);
 					NETbool(&NetPlay.players[index].heartbeat);
 					NETbool(&NetPlay.players[index].kick);
+					strncpy(oldName, NetPlay.players[index].name, sizeof(NetPlay.players[index].name));
 					NETstring(NetPlay.players[index].name, sizeof(NetPlay.players[index].name));
 					NETuint32_t(&NetPlay.players[index].heartattacktime);
 					NETint32_t(&colour);
@@ -2561,6 +2566,11 @@ static BOOL NETprocessSystemMessage(void)
 					debug(LOG_NET, "%s for player %u (%s)", n == 0? "Receiving MSG_PLAYER_INFO" : "                      and", (unsigned int)index, NetPlay.players[index].allocated ? "human" : "AI");
 					// update the color to the local array
 					setPlayerColour(index, NetPlay.players[index].colour);
+
+					if (wasAllocated && NetPlay.players[index].allocated && strncmp(oldName, NetPlay.players[index].name, sizeof(NetPlay.players[index].name)) != 0)
+					{
+						printConsoleNameChange(oldName, NetPlay.players[index].name);
+					}
 				}
 				NETuint32_t(&hostPlayer);
 			NETend();

@@ -1037,7 +1037,6 @@ BOOL recvResearchStatus()
 	return true;
 }
 
-
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
 // Text Messaging between players. proceed string with players to send to.
@@ -1183,6 +1182,19 @@ BOOL sendTextMessage(const char *pStr, BOOL all)
 
 	return true;
 }
+
+void printConsoleNameChange(const char *oldName, const char *newName)
+{
+	char msg[MAX_CONSOLE_STRING_LENGTH];
+
+	// Player changed name.
+	sstrcpy(msg, oldName);                               // Old name.
+	sstrcat(msg, " → ");                                 // Separator
+	sstrcat(msg, newName);  // New name.
+
+	addConsoleMessage(msg, DEFAULT_JUSTIFY, selectedPlayer);  // display
+}
+
 
 //AI multiplayer message, send from a certain player index to another player index
 BOOL sendAIMessage(char *pStr, UDWORD player, UDWORD to)

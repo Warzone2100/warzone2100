@@ -142,6 +142,7 @@ extern BOOL SendResearch		(UBYTE player,UDWORD index);
 extern BOOL SendDestroyFeature  (FEATURE *pF);					// send a destruct feature message.
 extern BOOL sendTextMessage		(const char *pStr,BOOL cast);		// send a text message
 extern BOOL sendAIMessage		(char *pStr, UDWORD player, UDWORD to);	//send AI message
+void printConsoleNameChange(const char *oldName, const char *newName);  ///< Print message to console saying a name changed.
 
 extern BOOL turnOffMultiMsg		(BOOL bDoit);
 
