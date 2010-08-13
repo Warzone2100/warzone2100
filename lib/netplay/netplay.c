@@ -1419,7 +1419,7 @@ static BOOL NETprocessSystemMessage(void)
 					NETuint32_t(&index);
 
 					// Bail out if the given ID number is out of range
-					if (index >= MAX_CONNECTED_PLAYERS)
+					if (index >= MAX_CONNECTED_PLAYERS || (NetMsg.source != NetPlay.hostPlayer && NetMsg.source != index))
 					{
 						debug(LOG_ERROR, "MSG_PLAYER_INFO: Player ID (%u) out of range (max %u)", index, (unsigned int)MAX_CONNECTED_PLAYERS);
 						NETend();

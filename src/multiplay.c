@@ -1299,6 +1299,11 @@ BOOL recvTextMessage()
 		NETstring(newmsg, MAX_CONSOLE_STRING_LENGTH);
 	NETend();
 
+	if (whosResponsible(playerIndex) != NetMsg.source)
+	{
+		playerIndex = NetMsg.source;  // Fix corrupted playerIndex.
+	}
+
 	if (playerIndex >= MAX_PLAYERS)
 	{
 		return false;
@@ -1345,6 +1350,11 @@ BOOL recvTextMessageAI()
 		NETuint32_t(&receiver);			//in-game player index
 		NETstring(newmsg,MAX_CONSOLE_STRING_LENGTH);
 	NETend();
+
+	if (whosResponsible(sender) != NetMsg.source)
+	{
+		sender = NetMsg.source;  // Fix corrupted sender.
+	}
 
 	//sstrcpy(msg, getPlayerName(sender));  // name
 	//sstrcat(msg, " : ");                  // seperator
