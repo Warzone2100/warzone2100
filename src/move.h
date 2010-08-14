@@ -31,9 +31,6 @@ extern "C"
 {
 #endif //__cplusplus
 
-/* The base movement speed */
-extern int	baseSpeed;
-
 // The next object that should get the router when a lot of units are
 // in a MOVEROUTE state
 extern DROID	*psNextRouteDroid;

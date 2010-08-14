@@ -113,16 +113,10 @@
 #define AVOID_DIST		(TILE_UNITS*2)
 
 /* Number of game units/sec for base speed in high integer precision */
-#define BASE_SPEED		EXTRA_PRECISION
+#define BASE_SPEED		(EXTRA_PRECISION / GAME_UPDATES_PER_SEC)
 
 /* Number of degrees/sec for base turn rate */
-#define BASE_TURN		EXTRA_PRECISION
-
-/* What the base speed is intialised to */
-#define BASE_SPEED_INIT		(BASE_SPEED / GAME_UPDATES_PER_SEC)
-
-/* What the base turn rate is intialised to */
-#define BASE_TURN_INIT		(BASE_TURN / GAME_UPDATES_PER_SEC)
+#define BASE_TURN		(EXTRA_PRECISION / GAME_UPDATES_PER_SEC)
 
 // maximum and minimum speed to approach a final way point
 #define MAX_END_SPEED		300
@@ -190,13 +184,6 @@
 // How fast vtols 'skid'
 #define VTOL_SKID_DECEL			600
 
-/* The current base speed for this frame and averages for the last few seconds */
-int baseSpeed;
-#define	BASE_FRAMES			10
-
-/* The current base turn rate */
-static int	baseTurn;
-
 /* Function prototypes */
 static void	moveUpdatePersonModel(DROID *psDroid, SDWORD speed, uint16_t direction);
 // Calculate the boundary vector
@@ -227,10 +214,6 @@ const char *moveDescription(MOVE_STATUS status)
  */
 BOOL moveInitialise(void)
 {
-	// Initialise the base speed counters
-	baseSpeed = BASE_SPEED_INIT;
-	baseTurn = BASE_TURN_INIT;
-
 	return true;
 }
 
@@ -238,8 +221,6 @@ BOOL moveInitialise(void)
  */
 void moveUpdateBaseSpeed(void)
 {
-	baseSpeed = BASE_SPEED / GAME_UPDATES_PER_SEC;
-	baseTurn  = BASE_TURN / GAME_UPDATES_PER_SEC;
 }
 
 /** Set a target location in world coordinates for a droid to move to
@@ -628,7 +609,7 @@ static void moveCalcTurn(uint16_t *pCurr, uint16_t target, int rate)
 	int diff = angleDelta(target - *pCurr);
 
 	// calculate the change in direction
-	int change = baseTurn * rate * (UINT16_MAX >> EXTRA_BITS) / 360;  // constant rate so we can use a normal multiplication
+	int change = BASE_TURN * rate * (UINT16_MAX >> EXTRA_BITS) / 360;  // constant rate so we can use a normal multiplication
 
 	// Move *pCurr towards target, by at most ±change.
 	*pCurr += clip(diff, -change, change);
@@ -1682,7 +1663,7 @@ static int moveCalcPerpSpeed(DROID *psDroid, uint16_t iDroidDir, SDWORD iSkidDec
 	perpSpeed = psDroid->sMove.speed * iSin(adiff) / UINT16_MAX;
 
 	// decelerate the perpendicular speed
-	perpSpeed = MAX(0, perpSpeed - iSkidDecel * baseSpeed);
+	perpSpeed = MAX(0, perpSpeed - iSkidDecel * BASE_SPEED);
 
 	return perpSpeed;
 }
@@ -1730,7 +1711,7 @@ static int moveCalcNormalSpeed(DROID *psDroid, int fSpeed, uint16_t iDroidDir, S
 	if (normalSpeed < fSpeed)
 	{
 		// accelerate
-		normalSpeed += (iAccel * baseSpeed);
+		normalSpeed += (iAccel * BASE_SPEED);
 		if (normalSpeed > fSpeed)
 		{
 			normalSpeed = fSpeed;
@@ -1739,7 +1720,7 @@ static int moveCalcNormalSpeed(DROID *psDroid, int fSpeed, uint16_t iDroidDir, S
 	else
 	{
 		// decelerate
-		normalSpeed -= (iDecel * baseSpeed);
+		normalSpeed -= (iDecel * BASE_SPEED);
 		if (normalSpeed < fSpeed)
 		{
 			normalSpeed = fSpeed;
@@ -1751,7 +1732,7 @@ static int moveCalcNormalSpeed(DROID *psDroid, int fSpeed, uint16_t iDroidDir, S
 
 static void moveGetDroidPosDiffs(DROID *psDroid, int32_t *pDX, int32_t *pDY)
 {
-	int32_t move = psDroid->sMove.speed * baseSpeed;	// high precision
+	int32_t move = psDroid->sMove.speed * BASE_SPEED;	// high precision
 
 	*pDX = iSinR(psDroid->sMove.moveDir, move);
 	*pDY = iCosR(psDroid->sMove.moveDir, move);
