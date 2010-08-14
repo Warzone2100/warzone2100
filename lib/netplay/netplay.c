@@ -165,7 +165,7 @@ unsigned NET_PlayerConnectionStatus[CONNECTIONSTATUS_NORMAL][MAX_PLAYERS];
  **            ie ("trunk", "2.1.3", "3.0", ...)
  ************************************************************************************
 **/
-char VersionString[VersionStringSize] = "newnet, netcode 4.1000";
+char VersionString[VersionStringSize] = "trunk, netcode 4.1000";
 static int NETCODE_VERSION_MAJOR = 4;
 static int NETCODE_VERSION_MINOR = 1000;
 static int NETCODE_HASH = 0;			// unused for now
