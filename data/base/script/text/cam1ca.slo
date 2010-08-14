@@ -123,7 +123,6 @@ event startEvnt(CALL_GAMEINIT)
 	//targetChoice = 1000;
 	targetChoice=random(numTargets);	//choose target now so can check for waypoints
 
-	randomiseSeed();
 //allow to build stuff
 	setStructureLimits (powerGen,numPow,0);
 	setStructureLimits (oilDerrick,numExt,0);

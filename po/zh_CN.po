@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-07-25 17:24+0200\n"
+"POT-Creation-Date: 2010-08-08 20:38+0200\n"
 "PO-Revision-Date: 2009-05-13 16:12+0800\n"
 "Last-Translator: Terra <wz2100cn@gmail.com>\n"
 "Language-Team: Simplified Chinese <zh_CN@li.org>\n"
@@ -6150,11 +6150,6 @@ msgstr "螳螂坦克"
 msgid "Transport Body"
 msgstr "车体"
 
-#: data/base/messages/strings/names.txt:297
-#: data/mp/messages/strings/names.txt:300
-msgid "Z NULL BRAIN"
-msgstr ""
-
 #: data/base/messages/strings/names.txt:300
 #: data/base/messages/strings/names.txt:542
 #: data/base/messages/strings/names.txt:648
@@ -6164,27 +6159,12 @@ msgstr ""
 msgid "Command Turret"
 msgstr "指挥炮塔"
 
-#: data/base/messages/strings/names.txt:303
-#: data/mp/messages/strings/names.txt:306
-msgid "Z NULL PROGRAM"
-msgstr ""
-
 #: data/base/messages/strings/names.txt:307
 #: data/base/messages/strings/names.txt:392
 #: data/mp/messages/strings/names.txt:310
 #: data/mp/messages/strings/names.txt:399
 msgid "Demolish"
 msgstr "拆除"
-
-#: data/base/messages/strings/names.txt:310
-#: data/mp/messages/strings/names.txt:313
-msgid "Z NULL CONSTRUCT"
-msgstr ""
-
-#: data/base/messages/strings/names.txt:314
-#: data/mp/messages/strings/names.txt:317
-msgid "Z NULL PROP"
-msgstr ""
 
 #: data/base/messages/strings/names.txt:315
 #: data/mp/messages/strings/names.txt:318
@@ -6280,16 +6260,6 @@ msgstr "生化步兵三型"
 msgid "Naval"
 msgstr ""
 
-#: data/base/messages/strings/names.txt:337
-#: data/mp/messages/strings/names.txt:340
-msgid "BaBaProp"
-msgstr ""
-
-#: data/base/messages/strings/names.txt:338
-#: data/mp/messages/strings/names.txt:341
-msgid "BaBaLegs"
-msgstr ""
-
 #: data/base/messages/strings/names.txt:341
 #: data/base/messages/strings/names.txt:692
 #: data/mp/messages/strings/names.txt:344
@@ -6297,26 +6267,11 @@ msgstr ""
 msgid "Cyborg Propulsion"
 msgstr "生化步兵"
 
-#: data/base/messages/strings/names.txt:345
-#: data/mp/messages/strings/names.txt:348
-msgid "Z NULL REPAIR"
-msgstr ""
-
 #: data/base/messages/strings/names.txt:346
 #: data/mp/messages/strings/names.txt:349
 #, fuzzy
 msgid "Repair Turret"
 msgstr "维修中心"
-
-#: data/base/messages/strings/names.txt:349
-#: data/mp/messages/strings/names.txt:352
-msgid "Z NULL ECM"
-msgstr ""
-
-#: data/base/messages/strings/names.txt:362
-#: data/mp/messages/strings/names.txt:365
-msgid "Z NULL SENSOR"
-msgstr ""
 
 #: data/base/messages/strings/names.txt:367
 #: data/base/messages/strings/names.txt:423
@@ -7034,10 +6989,6 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:559
 #: data/mp/messages/strings/names.txt:998
 msgid "Hurricane AA Turret"
-msgstr ""
-
-#: data/base/messages/strings/names.txt:558
-msgid "LasSat"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:560
@@ -9340,13 +9291,13 @@ msgstr ""
 #: data/base/script/text/cam1-2.slo:382
 #: data/base/script/text/cam1-4a.slo:590
 #: data/base/script/text/cam1-7.slo:506
-#: data/base/script/text/genexp.slo:999
+#: data/base/script/text/genexp.slo:997
 msgid "Return to LZ"
 msgstr ""
 
 #: data/base/script/text/cam1-7.slo:913
 #: data/base/script/text/cam2cx.slo:270
-#: data/base/script/text/genexp.slo:854
+#: data/base/script/text/genexp.slo:852
 msgid "Enemy Escaping"
 msgstr ""
 
@@ -12401,22 +12352,22 @@ msgstr "重型加农炮"
 msgid "Plasmite Retribution VTOL"
 msgstr "中量级车体 - 惩罚者"
 
-#: lib/framework/i18n.c:88
-#: lib/framework/i18n.c:145
+#: lib/framework/i18n.c:89
+#: lib/framework/i18n.c:147
 msgid "System locale"
 msgstr "系统语言"
 
-#: lib/netplay/netplay.c:207
-#: lib/netplay/netplay.c:1035
+#: lib/netplay/netplay.c:206
+#: lib/netplay/netplay.c:1058
 msgid "Enter password here"
 msgstr ""
 
-#: lib/netplay/netplay.c:2025
+#: lib/netplay/netplay.c:2060
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr ""
 
-#: lib/netplay/netplay.c:2038
+#: lib/netplay/netplay.c:2073
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr ""
@@ -12431,7 +12382,7 @@ msgstr ""
 #: src/intorder.c:782
 #: src/loadsave.c:256
 #: src/multimenu.c:479
-#: src/multimenu.c:1367
+#: src/multimenu.c:1357
 #: src/transporter.c:286
 #: src/transporter.c:375
 #: src/transporter.c:840
@@ -12579,7 +12530,7 @@ msgstr ""
 
 #: src/configuration.c:442
 #: src/configuration.c:443
-#: src/multistat.c:120
+#: src/multistat.c:130
 msgid "Player"
 msgstr "玩家"
 
@@ -13203,7 +13154,7 @@ msgid "GAME OPTIONS"
 msgstr "游戏选项"
 
 #: src/frontend.c:1340
-#: src/multiint.c:2117
+#: src/multiint.c:2115
 msgid "Mod: "
 msgstr ""
 
@@ -13264,7 +13215,7 @@ msgstr "建造建筑 (F3)"
 
 #: src/hci.c:3878
 #: src/multiint.c:1252
-#: src/multimenu.c:773
+#: src/multimenu.c:763
 msgid "Power"
 msgstr "能源"
 
@@ -13503,7 +13454,7 @@ msgid "Go to Transport"
 msgstr "前往运送点"
 
 #: src/intorder.c:177
-#: src/keymap.c:420
+#: src/keymap.c:419
 msgid "Return for Recycling"
 msgstr ""
 
@@ -13880,6 +13831,10 @@ msgstr ""
 msgid "View Location of Previous Message"
 msgstr ""
 
+#: src/keymap.c:307
+msgid "Toggle Sensor display"
+msgstr ""
+
 #: src/keymap.c:311
 msgid "Assign Group 0"
 msgstr "设定 0 号编队"
@@ -14133,6 +14088,36 @@ msgstr ""
 msgid "Send Text Message"
 msgstr "发送文本信息"
 
+#: src/keymap.c:399
+msgid "Drop a beacon"
+msgstr ""
+
+#: src/keymap.c:401
+#, fuzzy
+msgid "Sensor display On"
+msgstr "传感器半径"
+
+#: src/keymap.c:402
+msgid "Sensor display Off"
+msgstr ""
+
+#: src/keymap.c:403
+#, fuzzy
+msgid "Toggles shadows"
+msgstr "开启阴影"
+
+#: src/keymap.c:404
+msgid "Trap cursor"
+msgstr ""
+
+#: src/keymap.c:405
+msgid "Toggle radar terrain"
+msgstr ""
+
+#: src/keymap.c:406
+msgid "Toggle ally-enemy radar view"
+msgstr ""
+
 #: src/keymap.c:415
 msgid "Select all Combat Units"
 msgstr ""
@@ -14141,55 +14126,55 @@ msgstr ""
 msgid "Select all Heavily Damaged Units"
 msgstr ""
 
-#: src/keymap.c:418
+#: src/keymap.c:417
 msgid "Select all Half-tracks"
 msgstr ""
 
-#: src/keymap.c:419
+#: src/keymap.c:418
 msgid "Select all Hovers"
 msgstr ""
 
-#: src/keymap.c:421
+#: src/keymap.c:420
 msgid "Select all Units on Screen"
 msgstr ""
 
-#: src/keymap.c:422
+#: src/keymap.c:421
 msgid "Select all Tracks"
 msgstr ""
 
-#: src/keymap.c:423
+#: src/keymap.c:422
 msgid "Select EVERY unit"
 msgstr ""
 
-#: src/keymap.c:424
+#: src/keymap.c:423
 msgid "Select all VTOLs"
 msgstr ""
 
-#: src/keymap.c:425
+#: src/keymap.c:424
 msgid "Select all Wheels"
 msgstr ""
 
-#: src/keymap.c:427
+#: src/keymap.c:426
 msgid "Select all Similar Units"
 msgstr ""
 
-#: src/keymap.c:431
+#: src/keymap.c:430
 msgid "Select next Factory"
 msgstr ""
 
-#: src/keymap.c:432
+#: src/keymap.c:431
 msgid "Select next Research Facility"
 msgstr ""
 
-#: src/keymap.c:433
+#: src/keymap.c:432
 msgid "Select next Power Generator"
 msgstr ""
 
-#: src/keymap.c:434
+#: src/keymap.c:433
 msgid "Select next Cyborg Factory"
 msgstr ""
 
-#: src/keymap.c:435
+#: src/keymap.c:434
 msgid "Toggle reopening the build menu"
 msgstr ""
 
@@ -14413,7 +14398,7 @@ msgid "Distance Fog"
 msgstr "薄雾（可以看见地形）"
 
 #: src/multiint.c:1219
-#: src/multimenu.c:766
+#: src/multimenu.c:756
 msgid "Alliances"
 msgstr "同盟"
 
@@ -14493,76 +14478,76 @@ msgstr "2个玩家"
 msgid "Player number"
 msgstr "玩家"
 
-#: src/multiint.c:1804
+#: src/multiint.c:1802
 msgid "Team"
 msgstr "团队"
 
-#: src/multiint.c:1837
+#: src/multiint.c:1835
 msgid "Waiting for other players"
 msgstr "等待其他玩家"
 
-#: src/multiint.c:1843
+#: src/multiint.c:1841
 msgid "Click when ready"
 msgstr "点击准备开始游戏"
 
-#: src/multiint.c:1847
+#: src/multiint.c:1845
 msgid "READY?"
 msgstr ""
 
-#: src/multiint.c:1884
+#: src/multiint.c:1882
 msgid "PLAYERS"
 msgstr "玩家"
 
-#: src/multiint.c:2088
+#: src/multiint.c:2086
 msgid "CHAT"
 msgstr "聊天"
 
-#: src/multiint.c:2122
+#: src/multiint.c:2120
 msgid "All players need to have the same mods to join your game."
 msgstr ""
 
-#: src/multiint.c:2282
+#: src/multiint.c:2280
 msgid "*** password is now required! ***"
 msgstr ""
 
-#: src/multiint.c:2289
+#: src/multiint.c:2287
 msgid "*** password is NOT required! ***"
 msgstr ""
 
-#: src/multiint.c:2532
+#: src/multiint.c:2530
 msgid "Sorry! Failed to host the game."
 msgstr ""
 
-#: src/multiint.c:2617
+#: src/multiint.c:2615
 #, fuzzy
 msgid "'Locked Teams' mode enabled"
 msgstr "已锁定团队"
 
-#: src/multiint.c:2656
-#: src/multiint.c:2706
+#: src/multiint.c:2654
+#: src/multiint.c:2704
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "主玩家将 %s 踢出游戏!"
 
-#: src/multiint.c:2781
+#: src/multiint.c:2779
 msgid "Host is Starting Game"
 msgstr "主玩家正在开始游戏"
 
-#: src/multiint.c:3346
+#: src/multiint.c:3349
 msgid "Players"
 msgstr "玩家"
 
-#: src/multiint.c:3464
+#: src/multiint.c:3467
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr ""
 
-#: src/multiint.c:3472
+#: src/multiint.c:3475
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr ""
 
-#: src/multiint.c:3498
+#: src/multiint.c:3501
 msgid "HOST"
 msgstr ""
 
@@ -14605,74 +14590,74 @@ msgstr "返回到前一个屏幕"
 msgid "Limits reset to default values"
 msgstr ""
 
-#: src/multimenu.c:619
+#: src/multimenu.c:609
 msgid "Technology level 1"
 msgstr "技术等级1"
 
-#: src/multimenu.c:627
+#: src/multimenu.c:617
 msgid "Technology level 2"
 msgstr "技术等级2"
 
-#: src/multimenu.c:633
+#: src/multimenu.c:623
 msgid "Technology level 3"
 msgstr "技术等级3"
 
-#: src/multimenu.c:639
+#: src/multimenu.c:629
 msgid "Any number of players"
 msgstr ""
 
-#: src/multimenu.c:646
+#: src/multimenu.c:636
 msgid "2 players"
 msgstr "2个玩家"
 
-#: src/multimenu.c:652
+#: src/multimenu.c:642
 msgid "4 players"
 msgstr "4个玩家"
 
-#: src/multimenu.c:658
+#: src/multimenu.c:648
 msgid "8 players"
 msgstr "8个玩家"
 
-#: src/multimenu.c:767
+#: src/multimenu.c:757
 msgid "Score"
 msgstr "分数"
 
-#: src/multimenu.c:768
+#: src/multimenu.c:758
 msgid "Kills"
 msgstr "杀敌"
 
-#: src/multimenu.c:772
-#: src/multimenu.c:777
+#: src/multimenu.c:762
+#: src/multimenu.c:767
 #, fuzzy
 msgid "Units"
 msgstr "单位"
 
-#: src/multimenu.c:782
+#: src/multimenu.c:772
 msgid "Ping"
 msgstr ""
 
-#: src/multimenu.c:786
+#: src/multimenu.c:776
 #, fuzzy
 msgid "Structs"
 msgstr "损失建筑物"
 
-#: src/multimenu.c:1150
+#: src/multimenu.c:1140
 msgid "Toggle Alliance State"
 msgstr ""
 
-#: src/multimenu.c:1169
+#: src/multimenu.c:1159
 msgid "Give Visibility Report"
 msgstr ""
 
-#: src/multimenu.c:1175
+#: src/multimenu.c:1165
 msgid "Leak Technology Documents"
 msgstr ""
 
-#: src/multimenu.c:1182
+#: src/multimenu.c:1172
 msgid "Hand Over Selected Units"
 msgstr ""
 
-#: src/multimenu.c:1188
+#: src/multimenu.c:1178
 msgid "Give Power To Player"
 msgstr ""
 
@@ -14681,48 +14666,48 @@ msgstr ""
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr ""
 
-#: src/multiplay.c:1090
+#: src/multiplay.c:1088
 #, fuzzy
 msgid "(allies"
 msgstr "同盟"
 
-#: src/multiplay.c:1098
+#: src/multiplay.c:1096
 msgid "(private to "
 msgstr ""
 
-#: src/multiplay.c:1111
+#: src/multiplay.c:1109
 msgid "[invalid]"
 msgstr ""
 
-#: src/multiplay.c:1970
+#: src/multiplay.c:1968
 msgid "Green"
 msgstr "绿色"
 
-#: src/multiplay.c:1971
+#: src/multiplay.c:1969
 msgid "Orange"
 msgstr "橙色"
 
-#: src/multiplay.c:1972
+#: src/multiplay.c:1970
 msgid "Grey"
 msgstr "灰色"
 
-#: src/multiplay.c:1973
+#: src/multiplay.c:1971
 msgid "Black"
 msgstr "黑色"
 
-#: src/multiplay.c:1974
+#: src/multiplay.c:1972
 msgid "Red"
 msgstr "红色"
 
-#: src/multiplay.c:1975
+#: src/multiplay.c:1973
 msgid "Blue"
 msgstr "蓝色"
 
-#: src/multiplay.c:1976
+#: src/multiplay.c:1974
 msgid "Pink"
 msgstr "粉红色"
 
-#: src/multiplay.c:1977
+#: src/multiplay.c:1975
 msgid "Cyan"
 msgstr "青绿色"
 
@@ -14902,57 +14887,57 @@ msgstr "未能定位任何指挥官"
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "已达到可控制单位总数上限 - 停止生产新单位"
 
-#: src/structure.c:6024
-#: src/structure.c:6049
+#: src/structure.c:6021
+#: src/structure.c:6046
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - 已指派 %u 单位"
 
-#: src/structure.c:6054
-#: src/structure.c:6122
-#: src/structure.c:6138
-#: src/structure.c:6152
+#: src/structure.c:6051
+#: src/structure.c:6119
+#: src/structure.c:6135
+#: src/structure.c:6149
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - 损伤 %3.0f%%"
 
-#: src/structure.c:6104
+#: src/structure.c:6101
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr ""
 
-#: src/structure.c:6268
-#: src/structure.c:6313
+#: src/structure.c:6265
+#: src/structure.c:6310
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - 电子伤害"
 
-#: src/structure.c:6549
+#: src/structure.c:6546
 msgid "Electronic Reward - Visibility Report"
 msgstr ""
 
-#: src/structure.c:6589
+#: src/structure.c:6586
 msgid "Factory Reward - Propulsion"
 msgstr ""
 
-#: src/structure.c:6613
+#: src/structure.c:6610
 msgid "Factory Reward - Body"
 msgstr ""
 
-#: src/structure.c:6637
+#: src/structure.c:6634
 msgid "Factory Reward - Weapon"
 msgstr ""
 
-#: src/structure.c:6646
+#: src/structure.c:6643
 msgid "Factory Reward - Nothing"
 msgstr ""
 
-#: src/structure.c:6674
+#: src/structure.c:6671
 msgid "Repair Facility Award - Repair"
 msgstr ""
 
-#: src/structure.c:6681
+#: src/structure.c:6678
 msgid "Repair Facility Award - Nothing"
 msgstr ""
 

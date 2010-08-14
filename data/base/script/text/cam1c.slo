@@ -631,7 +631,6 @@ event startup(CALL_GAMEINIT)	//(init)
 	setAssemblyPoint (enm2c, 9920, 3136);
 	//setAssemblyPoint (enm2d, 14528, 3776);
 
-	randomiseSeed();
 	//make scavengers allies with NP
 	createAlliance(enemy1, enemy2);
 //set attack level for scavs

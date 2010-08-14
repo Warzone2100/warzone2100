@@ -2215,7 +2215,6 @@ static void stopJoining(void)
 static void processMultiopWidgets(UDWORD id)
 {
 	PLAYERSTATS playerStats;
-	char	tmp[255];
 
 	// host, who is setting up the game
 	if((ingame.bHostSetup && !bHosted))
@@ -2479,8 +2478,7 @@ static void processMultiopWidgets(UDWORD id)
 
 		removeWildcards((char*)sPlayer);
 
-		ssprintf(tmp, "-> %s", sPlayer);
-		sendTextMessage(tmp,true);
+		printConsoleNameChange(NetPlay.players[selectedPlayer].name, sPlayer);
 
 		NETchangePlayerName(selectedPlayer, (char*)sPlayer);			// update if joined.
 		loadMultiStats((char*)sPlayer,&playerStats);
@@ -3086,8 +3084,9 @@ void runMultiOptions(void)
 				sstrcpy(sPlayer, sTemp);
 				widgSetString(psWScreen,MULTIOP_PNAME,sTemp);
 
-				ssprintf(sTemp, " -> %s", sPlayer);
-				sendTextMessage(sTemp,true);
+				removeWildcards((char*)sPlayer);
+
+				printConsoleNameChange(NetPlay.players[selectedPlayer].name, sPlayer);
 
 				NETchangePlayerName(selectedPlayer, (char*)sPlayer);
 				loadMultiStats((char*)sPlayer,&playerStats);

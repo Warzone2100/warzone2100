@@ -1082,7 +1082,6 @@ BOOL recvResearchStatus(NETQUEUE queue)
 	return true;
 }
 
-
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
 // Text Messaging between players. proceed string with players to send to.
@@ -1229,6 +1228,19 @@ BOOL sendTextMessage(const char *pStr, BOOL all)
 	return true;
 }
 
+void printConsoleNameChange(const char *oldName, const char *newName)
+{
+	char msg[MAX_CONSOLE_STRING_LENGTH];
+
+	// Player changed name.
+	sstrcpy(msg, oldName);                               // Old name.
+	sstrcat(msg, " → ");                                 // Separator
+	sstrcat(msg, newName);  // New name.
+
+	addConsoleMessage(msg, DEFAULT_JUSTIFY, selectedPlayer);  // display
+}
+
+
 //AI multiplayer message, send from a certain player index to another player index
 BOOL sendAIMessage(char *pStr, UDWORD player, UDWORD to)
 {
@@ -1348,6 +1360,11 @@ BOOL recvTextMessage(NETQUEUE queue)
 		NETstring(newmsg, MAX_CONSOLE_STRING_LENGTH);
 	NETend();
 
+	if (whosResponsible(playerIndex) != queue.index)
+	{
+		playerIndex = queue.index;  // Fix corrupted playerIndex.
+	}
+
 	if (playerIndex >= MAX_PLAYERS)
 	{
 		return false;
@@ -1394,6 +1411,11 @@ BOOL recvTextMessageAI(NETQUEUE queue)
 		NETuint32_t(&receiver);			//in-game player index
 		NETstring(newmsg,MAX_CONSOLE_STRING_LENGTH);
 	NETend();
+
+	if (whosResponsible(sender) != queue.index)
+	{
+		sender = queue.index;  // Fix corrupted sender.
+	}
 
 	//sstrcpy(msg, getPlayerName(sender));  // name
 	//sstrcat(msg, " : ");                  // seperator

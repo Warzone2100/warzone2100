@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-07-25 17:24+0200\n"
+"POT-Creation-Date: 2010-08-08 20:38+0200\n"
 "PO-Revision-Date: 2010-04-21 08:32-0500\n"
 "Last-Translator: Gilles J. Séguin <segg2@videotron.ca>\n"
 "Language-Team: French <warzone-dev@gna.org>\n"
@@ -6137,11 +6137,6 @@ msgstr "Mante Religieuse"
 msgid "Transport Body"
 msgstr "Châssis de Transporteur"
 
-#: data/base/messages/strings/names.txt:297
-#: data/mp/messages/strings/names.txt:300
-msgid "Z NULL BRAIN"
-msgstr "Z NUL CERVEAU"
-
 #: data/base/messages/strings/names.txt:300
 #: data/base/messages/strings/names.txt:542
 #: data/base/messages/strings/names.txt:648
@@ -6151,27 +6146,12 @@ msgstr "Z NUL CERVEAU"
 msgid "Command Turret"
 msgstr "Tourelle de Commandement"
 
-#: data/base/messages/strings/names.txt:303
-#: data/mp/messages/strings/names.txt:306
-msgid "Z NULL PROGRAM"
-msgstr "Z NUL PROGRAMME"
-
 #: data/base/messages/strings/names.txt:307
 #: data/base/messages/strings/names.txt:392
 #: data/mp/messages/strings/names.txt:310
 #: data/mp/messages/strings/names.txt:399
 msgid "Demolish"
 msgstr "Démolir"
-
-#: data/base/messages/strings/names.txt:310
-#: data/mp/messages/strings/names.txt:313
-msgid "Z NULL CONSTRUCT"
-msgstr "Z NUL CONSTRUCT"
-
-#: data/base/messages/strings/names.txt:314
-#: data/mp/messages/strings/names.txt:317
-msgid "Z NULL PROP"
-msgstr "Z NUL PROP"
 
 #: data/base/messages/strings/names.txt:315
 #: data/mp/messages/strings/names.txt:318
@@ -6267,16 +6247,6 @@ msgstr "Propulsion Bipédique III"
 msgid "Naval"
 msgstr "Navale"
 
-#: data/base/messages/strings/names.txt:337
-#: data/mp/messages/strings/names.txt:340
-msgid "BaBaProp"
-msgstr "BaBaProp"
-
-#: data/base/messages/strings/names.txt:338
-#: data/mp/messages/strings/names.txt:341
-msgid "BaBaLegs"
-msgstr "BaBaJambes"
-
 #: data/base/messages/strings/names.txt:341
 #: data/base/messages/strings/names.txt:692
 #: data/mp/messages/strings/names.txt:344
@@ -6284,25 +6254,10 @@ msgstr "BaBaJambes"
 msgid "Cyborg Propulsion"
 msgstr "Propulsion Bipédique"
 
-#: data/base/messages/strings/names.txt:345
-#: data/mp/messages/strings/names.txt:348
-msgid "Z NULL REPAIR"
-msgstr "Z NUL RÉPARATION"
-
 #: data/base/messages/strings/names.txt:346
 #: data/mp/messages/strings/names.txt:349
 msgid "Repair Turret"
 msgstr "Tourelle de Réparation"
-
-#: data/base/messages/strings/names.txt:349
-#: data/mp/messages/strings/names.txt:352
-msgid "Z NULL ECM"
-msgstr "Z NUL ECM"
-
-#: data/base/messages/strings/names.txt:362
-#: data/mp/messages/strings/names.txt:365
-msgid "Z NULL SENSOR"
-msgstr "Z NUL SENSEUR"
 
 #: data/base/messages/strings/names.txt:367
 #: data/base/messages/strings/names.txt:423
@@ -7021,10 +6976,6 @@ msgstr "Tourelle de DCA Tourbillon"
 #: data/mp/messages/strings/names.txt:998
 msgid "Hurricane AA Turret"
 msgstr "Tourelle de DCA Ouragan"
-
-#: data/base/messages/strings/names.txt:558
-msgid "LasSat"
-msgstr "Satellite Laser"
 
 #: data/base/messages/strings/names.txt:560
 #: data/mp/messages/strings/names.txt:568
@@ -9323,13 +9274,13 @@ msgstr "Augmente la cadence de tir des Mini-Roquettes"
 #: data/base/script/text/cam1-2.slo:382
 #: data/base/script/text/cam1-4a.slo:590
 #: data/base/script/text/cam1-7.slo:506
-#: data/base/script/text/genexp.slo:999
+#: data/base/script/text/genexp.slo:997
 msgid "Return to LZ"
 msgstr "Revenez à la ZA"
 
 #: data/base/script/text/cam1-7.slo:913
 #: data/base/script/text/cam2cx.slo:270
-#: data/base/script/text/genexp.slo:854
+#: data/base/script/text/genexp.slo:852
 msgid "Enemy Escaping"
 msgstr "Un ennemi s'échappe"
 
@@ -12370,23 +12321,23 @@ msgstr "Canon lourd Python aéro-glisseur"
 msgid "Plasmite Retribution VTOL"
 msgstr "Châssis Moyen - Châtiment"
 
-#: lib/framework/i18n.c:88
-#: lib/framework/i18n.c:145
+#: lib/framework/i18n.c:89
+#: lib/framework/i18n.c:147
 msgid "System locale"
 msgstr "Langage du système"
 
-#: lib/netplay/netplay.c:207
-#: lib/netplay/netplay.c:1035
+#: lib/netplay/netplay.c:206
+#: lib/netplay/netplay.c:1058
 #, fuzzy
 msgid "Enter password here"
 msgstr "Entrez le mot de passe "
 
-#: lib/netplay/netplay.c:2025
+#: lib/netplay/netplay.c:2060
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Impossible de résourdre le DNS du serveur maître (%s) !"
 
-#: lib/netplay/netplay.c:2038
+#: lib/netplay/netplay.c:2073
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Impossible de communiquer avec le serveur maître ! Le port TCP %u est-il ouvert en sortie ?"
@@ -12401,7 +12352,7 @@ msgstr "Impossible de communiquer avec le serveur maître ! Le port TCP %u est-
 #: src/intorder.c:782
 #: src/loadsave.c:256
 #: src/multimenu.c:479
-#: src/multimenu.c:1367
+#: src/multimenu.c:1357
 #: src/transporter.c:286
 #: src/transporter.c:375
 #: src/transporter.c:840
@@ -12548,7 +12499,7 @@ msgstr "aller directement à l'écran de l'hôte"
 
 #: src/configuration.c:442
 #: src/configuration.c:443
-#: src/multistat.c:120
+#: src/multistat.c:130
 msgid "Player"
 msgstr "Joueur"
 
@@ -13166,7 +13117,7 @@ msgid "GAME OPTIONS"
 msgstr "OPTIONS"
 
 #: src/frontend.c:1340
-#: src/multiint.c:2117
+#: src/multiint.c:2115
 msgid "Mod: "
 msgstr "Mod: "
 
@@ -13226,7 +13177,7 @@ msgstr "Construction (F3)"
 
 #: src/hci.c:3878
 #: src/multiint.c:1252
-#: src/multimenu.c:773
+#: src/multimenu.c:763
 msgid "Power"
 msgstr "Énergie"
 
@@ -13467,7 +13418,7 @@ msgid "Go to Transport"
 msgstr "Aller au Transporteur"
 
 #: src/intorder.c:177
-#: src/keymap.c:420
+#: src/keymap.c:419
 msgid "Return for Recycling"
 msgstr "Retour pour Recyclage"
 
@@ -13847,6 +13798,11 @@ msgstr "Activer/Désactiver la Limite de vitesse en Formation"
 msgid "View Location of Previous Message"
 msgstr "Voir la Provenance du Dernier Message Reçu"
 
+#: src/keymap.c:307
+#, fuzzy
+msgid "Toggle Sensor display"
+msgstr "Affichage de la Console"
+
 #: src/keymap.c:311
 msgid "Assign Group 0"
 msgstr "Assigner au Groupe 0"
@@ -14099,6 +14055,38 @@ msgstr "Retour au QG"
 msgid "Send Text Message"
 msgstr "Envoyer un Message Textuel"
 
+#: src/keymap.c:399
+msgid "Drop a beacon"
+msgstr ""
+
+#: src/keymap.c:401
+#, fuzzy
+msgid "Sensor display On"
+msgstr "Portée des Senseurs"
+
+#: src/keymap.c:402
+msgid "Sensor display Off"
+msgstr ""
+
+#: src/keymap.c:403
+#, fuzzy
+msgid "Toggles shadows"
+msgstr "Activer les Ombres"
+
+#: src/keymap.c:404
+#, fuzzy
+msgid "Trap cursor"
+msgstr "Piéger le Curseur"
+
+#: src/keymap.c:405
+#, fuzzy
+msgid "Toggle radar terrain"
+msgstr "Affichage du Radar"
+
+#: src/keymap.c:406
+msgid "Toggle ally-enemy radar view"
+msgstr ""
+
 #: src/keymap.c:415
 msgid "Select all Combat Units"
 msgstr "Sélectionner toutes les Unités de Combat"
@@ -14107,56 +14095,56 @@ msgstr "Sélectionner toutes les Unités de Combat"
 msgid "Select all Heavily Damaged Units"
 msgstr "Sélectionner toutes les unités Sévèrement Endommagées"
 
-#: src/keymap.c:418
+#: src/keymap.c:417
 msgid "Select all Half-tracks"
 msgstr "Selectionner toutes les Autochenilles"
 
-#: src/keymap.c:419
+#: src/keymap.c:418
 msgid "Select all Hovers"
 msgstr "Selectionner tous les aéro-glisseur"
 
-#: src/keymap.c:421
+#: src/keymap.c:420
 msgid "Select all Units on Screen"
 msgstr "Sélectionner toutes les Unités à l'Écran"
 
-#: src/keymap.c:422
+#: src/keymap.c:421
 msgid "Select all Tracks"
 msgstr "Sélectionner touts les Véhicules à Chenilles"
 
-#: src/keymap.c:423
+#: src/keymap.c:422
 msgid "Select EVERY unit"
 msgstr "Sélectionner TOUTES les Unités"
 
-#: src/keymap.c:424
+#: src/keymap.c:423
 msgid "Select all VTOLs"
 msgstr "Sélectionner tous les VTOLs"
 
-#: src/keymap.c:425
+#: src/keymap.c:424
 msgid "Select all Wheels"
 msgstr "Sélectionner tous les Véhicules à Roues"
 
-#: src/keymap.c:427
+#: src/keymap.c:426
 #, fuzzy
 msgid "Select all Similar Units"
 msgstr "Sélectionner toutes les unitées similaires"
 
-#: src/keymap.c:431
+#: src/keymap.c:430
 msgid "Select next Factory"
 msgstr "Sélectionner l'Usine suivante"
 
-#: src/keymap.c:432
+#: src/keymap.c:431
 msgid "Select next Research Facility"
 msgstr "Sélectionner le Centre de recheche suivant"
 
-#: src/keymap.c:433
+#: src/keymap.c:432
 msgid "Select next Power Generator"
 msgstr "Sélectionner le Générateur d'énergie suivant"
 
-#: src/keymap.c:434
+#: src/keymap.c:433
 msgid "Select next Cyborg Factory"
 msgstr "Sélectionner l'Usine à Cyborgs suivante"
 
-#: src/keymap.c:435
+#: src/keymap.c:434
 msgid "Toggle reopening the build menu"
 msgstr "Activer/Désactiver la réouverture du menu des Constructions"
 
@@ -14375,7 +14363,7 @@ msgid "Distance Fog"
 msgstr "Brouillard de distance"
 
 #: src/multiint.c:1219
-#: src/multimenu.c:766
+#: src/multimenu.c:756
 msgid "Alliances"
 msgstr ""
 
@@ -14452,75 +14440,75 @@ msgstr "chasser le joueur"
 msgid "Player number"
 msgstr "numéro du Joueur"
 
-#: src/multiint.c:1804
+#: src/multiint.c:1802
 msgid "Team"
 msgstr "Équipe"
 
-#: src/multiint.c:1837
+#: src/multiint.c:1835
 msgid "Waiting for other players"
 msgstr "Attente des autres joueurs"
 
-#: src/multiint.c:1843
+#: src/multiint.c:1841
 msgid "Click when ready"
 msgstr "Cliquer une fois prêt"
 
-#: src/multiint.c:1847
+#: src/multiint.c:1845
 msgid "READY?"
 msgstr "PRÊT?"
 
-#: src/multiint.c:1884
+#: src/multiint.c:1882
 msgid "PLAYERS"
 msgstr "JOUEURS"
 
-#: src/multiint.c:2088
+#: src/multiint.c:2086
 msgid "CHAT"
 msgstr "Clavardage"
 
-#: src/multiint.c:2122
+#: src/multiint.c:2120
 msgid "All players need to have the same mods to join your game."
 msgstr "Tout les joueurs doivent avoir les mêmes mods pour jouer une partie."
 
-#: src/multiint.c:2282
+#: src/multiint.c:2280
 msgid "*** password is now required! ***"
 msgstr "*** un mot de passe est désormais requis ***"
 
-#: src/multiint.c:2289
+#: src/multiint.c:2287
 msgid "*** password is NOT required! ***"
 msgstr "*** mot de passe non requis ***"
 
-#: src/multiint.c:2532
+#: src/multiint.c:2530
 msgid "Sorry! Failed to host the game."
 msgstr "Désolé ! Impossible d'héberger la partie."
 
-#: src/multiint.c:2617
+#: src/multiint.c:2615
 msgid "'Locked Teams' mode enabled"
 msgstr "Verrouiller les équipes"
 
-#: src/multiint.c:2656
-#: src/multiint.c:2706
+#: src/multiint.c:2654
+#: src/multiint.c:2704
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "L'hôte a banni %s de la partie"
 
-#: src/multiint.c:2781
+#: src/multiint.c:2779
 msgid "Host is Starting Game"
 msgstr "L'hôte démarre la partie"
 
-#: src/multiint.c:3346
+#: src/multiint.c:3349
 msgid "Players"
 msgstr "Joueurs"
 
-#: src/multiint.c:3464
+#: src/multiint.c:3467
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Carte envoyé: %d%% "
 
-#: src/multiint.c:3472
+#: src/multiint.c:3475
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Carte: %d%% téléchargé"
 
-#: src/multiint.c:3498
+#: src/multiint.c:3501
 msgid "HOST"
 msgstr "HOTE"
 
@@ -14561,72 +14549,72 @@ msgstr "Appliquer les défaults et Revenir à l'écran précédent"
 msgid "Limits reset to default values"
 msgstr "Les limites ont été rinitialisées aux valeurs par défault"
 
-#: src/multimenu.c:619
+#: src/multimenu.c:609
 msgid "Technology level 1"
 msgstr "Niveau technologique 1"
 
-#: src/multimenu.c:627
+#: src/multimenu.c:617
 msgid "Technology level 2"
 msgstr "Niveau technologique 2"
 
-#: src/multimenu.c:633
+#: src/multimenu.c:623
 msgid "Technology level 3"
 msgstr "Niveau technologique 3"
 
-#: src/multimenu.c:639
+#: src/multimenu.c:629
 msgid "Any number of players"
 msgstr "Tout nombre de joueurs"
 
-#: src/multimenu.c:646
+#: src/multimenu.c:636
 msgid "2 players"
 msgstr "2 joueurs"
 
-#: src/multimenu.c:652
+#: src/multimenu.c:642
 msgid "4 players"
 msgstr "4 joueurs"
 
-#: src/multimenu.c:658
+#: src/multimenu.c:648
 msgid "8 players"
 msgstr "8 joueurs"
 
-#: src/multimenu.c:767
+#: src/multimenu.c:757
 msgid "Score"
 msgstr "Pointage"
 
-#: src/multimenu.c:768
+#: src/multimenu.c:758
 msgid "Kills"
 msgstr "Tués"
 
-#: src/multimenu.c:772
-#: src/multimenu.c:777
+#: src/multimenu.c:762
+#: src/multimenu.c:767
 msgid "Units"
 msgstr "Unités"
 
-#: src/multimenu.c:782
+#: src/multimenu.c:772
 msgid "Ping"
 msgstr "Ping"
 
-#: src/multimenu.c:786
+#: src/multimenu.c:776
 msgid "Structs"
 msgstr "Structure"
 
-#: src/multimenu.c:1150
+#: src/multimenu.c:1140
 msgid "Toggle Alliance State"
 msgstr "Activer/Désactiver l'état des Alliances"
 
-#: src/multimenu.c:1169
+#: src/multimenu.c:1159
 msgid "Give Visibility Report"
 msgstr "Envoyer un Rapport de Visibilité"
 
-#: src/multimenu.c:1175
+#: src/multimenu.c:1165
 msgid "Leak Technology Documents"
 msgstr "Transmettre des technologies"
 
-#: src/multimenu.c:1182
+#: src/multimenu.c:1172
 msgid "Hand Over Selected Units"
 msgstr "Céder les Unités Sélectionnées"
 
-#: src/multimenu.c:1188
+#: src/multimenu.c:1178
 msgid "Give Power To Player"
 msgstr "Donner de l'énergie au Joueur"
 
@@ -14635,47 +14623,47 @@ msgstr "Donner de l'énergie au Joueur"
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr "Le joueur %s à été kické car il a essayé de contourner le contrôle d'intégrité des données !"
 
-#: src/multiplay.c:1090
+#: src/multiplay.c:1088
 msgid "(allies"
 msgstr "( Alliés"
 
-#: src/multiplay.c:1098
+#: src/multiplay.c:1096
 msgid "(private to "
 msgstr "(privé à "
 
-#: src/multiplay.c:1111
+#: src/multiplay.c:1109
 msgid "[invalid]"
 msgstr "[invalide]"
 
-#: src/multiplay.c:1970
+#: src/multiplay.c:1968
 msgid "Green"
 msgstr "Vert"
 
-#: src/multiplay.c:1971
+#: src/multiplay.c:1969
 msgid "Orange"
 msgstr "Orange"
 
-#: src/multiplay.c:1972
+#: src/multiplay.c:1970
 msgid "Grey"
 msgstr "Gris"
 
-#: src/multiplay.c:1973
+#: src/multiplay.c:1971
 msgid "Black"
 msgstr "Noir"
 
-#: src/multiplay.c:1974
+#: src/multiplay.c:1972
 msgid "Red"
 msgstr "Rouge"
 
-#: src/multiplay.c:1975
+#: src/multiplay.c:1973
 msgid "Blue"
 msgstr "Bleu"
 
-#: src/multiplay.c:1976
+#: src/multiplay.c:1974
 msgid "Pink"
 msgstr "Rose"
 
-#: src/multiplay.c:1977
+#: src/multiplay.c:1975
 msgid "Cyan"
 msgstr "Cyan"
 
@@ -14857,58 +14845,58 @@ msgstr "Impossible de localiser le moindre Commandant !"
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Limite du Control Atteinte - Arrêt de la Production"
 
-#: src/structure.c:6024
-#: src/structure.c:6049
+#: src/structure.c:6021
+#: src/structure.c:6046
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Unité assignée"
 msgstr[1] "%s - %u Unités assignées"
 
-#: src/structure.c:6054
-#: src/structure.c:6122
-#: src/structure.c:6138
-#: src/structure.c:6152
+#: src/structure.c:6051
+#: src/structure.c:6119
+#: src/structure.c:6135
+#: src/structure.c:6149
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Endommagé à %3.0f%%"
 
-#: src/structure.c:6104
+#: src/structure.c:6101
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - %u connexions établies sur %u"
 
-#: src/structure.c:6268
-#: src/structure.c:6313
+#: src/structure.c:6265
+#: src/structure.c:6310
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Électroniquement endommagé"
 
-#: src/structure.c:6549
+#: src/structure.c:6546
 msgid "Electronic Reward - Visibility Report"
 msgstr "Récompense électronique - Rapport de visibilité"
 
-#: src/structure.c:6589
+#: src/structure.c:6586
 msgid "Factory Reward - Propulsion"
 msgstr "Récompense d'usine - Propulsion"
 
-#: src/structure.c:6613
+#: src/structure.c:6610
 msgid "Factory Reward - Body"
 msgstr "Récompense d'usine - Corps"
 
-#: src/structure.c:6637
+#: src/structure.c:6634
 msgid "Factory Reward - Weapon"
 msgstr "Récompense d'usine - Armes"
 
-#: src/structure.c:6646
+#: src/structure.c:6643
 msgid "Factory Reward - Nothing"
 msgstr "Récompense d'usine - Rien"
 
-#: src/structure.c:6674
+#: src/structure.c:6671
 msgid "Repair Facility Award - Repair"
 msgstr "Récompense Atelier de réparation - Réparation"
 
-#: src/structure.c:6681
+#: src/structure.c:6678
 msgid "Repair Facility Award - Nothing"
 msgstr "Récompense Atelier de réparation - Rien"
 
@@ -14948,6 +14936,36 @@ msgstr " - Compilation %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Version %s%s%s%s"
+
+#~ msgid "Z NULL BRAIN"
+#~ msgstr "Z NUL CERVEAU"
+
+#~ msgid "Z NULL PROGRAM"
+#~ msgstr "Z NUL PROGRAMME"
+
+#~ msgid "Z NULL CONSTRUCT"
+#~ msgstr "Z NUL CONSTRUCT"
+
+#~ msgid "Z NULL PROP"
+#~ msgstr "Z NUL PROP"
+
+#~ msgid "BaBaProp"
+#~ msgstr "BaBaProp"
+
+#~ msgid "BaBaLegs"
+#~ msgstr "BaBaJambes"
+
+#~ msgid "Z NULL REPAIR"
+#~ msgstr "Z NUL RÉPARATION"
+
+#~ msgid "Z NULL ECM"
+#~ msgstr "Z NUL ECM"
+
+#~ msgid "Z NULL SENSOR"
+#~ msgstr "Z NUL SENSEUR"
+
+#~ msgid "LasSat"
+#~ msgstr "Satellite Laser"
 
 #~ msgid "Czech"
 #~ msgstr "Tchèque"

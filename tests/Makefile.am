@@ -19,7 +19,7 @@ pointtreetest_SOURCES = pointtreetest.c ../src/pointtree.cpp
 pointtreetest_CPPFLAGS = $(AM_CPPFLAGS) -DDUMP_IMAGE
 
 CLEANFILES = \
-	$(BUILT_SOURCES)
+	$(BUILT_SOURCES) pointtree.ppm
 
 TESTS = \
 	maptest \

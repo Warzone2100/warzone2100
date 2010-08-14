@@ -1427,8 +1427,8 @@ static void moveGetObstacleVector(DROID *psDroid, int32_t *pX, int32_t *pY)
  */
 static uint16_t moveGetDirection(DROID *psDroid)
 {
-	Position src = droidGetPrecisePosition(psDroid);
-	Position target = { (psDroid->sMove.targetX << EXTRA_BITS), (psDroid->sMove.targetY << EXTRA_BITS), 0 };
+	Position src = psDroid->pos;  // Do not want precice precision here, would overflow.
+	Position target = {psDroid->sMove.targetX, psDroid->sMove.targetY, 0};
 	Position dest = Vector3i_Sub(target, src);
 
 	// Transporters don't need to avoid obstacles, but everyone else should

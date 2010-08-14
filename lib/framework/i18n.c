@@ -55,6 +55,7 @@
 #define LANG_NAME_LITHUANIAN "lietuvių kalba"
 #define LANG_NAME_LATIN "latine"
 #define LANG_NAME_LATVIAN "latviešu valoda"
+#define LANG_NAME_KOREAN "한국어"
 #define LANG_NAME_NORWEGIAN "Norsk"
 #define LANG_NAME_NORWEGIAN_NYNORSK "nynorsk"
 #define LANG_NAME_DUTCH "Nederlands"
@@ -63,6 +64,7 @@
 #define LANG_NAME_PORTUGUESE "Português"
 #define LANG_NAME_ROMANIAN "română"
 #define LANG_NAME_RUSSIAN "Русский"
+#define LANG_NAME_SLOVAK "Slovensky"
 #define LANG_NAME_SLOVENIAN "Slovenski"
 #define LANG_NAME_SWEDISH_SWEDEN "svenska (Sverige)"
 #define LANG_NAME_SWEDISH "svenska"
@@ -108,6 +110,7 @@ static const struct
 	{ "ga", LANG_NAME_IRISH, LANG_IRISH, SUBLANG_IRISH_IRELAND },
 	{ "hr", LANG_NAME_CROATIAN, LANG_CROATIAN, SUBLANG_DEFAULT },
 	{ "it", LANG_NAME_ITALIAN, LANG_ITALIAN, SUBLANG_ITALIAN },
+	{ "ko_KR", LANG_NAME_KOREAN, LANG_KOREAN, SUBLANG_DEFAULT },
 //	{ "la", LANG_NAME_LATIN, LANG_LATIN, SUBLANG_DEFAULT },
 	{ "lt", LANG_NAME_LITHUANIAN, LANG_LITHUANIAN, SUBLANG_DEFAULT },
 //	{ "lv", LANG_NAME_LATVIAN, LANG_LATVIAN, SUBLANG_DEFAULT },
@@ -120,6 +123,7 @@ static const struct
 	{ "pt", LANG_NAME_PORTUGUESE, LANG_PORTUGUESE, SUBLANG_DEFAULT },
 	{ "ro", LANG_NAME_ROMANIAN, LANG_ROMANIAN, SUBLANG_DEFAULT },
 	{ "ru", LANG_NAME_RUSSIAN, LANG_RUSSIAN, SUBLANG_DEFAULT },
+	{ "sk", LANG_NAME_SLOVAK, LANG_SLOVAK, SUBLANG_DEFAULT },
 	{ "sl", LANG_NAME_SLOVENIAN, LANG_SLOVENIAN, SUBLANG_DEFAULT },
 #if (WINVER >= 0x0600)
 //	{ "sv_SE", LANG_NAME_SWEDISH_SWEDEN, LANG_SWEDISH, SUBLANG_SWEDISH_SWEDEN },
@@ -165,6 +169,7 @@ static const struct
 	{ "ga", LANG_NAME_IRISH, "ga.UTF-8", "ga" },
 	{ "hr", LANG_NAME_CROATIAN, "hr_HR.UTF-8", "hr_HR" },
 	{ "it", LANG_NAME_ITALIAN, "it_IT.UTF-8", "it_IT" },
+	{ "ko_KR", LANG_NAME_KOREAN, "ko_KR.UTF-8", "ko_KR" },
 	{ "la", LANG_NAME_LATIN, "la.UTF-8", "la" },
 	{ "lt", LANG_NAME_LITHUANIAN, "lt.UTF-8", "lt" },
 //	{ "lv", LANG_NAME_LATVIAN, "lv.UTF-8", "lv" },
@@ -176,6 +181,7 @@ static const struct
 	{ "pt", LANG_NAME_PORTUGUESE, "pt_PT.UTF-8", "pt_PT" },
 	{ "ro", LANG_NAME_ROMANIAN, "ro.UTF-8", "ro" },
 	{ "ru", LANG_NAME_RUSSIAN, "ru_RU.UTF-8", "ru_RU" },
+	{ "sk", LANG_NAME_SLOVAK, "sk_SK.UTF-8", "sk_SK" },
 	{ "sl", LANG_NAME_SLOVENIAN, "sl.UTF-8", "sl" },
 //	{ "sv_SE", LANG_NAME_SWEDISH_SWEDEN, "sv_SE.UTF-8", "sv_SE" },
 //	{ "sv", LANG_NAME_SWEDISH, "sv.UTF-8", "sv" },

@@ -28,7 +28,7 @@ from __future__ import with_statement
 ################################################################################
 #
 
-__author__ = "Gerard Krol, Tim Perrei, Freddie Witherden, Gerhard Schaden, Dennis Schridde, Buginator"
+__author__ = "The Warzone 2100 Project"
 __version__ = "2.3"
 __bpydoc__ = """\
 This script runs a Warzone 2100 2.3.x+ masterserver

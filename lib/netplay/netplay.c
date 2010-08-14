@@ -48,6 +48,7 @@
 #include "src/multistat.h"
 #include "src/multijoin.h"
 #include "src/multiint.h"
+#include "src/multiplay.h"
 
 #ifdef WZ_OS_LINUX
 #include <execinfo.h>  // Nonfatal runtime backtraces.
@@ -1403,37 +1404,36 @@ static BOOL NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 
 			NETbeginDecode(playerQueue, NET_PLAYER_INFO);
 				NETuint32_tSmall(&indexLen);
-				if (indexLen > MAX_PLAYERS)
+				if (indexLen > MAX_PLAYERS || (playerQueue.index != NET_HOST_ONLY && indexLen > 1))
 				{
 					debug(LOG_ERROR, "MSG_PLAYER_INFO: Bad number of players updated");
-					NETend();
-					break;
-				}
-				if (index != playerQueue.index && playerQueue.index != NET_HOST_ONLY)
-				{
-					debug(LOG_ERROR, "MSG_PLAYER_INFO: Player %d trying to change info about player %d.", playerQueue.index, index);
 					NETend();
 					break;
 				}
 
 				for (n = 0; n < indexLen; ++n)
 				{
+					bool wasAllocated = false;
+					char oldName[sizeof(NetPlay.players[index].name)];
+
 					// Retrieve the player's ID
 					NETuint32_tSmall(&index);
 
 					// Bail out if the given ID number is out of range
-					if (index >= MAX_CONNECTED_PLAYERS)
+					if (index >= MAX_CONNECTED_PLAYERS || (playerQueue.index != NetPlay.hostPlayer && (playerQueue.index != index || !NetPlay.players[index].allocated)))
 					{
-						debug(LOG_ERROR, "MSG_PLAYER_INFO: Player ID (%u) out of range (max %u)", index, (unsigned int)MAX_CONNECTED_PLAYERS);
+						debug(LOG_ERROR, "MSG_PLAYER_INFO from %u: Player ID (%u) out of range (max %u)", playerQueue.index, index, (unsigned int)MAX_CONNECTED_PLAYERS);
 						NETend();
 						error = true;
 						break;
 					}
 
 					// Retrieve the rest of the data
+					wasAllocated = NetPlay.players[index].allocated;
 					NETbool(&NetPlay.players[index].allocated);
 					NETbool(&NetPlay.players[index].heartbeat);
 					NETbool(&NetPlay.players[index].kick);
+					strncpy(oldName, NetPlay.players[index].name, sizeof(NetPlay.players[index].name));
 					NETstring(NetPlay.players[index].name, sizeof(NetPlay.players[index].name));
 					NETuint32_tSmall(&NetPlay.players[index].heartattacktime);
 					NETint32_tSmall(&colour);
@@ -1453,6 +1453,11 @@ static BOOL NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 					debug(LOG_NET, "%s for player %u (%s)", n == 0? "Receiving MSG_PLAYER_INFO" : "                      and", (unsigned int)index, NetPlay.players[index].allocated ? "human" : "AI");
 					// update the color to the local array
 					setPlayerColour(index, NetPlay.players[index].colour);
+
+					if (wasAllocated && NetPlay.players[index].allocated && strncmp(oldName, NetPlay.players[index].name, sizeof(NetPlay.players[index].name)) != 0)
+					{
+						printConsoleNameChange(oldName, NetPlay.players[index].name);
+					}
 				}
 				NETuint32_tSmall(&hostPlayer);
 			NETend();
