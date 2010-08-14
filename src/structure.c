@@ -2596,7 +2596,10 @@ static BOOL structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 	{
 		INITIAL_DROID_ORDERS initialOrders = {psStructure->pFunctionality->factory.secondaryOrder, psStructure->pFunctionality->factory.psAssemblyPoint->coords.x, psStructure->pFunctionality->factory.psAssemblyPoint->coords.y, psStructure->id};
 		//create a droid near to the structure
+		syncDebug("Placing new droid at (%d,%d)", x, y);
+		turnOffMultiMsg(true);
 		psNewDroid = buildDroid(psTempl, world_coord(x), world_coord(y), psStructure->player, false, &initialOrders);
+		turnOffMultiMsg(false);
 		if (!psNewDroid)
 		{
 			*ppsDroid = NULL;
@@ -2604,7 +2607,16 @@ static BOOL structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 		}
 
 		//set the droids order to that of the factory - AB 22/04/99
-		psNewDroid->secondaryOrder = psStructure->pFunctionality->factory.secondaryOrder;
+		//psNewDroid->secondaryOrder = psStructure->pFunctionality->factory.secondaryOrder;
+		if (myResponsibility(psStructure->player))
+		{
+			uint32_t newState = psStructure->pFunctionality->factory.secondaryOrder;
+			uint32_t diff = newState ^ psNewDroid->secondaryOrder;
+			if ((diff & DSS_ARANGE_MASK) != 0)
+			{  // TODO Should either do this for all states, or synchronise factory.secondaryOrder.
+				secondarySetState(psNewDroid, DSO_ATTACK_RANGE, newState & DSS_ARANGE_MASK);
+			}
+		}
 
 		if(psStructure->visible[selectedPlayer])
 		{
