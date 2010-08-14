@@ -339,6 +339,7 @@ void orderGroupLoc(DROID_GROUP *psGroup, DROID_ORDER order, UDWORD x, UDWORD y)
 	if(bMultiMessages)
 	{
 		SendGroupOrderGroup(psGroup,order,x,y,NULL);
+		return;  // Wait for our order before changing the droids.
 		bMultiMessages = false;
 
 		for(psCurr=psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
@@ -368,6 +369,7 @@ void orderGroupObj(DROID_GROUP *psGroup, DROID_ORDER order, BASE_OBJECT *psObj)
 	if(bMultiMessages)
 	{
 		SendGroupOrderGroup(psGroup,order,0,0,psObj);
+		return;  // Wait for our order before changing the droids.
 		bMultiMessages = false;
 
 		for(psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)

@@ -87,7 +87,7 @@ static inline unsigned short TileNumber_texture(unsigned short tilenumber)
 #define BITS_NOTBLOCKING	0x01	///< Units can drive on this even if there is a structure or feature on it
 #define BITS_DECAL		0x02	///< Does this tile has a decal? If so, the tile from "texture" is drawn on top of the terrain.
 #define BITS_FPATHBLOCK		0x10	///< Bit set temporarily by find path to mark a blocking tile
-#define BITS_ON_FIRE		0x20	///< Cache whether tile is burning
+#define BITS_ON_FIRE            0x20    ///< Whether tile is burning
 #define BITS_GATEWAY		0x40	///< Bit set to show a gateway on the tile
 #define BITS_TALLSTRUCTURE	0x80	///< Bit set to show a tall structure which camera needs to avoid.
 
@@ -113,6 +113,7 @@ typedef struct _maptile
 	uint16_t		limitedContinent;	///< For land or sea limited propulsion types
 	uint16_t		hoverContinent;		///< For hover type propulsions
 	uint8_t			ground;			///< The ground type used for the terrain renderer
+	uint16_t                fireEndTime;            ///< The (uint16_t)(gameTime / GAME_TICKS_PER_UPDATE) that BITS_ON_FIRE should be cleared.
 	float			waterLevel;		///< At what height is the water for this tile
 } MAPTILE;
 
@@ -304,18 +305,18 @@ BOOL mapSaveTagged(char *pFileName);
 BOOL mapLoadTagged(char *pFileName);
 
 /** Return a pointer to the tile structure at x,y in map coordinates */
-static inline WZ_DECL_PURE MAPTILE *mapTile(SDWORD x, SDWORD y)
+static inline WZ_DECL_PURE MAPTILE *mapTile(int32_t x, int32_t y)
 {
 	// Clamp x and y values to actual ones
 	// Give one tile worth of leeway before asserting, for units/transporters coming in from off-map.
 	ASSERT(x >= -1, "mapTile: x value is too small (%d,%d) in %dx%d",x,y,mapWidth,mapHeight);
 	ASSERT(y >= -1, "mapTile: y value is too small (%d,%d) in %dx%d",x,y,mapWidth,mapHeight);
-	x = (x < 0 ? 0 : x);
-	y = (y < 0 ? 0 : y);
+	x = MAX(x, 0);
+	y = MAX(y, 0);
 	ASSERT(x < mapWidth + 1, "mapTile: x value is too big (%d,%d) in %dx%d",x,y,mapWidth,mapHeight);
 	ASSERT(y < mapHeight + 1, "mapTile: y value is too big (%d,%d) in %dx%d",x,y,mapWidth,mapHeight);
-	x = (x >= mapWidth ? mapWidth - 1 : x);
-	y = (y >= mapHeight ? mapHeight - 1 : y);
+	x = MIN(x, mapWidth - 1);
+	y = MIN(y, mapHeight - 1);
 
 	return &psMapTiles[x + (y * mapWidth)];
 }
@@ -435,6 +436,7 @@ void mapFloodFillContinents(void);
 
 extern void mapTest(void);
 
+void tileSetFire(int32_t x, int32_t y, uint32_t duration);
 extern bool fireOnLocation(unsigned int x, unsigned int y);
 
 /**
@@ -445,6 +447,8 @@ static inline bool hasSensorOnTile(MAPTILE *psTile, unsigned player)
 {
 	return ((player == selectedPlayer && godMode) || (alliancebits[selectedPlayer] & (satuplinkbits | psTile->sensorBits)));
 }
+
+void mapUpdate(void);
 
 #ifdef __cplusplus
 }

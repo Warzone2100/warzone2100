@@ -48,6 +48,7 @@ typedef struct _droid_order_data
 	SDWORD			order;
 	UWORD			x,y;
 	UWORD			x2,y2;
+	uint16_t                direction;
 	BASE_OBJECT		*psObj;
 	BASE_STATS		*psStats;
 } DROID_ORDER_DATA;

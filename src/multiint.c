@@ -89,6 +89,7 @@
 #include "multirecv.h"
 #include "multimenu.h"
 #include "multilimit.h"
+#include "multigifts.h"
 
 #include "warzoneconfig.h"
 
@@ -138,17 +139,6 @@ extern char	MultiPlayersPath[PATH_MAX];
 extern char VersionString[80];		// from netplay.c
 extern BOOL bSendingMap;			// used to indicate we are sending a map
 
-extern void intDisplayTemplateButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-extern void NETsetGamePassword(const char *password);	// in netplay.c
-extern void NETresetGamePassword(void);					// in netplay.c
-extern void NETGameLocked(bool flag);					// in netplay.c
-extern void NETsetGamePassword(const char *password);	// in netplay.c
-extern void NETresetGamePassword(void);					// in netplay.c
-extern void NETGameLocked(bool flag);					// in netplay.c
-extern void NETsetGamePassword(const char *password);	// in netplay.c
-extern void NETresetGamePassword(void);					// in netplay.c
-extern void NETGameLocked(bool flag);					// in netplay.c
-
 BOOL						bHosted			= false;				//we have set up a game
 char						sPlayer[128];							// player name (to be used)
 static int					colourChooserUp = -1;
@@ -162,7 +152,6 @@ static BOOL					safeSearch		= false;				// allow auto game finding.
 static bool disableLobbyRefresh = false;	// if we allow lobby to be refreshed or not.
 static UDWORD hideTime=0;
 static bool EnablePasswordPrompt = false;	// if we need the password prompt
-extern int NET_PlayerConnectionStatus;		// from src/display3d.c
 LOBBY_ERROR_TYPES LobbyError = ERROR_NOERROR;
 static BOOL allowChangePosition = true;
 
@@ -177,40 +166,29 @@ static void drawReadyButton(UDWORD player);
 static void displayPasswordEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours);
 
 // Drawing Functions
-void		displayChatEdit				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-void		displayMultiBut				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-void		intDisplayFeBox				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-void		displayRemoteGame			(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-void		displayPlayer				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-void		displayTeamChooser			(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-void		displayMultiEditBox			(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-void		setLockedTeamsMode			(void);
+static void displayChatEdit     (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+static void displayMultiBut     (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+static void intDisplayFeBox     (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+static void displayRemoteGame   (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+static void displayPlayer       (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+static void displayTeamChooser  (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+static void displayMultiEditBox (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+static void setLockedTeamsMode  (void);
 
 // find games
 static void addGames				(void);
 static void removeGames				(void);
-void		runGameFind				(void);
-void		startGameFind			(void);
 
 // password form functions
 static void hidePasswordForm(void);
 static void showPasswordForm(void);
 
-// Connection option functions
-void		runConnectionScreen		(void);
-BOOL		startConnectionScreen	(void);
-
 // Game option functions
 static	void	addGameOptions		(BOOL bRedo);				// options (rhs) boxV
-UDWORD	addPlayerBox		(BOOL);				// players (mid) box
 static	void	addChatBox			(void);
 static	void	disableMultiButs	(void);
 static	void	processMultiopWidgets(UDWORD);
 static	void	SendFireUp			(void);
-
-void			runMultiOptions		(void);
-BOOL			startMultiOptions	(BOOL);
-void			frontendMultiMessages(void);
 
 static	UDWORD	bestPlayer			(UDWORD);
 static	void	decideWRF			(void);
@@ -221,8 +199,6 @@ static BOOL		SendColourRequest	(UBYTE player, UBYTE col);
 static BOOL		SendPositionRequest	(UBYTE player, UBYTE chosenPlayer);
 static BOOL		safeToUseColour		(UDWORD player,UDWORD col);
 static BOOL		changeReadyStatus	(UBYTE player, BOOL bReady);
-void			resetReadyStatus	(bool bSendOptions);
-void			initTeams( void );
 static	void stopJoining(void);
 // ////////////////////////////////////////////////////////////////////////////
 // map previews..
@@ -567,6 +543,10 @@ void runConnectionScreen(void )
 			break;
 		case CON_OK:
 			sstrcpy(addr, widgGetString(psConScreen, CON_IP));
+			if (addr[0] == '\0')
+			{
+				sstrcpy(addr, "127.0.0.1");  // Default to localhost.
+			}
 
 			if(SettingsUp == true)
 			{
@@ -1479,7 +1459,7 @@ static BOOL SendTeamRequest(UBYTE player, UBYTE chosenTeam)
 	}
 	else
 	{
-		NETbeginEncode(NET_TEAMREQUEST, NET_HOST_ONLY);
+		NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_TEAMREQUEST);
 
 		NETuint8_t(&player);
 		NETuint8_t(&chosenTeam);
@@ -1490,7 +1470,7 @@ static BOOL SendTeamRequest(UBYTE player, UBYTE chosenTeam)
 	return true;
 }
 
-BOOL recvTeamRequest()
+BOOL recvTeamRequest(NETQUEUE queue)
 {
 	UBYTE	player, team;
 
@@ -1499,7 +1479,7 @@ BOOL recvTeamRequest()
 		return true;
 	}
 
-	NETbeginDecode(NET_TEAMREQUEST);
+	NETbeginDecode(queue, NET_TEAMREQUEST);
 	NETuint8_t(&player);
 	NETuint8_t(&team);
 	NETend();
@@ -1507,7 +1487,7 @@ BOOL recvTeamRequest()
 	if (player > MAX_PLAYERS || team > MAX_PLAYERS)
 	{
 		debug(LOG_ERROR, "Invalid NET_TEAMREQUEST from player %d: Tried to change player %d (team %d)",
-		      NETgetSource(), (int)player, (int)team);
+		      queue.index, (int)player, (int)team);
 		return false;
 	}
 
@@ -1528,7 +1508,7 @@ static BOOL SendReadyRequest(UBYTE player, BOOL bReady)
 	}
 	else
 	{
-		NETbeginEncode(NET_READY_REQUEST, NET_ALL_PLAYERS);
+		NETbeginEncode(NETbroadcastQueue(), NET_READY_REQUEST);
 			NETuint8_t(&player);
 			NETbool(&bReady);
 		NETend();
@@ -1536,7 +1516,7 @@ static BOOL SendReadyRequest(UBYTE player, BOOL bReady)
 	return true;
 }
 
-BOOL recvReadyRequest()
+BOOL recvReadyRequest(NETQUEUE queue)
 {
 	UBYTE	player;
 	BOOL	bReady;
@@ -1546,7 +1526,7 @@ BOOL recvReadyRequest()
 		return true;
 	}
 
-	NETbeginDecode(NET_READY_REQUEST);
+	NETbeginDecode(queue, NET_READY_REQUEST);
 		NETuint8_t(&player);
 		NETbool(&bReady);
 	NETend();
@@ -1554,7 +1534,7 @@ BOOL recvReadyRequest()
 	if (player > MAX_PLAYERS)
 	{
 		debug(LOG_ERROR, "Invalid NET_READY_REQUEST from player %d: player id = %d",
-		      NETgetSource(), (int)player);
+		      queue.index, (int)player);
 		return false;
 	}
 
@@ -1648,7 +1628,7 @@ static BOOL SendColourRequest(UBYTE player, UBYTE col)
 	else
 	{
 		// clients tell the host which color they want
-		NETbeginEncode(NET_COLOURREQUEST, NET_HOST_ONLY);
+		NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_COLOURREQUEST);
 			NETuint8_t(&player);
 			NETuint8_t(&col);
 		NETend();
@@ -1666,7 +1646,7 @@ static BOOL SendPositionRequest(UBYTE player, UBYTE position)
 	{
 		debug(LOG_NET, "Requesting the host to change our position. From %d to %d", player, position);
 		// clients tell the host which position they want
-		NETbeginEncode(NET_POSITIONREQUEST, NET_HOST_ONLY);
+		NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_POSITIONREQUEST);
 			NETuint8_t(&player);
 			NETuint8_t(&position);
 		NETend();
@@ -1674,7 +1654,7 @@ static BOOL SendPositionRequest(UBYTE player, UBYTE position)
 	return true;
 }
 
-BOOL recvColourRequest()
+BOOL recvColourRequest(NETQUEUE queue)
 {
 	UBYTE	player, col;
 
@@ -1683,7 +1663,7 @@ BOOL recvColourRequest()
 		return true;
 	}
 
-	NETbeginDecode(NET_COLOURREQUEST);
+	NETbeginDecode(queue, NET_COLOURREQUEST);
 		NETuint8_t(&player);
 		NETuint8_t(&col);
 	NETend();
@@ -1691,7 +1671,7 @@ BOOL recvColourRequest()
 	if (player > MAX_PLAYERS)
 	{
 		debug(LOG_ERROR, "Invalid NET_COLOURREQUEST from player %d: Tried to change player %d to colour %d",
-		      NETgetSource(), (int)player, (int)col);
+		      queue.index, (int)player, (int)col);
 		return false;
 	}
 
@@ -1700,7 +1680,7 @@ BOOL recvColourRequest()
 	return changeColour(player, col);
 }
 
-BOOL recvPositionRequest()
+BOOL recvPositionRequest(NETQUEUE queue)
 {
 	UBYTE	player, position;
 
@@ -1709,7 +1689,7 @@ BOOL recvPositionRequest()
 		return true;
 	}
 
-	NETbeginDecode(NET_POSITIONREQUEST);
+	NETbeginDecode(queue, NET_POSITIONREQUEST);
 		NETuint8_t(&player);
 		NETuint8_t(&position);
 	NETend();
@@ -1717,7 +1697,7 @@ BOOL recvPositionRequest()
 	if (player > MAX_PLAYERS || position > MAX_PLAYERS)
 	{
 		debug(LOG_ERROR, "Invalid NET_POSITIONREQUEST from player %d: Tried to change player %d to %d",
-		      NETgetSource(), (int)player, (int)position);
+		      queue.index, (int)player, (int)position);
 		return false;
 	}
 
@@ -2034,7 +2014,7 @@ UDWORD addPlayerBox(BOOL players)
  */
 static void SendFireUp(void)
 {
-	NETbeginEncode(NET_FIREUP, NET_ALL_PLAYERS);
+	NETbeginEncode(NETbroadcastQueue(), NET_FIREUP);
 		// no payload necessary
 	NETend();
 }
@@ -2043,7 +2023,7 @@ static void SendFireUp(void)
 void kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type)
 {
 	// send a kick msg
-	NETbeginEncode(NET_KICK, NET_ALL_PLAYERS);
+	NETbeginEncode(NETbroadcastQueue(), NET_KICK);
 		NETuint32_t(&player_id);
 		NETstring( (char *) reason, MAX_KICK_REASON);
 		NETenum(&type);
@@ -2175,7 +2155,7 @@ static void stopJoining(void)
 		{
 			// annouce we are leaving...
 			debug(LOG_NET, "Host is quitting game...");
-			NETbeginEncode(NET_HOST_DROPPED, NET_ALL_PLAYERS);
+			NETbeginEncode(NETbroadcastQueue(), NET_HOST_DROPPED);
 			NETend();
 			sendLeavingMsg();								// say goodbye
 			NETclose();										// quit running game.
@@ -2628,7 +2608,7 @@ static void processMultiopWidgets(UDWORD id)
 			{
 				startMultiplayerGame();
 				// reset flag in case people dropped/quit on join screen
-				NET_PlayerConnectionStatus = 0;
+				NETsetPlayerConnectionStatus(CONNECTIONSTATUS_NORMAL, NET_ALL_PLAYERS);
 			}
 		}
 	}
@@ -2723,7 +2703,7 @@ void startMultiplayerGame(void)
 	decideWRF();										// set up swrf & game.map
 	bMultiPlayer = true;
 	bMultiMessages = true;
-	NET_PlayerConnectionStatus = 0; // reset disconnect conditions
+	NETsetPlayerConnectionStatus(CONNECTIONSTATUS_NORMAL, NET_ALL_PLAYERS);  // reset disconnect conditions
 
 	if (NetPlay.isHost)
 	{
@@ -2783,20 +2763,21 @@ void startMultiplayerGame(void)
 
 void frontendMultiMessages(void)
 {
+	NETQUEUE queue;
 	uint8_t type;
 
-	while(NETrecv(&type))
+	while (NETrecvNet(&queue, &type))
 	{
 		// Copy the message to the global one used by the new NET API
 		switch(type)
 		{
 		case NET_FILE_REQUESTED:
-			recvMapFileRequested();
+			recvMapFileRequested(queue);
 			break;
 
 		case NET_FILE_PAYLOAD:
 			widgSetButtonState(psWScreen, MULTIOP_MAP_BUT, 1);	// turn preview button off
-			if (recvMapFileData())
+			if (recvMapFileData(queue))
 			{
 				widgSetButtonState(psWScreen, MULTIOP_MAP_BUT, 0);	// turn it back on again
 			}
@@ -2807,7 +2788,7 @@ void frontendMultiMessages(void)
 				uint32_t reason;
 				uint32_t victim;
 
-				NETbeginDecode(NET_FILE_CANCELLED);
+				NETbeginDecode(queue, NET_FILE_CANCELLED);
 					NETuint32_t(&victim);
 					NETuint32_t(&reason);
 				NETend();
@@ -2831,7 +2812,7 @@ void frontendMultiMessages(void)
 			break;
 
 		case NET_OPTIONS:					// incoming options file.
-			recvOptions();
+			recvOptions(queue);
 			ingame.localOptionsReceived = true;
 
 			if(titleMode == MULTIOPTION)
@@ -2842,24 +2823,24 @@ void frontendMultiMessages(void)
 			}
 			break;
 
-		case NET_ALLIANCE:
-			recvAlliance(false);
+		case GAME_ALLIANCE:
+			recvAlliance(queue, false);
 			break;
 
 		case NET_COLOURREQUEST:
-			recvColourRequest();
+			recvColourRequest(queue);
 			break;
 
 		case NET_POSITIONREQUEST:
-			recvPositionRequest();
+			recvPositionRequest(queue);
 			break;
 
 		case NET_TEAMREQUEST:
-			recvTeamRequest();
+			recvTeamRequest(queue);
 			break;
 
 		case NET_READY_REQUEST:
-			recvReadyRequest();
+			recvReadyRequest(queue);
 
 			// if hosting try to start the game if everyone is ready
 			if(NetPlay.isHost && multiplayPlayersReady(false))
@@ -2869,7 +2850,7 @@ void frontendMultiMessages(void)
 			break;
 
 		case NET_PING:						// diagnostic ping msg.
-			recvPing();
+			recvPing(queue);
 			break;
 
 		case NET_PLAYER_DROPPED:		// remote player got disconnected
@@ -2878,7 +2859,7 @@ void frontendMultiMessages(void)
 
 			resetReadyStatus(false);
 
-			NETbeginDecode(NET_PLAYER_DROPPED);
+			NETbeginDecode(queue, NET_PLAYER_DROPPED);
 			{
 				NETuint32_t(&player_id);
 			}
@@ -2894,7 +2875,7 @@ void frontendMultiMessages(void)
 
 			MultiPlayerLeave(player_id);		// get rid of their stuff
 			NET_InitPlayer(player_id, false);           // sets index player's array to false
-			NET_PlayerConnectionStatus = 2;		//DROPPED_CONNECTION
+			NETsetPlayerConnectionStatus(CONNECTIONSTATUS_PLAYER_DROPPED, player_id);
 			if (player_id == NetPlay.hostPlayer || player_id == selectedPlayer)	// if host quits or we quit, abort out
 			{
 				stopJoining();
@@ -2907,7 +2888,7 @@ void frontendMultiMessages(void)
 
 			resetReadyStatus(false);
 
-			NETbeginDecode(NET_PLAYERRESPONDING);
+			NETbeginDecode(queue, NET_PLAYERRESPONDING);
 				// the player that has just responded
 				NETuint32_t(&player_id);
 			NETend();
@@ -2933,8 +2914,13 @@ void frontendMultiMessages(void)
 				bMultiMessages = true;
 				changeTitleMode(STARTGAME);
 				bHosted = false;
-				break;
+
+				// Start the game before processing more messages.
+				NETpop(queue);
+				return;
 			}
+			ASSERT(false, "NET_FIREUP was received, but !ingame.localOptionsReceived.");
+			break;
 
 		case NET_KICK:						// player is forcing someone to leave
 		{
@@ -2949,7 +2935,7 @@ void frontendMultiMessages(void)
 				break;
 			}
 
-			NETbeginDecode(NET_KICK);
+			NETbeginDecode(queue, NET_KICK);
 				NETuint32_t(&player_id);
 				NETstring( reason, MAX_KICK_REASON);
 				NETenum(&KICK_TYPE);
@@ -2972,7 +2958,7 @@ void frontendMultiMessages(void)
 			break;
 		}
 		case NET_HOST_DROPPED:
-			NETbeginDecode(NET_HOST_DROPPED);
+			NETbeginDecode(queue, NET_HOST_DROPPED);
 			NETend();
 			stopJoining();
 			debug(LOG_NET, "The host has quit!");
@@ -2982,10 +2968,16 @@ void frontendMultiMessages(void)
 		case NET_TEXTMSG:					// Chat message
 			if(ingame.localOptionsReceived)
 			{
-				recvTextMessage();
+				recvTextMessage(queue);
 			}
 			break;
+
+		default:
+			debug(LOG_ERROR, "Didn't handle %s message!", messageTypeToString(type));
+			break;
 		}
+
+		NETpop(queue);
 	}
 }
 

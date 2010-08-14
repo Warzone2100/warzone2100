@@ -44,92 +44,89 @@ typedef enum
 	ERROR_CHEAT,
 	ERROR_KICKED,
 	ERROR_WRONGVERSION,
-	ERROR_WRONGPASSWORD,				// NOTE WRONG_PASSWORD results in conflict
+	ERROR_WRONGPASSWORD,
 	ERROR_HOSTDROPPED,
 	ERROR_WRONGDATA,
 	ERROR_UNKNOWNFILEISSUE
 } LOBBY_ERROR_TYPES;
 
+typedef enum
+{
+	CONNECTIONSTATUS_PLAYER_DROPPED,
+	CONNECTIONSTATUS_PLAYER_LEAVING,
+	CONNECTIONSTATUS_DESYNC,
+	CONNECTIONSTATUS_WAITING_FOR_PLAYER,
+
+	CONNECTIONSTATUS_NORMAL
+} CONNECTION_STATUS;
 
 typedef enum
 {
-	NET_DROID,				//0 a new droid
-	NET_DROIDINFO,			//1 update a droid order.
-	NET_DROIDDEST,			//2 issue a droid destruction
-	NET_DROIDMOVE,			//3 move a droid, don't change anything else though..
-	NET_GROUPORDER,			//4 order a group of droids.
-	NET_TEMPLATE,			//5 a new template
-	NET_TEMPLATEDEST,		//6 remove template
-	NET_FEATUREDEST,		//7 destroy a game feature.
-	NET_PING,				//8 ping players.
-	NET_CHECK_DROID,		//9 check & update bot position and damage.
-	NET_CHECK_STRUCT,		//10 check & update struct damage.
-	NET_CHECK_POWER,		//11 power levels for a player.
-	NET_PLAYER_STATS,		//12 player stats: HACK-NOTE: lib/netplay/netplay.c depends on this being 12
-	NET_BUILD,				//13 build a new structure
-	NET_STRUCTDEST,			//14 specify a strucutre to destroy
-	NET_BUILDFINISHED,		//15 a building is complete.
-	NET_RESEARCH,			//16 Research has been completed.
-	NET_TEXTMSG,			//17 A simple text message between machines.
-	NET_UNUSED_18,			//18 
-	NET_UNUSED_19,			//19
-	NET_PLAYERCOMPLETE,		//20 All Setup information about player x has been sent
-	NET_UNUSED_21,			//
-	NET_STRUCT,				//22 a complete structure
-	NET_UNUSED_23,			//
-	NET_FEATURES,			//24 information regarding features.
-	NET_PLAYERRESPONDING,	//25 computer that sent this is now playing warzone!
-	NET_OPTIONS,			//26 welcome a player to a game.
-	NET_KICK,				//27 kick a player .
-	NET_SECONDARY,			//28 set a droids secondary order
-	NET_FIREUP,				//29 campaign game has started, we can go too.. Shortcut message, not to be used in dmatch.
-	NET_ALLIANCE,			//30 alliance data.
-	NET_GIFT,				//31 a luvly gift between players.
-	NET_DEMOLISH,			//32 a demolish is complete.
-	NET_COLOURREQUEST,		//33 player requests a colour change.
-	NET_ARTIFACTS,			//34 artifacts randomly placed.
-	NET_DMATCHWIN,			//35 winner of a deathmatch. NOTUSED
-	NET_SCORESUBMIT,		//36 submission of scores to host.
-	NET_DESTROYXTRA,		//37 destroy droid with destroyer intact.
-	NET_VTOL,				//38 vtol rearmed
-	NET_UNUSED_39,			//
-	NET_WHITEBOARD,			//40 whiteboard.
-	NET_SECONDARY_ALL,		//41 complete secondary order.
-	NET_DROIDEMBARK,		//42 droid embarked on a Transporter
-	NET_DROIDDISEMBARK,		//43 droid disembarked from a Transporter
-	NET_RESEARCHSTATUS,		//44 research state.
-	NET_LASSAT,				//45 lassat firing.
-	NET_UNUSED_46,			//46 old map request, now unused.
-	NET_AITEXTMSG,			//47 chat between AIs
-	NET_TEAMS_ON,			//48 locked teams mode
-	NET_BEACONMSG,			//49 place beacon
-	NET_SET_TEAMS,			//50 set locked teams
-	NET_TEAMREQUEST,		//51 request team membership
-	NET_JOIN,				//52 join a game
-	NET_ACCEPTED,			//53 accepted into game
-	NET_PLAYER_INFO,		//54 basic player info
-	NET_PLAYER_JOINED,		//55 notice about player joining
-	NET_PLAYER_LEAVING,		//56 A player is leaving, (nicely)
-	NET_PLAYER_DROPPED,		//57 notice about player dropped / disconnected
-	NET_GAME_FLAGS,			//58 game flags
-	NET_READY_REQUEST,		//59 player ready to start an mp game
-	NET_NEVERUSE,			//60 
-	NET_REJECTED,			//61 nope, you can't join
-	NET_UNUSED_62,			//62 
-	NET_UNUSED_63,			//63 
-	NET_UNUSED_64,			//64 
-	NET_POSITIONREQUEST,	//65 position in GUI player list
-	NET_DATA_CHECK,			//66 Data integrity check
-	NET_HOST_DROPPED,		//67 Host has dropped
-	NET_FUTURE1,			//68	future use
-	NET_FUTURE2,			//69		"
-	NET_FUTURE3,			//70		"
-	NET_FILE_REQUESTED,		//71 Player has requested a file (map/mod/?)
-	NET_FILE_CANCELLED,		//72 Player cancelled a file request
-	NET_FILE_PAYLOAD,		//73 sending file to the player that needs it
-	NUM_GAME_PACKETS		//   *MUST* be last.
+	NET_MIN_TYPE = 33,              ///< Minimum-1 valid NET_ type, *MUST* be first.
+	NET_PING,                       ///< ping players.
+	NET_PLAYER_STATS,               ///< player stats
+	NET_TEXTMSG,                    ///< A simple text message between machines.
+	NET_PLAYERRESPONDING,           ///< computer that sent this is now playing warzone!
+	NET_OPTIONS,                    ///< welcome a player to a game.
+	NET_KICK,                       ///< kick a player .
+	NET_FIREUP,                     ///< campaign game has started, we can go too.. Shortcut message, not to be used in dmatch.
+	NET_COLOURREQUEST,              ///< player requests a colour change.
+	NET_AITEXTMSG,                  ///< chat between AIs
+	NET_BEACONMSG,                  ///< place beacon
+	NET_TEAMREQUEST,                ///< request team membership
+	NET_JOIN,                       ///< join a game
+	NET_ACCEPTED,                   ///< accepted into game
+	NET_PLAYER_INFO,                ///< basic player info
+	NET_PLAYER_JOINED,              ///< notice about player joining
+	NET_PLAYER_LEAVING,             ///< A player is leaving, (nicely)
+	NET_PLAYER_DROPPED,             ///< notice about player dropped / disconnected
+	NET_GAME_FLAGS,                 ///< game flags
+	NET_READY_REQUEST,              ///< player ready to start an mp game
+	NET_REJECTED,                   ///< nope, you can't join
+	NET_POSITIONREQUEST,            ///< position in GUI player list
+	NET_DATA_CHECK,                 ///< Data integrity check
+	NET_HOST_DROPPED,               ///< Host has dropped
+	NET_SEND_TO_PLAYER,             ///< Non-host clients aren't directly connected to each other, so they talk via the host using these messages.
+	NET_SHARE_GAME_QUEUE,           ///< Message contains a game message, which should be inserted into a queue.
+	NET_FILE_REQUESTED,             ///< Player has requested a file (map/mod/?)
+	NET_FILE_CANCELLED,             ///< Player cancelled a file request
+	NET_FILE_PAYLOAD,               ///< sending file to the player that needs it
+	NET_DEBUG_SYNC,                 ///< Synch error messages, so people don't have to use pastebin.
+	NET_MAX_TYPE,                   ///< Maximum+1 valid NET_ type, *MUST* be last.
+
+	GAME_MIN_TYPE = 111,            ///< Minimum-1 valid GAME_ type, *MUST* be first.
+	GAME_DROID,                     ///< a new droid
+	GAME_DROIDINFO,                 ///< update a droid order.
+	GAME_TEMPLATE,                  ///< a new template
+	GAME_TEMPLATEDEST,              ///< remove template
+	GAME_FEATUREDEST,               ///< destroy a game feature.
+	GAME_BUILD,                     ///< build a new structure
+	GAME_RESEARCH,                  ///< Research has been completed.
+	GAME_FEATURES,                  ///< information regarding features.
+	GAME_SECONDARY,                 ///< set a droids secondary order
+	GAME_ALLIANCE,                  ///< alliance data.
+	GAME_GIFT,                      ///< a luvly gift between players.
+	GAME_ARTIFACTS,                 ///< artifacts randomly placed.
+	GAME_RESEARCHSTATUS,            ///< research state.
+	GAME_STRUCTUREINFO,             ///< Structure state.
+	GAME_LASSAT,                    ///< lassat firing.
+	GAME_GAME_TIME,                 ///< Game time. Used for synchronising, so that all messages are executed at the same gameTime on all clients.
+	// The following messages (not including GAME_MAX_TYPE) are currently redundant, and should probably at some point not be
+	// sent, except (some of them) when using cheats in debug mode.
+	GAME_DROIDDEST,                 ///< issue a droid destruction, will be sent by all players at the same time, and have no effect, if synchronised.
+	GAME_CHECK_DROID,               ///< check & update bot position and damage.
+	GAME_CHECK_STRUCT,              ///< check & update struct damage.
+	GAME_CHECK_POWER,               ///< power levels for a player.
+	GAME_STRUCTDEST,                ///< specify a strucutre to destroy, will be sent by all players at the same time, and have no effect, if synchronised.
+	GAME_BUILDFINISHED,             ///< a building is complete.
+	GAME_DEMOLISH,                  ///< a demolish is complete.
+	GAME_DROIDEMBARK,               ///< droid embarked on a Transporter
+	GAME_DROIDDISEMBARK,            ///< droid disembarked from a Transporter
+	// End of redundant messages.
+	GAME_MAX_TYPE                   ///< Maximum+1 valid GAME_ type, *MUST* be last.
 } MESSAGE_TYPES;
-#define SYNC_FLAG (NUM_GAME_PACKETS * NUM_GAME_PACKETS)	//special flag used for logging.
+//#define SYNC_FLAG (NUM_GAME_PACKETS * NUM_GAME_PACKETS)	//special flag used for logging.
+#define SYNC_FLAG 0x10000000	//special flag used for logging. (Not sure what this is. Was added in trunk, NUM_GAME_PACKETS not in newnet.)
 
 // Constants
 // @NOTE / FIXME: We need a way to detect what should happen if the msg buffer exceeds this.
@@ -141,6 +138,9 @@ typedef enum
 #define password_string_size 64		// longer passwords slow down the join code
 
 #define SESSION_JOINDISABLED	1
+
+#define MAX_CONNECTED_PLAYERS   8
+#define MAX_TMP_SOCKETS         16
 
 typedef struct {					//Available game storage... JUST FOR REFERENCE!
 	int32_t dwSize;
@@ -199,8 +199,6 @@ typedef struct {
 	uint64_t	unsentScoreCheck;
 	uint64_t	sentPing;
 	uint64_t	unsentPing;
-	uint64_t	sentisMPDirtyBit;
-	uint64_t	unsentisMPDirtyBit;
 	uint16_t	kicks;
 	uint16_t	joins;
 	uint16_t	left;
@@ -209,15 +207,6 @@ typedef struct {
 	uint16_t	banned;
 	uint16_t	rejected;
 } SYNC_COUNTER;
-
-typedef struct {
-	uint16_t	size;				// used size of body
-	uint8_t		type;				// type of packet
-	uint8_t		destination;		// player to send to, or NET_ALL_PLAYERS
-	uint8_t		source;				// player it is sent from
-	char 		body[MaxMsgSize];	// msg buffer
-	BOOL		status;				// If the packet compiled or not (this is _not_ sent!)
-} NETMSG;
 
 typedef struct
 {
@@ -294,7 +283,6 @@ typedef struct
 // variables
 
 extern NETPLAY				NetPlay;
-extern NETMSG NetMsg;
 extern SYNC_COUNTER sync_counter;
 extern PLAYER_IP	*IPlist;
 // update flags
@@ -305,12 +293,13 @@ extern char iptoconnect[PATH_MAX]; // holds IP/hostname from command line
 // ////////////////////////////////////////////////////////////////////////
 // functions available to you.
 extern int   NETinit(BOOL bFirstCall);				// init
-extern BOOL   NETsend(NETMSG *msg, UDWORD player);	// send to player
-extern BOOL   NETbcast(NETMSG *msg);				// broadcast to everyone
-extern BOOL   NETrecv(uint8_t *type);				// recv a message if possible
+BOOL NETsend(uint8_t player, NETMESSAGE message);                        ///< send to player, or broadcast if player == NET_ALL_PLAYERS.
+extern BOOL NETrecvNet(NETQUEUE *queue, uint8_t *type);                  ///< recv a message from the net queues if possible.
+extern BOOL NETrecvGame(NETQUEUE *queue, uint8_t *type);                 ///< recv a message from the game queues which is sceduled to execute by time, if possible.
+void NETflush(void);                                                     ///< Flushes any data stuck in compression buffers.
 
 extern UBYTE   NETsendFile(char *fileName, UDWORD player);	// send file chunk.
-extern UBYTE   NETrecvFile(void);			// recv file chunk
+extern UBYTE   NETrecvFile(NETQUEUE queue);                     // recv file chunk
 
 extern int NETclose(void);					// close current game
 extern int NETshutdown(void);					// leave the game in play.
@@ -339,6 +328,7 @@ extern BOOL	NETjoinGame(UDWORD gameNumber, const char* playername);			// join ga
 extern BOOL	NEThostGame(const char* SessionName, const char* PlayerName,// host a game
 			    SDWORD one, SDWORD two, SDWORD three, SDWORD four, UDWORD plyrs);
 extern BOOL	NETchangePlayerName(UDWORD player, char *newName);// change a players name.
+void            NETfixDuplicatePlayerNames(void);  // Change a player's name automatically, if there are duplicates.
 
 #include "netlog.h"
 
@@ -360,6 +350,21 @@ extern void NET_InitPlayers(void);
 
 void NETGameLocked(bool flag);
 void NETresetGamePassword(void);
+
+void NETsetPlayerConnectionStatus(CONNECTION_STATUS status, unsigned player);    ///< Cumulative, except that CONNECTIONSTATUS_NORMAL resets.
+bool NETcheckPlayerConnectionStatus(CONNECTION_STATUS status, unsigned player);  ///< True iff connection status icon hasn't expired for this player. CONNECTIONSTATUS_NORMAL means any status, NET_ALL_PLAYERS means all players.
+
+const char *messageTypeToString(unsigned messageType);
+
+/// Sync debugging. Only prints anything, if different players would print different things.
+#define syncDebug(...) do { _syncDebug(__FUNCTION__, __VA_ARGS__); } while(0)
+void _syncDebug(const char *function, const char *str, ...)
+	WZ_DECL_FORMAT(printf, 2, 3);
+void syncDebugBacktrace(void);  ///< Adds a backtrace to syncDebug. (Expect lots of false positives, if all clients aren't using the exact same binaries.)
+const char *syncDebugFloat(float f);  ///< Prints the float in hex.
+
+uint32_t nextDebugSync(void);                                    ///< Returns a CRC corresponding to all syncDebug() calls since the last nextDebugSync() call.
+bool checkDebugSync(uint32_t checkGameTime, uint32_t checkCrc);  ///< Dumps all syncDebug() calls from that gameTime, if the CRC doesn't match.
 
 #ifdef __cplusplus
 }

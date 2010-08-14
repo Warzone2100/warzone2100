@@ -512,7 +512,7 @@ void driveUpdate(void)
 		if(psDrivenDroid != NULL) {
 			if(bMultiMessages && (driveBumpTime < gameTime))	// send latest info about driven droid.
 			{
-				SendDroidInfo(psDrivenDroid,DORDER_MOVE,psDrivenDroid->pos.x,psDrivenDroid->pos.y, NULL);
+				SendDroidInfo(psDrivenDroid, DORDER_MOVE, psDrivenDroid->pos.x, psDrivenDroid->pos.y, NULL, NULL, 0, 0, 0);
 			}
 
 	//TO BE DONE:

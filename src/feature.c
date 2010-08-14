@@ -485,6 +485,7 @@ bool removeFeature(FEATURE *psDel)
 	if(bMultiMessages && !ingame.localJoiningInProgress)
 	{
 		SendDestroyFeature(psDel);	// inform other players of destruction
+		return true;  // Wait for our message before really destroying the feature.
 	}
 
 	//remove from the map data

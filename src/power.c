@@ -99,6 +99,11 @@ void clearPlayerPower(void)
 	nextPowerSystemUpdate = 0;
 }
 
+static void syncDebugEconomy(unsigned player, char ch)
+{
+	syncDebug("%c economy%u = %"PRId64",%"PRId64",%"PRId64",%"PRId64"", ch, player, asPower[player].currentPower, asPower[player].economyThrottle, asPower[player].powerProduced, asPower[player].powerRequested);
+}
+
 void throttleEconomy(void)
 {
 	int player;
@@ -112,6 +117,8 @@ void throttleEconomy(void)
 
 	for (player = 0; player < MAX_PLAYERS; player++)
 	{
+		syncDebugEconomy(player, '<');
+
 		if (asPower[player].currentPower >= asPower[player].powerRequested ||
 		    asPower[player].powerRequested <= asPower[player].powerProduced)
 		{
@@ -135,6 +142,8 @@ void throttleEconomy(void)
 		CLIP(asPower[player].economyThrottle, 0, FP_ONE);
 		asPower[player].powerProduced = 0;
 		asPower[player].powerRequested = 0;
+
+		syncDebugEconomy(player, '>');
 	}
 }
 
@@ -161,12 +170,14 @@ BOOL checkPower(int player, uint32_t quantity)
 void usePower(int player, uint32_t quantity)
 {
 	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Bad player (%d)", player);
+	syncDebug("usePower%d %"PRId64"-=%u", player, asPower[player].currentPower, quantity);
 	asPower[player].currentPower = MAX(0, asPower[player].currentPower - quantity*FP_ONE);
 }
 
 void addPower(int player, int32_t quantity)
 {
 	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Bad player (%d)", player);
+	syncDebug("addPower%d %"PRId64"+=%d", player, asPower[player].currentPower, quantity);
 	asPower[player].currentPower += quantity*FP_ONE;
 	CLIP(asPower[player].currentPower, 0, MAX_POWER*FP_ONE);
 }
@@ -223,6 +234,8 @@ static int64_t updateExtractedPower(STRUCTURE *psBuilding)
 		}
 
 		pResExtractor->timeLastUpdated = gameTime;
+
+		syncDebug("updateExtractedPower%d = %"PRId64"", psBuilding->player, extractedPoints);
 	}
 	ASSERT(extractedPoints >= 0, "extracted negative amount of power");
 	return extractedPoints;
@@ -260,6 +273,7 @@ void updatePlayerPower(UDWORD player)
 		}
 	}
 	asPower[player].powerProduced += asPower[player].currentPower - powerBefore;
+	syncDebug("updatePlayerPower%u %"PRId64"->%"PRId64"", player, powerBefore, asPower[player].currentPower);
 }
 
 /* Updates the current power based on the extracted power and a Power Generator*/
@@ -301,7 +315,17 @@ void setPower(unsigned player, int32_t power)
 {
 	ASSERT(player < MAX_PLAYERS, "setPower: Bad player (%u)", player);
 
+	syncDebug("setPower%d %"PRId64"->%d", player, asPower[player].currentPower, power);
 	asPower[player].currentPower = power*FP_ONE;
+	ASSERT(asPower[player].currentPower >= 0, "negative power");
+}
+
+void setPrecisePower(unsigned player, int64_t power)
+{
+	ASSERT(player < MAX_PLAYERS, "setPower: Bad player (%u)", player);
+
+	syncDebug("setPower%d %"PRId64"->%"PRId64"", player, asPower[player].currentPower, power);
+	asPower[player].currentPower = power;
 	ASSERT(asPower[player].currentPower >= 0, "negative power");
 }
 
@@ -310,6 +334,13 @@ int32_t getPower(unsigned player)
 	ASSERT(player < MAX_PLAYERS, "setPower: Bad player (%u)", player);
 
 	return asPower[player].currentPower >> 32;
+}
+
+int64_t getPrecisePower(unsigned player)
+{
+	ASSERT(player < MAX_PLAYERS, "setPower: Bad player (%u)", player);
+
+	return asPower[player].currentPower;
 }
 
 /*Temp function to give all players some power when a new game has been loaded*/
@@ -439,8 +470,9 @@ int requestPrecisePowerFor(int player, int64_t amount, int points)
 	{
 		// you can have it
 		asPower[player].currentPower -= amountConsidered;
+		syncDebug("requestPrecisePowerFor%d give%d,want%d", player, pointsConsidered, points);
 		return pointsConsidered;
 	}
+	syncDebug("requestPrecisePowerFor%d giveNone,want%d", player, points);
 	return 0; // no power this frame
 }
-

@@ -1,5 +1,6 @@
 AM_CPPFLAGS = $(SDL_CFLAGS) $(WZ_CPPFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS) $(WZ_C99FLAGS)
+AM_CXXFLAGS = $(WZ_CXXFLAGS)
 noinst_LIBRARIES = libexceptionhandler.a
 noinst_HEADERS = \
 	dumpinfo.h \

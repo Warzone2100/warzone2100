@@ -49,6 +49,8 @@
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
 
+#include "lib/netplay/netplay.h"
+
 #include "e3demo.h"
 #include "loop.h"
 #include "atmos.h"
@@ -219,15 +221,14 @@ bool showSAMPLES = false;
 /**  Show the current selected units order / action
  *  default OFF, turn ON via console command 'showorders'
  */
-bool showORDERS = false;	
+bool showORDERS = false;
 /** Show the current level name on the screen, toggle via the 'showlevelname'
  *  console command
 */
 bool showLevelName = true;
 /** When we have a connection issue, we will flash a message on screen
-* 0 = no issue, 1= player leaving nicely, 2= player got disconnected
 */
-int NET_PlayerConnectionStatus = 0;
+
 #define NETWORK_FORM_ID 0xFAAA
 #define NETWORK_BUT_ID 0xFAAB
 /** When enabled, this causes a segfault in the game, to test out the crash handler */
@@ -391,7 +392,12 @@ static void NetworkDisplayPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOf
 	x1 = x0 + Form->width;
 	y1 = y0 + Form->height;
 
-	RenderWindowFrame(FRAME_NORMAL, x0, y0, x1 - x0, y1 - y0);
+	// Don't draw anything, a rectangle behind the icon just looks strange, if you notice it.
+	//RenderWindowFrame(FRAME_NORMAL, x0, y0, x1 - x0, y1 - y0);
+	(void)x0;
+	(void)y0;
+	(void)x1;
+	(void)y1;
 }
 
 /// Displays an image for the Network Issue button
@@ -400,6 +406,7 @@ static void NetworkDisplayImage(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 	UDWORD x = xOffset+psWidget->x;
 	UDWORD y = yOffset+psWidget->y;
 	UWORD ImageID;
+	unsigned status = UNPACKDWORD_TRI_A(psWidget->UserData);
 
 	ASSERT( psWidget->type == WIDG_BUTTON,"Not a button" );
 
@@ -413,7 +420,148 @@ static void NetworkDisplayImage(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 		ImageID = UNPACKDWORD_TRI_C(psWidget->UserData);
 	}
 
+	if (NETcheckPlayerConnectionStatus(status, NET_ALL_PLAYERS))
+	{
+		unsigned width, height;
+		unsigned n, c = 0;
+		char players[MAX_PLAYERS + 1];
+		unsigned playerMaskMapped = 0;
+		for (n = 0; n < MAX_PLAYERS; ++n)
+		{
+			if (NETcheckPlayerConnectionStatus(status, n))
+			{
+				playerMaskMapped |= 1<<NetPlay.players[n].position;
+			}
+		}
+		for (n = 0; n < MAX_PLAYERS; ++n)
+		{
+			if ((playerMaskMapped & 1<<n) != 0)
+			{
+				players[c++] = "0123456789ABCDEF"[n];
+			}
+		}
+		players[c] = '\0';
+
+		width = iV_GetTextWidth(players) + 10;
+		height = iV_GetTextHeight(players) + 10;
+
+		iV_DrawText(players, x - width, y + height);
+	}
+
 	iV_DrawImage(IntImages,ImageID,x,y);
+}
+
+static void setupConnectionStatusForm(void)
+{
+	static W_FORMINIT        sFormInit;
+	static W_BUTINIT         sButInit;
+	static unsigned          prevStatusMask = 0;
+
+	const int separation = 3;
+	unsigned statusMask = 0;
+	unsigned total = 0;
+	unsigned i;
+
+	for (i = 0; i < CONNECTIONSTATUS_NORMAL; ++i)
+	{
+		if (NETcheckPlayerConnectionStatus((CONNECTION_STATUS)i, NET_ALL_PLAYERS))
+		{
+			statusMask |= 1<<i;
+			++total;
+		}
+	}
+
+	if (prevStatusMask != 0 && statusMask != prevStatusMask)
+	{
+		// Remove the icons.
+		for (i = 0; i < CONNECTIONSTATUS_NORMAL; ++i)
+		{
+			if ((statusMask & 1<<i) != 0)
+			{
+				widgDelete(psWScreen, NETWORK_BUT_ID + i);   // kill button
+			}
+		}
+		widgDelete(psWScreen, NETWORK_FORM_ID);  // kill form
+
+		prevStatusMask = 0;
+	}
+
+	if (prevStatusMask == 0 && statusMask != 0)
+	{
+		unsigned n = 0;
+		// Create the basic form
+		memset(&sFormInit, 0, sizeof(W_FORMINIT));
+		sFormInit.formID = 0;
+		sFormInit.id = NETWORK_FORM_ID;
+		sFormInit.style = WFORM_PLAIN;
+		sFormInit.x = (int)(pie_GetVideoBufferWidth() - 52);
+		sFormInit.y = 80;
+		sFormInit.width = 36;
+		sFormInit.height = (24 + separation)*total - separation;
+		sFormInit.pDisplay = NetworkDisplayPlainForm;  // NetworkDisplayPlainForm used to do something, but it looks ugly.
+		if (!widgAddForm(psWScreen, &sFormInit))
+		{
+			//return false;
+		}
+
+		/* Now add the buttons */
+		for (i = 0; i < CONNECTIONSTATUS_NORMAL; ++i)
+		{
+			if ((statusMask & 1<<i) == 0)
+			{
+				continue;
+			}
+
+			//set up default button data
+			memset(&sButInit, 0, sizeof(W_BUTINIT));
+			sButInit.formID = NETWORK_FORM_ID;
+			sButInit.id = NETWORK_BUT_ID + i;
+			sButInit.width = 36;
+			sButInit.height = 24;
+			sButInit.FontID = font_regular;
+
+			//add button
+			sButInit.style = WBUT_PLAIN;
+			sButInit.x = 0;
+			sButInit.y = (24 + separation)*n;
+			sButInit.pDisplay = NetworkDisplayImage;
+			// Note we would set the image to be different based on which issue it is.
+			switch (i)
+			{
+			default:
+				ASSERT(false, "Bad connection status value.");
+				sButInit.pTip = "Bug";
+				sButInit.UserData = PACKDWORD_TRI(0, IMAGE_DESYNC_HI, IMAGE_PLAYER_LEFT_LO);
+				break;
+			case CONNECTIONSTATUS_PLAYER_LEAVING:
+				sButInit.pTip = _("Player left");
+				sButInit.UserData = PACKDWORD_TRI(i, IMAGE_PLAYER_LEFT_HI, IMAGE_PLAYER_LEFT_LO);
+				break;
+			case CONNECTIONSTATUS_PLAYER_DROPPED:
+				sButInit.pTip = _("Player dropped");
+				sButInit.UserData = PACKDWORD_TRI(i, IMAGE_DISCONNECT_LO, IMAGE_DISCONNECT_HI);
+				break;
+			case CONNECTIONSTATUS_WAITING_FOR_PLAYER:
+				sButInit.pTip = _("Waiting for other players");
+				sButInit.UserData = PACKDWORD_TRI(i, IMAGE_WAITING_HI, IMAGE_WAITING_LO);
+
+				break;
+			case CONNECTIONSTATUS_DESYNC:
+				sButInit.pTip = _("Out of sync");
+				sButInit.UserData = PACKDWORD_TRI(i, IMAGE_DESYNC_HI, IMAGE_DESYNC_LO);
+				break;
+			}
+
+			if (!widgAddButton(psWScreen, &sButInit))
+			{
+				//return false;
+			}
+
+			++n;
+		}
+
+		prevStatusMask = statusMask;
+	}
 }
 
 /// Render the 3D world
@@ -525,75 +673,8 @@ void draw3DScene( void )
 		iV_DrawText(DROIDDOING, 0, pie_GetVideoBufferHeight()- height);
 	}
 
-	if (NET_PlayerConnectionStatus)
-	{
-		static W_FORMINIT		sFormInit;
-		static W_BUTINIT		sButInit;
-		static bool formUP = 0;
-		static int flashtimer = 0;
+	setupConnectionStatusForm();
 
-		if(!formUP)
-		{
-			// Create the basic form 
-			memset(&sFormInit, 0, sizeof(W_FORMINIT));
-			sFormInit.formID = 0;
-			sFormInit.id = NETWORK_FORM_ID;
-			sFormInit.style = WFORM_PLAIN;
-			sFormInit.x = (SDWORD) (pie_GetVideoBufferWidth() - 52) ;
-			sFormInit.y = 80;
-			sFormInit.width = 36;
-			sFormInit.height = 	24;
-			sFormInit.pDisplay = NetworkDisplayPlainForm;
-			if (!widgAddForm(psWScreen, &sFormInit))
-			{
-				//return false;
-			}
-
-			/* Now add the buttons */
-
-			//set up default button data
-			memset(&sButInit, 0, sizeof(W_BUTINIT));
-			sButInit.formID = NETWORK_FORM_ID;
-			sButInit.id = NETWORK_BUT_ID;
-			sButInit.width = 36;
-			sButInit.height = 24;
-			sButInit.FontID = font_regular;
-
-			//add button
-			sButInit.style = WBUT_PLAIN;
-			sButInit.x = 0;
-			sButInit.y = 0;
-			sButInit.pTip = NET_PlayerConnectionStatus == 1 ? _("Player left"):_("Player dropped");
-			sButInit.pDisplay = NetworkDisplayImage;
-			// Note we would set the image to be different based on which issue it is.
-			if (NET_PlayerConnectionStatus == 1)
-			{
-				sButInit.UserData = PACKDWORD_TRI(1, IMAGE_PLAYER_LEFT_HI, IMAGE_PLAYER_LEFT_LO);
-			}
-			else
-			{
-				sButInit.UserData = PACKDWORD_TRI(1, IMAGE_DISCONNECT_LO, IMAGE_DISCONNECT_HI);
-			}
-
-			if (!widgAddButton(psWScreen, &sButInit))
-			{
-				//return false;
-			}
-			formUP = true;					//
-			flashtimer = gameTime2;			// save time widget went up
-		}
-		else
-		{
-			// flash the button for ~10 secs.
-			if(flashtimer + (GAME_TICKS_PER_SEC * 10) < gameTime2)
-			{
-				widgDelete(psWScreen,NETWORK_BUT_ID);	// kill button
-				widgDelete(psWScreen,NETWORK_FORM_ID);	// kill form
-				formUP = false;
-				NET_PlayerConnectionStatus = 0;
-			}
-		}
-	}
 	if (getWidgetsStatus() && !gamePaused())
 	{
 #ifdef DEBUG
@@ -1336,7 +1417,7 @@ void displayStaticObjects( void )
 	pie_SetDepthOffset(0.0f);
 }
 
-static void drawWallDrag(STRUCTURE_STATS *psStats, int left, int right, int up, int down, STRUCT_STATES state)
+static void drawWallDrag(STRUCTURE_STATS *psStats, int left, int right, int up, int down, uint16_t direction, STRUCT_STATES state)
 {
 	int i, j;
 	STRUCTURE *blueprint;
@@ -1350,6 +1431,7 @@ static void drawWallDrag(STRUCTURE_STATS *psStats, int left, int right, int up, 
 	blueprint = buildBlueprint(psStats,
 	                           world_coord(left)+world_coord(sBuildDetails.width)/2,
 	                           world_coord(up)+world_coord(sBuildDetails.height)/2,
+	                           direction,
 	                           state);
 	ASSERT_OR_RETURN(, blueprint != NULL, "No blueprint created");
 
@@ -1410,7 +1492,7 @@ void displayBlueprints(void)
 				up = MIN(wallDrag.y1, wallDrag.y2);
 				down = MAX(wallDrag.y1, wallDrag.y2);
 
-				drawWallDrag((STRUCTURE_STATS *)sBuildDetails.psStats, left, right, up, down, state);
+				drawWallDrag((STRUCTURE_STATS *)sBuildDetails.psStats, left, right, up, down, player.r.y, state);
 			}
 			else
 			{
@@ -1418,6 +1500,7 @@ void displayBlueprints(void)
 				blueprint = buildBlueprint((STRUCTURE_STATS *)sBuildDetails.psStats,
 										   world_coord(sBuildDetails.x)+world_coord(sBuildDetails.width)/2,
 										   world_coord(sBuildDetails.y)+world_coord(sBuildDetails.height)/2,
+										   player.r.y,
 										   state);
 				renderStructure(blueprint);
 				free(blueprint);
@@ -1465,7 +1548,7 @@ void displayBlueprints(void)
 				up = MIN(map_coord(psDroid->orderY), map_coord(psDroid->orderY2));
 				down = MAX(map_coord(psDroid->orderY), map_coord(psDroid->orderY2));
 
-				drawWallDrag((STRUCTURE_STATS *)psDroid->psTarStats, left, right, up, down, SS_BLUEPRINT_PLANNED);
+				drawWallDrag((STRUCTURE_STATS *)psDroid->psTarStats, left, right, up, down, psDroid->orderDirection, SS_BLUEPRINT_PLANNED);
 			}
 			if (psDroid->order == DORDER_BUILD && psDroid->psTarStats)
 			{
@@ -1474,6 +1557,7 @@ void displayBlueprints(void)
 					blueprint = buildBlueprint((STRUCTURE_STATS *)psDroid->psTarStats,
 											   psDroid->orderX,
 											   psDroid->orderY,
+											   psDroid->orderDirection,
 											   SS_BLUEPRINT_PLANNED);
 					renderStructure(blueprint);
 					free(blueprint);
@@ -1490,6 +1574,7 @@ void displayBlueprints(void)
 						blueprint = buildBlueprint((STRUCTURE_STATS *)psDroid->asOrderList[order].psOrderTarget,
 						                           psDroid->asOrderList[order].x,
 						                           psDroid->asOrderList[order].y,
+									   psDroid->asOrderList[order].direction,
 						                           SS_BLUEPRINT_PLANNED);
 						renderStructure(blueprint);
 						free(blueprint);
@@ -1505,7 +1590,7 @@ void displayBlueprints(void)
 					up = MIN(map_coord(psDroid->asOrderList[order].y), map_coord(psDroid->asOrderList[order].y2));
 					down = MAX(map_coord(psDroid->asOrderList[order].y), map_coord(psDroid->asOrderList[order].y2));
 
-					drawWallDrag((STRUCTURE_STATS *)psDroid->asOrderList[order].psOrderTarget, left, right, up, down, SS_BLUEPRINT_PLANNED);
+					drawWallDrag((STRUCTURE_STATS *)psDroid->asOrderList[order].psOrderTarget, left, right, up, down, psDroid->asOrderList[order].direction, SS_BLUEPRINT_PLANNED);
 				}
 			}
 		}

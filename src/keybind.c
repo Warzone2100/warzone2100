@@ -178,6 +178,11 @@ void	kf_ForceSync( void )
 	
 }
 
+void kf_ForceDesync(void)
+{
+	syncDebug("Oh no!!! I went out of sync!!!");
+}
+
 void	kf_PowerInfo( void )
 {
 	int i;
@@ -302,8 +307,8 @@ void	kf_CloneSelected( void )
 	DROID_TEMPLATE	sTemplate;
 	DROID_TEMPLATE	*sTemplate2 = NULL;
 	const int	limit = 10;	// make 10 clones
-	int		i, impact_side;
-	const char* msg;
+	int             i;//, impact_side;
+	//const char *    msg;
 
 #ifndef DEBUG
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
@@ -336,7 +341,8 @@ void	kf_CloneSelected( void )
 			templateSetParts(psDroid, &sTemplate);
 
 			// create a new droid
-			psNewDroid = buildDroid(&sTemplate, psDroid->pos.x, psDroid->pos.y, psDroid->player, false);
+			psNewDroid = buildDroid(&sTemplate, psDroid->pos.x, psDroid->pos.y, psDroid->player, false, NULL);
+			/* // TODO psNewDroid is null, since we just sent a message, but haven't actually created the droid locally yet.
 			ASSERT_OR_RETURN(, psNewDroid != NULL, "Unable to build a unit");
 			addDroid(psNewDroid, apsDroidLists);
 			psNewDroid->body = psDroid->body;
@@ -363,6 +369,7 @@ void	kf_CloneSelected( void )
 			psNewDroid->selected = true;
 			psNewDroid = NULL;
 			Cheated = true;
+			*/
 		}
 	}
 }
@@ -1417,8 +1424,16 @@ void	kf_FinishAllResearch(void)
 		pPlayerRes += j; // select right tech
 		if (IsResearchCompleted(pPlayerRes) == false)
 		{
-			MakeResearchCompleted(pPlayerRes);
-			researchResult(j, selectedPlayer, false, NULL, false);
+			if (bMultiMessages)
+			{
+				SendResearch(selectedPlayer, j, false);
+				// Wait for our message before doing anything.
+			}
+			else
+			{
+				MakeResearchCompleted(pPlayerRes);
+				researchResult(j, selectedPlayer, false, NULL, false);
+			}
 		}
 	}
 	sasprintf((char**)&cmsg, _("(Player %u) is using cheat :%s"),
@@ -1477,7 +1492,15 @@ void	kf_FinishResearch( void )
 			pSubject = ((RESEARCH_FACILITY *)psCurr->pFunctionality)->psSubject;
 			if (pSubject)
 			{
-				researchResult((RESEARCH*)pSubject - asResearch, selectedPlayer, true, psCurr, true);
+				if (bMultiMessages)
+				{
+					SendResearch(selectedPlayer, (RESEARCH*)pSubject - asResearch, true);
+					// Wait for our message before doing anything.
+				}
+				else
+				{
+					researchResult((RESEARCH*)pSubject - asResearch, selectedPlayer, true, psCurr, true);
+				}
 				sasprintf((char**)&cmsg, _("(Player %u) is using cheat :%s %s"),
 					selectedPlayer, _("Researched"), getName(pSubject->pName) );
 				sendTextMessage(cmsg, true);
@@ -1906,13 +1929,13 @@ void	kf_KillEnemy( void )
 			for(psCDroid=apsDroidLists[player]; psCDroid; psCDroid=psNDroid)
 			{
 				psNDroid = psCDroid->psNext;
-				destroyDroid(psCDroid);
+				SendDestroyDroid(psCDroid);
 			}
 			// wipe out all their structures
 		  	for(psCStruct=apsStructLists[player]; psCStruct; psCStruct=psNStruct)
 		  	{
 		  		psNStruct = psCStruct->psNext;
-		  		destroyStruct(psCStruct);
+				SendDestroyStructure(psCStruct);
 		  	}
 		}
 	}
@@ -1948,7 +1971,7 @@ void kf_KillSelected(void)
 		if (psCDroid->selected)
 		{
 //			removeDroid(psCDroid);
-			destroyDroid(psCDroid);
+			SendDestroyDroid(psCDroid);
 		}
 	}
 	for(psCStruct=apsStructLists[selectedPlayer]; psCStruct; psCStruct=psNStruct)
@@ -1956,7 +1979,7 @@ void kf_KillSelected(void)
 		psNStruct = psCStruct->psNext;
 		if (psCStruct->selected)
 		{
-			destroyStruct(psCStruct);
+			SendDestroyStructure(psCStruct);
 		}
 	}
 }

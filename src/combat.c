@@ -358,7 +358,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	}
 	else /* Deal with a missed shot */
 	{
-		int missDir = rand() % BUL_MAXSCATTERDIR, missDist = 2 * (100 - resultHitChance);
+		int missDir = gameRand(BUL_MAXSCATTERDIR), missDist = 2 * (100 - resultHitChance);
 		Vector3i miss = {
 			aScatterDir[missDir].x * missDist + psTarget->pos.x + minOffset,
 			aScatterDir[missDir].y * missDist + psTarget->pos.y + minOffset,
@@ -494,7 +494,13 @@ float objDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD originalhp, UDWORD wea
 
 	if (psObj->type == OBJ_STRUCTURE || psObj->type == OBJ_DROID)
 	{
+		// Force sending messages, even if messages were turned off, since a non-synchronised script will execute here. (Aaargh!)
+		bool bMultiMessagesBackup = bMultiMessages;
+		bMultiMessages = bMultiPlayer;
+
 		clustObjectAttacked((BASE_OBJECT *)psObj);
+
+		bMultiMessages = bMultiMessagesBackup;
 	}
 
 

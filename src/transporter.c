@@ -1109,7 +1109,7 @@ BOOL OrderDroidToEmbark(DROID *psDroid)
 {
 	DROID *psTransporter;
 
-	psTransporter = FindATransporter();
+	psTransporter = FindATransporter(psDroid->player);
 
 	if(psTransporter != NULL)
 	{
@@ -1357,6 +1357,15 @@ void transporterRemoveDroid(UDWORD id)
 	DROID_GROUP	*psGroup;
 
 	ASSERT( psCurrTransporter != NULL, "transporterRemoveUnit:can't remove units" );
+
+	if (bMultiMessages)
+	{
+		// Not sure how to fix this...
+		debug(LOG_ERROR, "TODO: Can't unload single droids, sending order to unload all at once, because this code is so convoluted.");
+		// All at once is better than nothing...
+		orderDroidLoc(psCurrTransporter, DORDER_DISEMBARK, psCurrTransporter->pos.x, psCurrTransporter->pos.y);
+		return;
+	}
 
 	currID = IDTRANS_CONTSTART;
 	for (psDroid = psCurrTransporter->psGroup->psList; psDroid != NULL && psDroid !=

@@ -184,7 +184,7 @@ AC_ARG_ENABLE([static],
 if test "x$enable_static" = "xyes" ; then
 	# Add libs where even pkg-config cannot help statically linking them,
 	# where one would otherwise have to provide them via commandline
-	WIN32_LIBS="${WIN32_LIBS} -lz -lintl -liconv"
+	WIN32_LIBS="${WIN32_LIBS} -lintl -liconv"
 	# Tell pkg-config to link against static libraries, incl. all dependencies
 	PKG_CONFIG="${PKG_CONFIG} --static"
 fi
@@ -212,11 +212,17 @@ AC_MSG_RESULT([${enable_debug}])
 AX_C_CHECK_FLAG([-Werror -Wno-switch], , , CFLAGS_IGNORE_WARNINGS="${CFLAGS_IGNORE_WARNINGS} -Wno-switch")
 AX_C_CHECK_FLAG([-Werror -Wno-enum-compare], , , CFLAGS_IGNORE_WARNINGS="${CFLAGS_IGNORE_WARNINGS} -Wno-enum-compare")
 
+# zlib
+LDFLAGS="-lz ${LDFLAGS}"
+
 if test "x$enable_debug" = "xyes" ; then
 	if test "x$cc_icc" = "xyes" ; then
+		# "-fp-model precise -fp-model source -ftz -no-fma" was here
 		WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -Wcheck -Werror"
+		WZ_CXXFLAGS="${WZ_CXXFLAGS} -O0 -g -Wcheck -Werror"
 		WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 	else
+		# "-mno-fused-madd" was here
 		WZ_WARNINGS="-Wall -Werror -Wno-unused-label -Wmissing-field-initializers -Wcast-align -Wwrite-strings -Wmissing-declarations -Wpointer-arith -Wno-format-security"
 		WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -Wno-pointer-to-int-cast  -Wstrict-prototypes -Wdeclaration-after-statement ${WZ_WARNINGS} ${CFLAGS_IGNORE_WARNINGS}"
 		WZ_CXXFLAGS="${WZ_CXXFLAGS} -O0 -g -Wextra ${WZ_WARNINGS}"
@@ -231,21 +237,26 @@ elif test "x$enable_debug" = "xoptimised" ; then
 	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 elif test "x$enable_debug" = "xrelaxed" ; then
 	WZ_CFLAGS="${WZ_CFLAGS} -g -O0 -Wall -Wextra -Wwrite-strings"
+	WZ_CXXFLAGS="${WZ_CXXFLAGS} -g -O0 -Wall -Wextra -Wwrite-strings"
 	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 elif test "x$enable_debug" = "xdebugprofile" ; then
 	WZ_CFLAGS="${WZ_CFLAGS} -g -O0 -pg -Wall -Wwrite-strings"
+	WZ_CXXFLAGS="${WZ_CXXFLAGS} -g -O0 -pg -Wall -Wwrite-strings"
 	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 	LDFLAGS="-pg ${LDFLAGS}"
 elif test "x$enable_debug" = "xprofile" ; then
 	WZ_CFLAGS="${WZ_CFLAGS} -g -Os -pg -Wall -Wwrite-strings"
+	WZ_CXXFLAGS="${WZ_CXXFLAGS} -g -Os -pg -Wall -Wwrite-strings"
 	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DNDEBUG"
 	LDFLAGS="-pg ${LDFLAGS}"
 elif test "x$enable_debug" = "xg++" ; then
 	WZ_CFLAGS="${WZ_CFLAGS} -g -O2 -Wall -fpermissive"
+	WZ_CXXFLAGS="${WZ_CXXFLAGS} -g -O2 -Wall"
 	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 	CC="g++"
 else
 	WZ_CFLAGS="${WZ_CFLAGS} -g -Wall -Wwrite-strings"
+	WZ_CXXFLAGS="${WZ_CXXFLAGS} -g -Wall -Wwrite-strings"
 	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DNDEBUG"
 fi
 

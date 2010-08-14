@@ -24,6 +24,13 @@
 #ifndef _gtime_h
 #define _gtime_h
 
+//#include "lib/netplay/nettypes.h"
+typedef struct _netqueue NETQUEUE_;
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
 
 /// The number of time units per second of the game clock.
 #define GAME_TICKS_PER_SEC 1000
@@ -36,10 +43,6 @@
  * changed to /6 by ajl. if this needs to go back to ticks/10 then tell me. */
 #define GTIME_MAXFRAME (GAME_TICKS_PER_SEC/6)
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
 /// The current time in the game world.
 /// Changes in GAME_UNITS_PER_TICK increments.
 extern UDWORD gameTime;
@@ -71,11 +74,14 @@ extern void gameTimeInit(void);
 /// Changes the game (and graphics) time.
 extern void setGameTime(uint32_t newGameTime);
 
-/** Call this each loop to update the timers.
- * @param sane If true, then the game time increases in GAME_UNITS_PER_TICK increments, and deltaGameTime is either 0 or GAME_UNITS_PER_TICK. If false, the game time is equal to the graphics time, and the game always ticks.
+/** Call this each loop to update the gameTime and graphicsTime timers, and corresponding deltaGameTime and deltaRealTime.
+ * If logicalUpdates is true, then the game time increases in GAME_UNITS_PER_TICK increments, and deltaGameTime is either 0 or GAME_UNITS_PER_TICK. If false, the game time is equal to the graphics time, and the game always ticks.
  * @returns true iff the game time ticked.
  */
 extern void gameTimeUpdate(void);
+
+/// Updates the realTime timer, and corresponding deltaRealTime.
+void realTimeUpdate(void);
 
 /* Returns true if gameTime is stopped. */
 extern BOOL gameTimeIsStopped(void);
@@ -156,9 +162,15 @@ static inline float realTimeAdjustedIncrement(float value)
 	return value * realTimeFraction;
 }
 
+void sendPlayerGameTime(void);                            ///< Sends a GAME_GAME_TIME message with gameTime plus latency to our game queues.
+void recvPlayerGameTime(NETQUEUE_ queue);                 ///< Processes a GAME_GAME_TIME message.
+bool checkPlayerGameTime(unsigned player);                ///< Checks that we are not waiting for a GAME_GAME_TIME message from this player. (player can be NET_ALL_PLAYERS.)
+void setPlayerGameTime(unsigned player, uint32_t time);   ///< Sets the player's time.
+
+bool isInSync(void);                                      ///< Returns true unless there was a CRC mismatch between the last GAME_GAME_TIME messages.
+
 #ifdef __cplusplus
 }
 #endif //__cplusplus
 
 #endif
-

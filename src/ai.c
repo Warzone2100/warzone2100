@@ -1089,14 +1089,6 @@ void aiUpdateDroid(DROID *psDroid)
 		return;
 	}
 
-	// HACK: we always want to update orders when NOT running a MP game,
-	// and we don't want to update when the droid belongs to another human player
-	if (!myResponsibility(psDroid->player) && bMultiPlayer
-		  && isHumanPlayer(psDroid->player))
-	{
-		return;		// we should not order this droid around
-	}
-	
 	lookForTarget = false;
 	updateTarget = false;
 	
@@ -1149,17 +1141,6 @@ void aiUpdateDroid(DROID *psDroid)
 
 	// don't look for a target if there are any queued orders
 	if (psDroid->listSize > 0)
-	{
-		lookForTarget = false;
-		updateTarget = false;
-	}
-
-	// horrible check to stop droids looking for a target if
-	// they would switch to the guard order in the order update loop
-	if ((psDroid->order == DORDER_NONE) &&
-		(psDroid->player == selectedPlayer) &&
-		!isVtolDroid(psDroid) &&
-		secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_GUARD)
 	{
 		lookForTarget = false;
 		updateTarget = false;

@@ -134,7 +134,7 @@ cscope.out
 
 # KDevelop4
 /.kdev4/
-/warzone.kdev4
+/warzone*.kdev4
 /.kdev_include_paths
 
 # Qt
@@ -148,8 +148,11 @@ tools/qwzm/ui_animationview.h
 tools/qwzm/ui_connectorview.h
 tools/qwzm/ui_qwzm.h
 
-# patches
+# Patches
 *.patch
+*.diff
+*.rej
+*.orig
 
 # Debian stuff
 /debian
@@ -169,8 +172,8 @@ tools/qwzm/ui_qwzm.h
 
 # build folders
 /build
+/build_*/
 /2.3
 /trunk
 /newnet
 /qt-trunk
-

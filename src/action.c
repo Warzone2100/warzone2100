@@ -28,6 +28,7 @@
 #include "lib/script/script.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
+#include "lib/netplay/netplay.h"
 
 #include "action.h"
 #include "combat.h"
@@ -1666,6 +1667,7 @@ void actionUpdateDroid(DROID *psDroid)
 				//unless its a module!
 				if (IsStatExpansionModule(psStructStats))
 				{
+					syncDebug("Reached build target: module");
 					debug( LOG_NEVER, "DACTION_MOVETOBUILD: setUpBuildModule");
 					setUpBuildModule(psDroid);
 				}
@@ -1676,6 +1678,7 @@ void actionUpdateDroid(DROID *psDroid)
 					if (psStruct->pStructureType == (STRUCTURE_STATS *)psDroid->psTarStats)
 					{
 						// same type - do a help build
+						syncDebug("Reached build target: do-help");
 						setDroidTarget(psDroid, (BASE_OBJECT *)psStruct);
 						helpBuild = true;
 					}
@@ -1686,16 +1689,19 @@ void actionUpdateDroid(DROID *psDroid)
 							// building a gun tower over a wall - OK
 							if (droidStartBuild(psDroid))
 							{
+								syncDebug("Reached build target: tower");
 								debug( LOG_NEVER, "DACTION_MOVETOBUILD: start foundation");
 								psDroid->action = DACTION_BUILD;
 							}
 							else
 							{
+								syncDebug("Reached build target: wall-in-way");
 								psDroid->action = DACTION_NONE;
 							}
 					}
 					else
 					{
+						syncDebug("Reached build target: already-structure");
 						objTrace(psDroid->id, "DACTION_MOVETOBUILD: tile has structure already");
 						cancelBuild(psDroid);
 					}
@@ -1706,11 +1712,13 @@ void actionUpdateDroid(DROID *psDroid)
 										psDroid->player,
 										false))
 				{
+					syncDebug("Reached build target: invalid");
 					objTrace(psDroid->id, "DACTION_MOVETOBUILD: !validLocation");
 					cancelBuild(psDroid);
 				}
 				else
 				{
+					syncDebug("Reached build target: build");
 					psDroid->action = DACTION_BUILD_FOUNDATION;
 					psDroid->actionStarted = gameTime;
 					psDroid->actionPoints = 0;
@@ -1722,6 +1730,7 @@ void actionUpdateDroid(DROID *psDroid)
 			{
 				// building a wall.
 				MAPTILE* const psTile = mapTile(map_coord(psDroid->orderX), map_coord(psDroid->orderY));
+				syncDebug("Reached build target: wall");
 				if (psDroid->psTarget == NULL
 				 && (TileHasStructure(psTile)
 				  || TileHasFeature(psTile)))
@@ -1772,6 +1781,7 @@ void actionUpdateDroid(DROID *psDroid)
 			}
 			else
 			{
+				syncDebug("Reached build target: planned-help");
 				helpBuild = true;
 			}
 
@@ -2443,6 +2453,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 	CHECK_DROID(psDroid);
 
 	psDroid->actionStarted = gameTime;
+	syncDebug("%d does %s", psDroid->id, getDroidActionName(psAction->action));
 
 	switch (psAction->action)
 	{

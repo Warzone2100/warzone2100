@@ -66,9 +66,11 @@ extern void updatePlayerPower(UDWORD player);
 
 /** Used in multiplayer to force power levels. */
 void setPower(unsigned player, int32_t power);
+void setPrecisePower(unsigned player, int64_t power);
 
 /** Get the amount of power current held by the given player. */
 int32_t getPower(unsigned player);
+int64_t getPrecisePower(unsigned player);
 
 /** Resets the power levels for all players when power is turned back on. */
 void powerCalc(BOOL on);

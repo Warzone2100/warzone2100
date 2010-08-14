@@ -31,6 +31,7 @@
 #include "lib/framework/physfs_ext.h"
 #include "lib/framework/tagfile.h"
 #include "lib/ivis_common/tex.h"
+#include "lib/netplay/netplay.h"  // For syncDebug
 
 #include "map.h"
 #include "hci.h"
@@ -1092,7 +1093,7 @@ static void structureSaveTagged(STRUCTURE *psStruct)
 
 			tagWriteEnter(0x0d, 1); // FACTORY GROUP
 			tagWrite(0x01, psFactory->capacity);
-			tagWrite(0x02, psFactory->quantity);
+			tagWrite(0x02, psFactory->productionLoops);
 			tagWrite(0x03, psFactory->loopsPerformed);
 			//tagWrite(0x04, psFactory->productionOutput); // not used in original code, recalculated instead
 			tagWrite(0x05, psFactory->powerAccrued);
@@ -2175,6 +2176,30 @@ void mapFloodFillContinents()
 	debug(LOG_MAP, "Found %d hover continents", (int)hoverContinents);
 }
 
+void tileSetFire(int32_t x, int32_t y, uint32_t duration)
+{
+	const int posX = map_coord(x);
+	const int posY = map_coord(y);
+	MAPTILE *const tile = mapTile(posX, posY);
+
+	uint16_t currentTime =  gameTime             / GAME_TICKS_PER_UPDATE;
+	uint16_t fireEndTime = (gameTime + duration) / GAME_TICKS_PER_UPDATE;
+	if (currentTime == fireEndTime)
+	{
+		return;  // Fire already ended.
+	}
+	if ((tile->tileInfoBits & BITS_ON_FIRE) != 0 && (uint16_t)(fireEndTime - currentTime) < (uint16_t)(tile->fireEndTime - currentTime))
+	{
+		return;  // Tile already on fire, and that fire lasts longer.
+	}
+
+	// Burn, tile, burn!
+	tile->tileInfoBits |= BITS_ON_FIRE;
+	tile->fireEndTime = fireEndTime;
+
+	syncDebug("Fire tile{%d, %d} dur%u end%d", posX, posY, duration, fireEndTime);
+}
+
 /** Check if tile contained within the given world coordinates is burning. */
 bool fireOnLocation(unsigned int x, unsigned int y)
 {
@@ -2184,4 +2209,26 @@ bool fireOnLocation(unsigned int x, unsigned int y)
 
 	ASSERT(psTile, "Checking fire on tile outside the map (%d, %d)", posX, posY);
 	return psTile != NULL && TileIsBurning(psTile);
+}
+
+void mapUpdate()
+{
+	uint16_t currentTime = gameTime / GAME_TICKS_PER_UPDATE;
+
+	int posX, posY;
+	for (posY = 0; posY < mapHeight; ++posY)
+		for (posX = 0; posX < mapWidth; ++posX)
+	{
+		MAPTILE *const tile = mapTile(posX, posY);
+
+		if ((tile->tileInfoBits & BITS_ON_FIRE) != 0 && tile->fireEndTime == currentTime)
+		{
+			// Extinguish, tile, extinguish!
+			tile->tileInfoBits &= ~BITS_ON_FIRE;
+
+			syncDebug("Extinguished tile{%d, %d}", posX, posY);
+		}
+	}
+
+	// TODO Make waves in the water?
 }

@@ -1927,7 +1927,7 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, BOOL goingHome)
 
 			// Set the launch time so the transporter doesn't just disappear for CAMSTART/CAMCHANGE
 			transporterSetLaunchTime(gameTime);
-        }
+		}
 	}
 }
 
@@ -2692,7 +2692,7 @@ DROID * buildMissionDroid(DROID_TEMPLATE *psTempl, UDWORD x, UDWORD y,
 {
 	DROID		*psNewDroid;
 
-	psNewDroid = buildDroid(psTempl, world_coord(x), world_coord(y), player, true);
+	psNewDroid = buildDroid(psTempl, world_coord(x), world_coord(y), player, true, NULL);
 	if (!psNewDroid)
 	{
 		return NULL;

@@ -25,7 +25,6 @@
 #define __INCLUDE_LIB_NETPLAY_NETTYPES_H__
 
 #include "lib/framework/frame.h"
-#include "netplay.h"
 #include "lib/framework/vector.h"
 
 #ifdef __cplusplus
@@ -40,20 +39,64 @@ typedef enum packetDirectionEnum
 	PACKET_INVALID
 } PACKETDIR;
 
-void NETbeginEncode(uint8_t type, uint8_t player);
-void NETbeginDecode(uint8_t type);
+typedef enum QueueType
+{
+	QUEUE_TMP,
+	QUEUE_NET,
+	QUEUE_GAME,
+	QUEUE_BROADCAST,
+} QUEUETYPE;
+
+typedef struct _netqueue
+{
+	void *queue;  ///< Is either a (NetQueuePair **) or a (NetQueue *). (Note different numbers of *.)
+	BOOL isPair;
+	uint8_t index;
+	uint8_t queueType;
+} NETQUEUE;
+
+typedef const struct NetMessage *NETMESSAGE;
+
+NETQUEUE NETnetTmpQueue(unsigned tmpPlayer);  ///< One of the temp queues from before a client has joined the game. (See comments on tmpQueues in nettypes.cpp.)
+NETQUEUE NETnetQueue(unsigned player);        ///< The queue pair used for sending and receiving data directly from another client. (See comments on netQueues in nettypes.cpp.)
+NETQUEUE NETgameQueue(unsigned player);       ///< The game action queue. (See comments on gameQueues in nettypes.cpp.)
+NETQUEUE NETbroadcastQueue(void);             ///< The queue for sending data directly to the netQueues of all clients, not just a specific one. (See comments on broadcastQueue in nettypes.cpp.)
+
+void NETinsertRawData(NETQUEUE queue, uint8_t *data, size_t dataLen);  ///< Dump raw data from sockets and raw data sent via host here.
+void NETinsertMessageFromNet(NETQUEUE queue, NETMESSAGE message);      ///< Dump whole NetMessages into the queue.
+BOOL NETisMessageReady(NETQUEUE queue);       ///< Returns true if there is a complete message ready to deserialise in this queue.
+NETMESSAGE NETgetMessage(NETQUEUE queue);     ///< Returns the current message in the queue which is ready to be deserialised. Do not delete the message.
+uint8_t NETmessageType(NETMESSAGE message);   ///< Returns the type of the message.
+uint32_t NETmessageSize(NETMESSAGE message);  ///< Returns the size of the message data.
+uint8_t *NETmessageRawData(NETMESSAGE message);///<Returns the raw data, must be deleted again with NETmessageDestroyRawData().
+void NETmessageDestroyRawData(uint8_t *data); ///< Destroys the data returned by NETmessageRawData().
+size_t NETmessageRawSize(NETMESSAGE message); ///< Returns the size of the message, including headers.
+
+void NETinitQueue(NETQUEUE queue);             ///< Allocates the queue. Deletes the old queue, if there was one. Avoids a crash on NULL pointer deference when trying to use the queue.
+void NETsetNoSendOverNetwork(NETQUEUE queue);  ///< Used to mark that a game queue should not be sent over the network (for example, if it is being sent to us, instead).
+void NETmoveQueue(NETQUEUE src, NETQUEUE dst); ///< Used for moving the tmpQueue to a netQueue, once a newly-connected client is assigned a player number.
+
+void NETbeginEncode(NETQUEUE queue, uint8_t type);
+void NETbeginDecode(NETQUEUE queue, uint8_t type);
 BOOL NETend(void);
-BOOL NETint8_t(int8_t *ip);
-BOOL NETuint8_t(uint8_t *ip);
-BOOL NETint16_t(int16_t *ip);
-BOOL NETuint16_t(uint16_t *ip);
-BOOL NETint32_t(int32_t *ip);
-BOOL NETuint32_t(uint32_t *ip);
-BOOL NETfloat(float* fp);
-BOOL NETbool(BOOL *bp);
-BOOL NETnull(void);
-BOOL NETstring(char *str, uint16_t maxlen);
-BOOL NETbin(char *str, uint16_t maxlen);
+void NETflushGameQueues(void);
+void NETpop(NETQUEUE queue);
+
+void NETint8_t(int8_t *ip);
+void NETuint8_t(uint8_t *ip);
+void NETint16_t(int16_t *ip);
+void NETuint16_t(uint16_t *ip);
+void NETint32_t(int32_t *ip);
+void NETint32_tSmall(int32_t *ip);  ///< Encodes small values (< 836 288) in at most 3 bytes, large values (≥ 22 888 448) in 5 bytes.
+void NETuint32_t(uint32_t *ip);
+void NETuint32_tSmall(uint32_t *ip);  ///< Encodes small values (< 1 672 576) in at most 3 bytes, large values (≥ 45 776 896) in 5 bytes.
+void NETint64_t(int64_t *ip);
+void NETuint64_t(uint64_t *ip);
+void NETfloat(float* fp);
+void NETbool(BOOL *bp);
+void NETnull(void);
+void NETstring(char *str, uint16_t maxlen);
+void NETbin(uint8_t *str, uint32_t maxlen);
 
 PACKETDIR NETgetPacketDir(void);
 
@@ -61,19 +104,17 @@ PACKETDIR NETgetPacketDir(void);
 }
 
 template <typename EnumT>
-static BOOL NETenum(EnumT* enumPtr)
+static void NETenum(EnumT* enumPtr)
 {
-	int32_t val;
+	uint32_t val;
 	
 	if (NETgetPacketDir() == PACKET_ENCODE)
 		val = *enumPtr;
 
-	const BOOL retVal = NETint32_t(&val);
+	NETuint32_tSmall(&val);
 
 	if (NETgetPacketDir() == PACKET_DECODE)
 		*enumPtr = static_cast<EnumT>(val);
-
-	return retVal;
 }
 
 extern "C"
@@ -84,24 +125,39 @@ static inline void squelchUninitialisedUseWarning(void *ptr) { (void)ptr; }
 #define NETenum(enumPtr) \
 do \
 { \
-	int32_t _val; \
+	uint32_t _val; \
 	squelchUninitialisedUseWarning(enumPtr); \
 	_val = (NETgetPacketDir() == PACKET_ENCODE) ? *(enumPtr) : 0; \
 \
-	NETint32_t(&_val); \
+	NETuint32_tSmall(&_val); \
 \
 	*(enumPtr) = _val; \
 } while(0)
 #endif
 
-BOOL NETPosition(Position *vp);
-BOOL NETRotation(Rotation *vp);
+void NETPosition(Position *vp);
+void NETRotation(Rotation *vp);
 
-/**
- *	Get player who is the source of the current packet.
- *	@see selectedPlayer
- */
-int NETgetSource(void);
+typedef struct PackagedCheck
+{
+	uint32_t gameTime;  ///< Game time that this synch check was made. Not touched by NETPACKAGED_CHECK().
+	uint8_t player;
+	uint32_t droidID;
+	int32_t order;
+	uint32_t secondaryOrder;
+	uint32_t body;
+	float experience;
+	Position pos;
+	Rotation rot;
+	float sMoveX;
+	float sMoveY;
+	uint32_t targetID;  ///< Defined iff order == DORDER_ATTACK.
+	uint16_t orderX;    ///< Defined iff order == DORDER_MOVE.
+	uint16_t orderY;    ///< Defined iff order == DORDER_MOVE.
+} PACKAGED_CHECK;
+void NETPACKAGED_CHECK(PACKAGED_CHECK *v);
+void NETNETMESSAGE(NETMESSAGE *message);  ///< If decoding, must destroy the NETMESSAGE.
+void NETdestroyNETMESSAGE(NETMESSAGE message);
 
 void NETtest(void);
 
