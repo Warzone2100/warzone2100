@@ -45,6 +45,7 @@
 #include "src/multistat.h"
 #include "src/multijoin.h"
 #include "src/multiint.h"
+#include "src/multiplay.h"
 
 #if   defined(WZ_OS_UNIX)
 # include <arpa/inet.h>
