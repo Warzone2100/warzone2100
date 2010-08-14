@@ -172,19 +172,6 @@ bool screenInitialise()
 		debug(LOG_INFO, "OpenGL 2.0 is not supported by your system, using fixed pipeline.");
 	}
 
-/*  // This code block left over from qt-trunk merge, should probably be deleted.
-	glViewport(0, 0, width, height);
-	glMatrixMode(GL_PROJECTION);
-	glPushMatrix();
-	glLoadIdentity();
-	glOrtho(0.0f, (double)width, (double)height, 0.0f, 1.0f, -1.0f);
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	glCullFace(GL_FRONT);
-	glEnable(GL_CULL_FACE);
-*/
-
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_ACCUM_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
