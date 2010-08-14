@@ -200,7 +200,7 @@ AS_IF([test "x$enable_sound" != "xyes"],[
 # -Wno-unused-label is necessary because flex produces unused labels that we cannot fix
 # Add later for stricter checking: -Wextra -Wmissing-declarations -Wstrict-prototypes
 AC_ARG_ENABLE([debug],
-	AS_HELP_STRING([--enable-debug[=yes/relaxed/profile/debugprofile/no]],[Compile debug version [[yes]]]),
+	AS_HELP_STRING([--enable-debug[=yes/relaxed/profile/debugprofile/optimised/no]],[Compile debug version [[yes]]]),
 	[ enable_debug=${enableval} ], [ enable_debug=yes ])
 AC_MSG_CHECKING([whether to compile in debug mode])
 AC_MSG_RESULT([${enable_debug}])
@@ -223,6 +223,12 @@ if test "x$enable_debug" = "xyes" ; then
 		WZ_C99FLAGS="${WZ_C99FLAGS} -Wno-declaration-after-statement"
 		WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 	fi
+elif test "x$enable_debug" = "xoptimised" ; then
+	WZ_WARNINGS="-Wall -Werror -Wno-unused-label -Wmissing-field-initializers -Wcast-align -Wwrite-strings -Wmissing-declarations -Wpointer-arith -Wno-format-security"
+	WZ_CFLAGS="${WZ_CFLAGS} -O2 -g -Wno-pointer-to-int-cast -Wno-strict-aliasing -Wstrict-prototypes -Wdeclaration-after-statement ${WZ_WARNINGS} ${CFLAGS_IGNORE_WARNINGS}"
+	WZ_CXXFLAGS="${WZ_CXXFLAGS} -O2 -g -Wextra ${WZ_WARNINGS}"
+	WZ_C99FLAGS="${WZ_C99FLAGS} -Wno-declaration-after-statement"
+	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 elif test "x$enable_debug" = "xrelaxed" ; then
 	WZ_CFLAGS="${WZ_CFLAGS} -g -O0 -Wall -Wextra -Wwrite-strings"
 	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
