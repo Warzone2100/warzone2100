@@ -136,14 +136,14 @@ extern void	getTimeComponents(UDWORD time, UDWORD *hours, UDWORD *minutes, UDWOR
 
 
 
-extern float gameTimeFraction;  ///< Private performance calculation. Do not use.
+extern UDWORD gameTimeFraction;  ///< Private performance calculation. Do not use.
 extern float graphicsTimeFraction;  ///< Private performance calculation. Do not use.
 extern float realTimeFraction;  ///< Private performance calculation. Do not use.
 
 /// Returns the value times deltaGameTime, converted to seconds.
-static inline float gameTimeAdjustedIncrement(float value)
+static inline int gameTimeAdjustedIncrement(int value)
 {
-	return value * gameTimeFraction;
+	return value * gameTimeFraction / GAME_TICKS_PER_SEC;
 }
 /// Returns the value times deltaGraphicsTime, converted to seconds.
 static inline float graphicsTimeAdjustedIncrement(float value)

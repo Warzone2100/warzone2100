@@ -33,8 +33,8 @@
 #define GTIME_MINFRAME	(GAME_TICKS_PER_SEC/80)
 
 /* See header file for documentation */
-UDWORD gameTime = 0, deltaGameTime = 0, graphicsTime = 0, deltaGraphicsTime = 0, realTime = 0, deltaRealTime = 0;
-float gameTimeFraction = 0.0, graphicsTimeFraction = 0.0, realTimeFraction = 0.0;
+UDWORD gameTime = 0, deltaGameTime = 0, graphicsTime = 0, deltaGraphicsTime = 0, realTime = 0, deltaRealTime = 0, gameTimeFraction = 0;
+float graphicsTimeFraction = 0.0, realTimeFraction = 0.0;
 
 /** The current clock modifier. Set to speed up the game. */
 static float modifier;
@@ -77,7 +77,7 @@ extern void setGameTime(uint32_t newGameTime)
 	// Setting game time.
 	gameTime = newGameTime;
 	deltaGameTime = 0;
-	gameTimeFraction = 0.f;
+	gameTimeFraction = 0;
 
 	// Setting graphics time to game time.
 	graphicsTime = gameTime;
@@ -164,7 +164,7 @@ void gameTimeUpdate()
 	realTime += deltaRealTime;
 
 	// Pre-calculate fraction used in timeAdjustedIncrement
-	gameTimeFraction = (float)deltaGameTime / (float)GAME_TICKS_PER_SEC;
+	gameTimeFraction = deltaGameTime;
 	graphicsTimeFraction = (float)deltaGraphicsTime / (float)GAME_TICKS_PER_SEC;
 	realTimeFraction = (float)deltaRealTime / (float)GAME_TICKS_PER_SEC;
 
