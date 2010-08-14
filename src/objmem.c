@@ -29,6 +29,7 @@
 #include "lib/sound/audio.h"
 #include "objects.h"
 #include "lib/gamelib/gtime.h"
+#include "lib/netplay/netplay.h"
 #include "hci.h"
 #include "map.h"
 #include "power.h"
@@ -51,12 +52,13 @@ static SDWORD factoryDeliveryPointCheck[MAX_PLAYERS][NUM_FLAG_TYPES][MAX_FACTORY
 #endif
 
 // the initial value for the object ID
-#define OBJ_ID_INIT		20000
+#define OBJ_ID_INIT 20000
 
 /* The id number for the next object allocated
  * Each object will have a unique id number irrespective of type
  */
-UDWORD                  objID;
+uint32_t                unsynchObjID;
+uint32_t                synchObjID;
 
 /* The lists of objects allocated */
 DROID			*apsDroidLists[MAX_PLAYERS];
@@ -81,7 +83,8 @@ static void objListIntegCheck(void);
 BOOL objmemInitialise(void)
 {
 	// reset the object ID number
-	objID = OBJ_ID_INIT;
+	unsynchObjID = OBJ_ID_INIT/2;  // /2 so that object IDs start around OBJ_ID_INIT*8, in case that's important when loading maps.
+	synchObjID   = OBJ_ID_INIT*4;  // *4 so that object IDs start around OBJ_ID_INIT*8, in case that's important when loading maps.
 
 	return true;
 }
@@ -200,7 +203,14 @@ void objmemUpdate(void)
 
 uint32_t generateNewObjectId(void)
 {
-	return objID++<<3 | selectedPlayer;  // Was taken from createObject, where 'player' was used instead of 'selectedPlayer'. Hope there are no stupid hacks that try to recover 'player' from the last 3 bits.
+	return unsynchObjID++*MAX_PLAYERS*2 + selectedPlayer*2;  // Was taken from createObject, where 'player' was used instead of 'selectedPlayer'. Hope there are no stupid hacks that try to recover 'player' from the last 3 bits.
+}
+
+uint32_t generateSynchronisedObjectId(void)
+{
+	uint32_t ret = synchObjID++*2 + 1;
+	syncDebug("New objectId = %u", ret);
+	return ret;
 }
 
 /**************************************************************************************
@@ -245,7 +255,7 @@ static inline BASE_OBJECT* createObject(UDWORD player, OBJECT_TYPE objType)
 	}
 
 	newObject->type = objType;
-	newObject->id = generateNewObjectId();
+	newObject->id = generateSynchronisedObjectId();
 	newObject->player = (UBYTE)player;
 	newObject->died = 0;
 	newObject->psNextFunc = NULL;

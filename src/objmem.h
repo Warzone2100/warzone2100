@@ -53,6 +53,8 @@ extern void objmemUpdate(void);
 
 /// Generates a new, (hopefully) unique object id.
 uint32_t generateNewObjectId(void);
+/// Generates a new, (hopefully) unique object id, which all clients agree on.
+uint32_t generateSynchronisedObjectId(void);
 
 /* Create a new droid */
 extern DROID* createDroid(UDWORD player);

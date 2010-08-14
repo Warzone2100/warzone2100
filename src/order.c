@@ -39,6 +39,7 @@
 #include "projectile.h"
 #include "effects.h"	// for waypoint display
 #include "lib/gamelib/gtime.h"
+#include "lib/netplay/netplay.h"
 #include "intorder.h"
 #include "orderdef.h"
 #include "transporter.h"
@@ -1488,6 +1489,8 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 	STRUCTURE	*psStruct, *psRepairFac, *psFactory;
 	const PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
 	const Vector3i rPos = { psOrder->x, psOrder->y, 0 };
+
+	syncDebug("%d ordered %s", psDroid->id, getDroidOrderName(psOrder->order));
 
 	if (psOrder->order != DORDER_TRANSPORTIN	// transporters special
 	    && psOrder->psObj == NULL			// location-type order

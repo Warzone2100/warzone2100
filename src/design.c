@@ -271,8 +271,6 @@ char StringBuffer[STRING_BUFFER_SIZE];
 /* the widget screen */
 extern W_SCREEN		*psWScreen;
 
-extern	UDWORD				objID;					// unique ID creation thing..
-
 /* default droid design template */
 DROID_TEMPLATE sDefaultDesignTemplate;
 

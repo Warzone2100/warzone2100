@@ -2165,7 +2165,8 @@ typedef enum _droid_save_type
  *	Local Variables
  */
 /***************************************************************************/
-extern	UDWORD				objID;					// unique ID creation thing..
+extern uint32_t unsynchObjID;  // unique ID creation thing..
+extern uint32_t synchObjID;    // unique ID creation thing..
 
 static UDWORD			saveGameVersion = 0;
 static BOOL				saveGameOnMission = false;
@@ -3450,7 +3451,8 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		//reset the objId for new objects
 		if (saveGameVersion >= VERSION_17)
 		{
-			objID = savedObjId;
+			unsynchObjID = (savedObjId + 1)/2;  // Make new object ID start at savedObjId*8.
+			synchObjID   = savedObjId*4;        // Make new object ID start at savedObjId*8.
 		}
 	}
 
@@ -4611,7 +4613,8 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 
 	if (version >= VERSION_17)
 	{
-		objID = saveGameData.objId;// this must be done before any new Ids added
+		unsynchObjID = (saveGameData.objId + 1)/2;  // Make new object ID start at savedObjId*8.
+		synchObjID   = saveGameData.objId*4;        // Make new object ID start at savedObjId*8.
 		savedObjId = saveGameData.objId;
 	}
 
@@ -4951,7 +4954,7 @@ static bool writeGameFile(const char* fileName, SDWORD saveType)
 	}
 
 	//version 17
-	saveGame.objId = objID;
+	saveGame.objId = MAX(unsynchObjID*2, (synchObjID + 3)/4);
 
 	//version 18
 	ASSERT(strlen(__DATE__) < MAX_STR_LENGTH, "BuildDate; String error" );

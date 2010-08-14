@@ -3808,7 +3808,7 @@ void _syncDebugStructure(const char *function, STRUCTURE *psStruct, char ch)
 {
 	// TODO psBuilding->status == SS_BEING_BUILT test is because structure ids are not synchronised until after they start building...
 	_syncDebug(function, "%c structure%d = p%d;pos(%d,%d,%d),stat%d,type%d,bld%d,pwr%d,bp%d, power = %"PRId64"", ch,
-	          psStruct->status == SS_BEING_BUILT ? -1 : psStruct->id,
+	          psStruct->id,
 
 	          psStruct->player,
 	          psStruct->pos.x, psStruct->pos.y, psStruct->pos.z,

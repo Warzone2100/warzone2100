@@ -2453,6 +2453,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 	CHECK_DROID(psDroid);
 
 	psDroid->actionStarted = gameTime;
+	syncDebug("%d does %s", psDroid->id, getDroidActionName(psAction->action));
 
 	switch (psAction->action)
 	{

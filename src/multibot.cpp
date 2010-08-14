@@ -78,7 +78,6 @@ struct QueuedDroidInfo
 		if (order == DORDER_BUILD || order == DORDER_LINEBUILD)
 		{
 			if (structRef != z.structRef) return structRef < z.structRef ? -1 : 1;
-			// Don't sort by structId, since everything obeying this build order should build the same structure.
 			if (direction != z.direction) return direction < z.direction ? -1 : 1;
 		}
 		if (order == DORDER_LINEBUILD)
@@ -98,7 +97,6 @@ struct QueuedDroidInfo
 	uint32_t    x;          // if (!subType)
 	uint32_t    y;          // if (!subType)
 	uint32_t    structRef;  // if (order == DORDER_BUILD || order == DORDER_LINEBUILD)
-	uint32_t    structId;   // if (order == DORDER_BUILD || order == DORDER_LINEBUILD), not used when sorting.
 	uint16_t    direction;  // if (order == DORDER_BUILD || order == DORDER_LINEBUILD)
 	uint32_t    x2;         // if (order == DORDER_LINEBUILD)
 	uint32_t    y2;         // if (order == DORDER_LINEBUILD)
@@ -557,7 +555,6 @@ static void NETQueuedDroidInfo(QueuedDroidInfo *info)
 	if (info->order == DORDER_BUILD || info->order == DORDER_LINEBUILD)
 	{
 		NETuint32_tSmall(&info->structRef);
-		NETuint32_tSmall(&info->structId);
 		NETuint16_t(&info->direction);
 	}
 	if (info->order == DORDER_LINEBUILD)
@@ -579,9 +576,6 @@ void sendQueuedDroidInfo()
 		// Find end of range of orders which differ only by the droid ID.
 		for (eqEnd = eqBegin + 1; eqEnd != queuedOrders.end() && eqEnd->orderCompare(*eqBegin) == 0; ++eqEnd)
 		{}
-
-		// Generate the structure ID for the new structure to be built.
-		eqBegin->structId = generateNewObjectId();
 
 		NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DROIDINFO);
 			NETQueuedDroidInfo(&*eqBegin);
@@ -639,7 +633,6 @@ BOOL SendDroidInfo(const DROID* psDroid, DROID_ORDER order, uint32_t x, uint32_t
 	if (order == DORDER_BUILD || order == DORDER_LINEBUILD)
 	{
 		info.structRef = psStats->ref;
-		// Skip info.structId, generate one just before actually sending the order, since the structId should be the same for all droids obeying this order.
 		info.direction = direction;
 	}
 	if (order == DORDER_LINEBUILD)
@@ -691,6 +684,15 @@ BOOL recvDroidInfo(NETQUEUE queue)
 		}
 		*/
 
+		if (info.subType)
+		{
+			syncDebug("Order=%s,%d(%d)", getDroidOrderName(info.order), info.destId, info.destType);
+		}
+		else
+		{
+			syncDebug("Order=%s,(%d,%d)", getDroidOrderName(info.order), info.x, info.y);
+		}
+
 		uint32_t num = 0;
 		NETuint32_tSmall(&num);
 
@@ -706,6 +708,7 @@ BOOL recvDroidInfo(NETQUEUE queue)
 			{
 				debug(LOG_NEVER, "Packet from %d refers to non-existent droid %u, [%s : p%d]",
 				      queue.index, info.droidId, isHumanPlayer(info.player) ? "Human" : "AI", info.player);
+				syncDebug("Droid %d missing", info.droidId);
 				continue;  // Can't find the droid, so skip this droid.
 			}
 
@@ -772,6 +775,7 @@ static void ProcessDroidOrder(DROID *psDroid, DROID_ORDER order, uint32_t x, uin
 		 && abs(psDroid->pos.y - (int) y) < (TILE_UNITS/2)
 		 && order != DORDER_DISEMBARK)
 		{
+			syncDebug("Close, do nothing");
 			return;
 		}
 
@@ -812,6 +816,7 @@ static void ProcessDroidOrder(DROID *psDroid, DROID_ORDER order, uint32_t x, uin
 		// If we did not find anything, return
 		if (!psObj)													// failed to find it;
 		{
+			syncDebug("Target missing");
 			return;
 		}
 
