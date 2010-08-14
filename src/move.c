@@ -2117,7 +2117,7 @@ static void moveUpdateVtolModel(DROID *psDroid, SDWORD speed, uint16_t direction
 
 	/* do vertical movement */
 	iMapZ = map_Height(psDroid->pos.x, psDroid->pos.y);
-	psDroid->pos.z = MAX(iMapZ, psDroid->pos.z + timeAdjustedIncrement(psDroid->sMove.iVertSpeed, true));
+	psDroid->pos.z = MAX(iMapZ, psDroid->pos.z + gameTimeAdjustedIncrement(psDroid->sMove.iVertSpeed));
 
 	moveAdjustVtolHeight(psDroid, iMapZ);
 }
@@ -2207,7 +2207,7 @@ static void moveUpdateCyborgModel(DROID *psDroid, SDWORD moveSpeed, uint16_t mov
 	/* do vertical movement */
 	if ( psPropStats->propulsionType == PROPULSION_TYPE_JUMP )
 	{
-		iDz = timeAdjustedIncrement(psDroid->sMove.iVertSpeed, true);
+		iDz = gameTimeAdjustedIncrement(psDroid->sMove.iVertSpeed);
 		iDroidZ = (SDWORD) psDroid->pos.z;
 
 		if ( iDroidZ+iDz < (SDWORD) iMapZ )

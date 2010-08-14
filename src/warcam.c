@@ -732,17 +732,17 @@ static void updateCameraVelocity(UBYTE update)
 {
 	if(update & X_UPDATE)
 	{
-		trackingCamera.velocity.x += timeAdjustedIncrement(trackingCamera.acceleration.x, false);
+		trackingCamera.velocity.x += realTimeAdjustedIncrement(trackingCamera.acceleration.x);
 	}
 
 	if(update & Y_UPDATE)
 	{
-		trackingCamera.velocity.y += timeAdjustedIncrement(trackingCamera.acceleration.y, false);
+		trackingCamera.velocity.y += realTimeAdjustedIncrement(trackingCamera.acceleration.y);
 	}
 
 	if(update & Z_UPDATE)
 	{
-		trackingCamera.velocity.z += timeAdjustedIncrement(trackingCamera.acceleration.z, false);
+		trackingCamera.velocity.z += realTimeAdjustedIncrement(trackingCamera.acceleration.z);
 	}
 }
 
@@ -768,19 +768,19 @@ PROPULSION_STATS	*psPropStats;
 	if(update & X_UPDATE)
 	{
 		/* Need to update position along x axis */
-		trackingCamera.position.x += timeAdjustedIncrement(trackingCamera.velocity.x, false);
+		trackingCamera.position.x += realTimeAdjustedIncrement(trackingCamera.velocity.x);
 	}
 
 	if(update & Y_UPDATE)
 	{
 		/* Need to update position along y axis */
-		trackingCamera.position.y += timeAdjustedIncrement(trackingCamera.velocity.y, false);
+		trackingCamera.position.y += realTimeAdjustedIncrement(trackingCamera.velocity.y);
 	}
 
 	if(update & Z_UPDATE)
 	{
 		/* Need to update position along z axis */
-		trackingCamera.position.z += timeAdjustedIncrement(trackingCamera.velocity.z, false);
+		trackingCamera.position.z += realTimeAdjustedIncrement(trackingCamera.velocity.z);
 	}
 }
 
@@ -920,15 +920,15 @@ static void updateCameraRotationVelocity( UBYTE update )
 {
 	if(update & Y_UPDATE)
 	{
-		trackingCamera.rotVel.y += timeAdjustedIncrement(trackingCamera.rotAccel.y, false);
+		trackingCamera.rotVel.y += realTimeAdjustedIncrement(trackingCamera.rotAccel.y);
 	}
 	if(update & X_UPDATE)
 	{
-		trackingCamera.rotVel.x += timeAdjustedIncrement(trackingCamera.rotAccel.x, false);
+		trackingCamera.rotVel.x += realTimeAdjustedIncrement(trackingCamera.rotAccel.x);
 	}
 	if(update & Z_UPDATE)
 	{
-		trackingCamera.rotVel.z += timeAdjustedIncrement(trackingCamera.rotAccel.z, false);
+		trackingCamera.rotVel.z += realTimeAdjustedIncrement(trackingCamera.rotAccel.z);
 	}
 
 }
@@ -939,15 +939,15 @@ static void updateCameraRotationPosition( UBYTE update )
 {
  	if (update & Y_UPDATE)
 	{
-		trackingCamera.rotation.y += timeAdjustedIncrement(trackingCamera.rotVel.y, false);
+		trackingCamera.rotation.y += realTimeAdjustedIncrement(trackingCamera.rotVel.y);
 	}
 	if (update & X_UPDATE)
 	{
-		trackingCamera.rotation.x += timeAdjustedIncrement(trackingCamera.rotVel.x, false);
+		trackingCamera.rotation.x += realTimeAdjustedIncrement(trackingCamera.rotVel.x);
 	}
 	if (update & Z_UPDATE)
 	{
-		trackingCamera.rotation.z += timeAdjustedIncrement(trackingCamera.rotVel.z, false);
+		trackingCamera.rotation.z += realTimeAdjustedIncrement(trackingCamera.rotVel.z);
 	}
 }
 

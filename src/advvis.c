@@ -41,7 +41,7 @@ void	avUpdateTiles( void )
 	const int len = mapHeight * mapWidth;
 	const int playermask = 1 << selectedPlayer;
 	UDWORD i = 0;
-	float maxLevel, increment = timeAdjustedIncrement(FADE_IN_TIME, true);	// call once per frame
+	float maxLevel, increment = graphicsTimeAdjustedIncrement(FADE_IN_TIME);	// call once per frame
 	MAPTILE *psTile;
 
 	/* Go through the tiles */

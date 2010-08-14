@@ -124,9 +124,9 @@ static void processParticle(ATPART *psPart)
 	if(!gamePaused())
 	{
 		/* Move the particle - frame rate controlled */
- 		psPart->position.x += timeAdjustedIncrement(psPart->velocity.x, true);
-		psPart->position.y += timeAdjustedIncrement(psPart->velocity.y, true);
-		psPart->position.z += timeAdjustedIncrement(psPart->velocity.z, true);
+ 		psPart->position.x += graphicsTimeAdjustedIncrement(psPart->velocity.x);
+		psPart->position.y += graphicsTimeAdjustedIncrement(psPart->velocity.y);
+		psPart->position.z += graphicsTimeAdjustedIncrement(psPart->velocity.z);
 
 		/* Wrap it around if it's gone off grid... */
 	   	testParticleWrap(psPart);

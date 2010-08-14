@@ -541,7 +541,7 @@ UDWORD	retVal;
 	if(lightVal>255) lightVal = 255;
 	presVal = psDroid->illumination;
 	adjust = (float)lightVal - (float)presVal;
-	adjust *= timeAdjustedIncrement(DROID_SEEK_LIGHT_SPEED, true);
+	adjust *= graphicsTimeAdjustedIncrement(DROID_SEEK_LIGHT_SPEED);
 	retVal = presVal + adjust;
 	if(retVal > 255) retVal = 255;
 	psDroid->illumination = (UBYTE)retVal;

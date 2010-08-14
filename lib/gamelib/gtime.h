@@ -156,18 +156,6 @@ static inline float realTimeAdjustedIncrement(float value)
 	return value * realTimeFraction;
 }
 
-/**
- * Returns value times deltaGameTime (pauseTime = true) or deltaRealTime (pauseTime = false), converted to seconds.
- * @param value Amount to change something in a second.
- * @param pauseTime If true, adjust also for pause of game time. Generally use true in-game, false for GUI.
- * @return Amount to change this frame.
- * TODO Replace all calls to this function with gameTimeAdjustedIncrement or realTimeAdjustedIncrement, and delete this function.
- */
-static inline float timeAdjustedIncrement(float value, BOOL pauseTime)
-{
-	return (pauseTime ? gameTimeAdjustedIncrement : realTimeAdjustedIncrement)(value);
-}
-
 #ifdef __cplusplus
 }
 #endif //__cplusplus

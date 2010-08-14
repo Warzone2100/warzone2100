@@ -1464,7 +1464,7 @@ void drawWater(void)
 	// move the water
 	if(!gamePaused())
 	{
-		waterOffset += timeAdjustedIncrement(0.1f, true);
+		waterOffset += graphicsTimeAdjustedIncrement(0.1f);
 	}
 
 	// disable second texture
