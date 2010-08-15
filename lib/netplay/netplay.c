@@ -54,6 +54,7 @@
 #include <execinfo.h>  // Nonfatal runtime backtraces.
 #endif //WZ_OS_LINUX
 
+// For /(hton|ntoh)[sh]/.
 #if   defined(WZ_OS_UNIX)
 # include <arpa/inet.h>
 #endif
@@ -2242,7 +2243,7 @@ static void NETallowJoining(void)
 						char buf[256] = {'\0'};
 
 						ssprintf(buf, "** A player that you have kicked tried to rejoin the game, and was rejected. IP:%s", clientAddress );
-						debug(LOG_INFO, buf);
+						debug(LOG_INFO, "%s", buf);
 						NETlogEntry(buf, SYNC_FLAG, i);
 						SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
 						socketClose(tmp_socket[i]);

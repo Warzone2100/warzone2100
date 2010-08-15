@@ -178,16 +178,16 @@ bool screenInitialise(
 	/* Dump general information about OpenGL implementation to the console and the dump file */
 	ssprintf(buf, "OpenGL Vendor : %s", glGetString(GL_VENDOR));
 	addDumpInfo(buf);
-	debug(LOG_3D, buf);
+	debug(LOG_3D, "%s", buf);
 	ssprintf(buf, "OpenGL Renderer : %s", glGetString(GL_RENDERER));
 	addDumpInfo(buf);
-	debug(LOG_3D, buf);
+	debug(LOG_3D, "%s", buf);
 	ssprintf(buf, "OpenGL Version : %s", glGetString(GL_VERSION));
 	addDumpInfo(buf);
-	debug(LOG_3D, buf);
+	debug(LOG_3D, "%s", buf);
 	ssprintf(buf, "Video Mode %d x %d (%d bpp) (%s)", width, height, bpp, fullScreen ? "fullscreen" : "window");
 	addDumpInfo(buf);
-	debug(LOG_3D, buf);
+	debug(LOG_3D, "%s", buf);
 
 	/* Dump extended information about OpenGL implementation to the console */
 	debug(LOG_3D, "OpenGL Extensions : %s", glGetString(GL_EXTENSIONS)); // FIXME This is too much for MAX_LEN_LOG_LINE

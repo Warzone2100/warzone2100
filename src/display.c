@@ -2150,7 +2150,7 @@ static void dealWithLMBObject(BASE_OBJECT* psClickedOn)
 
 		default:
 			// assert only when the value is outside of the valid range
-			ASSERT((type >= 0 && type < OBJ_NUM_TYPES), "Weird selection from LMB - type of clicked object is %d", (int)type);
+			ASSERT(type < OBJ_NUM_TYPES, "Weird selection from LMB - type of clicked object is %d", (int)type);
 			break;
 	}
 }

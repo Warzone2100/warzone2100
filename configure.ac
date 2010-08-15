@@ -215,6 +215,9 @@ AX_C_CHECK_FLAG([-Werror -Wno-enum-compare], , , CFLAGS_IGNORE_WARNINGS="${CFLAG
 # zlib
 LDFLAGS="-lz ${LDFLAGS}"
 
+WZ_WARNINGS_GCC="-Wall -Wextra -Wno-error=unused-parameter -Wno-error=sign-compare -Wno-error=clobbered -Wno-error=type-limits -Wcast-align -Wwrite-strings -Wmissing-declarations -Wpointer-arith -Wno-error=format-security"
+WZ_WARNINGS_GCC_C="${WZ_WARNINGS_GCC} -Wno-error=pointer-to-int-cast -Wno-error=strict-aliasing -Wstrict-prototypes -Wdeclaration-after-statement -Wc++-compat -Wno-error=c++-compat ${CFLAGS_IGNORE_WARNINGS}"
+WZ_WARNINGS_GCC_CXX="${WZ_WARNINGS_GCC} -Wc++0x-compat"
 if test "x$enable_debug" = "xyes" ; then
 	if test "x$cc_icc" = "xyes" ; then
 		# "-fp-model precise -fp-model source -ftz -no-fma" was here
@@ -222,41 +225,38 @@ if test "x$enable_debug" = "xyes" ; then
 		WZ_CXXFLAGS="${WZ_CXXFLAGS} -O0 -g -Wcheck -Werror"
 		WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 	else
-		# "-mno-fused-madd" was here
-		WZ_WARNINGS="-Wall -Werror -Wno-unused-label -Wmissing-field-initializers -Wcast-align -Wwrite-strings -Wmissing-declarations -Wpointer-arith -Wno-format-security"
-		WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -Wno-pointer-to-int-cast  -Wstrict-prototypes -Wdeclaration-after-statement ${WZ_WARNINGS} ${CFLAGS_IGNORE_WARNINGS}"
-		WZ_CXXFLAGS="${WZ_CXXFLAGS} -O0 -g -Wextra ${WZ_WARNINGS}"
+		WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -Werror ${WZ_WARNINGS_GCC_C}"
+		WZ_CXXFLAGS="${WZ_CXXFLAGS} -O0 -g -Werror ${WZ_WARNINGS_GCC_CXX}"
 		WZ_C99FLAGS="${WZ_C99FLAGS} -Wno-declaration-after-statement"
 		WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 	fi
 elif test "x$enable_debug" = "xoptimised" ; then
-	WZ_WARNINGS="-Wall -Werror -Wno-unused-label -Wmissing-field-initializers -Wcast-align -Wwrite-strings -Wmissing-declarations -Wpointer-arith -Wno-format-security"
-	WZ_CFLAGS="${WZ_CFLAGS} -O2 -g -Wno-pointer-to-int-cast -Wno-strict-aliasing -Wstrict-prototypes -Wdeclaration-after-statement ${WZ_WARNINGS} ${CFLAGS_IGNORE_WARNINGS}"
-	WZ_CXXFLAGS="${WZ_CXXFLAGS} -O2 -g -Wextra ${WZ_WARNINGS}"
+	WZ_CFLAGS="${WZ_CFLAGS} -O2 -g -Werror ${WZ_WARNINGS_GCC_C}"
+	WZ_CXXFLAGS="${WZ_CXXFLAGS} -O2 -g -Werror ${WZ_WARNINGS_GCC_CXX}"
 	WZ_C99FLAGS="${WZ_C99FLAGS} -Wno-declaration-after-statement"
 	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 elif test "x$enable_debug" = "xrelaxed" ; then
-	WZ_CFLAGS="${WZ_CFLAGS} -g -O0 -Wall -Wextra -Wwrite-strings"
-	WZ_CXXFLAGS="${WZ_CXXFLAGS} -g -O0 -Wall -Wextra -Wwrite-strings"
+	WZ_CFLAGS="${WZ_CFLAGS} -g -O0 ${WZ_WARNINGS_GCC_C}"
+	WZ_CXXFLAGS="${WZ_CXXFLAGS} -g -O0 ${WZ_WARNINGS_GCC_CXX}"
 	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 elif test "x$enable_debug" = "xdebugprofile" ; then
-	WZ_CFLAGS="${WZ_CFLAGS} -g -O0 -pg -Wall -Wwrite-strings"
-	WZ_CXXFLAGS="${WZ_CXXFLAGS} -g -O0 -pg -Wall -Wwrite-strings"
+	WZ_CFLAGS="${WZ_CFLAGS} -g -O0 -pg ${WZ_WARNINGS_GCC_C}"
+	WZ_CXXFLAGS="${WZ_CXXFLAGS} -g -O0 -pg ${WZ_WARNINGS_GCC_CXX}"
 	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 	LDFLAGS="-pg ${LDFLAGS}"
 elif test "x$enable_debug" = "xprofile" ; then
-	WZ_CFLAGS="${WZ_CFLAGS} -g -Os -pg -Wall -Wwrite-strings"
-	WZ_CXXFLAGS="${WZ_CXXFLAGS} -g -Os -pg -Wall -Wwrite-strings"
+	WZ_CFLAGS="${WZ_CFLAGS} -g -Os -pg ${WZ_WARNINGS_GCC_C}"
+	WZ_CXXFLAGS="${WZ_CXXFLAGS} -g -Os -pg ${WZ_WARNINGS_GCC_CXX}"
 	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DNDEBUG"
 	LDFLAGS="-pg ${LDFLAGS}"
 elif test "x$enable_debug" = "xg++" ; then
-	WZ_CFLAGS="${WZ_CFLAGS} -g -O2 -Wall -fpermissive"
-	WZ_CXXFLAGS="${WZ_CXXFLAGS} -g -O2 -Wall"
+	WZ_CFLAGS="${WZ_CFLAGS} -g -O2 ${WZ_WARNINGS_GCC_C} -fpermissive"
+	WZ_CXXFLAGS="${WZ_CXXFLAGS} -g -O2 ${WZ_WARNINGS_GCC_CXX}"
 	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 	CC="g++"
 else
-	WZ_CFLAGS="${WZ_CFLAGS} -g -Wall -Wwrite-strings"
-	WZ_CXXFLAGS="${WZ_CXXFLAGS} -g -Wall -Wwrite-strings"
+	WZ_CFLAGS="${WZ_CFLAGS} -g ${WZ_WARNINGS_GCC_C}"
+	WZ_CXXFLAGS="${WZ_CXXFLAGS} -g ${WZ_WARNINGS_GCC_CXX}"
 	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DNDEBUG"
 fi
 

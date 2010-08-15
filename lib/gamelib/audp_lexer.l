@@ -29,6 +29,9 @@
 /* Get the Yacc definitions */
 #include "audp_parser.tab.h"
 
+// fwrite declared with warn_unused_result, resulting in mysterious errors in "%%", whatever that is.
+#define fwrite(a, b, c, d) if (fwrite(a, b, c, d)) {}
+
 /* Maximum length for any TEXT value */
 #define YYLMAX	255
 

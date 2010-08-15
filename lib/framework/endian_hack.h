@@ -28,70 +28,32 @@ extern "C"
 /* Endianness hacks */
 // TODO Use SDL_SwapXXXX instead
 
-static inline void endian_uword(UWORD* uword)
+static inline void endian_uword(UWORD* p)
 {
-#ifdef __BIG_ENDIAN__
-  UBYTE tmp, *ptr;
-
-  ptr = (UBYTE *) uword;
-  tmp = ptr[0];
-  ptr[0] = ptr[1];
-  ptr[1] = tmp;
-#else
-  // Prevent warnings
-  (void)uword;
-#endif
+	uint8_t bytes[sizeof(*p)];
+	memcpy(bytes, p, sizeof(*p));
+	*p = bytes[1]<<8 | bytes[0];
 }
 
-static inline void endian_sword(SWORD* sword)
+static inline void endian_sword(SWORD* p)
 {
-#ifdef __BIG_ENDIAN__
-  UBYTE tmp, *ptr;
-
-  ptr = (UBYTE *) sword;
-  tmp = ptr[0];
-  ptr[0] = ptr[1];
-  ptr[1] = tmp;
-#else
-  // Prevent warnings
-  (void)sword;
-#endif
+	uint8_t bytes[sizeof(*p)];
+	memcpy(bytes, p, sizeof(*p));
+	*p = bytes[1]<<8 | bytes[0];
 }
 
-static inline void endian_udword(UDWORD* udword)
+static inline void endian_udword(UDWORD* p)
 {
-#ifdef __BIG_ENDIAN__
-  UBYTE tmp, *ptr;
-
-  ptr = (UBYTE *) udword;
-  tmp = ptr[0];
-  ptr[0] = ptr[3];
-  ptr[3] = tmp;
-  tmp = ptr[1];
-  ptr[1] = ptr[2];
-  ptr[2] = tmp;
-#else
-  // Prevent warnings
-  (void)udword;
-#endif
+	uint8_t bytes[sizeof(*p)];
+	memcpy(bytes, p, sizeof(*p));
+	*p = bytes[3]<<24 | bytes[2]<<16 | bytes[1]<<8 | bytes[0];
 }
 
-static inline void endian_sdword(SDWORD* sdword)
+static inline void endian_sdword(SDWORD* p)
 {
-#ifdef __BIG_ENDIAN__
-  UBYTE tmp, *ptr;
-
-  ptr = (UBYTE *) sdword;
-  tmp = ptr[0];
-  ptr[0] = ptr[3];
-  ptr[3] = tmp;
-  tmp = ptr[1];
-  ptr[1] = ptr[2];
-  ptr[2] = tmp;
-#else
-  // Prevent warnings
-  (void)sdword;
-#endif
+	uint8_t bytes[sizeof(*p)];
+	memcpy(bytes, p, sizeof(*p));
+	*p = bytes[3]<<24 | bytes[2]<<16 | bytes[1]<<8 | bytes[0];
 }
 
 #ifdef __cplusplus

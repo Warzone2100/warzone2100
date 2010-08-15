@@ -274,8 +274,11 @@ static inline void addObjectToList(BASE_OBJECT *list[], BASE_OBJECT *object, int
 	ASSERT(object != NULL, "Invalid pointer");
 
 	// Prepend the object to the top of the list
-	object->psNext = list[player];
-	list[player] = object;
+	//object->psNext = list[player];
+	//list[player] = object;
+	// Do the above two lines without breaking strict-aliasing rules. (Otherwise things may break when compiled with optimisations.)
+	memcpy(&object->psNext, &list[player], sizeof(BASE_OBJECT *));
+	memcpy(&list[player], &object, sizeof(BASE_OBJECT *));
 }
 
 /* Add the object to its list

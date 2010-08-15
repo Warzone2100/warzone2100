@@ -483,7 +483,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\multibot.c"
+				RelativePath="..\src\multibot.cpp"
 				>
 			</File>
 			<File

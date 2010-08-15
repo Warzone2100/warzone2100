@@ -627,11 +627,12 @@ void removeWildcards(char *pStr)
 	{
 		pStr[MAX_SAVE_NAME - 1] = 0;
 	}
-	
+
 	// Trim trailing spaces
-	for (i=strlen(pStr)-1; pStr[i]==' ' && i>=0; i--);
-	pStr[i+1] = 0;
-	
+	for (i = strlen(pStr); i > 0 && pStr[i - 1] == ' '; --i)
+	{}
+	pStr[i] = 0;
+
 	// Trims leading spaces (currently unused)
 	/* for (i=0; pStr[i]==' '; i++);
 	 if (i != 0)

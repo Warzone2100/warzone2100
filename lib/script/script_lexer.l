@@ -33,6 +33,9 @@
 /* Get the Yacc definitions */
 #include "script_parser.tab.h"
 
+// fwrite declared with warn_unused_result, resulting in mysterious errors in "%%", whatever that is.
+#define fwrite(a, b, c, d) if (fwrite(a, b, c, d)) {}
+
 /* Maximum length for any TEXT value */
 #ifndef YYLMAX
 #define YYLMAX	255
