@@ -24,7 +24,7 @@
  *
  */
 
-#include <SDL.h>
+#include <physfs.h>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
@@ -104,14 +104,14 @@ static void calcDataHash(uint8_t *pBuffer, uint32_t size, uint32_t index)
 		return;
 	}
 
-	DataHash[index] ^= SDL_SwapBE32(hashBuffer(pBuffer, size));
+	DataHash[index] ^= PHYSFS_swapUBE32(hashBuffer(pBuffer, size));
 
 	if (!DataHash[index] && oldHash)
 	{
 		debug(LOG_NET, "The new hash is 0, the old hash was %u. We XOR'ed the same value!", oldHash);
 	}
 
-	debug(LOG_NET, "DataHash[%2u] = %08x", index, SDL_SwapBE32(DataHash[index])); 
+	debug(LOG_NET, "DataHash[%2u] = %08x", index, PHYSFS_swapUBE32(DataHash[index])); 
 
 	return;
 }

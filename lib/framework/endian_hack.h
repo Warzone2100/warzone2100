@@ -17,16 +17,20 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
+/**
+ * @file
+ *  Endianness functions
+ */
+
 #ifndef ENDIAN_HACK_H
 #define ENDIAN_HACK_H
+
+#include <string.h>
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif //__cplusplus
-
-/* Endianness hacks */
-// TODO Use SDL_SwapXXXX instead
 
 static inline void endian_uword(UWORD* p)
 {

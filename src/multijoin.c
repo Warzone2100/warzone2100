@@ -24,6 +24,9 @@
  *
  * Stuff to handle the comings and goings of players.
  */
+
+#include <physfs.h>
+
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
 #include "lib/framework/math_ext.h"
@@ -64,7 +67,6 @@
 #include "multistat.h"
 #include "multigifts.h"
 #include "scriptcb.h"
-#include <SDL.h>
 
 // ////////////////////////////////////////////////////////////////////////////
 // External Variables
@@ -352,8 +354,8 @@ bool recvDataCheck(NETQUEUE queue)
 			addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
 
 			kickPlayer(player, "your data doesn't match the host's!", ERROR_WRONGDATA);
-			debug(LOG_WARNING, "%s (%u) has an incompatible mod. ([%d] got %x, expected %x)", getPlayerName(player), player, i, SDL_SwapBE32(tempBuffer[i]), SDL_SwapBE32(DataHash[i]));
-			debug(LOG_POPUP, "%s (%u), has an incompatible mod. ([%d] got %x, expected %x)", getPlayerName(player), player, i, SDL_SwapBE32(tempBuffer[i]), SDL_SwapBE32(DataHash[i]));
+			debug(LOG_WARNING, "%s (%u) has an incompatible mod. ([%d] got %x, expected %x)", getPlayerName(player), player, i, PHYSFS_swapUBE32(tempBuffer[i]), PHYSFS_swapUBE32(DataHash[i]));
+			debug(LOG_POPUP, "%s (%u), has an incompatible mod. ([%d] got %x, expected %x)", getPlayerName(player), player, i, PHYSFS_swapUBE32(tempBuffer[i]), PHYSFS_swapUBE32(DataHash[i]));
 
 			return false;
 		}
