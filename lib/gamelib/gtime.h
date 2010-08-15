@@ -142,7 +142,7 @@ extern void	getTimeComponents(UDWORD time, UDWORD *hours, UDWORD *minutes, UDWOR
 
 
 
-extern UDWORD gameTimeFraction;  ///< Private performance calculation. Do not use.
+extern int32_t gameTimeFraction;    ///< Private performance calculation. Do not use.
 extern float graphicsTimeFraction;  ///< Private performance calculation. Do not use.
 extern float realTimeFraction;  ///< Private performance calculation. Do not use.
 

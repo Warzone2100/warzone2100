@@ -1987,10 +1987,9 @@ static void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, uint16_t directi
 #define	VTOL_VERTICAL_SPEED		(((psDroid->baseSpeed / 4) > 60) ? ((SDWORD)psDroid->baseSpeed / 4) : 60)
 
 /* primitive 'bang-bang' vtol height controller */
-static void moveAdjustVtolHeight( DROID * psDroid, UDWORD iMapHeight )
+static void moveAdjustVtolHeight(DROID * psDroid, int32_t iMapHeight)
 {
 	int32_t	iMinHeight, iMaxHeight, iLevelHeight;
-
 	if ( psDroid->droidType == DROID_TRANSPORTER && !bMultiPlayer )
 	{
 		iMinHeight   = 2*VTOL_HEIGHT_MIN;
@@ -2028,7 +2027,7 @@ static void moveAdjustVtolHeight( DROID * psDroid, UDWORD iMapHeight )
 void moveMakeVtolHover( DROID *psDroid )
 {
 	psDroid->sMove.Status = MOVEHOVER;
-	psDroid->pos.z = (UWORD)(map_Height(psDroid->pos.x,psDroid->pos.y) + VTOL_HEIGHT_LEVEL);
+	psDroid->pos.z = map_Height(psDroid->pos.x,psDroid->pos.y) + VTOL_HEIGHT_LEVEL;
 }
 
 static void moveUpdateVtolModel(DROID *psDroid, SDWORD speed, uint16_t direction)
@@ -2146,7 +2145,7 @@ static void moveUpdateCyborgModel(DROID *psDroid, SDWORD moveSpeed, uint16_t mov
 {
 	PROPULSION_STATS	*psPropStats;
 	BASE_OBJECT			*psObj = (BASE_OBJECT *) psDroid;
-	UDWORD				iMapZ = map_Height(psDroid->pos.x, psDroid->pos.y);
+	int32_t                 iMapZ = map_Height(psDroid->pos.x, psDroid->pos.y);
 	int32_t				iDist, iDx, iDy, iDz, iDroidZ;
 
 	CHECK_DROID(psDroid);
@@ -2176,14 +2175,14 @@ static void moveUpdateCyborgModel(DROID *psDroid, SDWORD moveSpeed, uint16_t mov
 		iDz = gameTimeAdjustedIncrement(psDroid->sMove.iVertSpeed);
 		iDroidZ = (SDWORD) psDroid->pos.z;
 
-		if ( iDroidZ+iDz < (SDWORD) iMapZ )
+		if ( iDroidZ+iDz < iMapZ )
 		{
 			psDroid->sMove.iVertSpeed = 0;
-			psDroid->pos.z = (UWORD)iMapZ;
+			psDroid->pos.z = iMapZ;
 		}
 		else
 		{
-			psDroid->pos.z = (UWORD)(psDroid->pos.z + iDz);
+			psDroid->pos.z = psDroid->pos.z + iDz;
 		}
 
 		if ( (psDroid->pos.z >= (iMapZ+CYBORG_MAX_JUMP_HEIGHT)) &&
@@ -2281,7 +2280,7 @@ static void moveUpdateCyborgModel(DROID *psDroid, SDWORD moveSpeed, uint16_t mov
 
 static void moveDescending( DROID *psDroid )
 {
-	UDWORD iMapHeight = map_Height( psDroid->pos.x, psDroid->pos.y);
+	int32_t iMapHeight = map_Height( psDroid->pos.x, psDroid->pos.y);
 
 	psDroid->sMove.speed = 0;
 
@@ -2510,7 +2509,7 @@ static void checkLocalFeatures(DROID *psDroid)
 	}
 
 	// once they found a oil drum, we then wait ~600 secs before we pop up new one(s).
-	if( ((oilTimer + GAME_TICKS_PER_SEC * 600) < gameTime2 ) && GenerateDrum )
+	if (((oilTimer + GAME_TICKS_PER_SEC * 600u) < realTime) && GenerateDrum)
 	{
 		addOilDrum(drumCount);
 		oilTimer = 0;

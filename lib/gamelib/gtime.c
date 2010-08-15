@@ -34,7 +34,8 @@
 
 
 /* See header file for documentation */
-UDWORD gameTime = 0, deltaGameTime = 0, graphicsTime = 0, deltaGraphicsTime = 0, realTime = 0, deltaRealTime = 0, gameTimeFraction = 0;
+UDWORD gameTime = 0, deltaGameTime = 0, graphicsTime = 0, deltaGraphicsTime = 0, realTime = 0, deltaRealTime = 0;
+int32_t gameTimeFraction = 0;
 float graphicsTimeFraction = 0.0, realTimeFraction = 0.0;
 
 /** The current clock modifier. Set to speed up the game. */
