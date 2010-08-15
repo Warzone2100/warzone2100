@@ -4142,8 +4142,7 @@ BOOL scrAllianceExistsBetween(void)
 	{
 		return false;
 	}
-	ASSERT_OR_RETURN(false, i < MAX_PLAYERS && j < MAX_PLAYERS && i >= 0 && j >= 0, 
-	                 "Invalid player parameters %d and %d", i, j);
+	ASSERT_OR_RETURN(false, i < MAX_PLAYERS && j < MAX_PLAYERS, "Invalid player parameters %d and %d", i, j);
 	if(alliances[i][j] == ALLIANCE_FORMED)
 	{
 		scrFunctionResult.v.bval = true;
@@ -10157,18 +10156,6 @@ VIEWDATA *CreateBeaconViewData(SDWORD sender, UDWORD LocX, UDWORD LocY)
 	((VIEW_PROXIMITY *)psViewData->pData)->audioID = audioID;
 
 	//store blip location
-	if (LocX < 0)
-	{
-		ASSERT(false, "prepairHelpViewData() - Negative X coord for prox message");
-		return NULL;
-	}
-
-	if (LocY < 0)
-	{
-		ASSERT(false, "prepairHelpViewData() - Negative X coord for prox message");
-		return NULL;
-	}
-
 	((VIEW_PROXIMITY *)psViewData->pData)->x = (UDWORD)LocX;
 	((VIEW_PROXIMITY *)psViewData->pData)->y = (UDWORD)LocY;
 

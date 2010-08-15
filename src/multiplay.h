@@ -105,7 +105,7 @@ extern UBYTE				bDisplayMultiJoiningStatus;	// draw load progress?
 #define CAMP_BASE				1
 #define CAMP_WALLS				2
 
-#define PING_LO					0			// this ping is kickin'.
+//#define PING_LO				0			// this ping is kickin'.
 #define PING_MED				200			// this ping is crawlin'
 #define PING_HI					400			// this ping just plain sucks :P
 #define PING_LIMIT				1000		// if ping is bigger than this, then worry and panic.

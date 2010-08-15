@@ -3512,7 +3512,7 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 
 	// ping rating
 	ping = NETgetGameFlagsUnjoined(i, 2);
-	if (ping >= PING_LO && ping < PING_MED)
+	if (ping < PING_MED)
 	{
 		iV_DrawImage(FrontImages,IMAGE_LAMP_GREEN,x+70,y+26);
 	}
@@ -3661,7 +3661,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 		}
 
 		// ping rating
-		if(ingame.PingTimes[j] >= PING_LO && ingame.PingTimes[j] < PING_MED)
+		if (ingame.PingTimes[j] < PING_MED)
 		{
 			iV_DrawImage(FrontImages,IMAGE_LAMP_GREEN,x,y);
 		}else
