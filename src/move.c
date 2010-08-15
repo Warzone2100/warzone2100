@@ -1620,12 +1620,10 @@ static BOOL moveDroidStopped(DROID* psDroid, SDWORD speed)
 }
 
 static void moveUpdateDroidDirection(DROID *psDroid, SDWORD *pSpeed, uint16_t direction,
-		uint16_t iSpinAngle, int iSpinSpeed, int iTurnSpeed, uint16_t *pDroidDir,
-		int *pfSpeed ) // direction is target-direction
+		uint16_t iSpinAngle, int iSpinSpeed, int iTurnSpeed, uint16_t *pDroidDir) // direction is target-direction
 {
-	int             adiff;
+	int			adiff;
 
-	*pfSpeed = *pSpeed;
 	*pDroidDir = psDroid->rot.direction;
 
 	// don't move if in MOVEPAUSE state
@@ -1637,9 +1635,8 @@ static void moveUpdateDroidDirection(DROID *psDroid, SDWORD *pSpeed, uint16_t di
 	adiff = abs(angleDelta(direction - *pDroidDir));
 	if (adiff > iSpinAngle)
 	{
-		// large change in direction, spin on the spot
+		// large change in direction, make a sharper turn
 		moveCalcTurn(pDroidDir, direction, iSpinSpeed);
-		*pSpeed = 0;
 	}
 	else
 	{
@@ -1815,7 +1812,7 @@ static void moveUpdateDroidPos(DROID *psDroid, int32_t dx, int32_t dy)
 /* Update a tracked droids position and speed given target values */
 static void moveUpdateGroundModel(DROID *psDroid, SDWORD speed, uint16_t direction)
 {
-	int			fPerpSpeed, fNormalSpeed, fSpeed;
+	int			fPerpSpeed, fNormalSpeed;
 	uint16_t                iDroidDir;
 	uint16_t                slideDir;
 	PROPULSION_STATS	*psPropStats;
@@ -1854,9 +1851,9 @@ static void moveUpdateGroundModel(DROID *psDroid, SDWORD speed, uint16_t directi
 
 	moveCheckFinalWaypoint( psDroid, &speed );
 
-	moveUpdateDroidDirection(psDroid, &speed, direction, TRACKED_SPIN_ANGLE, spinSpeed, turnSpeed, &iDroidDir, &fSpeed);
+	moveUpdateDroidDirection(psDroid, &speed, direction, TRACKED_SPIN_ANGLE, spinSpeed, turnSpeed, &iDroidDir);
 
-	fNormalSpeed = moveCalcNormalSpeed(psDroid, fSpeed, iDroidDir, TRACKED_ACCEL, TRACKED_DECEL);
+	fNormalSpeed = moveCalcNormalSpeed(psDroid, speed, iDroidDir, TRACKED_ACCEL, TRACKED_DECEL);
 	fPerpSpeed   = moveCalcPerpSpeed(psDroid, iDroidDir, skidDecel);
 
 	moveCombineNormalAndPerpSpeeds(psDroid, fNormalSpeed, fPerpSpeed, iDroidDir);
@@ -1868,7 +1865,7 @@ static void moveUpdateGroundModel(DROID *psDroid, SDWORD speed, uint16_t directi
 	moveCalcBlockingSlide(psDroid, &bx, &by, direction, &slideDir);
 	if (bx != dx || by != dy)
 	{
-		moveUpdateDroidDirection(psDroid, &speed, slideDir, TRACKED_SPIN_ANGLE, psDroid->baseSpeed, psDroid->baseSpeed/3, &iDroidDir, &fSpeed);
+		moveUpdateDroidDirection(psDroid, &speed, slideDir, TRACKED_SPIN_ANGLE, psDroid->baseSpeed, psDroid->baseSpeed/3, &iDroidDir);
 		psDroid->rot.direction = iDroidDir;
 	}
 
@@ -1882,7 +1879,7 @@ static void moveUpdateGroundModel(DROID *psDroid, SDWORD speed, uint16_t directi
 /* Update a persons position and speed given target values */
 static void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, uint16_t direction)
 {
-	int			fPerpSpeed, fNormalSpeed, fSpeed;
+	int			fPerpSpeed, fNormalSpeed;
 	int32_t			dx, dy;
 	uint16_t                iDroidDir;
 	uint16_t                slideDir;
@@ -1929,9 +1926,9 @@ static void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, uint16_t directi
 
 	// Used to update some kind of weird neighbour list here.
 
-	moveUpdateDroidDirection(psDroid, &speed, direction, PERSON_SPIN_ANGLE, PERSON_SPIN_SPEED, PERSON_TURN_SPEED, &iDroidDir, &fSpeed);
+	moveUpdateDroidDirection(psDroid, &speed, direction, PERSON_SPIN_ANGLE, PERSON_SPIN_SPEED, PERSON_TURN_SPEED, &iDroidDir);
 
-	fNormalSpeed = moveCalcNormalSpeed(psDroid, fSpeed, iDroidDir, PERSON_ACCEL, PERSON_DECEL);
+	fNormalSpeed = moveCalcNormalSpeed(psDroid, speed, iDroidDir, PERSON_ACCEL, PERSON_DECEL);
 
 	/* people don't skid at the moment so set zero perpendicular speed */
 	fPerpSpeed = 0;
@@ -2036,7 +2033,7 @@ void moveMakeVtolHover( DROID *psDroid )
 
 static void moveUpdateVtolModel(DROID *psDroid, SDWORD speed, uint16_t direction)
 {
-	int fPerpSpeed, fNormalSpeed, fSpeed;
+	int fPerpSpeed, fNormalSpeed;
 	uint16_t   iDroidDir;
 	uint16_t   slideDir;
 	int32_t iMapZ, iSpinSpeed, iTurnSpeed, dx, dy;
@@ -2056,16 +2053,16 @@ static void moveUpdateVtolModel(DROID *psDroid, SDWORD speed, uint16_t direction
 
 	if ( psDroid->droidType == DROID_TRANSPORTER )
 	{
-		moveUpdateDroidDirection(psDroid, &speed, direction, VTOL_SPIN_ANGLE, VTOL_SPIN_SPEED, VTOL_TURN_SPEED, &iDroidDir, &fSpeed);
+		moveUpdateDroidDirection(psDroid, &speed, direction, VTOL_SPIN_ANGLE, VTOL_SPIN_SPEED, VTOL_TURN_SPEED, &iDroidDir);
 	}
 	else
 	{
 		iSpinSpeed = (psDroid->baseSpeed/2 > VTOL_SPIN_SPEED) ? psDroid->baseSpeed/2 : VTOL_SPIN_SPEED;
 		iTurnSpeed = (psDroid->baseSpeed/8 > VTOL_TURN_SPEED) ? psDroid->baseSpeed/8 : VTOL_TURN_SPEED;
-		moveUpdateDroidDirection(psDroid, &speed, direction, VTOL_SPIN_ANGLE, iSpinSpeed, iTurnSpeed, &iDroidDir, &fSpeed);
+		moveUpdateDroidDirection(psDroid, &speed, direction, VTOL_SPIN_ANGLE, iSpinSpeed, iTurnSpeed, &iDroidDir);
 	}
 
-	fNormalSpeed = moveCalcNormalSpeed(psDroid, fSpeed, iDroidDir, VTOL_ACCEL, VTOL_DECEL);
+	fNormalSpeed = moveCalcNormalSpeed(psDroid, speed, iDroidDir, VTOL_ACCEL, VTOL_DECEL);
 	fPerpSpeed   = moveCalcPerpSpeed(psDroid, iDroidDir, VTOL_SKID_DECEL);
 
 	moveCombineNormalAndPerpSpeeds(psDroid, fNormalSpeed, fPerpSpeed, iDroidDir);
@@ -2123,7 +2120,7 @@ moveCyborgTouchDownAnimDone( ANIM_OBJECT *psObj )
 
 static void moveUpdateJumpCyborgModel(DROID *psDroid, SDWORD speed, uint16_t direction)
 {
-	int	fPerpSpeed, fNormalSpeed, fSpeed;
+	int	fPerpSpeed, fNormalSpeed;
 	uint16_t iDroidDir;
 	int32_t dx, dy;
 
@@ -2135,9 +2132,9 @@ static void moveUpdateJumpCyborgModel(DROID *psDroid, SDWORD speed, uint16_t dir
 
 	// Used to update some kind of weird neighbour list here.
 
-	moveUpdateDroidDirection(psDroid, &speed, direction, VTOL_SPIN_ANGLE, psDroid->baseSpeed, psDroid->baseSpeed/3, &iDroidDir, &fSpeed);
+	moveUpdateDroidDirection(psDroid, &speed, direction, VTOL_SPIN_ANGLE, psDroid->baseSpeed, psDroid->baseSpeed/3, &iDroidDir);
 
-	fNormalSpeed = moveCalcNormalSpeed(psDroid, fSpeed, iDroidDir, VTOL_ACCEL, VTOL_DECEL);
+	fNormalSpeed = moveCalcNormalSpeed(psDroid, speed, iDroidDir, VTOL_ACCEL, VTOL_DECEL);
 	fPerpSpeed   = 0;
 	moveCombineNormalAndPerpSpeeds(psDroid, fNormalSpeed, fPerpSpeed, iDroidDir);
 
