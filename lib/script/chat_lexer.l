@@ -34,8 +34,9 @@
 /* Get the Yacc definitions */
 #include "chat_parser.tab.h"
 
-// fwrite declared with warn_unused_result, resulting in mysterious errors in "%%", whatever that is.
-#define fwrite(a, b, c, d) if (fwrite(a, b, c, d)) {}
+// fwrite declared with warn_unused_result, resulting in mysterious errors in "%%" on some distros.
+static inline bool no_warn_unused_result(int ignore) { if (ignore) {} return true; }
+#define fwrite(a, b, c, d) no_warn_unused_result(fwrite(a, b, c, d))
 
 /* Maximum length for any TEXT value */
 #ifndef YYLMAX
