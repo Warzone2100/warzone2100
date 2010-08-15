@@ -952,16 +952,16 @@ BOOL sendResearchStatus(STRUCTURE *psBuilding, uint32_t index, uint8_t player, B
 		// If we know the building researching it then send its ID
 		if (psBuilding)
 		{
-			NETuint32_tSmall(&psBuilding->id);
+			NETuint32_t(&psBuilding->id);
 		}
 		else
 		{
 			uint32_t zero = 0;
-			NETuint32_tSmall(&zero);
+			NETuint32_t(&zero);
 		}
 
 		// Finally the topic in question
-		NETuint32_tSmall(&index);
+		NETuint32_t(&index);
 	NETend();
 
 	return true;
@@ -980,8 +980,8 @@ BOOL recvResearchStatus(NETQUEUE queue)
 	NETbeginDecode(queue, GAME_RESEARCHSTATUS);
 		NETuint8_t(&player);
 		NETbool(&bStart);
-		NETuint32_tSmall(&structRef);
-		NETuint32_tSmall(&index);
+		NETuint32_t(&structRef);
+		NETuint32_t(&index);
 	NETend();
 
 	syncDebug("player%d, bStart%d, structRef%u, index%u", player, bStart, structRef, index);

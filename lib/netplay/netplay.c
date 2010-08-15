@@ -166,9 +166,9 @@ unsigned NET_PlayerConnectionStatus[CONNECTIONSTATUS_NORMAL][MAX_PLAYERS];
  **            ie ("trunk", "2.1.3", "3.0", ...)
  ************************************************************************************
 **/
-char VersionString[VersionStringSize] = "trunk, netcode 4.1000";
+char VersionString[VersionStringSize] = "trunk, netcode 4.1001";
 static int NETCODE_VERSION_MAJOR = 4;
-static int NETCODE_VERSION_MINOR = 1000;
+static int NETCODE_VERSION_MINOR = 1001;
 static int NETCODE_HASH = 0;			// unused for now
 
 bool NETisCorrectVersion(uint32_t game_version_major, uint32_t game_version_minor)
@@ -306,23 +306,23 @@ static void NETSendNPlayerInfoTo(uint32_t *index, uint32_t indexLen, unsigned to
 	int n;
 
 	NETbeginEncode(NETnetQueue(to), NET_PLAYER_INFO);
-		NETuint32_tSmall(&indexLen);
+		NETuint32_t(&indexLen);
 		for (n = 0; n < indexLen; ++n)
 		{
 			debug(LOG_NET, "sending player's (%u) info to all players", index[n]);
 			NETlogEntry(" sending player's info to all players", SYNC_FLAG, index[n]);
-			NETuint32_tSmall(&index[n]);
+			NETuint32_t(&index[n]);
 			NETbool(&NetPlay.players[index[n]].allocated);
 			NETbool(&NetPlay.players[index[n]].heartbeat);
 			NETbool(&NetPlay.players[index[n]].kick);
 			NETstring(NetPlay.players[index[n]].name, sizeof(NetPlay.players[index[n]].name));
-			NETuint32_tSmall(&NetPlay.players[index[n]].heartattacktime);
-			NETint32_tSmall(&NetPlay.players[index[n]].colour);
-			NETint32_tSmall(&NetPlay.players[index[n]].position);
-			NETint32_tSmall(&NetPlay.players[index[n]].team);
+			NETuint32_t(&NetPlay.players[index[n]].heartattacktime);
+			NETint32_t(&NetPlay.players[index[n]].colour);
+			NETint32_t(&NetPlay.players[index[n]].position);
+			NETint32_t(&NetPlay.players[index[n]].team);
 			NETbool(&NetPlay.players[index[n]].ready);
 		}
-		NETuint32_tSmall(&NetPlay.hostPlayer);
+		NETuint32_t(&NetPlay.hostPlayer);
 	NETend();
 }
 
@@ -1369,7 +1369,7 @@ static BOOL NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 			// Encoded in NETprocessSystemMessage in nettypes.cpp.
 			NETbeginDecode(playerQueue, NET_SHARE_GAME_QUEUE);
 				NETuint8_t(&player);
-				NETuint32_tSmall(&num);
+				NETuint32_t(&num);
 				for (n = 0; n < num; ++n)
 				{
 					NETNETMESSAGE(&message);
@@ -1404,7 +1404,7 @@ static BOOL NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 			bool error = false;
 
 			NETbeginDecode(playerQueue, NET_PLAYER_INFO);
-				NETuint32_tSmall(&indexLen);
+				NETuint32_t(&indexLen);
 				if (indexLen > MAX_PLAYERS || (playerQueue.index != NET_HOST_ONLY && indexLen > 1))
 				{
 					debug(LOG_ERROR, "MSG_PLAYER_INFO: Bad number of players updated");
@@ -1418,7 +1418,7 @@ static BOOL NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 					char oldName[sizeof(NetPlay.players[index].name)];
 
 					// Retrieve the player's ID
-					NETuint32_tSmall(&index);
+					NETuint32_t(&index);
 
 					// Bail out if the given ID number is out of range
 					if (index >= MAX_CONNECTED_PLAYERS || (playerQueue.index != NetPlay.hostPlayer && (playerQueue.index != index || !NetPlay.players[index].allocated)))
@@ -1436,10 +1436,10 @@ static BOOL NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 					NETbool(&NetPlay.players[index].kick);
 					strncpy(oldName, NetPlay.players[index].name, sizeof(NetPlay.players[index].name));
 					NETstring(NetPlay.players[index].name, sizeof(NetPlay.players[index].name));
-					NETuint32_tSmall(&NetPlay.players[index].heartattacktime);
-					NETint32_tSmall(&colour);
-					NETint32_tSmall(&position);
-					NETint32_tSmall(&team);
+					NETuint32_t(&NetPlay.players[index].heartattacktime);
+					NETint32_t(&colour);
+					NETint32_t(&position);
+					NETint32_t(&team);
 					NETbool(&NetPlay.players[index].ready);
 
 					// Don't let anyone except the host change these, otherwise it will end up inconsistent at some point, and the game gets really messed up.
@@ -1460,7 +1460,7 @@ static BOOL NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 						printConsoleNameChange(oldName, NetPlay.players[index].name);
 					}
 				}
-				NETuint32_tSmall(&hostPlayer);
+				NETuint32_t(&hostPlayer);
 			NETend();
 			// If we're the game host make sure to send the updated
 			// data to all other clients as well.

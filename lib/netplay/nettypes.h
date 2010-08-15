@@ -86,10 +86,9 @@ void NETint8_t(int8_t *ip);
 void NETuint8_t(uint8_t *ip);
 void NETint16_t(int16_t *ip);
 void NETuint16_t(uint16_t *ip);
-void NETint32_t(int32_t *ip);
-void NETint32_tSmall(int32_t *ip);  ///< Encodes small values (< 836 288) in at most 3 bytes, large values (≥ 22 888 448) in 5 bytes.
-void NETuint32_t(uint32_t *ip);
-void NETuint32_tSmall(uint32_t *ip);  ///< Encodes small values (< 1 672 576) in at most 3 bytes, large values (≥ 45 776 896) in 5 bytes.
+void NETint32_t(int32_t *ip);         ///< Encodes small values (< 836 288) in at most 3 bytes, large values (≥ 22 888 448) in 5 bytes.
+void NETuint32_t(uint32_t *ip);       ///< Encodes small values (< 1 672 576) in at most 3 bytes, large values (≥ 45 776 896) in 5 bytes.
+void NETuint32_tLarge(uint32_t *ip);  ///< Encodes all values in exactly 4 bytes.
 void NETint64_t(int64_t *ip);
 void NETuint64_t(uint64_t *ip);
 void NETfloat(float* fp);
@@ -111,7 +110,7 @@ static void NETenum(EnumT* enumPtr)
 	if (NETgetPacketDir() == PACKET_ENCODE)
 		val = *enumPtr;
 
-	NETuint32_tSmall(&val);
+	NETuint32_t(&val);
 
 	if (NETgetPacketDir() == PACKET_DECODE)
 		*enumPtr = static_cast<EnumT>(val);
@@ -129,7 +128,7 @@ do \
 	squelchUninitialisedUseWarning(enumPtr); \
 	_val = (NETgetPacketDir() == PACKET_ENCODE) ? *(enumPtr) : 0; \
 \
-	NETuint32_tSmall(&_val); \
+	NETuint32_t(&_val); \
 \
 	*(enumPtr) = _val; \
 } while(0)

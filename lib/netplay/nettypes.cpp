@@ -93,7 +93,36 @@ static void queue(const Q &q, uint16_t &v)
 }
 
 template<class Q>
-static void queue(const Q &q, uint32_t &v)
+static void queue(const Q &q, uint32_t &vOrig)
+{
+	if (Q::Direction == Q::Write)
+	{
+		uint32_t v = vOrig;
+		bool moreBytes = true;
+		for (int n = 0; moreBytes; ++n)
+		{
+			uint8_t b;
+			moreBytes = encode_uint32_t(b, v, n);
+			queue(q, b);
+		}
+	}
+	else if (Q::Direction == Q::Read)
+	{
+		uint32_t v = 0;
+		bool moreBytes = true;
+		for (int n = 0; moreBytes; ++n)
+		{
+			uint8_t b = 0;
+			queue(q, b);
+			moreBytes = decode_uint32_t(b, v, n);
+		}
+
+		vOrig = v;
+	}
+}
+
+template<class Q>
+static void queueLarge(const Q &q, uint32_t &v)
 {
 	uint16_t b[2] = {v>>16, v};
 	queue(q, b[0]);
@@ -158,11 +187,16 @@ static void queue(const Q &q, int16_t &v)
 template<class Q>
 static void queue(const Q &q, int32_t &v)
 {
-	uint32_t b = v;
+	// Non-negative values: value*2
+	// Negative values:     -value*2 - 1
+	// Example: int32_t -5 -4 -3 -2 -1  0  1  2  3  4  5
+	// becomes uint32_t  9  7  5  3  1  0  2  4  6  8 10
+
+	uint32_t b = v<<1 ^ (-((uint32_t)v>>31));
 	queue(q, b);
 	if (Q::Direction == Q::Read)
 	{
-		v = b;
+		v = b>>1 ^ -(b&1);
 	}
 
 	STATIC_ASSERT(sizeof(b) == sizeof(v));
@@ -213,57 +247,11 @@ void queue(const Q &q, float &v)
 }
 
 template<class Q>
-static void queueSmall(const Q &q, int32_t &v)
-{
-	// Non-negative values: value*2
-	// Negative values:     -value*2 - 1
-	// Example: int32_t -5 -4 -3 -2 -1  0  1  2  3  4  5
-	// becomes uint32_t  9  7  5  3  1  0  2  4  6  8 10
-
-	uint32_t b = v<<1 ^ (-((uint32_t)v>>31));
-	queueSmall(q, b);
-
-	if (Q::Direction == Q::Read)
-	{
-		v = b>>1 ^ -(b&1);
-	}
-}
-
-template<class Q>
-static void queueSmall(const Q &q, uint32_t &vOrig)
-{
-	if (Q::Direction == Q::Write)
-	{
-		uint32_t v = vOrig;
-		bool moreBytes = true;
-		for (int n = 0; moreBytes; ++n)
-		{
-			uint8_t b;
-			moreBytes = encode_uint32_t(b, v, n);
-			queue(q, b);
-		}
-	}
-	else if (Q::Direction == Q::Read)
-	{
-		uint32_t v = 0;
-		bool moreBytes = true;
-		for (int n = 0; moreBytes; ++n)
-		{
-			uint8_t b = 0;
-			queue(q, b);
-			moreBytes = decode_uint32_t(b, v, n);
-		}
-
-		vOrig = v;
-	}
-}
-
-template<class Q>
 static void queue(const Q &q, Position &v)
 {
-	queueSmall(q, v.x);
-	queueSmall(q, v.y);
-	queueSmall(q, v.z);
+	queue(q, v.x);
+	queue(q, v.y);
+	queue(q, v.z);
 }
 
 template<class Q>
@@ -278,7 +266,7 @@ template<class Q, class T>
 static void queue(const Q &q, std::vector<T> &v)
 {
 	uint32_t len = v.size();
-	queueSmall(q, len);
+	queue(q, len);
 	switch (Q::Direction)
 	{
 		case Q::Write:
@@ -320,15 +308,15 @@ static void queueAuto(T &v)
 }
 
 template<class T>
-static void queueAutoSmall(T &v)
+static void queueAutoLarge(T &v)
 {
 	if (NETgetPacketDir() == PACKET_ENCODE)
 	{
-		queueSmall(writer, v);
+		queueLarge(writer, v);
 	}
 	else if (NETgetPacketDir() == PACKET_DECODE)
 	{
-		queueSmall(reader, v);
+		queueLarge(reader, v);
 	}
 }
 
@@ -578,7 +566,7 @@ void NETflushGameQueues()
 		// Decoded in NETprocessSystemMessage in netplay.c.
 		NETbeginEncode(NETbroadcastQueue(), NET_SHARE_GAME_QUEUE);
 			NETuint8_t(&player);
-			NETuint32_tSmall(&num);
+			NETuint32_t(&num);
 			for (uint32_t n = 0; n < num; ++n)
 			{
 				queueAuto(const_cast<NetMessage &>(queue->getMessageForNet()));  // const_cast is safe since we are encoding, not decoding.
@@ -618,19 +606,14 @@ void NETint32_t(int32_t *ip)
 	queueAuto(*ip);
 }
 
-void NETint32_tSmall(int32_t *ip)
-{
-	queueAutoSmall(*ip);
-}
-
 void NETuint32_t(uint32_t *ip)
 {
 	queueAuto(*ip);
 }
 
-void NETuint32_tSmall(uint32_t *ip)
+void NETuint32_tLarge(uint32_t *ip)
 {
-	queueAutoSmall(*ip);
+	queueAutoLarge(*ip);
 }
 
 void NETint64_t(int64_t *ip)

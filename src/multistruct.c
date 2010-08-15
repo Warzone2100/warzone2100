@@ -424,13 +424,13 @@ void sendStructureInfo(STRUCTURE *psStruct, STRUCTURE_INFO structureInfo_, DROID
 
 	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_STRUCTUREINFO);
 		NETuint8_t(&player);
-		NETuint32_tSmall(&structId);
+		NETuint32_t(&structId);
 		NETuint8_t(&structureInfo);
 		if (structureInfo_ == STRUCTUREINFO_MANUFACTURE)
 		{
 			uint32_t templateId = psTempl != NULL ? psTempl->multiPlayerID : 0;
 
-			NETuint32_tSmall(&templateId);
+			NETuint32_t(&templateId);
 		}
 	NETend();
 }
@@ -446,11 +446,11 @@ void recvStructureInfo(NETQUEUE queue)
 
 	NETbeginDecode(queue, GAME_STRUCTUREINFO);
 		NETuint8_t(&player);
-		NETuint32_tSmall(&structId);
+		NETuint32_t(&structId);
 		NETuint8_t(&structureInfo);
 		if (structureInfo == STRUCTUREINFO_MANUFACTURE)
 		{
-			NETuint32_tSmall(&templateId);
+			NETuint32_t(&templateId);
 			if (templateId != 0)
 			{
 				psTempl = IdToTemplate(templateId, player);

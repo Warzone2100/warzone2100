@@ -699,11 +699,11 @@ void droidBurn(DROID *psDroid)
 
 void _syncDebugDroid(const char *function, DROID *psDroid, char ch)
 {
-	_syncDebug(function, "%c droid%d = p%d;pos(%d,%d,%d),ord%d(%d,%d),act%d,so%X,bp%d, power = %"PRId64"", ch,
+	_syncDebug(function, "%c droid%d = p%d;pos(%d.%d,%d.%d,%d),ord%d(%d,%d),act%d,so%X,bp%d, power = %"PRId64"", ch,
 	          psDroid->id,
 
 	          psDroid->player,
-	          psDroid->pos.x, psDroid->pos.y, psDroid->pos.z,
+	          psDroid->pos.x, psDroid->sMove.eBitX, psDroid->pos.y, psDroid->sMove.eBitY, psDroid->pos.z,
 	          psDroid->order, psDroid->orderX, psDroid->orderY,
 	          psDroid->action,
 	          psDroid->secondaryOrder,

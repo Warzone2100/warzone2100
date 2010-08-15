@@ -374,9 +374,9 @@ void sendPlayerGameTime()
 		}
 
 		NETbeginEncode(NETgameQueue(player), GAME_GAME_TIME);
-			NETuint32_tSmall(&latencyTicks);
-			NETuint32_tSmall(&checkTime);
-			NETuint32_t(&checkCrc);
+			NETuint32_t(&latencyTicks);
+			NETuint32_t(&checkTime);
+			NETuint32_tLarge(&checkCrc);
 			NETuint16_t(&wantedLatency);
 		NETend();
 	}
@@ -389,9 +389,9 @@ void recvPlayerGameTime(NETQUEUE queue)
 	uint32_t checkCrc = 0;
 
 	NETbeginDecode(queue, GAME_GAME_TIME);
-		NETuint32_tSmall(&latencyTicks);
-		NETuint32_tSmall(&checkTime);
-		NETuint32_t(&checkCrc);
+		NETuint32_t(&latencyTicks);
+		NETuint32_t(&checkTime);
+		NETuint32_tLarge(&checkCrc);
 		NETuint16_t(&wantedLatencies[queue.index]);
 	NETend();
 

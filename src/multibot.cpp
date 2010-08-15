@@ -131,7 +131,7 @@ BOOL sendDroidSecondary(const DROID* psDroid, SECONDARY_ORDER sec, SECONDARY_STA
 		uint32_t droid = psDroid->id;
 
 		NETuint8_t(&player);
-		NETuint32_tSmall(&droid);
+		NETuint32_t(&droid);
 		NETenum(&sec);
 		NETenum(&state);
 	}
@@ -151,7 +151,7 @@ BOOL recvDroidSecondary(NETQUEUE queue)
 		uint32_t droid;
 
 		NETuint8_t(&player);
-		NETuint32_tSmall(&droid);
+		NETuint32_t(&droid);
 		NETenum(&sec);
 		NETenum(&state);
 
@@ -544,23 +544,23 @@ static void NETQueuedDroidInfo(QueuedDroidInfo *info)
 	NETbool(&info->subType);
 	if (info->subType)
 	{
-		NETuint32_tSmall(&info->destId);
+		NETuint32_t(&info->destId);
 		NETenum(&info->destType);
 	}
 	else
 	{
-		NETuint32_tSmall(&info->x);
-		NETuint32_tSmall(&info->y);
+		NETuint32_t(&info->x);
+		NETuint32_t(&info->y);
 	}
 	if (info->order == DORDER_BUILD || info->order == DORDER_LINEBUILD)
 	{
-		NETuint32_tSmall(&info->structRef);
+		NETuint32_t(&info->structRef);
 		NETuint16_t(&info->direction);
 	}
 	if (info->order == DORDER_LINEBUILD)
 	{
-		NETuint32_tSmall(&info->x2);
-		NETuint32_tSmall(&info->y2);
+		NETuint32_t(&info->x2);
+		NETuint32_t(&info->y2);
 	}
 }
 
@@ -581,7 +581,7 @@ void sendQueuedDroidInfo()
 			NETQueuedDroidInfo(&*eqBegin);
 
 			uint32_t num = eqEnd - eqBegin;
-			NETuint32_tSmall(&num);
+			NETuint32_t(&num);
 
 			uint32_t prevDroidId = 0;
 			for (unsigned n = 0; n < num; ++n)
@@ -590,7 +590,7 @@ void sendQueuedDroidInfo()
 
 				// Encode deltas between droid IDs, since the deltas are smaller than the actual droid IDs, and will encode to less bytes on average.
 				uint32_t deltaDroidId = droidId - prevDroidId;
-				NETuint32_tSmall(&deltaDroidId);
+				NETuint32_t(&deltaDroidId);
 
 				prevDroidId = droidId;
 			}
@@ -694,13 +694,13 @@ BOOL recvDroidInfo(NETQUEUE queue)
 		}
 
 		uint32_t num = 0;
-		NETuint32_tSmall(&num);
+		NETuint32_t(&num);
 
 		for (unsigned n = 0; n < num; ++n)
 		{
 			// Get the next droid ID which is being given this order.
 			uint32_t deltaDroidId = 0;
-			NETuint32_tSmall(&deltaDroidId);
+			NETuint32_t(&deltaDroidId);
 			info.droidId += deltaDroidId;
 
 			DROID *psDroid = NULL;
