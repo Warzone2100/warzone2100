@@ -460,7 +460,8 @@ void fpathRemoveDroidData(int id)
 }
 
 
-static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int startY, int tX, int tY, PROPULSION_TYPE propulsionType, DROID_TYPE droidType, FPATH_MOVETYPE moveType, int owner)
+static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int startY, int tX, int tY, PROPULSION_TYPE propulsionType, 
+                               DROID_TYPE droidType, FPATH_MOVETYPE moveType, int owner, bool acceptNearest)
 {
 	PATHJOB		*psJob = NULL;
 	int 		count;
@@ -554,6 +555,7 @@ static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int sta
 	psJob->propulsion = propulsionType;
 	psJob->moveType = moveType;
 	psJob->owner = owner;
+	psJob->acceptNearest = acceptNearest;
 	fpathSetBlockingMap(psJob);
 
 	// Clear any results or jobs waiting already. It is a vital assumption that there is only one
@@ -594,6 +596,7 @@ static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int sta
 // Find a route for an DROID to a location in world coordinates
 FPATH_RETVAL fpathDroidRoute(DROID* psDroid, SDWORD tX, SDWORD tY, FPATH_MOVETYPE moveType)
 {
+	bool acceptNearest;
 	PROPULSION_STATS *psPropStats = getPropulsionStats(psDroid);
 
 	// override for AI to blast our way through stuff
@@ -651,7 +654,21 @@ FPATH_RETVAL fpathDroidRoute(DROID* psDroid, SDWORD tX, SDWORD tY, FPATH_MOVETYP
 			objTrace(psDroid->id, "Workaround found at (%d, %d)", map_coord(tX), map_coord(tY));
 		}
 	}
-	return fpathRoute(&psDroid->sMove, psDroid->id, psDroid->pos.x, psDroid->pos.y, tX, tY, psPropStats->propulsionType, psDroid->droidType, moveType, psDroid->player);
+	switch (psDroid->order)
+	{
+	case DORDER_BUILD:
+	case DORDER_HELPBUILD:                       // help to build a structure
+	case DORDER_LINEBUILD:                       // 6 - build a number of structures in a row (walls + bridges)
+	case DORDER_DEMOLISH:                        // demolish a structure
+	case DORDER_REPAIR:
+		acceptNearest = false;
+		break;
+	default:
+		acceptNearest = true;
+		break;
+	}
+	return fpathRoute(&psDroid->sMove, psDroid->id, psDroid->pos.x, psDroid->pos.y, tX, tY, psPropStats->propulsionType, 
+	                  psDroid->droidType, moveType, psDroid->player, acceptNearest);
 }
 
 // Run only from path thread
@@ -664,8 +681,16 @@ static void fpathExecute(PATHJOB *psJob, PATHRESULT *psResult)
 	switch (retval)
 	{
 	case ASR_NEAREST:
-		objTrace(psJob->droidID, "** Nearest route **");
-		psResult->retval = FPR_OK;
+		if (psJob->acceptNearest)
+		{
+			objTrace(psJob->droidID, "** Nearest route -- accepted **");
+			psResult->retval = FPR_OK;
+		}
+		else
+		{
+			objTrace(psJob->droidID, "** Nearest route -- rejected **");
+			psResult->retval = FPR_FAILED;
+		}
 		break;
 	case ASR_FAILED:
 		objTrace(psJob->droidID, "** Failed route **");
@@ -721,7 +746,7 @@ BOOL fpathTileLOS(DROID *psDroid, Vector3i dest)
 
 static FPATH_RETVAL fpathSimpleRoute(MOVE_CONTROL *psMove, int id, int startX, int startY, int tX, int tY)
 {
-	return fpathRoute(psMove, id, startX, startY, tX, tY, PROPULSION_TYPE_WHEELED, DROID_WEAPON, FMT_MOVE, 0);
+	return fpathRoute(psMove, id, startX, startY, tX, tY, PROPULSION_TYPE_WHEELED, DROID_WEAPON, FMT_MOVE, 0, true);
 }
 
 void fpathTest(int x, int y, int x2, int y2)

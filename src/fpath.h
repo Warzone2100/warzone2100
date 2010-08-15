@@ -54,6 +54,7 @@ typedef struct _jobNode
 	FPATH_MOVETYPE	moveType;
 	int		owner;		///< Player owner
 	struct PathBlockingMap *blockingMap;  ///< Map of blocking tiles.
+	bool		acceptNearest;
 } PATHJOB;
 
 typedef enum _fpath_retval
