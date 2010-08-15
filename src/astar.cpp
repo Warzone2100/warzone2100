@@ -51,6 +51,9 @@
 #include <vector>
 #include <algorithm>
 
+#include "lib/framework/crc.h"
+#include "lib/netplay/netplay.h"
+
 /// A coordinate.
 struct PathCoord
 {
@@ -112,9 +115,6 @@ struct PathBlockingMap
 	std::vector<bool> map;
 };
 
-/// Game time for all blocking maps in fpathBlockingMaps.
-static uint32_t fpathCurrentGameTime;
-
 // Data structures used for pathfinding, can contain cached results.
 struct PathfindContext
 {
@@ -126,8 +126,8 @@ struct PathfindContext
 	}
 	bool matches(PathBlockingMap const *blockingMap_, PathCoord tileS_) const
 	{
-		// Must check myGameTime == fpathCurrentGameTime, otherwise blockingMap be a deleted pointer which coincidentally compares equal to the valid pointer blockingMap_.
-		return myGameTime == fpathCurrentGameTime && blockingMap == blockingMap_ && tileS == tileS_;
+		// Must check myGameTime == blockingMap_->type.gameTime, otherwise blockingMap be a deleted pointer which coincidentally compares equal to the valid pointer blockingMap_.
+		return myGameTime == blockingMap_->type.gameTime && blockingMap == blockingMap_ && tileS == tileS_;
 	}
 	void assign(PathBlockingMap const *blockingMap_, PathCoord tileS_)
 	{
@@ -168,6 +168,8 @@ static std::list<PathfindContext> fpathContexts;
 static std::list<PathBlockingMap> fpathBlockingMaps;
 /// Lists of blocking maps from previous tick, will be cleared next tick (since it will be no longer needed after that).
 static std::list<PathBlockingMap> fpathPrevBlockingMaps;
+/// Game time for all blocking maps in fpathBlockingMaps.
+static uint32_t fpathCurrentGameTime;
 
 // Convert a direction into an offset
 // dir 0 => x = 0, y = -1

@@ -164,6 +164,7 @@ static int fpathThreadFunc(WZ_DECL_UNUSED void *data)
 		psResult->done = false;
 		psResult->droidID = job.droidID;
 		psResult->sMove.asPath = NULL;
+		psResult->sMove.numPoints = 0;
 		psResult->retval = FPR_FAILED;
 
 		// Add to beginning of result list
@@ -540,11 +541,7 @@ static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int sta
 
 	// We were not waiting for a result, and found no trivial path, so create new job and start waiting
 	psJob = malloc(sizeof(*psJob));
-	ASSERT(psJob, "Out of memory");
-	if (!psJob)
-	{
-		return FPR_FAILED;
-	}
+	ASSERT_OR_RETURN(FPR_FAILED, psJob, "Out of memory");
 	psJob->origX = startX;
 	psJob->origY = startY;
 	psJob->droidID = id;
