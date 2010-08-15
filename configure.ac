@@ -216,8 +216,9 @@ AX_C_CHECK_FLAG([-Werror -Wno-enum-compare], , , CFLAGS_IGNORE_WARNINGS="${CFLAG
 LDFLAGS="-lz ${LDFLAGS}"
 
 WZ_WARNINGS_GCC="-Wall -Wextra -Wno-error=unused-parameter -Wno-error=sign-compare -Wno-error=clobbered -Wno-error=type-limits -Wcast-align -Wwrite-strings -Wmissing-declarations -Wpointer-arith -Wno-error=format-security"
-WZ_WARNINGS_GCC_C="${WZ_WARNINGS_GCC} -Wno-error=pointer-to-int-cast -Wno-error=strict-aliasing -Wstrict-prototypes -Wdeclaration-after-statement -Wc++-compat -Wno-error=c++-compat ${CFLAGS_IGNORE_WARNINGS}"
+WZ_WARNINGS_GCC_C="${WZ_WARNINGS_GCC} -Wno-error=pointer-to-int-cast -Wno-error=strict-aliasing -Wstrict-prototypes -Wdeclaration-after-statement ${CFLAGS_IGNORE_WARNINGS}"
 WZ_WARNINGS_GCC_CXX="${WZ_WARNINGS_GCC} -Wc++0x-compat"
+# Maybe later: -Wc++-compat -Wno-error=c++-compat
 if test "x$enable_debug" = "xyes" ; then
 	if test "x$cc_icc" = "xyes" ; then
 		# "-fp-model precise -fp-model source -ftz -no-fma" was here
