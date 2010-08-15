@@ -215,10 +215,17 @@ AX_C_CHECK_FLAG([-Werror -Wno-enum-compare], , , CFLAGS_IGNORE_WARNINGS="${CFLAG
 # zlib
 LDFLAGS="-lz ${LDFLAGS}"
 
-WZ_WARNINGS_GCC="-Wall -Wextra -Wno-error=unused-parameter -Wno-error=sign-compare -Wno-error=clobbered -Wno-error=type-limits -Wcast-align -Wwrite-strings -Wmissing-declarations -Wpointer-arith -Wno-error=format-security"
-WZ_WARNINGS_GCC_C="${WZ_WARNINGS_GCC} -Wno-error=pointer-to-int-cast -Wno-error=strict-aliasing -Wstrict-prototypes -Wdeclaration-after-statement ${CFLAGS_IGNORE_WARNINGS}"
+if test "x$enable_warnings" = "xyes" ; then
+	# Only disable -Werror for the warning.
+	WZ_Wno_="-Wno-error="
+else
+	# Disable warning completely.
+	WZ_Wno_="-Wno-"
+fi
+
+WZ_WARNINGS_GCC="-Wall -Wextra ${WZ_Wno_}unused-parameter ${WZ_Wno_}sign-compare ${WZ_Wno_}clobbered ${WZ_Wno_}type-limits -Wcast-align -Wwrite-strings -Wmissing-declarations -Wpointer-arith ${WZ_Wno_}format-security"
+WZ_WARNINGS_GCC_C="${WZ_WARNINGS_GCC} ${WZ_Wno_}pointer-to-int-cast ${WZ_Wno_}strict-aliasing -Wstrict-prototypes -Wdeclaration-after-statement -Wc++-compat ${WZ_Wno_}c++-compat ${CFLAGS_IGNORE_WARNINGS}"
 WZ_WARNINGS_GCC_CXX="${WZ_WARNINGS_GCC} -Wc++0x-compat"
-# Maybe later: -Wc++-compat -Wno-error=c++-compat
 if test "x$enable_debug" = "xyes" ; then
 	if test "x$cc_icc" = "xyes" ; then
 		# "-fp-model precise -fp-model source -ftz -no-fma" was here
