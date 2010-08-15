@@ -1195,13 +1195,6 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 				// ignore transporters
 				continue;
 			}
-
-			if (bLegs && ((DROID *)psObj)->droidType != DROID_PERSON
-			          && !cyborgDroid((DROID *)psObj))
-			{
-				// cyborgs/people only avoid other cyborgs/people
-				continue;
-			}
 			if (!bLegs && ((DROID *)psObj)->droidType == DROID_PERSON)
 			{
 				// everything else doesn't avoid people
