@@ -879,7 +879,7 @@ static void moveCalcBlockingSlide(DROID *psDroid, int32_t *pmx, int32_t *pmy, ui
 	PROPULSION_TYPE	propulsion = getPropulsionStats(psDroid)->propulsionType;
 	SDWORD	horizX,horizY, vertX,vertY;
 	int16_t slideDir;
-	MAPTILE	*psTile;
+	MAPTILE	*psTile = NULL;
 	BOOL blocked = false;
 	// calculate the new coords and see if they are on a different tile
 	const int32_t mx = *pmx >> EXTRA_BITS;
@@ -896,7 +896,10 @@ static void moveCalcBlockingSlide(DROID *psDroid, int32_t *pmx, int32_t *pmy, ui
 	CHECK_DROID(psDroid);
 
 	// is the new tile a gate?
-	psTile = mapTile(ntx, nty);
+	if (worldOnMap(ntx, nty))
+	{
+		psTile = mapTile(ntx, nty);
+	}
 	if (!isFlying(psDroid) && psTile && psTile->psObject && psTile->psObject->type == OBJ_STRUCTURE
 	    && aiCheckAlliances(psTile->psObject->player, psDroid->player)
 	    && ((STRUCTURE *)psTile->psObject)->status == SS_BUILT
