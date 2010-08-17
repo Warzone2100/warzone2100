@@ -1467,6 +1467,19 @@ void intProcessMultiMenu(UDWORD id)
 	if(id >=MULTIMENU_CHANNEL &&  id<MULTIMENU_CHANNEL+MAX_PLAYERS)
 	{
 		i =(UBYTE)( id - MULTIMENU_CHANNEL);
+
+		if(mouseDown(MOUSE_RMB) && NetPlay.isHost) // both buttons....
+			{
+				char buf[250];
+				
+				ssprintf(buf, _("The host has kicked %s from the game!"), getPlayerName((unsigned int) i));
+				sendTextMessage(buf, true);
+				ssprintf(buf, _("kicked %s : %s from the game, and added them to the banned list!"), getPlayerName((unsigned int) i), NetPlay.players[i].IPtextAddress);
+				NETlogEntry(buf, SYNC_FLAG, (unsigned int) i);
+				kickPlayer((unsigned int) i, "you are unwanted by the host.", ERROR_KICKED);
+				return;
+			}
+
 		if(openchannels[i])
 		{
 			openchannels[i] = false;// close channel

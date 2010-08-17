@@ -759,21 +759,28 @@ BOOL recvMessage(void)
 			break;
 		case NET_KICK:
 		{
-			// FIX ME: in game kick ?  Is this even possible with current code?
+			// In game kick
 			uint32_t player_id;
 			char reason[MAX_KICK_REASON];
-
-			if (player_id == NET_HOST_ONLY)
-			{
-				debug(LOG_ERROR, "someone tried to kick the host--check your netplay logs!");
-				NETend();
-				break;
-			}
 
 			NETbeginDecode(NET_KICK);
 				NETuint32_t(&player_id);
 				NETstring( reason, MAX_KICK_REASON);
 			NETend();
+
+			if (NetMsg.source != NET_HOST_ONLY)
+			{
+				char buf[250]= {'\0'};
+
+				ssprintf(buf, "Player %d (%s : %s) tried to kick %u", (int) NetMsg.source, NetPlay.players[NetMsg.source].name, NetPlay.players[NetMsg.source].IPtextAddress, player_id);
+				NETlogEntry(buf, SYNC_FLAG, 0);
+				debug(LOG_ERROR, "%s", buf); 
+				if (player_id == NET_HOST_ONLY && NetPlay.isHost)
+				{
+					NETplayerKicked((unsigned int) NetMsg.source);
+				}
+				break;
+			}
 
 			if (selectedPlayer == player_id)  // we've been told to leave.
 			{

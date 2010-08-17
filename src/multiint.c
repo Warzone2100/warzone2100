@@ -2950,18 +2950,25 @@ void frontendMultiMessages(void)
 			char reason[MAX_KICK_REASON];
 			LOBBY_ERROR_TYPES KICK_TYPE = ERROR_NOERROR;
 
-			if (player_id == NET_HOST_ONLY)
-			{
-				debug(LOG_ERROR, "someone tried to kick the host--check your netplay logs!");
-				NETend();
-				break;
-			}
-
 			NETbeginDecode(NET_KICK);
 				NETuint32_t(&player_id);
 				NETstring( reason, MAX_KICK_REASON);
 				NETenum(&KICK_TYPE);
 			NETend();
+
+			if (NetMsg.source != NET_HOST_ONLY)
+			{
+				char buf[250]= {'\0'};
+
+				ssprintf(buf, "Player %d (%s : %s) tried to kick %u", (int) NetMsg.source, NetPlay.players[NetMsg.source].name, NetPlay.players[NetMsg.source].IPtextAddress, player_id);
+				NETlogEntry(buf, SYNC_FLAG, 0);
+				debug(LOG_ERROR, "%s", buf);
+				if (player_id == NET_HOST_ONLY && NetPlay.isHost)
+				{
+					NETplayerKicked((unsigned int) NetMsg.source);
+				}
+				return;
+			}
 
 			if (selectedPlayer == player_id)	// we've been told to leave.
 			{
