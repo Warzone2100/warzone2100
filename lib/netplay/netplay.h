@@ -283,8 +283,9 @@ typedef struct
 {
 	char	pname[40];
 	char	IPAddress[40];
+	int		times;
 } PLAYER_IP;
-#define MAX_BANS 255
+#define MAX_BANS 1000
 // ////////////////////////////////////////////////////////////////////////
 // variables
 
