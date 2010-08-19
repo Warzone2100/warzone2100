@@ -1,6 +1,6 @@
 // Bison settings for Release configuration
 
-#include "bison-all.xcconfig"
+#include "Bison-All.xcconfig"
 
 
 COPY_PHASE_STRIP = YES

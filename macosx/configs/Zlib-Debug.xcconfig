@@ -1,6 +1,6 @@
 // Zlib settings for Debug configuration
 
-#include "Zlib-all.xcconfig"
+#include "Zlib-All.xcconfig"
 
 
 GCC_ENABLE_FIX_AND_CONTINUE = YES
