@@ -2170,6 +2170,7 @@ int NETinit(BOOL bFirstCall)
 
 	if (!IPlist)
 	{
+		NETlogEntry("Looking for ban list.", SYNC_FLAG, 0);
 		read_bans();
 	}
 	return 0;
@@ -3644,12 +3645,6 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 	}
 
 	NetPlay.isHost = true;
-	NETlogEntry("Hosting game, resetting ban list.", SYNC_FLAG, 0);
-	if (IPlist)
-	{ 
-		free(IPlist);
-		IPlist = NULL;
-	}
 	sstrcpy(gamestruct.name, SessionName);
 	memset(&gamestruct.desc, 0, sizeof(gamestruct.desc));
 	gamestruct.desc.dwSize = sizeof(gamestruct.desc);
@@ -4187,6 +4182,7 @@ static void read_bans(void)
 			free(buffer);
 			debug(LOG_INFO, "Read in %d banned IPs", IPsfound);
 			TotalBans = IPsfound;
+			NETlogEntry("Found banned list :", SYNC_FLAG, TotalBans);
 		}
 	}
 }
@@ -4209,5 +4205,6 @@ static void write_bans(void)
 		}
 		PHYSFS_close(pFileHandle);
 		debug(LOG_INFO, "Wrote out %d IP's", i);
+		NETlogEntry("Writing new banned list :", SYNC_FLAG, TotalBans);
 	}
 }
