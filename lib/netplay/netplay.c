@@ -1456,7 +1456,10 @@ void NET_InitPlayer(int i, bool initPosition)
 	NetPlay.players[i].heartattacktime = 0;
 	NetPlay.players[i].heartbeat = true;		// we always start with a hearbeat
 	NetPlay.players[i].kick = false;
-	NetPlay.players[i].name[0] = '\0';
+	if (!NetPlay.isHost)
+	{	// only clear name outside of games.
+		NetPlay.players[i].name[0] = '\0';
+	}
 	if (initPosition)
 	{
 		NetPlay.players[i].colour = i;
@@ -1539,8 +1542,11 @@ static signed int NET_CreatePlayer(const char* name)
 	{
 		if (NetPlay.players[index].allocated == false)
 		{
-			debug(LOG_NET, "A new player has been created. Player, %s, is set to slot %u", name, index);
-			NETlogEntry("A new player has been created.", SYNC_FLAG, index);
+			char buf[250] = {'\0'};
+
+			ssprintf(buf, "A new player has been created. Player, %s, is set to slot %u", name, index);
+			debug(LOG_NET,"%s", buf);
+			NETlogEntry(buf, SYNC_FLAG, index);
 			NET_InitPlayer(index, false);	// re-init everything
 			NetPlay.players[index].allocated = true;
 			sstrcpy(NetPlay.players[index].name, name);
