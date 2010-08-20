@@ -1614,8 +1614,11 @@ static void NETplayerLeaving(UDWORD index)
 {
 	if(connected_bsocket[index])
 	{
-		debug(LOG_NET, "Player (%u) has left, closing socket %p", index, connected_bsocket[index]->socket);
-		NETlogEntry("Player has left nicely.", SYNC_FLAG, index);
+		char buf[250] = {'\0'};
+
+		ssprintf(buf, "Player (%u) has left, closing socket %p", index, connected_bsocket[index]->socket);
+		debug(LOG_NET, "%s", buf);
+		NETlogEntry(buf, SYNC_FLAG, index);
 		// Although we can get a error result from DelSocket, it don't really matter here.
 		SocketSet_DelSocket(socket_set, connected_bsocket[index]->socket);
 		socketClose(connected_bsocket[index]->socket);

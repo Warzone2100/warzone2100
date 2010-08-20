@@ -200,7 +200,7 @@ static void resetMultiVisibility(UDWORD player)
 // A remote player has left the game
 BOOL MultiPlayerLeave(UDWORD playerIndex)
 {
-	char	buf[255];
+	char	buf[255] = {'\0'};
 
 	if (playerIndex >= MAX_PLAYERS)
 	{
@@ -208,8 +208,9 @@ BOOL MultiPlayerLeave(UDWORD playerIndex)
 		return false;
 	}
 
-	NETlogEntry("Player leaving game", SYNC_FLAG, playerIndex);
-	debug(LOG_INFO,"** Player %u [%s], has left the game.", playerIndex, getPlayerName(playerIndex));
+	ssprintf(buf, "** Player %u [%s], has left the game.", playerIndex, getPlayerName(playerIndex));
+	NETlogEntry(buf, SYNC_FLAG, playerIndex);
+	debug(LOG_INFO,"%s", buf);
 
 	ssprintf(buf, _("%s has Left the Game"), getPlayerName(playerIndex));
 

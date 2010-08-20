@@ -471,5 +471,5 @@ void NETtest()
 
 int NETgetSource()
 {
-	return NetMsg.source;
+	return (int) NetMsg.source;
 }
