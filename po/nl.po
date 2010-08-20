@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-08-08 20:42+0200\n"
+"POT-Creation-Date: 2010-08-20 18:09+0200\n"
 "PO-Revision-Date: 2009-10-31 12:10+0100\n"
 "Last-Translator: \n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
@@ -12409,23 +12409,23 @@ msgstr "Mini-raket-artillerie Adder Wielen"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Zwaar kanon"
 
-#: lib/framework/i18n.c:89
-#: lib/framework/i18n.c:147
+#: lib/framework/i18n.c:90
+#: lib/framework/i18n.c:149
 msgid "System locale"
 msgstr "Systeemtaal"
 
-#: lib/netplay/netplay.c:1286
-#: lib/netplay/netplay.c:2159
+#: lib/netplay/netplay.c:1290
+#: lib/netplay/netplay.c:2172
 #, fuzzy
 msgid "Enter password here"
 msgstr "Vul eerst het wachtwoord in"
 
-#: lib/netplay/netplay.c:3171
+#: lib/netplay/netplay.c:3202
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr ""
 
-#: lib/netplay/netplay.c:3196
+#: lib/netplay/netplay.c:3227
 #, fuzzy, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Kan niet communiceren met de lobby server! is TCP port 9990 open?"
@@ -14651,10 +14651,11 @@ msgid "All players need to have the same mods to join your game."
 msgstr ""
 
 #: src/multiint.c:2285
-msgid "*** password is now required! ***"
+#, fuzzy, c-format
+msgid "*** password [%s] is now required! ***"
 msgstr "*** wachtwoord is NU nodig! ***"
 
-#: src/multiint.c:2292
+#: src/multiint.c:2293
 msgid "*** password is NOT required! ***"
 msgstr "*** Er is GEEN wachtwoord nodig! ***"
 
@@ -14668,6 +14669,7 @@ msgstr "Vergrendelde ploegen"
 
 #: src/multiint.c:2659
 #: src/multiint.c:2709
+#: src/multimenu.c:1475
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "De gastheer heeft %s uit het spel verwijderd!"
@@ -14676,21 +14678,21 @@ msgstr "De gastheer heeft %s uit het spel verwijderd!"
 msgid "Host is Starting Game"
 msgstr "Gastheer start spel"
 
-#: src/multiint.c:3356
+#: src/multiint.c:3364
 msgid "Players"
 msgstr "Spelers"
 
-#: src/multiint.c:3474
+#: src/multiint.c:3482
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr ""
 
-#: src/multiint.c:3483
+#: src/multiint.c:3491
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr ""
 
-#: src/multiint.c:3509
+#: src/multiint.c:3517
 msgid "HOST"
 msgstr ""
 
@@ -14699,27 +14701,27 @@ msgstr ""
 msgid "Players Still Joining"
 msgstr "Spelers komen nog steeds binnen"
 
-#: src/multijoin.c:214
+#: src/multijoin.c:215
 #, c-format
 msgid "%s has Left the Game"
 msgstr "%s heeft het spel verlaten"
 
-#: src/multijoin.c:228
+#: src/multijoin.c:229
 #, c-format
 msgid "File transfer has been aborted for %d."
 msgstr ""
 
-#: src/multijoin.c:347
+#: src/multijoin.c:348
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr ""
 
-#: src/multijoin.c:391
+#: src/multijoin.c:392
 #, c-format
 msgid "%s is Joining the Game"
 msgstr "%s neemt deel aan het spel"
 
-#: src/multijoin.c:401
+#: src/multijoin.c:402
 msgid "System message:"
 msgstr "Systeem bericht:"
 
@@ -14801,53 +14803,58 @@ msgstr "Geselecteerde eenheden overdragen"
 msgid "Give Power To Player"
 msgstr "Geef energie aan speler"
 
+#: src/multimenu.c:1477
+#, c-format
+msgid "kicked %s : %s from the game, and added them to the banned list!"
+msgstr ""
+
 #: src/multiplay.c:277
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr ""
 
-#: src/multiplay.c:1092
+#: src/multiplay.c:1098
 #, fuzzy
 msgid "(allies"
 msgstr "Bondgenootschappen toestaan"
 
-#: src/multiplay.c:1100
+#: src/multiplay.c:1106
 msgid "(private to "
 msgstr ""
 
-#: src/multiplay.c:1113
+#: src/multiplay.c:1119
 msgid "[invalid]"
 msgstr ""
 
-#: src/multiplay.c:1972
+#: src/multiplay.c:2001
 msgid "Green"
 msgstr "Groen"
 
-#: src/multiplay.c:1973
+#: src/multiplay.c:2002
 msgid "Orange"
 msgstr "Oranje"
 
-#: src/multiplay.c:1974
+#: src/multiplay.c:2003
 msgid "Grey"
 msgstr "Grijs"
 
-#: src/multiplay.c:1975
+#: src/multiplay.c:2004
 msgid "Black"
 msgstr "Zwart"
 
-#: src/multiplay.c:1976
+#: src/multiplay.c:2005
 msgid "Red"
 msgstr "Rood"
 
-#: src/multiplay.c:1977
+#: src/multiplay.c:2006
 msgid "Blue"
 msgstr "Blauw"
 
-#: src/multiplay.c:1978
+#: src/multiplay.c:2007
 msgid "Pink"
 msgstr "Roze"
 
-#: src/multiplay.c:1979
+#: src/multiplay.c:2008
 msgid "Cyan"
 msgstr "Cyaan"
 

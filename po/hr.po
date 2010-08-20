@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WZ2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-08-08 20:42+0200\n"
+"POT-Creation-Date: 2010-08-20 18:09+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: metalwarrior95 <metalwarrioroften@gmail.com>\n"
 "Language-Team: \n"
@@ -12214,22 +12214,22 @@ msgstr "AI unit"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "AI unit"
 
-#: lib/framework/i18n.c:89
-#: lib/framework/i18n.c:147
+#: lib/framework/i18n.c:90
+#: lib/framework/i18n.c:149
 msgid "System locale"
 msgstr "Lokalni"
 
-#: lib/netplay/netplay.c:1286
-#: lib/netplay/netplay.c:2159
+#: lib/netplay/netplay.c:1290
+#: lib/netplay/netplay.c:2172
 msgid "Enter password here"
 msgstr "Upišite sišfru ovdje"
 
-#: lib/netplay/netplay.c:3171
+#: lib/netplay/netplay.c:3202
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr ""
 
-#: lib/netplay/netplay.c:3196
+#: lib/netplay/netplay.c:3227
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr ""
@@ -14428,10 +14428,11 @@ msgid "All players need to have the same mods to join your game."
 msgstr "Svi igrači moraju imati iste modove."
 
 #: src/multiint.c:2285
-msgid "*** password is now required! ***"
+#, fuzzy, c-format
+msgid "*** password [%s] is now required! ***"
 msgstr "Lozinka je potrebna."
 
-#: src/multiint.c:2292
+#: src/multiint.c:2293
 msgid "*** password is NOT required! ***"
 msgstr "Lozinka nije potrebna."
 
@@ -14445,6 +14446,7 @@ msgstr "Model saveza: Timovi"
 
 #: src/multiint.c:2659
 #: src/multiint.c:2709
+#: src/multimenu.c:1475
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "Host je izbacio %s iz igre."
@@ -14453,21 +14455,21 @@ msgstr "Host je izbacio %s iz igre."
 msgid "Host is Starting Game"
 msgstr "Host započinje igru"
 
-#: src/multiint.c:3356
+#: src/multiint.c:3364
 msgid "Players"
 msgstr "Igrači"
 
-#: src/multiint.c:3474
+#: src/multiint.c:3482
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Slanje karte: %d%%"
 
-#: src/multiint.c:3483
+#: src/multiint.c:3491
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Karta: %d%% downloadana"
 
-#: src/multiint.c:3509
+#: src/multiint.c:3517
 msgid "HOST"
 msgstr "HOST"
 
@@ -14476,27 +14478,27 @@ msgstr "HOST"
 msgid "Players Still Joining"
 msgstr "Igrači se još pridružuju"
 
-#: src/multijoin.c:214
+#: src/multijoin.c:215
 #, c-format
 msgid "%s has Left the Game"
 msgstr "%s je izašao iz igre"
 
-#: src/multijoin.c:228
+#: src/multijoin.c:229
 #, c-format
 msgid "File transfer has been aborted for %d."
 msgstr "Slanje podaaka je zaustavljeno za %d."
 
-#: src/multijoin.c:347
+#: src/multijoin.c:348
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr "%s (%u) ima nedopušten mod  i izbačen je."
 
-#: src/multijoin.c:391
+#: src/multijoin.c:392
 #, c-format
 msgid "%s is Joining the Game"
 msgstr "%s se pridužio igri."
 
-#: src/multijoin.c:401
+#: src/multijoin.c:402
 msgid "System message:"
 msgstr "Poruka servera:"
 
@@ -14577,52 +14579,57 @@ msgstr "Predaj jedinice"
 msgid "Give Power To Player"
 msgstr "Pošalji resurse igraču"
 
+#: src/multimenu.c:1477
+#, c-format
+msgid "kicked %s : %s from the game, and added them to the banned list!"
+msgstr ""
+
 #: src/multiplay.c:277
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr "Izbacivanje igrača %s jer se podaci ne podudaraju"
 
-#: src/multiplay.c:1092
+#: src/multiplay.c:1098
 msgid "(allies"
 msgstr "(saveznika"
 
-#: src/multiplay.c:1100
+#: src/multiplay.c:1106
 msgid "(private to "
 msgstr "(samo za"
 
-#: src/multiplay.c:1113
+#: src/multiplay.c:1119
 msgid "[invalid]"
 msgstr "[nedostupno]"
 
-#: src/multiplay.c:1972
+#: src/multiplay.c:2001
 msgid "Green"
 msgstr "Zeleni"
 
-#: src/multiplay.c:1973
+#: src/multiplay.c:2002
 msgid "Orange"
 msgstr "Narančasti"
 
-#: src/multiplay.c:1974
+#: src/multiplay.c:2003
 msgid "Grey"
 msgstr "Sivi"
 
-#: src/multiplay.c:1975
+#: src/multiplay.c:2004
 msgid "Black"
 msgstr "Crni"
 
-#: src/multiplay.c:1976
+#: src/multiplay.c:2005
 msgid "Red"
 msgstr "Crveni"
 
-#: src/multiplay.c:1977
+#: src/multiplay.c:2006
 msgid "Blue"
 msgstr "Plavi"
 
-#: src/multiplay.c:1978
+#: src/multiplay.c:2007
 msgid "Pink"
 msgstr "Ljubičasta"
 
-#: src/multiplay.c:1979
+#: src/multiplay.c:2008
 msgid "Cyan"
 msgstr "Cijan"
 

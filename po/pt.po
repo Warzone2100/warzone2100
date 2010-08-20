@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-08-08 20:42+0200\n"
+"POT-Creation-Date: 2010-08-20 18:09+0200\n"
 "PO-Revision-Date: 2009-08-04 22:59+0100\n"
 "Last-Translator: Pedro Miguel Martins da Silva Caetano <pedro.m.caetano@netcabo.pt>\n"
 "Language-Team: Portugese <warzone-dev@gna.org>\n"
@@ -12349,23 +12349,23 @@ msgstr "Artilharia de Mini Rockets Cobra Lagartas"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Canhão Pesado Python Hovercraft"
 
-#: lib/framework/i18n.c:89
-#: lib/framework/i18n.c:147
+#: lib/framework/i18n.c:90
+#: lib/framework/i18n.c:149
 msgid "System locale"
 msgstr "Linguagem do sistema"
 
-#: lib/netplay/netplay.c:1286
-#: lib/netplay/netplay.c:2159
+#: lib/netplay/netplay.c:1290
+#: lib/netplay/netplay.c:2172
 #, fuzzy
 msgid "Enter password here"
 msgstr "Insere Primeiro a Palavra-passe"
 
-#: lib/netplay/netplay.c:3171
+#: lib/netplay/netplay.c:3202
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Não pode ser obtido o nome do masterserver (%s)!"
 
-#: lib/netplay/netplay.c:3196
+#: lib/netplay/netplay.c:3227
 #, fuzzy, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Não foi possível comunicar com o servidor de lobby! A porta TCP %u está aberta para tráfego outgoing?"
@@ -14589,10 +14589,11 @@ msgid "All players need to have the same mods to join your game."
 msgstr ""
 
 #: src/multiint.c:2285
-msgid "*** password is now required! ***"
+#, fuzzy, c-format
+msgid "*** password [%s] is now required! ***"
 msgstr "*** É agora necessária uma Palavra-passe! ***"
 
-#: src/multiint.c:2292
+#: src/multiint.c:2293
 msgid "*** password is NOT required! ***"
 msgstr "*** NÃO é necessária Palavra-passe ***"
 
@@ -14606,6 +14607,7 @@ msgstr "Modo \"Equipas Fixas\" activado"
 
 #: src/multiint.c:2659
 #: src/multiint.c:2709
+#: src/multimenu.c:1475
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "O servidor kickou %s do jogo!"
@@ -14614,21 +14616,21 @@ msgstr "O servidor kickou %s do jogo!"
 msgid "Host is Starting Game"
 msgstr "O servidor está a começar o jogo"
 
-#: src/multiint.c:3356
+#: src/multiint.c:3364
 msgid "Players"
 msgstr "Jogadores"
 
-#: src/multiint.c:3474
+#: src/multiint.c:3482
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr ""
 
-#: src/multiint.c:3483
+#: src/multiint.c:3491
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr ""
 
-#: src/multiint.c:3509
+#: src/multiint.c:3517
 msgid "HOST"
 msgstr ""
 
@@ -14637,27 +14639,27 @@ msgstr ""
 msgid "Players Still Joining"
 msgstr "Os jogadores ainda estão a entrar."
 
-#: src/multijoin.c:214
+#: src/multijoin.c:215
 #, c-format
 msgid "%s has Left the Game"
 msgstr "%s abandonou o Jogo"
 
-#: src/multijoin.c:228
+#: src/multijoin.c:229
 #, c-format
 msgid "File transfer has been aborted for %d."
 msgstr ""
 
-#: src/multijoin.c:347
+#: src/multijoin.c:348
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr ""
 
-#: src/multijoin.c:391
+#: src/multijoin.c:392
 #, c-format
 msgid "%s is Joining the Game"
 msgstr "%s está a juntar-se ao Jogo"
 
-#: src/multijoin.c:401
+#: src/multijoin.c:402
 msgid "System message:"
 msgstr "Mensagem de Sistema:"
 
@@ -14740,53 +14742,58 @@ msgstr "Passar Controlo das Unidades Seleccionadas"
 msgid "Give Power To Player"
 msgstr "Dar Energia ao Jogador"
 
+#: src/multimenu.c:1477
+#, c-format
+msgid "kicked %s : %s from the game, and added them to the banned list!"
+msgstr ""
+
 #: src/multiplay.c:277
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr ""
 
-#: src/multiplay.c:1092
+#: src/multiplay.c:1098
 #, fuzzy
 msgid "(allies"
 msgstr "Alianças"
 
-#: src/multiplay.c:1100
+#: src/multiplay.c:1106
 msgid "(private to "
 msgstr ""
 
-#: src/multiplay.c:1113
+#: src/multiplay.c:1119
 msgid "[invalid]"
 msgstr ""
 
-#: src/multiplay.c:1972
+#: src/multiplay.c:2001
 msgid "Green"
 msgstr "Verde"
 
-#: src/multiplay.c:1973
+#: src/multiplay.c:2002
 msgid "Orange"
 msgstr "Laranja"
 
-#: src/multiplay.c:1974
+#: src/multiplay.c:2003
 msgid "Grey"
 msgstr "Cinzento"
 
-#: src/multiplay.c:1975
+#: src/multiplay.c:2004
 msgid "Black"
 msgstr "Preto"
 
-#: src/multiplay.c:1976
+#: src/multiplay.c:2005
 msgid "Red"
 msgstr "Vermelho"
 
-#: src/multiplay.c:1977
+#: src/multiplay.c:2006
 msgid "Blue"
 msgstr "Azul"
 
-#: src/multiplay.c:1978
+#: src/multiplay.c:2007
 msgid "Pink"
 msgstr "Rosa"
 
-#: src/multiplay.c:1979
+#: src/multiplay.c:2008
 msgid "Cyan"
 msgstr "Ciano"
 
