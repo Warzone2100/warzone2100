@@ -625,6 +625,7 @@ BOOL multiGameShutdown(void)
 
 	// if we terminate the socket too quickly, then, it is possible not to get the leave message
 	SDL_Delay(1000);
+	ingame.TimeEveryoneIsInGame = 0;
 	// close game
 	NETclose();
 	NETremRedirects();
@@ -639,7 +640,6 @@ BOOL multiGameShutdown(void)
 	ingame.localJoiningInProgress = false; // Clean up
 	ingame.localOptionsReceived = false;
 	ingame.bHostSetup = false;	// Dont attempt a host
-	ingame.TimeEveryoneIsInGame = 0;
 	ingame.startTime = 0;
 	NetPlay.isHost					= false;
 	bMultiPlayer					= false;	// Back to single player mode
