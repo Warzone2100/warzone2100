@@ -139,8 +139,6 @@ static void NETregisterServer(int state);
 static void NETallowJoining(void);
 static bool onBanList(const char *ip);
 static void addToBanList(const char *ip, const char *name);
-static void write_bans(void);
-static void read_bans(void);
 
 /*
  * Network globals, these are part of the new network API
@@ -207,7 +205,6 @@ PLAYER_IP	*IPlist = NULL;
 static BOOL		allow_joining = false;
 static	bool server_not_there = false;
 static GAMESTRUCT	gamestruct;
-static int TotalBans = 0;
 
 // update flags
 bool netPlayersUpdated;
@@ -2177,11 +2174,6 @@ int NETinit(BOOL bFirstCall)
 	NetPlay.GamePassworded = false;
 	memset(&sync_counter, 0x0, sizeof(sync_counter));	//clear counters
 
-	if (!IPlist)
-	{
-		NETlogEntry("Looking for ban list.", SYNC_FLAG, 0);
-		read_bans();
-	}
 	return 0;
 }
 
@@ -2194,11 +2186,8 @@ int NETshutdown(void)
 	NETlogEntry("NETshutdown", SYNC_FLAG, selectedPlayer);
 	NETstopLogging();
 	if (IPlist)
-	{
-		write_bans();
 		free(IPlist);
-		IPlist = NULL;
-	}
+	IPlist = NULL;
 
 #if defined(WZ_OS_WIN)
 	WSACleanup();
@@ -3654,6 +3643,12 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 	}
 
 	NetPlay.isHost = true;
+	NETlogEntry("Hosting game, resetting ban list.", SYNC_FLAG, 0);
+	if (IPlist)
+	{ 
+		free(IPlist);
+		IPlist = NULL;
+	}
 	sstrcpy(gamestruct.name, SessionName);
 	memset(&gamestruct.desc, 0, sizeof(gamestruct.desc));
 	gamestruct.desc.dwSize = sizeof(gamestruct.desc);
@@ -4107,7 +4102,6 @@ static bool onBanList(const char *ip)
 	{
 		if (strcmp(ip, IPlist[i].IPAddress) == 0)
 		{
-			IPlist[i].times++;
 			return true;
 		}
 	}
@@ -4121,99 +4115,26 @@ static bool onBanList(const char *ip)
  */
 static void addToBanList(const char *ip, const char *name)
 {
-	if (TotalBans > MAX_BANS)
-	{
-		debug(LOG_POPUP, "We have exceeded %d bans.  Please edit the file (bannedIPs.txt) and remove old bans. Top ones are oldest.", MAX_BANS);
-		return;
-	}
+	static int numBans = 0;
 
-	sstrcpy(IPlist[TotalBans].IPAddress, ip);
-	sstrcpy(IPlist[TotalBans].pname, name);
-	IPlist[TotalBans].times = 0;
-	TotalBans++;
-	sync_counter.banned++;
-}
-
-static void read_bans(void)
-{
-	PHYSFS_file	*pFileHandle = NULL;
-	char	FileName[255] = "bannedIPs.txt";
-	char *buffer = NULL;
-	char *currentLine = NULL;
-	int IPsfound = 0, timesbanned = 0;
-	char IPin[40]= {'\0'};
-	char alias[40]= {'\0'};
-
-
-	IPlist = malloc(sizeof(PLAYER_IP) * MAX_BANS + 1);
 	if (!IPlist)
 	{
-		debug(LOG_FATAL, "Out of memory!");
-		abort();
+		IPlist = malloc(sizeof(PLAYER_IP) * MAX_BANS + 1);
+		if (!IPlist)
+		{
+			debug(LOG_FATAL, "Out of memory!");
+			abort();
+		}
+		numBans = 0;
 	}
 	memset(IPlist, 0x0, sizeof(PLAYER_IP) * MAX_BANS);
-
-	if (PHYSFS_exists(FileName))
+	sstrcpy(IPlist[numBans].IPAddress, ip);
+	sstrcpy(IPlist[numBans].pname, name);
+	numBans++;
+	sync_counter.banned++;
+	if (numBans > MAX_BANS)
 	{
-		pFileHandle = PHYSFS_openRead(FileName);
-		if (!pFileHandle)
-		{
-			debug(LOG_INFO, "Could not open file %s: %s.  There are currently no banned IPs found.", FileName, PHYSFS_getLastError());
-		}
-		else
-		{
-			PHYSFS_sint64 file_size = PHYSFS_fileLength(pFileHandle);
-			int values = 0;
-
-			buffer = malloc(file_size * sizeof(char) + 12);	// add some padding
-			if (!buffer)
-			{
-				debug(LOG_FATAL, "Out of memory!");
-				abort();
-			}
-			memset(buffer, 0x00, file_size * sizeof(char) + 12);
-			PHYSFS_read(pFileHandle, buffer, 1, file_size);
-			PHYSFS_close(pFileHandle);
-
-			currentLine = strtok(buffer,"\n");
-			while(currentLine != NULL)
-			{
-				values = sscanf(currentLine,"%s %s %d", IPin, alias, &timesbanned);
-				if (values == 3)
-				{
-					sstrcpy(IPlist[IPsfound].IPAddress, IPin);
-					sstrcpy(IPlist[IPsfound].pname, alias);
-					IPlist[IPsfound].times = timesbanned;
-					currentLine = strtok(NULL,"\n");
-					IPsfound++;
-				}
-			}
-			free(buffer);
-			debug(LOG_INFO, "Read in %d banned IPs", IPsfound);
-			TotalBans = IPsfound;
-			NETlogEntry("Found banned list :", SYNC_FLAG, TotalBans);
-		}
-	}
-}
-
-static void write_bans(void)
-{
-	if (IPlist && (sync_counter.banned || sync_counter.rejected))		// only write out file if we have new data
-	{
-		PHYSFS_file	*pFileHandle = NULL;
-		char	FileName[255] = "bannedIPs.txt";
-		char buf[255] = {'\0'};
-		int i = 0;
-
-		pFileHandle = PHYSFS_openWrite(FileName);
-		while ( i < TotalBans)
-		{
-			snprintf(buf, sizeof(buf), "%s %s %d\n", IPlist[i].IPAddress, IPlist[i].pname, IPlist[i].times);
-			PHYSFS_write( pFileHandle, buf, strlen( buf), 1 );
-			i++;
-		}
-		PHYSFS_close(pFileHandle);
-		debug(LOG_INFO, "Wrote out %d IP's", i);
-		NETlogEntry("Writing new banned list :", SYNC_FLAG, TotalBans);
+		debug(LOG_INFO, "We have exceeded %d bans, resetting to 0", MAX_BANS);
+		numBans = 0;
 	}
 }
