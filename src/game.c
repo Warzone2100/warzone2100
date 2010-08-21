@@ -8233,16 +8233,16 @@ BOOL loadStructSetPointers(void)
 							}
 							else
 							{
-                                if (list == 1) //ie offWorld
-                                {
-                                    //don't need to worry about the Flag
-                                    ((FACTORY *)psStruct->pFunctionality)->psCommander =
-                                        psCommander;
-                                }
-                                else
-                                {
-								    assignFactoryCommandDroid(psStruct, psCommander);
-                                }
+								if (list == 1) //ie offWorld
+								{
+									//don't need to worry about the Flag
+									((FACTORY *)psStruct->pFunctionality)->psCommander =
+										psCommander;
+								}
+								else
+								{
+									assignFactoryCommandDroid(psStruct, psCommander);
+								}
 							}
 						}
 						else
@@ -8260,6 +8260,11 @@ BOOL loadStructSetPointers(void)
 						else
 						{
 							psRepair->psObj = getBaseObjFromId(_tmpid);
+							if (!psRepair->psObj)
+							{
+								ASSERT(psRepair->psObj, "Can't find object from ID %x", _tmpid);
+								break;
+							}
 							ASSERT(psRepair->psObj->type == OBJ_DROID, "%s cannot repair %s", 
 							       objInfo((BASE_OBJECT *)psStruct), objInfo(psRepair->psObj));
 							//if the build has started set the powerAccrued =
