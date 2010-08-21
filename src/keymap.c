@@ -304,7 +304,7 @@ void	keyInitMappings( BOOL bForceDefaults )
 	keyAddMapping(KEYMAP_ALWAYS,         KEY_IGNORE, KEY_F10, KEYMAP_PRESSED, kf_ScreenDump,                   N_("Take Screen Shot"));
 	keyAddMapping(KEYMAP_ASSIGNABLE,     KEY_IGNORE, KEY_F11, KEYMAP_PRESSED, kf_ToggleFormationSpeedLimiting, N_("Toggle Formation Speed Limiting"));
 	keyAddMapping(KEYMAP_ASSIGNABLE,     KEY_IGNORE, KEY_F12, KEYMAP_PRESSED, kf_MoveToLastMessagePos,         N_("View Location of Previous Message"));
-	keyAddMapping(KEYMAP_ASSIGNABLE,     KEY_LSHIFT, KEY_F12, KEYMAP_PRESSED, kf_ToggleSensorDisplay,          N_("Toggle Sensor display")); //Which key should we use? --Re enabled see below! -Q 5-10-05
+	keyAddMapping(KEYMAP__DEBUG,     KEY_LSHIFT, KEY_F12, KEYMAP_PRESSED, kf_ToggleSensorDisplay,          N_("Toggle Sensor display")); //Which key should we use? --Re enabled see below! -Q 5-10-05
 	//                                **********************************
 	//                                **********************************
 	//										ASSIGN GROUPS
