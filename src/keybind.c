@@ -195,6 +195,16 @@ void	kf_TraceObject( void )
 //===================================================
 void kf_ToggleSensorDisplay( void )
 {
+
+#ifndef DEBUG
+	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
+	if (runningMultiplayer())
+	{
+		noMPCheatMsg();
+		return;
+	}
+#endif
+
 	rangeOnScreen = !rangeOnScreen;
 
 	if (rangeOnScreen)
