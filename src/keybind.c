@@ -1597,7 +1597,7 @@ SDWORD	xJump,yJump;
 	}
 	else
 	{
-		addConsoleMessage(_("Unable to locate any resource extractors!"),LEFT_JUSTIFY, SYSTEM_MESSAGE);
+		addConsoleMessage(_("Unable to locate any oil derricks!"),LEFT_JUSTIFY, SYSTEM_MESSAGE);
 	}
 
 }
