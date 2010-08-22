@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-08-20 18:09+0200\n"
+"POT-Creation-Date: 2010-08-23 01:45+0200\n"
 "PO-Revision-Date: 2009-05-13 16:12+0800\n"
 "Last-Translator: Terra <wz2100cn@gmail.com>\n"
 "Language-Team: Simplified Chinese <zh_CN@li.org>\n"
@@ -5755,6 +5755,7 @@ msgid "New Design"
 msgstr "设计新的单位"
 
 #: data/base/messages/strings/names.txt:15
+#: src/design.c:1349
 msgid "Transport"
 msgstr "运送"
 
@@ -6016,8 +6017,9 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:207
 #: data/mp/messages/strings/names.txt:210
-msgid "Fire Cannon"
-msgstr ""
+#, fuzzy
+msgid "Cannon Fire Truck"
+msgstr "轻型加农炮地堡"
 
 #: data/base/messages/strings/names.txt:208
 #: data/mp/messages/strings/names.txt:211
@@ -10373,8 +10375,9 @@ msgid "Scorpion Command Turret Tracks"
 msgstr ""
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1326
-msgid "mantis Command Turret Tracks"
-msgstr ""
+#, fuzzy
+msgid "Mantis Command Turret Tracks"
+msgstr "指挥炮塔"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1327
 msgid "Cobra Lancer Tracks"
@@ -12343,27 +12346,27 @@ msgstr "重型加农炮"
 msgid "System locale"
 msgstr "系统语言"
 
-#: lib/netplay/netplay.c:1290
-#: lib/netplay/netplay.c:2172
+#: lib/netplay/netplay.c:1287
+#: lib/netplay/netplay.c:2169
 msgid "Enter password here"
 msgstr ""
 
-#: lib/netplay/netplay.c:3202
+#: lib/netplay/netplay.c:3191
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr ""
 
-#: lib/netplay/netplay.c:3227
+#: lib/netplay/netplay.c:3216
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr ""
 
 #: src/challenge.c:188
-#: src/hci.c:1009
-#: src/hci.c:3820
-#: src/hci.c:3971
-#: src/hci.c:4425
-#: src/hci.c:5631
+#: src/hci.c:999
+#: src/hci.c:3810
+#: src/hci.c:3961
+#: src/hci.c:4415
+#: src/hci.c:5621
 #: src/intelmap.c:542
 #: src/intorder.c:787
 #: src/loadsave.c:267
@@ -12519,8 +12522,8 @@ msgstr ""
 msgid "go directly to host screen"
 msgstr ""
 
-#: src/configuration.c:452
-#: src/configuration.c:453
+#: src/configuration.c:441
+#: src/configuration.c:442
 #: src/multistat.c:130
 msgid "Player"
 msgstr "玩家"
@@ -12595,10 +12598,6 @@ msgstr "总体成本"
 #: src/design.c:1095
 msgid "Power Usage"
 msgstr "能源占用"
-
-#: src/design.c:1349
-msgid "Transporter"
-msgstr "运输占位"
 
 #: src/design.c:1371
 msgid "Hydra "
@@ -13141,12 +13140,12 @@ msgstr "游戏选项"
 msgid "Mod: "
 msgstr ""
 
-#: src/hci.c:1355
+#: src/hci.c:1345
 #, fuzzy
 msgid "MAP SAVED!"
 msgstr "游戏已保存! "
 
-#: src/hci.c:1702
+#: src/hci.c:1692
 #: src/loop.c:536
 #: src/loop.c:552
 #: src/mission.c:2913
@@ -13154,127 +13153,127 @@ msgstr "游戏已保存! "
 msgid "GAME SAVED :"
 msgstr "游戏已保存! "
 
-#: src/hci.c:2092
+#: src/hci.c:2082
 msgid "Failed to create building"
 msgstr ""
 
-#: src/hci.c:2115
+#: src/hci.c:2105
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr ""
 
-#: src/hci.c:2130
+#: src/hci.c:2120
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr ""
 
-#: src/hci.c:2151
+#: src/hci.c:2141
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr ""
 
-#: src/hci.c:3722
+#: src/hci.c:3712
 msgid "Commanders (F6)"
 msgstr "指挥官 (F6)"
 
-#: src/hci.c:3738
+#: src/hci.c:3728
 msgid "Intelligence Display (F5)"
 msgstr "情报显示 (F5)"
 
-#: src/hci.c:3754
+#: src/hci.c:3744
 msgid "Manufacture (F1)"
 msgstr "单位生产 (F1)"
 
-#: src/hci.c:3770
+#: src/hci.c:3760
 msgid "Design (F4)"
 msgstr "单位设计 (F4)"
 
-#: src/hci.c:3786
+#: src/hci.c:3776
 msgid "Research (F2)"
 msgstr "科技研究 (F2)"
 
-#: src/hci.c:3802
+#: src/hci.c:3792
 msgid "Build (F3)"
 msgstr "建造建筑 (F3)"
 
-#: src/hci.c:3882
+#: src/hci.c:3872
 #: src/multiint.c:1257
 #: src/multimenu.c:763
 msgid "Power"
 msgstr "能源"
 
-#: src/hci.c:4066
+#: src/hci.c:4056
 msgid "Tile"
 msgstr ""
 
-#: src/hci.c:4067
+#: src/hci.c:4057
 msgid "Place tiles on map"
 msgstr ""
 
-#: src/hci.c:4076
+#: src/hci.c:4066
 msgid "Unit"
 msgstr "单位"
 
-#: src/hci.c:4077
+#: src/hci.c:4067
 msgid "Place Unit on map"
 msgstr ""
 
-#: src/hci.c:4085
+#: src/hci.c:4075
 msgid "Struct"
 msgstr ""
 
-#: src/hci.c:4086
+#: src/hci.c:4076
 msgid "Place Structures on map"
 msgstr ""
 
-#: src/hci.c:4094
+#: src/hci.c:4084
 msgid "Feat"
 msgstr ""
 
-#: src/hci.c:4095
+#: src/hci.c:4085
 msgid "Place Features on map"
 msgstr ""
 
-#: src/hci.c:4106
+#: src/hci.c:4096
 #, fuzzy
 msgid "Pause or unpause the game"
 msgstr "暂停/继续游戏"
 
-#: src/hci.c:4120
+#: src/hci.c:4110
 msgid "Align height of all map objects"
 msgstr ""
 
-#: src/hci.c:4145
+#: src/hci.c:4135
 #: src/ingameop.c:119
 #: src/ingameop.c:264
 #: src/ingameop.c:269
 msgid "Quit"
 msgstr "退出"
 
-#: src/hci.c:4146
+#: src/hci.c:4136
 msgid "Exit Game"
 msgstr "退出游戏"
 
-#: src/hci.c:4510
+#: src/hci.c:4500
 #: src/intdisplay.c:209
 #: src/intdisplay.c:252
 #: src/intdisplay.c:303
 msgid "Progress Bar"
 msgstr "进度条"
 
-#: src/hci.c:5546
+#: src/hci.c:5536
 msgid "Factory Delivery Point"
 msgstr ""
 
-#: src/hci.c:5565
+#: src/hci.c:5555
 msgid "Loop Production"
 msgstr "循环生产"
 
-#: src/hci.c:5656
+#: src/hci.c:5646
 msgid "Tab Scroll left"
 msgstr ""
 
-#: src/hci.c:5673
+#: src/hci.c:5663
 msgid "Tab Scroll right"
 msgstr ""
 
@@ -13323,7 +13322,7 @@ msgid "Power Accrued"
 msgstr ""
 
 #: src/intelmap.c:246
-#: src/keybind.c:1528
+#: src/keybind.c:1534
 msgid "PAUSED"
 msgstr "暂停"
 
@@ -13459,286 +13458,274 @@ msgstr "抱歉, 多人游戏时无法使用作弊码"
 msgid "Warning! This cheat is buggy.  We recommend to NOT use it."
 msgstr ""
 
-#: src/keybind.c:201
+#: src/keybind.c:211
 msgid "Lets us see what you see!"
 msgstr ""
 
-#: src/keybind.c:203
+#: src/keybind.c:213
 msgid "Fine, weapon & sensor display is off!"
 msgstr ""
 
-#: src/keybind.c:411
-#, c-format
-msgid "(Player %u) has detected the borg 'legs' bug! Please enter legs in your console and upload the files to us!"
-msgstr ""
-
-#: src/keybind.c:491
+#: src/keybind.c:497
 #, c-format
 msgid "Player %u is cheating him/herself a new droid army of %s(s)."
 msgstr ""
 
-#: src/keybind.c:530
-#: src/keybind.c:560
-#: src/keybind.c:577
-#: src/keybind.c:621
-#: src/keybind.c:729
-#: src/keybind.c:769
-#: src/keybind.c:875
-#: src/keybind.c:1418
-#: src/keybind.c:1475
-#: src/keybind.c:1577
-#: src/keybind.c:1674
-#: src/keybind.c:1985
-#: src/keybind.c:2026
+#: src/keybind.c:536
+#: src/keybind.c:566
+#: src/keybind.c:583
+#: src/keybind.c:627
+#: src/keybind.c:735
+#: src/keybind.c:775
+#: src/keybind.c:881
+#: src/keybind.c:1424
+#: src/keybind.c:1481
+#: src/keybind.c:1583
+#: src/keybind.c:1680
+#: src/keybind.c:1991
+#: src/keybind.c:2032
 #, c-format
 msgid "(Player %u) is using cheat :%s"
 msgstr ""
 
-#: src/keybind.c:531
+#: src/keybind.c:537
 msgid "Hard as nails!!!"
 msgstr ""
 
-#: src/keybind.c:545
+#: src/keybind.c:551
 msgid "Takings thing easy!"
 msgstr ""
 
-#: src/keybind.c:561
+#: src/keybind.c:567
 msgid "1000 big ones!!!"
 msgstr ""
 
-#: src/keybind.c:578
+#: src/keybind.c:584
 msgid "Power overwhelming"
 msgstr ""
 
-#: src/keybind.c:593
+#: src/keybind.c:599
 msgid "Back to normality!"
 msgstr ""
 
-#: src/keybind.c:606
+#: src/keybind.c:612
 msgid "Getting tricky!"
 msgstr ""
 
-#: src/keybind.c:622
+#: src/keybind.c:628
 msgid "Twice as nice!"
 msgstr ""
 
-#: src/keybind.c:633
+#: src/keybind.c:639
 msgid "FPS display is enabled."
 msgstr "开启 FPS 显示"
 
-#: src/keybind.c:637
+#: src/keybind.c:643
 msgid "FPS display is disabled."
 msgstr "关闭 FPS 显示"
 
-#: src/keybind.c:661
+#: src/keybind.c:667
 #, c-format
 msgid "FPS %d; FPS-Limit: %d; PIEs %d; polys %d; Terr. polys %d; States %d"
 msgstr "FPS %d; FPS上限: %d; PIEs %d; polys %d; Terr. polys %d; 状态 %d"
 
-#: src/keybind.c:693
+#: src/keybind.c:699
 #, c-format
 msgid "(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"
 msgstr ""
 
-#: src/keybind.c:730
+#: src/keybind.c:736
 msgid "Infinite power disabled"
 msgstr ""
 
-#: src/keybind.c:730
+#: src/keybind.c:736
 msgid "Infinite power enabled"
 msgstr ""
 
-#: src/keybind.c:770
+#: src/keybind.c:776
 msgid "All items made available"
 msgstr ""
 
-#: src/keybind.c:876
+#: src/keybind.c:882
 msgid "Fog on"
 msgstr "迷雾 开"
 
-#: src/keybind.c:876
+#: src/keybind.c:882
 msgid "Fog off"
 msgstr "迷雾 关"
 
-#: src/keybind.c:1307
+#: src/keybind.c:1313
 #, c-format
 msgid "Warning!  This cheat can cause dire problems later on! [%s]"
 msgstr ""
 
-#: src/keybind.c:1307
+#: src/keybind.c:1313
 msgid "Ending Mission."
 msgstr ""
 
-#: src/keybind.c:1419
+#: src/keybind.c:1425
 msgid "CHEATS ARE NOW ENABLED!"
 msgstr ""
 
-#: src/keybind.c:1419
+#: src/keybind.c:1425
 msgid "CHEATS ARE NOW DISABLED!"
 msgstr ""
 
-#: src/keybind.c:1476
+#: src/keybind.c:1482
 msgid "God Mode ON"
 msgstr ""
 
-#: src/keybind.c:1476
+#: src/keybind.c:1482
 msgid "God Mode OFF"
 msgstr ""
 
-#: src/keybind.c:1488
+#: src/keybind.c:1494
 msgid "View Aligned to North"
 msgstr ""
 
-#: src/keybind.c:1497
+#: src/keybind.c:1503
 #, c-format
 msgid "Trap cursor %s"
 msgstr ""
 
-#: src/keybind.c:1578
+#: src/keybind.c:1584
 msgid "Researched EVERYTHING for you!"
 msgstr ""
 
-#: src/keybind.c:1611
+#: src/keybind.c:1617
 #, c-format
 msgid "(Player %u) is using cheat :%s %s"
 msgstr ""
 
-#: src/keybind.c:1612
+#: src/keybind.c:1618
 #, fuzzy
 msgid "Researched"
 msgstr "研究科技"
 
-#: src/keybind.c:1632
+#: src/keybind.c:1638
 msgid "Only displaying energy bars when selected"
 msgstr ""
 
-#: src/keybind.c:1635
+#: src/keybind.c:1641
 msgid "Always displaying energy bars for units"
 msgstr ""
 
-#: src/keybind.c:1638
+#: src/keybind.c:1644
 msgid "Always displaying energy bars for units and structures"
 msgstr ""
 
-#: src/keybind.c:1660
+#: src/keybind.c:1666
 msgid "Demo mode off - Returning to normal game mode"
 msgstr "演示模式关闭 - 正在返回正常游戏模式"
 
-#: src/keybind.c:1675
+#: src/keybind.c:1681
 msgid "Debug menu is Open"
 msgstr ""
 
-#: src/keybind.c:1706
-msgid "Unable to locate any resource extractors!"
-msgstr ""
+#: src/keybind.c:1712
+#, fuzzy
+msgid "Unable to locate any oil derricks!"
+msgstr "未能定位任何工程车"
 
-#: src/keybind.c:1927
+#: src/keybind.c:1933
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr ""
 
-#: src/keybind.c:1933
+#: src/keybind.c:1939
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr ""
 
-#: src/keybind.c:1939
+#: src/keybind.c:1945
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr ""
 
-#: src/keybind.c:1984
+#: src/keybind.c:1990
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr ""
 
-#: src/keybind.c:1986
+#: src/keybind.c:1992
 msgid "All enemies destroyed by cheating!"
 msgstr ""
 
-#: src/keybind.c:2027
+#: src/keybind.c:2033
 msgid "Destroying selected droids and structures!"
 msgstr ""
 
-#: src/keybind.c:2548
+#: src/keybind.c:2554
 msgid "Centered on player HQ, direction NORTH"
 msgstr ""
 
-#: src/keybind.c:2560
+#: src/keybind.c:2566
 msgid "Unable to locate HQ!"
 msgstr ""
 
-#: src/keybind.c:2567
+#: src/keybind.c:2573
 msgid "Formation speed limiting has been removed from the game due to bugs."
 msgstr ""
 
-#: src/keybind.c:2616
+#: src/keybind.c:2622
 msgid "Vertical rotation direction: Normal"
 msgstr ""
 
-#: src/keybind.c:2621
+#: src/keybind.c:2627
 msgid "Vertical rotation direction: Flipped"
 msgstr ""
 
-#: src/keybind.c:2630
+#: src/keybind.c:2636
 msgid "Screen shake when things die: Off"
 msgstr ""
 
-#: src/keybind.c:2635
+#: src/keybind.c:2641
 msgid "Screen shake when things die: On"
 msgstr ""
 
-#: src/keybind.c:2680
-#: src/keybind.c:2723
+#: src/keybind.c:2686
+#: src/keybind.c:2729
 #, fuzzy
 msgid "Sorry, but game speed cannot be changed in multiplayer."
 msgstr "抱歉, 多人游戏时无法使用作弊码"
 
-#: src/keybind.c:2701
-#: src/keybind.c:2744
-#: src/keybind.c:2766
+#: src/keybind.c:2707
+#: src/keybind.c:2750
+#: src/keybind.c:2772
 msgid "Game Speed Reset"
 msgstr ""
 
-#: src/keybind.c:2705
+#: src/keybind.c:2711
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr ""
 
-#: src/keybind.c:2748
+#: src/keybind.c:2754
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr ""
 
-#: src/keybind.c:2778
-msgid "Build menu will reopen"
-msgstr ""
-
-#: src/keybind.c:2782
-msgid "Build menu will not reopen"
-msgstr ""
-
-#: src/keybind.c:2794
+#: src/keybind.c:2784
 msgid "Radar showing friend-foe colors"
 msgstr ""
 
-#: src/keybind.c:2798
+#: src/keybind.c:2788
 msgid "Radar showing player colors"
 msgstr ""
 
-#: src/keybind.c:2819
+#: src/keybind.c:2809
 msgid "Radar showing only objects"
 msgstr ""
 
-#: src/keybind.c:2822
+#: src/keybind.c:2812
 msgid "Radar blending terrain and height"
 msgstr ""
 
-#: src/keybind.c:2825
+#: src/keybind.c:2815
 msgid "Radar showing terrain"
 msgstr ""
 
-#: src/keybind.c:2828
+#: src/keybind.c:2818
 msgid "Radar showing revealed terrain"
 msgstr ""
 
-#: src/keybind.c:2831
+#: src/keybind.c:2821
 msgid "Radar showing height"
 msgstr ""
 
@@ -14152,92 +14139,88 @@ msgstr ""
 msgid "Select next Cyborg Factory"
 msgstr ""
 
-#: src/keymap.c:434
-msgid "Toggle reopening the build menu"
-msgstr ""
-
-#: src/keymap.c:438
+#: src/keymap.c:437
 msgid "Toggle display of droid path"
 msgstr ""
 
-#: src/keymap.c:439
+#: src/keymap.c:438
 msgid "Toggle display of gateways"
 msgstr ""
 
-#: src/keymap.c:440
+#: src/keymap.c:439
 #, fuzzy
 msgid "Toggle Debug Mappings"
 msgstr "按键设置"
 
-#: src/keymap.c:441
+#: src/keymap.c:440
 msgid "Show all keyboard mappings - use pause!"
 msgstr ""
 
-#: src/keymap.c:442
+#: src/keymap.c:441
 msgid "Toggle visibility"
 msgstr ""
 
-#: src/keymap.c:443
+#: src/keymap.c:442
 msgid "Raise tile height"
 msgstr ""
 
-#: src/keymap.c:444
+#: src/keymap.c:443
 msgid "Lower tile height"
 msgstr ""
 
-#: src/keymap.c:445
+#: src/keymap.c:444
 msgid "Toggles on/off DEMO Mode"
 msgstr ""
 
-#: src/keymap.c:446
+#: src/keymap.c:445
 msgid "End Mission"
 msgstr ""
 
-#: src/keymap.c:447
+#: src/keymap.c:446
 msgid "Toggles All fog"
 msgstr ""
 
-#: src/keymap.c:448
+#: src/keymap.c:447
 msgid "Trigger some weather"
 msgstr ""
 
-#: src/keymap.c:449
+#: src/keymap.c:448
 msgid "Flip terrain triangle"
 msgstr ""
 
-#: src/keymap.c:450
+#: src/keymap.c:449
 msgid "Realign height of all objects on the map"
 msgstr ""
 
-#: src/keymap.c:453
+#: src/keymap.c:452
 msgid "Make all items available"
 msgstr ""
 
-#: src/keymap.c:454
+#: src/keymap.c:453
 msgid "Kill Selected Unit(s)"
 msgstr ""
 
-#: src/keymap.c:455
+#: src/keymap.c:454
 msgid "Toggle god Mode Status"
 msgstr ""
 
-#: src/keymap.c:456
+#: src/keymap.c:455
 msgid "Display Options Screen"
 msgstr ""
 
-#: src/keymap.c:457
+#: src/keymap.c:456
 msgid "Complete current research"
 msgstr ""
 
-#: src/keymap.c:458
+#: src/keymap.c:457
 msgid "Toggle watch window"
 msgstr ""
 
-#: src/keymap.c:459
+#: src/keymap.c:458
 msgid "Trace a game object"
 msgstr ""
 
-#: src/keymap.c:460
+#: src/keymap.c:459
 msgid "Toggle Driving Mode"
 msgstr ""
 
@@ -15045,6 +15028,9 @@ msgstr ""
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr ""
+
+#~ msgid "Transporter"
+#~ msgstr "运输占位"
 
 #~ msgid "Danish"
 #~ msgstr "丹麦语"
