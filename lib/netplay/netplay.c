@@ -1661,7 +1661,10 @@ void NETplayerKicked(UDWORD index)
 	debug(LOG_INFO, "Player %u was kicked.", index);
 	sync_counter.kicks++;
 	NETlogEntry("Player was kicked.", SYNC_FLAG, index);
-	addToBanList(NetPlay.players[index].IPtextAddress, NetPlay.players[index].name);
+	if (NetPlay.players[index].allocated)
+	{
+		addToBanList(NetPlay.players[index].IPtextAddress, NetPlay.players[index].name);
+	}
 	NETplayerLeaving(index);		// need to close socket for the player that left.
 	NET_PlayerConnectionStatus = 1;		// LEAVING_NICELY
 }
