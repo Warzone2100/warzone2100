@@ -453,9 +453,6 @@ extern void HandleClosingWindows(void);
 
 extern BOOL intIsRefreshing(void);
 
-void intReopenBuild(BOOL reopen);
-BOOL intGetReopenBuild(void);
-
 extern void intDemolishCancel(void);
 
 #endif // __INCLUDED_SRC_HCI_H__

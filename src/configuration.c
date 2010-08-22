@@ -415,17 +415,6 @@ BOOL loadConfig(void)
 	}
 
 
-	// reopen the build menu after placing a structure
-	if(getWarzoneKeyNumeric("reopenBuild", &val))
-	{
-		intReopenBuild(val);
-	}
-	else
-	{
-		intReopenBuild(true);
-		setWarzoneKeyNumeric("reopenBuild", true);
-	}
-
 	// /////////////////////////
 	//  multiplayer stuff.
 	// /////////////////////////
@@ -736,7 +725,6 @@ BOOL saveConfig(void)
 	setWarzoneKeyNumeric("sound", (SDWORD)war_getSoundEnabled());
 	setWarzoneKeyNumeric("FMVmode",(SDWORD)(war_GetFMVmode()));		// sequences
 	setWarzoneKeyNumeric("subtitles",(SDWORD)(seq_GetSubtitles()));		// subtitles
-	setWarzoneKeyNumeric("reopenBuild",(SDWORD)(intGetReopenBuild()));	// build menu
 	setWarzoneKeyNumeric("radarObjectMode",(SDWORD)bEnemyAllyRadarColor);    // enemy/allies radar view
 	setWarzoneKeyNumeric("radarTerrainMode",(SDWORD)radarDrawMode);
 	setWarzoneKeyNumeric("trapCursor", war_GetTrapCursor());

@@ -684,16 +684,6 @@ BOOL intInitialise(void)
 	return true;
 }
 
-void intReopenBuild(BOOL reopen)
-{
-	// obsolete
-}
-
-BOOL intGetReopenBuild(void)
-{
-	// obsolete
-	return false;
-}
 
 //initialise all the previous obj - particularly useful for when go Off world!
 void intResetPreviousObj(void)
