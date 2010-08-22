@@ -1342,7 +1342,7 @@ const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 	*/
 	if(psTemplate->droidType == DROID_TRANSPORTER)
 	{
-		return _("Transporter");
+		return _("Transport");
 	}
 
 	/*
