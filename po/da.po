@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-08-15 12:57+0200\n"
+"POT-Creation-Date: 2010-08-23 01:39+0200\n"
 "PO-Revision-Date: 2008-05-09 16:08+0000\n"
 "Last-Translator: carson <Unknown>\n"
 "Language-Team: Dansk <da@li.org>\n"
@@ -5714,86 +5714,69 @@ msgid "Incoming intelligence report... Team Gamma"
 msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:4
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:4
 msgid "Briefing Commences:"
 msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:7
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:7
 #, fuzzy
 msgid "Scavenger Outpost"
 msgstr "Hestekrafter"
 
 #: data/base/messages/strings/genstrings.txt:8
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:8
 #, fuzzy
 msgid "Power Resource"
 msgstr "Produktionsomkostninger"
 
 #: data/base/messages/strings/genstrings.txt:9
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:9
 msgid "Unknown Artifact"
 msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:10
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:10
 msgid "Source of Power Surge"
 msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:13
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:13
 msgid "Landing Zone"
 msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:14
 #: data/base/messages/strings/genstrings.txt:24
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:14
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:24
 msgid "Mission Target"
 msgstr "Missionens mål"
 
 #: data/base/messages/strings/genstrings.txt:15
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:15
 msgid "Pre-Collapse Research Center"
 msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:17
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:17
 msgid "En-route To Mission Site"
 msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:18
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:18
 msgid "Mission Failed"
 msgstr "Mission mislykkedes"
 
 #: data/base/messages/strings/genstrings.txt:19
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:19
 msgid "Mission Successful"
 msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:22
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:22
 msgid "Enemy Landing Zone"
 msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:23
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:23
 msgid "Enemy Base"
 msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:27
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:27
 msgid "Incoming transmission"
 msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:30
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:30
 msgid "Incoming intelligence report."
 msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:33
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:33
 msgid "Nuclear Reactor"
 msgstr ""
 
@@ -5803,6 +5786,7 @@ msgid "New Design"
 msgstr "Nyt design"
 
 #: data/base/messages/strings/names.txt:15
+#: src/design.c:1345
 msgid "Transport"
 msgstr "Transport"
 
@@ -5994,7 +5978,6 @@ msgid "Light Cannon Python Tracks"
 msgstr "Kommandører"
 
 #: data/base/messages/strings/names.txt:194
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1357
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1923
 #: data/mp/messages/strings/names.txt:197
 #: data/mp/messages/strings/names.txt:1926
@@ -6063,8 +6046,9 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:207
 #: data/mp/messages/strings/names.txt:210
-msgid "Fire Cannon"
-msgstr ""
+#, fuzzy
+msgid "Cannon Fire Truck"
+msgstr "Brandbil"
 
 #: data/base/messages/strings/names.txt:208
 #: data/mp/messages/strings/names.txt:211
@@ -9276,7 +9260,6 @@ msgid "Downed Transport"
 msgstr "Fyld transportskib"
 
 #: data/base/messages/strings/names.txt:1458
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1356
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1922
 #: data/mp/messages/strings/names.txt:1477
 #: data/mp/messages/strings/names.txt:1925
@@ -10444,207 +10427,6 @@ msgstr ""
 msgid "Slowly, out of the ashes we will rise again..."
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1313
-msgid "Cobra Hover Heavy-Repair"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1314
-msgid "Viper HMG Wheels"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1315
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1824
-#: data/mp/messages/strings/names.txt:1827
-msgid "Scourge Mantis Hover"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1316
-msgid "TK Mantis Hover"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1317
-#, fuzzy
-msgid "Cobra HMG Tracks"
-msgstr "Vælg alle halv-bælter"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1318
-msgid "Cobra Hover HC"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1319
-#, fuzzy
-msgid "Scorpion Lancer Tracks"
-msgstr "Kommandører"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1320
-msgid "Scorpion Heavy Cannon Tracks"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1321
-msgid "Scorpion Lancer VTOL"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1322
-#, fuzzy
-msgid "Scorpion BB VTOL"
-msgstr "Score"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1323
-#, fuzzy
-msgid "Viper Command Turret Tracks"
-msgstr "Kommandotårn"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1324
-#, fuzzy
-msgid "Cobra Command Turret Tracks"
-msgstr "Kommandotårn"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1325
-#, fuzzy
-msgid "Scorpion Command Turret Tracks"
-msgstr "Kommandotårn"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1326
-#, fuzzy
-msgid "mantis Command Turret Tracks"
-msgstr "Kommandotårn"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1327
-#, fuzzy
-msgid "Cobra Lancer Tracks"
-msgstr "Kommandører"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1328
-msgid "Mantis Heavy Cannon Tracks"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1329
-msgid "Mantis Tank Killer Tracks"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1330
-#, fuzzy
-msgid "Mantis Scourge Tracks"
-msgstr "Vælg alle halv-bælter"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1331
-msgid "Scorpion Heavy Machinegun Tracks"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1332
-msgid "Scorpion Repair Tracks"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1333
-msgid "Scorpion Heavy Repair Hover"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1334
-#, fuzzy
-msgid "Cobra Hover Truck"
-msgstr "Vælg alle halv-bælter"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1335
-#, fuzzy
-msgid "Scorpion Hover Truck"
-msgstr "Kommandører"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1336
-#, fuzzy
-msgid "Mantis Hover Truck"
-msgstr "Vælg alle halv-bælter"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1337
-#, fuzzy
-msgid "Cobra Bunker Buster Tracks"
-msgstr "Kommandører"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1338
-#, fuzzy
-msgid "Scorpion Bunker Buster Tracks"
-msgstr "Kommandører"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1339
-#, fuzzy
-msgid "Mantis Bunker Buster Tracks"
-msgstr "Vælg alle halv-bælter"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1340
-#, fuzzy
-msgid "Viper Tracks Lancer"
-msgstr "Søger"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1341
-#, fuzzy
-msgid "Cobra Half-Tracks Mini-Pod"
-msgstr "Vælg alle halv-bælter"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1342
-#, fuzzy
-msgid "Cobra Tracks Mini-Pod"
-msgstr "Vælg alle halv-bælter"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1343
-msgid "Cobra Tracks Mini-Rocket Artillery"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1344
-#, fuzzy
-msgid "Cobra Inferno Half-track"
-msgstr "Vælg alle halv-bælter"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1345
-msgid "Python HVC Hover"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1346
-#, fuzzy
-msgid "Python Scourge Tracks"
-msgstr "Vælg alle halv-bælter"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1347
-#, fuzzy
-msgid "Python Gauss Cannon Tracks"
-msgstr "Kommandører"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1348
-#, fuzzy
-msgid "Python Pulse Laser Tracks"
-msgstr "Kommandører"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1349
-#, fuzzy
-msgid "Tiger Pulse Laser Tracks"
-msgstr "Kommandører"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1350
-#, fuzzy
-msgid "Tiger Heavy Laser Tracks"
-msgstr "Kommandører"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1351
-msgid "Wyvern Gauss Cannon Tracks"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1352
-msgid "Wyvern Pulse Laser Tracks"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1353
-#, fuzzy
-msgid "Wyvern Heavy Laser Tracks"
-msgstr "Kommandører"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1354
-#, fuzzy
-msgid "Viper Machinegun Half-Track"
-msgstr "Vælg alle halv-bælter"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1355
-#, fuzzy
-msgid "Viper Flamer Half-Track"
-msgstr "Vælg alle halv-bælter"
-
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1822
 #: data/mp/messages/strings/names.txt:1825
 msgid "Heavy Repair Turret Cobra Hover"
@@ -10655,6 +10437,11 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:1826
 #: data/mp/messages/strings/names.txt:1837
 msgid "Heavy Machinegun Viper Wheels"
+msgstr ""
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1824
+#: data/mp/messages/strings/names.txt:1827
+msgid "Scourge Mantis Hover"
 msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1825
@@ -12572,11 +12359,11 @@ msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing
 msgstr ""
 
 #: src/challenge.c:188
-#: src/hci.c:1015
-#: src/hci.c:3796
-#: src/hci.c:3945
-#: src/hci.c:4463
-#: src/hci.c:5645
+#: src/hci.c:1005
+#: src/hci.c:3786
+#: src/hci.c:3935
+#: src/hci.c:4453
+#: src/hci.c:5635
 #: src/intelmap.c:544
 #: src/intorder.c:782
 #: src/loadsave.c:256
@@ -12726,8 +12513,8 @@ msgstr ""
 msgid "go directly to host screen"
 msgstr ""
 
-#: src/configuration.c:442
-#: src/configuration.c:443
+#: src/configuration.c:431
+#: src/configuration.c:432
 #: src/multistat.c:130
 msgid "Player"
 msgstr "Spiller"
@@ -12803,10 +12590,6 @@ msgstr "Total pansring"
 #: src/design.c:1091
 msgid "Power Usage"
 msgstr "Energi forbrug"
-
-#: src/design.c:1345
-msgid "Transporter"
-msgstr "Transportskib"
 
 #: src/design.c:1367
 msgid "Hydra "
@@ -13375,149 +13158,149 @@ msgstr "SPIL INDSTILLINGER"
 msgid "Mod: "
 msgstr ""
 
-#: src/hci.c:1360
+#: src/hci.c:1350
 #, fuzzy
 msgid "MAP SAVED!"
 msgstr "SPIL GEMT!"
 
-#: src/hci.c:1744
+#: src/hci.c:1734
 #: src/loop.c:557
 #: src/loop.c:573
 #, fuzzy
 msgid "GAME SAVED: "
 msgstr "SPIL GEMT!"
 
-#: src/hci.c:2137
+#: src/hci.c:2127
 msgid "Failed to create building"
 msgstr ""
 
-#: src/hci.c:2160
+#: src/hci.c:2150
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr ""
 
-#: src/hci.c:2175
+#: src/hci.c:2165
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr ""
 
-#: src/hci.c:2196
+#: src/hci.c:2186
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr ""
 
-#: src/hci.c:2207
+#: src/hci.c:2197
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr ""
 
-#: src/hci.c:3698
+#: src/hci.c:3688
 msgid "Commanders (F6)"
 msgstr "Kommandører (F6)"
 
-#: src/hci.c:3714
+#: src/hci.c:3704
 #, fuzzy
 msgid "Intelligence Display (F5)"
 msgstr "Kommando Pult"
 
-#: src/hci.c:3730
+#: src/hci.c:3720
 #, fuzzy
 msgid "Manufacture (F1)"
 msgstr "Fabrikering"
 
-#: src/hci.c:3746
+#: src/hci.c:3736
 msgid "Design (F4)"
 msgstr "Design (F4)"
 
-#: src/hci.c:3762
+#: src/hci.c:3752
 msgid "Research (F2)"
 msgstr "Forskning (F2)"
 
-#: src/hci.c:3778
+#: src/hci.c:3768
 msgid "Build (F3)"
 msgstr "Konstruktion (F3)"
 
-#: src/hci.c:3856
+#: src/hci.c:3846
 #: src/multiint.c:1232
 #: src/multimenu.c:763
 msgid "Power"
 msgstr "Kraft"
 
-#: src/hci.c:4040
+#: src/hci.c:4030
 #, fuzzy
 msgid "Tile"
 msgstr "fil"
 
-#: src/hci.c:4041
+#: src/hci.c:4031
 #, fuzzy
 msgid "Place tiles on map"
 msgstr "Tabte bygninger"
 
-#: src/hci.c:4050
+#: src/hci.c:4040
 msgid "Unit"
 msgstr "Enhed"
 
-#: src/hci.c:4051
+#: src/hci.c:4041
 #, fuzzy
 msgid "Place Unit on map"
 msgstr "Tabte bygninger"
 
-#: src/hci.c:4059
+#: src/hci.c:4049
 msgid "Struct"
 msgstr ""
 
-#: src/hci.c:4060
+#: src/hci.c:4050
 #, fuzzy
 msgid "Place Structures on map"
 msgstr "Tabte bygninger"
 
-#: src/hci.c:4068
+#: src/hci.c:4058
 msgid "Feat"
 msgstr ""
 
-#: src/hci.c:4069
+#: src/hci.c:4059
 #, fuzzy
 msgid "Place Features on map"
 msgstr "Tabte bygninger"
 
-#: src/hci.c:4080
+#: src/hci.c:4070
 #, fuzzy
 msgid "Pause or unpause the game"
 msgstr "Værten har forladt spillet"
 
-#: src/hci.c:4094
+#: src/hci.c:4084
 msgid "Align height of all map objects"
 msgstr ""
 
-#: src/hci.c:4119
+#: src/hci.c:4109
 #: src/ingameop.c:119
 #: src/ingameop.c:276
 #: src/ingameop.c:281
 msgid "Quit"
 msgstr "Afslut"
 
-#: src/hci.c:4120
+#: src/hci.c:4110
 msgid "Exit Game"
 msgstr "Forlad spil"
 
-#: src/hci.c:4544
+#: src/hci.c:4534
 #: src/intdisplay.c:275
 msgid "Progress Bar"
 msgstr "Statuslinje"
 
-#: src/hci.c:5564
+#: src/hci.c:5554
 msgid "Factory Delivery Point"
 msgstr "Leveringspunkt"
 
-#: src/hci.c:5583
+#: src/hci.c:5573
 msgid "Loop Production"
 msgstr "Gentag produktion"
 
-#: src/hci.c:5670
+#: src/hci.c:5660
 msgid "Tab Scroll left"
 msgstr ""
 
-#: src/hci.c:5687
+#: src/hci.c:5677
 msgid "Tab Scroll right"
 msgstr ""
 
@@ -13886,8 +13669,9 @@ msgid "Debug menu is Open"
 msgstr "Konstruktionsmenuen vil genåbne"
 
 #: src/keybind.c:1600
-msgid "Unable to locate any resource extractors!"
-msgstr "Kan ikke lokalisere resourcer"
+#, fuzzy
+msgid "Unable to locate any oil derricks!"
+msgstr "Kan ikke finde nogle trucks!"
 
 #: src/keybind.c:1821
 msgid "Oh, the weather outside is frightful... SNOW"
@@ -13963,38 +13747,30 @@ msgid "Game Speed Reduced to %3.1f"
 msgstr "Spillehastighed reduceret til %3.1f"
 
 #: src/keybind.c:2713
-msgid "Build menu will reopen"
-msgstr "Konstruktionsmenuen vil genåbne"
-
-#: src/keybind.c:2717
-msgid "Build menu will not reopen"
-msgstr "Konstruktionsmenuen vil ikke genåbne"
-
-#: src/keybind.c:2729
 msgid "Radar showing friend-foe colors"
 msgstr ""
 
-#: src/keybind.c:2733
+#: src/keybind.c:2717
 msgid "Radar showing player colors"
 msgstr ""
 
-#: src/keybind.c:2754
+#: src/keybind.c:2738
 msgid "Radar showing only objects"
 msgstr ""
 
-#: src/keybind.c:2757
+#: src/keybind.c:2741
 msgid "Radar blending terrain and height"
 msgstr ""
 
-#: src/keybind.c:2760
+#: src/keybind.c:2744
 msgid "Radar showing terrain"
 msgstr ""
 
-#: src/keybind.c:2763
+#: src/keybind.c:2747
 msgid "Radar showing revealed terrain"
 msgstr ""
 
-#: src/keybind.c:2766
+#: src/keybind.c:2750
 msgid "Radar showing height"
 msgstr ""
 
@@ -14409,10 +14185,6 @@ msgstr "Find næste kraftværk"
 msgid "Select next Cyborg Factory"
 msgstr "Find næste cyborg fabrik"
 
-#: src/keymap.c:434
-msgid "Toggle reopening the build menu"
-msgstr "Slå genåbning af konstruktionsmenuen til/fra"
-
 #: src/loop.c:564
 #: src/loop.c:580
 #, fuzzy
@@ -14456,8 +14228,8 @@ msgstr "Fortsæt spil"
 msgid "GAME SAVED :"
 msgstr "SPIL GEMT!"
 
-#: src/move.c:2491
-#: src/move.c:2507
+#: src/move.c:2490
+#: src/move.c:2506
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr ""
@@ -14787,32 +14559,32 @@ msgstr ""
 msgid "HOST"
 msgstr ""
 
-#: src/multijoin.c:98
-#: src/multijoin.c:99
+#: src/multijoin.c:100
+#: src/multijoin.c:101
 msgid "Players Still Joining"
 msgstr "Spillere tilkobler stadig"
 
-#: src/multijoin.c:214
+#: src/multijoin.c:216
 #, c-format
 msgid "%s has Left the Game"
 msgstr "%s har forladt spillet"
 
-#: src/multijoin.c:228
+#: src/multijoin.c:230
 #, c-format
 msgid "File transfer has been aborted for %d."
 msgstr ""
 
-#: src/multijoin.c:350
+#: src/multijoin.c:352
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr ""
 
-#: src/multijoin.c:389
+#: src/multijoin.c:391
 #, c-format
 msgid "%s is Joining the Game"
 msgstr "%s kom med i spillet"
 
-#: src/multijoin.c:399
+#: src/multijoin.c:401
 #, fuzzy
 msgid "System message:"
 msgstr "Elektronik"
@@ -15215,6 +14987,129 @@ msgstr ""
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Cobra HMG Tracks"
+#~ msgstr "Vælg alle halv-bælter"
+
+#, fuzzy
+#~ msgid "Scorpion Lancer Tracks"
+#~ msgstr "Kommandører"
+
+#, fuzzy
+#~ msgid "Scorpion BB VTOL"
+#~ msgstr "Score"
+
+#, fuzzy
+#~ msgid "Viper Command Turret Tracks"
+#~ msgstr "Kommandotårn"
+
+#, fuzzy
+#~ msgid "Cobra Command Turret Tracks"
+#~ msgstr "Kommandotårn"
+
+#, fuzzy
+#~ msgid "Scorpion Command Turret Tracks"
+#~ msgstr "Kommandotårn"
+
+#, fuzzy
+#~ msgid "mantis Command Turret Tracks"
+#~ msgstr "Kommandotårn"
+
+#, fuzzy
+#~ msgid "Cobra Lancer Tracks"
+#~ msgstr "Kommandører"
+
+#, fuzzy
+#~ msgid "Mantis Scourge Tracks"
+#~ msgstr "Vælg alle halv-bælter"
+
+#, fuzzy
+#~ msgid "Cobra Hover Truck"
+#~ msgstr "Vælg alle halv-bælter"
+
+#, fuzzy
+#~ msgid "Scorpion Hover Truck"
+#~ msgstr "Kommandører"
+
+#, fuzzy
+#~ msgid "Mantis Hover Truck"
+#~ msgstr "Vælg alle halv-bælter"
+
+#, fuzzy
+#~ msgid "Cobra Bunker Buster Tracks"
+#~ msgstr "Kommandører"
+
+#, fuzzy
+#~ msgid "Scorpion Bunker Buster Tracks"
+#~ msgstr "Kommandører"
+
+#, fuzzy
+#~ msgid "Mantis Bunker Buster Tracks"
+#~ msgstr "Vælg alle halv-bælter"
+
+#, fuzzy
+#~ msgid "Viper Tracks Lancer"
+#~ msgstr "Søger"
+
+#, fuzzy
+#~ msgid "Cobra Half-Tracks Mini-Pod"
+#~ msgstr "Vælg alle halv-bælter"
+
+#, fuzzy
+#~ msgid "Cobra Tracks Mini-Pod"
+#~ msgstr "Vælg alle halv-bælter"
+
+#, fuzzy
+#~ msgid "Cobra Inferno Half-track"
+#~ msgstr "Vælg alle halv-bælter"
+
+#, fuzzy
+#~ msgid "Python Scourge Tracks"
+#~ msgstr "Vælg alle halv-bælter"
+
+#, fuzzy
+#~ msgid "Python Gauss Cannon Tracks"
+#~ msgstr "Kommandører"
+
+#, fuzzy
+#~ msgid "Python Pulse Laser Tracks"
+#~ msgstr "Kommandører"
+
+#, fuzzy
+#~ msgid "Tiger Pulse Laser Tracks"
+#~ msgstr "Kommandører"
+
+#, fuzzy
+#~ msgid "Tiger Heavy Laser Tracks"
+#~ msgstr "Kommandører"
+
+#, fuzzy
+#~ msgid "Wyvern Heavy Laser Tracks"
+#~ msgstr "Kommandører"
+
+#, fuzzy
+#~ msgid "Viper Machinegun Half-Track"
+#~ msgstr "Vælg alle halv-bælter"
+
+#, fuzzy
+#~ msgid "Viper Flamer Half-Track"
+#~ msgstr "Vælg alle halv-bælter"
+
+#~ msgid "Transporter"
+#~ msgstr "Transportskib"
+
+#~ msgid "Unable to locate any resource extractors!"
+#~ msgstr "Kan ikke lokalisere resourcer"
+
+#~ msgid "Build menu will reopen"
+#~ msgstr "Konstruktionsmenuen vil genåbne"
+
+#~ msgid "Build menu will not reopen"
+#~ msgstr "Konstruktionsmenuen vil ikke genåbne"
+
+#~ msgid "Toggle reopening the build menu"
+#~ msgstr "Slå genåbning af konstruktionsmenuen til/fra"
 
 #~ msgid "Danish"
 #~ msgstr "Dansk"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-08-15 12:57+0200\n"
+"POT-Creation-Date: 2010-08-23 01:39+0200\n"
 "PO-Revision-Date: 2009-06-10 14:43+0100\n"
 "Last-Translator: Tomaž Povšin <tomaz.povsin@gmail.com>\n"
 "Language-Team: Slovenian <sl@li.org>\n"
@@ -5664,84 +5664,67 @@ msgid "Incoming intelligence report... Team Gamma"
 msgstr "Prihajajoče obveščevalno poročilo... Skupina gama"
 
 #: data/base/messages/strings/genstrings.txt:4
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:4
 msgid "Briefing Commences:"
 msgstr "Navodila sledijo:"
 
 #: data/base/messages/strings/genstrings.txt:7
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:7
 msgid "Scavenger Outpost"
 msgstr "Oporišče plenilcev"
 
 #: data/base/messages/strings/genstrings.txt:8
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:8
 msgid "Power Resource"
 msgstr "Vir moči"
 
 #: data/base/messages/strings/genstrings.txt:9
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:9
 msgid "Unknown Artifact"
 msgstr "Neznan artefakt"
 
 #: data/base/messages/strings/genstrings.txt:10
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:10
 msgid "Source of Power Surge"
 msgstr "Izvor nenavadnega vzpona moči"
 
 #: data/base/messages/strings/genstrings.txt:13
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:13
 msgid "Landing Zone"
 msgstr "Pristajalna cona"
 
 #: data/base/messages/strings/genstrings.txt:14
 #: data/base/messages/strings/genstrings.txt:24
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:14
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:24
 msgid "Mission Target"
 msgstr "Cilj misije"
 
 #: data/base/messages/strings/genstrings.txt:15
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:15
 msgid "Pre-Collapse Research Center"
 msgstr "Predpropadno raziskovalno središče"
 
 #: data/base/messages/strings/genstrings.txt:17
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:17
 msgid "En-route To Mission Site"
 msgstr "Med potjo na kraj misije"
 
 #: data/base/messages/strings/genstrings.txt:18
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:18
 msgid "Mission Failed"
 msgstr "Misija spodletela"
 
 #: data/base/messages/strings/genstrings.txt:19
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:19
 msgid "Mission Successful"
 msgstr "Misija uspešna"
 
 #: data/base/messages/strings/genstrings.txt:22
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:22
 msgid "Enemy Landing Zone"
 msgstr "Sovražna pristajalna cona"
 
 #: data/base/messages/strings/genstrings.txt:23
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:23
 msgid "Enemy Base"
 msgstr "Sovražna baza"
 
 #: data/base/messages/strings/genstrings.txt:27
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:27
 msgid "Incoming transmission"
 msgstr "Prihajajoče sporočilo"
 
 #: data/base/messages/strings/genstrings.txt:30
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:30
 msgid "Incoming intelligence report."
 msgstr "Prihajajoče obveščevalno poročilo."
 
 #: data/base/messages/strings/genstrings.txt:33
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:33
 msgid "Nuclear Reactor"
 msgstr "Jedrski reaktor"
 
@@ -5751,6 +5734,7 @@ msgid "New Design"
 msgstr "Nov načrt"
 
 #: data/base/messages/strings/names.txt:15
+#: src/design.c:1345
 msgid "Transport"
 msgstr "Prevoz"
 
@@ -5922,7 +5906,6 @@ msgid "Light Cannon Python Tracks"
 msgstr "Lahki top Piton Gosenice"
 
 #: data/base/messages/strings/names.txt:194
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1357
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1923
 #: data/mp/messages/strings/names.txt:197
 #: data/mp/messages/strings/names.txt:1926
@@ -5987,8 +5970,9 @@ msgstr "Poltovornjak"
 
 #: data/base/messages/strings/names.txt:207
 #: data/mp/messages/strings/names.txt:210
-msgid "Fire Cannon"
-msgstr "Ognjeni top"
+#, fuzzy
+msgid "Cannon Fire Truck"
+msgstr "Gasilski avto"
 
 #: data/base/messages/strings/names.txt:208
 #: data/mp/messages/strings/names.txt:211
@@ -9117,7 +9101,6 @@ msgid "Downed Transport"
 msgstr "Sestreljen prevoz"
 
 #: data/base/messages/strings/names.txt:1458
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1356
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1922
 #: data/mp/messages/strings/names.txt:1477
 #: data/mp/messages/strings/names.txt:1925
@@ -10311,180 +10294,6 @@ msgstr ""
 msgid "Slowly, out of the ashes we will rise again..."
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1313
-msgid "Cobra Hover Heavy-Repair"
-msgstr "Naočarka Zračna blazina Težka popravila"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1314
-msgid "Viper HMG Wheels"
-msgstr "Gad TST Kolesa"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1315
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1824
-#: data/mp/messages/strings/names.txt:1827
-msgid "Scourge Mantis Hover"
-msgstr "Bič Bogomolka Zračna blazina"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1316
-msgid "TK Mantis Hover"
-msgstr "MT Bogomolka Zračna blazina"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1317
-msgid "Cobra HMG Tracks"
-msgstr "Naočarka TST Gosenice"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1318
-msgid "Cobra Hover HC"
-msgstr "Naočarka Zračna blazina TT"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1319
-msgid "Scorpion Lancer Tracks"
-msgstr "Škorpijon Suličar Gosenice"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1320
-msgid "Scorpion Heavy Cannon Tracks"
-msgstr "Škorpijon Težki top Gosenice"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1321
-msgid "Scorpion Lancer VTOL"
-msgstr "Škorpijon Suličar NVP"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1322
-msgid "Scorpion BB VTOL"
-msgstr "Škorpijon UB NVP"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1323
-msgid "Viper Command Turret Tracks"
-msgstr "Gad Poveljniška kupola Gosenice"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1324
-msgid "Cobra Command Turret Tracks"
-msgstr "Naočarka Poveljniška kupola Gosenice"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1325
-msgid "Scorpion Command Turret Tracks"
-msgstr "Škorpijon Poveljniška kupola Gosenice"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1326
-msgid "mantis Command Turret Tracks"
-msgstr "Bogomolka Poveljniška kupola Gosenice"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1327
-msgid "Cobra Lancer Tracks"
-msgstr "Naočarka Suličar Gosenice"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1328
-msgid "Mantis Heavy Cannon Tracks"
-msgstr "Bogomolka Težki top Gosenice"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1329
-msgid "Mantis Tank Killer Tracks"
-msgstr "Bogomolka Morilec tankov Gosenice"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1330
-msgid "Mantis Scourge Tracks"
-msgstr "Bogomolka Bič Gosenice"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1331
-msgid "Scorpion Heavy Machinegun Tracks"
-msgstr "Škorpijon Težka strojnica Gosenice"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1332
-msgid "Scorpion Repair Tracks"
-msgstr "Škorpijon Popravila Gosenice"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1333
-msgid "Scorpion Heavy Repair Hover"
-msgstr "Škorpijon Težka popravila Zračna blazina"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1334
-msgid "Cobra Hover Truck"
-msgstr "Naočarka Zračna blazina Tovornjak"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1335
-msgid "Scorpion Hover Truck"
-msgstr "Škorpijon Zračna blazina Tovornjak"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1336
-msgid "Mantis Hover Truck"
-msgstr "Bogomolka Zračna blazina Tovornjak"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1337
-msgid "Cobra Bunker Buster Tracks"
-msgstr "Naočarka z uničevalcem bunkerjev in gosenicami"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1338
-msgid "Scorpion Bunker Buster Tracks"
-msgstr "Škorpijon z uničevalcem bunkerjev in gosenicami"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1339
-msgid "Mantis Bunker Buster Tracks"
-msgstr "Bogomolka Uničevalec bunkerjev Gosenice"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1340
-msgid "Viper Tracks Lancer"
-msgstr "Gad Gosenice Suličar"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1341
-msgid "Cobra Half-Tracks Mini-Pod"
-msgstr "Naočarka Polgosenice Mini-metalec"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1342
-msgid "Cobra Tracks Mini-Pod"
-msgstr "Naočarka Gosenice Mini-metalec"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1343
-msgid "Cobra Tracks Mini-Rocket Artillery"
-msgstr "Naočarka Gosenice Mini-raketno topništvo"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1344
-msgid "Cobra Inferno Half-track"
-msgstr "Naočarka Pekel Polgosenice"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1345
-msgid "Python HVC Hover"
-msgstr "Piton HHT Zračna blazina"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1346
-msgid "Python Scourge Tracks"
-msgstr "Piton Bič Gosenice"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1347
-msgid "Python Gauss Cannon Tracks"
-msgstr "Piton Gavs top Gosenice"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1348
-msgid "Python Pulse Laser Tracks"
-msgstr "Piton Sunkovni laser Gosenice"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1349
-msgid "Tiger Pulse Laser Tracks"
-msgstr "Tiger Sunkovni laser Gosenice"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1350
-msgid "Tiger Heavy Laser Tracks"
-msgstr "Tiger Težki laser Gosenice"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1351
-msgid "Wyvern Gauss Cannon Tracks"
-msgstr "Krilata kača Gavs top Gosenice"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1352
-msgid "Wyvern Pulse Laser Tracks"
-msgstr "Krilata kača Sunkovni laser Gosenice"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1353
-msgid "Wyvern Heavy Laser Tracks"
-msgstr "Krilata kača Težki laser Gosenice"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1354
-msgid "Viper Machinegun Half-Track"
-msgstr "Gad Strojnica Polgosenice"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1355
-msgid "Viper Flamer Half-Track"
-msgstr "Gad Plamenometalec Polgosenice"
-
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1822
 #: data/mp/messages/strings/names.txt:1825
 msgid "Heavy Repair Turret Cobra Hover"
@@ -10496,6 +10305,11 @@ msgstr "Kupola za težka popravila Naočarka Zračna blazina"
 #: data/mp/messages/strings/names.txt:1837
 msgid "Heavy Machinegun Viper Wheels"
 msgstr "Težka strojnica Gad Kolesa"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1824
+#: data/mp/messages/strings/names.txt:1827
+msgid "Scourge Mantis Hover"
+msgstr "Bič Bogomolka Zračna blazina"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1825
 #: data/mp/messages/strings/names.txt:1828
@@ -12374,11 +12188,11 @@ msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing
 msgstr "Ni bilo mogoče komunicirati z vežnim strežnikom! Je TCP prehod %u odprt za izhodni promet?"
 
 #: src/challenge.c:188
-#: src/hci.c:1015
-#: src/hci.c:3796
-#: src/hci.c:3945
-#: src/hci.c:4463
-#: src/hci.c:5645
+#: src/hci.c:1005
+#: src/hci.c:3786
+#: src/hci.c:3935
+#: src/hci.c:4453
+#: src/hci.c:5635
 #: src/intelmap.c:544
 #: src/intorder.c:782
 #: src/loadsave.c:256
@@ -12528,8 +12342,8 @@ msgstr "gostitelj"
 msgid "go directly to host screen"
 msgstr "pojdi naravnost na gostiteljev zaslon"
 
-#: src/configuration.c:442
-#: src/configuration.c:443
+#: src/configuration.c:431
+#: src/configuration.c:432
 #: src/multistat.c:130
 msgid "Player"
 msgstr "Igralec"
@@ -12604,10 +12418,6 @@ msgstr "Celotne telesne točke"
 #: src/design.c:1091
 msgid "Power Usage"
 msgstr "Poraba moči"
-
-#: src/design.c:1345
-msgid "Transporter"
-msgstr "Prevoz"
 
 #: src/design.c:1367
 msgid "Hydra "
@@ -13173,140 +12983,140 @@ msgstr "MOŽNOSTI IGRE"
 msgid "Mod: "
 msgstr ""
 
-#: src/hci.c:1360
+#: src/hci.c:1350
 msgid "MAP SAVED!"
 msgstr "MAPA SHRANJENA!"
 
-#: src/hci.c:1744
+#: src/hci.c:1734
 #: src/loop.c:557
 #: src/loop.c:573
 #, fuzzy
 msgid "GAME SAVED: "
 msgstr "IGRA SHRANJENA:"
 
-#: src/hci.c:2137
+#: src/hci.c:2127
 msgid "Failed to create building"
 msgstr "Ni uspelo zgraditi stavbe"
 
-#: src/hci.c:2160
+#: src/hci.c:2150
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr "Igralec/ka %u si je prigoljufal/a (razhroščevalni meni) novo zgradbo: %s."
 
-#: src/hci.c:2175
+#: src/hci.c:2165
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr "Igralec/ka %u si je prigoljufal/a (razhroščevalni meni) novo odliko: %s."
 
-#: src/hci.c:2196
+#: src/hci.c:2186
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "Igralec/ka %u si je prigoljufal/a (razhroščevalni meni) novega droida: %s."
 
-#: src/hci.c:2207
+#: src/hci.c:2197
 #, fuzzy, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "Igralec/ka %u si je prigoljufal/a (razhroščevalni meni) novega droida: %s."
 
-#: src/hci.c:3698
+#: src/hci.c:3688
 msgid "Commanders (F6)"
 msgstr "Poveljniki (F6)"
 
-#: src/hci.c:3714
+#: src/hci.c:3704
 msgid "Intelligence Display (F5)"
 msgstr "Obveščevalni zaslon (F5)"
 
-#: src/hci.c:3730
+#: src/hci.c:3720
 msgid "Manufacture (F1)"
 msgstr "Izdelava (F1)"
 
-#: src/hci.c:3746
+#: src/hci.c:3736
 msgid "Design (F4)"
 msgstr "Načrtovanje (F4)"
 
-#: src/hci.c:3762
+#: src/hci.c:3752
 msgid "Research (F2)"
 msgstr "Raziskave (F2)"
 
-#: src/hci.c:3778
+#: src/hci.c:3768
 msgid "Build (F3)"
 msgstr "Gradnja (F3)"
 
-#: src/hci.c:3856
+#: src/hci.c:3846
 #: src/multiint.c:1232
 #: src/multimenu.c:763
 msgid "Power"
 msgstr "Moč"
 
-#: src/hci.c:4040
+#: src/hci.c:4030
 msgid "Tile"
 msgstr "Plošča"
 
-#: src/hci.c:4041
+#: src/hci.c:4031
 msgid "Place tiles on map"
 msgstr "Položi plošče na mapo"
 
-#: src/hci.c:4050
+#: src/hci.c:4040
 msgid "Unit"
 msgstr "Enota"
 
-#: src/hci.c:4051
+#: src/hci.c:4041
 msgid "Place Unit on map"
 msgstr "Položi enote na mapo"
 
-#: src/hci.c:4059
+#: src/hci.c:4049
 msgid "Struct"
 msgstr "Zgradba"
 
-#: src/hci.c:4060
+#: src/hci.c:4050
 msgid "Place Structures on map"
 msgstr "Položi zgradbe na mapo"
 
-#: src/hci.c:4068
+#: src/hci.c:4058
 msgid "Feat"
 msgstr "Odlika"
 
-#: src/hci.c:4069
+#: src/hci.c:4059
 msgid "Place Features on map"
 msgstr "Položi odlike na mapo"
 
-#: src/hci.c:4080
+#: src/hci.c:4070
 msgid "Pause or unpause the game"
 msgstr "Ustavi ali nadaljuj igro"
 
-#: src/hci.c:4094
+#: src/hci.c:4084
 msgid "Align height of all map objects"
 msgstr "Uskladi višino vseh predmetov na mapi"
 
-#: src/hci.c:4119
+#: src/hci.c:4109
 #: src/ingameop.c:119
 #: src/ingameop.c:276
 #: src/ingameop.c:281
 msgid "Quit"
 msgstr "Končaj"
 
-#: src/hci.c:4120
+#: src/hci.c:4110
 msgid "Exit Game"
 msgstr "Zapusti igro"
 
-#: src/hci.c:4544
+#: src/hci.c:4534
 #: src/intdisplay.c:275
 msgid "Progress Bar"
 msgstr "Črta napredka"
 
-#: src/hci.c:5564
+#: src/hci.c:5554
 msgid "Factory Delivery Point"
 msgstr "Dostavna točka tovarne"
 
-#: src/hci.c:5583
+#: src/hci.c:5573
 msgid "Loop Production"
 msgstr "Ponavljaj izdelavo"
 
-#: src/hci.c:5670
+#: src/hci.c:5660
 msgid "Tab Scroll left"
 msgstr "Tab premakni levo"
 
-#: src/hci.c:5687
+#: src/hci.c:5677
 msgid "Tab Scroll right"
 msgstr "Tab premakni desno"
 
@@ -13665,8 +13475,9 @@ msgid "Debug menu is Open"
 msgstr "Razhroščevalni meni je odprt"
 
 #: src/keybind.c:1600
-msgid "Unable to locate any resource extractors!"
-msgstr "Ni mogoče najti nobenih črpalcev virov!"
+#, fuzzy
+msgid "Unable to locate any oil derricks!"
+msgstr "Ni mogoče najti nobenih tovornjakov!"
 
 #: src/keybind.c:1821
 msgid "Oh, the weather outside is frightful... SNOW"
@@ -13743,39 +13554,31 @@ msgid "Game Speed Reduced to %3.1f"
 msgstr "Hitrost igre zmanjšana na %3.1f"
 
 #: src/keybind.c:2713
-msgid "Build menu will reopen"
-msgstr "Gradbeni meni se bo ponovno odprl"
-
-#: src/keybind.c:2717
-msgid "Build menu will not reopen"
-msgstr "Gradbeni meni se ne bo ponovno odprl"
-
-#: src/keybind.c:2729
 msgid "Radar showing friend-foe colors"
 msgstr "Radar kaže barve prijateja-sovražnika"
 
-#: src/keybind.c:2733
+#: src/keybind.c:2717
 msgid "Radar showing player colors"
 msgstr "Radar kaže barve igralca"
 
-#: src/keybind.c:2754
+#: src/keybind.c:2738
 msgid "Radar showing only objects"
 msgstr "Radar kaže samo predmete"
 
-#: src/keybind.c:2757
+#: src/keybind.c:2741
 msgid "Radar blending terrain and height"
 msgstr "Radar združuje teren in višino "
 
-#: src/keybind.c:2760
+#: src/keybind.c:2744
 msgid "Radar showing terrain"
 msgstr "Radar kaže teren"
 
-#: src/keybind.c:2763
+#: src/keybind.c:2747
 #, fuzzy
 msgid "Radar showing revealed terrain"
 msgstr "Radar kaže teren"
 
-#: src/keybind.c:2766
+#: src/keybind.c:2750
 msgid "Radar showing height"
 msgstr "Radar kaže višino"
 
@@ -14189,10 +13992,6 @@ msgstr "Izberi naslednji generator moči"
 msgid "Select next Cyborg Factory"
 msgstr "Izberi naslednjo tovarno kiborgov"
 
-#: src/keymap.c:434
-msgid "Toggle reopening the build menu"
-msgstr "Nastavi ponovno odpiranje gradbenega menija"
-
 #: src/loop.c:564
 #: src/loop.c:580
 msgid "Could not save game!"
@@ -14232,8 +14031,8 @@ msgstr "Nadaljuj igro"
 msgid "GAME SAVED :"
 msgstr "IGRA SHRANJENA:"
 
-#: src/move.c:2491
-#: src/move.c:2507
+#: src/move.c:2490
+#: src/move.c:2506
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr "Našli ste %u moči v sodu nafte"
@@ -14558,32 +14357,32 @@ msgstr ""
 msgid "HOST"
 msgstr ""
 
-#: src/multijoin.c:98
-#: src/multijoin.c:99
+#: src/multijoin.c:100
+#: src/multijoin.c:101
 msgid "Players Still Joining"
 msgstr "Igralci se še pridružujejo"
 
-#: src/multijoin.c:214
+#: src/multijoin.c:216
 #, c-format
 msgid "%s has Left the Game"
 msgstr "%s je zapustil igro"
 
-#: src/multijoin.c:228
+#: src/multijoin.c:230
 #, c-format
 msgid "File transfer has been aborted for %d."
 msgstr ""
 
-#: src/multijoin.c:350
+#: src/multijoin.c:352
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr ""
 
-#: src/multijoin.c:389
+#: src/multijoin.c:391
 #, c-format
 msgid "%s is Joining the Game"
 msgstr "%s se pridružuje igri"
 
-#: src/multijoin.c:399
+#: src/multijoin.c:401
 msgid "System message:"
 msgstr "Sistemsko sporočilo:"
 
@@ -14987,6 +14786,150 @@ msgstr "- Zgrajen %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Verzija %s%s%s%s"
+
+#~ msgid "Fire Cannon"
+#~ msgstr "Ognjeni top"
+
+#~ msgid "Cobra Hover Heavy-Repair"
+#~ msgstr "Naočarka Zračna blazina Težka popravila"
+
+#~ msgid "Viper HMG Wheels"
+#~ msgstr "Gad TST Kolesa"
+
+#~ msgid "TK Mantis Hover"
+#~ msgstr "MT Bogomolka Zračna blazina"
+
+#~ msgid "Cobra HMG Tracks"
+#~ msgstr "Naočarka TST Gosenice"
+
+#~ msgid "Cobra Hover HC"
+#~ msgstr "Naočarka Zračna blazina TT"
+
+#~ msgid "Scorpion Lancer Tracks"
+#~ msgstr "Škorpijon Suličar Gosenice"
+
+#~ msgid "Scorpion Heavy Cannon Tracks"
+#~ msgstr "Škorpijon Težki top Gosenice"
+
+#~ msgid "Scorpion Lancer VTOL"
+#~ msgstr "Škorpijon Suličar NVP"
+
+#~ msgid "Scorpion BB VTOL"
+#~ msgstr "Škorpijon UB NVP"
+
+#~ msgid "Viper Command Turret Tracks"
+#~ msgstr "Gad Poveljniška kupola Gosenice"
+
+#~ msgid "Cobra Command Turret Tracks"
+#~ msgstr "Naočarka Poveljniška kupola Gosenice"
+
+#~ msgid "Scorpion Command Turret Tracks"
+#~ msgstr "Škorpijon Poveljniška kupola Gosenice"
+
+#~ msgid "mantis Command Turret Tracks"
+#~ msgstr "Bogomolka Poveljniška kupola Gosenice"
+
+#~ msgid "Cobra Lancer Tracks"
+#~ msgstr "Naočarka Suličar Gosenice"
+
+#~ msgid "Mantis Heavy Cannon Tracks"
+#~ msgstr "Bogomolka Težki top Gosenice"
+
+#~ msgid "Mantis Tank Killer Tracks"
+#~ msgstr "Bogomolka Morilec tankov Gosenice"
+
+#~ msgid "Mantis Scourge Tracks"
+#~ msgstr "Bogomolka Bič Gosenice"
+
+#~ msgid "Scorpion Heavy Machinegun Tracks"
+#~ msgstr "Škorpijon Težka strojnica Gosenice"
+
+#~ msgid "Scorpion Repair Tracks"
+#~ msgstr "Škorpijon Popravila Gosenice"
+
+#~ msgid "Scorpion Heavy Repair Hover"
+#~ msgstr "Škorpijon Težka popravila Zračna blazina"
+
+#~ msgid "Cobra Hover Truck"
+#~ msgstr "Naočarka Zračna blazina Tovornjak"
+
+#~ msgid "Scorpion Hover Truck"
+#~ msgstr "Škorpijon Zračna blazina Tovornjak"
+
+#~ msgid "Mantis Hover Truck"
+#~ msgstr "Bogomolka Zračna blazina Tovornjak"
+
+#~ msgid "Cobra Bunker Buster Tracks"
+#~ msgstr "Naočarka z uničevalcem bunkerjev in gosenicami"
+
+#~ msgid "Scorpion Bunker Buster Tracks"
+#~ msgstr "Škorpijon z uničevalcem bunkerjev in gosenicami"
+
+#~ msgid "Mantis Bunker Buster Tracks"
+#~ msgstr "Bogomolka Uničevalec bunkerjev Gosenice"
+
+#~ msgid "Viper Tracks Lancer"
+#~ msgstr "Gad Gosenice Suličar"
+
+#~ msgid "Cobra Half-Tracks Mini-Pod"
+#~ msgstr "Naočarka Polgosenice Mini-metalec"
+
+#~ msgid "Cobra Tracks Mini-Pod"
+#~ msgstr "Naočarka Gosenice Mini-metalec"
+
+#~ msgid "Cobra Tracks Mini-Rocket Artillery"
+#~ msgstr "Naočarka Gosenice Mini-raketno topništvo"
+
+#~ msgid "Cobra Inferno Half-track"
+#~ msgstr "Naočarka Pekel Polgosenice"
+
+#~ msgid "Python HVC Hover"
+#~ msgstr "Piton HHT Zračna blazina"
+
+#~ msgid "Python Scourge Tracks"
+#~ msgstr "Piton Bič Gosenice"
+
+#~ msgid "Python Gauss Cannon Tracks"
+#~ msgstr "Piton Gavs top Gosenice"
+
+#~ msgid "Python Pulse Laser Tracks"
+#~ msgstr "Piton Sunkovni laser Gosenice"
+
+#~ msgid "Tiger Pulse Laser Tracks"
+#~ msgstr "Tiger Sunkovni laser Gosenice"
+
+#~ msgid "Tiger Heavy Laser Tracks"
+#~ msgstr "Tiger Težki laser Gosenice"
+
+#~ msgid "Wyvern Gauss Cannon Tracks"
+#~ msgstr "Krilata kača Gavs top Gosenice"
+
+#~ msgid "Wyvern Pulse Laser Tracks"
+#~ msgstr "Krilata kača Sunkovni laser Gosenice"
+
+#~ msgid "Wyvern Heavy Laser Tracks"
+#~ msgstr "Krilata kača Težki laser Gosenice"
+
+#~ msgid "Viper Machinegun Half-Track"
+#~ msgstr "Gad Strojnica Polgosenice"
+
+#~ msgid "Viper Flamer Half-Track"
+#~ msgstr "Gad Plamenometalec Polgosenice"
+
+#~ msgid "Transporter"
+#~ msgstr "Prevoz"
+
+#~ msgid "Unable to locate any resource extractors!"
+#~ msgstr "Ni mogoče najti nobenih črpalcev virov!"
+
+#~ msgid "Build menu will reopen"
+#~ msgstr "Gradbeni meni se bo ponovno odprl"
+
+#~ msgid "Build menu will not reopen"
+#~ msgstr "Gradbeni meni se ne bo ponovno odprl"
+
+#~ msgid "Toggle reopening the build menu"
+#~ msgstr "Nastavi ponovno odpiranje gradbenega menija"
 
 #, fuzzy
 #~ msgid "Player %u is cheating him/herself a new droid army of %s(s)."

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100 version 2.2.3\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-08-15 12:57+0200\n"
+"POT-Creation-Date: 2010-08-23 01:39+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Меденцій Олександр <olexandr1986@i.ua>\n"
 "Language-Team: \n"
@@ -5659,84 +5659,67 @@ msgid "Incoming intelligence report... Team Gamma"
 msgstr "Нові дані розвідки... Команда Гама"
 
 #: data/base/messages/strings/genstrings.txt:4
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:4
 msgid "Briefing Commences:"
 msgstr "Починається Брифінг:"
 
 #: data/base/messages/strings/genstrings.txt:7
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:7
 msgid "Scavenger Outpost"
 msgstr "Форпост Звалищників"
 
 #: data/base/messages/strings/genstrings.txt:8
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:8
 msgid "Power Resource"
 msgstr "Енергетичний Ресурс"
 
 #: data/base/messages/strings/genstrings.txt:9
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:9
 msgid "Unknown Artifact"
 msgstr "Невідомий Артефакт"
 
 #: data/base/messages/strings/genstrings.txt:10
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:10
 msgid "Source of Power Surge"
 msgstr "Джерело Енергетичної Хвилі"
 
 #: data/base/messages/strings/genstrings.txt:13
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:13
 msgid "Landing Zone"
 msgstr "Зона Висадки"
 
 #: data/base/messages/strings/genstrings.txt:14
 #: data/base/messages/strings/genstrings.txt:24
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:14
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:24
 msgid "Mission Target"
 msgstr "Ціль Місії"
 
 #: data/base/messages/strings/genstrings.txt:15
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:15
 msgid "Pre-Collapse Research Center"
 msgstr "До-Катастрофний Дослідницький Центр"
 
 #: data/base/messages/strings/genstrings.txt:17
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:17
 msgid "En-route To Mission Site"
 msgstr "Переміщуємось до Території Місії"
 
 #: data/base/messages/strings/genstrings.txt:18
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:18
 msgid "Mission Failed"
 msgstr "Місія Провалена"
 
 #: data/base/messages/strings/genstrings.txt:19
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:19
 msgid "Mission Successful"
 msgstr "Місія Виконана"
 
 #: data/base/messages/strings/genstrings.txt:22
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:22
 msgid "Enemy Landing Zone"
 msgstr "Ворожа Зона Висадки"
 
 #: data/base/messages/strings/genstrings.txt:23
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:23
 msgid "Enemy Base"
 msgstr "Ворожа База"
 
 #: data/base/messages/strings/genstrings.txt:27
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:27
 msgid "Incoming transmission"
 msgstr "Вхідне Повідомлення"
 
 #: data/base/messages/strings/genstrings.txt:30
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:30
 msgid "Incoming intelligence report."
 msgstr "Нові дані розвідки."
 
 #: data/base/messages/strings/genstrings.txt:33
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:33
 msgid "Nuclear Reactor"
 msgstr "Ядерний Реактор"
 
@@ -5746,6 +5729,7 @@ msgid "New Design"
 msgstr "Новий Макет"
 
 #: data/base/messages/strings/names.txt:15
+#: src/design.c:1345
 msgid "Transport"
 msgstr "Транспорт"
 
@@ -5917,7 +5901,6 @@ msgid "Light Cannon Python Tracks"
 msgstr "Гусеничний Пітон з Легкою Гарматою"
 
 #: data/base/messages/strings/names.txt:194
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1357
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1923
 #: data/mp/messages/strings/names.txt:197
 #: data/mp/messages/strings/names.txt:1926
@@ -5982,8 +5965,9 @@ msgstr "Пікап"
 
 #: data/base/messages/strings/names.txt:207
 #: data/mp/messages/strings/names.txt:210
-msgid "Fire Cannon"
-msgstr "Вогнева Гармата"
+#, fuzzy
+msgid "Cannon Fire Truck"
+msgstr "Вогнева Вантажівка"
 
 #: data/base/messages/strings/names.txt:208
 #: data/mp/messages/strings/names.txt:211
@@ -9112,7 +9096,6 @@ msgid "Downed Transport"
 msgstr "Збитий Транспорт"
 
 #: data/base/messages/strings/names.txt:1458
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1356
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1922
 #: data/mp/messages/strings/names.txt:1477
 #: data/mp/messages/strings/names.txt:1925
@@ -10298,180 +10281,6 @@ msgstr ""
 msgid "Slowly, out of the ashes we will rise again..."
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1313
-msgid "Cobra Hover Heavy-Repair"
-msgstr "Всюдихідна Кобра з Важкою Вемонтою Баштою"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1314
-msgid "Viper HMG Wheels"
-msgstr "Колісна Гадюка з Важким Кулеметом"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1315
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1824
-#: data/mp/messages/strings/names.txt:1827
-msgid "Scourge Mantis Hover"
-msgstr "Всюдихідний Богомол з ПУ 'Батіг'"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1316
-msgid "TK Mantis Hover"
-msgstr "Всюдихідний Богомол з ПУ 'Вбивця Танків'"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1317
-msgid "Cobra HMG Tracks"
-msgstr "Гусенична Кобра з Важким Кулеметом"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1318
-msgid "Cobra Hover HC"
-msgstr "Всюдихідна Кобра з Важкою Гарматою"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1319
-msgid "Scorpion Lancer Tracks"
-msgstr "Гусеничний Скорпіон з ПУ 'Спис'"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1320
-msgid "Scorpion Heavy Cannon Tracks"
-msgstr "Гусеничний Скорпіон з Важкою Гарматою"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1321
-msgid "Scorpion Lancer VTOL"
-msgstr "ВЗІП Скорпіон з ПУ 'Спис'"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1322
-msgid "Scorpion BB VTOL"
-msgstr "ВЗІП Скорпіон з Протибункерною ПУ"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1323
-msgid "Viper Command Turret Tracks"
-msgstr "Гусенична Гадюка з Командною Баштою"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1324
-msgid "Cobra Command Turret Tracks"
-msgstr "Гусенична Кобра з Командною Баштою"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1325
-msgid "Scorpion Command Turret Tracks"
-msgstr "Гусеничний Скорпіон з Командною Баштою"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1326
-msgid "mantis Command Turret Tracks"
-msgstr "Гусеничний Богомол з Командною Баштою"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1327
-msgid "Cobra Lancer Tracks"
-msgstr "Гусенична Кобра з ПУ 'Спис'"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1328
-msgid "Mantis Heavy Cannon Tracks"
-msgstr "Гусеничний Богомол з Важкою Гарматою"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1329
-msgid "Mantis Tank Killer Tracks"
-msgstr "Гусеничний Богомол з ПУ 'Вбивця Танків'"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1330
-msgid "Mantis Scourge Tracks"
-msgstr "Гусеничний Богомол з ПУ 'Батіг'"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1331
-msgid "Scorpion Heavy Machinegun Tracks"
-msgstr "Гусеничний Скорпіон з Важким Кулеметом"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1332
-msgid "Scorpion Repair Tracks"
-msgstr "Гусеничний Скорпіон з Ремонтною Баштою"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1333
-msgid "Scorpion Heavy Repair Hover"
-msgstr "Всюдихіднаий Скорпіон з Важкою Ремонтною Баштою"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1334
-msgid "Cobra Hover Truck"
-msgstr "Всюдихідна Кобра Інженер"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1335
-msgid "Scorpion Hover Truck"
-msgstr "Всюдихідний Скорпіон Інженер"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1336
-msgid "Mantis Hover Truck"
-msgstr "Всюдихідний Богомол Інженер"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1337
-msgid "Cobra Bunker Buster Tracks"
-msgstr "Гусенична Кобра з Протибункерною ПУ"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1338
-msgid "Scorpion Bunker Buster Tracks"
-msgstr "Гусеничний Скорпіон з Протибункерною ПУ"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1339
-msgid "Mantis Bunker Buster Tracks"
-msgstr "Гусеничний Богомол з Протибункерною ПУ"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1340
-msgid "Viper Tracks Lancer"
-msgstr "Гусенична Гадюка з ПУ 'Спис'"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1341
-msgid "Cobra Half-Tracks Mini-Pod"
-msgstr "Напівгусенична Кобра з Міні-Ракетами"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1342
-msgid "Cobra Tracks Mini-Pod"
-msgstr "Гусенична Кобра з Міні-Ракетами"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1343
-msgid "Cobra Tracks Mini-Rocket Artillery"
-msgstr "Гусенична Кобра з Міні-Ракетною Артилерією"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1344
-msgid "Cobra Inferno Half-track"
-msgstr "Напівгусенична Кобра з Вогнеметом 'Пекло'"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1345
-msgid "Python HVC Hover"
-msgstr "Амфібія Пітон з ГШГ"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1346
-msgid "Python Scourge Tracks"
-msgstr "Гусеничний Пітон з ПУ 'Батіг'"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1347
-msgid "Python Gauss Cannon Tracks"
-msgstr "Гусеничний Пітон з Гарматою Гауса"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1348
-msgid "Python Pulse Laser Tracks"
-msgstr "Гусеничний Пітон з Імпульсним Лазером"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1349
-msgid "Tiger Pulse Laser Tracks"
-msgstr "Гусеничний Тигр з Імпульсним Лазером"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1350
-msgid "Tiger Heavy Laser Tracks"
-msgstr "Гусеничний Тигр з Важким Лазером"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1351
-msgid "Wyvern Gauss Cannon Tracks"
-msgstr "Гусенична Виверна з Гарматою Гауса"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1352
-msgid "Wyvern Pulse Laser Tracks"
-msgstr "Гусенична Виверна з Імпульсним Лазером"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1353
-msgid "Wyvern Heavy Laser Tracks"
-msgstr "Гусенична Виверна з Важким Лазером"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1354
-msgid "Viper Machinegun Half-Track"
-msgstr "Напівгусенична Гадюка з Кулеметом"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1355
-msgid "Viper Flamer Half-Track"
-msgstr "Напівгусенична Гадюка з Вогнеметом"
-
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1822
 #: data/mp/messages/strings/names.txt:1825
 msgid "Heavy Repair Turret Cobra Hover"
@@ -10483,6 +10292,11 @@ msgstr "Всюдихідна Кобра з Важкою Ремонтною Ба�
 #: data/mp/messages/strings/names.txt:1837
 msgid "Heavy Machinegun Viper Wheels"
 msgstr "Колісна Гадюка з Важким Кулеметом"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1824
+#: data/mp/messages/strings/names.txt:1827
+msgid "Scourge Mantis Hover"
+msgstr "Всюдихідний Богомол з ПУ 'Батіг'"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1825
 #: data/mp/messages/strings/names.txt:1828
@@ -12255,11 +12069,11 @@ msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing
 msgstr "Неможливо зв'язатись з сервером лоббі! Чи відкритий TCP порт %u для вихідного трафіку?"
 
 #: src/challenge.c:188
-#: src/hci.c:1015
-#: src/hci.c:3796
-#: src/hci.c:3945
-#: src/hci.c:4463
-#: src/hci.c:5645
+#: src/hci.c:1005
+#: src/hci.c:3786
+#: src/hci.c:3935
+#: src/hci.c:4453
+#: src/hci.c:5635
 #: src/intelmap.c:544
 #: src/intorder.c:782
 #: src/loadsave.c:256
@@ -12409,8 +12223,8 @@ msgstr "хост"
 msgid "go directly to host screen"
 msgstr "перейти безпосередньо до екрану хосту"
 
-#: src/configuration.c:442
-#: src/configuration.c:443
+#: src/configuration.c:431
+#: src/configuration.c:432
 #: src/multistat.c:130
 msgid "Player"
 msgstr "Гравець"
@@ -12485,10 +12299,6 @@ msgstr "Запас Міцності Корпусу"
 #: src/design.c:1091
 msgid "Power Usage"
 msgstr "Ціна Енергії"
-
-#: src/design.c:1345
-msgid "Transporter"
-msgstr "Транспорт"
 
 #: src/design.c:1367
 msgid "Hydra "
@@ -13039,139 +12849,139 @@ msgstr "ІГРОВІ ОПЦІЇ"
 msgid "Mod: "
 msgstr ", моди: "
 
-#: src/hci.c:1360
+#: src/hci.c:1350
 msgid "MAP SAVED!"
 msgstr "МАПУ ЗБЕРЕЖЕНО!"
 
-#: src/hci.c:1744
+#: src/hci.c:1734
 #: src/loop.c:557
 #: src/loop.c:573
 msgid "GAME SAVED: "
 msgstr "ГРУ ЗБЕРЕЖЕНО:"
 
-#: src/hci.c:2137
+#: src/hci.c:2127
 msgid "Failed to create building"
 msgstr "Не вдалося створити будівлю"
 
-#: src/hci.c:2160
+#: src/hci.c:2150
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr "Гравець %u за допомогою шахрайства (меню налагодження) здобув(ла) нову будівлю : %s."
 
-#: src/hci.c:2175
+#: src/hci.c:2165
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr "Гравець %u за допомогою шахрайства (меню налагодження) здобув(ла) нову властивість : %s."
 
-#: src/hci.c:2196
+#: src/hci.c:2186
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "Гравець %u за допомогою шахрайства (меню налагодження) здобув(ла) нову одиницю : %s."
 
-#: src/hci.c:2207
+#: src/hci.c:2197
 #, fuzzy, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "Гравець %u за допомогою шахрайства (меню налагодження) здобув(ла) нову одиницю : %s."
 
-#: src/hci.c:3698
+#: src/hci.c:3688
 msgid "Commanders (F6)"
 msgstr "Командири (F6)"
 
-#: src/hci.c:3714
+#: src/hci.c:3704
 msgid "Intelligence Display (F5)"
 msgstr "Показати Розвіддані (F5)"
 
-#: src/hci.c:3730
+#: src/hci.c:3720
 msgid "Manufacture (F1)"
 msgstr "Виробництво (F1)"
 
-#: src/hci.c:3746
+#: src/hci.c:3736
 msgid "Design (F4)"
 msgstr "Конструювання (F4)"
 
-#: src/hci.c:3762
+#: src/hci.c:3752
 msgid "Research (F2)"
 msgstr "Дослідження (F2)"
 
-#: src/hci.c:3778
+#: src/hci.c:3768
 msgid "Build (F3)"
 msgstr "Будівництво (F3)"
 
-#: src/hci.c:3856
+#: src/hci.c:3846
 #: src/multiint.c:1232
 #: src/multimenu.c:763
 msgid "Power"
 msgstr "Енергія"
 
-#: src/hci.c:4040
+#: src/hci.c:4030
 msgid "Tile"
 msgstr "Клітинка"
 
-#: src/hci.c:4041
+#: src/hci.c:4031
 msgid "Place tiles on map"
 msgstr "Розмістити клітинки на мапі"
 
-#: src/hci.c:4050
+#: src/hci.c:4040
 msgid "Unit"
 msgstr "Підрозділ"
 
-#: src/hci.c:4051
+#: src/hci.c:4041
 msgid "Place Unit on map"
 msgstr "Розмістити Підрозділ на мапі"
 
-#: src/hci.c:4059
+#: src/hci.c:4049
 msgid "Struct"
 msgstr "Struct"
 
-#: src/hci.c:4060
+#: src/hci.c:4050
 msgid "Place Structures on map"
 msgstr "Розмістити Будівлі на мапі"
 
-#: src/hci.c:4068
+#: src/hci.c:4058
 msgid "Feat"
 msgstr "Feat"
 
-#: src/hci.c:4069
+#: src/hci.c:4059
 msgid "Place Features on map"
 msgstr "Розмістити Особливості на мапі"
 
-#: src/hci.c:4080
+#: src/hci.c:4070
 msgid "Pause or unpause the game"
 msgstr "Поставити гру на паузу, або зняти з паузи"
 
-#: src/hci.c:4094
+#: src/hci.c:4084
 msgid "Align height of all map objects"
 msgstr "Вирівняти висоту усіх об'єктів на мапі"
 
-#: src/hci.c:4119
+#: src/hci.c:4109
 #: src/ingameop.c:119
 #: src/ingameop.c:276
 #: src/ingameop.c:281
 msgid "Quit"
 msgstr "Вийти"
 
-#: src/hci.c:4120
+#: src/hci.c:4110
 msgid "Exit Game"
 msgstr "Покинути Гру"
 
-#: src/hci.c:4544
+#: src/hci.c:4534
 #: src/intdisplay.c:275
 msgid "Progress Bar"
 msgstr "Індикатор Прогресу"
 
-#: src/hci.c:5564
+#: src/hci.c:5554
 msgid "Factory Delivery Point"
 msgstr "Точка Доставки Фабрики"
 
-#: src/hci.c:5583
+#: src/hci.c:5573
 msgid "Loop Production"
 msgstr "Зациклити Виробництво"
 
-#: src/hci.c:5670
+#: src/hci.c:5660
 msgid "Tab Scroll left"
 msgstr "Прогорнути Вкладку ліворуч"
 
-#: src/hci.c:5687
+#: src/hci.c:5677
 msgid "Tab Scroll right"
 msgstr "Прогорнути Вкладку праворуч"
 
@@ -13536,8 +13346,9 @@ msgid "Debug menu is Open"
 msgstr "Меню налагодження Відкрито"
 
 #: src/keybind.c:1600
-msgid "Unable to locate any resource extractors!"
-msgstr "Не вдалося знайти жодних добувачів ресурсів!"
+#, fuzzy
+msgid "Unable to locate any oil derricks!"
+msgstr "Не можу знайти жодного Інженера!"
 
 #: src/keybind.c:1821
 msgid "Oh, the weather outside is frightful... SNOW"
@@ -13613,38 +13424,30 @@ msgid "Game Speed Reduced to %3.1f"
 msgstr "Швидкість Гри Знижено до %3.1f"
 
 #: src/keybind.c:2713
-msgid "Build menu will reopen"
-msgstr "Меню будівництва буде повторно відкриватись"
-
-#: src/keybind.c:2717
-msgid "Build menu will not reopen"
-msgstr "Меню будівництва не буде повторно відкриватись"
-
-#: src/keybind.c:2729
 msgid "Radar showing friend-foe colors"
 msgstr "Радар показує кольори свій-чужий"
 
-#: src/keybind.c:2733
+#: src/keybind.c:2717
 msgid "Radar showing player colors"
 msgstr "Радар показує кольори гравців"
 
-#: src/keybind.c:2754
+#: src/keybind.c:2738
 msgid "Radar showing only objects"
 msgstr "Радар показує лише об’єкти"
 
-#: src/keybind.c:2757
+#: src/keybind.c:2741
 msgid "Radar blending terrain and height"
 msgstr "Радар відображає місцевість та рельєф"
 
-#: src/keybind.c:2760
+#: src/keybind.c:2744
 msgid "Radar showing terrain"
 msgstr "Радар показує місцевість"
 
-#: src/keybind.c:2763
+#: src/keybind.c:2747
 msgid "Radar showing revealed terrain"
 msgstr "Радар показує розвідану місцевість"
 
-#: src/keybind.c:2766
+#: src/keybind.c:2750
 msgid "Radar showing height"
 msgstr "Радар показує рельєф"
 
@@ -14056,10 +13859,6 @@ msgstr "Обрати наступний Енергогенератор"
 msgid "Select next Cyborg Factory"
 msgstr "Обрати наступну Фабрику Кіборгів"
 
-#: src/keymap.c:434
-msgid "Toggle reopening the build menu"
-msgstr "Задіяти повторне відкривання будівельного меню"
-
 #: src/loop.c:564
 #: src/loop.c:580
 msgid "Could not save game!"
@@ -14099,8 +13898,8 @@ msgstr "Продовжити Гру"
 msgid "GAME SAVED :"
 msgstr "ГРУ ЗБЕРЕЖЕНО:"
 
-#: src/move.c:2491
-#: src/move.c:2507
+#: src/move.c:2490
+#: src/move.c:2506
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr "Ви знайшли %u енергії в бочці нафти."
@@ -14416,32 +14215,32 @@ msgstr "Мапа: %d%% завантажена"
 msgid "HOST"
 msgstr "ХОСТ"
 
-#: src/multijoin.c:98
-#: src/multijoin.c:99
+#: src/multijoin.c:100
+#: src/multijoin.c:101
 msgid "Players Still Joining"
 msgstr "Гравці Продовжують Приєднуватись"
 
-#: src/multijoin.c:214
+#: src/multijoin.c:216
 #, c-format
 msgid "%s has Left the Game"
 msgstr "%s покинув Гру"
 
-#: src/multijoin.c:228
+#: src/multijoin.c:230
 #, c-format
 msgid "File transfer has been aborted for %d."
 msgstr "Передача файлу була перервана для %d."
 
-#: src/multijoin.c:350
+#: src/multijoin.c:352
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr "%s (%u) має несумісний мод, отже був викинутий."
 
-#: src/multijoin.c:389
+#: src/multijoin.c:391
 #, c-format
 msgid "%s is Joining the Game"
 msgstr "%s Приєднався до Гри"
 
-#: src/multijoin.c:399
+#: src/multijoin.c:401
 msgid "System message:"
 msgstr "Повідомлення системи:"
 
@@ -14840,6 +14639,150 @@ msgstr " - Збудовано %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Версія %s%s%s%s"
+
+#~ msgid "Fire Cannon"
+#~ msgstr "Вогнева Гармата"
+
+#~ msgid "Cobra Hover Heavy-Repair"
+#~ msgstr "Всюдихідна Кобра з Важкою Вемонтою Баштою"
+
+#~ msgid "Viper HMG Wheels"
+#~ msgstr "Колісна Гадюка з Важким Кулеметом"
+
+#~ msgid "TK Mantis Hover"
+#~ msgstr "Всюдихідний Богомол з ПУ 'Вбивця Танків'"
+
+#~ msgid "Cobra HMG Tracks"
+#~ msgstr "Гусенична Кобра з Важким Кулеметом"
+
+#~ msgid "Cobra Hover HC"
+#~ msgstr "Всюдихідна Кобра з Важкою Гарматою"
+
+#~ msgid "Scorpion Lancer Tracks"
+#~ msgstr "Гусеничний Скорпіон з ПУ 'Спис'"
+
+#~ msgid "Scorpion Heavy Cannon Tracks"
+#~ msgstr "Гусеничний Скорпіон з Важкою Гарматою"
+
+#~ msgid "Scorpion Lancer VTOL"
+#~ msgstr "ВЗІП Скорпіон з ПУ 'Спис'"
+
+#~ msgid "Scorpion BB VTOL"
+#~ msgstr "ВЗІП Скорпіон з Протибункерною ПУ"
+
+#~ msgid "Viper Command Turret Tracks"
+#~ msgstr "Гусенична Гадюка з Командною Баштою"
+
+#~ msgid "Cobra Command Turret Tracks"
+#~ msgstr "Гусенична Кобра з Командною Баштою"
+
+#~ msgid "Scorpion Command Turret Tracks"
+#~ msgstr "Гусеничний Скорпіон з Командною Баштою"
+
+#~ msgid "mantis Command Turret Tracks"
+#~ msgstr "Гусеничний Богомол з Командною Баштою"
+
+#~ msgid "Cobra Lancer Tracks"
+#~ msgstr "Гусенична Кобра з ПУ 'Спис'"
+
+#~ msgid "Mantis Heavy Cannon Tracks"
+#~ msgstr "Гусеничний Богомол з Важкою Гарматою"
+
+#~ msgid "Mantis Tank Killer Tracks"
+#~ msgstr "Гусеничний Богомол з ПУ 'Вбивця Танків'"
+
+#~ msgid "Mantis Scourge Tracks"
+#~ msgstr "Гусеничний Богомол з ПУ 'Батіг'"
+
+#~ msgid "Scorpion Heavy Machinegun Tracks"
+#~ msgstr "Гусеничний Скорпіон з Важким Кулеметом"
+
+#~ msgid "Scorpion Repair Tracks"
+#~ msgstr "Гусеничний Скорпіон з Ремонтною Баштою"
+
+#~ msgid "Scorpion Heavy Repair Hover"
+#~ msgstr "Всюдихіднаий Скорпіон з Важкою Ремонтною Баштою"
+
+#~ msgid "Cobra Hover Truck"
+#~ msgstr "Всюдихідна Кобра Інженер"
+
+#~ msgid "Scorpion Hover Truck"
+#~ msgstr "Всюдихідний Скорпіон Інженер"
+
+#~ msgid "Mantis Hover Truck"
+#~ msgstr "Всюдихідний Богомол Інженер"
+
+#~ msgid "Cobra Bunker Buster Tracks"
+#~ msgstr "Гусенична Кобра з Протибункерною ПУ"
+
+#~ msgid "Scorpion Bunker Buster Tracks"
+#~ msgstr "Гусеничний Скорпіон з Протибункерною ПУ"
+
+#~ msgid "Mantis Bunker Buster Tracks"
+#~ msgstr "Гусеничний Богомол з Протибункерною ПУ"
+
+#~ msgid "Viper Tracks Lancer"
+#~ msgstr "Гусенична Гадюка з ПУ 'Спис'"
+
+#~ msgid "Cobra Half-Tracks Mini-Pod"
+#~ msgstr "Напівгусенична Кобра з Міні-Ракетами"
+
+#~ msgid "Cobra Tracks Mini-Pod"
+#~ msgstr "Гусенична Кобра з Міні-Ракетами"
+
+#~ msgid "Cobra Tracks Mini-Rocket Artillery"
+#~ msgstr "Гусенична Кобра з Міні-Ракетною Артилерією"
+
+#~ msgid "Cobra Inferno Half-track"
+#~ msgstr "Напівгусенична Кобра з Вогнеметом 'Пекло'"
+
+#~ msgid "Python HVC Hover"
+#~ msgstr "Амфібія Пітон з ГШГ"
+
+#~ msgid "Python Scourge Tracks"
+#~ msgstr "Гусеничний Пітон з ПУ 'Батіг'"
+
+#~ msgid "Python Gauss Cannon Tracks"
+#~ msgstr "Гусеничний Пітон з Гарматою Гауса"
+
+#~ msgid "Python Pulse Laser Tracks"
+#~ msgstr "Гусеничний Пітон з Імпульсним Лазером"
+
+#~ msgid "Tiger Pulse Laser Tracks"
+#~ msgstr "Гусеничний Тигр з Імпульсним Лазером"
+
+#~ msgid "Tiger Heavy Laser Tracks"
+#~ msgstr "Гусеничний Тигр з Важким Лазером"
+
+#~ msgid "Wyvern Gauss Cannon Tracks"
+#~ msgstr "Гусенична Виверна з Гарматою Гауса"
+
+#~ msgid "Wyvern Pulse Laser Tracks"
+#~ msgstr "Гусенична Виверна з Імпульсним Лазером"
+
+#~ msgid "Wyvern Heavy Laser Tracks"
+#~ msgstr "Гусенична Виверна з Важким Лазером"
+
+#~ msgid "Viper Machinegun Half-Track"
+#~ msgstr "Напівгусенична Гадюка з Кулеметом"
+
+#~ msgid "Viper Flamer Half-Track"
+#~ msgstr "Напівгусенична Гадюка з Вогнеметом"
+
+#~ msgid "Transporter"
+#~ msgstr "Транспорт"
+
+#~ msgid "Unable to locate any resource extractors!"
+#~ msgstr "Не вдалося знайти жодних добувачів ресурсів!"
+
+#~ msgid "Build menu will reopen"
+#~ msgstr "Меню будівництва буде повторно відкриватись"
+
+#~ msgid "Build menu will not reopen"
+#~ msgstr "Меню будівництва не буде повторно відкриватись"
+
+#~ msgid "Toggle reopening the build menu"
+#~ msgstr "Задіяти повторне відкривання будівельного меню"
 
 #~ msgid "Player %u is cheating him/herself a new droid army of %s(s)."
 #~ msgstr "Гравець %u за допомогою шахрайства здобув(ла) нову одиницю : %s."

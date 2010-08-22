@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-08-15 12:57+0200\n"
+"POT-Creation-Date: 2010-08-23 01:39+0200\n"
 "PO-Revision-Date: 2010-04-29 17:24+0100\n"
 "Last-Translator: Daniel Vijande <nsa_server@hotmail.com>\n"
 "Language-Team: Spanish <warzone-dev@gna.org>\n"
@@ -5669,84 +5669,67 @@ msgid "Incoming intelligence report... Team Gamma"
 msgstr "Recibiendo informe de inteligencia... Equipo Gamma"
 
 #: data/base/messages/strings/genstrings.txt:4
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:4
 msgid "Briefing Commences:"
 msgstr "Comienzo de la información:"
 
 #: data/base/messages/strings/genstrings.txt:7
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:7
 msgid "Scavenger Outpost"
 msgstr "Enclave de Carroñeros"
 
 #: data/base/messages/strings/genstrings.txt:8
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:8
 msgid "Power Resource"
 msgstr "Fuente de Energía"
 
 #: data/base/messages/strings/genstrings.txt:9
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:9
 msgid "Unknown Artifact"
 msgstr "Artefacto Desconocido"
 
 #: data/base/messages/strings/genstrings.txt:10
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:10
 msgid "Source of Power Surge"
 msgstr "Fuente de Incremento de Energía"
 
 #: data/base/messages/strings/genstrings.txt:13
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:13
 msgid "Landing Zone"
 msgstr "Zona de Aterrizaje"
 
 #: data/base/messages/strings/genstrings.txt:14
 #: data/base/messages/strings/genstrings.txt:24
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:14
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:24
 msgid "Mission Target"
 msgstr "Objetivo de Misión"
 
 #: data/base/messages/strings/genstrings.txt:15
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:15
 msgid "Pre-Collapse Research Center"
 msgstr "Centro de Investigación anterior al Colapso"
 
 #: data/base/messages/strings/genstrings.txt:17
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:17
 msgid "En-route To Mission Site"
 msgstr "En ruta al lugar de la misión"
 
 #: data/base/messages/strings/genstrings.txt:18
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:18
 msgid "Mission Failed"
 msgstr "Misión Fallida"
 
 #: data/base/messages/strings/genstrings.txt:19
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:19
 msgid "Mission Successful"
 msgstr "Misión superada"
 
 #: data/base/messages/strings/genstrings.txt:22
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:22
 msgid "Enemy Landing Zone"
 msgstr "Zona de Aterrizaje Enemiga"
 
 #: data/base/messages/strings/genstrings.txt:23
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:23
 msgid "Enemy Base"
 msgstr "Base Enemiga"
 
 #: data/base/messages/strings/genstrings.txt:27
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:27
 msgid "Incoming transmission"
 msgstr "Transmisión entrante"
 
 #: data/base/messages/strings/genstrings.txt:30
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:30
 msgid "Incoming intelligence report."
 msgstr "Recibiendo Informe de Inteligencia"
 
 #: data/base/messages/strings/genstrings.txt:33
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:33
 msgid "Nuclear Reactor"
 msgstr "Reactor Nuclear"
 
@@ -5756,6 +5739,7 @@ msgid "New Design"
 msgstr "Nuevo Diseño"
 
 #: data/base/messages/strings/names.txt:15
+#: src/design.c:1345
 msgid "Transport"
 msgstr "Transporte"
 
@@ -5927,7 +5911,6 @@ msgid "Light Cannon Python Tracks"
 msgstr "Cañón HPV Pitón Oruga"
 
 #: data/base/messages/strings/names.txt:194
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1357
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1923
 #: data/mp/messages/strings/names.txt:197
 #: data/mp/messages/strings/names.txt:1926
@@ -5992,8 +5975,9 @@ msgstr "Camión de Carga"
 
 #: data/base/messages/strings/names.txt:207
 #: data/mp/messages/strings/names.txt:210
-msgid "Fire Cannon"
-msgstr "Cañón de Fuego"
+#, fuzzy
+msgid "Cannon Fire Truck"
+msgstr "Fuego Camión"
 
 #: data/base/messages/strings/names.txt:208
 #: data/mp/messages/strings/names.txt:211
@@ -9122,7 +9106,6 @@ msgid "Downed Transport"
 msgstr "Transporte Derribado"
 
 #: data/base/messages/strings/names.txt:1458
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1356
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1922
 #: data/mp/messages/strings/names.txt:1477
 #: data/mp/messages/strings/names.txt:1925
@@ -10283,180 +10266,6 @@ msgstr "Ahora, es tiempo de usarlas para reconstruir el mundo."
 msgid "Slowly, out of the ashes we will rise again..."
 msgstr "Lentamente, fuera de los escombros, nos levantaremos de nuevo"
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1313
-msgid "Cobra Hover Heavy-Repair"
-msgstr "Cobra Deslizador Reparador Pesado"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1314
-msgid "Viper HMG Wheels"
-msgstr "Víbora Ametralladora Pesada Ruedas"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1315
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1824
-#: data/mp/messages/strings/names.txt:1827
-msgid "Scourge Mantis Hover"
-msgstr "Azote Mantis Deslizador"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1316
-msgid "TK Mantis Hover"
-msgstr "Mata Tanques Mantis Deslizador"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1317
-msgid "Cobra HMG Tracks"
-msgstr "Cobra Ametralladora Pesada Oruga"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1318
-msgid "Cobra Hover HC"
-msgstr "Cobra Deslizador Cañón Pesado"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1319
-msgid "Scorpion Lancer Tracks"
-msgstr "Escorpión Lanzadera Oruga"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1320
-msgid "Scorpion Heavy Cannon Tracks"
-msgstr "Escorpión Cañón Pesado Oruga"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1321
-msgid "Scorpion Lancer VTOL"
-msgstr "Escorpión Lanzadera ADV"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1322
-msgid "Scorpion BB VTOL"
-msgstr "Escorpión Revienta Búnker ADV"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1323
-msgid "Viper Command Turret Tracks"
-msgstr "Víbora Torreta de Comandancia Oruga"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1324
-msgid "Cobra Command Turret Tracks"
-msgstr "Cobra Torreta de Comandancia Oruga"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1325
-msgid "Scorpion Command Turret Tracks"
-msgstr "Escorpión Torreta de Comandancia Oruga"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1326
-msgid "mantis Command Turret Tracks"
-msgstr "Mantis Torreta de Comandancia Oruga"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1327
-msgid "Cobra Lancer Tracks"
-msgstr "Cobra Lanzadera Oruga"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1328
-msgid "Mantis Heavy Cannon Tracks"
-msgstr "Mantis Cañón Pesado Oruga"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1329
-msgid "Mantis Tank Killer Tracks"
-msgstr "Mantis Mata Tanque Oruga"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1330
-msgid "Mantis Scourge Tracks"
-msgstr "Mantis Azote Oruga"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1331
-msgid "Scorpion Heavy Machinegun Tracks"
-msgstr "Escorpión Ametralladora Pesada Oruga"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1332
-msgid "Scorpion Repair Tracks"
-msgstr "Escorpión Reparador Oruga"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1333
-msgid "Scorpion Heavy Repair Hover"
-msgstr "Escorpión Reparador Pesado Deslizador"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1334
-msgid "Cobra Hover Truck"
-msgstr "Cobra Deslizador Camión"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1335
-msgid "Scorpion Hover Truck"
-msgstr "Escorpión Deslizador Camión"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1336
-msgid "Mantis Hover Truck"
-msgstr "Mantis Deslizador Camión"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1337
-msgid "Cobra Bunker Buster Tracks"
-msgstr "Cobra Revienta Búnker Oruga"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1338
-msgid "Scorpion Bunker Buster Tracks"
-msgstr "Escorpión Revienta Búnker Oruga"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1339
-msgid "Mantis Bunker Buster Tracks"
-msgstr "Mantis Revienta Búnker Oruga"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1340
-msgid "Viper Tracks Lancer"
-msgstr "Víbora Oruga Lanzadera"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1341
-msgid "Cobra Half-Tracks Mini-Pod"
-msgstr "Cobra Semi-oruga Mini-Pod"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1342
-msgid "Cobra Tracks Mini-Pod"
-msgstr "Cobra Oruga Mini-Pod"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1343
-msgid "Cobra Tracks Mini-Rocket Artillery"
-msgstr "Cobra Oruga Artillería Mini-Cohete"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1344
-msgid "Cobra Inferno Half-track"
-msgstr "Cobra Infiermo Semi-oruga"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1345
-msgid "Python HVC Hover"
-msgstr "Pitón Cañón HV Deslizador"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1346
-msgid "Python Scourge Tracks"
-msgstr "Pitón Azote Oruga"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1347
-msgid "Python Gauss Cannon Tracks"
-msgstr "Pitón Cañón de Gauss Oruga"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1348
-msgid "Python Pulse Laser Tracks"
-msgstr "Pitón Láser de Pulsos Oruga"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1349
-msgid "Tiger Pulse Laser Tracks"
-msgstr "Tigre Láser de Pulsos Oruga"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1350
-msgid "Tiger Heavy Laser Tracks"
-msgstr "Tigre Láser Pesado Oruga"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1351
-msgid "Wyvern Gauss Cannon Tracks"
-msgstr "Dragón Heráldico Cañón de Gauss Oruga"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1352
-msgid "Wyvern Pulse Laser Tracks"
-msgstr "Dragón Heráldico Láser de Pulsos Oruga"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1353
-msgid "Wyvern Heavy Laser Tracks"
-msgstr "Dragón Heráldico Láser Pesado Oruga"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1354
-msgid "Viper Machinegun Half-Track"
-msgstr "Víbora Doble Ametralladora Semi-oruga"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1355
-msgid "Viper Flamer Half-Track"
-msgstr "Víbora Reparador Semi-oruga"
-
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1822
 #: data/mp/messages/strings/names.txt:1825
 msgid "Heavy Repair Turret Cobra Hover"
@@ -10468,6 +10277,11 @@ msgstr "Torreta Pesada de Reparación Cobra Deslizador"
 #: data/mp/messages/strings/names.txt:1837
 msgid "Heavy Machinegun Viper Wheels"
 msgstr "Ametralladora Pesada Víbora Ruedas"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1824
+#: data/mp/messages/strings/names.txt:1827
+msgid "Scourge Mantis Hover"
+msgstr "Azote Mantis Deslizador"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1825
 #: data/mp/messages/strings/names.txt:1828
@@ -12241,11 +12055,11 @@ msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing
 msgstr "¡No se pudo comunicar con el servidor! ¿Está el puerto TCP %u abierto para tráfico saliente?"
 
 #: src/challenge.c:188
-#: src/hci.c:1015
-#: src/hci.c:3796
-#: src/hci.c:3945
-#: src/hci.c:4463
-#: src/hci.c:5645
+#: src/hci.c:1005
+#: src/hci.c:3786
+#: src/hci.c:3935
+#: src/hci.c:4453
+#: src/hci.c:5635
 #: src/intelmap.c:544
 #: src/intorder.c:782
 #: src/loadsave.c:256
@@ -12395,8 +12209,8 @@ msgstr "Dominio"
 msgid "go directly to host screen"
 msgstr "Ir directamente a pantalla de dominio"
 
-#: src/configuration.c:442
-#: src/configuration.c:443
+#: src/configuration.c:431
+#: src/configuration.c:432
 #: src/multistat.c:130
 msgid "Player"
 msgstr "Jugador"
@@ -12471,10 +12285,6 @@ msgstr "Puntos Estructurales Totales"
 #: src/design.c:1091
 msgid "Power Usage"
 msgstr "Uso de energía"
-
-#: src/design.c:1345
-msgid "Transporter"
-msgstr "Transporte"
 
 #: src/design.c:1367
 msgid "Hydra "
@@ -13025,140 +12835,140 @@ msgstr "OPCIONES DE JUEGO"
 msgid "Mod: "
 msgstr "Mod:"
 
-#: src/hci.c:1360
+#: src/hci.c:1350
 msgid "MAP SAVED!"
 msgstr "¡MAPA GUARDADO!"
 
-#: src/hci.c:1744
+#: src/hci.c:1734
 #: src/loop.c:557
 #: src/loop.c:573
 #, fuzzy
 msgid "GAME SAVED: "
 msgstr "¡PARTIDA GUARDADA!"
 
-#: src/hci.c:2137
+#: src/hci.c:2127
 msgid "Failed to create building"
 msgstr "Error al crear estructura"
 
-#: src/hci.c:2160
+#: src/hci.c:2150
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr "El jugador %u está haciendo trampas (menú depuración) con una nueva estructura: %s."
 
-#: src/hci.c:2175
+#: src/hci.c:2165
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr "El jugador %u está haciendo trampas (menú depuración) con una nueva característica: %s."
 
-#: src/hci.c:2196
+#: src/hci.c:2186
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "El jugador %u está haciendo trampas (menú depuración) con un nuevo androide: %s."
 
-#: src/hci.c:2207
+#: src/hci.c:2197
 #, fuzzy, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "El jugador %u está haciendo trampas (menú depuración) con un nuevo androide: %s."
 
-#: src/hci.c:3698
+#: src/hci.c:3688
 msgid "Commanders (F6)"
 msgstr "Comandantes (F6)"
 
-#: src/hci.c:3714
+#: src/hci.c:3704
 msgid "Intelligence Display (F5)"
 msgstr "Inteligencia (F5)"
 
-#: src/hci.c:3730
+#: src/hci.c:3720
 msgid "Manufacture (F1)"
 msgstr "Fabricación (F1)"
 
-#: src/hci.c:3746
+#: src/hci.c:3736
 msgid "Design (F4)"
 msgstr "Diseño (F4)"
 
-#: src/hci.c:3762
+#: src/hci.c:3752
 msgid "Research (F2)"
 msgstr "Investigación (F2)"
 
-#: src/hci.c:3778
+#: src/hci.c:3768
 msgid "Build (F3)"
 msgstr "Construcción (F3)"
 
-#: src/hci.c:3856
+#: src/hci.c:3846
 #: src/multiint.c:1232
 #: src/multimenu.c:763
 msgid "Power"
 msgstr "Energía"
 
-#: src/hci.c:4040
+#: src/hci.c:4030
 msgid "Tile"
 msgstr "casilla"
 
-#: src/hci.c:4041
+#: src/hci.c:4031
 msgid "Place tiles on map"
 msgstr "Colocar casillas en el mapa"
 
-#: src/hci.c:4050
+#: src/hci.c:4040
 msgid "Unit"
 msgstr "Unidad"
 
-#: src/hci.c:4051
+#: src/hci.c:4041
 msgid "Place Unit on map"
 msgstr "Colocar Unidad en el mapa"
 
-#: src/hci.c:4059
+#: src/hci.c:4049
 msgid "Struct"
 msgstr "Estructura"
 
-#: src/hci.c:4060
+#: src/hci.c:4050
 msgid "Place Structures on map"
 msgstr "Colocar Estructuras en el mapa"
 
-#: src/hci.c:4068
+#: src/hci.c:4058
 msgid "Feat"
 msgstr "Hazaña"
 
-#: src/hci.c:4069
+#: src/hci.c:4059
 msgid "Place Features on map"
 msgstr "Colocar Características en el mapa"
 
-#: src/hci.c:4080
+#: src/hci.c:4070
 msgid "Pause or unpause the game"
 msgstr "Pausa o despausa la partida"
 
-#: src/hci.c:4094
+#: src/hci.c:4084
 msgid "Align height of all map objects"
 msgstr "Anchura de alineacion de todos los objetos del mapa"
 
-#: src/hci.c:4119
+#: src/hci.c:4109
 #: src/ingameop.c:119
 #: src/ingameop.c:276
 #: src/ingameop.c:281
 msgid "Quit"
 msgstr "Salir"
 
-#: src/hci.c:4120
+#: src/hci.c:4110
 msgid "Exit Game"
 msgstr "Salir del Juego"
 
-#: src/hci.c:4544
+#: src/hci.c:4534
 #: src/intdisplay.c:275
 msgid "Progress Bar"
 msgstr "Barra de progreso"
 
-#: src/hci.c:5564
+#: src/hci.c:5554
 msgid "Factory Delivery Point"
 msgstr "Punto de Reparto de la Fábrica"
 
-#: src/hci.c:5583
+#: src/hci.c:5573
 msgid "Loop Production"
 msgstr "Ciclos de Producción"
 
-#: src/hci.c:5670
+#: src/hci.c:5660
 msgid "Tab Scroll left"
 msgstr "Tab Desplazamiento Izquierda"
 
-#: src/hci.c:5687
+#: src/hci.c:5677
 msgid "Tab Scroll right"
 msgstr "Tab Desplazamiento Derecha"
 
@@ -13521,8 +13331,9 @@ msgid "Debug menu is Open"
 msgstr "El Menú de construcción está Abierto"
 
 #: src/keybind.c:1600
-msgid "Unable to locate any resource extractors!"
-msgstr "¡Incapaz de encontrar ningún extractor de recursos!"
+#, fuzzy
+msgid "Unable to locate any oil derricks!"
+msgstr "¡Imposible localizar ningún Camión!"
 
 #: src/keybind.c:1821
 msgid "Oh, the weather outside is frightful... SNOW"
@@ -13598,38 +13409,30 @@ msgid "Game Speed Reduced to %3.1f"
 msgstr "Velocidad de Juego Reducida a  %3.1f"
 
 #: src/keybind.c:2713
-msgid "Build menu will reopen"
-msgstr "Menú de construcción se reabrirá"
-
-#: src/keybind.c:2717
-msgid "Build menu will not reopen"
-msgstr "Menú de construcción no se reabrirá"
-
-#: src/keybind.c:2729
 msgid "Radar showing friend-foe colors"
 msgstr "Radar mostrando colores de amigo-enemigo"
 
-#: src/keybind.c:2733
+#: src/keybind.c:2717
 msgid "Radar showing player colors"
 msgstr "Radar mostrando colores de jugador"
 
-#: src/keybind.c:2754
+#: src/keybind.c:2738
 msgid "Radar showing only objects"
 msgstr "Radar mostrando sólo objetos"
 
-#: src/keybind.c:2757
+#: src/keybind.c:2741
 msgid "Radar blending terrain and height"
 msgstr "Radar mezclando terreno y alturas"
 
-#: src/keybind.c:2760
+#: src/keybind.c:2744
 msgid "Radar showing terrain"
 msgstr "Radar mostrando terreno"
 
-#: src/keybind.c:2763
+#: src/keybind.c:2747
 msgid "Radar showing revealed terrain"
 msgstr "Radar mostrando terreno"
 
-#: src/keybind.c:2766
+#: src/keybind.c:2750
 msgid "Radar showing height"
 msgstr "Radar mostrando alturas"
 
@@ -14041,10 +13844,6 @@ msgstr "Seleccionar siguiente Generador de Energía"
 msgid "Select next Cyborg Factory"
 msgstr "Seleccionar Siguiente Fábrica de Cyborgs"
 
-#: src/keymap.c:434
-msgid "Toggle reopening the build menu"
-msgstr "Alternar Reabrir el menú de construción"
-
 #: src/loop.c:564
 #: src/loop.c:580
 msgid "Could not save game!"
@@ -14084,8 +13883,8 @@ msgstr "Continuar Partida"
 msgid "GAME SAVED :"
 msgstr "¡PARTIDA GUARDADA!"
 
-#: src/move.c:2491
-#: src/move.c:2507
+#: src/move.c:2490
+#: src/move.c:2506
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr "Encontraste %u energía en un barril de petróleo"
@@ -14401,32 +14200,32 @@ msgstr "Mapa: %d%% descargado"
 msgid "HOST"
 msgstr "ANFITRIÓN"
 
-#: src/multijoin.c:98
-#: src/multijoin.c:99
+#: src/multijoin.c:100
+#: src/multijoin.c:101
 msgid "Players Still Joining"
 msgstr "Todavia hay jugadores uniéndose"
 
-#: src/multijoin.c:214
+#: src/multijoin.c:216
 #, c-format
 msgid "%s has Left the Game"
 msgstr "%s abandonó la partida"
 
-#: src/multijoin.c:228
+#: src/multijoin.c:230
 #, c-format
 msgid "File transfer has been aborted for %d."
 msgstr "La transferencia de archivos ha sido abortada por %d"
 
-#: src/multijoin.c:350
+#: src/multijoin.c:352
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr "%s (%u) tiene un mod incompatible, y ha sido expulsado"
 
-#: src/multijoin.c:389
+#: src/multijoin.c:391
 #, c-format
 msgid "%s is Joining the Game"
 msgstr "%s se está uniendo a la partida"
 
-#: src/multijoin.c:399
+#: src/multijoin.c:401
 msgid "System message:"
 msgstr "Mensaje del sistema:"
 
@@ -14825,6 +14624,150 @@ msgstr " - Construido %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Versión: %s%s%s%s"
+
+#~ msgid "Fire Cannon"
+#~ msgstr "Cañón de Fuego"
+
+#~ msgid "Cobra Hover Heavy-Repair"
+#~ msgstr "Cobra Deslizador Reparador Pesado"
+
+#~ msgid "Viper HMG Wheels"
+#~ msgstr "Víbora Ametralladora Pesada Ruedas"
+
+#~ msgid "TK Mantis Hover"
+#~ msgstr "Mata Tanques Mantis Deslizador"
+
+#~ msgid "Cobra HMG Tracks"
+#~ msgstr "Cobra Ametralladora Pesada Oruga"
+
+#~ msgid "Cobra Hover HC"
+#~ msgstr "Cobra Deslizador Cañón Pesado"
+
+#~ msgid "Scorpion Lancer Tracks"
+#~ msgstr "Escorpión Lanzadera Oruga"
+
+#~ msgid "Scorpion Heavy Cannon Tracks"
+#~ msgstr "Escorpión Cañón Pesado Oruga"
+
+#~ msgid "Scorpion Lancer VTOL"
+#~ msgstr "Escorpión Lanzadera ADV"
+
+#~ msgid "Scorpion BB VTOL"
+#~ msgstr "Escorpión Revienta Búnker ADV"
+
+#~ msgid "Viper Command Turret Tracks"
+#~ msgstr "Víbora Torreta de Comandancia Oruga"
+
+#~ msgid "Cobra Command Turret Tracks"
+#~ msgstr "Cobra Torreta de Comandancia Oruga"
+
+#~ msgid "Scorpion Command Turret Tracks"
+#~ msgstr "Escorpión Torreta de Comandancia Oruga"
+
+#~ msgid "mantis Command Turret Tracks"
+#~ msgstr "Mantis Torreta de Comandancia Oruga"
+
+#~ msgid "Cobra Lancer Tracks"
+#~ msgstr "Cobra Lanzadera Oruga"
+
+#~ msgid "Mantis Heavy Cannon Tracks"
+#~ msgstr "Mantis Cañón Pesado Oruga"
+
+#~ msgid "Mantis Tank Killer Tracks"
+#~ msgstr "Mantis Mata Tanque Oruga"
+
+#~ msgid "Mantis Scourge Tracks"
+#~ msgstr "Mantis Azote Oruga"
+
+#~ msgid "Scorpion Heavy Machinegun Tracks"
+#~ msgstr "Escorpión Ametralladora Pesada Oruga"
+
+#~ msgid "Scorpion Repair Tracks"
+#~ msgstr "Escorpión Reparador Oruga"
+
+#~ msgid "Scorpion Heavy Repair Hover"
+#~ msgstr "Escorpión Reparador Pesado Deslizador"
+
+#~ msgid "Cobra Hover Truck"
+#~ msgstr "Cobra Deslizador Camión"
+
+#~ msgid "Scorpion Hover Truck"
+#~ msgstr "Escorpión Deslizador Camión"
+
+#~ msgid "Mantis Hover Truck"
+#~ msgstr "Mantis Deslizador Camión"
+
+#~ msgid "Cobra Bunker Buster Tracks"
+#~ msgstr "Cobra Revienta Búnker Oruga"
+
+#~ msgid "Scorpion Bunker Buster Tracks"
+#~ msgstr "Escorpión Revienta Búnker Oruga"
+
+#~ msgid "Mantis Bunker Buster Tracks"
+#~ msgstr "Mantis Revienta Búnker Oruga"
+
+#~ msgid "Viper Tracks Lancer"
+#~ msgstr "Víbora Oruga Lanzadera"
+
+#~ msgid "Cobra Half-Tracks Mini-Pod"
+#~ msgstr "Cobra Semi-oruga Mini-Pod"
+
+#~ msgid "Cobra Tracks Mini-Pod"
+#~ msgstr "Cobra Oruga Mini-Pod"
+
+#~ msgid "Cobra Tracks Mini-Rocket Artillery"
+#~ msgstr "Cobra Oruga Artillería Mini-Cohete"
+
+#~ msgid "Cobra Inferno Half-track"
+#~ msgstr "Cobra Infiermo Semi-oruga"
+
+#~ msgid "Python HVC Hover"
+#~ msgstr "Pitón Cañón HV Deslizador"
+
+#~ msgid "Python Scourge Tracks"
+#~ msgstr "Pitón Azote Oruga"
+
+#~ msgid "Python Gauss Cannon Tracks"
+#~ msgstr "Pitón Cañón de Gauss Oruga"
+
+#~ msgid "Python Pulse Laser Tracks"
+#~ msgstr "Pitón Láser de Pulsos Oruga"
+
+#~ msgid "Tiger Pulse Laser Tracks"
+#~ msgstr "Tigre Láser de Pulsos Oruga"
+
+#~ msgid "Tiger Heavy Laser Tracks"
+#~ msgstr "Tigre Láser Pesado Oruga"
+
+#~ msgid "Wyvern Gauss Cannon Tracks"
+#~ msgstr "Dragón Heráldico Cañón de Gauss Oruga"
+
+#~ msgid "Wyvern Pulse Laser Tracks"
+#~ msgstr "Dragón Heráldico Láser de Pulsos Oruga"
+
+#~ msgid "Wyvern Heavy Laser Tracks"
+#~ msgstr "Dragón Heráldico Láser Pesado Oruga"
+
+#~ msgid "Viper Machinegun Half-Track"
+#~ msgstr "Víbora Doble Ametralladora Semi-oruga"
+
+#~ msgid "Viper Flamer Half-Track"
+#~ msgstr "Víbora Reparador Semi-oruga"
+
+#~ msgid "Transporter"
+#~ msgstr "Transporte"
+
+#~ msgid "Unable to locate any resource extractors!"
+#~ msgstr "¡Incapaz de encontrar ningún extractor de recursos!"
+
+#~ msgid "Build menu will reopen"
+#~ msgstr "Menú de construcción se reabrirá"
+
+#~ msgid "Build menu will not reopen"
+#~ msgstr "Menú de construcción no se reabrirá"
+
+#~ msgid "Toggle reopening the build menu"
+#~ msgstr "Alternar Reabrir el menú de construción"
 
 #~ msgid "Player %u is cheating him/herself a new droid army of %s(s)."
 #~ msgstr "El jugador %u está haciendo trampas con una nueva armada de droides de: %s(s)."

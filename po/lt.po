@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-08-15 12:57+0200\n"
+"POT-Creation-Date: 2010-08-23 01:39+0200\n"
 "PO-Revision-Date: 2008-05-09 16:42+0000\n"
 "Last-Translator: Roman <rms200x@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -5665,84 +5665,67 @@ msgid "Incoming intelligence report... Team Gamma"
 msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:4
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:4
 msgid "Briefing Commences:"
 msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:7
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:7
 msgid "Scavenger Outpost"
 msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:8
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:8
 msgid "Power Resource"
 msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:9
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:9
 msgid "Unknown Artifact"
 msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:10
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:10
 msgid "Source of Power Surge"
 msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:13
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:13
 msgid "Landing Zone"
 msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:14
 #: data/base/messages/strings/genstrings.txt:24
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:14
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:24
 msgid "Mission Target"
 msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:15
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:15
 msgid "Pre-Collapse Research Center"
 msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:17
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:17
 msgid "En-route To Mission Site"
 msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:18
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:18
 msgid "Mission Failed"
 msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:19
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:19
 msgid "Mission Successful"
 msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:22
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:22
 msgid "Enemy Landing Zone"
 msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:23
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:23
 msgid "Enemy Base"
 msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:27
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:27
 msgid "Incoming transmission"
 msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:30
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:30
 msgid "Incoming intelligence report."
 msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:33
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:33
 msgid "Nuclear Reactor"
 msgstr ""
 
@@ -5752,6 +5735,7 @@ msgid "New Design"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:15
+#: src/design.c:1345
 msgid "Transport"
 msgstr ""
 
@@ -5923,7 +5907,6 @@ msgid "Light Cannon Python Tracks"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:194
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1357
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1923
 #: data/mp/messages/strings/names.txt:197
 #: data/mp/messages/strings/names.txt:1926
@@ -5988,7 +5971,7 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:207
 #: data/mp/messages/strings/names.txt:210
-msgid "Fire Cannon"
+msgid "Cannon Fire Truck"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:208
@@ -9118,7 +9101,6 @@ msgid "Downed Transport"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:1458
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1356
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1922
 #: data/mp/messages/strings/names.txt:1477
 #: data/mp/messages/strings/names.txt:1925
@@ -10278,180 +10260,6 @@ msgstr ""
 msgid "Slowly, out of the ashes we will rise again..."
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1313
-msgid "Cobra Hover Heavy-Repair"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1314
-msgid "Viper HMG Wheels"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1315
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1824
-#: data/mp/messages/strings/names.txt:1827
-msgid "Scourge Mantis Hover"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1316
-msgid "TK Mantis Hover"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1317
-msgid "Cobra HMG Tracks"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1318
-msgid "Cobra Hover HC"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1319
-msgid "Scorpion Lancer Tracks"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1320
-msgid "Scorpion Heavy Cannon Tracks"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1321
-msgid "Scorpion Lancer VTOL"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1322
-msgid "Scorpion BB VTOL"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1323
-msgid "Viper Command Turret Tracks"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1324
-msgid "Cobra Command Turret Tracks"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1325
-msgid "Scorpion Command Turret Tracks"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1326
-msgid "mantis Command Turret Tracks"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1327
-msgid "Cobra Lancer Tracks"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1328
-msgid "Mantis Heavy Cannon Tracks"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1329
-msgid "Mantis Tank Killer Tracks"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1330
-msgid "Mantis Scourge Tracks"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1331
-msgid "Scorpion Heavy Machinegun Tracks"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1332
-msgid "Scorpion Repair Tracks"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1333
-msgid "Scorpion Heavy Repair Hover"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1334
-msgid "Cobra Hover Truck"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1335
-msgid "Scorpion Hover Truck"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1336
-msgid "Mantis Hover Truck"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1337
-msgid "Cobra Bunker Buster Tracks"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1338
-msgid "Scorpion Bunker Buster Tracks"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1339
-msgid "Mantis Bunker Buster Tracks"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1340
-msgid "Viper Tracks Lancer"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1341
-msgid "Cobra Half-Tracks Mini-Pod"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1342
-msgid "Cobra Tracks Mini-Pod"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1343
-msgid "Cobra Tracks Mini-Rocket Artillery"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1344
-msgid "Cobra Inferno Half-track"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1345
-msgid "Python HVC Hover"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1346
-msgid "Python Scourge Tracks"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1347
-msgid "Python Gauss Cannon Tracks"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1348
-msgid "Python Pulse Laser Tracks"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1349
-msgid "Tiger Pulse Laser Tracks"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1350
-msgid "Tiger Heavy Laser Tracks"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1351
-msgid "Wyvern Gauss Cannon Tracks"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1352
-msgid "Wyvern Pulse Laser Tracks"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1353
-msgid "Wyvern Heavy Laser Tracks"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1354
-msgid "Viper Machinegun Half-Track"
-msgstr ""
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1355
-msgid "Viper Flamer Half-Track"
-msgstr ""
-
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1822
 #: data/mp/messages/strings/names.txt:1825
 msgid "Heavy Repair Turret Cobra Hover"
@@ -10462,6 +10270,11 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:1826
 #: data/mp/messages/strings/names.txt:1837
 msgid "Heavy Machinegun Viper Wheels"
+msgstr ""
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1824
+#: data/mp/messages/strings/names.txt:1827
+msgid "Scourge Mantis Hover"
 msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1825
@@ -12237,11 +12050,11 @@ msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing
 msgstr ""
 
 #: src/challenge.c:188
-#: src/hci.c:1015
-#: src/hci.c:3796
-#: src/hci.c:3945
-#: src/hci.c:4463
-#: src/hci.c:5645
+#: src/hci.c:1005
+#: src/hci.c:3786
+#: src/hci.c:3935
+#: src/hci.c:4453
+#: src/hci.c:5635
 #: src/intelmap.c:544
 #: src/intorder.c:782
 #: src/loadsave.c:256
@@ -12391,8 +12204,8 @@ msgstr ""
 msgid "go directly to host screen"
 msgstr ""
 
-#: src/configuration.c:442
-#: src/configuration.c:443
+#: src/configuration.c:431
+#: src/configuration.c:432
 #: src/multistat.c:130
 msgid "Player"
 msgstr "Žaidėjas"
@@ -12466,10 +12279,6 @@ msgstr ""
 #: src/design.c:1059
 #: src/design.c:1091
 msgid "Power Usage"
-msgstr ""
-
-#: src/design.c:1345
-msgid "Transporter"
 msgstr ""
 
 #: src/design.c:1367
@@ -13026,142 +12835,142 @@ msgstr ""
 msgid "Mod: "
 msgstr ""
 
-#: src/hci.c:1360
+#: src/hci.c:1350
 #, fuzzy
 msgid "MAP SAVED!"
 msgstr "Žaidimas išsaugotas"
 
-#: src/hci.c:1744
+#: src/hci.c:1734
 #: src/loop.c:557
 #: src/loop.c:573
 #, fuzzy
 msgid "GAME SAVED: "
 msgstr "Žaidimas išsaugotas"
 
-#: src/hci.c:2137
+#: src/hci.c:2127
 msgid "Failed to create building"
 msgstr ""
 
-#: src/hci.c:2160
+#: src/hci.c:2150
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr "Žaidėjas %u sukčiauja (debug meniu) jam/jai naujas pastatas: %s."
 
-#: src/hci.c:2175
+#: src/hci.c:2165
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr "Žaidėjas %u sukčiauja (debug meniu) jam/jai naujos galimybės: %s."
 
-#: src/hci.c:2196
+#: src/hci.c:2186
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "Žaidėjas %u sukčiauja (debug meniu) jam/jai naujas droidas: %s."
 
-#: src/hci.c:2207
+#: src/hci.c:2197
 #, fuzzy, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "Žaidėjas %u sukčiauja (debug meniu) jam/jai naujas droidas: %s."
 
-#: src/hci.c:3698
+#: src/hci.c:3688
 msgid "Commanders (F6)"
 msgstr "Kapitonas (F6)"
 
-#: src/hci.c:3714
+#: src/hci.c:3704
 msgid "Intelligence Display (F5)"
 msgstr "Valdymo skydas (F5)"
 
-#: src/hci.c:3730
+#: src/hci.c:3720
 msgid "Manufacture (F1)"
 msgstr "Pastatai (F1)"
 
-#: src/hci.c:3746
+#: src/hci.c:3736
 msgid "Design (F4)"
 msgstr "Kūrimas (F4)"
 
-#: src/hci.c:3762
+#: src/hci.c:3752
 msgid "Research (F2)"
 msgstr "Išradimas (F2)"
 
-#: src/hci.c:3778
+#: src/hci.c:3768
 msgid "Build (F3)"
 msgstr "Pastatyti (F3)"
 
-#: src/hci.c:3856
+#: src/hci.c:3846
 #: src/multiint.c:1232
 #: src/multimenu.c:763
 msgid "Power"
 msgstr "Energija"
 
-#: src/hci.c:4040
+#: src/hci.c:4030
 msgid "Tile"
 msgstr ""
 
-#: src/hci.c:4041
+#: src/hci.c:4031
 msgid "Place tiles on map"
 msgstr ""
 
-#: src/hci.c:4050
+#: src/hci.c:4040
 msgid "Unit"
 msgstr "Karinis vienetas"
 
-#: src/hci.c:4051
+#: src/hci.c:4041
 msgid "Place Unit on map"
 msgstr ""
 
-#: src/hci.c:4059
+#: src/hci.c:4049
 msgid "Struct"
 msgstr "Statyti"
 
-#: src/hci.c:4060
+#: src/hci.c:4050
 msgid "Place Structures on map"
 msgstr ""
 
-#: src/hci.c:4068
+#: src/hci.c:4058
 msgid "Feat"
 msgstr "Naujovė"
 
-#: src/hci.c:4069
+#: src/hci.c:4059
 msgid "Place Features on map"
 msgstr ""
 
-#: src/hci.c:4080
+#: src/hci.c:4070
 #, fuzzy
 msgid "Pause or unpause the game"
 msgstr "Hostas paliko žaidimą"
 
-#: src/hci.c:4094
+#: src/hci.c:4084
 msgid "Align height of all map objects"
 msgstr ""
 
-#: src/hci.c:4119
+#: src/hci.c:4109
 #: src/ingameop.c:119
 #: src/ingameop.c:276
 #: src/ingameop.c:281
 msgid "Quit"
 msgstr "Išeiti"
 
-#: src/hci.c:4120
+#: src/hci.c:4110
 msgid "Exit Game"
 msgstr "Išeiti iš žaidimo"
 
-#: src/hci.c:4544
+#: src/hci.c:4534
 #: src/intdisplay.c:275
 msgid "Progress Bar"
 msgstr "Eigos juosta"
 
-#: src/hci.c:5564
+#: src/hci.c:5554
 msgid "Factory Delivery Point"
 msgstr "Gamyklinis išeities taškas"
 
-#: src/hci.c:5583
+#: src/hci.c:5573
 msgid "Loop Production"
 msgstr "Nesibaigianti gamyba"
 
-#: src/hci.c:5670
+#: src/hci.c:5660
 msgid "Tab Scroll left"
 msgstr "Pasukti į kairę"
 
-#: src/hci.c:5687
+#: src/hci.c:5677
 msgid "Tab Scroll right"
 msgstr "Pasukti į dešinę"
 
@@ -13522,7 +13331,7 @@ msgid "Debug menu is Open"
 msgstr ""
 
 #: src/keybind.c:1600
-msgid "Unable to locate any resource extractors!"
+msgid "Unable to locate any oil derricks!"
 msgstr ""
 
 #: src/keybind.c:1821
@@ -13599,38 +13408,30 @@ msgid "Game Speed Reduced to %3.1f"
 msgstr ""
 
 #: src/keybind.c:2713
-msgid "Build menu will reopen"
-msgstr ""
-
-#: src/keybind.c:2717
-msgid "Build menu will not reopen"
-msgstr ""
-
-#: src/keybind.c:2729
 msgid "Radar showing friend-foe colors"
 msgstr ""
 
-#: src/keybind.c:2733
+#: src/keybind.c:2717
 msgid "Radar showing player colors"
 msgstr ""
 
-#: src/keybind.c:2754
+#: src/keybind.c:2738
 msgid "Radar showing only objects"
 msgstr ""
 
-#: src/keybind.c:2757
+#: src/keybind.c:2741
 msgid "Radar blending terrain and height"
 msgstr ""
 
-#: src/keybind.c:2760
+#: src/keybind.c:2744
 msgid "Radar showing terrain"
 msgstr ""
 
-#: src/keybind.c:2763
+#: src/keybind.c:2747
 msgid "Radar showing revealed terrain"
 msgstr ""
 
-#: src/keybind.c:2766
+#: src/keybind.c:2750
 msgid "Radar showing height"
 msgstr ""
 
@@ -14037,10 +13838,6 @@ msgstr ""
 msgid "Select next Cyborg Factory"
 msgstr ""
 
-#: src/keymap.c:434
-msgid "Toggle reopening the build menu"
-msgstr ""
-
 #: src/loop.c:564
 #: src/loop.c:580
 msgid "Could not save game!"
@@ -14083,8 +13880,8 @@ msgstr "Tęsti žaidimą"
 msgid "GAME SAVED :"
 msgstr "Žaidimas išsaugotas"
 
-#: src/move.c:2491
-#: src/move.c:2507
+#: src/move.c:2490
+#: src/move.c:2506
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr ""
@@ -14404,32 +14201,32 @@ msgstr ""
 msgid "HOST"
 msgstr ""
 
-#: src/multijoin.c:98
-#: src/multijoin.c:99
+#: src/multijoin.c:100
+#: src/multijoin.c:101
 msgid "Players Still Joining"
 msgstr ""
 
-#: src/multijoin.c:214
+#: src/multijoin.c:216
 #, c-format
 msgid "%s has Left the Game"
 msgstr ""
 
-#: src/multijoin.c:228
+#: src/multijoin.c:230
 #, c-format
 msgid "File transfer has been aborted for %d."
 msgstr ""
 
-#: src/multijoin.c:350
+#: src/multijoin.c:352
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr ""
 
-#: src/multijoin.c:389
+#: src/multijoin.c:391
 #, c-format
 msgid "%s is Joining the Game"
 msgstr ""
 
-#: src/multijoin.c:399
+#: src/multijoin.c:401
 #, fuzzy
 msgid "System message:"
 msgstr "Vietinė sistema"

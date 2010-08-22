@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100 2.3_branch\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-08-20 18:12+0200\n"
+"POT-Creation-Date: 2010-08-23 01:39+0200\n"
 "PO-Revision-Date: 2010-08-21 00:57+0900\n"
 "Last-Translator: Josh Shin <urgood2@gmail.com>\n"
 "Language-Team: Korean Translation Team <urgood2@gmail.com>\n"
@@ -5685,84 +5685,67 @@ msgid "Incoming intelligence report... Team Gamma"
 msgstr "보도 수신중 ... 감마 팀"
 
 #: data/base/messages/strings/genstrings.txt:4
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:4
 msgid "Briefing Commences:"
 msgstr "브리핑이 시작됩니다:"
 
 #: data/base/messages/strings/genstrings.txt:7
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:7
 msgid "Scavenger Outpost"
 msgstr "스캐빈저 도적들의 전초기지"
 
 #: data/base/messages/strings/genstrings.txt:8
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:8
 msgid "Power Resource"
 msgstr "전력 자원"
 
 #: data/base/messages/strings/genstrings.txt:9
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:9
 msgid "Unknown Artifact"
 msgstr "알 수 없는 유물"
 
 #: data/base/messages/strings/genstrings.txt:10
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:10
 msgid "Source of Power Surge"
 msgstr "전력 급상승의 근원"
 
 #: data/base/messages/strings/genstrings.txt:13
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:13
 msgid "Landing Zone"
 msgstr "착륙 지점"
 
 #: data/base/messages/strings/genstrings.txt:14
 #: data/base/messages/strings/genstrings.txt:24
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:14
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:24
 msgid "Mission Target"
 msgstr "임무 목표"
 
 #: data/base/messages/strings/genstrings.txt:15
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:15
 msgid "Pre-Collapse Research Center"
 msgstr "멸망 전(Pre-Collapse) 시대의 연구 센터"
 
 #: data/base/messages/strings/genstrings.txt:17
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:17
 msgid "En-route To Mission Site"
 msgstr "작전 수행지로 가는 도중"
 
 #: data/base/messages/strings/genstrings.txt:18
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:18
 msgid "Mission Failed"
 msgstr "임무에 실패하였습니다"
 
 #: data/base/messages/strings/genstrings.txt:19
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:19
 msgid "Mission Successful"
 msgstr "임무에 성공하였습니다"
 
 #: data/base/messages/strings/genstrings.txt:22
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:22
 msgid "Enemy Landing Zone"
 msgstr "적군 착륙 지점"
 
 #: data/base/messages/strings/genstrings.txt:23
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:23
 msgid "Enemy Base"
 msgstr "적군 기지"
 
 #: data/base/messages/strings/genstrings.txt:27
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:27
 msgid "Incoming transmission"
 msgstr "전송이 들어오고 있습니다."
 
 #: data/base/messages/strings/genstrings.txt:30
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:30
 msgid "Incoming intelligence report."
 msgstr "보도를 수신 중입니다."
 
 #: data/base/messages/strings/genstrings.txt:33
-#: data/mods/multiplay/ntw/messages/strings/genstrings.txt:33
 msgid "Nuclear Reactor"
 msgstr "원자로"
 
@@ -5772,6 +5755,7 @@ msgid "New Design"
 msgstr "새 디자인"
 
 #: data/base/messages/strings/names.txt:15
+#: src/design.c:1345
 msgid "Transport"
 msgstr "수송선"
 
@@ -5943,7 +5927,6 @@ msgid "Light Cannon Python Tracks"
 msgstr "소형 캐논 파이썬 무한궤도"
 
 #: data/base/messages/strings/names.txt:194
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1357
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1923
 #: data/mp/messages/strings/names.txt:197
 #: data/mp/messages/strings/names.txt:1926
@@ -6006,12 +5989,11 @@ msgstr "소방차"
 msgid "Pick-Up Truck"
 msgstr "소형 오픈 트럭 "
 
-# not sure what this is
 #: data/base/messages/strings/names.txt:207
 #: data/mp/messages/strings/names.txt:210
 #, fuzzy
-msgid "Fire Cannon"
-msgstr "화염 캐논"
+msgid "Cannon Fire Truck"
+msgstr "소방차"
 
 #: data/base/messages/strings/names.txt:208
 #: data/mp/messages/strings/names.txt:211
@@ -9159,7 +9141,6 @@ msgid "Downed Transport"
 msgstr "격추된 수송선"
 
 #: data/base/messages/strings/names.txt:1458
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1356
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1922
 #: data/mp/messages/strings/names.txt:1477
 #: data/mp/messages/strings/names.txt:1925
@@ -10328,196 +10309,6 @@ msgstr ""
 msgid "Slowly, out of the ashes we will rise again..."
 msgstr ""
 
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1313
-msgid "Cobra Hover Heavy-Repair"
-msgstr "코브라 호버 추진 대형 수리 터릿"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1314
-msgid "Viper HMG Wheels"
-msgstr "바이퍼 중기관총 바퀴 추진"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1315
-#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1824
-#: data/mp/messages/strings/names.txt:1827
-msgid "Scourge Mantis Hover"
-msgstr "스커지 맨티스 호버 추진"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1316
-msgid "TK Mantis Hover"
-msgstr "탱크킬러 맨티스 호버 추진"
-
-# HMG = Heavy Machine Gun or 중기관총
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1317
-msgid "Cobra HMG Tracks"
-msgstr "코브라 중기관총 무한궤도"
-
-# LC = Light Cannon
-# MC = Medium Cannon
-# HC = Heavy Cannon
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1318
-msgid "Cobra Hover HC"
-msgstr "코브라 호버 추진 대형 캐논"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1319
-msgid "Scorpion Lancer Tracks"
-msgstr "스코피언 랜서 무한궤도"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1320
-msgid "Scorpion Heavy Cannon Tracks"
-msgstr "스코피언 대형 캐논 무한궤도"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1321
-msgid "Scorpion Lancer VTOL"
-msgstr "스코피언 랜서 VTOL"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1322
-msgid "Scorpion BB VTOL"
-msgstr "스코피언 벙커 버스터 VTOL"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1323
-msgid "Viper Command Turret Tracks"
-msgstr "바이퍼 사령관 터릿 무한궤도"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1324
-msgid "Cobra Command Turret Tracks"
-msgstr "코브라 사령관 터릿 무한궤도"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1325
-msgid "Scorpion Command Turret Tracks"
-msgstr "스코피언 사령관 터릿 무한궤도"
-
-# English typo
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1326
-#, fuzzy
-msgid "mantis Command Turret Tracks"
-msgstr "맨티스 사령관 터릿 무한궤도"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1327
-msgid "Cobra Lancer Tracks"
-msgstr "코브라 랜서 무한궤도"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1328
-msgid "Mantis Heavy Cannon Tracks"
-msgstr "맨티스 대형 캐논 무한궤도"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1329
-msgid "Mantis Tank Killer Tracks"
-msgstr "맨티스 탱크킬러 무한궤도"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1330
-msgid "Mantis Scourge Tracks"
-msgstr "맨티스 스커지 무한궤도"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1331
-msgid "Scorpion Heavy Machinegun Tracks"
-msgstr "스코피언 중기관총 무한궤도"
-
-# applies to other names as well
-# repair ->
-# just 수리 or 수리 터릿??
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1332
-#, fuzzy
-msgid "Scorpion Repair Tracks"
-msgstr "스코피언 수리 터릿 무한궤도"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1333
-msgid "Scorpion Heavy Repair Hover"
-msgstr "스코피언 대형 수리 터릿 호버 추진"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1334
-msgid "Cobra Hover Truck"
-msgstr "코브라 호버 추진 트럭"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1335
-msgid "Scorpion Hover Truck"
-msgstr "스코피언 호버 추진 트럭"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1336
-msgid "Mantis Hover Truck"
-msgstr "맨티스 호버 추진 트럭"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1337
-msgid "Cobra Bunker Buster Tracks"
-msgstr "코브라 벙커 버스터 무한궤도"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1338
-msgid "Scorpion Bunker Buster Tracks"
-msgstr "스코피언 벙커 버스터 무한궤도"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1339
-msgid "Mantis Bunker Buster Tracks"
-msgstr "맨티스 벙커 버스터 무한궤도"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1340
-msgid "Viper Tracks Lancer"
-msgstr "바이퍼 무한궤도 랜서"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1341
-msgid "Cobra Half-Tracks Mini-Pod"
-msgstr "코브라 반 무한궤도 미니포드"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1342
-msgid "Cobra Tracks Mini-Pod"
-msgstr "코브라 무한궤도 미니포드"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1343
-msgid "Cobra Tracks Mini-Rocket Artillery"
-msgstr "코브라 무한궤도 미니로케트 화포"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1344
-msgid "Cobra Inferno Half-track"
-msgstr "코브라 인퍼노 반 무한궤도"
-
-# Dear Translator:
-# In the names of vehicles inside the game, the following parts follow specific rules:
-# Wheels -> 바퀴 추진
-# Hover   -> 호버 추진
-# But only these two. Tracks, for example, is left simply as 무한궤도 without adding 추진.
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1345
-msgid "Python HVC Hover"
-msgstr "파이썬 초고속도 캐논 호버 추진"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1346
-msgid "Python Scourge Tracks"
-msgstr "파이썬 시커지 무한궤도"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1347
-msgid "Python Gauss Cannon Tracks"
-msgstr "파이썬 가우스 캐논 무한궤도"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1348
-msgid "Python Pulse Laser Tracks"
-msgstr "파이썬 펄스 레이저 무한궤도"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1349
-msgid "Tiger Pulse Laser Tracks"
-msgstr "타이거 펄스 레이저 무한궤도"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1350
-msgid "Tiger Heavy Laser Tracks"
-msgstr "타이거 대형 레이저 무한궤도"
-
-# wyvern = 와이번 and means 비룡
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1351
-msgid "Wyvern Gauss Cannon Tracks"
-msgstr "와이번 가우스 캐논 무한궤도"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1352
-msgid "Wyvern Pulse Laser Tracks"
-msgstr "와이번 펄스 레이저 무한궤도"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1353
-msgid "Wyvern Heavy Laser Tracks"
-msgstr "와이번 대형 레이저 무한궤도"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1354
-msgid "Viper Machinegun Half-Track"
-msgstr "바이퍼 기관총 반 무한궤도"
-
-#: data/mods/multiplay/ntw/messages/strings/names.txt:1355
-msgid "Viper Flamer Half-Track"
-msgstr "바이퍼 화염방사기 반 무한궤도"
-
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1822
 #: data/mp/messages/strings/names.txt:1825
 msgid "Heavy Repair Turret Cobra Hover"
@@ -10529,6 +10320,11 @@ msgstr "대형 수리 터릿 코브라 호버 추진"
 #: data/mp/messages/strings/names.txt:1837
 msgid "Heavy Machinegun Viper Wheels"
 msgstr "중기관총 바이퍼 바퀴 추진"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1824
+#: data/mp/messages/strings/names.txt:1827
+msgid "Scourge Mantis Hover"
+msgstr "스커지 맨티스 호버 추진"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1825
 #: data/mp/messages/strings/names.txt:1828
@@ -12304,11 +12100,11 @@ msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing
 msgstr "로비 서버와 통신할 수 없습니다! TCP 포트 %u 가 보내는 트래픽에 대해 열려 있습니까?"
 
 #: src/challenge.c:188
-#: src/hci.c:1015
-#: src/hci.c:3796
-#: src/hci.c:3945
-#: src/hci.c:4463
-#: src/hci.c:5645
+#: src/hci.c:1005
+#: src/hci.c:3786
+#: src/hci.c:3935
+#: src/hci.c:4453
+#: src/hci.c:5635
 #: src/intelmap.c:544
 #: src/intorder.c:782
 #: src/loadsave.c:256
@@ -12458,8 +12254,8 @@ msgstr "호스트"
 msgid "go directly to host screen"
 msgstr "호스트 화면으로 바로 가기"
 
-#: src/configuration.c:442
-#: src/configuration.c:443
+#: src/configuration.c:431
+#: src/configuration.c:432
 #: src/multistat.c:130
 msgid "Player"
 msgstr "플레이어"
@@ -12534,13 +12330,6 @@ msgstr "총 보디포인트"
 #: src/design.c:1091
 msgid "Power Usage"
 msgstr "전력 소비"
-
-# Transporter
-# That word is an internal name and should never be translated; file a bug report.
-#: src/design.c:1345
-#, fuzzy
-msgid "Transporter"
-msgstr "트랜스포터(Transporter)"
 
 #: src/design.c:1367
 msgid "Hydra "
@@ -13098,140 +12887,140 @@ msgstr "게임 옵션"
 msgid "Mod: "
 msgstr "Mod (Modification):"
 
-#: src/hci.c:1360
+#: src/hci.c:1350
 msgid "MAP SAVED!"
 msgstr "지도가 저장되었습니다!"
 
-#: src/hci.c:1744
+#: src/hci.c:1734
 #: src/loop.c:557
 #: src/loop.c:573
 #, fuzzy
 msgid "GAME SAVED: "
 msgstr "게임이 저장되었습니다 :"
 
-#: src/hci.c:2137
+#: src/hci.c:2127
 msgid "Failed to create building"
 msgstr "건물을 만들지 못했습니다"
 
-#: src/hci.c:2160
+#: src/hci.c:2150
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr "플레이어 %u 가 치트(디버그 메뉴)를 사용해 새로운 구조물을 지었습니다: %s."
 
-#: src/hci.c:2175
+#: src/hci.c:2165
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr "플레이어 %u 가 치트(디버그 메뉴)를 사용해 새로운 피쳐를 배치하였습니다: %s."
 
-#: src/hci.c:2196
+#: src/hci.c:2186
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "플레이어 %u 가 치트(디버그 메뉴)를 사용해 새로운 병사를 만들었습니다: %s."
 
-#: src/hci.c:2207
+#: src/hci.c:2197
 #, fuzzy, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "플레이어 %u 가 치트(디버그 메뉴)를 사용해 새로운 병사를 만들었습니다: %s."
 
-#: src/hci.c:3698
+#: src/hci.c:3688
 msgid "Commanders (F6)"
 msgstr "사령관 (F6)"
 
-#: src/hci.c:3714
+#: src/hci.c:3704
 msgid "Intelligence Display (F5)"
 msgstr "보도 디스플레이 (F5)"
 
-#: src/hci.c:3730
+#: src/hci.c:3720
 msgid "Manufacture (F1)"
 msgstr "생산 (F1)"
 
-#: src/hci.c:3746
+#: src/hci.c:3736
 msgid "Design (F4)"
 msgstr "디자인 (F4)"
 
-#: src/hci.c:3762
+#: src/hci.c:3752
 msgid "Research (F2)"
 msgstr "연구 (F2)"
 
-#: src/hci.c:3778
+#: src/hci.c:3768
 msgid "Build (F3)"
 msgstr "건축 (F3)"
 
-#: src/hci.c:3856
+#: src/hci.c:3846
 #: src/multiint.c:1232
 #: src/multimenu.c:763
 msgid "Power"
 msgstr "전력"
 
-#: src/hci.c:4040
+#: src/hci.c:4030
 msgid "Tile"
 msgstr "타일"
 
-#: src/hci.c:4041
+#: src/hci.c:4031
 msgid "Place tiles on map"
 msgstr "게임 지도에서 타일을 놓기"
 
-#: src/hci.c:4050
+#: src/hci.c:4040
 msgid "Unit"
 msgstr "유니트"
 
-#: src/hci.c:4051
+#: src/hci.c:4041
 msgid "Place Unit on map"
 msgstr "게임 지도 안에 유니트 배치하기"
 
-#: src/hci.c:4059
+#: src/hci.c:4049
 msgid "Struct"
 msgstr "구조물"
 
-#: src/hci.c:4060
+#: src/hci.c:4050
 msgid "Place Structures on map"
 msgstr "게임 지도에서 구조물을 놓기"
 
-#: src/hci.c:4068
+#: src/hci.c:4058
 msgid "Feat"
 msgstr "물체"
 
-#: src/hci.c:4069
+#: src/hci.c:4059
 msgid "Place Features on map"
 msgstr "피처(Feature)를 지도 위에 배치하기"
 
-#: src/hci.c:4080
+#: src/hci.c:4070
 msgid "Pause or unpause the game"
 msgstr "게임을 일시 중지하거나 일시중지를 해제합니다"
 
-#: src/hci.c:4094
+#: src/hci.c:4084
 msgid "Align height of all map objects"
 msgstr "모든 지도 개체의 높이를 정렬하기 "
 
-#: src/hci.c:4119
+#: src/hci.c:4109
 #: src/ingameop.c:119
 #: src/ingameop.c:276
 #: src/ingameop.c:281
 msgid "Quit"
 msgstr "종료"
 
-#: src/hci.c:4120
+#: src/hci.c:4110
 msgid "Exit Game"
 msgstr "게임 종료"
 
-#: src/hci.c:4544
+#: src/hci.c:4534
 #: src/intdisplay.c:275
 msgid "Progress Bar"
 msgstr "진행률 표시줄"
 
-#: src/hci.c:5564
+#: src/hci.c:5554
 msgid "Factory Delivery Point"
 msgstr "공장 배달 지점"
 
-#: src/hci.c:5583
+#: src/hci.c:5573
 msgid "Loop Production"
 msgstr "반복 생산"
 
-#: src/hci.c:5670
+#: src/hci.c:5660
 msgid "Tab Scroll left"
 msgstr "왼쪽으로 탭 스크롤"
 
-#: src/hci.c:5687
+#: src/hci.c:5677
 msgid "Tab Scroll right"
 msgstr "오른쪽으로 탭 스크롤"
 
@@ -13602,7 +13391,7 @@ msgstr "디버그 메뉴가 열였습니다"
 # report bug
 #: src/keybind.c:1600
 #, fuzzy
-msgid "Unable to locate any resource extractors!"
+msgid "Unable to locate any oil derricks!"
 msgstr "유정 탑을 하나도 찾지 못했습니다!"
 
 #: src/keybind.c:1821
@@ -13679,38 +13468,30 @@ msgid "Game Speed Reduced to %3.1f"
 msgstr "%3.1f 로 게임 속도가 감소되었습니다"
 
 #: src/keybind.c:2713
-msgid "Build menu will reopen"
-msgstr "건축 메뉴가 다시 열립니다"
-
-#: src/keybind.c:2717
-msgid "Build menu will not reopen"
-msgstr "건축 메뉴가 다시 열리지 않습니다"
-
-#: src/keybind.c:2729
 msgid "Radar showing friend-foe colors"
 msgstr ""
 
-#: src/keybind.c:2733
+#: src/keybind.c:2717
 msgid "Radar showing player colors"
 msgstr "레이더에 플레이어의 색깔이 보입니다"
 
-#: src/keybind.c:2754
+#: src/keybind.c:2738
 msgid "Radar showing only objects"
 msgstr "레이더에 물체만 보입니다"
 
-#: src/keybind.c:2757
+#: src/keybind.c:2741
 msgid "Radar blending terrain and height"
 msgstr ""
 
-#: src/keybind.c:2760
+#: src/keybind.c:2744
 msgid "Radar showing terrain"
 msgstr ""
 
-#: src/keybind.c:2763
+#: src/keybind.c:2747
 msgid "Radar showing revealed terrain"
 msgstr ""
 
-#: src/keybind.c:2766
+#: src/keybind.c:2750
 msgid "Radar showing height"
 msgstr ""
 
@@ -14123,10 +13904,6 @@ msgstr "다음 전력 발전기를 선택하기"
 #: src/keymap.c:433
 msgid "Select next Cyborg Factory"
 msgstr "다음 사이보그 공장을 선택하기"
-
-#: src/keymap.c:434
-msgid "Toggle reopening the build menu"
-msgstr ""
 
 #: src/loop.c:564
 #: src/loop.c:580
@@ -14907,6 +14684,165 @@ msgstr ""
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr ""
+
+# not sure what this is
+#, fuzzy
+#~ msgid "Fire Cannon"
+#~ msgstr "화염 캐논"
+
+#~ msgid "Cobra Hover Heavy-Repair"
+#~ msgstr "코브라 호버 추진 대형 수리 터릿"
+
+#~ msgid "Viper HMG Wheels"
+#~ msgstr "바이퍼 중기관총 바퀴 추진"
+
+#~ msgid "TK Mantis Hover"
+#~ msgstr "탱크킬러 맨티스 호버 추진"
+
+# HMG = Heavy Machine Gun or 중기관총
+#~ msgid "Cobra HMG Tracks"
+#~ msgstr "코브라 중기관총 무한궤도"
+
+# LC = Light Cannon
+# MC = Medium Cannon
+# HC = Heavy Cannon
+#~ msgid "Cobra Hover HC"
+#~ msgstr "코브라 호버 추진 대형 캐논"
+
+#~ msgid "Scorpion Lancer Tracks"
+#~ msgstr "스코피언 랜서 무한궤도"
+
+#~ msgid "Scorpion Heavy Cannon Tracks"
+#~ msgstr "스코피언 대형 캐논 무한궤도"
+
+#~ msgid "Scorpion Lancer VTOL"
+#~ msgstr "스코피언 랜서 VTOL"
+
+#~ msgid "Scorpion BB VTOL"
+#~ msgstr "스코피언 벙커 버스터 VTOL"
+
+#~ msgid "Viper Command Turret Tracks"
+#~ msgstr "바이퍼 사령관 터릿 무한궤도"
+
+#~ msgid "Cobra Command Turret Tracks"
+#~ msgstr "코브라 사령관 터릿 무한궤도"
+
+#~ msgid "Scorpion Command Turret Tracks"
+#~ msgstr "스코피언 사령관 터릿 무한궤도"
+
+# English typo
+#, fuzzy
+#~ msgid "mantis Command Turret Tracks"
+#~ msgstr "맨티스 사령관 터릿 무한궤도"
+
+#~ msgid "Cobra Lancer Tracks"
+#~ msgstr "코브라 랜서 무한궤도"
+
+#~ msgid "Mantis Heavy Cannon Tracks"
+#~ msgstr "맨티스 대형 캐논 무한궤도"
+
+#~ msgid "Mantis Tank Killer Tracks"
+#~ msgstr "맨티스 탱크킬러 무한궤도"
+
+#~ msgid "Mantis Scourge Tracks"
+#~ msgstr "맨티스 스커지 무한궤도"
+
+#~ msgid "Scorpion Heavy Machinegun Tracks"
+#~ msgstr "스코피언 중기관총 무한궤도"
+
+# applies to other names as well
+# repair ->
+# just 수리 or 수리 터릿??
+#, fuzzy
+#~ msgid "Scorpion Repair Tracks"
+#~ msgstr "스코피언 수리 터릿 무한궤도"
+
+#~ msgid "Scorpion Heavy Repair Hover"
+#~ msgstr "스코피언 대형 수리 터릿 호버 추진"
+
+#~ msgid "Cobra Hover Truck"
+#~ msgstr "코브라 호버 추진 트럭"
+
+#~ msgid "Scorpion Hover Truck"
+#~ msgstr "스코피언 호버 추진 트럭"
+
+#~ msgid "Mantis Hover Truck"
+#~ msgstr "맨티스 호버 추진 트럭"
+
+#~ msgid "Cobra Bunker Buster Tracks"
+#~ msgstr "코브라 벙커 버스터 무한궤도"
+
+#~ msgid "Scorpion Bunker Buster Tracks"
+#~ msgstr "스코피언 벙커 버스터 무한궤도"
+
+#~ msgid "Mantis Bunker Buster Tracks"
+#~ msgstr "맨티스 벙커 버스터 무한궤도"
+
+#~ msgid "Viper Tracks Lancer"
+#~ msgstr "바이퍼 무한궤도 랜서"
+
+#~ msgid "Cobra Half-Tracks Mini-Pod"
+#~ msgstr "코브라 반 무한궤도 미니포드"
+
+#~ msgid "Cobra Tracks Mini-Pod"
+#~ msgstr "코브라 무한궤도 미니포드"
+
+#~ msgid "Cobra Tracks Mini-Rocket Artillery"
+#~ msgstr "코브라 무한궤도 미니로케트 화포"
+
+#~ msgid "Cobra Inferno Half-track"
+#~ msgstr "코브라 인퍼노 반 무한궤도"
+
+# Dear Translator:
+# In the names of vehicles inside the game, the following parts follow specific rules:
+# Wheels -> 바퀴 추진
+# Hover   -> 호버 추진
+# But only these two. Tracks, for example, is left simply as 무한궤도 without adding 추진.
+#~ msgid "Python HVC Hover"
+#~ msgstr "파이썬 초고속도 캐논 호버 추진"
+
+#~ msgid "Python Scourge Tracks"
+#~ msgstr "파이썬 시커지 무한궤도"
+
+#~ msgid "Python Gauss Cannon Tracks"
+#~ msgstr "파이썬 가우스 캐논 무한궤도"
+
+#~ msgid "Python Pulse Laser Tracks"
+#~ msgstr "파이썬 펄스 레이저 무한궤도"
+
+#~ msgid "Tiger Pulse Laser Tracks"
+#~ msgstr "타이거 펄스 레이저 무한궤도"
+
+#~ msgid "Tiger Heavy Laser Tracks"
+#~ msgstr "타이거 대형 레이저 무한궤도"
+
+# wyvern = 와이번 and means 비룡
+#~ msgid "Wyvern Gauss Cannon Tracks"
+#~ msgstr "와이번 가우스 캐논 무한궤도"
+
+#~ msgid "Wyvern Pulse Laser Tracks"
+#~ msgstr "와이번 펄스 레이저 무한궤도"
+
+#~ msgid "Wyvern Heavy Laser Tracks"
+#~ msgstr "와이번 대형 레이저 무한궤도"
+
+#~ msgid "Viper Machinegun Half-Track"
+#~ msgstr "바이퍼 기관총 반 무한궤도"
+
+#~ msgid "Viper Flamer Half-Track"
+#~ msgstr "바이퍼 화염방사기 반 무한궤도"
+
+# Transporter
+# That word is an internal name and should never be translated; file a bug report.
+#, fuzzy
+#~ msgid "Transporter"
+#~ msgstr "트랜스포터(Transporter)"
+
+#~ msgid "Build menu will reopen"
+#~ msgstr "건축 메뉴가 다시 열립니다"
+
+#~ msgid "Build menu will not reopen"
+#~ msgstr "건축 메뉴가 다시 열리지 않습니다"
 
 #~ msgid "Z NULL BRAIN"
 #~ msgstr "Z NULL BRAIN"
