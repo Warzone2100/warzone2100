@@ -207,7 +207,7 @@ BarbarianRKBuggy			_("Rocket Buggy")
 BabaRKJeep				_("Rocket Jeep")
 BabaFireTruck				_("Fire Truck")
 BabaPickUp				_("Pick-Up Truck")
-BabaFireCan				_("Fire Cannon")
+BabaFireCan				_("Cannon Fire Truck")
 BabaBusCan				_("School Bus")
 BaBaCivilian				_("Civilian")
 
