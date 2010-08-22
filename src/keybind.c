@@ -416,14 +416,10 @@ void	kf_DebugTemplates(void)
 		debug(LOG_POPUP, "Could not close templateAI file: %s", PHYSFS_getLastError());
 		return;
 	}
-	{
-		char *cmsg;
-		sasprintf((char**)&cmsg, _("(Player %u) has detected the borg 'legs' bug! Please enter legs in your console and upload the files to us!"), selectedPlayer);
-		sendTextMessage(cmsg, true);
-		sprintf(outbuf, "The logs are located here: %s", filename);
-		addConsoleMessage(outbuf, LEFT_JUSTIFY, NOTIFY_MESSAGE);
-	}
+	sprintf(outbuf, "Saved template list to %s", filename);
+	addConsoleMessage(outbuf, LEFT_JUSTIFY, NOTIFY_MESSAGE);
 }
+
 /* Writes out debug info about all the selected droids */
 void	kf_DebugDroidInfo( void )
 {
