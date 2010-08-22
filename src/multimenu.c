@@ -904,7 +904,7 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 				//c11:ping
 				if (player != selectedPlayer)
 				{
-					if (ingame.PingTimes[player] >= 2000)
+					if (ingame.PingTimes[player] >= 1000)
 					{
 						sprintf(str,"???");
 					}
@@ -1110,7 +1110,7 @@ static void addMultiPlayer(UDWORD player,UDWORD pos)
 	//ALL DONE IN THE DISPLAY FUNC.
 
 	// add channel opener.
-	if(player != selectedPlayer)
+	if (player != selectedPlayer && (NetPlay.players[player].allocated || (apsDroidLists[player] && apsStructLists[player])))
 	{
 		memset(&sButInit, 0, sizeof(W_BUTINIT));
 		sButInit.formID = id;
@@ -1127,7 +1127,7 @@ static void addMultiPlayer(UDWORD player,UDWORD pos)
 		widgAddButton(psWScreen, &sButInit);
 	}
 
-	if(game.alliance!=NO_ALLIANCES && player!=selectedPlayer)
+	if (game.alliance != NO_ALLIANCES && player != selectedPlayer && (NetPlay.players[player].allocated || (apsDroidLists[player] && apsStructLists[player])))
 	{
 		//alliance
 		sButInit.x		= MULTIMENU_C3;
@@ -1141,7 +1141,7 @@ static void addMultiPlayer(UDWORD player,UDWORD pos)
 		sButInit.UserData = player;
 
 		//can't break alliances in 'Locked Teams' mode
-		if(game.alliance != ALLIANCES_TEAMS)
+		if (game.alliance != ALLIANCES_TEAMS)
 		{
 			widgAddButton(psWScreen, &sButInit);
 		}
@@ -1221,7 +1221,7 @@ BOOL addDebugMenu(BOOL bAdd)
 	UDWORD			i,pos = 0,formHeight=0;
 
 	/* Close */
-	if(!bAdd)	//|| widgGetFromID(psWScreen,DEBUGMENU)
+	if (!bAdd)	//|| widgGetFromID(psWScreen,DEBUGMENU)
 	{
 		intCloseDebugMenuNoAnim();
 		return true;
@@ -1256,9 +1256,9 @@ BOOL addDebugMenu(BOOL bAdd)
 
 	// add debug info
 	pos = 0;
-	for(i=0;i<DEBUGMENU_MAX_ENTRIES;i++)
+	for (i=0;i<DEBUGMENU_MAX_ENTRIES;i++)
 	{
-		if(strcmp(debugMenuEntry[i],""))
+		if (strcmp(debugMenuEntry[i],""))
 		{
 			// add form
 			memset(&sFormInit, 0, sizeof(W_FORMINIT));
@@ -1307,7 +1307,7 @@ BOOL intAddMultiMenu(void)
 	UDWORD			i;
 
 	//check for already open.
-	if(widgGetFromID(psWScreen,MULTIMENU_FORM))
+	if (widgGetFromID(psWScreen,MULTIMENU_FORM))
 	{
 		intCloseMultiMenu();
 		return true;
@@ -1336,9 +1336,9 @@ BOOL intAddMultiMenu(void)
 	}
 
 	// add any players
-	for(i=0;i<MAX_PLAYERS;i++)
+	for (i=0;i<MAX_PLAYERS;i++)
 	{
-		if(isHumanPlayer(i) || (game.type == SKIRMISH && i<game.maxPlayers && game.skDiff[i] ) )
+		if (isHumanPlayer(i) || (game.type == SKIRMISH && i<game.maxPlayers && game.skDiff[i] ) )
 		{
 			addMultiPlayer(i,NetPlay.players[i].position);
 		}
@@ -1403,7 +1403,8 @@ BOOL intCloseMultiMenu(void)
 
 	// Start the window close animation.
 	Form = (W_TABFORM*)widgGetFromID(psWScreen,MULTIMENU_FORM);
-	if(Form) {
+	if (Form)
+	{
 		Form->display = intClosePlainForm;
 		Form->pUserData = NULL;	// Used to signal when the close anim has finished.
 		Form->disableChildren = true;
@@ -1438,7 +1439,7 @@ void intProcessMultiMenu(UDWORD id)
 	}
 
 	//alliance button
-	if(id >=MULTIMENU_ALLIANCE_BASE  &&  id<MULTIMENU_ALLIANCE_BASE+MAX_PLAYERS)
+	if (id >= MULTIMENU_ALLIANCE_BASE  &&  id < MULTIMENU_ALLIANCE_BASE + MAX_PLAYERS)
 	{
 		i =(UBYTE)( id - MULTIMENU_ALLIANCE_BASE);
 
@@ -1464,11 +1465,11 @@ void intProcessMultiMenu(UDWORD id)
 
 
 	//channel opens.
-	if(id >=MULTIMENU_CHANNEL &&  id<MULTIMENU_CHANNEL+MAX_PLAYERS)
+	if (id >= MULTIMENU_CHANNEL &&  id < MULTIMENU_CHANNEL + MAX_PLAYERS)
 	{
 		i =(UBYTE)( id - MULTIMENU_CHANNEL);
 
-		if(mouseDown(MOUSE_RMB) && NetPlay.isHost) // both buttons....
+		if (mouseDown(MOUSE_RMB) && NetPlay.isHost)	// both buttons down
 			{
 				char buf[250];
 				
@@ -1480,7 +1481,7 @@ void intProcessMultiMenu(UDWORD id)
 				return;
 			}
 
-		if(openchannels[i])
+		if (openchannels[i])
 		{
 			openchannels[i] = false;// close channel
 		}
@@ -1491,25 +1492,25 @@ void intProcessMultiMenu(UDWORD id)
 	}
 
 	//radar gifts
-	if(id >=  MULTIMENU_GIFT_RAD && id< MULTIMENU_GIFT_RAD +MAX_PLAYERS)
+	if (id >=  MULTIMENU_GIFT_RAD && id < MULTIMENU_GIFT_RAD + MAX_PLAYERS)
 	{
 		sendGift(RADAR_GIFT, id - MULTIMENU_GIFT_RAD);
 	}
 
 	// research gift
-	if(id >= MULTIMENU_GIFT_RES && id<MULTIMENU_GIFT_RES  +MAX_PLAYERS)
+	if (id >= MULTIMENU_GIFT_RES && id < MULTIMENU_GIFT_RES  + MAX_PLAYERS)
 	{
 		sendGift(RESEARCH_GIFT, id - MULTIMENU_GIFT_RES);
 	}
 
 	//droid gift
-	if(id >=  MULTIMENU_GIFT_DRO && id<  MULTIMENU_GIFT_DRO +MAX_PLAYERS)
+	if (id >=  MULTIMENU_GIFT_DRO && id <  MULTIMENU_GIFT_DRO + MAX_PLAYERS)
 	{
 		sendGift(DROID_GIFT, id - MULTIMENU_GIFT_DRO);
 	}
 
 	//power gift
-	if(id >=  MULTIMENU_GIFT_POW && id<  MULTIMENU_GIFT_POW +MAX_PLAYERS)
+	if (id >=  MULTIMENU_GIFT_POW && id <  MULTIMENU_GIFT_POW + MAX_PLAYERS)
 	{
 		sendGift(POWER_GIFT, id - MULTIMENU_GIFT_POW);
 	}
