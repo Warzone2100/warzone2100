@@ -18,42 +18,23 @@ OLD110LIST = \
 	messages \
 	stats \
 	wrf
-	
+
 OLD110ARCHIVE = old-1.10-balance.wz
 
-
-NTWLIST = \
-	addon.lev \
-	audio \
-	components \
-	COPYING \
-	doc \
-	effects \
-	images \
-	messages \
-	multiplay \
-	stats \
-	structs \
-	texpages \
-	wrf
-
-NTWARCHIVE = ntw.wz
 
 SEMPERFILIST = multiplay
 SEMPERFIARCHIVE = semperfi.wz
 
-CLEANFILES = $(DYDOAIARCHIVE) $(OLD110ARCHIVE) $(NTWARCHIVE) $(SEMPERFIARCHIVE)
+CLEANFILES = $(DYDOAIARCHIVE) $(OLD110ARCHIVE) $(SEMPERFIARCHIVE)
 
 $(DYDOAIARCHIVE): $(DYDOAILIST:%=$(basename $(DYDOAIARCHIVE))/%)
 $(OLD110ARCHIVE): $(OLD110LIST:%=$(basename $(OLD110ARCHIVE))/%)
-$(NTWARCHIVE): $(NTWLIST:%=$(basename $(NTWARCHIVE))/%)
 $(SEMPERFIARCHIVE): $(SEMPERFILIST:%=$(basename $(SEMPERFIARCHIVE))/%)
 
 multiplaymodsdir = $(pkgdatadir)/mods/multiplay
-nodist_multiplaymods_DATA =  $(DYDOAIARCHIVE) $(OLD110ARCHIVE) $(NTWARCHIVE) $(SEMPERFIARCHIVE)
+nodist_multiplaymods_DATA =  $(DYDOAIARCHIVE) $(OLD110ARCHIVE) $(SEMPERFIARCHIVE)
 
-dist-hook: $(DYDOAIARCHIVE) $(OLD110ARCHIVE) $(NTWARCHIVE) $(SEMPERFIARCHIVE)
+dist-hook: $(DYDOAIARCHIVE) $(OLD110ARCHIVE) $(SEMPERFIARCHIVE)
 	$(UNZIP) -u $(DYDOAIARCHIVE) -d $(DESTDIR)$(distdir)/$(basename $(DYDOAIARCHIVE))
 	$(UNZIP) -u $(OLD110ARCHIVE) -d $(DESTDIR)$(distdir)/$(basename $(OLD110ARCHIVE))
-	$(UNZIP) -u $(NTWARCHIVE) -d $(DESTDIR)$(distdir)/$(basename $(NTWARCHIVE))
 	$(UNZIP) -u $(SEMPERFIARCHIVE) -d $(DESTDIR)$(distdir)/$(basename $(SEMPERFIARCHIVE))
