@@ -1609,7 +1609,7 @@ static void NETplayerClientDisconnect(uint32_t index)
  */
 static void NETplayerLeaving(UDWORD index)
 {
-	if(connected_bsocket[index]->socket)
+	if(NetPlay.players[index].allocated && connected_bsocket[index]->socket)
 	{
 		char buf[250] = {'\0'};
 
