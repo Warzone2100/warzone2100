@@ -2704,22 +2704,6 @@ void kf_NormalSpeed( void )
 
 // --------------------------------------------------------------------------
 
-void kf_ToggleReopenBuildMenu( void )
-{
-	intReopenBuild( !intGetReopenBuild() );
-
-	if (intGetReopenBuild())
-	{
-		CONPRINTF(ConsoleString,(ConsoleString,_("Build menu will reopen")));
-	}
-	else
-	{
-		CONPRINTF(ConsoleString,(ConsoleString,_("Build menu will not reopen")));
-	}
-}
-
-// --------------------------------------------------------------------------
-
 void kf_ToggleRadarAllyEnemy(void)
 {
 	bEnemyAllyRadarColor = !bEnemyAllyRadarColor;

@@ -440,9 +440,6 @@ extern void HandleClosingWindows(void);
 
 extern BOOL intIsRefreshing(void);
 
-void intReopenBuild(BOOL reopen);
-BOOL intGetReopenBuild(void);
-
 extern void intDemolishCancel(void);
 
 #ifdef __cplusplus

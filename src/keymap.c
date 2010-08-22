@@ -205,7 +205,7 @@ _keymapsave keyMapSaveTable[] =
 	kf_NormalSpeed,
 	kf_ToggleRadarJump,
 	kf_MovePause,
-	kf_ToggleReopenBuildMenu,
+	kf_NOOP,
 	kf_SensorDisplayOn,
 	kf_SensorDisplayOff,
 	kf_ToggleRadarTerrain,          //radar terrain on/off
@@ -431,7 +431,6 @@ void	keyInitMappings( BOOL bForceDefaults )
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE,(KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_SelectNextResearch,      N_("Select next Research Facility"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE,(KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_SelectNextPowerStation,  N_("Select next Power Generator"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE,(KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_SelectNextCyborgFactory, N_("Select next Cyborg Factory"));
-	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE,(KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_ToggleReopenBuildMenu,   N_("Toggle reopening the build menu"));
 
 	// Debug options
 	keyAddMapping(KEYMAP___HIDE, KEY_LSHIFT, KEY_BACKSPACE, KEYMAP_PRESSED, kf_ToggleDebugMappings, "Toggle Debug Mappings");
