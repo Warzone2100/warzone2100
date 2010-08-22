@@ -406,6 +406,11 @@ void initI18n(void)
 			debug( LOG_ERROR, "Could not change to resources directory." );
 		}
 
+		if (resourceURL != NULL)
+		{
+			CFRelease(resourceURL);
+		}
+
 		debug(LOG_INFO, "resourcePath is %s", resourcePath);
 	}
 	#else

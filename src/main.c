@@ -615,6 +615,10 @@ static void scanDataDirs( void )
 		} else {
 			debug( LOG_ERROR, "Could not change to resources directory." );
 		}
+
+		if( resourceURL != NULL ) {
+			CFRelease( resourceURL );
+		}
 	}
 #endif
 
