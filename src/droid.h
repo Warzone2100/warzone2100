@@ -110,7 +110,7 @@ extern void	removeDroidBase(DROID *psDel);
 // refresh the naybor list
 // this only does anything if the naybor list is out of date
 extern void droidGetNaybors(DROID *psDroid);
-extern char *RemakeTemplate(DROID_TEMPLATE	*templatelist, COMPONENT_STATS *cStat, COMPONENT_TYPE COMP_PART);
+
 extern BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize);
 extern BOOL loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize);
 

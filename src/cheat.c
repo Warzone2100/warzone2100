@@ -71,7 +71,6 @@ static CHEAT_ENTRY cheatCodes[] =
 	{"showsamples", kf_ToggleSamples}, //displays the # of Sound samples in Queue & List
 	{"showorders", kf_ToggleOrders}, //displays unit order/action state.
 	{"showlevelname", kf_ToggleLevelName}, // shows the current level name on screen
-	{"legs", kf_DebugTemplates},	// for template debugging
 };
 
 BOOL attemptCheatCode(const char* cheat_name)
@@ -88,11 +87,6 @@ BOOL attemptCheatCode(const char* cheat_name)
 	else if (!strcasecmp("showlevelname", cheat_name))
 	{
 		kf_ToggleLevelName();
-		return true;
-	}
-	else if (!strcasecmp("legs", cheat_name))
-	{
-		kf_DebugTemplates();
 		return true;
 	}
 
