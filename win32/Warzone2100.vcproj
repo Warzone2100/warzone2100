@@ -79,7 +79,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				ExecutionBucket="11"
-				AdditionalDependencies="SDL.lib SDLmain.lib H:\wz_libs_raw\lpng141\lpng141\projects\visualc71\Win32_LIB_Release\libpng.lib ogg_static.lib vorbis_static.lib vorbisfile_static.lib OpenAL32.lib glc32.lib OpenGL32.lib GLU32.lib shfolder.lib winmm.lib wsock32.lib dbghelp.lib libpopt.lib physfs.lib zlib.lib libtheora_static.lib ws2_32.lib"
+				AdditionalDependencies="SDL.lib SDLmain.lib libpng-static.lib ogg_static.lib vorbis_static.lib vorbisfile_static.lib OpenAL32.lib glc32.lib OpenGL32.lib GLU32.lib shfolder.lib winmm.lib wsock32.lib dbghelp.lib libpopt.lib physfs.lib zlib.lib libtheora_static.lib ws2_32.lib"
 				OutputFile="$(OutDir)\$(ProjectName)-Dbg.exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)\..\devpkg\lib&quot;"
@@ -1138,11 +1138,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\scriptvals_parser.tab.h"
+				RelativePath="..\src\scriptvals_parser.tab.h"
 				>
 			</File>
 			<File
-				RelativePath="..\src\scriptvals_parser.tab.h"
+				RelativePath=".\scriptvals_parser.tab.h"
 				>
 			</File>
 			<File
