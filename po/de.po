@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-08-23 01:39+0200\n"
+"POT-Creation-Date: 2010-08-25 16:35+0200\n"
 "PO-Revision-Date: 2010-06-05 07:09+0100\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
@@ -12508,6 +12508,7 @@ msgid "Tutorial"
 msgstr "Tutorial"
 
 #: src/frontend.c:100
+#: src/hci.c:3918
 msgid "Options"
 msgstr "Optionen"
 
@@ -12923,6 +12924,38 @@ msgstr "Konstruktionsmenü"
 msgid "Power"
 msgstr "Energie"
 
+#: src/hci.c:3960
+msgid "Map:"
+msgstr ""
+
+#: src/hci.c:3974
+#, fuzzy
+msgid "Load"
+msgstr "Spielstand laden"
+
+#: src/hci.c:3975
+#, fuzzy
+msgid "Load Map File"
+msgstr "Spielstand laden"
+
+#: src/hci.c:3982
+#, fuzzy
+msgid "Save"
+msgstr "Spiel speichern"
+
+#: src/hci.c:3983
+#, fuzzy
+msgid "Save Map File"
+msgstr "Spiel speichern"
+
+#: src/hci.c:3991
+msgid "New"
+msgstr ""
+
+#: src/hci.c:3992
+msgid "New Blank Map"
+msgstr ""
+
 #: src/hci.c:4030
 msgid "Tile"
 msgstr "Kartenkachel"
@@ -12956,6 +12989,10 @@ msgstr "Leistung"
 msgid "Place Features on map"
 msgstr "Feature auf der Karte platzieren"
 
+#: src/hci.c:4069
+msgid "Pause"
+msgstr ""
+
 #: src/hci.c:4070
 msgid "Pause or unpause the game"
 msgstr "Spiel pausieren oder fortsetzen"
@@ -12963,6 +13000,15 @@ msgstr "Spiel pausieren oder fortsetzen"
 #: src/hci.c:4084
 msgid "Align height of all map objects"
 msgstr "Höhe aller Kartenobjekte abgleichen"
+
+#: src/hci.c:4094
+msgid "Edit"
+msgstr ""
+
+#: src/hci.c:4095
+#, fuzzy
+msgid "Start Edit Mode"
+msgstr "Ohne Basen starten"
 
 #: src/hci.c:4109
 #: src/ingameop.c:119
@@ -12975,10 +13021,20 @@ msgstr "Beenden"
 msgid "Exit Game"
 msgstr "Spiel verlassen"
 
+#: src/hci.c:4135
+#, fuzzy
+msgid "Current Player:"
+msgstr "Mehrspieler"
+
 #: src/hci.c:4534
 #: src/intdisplay.c:275
 msgid "Progress Bar"
 msgstr "Fortschrittsbalken"
+
+#: src/hci.c:5478
+#, fuzzy
+msgid "Infinite Production"
+msgstr "Produktion wiederholen"
 
 #: src/hci.c:5554
 msgid "Factory Delivery Point"
@@ -14175,6 +14231,12 @@ msgstr "BEREIT?"
 msgid "PLAYERS"
 msgstr "SPIELER"
 
+# festgelegt ungleich fest -Kreuvf
+#: src/multiint.c:1916
+#, fuzzy
+msgid "Choose Team"
+msgstr "Feste Teams"
+
 #: src/multiint.c:2066
 msgid "CHAT"
 msgstr "CHAT"
@@ -14313,6 +14375,10 @@ msgstr "Ping"
 #: src/multimenu.c:776
 msgid "Structs"
 msgstr "Gebäude"
+
+#: src/multimenu.c:1125
+msgid "Channel"
+msgstr ""
 
 #: src/multimenu.c:1140
 msgid "Toggle Alliance State"

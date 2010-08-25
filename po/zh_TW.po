@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-08-23 01:39+0200\n"
+"POT-Creation-Date: 2010-08-25 16:35+0200\n"
 "PO-Revision-Date: 2009-05-11 00:21+0800\n"
 "Last-Translator: \n"
 "Language-Team: zh_TW\n"
@@ -12668,6 +12668,7 @@ msgid "Tutorial"
 msgstr "教學模式"
 
 #: src/frontend.c:100
+#: src/hci.c:3918
 msgid "Options"
 msgstr "選項"
 
@@ -13091,6 +13092,38 @@ msgstr "建造新的建築物 （F3）"
 msgid "Power"
 msgstr "能源"
 
+#: src/hci.c:3960
+msgid "Map:"
+msgstr ""
+
+#: src/hci.c:3974
+#, fuzzy
+msgid "Load"
+msgstr "載入遊戲"
+
+#: src/hci.c:3975
+#, fuzzy
+msgid "Load Map File"
+msgstr "載入遊戲"
+
+#: src/hci.c:3982
+#, fuzzy
+msgid "Save"
+msgstr "儲存遊戲"
+
+#: src/hci.c:3983
+#, fuzzy
+msgid "Save Map File"
+msgstr "儲存遊戲"
+
+#: src/hci.c:3991
+msgid "New"
+msgstr ""
+
+#: src/hci.c:3992
+msgid "New Blank Map"
+msgstr ""
+
 #: src/hci.c:4030
 msgid "Tile"
 msgstr "貼圖"
@@ -13123,6 +13156,10 @@ msgstr "特徵"
 msgid "Place Features on map"
 msgstr "在地圖上加入特徵"
 
+#: src/hci.c:4069
+msgid "Pause"
+msgstr ""
+
 #: src/hci.c:4070
 msgid "Pause or unpause the game"
 msgstr "暫停（或繼續）遊戲"
@@ -13130,6 +13167,15 @@ msgstr "暫停（或繼續）遊戲"
 #: src/hci.c:4084
 msgid "Align height of all map objects"
 msgstr "使地圖上所有物件等高"
+
+#: src/hci.c:4094
+msgid "Edit"
+msgstr ""
+
+#: src/hci.c:4095
+#, fuzzy
+msgid "Start Edit Mode"
+msgstr "開始時無基地"
 
 #: src/hci.c:4109
 #: src/ingameop.c:119
@@ -13142,10 +13188,20 @@ msgstr "退出"
 msgid "Exit Game"
 msgstr "離開遊戲"
 
+#: src/hci.c:4135
+#, fuzzy
+msgid "Current Player:"
+msgstr "多人遊戲"
+
 #: src/hci.c:4534
 #: src/intdisplay.c:275
 msgid "Progress Bar"
 msgstr "進度條"
+
+#: src/hci.c:5478
+#, fuzzy
+msgid "Infinite Production"
+msgstr "循環生產"
 
 #: src/hci.c:5554
 msgid "Factory Delivery Point"
@@ -14360,6 +14416,11 @@ msgstr ""
 msgid "PLAYERS"
 msgstr "玩家"
 
+#: src/multiint.c:1916
+#, fuzzy
+msgid "Choose Team"
+msgstr "鎖定同盟模式"
+
 #: src/multiint.c:2066
 msgid "CHAT"
 msgstr "聊天"
@@ -14499,6 +14560,10 @@ msgstr "Ping"
 #: src/multimenu.c:776
 msgid "Structs"
 msgstr "建築"
+
+#: src/multimenu.c:1125
+msgid "Channel"
+msgstr ""
 
 #: src/multimenu.c:1140
 msgid "Toggle Alliance State"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WZ2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-08-23 01:39+0200\n"
+"POT-Creation-Date: 2010-08-25 16:35+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: metalwarrior95 <metalwarrioroften@gmail.com>\n"
 "Language-Team: \n"
@@ -12492,6 +12492,7 @@ msgid "Tutorial"
 msgstr "Vježbe"
 
 #: src/frontend.c:100
+#: src/hci.c:3918
 msgid "Options"
 msgstr "Opcije"
 
@@ -12907,6 +12908,38 @@ msgstr "Gradi (F3)"
 msgid "Power"
 msgstr "Resursi"
 
+#: src/hci.c:3960
+msgid "Map:"
+msgstr ""
+
+#: src/hci.c:3974
+#, fuzzy
+msgid "Load"
+msgstr "Učitaj Igru"
+
+#: src/hci.c:3975
+#, fuzzy
+msgid "Load Map File"
+msgstr "Učitaj Igru"
+
+#: src/hci.c:3982
+#, fuzzy
+msgid "Save"
+msgstr "Spermi igru"
+
+#: src/hci.c:3983
+#, fuzzy
+msgid "Save Map File"
+msgstr "Spermi igru"
+
+#: src/hci.c:3991
+msgid "New"
+msgstr ""
+
+#: src/hci.c:3992
+msgid "New Blank Map"
+msgstr ""
+
 #: src/hci.c:4030
 msgid "Tile"
 msgstr "Kvadratić"
@@ -12939,6 +12972,10 @@ msgstr "Pogodnosti"
 msgid "Place Features on map"
 msgstr "Postavi pogodnost na kartu"
 
+#: src/hci.c:4069
+msgid "Pause"
+msgstr ""
+
 #: src/hci.c:4070
 msgid "Pause or unpause the game"
 msgstr "Pauziraj igru"
@@ -12946,6 +12983,15 @@ msgstr "Pauziraj igru"
 #: src/hci.c:4084
 msgid "Align height of all map objects"
 msgstr "Podesi visinu svih objekata na karti"
+
+#: src/hci.c:4094
+msgid "Edit"
+msgstr ""
+
+#: src/hci.c:4095
+#, fuzzy
+msgid "Start Edit Mode"
+msgstr "Započni bez baza"
 
 #: src/hci.c:4109
 #: src/ingameop.c:119
@@ -12958,10 +13004,20 @@ msgstr "Izađi"
 msgid "Exit Game"
 msgstr "Izađi iz igre"
 
+#: src/hci.c:4135
+#, fuzzy
+msgid "Current Player:"
+msgstr "Više Igrača"
+
 #: src/hci.c:4534
 #: src/intdisplay.c:275
 msgid "Progress Bar"
 msgstr "Procesna trakica"
+
+#: src/hci.c:5478
+#, fuzzy
+msgid "Infinite Production"
+msgstr "Ponovi proizvodnju"
 
 #: src/hci.c:5554
 msgid "Factory Delivery Point"
@@ -14151,6 +14207,11 @@ msgstr "SPREMAN?"
 msgid "PLAYERS"
 msgstr "Igrači"
 
+#: src/multiint.c:1916
+#, fuzzy
+msgid "Choose Team"
+msgstr "Timovi"
+
 #: src/multiint.c:2066
 msgid "CHAT"
 msgstr "Čavrljanje"
@@ -14288,6 +14349,10 @@ msgstr "Ping"
 #: src/multimenu.c:776
 msgid "Structs"
 msgstr "Strukture"
+
+#: src/multimenu.c:1125
+msgid "Channel"
+msgstr ""
 
 #: src/multimenu.c:1140
 msgid "Toggle Alliance State"

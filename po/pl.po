@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-08-23 01:39+0200\n"
+"POT-Creation-Date: 2010-08-25 16:35+0200\n"
 "PO-Revision-Date: 2010-07-26 09:40+0100\n"
 "Last-Translator: Michał D. aka Emdek <emdeck@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -12500,6 +12500,7 @@ msgid "Tutorial"
 msgstr "Szkolenie"
 
 #: src/frontend.c:100
+#: src/hci.c:3918
 msgid "Options"
 msgstr "Opcje"
 
@@ -12916,6 +12917,38 @@ msgstr "Buduj (F3)"
 msgid "Power"
 msgstr "Energia"
 
+#: src/hci.c:3960
+msgid "Map:"
+msgstr ""
+
+#: src/hci.c:3974
+#, fuzzy
+msgid "Load"
+msgstr "Załaduj grę"
+
+#: src/hci.c:3975
+#, fuzzy
+msgid "Load Map File"
+msgstr "Załaduj grę"
+
+#: src/hci.c:3982
+#, fuzzy
+msgid "Save"
+msgstr "Zapisz grę"
+
+#: src/hci.c:3983
+#, fuzzy
+msgid "Save Map File"
+msgstr "Zapisz grę"
+
+#: src/hci.c:3991
+msgid "New"
+msgstr ""
+
+#: src/hci.c:3992
+msgid "New Blank Map"
+msgstr ""
+
 #: src/hci.c:4030
 msgid "Tile"
 msgstr "Kafel"
@@ -12948,6 +12981,10 @@ msgstr "Obiekt"
 msgid "Place Features on map"
 msgstr "Umieść obiekty specjalne na mapie"
 
+#: src/hci.c:4069
+msgid "Pause"
+msgstr ""
+
 #: src/hci.c:4070
 msgid "Pause or unpause the game"
 msgstr "Spauzuj lub wznów grę"
@@ -12955,6 +12992,15 @@ msgstr "Spauzuj lub wznów grę"
 #: src/hci.c:4084
 msgid "Align height of all map objects"
 msgstr "Wyrównaj wysokość wszystkich obiektów mapy"
+
+#: src/hci.c:4094
+msgid "Edit"
+msgstr ""
+
+#: src/hci.c:4095
+#, fuzzy
+msgid "Start Edit Mode"
+msgstr "Rozpocznij bez baz"
 
 #: src/hci.c:4109
 #: src/ingameop.c:119
@@ -12967,10 +13013,20 @@ msgstr "Wyjdź"
 msgid "Exit Game"
 msgstr "Zakończ grę"
 
+#: src/hci.c:4135
+#, fuzzy
+msgid "Current Player:"
+msgstr "Gra wieloosobowa"
+
 #: src/hci.c:4534
 #: src/intdisplay.c:275
 msgid "Progress Bar"
 msgstr "Pasek postępu"
+
+#: src/hci.c:5478
+#, fuzzy
+msgid "Infinite Production"
+msgstr "Cykl produkcji"
 
 #: src/hci.c:5554
 msgid "Factory Delivery Point"
@@ -14164,6 +14220,11 @@ msgstr "GOTOWY?"
 msgid "PLAYERS"
 msgstr "GRACZE"
 
+#: src/multiint.c:1916
+#, fuzzy
+msgid "Choose Team"
+msgstr "Zablokowane drużyny"
+
 #: src/multiint.c:2066
 msgid "CHAT"
 msgstr "CHAT"
@@ -14301,6 +14362,10 @@ msgstr "Ping"
 #: src/multimenu.c:776
 msgid "Structs"
 msgstr "Konstrukcje"
+
+#: src/multimenu.c:1125
+msgid "Channel"
+msgstr ""
 
 #: src/multimenu.c:1140
 msgid "Toggle Alliance State"

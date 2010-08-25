@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100 2.3_branch\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-08-23 01:39+0200\n"
+"POT-Creation-Date: 2010-08-25 16:35+0200\n"
 "PO-Revision-Date: 2010-08-21 00:57+0900\n"
 "Last-Translator: Josh Shin <urgood2@gmail.com>\n"
 "Language-Team: Korean Translation Team <urgood2@gmail.com>\n"
@@ -12536,6 +12536,7 @@ msgid "Tutorial"
 msgstr "튜토리얼"
 
 #: src/frontend.c:100
+#: src/hci.c:3918
 msgid "Options"
 msgstr "옵션"
 
@@ -12952,6 +12953,38 @@ msgstr "건축 (F3)"
 msgid "Power"
 msgstr "전력"
 
+#: src/hci.c:3960
+msgid "Map:"
+msgstr ""
+
+#: src/hci.c:3974
+#, fuzzy
+msgid "Load"
+msgstr "게임 로드"
+
+#: src/hci.c:3975
+#, fuzzy
+msgid "Load Map File"
+msgstr "게임 로드"
+
+#: src/hci.c:3982
+#, fuzzy
+msgid "Save"
+msgstr "게임 저장"
+
+#: src/hci.c:3983
+#, fuzzy
+msgid "Save Map File"
+msgstr "게임 저장"
+
+#: src/hci.c:3991
+msgid "New"
+msgstr ""
+
+#: src/hci.c:3992
+msgid "New Blank Map"
+msgstr ""
+
 #: src/hci.c:4030
 msgid "Tile"
 msgstr "타일"
@@ -12984,6 +13017,10 @@ msgstr "물체"
 msgid "Place Features on map"
 msgstr "피처(Feature)를 지도 위에 배치하기"
 
+#: src/hci.c:4069
+msgid "Pause"
+msgstr ""
+
 #: src/hci.c:4070
 msgid "Pause or unpause the game"
 msgstr "게임을 일시 중지하거나 일시중지를 해제합니다"
@@ -12991,6 +13028,15 @@ msgstr "게임을 일시 중지하거나 일시중지를 해제합니다"
 #: src/hci.c:4084
 msgid "Align height of all map objects"
 msgstr "모든 지도 개체의 높이를 정렬하기 "
+
+#: src/hci.c:4094
+msgid "Edit"
+msgstr ""
+
+#: src/hci.c:4095
+#, fuzzy
+msgid "Start Edit Mode"
+msgstr "기지 없이 시작하기"
 
 #: src/hci.c:4109
 #: src/ingameop.c:119
@@ -13003,10 +13049,20 @@ msgstr "종료"
 msgid "Exit Game"
 msgstr "게임 종료"
 
+#: src/hci.c:4135
+#, fuzzy
+msgid "Current Player:"
+msgstr "멀티 플레이어(Multi player)"
+
 #: src/hci.c:4534
 #: src/intdisplay.c:275
 msgid "Progress Bar"
 msgstr "진행률 표시줄"
+
+#: src/hci.c:5478
+#, fuzzy
+msgid "Infinite Production"
+msgstr "반복 생산"
 
 #: src/hci.c:5554
 msgid "Factory Delivery Point"
@@ -14209,6 +14265,11 @@ msgstr "준비되었습니까?"
 msgid "PLAYERS"
 msgstr "플레이어"
 
+#: src/multiint.c:1916
+#, fuzzy
+msgid "Choose Team"
+msgstr "팀 잠금"
+
 #: src/multiint.c:2066
 msgid "CHAT"
 msgstr "채팅"
@@ -14345,6 +14406,10 @@ msgstr ""
 
 #: src/multimenu.c:776
 msgid "Structs"
+msgstr ""
+
+#: src/multimenu.c:1125
+msgid "Channel"
 msgstr ""
 
 #: src/multimenu.c:1140

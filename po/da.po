@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-08-23 01:39+0200\n"
+"POT-Creation-Date: 2010-08-25 16:35+0200\n"
 "PO-Revision-Date: 2008-05-09 16:08+0000\n"
 "Last-Translator: carson <Unknown>\n"
 "Language-Team: Dansk <da@li.org>\n"
@@ -12795,6 +12795,7 @@ msgid "Tutorial"
 msgstr "Gennemgang"
 
 #: src/frontend.c:100
+#: src/hci.c:3918
 msgid "Options"
 msgstr "Indstillinger"
 
@@ -13226,6 +13227,38 @@ msgstr "Konstruktion (F3)"
 msgid "Power"
 msgstr "Kraft"
 
+#: src/hci.c:3960
+msgid "Map:"
+msgstr ""
+
+#: src/hci.c:3974
+#, fuzzy
+msgid "Load"
+msgstr "Indlæs spil"
+
+#: src/hci.c:3975
+#, fuzzy
+msgid "Load Map File"
+msgstr "Indlæs spil"
+
+#: src/hci.c:3982
+#, fuzzy
+msgid "Save"
+msgstr "Gem spil"
+
+#: src/hci.c:3983
+#, fuzzy
+msgid "Save Map File"
+msgstr "Gem spil"
+
+#: src/hci.c:3991
+msgid "New"
+msgstr ""
+
+#: src/hci.c:3992
+msgid "New Blank Map"
+msgstr ""
+
 #: src/hci.c:4030
 #, fuzzy
 msgid "Tile"
@@ -13263,6 +13296,10 @@ msgstr ""
 msgid "Place Features on map"
 msgstr "Tabte bygninger"
 
+#: src/hci.c:4069
+msgid "Pause"
+msgstr ""
+
 #: src/hci.c:4070
 #, fuzzy
 msgid "Pause or unpause the game"
@@ -13271,6 +13308,15 @@ msgstr "Værten har forladt spillet"
 #: src/hci.c:4084
 msgid "Align height of all map objects"
 msgstr ""
+
+#: src/hci.c:4094
+msgid "Edit"
+msgstr ""
+
+#: src/hci.c:4095
+#, fuzzy
+msgid "Start Edit Mode"
+msgstr "Start uden baser"
 
 #: src/hci.c:4109
 #: src/ingameop.c:119
@@ -13283,10 +13329,20 @@ msgstr "Afslut"
 msgid "Exit Game"
 msgstr "Forlad spil"
 
+#: src/hci.c:4135
+#, fuzzy
+msgid "Current Player:"
+msgstr "Flerbruger spil"
+
 #: src/hci.c:4534
 #: src/intdisplay.c:275
 msgid "Progress Bar"
 msgstr "Statuslinje"
+
+#: src/hci.c:5478
+#, fuzzy
+msgid "Infinite Production"
+msgstr "Gentag produktion"
 
 #: src/hci.c:5554
 msgid "Factory Delivery Point"
@@ -14506,6 +14562,11 @@ msgstr ""
 msgid "PLAYERS"
 msgstr "SPILLERE"
 
+#: src/multiint.c:1916
+#, fuzzy
+msgid "Choose Team"
+msgstr "Låste hold"
+
 #: src/multiint.c:2066
 msgid "CHAT"
 msgstr "BESKEDER"
@@ -14648,6 +14709,10 @@ msgstr "Ping"
 #, fuzzy
 msgid "Structs"
 msgstr "Tabte bygninger"
+
+#: src/multimenu.c:1125
+msgid "Channel"
+msgstr ""
 
 #: src/multimenu.c:1140
 msgid "Toggle Alliance State"

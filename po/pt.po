@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-08-23 01:39+0200\n"
+"POT-Creation-Date: 2010-08-25 16:35+0200\n"
 "PO-Revision-Date: 2009-08-04 22:59+0100\n"
 "Last-Translator: Pedro Miguel Martins da Silva Caetano <pedro.m.caetano@netcabo.pt>\n"
 "Language-Team: Portugese <warzone-dev@gna.org>\n"
@@ -12632,6 +12632,7 @@ msgid "Tutorial"
 msgstr "Tutorial"
 
 #: src/frontend.c:100
+#: src/hci.c:3918
 msgid "Options"
 msgstr "Opções"
 
@@ -13052,6 +13053,38 @@ msgstr "Construir (F3)"
 msgid "Power"
 msgstr "Energia"
 
+#: src/hci.c:3960
+msgid "Map:"
+msgstr ""
+
+#: src/hci.c:3974
+#, fuzzy
+msgid "Load"
+msgstr "Carregar Jogo"
+
+#: src/hci.c:3975
+#, fuzzy
+msgid "Load Map File"
+msgstr "Carregar Jogo"
+
+#: src/hci.c:3982
+#, fuzzy
+msgid "Save"
+msgstr "Gravar Jogo"
+
+#: src/hci.c:3983
+#, fuzzy
+msgid "Save Map File"
+msgstr "Gravar Jogo"
+
+#: src/hci.c:3991
+msgid "New"
+msgstr ""
+
+#: src/hci.c:3992
+msgid "New Blank Map"
+msgstr ""
+
 #: src/hci.c:4030
 msgid "Tile"
 msgstr "Mosaico"
@@ -13085,6 +13118,10 @@ msgstr "Característica"
 msgid "Place Features on map"
 msgstr "Colocar ?recursos/características? no mapa"
 
+#: src/hci.c:4069
+msgid "Pause"
+msgstr ""
+
 #: src/hci.c:4070
 msgid "Pause or unpause the game"
 msgstr "Pausa ou retira de pausa o jogo"
@@ -13092,6 +13129,15 @@ msgstr "Pausa ou retira de pausa o jogo"
 #: src/hci.c:4084
 msgid "Align height of all map objects"
 msgstr "Alinhar altura de todos os objectos do mapa"
+
+#: src/hci.c:4094
+msgid "Edit"
+msgstr ""
+
+#: src/hci.c:4095
+#, fuzzy
+msgid "Start Edit Mode"
+msgstr "Começar sem Bases"
 
 #: src/hci.c:4109
 #: src/ingameop.c:119
@@ -13104,10 +13150,20 @@ msgstr "Sair"
 msgid "Exit Game"
 msgstr "Sair do Jogo"
 
+#: src/hci.c:4135
+#, fuzzy
+msgid "Current Player:"
+msgstr "Multijogador"
+
 #: src/hci.c:4534
 #: src/intdisplay.c:275
 msgid "Progress Bar"
 msgstr "Barra de Progresso"
+
+#: src/hci.c:5478
+#, fuzzy
+msgid "Infinite Production"
+msgstr "Produção Pontínua"
 
 #: src/hci.c:5554
 msgid "Factory Delivery Point"
@@ -14310,6 +14366,11 @@ msgstr ""
 msgid "PLAYERS"
 msgstr "JOGADORES"
 
+#: src/multiint.c:1916
+#, fuzzy
+msgid "Choose Team"
+msgstr "Equipas Fixas"
+
 #: src/multiint.c:2066
 msgid "CHAT"
 msgstr "CHAT"
@@ -14449,6 +14510,10 @@ msgstr "Ping"
 #, fuzzy
 msgid "Structs"
 msgstr "Estrutura"
+
+#: src/multimenu.c:1125
+msgid "Channel"
+msgstr ""
 
 #: src/multimenu.c:1140
 msgid "Toggle Alliance State"

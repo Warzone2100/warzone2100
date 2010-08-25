@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-08-23 01:39+0200\n"
+"POT-Creation-Date: 2010-08-25 16:35+0200\n"
 "PO-Revision-Date: 2010-08-01 23:54-0300\n"
 "Last-Translator: Artur Filipe <tucalipe@gmail.com>\n"
 "Language-Team: Brazilian Portugese <warzone-dev@gna.org>\n"
@@ -12473,6 +12473,7 @@ msgid "Tutorial"
 msgstr "Aprendendo a Jogar"
 
 #: src/frontend.c:100
+#: src/hci.c:3918
 msgid "Options"
 msgstr "Opções"
 
@@ -12885,6 +12886,38 @@ msgstr "Construir (F3)"
 msgid "Power"
 msgstr "Energia"
 
+#: src/hci.c:3960
+msgid "Map:"
+msgstr ""
+
+#: src/hci.c:3974
+#, fuzzy
+msgid "Load"
+msgstr "Carregar Jogo"
+
+#: src/hci.c:3975
+#, fuzzy
+msgid "Load Map File"
+msgstr "Carregar Jogo"
+
+#: src/hci.c:3982
+#, fuzzy
+msgid "Save"
+msgstr "Salvar"
+
+#: src/hci.c:3983
+#, fuzzy
+msgid "Save Map File"
+msgstr "Salvar"
+
+#: src/hci.c:3991
+msgid "New"
+msgstr ""
+
+#: src/hci.c:3992
+msgid "New Blank Map"
+msgstr ""
+
 #: src/hci.c:4030
 msgid "Tile"
 msgstr "Espaço"
@@ -12917,6 +12950,10 @@ msgstr "Feito"
 msgid "Place Features on map"
 msgstr "Colocar Artefatos no mapa"
 
+#: src/hci.c:4069
+msgid "Pause"
+msgstr ""
+
 #: src/hci.c:4070
 msgid "Pause or unpause the game"
 msgstr "Pausar ou resumir o jogo"
@@ -12924,6 +12961,15 @@ msgstr "Pausar ou resumir o jogo"
 #: src/hci.c:4084
 msgid "Align height of all map objects"
 msgstr "Alinhar a altitude dos objetos e do mapa"
+
+#: src/hci.c:4094
+msgid "Edit"
+msgstr ""
+
+#: src/hci.c:4095
+#, fuzzy
+msgid "Start Edit Mode"
+msgstr "Iniciar sem Bases"
 
 #: src/hci.c:4109
 #: src/ingameop.c:119
@@ -12936,10 +12982,20 @@ msgstr "Sair"
 msgid "Exit Game"
 msgstr "Sair do Jogo"
 
+#: src/hci.c:4135
+#, fuzzy
+msgid "Current Player:"
+msgstr "Jogo Multiplayer"
+
 #: src/hci.c:4534
 #: src/intdisplay.c:275
 msgid "Progress Bar"
 msgstr "Barra de Progresso"
+
+#: src/hci.c:5478
+#, fuzzy
+msgid "Infinite Production"
+msgstr "Prender Produção"
 
 #: src/hci.c:5554
 msgid "Factory Delivery Point"
@@ -14131,6 +14187,11 @@ msgstr "PRONTO?"
 msgid "PLAYERS"
 msgstr "JOGADORES"
 
+#: src/multiint.c:1916
+#, fuzzy
+msgid "Choose Team"
+msgstr "Trancar Times"
+
 #: src/multiint.c:2066
 msgid "CHAT"
 msgstr "BATE-PAPO"
@@ -14268,6 +14329,10 @@ msgstr "Ping"
 #: src/multimenu.c:776
 msgid "Structs"
 msgstr "Estruturas"
+
+#: src/multimenu.c:1125
+msgid "Channel"
+msgstr ""
 
 #: src/multimenu.c:1140
 msgid "Toggle Alliance State"

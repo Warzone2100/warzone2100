@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-08-23 01:39+0200\n"
+"POT-Creation-Date: 2010-08-25 16:35+0200\n"
 "PO-Revision-Date: 2010-05-05 12:19+0100\n"
 "Last-Translator: Cristian Odorico <generalchris@hotmail.it>\n"
 "Language-Team: Italian <warzone-dev@gna.org>\n"
@@ -12484,6 +12484,7 @@ msgid "Tutorial"
 msgstr "Tutorial"
 
 #: src/frontend.c:100
+#: src/hci.c:3918
 msgid "Options"
 msgstr "Opzioni"
 
@@ -12898,6 +12899,38 @@ msgstr "Costruzione (F3)"
 msgid "Power"
 msgstr "Energia"
 
+#: src/hci.c:3960
+msgid "Map:"
+msgstr ""
+
+#: src/hci.c:3974
+#, fuzzy
+msgid "Load"
+msgstr "Carica Partita"
+
+#: src/hci.c:3975
+#, fuzzy
+msgid "Load Map File"
+msgstr "Carica Partita"
+
+#: src/hci.c:3982
+#, fuzzy
+msgid "Save"
+msgstr "Salva Partita"
+
+#: src/hci.c:3983
+#, fuzzy
+msgid "Save Map File"
+msgstr "Salva Partita"
+
+#: src/hci.c:3991
+msgid "New"
+msgstr ""
+
+#: src/hci.c:3992
+msgid "New Blank Map"
+msgstr ""
+
 #: src/hci.c:4030
 msgid "Tile"
 msgstr "Texture"
@@ -12930,6 +12963,10 @@ msgstr "Caratteristica"
 msgid "Place Features on map"
 msgstr "Piazza Oggetti sulla mappa"
 
+#: src/hci.c:4069
+msgid "Pause"
+msgstr ""
+
 #: src/hci.c:4070
 msgid "Pause or unpause the game"
 msgstr "Metti in pausa o riprendi la partita"
@@ -12937,6 +12974,15 @@ msgstr "Metti in pausa o riprendi la partita"
 #: src/hci.c:4084
 msgid "Align height of all map objects"
 msgstr "Allinea le altezze di tutti gli oggetti della mappa"
+
+#: src/hci.c:4094
+msgid "Edit"
+msgstr ""
+
+#: src/hci.c:4095
+#, fuzzy
+msgid "Start Edit Mode"
+msgstr "Inizia senza Basi"
 
 #: src/hci.c:4109
 #: src/ingameop.c:119
@@ -12949,10 +12995,20 @@ msgstr "Abbandona"
 msgid "Exit Game"
 msgstr "Esci dal Gioco"
 
+#: src/hci.c:4135
+#, fuzzy
+msgid "Current Player:"
+msgstr "Multi Player"
+
 #: src/hci.c:4534
 #: src/intdisplay.c:275
 msgid "Progress Bar"
 msgstr "Barra del Progresso"
+
+#: src/hci.c:5478
+#, fuzzy
+msgid "Infinite Production"
+msgstr "Produzione Ciclica"
 
 #: src/hci.c:5554
 msgid "Factory Delivery Point"
@@ -14144,6 +14200,11 @@ msgstr "PRONTO?"
 msgid "PLAYERS"
 msgstr "GIOCATORI"
 
+#: src/multiint.c:1916
+#, fuzzy
+msgid "Choose Team"
+msgstr "Squadre Bloccate"
+
 #: src/multiint.c:2066
 msgid "CHAT"
 msgstr "CHAT"
@@ -14281,6 +14342,10 @@ msgstr "Ping"
 #: src/multimenu.c:776
 msgid "Structs"
 msgstr "Strutture"
+
+#: src/multimenu.c:1125
+msgid "Channel"
+msgstr ""
 
 #: src/multimenu.c:1140
 msgid "Toggle Alliance State"

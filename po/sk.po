@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100 2.3.2\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-08-23 01:39+0200\n"
+"POT-Creation-Date: 2010-08-25 16:35+0200\n"
 "PO-Revision-Date: 2010-07-30 08:44+0100\n"
 "Last-Translator: Marian Zsemlye <koapa@inmail.sk>\n"
 "Language-Team: Koapa - Marian Zsemlye <koapa@inmail.sk>\n"
@@ -12483,6 +12483,7 @@ msgid "Tutorial"
 msgstr "Výcvik"
 
 #: src/frontend.c:100
+#: src/hci.c:3918
 msgid "Options"
 msgstr "Nastavenia"
 
@@ -12896,6 +12897,38 @@ msgstr "Stavba (F3)"
 msgid "Power"
 msgstr "Energia"
 
+#: src/hci.c:3960
+msgid "Map:"
+msgstr ""
+
+#: src/hci.c:3974
+#, fuzzy
+msgid "Load"
+msgstr "Nahraj Hru"
+
+#: src/hci.c:3975
+#, fuzzy
+msgid "Load Map File"
+msgstr "Nahraj Hru"
+
+#: src/hci.c:3982
+#, fuzzy
+msgid "Save"
+msgstr "Uložiť hru"
+
+#: src/hci.c:3983
+#, fuzzy
+msgid "Save Map File"
+msgstr "Uložiť hru"
+
+#: src/hci.c:3991
+msgid "New"
+msgstr ""
+
+#: src/hci.c:3992
+msgid "New Blank Map"
+msgstr ""
+
 #: src/hci.c:4030
 msgid "Tile"
 msgstr "dlaždica"
@@ -12928,6 +12961,10 @@ msgstr ""
 msgid "Place Features on map"
 msgstr "Umiestni na mapu črty"
 
+#: src/hci.c:4069
+msgid "Pause"
+msgstr ""
+
 #: src/hci.c:4070
 msgid "Pause or unpause the game"
 msgstr "Pauzni alebo odpauzni hru"
@@ -12935,6 +12972,15 @@ msgstr "Pauzni alebo odpauzni hru"
 #: src/hci.c:4084
 msgid "Align height of all map objects"
 msgstr ""
+
+#: src/hci.c:4094
+msgid "Edit"
+msgstr ""
+
+#: src/hci.c:4095
+#, fuzzy
+msgid "Start Edit Mode"
+msgstr "Začni bez základní"
 
 #: src/hci.c:4109
 #: src/ingameop.c:119
@@ -12947,10 +12993,20 @@ msgstr "Ukončiť"
 msgid "Exit Game"
 msgstr "Ukončiť hru"
 
+#: src/hci.c:4135
+#, fuzzy
+msgid "Current Player:"
+msgstr "Hra viacerých hráčov"
+
 #: src/hci.c:4534
 #: src/intdisplay.c:275
 msgid "Progress Bar"
 msgstr "Panel priebehu"
+
+#: src/hci.c:5478
+#, fuzzy
+msgid "Infinite Production"
+msgstr "Opakovať výrobu"
 
 #: src/hci.c:5554
 msgid "Factory Delivery Point"
@@ -14137,6 +14193,11 @@ msgstr ""
 msgid "PLAYERS"
 msgstr "HRÁČI"
 
+#: src/multiint.c:1916
+#, fuzzy
+msgid "Choose Team"
+msgstr "Pevné týmy"
+
 #: src/multiint.c:2066
 msgid "CHAT"
 msgstr "CHAT"
@@ -14274,6 +14335,10 @@ msgstr ""
 #: src/multimenu.c:776
 msgid "Structs"
 msgstr "Stavby"
+
+#: src/multimenu.c:1125
+msgid "Channel"
+msgstr ""
 
 #: src/multimenu.c:1140
 msgid "Toggle Alliance State"
