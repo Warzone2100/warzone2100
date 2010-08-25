@@ -3915,7 +3915,7 @@ BOOL intAddOptions(void)
 	sLabInit.y = OPT_GAP;
 	sLabInit.width = OPT_BUTWIDTH;
 	sLabInit.height = OPT_BUTHEIGHT;
-	sLabInit.pText = "Options";
+	sLabInit.pText = _("Options");
 	sLabInit.FontID = font_regular;
 	if (!widgAddLabel(psWScreen, &sLabInit))
 	{
@@ -3957,7 +3957,7 @@ BOOL intAddOptions(void)
 	sLabInit.style = WLAB_PLAIN;
 	sLabInit.x = OPT_GAP;
 	sLabInit.y = OPT_GAP;
-	sLabInit.pText = "Map:";
+	sLabInit.pText = _("Map:");
 	sLabInit.FontID = font_regular;
 	if (!widgAddLabel(psWScreen, &sLabInit))
 	{
@@ -3971,16 +3971,16 @@ BOOL intAddOptions(void)
 	sButInit.y = OPT_GAP;
 	sButInit.width = OPT_BUTWIDTH;
 	sButInit.height = OPT_BUTHEIGHT;
-	sButInit.pText = "Load";
-	sButInit.pTip = "Load Map File";
+	sButInit.pText = _("Load");
+	sButInit.pTip = _("Load Map File");
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
 		return false;
 	}
 	sButInit.id = IDOPT_MAPSAVE;
 	sButInit.x += OPT_GAP + OPT_BUTWIDTH;
-	sButInit.pText = "Save";
-	sButInit.pTip = "Save Map File";
+	sButInit.pText = _("Save");
+	sButInit.pTip = _("Save Map File");
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
 		return false;
@@ -3988,8 +3988,8 @@ BOOL intAddOptions(void)
 	sButInit.id = IDOPT_MAPNEW;
 	sButInit.x = OPT_GAP;
 	sButInit.y = OPT_GAP*2 + OPT_BUTHEIGHT;
-	sButInit.pText = "New";
-	sButInit.pTip = "New Blank Map";
+	sButInit.pText = _("New");
+	sButInit.pTip = _("New Blank Map");
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
 		return false;
@@ -4066,7 +4066,7 @@ BOOL intAddOptions(void)
 	sButInit.x = OPT_GAP;
 	sButInit.y = OPT_EDITY + OPT_BUTHEIGHT + OPT_GAP;
 	sButInit.id = IDOPT_PAUSE;
-	sButInit.pText = "Pause";
+	sButInit.pText = _("Pause");
 	sButInit.pTip = _("Pause or unpause the game");
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
@@ -4091,8 +4091,8 @@ BOOL intAddOptions(void)
 	/* Open the edit window - whatever that is supposed to be */
 	sButInit.x += OPT_GAP;
 	sButInit.id = IDOPT_EDIT;
-	sButInit.pText = "Edit";
-	sButInit.pTip = "Start Edit Mode";
+	sButInit.pText = _("Edit");
+	sButInit.pTip = _("Start Edit Mode");
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
 		return false;
@@ -4132,7 +4132,7 @@ BOOL intAddOptions(void)
 	sLabInit.style = WLAB_PLAIN;
 	sLabInit.x = OPT_GAP;
 	sLabInit.y = OPT_GAP;
-	sLabInit.pText = "Current Player:";
+	sLabInit.pText = _("Current Player:");
 	sLabInit.FontID = font_regular;
 	if (!widgAddLabel(psWScreen, &sLabInit))
 	{
@@ -5475,7 +5475,7 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		sButInit.width = iV_GetImageWidth(IntImages,IMAGE_INFINITE_DOWN);
 		sButInit.height = iV_GetImageHeight(IntImages,IMAGE_INFINITE_DOWN);
 	//	sButInit.pText = pCloseText;
-		sButInit.pTip = "Infinite Production";
+		sButInit.pTip = _("Infinite Production");
 		sButInit.FontID = font_regular;
 		sButInit.pDisplay = intDisplayButtonPressed;
 		sButInit.UserData = PACKDWORD_TRI(IMAGE_INFINITE_DOWN, IMAGE_INFINITE_HI, IMAGE_INFINITE_UP);

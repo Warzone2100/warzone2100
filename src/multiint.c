@@ -1913,7 +1913,7 @@ UDWORD addPlayerBox(BOOL players)
 				sButInit.height = MULTIOP_TEAMSHEIGHT;
 				if (canChooseTeamFor(i))
 				{
-					sButInit.pTip = "Choose team";
+					sButInit.pTip = _("Choose Team");
 				}
 				else
 				{
