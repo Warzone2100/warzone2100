@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2010-08-25 16:31+0200\n"
-"PO-Revision-Date: 2010-08-12 19:53+0200\n"
+"PO-Revision-Date: 2010-08-25 21:34+0200\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
 "Language: \n"
@@ -5994,7 +5994,7 @@ msgstr "Jeep mit Raketenwerfer"
 #: data/base/messages/strings/names.txt:205
 #: data/mp/messages/strings/names.txt:208
 msgid "Fire Truck"
-msgstr "Feuerlaster"
+msgstr "Feuerwehrfahrzeug"
 
 #: data/base/messages/strings/names.txt:206
 #: data/mp/messages/strings/names.txt:209
@@ -6003,9 +6003,8 @@ msgstr "Pick-Up"
 
 #: data/base/messages/strings/names.txt:207
 #: data/mp/messages/strings/names.txt:210
-#, fuzzy
 msgid "Cannon Fire Truck"
-msgstr "Feuerlaster"
+msgstr "Feuerwehrfahrzeug mit Geschütz"
 
 #: data/base/messages/strings/names.txt:208
 #: data/mp/messages/strings/names.txt:211
@@ -10362,7 +10361,6 @@ msgid "Scorpion Command Turret Tracks"
 msgstr "Scorpion Commanderturm Ketten"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1326
-#, fuzzy
 msgid "Mantis Command Turret Tracks"
 msgstr "Mantis Commanderturm Ketten"
 
@@ -13083,35 +13081,31 @@ msgstr "Energie"
 
 #: src/hci.c:3986
 msgid "Map:"
-msgstr ""
+msgstr "Karte:"
 
 #: src/hci.c:4000
-#, fuzzy
 msgid "Load"
-msgstr "Spielstand laden"
+msgstr "Laden"
 
 #: src/hci.c:4001
-#, fuzzy
 msgid "Load Map File"
-msgstr "Spielstand laden"
+msgstr "Kartendatei laden"
 
 #: src/hci.c:4008
-#, fuzzy
 msgid "Save"
-msgstr "Spiel speichern"
+msgstr "Speichern"
 
 #: src/hci.c:4009
-#, fuzzy
 msgid "Save Map File"
-msgstr "Spiel speichern"
+msgstr "Kartendatei speichern"
 
 #: src/hci.c:4017
 msgid "New"
-msgstr ""
+msgstr "Neu"
 
 #: src/hci.c:4018
 msgid "New Blank Map"
-msgstr ""
+msgstr "Neue leere Karte"
 
 #: src/hci.c:4056
 msgid "Tile"
@@ -13148,7 +13142,7 @@ msgstr "Feature auf der Karte platzieren"
 
 #: src/hci.c:4095
 msgid "Pause"
-msgstr ""
+msgstr "Pause"
 
 #: src/hci.c:4096
 msgid "Pause or unpause the game"
@@ -13160,12 +13154,11 @@ msgstr "Höhe aller Kartenobjekte abgleichen"
 
 #: src/hci.c:4120
 msgid "Edit"
-msgstr ""
+msgstr "Bearbeiten"
 
 #: src/hci.c:4121
-#, fuzzy
 msgid "Start Edit Mode"
-msgstr "Ohne Basen starten"
+msgstr "Bearbeitungsmodus starten"
 
 #: src/hci.c:4135
 #: src/ingameop.c:119
@@ -13179,9 +13172,8 @@ msgid "Exit Game"
 msgstr "Spiel verlassen"
 
 #: src/hci.c:4161
-#, fuzzy
 msgid "Current Player:"
-msgstr "Mehrspieler"
+msgstr "Aktueller Spieler:"
 
 #: src/hci.c:4500
 #: src/intdisplay.c:209
@@ -13191,9 +13183,8 @@ msgid "Progress Bar"
 msgstr "Fortschrittsbalken"
 
 #: src/hci.c:5458
-#, fuzzy
 msgid "Infinite Production"
-msgstr "Produktion wiederholen"
+msgstr "Unbegrenzte Produktion"
 
 #: src/hci.c:5536
 msgid "Factory Delivery Point"
@@ -13558,9 +13549,8 @@ msgid "Debug menu is Open"
 msgstr "Debug-Menü ist offen"
 
 #: src/keybind.c:1559
-#, fuzzy
 msgid "Unable to locate any oil derricks!"
-msgstr "Kann keinen LKW finden!"
+msgstr "Kann keine Ölbohrtürme finden!"
 
 # Let it snow, let it snow, let it snow..
 # Von daher sollte das unübersetzt bleiben -Kreuvf
@@ -14146,7 +14136,6 @@ msgid "Complete current research"
 msgstr "Erledige aktuelle Forschung"
 
 #: src/keymap.c:457
-#, fuzzy
 msgid "Toggle watch window"
 msgstr "Beobachtungsfenster umschalten"
 
@@ -14467,11 +14456,9 @@ msgstr "BEREIT?"
 msgid "PLAYERS"
 msgstr "SPIELER"
 
-# festgelegt ungleich fest -Kreuvf
 #: src/multiint.c:1941
-#, fuzzy
 msgid "Choose Team"
-msgstr "Feste Teams"
+msgstr "Wähle ein Team"
 
 #: src/multiint.c:2091
 msgid "CHAT"
@@ -14482,9 +14469,8 @@ msgid "All players need to have the same mods to join your game."
 msgstr "Alle Spieler benötigen dieselben Mods, um Ihrem Spiel beitreten zu können."
 
 #: src/multiint.c:2285
-#, fuzzy, c-format
 msgid "*** password [%s] is now required! ***"
-msgstr "*** Jetzt wird ein Passwort benötigt! ***"
+msgstr "*** Jetzt wird ein Passwort [%s] benötigt! ***"
 
 #: src/multiint.c:2293
 msgid "*** password is NOT required! ***"
@@ -14616,7 +14602,7 @@ msgstr "Gebäude"
 
 #: src/multimenu.c:1124
 msgid "Channel"
-msgstr ""
+msgstr "Kanal"
 
 #: src/multimenu.c:1139
 msgid "Toggle Alliance State"
@@ -14641,7 +14627,7 @@ msgstr "Energie übertragen"
 #: src/multimenu.c:1478
 #, c-format
 msgid "kicked %s : %s from the game, and added them to the banned list!"
-msgstr ""
+msgstr "%s : %s aus dem Spiel geworfen und der Bannliste hinzugefügt!"
 
 #: src/multiplay.c:277
 #, c-format
