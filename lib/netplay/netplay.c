@@ -3521,7 +3521,8 @@ static void NETallowJoining(void)
 					{
 						char buf[256] = {'\0'};
 
-						ssprintf(buf, "** This player %u, was rejected, error code: %u",(unsigned int) index, (unsigned int) rejected);
+						ssprintf(buf, "** Player %s (%u), was rejected, error code: %u, IP: %s, pw:%s", name, (unsigned int) index, (unsigned int) rejected,
+									clientAddress,  GamePassword[0] ? GamePassword : "n/a");
 						debug(LOG_INFO, buf);
 						NETlogEntry(buf, SYNC_FLAG, index);
 						NETbeginEncode(NET_REJECTED, index);
