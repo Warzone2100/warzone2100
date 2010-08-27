@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100 2.3_branch\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-08-25 16:35+0200\n"
-"PO-Revision-Date: 2010-08-21 00:57+0900\n"
-"Last-Translator: Josh Shin <urgood2@gmail.com>\n"
+"POT-Creation-Date: 2010-08-27 19:52+0200\n"
+"PO-Revision-Date: 2010-08-27 17:38+0900\n"
+"Last-Translator: Joshua Shin <urgood2@gmail.com>\n"
 "Language-Team: Korean Translation Team <urgood2@gmail.com>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -208,7 +208,6 @@ msgstr "무기 연구 완료"
 msgid "New Defensive Structure Available"
 msgstr "새로운 방어 구조 사용가능"
 
-# get rid of 장갑??? armored
 #: data/base/messages/resmessages12.rmsg:5
 #: data/mp/messages/resmessages12.rmsg:5
 msgid "Armored Mortar battery pit"
@@ -1256,7 +1255,8 @@ msgstr "사이보그용 자재가 향상되었습니다"
 msgid "Layered composite alloys and energy-absorbing fibres"
 msgstr "계층화된 복합 합금과 에너지-흡수 섬유질"
 
-# kinetic armour???
+# kinetic armour=contrast to thermal armor, which is for heat
+# so kinetic armor is for bullets, discarding sabots, and other projectiles
 #: data/base/messages/resmessages1.rmsg:32
 #: data/base/messages/resmessages2.rmsg:19
 #: data/base/messages/resmessages3.rmsg:71
@@ -1264,7 +1264,7 @@ msgstr "계층화된 복합 합금과 에너지-흡수 섬유질"
 #: data/base/messages/strings/resstrings.txt:33
 #: data/mp/messages/strings/resstrings.txt:35
 msgid "Increases Kinetic Armor and Body Points"
-msgstr "운동 에너지 장갑과 보디포인트를 향상시켜줍니다"
+msgstr "장갑과 보디포인트를 향상시켜줍니다"
 
 #: data/base/messages/resmessages1.rmsg:33
 #: data/base/messages/resmessages23.rmsg:7
@@ -1390,7 +1390,7 @@ msgstr "사이보그 캐논으로 무장"
 #: data/base/messages/resmessages1.rmsg:70
 #: data/mp/messages/resmessages1.rmsg:70
 msgid "Armed with Cyborg Flamer"
-msgstr "사이보그 화염 방사기로 무장"
+msgstr "사이보그 화염방사기로 무장"
 
 #: data/base/messages/resmessages1.rmsg:83
 #: data/mp/messages/resmessages1.rmsg:83
@@ -1459,7 +1459,7 @@ msgstr "랜서Lancer 대전차로케트를 장착한 장갑벙커"
 #: data/base/messages/resmessages1.rmsg:161
 #: data/mp/messages/resmessages1.rmsg:161
 msgid "Armored bunker with Flamer"
-msgstr "화염 방사기를 장착한 장갑벙커"
+msgstr "화염방사기를 장착한 장갑벙커"
 
 #: data/base/messages/resmessages1.rmsg:174
 #: data/mp/messages/resmessages1.rmsg:174
@@ -1511,17 +1511,17 @@ msgstr "새로운 기지 구조물이 사용가능합니다"
 #: data/base/messages/resmessages1.rmsg:239
 #: data/mp/messages/resmessages1.rmsg:239
 msgid "New Repair Facility Repairs Damaged Units"
-msgstr "새로운 수리 시설이 손상된 유니트를 복구합니다"
+msgstr "새로운 수리 시설이 손상된 유닛을 복구합니다"
 
 #: data/base/messages/resmessages1.rmsg:240
 #: data/mp/messages/resmessages1.rmsg:240
 msgid "Use the Command Console to send units back for repair"
-msgstr "유니트를 수리를 위해 돌려보낼 때 명령 콘솔을 사용하십시오"
+msgstr "유닛을 수리를 위해 돌려보낼 때 명령 콘솔을 사용하십시오"
 
 #: data/base/messages/resmessages1.rmsg:241
 #: data/mp/messages/resmessages1.rmsg:241
 msgid "Or select the Repair Facility as a unit's target"
-msgstr "또는 수리 시설을 유니트의 타깃으로 선택하십시오"
+msgstr "또는 수리 시설을 유닛의 표적으로 선택하십시오"
 
 #: data/base/messages/resmessages1.rmsg:251
 #: data/base/messages/resmessages2.rmsg:329
@@ -1780,7 +1780,7 @@ msgstr "모든 연구 시설이 자동으로 업그레이드됩니다"
 #: data/mp/messages/resmessages3.rmsg:472
 #: data/mp/messages/strings/resstrings.txt:425
 msgid "Increases Damage Resistance"
-msgstr "피해 저항력을 늘립니다"
+msgstr "데미지 저항력을 늘립니다"
 
 #: data/base/messages/resmessages1.rmsg:369
 #: data/base/messages/strings/names.txt:805
@@ -2021,7 +2021,7 @@ msgstr "차량 차체가 향상되었습니다"
 #: data/base/messages/strings/resstrings.txt:573
 #: data/mp/messages/strings/resstrings.txt:606
 msgid "Increases kinetic armor and body points"
-msgstr "운동 에너지 장갑과 보디포인트를 향상시킵니다"
+msgstr "장갑과 보디포인트를 향상시킵니다"
 
 #: data/base/messages/resmessages1.rmsg:485
 #: data/base/messages/resmessages1.rmsg:498
@@ -2142,7 +2142,7 @@ msgstr "대전차 캐논 고위력 폭발탄"
 #: data/base/messages/resmessages1.rmsg:590
 #: data/mp/messages/resmessages1.rmsg:591
 msgid "Flame-thrower firing Propylene Oxide gel"
-msgstr "프로필렌옥사이드 젤을 발사하는 화염 방사기"
+msgstr "프로필렌옥사이드 젤을 발사하는 화염방사기"
 
 #: data/base/messages/resmessages1.rmsg:591
 #: data/base/messages/resmessages2.rmsg:773
@@ -2294,7 +2294,7 @@ msgstr "미니로케트의 공격범위를 넓혀줍니다"
 #: data/base/messages/resmessages1.rmsg:746
 #: data/mp/messages/resmessages1.rmsg:747
 msgid "Tracks and directs in-flight rocket to target"
-msgstr "비행중인 로케트의 진로를 관찰하면서 표적으로 안내해줍니다"
+msgstr "비행 중인 로케트의 진로를 관찰하면서 표적으로 안내해줍니다"
 
 #: data/base/messages/resmessages1.rmsg:759
 #: data/mp/messages/resmessages1.rmsg:760
@@ -2432,7 +2432,7 @@ msgstr "VTOL 카운터배터리 탑에서 적의 간접 사격 포대를 감지�
 #: data/mp/messages/resmessages2.rmsg:435
 #: data/mp/messages/strings/resstrings.txt:509
 msgid "Orders assigned VTOLs to attack the enemy batteries"
-msgstr "할당된 VTOL 유니트에게 적의 포대를 공격하도록 명령합니다"
+msgstr "할당된 VTOL 유닛에게 적의 포대를 공격하도록 명령합니다"
 
 #: data/base/messages/resmessages23.rmsg:72
 #: data/base/messages/resmessages2.rmsg:436
@@ -2441,7 +2441,7 @@ msgstr "할당된 VTOL 유니트에게 적의 포대를 공격하도록 명령�
 #: data/mp/messages/resmessages2.rmsg:436
 #: data/mp/messages/strings/resstrings.txt:510
 msgid "VTOLs attack until enemy battery is suppressed"
-msgstr "VTOL 유니트가 적의 포대가 억압될 때까지 공격합니다"
+msgstr "적의 포대가 억압될 때까지 VTOL 유닛이 공격합니다"
 
 #: data/base/messages/resmessages23.rmsg:82
 #: data/base/messages/resmessages2.rmsg:446
@@ -2484,7 +2484,7 @@ msgstr "VTOL 공습 탑에서 접근하는 적을 감지합니다"
 #: data/base/messages/resmessages23.rmsg:97
 #: data/mp/messages/resmessages23.rmsg:97
 msgid "Assigned VTOLs attack the enemy units"
-msgstr "할당된 VTOL 유니트가 적의 유닛을 공격합니다"
+msgstr "할당된 VTOL 유닛이 적의 유닛을 공격합니다"
 
 #: data/base/messages/resmessages23.rmsg:98
 #: data/mp/messages/resmessages23.rmsg:98
@@ -2793,7 +2793,7 @@ msgstr "싸이클론 대공포 발사시설"
 #: data/mp/messages/strings/resstrings.txt:139
 #: data/mp/messages/strings/resstrings.txt:151
 msgid "Automatically targets VTOLs"
-msgstr "VTOL 유니트를 자동으로 겨냥합니다"
+msgstr "VTOL 유닛을 자동으로 겨냥합니다"
 
 #: data/base/messages/resmessages2.rmsg:83
 #: data/base/messages/strings/resstrings.txt:126
@@ -3862,14 +3862,13 @@ msgstr "고급 수리 기법"
 msgid "Vapor Turbine boosts power output"
 msgstr "증기 터빈이 전력 생산량을 증가합니다"
 
-# what is a brain in this instance???
+# 이건 maybe 인공 뇌
 #: data/base/messages/resmessages3.rmsg:447
 #: data/base/messages/strings/names.txt:838
 #: data/mp/messages/resmessages3.rmsg:447
 #: data/mp/messages/strings/names.txt:852
-#, fuzzy
 msgid "Neural Synapse Research Brain"
-msgstr "시냅스 신경 연구 브레인(뇌)"
+msgstr "시냅스 신경 연구 뇌"
 
 #: data/base/messages/resmessages3.rmsg:460
 #: data/base/messages/strings/names.txt:811
@@ -4432,7 +4431,7 @@ msgstr "VTOL 공장이 VTOL 생산을 가능하게 합니다"
 #: data/base/messages/resmessagesall.rmsg:19
 #: data/mp/messages/resmessagesall.rmsg:19
 msgid "VTOL rearming pads required to keep VTOLs flying"
-msgstr "VTOL 재무장 패드가 VTOL 유니트의 연속비행을 유지하는 데 필요합니다"
+msgstr "VTOL 재무장 패드가 VTOL 유닛의 연속비행을 유지하는 데 필요합니다"
 
 #: data/base/messages/resmessagesall.rmsg:20
 #: data/mp/messages/resmessagesall.rmsg:20
@@ -4447,17 +4446,17 @@ msgstr "VTOL을 급유하며 재무장 및 수리합니다"
 #: data/base/messages/resmessagesall.rmsg:32
 #: data/mp/messages/resmessagesall.rmsg:32
 msgid "Assign a VTOL by selecting the rearming pad as its target"
-msgstr "재무장 패드를 VTOL 유니트의 표적으로 선택하여 할당하십시오"
+msgstr "재무장 패드를 VTOL 유닛의 표적으로 선택하여 할당하십시오"
 
 #: data/base/messages/resmessagesall.rmsg:33
 #: data/mp/messages/resmessagesall.rmsg:33
 msgid "The VTOL returns to the selected pad for rearming"
-msgstr "VTOL 유니트가 재무장하기 위해 선택된 패드로 돌아옵니다"
+msgstr "VTOL 유닛이 재무장하기 위해 선택된 패드로 돌아옵니다"
 
 #: data/base/messages/resmessagesall.rmsg:44
 #: data/mp/messages/resmessagesall.rmsg:44
 msgid "Battlefield repair unit"
-msgstr "전장 수리 유니트"
+msgstr "전장 수리 유닛"
 
 #: data/base/messages/resmessagesall.rmsg:45
 #: data/base/messages/strings/resstrings.txt:445
@@ -4465,7 +4464,7 @@ msgstr "전장 수리 유니트"
 #: data/mp/messages/resmessagesall.rmsg:357
 #: data/mp/messages/strings/resstrings.txt:471
 msgid "Automatically Repairs Damaged Units"
-msgstr "자동으로 손상된 유니트를 수리합니다"
+msgstr "손상된 유닛을 자동으로 수리합니다"
 
 #: data/base/messages/resmessagesall.rmsg:46
 #: data/base/messages/strings/resstrings.txt:446
@@ -4473,7 +4472,7 @@ msgstr "자동으로 손상된 유니트를 수리합니다"
 #: data/mp/messages/resmessagesall.rmsg:358
 #: data/mp/messages/strings/resstrings.txt:472
 msgid "Or damaged units may be selected as target"
-msgstr "또는 손상된 유니트를 표적으로 선택할 수도 있습니다"
+msgstr "또는 손상된 유닛을 표적으로 선택할 수도 있습니다"
 
 #: data/base/messages/resmessagesall.rmsg:56
 #: data/mp/messages/resmessagesall.rmsg:56
@@ -4586,7 +4585,7 @@ msgstr "레이저 조준기가 표적을 향해 탄환을 지도해줍니다"
 #: data/base/messages/strings/cam1strings.txt:3
 #: data/base/sequenceaudio/cam1/c001.txa:12
 msgid "OBJECTIVE: Locate and recover neural synapse technology"
-msgstr "목표: 신경 시냅스 기술을 찾아 복구한다"
+msgstr "목표: 신경 시냅스 기술의 수색 및 복구"
 
 #: data/base/messages/strings/cam1strings.txt:4
 #: data/base/sequenceaudio/cam1/c001.txa:13
@@ -4596,7 +4595,7 @@ msgstr "기지를 확립하고, 그 다음 멸망 전(Pre-Collapse) 시대의 �
 #: data/base/messages/strings/cam1strings.txt:5
 #: data/base/sequenceaudio/cam1/c001.txa:14
 msgid "This structure contains technology vital for the success of the Project."
-msgstr "이 구조물이 우리 프로젝트의 성공을 위해 필수적인 기술이 들어있습니다."
+msgstr "이 구조물이 우리 프로젝트의 성공을 위해 필수적인 기술이 들어 있습니다."
 
 #: data/base/messages/strings/cam1strings.txt:7
 msgid "ALPHA BASE MISSION: Scavenger Raiders"
@@ -4604,7 +4603,7 @@ msgstr "알파(ALPHA) 기지 중요임무: 스캐빈저 도적"
 
 #: data/base/messages/strings/cam1strings.txt:8
 msgid "Scavenger raiders are approaching our base."
-msgstr "스캐빈저(Scavenger) 도적들이 우리의 기지에 접근하고있습니다."
+msgstr "스캐빈저(Scavenger) 도적들이 우리의 기지에 접근하고 있습니다."
 
 #: data/base/messages/strings/cam1strings.txt:9
 msgid "Defend the base then destroy the Scavenger camps."
@@ -5005,7 +5004,7 @@ msgstr "수송 중요임무: 격추된 수송선"
 
 #: data/base/messages/strings/cam2strings.txt:19
 msgid "Our transport carrying units from team Alpha Base has been shot down."
-msgstr "알파 기지의 유니트를 태운 우리의 수송선이 격추되었습니다."
+msgstr "알파 기지의 유닛을 태운 우리의 수송선이 격추되었습니다."
 
 #: data/base/messages/strings/cam2strings.txt:23
 msgid "It is under attack from The Collective at this location."
@@ -5013,7 +5012,7 @@ msgstr "이 위치에서 컬렉티브(The Collective)의 공격을 받고 있습
 
 #: data/base/messages/strings/cam2strings.txt:24
 msgid "Assemble a rescue team to recover the transport and its cargo."
-msgstr "구조 팀을 집합시켜 수송선과 그 안에 탄 유니트들을 되찾으십시오."
+msgstr "구조 팀을 집합시켜 수송선과 그 안에 탑승한 유닛을 되찾으십시오."
 
 #: data/base/messages/strings/cam2strings.txt:27
 msgid "IN-FLIGHT BRIEFING"
@@ -5098,7 +5097,7 @@ msgstr "당신은 그 수송대를 가로막아 화물을 되찾으십시오."
 
 #: data/base/messages/strings/cam2strings.txt:65
 msgid "Enemy VTOLs are likely to be flying close escort."
-msgstr "적의 VTOL 유니트들이 가까이 호위 비행을 하고 있을 가능성이 높습니다."
+msgstr "적의 VTOL 유닛이 가까이 호위 비행을 하고 있을 가능성이 높습니다."
 
 #: data/base/messages/strings/cam2strings.txt:68
 #: data/base/messages/strings/cam2strings.txt:72
@@ -5123,7 +5122,7 @@ msgstr "베타 기지 중요임무: 적의 항공 기지를 파괴하고 VTOL을
 
 #: data/base/messages/strings/cam2strings.txt:78
 msgid "Analysis of flight paths indicate that The Collective's VTOLs originate from here."
-msgstr "비행 경로의 분석에 따르면 컬렉티브의 VTOL 유니트의 출몰지역이 이 위치에 있습니다."
+msgstr "비행 경로의 분석에 따르면 컬렉티브의 VTOL 유닛의 출몰지역이 이 위치에 있습니다."
 
 #: data/base/messages/strings/cam2strings.txt:81
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs"
@@ -5357,7 +5356,7 @@ msgstr "북부 섹터 중요임무: 핵폭발"
 
 #: data/base/messages/strings/cam3strings.txt:34
 msgid "All units must escape the area before the warhead detonates."
-msgstr "탄두가 폴발하기전 모든 유니트이 그 지역을 벗어나야 합니다."
+msgstr "탄두가 폴발하기전 모든 유닛이 그 지역을 벗어나야 합니다."
 
 #: data/base/messages/strings/cam3strings.txt:35
 msgid "Air-lift by transport is not possible. You'll have to head overland."
@@ -5991,9 +5990,8 @@ msgstr "소형 오픈 트럭 "
 
 #: data/base/messages/strings/names.txt:207
 #: data/mp/messages/strings/names.txt:210
-#, fuzzy
 msgid "Cannon Fire Truck"
-msgstr "소방차"
+msgstr "캐논 소방차"
 
 #: data/base/messages/strings/names.txt:208
 #: data/mp/messages/strings/names.txt:211
@@ -6023,7 +6021,7 @@ msgstr "기관총 사수 "
 #: data/mp/messages/strings/names.txt:546
 #: data/mp/messages/strings/names.txt:1074
 msgid "Flamer"
-msgstr "화염 방사기 사수"
+msgstr "화염방사기"
 
 #: data/base/messages/strings/names.txt:214
 #: data/base/messages/strings/names.txt:221
@@ -6044,7 +6042,7 @@ msgstr "랜서"
 #: data/mp/messages/strings/names.txt:223
 #: data/mp/messages/strings/names.txt:542
 msgid "Heavy Gunner"
-msgstr "헤비 사수"
+msgstr "소형 캐논 사수"
 
 #: data/base/messages/strings/names.txt:219
 #: data/mp/messages/strings/names.txt:222
@@ -7799,7 +7797,7 @@ msgstr "센서 업그레이드"
 #: data/base/messages/strings/names.txt:876
 #: data/mp/messages/strings/names.txt:892
 msgid "Construction Unit"
-msgstr "건설 유니트"
+msgstr "건설 유닛"
 
 #: data/base/messages/strings/names.txt:878
 #: data/mp/messages/strings/names.txt:894
@@ -9225,7 +9223,7 @@ msgstr "자기 재생 공장 생산"
 #: data/mp/messages/resmessagesall.rmsg:356
 #: data/mp/messages/strings/resstrings.txt:470
 msgid "Heavy repair unit"
-msgstr "대형 수리 유니트"
+msgstr "대형 수리 유닛"
 
 #: data/base/messages/strings/resstrings.txt:449
 #: data/mp/messages/strings/resstrings.txt:477
@@ -9240,7 +9238,7 @@ msgstr "수리 속도를 증가합니다"
 #: data/base/messages/strings/resstrings.txt:452
 #: data/mp/messages/strings/resstrings.txt:480
 msgid "All mobile repair units upgraded automatically"
-msgstr "모든 이동식 수리 유니트가 자동 업그레이드됩니다."
+msgstr "모든 이동식 수리 유닛이 자동 업그레이드됩니다."
 
 #: data/base/messages/strings/resstrings.txt:511
 #: data/mp/messages/strings/resstrings.txt:539
@@ -9437,7 +9435,7 @@ msgstr "공장 배달 지점은 숫자 1로 표시됩니다"
 
 #: data/base/script/text/tutorial3.slo:936
 msgid "All new units will drive to this location once built"
-msgstr "모든 새로운 유니트가 생산 되자마자 이 지점으로 이동합니다"
+msgstr "모든 새로운 유닛이 생산 완료 즉시 이 지점으로 이동합니다"
 
 #: data/base/script/text/tutorial3.slo:938
 msgid "You can move the delivery point at any time by left clicking it"
@@ -9449,7 +9447,7 @@ msgstr "그 다음 배달 지점의 새로운 위치를 클릭하십시오"
 
 #: data/base/script/text/tutorial3.slo:969
 msgid "The factory can now be ordered to build a new unit"
-msgstr "이제 공장이 새로운 유니트를 지을 준비가 되었습니다"
+msgstr "이제 공장이 새로운 유닛을 지을 준비가 되었습니다"
 
 #: data/base/script/text/tutorial3.slo:995
 msgid "Left click the flashing MANUFACTURE icon"
@@ -9457,11 +9455,11 @@ msgstr "반짝이는 생산 아이콘을 왼쪽 클릭하십시오"
 
 #: data/base/script/text/tutorial3.slo:1013
 msgid "Now left click the units you want to build from the menu at the left"
-msgstr "그리고 나서 생산하고 싶은 유니트를 좌측에 있는 메뉴에서 왼쪽 클릭하십시오"
+msgstr "그 다음 생산하고 싶은 유닛을 좌측에 있는 메뉴에서 왼쪽 클릭하십시오"
 
 #: data/base/script/text/tutorial3.slo:1027
 msgid "Please wait whilst the factory manufactures the new unit(s)"
-msgstr "공장에서 새로운 유니트가 생산되는 동안 잠시 기다려 주십시오"
+msgstr "공장에서 새로운 유닛이 생산되는 동안 잠시 기다려 주십시오"
 
 #: data/base/script/text/tutorial3.slo:1052
 msgid "Congratulations commander - you are ready for your first mission"
@@ -9485,7 +9483,7 @@ msgstr "제발 도와줘요!..."
 
 #: data/base/sequenceaudio/cam1/c001.txa:1
 msgid "CAMPAIGN ONE"
-msgstr "캠페인 1"
+msgstr "첫번째 캠페인"
 
 #: data/base/sequenceaudio/cam1/c001.txa:2
 msgid "WESTERN SECTOR"
@@ -9551,7 +9549,7 @@ msgstr "사령관님, 뉴 패러다임에게서 사령관 터릿을 획득하였
 
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:6
 msgid "This turret allows commanders to coordinate attacks between assigned units and to act as a delivery point for factories. Researching and using this technology has the highest priority."
-msgstr "이 터릿은 사령관들이 자신에게 할당된 유니트의 공격을 조직화하고 또한 공장 배달 지점 역할을 할 수 있게 해줍니다. 이 장비를 연구하고 사용하는 것이 최우선입니다."
+msgstr "이 터릿은 사령관들이 자신에게 할당된 유닛의 공격을 조직화하고 또한 공장 배달 지점 역할을 할 수 있게 해줍니다. 이 장비를 연구하고 사용하는 것이 최우선입니다."
 
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:8
 msgid "Commander, we are receiving this transmission."
@@ -9565,7 +9563,7 @@ msgstr "우리에 대한 너희의 공격은 무사히 넘어가지 않을 것�
 #: data/base/sequenceaudio/cam1/cam1cnp.txt:5
 #: data/base/sequenceaudio/cam1/sub13np2.txt:5
 msgid "You are in contravention of the New Paradigm."
-msgstr "당신은 뉴 패러다임을 대항하고있다."
+msgstr "당신은 뉴 패러다임을 대항하고 있다."
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:4
 msgid "All attack groups commence attack on enemy."
@@ -9645,7 +9643,6 @@ msgid "We are not sure what Nexus is or who or what is directing it. Initial res
 msgstr "넥서스가 무엇인지, 또한 누가(아니면 무엇이) 그것을 제어하는지 확실이 알지 못합니다. 초기 연구에 의하면 시냅스 연결의 개발자인 리드(Reed) 기업과 넥서스 침입자 프로그램 사이 관련이 있습니다."
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:8
-#, fuzzy
 msgid "We have ascertained that Nexus supplied the New Paradigm with most of its technology. Whatever Nexus is, it's more than a computer parasite."
 msgstr "우리는 넥서스가 뉴 패러다임의 장비 대부분을 공급해 주었다는 것을 알아내었습니다. 넥서스가 무었이든지 간에, 그것은 컴퓨터 바이러스 이상의 존재입니다."
 
@@ -9729,585 +9726,585 @@ msgstr "우리는 그것의 궁극적인 목적 또는 기능을 확인하지 �
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:8
 msgid "Further analysis was prevented by the manual shutdown of the system by our technicians to prevent additional contamination by the Nexus Intruder Program."
-msgstr ""
+msgstr "우리의 기술자들이 넥서스 침입자 프로그램에 의한 추가 오염을 막기 위해 수동으로 시스템을 종료하였습니다. 이 때문에 더 자세한 분석을 할 수 없었습니다."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:10
 msgid "However, the spread of the Nexus Intruder Program was not checked by New Paradigm. We need to capture New Paradigm's core systems to further investigate Nexus and determine its origins."
-msgstr ""
+msgstr "하지만, 뉴 패러다임은 넥서스 침입자 프로그램의 확산을 막지 않았습니다. 넥서스에 대한 연구를 계속하고 그것의 기원을 확인하기 위해 뉴 패러다임의 핵심 시스템을 점령해야 합니다."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:12
 msgid "Commander, you are to curtail the New Paradigm's activities in this sector and locate their main base."
-msgstr ""
+msgstr "사령관님, 당신은 이 섹터에서 뉴 패러다임의 활동을 막고 그들의 주요 기지를 찾아야 합니다."
 
 #: data/base/sequenceaudio/cam2/c002.txa:1
 msgid "CAMPAIGN TWO"
-msgstr ""
+msgstr "두번째 켐페인"
 
 #: data/base/sequenceaudio/cam2/c002.txa:2
 msgid "EASTERN SECTOR"
-msgstr ""
+msgstr "동쪽 섹터"
 
 #: data/base/sequenceaudio/cam2/c002.txa:4
 msgid "Morning, September 1st, 2100"
-msgstr ""
+msgstr "아침, 2100년 9월 1일"
 
 #: data/base/sequenceaudio/cam2/c002.txa:5
 msgid "In-flight to Eastern Sector"
-msgstr ""
+msgstr "동쪽 섹터로 비행 중"
 
 #: data/base/sequenceaudio/cam2/c002.txa:6
 msgid "Team Alpha approaches Beta Base"
-msgstr ""
+msgstr "알파 팀이 베타 기지에 다가갑니다"
 
 #: data/base/sequenceaudio/cam2/c002.txa:10
 msgid "You must defend and hold it at all costs."
-msgstr ""
+msgstr "어떤 일이 있더라도 이 기지를 보호하십시오."
 
 #: data/base/sequenceaudio/cam2/c002.txa:12
 msgid "THE COLLECTIVE"
-msgstr ""
+msgstr "컬렉티브"
 
 #: data/base/sequenceaudio/cam2/c2diif2.txt:1
 msgid "Commander, a new launch has been detected."
-msgstr ""
+msgstr "사령관님, 새로 발사된 미사일이 감지되었습니다."
 
 #: data/base/sequenceaudio/cam2/c2diif2.txt:2
 msgid "It is likely to be targeted at your location."
-msgstr ""
+msgstr "당신의 위치를 향해 오고있을 가능성이 높습니다."
 
 #: data/base/sequenceaudio/cam2/c2diif2.txt:4
 msgid "You are to start the immediate evacuation of Beta Base to the safe haven."
-msgstr ""
+msgstr "당신은 안전한 피난처로 베타 기지의 즉각 철수를 시작하십시오."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:1
 msgid "NASDA is the North American Strategic Defense Agency."
-msgstr ""
+msgstr "NASDA는 북미 전략 방어기구이다."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:3
 msgid "NASDA was formed in 2076 to defend North America from conventional and nuclear attack. The construction of a satellite defense system began in 2081 and was completed in 2082."
-msgstr ""
+msgstr "NASDA는 2076년 일반 및 핵 공격으로부터 북미를 보호하기 위해 형성되었다."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:6
 msgid "In 2085 the NASDA satellites fired their nukes at Earth."
-msgstr ""
+msgstr "2085년, NASDA 위성들은 장착된 핵폭탄을 지구로 떨어뜨렸다."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:8
 msgid "There were also ground-based sites. Many of these were destroyed in the nuclear counterstrikes, but there's bound to be some out there."
-msgstr ""
+msgstr "또한 지상 기반의 발사 시설도 있었습니다. 핵 반격 때문에 다수가 파괴됐지만, 아직도 몇 개는 남아 있을 겁니다."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:10
 msgid "The NASDA satellites also contained pulse-lasers designed to shoot down missiles approaching North America."
-msgstr ""
+msgstr "NASDA 위성에는 북미에 접근하는 미사일을 격추하도록 만들어진 펄스 레이저도 장착되 있었다."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:12
 msgid "During the counterstrikes, these LasSats failed to fire. If brought into operation, these LasSats could inflict major damage on ground targets."
-msgstr ""
+msgstr "반격이 진행 중일 때, 이 레이저들을 불발을 일으켰습니다. 사용되었으면 이 레이저들은 지상 표적에 심한 손상을 입힐 수 있었습니다."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:14
 msgid "All nukes targeted at  North America found their targets."
-msgstr ""
+msgstr "북미로 발사된 모든 핵폭탄은 정확히 표적에 떨어졌습니다."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:16
 msgid "We know that Nexus is searching for NASDA Central in the Eastern Sector. This was one of the land-based control centres for the satellites."
-msgstr ""
+msgstr "우리는 넥서스가 동부 섹터에서 NASDA 중앙 본부를 찾고 있다는 것을 알고 있습니다. 이곳은 NASDA 위성의 지상 제어 센터 중 하나였습니다."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:18
 msgid "If the centre is found intact, NEXUS may gain control of the satellites."
-msgstr ""
+msgstr "이 기지가 온전한 채로 발견되면, 넥서스는 위성을 제어할 수도 있습니다."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:20
 msgid "Nexus claimed that it had already destroyed the world."
-msgstr ""
+msgstr "넥서스는 자신이 이미 세상을 파괴하였다고 주장하였습니다."
 
 #: data/base/sequenceaudio/cam2/cam2_2n.txt:1
 msgid "Warriors of the Collective, I seek the location of NASDA Central."
-msgstr ""
+msgstr "컬렉티브의 전사들이여, 나는 NADSA 중앙 본부의 위치를 찾고 있다."
 
 #: data/base/sequenceaudio/cam2/cam2_2n.txt:2
 msgid "It lies somewhere in your territory."
-msgstr ""
+msgstr "이 본부는 당신의 영토 어딘가에 놓여 있다."
 
 #: data/base/sequenceaudio/cam2/cam2_2n.txt:4
 msgid "Find it for me and I shall provide you with further weapons to aid you in your war against the Project."
-msgstr ""
+msgstr "나를 위해 이것을 찾아달라. 그러면 프로젝트에 대한 당신의 전쟁을 돕기 위해 무기를 더 제공하겠다."
 
 #: data/base/sequenceaudio/cam2/cam22pl2.txt:1
 msgid "NASDA Briefing follows..."
-msgstr ""
+msgstr "NASDA 브리핑이 따릅니다..."
 
 #: data/base/sequenceaudio/cam2/cam22pl3.txt:1
 msgid "We've got to make sure that it can't do it again."
-msgstr ""
+msgstr "그것이 다시 그런 짓을 하지 못하도록 막아야 합니다."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:1
 msgid "Analysis indicates that these systems were part of the control system for the NASDA satellites."
-msgstr ""
+msgstr "분석에 의하면 이 시스템들은 NASDA 위성 제어 시스템의 일부였습니다."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:2
 msgid "It's now certain that Nexus was responsible for The Collapse."
-msgstr ""
+msgstr "넥서스가 컬랩스의 윈인이였다는 것이 이제 확실합니다."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:4
 msgid "During the early stages of the Collapse, NASDA technicians switched off  the infected systems in order to isolate the spread of Nexus. This seems to have prevented the LasSats from firing during the counterstrikes."
-msgstr ""
+msgstr "컬랩스의 초기 단계 동안, NASDA 기술자들이 넥서스의 확장을 막기 위해 감염뒨 시스템을 종료하였습니다. 이 때문에 레이저 위성들이 핵 반격 당시 불통이였던 것 같습니다."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:6
 msgid "The ensuing nuclear-magnetic pulses wiped clean large amounts of NASDA's memory banks, shattering its core processor, and sent shockwaves blasting through Nexus."
-msgstr ""
+msgstr "그 다음 일어난 핵자기 파동이 NASDA의 메모리 뱅크를 다량으로 깨끗하게 지우며, 코어 프로세서를 산산조각 내었고 폭발적인 충격파가 넥서스 자체를 통과하였습니다."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:8
 msgid "Nexus was fried as whole sections of its consciousness were obliterated in the counterstrikes."
-msgstr ""
+msgstr "핵 반격 동안에 자기 의식의 전체 섹션들이 지워지면서 넥서스의 회로가 파괴되었습니다."
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:1
 msgid "Commander we are detecting transmissions from this site that are reaching high orbit."
-msgstr ""
+msgstr "사령관님 우리가 이곳에서 수신되어 높은 궤도까지 도달하고 있는 전송을 감지하였습니다."
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:3
 msgid "Nexus has now reconnected itself with the NASDA satellites."
-msgstr ""
+msgstr "이제 넥서스는 NASDA 위성과 다시 연결하였습니다."
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:5
 msgid "This poses a major threat to the Project and to our survival."
-msgstr ""
+msgstr "이것은 프로젝트와 우리의 생존에 대한 주요 위협이 됩니다."
 
 #: data/base/sequenceaudio/cam2/cam26pl1.txt:1
 msgid "Analysis of NASDA Central leaves no doubt that The Collective has introduced the Nexus Intruder Virus to it."
-msgstr ""
+msgstr "NASDA 중앙 본부의 분석 후, 컬렉티브가 넥서스 침입자 바이러스를 이곳으로 가져온 것이 의심의 여지가 없습니다."
 
 #: data/base/sequenceaudio/cam2/cam26pl1.txt:3
 msgid "The nuclear reactor was going to be used to power a vast network of pre-Collapse computer systems."
-msgstr ""
+msgstr "원자로는 컬랩스 전 시대의 컴퓨터로 이루어진 거대한 네트워크를 작동시키는 데 사용될 예정이었습니다."
 
 #: data/base/sequenceaudio/cam2/cam27fmv.txt:1
 msgid "Commander, we have just detected a missile launch at these coordinates."
-msgstr ""
+msgstr "사령관님, 우리가 이 좌표에서 미사일 발사를 감지하였습니다."
 
 #: data/base/sequenceaudio/cam2/cam27fmv.txt:3
 msgid "Team Gamma are sending a team to investigate the launch site and to prevent any further launches."
-msgstr ""
+msgstr "감마 팀이 발사 사이트를 조사하고 더 이상의 발사를 막기 위해 팀을 보냅니다."
 
 #: data/base/sequenceaudio/cam2/cam27fmv.txt:5
 msgid "We can only assume that Nexus has gained control of this site. We cannot determine whether the missile is nuclear-armed or where it is targeted. You are advised to begin preparations for the evacuation of your base."
-msgstr ""
+msgstr "우리는 넥서스가 이 사이트를 점령하였다고 추정할 뿐입니다. 미사일이 핵무장 되었는지, 또는 어디를 향해 발사되었는지 알아낼 수가 없습니다. 당신의 기지를 철수할 준비를 하는 것이 좋을 겁니다."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:1
 msgid "Warriors of The Collective, more intruders are entering our territory."
-msgstr ""
+msgstr "컬렉티브의 전사들이여, 침입자가 또 우리의 영토에 들어오고 있다."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:2
 msgid "They are not part of the machine."
-msgstr ""
+msgstr "그들은 기계의 일부가 아니다."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:4
 msgid "Warriors of The Collective, attack and destroy kill all who resist the machine."
-msgstr ""
+msgstr "컬렉티브의 전사들이여, 공격하고 파괴하라. 기계에 저항하는 모든 이를 파괴하라."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:5
 msgid "Attack! Erase their presence from this area!"
-msgstr ""
+msgstr "공격! 이 지역에서 그들의 존재를 지워버려라!"
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:1
 msgid "Warriors of The Collective, we are ready to destroy the intruders who pollute our lands."
-msgstr ""
+msgstr "컬렉티브의 전사들이어, 우리의 땅을 오염시키는 침입자들을 없앨 준비가 되었다."
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:3
 msgid "Those of the Project are not of the machine. They have been denied its blessing. We who have embraced the power of the machine have a destiny to sweep away such weak creatures."
-msgstr ""
+msgstr "프로젝트의 사람들은 기계의 일부분이 아니다. 그들에게는 그것의 축복이 허락되지 않았다. 그런 약한 존재들을 소멸하는 것이 기계의 힘을 받아들인 우리들의 운명이다."
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:6
 msgid "They shall fall before the might of The Collective."
-msgstr ""
+msgstr "그들은 컬렉티브의 강력 앞에서 무너질 것이다."
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:8
 msgid "Attack and destroy all who resist the machine."
-msgstr ""
+msgstr "기계에 저항하는 모든 이들을 공격해 파괴하라."
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:9
 msgid "Attack!"
-msgstr ""
+msgstr "공격!"
 
 #: data/base/sequenceaudio/cam2/cam2dico.txt:1
 msgid "Warriors of the Collective, Nexus has given us the power of the machine so that we can destroy all that oppose us."
-msgstr ""
+msgstr "컬렉티브의 전사들이여, 넥서스는 우리의 모든 적들을 파괴할 수 있도록 기계의 힘을 주었다."
 
 #: data/base/sequenceaudio/cam2/cam2dico.txt:3
 msgid "Nexus now asks us to crush the Project."
-msgstr ""
+msgstr "이제 넥서스가 우리에게 프로젝트를 파괴하여 달라고 요청하였다."
 
 #: data/base/sequenceaudio/cam2/cam2dico.txt:4
 msgid "Cleanse and destroy!!"
-msgstr ""
+msgstr "파괴하고 청결하게 만들라!!"
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:1
 msgid "Warriors of the Collective. You have performed well."
-msgstr ""
+msgstr "컬렉티브의 전사들이여. 당신들은 잘 수행했다."
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:2
 msgid "Your just reward is on its way."
-msgstr ""
+msgstr "당신들의 보상을 보내었다."
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:4
 msgid "The Project is fleeing its base and stealing your technology."
-msgstr ""
+msgstr "프로젝트는 자신들의 기지에서 도망치며 당신들의 기술을 훔쳐가고 있다."
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:5
 msgid "You must stop them!"
-msgstr ""
+msgstr "그들을 막아야 합니다!"
 
 #: data/base/sequenceaudio/cam2/cam2dipl.txt:1
 msgid "Decoding Transmission..."
-msgstr ""
+msgstr "전송 해독 중..."
 
 #: data/base/sequenceaudio/cam3/c003.txa:1
 msgid "CAMPAIGN THREE"
-msgstr ""
+msgstr "세번째 캠페인"
 
 #: data/base/sequenceaudio/cam3/c003.txa:2
 msgid "NORTHERN SECTOR"
-msgstr ""
+msgstr "북쪽 섹터"
 
 #: data/base/sequenceaudio/cam3/c003.txa:5
 #, fuzzy
 msgid "Congratulations your successful evacuation of Beta Base."
-msgstr "베타 기지의 성공적인 대피 작업을 축하합니다."
+msgstr "당신의 베타 기지의 성공적인 철수를 축하드립니다."
 
 #: data/base/sequenceaudio/cam3/c003.txa:8
 msgid "Dusk, December 3rd, 2100"
-msgstr ""
+msgstr "황혼녘, 2100년 12월 3일"
 
 #: data/base/sequenceaudio/cam3/c003.txa:9
 msgid "In-flight to Northern Sector"
-msgstr ""
+msgstr "북쪽 섹터로 비행 중"
 
 #: data/base/sequenceaudio/cam3/c003.txa:10
 msgid "The Final Encounter"
-msgstr ""
+msgstr "최후의 대전"
 
 #: data/base/sequenceaudio/cam3/c003.txa:12
 msgid "Briefing Commences"
-msgstr ""
+msgstr "브리핑이 시작됩니다"
 
 #: data/base/sequenceaudio/cam3/c003.txt:1
 msgid "Personnel at Gamma Base have confirmed that the nuclear missiles targeted at Alpha and Beta bases were launched from a silo in their sector."
-msgstr ""
+msgstr "알파 기지와 베타 기지에 겨냥된 미사일들이 감마 섹터의 미사일 저장고에서 발사되었다는 것을 감마 기지의 직원들이 확인하였습니다."
 
 #: data/base/sequenceaudio/cam3/c003.txt:4
 msgid "Team Gamma is currently scouting the silo's location and monitoring NEXUS's activity."
-msgstr ""
+msgstr "현재 감마 팀이 미사일 저장고의 위치를 찾고 있고 넥서스의 활동을 감시하고 있습니다."
 
 #: data/base/sequenceaudio/cam3/c3ad2n2.txt:1
 msgid "Time's up commander!!"
-msgstr ""
+msgstr "시간이 다 됐습니다, 사령관님!!"
 
 #: data/base/sequenceaudio/cam3/c3ad2pl3.txt:1
 msgid "Commander, we are detecting NEXUS forces from these coordinates..."
-msgstr ""
+msgstr "사령관님, 이 좌표에서 넥서스의 병력이 감지되고 있습니다..."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:1
 msgid "Well done Commander, you've prevented my last missile from launching."
-msgstr ""
+msgstr "잘 했군 사령관, 나의 마지막 미사일의 발사를 막았어."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:2
 msgid "Such a shame. Your Project HQ would have made a wonderful target."
-msgstr ""
+msgstr "유감이로군. 당신의 프로젝트 본부는 훌륭한 표적이 되었을텐데."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:4
 msgid "But it's good of you to join me here."
-msgstr ""
+msgstr "하지만 당신이 여기까지 와 주니 좋군."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:6
 msgid "Buried beneath this silo is a tactical nuclear warhead that is set to go off soon."
-msgstr ""
+msgstr "곧 폭발되도록 설정돼있는 전술 핵탄두가 이 저장고 아래에 묻혀있다."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:9
 msgid "As I cannot launch it, it'll just have to blow where it is."
-msgstr ""
+msgstr "내가 발사할 수 없으니, 묻혀 있는 그대로 터뜨려버려야겠군."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:11
 msgid "Please note that all entrances to the underground complex have been sealed. Goodbye, Commander."
-msgstr ""
+msgstr "모든 입구가 막혀 있다는 것을 기억해두도록. 안녕히 계시오, 사령관."
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:1
 msgid "Glad you could make it, Commander."
-msgstr ""
+msgstr "오시니 기쁘군요, 사령관님."
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:4
 msgid "Enemy strike VTOLs have got us pinned down. We've managed to hold off cyborgs and tanks, but we haven't been able to make any progress along the valley."
-msgstr ""
+msgstr "적의 공습 VTOL들이 우리를 꼼짝 못하게 하고 있습니다. 사이보그와 탱크는 막아냈지만, 이 계곡에선 아무런 진전이 없습니다."
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:7
 msgid "Can you try and reach us with anti-aircraft units?"
-msgstr ""
+msgstr "우리에게 대공 유닛을 데리고 오는 시도를 해 주실 수 있나요?"
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:1
 msgid "This is Team Alpha. Repeat, this is Team Alpha. We require immediate assistance."
-msgstr ""
+msgstr "여기는 알파 팀이다. 반복하겠다, 여기는 알파 팀이다. 우리는 즉각 지원을 요청한다."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:4
 msgid "We are under heavy attack from cyborgs, laser tanks, and strike VTOLs."
-msgstr ""
+msgstr "우리는 사이보그, 레이저 탱크, 그리고 공습 VTOL들로부터 맹공격을 받고있다."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:6
 msgid "We were trying to reach your position, but have been ambushed."
-msgstr ""
+msgstr "우리가 당신의 위치로 가는 도중 습격당했습니다."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:7
 msgid "We're holed up in  a valley at these coordinates."
-msgstr ""
+msgstr "이 좌표에 있는 계곡 안에 틀어박혀 있습니다."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:8
 msgid "Please assist."
-msgstr ""
+msgstr "부디 도와주십시오."
 
 #: data/base/sequenceaudio/cam3/cam32pl2.txt:4
 msgid "Commander, forces from Team Alpha escaped the nuclear attack on Alpha Base."
-msgstr ""
+msgstr "사령관님, 알파 팀의 군사들이 알파 기지에 대한 핵공격을 탈출하였습니다."
 
 #: data/base/sequenceaudio/cam3/cam34mu1.txt:1
 msgid "We are experiencing some interference from NEXUS."
-msgstr ""
+msgstr "우리는 넥서스의 방해를 받고 있습니다."
 
 #: data/base/sequenceaudio/cam3/cam34mu1.txt:3
 msgid "You must destroy his command centre before we lose control of key systems."
-msgstr ""
+msgstr "우리의 핵심 시스템들을 잃기 전에 당신이 그의 명령 센터를 파괴해야 합니다."
 
 #: data/base/sequenceaudio/cam3/cam34mu2.txt:1
 msgid "Commander, welcome to NEXUS!"
-msgstr ""
+msgstr "사령관, 넥서스에 환영하네!"
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:1
 msgid "The Reed Corporation was founded by Dr Allan Reed. In 2080, Dr Reed landed a contract with the US Military to develop the synaptic link technology."
-msgstr ""
+msgstr "리드(Reed) 기업은 앨런 리드 박사가 창립하였습니다. 2080년, 리드 박사는 시냅스 연결 기술을 개발하는 계약을 미군과 맺었습니다."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:3
 msgid "After patenting the synaptic link five years later, Dr Reed continued his researches into cybernetics."
-msgstr ""
+msgstr "5년 후에 시냅스 연결에 대해 특허권을 획득한 다음, 리드 박사는 인공두뇌학에 대한 그의 연구를 계속하였습니다."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:5
 msgid "His goal this time was to allow transfer of human consciousness into data streams that could meld with computer technologies. While in Cyberspace the operator's bodies were kept in immersion tanks."
-msgstr ""
+msgstr "이번에 그의 목표는 사람의 의식을 컴퓨터 테크놀로지와 결합할 수 있는 데이터 스트림으로 이동하는 것이였습니다. 조작자의 몸은 사이버 공간에 있는 동안 액체 탱크 속에 담겨있었습니다."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:7
 msgid "Backed again by the military, Dr Reed began work on the NEXUS Intruder Program. After three years with little progress, the military abandoned the Nexus Project and cut Dr Reed's funding."
-msgstr ""
+msgstr "다시 한번 미군의 후원을 받으며, 리드 박사는 넥서스 침입자 프로그램을 말들기 시작했습니다. 3년 후 진전이 별로 없자, 미군은 넥서스 프로젝트를 포기하고 리드 박사의 자금 제공을 멈추었습니다."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:9
 msgid "Reports from the time claim that Dr Reed was furious and vowed to have his revenge on all who got in his way."
-msgstr ""
+msgstr "그때의 보도에 의하면 리드 박사는 몹시 화가 났고 자신의 일을 막는 모든 이들에게 복수하겠다고 멩세했습니다."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:11
 msgid "It appears that Dr Reed may have succeeded in his goals and completed the Nexus Intruder Program."
-msgstr ""
+msgstr "리드 박사가 목표를 달성해 넥서스 침입자 프로그램을 완성했을 수도 있을 것 같습니다."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:12
 msgid "The similarity between NEXUS and Dr Reed is striking."
-msgstr ""
+msgstr "넥서스와 리드 박사 사이의 유사성은 두드러지게 나타납니다."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:14
 msgid "Such an interesting history lesson. Now allow me to bring you up to date."
-msgstr ""
+msgstr "얼마나 재미있는 역사 수업인가. 이제 내가 최신식으로 가르쳐 주지."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:15
 msgid "The NEXUS Intruder Program was created in order to control fools like you."
-msgstr ""
+msgstr "넥서스 침입자 프로그램은 너희같은 바보들을 지배하기 위해 만들어졌다."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:17
 msgid "It's very simple for me to infiltrate your systems and take them over. It's so simple, in fact, that you wouldn't even know I'm there. That is until I activate parts of myself etched into your core systems."
-msgstr ""
+msgstr "내가 너희의 시스템에 잠입해 탈취하기는 매우 쉽다. 너무나 간단해서, 너희는 내가 잠입했다는 것을 아예 모르지. 너희의 시스템에 새겨진 나의 일부분들을 활성 시킬 때까지 말이야."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:19
 msgid "Let's start by activating NEXUS in your core systems and see what happens!"
-msgstr ""
+msgstr "시작으로 너희의 핵심 시스템 속에 넥서스를 활성화시키면 어떻게 돼는지 보자고!"
 
 #: data/base/sequenceaudio/cam3/cam3abpl.txt:1
 msgid "Commander, we are experiencing interference with our equipment."
-msgstr ""
+msgstr "사령관님, 우리 장비를 사용하는 데 방해를 겪고 있습니다."
 
 #: data/base/sequenceaudio/cam3/cam3abpl.txt:2
 msgid "Normal service will be restored as soon as possible."
-msgstr ""
+msgstr "정상적인 작동이 가능한 한 빨리 복원될 것입니다."
 
 #: data/base/sequenceaudio/cam3/cam3ad2n.txt:1
 msgid "Not long to go now, Commander. There's no where else for you to run to."
-msgstr ""
+msgstr "이제 시간이 별로 안 남았어, 사령관. 당신이 도망갈 수 있는 다른 곳은 없다."
 
 #: data/base/sequenceaudio/cam3/cam3ad2n.txt:4
 msgid "However, if you vacate this facility, then I shall let you go free, as you are no longer a threat to me."
-msgstr ""
+msgstr "하지만, 이 시설을 비운다면 풀어주겠다. 너희는 이제는 나에게 위협이 되지 않아."
 
 #: data/base/sequenceaudio/cam3/cam3ad2n.txt:6
 msgid "You have five minutes to comply or else it's frying time!"
-msgstr ""
+msgstr "5분 내에 내 말을 따르지 않으면 구워 주겠다!"
 
 #: data/base/sequenceaudio/cam3/cam3bg.txt:1
 msgid "Commander, we are under attack by NEXUS cyborgs and tanks. Please help as we...."
-msgstr ""
+msgstr "사령관님, 우리는 넥서스 사이보그와 탱크의 공격을 받고 있습니다. 제발 도와주십시오 우리는..."
 
 #: data/base/sequenceaudio/cam3/cam3bg.txt:3
 msgid "...cannot hold out much longer.  Repeat, please help, we cannot hold out much longer...."
-msgstr ""
+msgstr "...오래 버틸 수 없습니다. 반복합니다, 부디 도와주십시오, 우리는 오래 버틸 수 없습니다..."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:1
 msgid "Ah, Commander, so good of you to join us here at Nexus base."
-msgstr ""
+msgstr "아, 사령관, 여기 넥서스 기지에 와주다니, 너무 좋군."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:3
 msgid "It was very useful having Gamma Team set up here in the mountains."
-msgstr ""
+msgstr "감마 팀을 여기 산 속에 세워 두었던게 아주 유용했다."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:4
 msgid "Their absorption was such a pleasure."
-msgstr ""
+msgstr "그들을 흡수하는 것이 얼마나 즐겁던지."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:6
 msgid "Thank you for all those useful technologies you've recovered."
-msgstr ""
+msgstr "당신이 되찾은 그 모든 유용한 기술에 대해 감사한다."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:8
 msgid "You and not those fools in the New Paradigm and the Collective."
-msgstr ""
+msgstr "뉴 패러다임과 컬렉티브의 바보들이 아니라 당신이 말이야."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:10
 msgid "I'm now activating all your synaptic links so that your forces can meld with Nexus."
-msgstr ""
+msgstr "당신의 군사들이 넥서스와 결합될 수 있도록 이제 내가 너희의 모든 시냅스 링크를 활성화하겠다."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:12
 msgid "Your forces are now mine! Welcome to Nexus."
-msgstr ""
+msgstr "당신의 군사들이 이제 내 것이다! 넥서스에 온 것을 환영한다."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:1
 msgid "Commander, you're proving to be more resilient than I thought."
-msgstr ""
+msgstr "사령관, 당신은 생각보다 회복력이 강하군."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:2
 msgid "Such a pity that you refused to join me earlier."
-msgstr ""
+msgstr "당신이 아까 나와 합께 일하는 것을 거부했던 것이 유감이야."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:4
 msgid "But no matter, as you'll not be here much longer."
-msgstr ""
+msgstr "하지만 이제 상관없어, 당신은 오래 살아 있지 못할 거니까."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:6
 msgid "After much searching and reprogramming, I've finally got all my systems back on-line."
-msgstr ""
+msgstr "많은 수색과 재프로그밍 후, 나는 마침내 나의 모든 시스템을 다시 온라인으로 전환시켰다."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:8
 msgid "Once I destroyed the world with nuclear fire to clear the way for my cybernetic future."
-msgstr ""
+msgstr "내 인공 두뇌학 미래의 길을 열기 위해, 한때 나는 세상을 핵으로 파괴하였지."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:9
 msgid "I now intend to further shape the world into my own image, by  surgically removing unwanted growths like yourself."
-msgstr ""
+msgstr "난 이제 당신 같은 원치 않는 부분들을 없애서, 세상을 더 나의 형상으로 빚을 것이다."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:11
 msgid "My Laser Satellites are now powering up. I intend to test them on you first, Commander!"
-msgstr ""
+msgstr "내 레이저 위성들의 가동이 지금 진행 중이다. 나의 첫 표적은 당신이다, 사령관!"
 
 #: data/base/sequenceaudio/devastation.txa:4
 msgid "Dusk, November 3rd, 2085"
-msgstr ""
+msgstr "황혼녘, 2085년 11월 3일"
 
 #: data/base/sequenceaudio/devastation.txa:5
 msgid "Earth, High Orbit"
-msgstr ""
+msgstr "지구, 높은 궤도"
 
 #: data/base/sequenceaudio/devastation.txa:6
 msgid "The Collapse"
-msgstr ""
+msgstr "컬랩스(Collapse) 세계대전"
 
 #: data/base/sequenceaudio/devastation.txa:8
 msgid "January 19th, 2086"
-msgstr ""
+msgstr "2086년 1월 19일"
 
 #: data/base/sequenceaudio/devastation.txa:9
 #: data/base/sequenceaudio/devastation.txa:17
 msgid "North America"
-msgstr ""
+msgstr "북아메리카"
 
 #: data/base/sequenceaudio/devastation.txa:10
 msgid "Nuclear Winter"
-msgstr ""
+msgstr "핵겨울"
 
 #: data/base/sequenceaudio/devastation.txa:12
 msgid "Midnight, April 10th, 2086"
-msgstr ""
+msgstr "한밤중, 2086년 4월 10일"
 
 #: data/base/sequenceaudio/devastation.txa:13
 msgid "Rocky Mountains"
-msgstr ""
+msgstr "로키 산맥"
 
 #: data/base/sequenceaudio/devastation.txa:14
 msgid "Safety"
-msgstr ""
+msgstr "안전한 곳"
 
 #: data/base/sequenceaudio/devastation.txa:16
 msgid "Dawn, April 4th, 2100"
-msgstr ""
+msgstr "새벽, 2100년 4월 4일"
 
 #: data/base/sequenceaudio/devastation.txa:18
 msgid "A New Beginning"
-msgstr ""
+msgstr "새로운 시작"
 
 #: data/base/sequenceaudio/devastation.txt:1
 msgid "The NASDA system was developed to protect us. It was to be the ultimate nuclear deterrent. As it turned out, it was our executioner."
-msgstr ""
+msgstr "NASDA 시스템은 우리의 안전을 위해 개발되었다. 그것은 궁극적인 핵 억지력으로 사용될 예정이였다. 뒤에 알고 보니, 그것은 우리의 사형 집행인이였다."
 
 #: data/base/sequenceaudio/devastation.txt:3
 msgid "Reports said that NASDA developed a fault during a routine systems check. Don't believe it. Someone wanted it to take us out."
-msgstr ""
+msgstr "보도에 의하면, NASDA 시스템이 정기 검사 도중 문제를 일으켰다고 한다. 이것을 믿지 마라. 누군가가 그것을 사용해 우리를 없애고 싶었다."
 
 #: data/base/sequenceaudio/devastation.txt:5
 msgid "Those nukes were targeted on every major city around the world. NASDA was programmed to start the Collapse. When the counterstrikes launched, its laser defenses and anti-missile ground sites failed."
-msgstr ""
+msgstr "그 핵폭탄은 세계 모든 주요 도시에 발사되었다. NASDA는 컬랩스(Collapse) 세계대전을 시작하도록 프로그램 돼 있었던 것이다. 핵 반격이 시작되었을 때, NASDA의 레이저 방어시설과 지상 미사일 방어시설이 고장 났다."
 
 #: data/base/sequenceaudio/devastation.txt:7
 msgid "The world as we knew it ended..."
-msgstr ""
+msgstr "우리가 알던 세상은 끝나고 말았다."
 
 #: data/base/sequenceaudio/devastation.txt:9
 msgid "The Nuclear Winter hit hard. Disease and famine claimed most of us who had survived the nuclear strikes. Wars over cans of dog food took even more."
-msgstr ""
+msgstr "핵겨울은 거셌다. 질병과 기근이 살아남은 대부분의 목숨을 앗아갔다. 개 사료를 차지하려는 싸움에서 그보다 더 많은 사람들이 죽었다."
 
 #: data/base/sequenceaudio/devastation.txt:11
 msgid "We'd fled Seattle early in '86. We'd heard that the Rocky Mountains were relatively rad-free."
-msgstr ""
+msgstr "우리는 시애틀을 일찍이 '86년에 떠났었다. 록키 산맥은 비교적 방사능의 양이 낮은 곳이라고 들었던 것이다."
 
 #: data/base/sequenceaudio/devastation.txt:13
 msgid "After fighting off bands of marauders we came across the base. Its personnel were dead. Killed by any one of a number of virulent diseases."
-msgstr ""
+msgstr "도적 무리들을 싸워 물리친 후, 우리는 기지를 발견했다. 직원들은 다 죽어 있었다. 수많은 악성 질병중 하나에 의해 죽은 것이다."
 
 #: data/base/sequenceaudio/devastation.txt:15
 msgid "We cracked the doors, and cleared out the bodies inside."
-msgstr ""
+msgstr "우리는 문을 깨부수고, 안에 있던 시체들을 치웠다."
 
 #: data/base/sequenceaudio/devastation.txt:17
 msgid "We knew that things would never be the same again, but we were determined to build a new world out of the ruins. We rebuilt the landing pads and brought the old systems back on-line."
-msgstr ""
+msgstr "다시는 예전 같지 않을 것이라는 걸 알았지만, 우리는 이 폐허에서 새로운 세상을 만들기로 결심이 되어 있었다. 우리는 착륙 패드를 다시 짓고 옛 시스템을 다시 가동했다."
 
 #: data/base/sequenceaudio/devastation.txt:19
 msgid "We were finally ready to begin the Project."
-msgstr ""
+msgstr "드디어 우리는 '프로젝트'를 시작할 준비가 돼었다."
 
 #: data/base/sequenceaudio/outro.txt:1
 msgid "After many long months of struggle, we defeated NEXUS."
-msgstr ""
+msgstr "오랜 투쟁의 개월이 지나, 우리는 넥서스를 물리쳤다."
 
 #: data/base/sequenceaudio/outro.txt:3
 msgid "The war started by Dr Reed was over."
-msgstr ""
+msgstr "리드 박사가 시작한 전쟁은 끝난 것이었다."
 
 #: data/base/sequenceaudio/outro.txt:5
 msgid "We have recovered many of the technologies we sought."
-msgstr ""
+msgstr "우리는 우리가 찾던 많은 기술을 발견했다."
 
 #: data/base/sequenceaudio/outro.txt:7
 msgid "It is now time to use them to rebuild the world."
-msgstr ""
+msgstr "이제 그 기술을 사용해 세상을 다시 짓을 차례이다."
 
 #: data/base/sequenceaudio/outro.txt:9
 msgid "Slowly, out of the ashes we will rise again..."
-msgstr ""
+msgstr "서서히, 잿더미 속에서 우리는 다시 일어날 것이다..."
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1822
 #: data/mp/messages/strings/names.txt:1825
@@ -10838,7 +10835,7 @@ msgstr "로케트 정확도 +10%"
 #: data/mp/messages/resmessages3.rmsg:71
 #: data/mp/messages/resmessages3.rmsg:84
 msgid "Kinetic Armor +35%, Body Points +35%"
-msgstr "운동 에너지 장갑 +35%, 보디포인트 +35%"
+msgstr "장갑 +35%, 보디포인트 +35%"
 
 #: data/mp/messages/resmessages1.rmsg:97
 msgid "Armour +35%, Body Points +30%"
@@ -10896,7 +10893,7 @@ msgstr "차량 속도 +5%"
 #: data/mp/messages/resmessages3.rmsg:695
 #: data/mp/messages/resmessages3.rmsg:708
 msgid "Kinetic armor +30%, body points +30%"
-msgstr "운동 에너지 장갑 +20%, 보디포인트 +30%"
+msgstr "장갑 +20%, 보디포인트 +30%"
 
 #: data/mp/messages/resmessages1.rmsg:553
 #: data/mp/messages/resmessages1.rmsg:566
@@ -10978,7 +10975,7 @@ msgstr "내열설 장갑 +45%"
 
 #: data/mp/messages/resmessages2.rmsg:19
 msgid "Kinetic Armor +35%, and Body Points +35%"
-msgstr "운동 에너지 장갑 +35%, 그리고 보디포인트 +35%"
+msgstr "장갑 +35%, 그리고 보디포인트 +35%"
 
 #: data/mp/messages/resmessages2.rmsg:357
 msgid "Factory production rate +60%"
@@ -11104,7 +11101,7 @@ msgstr "레이더 감지기 타워는 적의 센서를 감지합니다"
 
 #: data/mp/messages/resmessagesall.rmsg:136
 msgid "Orders assigned indirect fire units to fire at the enemy sensors"
-msgstr "할당된 간접 사격 유니트에게 적의 센서를 공격하라 명령합니다"
+msgstr "할당된 간접 사격 유닛에게 적의 센서를 공격하라 명령합니다"
 
 #: data/mp/messages/resmessagesall.rmsg:137
 msgid "Counter-battery fire continues until enemy sensor is suppressed"
@@ -11307,10 +11304,9 @@ msgstr "강력한 전자 자성 펄스 무기"
 msgid "New System Available"
 msgstr "새로운 시스템이 사용 가능합니다"
 
-# use "heavy" as 헤비 for only the "superheavy" bodies--not the weapons
 #: data/mp/messages/resmessagesall.rmsg:719
 msgid "Medium Super Heavy Body"
-msgstr "중형 슈퍼 헤비 차체"
+msgstr "중형 슈퍼 대형 차체"
 
 #: data/mp/messages/resmessagesall.rmsg:720
 msgid "More armor and body points than Vengeance"
@@ -11808,7 +11804,7 @@ msgstr "차량 초고밀도 내열 장갑 Mk 3"
 #: data/mp/messages/strings/names.txt:1665
 #: data/mp/messages/strings/names.txt:1666
 msgid "Super Heavy-Gunner"
-msgstr "슈퍼 헤비 사수"
+msgstr "슈퍼 소형 캐논 사수"
 
 #: data/mp/messages/strings/names.txt:1668
 #: data/mp/messages/strings/names.txt:1669
@@ -12287,7 +12283,7 @@ msgstr "디자인 없애기"
 #: src/design.c:694
 #: src/design.c:742
 msgid "Kinetic Armour"
-msgstr "운동 에너지 장갑"
+msgstr "장갑"
 
 #: src/design.c:703
 #: src/design.c:753
@@ -12422,18 +12418,18 @@ msgstr ""
 
 #: src/display.c:1692
 msgid "Cannot Build. Oil Resource Burning."
-msgstr "건설이 불가능합니다. 석유 자원이 타고있습니다"
+msgstr "건설이 불가능합니다. 석유 자원이 타고 있습니다"
 
 #: src/display.c:1872
 #: src/display.c:2471
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
-msgstr "%s - 손상 %d%% - 경험치 %d, %s"
+msgstr "%s - 데미지 %d%% - 경험치 %d, %s"
 
 #: src/display.c:1888
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
-msgstr "%s - 동맹군 - 손상 %d%% - 경험치 %d, %s"
+msgstr "%s - 동맹군 - 데미지 %d%% - 경험치 %d, %s"
 
 #: src/display.c:2086
 msgid "Truck ordered to build Oil Derrick"
@@ -12451,7 +12447,7 @@ msgstr "트럭이 유정탑을 건설하라는 명령을 받았습니다"
 
 #: src/droid.c:210
 msgid "Unit Lost!"
-msgstr "유니트를 잃었습니다!"
+msgstr "유닛을 잃었습니다!"
 
 #: src/droid.c:1367
 msgid "Structure Restored"
@@ -12712,7 +12708,7 @@ msgstr "꺼짐"
 #: src/frontend.c:523
 #: src/multiint.c:1185
 msgid "Fog"
-msgstr "안개(Fog)"
+msgstr "안개"
 
 #: src/frontend.c:526
 #: src/frontend.c:601
@@ -12796,7 +12792,7 @@ msgstr "3D 회전방향 반전"
 
 #: src/frontend.c:973
 msgid "Trap Cursor"
-msgstr "마우스 커서 트랩(가두기)"
+msgstr "마우스 커서 가두기"
 
 #: src/frontend.c:985
 msgid "Colored Cursors*"
@@ -12807,19 +12803,20 @@ msgid "Switch Mouse Buttons"
 msgstr "마우스 버튼 좌우 전환"
 
 #: src/frontend.c:1010
-#, fuzzy
 msgid "Rotate Screen"
-msgstr "좌측으로 회전"
+msgstr "화면 회전"
 
 #: src/frontend.c:1013
 #: src/frontend.c:1101
+#, fuzzy
 msgid "Middle Mouse"
-msgstr ""
+msgstr "마우스 중앙 버튼"
 
 #: src/frontend.c:1017
 #: src/frontend.c:1096
+#, fuzzy
 msgid "Right Mouse"
-msgstr ""
+msgstr "마우스 오른쪽 버튼"
 
 #: src/frontend.c:1021
 msgid "MOUSE OPTIONS"
@@ -12861,22 +12858,21 @@ msgstr "언어"
 #: src/frontend.c:1178
 #: src/frontend.c:1205
 msgid "Unit Colour"
-msgstr "유니트 색"
+msgstr "유닛 색"
 
 #: src/frontend.c:1181
 msgid "Radar"
-msgstr ""
+msgstr "레이더"
 
 #: src/frontend.c:1182
 #: src/frontend.c:1231
-#, fuzzy
 msgid "Rotating"
-msgstr "우측으로 회전"
+msgstr "회전식"
 
 #: src/frontend.c:1182
 #: src/frontend.c:1231
 msgid "Fixed"
-msgstr ""
+msgstr "고정식"
 
 #: src/frontend.c:1188
 #: src/frontend.c:1208
@@ -12890,14 +12886,14 @@ msgstr "Mod (Modification):"
 
 #: src/hci.c:1350
 msgid "MAP SAVED!"
-msgstr "지도가 저장되었습니다!"
+msgstr "맵이 저장되었습니다!"
 
 #: src/hci.c:1734
 #: src/loop.c:557
 #: src/loop.c:573
 #, fuzzy
 msgid "GAME SAVED: "
-msgstr "게임이 저장되었습니다 :"
+msgstr "게임이 저장되었습니다 : "
 
 #: src/hci.c:2127
 msgid "Failed to create building"
@@ -12911,7 +12907,7 @@ msgstr "플레이어 %u 가 치트(디버그 메뉴)를 사용해 새로운 구�
 #: src/hci.c:2165
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
-msgstr "플레이어 %u 가 치트(디버그 메뉴)를 사용해 새로운 피쳐를 배치하였습니다: %s."
+msgstr "플레이어 %u 가 치트(디버그 메뉴)를 사용해 새로운 물체를 배치하였습니다: %s."
 
 #: src/hci.c:2186
 #, c-format
@@ -12955,35 +12951,31 @@ msgstr "전력"
 
 #: src/hci.c:3960
 msgid "Map:"
-msgstr ""
+msgstr "맵: "
 
 #: src/hci.c:3974
-#, fuzzy
 msgid "Load"
-msgstr "게임 로드"
+msgstr "로드"
 
 #: src/hci.c:3975
-#, fuzzy
 msgid "Load Map File"
-msgstr "게임 로드"
+msgstr "맵 파일 로드"
 
 #: src/hci.c:3982
-#, fuzzy
 msgid "Save"
-msgstr "게임 저장"
+msgstr "저장"
 
 #: src/hci.c:3983
-#, fuzzy
 msgid "Save Map File"
-msgstr "게임 저장"
+msgstr "맵 파일 저장"
 
 #: src/hci.c:3991
 msgid "New"
-msgstr ""
+msgstr "새로 (New)"
 
 #: src/hci.c:3992
 msgid "New Blank Map"
-msgstr ""
+msgstr "새로운 빈 맵"
 
 #: src/hci.c:4030
 msgid "Tile"
@@ -12991,15 +12983,15 @@ msgstr "타일"
 
 #: src/hci.c:4031
 msgid "Place tiles on map"
-msgstr "게임 지도에서 타일을 놓기"
+msgstr "게임 맵에서 타일을 놓기"
 
 #: src/hci.c:4040
 msgid "Unit"
-msgstr "유니트"
+msgstr "유닛"
 
 #: src/hci.c:4041
 msgid "Place Unit on map"
-msgstr "게임 지도 안에 유니트 배치하기"
+msgstr "게임 맵 안에 유닛 배치하기"
 
 #: src/hci.c:4049
 msgid "Struct"
@@ -13007,7 +12999,7 @@ msgstr "구조물"
 
 #: src/hci.c:4050
 msgid "Place Structures on map"
-msgstr "게임 지도에서 구조물을 놓기"
+msgstr "게임 맵에서 구조물을 놓기"
 
 #: src/hci.c:4058
 msgid "Feat"
@@ -13015,11 +13007,11 @@ msgstr "물체"
 
 #: src/hci.c:4059
 msgid "Place Features on map"
-msgstr "피처(Feature)를 지도 위에 배치하기"
+msgstr "물체(Feature)를 맵위에 배치하기"
 
 #: src/hci.c:4069
 msgid "Pause"
-msgstr ""
+msgstr "일시 정지"
 
 #: src/hci.c:4070
 msgid "Pause or unpause the game"
@@ -13027,16 +13019,15 @@ msgstr "게임을 일시 중지하거나 일시중지를 해제합니다"
 
 #: src/hci.c:4084
 msgid "Align height of all map objects"
-msgstr "모든 지도 개체의 높이를 정렬하기 "
+msgstr "모든 맵 개체의 높이를 정렬하기 "
 
 #: src/hci.c:4094
 msgid "Edit"
-msgstr ""
+msgstr "편집"
 
 #: src/hci.c:4095
-#, fuzzy
 msgid "Start Edit Mode"
-msgstr "기지 없이 시작하기"
+msgstr "편집 모드 시작하기"
 
 #: src/hci.c:4109
 #: src/ingameop.c:119
@@ -13050,9 +13041,8 @@ msgid "Exit Game"
 msgstr "게임 종료"
 
 #: src/hci.c:4135
-#, fuzzy
 msgid "Current Player:"
-msgstr "멀티 플레이어(Multi player)"
+msgstr "현재 플레이어: "
 
 #: src/hci.c:4534
 #: src/intdisplay.c:275
@@ -13060,9 +13050,8 @@ msgid "Progress Bar"
 msgstr "진행률 표시줄"
 
 #: src/hci.c:5478
-#, fuzzy
 msgid "Infinite Production"
-msgstr "반복 생산"
+msgstr "무한 생산"
 
 #: src/hci.c:5554
 msgid "Factory Delivery Point"
@@ -13141,7 +13130,7 @@ msgstr "건설(빌드) 포인트"
 #: src/intdisplay.c:233
 #, fuzzy
 msgid "Construction Progress"
-msgstr "건설 유니트"
+msgstr "건설 유닛"
 
 #: src/intdisplay.c:268
 msgid "Power Accrued"
@@ -13165,7 +13154,6 @@ msgid "Current Objective"
 msgstr "현재 목표"
 
 #: src/intelmap.c:1524
-#, fuzzy
 msgid "New Intelligence Report"
 msgstr "새로운 보도"
 
@@ -13197,7 +13185,7 @@ msgstr "심한 손상시 후퇴"
 #: src/intorder.c:166
 #: src/keymap.c:411
 msgid "Do or Die!"
-msgstr "죽기 아니면 살기다!"
+msgstr "후퇴 금지"
 
 #: src/intorder.c:167
 msgid "Fire-At-Will"
@@ -13226,7 +13214,7 @@ msgstr "추적"
 #: src/intorder.c:172
 #: src/keymap.c:387
 msgid "Guard Position"
-msgstr "자신의 위치를 경호하라"
+msgstr "자신의 위치 경호"
 
 #: src/intorder.c:173
 #: src/keymap.c:394
@@ -13245,7 +13233,7 @@ msgstr "본부로 돌아가라"
 #: src/intorder.c:176
 #: src/keymap.c:395
 msgid "Go to Transport"
-msgstr "수송선을 탑승하라"
+msgstr "수송선 탑승"
 
 #: src/intorder.c:177
 #: src/keymap.c:419
@@ -13330,9 +13318,8 @@ msgid "Back to normality!"
 msgstr "노멀리티(정상 상태)로 돌아가기!"
 
 #: src/keybind.c:482
-#, fuzzy
 msgid "Getting tricky!"
-msgstr "혼란스러워지는걸!"
+msgstr "까다로워진다!"
 
 #: src/keybind.c:498
 msgid "Twice as nice!"
@@ -13347,14 +13334,14 @@ msgid "FPS display is disabled."
 msgstr "초당 프레임 수를 보이지 않습니다."
 
 #: src/keybind.c:537
-#, fuzzy, c-format
+#, c-format
 msgid "FPS %d; FPS-Limit: %d; PIEs %d; polys %d; Terr. polys %d; States %d"
 msgstr "FPS %d; FPS-Limit: %d; PIEs %d; polys %d; Terr. polys %d; States %d"
 
 #: src/keybind.c:569
 #, c-format
 msgid "(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"
-msgstr "(플레이어 %u) 가 치트를 사용하고 있습니다 :병사 수: %d  구조물 수: %d  피쳐 수: %d"
+msgstr "(플레이어 %u) 가 치트를 사용하고 있습니다 :병사 수: %d  구조물 수: %d  물체 수: %d"
 
 #: src/keybind.c:606
 msgid "Infinite power disabled"
@@ -13408,7 +13395,7 @@ msgstr "카메라 보기(view)가 북쪽으로 정렬되었습니다"
 #: src/keybind.c:1351
 #, c-format
 msgid "Trap cursor %s"
-msgstr "커서 트랩 %s"
+msgstr "마우스 커서 가두기 %s"
 
 #: src/keybind.c:1440
 msgid "Researched EVERYTHING for you!"
@@ -13443,12 +13430,9 @@ msgstr "데모(시범) 모드 꺼짐 - 보통 게임 모드로 되돌아갑니�
 msgid "Debug menu is Open"
 msgstr "디버그 메뉴가 열였습니다"
 
-# resource extractors??
-# report bug
 #: src/keybind.c:1600
-#, fuzzy
 msgid "Unable to locate any oil derricks!"
-msgstr "유정 탑을 하나도 찾지 못했습니다!"
+msgstr "유정 탑을 찾을 수 없습니다!"
 
 #: src/keybind.c:1821
 msgid "Oh, the weather outside is frightful... SNOW"
@@ -13488,7 +13472,7 @@ msgstr "편대 속도 제한은 버그로 인해 게임에서 제거되었습니
 
 #: src/keybind.c:2551
 msgid "Vertical rotation direction: Normal"
-msgstr "수직 회전 방향: 보통"
+msgstr "수직 회전 방향: 기본"
 
 #: src/keybind.c:2556
 msgid "Vertical rotation direction: Flipped"
@@ -13511,7 +13495,7 @@ msgstr "죄송합니다, 멀티플레이어 게임에서는 게임 속도를 바
 #: src/keybind.c:2679
 #: src/keybind.c:2701
 msgid "Game Speed Reset"
-msgstr "게임 속도 원래대로"
+msgstr "게임 속도 리셋"
 
 #: src/keybind.c:2640
 #, c-format
@@ -13523,33 +13507,34 @@ msgstr "%3.1f 로 게임 속도가 증가되었습니다"
 msgid "Game Speed Reduced to %3.1f"
 msgstr "%3.1f 로 게임 속도가 감소되었습니다"
 
+# 아군/적군
 #: src/keybind.c:2713
 msgid "Radar showing friend-foe colors"
-msgstr ""
+msgstr "레이더에 아군-적군 색깔이 나옵니다"
 
 #: src/keybind.c:2717
 msgid "Radar showing player colors"
-msgstr "레이더에 플레이어의 색깔이 보입니다"
+msgstr "레이더에 플레이어들의 색깔이 나옵니다"
 
 #: src/keybind.c:2738
 msgid "Radar showing only objects"
-msgstr "레이더에 물체만 보입니다"
+msgstr "레이더에 물체만 나옵니다"
 
 #: src/keybind.c:2741
 msgid "Radar blending terrain and height"
-msgstr ""
+msgstr "레이더에 지형과 고도가 혼합되 나옵니다"
 
 #: src/keybind.c:2744
 msgid "Radar showing terrain"
-msgstr ""
+msgstr "레이더에 지형이 나옵니다"
 
 #: src/keybind.c:2747
 msgid "Radar showing revealed terrain"
-msgstr ""
+msgstr "드러난 지형이 레이더에 나옵니다"
 
 #: src/keybind.c:2750
 msgid "Radar showing height"
-msgstr ""
+msgstr "레이더에 고도가 나옵니다"
 
 #: src/keyedit.c:352
 msgid "KEY MAPPING"
@@ -13592,15 +13577,15 @@ msgstr "사령관"
 
 #: src/keymap.c:301
 msgid "Toggle Radar"
-msgstr "레이더 켜짐/꺼짐"
+msgstr "레이더 전환"
 
 #: src/keymap.c:302
 msgid "Toggle Console Display"
-msgstr "콘솔 보기 켜짐/꺼짐"
+msgstr "메시지 콘솔 켜짐/꺼짐"
 
 #: src/keymap.c:303
 msgid "Toggle Damage Bars On/Off"
-msgstr "데미지(손상 표지) 바 켜짐/꺼짐"
+msgstr "손상 표시줄 켜짐/꺼짐"
 
 #: src/keymap.c:304
 msgid "Take Screen Shot"
@@ -13615,9 +13600,8 @@ msgid "View Location of Previous Message"
 msgstr "이전 메시지의 위치 보기"
 
 #: src/keymap.c:307
-#, fuzzy
 msgid "Toggle Sensor display"
-msgstr "콘솔 보기 켜짐/꺼짐"
+msgstr "센서 디스플레이 켜짐/꺼짐"
 
 #: src/keymap.c:311
 msgid "Assign Group 0"
@@ -13745,15 +13729,15 @@ msgstr "멀티플레이어 옵션 / 동맹 다이얼로그"
 
 #: src/keymap.c:353
 msgid "Snap View to North"
-msgstr "시야를 북쪽으로 맞추기"
+msgstr "시야 북쪽으로 돌리기"
 
 #: src/keymap.c:354
 msgid "Toggle Tracking Camera"
-msgstr "추적 카메라 켜짐/꺼짐"
+msgstr "유닛 추적 카메라 켜짐/꺼짐"
 
 #: src/keymap.c:355
 msgid "Display In-Game Options"
-msgstr "게임 중 옵션 보기"
+msgstr "게임 실행 중 옵션 보기"
 
 #: src/keymap.c:356
 msgid "Zoom Radar Out"
@@ -13773,23 +13757,23 @@ msgstr "화면 줌아웃(축소)"
 
 #: src/keymap.c:360
 msgid "Pitch Forward"
-msgstr "앞으로 기울이기"
+msgstr "앞으로 시야 회전"
 
 #: src/keymap.c:361
 msgid "Rotate Left"
-msgstr "좌측으로 회전"
+msgstr "좌측으로 시야 회전"
 
 #: src/keymap.c:362
 msgid "Reset Pitch"
-msgstr "전후 기울기 원위치"
+msgstr "시야 수직 회전 리셋"
 
 #: src/keymap.c:363
 msgid "Rotate Right"
-msgstr "우측으로 회전"
+msgstr "우측으로 시야 회전"
 
 #: src/keymap.c:364
 msgid "Pitch Back"
-msgstr "뒤로 기울이기"
+msgstr "뒤로 시야 회전"
 
 #: src/keymap.c:365
 msgid "Orders Menu"
@@ -13805,7 +13789,7 @@ msgstr "게임 속도 늘이기"
 
 #: src/keymap.c:368
 msgid "Reset Game Speed"
-msgstr "게임 속도 원래대로"
+msgstr "게임 속도 리셋"
 
 #: src/keymap.c:369
 msgid "View North"
@@ -13845,13 +13829,12 @@ msgstr "다음 사령관 보기"
 
 #: src/keymap.c:378
 msgid "Toggle Overlays"
-msgstr ""
+msgstr "사용자 인터페이스 켜짐/꺼짐"
 
 # what is console?
 #: src/keymap.c:379
-#, fuzzy
 msgid "Console On/Off"
-msgstr "콘솔 켜짐/꺼짐"
+msgstr "메시지 콘솔 켜짐/꺼짐"
 
 #: src/keymap.c:382
 msgid "Center View on HQ"
@@ -13873,37 +13856,34 @@ msgstr "본부로 돌아가라"
 msgid "Send Text Message"
 msgstr "문자 메시지 보내기"
 
+# are there other uses for beacons than asking for help?
 #: src/keymap.c:399
 msgid "Drop a beacon"
-msgstr ""
+msgstr "표지 떨어뜨리기"
 
 #: src/keymap.c:401
-#, fuzzy
 msgid "Sensor display On"
-msgstr "센서 범위"
+msgstr "센서 디스플레이 켜짐"
 
 #: src/keymap.c:402
 msgid "Sensor display Off"
-msgstr ""
+msgstr "센서 디스플레이 꺼짐"
 
 #: src/keymap.c:403
-#, fuzzy
 msgid "Toggles shadows"
-msgstr "그림자 사용"
+msgstr "그림자 켜짐/꺼짐"
 
 #: src/keymap.c:404
-#, fuzzy
 msgid "Trap cursor"
-msgstr "마우스 커서 트랩(가두기)"
+msgstr "마우스 커서 가두기"
 
 #: src/keymap.c:405
-#, fuzzy
 msgid "Toggle radar terrain"
-msgstr "레이더 켜짐/꺼짐"
+msgstr "레이더 지형 전환"
 
 #: src/keymap.c:406
 msgid "Toggle ally-enemy radar view"
-msgstr ""
+msgstr "아군/적군 레이더 전망 켜짐/꺼짐"
 
 #: src/keymap.c:415
 msgid "Select all Combat Units"
@@ -13911,7 +13891,7 @@ msgstr "모든 전투 유닛을 선택하기"
 
 #: src/keymap.c:416
 msgid "Select all Heavily Damaged Units"
-msgstr "모든 심하게 손상된 유닛을 선택하기"
+msgstr "심하게 손상된 모든 유닛을 선택하기"
 
 #: src/keymap.c:417
 msgid "Select all Half-tracks"
@@ -13980,7 +13960,7 @@ msgstr "목표 달성"
 
 #: src/mission.c:2474
 msgid "OBJECTIVE FAILED--and you cheated!"
-msgstr "목표 달성 실패--그리고 치팅했습니다!"
+msgstr "목표 달성 실패--그리고 치트를 사용했습니다!"
 
 #: src/mission.c:2474
 msgid "OBJECTIVE FAILED"
@@ -13998,7 +13978,7 @@ msgstr "게임 계속하기"
 
 #: src/mission.c:2605
 msgid "GAME SAVED :"
-msgstr "게임이 저장되었습니다 :"
+msgstr "게임이 저장되었습니다 : "
 
 #: src/move.c:2490
 #: src/move.c:2506
@@ -14009,7 +13989,7 @@ msgstr "석유 드럼통 속에 전력 %u 을 찾았습니다."
 #: src/multigifts.c:172
 #, c-format
 msgid "%s Gives You A Visibility Report"
-msgstr "%s가 당신에게 시계보고를 보냇습니다"
+msgstr "%s가 당신에게 시계보고를 보냈습니다"
 
 #: src/multigifts.c:194
 #, c-format
@@ -14044,12 +14024,12 @@ msgstr "당신이 %s 에게 동맹을 요청합니다"
 #: src/multigifts.c:396
 #, c-format
 msgid "%s Breaks The Alliance With %s"
-msgstr "%s가 %s와의 동맹을 깨었습니다"
+msgstr "%s가 %s와(과)의 동맹을 깨었습니다"
 
 #: src/multigifts.c:425
 #, c-format
 msgid "%s Forms An Alliance With %s"
-msgstr "%s가 %s와 동맹을 맺었습니다"
+msgstr "%s가 %s와(과) 동맹을 맺었습니다"
 
 #: src/multigifts.c:758
 #, c-format
@@ -14104,7 +14084,7 @@ msgstr "당신은 호환되지 않는 mod를 사용 중입니다."
 
 #: src/multiint.c:715
 msgid "Host couldn't send file?"
-msgstr ""
+msgstr "호스트가 파일을 보내지 못했습니다."
 
 #: src/multiint.c:719
 msgid "Incorrect Password!"
@@ -14170,7 +14150,7 @@ msgstr "플레이어 이름 선택"
 
 #: src/multiint.c:1188
 msgid "Distance Fog"
-msgstr "거리(멀어짐) 안개"
+msgstr "디스턴스(거리) 안개"
 
 #: src/multiint.c:1199
 #: src/multimenu.c:756
@@ -14259,16 +14239,15 @@ msgstr "준비되었을 때 클릭하십시오"
 
 #: src/multiint.c:1825
 msgid "READY?"
-msgstr "준비되었습니까?"
+msgstr "시작"
 
 #: src/multiint.c:1862
 msgid "PLAYERS"
 msgstr "플레이어"
 
 #: src/multiint.c:1916
-#, fuzzy
 msgid "Choose Team"
-msgstr "팀 잠금"
+msgstr "팀 선택"
 
 #: src/multiint.c:2066
 msgid "CHAT"
@@ -14279,8 +14258,9 @@ msgid "All players need to have the same mods to join your game."
 msgstr "모든 플레이어는 당신과 같은 mod를 사용해야만 게임에 참여할 수 있습니다"
 
 #: src/multiint.c:2259
+#, fuzzy
 msgid "*** password is now required! ***"
-msgstr "*** 이제 비밀번호가 요구됩니다! ***"
+msgstr "*** 이제 비밀번호 [%s] 가 요구됩니다! ***"
 
 #: src/multiint.c:2266
 msgid "*** password is NOT required! ***"
@@ -14292,379 +14272,378 @@ msgstr "죄송합니다! 게임 호스팅이 실패하였습니다"
 
 #: src/multiint.c:2593
 msgid "'Locked Teams' mode enabled"
-msgstr ""
+msgstr "'팀 잠금' 모드가 켜졌습니다"
 
 #: src/multiint.c:2632
 #: src/multiint.c:2682
 #, c-format
 msgid "The host has kicked %s from the game!"
-msgstr ""
+msgstr "호스트가 %s를 게임에서 퇴장시켰습니다!"
 
 #: src/multiint.c:2757
 msgid "Host is Starting Game"
-msgstr ""
+msgstr "호스트가 게임을 시작하고 있습니다"
 
 #: src/multiint.c:3340
 msgid "Players"
-msgstr ""
+msgstr "플레이어"
 
 #: src/multiint.c:3458
 #, c-format
 msgid "Sending Map: %d%% "
-msgstr ""
+msgstr "맵을 보내는 중: %d%% "
 
 #: src/multiint.c:3466
 #, c-format
 msgid "Map: %d%% downloaded"
-msgstr ""
+msgstr "맵: %d%% 다운로드 완료"
 
 #: src/multiint.c:3492
 msgid "HOST"
-msgstr ""
+msgstr "호스트"
 
 #: src/multijoin.c:100
 #: src/multijoin.c:101
 msgid "Players Still Joining"
-msgstr ""
+msgstr "플레이어가 아직 들어오고 있습니다"
 
 #: src/multijoin.c:216
 #, c-format
 msgid "%s has Left the Game"
-msgstr ""
+msgstr "%s가 게임을 퇴장하였습니다"
 
 #: src/multijoin.c:230
 #, c-format
 msgid "File transfer has been aborted for %d."
-msgstr ""
+msgstr "%d에게 파일 전송이 취소되었습니다"
 
 #: src/multijoin.c:352
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
-msgstr ""
+msgstr "%s (%u)는 호환되지 않는 mod를 사용 중이며, 게임에서 퇴장당하였습니다."
 
 #: src/multijoin.c:391
 #, c-format
 msgid "%s is Joining the Game"
-msgstr ""
+msgstr "%s가 게임에 참여하였습니다"
 
 #: src/multijoin.c:401
 msgid "System message:"
-msgstr ""
+msgstr "시스템 메시지:"
 
 #: src/multilimit.c:185
 msgid "Apply Defaults and Return To Previous Screen"
-msgstr ""
+msgstr "기본값을 적용하고 이전 화면으로 돌아가기"
 
 #: src/multilimit.c:316
 msgid "Limits reset to default values"
-msgstr ""
+msgstr "제한 값을 기본값으로 재설정"
 
 #: src/multimenu.c:609
 msgid "Technology level 1"
-msgstr ""
+msgstr "기술 수준 1"
 
 #: src/multimenu.c:617
 msgid "Technology level 2"
-msgstr ""
+msgstr "기술 수준 2"
 
 #: src/multimenu.c:623
 msgid "Technology level 3"
-msgstr ""
+msgstr "기술 수준 3"
 
 #: src/multimenu.c:629
 msgid "Any number of players"
-msgstr ""
+msgstr "플레이어 수 무제한"
 
 #: src/multimenu.c:636
 msgid "2 players"
-msgstr ""
+msgstr "2 플레이어"
 
 #: src/multimenu.c:642
 msgid "4 players"
-msgstr ""
+msgstr "4 플레이어"
 
 #: src/multimenu.c:648
 msgid "8 players"
-msgstr ""
+msgstr "8 플레이어"
 
 #: src/multimenu.c:757
 msgid "Score"
-msgstr ""
+msgstr "점수"
 
 #: src/multimenu.c:758
 msgid "Kills"
-msgstr ""
+msgstr "킬(Kills)"
 
 #: src/multimenu.c:762
 #: src/multimenu.c:767
 msgid "Units"
-msgstr ""
+msgstr "유닛"
 
 #: src/multimenu.c:772
 msgid "Ping"
-msgstr ""
+msgstr "핑(Ping)"
 
 #: src/multimenu.c:776
 msgid "Structs"
-msgstr ""
+msgstr "구조물"
 
 #: src/multimenu.c:1125
 msgid "Channel"
-msgstr ""
+msgstr "채널"
 
 #: src/multimenu.c:1140
 msgid "Toggle Alliance State"
-msgstr ""
+msgstr "동맹 상태 전환"
 
 #: src/multimenu.c:1159
 msgid "Give Visibility Report"
-msgstr ""
+msgstr "시계보고 제공하기"
 
 #: src/multimenu.c:1165
 msgid "Leak Technology Documents"
-msgstr ""
+msgstr "기술 문서 누설하기"
 
 #: src/multimenu.c:1172
 msgid "Hand Over Selected Units"
-msgstr ""
+msgstr "선택된 유닛을 넘겨주기"
 
 #: src/multimenu.c:1178
 msgid "Give Power To Player"
-msgstr ""
+msgstr "플레이어에게 전력 제공하기"
 
 #: src/multiplay.c:265
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
-msgstr ""
+msgstr "데이터 무결성 시험을 건너뛰려 했기 때문에 %s가 퇴장당하였습니다!"
 
 #: src/multiplay.c:1136
 msgid "(allies"
-msgstr ""
+msgstr "(동맹팀"
 
 #: src/multiplay.c:1144
 msgid "(private to "
-msgstr ""
+msgstr "(개인적입니다 "
 
 #: src/multiplay.c:1157
 msgid "[invalid]"
-msgstr ""
+msgstr "[인식 불가능]"
 
 #: src/multiplay.c:2048
 msgid "Green"
-msgstr ""
+msgstr "녹색"
 
 #: src/multiplay.c:2049
 msgid "Orange"
-msgstr ""
+msgstr "주황색"
 
 #: src/multiplay.c:2050
 msgid "Grey"
-msgstr ""
+msgstr "회색"
 
 #: src/multiplay.c:2051
 msgid "Black"
-msgstr ""
+msgstr "검정색"
 
 #: src/multiplay.c:2052
 msgid "Red"
-msgstr ""
+msgstr "빨강색"
 
 #: src/multiplay.c:2053
 msgid "Blue"
-msgstr ""
+msgstr "파랑색"
 
 #: src/multiplay.c:2054
 msgid "Pink"
-msgstr ""
+msgstr "핑크색"
 
 #: src/multiplay.c:2055
 msgid "Cyan"
-msgstr ""
+msgstr "청록색"
 
 #: src/research.c:1737
 #, c-format
 msgid "Research completed: %s"
-msgstr ""
+msgstr "연구 완료: %s"
 
 #: src/research.c:1742
 msgid "Research Completed"
-msgstr ""
+msgstr "연구 완료"
 
 #: src/research.c:2563
 msgid "Research Award"
-msgstr ""
+msgstr "연구 상"
 
 #: src/scores.c:99
 #, c-format
 msgid "Own Units: %u"
-msgstr ""
+msgstr "내 유닛: %u"
 
 #: src/scores.c:100
 #, c-format
 msgid "Enemy Units: %u"
-msgstr ""
+msgstr "적의 유닛: %u"
 
 #: src/scores.c:101
 #, c-format
 msgid "Own Structures: %u"
-msgstr ""
+msgstr "나의 구조물: %u"
 
 #: src/scores.c:102
 #, c-format
 msgid "Enemy Structures: %u"
-msgstr ""
+msgstr "적의 구조물: %u"
 
 #: src/scores.c:103
 #, c-format
 msgid "Units Manufactured: %u"
-msgstr ""
+msgstr "생산된 유닛: %u"
 
 #: src/scores.c:104
 #, c-format
 msgid "Total Units: %u"
-msgstr ""
+msgstr "유닛 총수: %u"
 
 #: src/scores.c:105
 #, c-format
 msgid "Structures Built: %u"
-msgstr ""
+msgstr "건설된 구조물: %u"
 
 #: src/scores.c:106
 #, c-format
 msgid "Total Structures: %u"
-msgstr ""
+msgstr "구조물 총수: %u"
 
 #: src/scores.c:108
 #, c-format
 msgid "Rookie: %u"
-msgstr ""
+msgstr "루키: %u"
 
 #: src/scores.c:109
 #, c-format
 msgctxt "rank"
 msgid "Green: %u"
-msgstr ""
+msgstr "그린: %u"
 
 #: src/scores.c:110
 #, c-format
 msgid "Trained: %u"
-msgstr ""
+msgstr "견습병: %u"
 
 #: src/scores.c:111
 #, c-format
 msgid "Regular: %u"
-msgstr ""
+msgstr "정규병: %u"
 
 #: src/scores.c:112
 #, c-format
 msgid "Professional: %u"
-msgstr ""
+msgstr "프로페셔널: %u"
 
 #: src/scores.c:113
 #, c-format
 msgid "Veteran: %u"
-msgstr ""
+msgstr "베테랑: %u"
 
 #: src/scores.c:114
 #, c-format
 msgid "Elite: %u"
-msgstr ""
+msgstr "엘리트: %u"
 
 #: src/scores.c:115
 #, c-format
 msgid "Special: %u"
-msgstr ""
+msgstr "스페셜: %u"
 
 #: src/scores.c:116
 #, c-format
 msgid "Hero: %u"
-msgstr ""
+msgstr "히어로: %u"
 
 #: src/scores.c:350
 msgid "Unit Losses"
-msgstr ""
+msgstr "유닛 손실"
 
 #: src/scores.c:351
 msgid "Structure Losses"
-msgstr ""
+msgstr "구조물 손실"
 
 #: src/scores.c:352
 msgid "Force Information"
-msgstr ""
+msgstr "군력 정보"
 
 #: src/scores.c:432
 #, c-format
 msgid "ARTIFACTS RECOVERED: %d"
-msgstr ""
+msgstr "되찾은 유물 수: %d"
 
 #: src/scores.c:437
 #, c-format
 msgid "Mission Time - %s"
-msgstr ""
+msgstr "임무 시간소요 - %s"
 
 #: src/scores.c:442
 #, c-format
 msgid "Total Game Time - %s"
-msgstr ""
+msgstr "총 게임 시간소요 - %s"
 
 #: src/scores.c:448
 #, c-format
 msgid "You cheated!"
-msgstr ""
+msgstr "당신이 치트했습니다!"
 
 #: src/scriptfuncs.c:3153
 msgid "YOU ARE VICTORIOUS!"
-msgstr ""
+msgstr "당신이 승리했습니다!"
 
 #: src/scriptfuncs.c:3157
 msgid "YOU WERE DEFEATED!"
-msgstr ""
+msgstr "당신이 패배했습니다!"
 
 #: src/scriptfuncs.c:10073
 #, c-format
 msgid "Beacon received from %s!"
-msgstr ""
+msgstr "%s이 표지를 보냈습니다!"
 
 #: src/scriptfuncs.c:10119
 #, c-format
 msgid "Beacon %d"
-msgstr ""
+msgstr "표지 %d"
 
 #: src/selection.c:116
 #, c-format
 msgid "%u unit selected"
 msgid_plural "%u units selected"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "유닛 %u개가 선택되었습니다"
 
 #: src/selection.c:433
 #: src/selection.c:520
 msgid "Unable to locate any repair units!"
-msgstr ""
+msgstr "수리 유닛을 찾을 수 없습니다!"
 
 #: src/selection.c:436
 msgid "Unable to locate any Trucks!"
-msgstr ""
+msgstr "트럭을 찾을 수 없습니다!"
 
 #: src/selection.c:439
 msgid "Unable to locate any Sensor Units!"
-msgstr ""
+msgstr "센서 유닛을 찾을 수 없습니다!"
 
 #: src/selection.c:442
 msgid "Unable to locate any Commanders!"
-msgstr ""
+msgstr "사령관을 찾을 수 없습니다!"
 
 #: src/structure.c:2851
+#, fuzzy
 msgid "Command Control Limit Reached - Production Halted"
-msgstr ""
+msgstr "제어 한계에 도달하였습니다 - 생산이 중단되었습니다"
 
 #: src/structure.c:6044
 #: src/structure.c:6069
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%s - 유닛 %u개 할당되었습니다"
 
 #: src/structure.c:6074
 #: src/structure.c:6142
@@ -14672,88 +14651,83 @@ msgstr[1] ""
 #: src/structure.c:6172
 #, c-format
 msgid "%s - Damage %3.0f%%"
-msgstr ""
+msgstr "%s - 데미지 %3.0f%%"
 
 #: src/structure.c:6124
 #, c-format
 msgid "%s - Connected %u of %u"
-msgstr ""
+msgstr "%s - %u개 연결 되었습니다 (전체 %u개)"
 
 #: src/structure.c:6288
 #: src/structure.c:6333
 #, c-format
 msgid "%s - Electronically Damaged"
-msgstr ""
+msgstr "%s - 전자적으로 손상됨"
 
 #: src/structure.c:6570
 msgid "Electronic Reward - Visibility Report"
-msgstr ""
+msgstr "전자적 보상 - 시계보고"
 
 #: src/structure.c:6610
 msgid "Factory Reward - Propulsion"
-msgstr ""
+msgstr "공장 보상 - 추진력"
 
 #: src/structure.c:6634
 msgid "Factory Reward - Body"
-msgstr ""
+msgstr "공장 보상 - 차체"
 
 #: src/structure.c:6658
 msgid "Factory Reward - Weapon"
-msgstr ""
+msgstr "공장 보상 - 무기"
 
 #: src/structure.c:6667
 msgid "Factory Reward - Nothing"
-msgstr ""
+msgstr "공장 보상 - 없음"
 
 #: src/structure.c:6695
 msgid "Repair Facility Award - Repair"
-msgstr ""
+msgstr "수리 시설 상 - 수리"
 
 #: src/structure.c:6702
 msgid "Repair Facility Award - Nothing"
-msgstr ""
+msgstr "수리 시설 상 - 없음"
 
 #: src/transporter.c:397
 #: src/transporter.c:451
 msgid "Launch Transport"
-msgstr ""
+msgstr "수송선 출발"
 
 #: src/transporter.c:1761
 msgid "Reinforcements landing"
-msgstr ""
+msgstr "지원군이 착륙하고 있습니다"
 
 #: src/version.c:139
 msgid " (modified and switched locally)"
-msgstr ""
+msgstr " (로컬 수정 및 전환switch)"
 
 #: src/version.c:141
 msgid " (modified locally)"
-msgstr ""
+msgstr " (로컬 수정)"
 
 #: src/version.c:143
 msgid " (switched locally)"
-msgstr ""
+msgstr " (로컬 전환switch)"
 
 #: src/version.c:150
 msgid " - DEBUG"
-msgstr ""
+msgstr " - 디버그(DEBUG)"
 
 #: src/version.c:159
 #, c-format
 msgid " - Built %s"
-msgstr ""
+msgstr " - 빌드 날짜 %s"
 
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version <version name/number> <working copy state><BUILD DATE><BUILD TYPE>"
 #: src/version.c:169
 #, c-format
 msgid "Version %s%s%s%s"
-msgstr ""
-
-# not sure what this is
-#, fuzzy
-#~ msgid "Fire Cannon"
-#~ msgstr "화염 캐논"
+msgstr "버젼 %s%s%s%s"
 
 #~ msgid "Cobra Hover Heavy-Repair"
 #~ msgstr "코브라 호버 추진 대형 수리 터릿"
@@ -14795,9 +14769,7 @@ msgstr ""
 #~ msgid "Scorpion Command Turret Tracks"
 #~ msgstr "스코피언 사령관 터릿 무한궤도"
 
-# English typo
-#, fuzzy
-#~ msgid "mantis Command Turret Tracks"
+#~ msgid "Mantis Command Turret Tracks"
 #~ msgstr "맨티스 사령관 터릿 무한궤도"
 
 #~ msgid "Cobra Lancer Tracks"
@@ -14815,10 +14787,6 @@ msgstr ""
 #~ msgid "Scorpion Heavy Machinegun Tracks"
 #~ msgstr "스코피언 중기관총 무한궤도"
 
-# applies to other names as well
-# repair ->
-# just 수리 or 수리 터릿??
-#, fuzzy
 #~ msgid "Scorpion Repair Tracks"
 #~ msgstr "스코피언 수리 터릿 무한궤도"
 
@@ -14897,132 +14865,80 @@ msgstr ""
 #~ msgid "Viper Flamer Half-Track"
 #~ msgstr "바이퍼 화염방사기 반 무한궤도"
 
-# Transporter
-# That word is an internal name and should never be translated; file a bug report.
-#, fuzzy
-#~ msgid "Transporter"
-#~ msgstr "트랜스포터(Transporter)"
-
-#~ msgid "Build menu will reopen"
-#~ msgstr "건축 메뉴가 다시 열립니다"
-
-#~ msgid "Build menu will not reopen"
-#~ msgstr "건축 메뉴가 다시 열리지 않습니다"
-
-#~ msgid "Z NULL BRAIN"
-#~ msgstr "Z NULL BRAIN"
-
-#~ msgid "Z NULL PROGRAM"
-#~ msgstr "Z NULL PROGRAM"
-
-#~ msgid "Z NULL CONSTRUCT"
-#~ msgstr "Z NULL CONSTRUCT"
-
-#~ msgid "Z NULL PROP"
-#~ msgstr "Z NULL PROP"
-
-#~ msgid "BaBaProp"
-#~ msgstr "BaBaProp"
-
-#~ msgid "BaBaLegs"
-#~ msgstr "BaBaLegs"
-
-#~ msgid "Z NULL REPAIR"
-#~ msgstr "Z NULL REPAIR"
-
-#~ msgid "Z NULL ECM"
-#~ msgstr "Z NULL ECM"
-
-#~ msgid "Z NULL SENSOR"
-#~ msgstr "Z NULL SENSOR"
-
-#~ msgid "LasSat"
-#~ msgstr "LasSat"
-
-#~ msgid "Czech"
-#~ msgstr "체코어"
-
-#~ msgid "Danish"
-#~ msgstr "덴마크어"
-
-#~ msgid "German"
-#~ msgstr "독일어"
-
-#~ msgid "English (United Kingdom)"
-#~ msgstr "영어 (U.K.)"
-
-#~ msgid "Spanish"
-#~ msgstr "스페인어"
-
-#~ msgid "Estonian"
-#~ msgstr "에스토니아어"
-
-#~ msgid "Finnish"
-#~ msgstr "핀란드어"
-
-#~ msgid "French"
-#~ msgstr "프랑스어"
-
-#~ msgid "Frisian"
-#~ msgstr "프리지아어"
-
-#~ msgid "Irish"
-#~ msgstr "아일랜드어"
-
-#~ msgid "Croatian"
-#~ msgstr "크로아티아어"
-
-#~ msgid "Italian"
-#~ msgstr "이탈리아어"
-
-#~ msgid "Lithuanian"
-#~ msgstr "리투아니아어"
-
-#~ msgid "Norwegian"
-#~ msgstr "노르웨이어"
-
-#~ msgid "Dutch"
-#~ msgstr "네덜란드어"
-
-#~ msgid "Polish"
-#~ msgstr "폴란드어"
-
-#~ msgid "Brazilian Portuguese"
-#~ msgstr "브라질식 포르투갈어"
-
-#~ msgid "Portuguese"
-#~ msgstr "포르투갈어"
-
-#~ msgid "Romanian"
-#~ msgstr "루마니아어"
-
-#~ msgid "Russian"
-#~ msgstr "러시아어"
-
-#~ msgid "Slovenian"
-#~ msgstr "슬로베니아어"
-
-#~ msgid "Ukrainian"
-#~ msgstr "우크라이나어"
-
-#~ msgid "Simplified Chinese"
-#~ msgstr "중국어 간체자"
-
-#~ msgid "Traditional Chinese"
-#~ msgstr "중국어 번체자"
-
-#~ msgid "Latin"
-#~ msgstr "라틴어"
-
 #~ msgid ": Unknown cheat code."
 #~ msgstr ": 알 수 없는 치트 코드입니다."
-
-#, fuzzy
-#~ msgid "(Player %u) has detected the borg 'legs' bug! Please enter legs in your console and upload the files to us!"
-#~ msgstr "Should not exist"
 
 #~ msgid "Player %u is cheating him/herself a new droid army of %s(s)."
 #~ msgstr "플레이어 %u이(가) 치트를 사용해 %s(으)로 이루어진 새로운 군대를 만들고 있습니다."
 
+#~ msgid "Show frame rate"
+#~ msgstr "초당 프레임 수 보기"
+
+#~ msgid "Toggle display of droid path"
+#~ msgstr "유닛 경로 표시 켜짐/꺼짐"
+
+#~ msgid "Toggle display of gateways"
+#~ msgstr "게이트웨이 표시 켜짐/꺼짐"
+
+#~ msgid "Toggle Debug Mappings"
+#~ msgstr "디버그 매핑 토글(켜짐/꺼짐)"
+
+#~ msgid "Show all keyboard mappings - use pause!"
+#~ msgstr "모든 키보드 매핑 보기 - 일시 정지를 사용하세요!"
+
+#~ msgid "Toggle visibility"
+#~ msgstr "시계 토글"
+
+#~ msgid "Raise tile height"
+#~ msgstr "타일 높이기"
+
+#~ msgid "Lower tile height"
+#~ msgstr "타일 낮추기"
+
+#~ msgid "Toggles on/off DEMO Mode"
+#~ msgstr "데모(DEMO) 모드 켜짐/꺼짐"
+
+#~ msgid "End Mission"
+#~ msgstr "임무 종료"
+
+#~ msgid "Toggles All fog"
+#~ msgstr "모든 안개 토글"
+
+#~ msgid "Trigger some weather"
+#~ msgstr "기후 촉발"
+
+#~ msgid "Flip terrain triangle"
+#~ msgstr "지형 삼각형 뒤집기"
+
+#~ msgid "Realign height of all objects on the map"
+#~ msgstr "모든 맵 개체의 높이 재정렬하기 "
+
+#~ msgid "Make all items available"
+#~ msgstr "모든 항목 사용 가능하게 만들기"
+
+#~ msgid "Kill Selected Unit(s)"
+#~ msgstr "선택된 유닛을 파괴하기"
+
+#~ msgid "Toggle god Mode Status"
+#~ msgstr "신 모드 켜짐/꺼짐"
+
+#~ msgid "Display Options Screen"
+#~ msgstr "옵션 화면 보기"
+
+#~ msgid "Complete current research"
+#~ msgstr "현재 진행 중인 연구 완료"
+
+#~ msgid "Toggle watch window"
+#~ msgstr "워치(Watch) 창 켜짐/꺼짐"
+
+#~ msgid "Trace a game object"
+#~ msgstr "게임 개체 트레이스(trace)하기"
+
+#~ msgid "Toggle Driving Mode"
+#~ msgstr "유닛 운전 모드 켜짐/꺼짐"
+
 #~ msgid "You found %u power in an oil drum"
 #~ msgstr "석유 드럼통 속에 전력 %u 을 찾았습니다"
+
+#~ msgid "kicked %s : %s from the game, and added them to the banned list!"
+#~ msgstr "%s 퇴장 : %s를 퇴장시켰으며, 금지 목록에 추가되었습니다!"
