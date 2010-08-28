@@ -3951,23 +3951,13 @@ static void structureEffects()
 {
 	UDWORD	i;
 
-		/* Only do for player 0 power stations */
-
-		if(bMultiPlayer)
+	for (i = 0; i < MAX_PLAYERS; i++)
+	{
+		if (apsStructLists[i])
 		{
-			for(i=0;i<MAX_PLAYERS;i++)
-			{
-				if(isHumanPlayer(i) && apsStructLists[i] )
-				{
-					structureEffectsPlayer(i);
-				}
-
-			}
+			structureEffectsPlayer(i);
 		}
-		else if(apsStructLists[0])
-		{
-			structureEffectsPlayer(0);
-		}
+	}
 }
 
 /// Show the sensor ranges of selected droids and buildings
