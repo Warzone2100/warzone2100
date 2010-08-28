@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-08-25 16:31+0200\n"
+"POT-Creation-Date: 2010-08-28 14:14+0200\n"
 "PO-Revision-Date: 2010-07-26 09:40+0100\n"
 "Last-Translator: Michał D. aka Emdek <emdeck@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -12224,16 +12224,16 @@ msgid "System locale"
 msgstr "Język systemu"
 
 #: lib/netplay/netplay.c:1287
-#: lib/netplay/netplay.c:2172
+#: lib/netplay/netplay.c:2188
 msgid "Enter password here"
 msgstr "Wpisz hasło tutaj"
 
-#: lib/netplay/netplay.c:3194
+#: lib/netplay/netplay.c:3210
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Nie można rozwinąć nazwy głównego serwera (%s)!"
 
-#: lib/netplay/netplay.c:3219
+#: lib/netplay/netplay.c:3235
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Nie można skomunikować się z serwerem lobby! Czy port %u TCP jest otwarty dla ruchu wychodzącego?"
@@ -12738,7 +12738,7 @@ msgid "Join Game"
 msgstr "Dołącz do gry"
 
 #: src/frontend.c:414
-#: src/multiint.c:1140
+#: src/multiint.c:1141
 msgid "OPTIONS"
 msgstr "OPCJE"
 
@@ -12833,7 +12833,7 @@ msgid "Off"
 msgstr "Wyłącz"
 
 #: src/frontend.c:516
-#: src/multiint.c:1210
+#: src/multiint.c:1211
 msgid "Fog"
 msgstr "Mgła"
 
@@ -12845,7 +12845,7 @@ msgstr "Mgła"
 
 #: src/frontend.c:523
 #: src/frontend.c:588
-#: src/multiint.c:1212
+#: src/multiint.c:1213
 msgid "Fog Of War"
 msgstr "Mgła wojny"
 
@@ -13007,7 +13007,7 @@ msgid "GAME OPTIONS"
 msgstr "USTAWIENIA GRY"
 
 #: src/frontend.c:1342
-#: src/multiint.c:2120
+#: src/multiint.c:2121
 msgid "Mod: "
 msgstr "Mod: "
 
@@ -13066,7 +13066,7 @@ msgid "Build (F3)"
 msgstr "Buduj (F3)"
 
 #: src/hci.c:3872
-#: src/multiint.c:1257
+#: src/multiint.c:1258
 #: src/multimenu.c:763
 msgid "Power"
 msgstr "Energia"
@@ -13657,8 +13657,8 @@ msgstr "SKRÓTY KLAWISZOWE"
 
 #: src/keyedit.c:374
 #: src/multiint.c:533
-#: src/multiint.c:958
-#: src/multiint.c:1343
+#: src/multiint.c:959
+#: src/multiint.c:1344
 msgid "Return To Previous Screen"
 msgstr "Wstecz"
 
@@ -14260,7 +14260,7 @@ msgid "Accept Settings"
 msgstr "Zapisz ustawienia"
 
 #: src/multiint.c:469
-#: src/multiint.c:1006
+#: src/multiint.c:1007
 msgid "Cancel"
 msgstr "Anuluj"
 
@@ -14280,249 +14280,257 @@ msgstr "Lobby"
 msgid "IP"
 msgstr "IP"
 
-#: src/multiint.c:724
+#: src/multiint.c:725
 msgid "No games are available"
 msgstr "Brak dostępnych gier"
 
-#: src/multiint.c:727
+#: src/multiint.c:728
 msgid "Game is full"
 msgstr "Brak miejsc"
 
-#: src/multiint.c:731
+#: src/multiint.c:732
 msgid "You were kicked!"
 msgstr "Zostałeś wyrzucony!"
 
-#: src/multiint.c:734
+#: src/multiint.c:735
 msgid "Wrong Game Version!"
 msgstr "Niewłaściwa wersja gry!"
 
-#: src/multiint.c:737
+#: src/multiint.c:738
 msgid "You have an incompatible mod."
 msgstr "Masz niekompatybilny mod."
 
-#: src/multiint.c:742
+#: src/multiint.c:743
 msgid "Host couldn't send file?"
 msgstr "Host nie mógł przesłać pliku?"
 
-#: src/multiint.c:746
+#: src/multiint.c:747
 msgid "Incorrect Password!"
 msgstr "Niewłaściwe hasło!"
 
-#: src/multiint.c:749
+#: src/multiint.c:750
 msgid "Host has dropped connection!"
 msgstr "Host zerwał połączenie!"
 
-#: src/multiint.c:753
+#: src/multiint.c:754
 msgid "Connection Error"
 msgstr "Błąd połączenia"
 
-#: src/multiint.c:894
+#: src/multiint.c:895
 msgid "Searching"
 msgstr "Wyszukiwanie"
 
-#: src/multiint.c:955
+#: src/multiint.c:956
 msgid "GAMES"
 msgstr "GRY"
 
-#: src/multiint.c:963
+#: src/multiint.c:964
 msgid "Refresh Games List"
 msgstr "Odśwież listę gier"
 
-#: src/multiint.c:983
+#: src/multiint.c:984
 msgid "Enter Password:"
 msgstr "Wpisz hasło:"
 
-#: src/multiint.c:1004
+#: src/multiint.c:1005
 msgid "OK"
 msgstr "OK"
 
-#: src/multiint.c:1145
-#: src/multiint.c:1152
+#: src/multiint.c:1146
+#: src/multiint.c:1153
 msgid "Select Game Name"
 msgstr "Wybierz grę"
 
-#: src/multiint.c:1145
+#: src/multiint.c:1146
 msgid "One-Player Skirmish"
 msgstr "Potyczka"
 
-#: src/multiint.c:1155
+#: src/multiint.c:1156
 msgid "Select Map"
 msgstr "Wybór mapy"
 
-#: src/multiint.c:1163
+#: src/multiint.c:1164
 msgid "Click to set Password"
 msgstr "Kliknij by ustawić hasło"
 
-#: src/multiint.c:1173
 #: src/multiint.c:1174
+#: src/multiint.c:1175
 msgid "Scavengers"
 msgstr "Śmieciarze"
 
-#: src/multiint.c:1176
+#: src/multiint.c:1177
 msgid "No Scavengers"
 msgstr "Brak Śmieciarzy"
 
-#: src/multiint.c:1207
+#: src/multiint.c:1208
 msgid "Select Player Name"
 msgstr "Wybierz nazwę gracza"
 
-#: src/multiint.c:1213
+#: src/multiint.c:1214
 msgid "Distance Fog"
 msgstr "Mgła dystansowa"
 
-#: src/multiint.c:1224
+#: src/multiint.c:1225
 #: src/multimenu.c:756
 msgid "Alliances"
 msgstr "Sojusze"
 
-#: src/multiint.c:1227
+#: src/multiint.c:1228
 msgid "No Alliances"
 msgstr "Brak sojuszy"
 
-#: src/multiint.c:1229
+#: src/multiint.c:1230
 msgid "Allow Alliances"
 msgstr "Pozwól na sojusze"
 
-#: src/multiint.c:1233
+#: src/multiint.c:1234
 msgid "Locked Teams"
 msgstr "Zablokowane drużyny"
 
-#: src/multiint.c:1259
+#: src/multiint.c:1260
 msgid "Low Power Levels"
 msgstr "Niskie poziomy energii"
 
-#: src/multiint.c:1261
+#: src/multiint.c:1262
 msgid "Medium Power Levels"
 msgstr "Średnie poziomy energii"
 
-#: src/multiint.c:1263
+#: src/multiint.c:1264
 msgid "High Power Levels"
 msgstr "Wysokie poziomy energii"
 
-#: src/multiint.c:1295
+#: src/multiint.c:1296
 msgid "Base"
 msgstr "Baza"
 
-#: src/multiint.c:1297
+#: src/multiint.c:1298
 msgid "Start with No Bases"
 msgstr "Rozpocznij bez baz"
 
-#: src/multiint.c:1299
+#: src/multiint.c:1300
 msgid "Start with Bases"
 msgstr "Rozpocznij z bazami"
 
-#: src/multiint.c:1301
+#: src/multiint.c:1302
 msgid "Start with Advanced Bases"
 msgstr "Rozpocznij z zaawansowanymi bazami"
 
-#: src/multiint.c:1333
+#: src/multiint.c:1334
 msgid "Map Preview"
 msgstr "Podgląd mapy"
 
-#: src/multiint.c:1335
+#: src/multiint.c:1336
 msgid "Click to see Map"
 msgstr "Kliknij by obejrzeć mapę"
 
-#: src/multiint.c:1349
+#: src/multiint.c:1350
 msgid "Start Hosting Game"
 msgstr "Rozpocznij grę jako Host"
 
-#: src/multiint.c:1357
+#: src/multiint.c:1358
 msgid "Show Structure Limits"
 msgstr "Pokaż limit budowli"
 
-#: src/multiint.c:1357
+#: src/multiint.c:1358
 msgid "Set Structure Limits"
 msgstr "Ustaw limit budowli"
 
-#: src/multiint.c:1420
+#: src/multiint.c:1421
 msgid "Player colour"
 msgstr "Kolor gracza"
 
-#: src/multiint.c:1436
+#: src/multiint.c:1437
 msgid "Kick player"
 msgstr "Wyrzuć gracza"
 
-#: src/multiint.c:1447
+#: src/multiint.c:1448
 msgid "Player number"
 msgstr "Numer gracza"
 
-#: src/multiint.c:1807
+#: src/multiint.c:1808
 msgid "Team"
 msgstr "Drużyna"
 
-#: src/multiint.c:1840
+#: src/multiint.c:1841
 msgid "Waiting for other players"
 msgstr "Oczekiwanie na graczy"
 
-#: src/multiint.c:1846
+#: src/multiint.c:1847
 msgid "Click when ready"
 msgstr "Kliknij kiedy jesteś gotowy"
 
-#: src/multiint.c:1850
+#: src/multiint.c:1851
 msgid "READY?"
 msgstr "GOTOWY?"
 
-#: src/multiint.c:1887
+#: src/multiint.c:1888
 msgid "PLAYERS"
 msgstr "GRACZE"
 
-#: src/multiint.c:1941
+#: src/multiint.c:1942
 #, fuzzy
 msgid "Choose Team"
 msgstr "Zablokowane drużyny"
 
-#: src/multiint.c:2091
+#: src/multiint.c:1982
+msgid "Click to change player settings"
+msgstr ""
+
+#: src/multiint.c:2013
+msgid "Click to adjust AI difficulty"
+msgstr ""
+
+#: src/multiint.c:2092
 msgid "CHAT"
 msgstr "CHAT"
 
-#: src/multiint.c:2125
+#: src/multiint.c:2126
 msgid "All players need to have the same mods to join your game."
 msgstr "Wszyscy gracze muszą mieć takie same mody aby przyłączyć się do twojej gry."
 
-#: src/multiint.c:2285
+#: src/multiint.c:2286
 #, fuzzy, c-format
 msgid "*** password [%s] is now required! ***"
 msgstr "*** hasło jest teraz wymagane! ***"
 
-#: src/multiint.c:2293
+#: src/multiint.c:2294
 msgid "*** password is NOT required! ***"
 msgstr "*** hasło jest teraz niewymagane! ***"
 
-#: src/multiint.c:2535
+#: src/multiint.c:2536
 msgid "Sorry! Failed to host the game."
 msgstr "Przepraszamy! Nie udało się utworzyć serwera gry."
 
-#: src/multiint.c:2620
+#: src/multiint.c:2621
 msgid "'Locked Teams' mode enabled"
 msgstr "Włączono 'zablokowane drużyny'"
 
-#: src/multiint.c:2659
-#: src/multiint.c:2709
+#: src/multiint.c:2660
+#: src/multiint.c:2710
 #: src/multimenu.c:1476
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "Host wyrzucił %s z gry!"
 
-#: src/multiint.c:2787
+#: src/multiint.c:2788
 msgid "Host is Starting Game"
 msgstr "Host rozpoczyna grę"
 
-#: src/multiint.c:3364
+#: src/multiint.c:3365
 msgid "Players"
 msgstr "Gracze"
 
-#: src/multiint.c:3482
+#: src/multiint.c:3483
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Przesyłanie mapy: %d%%"
 
-#: src/multiint.c:3491
+#: src/multiint.c:3492
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Mapa: %d%% pobrane"
 
-#: src/multiint.c:3517
+#: src/multiint.c:3518
 msgid "HOST"
 msgstr "HOST"
 

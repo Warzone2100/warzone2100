@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WZ2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-08-25 16:31+0200\n"
+"POT-Creation-Date: 2010-08-28 14:14+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: metalwarrior95 <metalwarrioroften@gmail.com>\n"
 "Language-Team: \n"
@@ -12223,16 +12223,16 @@ msgid "System locale"
 msgstr "Lokalni"
 
 #: lib/netplay/netplay.c:1287
-#: lib/netplay/netplay.c:2172
+#: lib/netplay/netplay.c:2188
 msgid "Enter password here"
 msgstr "Upišite sišfru ovdje"
 
-#: lib/netplay/netplay.c:3194
+#: lib/netplay/netplay.c:3210
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr ""
 
-#: lib/netplay/netplay.c:3219
+#: lib/netplay/netplay.c:3235
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr ""
@@ -12732,7 +12732,7 @@ msgid "Join Game"
 msgstr "Pridruži se Igri"
 
 #: src/frontend.c:414
-#: src/multiint.c:1140
+#: src/multiint.c:1141
 msgid "OPTIONS"
 msgstr "POSTAVKE"
 
@@ -12827,7 +12827,7 @@ msgid "Off"
 msgstr "Isključeno"
 
 #: src/frontend.c:516
-#: src/multiint.c:1210
+#: src/multiint.c:1211
 msgid "Fog"
 msgstr "Magla"
 
@@ -12838,7 +12838,7 @@ msgstr "Misterija"
 
 #: src/frontend.c:523
 #: src/frontend.c:588
-#: src/multiint.c:1212
+#: src/multiint.c:1213
 msgid "Fog Of War"
 msgstr "Magla Rata"
 
@@ -13002,7 +13002,7 @@ msgid "GAME OPTIONS"
 msgstr "OPCIJE IGRE"
 
 #: src/frontend.c:1342
-#: src/multiint.c:2120
+#: src/multiint.c:2121
 msgid "Mod: "
 msgstr "Modifikacija:"
 
@@ -13061,7 +13061,7 @@ msgid "Build (F3)"
 msgstr "Gradi (F3)"
 
 #: src/hci.c:3872
-#: src/multiint.c:1257
+#: src/multiint.c:1258
 #: src/multimenu.c:763
 msgid "Power"
 msgstr "Resursi"
@@ -13649,8 +13649,8 @@ msgstr "Tipkovničke kratice"
 
 #: src/keyedit.c:374
 #: src/multiint.c:533
-#: src/multiint.c:958
-#: src/multiint.c:1343
+#: src/multiint.c:959
+#: src/multiint.c:1344
 msgid "Return To Previous Screen"
 msgstr "Nazad"
 
@@ -14251,7 +14251,7 @@ msgid "Accept Settings"
 msgstr "Prihvati postavke"
 
 #: src/multiint.c:469
-#: src/multiint.c:1006
+#: src/multiint.c:1007
 msgid "Cancel"
 msgstr "Poništi"
 
@@ -14271,249 +14271,257 @@ msgstr "Predvorje"
 msgid "IP"
 msgstr "IP"
 
-#: src/multiint.c:724
+#: src/multiint.c:725
 msgid "No games are available"
 msgstr "Nema dostupnih igara."
 
-#: src/multiint.c:727
+#: src/multiint.c:728
 msgid "Game is full"
 msgstr "Igra je popunjena!"
 
-#: src/multiint.c:731
+#: src/multiint.c:732
 msgid "You were kicked!"
 msgstr "Izbačen si!"
 
-#: src/multiint.c:734
+#: src/multiint.c:735
 msgid "Wrong Game Version!"
 msgstr "Kriva verzija igre!"
 
-#: src/multiint.c:737
+#: src/multiint.c:738
 msgid "You have an incompatible mod."
 msgstr "Imaš nedozvoljeni mod."
 
-#: src/multiint.c:742
+#: src/multiint.c:743
 msgid "Host couldn't send file?"
 msgstr "Host ne može poslati datoteku."
 
-#: src/multiint.c:746
+#: src/multiint.c:747
 msgid "Incorrect Password!"
 msgstr "Netočna lozinka."
 
-#: src/multiint.c:749
+#: src/multiint.c:750
 msgid "Host has dropped connection!"
 msgstr "Host je prekinuo igru."
 
-#: src/multiint.c:753
+#: src/multiint.c:754
 msgid "Connection Error"
 msgstr "Greška u povezivanju"
 
-#: src/multiint.c:894
+#: src/multiint.c:895
 msgid "Searching"
 msgstr "Traženje"
 
-#: src/multiint.c:955
+#: src/multiint.c:956
 msgid "GAMES"
 msgstr "Igre"
 
-#: src/multiint.c:963
+#: src/multiint.c:964
 msgid "Refresh Games List"
 msgstr "Osvježi popis igara"
 
-#: src/multiint.c:983
+#: src/multiint.c:984
 msgid "Enter Password:"
 msgstr "Unesi lozinku:"
 
-#: src/multiint.c:1004
+#: src/multiint.c:1005
 msgid "OK"
 msgstr "OK"
 
-#: src/multiint.c:1145
-#: src/multiint.c:1152
+#: src/multiint.c:1146
+#: src/multiint.c:1153
 msgid "Select Game Name"
 msgstr "Odaberi naziv igre"
 
-#: src/multiint.c:1145
+#: src/multiint.c:1146
 msgid "One-Player Skirmish"
 msgstr "Okršaj za 1 igrača"
 
-#: src/multiint.c:1155
+#: src/multiint.c:1156
 msgid "Select Map"
 msgstr "Odaberi kartu"
 
-#: src/multiint.c:1163
+#: src/multiint.c:1164
 msgid "Click to set Password"
 msgstr "Odaberi lozinku"
 
-#: src/multiint.c:1173
 #: src/multiint.c:1174
+#: src/multiint.c:1175
 msgid "Scavengers"
 msgstr "Sa stanovnicima"
 
-#: src/multiint.c:1176
+#: src/multiint.c:1177
 msgid "No Scavengers"
 msgstr "Bez stanovnika"
 
-#: src/multiint.c:1207
+#: src/multiint.c:1208
 msgid "Select Player Name"
 msgstr "Odaberi ime igrača"
 
-#: src/multiint.c:1213
+#: src/multiint.c:1214
 msgid "Distance Fog"
 msgstr "Magla udaljenosti"
 
-#: src/multiint.c:1224
+#: src/multiint.c:1225
 #: src/multimenu.c:756
 msgid "Alliances"
 msgstr "Savezi"
 
-#: src/multiint.c:1227
+#: src/multiint.c:1228
 msgid "No Alliances"
 msgstr "Opći rat"
 
-#: src/multiint.c:1229
+#: src/multiint.c:1230
 msgid "Allow Alliances"
 msgstr "Slobodno"
 
-#: src/multiint.c:1233
+#: src/multiint.c:1234
 msgid "Locked Teams"
 msgstr "Timovi"
 
-#: src/multiint.c:1259
+#: src/multiint.c:1260
 msgid "Low Power Levels"
 msgstr "Niska razina resursa"
 
-#: src/multiint.c:1261
+#: src/multiint.c:1262
 msgid "Medium Power Levels"
 msgstr "Srednja razina resursa"
 
-#: src/multiint.c:1263
+#: src/multiint.c:1264
 msgid "High Power Levels"
 msgstr "Visoka razina resursa"
 
-#: src/multiint.c:1295
+#: src/multiint.c:1296
 msgid "Base"
 msgstr "Baza"
 
-#: src/multiint.c:1297
+#: src/multiint.c:1298
 msgid "Start with No Bases"
 msgstr "Započni bez baza"
 
-#: src/multiint.c:1299
+#: src/multiint.c:1300
 msgid "Start with Bases"
 msgstr "Započni sa bazama"
 
-#: src/multiint.c:1301
+#: src/multiint.c:1302
 msgid "Start with Advanced Bases"
 msgstr "Započni sa naprednim bazama"
 
-#: src/multiint.c:1333
+#: src/multiint.c:1334
 msgid "Map Preview"
 msgstr "Predprikaz karte"
 
-#: src/multiint.c:1335
+#: src/multiint.c:1336
 msgid "Click to see Map"
 msgstr "Klikni za predprikaz karte"
 
-#: src/multiint.c:1349
+#: src/multiint.c:1350
 msgid "Start Hosting Game"
 msgstr "Započni hostanje igre"
 
-#: src/multiint.c:1357
+#: src/multiint.c:1358
 msgid "Show Structure Limits"
 msgstr "Pokaži limite"
 
-#: src/multiint.c:1357
+#: src/multiint.c:1358
 msgid "Set Structure Limits"
 msgstr "Postavi limite"
 
-#: src/multiint.c:1420
+#: src/multiint.c:1421
 msgid "Player colour"
 msgstr "Boja igrača"
 
-#: src/multiint.c:1436
+#: src/multiint.c:1437
 msgid "Kick player"
 msgstr "Izbaci igrača"
 
-#: src/multiint.c:1447
+#: src/multiint.c:1448
 msgid "Player number"
 msgstr "Broj igrača"
 
-#: src/multiint.c:1807
+#: src/multiint.c:1808
 msgid "Team"
 msgstr "Savez"
 
-#: src/multiint.c:1840
+#: src/multiint.c:1841
 msgid "Waiting for other players"
 msgstr "Čekanje na ostale igrače"
 
-#: src/multiint.c:1846
+#: src/multiint.c:1847
 msgid "Click when ready"
 msgstr "Označi kada si spreman"
 
-#: src/multiint.c:1850
+#: src/multiint.c:1851
 msgid "READY?"
 msgstr "SPREMAN?"
 
-#: src/multiint.c:1887
+#: src/multiint.c:1888
 msgid "PLAYERS"
 msgstr "Igrači"
 
-#: src/multiint.c:1941
+#: src/multiint.c:1942
 #, fuzzy
 msgid "Choose Team"
 msgstr "Timovi"
 
-#: src/multiint.c:2091
+#: src/multiint.c:1982
+msgid "Click to change player settings"
+msgstr ""
+
+#: src/multiint.c:2013
+msgid "Click to adjust AI difficulty"
+msgstr ""
+
+#: src/multiint.c:2092
 msgid "CHAT"
 msgstr "Čavrljanje"
 
-#: src/multiint.c:2125
+#: src/multiint.c:2126
 msgid "All players need to have the same mods to join your game."
 msgstr "Svi igrači moraju imati iste modove."
 
-#: src/multiint.c:2285
+#: src/multiint.c:2286
 #, fuzzy, c-format
 msgid "*** password [%s] is now required! ***"
 msgstr "Lozinka je potrebna."
 
-#: src/multiint.c:2293
+#: src/multiint.c:2294
 msgid "*** password is NOT required! ***"
 msgstr "Lozinka nije potrebna."
 
-#: src/multiint.c:2535
+#: src/multiint.c:2536
 msgid "Sorry! Failed to host the game."
 msgstr "Ne možeš hostati igru."
 
-#: src/multiint.c:2620
+#: src/multiint.c:2621
 msgid "'Locked Teams' mode enabled"
 msgstr "Model saveza: Timovi"
 
-#: src/multiint.c:2659
-#: src/multiint.c:2709
+#: src/multiint.c:2660
+#: src/multiint.c:2710
 #: src/multimenu.c:1476
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "Host je izbacio %s iz igre."
 
-#: src/multiint.c:2787
+#: src/multiint.c:2788
 msgid "Host is Starting Game"
 msgstr "Host započinje igru"
 
-#: src/multiint.c:3364
+#: src/multiint.c:3365
 msgid "Players"
 msgstr "Igrači"
 
-#: src/multiint.c:3482
+#: src/multiint.c:3483
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Slanje karte: %d%%"
 
-#: src/multiint.c:3491
+#: src/multiint.c:3492
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Karta: %d%% downloadana"
 
-#: src/multiint.c:3517
+#: src/multiint.c:3518
 msgid "HOST"
 msgstr "HOST"
 
