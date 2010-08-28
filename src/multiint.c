@@ -1979,7 +1979,7 @@ UDWORD addPlayerBox(BOOL players)
 				sButInit.height = MULTIOP_PLAYERHEIGHT;
 				if (selectedPlayer == i)
 				{
-					sButInit.pTip = "Click to change player settings";
+					sButInit.pTip = _("Click to change player settings");
 				}
 				else
 				{
@@ -2010,7 +2010,7 @@ UDWORD addPlayerBox(BOOL players)
 				sFormInit.height = MULTIOP_PLAYERHEIGHT;
 				if (NetPlay.isHost && !challengeActive)
 				{
-					sFormInit.pTip = "Click to adjust AI difficulty";
+					sFormInit.pTip = _("Click to adjust AI difficulty");
 				}
 				else
 				{
