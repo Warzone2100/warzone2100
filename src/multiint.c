@@ -148,7 +148,7 @@ static UDWORD hideTime=0;
 static bool EnablePasswordPrompt = false;	// if we need the password prompt
 LOBBY_ERROR_TYPES LobbyError = ERROR_NOERROR;
 static BOOL allowChangePosition = true;
-
+static char tooltipbuffer[256] ={'\0'};
 /// end of globals.
 // ////////////////////////////////////////////////////////////////////////////
 // Function protos
@@ -671,7 +671,8 @@ static void addGames(void)
 				}
 				else
 				{
-					sButInit.pTip = NetPlay.games[i].name;
+					ssprintf(tooltipbuffer, "Map:%s, Game:%s, Hosted by %s ", NetPlay.games[i].mapname, NetPlay.games[i].name, NetPlay.games[i].hostname);
+					sButInit.pTip = tooltipbuffer;
 				}
 				sButInit.UserData = i;
 

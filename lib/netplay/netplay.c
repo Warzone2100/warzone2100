@@ -602,7 +602,7 @@ static bool NETsendGAMESTRUCT(Socket* sock, const GAMESTRUCT* ourgamestruct)
 	// to zero so that we can be sure we're not sending any (undefined)
 	// memory content across the network.
 	char buf[sizeof(ourgamestruct->GAMESTRUCT_VERSION) + sizeof(ourgamestruct->name) + sizeof(ourgamestruct->desc.host) + (sizeof(int32_t) * 8) +
-		sizeof(ourgamestruct->secondaryHosts) + sizeof(ourgamestruct->extra) + sizeof(ourgamestruct->versionstring) +
+		sizeof(ourgamestruct->secondaryHosts) + sizeof(ourgamestruct->extra) + sizeof(ourgamestruct->mapname) + sizeof(ourgamestruct->hostname) + sizeof(ourgamestruct->versionstring) +
 		sizeof(ourgamestruct->modlist) + (sizeof(uint32_t) * 9) ] = { 0 };
 	char *buffer = buf;
 	unsigned int i;
@@ -648,6 +648,14 @@ static bool NETsendGAMESTRUCT(Socket* sock, const GAMESTRUCT* ourgamestruct)
 	// Copy a string
 	strlcpy(buffer, ourgamestruct->extra, sizeof(ourgamestruct->extra));
 	buffer += sizeof(ourgamestruct->extra);
+
+	// Copy a string
+	strlcpy(buffer, ourgamestruct->mapname, sizeof(ourgamestruct->mapname));
+	buffer += sizeof(ourgamestruct->mapname);
+
+	// Copy a string
+	strlcpy(buffer, ourgamestruct->hostname, sizeof(ourgamestruct->hostname));
+	buffer += sizeof(ourgamestruct->hostname);
 
 	// Copy a string
 	strlcpy(buffer, ourgamestruct->versionstring, sizeof(ourgamestruct->versionstring));
@@ -725,7 +733,7 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* ourgamestruct)
 	// A buffer that's guaranteed to have the correct size (i.e. it
 	// circumvents struct padding, which could pose a problem).
 	char buf[sizeof(ourgamestruct->GAMESTRUCT_VERSION) + sizeof(ourgamestruct->name) + sizeof(ourgamestruct->desc.host) + (sizeof(int32_t) * 8) +
-		sizeof(ourgamestruct->secondaryHosts) + sizeof(ourgamestruct->extra) + sizeof(ourgamestruct->versionstring) +
+		sizeof(ourgamestruct->secondaryHosts) + sizeof(ourgamestruct->extra) + sizeof(ourgamestruct->mapname) + sizeof(ourgamestruct->hostname) + sizeof(ourgamestruct->versionstring) +
 		sizeof(ourgamestruct->modlist) + (sizeof(uint32_t) * 9) ] = { 0 };
 	char* buffer = buf;
 	unsigned int i;
@@ -809,6 +817,14 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* ourgamestruct)
 	// Copy a string
 	sstrcpy(ourgamestruct->extra, buffer);
 	buffer += sizeof(ourgamestruct->extra);
+
+	// Copy a string
+	sstrcpy(ourgamestruct->mapname, buffer);
+	buffer += sizeof(ourgamestruct->mapname);
+
+	// Copy a string
+	sstrcpy(ourgamestruct->hostname, buffer);
+	buffer += sizeof(ourgamestruct->hostname);
 
 	// Copy a string
 	sstrcpy(ourgamestruct->versionstring, buffer);
@@ -2455,6 +2471,8 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 	gamestruct.desc.dwUserFlags[3] = four;
 	memset(gamestruct.secondaryHosts, 0, sizeof(gamestruct.secondaryHosts));
 	sstrcpy(gamestruct.extra, "Extra");						// extra string (future use)
+	sstrcpy(gamestruct.mapname, game.map);					// map we are hosting
+	sstrcpy(gamestruct.hostname, PlayerName);
 	sstrcpy(gamestruct.versionstring, VersionString);		// version (string)
 	sstrcpy(gamestruct.modlist, getModList());				// List of mods
 	gamestruct.GAMESTRUCT_VERSION = 3;						// version of this structure
