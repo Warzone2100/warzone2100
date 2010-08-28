@@ -51,7 +51,7 @@ extern unsigned int iV_GetTextHeight(const char* string);
 extern void iV_SetTextColour(PIELIGHT colour);
 
 #define ASCII_SPACE			(32)
-#define ASCII_NEWLINE		('@')
+#define ASCII_NEWLINE		('`')
 #define ASCII_COLOURMODE	('#')
 
 #define TEXT_UTF8_SPACE       " "
