@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-08-25 16:35+0200\n"
+"POT-Creation-Date: 2010-08-28 14:17+0200\n"
 "PO-Revision-Date: 2008-04-21 08:59+0000\n"
 "Last-Translator: Wander Nauta <wnauta@gmail.com>\n"
 "Language-Team: Frisian <fy@li.org>\n"
@@ -14219,6 +14219,14 @@ msgstr "SPILERS"
 #, fuzzy
 msgid "Choose Team"
 msgstr "Teams fêststelle"
+
+#: src/multiint.c:1956
+msgid "Click to change player settings"
+msgstr ""
+
+#: src/multiint.c:1987
+msgid "Click to adjust AI difficulty"
+msgstr ""
 
 #: src/multiint.c:2066
 msgid "CHAT"

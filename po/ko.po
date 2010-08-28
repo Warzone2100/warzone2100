@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100 2.3_branch\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-08-27 19:52+0200\n"
+"POT-Creation-Date: 2010-08-28 14:17+0200\n"
 "PO-Revision-Date: 2010-08-27 17:38+0900\n"
 "Last-Translator: Joshua Shin <urgood2@gmail.com>\n"
 "Language-Team: Korean Translation Team <urgood2@gmail.com>\n"
@@ -14248,6 +14248,14 @@ msgstr "플레이어"
 #: src/multiint.c:1916
 msgid "Choose Team"
 msgstr "팀 선택"
+
+#: src/multiint.c:1956
+msgid "Click to change player settings"
+msgstr ""
+
+#: src/multiint.c:1987
+msgid "Click to adjust AI difficulty"
+msgstr ""
 
 #: src/multiint.c:2066
 msgid "CHAT"

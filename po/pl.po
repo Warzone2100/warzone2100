@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-08-25 16:35+0200\n"
+"POT-Creation-Date: 2010-08-28 14:17+0200\n"
 "PO-Revision-Date: 2010-07-26 09:40+0100\n"
 "Last-Translator: Michał D. aka Emdek <emdeck@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -14224,6 +14224,14 @@ msgstr "GRACZE"
 #, fuzzy
 msgid "Choose Team"
 msgstr "Zablokowane drużyny"
+
+#: src/multiint.c:1956
+msgid "Click to change player settings"
+msgstr ""
+
+#: src/multiint.c:1987
+msgid "Click to adjust AI difficulty"
+msgstr ""
 
 #: src/multiint.c:2066
 msgid "CHAT"
