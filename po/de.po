@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2010-08-28 14:14+0200\n"
-"PO-Revision-Date: 2010-08-25 21:34+0200\n"
+"PO-Revision-Date: 2010-08-28 14:30+0200\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
 "Language: \n"
@@ -14462,11 +14462,11 @@ msgstr "Wähle ein Team"
 
 #: src/multiint.c:1982
 msgid "Click to change player settings"
-msgstr ""
+msgstr "Klicken, um Spielereinstellungen zu ändern"
 
 #: src/multiint.c:2013
 msgid "Click to adjust AI difficulty"
-msgstr ""
+msgstr "Klicken, um KI-Stärke einzustellen"
 
 #: src/multiint.c:2092
 msgid "CHAT"
