@@ -10459,16 +10459,13 @@ BOOL objectInRangeVis(BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range, SDW
 BOOL scrPursueResearch(void)
 {
 	RESEARCH			*psResearch;
-	SDWORD				foundIndex = 0,player,cur,tempIndex,Stack[400];
+	SDWORD				foundIndex = 0, player, cur, tempIndex, Stack[400];
 	UDWORD				index;
 	SWORD				top;
-
 	BOOL				found;
 	PLAYER_RESEARCH		*pPlayerRes;
-
 	STRUCTURE			*psBuilding;
 	RESEARCH_FACILITY	*psResFacilty;
-
 	RESEARCH			*pResearch;
 
 	if (!stackPopParams(3,ST_STRUCTURE, &psBuilding, VAL_INT, &player, ST_RESEARCH, &psResearch ))
@@ -10477,7 +10474,7 @@ BOOL scrPursueResearch(void)
 		return false;
 	}
 
-	if(psResearch == NULL)
+	if (psResearch == NULL)
 	{
 		ASSERT(false, ": no such research topic");
 		return false;
@@ -10485,7 +10482,7 @@ BOOL scrPursueResearch(void)
 
 	psResFacilty =	(RESEARCH_FACILITY*)psBuilding->pFunctionality;
 
-	if(psResFacilty->psSubject != NULL)		// not finished yet
+	if (psResFacilty->psSubject != NULL)		// not finished yet
 	{
 		scrFunctionResult.v.bval = false;
 		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
@@ -10506,28 +10503,27 @@ BOOL scrPursueResearch(void)
 
 	found = false;
 
-	if(beingResearchedByAlly(index, player))		//an ally is already researching it
+	if (beingResearchedByAlly(index, player))		//an ally is already researching it
 	{
 		found = false;
 	}
-	else if(IsResearchCompleted(&pPlayerRes[index]))
+	else if (IsResearchCompleted(&pPlayerRes[index]))
 	{
 		found = false;
 		//DbgMsg("Research already completed: %d", index);
 	}
-	else if(IsResearchStarted(&pPlayerRes[index]))
+	else if (IsResearchStarted(&pPlayerRes[index]))
 	{
 		found = false;
 		//DbgMsg("Research already in progress, %d", index);
 	}
-	else if(IsResearchPossible(&pPlayerRes[index])
-	     || IsResearchCancelled(&pPlayerRes[index]))
+	else if (IsResearchPossible(&pPlayerRes[index]) || IsResearchCancelled(&pPlayerRes[index]))
 	{
 		foundIndex = index;
 		found = true;
 		//DbgMsg("Research possible or cancelled: %d", index);
 	}
-	else if(skTopicAvail(index,player))
+	else if (skTopicAvail(index, player))
 	{
 		foundIndex = index;
 		found = true;
@@ -10544,12 +10540,12 @@ BOOL scrPursueResearch(void)
 		{
 			//DbgMsg("Going on with %d, numPR: %d, %s", index, asResearch[index].numPRRequired, asResearch[index].pName);
 
-			if(cur >= asResearch[index].numPRRequired)		//node has nodes?
+			if (cur >= asResearch[index].numPRRequired)		//node has nodes?
 			{
 				//DbgMsg("cur >= numPRRequired : %d (%d >= %d)", index, cur, asResearch[index].numPRRequired);
 
 				top = top - 2;
-				if(top < (-1))
+				if (top < (-1))
 				{
 					//DbgMsg("Nothing on stack");
 					break;		//end of stack
@@ -10563,17 +10559,17 @@ BOOL scrPursueResearch(void)
 				tempIndex = asResearch[index].pPRList[cur];		//get cur node's index
 				//DbgMsg("evaluating node: %d, (cur = %d), %s", tempIndex, cur, asResearch[tempIndex].pName);
 
-				if(skTopicAvail(tempIndex,player) && (!beingResearchedByAlly(tempIndex, player)))	//<NEW> - ally check added
+				if (skTopicAvail(tempIndex,player) && (!beingResearchedByAlly(tempIndex, player)))	//<NEW> - ally check added
 				{
 					//DbgMsg("avail: %d (cur=%d), %s", tempIndex, cur, asResearch[tempIndex].pName);
 					found = true;
 					foundIndex = tempIndex;		//done
 					break;
 				}
-				else if((IsResearchCompleted(&pPlayerRes[tempIndex])==false) && (IsResearchStarted(&pPlayerRes[tempIndex])==false))		//not avail and not busy with it, can check this PR's PR
+				else if ((IsResearchCompleted(&pPlayerRes[tempIndex]) == false) && (IsResearchStarted(&pPlayerRes[tempIndex]) == false))		//not avail and not busy with it, can check this PR's PR
 				{
 					//DbgMsg("node not complete, not started: %d, (cur=%d), %s", tempIndex,cur, asResearch[tempIndex].pName);
-					if(asResearch[tempIndex].numPRRequired > 0)	//node has any nodes itself
+					if (asResearch[tempIndex].numPRRequired > 0)	//node has any nodes itself
 					{
 						//DbgMsg("node has nodes, so selecting as main node: %d, %s", tempIndex, asResearch[tempIndex].pName);
 
@@ -10600,29 +10596,28 @@ BOOL scrPursueResearch(void)
 			cur++;				//try next node of the main node
 			if((cur >= asResearch[index].numPRRequired) && (top <= (-1)))	//nothing left
 			{
-				//DbgMsg("END");
 				break;
 			}
 
 		} // while(true)
 	}
 
-	if(found
-	 && foundIndex < numResearch)
+	if (found && foundIndex < numResearch)
 	{
 		pResearch = (asResearch + foundIndex);
-		pPlayerRes				= asPlayerResList[player]+ foundIndex;
-		psResFacilty->psSubject = (BASE_STATS*)pResearch;		  //set the subject up
+		pPlayerRes = asPlayerResList[player] + foundIndex;
+		psResFacilty->psSubject = (BASE_STATS*)pResearch;			//set the subject up
 
 		if (IsResearchCancelled(pPlayerRes))
 		{
-			psResFacilty->powerAccrued = pResearch->researchPower;//set up as if all power available for cancelled topics
+			psResFacilty->powerAccrued = pResearch->researchPower;	//set up as if all power available for cancelled topics
 		}
 		else
 		{
 			psResFacilty->powerAccrued = 0;
 		}
 
+		sendReseachStatus(psBuilding, foundIndex, player, true);	// inform others, I'm researching this.
 		MakeResearchStarted(pPlayerRes);
 		psResFacilty->timeStarted = ACTION_START_TIME;
 		psResFacilty->timeStartHold = 0;
