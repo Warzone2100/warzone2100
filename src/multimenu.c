@@ -52,6 +52,7 @@
 #include "multiint.h"
 #include "multigifts.h"
 #include "multijoin.h"
+#include "mission.h"
 #include "scores.h"
 #include "keymap.h"
 #include "loop.h"
@@ -916,7 +917,14 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 		if (NetPlay.bComms)
 		{
 			//c8:score,
-			sprintf(str,"%d",getMultiStats(player).recentScore);
+			if (Cheated)
+			{
+				sprintf(str,"(cheated)");
+			}
+			else
+			{
+				sprintf(str,"%d",getMultiStats(player).recentScore);
+			}
 			iV_DrawText(str, x+MULTIMENU_C8, y+MULTIMENU_FONT_OSET);
 
 			//c9:kills,
@@ -980,7 +988,14 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 		if (NetPlay.bComms)
 		{
 			//c8:score,
-			sprintf(str,"%d",getMultiStats(player).recentScore);
+			if (Cheated)
+			{
+				sprintf(str,"(cheated)");
+			}
+			else
+			{
+				sprintf(str,"%d",getMultiStats(player).recentScore);
+			}
 			iV_DrawText(str, x+MULTIMENU_C8, y+MULTIMENU_FONT_OSET);
 
 			//c9:kills,
