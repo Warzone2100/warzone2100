@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: warzone2100 2.3_branch\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2010-08-28 14:14+0200\n"
-"PO-Revision-Date: 2010-08-27 17:38+0900\n"
+"PO-Revision-Date: 2010-08-29 12:46+0900\n"
 "Last-Translator: Joshua Shin <urgood2@gmail.com>\n"
 "Language-Team: Korean Translation Team <urgood2@gmail.com>\n"
 "Language: \n"
@@ -206,7 +206,7 @@ msgstr "무기 연구 완료"
 #: data/mp/messages/strings/resstrings.txt:333
 #: data/mp/messages/strings/resstrings.txt:349
 msgid "New Defensive Structure Available"
-msgstr "새로운 방어 구조 사용가능"
+msgstr "새로운 방어 구조 사용 가능"
 
 #: data/base/messages/resmessages12.rmsg:5
 #: data/mp/messages/resmessages12.rmsg:5
@@ -712,7 +712,7 @@ msgstr "모든 화염방사기가 자동으로 업그레이드됩니다"
 #: data/mp/messages/strings/resstrings.txt:768
 #: data/mp/messages/strings/resstrings.txt:794
 msgid "New Weapon Turret Available"
-msgstr "새로운 무기 터릿이 사용가능합니다"
+msgstr "새로운 무기 터릿이 사용 가능합니다"
 
 #: data/base/messages/resmessages12.rmsg:122
 #: data/mp/messages/resmessages12.rmsg:122
@@ -916,7 +916,7 @@ msgstr "모든 기관총이 자동 업그레이드됩니다"
 #: data/mp/messages/strings/resstrings.txt:826
 #: data/mp/messages/strings/resstrings.txt:932
 msgid "New Indirect Fire Weapon Available"
-msgstr "새로운 간접 사격 무기가 사용가능합니다"
+msgstr "새로운 간접 사격 무기가 사용 가능합니다"
 
 #: data/base/messages/resmessages12.rmsg:148
 #: data/base/messages/resmessages2.rmsg:902
@@ -1047,7 +1047,7 @@ msgstr "박격포의 공격 범위를 증가시킵니다"
 #: data/mp/messages/resmessagesall.rmsg:186
 #: data/mp/messages/resmessagesall.rmsg:199
 msgid "New Rocket Available"
-msgstr "새로운 로케트 무기 사용가능"
+msgstr "새로운 로케트 무기 사용 가능"
 
 #: data/base/messages/resmessages12.rmsg:187
 #: data/mp/messages/resmessages12.rmsg:187
@@ -1506,7 +1506,7 @@ msgstr "적의 움직임을 방지합니다"
 #: data/mp/messages/resmessagesall.rmsg:17
 #: data/mp/messages/resmessagesall.rmsg:30
 msgid "New Base Structure Available"
-msgstr "새로운 기지 구조물이 사용가능합니다"
+msgstr "새로운 기지 구조물이 사용 가능합니다"
 
 #: data/base/messages/resmessages1.rmsg:239
 #: data/mp/messages/resmessages1.rmsg:239
@@ -1721,7 +1721,7 @@ msgstr "트럭을 써서 전력 발전소에 모듈을 더하십시오"
 #: data/base/messages/resmessages1.rmsg:342
 #: data/mp/messages/resmessages1.rmsg:343
 msgid "Research Module Available"
-msgstr "연구 시설 모듈 사용가능"
+msgstr "연구 시설 모듈 사용 가능"
 
 #: data/base/messages/resmessages1.rmsg:343
 #: data/mp/messages/resmessages1.rmsg:344
@@ -2032,7 +2032,7 @@ msgstr "장갑과 보디포인트를 향상시킵니다"
 #: data/mp/messages/resmessages1.rmsg:512
 #: data/mp/messages/resmessages1.rmsg:525
 msgid "New Propulsion Available"
-msgstr "새로운 추진력이 사용가능합니다"
+msgstr "새로운 추진력이 사용 가능합니다"
 
 #: data/base/messages/resmessages1.rmsg:486
 #: data/mp/messages/resmessages1.rmsg:487
@@ -2418,7 +2418,7 @@ msgstr "사격 탐지 시스템이 향상되었습니다"
 #: data/mp/messages/resmessagesall.rmsg:121
 #: data/mp/messages/resmessagesall.rmsg:134
 msgid "New Systems Tower Available"
-msgstr "새로운 시스템 탑이 사용가능합니다"
+msgstr "새로운 시스템 탑이 사용 가능합니다"
 
 #: data/base/messages/resmessages23.rmsg:70
 #: data/mp/messages/resmessages23.rmsg:70
@@ -2506,7 +2506,7 @@ msgstr "공습 임무는 적이 파괴되거나 후퇴할 때까지 계속됩니
 #: data/mp/messages/strings/resstrings.txt:469
 #: data/mp/messages/strings/resstrings.txt:507
 msgid "New Systems Turret Available"
-msgstr "새로운 시스템 터릿 사용가능"
+msgstr "새로운 시스템 터릿 사용 가능"
 
 #: data/base/messages/resmessages23.rmsg:109
 #: data/mp/messages/resmessages23.rmsg:109
@@ -2626,7 +2626,7 @@ msgstr "모든 대공 무기가 자동 업그레이드됩니다"
 #: data/mp/messages/strings/resstrings.txt:730
 #: data/mp/messages/strings/resstrings.txt:736
 msgid "New Bomb Bay Available"
-msgstr "새로운 폭탄 투하실이 사용가능합니다"
+msgstr "새로운 폭탄 투하실이 사용 가능합니다"
 
 #: data/base/messages/resmessages23.rmsg:148
 #: data/mp/messages/resmessages23.rmsg:148
@@ -2672,7 +2672,7 @@ msgstr "모든 폭탄 투하실이 자동 업그레이드됩니다"
 #: data/base/messages/resmessages23.rmsg:174
 #: data/mp/messages/resmessages23.rmsg:174
 msgid "Robotic advances make new chaingun upgrade available"
-msgstr "로봇발전 덕분에 새로운 체인건 업그레이드가 사용가능합니다"
+msgstr "로봇발전 덕분에 새로운 체인건 업그레이드가 사용 가능합니다"
 
 #: data/base/messages/resmessages23.rmsg:187
 #: data/mp/messages/resmessages23.rmsg:187
@@ -2717,7 +2717,7 @@ msgstr "모든 기관총을 대체합니다"
 #: data/mp/messages/resmessages3.rmsg:4
 #: data/mp/messages/strings/resstrings.txt:43
 msgid "Cyborg Thermal Armor Improved"
-msgstr "사이보그 내열 장갑이 개선되었습니다"
+msgstr "사이보그 내열성 장갑이 개선되었습니다"
 
 #: data/base/messages/resmessages2.rmsg:5
 #: data/base/messages/resmessages3.rmsg:5
@@ -2726,14 +2726,14 @@ msgstr "사이보그 내열 장갑이 개선되었습니다"
 #: data/mp/messages/resmessages3.rmsg:5
 #: data/mp/messages/strings/resstrings.txt:44
 msgid "Heat resistant armored layers"
-msgstr "겹쳐진 내열 장갑층"
+msgstr "겹쳐진 내열성 장갑층"
 
 #: data/base/messages/resmessages2.rmsg:6
 #: data/base/messages/resmessages3.rmsg:6
 #: data/base/messages/strings/resstrings.txt:43
 #: data/mp/messages/strings/resstrings.txt:45
 msgid "Thermal Armor increased"
-msgstr "내열 장갑이 증가되었습니다"
+msgstr "내열성 장갑이 증가되었습니다"
 
 #: data/base/messages/resmessages2.rmsg:18
 #: data/base/messages/resmessages2.rmsg:512
@@ -3079,7 +3079,7 @@ msgstr "모든 재무장 패드가 자동 업그레이드됩니다"
 #: data/mp/messages/resmessages2.rmsg:420
 #: data/mp/messages/strings/resstrings.txt:487
 msgid "Improved Sensor Tower Available"
-msgstr "개선된 센서탑이 사용가능합니다"
+msgstr "개선된 센서탑이 사용 가능합니다"
 
 #: data/base/messages/resmessages2.rmsg:421
 #: data/base/messages/strings/resstrings.txt:460
@@ -3197,7 +3197,7 @@ msgstr "터보충전 엔진"
 #: data/mp/messages/resmessagesall.rmsg:836
 #: data/mp/messages/strings/resstrings.txt:614
 msgid "Vehicle Thermal Armor Improved"
-msgstr "차량의 내열 장갑이 향상되었습니다"
+msgstr "차량의 내열성 장갑이 향상되었습니다"
 
 #: data/base/messages/resmessages2.rmsg:525
 #: data/base/messages/resmessages3.rmsg:720
@@ -3214,7 +3214,7 @@ msgstr "겹쳐진 내열성 장갑층"
 #: data/base/messages/strings/resstrings.txt:583
 #: data/mp/messages/strings/resstrings.txt:616
 msgid "Increases Thermal Armor"
-msgstr "내열 장갑을 증가시킵니다"
+msgstr "내열성 장갑을 증가시킵니다"
 
 #: data/base/messages/resmessages2.rmsg:537
 #: data/base/messages/resmessages2.rmsg:550
@@ -3300,7 +3300,7 @@ msgstr "모든 바퀴가 자동 업그레이드됩니다"
 #: data/mp/messages/strings/resstrings.txt:680
 #: data/mp/messages/strings/resstrings.txt:686
 msgid "New AA Turret Available"
-msgstr "새로운 대공 터릿이 사용가능합니다"
+msgstr "새로운 대공 터릿이 사용 가능합니다"
 
 #: data/base/messages/resmessages2.rmsg:590
 #: data/base/messages/strings/resstrings.txt:636
@@ -3415,7 +3415,7 @@ msgstr "대공 공격 범위를 넓힙니다"
 #: data/mp/messages/strings/resstrings.txt:718
 #: data/mp/messages/strings/resstrings.txt:724
 msgid "New Proximity Bomb Turret Available"
-msgstr "새로운 근접폭탄 터릿이 사용가능합니다"
+msgstr "새로운 근접폭탄 터릿이 사용 가능합니다"
 
 #: data/base/messages/resmessages2.rmsg:681
 #: data/base/messages/strings/resstrings.txt:686
@@ -4197,7 +4197,7 @@ msgstr "감손 우라늄 운동 에너지 탄환"
 #: data/base/messages/resmessages3.rmsg:1019
 #: data/mp/messages/resmessages3.rmsg:1019
 msgid "Collapsing Plutonium kinetic energy bullets"
-msgstr "플루토늄 운동에너지 탄환"
+msgstr "붕괴 플루토늄 운동에너지 탄환"
 
 #: data/base/messages/resmessages3.rmsg:1031
 #: data/base/messages/resmessages3.rmsg:1044
@@ -4214,7 +4214,7 @@ msgstr "대전차미사일"
 #: data/base/messages/resmessages3.rmsg:1045
 #: data/mp/messages/resmessages3.rmsg:1045
 msgid "Bunker buster missile"
-msgstr "벙커 버스터(buster) 미사일"
+msgstr "벙커 버스터 미사일"
 
 #: data/base/messages/resmessages3.rmsg:1057
 #: data/base/messages/resmessages3.rmsg:1070
@@ -4272,7 +4272,7 @@ msgstr "미사일의 파괴력을 높입니다"
 #: data/mp/messages/resmessages3.rmsg:1096
 #: data/mp/messages/resmessages3.rmsg:1109
 msgid "New SAM Turret Available"
-msgstr "새로운 지대공미사일 터릿이 사용가능합니다"
+msgstr "새로운 지대공미사일 터릿이 사용 가능합니다"
 
 #: data/base/messages/resmessages3.rmsg:1097
 #: data/mp/messages/resmessages3.rmsg:1097
@@ -7181,32 +7181,32 @@ msgstr "3 단계 미사일 타겟팅 암호"
 #: data/base/messages/strings/names.txt:655
 #: data/mp/messages/strings/names.txt:662
 msgid "Cyborg Thermal Armor"
-msgstr "사이보그 내열 갑옷"
+msgstr "사이보그 내열성 갑옷"
 
 #: data/base/messages/strings/names.txt:656
 #: data/mp/messages/strings/names.txt:663
 msgid "Cyborg Thermal Armor Mk2"
-msgstr "사이보그 내열 갑옷 Mk 2"
+msgstr "사이보그 내열성 갑옷 Mk 2"
 
 #: data/base/messages/strings/names.txt:657
 #: data/mp/messages/strings/names.txt:664
 msgid "Cyborg Thermal Armor Mk3"
-msgstr "사이보그 내열 갑옷 Mk 3"
+msgstr "사이보그 내열성 갑옷 Mk 3"
 
 #: data/base/messages/strings/names.txt:658
 #: data/mp/messages/strings/names.txt:665
 msgid "Cyborg High Intensity Thermal Armor"
-msgstr "고강도 사이보그 내열 갑옷"
+msgstr "고강도 사이보그 내열성 갑옷"
 
 #: data/base/messages/strings/names.txt:659
 #: data/mp/messages/strings/names.txt:666
 msgid "Cyborg High Intensity Thermal Armor Mk2"
-msgstr "고강도 사이보그 내열 갑옷 Mk 2"
+msgstr "고강도 사이보그 내열성 갑옷 Mk 2"
 
 #: data/base/messages/strings/names.txt:660
 #: data/mp/messages/strings/names.txt:667
 msgid "Cyborg High Intensity Thermal Armor Mk3"
-msgstr "고강도 사이보그 내열 갑옷 Mk 3"
+msgstr "고강도 사이보그 내열성 갑옷 Mk 3"
 
 #: data/base/messages/strings/names.txt:662
 #: data/mp/messages/strings/names.txt:669
@@ -7695,12 +7695,12 @@ msgstr "전용 시냅스 연결 데이터 분석 Mk 3"
 #: data/base/messages/strings/names.txt:839
 #: data/mp/messages/strings/names.txt:850
 msgid "Neural Synapse Research Brain Mk2"
-msgstr "시냅스 신경 연구 브레인 Mk 2"
+msgstr "시냅스 신경 연구 뇌 Mk 2"
 
 #: data/base/messages/strings/names.txt:840
 #: data/mp/messages/strings/names.txt:851
 msgid "Neural Synapse Research Brain Mk3"
-msgstr "시냅스 신경 연구 브레인 Mk 3"
+msgstr "시냅스 신경 연구 뇌 Mk 3"
 
 #: data/base/messages/strings/names.txt:844
 #: data/mp/messages/strings/names.txt:855
@@ -7948,17 +7948,17 @@ msgstr "센서 자동추적"
 #: data/base/messages/strings/names.txt:922
 #: data/mp/messages/strings/names.txt:935
 msgid "Thermal Armor"
-msgstr "내열 장갑"
+msgstr "내열성 장갑"
 
 #: data/base/messages/strings/names.txt:923
 #: data/mp/messages/strings/names.txt:936
 msgid "Thermal Armor Mk2"
-msgstr "내열 갑옷 Mk 2"
+msgstr "내열성 갑옷 Mk 2"
 
 #: data/base/messages/strings/names.txt:924
 #: data/mp/messages/strings/names.txt:937
 msgid "Thermal Armor Mk3"
-msgstr "내열 갑옷 Mk 3"
+msgstr "내열성 갑옷 Mk 3"
 
 #: data/base/messages/strings/names.txt:925
 #: data/mp/messages/strings/names.txt:938
@@ -9355,7 +9355,7 @@ msgstr "사각형을 기지에 배치하고 왼쪽 클릭하면 건설 과정이
 
 #: data/base/script/text/tutorial3.slo:422
 msgid "To increase your build rate, select your second truck"
-msgstr "건설 속도를 증가시키려면, 당신의 두번째 트럭을 선택하십시오"
+msgstr "건설 속도를 증가하려면, 당신의 두번째 트럭을 선택하십시오"
 
 #: data/base/script/text/tutorial3.slo:457
 msgid "Now left click the power generator site"
@@ -9466,7 +9466,7 @@ msgstr "그 다음 배달 지점의 새로운 위치를 클릭하십시오"
 
 #: data/base/script/text/tutorial3.slo:969
 msgid "The factory can now be ordered to build a new unit"
-msgstr "이제 공장이 새로운 유닛을 지을 준비가 되었습니다"
+msgstr "이제 공장이 새로운 유닛을 생산할 준비가 되었습니다"
 
 #: data/base/script/text/tutorial3.slo:995
 msgid "Left click the flashing MANUFACTURE icon"
@@ -11190,7 +11190,7 @@ msgstr "재무장 속도 +30%"
 
 #: data/mp/messages/resmessages2.rmsg:526
 msgid "Thermal armor +40%"
-msgstr "내열 장갑 +40%"
+msgstr "내열성 장갑 +40%"
 
 #: data/mp/messages/resmessages2.rmsg:656
 #: data/mp/messages/resmessages3.rmsg:825
@@ -11219,7 +11219,7 @@ msgstr "곡사포 재장전 시간 소요 -10%"
 
 #: data/mp/messages/resmessages3.rmsg:6
 msgid "Thermal Armor +35%"
-msgstr "내열 장갑 +35%"
+msgstr "내열성 장갑 +35%"
 
 #: data/mp/messages/resmessages3.rmsg:304
 msgid "Armored guard tower with Pulse Laser"
@@ -11232,7 +11232,7 @@ msgstr "전력 생산 +30%"
 #: data/mp/messages/resmessages3.rmsg:721
 #: data/mp/messages/resmessagesall.rmsg:838
 msgid "Thermal Armor +40%"
-msgstr "내열 장갑 +40%"
+msgstr "내열성 장갑 +40%"
 
 #: data/mp/messages/resmessages3.rmsg:968
 msgid "Laser accuracy +10%"
@@ -11965,27 +11965,27 @@ msgstr "방화용 박격포 구덩이"
 
 #: data/mp/messages/strings/names.txt:1650
 msgid "Cyborg Superdense Thermal Armor"
-msgstr "사이보그 초고밀도 내열 장갑"
+msgstr "사이보그 초고밀도 내열성 장갑"
 
 #: data/mp/messages/strings/names.txt:1651
 msgid "Cyborg Superdense Thermal Armor Mk2"
-msgstr "사이보그 초고밀도 내열 장갑 Mk 2"
+msgstr "사이보그 초고밀도 내열성 장갑 Mk 2"
 
 #: data/mp/messages/strings/names.txt:1652
 msgid "Cyborg Superdense Thermal Armor Mk3"
-msgstr "사이보그 초고밀도 내열 장갑 Mk 2"
+msgstr "사이보그 초고밀도 내열성 장갑 Mk 2"
 
 #: data/mp/messages/strings/names.txt:1654
 msgid "Vehicle Superdense Thermal Armor"
-msgstr "차량 초고밀도 내열 장갑"
+msgstr "차량 초고밀도 내열성 장갑"
 
 #: data/mp/messages/strings/names.txt:1655
 msgid "Vehicle Superdense Thermal Armor Mk2"
-msgstr "차량 초고밀도 내열 장갑 Mk 2"
+msgstr "차량 초고밀도 내열성 장갑 Mk 2"
 
 #: data/mp/messages/strings/names.txt:1656
 msgid "Vehicle Superdense Thermal Armor Mk3"
-msgstr "차량 초고밀도 내열 장갑 Mk 3"
+msgstr "차량 초고밀도 내열성 장갑 Mk 3"
 
 #: data/mp/messages/strings/names.txt:1660
 #: data/mp/messages/strings/names.txt:1661
@@ -12475,7 +12475,7 @@ msgstr "장갑"
 #: src/design.c:703
 #: src/design.c:753
 msgid "Thermal Armour"
-msgstr "내열 장갑"
+msgstr "내열성 장갑"
 
 #: src/design.c:719
 #: src/design.c:773
