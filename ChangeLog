@@ -1,3 +1,24 @@
+2010-00-00: Version 2.3.5RC
+ * General:
+   * Fix: Fix CFURLRef leaks on Mac. (r11510 ticket:2009)
+   * Change: Don't allow ToggleSensorDisplay in MP games. (r11501)
+   * Update: Improved weapon textures - new version of page-17-droid-weapons.png. (r11534, ticket:2115)
+ * Multiplayer:
+   * Fix: Eschew ventriloquism assiduously.(r11449)
+   * Change: Add in-game kick via the 'scoreboard' Hold LMB+RMB over the player's channel icon that you want to kick. (r11490)
+   * Fix: Try to make the password box more idiot proof. (r11492)
+   * Change: Only clear player name when needed. (r11495)
+   * Fix: Host will not pass on bogus messages.
+   * Change: Don't display scoreboard widgets when players are dead. (r11504)
+   * Change: Allow "@" in chat now. (r11545)
+   * Change: Show map / game name / hosted by in the tooltip for the lobby (r11546 , ticket:2121)
+   * Fix: Non-host players now get info about the research in progress by allied AIs (r11556, ticket:1478)
+ * Translations:
+   * Updated: Korean & German translations
+ * Mods:
+   * Fix: Nexus Total War Ai Slider Bug, and update image for name change. (r11508)
+
+
 2010-08-11: Version 2.3.4
  * General:
    * Fix: Really fix burn damage calculations (r11393, ticket:2045)
