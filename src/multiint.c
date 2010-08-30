@@ -3519,6 +3519,19 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 			iV_SetFont(font_regular);
 			iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 		}
+		else if (NetPlay.bComms && NetPlay.isHost)
+		{
+			char buf[250] = {'\0'};
+
+			// show "actual" ping time
+			iV_DrawText(NetPlay.players[j].name, x + 65, y + 18);
+			iV_SetFont(font_small);
+			iV_SetTextColour(WZCOL_TEXT_MEDIUM);
+			ssprintf(buf, "Ping: %03d", ingame.PingTimes[j]);
+			iV_DrawText(buf, x + 65, y + 28);
+			iV_SetFont(font_regular);
+			iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+		}
 		else
 		{
 			iV_DrawText(NetPlay.players[j].name, x + 65, y + 22);
