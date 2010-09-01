@@ -167,21 +167,14 @@ Weapon Upgrade,Wpn-Rail-ROF02,GAUSS,30,0,0,0,0,0,0
 Weapon Upgrade,Wpn-Rail-ROF03,GAUSS,45,0,0,0,0,0,0
 Weapon Upgrade,Wpn-Rocket-Accuracy01,ROCKET,0,10,10,0,0,0,0
 Weapon Upgrade,Wpn-Rocket-Accuracy02,ROCKET,0,20,20,0,0,0,0
+Weapon Upgrade,Wpn-Rocket-Accuracy03,ROCKET,0,30,30,0,0,0,0
+Weapon Upgrade,Wpn-Rocket-Accuracy04,ROCKET,0,40,40,0,0,0,0
 Weapon Upgrade,Wpn-Rocket-Damage04,ROCKET,0,0,0,100,100,0,0
 Weapon Upgrade,Wpn-Rocket-Damage05,ROCKET,0,0,0,125,125,0,0
 Weapon Upgrade,Wpn-Rocket-Damage06,ROCKET,0,0,0,150,150,0,0
-Weapon Upgrade,Wpn-RocketSlow-Accuracy01,SLOW ROCKET,0,10,10,0,0,0,0
-Weapon Upgrade,Wpn-RocketSlow-Accuracy02,SLOW ROCKET,0,20,20,0,0,0,0
-Weapon Upgrade,Wpn-RocketSlow-Accuracy03,SLOW ROCKET,0,30,30,0,0,0,0
-Weapon Upgrade,Wpn-RocketSlow-Damage01,SLOW ROCKET,0,0,0,25,25,0,0
-Weapon Upgrade,Wpn-RocketSlow-Damage02,SLOW ROCKET,0,0,0,50,50,0,0
-Weapon Upgrade,Wpn-RocketSlow-Damage03,SLOW ROCKET,0,0,0,75,75,0,0
-Weapon Upgrade,Wpn-RocketSlow-Damage04,SLOW ROCKET,0,0,0,100,100,0,0
-Weapon Upgrade,Wpn-RocketSlow-Damage05,SLOW ROCKET,0,0,0,125,125,0,0
-Weapon Upgrade,Wpn-RocketSlow-Damage06,SLOW ROCKET,0,0,0,150,150,0,0
-Weapon Upgrade,Wpn-RocketSlow-ROF01,SLOW ROCKET,15,0,0,0,0,0,0
-Weapon Upgrade,Wpn-RocketSlow-ROF02,SLOW ROCKET,30,0,0,0,0,0,0
-Weapon Upgrade,Wpn-RocketSlow-ROF03,SLOW ROCKET,45,0,0,0,0,0,0
+Weapon Upgrade,Wpn-Rocket-Damage07,ROCKET,0,0,0,175,175,0,0
+Weapon Upgrade,Wpn-Rocket-Damage08,ROCKET,0,0,0,200,200,0,0
+Weapon Upgrade,Wpn-Rocket-Damage09,ROCKET,0,0,0,225,225,0,0
 Weapon Upgrade,Wpn-Flamer-Damage07,FLAME,0,0,0,175,0,175,0
 Weapon Upgrade,Wpn-Flamer-Damage08,FLAME,0,0,0,200,0,200,0
 Weapon Upgrade,Wpn-Flamer-Damage09,FLAME,0,0,0,225,0,225,0

@@ -924,10 +924,10 @@ RES_W_M_D4
 RES_W_RK_D4
 {
 	{
-		_("Mini-Rocket Upgrade"),
-		_("High Explosive Armor-Piercing warheads"),
-		_("Mini-Rocket damage +25%"),
-		_("All mini-rockets upgraded automatically"),
+		_("Rocket Upgrade"),
+		_("High Explosive Anti-Tank warheads"),
+		_("Rocket damage +25%"),
+		_("All rockets upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
