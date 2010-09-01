@@ -2021,9 +2021,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 			/* move to front of structure */
 			psDroid->order  = DORDER_RECYCLE;
 			psDroid->orderX = psFactory->pos.x;
-			psDroid->orderY = (UWORD)(psFactory->pos.y +
-					world_coord(psFactory->pStructureType->baseBreadth) / 2 +
-					TILE_UNITS / 2);
+			psDroid->orderY = psFactory->pos.y + world_coord(getStructureBreadth(psFactory)) / 2 + TILE_UNITS / 2;
 			setDroidTarget(psDroid, (BASE_OBJECT *) psFactory);
 			actionDroidObjLoc( psDroid, DACTION_MOVE, (BASE_OBJECT *) psFactory,
 								psDroid->orderX, psDroid->orderY);

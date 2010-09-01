@@ -1065,8 +1065,8 @@ static void addConstructorEffect(STRUCTURE *psStruct)
 	if((ONEINTEN) && (psStruct->visible[selectedPlayer]))
 	{
 		/* This needs fixing - it's an arse effect! */
-		widthRange = (psStruct->pStructureType->baseWidth*TILE_UNITS)/4;
-		breadthRange = (psStruct->pStructureType->baseBreadth*TILE_UNITS)/4;
+		widthRange   = getStructureWidth  (psStruct)*TILE_UNITS/4;
+		breadthRange = getStructureBreadth(psStruct)*TILE_UNITS/4;
 		temp.x = psStruct->pos.x+((rand()%(2*widthRange)) - widthRange);
 		temp.y = map_TileHeight(map_coord(psStruct->pos.x), map_coord(psStruct->pos.y))+
 						(psStruct->sDisplay.imd->max.y / 6);

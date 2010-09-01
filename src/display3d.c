@@ -1421,6 +1421,7 @@ static void drawWallDrag(STRUCTURE_STATS *psStats, int left, int right, int up, 
 {
 	int i, j;
 	STRUCTURE *blueprint;
+	unsigned width, height;
 
 	if (left != right && up != down)
 	{
@@ -1428,9 +1429,21 @@ static void drawWallDrag(STRUCTURE_STATS *psStats, int left, int right, int up, 
 		return;
 	}
 
+	if (((direction + 0x2000) & 0x4000) == 0)
+	{
+		width  = sBuildDetails.width;
+		height = sBuildDetails.height;
+	}
+	else
+	{
+		// Rotated 90°, swap width and height
+		width  = sBuildDetails.height;
+		height = sBuildDetails.width;
+	}
+
 	blueprint = buildBlueprint(psStats,
-	                           world_coord(left)+world_coord(sBuildDetails.width)/2,
-	                           world_coord(up)+world_coord(sBuildDetails.height)/2,
+	                           world_coord(left)+world_coord(width)/2,
+	                           world_coord(up)+world_coord(height)/2,
 	                           direction,
 	                           state);
 	ASSERT_OR_RETURN(, blueprint != NULL, "No blueprint created");
@@ -1496,10 +1509,22 @@ void displayBlueprints(void)
 			}
 			else
 			{
+				unsigned width, height;
+				if (((player.r.y + 0x2000) & 0x4000) == 0)
+				{
+					width  = sBuildDetails.width;
+					height = sBuildDetails.height;
+				}
+				else
+				{
+					// Rotated 90°, swap width and height
+					width  = sBuildDetails.height;
+					height = sBuildDetails.width;
+				}
 				// a single building
 				blueprint = buildBlueprint((STRUCTURE_STATS *)sBuildDetails.psStats,
-										   world_coord(sBuildDetails.x)+world_coord(sBuildDetails.width)/2,
-										   world_coord(sBuildDetails.y)+world_coord(sBuildDetails.height)/2,
+										   world_coord(sBuildDetails.x)+world_coord(width)/2,
+										   world_coord(sBuildDetails.y)+world_coord(height)/2,
 										   player.r.y,
 										   state);
 				renderStructure(blueprint);

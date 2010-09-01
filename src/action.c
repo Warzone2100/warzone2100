@@ -1654,14 +1654,15 @@ void actionUpdateDroid(DROID *psDroid)
 			bool helpBuild = false;
 			// Got to destination - start building
 			STRUCTURE_STATS* const psStructStats = (STRUCTURE_STATS*)psDroid->psTarStats;
+			uint16_t dir = psDroid->orderDirection;
 			moveStopDroid(psDroid);
 			objTrace(psDroid->id, "Halted in our tracks - at construction site");
 			if (psDroid->order == DORDER_BUILD && psDroid->psTarget == NULL)
 			{
 				// Starting a new structure
 				// calculate the top left of the structure
-				const UDWORD tlx = (SDWORD)psDroid->orderX - (SDWORD)(psStructStats->baseWidth * TILE_UNITS)/2;
-				const UDWORD tly = (SDWORD)psDroid->orderY - (SDWORD)(psStructStats->baseBreadth * TILE_UNITS)/2;
+				const UDWORD tlx = psDroid->orderX - getStructureStatsWidth(psStructStats, dir) * TILE_UNITS/2;
+				const UDWORD tly = psDroid->orderY - getStructureStatsBreadth(psStructStats, dir) * TILE_UNITS/2;
 
 				//need to check if something has already started building here?
 				//unless its a module!
@@ -1708,7 +1709,7 @@ void actionUpdateDroid(DROID *psDroid)
 				}
 				else if (!validLocation((BASE_STATS*)psDroid->psTarStats,
 										map_coord(tlx),
-										map_coord(tly),
+										map_coord(tly), dir,
 										psDroid->player,
 										false))
 				{
@@ -2047,8 +2048,9 @@ void actionUpdateDroid(DROID *psDroid)
 		{
 			MAPTILE* const psTile = mapTile(map_coord(psDroid->orderX), map_coord(psDroid->orderY));
 			STRUCTURE_STATS* const psStructStats = (STRUCTURE_STATS*)psDroid->psTarStats;
-			const UDWORD tlx = (SDWORD)psDroid->orderX - (SDWORD)(psStructStats->baseWidth * TILE_UNITS)/2;
-			const UDWORD tly = (SDWORD)psDroid->orderY - (SDWORD)(psStructStats->baseBreadth * TILE_UNITS)/2;
+			uint16_t dir = psDroid->orderDirection;
+			const UDWORD tlx = psDroid->orderX - getStructureStatsWidth(psStructStats, dir) * TILE_UNITS/2;
+			const UDWORD tly = psDroid->orderY - getStructureStatsBreadth(psStructStats, dir) * TILE_UNITS/2;
 			if ((psDroid->psTarget == NULL) &&
 				(TileHasStructure(psTile) ||
 				TileHasFeature(psTile)))
@@ -2069,7 +2071,7 @@ void actionUpdateDroid(DROID *psDroid)
 				}
 				else if (!validLocation((BASE_STATS*)psDroid->psTarStats,
 				                        map_coord(tlx),
-				                        map_coord(tly),
+				                        map_coord(tly), dir,
 				                        psDroid->player,
 				                        false))
 				{

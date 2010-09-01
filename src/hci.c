@@ -1308,10 +1308,8 @@ void intResetScreen(BOOL NoAnim)
 // top left tile coords
 static void intCalcStructCenter(STRUCTURE_STATS *psStats, UDWORD tilex, UDWORD tiley, uint16_t direction, UDWORD *pcx, UDWORD *pcy)
 {
-	SDWORD	width, height;
-
-	width = psStats->baseWidth * TILE_UNITS;
-	height = psStats->baseBreadth * TILE_UNITS;
+	unsigned width  = getStructureStatsWidth  (psStats, direction) * TILE_UNITS;
+	unsigned height = getStructureStatsBreadth(psStats, direction) * TILE_UNITS;
 
 	*pcx = tilex * TILE_UNITS + width/2;
 	*pcy = tiley * TILE_UNITS + height/2;

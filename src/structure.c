@@ -1506,18 +1506,18 @@ static SDWORD structChooseWallType(UDWORD player, UDWORD mapX, UDWORD mapY)
 }
 
 
-static void buildFlatten(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, UDWORD h)
+static void buildFlatten(STRUCTURE *pStructure, UDWORD x, UDWORD y, UDWORD h)
 {
-	UBYTE				width;
-	UBYTE				breadth;
+	unsigned width;
+	unsigned breadth;
 
-	for (breadth=0; breadth <= (UBYTE)(pStructureType->baseBreadth/* + 1*/); breadth++)
+	for (breadth = 0; breadth <= getStructureBreadth(pStructure); ++breadth)
 	{
-		for (width=0; width <= (UBYTE)(pStructureType->baseWidth /*+ 1*/); width++)
+		for (width = 0; width <= getStructureWidth(pStructure); ++width)
 		{
-			if (pStructureType->type != REF_WALL
-			    && pStructureType->type != REF_WALLCORNER
-			    && pStructureType->type != REF_GATE)
+			if (pStructure->pStructureType->type != REF_WALL
+			    && pStructure->pStructureType->type != REF_WALLCORNER
+			    && pStructure->pStructureType->type != REF_GATE)
 			{
 				setTileHeight(x + width, y + breadth, h);//-1
 				// We need to raise features on raised tiles to the new height
@@ -1535,15 +1535,17 @@ void alignStructure(STRUCTURE *psBuilding)
 	int width, breadth;
 	int x = psBuilding->pos.x;
 	int y = psBuilding->pos.y;
-	int mapX = map_coord(x) - (psBuilding->pStructureType->baseWidth / 2);
-	int mapY = map_coord(y) - (psBuilding->pStructureType->baseBreadth / 2);
+	unsigned sWidth   = getStructureWidth(psBuilding);
+	unsigned sBreadth = getStructureBreadth(psBuilding);
+	int mapX = map_coord(x) - sWidth/2;
+	int mapY = map_coord(y) - sBreadth/2;
 
 	/* DEFENSIVE structures are pulled to the terrain */
 	if (psBuilding->pStructureType->type != REF_DEFENSE)
 	{
-		int mapH = buildFoundation(psBuilding->pStructureType, x, y);
+		int mapH = buildFoundation(psBuilding, x, y);
 
-		buildFlatten(psBuilding->pStructureType, mapX, mapY, mapH);
+		buildFlatten(psBuilding, mapX, mapY, mapH);
 		psBuilding->pos.z = mapH;
 	}
 	else
@@ -1551,9 +1553,9 @@ void alignStructure(STRUCTURE *psBuilding)
 		psBuilding->pos.z = TILE_MIN_HEIGHT;
 
 		/* Set it at the higher coord */
-		for (width = 0; width < psBuilding->pStructureType->baseWidth; width++)
+		for (width = 0; width < sWidth; width++)
 		{
-			for (breadth = 0; breadth < psBuilding->pStructureType->baseBreadth; breadth++)
+			for (breadth = 0; breadth < sBreadth; breadth++)
 			{
 				UDWORD tmpMax, tmpMin;
 
@@ -1573,6 +1575,8 @@ STRUCTURE *buildStructure(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, U
 STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, uint16_t direction, UDWORD player, BOOL FromSave)
 {
 	STRUCTURE	*psBuilding = NULL;
+	unsigned sWidth   = getStructureStatsWidth  (pStructureType, direction);
+	unsigned sBreadth = getStructureStatsBreadth(pStructureType, direction);
 
 	ASSERT_OR_RETURN(NULL, pStructureType && pStructureType->type != REF_DEMOLISH, "You cannot build demolition!");
 
@@ -1596,8 +1600,8 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		}
 
 		// snap the coords to a tile
-		x = ((pStructureType->baseWidth % 2) == 0) ? (x & ~TILE_MASK) : (x & ~TILE_MASK) + TILE_UNITS/2;
-		y = ((pStructureType->baseBreadth % 2) == 0) ? (y & ~TILE_MASK) : (y & ~TILE_MASK) + TILE_UNITS/2;
+		x = sWidth   % 2 == 0 ? (x & ~TILE_MASK) : (x & ~TILE_MASK) + TILE_UNITS/2;
+		y = sBreadth % 2 == 0 ? (y & ~TILE_MASK) : (y & ~TILE_MASK) + TILE_UNITS/2;
 
 		//check not trying to build too near the edge
 		if (map_coord(x) < TOO_NEAR_EDGE || map_coord(x) > (mapWidth - TOO_NEAR_EDGE))
@@ -1642,8 +1646,8 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 
 		//This needs to be done before the functionality bit...
 		//load into the map data and structure list if not an upgrade
-		mapX = map_coord(x) - (pStructureType->baseWidth/2);
-		mapY = map_coord(y) - (pStructureType->baseBreadth/2);
+		mapX = map_coord(x) - sWidth/2;
+		mapY = map_coord(y) - sBreadth/2;
 
 		//set up the imd to use for the display
 		psBuilding->sDisplay.imd = pStructureType->pIMD;
@@ -1672,9 +1676,9 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 			}
 		}
 
-		for (width = 0; width < pStructureType->baseWidth; width++)
+		for (width = 0; width < sWidth; width++)
 		{
-			for (breadth = 0; breadth < pStructureType->baseBreadth; breadth++)
+			for (breadth = 0; breadth < sBreadth; breadth++)
 			{
 				MAPTILE *psTile = mapTile(mapX+width,mapY+breadth);
 
@@ -1718,8 +1722,6 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 			}
 		}
 
-		alignStructure(psBuilding);
-
 		//set up the rest of the data
 		for (i = 0;i < STRUCT_MAXWEAPS;i++)
 		{
@@ -1740,7 +1742,7 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		psBuilding->burnStart = 0;
 		psBuilding->burnDamage = 0;
 
-		psBuilding->rot.direction = pStructureType->baseWidth == pStructureType->baseBreadth ? (direction + 0x2000)&0xC000 : (direction + 0x4000)&0x8000;
+		psBuilding->rot.direction = (direction + 0x2000)&0xC000;
 		psBuilding->rot.pitch = 0;
 		psBuilding->rot.roll = 0;
 		psBuilding->selected = false;
@@ -1748,6 +1750,8 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		psBuilding->currentBuildPts = 0;
 		psBuilding->currentPowerAccrued = 0;
 		psBuilding->cluster = 0;
+
+		alignStructure(psBuilding);
 
 		// rotate a wall if necessary
 		if (!FromSave && (pStructureType->type == REF_WALL || pStructureType->type == REF_GATE ) && wallType == WALL_VERT)
@@ -2096,7 +2100,7 @@ STRUCTURE *buildBlueprint(STRUCTURE_STATS *psStats, float x, float y, uint16_t d
 	blueprint->pos.x = x;
 	blueprint->pos.y = y;
 	blueprint->pos.z = map_Height(blueprint->pos.x, blueprint->pos.y) + world_coord(1)/10;
-	blueprint->rot.direction = psStats->baseWidth == psStats->baseBreadth ? (direction + 0x2000)&0xC000 : (direction + 0x4000)&0x8000;
+	blueprint->rot.direction = (direction + 0x2000)&0xC000;
 	blueprint->rot.pitch = 0;
 	blueprint->rot.roll = 0;
 	blueprint->selected = false;
@@ -2472,21 +2476,23 @@ BOOL placeDroid(STRUCTURE *psStructure, UDWORD *droidX, UDWORD *droidY)
 {
 	SWORD			sx,sy, xmin,xmax, ymin,ymax, x,y, xmid;
 	BOOL			placed;
+	unsigned sWidth   = getStructureWidth(psStructure);
+	unsigned sBreadth = getStructureBreadth(psStructure);
 
 	CHECK_STRUCTURE(psStructure);
 
 	/* Get the tile coords for the top left of the structure */
-	sx = (SWORD)(psStructure->pos.x - psStructure->pStructureType->baseWidth * TILE_UNITS/2);
+	sx = (SWORD)(psStructure->pos.x - sWidth * TILE_UNITS/2);
 	sx = map_coord(sx);
-	sy = (SWORD)(psStructure->pos.y - psStructure->pStructureType->baseBreadth * TILE_UNITS/2);
+	sy = (SWORD)(psStructure->pos.y - sBreadth * TILE_UNITS/2);
 	sy = map_coord(sy);
 
 	/* Find the four corners of the square */
 	xmin = (SWORD)(sx - 1);
-	xmax = (SWORD)(sx + psStructure->pStructureType->baseWidth);
-	xmid = (SWORD)(sx + (psStructure->pStructureType->baseWidth-1)/2);
+	xmax = (SWORD)(sx + sWidth);
+	xmid = (SWORD)(sx + (sWidth-1)/2);
 	ymin = (SWORD)(sy - 1);
-	ymax = (SWORD)(sy + psStructure->pStructureType->baseBreadth);
+	ymax = (SWORD)(sy + sBreadth);
 	if (xmin < 0)
 	{
 		xmin = 0;
@@ -3910,8 +3916,8 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 			emissionInterval = CalcStructureSmokeInterval(damage);
 			if(gameTime > (psBuilding->lastEmission + emissionInterval))
 			{
-				widthScatter = ((psBuilding->pStructureType->baseWidth) * TILE_UNITS/2)/3;
-				breadthScatter = ((psBuilding->pStructureType->baseBreadth) * TILE_UNITS/2)/3;
+				widthScatter   = getStructureWidth(psBuilding)   * TILE_UNITS/2/3;
+				breadthScatter = getStructureBreadth(psBuilding) * TILE_UNITS/2/3;
 				dv.x = psBuilding->pos.x + widthScatter - rand()%(2*widthScatter);
 				dv.z = psBuilding->pos.y + breadthScatter - rand()%(2*breadthScatter);
 				dv.y = psBuilding->pos.z;
@@ -4185,8 +4191,7 @@ UDWORD fillStructureList(STRUCTURE_STATS **ppList, UDWORD selectedPlayer, UDWORD
 
 /* checks that the location is a valid one to build on and sets the outline colour
 x and y in tile-coords*/
-BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
-				BOOL bCheckBuildQueue)
+bool validLocation(BASE_STATS *psStats, unsigned x, unsigned y, uint16_t direction, unsigned player, bool bCheckBuildQueue)
 {
 	STRUCTURE			*psStruct;
 	STRUCTURE_STATS		*psBuilding;
@@ -4211,10 +4216,12 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 	if (psStats->ref >= REF_STRUCTURE_START &&
 		psStats->ref < (REF_STRUCTURE_START + REF_RANGE))
 	{
+		unsigned sWidth   = getStructureStatsWidth((STRUCTURE_STATS *)psStats, direction);
+		unsigned sBreadth = getStructureStatsBreadth((STRUCTURE_STATS *)psStats, direction);
 		site.xTL = (UWORD)x;
 		site.yTL = (UWORD)y;
-		site.xBR = (UWORD)(x + psBuilding->baseWidth - 1);
-		site.yBR = (UWORD)(y + psBuilding->baseBreadth - 1);
+		site.xBR = (UWORD)(x + sWidth - 1);
+		site.yBR = (UWORD)(y + sBreadth - 1);
 
 		//if we're dragging the wall/defense we need to check along the current dragged size
 		if (wallDrag.status != DRAG_INACTIVE
@@ -4599,12 +4606,12 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 								{
 									/*need to check there is one tile between buildings*/
 									//check if any corner is within the build site
-									size = ((STRUCTURE_STATS *)psDroid->asOrderList[order].
-										psOrderTarget)->baseWidth;
+									STRUCTURE_STATS *target = (STRUCTURE_STATS *)psDroid->asOrderList[order].psOrderTarget;
+									uint16_t dir = psDroid->asOrderList[order].direction;
+									size = getStructureStatsWidth(target, dir);
 									left = map_coord(psDroid->asOrderList[order].x) - size/2;
 									right = left + size;
-									size = ((STRUCTURE_STATS *)psDroid->asOrderList[order].
-										psOrderTarget)->baseBreadth;
+									size = getStructureStatsBreadth(target, dir);
 									up = map_coord(psDroid->asOrderList[order].y) - size/2;
 									down = up + size;
 									if (((left > site.xTL-1 && left <= site.xBR+1) &&
@@ -4859,13 +4866,15 @@ static void removeStructFromMap(STRUCTURE *psStruct)
 	UDWORD		i,j;
 	UDWORD		mapX, mapY;
 	MAPTILE		*psTile;
+	unsigned sWidth   = getStructureWidth(psStruct);
+	unsigned sBreadth = getStructureBreadth(psStruct);
 
 	/* set tiles drawing */
-	mapX = map_coord(psStruct->pos.x - psStruct->pStructureType->baseWidth * TILE_UNITS / 2);
-	mapY = map_coord(psStruct->pos.y - psStruct->pStructureType->baseBreadth * TILE_UNITS / 2);
-	for (i = 0; i < psStruct->pStructureType->baseWidth; i++)
+	mapX = map_coord(psStruct->pos.x - sWidth * TILE_UNITS / 2);
+	mapY = map_coord(psStruct->pos.y - sBreadth * TILE_UNITS / 2);
+	for (i = 0; i < sWidth; i++)
 	{
-		for (j = 0; j < psStruct->pStructureType->baseBreadth; j++)
+		for (j = 0; j < sBreadth; j++)
 		{
 			psTile = mapTile(mapX+i, mapY+j);
 			psTile->psObject = NULL;
@@ -5141,11 +5150,13 @@ BOOL destroyStruct(STRUCTURE *psDel)
 		if (!resourceFound && !(psDel->pStructureType->type == REF_WALL) &&
 			!(psDel->pStructureType->type == REF_WALLCORNER))
 		{
-			mapX = map_coord(psDel->pos.x - psDel->pStructureType->baseWidth * TILE_UNITS / 2);
-			mapY = map_coord(psDel->pos.y - psDel->pStructureType->baseBreadth * TILE_UNITS / 2);
-			for (width = 0; width < psDel->pStructureType->baseWidth; width++)
+			unsigned sWidth   = getStructureWidth(psDel);
+			unsigned sBreadth = getStructureBreadth(psDel);
+			mapX = map_coord(psDel->pos.x - sWidth * TILE_UNITS / 2);
+			mapY = map_coord(psDel->pos.y - sBreadth * TILE_UNITS / 2);
+			for (width = 0; width < sWidth; width++)
 			{
-				for (breadth = 0; breadth < psDel->pStructureType->baseBreadth; breadth++)
+				for (breadth = 0; breadth < sBreadth; breadth++)
 				{
 					psTile = mapTile(mapX+width,mapY+breadth);
 					if(TEST_TILE_VISIBLE(selectedPlayer,psTile))
@@ -5184,23 +5195,25 @@ BOOL destroyStruct(STRUCTURE *psDel)
 /* For now all this does is work out what height the terrain needs to be set to
 An actual foundation structure may end up being placed down
 The x and y passed in are the CENTRE of the structure*/
-SWORD buildFoundation(STRUCTURE_STATS *psStructStats, UDWORD x, UDWORD y)
+SWORD buildFoundation(STRUCTURE *psStruct, UDWORD x, UDWORD y)
 {
 	UDWORD	width, breadth;
 	UDWORD	startX, startY;
 	SWORD	height,foundationMin, foundationMax;
+	unsigned sWidth   = getStructureWidth(psStruct);
+	unsigned sBreadth = getStructureBreadth(psStruct);
 
-	startX = map_coord(x) - psStructStats->baseWidth/2;
-	startY = map_coord(y) - psStructStats->baseBreadth/2;
+	startX = map_coord(x) - sWidth/2;
+	startY = map_coord(y) - sBreadth/2;
 
 	//check the terrain is the correct type return -1 if not
 
 	//shouldn't need to do this but doesn't take long hey?!
 	/*check if there is a structure next to the new one - return the height of the
 	structure if found*/
-	for (breadth = 0; breadth <= psStructStats->baseBreadth; breadth++)
+	for (breadth = 0; breadth <= sBreadth; breadth++)
 	{
-		for (width = 0; width <= psStructStats->baseWidth; width++)
+		for (width = 0; width <= sWidth; width++)
 		{
 			if(TileHasStructure(mapTile(startX+width,startY+breadth)))
 			{
@@ -5212,16 +5225,16 @@ SWORD buildFoundation(STRUCTURE_STATS *psStructStats, UDWORD x, UDWORD y)
 	//may also have to check that overlapping terrain can be set to the average height
 	//eg water - don't want it to 'flow' into the structure if this effect is coded!
 
-	startX = map_coord(x) - psStructStats->baseWidth/2;
-	startY = map_coord(y) - psStructStats->baseBreadth/2;
+	startX = map_coord(x) - sWidth/2;
+	startY = map_coord(y) - sBreadth/2;
 
 	//initialise the starting values so they get set in loop
 	foundationMin = TILE_MAX_HEIGHT;
 	foundationMax = TILE_MIN_HEIGHT;
 
-	for (breadth = 0; breadth <= psStructStats->baseBreadth; breadth++)
+	for (breadth = 0; breadth <= sBreadth; breadth++)
 	{
-		for (width = 0; width <= psStructStats->baseWidth; width++)
+		for (width = 0; width <= sWidth; width++)
 		{
 			height = map_TileHeight(startX+width,startY+breadth);
 			if (foundationMin > height)
@@ -5362,7 +5375,7 @@ void findAssemblyPointPosition(UDWORD *pX, UDWORD *pY, UDWORD player)
 	passes = 0;
 
 	//if the value passed in is not a valid location - find one!
-	if (!validLocation((BASE_STATS *)&sStats, *pX, *pY, player, false))
+	if (!validLocation((BASE_STATS *)&sStats, *pX, *pY, 0, player, false))
 	{
 		/* Keep going until we get a tile or we exceed distance */
 		while(passes < LOOK_FOR_EMPTY_TILE)
@@ -5376,7 +5389,7 @@ void findAssemblyPointPosition(UDWORD *pX, UDWORD *pY, UDWORD player)
 					if(i==startX || i==endX || j==startY || j==endY)
 					{
 						/* Good enough? */
-						if(validLocation((BASE_STATS *)&sStats, i, j, player, false))
+						if(validLocation((BASE_STATS *)&sStats, i, j, 0, player, false))
 						{
 							/* Set exit conditions and get out NOW */
 							*pX = i;
@@ -8122,6 +8135,40 @@ void cbNewDroid(STRUCTURE *psFactory, DROID *psDroid)
 	eventFireCallbackTrigger((TRIGGER_TYPE)CALL_NEWDROID);
 	psScrCBNewDroid = NULL;
 	psScrCBNewDroidFact = NULL;
+}
+
+unsigned getStructureWidth(const STRUCTURE *psBuilding)
+{
+	return getStructureStatsWidth(psBuilding->pStructureType, psBuilding->rot.direction);
+}
+
+unsigned getStructureBreadth(const STRUCTURE *psBuilding)
+{
+	return getStructureStatsBreadth(psBuilding->pStructureType, psBuilding->rot.direction);
+}
+
+unsigned getStructureStatsWidth(const STRUCTURE_STATS *pStructureType, uint16_t direction)
+{
+	if (((direction + 0x2000) & 0x4000) != 0)
+	{
+		// Building is rotated left or right by 90°, swap width and height.
+		return pStructureType->baseBreadth;
+	}
+
+	// Building has normal orientation (or upsidedown).
+	return pStructureType->baseWidth;
+}
+
+unsigned getStructureStatsBreadth(const STRUCTURE_STATS *pStructureType, uint16_t direction)
+{
+	if (((direction + 0x2000) & 0x4000) != 0)
+	{
+		// Building is rotated left or right by 90°, swap width and height.
+		return pStructureType->baseWidth;
+	}
+
+	// Building has normal orientation (or upsidedown).
+	return pStructureType->baseBreadth;
 }
 
 // Check that psVictimStruct is not referred to by any other object in the game

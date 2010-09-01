@@ -152,8 +152,7 @@ extern UDWORD fillStructureList(STRUCTURE_STATS **ppList, UDWORD selectedPlayer,
 						 UDWORD limit);
 /* checks that the location is a valid one to build on and sets the outline colour
 x and y in tile-coords*/
-extern BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
-                          BOOL bCheckBuildQueue);
+extern bool validLocation(BASE_STATS *psStats, unsigned x, unsigned y, uint16_t direction, unsigned player, bool bCheckBuildQueue);
 
 /* for a new structure, find a location along an edge which the droid can get
 to and return this as the destination for the droid */
@@ -169,7 +168,7 @@ extern BOOL checkWidth(UDWORD maxRange, UDWORD x, UDWORD y, UDWORD *pDroidX, UDW
 /* check along the length of a structure for an empty space */
 extern BOOL checkLength(UDWORD maxRange, UDWORD x, UDWORD y, UDWORD *pDroidX, UDWORD *pDroidY);
 
-extern SWORD buildFoundation(STRUCTURE_STATS *psStructStats, UDWORD x, UDWORD y);
+extern SWORD buildFoundation(STRUCTURE *psStruct, UDWORD x, UDWORD y);
 extern void alignStructure(STRUCTURE *psBuilding);
 
 //initialise the structure limits structure
@@ -416,6 +415,11 @@ extern BOOL lasSatStructSelected(STRUCTURE *psStruct);
 BOOL structureCheckReferences(STRUCTURE *psVictimStruct);
 
 void cbNewDroid(STRUCTURE *psFactory, DROID *psDroid);
+
+unsigned getStructureWidth(const STRUCTURE *psBuilding);
+unsigned getStructureBreadth(const STRUCTURE *psBuilding);
+unsigned getStructureStatsWidth(const STRUCTURE_STATS *pStructureType, uint16_t direction);
+unsigned getStructureStatsBreadth(const STRUCTURE_STATS *pStructureType, uint16_t direction);
 
 static inline int structSensorRange(const STRUCTURE* psObj)
 {

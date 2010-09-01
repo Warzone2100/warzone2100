@@ -184,19 +184,19 @@ BOOL process3DBuilding(void)
 
 
 	if (buildState != BUILD3D_FINISHED)// && buildState != BUILD3D_NONE)
-  	{
+	{
 		bX = mouseTileX;
 		bY = mouseTileY;
 
-      	if (validLocation(sBuildDetails.psStats, bX, bY, selectedPlayer, true))
-        {
-  		   	buildState = BUILD3D_VALID;
-        }
-  		else
-  		{
-  			buildState = BUILD3D_POS;
+		if (validLocation(sBuildDetails.psStats, bX, bY, player.r.y, selectedPlayer, true))
+		{
+			buildState = BUILD3D_VALID;
 		}
-  	}
+		else
+		{
+			buildState = BUILD3D_POS;
+		}
+	}
 
 	/* Need to update the building locations if we're building */
 	bX = mouseTileX;
@@ -238,8 +238,17 @@ BOOL process3DBuilding(void)
 
 	sBuildDetails.x = buildSite.xTL = (UWORD)bX;
  	sBuildDetails.y = buildSite.yTL = (UWORD)bY;
-	buildSite.xBR = (UWORD)(buildSite.xTL+sBuildDetails.width-1);
-  	buildSite.yBR = (UWORD)(buildSite.yTL+sBuildDetails.height-1);
+	if (((player.r.y + 0x2000) & 0x4000) == 0)
+	{
+		buildSite.xBR = buildSite.xTL+sBuildDetails.width-1;
+		buildSite.yBR = buildSite.yTL+sBuildDetails.height-1;
+	}
+	else
+	{
+		// Rotated 90°, swap width and height
+		buildSite.xBR = buildSite.xTL+sBuildDetails.height-1;
+		buildSite.yBR = buildSite.yTL+sBuildDetails.width-1;
+	}
 
 	if( (buildState == BUILD3D_FINISHED) && (sBuildDetails.CallBack != NULL) )
 	{

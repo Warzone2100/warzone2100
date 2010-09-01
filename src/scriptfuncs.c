@@ -5589,7 +5589,7 @@ static BOOL pickStructLocation(DROID *psDroid, int index, int *pX, int *pY, int 
 
 	// save a lot of typing... checks whether a position is valid
 	#define LOC_OK(_x, _y) ((!psDroid || fpathCheck(psDroid->pos, Vector3i_Init(world_coord(_x), world_coord(_y), 0), PROPULSION_TYPE_WHEELED)) \
-	                        && validLocation((BASE_STATS*)psStat, _x, _y, player, false) && structDoubleCheck((BASE_STATS*)psStat, _x, _y, maxBlockingTiles))
+	                        && validLocation((BASE_STATS*)psStat, _x, _y, 0, player, false) && structDoubleCheck((BASE_STATS*)psStat, _x, _y, maxBlockingTiles))
 
 	// first try the original location
 	if (LOC_OK(startX, startY))
