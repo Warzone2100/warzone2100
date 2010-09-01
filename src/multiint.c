@@ -2189,18 +2189,19 @@ static void stopJoining(void)
 			if(NetPlay.bComms)	// not even connected.
 			{
 				changeTitleMode(GAMEFIND);
-				selectedPlayer =0;
 			}
 			else
 			{
 				changeTitleMode(MULTI);
-				selectedPlayer =0;
 			}
+			selectedPlayer = 0;
+			realSelectedPlayer = 0;
 			return;
 		}
 		debug(LOG_NET, "We have stopped joining.");
 		changeTitleMode(lastTitleMode);
 		selectedPlayer = 0;
+		realSelectedPlayer = 0;
 
 		if (ingame.bHostSetup)
 		{

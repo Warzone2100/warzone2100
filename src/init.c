@@ -1237,6 +1237,7 @@ BOOL saveGameReset(void)
 static void	initMiscVars(void)
 {
 	selectedPlayer = 0;
+	realSelectedPlayer = 0;
 	godMode = false;
 
 	// ffs am

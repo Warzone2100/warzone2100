@@ -1329,6 +1329,7 @@ static void intProcessOptions(UDWORD id)
 	{
 		widgSetButtonState(psWScreen, IDOPT_PLAYERSTART + selectedPlayer, 0);
 		selectedPlayer = id - IDOPT_PLAYERSTART;
+		// Do not change realSelectedPlayer here, so game doesn't pause.
 		widgSetButtonState(psWScreen, IDOPT_PLAYERSTART + selectedPlayer, WBUT_LOCK);
 	}
 	else

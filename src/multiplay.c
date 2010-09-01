@@ -496,27 +496,13 @@ UDWORD  whosResponsible(UDWORD player)
 //returns true if selected player is responsible for 'player'
 BOOL myResponsibility(UDWORD player)
 {
-	if(whosResponsible(player) == selectedPlayer)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+	return whosResponsible(player) == selectedPlayer;
 }
 
 //returns true if 'player' is responsible for 'playerinquestion'
 BOOL responsibleFor(UDWORD player, UDWORD playerinquestion)
 {
-	if(whosResponsible(playerinquestion) == player)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+	return whosResponsible(playerinquestion) == player;
 }
 
 

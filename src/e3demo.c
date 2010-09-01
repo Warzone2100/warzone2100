@@ -166,6 +166,7 @@ PROPULSION_STATS	*psPropStats;
 			{
 				psDroid->selected = true;
 			  	selectedPlayer = player;
+				realSelectedPlayer = selectedPlayer;
 				psLastDroid = psDroid;
 			  //	if(orderState(psDroid,DORDER_ATTACK) == false)
 			  //	{
@@ -305,6 +306,7 @@ void	toggleDemoStatus( void )
 	{
 		presentStatus = DC_INACTIVE;
 		selectedPlayer = lastSelectedPlayer;
+		realSelectedPlayer = selectedPlayer;
 	}
 	else if(presentStatus == DC_INACTIVE)
 	{

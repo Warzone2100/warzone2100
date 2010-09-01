@@ -2472,6 +2472,7 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 	gamestruct.future4 = 0xBAD04;								// for future use
 
 	selectedPlayer= NET_CreatePlayer(PlayerName);
+	realSelectedPlayer = selectedPlayer;
 	NetPlay.isHost	= true;
 	NetPlay.isHostAlive = true;
 	NetPlay.hostPlayer	= NET_HOST_ONLY;
@@ -2790,6 +2791,7 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 			NETpop(queue);
 
 			selectedPlayer = index;
+			realSelectedPlayer = selectedPlayer;
 			debug(LOG_NET, "NET_ACCEPTED received. Accepted into the game - I'm player %u using bsocket %p, tcp_socket=%p", (unsigned int)index, bsocket, tcp_socket);
 			NetPlay.isHost = false;
 			NetPlay.isHostAlive = true;

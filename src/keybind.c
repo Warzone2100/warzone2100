@@ -1026,6 +1026,7 @@ void	kf_SelectPlayer( void )
 	{
 		selectedPlayer = playerNumber;
 	}
+	realSelectedPlayer = selectedPlayer;
 	//	godMode = true;
 
 	if (prevPlayer == selectedPlayer)
