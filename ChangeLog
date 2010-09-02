@@ -3,7 +3,6 @@
    * Fix: Disable Dragging when in-game menus / popup is up. (r11565, ticket:2086)
    * Fix: Fix CFURLRef leaks on Mac. (r11510 ticket:2009)
    * Change: Don't allow ToggleSensorDisplay in MP games. (r11501)
-   * Update: Improved weapon textures - new version of page-17-droid-weapons.png. (r11534, ticket:2115)
    * Change: Display a video of where to get the videos since they were not installed. (r11566, ticket:2052)
  * Multiplayer:
    * Fix: Eschew ventriloquism assiduously.(r11449)
@@ -17,6 +16,28 @@
    * Change: Add numeric ping values in the hosting screen for the host. (r11559)
    * Change: Show map / game name / hosted by in the tooltip for the lobby (r11546 , ticket:2121)
    * Fix: Non-host players now get info about the research in progress by allied AIs (r11556, ticket:1478)
+ * Graphics:
+   * Update: New detailed weapons textures - new version of page-17-droid-weapons.png. (r11534, ticket:2115)
+ * Multiplayer balance (r11560, r11569):
+   * VTOL balance has been shaken up a bit:
+     * Removed: Cyclone turret
+     * Added: AA Flak Cannon (and Emplacement and Hardpoint)
+       * Flak Cannon is a medium-reload splash weapon
+       * Prerequisites: Hyper Velocity Cannon
+     * Added: Sunburst AA Rocket Array (and Site)
+       * Sunburst is a slow-reload salvo weapon
+       * Prerequisites: Lancer
+   * Machinegun is now less overpowered in the early-game:
+     * HMG now requires APDSB Mk2 instead of TMG
+     * APDSB Mk1 now requires TMG instead of APDSB Mk1
+     * Flamer now requires Engineering instead of FIE+MG
+   * The "mini-rocket" and "rocket" subclasses have been merged:
+     * Mini-rockets and rockets are now affected by the same upgrades.
+     * The merged subclass has 9 damage upgrades (+25% each), 3 accuracy upgrades (+10% each), and 3 ROF upgrades (-15% reload time each)
+     * Lancer, TK, BB, Cyborg Lancer, and Super TK Cyborg have their damage adjusted so that their fully upgraded damage remains the same
+     * These changes should mainly help make MRA more viable
+   * Slight buff to Heavy Laser, Avenger, and Vindicator damage
+   * Require HQ for every weapon structure, not just MG Tower
  * Translations:
    * Updated: Korean & German translations
  * Mods:
