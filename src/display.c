@@ -462,6 +462,11 @@ void processInput(void)
 	BOOL mOverRadar = false;
 	int WheelZoomIterator;
 
+	if (InGameOpUp || isInGamePopupUp)
+	{
+		dragBox3D.status = DRAG_RELEASED;	// disengage the dragging since it stops menu input
+	}
+
 	if(radarOnScreen && getHQExists(selectedPlayer) && CoordInRadar(mouseX(), mouseY()))
 	{
 		mOverRadar = true;
