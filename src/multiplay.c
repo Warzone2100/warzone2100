@@ -312,6 +312,12 @@ BOOL IdToDroid(UDWORD id, UDWORD player, DROID **psDroid)
 	}
 	else									// find the droid, given player
 	{
+		if (player >= MAX_PLAYERS)
+		{
+			debug(LOG_FEATURE, "Feature detected");
+			// feature hack, player = 9 are features
+			return false;
+		}
 		d = apsDroidLists[player];
 		while( (d != NULL ) && (d->id !=id))d=d->psNext;
 		if(d)
@@ -343,6 +349,12 @@ STRUCTURE *IdToStruct(UDWORD id,UDWORD player)
 	}
 	else
 	{
+		if (player >= MAX_PLAYERS)
+		{
+			debug(LOG_FEATURE, "Feature detected");
+			// feature hack, player = 9 are features
+			return NULL;
+		}
 		for(psStr=apsStructLists[player];((psStr != NULL )&&(psStr->id != id) );psStr=psStr->psNext);
 	}
 	return psStr;
@@ -368,6 +380,12 @@ FEATURE *IdToFeature(UDWORD id,UDWORD player)
 	}
 	else
 	{
+		if (player >= MAX_PLAYERS)
+		{
+			debug(LOG_FEATURE, "Feature detected");
+			// feature hack, player = 9 are features
+			return NULL;
+		}
 		for(psF=apsFeatureLists[player];((psF != NULL )&&(psF->id != id) );psF=psF->psNext);
 	}
 	return psF;
