@@ -1,20 +1,20 @@
 2010-00-00: Version 2.3.5RC
  * General:
-   * Fix: Disable Dragging when in-game menus / popup is up. (r11565, ticket:2086)
-   * Fix: Fix CFURLRef leaks on Mac. (r11510 ticket:2009)
-   * Change: Don't allow ToggleSensorDisplay in MP games. (r11501)
    * Change: Display a video of where to get the videos since they were not installed. (r11566, ticket:2052)
+   * Change: Don't allow ToggleSensorDisplay in MP games. (r11501)
+   * Fix: Disable Dragging when in-game menus / popup is up. (r11565, ticket:2086)
+   * Fix: Fix CFURLRef leaks on Mac. (r11510, ticket:2009)
  * Multiplayer:
-   * Fix: Eschew ventriloquism assiduously.(r11449)
    * Change: Add in-game kick via the 'scoreboard' Hold LMB+RMB over the player's channel icon that you want to kick. (r11490)
-   * Fix: Try to make the password box more idiot proof. (r11492)
    * Change: Only clear player name when needed. (r11495)
-   * Fix: Host will not pass on bogus messages.
    * Change: Show score as '(cheated)' instead of 0 when people have cheated. (r11558)
    * Change: Don't display scoreboard widgets when players are dead. (r11504)
    * Change: Allow "@" in chat now. (r11545)
    * Change: Add numeric ping values in the hosting screen for the host. (r11559)
    * Change: Show map / game name / hosted by in the tooltip for the lobby (r11546 , ticket:2121)
+   * Fix: Eschew ventriloquism assiduously. (r11449)
+   * Fix: Try to make the password box more idiot proof. (r11492)
+   * Fix: Host will not pass on bogus messages.
    * Fix: Non-host players now get info about the research in progress by allied AIs (r11556, ticket:1478)
  * Graphics:
    * Update: New detailed weapons textures - new version of page-17-droid-weapons.png. (r11534, ticket:2115)
