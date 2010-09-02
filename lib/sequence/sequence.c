@@ -497,7 +497,12 @@ bool seq_Play(const char* filename)
 	if (fpInfile == NULL)
 	{
 		info("unable to open '%s' for playback", filename);
-		return false;
+		
+		fpInfile = PHYSFS_openRead("novideo.ogg");
+		if (fpInfile == NULL)
+		{
+			return false;
+		}
 	}
 
 	theora_p = 0;
