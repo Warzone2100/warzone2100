@@ -415,7 +415,7 @@ Emplacement-RotHow			_("Hellstorm Emplacement")
 //PlasmaEmplacement			"*Plasma Weapon*"
 
 AASite-TwinBof				_("Tornado AA Site")
-AASite-QuadBof				_("Cyclone AA Site")
+AASite-QuadBof				_("AA Flak Cannon Emplacement")
 AASite-QuadMg1				_("Hurricane AA Site")
 AASite-QuadRotMg			_("Whirlwind AA Site")
 
@@ -550,7 +550,7 @@ TUTMG						_("Machinegun")
 CommandTurret1				_("Command Turret")
 
 AAGun1Mk1					_("Tornado Flak Turret")
-AAGun2Mk1					_("Cyclone Flak Turret")
+AAGun2Mk1					_("AA Flak Cannon")
 
 //Supergun					"*Supergun*"
 PlasmaHeavy					"*Heavy Plasma Launcher*"
@@ -723,7 +723,7 @@ R-Defense-WallUpgrade12			_("Plasteel Mk3")
 
 R-Defense-HardcreteGate			_("Hardcrete Gate")
 
-R-Defense-AASite-QuadBof		_("Cyclone AA Site")
+R-Defense-AASite-QuadBof		_("AA Flak Cannon Emplacement")
 R-Defense-AASite-QuadMg1		_("Hurricane AA Site")
 R-Defense-AASite-QuadRotMg		_("Whirlwind AA Site")
 R-Defense-AASite-TwinBof		_("Tornado AA Flak Site")
@@ -994,7 +994,7 @@ R-Vehicle-Prop-Wheels02			_("Wheeled Propulsion II")
 //R-Vehicle-Prop-Wheels03			_("Wheeled Propulsion III")
 
 R-Wpn-AAGun01				_("Tornado Flak Turret")
-R-Wpn-AAGun02				_("Cyclone Flak Turret")
+R-Wpn-AAGun02				_("AA Flak Cannon")
 R-Wpn-AAGun03				_("Hurricane AA Turret")
 R-Wpn-AAGun04				_("Whirlwind AA Turret")
 R-Wpn-AAGun-Accuracy01			_("AA Thermal Imaging Sensor")
@@ -1476,7 +1476,7 @@ Emplacement-Howitzer150	_("Ground Shaker Emplacement")
 P0cam3CobCONTrk		_("Truck")
 P0cam3PyHvyATTrk	_("Tank Killer Python Tracks")
 P0cam3PyHPVcanTrk	_("Hyper Velocity Cannon Python Tracks")
-P0cam3PyFlakHT		_("Cyclone AA Python Half-tracks")
+P0cam3PyFlakHT		_("AA Flak Cannon Python Half-tracks")
 P0cam3PyAsltGnTrk	_("Assault Gun Python Tracks")
 
 R-Sys-NEXUSrepair		"*R-Sys-NEXUSrepair*"
@@ -1721,6 +1721,11 @@ Laser4-PlasmaCannon			_("Plasma Cannon")
 R-Defense-PlasmaCannon			_("Plasma Cannon Emplacement")
 Emplacement-PlasmaCannon		_("Plasma Cannon Emplacement")
 
+R-Wpn-Sunburst			_("Sunburst AA Rocket Array")
+Rocket-Sunburst			_("Sunburst AA")
+R-Defense-Sunburst			_("Sunburst AA Site")
+P0-AASite-Sunburst			_("Sunburst AA Site")
+
 R-Cyborg-Hvywpn-PulseLsr		_("Super Pulse Laser Cyborg")
 Cyb-Hvy-PulseLsr				_("Super Pulse Laser Cyborg")
 Cyb-Hvybod-PulseLsr			_("Super Pulse Laser Cyborg")
@@ -1788,8 +1793,8 @@ R-Defense-WallTower-SamHvy		_("Vindicator Hardpoint")
 WallTower-SamHvy				_("Vindicator Hardpoint")
 WallTower-QuadRotAAGun			_("Whirlwind Hardpoint")
 R-Defense-WallTower-QuadRotAA		_("Whirlwind Hardpoint")
-WallTower-DoubleAAGun			_("Cyclone Hardpoint")
-R-Defense-WallTower-DoubleAAgun	_("Cyclone Hardpoint")
+WallTower-DoubleAAGun			_("AA Flak Cannon Hardpoint")
+R-Defense-WallTower-DoubleAAgun	_("AA Flak Cannon Hardpoint")
 R-Defense-WallTower-SamSite		_("Avenger Hardpoint")
 WallTower-SamSite				_("Avenger Hardpoint")
 

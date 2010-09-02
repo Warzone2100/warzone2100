@@ -63,3 +63,4 @@ R-Defense-WallTower-QuadRotAA,A0CommandCentre,0
 R-Defense-WallTower-DoubleAAgun,A0CommandCentre,0
 R-Defense-WallTower-SamSite,A0CommandCentre,0
 R-Defense-WallTower-TwinAGun,A0CommandCentre,0
+R-Defense-Sunburst,A0CommandCentre,0

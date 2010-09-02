@@ -351,11 +351,10 @@ R-Wpn-AAGun-ROF04,R-Wpn-AAGun-ROF03,826
 R-Wpn-AAGun-ROF04,R-Wpn-Cannon-ROF04,826
 R-Wpn-AAGun-ROF05,R-Wpn-AAGun-ROF04,827
 R-Wpn-AAGun-ROF06,R-Wpn-AAGun-ROF05,828
-R-Wpn-AAGun02,R-Wpn-AAGun03,523
-R-Wpn-AAGun02,R-Wpn-AAGun-Damage02,523
+R-Wpn-AAGun02,R-Wpn-Cannon4AMk1,523
 R-Wpn-AAGun03,R-Wpn-MG2Mk1,529
 R-Wpn-AAGun04,R-Wpn-MG4,530
-R-Wpn-AAGun04,R-Wpn-AAGun02,530
+R-Wpn-AAGun04,R-Wpn-AAGun-Damage02,530
 R-Wpn-AALaser,R-Wpn-Energy-ROF01,1151
 R-Wpn-Bomb-Accuracy01,R-Wpn-Mortar-Damage02,1009
 R-Wpn-Bomb-Accuracy01,R-Wpn-Bomb01,1009
@@ -585,3 +584,5 @@ R-Wpn-Rocket06-IDF,R-Sys-CBSensor-Tower01,295
 R-Wpn-Rocket07-Tank-Killer,R-Wpn-RocketSlow-Accuracy02,630
 R-Wpn-Rocket07-Tank-Killer,R-Wpn-RocketSlow-Damage03,630
 R-Sys-RadarDetector01,R-Sys-Sensor-Upgrade01,945
+R-Wpn-Sunburst,R-Wpn-Rocket01-LtAT,0
+R-Defense-Sunburst,R-Wpn-Sunburst,0
