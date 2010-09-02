@@ -1684,8 +1684,8 @@ BOOL scrSkDoResearch(void)
 		}
 #if defined (DEBUG)
 		{
-			char				sTemp[128];
-			sprintf(sTemp,"player:%d starts topic: %s",player, asResearch[i].pName );
+			char	sTemp[128];
+			sprintf(sTemp,"[debug]player:%d starts topic: %s",player, asResearch[i].pName );
 			NETlogEntry(sTemp, SYNC_FLAG, 0);
 		}
 #endif
