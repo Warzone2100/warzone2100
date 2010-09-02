@@ -398,7 +398,7 @@ DROID_TEMPLATE *IdToTemplate(UDWORD tempId,UDWORD player)
 	if (psTempl) return psTempl;
 
 	// Check if we know which player this is from, in that case, assume it is a player template
-	if (player != ANYPLAYER)
+	if (player != ANYPLAYER && player < MAX_PLAYERS)
 	{
 		for (psTempl = apsDroidTemplates[player];			// follow templates
 		(psTempl && (psTempl->multiPlayerID != tempId ));
