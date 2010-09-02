@@ -350,8 +350,8 @@ extern unsigned int NETgetGameserverPort(void);
 
 extern BOOL NETsetupTCPIP(const char *machine);
 extern void NETsetGamePassword(const char *password);
-extern void NETBroadcastPlayerInfo(uint32_t index);
-void NETBroadcastTwoPlayerInfo(uint32_t index1, uint32_t index2);
+extern void NETsendPlayerInfo(uint32_t index);
+extern void NETSendAllPlayerInfoTo(unsigned int to);
 extern bool NETisCorrectVersion(uint32_t game_version_major, uint32_t game_version_minor);
 extern bool NETgameIsCorrectVersion(GAMESTRUCT* check_game);
 void NET_InitPlayer(int i, bool initPosition);
@@ -359,5 +359,6 @@ extern void NET_InitPlayers(void);
 
 void NETGameLocked(bool flag);
 void NETresetGamePassword(void);
+void NET_TEST( int a, int b);
 
 #endif

@@ -1473,7 +1473,7 @@ static void changeTeam(UBYTE player, UBYTE team)
 {
 	NetPlay.players[player].team = team;
 	debug(LOG_WZ, "set %d as new team for player %d", team, player);
-	NETBroadcastPlayerInfo(player);
+	NETSendAllPlayerInfoTo(NET_ALL_PLAYERS);
 	netPlayersUpdated = true;
 }
 
@@ -1502,6 +1502,7 @@ BOOL recvTeamRequest()
 
 	if(!NetPlay.isHost)			// only host should act
 	{
+		ASSERT(false, "Host only routine detected for client!");
 		return true;
 	}
 
@@ -1512,8 +1513,15 @@ BOOL recvTeamRequest()
 
 	if (player > MAX_PLAYERS || team > MAX_PLAYERS)
 	{
+		debug(LOG_NET, "NET_TEAMREQUEST invalid, player %d team, %d", (int) player, (int) team);
 		debug(LOG_ERROR, "Invalid NET_TEAMREQUEST from player %d: Tried to change player %d (team %d)",
 		      NETgetSource(), (int)player, (int)team);
+		return false;
+	}
+
+	if (whosResponsible(player) != NetMsg.source)
+	{
+		HandleBadParam("NET_TEAMREQUEST given incorrect params.", player, NetMsg.source);
 		return false;
 	}
 
@@ -1521,8 +1529,9 @@ BOOL recvTeamRequest()
 	{
 		resetReadyStatus(false);
 	}
+	debug(LOG_NET, "%s is now part of team: %d", NetPlay.players[player].name, (int) team);
 	changeTeam(player, team); // we do this regardless, in case of sync issues
-	
+
 	return true;
 }
 
@@ -1534,7 +1543,7 @@ static BOOL SendReadyRequest(UBYTE player, BOOL bReady)
 	}
 	else
 	{
-		NETbeginEncode(NET_READY_REQUEST, NET_ALL_PLAYERS);
+		NETbeginEncode(NET_READY_REQUEST, NET_HOST_ONLY);
 			NETuint8_t(&player);
 			NETbool(&bReady);
 		NETend();
@@ -1549,6 +1558,7 @@ BOOL recvReadyRequest()
 
 	if(!NetPlay.isHost)					// only host should act
 	{
+		ASSERT(false, "Host only routine detected for client!");
 		return true;
 	}
 
@@ -1564,6 +1574,12 @@ BOOL recvReadyRequest()
 		return false;
 	}
 
+	if (whosResponsible(player) != NetMsg.source)
+	{
+		HandleBadParam("NET_READY_REQUEST given incorrect params.", player, NetMsg.source);
+		return false;
+	}
+
 	// do not allow players to select 'ready' if we are sending a map too them!
 	// TODO: make a new icon to show this state?
 	if (NetPlay.players[player].wzFile.isSending)
@@ -1571,14 +1587,14 @@ BOOL recvReadyRequest()
 		return false;
 	}
 
-	return changeReadyStatus((UBYTE)player, bReady);
+	return changeReadyStatus(player, bReady);
 }
 
 static BOOL changeReadyStatus(UBYTE player, BOOL bReady)
 {
 	drawReadyButton(player);
 	NetPlay.players[player].ready = bReady;
-	NETBroadcastPlayerInfo(player);
+	NETSendAllPlayerInfoTo(NET_ALL_PLAYERS);
 
 	netPlayersUpdated = true;
 	return true;
@@ -1596,7 +1612,7 @@ static BOOL changePosition(UBYTE player, UBYTE position)
 			      player, NetPlay.players[player].position, i, NetPlay.players[i].position);
 			NetPlay.players[i].position = NetPlay.players[player].position;
 			NetPlay.players[player].position = position;
-			NETBroadcastTwoPlayerInfo(player, i);
+			NETSendAllPlayerInfoTo(NET_ALL_PLAYERS);
 			netPlayersUpdated = true;
 			return true;
 		}
@@ -1604,9 +1620,10 @@ static BOOL changePosition(UBYTE player, UBYTE position)
 	debug(LOG_ERROR, "Failed to swap positions for player %d, position %d", (int)player, (int)position);
 	if (player < game.maxPlayers && position < game.maxPlayers)
 	{
+		debug(LOG_NET, "corrupted positions :player (%hhu) new position (%hhu) old position (%d)", player, position, NetPlay.players[player].position );
 		// Positions were corrupted. Attempt to fix.
 		NetPlay.players[player].position = position;
-		NETBroadcastPlayerInfo(player);
+		NETSendAllPlayerInfoTo(NET_ALL_PLAYERS);
 		netPlayersUpdated = true;
 		return true;
 	}
@@ -1627,7 +1644,7 @@ static BOOL changeColour(UBYTE player, UBYTE col)
 			NetPlay.players[i].colour = getPlayerColour(player);
 			setPlayerColour(player, col);
 			NetPlay.players[player].colour = col;
-			NETBroadcastTwoPlayerInfo(player, i);
+			NETSendAllPlayerInfoTo(NET_ALL_PLAYERS);
 			netPlayersUpdated = true;
 			return true;
 		}
@@ -1636,9 +1653,10 @@ static BOOL changeColour(UBYTE player, UBYTE col)
 	if (player < game.maxPlayers && col < MAX_PLAYERS)
 	{
 		// Colours were corrupted. Attempt to fix.
+		debug(LOG_NET, "corrupted colors :player (%hhu) new position (%hhu) old color (%d)", player, col, NetPlay.players[player].colour );
 		setPlayerColour(player, col);
 		NetPlay.players[player].colour = col;
-		NETBroadcastPlayerInfo(player);
+		NETSendAllPlayerInfoTo(NET_ALL_PLAYERS);
 		netPlayersUpdated = true;
 		return true;
 	}
@@ -1686,6 +1704,7 @@ BOOL recvColourRequest()
 
 	if(!NetPlay.isHost)				// only host should act
 	{
+		ASSERT(false, "Host only routine detected for client!");
 		return true;
 	}
 
@@ -1701,6 +1720,12 @@ BOOL recvColourRequest()
 		return false;
 	}
 
+	if (whosResponsible(player) != NetMsg.source)
+	{
+		HandleBadParam("NET_COLOURREQUEST given incorrect params.", player, NetMsg.source);
+		return false;
+	}
+
 	resetReadyStatus(false);
 
 	return changeColour(player, col);
@@ -1712,6 +1737,7 @@ BOOL recvPositionRequest()
 
 	if(!NetPlay.isHost)				// only host should act
 	{
+		ASSERT(false, "Host only routine detected for client!");
 		return true;
 	}
 
@@ -1720,10 +1746,17 @@ BOOL recvPositionRequest()
 		NETuint8_t(&position);
 	NETend();
 	debug(LOG_NET, "Host received position request from player %d to %d", player, position);
+
 	if (player > MAX_PLAYERS || position > MAX_PLAYERS)
 	{
 		debug(LOG_ERROR, "Invalid NET_POSITIONREQUEST from player %d: Tried to change player %d to %d",
 		      NETgetSource(), (int)player, (int)position);
+		return false;
+	}
+
+	if (whosResponsible(player) != NetMsg.source)
+	{
+		HandleBadParam("NET_POSITIONREQUEST given incorrect params.", player, NetMsg.source);
 		return false;
 	}
 
@@ -2512,6 +2545,7 @@ static void processMultiopWidgets(UDWORD id)
 		loadMultiStats((char*)sPlayer,&playerStats);
 		setMultiStats(selectedPlayer,playerStats,false);
 		setMultiStats(selectedPlayer,playerStats,true);
+		netPlayersUpdated = true;
 		break;
 
 	case MULTIOP_PNAME_ICON:
@@ -2818,10 +2852,23 @@ void frontendMultiMessages(void)
 				uint32_t reason;
 				uint32_t victim;
 
+				if(!NetPlay.isHost)				// only host should act
+				{
+					ASSERT(false, "Host only routine detected for client!");
+					break;
+				}
+
 				NETbeginDecode(NET_FILE_CANCELLED);
 					NETuint32_t(&victim);
 					NETuint32_t(&reason);
 				NETend();
+
+				if (whosResponsible(victim) != NetMsg.source)
+				{
+					HandleBadParam("NET_FILE_CANCELLED given incorrect params.", victim, NetMsg.source);
+					return;
+				}
+
 				switch (reason)
 				{
 					case STUCK_IN_FILE_LOOP:
@@ -2870,12 +2917,14 @@ void frontendMultiMessages(void)
 			break;
 
 		case NET_READY_REQUEST:
-			recvReadyRequest();
-
-			// if hosting try to start the game if everyone is ready
-			if(NetPlay.isHost && multiplayPlayersReady(false))
+			if (NetPlay.isHost)
 			{
-				startMultiplayerGame();
+				recvReadyRequest();
+				if (multiplayPlayersReady(false))
+				{
+					// if hosting try to start the game if everyone is ready
+					startMultiplayerGame();
+				}
 			}
 			break;
 
@@ -2898,6 +2947,12 @@ void frontendMultiMessages(void)
 			if (player_id >= MAX_PLAYERS)
 			{
 				debug(LOG_INFO, "** player %u has dropped - huh?", player_id);
+				break;
+			}
+
+			if (whosResponsible(player_id) != NetMsg.source)
+			{
+				HandleBadParam("NET_PLAYER_DROPPED given incorrect params.", player_id, NetMsg.source);
 				break;
 			}
 
@@ -2928,6 +2983,11 @@ void frontendMultiMessages(void)
 			break;
 		}
 		case NET_FIREUP:					// campaign game started.. can fire the whole shebang up...
+			if (NET_HOST_ONLY != NetMsg.source)
+			{
+				HandleBadParam("NET_FIREUP given incorrect params.", 255, NetMsg.source);
+				break;
+			}
 			debug(LOG_NET, "NET_FIREUP was received ..."); 
 			if(ingame.localOptionsReceived)
 			{
@@ -2966,11 +3026,11 @@ void frontendMultiMessages(void)
 				ssprintf(buf, "Player %d (%s : %s) tried to kick %u", (int) NetMsg.source, NetPlay.players[NetMsg.source].name, NetPlay.players[NetMsg.source].IPtextAddress, player_id);
 				NETlogEntry(buf, SYNC_FLAG, 0);
 				debug(LOG_ERROR, "%s", buf);
-				if (player_id == NET_HOST_ONLY && NetPlay.isHost)
+				if (NetPlay.isHost)
 				{
-					NETplayerKicked((unsigned int) NetMsg.source);
-				}
-				return;
+					kickPlayer(NetMsg.source, reason, KICK_TYPE);
+				} 
+				break;
 			}
 
 			if (selectedPlayer == player_id)	// we've been told to leave.
@@ -3118,6 +3178,7 @@ void runMultiOptions(void)
 				loadMultiStats((char*)sPlayer,&playerStats);
 				setMultiStats(selectedPlayer,playerStats,false);
 				setMultiStats(selectedPlayer,playerStats,true);
+				netPlayersUpdated = true;
 				break;
 			case MULTIOP_MAP:
 				sstrcpy(game.map, sTemp);

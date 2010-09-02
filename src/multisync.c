@@ -51,6 +51,7 @@
 #include "multistat.h"
 #include "power.h"									// for power checks
 #include "multirecv.h"
+#include "multiint.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // function definitions
@@ -976,7 +977,20 @@ BOOL recvPowerCheck()
 	}
 	return true;
 }
+void HandleBadParam(const char *msg, const int from, const int actual)
+{
+	char buf[255];
+	LOBBY_ERROR_TYPES KICK_TYPE = ERROR_CHEAT;
 
+	ssprintf(buf, "!!>Msg: %s, Actual: %d, Bad: %d", msg, actual, from);
+	NETlogEntry(buf, SYNC_FLAG, actual);
+	if (NetPlay.isHost)
+	{
+		ssprintf(buf, "Auto kicking player %s for cheating", NetPlay.players[actual].name);
+		sendTextMessage(buf, true);
+		kickPlayer(actual, buf, KICK_TYPE);
+	}
+}
 // ////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////
 // Score

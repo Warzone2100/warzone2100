@@ -94,6 +94,15 @@ void recvMultiStats()
 
 		if (playerIndex >= MAX_PLAYERS)
 		{
+			NETend();
+			return;
+		}
+
+
+		if (playerIndex != NetMsg.source && NetMsg.source != NET_HOST_ONLY)
+		{
+			HandleBadParam("NET_PLAYER_STATS given incorrect params.", playerIndex, NetMsg.source);
+			NETend();
 			return;
 		}
 

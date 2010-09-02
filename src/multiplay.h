@@ -194,7 +194,7 @@ extern BOOL addTemplateToList(DROID_TEMPLATE *psNew, DROID_TEMPLATE **ppList);
 extern BOOL sendCheck			(void);							//send/recv  check info
 extern BOOL sendScoreCheck		(void);							//score check only(frontend)
 extern BOOL sendPing			(void);							// allow game to request pings.
-
+extern void HandleBadParam(const char *msg, const int from, const int actual);
 extern BOOL ForceDroidSync(const DROID* droidToSend);
 // multijoin
 extern BOOL sendReseachStatus	(STRUCTURE *psBuilding ,UDWORD index, UBYTE player, BOOL bStart);

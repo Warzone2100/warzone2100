@@ -180,6 +180,7 @@ typedef struct
 	 * All non-listening sockets will only use the first socket handle.
 	 */
 	SOCKET fd[SOCK_COUNT];
+	int belongsTo;
 	bool ready;
 } Socket;
 
@@ -256,7 +257,7 @@ extern LOBBY_ERROR_TYPES LobbyError;		// from src/multiint.c
 **/
 char VersionString[VersionStringSize] = "2.3 svn"; // used for display in the lobby, not the actual version check
 static int NETCODE_VERSION_MAJOR = 2;                // major netcode version, used for compatibility check
-static int NETCODE_VERSION_MINOR = 81;               // minor netcode version, used for compatibility check
+static int NETCODE_VERSION_MINOR = 85;               // minor netcode version, used for compatibility check
 static int NETCODE_HASH = 0;			// unused for now
 
 static int checkSockets(const SocketSet* set, unsigned int timeout);
@@ -1309,14 +1310,16 @@ static void NET_destroyBufferedSocket(NETBUFSOCKET* bs)
 	free(bs);
 }
 
-static void NET_initBufferedSocket(NETBUFSOCKET* bs, Socket* s)
+static void NET_initBufferedSocket(NETBUFSOCKET* bs, Socket* s, int player)
 {
 	bs->socket = s;
-	if (bs->buffer == NULL) {
+	if (bs->buffer == NULL)
+	{
 		bs->buffer = (char*)malloc(NET_BUFFER_SIZE);
 	}
 	bs->buffer_start = 0;
 	bs->bytes = 0;
+	bs->socket->belongsTo = player;
 }
 
 static BOOL NET_fillBuffer(NETBUFSOCKET* bs, SocketSet* socket_set)
@@ -1395,6 +1398,11 @@ static BOOL NET_recvMessage(NETBUFSOCKET* bs)
 					+ sizeof(message->destination)
 					+ sizeof(message->source);
 
+	if (!bs->socket)
+	{
+		return false;
+	}
+
 	if (headersize > bs->bytes)
 	{
 		goto error;
@@ -1411,6 +1419,26 @@ static BOOL NET_recvMessage(NETBUFSOCKET* bs)
 	pMsg->size = ntohs(message->size);
 	bs->buffer_start += size;
 	bs->bytes -= size;
+
+	if (bs->socket->belongsTo != pMsg->source && bs->socket->belongsTo != NET_HOST_ONLY)
+	{
+		char buf[250]= {'\0'};
+		LOBBY_ERROR_TYPES KICK_TYPE = ERROR_CHEAT;
+
+		ssprintf(buf, "Player %d (%s : %s) tried to spoof with msg type %hhu, they were pretending to be %hhu, we are %u.", bs->socket->belongsTo, NetPlay.players[bs->socket->belongsTo].name,
+					NetPlay.players[bs->socket->belongsTo].IPtextAddress, pMsg->type, pMsg->source, selectedPlayer);
+		NETlogEntry(buf, SYNC_FLAG, 0);
+		debug(LOG_ERROR, "%s", buf);
+		pMsg->source = bs->socket->belongsTo;
+		if (NETgetPacketDir() != PACKET_INVALID)
+		{
+			NETend();
+		}
+
+		ssprintf(buf, "Auto kicking player %s for cheating", NetPlay.players[bs->socket->belongsTo].name);
+		kickPlayer(bs->socket->belongsTo, buf, KICK_TYPE);
+		return false;
+	}
 
 	return true;
 
@@ -1492,8 +1520,7 @@ static void NETSendNPlayerInfoTo(uint32_t *index, uint32_t indexLen, unsigned to
 		NETuint32_t(&indexLen);
 		for (n = 0; n < indexLen; ++n)
 		{
-			debug(LOG_NET, "sending player's (%u) info to all players", index[n]);
-			NETlogEntry(" sending player's info to all players", SYNC_FLAG, index[n]);
+			debug(LOG_NET, "sending player's (%u) info to players: %u, cur %d, for: %u", index[n], to, n, index[n]);
 			NETuint32_t(&index[n]);
 			NETbool(&NetPlay.players[index[n]].allocated);
 			NETbool(&NetPlay.players[index[n]].heartbeat);
@@ -1507,6 +1534,8 @@ static void NETSendNPlayerInfoTo(uint32_t *index, uint32_t indexLen, unsigned to
 		}
 		NETuint32_t(&NetPlay.hostPlayer);
 	NETend();
+
+	NETlogEntry(" sending player's info to players", SYNC_FLAG, to);
 }
 
 static void NETSendPlayerInfoTo(uint32_t index, unsigned to)
@@ -1514,21 +1543,15 @@ static void NETSendPlayerInfoTo(uint32_t index, unsigned to)
 	NETSendNPlayerInfoTo(&index, 1, to);
 }
 
-static void NETSendAllPlayerInfoTo(unsigned to)
+void NETSendAllPlayerInfoTo(unsigned int to)
 {
 	static uint32_t indices[MAX_PLAYERS] = {0, 1, 2, 3, 4, 5, 6, 7};
 	NETSendNPlayerInfoTo(indices, ARRAY_SIZE(indices), to);
 }
 
-void NETBroadcastTwoPlayerInfo(uint32_t index1, uint32_t index2)
+void NETsendPlayerInfo(uint32_t index)
 {
-	uint32_t indices[2] = {index1, index2};
-	NETSendNPlayerInfoTo(indices, 2, NET_ALL_PLAYERS);
-}
-
-void NETBroadcastPlayerInfo(uint32_t index)
-{
-	NETSendPlayerInfoTo(index, NET_ALL_PLAYERS);
+	NETSendPlayerInfoTo(index, NET_HOST_ONLY);
 }
 
 static signed int NET_CreatePlayer(const char* name)
@@ -1609,7 +1632,7 @@ static void NETplayerClientDisconnect(uint32_t index)
  */
 static void NETplayerLeaving(UDWORD index)
 {
-	if (NetPlay.isHost && connected_bsocket[index]->socket)
+	if (NetPlay.isHost && (NetPlay.bComms && connected_bsocket[index]->socket))
 	{
 		char buf[250] = {'\0'};
 
@@ -1645,8 +1668,8 @@ static void NETplayerDropped(UDWORD index)
 	NETend();
 	debug(LOG_INFO, "sending NET_PLAYER_DROPPED for player %d", id);
 	sync_counter.drops++;
-	NET_DestroyPlayer(id);		// just clears array
 	MultiPlayerLeave(id);			// more cleanup
+	NET_DestroyPlayer(id);		// just clears array
 	NET_PlayerConnectionStatus = 2;	//DROPPED_CONNECTION
 }
 
@@ -1682,7 +1705,14 @@ BOOL NETchangePlayerName(UDWORD index, char *newName)
 	NETlogEntry("Player wants a name change.", SYNC_FLAG, index);
 	sstrcpy(NetPlay.players[index].name, newName);
 
-	NETBroadcastPlayerInfo(index);
+	if (NetPlay.isHost)
+	{
+		NETSendAllPlayerInfoTo(NET_ALL_PLAYERS);
+	}
+	else
+	{
+		NETsendPlayerInfo(index);
+	}
 
 	return true;
 }
@@ -2547,12 +2577,13 @@ static BOOL NETprocessSystemMessage(void)
 
 			NETbeginDecode(NET_PLAYER_INFO);
 				NETuint32_t(&indexLen);
-				if (indexLen > MAX_PLAYERS || (pMsg->source != NetPlay.hostPlayer && indexLen != 1))
+				if (indexLen > MAX_PLAYERS )
 				{
 					debug(LOG_ERROR, "MSG_PLAYER_INFO: Bad number of players updated");
 					NETend();
 					break;
 				}
+
 				for (n = 0; n < indexLen; ++n)
 				{
 					bool wasAllocated = false;
@@ -2562,14 +2593,19 @@ static BOOL NETprocessSystemMessage(void)
 					NETuint32_t(&index);
 
 					// Bail out if the given ID number is out of range
-					if (index >= MAX_CONNECTED_PLAYERS || (NetMsg.source != NetPlay.hostPlayer && (NetMsg.source != index || !NetPlay.players[index].allocated)))
+					if (index >= MAX_CONNECTED_PLAYERS)
 					{
 						debug(LOG_ERROR, "MSG_PLAYER_INFO: Player ID (%u) out of range (max %u)", index, (unsigned int)MAX_CONNECTED_PLAYERS);
 						NETend();
 						error = true;
 						break;
 					}
-
+					
+					if (index != NetMsg.source && NetMsg.source != NET_HOST_ONLY)
+					{
+						HandleBadParam("NET_PLAYER_INFO given incorrect params.", index, NetMsg.source);
+						break;
+					}
 					// Retrieve the rest of the data
 					wasAllocated = NetPlay.players[index].allocated;
 					NETbool(&NetPlay.players[index].allocated);
@@ -2607,7 +2643,7 @@ static BOOL NETprocessSystemMessage(void)
 			// data to all other clients as well.
 			if (NetPlay.isHost && !error)
 			{
-				NETBroadcastPlayerInfo(index);
+				NETSendAllPlayerInfoTo(NET_ALL_PLAYERS);
 			}
 			netPlayersUpdated = true;
 			break;
@@ -2635,6 +2671,12 @@ static BOOL NETprocessSystemMessage(void)
 			NETbeginDecode(NET_PLAYER_LEAVING);
 				NETuint32_t(&index);
 			NETend();
+
+			if (whosResponsible(index) != NetMsg.source)
+			{
+				HandleBadParam("NET_PLAYER_LEAVING given incorrect params.", index, NetMsg.source);
+				break;
+			}
 
 			if(connected_bsocket[index])
 			{
@@ -2798,7 +2840,7 @@ receive_message:
 					{
 						// we received some data, add to buffer
 						received = NET_recvMessage(connected_bsocket[i]);
-						if (i == pMsg->source) // prevent spoofing
+						if (i == pMsg->source)
 						{
 							current = i;
 							break;
@@ -2861,82 +2903,101 @@ receive_message:
 		}
 		else
 		{
-			size =	  pMsg->size + sizeof(pMsg->size) + sizeof(pMsg->type)
-				+ sizeof(pMsg->destination) + sizeof(pMsg->source);
+			size = pMsg->size + sizeof(pMsg->size) + sizeof(pMsg->type) + sizeof(pMsg->destination) + sizeof(pMsg->source);
 			if (!NetPlay.isHost)
 			{	//client gets a packet
 				NETlogPacket(pMsg->type, pMsg->size, true);		// log packet that we received
 			}
-			else if (pMsg->destination == NET_ALL_PLAYERS)
+			else if (pMsg->destination == NET_ALL_PLAYERS || (pMsg->destination != selectedPlayer  && pMsg->destination < MAX_CONNECTED_PLAYERS))
 			{
 				unsigned int j;
 				uint16_t Sbytes;
 
-				if (pMsg->source != NET_HOST_ONLY && (pMsg->type == NET_KICK || pMsg->type == NET_PLAYER_LEAVING) )
+				if ((  pMsg->type == NET_FIREUP
+					|| pMsg->type == NET_KICK
+					|| pMsg->type == NET_HOST_DROPPED
+					|| pMsg->type == NET_OPTIONS
+					|| pMsg->type == NET_FILE_REQUESTED
+					|| pMsg->type == NET_PLAYER_LEAVING
+					|| pMsg->type == NET_PLAYER_DROPPED
+					|| pMsg->type == NET_TEAMREQUEST
+					|| pMsg->type == NET_COLOURREQUEST
+					|| pMsg->type == NET_POSITIONREQUEST
+					|| pMsg->type == NET_FILE_CANCELLED
+					|| pMsg->type == NET_JOIN
+					|| pMsg->type == NET_REJECTED
+					|| pMsg->type == NET_PLAYER_INFO
+					|| pMsg->type == NET_PLAYER_JOINED) && pMsg->source != NET_HOST_ONLY)
 				{
-					// somone is trying to kick the HOST, and we are not going to let them, instead we will kick THEM.
-					char msg[256] = {'\0'};
+					char buf[255];
+					uint32_t chump = pMsg->source;
+					LOBBY_ERROR_TYPES KICK_TYPE = ERROR_CHEAT;
 
-					ssprintf(msg, "Kicking player %u, because they tried to kick the host!", (unsigned int) pMsg->source);
-					NETlogEntry(msg, SYNC_FLAG, pMsg->source);
-
-					kickPlayer((unsigned int) pMsg->source, "it is not nice to cheat!", ERROR_CHEAT);
-					debug(LOG_ERROR, "%s", msg);
-					return true;
-
+					ssprintf(buf, "!!>Msg: %hhu was detected from a non-host player %hhu (%s), IP:%s", pMsg->type, chump, NetPlay.players[chump].name, NetPlay.players[chump].IPtextAddress);
+					NETlogEntry(buf, SYNC_FLAG, chump);
+					ssprintf(buf, "Auto kicking player %s for cheating", NetPlay.players[chump].name);
+					sendTextMessage(buf, true);
+					kickPlayer(chump, buf, KICK_TYPE);
+					return false;
 				}
 
-				NETlogPacket(pMsg->type, pMsg->size, true);		// log packet that we received
-				Sbytes = pMsg->size;
-				pMsg->size = htons(pMsg->size);			// convert back to network byte order when sending
-
-				// we are the host, and have received a broadcast packet; distribute it
-				for (j = 0; j < MAX_CONNECTED_PLAYERS; ++j)
+				if (pMsg->destination == NET_ALL_PLAYERS)
 				{
-					if (   j != current
-					    && connected_bsocket[j] != NULL
-					    && connected_bsocket[j]->socket != NULL)
-					{
-						if (writeAll(connected_bsocket[j]->socket, pMsg, size) == SOCKET_ERROR)
-						{
-							// Write error, most likely client disconnect.
-							debug(LOG_ERROR, "Failed to send message (host broadcast): %s", strSockError(getSockErr()));
-							NETplayerClientDisconnect(j);
-						}
-						NETlogPacket(pMsg->type, Sbytes, false);				// and since we are sending it out again, log it.
-					}
-				}
-			}
-			else if (pMsg->destination != selectedPlayer && pMsg->destination < MAX_CONNECTED_PLAYERS)
-			{
-				// message was not meant for us; send it further
-				if (   pMsg->destination < MAX_CONNECTED_PLAYERS
-				    && connected_bsocket[pMsg->destination] != NULL
-				    && connected_bsocket[pMsg->destination]->socket != NULL)
-				{
-					debug(LOG_NET, "Reflecting message type %hhu to %hhu", pMsg->type, pMsg->destination);
-
 					NETlogPacket(pMsg->type, pMsg->size, true);		// log packet that we received
-					NETlogPacket(pMsg->type, pMsg->size, false);	// log packet that we are sending out
-					pMsg->size = htons(pMsg->size);	// convert back to network byte order when sending
+					Sbytes = pMsg->size;
+					pMsg->size = htons(pMsg->size);			// convert back to network byte order when sending
 
-					if (writeAll(connected_bsocket[pMsg->destination]->socket, pMsg, size) == SOCKET_ERROR)
+					// we are the host, and have received a broadcast packet; distribute it
+					for (j = 0; j < MAX_CONNECTED_PLAYERS; ++j)
 					{
-						// Write error, most likely client disconnect.
-						debug(LOG_ERROR, "Failed to send message (host specific): %s", strSockError(getSockErr()));
-						NETplayerClientDisconnect(pMsg->destination);
+						if (j != current
+							&& connected_bsocket[j] != NULL
+							&& connected_bsocket[j]->socket != NULL)
+						{
+							// spams way too much to be useful for LOG_NET, but ON for testing!
+							// debug(LOG_NET, "broadcast (%hhu) message type %hhu to %u", pMsg->destination, pMsg->type, j);
+							if (writeAll(connected_bsocket[j]->socket, pMsg, size) == SOCKET_ERROR)
+							{
+								// Write error, most likely client disconnect.
+								debug(LOG_ERROR, "Failed to send message (host broadcast): %s", strSockError(getSockErr()));
+								NETplayerClientDisconnect(j);
+							}
+							NETlogPacket(pMsg->type, Sbytes, false);				// and since we are sending it out again, log it.
+						}
 					}
 				}
 				else
-				{
-					debug(LOG_NET, "Cannot reflect message type %hhu to %hhu", pMsg->type, pMsg->destination);
+				{	// route to specific player
+					if (connected_bsocket[pMsg->destination] != NULL && connected_bsocket[pMsg->destination]->socket != NULL)
+					{
+						// spams way too much to be useful for LOG_NET, but ON for testing!
+						// debug(LOG_NET, "Reflecting message type %hhu to %hhu", pMsg->type, pMsg->destination);
+
+						NETlogPacket(pMsg->type, pMsg->size, true);		// log packet that we received
+						NETlogPacket(pMsg->type, pMsg->size, false);	// log packet that we are sending out
+						pMsg->size = htons(pMsg->size);	// convert back to network byte order when sending
+
+						if (writeAll(connected_bsocket[pMsg->destination]->socket, pMsg, size) == SOCKET_ERROR)
+						{
+							// Write error, most likely client disconnect.
+							debug(LOG_ERROR, "Failed to send message (host specific): %s", strSockError(getSockErr()));
+							NETplayerClientDisconnect(pMsg->destination);
+						}
+					}
+					else
+					{
+						debug(LOG_NET, "Cannot reflect message type %hhu to %hhu", pMsg->type, pMsg->destination);
+					}
+
+					goto receive_message;
 				}
-
-				goto receive_message;
 			}
-
-			nStats.bytesRecvd   += size;
-			nStats.packetsRecvd += 1;
+			else if (pMsg->destination > MAX_PLAYERS)
+			{
+				ASSERT (false, "destination player (%hhu) socket is invalid!", pMsg->destination);
+			}
+		nStats.bytesRecvd += size;
+		nStats.packetsRecvd++;
 		}
 
 	} while (NETprocessSystemMessage() == true);
@@ -3508,7 +3569,7 @@ static void NETallowJoining(void)
 
 					debug(LOG_NET, "freeing temp socket %p (%d), creating permanent socket.", tmp_socket[i], __LINE__);
 					SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
-					NET_initBufferedSocket(connected_bsocket[index], tmp_socket[i]);
+					NET_initBufferedSocket(connected_bsocket[index], tmp_socket[i], index);
 					SocketSet_AddSocket(socket_set, connected_bsocket[index]->socket);
 					tmp_socket[i] = NULL;
 
@@ -3568,8 +3629,6 @@ static void NETallowJoining(void)
 
 					// First send info about players to newcomer.
 					NETSendAllPlayerInfoTo(index);
-					// then send info about newcomer to all players.
-					NETBroadcastPlayerInfo(index);
 
 					debug(LOG_NET, "Player, %s, with index of %u has joined using socket %p", name,
 					      (unsigned int)index, connected_bsocket[index]->socket);
@@ -3988,7 +4047,7 @@ connect_succesfull:
 	// Allocate memory for a new socket
 	bsocket = NET_createBufferedSocket();
 	// NOTE: tcp_socket = bsocket->socket now!
-	NET_initBufferedSocket(bsocket, tcp_socket);
+	NET_initBufferedSocket(bsocket, tcp_socket, selectedPlayer);
 
 	// Send a join message to the host
 	NETbeginEncode(NET_JOIN, NET_HOST_ONLY);

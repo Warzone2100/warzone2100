@@ -320,6 +320,12 @@ bool recvDataCheck(void)
 	uint32_t	player;
 	uint32_t tempBuffer[DATA_MAXDATA] = {0};
 
+	if(!NetPlay.isHost)				// only host should act
+	{
+		ASSERT(false, "Host only routine detected for client!");
+		return false;
+	}
+
 	NETbeginDecode(NET_DATA_CHECK);
 	for(i = 0; i < DATA_MAXDATA; i++)
 	{
@@ -333,6 +339,13 @@ bool recvDataCheck(void)
 		debug(LOG_ERROR, "invalid player number (%u) detected.", player);
 		return false;
 	}
+
+	if (whosResponsible(player) != NetMsg.source)
+	{
+		HandleBadParam("NET_DATA_CHECK given incorrect params.", player, NetMsg.source);
+		return false;
+	}
+
 	debug(LOG_NET, "** Received NET_DATA_CHECK from player %u", player);
 	if (NetPlay.isHost)
 	{

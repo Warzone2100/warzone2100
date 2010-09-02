@@ -704,6 +704,12 @@ BOOL recvMessage(void)
 			}
 			NETend();
 
+			if (whosResponsible(player_id) != NetMsg.source)
+			{
+				HandleBadParam("NET_PLAYER_DROPPED given incorrect params.", player_id, NetMsg.source);
+				break;
+			}
+
 			debug(LOG_INFO,"** player %u has dropped!", player_id);
 
 			MultiPlayerLeave(player_id);		// get rid of their stuff
@@ -740,12 +746,14 @@ BOOL recvMessage(void)
 			recvTeamRequest();
 			break;
 		case NET_READY_REQUEST:
-			recvReadyRequest();
-
-			// if hosting try to start the game if everyone is ready
-			if(NetPlay.isHost && multiplayPlayersReady(false))
+			if (NetPlay.isHost)
 			{
-				startMultiplayerGame();
+				recvReadyRequest();
+				if (multiplayPlayersReady(false))
+				{
+					// if hosting try to start the game if everyone is ready
+					startMultiplayerGame();
+				}
 			}
 			break;
 		case NET_ARTIFACTS:
@@ -762,10 +770,12 @@ BOOL recvMessage(void)
 			// In game kick
 			uint32_t player_id;
 			char reason[MAX_KICK_REASON];
+			LOBBY_ERROR_TYPES KICK_TYPE = ERROR_NOERROR;
 
 			NETbeginDecode(NET_KICK);
 				NETuint32_t(&player_id);
 				NETstring( reason, MAX_KICK_REASON);
+				NETenum(&KICK_TYPE);
 			NETend();
 
 			if (NetMsg.source != NET_HOST_ONLY)
@@ -775,9 +785,9 @@ BOOL recvMessage(void)
 				ssprintf(buf, "Player %d (%s : %s) tried to kick %u", (int) NetMsg.source, NetPlay.players[NetMsg.source].name, NetPlay.players[NetMsg.source].IPtextAddress, player_id);
 				NETlogEntry(buf, SYNC_FLAG, 0);
 				debug(LOG_ERROR, "%s", buf); 
-				if (player_id == NET_HOST_ONLY && NetPlay.isHost)
+				if (NetPlay.isHost)
 				{
-					NETplayerKicked((unsigned int) NetMsg.source);
+					kickPlayer(NetMsg.source, reason, KICK_TYPE);
 				}
 				break;
 			}
@@ -1605,10 +1615,10 @@ BOOL recvMapFileRequested()
 	PHYSFS_sint64 fileSize_64;
 	PHYSFS_file	*pFileHandle;
 
-	// We are not the host, so we don't care. (in fact, this would be a error)
-	if(!NetPlay.isHost)
+	if(!NetPlay.isHost)				// only host should act
 	{
-		return true;
+		ASSERT(false, "Host only routine detected for client!");
+		return false;
 	}
 
 	//	Check to see who wants the file
