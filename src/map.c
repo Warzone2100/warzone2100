@@ -163,8 +163,13 @@ BOOL mapNew(UDWORD width, UDWORD height)
 
 	if (width*height > MAP_MAXAREA)
 	{
-		debug(LOG_ERROR, "map too large : %u %u", width, height);
+		debug(LOG_ERROR, "Map too large : %u %u", width, height);
+		return false;
+	}
 
+	if (width <=1 || height <=1)
+	{
+		debug(LOG_ERROR, "Map is too small : %u, %u", width, height);
 		return false;
 	}
 
@@ -779,6 +784,12 @@ BOOL mapLoad(char *filename)
 	{
 		debug(LOG_ERROR, "Map %s too large : %d %d", filename, width, height);
 		goto failure;
+	}
+
+	if (width <=1 || height <=1)
+	{
+		debug(LOG_ERROR, "Map is too small : %u, %u", width, height);
+		return false;
 	}
 
 	/* See if this is the first time a map has been loaded */
