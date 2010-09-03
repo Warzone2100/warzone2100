@@ -1,4 +1,4 @@
-2010-00-00: Version 2.3.5RC
+2010-09-02: Version 2.3.5RC
  * General:
    * Change: Show a placeholder video of where to get the videos when they were not installed (r11566, ticket:2052)
    * Change: Don't allow sensor/weapon range display in MP games (r11501)
