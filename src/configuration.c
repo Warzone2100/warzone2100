@@ -353,7 +353,7 @@ BOOL loadConfig(void)
 	}
 	else
 	{
-		war_SetFMVmode(FMV_1X);
+		war_SetFMVmode(FMV_2X);
 	}
 
 	// //////////////////////////
