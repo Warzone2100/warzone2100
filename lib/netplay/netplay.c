@@ -2702,9 +2702,14 @@ static BOOL NETprocessSystemMessage(void)
 				NETend();
 			}
 
+			netPlayersUpdated = true;
 			debug(LOG_INFO, "Player %u has left the game.", index);
 			NETplayerLeaving(index);		// need to close socket for the player that left.
 			NET_PlayerConnectionStatus = 1;		// LEAVING_NICELY
+			if (NetPlay.isHost)
+			{
+				NETSendAllPlayerInfoTo(NET_ALL_PLAYERS); // tell everyone else
+			}
 			break;
 		}
 		case NET_GAME_FLAGS:
@@ -2737,7 +2742,10 @@ static BOOL NETprocessSystemMessage(void)
  			if (NetPlay.isHost)
  			{
 				NETsendGameFlags();
+				NETSendAllPlayerInfoTo(NET_ALL_PLAYERS);
 			}
+
+			netPlayersUpdated = true;
 			break;
 		}
 
@@ -3660,6 +3668,7 @@ static void NETallowJoining(void)
 					// Make sure the master server gets updated by disconnecting from it
 					// NETallowJoining will reconnect
 					NETregisterServer(0);
+					NETSendAllPlayerInfoTo(NET_ALL_PLAYERS);	// tell everyone about it
 					// reset flags for new players
 					NetPlay.players[index].wzFile.isCancelled = false;
 					NetPlay.players[index].wzFile.isSending = false;
