@@ -1,7 +1,7 @@
 2010-09-04: Version 2.3.5_RC2
  * Multiplayer:
-   Fix: Player Lobby is updated when it should be updated. (r11586, ticket:2136)
-   Fix: Tech-tree should be fixed (r11588, ticket:2134)
+   * Fix: Player Lobby is updated when it should be updated. (r11586, ticket:2136)
+   * Fix: Tech-tree should be fixed (r11588, ticket:2134)
 
 2010-09-02: Version 2.3.5RC
  * General:
