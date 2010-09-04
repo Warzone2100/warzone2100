@@ -37,10 +37,10 @@
   OutFile "${OUTFILE}"
 
   ;Default installation folder
-  InstallDir "$PROGRAMFILES\${PACKAGE_NAME}"
+  InstallDir "$PROGRAMFILES\${PACKAGE_NAME} Trunk"
 
   ;Get installation folder from registry if available
-  InstallDirRegKey HKLM "Software\${PACKAGE_NAME}" ""
+  InstallDirRegKey HKLM "Software\${PACKAGE_NAME} Trunk" ""
 
   ;Request application privileges for Windows Vista
   RequestExecutionLevel admin
