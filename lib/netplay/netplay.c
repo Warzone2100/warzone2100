@@ -4056,6 +4056,12 @@ connect_succesfull:
 	// Allocate memory for a new socket
 	bsocket = NET_createBufferedSocket();
 	// NOTE: tcp_socket = bsocket->socket now!
+	if (!tcp_socket)
+	{
+		debug(LOG_NET, "tcp_socket was cleared ?");
+		return false;
+	}
+
 	NET_initBufferedSocket(bsocket, tcp_socket, selectedPlayer);
 
 	// Send a join message to the host
