@@ -54,7 +54,7 @@
        * Prerequisites: Lancer
    * Machinegun is now less overpowered in the early-game:
      * HMG now requires APDSB Mk2 instead of TMG
-     * APDSB Mk1 now requires TMG instead of APDSB Mk1
+     * APDSB Mk2 now requires TMG instead of APDSB Mk1
      * Flamer now requires Engineering instead of FIE+MG
    * The "mini-rocket" and "rocket" subclasses have been merged:
      * Mini-rockets and rockets are now affected by the same upgrades
