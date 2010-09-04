@@ -424,7 +424,7 @@ Emplacement-Rocket06-IDF		_("Ripple Rocket Battery")
 //Tower-Missile2				_("Mini-Rocket Guard Tower")
 Tower-VulcanCan				_("Assault Cannon Guard Tower")
 Tower-RotMg				_("Assault Gun Emplacement")
-Wall-RotMg				"*NOT USED Assault Gun Hardpoint*"
+Wall-RotMg				_("Assault Gun Hardpoint")
 Wall-VulcanCan				_("Assault Cannon Hardpoint")
 
 /*SENSOR TOWERS*/
@@ -781,7 +781,7 @@ R-Defense-WallTower03			_("Medium Cannon Hardpoint")
 R-Defense-WallTower04			_("Heavy Cannon Hardpoint")
 R-Defense-WallTower05			_("Flamer Hardpoint")
 R-Defense-WallTower06			_("Lancer Hardpoint")
-R-Defense-Wall-RotMg			"*NOT USED Assault Gun Hardpoint*"
+R-Defense-Wall-RotMg			_("Assault Gun Hardpoint")
 R-Defense-Wall-VulcanCan		_("Assault Cannon Hardpoint")
 R-Defense-WallTower-A-Tmiss		_("Scourge Missile Hardpoint")
 R-Defense-WallTower-HvyFlamer		"*NOT USED Inferno Hardpoint*"
