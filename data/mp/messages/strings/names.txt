@@ -551,6 +551,7 @@ CommandTurret1				_("Command Turret")
 
 AAGun1Mk1					_("Tornado Flak Turret")
 AAGun2Mk1					_("AA Flak Cannon")
+AAGun2Mk1-VTOL				_("VTOL Flak Cannon")
 
 //Supergun					"*Supergun*"
 PlasmaHeavy					"*Heavy Plasma Launcher*"
@@ -1723,6 +1724,7 @@ Emplacement-PlasmaCannon		_("Plasma Cannon Emplacement")
 
 R-Wpn-Sunburst			_("Sunburst AA Rocket Array")
 Rocket-Sunburst			_("Sunburst AA")
+Rocket-VTOL-Sunburst		_("VTOL Sunburst AA")
 R-Defense-Sunburst			_("Sunburst AA Site")
 P0-AASite-Sunburst			_("Sunburst AA Site")
 
