@@ -281,6 +281,7 @@ BOOL mapLoad(char *pFileData, UDWORD fileSize)
 	if (width <=1 || height <=1)
 	{
 		debug(LOG_ERROR, "Map is too small : %u, %u", width, height);
+		free(pFileData);
 		return false;
 	}
 
