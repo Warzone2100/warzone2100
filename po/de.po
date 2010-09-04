@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2010-09-04 11:53+0200\n"
-"PO-Revision-Date: 2010-08-28 14:30+0200\n"
+"PO-Revision-Date: 2010-09-04 12:44+0200\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
 "Language: \n"
@@ -3291,7 +3291,7 @@ msgstr "Alle Radfahrzeuge wurden automatisch aufgerüstet"
 #: data/mp/messages/strings/resstrings.txt:680
 #: data/mp/messages/strings/resstrings.txt:686
 msgid "New AA Turret Available"
-msgstr "Neuer FLAK-Turm verfügbar"
+msgstr "Neuer Luftabwehrturm verfügbar"
 
 #: data/base/messages/resmessages2.rmsg:590
 #: data/base/messages/strings/resstrings.txt:636
@@ -10974,7 +10974,6 @@ msgid "Armour +35%, Body Points +30%"
 msgstr "Panzerung +35%, Rumpfpunkte +30%"
 
 #: data/mp/messages/resmessages1.rmsg:122
-#, fuzzy
 msgid "Armored guard tower with Mini-Rocket Pod"
 msgstr "Gepanzerter Wachturm mit Miniraketen"
 
@@ -11147,9 +11146,8 @@ msgid "Howitzer reload time -10%"
 msgstr "Haubitzennachladezeit -10%"
 
 #: data/mp/messages/resmessages2.rmsg:928
-#, fuzzy
 msgid "High Explosive Anti-Tank warheads"
-msgstr "Hochexplosiver Antipanzer-Sprengkopf"
+msgstr "Hochexplosive Antipanzer-Sprengköpfe"
 
 #: data/mp/messages/resmessages3.rmsg:6
 msgid "Thermal Armor +35%"
@@ -11572,9 +11570,8 @@ msgstr "NEXUS-Link-Turm"
 
 #: data/mp/messages/strings/names.txt:404
 #: data/mp/messages/strings/names.txt:724
-#, fuzzy
 msgid "Hardcrete Gate"
-msgstr "Hartbetonmauer"
+msgstr "Hartbetontor"
 
 #: data/mp/messages/strings/names.txt:410
 #: data/mp/messages/strings/names.txt:735
@@ -11587,9 +11584,8 @@ msgstr "Luftabwehrstellung mit Tornado"
 
 #: data/mp/messages/strings/names.txt:418
 #: data/mp/messages/strings/names.txt:726
-#, fuzzy
 msgid "AA Flak Cannon Emplacement"
-msgstr "Stellung mit Plasmakanone"
+msgstr "Stellung mit Luftabwehrgeschütz"
 
 #: data/mp/messages/strings/names.txt:474
 #: data/mp/messages/strings/names.txt:790
@@ -11613,9 +11609,8 @@ msgstr "Miniraketen-Anordnung"
 
 #: data/mp/messages/strings/names.txt:553
 #: data/mp/messages/strings/names.txt:997
-#, fuzzy
 msgid "AA Flak Cannon"
-msgstr "Plasmakanone"
+msgstr "Luftabwehrgeschütz"
 
 #: data/mp/messages/strings/names.txt:566
 #: data/mp/messages/strings/names.txt:1698
@@ -11770,24 +11765,20 @@ msgid "Rail Target Prediction Computer"
 msgstr "Computer für Zielvorhersage von Magnetgeschossen"
 
 #: data/mp/messages/strings/names.txt:1169
-#, fuzzy
 msgid "Stabilized Rockets"
-msgstr "Stabilisierte Miniraketen"
+msgstr "Stabilisierte Raketen"
 
 #: data/mp/messages/strings/names.txt:1173
-#, fuzzy
 msgid "HE Rockets"
-msgstr "Hochexplosive Miniraketen"
+msgstr "Hochexplosive Raketen"
 
 #: data/mp/messages/strings/names.txt:1174
-#, fuzzy
 msgid "HE Rockets Mk2"
-msgstr "Hochexplosive Miniraketen Mk2"
+msgstr "Hochexplosive Raketen Mk2"
 
 #: data/mp/messages/strings/names.txt:1175
-#, fuzzy
 msgid "HE Rockets Mk3"
-msgstr "Hochexplosive Miniraketen Mk3"
+msgstr "Hochexplosive Raketen Mk3"
 
 #: data/mp/messages/strings/names.txt:1388
 msgid "Assault Gun Tower"
@@ -11802,9 +11793,8 @@ msgid "Hyper Velocity Cannon Python Tracks"
 msgstr "Hochgeschwindigkeitsgeschütz Python Ketten"
 
 #: data/mp/messages/strings/names.txt:1479
-#, fuzzy
 msgid "AA Flak Cannon Python Half-tracks"
-msgstr "Schweres Geschütz Python Ketten"
+msgstr "Luftabwehrgeschütz Python Ketten"
 
 #: data/mp/messages/strings/names.txt:1517
 msgid "Bunker Buster Cobra Hover"
@@ -11983,19 +11973,17 @@ msgid "Plasma Cannon Emplacement"
 msgstr "Stellung mit Plasmakanone"
 
 #: data/mp/messages/strings/names.txt:1724
-#, fuzzy
 msgid "Sunburst AA Rocket Array"
-msgstr "Miniraketen-Anordnung"
+msgstr "Anordnung mit Sunburst-Luftabwehrrakete"
 
 #: data/mp/messages/strings/names.txt:1725
 msgid "Sunburst AA"
-msgstr ""
+msgstr "Sunburst-Luftabwehrrakete"
 
 #: data/mp/messages/strings/names.txt:1726
 #: data/mp/messages/strings/names.txt:1727
-#, fuzzy
 msgid "Sunburst AA Site"
-msgstr "Luftabwehrstellung mit Hurricane FLAK"
+msgstr "Luftabwehrstellung mit Sunburst"
 
 #: data/mp/messages/strings/names.txt:1729
 #: data/mp/messages/strings/names.txt:1730
@@ -12120,9 +12108,8 @@ msgstr "Aufhängung mit Whirlwind"
 
 #: data/mp/messages/strings/names.txt:1796
 #: data/mp/messages/strings/names.txt:1797
-#, fuzzy
 msgid "AA Flak Cannon Hardpoint"
-msgstr "Aufhängung mit Sturmgeschütz"
+msgstr "Aufhängung mit Luftabwehrgeschütz"
 
 #: data/mp/messages/strings/names.txt:1798
 #: data/mp/messages/strings/names.txt:1799
@@ -12191,9 +12178,8 @@ msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Hochgeschwindigkeitsgeschütz Python Hover"
 
 #: data/mp/messages/strings/names.txt:1965
-#, fuzzy
 msgid "Plasmite Retribution VTOL"
-msgstr "VTOL-Bombenabwurfschacht für hochexplosive, panzerbrechende Bomben Retribution VTOL"
+msgstr "Plasmit-Flammenwerfer Retribution VTOL"
 
 #: lib/framework/i18n.c:90
 #: lib/framework/i18n.c:149
