@@ -1,7 +1,23 @@
+2010-00-00: Version 2.3.5_RC3
+ * Balance (r11600, r11603, r11607):
+   * Decrease ground-to-air damage modifier of minipod, lancer/TK/scourge cyborgs/VTOLs, Sunburst, and Flak Cannon from 100% to 80%.
+   * Add air-to-air versions of Sunburst and Flak Cannon
+   * Increase research/manufacture/build price of Sunburst and Flak Cannon by a lot, to offset the fact that you don't have to upgrade them separately
+
 2010-09-04: Version 2.3.5_RC2
  * Multiplayer:
    * Fix: Player Lobby is updated when it should be updated. (r11586, ticket:2136)
    * Fix: Tech-tree should be fixed (r11588, ticket:2134)
+ * Balance (r11570):
+   * Removed Cyclone turret
+   * Added: AA Flak Cannon (and Emplacement and Hardpoint)
+     * Flak Cannon is a medium-reload splash weapon
+     * Prerequisites: HPV
+   * Added: Sunburst AA Rocket Array (and Site)
+     * Sunburst is a slow-reload salvo weapon
+     * Prerequisites: Lancer
+   * Lancer damage toned down a bit
+   * Heavy Laser damage increased a bit
 
 2010-09-02: Version 2.3.5RC
  * General:
