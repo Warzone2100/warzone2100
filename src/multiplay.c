@@ -722,7 +722,7 @@ BOOL recvMessage(void)
 			}
 			NETend();
 
-			if (whosResponsible(player_id) != NetMsg.source)
+			if (whosResponsible(player_id) != NetMsg.source && NetMsg.source != NET_HOST_ONLY)
 			{
 				HandleBadParam("NET_PLAYER_DROPPED given incorrect params.", player_id, NetMsg.source);
 				break;

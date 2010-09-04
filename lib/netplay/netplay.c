@@ -2672,7 +2672,7 @@ static BOOL NETprocessSystemMessage(void)
 				NETuint32_t(&index);
 			NETend();
 
-			if (whosResponsible(index) != NetMsg.source)
+			if (whosResponsible(index) != NetMsg.source && NetMsg.source != NET_HOST_ONLY)
 			{
 				HandleBadParam("NET_PLAYER_LEAVING given incorrect params.", index, NetMsg.source);
 				break;
@@ -2963,7 +2963,7 @@ receive_message:
 							&& connected_bsocket[j]->socket != NULL)
 						{
 							// spams way too much to be useful for LOG_NET, but ON for testing!
-							// debug(LOG_NET, "broadcast (%hhu) message type %hhu to %u", pMsg->destination, pMsg->type, j);
+							// debug(LOG_NET, "*** broadcast (%hhu) message type %hhu to %u", pMsg->destination, pMsg->type, j);
 							if (writeAll(connected_bsocket[j]->socket, pMsg, size) == SOCKET_ERROR)
 							{
 								// Write error, most likely client disconnect.
@@ -2979,7 +2979,7 @@ receive_message:
 					if (connected_bsocket[pMsg->destination] != NULL && connected_bsocket[pMsg->destination]->socket != NULL)
 					{
 						// spams way too much to be useful for LOG_NET, but ON for testing!
-						// debug(LOG_NET, "Reflecting message type %hhu to %hhu", pMsg->type, pMsg->destination);
+						//debug(LOG_NET, ">>>Reflecting message type %hhu to %hhu", pMsg->type, pMsg->destination);
 
 						NETlogPacket(pMsg->type, pMsg->size, true);		// log packet that we received
 						NETlogPacket(pMsg->type, pMsg->size, false);	// log packet that we are sending out
