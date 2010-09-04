@@ -562,7 +562,7 @@ void runConnectionScreen(void )
 			break;
 		case CON_TYPESID_START+0: // Lobby button
 			NETsetupTCPIP(""); //inet
-			if ((LobbyError != ERROR_KICKED) && (LobbyError != ERROR_CHEAT))
+			if (LobbyError != ERROR_CHEAT)
 			{
 				setLobbyError(ERROR_NOERROR);
 			}

@@ -376,7 +376,7 @@ BOOL runMultiPlayerMenu(void)
 		ingame.bHostSetup = false;
 		bMultiPlayer = true;
 		bMultiMessages = true;
-		if (getLobbyError() != ERROR_CHEAT && getLobbyError() != ERROR_KICKED)
+		if (getLobbyError() != ERROR_CHEAT)
 		{
 			setLobbyError(ERROR_NOERROR);
 		}
