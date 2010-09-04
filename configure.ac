@@ -190,7 +190,7 @@ AC_ARG_ENABLE([static],
 if test "x$enable_static" = "xyes" ; then
 	# Add libs where even pkg-config cannot help statically linking them,
 	# where one would otherwise have to provide them via commandline
-	WIN32_LIBS="${WIN32_LIBS} -lintl -liconv"
+	WIN32_LIBS="${WIN32_LIBS} -lz -lintl -liconv"
 	# Tell pkg-config to link against static libraries, incl. all dependencies
 	PKG_CONFIG="${PKG_CONFIG} --static"
 fi
