@@ -229,9 +229,9 @@ else
 	WZ_Wno_="-Wno-"
 fi
 
-WZ_WARNINGS_GCC="-Wall -Wextra ${WZ_Wno_}unused-parameter ${WZ_Wno_}sign-compare ${WZ_Wno_}clobbered ${WZ_Wno_}type-limits -Wcast-align -Wwrite-strings -Wmissing-declarations -Wpointer-arith ${WZ_Wno_}format-security"
+WZ_WARNINGS_GCC="-Wall -Wextra ${WZ_Wno_}unused-parameter ${WZ_Wno_}sign-compare -Wcast-align -Wwrite-strings -Wpointer-arith ${WZ_Wno_}format-security"
 WZ_WARNINGS_GCC_C="${WZ_WARNINGS_GCC} ${WZ_Wno_}pointer-to-int-cast ${WZ_Wno_}strict-aliasing -Wstrict-prototypes -Wdeclaration-after-statement -Wc++-compat ${WZ_Wno_}c++-compat ${CFLAGS_IGNORE_WARNINGS}"
-WZ_WARNINGS_GCC_CXX="${WZ_WARNINGS_GCC} -Wc++0x-compat"
+WZ_WARNINGS_GCC_CXX="${WZ_WARNINGS_GCC}"
 if test "x$enable_debug" = "xyes" ; then
 	if test "x$cc_icc" = "xyes" ; then
 		# "-fp-model precise -fp-model source -ftz -no-fma" was here
