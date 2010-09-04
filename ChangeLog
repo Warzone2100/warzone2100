@@ -1,4 +1,8 @@
-2010-00-00: Version 2.3.5_RC3
+2010-09-04: Version 2.3.5_RC3
+ * Multiplayer:
+   * Fix: Client side messages.  (r11601, ticket:2144)
+   * Change: When people are kicked, don't lock them out of all games. (r11605)
+   * Change: Don't allow Hosts to kick AIs if they are in a skirmish game, unless they are in cheat mode. (r11596, ticket:2139)
  * Balance (r11600, r11603, r11607):
    * Decrease ground-to-air damage modifier of minipod, lancer/TK/scourge cyborgs/VTOLs, Sunburst, and Flak Cannon from 100% to 80%.
    * Add air-to-air versions of Sunburst and Flak Cannon
