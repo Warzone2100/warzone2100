@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2010-09-05 13:34+0200\n"
-"PO-Revision-Date: 2010-09-04 12:44+0200\n"
+"PO-Revision-Date: 2010-09-05 14:22+0200\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
 "Language: \n"
@@ -11615,9 +11615,8 @@ msgid "AA Flak Cannon"
 msgstr "Luftabwehrgeschütz"
 
 #: data/mp/messages/strings/names.txt:554
-#, fuzzy
 msgid "VTOL Flak Cannon"
-msgstr "VTOL-Geschütz"
+msgstr "VTOL-Luftabwehrgeschütz"
 
 #: data/mp/messages/strings/names.txt:567
 #: data/mp/messages/strings/names.txt:1699
@@ -11988,9 +11987,8 @@ msgid "Sunburst AA"
 msgstr "Sunburst-Luftabwehrrakete"
 
 #: data/mp/messages/strings/names.txt:1727
-#, fuzzy
 msgid "VTOL Sunburst AA"
-msgstr "Sunburst-Luftabwehrrakete"
+msgstr "VTOL-Sunburst-Luftabwehrrakete"
 
 #: data/mp/messages/strings/names.txt:1728
 #: data/mp/messages/strings/names.txt:1729
