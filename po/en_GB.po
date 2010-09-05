@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-09-04 11:53+0200\n"
+"POT-Creation-Date: 2010-09-05 13:34+0200\n"
 "PO-Revision-Date: 2008-05-05 12:29+0000\n"
 "Last-Translator: Jen Ockwell <jenfraggleubuntu@googlemail.com>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
@@ -1620,7 +1620,7 @@ msgstr "All Cyborg factories upgraded automatically"
 #: data/base/messages/strings/names.txt:782
 #: data/mp/messages/resmessages1.rmsg:291
 #: data/mp/messages/strings/names.txt:407
-#: data/mp/messages/strings/names.txt:796
+#: data/mp/messages/strings/names.txt:797
 msgid "Cyborg Factory"
 msgstr "Cyborg Factory"
 
@@ -1781,7 +1781,7 @@ msgstr "Increases Damage Resistance"
 #: data/base/messages/resmessages1.rmsg:369
 #: data/base/messages/strings/names.txt:805
 #: data/mp/messages/resmessages1.rmsg:370
-#: data/mp/messages/strings/names.txt:819
+#: data/mp/messages/strings/names.txt:820
 msgid "Reinforced Base Structure Materials"
 msgstr "Reinforced Base Structure Materials"
 
@@ -1954,7 +1954,7 @@ msgstr "Vehicle Engine Upgrade"
 #: data/base/messages/resmessages1.rmsg:460
 #: data/base/messages/strings/names.txt:942
 #: data/mp/messages/resmessages1.rmsg:461
-#: data/mp/messages/strings/names.txt:958
+#: data/mp/messages/strings/names.txt:959
 msgid "Fuel Injection Engine"
 msgstr "Fuel Injection Engine"
 
@@ -2111,7 +2111,7 @@ msgstr "Speed: Slow"
 #: data/base/messages/resmessages1.rmsg:525
 #: data/base/messages/strings/names.txt:976
 #: data/mp/messages/resmessages1.rmsg:526
-#: data/mp/messages/strings/names.txt:992
+#: data/mp/messages/strings/names.txt:993
 msgid "Wheeled Propulsion"
 msgstr "Wheeled Propulsion"
 
@@ -2984,7 +2984,7 @@ msgstr "Increases factory production rate"
 #: data/base/messages/strings/names.txt:835
 #: data/base/messages/strings/resstrings.txt:390
 #: data/mp/messages/resmessages2.rmsg:369
-#: data/mp/messages/strings/names.txt:849
+#: data/mp/messages/strings/names.txt:850
 #: data/mp/messages/strings/resstrings.txt:416
 msgid "Dedicated Synaptic Link Data Analysis"
 msgstr "Dedicated Synaptic Link Data Analysis"
@@ -2993,7 +2993,7 @@ msgstr "Dedicated Synaptic Link Data Analysis"
 #: data/base/messages/strings/names.txt:808
 #: data/base/messages/strings/resstrings.txt:400
 #: data/mp/messages/resmessages2.rmsg:382
-#: data/mp/messages/strings/names.txt:822
+#: data/mp/messages/strings/names.txt:823
 #: data/mp/messages/strings/resstrings.txt:426
 msgid "Hardened Base Structure Materials"
 msgstr "Hardened Base Structure Materials"
@@ -3037,7 +3037,7 @@ msgstr "VTOL Rearming Times Reduced"
 #: data/base/messages/strings/names.txt:843
 #: data/base/messages/strings/resstrings.txt:422
 #: data/mp/messages/resmessages2.rmsg:408
-#: data/mp/messages/strings/names.txt:857
+#: data/mp/messages/strings/names.txt:858
 #: data/mp/messages/strings/resstrings.txt:448
 msgid "Automated VTOL Rearming"
 msgstr "Automated VTOL Rearming"
@@ -3168,7 +3168,7 @@ msgstr "High power costs and slower to produce than Cobra"
 #: data/base/messages/strings/names.txt:945
 #: data/base/messages/strings/resstrings.txt:560
 #: data/mp/messages/resmessages2.rmsg:499
-#: data/mp/messages/strings/names.txt:961
+#: data/mp/messages/strings/names.txt:962
 #: data/mp/messages/strings/resstrings.txt:593
 msgid "Turbo-Charged Engine"
 msgstr "Turbo-Charged Engine"
@@ -3845,14 +3845,14 @@ msgstr "Vapour Turbine boosts power output"
 #: data/base/messages/resmessages3.rmsg:447
 #: data/base/messages/strings/names.txt:838
 #: data/mp/messages/resmessages3.rmsg:447
-#: data/mp/messages/strings/names.txt:852
+#: data/mp/messages/strings/names.txt:853
 msgid "Neural Synapse Research Brain"
 msgstr "Neural Synapse Research Brain"
 
 #: data/base/messages/resmessages3.rmsg:460
 #: data/base/messages/strings/names.txt:811
 #: data/mp/messages/resmessages3.rmsg:460
-#: data/mp/messages/strings/names.txt:825
+#: data/mp/messages/strings/names.txt:826
 msgid "Advanced Base Structure Materials"
 msgstr "Advanced Base Structure Materials"
 
@@ -3870,7 +3870,7 @@ msgstr "Advanced VTOL Production"
 #: data/base/messages/resmessages3.rmsg:499
 #: data/base/messages/strings/names.txt:846
 #: data/mp/messages/resmessages3.rmsg:499
-#: data/mp/messages/strings/names.txt:860
+#: data/mp/messages/strings/names.txt:861
 msgid "Robotic VTOL Rearming"
 msgstr "Robotic VTOL Rearming"
 
@@ -4008,7 +4008,7 @@ msgstr "Very expensive to produce"
 #: data/base/messages/resmessages3.rmsg:668
 #: data/base/messages/strings/names.txt:948
 #: data/mp/messages/resmessages3.rmsg:668
-#: data/mp/messages/strings/names.txt:964
+#: data/mp/messages/strings/names.txt:965
 msgid "Gas Turbine Engine"
 msgstr "Gas Turbine Engine"
 
@@ -5760,7 +5760,7 @@ msgstr "Transport"
 #: data/mp/messages/strings/names.txt:16
 #: data/mp/messages/strings/names.txt:154
 #: data/mp/messages/strings/names.txt:314
-#: data/mp/messages/strings/names.txt:1476
+#: data/mp/messages/strings/names.txt:1477
 msgid "Truck"
 msgstr "Truck"
 
@@ -5769,7 +5769,7 @@ msgstr "Truck"
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1832
 #: data/mp/messages/strings/names.txt:17
 #: data/mp/messages/strings/names.txt:176
-#: data/mp/messages/strings/names.txt:1840
+#: data/mp/messages/strings/names.txt:1842
 msgid "Machinegun Viper Wheels"
 msgstr "Machinegun Viper Wheels"
 
@@ -5800,7 +5800,7 @@ msgstr "Viper Light Cannon Tracks"
 #: data/base/messages/strings/names.txt:148
 #: data/base/messages/strings/names.txt:1421
 #: data/mp/messages/strings/names.txt:149
-#: data/mp/messages/strings/names.txt:1440
+#: data/mp/messages/strings/names.txt:1441
 #, fuzzy
 msgid "Heavy Machinegun Cobra Half-tracks"
 msgstr "Cobra Heavy Machinegun Half-track"
@@ -5837,7 +5837,7 @@ msgstr "Viper Repair Half-track"
 #: data/base/messages/strings/names.txt:174
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1833
 #: data/mp/messages/strings/names.txt:177
-#: data/mp/messages/strings/names.txt:1841
+#: data/mp/messages/strings/names.txt:1843
 #, fuzzy
 msgid "Twin Machinegun Viper Wheels"
 msgstr "Machinegun Viper Wheels"
@@ -5857,7 +5857,7 @@ msgstr "Cobra Heavy Machinegun Half-track"
 #: data/base/messages/strings/names.txt:177
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1840
 #: data/mp/messages/strings/names.txt:180
-#: data/mp/messages/strings/names.txt:1848
+#: data/mp/messages/strings/names.txt:1850
 #, fuzzy
 msgid "Heavy Machinegun Viper Tracks"
 msgstr "Viper Heavy Machinegun Tracks"
@@ -5886,7 +5886,7 @@ msgstr "Viper Bunker Buster Rockets Wheels"
 
 #: data/base/messages/strings/names.txt:183
 #: data/mp/messages/strings/names.txt:186
-#: data/mp/messages/strings/names.txt:1365
+#: data/mp/messages/strings/names.txt:1366
 #, fuzzy
 msgid "Medium Cannon Cobra Tracks"
 msgstr "Viper Medium Cannon Tracks"
@@ -5900,7 +5900,7 @@ msgstr "Cobra Heavy Cannon Tracks"
 #: data/base/messages/strings/names.txt:185
 #: data/base/messages/strings/names.txt:1344
 #: data/mp/messages/strings/names.txt:188
-#: data/mp/messages/strings/names.txt:1363
+#: data/mp/messages/strings/names.txt:1364
 msgid "Cobra Truck"
 msgstr "Cobra Truck"
 
@@ -5911,7 +5911,7 @@ msgstr "Lancer Cobra Half-tracks"
 
 #: data/base/messages/strings/names.txt:187
 #: data/mp/messages/strings/names.txt:190
-#: data/mp/messages/strings/names.txt:1364
+#: data/mp/messages/strings/names.txt:1365
 #, fuzzy
 msgid "Flamer Cobra Tracks"
 msgstr "Repair Cobra Tracks"
@@ -5931,7 +5931,7 @@ msgstr "Cobra Command Turret Half-track"
 #: data/base/messages/strings/names.txt:190
 #: data/base/messages/strings/names.txt:1420
 #: data/mp/messages/strings/names.txt:193
-#: data/mp/messages/strings/names.txt:1439
+#: data/mp/messages/strings/names.txt:1440
 msgid "Lancer Cobra Half-tracks"
 msgstr "Lancer Cobra Half-tracks"
 
@@ -5950,7 +5950,7 @@ msgstr "HPV Cannon Python Tracks"
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1357
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1923
 #: data/mp/messages/strings/names.txt:197
-#: data/mp/messages/strings/names.txt:1931
+#: data/mp/messages/strings/names.txt:1933
 #, fuzzy
 msgid "Medium Cannon Python Tracks"
 msgstr "HPV Cannon Python Tracks"
@@ -5958,9 +5958,9 @@ msgstr "HPV Cannon Python Tracks"
 #: data/base/messages/strings/names.txt:195
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1848
 #: data/mp/messages/strings/names.txt:198
-#: data/mp/messages/strings/names.txt:1362
-#: data/mp/messages/strings/names.txt:1516
-#: data/mp/messages/strings/names.txt:1856
+#: data/mp/messages/strings/names.txt:1363
+#: data/mp/messages/strings/names.txt:1517
+#: data/mp/messages/strings/names.txt:1858
 #, fuzzy
 msgid "Heavy Cannon Python Tracks"
 msgstr "HPV Cannon Python Tracks"
@@ -5968,7 +5968,7 @@ msgstr "HPV Cannon Python Tracks"
 #: data/base/messages/strings/names.txt:196
 #: data/base/messages/strings/names.txt:1422
 #: data/mp/messages/strings/names.txt:199
-#: data/mp/messages/strings/names.txt:1441
+#: data/mp/messages/strings/names.txt:1442
 #, fuzzy
 msgid "Command Turret Python Tracks"
 msgstr "Commander Python Tracks"
@@ -6045,7 +6045,7 @@ msgstr "Machinegunner"
 #: data/mp/messages/strings/names.txt:216
 #: data/mp/messages/strings/names.txt:488
 #: data/mp/messages/strings/names.txt:546
-#: data/mp/messages/strings/names.txt:1074
+#: data/mp/messages/strings/names.txt:1075
 msgid "Flamer"
 msgstr "Flamer"
 
@@ -6155,7 +6155,7 @@ msgstr "Transport Body"
 #: data/base/messages/strings/names.txt:648
 #: data/mp/messages/strings/names.txt:303
 #: data/mp/messages/strings/names.txt:550
-#: data/mp/messages/strings/names.txt:656
+#: data/mp/messages/strings/names.txt:657
 msgid "Command Turret"
 msgstr "Command Turret"
 
@@ -6244,14 +6244,14 @@ msgstr "Half-tracks III"
 #: data/base/messages/strings/names.txt:330
 #: data/base/messages/strings/names.txt:693
 #: data/mp/messages/strings/names.txt:333
-#: data/mp/messages/strings/names.txt:703
+#: data/mp/messages/strings/names.txt:704
 msgid "Cyborg Propulsion II"
 msgstr "Cyborg Propulsion II"
 
 #: data/base/messages/strings/names.txt:331
 #: data/base/messages/strings/names.txt:694
 #: data/mp/messages/strings/names.txt:334
-#: data/mp/messages/strings/names.txt:704
+#: data/mp/messages/strings/names.txt:705
 msgid "Cyborg Propulsion III"
 msgstr "Cyborg Propulsion III"
 
@@ -6263,7 +6263,7 @@ msgstr ""
 #: data/base/messages/strings/names.txt:341
 #: data/base/messages/strings/names.txt:692
 #: data/mp/messages/strings/names.txt:344
-#: data/mp/messages/strings/names.txt:702
+#: data/mp/messages/strings/names.txt:703
 msgid "Cyborg Propulsion"
 msgstr "Cyborg Propulsion"
 
@@ -6278,7 +6278,7 @@ msgstr "Heavy Repair Turret"
 #: data/base/messages/strings/names.txt:888
 #: data/mp/messages/strings/names.txt:373
 #: data/mp/messages/strings/names.txt:431
-#: data/mp/messages/strings/names.txt:904
+#: data/mp/messages/strings/names.txt:905
 msgid "Sensor Tower"
 msgstr "Sensor Tower"
 
@@ -6287,14 +6287,14 @@ msgstr "Sensor Tower"
 #: data/base/messages/strings/names.txt:889
 #: data/mp/messages/strings/names.txt:374
 #: data/mp/messages/strings/names.txt:432
-#: data/mp/messages/strings/names.txt:905
+#: data/mp/messages/strings/names.txt:906
 msgid "Hardened Sensor Tower"
 msgstr "Hardened Sensor Tower"
 
 #: data/base/messages/strings/names.txt:369
 #: data/base/messages/strings/names.txt:887
 #: data/mp/messages/strings/names.txt:375
-#: data/mp/messages/strings/names.txt:903
+#: data/mp/messages/strings/names.txt:904
 msgid "Sensor Turret"
 msgstr "Sensor Turret"
 
@@ -6318,7 +6318,7 @@ msgstr "CB Radar Turret"
 #: data/base/messages/strings/names.txt:376
 #: data/base/messages/strings/names.txt:906
 #: data/mp/messages/strings/names.txt:383
-#: data/mp/messages/strings/names.txt:922
+#: data/mp/messages/strings/names.txt:923
 msgid "VTOL Strike Turret"
 msgstr "VTOL Strike Turret"
 
@@ -6354,7 +6354,7 @@ msgstr "Factory"
 #: data/base/messages/strings/names.txt:386
 #: data/base/messages/strings/names.txt:793
 #: data/mp/messages/strings/names.txt:393
-#: data/mp/messages/strings/names.txt:807
+#: data/mp/messages/strings/names.txt:808
 msgid "Factory Module"
 msgstr "Factory Module"
 
@@ -6366,7 +6366,7 @@ msgstr "Power Generator"
 #: data/base/messages/strings/names.txt:388
 #: data/base/messages/strings/names.txt:816
 #: data/mp/messages/strings/names.txt:395
-#: data/mp/messages/strings/names.txt:830
+#: data/mp/messages/strings/names.txt:831
 msgid "Power Module"
 msgstr "Power Module"
 
@@ -6378,7 +6378,7 @@ msgstr "Research Facility"
 #: data/base/messages/strings/names.txt:390
 #: data/base/messages/strings/names.txt:831
 #: data/mp/messages/strings/names.txt:397
-#: data/mp/messages/strings/names.txt:845
+#: data/mp/messages/strings/names.txt:846
 msgid "Research Module"
 msgstr "Research Module"
 
@@ -6390,7 +6390,7 @@ msgstr "Demolish Structure"
 #: data/base/messages/strings/names.txt:393
 #: data/base/messages/strings/names.txt:1448
 #: data/mp/messages/strings/names.txt:400
-#: data/mp/messages/strings/names.txt:1467
+#: data/mp/messages/strings/names.txt:1468
 msgid "Repair Center"
 msgstr "Repair Centre"
 
@@ -6412,7 +6412,7 @@ msgstr "Hardcrete Wall"
 #: data/base/messages/strings/names.txt:398
 #: data/base/messages/strings/names.txt:850
 #: data/mp/messages/strings/names.txt:406
-#: data/mp/messages/strings/names.txt:864
+#: data/mp/messages/strings/names.txt:865
 msgid "VTOL Factory"
 msgstr "VTOL Factory"
 
@@ -6430,7 +6430,7 @@ msgstr "Inferno Hardpoint"
 #: data/base/messages/strings/names.txt:404
 #: data/base/messages/strings/names.txt:747
 #: data/mp/messages/strings/names.txt:412
-#: data/mp/messages/strings/names.txt:761
+#: data/mp/messages/strings/names.txt:762
 msgid "Pepperpot Pit"
 msgstr "Pepperpot Pit"
 
@@ -6439,13 +6439,13 @@ msgstr "Pepperpot Pit"
 #: data/base/messages/strings/names.txt:745
 #: data/mp/messages/strings/names.txt:413
 #: data/mp/messages/strings/names.txt:496
-#: data/mp/messages/strings/names.txt:759
+#: data/mp/messages/strings/names.txt:760
 msgid "Hellstorm Emplacement"
 msgstr "Hellstorm Emplacement"
 
 #: data/base/messages/strings/names.txt:409
 #: data/base/messages/strings/names.txt:715
-#: data/mp/messages/strings/names.txt:729
+#: data/mp/messages/strings/names.txt:730
 msgid "Tornado AA Flak Site"
 msgstr "Tornado AA Flak Site"
 
@@ -6457,21 +6457,21 @@ msgstr "Cyclone AA Flak Site"
 #: data/base/messages/strings/names.txt:411
 #: data/base/messages/strings/names.txt:713
 #: data/mp/messages/strings/names.txt:419
-#: data/mp/messages/strings/names.txt:727
+#: data/mp/messages/strings/names.txt:728
 msgid "Hurricane AA Site"
 msgstr "Hurricane AA Site"
 
 #: data/base/messages/strings/names.txt:412
 #: data/base/messages/strings/names.txt:714
 #: data/mp/messages/strings/names.txt:420
-#: data/mp/messages/strings/names.txt:728
+#: data/mp/messages/strings/names.txt:729
 msgid "Whirlwind AA Site"
 msgstr "Whirlwind AA Site"
 
 #: data/base/messages/strings/names.txt:414
 #: data/base/messages/strings/names.txt:726
 #: data/mp/messages/strings/names.txt:422
-#: data/mp/messages/strings/names.txt:740
+#: data/mp/messages/strings/names.txt:741
 msgid "Ripple Rocket Battery"
 msgstr "Ripple Rocket Battery"
 
@@ -6487,27 +6487,29 @@ msgstr "Assault Gun Guard Tower"
 
 #: data/base/messages/strings/names.txt:419
 #: data/base/messages/strings/names.txt:770
+#: data/mp/messages/strings/names.txt:427
+#: data/mp/messages/strings/names.txt:785
 msgid "Assault Gun Hardpoint"
 msgstr "Assault Gun Hardpoint"
 
 #: data/base/messages/strings/names.txt:420
 #: data/base/messages/strings/names.txt:771
 #: data/mp/messages/strings/names.txt:428
-#: data/mp/messages/strings/names.txt:785
+#: data/mp/messages/strings/names.txt:786
 msgid "Assault Cannon Hardpoint"
 msgstr "Assault Cannon Hardpoint"
 
 #: data/base/messages/strings/names.txt:426
 #: data/base/messages/strings/names.txt:892
 #: data/mp/messages/strings/names.txt:434
-#: data/mp/messages/strings/names.txt:908
+#: data/mp/messages/strings/names.txt:909
 msgid "CB Tower"
 msgstr "CB Tower"
 
 #: data/base/messages/strings/names.txt:427
 #: data/base/messages/strings/names.txt:899
 #: data/mp/messages/strings/names.txt:435
-#: data/mp/messages/strings/names.txt:915
+#: data/mp/messages/strings/names.txt:916
 msgid "VTOL CB Tower"
 msgstr "VTOL CB Tower"
 
@@ -6518,49 +6520,49 @@ msgstr "VTOL Radar Tower"
 #: data/base/messages/strings/names.txt:431
 #: data/base/messages/strings/names.txt:764
 #: data/mp/messages/strings/names.txt:439
-#: data/mp/messages/strings/names.txt:778
+#: data/mp/messages/strings/names.txt:779
 msgid "Heavy Machinegun Hardpoint"
 msgstr "Heavy Machinegun Hardpoint"
 
 #: data/base/messages/strings/names.txt:432
 #: data/base/messages/strings/names.txt:765
 #: data/mp/messages/strings/names.txt:440
-#: data/mp/messages/strings/names.txt:779
+#: data/mp/messages/strings/names.txt:780
 msgid "Light Cannon Hardpoint"
 msgstr "Light Cannon Hardpoint"
 
 #: data/base/messages/strings/names.txt:433
 #: data/base/messages/strings/names.txt:766
 #: data/mp/messages/strings/names.txt:441
-#: data/mp/messages/strings/names.txt:780
+#: data/mp/messages/strings/names.txt:781
 msgid "Medium Cannon Hardpoint"
 msgstr "Medium Cannon Hardpoint"
 
 #: data/base/messages/strings/names.txt:434
 #: data/base/messages/strings/names.txt:767
 #: data/mp/messages/strings/names.txt:442
-#: data/mp/messages/strings/names.txt:781
+#: data/mp/messages/strings/names.txt:782
 msgid "Heavy Cannon Hardpoint"
 msgstr "Heavy Cannon Hardpoint"
 
 #: data/base/messages/strings/names.txt:435
 #: data/base/messages/strings/names.txt:768
 #: data/mp/messages/strings/names.txt:443
-#: data/mp/messages/strings/names.txt:782
+#: data/mp/messages/strings/names.txt:783
 msgid "Flamer Hardpoint"
 msgstr "Flamer Hardpoint"
 
 #: data/base/messages/strings/names.txt:436
 #: data/base/messages/strings/names.txt:769
 #: data/mp/messages/strings/names.txt:444
-#: data/mp/messages/strings/names.txt:783
+#: data/mp/messages/strings/names.txt:784
 msgid "Lancer Hardpoint"
 msgstr "Lancer Hardpoint"
 
 #: data/base/messages/strings/names.txt:438
 #: data/base/messages/strings/names.txt:755
 #: data/mp/messages/strings/names.txt:446
-#: data/mp/messages/strings/names.txt:769
+#: data/mp/messages/strings/names.txt:770
 msgid "Machinegun Guard Tower"
 msgstr "Machinegun Guard Tower"
 
@@ -6571,7 +6573,7 @@ msgstr "Twin Machinegun Guard Tower"
 
 #: data/base/messages/strings/names.txt:440
 #: data/mp/messages/strings/names.txt:448
-#: data/mp/messages/strings/names.txt:770
+#: data/mp/messages/strings/names.txt:771
 #, fuzzy
 msgid "Heavy Machinegun Tower"
 msgstr "Heavy Machinegun Guard Tower"
@@ -6584,15 +6586,15 @@ msgstr "Flamer Guard Tower"
 
 #: data/base/messages/strings/names.txt:442
 #: data/mp/messages/strings/names.txt:450
-#: data/mp/messages/strings/names.txt:751
-#: data/mp/messages/strings/names.txt:772
+#: data/mp/messages/strings/names.txt:752
+#: data/mp/messages/strings/names.txt:773
 #, fuzzy
 msgid "Lancer Tower"
 msgstr "Lancer Guard Tower"
 
 #: data/base/messages/strings/names.txt:443
 #: data/mp/messages/strings/names.txt:451
-#: data/mp/messages/strings/names.txt:773
+#: data/mp/messages/strings/names.txt:774
 #, fuzzy
 msgid "Mini-Rocket Tower"
 msgstr "Mini-Pod Rocket Guard Tower"
@@ -6602,7 +6604,7 @@ msgstr "Mini-Pod Rocket Guard Tower"
 #: data/base/messages/strings/names.txt:733
 #: data/mp/messages/strings/names.txt:454
 #: data/mp/messages/strings/names.txt:504
-#: data/mp/messages/strings/names.txt:747
+#: data/mp/messages/strings/names.txt:748
 msgid "Machinegun Bunker"
 msgstr "Machinegun Bunker"
 
@@ -6618,21 +6620,21 @@ msgstr "Twin Machinegun Bunker"
 #: data/base/messages/strings/names.txt:734
 #: data/mp/messages/strings/names.txt:456
 #: data/mp/messages/strings/names.txt:508
-#: data/mp/messages/strings/names.txt:748
+#: data/mp/messages/strings/names.txt:749
 msgid "Heavy Machinegun Bunker"
 msgstr "Heavy Machinegun Bunker"
 
 #: data/base/messages/strings/names.txt:449
 #: data/base/messages/strings/names.txt:735
 #: data/mp/messages/strings/names.txt:457
-#: data/mp/messages/strings/names.txt:749
+#: data/mp/messages/strings/names.txt:750
 msgid "Light Cannon Bunker"
 msgstr "Light Cannon Bunker"
 
 #: data/base/messages/strings/names.txt:450
 #: data/base/messages/strings/names.txt:736
 #: data/mp/messages/strings/names.txt:458
-#: data/mp/messages/strings/names.txt:750
+#: data/mp/messages/strings/names.txt:751
 msgid "Flamer Bunker"
 msgstr "Flamer Bunker"
 
@@ -6647,7 +6649,7 @@ msgstr "Lancer Bunker"
 #: data/base/messages/strings/names.txt:752
 #: data/mp/messages/strings/names.txt:462
 #: data/mp/messages/strings/names.txt:464
-#: data/mp/messages/strings/names.txt:766
+#: data/mp/messages/strings/names.txt:767
 msgid "Tank Traps"
 msgstr "Tank Traps"
 
@@ -6656,14 +6658,14 @@ msgstr "Tank Traps"
 #: data/base/messages/strings/names.txt:753
 #: data/mp/messages/strings/names.txt:463
 #: data/mp/messages/strings/names.txt:465
-#: data/mp/messages/strings/names.txt:767
+#: data/mp/messages/strings/names.txt:768
 msgid "Dragon's Teeth"
 msgstr "Dragon's Teeth"
 
 #: data/base/messages/strings/names.txt:460
 #: data/base/messages/strings/names.txt:842
 #: data/mp/messages/strings/names.txt:468
-#: data/mp/messages/strings/names.txt:856
+#: data/mp/messages/strings/names.txt:857
 msgid "VTOL Rearming Pad"
 msgstr "VTOL Rearming Pad"
 
@@ -6672,7 +6674,7 @@ msgstr "VTOL Rearming Pad"
 #: data/base/messages/strings/names.txt:719
 #: data/mp/messages/strings/names.txt:471
 #: data/mp/messages/strings/names.txt:492
-#: data/mp/messages/strings/names.txt:733
+#: data/mp/messages/strings/names.txt:734
 msgid "Howitzer Emplacement"
 msgstr "Howitzer Emplacement"
 
@@ -6680,8 +6682,8 @@ msgstr "Howitzer Emplacement"
 #: data/base/messages/strings/names.txt:740
 #: data/base/messages/strings/names.txt:1362
 #: data/mp/messages/strings/names.txt:472
-#: data/mp/messages/strings/names.txt:754
-#: data/mp/messages/strings/names.txt:1381
+#: data/mp/messages/strings/names.txt:755
+#: data/mp/messages/strings/names.txt:1382
 msgid "Flashlight Emplacement"
 msgstr "Flashlight Emplacement"
 
@@ -6693,63 +6695,63 @@ msgstr "Flashlight Hardpoint"
 #: data/base/messages/strings/names.txt:467
 #: data/base/messages/strings/names.txt:777
 #: data/mp/messages/strings/names.txt:475
-#: data/mp/messages/strings/names.txt:791
+#: data/mp/messages/strings/names.txt:792
 msgid "Rail Gun Hardpoint"
 msgstr "Rail Gun Hardpoint"
 
 #: data/base/messages/strings/names.txt:469
 #: data/base/messages/strings/names.txt:761
 #: data/mp/messages/strings/names.txt:477
-#: data/mp/messages/strings/names.txt:775
+#: data/mp/messages/strings/names.txt:776
 msgid "Scourge Missile Tower"
 msgstr "Scourge Missile Tower"
 
 #: data/base/messages/strings/names.txt:470
 #: data/base/messages/strings/names.txt:762
 #: data/mp/messages/strings/names.txt:478
-#: data/mp/messages/strings/names.txt:776
+#: data/mp/messages/strings/names.txt:777
 msgid "Needle Gun Tower"
 msgstr "Needle Gun Tower"
 
 #: data/base/messages/strings/names.txt:471
 #: data/base/messages/strings/names.txt:743
 #: data/mp/messages/strings/names.txt:479
-#: data/mp/messages/strings/names.txt:757
+#: data/mp/messages/strings/names.txt:758
 msgid "Gauss Cannon Emplacement"
 msgstr "Gauss Cannon Emplacement"
 
 #: data/base/messages/strings/names.txt:474
 #: data/base/messages/strings/names.txt:1033
 #: data/mp/messages/strings/names.txt:482
-#: data/mp/messages/strings/names.txt:1049
+#: data/mp/messages/strings/names.txt:1050
 msgid "Light Cannon"
 msgstr "Light Cannon"
 
 #: data/base/messages/strings/names.txt:475
 #: data/base/messages/strings/names.txt:1034
 #: data/mp/messages/strings/names.txt:483
-#: data/mp/messages/strings/names.txt:1050
+#: data/mp/messages/strings/names.txt:1051
 msgid "Medium Cannon"
 msgstr "Medium Cannon"
 
 #: data/base/messages/strings/names.txt:476
 #: data/base/messages/strings/names.txt:1035
 #: data/mp/messages/strings/names.txt:484
-#: data/mp/messages/strings/names.txt:1051
+#: data/mp/messages/strings/names.txt:1052
 msgid "Heavy Cannon"
 msgstr "Heavy Cannon"
 
 #: data/base/messages/strings/names.txt:477
 #: data/base/messages/strings/names.txt:1036
 #: data/mp/messages/strings/names.txt:485
-#: data/mp/messages/strings/names.txt:1052
+#: data/mp/messages/strings/names.txt:1053
 msgid "Hyper Velocity Cannon"
 msgstr "Hyper Velocity Cannon"
 
 #: data/base/messages/strings/names.txt:478
 #: data/base/messages/strings/names.txt:1037
 #: data/mp/messages/strings/names.txt:486
-#: data/mp/messages/strings/names.txt:1053
+#: data/mp/messages/strings/names.txt:1054
 msgid "Assault Cannon"
 msgstr "Assault Cannon"
 
@@ -6761,7 +6763,7 @@ msgstr "Inferno"
 #: data/base/messages/strings/names.txt:483
 #: data/base/messages/strings/names.txt:1061
 #: data/mp/messages/strings/names.txt:491
-#: data/mp/messages/strings/names.txt:1077
+#: data/mp/messages/strings/names.txt:1078
 msgid "Howitzer"
 msgstr "Howitzer"
 
@@ -6774,8 +6776,8 @@ msgstr "Ground Shaker"
 #: data/base/messages/strings/names.txt:722
 #: data/base/messages/strings/names.txt:1453
 #: data/mp/messages/strings/names.txt:494
-#: data/mp/messages/strings/names.txt:736
-#: data/mp/messages/strings/names.txt:1472
+#: data/mp/messages/strings/names.txt:737
+#: data/mp/messages/strings/names.txt:1473
 msgid "Ground Shaker Emplacement"
 msgstr "Ground Shaker Emplacement"
 
@@ -6787,7 +6789,7 @@ msgstr "Hellstorm"
 #: data/base/messages/strings/names.txt:492
 #: data/base/messages/strings/names.txt:1083
 #: data/mp/messages/strings/names.txt:500
-#: data/mp/messages/strings/names.txt:1099
+#: data/mp/messages/strings/names.txt:1100
 msgid "Pulse Laser"
 msgstr "Pulse Laser"
 
@@ -6796,35 +6798,35 @@ msgstr "Pulse Laser"
 #: data/base/messages/strings/names.txt:1098
 #: data/mp/messages/strings/names.txt:503
 #: data/mp/messages/strings/names.txt:548
-#: data/mp/messages/strings/names.txt:1114
+#: data/mp/messages/strings/names.txt:1115
 msgid "Machinegun"
 msgstr "Machinegun"
 
 #: data/base/messages/strings/names.txt:497
 #: data/base/messages/strings/names.txt:1099
 #: data/mp/messages/strings/names.txt:505
-#: data/mp/messages/strings/names.txt:1115
+#: data/mp/messages/strings/names.txt:1116
 msgid "Twin Machinegun"
 msgstr "Twin Machinegun"
 
 #: data/base/messages/strings/names.txt:499
 #: data/base/messages/strings/names.txt:1100
 #: data/mp/messages/strings/names.txt:507
-#: data/mp/messages/strings/names.txt:1116
+#: data/mp/messages/strings/names.txt:1117
 msgid "Heavy Machinegun"
 msgstr "Heavy Machinegun"
 
 #: data/base/messages/strings/names.txt:501
 #: data/base/messages/strings/names.txt:1101
 #: data/mp/messages/strings/names.txt:509
-#: data/mp/messages/strings/names.txt:1117
+#: data/mp/messages/strings/names.txt:1118
 msgid "Assault Gun"
 msgstr "Assault Gun"
 
 #: data/base/messages/strings/names.txt:504
 #: data/base/messages/strings/names.txt:1120
 #: data/mp/messages/strings/names.txt:512
-#: data/mp/messages/strings/names.txt:1136
+#: data/mp/messages/strings/names.txt:1137
 msgid "Scourge Missile"
 msgstr "Scourge Missile"
 
@@ -6836,21 +6838,21 @@ msgstr "Angel Missile"
 #: data/base/messages/strings/names.txt:506
 #: data/base/messages/strings/names.txt:1119
 #: data/mp/messages/strings/names.txt:514
-#: data/mp/messages/strings/names.txt:1135
+#: data/mp/messages/strings/names.txt:1136
 msgid "Vindicator SAM"
 msgstr "Vindicator SAM"
 
 #: data/base/messages/strings/names.txt:507
 #: data/base/messages/strings/names.txt:1122
 #: data/mp/messages/strings/names.txt:515
-#: data/mp/messages/strings/names.txt:1138
+#: data/mp/messages/strings/names.txt:1139
 msgid "Archangel Missile"
 msgstr "Archangel Missile"
 
 #: data/base/messages/strings/names.txt:509
 #: data/base/messages/strings/names.txt:1118
 #: data/mp/messages/strings/names.txt:517
-#: data/mp/messages/strings/names.txt:1134
+#: data/mp/messages/strings/names.txt:1135
 msgid "Avenger SAM"
 msgstr "Avenger SAM"
 
@@ -6862,7 +6864,7 @@ msgstr "VTOL Scourge Missile"
 #: data/base/messages/strings/names.txt:513
 #: data/base/messages/strings/names.txt:1138
 #: data/mp/messages/strings/names.txt:521
-#: data/mp/messages/strings/names.txt:1154
+#: data/mp/messages/strings/names.txt:1155
 msgid "Mortar"
 msgstr "Mortar"
 
@@ -6894,21 +6896,21 @@ msgstr "Pepperpot Emplacement"
 #: data/base/messages/strings/names.txt:519
 #: data/base/messages/strings/names.txt:1142
 #: data/mp/messages/strings/names.txt:527
-#: data/mp/messages/strings/names.txt:1158
+#: data/mp/messages/strings/names.txt:1159
 msgid "Needle Gun"
 msgstr "Needle Gun"
 
 #: data/base/messages/strings/names.txt:520
 #: data/base/messages/strings/names.txt:1143
 #: data/mp/messages/strings/names.txt:528
-#: data/mp/messages/strings/names.txt:1159
+#: data/mp/messages/strings/names.txt:1160
 msgid "Rail Gun"
 msgstr "Rail Gun"
 
 #: data/base/messages/strings/names.txt:521
 #: data/base/messages/strings/names.txt:1144
 #: data/mp/messages/strings/names.txt:529
-#: data/mp/messages/strings/names.txt:1160
+#: data/mp/messages/strings/names.txt:1161
 msgid "Gauss Cannon"
 msgstr "Gauss Cannon"
 
@@ -6925,7 +6927,7 @@ msgstr "Bunker Buster"
 #: data/base/messages/strings/names.txt:526
 #: data/base/messages/strings/names.txt:1183
 #: data/mp/messages/strings/names.txt:534
-#: data/mp/messages/strings/names.txt:1202
+#: data/mp/messages/strings/names.txt:1203
 #, fuzzy
 msgid "Mini-Rocket Pod"
 msgstr "Mini-Rocket Upgrade"
@@ -6933,7 +6935,7 @@ msgstr "Mini-Rocket Upgrade"
 #: data/base/messages/strings/names.txt:527
 #: data/base/messages/strings/names.txt:1184
 #: data/mp/messages/strings/names.txt:535
-#: data/mp/messages/strings/names.txt:1203
+#: data/mp/messages/strings/names.txt:1204
 msgid "Ripple Rockets"
 msgstr "Ripple Rockets"
 
@@ -6966,7 +6968,7 @@ msgstr "VTOL Tank Killer"
 #: data/base/messages/strings/names.txt:544
 #: data/base/messages/strings/names.txt:980
 #: data/mp/messages/strings/names.txt:552
-#: data/mp/messages/strings/names.txt:996
+#: data/mp/messages/strings/names.txt:997
 msgid "Tornado Flak Turret"
 msgstr "Tornado Flak Turret"
 
@@ -6977,75 +6979,75 @@ msgstr "Cyclone Flak Turret"
 
 #: data/base/messages/strings/names.txt:550
 #: data/base/messages/strings/names.txt:983
-#: data/mp/messages/strings/names.txt:558
-#: data/mp/messages/strings/names.txt:999
+#: data/mp/messages/strings/names.txt:559
+#: data/mp/messages/strings/names.txt:1000
 msgid "Whirlwind AA Turret"
 msgstr "Whirlwind AA Turret"
 
 #: data/base/messages/strings/names.txt:551
 #: data/base/messages/strings/names.txt:982
-#: data/mp/messages/strings/names.txt:559
-#: data/mp/messages/strings/names.txt:998
+#: data/mp/messages/strings/names.txt:560
+#: data/mp/messages/strings/names.txt:999
 msgid "Hurricane AA Turret"
 msgstr "Hurricane AA Turret"
 
 #: data/base/messages/strings/names.txt:560
-#: data/mp/messages/strings/names.txt:568
+#: data/mp/messages/strings/names.txt:569
 msgid "VTOL Cannon"
 msgstr "VTOL Cannon"
 
 #: data/base/messages/strings/names.txt:561
-#: data/mp/messages/strings/names.txt:569
+#: data/mp/messages/strings/names.txt:570
 msgid "VTOL Hyper Velocity Cannon"
 msgstr "VTOL Hyper Velocity Cannon"
 
 #: data/base/messages/strings/names.txt:562
-#: data/mp/messages/strings/names.txt:570
+#: data/mp/messages/strings/names.txt:571
 msgid "VTOL Assault Cannon"
 msgstr "VTOL Assault Cannon"
 
 #: data/base/messages/strings/names.txt:563
-#: data/mp/messages/strings/names.txt:571
+#: data/mp/messages/strings/names.txt:572
 msgid "VTOL Pulse Laser"
 msgstr "VTOL Pulse Laser"
 
 #: data/base/messages/strings/names.txt:565
-#: data/mp/messages/strings/names.txt:573
+#: data/mp/messages/strings/names.txt:574
 msgid "VTOL Machinegun"
 msgstr "VTOL Machinegun"
 
 #: data/base/messages/strings/names.txt:566
-#: data/mp/messages/strings/names.txt:574
+#: data/mp/messages/strings/names.txt:575
 msgid "VTOL Twin Machinegun"
 msgstr "VTOL Twin Machinegun"
 
 #: data/base/messages/strings/names.txt:567
-#: data/mp/messages/strings/names.txt:575
+#: data/mp/messages/strings/names.txt:576
 msgid "VTOL Heavy Machinegun"
 msgstr "VTOL Heavy Machinegun"
 
 #: data/base/messages/strings/names.txt:568
-#: data/mp/messages/strings/names.txt:576
+#: data/mp/messages/strings/names.txt:577
 msgid "VTOL Assault Gun"
 msgstr "VTOL Assault Gun"
 
 #: data/base/messages/strings/names.txt:569
-#: data/mp/messages/strings/names.txt:577
+#: data/mp/messages/strings/names.txt:578
 msgid "VTOL Needle Gun"
 msgstr "VTOL Needle Gun"
 
 #: data/base/messages/strings/names.txt:570
-#: data/mp/messages/strings/names.txt:578
+#: data/mp/messages/strings/names.txt:579
 msgid "VTOL Rail Gun"
 msgstr "VTOL Rail Gun"
 
 #: data/base/messages/strings/names.txt:572
-#: data/mp/messages/strings/names.txt:580
+#: data/mp/messages/strings/names.txt:581
 msgid "Proximity Bomb Turret"
 msgstr "Proximity Bomb Turret"
 
 #: data/base/messages/strings/names.txt:573
-#: data/mp/messages/strings/names.txt:581
+#: data/mp/messages/strings/names.txt:582
 msgid "Proximity Superbomb Turret"
 msgstr "Proximity Superbomb Turret"
 
@@ -7054,22 +7056,22 @@ msgid "VTOL Cluster Bombs Bay"
 msgstr "VTOL Cluster Bombs Bay"
 
 #: data/base/messages/strings/names.txt:576
-#: data/mp/messages/strings/names.txt:584
+#: data/mp/messages/strings/names.txt:585
 msgid "VTOL Heap Bomb Bay"
 msgstr "VTOL Heap Bomb Bay"
 
 #: data/base/messages/strings/names.txt:577
-#: data/mp/messages/strings/names.txt:585
+#: data/mp/messages/strings/names.txt:586
 msgid "VTOL Phosphor Bomb Bay"
 msgstr "VTOL Phosphor Bomb Bay"
 
 #: data/base/messages/strings/names.txt:578
-#: data/mp/messages/strings/names.txt:586
+#: data/mp/messages/strings/names.txt:587
 msgid "VTOL Thermite Bomb Bay"
 msgstr "VTOL Thermite Bomb Bay"
 
 #: data/base/messages/strings/names.txt:581
-#: data/mp/messages/strings/names.txt:589
+#: data/mp/messages/strings/names.txt:590
 msgid "Collective Wall"
 msgstr "Collective Wall"
 
@@ -7086,195 +7088,195 @@ msgid "NEXUS CWall"
 msgstr "NEXUS CWall"
 
 #: data/base/messages/strings/names.txt:623
-#: data/mp/messages/strings/names.txt:631
+#: data/mp/messages/strings/names.txt:632
 msgid "CAM1 RESEARCH"
 msgstr "CAM1 RESEARCH"
 
 #: data/base/messages/strings/names.txt:624
-#: data/mp/messages/strings/names.txt:632
+#: data/mp/messages/strings/names.txt:633
 msgid "ADVANCED RESEARCH"
 msgstr "ADVANCED RESEARCH"
 
 #: data/base/messages/strings/names.txt:625
-#: data/mp/messages/strings/names.txt:633
+#: data/mp/messages/strings/names.txt:634
 msgid "CAM1 VEHICLES"
 msgstr "CAM1 VEHICLES"
 
 #: data/base/messages/strings/names.txt:626
-#: data/mp/messages/strings/names.txt:634
+#: data/mp/messages/strings/names.txt:635
 msgid "CAM1 WEAPONS"
 msgstr "CAM1 WEAPONS"
 
 #: data/base/messages/strings/names.txt:627
-#: data/mp/messages/strings/names.txt:635
+#: data/mp/messages/strings/names.txt:636
 msgid "CAM1 SYSTEMS"
 msgstr "CAM1 SYSTEMS"
 
 #: data/base/messages/strings/names.txt:628
-#: data/mp/messages/strings/names.txt:636
+#: data/mp/messages/strings/names.txt:637
 msgid "CAM1 DEFENSES"
 msgstr "CAM1 DEFENSES"
 
 #: data/base/messages/strings/names.txt:629
-#: data/mp/messages/strings/names.txt:637
+#: data/mp/messages/strings/names.txt:638
 msgid "CAM1 STRUCTURES"
 msgstr "CAM1 STRUCTURES"
 
 #: data/base/messages/strings/names.txt:630
-#: data/mp/messages/strings/names.txt:638
+#: data/mp/messages/strings/names.txt:639
 msgid "CAM2 RESEARCH"
 msgstr "CAM2 RESEARCH"
 
 #: data/base/messages/strings/names.txt:631
-#: data/mp/messages/strings/names.txt:639
+#: data/mp/messages/strings/names.txt:640
 msgid "CAM2 VEHICLES"
 msgstr "CAM2 VEHICLES"
 
 #: data/base/messages/strings/names.txt:632
-#: data/mp/messages/strings/names.txt:640
+#: data/mp/messages/strings/names.txt:641
 msgid "CAM2 CYBORGS"
 msgstr "CAM2 CYBORGS"
 
 #: data/base/messages/strings/names.txt:633
-#: data/mp/messages/strings/names.txt:641
+#: data/mp/messages/strings/names.txt:642
 msgid "CAM2 WEAPONS"
 msgstr "CAM2 WEAPONS"
 
 #: data/base/messages/strings/names.txt:634
-#: data/mp/messages/strings/names.txt:642
+#: data/mp/messages/strings/names.txt:643
 msgid "CAM2 SYSTEMS"
 msgstr "CAM2 SYSTEMS"
 
 #: data/base/messages/strings/names.txt:635
-#: data/mp/messages/strings/names.txt:643
+#: data/mp/messages/strings/names.txt:644
 msgid "CAM2 DEFENSES"
 msgstr "CAM2 DEFENSES"
 
 #: data/base/messages/strings/names.txt:636
-#: data/mp/messages/strings/names.txt:644
+#: data/mp/messages/strings/names.txt:645
 msgid "CAM2 STRUCTURES"
 msgstr "CAM2 STRUCTURES"
 
 #: data/base/messages/strings/names.txt:638
-#: data/mp/messages/strings/names.txt:646
+#: data/mp/messages/strings/names.txt:647
 msgid "CAM3 RESEARCH"
 msgstr "CAM3 RESEARCH"
 
 #: data/base/messages/strings/names.txt:649
-#: data/mp/messages/strings/names.txt:657
+#: data/mp/messages/strings/names.txt:658
 msgid "Synaptic Link"
 msgstr "Synaptic Link"
 
 #: data/base/messages/strings/names.txt:651
-#: data/mp/messages/strings/names.txt:659
+#: data/mp/messages/strings/names.txt:660
 msgid "Missile Targeting Codes"
 msgstr "Missile Targeting Codes"
 
 #: data/base/messages/strings/names.txt:652
-#: data/mp/messages/strings/names.txt:660
+#: data/mp/messages/strings/names.txt:661
 msgid "Second Level Missile Targeting Codes"
 msgstr "Second Level Missile Targeting Codes"
 
 #: data/base/messages/strings/names.txt:653
-#: data/mp/messages/strings/names.txt:661
+#: data/mp/messages/strings/names.txt:662
 msgid "Third Level Missile Firing Codes"
 msgstr "Third Level Missile Firing Codes"
 
 #: data/base/messages/strings/names.txt:655
-#: data/mp/messages/strings/names.txt:663
+#: data/mp/messages/strings/names.txt:664
 msgid "Cyborg Thermal Armor"
 msgstr "Cyborg Thermal Armour"
 
 #: data/base/messages/strings/names.txt:656
-#: data/mp/messages/strings/names.txt:664
+#: data/mp/messages/strings/names.txt:665
 msgid "Cyborg Thermal Armor Mk2"
 msgstr "Cyborg Thermal Armour Mk2"
 
 #: data/base/messages/strings/names.txt:657
-#: data/mp/messages/strings/names.txt:665
+#: data/mp/messages/strings/names.txt:666
 msgid "Cyborg Thermal Armor Mk3"
 msgstr "Cyborg Thermal Armour Mk3"
 
 #: data/base/messages/strings/names.txt:658
-#: data/mp/messages/strings/names.txt:666
+#: data/mp/messages/strings/names.txt:667
 msgid "Cyborg High Intensity Thermal Armor"
 msgstr "Cyborg High Intensity Thermal Armour"
 
 #: data/base/messages/strings/names.txt:659
-#: data/mp/messages/strings/names.txt:667
+#: data/mp/messages/strings/names.txt:668
 msgid "Cyborg High Intensity Thermal Armor Mk2"
 msgstr "Cyborg High Intensity Thermal Armour Mk2"
 
 #: data/base/messages/strings/names.txt:660
-#: data/mp/messages/strings/names.txt:668
+#: data/mp/messages/strings/names.txt:669
 msgid "Cyborg High Intensity Thermal Armor Mk3"
 msgstr "Cyborg High Intensity Thermal Armour Mk3"
 
 #: data/base/messages/strings/names.txt:662
-#: data/mp/messages/strings/names.txt:670
+#: data/mp/messages/strings/names.txt:671
 msgid "Cyborg Composite Alloys"
 msgstr "Cyborg Composite Alloys"
 
 #: data/base/messages/strings/names.txt:663
-#: data/mp/messages/strings/names.txt:671
+#: data/mp/messages/strings/names.txt:672
 msgid "Cyborg Composite Alloys Mk2"
 msgstr "Cyborg Composite Alloys Mk2"
 
 #: data/base/messages/strings/names.txt:664
-#: data/mp/messages/strings/names.txt:672
+#: data/mp/messages/strings/names.txt:673
 msgid "Cyborg Composite Alloys Mk3"
 msgstr "Cyborg Composite Alloys Mk3"
 
 #: data/base/messages/strings/names.txt:665
-#: data/mp/messages/strings/names.txt:673
+#: data/mp/messages/strings/names.txt:674
 msgid "Cyborg Dense Composite Alloys"
 msgstr "Cyborg Dense Composite Alloys"
 
 #: data/base/messages/strings/names.txt:666
-#: data/mp/messages/strings/names.txt:674
+#: data/mp/messages/strings/names.txt:675
 msgid "Cyborg Dense Composite Alloys Mk2"
 msgstr "Cyborg Dense Composite Alloys Mk2"
 
 #: data/base/messages/strings/names.txt:667
-#: data/mp/messages/strings/names.txt:675
+#: data/mp/messages/strings/names.txt:676
 msgid "Cyborg Dense Composite Alloys Mk3"
 msgstr "Cyborg Dense Composite Alloys Mk3"
 
 #: data/base/messages/strings/names.txt:668
-#: data/mp/messages/strings/names.txt:676
+#: data/mp/messages/strings/names.txt:677
 msgid "Cyborg Superdense Composite Alloys"
 msgstr "Cyborg Superdense Composite Alloys"
 
 #: data/base/messages/strings/names.txt:669
-#: data/mp/messages/strings/names.txt:677
+#: data/mp/messages/strings/names.txt:678
 msgid "Cyborg Superdense Composite Alloys Mk2"
 msgstr "Cyborg Superdense Composite Alloys Mk2"
 
 #: data/base/messages/strings/names.txt:670
-#: data/mp/messages/strings/names.txt:678
+#: data/mp/messages/strings/names.txt:679
 msgid "Cyborg Superdense Composite Alloys Mk3"
 msgstr "Cyborg Superdense Composite Alloys Mk3"
 
 #: data/base/messages/strings/names.txt:673
-#: data/mp/messages/strings/names.txt:683
+#: data/mp/messages/strings/names.txt:684
 #, fuzzy
 msgid "Bunker Blaster Cyborg"
 msgstr "Bunker Blaster"
 
 #: data/base/messages/strings/names.txt:674
-#: data/mp/messages/strings/names.txt:684
+#: data/mp/messages/strings/names.txt:685
 #, fuzzy
 msgid "Heavy Gunner Cyborg"
 msgstr "Heavy Gunner"
 
 #: data/base/messages/strings/names.txt:675
-#: data/mp/messages/strings/names.txt:685
+#: data/mp/messages/strings/names.txt:686
 #, fuzzy
 msgid "Flamer Cyborg"
 msgstr "Flamer"
 
 #: data/base/messages/strings/names.txt:676
-#: data/mp/messages/strings/names.txt:686
+#: data/mp/messages/strings/names.txt:687
 #, fuzzy
 msgid "Machinegunner Cyborg"
 msgstr "Machinegunner"
@@ -7305,92 +7307,92 @@ msgid "Flashlight Gunner Cyborg"
 msgstr "Flashlight Gunner"
 
 #: data/base/messages/strings/names.txt:683
-#: data/mp/messages/strings/names.txt:693
+#: data/mp/messages/strings/names.txt:694
 msgid "Jump Bunker Blaster"
 msgstr "Jump Bunker Blaster"
 
 #: data/base/messages/strings/names.txt:684
-#: data/mp/messages/strings/names.txt:694
+#: data/mp/messages/strings/names.txt:695
 msgid "Jump Heavy Gunner"
 msgstr "Jump Heavy Gunner"
 
 #: data/base/messages/strings/names.txt:685
-#: data/mp/messages/strings/names.txt:695
+#: data/mp/messages/strings/names.txt:696
 msgid "Jump Lancer"
 msgstr "Jump Lancer"
 
 #: data/base/messages/strings/names.txt:686
-#: data/mp/messages/strings/names.txt:696
+#: data/mp/messages/strings/names.txt:697
 msgid "Jump Assault Gunner"
 msgstr "Jump Assault Gunner"
 
 #: data/base/messages/strings/names.txt:687
-#: data/mp/messages/strings/names.txt:697
+#: data/mp/messages/strings/names.txt:698
 msgid "Jump Needle Gunner"
 msgstr "Jump Needle Gunner"
 
 #: data/base/messages/strings/names.txt:688
-#: data/mp/messages/strings/names.txt:698
+#: data/mp/messages/strings/names.txt:699
 msgid "Jump Scourge"
 msgstr "Jump Scourge"
 
 #: data/base/messages/strings/names.txt:689
-#: data/mp/messages/strings/names.txt:699
+#: data/mp/messages/strings/names.txt:700
 msgid "Jump Flashlight Gunner"
 msgstr "Jump Flashlight Gunner"
 
 #: data/base/messages/strings/names.txt:691
-#: data/mp/messages/strings/names.txt:701
+#: data/mp/messages/strings/names.txt:702
 msgid "Cyborg Jump Pack"
 msgstr "Cyborg Jump Pack"
 
 #: data/base/messages/strings/names.txt:697
-#: data/mp/messages/strings/names.txt:707
+#: data/mp/messages/strings/names.txt:708
 msgid "Hardcrete"
 msgstr "Hardcrete"
 
 #: data/base/messages/strings/names.txt:699
-#: data/mp/messages/strings/names.txt:709
+#: data/mp/messages/strings/names.txt:710
 msgid "NP-Hardcrete"
 msgstr "NP-Hardcrete"
 
 #: data/base/messages/strings/names.txt:701
-#: data/mp/messages/strings/names.txt:711
+#: data/mp/messages/strings/names.txt:712
 msgid "Improved Hardcrete"
 msgstr "Improved Hardcrete"
 
 #: data/base/messages/strings/names.txt:702
-#: data/mp/messages/strings/names.txt:712
+#: data/mp/messages/strings/names.txt:713
 msgid "Improved Hardcrete Mk2"
 msgstr "Improved Hardcrete Mk2"
 
 #: data/base/messages/strings/names.txt:703
-#: data/mp/messages/strings/names.txt:713
+#: data/mp/messages/strings/names.txt:714
 msgid "Improved Hardcrete Mk3"
 msgstr "Improved Hardcrete Mk3"
 
 #: data/base/messages/strings/names.txt:704
-#: data/mp/messages/strings/names.txt:714
+#: data/mp/messages/strings/names.txt:715
 msgid "Supercrete"
 msgstr "Supercrete"
 
 #: data/base/messages/strings/names.txt:705
-#: data/mp/messages/strings/names.txt:715
+#: data/mp/messages/strings/names.txt:716
 msgid "Supercrete Mk2"
 msgstr "Supercrete Mk2"
 
 #: data/base/messages/strings/names.txt:706
-#: data/mp/messages/strings/names.txt:716
+#: data/mp/messages/strings/names.txt:717
 msgid "Supercrete Mk3"
 msgstr "Supercrete Mk3"
 
 #: data/base/messages/strings/names.txt:707
-#: data/mp/messages/strings/names.txt:717
+#: data/mp/messages/strings/names.txt:718
 msgid "Plascrete"
 msgstr "Plascrete"
 
 #: data/base/messages/strings/names.txt:708
-#: data/mp/messages/strings/names.txt:718
+#: data/mp/messages/strings/names.txt:719
 msgid "Plascrete Mk2"
 msgstr "Plascrete Mk2"
 
@@ -7405,15 +7407,15 @@ msgstr "HPV Cannon Emplacement"
 
 #: data/base/messages/strings/names.txt:720
 #: data/base/messages/strings/names.txt:1371
-#: data/mp/messages/strings/names.txt:734
-#: data/mp/messages/strings/names.txt:1390
+#: data/mp/messages/strings/names.txt:735
+#: data/mp/messages/strings/names.txt:1391
 msgid "Tank Killer Emplacement"
 msgstr "Tank Killer Emplacement"
 
 #: data/base/messages/strings/names.txt:723
 #: data/base/messages/strings/names.txt:1452
-#: data/mp/messages/strings/names.txt:737
-#: data/mp/messages/strings/names.txt:1471
+#: data/mp/messages/strings/names.txt:738
+#: data/mp/messages/strings/names.txt:1472
 msgid "Bombard Pit"
 msgstr "Bombard Pit"
 
@@ -7422,31 +7424,31 @@ msgid "Angel Missile Battery"
 msgstr "Angel Missile Battery"
 
 #: data/base/messages/strings/names.txt:729
-#: data/mp/messages/strings/names.txt:743
+#: data/mp/messages/strings/names.txt:744
 msgid "Archangel Missile Battery"
 msgstr "Archangel Missile Battery"
 
 #: data/base/messages/strings/names.txt:730
 #: data/base/messages/strings/names.txt:1216
-#: data/mp/messages/strings/names.txt:744
-#: data/mp/messages/strings/names.txt:1235
+#: data/mp/messages/strings/names.txt:745
+#: data/mp/messages/strings/names.txt:1236
 msgid "Mortar Pit"
 msgstr "Mortar Pit"
 
 #: data/base/messages/strings/names.txt:731
-#: data/mp/messages/strings/names.txt:745
-#: data/mp/messages/strings/names.txt:1387
+#: data/mp/messages/strings/names.txt:746
+#: data/mp/messages/strings/names.txt:1388
 msgid "Mini-Rocket Battery"
 msgstr "Mini-Rocket Battery"
 
 #: data/base/messages/strings/names.txt:738
 #: data/base/messages/strings/names.txt:1374
-#: data/mp/messages/strings/names.txt:1393
+#: data/mp/messages/strings/names.txt:1394
 msgid "Pulse Laser Emplacement"
 msgstr "Pulse Laser Emplacement"
 
 #: data/base/messages/strings/names.txt:742
-#: data/mp/messages/strings/names.txt:756
+#: data/mp/messages/strings/names.txt:757
 msgid "Rail Gun Emplacement"
 msgstr "Rail Gun Emplacement"
 
@@ -7461,15 +7463,15 @@ msgstr "Assault Gun Emplacement"
 
 #: data/base/messages/strings/names.txt:749
 #: data/base/messages/strings/names.txt:1363
-#: data/mp/messages/strings/names.txt:763
-#: data/mp/messages/strings/names.txt:1382
+#: data/mp/messages/strings/names.txt:764
+#: data/mp/messages/strings/names.txt:1383
 msgid "Avenger SAM Site"
 msgstr "Avenger SAM Site"
 
 #: data/base/messages/strings/names.txt:750
 #: data/base/messages/strings/names.txt:1364
-#: data/mp/messages/strings/names.txt:764
-#: data/mp/messages/strings/names.txt:1383
+#: data/mp/messages/strings/names.txt:765
+#: data/mp/messages/strings/names.txt:1384
 msgid "Vindicator SAM Site"
 msgstr "Vindicator SAM Site"
 
@@ -7488,15 +7490,15 @@ msgstr "Mini-Pod Rocket Guard Tower"
 
 #: data/base/messages/strings/names.txt:772
 #: data/base/messages/strings/names.txt:1382
-#: data/mp/messages/strings/names.txt:786
-#: data/mp/messages/strings/names.txt:1401
+#: data/mp/messages/strings/names.txt:787
+#: data/mp/messages/strings/names.txt:1402
 msgid "Scourge Missile Hardpoint"
 msgstr "Scourge Missile Hardpoint"
 
 #: data/base/messages/strings/names.txt:774
 #: data/base/messages/strings/names.txt:1380
-#: data/mp/messages/strings/names.txt:788
-#: data/mp/messages/strings/names.txt:1399
+#: data/mp/messages/strings/names.txt:789
+#: data/mp/messages/strings/names.txt:1400
 msgid "Tank Killer Hardpoint"
 msgstr "Tank Killer Hardpoint"
 
@@ -7507,13 +7509,13 @@ msgstr "HPV Cannon Hardpoint"
 
 #: data/base/messages/strings/names.txt:778
 #: data/base/messages/strings/names.txt:1383
-#: data/mp/messages/strings/names.txt:792
-#: data/mp/messages/strings/names.txt:1402
+#: data/mp/messages/strings/names.txt:793
+#: data/mp/messages/strings/names.txt:1403
 msgid "Gauss Cannon Hardpoint"
 msgstr "Gauss Cannon Hardpoint"
 
 #: data/base/messages/strings/names.txt:780
-#: data/mp/messages/strings/names.txt:794
+#: data/mp/messages/strings/names.txt:795
 msgid "Command Relay Post"
 msgstr "Command Relay Post"
 
@@ -7580,54 +7582,54 @@ msgid "Advanced Factory Production Mk3"
 msgstr "Advanced Factory Production Mk3"
 
 #: data/base/messages/strings/names.txt:806
-#: data/mp/messages/strings/names.txt:820
+#: data/mp/messages/strings/names.txt:821
 msgid "Reinforced Base Structure Materials Mk2"
 msgstr "Reinforced Base Structure Materials Mk2"
 
 #: data/base/messages/strings/names.txt:807
-#: data/mp/messages/strings/names.txt:821
+#: data/mp/messages/strings/names.txt:822
 msgid "Reinforced Base Structure Materials Mk3"
 msgstr "Reinforced Base Structure Materials Mk3"
 
 #: data/base/messages/strings/names.txt:809
-#: data/mp/messages/strings/names.txt:823
+#: data/mp/messages/strings/names.txt:824
 msgid "Hardened Base Structure Materials Mk2"
 msgstr "Hardened Base Structure Materials Mk2"
 
 #: data/base/messages/strings/names.txt:810
-#: data/mp/messages/strings/names.txt:824
+#: data/mp/messages/strings/names.txt:825
 msgid "Hardened Base Structure Materials Mk3"
 msgstr "Hardened Base Structure Materials Mk3"
 
 #: data/base/messages/strings/names.txt:812
-#: data/mp/messages/strings/names.txt:826
+#: data/mp/messages/strings/names.txt:827
 msgid "Advanced Base Structure Materials Mk2"
 msgstr "Advanced Base Structure Materials Mk2"
 
 #: data/base/messages/strings/names.txt:813
-#: data/mp/messages/strings/names.txt:827
+#: data/mp/messages/strings/names.txt:828
 msgid "Advanced Base Structure Materials Mk3"
 msgstr "Advanced Base Structure Materials Mk3"
 
 #: data/base/messages/strings/names.txt:817
-#: data/mp/messages/strings/names.txt:831
+#: data/mp/messages/strings/names.txt:832
 msgid "Gas Turbine Generator"
 msgstr "Gas Turbine Generator"
 
 #: data/base/messages/strings/names.txt:818
-#: data/mp/messages/strings/names.txt:832
+#: data/mp/messages/strings/names.txt:833
 msgid "Vapor Turbine Generator"
 msgstr "Vapour Turbine Generator"
 
 #: data/base/messages/strings/names.txt:820
 #: data/base/messages/strings/names.txt:1449
-#: data/mp/messages/strings/names.txt:834
-#: data/mp/messages/strings/names.txt:1468
+#: data/mp/messages/strings/names.txt:835
+#: data/mp/messages/strings/names.txt:1469
 msgid "Repair Facility"
 msgstr "Repair Facility"
 
 #: data/base/messages/strings/names.txt:821
-#: data/mp/messages/strings/names.txt:835
+#: data/mp/messages/strings/names.txt:836
 msgid "Automated Repair Facility"
 msgstr "Automated Repair Facility"
 
@@ -7664,62 +7666,62 @@ msgid "Advanced Repair Facility Upgrade Mk3"
 msgstr "Advanced Repair Facility Upgrade Mk3"
 
 #: data/base/messages/strings/names.txt:832
-#: data/mp/messages/strings/names.txt:846
+#: data/mp/messages/strings/names.txt:847
 msgid "Synaptic Link Data Analysis"
 msgstr "Synaptic Link Data Analysis"
 
 #: data/base/messages/strings/names.txt:833
-#: data/mp/messages/strings/names.txt:847
+#: data/mp/messages/strings/names.txt:848
 msgid "Synaptic Link Data Analysis Mk2"
 msgstr "Synaptic Link Data Analysis Mk2"
 
 #: data/base/messages/strings/names.txt:834
-#: data/mp/messages/strings/names.txt:848
+#: data/mp/messages/strings/names.txt:849
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "Synaptic Link Data Analysis Mk3"
 
 #: data/base/messages/strings/names.txt:836
-#: data/mp/messages/strings/names.txt:850
+#: data/mp/messages/strings/names.txt:851
 msgid "Dedicated Synaptic Link Data Analysis Mk2"
 msgstr "Dedicated Synaptic Link Data Analysis Mk2"
 
 #: data/base/messages/strings/names.txt:837
-#: data/mp/messages/strings/names.txt:851
+#: data/mp/messages/strings/names.txt:852
 msgid "Dedicated Synaptic Link Data Analysis Mk3"
 msgstr "Dedicated Synaptic Link Data Analysis Mk3"
 
 #: data/base/messages/strings/names.txt:839
-#: data/mp/messages/strings/names.txt:853
+#: data/mp/messages/strings/names.txt:854
 msgid "Neural Synapse Research Brain Mk2"
 msgstr "Neural Synapse Research Brain Mk2"
 
 #: data/base/messages/strings/names.txt:840
-#: data/mp/messages/strings/names.txt:854
+#: data/mp/messages/strings/names.txt:855
 msgid "Neural Synapse Research Brain Mk3"
 msgstr "Neural Synapse Research Brain Mk3"
 
 #: data/base/messages/strings/names.txt:844
-#: data/mp/messages/strings/names.txt:858
+#: data/mp/messages/strings/names.txt:859
 msgid "Automated VTOL Rearming Mk2"
 msgstr "Automated VTOL Rearming Mk2"
 
 #: data/base/messages/strings/names.txt:845
-#: data/mp/messages/strings/names.txt:859
+#: data/mp/messages/strings/names.txt:860
 msgid "Automated VTOL Rearming Mk3"
 msgstr "Automated VTOL Rearming Mk3"
 
 #: data/base/messages/strings/names.txt:847
-#: data/mp/messages/strings/names.txt:861
+#: data/mp/messages/strings/names.txt:862
 msgid "Robotic VTOL Rearming Mk2"
 msgstr "Robotic VTOL Rearming Mk2"
 
 #: data/base/messages/strings/names.txt:848
-#: data/mp/messages/strings/names.txt:862
+#: data/mp/messages/strings/names.txt:863
 msgid "Robotic VTOL Rearming Mk3"
 msgstr "Robotic VTOL Rearming Mk3"
 
 #: data/base/messages/strings/names.txt:849
-#: data/mp/messages/strings/names.txt:863
+#: data/mp/messages/strings/names.txt:864
 msgid "Robotic VTOL Rearming Mk4"
 msgstr "Robotic VTOL Rearming Mk4"
 
@@ -7740,92 +7742,92 @@ msgid "Advanced VTOL Production Mk3"
 msgstr "Advanced VTOL Production Mk3"
 
 #: data/base/messages/strings/names.txt:858
-#: data/mp/messages/strings/names.txt:872
+#: data/mp/messages/strings/names.txt:873
 msgid "Cyborg Self-Repair"
 msgstr "Cyborg Self-Repair"
 
 #: data/base/messages/strings/names.txt:859
-#: data/mp/messages/strings/names.txt:873
+#: data/mp/messages/strings/names.txt:874
 msgid "Automated Cyborg Repair Mk2"
 msgstr "Automated Cyborg Repair Mk2"
 
 #: data/base/messages/strings/names.txt:860
-#: data/mp/messages/strings/names.txt:874
+#: data/mp/messages/strings/names.txt:875
 msgid "Automated Cyborg Repair Mk3"
 msgstr "Automated Cyborg Repair Mk3"
 
 #: data/base/messages/strings/names.txt:862
-#: data/mp/messages/strings/names.txt:876
+#: data/mp/messages/strings/names.txt:877
 msgid "Defenses Self-Repair"
 msgstr "Defenses Self-Repair"
 
 #: data/base/messages/strings/names.txt:863
-#: data/mp/messages/strings/names.txt:877
+#: data/mp/messages/strings/names.txt:878
 msgid "Automated Defenses Repair Mk2"
 msgstr "Automated Defenses Repair Mk2"
 
 #: data/base/messages/strings/names.txt:864
-#: data/mp/messages/strings/names.txt:878
+#: data/mp/messages/strings/names.txt:879
 msgid "Automated Defenses Repair Mk3"
 msgstr "Automated Defenses Repair Mk3"
 
 #: data/base/messages/strings/names.txt:866
-#: data/mp/messages/strings/names.txt:880
+#: data/mp/messages/strings/names.txt:881
 msgid "Base Structure Self-Repair"
 msgstr "Base Structure Self-Repair"
 
 #: data/base/messages/strings/names.txt:867
-#: data/mp/messages/strings/names.txt:881
+#: data/mp/messages/strings/names.txt:882
 msgid "Automated Base Structure Repair Mk2"
 msgstr "Automated Base Structure Repair Mk2"
 
 #: data/base/messages/strings/names.txt:868
-#: data/mp/messages/strings/names.txt:882
+#: data/mp/messages/strings/names.txt:883
 msgid "Automated Base Structure Repair Mk3"
 msgstr "Automated Base Structure Repair Mk3"
 
 #: data/base/messages/strings/names.txt:870
-#: data/mp/messages/strings/names.txt:884
+#: data/mp/messages/strings/names.txt:885
 msgid "Vehicle Self-Repair"
 msgstr "Vehicle Self-Repair"
 
 #: data/base/messages/strings/names.txt:871
-#: data/mp/messages/strings/names.txt:885
+#: data/mp/messages/strings/names.txt:886
 msgid "Automated Vehicle Repair Mk2"
 msgstr "Automated Vehicle Repair Mk2"
 
 #: data/base/messages/strings/names.txt:872
-#: data/mp/messages/strings/names.txt:886
+#: data/mp/messages/strings/names.txt:887
 msgid "Automated Vehicle Repair Mk3"
 msgstr "Automated Vehicle Repair Mk3"
 
 #: data/base/messages/strings/names.txt:874
-#: data/mp/messages/strings/names.txt:890
+#: data/mp/messages/strings/names.txt:891
 msgid "Sensor Upgrade"
 msgstr "Sensor Upgrade"
 
 #: data/base/messages/strings/names.txt:876
-#: data/mp/messages/strings/names.txt:892
+#: data/mp/messages/strings/names.txt:893
 msgid "Construction Unit"
 msgstr "Construction Unit"
 
 #: data/base/messages/strings/names.txt:878
-#: data/mp/messages/strings/names.txt:894
+#: data/mp/messages/strings/names.txt:895
 msgid "Engineering"
 msgstr "Engineering"
 
 #: data/base/messages/strings/names.txt:879
-#: data/mp/messages/strings/names.txt:895
+#: data/mp/messages/strings/names.txt:896
 msgid "Improved Engineering"
 msgstr "Improved Engineering"
 
 #: data/base/messages/strings/names.txt:880
-#: data/mp/messages/strings/names.txt:896
+#: data/mp/messages/strings/names.txt:897
 msgid "Advanced Engineering"
 msgstr "Advanced Engineering"
 
 #: data/base/messages/strings/names.txt:882
-#: data/mp/messages/strings/names.txt:898
+#: data/mp/messages/strings/names.txt:899
 msgid "Mobile Repair Turret"
 msgstr "Mobile Repair Turret"
 
@@ -7835,84 +7837,84 @@ msgstr "Heavy Mobile Repair Turret"
 
 #: data/base/messages/strings/names.txt:884
 #: data/base/messages/strings/resstrings.txt:450
-#: data/mp/messages/strings/names.txt:900
+#: data/mp/messages/strings/names.txt:901
 #: data/mp/messages/strings/resstrings.txt:478
 msgid "Mobile Repair Upgrade"
 msgstr "Mobile Repair Upgrade"
 
 #: data/base/messages/strings/names.txt:885
-#: data/mp/messages/strings/names.txt:901
+#: data/mp/messages/strings/names.txt:902
 msgid "Mobile Repair Upgrade Mk2"
 msgstr "Mobile Repair Upgrade Mk2"
 
 #: data/base/messages/strings/names.txt:891
-#: data/mp/messages/strings/names.txt:907
+#: data/mp/messages/strings/names.txt:908
 msgid "CB Turret"
 msgstr "CB Turret"
 
 #: data/base/messages/strings/names.txt:893
-#: data/mp/messages/strings/names.txt:909
+#: data/mp/messages/strings/names.txt:910
 msgid "CB Sensor Upgrade"
 msgstr "CB Sensor Upgrade"
 
 #: data/base/messages/strings/names.txt:894
-#: data/mp/messages/strings/names.txt:910
+#: data/mp/messages/strings/names.txt:911
 msgid "CB Sensor Upgrade 2"
 msgstr "CB Sensor Upgrade 2"
 
 #: data/base/messages/strings/names.txt:895
-#: data/mp/messages/strings/names.txt:911
+#: data/mp/messages/strings/names.txt:912
 msgid "CB Sensor Upgrade 3"
 msgstr "CB Sensor Upgrade 3"
 
 #: data/base/messages/strings/names.txt:897
-#: data/mp/messages/strings/names.txt:913
+#: data/mp/messages/strings/names.txt:914
 msgid "VTOL CB Turret"
 msgstr "VTOL CB Turret"
 
 #: data/base/messages/strings/names.txt:900
-#: data/mp/messages/strings/names.txt:916
+#: data/mp/messages/strings/names.txt:917
 msgid "VTOL CB Upgrade"
 msgstr "VTOL CB Upgrade"
 
 #: data/base/messages/strings/names.txt:901
-#: data/mp/messages/strings/names.txt:917
+#: data/mp/messages/strings/names.txt:918
 msgid "VTOL CB Upgrade 2"
 msgstr "VTOL CB Upgrade 2"
 
 #: data/base/messages/strings/names.txt:902
-#: data/mp/messages/strings/names.txt:918
+#: data/mp/messages/strings/names.txt:919
 msgid "VTOL CB Upgrade 3"
 msgstr "VTOL CB Upgrade 3"
 
 #: data/base/messages/strings/names.txt:903
-#: data/mp/messages/strings/names.txt:919
+#: data/mp/messages/strings/names.txt:920
 msgid "VTOL Strike Upgrade"
 msgstr "VTOL Strike Upgrade"
 
 #: data/base/messages/strings/names.txt:904
-#: data/mp/messages/strings/names.txt:920
+#: data/mp/messages/strings/names.txt:921
 msgid "VTOL Strike Upgrade Mk2"
 msgstr "VTOL Strike Upgrade Mk2"
 
 #: data/base/messages/strings/names.txt:905
-#: data/mp/messages/strings/names.txt:921
+#: data/mp/messages/strings/names.txt:922
 msgid "VTOL Strike Upgrade Mk3"
 msgstr "VTOL Strike Upgrade Mk3"
 
 #: data/base/messages/strings/names.txt:907
 #: data/mp/messages/strings/names.txt:436
-#: data/mp/messages/strings/names.txt:923
+#: data/mp/messages/strings/names.txt:924
 msgid "VTOL Strike Tower"
 msgstr "VTOL Strike Tower"
 
 #: data/base/messages/strings/names.txt:910
-#: data/mp/messages/strings/names.txt:926
+#: data/mp/messages/strings/names.txt:927
 msgid "Improved Scrambler"
 msgstr "Improved Scrambler"
 
 #: data/base/messages/strings/names.txt:911
-#: data/mp/messages/strings/names.txt:927
+#: data/mp/messages/strings/names.txt:928
 msgid "Scrambler Turret Mk2"
 msgstr "Scrambler Turret Mk2"
 
@@ -7933,292 +7935,292 @@ msgid "NEXUS Resistance Circuits Mk3"
 msgstr "NEXUS Resistance Circuits Mk3"
 
 #: data/base/messages/strings/names.txt:918
-#: data/mp/messages/strings/names.txt:934
+#: data/mp/messages/strings/names.txt:935
 msgid "Sensor Lock"
 msgstr "Sensor Lock"
 
 #: data/base/messages/strings/names.txt:922
-#: data/mp/messages/strings/names.txt:938
+#: data/mp/messages/strings/names.txt:939
 msgid "Thermal Armor"
 msgstr "Thermal Armour"
 
 #: data/base/messages/strings/names.txt:923
-#: data/mp/messages/strings/names.txt:939
+#: data/mp/messages/strings/names.txt:940
 msgid "Thermal Armor Mk2"
 msgstr "Thermal Armour Mk2"
 
 #: data/base/messages/strings/names.txt:924
-#: data/mp/messages/strings/names.txt:940
+#: data/mp/messages/strings/names.txt:941
 msgid "Thermal Armor Mk3"
 msgstr "Thermal Armour Mk3"
 
 #: data/base/messages/strings/names.txt:925
-#: data/mp/messages/strings/names.txt:941
+#: data/mp/messages/strings/names.txt:942
 msgid "High Intensity Thermal Armor"
 msgstr "High Intensity Thermal Armour"
 
 #: data/base/messages/strings/names.txt:926
-#: data/mp/messages/strings/names.txt:942
+#: data/mp/messages/strings/names.txt:943
 msgid "High Intensity Thermal Armor Mk2"
 msgstr "High Intensity Thermal Armour Mk2"
 
 #: data/base/messages/strings/names.txt:927
-#: data/mp/messages/strings/names.txt:943
+#: data/mp/messages/strings/names.txt:944
 msgid "High Intensity Thermal Armor Mk3"
 msgstr "High Intensity Thermal Armour Mk3"
 
 #: data/base/messages/strings/names.txt:929
-#: data/mp/messages/strings/names.txt:945
+#: data/mp/messages/strings/names.txt:946
 msgid "Light Body - Viper"
 msgstr "Light Body - Viper"
 
 #: data/base/messages/strings/names.txt:930
-#: data/mp/messages/strings/names.txt:946
+#: data/mp/messages/strings/names.txt:947
 msgid "Light Body - Leopard"
 msgstr "Light Body - Leopard"
 
 #: data/base/messages/strings/names.txt:931
-#: data/mp/messages/strings/names.txt:947
+#: data/mp/messages/strings/names.txt:948
 msgid "Light Body - Retaliation"
 msgstr "Light Body - Retaliation"
 
 #: data/base/messages/strings/names.txt:932
-#: data/mp/messages/strings/names.txt:948
+#: data/mp/messages/strings/names.txt:949
 msgid "Light Body - Bug"
 msgstr "Light Body - Bug"
 
 #: data/base/messages/strings/names.txt:933
-#: data/mp/messages/strings/names.txt:949
+#: data/mp/messages/strings/names.txt:950
 msgid "Medium Body - Cobra"
 msgstr "Medium Body - Cobra"
 
 #: data/base/messages/strings/names.txt:934
-#: data/mp/messages/strings/names.txt:950
+#: data/mp/messages/strings/names.txt:951
 msgid "Medium Body - Panther"
 msgstr "Medium Body - Panther"
 
 #: data/base/messages/strings/names.txt:935
-#: data/mp/messages/strings/names.txt:951
+#: data/mp/messages/strings/names.txt:952
 msgid "Medium Body - Retribution"
 msgstr "Medium Body - Retribution"
 
 #: data/base/messages/strings/names.txt:936
-#: data/mp/messages/strings/names.txt:952
+#: data/mp/messages/strings/names.txt:953
 msgid "Medium Body - Scorpion"
 msgstr "Medium Body - Scorpion"
 
 #: data/base/messages/strings/names.txt:937
-#: data/mp/messages/strings/names.txt:953
+#: data/mp/messages/strings/names.txt:954
 msgid "Heavy Body - Tiger"
 msgstr "Heavy Body - Tiger"
 
 #: data/base/messages/strings/names.txt:938
-#: data/mp/messages/strings/names.txt:954
+#: data/mp/messages/strings/names.txt:955
 msgid "Heavy Body - Vengeance"
 msgstr "Heavy Body - Vengeance"
 
 #: data/base/messages/strings/names.txt:939
-#: data/mp/messages/strings/names.txt:955
+#: data/mp/messages/strings/names.txt:956
 msgid "Heavy Body - Python"
 msgstr "Heavy Body - Python"
 
 #: data/base/messages/strings/names.txt:940
-#: data/mp/messages/strings/names.txt:956
+#: data/mp/messages/strings/names.txt:957
 msgid "Heavy Body - Mantis"
 msgstr "Heavy Body - Mantis"
 
 #: data/base/messages/strings/names.txt:943
-#: data/mp/messages/strings/names.txt:959
+#: data/mp/messages/strings/names.txt:960
 msgid "Fuel Injection Engine Mk2"
 msgstr "Fuel Injection Engine Mk2"
 
 #: data/base/messages/strings/names.txt:944
-#: data/mp/messages/strings/names.txt:960
+#: data/mp/messages/strings/names.txt:961
 msgid "Fuel Injection Engine Mk3"
 msgstr "Fuel Injection Engine Mk3"
 
 #: data/base/messages/strings/names.txt:946
-#: data/mp/messages/strings/names.txt:962
+#: data/mp/messages/strings/names.txt:963
 msgid "Turbo-Charged Engine Mk2"
 msgstr "Turbo-Charged Engine Mk2"
 
 #: data/base/messages/strings/names.txt:947
-#: data/mp/messages/strings/names.txt:963
+#: data/mp/messages/strings/names.txt:964
 msgid "Turbo-Charged Engine Mk3"
 msgstr "Turbo-Charged Engine Mk3"
 
 #: data/base/messages/strings/names.txt:949
-#: data/mp/messages/strings/names.txt:965
+#: data/mp/messages/strings/names.txt:966
 msgid "Gas Turbine Engine Mk2"
 msgstr "Gas Turbine Engine Mk2"
 
 #: data/base/messages/strings/names.txt:950
-#: data/mp/messages/strings/names.txt:966
+#: data/mp/messages/strings/names.txt:967
 msgid "Gas Turbine Engine Mk3"
 msgstr "Gas Turbine Engine Mk3"
 
 #: data/base/messages/strings/names.txt:953
-#: data/mp/messages/strings/names.txt:969
+#: data/mp/messages/strings/names.txt:970
 msgid "Composite Alloys"
 msgstr "Composite Alloys"
 
 #: data/base/messages/strings/names.txt:954
-#: data/mp/messages/strings/names.txt:970
+#: data/mp/messages/strings/names.txt:971
 msgid "Composite Alloys Mk2"
 msgstr "Composite Alloys Mk2"
 
 #: data/base/messages/strings/names.txt:955
-#: data/mp/messages/strings/names.txt:971
+#: data/mp/messages/strings/names.txt:972
 msgid "Composite Alloys Mk3"
 msgstr "Composite Alloys Mk3"
 
 #: data/base/messages/strings/names.txt:956
-#: data/mp/messages/strings/names.txt:972
+#: data/mp/messages/strings/names.txt:973
 msgid "Dense Composite Alloys"
 msgstr "Dense Composite Alloys"
 
 #: data/base/messages/strings/names.txt:957
-#: data/mp/messages/strings/names.txt:973
+#: data/mp/messages/strings/names.txt:974
 msgid "Dense Composite Alloys Mk2"
 msgstr "Dense Composite Alloys Mk2"
 
 #: data/base/messages/strings/names.txt:958
-#: data/mp/messages/strings/names.txt:974
+#: data/mp/messages/strings/names.txt:975
 msgid "Dense Composite Alloys Mk3"
 msgstr "Dense Composite Alloys Mk3"
 
 #: data/base/messages/strings/names.txt:959
-#: data/mp/messages/strings/names.txt:975
+#: data/mp/messages/strings/names.txt:976
 msgid "Superdense Composite Alloys"
 msgstr "Superdense Composite Alloys"
 
 #: data/base/messages/strings/names.txt:960
-#: data/mp/messages/strings/names.txt:976
+#: data/mp/messages/strings/names.txt:977
 msgid "Superdense Composite Alloys Mk2"
 msgstr "Superdense Composite Alloys Mk2"
 
 #: data/base/messages/strings/names.txt:961
-#: data/mp/messages/strings/names.txt:977
+#: data/mp/messages/strings/names.txt:978
 msgid "Superdense Composite Alloys Mk3"
 msgstr "Superdense Composite Alloys Mk3"
 
 #: data/base/messages/strings/names.txt:964
-#: data/mp/messages/strings/names.txt:980
+#: data/mp/messages/strings/names.txt:981
 msgid "Hover Propulsion"
 msgstr "Hover Propulsion"
 
 #: data/base/messages/strings/names.txt:965
-#: data/mp/messages/strings/names.txt:981
+#: data/mp/messages/strings/names.txt:982
 msgid "Hover Propulsion II"
 msgstr "Hover Propulsion II"
 
 #: data/base/messages/strings/names.txt:967
-#: data/mp/messages/strings/names.txt:983
+#: data/mp/messages/strings/names.txt:984
 msgid "Half-tracked Propulsion"
 msgstr "Half-tracked Propulsion"
 
 #: data/base/messages/strings/names.txt:968
-#: data/mp/messages/strings/names.txt:984
+#: data/mp/messages/strings/names.txt:985
 msgid "Half-tracked Propulsion II"
 msgstr "Half-tracked Propulsion II"
 
 #: data/base/messages/strings/names.txt:970
-#: data/mp/messages/strings/names.txt:986
+#: data/mp/messages/strings/names.txt:987
 msgid "Tracked Propulsion"
 msgstr "Tracked Propulsion"
 
 #: data/base/messages/strings/names.txt:971
-#: data/mp/messages/strings/names.txt:987
+#: data/mp/messages/strings/names.txt:988
 msgid "Tracked Propulsion II"
 msgstr "Tracked Propulsion II"
 
 #: data/base/messages/strings/names.txt:973
-#: data/mp/messages/strings/names.txt:989
+#: data/mp/messages/strings/names.txt:990
 msgid "VTOL Propulsion"
 msgstr "VTOL Propulsion"
 
 #: data/base/messages/strings/names.txt:974
-#: data/mp/messages/strings/names.txt:990
+#: data/mp/messages/strings/names.txt:991
 msgid "VTOL Propulsion II"
 msgstr "VTOL Propulsion II"
 
 #: data/base/messages/strings/names.txt:977
-#: data/mp/messages/strings/names.txt:993
+#: data/mp/messages/strings/names.txt:994
 msgid "Wheeled Propulsion II"
 msgstr "Wheeled Propulsion II"
 
 #: data/base/messages/strings/names.txt:984
-#: data/mp/messages/strings/names.txt:1000
+#: data/mp/messages/strings/names.txt:1001
 msgid "AA Thermal Imaging Sensor"
 msgstr "AA Thermal Imaging Sensor"
 
 #: data/base/messages/strings/names.txt:985
-#: data/mp/messages/strings/names.txt:1001
+#: data/mp/messages/strings/names.txt:1002
 msgid "AA Target Acquisition Shells"
 msgstr "AA Target Acquisition Shells"
 
 #: data/base/messages/strings/names.txt:986
-#: data/mp/messages/strings/names.txt:1002
+#: data/mp/messages/strings/names.txt:1003
 msgid "AA Target Prediction Computer"
 msgstr "AA Target Prediction Computer"
 
 #: data/base/messages/strings/names.txt:987
-#: data/mp/messages/strings/names.txt:1003
+#: data/mp/messages/strings/names.txt:1004
 msgid "AA HE Flak"
 msgstr "AA HE Flak"
 
 #: data/base/messages/strings/names.txt:988
-#: data/mp/messages/strings/names.txt:1004
+#: data/mp/messages/strings/names.txt:1005
 msgid "AA HE Flak Mk2"
 msgstr "AA HE Flak Mk2"
 
 #: data/base/messages/strings/names.txt:989
-#: data/mp/messages/strings/names.txt:1005
+#: data/mp/messages/strings/names.txt:1006
 msgid "AA HE Flak Mk3"
 msgstr "AA HE Flak Mk3"
 
 #: data/base/messages/strings/names.txt:990
-#: data/mp/messages/strings/names.txt:1006
+#: data/mp/messages/strings/names.txt:1007
 msgid "AA HEAP Flak"
 msgstr "AA HEAP Flak"
 
 #: data/base/messages/strings/names.txt:991
-#: data/mp/messages/strings/names.txt:1007
+#: data/mp/messages/strings/names.txt:1008
 msgid "AA HEAP Flak Mk2"
 msgstr "AA HEAP Flak Mk2"
 
 #: data/base/messages/strings/names.txt:992
-#: data/mp/messages/strings/names.txt:1008
+#: data/mp/messages/strings/names.txt:1009
 msgid "AA HEAP Flak Mk3"
 msgstr "AA HEAP Flak Mk3"
 
 #: data/base/messages/strings/names.txt:993
-#: data/mp/messages/strings/names.txt:1009
+#: data/mp/messages/strings/names.txt:1010
 msgid "AA Ammunition Hopper"
 msgstr "AA Ammunition Hopper"
 
 #: data/base/messages/strings/names.txt:994
-#: data/mp/messages/strings/names.txt:1010
+#: data/mp/messages/strings/names.txt:1011
 msgid "AA Ammunition Hopper Mk2"
 msgstr "AA Ammunition Hopper Mk2"
 
 #: data/base/messages/strings/names.txt:995
-#: data/mp/messages/strings/names.txt:1011
+#: data/mp/messages/strings/names.txt:1012
 msgid "AA Ammunition Hopper Mk3"
 msgstr "AA Ammunition Hopper Mk3"
 
 #: data/base/messages/strings/names.txt:996
-#: data/mp/messages/strings/names.txt:1012
+#: data/mp/messages/strings/names.txt:1013
 msgid "AA Chainfeed Loader"
 msgstr "AA Chainfeed Loader"
 
 #: data/base/messages/strings/names.txt:997
-#: data/mp/messages/strings/names.txt:1013
+#: data/mp/messages/strings/names.txt:1014
 msgid "AA Chainfeed Loader Mk2"
 msgstr "AA Chainfeed Loader Mk2"
 
 #: data/base/messages/strings/names.txt:998
-#: data/mp/messages/strings/names.txt:1014
+#: data/mp/messages/strings/names.txt:1015
 msgid "AA Chainfeed Loader Mk3"
 msgstr "AA Chainfeed Loader Mk3"
 
@@ -8227,17 +8229,17 @@ msgid "Cluster Bombs Bay"
 msgstr "Cluster Bombs Bay"
 
 #: data/base/messages/strings/names.txt:1004
-#: data/mp/messages/strings/names.txt:1020
+#: data/mp/messages/strings/names.txt:1021
 msgid "HEAP Bomb Bay"
 msgstr "HEAP Bomb Bay"
 
 #: data/base/messages/strings/names.txt:1005
-#: data/mp/messages/strings/names.txt:1021
+#: data/mp/messages/strings/names.txt:1022
 msgid "Phosphor Bomb Bay"
 msgstr "Phosphor Bomb Bay"
 
 #: data/base/messages/strings/names.txt:1006
-#: data/mp/messages/strings/names.txt:1022
+#: data/mp/messages/strings/names.txt:1023
 msgid "Thermite Bomb Bay"
 msgstr "Thermite Bomb Bay"
 
@@ -8254,252 +8256,252 @@ msgid "Target Acquisition Bombsight"
 msgstr "Target Acquisition Bombsight"
 
 #: data/base/messages/strings/names.txt:1012
-#: data/mp/messages/strings/names.txt:1028
+#: data/mp/messages/strings/names.txt:1029
 msgid "Cannon Laser Rangefinder"
 msgstr "Cannon Laser Rangefinder"
 
 #: data/base/messages/strings/names.txt:1013
-#: data/mp/messages/strings/names.txt:1029
+#: data/mp/messages/strings/names.txt:1030
 msgid "Cannon Laser Designator"
 msgstr "Cannon Laser Designator"
 
 #: data/base/messages/strings/names.txt:1014
-#: data/mp/messages/strings/names.txt:1030
+#: data/mp/messages/strings/names.txt:1031
 msgid "HEAT Cannon Shells"
 msgstr "HEAT Cannon Shells"
 
 #: data/base/messages/strings/names.txt:1015
-#: data/mp/messages/strings/names.txt:1031
+#: data/mp/messages/strings/names.txt:1032
 msgid "HEAT Cannon Shells Mk2"
 msgstr "HEAT Cannon Shells Mk2"
 
 #: data/base/messages/strings/names.txt:1016
-#: data/mp/messages/strings/names.txt:1032
+#: data/mp/messages/strings/names.txt:1033
 msgid "HEAT Cannon Shells Mk3"
 msgstr "HEAT Cannon Shells Mk3"
 
 #: data/base/messages/strings/names.txt:1017
-#: data/mp/messages/strings/names.txt:1033
+#: data/mp/messages/strings/names.txt:1034
 msgid "APFSDS Cannon Rounds"
 msgstr "APFSDS Cannon Rounds"
 
 #: data/base/messages/strings/names.txt:1018
-#: data/mp/messages/strings/names.txt:1034
+#: data/mp/messages/strings/names.txt:1035
 msgid "APFSDS Cannon Rounds Mk2"
 msgstr "APFSDS Cannon Rounds Mk2"
 
 #: data/base/messages/strings/names.txt:1019
-#: data/mp/messages/strings/names.txt:1035
+#: data/mp/messages/strings/names.txt:1036
 msgid "APFSDS Cannon Rounds Mk3"
 msgstr "APFSDS Cannon Rounds Mk3"
 
 #: data/base/messages/strings/names.txt:1020
-#: data/mp/messages/strings/names.txt:1036
+#: data/mp/messages/strings/names.txt:1037
 msgid "HVAPFSDS Cannon Rounds"
 msgstr "HVAPFSDS Cannon Rounds"
 
 #: data/base/messages/strings/names.txt:1021
-#: data/mp/messages/strings/names.txt:1037
+#: data/mp/messages/strings/names.txt:1038
 msgid "HVAPFSDS Cannon Rounds Mk2"
 msgstr "HVAPFSDS Cannon Rounds Mk2"
 
 #: data/base/messages/strings/names.txt:1022
-#: data/mp/messages/strings/names.txt:1038
+#: data/mp/messages/strings/names.txt:1039
 msgid "HVAPFSDS Cannon Rounds Mk3"
 msgstr "HVAPFSDS Cannon Rounds Mk3"
 
 #: data/base/messages/strings/names.txt:1026
-#: data/mp/messages/strings/names.txt:1042
+#: data/mp/messages/strings/names.txt:1043
 msgid "Cannon Autoloader"
 msgstr "Cannon Autoloader"
 
 #: data/base/messages/strings/names.txt:1027
-#: data/mp/messages/strings/names.txt:1043
+#: data/mp/messages/strings/names.txt:1044
 msgid "Cannon Autoloader Mk2"
 msgstr "Cannon Autoloader Mk2"
 
 #: data/base/messages/strings/names.txt:1028
-#: data/mp/messages/strings/names.txt:1044
+#: data/mp/messages/strings/names.txt:1045
 msgid "Cannon Autoloader Mk3"
 msgstr "Cannon Autoloader Mk3"
 
 #: data/base/messages/strings/names.txt:1029
-#: data/mp/messages/strings/names.txt:1045
+#: data/mp/messages/strings/names.txt:1046
 msgid "Cannon Rapid Loader"
 msgstr "Cannon Rapid Loader"
 
 #: data/base/messages/strings/names.txt:1030
-#: data/mp/messages/strings/names.txt:1046
+#: data/mp/messages/strings/names.txt:1047
 msgid "Cannon Rapid Loader Mk2"
 msgstr "Cannon Rapid Loader Mk2"
 
 #: data/base/messages/strings/names.txt:1031
-#: data/mp/messages/strings/names.txt:1047
+#: data/mp/messages/strings/names.txt:1048
 msgid "Cannon Rapid Loader Mk3"
 msgstr "Cannon Rapid Loader Mk3"
 
 #: data/base/messages/strings/names.txt:1039
-#: data/mp/messages/strings/names.txt:1055
+#: data/mp/messages/strings/names.txt:1056
 msgid "Improved Laser Focusing"
 msgstr "Improved Laser Focusing"
 
 #: data/base/messages/strings/names.txt:1040
-#: data/mp/messages/strings/names.txt:1056
+#: data/mp/messages/strings/names.txt:1057
 msgid "Improved Laser Focusing Mk2"
 msgstr "Improved Laser Focusing Mk2"
 
 #: data/base/messages/strings/names.txt:1041
-#: data/mp/messages/strings/names.txt:1057
+#: data/mp/messages/strings/names.txt:1058
 msgid "Improved Laser Focusing Mk3"
 msgstr "Improved Laser Focusing Mk3"
 
 #: data/base/messages/strings/names.txt:1042
-#: data/mp/messages/strings/names.txt:1058
+#: data/mp/messages/strings/names.txt:1059
 msgid "Hi-Energy Laser Emitter"
 msgstr "Hi-Energy Laser Emitter"
 
 #: data/base/messages/strings/names.txt:1043
-#: data/mp/messages/strings/names.txt:1059
+#: data/mp/messages/strings/names.txt:1060
 msgid "Hi-Energy Laser Emitter Mk2"
 msgstr "Hi-Energy Laser Emitter Mk2"
 
 #: data/base/messages/strings/names.txt:1044
-#: data/mp/messages/strings/names.txt:1060
+#: data/mp/messages/strings/names.txt:1061
 msgid "Hi-Energy Laser Emitter Mk3"
 msgstr "Hi-Energy Laser Emitter Mk3"
 
 #: data/base/messages/strings/names.txt:1045
-#: data/mp/messages/strings/names.txt:1061
+#: data/mp/messages/strings/names.txt:1062
 msgid "Thermopole Energizer"
 msgstr "Thermopole Energiser"
 
 #: data/base/messages/strings/names.txt:1046
-#: data/mp/messages/strings/names.txt:1062
+#: data/mp/messages/strings/names.txt:1063
 msgid "Thermopole Energizer Mk2"
 msgstr "Thermopole Energiser Mk2"
 
 #: data/base/messages/strings/names.txt:1047
-#: data/mp/messages/strings/names.txt:1063
+#: data/mp/messages/strings/names.txt:1064
 msgid "Thermopole Energizer Mk3"
 msgstr "Thermopole Energiser Mk3"
 
 #: data/base/messages/strings/names.txt:1049
-#: data/mp/messages/strings/names.txt:1065
+#: data/mp/messages/strings/names.txt:1066
 msgid "High Temperature Flamer Gel"
 msgstr "High Temperature Flamer Gel"
 
 #: data/base/messages/strings/names.txt:1050
-#: data/mp/messages/strings/names.txt:1066
+#: data/mp/messages/strings/names.txt:1067
 msgid "High Temperature Flamer Gel Mk2"
 msgstr "High Temperature Flamer Gel Mk2"
 
 #: data/base/messages/strings/names.txt:1051
-#: data/mp/messages/strings/names.txt:1067
+#: data/mp/messages/strings/names.txt:1068
 msgid "High Temperature Flamer Gel Mk3"
 msgstr "High Temperature Flamer Gel Mk3"
 
 #: data/base/messages/strings/names.txt:1052
-#: data/mp/messages/strings/names.txt:1068
+#: data/mp/messages/strings/names.txt:1069
 msgid "Superhot Flamer Gel"
 msgstr "Superhot Flamer Gel"
 
 #: data/base/messages/strings/names.txt:1053
-#: data/mp/messages/strings/names.txt:1069
+#: data/mp/messages/strings/names.txt:1070
 msgid "Superhot Flamer Gel Mk2"
 msgstr "Superhot Flamer Gel Mk2"
 
 #: data/base/messages/strings/names.txt:1054
-#: data/mp/messages/strings/names.txt:1070
+#: data/mp/messages/strings/names.txt:1071
 msgid "Superhot Flamer Gel Mk3"
 msgstr "Superhot Flamer Gel Mk3"
 
 #: data/base/messages/strings/names.txt:1055
-#: data/mp/messages/strings/names.txt:1071
+#: data/mp/messages/strings/names.txt:1072
 msgid "Flamer Autoloader"
 msgstr "Flamer Autoloader"
 
 #: data/base/messages/strings/names.txt:1056
-#: data/mp/messages/strings/names.txt:1072
+#: data/mp/messages/strings/names.txt:1073
 msgid "Flamer Autoloader Mk2"
 msgstr "Flamer Autoloader Mk2"
 
 #: data/base/messages/strings/names.txt:1057
-#: data/mp/messages/strings/names.txt:1073
+#: data/mp/messages/strings/names.txt:1074
 msgid "Flamer Autoloader Mk3"
 msgstr "Flamer Autoloader Mk3"
 
 #: data/base/messages/strings/names.txt:1059
-#: data/mp/messages/strings/names.txt:1075
+#: data/mp/messages/strings/names.txt:1076
 msgid "Heavy Flamer - Inferno"
 msgstr "Heavy Flamer - Inferno"
 
 #: data/base/messages/strings/names.txt:1062
-#: data/mp/messages/strings/names.txt:1078
+#: data/mp/messages/strings/names.txt:1079
 msgid "Heavy Howitzer - Ground Shaker"
 msgstr "Heavy Howitzer - Ground Shaker"
 
 #: data/base/messages/strings/names.txt:1063
-#: data/mp/messages/strings/names.txt:1079
+#: data/mp/messages/strings/names.txt:1080
 msgid "Rotary Howitzer - Hellstorm"
 msgstr "Rotary Howitzer - Hellstorm"
 
 #: data/base/messages/strings/names.txt:1066
-#: data/mp/messages/strings/names.txt:1082
+#: data/mp/messages/strings/names.txt:1083
 msgid "Target Acquisition Artillery Shells"
 msgstr "Target Acquisition Artillery Shells"
 
 #: data/base/messages/strings/names.txt:1067
-#: data/mp/messages/strings/names.txt:1083
+#: data/mp/messages/strings/names.txt:1084
 msgid "Target Acquisition Artillery Shells Mk2"
 msgstr "Target Acquisition Artillery Shells Mk2"
 
 #: data/base/messages/strings/names.txt:1068
-#: data/mp/messages/strings/names.txt:1084
+#: data/mp/messages/strings/names.txt:1085
 msgid "Target Prediction Artillery Shells"
 msgstr "Target Prediction Artillery Shells"
 
 #: data/base/messages/strings/names.txt:1070
-#: data/mp/messages/strings/names.txt:1086
+#: data/mp/messages/strings/names.txt:1087
 msgid "HE Howitzer Shells"
 msgstr "HE Howitzer Shells"
 
 #: data/base/messages/strings/names.txt:1071
-#: data/mp/messages/strings/names.txt:1087
+#: data/mp/messages/strings/names.txt:1088
 msgid "HE Howitzer Shells Mk2"
 msgstr "HE Howitzer Shells Mk2"
 
 #: data/base/messages/strings/names.txt:1072
-#: data/mp/messages/strings/names.txt:1088
+#: data/mp/messages/strings/names.txt:1089
 msgid "HE Howitzer Shells Mk3"
 msgstr "HE Howitzer Shells Mk3"
 
 #: data/base/messages/strings/names.txt:1073
-#: data/mp/messages/strings/names.txt:1089
+#: data/mp/messages/strings/names.txt:1090
 msgid "HEAP Howitzer Shells"
 msgstr "HEAP Howitzer Shells"
 
 #: data/base/messages/strings/names.txt:1074
-#: data/mp/messages/strings/names.txt:1090
+#: data/mp/messages/strings/names.txt:1091
 msgid "HEAP Howitzer Shells Mk2"
 msgstr "HEAP Howitzer Shells Mk2"
 
 #: data/base/messages/strings/names.txt:1075
-#: data/mp/messages/strings/names.txt:1091
+#: data/mp/messages/strings/names.txt:1092
 msgid "HEAP Howitzer Shells Mk3"
 msgstr "HEAP Howitzer Shells Mk3"
 
 #: data/base/messages/strings/names.txt:1077
-#: data/mp/messages/strings/names.txt:1093
+#: data/mp/messages/strings/names.txt:1094
 msgid "Howitzer Autoloader"
 msgstr "Howitzer Autoloader"
 
 #: data/base/messages/strings/names.txt:1078
-#: data/mp/messages/strings/names.txt:1094
+#: data/mp/messages/strings/names.txt:1095
 msgid "Howitzer Autoloader Mk2"
 msgstr "Howitzer Autoloader Mk2"
 
 #: data/base/messages/strings/names.txt:1079
-#: data/mp/messages/strings/names.txt:1095
+#: data/mp/messages/strings/names.txt:1096
 msgid "Howitzer Autoloader Mk3"
 msgstr "Howitzer Autoloader Mk3"
 
@@ -8508,57 +8510,57 @@ msgid "Fast Loader"
 msgstr "Fast Loader"
 
 #: data/base/messages/strings/names.txt:1082
-#: data/mp/messages/strings/names.txt:1098
+#: data/mp/messages/strings/names.txt:1099
 msgid "Laser - Flashlight"
 msgstr "Laser - Flashlight"
 
 #: data/base/messages/strings/names.txt:1085
-#: data/mp/messages/strings/names.txt:1101
+#: data/mp/messages/strings/names.txt:1102
 msgid "Hardened MG Bullets"
 msgstr "Hardened MG Bullets"
 
 #: data/base/messages/strings/names.txt:1086
-#: data/mp/messages/strings/names.txt:1102
+#: data/mp/messages/strings/names.txt:1103
 msgid "APDSB MG Bullets"
 msgstr "APDSB MG Bullets"
 
 #: data/base/messages/strings/names.txt:1087
-#: data/mp/messages/strings/names.txt:1103
+#: data/mp/messages/strings/names.txt:1104
 msgid "APDSB MG Bullets Mk2"
 msgstr "APDSB MG Bullets Mk2"
 
 #: data/base/messages/strings/names.txt:1088
-#: data/mp/messages/strings/names.txt:1104
+#: data/mp/messages/strings/names.txt:1105
 msgid "APDSB MG Bullets Mk3"
 msgstr "APDSB MG Bullets Mk3"
 
 #: data/base/messages/strings/names.txt:1089
-#: data/mp/messages/strings/names.txt:1105
+#: data/mp/messages/strings/names.txt:1106
 msgid "Tungsten-Tipped MG Bullets"
 msgstr "Tungsten-Tipped MG Bullets"
 
 #: data/base/messages/strings/names.txt:1090
-#: data/mp/messages/strings/names.txt:1106
+#: data/mp/messages/strings/names.txt:1107
 msgid "Tungsten-Tipped MG Bullets Mk2"
 msgstr "Tungsten-Tipped MG Bullets Mk2"
 
 #: data/base/messages/strings/names.txt:1091
-#: data/mp/messages/strings/names.txt:1107
+#: data/mp/messages/strings/names.txt:1108
 msgid "Tungsten-Tipped MG Bullets Mk3"
 msgstr "Tungsten-Tipped MG Bullets Mk3"
 
 #: data/base/messages/strings/names.txt:1092
-#: data/mp/messages/strings/names.txt:1108
+#: data/mp/messages/strings/names.txt:1109
 msgid "Depleted Uranium MG Bullets"
 msgstr "Depleted Uranium MG Bullets"
 
 #: data/base/messages/strings/names.txt:1093
-#: data/mp/messages/strings/names.txt:1109
+#: data/mp/messages/strings/names.txt:1110
 msgid "Depleted Uranium MG Bullets Mk2"
 msgstr "Depleted Uranium MG Bullets Mk2"
 
 #: data/base/messages/strings/names.txt:1095
-#: data/mp/messages/strings/names.txt:1111
+#: data/mp/messages/strings/names.txt:1112
 msgid "Chaingun Upgrade"
 msgstr "Chaingun Upgrade"
 
@@ -8567,142 +8569,142 @@ msgid "Rapid Fire Chaingun Upgrade"
 msgstr "Rapid Fire Chaingun Upgrade"
 
 #: data/base/messages/strings/names.txt:1097
-#: data/mp/messages/strings/names.txt:1113
+#: data/mp/messages/strings/names.txt:1114
 msgid "Hyper Fire Chaingun Upgrade"
 msgstr "Hyper Fire Chaingun Upgrade"
 
 #: data/base/messages/strings/names.txt:1103
-#: data/mp/messages/strings/names.txt:1119
+#: data/mp/messages/strings/names.txt:1120
 msgid "Target Prediction Missiles"
 msgstr "Target Prediction Missiles"
 
 #: data/base/messages/strings/names.txt:1104
-#: data/mp/messages/strings/names.txt:1120
+#: data/mp/messages/strings/names.txt:1121
 msgid "Search & Destroy Missiles"
 msgstr "Search & Destroy Missiles"
 
 #: data/base/messages/strings/names.txt:1105
-#: data/mp/messages/strings/names.txt:1121
+#: data/mp/messages/strings/names.txt:1122
 msgid "Advanced Missile Warhead"
 msgstr "Advanced Missile Warhead"
 
 #: data/base/messages/strings/names.txt:1106
-#: data/mp/messages/strings/names.txt:1122
+#: data/mp/messages/strings/names.txt:1123
 msgid "Advanced Missile Warhead Mk2"
 msgstr "Advanced Missile Warhead Mk2"
 
 #: data/base/messages/strings/names.txt:1107
-#: data/mp/messages/strings/names.txt:1123
+#: data/mp/messages/strings/names.txt:1124
 msgid "Advanced Missile Warhead Mk3"
 msgstr "Advanced Missile Warhead Mk3"
 
 #: data/base/messages/strings/names.txt:1108
-#: data/mp/messages/strings/names.txt:1124
+#: data/mp/messages/strings/names.txt:1125
 msgid "Advanced Missile Allocation System"
 msgstr "Advanced Missile Allocation System"
 
 #: data/base/messages/strings/names.txt:1109
-#: data/mp/messages/strings/names.txt:1125
+#: data/mp/messages/strings/names.txt:1126
 msgid "Advanced Missile Allocation System Mk2"
 msgstr "Advanced Missile Allocation System Mk2"
 
 #: data/base/messages/strings/names.txt:1110
-#: data/mp/messages/strings/names.txt:1126
+#: data/mp/messages/strings/names.txt:1127
 msgid "Advanced Missile Allocation System Mk3"
 msgstr "Advanced Missile Allocation System Mk3"
 
 #: data/base/messages/strings/names.txt:1111
-#: data/mp/messages/strings/names.txt:1127
+#: data/mp/messages/strings/names.txt:1128
 msgid "HEAP Missile Warhead"
 msgstr "HEAP Missile Warhead"
 
 #: data/base/messages/strings/names.txt:1112
-#: data/mp/messages/strings/names.txt:1128
+#: data/mp/messages/strings/names.txt:1129
 msgid "HEAP Missile Warhead Mk2"
 msgstr "HEAP Missile Warhead Mk2"
 
 #: data/base/messages/strings/names.txt:1113
-#: data/mp/messages/strings/names.txt:1129
+#: data/mp/messages/strings/names.txt:1130
 msgid "HEAP Missile Warhead Mk3"
 msgstr "HEAP Missile Warhead Mk3"
 
 #: data/base/messages/strings/names.txt:1114
-#: data/mp/messages/strings/names.txt:1130
+#: data/mp/messages/strings/names.txt:1131
 msgid "Improved Missile Loading System"
 msgstr "Improved Missile Loading System"
 
 #: data/base/messages/strings/names.txt:1125
-#: data/mp/messages/strings/names.txt:1141
+#: data/mp/messages/strings/names.txt:1142
 msgid "Mortar Targeting Computer"
 msgstr "Mortar Targeting Computer"
 
 #: data/base/messages/strings/names.txt:1126
-#: data/mp/messages/strings/names.txt:1142
+#: data/mp/messages/strings/names.txt:1143
 msgid "Thermal Imaging Mortar Shells"
 msgstr "Thermal Imaging Mortar Shells"
 
 #: data/base/messages/strings/names.txt:1127
-#: data/mp/messages/strings/names.txt:1143
+#: data/mp/messages/strings/names.txt:1144
 msgid "Target Acquisition Mortar Shells"
 msgstr "Target Acquisition Mortar Shells"
 
 #: data/base/messages/strings/names.txt:1128
-#: data/mp/messages/strings/names.txt:1144
+#: data/mp/messages/strings/names.txt:1145
 msgid "HE Mortar Shells"
 msgstr "HE Mortar Shells"
 
 #: data/base/messages/strings/names.txt:1129
-#: data/mp/messages/strings/names.txt:1145
+#: data/mp/messages/strings/names.txt:1146
 msgid "HE Mortar Shells Mk2"
 msgstr "HE Mortar Shells Mk2"
 
 #: data/base/messages/strings/names.txt:1130
-#: data/mp/messages/strings/names.txt:1146
+#: data/mp/messages/strings/names.txt:1147
 msgid "HE Mortar Shells Mk3"
 msgstr "HE Mortar Shells Mk3"
 
 #: data/base/messages/strings/names.txt:1131
-#: data/mp/messages/strings/names.txt:1147
+#: data/mp/messages/strings/names.txt:1148
 msgid "HEAP Mortar Shells"
 msgstr "HEAP Mortar Shells"
 
 #: data/base/messages/strings/names.txt:1132
-#: data/mp/messages/strings/names.txt:1148
+#: data/mp/messages/strings/names.txt:1149
 msgid "HEAP Mortar Shells Mk2"
 msgstr "HEAP Mortar Shells Mk2"
 
 #: data/base/messages/strings/names.txt:1133
-#: data/mp/messages/strings/names.txt:1149
+#: data/mp/messages/strings/names.txt:1150
 msgid "HEAP Mortar Shells Mk3"
 msgstr "HEAP Mortar Shells Mk3"
 
 #: data/base/messages/strings/names.txt:1134
-#: data/mp/messages/strings/names.txt:1150
+#: data/mp/messages/strings/names.txt:1151
 msgid "Mortar Autoloader"
 msgstr "Mortar Autoloader"
 
 #: data/base/messages/strings/names.txt:1135
-#: data/mp/messages/strings/names.txt:1151
+#: data/mp/messages/strings/names.txt:1152
 msgid "Mortar Autoloader Mk2"
 msgstr "Mortar Autoloader Mk2"
 
 #: data/base/messages/strings/names.txt:1136
-#: data/mp/messages/strings/names.txt:1152
+#: data/mp/messages/strings/names.txt:1153
 msgid "Mortar Autoloader Mk3"
 msgstr "Mortar Autoloader Mk3"
 
 #: data/base/messages/strings/names.txt:1137
-#: data/mp/messages/strings/names.txt:1153
+#: data/mp/messages/strings/names.txt:1154
 msgid "Mortar Fast Loader"
 msgstr "Mortar Fast Loader"
 
 #: data/base/messages/strings/names.txt:1139
-#: data/mp/messages/strings/names.txt:1155
+#: data/mp/messages/strings/names.txt:1156
 msgid "Heavy Mortar - Bombard"
 msgstr "Heavy Mortar - Bombard"
 
 #: data/base/messages/strings/names.txt:1140
-#: data/mp/messages/strings/names.txt:1156
+#: data/mp/messages/strings/names.txt:1157
 msgid "Rotary Mortar - Pepperpot"
 msgstr "Rotary Mortar - Pepperpot"
 
@@ -8711,32 +8713,32 @@ msgid "Target Prediction Computer"
 msgstr "Target Prediction Computer"
 
 #: data/base/messages/strings/names.txt:1146
-#: data/mp/messages/strings/names.txt:1162
+#: data/mp/messages/strings/names.txt:1163
 msgid "Hardened Rail Dart"
 msgstr "Hardened Rail Dart"
 
 #: data/base/messages/strings/names.txt:1147
-#: data/mp/messages/strings/names.txt:1163
+#: data/mp/messages/strings/names.txt:1164
 msgid "Hardened Rail Dart Mk2"
 msgstr "Hardened Rail Dart Mk2"
 
 #: data/base/messages/strings/names.txt:1148
-#: data/mp/messages/strings/names.txt:1164
+#: data/mp/messages/strings/names.txt:1165
 msgid "Hardened Rail Dart Mk3"
 msgstr "Hardened Rail Dart Mk3"
 
 #: data/base/messages/strings/names.txt:1149
-#: data/mp/messages/strings/names.txt:1165
+#: data/mp/messages/strings/names.txt:1166
 msgid "Rail Gun ROF"
 msgstr "Rail Gun ROF"
 
 #: data/base/messages/strings/names.txt:1150
-#: data/mp/messages/strings/names.txt:1166
+#: data/mp/messages/strings/names.txt:1167
 msgid "Rail Gun ROF Mk2"
 msgstr "Rail Gun ROF Mk2"
 
 #: data/base/messages/strings/names.txt:1151
-#: data/mp/messages/strings/names.txt:1167
+#: data/mp/messages/strings/names.txt:1168
 msgid "Rail Gun ROF Mk3"
 msgstr "Rail Gun ROF Mk3"
 
@@ -8785,283 +8787,283 @@ msgid "Fast Fire Mini-Rockets Mk3"
 msgstr "Fast Fire Mini-Rockets Mk3"
 
 #: data/base/messages/strings/names.txt:1164
-#: data/mp/messages/strings/names.txt:1185
+#: data/mp/messages/strings/names.txt:1186
 msgid "Rapid Fire Mini-Rockets"
 msgstr "Rapid Fire Mini-Rockets"
 
 #: data/base/messages/strings/names.txt:1165
-#: data/mp/messages/strings/names.txt:1186
+#: data/mp/messages/strings/names.txt:1187
 msgid "Rapid Fire Mini-Rockets Mk2"
 msgstr "Rapid Fire Mini-Rockets Mk2"
 
 #: data/base/messages/strings/names.txt:1166
-#: data/mp/messages/strings/names.txt:1187
+#: data/mp/messages/strings/names.txt:1188
 msgid "Rapid Fire Mini-Rockets Mk3"
 msgstr "Rapid Fire Mini-Rockets Mk3"
 
 #: data/base/messages/strings/names.txt:1167
-#: data/mp/messages/strings/names.txt:1170
+#: data/mp/messages/strings/names.txt:1171
 msgid "Improved Rocket Wire Guidance"
 msgstr "Improved Rocket Wire Guidance"
 
 #: data/base/messages/strings/names.txt:1168
-#: data/mp/messages/strings/names.txt:1171
+#: data/mp/messages/strings/names.txt:1172
 msgid "Rocket Laser Designator"
 msgstr "Rocket Laser Designator"
 
 #: data/base/messages/strings/names.txt:1169
-#: data/mp/messages/strings/names.txt:1172
+#: data/mp/messages/strings/names.txt:1173
 msgid "Thermal Imaging Rockets"
 msgstr "Thermal Imaging Rockets"
 
 #: data/base/messages/strings/names.txt:1170
-#: data/mp/messages/strings/names.txt:1176
+#: data/mp/messages/strings/names.txt:1177
 msgid "HEAT Rocket Warhead"
 msgstr "HEAT Rocket Warhead"
 
 #: data/base/messages/strings/names.txt:1171
-#: data/mp/messages/strings/names.txt:1177
+#: data/mp/messages/strings/names.txt:1178
 msgid "HEAT Rocket Warhead Mk2"
 msgstr "HEAT Rocket Warhead Mk2"
 
 #: data/base/messages/strings/names.txt:1172
-#: data/mp/messages/strings/names.txt:1178
+#: data/mp/messages/strings/names.txt:1179
 msgid "HEAT Rocket Warhead Mk3"
 msgstr "HEAT Rocket Warhead Mk3"
 
 #: data/base/messages/strings/names.txt:1173
-#: data/mp/messages/strings/names.txt:1179
+#: data/mp/messages/strings/names.txt:1180
 msgid "HESH Rocket Warhead"
 msgstr "HESH Rocket Warhead"
 
 #: data/base/messages/strings/names.txt:1174
-#: data/mp/messages/strings/names.txt:1180
+#: data/mp/messages/strings/names.txt:1181
 msgid "HESH Rocket Warhead Mk2"
 msgstr "HESH Rocket Warhead Mk2"
 
 #: data/base/messages/strings/names.txt:1175
-#: data/mp/messages/strings/names.txt:1181
+#: data/mp/messages/strings/names.txt:1182
 msgid "HESH Rocket Warhead Mk3"
 msgstr "HESH Rocket Warhead Mk3"
 
 #: data/base/messages/strings/names.txt:1176
-#: data/mp/messages/strings/names.txt:1182
+#: data/mp/messages/strings/names.txt:1183
 msgid "Rocket Autoloader"
 msgstr "Rocket Autoloader"
 
 #: data/base/messages/strings/names.txt:1177
-#: data/mp/messages/strings/names.txt:1183
+#: data/mp/messages/strings/names.txt:1184
 msgid "Rocket Autoloader Mk2"
 msgstr "Rocket Autoloader Mk2"
 
 #: data/base/messages/strings/names.txt:1178
-#: data/mp/messages/strings/names.txt:1184
+#: data/mp/messages/strings/names.txt:1185
 msgid "Rocket Autoloader Mk3"
 msgstr "Rocket Autoloader Mk3"
 
 #: data/base/messages/strings/names.txt:1180
-#: data/mp/messages/strings/names.txt:1199
+#: data/mp/messages/strings/names.txt:1200
 msgid "Lancer AT Rocket"
 msgstr "Lancer AT Rocket"
 
 #: data/base/messages/strings/names.txt:1182
-#: data/mp/messages/strings/names.txt:1201
+#: data/mp/messages/strings/names.txt:1202
 msgid "Bunker Buster Rocket"
 msgstr "Bunker Buster Rocket"
 
 #: data/base/messages/strings/names.txt:1185
-#: data/mp/messages/strings/names.txt:1204
+#: data/mp/messages/strings/names.txt:1205
 msgid "Tank Killer Rocket"
 msgstr "Tank Killer Rocket"
 
 #: data/base/messages/strings/names.txt:1187
-#: data/mp/messages/strings/names.txt:1206
+#: data/mp/messages/strings/names.txt:1207
 #, fuzzy
 msgid "Machinegun Artifact"
 msgstr "Machine Gun Artifact"
 
 #: data/base/messages/strings/names.txt:1190
-#: data/mp/messages/strings/names.txt:1209
+#: data/mp/messages/strings/names.txt:1210
 msgid "New Paradigm Command Center"
 msgstr "New Paradigm Command Centre"
 
 #: data/base/messages/strings/names.txt:1191
-#: data/mp/messages/strings/names.txt:1210
+#: data/mp/messages/strings/names.txt:1211
 msgid "Collective Command Center"
 msgstr "Collective Command Centre"
 
 #: data/base/messages/strings/names.txt:1201
-#: data/mp/messages/strings/names.txt:1220
+#: data/mp/messages/strings/names.txt:1221
 msgid "Scavenger Factory"
 msgstr "Scavenger Factory"
 
 #: data/base/messages/strings/names.txt:1202
-#: data/mp/messages/strings/names.txt:1221
+#: data/mp/messages/strings/names.txt:1222
 msgid "Scavenger Gun Tower"
 msgstr "Scavenger Gun Tower"
 
 #: data/base/messages/strings/names.txt:1203
-#: data/mp/messages/strings/names.txt:1222
+#: data/mp/messages/strings/names.txt:1223
 msgid "Scavenger Horizontal Wall"
 msgstr "Scavenger Horizontal Wall"
 
 #: data/base/messages/strings/names.txt:1204
-#: data/mp/messages/strings/names.txt:1223
+#: data/mp/messages/strings/names.txt:1224
 msgid "Scavenger Power Generator"
 msgstr "Scavenger Power Generator"
 
 #: data/base/messages/strings/names.txt:1205
-#: data/mp/messages/strings/names.txt:1224
+#: data/mp/messages/strings/names.txt:1225
 msgid "Scavenger Rocket Pit"
 msgstr "Scavenger Rocket Pit"
 
 #: data/base/messages/strings/names.txt:1206
-#: data/mp/messages/strings/names.txt:1225
+#: data/mp/messages/strings/names.txt:1226
 msgid "Scavenger AT-Rocket Pit"
 msgstr "Scavenger AT-Rocket Pit"
 
 #: data/base/messages/strings/names.txt:1207
-#: data/mp/messages/strings/names.txt:1226
+#: data/mp/messages/strings/names.txt:1227
 msgid "Scavenger Bunker"
 msgstr "Scavenger Bunker"
 
 #: data/base/messages/strings/names.txt:1208
-#: data/mp/messages/strings/names.txt:1227
+#: data/mp/messages/strings/names.txt:1228
 msgid "Scavenger CornerWall"
 msgstr "Scavenger CornerWall"
 
 #: data/base/messages/strings/names.txt:1209
-#: data/mp/messages/strings/names.txt:1228
+#: data/mp/messages/strings/names.txt:1229
 msgid "Scavenger Flame Tower"
 msgstr "Scavenger Flame Tower"
 
 #: data/base/messages/strings/names.txt:1210
-#: data/mp/messages/strings/names.txt:1229
+#: data/mp/messages/strings/names.txt:1230
 msgid "Scavenger Flame Tower End"
 msgstr "Scavenger Flame Tower End"
 
 #: data/base/messages/strings/names.txt:1211
-#: data/mp/messages/strings/names.txt:1230
+#: data/mp/messages/strings/names.txt:1231
 msgid "Look-Out Tower"
 msgstr "Look-Out Tower"
 
 #: data/base/messages/strings/names.txt:1212
-#: data/mp/messages/strings/names.txt:1231
+#: data/mp/messages/strings/names.txt:1232
 msgid "Cannon Tower"
 msgstr "Cannon Tower"
 
 #: data/base/messages/strings/names.txt:1235
-#: data/mp/messages/strings/names.txt:1254
+#: data/mp/messages/strings/names.txt:1255
 msgid "Artifact"
 msgstr "Artifact"
 
 #: data/base/messages/strings/names.txt:1236
-#: data/mp/messages/strings/names.txt:1255
+#: data/mp/messages/strings/names.txt:1256
 msgid "Oil Resource"
 msgstr "Oil Resource"
 
 #: data/base/messages/strings/names.txt:1262
-#: data/mp/messages/strings/names.txt:1281
+#: data/mp/messages/strings/names.txt:1282
 msgid "Bridge"
 msgstr "Bridge"
 
 #: data/base/messages/strings/names.txt:1265
-#: data/mp/messages/strings/names.txt:1284
+#: data/mp/messages/strings/names.txt:1285
 msgid "Ruined Factory"
 msgstr "Ruined Factory"
 
 #: data/base/messages/strings/names.txt:1266
-#: data/mp/messages/strings/names.txt:1285
+#: data/mp/messages/strings/names.txt:1286
 msgid "Warehouse"
 msgstr "Warehouse"
 
 #: data/base/messages/strings/names.txt:1267
-#: data/mp/messages/strings/names.txt:1286
+#: data/mp/messages/strings/names.txt:1287
 msgid "Hut"
 msgstr "Hut"
 
 #: data/base/messages/strings/names.txt:1275
-#: data/mp/messages/strings/names.txt:1294
+#: data/mp/messages/strings/names.txt:1295
 msgid "Oil Drum"
 msgstr "Oil Drum"
 
 #: data/base/messages/strings/names.txt:1293
-#: data/mp/messages/strings/names.txt:1312
+#: data/mp/messages/strings/names.txt:1313
 msgid "Wreck"
 msgstr "Wreck"
 
 #: data/base/messages/strings/names.txt:1295
-#: data/mp/messages/strings/names.txt:1314
+#: data/mp/messages/strings/names.txt:1315
 msgid "Wrecked Tank"
 msgstr "Wrecked Tank"
 
 #: data/base/messages/strings/names.txt:1313
-#: data/mp/messages/strings/names.txt:1332
+#: data/mp/messages/strings/names.txt:1333
 msgid "Wrecked Bridge"
 msgstr "Wrecked Bridge"
 
 #: data/base/messages/strings/names.txt:1314
-#: data/mp/messages/strings/names.txt:1333
+#: data/mp/messages/strings/names.txt:1334
 msgid "Wrecked Van"
 msgstr "Wrecked Van"
 
 #: data/base/messages/strings/names.txt:1315
-#: data/mp/messages/strings/names.txt:1334
+#: data/mp/messages/strings/names.txt:1335
 msgid "Wrecked Vehicle"
 msgstr "Wrecked Vehicle"
 
 #: data/base/messages/strings/names.txt:1316
-#: data/mp/messages/strings/names.txt:1335
+#: data/mp/messages/strings/names.txt:1336
 msgid "Wrecked Tanker"
 msgstr "Wrecked Tanker"
 
 #: data/base/messages/strings/names.txt:1320
 #: data/base/messages/strings/names.txt:1336
-#: data/mp/messages/strings/names.txt:1339
-#: data/mp/messages/strings/names.txt:1355
+#: data/mp/messages/strings/names.txt:1340
+#: data/mp/messages/strings/names.txt:1356
 msgid "Cyborg Laboratory"
 msgstr "Cyborg Laboratory"
 
 #: data/base/messages/strings/names.txt:1321
-#: data/mp/messages/strings/names.txt:1340
+#: data/mp/messages/strings/names.txt:1341
 msgid "Advanced Warfare Laboratory"
 msgstr "Advanced Warfare Laboratory"
 
 #: data/base/messages/strings/names.txt:1322
 #: data/base/messages/strings/names.txt:1338
-#: data/mp/messages/strings/names.txt:1341
-#: data/mp/messages/strings/names.txt:1357
+#: data/mp/messages/strings/names.txt:1342
+#: data/mp/messages/strings/names.txt:1358
 msgid "Engineering Laboratory"
 msgstr "Engineering Laboratory"
 
 #: data/base/messages/strings/names.txt:1323
 #: data/base/messages/strings/names.txt:1339
-#: data/mp/messages/strings/names.txt:1342
-#: data/mp/messages/strings/names.txt:1358
+#: data/mp/messages/strings/names.txt:1343
+#: data/mp/messages/strings/names.txt:1359
 msgid "Robotics Laboratory"
 msgstr "Robotics Laboratory"
 
 #: data/base/messages/strings/names.txt:1324
-#: data/mp/messages/strings/names.txt:1343
+#: data/mp/messages/strings/names.txt:1344
 msgid "Laser Optics Laboratory"
 msgstr "Laser Optics Laboratory"
 
 #: data/base/messages/strings/names.txt:1325
 #: data/base/messages/strings/names.txt:1337
-#: data/mp/messages/strings/names.txt:1344
-#: data/mp/messages/strings/names.txt:1356
+#: data/mp/messages/strings/names.txt:1345
+#: data/mp/messages/strings/names.txt:1357
 msgid "Electronics Laboratory"
 msgstr "Electronics Laboratory"
 
 #: data/base/messages/strings/names.txt:1326
 #: data/base/messages/strings/names.txt:1335
-#: data/mp/messages/strings/names.txt:1345
-#: data/mp/messages/strings/names.txt:1354
+#: data/mp/messages/strings/names.txt:1346
+#: data/mp/messages/strings/names.txt:1355
 msgid "Chemical Laboratory"
 msgstr "Chemical Laboratory"
 
 #: data/base/messages/strings/names.txt:1334
-#: data/mp/messages/strings/names.txt:1353
+#: data/mp/messages/strings/names.txt:1354
 msgid "Advanced Warfare"
 msgstr "Advanced Warfare"
 
@@ -9082,7 +9084,7 @@ msgid "MRL Emplacement"
 msgstr "MRL Emplacement"
 
 #: data/base/messages/strings/names.txt:1375
-#: data/mp/messages/strings/names.txt:1394
+#: data/mp/messages/strings/names.txt:1395
 msgid "Railgun Emplacement"
 msgstr "Railgun Emplacement"
 
@@ -9091,50 +9093,50 @@ msgid "Angel Missile Emplacement"
 msgstr "Angel Missile Emplacement"
 
 #: data/base/messages/strings/names.txt:1378
-#: data/mp/messages/strings/names.txt:1397
+#: data/mp/messages/strings/names.txt:1398
 msgid "Archangel Missile Emplacement"
 msgstr "Archangel Missile Emplacement"
 
 #: data/base/messages/strings/names.txt:1423
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1881
-#: data/mp/messages/strings/names.txt:1889
+#: data/mp/messages/strings/names.txt:1891
 #, fuzzy
 msgid "Repair Turret Cobra Tracks"
 msgstr "Repair Cobra Tracks"
 
 #: data/base/messages/strings/names.txt:1436
-#: data/mp/messages/strings/names.txt:1455
-#: data/mp/messages/strings/names.txt:1522
+#: data/mp/messages/strings/names.txt:1456
+#: data/mp/messages/strings/names.txt:1523
 msgid "Scourge"
 msgstr "Scourge"
 
 #: data/base/messages/strings/names.txt:1437
-#: data/mp/messages/strings/names.txt:1456
+#: data/mp/messages/strings/names.txt:1457
 msgid "Bunker Blaster"
 msgstr "Bunker Blaster"
 
 #: data/base/messages/strings/names.txt:1438
-#: data/mp/messages/strings/names.txt:1457
-#: data/mp/messages/strings/names.txt:1523
+#: data/mp/messages/strings/names.txt:1458
+#: data/mp/messages/strings/names.txt:1524
 msgid "Flashlight Gunner"
 msgstr "Flashlight Gunner"
 
 #: data/base/messages/strings/names.txt:1439
-#: data/mp/messages/strings/names.txt:1458
-#: data/mp/messages/strings/names.txt:1611
+#: data/mp/messages/strings/names.txt:1459
+#: data/mp/messages/strings/names.txt:1612
 msgid "Needle Gunner"
 msgstr "Needle Gunner"
 
 #: data/base/messages/strings/names.txt:1440
-#: data/mp/messages/strings/names.txt:1459
+#: data/mp/messages/strings/names.txt:1460
 msgid "Downed Transport"
 msgstr "Downed Transport"
 
 #: data/base/messages/strings/names.txt:1458
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1356
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1922
-#: data/mp/messages/strings/names.txt:1477
-#: data/mp/messages/strings/names.txt:1930
+#: data/mp/messages/strings/names.txt:1478
+#: data/mp/messages/strings/names.txt:1932
 msgid "Tank Killer Python Tracks"
 msgstr "Tank Killer Python Tracks"
 
@@ -9147,31 +9149,31 @@ msgid "Cyclone AA Python Half-tracks"
 msgstr "Cyclone AA Python Half-tracks"
 
 #: data/base/messages/strings/names.txt:1461
-#: data/mp/messages/strings/names.txt:1480
+#: data/mp/messages/strings/names.txt:1481
 msgid "Assault Gun Python Tracks"
 msgstr "Assault Gun Python Tracks"
 
 #: data/base/messages/strings/names.txt:1467
-#: data/mp/messages/strings/names.txt:1486
+#: data/mp/messages/strings/names.txt:1487
 msgid "Flashlight"
 msgstr "Flashlight"
 
 #: data/base/messages/strings/names.txt:1468
-#: data/mp/messages/strings/names.txt:1487
+#: data/mp/messages/strings/names.txt:1488
 msgid "VTOL Flashlight"
 msgstr "VTOL Flashlight"
 
 #: data/base/messages/strings/names.txt:1471
 #: data/base/messages/strings/names.txt:1472
-#: data/mp/messages/strings/names.txt:760
-#: data/mp/messages/strings/names.txt:1490
+#: data/mp/messages/strings/names.txt:761
+#: data/mp/messages/strings/names.txt:1491
 msgid "Rotary MG Bunker"
 msgstr "Rotary MG Bunker"
 
 #: data/base/messages/strings/names.txt:1477
 #: data/base/messages/strings/names.txt:1478
-#: data/mp/messages/strings/names.txt:1496
 #: data/mp/messages/strings/names.txt:1497
+#: data/mp/messages/strings/names.txt:1498
 msgid "Missile Silo"
 msgstr "Missile Silo"
 
@@ -10332,7 +10334,7 @@ msgstr "Viper HMG Wheels"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1315
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1824
-#: data/mp/messages/strings/names.txt:1832
+#: data/mp/messages/strings/names.txt:1834
 msgid "Scourge Mantis Hover"
 msgstr "Scourge Mantis Hover"
 
@@ -10500,190 +10502,190 @@ msgid "Viper Flamer Half-Track"
 msgstr "Viper Repair Half-track"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1822
-#: data/mp/messages/strings/names.txt:1830
+#: data/mp/messages/strings/names.txt:1832
 #, fuzzy
 msgid "Heavy Repair Turret Cobra Hover"
 msgstr "Heavy Repair Turret"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1823
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1834
-#: data/mp/messages/strings/names.txt:1831
-#: data/mp/messages/strings/names.txt:1842
+#: data/mp/messages/strings/names.txt:1833
+#: data/mp/messages/strings/names.txt:1844
 #, fuzzy
 msgid "Heavy Machinegun Viper Wheels"
 msgstr "Machinegun Viper Wheels"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1825
-#: data/mp/messages/strings/names.txt:1833
+#: data/mp/messages/strings/names.txt:1835
 #, fuzzy
 msgid "Tank Killer Mantis Hover"
 msgstr "TK Mantis Hover"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1826
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1841
-#: data/mp/messages/strings/names.txt:1834
-#: data/mp/messages/strings/names.txt:1849
+#: data/mp/messages/strings/names.txt:1836
+#: data/mp/messages/strings/names.txt:1851
 #, fuzzy
 msgid "Heavy Machinegun Cobra Tracks"
 msgstr "Viper Heavy Machinegun Tracks"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1827
-#: data/mp/messages/strings/names.txt:1835
+#: data/mp/messages/strings/names.txt:1837
 #, fuzzy
 msgid "Heavy Cannon Cobra Hover"
 msgstr "Heavy Cannon"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1835
-#: data/mp/messages/strings/names.txt:1843
+#: data/mp/messages/strings/names.txt:1845
 #, fuzzy
 msgid "Heavy Machinegun Cobra Wheels"
 msgstr "Machinegun Viper Wheels"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1836
-#: data/mp/messages/strings/names.txt:1844
+#: data/mp/messages/strings/names.txt:1846
 #, fuzzy
 msgid "Heavy Machinegun Cobra Hover"
 msgstr "Heavy Machinegun Guard Tower"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1838
-#: data/mp/messages/strings/names.txt:1846
+#: data/mp/messages/strings/names.txt:1848
 #, fuzzy
 msgid "Machinegun Viper Tracks"
 msgstr "Machinegun Viper Wheels"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1839
-#: data/mp/messages/strings/names.txt:1847
+#: data/mp/messages/strings/names.txt:1849
 #, fuzzy
 msgid "Twin Machinegun Viper Tracks"
 msgstr "Twin Machinegun Guard Tower"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1843
-#: data/mp/messages/strings/names.txt:1851
+#: data/mp/messages/strings/names.txt:1853
 #, fuzzy
 msgid "Medium Cannon Cobra Hover"
 msgstr "Medium Cannon"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1844
-#: data/mp/messages/strings/names.txt:1852
+#: data/mp/messages/strings/names.txt:1854
 #, fuzzy
 msgid "Medium Cannon Scorpion Hover"
 msgstr "Medium Cannon Hardpoint"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1845
-#: data/mp/messages/strings/names.txt:1853
+#: data/mp/messages/strings/names.txt:1855
 #, fuzzy
 msgid "Medium Cannon Scorpion Tracks"
 msgstr "Viper Medium Cannon Tracks"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1846
-#: data/mp/messages/strings/names.txt:1854
+#: data/mp/messages/strings/names.txt:1856
 #, fuzzy
 msgid "Medium Cannon Python Hover"
 msgstr "Medium Cannon"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1847
-#: data/mp/messages/strings/names.txt:1855
+#: data/mp/messages/strings/names.txt:1857
 #, fuzzy
 msgid "Heavy Cannon Python Hover"
 msgstr "HPV Cannon Python Tracks"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1849
-#: data/mp/messages/strings/names.txt:1857
+#: data/mp/messages/strings/names.txt:1859
 #, fuzzy
 msgid "Rail Gun Mantis Tracks"
 msgstr "Assault Gun Python Tracks"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1850
-#: data/mp/messages/strings/names.txt:1858
+#: data/mp/messages/strings/names.txt:1860
 #, fuzzy
 msgid "Pulse Laser Mantis Tracks"
 msgstr "Tiger Pulse Laser Tracks"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1851
-#: data/mp/messages/strings/names.txt:1859
+#: data/mp/messages/strings/names.txt:1861
 #, fuzzy
 msgid "Lancer Python Tracks"
 msgstr "Commander Python Tracks"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1852
-#: data/mp/messages/strings/names.txt:1860
+#: data/mp/messages/strings/names.txt:1862
 #, fuzzy
 msgid "Lancer Mantis Tracks"
 msgstr "Cobra Lancer Tracks"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1853
-#: data/mp/messages/strings/names.txt:1861
+#: data/mp/messages/strings/names.txt:1863
 #, fuzzy
 msgid "Tank Killer Vengeance Tracks"
 msgstr "Tank Killer Python Tracks"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1858
-#: data/mp/messages/strings/names.txt:1866
+#: data/mp/messages/strings/names.txt:1868
 #, fuzzy
 msgid "Heavy Cannon Tiger Tracks"
 msgstr "Cobra Heavy Cannon Tracks"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1859
-#: data/mp/messages/strings/names.txt:1867
+#: data/mp/messages/strings/names.txt:1869
 #, fuzzy
 msgid "Needle Gun Tiger Tracks"
 msgstr "Needle Gun Tower"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1860
-#: data/mp/messages/strings/names.txt:1868
+#: data/mp/messages/strings/names.txt:1870
 #, fuzzy
 msgid "Needle Gun Retribution Tracks"
 msgstr "Retribution Tracks Needle Gun"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1861
-#: data/mp/messages/strings/names.txt:1869
+#: data/mp/messages/strings/names.txt:1871
 #, fuzzy
 msgid "Needle Gun Vengeance Tracks"
 msgstr "Needle Gunner"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1862
-#: data/mp/messages/strings/names.txt:1870
+#: data/mp/messages/strings/names.txt:1872
 msgid "Vengeance Tracks Rail Gun"
 msgstr "Vengeance Tracks Rail Gun"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1863
-#: data/mp/messages/strings/names.txt:1871
+#: data/mp/messages/strings/names.txt:1873
 #, fuzzy
 msgid "Vengeance Tracks Gauss Cannon"
 msgstr "Vengeance Tracks Guass Cannon"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1864
-#: data/mp/messages/strings/names.txt:1872
+#: data/mp/messages/strings/names.txt:1874
 #, fuzzy
 msgid "Vengeance Tracks Gauss Scourge"
 msgstr "Vengeance Tracks Guass Scourge"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1867
-#: data/mp/messages/strings/names.txt:1875
+#: data/mp/messages/strings/names.txt:1877
 #, fuzzy
 msgid "VTOL Cluster Bomb Bay Bug VTOL"
 msgstr "VTOL Cluster Bombs Bay"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1868
-#: data/mp/messages/strings/names.txt:1876
+#: data/mp/messages/strings/names.txt:1878
 #, fuzzy
 msgid "VTOL Bunker Buster Bug VTOL"
 msgstr "Bug Bunker Buster VTOL"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1869
-#: data/mp/messages/strings/names.txt:1877
+#: data/mp/messages/strings/names.txt:1879
 #, fuzzy
 msgid "VTOL Cluster Bomb Bay Scorpion VTOL"
 msgstr "Bug Cluster Bomb VTOL"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1870
-#: data/mp/messages/strings/names.txt:1878
+#: data/mp/messages/strings/names.txt:1880
 #, fuzzy
 msgid "VTOL Bunker Buster Scorpion VTOL"
 msgstr "Bug Bunker Buster VTOL"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1873
-#: data/mp/messages/strings/names.txt:1881
+#: data/mp/messages/strings/names.txt:1883
 #, fuzzy
 msgid "VTOL Lancer Bug VTOL"
 msgstr "VTOL Lancer"
@@ -10694,7 +10696,7 @@ msgid "VTOL HPV Cannon Bug VTOL"
 msgstr "VTOL Cannon"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1875
-#: data/mp/messages/strings/names.txt:1883
+#: data/mp/messages/strings/names.txt:1885
 #, fuzzy
 msgid "VTOL Lancer Scorpion VTOL"
 msgstr "Scorpion BB VTOL"
@@ -10705,7 +10707,7 @@ msgid "VTOL HPV Cannon Scorpion VTOL"
 msgstr "HPV Cannon Hardpoint"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1877
-#: data/mp/messages/strings/names.txt:1885
+#: data/mp/messages/strings/names.txt:1887
 #, fuzzy
 msgid "VTOL Lancer Mantis VTOL"
 msgstr "VTOL Lancer"
@@ -10716,151 +10718,151 @@ msgid "VTOL HPV Cannon Mantis VTOL"
 msgstr "VTOL Cannon"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1882
-#: data/mp/messages/strings/names.txt:1890
+#: data/mp/messages/strings/names.txt:1892
 #, fuzzy
 msgid "Repair Turret Mantis Tracks"
 msgstr "Repair Cobra Tracks"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1884
-#: data/mp/messages/strings/names.txt:1892
+#: data/mp/messages/strings/names.txt:1894
 #, fuzzy
 msgid "Lancer Scorpion Tracks"
 msgstr "Scorpion Lancer Tracks"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1885
-#: data/mp/messages/strings/names.txt:1893
+#: data/mp/messages/strings/names.txt:1895
 #, fuzzy
 msgid "Heavy Cannon Scorpion Tracks"
 msgstr "Cobra Heavy Cannon Tracks"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1886
-#: data/mp/messages/strings/names.txt:1894
+#: data/mp/messages/strings/names.txt:1896
 #, fuzzy
 msgid "Lancer Scorpion VTOL"
 msgstr "Scorpion BB VTOL"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1887
-#: data/mp/messages/strings/names.txt:1895
+#: data/mp/messages/strings/names.txt:1897
 #, fuzzy
 msgid "Bunker Buster Scorpion VTOL"
 msgstr "Bug Bunker Buster VTOL"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1889
-#: data/mp/messages/strings/names.txt:1897
+#: data/mp/messages/strings/names.txt:1899
 #, fuzzy
 msgid "Command Turret Viper Tracks"
 msgstr "Viper Command Turret Tracks"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1890
-#: data/mp/messages/strings/names.txt:1898
+#: data/mp/messages/strings/names.txt:1900
 #, fuzzy
 msgid "Command Turret Cobra Tracks"
 msgstr "Viper Command Turret Tracks"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1891
-#: data/mp/messages/strings/names.txt:1899
+#: data/mp/messages/strings/names.txt:1901
 #, fuzzy
 msgid "Command Turret Scorpion Tracks"
 msgstr "Viper Command Turret Tracks"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1892
-#: data/mp/messages/strings/names.txt:1900
+#: data/mp/messages/strings/names.txt:1902
 #, fuzzy
 msgid "Command Turret Mantis Tracks"
 msgstr "Viper Command Turret Tracks"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1894
-#: data/mp/messages/strings/names.txt:1902
+#: data/mp/messages/strings/names.txt:1904
 #, fuzzy
 msgid "Lancer Cobra Tracks"
 msgstr "Lancer Cobra Half-tracks"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1895
-#: data/mp/messages/strings/names.txt:1903
+#: data/mp/messages/strings/names.txt:1905
 #, fuzzy
 msgid "Heavy Cannon Mantis Tracks"
 msgstr "Cobra Heavy Cannon Tracks"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1896
-#: data/mp/messages/strings/names.txt:1904
+#: data/mp/messages/strings/names.txt:1906
 #, fuzzy
 msgid "Tank Killer Mantis Tracks"
 msgstr "Tank Killer Python Tracks"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1897
-#: data/mp/messages/strings/names.txt:1905
+#: data/mp/messages/strings/names.txt:1907
 #, fuzzy
 msgid "Scourge Mantis Tracks"
 msgstr "Scourge Mantis Hover"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1898
-#: data/mp/messages/strings/names.txt:1906
+#: data/mp/messages/strings/names.txt:1908
 #, fuzzy
 msgid "Heavy Machinegun Scorpion Tracks"
 msgstr "Viper Heavy Machinegun Tracks"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1900
-#: data/mp/messages/strings/names.txt:1908
+#: data/mp/messages/strings/names.txt:1910
 #, fuzzy
 msgid "Repair Scorpion Tracks"
 msgstr "Repair Cobra Tracks"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1901
-#: data/mp/messages/strings/names.txt:1909
+#: data/mp/messages/strings/names.txt:1911
 #, fuzzy
 msgid "Heavy Repair Scorpion Hover"
 msgstr "Scorpion Heavy Repair Hover"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1904
-#: data/mp/messages/strings/names.txt:1912
+#: data/mp/messages/strings/names.txt:1914
 #, fuzzy
 msgid "Truck Cobra Hover"
 msgstr "Cobra Hover HC"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1905
-#: data/mp/messages/strings/names.txt:1913
+#: data/mp/messages/strings/names.txt:1915
 #, fuzzy
 msgid "Truck Scorpion Hover"
 msgstr "Scorpion Hover Truck"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1906
-#: data/mp/messages/strings/names.txt:1914
+#: data/mp/messages/strings/names.txt:1916
 #, fuzzy
 msgid "Truck Mantis Hover"
 msgstr "TK Mantis Hover"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1909
-#: data/mp/messages/strings/names.txt:1917
+#: data/mp/messages/strings/names.txt:1919
 #, fuzzy
 msgid "Bunker Buster Cobra Tracks"
 msgstr "Cobra Bunker Buster Tracks"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1910
-#: data/mp/messages/strings/names.txt:1918
+#: data/mp/messages/strings/names.txt:1920
 #, fuzzy
 msgid "Bunker Buster Scorpion Tracks"
 msgstr "Cobra Bunker Buster Tracks"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1911
-#: data/mp/messages/strings/names.txt:1919
+#: data/mp/messages/strings/names.txt:1921
 #, fuzzy
 msgid "Bunker Buster Mantis Tracks"
 msgstr "Cobra Bunker Buster Tracks"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1913
-#: data/mp/messages/strings/names.txt:1921
+#: data/mp/messages/strings/names.txt:1923
 #, fuzzy
 msgid "Lancer Viper Tracks"
 msgstr "Cobra Lancer Tracks"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1915
-#: data/mp/messages/strings/names.txt:1923
+#: data/mp/messages/strings/names.txt:1925
 #, fuzzy
 msgid "Mini-Rocket Cobra Half-Tracks"
 msgstr "HMG Cobra Half-tracks"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1916
-#: data/mp/messages/strings/names.txt:1924
+#: data/mp/messages/strings/names.txt:1926
 #, fuzzy
 msgid "Mini-Rocket Cobra Tracks"
 msgstr "Mini-Pod Rockets"
@@ -10871,7 +10873,7 @@ msgid "Mini-Rocket Artillery Cobra Tracks"
 msgstr "Mini-Rocket Artillery"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1919
-#: data/mp/messages/strings/names.txt:1927
+#: data/mp/messages/strings/names.txt:1929
 #, fuzzy
 msgid "Inferno Cobra Half-Tracks"
 msgstr "Lancer Cobra Half-tracks"
@@ -10882,181 +10884,181 @@ msgid "HPV Cannon Python Hover"
 msgstr "HPV Cannon Python Tracks"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1924
-#: data/mp/messages/strings/names.txt:1932
+#: data/mp/messages/strings/names.txt:1934
 #, fuzzy
 msgid "Scourge Python Tracks"
 msgstr "Commander Python Tracks"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1925
-#: data/mp/messages/strings/names.txt:1933
+#: data/mp/messages/strings/names.txt:1935
 #, fuzzy
 msgid "Gauss Cannon Python Tracks"
 msgstr "HPV Cannon Python Tracks"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1926
-#: data/mp/messages/strings/names.txt:1934
+#: data/mp/messages/strings/names.txt:1936
 #, fuzzy
 msgid "Pulse Laser Python Tracks"
 msgstr "Tiger Pulse Laser Tracks"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1927
-#: data/mp/messages/strings/names.txt:1935
+#: data/mp/messages/strings/names.txt:1937
 #, fuzzy
 msgid "Pulse Laser Tiger Tracks"
 msgstr "Tiger Pulse Laser Tracks"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1928
-#: data/mp/messages/strings/names.txt:1936
+#: data/mp/messages/strings/names.txt:1938
 #, fuzzy
 msgid "Heavy Laser Tiger Tracks"
 msgstr "Tiger Heavy Laser Tracks"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1929
-#: data/mp/messages/strings/names.txt:1937
+#: data/mp/messages/strings/names.txt:1939
 #, fuzzy
 msgid "Gauss Cannon Wyvern Tracks"
 msgstr "Python Gauss Cannon Tracks"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1930
-#: data/mp/messages/strings/names.txt:1938
+#: data/mp/messages/strings/names.txt:1940
 #, fuzzy
 msgid "Pulse Laser Wyvern Tracks"
 msgstr "Tiger Pulse Laser Tracks"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1931
-#: data/mp/messages/strings/names.txt:1939
+#: data/mp/messages/strings/names.txt:1941
 #, fuzzy
 msgid "Heavy Laser Wyvern Tracks"
 msgstr "Tiger Heavy Laser Tracks"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1933
-#: data/mp/messages/strings/names.txt:1941
+#: data/mp/messages/strings/names.txt:1943
 #, fuzzy
 msgid "Machinegun Viper Half-Tracks"
 msgstr "Viper Twin Machinegun Half-track"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1934
-#: data/mp/messages/strings/names.txt:1942
+#: data/mp/messages/strings/names.txt:1944
 #, fuzzy
 msgid "Flamer Viper Half-Tracks"
 msgstr "Viper Repair Half-track"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1937
-#: data/mp/messages/strings/names.txt:1945
+#: data/mp/messages/strings/names.txt:1947
 #, fuzzy
 msgid "Inferno Cobra Hover"
 msgstr "Lancer Cobra Half-tracks"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1938
-#: data/mp/messages/strings/names.txt:1946
+#: data/mp/messages/strings/names.txt:1948
 #, fuzzy
 msgid "Medium Cannon Cobra Half Track"
 msgstr "Viper Medium Cannon Tracks"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1939
-#: data/mp/messages/strings/names.txt:1947
+#: data/mp/messages/strings/names.txt:1949
 #, fuzzy
 msgid "Inferno Python Hover"
 msgstr "HPV Cannon Python Tracks"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1940
-#: data/mp/messages/strings/names.txt:1948
+#: data/mp/messages/strings/names.txt:1950
 #, fuzzy
 msgid "Assault Gun Python Hover"
 msgstr "Assault Gun Python Tracks"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1941
-#: data/mp/messages/strings/names.txt:1949
+#: data/mp/messages/strings/names.txt:1951
 #, fuzzy
 msgid "Assault Gun Python Half Track"
 msgstr "Assault Gun Python Tracks"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1942
-#: data/mp/messages/strings/names.txt:1950
+#: data/mp/messages/strings/names.txt:1952
 #, fuzzy
 msgid "Heavy Machinegun Scorpion Half Tracks"
 msgstr "Viper Heavy Machinegun Tracks"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1943
-#: data/mp/messages/strings/names.txt:1951
+#: data/mp/messages/strings/names.txt:1953
 #, fuzzy
 msgid "Assault Cannon Mantis Hover"
 msgstr "Assault Cannon Guard Tower"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1944
-#: data/mp/messages/strings/names.txt:1952
+#: data/mp/messages/strings/names.txt:1954
 #, fuzzy
 msgid "Pulse Laser Leopard Hover"
 msgstr "Pulse Laser"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1945
-#: data/mp/messages/strings/names.txt:1953
+#: data/mp/messages/strings/names.txt:1955
 #, fuzzy
 msgid "Pulse Laser Panther Hover"
 msgstr "Pulse Laser"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1946
-#: data/mp/messages/strings/names.txt:1954
+#: data/mp/messages/strings/names.txt:1956
 #, fuzzy
 msgid "Rail Gun Tiger Hover"
 msgstr "Rail Gun Upgrade"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1947
-#: data/mp/messages/strings/names.txt:1955
+#: data/mp/messages/strings/names.txt:1957
 #, fuzzy
 msgid "Pulse Laser Tiger Hover"
 msgstr "Tiger Pulse Laser Tracks"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1948
-#: data/mp/messages/strings/names.txt:1956
+#: data/mp/messages/strings/names.txt:1958
 #, fuzzy
 msgid "Plasma Cannon Wyvern Tracks"
 msgstr "Python Gauss Cannon Tracks"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1949
-#: data/mp/messages/strings/names.txt:1957
+#: data/mp/messages/strings/names.txt:1959
 #, fuzzy
 msgid "Scourge Missile Wyvern Tracks"
 msgstr "Scourge Missile Tower"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1950
-#: data/mp/messages/strings/names.txt:1958
+#: data/mp/messages/strings/names.txt:1960
 #, fuzzy
 msgid "Flashlight Retribution Hover"
 msgstr "Flashlight Gunner"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1951
-#: data/mp/messages/strings/names.txt:1959
+#: data/mp/messages/strings/names.txt:1961
 #, fuzzy
 msgid "Mini-Rocket Viper Half Track"
 msgstr "HMG Cobra Half-tracks"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1952
-#: data/mp/messages/strings/names.txt:1960
+#: data/mp/messages/strings/names.txt:1962
 #, fuzzy
 msgid "Mini-Rocket Array Viper Half Track"
 msgstr "Mini-Rocket Artillery"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1953
-#: data/mp/messages/strings/names.txt:1961
+#: data/mp/messages/strings/names.txt:1963
 #, fuzzy
 msgid "Phosphor Bomb Bay Mantis VTOL"
 msgstr "Phosphor Bomb Bay"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1954
-#: data/mp/messages/strings/names.txt:1962
+#: data/mp/messages/strings/names.txt:1964
 #, fuzzy
 msgid "Heap Bomb Bay Mantis VTOL"
 msgstr "VTOL Heap Bomb Bay"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1955
-#: data/mp/messages/strings/names.txt:1963
+#: data/mp/messages/strings/names.txt:1965
 #, fuzzy
 msgid "Heap Bomb Bay Retribution VTOL"
 msgstr "Medium Body - Retribution"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1956
-#: data/mp/messages/strings/names.txt:1964
+#: data/mp/messages/strings/names.txt:1966
 #, fuzzy
 msgid "Scourge Retaliation VTOL"
 msgstr "Retaliation"
@@ -11731,7 +11733,7 @@ msgid "Upgraded battlefield computer system"
 msgstr "Upgraded battlefield computer system"
 
 #: data/mp/messages/strings/names.txt:15
-#: data/mp/messages/strings/names.txt:681
+#: data/mp/messages/strings/names.txt:682
 msgid "Cyborg Transport"
 msgstr "Cyborg Transport"
 
@@ -11766,7 +11768,7 @@ msgid "Mini-Rocket Array Cobra Half-tracks"
 msgstr "Cobra Mini-Rocket Artillery Half-track"
 
 #: data/mp/messages/strings/names.txt:372
-#: data/mp/messages/strings/names.txt:1708
+#: data/mp/messages/strings/names.txt:1709
 msgid "Radar Detector"
 msgstr ""
 
@@ -11781,18 +11783,18 @@ msgid "Nexus Link"
 msgstr "Nexus Link Turret"
 
 #: data/mp/messages/strings/names.txt:387
-#: data/mp/messages/strings/names.txt:925
+#: data/mp/messages/strings/names.txt:926
 msgid "Nexus Link Turret"
 msgstr "Nexus Link Turret"
 
 #: data/mp/messages/strings/names.txt:404
-#: data/mp/messages/strings/names.txt:724
+#: data/mp/messages/strings/names.txt:725
 #, fuzzy
 msgid "Hardcrete Gate"
 msgstr "Hardcrete Wall"
 
 #: data/mp/messages/strings/names.txt:410
-#: data/mp/messages/strings/names.txt:735
+#: data/mp/messages/strings/names.txt:736
 #, fuzzy
 msgid "Inferno Bunker"
 msgstr "Lancer Bunker"
@@ -11802,676 +11804,686 @@ msgid "Tornado AA Site"
 msgstr "Tornado AA Site"
 
 #: data/mp/messages/strings/names.txt:418
-#: data/mp/messages/strings/names.txt:726
+#: data/mp/messages/strings/names.txt:727
 #, fuzzy
 msgid "AA Flak Cannon Emplacement"
 msgstr "Plasma Cannon Emplacement"
 
 #: data/mp/messages/strings/names.txt:474
-#: data/mp/messages/strings/names.txt:790
+#: data/mp/messages/strings/names.txt:791
 #, fuzzy
 msgid "Pulse Laser Hardpoint"
 msgstr "Flamer Hardpoint"
 
 #: data/mp/messages/strings/names.txt:476
-#: data/mp/messages/strings/names.txt:752
+#: data/mp/messages/strings/names.txt:753
 #, fuzzy
 msgid "Pulse Laser Tower"
 msgstr "Pulse Laser"
 
 #: data/mp/messages/strings/names.txt:513
-#: data/mp/messages/strings/names.txt:1137
+#: data/mp/messages/strings/names.txt:1138
 #, fuzzy
 msgid "Seraph Missile Array"
 msgstr "Increases Missile accuracy"
 
 #: data/mp/messages/strings/names.txt:531
-#: data/mp/messages/strings/names.txt:1200
+#: data/mp/messages/strings/names.txt:1201
 #, fuzzy
 msgid "Mini-Rocket Array"
 msgstr "Mini-Rocket Artillery"
 
 #: data/mp/messages/strings/names.txt:553
-#: data/mp/messages/strings/names.txt:997
+#: data/mp/messages/strings/names.txt:998
 #, fuzzy
 msgid "AA Flak Cannon"
 msgstr "Plasma Cannon"
 
-#: data/mp/messages/strings/names.txt:566
-#: data/mp/messages/strings/names.txt:1698
-#: data/mp/messages/strings/names.txt:1705
+#: data/mp/messages/strings/names.txt:554
+#, fuzzy
+msgid "VTOL Flak Cannon"
+msgstr "VTOL Cannon"
+
+#: data/mp/messages/strings/names.txt:567
+#: data/mp/messages/strings/names.txt:1699
+#: data/mp/messages/strings/names.txt:1706
 msgid "Laser Satellite Command Post"
 msgstr "Laser Satellite Command Post"
 
-#: data/mp/messages/strings/names.txt:583
+#: data/mp/messages/strings/names.txt:584
 #, fuzzy
 msgid "VTOL Cluster Bomb Bay"
 msgstr "VTOL Cluster Bombs Bay"
 
-#: data/mp/messages/strings/names.txt:590
+#: data/mp/messages/strings/names.txt:591
 #, fuzzy
 msgid "Collective Corner Wall"
 msgstr "Collective CWall"
 
-#: data/mp/messages/strings/names.txt:612
+#: data/mp/messages/strings/names.txt:613
 #, fuzzy
 msgid "Nexus Wall"
 msgstr "NEXUS Wall"
 
-#: data/mp/messages/strings/names.txt:613
+#: data/mp/messages/strings/names.txt:614
 #, fuzzy
 msgid "Nexus Corner Wall"
 msgstr "Hardcrete Corner Wall"
 
-#: data/mp/messages/strings/names.txt:719
+#: data/mp/messages/strings/names.txt:720
 #, fuzzy
 msgid "Plascrete Mk3"
 msgstr "Plascrete Mk2"
 
-#: data/mp/messages/strings/names.txt:720
+#: data/mp/messages/strings/names.txt:721
 msgid "Plasteel"
 msgstr "Plasteel"
 
-#: data/mp/messages/strings/names.txt:721
+#: data/mp/messages/strings/names.txt:722
 msgid "Plasteel Mk2"
 msgstr "Plasteel Mk2"
 
-#: data/mp/messages/strings/names.txt:722
+#: data/mp/messages/strings/names.txt:723
 msgid "Plasteel Mk3"
 msgstr "Plasteel Mk3"
 
-#: data/mp/messages/strings/names.txt:731
-#: data/mp/messages/strings/names.txt:1392
+#: data/mp/messages/strings/names.txt:732
+#: data/mp/messages/strings/names.txt:1393
 #, fuzzy
 msgid "Hyper Velocity Cannon Emplacement"
 msgstr "Hyper Velocity Cannon"
 
-#: data/mp/messages/strings/names.txt:742
-#: data/mp/messages/strings/names.txt:1395
+#: data/mp/messages/strings/names.txt:743
+#: data/mp/messages/strings/names.txt:1396
 #, fuzzy
 msgid "Seraph Missile Battery"
 msgstr "Angel Missile Battery"
 
-#: data/mp/messages/strings/names.txt:771
+#: data/mp/messages/strings/names.txt:772
 #, fuzzy
 msgid "Flamer Tower"
 msgstr "Flamer Guard Tower"
 
-#: data/mp/messages/strings/names.txt:789
-#: data/mp/messages/strings/names.txt:1400
+#: data/mp/messages/strings/names.txt:790
+#: data/mp/messages/strings/names.txt:1401
 #, fuzzy
 msgid "Hyper Velocity Cannon Hardpoint"
 msgstr "Hyper Velocity Cannon"
 
-#: data/mp/messages/strings/names.txt:808
+#: data/mp/messages/strings/names.txt:809
 #, fuzzy
 msgid "Automated Manufacturing"
 msgstr "Automated VTOL Rearming"
 
-#: data/mp/messages/strings/names.txt:811
+#: data/mp/messages/strings/names.txt:812
 #, fuzzy
 msgid "Robotic Manufacturing"
 msgstr "Manufacture"
 
-#: data/mp/messages/strings/names.txt:814
+#: data/mp/messages/strings/names.txt:815
 #, fuzzy
 msgid "Advanced Manufacturing"
 msgstr "Advanced Warfare"
 
-#: data/mp/messages/strings/names.txt:816
+#: data/mp/messages/strings/names.txt:817
 #, fuzzy
 msgid "Self-Replicating Manufacturing"
 msgstr "Self-Replicating Factory Production"
 
-#: data/mp/messages/strings/names.txt:817
+#: data/mp/messages/strings/names.txt:818
 #, fuzzy
 msgid "Advanced Manufacturing Mk3"
 msgstr "Advanced Factory Production Mk3"
 
-#: data/mp/messages/strings/names.txt:838
+#: data/mp/messages/strings/names.txt:839
 #, fuzzy
 msgid "Robotic Repair Facility"
 msgstr "Robotic Repair Facility Upgrade"
 
-#: data/mp/messages/strings/names.txt:840
+#: data/mp/messages/strings/names.txt:841
 #, fuzzy
 msgid "Advanced Repair Facility"
 msgstr "Advanced Repair Facility Upgrade"
 
-#: data/mp/messages/strings/names.txt:841
+#: data/mp/messages/strings/names.txt:842
 #, fuzzy
 msgid "Robotic Repair Facility Mk3"
 msgstr "Robotic Repair Facility Upgrade Mk3"
 
-#: data/mp/messages/strings/names.txt:842
+#: data/mp/messages/strings/names.txt:843
 #, fuzzy
 msgid "Advanced Repair Facility Mk2"
 msgstr "Advanced Repair Facility Upgrade Mk2"
 
-#: data/mp/messages/strings/names.txt:843
+#: data/mp/messages/strings/names.txt:844
 #, fuzzy
 msgid "Advanced Repair Facility Mk3"
 msgstr "Advanced Repair Facility Upgrade Mk3"
 
-#: data/mp/messages/strings/names.txt:888
+#: data/mp/messages/strings/names.txt:889
 msgid "Auto-Repair"
 msgstr "Auto-Repair"
 
-#: data/mp/messages/strings/names.txt:899
-#: data/mp/messages/strings/names.txt:1650
+#: data/mp/messages/strings/names.txt:900
 #: data/mp/messages/strings/names.txt:1651
+#: data/mp/messages/strings/names.txt:1652
 msgid "Heavy Repair Turret"
 msgstr "Heavy Repair Turret"
 
-#: data/mp/messages/strings/names.txt:929
+#: data/mp/messages/strings/names.txt:930
 #, fuzzy
 msgid "Nexus Intruder Program"
 msgstr "NEXUS Intruder Program"
 
-#: data/mp/messages/strings/names.txt:930
-#: data/mp/messages/strings/names.txt:1691
+#: data/mp/messages/strings/names.txt:931
+#: data/mp/messages/strings/names.txt:1692
 #, fuzzy
 msgid "Nexus Resistance Circuits"
 msgstr "Resistance Circuits"
 
-#: data/mp/messages/strings/names.txt:931
+#: data/mp/messages/strings/names.txt:932
 #, fuzzy
 msgid "Nexus Resistance Circuits Mk2"
 msgstr "NEXUS Resistance Circuits Mk2"
 
-#: data/mp/messages/strings/names.txt:932
+#: data/mp/messages/strings/names.txt:933
 #, fuzzy
 msgid "Nexus Resistance Circuits Mk3"
 msgstr "NEXUS Resistance Circuits Mk3"
 
-#: data/mp/messages/strings/names.txt:1019
+#: data/mp/messages/strings/names.txt:1020
 #, fuzzy
 msgid "Cluster Bomb Bay"
 msgstr "Cluster Bombs Bay"
 
-#: data/mp/messages/strings/names.txt:1024
+#: data/mp/messages/strings/names.txt:1025
 #, fuzzy
 msgid "HE Bomb Shells"
 msgstr "HE Mortar Shells"
 
-#: data/mp/messages/strings/names.txt:1025
+#: data/mp/messages/strings/names.txt:1026
 #, fuzzy
 msgid "Improved Bomb Warhead"
 msgstr "Improved shaped charge warhead"
 
-#: data/mp/messages/strings/names.txt:1026
+#: data/mp/messages/strings/names.txt:1027
 #, fuzzy
 msgid "Advanced Bomb Warhead"
 msgstr "Advanced Missile Warhead"
 
-#: data/mp/messages/strings/names.txt:1096
+#: data/mp/messages/strings/names.txt:1097
 #, fuzzy
 msgid "Howitzer Fast Loader"
 msgstr "Mortar Fast Loader"
 
-#: data/mp/messages/strings/names.txt:1112
+#: data/mp/messages/strings/names.txt:1113
 msgid "Rapid Fire Chaingun"
 msgstr "Rapid Fire Chaingun"
 
-#: data/mp/messages/strings/names.txt:1161
+#: data/mp/messages/strings/names.txt:1162
 #, fuzzy
 msgid "Rail Target Prediction Computer"
 msgstr "Target Prediction Computer"
 
-#: data/mp/messages/strings/names.txt:1169
+#: data/mp/messages/strings/names.txt:1170
 #, fuzzy
 msgid "Stabilized Rockets"
 msgstr "Stabilised Mini-Rockets"
 
-#: data/mp/messages/strings/names.txt:1173
+#: data/mp/messages/strings/names.txt:1174
 #, fuzzy
 msgid "HE Rockets"
 msgstr "HE Mini-Rockets"
 
-#: data/mp/messages/strings/names.txt:1174
+#: data/mp/messages/strings/names.txt:1175
 #, fuzzy
 msgid "HE Rockets Mk2"
 msgstr "HE Mini-Rockets Mk2"
 
-#: data/mp/messages/strings/names.txt:1175
+#: data/mp/messages/strings/names.txt:1176
 #, fuzzy
 msgid "HE Rockets Mk3"
 msgstr "HE Mini-Rockets Mk3"
 
-#: data/mp/messages/strings/names.txt:1388
+#: data/mp/messages/strings/names.txt:1389
 #, fuzzy
 msgid "Assault Gun Tower"
 msgstr "Assault Gun Guard Tower"
 
-#: data/mp/messages/strings/names.txt:1442
+#: data/mp/messages/strings/names.txt:1443
 msgid "Repair Cobra Tracks"
 msgstr "Repair Cobra Tracks"
 
-#: data/mp/messages/strings/names.txt:1478
+#: data/mp/messages/strings/names.txt:1479
 #, fuzzy
 msgid "Hyper Velocity Cannon Python Tracks"
 msgstr "HPV Cannon Python Tracks"
 
-#: data/mp/messages/strings/names.txt:1479
+#: data/mp/messages/strings/names.txt:1480
 #, fuzzy
 msgid "AA Flak Cannon Python Half-tracks"
 msgstr "HPV Cannon Python Tracks"
 
-#: data/mp/messages/strings/names.txt:1517
+#: data/mp/messages/strings/names.txt:1518
 #, fuzzy
 msgid "Bunker Buster Cobra Hover"
 msgstr "Cobra Bunker Buster Hover"
 
-#: data/mp/messages/strings/names.txt:1519
+#: data/mp/messages/strings/names.txt:1520
 #, fuzzy
 msgid "Sensor Upgrade Mk2"
 msgstr "Sensor Upgrade"
 
-#: data/mp/messages/strings/names.txt:1520
+#: data/mp/messages/strings/names.txt:1521
 #, fuzzy
 msgid "Sensor Upgrade Mk3"
 msgstr "Sensor Upgrade"
 
-#: data/mp/messages/strings/names.txt:1521
+#: data/mp/messages/strings/names.txt:1522
 #, fuzzy
 msgid "Vapor Turbine Generator Mk2"
 msgstr "Vapour Turbine Generator"
 
-#: data/mp/messages/strings/names.txt:1525
+#: data/mp/messages/strings/names.txt:1526
 #, fuzzy
 msgid "Gas Turbine Generator Mk2"
 msgstr "Gas Turbine Generator"
 
-#: data/mp/messages/strings/names.txt:1526
+#: data/mp/messages/strings/names.txt:1527
 #, fuzzy
 msgid "Gas Turbine Generator Mk3"
 msgstr "Gas Turbine Generator"
 
-#: data/mp/messages/strings/names.txt:1529
+#: data/mp/messages/strings/names.txt:1530
 #, fuzzy
 msgid "Vapor Turbine Generator Mk3"
 msgstr "Vapour Turbine Generator"
 
-#: data/mp/messages/strings/names.txt:1617
+#: data/mp/messages/strings/names.txt:1618
 msgid "Thermite Flamer"
 msgstr "Thermite Flamer"
 
-#: data/mp/messages/strings/names.txt:1622
+#: data/mp/messages/strings/names.txt:1623
 msgid "Grenadier"
 msgstr "Grenadier"
 
-#: data/mp/messages/strings/names.txt:1629
+#: data/mp/messages/strings/names.txt:1630
 msgid "Combat Engineer"
 msgstr "Combat Engineer"
 
-#: data/mp/messages/strings/names.txt:1634
+#: data/mp/messages/strings/names.txt:1635
 msgid "Cyborg Mechanic"
 msgstr "Cyborg Mechanic"
 
-#: data/mp/messages/strings/names.txt:1638
 #: data/mp/messages/strings/names.txt:1639
+#: data/mp/messages/strings/names.txt:1640
 #, fuzzy
 msgid "Incendiary Howitzer"
 msgstr "Incendiary Howitzer"
 
-#: data/mp/messages/strings/names.txt:1640
 #: data/mp/messages/strings/names.txt:1641
+#: data/mp/messages/strings/names.txt:1642
 #, fuzzy
 msgid "Incendiary Howitzer Emplacement"
 msgstr "Incendiary Howitzer Emplacement"
 
-#: data/mp/messages/strings/names.txt:1642
 #: data/mp/messages/strings/names.txt:1643
+#: data/mp/messages/strings/names.txt:1644
 msgid "Plasmite Flamer"
 msgstr "Plasmite Flamer"
 
-#: data/mp/messages/strings/names.txt:1644
 #: data/mp/messages/strings/names.txt:1645
+#: data/mp/messages/strings/names.txt:1646
 #, fuzzy
 msgid "Plasmite Flamer Bunker"
 msgstr "Plasmite Flamer"
 
-#: data/mp/messages/strings/names.txt:1646
 #: data/mp/messages/strings/names.txt:1647
+#: data/mp/messages/strings/names.txt:1648
 #, fuzzy
 msgid "Incendiary Mortar"
 msgstr "Incendiary Mortar"
 
-#: data/mp/messages/strings/names.txt:1648
 #: data/mp/messages/strings/names.txt:1649
+#: data/mp/messages/strings/names.txt:1650
 #, fuzzy
 msgid "Incendiary Mortar Pit"
 msgstr "Incendiary Mortar"
 
-#: data/mp/messages/strings/names.txt:1653
+#: data/mp/messages/strings/names.txt:1654
 msgid "Cyborg Superdense Thermal Armor"
 msgstr "Cyborg Superdense Thermal Armour"
 
-#: data/mp/messages/strings/names.txt:1654
+#: data/mp/messages/strings/names.txt:1655
 msgid "Cyborg Superdense Thermal Armor Mk2"
 msgstr "Cyborg Superdense Thermal Armour Mk2"
 
-#: data/mp/messages/strings/names.txt:1655
+#: data/mp/messages/strings/names.txt:1656
 msgid "Cyborg Superdense Thermal Armor Mk3"
 msgstr "Cyborg Superdense Thermal Armour Mk3"
 
-#: data/mp/messages/strings/names.txt:1657
+#: data/mp/messages/strings/names.txt:1658
 msgid "Vehicle Superdense Thermal Armor"
 msgstr "Vehicle Superdense Thermal Armour"
 
-#: data/mp/messages/strings/names.txt:1658
+#: data/mp/messages/strings/names.txt:1659
 msgid "Vehicle Superdense Thermal Armor Mk2"
 msgstr "Vehicle Superdense Thermal Armour Mk2"
 
-#: data/mp/messages/strings/names.txt:1659
+#: data/mp/messages/strings/names.txt:1660
 msgid "Vehicle Superdense Thermal Armor Mk3"
 msgstr "Vehicle Superdense Thermal Armour Mk3"
 
-#: data/mp/messages/strings/names.txt:1663
 #: data/mp/messages/strings/names.txt:1664
 #: data/mp/messages/strings/names.txt:1665
 #: data/mp/messages/strings/names.txt:1666
+#: data/mp/messages/strings/names.txt:1667
 msgid "Super Heavy-Gunner"
 msgstr "Super Heavy-Gunner"
 
-#: data/mp/messages/strings/names.txt:1668
 #: data/mp/messages/strings/names.txt:1669
 #: data/mp/messages/strings/names.txt:1670
 #: data/mp/messages/strings/names.txt:1671
+#: data/mp/messages/strings/names.txt:1672
 msgid "Super Auto-Cannon Cyborg"
 msgstr "Super Auto-Cannon Cyborg"
 
-#: data/mp/messages/strings/names.txt:1673
 #: data/mp/messages/strings/names.txt:1674
 #: data/mp/messages/strings/names.txt:1675
 #: data/mp/messages/strings/names.txt:1676
+#: data/mp/messages/strings/names.txt:1677
 msgid "Super HPV Cyborg"
 msgstr "Super HPV Cyborg"
 
-#: data/mp/messages/strings/names.txt:1678
 #: data/mp/messages/strings/names.txt:1679
 #: data/mp/messages/strings/names.txt:1680
 #: data/mp/messages/strings/names.txt:1681
+#: data/mp/messages/strings/names.txt:1682
 msgid "Super Tank-Killer Cyborg"
 msgstr "Super Tank-Killer Cyborg"
 
-#: data/mp/messages/strings/names.txt:1683
 #: data/mp/messages/strings/names.txt:1684
+#: data/mp/messages/strings/names.txt:1685
 msgid "Heavy Laser"
 msgstr "Heavy Laser"
 
-#: data/mp/messages/strings/names.txt:1685
+#: data/mp/messages/strings/names.txt:1686
 #, fuzzy
 msgid "VTOL Heavy Laser"
 msgstr "Heavy Laser"
 
-#: data/mp/messages/strings/names.txt:1686
 #: data/mp/messages/strings/names.txt:1687
+#: data/mp/messages/strings/names.txt:1688
 msgid "Heavy Laser Emplacement"
 msgstr "Heavy Laser Emplacement"
 
-#: data/mp/messages/strings/names.txt:1693
 #: data/mp/messages/strings/names.txt:1694
+#: data/mp/messages/strings/names.txt:1695
 msgid "Twin Assault Cannon"
 msgstr "Twin Assault Cannon"
 
-#: data/mp/messages/strings/names.txt:1695
 #: data/mp/messages/strings/names.txt:1696
+#: data/mp/messages/strings/names.txt:1697
 msgid "Twin Assault Cannon Bunker"
 msgstr "Twin Assault Cannon Bunker"
 
-#: data/mp/messages/strings/names.txt:1699
-#: data/mp/messages/strings/names.txt:1704
-#: data/mp/messages/strings/names.txt:1706
+#: data/mp/messages/strings/names.txt:1700
+#: data/mp/messages/strings/names.txt:1705
+#: data/mp/messages/strings/names.txt:1707
 msgid "Satellite Uplink Center"
 msgstr "Satellite Uplink Centre"
 
-#: data/mp/messages/strings/names.txt:1700
-#: data/mp/messages/strings/names.txt:1702
+#: data/mp/messages/strings/names.txt:1701
+#: data/mp/messages/strings/names.txt:1703
 msgid "Wide Spectrum Sensor"
 msgstr "Wide Spectrum Sensor"
 
-#: data/mp/messages/strings/names.txt:1701
-#: data/mp/messages/strings/names.txt:1703
+#: data/mp/messages/strings/names.txt:1702
+#: data/mp/messages/strings/names.txt:1704
 msgid "Wide Spectrum Sensor Tower"
 msgstr "Wide Spectrum Sensor Tower"
 
-#: data/mp/messages/strings/names.txt:1719
 #: data/mp/messages/strings/names.txt:1720
+#: data/mp/messages/strings/names.txt:1721
 msgid "Plasma Cannon"
 msgstr "Plasma Cannon"
 
-#: data/mp/messages/strings/names.txt:1721
 #: data/mp/messages/strings/names.txt:1722
+#: data/mp/messages/strings/names.txt:1723
 msgid "Plasma Cannon Emplacement"
 msgstr "Plasma Cannon Emplacement"
 
-#: data/mp/messages/strings/names.txt:1724
+#: data/mp/messages/strings/names.txt:1725
 #, fuzzy
 msgid "Sunburst AA Rocket Array"
 msgstr "Mini-Rocket Artillery"
 
-#: data/mp/messages/strings/names.txt:1725
+#: data/mp/messages/strings/names.txt:1726
 msgid "Sunburst AA"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1726
 #: data/mp/messages/strings/names.txt:1727
+#, fuzzy
+msgid "VTOL Sunburst AA"
+msgstr "Hurricane AA Site"
+
+#: data/mp/messages/strings/names.txt:1728
+#: data/mp/messages/strings/names.txt:1729
 #, fuzzy
 msgid "Sunburst AA Site"
 msgstr "Hurricane AA Site"
 
-#: data/mp/messages/strings/names.txt:1729
-#: data/mp/messages/strings/names.txt:1730
 #: data/mp/messages/strings/names.txt:1731
 #: data/mp/messages/strings/names.txt:1732
+#: data/mp/messages/strings/names.txt:1733
+#: data/mp/messages/strings/names.txt:1734
 msgid "Super Pulse Laser Cyborg"
 msgstr "Super Pulse Laser Cyborg"
 
-#: data/mp/messages/strings/names.txt:1734
-#: data/mp/messages/strings/names.txt:1735
 #: data/mp/messages/strings/names.txt:1736
 #: data/mp/messages/strings/names.txt:1737
+#: data/mp/messages/strings/names.txt:1738
+#: data/mp/messages/strings/names.txt:1739
 msgid "Super Rail-Gunner"
 msgstr "Super Rail-Gunner"
 
-#: data/mp/messages/strings/names.txt:1739
-#: data/mp/messages/strings/names.txt:1740
 #: data/mp/messages/strings/names.txt:1741
 #: data/mp/messages/strings/names.txt:1742
+#: data/mp/messages/strings/names.txt:1743
+#: data/mp/messages/strings/names.txt:1744
 msgid "Super Scourge Cyborg"
 msgstr "Super Scourge Cyborg"
 
-#: data/mp/messages/strings/names.txt:1744
-#: data/mp/messages/strings/names.txt:1745
+#: data/mp/messages/strings/names.txt:1746
+#: data/mp/messages/strings/names.txt:1747
 #, fuzzy
 msgid "Nexus Link Tower"
 msgstr "Nexus Link Turret"
 
-#: data/mp/messages/strings/names.txt:1747
-#: data/mp/messages/strings/names.txt:1750
+#: data/mp/messages/strings/names.txt:1749
+#: data/mp/messages/strings/names.txt:1752
 msgid "EMP Cannon"
 msgstr "EMP Cannon"
 
-#: data/mp/messages/strings/names.txt:1748
-#: data/mp/messages/strings/names.txt:1749
+#: data/mp/messages/strings/names.txt:1750
+#: data/mp/messages/strings/names.txt:1751
 msgid "EMP Cannon Tower"
 msgstr "EMP Cannon Tower"
 
-#: data/mp/messages/strings/names.txt:1754
 #: data/mp/messages/strings/names.txt:1756
+#: data/mp/messages/strings/names.txt:1758
 msgid "Mass Driver Fortress"
 msgstr "Mass Driver Fortress"
 
-#: data/mp/messages/strings/names.txt:1755
+#: data/mp/messages/strings/names.txt:1757
 #, fuzzy
 msgid "Mass Driver"
 msgstr "Mass Driver Fortress"
 
-#: data/mp/messages/strings/names.txt:1758
-#: data/mp/messages/strings/names.txt:1759
 #: data/mp/messages/strings/names.txt:1760
+#: data/mp/messages/strings/names.txt:1761
+#: data/mp/messages/strings/names.txt:1762
 msgid "Cannon Fortress"
 msgstr "Cannon Fortress"
 
-#: data/mp/messages/strings/names.txt:1762
-#: data/mp/messages/strings/names.txt:1763
 #: data/mp/messages/strings/names.txt:1764
+#: data/mp/messages/strings/names.txt:1765
+#: data/mp/messages/strings/names.txt:1766
 msgid "Heavy Rocket Bastion"
 msgstr "Heavy Rocket Bastion"
 
-#: data/mp/messages/strings/names.txt:1766
-#: data/mp/messages/strings/names.txt:1767
 #: data/mp/messages/strings/names.txt:1768
+#: data/mp/messages/strings/names.txt:1769
+#: data/mp/messages/strings/names.txt:1770
 msgid "Missile Fortress"
 msgstr "Missile Fortress"
 
-#: data/mp/messages/strings/names.txt:1772
+#: data/mp/messages/strings/names.txt:1774
 #, fuzzy
 msgid "Heavy Body - Wyvern"
 msgstr "Super Heavy Body - Wyvern"
 
-#: data/mp/messages/strings/names.txt:1773
+#: data/mp/messages/strings/names.txt:1775
 msgid "Wyvern"
 msgstr "Wyvern"
 
-#: data/mp/messages/strings/names.txt:1775
+#: data/mp/messages/strings/names.txt:1777
 #, fuzzy
 msgid "Multi Turret Body - Dragon"
 msgstr "Super Heavy Body - Dragon"
 
-#: data/mp/messages/strings/names.txt:1776
+#: data/mp/messages/strings/names.txt:1778
 msgid "Dragon"
 msgstr "Dragon"
 
-#: data/mp/messages/strings/names.txt:1778
+#: data/mp/messages/strings/names.txt:1780
 msgid "Superhot Plasmite gel"
 msgstr "Superhot Plasmite gel"
 
-#: data/mp/messages/strings/names.txt:1779
+#: data/mp/messages/strings/names.txt:1781
 msgid "Superhot Plasmite gel Mk2"
 msgstr "Superhot Plasmite gel Mk2"
 
-#: data/mp/messages/strings/names.txt:1780
+#: data/mp/messages/strings/names.txt:1782
 msgid "Superhot Plasmite gel Mk3"
 msgstr "Superhot Plasmite gel Mk3"
 
-#: data/mp/messages/strings/names.txt:1784
 #: data/mp/messages/strings/names.txt:1786
+#: data/mp/messages/strings/names.txt:1788
 msgid "EMP Mortar"
 msgstr "EMP Mortar"
 
-#: data/mp/messages/strings/names.txt:1785
 #: data/mp/messages/strings/names.txt:1787
+#: data/mp/messages/strings/names.txt:1789
 #, fuzzy
 msgid "EMP Mortar Pit"
 msgstr " Mortar Pit"
 
-#: data/mp/messages/strings/names.txt:1788
 #: data/mp/messages/strings/names.txt:1790
+#: data/mp/messages/strings/names.txt:1792
 msgid "Stormbringer AA Laser"
 msgstr "Stormbringer AA Laser"
 
-#: data/mp/messages/strings/names.txt:1789
 #: data/mp/messages/strings/names.txt:1791
+#: data/mp/messages/strings/names.txt:1793
 #, fuzzy
 msgid "Stormbringer Emplacement"
 msgstr "Bombard Emplacement"
 
-#: data/mp/messages/strings/names.txt:1792
-#: data/mp/messages/strings/names.txt:1793
+#: data/mp/messages/strings/names.txt:1794
+#: data/mp/messages/strings/names.txt:1795
 msgid "Vindicator Hardpoint"
 msgstr "Vindicator Hardpoint"
 
-#: data/mp/messages/strings/names.txt:1794
-#: data/mp/messages/strings/names.txt:1795
+#: data/mp/messages/strings/names.txt:1796
+#: data/mp/messages/strings/names.txt:1797
 msgid "Whirlwind Hardpoint"
 msgstr "Whirlwind Hardpoint"
 
-#: data/mp/messages/strings/names.txt:1796
-#: data/mp/messages/strings/names.txt:1797
+#: data/mp/messages/strings/names.txt:1798
+#: data/mp/messages/strings/names.txt:1799
 #, fuzzy
 msgid "AA Flak Cannon Hardpoint"
 msgstr "Assault Cannon Hardpoint"
 
-#: data/mp/messages/strings/names.txt:1798
-#: data/mp/messages/strings/names.txt:1799
+#: data/mp/messages/strings/names.txt:1800
+#: data/mp/messages/strings/names.txt:1801
 msgid "Avenger Hardpoint"
 msgstr "Avenger Hardpoint"
 
-#: data/mp/messages/strings/names.txt:1803
-#: data/mp/messages/strings/names.txt:1804
+#: data/mp/messages/strings/names.txt:1805
+#: data/mp/messages/strings/names.txt:1806
 msgid "Twin Assault Gun"
 msgstr "Twin Assault Gun"
 
-#: data/mp/messages/strings/names.txt:1805
-#: data/mp/messages/strings/names.txt:1806
+#: data/mp/messages/strings/names.txt:1807
+#: data/mp/messages/strings/names.txt:1808
 #, fuzzy
 msgid "Twin Assault Gun Hardpoint"
 msgstr "Assault Gun Hardpoint"
 
-#: data/mp/messages/strings/names.txt:1808
+#: data/mp/messages/strings/names.txt:1810
 #, fuzzy
 msgid "VTOL Plasmite Bomb Bay"
 msgstr "VTOL Cluster Bombs Bay"
 
-#: data/mp/messages/strings/names.txt:1809
+#: data/mp/messages/strings/names.txt:1811
 msgid "Plasmite Bomb"
 msgstr "Plasmite Bomb"
 
-#: data/mp/messages/strings/names.txt:1810
+#: data/mp/messages/strings/names.txt:1812
 #, fuzzy
 msgid "VTOL EMP Missile Launcher"
 msgstr "EMP Missile Launcher"
 
-#: data/mp/messages/strings/names.txt:1811
+#: data/mp/messages/strings/names.txt:1813
 msgid "EMP Missile Launcher"
 msgstr "EMP Missile Launcher"
-
-#: data/mp/messages/strings/names.txt:1815
-#: data/mp/messages/strings/names.txt:1816
-#, fuzzy
-msgid "Command Turret II"
-msgstr "Command Turret"
 
 #: data/mp/messages/strings/names.txt:1817
 #: data/mp/messages/strings/names.txt:1818
 #, fuzzy
-msgid "Command Turret III"
-msgstr "Command turret MkIII"
+msgid "Command Turret II"
+msgstr "Command Turret"
 
 #: data/mp/messages/strings/names.txt:1819
 #: data/mp/messages/strings/names.txt:1820
 #, fuzzy
+msgid "Command Turret III"
+msgstr "Command turret MkIII"
+
+#: data/mp/messages/strings/names.txt:1821
+#: data/mp/messages/strings/names.txt:1822
+#, fuzzy
 msgid "Command Turret IV"
 msgstr "Command Turret"
 
-#: data/mp/messages/strings/names.txt:1882
+#: data/mp/messages/strings/names.txt:1884
 #, fuzzy
 msgid "VTOL Hyper Velocity Cannon Bug VTOL"
 msgstr "VTOL Hyper Velocity Cannon"
 
-#: data/mp/messages/strings/names.txt:1884
+#: data/mp/messages/strings/names.txt:1886
 #, fuzzy
 msgid "VTOL Hyper Velocity Cannon Scorpion VTOL"
 msgstr "HPV Cannon Hardpoint"
 
-#: data/mp/messages/strings/names.txt:1886
+#: data/mp/messages/strings/names.txt:1888
 #, fuzzy
 msgid "VTOL Hyper Velocity Cannon Mantis VTOL"
 msgstr "VTOL Hyper Velocity Cannon"
 
-#: data/mp/messages/strings/names.txt:1925
+#: data/mp/messages/strings/names.txt:1927
 #, fuzzy
 msgid "Mini-Rocket Array Cobra Tracks"
 msgstr "Mini-Rocket Artillery"
 
-#: data/mp/messages/strings/names.txt:1928
+#: data/mp/messages/strings/names.txt:1930
 #, fuzzy
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "HPV Cannon Python Tracks"
 
-#: data/mp/messages/strings/names.txt:1965
+#: data/mp/messages/strings/names.txt:1967
 #, fuzzy
 msgid "Plasmite Retribution VTOL"
 msgstr "Medium Body - Retribution"
