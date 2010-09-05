@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-09-04 23:04+0200\n"
-"PO-Revision-Date: 2010-07-26 09:40+0100\n"
+"POT-Creation-Date: 2010-09-05 13:21+0200\n"
+"PO-Revision-Date: 2010-09-05 07:35+0100\n"
 "Last-Translator: Michał D. aka Emdek <emdeck@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -553,7 +553,7 @@ msgstr "Wieżyczka CB namierza artylerię wroga"
 #: data/mp/messages/resmessages12.rmsg:71
 #: data/mp/messages/resmessagesall.rmsg:123
 msgid "Orders assigned indirect fire units to fire at the enemy batteries"
-msgstr "Rozkazuje twojej artylerii atak na artylerię wroga"
+msgstr "Rozkazuje twojej artylerii atak na baterię wroga"
 
 #: data/base/messages/resmessages12.rmsg:72
 #: data/base/messages/resmessagesall.rmsg:98
@@ -5967,9 +5967,8 @@ msgstr "Ciężarówka Pick-Up"
 
 #: data/base/messages/strings/names.txt:207
 #: data/mp/messages/strings/names.txt:210
-#, fuzzy
 msgid "Cannon Fire Truck"
-msgstr "Wóz strażacki"
+msgstr "Wóz strażacki z działem"
 
 #: data/base/messages/strings/names.txt:208
 #: data/mp/messages/strings/names.txt:211
@@ -6290,7 +6289,7 @@ msgstr "Scrambler"
 #: data/base/messages/strings/names.txt:383
 #: data/mp/messages/strings/names.txt:390
 msgid "Oil Derrick"
-msgstr "Rafineria"
+msgstr "Platforma wydobywcza"
 
 #: data/base/messages/strings/names.txt:384
 #: data/mp/messages/strings/names.txt:391
@@ -9246,15 +9245,15 @@ msgstr "Zasoby ropy są kluczem do sukcesu"
 
 #: data/base/script/text/tutorial3.slo:313
 msgid "To build an oil derrick, select one of your trucks"
-msgstr "Aby zbudować rafinerię, zaznacz jedną z twoich ciężarówek"
+msgstr "Aby zbudować platformę wydobywczą, zaznacz jedną z twoich ciężarówek"
 
 #: data/base/script/text/tutorial3.slo:333
 msgid "Left click the oil pool indicated by the radar pulse to order your truck to build"
-msgstr "Kliknij na polu ropy oznaczonej na mapie by rozkazać budowę"
+msgstr "Kliknij na polu ropy oznaczonej na mapie by rozkazać ciężarówce budowę"
 
 #: data/base/script/text/tutorial3.slo:353
 msgid "The oil derrick is currently dormant. Build a power generator to convert the oil into power"
-msgstr "Rafineria jest na razie bezczynna. Zbuduj Generator by zmienić ropę na energię."
+msgstr "Platforma wydobywcza jest na razie bezczynna. Zbuduj Generator by zmienić ropę na energię."
 
 #: data/base/script/text/tutorial3.slo:370
 #: data/base/script/text/tutorial3.slo:580
@@ -10773,7 +10772,6 @@ msgid "Armour +35%, Body Points +30%"
 msgstr "Pancerz +35%, punkty zdrowia +30%"
 
 #: data/mp/messages/resmessages1.rmsg:122
-#, fuzzy
 msgid "Armored guard tower with Mini-Rocket Pod"
 msgstr "Wzmocniona wieża strażnicza uzbrojona w minirakiety"
 
@@ -10946,7 +10944,6 @@ msgid "Howitzer reload time -10%"
 msgstr "Czas przeładowania haubicy -10%"
 
 #: data/mp/messages/resmessages2.rmsg:928
-#, fuzzy
 msgid "High Explosive Anti-Tank warheads"
 msgstr "Wysoko wybuchowa głowica przeciwpancerna"
 
@@ -11059,7 +11056,7 @@ msgstr "Umocnienie z ognistym moździeżem"
 
 #: data/mp/messages/resmessagesall.rmsg:265
 msgid "Armored strongpoint with Plasmite Flamer"
-msgstr "Umocnienie z plasmitowym miotaczem"
+msgstr "Umocnienie z miotaczem plazmowym"
 
 #: data/mp/messages/resmessagesall.rmsg:278
 msgid "Armed with Cyborg Thermite Flamer"
@@ -11083,7 +11080,7 @@ msgstr "Ognista haubica może być przypisana do radaru"
 
 #: data/mp/messages/resmessagesall.rmsg:369
 msgid "Plasmite Flame-thrower"
-msgstr "Plasmitowy miotacz ognia"
+msgstr "Plazmowy miotacz ognia"
 
 #: data/mp/messages/resmessagesall.rmsg:384
 msgid "Steals technology from structures and takes control of weapons"
@@ -11300,7 +11297,7 @@ msgstr "Umocnienie z podwójnym karabinem sztur. dostępne"
 
 #: data/mp/messages/resmessagesall.rmsg:902
 msgid "Drops high intensity Plasmite bombs"
-msgstr "Zrzuca wysokiej mocy bomby plasmitowe"
+msgstr "Zrzuca wysokiej mocy bomby plazmowe"
 
 #: data/mp/messages/resmessagesall.rmsg:914
 msgid "New VTOL Missile Launcher"
@@ -11371,9 +11368,8 @@ msgstr "Wieżyczka NEXUS Link"
 
 #: data/mp/messages/strings/names.txt:404
 #: data/mp/messages/strings/names.txt:725
-#, fuzzy
 msgid "Hardcrete Gate"
-msgstr "Betonowy mur"
+msgstr "Betonowa brama"
 
 #: data/mp/messages/strings/names.txt:410
 #: data/mp/messages/strings/names.txt:736
@@ -11386,9 +11382,8 @@ msgstr "Stanowisko AA Tornado"
 
 #: data/mp/messages/strings/names.txt:418
 #: data/mp/messages/strings/names.txt:727
-#, fuzzy
 msgid "AA Flak Cannon Emplacement"
-msgstr "Stanowisko działa plazmowego"
+msgstr "Stanowisko działa przeciwlotniczego"
 
 #: data/mp/messages/strings/names.txt:474
 #: data/mp/messages/strings/names.txt:791
@@ -11412,14 +11407,12 @@ msgstr "Artyleria minirakiet"
 
 #: data/mp/messages/strings/names.txt:553
 #: data/mp/messages/strings/names.txt:998
-#, fuzzy
 msgid "AA Flak Cannon"
-msgstr "Działo plazmowe"
+msgstr "Działo przeciwlotnicze"
 
 #: data/mp/messages/strings/names.txt:554
-#, fuzzy
 msgid "VTOL Flak Cannon"
-msgstr "Działo VTOL"
+msgstr "Działko przeciwlotnicze VTOL"
 
 #: data/mp/messages/strings/names.txt:567
 #: data/mp/messages/strings/names.txt:1699
@@ -11575,24 +11568,20 @@ msgid "Rail Target Prediction Computer"
 msgstr "Komputer Rail przewidujący cel"
 
 #: data/mp/messages/strings/names.txt:1170
-#, fuzzy
 msgid "Stabilized Rockets"
-msgstr "Stabilizowane minirakiety"
+msgstr "Stabilizowane rakiety"
 
 #: data/mp/messages/strings/names.txt:1174
-#, fuzzy
 msgid "HE Rockets"
-msgstr "Minirakiety HE"
+msgstr "Rakiety HE"
 
 #: data/mp/messages/strings/names.txt:1175
-#, fuzzy
 msgid "HE Rockets Mk2"
-msgstr "Minirakiety HE Mk2"
+msgstr "Rakiety HE Mk2"
 
 #: data/mp/messages/strings/names.txt:1176
-#, fuzzy
 msgid "HE Rockets Mk3"
-msgstr "Minirakiety HE Mk3"
+msgstr "Rakiety HE Mk3"
 
 #: data/mp/messages/strings/names.txt:1389
 msgid "Assault Gun Tower"
@@ -11607,9 +11596,8 @@ msgid "Hyper Velocity Cannon Python Tracks"
 msgstr "Pyton z działem HPV na gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1480
-#, fuzzy
 msgid "AA Flak Cannon Python Half-tracks"
-msgstr "Pyton z ciężkim działem na gąsienicach"
+msgstr "Pyton z działem przeciwlotniczym na gąsienicach"
 
 #: data/mp/messages/strings/names.txt:1518
 msgid "Bunker Buster Cobra Hover"
@@ -11788,23 +11776,21 @@ msgid "Plasma Cannon Emplacement"
 msgstr "Stanowisko działa plazmowego"
 
 #: data/mp/messages/strings/names.txt:1725
-#, fuzzy
 msgid "Sunburst AA Rocket Array"
-msgstr "Artyleria minirakiet"
+msgstr "Artyleria rakiet AA Sunburst"
 
 #: data/mp/messages/strings/names.txt:1726
 msgid "Sunburst AA"
-msgstr ""
+msgstr "Sunburst AA"
 
 #: data/mp/messages/strings/names.txt:1727
 msgid "VTOL Sunburst AA"
-msgstr ""
+msgstr "Sunburst AA VTOL"
 
 #: data/mp/messages/strings/names.txt:1728
 #: data/mp/messages/strings/names.txt:1729
-#, fuzzy
 msgid "Sunburst AA Site"
-msgstr "Stanowisko działka AA Hurricane"
+msgstr "Stanowisko artylerii AA Sunburst"
 
 #: data/mp/messages/strings/names.txt:1731
 #: data/mp/messages/strings/names.txt:1732
@@ -11889,15 +11875,15 @@ msgstr "Smok"
 
 #: data/mp/messages/strings/names.txt:1780
 msgid "Superhot Plasmite gel"
-msgstr "Supergorący żel Plasmitowy"
+msgstr "Super gorący żel Plazmowy"
 
 #: data/mp/messages/strings/names.txt:1781
 msgid "Superhot Plasmite gel Mk2"
-msgstr "Supergorący żel Plasmitowy Mk2"
+msgstr "Super gorący żel Plazmowy Mk2"
 
 #: data/mp/messages/strings/names.txt:1782
 msgid "Superhot Plasmite gel Mk3"
-msgstr "Supergorący żel Plasmitowy Mk3"
+msgstr "Super gorący żel Plazmowy Mk3"
 
 #: data/mp/messages/strings/names.txt:1786
 #: data/mp/messages/strings/names.txt:1788
@@ -11931,9 +11917,8 @@ msgstr "Umocnienie z działkiem Whirlwind"
 
 #: data/mp/messages/strings/names.txt:1798
 #: data/mp/messages/strings/names.txt:1799
-#, fuzzy
 msgid "AA Flak Cannon Hardpoint"
-msgstr "Umocnienie z działem szturmowym"
+msgstr "Umocnienie z działem przeciwlotniczym"
 
 #: data/mp/messages/strings/names.txt:1800
 #: data/mp/messages/strings/names.txt:1801
@@ -11956,7 +11941,7 @@ msgstr "VTOL Luk bomb plazmowych"
 
 #: data/mp/messages/strings/names.txt:1811
 msgid "Plasmite Bomb"
-msgstr "Bomba Plasmitowa"
+msgstr "Bomba Plazmowa"
 
 #: data/mp/messages/strings/names.txt:1812
 msgid "VTOL EMP Missile Launcher"
@@ -12002,9 +11987,8 @@ msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Pyton poduszkowiec z działem HPV"
 
 #: data/mp/messages/strings/names.txt:1967
-#, fuzzy
 msgid "Plasmite Retribution VTOL"
-msgstr "Odwet luk bomb HEAP VTOL"
+msgstr "Odwet luk bomb plazmowych VTOL"
 
 #: lib/framework/i18n.c:90
 #: lib/framework/i18n.c:149
@@ -12081,7 +12065,7 @@ msgstr "plik"
 
 #: src/clparse.c:237
 msgid "Flush all debug output written to stderr"
-msgstr "Wryślij dane odpluskwiania do stderr"
+msgstr "Wyślij dane odpluskwiania do stderr"
 
 #: src/clparse.c:238
 msgid "Play in fullscreen mode"
@@ -12358,17 +12342,17 @@ msgstr "%s - Sojusznik - Obrażenia %d%% - Doświadczenie %d, %s"
 
 #: src/display.c:2086
 msgid "Truck ordered to build Oil Derrick"
-msgstr "Rozkazano budowniczemu zbudować Rafinerię"
+msgstr "Rozkazano budowniczemu zbudować platformę wydobywczą"
 
 #: src/display.c:2087
 #, fuzzy
 msgid "2 trucks ordered to build Oil Derrick"
-msgstr "Rozkazano budowniczemu zbudować Rafinerię"
+msgstr "Rozkazano budowniczemu zbudować platformę wydobywczą"
 
 #: src/display.c:2088
 #, fuzzy, c-format
 msgid "%d trucks ordered to build Oil Derrick"
-msgstr "Rozkazano budowniczemu zbudować Rafinerię"
+msgstr "Rozkazano budowniczemu zbudować platformę wydobywczą"
 
 #: src/droid.c:210
 msgid "Unit Lost!"
@@ -12640,11 +12624,10 @@ msgstr "Wyłącz"
 msgid "Fog"
 msgstr "Mgła"
 
-# 'Mist' and 'Fog' has the same meaning in Polish
 #: src/frontend.c:526
 #: src/frontend.c:601
 msgid "Mist"
-msgstr "Mgła"
+msgstr "Mgiełka"
 
 #: src/frontend.c:530
 #: src/frontend.c:595
@@ -12881,35 +12864,31 @@ msgstr "Energia"
 
 #: src/hci.c:3959
 msgid "Map:"
-msgstr ""
+msgstr "Mapa:"
 
 #: src/hci.c:3973
-#, fuzzy
 msgid "Load"
-msgstr "Załaduj grę"
+msgstr "Załaduj"
 
 #: src/hci.c:3974
-#, fuzzy
 msgid "Load Map File"
-msgstr "Załaduj grę"
+msgstr "Załaduj plik mapy"
 
 #: src/hci.c:3981
-#, fuzzy
 msgid "Save"
-msgstr "Zapisz grę"
+msgstr "Zapisz"
 
 #: src/hci.c:3982
-#, fuzzy
 msgid "Save Map File"
-msgstr "Zapisz grę"
+msgstr "Zapisz plik mapy"
 
 #: src/hci.c:3990
 msgid "New"
-msgstr ""
+msgstr "Nowa"
 
 #: src/hci.c:3991
 msgid "New Blank Map"
-msgstr ""
+msgstr "Nowa mapa"
 
 #: src/hci.c:4029
 msgid "Tile"
@@ -12945,7 +12924,7 @@ msgstr "Umieść obiekty specjalne na mapie"
 
 #: src/hci.c:4068
 msgid "Pause"
-msgstr ""
+msgstr "Pauza"
 
 #: src/hci.c:4069
 msgid "Pause or unpause the game"
@@ -12957,12 +12936,11 @@ msgstr "Wyrównaj wysokość wszystkich obiektów mapy"
 
 #: src/hci.c:4093
 msgid "Edit"
-msgstr ""
+msgstr "Edytuj"
 
 #: src/hci.c:4094
-#, fuzzy
 msgid "Start Edit Mode"
-msgstr "Rozpocznij bez baz"
+msgstr "Rozpocznij tryb edycji"
 
 #: src/hci.c:4108
 #: src/ingameop.c:119
@@ -12976,9 +12954,8 @@ msgid "Exit Game"
 msgstr "Zakończ grę"
 
 #: src/hci.c:4134
-#, fuzzy
 msgid "Current Player:"
-msgstr "Gra wieloosobowa"
+msgstr "Aktualny gracz:"
 
 #: src/hci.c:4533
 #: src/intdisplay.c:275
@@ -12986,9 +12963,8 @@ msgid "Progress Bar"
 msgstr "Pasek postępu"
 
 #: src/hci.c:5477
-#, fuzzy
 msgid "Infinite Production"
-msgstr "Cykl produkcji"
+msgstr "Produkcja ciągła"
 
 #: src/hci.c:5553
 msgid "Factory Delivery Point"
@@ -13365,9 +13341,8 @@ msgid "Debug menu is Open"
 msgstr "Menu odpluskwiania jest otwarte"
 
 #: src/keybind.c:1601
-#, fuzzy
 msgid "Unable to locate any oil derricks!"
-msgstr "Niemożna odnaleźć jednostek budujących!"
+msgstr "Niemożna odnaleźć platform wydobywczych!"
 
 #: src/keybind.c:1822
 msgid "Oh, the weather outside is frightful... SNOW"
@@ -13534,9 +13509,8 @@ msgid "View Location of Previous Message"
 msgstr "Wyświetl miejsce ostatniej wiadomości"
 
 #: src/keymap.c:307
-#, fuzzy
 msgid "Toggle Sensor display"
-msgstr "Przełącz wyświetlanie konsoli"
+msgstr "Przełącz widok radarów"
 
 #: src/keymap.c:311
 msgid "Assign Group 0"
@@ -13744,7 +13718,7 @@ msgstr "Widok na Zachód"
 
 #: src/keymap.c:373
 msgid "View next Oil Derrick"
-msgstr "Pokaż następną Rafinerię"
+msgstr "Pokaż następną platformę wydobywczą"
 
 #: src/keymap.c:374
 msgid "View next Repair Unit"
@@ -13792,35 +13766,31 @@ msgstr "Wyślij wiadomość tekstową"
 
 #: src/keymap.c:399
 msgid "Drop a beacon"
-msgstr ""
+msgstr "Daj znak świetlny"
 
 #: src/keymap.c:401
-#, fuzzy
 msgid "Sensor display On"
-msgstr "Zasięg radaru"
+msgstr "Wyświetlanie radaru włączone"
 
 #: src/keymap.c:402
 msgid "Sensor display Off"
-msgstr ""
+msgstr "Wyświetlanie radaru wyłączone"
 
 #: src/keymap.c:403
-#, fuzzy
 msgid "Toggles shadows"
-msgstr "Włącz cienie"
+msgstr "Przełącz cienie"
 
 #: src/keymap.c:404
-#, fuzzy
 msgid "Trap cursor"
 msgstr "Złap kursor"
 
 #: src/keymap.c:405
-#, fuzzy
 msgid "Toggle radar terrain"
-msgstr "Przełącz radar"
+msgstr "Przełącz radar terenu"
 
 #: src/keymap.c:406
 msgid "Toggle ally-enemy radar view"
-msgstr ""
+msgstr "Przełącz widok radaru przyjaciel-wróg"
 
 #: src/keymap.c:415
 msgid "Select all Combat Units"
@@ -14183,17 +14153,16 @@ msgid "PLAYERS"
 msgstr "GRACZE"
 
 #: src/multiint.c:1916
-#, fuzzy
 msgid "Choose Team"
-msgstr "Zablokowane drużyny"
+msgstr "Wybierz drużynę"
 
 #: src/multiint.c:1956
 msgid "Click to change player settings"
-msgstr ""
+msgstr "Kliknij aby zmienić ustawienia gracza"
 
 #: src/multiint.c:1987
 msgid "Click to adjust AI difficulty"
-msgstr ""
+msgstr "Kliknij aby dostosować poziom sztucznej inteligencji"
 
 #: src/multiint.c:2066
 msgid "CHAT"
@@ -14204,8 +14173,9 @@ msgid "All players need to have the same mods to join your game."
 msgstr "Wszyscy gracze muszą mieć takie same mody aby przyłączyć się do twojej gry."
 
 #: src/multiint.c:2260
+#, fuzzy
 msgid "*** password is now required! ***"
-msgstr "*** hasło jest teraz wymagane! ***"
+msgstr "*** hasło [%s] jest teraz wymagane! ***"
 
 #: src/multiint.c:2267
 msgid "*** password is NOT required! ***"
@@ -14335,7 +14305,7 @@ msgstr "Konstrukcje"
 
 #: src/multimenu.c:1125
 msgid "Channel"
-msgstr ""
+msgstr "Kanał"
 
 #: src/multimenu.c:1140
 msgid "Toggle Alliance State"
@@ -14679,63 +14649,6 @@ msgstr " - Zbudowana %s"
 msgid "Version %s%s%s%s"
 msgstr "Wersja %s%s%s%s"
 
-#~ msgid "Mini-Rocket accuracy +10%"
-#~ msgstr "Celność minirakiet +10%"
-
-#~ msgid "Mini-Rocket damage +25%"
-#~ msgstr "Obrażenia zadawane przez minirakiety +25%"
-
-#~ msgid "Mini-Rocket reload time -15%"
-#~ msgstr "Czas przeładowania minirakiet -15%"
-
-#~ msgid "Cyclone AA Site"
-#~ msgstr "Stanowisko AA Cyclone"
-
-#~ msgid "Automated Manufacturing Mk2"
-#~ msgstr "Automatyczna produkcja Fabryki Mk2"
-
-#~ msgid "Automated Manufacturing Mk3"
-#~ msgstr "Automatyczna produkcja Fabryki Mk3"
-
-#~ msgid "Robotic Manufacturing Mk2"
-#~ msgstr "Robotyczna produkcja Fabryki Mk2"
-
-#~ msgid "Robotic Manufacturing Mk3"
-#~ msgstr "Robotyczna produkcja Fabryki Mk3"
-
-#~ msgid "Advanced Manufacturing Mk2"
-#~ msgstr "Zaawansowana produkcja Fabryki Mk2"
-
-#~ msgid "Automated Repair Facility Mk2"
-#~ msgstr "Zautomatyzowana Stacja Naprawcza Mk2"
-
-#~ msgid "Automated Repair Facility Mk3"
-#~ msgstr "Zautomatyzowana Stacja Naprawcza Mk3"
-
-#~ msgid "Robotic Repair Facility Mk2"
-#~ msgstr "Robotyczna Stacja Naprawcza Mk2"
-
-#~ msgid "HESH Mini-Rockets"
-#~ msgstr "Minirakiety HESH"
-
-#~ msgid "HESH Mini-Rockets Mk2"
-#~ msgstr "Minirakiety HESH Mk2"
-
-#~ msgid "HESH Mini-Rockets Mk3"
-#~ msgstr "Minirakiety HESH Mk3"
-
-#~ msgid "Thermite Flamer Cyborg"
-#~ msgstr "Cyborg z miotaczem termicznym"
-
-#~ msgid "Grenadier Cyborg"
-#~ msgstr "Cyborg grenadier"
-
-#~ msgid "Cyclone Hardpoint"
-#~ msgstr "Umocnienie z działkiem Cyclone"
-
-#~ msgid "Fire Cannon"
-#~ msgstr "Działo ogniowe"
-
 #~ msgid "Cobra Hover Heavy-Repair"
 #~ msgstr "Kobra poduszkowiec ciężka naprawiająca"
 
@@ -14772,7 +14685,7 @@ msgstr "Wersja %s%s%s%s"
 #~ msgid "Scorpion Command Turret Tracks"
 #~ msgstr "Skorpion dowodzący na gąsienicach"
 
-#~ msgid "mantis Command Turret Tracks"
+#~ msgid "Mantis Command Turret Tracks"
 #~ msgstr "Modliszka dowodząca na gąsienicach"
 
 #~ msgid "Cobra Lancer Tracks"
@@ -14862,59 +14775,80 @@ msgstr "Wersja %s%s%s%s"
 #~ msgid "Viper Flamer Half-Track"
 #~ msgstr "Żmija miotacz na pół-gąsienicach"
 
-#~ msgid "Transporter"
-#~ msgstr "Transportowiec"
-
-#~ msgid "Unable to locate any resource extractors!"
-#~ msgstr "Nie można dodać żadnych miejsc z zasobami"
-
-#~ msgid "Build menu will reopen"
-#~ msgstr "Menu budowania zostanie ponownie otwarte"
-
-#~ msgid "Build menu will not reopen"
-#~ msgstr "Menu budowania nie zostanie ponownie otwarte"
-
-#~ msgid "Toggle reopening the build menu"
-#~ msgstr "Przełącz otwieranie menu budowania"
+#~ msgid ": Unknown cheat code."
+#~ msgstr ": Nieznany kod oszustwa."
 
 #~ msgid "Player %u is cheating him/herself a new droid army of %s(s)."
 #~ msgstr "Gracz %u oszukuje by zdobyć armię jednostek %s."
 
-#~ msgid "Z NULL BRAIN"
-#~ msgstr "Z NULL BRAIN"
+#~ msgid "Show frame rate"
+#~ msgstr "Pokazuj liczbę klatek na sekundę"
 
-#~ msgid "Z NULL PROGRAM"
-#~ msgstr "Z NULL PROGRAM"
+#~ msgid "Toggle display of droid path"
+#~ msgstr "Przełącz wyświetlanie ścieżek pojazdów"
 
-#~ msgid "Z NULL CONSTRUCT"
-#~ msgstr "Z NULL CONSTRUCT"
+#~ msgid "Toggle display of gateways"
+#~ msgstr "Przełącz wyświetlanie bram"
 
-#~ msgid "Z NULL PROP"
-#~ msgstr "Z NULL PROP"
+#~ msgid "Toggle Debug Mappings"
+#~ msgstr "Przełącz mapowanie odpluskwiania"
 
-#~ msgid "BaBaProp"
-#~ msgstr "BaBaProp"
+#~ msgid "Show all keyboard mappings - use pause!"
+#~ msgstr "Pokaż wszystkie skróty klawiaturowe - użyj pauzy!"
 
-#~ msgid "BaBaLegs"
-#~ msgstr "BaBaLegs"
+#~ msgid "Toggle visibility"
+#~ msgstr "Przełącz widoczność"
 
-#~ msgid "Z NULL REPAIR"
-#~ msgstr "Z NULL REPAIR"
+#~ msgid "Raise tile height"
+#~ msgstr "Zwiększ wysokość kafla"
 
-#~ msgid "Z NULL ECM"
-#~ msgstr "Z NULL ECM"
+#~ msgid "Lower tile height"
+#~ msgstr "Zmniejsz wysokość kafla"
 
-#~ msgid "Z NULL SENSOR"
-#~ msgstr "Z NULL SENSOR"
+#~ msgid "Toggles on/off DEMO Mode"
+#~ msgstr "Przełącz tryb DEMO wł/wył."
 
-#~ msgid "LasSat"
-#~ msgstr "LasSat"
+#~ msgid "End Mission"
+#~ msgstr "Zakończ misję"
 
-#~ msgid ": Unknown cheat code."
-#~ msgstr ": Nieznany kod oszustwa."
+#~ msgid "Toggles All fog"
+#~ msgstr "Przełącz rodzaj mgły"
 
-#~ msgid "(Player %u) has detected the borg 'legs' bug! Please enter legs in your console and upload the files to us!"
-#~ msgstr "(Gracz %u) wykrył  błąd 'legs' (nóg) cyborgów! Wprowadź legs do swojej konsoli i wyślij do nas pliki!"
+#~ msgid "Trigger some weather"
+#~ msgstr "Zmień pogodę"
+
+#~ msgid "Flip terrain triangle"
+#~ msgstr "Odbij trójkąt terenu"
+
+#~ msgid "Realign height of all objects on the map"
+#~ msgstr "Ponownie wyrównaj wysokość wszystkich obiektów na mapie"
+
+#~ msgid "Make all items available"
+#~ msgstr "Udostępnij wszystkie przedmioty"
+
+#~ msgid "Kill Selected Unit(s)"
+#~ msgstr "Zabij zaznaczone jednostki"
+
+#~ msgid "Toggle god Mode Status"
+#~ msgstr "Przełącz stan God Mode"
+
+#~ msgid "Display Options Screen"
+#~ msgstr "Wyświetl ekran opcji"
+
+#~ msgid "Complete current research"
+#~ msgstr "Dokończ aktualne badania"
+
+#~ msgid "Toggle watch window"
+#~ msgstr "Przełącz obserwowanie okna"
+
+#~ msgid "Trace a game object"
+#~ msgstr "Śledź obiekt gry"
+
+#~ msgid "Toggle Driving Mode"
+#~ msgstr "Przełącz tryb kierowania "
 
 #~ msgid "You found %u power in an oil drum"
 #~ msgstr "Znalazłeś %u energii w beczce z ropą"
+
+#~ msgid "kicked %s : %s from the game, and added them to the banned list!"
+#~ msgstr "wyrzucono %s : %s z gry oraz dodano do listy zbanowanych!"
