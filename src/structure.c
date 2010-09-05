@@ -1298,7 +1298,7 @@ BOOL structureRepair(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 	if (repairAmount != 0)  // didn't get truncated to zero
 	{
 		psStruct->body += repairAmount;
-		CLIP(psStruct->body, 0, structureBody(psStruct));
+		psStruct->body = MIN(psStruct->body, structureBody(psStruct));
 		if (psStruct->body == 0)
 		{
 			removeStruct(psStruct, true);
