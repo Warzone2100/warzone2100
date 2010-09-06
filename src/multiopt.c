@@ -113,6 +113,8 @@ void sendOptions()
 		NETuint8_t(&ingame.pStructureLimits[i].id);
 		NETuint8_t(&ingame.pStructureLimits[i].limit);
 	}
+	updateLimitFlags();
+	NETuint8_t(&ingame.flags);
 
 	NETend();
 }
@@ -201,6 +203,7 @@ void recvOptions(NETQUEUE queue)
 		NETuint8_t(&ingame.pStructureLimits[i].id);
 		NETuint8_t(&ingame.pStructureLimits[i].limit);
 	}
+	NETuint8_t(&ingame.flags);
 
 	NETend();
 
@@ -630,6 +633,7 @@ BOOL multiGameShutdown(void)
 		free(ingame.pStructureLimits);
 		ingame.pStructureLimits = NULL;
 	}
+	ingame.flags = 0;
 
 	ingame.localJoiningInProgress = false; // Clean up
 	ingame.localOptionsReceived = false;

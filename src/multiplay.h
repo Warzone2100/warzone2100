@@ -68,6 +68,7 @@ typedef struct {
 	UDWORD				startTime;
 	UDWORD				numStructureLimits;					// number of limits
 	MULTISTRUCTLIMITS	*pStructureLimits;					// limits chunk.
+	uint8_t                         flags;  ///< Bitmask, shows which structures are disabled.
 	UDWORD		skScores[MAX_PLAYERS][2];			// score+kills for local skirmish players.
 	char		phrases[5][255];					// 5 favourite text messages.
 } MULTIPLAYERINGAME;
