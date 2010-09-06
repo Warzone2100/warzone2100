@@ -8,7 +8,7 @@ run
 {
    player          INT                7
 
-// Version 2.5.1
+// Version 2.5.2
 // the version of the .vlo files is not related to the one of the .slo files
 //
 //
@@ -232,8 +232,9 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
 	CyborgLegs 		   RESEARCHSTAT 	"R-Cyborg-Legs01"
 	VTOLPadRes       RESEARCHSTAT   "R-Struc-VTOLPad"
 	HurricaneAASite	 RESEARCHSTAT	  "R-Defense-AASite-QuadMg1" 
-	CycloneAASite    RESEARCHSTAT   "R-Defense-AASite-QuadBof"
+	//CycloneAASite    RESEARCHSTAT   "R-Defense-AASite-QuadBof" //not used anymore since wz 2.3.5
 	WhirlwindAASite  RESEARCHSTAT   "R-Defense-AASite-QuadRotMg"
+	SunburstAAsite   RESEARCHSTAT   "R-Defense-Sunburst"
 
 	MortarFastLoad3  RESEARCHSTAT   "R-Wpn-Mortar-ROF03"
 
@@ -295,22 +296,7 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
 	sense[1]		STRUCTURESTAT		"Sys-CB-Tower01"    //CB Tower [range 16-24]
 	sense[2]		STRUCTURESTAT		"Sys-SensoTower01"  //Sensor Tower  [range 12-18]
 
-	//anti air
-	/*
-  numAA	INT					6
-	vtolDefStruct[0]	STRUCTURESTAT		"AASite-QuadMg1"			//hurricane
-	vtolDefStruct[1]	STRUCTURESTAT		"AASite-QuadBof" 			//cyclone
-	vtolDefStruct[2]	STRUCTURESTAT		"AASite-QuadRotMg"		//plasma site
-	vtolDefStruct[3]	STRUCTURESTAT		"P0-AASite-SAM1" 			//avenger
-	vtolDefStruct[4]	STRUCTURESTAT		"P0-AASite-SAM2" 			//vindicator
-	vtolDefStruct[5]	STRUCTURESTAT		"P0-AASite-Laser" 			//laser
-  */
-  
-  //min droids to keep in defend team for each AIpersonality
-  //[x][0] tanks
-  //[x][1] cyborgs
-  //[x][2] VTOLs
-  
+  //defnce teams
   minDefDroids[0][0]    INT       5
   minDefDroids[0][1]    INT       5
   minDefDroids[0][2]    INT       3
@@ -416,17 +402,15 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
   fortressDef[3]  STRUCTURESTAT "X-Super-MassDriver"//"R-Defense-MassDriver"// Mass Driver Fortress
 
 
-	numGenAA	INT					10
+	numGenAA	INT					8
 	vtolGenStruct[0]	STRUCTURESTAT		"AASite-QuadMg1"			   //Hurricane Site
-	vtolGenStruct[1]	STRUCTURESTAT		"WallTower-DoubleAAGun"  //Cyclone - HP
-	vtolGenStruct[2]	STRUCTURESTAT		"AASite-QuadBof" 			   //Cyclone - Site
-	vtolGenStruct[3]	STRUCTURESTAT		"AASite-QuadRotMg"		   //WhirlWind - Site
-	vtolGenStruct[4]	STRUCTURESTAT		"WallTower-QuadRotAAGun" //Whirlwind - HP
-	vtolGenStruct[5]	STRUCTURESTAT		"P0-AASite-SAM1" 			   //Avenger SAM - Site
-	vtolGenStruct[6]	STRUCTURESTAT		"WallTower-SamSite" 		 //Avenger - HP
-	vtolGenStruct[7]	STRUCTURESTAT		"P0-AASite-SAM2" 			   //Vindicator SAM - Site
-	vtolGenStruct[8]	STRUCTURESTAT		"WallTower-SamHvy" 		   //Vindicator - HP
-	vtolGenStruct[9]	STRUCTURESTAT		"P0-AASite-Laser" 			 //Laser
+	vtolGenStruct[1]	STRUCTURESTAT		"AASite-QuadRotMg"		   //WhirlWind - Site
+	vtolGenStruct[2]	STRUCTURESTAT		"P0-AASite-Sunburst"     //new in dydo 2.2.4 was "WallTower-QuadRotAAGun" //Whirlwind - HP
+	vtolGenStruct[3]	STRUCTURESTAT		"P0-AASite-SAM1" 			   //Avenger SAM - Site
+	vtolGenStruct[4]	STRUCTURESTAT		"WallTower-SamSite" 		 //Avenger - HP
+	vtolGenStruct[5]	STRUCTURESTAT		"P0-AASite-SAM2" 			   //Vindicator SAM - Site
+	vtolGenStruct[6]	STRUCTURESTAT		"WallTower-SamHvy" 		   //Vindicator - HP
+	vtolGenStruct[7]	STRUCTURESTAT		"P0-AASite-Laser" 			 //Laser
 
 
 
@@ -591,11 +575,18 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
   
   numTmpl_01	INT		52
   //=================================================================
+
   //1-Viper
   tmpl_p1[51]	TEMPLATE	"ViperFlameWheels"      //anti personnel
   tmpl_p1[50]	TEMPLATE	"ViperFlameHalfTracks"  //anti personnel
 	tmpl_p1[49]	TEMPLATE	"ViperPODHalfTracks"		//anti-tank
 	tmpl_p1[48]	TEMPLATE	"ViperMRLHalfTracks"		//anti-tank
+  //2-Bug
+	//3-Leopard {R-Vehicle-Body02}
+  tmpl_p1[28]	TEMPLATE	"LeopardHoverPulseLas"    //anti personnel
+  //4-Retaliation {R-Vehicle-Body03}
+
+  //=================================================================
 
   //1-Cobra
   tmpl_p1[47]	TEMPLATE	"CobraMRLHalftrack"   //anti-tank
@@ -604,7 +595,24 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
 	tmpl_p1[44]	TEMPLATE	"CobraHMGHalfTrack"   //anti personnel
 	tmpl_p1[43]	TEMPLATE	"CobraInfernoHTracks" //anti personnel
   tmpl_p1[42]	TEMPLATE	"CobraInfernoHover"   //anti personnel
-	
+  //2-Scorpion {R-Vehicle-Body08}
+  tmpl_p1[35]	TEMPLATE	"SK-Scorp-Hover-Lancer"	  //anti-tank  
+  tmpl_p1[34]	TEMPLATE	"H-Scorp-Trk-Lancer"	    //anti-tank  
+	//3-Panther {R-Vehicle-Body06}
+  tmpl_p1[27]	TEMPLATE	"CO-M-HvFlame-Track"     //anti personnel
+  tmpl_p1[26]	TEMPLATE	"PantherHoverPulseLas"   //anti personnel
+  tmpl_p1[25]	TEMPLATE	"CO-M-LTAT-Hover"        //anti-tank 
+  tmpl_p1[24]	TEMPLATE	"SK-Panther-Hover-TK"    //anti-tank 
+  tmpl_p1[23]	TEMPLATE	"SK-Panther-Track-TK"    //anti-tank 
+  //4-Retribution {Body7ABT}
+  tmpl_p1[15]	TEMPLATE	"SK-Retre-Hover-Scourge"    //anti-tank
+	tmpl_p1[14]	TEMPLATE	"SK-Retre-Track-Scourge"    //anti-tank
+	tmpl_p1[13]	TEMPLATE	"RetreHoverFlashLight"      //anti personnel 
+	tmpl_p1[12]	TEMPLATE	"SK-Retre-Track-FlashLight" //anti personnel
+	tmpl_p1[11]	TEMPLATE	"SK-Retre-Track-PulseLsr"   //anti personnel
+	tmpl_p1[10]	TEMPLATE	"NX-M-PulseLas-Hover"       //anti personnel
+
+  //=================================================================
 
   //1-Phyton  Lancer,TK,Inferno,AssGun,MC,HC
   tmpl_p1[41]	TEMPLATE	"SK-Python-Hover-Lancer" //anti-tank 
@@ -613,33 +621,12 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
 	tmpl_p1[38]	TEMPLATE	"PythonScourgeTracks"		 //anti-tank 
   tmpl_p1[37]	TEMPLATE	"PythonHoverInferno"     //anti personnel
 	tmpl_p1[36]	TEMPLATE	"PythonPulseTracks"		   //anti personnel 
-
-  //=================================================================
-  //2-Bug
- 
-  //2-Scorpion {R-Vehicle-Body08}
-  tmpl_p1[35]	TEMPLATE	"SK-Scorp-Hover-Lancer"	  //anti-tank  
-  tmpl_p1[34]	TEMPLATE	"H-Scorp-Trk-Lancer"	    //anti-tank  
-  //tmpl_p1[46]	TEMPLATE	"ScorpHTrackHMG"	        //anti personnel  T2 games   
-
 	//2-Mantis {R-Vehicle-Body12} AC,HC,[HVC]
   tmpl_p1[33]	TEMPLATE	"A-Mantis-Trk-Pulse"   //anti personnel
   tmpl_p1[32]	TEMPLATE	"A-Mantis-Trk-Lancer"  //anti-tank 
   tmpl_p1[31]	TEMPLATE	"TK-Mantis-H"          //anti-tank 
   tmpl_p1[30]	TEMPLATE	"MantisTKTracks"       //anti-tank 
   tmpl_p1[29]	TEMPLATE	"MantisScourgeTracks"  //anti-tank 
-
-  //=================================================================
-	//3-Leopard {R-Vehicle-Body02}
-  tmpl_p1[28]	TEMPLATE	"LeopardHoverPulseLas"    //anti personnel
-	
-	//3-Panther {R-Vehicle-Body06}
-  tmpl_p1[27]	TEMPLATE	"CO-M-HvFlame-Track"     //anti personnel
-  tmpl_p1[26]	TEMPLATE	"PantherHoverPulseLas"   //anti personnel
-  tmpl_p1[25]	TEMPLATE	"CO-M-LTAT-Hover"        //anti-tank 
-  tmpl_p1[24]	TEMPLATE	"SK-Panther-Hover-TK"    //anti-tank 
-  tmpl_p1[23]	TEMPLATE	"SK-Panther-Track-TK"    //anti-tank 
-	
   //3-Tiger {R-Vehicle-Body09}
 	tmpl_p1[22]	TEMPLATE	"TigerHoverPulseLas"      //anti personnel
 	tmpl_p1[21]	TEMPLATE	"TigerPulseTracks"        //anti personnel
@@ -648,18 +635,6 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
 	tmpl_p1[18]	TEMPLATE	"SK-Tiger-Track-TK"       //anti-tank 
 	tmpl_p1[17]	TEMPLATE	"SK-Tiger-Track-Scourge"  //anti-tank 
 	tmpl_p1[16]	TEMPLATE	"SK-Tiger-Hover-Scourge"  //anti-tank 
-	
-  //=================================================================
-  //4-Retaliation {R-Vehicle-Body03}
-
-  //4-Retribution {Body7ABT}
-  tmpl_p1[15]	TEMPLATE	"SK-Retre-Hover-Scourge"    //anti-tank
-	tmpl_p1[14]	TEMPLATE	"SK-Retre-Track-Scourge"    //anti-tank
-	tmpl_p1[13]	TEMPLATE	"RetreHoverFlashLight"      //anti personnel 
-	tmpl_p1[12]	TEMPLATE	"SK-Retre-Track-FlashLight" //anti personnel
-	tmpl_p1[11]	TEMPLATE	"SK-Retre-Track-PulseLsr"   //anti personnel
-	tmpl_p1[10]	TEMPLATE	"NX-M-PulseLas-Hover"       //anti personnel
-	
   //4-Vengeance {Body10MBT}
   tmpl_p1[9]	TEMPLATE	"A-Veng-Trk-TK"           //anti-tank
   tmpl_p1[8]	TEMPLATE	"SK-Veng-Hover-Scourge"   //anti-tank
@@ -675,11 +650,6 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
 	tmpl_p1[1]	TEMPLATE	"WyvernPulseTracks"   //anti personnel
 	tmpl_p1[0]	TEMPLATE	"WyvernHvLaserTracks" //anti personnel
 
-	
-
-
-
-
   //=================================================================
   //    Templates for Research PATH = 2 (MG - Cannons)
   //=================================================================
@@ -689,116 +659,85 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
 	tmpl_p2[63]	TEMPLATE	"ViperMG01Wheels"       //anti personnel  
 	tmpl_p2[62]	TEMPLATE	"ViperMG02Halftrack"    //anti personnel
 	tmpl_p2[61]	TEMPLATE	"ViperHMGHalftrack"     //anti personnel
-
 	tmpl_p2[60]	TEMPLATE	"ViperLtCannonHTracks"	//all-rounder 
+  //2-Bug
+	//3-Leopard AssGun,PulseLas,HvyLas - Needle  
+  tmpl_p2[38]	TEMPLATE	"SK-Leopard-HTrk-ASGun"   //anti personnel  
+  tmpl_p2[37]	TEMPLATE	"LeopardHoverPulseLas"    //anti personnel
+  tmpl_p2[36]	TEMPLATE	"SK-Leopard-Hover-Needle" //all-rounder  
+  tmpl_p2[35]	TEMPLATE	"SK-Leopard-Htrk-Needle"  //all-rounder  
+  //4-Retaliation  Needle
+	tmpl_p2[19]	TEMPLATE	"SK-Retal-Track-Needle"   //all-rounder
 
+  //=================================================================
+ 
   //1-Cobra  Hover - HMG - MCHVC
   tmpl_p2[59]	TEMPLATE	"CobraHMGHalfTrack"		//anti personnel
   tmpl_p2[58]	TEMPLATE	"SK-Cobra-Hover-HMG"  //anti personnel
-
   tmpl_p2[57]	TEMPLATE	"CobraMedCnHTrks"     //all-rounder 
   tmpl_p2[56]	TEMPLATE	"A-Cobra-Hover-MC"    //all-rounder
-
   tmpl_p2[55]	TEMPLATE	"SK-Cobra-Track-HVC"	//all-rounder 
-	
-
-  //1-Phyton AssGun,MC,HVC,HC
-  tmpl_p2[54]	TEMPLATE	"PhytonHoverAssGun"       //anti personnel
-  tmpl_p2[53]	TEMPLATE	"PhytonHTrackAssGun"      //anti personnel
-
-	tmpl_p2[52]	TEMPLATE	"PythonMedCanTracks"	    //all-rounder 
-	tmpl_p2[51]	TEMPLATE	"SK-Python-Hover-Mcannon" //all-rounder 
-
-	tmpl_p2[50]	TEMPLATE	"P0cam3PyHPVcanTrk"       //all-rounder 
-	tmpl_p2[49]	TEMPLATE	"PythonHoverHVC"          //all-rounder 
-
-  tmpl_p2[48]	TEMPLATE	"SK-Python-Track-Hcannon" //all-rounder 
-	tmpl_p2[47]	TEMPLATE	"SK-Python-Hover-Hcannon" //all-rounder 
-
-  //=================================================================
-  //2-Bug
- 
   //2-Scorpion HMG,AssGun,MC 
   tmpl_p2[46]	TEMPLATE	"ScorpHTrackHMG"	        //anti personnel     
   tmpl_p2[45]	TEMPLATE	"SK-Scorp-Hover-ASGUN"	  //anti personnel 
   tmpl_p2[44]	TEMPLATE	"SK-Scorp-Hover-Mcannon"	//all-rounder
-
-	//2-Mantis (Pulse)(RailGun),AssCann,HVC
-  tmpl_p2[43]	TEMPLATE	"A-Mantis-Trk-Pulse"      //anti personnel
-
-	tmpl_p2[42]	TEMPLATE	"MantisHoverAC"           //all-rounder
-	tmpl_p2[41]	TEMPLATE	"SK-Mantis-Hover-HVC"     //all-rounder
-
-	tmpl_p2[40]	TEMPLATE	"SK-Mantis-Hover-Hcannon" //all-rounder
-	tmpl_p2[39]	TEMPLATE	"A-Mantis-Trk-Rail"       //all-rounder 
-
-  //=================================================================
-	//3-Leopard AssGun,PulseLas,HvyLas - Needle  
-  tmpl_p2[38]	TEMPLATE	"SK-Leopard-HTrk-ASGun"   //anti personnel  
-  tmpl_p2[37]	TEMPLATE	"LeopardHoverPulseLas"    //anti personnel
-  
-  tmpl_p2[36]	TEMPLATE	"SK-Leopard-Hover-Needle" //all-rounder  
-  tmpl_p2[35]	TEMPLATE	"SK-Leopard-Htrk-Needle"  //all-rounder  
-	
 	//3-Panther PulseLas,AssGun - RailGun,HVC
   tmpl_p2[33]	TEMPLATE	"SK-Panther-Htrk-ASGun"    //anti personnel 
   tmpl_p2[34]	TEMPLATE	"PantherHoverPulseLas"     //anti personnel
-
   tmpl_p2[32]	TEMPLATE	"SK-Panther-Hover-HVC"     //all-rounder 
   tmpl_p2[31]	TEMPLATE	"SK-Panther-Track-HVC"     //all-rounder
   tmpl_p2[30]	TEMPLATE	"SK-Panther-Track-RailGun" //all-rounder
-	
-  //3-Tiger PulseLas,HvyLas - Needle,RailGun,AssCann,HC,HVC,Gauss
-	tmpl_p2[29]	TEMPLATE	"TigerHoverPulseLas"      //anti personnel
-	tmpl_p2[28]	TEMPLATE	"TigerPulseTracks"        //anti personnel
-
-	tmpl_p2[27]	TEMPLATE	"TigerHvLaserTracks"      //anti personnel
-
-	tmpl_p2[26]	TEMPLATE	"SK-Tiger-Track-ASCannon" //all-rounder
-	tmpl_p2[25]	TEMPLATE	"SK-Tiger-Hover-ASCannon" //all-rounder
-
-  tmpl_p2[24]	TEMPLATE	"SK-Tiger-Track-Hcannon"  //all-rounder
-	tmpl_p2[23]	TEMPLATE	"A-Tiger-Trk-Needle"      //all-rounder 
-	tmpl_p2[22]	TEMPLATE	"TigerHoverRailGun"       //all-rounder
-
-  tmpl_p2[21]	TEMPLATE  "SK-Tiger-Track-Gauss"    //all-rounder
-  tmpl_p2[20]	TEMPLATE  "SK-Tiger-Hover-Gauss"    //all-rounder
-	
-  //=================================================================
-  //4-Retaliation  Needle
-	tmpl_p2[19]	TEMPLATE	"SK-Retal-Track-Needle"   //all-rounder
-
   //4-Retribution  Flash,PulseLas - Needle, RailGun
 	tmpl_p2[18]	TEMPLATE	"RetreHoverFlashLight"      //anti personnel 
 	tmpl_p2[17]	TEMPLATE	"SK-Retre-Track-FlashLight" //anti personnel
-
 	tmpl_p2[16]	TEMPLATE	"SK-Retre-Track-PulseLsr"   //anti personnel
 	tmpl_p2[15]	TEMPLATE	"NX-M-PulseLas-Hover"       //anti personnel
-
 	tmpl_p2[14]	TEMPLATE	"A-Retrib-Trk-Needle"     //all-rounder
-
 	tmpl_p2[13]	TEMPLATE	"SK-Retre-Track-RailGun"  //all-rounder
 	tmpl_p2[12]	TEMPLATE	"SK-Retre-Hover-RailGun"  //all-rounder
 	
+  //=================================================================
+
+  //1-Phyton AssGun,MC,HVC,HC
+  tmpl_p2[54]	TEMPLATE	"PhytonHoverAssGun"       //anti personnel
+  tmpl_p2[53]	TEMPLATE	"PhytonHTrackAssGun"      //anti personnel
+	tmpl_p2[52]	TEMPLATE	"PythonMedCanTracks"	    //all-rounder 
+	tmpl_p2[51]	TEMPLATE	"SK-Python-Hover-Mcannon" //all-rounder 
+	tmpl_p2[50]	TEMPLATE	"P0cam3PyHPVcanTrk"       //all-rounder 
+	tmpl_p2[49]	TEMPLATE	"PythonHoverHVC"          //all-rounder 
+  tmpl_p2[48]	TEMPLATE	"SK-Python-Track-Hcannon" //all-rounder 
+	tmpl_p2[47]	TEMPLATE	"SK-Python-Hover-Hcannon" //all-rounder 
+	//2-Mantis (Pulse)(RailGun),AssCann,HVC
+  tmpl_p2[43]	TEMPLATE	"A-Mantis-Trk-Pulse"      //anti personnel
+	tmpl_p2[42]	TEMPLATE	"MantisHoverAC"           //all-rounder
+	tmpl_p2[41]	TEMPLATE	"SK-Mantis-Hover-HVC"     //all-rounder
+	tmpl_p2[40]	TEMPLATE	"SK-Mantis-Hover-Hcannon" //all-rounder
+	tmpl_p2[39]	TEMPLATE	"A-Mantis-Trk-Rail"       //all-rounder 
+  //3-Tiger PulseLas,HvyLas - Needle,RailGun,AssCann,HC,HVC,Gauss
+	tmpl_p2[29]	TEMPLATE	"TigerHoverPulseLas"      //anti personnel
+	tmpl_p2[28]	TEMPLATE	"TigerPulseTracks"        //anti personnel
+	tmpl_p2[27]	TEMPLATE	"TigerHvLaserTracks"      //anti personnel
+	tmpl_p2[26]	TEMPLATE	"SK-Tiger-Track-ASCannon" //all-rounder
+	tmpl_p2[25]	TEMPLATE	"SK-Tiger-Hover-ASCannon" //all-rounder
+  tmpl_p2[24]	TEMPLATE	"SK-Tiger-Track-Hcannon"  //all-rounder
+	tmpl_p2[23]	TEMPLATE	"A-Tiger-Trk-Needle"      //all-rounder 
+	tmpl_p2[22]	TEMPLATE	"TigerHoverRailGun"       //all-rounder
+  tmpl_p2[21]	TEMPLATE  "SK-Tiger-Track-Gauss"    //all-rounder
+  tmpl_p2[20]	TEMPLATE  "SK-Tiger-Hover-Gauss"    //all-rounder
   //4-Vengeance  PulseLas,HvyLas - Needle,TwinAssCann,RailGun,GaussCann
 	tmpl_p2[11]	TEMPLATE	"SK-Veng-Hover-PulseLsr"   //anti personnel
 	tmpl_p2[10]	TEMPLATE	"SK-Veng-Track-PulseLsr"   //anti personnel
 	tmpl_p2[9]	TEMPLATE	"SK-Veng-Track-HvyLaser"   //anti personnel
-
 	tmpl_p2[8]	TEMPLATE	"A-Veng-Trk-Needle"        //all-rounder
 	tmpl_p2[7]	TEMPLATE	"A-Veng-Trk-Needle"        //all-rounder
 	tmpl_p2[6]	TEMPLATE	"A-Veng-Trk-Rail"          //all-rounder
-
-	tmpl_p2[5]	TEMPLATE	"SK-Veng-Hover-Gauss"      //*ll-rounder
+	tmpl_p2[5]	TEMPLATE	"SK-Veng-Hover-Gauss"      //all-rounder
 	tmpl_p2[4]	TEMPLATE	"SK-Veng-Track-Gauss"      //all-rounder
-	
-  //=================================================================
 	//5-Wyvern PulseLas,HvyLas - PlasmaCann, GaussCann 
-	tmpl_p2[3]	TEMPLATE	"WyvernPulseTracks"   //anti personnel
-	tmpl_p2[2]	TEMPLATE	"WyvernHvLaserTracks" //anti personnel
-
-	tmpl_p2[1]	TEMPLATE	"WyvernPlasmaCTracks" //all-rounder 
-	tmpl_p2[0]	TEMPLATE	"WyvernGaussTracks"   //all-rounder 
+	tmpl_p2[3]	TEMPLATE	"WyvernPulseTracks"        //anti personnel
+	tmpl_p2[2]	TEMPLATE	"WyvernHvLaserTracks"      //anti personnel
+	tmpl_p2[1]	TEMPLATE	"WyvernPlasmaCTracks"      //all-rounder 
+	tmpl_p2[0]	TEMPLATE	"WyvernGaussTracks"        //all-rounder 
 
 
 
@@ -963,7 +902,7 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
 	researchCheap[0][14]	RESEARCHSTAT		"R-Defense-Tower06"		      //Mini-Rocket Tower  
 
   //Defences - 2  (AA,HMG,MC,HPV)
-	researchCheap[0][15]	RESEARCHSTAT		"R-Defense-AASite-QuadBof"  //Cyclone AA site {R-Wpn-AAGun-Damage02}
+	researchCheap[0][15]	RESEARCHSTAT		"R-Defense-AASite-QuadRotMg"  //Whirlwind AA site {R-Wpn-AAGun-Damage02}
 	researchCheap[0][16]	RESEARCHSTAT		"R-Defense-WallTower01"	    //HMG Hard Point {HardCrete,HMG} 
 	researchCheap[0][17]  RESEARCHSTAT		"R-Defense-WallTower03"	    //MC Hard Point {LC, R-Wpn-Cannon-Damage01}
   researchCheap[0][18]	RESEARCHSTAT		"R-Defense-WallTower-HPVcannon" //HPV Hard Point {R-Struc-Research-Upgrade01,R-Wpn-Cannon-Accuracy01,R-Wpn-Cannon-Damage02-} 
@@ -1848,7 +1787,7 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
 	general2Cheap[0][12]	RESEARCHSTAT		"R-Vehicle-Body11"	        //Phyton , Cobra {facMod, powMod}
 
   //Defences - 2  (AA,HMG,MC,HPV)
-	general2Cheap[0][13]	RESEARCHSTAT		"R-Defense-AASite-QuadBof"  //Cyclone AA site {R-Wpn-AAGun-Damage02}
+	general2Cheap[0][13]	RESEARCHSTAT		"R-Defense-AASite-QuadRotMg"  //Whirlwind AA site {R-Wpn-AAGun-Damage02}
 	general2Cheap[0][14]	RESEARCHSTAT		"R-Defense-WallTower01"	    //HMG Hard Point {HardCrete,HMG} 
 	general2Cheap[0][15]  RESEARCHSTAT		"R-Defense-WallTower03"	    //MC Hard Point {LC, R-Wpn-Cannon-Damage01}
   general2Cheap[0][16]	RESEARCHSTAT		"R-Defense-WallTower-HPVcannon" //HPV Hard Point {R-Struc-Research-Upgrade01,R-Wpn-Cannon-Accuracy01,R-Wpn-Cannon-Damage02-} 
@@ -2056,7 +1995,7 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
   numResGen2[9]	INT			26
   general2[9][0]	RESEARCHSTAT		"R-Vehicle-Prop-Hover"	
   general2[9][1]	RESEARCHSTAT		"R-Struc-VTOLPad-Upgrade01"	
-  general2[9][2]	RESEARCHSTAT		"R-Defense-AASite-QuadBof" //Cyclone AA Site	
+  general2[9][2]	RESEARCHSTAT		"R-Defense-AASite-QuadRotMg" //Whirlwind AA Site	
   general2[9][3]	RESEARCHSTAT		"R-Wpn-AAGun-ROF03" //AA ROF	
   general2[9][4]	RESEARCHSTAT		"R-Wpn-AAGun-Accuracy01" //AA Accuracy	
   
@@ -2126,7 +2065,7 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
 	general3Cheap[0][12]	RESEARCHSTAT		"R-Vehicle-Body11"	        //Phyton , Cobra {facMod, powMod}
 
   //Defences - 2  (AA,HMG,MC,HPV)
-	general3Cheap[0][13]	RESEARCHSTAT		"R-Defense-AASite-QuadBof"  //Cyclone AA site {R-Wpn-AAGun-Damage02}
+	general3Cheap[0][13]	RESEARCHSTAT		"R-Defense-AASite-QuadRotMg"  //Whirlwind AA site {R-Wpn-AAGun-Damage02}
 	general3Cheap[0][14]	RESEARCHSTAT		"R-Defense-WallTower01"	    //HMG Hard Point {HardCrete,HMG} 
 	general3Cheap[0][15]  RESEARCHSTAT		"R-Defense-WallTower03"	    //MC Hard Point {LC, R-Wpn-Cannon-Damage01}
   general3Cheap[0][16]	RESEARCHSTAT		"R-Defense-WallTower-HPVcannon" //HPV Hard Point {R-Struc-Research-Upgrade01,R-Wpn-Cannon-Accuracy01,R-Wpn-Cannon-Damage02-} 
@@ -2332,7 +2271,7 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
   numResGen3[9]	INT			26
   general3[9][0]	RESEARCHSTAT		"R-Vehicle-Prop-Hover"	
   general3[9][1]	RESEARCHSTAT		"R-Struc-VTOLPad-Upgrade01"	
-  general3[9][2]	RESEARCHSTAT		"R-Defense-AASite-QuadBof" //Cyclone AA Site	
+  general3[9][2]	RESEARCHSTAT		"R-Defense-AASite-QuadRotMg" //Whirlwind AA Site	
   general3[9][3]	RESEARCHSTAT		"R-Wpn-AAGun-ROF03" //AA ROF	
   general3[9][4]	RESEARCHSTAT		"R-Wpn-AAGun-Accuracy01" //AA Accuracy	
   
@@ -2400,7 +2339,7 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
  	general4Cheap[0][13]	RESEARCHSTAT		"R-Struc-Materials03"        
 
   //Defences - 2  (AA,HMG,MC,HPV)
-	general4Cheap[0][14]	RESEARCHSTAT		"R-Defense-AASite-QuadBof"  //Cyclone AA site {R-Wpn-AAGun-Damage02}
+	general4Cheap[0][14]	RESEARCHSTAT		"R-Defense-AASite-QuadRotMg"  //Whirlwind AA site {R-Wpn-AAGun-Damage02}
 	general4Cheap[0][15]	RESEARCHSTAT		"R-Defense-WallTower01"	    //HMG Hard Point {HardCrete,HMG} 
 	general4Cheap[0][16]  RESEARCHSTAT		"R-Defense-WallTower03"	    //MC Hard Point {LC, R-Wpn-Cannon-Damage01}
   general4Cheap[0][17]	RESEARCHSTAT		"R-Defense-WallTower-HPVcannon" //HPV Hard Point {R-Struc-Research-Upgrade01,R-Wpn-Cannon-Accuracy01,R-Wpn-Cannon-Damage02-} 
@@ -2589,7 +2528,7 @@ AIstrenght - CHANGE DYDO STRENGHT, it affects game difficulty in 4 and 8 players
   numResGen4[9]	INT			26
   general4[9][0]	RESEARCHSTAT		"R-Vehicle-Prop-Hover"	
   general4[9][1]	RESEARCHSTAT		"R-Struc-VTOLPad-Upgrade01"	
-  general4[9][2]	RESEARCHSTAT		"R-Defense-AASite-QuadBof" //Cyclone AA Site	
+  general4[9][2]	RESEARCHSTAT		"R-Defense-AASite-QuadRotMg" //Whirlwind AA Site	
   general4[9][3]	RESEARCHSTAT		"R-Wpn-AAGun-ROF03" //AA ROF	
   general4[9][4]	RESEARCHSTAT		"R-Wpn-AAGun-Accuracy01" //AA Accuracy	
   

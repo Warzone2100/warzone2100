@@ -1,5 +1,5 @@
 /*
-DyDo-AI Rel 2.2.3
+DyDo-AI Rel 2.2.4
 Mod Developer: "DylanDog" on http://forums.wz2100.net/
 AI webpage: http://www.obooma.net/dydo/       
                                                                 
@@ -13,30 +13,10 @@ For changelog and downloads see DyDo-AI homepage http://www.obooma.net/dydo/
 ________________ CHANGELOG ___________________________________
 
 
-{fix} - Small fix on light tank building sequence when research path is "Flamers/Rockets".
-          It happened that rockets were built instead of flamers. 
-{change} - If research path = Gunners and Cannons VTOL research only heap bombs. 
-          This improves the efficiency of the research, otherwise flamers technologies
-          would have been research to allow the building of such VTOLs bombs 
-{change} - Improved the method to get artillery building coordinates to defend base.
-{change} - droids will attack nearest enemy to their group and not the most damaged one as this method 
-            is more effective for droids having long range weapons.
-
-DROID takeOverSingleDroid(DROID droidToTakeOver, int playerToGain)
-    This replaces the existing droid (droidToTakeOver) by a new one for 
-    the playerToGain. The new droid is passed back to the script. 
-    Test for NULLOBJECT BEFORE calling this function. 
-int takeOverDroidsInArea(int fromPlayer, int toPlayer, int x1, int y1, int x2, int y2)
-    x1, y1, x2, y2 are in world units. Checks for units belonging to fromPlayer 
-    and if they are in the area they are given to the toPlayer. 
-int takeOverDroidsInAreaExp(int fromPlayer, int toPlayer, int x1, int y1, int x2, int y2, int level, int max)
-    x1, y1, x2, y2 are in world units. Checks for units belonging to fromPlayer 
-    and if they are in the area they are given to the toPlayer. 
-    If their experience level is less than or equal to level. max specifies 
-    the maximum number of units to take over. 
+{change} - DyDo to use new sunburst AA defence
 
 */
-#define DYDOBP_RELEASE "DyDo-AI ver 2.2.3"
+#define DYDOBP_RELEASE "DyDo-AI ver 2.2.4"
 
 #define	GAME_TIME_IN_SECS	(gameTime / 10)
 #define	GAME_TIME_IN_MIN	(gameTime / 10 / 60)
@@ -268,7 +248,7 @@ public STRUCTURESTAT wall,aScavBaseStr[4],incendrys[8],structs[51],defStructs[20
 public STRUCTURESTAT sensorTower,sensorHardTower,resLab,powGen,playerHQ,demAnomallyFix,lassat,scavFactory,factory,derrick,cybFactory,vtolPad,vtolFactory,repairFacility, uplinkCenter,CBSense;
 public STRUCTURESTAT HMGhardPoint,MGbunker,miniRocketTower,LancerTower, powModule,facModule,resModule;
 public STRUCTURESTAT defMortar,defBombard, defPepperpot,defRippleRockets;
-public RESEARCHSTAT WhirlwindAASite,CycloneAASite,HurricaneAASite;
+public RESEARCHSTAT SunburstAAsite,WhirlwindAASite,HurricaneAASite;
 public RESEARCHSTAT MortarFastLoad3;
 public RESEARCHSTAT defRippleRes,VTOLPadRes,lancerATweap,cyborgFactory,MGTower;
 public int nStat,aStat[20][8],structsLimits[4][4],strToBuild[4][4],numDefStructs,minDefDroids[4][3];
@@ -5661,10 +5641,10 @@ event doResearch(inactive)//doResearchTr
       
       //check for AA - Whirlwind!
       if ( (bAttackedByVTOL or nT_Game >= T2_GAME) and boolResult2 and researchFinished(HurricaneAASite,player) ){ 
-        if ( !researchFinished(CycloneAASite,player) ){
-          boolResult = pursueResearch(structure,player,CycloneAASite);
+        if ( !researchFinished(WhirlwindAASite,player) ){
+          boolResult = pursueResearch(structure,player,WhirlwindAASite);
           if (boolResult) {
-           //printDebug1("doResearch; forcing research of Cyclone AA Site");
+           //printDebug1("doResearch; forcing research of Whirlwind AA Site");
             boolResult2 = false; tLastResearch = gameTime;
           }//execute only once
         } 
@@ -15329,15 +15309,15 @@ function void buildAAdef(DROID _droid)
   if ( AIPersonality != AI_TURTLE ){
 
     if ( researchFinished(HurricaneAASite,player) ) { _aa = MIN_AA_INBASERANGE; }
-    if ( researchFinished(CycloneAASite,player) )   { _aa = MIN_AA_INBASERANGE+4; }
-    if ( researchFinished(WhirlwindAASite,player) ) { _aa = MIN_AA_INBASERANGE+8; }
+    if ( researchFinished(SunburstAAsite,player) )  { _aa = MIN_AA_INBASERANGE+4; }
+    if ( researchFinished(WhirlwindAASite,player) ) { _aa = MIN_AA_INBASERANGE+4; }
     if ( numAAinBase >= _aa ) { exit; }
 
   }  else {
 
     if ( researchFinished(HurricaneAASite,player) ) { _aa = MIN_AA_INBASERANGE; }
-    if ( researchFinished(CycloneAASite,player) )   { _aa = MIN_AA_INBASERANGE+6; }
-    if ( researchFinished(WhirlwindAASite,player) ) { _aa = MIN_AA_INBASERANGE+12; }
+    if ( researchFinished(SunburstAAsite,player) )  { _aa = MIN_AA_INBASERANGE+6; }
+    if ( researchFinished(WhirlwindAASite,player) ) { _aa = MIN_AA_INBASERANGE+6; }
     if ( numAAinBase >= _aa ) { exit; }
 
   }
