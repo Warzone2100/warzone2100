@@ -9148,7 +9148,7 @@ BOOL loadSaveTemplateV(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 			goto error;
 		}
 		//copy the values across
-
+		memset(psTemplate, 0x0, sizeof(DROID_TEMPLATE));
 		psTemplate->pName = NULL;
 		sstrcpy(psTemplate->aName, psSaveTemplate->name);
 
