@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2010-09-05 13:34+0200\n"
-"PO-Revision-Date: 2010-09-05 14:22+0200\n"
+"PO-Revision-Date: 2010-09-06 19:50+0200\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
 "Language: \n"
@@ -8185,17 +8185,17 @@ msgstr "Kastenmagazin mit Ladestreifen für Luftabwehrwaffen Mk3"
 #: data/base/messages/strings/names.txt:996
 #: data/mp/messages/strings/names.txt:1013
 msgid "AA Chainfeed Loader"
-msgstr "Luftabwehr-Munitionsband-Lader"
+msgstr "Ladesystem mit Munitionsgurten für Luftabwehrwaffen"
 
 #: data/base/messages/strings/names.txt:997
 #: data/mp/messages/strings/names.txt:1014
 msgid "AA Chainfeed Loader Mk2"
-msgstr "Luftabwehr-Munitionsband-Lader Mk2"
+msgstr "Ladesystem mit Munitionsgurten für Luftabwehrwaffen Mk2"
 
 #: data/base/messages/strings/names.txt:998
 #: data/mp/messages/strings/names.txt:1015
 msgid "AA Chainfeed Loader Mk3"
-msgstr "Luftabwehr-Munitionsband-Lader Mk3"
+msgstr "Ladesystem mit Munitionsgurten für Luftabwehrwaffen Mk3"
 
 #: data/base/messages/strings/names.txt:1003
 msgid "Cluster Bombs Bay"
