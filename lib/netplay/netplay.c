@@ -257,7 +257,7 @@ extern LOBBY_ERROR_TYPES LobbyError;		// from src/multiint.c
 **/
 char VersionString[VersionStringSize] = "2.3 svn"; // used for display in the lobby, not the actual version check
 static int NETCODE_VERSION_MAJOR = 2;                // major netcode version, used for compatibility check
-static int NETCODE_VERSION_MINOR = 89;               // minor netcode version, used for compatibility check
+static int NETCODE_VERSION_MINOR = 90;               // minor netcode version, used for compatibility check
 static int NETCODE_HASH = 0;			// unused for now
 
 static int checkSockets(const SocketSet* set, unsigned int timeout);
@@ -3542,7 +3542,7 @@ static void NETallowJoining(void)
 						char buf[256] = {'\0'};
 
 						ssprintf(buf, "** A player that you have kicked tried to rejoin the game, and was rejected. IP:%s", clientAddress );
-						debug(LOG_INFO, buf);
+						debug(LOG_INFO, "%s", buf);
 						NETlogEntry(buf, SYNC_FLAG, i);
 						SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
 						socketClose(tmp_socket[i]);
@@ -3608,7 +3608,7 @@ static void NETallowJoining(void)
 
 						ssprintf(buf, "** Player %s (%u), was rejected, error code: %u, IP: %s, pw:%s", name, (unsigned int) index, (unsigned int) rejected,
 									clientAddress,  GamePassword[0] ? GamePassword : "n/a");
-						debug(LOG_INFO, buf);
+						debug(LOG_INFO, "%s", buf);
 						NETlogEntry(buf, SYNC_FLAG, index);
 						NETbeginEncode(NET_REJECTED, index);
 							NETuint8_t(&rejected);

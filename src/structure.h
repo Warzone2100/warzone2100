@@ -172,7 +172,7 @@ extern void initStructLimits(void);
 /* set the current number of structures of each type built */
 extern void setCurrentStructQuantity(BOOL displayError);
 /* get a stat inc based on the name */
-extern SDWORD getStructStatFromName(char *pName);
+extern int32_t getStructStatFromName(char const *pName);
 /*check to see if the structure is 'doing' anything  - return true if idle*/
 extern BOOL  structureIdle(STRUCTURE *psBuilding);
 /*checks to see if any structure exists of a specified type with a specified status */

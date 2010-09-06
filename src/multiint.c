@@ -1116,6 +1116,39 @@ static void addBlueForm(UDWORD parent,UDWORD id, const char *txt,UDWORD x,UDWORD
 }
 
 
+typedef struct
+{
+	char const *stat;
+	char const *desc;
+	int         icon;
+} LimitIcon;
+static const LimitIcon limitIcons[] =
+{
+	{"A0LightFactory",  N_("Tanks disabled!!"),  IMAGE_FRAGLIMIT},
+	{"A0CyborgFactory", N_("Cyborgs disabled."), IMAGE_FRAGLIMIT},
+	{"A0VTolFactory1",  N_("VTOLs disabled."),   IMAGE_FRAGLIMIT}
+};
+
+void updateLimitFlags()
+{
+	unsigned i;
+	unsigned flags = 0;
+
+	if (!ingame.bHostSetup)
+	{
+		return;  // The host works out the flags.
+	}
+
+	for (i = 0; i < ARRAY_SIZE(limitIcons); ++i)
+	{
+		int stat = getStructStatFromName(limitIcons[i].stat);
+		bool disabled = asStructLimits[0] != NULL && stat >= 0 && asStructLimits[0][stat].limit == 0;
+		flags |= disabled<<i;
+	}
+
+	ingame.flags = flags;
+}
+
 // FIX ME: bRedo is not used anymore since the removal of the forced screenClearFocus()
 // need to check for side effects.
 static void addGameOptions(BOOL bRedo)
@@ -1359,7 +1392,22 @@ static void addGameOptions(BOOL bRedo)
 		            IMAGE_SLIM, IMAGE_SLIM_HI, IMAGE_SLIM_HI);
 	}
 
-	return;
+	// Add any relevant factory disabled icons.
+	updateLimitFlags();
+	{
+		int i;
+		int y = MULTIOP_NO_SOMETHINGY;
+		for (i = 0; i < ARRAY_SIZE(limitIcons); ++i)
+		{
+			if ((ingame.flags & 1<<i) != 0)
+			{
+				addMultiBut(psWScreen, MULTIOP_OPTIONS, MULTIOP_NO_SOMETHING + i, MULTIOP_NO_SOMETHINGX, y,
+				            35, 28, _(limitIcons[i].desc),
+				            limitIcons[i].icon, limitIcons[i].icon, limitIcons[i].icon);
+				y += 28 + 5;
+			}
+		}
+	}
 }
 
 // ////////////////////////////////////////////////////////////////////////////
