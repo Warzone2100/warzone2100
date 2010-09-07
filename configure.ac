@@ -41,6 +41,12 @@ AC_CHECK_PROG(ZIP, zip, zip)
 test -z "${ZIP}" && AC_MSG_ERROR(Zip not found!)
 AC_CHECK_PROG(UNZIP, unzip, unzip)
 test -z "${UNZIP}" && AC_MSG_ERROR(Unzip not found!)
+# --filesync was added in zip 3.0, older versions need -u
+ZIP_UPDATE="-u"
+zip -q --filesync filesynctest.zip $srcdir/ChangeLog 2> /dev/null && export ZIP_UPDATE="--filesync"
+echo $srcdir
+rm -f filesynctest.zip
+AC_SUBST([ZIP_UPDATE], [${ZIP_UPDATE}])
 
 # Enable Compiler/LibC GNU extensions
 AC_GNU_SOURCE

@@ -4,7 +4,7 @@ stamp:
 	touch stamp
 
 %.wz: $(abs_srcdir)/% stamp
-	(cd $< && $(ZIP) -ru0 $(abs_builddir)/$@ $(filter-out stamp,$(filter-out $<,$(^:$</%=%))) -x '*svn*' -x '*Makefile*' || [ $$? -eq 12 ] && true) # zip returns 12 on "nothing to do"
+	(cd $< && $(ZIP) -r0 $(ZIP_UPDATE) $(abs_builddir)/$@ $(filter-out stamp,$(filter-out $<,$(^:$</%=%))) -x '*svn*' -x '*Makefile*' || [ $$? -eq 12 ] && true) # zip returns 12 on "nothing to do"
 	$(ZIP) -T $@
 	rm -f stamp
 
