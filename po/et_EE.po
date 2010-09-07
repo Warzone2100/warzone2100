@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-09-04 23:04+0200\n"
+"POT-Creation-Date: 2010-09-07 13:59+0200\n"
 "PO-Revision-Date: 2010-05-10 16:59+0200\n"
 "Last-Translator: erlando <erlando112@hotmail.com>\n"
 "Language-Team: Estonian <ee@li.org>\n"
@@ -12318,7 +12318,7 @@ msgid "Player dropped"
 msgstr "Mängija Väjavisatud"
 
 #: src/display3d.c:545
-#: src/multiint.c:1815
+#: src/multiint.c:1863
 msgid "Waiting for other players"
 msgstr "Teiste mängijate ootamine"
 
@@ -12521,7 +12521,7 @@ msgid "Join Game"
 msgstr "Liitu Mängu"
 
 #: src/frontend.c:421
-#: src/multiint.c:1116
+#: src/multiint.c:1149
 msgid "OPTIONS"
 msgstr "SEADED"
 
@@ -12616,7 +12616,7 @@ msgid "Off"
 msgstr "Väljas"
 
 #: src/frontend.c:523
-#: src/multiint.c:1185
+#: src/multiint.c:1218
 msgid "Fog"
 msgstr "Udu"
 
@@ -12627,7 +12627,7 @@ msgstr "Udu"
 
 #: src/frontend.c:530
 #: src/frontend.c:595
-#: src/multiint.c:1187
+#: src/multiint.c:1220
 msgid "Fog Of War"
 msgstr "Sõjaudu"
 
@@ -12789,7 +12789,7 @@ msgid "GAME OPTIONS"
 msgstr "MÄNGU SEADED"
 
 #: src/frontend.c:1340
-#: src/multiint.c:2095
+#: src/multiint.c:2143
 msgid "Mod: "
 msgstr "Mod:"
 
@@ -12853,7 +12853,7 @@ msgid "Build (F3)"
 msgstr "Ehitamine (F3)"
 
 #: src/hci.c:3845
-#: src/multiint.c:1232
+#: src/multiint.c:1265
 #: src/multimenu.c:763
 msgid "Power"
 msgstr "Energia"
@@ -13453,7 +13453,7 @@ msgstr "NUPPUDE VASTAD"
 #: src/keyedit.c:374
 #: src/multiint.c:503
 #: src/multiint.c:934
-#: src/multiint.c:1318
+#: src/multiint.c:1351
 msgid "Return To Previous Screen"
 msgstr "Naase Eelmisele Ekraanile"
 
@@ -14031,195 +14031,208 @@ msgstr "Sisesta Salasõna:"
 msgid "OK"
 msgstr "OK"
 
-#: src/multiint.c:1121
-#: src/multiint.c:1128
+#: src/multiint.c:1102
+msgid "Tanks disabled!!"
+msgstr ""
+
+#: src/multiint.c:1103
+#, fuzzy
+msgid "Cyborgs disabled."
+msgstr "Uus Küborg Kasutatv"
+
+#: src/multiint.c:1104
+msgid "VTOLs disabled."
+msgstr ""
+
+#: src/multiint.c:1154
+#: src/multiint.c:1161
 msgid "Select Game Name"
 msgstr "Sisesta Mängu Nimi"
 
-#: src/multiint.c:1121
+#: src/multiint.c:1154
 msgid "One-Player Skirmish"
 msgstr "Ühe Mängja Lahing"
 
-#: src/multiint.c:1131
+#: src/multiint.c:1164
 msgid "Select Map"
 msgstr "Vali Kaart"
 
-#: src/multiint.c:1139
+#: src/multiint.c:1172
 msgid "Click to set Password"
 msgstr "Vajuta, et Salasõna sisestada"
 
-#: src/multiint.c:1149
-#: src/multiint.c:1150
+#: src/multiint.c:1182
+#: src/multiint.c:1183
 msgid "Scavengers"
 msgstr "Mässajad"
 
-#: src/multiint.c:1152
+#: src/multiint.c:1185
 msgid "No Scavengers"
 msgstr "Mässajateta"
 
-#: src/multiint.c:1182
+#: src/multiint.c:1215
 msgid "Select Player Name"
 msgstr "Sisesta Mängija nimi"
 
-#: src/multiint.c:1188
+#: src/multiint.c:1221
 msgid "Distance Fog"
 msgstr "Vahemaa Udu"
 
-#: src/multiint.c:1199
+#: src/multiint.c:1232
 #: src/multimenu.c:756
 msgid "Alliances"
 msgstr "Liitlus"
 
-#: src/multiint.c:1202
+#: src/multiint.c:1235
 msgid "No Alliances"
 msgstr "Liitluseta"
 
-#: src/multiint.c:1204
+#: src/multiint.c:1237
 msgid "Allow Alliances"
 msgstr "Luba Liitlus"
 
-#: src/multiint.c:1208
+#: src/multiint.c:1241
 msgid "Locked Teams"
 msgstr "Lukustatud Tiimid"
 
-#: src/multiint.c:1234
+#: src/multiint.c:1267
 msgid "Low Power Levels"
 msgstr "Madal Energia Level"
 
-#: src/multiint.c:1236
+#: src/multiint.c:1269
 msgid "Medium Power Levels"
 msgstr "Keskmine Energia Level"
 
-#: src/multiint.c:1238
+#: src/multiint.c:1271
 msgid "High Power Levels"
 msgstr "Kõrge Energia Level"
 
-#: src/multiint.c:1270
+#: src/multiint.c:1303
 msgid "Base"
 msgstr "Baas"
 
-#: src/multiint.c:1272
+#: src/multiint.c:1305
 msgid "Start with No Bases"
 msgstr "Alusta Baasideta"
 
-#: src/multiint.c:1274
+#: src/multiint.c:1307
 msgid "Start with Bases"
 msgstr "Alusta Baasidega"
 
-#: src/multiint.c:1276
+#: src/multiint.c:1309
 msgid "Start with Advanced Bases"
 msgstr "Alusta Arenenud Baasidega"
 
-#: src/multiint.c:1308
+#: src/multiint.c:1341
 msgid "Map Preview"
 msgstr "Kaarti Esitus"
 
-#: src/multiint.c:1310
+#: src/multiint.c:1343
 msgid "Click to see Map"
 msgstr "Vajuta, et Kaarti näha"
 
-#: src/multiint.c:1324
+#: src/multiint.c:1357
 msgid "Start Hosting Game"
 msgstr "Alusta Mängu Võõrustamist"
 
-#: src/multiint.c:1332
+#: src/multiint.c:1365
 msgid "Show Structure Limits"
 msgstr "Näita Ehitiste Limiite"
 
-#: src/multiint.c:1332
+#: src/multiint.c:1365
 msgid "Set Structure Limits"
 msgstr "Sea Ehitiste Limiidid"
 
-#: src/multiint.c:1395
+#: src/multiint.c:1443
 msgid "Player colour"
 msgstr "Mängija värv"
 
-#: src/multiint.c:1411
+#: src/multiint.c:1459
 msgid "Kick player"
 msgstr "Löö mängija välja"
 
-#: src/multiint.c:1422
+#: src/multiint.c:1470
 msgid "Player number"
 msgstr "Mängija number"
 
-#: src/multiint.c:1782
+#: src/multiint.c:1830
 msgid "Team"
 msgstr "Tiim"
 
-#: src/multiint.c:1821
+#: src/multiint.c:1869
 msgid "Click when ready"
 msgstr "Vajuta kui valmis"
 
-#: src/multiint.c:1825
+#: src/multiint.c:1873
 msgid "READY?"
 msgstr "VALMIS?"
 
-#: src/multiint.c:1862
+#: src/multiint.c:1910
 msgid "PLAYERS"
 msgstr "MÄNGIJAD"
 
-#: src/multiint.c:1916
+#: src/multiint.c:1964
 #, fuzzy
 msgid "Choose Team"
 msgstr "Lukustatud Tiimid"
 
-#: src/multiint.c:1956
+#: src/multiint.c:2004
 msgid "Click to change player settings"
 msgstr ""
 
-#: src/multiint.c:1987
+#: src/multiint.c:2035
 msgid "Click to adjust AI difficulty"
 msgstr ""
 
-#: src/multiint.c:2066
+#: src/multiint.c:2114
 msgid "CHAT"
 msgstr "VESTLUS"
 
-#: src/multiint.c:2100
+#: src/multiint.c:2148
 msgid "All players need to have the same mods to join your game."
 msgstr "Kõigil mängijatel peab olema sama mod, et sinu mänguga liituda"
 
-#: src/multiint.c:2260
+#: src/multiint.c:2308
 msgid "*** password is now required! ***"
 msgstr "*** salasõna on vajalik! ***"
 
-#: src/multiint.c:2267
+#: src/multiint.c:2315
 msgid "*** password is NOT required! ***"
 msgstr "*** salasõna pole vaja! ***"
 
-#: src/multiint.c:2509
+#: src/multiint.c:2557
 msgid "Sorry! Failed to host the game."
 msgstr "Kahju! Ebaõnnestusid mängu võõrustamisel."
 
-#: src/multiint.c:2594
+#: src/multiint.c:2642
 msgid "'Locked Teams' mode enabled"
 msgstr "Lukustatud Tiimid, mode lubatud"
 
-#: src/multiint.c:2633
-#: src/multiint.c:2683
+#: src/multiint.c:2681
+#: src/multiint.c:2731
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "Võõrustaja lõi %s mängust välja!"
 
-#: src/multiint.c:2758
+#: src/multiint.c:2806
 msgid "Host is Starting Game"
 msgstr "Võõrustaja Alustab Mängu"
 
-#: src/multiint.c:3341
+#: src/multiint.c:3389
 msgid "Players"
 msgstr "Mängijad"
 
-#: src/multiint.c:3459
+#: src/multiint.c:3507
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Kaarti Saatmine: %d%%"
 
-#: src/multiint.c:3467
+#: src/multiint.c:3515
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Kaart: %d%% allalaaditud"
 
-#: src/multiint.c:3493
+#: src/multiint.c:3541
 msgid "HOST"
 msgstr "VÕÕRUSTJA"
 

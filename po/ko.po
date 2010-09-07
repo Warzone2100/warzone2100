@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100 2.3_branch\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-09-05 13:21+0200\n"
+"POT-Creation-Date: 2010-09-07 13:59+0200\n"
 "PO-Revision-Date: 2003-01-05 22:18+0900\n"
 "Last-Translator: Joshua Shin <urgood2@gmail.com>\n"
 "Language-Team: Korean Translation Team <urgood2@gmail.com>\n"
@@ -12370,7 +12370,7 @@ msgid "Player dropped"
 msgstr "플레이어가 인터넷 연결 문제 또는 게임 버그 때문에 퇴장하였습니다"
 
 #: src/display3d.c:545
-#: src/multiint.c:1815
+#: src/multiint.c:1863
 msgid "Waiting for other players"
 msgstr "다른 플레이어를 더 기다리고 있습니다"
 
@@ -12573,7 +12573,7 @@ msgid "Join Game"
 msgstr "네트워크 게임 참여하기"
 
 #: src/frontend.c:421
-#: src/multiint.c:1116
+#: src/multiint.c:1149
 msgid "OPTIONS"
 msgstr "옵션"
 
@@ -12668,7 +12668,7 @@ msgid "Off"
 msgstr "꺼짐"
 
 #: src/frontend.c:523
-#: src/multiint.c:1185
+#: src/multiint.c:1218
 msgid "Fog"
 msgstr "안개"
 
@@ -12679,7 +12679,7 @@ msgstr "흐림(Mist)"
 
 #: src/frontend.c:530
 #: src/frontend.c:595
-#: src/multiint.c:1187
+#: src/multiint.c:1220
 msgid "Fog Of War"
 msgstr "전쟁의 안개"
 
@@ -12842,7 +12842,7 @@ msgid "GAME OPTIONS"
 msgstr "게임 옵션"
 
 #: src/frontend.c:1340
-#: src/multiint.c:2095
+#: src/multiint.c:2143
 msgid "Mod: "
 msgstr "Mod (Modification):"
 
@@ -12906,7 +12906,7 @@ msgid "Build (F3)"
 msgstr "건축 (F3)"
 
 #: src/hci.c:3845
-#: src/multiint.c:1232
+#: src/multiint.c:1265
 #: src/multimenu.c:763
 msgid "Power"
 msgstr "전력"
@@ -13505,7 +13505,7 @@ msgstr "키보드 매핑"
 #: src/keyedit.c:374
 #: src/multiint.c:503
 #: src/multiint.c:934
-#: src/multiint.c:1318
+#: src/multiint.c:1351
 msgid "Return To Previous Screen"
 msgstr "이전 화면으로 돌아가기"
 
@@ -14080,195 +14080,208 @@ msgstr "비밀번호를 입력하십시오:"
 msgid "OK"
 msgstr "확인"
 
-#: src/multiint.c:1121
-#: src/multiint.c:1128
+#: src/multiint.c:1102
+msgid "Tanks disabled!!"
+msgstr ""
+
+#: src/multiint.c:1103
+#, fuzzy
+msgid "Cyborgs disabled."
+msgstr "새로운 사이보그가 사용 가능합니다"
+
+#: src/multiint.c:1104
+msgid "VTOLs disabled."
+msgstr ""
+
+#: src/multiint.c:1154
+#: src/multiint.c:1161
 msgid "Select Game Name"
 msgstr "게임 이름 선택"
 
-#: src/multiint.c:1121
+#: src/multiint.c:1154
 msgid "One-Player Skirmish"
 msgstr "싱글플레이어 스커미쉬"
 
-#: src/multiint.c:1131
+#: src/multiint.c:1164
 msgid "Select Map"
 msgstr "맵 선택"
 
-#: src/multiint.c:1139
+#: src/multiint.c:1172
 msgid "Click to set Password"
 msgstr "클릭하여 비밀번호를 설정하십시오"
 
-#: src/multiint.c:1149
-#: src/multiint.c:1150
+#: src/multiint.c:1182
+#: src/multiint.c:1183
 msgid "Scavengers"
 msgstr "스캐빈저"
 
-#: src/multiint.c:1152
+#: src/multiint.c:1185
 msgid "No Scavengers"
 msgstr "스캐빈저 없음"
 
-#: src/multiint.c:1182
+#: src/multiint.c:1215
 msgid "Select Player Name"
 msgstr "플레이어 이름 선택"
 
-#: src/multiint.c:1188
+#: src/multiint.c:1221
 msgid "Distance Fog"
 msgstr "디스턴스(거리) 안개"
 
-#: src/multiint.c:1199
+#: src/multiint.c:1232
 #: src/multimenu.c:756
 msgid "Alliances"
 msgstr "동맹"
 
-#: src/multiint.c:1202
+#: src/multiint.c:1235
 msgid "No Alliances"
 msgstr "동맹 없음"
 
-#: src/multiint.c:1204
+#: src/multiint.c:1237
 msgid "Allow Alliances"
 msgstr "동맹 있음"
 
-#: src/multiint.c:1208
+#: src/multiint.c:1241
 msgid "Locked Teams"
 msgstr "팀 잠금"
 
-#: src/multiint.c:1234
+#: src/multiint.c:1267
 msgid "Low Power Levels"
 msgstr "낮은 전력 수준"
 
-#: src/multiint.c:1236
+#: src/multiint.c:1269
 msgid "Medium Power Levels"
 msgstr "중급 전력 수준"
 
-#: src/multiint.c:1238
+#: src/multiint.c:1271
 msgid "High Power Levels"
 msgstr "높은 전력 수준"
 
-#: src/multiint.c:1270
+#: src/multiint.c:1303
 msgid "Base"
 msgstr "기지"
 
-#: src/multiint.c:1272
+#: src/multiint.c:1305
 msgid "Start with No Bases"
 msgstr "기지 없이 시작하기"
 
-#: src/multiint.c:1274
+#: src/multiint.c:1307
 msgid "Start with Bases"
 msgstr "기지를 갖추고 시작하기"
 
-#: src/multiint.c:1276
+#: src/multiint.c:1309
 msgid "Start with Advanced Bases"
 msgstr "고급 기지를 갖추고 시작하기"
 
-#: src/multiint.c:1308
+#: src/multiint.c:1341
 msgid "Map Preview"
 msgstr "맵 미리보기"
 
-#: src/multiint.c:1310
+#: src/multiint.c:1343
 msgid "Click to see Map"
 msgstr "맵을 보려면 클릭하십시오"
 
-#: src/multiint.c:1324
+#: src/multiint.c:1357
 msgid "Start Hosting Game"
 msgstr "게임 호스팅을 시작하기"
 
-#: src/multiint.c:1332
+#: src/multiint.c:1365
 msgid "Show Structure Limits"
 msgstr "구조물 제한 보기"
 
-#: src/multiint.c:1332
+#: src/multiint.c:1365
 msgid "Set Structure Limits"
 msgstr "구조물 제한 설정하기"
 
-#: src/multiint.c:1395
+#: src/multiint.c:1443
 msgid "Player colour"
 msgstr "플레이어 색"
 
-#: src/multiint.c:1411
+#: src/multiint.c:1459
 msgid "Kick player"
 msgstr "플레이어 퇴장시키기"
 
-#: src/multiint.c:1422
+#: src/multiint.c:1470
 msgid "Player number"
 msgstr "플레이어 숫자"
 
-#: src/multiint.c:1782
+#: src/multiint.c:1830
 msgid "Team"
 msgstr "팀"
 
-#: src/multiint.c:1821
+#: src/multiint.c:1869
 msgid "Click when ready"
 msgstr "준비되었을 때 클릭하십시오"
 
-#: src/multiint.c:1825
+#: src/multiint.c:1873
 msgid "READY?"
 msgstr "시작"
 
-#: src/multiint.c:1862
+#: src/multiint.c:1910
 msgid "PLAYERS"
 msgstr "플레이어"
 
-#: src/multiint.c:1916
+#: src/multiint.c:1964
 msgid "Choose Team"
 msgstr "팀 선택"
 
-#: src/multiint.c:1956
+#: src/multiint.c:2004
 msgid "Click to change player settings"
 msgstr "사용자 설정을 변경하려면 클릭하십시오"
 
-#: src/multiint.c:1987
+#: src/multiint.c:2035
 msgid "Click to adjust AI difficulty"
 msgstr "인공 지능 난이도를 변경하려면 클릭하십시오"
 
-#: src/multiint.c:2066
+#: src/multiint.c:2114
 msgid "CHAT"
 msgstr "채팅"
 
-#: src/multiint.c:2100
+#: src/multiint.c:2148
 msgid "All players need to have the same mods to join your game."
 msgstr "모든 플레이어는 당신과 같은 mod를 사용해야만 게임에 참여할 수 있습니다"
 
-#: src/multiint.c:2260
+#: src/multiint.c:2308
 #, fuzzy
 msgid "*** password is now required! ***"
 msgstr "*** 이제 비밀번호 [%s] 가 요구됩니다! ***"
 
-#: src/multiint.c:2267
+#: src/multiint.c:2315
 msgid "*** password is NOT required! ***"
 msgstr "*** 비밀번호가 요구되지 않습니다! ***"
 
-#: src/multiint.c:2509
+#: src/multiint.c:2557
 msgid "Sorry! Failed to host the game."
 msgstr "죄송합니다! 게임 호스팅이 실패하였습니다"
 
-#: src/multiint.c:2594
+#: src/multiint.c:2642
 msgid "'Locked Teams' mode enabled"
 msgstr "'팀 잠금' 모드가 켜졌습니다"
 
-#: src/multiint.c:2633
-#: src/multiint.c:2683
+#: src/multiint.c:2681
+#: src/multiint.c:2731
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "호스트가 %s를 게임에서 퇴장시켰습니다!"
 
-#: src/multiint.c:2758
+#: src/multiint.c:2806
 msgid "Host is Starting Game"
 msgstr "호스트가 게임을 시작하고 있습니다"
 
-#: src/multiint.c:3341
+#: src/multiint.c:3389
 msgid "Players"
 msgstr "플레이어"
 
-#: src/multiint.c:3459
+#: src/multiint.c:3507
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "맵을 보내는 중: %d%% "
 
-#: src/multiint.c:3467
+#: src/multiint.c:3515
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "맵: %d%% 다운로드 완료"
 
-#: src/multiint.c:3493
+#: src/multiint.c:3541
 msgid "HOST"
 msgstr "호스트"
 

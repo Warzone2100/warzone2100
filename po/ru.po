@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-09-04 23:04+0200\n"
+"POT-Creation-Date: 2010-09-07 13:59+0200\n"
 "PO-Revision-Date: 2010-06-10 02:04+0300\n"
 "Last-Translator: Filipp Chertiev <f@fzfx.ru>\n"
 "Language-Team: Russian <>\n"
@@ -12328,7 +12328,7 @@ msgid "Player dropped"
 msgstr "Игрок исчез"
 
 #: src/display3d.c:545
-#: src/multiint.c:1815
+#: src/multiint.c:1863
 msgid "Waiting for other players"
 msgstr "Ожидание других игроков"
 
@@ -12535,7 +12535,7 @@ msgid "Join Game"
 msgstr "Присоединиться"
 
 #: src/frontend.c:421
-#: src/multiint.c:1116
+#: src/multiint.c:1149
 msgid "OPTIONS"
 msgstr "ПАРАМЕТРЫ"
 
@@ -12630,7 +12630,7 @@ msgid "Off"
 msgstr "Выкл."
 
 #: src/frontend.c:523
-#: src/multiint.c:1185
+#: src/multiint.c:1218
 msgid "Fog"
 msgstr "Туман"
 
@@ -12641,7 +12641,7 @@ msgstr "Мгла"
 
 #: src/frontend.c:530
 #: src/frontend.c:595
-#: src/multiint.c:1187
+#: src/multiint.c:1220
 msgid "Fog Of War"
 msgstr "Туман войны"
 
@@ -12803,7 +12803,7 @@ msgid "GAME OPTIONS"
 msgstr "НАСТРОЙКИ ИГРЫ"
 
 #: src/frontend.c:1340
-#: src/multiint.c:2095
+#: src/multiint.c:2143
 msgid "Mod: "
 msgstr "Мод:"
 
@@ -12867,7 +12867,7 @@ msgid "Build (F3)"
 msgstr "Строить (F3)"
 
 #: src/hci.c:3845
-#: src/multiint.c:1232
+#: src/multiint.c:1265
 #: src/multimenu.c:763
 msgid "Power"
 msgstr "Энергия"
@@ -13468,7 +13468,7 @@ msgstr "РАСКЛАДКА КЛАВИАТУРЫ"
 #: src/keyedit.c:374
 #: src/multiint.c:503
 #: src/multiint.c:934
-#: src/multiint.c:1318
+#: src/multiint.c:1351
 msgid "Return To Previous Screen"
 msgstr "Назад"
 
@@ -14046,195 +14046,208 @@ msgstr "Введите пароль:"
 msgid "OK"
 msgstr "ОК"
 
-#: src/multiint.c:1121
-#: src/multiint.c:1128
+#: src/multiint.c:1102
+msgid "Tanks disabled!!"
+msgstr ""
+
+#: src/multiint.c:1103
+#, fuzzy
+msgid "Cyborgs disabled."
+msgstr "Доступен новый тип киборгов"
+
+#: src/multiint.c:1104
+msgid "VTOLs disabled."
+msgstr ""
+
+#: src/multiint.c:1154
+#: src/multiint.c:1161
 msgid "Select Game Name"
 msgstr "Выбрать название игры"
 
-#: src/multiint.c:1121
+#: src/multiint.c:1154
 msgid "One-Player Skirmish"
 msgstr "Сражение"
 
-#: src/multiint.c:1131
+#: src/multiint.c:1164
 msgid "Select Map"
 msgstr "Выбрать карту"
 
-#: src/multiint.c:1139
+#: src/multiint.c:1172
 msgid "Click to set Password"
 msgstr "Щелкни чтобы задать пароль"
 
-#: src/multiint.c:1149
-#: src/multiint.c:1150
+#: src/multiint.c:1182
+#: src/multiint.c:1183
 msgid "Scavengers"
 msgstr "Мусорщики"
 
-#: src/multiint.c:1152
+#: src/multiint.c:1185
 msgid "No Scavengers"
 msgstr "Нет Мусорщиков"
 
-#: src/multiint.c:1182
+#: src/multiint.c:1215
 msgid "Select Player Name"
 msgstr "Выбор Имя Игрока"
 
-#: src/multiint.c:1188
+#: src/multiint.c:1221
 msgid "Distance Fog"
 msgstr "Туман на растоянии"
 
-#: src/multiint.c:1199
+#: src/multiint.c:1232
 #: src/multimenu.c:756
 msgid "Alliances"
 msgstr "Союзники"
 
-#: src/multiint.c:1202
+#: src/multiint.c:1235
 msgid "No Alliances"
 msgstr "Без Союзов"
 
-#: src/multiint.c:1204
+#: src/multiint.c:1237
 msgid "Allow Alliances"
 msgstr "Позволить Союзы"
 
-#: src/multiint.c:1208
+#: src/multiint.c:1241
 msgid "Locked Teams"
 msgstr "Закрытые Команды"
 
-#: src/multiint.c:1234
+#: src/multiint.c:1267
 msgid "Low Power Levels"
 msgstr "Низкий уровень энергии"
 
-#: src/multiint.c:1236
+#: src/multiint.c:1269
 msgid "Medium Power Levels"
 msgstr "Средний уровень энергии"
 
-#: src/multiint.c:1238
+#: src/multiint.c:1271
 msgid "High Power Levels"
 msgstr "Высокий уровень энергии"
 
-#: src/multiint.c:1270
+#: src/multiint.c:1303
 msgid "Base"
 msgstr "База"
 
-#: src/multiint.c:1272
+#: src/multiint.c:1305
 msgid "Start with No Bases"
 msgstr "Начать без Базы"
 
-#: src/multiint.c:1274
+#: src/multiint.c:1307
 msgid "Start with Bases"
 msgstr "Начать с Базой"
 
-#: src/multiint.c:1276
+#: src/multiint.c:1309
 msgid "Start with Advanced Bases"
 msgstr "Начать с Продвинутой Базой"
 
-#: src/multiint.c:1308
+#: src/multiint.c:1341
 msgid "Map Preview"
 msgstr "Просмотр карты"
 
-#: src/multiint.c:1310
+#: src/multiint.c:1343
 msgid "Click to see Map"
 msgstr "щелкни чтобы посмотреть карту"
 
-#: src/multiint.c:1324
+#: src/multiint.c:1357
 msgid "Start Hosting Game"
 msgstr "Начать хостинг игры"
 
-#: src/multiint.c:1332
+#: src/multiint.c:1365
 msgid "Show Structure Limits"
 msgstr "Показать лимиты сооружений"
 
-#: src/multiint.c:1332
+#: src/multiint.c:1365
 msgid "Set Structure Limits"
 msgstr "Установить лимиты сооружений"
 
-#: src/multiint.c:1395
+#: src/multiint.c:1443
 msgid "Player colour"
 msgstr "Цвет игрока"
 
-#: src/multiint.c:1411
+#: src/multiint.c:1459
 msgid "Kick player"
 msgstr "Выкинуть игрока"
 
-#: src/multiint.c:1422
+#: src/multiint.c:1470
 msgid "Player number"
 msgstr "Номер игрока"
 
-#: src/multiint.c:1782
+#: src/multiint.c:1830
 msgid "Team"
 msgstr "Команда"
 
-#: src/multiint.c:1821
+#: src/multiint.c:1869
 msgid "Click when ready"
 msgstr "Щелкни когда будешь готов"
 
-#: src/multiint.c:1825
+#: src/multiint.c:1873
 msgid "READY?"
 msgstr "ГОТОВ?"
 
-#: src/multiint.c:1862
+#: src/multiint.c:1910
 msgid "PLAYERS"
 msgstr "ИГРОКИ"
 
-#: src/multiint.c:1916
+#: src/multiint.c:1964
 #, fuzzy
 msgid "Choose Team"
 msgstr "Закрытые Команды"
 
-#: src/multiint.c:1956
+#: src/multiint.c:2004
 msgid "Click to change player settings"
 msgstr ""
 
-#: src/multiint.c:1987
+#: src/multiint.c:2035
 msgid "Click to adjust AI difficulty"
 msgstr ""
 
-#: src/multiint.c:2066
+#: src/multiint.c:2114
 msgid "CHAT"
 msgstr "ЧАТ"
 
-#: src/multiint.c:2100
+#: src/multiint.c:2148
 msgid "All players need to have the same mods to join your game."
 msgstr "Всем игрокам нужен такой же мод, что и у вас."
 
-#: src/multiint.c:2260
+#: src/multiint.c:2308
 msgid "*** password is now required! ***"
 msgstr "*** требуется пароль! ***"
 
-#: src/multiint.c:2267
+#: src/multiint.c:2315
 msgid "*** password is NOT required! ***"
 msgstr "*** пароль не требуется! ***"
 
-#: src/multiint.c:2509
+#: src/multiint.c:2557
 msgid "Sorry! Failed to host the game."
 msgstr "Извините! Не удалось создать игру."
 
-#: src/multiint.c:2594
+#: src/multiint.c:2642
 msgid "'Locked Teams' mode enabled"
 msgstr "Закрытые Команды"
 
-#: src/multiint.c:2633
-#: src/multiint.c:2683
+#: src/multiint.c:2681
+#: src/multiint.c:2731
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "Хост выкинул %s из игры!"
 
-#: src/multiint.c:2758
+#: src/multiint.c:2806
 msgid "Host is Starting Game"
 msgstr "Хост стартует"
 
-#: src/multiint.c:3341
+#: src/multiint.c:3389
 msgid "Players"
 msgstr "Игроки"
 
-#: src/multiint.c:3459
+#: src/multiint.c:3507
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Отправка карты: %d%%"
 
-#: src/multiint.c:3467
+#: src/multiint.c:3515
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "карта: %d%% загружена"
 
-#: src/multiint.c:3493
+#: src/multiint.c:3541
 msgid "HOST"
 msgstr "ХОСТ"
 

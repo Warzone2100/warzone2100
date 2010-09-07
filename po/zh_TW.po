@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-09-04 23:04+0200\n"
+"POT-Creation-Date: 2010-09-07 13:59+0200\n"
 "PO-Revision-Date: 2009-05-11 00:21+0800\n"
 "Last-Translator: \n"
 "Language-Team: zh_TW\n"
@@ -12495,7 +12495,7 @@ msgid "Player dropped"
 msgstr "玩家"
 
 #: src/display3d.c:545
-#: src/multiint.c:1815
+#: src/multiint.c:1863
 msgid "Waiting for other players"
 msgstr "等待其他玩家"
 
@@ -12695,7 +12695,7 @@ msgid "Join Game"
 msgstr "加入遊戲"
 
 #: src/frontend.c:421
-#: src/multiint.c:1116
+#: src/multiint.c:1149
 msgid "OPTIONS"
 msgstr "選項"
 
@@ -12790,7 +12790,7 @@ msgid "Off"
 msgstr "關閉"
 
 #: src/frontend.c:523
-#: src/multiint.c:1185
+#: src/multiint.c:1218
 msgid "Fog"
 msgstr "迷霧"
 
@@ -12801,7 +12801,7 @@ msgstr "迷霧"
 
 #: src/frontend.c:530
 #: src/frontend.c:595
-#: src/multiint.c:1187
+#: src/multiint.c:1220
 msgid "Fog Of War"
 msgstr "完全迷霧"
 
@@ -12969,7 +12969,7 @@ msgid "GAME OPTIONS"
 msgstr "遊戲選項"
 
 #: src/frontend.c:1340
-#: src/multiint.c:2095
+#: src/multiint.c:2143
 msgid "Mod: "
 msgstr ""
 
@@ -13034,7 +13034,7 @@ msgid "Build (F3)"
 msgstr "建造新的建築物 （F3）"
 
 #: src/hci.c:3845
-#: src/multiint.c:1232
+#: src/multiint.c:1265
 #: src/multimenu.c:763
 msgid "Power"
 msgstr "能源"
@@ -13641,7 +13641,7 @@ msgstr "鍵盤配置"
 #: src/keyedit.c:374
 #: src/multiint.c:503
 #: src/multiint.c:934
-#: src/multiint.c:1318
+#: src/multiint.c:1351
 msgid "Return To Previous Screen"
 msgstr "回到前一個畫面"
 
@@ -14228,203 +14228,216 @@ msgstr "按一下看地圖"
 msgid "OK"
 msgstr ""
 
-#: src/multiint.c:1121
-#: src/multiint.c:1128
+#: src/multiint.c:1102
+msgid "Tanks disabled!!"
+msgstr ""
+
+#: src/multiint.c:1103
+#, fuzzy
+msgid "Cyborgs disabled."
+msgstr "可生產新的生化人步兵"
+
+#: src/multiint.c:1104
+msgid "VTOLs disabled."
+msgstr ""
+
+#: src/multiint.c:1154
+#: src/multiint.c:1161
 msgid "Select Game Name"
 msgstr "選擇遊戲名稱"
 
-#: src/multiint.c:1121
+#: src/multiint.c:1154
 #, fuzzy
 msgid "One-Player Skirmish"
 msgstr "單人戰役模式"
 
-#: src/multiint.c:1131
+#: src/multiint.c:1164
 msgid "Select Map"
 msgstr "選擇地圖"
 
-#: src/multiint.c:1139
+#: src/multiint.c:1172
 #, fuzzy
 msgid "Click to set Password"
 msgstr "按一下看地圖"
 
-#: src/multiint.c:1149
-#: src/multiint.c:1150
+#: src/multiint.c:1182
+#: src/multiint.c:1183
 #, fuzzy
 msgid "Scavengers"
 msgstr "拾荒者"
 
-#: src/multiint.c:1152
+#: src/multiint.c:1185
 #, fuzzy
 msgid "No Scavengers"
 msgstr "拾荒者"
 
-#: src/multiint.c:1182
+#: src/multiint.c:1215
 msgid "Select Player Name"
 msgstr "選擇玩家名稱"
 
-#: src/multiint.c:1188
+#: src/multiint.c:1221
 msgid "Distance Fog"
 msgstr "迷霧（看得見地形）"
 
-#: src/multiint.c:1199
+#: src/multiint.c:1232
 #: src/multimenu.c:756
 msgid "Alliances"
 msgstr "同盟"
 
-#: src/multiint.c:1202
+#: src/multiint.c:1235
 msgid "No Alliances"
 msgstr "不允許同盟"
 
-#: src/multiint.c:1204
+#: src/multiint.c:1237
 msgid "Allow Alliances"
 msgstr "允許同盟"
 
-#: src/multiint.c:1208
+#: src/multiint.c:1241
 msgid "Locked Teams"
 msgstr "鎖定同盟模式"
 
-#: src/multiint.c:1234
+#: src/multiint.c:1267
 msgid "Low Power Levels"
 msgstr "生產能源速度：慢"
 
-#: src/multiint.c:1236
+#: src/multiint.c:1269
 msgid "Medium Power Levels"
 msgstr "生產能源速度：中"
 
-#: src/multiint.c:1238
+#: src/multiint.c:1271
 msgid "High Power Levels"
 msgstr "生產能源速度：快"
 
-#: src/multiint.c:1270
+#: src/multiint.c:1303
 msgid "Base"
 msgstr "基地"
 
-#: src/multiint.c:1272
+#: src/multiint.c:1305
 msgid "Start with No Bases"
 msgstr "開始時無基地"
 
-#: src/multiint.c:1274
+#: src/multiint.c:1307
 msgid "Start with Bases"
 msgstr "開始時有基地"
 
-#: src/multiint.c:1276
+#: src/multiint.c:1309
 msgid "Start with Advanced Bases"
 msgstr "開始時具規模基地"
 
-#: src/multiint.c:1308
+#: src/multiint.c:1341
 msgid "Map Preview"
 msgstr "預覽地圖"
 
-#: src/multiint.c:1310
+#: src/multiint.c:1343
 msgid "Click to see Map"
 msgstr "按一下看地圖"
 
-#: src/multiint.c:1324
+#: src/multiint.c:1357
 msgid "Start Hosting Game"
 msgstr "開始遊戲"
 
-#: src/multiint.c:1332
+#: src/multiint.c:1365
 #, fuzzy
 msgid "Show Structure Limits"
 msgstr "設定建築物數量限制"
 
-#: src/multiint.c:1332
+#: src/multiint.c:1365
 msgid "Set Structure Limits"
 msgstr "設定建築物數量限制"
 
-#: src/multiint.c:1395
+#: src/multiint.c:1443
 #, fuzzy
 msgid "Player colour"
 msgstr "玩家"
 
-#: src/multiint.c:1411
+#: src/multiint.c:1459
 #, fuzzy
 msgid "Kick player"
 msgstr "2 玩家"
 
-#: src/multiint.c:1422
+#: src/multiint.c:1470
 #, fuzzy
 msgid "Player number"
 msgstr "玩家"
 
-#: src/multiint.c:1782
+#: src/multiint.c:1830
 msgid "Team"
 msgstr "隊伍"
 
-#: src/multiint.c:1821
+#: src/multiint.c:1869
 msgid "Click when ready"
 msgstr "按一下開始"
 
-#: src/multiint.c:1825
+#: src/multiint.c:1873
 msgid "READY?"
 msgstr ""
 
-#: src/multiint.c:1862
+#: src/multiint.c:1910
 msgid "PLAYERS"
 msgstr "玩家"
 
-#: src/multiint.c:1916
+#: src/multiint.c:1964
 #, fuzzy
 msgid "Choose Team"
 msgstr "鎖定同盟模式"
 
-#: src/multiint.c:1956
+#: src/multiint.c:2004
 msgid "Click to change player settings"
 msgstr ""
 
-#: src/multiint.c:1987
+#: src/multiint.c:2035
 msgid "Click to adjust AI difficulty"
 msgstr ""
 
-#: src/multiint.c:2066
+#: src/multiint.c:2114
 msgid "CHAT"
 msgstr "聊天"
 
-#: src/multiint.c:2100
+#: src/multiint.c:2148
 msgid "All players need to have the same mods to join your game."
 msgstr ""
 
-#: src/multiint.c:2260
+#: src/multiint.c:2308
 msgid "*** password is now required! ***"
 msgstr ""
 
-#: src/multiint.c:2267
+#: src/multiint.c:2315
 msgid "*** password is NOT required! ***"
 msgstr ""
 
-#: src/multiint.c:2509
+#: src/multiint.c:2557
 msgid "Sorry! Failed to host the game."
 msgstr ""
 
-#: src/multiint.c:2594
+#: src/multiint.c:2642
 msgid "'Locked Teams' mode enabled"
 msgstr "鎖定同盟模式"
 
-#: src/multiint.c:2633
-#: src/multiint.c:2683
+#: src/multiint.c:2681
+#: src/multiint.c:2731
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "主玩家將 %s 踢出遊戲！"
 
-#: src/multiint.c:2758
+#: src/multiint.c:2806
 msgid "Host is Starting Game"
 msgstr "主玩家已開始遊戲"
 
-#: src/multiint.c:3341
+#: src/multiint.c:3389
 msgid "Players"
 msgstr "玩家"
 
-#: src/multiint.c:3459
+#: src/multiint.c:3507
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr ""
 
-#: src/multiint.c:3467
+#: src/multiint.c:3515
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr ""
 
-#: src/multiint.c:3493
+#: src/multiint.c:3541
 msgid "HOST"
 msgstr ""
 
