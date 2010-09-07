@@ -3237,7 +3237,7 @@ error:
 	if (result == SOCKET_ERROR)
 	{
 		free(NetPlay.MOTD);
-		asprintf(&NetPlay.MOTD, "Error while communicating with the lobby server: %s", strSockError(getSockErr()));
+		asprintf(&NetPlay.MOTD, "Error connecting to the lobby server: %s\nMake sure port %d can receive incoming connections.", strSockError(getSockErr()), gameserver_port);
 		debug(LOG_ERROR, "%s", NetPlay.MOTD);
 	}
 	else
