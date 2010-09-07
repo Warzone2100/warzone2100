@@ -118,7 +118,7 @@ static code_part code_part_from_str(const char *str)
  */
 void debug_callback_stderr( WZ_DECL_UNUSED void ** data, const char * outputBuffer )
 {
-	if ( !strchr( outputBuffer, '\n' ) ) {
+	if ( outputBuffer[strlen(outputBuffer) - 1] != '\n' ) {
 		fprintf( stderr, "%s\n", outputBuffer );
 	} else {
 		fprintf( stderr, "%s", outputBuffer );
