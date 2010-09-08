@@ -165,7 +165,7 @@ static bool EnablePasswordPrompt = false;	// if we need the password prompt
 extern int NET_PlayerConnectionStatus;		// from src/display3d.c
 LOBBY_ERROR_TYPES LobbyError = ERROR_NOERROR;
 static BOOL allowChangePosition = true;
-static char tooltipbuffer[256] ={'\0'};
+static char tooltipbuffer[MaxGames][256];
 /// end of globals.
 // ////////////////////////////////////////////////////////////////////////////
 // Function protos
@@ -635,6 +635,8 @@ static void addGames(void)
 	static const char *wrongVersionTip = "Your version of Warzone is incompatible with this game.";
 	static const char *badModTip = "Your loaded mods are incompatible with this game. (Check mods/autoload/?)";
 
+	memset(tooltipbuffer, 0, sizeof(tooltipbuffer));
+
 	//count games to see if need two columns.
 	for(i=0;i<MaxGames;i++)							// draw games
 	{
@@ -703,8 +705,8 @@ static void addGames(void)
 				}
 				else
 				{
-					ssprintf(tooltipbuffer, "Map:%s, Game:%s, Hosted by %s ", NetPlay.games[i].mapname, NetPlay.games[i].name, NetPlay.games[i].hostname);
-					sButInit.pTip = tooltipbuffer;
+					ssprintf(tooltipbuffer[i], "Map:%s, Game:%s, Hosted by %s ", NetPlay.games[i].mapname, NetPlay.games[i].name, NetPlay.games[i].hostname);
+					sButInit.pTip = tooltipbuffer[i];
 				}
 				sButInit.UserData = i;
 
