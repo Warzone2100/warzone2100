@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-09-07 13:59+0200\n"
-"PO-Revision-Date: 2010-09-05 07:35+0100\n"
+"POT-Creation-Date: 2010-09-08 14:38+0200\n"
+"PO-Revision-Date: 2010-09-08 11:07+0100\n"
 "Last-Translator: Michał D. aka Emdek <emdeck@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -1251,7 +1251,7 @@ msgstr "Nowe opcje badań dostępne"
 #: data/mp/messages/resmessages3.rmsg:82
 #: data/mp/messages/strings/resstrings.txt:33
 msgid "Cyborg Materials Improved"
-msgstr "Materiały Cyborgów ulepszone"
+msgstr "Materiały cyborgów ulepszone"
 
 #: data/base/messages/resmessages1.rmsg:31
 #: data/base/messages/resmessages1.rmsg:473
@@ -1290,7 +1290,7 @@ msgstr "Zwiększa pancerz kinetyczny i punkty zdrowia"
 #: data/mp/messages/strings/resstrings.txt:36
 #: data/mp/messages/strings/resstrings.txt:46
 msgid "All Cyborgs upgraded automatically"
-msgstr "Wszystkie Cyborgi ulepszone automatycznie"
+msgstr "Wszystkie cyborgi ulepszone automatycznie"
 
 #: data/base/messages/resmessages1.rmsg:43
 #: data/base/messages/resmessages1.rmsg:56
@@ -1328,7 +1328,7 @@ msgstr "Wszystkie Cyborgi ulepszone automatycznie"
 #: data/mp/messages/strings/resstrings.txt:51
 #: data/mp/messages/strings/resstrings.txt:83
 msgid "New Cyborg Available"
-msgstr "Nowy Cyborg dostępny"
+msgstr "Nowy cyborg dostępny"
 
 #: data/base/messages/resmessages1.rmsg:44
 #: data/mp/messages/resmessages1.rmsg:44
@@ -1383,7 +1383,7 @@ msgstr "Uzbrojony w karabin maszynowy"
 #: data/mp/messages/strings/resstrings.txt:98
 #: data/mp/messages/strings/resstrings.txt:104
 msgid "Requires Cyborg factory to produce"
-msgstr "Wymaga Fabryki Cyborgów do wyprodukowania"
+msgstr "Wymaga Fabryki cyborgów do wyprodukowania"
 
 #: data/base/messages/resmessages1.rmsg:57
 #: data/mp/messages/resmessages1.rmsg:57
@@ -1585,13 +1585,13 @@ msgstr "Kontroluje do pięciu dowódców"
 #: data/mp/messages/strings/resstrings.txt:373
 #: data/mp/messages/strings/resstrings.txt:381
 msgid "Cyborg Production Improved"
-msgstr "Produkcja Cyborgów ulepszona"
+msgstr "Produkcja cyborgów ulepszona"
 
 #: data/base/messages/resmessages1.rmsg:278
 #: data/base/messages/strings/names.txt:783
 #: data/mp/messages/resmessages1.rmsg:278
 msgid "Automated Cyborg Production"
-msgstr "Automatyczna produkcja Cyborgów"
+msgstr "Automatyczna produkcja cyborgów"
 
 #: data/base/messages/resmessages1.rmsg:279
 #: data/base/messages/resmessages2.rmsg:344
@@ -1603,7 +1603,7 @@ msgstr "Automatyczna produkcja Cyborgów"
 #: data/mp/messages/strings/resstrings.txt:375
 #: data/mp/messages/strings/resstrings.txt:383
 msgid "Increases Cyborg factory output"
-msgstr "Zwiększa szybkość produkcji"
+msgstr "Zwiększa szybkość produkcji cyborgów"
 
 #: data/base/messages/resmessages1.rmsg:280
 #: data/base/messages/resmessages2.rmsg:345
@@ -1615,7 +1615,7 @@ msgstr "Zwiększa szybkość produkcji"
 #: data/mp/messages/strings/resstrings.txt:376
 #: data/mp/messages/strings/resstrings.txt:384
 msgid "All Cyborg factories upgraded automatically"
-msgstr "Wszystkie Fabryki Cyborgów ulepszone automatycznie"
+msgstr "Wszystkie Fabryki cyborgów ulepszone automatycznie"
 
 #: data/base/messages/resmessages1.rmsg:291
 #: data/base/messages/strings/names.txt:399
@@ -1624,17 +1624,17 @@ msgstr "Wszystkie Fabryki Cyborgów ulepszone automatycznie"
 #: data/mp/messages/strings/names.txt:407
 #: data/mp/messages/strings/names.txt:797
 msgid "Cyborg Factory"
-msgstr "Fabryka Cyborgów"
+msgstr "Fabryka cyborgów"
 
 #: data/base/messages/resmessages1.rmsg:292
 #: data/mp/messages/resmessages1.rmsg:292
 msgid "Produces Cyborgs"
-msgstr "Produkuje Cyborgi"
+msgstr "Produkuje cyborgi"
 
 #: data/base/messages/resmessages1.rmsg:293
 #: data/mp/messages/resmessages1.rmsg:293
 msgid "Research makes additional Cyborgs available"
-msgstr "Badanie udostępnia dodatkowe Cyborgi"
+msgstr "Badanie udostępnia dodatkowe cyborgi"
 
 #: data/base/messages/resmessages1.rmsg:303
 #: data/base/messages/resmessages2.rmsg:394
@@ -2302,7 +2302,7 @@ msgstr "Zwiększa obrażenia od rakiet"
 #: data/mp/messages/resmessages23.rmsg:4
 #: data/mp/messages/resmessages3.rmsg:56
 msgid "Cyborg Propulsion Improved"
-msgstr "Napęd Cyborgów ulepszony"
+msgstr "Napęd cyborgów ulepszony"
 
 #: data/base/messages/resmessages23.rmsg:5
 #: data/base/messages/resmessages2.rmsg:538
@@ -2421,7 +2421,7 @@ msgstr "Wieża CB VTOL wykrywa artylerię wroga"
 #: data/mp/messages/resmessages2.rmsg:435
 #: data/mp/messages/strings/resstrings.txt:509
 msgid "Orders assigned VTOLs to attack the enemy batteries"
-msgstr "Rozkazuje przypisanym VTOL atak na baterie wroga"
+msgstr "Rozkazuje przypisanym jednostkom VTOL atak na baterie wroga"
 
 #: data/base/messages/resmessages23.rmsg:72
 #: data/base/messages/resmessages2.rmsg:436
@@ -2430,7 +2430,7 @@ msgstr "Rozkazuje przypisanym VTOL atak na baterie wroga"
 #: data/mp/messages/resmessages2.rmsg:436
 #: data/mp/messages/strings/resstrings.txt:510
 msgid "VTOLs attack until enemy battery is suppressed"
-msgstr "VTOL atakują dopóki wroga bateria nie jest zniszczona"
+msgstr "Jednostki VTOL atakują dopóki wroga bateria nie jest zniszczona"
 
 #: data/base/messages/resmessages23.rmsg:82
 #: data/base/messages/resmessages2.rmsg:446
@@ -2505,7 +2505,7 @@ msgstr "Wieżyczka uderzeniowa VTOL jest używana do rozpoznawania celów"
 #: data/base/messages/resmessages23.rmsg:110
 #: data/mp/messages/resmessages23.rmsg:110
 msgid "Assigned VTOLs attack the designated targets"
-msgstr "Przypisane VTOL atakują zaznaczony cel"
+msgstr "Przypisane jednostki VTOL atakują wyznaczony cel"
 
 #: data/base/messages/resmessages23.rmsg:111
 #: data/mp/messages/resmessages23.rmsg:111
@@ -2706,7 +2706,7 @@ msgstr "Zastępuje wszystkie karabiny maszynowe"
 #: data/mp/messages/resmessages3.rmsg:4
 #: data/mp/messages/strings/resstrings.txt:43
 msgid "Cyborg Thermal Armor Improved"
-msgstr "Pancerz termiczny Cyborgów ulepszony"
+msgstr "Pancerz termiczny cyborgów ulepszony"
 
 #: data/base/messages/resmessages2.rmsg:5
 #: data/base/messages/resmessages3.rmsg:5
@@ -2782,7 +2782,7 @@ msgstr "Bateria przeciwlotnicza uzbrojona w działko Cyclone"
 #: data/mp/messages/strings/resstrings.txt:139
 #: data/mp/messages/strings/resstrings.txt:151
 msgid "Automatically targets VTOLs"
-msgstr "Automatycznie namierza VTOL"
+msgstr "Automatycznie namierza jednostki VTOL"
 
 #: data/base/messages/resmessages2.rmsg:83
 #: data/base/messages/strings/resstrings.txt:126
@@ -3661,7 +3661,7 @@ msgstr "Systemy komputerowe mogą być teraz chronione przed NEXUS"
 #: data/base/messages/resmessages3.rmsg:43
 #: data/mp/messages/resmessages3.rmsg:43
 msgid "New Cyborg Research Available"
-msgstr "Nowe badania nad Cyborgami dostępne"
+msgstr "Nowe badania nad cyborgami dostępne"
 
 #: data/base/messages/resmessages3.rmsg:44
 #: data/mp/messages/resmessages3.rmsg:44
@@ -3671,12 +3671,12 @@ msgstr "Areodynamiczny plecak odrzutowy"
 #: data/base/messages/resmessages3.rmsg:45
 #: data/mp/messages/resmessages3.rmsg:45
 msgid "Gives Cyborg limited flight abilities"
-msgstr "Daje Cyborgom ograniczone umiejętności lotu"
+msgstr "Daje cyborgom ograniczone umiejętności lotu"
 
 #: data/base/messages/resmessages3.rmsg:46
 #: data/mp/messages/resmessages3.rmsg:46
 msgid "Jump Cyborgs can now be researched"
-msgstr "Skaczące Cyborgi mogą byc teraz wynalezione"
+msgstr "Skaczące cyborgi mogą być teraz wynalezione"
 
 #: data/base/messages/resmessages3.rmsg:70
 #: data/base/messages/resmessages3.rmsg:694
@@ -3733,7 +3733,7 @@ msgstr "Uzbrojony w laser Flashlight"
 #: data/mp/messages/strings/resstrings.txt:95
 #: data/mp/messages/strings/resstrings.txt:101
 msgid "New Jump Cyborg Available"
-msgstr "Nowy Skaczący Cyborg dostępny"
+msgstr "Nowy skaczący cyborg dostępny"
 
 #: data/base/messages/resmessages3.rmsg:148
 #: data/mp/messages/resmessages3.rmsg:148
@@ -3753,7 +3753,7 @@ msgstr "Uzbrojony w laser Flashlight"
 #: data/base/messages/resmessages3.rmsg:202
 #: data/mp/messages/resmessages3.rmsg:202
 msgid "Requires cyborg factory to produce"
-msgstr "Wymaga Fabryki Cyborgów do produkcji"
+msgstr "Wymaga Fabryki cyborgów do produkcji"
 
 #: data/base/messages/resmessages3.rmsg:213
 #: data/mp/messages/resmessages3.rmsg:213
@@ -3944,7 +3944,7 @@ msgstr "Pokładowe systemy diagnostyczne i naprawcze"
 #: data/base/messages/resmessages3.rmsg:579
 #: data/mp/messages/resmessages3.rmsg:579
 msgid "Enables self-repair in all Cyborgs"
-msgstr "Umożliwia samonaprawę u wszystkich Cyborgów"
+msgstr "Umożliwia samonaprawę u wszystkich cyborgów"
 
 #: data/base/messages/resmessages3.rmsg:591
 #: data/base/messages/resmessages3.rmsg:604
@@ -4038,7 +4038,7 @@ msgstr "Punkty zdrowia i prędkość zwiększona"
 #: data/mp/messages/resmessages3.rmsg:787
 #: data/mp/messages/resmessages3.rmsg:800
 msgid "All VTOLs upgraded automatically"
-msgstr "Wszystkie VTOL ulepszone automatycznie"
+msgstr "Wszystkie jednostki VTOL ulepszone automatycznie"
 
 #: data/base/messages/resmessages3.rmsg:811
 #: data/mp/messages/resmessages3.rmsg:811
@@ -4116,7 +4116,7 @@ msgstr "Generuje i koncentruje ładunki energii laserowej"
 #: data/mp/messages/resmessages3.rmsg:942
 #: data/mp/messages/resmessages3.rmsg:955
 msgid "Best Targets: Cyborgs"
-msgstr "Najlepsze cele: Cyborgi"
+msgstr "Najlepsze cele: cyborgi"
 
 #: data/base/messages/resmessages3.rmsg:954
 #: data/mp/messages/resmessages3.rmsg:954
@@ -4291,7 +4291,7 @@ msgstr "Wysoko wybuchowa rakieta artyleryjska"
 #: data/mp/messages/resmessages3.rmsg:1124
 #: data/mp/messages/resmessages3.rmsg:1137
 msgid "Best Targets: Base structures and cyborgs"
-msgstr "Najlepsze cele: Struktury bazy i Cyborgi"
+msgstr "Najlepsze cele: Struktury bazy i cyborgi"
 
 #: data/base/messages/resmessages3.rmsg:1136
 #: data/mp/messages/resmessages3.rmsg:1136
@@ -4410,7 +4410,7 @@ msgstr "Fabryka VTOL umożliwia na produkcję VTOL"
 #: data/base/messages/resmessagesall.rmsg:19
 #: data/mp/messages/resmessagesall.rmsg:19
 msgid "VTOL rearming pads required to keep VTOLs flying"
-msgstr "Platformy dozbrajania wymagane VTOL dalej latały"
+msgstr "Platformy dozbrajania wymagane aby jednostki VTOL dalej latały"
 
 #: data/base/messages/resmessagesall.rmsg:20
 #: data/mp/messages/resmessagesall.rmsg:20
@@ -4420,7 +4420,7 @@ msgstr "Może być ulepszona przez moduł fabryki"
 #: data/base/messages/resmessagesall.rmsg:31
 #: data/mp/messages/resmessagesall.rmsg:31
 msgid "Refuels, rearms and repairs VTOLs"
-msgstr "Tankuje, dozbraja i naprawia VTOL"
+msgstr "Tankuje, dozbraja i naprawia jednostki VTOL"
 
 #: data/base/messages/resmessagesall.rmsg:32
 #: data/mp/messages/resmessagesall.rmsg:32
@@ -4559,7 +4559,7 @@ msgstr "Wysoko wybuchowy kształt głowicy rakiety"
 #: data/base/messages/resmessagesall.rmsg:174
 #: data/mp/messages/resmessagesall.rmsg:213
 msgid "Laser designator paints and guides rounds to the target"
-msgstr "Celownik laserowy prowadzi pociski do celu"
+msgstr "Celownik laserowy naprowadza pociski na celu"
 
 #: data/base/messages/strings/cam1strings.txt:3
 #: data/base/sequenceaudio/cam1/c001.txa:12
@@ -7130,77 +7130,77 @@ msgstr "Trzeci poziom kodów - sekwencja odpalenia"
 #: data/base/messages/strings/names.txt:655
 #: data/mp/messages/strings/names.txt:664
 msgid "Cyborg Thermal Armor"
-msgstr "Pancerz termiczny Cyborgów"
+msgstr "Pancerz termiczny cyborgów"
 
 #: data/base/messages/strings/names.txt:656
 #: data/mp/messages/strings/names.txt:665
 msgid "Cyborg Thermal Armor Mk2"
-msgstr "Pancerz termiczny Cyborgów Mk2"
+msgstr "Pancerz termiczny cyborgów Mk2"
 
 #: data/base/messages/strings/names.txt:657
 #: data/mp/messages/strings/names.txt:666
 msgid "Cyborg Thermal Armor Mk3"
-msgstr "Pancerz termiczny Cyborgów Mk3"
+msgstr "Pancerz termiczny cyborgów Mk3"
 
 #: data/base/messages/strings/names.txt:658
 #: data/mp/messages/strings/names.txt:667
 msgid "Cyborg High Intensity Thermal Armor"
-msgstr "Wysoko odporny pancerz termiczny Cyborgów"
+msgstr "Wysoko odporny pancerz termiczny cyborgów"
 
 #: data/base/messages/strings/names.txt:659
 #: data/mp/messages/strings/names.txt:668
 msgid "Cyborg High Intensity Thermal Armor Mk2"
-msgstr "Wysoko odporny pancerz termiczny Cyborgów Mk2"
+msgstr "Wysoko odporny pancerz termiczny cyborgów Mk2"
 
 #: data/base/messages/strings/names.txt:660
 #: data/mp/messages/strings/names.txt:669
 msgid "Cyborg High Intensity Thermal Armor Mk3"
-msgstr "Wysoko odporny pancerz termiczny Cyborgów Mk3"
+msgstr "Wysoko odporny pancerz termiczny cyborgów Mk3"
 
 #: data/base/messages/strings/names.txt:662
 #: data/mp/messages/strings/names.txt:671
 msgid "Cyborg Composite Alloys"
-msgstr "Pancerze kompozytowe Cyborgów"
+msgstr "Pancerze kompozytowe cyborgów"
 
 #: data/base/messages/strings/names.txt:663
 #: data/mp/messages/strings/names.txt:672
 msgid "Cyborg Composite Alloys Mk2"
-msgstr "Pancerze kompozytowe Cyborgów Mk2"
+msgstr "Pancerze kompozytowe cyborgów Mk2"
 
 #: data/base/messages/strings/names.txt:664
 #: data/mp/messages/strings/names.txt:673
 msgid "Cyborg Composite Alloys Mk3"
-msgstr "Pancerze kompozytowe Cyborgów Mk3"
+msgstr "Pancerze kompozytowe cyborgów Mk3"
 
 #: data/base/messages/strings/names.txt:665
 #: data/mp/messages/strings/names.txt:674
 msgid "Cyborg Dense Composite Alloys"
-msgstr "Ulepszone pancerze kompozytowe Cyborgów"
+msgstr "Ulepszone pancerze kompozytowe cyborgów"
 
 #: data/base/messages/strings/names.txt:666
 #: data/mp/messages/strings/names.txt:675
 msgid "Cyborg Dense Composite Alloys Mk2"
-msgstr "Ulepszone pancerze kompozytowe Cyborgów Mk2"
+msgstr "Ulepszone pancerze kompozytowe cyborgów Mk2"
 
 #: data/base/messages/strings/names.txt:667
 #: data/mp/messages/strings/names.txt:676
 msgid "Cyborg Dense Composite Alloys Mk3"
-msgstr "Ulepszone pancerze kompozytowe Cyborgów Mk3"
+msgstr "Ulepszone pancerze kompozytowe cyborgów Mk3"
 
 #: data/base/messages/strings/names.txt:668
 #: data/mp/messages/strings/names.txt:677
 msgid "Cyborg Superdense Composite Alloys"
-msgstr "Utwardzone pancerze kompozytowe Cyborgów"
+msgstr "Utwardzone pancerze kompozytowe cyborgów"
 
 #: data/base/messages/strings/names.txt:669
 #: data/mp/messages/strings/names.txt:678
 msgid "Cyborg Superdense Composite Alloys Mk2"
-msgstr "Utwardzone pancerze kompozytowe Cyborgów Mk2"
+msgstr "Utwardzone pancerze kompozytowe cyborgów Mk2"
 
 #: data/base/messages/strings/names.txt:670
 #: data/mp/messages/strings/names.txt:679
 msgid "Cyborg Superdense Composite Alloys Mk3"
-msgstr "Utwardzone pancerze kompozytowe Cyborgów Mk3"
+msgstr "Utwardzone pancerze kompozytowe cyborgów Mk3"
 
 #: data/base/messages/strings/names.txt:673
 #: data/mp/messages/strings/names.txt:684
@@ -7275,7 +7275,7 @@ msgstr "Skaczący z rakietami Scourge"
 #: data/base/messages/strings/names.txt:689
 #: data/mp/messages/strings/names.txt:700
 msgid "Jump Flashlight Gunner"
-msgstr "Skaczący cyborg z laserem flashlight"
+msgstr "Skaczący cyborg z laserem Flashlight"
 
 #: data/base/messages/strings/names.txt:691
 #: data/mp/messages/strings/names.txt:702
@@ -7456,32 +7456,32 @@ msgstr "Centrum koordynacji dowodzenia"
 
 #: data/base/messages/strings/names.txt:784
 msgid "Automated Cyborg Production Mk2"
-msgstr "Automatyczna produkcja Cyborgów Mk2"
+msgstr "Automatyczna produkcja cyborgów Mk2"
 
 #: data/base/messages/strings/names.txt:785
 msgid "Automated Cyborg Production Mk3"
-msgstr "Automatyczna produkcja Cyborgów Mk3"
+msgstr "Automatyczna produkcja cyborgów Mk3"
 
 #: data/base/messages/strings/names.txt:787
 msgid "Robotic Cyborg Production Mk2"
-msgstr "Robotyczna produkcja Cyborgów Mk2"
+msgstr "Robotyczna produkcja cyborgów Mk2"
 
 #: data/base/messages/strings/names.txt:788
 msgid "Robotic Cyborg Production Mk3"
-msgstr "Robotyczna produkcja Cyborgów Mk3"
+msgstr "Robotyczna produkcja cyborgów Mk3"
 
 #: data/base/messages/strings/names.txt:789
 #: data/mp/messages/resmessagesall.rmsg:798
 msgid "Advanced Cyborg Production"
-msgstr "Zaawansowana produkcja Cyborgów"
+msgstr "Zaawansowana produkcja cyborgów"
 
 #: data/base/messages/strings/names.txt:790
 msgid "Advanced Cyborg Production Mk2"
-msgstr "Zaawansowana produkcja Cyborgów Mk2"
+msgstr "Zaawansowana produkcja cyborgów Mk2"
 
 #: data/base/messages/strings/names.txt:791
 msgid "Advanced Cyborg Production Mk3"
-msgstr "Zaawansowana produkcja Cyborgów Mk3"
+msgstr "Zaawansowana produkcja cyborgów Mk3"
 
 #: data/base/messages/strings/names.txt:795
 msgid "Automated Factory Production Mk2"
@@ -7679,17 +7679,17 @@ msgstr "Zaawansowana produkcja VTOL Mk3"
 #: data/base/messages/strings/names.txt:858
 #: data/mp/messages/strings/names.txt:873
 msgid "Cyborg Self-Repair"
-msgstr "Samonaprawa Cyborgów"
+msgstr "Samonaprawa cyborgów"
 
 #: data/base/messages/strings/names.txt:859
 #: data/mp/messages/strings/names.txt:874
 msgid "Automated Cyborg Repair Mk2"
-msgstr "Automatyczna naprawa Cyborgów Mk2"
+msgstr "Automatyczna naprawa cyborgów Mk2"
 
 #: data/base/messages/strings/names.txt:860
 #: data/mp/messages/strings/names.txt:875
 msgid "Automated Cyborg Repair Mk3"
-msgstr "Automatyczna naprawa Cyborgów Mk3"
+msgstr "Automatyczna naprawa cyborgów Mk3"
 
 #: data/base/messages/strings/names.txt:862
 #: data/mp/messages/strings/names.txt:877
@@ -9147,7 +9147,7 @@ msgstr "Umocnione stanowisko uzbrojone w miotacz ognia"
 #: data/base/messages/strings/resstrings.txt:356
 #: data/mp/messages/strings/resstrings.txt:382
 msgid "Self-Replicating Cyborg Production"
-msgstr "Samoreplikująca produkcja Cyborgów"
+msgstr "Samoreplikująca produkcja cyborgów"
 
 #: data/base/messages/strings/resstrings.txt:374
 #: data/mp/messages/strings/resstrings.txt:400
@@ -11641,7 +11641,7 @@ msgstr "Inżynier bojowy"
 
 #: data/mp/messages/strings/names.txt:1635
 msgid "Cyborg Mechanic"
-msgstr "Cyborg Mechanik"
+msgstr "Cyborg mechanik"
 
 #: data/mp/messages/strings/names.txt:1639
 #: data/mp/messages/strings/names.txt:1640
@@ -13822,7 +13822,7 @@ msgstr "Zaznacz WSZYSTKIE jednostki"
 
 #: src/keymap.c:423
 msgid "Select all VTOLs"
-msgstr "Zaznacz wszystkie VTOL"
+msgstr "Zaznacz wszystkie jednostki VTOL"
 
 #: src/keymap.c:424
 msgid "Select all Wheels"
@@ -14027,21 +14027,20 @@ msgstr "OK"
 
 #: src/multiint.c:1102
 msgid "Tanks disabled!!"
-msgstr ""
+msgstr "Czołgi wyłączone!!"
 
 #: src/multiint.c:1103
-#, fuzzy
 msgid "Cyborgs disabled."
-msgstr "Nowy Cyborg dostępny"
+msgstr "Cyborgi wyłączone."
 
 #: src/multiint.c:1104
 msgid "VTOLs disabled."
-msgstr ""
+msgstr "Jednostki VTOL wyłączone."
 
 #: src/multiint.c:1154
 #: src/multiint.c:1161
 msgid "Select Game Name"
-msgstr "Wybierz grę"
+msgstr "Wybierz nazwę gry"
 
 #: src/multiint.c:1154
 msgid "One-Player Skirmish"
