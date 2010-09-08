@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2010-09-08 00:53+0200\n"
-"PO-Revision-Date: 2010-09-06 19:50+0200\n"
+"PO-Revision-Date: 2010-09-08 07:57+0200\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
 "Language: \n"
@@ -14287,16 +14287,15 @@ msgstr "OK"
 
 #: src/multiint.c:1127
 msgid "Tanks disabled!!"
-msgstr ""
+msgstr "Panzer abgeschaltet!!"
 
 #: src/multiint.c:1128
-#, fuzzy
 msgid "Cyborgs disabled."
-msgstr "Neuer Cyborg verfügbar"
+msgstr "Cyborgs abgeschaltet."
 
 #: src/multiint.c:1129
 msgid "VTOLs disabled."
-msgstr ""
+msgstr "VTOLs abgeschaltet."
 
 #: src/multiint.c:1179
 #: src/multiint.c:1186
