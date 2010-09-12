@@ -1,3 +1,19 @@
+2010-09-12: Version 2.3.5_RC4
+ * General:
+   * Fix: Units can no longer shoot through the ground. (r11652, ticket:2151)
+   * Fix: Numerous fixes (r11630, ticket:2150) (r11647, ticket:2157) (r11650, ticket:2136)
+ * Multiplayer:
+   * Change: Display no-tank, no-cyborg or no-VTOL icons if the relevant factories are disabled via limits. (r11633)
+   * Balance fixes: ticket:2147, ticket:2158 
+   * Update Rebalance 0.8.3: (r11635)
+     * Weaken Flak Cannon and Sunburst a lot more. I'm pretty sure this change makes them too weak, but when introducing new weapons it's better to make them too weak than too strong.
+     * Increase HP of a bunch of VTOL weapons
+     * Slightly buff Hurricane/Whirlwind
+ * Translations:
+   * Update: Polish translation (r11624, r11646, ticket:1347)
+   * Update: Korean translation (r11625, ticket:2098)
+   * Update: German translation (r11627, r11644)
+
 2010-09-04: Version 2.3.5_RC3
  * Multiplayer:
    * Fix: Client side messages for when people leave / drop  (r11601, ticket:2144)
