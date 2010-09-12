@@ -1,17 +1,17 @@
 2010-09-12: Version 2.3.5_RC4
  * General:
-   * Fix: Numerous fixes (r11630, ticket:2150) (r11647, ticket:2157) (r11650, ticket:2136)
+   * Fix: Possible crash when designing units (r11630, ticket:2150)
  * Multiplayer:
-   * Change: Display no-tank, no-cyborg or no-VTOL icons if the relevant factories are disabled via limits. (r11633)
-   * Balance fixes: ticket:2147, ticket:2158 
+   * Change: Display no-tank, no-cyborg or no-VTOL icons if the relevant factories are disabled via limits (r11633)
+   * Fix: Make sure new players are shown immediately (r11650, ticket:2136)
+   * Fix: Lobby tooltip display (r11647, ticket:2157)
+   * Balance fixes: ticket:2147, ticket:2158
    * Update Rebalance 0.8.3: (r11635)
      * Weaken Flak Cannon and Sunburst a lot more. I'm pretty sure this change makes them too weak, but when introducing new weapons it's better to make them too weak than too strong.
      * Increase HP of a bunch of VTOL weapons
      * Slightly buff Hurricane/Whirlwind
  * Translations:
-   * Update: Polish translation (r11624, r11646, ticket:1347)
-   * Update: Korean translation (r11625, ticket:2098)
-   * Update: German translation (r11627, r11644)
+   * Update: Polish (r11624, r11646, ticket:1347), Korean (r11625, ticket:2098), German (r11627, r11644), Brazilian (r11656, ticket:2163)
 
 2010-09-04: Version 2.3.5_RC3
  * Multiplayer:
