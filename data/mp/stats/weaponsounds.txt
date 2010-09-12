@@ -40,7 +40,6 @@ BusCannon,smlcan.ogg,smlexpl.ogg,206
 BabaPitRocket,rocket.ogg,lrgexpl.ogg,207
 CyborgFlamer01,flmthrow.ogg,-1,208
 AAGun2Mk1,medcan.ogg,lrgexpl.ogg,210
-AAGun2Mk1-VTOL,medcan.ogg,lrgexpl.ogg,210
 PlasmaHeavy,medcan.ogg,lrgexpl.ogg,212
 MG2-Pillbox,mgbar3.ogg,-1,214
 MG3-Pillbox,mgheavy.ogg,-1,215
