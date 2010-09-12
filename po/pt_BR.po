@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-09-08 00:53+0200\n"
-"PO-Revision-Date: 2010-08-01 23:54-0300\n"
+"POT-Creation-Date: 2010-09-12 21:25+0200\n"
+"PO-Revision-Date: 2010-09-10 22:16-0300\n"
 "Last-Translator: Artur Filipe <tucalipe@gmail.com>\n"
 "Language-Team: Brazilian Portugese <warzone-dev@gna.org>\n"
 "Language: \n"
@@ -5980,9 +5980,8 @@ msgstr "Picape"
 
 #: data/base/messages/strings/names.txt:207
 #: data/mp/messages/strings/names.txt:210
-#, fuzzy
 msgid "Cannon Fire Truck"
-msgstr "Caminhão de Bombeiros"
+msgstr "Canhão Caminhão de Bombeiros"
 
 #: data/base/messages/strings/names.txt:208
 #: data/mp/messages/strings/names.txt:211
@@ -9898,9 +9897,8 @@ msgid "NORTHERN SECTOR"
 msgstr "SETOR NORTE"
 
 #: data/base/sequenceaudio/cam3/c003.txa:5
-#, fuzzy
 msgid "Congratulations your successfull evacuation of Beta Base."
-msgstr "Congratulações na evacuação bem sucedida da Base Beta."
+msgstr "Parabéns pela evacuação bem sucedida da Base Beta."
 
 #: data/base/sequenceaudio/cam3/c003.txa:8
 msgid "Dusk, December 3rd, 2100"
@@ -10294,7 +10292,6 @@ msgid "Scorpion Command Turret Tracks"
 msgstr "Tanque Comandante Escorpião"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1326
-#, fuzzy
 msgid "Mantis Command Turret Tracks"
 msgstr "Tanque Comandante Mantis"
 
@@ -10947,7 +10944,6 @@ msgid "Armour +35%, Body Points +30%"
 msgstr "Armadura +35%, Ptos. de vida +35%"
 
 #: data/mp/messages/resmessages1.rmsg:122
-#, fuzzy
 msgid "Armored guard tower with Mini-Rocket Pod"
 msgstr "Torre Reforçada com Mini-Foguetes"
 
@@ -11120,9 +11116,8 @@ msgid "Howitzer reload time -10%"
 msgstr "Interv. de Recarga de Obus -10%"
 
 #: data/mp/messages/resmessages2.rmsg:928
-#, fuzzy
 msgid "High Explosive Anti-Tank warheads"
-msgstr "Ogiva Anti-Tanque Altamente Explosiva"
+msgstr "Ogivas Anti-Tanque Altamente Explosivas"
 
 #: data/mp/messages/resmessages3.rmsg:6
 msgid "Thermal Armor +35%"
@@ -11559,9 +11554,8 @@ msgstr "Defesa AA Tornado"
 
 #: data/mp/messages/strings/names.txt:418
 #: data/mp/messages/strings/names.txt:727
-#, fuzzy
 msgid "AA Flak Cannon Emplacement"
-msgstr "Defesa de Canhão de Plasma"
+msgstr "Defesa de Canhão AA Explosivo"
 
 #: data/mp/messages/strings/names.txt:474
 #: data/mp/messages/strings/names.txt:791
@@ -11585,14 +11579,12 @@ msgstr "Artilharia de Mini-Foguetes"
 
 #: data/mp/messages/strings/names.txt:553
 #: data/mp/messages/strings/names.txt:998
-#, fuzzy
 msgid "AA Flak Cannon"
-msgstr "Canhão de Plasma"
+msgstr "Canhão AA Explosivo"
 
 #: data/mp/messages/strings/names.txt:554
-#, fuzzy
 msgid "VTOL Flak Cannon"
-msgstr "Canhão VTOL"
+msgstr "Canhão AA Explosivo VTOL"
 
 #: data/mp/messages/strings/names.txt:567
 #: data/mp/messages/strings/names.txt:1699
@@ -11747,24 +11739,20 @@ msgid "Rail Target Prediction Computer"
 msgstr "Computador de Predição de Alvos"
 
 #: data/mp/messages/strings/names.txt:1170
-#, fuzzy
 msgid "Stabilized Rockets"
-msgstr "Mini-Foguetes Estabilizados"
+msgstr "Foguetes Estabilizados"
 
 #: data/mp/messages/strings/names.txt:1174
-#, fuzzy
 msgid "HE Rockets"
-msgstr "Mini-Foguetes AP"
+msgstr "Foguetes AE"
 
 #: data/mp/messages/strings/names.txt:1175
-#, fuzzy
 msgid "HE Rockets Mk2"
-msgstr "Mini-Foguetes AP Mk2"
+msgstr "Foguetes AE Mk2"
 
 #: data/mp/messages/strings/names.txt:1176
-#, fuzzy
 msgid "HE Rockets Mk3"
-msgstr "Mini-Foguetes AP Mk3"
+msgstr "Foguetes AE Mk3"
 
 #: data/mp/messages/strings/names.txt:1389
 msgid "Assault Gun Tower"
@@ -11779,9 +11767,8 @@ msgid "Hyper Velocity Cannon Python Tracks"
 msgstr "Tanque Canhão de Hiper Velocidade Píton"
 
 #: data/mp/messages/strings/names.txt:1480
-#, fuzzy
 msgid "AA Flak Cannon Python Half-tracks"
-msgstr "Tanque Canhão Pesado Píton"
+msgstr "Híbrido Canhão AA Explosivo Píton"
 
 #: data/mp/messages/strings/names.txt:1518
 msgid "Bunker Buster Cobra Hover"
@@ -11960,24 +11947,21 @@ msgid "Plasma Cannon Emplacement"
 msgstr "Defesa de Canhão de Plasma"
 
 #: data/mp/messages/strings/names.txt:1725
-#, fuzzy
 msgid "Sunburst AA Rocket Array"
-msgstr "Artilharia de Mini-Foguetes"
+msgstr "Artilharia AA Sunburst"
 
 #: data/mp/messages/strings/names.txt:1726
 msgid "Sunburst AA"
-msgstr ""
+msgstr "AA Sunburst"
 
 #: data/mp/messages/strings/names.txt:1727
-#, fuzzy
 msgid "VTOL Sunburst AA"
-msgstr "Defesa AA Hurricane"
+msgstr "AA Sunburst VTOL"
 
 #: data/mp/messages/strings/names.txt:1728
 #: data/mp/messages/strings/names.txt:1729
-#, fuzzy
 msgid "Sunburst AA Site"
-msgstr "Defesa AA Hurricane"
+msgstr "Defesa AA Sunburst"
 
 #: data/mp/messages/strings/names.txt:1731
 #: data/mp/messages/strings/names.txt:1732
@@ -12102,9 +12086,8 @@ msgstr "Muro Whirlwind"
 
 #: data/mp/messages/strings/names.txt:1798
 #: data/mp/messages/strings/names.txt:1799
-#, fuzzy
 msgid "AA Flak Cannon Hardpoint"
-msgstr "Defesa de Canhão de Assalto"
+msgstr "Defesa de Canhão AA Explosívo"
 
 #: data/mp/messages/strings/names.txt:1800
 #: data/mp/messages/strings/names.txt:1801
@@ -12182,16 +12165,16 @@ msgid "System locale"
 msgstr "Localização do Sistema"
 
 #: lib/netplay/netplay.c:1288
-#: lib/netplay/netplay.c:2218
+#: lib/netplay/netplay.c:2223
 msgid "Enter password here"
 msgstr "Entre a senha aqui"
 
-#: lib/netplay/netplay.c:3279
+#: lib/netplay/netplay.c:3284
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Não foi possível resolver o nome do servidor mestre (%s)!"
 
-#: lib/netplay/netplay.c:3304
+#: lib/netplay/netplay.c:3309
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Não foi possível communicar com o servidor de lobby! A porta TCP %u está aberta para tráfego saindo?"
@@ -12691,7 +12674,7 @@ msgid "Join Game"
 msgstr "Conectar-se a um jogo"
 
 #: src/frontend.c:414
-#: src/multiint.c:1174
+#: src/multiint.c:1176
 msgid "OPTIONS"
 msgstr "OPÇÕES"
 
@@ -12786,7 +12769,7 @@ msgid "Off"
 msgstr "Desligado"
 
 #: src/frontend.c:516
-#: src/multiint.c:1244
+#: src/multiint.c:1246
 msgid "Fog"
 msgstr "Nevoeiro"
 
@@ -12797,7 +12780,7 @@ msgstr "Misto"
 
 #: src/frontend.c:523
 #: src/frontend.c:588
-#: src/multiint.c:1246
+#: src/multiint.c:1248
 msgid "Fog Of War"
 msgstr "Nevoeiro da Guerra"
 
@@ -12887,14 +12870,12 @@ msgstr "Girar a Tela"
 
 #: src/frontend.c:1006
 #: src/frontend.c:1094
-#, fuzzy
 msgctxt "middle mouse button"
 msgid "Middle Button"
 msgstr "Botão do Meio"
 
 #: src/frontend.c:1010
 #: src/frontend.c:1089
-#, fuzzy
 msgctxt "right mouse button"
 msgid "Right Button"
 msgstr "Botão Direito"
@@ -12961,7 +12942,7 @@ msgid "GAME OPTIONS"
 msgstr "OPÇÕES DE JOGO"
 
 #: src/frontend.c:1342
-#: src/multiint.c:2202
+#: src/multiint.c:2204
 msgid "Mod: "
 msgstr "Mod:"
 
@@ -13020,42 +13001,38 @@ msgid "Build (F3)"
 msgstr "Construir (F3)"
 
 #: src/hci.c:3872
-#: src/multiint.c:1291
+#: src/multiint.c:1293
 #: src/multimenu.c:764
 msgid "Power"
 msgstr "Energia"
 
 #: src/hci.c:3986
 msgid "Map:"
-msgstr ""
+msgstr "Mapa:"
 
 #: src/hci.c:4000
-#, fuzzy
 msgid "Load"
-msgstr "Carregar Jogo"
+msgstr "Carregar"
 
 #: src/hci.c:4001
-#, fuzzy
 msgid "Load Map File"
-msgstr "Carregar Jogo"
+msgstr "Carregar Mapa"
 
 #: src/hci.c:4008
-#, fuzzy
 msgid "Save"
 msgstr "Salvar"
 
 #: src/hci.c:4009
-#, fuzzy
 msgid "Save Map File"
-msgstr "Salvar"
+msgstr "Salvar Mapa"
 
 #: src/hci.c:4017
 msgid "New"
-msgstr ""
+msgstr "Novo"
 
 #: src/hci.c:4018
 msgid "New Blank Map"
-msgstr ""
+msgstr "Novo Mapa Vazio"
 
 #: src/hci.c:4056
 msgid "Tile"
@@ -13091,7 +13068,7 @@ msgstr "Colocar Artefatos no mapa"
 
 #: src/hci.c:4095
 msgid "Pause"
-msgstr ""
+msgstr "Pausa"
 
 #: src/hci.c:4096
 msgid "Pause or unpause the game"
@@ -13103,12 +13080,11 @@ msgstr "Alinhar a altitude dos objetos e do mapa"
 
 #: src/hci.c:4120
 msgid "Edit"
-msgstr ""
+msgstr "Editar"
 
 #: src/hci.c:4121
-#, fuzzy
 msgid "Start Edit Mode"
-msgstr "Iniciar sem Bases"
+msgstr "Modo Editar Início"
 
 #: src/hci.c:4135
 #: src/ingameop.c:119
@@ -13122,9 +13098,8 @@ msgid "Exit Game"
 msgstr "Sair do Jogo"
 
 #: src/hci.c:4161
-#, fuzzy
 msgid "Current Player:"
-msgstr "Jogo Multiplayer"
+msgstr "Jogador Atual:"
 
 #: src/hci.c:4500
 #: src/intdisplay.c:209
@@ -13134,9 +13109,8 @@ msgid "Progress Bar"
 msgstr "Barra de Progresso"
 
 #: src/hci.c:5458
-#, fuzzy
 msgid "Infinite Production"
-msgstr "Prender Produção"
+msgstr "Produção Infinita"
 
 #: src/hci.c:5536
 msgid "Factory Delivery Point"
@@ -13500,9 +13474,8 @@ msgid "Debug menu is Open"
 msgstr "Menu de Debug está Aberto"
 
 #: src/keybind.c:1559
-#, fuzzy
 msgid "Unable to locate any oil derricks!"
-msgstr "Impossível localicar Caminhões!"
+msgstr "Impossível localicar extratores!"
 
 #: src/keybind.c:1780
 msgid "Oh, the weather outside is frightful... SNOW"
@@ -13611,8 +13584,8 @@ msgstr "CONFIGURAÇÃO DAS TECLAS"
 
 #: src/keyedit.c:374
 #: src/multiint.c:533
-#: src/multiint.c:959
-#: src/multiint.c:1377
+#: src/multiint.c:961
+#: src/multiint.c:1379
 msgid "Return To Previous Screen"
 msgstr "Return a Tela Anterior"
 
@@ -13669,9 +13642,8 @@ msgid "View Location of Previous Message"
 msgstr "Ir Para a Origem da Última Mensagem"
 
 #: src/keymap.c:307
-#, fuzzy
 msgid "Toggle Sensor display"
-msgstr "Liga/Desliga o Console"
+msgstr "Liga/Desliga Alcance de Sensor"
 
 #: src/keymap.c:311
 msgid "Assign Group 0"
@@ -13927,35 +13899,31 @@ msgstr "Enviar mensagem"
 
 #: src/keymap.c:399
 msgid "Drop a beacon"
-msgstr ""
+msgstr "Marcar no mapa"
 
 #: src/keymap.c:401
-#, fuzzy
 msgid "Sensor display On"
-msgstr "Alcance de Sensor"
+msgstr "Alcance de Sensor Ligado"
 
 #: src/keymap.c:402
 msgid "Sensor display Off"
-msgstr ""
+msgstr "Alcance de Sensor Desligado"
 
 #: src/keymap.c:403
-#, fuzzy
 msgid "Toggles shadows"
-msgstr "Ativa Sombras"
+msgstr "Liga/Desliga Sombras"
 
 #: src/keymap.c:404
-#, fuzzy
 msgid "Trap cursor"
 msgstr "Travar Cursor"
 
 #: src/keymap.c:405
-#, fuzzy
 msgid "Toggle radar terrain"
-msgstr "Liga/Desliga o Radar"
+msgstr "Liga/Desliga o Radar de Terreno"
 
 #: src/keymap.c:406
 msgid "Toggle ally-enemy radar view"
-msgstr ""
+msgstr "Liga/Desliga marcação de radar Inimigo/Amigo"
 
 #: src/keymap.c:415
 msgid "Select all Combat Units"
@@ -13995,7 +13963,7 @@ msgstr "Selecionar todos os veículos de rodas"
 
 #: src/keymap.c:425
 msgid "Show frame rate"
-msgstr ""
+msgstr "Mostrar taxa de frames"
 
 #: src/keymap.c:426
 msgid "Select all Similar Units"
@@ -14019,99 +13987,87 @@ msgstr "Localizar Fábrica de Ciborgues"
 
 #: src/keymap.c:437
 msgid "Toggle display of droid path"
-msgstr ""
+msgstr "Liga/Desliga exibir caminho do droide"
 
 #: src/keymap.c:438
 msgid "Toggle display of gateways"
-msgstr ""
+msgstr "Liga/Desliga exibir passagens"
 
 #: src/keymap.c:439
-#, fuzzy
 msgid "Toggle Debug Mappings"
-msgstr "Configuração das Teclas"
+msgstr "Liga/Desliga Mapeamento de Falhas"
 
 #: src/keymap.c:440
 msgid "Show all keyboard mappings - use pause!"
-msgstr ""
+msgstr "Exibir todos os comandos de teclado - use o pause!"
 
 #: src/keymap.c:441
-#, fuzzy
 msgid "Toggle visibility"
-msgstr "Liga/Desliga Barra de Energia"
+msgstr "Liga/Desliga Visibilidade"
 
 #: src/keymap.c:442
-#, fuzzy
 msgid "Raise tile height"
-msgstr "Girar a visão para a direita"
+msgstr "Aumentar a altura do quadrado"
 
 #: src/keymap.c:443
 msgid "Lower tile height"
-msgstr ""
+msgstr "Diminuir altura do quadrado"
 
 #: src/keymap.c:444
 msgid "Toggles on/off DEMO Mode"
-msgstr ""
+msgstr "Liga/Desliga Modo DEMO"
 
 #: src/keymap.c:445
-#, fuzzy
 msgid "End Mission"
-msgstr "Fim da Missão."
+msgstr "Terminar a Missão"
 
 #: src/keymap.c:446
-#, fuzzy
 msgid "Toggles All fog"
-msgstr "Liga/Desliga Status da Aliança"
+msgstr "Liga/Desliga Névoa"
 
 #: src/keymap.c:447
 msgid "Trigger some weather"
-msgstr ""
+msgstr "Ativar alteração de clima"
 
 #: src/keymap.c:448
 msgid "Flip terrain triangle"
-msgstr ""
+msgstr "Virar o triângulo do terreno"
 
 #: src/keymap.c:449
-#, fuzzy
 msgid "Realign height of all objects on the map"
-msgstr "Alinhar a altitude dos objetos e do mapa"
+msgstr "Realinhar a altitude dos objetos no mapa"
 
 #: src/keymap.c:452
-#, fuzzy
 msgid "Make all items available"
-msgstr "Todos os itens disponibilizados"
+msgstr "Tornar todos os itens disponíveis"
 
 #: src/keymap.c:453
-#, fuzzy
 msgid "Kill Selected Unit(s)"
-msgstr "Repassar Unidades Selecionadas"
+msgstr "Destruir unidade(s) selecionada(s)"
 
 #: src/keymap.c:454
-#, fuzzy
 msgid "Toggle god Mode Status"
-msgstr "Liga/Desliga Status da Aliança"
+msgstr "Liga/Desliga God Mode"
 
 #: src/keymap.c:455
-#, fuzzy
 msgid "Display Options Screen"
-msgstr "Exibir Opções Em-Jogo"
+msgstr "Exibir Opções Gráficas"
 
 #: src/keymap.c:456
-#, fuzzy
 msgid "Complete current research"
-msgstr "Permite a pesquisa do Torrete de Comandante"
+msgstr "Termina as pesquisas atuais"
 
 #: src/keymap.c:457
 msgid "Toggle watch window"
-msgstr ""
+msgstr "Liga/Desliga janela de visualização"
 
 #: src/keymap.c:458
 msgid "Trace a game object"
-msgstr ""
+msgstr "Localizar um objeto do jogo"
 
 #: src/keymap.c:459
-#, fuzzy
 msgid "Toggle Driving Mode"
-msgstr "Liga/Desliga Visão Alinhada com Unidade"
+msgstr "Liga/Desliga Modo Dirigir"
 
 #: src/loop.c:543
 #: src/loop.c:559
@@ -14214,7 +14170,7 @@ msgid "Accept Settings"
 msgstr "Aceitar Configurações"
 
 #: src/multiint.c:469
-#: src/multiint.c:1007
+#: src/multiint.c:1009
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -14234,270 +14190,268 @@ msgstr "Lobby"
 msgid "IP"
 msgstr "IP"
 
-#: src/multiint.c:725
+#: src/multiint.c:727
 msgid "No games are available"
 msgstr "Não há jogos disponíveis"
 
-#: src/multiint.c:728
+#: src/multiint.c:730
 msgid "Game is full"
 msgstr "A sessão está cheia"
 
-#: src/multiint.c:732
+#: src/multiint.c:734
 msgid "You were kicked!"
 msgstr "Você foi expulso!"
 
-#: src/multiint.c:735
+#: src/multiint.c:737
 msgid "Wrong Game Version!"
 msgstr "Versão do Jogo Errada!"
 
-#: src/multiint.c:738
+#: src/multiint.c:740
 msgid "You have an incompatible mod."
 msgstr "Você tem um mod incompatível"
 
-#: src/multiint.c:743
+#: src/multiint.c:745
 msgid "Host couldn't send file?"
 msgstr "Hosp. não pôde enviar arquvo?"
 
-#: src/multiint.c:747
+#: src/multiint.c:749
 msgid "Incorrect Password!"
 msgstr "Senha Incorreta!"
 
-#: src/multiint.c:750
+#: src/multiint.c:752
 msgid "Host has dropped connection!"
 msgstr "O Hospedeiro terminou a conexão!"
 
-#: src/multiint.c:754
+#: src/multiint.c:756
 msgid "Connection Error"
 msgstr "Erro de conexão"
 
-#: src/multiint.c:895
+#: src/multiint.c:897
 msgid "Searching"
 msgstr "Pesquisando"
 
-#: src/multiint.c:956
+#: src/multiint.c:958
 msgid "GAMES"
 msgstr "JOGOS"
 
-#: src/multiint.c:964
+#: src/multiint.c:966
 msgid "Refresh Games List"
 msgstr "Atualizar Lista de Jogos"
 
-#: src/multiint.c:984
+#: src/multiint.c:986
 msgid "Enter Password:"
 msgstr "Entre a Senha:"
 
-#: src/multiint.c:1005
+#: src/multiint.c:1007
 msgid "OK"
 msgstr "OK"
 
-#: src/multiint.c:1127
-msgid "Tanks disabled!!"
-msgstr ""
-
-#: src/multiint.c:1128
-#, fuzzy
-msgid "Cyborgs disabled."
-msgstr "Novo Ciborgue Disponível"
-
 #: src/multiint.c:1129
-msgid "VTOLs disabled."
-msgstr ""
+msgid "Tanks disabled!!"
+msgstr "Tanques desativados!!"
 
-#: src/multiint.c:1179
-#: src/multiint.c:1186
+#: src/multiint.c:1130
+msgid "Cyborgs disabled."
+msgstr "Ciborgues desativados."
+
+#: src/multiint.c:1131
+msgid "VTOLs disabled."
+msgstr "VTOLs desativados."
+
+#: src/multiint.c:1181
+#: src/multiint.c:1188
 msgid "Select Game Name"
 msgstr "Selecionar Nome do Jogo"
 
-#: src/multiint.c:1179
+#: src/multiint.c:1181
 msgid "One-Player Skirmish"
 msgstr "Jogador vs. Computador"
 
-#: src/multiint.c:1189
+#: src/multiint.c:1191
 msgid "Select Map"
 msgstr "Selecionar o Mapa"
 
-#: src/multiint.c:1197
+#: src/multiint.c:1199
 msgid "Click to set Password"
 msgstr "Clique para requered uma senha"
 
-#: src/multiint.c:1207
-#: src/multiint.c:1208
+#: src/multiint.c:1209
+#: src/multiint.c:1210
 msgid "Scavengers"
 msgstr "Com Catadores"
 
-#: src/multiint.c:1210
+#: src/multiint.c:1212
 msgid "No Scavengers"
 msgstr "Sem Catadores"
 
-#: src/multiint.c:1241
+#: src/multiint.c:1243
 msgid "Select Player Name"
 msgstr "Selecionar o Nome do Jogador"
 
-#: src/multiint.c:1247
+#: src/multiint.c:1249
 msgid "Distance Fog"
 msgstr "Distância do Nevoeiro"
 
-#: src/multiint.c:1258
+#: src/multiint.c:1260
 #: src/multimenu.c:757
 msgid "Alliances"
 msgstr "Alianças"
 
-#: src/multiint.c:1261
+#: src/multiint.c:1263
 msgid "No Alliances"
 msgstr "Sem Alianças"
 
-#: src/multiint.c:1263
+#: src/multiint.c:1265
 msgid "Allow Alliances"
 msgstr "Permitir Alianças"
 
-#: src/multiint.c:1267
+#: src/multiint.c:1269
 msgid "Locked Teams"
 msgstr "Trancar Times"
 
-#: src/multiint.c:1293
+#: src/multiint.c:1295
 msgid "Low Power Levels"
 msgstr "Nível de Energia Baixo"
 
-#: src/multiint.c:1295
+#: src/multiint.c:1297
 msgid "Medium Power Levels"
 msgstr "Nível de Energia Médio"
 
-#: src/multiint.c:1297
+#: src/multiint.c:1299
 msgid "High Power Levels"
 msgstr "Nível de Energia Alto"
 
-#: src/multiint.c:1329
+#: src/multiint.c:1331
 msgid "Base"
 msgstr "Bases"
 
-#: src/multiint.c:1331
+#: src/multiint.c:1333
 msgid "Start with No Bases"
 msgstr "Iniciar sem Bases"
 
-#: src/multiint.c:1333
+#: src/multiint.c:1335
 msgid "Start with Bases"
 msgstr "Iniciar com Bases"
 
-#: src/multiint.c:1335
+#: src/multiint.c:1337
 msgid "Start with Advanced Bases"
 msgstr "Iniciar com Bases Avançadas"
 
-#: src/multiint.c:1367
+#: src/multiint.c:1369
 msgid "Map Preview"
 msgstr "Previsualização do Mapa"
 
-#: src/multiint.c:1369
+#: src/multiint.c:1371
 msgid "Click to see Map"
 msgstr "Clique para ver o Mapa"
 
-#: src/multiint.c:1383
+#: src/multiint.c:1385
 msgid "Start Hosting Game"
 msgstr "Iniciar Hospedagem de Jogo"
 
-#: src/multiint.c:1391
+#: src/multiint.c:1393
 msgid "Show Structure Limits"
 msgstr "Exibir Limites da Estrutura"
 
-#: src/multiint.c:1391
+#: src/multiint.c:1393
 msgid "Set Structure Limits"
 msgstr "Definir Limites da Estrutura"
 
-#: src/multiint.c:1469
+#: src/multiint.c:1471
 msgid "Player colour"
 msgstr "Cor do jogador"
 
-#: src/multiint.c:1485
+#: src/multiint.c:1487
 msgid "Kick player"
 msgstr "Expulsar jogador"
 
-#: src/multiint.c:1496
+#: src/multiint.c:1498
 msgid "Player number"
 msgstr "Número do jogador"
 
-#: src/multiint.c:1889
+#: src/multiint.c:1891
 msgid "Team"
 msgstr "Time"
 
-#: src/multiint.c:1922
+#: src/multiint.c:1924
 msgid "Waiting for other players"
 msgstr "Aguardando outros jogadores"
 
-#: src/multiint.c:1928
+#: src/multiint.c:1930
 msgid "Click when ready"
 msgstr "Clique quando estiver pronto"
 
-#: src/multiint.c:1932
+#: src/multiint.c:1934
 msgid "READY?"
 msgstr "PRONTO?"
 
-#: src/multiint.c:1969
+#: src/multiint.c:1971
 msgid "PLAYERS"
 msgstr "JOGADORES"
 
-#: src/multiint.c:2023
-#, fuzzy
+#: src/multiint.c:2025
 msgid "Choose Team"
-msgstr "Trancar Times"
+msgstr "Escolher Time"
 
-#: src/multiint.c:2063
+#: src/multiint.c:2065
 msgid "Click to change player settings"
-msgstr ""
+msgstr "Clique para alterar as configs. de jogador"
 
-#: src/multiint.c:2094
+#: src/multiint.c:2096
 msgid "Click to adjust AI difficulty"
-msgstr ""
+msgstr "Clique para ajustar a dificuldade da IA"
 
-#: src/multiint.c:2173
+#: src/multiint.c:2175
 msgid "CHAT"
 msgstr "BATE-PAPO"
 
-#: src/multiint.c:2207
+#: src/multiint.c:2209
 msgid "All players need to have the same mods to join your game."
 msgstr "Todos os jogadores devem ter os mesmos mods para entrar no seu jogo."
 
-#: src/multiint.c:2367
-#, fuzzy, c-format
+#: src/multiint.c:2369
+#, c-format
 msgid "*** password [%s] is now required! ***"
-msgstr "*** a sessão está protegida por senha ***"
+msgstr "*** senha [%s] é necessária! ***"
 
-#: src/multiint.c:2375
+#: src/multiint.c:2377
 msgid "*** password is NOT required! ***"
 msgstr "*** a sessão NÃO está protegida por senha ***"
 
-#: src/multiint.c:2618
+#: src/multiint.c:2620
 msgid "Sorry! Failed to host the game."
 msgstr "Desculpe! Falha ao hospedar uma sessão."
 
-#: src/multiint.c:2703
+#: src/multiint.c:2705
 msgid "'Locked Teams' mode enabled"
 msgstr "Modo 'Times Fixos' ativado"
 
-#: src/multiint.c:2742
-#: src/multiint.c:2792
+#: src/multiint.c:2744
+#: src/multiint.c:2794
 #: src/multimenu.c:1494
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "O Host chutou %s do jogo!"
 
-#: src/multiint.c:2870
+#: src/multiint.c:2872
 msgid "Host is Starting Game"
 msgstr "O Host iniciou o Jogo"
 
-#: src/multiint.c:3474
+#: src/multiint.c:3476
 msgid "Players"
 msgstr "Jogadores"
 
-#: src/multiint.c:3592
+#: src/multiint.c:3594
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Enviando mapa: %d%%"
 
-#: src/multiint.c:3601
+#: src/multiint.c:3603
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Mapa: %d%% baixado"
 
-#: src/multiint.c:3627
+#: src/multiint.c:3629
 msgid "HOST"
 msgstr "HOSPEDEIRO"
 
@@ -14589,7 +14543,7 @@ msgstr "Estruturas"
 
 #: src/multimenu.c:1139
 msgid "Channel"
-msgstr ""
+msgstr "Canal"
 
 #: src/multimenu.c:1154
 msgid "Toggle Alliance State"
@@ -14614,7 +14568,7 @@ msgstr "Fornecer Energia"
 #: src/multimenu.c:1496
 #, c-format
 msgid "kicked %s : %s from the game, and added them to the banned list!"
-msgstr ""
+msgstr "expulsou %s: %s do jogo, e o baniu!"
 
 #: src/multiplay.c:277
 #, c-format
@@ -14839,7 +14793,6 @@ msgid "Unable to locate any Commanders!"
 msgstr "Impossível localizar Comandantes!"
 
 #: src/structure.c:2739
-#, fuzzy
 msgid "Control Limit Reached - Production Halted"
 msgstr "Limite de Unidade Alcançado - Produção Interrompida"
 
