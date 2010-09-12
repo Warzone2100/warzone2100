@@ -22,6 +22,7 @@ R-Defense-GuardTower-ATMiss,A0CommandCentre,0
 R-Defense-GuardTower-Rail1,A0CommandCentre,0
 R-Defense-Howitzer,A0CommandCentre,0
 R-Defense-MortarPit,A0CommandCentre,0
+R-Defense-Wall-RotMg,A0CommandCentre,0
 R-Defense-Wall-VulcanCan,A0CommandCentre,0
 R-Defense-WallTower-HvyFlamer,A0CommandCentre,0
 R-Defense-WallTower-PulseLas,A0CommandCentre,0

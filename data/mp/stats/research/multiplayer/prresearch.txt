@@ -470,6 +470,7 @@ R-Wpn-MdArtMissile,R-Wpn-Rocket02-MRL,1031
 R-Wpn-MG-Damage01,R-Wpn-MG1Mk1,362
 R-Wpn-MG-Damage02,R-Wpn-MG-Damage01,364
 R-Wpn-MG-Damage03,R-Wpn-MG2Mk1,366
+R-Wpn-MG-Damage03,R-Wpn-MG-Damage02,366
 R-Wpn-MG-ROF01,R-Struc-Factory-Upgrade01,363
 R-Wpn-MG-ROF01,R-Wpn-MG-Damage03,363
 R-Wpn-MG-ROF02,R-Wpn-MG-ROF01,365

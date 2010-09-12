@@ -1,5 +1,4 @@
 R-Wpn-AAGun02,AAGun2Mk1,WEAPON,0,0,10
-R-Wpn-AAGun02,AAGun2Mk1-VTOL,WEAPON,0,0,10
 R-Wpn-AALaser,AAGunLaser,WEAPON,0,0,10
 R-Sys-Autorepair-General,AutoRepair,REPAIR,ZNULLREPAIR,REPAIR,6
 R-Vehicle-Body10,Body10MBT,BODY,0,0,2
