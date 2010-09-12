@@ -91,8 +91,9 @@
    * Change: Show less netcode errors/warnings (r11356)
    * Fix: Possible crash (r11409, ticket:2033)
  * DyDo-AI:
-   * Update to 2.2.3, improved efficiency of research for research path Gunners and Cannons, minor fixes (r11374, r11375, r11377, r11388)
-   * New challenges (r11373, r11376, r11436)
+   * dydo-scav updated to 1.2.1 (r11374)
+   * Update to 2.2.3, improved efficiency of research for the Gunners and Cannons research path, minor fixes (r11375, r11377, r11388, ticket:1945)
+   * New challenges (r11373, r11376, r11436, ticket:2073)
  * Translations:
    * Change: Don't save translated descriptions in the keymap (r11408, ticket:2049)
    * Fix: Actually install the Korean translation on Windows (r11434, ticket:2074)
