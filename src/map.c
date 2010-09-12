@@ -1329,10 +1329,10 @@ extern BOOL mapObjIsAboveGround( BASE_OBJECT *psObj )
 			tileY = map_coord(psObj->pos.y),
 			tileYOffset1 = (tileY * mapWidth),
 			tileYOffset2 = ((tileY+1) * mapWidth),
-			h1 = psMapTiles[MIN(mapWidth * mapHeight, tileYOffset1 + tileX)    ].height,
-			h2 = psMapTiles[MIN(mapWidth * mapHeight, tileYOffset1 + tileX + 1)].height,
-			h3 = psMapTiles[MIN(mapWidth * mapHeight, tileYOffset2 + tileX)    ].height,
-			h4 = psMapTiles[MIN(mapWidth * mapHeight, tileYOffset2 + tileX + 1)].height;
+			h1 = psMapTiles[MIN(mapWidth * mapHeight, tileYOffset1 + tileX)    ].height * ELEVATION_SCALE,
+			h2 = psMapTiles[MIN(mapWidth * mapHeight, tileYOffset1 + tileX + 1)].height * ELEVATION_SCALE,
+			h3 = psMapTiles[MIN(mapWidth * mapHeight, tileYOffset2 + tileX)    ].height * ELEVATION_SCALE,
+			h4 = psMapTiles[MIN(mapWidth * mapHeight, tileYOffset2 + tileX + 1)].height * ELEVATION_SCALE;
 
 	/* trivial test above */
 	if ( (psObj->pos.z > h1) && (psObj->pos.z > h2) &&
