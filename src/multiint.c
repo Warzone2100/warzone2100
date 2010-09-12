@@ -3143,10 +3143,10 @@ void runMultiOptions(void)
 	if (netPlayersUpdated || (NetPlay.isHost && mouseDown(MOUSE_LMB) && gameTime-lastrefresh>500))
 	{
 		netPlayersUpdated = false;
+		ingame.localOptionsReceived = true;		// when netPlayersUpdated is true, we need to redraw everything
 		lastrefresh= gameTime;
 		if (!multiRequestUp && (bHosted || ingame.localJoiningInProgress))
 		{
-
 			// store the slider settings if they are up,
 			for(id=0;id<MAX_PLAYERS;id++)
 			{
