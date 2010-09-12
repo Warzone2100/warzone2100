@@ -1,6 +1,5 @@
 2010-09-12: Version 2.3.5_RC4
  * General:
-   * Fix: Units can no longer shoot through the ground. (r11652, ticket:2151)
    * Fix: Numerous fixes (r11630, ticket:2150) (r11647, ticket:2157) (r11650, ticket:2136)
  * Multiplayer:
    * Change: Display no-tank, no-cyborg or no-VTOL icons if the relevant factories are disabled via limits. (r11633)
