@@ -1312,6 +1312,8 @@ static void NET_destroyBufferedSocket(NETBUFSOCKET* bs)
 
 static void NET_initBufferedSocket(NETBUFSOCKET* bs, Socket* s, int player)
 {
+	char buf[250]= {'\0'};
+
 	bs->socket = s;
 	if (bs->buffer == NULL)
 	{
@@ -1320,6 +1322,9 @@ static void NET_initBufferedSocket(NETBUFSOCKET* bs, Socket* s, int player)
 	bs->buffer_start = 0;
 	bs->bytes = 0;
 	bs->socket->belongsTo = player;
+	ssprintf(buf, "Socket %p locked to player %d", s, player);
+	NETlogEntry(buf, SYNC_FLAG, selectedPlayer);
+
 }
 
 static BOOL NET_fillBuffer(NETBUFSOCKET* bs, SocketSet* socket_set)
@@ -3525,7 +3530,6 @@ static void NETallowJoining(void)
 				}
 				else if (NetMsg.type == NET_JOIN)
 				{
-					uint8_t j;
 					uint8_t index;
 					uint8_t rejected = 0;
 					int tmp;
@@ -3627,7 +3631,7 @@ static void NETallowJoining(void)
 					sstrcpy(NetPlay.players[index].IPtextAddress, clientAddress);
 					{
 						char buf[250] = {'\0'};
-						snprintf(buf, sizeof(buf), "Player %d has joined, IP is:%s", index, clientAddress);
+						snprintf(buf, sizeof(buf), "Player %d [%s] has joined, IP is:%s", index, NetPlay.players[index].name, clientAddress);
 						NETlogEntry(buf, SYNC_FLAG, index);
 					}
 
@@ -3646,21 +3650,8 @@ static void NETallowJoining(void)
 
 					MultiPlayerJoin(index);
 
-					// Narrowcast to new player that everyone has joined.
-					for (j = 0; j < MAX_CONNECTED_PLAYERS; ++j)
-					{
-						if (index != j)  // We will broadcast the index == j case.
-						{
-							if (NetPlay.players[j].allocated)
-							{
-								NETbeginEncode(NET_PLAYER_JOINED, index);
-									NETuint8_t(&j);
-								NETend();
-							}
-						}
-					}
-
 					// Broadcast to everyone that a new player has joined
+					debug(LOG_NET, "sending join to everyone for %hhu ", index);
 					NETbeginEncode(NET_PLAYER_JOINED, NET_ALL_PLAYERS);
 						NETuint8_t(&index);
 					NETend();
