@@ -631,6 +631,7 @@ static void updateSectorGeometry(int x, int y)
 	glBindBuffer(GL_ARRAY_BUFFER, decalVBO); glError();
 	glBufferSubData(GL_ARRAY_BUFFER, sizeof(DecalVertex)*sectors[x*ySectors + y].decalOffset,
 	                                 sizeof(DecalVertex)*sectors[x*ySectors + y].decalSize, decaldata); glError();
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	free (decaldata);
 }
@@ -857,6 +858,7 @@ bool initTerrain(void)
 	glBindBuffer(GL_ARRAY_BUFFER, waterIndexVBO); glError();
 	glBufferData(GL_ARRAY_BUFFER, sizeof(GLuint)*waterIndexSize, waterIndex, GL_STATIC_DRAW); glError();
 	free(waterIndex);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	
 	////////////////////
@@ -970,6 +972,7 @@ bool initTerrain(void)
 	glBindBuffer(GL_ARRAY_BUFFER, textureIndexVBO); glError();
 	glBufferData(GL_ARRAY_BUFFER, sizeof(GLuint)*textureIndexSize, textureIndex, GL_STATIC_DRAW); glError();
 	free(textureIndex);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	// and finally the decals
 	decaldata = malloc(sizeof(DecalVertex)*mapWidth*mapHeight*12);
@@ -989,6 +992,7 @@ bool initTerrain(void)
 	glBindBuffer(GL_ARRAY_BUFFER, decalVBO); glError();
 	glBufferData(GL_ARRAY_BUFFER, sizeof(DecalVertex)*decalSize, decaldata, GL_STATIC_DRAW); glError();
 	free(decaldata);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	
 	lightmap_tex_num = 0;
 	lightmapNextUpdate = 0;
@@ -1231,6 +1235,8 @@ void drawTerrain(void)
 		}
 	}
 	finishDrawRangeElements();
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	
 	if (rendStates.fogEnabled)
 	{
@@ -1308,6 +1314,8 @@ void drawTerrain(void)
 		}
 		finishDrawRangeElements();
 	}
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	// we don't need this one anymore
 	glDisableClientState( GL_COLOR_ARRAY );
 	// no more texture generation
@@ -1332,6 +1340,7 @@ void drawTerrain(void)
 	glBindBuffer(GL_ARRAY_BUFFER, decalVBO); glError();
 	glVertexPointer(3, GL_FLOAT, sizeof(DecalVertex), BUFFER_OFFSET(0)); glError();
 	glTexCoordPointer(2, GL_FLOAT, sizeof(DecalVertex), BUFFER_OFFSET(12)); glError();
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	size = 0;
 	offset = 0;
@@ -1458,7 +1467,9 @@ void drawWater(void)
 		}
 	}
 	finishDrawRangeElements();
-	
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
 	glDisableClientState( GL_VERTEX_ARRAY );
 	
 	// move the water
