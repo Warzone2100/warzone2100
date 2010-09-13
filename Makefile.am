@@ -9,16 +9,11 @@ dist_doc_DATA = \
 
 ACLOCAL_AMFLAGS = -I m4
 
-# workaround for e.g. git, which doesn't include empty directories
-macosx/prebuilt:
-	$(MKDIR_P) macosx/prebuilt
-
 EXTRA_DIST= \
 	autogen.sh \
 	autorevision.conf \
 	config.rpath \
 	configure.ac \
-	macosx/prebuilt \
 	macosx
 
 # get rid of SVN stuff in the tarball
