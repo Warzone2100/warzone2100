@@ -5,7 +5,9 @@
 
 # Generated binary files:
 *.o
+*.lo
 *.a
+*.la
 *.gmo
 *.pyc
 *.wz
@@ -85,6 +87,7 @@ win32/libs/zlib/zlib-*/
 
 # Autotool files:
 .deps
+.libs
 Makefile
 Makefile.in
 /aclocal.m4
@@ -108,7 +111,6 @@ Makefile.in
 /lib/betawidget/.libs/
 /lib/betawidget/aclocal.m4
 /lib/betawidget/autom4te.cache/
-/lib/betawidget/betawidget_wrap_lua.cpp
 /lib/betawidget/config.*
 /lib/betawidget/configure
 /lib/betawidget/depcomp
@@ -120,6 +122,8 @@ Makefile.in
 /lib/betawidget/lua-5.1.3/
 /lib/betawidget/m4/
 /lib/betawidget/missing
+/lib/betawidget/src/*_wrap_lua.cpp
+/lib/betawidget/src/betawidget.pc
 /lib/betawidget/stamp-h1
 /lib/betawidget/tools/.dirstamp
 
