@@ -39,11 +39,6 @@
 #include "lib/ivis_common/pieblitfunc.h"
 #include "lib/ivis_common/pieclip.h"
 
-#if defined(WZ_OS_MAC)
-#include <OpenGL/glu.h>
-#else
-#include <GL/glu.h>
-#endif
 #include "screen.h"
 #include "src/console.h"
 #include "src/levels.h"
