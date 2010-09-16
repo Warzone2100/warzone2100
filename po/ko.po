@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100 2.3_branch\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-09-08 00:53+0200\n"
-"PO-Revision-Date: 2003-01-05 22:18+0900\n"
+"POT-Creation-Date: 2010-09-16 20:22+0200\n"
+"PO-Revision-Date: 2003-01-15 11:40+0900\n"
 "Last-Translator: Joshua Shin <urgood2@gmail.com>\n"
 "Language-Team: Korean Translation Team <urgood2@gmail.com>\n"
 "Language: \n"
@@ -4948,7 +4948,7 @@ msgstr "다른 진전이 있으면 알려드리겠습니다."
 #: data/base/messages/strings/cam1strings.txt:157
 #: data/base/sequenceaudio/cam1/c001end.txt:7
 msgid "Commander you are to assist Team Beta"
-msgstr "사령관님, 당신은 베타 팀을 도울 것입니다"
+msgstr "사령관님, 당신은 베타 팀을 도와야 합니다"
 
 #: data/base/messages/strings/cam2strings.txt:4
 #: data/base/sequenceaudio/cam2/c002.txa:8
@@ -11002,9 +11002,8 @@ msgid "Armour +35%, Body Points +30%"
 msgstr "장갑 + 35%, 보디포인트 +30%"
 
 #: data/mp/messages/resmessages1.rmsg:122
-#, fuzzy
 msgid "Armored guard tower with Mini-Rocket Pod"
-msgstr "미니포드 로케트를 장착한 장갑된 경호탑"
+msgstr "미니로케트 포드를 장착한 장갑된 경호탑"
 
 #: data/mp/messages/resmessages1.rmsg:148
 msgid "Armored guard tower with Lancer AT rocket"
@@ -11175,7 +11174,6 @@ msgid "Howitzer reload time -10%"
 msgstr "곡사포 재장전 시간 소요 -10%"
 
 #: data/mp/messages/resmessages2.rmsg:928
-#, fuzzy
 msgid "High Explosive Anti-Tank warheads"
 msgstr "대전차용 고위력 탄두"
 
@@ -11601,9 +11599,8 @@ msgstr "넥서스 링크 터릿"
 
 #: data/mp/messages/strings/names.txt:404
 #: data/mp/messages/strings/names.txt:725
-#, fuzzy
 msgid "Hardcrete Gate"
-msgstr "하드크리트 벽"
+msgstr "하드크리트 문"
 
 #: data/mp/messages/strings/names.txt:410
 #: data/mp/messages/strings/names.txt:736
@@ -11616,9 +11613,8 @@ msgstr "토네이도 대공 발사 시설"
 
 #: data/mp/messages/strings/names.txt:418
 #: data/mp/messages/strings/names.txt:727
-#, fuzzy
 msgid "AA Flak Cannon Emplacement"
-msgstr "플라즈마 캐논 발사 시설"
+msgstr "대공 캐논 발사 시설"
 
 #: data/mp/messages/strings/names.txt:474
 #: data/mp/messages/strings/names.txt:791
@@ -11642,14 +11638,12 @@ msgstr "미니로케트 배열"
 
 #: data/mp/messages/strings/names.txt:553
 #: data/mp/messages/strings/names.txt:998
-#, fuzzy
 msgid "AA Flak Cannon"
-msgstr "플라즈마 캐논"
+msgstr "대공 캐논"
 
 #: data/mp/messages/strings/names.txt:554
-#, fuzzy
 msgid "VTOL Flak Cannon"
-msgstr "VTOL 캐논"
+msgstr "VTOL 대공 캐논"
 
 #: data/mp/messages/strings/names.txt:567
 #: data/mp/messages/strings/names.txt:1699
@@ -11804,24 +11798,20 @@ msgid "Rail Target Prediction Computer"
 msgstr "레일 표적 예측 컴퓨터"
 
 #: data/mp/messages/strings/names.txt:1170
-#, fuzzy
 msgid "Stabilized Rockets"
-msgstr "안정 미니 로케트"
+msgstr "안정 로케트"
 
 #: data/mp/messages/strings/names.txt:1174
-#, fuzzy
 msgid "HE Rockets"
-msgstr "고위력 미니로케트"
+msgstr "고위력 로케트"
 
 #: data/mp/messages/strings/names.txt:1175
-#, fuzzy
 msgid "HE Rockets Mk2"
-msgstr "고위력 미니로케트 Mk 2"
+msgstr "고위력 로케트 Mk 2"
 
 #: data/mp/messages/strings/names.txt:1176
-#, fuzzy
 msgid "HE Rockets Mk3"
-msgstr "고위력 미니로케트 Mk 3"
+msgstr "고위력 로케트 Mk 3"
 
 #: data/mp/messages/strings/names.txt:1389
 msgid "Assault Gun Tower"
@@ -11836,9 +11826,8 @@ msgid "Hyper Velocity Cannon Python Tracks"
 msgstr "초고속도 캐논 파이썬 무한궤도"
 
 #: data/mp/messages/strings/names.txt:1480
-#, fuzzy
 msgid "AA Flak Cannon Python Half-tracks"
-msgstr "대형 캐논 파이썬 무한궤도"
+msgstr "대공 캐논 파이썬 반 무한궤도"
 
 #: data/mp/messages/strings/names.txt:1518
 msgid "Bunker Buster Cobra Hover"
@@ -12017,23 +12006,21 @@ msgid "Plasma Cannon Emplacement"
 msgstr "플라즈마 캐논 발사 시설"
 
 #: data/mp/messages/strings/names.txt:1725
-#, fuzzy
 msgid "Sunburst AA Rocket Array"
-msgstr "미니로케트 배열"
+msgstr "썬버스트 대공 로케트 배열"
 
 #: data/mp/messages/strings/names.txt:1726
 msgid "Sunburst AA"
-msgstr ""
+msgstr "썬버스트 대공 로케트"
 
 #: data/mp/messages/strings/names.txt:1727
 msgid "VTOL Sunburst AA"
-msgstr ""
+msgstr "VTOL 썬버스트 대공 로케트"
 
 #: data/mp/messages/strings/names.txt:1728
 #: data/mp/messages/strings/names.txt:1729
-#, fuzzy
 msgid "Sunburst AA Site"
-msgstr "허리케인 대공 발사 시설"
+msgstr "썬버스트 대공 발사 시설"
 
 #: data/mp/messages/strings/names.txt:1731
 #: data/mp/messages/strings/names.txt:1732
@@ -12159,9 +12146,8 @@ msgstr "회오리 하드포인트"
 
 #: data/mp/messages/strings/names.txt:1798
 #: data/mp/messages/strings/names.txt:1799
-#, fuzzy
 msgid "AA Flak Cannon Hardpoint"
-msgstr "어썰트 캐논 하드포인트"
+msgstr "대공 캐논 하드포인트"
 
 #: data/mp/messages/strings/names.txt:1800
 #: data/mp/messages/strings/names.txt:1801
@@ -12230,9 +12216,8 @@ msgid "Hyper Velocity Cannon Python Hover"
 msgstr "초고속도 캐논 파이썬 호버추진"
 
 #: data/mp/messages/strings/names.txt:1967
-#, fuzzy
 msgid "Plasmite Retribution VTOL"
-msgstr "HEAP 폭탄 투하실 레트리뷰션 VTOL"
+msgstr "플라즈마이트 폭탄 투하실 레트리뷰션 VTOL"
 
 #: lib/framework/i18n.c:90
 #: lib/framework/i18n.c:149
@@ -12240,16 +12225,16 @@ msgid "System locale"
 msgstr "사용자 시스템 언어"
 
 #: lib/netplay/netplay.c:1288
-#: lib/netplay/netplay.c:2218
+#: lib/netplay/netplay.c:2223
 msgid "Enter password here"
 msgstr "여기에 비밀번호를 입력하십시오"
 
-#: lib/netplay/netplay.c:3279
+#: lib/netplay/netplay.c:3284
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "마스터서버 이름을 확인할 수 없습니다 (%s)!"
 
-#: lib/netplay/netplay.c:3304
+#: lib/netplay/netplay.c:3309
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "로비 서버와 통신할 수 없습니다! TCP 포트 %u 가 보내는 트래픽에 대해 열려 있습니까?"
@@ -12755,7 +12740,7 @@ msgid "Join Game"
 msgstr "네트워크 게임 참여하기"
 
 #: src/frontend.c:414
-#: src/multiint.c:1174
+#: src/multiint.c:1176
 msgid "OPTIONS"
 msgstr "옵션"
 
@@ -12850,7 +12835,7 @@ msgid "Off"
 msgstr "꺼짐"
 
 #: src/frontend.c:516
-#: src/multiint.c:1244
+#: src/multiint.c:1246
 msgid "Fog"
 msgstr "안개"
 
@@ -12861,7 +12846,7 @@ msgstr "흐림(Mist)"
 
 #: src/frontend.c:523
 #: src/frontend.c:588
-#: src/multiint.c:1246
+#: src/multiint.c:1248
 msgid "Fog Of War"
 msgstr "전쟁의 안개"
 
@@ -13024,7 +13009,7 @@ msgid "GAME OPTIONS"
 msgstr "게임 옵션"
 
 #: src/frontend.c:1342
-#: src/multiint.c:2202
+#: src/multiint.c:2204
 msgid "Mod: "
 msgstr "Mod (Modification):"
 
@@ -13083,7 +13068,7 @@ msgid "Build (F3)"
 msgstr "건축 (F3)"
 
 #: src/hci.c:3872
-#: src/multiint.c:1291
+#: src/multiint.c:1293
 #: src/multimenu.c:764
 msgid "Power"
 msgstr "전력"
@@ -13667,8 +13652,8 @@ msgstr "키보드 매핑"
 
 #: src/keyedit.c:374
 #: src/multiint.c:533
-#: src/multiint.c:959
-#: src/multiint.c:1377
+#: src/multiint.c:961
+#: src/multiint.c:1379
 msgid "Return To Previous Screen"
 msgstr "이전 화면으로 돌아가기"
 
@@ -14255,7 +14240,7 @@ msgid "Accept Settings"
 msgstr "설정 적용"
 
 #: src/multiint.c:469
-#: src/multiint.c:1007
+#: src/multiint.c:1009
 msgid "Cancel"
 msgstr "취소"
 
@@ -14275,269 +14260,268 @@ msgstr "로비"
 msgid "IP"
 msgstr "IP"
 
-#: src/multiint.c:725
+#: src/multiint.c:727
 msgid "No games are available"
 msgstr "참여 가능한 게임이 없습니다"
 
-#: src/multiint.c:728
+#: src/multiint.c:730
 msgid "Game is full"
 msgstr "게임이 만원입니다"
 
-#: src/multiint.c:732
+#: src/multiint.c:734
 msgid "You were kicked!"
 msgstr "당신이 퇴장당하였습니다!"
 
-#: src/multiint.c:735
+#: src/multiint.c:737
 msgid "Wrong Game Version!"
 msgstr "잘못된 게임 버젼입니다!"
 
-#: src/multiint.c:738
+#: src/multiint.c:740
 msgid "You have an incompatible mod."
 msgstr "당신은 호환되지 않는 mod를 사용 중입니다."
 
-#: src/multiint.c:743
+#: src/multiint.c:745
 msgid "Host couldn't send file?"
 msgstr "호스트가 파일을 보내지 못했습니다."
 
-#: src/multiint.c:747
+#: src/multiint.c:749
 msgid "Incorrect Password!"
 msgstr "비밀번호가 틀립니다!"
 
-#: src/multiint.c:750
+#: src/multiint.c:752
 msgid "Host has dropped connection!"
 msgstr "호스트의 연결이 끊어졌습니다!"
 
-#: src/multiint.c:754
+#: src/multiint.c:756
 msgid "Connection Error"
 msgstr "연결 에러(Error)"
 
-#: src/multiint.c:895
+#: src/multiint.c:897
 msgid "Searching"
 msgstr "찾는 중"
 
-#: src/multiint.c:956
+#: src/multiint.c:958
 msgid "GAMES"
 msgstr "게임"
 
-#: src/multiint.c:964
+#: src/multiint.c:966
 msgid "Refresh Games List"
 msgstr "게임 목록 새로고침"
 
-#: src/multiint.c:984
+#: src/multiint.c:986
 msgid "Enter Password:"
 msgstr "비밀번호를 입력하십시오:"
 
-#: src/multiint.c:1005
+#: src/multiint.c:1007
 msgid "OK"
 msgstr "확인"
 
-#: src/multiint.c:1127
-msgid "Tanks disabled!!"
-msgstr ""
-
-#: src/multiint.c:1128
-#, fuzzy
-msgid "Cyborgs disabled."
-msgstr "새로운 사이보그가 사용 가능합니다"
-
 #: src/multiint.c:1129
-msgid "VTOLs disabled."
-msgstr ""
+msgid "Tanks disabled!!"
+msgstr "탱크가 비활성화되었습니다!!"
 
-#: src/multiint.c:1179
-#: src/multiint.c:1186
+#: src/multiint.c:1130
+msgid "Cyborgs disabled."
+msgstr "사이보그가 비활성화되었습니다."
+
+#: src/multiint.c:1131
+msgid "VTOLs disabled."
+msgstr "VTOL이 비활성화되었습니다."
+
+#: src/multiint.c:1181
+#: src/multiint.c:1188
 msgid "Select Game Name"
 msgstr "게임 이름 선택"
 
-#: src/multiint.c:1179
+#: src/multiint.c:1181
 msgid "One-Player Skirmish"
 msgstr "싱글플레이어 스커미쉬"
 
-#: src/multiint.c:1189
+#: src/multiint.c:1191
 msgid "Select Map"
 msgstr "맵 선택"
 
-#: src/multiint.c:1197
+#: src/multiint.c:1199
 msgid "Click to set Password"
 msgstr "클릭하여 비밀번호를 설정하십시오"
 
-#: src/multiint.c:1207
-#: src/multiint.c:1208
+#: src/multiint.c:1209
+#: src/multiint.c:1210
 msgid "Scavengers"
 msgstr "스캐빈저"
 
-#: src/multiint.c:1210
+#: src/multiint.c:1212
 msgid "No Scavengers"
 msgstr "스캐빈저 없음"
 
-#: src/multiint.c:1241
+#: src/multiint.c:1243
 msgid "Select Player Name"
 msgstr "플레이어 이름 선택"
 
-#: src/multiint.c:1247
+#: src/multiint.c:1249
 msgid "Distance Fog"
 msgstr "디스턴스(거리) 안개"
 
-#: src/multiint.c:1258
+#: src/multiint.c:1260
 #: src/multimenu.c:757
 msgid "Alliances"
 msgstr "동맹"
 
-#: src/multiint.c:1261
+#: src/multiint.c:1263
 msgid "No Alliances"
 msgstr "동맹 없음"
 
-#: src/multiint.c:1263
+#: src/multiint.c:1265
 msgid "Allow Alliances"
 msgstr "동맹 있음"
 
-#: src/multiint.c:1267
+#: src/multiint.c:1269
 msgid "Locked Teams"
 msgstr "팀 잠금"
 
-#: src/multiint.c:1293
+#: src/multiint.c:1295
 msgid "Low Power Levels"
 msgstr "낮은 전력 수준"
 
-#: src/multiint.c:1295
+#: src/multiint.c:1297
 msgid "Medium Power Levels"
 msgstr "중급 전력 수준"
 
-#: src/multiint.c:1297
+#: src/multiint.c:1299
 msgid "High Power Levels"
 msgstr "높은 전력 수준"
 
-#: src/multiint.c:1329
+#: src/multiint.c:1331
 msgid "Base"
 msgstr "기지"
 
-#: src/multiint.c:1331
+#: src/multiint.c:1333
 msgid "Start with No Bases"
 msgstr "기지 없이 시작하기"
 
-#: src/multiint.c:1333
+#: src/multiint.c:1335
 msgid "Start with Bases"
 msgstr "기지를 갖추고 시작하기"
 
-#: src/multiint.c:1335
+#: src/multiint.c:1337
 msgid "Start with Advanced Bases"
 msgstr "고급 기지를 갖추고 시작하기"
 
-#: src/multiint.c:1367
+#: src/multiint.c:1369
 msgid "Map Preview"
 msgstr "맵 미리보기"
 
-#: src/multiint.c:1369
+#: src/multiint.c:1371
 msgid "Click to see Map"
 msgstr "맵을 보려면 클릭하십시오"
 
-#: src/multiint.c:1383
+#: src/multiint.c:1385
 msgid "Start Hosting Game"
 msgstr "게임 호스팅을 시작하기"
 
-#: src/multiint.c:1391
+#: src/multiint.c:1393
 msgid "Show Structure Limits"
 msgstr "구조물 제한 보기"
 
-#: src/multiint.c:1391
+#: src/multiint.c:1393
 msgid "Set Structure Limits"
 msgstr "구조물 제한 설정하기"
 
-#: src/multiint.c:1469
+#: src/multiint.c:1471
 msgid "Player colour"
 msgstr "플레이어 색"
 
-#: src/multiint.c:1485
+#: src/multiint.c:1487
 msgid "Kick player"
 msgstr "플레이어 퇴장시키기"
 
-#: src/multiint.c:1496
+#: src/multiint.c:1498
 msgid "Player number"
 msgstr "플레이어 숫자"
 
-#: src/multiint.c:1889
+#: src/multiint.c:1891
 msgid "Team"
 msgstr "팀"
 
-#: src/multiint.c:1922
+#: src/multiint.c:1924
 msgid "Waiting for other players"
 msgstr "다른 플레이어를 더 기다리고 있습니다"
 
-#: src/multiint.c:1928
+#: src/multiint.c:1930
 msgid "Click when ready"
 msgstr "준비되었을 때 클릭하십시오"
 
-#: src/multiint.c:1932
+#: src/multiint.c:1934
 msgid "READY?"
 msgstr "시작"
 
-#: src/multiint.c:1969
+#: src/multiint.c:1971
 msgid "PLAYERS"
 msgstr "플레이어"
 
-#: src/multiint.c:2023
+#: src/multiint.c:2025
 msgid "Choose Team"
 msgstr "팀 선택"
 
-#: src/multiint.c:2063
+#: src/multiint.c:2065
 msgid "Click to change player settings"
 msgstr "사용자 설정을 변경하려면 클릭하십시오"
 
-#: src/multiint.c:2094
+#: src/multiint.c:2096
 msgid "Click to adjust AI difficulty"
 msgstr "인공 지능 난이도를 변경하려면 클릭하십시오"
 
-#: src/multiint.c:2173
+#: src/multiint.c:2175
 msgid "CHAT"
 msgstr "채팅"
 
-#: src/multiint.c:2207
+#: src/multiint.c:2209
 msgid "All players need to have the same mods to join your game."
 msgstr "모든 플레이어는 당신과 같은 mod를 사용해야만 게임에 참여할 수 있습니다"
 
-#: src/multiint.c:2367
+#: src/multiint.c:2369
 #, c-format
 msgid "*** password [%s] is now required! ***"
 msgstr "*** 이제 비밀번호 [%s] 가 요구됩니다! ***"
 
-#: src/multiint.c:2375
+#: src/multiint.c:2377
 msgid "*** password is NOT required! ***"
 msgstr "*** 비밀번호가 요구되지 않습니다! ***"
 
-#: src/multiint.c:2618
+#: src/multiint.c:2620
 msgid "Sorry! Failed to host the game."
 msgstr "죄송합니다! 게임 호스팅이 실패하였습니다"
 
-#: src/multiint.c:2703
+#: src/multiint.c:2705
 msgid "'Locked Teams' mode enabled"
 msgstr "'팀 잠금' 모드가 켜졌습니다"
 
-#: src/multiint.c:2742
-#: src/multiint.c:2792
+#: src/multiint.c:2744
+#: src/multiint.c:2794
 #: src/multimenu.c:1494
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "호스트가 %s를 게임에서 퇴장시켰습니다!"
 
-#: src/multiint.c:2870
+#: src/multiint.c:2872
 msgid "Host is Starting Game"
 msgstr "호스트가 게임을 시작하고 있습니다"
 
-#: src/multiint.c:3474
+#: src/multiint.c:3476
 msgid "Players"
 msgstr "플레이어"
 
-#: src/multiint.c:3592
+#: src/multiint.c:3594
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "맵을 보내는 중: %d%% "
 
-#: src/multiint.c:3601
+#: src/multiint.c:3603
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "맵: %d%% 다운로드 완료"
 
-#: src/multiint.c:3627
+#: src/multiint.c:3629
 msgid "HOST"
 msgstr "호스트"
 
