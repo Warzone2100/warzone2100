@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100 2.3_branch\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-09-07 13:59+0200\n"
-"PO-Revision-Date: 2003-01-05 22:18+0900\n"
+"POT-Creation-Date: 2010-09-16 20:24+0200\n"
+"PO-Revision-Date: 2003-01-15 11:40+0900\n"
 "Last-Translator: Joshua Shin <urgood2@gmail.com>\n"
 "Language-Team: Korean Translation Team <urgood2@gmail.com>\n"
 "Language: \n"
@@ -4948,7 +4948,7 @@ msgstr "다른 진전이 있으면 알려드리겠습니다."
 #: data/base/messages/strings/cam1strings.txt:157
 #: data/base/sequenceaudio/cam1/c001end.txt:7
 msgid "Commander you are to assist Team Beta"
-msgstr "사령관님, 당신은 베타 팀을 도울 것입니다"
+msgstr "사령관님, 당신은 베타 팀을 도와야 합니다"
 
 #: data/base/messages/strings/cam2strings.txt:4
 #: data/base/sequenceaudio/cam2/c002.txa:8
@@ -10805,9 +10805,8 @@ msgid "Armour +35%, Body Points +30%"
 msgstr "장갑 + 35%, 보디포인트 +30%"
 
 #: data/mp/messages/resmessages1.rmsg:122
-#, fuzzy
 msgid "Armored guard tower with Mini-Rocket Pod"
-msgstr "미니포드 로케트를 장착한 장갑된 경호탑"
+msgstr "미니로케트 포드를 장착한 장갑된 경호탑"
 
 #: data/mp/messages/resmessages1.rmsg:148
 msgid "Armored guard tower with Lancer AT rocket"
@@ -10978,7 +10977,6 @@ msgid "Howitzer reload time -10%"
 msgstr "곡사포 재장전 시간 소요 -10%"
 
 #: data/mp/messages/resmessages2.rmsg:928
-#, fuzzy
 msgid "High Explosive Anti-Tank warheads"
 msgstr "대전차용 고위력 탄두"
 
@@ -11404,9 +11402,8 @@ msgstr "넥서스 링크 터릿"
 
 #: data/mp/messages/strings/names.txt:404
 #: data/mp/messages/strings/names.txt:725
-#, fuzzy
 msgid "Hardcrete Gate"
-msgstr "하드크리트 벽"
+msgstr "하드크리트 문"
 
 #: data/mp/messages/strings/names.txt:410
 #: data/mp/messages/strings/names.txt:736
@@ -11419,9 +11416,8 @@ msgstr "토네이도 대공 발사 시설"
 
 #: data/mp/messages/strings/names.txt:418
 #: data/mp/messages/strings/names.txt:727
-#, fuzzy
 msgid "AA Flak Cannon Emplacement"
-msgstr "플라즈마 캐논 발사 시설"
+msgstr "대공 캐논 발사 시설"
 
 #: data/mp/messages/strings/names.txt:474
 #: data/mp/messages/strings/names.txt:791
@@ -11445,14 +11441,12 @@ msgstr "미니로케트 배열"
 
 #: data/mp/messages/strings/names.txt:553
 #: data/mp/messages/strings/names.txt:998
-#, fuzzy
 msgid "AA Flak Cannon"
-msgstr "플라즈마 캐논"
+msgstr "대공 캐논"
 
 #: data/mp/messages/strings/names.txt:554
-#, fuzzy
 msgid "VTOL Flak Cannon"
-msgstr "VTOL 캐논"
+msgstr "VTOL 대공 캐논"
 
 #: data/mp/messages/strings/names.txt:567
 #: data/mp/messages/strings/names.txt:1699
@@ -11607,24 +11601,20 @@ msgid "Rail Target Prediction Computer"
 msgstr "레일 표적 예측 컴퓨터"
 
 #: data/mp/messages/strings/names.txt:1170
-#, fuzzy
 msgid "Stabilized Rockets"
-msgstr "안정 미니 로케트"
+msgstr "안정 로케트"
 
 #: data/mp/messages/strings/names.txt:1174
-#, fuzzy
 msgid "HE Rockets"
-msgstr "고위력 미니로케트"
+msgstr "고위력 로케트"
 
 #: data/mp/messages/strings/names.txt:1175
-#, fuzzy
 msgid "HE Rockets Mk2"
-msgstr "고위력 미니로케트 Mk 2"
+msgstr "고위력 로케트 Mk 2"
 
 #: data/mp/messages/strings/names.txt:1176
-#, fuzzy
 msgid "HE Rockets Mk3"
-msgstr "고위력 미니로케트 Mk 3"
+msgstr "고위력 로케트 Mk 3"
 
 #: data/mp/messages/strings/names.txt:1389
 msgid "Assault Gun Tower"
@@ -11639,9 +11629,8 @@ msgid "Hyper Velocity Cannon Python Tracks"
 msgstr "초고속도 캐논 파이썬 무한궤도"
 
 #: data/mp/messages/strings/names.txt:1480
-#, fuzzy
 msgid "AA Flak Cannon Python Half-tracks"
-msgstr "대형 캐논 파이썬 무한궤도"
+msgstr "대공 캐논 파이썬 반 무한궤도"
 
 #: data/mp/messages/strings/names.txt:1518
 msgid "Bunker Buster Cobra Hover"
@@ -11820,23 +11809,21 @@ msgid "Plasma Cannon Emplacement"
 msgstr "플라즈마 캐논 발사 시설"
 
 #: data/mp/messages/strings/names.txt:1725
-#, fuzzy
 msgid "Sunburst AA Rocket Array"
-msgstr "미니로케트 배열"
+msgstr "썬버스트 대공 로케트 배열"
 
 #: data/mp/messages/strings/names.txt:1726
 msgid "Sunburst AA"
-msgstr ""
+msgstr "썬버스트 대공 로케트"
 
 #: data/mp/messages/strings/names.txt:1727
 msgid "VTOL Sunburst AA"
-msgstr ""
+msgstr "VTOL 썬버스트 대공 로케트"
 
 #: data/mp/messages/strings/names.txt:1728
 #: data/mp/messages/strings/names.txt:1729
-#, fuzzy
 msgid "Sunburst AA Site"
-msgstr "허리케인 대공 발사 시설"
+msgstr "썬버스트 대공 발사 시설"
 
 #: data/mp/messages/strings/names.txt:1731
 #: data/mp/messages/strings/names.txt:1732
@@ -11962,9 +11949,8 @@ msgstr "회오리 하드포인트"
 
 #: data/mp/messages/strings/names.txt:1798
 #: data/mp/messages/strings/names.txt:1799
-#, fuzzy
 msgid "AA Flak Cannon Hardpoint"
-msgstr "어썰트 캐논 하드포인트"
+msgstr "대공 캐논 하드포인트"
 
 #: data/mp/messages/strings/names.txt:1800
 #: data/mp/messages/strings/names.txt:1801
@@ -12033,9 +12019,8 @@ msgid "Hyper Velocity Cannon Python Hover"
 msgstr "초고속도 캐논 파이썬 호버추진"
 
 #: data/mp/messages/strings/names.txt:1967
-#, fuzzy
 msgid "Plasmite Retribution VTOL"
-msgstr "HEAP 폭탄 투하실 레트리뷰션 VTOL"
+msgstr "플라즈마이트 폭탄 투하실 레트리뷰션 VTOL"
 
 #: lib/framework/i18n.c:90
 #: lib/framework/i18n.c:149
@@ -14082,16 +14067,15 @@ msgstr "확인"
 
 #: src/multiint.c:1102
 msgid "Tanks disabled!!"
-msgstr ""
+msgstr "탱크가 비활성화되었습니다!!"
 
 #: src/multiint.c:1103
-#, fuzzy
 msgid "Cyborgs disabled."
-msgstr "새로운 사이보그가 사용 가능합니다"
+msgstr "사이보그가 비활성화되었습니다."
 
 #: src/multiint.c:1104
 msgid "VTOLs disabled."
-msgstr ""
+msgstr "VTOL이 비활성화되었습니다."
 
 #: src/multiint.c:1154
 #: src/multiint.c:1161
@@ -14848,60 +14832,6 @@ msgstr "버젼 %s%s%s%s"
 #~ msgid "Viper Flamer Half-Track"
 #~ msgstr "바이퍼 화염방사기 반 무한궤도"
 
-#~ msgid "Mini-Rocket accuracy +10%"
-#~ msgstr "미니로케트 정확도 +10%"
-
-#~ msgid "Mini-Rocket damage +25%"
-#~ msgstr "미니로케트 파괴력 +25%"
-
-#~ msgid "Mini-Rocket reload time -15%"
-#~ msgstr "미니로케트 재장전 시간 소요 -15%"
-
-#~ msgid "Cyclone AA Site"
-#~ msgstr "싸이클론 대공 발사 시설"
-
-#~ msgid "Automated Manufacturing Mk2"
-#~ msgstr "자동화 생산 Mk 2"
-
-#~ msgid "Automated Manufacturing Mk3"
-#~ msgstr "자동화 생산 Mk 3"
-
-#~ msgid "Robotic Manufacturing Mk2"
-#~ msgstr "로봇식 생산 Mk 2"
-
-#~ msgid "Robotic Manufacturing Mk3"
-#~ msgstr "로봇식 생산 Mk 3"
-
-#~ msgid "Advanced Manufacturing Mk2"
-#~ msgstr "고급 생산 Mk 2"
-
-#~ msgid "Automated Repair Facility Mk2"
-#~ msgstr "자동화 수리 시설 Mk 2"
-
-#~ msgid "Automated Repair Facility Mk3"
-#~ msgstr "자동화 수리 시설 Mk 3"
-
-#~ msgid "Robotic Repair Facility Mk2"
-#~ msgstr "로봇식 수리 시설 Mk 2"
-
-#~ msgid "HESH Mini-Rockets"
-#~ msgstr "점착유탄 미니로케트"
-
-#~ msgid "HESH Mini-Rockets Mk2"
-#~ msgstr "점착유탄 미니로케트 Mk 2"
-
-#~ msgid "HESH Mini-Rockets Mk3"
-#~ msgstr "점착유탄 미니로케트 Mk 3"
-
-#~ msgid "Thermite Flamer Cyborg"
-#~ msgstr "테르밋 화염방사기 사이보그"
-
-#~ msgid "Grenadier Cyborg"
-#~ msgstr "척탄병 사이보그"
-
-#~ msgid "Cyclone Hardpoint"
-#~ msgstr "싸이클론 하드포인트"
-
 #~ msgid ": Unknown cheat code."
 #~ msgstr ": 알 수 없는 치트 코드입니다."
 
@@ -14979,3 +14909,57 @@ msgstr "버젼 %s%s%s%s"
 
 #~ msgid "kicked %s : %s from the game, and added them to the banned list!"
 #~ msgstr "%s 퇴장 : %s를 퇴장시켰으며, 금지 목록에 추가되었습니다!"
+
+#~ msgid "Mini-Rocket accuracy +10%"
+#~ msgstr "미니로케트 정확도 +10%"
+
+#~ msgid "Mini-Rocket damage +25%"
+#~ msgstr "미니로케트 파괴력 +25%"
+
+#~ msgid "Mini-Rocket reload time -15%"
+#~ msgstr "미니로케트 재장전 시간 소요 -15%"
+
+#~ msgid "Cyclone AA Site"
+#~ msgstr "싸이클론 대공 발사 시설"
+
+#~ msgid "Automated Manufacturing Mk2"
+#~ msgstr "자동화 생산 Mk 2"
+
+#~ msgid "Automated Manufacturing Mk3"
+#~ msgstr "자동화 생산 Mk 3"
+
+#~ msgid "Robotic Manufacturing Mk2"
+#~ msgstr "로봇식 생산 Mk 2"
+
+#~ msgid "Robotic Manufacturing Mk3"
+#~ msgstr "로봇식 생산 Mk 3"
+
+#~ msgid "Advanced Manufacturing Mk2"
+#~ msgstr "고급 생산 Mk 2"
+
+#~ msgid "Automated Repair Facility Mk2"
+#~ msgstr "자동화 수리 시설 Mk 2"
+
+#~ msgid "Automated Repair Facility Mk3"
+#~ msgstr "자동화 수리 시설 Mk 3"
+
+#~ msgid "Robotic Repair Facility Mk2"
+#~ msgstr "로봇식 수리 시설 Mk 2"
+
+#~ msgid "HESH Mini-Rockets"
+#~ msgstr "점착유탄 미니로케트"
+
+#~ msgid "HESH Mini-Rockets Mk2"
+#~ msgstr "점착유탄 미니로케트 Mk 2"
+
+#~ msgid "HESH Mini-Rockets Mk3"
+#~ msgstr "점착유탄 미니로케트 Mk 3"
+
+#~ msgid "Thermite Flamer Cyborg"
+#~ msgstr "테르밋 화염방사기 사이보그"
+
+#~ msgid "Grenadier Cyborg"
+#~ msgstr "척탄병 사이보그"
+
+#~ msgid "Cyclone Hardpoint"
+#~ msgstr "싸이클론 하드포인트"
