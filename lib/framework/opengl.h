@@ -28,10 +28,10 @@
 
 #if defined(__glext_h_)
 # define FRAMEWORK_GLEXT_INCLUDED
-#endif
-
+#else
 // Prevent inclusion of glext.h by gl.h, requiring explicit inclusion by the user
-#define __glext_h_
+# define __glext_h_
+#endif
 
 #if   defined(WZ_OS_MAC)
 # include <OpenGL/gl.h>
