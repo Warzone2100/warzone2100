@@ -22,9 +22,9 @@
 #include "lib/framework/frame.h"
 
 #if defined(WZ_OS_MAC)
-#include <OpenGL/glu.h>
+# include <OpenGL/glu.h>
 #else
-#include <GL/glu.h>
+# include <GL/glu.h>
 #endif
 
 #include "lib/ivis_common/ivisdef.h"

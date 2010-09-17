@@ -20,7 +20,7 @@
 #ifndef _tex_
 #define _tex_
 
-#include <SDL_opengl.h>
+#include "lib/framework/opengl.h"
 #include "png_util.h"
 
 //*************************************************************************
