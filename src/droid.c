@@ -4298,6 +4298,14 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
 
 		if (droidRemove(psD, apsDroidLists)) 		// remove droid from one list
 		{
+			if (psD->droidType == DROID_CYBORG_CONSTRUCT || psD->droidType == DROID_CONSTRUCT)
+			{
+				if (getNumConstructorDroids(selectedPlayer) > MAX_CONSTRUCTOR_DROIDS)
+				{
+					CONPRINTF(ConsoleString, (ConsoleString, _("%s wanted to give you a %s but you have too many!"), getPlayerName(psD->player), psD->aName));
+					return NULL;
+				}
+			}
 			if (!isHumanPlayer(psD->player))
 			{
 				droidSetName(psD, "Enemy Unit");
@@ -4331,6 +4339,11 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
 					psD->asBits[COMP_REPAIRUNIT].nStat = (UBYTE)aDefaultRepair[psD->player];
 				}
 			}
+		}
+		else
+		{
+			// if we couldn't remove it, then get rid of it.
+			return NULL;
 		}
 		// add back into cluster system
 		clustNewDroid(psD);
