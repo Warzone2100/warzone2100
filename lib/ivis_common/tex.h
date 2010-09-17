@@ -20,12 +20,7 @@
 #ifndef _tex_
 #define _tex_
 
-//#include <GLee.h>
-#if defined __APPLE__ && defined __MACH__
-#include <OpenGL/gl.h>
-#else
-#include <GL/gl.h>
-#endif
+#include "lib/framework/opengl.h"
 #include "png_util.h"
 
 #ifdef __cplusplus

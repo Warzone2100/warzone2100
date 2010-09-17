@@ -30,6 +30,13 @@
 #include "lib/framework/frame.h"
 
 #include <physfs.h>
+#include "lib/framework/opengl.h"
+
+#if defined(WZ_OS_MAC)
+# include <OpenGL/glu.h>
+#else
+# include <GL/glu.h>
+#endif
 
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/piedef.h"
