@@ -2942,7 +2942,6 @@ static void checkLocalFeatures(DROID *psDroid)
 		{
 			giftPower(ANYPLAYER,selectedPlayer,true);			// give power
 			CONPRINTF(ConsoleString,(ConsoleString,_("You found %u power in an oil drum."),OILDRUM_POWER));
-			addOilDrum(1);
 		}
 		else
 
