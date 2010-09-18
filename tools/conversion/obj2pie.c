@@ -166,10 +166,8 @@ void readobj(FILE *input)
 	faces = NULL;
 	count_faces = 0;
 
-	while (!feof(input))
+	while (fgets(buffer, 256, input) != NULL)
 	{
-		fgets(buffer, 256, input);
-
 		if (buffer[0] == 'v' && buffer[1] == 'n')
 		{
 			normalsDetected = true;
