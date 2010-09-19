@@ -106,7 +106,8 @@ static const char *packetname[NUM_GAME_PACKETS] =
 	"NET_FUTURE3",
 	"NET_FILE_REQUESTED",
 	"NET_FILE_CANCELLED",
-	"NET_FILE_PAYLOAD"
+	"NET_FILE_PAYLOAD",
+	"NET_ARTIFACTS_REQUEST"
 };
 
 static PHYSFS_file	*pFileHandle = NULL;

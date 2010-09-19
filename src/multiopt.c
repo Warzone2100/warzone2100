@@ -59,7 +59,7 @@
 // External Variables
 
 extern char	buildTime[8];
-
+extern uint8_t numDrumsNeeded;
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
 
@@ -566,6 +566,7 @@ static BOOL campInit(void)
 
 	if (NetPlay.isHost)	// add oil drums
 	{
+		numDrumsNeeded = 0;
 		addOilDrum(NetPlay.playercount * 2);
 	}
 

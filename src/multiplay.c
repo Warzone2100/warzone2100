@@ -777,6 +777,12 @@ BOOL recvMessage(void)
 		case NET_ARTIFACTS:
 			recvMultiPlayerRandomArtifacts();
 			break;
+		case NET_ARTIFACTS_REQUEST:
+			if (NetPlay.isHost)
+			{
+				HandleArtifact();
+			}
+			break;
 		case NET_FEATURES:
 			recvMultiPlayerFeature();
 			break;

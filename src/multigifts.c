@@ -61,6 +61,8 @@ static void		recvGiftDroids					(uint8_t from, uint8_t to, uint32_t droidID);
 static void		sendGiftDroids					(uint8_t from, uint8_t to);
 static void		giftResearch					(uint8_t from, uint8_t to, BOOL send);
 
+uint32_t lastOilSpawn = 0;
+uint8_t numDrumsNeeded = 0;
 ///////////////////////////////////////////////////////////////////////////////
 // gifts..
 
@@ -620,6 +622,30 @@ static const char *feature_names[] =
 	"FEAT_TREE",
 	"FEAT_SKYSCRAPER",
 };
+void HandleArtifact(void)
+{
+	uint8_t quantity;
+	FEATURE_TYPE type;
+
+	NETbeginDecode(NET_ARTIFACTS_REQUEST);
+		NETuint8_t(&quantity);
+		NETenum(&type);
+	NETend();
+
+	debug(LOG_NET, "Player %hhu wants %hhu of type %s", NetMsg.source, quantity, feature_names[type]);
+
+	if (type == FEAT_OIL_DRUM)
+	{
+		numDrumsNeeded++;
+		lastOilSpawn = gameTime;
+		debug(LOG_NET, "Queueing %hhu of %s, @ %u", numDrumsNeeded, feature_names[type], lastOilSpawn);
+		return;
+	}
+	else
+	{
+		addMultiPlayerRandomArtifacts(quantity, type);
+	}
+}
 ///////////////////////////////////////////////////////////////////////////////
 // splatter artifact gifts randomly about.
 void  addMultiPlayerRandomArtifacts(uint8_t quantity, FEATURE_TYPE type)
@@ -687,9 +713,25 @@ void  addMultiPlayerRandomArtifacts(uint8_t quantity, FEATURE_TYPE type)
 }
 
 // ///////////////////////////////////////////////////////////////
+void requestOilDrum(uint8_t quantity)
+{
+FEATURE_TYPE type = FEAT_OIL_DRUM;
+
+	NETbeginEncode(NET_ARTIFACTS_REQUEST, NET_HOST_ONLY);
+		NETuint8_t(&quantity);
+		NETenum(&type);
+	NETend();
+	debug(LOG_NET, "Player %u sending request for %hhu of type %s", selectedPlayer, quantity, feature_names[type]);
+}
+
 BOOL addOilDrum(uint8_t count)
 {
-	addMultiPlayerRandomArtifacts(count, FEAT_OIL_DRUM);
+	if (NetPlay.isHost)
+	{
+		addMultiPlayerRandomArtifacts(count, FEAT_OIL_DRUM);
+		lastOilSpawn = gameTime;
+		debug(LOG_NET, "Player %u wants %hhu of type %s", selectedPlayer, count, feature_names[FEAT_OIL_DRUM]);
+	}
 	return true;
 }
 
@@ -792,6 +834,19 @@ void processMultiPlayerArtifacts(void)
 	UDWORD	x,y,pl;
 	Vector3i position;
 	BOOL	found=false;
+
+
+	// Wait ~65 secs between spawns if required
+	if ((lastOilSpawn + (65 * GAME_TICKS_PER_SEC) <  gameTime) && numDrumsNeeded)
+	{
+		if (numDrumsNeeded > NetPlay.playercount * 2)
+		{
+			numDrumsNeeded = NetPlay.playercount * 2;		// don't go over max that we started with
+		}
+		debug(LOG_NET, "Spawn time expired, sending out %hhu of %s", numDrumsNeeded, feature_names[FEAT_OIL_DRUM]);
+		addOilDrum(numDrumsNeeded);
+		numDrumsNeeded = 0;
+	}
 
 	// only do this every now and again.
 	if(lastCall > gameTime)lastCall= 0;

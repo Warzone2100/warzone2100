@@ -122,6 +122,7 @@ typedef enum
 	NET_FILE_REQUESTED,		//71 Player has requested a file (map/mod/?)
 	NET_FILE_CANCELLED,		//72 Player cancelled a file request
 	NET_FILE_PAYLOAD,		//73 sending file to the player that needs it
+	NET_ARTIFACTS_REQUEST,	//74
 	NUM_GAME_PACKETS		//   *MUST* be last.
 } MESSAGE_TYPES;
 #define SYNC_FLAG (NUM_GAME_PACKETS * NUM_GAME_PACKETS)	//special flag used for logging.
