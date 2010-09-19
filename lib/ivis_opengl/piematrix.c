@@ -21,8 +21,8 @@
  *  Matrix manipulation functions.
  */
 
-#include <GLee.h>
 #include "lib/framework/frame.h"
+#include "lib/framework/opengl.h"
 
 #include "lib/framework/fixedpoint.h"
 #include "lib/ivis_common/pieclip.h"

@@ -26,8 +26,8 @@
  */
 /***************************************************************************/
 
-#include <GLee.h>
 #include "lib/framework/frame.h"
+#include "lib/framework/opengl.h"
 #include <time.h>
 
 #include "lib/ivis_common/pieblitfunc.h"

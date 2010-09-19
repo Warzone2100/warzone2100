@@ -22,13 +22,9 @@
  * Draws the 3D view.
  * Originally by Alex McLean & Jeremy Sallis, Pumpkin Studios, EIDOS INTERACTIVE
  */
-#include <GLee.h>
-// Workaround X11 headers #defining Status
-#ifdef Status
-# undef Status
-#endif
 
 #include "lib/framework/frame.h"
+#include "lib/framework/opengl.h"
 #include "lib/framework/math_ext.h"
 #include "lib/framework/stdio_ext.h"
 
