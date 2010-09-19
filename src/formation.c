@@ -313,7 +313,10 @@ void formationLeave(FORMATION *psFormation, const DROID* psDroid)
 			{
 				psPrev = psCurr;
 			}
-			psPrev->psNext = psFormation->psNext;
+			if (psPrev)
+			{
+				psPrev->psNext = psFormation->psNext;
+			}
 		}
 		free(psFormation);
 	}
