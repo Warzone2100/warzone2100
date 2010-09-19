@@ -3509,6 +3509,10 @@ static void orderFactories(void)
 		{
 			inc = 0;
 			type++;
+			if (type > NUM_FACTORY_TYPES)
+			{
+				type = 0;
+			}
 		}
 		objectInc = 0;
 	}
