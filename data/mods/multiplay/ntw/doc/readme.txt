@@ -53,7 +53,7 @@ Fish, Dolphin, Whale Bodys (.pie Files, not .png):
 Factory, Power & Button Textures
 	Mysteryem - http://www.mysterymayhem.co.uk
 
-Camo Textures
+Camo Textures & Nuke (.pie)
 	Black Project - http://forums.wz2100.net
 
 The Rest is made/remade by me:
