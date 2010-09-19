@@ -83,12 +83,6 @@ bool trigInitialise(void)
 	return true;
 }
 
-
-/* Shutdown the trig tables */
-void trigShutDown(void)
-{}
-
-
 int32_t iSin(uint16_t a)
 {
 	int sign[4] = {1, 1, -1, -1};

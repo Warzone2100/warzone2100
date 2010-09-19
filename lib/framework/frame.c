@@ -305,9 +305,6 @@ void frameShutDown(void)
 	/* Destroy the Application window */
 	SDL_Quit();
 
-	/* shutdown the trig stuff */
-	trigShutDown();
-
 	// Shutdown the resource stuff
 	resShutDown();
 }
