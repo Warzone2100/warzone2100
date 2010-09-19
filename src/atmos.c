@@ -358,8 +358,8 @@ void	renderParticle( ATPART *psPart )
 	rz = map_round(player.p.z);
 	iV_TRANSLATE(rx,0,-rz);						/* Translate */
 	/* Make it face camera */
-	iV_MatrixRotateY(-player.r.y);
-	iV_MatrixRotateX(-player.r.x);
+	iV_MatrixRotateY(UNDEG(-player.r.y));
+	iV_MatrixRotateX(UNDEG(-player.r.x));
 	/* Scale it... */
 	pie_MatScale(psPart->size / 100.f);
 	/* Draw it... */

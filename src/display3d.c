@@ -858,9 +858,9 @@ static void drawTiles(iView *player)
 	pie_MATTRANS(0, 0, distance);
 
 	/* Rotate for the player */
-	pie_MatRotZ(player->r.z);
-	pie_MatRotX(player->r.x);
-	pie_MatRotY(player->r.y);
+	pie_MatRotZ(UNDEG(player->r.z));
+	pie_MatRotX(UNDEG(player->r.x));
+	pie_MatRotY(UNDEG(player->r.y));
 
 	/* Translate */
 	pie_TRANSLATE(-rx, -player->p.y, rz);
@@ -1210,11 +1210,11 @@ void	renderProjectile(PROJECTILE *psCurr)
 
 		/* Rotate it to the direction it's facing */
 		imdRot2.y = st.rot.direction;
-		iV_MatrixRotateY(-imdRot2.y);
+		iV_MatrixRotateY(UNDEG(-imdRot2.y));
 
 		/* pitch it */
 		imdRot2.x = st.rot.pitch;
-		iV_MatrixRotateX(imdRot2.x);
+		iV_MatrixRotateX(UNDEG(imdRot2.x));
 
 		if (psStats->weaponSubClass == WSC_ROCKET || psStats->weaponSubClass == WSC_MISSILE
 		    || psStats->weaponSubClass == WSC_SLOWROCKET || psStats->weaponSubClass == WSC_SLOWMISSILE)
@@ -1278,9 +1278,9 @@ void	renderAnimComponent( const COMPONENT_OBJECT *psObj )
 
 		/* parent object rotations */
 		imdRot2.y = spacetime.rot.direction;
-		iV_MatrixRotateY(-imdRot2.y);
+		iV_MatrixRotateY(UNDEG(-imdRot2.y));
 		imdRot2.x = spacetime.rot.pitch;
-		iV_MatrixRotateX(imdRot2.x);
+		iV_MatrixRotateX(UNDEG(imdRot2.x));
 
 		/* Set frame numbers - look into this later?? FIXME!!!!!!!! */
 		if( psParentObj->type == OBJ_DROID )
@@ -1330,9 +1330,9 @@ void	renderAnimComponent( const COMPONENT_OBJECT *psObj )
 		// object (animation) translations - ivis z and y flipped
 		iV_TRANSLATE(psObj->position.x, psObj->position.z, psObj->position.y);
 		// object (animation) rotations
-		iV_MatrixRotateY(-psObj->orientation.z);
-		iV_MatrixRotateZ(-psObj->orientation.y);
-		iV_MatrixRotateX(-psObj->orientation.x);
+		iV_MatrixRotateY(UNDEG(-psObj->orientation.z));
+		iV_MatrixRotateZ(UNDEG(-psObj->orientation.y));
+		iV_MatrixRotateX(UNDEG(-psObj->orientation.x));
 
 		pie_Draw3DShape(psObj->psShape, 0, iPlayer, brightness, WZCOL_BLACK, pie_STATIC_SHADOW, 0);
 
@@ -1896,7 +1896,7 @@ void	renderFeature(FEATURE *psFeature)
 	iV_TRANSLATE(rx,0,-rz);
 	rotation = psFeature->rot.direction;
 
-	iV_MatrixRotateY(-rotation);
+	iV_MatrixRotateY(UNDEG(-rotation));
 
 	brightness = pal_SetBrightness(200); //? HUH?
 
@@ -2050,8 +2050,8 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp)
 		}
 	}
 
-	iV_MatrixRotateY(-player.r.y);
-	iV_MatrixRotateX(-player.r.x);
+	iV_MatrixRotateY(UNDEG(-player.r.y));
+	iV_MatrixRotateX(UNDEG(-player.r.x));
 
 	pie_Draw3DShape(proxImd, getModularScaledGraphicsTime(1000, 4), 0, WZCOL_WHITE, WZCOL_BLACK, pie_ADDITIVE, 192);
 
@@ -2176,7 +2176,7 @@ void	renderStructure(STRUCTURE *psStructure)
 	* buildings in other words are NOT made up of components - much quicker! */
 
 	rotation = psStructure->rot.direction;
-	iV_MatrixRotateY(-rotation);
+	iV_MatrixRotateY(UNDEG(-rotation));
 	if (!defensive
 	    && gameTime2-psStructure->timeLastHit < ELEC_DAMAGE_DURATION
 	    && psStructure->lastHitWeapon == WSC_ELECTRONIC )
@@ -2315,7 +2315,7 @@ void	renderStructure(STRUCTURE *psStructure)
 				{
 					iV_MatrixBegin();
 					iV_TRANSLATE(strImd->connectors[i].x, strImd->connectors[i].z, strImd->connectors[i].y);
-					pie_MatRotY(-rot.direction);
+					pie_MatRotY(UNDEG(-rot.direction));
 					if (mountImd[i] != NULL)
 					{
 						pie_TRANSLATE(0, 0, psStructure->asWeaps[i].recoilValue / 3);
@@ -2326,7 +2326,7 @@ void	renderStructure(STRUCTURE *psStructure)
 							iV_TRANSLATE(mountImd[i]->connectors->x, mountImd[i]->connectors->z, mountImd[i]->connectors->y);
 						}
 					}
-					iV_MatrixRotateX(rot.pitch);
+					iV_MatrixRotateX(UNDEG(rot.pitch));
 					pie_TRANSLATE(0, 0, psStructure->asWeaps[i].recoilValue);
 
 					pie_Draw3DShape(weaponImd[i], 0, colour, buildingBrightness, WZCOL_BLACK, pieFlag, pieFlagData);
@@ -2350,15 +2350,15 @@ void	renderStructure(STRUCTURE *psStructure)
 									iV_TRANSLATE(weaponImd[i]->connectors->x,weaponImd[i]->connectors->z-12,weaponImd[i]->connectors->y);
 									pRepImd = getImdFromIndex(MI_FLAME);
 
-									pie_MatRotY(rot.direction);
+									pie_MatRotY(UNDEG(rot.direction));
 
-									iV_MatrixRotateY(-player.r.y);
-									iV_MatrixRotateX(-player.r.x);
+									iV_MatrixRotateY(UNDEG(-player.r.y));
+									iV_MatrixRotateX(UNDEG(-player.r.x));
 									pie_Draw3DShape(pRepImd, getModularScaledGraphicsTime(100, pRepImd->numFrames), colour, buildingBrightness, WZCOL_BLACK, pie_ADDITIVE, 192);
 
-									iV_MatrixRotateX(player.r.x);
-									iV_MatrixRotateY(player.r.y);
-									pie_MatRotY(rot.direction);
+									iV_MatrixRotateX(UNDEG(player.r.x));
+									iV_MatrixRotateY(UNDEG(player.r.y));
+									pie_MatRotY(UNDEG(rot.direction));
 								}
 							}
 						}
@@ -2420,16 +2420,16 @@ void	renderStructure(STRUCTURE *psStructure)
 							if (strImd->max.y > 80) // babatower
 							{
 								iV_TRANSLATE(0, 80, 0);
-								pie_MatRotY(-rot.direction);
+								pie_MatRotY(UNDEG(-rot.direction));
 								iV_TRANSLATE(0, 0, -20);
 							}
 							else//baba bunker
 							{
 								iV_TRANSLATE(0, 10, 0);
-								pie_MatRotY(-rot.direction);
+								pie_MatRotY(UNDEG(-rot.direction));
 								iV_TRANSLATE(0, 0, -40);
 							}
-							pie_MatRotX(rot.pitch);
+							pie_MatRotX(UNDEG(rot.pitch));
 							// draw the muzzle flash?
 							if (psStructure && psStructure->visible[selectedPlayer] > UBYTE_MAX / 2)
 							{
@@ -2633,7 +2633,7 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 		iV_TRANSLATE(rx, 0, -rz);
 
 		rotation = psStructure->rot.direction;
-		iV_MatrixRotateY(-rotation);
+		iV_MatrixRotateY(UNDEG(-rotation));
 
 		if(imd != NULL)
 		{
@@ -2728,7 +2728,7 @@ void renderShadow( DROID *psDroid, iIMDShape *psShadowIMD )
 
 	if(psDroid->droidType == DROID_TRANSPORTER)
 	{
-		iV_MatrixRotateY(-psDroid->rot.direction);
+		iV_MatrixRotateY(UNDEG(-psDroid->rot.direction));
 	}
 
 	pVecTemp = psShadowIMD->points;
@@ -2740,9 +2740,9 @@ void renderShadow( DROID *psDroid, iIMDShape *psShadowIMD )
 	}
 	else
 	{
-		pie_MatRotY(-psDroid->rot.direction);
-		pie_MatRotX(psDroid->rot.pitch);
-		pie_MatRotZ(psDroid->rot.roll);
+		pie_MatRotY(UNDEG(-psDroid->rot.direction));
+		pie_MatRotX(UNDEG(psDroid->rot.pitch));
+		pie_MatRotZ(UNDEG(psDroid->rot.roll));
 	}
 
 	pie_Draw3DShape(psShadowIMD, 0, 0, WZCOL_WHITE, WZCOL_BLACK, pie_TRANSLUCENT, 128);
@@ -3700,7 +3700,7 @@ static void renderSurroundings(void)
 	pie_MATTRANS(0, 0, distance);
 
 	// rotate it
-	pie_MatRotY(DEG(1) * wind);
+	pie_MatRotY(wind);
 
 	// move it somewhat below ground level for the blending effect
 	pie_TRANSLATE(0, -skybox_scale/8, 0);

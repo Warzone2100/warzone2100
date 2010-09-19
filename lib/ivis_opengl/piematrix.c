@@ -153,12 +153,12 @@ void pie_MatScale(float scale)
 //*
 //******
 
-void pie_MatRotY(int y)
+void pie_MatRotY(float y)
 {
-	if (y != 0)
+	if (y != 0.f)
 	{
 		int t;
-		int64_t cra = iCos(y), sra = iSin(y);
+		int64_t cra = iCos(DEG(y)), sra = iSin(DEG(y));
 
 		t = (cra*psMatrix->a - sra*psMatrix->g)>>16;
 		psMatrix->g = (sra*psMatrix->a + cra*psMatrix->g)>>16;
@@ -172,7 +172,7 @@ void pie_MatRotY(int y)
 		psMatrix->i = (sra*psMatrix->c + cra*psMatrix->i)>>16;
 		psMatrix->c = t;
 
-		glRotatef(y*(360.f / 65536), 0.0f, 1.0f, 0.0f);
+		glRotatef(y, 0.0f, 1.0f, 0.0f);
 	}
 }
 
@@ -182,12 +182,12 @@ void pie_MatRotY(int y)
 //*
 //******
 
-void pie_MatRotZ(int z)
+void pie_MatRotZ(float z)
 {
-	if (z != 0)
+	if (z != 0.f)
 	{
 		int t;
-		int64_t cra = iCos(z), sra = iSin(z);
+		int64_t cra = iCos(DEG(z)), sra = iSin(DEG(z));
 
 		t = (cra*psMatrix->a + sra*psMatrix->d)>>16;
 		psMatrix->d = (cra*psMatrix->d - sra*psMatrix->a)>>16;
@@ -201,7 +201,7 @@ void pie_MatRotZ(int z)
 		psMatrix->f = (cra*psMatrix->f - sra*psMatrix->c)>>16;
 		psMatrix->c = t;
 
-		glRotatef(z*(360.f / 65536), 0.0f, 0.0f, 1.0f);
+		glRotatef(z, 0.0f, 0.0f, 1.0f);
 	}
 }
 
@@ -211,12 +211,12 @@ void pie_MatRotZ(int z)
 //*
 //******
 
-void pie_MatRotX(int x)
+void pie_MatRotX(float x)
 {
-	if (x != 0)
+	if (x != 0.f)
 	{
 		int t;
-		int64_t cra = iCos(x), sra = iSin(x);
+		int64_t cra = iCos(DEG(x)), sra = iSin(DEG(x));
 
 		t = (cra*psMatrix->d + sra*psMatrix->g)>>16;
 		psMatrix->g = (cra*psMatrix->g - sra*psMatrix->d)>>16;
@@ -230,7 +230,7 @@ void pie_MatRotX(int x)
 		psMatrix->i = (cra*psMatrix->i - sra*psMatrix->f)>>16;
 		psMatrix->f = t;
 
-		glRotatef(x*(360.f / 65536), 1.0f, 0.0f, 0.0f);
+		glRotatef(x, 1.0f, 0.0f, 0.0f);
 	}
 }
 

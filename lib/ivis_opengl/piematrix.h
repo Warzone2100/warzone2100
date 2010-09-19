@@ -100,9 +100,9 @@ extern void pie_MatEnd(void);
 extern void pie_MATTRANS(float x, float y, float z);
 extern void pie_TRANSLATE(float x, float y, float z);
 extern void pie_MatScale(float scale);
-extern void pie_MatRotX(int x);
-extern void pie_MatRotY(int y);
-extern void pie_MatRotZ(int z);
+extern void pie_MatRotX(float x);
+extern void pie_MatRotY(float y);
+extern void pie_MatRotZ(float z);
 extern int32_t pie_RotateProject(const Vector3i *src, Vector2i *dest);
 
 //*************************************************************************

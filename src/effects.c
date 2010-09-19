@@ -1626,8 +1626,8 @@ static void renderFirework(const EFFECT *psEffect)
 
 	positionEffect(psEffect);
 
-	iV_MatrixRotateY(-player.r.y);
-	iV_MatrixRotateX(-player.r.x);
+	iV_MatrixRotateY(UNDEG(-player.r.y));
+	iV_MatrixRotateX(UNDEG(-player.r.x));
 
 	pie_MatScale(psEffect->size / 100.f);
  	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, WZCOL_WHITE, WZCOL_BLACK, pie_ADDITIVE, EFFECT_EXPLOSION_ADDITIVE);
@@ -1639,8 +1639,8 @@ static void renderBloodEffect(const EFFECT *psEffect)
 {
 	positionEffect(psEffect);
 
-	iV_MatrixRotateY(-player.r.y);
-	iV_MatrixRotateX(-player.r.x);
+	iV_MatrixRotateY(UNDEG(-player.r.y));
+	iV_MatrixRotateX(UNDEG(-player.r.x));
 	pie_MatScale(psEffect->size / 100.f);
 
 	pie_Draw3DShape(getImdFromIndex(MI_BLOOD), psEffect->frameNumber, 0, WZCOL_WHITE, WZCOL_BLACK, pie_TRANSLUCENT, EFFECT_BLOOD_TRANSPARENCY);
@@ -1668,9 +1668,9 @@ static void renderDestructionEffect(const EFFECT *psEffect)
 
 	if(!gamePaused())
 	{
- 		iV_MatrixRotateX(SKY_SHIMMY);
- 		iV_MatrixRotateY(SKY_SHIMMY);
- 		iV_MatrixRotateZ(SKY_SHIMMY);
+		iV_MatrixRotateX(UNDEG(SKY_SHIMMY));
+		iV_MatrixRotateY(UNDEG(SKY_SHIMMY));
+		iV_MatrixRotateZ(UNDEG(SKY_SHIMMY));
 	}
  	pie_Draw3DShape(psEffect->imd, 0, 0, WZCOL_WHITE, WZCOL_BLACK, pie_RAISE, percent);
 
@@ -1722,8 +1722,8 @@ static void renderExplosionEffect(const EFFECT *psEffect)
 	if(TEST_FACING(psEffect))
 	{
 		/* Always face the viewer! */
-/*		TEST_FLIPPED_Y(psEffect) ? iV_MatrixRotateY(-player.r.y+iV_DEG(180)) :*/ iV_MatrixRotateY(-player.r.y);
-/*		TEST_FLIPPED_X(psEffect) ? iV_MatrixRotateX(-player.r.x+iV_DEG(180)) :*/ iV_MatrixRotateX(-player.r.x);
+/*		TEST_FLIPPED_Y(psEffect) ? iV_MatrixRotateY(UNDEG(-player.r.y+iV_DEG(180))) :*/ iV_MatrixRotateY(UNDEG(-player.r.y));
+/*		TEST_FLIPPED_X(psEffect) ? iV_MatrixRotateX(UNDEG(-player.r.x+iV_DEG(180))) :*/ iV_MatrixRotateX(UNDEG(-player.r.x));
 	}
 
 	/* Tesla explosions diminish in size */
@@ -1767,9 +1767,9 @@ static void renderGravitonEffect(const EFFECT *psEffect)
 
 	positionEffect(psEffect);
 
-	iV_MatrixRotateX(psEffect->rotation.x);
-	iV_MatrixRotateY(psEffect->rotation.y);
-	iV_MatrixRotateZ(psEffect->rotation.z);
+	iV_MatrixRotateX(UNDEG(psEffect->rotation.x));
+	iV_MatrixRotateY(UNDEG(psEffect->rotation.y));
+	iV_MatrixRotateZ(UNDEG(psEffect->rotation.z));
 
 	/* Buildings emitted by gravitons are chunkier */
 	if(psEffect->type == GRAVITON_TYPE_EMITTING_ST)
@@ -1800,8 +1800,8 @@ static void renderConstructionEffect(const EFFECT *psEffect)
 	/* Bit in comments doesn't quite work yet? */
 	if(TEST_FACING(psEffect))
 	{
-/*		TEST_FLIPPED_Y(psEffect) ? iV_MatrixRotateY(-player.r.y+iV_DEG(180)) :*/ iV_MatrixRotateY(-player.r.y);
-/*		TEST_FLIPPED_X(psEffect) ? iV_MatrixRotateX(-player.r.x+iV_DEG(180)) :*/ iV_MatrixRotateX(-player.r.x);
+/*		TEST_FLIPPED_Y(psEffect) ? iV_MatrixRotateY(UNDEG(-player.r.y+iV_DEG(180))) :*/ iV_MatrixRotateY(UNDEG(-player.r.y));
+/*		TEST_FLIPPED_X(psEffect) ? iV_MatrixRotateX(UNDEG(-player.r.x+iV_DEG(180))) :*/ iV_MatrixRotateX(UNDEG(-player.r.x));
 	}
 
 	/* Scale size according to age */
@@ -1841,8 +1841,8 @@ static void renderSmokeEffect(const EFFECT *psEffect)
 	if(TEST_FACING(psEffect))
 	{
  		/* Always face the viewer! */
-/*		TEST_FLIPPED_Y(psEffect) ? iV_MatrixRotateY(-player.r.y+iV_DEG(180)) : */iV_MatrixRotateY(-player.r.y);
-/*		TEST_FLIPPED_X(psEffect) ? iV_MatrixRotateX(-player.r.x+iV_DEG(180)) : */iV_MatrixRotateX(-player.r.x);
+/*		TEST_FLIPPED_Y(psEffect) ? iV_MatrixRotateY(UNDEG(-player.r.y+iV_DEG(180))) : */iV_MatrixRotateY(UNDEG(-player.r.y));
+/*		TEST_FLIPPED_X(psEffect) ? iV_MatrixRotateX(UNDEG(-player.r.x+iV_DEG(180))) : */iV_MatrixRotateX(UNDEG(-player.r.x));
 	}
 
 	/* Small smoke - used for the droids */
