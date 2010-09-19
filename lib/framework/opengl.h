@@ -39,10 +39,16 @@
 # include <GL/gl.h>
 #endif
 
+// Restore the previous definition state of the __glext_h_ symbol
 #if defined(FRAMEWORK_GLEXT_INCLUDED)
 # undef FRAMEWORK_GLEXT_INCLUDED
 #else
 # undef __glext_h_
+#endif
+
+// Workaround X11 headers #defining Status
+#ifdef Status
+# undef Status
 #endif
 
 #endif
