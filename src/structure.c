@@ -1457,6 +1457,15 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 			ASSERT(!"invalid structure type", "buildStructure: Invalid structure type");
 			return NULL;
 		}
+
+		if (!strcmp(pStructureType->pName, "A0CyborgFactory") && player == 0 && !bMultiPlayer)
+		{
+			// HACK: correcting SP bug, needs fixing in script(!!) (only applies for player 0)
+			// should be OK for Skirmish/MP games, since that is set correctly.
+			// scrSetStructureLimits() is called by scripts to set this normally.
+			asStructLimits[player][max].limit = MAX_FACTORY;
+			asStructLimits[player][max].globalLimit = MAX_FACTORY;
+		}
 		// Don't allow more than interface limits
 		if (asStructLimits[player][max].currentQuantity + 1 > asStructLimits[player][max].limit)
 		{
