@@ -56,6 +56,7 @@ noinst_HEADERS = \
 	lexer_input.h \
 	listmacs.h \
 	math_ext.h \
+	opengl.h \
 	physfs_ext.h \
 	resly.h \
 	stdio_ext.h \
