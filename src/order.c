@@ -4273,13 +4273,10 @@ BOOL getFactoryState(STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_STATE *
 {
 	UDWORD	state;
 
-    if (!StructIsFactory(psStruct))
-    {
-        ASSERT( false, "getFactoryState: structure is not a factory" );
-        return false;
-    }
+	ASSERT_OR_RETURN( false, StructIsFactory(psStruct), "structure is not a factory");
+	ASSERT_OR_RETURN( false, psStruct->pFunctionality !=NULL, "Invalid factory?");
 
-    state = ((FACTORY *)psStruct->pFunctionality)->secondaryOrder;
+	state = ((FACTORY *)psStruct->pFunctionality)->secondaryOrder;
 
 	switch (sec)
 	{
