@@ -600,11 +600,8 @@ int iV_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width, U
 
 void iV_DrawTextRotated(const char* string, float XPos, float YPos, float rotation)
 {
-	GLint matrix_mode = 0;
-
 	pie_SetTexturePage(TEXPAGE_FONT);
 
-	glGetIntegerv(GL_MATRIX_MODE, &matrix_mode);
 	glMatrixMode(GL_TEXTURE);
 	glPushMatrix();
 	glLoadIdentity();
@@ -630,7 +627,7 @@ void iV_DrawTextRotated(const char* string, float XPos, float YPos, float rotati
 	glPopMatrix();
 	glMatrixMode(GL_TEXTURE);
 	glPopMatrix();
-	glMatrixMode(matrix_mode);
+	glMatrixMode(GL_MODELVIEW);
 
 	// Reset the current model view matrix
 	glLoadIdentity();
