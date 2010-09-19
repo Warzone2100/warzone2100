@@ -9,5 +9,5 @@
 
 cd macosx
 
-xcodebuild -project Warzone.xcodeproj -parallelizeTargets -target "Warzone" -nodependencies Clean
+xcodebuild -project Warzone.xcodeproj -parallelizeTargets -target "Warzone" -nodependencies clean
 exit ${?}
