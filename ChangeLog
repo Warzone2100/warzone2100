@@ -1,3 +1,16 @@
+2010-09-24: Version 2.3.5
+ * General:
+   * Fix: Fix edit boxes so they correctly calculate the string's pixel borders. (r11668)
+   * Change: On LOG_ERROR, notify people in-game via the console and a sound effect that there was a error. (r11702)
+ * Multiplayer:
+   * Fix: Don't allow a player to acquire more construction vehicles than the max amount allowed. (r11674, ticket:2175)
+   * Change: Spawning of oil drums to be host side, and also add a timer between spawn periods. (r11692, ticket:2174)
+   * Add: Add new icons for "No tanks", "No cyborgs" and "No VTOLs" (r11710)
+ * Translations:
+   * Update: Korean (r11673, ticket:2098)
+ * Mods:
+   * Fix: Fixed the sound problem with - old 1.10 balance (r11703, ticket:2176)
+
 2010-09-12: Version 2.3.5_RC4
  * General:
    * Fix: Possible crash when designing units (r11630, ticket:2150)
