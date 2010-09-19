@@ -16,20 +16,20 @@ tar_dS="-dSYM.tar.gz"
 
 
 # Set bran
-if [ -z ${rtag} ]; then
+if [ -z ${1} ]; then
 	echo "Must supply the branch name being built."
 	exit 1
 fi
-bran="-${1}
+bran="-${1}"
 
 
 # Upload the dSYM bundle
-if ! scp -lpq 160 ${lpth}${dmg_bn}${tar_dS} ${uurl}:${rpth}${dmg_bn}${bran}${revt}${tar_dS}; then
+if ! scp -pql 160 ${lpth}${dmg_bn}${tar_dS} ${uurl}:${rpth}${dmg_bn}${bran}${revt}${tar_dS}; then
 	exit ${?}
 fi
 
 # Upload the .dmg
-if ! scp -lpq 160 ${lpth}${dmg_bn}${dmg_nv} ${uurl}:${rpth}${dmg_bn}${bran}${revt}.dmg; then
+if ! scp -pql 160 ${lpth}${dmg_bn}${dmg_nv} ${uurl}:${rpth}${dmg_bn}${bran}${revt}.dmg; then
 	exit ${?}
 fi
 
