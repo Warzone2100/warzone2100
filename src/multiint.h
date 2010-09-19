@@ -264,8 +264,8 @@ void loadMapPreview(bool hideInterface);
 #define MULTIOP_PASSWORD_EDIT 920013
 
 #define MULTIOP_NO_SOMETHING            10331  // Up to 10340 reserved for future use.
-#define MULTIOP_NO_SOMETHINGX           5
-#define MULTIOP_NO_SOMETHINGY           MROW5+5
+#define MULTIOP_NO_SOMETHINGX           3
+#define MULTIOP_NO_SOMETHINGY           MROW5
 
 // ///////////////////////////////
 // Many Button Variations..

@@ -1126,9 +1126,9 @@ typedef struct
 } LimitIcon;
 static const LimitIcon limitIcons[] =
 {
-	{"A0LightFactory",  N_("Tanks disabled!!"),  IMAGE_FRAGLIMIT},
-	{"A0CyborgFactory", N_("Cyborgs disabled."), IMAGE_FRAGLIMIT},
-	{"A0VTolFactory1",  N_("VTOLs disabled."),   IMAGE_FRAGLIMIT}
+	{"A0LightFactory",  N_("Tanks disabled!!"),  IMAGE_NO_TANK},
+	{"A0CyborgFactory", N_("Cyborgs disabled."), IMAGE_NO_CYBORG},
+	{"A0VTolFactory1",  N_("VTOLs disabled."),   IMAGE_NO_VTOL}
 };
 
 void updateLimitFlags()
@@ -1398,15 +1398,23 @@ static void addGameOptions(BOOL bRedo)
 	updateLimitFlags();
 	{
 		int i;
-		int y = MULTIOP_NO_SOMETHINGY;
+		int y = 2;
+		bool skip = false;
+
 		for (i = 0; i < ARRAY_SIZE(limitIcons); ++i)
 		{
 			if ((ingame.flags & 1<<i) != 0)
 			{
-				addMultiBut(psWScreen, MULTIOP_OPTIONS, MULTIOP_NO_SOMETHING + i, MULTIOP_NO_SOMETHINGX, y,
+				if (!skip)
+				{	// only add this once.
+					addBlueForm(MULTIOP_OPTIONS, MULTIOP_NO_SOMETHING, "", MULTIOP_HOSTX, MULTIOP_NO_SOMETHINGY, 41, 90 );
+				}
+
+				addMultiBut(psWScreen, MULTIOP_NO_SOMETHING, MULTIOP_NO_SOMETHINGY + i, MULTIOP_NO_SOMETHINGX, y,
 				            35, 28, _(limitIcons[i].desc),
 				            limitIcons[i].icon, limitIcons[i].icon, limitIcons[i].icon);
-				y += 28 + 5;
+				y += 28 + 3;
+				skip = true;
 			}
 		}
 	}
