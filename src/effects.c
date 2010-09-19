@@ -1629,7 +1629,7 @@ static void renderFirework(const EFFECT *psEffect)
 	iV_MatrixRotateY(-player.r.y);
 	iV_MatrixRotateX(-player.r.x);
 
-	pie_MatScale(psEffect->size);
+	pie_MatScale(psEffect->size / 100.f);
  	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, WZCOL_WHITE, WZCOL_BLACK, pie_ADDITIVE, EFFECT_EXPLOSION_ADDITIVE);
  	iV_MatrixEnd();
 }
@@ -1641,7 +1641,7 @@ static void renderBloodEffect(const EFFECT *psEffect)
 
 	iV_MatrixRotateY(-player.r.y);
 	iV_MatrixRotateX(-player.r.x);
-	pie_MatScale(psEffect->size);
+	pie_MatScale(psEffect->size / 100.f);
 
 	pie_Draw3DShape(getImdFromIndex(MI_BLOOD), psEffect->frameNumber, 0, WZCOL_WHITE, WZCOL_BLACK, pie_TRANSLUCENT, EFFECT_BLOOD_TRANSPARENCY);
 	iV_MatrixEnd();
@@ -1706,7 +1706,6 @@ static bool rejectLandLight(LAND_LIGHT_SPEC type)
 /** Renders the standard explosion effect */
 static void renderExplosionEffect(const EFFECT *psEffect)
 {
-	SDWORD	percent;
 	const PIELIGHT brightness = WZCOL_WHITE;
 
 	if(psEffect->type == EXPLOSION_TYPE_LAND_LIGHT)
@@ -1730,19 +1729,21 @@ static void renderExplosionEffect(const EFFECT *psEffect)
 	/* Tesla explosions diminish in size */
 	if(psEffect->type == EXPLOSION_TYPE_TESLA)
 	{
-		percent = PERCENT(graphicsTime - psEffect->birthTime, psEffect->lifeSpan);
-		if(percent<0) percent = 0;
-		if(percent>45) percent = 45;
-		pie_MatScale(psEffect->size - percent);
+		float scale = (graphicsTime - psEffect->birthTime) / (float)psEffect->lifeSpan;
+		if      (scale < 0.f)
+			scale = 0.f;
+		else if (scale > .45f)
+			scale = .45f;
+		pie_MatScale(psEffect->size / 100.f - scale);
 	}
 	else if(psEffect->type == EXPLOSION_TYPE_PLASMA)
 	{
-		percent = PERCENT(graphicsTime - psEffect->birthTime, psEffect->lifeSpan) / 3;
-		pie_MatScale(BASE_PLASMA_SIZE + percent);
+		float scale = (graphicsTime - psEffect->birthTime) / (float)psEffect->lifeSpan / 3.f;
+		pie_MatScale(BASE_PLASMA_SIZE / 100.f + scale);
 	}
 	else
 	{
-		pie_MatScale(psEffect->size);
+		pie_MatScale(psEffect->size / 100.f);
 	}
 
 	if(psEffect->type == EXPLOSION_TYPE_PLASMA)
@@ -1774,11 +1775,7 @@ static void renderGravitonEffect(const EFFECT *psEffect)
 	if(psEffect->type == GRAVITON_TYPE_EMITTING_ST)
 	{
 		/* Twice as big - 150 percent */
-		pie_MatScale(psEffect->size);
-	}
-	else
-	{
-		pie_MatScale(100);
+		pie_MatScale(psEffect->size / 100.f);
 	}
 
 	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, WZCOL_WHITE, WZCOL_BLACK, 0, 0);
@@ -1793,7 +1790,7 @@ static void renderConstructionEffect(const EFFECT *psEffect)
 	Vector3i null;
 	SDWORD	percent;
 	UDWORD	translucency;
-	UDWORD	size;
+	float size;
 
 	/* No rotation about arbitrary axis */
 	null.x = null.y = null.z = 0;
@@ -1822,8 +1819,7 @@ static void renderConstructionEffect(const EFFECT *psEffect)
 		translucency = (100 - percent) * 2;
 	}
 	translucency+=10;
-	size = 2*translucency;
-	if(size>90) size = 90;
+	size = MIN(2.f * translucency / 100.f, .90f);
 	pie_MatScale(size);
 
 	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, WZCOL_WHITE, WZCOL_BLACK, pie_TRANSLUCENT, (UBYTE)(translucency));
@@ -1873,7 +1869,7 @@ static void renderSmokeEffect(const EFFECT *psEffect)
 			percent = 100;
 
 
-		pie_MatScale(percent + psEffect->baseScale);
+		pie_MatScale((percent + psEffect->baseScale) / 100.f);
 		transparency = (EFFECT_SMOKE_TRANSPARENCY * (100 - percent))/100;
 	}
 

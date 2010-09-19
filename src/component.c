@@ -178,7 +178,7 @@ UDWORD getStructureStatHeight(STRUCTURE_STATS *psStat)
 void displayIMDButton(iIMDShape *IMDShape, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale)
 {
 	setMatrix(Position, Rotation, RotXYZ);
-	pie_MatScale(scale);
+	pie_MatScale(scale / 100.f);
 
 	pie_SetFogStatus(false);
 	pie_Draw3DShape(IMDShape, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, WZCOL_BLACK, pie_BUTTON, 0);
@@ -205,7 +205,7 @@ void displayStructureButton(STRUCTURE *psStructure, Vector3i *rotation, Vector3i
 	}
 
 	setMatrix(Position, rotation, RotXYZ);
-	pie_MatScale(scale);
+	pie_MatScale(scale / 100.f);
 
 	/* Draw the building's base first */
 	baseImd = psStructure->pStructureType->pBaseIMD;
@@ -301,7 +301,7 @@ void displayStructureStatButton(STRUCTURE_STATS *Stats, Vector3i *Rotation, Vect
 	}
 
 	setMatrix(Position, Rotation, RotXYZ);
-	pie_MatScale(scale);
+	pie_MatScale(scale / 100.f);
 
 	/* Draw the building's base first */
 	baseImd = Stats->pBaseIMD;
@@ -401,7 +401,7 @@ void displayComponentButton(BASE_STATS *Stat, Vector3i *Rotation, Vector3i *Posi
 	SDWORD compID;
 
 	setMatrix(Position, Rotation, RotXYZ);
-	pie_MatScale(scale);
+	pie_MatScale(scale / 100.f);
 
 	compID = StatIsComponent(Stat);
 	if (compID > 0)	{
@@ -450,7 +450,7 @@ void displayResearchButton(BASE_STATS *Stat, Vector3i *Rotation, Vector3i *Posit
 	if(ResearchIMD)
 	{
 		setMatrix(Position, Rotation, RotXYZ);
-		pie_MatScale(scale);
+		pie_MatScale(scale / 100.f);
 
 		if(MountIMD) {
 			pie_Draw3DShape(MountIMD, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, WZCOL_BLACK, pie_BUTTON, 0);
@@ -598,7 +598,7 @@ static void displayCompObj(DROID *psDroid, BOOL bButton)
 			if ( psDroid->psCurAnim == NULL  || psDroid->psCurAnim->bVisible == false )
 			{
 				// FIXME - hideous....!!!!
-				pie_MatScale(75);
+				pie_MatScale(.75f);
 				pie_Draw3DShape(psShapeTemp, 0, psDroid->player-6, brightness, specular, pieFlag, iPieData);
 			}
 		}
@@ -964,7 +964,7 @@ void displayComponentButtonTemplate(DROID_TEMPLATE *psTemplate, Vector3i *Rotati
 	memset( &Droid, 0, sizeof(DROID) );
 
 	setMatrix(Position, Rotation, RotXYZ);
-	pie_MatScale(scale);
+	pie_MatScale(scale / 100.f);
 
 // Decide how to sort it.
 
@@ -999,7 +999,7 @@ void displayComponentButtonObject(DROID *psDroid, Vector3i *Rotation, Vector3i *
 	SDWORD		difference;
 
 	setMatrix(Position, Rotation, RotXYZ);
-	pie_MatScale(scale);
+	pie_MatScale(scale / 100.f);
 
 // Decide how to sort it.
 	difference = Rotation->y%360;

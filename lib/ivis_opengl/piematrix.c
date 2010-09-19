@@ -45,8 +45,12 @@ BOOL drawing_interface = true;
 
 //*************************************************************************
 
-// We use FP12_MULTIPLIER.
-static SDMATRIX _MATRIX_ID = {FP12_MULTIPLIER, 0, 0, 0, FP12_MULTIPLIER, 0, 0, 0, FP12_MULTIPLIER, 0L, 0L, 0L};
+static const SDMATRIX Identitymatrix = {
+	FP12_MULTIPLIER,                  0,               0,
+	              0,    FP12_MULTIPLIER,               0,
+	              0,                  0, FP12_MULTIPLIER,
+	              0,                  0,               0,
+};
 static SDWORD _MATRIX_INDEX;
 
 //*************************************************************************
@@ -59,7 +63,7 @@ static void pie_MatReset(void)
 	psMatrix = &aMatrixStack[0];
 
 	// make 1st matrix identity
-	*psMatrix = _MATRIX_ID;
+	*psMatrix = Identitymatrix;
 
 	glLoadIdentity();
 }
@@ -98,13 +102,13 @@ void pie_MatEnd(void)
 }
 
 
-void pie_MATTRANS(int x, int y, int z)
+void pie_MATTRANS(float x, float y, float z)
 {
 	GLfloat matrix[16];
 
-	psMatrix->j = x<<FP12_SHIFT;
-	psMatrix->k = y<<FP12_SHIFT;
-	psMatrix->l = z<<FP12_SHIFT;
+	psMatrix->j = (int)x << FP12_SHIFT | (int)((x - (int)x) * FP12_MULTIPLIER);
+	psMatrix->k = (int)y << FP12_SHIFT | (int)((y - (int)y) * FP12_MULTIPLIER);
+	psMatrix->l = (int)z << FP12_SHIFT | (int)((z - (int)z) * FP12_MULTIPLIER);
 
 	glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
 	matrix[12] = x;
@@ -113,11 +117,11 @@ void pie_MATTRANS(int x, int y, int z)
 	glLoadMatrixf(matrix);
 }
 
-void pie_TRANSLATE(int x, int y, int z)
+void pie_TRANSLATE(float x, float y, float z)
 {
-	psMatrix->j += ((x) * psMatrix->a + (y) * psMatrix->d + (z) * psMatrix->g);
-	psMatrix->k += ((x) * psMatrix->b + (y) * psMatrix->e + (z) * psMatrix->h);
-	psMatrix->l += ((x) * psMatrix->c + (y) * psMatrix->f + (z) * psMatrix->i);
+	psMatrix->j += x * psMatrix->a + y * psMatrix->d + z * psMatrix->g;
+	psMatrix->k += x * psMatrix->b + y * psMatrix->e + z * psMatrix->h;
+	psMatrix->l += x * psMatrix->c + y * psMatrix->f + z * psMatrix->i;
 
 	glTranslatef(x, y, z);
 }
@@ -126,26 +130,21 @@ void pie_TRANSLATE(int x, int y, int z)
 //*** matrix scale current transformation matrix
 //*
 //******
-void pie_MatScale( unsigned int percent )
+void pie_MatScale(float scale)
 {
-	if (percent == 100)
-	{
-		return;
-	}
+	psMatrix->a = psMatrix->a * scale;
+	psMatrix->b = psMatrix->b * scale;
+	psMatrix->c = psMatrix->c * scale;
 
-	psMatrix->a = (psMatrix->a * percent) / 100;
-	psMatrix->b = (psMatrix->b * percent) / 100;
-	psMatrix->c = (psMatrix->c * percent) / 100;
+	psMatrix->d = psMatrix->d * scale;
+	psMatrix->e = psMatrix->e * scale;
+	psMatrix->f = psMatrix->f * scale;
 
-	psMatrix->d = (psMatrix->d * percent) / 100;
-	psMatrix->e = (psMatrix->e * percent) / 100;
-	psMatrix->f = (psMatrix->f * percent) / 100;
+	psMatrix->g = psMatrix->g * scale;
+	psMatrix->h = psMatrix->h * scale;
+	psMatrix->i = psMatrix->i * scale;
 
-	psMatrix->g = (psMatrix->g * percent) / 100;
-	psMatrix->h = (psMatrix->h * percent) / 100;
-	psMatrix->i = (psMatrix->i * percent) / 100;
-
-	glScalef(0.01f*percent, 0.01f*percent, 0.01f*percent);
+	glScalef(scale, scale, scale);
 }
 
 

@@ -852,7 +852,7 @@ static void drawTiles(iView *player)
 	pie_MatBegin();
 
 	// Now, scale the world according to what resolution we're running in
-	pie_MatScale(pie_GetResScalingFactor());
+	pie_MatScale(pie_GetResScalingFactor() / 100.f);
 
 	/* Set the camera position */
 	pie_MATTRANS(0, 0, distance);
@@ -1289,7 +1289,7 @@ void	renderAnimComponent( const COMPONENT_OBJECT *psObj )
 			if ( psDroid->droidType == DROID_PERSON )
 			{
 				iPlayer = psParentObj->player - 6;
-				pie_MatScale(75);
+				pie_MatScale(.75f);
 			}
 			else
 			{
@@ -2524,7 +2524,7 @@ void	renderDeliveryPoint(FLAG_POSITION *psPosition, BOOL blueprint)
 			psPosition->coords.x, psPosition->coords.y,0);
 	}
 
-	pie_MatScale(50); // they are all big now so make this one smaller too
+	pie_MatScale(.5f); // they are all big now so make this one smaller too
 
 	pieFlag = pie_TRANSLUCENT;
 	pieFlagData = BLUEPRINT_OPACITY;
@@ -3694,7 +3694,7 @@ static void renderSurroundings(void)
 	pie_MatBegin();
 
 	// Now, scale the world according to what resolution we're running in
-	pie_MatScale(pie_GetResScalingFactor());
+	pie_MatScale(pie_GetResScalingFactor() / 100.f);
 
 	// Set the camera position
 	pie_MATTRANS(0, 0, distance);
