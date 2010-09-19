@@ -176,13 +176,7 @@ static void internal_saveImage_PNG(const char *fileName, const iV_Image *image, 
 	unsigned char** scanlines = NULL;
 	png_infop info_ptr = NULL;
 	png_structp png_ptr = NULL;
-	unsigned int channelsPerPixel = 3;
 	PHYSFS_file* fileHandle;
-
-	if (color_type == PNG_COLOR_TYPE_GRAY)
-	{
-		channelsPerPixel = 1;
-	}
 
 	ASSERT(image->depth != 0, "Bad depth");
 
@@ -216,8 +210,14 @@ static void internal_saveImage_PNG(const char *fileName, const iV_Image *image, 
 	}
 	else
 	{
-		unsigned int currentRow;
-		unsigned int row_stride = image->width * channelsPerPixel * image->depth / 8;
+		unsigned int channelsPerPixel = 3;
+		unsigned int currentRow, row_stride;
+
+		if (color_type == PNG_COLOR_TYPE_GRAY)
+		{
+			channelsPerPixel = 1;
+		}
+		row_stride = image->width * channelsPerPixel * image->depth / 8;
 
 		scanlines = malloc(sizeof(const char*) * image->height);
 		if (scanlines == NULL)
