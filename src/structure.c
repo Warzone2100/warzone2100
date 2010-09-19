@@ -6654,6 +6654,9 @@ void hqReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 //
 BOOL StructIsFactory(STRUCTURE *Struct)
 {
+	ASSERT_OR_RETURN(false, Struct != NULL, "Invalid structure!");
+	ASSERT_OR_RETURN(false, Struct->pStructureType != NULL, "Invalid structureType!");
+
 	if( (Struct->pStructureType->type == REF_FACTORY) ||
 		(Struct->pStructureType->type == REF_CYBORG_FACTORY) ||
 		(Struct->pStructureType->type == REF_VTOL_FACTORY) )
