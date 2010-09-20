@@ -1,10 +1,7 @@
-#version 120
 #pragma debug(on)
 #ifdef FOG_ENABLED
 varying float vertexDistance;
 #endif
-
-invariant gl_Position;
 
 void main(void)
 {
