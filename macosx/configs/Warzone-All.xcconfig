@@ -16,8 +16,8 @@ LIBRARY_SEARCH_PATHS = $(inherited) $(LIBRARY_SEARCH_PATHS_QUOTED_1) $(LIBRARY_S
 GCC_ENABLE_SSE3_EXTENSIONS = YES // -msse3
 GCC_MODEL_TUNING = G5
 OTHER_CFLAGS = $(FlagsForCandCpp) $(BuildDependentFlagsForC) -Wmissing-declarations -Wno-pointer-to-int-cast -Wno-strict-aliasing -Wstrict-prototypes -Wdeclaration-after-statement $(inherited) // Warning flags that c++ does not like
-OTHER_CFLAGS[arch=i386] = -Wno-type-limits $(inherited) // intel 32 bit only
-OTHER_CFLAGS[arch=x86_64] = -Wno-type-limits $(inherited) // intel 64 bit only
+// OTHER_CFLAGS[arch=i386] = -Wno-type-limits $(inherited) // intel 32 bit only
+// OTHER_CFLAGS[arch=x86_64] = -Wno-type-limits $(inherited) // intel 64 bit only
 OTHER_CPLUSPLUSFLAGS = $(FlagsForCandCpp) // -Wc++0x-compat is not in clang
 OTHER_CPLUSPLUSFLAGS[arch=i386] = $(inherited) // intel 32 bit only
 
