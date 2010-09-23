@@ -98,7 +98,7 @@ typedef struct _maptile
 {
 	uint8_t			tileInfoBits;
 	uint8_t			tileVisBits;	// COMPRESSED - bit per player
-	uint8_t			height;			// The height at the top left of the tile
+	float			height;			// The height at the top left of the tile
 	uint8_t			illumination;	// How bright is this tile?
 	uint16_t		texture;		// Which graphics texture is on this tile
 	uint8_t			watchers[MAX_PLAYERS];		// player sees through fog of war here with this many objects
@@ -108,8 +108,7 @@ typedef struct _maptile
 	uint16_t		limitedContinent;	///< For land or sea limited propulsion types
 	uint16_t		hoverContinent;		///< For hover type propulsions
 	uint8_t			ground;			///< The ground type used for the terrain renderer
-	float			height_new; // FIXME: replace height with a float and remove this one
-	float           waterLevel; ///< At what height is the water for this tile
+	float			waterLevel;		///< At what height is the water for this tile
 } MAPTILE;
 
 
@@ -329,16 +328,6 @@ static inline WZ_DECL_PURE float map_TileHeight(UDWORD x, UDWORD y)
 	return ((float)psMapTiles[x + (y * mapWidth)].height * ELEVATION_SCALE);
 }
 
-/* Return height of tile at x,y, uses float height_new */
-static inline WZ_DECL_PURE float map_TileHeight_new(UDWORD x, UDWORD y)
-{
-	if ( x >= mapWidth || y >= mapHeight )
-	{
-		return 0;
-	}
-	return ((float)psMapTiles[x + (y * mapWidth)].height_new * ELEVATION_SCALE);
-}
-
 /* Return height of tile at x,y */
 static inline WZ_DECL_PURE float map_WaterHeight(UDWORD x, UDWORD y)
 {
@@ -356,8 +345,7 @@ static inline void setTileHeight(UDWORD x, UDWORD y, float height)
 	ASSERT_OR_RETURN( , x < mapWidth, "x coordinate %u bigger than map width %u", x, mapWidth);
 	ASSERT_OR_RETURN( , y < mapHeight, "y coordinate %u bigger than map height %u", y, mapHeight);
 
-	psMapTiles[x + (y * mapWidth)].height = (UBYTE)(height / ELEVATION_SCALE);
-	psMapTiles[x + (y * mapWidth)].height_new = (height / ELEVATION_SCALE);
+	psMapTiles[x + (y * mapWidth)].height = height / (float)ELEVATION_SCALE;
 	markTileDirty(x, y);
 }
 

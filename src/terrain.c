@@ -362,7 +362,7 @@ static void getGridPos(Vector3i *result, int x, int y, bool center, bool water)
 	}
 	else
 	{
-		result->y = map_TileHeight_new(x, y);
+		result->y = map_TileHeight(x, y);
 		if (water)
 		{
 			result->y = map_WaterHeight(x, y);
