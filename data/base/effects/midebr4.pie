@@ -3,11 +3,11 @@ TYPE 200
 TEXTURE 0 page-14-droid-hubs.png 256 256
 LEVELS 1
 LEVEL 1
-POINTS 5
-	-1 -12 5
-	-8 2 6
-	4 6 0
-	-7 -3 -3
+POINTS 5 
+	-1 -12 5 
+	-8 2 6 
+	4 6 0 
+	-7 -3 -3 
 	8 -9 -4
 POLYGONS 6
 	200 3 2 1 0 28 71 40 75 34 90
