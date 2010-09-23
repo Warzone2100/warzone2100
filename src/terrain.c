@@ -485,7 +485,7 @@ static void setSectorDecals(int x, int y,
 			{
 				continue;
 			}
-			if (mapTile(i,j)->decal)
+			if (TILE_HAS_DECAL(mapTile(i, j)))
 			{
 				getTileTexCoords(*uv, mapTile(i,j)->texture);
 				averageUV(&center, *uv);

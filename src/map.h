@@ -81,6 +81,7 @@ static inline unsigned short TileNumber_texture(unsigned short tilenumber)
 
 #define BITS_NOTBLOCKING	0x01	///< Units can drive on this even if there is a structure or feature on it
 #define BITS_EXPLORED		0x02	///< Tile has been explored
+#define BITS_DECAL		0x02	///< Does this tile has a decal? If so, the tile from "texture" is drawn on top of the terrain.
 #define BITS_FPATHBLOCK		0x10	///< Bit set temporarily by find path to mark a blocking tile
 #define BITS_ON_FIRE		0x20	///< Cache whether tile is burning
 #define BITS_GATEWAY		0x40	///< Bit set to show a gateway on the tile
@@ -97,21 +98,18 @@ typedef struct _maptile
 {
 	uint8_t			tileInfoBits;
 	uint8_t			tileVisBits;	// COMPRESSED - bit per player
-	UBYTE			height;			// The height at the top left of the tile
-	UBYTE			illumination;	// How bright is this tile?
-	UWORD			texture;		// Which graphics texture is on this tile
-	UBYTE			watchers[MAX_PLAYERS];		// player sees through fog of war here with this many objects
+	uint8_t			height;			// The height at the top left of the tile
+	uint8_t			illumination;	// How bright is this tile?
+	uint16_t		texture;		// Which graphics texture is on this tile
+	uint8_t			watchers[MAX_PLAYERS];		// player sees through fog of war here with this many objects
 	float			level;
 	BASE_OBJECT		*psObject;		// Any object sitting on the location (e.g. building)
 	PIELIGHT		colour;
-	short			limitedContinent;	/** For land or sea limited propulsion types */
-	short			hoverContinent;		/** For hover type propulsions */
-
-	int             ground; ///< The ground type used for the terrain renderer
-	BOOL            decal;  ///< Does this tile has a decal? If so, the tile from "texture" is drawn on top of the terrain.
+	uint16_t		limitedContinent;	///< For land or sea limited propulsion types
+	uint16_t		hoverContinent;		///< For hover type propulsions
+	uint8_t			ground;			///< The ground type used for the terrain renderer
 	float			height_new; // FIXME: replace height with a float and remove this one
 	float           waterLevel; ///< At what height is the water for this tile
-//	TYPE_OF_TERRAIN	type;			// The terrain type for the tile
 } MAPTILE;
 
 
@@ -188,6 +186,10 @@ static inline bool TileHasSmallStructure(const MAPTILE* tile)
 
 #define SET_TILE_NOTBLOCKING(x)	((x)->tileInfoBits |= BITS_NOTBLOCKING)
 #define CLEAR_TILE_NOTBLOCKING(x)	((x)->tileInfoBits &= ~BITS_NOTBLOCKING)
+
+#define SET_TILE_DECAL(x)	((x)->tileInfoBits |= BITS_DECAL)
+#define CLEAR_TILE_DECAL(x)	((x)->tileInfoBits &= ~BITS_DECAL)
+#define TILE_HAS_DECAL(x)	((x)->tileInfoBits & BITS_DECAL)
 
 #define SET_TILE_HIGHLIGHT(x)	((x)->texture |= TILE_HILIGHT)
 #define CLEAR_TILE_HIGHLIGHT(x)	((x)->texture &= ~TILE_HILIGHT)
