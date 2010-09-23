@@ -112,7 +112,7 @@ int pie_AddTexPage(iV_Image *s, const char* filename, int slot, int maxTextureSi
 			scaleDown = true;
 		}
 		if (scaleDown)
-		{
+	{
 			debug(LOG_TEXTURE, "scaling down texture %s from %ix%i to %ix%i", filename, s->width, s->height, width, height);
 			bmp = malloc(4 * width * height); // FIXME: don't know for sure it is 4 bytes per pixel
 			gluScaleImage(iV_getPixelFormat(s), s->width, s->height, GL_UNSIGNED_BYTE, s->bmp,

@@ -887,8 +887,8 @@ BOOL runVideoOptionsMenu(void)
 		{
 			int newTexSize = getTextureSize() * 2;
 
-			// Clip such that 32 <= size <= 512
-			if (newTexSize > 512)
+			// Clip such that 32 <= size <= 2048
+			if (newTexSize > 2048)
 			{
 				newTexSize = 32;
 			}
@@ -1659,7 +1659,7 @@ void addTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt, unsign
 	sButInit.FontID = font_large;
 	sButInit.pText = txt;
 	widgAddButton(psWScreen, &sButInit);
-	
+
 	// Disable button
 	if (style & WBUT_DISABLE)									
 	{
@@ -1692,7 +1692,7 @@ void addFESlider(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, UDW
 void addFEAISlider(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, UDWORD pos)
 {
 	W_SLDINIT		sSldInit;
-	
+
 	memset(&sSldInit, 0, sizeof(W_SLDINIT));
 	sSldInit.formID		= parent;
 	sSldInit.id			= id;
