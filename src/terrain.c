@@ -704,8 +704,8 @@ bool initTerrain(void)
 	glGetIntegerv(GL_MAX_ELEMENTS_INDICES,  &GLmaxElementsIndices);
 
 	// testing for crappy cards
-	debug(LOG_TERRAIN, "GL_MAX_ELEMENTS_VERTICES: %i", GLmaxElementsVertices);
-	debug(LOG_TERRAIN, "GL_MAX_ELEMENTS_INDICES:  %i", GLmaxElementsIndices);
+	debug(LOG_TERRAIN, "GL_MAX_ELEMENTS_VERTICES: %i", (int)GLmaxElementsVertices);
+	debug(LOG_TERRAIN, "GL_MAX_ELEMENTS_INDICES:  %i", (int)GLmaxElementsIndices);
 	
 	// now we know these values, determine the maximum sector size achievable
 	maxSectorSizeVertices = sqrt(GLmaxElementsVertices/2)-1;
@@ -729,8 +729,8 @@ bool initTerrain(void)
 	{
 		if (sectorSize < 1)
 		{
-			debug(LOG_WARNING, "GL_MAX_ELEMENTS_VERTICES: %i", GLmaxElementsVertices);
-			debug(LOG_WARNING, "GL_MAX_ELEMENTS_INDICES:  %i", GLmaxElementsIndices);
+			debug(LOG_WARNING, "GL_MAX_ELEMENTS_VERTICES: %i", (int)GLmaxElementsVertices);
+			debug(LOG_WARNING, "GL_MAX_ELEMENTS_INDICES:  %i", (int)GLmaxElementsIndices);
 			debug(LOG_WARNING, "maximum sector size due to vertices: %i", maxSectorSizeVertices);
 			debug(LOG_WARNING, "maximum sector size due to indices: %i", maxSectorSizeIndices);
 			debug(LOG_ERROR, "Your graphics card and/or drivers do not seem to support glDrawRangeElements, needed for the terrain renderer.");
