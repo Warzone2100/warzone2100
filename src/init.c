@@ -270,10 +270,20 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 					// Remove multiplay patches
 					sstrcpy(tmpstr, curSearchPath->path);
 					sstrcat(tmpstr, "mp");
-					PHYSFS_removeFromSearchPath( tmpstr );
+					if (!PHYSFS_removeFromSearchPath(tmpstr))
+					{ 
+#ifdef DEBUG
+						debug(LOG_WZ, "* Failed to remove path %s (norm-mp), %s", tmpstr, PHYSFS_getLastError());
+#endif
+					}
 					sstrcpy(tmpstr, curSearchPath->path);
 					sstrcat(tmpstr, "mp.wz");
-					PHYSFS_removeFromSearchPath( tmpstr );
+					if (!PHYSFS_removeFromSearchPath(tmpstr))
+					{ 
+#ifdef DEBUG
+						debug(LOG_WZ, "* Failed to remove path %s (wz-mp), %s", tmpstr, PHYSFS_getLastError());
+#endif
+					}
 
 					// Remove plain dir
 					PHYSFS_removeFromSearchPath( curSearchPath->path );
@@ -281,10 +291,20 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 					// Remove base files
 					sstrcpy(tmpstr, curSearchPath->path);
 					sstrcat(tmpstr, "base");
-					PHYSFS_removeFromSearchPath( tmpstr );
+					if (!PHYSFS_removeFromSearchPath(tmpstr))
+					{
+#ifdef DEBUG
+						debug(LOG_WZ, "* Failed to remove path %s (norm-base), %s", tmpstr, PHYSFS_getLastError());
+#endif
+					}
 					sstrcpy(tmpstr, curSearchPath->path);
 					sstrcat(tmpstr, "base.wz");
-					PHYSFS_removeFromSearchPath( tmpstr );
+					if (!PHYSFS_removeFromSearchPath(tmpstr))
+					{
+#ifdef DEBUG
+						debug(LOG_WZ, "* Failed to remove path %s (wz-base), %s", tmpstr, PHYSFS_getLastError());
+#endif
+					}
 
 					// remove video search path as well
 					sstrcpy(tmpstr, curSearchPath->path);
@@ -1206,6 +1226,11 @@ BOOL campaignReset(void)
 	debug(LOG_MAIN, "campaignReset");
 	gwShutDown();
 	mapShutdown();
+	shutdownTerrain();
+	// when the terrain textures are reloaded we need to reset the radar
+	// otherwise it will end up as a terrain texture somehow
+	ShutdownRadar();
+	InitRadar();
 	return true;
 }
 
