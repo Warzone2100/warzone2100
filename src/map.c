@@ -689,10 +689,10 @@ static int determineGroundType(int x, int y, const char *tileset)
 			{
 				ground[i][j] = groundFromRockiesTile(tile, a, b);
 			}
-
+			
 			votes[i][j] = 0;
+			}
 		}
-	}
 
 	//for(i=0; i<psGateHeader->numGateways; i++) {
 	//	if (!gwNewGateway(psGate->x0,psGate->y0, psGate->x1,psGate->y1)) {
@@ -883,29 +883,22 @@ BOOL mapLoad(char *filename)
 	    || aFileType[2] != 'p')
 	{
 		debug(LOG_ERROR, "Bad header in %s", filename);
-		return false;
+		goto failure;
 	}
 	else if (version <= VERSION_9)
 	{
 		debug(LOG_ERROR, "%s: Unsupported save format version %u", filename, version);
-		return false;
+		goto failure;
 	}
 	else if (version > CURRENT_VERSION_NUM)
 	{
 		debug(LOG_ERROR, "%s: Undefined save format version %u", filename, version);
-		return false;
+		goto failure;
 	}
 	else if (width * height > MAP_MAXAREA)
 	{
 		debug(LOG_ERROR, "Map %s too large : %d %d", filename, width, height);
-		return false;
-	}
-
-	if (width <=1 || height <=1)
-	{
-		debug(LOG_ERROR, "Map is too small : %u, %u", width, height);
-//		free(pFileData);
-		return false;
+		goto failure;
 	}
 
 	/* See if this is the first time a map has been loaded */
@@ -928,6 +921,7 @@ BOOL mapLoad(char *filename)
 	// load the ground types
 	if (!mapLoadGroundTypes())
 	{
+		goto failure;
 		return false;
 	}
 	
@@ -977,12 +971,12 @@ BOOL mapLoad(char *filename)
 
 	if (!mapSetGroundTypes())
 	{
-		return false;
+		goto failure;
 	}
 
 	// reset the random water bottom heights
 	environReset();
-
+	
 	// set the river bed
 	for (i=0;i<mapWidth;i++)
 	{
@@ -1007,7 +1001,12 @@ BOOL mapLoad(char *filename)
 
 	mapFloodFillContinents();
 
+	PHYSFS_close(fp);
 	return true;
+	
+failure:
+	PHYSFS_close(fp);
+	return false;
 }
 
 // Object macro group
