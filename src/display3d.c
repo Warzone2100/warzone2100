@@ -471,20 +471,26 @@ void draw3DScene( void )
 
 	bPlayerHasHQ = getHQExists(selectedPlayer);
 
-	if (radarOnScreen && bPlayerHasHQ && getWidgetsStatus())
+	if (radarOnScreen && bPlayerHasHQ)
 	{
 		pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 		pie_SetFogStatus(false);
-		drawRadar();
+		if (getWidgetsStatus())
+		{
+			drawRadar();
+		}
 		pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 		pie_SetFogStatus(true);
 	}
 
-	if (!bRender3DOnly && getWidgetsStatus())
+	if (!bRender3DOnly)
 	{
 		/* Ensure that any text messages are displayed at bottom of screen */
 		pie_SetFogStatus(false);
-		displayConsoleMessages();
+		if (getWidgetsStatus())
+		{
+			displayConsoleMessages();
+		}
 	}
 	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_OFF);
 	pie_SetFogStatus(false);
@@ -3427,6 +3433,9 @@ static void	drawDroidSelections( void )
 			}
 		}
 	}
+
+//	// Reset color to white so that features textures are rendered as expected
+//	glColor3ub(0xFF,0xFF,0xFF);
 
 	for(psFeature = apsFeatureLists[0]; psFeature; psFeature = psFeature->psNext)
 	{
