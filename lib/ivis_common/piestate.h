@@ -85,6 +85,13 @@ typedef enum
 	TEXPAGE_FONT = -2
 } TEXPAGE_TYPE;
 
+typedef enum
+{
+	SHADER_NONE,
+	SHADER_TCMASK,
+	SHADER_MAX
+} SHADER_MODE;
+
 /***************************************************************************/
 /*
  *	Global Variables
@@ -123,6 +130,23 @@ extern void pie_ShowMouse(bool visible);
 
 extern void pie_SetTranslucencyMode(TRANSLUCENCY_MODE transMode);
 
+/* Actually in piestate.c */
+
+// Shaders control center
+extern bool pie_GetShadersStatus(void);
+extern void pie_SetShadersStatus(bool);
+bool pie_LoadShaders(void);
+// Actual shaders (we do not want to export these calls)
+void pie_DeactivateShader(void);
+void pie_ActivateShader_TCMask(PIELIGHT teamcolour, SDWORD maskpage);
+
+/* Actually in piedraw.c */
+
+// Lighting cotrols
+extern void pie_SetLightingState(bool);
+extern bool pie_GetLightingState(void);
+
+/* Errors control routine */
 #define glErrors() \
 	_glerrors(__FUNCTION__, __FILE__, __LINE__)
 

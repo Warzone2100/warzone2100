@@ -771,6 +771,7 @@ static void drawTiles(iView *player)
 {
 	UDWORD i, j;
 	SDWORD rx, rz;
+	Vector3f theSun;
 
 	/* ---------------------------------------------------------------- */
 	/* Do boundary and extent checking                                  */
@@ -809,12 +810,9 @@ static void drawTiles(iView *player)
 	/* Translate */
 	pie_TRANSLATE(-rx, -player->p.y, rz);
 
-	if (getDrawShadows())
-	{
-		Vector3f theSun = getTheSun();
-		// this also detemines the length of the shadows
-		pie_BeginLighting(&theSun);
-	}
+	// this also detemines the length of the shadows
+	theSun = getTheSun();
+	pie_BeginLighting(&theSun, getDrawShadows());
 
 	// update the fog of war
 	for (i = 0; i < visibleTiles.y+1; i++)
@@ -874,7 +872,12 @@ static void drawTiles(iView *player)
 	drawTerrain();
 
 	// go back to the warzone [0,255] range
+	glActiveTexture(GL_TEXTURE1);
 	pie_TranslateTextureEnd();
+	// go back to the warzone [0,255] range
+	glActiveTexture(GL_TEXTURE0);
+	pie_TranslateTextureEnd();
+
 	// and to the warzone modelview transform
 	glPopMatrix();
 	
@@ -929,7 +932,12 @@ static void drawTiles(iView *player)
 	drawWater();
 	
 	// go back to the warzone [0,255] range
+	glActiveTexture(GL_TEXTURE1);
 	pie_TranslateTextureEnd();
+	// go back to the warzone [0,255] range
+	glActiveTexture(GL_TEXTURE0);
+	pie_TranslateTextureEnd();
+
 	// and to the warzone modelview transform
 	glPopMatrix();
 

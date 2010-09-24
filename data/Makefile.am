@@ -22,6 +22,7 @@ BASELIST = \
 	multiplay \
 	script \
 	sequenceaudio \
+	shaders\
 	stats \
 	structs \
 	tagdefinitions \

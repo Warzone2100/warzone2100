@@ -33,6 +33,7 @@
 #include "lib/ivis_common/tex.h"
 #include "lib/ivis_common/piedef.h"
 #include "lib/ivis_common/piestate.h"
+#include "lib/ivis_common/piepalette.h"
 #include "lib/ivis_common/pieclip.h"
 #include "piematrix.h"
 #include "screen.h"
@@ -55,14 +56,15 @@ extern BOOL drawing_interface;
 static unsigned int pieCount = 0;
 static unsigned int tileCount = 0;
 static unsigned int polyCount = 0;
-static BOOL lighting = false;
-static BOOL shadows = false;
+static bool lighting = false;
+static bool lightingstate = false;
+static bool shadows = false;
 
 /*
  *	Source
  */
 
-void pie_BeginLighting(const Vector3f * light)
+void pie_BeginLighting(const Vector3f * light, bool drawshadows)
 {
 	const float pos[4] = {light->x, light->y, light->z, 0.0f};
 	const float zero[4] = {0.0f, 0.0f, 0.0f, 0.0f};
@@ -78,8 +80,21 @@ void pie_BeginLighting(const Vector3f * light)
 	glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
 	glEnable(GL_LIGHT0);
 
-//	lighting = true;
-	shadows = true;
+	lighting = lightingstate;
+	if (drawshadows)
+	{
+		shadows = true;
+	}
+}
+
+bool pie_GetLightingState(void)
+{
+	return lightingstate;
+}
+
+void pie_SetLightingState(bool val)
+{
+	lightingstate = val;
 }
 
 void pie_EndLighting(void)
@@ -121,10 +136,10 @@ static transluscent_shape_t* tshapes = NULL;
 static unsigned int tshapes_size = 0;
 static unsigned int nb_tshapes = 0;
 
-static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, WZ_DECL_UNUSED PIELIGHT specular, int pieFlag, int pieFlagData)
+static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELIGHT teamcolour, WZ_DECL_UNUSED PIELIGHT specular, int pieFlag, int pieFlagData)
 {
 	iIMDPoly *pPolys;
-	BOOL light = lighting;
+	bool light = lighting;
 
 	pie_SetAlphaTest(true);
 
@@ -173,8 +188,6 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, WZ_DE
 		glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
 	}
 
-	pie_SetTexturePage(shape->texpage);
-
 	if (pieFlag & pie_HEIGHT_SCALED)	// construct
 	{
 		glScalef(1.0f, (float)pieFlagData / (float)pie_RAISE_SCALE, 1.0f);
@@ -185,6 +198,72 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, WZ_DE
 	}
 
 	glColor4ubv(colour.vector);	// Only need to set once for entire model
+	pie_SetTexturePage(shape->texpage);
+
+	// Activate TCMask if needed
+	if (shape->flags & iV_IMD_TCMASK &&	rendStates.rendMode == REND_OPAQUE)
+	{
+#ifdef _DEBUG
+	glErrors();
+#endif
+		if (pie_GetShadersStatus())
+		{
+			pie_ActivateShader_TCMask(teamcolour, shape->tcmaskpage);
+		}
+		else
+		{
+			//Set the environment colour with tcmask
+			GLfloat tc_env_colour[4];  
+			pal_PIELIGHTtoRGBA4f(&tc_env_colour[0], teamcolour);
+
+			// TU0
+			glActiveTexture(GL_TEXTURE0);
+			glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,	GL_COMBINE);
+			glTexEnvfv(GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, tc_env_colour);
+
+			// TU0 RGB
+			glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB,		GL_ADD_SIGNED);
+			glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_RGB,		GL_TEXTURE);
+			glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_RGB,		GL_SRC_COLOR);
+			glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE1_RGB,		GL_CONSTANT);
+			glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND1_RGB,		GL_SRC_COLOR);
+
+			// TU0 Alpha
+			glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA,		GL_REPLACE);
+			glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_ALPHA,		GL_TEXTURE);
+			glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_ALPHA,	GL_SRC_ALPHA);
+
+			// TU1
+			glActiveTexture(GL_TEXTURE1);
+			glEnable(GL_TEXTURE_2D);
+			glBindTexture(GL_TEXTURE_2D, _TEX_PAGE[shape->tcmaskpage].id);
+			glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,	GL_COMBINE);
+
+			// TU1 RGB
+			glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB,		GL_INTERPOLATE);
+			glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_RGB,		GL_PREVIOUS);
+			glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_RGB,		GL_SRC_COLOR);
+			glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE1_RGB,		GL_TEXTURE0);
+			glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND1_RGB,		GL_SRC_COLOR);
+			glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE2_RGB,		GL_TEXTURE);
+			glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND2_RGB,		GL_SRC_ALPHA);
+
+			// TU1 Alpha
+			glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA,		GL_REPLACE);
+			glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_ALPHA,		GL_PREVIOUS);
+			glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_ALPHA,	GL_SRC_ALPHA);
+
+
+			// This is why we are doing in opaque mode.
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_CONSTANT_COLOR, GL_ZERO);
+			glBlendColor(colour.byte.r / 255.0, colour.byte.g / 255.0,
+						colour.byte.b / 255.0, colour.byte.a / 255.0);
+		}
+#ifdef _DEBUG
+	glErrors();
+#endif
+	}
 
 	for (pPolys = shape->polys; pPolys < shape->polys + shape->npolys; pPolys++)
 	{
@@ -206,7 +285,8 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, WZ_DE
 
 		polyCount++;
 
-		if (frame != 0 && pPolys->flags & iV_IMD_TEXANIM)
+		// Run TextureAnimation (exluding the new teamcoloured models)
+		if (frame && pPolys->flags & iV_IMD_TEXANIM && !(shape->flags & iV_IMD_TCMASK))
 		{
 			frame %= shape->numFrames;
 
@@ -239,6 +319,11 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, WZ_DE
 		for (n = 0; n < pPolys->npnts; n++)
 		{
 			glTexCoord2fv((GLfloat*)&texCoords[n]);
+			if (shape->flags & iV_IMD_TCMASK && rendStates.rendMode == REND_OPAQUE &&
+				!pie_GetShadersStatus())
+			{
+				glMultiTexCoord2fv(GL_TEXTURE1, (GLfloat*)&texCoords[n]);
+			}
 			glVertex3fv((GLfloat*)&vertexCoords[n]);
 		}
 
@@ -247,6 +332,26 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, WZ_DE
 		if (pPolys->flags & PIE_NO_CULL)
 		{
 			glEnable(GL_CULL_FACE);
+		}
+	}
+
+	// Deactivate TCMask if it was previously enabled
+	if (shape->flags & iV_IMD_TCMASK && rendStates.rendMode == REND_OPAQUE)
+	{
+		if (pie_GetShadersStatus())
+		{
+			pie_DeactivateShader();
+		}
+		else
+		{
+			glDisable(GL_BLEND);
+
+			glActiveTexture(GL_TEXTURE1);
+			glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+			glDisable(GL_TEXTURE_2D);
+
+			glActiveTexture(GL_TEXTURE0);
+			glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 		}
 	}
 
@@ -474,6 +579,11 @@ static void inverse_matrix(const float * src, float * dst)
 	dst[8] = invdet * (src[0]*src[5] - src[4]*src[1]);
 }
 
+void pie_SetUp(void)
+{
+	// initialise pie engine (just a placeholder for now)
+}
+
 void pie_CleanUp( void )
 {
 	free( tshapes );
@@ -484,6 +594,12 @@ void pie_CleanUp( void )
 
 void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, PIELIGHT specular, int pieFlag, int pieFlagData)
 {
+	PIELIGHT teamcolour;
+
+	ASSERT_OR_RETURN(, shape, "Attempting to draw null sprite");
+
+	teamcolour = pal_GetTeamColour(team);
+
 	pieCount++;
 
 	if (frame == 0)
@@ -493,7 +609,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, PIE
 
 	if (drawing_interface || !shadows)
 	{
-		pie_Draw3DShape2(shape, frame, colour, specular, pieFlag, pieFlagData);
+		pie_Draw3DShape2(shape, frame, colour, teamcolour, specular, pieFlag, pieFlagData);
 	}
 	else
 	{
@@ -573,7 +689,8 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, PIE
 					nb_scshapes++;
 				}
 			}
-			pie_Draw3DShape2(shape, frame, colour, specular, pieFlag, pieFlagData);
+
+			pie_Draw3DShape2(shape, frame, colour, teamcolour, specular, pieFlag, pieFlagData);
 		}
 	}
 }
@@ -698,7 +815,7 @@ static void pie_DrawRemainingTransShapes(void)
 	for (i = 0; i < nb_tshapes; ++i)
 	{
 		glLoadMatrixf(tshapes[i].matrix);
-		pie_Draw3DShape2(tshapes[i].shape, tshapes[i].frame, tshapes[i].colour,
+		pie_Draw3DShape2(tshapes[i].shape, tshapes[i].frame, tshapes[i].colour, tshapes[i].colour,
 				 tshapes[i].specular, tshapes[i].flag, tshapes[i].flag_data);
 	}
 	glPopMatrix();

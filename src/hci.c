@@ -35,6 +35,7 @@
 #include "lib/gamelib/gtime.h"
 #include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_common/piepalette.h"
+#include "lib/ivis_common/piestate.h"
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/screen.h"
 #include "lib/script/script.h"
@@ -176,9 +177,13 @@ BOOL Refreshing = false;
 #define IDOPT_DROID			1037		// The place droid button
 #define IDOPT_STRUCT		1038		// The place struct button
 #define IDOPT_FEATURE		1039		// The place feature button
-#define IDOPT_TILE		1040		// The place tile button
-#define IDOPT_PAUSE		1041		// The edit pause button
+#define IDOPT_TILE			1040		// The place tile button
+#define IDOPT_PAUSE			1041		// The edit pause button
 #define IDOPT_ZALIGN		1042		// The z-align button
+#define IDOPT_IVISFORM		1043		// iViS engine form
+#define IDOPT_IVISLABEL		1044		// iViS form label
+#define IDOPT_IVISSHADERS	1045		// iViS shaders button
+#define IDOPT_IVISLIGHTING	1046		// iViS lighting button
 
 /* Edit screen IDs */
 #define IDED_FORM			2000		// The edit form
@@ -1443,6 +1448,39 @@ static void intProcessOptions(UDWORD id)
 			intMode = INT_NORMAL;
 //			widgSetButtonState(psWScreen, IDRET_OPTIONS, 0);
 			break;
+		case IDOPT_IVISSHADERS:
+			{
+				bool status = pie_GetShadersStatus();
+				pie_SetShadersStatus(!status);
+				if (status != pie_GetShadersStatus())
+				{
+					if (!status)
+					{
+						widgSetButtonState(psWScreen, IDOPT_IVISSHADERS, WBUT_CLICKLOCK);
+					}
+					else
+					{
+						widgSetButtonState(psWScreen, IDOPT_IVISSHADERS, 0);
+					}
+				}
+				else
+				{
+					widgSetButtonState(psWScreen, IDOPT_IVISSHADERS, WBUT_DISABLE);
+				}
+			}
+			break;
+		case IDOPT_IVISLIGHTING:
+			if (pie_GetLightingState())
+			{
+				pie_SetLightingState(false);
+				widgSetButtonState(psWScreen, IDOPT_IVISLIGHTING, 0);
+			}
+			else
+			{
+				pie_SetLightingState(true);
+				widgSetButtonState(psWScreen, IDOPT_IVISLIGHTING, WBUT_CLICKLOCK);
+			}
+			break;
 			/* Ignore these */
 		case IDOPT_FORM:
 		case IDOPT_LABEL:
@@ -1450,6 +1488,8 @@ static void intProcessOptions(UDWORD id)
 		case IDOPT_MAPLABEL:
 		case IDOPT_PLAYERFORM:
 		case IDOPT_PLAYERLABEL:
+		case IDOPT_IVISFORM:
+		case IDOPT_IVISLABEL:
 			break;
 		default:
 			ASSERT( false, "intProcessOptions: Unknown return code" );
@@ -4195,6 +4235,70 @@ BOOL intAddOptions(void)
 			sButInit.x = OPT_GAP;
 			sButInit.y += OPT_BUTHEIGHT + OPT_GAP;
 		}
+	}
+
+	/* Add iViS form */
+	sFormInit.formID = IDOPT_FORM;
+	sFormInit.id = IDOPT_IVISFORM;
+	sFormInit.style = WFORM_PLAIN;
+	sFormInit.x = OPT_GAP;
+	sFormInit.y = OPT_PLAYERY + OPT_BUTHEIGHT * 3 + OPT_GAP * 5;
+	sFormInit.width = OPT_WIDTH - OPT_GAP * 2;
+	sFormInit.height = OPT_BUTHEIGHT * 3 + OPT_GAP * 4;
+	if (!widgAddForm(psWScreen, &sFormInit))
+	{
+		return false;
+	}
+
+	/* Add iViS label */
+	sLabInit.formID = IDOPT_IVISFORM;
+	sLabInit.id = IDOPT_IVISLABEL;
+	sLabInit.style = WLAB_PLAIN;
+	sLabInit.x = OPT_GAP;
+	sLabInit.y = OPT_GAP;
+	sLabInit.pText = "iViS:";
+	sLabInit.FontID = font_regular;
+	if (!widgAddLabel(psWScreen, &sLabInit))
+	{
+		return false;
+	}
+
+	/* Add iViS shaders button */
+	sButInit.formID = IDOPT_IVISFORM;
+	sButInit.id = IDOPT_IVISSHADERS;
+	sButInit.x = OPT_BUTWIDTH + OPT_GAP * 2;
+	sButInit.y = OPT_GAP;
+	sButInit.width = OPT_BUTWIDTH;
+	sButInit.height = OPT_BUTHEIGHT;
+	sButInit.FontID = font_regular;
+	sButInit.pText = "Shaders";
+	sButInit.pTip = "Toggles Shaders/FF mode.";
+	if (!widgAddButton(psWScreen, &sButInit))
+	{
+		return false;
+	}
+	if (pie_GetShadersStatus())
+	{
+		widgSetButtonState(psWScreen, IDOPT_IVISSHADERS, WBUT_CLICKLOCK);
+	}
+
+	/* Add iViS lighting button */
+	sButInit.formID = IDOPT_IVISFORM;
+	sButInit.id = IDOPT_IVISLIGHTING;
+	sButInit.x += OPT_BUTWIDTH + OPT_GAP;
+	sButInit.y = OPT_GAP;
+	sButInit.width = OPT_BUTWIDTH;
+	sButInit.height = OPT_BUTHEIGHT;
+	sButInit.FontID = font_regular;
+	sButInit.pText = "Lighting";
+	sButInit.pTip = "Toggles lighting On/Off.";
+	if (!widgAddButton(psWScreen, &sButInit))
+	{
+		return false;
+	}
+	if (pie_GetLightingState())
+	{
+		widgSetButtonState(psWScreen, IDOPT_IVISLIGHTING, WBUT_CLICKLOCK);
 	}
 
 //	widgStartScreen(psWScreen);

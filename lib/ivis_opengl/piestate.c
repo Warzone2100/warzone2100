@@ -27,12 +27,14 @@
 #include <SDL.h>
 #include <SDL_mouse.h>
 #include <SDL_opengl.h>
+#include <physfs.h>
 
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/piedef.h"
 #include "lib/ivis_common/tex.h"
 #include "lib/ivis_common/piepalette.h"
 #include "lib/ivis_common/rendmode.h"
+#include "screen.h"
 
 /*
  *	Global Variables
@@ -44,10 +46,228 @@ static bool ColouredMouse = false;
 static IMAGEFILE* MouseCursors = NULL;
 static uint16_t MouseCursorIDs[CURSOR_MAX];
 static bool MouseVisible = true;
+static GLuint shaderProgram[SHADER_MAX];
+static bool shadersAvailable = false;		// Can we use shaders?
+static bool shadersActivate = true;			// If we can, should we use them?
 
 /*
  *	Source
  */
+
+// Read shader into text buffer
+static char *readShaderBuf(const char *name)
+{
+	PHYSFS_file	*fp;
+	int	filesize;
+	char *buffer;
+
+	fp = PHYSFS_openRead(name);
+	debug(LOG_3D, "Reading...[directory: %s] %s", PHYSFS_getRealDir(name), name);
+	ASSERT_OR_RETURN(0, fp != NULL, "Could not open %s", name);
+	filesize = PHYSFS_fileLength(fp);
+	buffer = malloc(filesize + 1);
+	if (buffer)
+	{
+		PHYSFS_read(fp, buffer, 1, filesize);
+		buffer[filesize] = '\0';
+	}
+	PHYSFS_close(fp);
+
+	return buffer;
+}
+
+// Retrieve shader compilation errors
+static void printShaderInfoLog(GLuint shader)
+{
+	int infologLen = 0;
+
+	glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infologLen);
+	if (infologLen > 0)
+	{
+		int charsWritten = 0;
+		GLchar *infoLog = (GLchar *)malloc(infologLen);
+
+		glGetShaderInfoLog(shader, infologLen, &charsWritten, infoLog);
+		debug(LOG_ERROR, "Shader info log: %s", infoLog);
+		free(infoLog);
+	}
+}
+
+// Retrieve shader linkage errors
+static void printProgramInfoLog(GLuint program)
+{
+	int infologLen = 0;
+
+	glGetProgramiv(program, GL_INFO_LOG_LENGTH, &infologLen);
+	if (infologLen > 0)
+	{
+		int charsWritten = 0;
+		GLchar *infoLog = (GLchar *)malloc(infologLen);
+
+		glGetProgramInfoLog(program, infologLen, &charsWritten, infoLog);
+		debug(LOG_ERROR, "Program info log: %s", infoLog);
+		free(infoLog);
+	}
+}
+
+// Read/compile/link shaders
+static bool loadShaders(GLuint *program, const char *vertexPath, const char *fragmentPath)
+{
+	GLint status;
+	bool success = true; // Assume overall success
+	char *buffer;
+	*program = glCreateProgram();
+
+	ASSERT_OR_RETURN(false, *program != 0, "Could not create shader program");
+
+	if (vertexPath)
+	{
+		success = false; // Assume failure before reading shader file
+
+		if ((buffer = readShaderBuf(vertexPath)))
+		{
+			GLuint shader = glCreateShader(GL_VERTEX_SHADER);
+
+			glShaderSource(shader, 1, (const char **)&buffer, NULL);
+			glCompileShader(shader);
+
+			// Check for compilation errors
+			glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
+			if (!status)
+			{
+				debug(LOG_ERROR, "Vertex shader compilation has failed [%s]", vertexPath);
+				printShaderInfoLog(shader);
+			}
+			else
+			{
+				glAttachShader(*program, shader);
+				success = true;
+			}
+
+			free(buffer);
+		}
+	}
+
+	if (success && fragmentPath)
+	{
+		success = false; // Assume failure before reading shader file
+
+		if ((buffer = readShaderBuf(fragmentPath)))
+		{
+			GLuint shader = glCreateShader(GL_FRAGMENT_SHADER);
+
+			glShaderSource(shader, 1, (const char **)&buffer, NULL);
+			glCompileShader(shader);
+			
+			// Check for compilation errors
+			glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
+			if (!status)
+			{
+				debug(LOG_ERROR, "Fragment shader compilation has failed [%s]", fragmentPath);
+				printShaderInfoLog(shader);
+			}
+			else
+			{
+				glAttachShader(*program, shader);
+				success = true;
+			}
+
+			free(buffer);
+		}
+	}
+
+	if (success)
+	{
+		glLinkProgram(*program);
+
+		// Check for linkage errors
+		glGetProgramiv(*program, GL_LINK_STATUS, &status);
+		if (!status)
+		{
+			debug(LOG_ERROR, "Shader program linkage has failed [%s, %s]", vertexPath, fragmentPath);
+			printProgramInfoLog(*program);
+			success = false;
+		}
+	}
+
+	return success;	
+}
+
+// Run from screen.c on init. FIXME: do some kind of FreeShaders on failure.
+bool pie_LoadShaders()
+{
+	GLuint program;
+
+	// Reset shaders status
+	shadersAvailable = false;
+
+	// Try and load some shaders
+	shaderProgram[SHADER_NONE]		= 0;
+
+	// TCMask shader
+	debug(LOG_3D, "Loading shaders: SHADER_TCMASK");
+	if (!loadShaders(&program, "shaders/tcmask.vert", "shaders/tcmask.frag"))
+		return false;
+	shaderProgram[SHADER_TCMASK] = program;
+
+	// Good to go
+	shadersAvailable = true;
+	return true;
+}
+
+static inline GLuint pie_SetShader(SHADER_MODE shaderMode)
+{
+	if (!shadersAvailable || shaderMode >= SHADER_MAX)
+		return shaderProgram[SHADER_NONE];
+
+	glUseProgram(shaderProgram[shaderMode]);
+	return shaderProgram[shaderMode];
+}
+
+void pie_DeactivateShader(void)
+{
+	pie_SetShader(SHADER_NONE);
+}
+
+bool pie_GetShadersStatus(void)
+{
+	return shadersAvailable && shadersActivate;
+}
+
+void pie_SetShadersStatus(bool status)
+{
+	shadersActivate = status;
+}
+
+void pie_ActivateShader_TCMask(PIELIGHT teamcolour, SDWORD maskpage)
+{
+	GLint loc;
+	GLuint shaderProgram;
+	GLfloat colour4f[4];
+
+	if (!shadersAvailable)
+		return;
+
+	shaderProgram = pie_SetShader(SHADER_TCMASK);
+
+	loc = glGetUniformLocation(shaderProgram, "Texture0"); 
+	glUniform1i(loc, 0);
+
+	loc = glGetUniformLocation(shaderProgram, "Texture1"); 
+	glUniform1i(loc, 1);
+
+	loc = glGetUniformLocation(shaderProgram, "teamcolour"); 
+	pal_PIELIGHTtoRGBA4f(&colour4f[0], teamcolour);
+	glUniform4fv(loc, 1, &colour4f[0]);
+
+	glActiveTexture(GL_TEXTURE1);
+	pie_SetTexturePage(maskpage);
+	glActiveTexture(GL_TEXTURE0);
+
+#ifdef _DEBUG
+	glErrors();
+#endif
+}
 
 void pie_SetDepthBufferStatus(DEPTH_MODE depthMode)
 {
