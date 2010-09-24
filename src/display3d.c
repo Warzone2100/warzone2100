@@ -1302,7 +1302,7 @@ void	renderProjectile(PROJECTILE *psCurr)
 		}
 		else
 		{
-			pie_Draw3DShape(pIMD, 0, 0, WZCOL_WHITE, WZCOL_BLACK, pie_NO_BILINEAR, 0);
+			pie_Draw3DShape(pIMD, 0, 0, WZCOL_WHITE, WZCOL_BLACK, 0, 0);
 		}
 
 		iV_MatrixEnd();
@@ -1415,7 +1415,7 @@ void	renderAnimComponent( const COMPONENT_OBJECT *psObj )
 			}
 		}
 
-		pie_Draw3DShape(psObj->psShape, 0, iPlayer, brightness, WZCOL_BLACK, pie_NO_BILINEAR|pie_STATIC_SHADOW, 0);
+		pie_Draw3DShape(psObj->psShape, 0, iPlayer, brightness, WZCOL_BLACK, pie_STATIC_SHADOW, 0);
 
 		/* clear stack */
 		iV_MatrixEnd();
@@ -2282,7 +2282,7 @@ void	renderStructure(STRUCTURE *psStructure)
 			}
 			else
 			{
-				pieFlag = pie_TRANSLUCENT;
+				pieFlag = pie_TRANSLUCENT | pie_FORCE_FOG;
 				pieFlagData = 255;
 			}
 			pie_Draw3DShape(psStructure->pStructureType->pBaseIMD, 0, 0, buildingBrightness, WZCOL_BLACK, pieFlag, pieFlagData);

@@ -143,17 +143,26 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 
 	pie_SetAlphaTest(true);
 
+	/* Set fog status */
+	if (!(pieFlag & pie_FORCE_FOG) && 
+		(pieFlag & pie_ADDITIVE || pieFlag & pie_TRANSLUCENT || pieFlag & pie_BUTTON))
+	{
+		pie_SetFogStatus(false);
+	}
+	else
+	{
+		pie_SetFogStatus(true);
+	}
+
 	/* Set tranlucency */
 	if (pieFlag & pie_ADDITIVE)
-	{ //Assume also translucent
-		pie_SetFogStatus(false);
+	{
 		pie_SetRendMode(REND_ADDITIVE);
 		colour.byte.a = (UBYTE)pieFlagData;
 		light = false;
 	}
 	else if (pieFlag & pie_TRANSLUCENT)
 	{
-		pie_SetFogStatus(false);
 		pie_SetRendMode(REND_ALPHA);
 		colour.byte.a = (UBYTE)pieFlagData;
 		light = false;
@@ -162,12 +171,7 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 	{
 		if (pieFlag & pie_BUTTON)
 		{
-			pie_SetFogStatus(false);
 			pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
-		}
-		else
-		{
-			pie_SetFogStatus(true);
 		}
 		pie_SetRendMode(REND_OPAQUE);
 	}
@@ -777,13 +781,12 @@ static void pie_DrawShadows(void)
 		pie_ShadowDrawLoop();
 	}
 
+	pie_SetRendMode(REND_ALPHA);
 	glEnable(GL_CULL_FACE);
 	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 	glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 	glStencilMask(~0);
 	glStencilFunc(GL_LESS, 0, ~0);
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glColor4f(0, 0, 0, 0.5);
 
 	pie_PerspectiveEnd();
@@ -797,7 +800,7 @@ static void pie_DrawShadows(void)
 	glEnd();
 	pie_PerspectiveBegin();
 
-	glDisable(GL_BLEND);
+	pie_SetRendMode(REND_OPAQUE);
 	glDisable(GL_STENCIL_TEST);
 	glEnable(GL_DEPTH_TEST);
 	glDepthMask(GL_TRUE);

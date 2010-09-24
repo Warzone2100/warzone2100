@@ -319,9 +319,8 @@ void pie_DownLoadRadar(UDWORD *buffer, int width, int height, bool filter)
 void pie_RenderRadar(int x, int y, int width, int height)
 {
 	pie_SetTexturePage(radarTexture);
-	pie_SetRendMode(REND_OPAQUE);
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	pie_SetRendMode(REND_ALPHA);
+
 	glColor4ubv(WZCOL_WHITE.vector);
 	glBegin(GL_TRIANGLE_STRIP);
 		glTexCoord2f(0, 0);			glVertex2f(x, y);

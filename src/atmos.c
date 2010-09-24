@@ -365,7 +365,7 @@ void	renderParticle( ATPART *psPart )
 	/* Draw it... */
 	centreX = player.p.x + world_coord(visibleTiles.x / 2);
 	centreZ = player.p.z + world_coord(visibleTiles.y / 2);
-   	pie_Draw3DShape(psPart->imd, 0, 0, WZCOL_WHITE, WZCOL_BLACK, pie_NO_BILINEAR, 0);
+   	pie_Draw3DShape(psPart->imd, 0, 0, WZCOL_WHITE, WZCOL_BLACK, 0, 0);
 	iV_MatrixEnd();
 }
 

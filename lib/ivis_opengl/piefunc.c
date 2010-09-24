@@ -130,8 +130,7 @@ void pie_DrawSkybox(float scale, int u, int v, int w, int h)
 	glColor4ub(0xFF,0xFF,0xFF,0xFF);
 
 	// enable alpha
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	pie_SetRendMode(REND_ALPHA);
 
 	// for the nice blend of the sky with the fog
 	glDisable(GL_ALPHA_TEST);
