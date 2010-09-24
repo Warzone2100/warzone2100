@@ -57,12 +57,13 @@ static void pie_PrintLoadedTextures(void);
 
 	Returns the texture number of the image.
 **************************************************************************/
-int pie_AddTexPage(iV_Image *s, const char* filename, int slot, int maxTextureSize)
+int pie_AddTexPage(iV_Image *s, const char* filename, int slot, int maxTextureSize, bool useMipmaping)
 {
 	unsigned int i = 0;
 	int width, height;
 	void *bmp;
 	bool scaleDown = false;
+	GLint minfilter;
 
 	/* Have we already loaded this one? Should not happen here. */
 	while (i < _TEX_INDEX)
@@ -130,14 +131,28 @@ int pie_AddTexPage(iV_Image *s, const char* filename, int slot, int maxTextureSi
 			// this is an interface texture, do not use compression
 			gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, width, height, iV_getPixelFormat(s), GL_UNSIGNED_BYTE, bmp);
 		}
-	} else {
+	}
+	else
+	{
 		debug(LOG_ERROR, "pie_AddTexPage: non POT texture %s", filename);
 	}
-	free(bmp); // it is uploaded, we do not need it anymore
+	
+	// it is uploaded, we do not need it anymore
+	free(bmp); 
 	s->bmp = NULL;
 
+	if (useMipmaping)
+	{
+		minfilter = GL_LINEAR_MIPMAP_LINEAR;
+	}
+	else
+	{
+		minfilter = GL_LINEAR;
+	}
+
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minfilter);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	// Use anisotropic filtering, if available, but only max 4.0 to reduce processor burden
@@ -181,6 +196,20 @@ void pie_MakeTexPageName(char * filename)
 	}
 }
 
+/*!
+ * Turns page filename into a pagename + tc mask if possible
+ * \param[in,out] filename Filename to pagify
+ */
+void pie_MakeTexPageTCMaskName(char * filename)
+{
+	if (strncmp(filename, "page-", 5) == 0)
+	{
+		int i;
+		for( i = 5; i < iV_TEXNAME_MAX-1 && isdigit(filename[i]); i++);
+		filename[i] = '\0';
+		strcat(filename, iV_TEXNAME_TCSUFFIX);
+	}
+}
 
 /*!
  * Print the names of all loaded textures to LOG_ERROR
@@ -236,7 +265,7 @@ int iV_GetTexture(const char *filename)
 	replaceing the texture page with the same name if another file
 	with this prefix is loaded.
 **************************************************************************/
-int pie_ReplaceTexPage(iV_Image *s, const char *texPage, int maxTextureSize)
+int pie_ReplaceTexPage(iV_Image *s, const char *texPage, int maxTextureSize, bool useMipmaping)
 {
 	int i = iV_GetTexture(texPage);
 
@@ -249,7 +278,7 @@ int pie_ReplaceTexPage(iV_Image *s, const char *texPage, int maxTextureSize)
 	glDeleteTextures(1, &_TEX_PAGE[i].id);
 	debug(LOG_TEXTURE, "Reloading texture %s from index %d", texPage, i);
 	_TEX_PAGE[i].name[0] = '\0';
-	pie_AddTexPage(s, texPage, i, maxTextureSize);
+	pie_AddTexPage(s, texPage, i, maxTextureSize, useMipmaping);
 
 	return i;
 }
