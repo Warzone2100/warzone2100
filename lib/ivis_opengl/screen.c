@@ -286,9 +286,6 @@ bool screenInitialise(
 	glLoadIdentity();
 	glOrtho(0.0f, (double)width, (double)height, 0.0f, 1.0f, -1.0f);
 
-	glMatrixMode(GL_TEXTURE);
-	glScalef(1.0f/OLD_TEXTURE_SIZE_FIX, 1.0f/OLD_TEXTURE_SIZE_FIX, 1.0f); // FIXME Scaling texture coords to 256x256!
-
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	glCullFace(GL_FRONT);
@@ -452,10 +449,6 @@ void screen_Upload(const char *newBackDropBmp, BOOL preview)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	}
-
-	// we use 0..256 as texture coordinates, not 0..1
-	tx *= 256;
-	ty *= 256;
 
 	glBegin(GL_TRIANGLE_STRIP);
 		glTexCoord2f(0, 0);

@@ -860,10 +860,6 @@ static void drawTiles(iView *player)
 	pie_SetAlphaTest(false);
 	pie_SetFogStatus(true);
 
-	// reset the texture coordinates to the standard [0,1] range.
-	glMatrixMode(GL_TEXTURE);
-	glLoadIdentity();
-	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 	// also, make sure we can use world coordinates directly
 	glTranslatef(world_coord(-playerXTile-terrainMidX), 0.0f, world_coord(playerZTile+terrainMidY));
@@ -871,12 +867,6 @@ static void drawTiles(iView *player)
 	// and draw it
 	drawTerrain();
 
-	// go back to the warzone [0,255] range
-	glActiveTexture(GL_TEXTURE1);
-	pie_TranslateTextureEnd();
-	// go back to the warzone [0,255] range
-	glActiveTexture(GL_TEXTURE0);
-	pie_TranslateTextureEnd();
 
 	// and to the warzone modelview transform
 	glPopMatrix();
@@ -921,23 +911,12 @@ static void drawTiles(iView *player)
 	pie_SetAlphaTest(false);
 	pie_SetFogStatus(true);
 	
-	// reset the texture coordinates to the standard [0,1] range.
-	glMatrixMode(GL_TEXTURE);
-	glLoadIdentity();
-	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 	// also, make sure we can use world coordinates directly
 	glTranslatef(world_coord(-playerXTile-terrainMidX), 0.0f, world_coord(playerZTile+terrainMidY));
 	
 	drawWater();
 	
-	// go back to the warzone [0,255] range
-	glActiveTexture(GL_TEXTURE1);
-	pie_TranslateTextureEnd();
-	// go back to the warzone [0,255] range
-	glActiveTexture(GL_TEXTURE0);
-	pie_TranslateTextureEnd();
-
 	// and to the warzone modelview transform
 	glPopMatrix();
 
@@ -3771,7 +3750,7 @@ static void renderSurroundings(void)
 	{
 		wind = wrapf(wind + timeAdjustedIncrement(0.5f, false), 360.0f);
 	}
-	pie_DrawSkybox(skybox_scale, 0, 0, 256, 256);
+	pie_DrawSkybox(skybox_scale, 0, 0, 1, 1);
 
 	// Load Saved State
 	pie_MatEnd();

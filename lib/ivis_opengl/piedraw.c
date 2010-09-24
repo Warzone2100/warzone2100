@@ -296,14 +296,14 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 
 			if (frame > 0)
 			{
-				const int framesPerLine = 256 / pPolys->texAnim.textureWidth;
-				const int uFrame = (frame % framesPerLine) * pPolys->texAnim.textureWidth;
-				const int vFrame = (frame / framesPerLine) * pPolys->texAnim.textureHeight;
+				const int framesPerLine = OLD_TEXTURE_SIZE_FIX / (pPolys->texAnim.x * OLD_TEXTURE_SIZE_FIX);
+				const int uFrame = (frame % framesPerLine) * (pPolys->texAnim.x * OLD_TEXTURE_SIZE_FIX);
+				const int vFrame = (frame / framesPerLine) * (pPolys->texAnim.y * OLD_TEXTURE_SIZE_FIX);
 
 				for (n = 0; n < pPolys->npnts; n++)
 				{
-					texCoords[n].x += uFrame;
-					texCoords[n].y += vFrame;
+					texCoords[n].x += uFrame / OLD_TEXTURE_SIZE_FIX;
+					texCoords[n].y += vFrame / OLD_TEXTURE_SIZE_FIX;
 				}
 			}
 		}
@@ -857,16 +857,16 @@ void pie_DrawImage(const PIEIMAGE *image, const PIERECT *dest)
 
 	glBegin(GL_TRIANGLE_STRIP);
 		//set up 4 pie verts
-		glTexCoord2f(image->tu, image->tv);
+		glTexCoord2f(image->tu / OLD_TEXTURE_SIZE_FIX, image->tv / OLD_TEXTURE_SIZE_FIX);
 		glVertex2f(dest->x, dest->y);
 
-		glTexCoord2f(image->tu + image->tw, image->tv);
+		glTexCoord2f((image->tu + image->tw) / OLD_TEXTURE_SIZE_FIX, image->tv / OLD_TEXTURE_SIZE_FIX);
 		glVertex2f(dest->x + dest->w, dest->y);
 
-		glTexCoord2f(image->tu, image->tv + image->th);
+		glTexCoord2f(image->tu / OLD_TEXTURE_SIZE_FIX, (image->tv + image->th) / OLD_TEXTURE_SIZE_FIX);
 		glVertex2f(dest->x, dest->y + dest->h);
 
-		glTexCoord2f(image->tu + image->tw, image->tv + image->th);
+		glTexCoord2f((image->tu + image->tw) / OLD_TEXTURE_SIZE_FIX, (image->tv + image->th) / OLD_TEXTURE_SIZE_FIX);
 		glVertex2f(dest->x + dest->w, dest->y + dest->h);
 	glEnd();
 }

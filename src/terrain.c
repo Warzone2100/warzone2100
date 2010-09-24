@@ -1349,7 +1349,11 @@ void drawTerrain(void)
 	// disable the lightmap texture
 	glActiveTexture(GL_TEXTURE1);
 	glDisable(GL_TEXTURE_2D);
+	glMatrixMode(GL_TEXTURE);
+	glLoadIdentity();
 	glActiveTexture(GL_TEXTURE0);
+	glLoadIdentity();
+	glMatrixMode(GL_MODELVIEW);
 
 	// leave everything in a sane state so it won't mess up somewhere else
 	glDisableClientState( GL_TEXTURE_COORD_ARRAY );

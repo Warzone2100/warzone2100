@@ -75,7 +75,7 @@ static BOOL AtEndOfFile(const char *CurPos, const char *EndOfFile)
  * \post s->polys allocated (iFSDPoly * s->npolys)
  * \post s->pindex allocated for each poly
  */
-static BOOL _imd_load_polys( const char **ppFileData, iIMDShape *s )
+static bool _imd_load_polys( const char **ppFileData, iIMDShape *s, int pieVersion)
 {
 	const char *pFileData = *ppFileData;
 	unsigned int i, j;
@@ -147,9 +147,16 @@ static BOOL _imd_load_polys( const char **ppFileData, iIMDShape *s )
 			poly->normal = pie_SurfaceNormal3fv(p0, p1, p2);
 		}
 
+		// PIE2 only
 		if (poly->flags & iV_IMD_TEXANIM)
 		{
 			unsigned int nFrames, pbRate, tWidth, tHeight;
+
+			if (pieVersion == PIE_FLOAT_VER)
+			{
+				debug(LOG_ERROR, "PIE version %d doesn't support texanim data! Use PIE2 instead.", pieVersion);
+				return false;
+			}
 
 			// even the psx needs to skip the data
 			if (sscanf(pFileData, "%d %d %d %d%n", &nFrames, &pbRate, &tWidth, &tHeight, &cnt) != 4)
@@ -166,13 +173,13 @@ static BOOL _imd_load_polys( const char **ppFileData, iIMDShape *s )
 			s->numFrames = nFrames;
 			s->animInterval = pbRate;
 
-			poly->texAnim.textureWidth = tWidth;
-			poly->texAnim.textureHeight = tHeight;
+			poly->texAnim.x = tWidth / OLD_TEXTURE_SIZE_FIX;
+			poly->texAnim.y = tHeight / OLD_TEXTURE_SIZE_FIX;
 		}
 		else
 		{
-			poly->texAnim.textureWidth = 0;
-			poly->texAnim.textureHeight = 0;
+			poly->texAnim.x = 0;
+			poly->texAnim.y = 0;
 		}
 
 		// PC texture coord routine
@@ -195,8 +202,16 @@ static BOOL _imd_load_polys( const char **ppFileData, iIMDShape *s )
 				}
 				pFileData += cnt;
 
-				poly->texCoord[j].x = VertexU;
-				poly->texCoord[j].y = VertexV;
+				if (pieVersion == PIE_FLOAT_VER)
+				{
+					poly->texCoord[j].x = VertexU;
+					poly->texCoord[j].y = VertexV;
+				}
+				else
+				{
+					poly->texCoord[j].x = VertexU / OLD_TEXTURE_SIZE_FIX;
+					poly->texCoord[j].y = VertexV / OLD_TEXTURE_SIZE_FIX;
+				}
 			}
 		}
 		else
@@ -506,7 +521,7 @@ static BOOL _imd_load_connectors(const char **ppFileData, iIMDShape *s)
  * \pre ppFileData loaded
  * \post s allocated
  */
-static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataEnd, int nlevels)
+static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataEnd, int nlevels, int pieVersion)
 {
 	const char *pFileData = *ppFileData;
 	char buffer[PATH_MAX] = {'\0'};
@@ -576,7 +591,7 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
 		return NULL;
 	}
 
-	_imd_load_polys( &pFileData, s );
+	_imd_load_polys( &pFileData, s, pieVersion);
 
 
 	// NOW load optional stuff
@@ -594,7 +609,7 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
 		if (strcmp(buffer, "LEVEL") == 0)
 		{
 			debug(LOG_3D, "imd[_load_level] = npoints %d, npolys %d", s->npoints, s->npolys);
-			s->next = _imd_load_level(&pFileData, FileDataEnd, nlevels - 1);
+			s->next = _imd_load_level(&pFileData, FileDataEnd, nlevels - 1, pieVersion);
 		}
 		else if (strcmp(buffer, "CONNECTORS") == 0)
 		{
@@ -648,8 +663,8 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 		return NULL;
 	}
 
-	//Now supporting version 4 files
-	if (imd_version < 2 || imd_version > 5)
+	//Now supporting version PIE_VER and PIE_FLOAT_VER files
+	if (imd_version != PIE_VER && imd_version != PIE_FLOAT_VER)
 	{
 		debug(LOG_ERROR, "iV_ProcessIMD %s version %d not supported", pFileName, imd_version);
 		return NULL;
@@ -742,7 +757,7 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 		return NULL;
 	}
 
-	shape = _imd_load_level(&pFileData, FileDataEnd, nlevels);
+	shape = _imd_load_level(&pFileData, FileDataEnd, nlevels, imd_version);
 	if (shape == NULL)
 	{
 		debug(LOG_ERROR, "iV_ProcessIMD %s unsuccessful", pFileName);

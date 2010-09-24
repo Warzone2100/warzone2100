@@ -117,9 +117,6 @@ extern Sint32 pie_RotateProject(const Vector3i *src, Vector2i *dest);
 extern void pie_PerspectiveBegin(void);
 extern void pie_PerspectiveEnd(void);
 
-extern void pie_TranslateTextureBegin(const Vector2f offset);
-extern void pie_TranslateTextureEnd(void);
-
 //*************************************************************************
 
 extern void pie_VectorInverseRotate0(const Vector3i *v1, Vector3i *v2);
