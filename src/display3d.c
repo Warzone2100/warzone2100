@@ -882,10 +882,6 @@ static void drawTiles(iView *player)
 	// also, make sure we can use world coordinates directly
 	glTranslatef(world_coord(-playerXTile-terrainMidX), 0.0f, world_coord(playerZTile+terrainMidY));
 
-	pie_DrawTerrain(MAX(0,-playerZTile-1),
-	                MAX(0,-playerXTile-1),
-	                MIN(visibleTiles.y, mapHeight-playerZTile),
-	                MIN(visibleTiles.x, mapWidth-playerXTile));
 	// and draw it
 	drawTerrain();
 
@@ -989,9 +985,6 @@ BOOL init3DView(void)
 
 	/* Make sure and change these to comply with map.c */
 	imdRot.x = -35;
-
-	/* Initialize vertex arrays */
-	pie_TerrainInit(visibleTiles.y+1, visibleTiles.x+1);
 
 	/* Get all the init stuff out of here? */
 	initWarCam();

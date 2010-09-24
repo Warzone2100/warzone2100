@@ -549,7 +549,6 @@ void systemShutdown(void)
 	iV_ShutDown();
 	levShutDown();
 	widgShutDown();
-	pie_TerrainCleanup();
 	fpathShutdown();
 	debug(LOG_MAIN, "shutting down everything else");
 	pal_ShutDown();		// currently unused stub
