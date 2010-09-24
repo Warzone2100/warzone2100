@@ -837,19 +837,10 @@ static void drawTiles(iView *player)
 			}
 			else
 			{
-				BOOL bEdgeTile = false;
 				MAPTILE *psTile = mapTile(playerXTile + j, playerZTile + i);
 
 				tileScreenInfo[i][j].pos.y = map_TileHeight(playerXTile + j, playerZTile + i);
 				TileIllum = pal_SetBrightness(psTile->level);
-
-				if ( playerXTile+j <= 1 ||
-					 playerZTile+i <= 1 ||
-					 playerXTile+j >= mapWidth-2 ||
-					 playerZTile+i >= mapHeight-2 )
-				{
-					bEdgeTile = true;
-				}
 
 				setTileColour(playerXTile + j, playerZTile + i, TileIllum);
 			}
@@ -4214,7 +4205,7 @@ static void showWeaponRange(BASE_OBJECT *psObj)
 	Vector3i pos;
 	int compIndex;
 
-	if ( psObj->type == OBJ_DROID)
+	if (psObj->type == OBJ_DROID)
 	{
 		psDroid = (DROID*)psObj;
 		compIndex = psDroid->asWeaps[0].nStat;	//weapon_slot
@@ -4229,12 +4220,12 @@ static void showWeaponRange(BASE_OBJECT *psObj)
 		weaponRange = psStruct->pStructureType->psWeapStat[0]->longRange;
 	}
 
-	if ( weaponRange == 0)
+	if (!weaponRange)
 	{
 		return;		//don't bother if no range.
 	}
 
-	for(i=0; i<360; i+=23)
+	for (i=0; i<360; i+=23)
 	{
 		radius = weaponRange;
 		xDif = radius * (SIN(DEG(i)));
@@ -4285,11 +4276,10 @@ static void	showSensorRange2(BASE_OBJECT *psObj)
 		pos.x = psObj->pos.x - xDif;
 		pos.z = psObj->pos.y - yDif;
 
-		// Check if it's actually on map
 		if (worldOnMap(pos.x, pos.z))
 		{
 			pos.y = map_Height(pos.x, pos.z) + 16;
-			effectGiveAuxVar(80);	// half normal plasma size...
+			effectGiveAuxVar(80);
 			addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER, false, NULL, 0);
 		}
 	}
