@@ -80,8 +80,8 @@ static inline unsigned short TileNumber_texture(unsigned short tilenumber)
 }
 
 #define BITS_NOTBLOCKING	0x01	///< Units can drive on this even if there is a structure or feature on it
-#define BITS_EXPLORED		0x02	///< Tile has been explored
-#define BITS_DECAL		0x02	///< Does this tile has a decal? If so, the tile from "texture" is drawn on top of the terrain.
+#define BITS_EXPLORED		0x02	///< Tile has been explored ***NOTE*** WE DIFFER FROM TRUNK!
+#define BITS_DECAL		0x04	///< Does this tile has a decal? If so, the tile from "texture" is drawn on top of the terrain.
 #define BITS_FPATHBLOCK		0x10	///< Bit set temporarily by find path to mark a blocking tile
 #define BITS_ON_FIRE		0x20	///< Cache whether tile is burning
 #define BITS_GATEWAY		0x40	///< Bit set to show a gateway on the tile
