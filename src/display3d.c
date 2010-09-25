@@ -1036,108 +1036,6 @@ void disp3d_getView(iView *newView)
 	memcpy(newView,&player,sizeof(iView));
 }
 
-// NOTE:  The current (max) texture size of a tile is 128x128.  We allow up to a user defined texture size
-// of 2048.  This will cause ugly seams for the terrain & decals, if user picks a texture size bigger than the tile!
-#define MAX_TILE_TEXTURE_SIZE 128.0f
-/// Set up the texture coordinates for a tile
-static void setTexCoords(unsigned int tileNumber, unsigned int i, unsigned int j)
-{
-	/* unmask proper values from compressed data */
-	const unsigned short texture = TileNumber_texture(tileNumber);
-	const unsigned short tile = TileNumber_tile(tileNumber);
-
-	/* Used to calculate texture coordinates */
-	const float xMult = 1.0f / TILES_IN_PAGE_COLUMN;
-	const float yMult = 1.0f / TILES_IN_PAGE_ROW;
-	float texsize = (float)getTextureSize();
-	float centertile, shiftamount, one;
-	Vector2f sP1, sP2, sP3, sP4, sPTemp;
-
-	// the decals / terrain are 128x128 (at this time), we should not go above this value.  See note above
-	if (texsize > MAX_TILE_TEXTURE_SIZE)
-	{
-		texsize = MAX_TILE_TEXTURE_SIZE;
-	}
-	centertile = 0.5f / texsize;			//compute center of tile
-	shiftamount = (texsize -1.0) / texsize;	// 1 pixel border
-	one = 1.0f / (TILES_IN_PAGE_COLUMN * texsize);
-
-	// // bump the texture coords, for 1 pixel border, so our range is [.5,(texsize - .5)]
-	one += centertile * (shiftamount);
-
-	/*
-	 * Points for flipping the texture around if the tile is flipped or rotated
-	 * Store the source rect as four points
-	 */
-	sP1.x = one;
-	sP1.y = one;
-	sP2.x = xMult - one;
-	sP2.y = one;
-	sP3.x = xMult - one;
-	sP3.y = yMult - one;
-	sP4.x = one;
-	sP4.y = yMult - one;
-
-	if (texture & TILE_XFLIP)
-	{
-		sPTemp = sP1;
-		sP1 = sP2;
-		sP2 = sPTemp;
-
-		sPTemp = sP3;
-		sP3 = sP4;
-		sP4 = sPTemp;
-	}
-	if (texture & TILE_YFLIP)
-	{
-		sPTemp = sP1;
-		sP1 = sP4;
-		sP4 = sPTemp;
-		sPTemp = sP2;
-		sP2 = sP3;
-		sP3 = sPTemp;
-	}
-
-	switch ((texture & TILE_ROTMASK) >> TILE_ROTSHIFT)
-	{
-		case 1:
-			sPTemp = sP1;
-			sP1 = sP4;
-			sP4 = sP3;
-			sP3 = sP2;
-			sP2 = sPTemp;
-			break;
-		case 2:
-			sPTemp = sP1;
-			sP1 = sP3;
-			sP3 = sPTemp;
-			sPTemp = sP4;
-			sP4 = sP2;
-			sP2 = sPTemp;
-			break;
-		case 3:
-			sPTemp = sP1;
-			sP1 = sP2;
-			sP2 = sP3;
-			sP3 = sP4;
-			sP4 = sPTemp;
-			break;
-	}
-
-	tileScreenInfo[i + 0][j + 0].u = tileTexInfo[tile].uOffset + sP1.x;
-	tileScreenInfo[i + 0][j + 0].v = tileTexInfo[tile].vOffset + sP1.y;
-
-	tileScreenInfo[i + 0][j + 1].u = tileTexInfo[tile].uOffset + sP2.x;
-	tileScreenInfo[i + 0][j + 1].v = tileTexInfo[tile].vOffset + sP2.y;
-
-	tileScreenInfo[i + 1][j + 1].u = tileTexInfo[tile].uOffset + sP3.x;
-	tileScreenInfo[i + 1][j + 1].v = tileTexInfo[tile].vOffset + sP3.y;
-
-	tileScreenInfo[i + 1][j + 0].u = tileTexInfo[tile].uOffset + sP4.x;
-	tileScreenInfo[i + 1][j + 0].v = tileTexInfo[tile].vOffset + sP4.y;
-}
-
-
 /// Are the current tile coordinates visible on screen?
 BOOL clipXY(SDWORD x, SDWORD y)
 {
@@ -3434,9 +3332,9 @@ static void	drawDroidSelections( void )
 		}
 	}
 
-//	// Reset color to white so that features textures are rendered as expected
-//	glColor3ub(0xFF,0xFF,0xFF);
-
+	// Reset color to white so that features textures are rendered as expected
+	glColor3f( 1.0f, 1.0f, 1.0f);
+	
 	for(psFeature = apsFeatureLists[0]; psFeature; psFeature = psFeature->psNext)
 	{
 		if(!psFeature->died && psFeature->sDisplay.frameNumber == currentGameFrame)

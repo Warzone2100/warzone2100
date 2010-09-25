@@ -1176,7 +1176,7 @@ void drawTerrain(void)
 	//////////////////////////////////////
 	// canvas to draw on
 	glDisable(GL_TEXTURE_2D);
-	glDisable(GL_BLEND);
+	pie_SetRendMode(REND_OPAQUE);
 	// we only draw in the depth buffer of using fog of war, as the clear color is black then
 	if (rendStates.fogEnabled)
 	{
@@ -1348,7 +1348,7 @@ void drawTerrain(void)
 	////////////////////////////////
 	// disable the lightmap texture
 	glActiveTexture(GL_TEXTURE1);
-	glDisable(GL_TEXTURE_2D);
+	pie_SetTexturePage(TEXPAGE_NONE);
 	glMatrixMode(GL_TEXTURE);
 	glLoadIdentity();
 	glActiveTexture(GL_TEXTURE0);
@@ -1403,8 +1403,7 @@ void drawWater(void)
 	glTranslatef(waterOffset, 0, 0);
 
 	// multiplicative blending
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_ZERO, GL_SRC_COLOR);
+	pie_SetRendMode(REND_MULTIPLICATIVE);
 	
 	// second texture unit
 	glActiveTexture(GL_TEXTURE1);
