@@ -16,12 +16,14 @@ BASELIST = \
 	effects \
 	features \
 	gamedesc.lev \
+	novideo.ogg \
 	images \
 	messages \
 	misc \
 	multiplay \
 	script \
 	sequenceaudio \
+	sequences \
 	stats \
 	structs \
 	tagdefinitions \
