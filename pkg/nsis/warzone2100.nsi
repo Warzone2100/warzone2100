@@ -294,7 +294,7 @@ SectionGroup $(TEXT_SecFMVs) SecFMVs
 Section /o $(TEXT_SecFMVs_Eng) SecFMVs_Eng
 
   IfFileExists "sequences.wz" +5
-    NSISdl::download "http://www.il.fontys.nl/~giel/warzone/videos/warzone2100-sequences-en-hi-2.2-1.wz"               "sequences.wz"
+    NSISdl::download "http://sourceforge.net/projects/warzone2100/files/warzone2100/Videos/2.2/standard-quality-en/sequences.wz/download"               "sequences.wz"
     Pop $R0 ; Get the return value
     StrCmp $R0 "success" +2
       MessageBox MB_OK|MB_ICONSTOP "Download of videos failed: $R0"
@@ -304,7 +304,7 @@ SectionEnd
 Section /o $(TEXT_SecFMVs_EngLo) SecFMVs_EngLo
 
   IfFileExists "sequences.wz" +5
-    NSISdl::download "http://www.il.fontys.nl/~giel/warzone/videos/warzone2100-sequences-en-lo-2.2-1.wz"               "sequences.wz"
+    NSISdl::download "http://sourceforge.net/projects/warzone2100/files/warzone2100/Videos/2.2/low-quality-en/sequences.wz/download"               "sequences.wz"
     Pop $R0 ; Get the return value
     StrCmp $R0 "success" +2
       MessageBox MB_OK|MB_ICONSTOP "Download of videos failed: $R0"
