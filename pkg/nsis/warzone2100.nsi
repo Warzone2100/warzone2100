@@ -161,9 +161,19 @@ Section $(TEXT_SecBase) SecBase
   Push "Authors.txt"
   Call unix2dos
 
+  File "${TOP_SRCDIR}\COPYING.NONGPL"
+  Push "COPYING.NONGPL"
+  Push "COPYING.NONGPL.txt"
+  Call unix2dos
+
   File "${TOP_SRCDIR}\COPYING"
   Push "COPYING"
-  Push "License.txt"
+  Push "COPYING.txt"
+  Call unix2dos
+
+  File "${TOP_SRCDIR}\COPYING.README"
+  Push "COPYING.README"
+  Push "COPYING.README.txt"
   Call unix2dos
 
   File "${TOP_SRCDIR}\doc\Readme.en"
