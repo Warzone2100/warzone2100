@@ -63,7 +63,7 @@
 #define WZCOL_CONS_TEXT_DEBUG		psPalette[38]
 #define WZCOL_GREY					psPalette[39]
 #define WZCOL_MAP_PREVIEW_AIPLAYER  psPalette[40]
-#define WZCOL_MENU_SHADOW	psPalette[41]
+#define WZCOL_MENU_SHADOW			psPalette[41]
 #define WZCOL_DBLUE					psPalette[42]
 #define WZCOL_LBLUE					psPalette[43]
 #define WZCOL_BLUEPRINT_VALID		psPalette[44]
