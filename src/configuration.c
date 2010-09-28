@@ -405,11 +405,11 @@ BOOL loadConfig(void)
 	{
 		if(getWarzoneKeyNumeric("colour", &val))
 		{
-			setPlayerColour(0, val);
+			war_SetSPcolor(val);
 		}
 		else
 		{
-			setPlayerColour(0, 0);
+			war_SetSPcolor(0);	//default is green (0)
 			setWarzoneKeyNumeric("colour", 0);
 		}
 	}
