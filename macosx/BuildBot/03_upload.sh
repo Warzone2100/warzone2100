@@ -26,12 +26,12 @@ bran="-${rtag}"
 
 
 # Upload the dSYM bundle
-if ! scp -pql 160 ${lpth}${dmg_bn}${tar_dS} ${uurl}:${rpth}${opth}${dmg_bn}${bran}${revt}${tar_dS}; then
+if ! scp -pql 320 ${lpth}${dmg_bn}${tar_dS} ${uurl}:${rpth}${opth}${dmg_bn}${bran}${revt}${tar_dS}; then
 	exit ${?}
 fi
 
 # Upload the .dmg
-if ! scp -pql 160 ${lpth}${dmg_bn}${dmg_nv} ${uurl}:${rpth}${opth}${dmg_bn}${bran}${revt}.dmg; then
+if ! scp -pql 320 ${lpth}${dmg_bn}${dmg_nv} ${uurl}:${rpth}${opth}${dmg_bn}${bran}${revt}.dmg; then
 	exit ${?}
 fi
 
