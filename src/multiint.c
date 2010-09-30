@@ -2825,6 +2825,10 @@ void startMultiplayerGame(void)
 		// If host sets limits, then we do not need to do the following routine.
 		if (!bLimiterLoaded)
 		{
+			if (!resLoad("wrf/limiter_tex.wrf", 501))
+			{
+				debug(LOG_INFO, "Unable to load limiter_tex.  Defaults not set.");
+			}
 			debug(LOG_NET, "limiter was NOT activated, setting defaults");
 			if (!resLoad("wrf/piestats.wrf", 502))
 			{
@@ -3084,20 +3088,26 @@ void frontendMultiMessages(void)
 				} 
 				break;
 			}
-
-			if (selectedPlayer == player_id)	// we've been told to leave.
+			if (!NetPlay.isHost)
 			{
-				setLobbyError(KICK_TYPE);
-				stopJoining();
-				//screen_RestartBackDrop();
-				//changeTitleMode(TITLE);
-				// maybe we want a custom 'kick' backdrop instead?
-				pie_LoadBackDrop(SCREEN_RANDOMBDROP);
-				debug(LOG_ERROR, "You have been kicked, because %s ", reason );
+				if (selectedPlayer == player_id)	// we've been told to leave.
+				{
+					setLobbyError(KICK_TYPE);
+					stopJoining();
+					//screen_RestartBackDrop();
+					//changeTitleMode(TITLE);
+					// maybe we want a custom 'kick' backdrop instead?
+					pie_LoadBackDrop(SCREEN_RANDOMBDROP);
+					debug(LOG_ERROR, "You have been kicked, because %s ", reason );
+				}
+				else
+				{
+					NETplayerKicked(player_id);
+				}
 			}
 			else
 			{
-				NETplayerKicked(player_id);
+				debug(LOG_ERROR, "Player %d (%s : %s) tried to kick %u ?", (int) NetMsg.source, NetPlay.players[NetMsg.source].name, NetPlay.players[NetMsg.source].IPtextAddress, player_id);
 			}
 			break;
 		}
