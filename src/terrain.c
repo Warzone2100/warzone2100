@@ -1030,7 +1030,7 @@ void shutdownTerrain(void)
 		}
 	}
 	free(sectors);
-	
+	sectors = NULL;
 	terrainInitalised = false;
 }
 
