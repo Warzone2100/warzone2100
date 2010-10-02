@@ -16,6 +16,7 @@ BASELIST = \
 	effects \
 	features \
 	gamedesc.lev \
+	palette.txt \
 	images \
 	messages \
 	misc \
@@ -27,6 +28,7 @@ BASELIST = \
 	structs \
 	tagdefinitions \
 	texpages \
+	tileset \
 	wrf
 
 PATCHLIST = \
