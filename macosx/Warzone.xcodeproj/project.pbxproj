@@ -543,6 +543,8 @@
 		4355E13110D6028C00A19EE4 /* theora.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E12D10D6028C00A19EE4 /* theora.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4355E13210D6028C00A19EE4 /* theoradec.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E12E10D6028C00A19EE4 /* theoradec.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4355E13310D6028C00A19EE4 /* theoraenc.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E12F10D6028C00A19EE4 /* theoraenc.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		436E3E821257C9640064FFC5 /* COPYING.NONGPL.txt in Resources */ = {isa = PBXBuildFile; fileRef = 436E3E7E1257C9640064FFC5 /* COPYING.NONGPL.txt */; };
+		436E3E831257C9640064FFC5 /* COPYING.txt in Resources */ = {isa = PBXBuildFile; fileRef = 436E3E801257C9640064FFC5 /* COPYING.txt */; };
 		4371B5F911D93EA0005A67AB /* pngpriv.h in Headers */ = {isa = PBXBuildFile; fileRef = 4371B5F711D93EA0005A67AB /* pngpriv.h */; settings = {ATTRIBUTES = (); }; };
 		439A28B8114F2E14004F1266 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 439A289C114F2E14004F1266 /* InfoPlist.strings */; };
 		43BB94E411ED898E00F0C9E5 /* jpeg_encoder.c in Sources */ = {isa = PBXBuildFile; fileRef = 43BB94E211ED898E00F0C9E5 /* jpeg_encoder.c */; };
@@ -1526,6 +1528,8 @@
 		4355E12D10D6028C00A19EE4 /* theora.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = theora.h; path = external/libtheora/include/theora/theora.h; sourceTree = "<group>"; };
 		4355E12E10D6028C00A19EE4 /* theoradec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = theoradec.h; path = external/libtheora/include/theora/theoradec.h; sourceTree = "<group>"; };
 		4355E12F10D6028C00A19EE4 /* theoraenc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = theoraenc.h; path = external/libtheora/include/theora/theoraenc.h; sourceTree = "<group>"; };
+		436E3E7F1257C9640064FFC5 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = English; path = English.lproj/COPYING.NONGPL.txt; sourceTree = "<group>"; };
+		436E3E811257C9640064FFC5 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = English; path = English.lproj/COPYING.txt; sourceTree = "<group>"; };
 		4371B5F611D93EA0005A67AB /* new_push_process_row.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = new_push_process_row.c; path = external/libpng/new_push_process_row.c; sourceTree = "<group>"; };
 		4371B5F711D93EA0005A67AB /* pngpriv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pngpriv.h; path = external/libpng/pngpriv.h; sourceTree = "<group>"; };
 		439A289D114F2E14004F1266 /* cs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -2826,6 +2830,8 @@
 		439A289B114F2E14004F1266 /* wzlocal */ = {
 			isa = PBXGroup;
 			children = (
+				436E3E7E1257C9640064FFC5 /* COPYING.NONGPL.txt */,
+				436E3E801257C9640064FFC5 /* COPYING.txt */,
 				439A289C114F2E14004F1266 /* InfoPlist.strings */,
 			);
 			name = wzlocal;
@@ -3520,6 +3526,8 @@
 			files = (
 				0246A05D0BD3C975004D1C70 /* Warzone.icns in Resources */,
 				439A28B8114F2E14004F1266 /* InfoPlist.strings in Resources */,
+				436E3E821257C9640064FFC5 /* COPYING.NONGPL.txt in Resources */,
+				436E3E831257C9640064FFC5 /* COPYING.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4491,6 +4499,22 @@
 				432BE3FF10D9CF1300A486AB /* English */,
 			);
 			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		436E3E7E1257C9640064FFC5 /* COPYING.NONGPL.txt */ = {
+			isa = PBXVariantGroup;
+			children = (
+				436E3E7F1257C9640064FFC5 /* English */,
+			);
+			name = COPYING.NONGPL.txt;
+			sourceTree = "<group>";
+		};
+		436E3E801257C9640064FFC5 /* COPYING.txt */ = {
+			isa = PBXVariantGroup;
+			children = (
+				436E3E811257C9640064FFC5 /* English */,
+			);
+			name = COPYING.txt;
 			sourceTree = "<group>";
 		};
 		439A289C114F2E14004F1266 /* InfoPlist.strings */ = {
