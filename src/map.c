@@ -111,12 +111,23 @@ MAPTILE	*psMapTiles = NULL;
 
 #define WATER_DEPTH	180
 
+static void SetGroundForTile(const char *filename, const char *nametype, int (*callback)(const char *type));
+static int getArizona(const char *textureType);
+static int getUrban(const char *textureType);
+static int getRocky(const char *textureType);
+static BOOL hasDecals(int i, int j);
+static void SetDecals(const char *filename, const char *decal_type);
+
 /// The different ground types
 GROUND_TYPE *psGroundTypes;
 int numGroundTypes;
 int waterGroundType;
 int cliffGroundType;
 char *tileset = NULL;
+
+static int *map;			// 3D array pointer that holds the texturetype
+static int *mapDecals;		// array that tells us what tile is a decal
+#define MAX_TERRAIN_TILES 80		// max that we support (for now)
 
 /* Look up table that returns the terrain type of a given tile texture */
 UBYTE terrainTypes[MAX_TILE_TEXTURES];
@@ -231,84 +242,150 @@ enum
 	r_snow,
 };
 
+// This is the main loading routine to get all the map's parameters set.
+// Once it figures out what tileset we need, we then parse the files for that tileset.
+// Currently, we only support 3 tilesets.  Arizona, Urban, and Rockie
 static BOOL mapLoadGroundTypes(void)
 {
+	char	*pFileData = NULL;
+	char	tilename[255] = {'\0'};
+	char	textureName[255] = {'\0'};
+	char	textureType[255] = {'\0'};
+	double	textureSize = 0.f;
+	int		numlines = 0;
+	int		cnt = 0, i = 0;
+	uint32_t	fileSize = 0;
+
+	pFileData = fileLoadBuffer;
+
 	debug(LOG_TERRAIN, "tileset: %s", tileset);
-	// FIXME: Read these from a config file
+	// For Arizona
 	if (strcmp(tileset, "texpages/tertilesc1hw") == 0)
 	{
-		numGroundTypes = 7;
-		psGroundTypes = malloc(sizeof(GROUND_TYPE)*numGroundTypes);
-		
-		psGroundTypes[a_yellow].textureName = "page-45";
-		psGroundTypes[a_yellow].textureSize = 4.6;
-		psGroundTypes[a_red].textureName = "page-44";
-		psGroundTypes[a_red].textureSize = 6.2;
-		psGroundTypes[a_concrete].textureName = "page-47";
-		psGroundTypes[a_concrete].textureSize = 3.2;
-		psGroundTypes[a_cliff].textureName = "page-46";
-		psGroundTypes[a_cliff].textureSize = 5.8;
-		psGroundTypes[a_water].textureName = "page-42";
-		psGroundTypes[a_water].textureSize = 7.3;
-		
-		psGroundTypes[a_mud] = psGroundTypes[a_red];
-		psGroundTypes[a_green] = psGroundTypes[a_red];
-		
+		if (!loadFileToBuffer("tileset/tertilesc1hwGtype.txt", pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
+		{
+			debug(LOG_POPUP, "tileset/tertilesc1hwGtype.txt not found, using default terrain ground types.");
+			goto fallback;
+		}
+
+		sscanf(pFileData, "%[^','],%d%n", tilename, &numlines, &cnt);
+		pFileData += cnt;
+
+		if (strcmp(tilename, "tertilesc1hw"))
+		{
+			debug(LOG_POPUP, "%s found, but was expecting tertilesc1hw!", tilename);
+			goto fallback;
+		}
+
+		debug(LOG_TERRAIN, "tilename: %s, with %d entries", tilename, numlines);
+		//increment the pointer to the start of the next record
+		pFileData = strchr(pFileData,'\n') + 1;
+		numGroundTypes = numlines;
+		psGroundTypes = malloc(sizeof(GROUND_TYPE)*numlines);
+
+		for (i=0; i < numlines; i++)
+		{
+			sscanf(pFileData, "%[^','],%[^','],%lf%n", textureType, textureName, &textureSize, &cnt);
+			pFileData += cnt;
+			//increment the pointer to the start of the next record
+			pFileData = strchr(pFileData,'\n') + 1;
+
+			psGroundTypes[getArizona(textureType)].textureName = strdup(textureName);
+			psGroundTypes[getArizona(textureType)].textureSize = textureSize ;
+		}
+
 		waterGroundType = a_water;
 		cliffGroundType = a_cliff;
+
+		SetGroundForTile("tileset/arizonaground.txt", "arizona_ground", getArizona);
+		SetDecals("tileset/arizonadecals.txt", "arizona_decals");
 	}
+	// for Urban
 	else if (strcmp(tileset, "texpages/tertilesc2hw") == 0)
 	{
-		numGroundTypes = 8;
-		psGroundTypes = malloc(sizeof(GROUND_TYPE)*numGroundTypes);
+		if (!loadFileToBuffer("tileset/tertilesc2hwGtype.txt", pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
+		{
+			debug(LOG_POPUP, "tileset/tertilesc2hwGtype.txt not found, using default terrain ground types.");
+			goto fallback;
+		}
 
-		psGroundTypes[u_gray].textureName = "page-51"; // rubble
-		psGroundTypes[u_gray].textureSize = 3.9;
-		psGroundTypes[u_green].textureName = "page-52"; // close plants
-		psGroundTypes[u_green].textureSize = 2.6;
-		psGroundTypes[u_stone].textureName = "page-47"; // pavement
-		psGroundTypes[u_stone].textureSize = 3.2;
-		psGroundTypes[u_cliff].textureName = "page-49"; // crater walls
-		psGroundTypes[u_cliff].textureSize = 4.7;
-		psGroundTypes[u_brown].textureName = "page-49"; // rocks
-		psGroundTypes[u_brown].textureSize = 4.7;
+		sscanf(pFileData, "%[^','],%d%n", tilename, &numlines, &cnt);
+		pFileData += cnt;
 
-		psGroundTypes[u_blue] = psGroundTypes[u_brown]; // burned ground
-		psGroundTypes[u_dark] = psGroundTypes[u_stone];
-		psGroundTypes[u_water] = psGroundTypes[u_cliff];
-		
+		if (strcmp(tilename, "tertilesc2hw"))
+		{
+			debug(LOG_POPUP, "%s found, but was expecting tertilesc2hw!", tilename);
+			goto fallback;
+		}
+
+		debug(LOG_TERRAIN, "tilename: %s, with %d entries", tilename, numlines);
+		//increment the pointer to the start of the next record
+		pFileData = strchr(pFileData,'\n') + 1;
+		numGroundTypes = numlines;
+		psGroundTypes = malloc(sizeof(GROUND_TYPE)*numlines);
+
+		for (i=0; i < numlines; i++)
+		{
+			sscanf(pFileData, "%[^','],%[^','],%lf%n", textureType, textureName, &textureSize, &cnt);
+			pFileData += cnt;
+			//increment the pointer to the start of the next record
+			pFileData = strchr(pFileData,'\n') + 1;
+
+			psGroundTypes[getUrban(textureType)].textureName = strdup(textureName);
+			psGroundTypes[getUrban(textureType)].textureSize = textureSize;
+		}
+
 		waterGroundType = u_water;
 		cliffGroundType = u_cliff;
+
+		SetGroundForTile("tileset/urbanground.txt", "urban_ground", getUrban);
+		SetDecals("tileset/urbandecals.txt", "urban_decals");
 	}
+	// for Rockie
 	else if (strcmp(tileset, "texpages/tertilesc3hw") == 0)
 	{
-		numGroundTypes = 9;
-		psGroundTypes = malloc(sizeof(GROUND_TYPE)*numGroundTypes);
+		if (!loadFileToBuffer("tileset/tertilesc3hwGtype.txt", pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
+		{
+			debug(LOG_POPUP, "tileset/tertilesc3hwGtype.txt not found, using default terrain ground types.");
+			goto fallback;
+		}
 
-		psGroundTypes[r_grass].textureName = "page-55";
-		psGroundTypes[r_grass].textureSize = 4.6;
-		psGroundTypes[r_rock].textureName = "page-56";
-		psGroundTypes[r_rock].textureSize = 3.9;
-		psGroundTypes[r_cliff].textureName = "page-46";
-		psGroundTypes[r_cliff].textureSize = 5.8;
-		psGroundTypes[r_water].textureName = "page-49";
-		psGroundTypes[r_water].textureSize = 5.8;
-		psGroundTypes[r_tiles].textureName = "page-47";
-		psGroundTypes[r_tiles].textureSize = 3.2;
-		psGroundTypes[r_snowgrass].textureName = "page-54";
-		psGroundTypes[r_snowgrass].textureSize = 2.1;
-		psGroundTypes[r_snow].textureName = "page-57";
-		psGroundTypes[r_snow].textureSize = 10.2;
-		psGroundTypes[r_snowrock].textureName = "page-58";
-		psGroundTypes[r_snowrock].textureSize = psGroundTypes[r_rock].textureSize;
-		
-		psGroundTypes[r_brown] = psGroundTypes[r_water];
+		sscanf(pFileData, "%[^','],%d%n", tilename, &numlines, &cnt);
+		pFileData += cnt;
+
+		if (strcmp(tilename, "tertilesc3hw"))
+		{
+			debug(LOG_POPUP, "%s found, but was expecting tertilesc3hw!", tilename);
+			goto fallback;
+		}
+
+		debug(LOG_TERRAIN, "tilename: %s, with %d entries", tilename, numlines);
+		//increment the pointer to the start of the next record
+		pFileData = strchr(pFileData,'\n') + 1;
+		numGroundTypes = numlines;
+		psGroundTypes = malloc(sizeof(GROUND_TYPE)*numlines);
+
+		for (i=0; i < numlines; i++)
+		{
+			sscanf(pFileData, "%[^','],%[^','],%lf%n", textureType, textureName, &textureSize, &cnt);
+			pFileData += cnt;
+			//increment the pointer to the start of the next record
+			pFileData = strchr(pFileData,'\n') + 1;
+
+			psGroundTypes[getRocky(textureType)].textureName = strdup(textureName);
+			psGroundTypes[getRocky(textureType)].textureSize = textureSize;
+		}
 
 		waterGroundType = r_water;
 		cliffGroundType = r_cliff;
+
+		SetGroundForTile("tileset/rockieground.txt", "rockie_ground", getRocky);
+		SetDecals("tileset/rockiedecals.txt", "rockie_decals");
 	}
+	// When a map uses something other than the above, we fallback to Arizona
 	else
 	{
+fallback:
 		debug(LOG_ERROR, "unsupported tileset: %s", tileset);
 		debug(LOG_POPUP, "This is a UNSUPPORTED map with a custom tileset.\nDefaulting to tertilesc1hw -- map may look strange!");
 		// HACK: / FIXME: For now, we just pretend this is a tertilesc1hw map.
@@ -334,275 +411,121 @@ static BOOL mapLoadGroundTypes(void)
 		waterGroundType = a_water;
 		cliffGroundType = a_cliff;
 
+		SetGroundForTile("tileset/arizonaground.txt", "arizona_ground", getArizona);
+		SetDecals("tileset/arizonadecals.txt", "arizona_decals");
 	}
 	return true;
 }
-
-static int groundFromArizonaTile(int tile, int i, int j)
+// Parse the file to set up the ground type
+static void SetGroundForTile(const char *filename, const char *nametype, int (*callback)(const char *type))
 {
-	const int map[][2][2] = {
-		{{a_yellow,a_yellow}, {a_yellow,a_yellow}},
-		{{a_yellow,a_yellow}, {a_yellow,a_yellow}},
-		{{a_yellow,a_mud}, {a_yellow,a_mud}},
-		{{a_mud,a_mud}, {a_mud,a_yellow}},
-		{{a_mud,a_yellow}, {a_yellow,a_yellow}},
-		{{a_mud,a_mud}, {a_mud,a_mud}},
-		{{a_mud,a_mud}, {a_mud,a_mud}},
-		{{a_mud,a_mud}, {a_mud,a_mud}},
-		{{a_mud,a_mud}, {a_mud,a_mud}},
-		{{a_yellow,a_yellow}, {a_yellow,a_yellow}},
-		{{a_yellow,a_yellow}, {a_yellow,a_yellow}},
-		{{a_yellow,a_yellow}, {a_yellow,a_yellow}},
-		{{a_yellow,a_yellow}, {a_yellow,a_yellow}},
-		{{a_water,a_yellow}, {a_yellow,a_yellow}},
-		{{a_water,a_water}, {a_yellow,a_yellow}},
-		{{a_yellow,a_water}, {a_yellow,a_yellow}},
-		{{a_water,a_water}, {a_yellow,a_water}},
-		{{a_water,a_water}, {a_water,a_water}},
-		{{a_cliff,a_cliff}, {a_cliff,a_cliff}},
-		{{a_concrete,a_concrete}, {a_concrete,a_red}},
-		{{a_concrete,a_red}, {a_red,a_red}},
-		{{a_concrete,a_red}, {a_concrete,a_red}},
-		{{a_concrete,a_concrete}, {a_concrete,a_concrete}},
-		{{a_green,a_green}, {a_green,a_green}},
-		{{a_green,a_mud}, {a_green,a_mud}},
-		{{a_green,a_green}, {a_green,a_mud}},
-		{{a_green,a_mud}, {a_mud,a_mud}},
-		{{a_yellow,a_red}, {a_yellow,a_red}},
-		{{a_yellow,a_yellow}, {a_yellow,a_red}},
-		{{a_yellow,a_red}, {a_red,a_red}},
-		{{a_water,a_water}, {a_red,a_green}},
-		{{a_green,a_green}, {a_water,a_water}},
-		{{a_green,a_green}, {a_green,a_water}},
-		{{a_green,a_water}, {a_water,a_water}},
-		{{a_red,a_mud}, {a_red,a_mud}},
-		{{a_red,a_red}, {a_red,a_mud}},
-		{{a_red,a_mud}, {a_mud,a_mud}},
-		{{a_red,a_red}, {a_red,a_red}},
-		{{a_yellow,a_mud}, {a_yellow,a_mud}},
-		{{a_mud,a_mud}, {a_mud,a_yellow}},
-		{{a_mud,a_yellow}, {a_yellow,a_yellow}},
-		{{a_red,a_red}, {a_red,a_yellow}},
-		{{a_red,a_yellow}, {a_yellow,a_yellow}},
-		{{a_red,a_yellow}, {a_red,a_yellow}},
-		{{a_red,a_red}, {a_red,a_red}},
-		{{a_cliff,a_cliff}, {a_red,a_cliff}},
-		{{a_cliff,a_cliff}, {a_cliff,a_cliff}},
-		{{a_red,a_red}, {a_red,a_red}},
-		{{a_red,a_red}, {a_red,a_red}},
-		{{a_red,a_red}, {a_red,a_red}},
-		{{a_red,a_red}, {a_red,a_red}},
-		{{a_red,a_red}, {a_red,a_red}},
-		{{a_red,a_red}, {a_red,a_red}},
-		{{a_red,a_red}, {a_red,a_red}},
-		{{a_red,a_red}, {a_red,a_red}},
-		{{a_yellow,a_yellow}, {a_yellow,a_yellow}},
-		{{a_red,a_red}, {a_red,a_red}},
-		{{a_red,a_red}, {a_red,a_red}},
-		{{a_mud,a_mud}, {a_mud,a_mud}},
-		{{a_red,a_red}, {a_red,a_red}},
-		{{a_red,a_red}, {a_red,a_red}},
-		{{a_red,a_red}, {a_red,a_red}},
-		{{a_green,a_green}, {a_green,a_green}},
-		{{a_yellow,a_yellow}, {a_yellow,a_yellow}},
-		{{a_yellow,a_yellow}, {a_yellow,a_yellow}},
-		{{a_yellow,a_yellow}, {a_yellow,a_yellow}},
-		{{a_yellow,a_yellow}, {a_yellow,a_yellow}},
-		{{a_red,a_red}, {a_red,a_red}},
-		{{a_red,a_red}, {a_red,a_red}},
-		{{a_red,a_red}, {a_red,a_red}},
-		{{a_red,a_red}, {a_red,a_red}},
-		{{a_cliff,a_cliff}, {a_cliff,a_cliff}},
-		{{a_red,a_red}, {a_red,a_red}},
-		{{a_red,a_red}, {a_red,a_red}},
-		{{a_red,a_red}, {a_red,a_red}},
-		{{a_cliff,a_cliff}, {a_cliff,a_red}},
-		{{a_red,a_red}, {a_red,a_red}},
-		{{a_concrete,a_concrete}, {a_concrete,a_concrete}},
-		};
-		
-	// look up
-	return map[TileNumber_tile(tile)][i][j];
+	char	*pFileData = NULL;
+	char	tilename[255] = {'\0'};
+	char	val1[25], val2[25], val3[25], val4[25];
+	int		numlines = 0;
+	int		cnt = 0, i = 0;
+	uint32_t	fileSize = 0;
+
+	pFileData = fileLoadBuffer;
+	if (!loadFileToBuffer(filename, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
+	{
+		debug(LOG_FATAL, "%s not found, aborting.", filename);
+		abort();
+	}
+
+	sscanf(pFileData, "%[^','],%d%n", tilename, &numlines, &cnt);
+	pFileData += cnt;
+
+	if (strcmp(tilename, nametype))
+	{
+		debug(LOG_FATAL, "%s found, but was expecting %s, aborting.", tilename, nametype);
+		abort();
+	}
+
+	debug(LOG_TERRAIN, "tilename: %s, with %d entries", tilename, numlines);
+	//increment the pointer to the start of the next record
+	pFileData = strchr(pFileData,'\n') + 1;
+
+	map = malloc(sizeof(int) * numlines * 2 * 2 );	// this is a 3D array map[numlines][2][2]
+
+	for (i=0; i < numlines; i++)
+	{
+		sscanf(pFileData, "%[^','],%[^','],%[^','],%s%n", val1, val2, val3, val4, &cnt);
+		pFileData += cnt;
+		//increment the pointer to the start of the next record
+		pFileData = strchr(pFileData,'\n') + 1;
+
+		// inline int iA(int i, int j, int k){ return i*N2*N3 + j*N3 + k; }
+		// in case it isn't obvious, this is a 3D array, and using pointer math to access each element.
+		// so map[10][0][1] would be map[10*2*2 + 0 + 1] == map[41]
+		// map[10][1][0] == map[10*2*2 + 2 + 0] == map[42]
+		map[i*2*2+0*2+0] = callback(val1);
+		map[i*2*2+0*2+1] = callback(val2);
+		map[i*2*2+1*2+0] = callback(val3);
+		map[i*2*2+1*2+1] = callback(val4);
+	}
 }
-
-
-static int groundFromUrbanTile(int tile, int i, int j)
+// getArizona() -- just returns the enum value for that texture type.
+static int getArizona(const char *textureType)
 {
-	const int map[][2][2] = {
-		{{u_blue, u_blue}, {u_blue, u_blue}},
-		{{u_blue, u_blue}, {u_blue, u_blue}},
-		{{u_blue, u_blue}, {u_blue, u_blue}},
-		{{u_gray, u_blue}, {u_blue, u_blue}},
-		{{u_gray, u_gray}, {u_gray, u_blue}},
-		{{u_gray, u_gray}, {u_gray, u_gray}},
-		{{u_blue, u_gray}, {u_blue, u_gray}},
-		{{u_gray, u_gray}, {u_gray, u_gray}},
-		{{u_gray, u_gray}, {u_gray, u_gray}},
-		{{u_gray, u_stone}, {u_gray, u_stone}},
-		{{u_gray, u_stone}, {u_gray, u_gray}},
-		{{u_stone, u_stone}, {u_dark, u_stone}},
-		{{u_dark, u_stone}, {u_dark, u_stone}},
-		{{u_stone, u_water}, {u_stone, u_water}},
-		{{u_water, u_water}, {u_stone, u_stone}},
-		{{u_stone, u_water}, {u_stone, u_stone}},
-		{{u_water, u_water}, {u_stone, u_water}},
-		{{u_water, u_water}, {u_water, u_water}},
-		{{u_dark, u_dark}, {u_dark, u_dark}},
-		{{u_stone, u_stone}, {u_stone, u_stone}},
-		{{u_stone, u_stone}, {u_stone, u_stone}},
-		{{u_stone, u_stone}, {u_stone, u_stone}},
-		{{u_brown, u_brown}, {u_brown, u_brown}},
-		{{u_gray, u_water}, {u_gray, u_water}},
-		{{u_gray, u_gray}, {u_water, u_water}},
-		{{u_gray, u_water}, {u_water, u_water}},
-		{{u_gray, u_gray}, {u_gray, u_water}},
-		{{u_stone, u_gray}, {u_stone, u_gray}},
-		{{u_stone, u_stone}, {u_stone, u_stone}},
-		{{u_gray, u_stone}, {u_gray, u_gray}},
-		{{u_stone, u_stone}, {u_gray, u_stone}},
-		{{u_brown, u_brown}, {u_brown, u_brown}},
-		{{u_blue, u_blue}, {u_blue, u_blue}},
-		{{u_brown, u_blue}, {u_brown, u_blue}},
-		{{u_brown, u_brown}, {u_brown, u_blue}},
-		{{u_brown, u_blue}, {u_blue, u_blue}},
-		{{u_brown, u_brown}, {u_brown, u_brown}},
-		{{u_green, u_green}, {u_green, u_brown}},
-		{{u_green, u_brown}, {u_brown, u_brown}},
-		{{u_brown, u_green}, {u_brown, u_green}},
-		{{u_stone, u_stone}, {u_stone, u_stone}},
-		{{u_blue, u_blue}, {u_blue, u_blue}},
-		{{u_stone, u_stone}, {u_stone, u_stone}},
-		{{u_gray, u_gray}, {u_gray, u_gray}},
-		{{u_gray, u_gray}, {u_gray, u_gray}},
-		{{u_green, u_green}, {u_green, u_green}},
-		{{u_stone, u_stone}, {u_stone, u_stone}},
-		{{u_gray, u_gray}, {u_gray, u_gray}},
-		{{u_stone, u_stone}, {u_stone, u_stone}},
-		{{u_stone, u_stone}, {u_stone, u_stone}},
-		{{u_green, u_green}, {u_green, u_green}},
-		{{u_stone, u_stone}, {u_stone, u_stone}},
-		{{u_stone, u_stone}, {u_stone, u_stone}},
-		{{u_gray, u_gray}, {u_gray, u_gray}},
-		{{u_gray, u_gray}, {u_gray, u_gray}},
-		{{u_gray, u_gray}, {u_gray, u_gray}},
-		{{u_stone, u_stone}, {u_stone, u_stone}},
-		{{u_blue, u_blue}, {u_blue, u_blue}},
-		{{u_gray, u_gray}, {u_gray, u_gray}},
-		{{u_stone, u_stone}, {u_stone, u_stone}},
-		{{u_brown, u_gray}, {u_brown, u_gray}},
-		{{u_stone, u_stone}, {u_stone, u_stone}},
-		{{u_gray, u_gray}, {u_gray, u_gray}},
-		{{u_blue, u_blue}, {u_blue, u_blue}},
-		{{u_blue, u_blue}, {u_blue, u_blue}},
-		{{u_blue, u_blue}, {u_blue, u_blue}},
-		{{u_blue, u_blue}, {u_blue, u_blue}},
-		{{u_gray, u_gray}, {u_gray, u_gray}},
-		{{u_cliff, u_cliff}, {u_gray, u_cliff}},
-		{{u_cliff, u_cliff}, {u_cliff, u_cliff}},
-		{{u_cliff, u_cliff}, {u_cliff, u_cliff}},
-		{{u_brown, u_stone}, {u_brown, u_stone}},
-		{{u_gray, u_gray}, {u_gray, u_brown}},
-		{{u_gray, u_brown}, {u_brown, u_brown}},
-		{{u_stone, u_stone}, {u_stone, u_stone}},
-		{{u_brown, u_stone}, {u_stone, u_stone}},
-		{{u_brown, u_brown}, {u_brown, u_stone}},
-		{{u_gray, u_green}, {u_gray, u_green}},
-		{{u_gray, u_gray}, {u_gray, u_gray}},
-		{{u_green, u_gray}, {u_green, u_green}},
-		{{u_gray, u_gray}, {u_gray, u_gray}},
-		};
-		
-	// look up
-	return map[TileNumber_tile(tile)][i][j];
+	if (!strcmp(textureType, "a_red"))				return a_red;
+	else if (!strcmp(textureType, "a_cliff"))		return a_cliff;
+	else if (!strcmp(textureType, "a_yellow"))		return a_yellow;
+	else if (!strcmp(textureType, "a_concrete"))	return a_concrete;
+	else if (!strcmp(textureType, "a_mud"))			return a_mud;
+	else if (!strcmp(textureType, "a_green"))		return a_green;
+	else if (!strcmp(textureType, "a_water"))		return a_water;
+	else
+	{
+		debug(LOG_FATAL, "unknown type [%s] found, aborting!", textureType);
+		abort();
+	}
 }
-
-static int groundFromRockiesTile(int tile, int i, int j)
+// getUrban() -- just returns the enum value for that texture type.
+static int getUrban(const char *textureType)
 {
-	const int map[][2][2] = {
-		{{r_grass, r_grass}, {r_grass, r_grass}},
-		{{r_grass, r_grass}, {r_grass, r_grass}},
-		{{r_rock, r_grass}, {r_rock, r_grass}},
-		{{r_rock, r_grass}, {r_grass, r_grass}},
-		{{r_rock, r_rock}, {r_rock, r_grass}},
-		{{r_rock, r_rock}, {r_rock, r_rock}},
-		{{r_rock, r_rock}, {r_rock, r_rock}},
-		{{r_rock, r_rock}, {r_rock, r_rock}},
-		{{r_rock, r_rock}, {r_rock, r_rock}},
-		{{r_cliff, r_cliff}, {r_cliff, r_snowrock}},
-		{{r_snowrock, r_snowrock}, {r_snowrock, r_snowrock}},
-		{{r_snowrock, r_rock}, {r_rock, r_rock}},
-		{{r_snowrock, r_snowrock}, {r_rock, r_rock}},
-		{{r_brown, r_brown}, {r_brown, r_brown}},
-		{{r_water, r_water}, {r_grass, r_grass}},
-		{{r_grass, r_water}, {r_grass, r_grass}},
-		{{r_water, r_water}, {r_grass, r_water}},
-		{{r_water, r_water}, {r_water, r_water}},
-		{{r_cliff, r_cliff}, {r_cliff, r_rock}},
-		{{r_tiles, r_brown}, {r_brown, r_brown}},
-		{{r_tiles, r_tiles}, {r_tiles, r_brown}},
-		{{r_tiles, r_brown}, {r_tiles, r_brown}},
-		{{r_tiles, r_tiles}, {r_tiles, r_tiles}},
-		{{r_snowgrass, r_snowgrass}, {r_snowgrass, r_snowgrass}},
-		{{r_snowgrass, r_snowgrass}, {r_snowgrass, r_grass}},
-		{{r_snowgrass, r_grass}, {r_grass, r_grass}},
-		{{r_snowgrass, r_snowgrass}, {r_grass, r_grass}},
-		{{r_brown, r_brown}, {r_brown, r_brown}},
-		{{r_brown, r_brown}, {r_brown, r_brown}},
-		{{r_cliff, r_cliff}, {r_cliff, r_cliff}},
-		{{r_cliff, r_cliff}, {r_cliff, r_cliff}},
-		{{r_rock, r_rock}, {r_water, r_water}},
-		{{r_rock, r_water}, {r_water, r_water}},
-		{{r_rock, r_rock}, {r_rock, r_water}},
-		{{r_grass, r_brown}, {r_grass, r_brown}},
-		{{r_grass, r_grass}, {r_grass, r_brown}},
-		{{r_grass, r_brown}, {r_brown, r_brown}},
-		{{r_brown, r_brown}, {r_brown, r_brown}},
-		{{r_brown, r_rock}, {r_brown, r_rock}},
-		{{r_brown, r_brown}, {r_brown, r_rock}},
-		{{r_brown, r_rock}, {r_rock, r_rock}},
-		{{r_snowrock, r_snowrock}, {r_snowrock, r_snowrock}},
-		{{r_cliff, r_cliff}, {r_rock, r_cliff}},
-		{{r_cliff, r_rock}, {r_rock, r_cliff}},
-		{{r_cliff, r_cliff}, {r_rock, r_cliff}},
-		{{r_cliff, r_cliff}, {r_rock, r_cliff}},
-		{{r_cliff, r_cliff}, {r_cliff, r_cliff}},
-		{{r_grass, r_grass}, {r_grass, r_grass}},
-		{{r_snowrock, r_snowrock}, {r_rock, r_rock}},
-		{{r_brown, r_brown}, {r_brown, r_brown}},
-		{{r_brown, r_brown}, {r_brown, r_brown}},
-		{{r_brown, r_brown}, {r_brown, r_brown}},
-		{{r_brown, r_brown}, {r_brown, r_brown}},
-		{{r_brown, r_brown}, {r_brown, r_brown}},
-		{{r_snow, r_snow}, {r_snow, r_rock}},
-		{{r_rock, r_rock}, {r_rock, r_rock}},
-		{{r_brown, r_brown}, {r_brown, r_brown}},
-		{{r_rock, r_rock}, {r_rock, r_rock}},
-		{{r_grass, r_grass}, {r_grass, r_grass}},
-		{{r_brown, r_brown}, {r_brown, r_brown}},
-		{{r_brown, r_brown}, {r_brown, r_brown}},
-		{{r_cliff, r_cliff}, {r_cliff, r_cliff}},
-		{{r_rock, r_rock}, {r_rock, r_rock}},
-		{{r_cliff, r_cliff}, {r_cliff, r_snow}},
-		{{r_snow, r_snow}, {r_snow, r_snow}},
-		{{r_snow, r_snow}, {r_snow, r_snowrock}},
-		{{r_snow, r_snowrock}, {r_snowrock, r_snowrock}},
-		{{r_snow, r_snow}, {r_snowrock, r_snowrock}},
-		{{r_cliff, r_cliff}, {r_cliff, r_snow}},
-		{{r_cliff, r_cliff}, {r_cliff, r_snow}},
-		{{r_snow, r_snow}, {r_snow, r_snow}},
-		{{r_cliff, r_cliff}, {r_cliff, r_snow}},
-		{{r_brown, r_brown}, {r_brown, r_brown}},
-		{{r_snowrock, r_snowrock}, {r_snowrock, r_snowrock}},
-		{{r_grass, r_grass}, {r_grass, r_grass}},
-		{{r_snowrock, r_snowrock}, {r_snowrock, r_snowrock}},
-		{{r_cliff, r_cliff}, {r_cliff, r_cliff}},
-		{{r_cliff, r_cliff}, {r_cliff, r_cliff}},
-		{{r_cliff, r_cliff}, {r_cliff, r_cliff}},
-		{{r_tiles, r_tiles}, {r_tiles, r_tiles}},
-		};
-		
-	// look up
-	return map[TileNumber_tile(tile)][i][j];
+	if (!strcmp(textureType, "u_blue"))			return u_blue;
+	else if (!strcmp(textureType, "u_gray"))	return u_gray;
+	else if (!strcmp(textureType, "u_stone"))	return u_stone;
+	else if (!strcmp(textureType, "u_dark"))	return u_dark;
+	else if (!strcmp(textureType, "u_water"))	return u_water;
+	else if (!strcmp(textureType, "u_brown"))	return u_brown;
+	else if (!strcmp(textureType, "u_cliff"))	return u_cliff;
+	else if (!strcmp(textureType, "u_green"))	return u_green;
+	else
+	{
+		debug(LOG_POPUP, "unknwon type [%s] found, aborting!", textureType);
+		free(psGroundTypes);
+		psGroundTypes = NULL;
+		abort();
+	}
+}
+// getRocky() -- just returns the enum value for that texture type.
+static int getRocky(const char *textureType)
+{
+	if (!strcmp(textureType, "r_grass"))			return r_grass;
+	else if (!strcmp(textureType, "r_rock"))		return r_rock;
+	else if (!strcmp(textureType, "r_cliff"))		return r_cliff;
+	else if (!strcmp(textureType, "r_snowrock"))	return r_snowrock;
+	else if (!strcmp(textureType, "r_brown"))		return r_brown;
+	else if (!strcmp(textureType, "r_water"))		return r_water;
+	else if (!strcmp(textureType, "r_snowgrass"))	return r_snowgrass;
+	else if (!strcmp(textureType, "r_tiles"))		return r_tiles;
+	else if (!strcmp(textureType, "r_snow"))		return r_snow;
+	else
+	{
+		debug(LOG_POPUP, "unknwon type [%s] found, aborting!", textureType);
+		free(psGroundTypes);
+		psGroundTypes = NULL;
+		abort();
+	}
+}
+// groundFromMapTile() just a simple lookup table, using pointers to access the 3D map array
+//	(quasi) pointer math is: map[num elements][2][2]
+//	so map[10][0][1] would be map[10*2*2 + 0*2 + 1] == map[41]
+static int groundFromMapTile(int tile, int j, int k)
+{
+	return map[TileNumber_tile(tile)* 2 * 2 + j * 2 + k];
 }
 
 static void rotFlip(int tile, int *i, int *j)
@@ -655,7 +578,6 @@ static int determineGroundType(int x, int y, const char *tileset)
 		return 0;
 	}
 
-	
 	if (x <= 0 || y <= 0 || x >= mapWidth || y >= mapHeight)
 	{
 		return 0; // just return the first ground type
@@ -677,18 +599,7 @@ static int determineGroundType(int x, int y, const char *tileset)
 			a = i;
 			b = j;
 			rotFlip(tile, &a, &b);
-			if (arizona)
-			{
-				ground[i][j] = groundFromArizonaTile(tile, a, b);
-			}
-			if (urban)
-			{
-				ground[i][j] = groundFromUrbanTile(tile, a, b);
-			}
-			if (rockies)
-			{
-				ground[i][j] = groundFromRockiesTile(tile, a, b);
-			}
+			ground[i][j] = groundFromMapTile(tile, a, b);
 			
 			votes[i][j] = 0;
 			
@@ -701,19 +612,7 @@ static int determineGroundType(int x, int y, const char *tileset)
 			}
 		}
 	}
-// ***NOTE CHECK TRUNK to verify
-	//for(i=0; i<psGateHeader->numGateways; i++) {
-	//	if (!gwNewGateway(psGate->x0,psGate->y0, psGate->x1,psGate->y1)) {
-	//		debug( LOG_ERROR, "mapLoadV3: Unable to add gateway" );
-	//		if ((ground[i][j] == u_cliff && urban) ||
-	//		    (ground[i][j] == a_cliff && arizona) ||
-	//		    (ground[i][j] == r_cliff && rockies))
-	//		{
-	//			// cliffs are so small they won't show up otherwise
-	//			return ground[i][j];
-	//		}
-	//	}
-	//}
+
 	// now vote, because some maps have seams
 	for(i=0;i<2;i++)
 	{
@@ -748,102 +647,66 @@ static int determineGroundType(int x, int y, const char *tileset)
 	return ground[a][b];
 }
 
-static BOOL hasArizonaDecal(UDWORD i, UDWORD j)
+// SetDecals()
+// reads in the decal array for the requested tileset.
+static void SetDecals(const char *filename, const char *decal_type)
 {
-	switch ( TileNumber_tile(mapTile(i, j)->texture))
+	char decalname[50], *pFileData;
+	int numlines, cnt, i, tiledecal;
+	uint32_t fileSize;
+
+	pFileData = fileLoadBuffer;
+
+	if (!loadFileToBuffer(filename, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 	{
-		case 37:
-		case 47:
-		case 49:
-		case 50:
-		case 51:
-		case 52:
-		case 55:
-		case 56:
-		case 57:
-		case 58:
-		case 59:
-		case 60:
-		case 61:
-		case 62:
-		case 63:
-		case 64:
-		case 65:
-		case 66:
-		case 67:
-		case 68:
-		case 69:
-		case 70:
-		case 72:
-		case 73:
-			return true;
-		default:
-			return false;
+		debug(LOG_POPUP, "%s not found, aborting.", filename);
+		abort();
+	}
+
+	sscanf(pFileData, "%[^','],%d%n", decalname, &numlines, &cnt);
+	pFileData += cnt;
+
+	if (strcmp(decalname, decal_type))
+	{
+		debug(LOG_POPUP, "%s found, but was expecting %s, aborting.", decalname, decal_type);
+		abort();
+	}
+
+	debug(LOG_TERRAIN, "reading: %s, with %d entries", filename, numlines);
+	//increment the pointer to the start of the next record
+	pFileData = strchr(pFileData,'\n') + 1;
+	if (numlines > MAX_TERRAIN_TILES)
+	{
+		debug(LOG_FATAL, "Too many tiles, we only support %d max at this time", MAX_TERRAIN_TILES);
+		abort();
+	}
+	mapDecals = malloc(sizeof(int)*MAX_TERRAIN_TILES);		// max of 80 tiles that we support
+	memset(mapDecals, 0x0, sizeof(int)*MAX_TERRAIN_TILES);	// set everything to false;
+
+	for (i=0; i < numlines; i++)
+	{
+		sscanf(pFileData, "%d%n", &tiledecal, &cnt);
+		pFileData += cnt;
+		//increment the pointer to the start of the next record
+		pFileData = strchr(pFileData,'\n') + 1;
+		mapDecals[tiledecal] = 1;
 	}
 }
-
-static BOOL hasUrbanDecal(UDWORD i, UDWORD j)
+// hasDecals()
+// Checks to see if the requested tile has a decal on it or not.
+static BOOL hasDecals(int i, int j)
 {
-	switch ( TileNumber_tile(mapTile(i, j)->texture))
+	int index = 0;
+	index = TileNumber_tile(mapTile(i, j)->texture);
+	if (index > MAX_TERRAIN_TILES)
 	{
-		case 11:
-		case 12:
-		case 28:
-		case 32:
-		case 40:
-		case 41:
-		case 42:
-		case 43:
-		case 44:
-		case 45:
-		case 46:
-		case 47:
-		case 48:
-		case 49:
-		case 52:
-		case 53:
-		case 54:
-		case 55:
-		case 56:
-		case 57:
-		case 59:
-		case 61:
-		case 62:
-		case 63:
-		case 64:
-		case 65:
-		case 66:
-		case 67:
-		case 80:
-			return true;
-		default:
-			return false;
+		debug(LOG_FATAL, "Tile index is out of range!  Was %d, our max is %d", index, MAX_TERRAIN_TILES);
+		abort();
 	}
+	return mapDecals[index];
 }
-
-static BOOL hasRockiesDecal(UDWORD i, UDWORD j)
-{
-	switch ( TileNumber_tile(mapTile(i, j)->texture))
-	{
-		case 13:
-		case 37:
-		case 49:
-		case 50:
-		case 51:
-		case 52:
-		case 56:
-		case 58:
-		case 59:
-		case 60:
-		case 62:
-		case 72:
-		case 79:
-			return true;
-		default:
-			return false;
-	}
-}
-
+// mapSetGroundTypes()
+// Sets the ground type to be a decal or not
 static BOOL mapSetGroundTypes(void)
 {
 	int i,j;
@@ -856,9 +719,7 @@ static BOOL mapSetGroundTypes(void)
 
 			psTile->ground = determineGroundType(i,j,tileset);
 
-			if ((strcmp(tileset, "texpages/tertilesc1hw") == 0 && hasArizonaDecal(i, j))
-			    || (strcmp(tileset, "texpages/tertilesc2hw") == 0 && hasUrbanDecal(i, j))
-			    || (strcmp(tileset, "texpages/tertilesc3hw") == 0 && hasRockiesDecal(i, j)))
+			if (hasDecals(i,j))
 			{
 				SET_TILE_DECAL(psTile);
 			}
@@ -1872,10 +1733,26 @@ BOOL mapSave(char **ppFileData, UDWORD *pFileSize)
 /* Shutdown the map module */
 BOOL mapShutdown(void)
 {
-	if(psMapTiles)
+	if (psMapTiles)
 	{
 		free(psMapTiles);
 	}
+	if (mapDecals)
+	{
+		free(mapDecals);
+	}
+	if (psGroundTypes)
+	{
+		free(psGroundTypes);
+	}
+	if (map)
+	{
+		free(map);
+	}
+
+	map = NULL;
+	psGroundTypes = NULL;
+	mapDecals = NULL;
 	psMapTiles = NULL;
 	mapWidth = mapHeight = 0;
 
