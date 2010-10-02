@@ -1,0 +1,9 @@
+tertilesc2hw,8
+u_gray,page-51,3.9
+u_green,page-52,2.6
+u_stone,page-47,3.2
+u_cliff,page-49,4.7
+u_brown,page-49,4.7
+u_blue,page-49,4.7
+u_dark,page-47,3.2
+u_water,page-49,4.7

@@ -1,0 +1,10 @@
+tertilesc3hw,9
+r_grass,page-55,4.6
+r_rock,page-56,3.9
+r_cliff,page-46,5.8
+r_water,page-49,5.8
+r_tiles,page-47,3.2
+r_snowgrass,page-54,2.1
+r_snow,page-57,10.2
+r_snowrock,page-58,3.9
+r_brown,page-49,5.8
