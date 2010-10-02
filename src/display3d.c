@@ -2028,20 +2028,13 @@ static PIELIGHT getBlueprintColour(STRUCT_STATES state)
 /// Draw the structures
 void	renderStructure(STRUCTURE *psStructure)
 {
-	SDWORD			structX, structY, rx, rz;
-	SDWORD			rotation;
-	SDWORD			frame;
-	SDWORD			playerFrame;
-	SDWORD			animFrame;
-	UDWORD			nWeaponStat;
+	int			i, structX, structY, rx, rz, colour, rotation, frame, animFrame, pieFlag, pieFlagData;
 	PIELIGHT		buildingBrightness;
 	Vector3i		dv;
-	SDWORD			i;
 	Vector3f		*temp = NULL;
 	BOOL			bHitByElectronic = false;
 	BOOL			defensive = false;
 	iIMDShape		*strImd = psStructure->sDisplay.imd;
-	int				pieFlag, pieFlagData;
 
 	if (psStructure->pStructureType->type == REF_WALL || psStructure->pStructureType->type == REF_WALLCORNER)
 	{
@@ -2057,30 +2050,14 @@ void	renderStructure(STRUCTURE *psStructure)
 		defensive = true;
 	}
 
-	playerFrame = getPlayerColour(psStructure->player);
+	colour = getPlayerColour(psStructure->player);
+	animFrame = 0;
 
-	/* Power stations and factories have pulsing lights  */
-	if (!defensive && psStructure->sDisplay.imd->numFrames > 0)
+	/* Power stations and factories have pulsing lights. Hack for fortresses, since they need team colour. */
+	if (!defensive && psStructure->sDisplay.imd->numFrames > 0 && !(bMultiPlayer && psStructure->pStructureType->type == REF_BLASTDOOR))
 	{
-		/*OK, so we've got a hack for a new structure - its a 2x2 wall but
-		we've called it a BLAST_DOOR cos we don't want it to use the wallDrag code
-		So its got clan colour trim and not really an anim - these HACKS just keep
-		coming back to haunt us hey? - AB 02/09/99*/
-		if (bMultiPlayer && psStructure->pStructureType->type == REF_BLASTDOOR)
-		{
-			animFrame = getPlayerColour( psStructure->player );
-		}
-		else
-		{
-			//calculate an animation frame
-			animFrame = (gameTime % (STRUCTURE_ANIM_RATE * GAME_TICKS_PER_SEC)) / GAME_TICKS_PER_SEC;
-		}
-	}
-	else if (!defensive)
-	{
-		animFrame = 0;
-	} else {
-		animFrame = playerFrame;
+		// Calculate an animation frame
+		animFrame = (gameTime % (STRUCTURE_ANIM_RATE * GAME_TICKS_PER_SEC)) / GAME_TICKS_PER_SEC;
 	}
 
 	// -------------------------------------------------------------------------------
@@ -2168,7 +2145,7 @@ void	renderStructure(STRUCTURE *psStructure)
 				pieFlag = pie_TRANSLUCENT | pie_FORCE_FOG;
 				pieFlagData = 255;
 			}
-			pie_Draw3DShape(psStructure->pStructureType->pBaseIMD, 0, 0, buildingBrightness, WZCOL_BLACK, pieFlag, pieFlagData);
+			pie_Draw3DShape(psStructure->pStructureType->pBaseIMD, 0, colour, buildingBrightness, WZCOL_BLACK, pieFlag, pieFlagData);
 		}
 
 		// override
@@ -2192,7 +2169,7 @@ void	renderStructure(STRUCTURE *psStructure)
 	//first check if partially built - ANOTHER HACK!
 	if (psStructure->status == SS_BEING_BUILT || psStructure->status == SS_BEING_DEMOLISHED)
 	{
-		pie_Draw3DShape(strImd, 0, playerFrame, buildingBrightness, WZCOL_BLACK, pie_HEIGHT_SCALED | pie_SHADOW,
+		pie_Draw3DShape(strImd, 0, colour, buildingBrightness, WZCOL_BLACK, pie_HEIGHT_SCALED | pie_SHADOW,
 		                (SDWORD)(structHeightScale(psStructure) * pie_RAISE_SCALE));
 		if (defensive)
 		{
@@ -2211,7 +2188,7 @@ void	renderStructure(STRUCTURE *psStructure)
 			pieFlag = pie_STATIC_SHADOW;
 			pieFlagData = 0;
 		}
-		pie_Draw3DShape(strImd, animFrame, 0, buildingBrightness, WZCOL_BLACK, pieFlag, pieFlagData);
+		pie_Draw3DShape(strImd, animFrame, colour, buildingBrightness, WZCOL_BLACK, pieFlag, pieFlagData);
 		if (defensive)
 		{
 			strImd->points = temp;
@@ -2238,7 +2215,7 @@ void	renderStructure(STRUCTURE *psStructure)
 				{
 					if (psStructure->asWeaps[i].nStat > 0)
 					{
-						nWeaponStat = psStructure->asWeaps[i].nStat;
+						const int nWeaponStat = psStructure->asWeaps[i].nStat;
 						weaponImd[i] =  asWeaponStats[nWeaponStat].pIMD;
 						mountImd[i] =  asWeaponStats[nWeaponStat].pMountGraphic;
 						flashImd[i] =  asWeaponStats[nWeaponStat].pMuzzleGraphic;
@@ -2249,7 +2226,7 @@ void	renderStructure(STRUCTURE *psStructure)
 			{
 				if (psStructure->asWeaps[0].nStat > 0)
 				{
-					nWeaponStat = psStructure->asWeaps[0].nStat;
+					const int nWeaponStat = psStructure->asWeaps[0].nStat;
 					weaponImd[0] =  asWeaponStats[nWeaponStat].pIMD;
 					mountImd[0] =  asWeaponStats[nWeaponStat].pMountGraphic;
 					flashImd[0] =  asWeaponStats[nWeaponStat].pMuzzleGraphic;
@@ -2300,7 +2277,7 @@ void	renderStructure(STRUCTURE *psStructure)
 					{
 						pie_TRANSLATE(0, 0, psStructure->asWeaps[i].recoilValue / 3);
 
-						pie_Draw3DShape(mountImd[i], animFrame, 0, buildingBrightness, WZCOL_BLACK, pieFlag, pieFlagData);
+						pie_Draw3DShape(mountImd[i], animFrame, colour, buildingBrightness, WZCOL_BLACK, pieFlag, pieFlagData);
 						if(mountImd[i]->nconnectors)
 						{
 							iV_TRANSLATE(mountImd[i]->connectors->x, mountImd[i]->connectors->z, mountImd[i]->connectors->y);
@@ -2309,7 +2286,7 @@ void	renderStructure(STRUCTURE *psStructure)
 					iV_MatrixRotateX(DEG(psStructure->asWeaps[i].pitch));
 					pie_TRANSLATE(0, 0, psStructure->asWeaps[i].recoilValue);
 
-					pie_Draw3DShape(weaponImd[i], playerFrame, 0, buildingBrightness, WZCOL_BLACK, pieFlag, pieFlagData);
+					pie_Draw3DShape(weaponImd[i], 0, colour, buildingBrightness, WZCOL_BLACK, pieFlag, pieFlagData);
 					if (psStructure->status == SS_BUILT && psStructure->visible[selectedPlayer] > (UBYTE_MAX / 2))
 					{
 						if (psStructure->pStructureType->type == REF_REPAIR_FACILITY)
@@ -2348,19 +2325,11 @@ void	renderStructure(STRUCTURE *psStructure)
 								// assume no clan colours formuzzle effects
 								if (flashImd[i]->numFrames == 0 || flashImd[i]->animInterval <= 0)
 								{
-									// no anim so display one frame for a fixed time
-									if (gameTime < (psStructure->asWeaps[i].lastFired + BASE_MUZZLE_FLASH_DURATION))
-									{
-										pie_Draw3DShape(flashImd[i], 0, 0, buildingBrightness, WZCOL_BLACK, pie_ADDITIVE, 128);//muzzle flash
-									}
+									pie_Draw3DShape(flashImd[i], 0, colour, buildingBrightness, WZCOL_BLACK, pieFlag | pie_ADDITIVE, EFFECT_MUZZLE_ADDITIVE);
 								}
 								else
 								{
-									frame = (gameTime - psStructure->asWeaps[i].lastFired)/flashImd[i]->animInterval;
-									if (frame < flashImd[i]->numFrames)
-									{
-										pie_Draw3DShape(flashImd[i], frame, 0, buildingBrightness, WZCOL_BLACK, pie_ADDITIVE, 20);//muzzle flash
-									}
+									pie_Draw3DShape(flashImd[i], frame, colour, buildingBrightness, WZCOL_BLACK, pieFlag | pie_ADDITIVE, EFFECT_MUZZLE_ADDITIVE);
 								}
 							}
 						}
@@ -2372,10 +2341,11 @@ void	renderStructure(STRUCTURE *psStructure)
 				{
 					if (psStructure->status == SS_BUILT)
 					{
+						const int nWeaponStat = psStructure->asWeaps[i].nStat;
+
 						flashImd[i] = NULL;
 						// get an imd to draw on the connector priority is weapon, ECM, sensor
 						// check for weapon
-						nWeaponStat = psStructure->asWeaps[i].nStat;
 						flashImd[i] =  asWeaponStats[nWeaponStat].pMuzzleGraphic;
 						// draw Weapon/ECM/Sensor for structure
 						if (flashImd[i] != NULL)
@@ -2405,7 +2375,7 @@ void	renderStructure(STRUCTURE *psStructure)
 									// no anim so display one frame for a fixed time
 									if (gameTime < psStructure->asWeaps[i].lastFired + BASE_MUZZLE_FLASH_DURATION)
 									{
-										pie_Draw3DShape(flashImd[i], 0, 0, buildingBrightness, WZCOL_BLACK, 0, 0); //muzzle flash
+										pie_Draw3DShape(flashImd[i], 0, colour, buildingBrightness, WZCOL_BLACK, 0, 0); //muzzle flash
 									}
 								}
 								else
@@ -2413,7 +2383,7 @@ void	renderStructure(STRUCTURE *psStructure)
 									frame = (gameTime - psStructure->asWeaps[i].lastFired) / flashImd[i]->animInterval;
 									if (frame < flashImd[i]->numFrames)
 									{
-										pie_Draw3DShape(flashImd[i], 0, 0, buildingBrightness, WZCOL_BLACK, 0, 0); //muzzle flash
+										pie_Draw3DShape(flashImd[i], 0, colour, buildingBrightness, WZCOL_BLACK, 0, 0); //muzzle flash
 									}
 								}
 							}
@@ -2432,7 +2402,7 @@ void	renderStructure(STRUCTURE *psStructure)
 						iV_TRANSLATE(psStructure->sDisplay.imd->connectors->x, psStructure->sDisplay.imd->connectors->z,
 						             psStructure->sDisplay.imd->connectors->y);
 						lImd = getImdFromIndex(MI_LANDING);
-						pie_Draw3DShape(lImd, getStaticTimeValueRange(1024, lImd->numFrames), 0, buildingBrightness, WZCOL_BLACK, 0, 0);
+						pie_Draw3DShape(lImd, getStaticTimeValueRange(1024, lImd->numFrames), colour, buildingBrightness, WZCOL_BLACK, 0, 0);
 						iV_MatrixEnd();
 					}
 				}
