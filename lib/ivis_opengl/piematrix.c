@@ -250,19 +250,17 @@ int32_t pie_RotateProject(const Vector3i *v3d, Vector2i *v2d)
 		v3d->x * psMatrix->c + v3d->y * psMatrix->f + v3d->z * psMatrix->i + psMatrix->l
 	};
 
-	int zz = v.z >> STRETCHED_Z_SHIFT;
-	int zfx = v.z >> psRendSurface->xpshift;
-	int zfy = v.z >> psRendSurface->ypshift;
+	const int zz = v.z >> STRETCHED_Z_SHIFT;
 
-	if (zfx <= 0 || zfy <= 0 || zz < MIN_STRETCHED_Z)
+	if (zz < MIN_STRETCHED_Z)
 	{
 		v2d->x = LONG_WAY; //just along way off screen
 		v2d->y = LONG_WAY;
 	}
 	else
 	{
-		v2d->x = psRendSurface->xcentre + (v.x / zfx);
-		v2d->y = psRendSurface->ycentre - (v.y / zfy);
+		v2d->x = psRendSurface->xcentre + (v.x / zz);
+		v2d->y = psRendSurface->ycentre - (v.y / zz);
 	}
 
 	return zz;

@@ -81,8 +81,6 @@ BOOL pie_Initialise(void)
 	rendSurface.clip.top	= 0;
 	rendSurface.clip.right	= pie_GetVideoBufferWidth();
 	rendSurface.clip.bottom	= pie_GetVideoBufferHeight();
-	rendSurface.xpshift	= 10;
-	rendSurface.ypshift	= 10;
 
 	pie_SetDefaultStates();
 	iV_RenderAssign(&rendSurface);
