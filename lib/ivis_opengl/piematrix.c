@@ -37,6 +37,13 @@
 
 #define MATRIX_MAX 8
 
+/*
+ * Matrices are of this form:
+ * [ a e g j ]
+ * [ b d h k ]
+ * [ c f i l ]
+ * [ 0 0 0 1 ]
+ */
 typedef struct { SDWORD a, b, c,  d, e, f,  g, h, i,  j, k, l; } SDMATRIX;
 static SDMATRIX	aMatrixStack[MATRIX_MAX];
 static SDMATRIX *psMatrix = &aMatrixStack[0];
@@ -119,6 +126,14 @@ void pie_MATTRANS(float x, float y, float z)
 
 void pie_TRANSLATE(float x, float y, float z)
 {
+	/*
+	 * curMatrix = curMatrix . translationMatrix(x, y, z)
+	 *
+	 *                         [ 1 0 0 x ]
+	 *                         [ 0 1 0 y ]
+	 * curMatrix = curMatrix . [ 0 0 1 z ]
+	 *                         [ 0 0 0 1 ]
+	 */
 	psMatrix->j += x * psMatrix->a + y * psMatrix->d + z * psMatrix->g;
 	psMatrix->k += x * psMatrix->b + y * psMatrix->e + z * psMatrix->h;
 	psMatrix->l += x * psMatrix->c + y * psMatrix->f + z * psMatrix->i;
@@ -132,6 +147,18 @@ void pie_TRANSLATE(float x, float y, float z)
 //******
 void pie_MatScale(float scale)
 {
+	/*
+	 * s := scale
+	 * curMatrix = curMatrix . scaleMatrix(s, s, s)
+	 *
+	 *                         [ s 0 0 0 ]
+	 *                         [ 0 s 0 0 ]
+	 * curMatrix = curMatrix . [ 0 0 s 0 ]
+	 *                         [ 0 0 0 1 ]
+	 *
+	 * curMatrix = scale * curMatrix
+	 */
+
 	psMatrix->a = psMatrix->a * scale;
 	psMatrix->b = psMatrix->b * scale;
 	psMatrix->c = psMatrix->c * scale;
@@ -155,6 +182,28 @@ void pie_MatScale(float scale)
 
 void pie_MatRotY(float y)
 {
+	/*
+	 * a := angle
+	 * c := cos(a)
+	 * s := sin(a)
+	 * h := 2 - c
+	 * i := 1 / h
+	 *
+	 *                                                      [ 1  0  0  0 ]
+	 *                                                      [ 0  i  0  0 ]
+	 * curMatrix = curMatrix . rotationMatrix(a, 0, 1, 0) . [ 0  0  1  0 ]
+	 *                                                      [ 0  0  0  1 ]
+	 *
+	 *                         [  c  0  s  0 ]   [ 1  0  0  0 ]
+	 *                         [  0  h  0  0 ]   [ 0  i  0  0 ]
+	 * curMatrix = curMatrix . [ -s  0  c  0 ] . [ 0  0  1  0 ]
+	 *                         [  0  0  0  1 ]   [ 0  0  0  1 ]
+	 *
+	 *                         [  c  0  s  0 ]
+	 *                         [  0  1  0  0 ]
+	 * curMatrix = curMatrix . [ -s  0  c  0 ]
+	 *                         [  0  0  0  1 ]
+	 */
 	if (y != 0.f)
 	{
 		int t;
@@ -184,6 +233,28 @@ void pie_MatRotY(float y)
 
 void pie_MatRotZ(float z)
 {
+	/*
+	 * a := angle
+	 * c := cos(a)
+	 * s := sin(a)
+	 * h := 2 - c
+	 * i := 1 / h
+	 *
+	 *                                                      [ 1  0  0  0 ]
+	 *                                                      [ 0  1  0  0 ]
+	 * curMatrix = curMatrix . rotationMatrix(a, 0, 0, 1) . [ 0  0  i  0 ]
+	 *                                                      [ 0  0  0  1 ]
+	 *
+	 *                         [ c  -s  0  0 ]   [ 1  0  0  0 ]
+	 *                         [ s   c  0  0 ]   [ 0  1  0  0 ]
+	 * curMatrix = curMatrix . [ 0   0  h  0 ] . [ 0  0  i  0 ]
+	 *                         [ 0   0  0  1 ]   [ 0  0  0  1 ]
+	 *
+	 *                         [ c  -s  0  0 ]
+	 *                         [ s   c  0  0 ]
+	 * curMatrix = curMatrix . [ 0   0  1  0 ]
+	 *                         [ 0   0  0  1 ]
+	 */
 	if (z != 0.f)
 	{
 		int t;
@@ -213,6 +284,28 @@ void pie_MatRotZ(float z)
 
 void pie_MatRotX(float x)
 {
+	/*
+	 * a := angle
+	 * c := cos(a)
+	 * s := sin(a)
+	 * h := 2 - c
+	 * i := 1 / h
+	 *
+	 *                                                      [ i  0  0  0 ]
+	 *                                                      [ 0  1  0  0 ]
+	 * curMatrix = curMatrix . rotationMatrix(a, 0, 0, 1) . [ 0  0  1  0 ]
+	 *                                                      [ 0  0  0  1 ]
+	 *
+	 *                         [ h  0   0  0 ]   [ i  0  0  0 ]
+	 *                         [ 0  c  -s  0 ]   [ 0  1  0  0 ]
+	 * curMatrix = curMatrix . [ 0  s   c  0 ] . [ 0  0  1  0 ]
+	 *                         [ 0  0   0  1 ]   [ 0  0  0  1 ]
+	 *
+	 *                         [ 1  0   0  0 ]
+	 *                         [ 0  c  -s  0 ]
+	 * curMatrix = curMatrix . [ 0  s   c  0 ]
+	 *                         [ 0  0   0  1 ]
+	 */
 	if (x != 0.f)
 	{
 		int t;
@@ -244,6 +337,9 @@ void pie_MatRotX(float x)
  */
 int32_t pie_RotateProject(const Vector3i *v3d, Vector2i *v2d)
 {
+	/*
+	 * v = curMatrix . v3d
+	 */
 	Vector3i v = {
 		v3d->x * psMatrix->a + v3d->y * psMatrix->d + v3d->z * psMatrix->g + psMatrix->j,
 		v3d->x * psMatrix->b + v3d->y * psMatrix->e + v3d->z * psMatrix->h + psMatrix->k,
@@ -317,11 +413,13 @@ void pie_SetGeometricOffset(int x, int y)
  */
 void pie_VectorInverseRotate0(const Vector3i *v1, Vector3i *v2)
 {
-	unsigned int x = v1->x, y = v1->y, z = v1->z;
-
-	v2->x = (x * psMatrix->a + y * psMatrix->b + z * psMatrix->c) >> FP12_SHIFT;
-	v2->y = (x * psMatrix->d + y * psMatrix->e + z * psMatrix->f) >> FP12_SHIFT;
-	v2->z = (x * psMatrix->g + y * psMatrix->h + z * psMatrix->i) >> FP12_SHIFT;
+	/*
+	 * invMatrix = transpose(sub3x3Matrix(curMatrix))
+	 * v2 = invMatrix . v1
+	 */
+	v2->x = (v1->x * psMatrix->a + v1->y * psMatrix->b + v1->z * psMatrix->c) >> FP12_SHIFT;
+	v2->y = (v1->x * psMatrix->d + v1->y * psMatrix->e + v1->z * psMatrix->f) >> FP12_SHIFT;
+	v2->z = (v1->x * psMatrix->g + v1->y * psMatrix->h + v1->z * psMatrix->i) >> FP12_SHIFT;
 }
 
 /** Sets up transformation matrices/quaternions and trig tables
@@ -334,6 +432,9 @@ void pie_MatInit(void)
 
 void pie_RotateTranslate3iv(const Vector3i *v, Vector3i *s)
 {
+	/*
+	 * s = curMatrix . v
+	 */
 	s->x = ( v->x * psMatrix->a + v->z * psMatrix->d + v->y * psMatrix->g
 			+ psMatrix->j ) / FP12_MULTIPLIER;
 	s->z = ( v->x * psMatrix->b + v->z * psMatrix->e + v->y * psMatrix->h
@@ -342,9 +443,11 @@ void pie_RotateTranslate3iv(const Vector3i *v, Vector3i *s)
 			+ psMatrix->l ) / FP12_MULTIPLIER;
 }
 
-
 void pie_RotateTranslate3f(const Vector3f *v, Vector3f *s)
 {
+	/*
+	 * s = curMatrix . v
+	 */
 	s->x = ( v->x * psMatrix->a + v->z * psMatrix->d + v->y * psMatrix->g
 			+ psMatrix->j ) / FP12_MULTIPLIER;
 	s->z = ( v->x * psMatrix->b + v->z * psMatrix->e + v->y * psMatrix->h
