@@ -39,8 +39,8 @@
 
 /*
  * Matrices are of this form:
- * [ a e g j ]
- * [ b d h k ]
+ * [ a d g j ]
+ * [ b e h k ]
  * [ c f i l ]
  * [ 0 0 0 1 ]
  */
