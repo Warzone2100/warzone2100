@@ -113,9 +113,9 @@ void pie_MATTRANS(float x, float y, float z)
 {
 	GLfloat matrix[16];
 
-	psMatrix->j = (int)x << FP12_SHIFT | (int)((x - (int)x) * FP12_MULTIPLIER);
-	psMatrix->k = (int)y << FP12_SHIFT | (int)((y - (int)y) * FP12_MULTIPLIER);
-	psMatrix->l = (int)z << FP12_SHIFT | (int)((z - (int)z) * FP12_MULTIPLIER);
+	psMatrix->j = x * FP12_MULTIPLIER;
+	psMatrix->k = y * FP12_MULTIPLIER;
+	psMatrix->l = z * FP12_MULTIPLIER;
 
 	glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
 	matrix[12] = x;
@@ -417,9 +417,9 @@ void pie_VectorInverseRotate0(const Vector3i *v1, Vector3i *v2)
 	 * invMatrix = transpose(sub3x3Matrix(curMatrix))
 	 * v2 = invMatrix . v1
 	 */
-	v2->x = (v1->x * psMatrix->a + v1->y * psMatrix->b + v1->z * psMatrix->c) >> FP12_SHIFT;
-	v2->y = (v1->x * psMatrix->d + v1->y * psMatrix->e + v1->z * psMatrix->f) >> FP12_SHIFT;
-	v2->z = (v1->x * psMatrix->g + v1->y * psMatrix->h + v1->z * psMatrix->i) >> FP12_SHIFT;
+	v2->x = (v1->x * psMatrix->a + v1->y * psMatrix->b + v1->z * psMatrix->c) / FP12_MULTIPLIER;
+	v2->y = (v1->x * psMatrix->d + v1->y * psMatrix->e + v1->z * psMatrix->f) / FP12_MULTIPLIER;
+	v2->z = (v1->x * psMatrix->g + v1->y * psMatrix->h + v1->z * psMatrix->i) / FP12_MULTIPLIER;
 }
 
 /** Sets up transformation matrices/quaternions and trig tables
