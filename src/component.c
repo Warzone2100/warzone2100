@@ -882,7 +882,17 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 		iPieData = 0;
 	}
 
+	/* get propulsion stats */
+	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
+	ASSERT( psPropStats != NULL, "invalid propulsion stats pointer" );
+
 	//uses psShapeTemp too separate it from turret's psShape
+	if (!bButton && psPropStats->propulsionType == PROPULSION_TYPE_PROPELLOR)
+	{
+		// FIXME: change when adding submarines to the game
+		pie_TRANSLATE(0, -world_coord(1)/2.3f, 0);
+	}
+
 	psShapeTemp = (leftFirst ? getLeftPropulsionIMD(psDroid) : getRightPropulsionIMD(psDroid));
 	if(psShapeTemp!=NULL)
 	{
@@ -932,9 +942,6 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 		}
 	}
 
-	/* get propulsion stats */
-	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-	ASSERT_OR_RETURN( , psPropStats != NULL, "invalid propulsion stats pointer");
 
 	/* render vtol jet if flying - horrible hack - GJ */
 	if (((psPropStats->propulsionType == PROPULSION_TYPE_LIFT) &&

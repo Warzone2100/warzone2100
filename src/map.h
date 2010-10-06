@@ -29,6 +29,7 @@
 #include "objects.h"
 #include "multiplay.h"
 #include "display.h"
+#include "terrain.h"
 
 /* The different types of terrain as far as the game is concerned */
 typedef enum _terrain_type
@@ -85,6 +86,12 @@ static inline unsigned short TileNumber_texture(unsigned short tilenumber)
 #define BITS_GATEWAY		0x40	///< Bit set to show a gateway on the tile
 #define BITS_TALLSTRUCTURE	0x80	///< Bit set to show a tall structure which camera needs to avoid.
 
+typedef struct _ground_type
+{
+	const char *textureName;
+	float textureSize;
+} GROUND_TYPE;
+
 /* Information stored with each tile */
 typedef struct _maptile
 {
@@ -100,6 +107,10 @@ typedef struct _maptile
 	short			limitedContinent;	/** For land or sea limited propulsion types */
 	short			hoverContinent;		/** For hover type propulsions */
 
+	int             ground;
+	BOOL            decal;
+	float			height_new; // FIXME: replace height with a float and remove this one
+	float           waterLevel;
 //	TYPE_OF_TERRAIN	type;			// The terrain type for the tile
 } MAPTILE;
 
@@ -221,6 +232,13 @@ static inline unsigned char terrainType(const MAPTILE * tile)
 /* The size and contents of the map */
 extern UDWORD	mapWidth, mapHeight;
 extern MAPTILE *psMapTiles;
+extern float waterLevel;
+
+extern GROUND_TYPE *psGroundTypes;
+extern int numGroundTypes;
+extern int waterGroundType;
+extern int cliffGroundType;
+extern char *tileset;
 
 /*
  * Usage-Example:
@@ -273,7 +291,7 @@ extern BOOL mapShutdown(void);
 extern BOOL mapNew(UDWORD width, UDWORD height);
 
 /* Load the map data */
-extern BOOL mapLoad(char *pFileData, UDWORD fileSize);
+extern BOOL mapLoad(char *filename);
 
 /* Save the map data */
 extern BOOL mapSave(char **ppFileData, UDWORD *pFileSize);
@@ -300,22 +318,45 @@ static inline WZ_DECL_PURE MAPTILE *mapTile(SDWORD x, SDWORD y)
 }
 
 /* Return height of tile at x,y */
-static inline WZ_DECL_PURE SWORD map_TileHeight(UDWORD x, UDWORD y)
+static inline WZ_DECL_PURE float map_TileHeight(UDWORD x, UDWORD y)
 {
 	if ( x >= mapWidth || y >= mapHeight )
 	{
 		return 0;
 	}
-	return (SWORD)(psMapTiles[x + (y * mapWidth)].height * ELEVATION_SCALE);
+	return ((float)psMapTiles[x + (y * mapWidth)].height * ELEVATION_SCALE);
 }
 
+/* Return height of tile at x,y, uses float height_new */
+static inline WZ_DECL_PURE float map_TileHeight_new(UDWORD x, UDWORD y)
+{
+	if ( x >= mapWidth || y >= mapHeight )
+	{
+		return 0;
+	}
+	return ((float)psMapTiles[x + (y * mapWidth)].height_new * ELEVATION_SCALE);
+}
+
+/* Return height of tile at x,y */
+static inline WZ_DECL_PURE float map_WaterHeight(UDWORD x, UDWORD y)
+{
+	if ( x >= mapWidth || y >= mapHeight )
+	{
+		return 0;
+	}
+	return ((float)psMapTiles[x + (y * mapWidth)].waterLevel * ELEVATION_SCALE);
+}
+
+
 /*sets the tile height */
-static inline void setTileHeight(UDWORD x, UDWORD y, UDWORD height)
+static inline void setTileHeight(UDWORD x, UDWORD y, float height)
 {
 	ASSERT_OR_RETURN( , x < mapWidth, "x coordinate %u bigger than map width %u", x, mapWidth);
 	ASSERT_OR_RETURN( , y < mapHeight, "y coordinate %u bigger than map height %u", y, mapHeight);
 
-	psMapTiles[x + (y * mapWidth)].height = (UBYTE) (height / ELEVATION_SCALE);
+	psMapTiles[x + (y * mapWidth)].height = (UBYTE)(height / ELEVATION_SCALE);
+	psMapTiles[x + (y * mapWidth)].height_new = (height / ELEVATION_SCALE);
+	markTileDirty(x, y);
 }
 
 /* Return whether a tile coordinate is on the map */

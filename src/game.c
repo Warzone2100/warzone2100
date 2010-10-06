@@ -2784,14 +2784,10 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "mission.map");
 		/* Load in the chosen file data */
-		pFileData = fileLoadBuffer;
-		if (loadFileToBufferNoError(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
+		if (!mapLoad(aFileName))
 		{
-			if (!mapLoad(pFileData, fileSize))
-			{
-				debug( LOG_NEVER, "loadgame: Fail7\n" );
-				return(false);
-			}
+			debug(LOG_ERROR, "Failed to load map");
+			return false;
 		}
 
 		//load in the visibility file
@@ -2936,15 +2932,8 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		//load in the map file
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "game.map");
-		/* Load in the chosen file data */
-		pFileData = fileLoadBuffer;
-		if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
-		{
-			debug( LOG_NEVER, "loadgame: Fail5\n" );
-			goto error;
-		}
+		if (!mapLoad(aFileName))
 
-		if (!mapLoad(pFileData, fileSize))
 		{
 			debug( LOG_NEVER, "loadgame: Fail7\n" );
 			return(false);

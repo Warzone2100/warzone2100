@@ -67,6 +67,7 @@ void raiseTile(int tile3dX, int tile3dY)
 		for (j = tile3dY; j <= MIN(mapHeight - 1, tile3dY + brushSize); j++)
 		{
 			adjustTileHeight(mapTile(i, j), TILE_RAISE);
+			markTileDirty(i,j);
 		}
 	}
 }
@@ -85,6 +86,7 @@ void lowerTile(int tile3dX, int tile3dY)
 		for (j = tile3dY; j <= MIN(mapHeight - 1, tile3dY + brushSize); j++)
 		{
 			adjustTileHeight(mapTile(i, j), TILE_LOWER);
+			markTileDirty(i,j);
 		}
 	}
 }
@@ -98,6 +100,7 @@ void	adjustTileHeight(MAPTILE *psTile, SDWORD adjust)
 	if (newHeight>=MIN_TILE_HEIGHT && newHeight<=MAX_TILE_HEIGHT)
 	{
 		psTile->height=(unsigned char) newHeight;
+		psTile->height_new += adjust;
 	}
 }
 

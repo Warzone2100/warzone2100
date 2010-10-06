@@ -39,7 +39,7 @@
 #include "effects.h"
 #include "atmos.h"
 #include "environ.h"
-
+#include "terrain.h"
 
 // These values determine the fog when fully zoomed in
 // Determine these when fully zoomed in
@@ -133,14 +133,6 @@ static void normalsOnTile(unsigned int tileX, unsigned int tileY, unsigned int q
 		*tileDownRight = mapTile(tileX+1,tileY+1),
 		*tileDown = mapTile(tileX,tileY+1);
 	unsigned int rMod = 0, drMod = 0, dMod = 0, nMod = 0;
-
-	if (terrainType(psTile) == TER_WATER)
-	{
- 		nMod = 100 + (2*environGetData(tileX,tileY));
-		rMod = 100 + (2*environGetData(tileX+1,tileY));
-		drMod = 100 + (2*environGetData(tileX+1,tileY+1));
-		dMod = 100 + (2*environGetData(tileX,tileY+1));
-	}
 
 	switch(quadrant)
 	{

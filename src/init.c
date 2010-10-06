@@ -93,6 +93,7 @@
 #include "main.h"
 #include "wrappers.h"
 #include "ingameop.h"
+#include "terrain.h"
 
 static void	initMiscVars(void);
 
@@ -859,6 +860,8 @@ BOOL stageOneShutDown(void)
 
 	//free up the gateway stuff?
 	gwShutDown();
+
+	shutdownTerrain();
 
 	if (!mapShutdown())
 	{

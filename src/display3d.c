@@ -22,6 +22,7 @@
  * Draws the 3D view.
  * Originally by Alex McLean & Jeremy Sallis, Pumpkin Studios, EIDOS INTERACTIVE
  */
+#include "lib/ivis_opengl/GLee.h"
 #include "lib/framework/frame.h"
 #include "lib/framework/math_ext.h"
 #include "lib/framework/stdio_ext.h"
@@ -90,10 +91,7 @@
 #include "texture.h"
 #include "anim_id.h"
 #include "cmddroid.h"
-
-#define WATER_ZOFFSET 32		///< Sorting offset for main water tile.
-#define WATER_EDGE_ZOFFSET 64	///< Sorting offset for water edge tiles.
-#define WATER_DEPTH	127			///< Amount to push terrain below water.
+#include "terrain.h"
 
 /********************  Prototypes  ********************/
 
@@ -105,7 +103,6 @@ static void	locateMouse(void);
 static BOOL	renderWallSection(STRUCTURE *psStructure);
 static void	drawDragBox(void);
 static void	calcFlagPosScreenCoords(SDWORD *pX, SDWORD *pY, SDWORD *pR);
-static void	setTexCoords(unsigned int tileNumber, unsigned int i, unsigned int j);
 static void	displayTerrain(void);
 static iIMDShape	*flattenImd(iIMDShape *imd, UDWORD structX, UDWORD structY, UDWORD direction);
 static void	drawTiles(iView *player);
@@ -130,9 +127,6 @@ static void	calcAverageTerrainHeight(iView *player);
 BOOL	doWeDrawProximitys(void);
 static PIELIGHT getBlueprintColour(STRUCT_STATES state);
 
-static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge);
-static void drawTerrainWaterTile(UDWORD i, UDWORD j);
-
 static void NetworkDisplayPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours);
 static void NetworkDisplayImage(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours);
 void NotifyUserOfError(char *msg);
@@ -149,11 +143,6 @@ BOOL	showPath = false;
 
 /// The name of the texture page used to draw the skybox
 static char skyboxPageName[PATH_MAX] = "page-25";
-
-/// The current shift of the water texture
-static float waterRealValue = 0.0f;
-/// The speed at which to shift the water texture
-#define WAVE_SPEED 0.015f
 
 /// When to display HP bars
 UWORD barMode;
@@ -236,9 +225,6 @@ static bool errorWaiting = false;
 static char errorMessage[512];
 static uint32_t lastErrorTime = 0;
 
-int NET_PlayerConnectionStatus = 0;
-#define NETWORK_FORM_ID 0xFAAA
-#define NETWORK_BUT_ID 0xFAAB
 /** When enabled, this causes a segfault in the game, to test out the crash handler */
 bool CauseCrash = false;
 
@@ -246,6 +232,12 @@ bool CauseCrash = false;
 */
 char DROIDDOING[512];
 
+/** When we have a connection issue, we will flash a message on screen
+* 0 = no issue, 1= player leaving nicely, 2= player got disconnected
+*/
+int NET_PlayerConnectionStatus = 0;
+#define NETWORK_FORM_ID 0xFAAA
+#define NETWORK_BUT_ID 0xFAAB
 /// Geometric offset which will be passed to pie_SetGeometricOffset
 UDWORD geoOffset;
 /// The average terrain height for the center of the area the camera is looking at
@@ -468,11 +460,11 @@ void draw3DScene( void )
 	/* Set 3D world origins */
 	pie_SetGeometricOffset((rendSurface.width >> 1), geoOffset);
 
-	// draw sky and fogbox
-	renderSurroundings();
-
 	// draw terrain
 	displayTerrain();
+
+	// draw skybox
+	renderSurroundings();
 
 	pie_BeginInterface();
 	updateLightLevels();
@@ -776,33 +768,12 @@ static void calcAverageTerrainHeight(iView *player)
 		averageCentreTerrainHeight = ELEVATION_SCALE * TILE_UNITS;
 	}
 }
-/// Get the colour of the terrain tile at the specified position
-PIELIGHT getTileColour(int x, int y)
-{
-	return mapTile(x, y)->colour;
-}
-/// Set the colour of the tile at the specified position
-void setTileColour(int x, int y, PIELIGHT colour)
-{
-	MAPTILE *psTile = mapTile(x, y);
 
-	psTile->colour = colour;
-}
 /// Draw the terrain and all droids, missiles and other objects on it
 static void drawTiles(iView *player)
 {
 	UDWORD i, j;
 	SDWORD rx, rz;
-
-	// Animate the water texture, just cycles the V coordinate through half the tiles height.
-	if(!gamePaused())
-	{
-		waterRealValue += timeAdjustedIncrement(WAVE_SPEED, false);
-		if (waterRealValue >= (1.0f / TILES_IN_PAGE_ROW) / 2)
-		{
-			waterRealValue = 0.0f;
-		}
-	}
 
 	/* ---------------------------------------------------------------- */
 	/* Do boundary and extent checking                                  */
@@ -848,9 +819,7 @@ static void drawTiles(iView *player)
 		pie_BeginLighting(&theSun);
 	}
 
-	/* ---------------------------------------------------------------- */
-	/* Rotate and project all the tiles within the grid                 */
-	/* ---------------------------------------------------------------- */
+	// update the fog of war
 	for (i = 0; i < visibleTiles.y+1; i++)
 	{
 		/* Go through the x's */
@@ -858,7 +827,6 @@ static void drawTiles(iView *player)
 		{
 			Vector2i screen;
 			PIELIGHT TileIllum = WZCOL_BLACK;
-			int shiftVal = 0;
 
 			tileScreenInfo[i][j].pos.x = world_coord(j - terrainMidX);
 			tileScreenInfo[i][j].pos.z = world_coord(terrainMidY - i);
@@ -874,8 +842,6 @@ static void drawTiles(iView *player)
 			{
 				BOOL bEdgeTile = false;
 				MAPTILE *psTile = mapTile(playerXTile + j, playerZTile + i);
-				BOOL pushedDown = false;
-				float distToEdge,distA,distB,distC,distD;
 
 				tileScreenInfo[i][j].pos.y = map_TileHeight(playerXTile + j, playerZTile + i);
 				TileIllum = pal_SetBrightness(psTile->level);
@@ -886,59 +852,6 @@ static void drawTiles(iView *player)
 					 playerZTile+i >= mapHeight-2 )
 				{
 					bEdgeTile = true;
-				}
-
-				// If it's the main water tile (has water texture) then..
-				if (TileNumber_tile(psTile->texture) == underwaterTile && !bEdgeTile)
-				{
-					// Push the terrain down for the river bed.
-					shiftVal = WATER_DEPTH + environGetData(playerXTile+j, playerZTile+i) * 1.5f;
-					tileScreenInfo[i][j].pos.y -= shiftVal;
-					// And darken it.
-					TileIllum.byte.r = (TileIllum.byte.r * 2) / 3;
-					TileIllum.byte.g = (TileIllum.byte.g * 2) / 3;
-					TileIllum.byte.b = (TileIllum.byte.b * 2) / 3;
-					pushedDown = true;
-				}
-				
-				// calculate the distance to the closest edge of the visible map
-				distA = j                + 1-rx/(float)TILE_UNITS;
-				distB = visibleTiles.x-j +   rx/(float)TILE_UNITS;
-				distC = i                + 1-rz/(float)TILE_UNITS;
-				distD = visibleTiles.y-i +   rz/(float)TILE_UNITS;
-				// determine the smallest distance
-				distToEdge = distA;
-				if (distB < distToEdge) distToEdge = distB;
-				if (distC < distToEdge) distToEdge = distC;
-				if (distD < distToEdge) distToEdge = distD;
-
-				// now fade the border depending on the distance
-				if (pie_GetFogStatus() == true)
-				{
-					// no fog of war, so fade to fog color,
-					// as transparency and fog do not play well together
-					if (distToEdge < 3)
-					{
-						TileIllum.byte.r = (distToEdge-1)/2*TileIllum.byte.r + (1-(distToEdge-1)/2)*pie_GetFogColour().byte.r;
-						TileIllum.byte.g = (distToEdge-1)/2*TileIllum.byte.g + (1-(distToEdge-1)/2)*pie_GetFogColour().byte.g;
-						TileIllum.byte.b = (distToEdge-1)/2*TileIllum.byte.b + (1-(distToEdge-1)/2)*pie_GetFogColour().byte.b;
-					}
-					if (distToEdge < 1)
-					{
-						TileIllum = pie_GetFogColour();
-					}
-				}
-				else
-				{
-					// fog of war; fade to transparancy
-					if (distToEdge < 3)
-					{
-						TileIllum.byte.a *= (distToEdge-1)/2;
-					}
-					if (distToEdge < 1)
-					{
-						TileIllum.byte.a = 0;
-					}
 				}
 
 				setTileColour(playerXTile + j, playerZTile + i, TileIllum);
@@ -957,124 +870,45 @@ static void drawTiles(iView *player)
 	atmosUpdateSystem();
 	avUpdateTiles();
 
-	// Draw all the normal tiles
+	// now we are about to draw the terrain
 	pie_SetAlphaTest(false);
 	pie_SetFogStatus(true);
-	pie_SetTexturePage(terrainPage);
-	pie_SetRendMode(REND_ALPHA_TEX);
-	for (i = 0; i < visibleTiles.y; i++)
-	{
-		for (j = 0; j < visibleTiles.x; j++)
-		{
-			//get distance of furthest corner
-			int zMax = MAX(tileScreenInfo[i][j].screen.z, tileScreenInfo[i+1][j].screen.z);
-			zMax = MAX(zMax, tileScreenInfo[i + 1][j + 1].screen.z);
-			zMax = MAX(zMax, tileScreenInfo[i][j + 1].screen.z);
 
-			if (zMax < 0)
-			{
-				// clipped
-				continue;
-			}
+	// reset the texture coordinates to the standard [0,1] range.
+	glMatrixMode(GL_TEXTURE);
+	glLoadIdentity();
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	// also, make sure we can use world coordinates directly
+	glTranslatef(world_coord(-playerXTile-terrainMidX), 0.0f, world_coord(playerZTile+terrainMidY));
 
-			drawTerrainTile(i, j, false);
-		}
-	}
 	pie_DrawTerrain(MAX(0,-playerZTile-1),
 	                MAX(0,-playerXTile-1),
 	                MIN(visibleTiles.y, mapHeight-playerZTile),
 	                MIN(visibleTiles.x, mapWidth-playerXTile));
+	// and draw it
+	drawTerrain();
 
-	// Update height for water
-	for (i = 0; i < visibleTiles.y + 1; i++)
+	// go back to the warzone [0,255] range
+	pie_TranslateTextureEnd();
+	// and to the warzone modelview transform
+	glPopMatrix();
+
+	// clear the terrain highlight
+	for (i = 0; i < visibleTiles.y; i++)
 	{
-		/* Go through the x's */
-		for (j = 0; j < visibleTiles.x + 1; j++)
+		for (j = 0; j < visibleTiles.x; j++)
 		{
-			if (!(playerXTile + j < 0 || playerZTile + i < 0 || playerXTile + j > (SDWORD)(mapWidth - 1)
-			      || playerZTile + i > (SDWORD)(mapHeight - 1)))
+			if (tileOnMap(playerXTile + j, playerZTile + i))
 			{
-				tileScreenInfo[i][j].pos.y = map_TileHeight(playerXTile + j, playerZTile + i);
-			}
-			else
-			{
-				tileScreenInfo[i][j].pos.y = 0;
+				CLEAR_TILE_HIGHLIGHT(mapTile(playerXTile + j, playerZTile + i));
 			}
 		}
 	}
 
-	// Draw water edges
-	pie_SetDepthOffset(-2.0);
-	pie_SetAlphaTest(true);
-	for (i = 0; i < MIN(visibleTiles.y, mapHeight); i++)
-	{
-		for (j = 0; j < MIN(visibleTiles.x, mapWidth); j++)
-		{
-			MAPTILE *psTile;
-
-			if (!tileOnMap(playerXTile + j, playerZTile + i))
-			{
-				continue;
-			}
-			psTile = mapTile(playerXTile + j, playerZTile + i);
-
-			// check if we need to draw a water edge
-			if (terrainType(psTile) == TER_WATER && TileNumber_tile(psTile->texture) != underwaterTile)
-			{
-				//get distance of furthest corner
-				int zMax = MAX(tileScreenInfo[i][j].screen.z, tileScreenInfo[i + 1][j].screen.z);
-				zMax = MAX(zMax, tileScreenInfo[i + 1][j + 1].screen.z);
-				zMax = MAX(zMax, tileScreenInfo[i][j + 1].screen.z);
-
-				if (zMax < 0)
-				{
-					// clipped
-					continue;
-				}
-
-				// the edge is in front of the water (which is drawn at z-index -1)
-				drawTerrainTile(i, j, true);
-			}
-		}
-	}
-
-	// Now draw the water tiles in a second pass to get alpha sort order correct
-	pie_TranslateTextureBegin(Vector2f_Init(0.0f, waterRealValue));
-	pie_SetAlphaTest(false);
-	pie_SetDepthOffset(-1.0f);
-	for (i = 0; i < MIN(visibleTiles.y, mapHeight ); i++)
-	{
-		for (j = 0; j < MIN(visibleTiles.x, mapWidth); j++)
-		{
-			MAPTILE *psTile;
-
-			if (!tileOnMap(playerXTile + j, playerZTile + i))
-			{
-				continue;
-			}
-			psTile = mapTile(playerXTile + j, playerZTile + i);
-
-			if (terrainType(psTile) == TER_WATER)
-			{
-				//get distance of furthest corner
-				int zMax = MAX(tileScreenInfo[i][j].screen.z, tileScreenInfo[i + 1][j].screen.z);
-				zMax = MAX(zMax, tileScreenInfo[i + 1][j + 1].screen.z);
-				zMax = MAX(zMax, tileScreenInfo[i][j + 1].screen.z);
-
-				if (zMax < 0)
-				{
-					// clipped
-					continue;
-				}
-
-				drawTerrainWaterTile(i, j);
-			}
-		}
-	}
-	pie_SetDepthOffset(0.0f);
+	// and prepare for rendering the models
 	pie_SetRendMode(REND_GOURAUD_TEX);
 	pie_SetAlphaTest(true);
-	pie_TranslateTextureEnd();
 
 	targetOpenList((BASE_OBJECT*)driveGetDriven());
 
@@ -1092,6 +926,25 @@ static void drawTiles(iView *player)
 	display3DProjectiles(); // bucket render implemented
 
 	atmosDrawParticles();
+
+	// prepare for the water and the lightmap
+	pie_SetAlphaTest(false);
+	pie_SetFogStatus(true);
+	
+	// reset the texture coordinates to the standard [0,1] range.
+	glMatrixMode(GL_TEXTURE);
+	glLoadIdentity();
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	// also, make sure we can use world coordinates directly
+	glTranslatef(world_coord(-playerXTile-terrainMidX), 0.0f, world_coord(playerZTile+terrainMidY));
+	
+	drawWater();
+	
+	// go back to the warzone [0,255] range
+	pie_TranslateTextureEnd();
+	// and to the warzone modelview transform
+	glPopMatrix();
 
 	bucketRenderCurrentList();
 	displayBlueprints();
@@ -1169,6 +1022,8 @@ BOOL init3DView(void)
 
 	// distance is not saved, so initialise it now
 	distance = START_DISTANCE; // distance
+
+	initTerrain();
 
 	return true;
 }
@@ -2492,7 +2347,7 @@ void	renderStructure(STRUCTURE *psStructure)
 			iIMDShape	*mountImd[STRUCT_MAXWEAPS];
 			iIMDShape	*weaponImd[STRUCT_MAXWEAPS];
 			iIMDShape	*flashImd[STRUCT_MAXWEAPS];
-			
+
 			for (i = 0; i < STRUCT_MAXWEAPS; i++)
 			{
 				weaponImd[i] = NULL;//weapon is gun ecm or sensor
@@ -2548,7 +2403,7 @@ void	renderStructure(STRUCTURE *psStructure)
 					flashImd[0] = NULL;
 				}
 			}
-			
+
 			// flags for drawing weapons
 			if (structureIsBlueprint(psStructure))
 			{
@@ -3468,7 +3323,7 @@ static void	drawDroidSelections( void )
 				pie_BoxFill(scrX - scrR - 1, scrY + scrR+2, scrX + scrR + 1, scrY + scrR + 6, WZCOL_RELOAD_BACKGROUND);
 				pie_BoxFill(scrX - scrR, scrY + scrR+3, scrX - scrR + damage, scrY + scrR + 4, powerCol);
 				pie_BoxFill(scrX - scrR, scrY + scrR+4, scrX - scrR + damage, scrY + scrR + 5, powerColShadow);
-				
+
 				/* Write the droid rank out */
 				if((scrX+scrR)>0 && (scrY+scrR)>0 && (scrX-scrR) < pie_GetVideoBufferWidth() && (scrY-scrR) < pie_GetVideoBufferHeight())
 				{
@@ -3536,7 +3391,7 @@ static void	drawDroidSelections( void )
 					powerCol = WZCOL_HEALTH_LOW;
 					powerColShadow = WZCOL_HEALTH_LOW_SHADOW;
 				}
-				
+
 				//show resistance values if CTRL/SHIFT depressed
 				if (ctrlShiftDown())
 				{
@@ -3876,7 +3731,8 @@ static void locateMouse(void)
 static void renderSurroundings(void)
 {
 	static float wind = 0.0f;
-	const float skybox_scale = 10000.0f;
+	const float skybox_scale = 20000.0f;
+// check with TRUNK
 	const float height = 20.0f * TILE_UNITS;
 	const float wider  = 2.0f * (visibleTiles.x * TILE_UNITS);
 	int left, right, front, back, rx, rz;
@@ -3897,7 +3753,7 @@ static void renderSurroundings(void)
 	pie_MatRotZ(player.r.z);
 	pie_MatRotX(player.r.x);
 	pie_MatRotY(player.r.y);
-
+// check with TRUNK
 	// Fogbox //
 	rx = (player.p.x) & (TILE_UNITS-1);
 	rz = (player.p.z) & (TILE_UNITS-1);
@@ -4016,223 +3872,6 @@ static iIMDShape	*flattenImd(iIMDShape *imd, UDWORD structX, UDWORD structY, UDW
 
 	imd->points = alteredPoints;
 	return imd;
-}
-
-/** Draw a single terrain tile
- * If onWaterEdge is true, a water tile will be drawn.
- */
-static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
-{
-	/* Get the correct tile index for the x/y coordinates */
-	SDWORD actualX = playerXTile + j, actualY = playerZTile + i;
-	MAPTILE *psTile = NULL;
-	BOOL bOutlined = false;
-	UDWORD tileNumber = 0;
-	TERRAIN_VERTEX vertices[3];
-	PIELIGHT colour[2][2];
-
-	colour[0][0] = WZCOL_BLACK;
-	colour[1][0] = WZCOL_BLACK;
-	colour[0][1] = WZCOL_BLACK;
-	colour[1][1] = WZCOL_BLACK;
-
-	/* Let's just get out now if we're not supposed to draw it */
-	if (actualX < 0 || actualY < 0 || actualX > mapWidth - 1 || actualY > mapHeight - 1)
-	{
-		tileNumber = 0;
-	}
-	else
-	{
-		psTile = mapTile(actualX, actualY);
-
-		colour[0][0] = psTile->colour;
-		if (actualY + 1 < mapHeight - 1)
-		{
-			colour[1][0] = mapTile(actualX, actualY + 1)->colour;
-		}
-		if (actualX + 1 < mapWidth - 1)
-		{
-			colour[0][1] = mapTile(actualX + 1, actualY)->colour;
-		}
-		if (actualX + 1 < mapWidth - 1 && actualY + 1 < mapHeight - 1)
-		{
-			colour[1][1] = mapTile(actualX + 1, actualY + 1)->colour;
-		}
-		if ( terrainType(psTile) != TER_WATER || onWaterEdge )
-		{
-			// what tile texture number is it?
-			tileNumber = psTile->texture;
-		}
-		else
-		{
-			// If it's a water tile then force it to be the river bed texture.
-			tileNumber = RIVERBED_TILE;
-		}
-	}
-
-	/* Show gateways */
-	if (psTile && psTile->tileInfoBits & BITS_GATEWAY && showGateways)
-	{
-		colour[0][0].byte.g = 255;
-		colour[1][0].byte.g = 255;
-		colour[0][1].byte.g = 255;
-		colour[1][1].byte.g = 255;
-	}
-
-	/* Is the tile highlighted? Perhaps because there's a building foundation on it */
-	if (psTile && !onWaterEdge && TileIsHighlighted(psTile))
-	{
-		/* Clear it for next time round */
-		CLEAR_TILE_HIGHLIGHT(psTile);
-		bOutlined = true;
-		if ( i < visibleTiles.x && j < visibleTiles.y ) // FIXME
-		{
-			if (outlineTile)
-			{
-				colour[0][0] = pal_SetBrightness(255);
-				colour[1][0] = pal_SetBrightness(255);
-				colour[0][1] = pal_SetBrightness(255);
-				colour[1][1] = pal_SetBrightness(255);
-			}
-			else
-			{
-				colour[0][0].byte.r = 255;
-				colour[1][0].byte.r = 255;
-				colour[0][1].byte.r = 255;
-				colour[1][1].byte.r = 255;
-			}
-		}
-	}
-
-	/* Check for rotations and flips - this sets up the coordinates for texturing */
-	setTexCoords(tileNumber, i, j);
-
-	/* The first triangle */
-	vertices[0] = tileScreenInfo[i + 0][j + 0];
-	vertices[1] = tileScreenInfo[i + 0][j + 1];
-	vertices[0].light = colour[0][0];
-	vertices[1].light = colour[0][1];
-
-	if (psTile && TRI_FLIPPED(psTile))
-	{
-		vertices[2] = tileScreenInfo[i + 1][j + 0];
-		vertices[2].light = colour[1][0];
-	}
-	else
-	{
-		vertices[2] = tileScreenInfo[i + 1][j + 1];
-		vertices[2].light = colour[1][1];
-	}
-
-	if (onWaterEdge)
-	{
-		pie_DrawWaterTriangle(vertices);
-	}
-	else
-	{
-		pie_DrawTerrainTriangle(i, j, 0, vertices);
-	}
-
-	/* The second triangle */
-	if (psTile && TRI_FLIPPED(psTile))
-	{
-		vertices[0] = tileScreenInfo[i + 0][j + 1];
-		vertices[0].light = colour[0][1];
-	}
-	else
-	{
-		vertices[0] = tileScreenInfo[i + 0][j + 0];
-		vertices[0].light = colour[0][0];
-	}
-
-	vertices[1] = tileScreenInfo[i + 1][j + 1];
-	vertices[2] = tileScreenInfo[i + 1][j + 0];
-	vertices[1].light = colour[1][1];
-	vertices[2].light = colour[1][0];
-
-	if (onWaterEdge)
-	{
-		pie_DrawWaterTriangle(vertices);
-	}
-	else
-	{
-		pie_DrawTerrainTriangle(i, j, 1, vertices);
-	}
-}
-
-
-/// Render a water tile.
-static void drawTerrainWaterTile(UDWORD i, UDWORD j)
-{
-	/* Get the correct tile index for the x/y coordinates */
-	const unsigned int actualX = playerXTile + j, actualY = playerZTile + i;
-	PIELIGHT colour[2][2];
-	MAPTILE *psTile;
-
-	/* Let's just get out now if we're not supposed to draw it */
-	if ( actualX > mapWidth - 1 || actualY > mapHeight - 1 )
-	{
-		return;
-	}
-
-	psTile = mapTile(actualX, actualY);
-	colour[0][0] = psTile->colour;
-	colour[1][0] = WZCOL_BLACK;
-	colour[0][1] = WZCOL_BLACK;
-	colour[1][1] = WZCOL_BLACK;
-
-	if (actualY + 1 < mapHeight - 1)
-	{
-		colour[1][0] = mapTile(actualX, actualY + 1)->colour;
-	}
-	if (actualX + 1 < mapWidth - 1)
-	{
-		colour[0][1] = mapTile(actualX + 1, actualY)->colour;
-	}
-	if (actualX + 1 < mapWidth - 1 && actualY + 1 < mapHeight - 1)
-	{
-		colour[1][1] = mapTile(actualX + 1, actualY + 1)->colour;
-	}
-
-	// If it's a water tile then draw the water
-	if (terrainType(psTile) == TER_WATER)
-	{
-		/* Used to calculate texture coordinates */
-		const float xMult = 1.0f / TILES_IN_PAGE_COLUMN;
-		const float yMult = 1.0f / (2.0f * TILES_IN_PAGE_ROW);
-		const float one = 1.0f / (TILES_IN_PAGE_COLUMN * (float)getTextureSize());
-		const unsigned int tileNumber = getWaterTileNum();
-		TERRAIN_VERTEX vertices[3];
-
-		tileScreenInfo[i+0][j+0].u = tileTexInfo[TileNumber_tile(tileNumber)].uOffset + one;
-		tileScreenInfo[i+0][j+0].v = tileTexInfo[TileNumber_tile(tileNumber)].vOffset;
-
-		tileScreenInfo[i+0][j+1].u = tileTexInfo[TileNumber_tile(tileNumber)].uOffset + (xMult - one);
-		tileScreenInfo[i+0][j+1].v = tileTexInfo[TileNumber_tile(tileNumber)].vOffset;
-
-		tileScreenInfo[i+1][j+1].u = tileTexInfo[TileNumber_tile(tileNumber)].uOffset + (xMult - one);
-		tileScreenInfo[i+1][j+1].v = tileTexInfo[TileNumber_tile(tileNumber)].vOffset + (yMult - one);
-
-		tileScreenInfo[i+1][j+0].u = tileTexInfo[TileNumber_tile(tileNumber)].uOffset + one;
-		tileScreenInfo[i+1][j+0].v = tileTexInfo[TileNumber_tile(tileNumber)].vOffset + (yMult - one);
-
-		vertices[0] = tileScreenInfo[i + 0][j + 0];
-		vertices[0].light = colour[0][0];
-
-		vertices[1] = tileScreenInfo[i + 0][j + 1];
-		vertices[1].light = colour[0][1];
-
-		vertices[2] = tileScreenInfo[i + 1][j + 1];
-		vertices[2].light = colour[1][1];
-
-		pie_DrawWaterTriangle(vertices);
-
-		vertices[1] = vertices[2];
-		vertices[2] = tileScreenInfo[i + 1][j + 0];
-		vertices[2].light = colour[1][0];
-
-		pie_DrawWaterTriangle(vertices);
-	}
 }
 
 /// Smoothly adjust player height to match the desired height
@@ -4793,6 +4432,7 @@ static	void	doConstructionLines( void )
 DROID	*psDroid;
 UDWORD	i;
 
+	pie_SetTranslucencyMode(TRANS_ALPHA);
 	for(i=0; i<MAX_PLAYERS; i++)
 	{
 		for(psDroid= apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)

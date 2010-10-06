@@ -112,6 +112,7 @@ SRC= \
 	stats.c \
 	structure.c \
 	target.c \
+	terrain.c \
 	text.c \
 	texture.c \
 	transporter.c \

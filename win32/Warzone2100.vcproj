@@ -639,6 +639,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\terrain.c"
+					>
+				</File>
+				<File
 					RelativePath="..\src\text.c"
 					>
 				</File>

@@ -1743,19 +1743,19 @@ static void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 		/* We've clicked on somebody else's droid */
 		//		addConsoleMessage("Clicked on another player's droid",SYSTEM_MESSAGE);
 		orderSelectedObjAdd(selectedPlayer, (BASE_OBJECT*)psDroid, ctrlShiftDown());
-		
+
 		//lasSat structure can select a target - in multiPlayer only
 		if (bMultiPlayer && bLasSatStruct)
 		{
 			orderStructureObj(selectedPlayer, (BASE_OBJECT*)psDroid);
 		}
-		
+
 		FeedbackOrderGiven();
 		driveDisableTactical();
-		
+
 		return;
 	}
-	
+
 	ownDroid = (selectedPlayer == psDroid->player);
 	// Hack to detect if sensor was assigned
 	bSensorAssigned = true;
@@ -1952,15 +1952,15 @@ static void dealWithLMBStructure(STRUCTURE* psStructure, SELECTION_TYPE selectio
 		}
 		FeedbackOrderGiven();
 		driveDisableTactical();
-		
+
 		return;
 	}
-	
+
 	/* We've clicked on our own building */
-	
+
 	//print some info at the top of the screen for the specific structure
 	if (!bRightClickOrders) printStructureInfo(psStructure);
-	
+
 	/* Got to be built. Also, you can't 'select' derricks */
 	if (!keyDown(KEY_LALT) && !keyDown(KEY_RALT) && (psStructure->status == SS_BUILT) &&
 		(psStructure->pStructureType->type != REF_RESOURCE_EXTRACTOR) && ownStruct)
@@ -2013,7 +2013,7 @@ static void dealWithLMBStructure(STRUCTURE* psStructure, SELECTION_TYPE selectio
 			//determine if LasSat structure has been selected
 			bLasSatStruct = lasSatStructSelected(psStructure);
 		}
-		
+
 	}
 	else if ((psStructure->status==SS_BUILT) &&
 			 (psStructure->pStructureType->type == REF_RESOURCE_EXTRACTOR) &&
