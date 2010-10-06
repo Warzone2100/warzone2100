@@ -186,18 +186,8 @@ void pie_MatRotY(float y)
 	 * a := angle
 	 * c := cos(a)
 	 * s := sin(a)
-	 * h := 2 - c
-	 * i := 1 / h
 	 *
-	 *                                                      [ 1  0  0  0 ]
-	 *                                                      [ 0  i  0  0 ]
-	 * curMatrix = curMatrix . rotationMatrix(a, 0, 1, 0) . [ 0  0  1  0 ]
-	 *                                                      [ 0  0  0  1 ]
-	 *
-	 *                         [  c  0  s  0 ]   [ 1  0  0  0 ]
-	 *                         [  0  h  0  0 ]   [ 0  i  0  0 ]
-	 * curMatrix = curMatrix . [ -s  0  c  0 ] . [ 0  0  1  0 ]
-	 *                         [  0  0  0  1 ]   [ 0  0  0  1 ]
+	 * curMatrix = curMatrix . rotationMatrix(a, 0, 1, 0)
 	 *
 	 *                         [  c  0  s  0 ]
 	 *                         [  0  1  0  0 ]
@@ -237,18 +227,8 @@ void pie_MatRotZ(float z)
 	 * a := angle
 	 * c := cos(a)
 	 * s := sin(a)
-	 * h := 2 - c
-	 * i := 1 / h
 	 *
-	 *                                                      [ 1  0  0  0 ]
-	 *                                                      [ 0  1  0  0 ]
-	 * curMatrix = curMatrix . rotationMatrix(a, 0, 0, 1) . [ 0  0  i  0 ]
-	 *                                                      [ 0  0  0  1 ]
-	 *
-	 *                         [ c  -s  0  0 ]   [ 1  0  0  0 ]
-	 *                         [ s   c  0  0 ]   [ 0  1  0  0 ]
-	 * curMatrix = curMatrix . [ 0   0  h  0 ] . [ 0  0  i  0 ]
-	 *                         [ 0   0  0  1 ]   [ 0  0  0  1 ]
+	 * curMatrix = curMatrix . rotationMatrix(a, 0, 0, 1)
 	 *
 	 *                         [ c  -s  0  0 ]
 	 *                         [ s   c  0  0 ]
@@ -288,18 +268,8 @@ void pie_MatRotX(float x)
 	 * a := angle
 	 * c := cos(a)
 	 * s := sin(a)
-	 * h := 2 - c
-	 * i := 1 / h
 	 *
-	 *                                                      [ i  0  0  0 ]
-	 *                                                      [ 0  1  0  0 ]
-	 * curMatrix = curMatrix . rotationMatrix(a, 0, 0, 1) . [ 0  0  1  0 ]
-	 *                                                      [ 0  0  0  1 ]
-	 *
-	 *                         [ h  0   0  0 ]   [ i  0  0  0 ]
-	 *                         [ 0  c  -s  0 ]   [ 0  1  0  0 ]
-	 * curMatrix = curMatrix . [ 0  s   c  0 ] . [ 0  0  1  0 ]
-	 *                         [ 0  0   0  1 ]   [ 0  0  0  1 ]
+	 * curMatrix = curMatrix . rotationMatrix(a, 0, 0, 1)
 	 *
 	 *                         [ 1  0   0  0 ]
 	 *                         [ 0  c  -s  0 ]
