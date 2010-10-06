@@ -4274,7 +4274,6 @@ static	void	doConstructionLines( void )
 DROID	*psDroid;
 UDWORD	i;
 
-	pie_SetTranslucencyMode(TRANS_ALPHA);
 	for(i=0; i<MAX_PLAYERS; i++)
 	{
 		for(psDroid= apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
