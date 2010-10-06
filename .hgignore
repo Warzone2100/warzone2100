@@ -1,0 +1,16 @@
+# Mac clutter
+syntax: glob
+.DS_Store
+Icon?
+._*
+
+# git clutter
+.git/*
+
+# General Build Stuff
+src/autorevision.h
+
+# Mac Build Stuff
+macosx/build/*
+macosx/external/*
+macosx/prebuilt/*
