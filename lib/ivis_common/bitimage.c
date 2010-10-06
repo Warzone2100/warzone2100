@@ -31,7 +31,7 @@ static unsigned LoadTextureFile(const char *FileName)
 	iV_Image *pSprite;
 	unsigned int i;
 
-	ASSERT(resPresent("IMGPAGE", FileName), "Texture file \"%s\" not preloaded.", FileName);
+	ASSERT_OR_RETURN( 0, resPresent("IMGPAGE", FileName), "Texture file \"%s\" not preloaded.", FileName);
 
 	pSprite = (iV_Image*)resGetData("IMGPAGE", FileName);
 	debug(LOG_TEXTURE, "Load texture from resource cache: %s (%d, %d)",
