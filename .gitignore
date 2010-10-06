@@ -134,6 +134,9 @@ cscope.out
 
 
 # build folders
+/macosx/build/
+/macosx/external/
+/macosx/prebuilt/
 /build
 /2.3
 /trunk
