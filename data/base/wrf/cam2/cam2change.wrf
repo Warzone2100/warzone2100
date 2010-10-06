@@ -7,11 +7,11 @@
 
 
 directory	"texpages"
-file 		TERTILES	"tertilesc2hw"
-file 		TEXPAGE		"page-6-features-urban.png"
-file		TEXPAGE 	"page-7-barbarians-urban.png"
-file		TEXPAGE		"page-8-player-buildings-bases-urban.png"
-file		TEXPAGE		"page-9-player-buildings-bases-urban.png"
+file		TERTILES	"tertilesc2hw"
+file		TEXPAGE	"page-6-features-urban.png"
+file		TEXPAGE	"page-7-barbarians-urban.png"
+file		TEXPAGE	"page-8-player-buildings-bases-urban.png"
+file		TEXPAGE	"page-9-player-buildings-bases-urban.png"
 /* These come from ../vidmem2.wrf */
 file		TEXPAGE	"page-25-sky-urban.png"
 file		TEXPAGE	"page-47-tiles.png"
@@ -23,12 +23,12 @@ file		TEXPAGE	"page-81-water-2.png"
 
 directory 	"stats/research/cam2"
 file		RESCH		"research.txt"
-file		RPREREQ		"prresearch.txt"
+file		RPREREQ	"prresearch.txt"
 
 file		RCOMPRED	"redcomponents.txt"
 file		RCOMPRES	"resultcomponent.txt"
-file		RSTRREQ		"researchstruct.txt"
-file		RSTRRED		"redstructure.txt"
-file		RSTRRES		"resultstructure.txt"
+file		RSTRREQ	"researchstruct.txt"
+file		RSTRRED	"redstructure.txt"
+file		RSTRRES	"resultstructure.txt"
 file		RFUNC		"researchfunctions.txt"
 
