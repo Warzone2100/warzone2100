@@ -34,15 +34,6 @@
 
 /*!
  * Rotate and translate v with the worldmatrix. Store the result in s
- * int variant
- * \param[in] v Vector to translate
- * \param[out] s Resulting vector
- */
-void pie_RotateTranslate3iv(const Vector3i *v, Vector3i *s);
-
-
-/*!
- * Rotate and translate v with the worldmatrix. Store the result in s
  * Float variant
  * \param[in] v Vector to translate
  * \param[out] s Resulting vector
