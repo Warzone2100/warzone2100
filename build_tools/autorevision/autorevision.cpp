@@ -210,6 +210,23 @@ class RevGitSVNQuery : public RevisionExtractor
         const std::string _workingDir;
 };
 
+class RevGitQuery : public RevisionExtractor
+{
+    public:
+        RevGitQuery(const std::string& workingDir, RevisionExtractor* s = NULL) :
+            RevisionExtractor(s),
+            _workingDir(workingDir)
+        {}
+
+        virtual bool extractRevision(RevisionInformation& rev_info);
+
+    private:
+        std::string runCommand(char const *cmd) const;
+
+    private:
+        const std::string _workingDir;
+};
+
 class RevConfigFile : public RevisionExtractor
 {
     public:
@@ -270,7 +287,7 @@ int main(int argc, char** argv)
              << "         +int  assign const unsigned int\n"
              << "         +std  assign const std::string\n"
              << "         +cstr assign const char[]\n"
-             << "         +wx  assing const wxString\n"
+             << "         +wx   assign const wxString\n"
              << "         +t    add Unicode translation macros to strings\n"
              << "         -v    be verbose\n";
 
@@ -283,7 +300,8 @@ int main(int argc, char** argv)
     RevConfigFile revRetr4(workingDir + "/autorevision.conf");
     RevFileParse revRetr3(workingDir + "/_svn/entries", &revRetr4);
     RevFileParse revRetr2(workingDir + "/.svn/entries", &revRetr3);
-    RevGitSVNQuery revRetr2_1(workingDir, &revRetr2);
+    RevGitSVNQuery revRetr2_2(workingDir, &revRetr2);
+    RevGitQuery revRetr2_1(workingDir, &revRetr2_2);
     RevSVNQuery  revRetr1(workingDir, &revRetr2_1);
 
     RevSVNVersionQuery revRetr(workingDir, &revRetr1);
@@ -581,11 +599,67 @@ bool RevGitSVNQuery::extractRevision(RevisionInformation& rev_info)
         if (system(NULL))
         {
             // This command will return without success if the working copy is
-            // changed, wether checked into index or not.
+            // changed, whether checked into index or not.
             rev_info.wc_modified = system("git diff --quiet HEAD");
         }
     }
 
+    return RevisionExtractor::extractRevision(rev_info);
+}
+
+std::string RevGitQuery::runCommand(char const *cmd) const
+{
+    std::string result;
+
+    const string cwd(GetWorkingDir());
+    if (!ChangeDir(_workingDir))
+        return false;
+
+    set_env("LANG", "C");
+    set_env("LC_ALL", "C");
+    FILE* process = popen(cmd, "r");
+
+    // Change directories back
+    ChangeDir(cwd);
+
+    if (!process)
+        return false;
+
+    char buf[1024];
+    if (fgets(buf, sizeof(buf), process))
+    {
+        result.assign(buf);
+        removeAfterNewLine(result);
+    }
+
+    pclose(process);
+
+    return result;
+}
+
+bool RevGitQuery::extractRevision(RevisionInformation& rev_info)
+{
+    std::string revision = runCommand("git rev-parse HEAD");
+    if (!revision.empty())
+    {
+        rev_info.low_revision = revision;
+        rev_info.revision = revision;
+        if (system(NULL))
+        {
+            // This command will return without success if the working copy is
+            // changed, whether checked into index or not.
+            rev_info.wc_modified = system("git diff --quiet HEAD");
+        }
+    }
+    std::string branch = runCommand("git symbolic-ref HEAD");
+    if (!branch.empty())
+    {
+        rev_info.wc_uri = branch;
+    }
+
+    // The working copy URI still needs to be extracted. "svnversion" cannot
+    // help us with that task, so delegate that task to another link in the
+    // chain of responsibility.
     return RevisionExtractor::extractRevision(rev_info);
 }
 
@@ -657,6 +731,14 @@ bool RevConfigFile::extractRevision(RevisionInformation& rev_info)
         return RevisionExtractor::extractRevision(rev_info);
 }
 
+static std::string integerOnly(std::string const &str)
+{
+    std::string ret = "-1";
+    if (!str.empty() && str.find_first_not_of("0123456789") == std::string::npos)
+        ret = str;
+    return ret;
+}
+
 bool WriteOutput(const string& outputFile, const RevisionInformation& rev_info)
 {
     std::stringstream comment_str;
@@ -722,9 +804,9 @@ bool WriteOutput(const string& outputFile, const RevisionInformation& rev_info)
     if(do_wx)
         header << "#include <wx/string.h>\n";
 
-    header << "\n#define SVN_LOW_REV      " << (rev_info.low_revision.empty() ? rev_info.revision : rev_info.low_revision)
+    header << "\n#define SVN_LOW_REV      " << integerOnly(rev_info.low_revision.empty() ? rev_info.revision : rev_info.low_revision)
            << "\n#define SVN_LOW_REV_STR \"" << (rev_info.low_revision.empty() ? rev_info.revision : rev_info.low_revision) << "\""
-           << "\n#define SVN_REV          " << rev_info.revision
+           << "\n#define SVN_REV          " << integerOnly(rev_info.revision)
            << "\n#define SVN_REV_STR     \"" << rev_info.revision << "\""
            << "\n#define SVN_DATE        \"" << rev_info.date << "\""
            << "\n#define SVN_URI         \"" << rev_info.wc_uri << "\"\n";
