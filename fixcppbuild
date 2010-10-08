@@ -1,0 +1,17 @@
+#!/bin/bash
+for a in {src,lib/*}/*.cpp
+do
+	b="${a%pp}"
+	c="${a##*/}"
+	d="${b##*/}"
+	if [ "$d" != '*.c' ]
+	then
+		#echo Checking "$a"
+		sed -i "s/\\b${b//\//\\\\}\\b/${a//\//\\\\}/" win32/*.vcproj
+		sed -i "s/\\b$d\\b/$c/" {src,lib/*}/{Makefile.am,makefile.win32} macosx/Warzone.xcodeproj/project.pbxproj
+	else
+		echo Skipping "$a".
+	fi
+done
+# macosx weirdness:
+sed -i 's/sourcecode\.c\.c;\(.*\.cpp;\)/sourcecode.cpp.cpp;\1/' macosx/Warzone.xcodeproj/project.pbxproj
