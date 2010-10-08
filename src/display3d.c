@@ -858,9 +858,9 @@ static void drawTiles(iView *player)
 	pie_MATTRANS(0, 0, distance);
 
 	/* Rotate for the player */
-	pie_MatRotZ(UNDEG(player->r.z));
-	pie_MatRotX(UNDEG(player->r.x));
-	pie_MatRotY(UNDEG(player->r.y));
+	pie_MatRotZ(player->r.z);
+	pie_MatRotX(player->r.x);
+	pie_MatRotY(player->r.y);
 
 	/* Translate */
 	pie_TRANSLATE(-rx, -player->p.y, rz);
@@ -985,7 +985,7 @@ static void drawTiles(iView *player)
 	}
 
 	/* Clear the matrix stack */
-	iV_MatrixEnd();
+	pie_MatEnd();
 	locateMouse();
 }
 
@@ -1197,24 +1197,24 @@ void	renderProjectile(PROJECTILE *psCurr)
 		/* What's the present height of the bullet? */
 		dv.y = st.pos.z;
 		/* Set up the matrix */
-		iV_MatrixBegin();
+		pie_MatBegin();
 
 		/* Translate to the correct position */
-		iV_TRANSLATE(dv.x,dv.y,dv.z);
+		pie_TRANSLATE(dv.x,dv.y,dv.z);
 		/* Get the x,z translation components */
 		rx = player.p.x & (TILE_UNITS-1);
 		rz = player.p.z & (TILE_UNITS-1);
 
 		/* Translate */
-		iV_TRANSLATE(rx,0,-rz);
+		pie_TRANSLATE(rx,0,-rz);
 
 		/* Rotate it to the direction it's facing */
 		imdRot2.y = st.rot.direction;
-		iV_MatrixRotateY(UNDEG(-imdRot2.y));
+		pie_MatRotY(-imdRot2.y);
 
 		/* pitch it */
 		imdRot2.x = st.rot.pitch;
-		iV_MatrixRotateX(UNDEG(imdRot2.x));
+		pie_MatRotX(imdRot2.x);
 
 		if (psStats->weaponSubClass == WSC_ROCKET || psStats->weaponSubClass == WSC_MISSILE
 		    || psStats->weaponSubClass == WSC_SLOWROCKET || psStats->weaponSubClass == WSC_SLOWMISSILE)
@@ -1226,7 +1226,7 @@ void	renderProjectile(PROJECTILE *psCurr)
 			pie_Draw3DShape(pIMD, 0, 0, WZCOL_WHITE, WZCOL_BLACK, 0, 0);
 		}
 
-		iV_MatrixEnd();
+		pie_MatEnd();
 	}
 	/* Flush matrices */
 }
@@ -1264,23 +1264,23 @@ void	renderAnimComponent( const COMPONENT_OBJECT *psObj )
 		psParentObj->sDisplay.frameNumber = currentGameFrame;
 
 		/* Push the indentity matrix */
-		iV_MatrixBegin();
+		pie_MatBegin();
 
 		/* parent object translation */
-		iV_TRANSLATE(dv.x, dv.y, dv.z);
+		pie_TRANSLATE(dv.x, dv.y, dv.z);
 
 		/* Get the x,z translation components */
 		rx = player.p.x & (TILE_UNITS-1);
 		rz = player.p.z & (TILE_UNITS-1);
 
 		/* Translate */
-		iV_TRANSLATE(rx, 0, -rz);
+		pie_TRANSLATE(rx, 0, -rz);
 
 		/* parent object rotations */
 		imdRot2.y = spacetime.rot.direction;
-		iV_MatrixRotateY(UNDEG(-imdRot2.y));
+		pie_MatRotY(-imdRot2.y);
 		imdRot2.x = spacetime.rot.pitch;
-		iV_MatrixRotateX(UNDEG(imdRot2.x));
+		pie_MatRotX(imdRot2.x);
 
 		/* Set frame numbers - look into this later?? FIXME!!!!!!!! */
 		if( psParentObj->type == OBJ_DROID )
@@ -1328,16 +1328,16 @@ void	renderAnimComponent( const COMPONENT_OBJECT *psObj )
 
 		// Do translation and rotation after setting sDisplay.screen[XY], so that the health bars for animated objects (such as oil derricks and cyborgs) will show on the stationary part.
 		// object (animation) translations - ivis z and y flipped
-		iV_TRANSLATE(psObj->position.x, psObj->position.z, psObj->position.y);
+		pie_TRANSLATE(psObj->position.x, psObj->position.z, psObj->position.y);
 		// object (animation) rotations
-		iV_MatrixRotateY(UNDEG(-psObj->orientation.z));
-		iV_MatrixRotateZ(UNDEG(-psObj->orientation.y));
-		iV_MatrixRotateX(UNDEG(-psObj->orientation.x));
+		pie_MatRotY(-psObj->orientation.z);
+		pie_MatRotZ(-psObj->orientation.y);
+		pie_MatRotX(-psObj->orientation.x);
 
 		pie_Draw3DShape(psObj->psShape, 0, iPlayer, brightness, WZCOL_BLACK, pie_STATIC_SHADOW, 0);
 
 		/* clear stack */
-		iV_MatrixEnd();
+		pie_MatEnd();
 	}
 }
 
@@ -1882,21 +1882,21 @@ void	renderFeature(FEATURE *psFeature)
 	);
 
 	/* Push the indentity matrix */
-	iV_MatrixBegin();
+	pie_MatBegin();
 
 	/* Translate the feature  - N.B. We can also do rotations here should we require
 	buildings to face different ways - Don't know if this is necessary - should be IMO */
-	iV_TRANSLATE(dv.x,dv.y,dv.z);
+	pie_TRANSLATE(dv.x,dv.y,dv.z);
 
 	/* Get the x,z translation components */
 	rx = player.p.x & (TILE_UNITS-1);
 	rz = player.p.z & (TILE_UNITS-1);
 
 	/* Translate */
-	iV_TRANSLATE(rx,0,-rz);
+	pie_TRANSLATE(rx,0,-rz);
 	rotation = psFeature->rot.direction;
 
-	iV_MatrixRotateY(UNDEG(-rotation));
+	pie_MatRotY(-rotation);
 
 	brightness = pal_SetBrightness(200); //? HUH?
 
@@ -1950,7 +1950,7 @@ void	renderFeature(FEATURE *psFeature)
 		psFeature->sDisplay.screenY = s.y;
 	}
 
-	iV_MatrixEnd();
+	pie_MatEnd();
 }
 
 /// 
@@ -2002,16 +2002,16 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp)
 	dv.z = terrainMidY*TILE_UNITS - (msgY - player.p.z);
 
 	/* Push the indentity matrix */
-	iV_MatrixBegin();
+	pie_MatBegin();
 
 	/* Translate the message */
-	iV_TRANSLATE(dv.x,dv.y,dv.z);
+	pie_TRANSLATE(dv.x,dv.y,dv.z);
 	/* Get the x,z translation components */
 	rx = player.p.x & (TILE_UNITS-1);
 	rz = player.p.z & (TILE_UNITS-1);
 
 	/* Translate */
-	iV_TRANSLATE(rx,0,-rz);
+	pie_TRANSLATE(rx,0,-rz);
 	//get the appropriate IMD
 	if (pViewProximity)
 	{
@@ -2050,8 +2050,8 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp)
 		}
 	}
 
-	iV_MatrixRotateY(UNDEG(-player.r.y));
-	iV_MatrixRotateX(UNDEG(-player.r.x));
+	pie_MatRotY(-player.r.y);
+	pie_MatRotX(-player.r.x);
 
 	pie_Draw3DShape(proxImd, getModularScaledGraphicsTime(1000, 4), 0, WZCOL_WHITE, WZCOL_BLACK, pie_ADDITIVE, 192);
 
@@ -2061,7 +2061,7 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp)
 	psProxDisp->screenY = y;
 	psProxDisp->screenR = r;
 
-	iV_MatrixEnd();
+	pie_MatEnd();
 }
 
 static PIELIGHT getBlueprintColour(STRUCT_STATES state)
@@ -2159,24 +2159,24 @@ void	renderStructure(STRUCTURE *psStructure)
 		dv.y = map_TileHeight(map_coord(structX), map_coord(structY));
 	}
 	/* Push the indentity matrix */
-	iV_MatrixBegin();
+	pie_MatBegin();
 
 	/* Translate the building  - N.B. We can also do rotations here should we require
 	buildings to face different ways - Don't know if this is necessary - should be IMO */
-	iV_TRANSLATE(dv.x,dv.y,dv.z);
+	pie_TRANSLATE(dv.x,dv.y,dv.z);
 
 	/* Get the x,z translation components */
 	rx = player.p.x & (TILE_UNITS-1);
 	rz = player.p.z & (TILE_UNITS-1);
 
 	/* Translate */
-	iV_TRANSLATE(rx, 0, -rz);
+	pie_TRANSLATE(rx, 0, -rz);
 
 	/* OK - here is where we establish which IMD to draw for the building - luckily static objects,
 	* buildings in other words are NOT made up of components - much quicker! */
 
 	rotation = psStructure->rot.direction;
-	iV_MatrixRotateY(UNDEG(-rotation));
+	pie_MatRotY(-rotation);
 	if (!defensive
 	    && gameTime2-psStructure->timeLastHit < ELEC_DAMAGE_DURATION
 	    && psStructure->lastHitWeapon == WSC_ELECTRONIC )
@@ -2313,9 +2313,9 @@ void	renderStructure(STRUCTURE *psStructure)
 
 				if (weaponImd[i] != NULL)
 				{
-					iV_MatrixBegin();
-					iV_TRANSLATE(strImd->connectors[i].x, strImd->connectors[i].z, strImd->connectors[i].y);
-					pie_MatRotY(UNDEG(-rot.direction));
+					pie_MatBegin();
+					pie_TRANSLATE(strImd->connectors[i].x, strImd->connectors[i].z, strImd->connectors[i].y);
+					pie_MatRotY(-rot.direction);
 					if (mountImd[i] != NULL)
 					{
 						pie_TRANSLATE(0, 0, psStructure->asWeaps[i].recoilValue / 3);
@@ -2323,10 +2323,10 @@ void	renderStructure(STRUCTURE *psStructure)
 						pie_Draw3DShape(mountImd[i], animFrame, colour, buildingBrightness, WZCOL_BLACK, pieFlag, pieFlagData);
 						if(mountImd[i]->nconnectors)
 						{
-							iV_TRANSLATE(mountImd[i]->connectors->x, mountImd[i]->connectors->z, mountImd[i]->connectors->y);
+							pie_TRANSLATE(mountImd[i]->connectors->x, mountImd[i]->connectors->z, mountImd[i]->connectors->y);
 						}
 					}
-					iV_MatrixRotateX(UNDEG(rot.pitch));
+					pie_MatRotX(rot.pitch);
 					pie_TRANSLATE(0, 0, psStructure->asWeaps[i].recoilValue);
 
 					pie_Draw3DShape(weaponImd[i], 0, colour, buildingBrightness, WZCOL_BLACK, pieFlag, pieFlagData);
@@ -2347,18 +2347,18 @@ void	renderStructure(STRUCTURE *psStructure)
 								{
 									iIMDShape	*pRepImd;
 
-									iV_TRANSLATE(weaponImd[i]->connectors->x,weaponImd[i]->connectors->z-12,weaponImd[i]->connectors->y);
+									pie_TRANSLATE(weaponImd[i]->connectors->x,weaponImd[i]->connectors->z-12,weaponImd[i]->connectors->y);
 									pRepImd = getImdFromIndex(MI_FLAME);
 
-									pie_MatRotY(UNDEG(rot.direction));
+									pie_MatRotY(rot.direction);
 
-									iV_MatrixRotateY(UNDEG(-player.r.y));
-									iV_MatrixRotateX(UNDEG(-player.r.x));
+									pie_MatRotY(-player.r.y);
+									pie_MatRotX(-player.r.x);
 									pie_Draw3DShape(pRepImd, getModularScaledGraphicsTime(100, pRepImd->numFrames), colour, buildingBrightness, WZCOL_BLACK, pie_ADDITIVE, 192);
 
-									iV_MatrixRotateX(UNDEG(player.r.x));
-									iV_MatrixRotateY(UNDEG(player.r.y));
-									pie_MatRotY(UNDEG(rot.direction));
+									pie_MatRotX(player.r.x);
+									pie_MatRotY(player.r.y);
+									pie_MatRotY(rot.direction);
 								}
 							}
 						}
@@ -2399,7 +2399,7 @@ void	renderStructure(STRUCTURE *psStructure)
 							}
 						}
 					}
-					iV_MatrixEnd();
+					pie_MatEnd();
 				}
 				// no IMD, its a baba machine gun, bunker, etc.
 				else if (psStructure->asWeaps[i].nStat > 0)
@@ -2415,21 +2415,21 @@ void	renderStructure(STRUCTURE *psStructure)
 						// draw Weapon/ECM/Sensor for structure
 						if (flashImd[i] != NULL)
 						{
-							iV_MatrixBegin();
+							pie_MatBegin();
 							// horrendous hack
 							if (strImd->max.y > 80) // babatower
 							{
-								iV_TRANSLATE(0, 80, 0);
-								pie_MatRotY(UNDEG(-rot.direction));
-								iV_TRANSLATE(0, 0, -20);
+								pie_TRANSLATE(0, 80, 0);
+								pie_MatRotY(-rot.direction);
+								pie_TRANSLATE(0, 0, -20);
 							}
 							else//baba bunker
 							{
-								iV_TRANSLATE(0, 10, 0);
-								pie_MatRotY(UNDEG(-rot.direction));
-								iV_TRANSLATE(0, 0, -40);
+								pie_TRANSLATE(0, 10, 0);
+								pie_MatRotY(-rot.direction);
+								pie_TRANSLATE(0, 0, -40);
 							}
-							pie_MatRotX(UNDEG(rot.pitch));
+							pie_MatRotX(rot.pitch);
 							// draw the muzzle flash?
 							if (psStructure && psStructure->visible[selectedPlayer] > UBYTE_MAX / 2)
 							{
@@ -2452,7 +2452,7 @@ void	renderStructure(STRUCTURE *psStructure)
 									}
 								}
 							}
-							iV_MatrixEnd();
+							pie_MatEnd();
 						}
 					}
 				}
@@ -2463,12 +2463,12 @@ void	renderStructure(STRUCTURE *psStructure)
 					{
 						iIMDShape *lImd;
 
-						iV_MatrixBegin();
-						iV_TRANSLATE(psStructure->sDisplay.imd->connectors->x, psStructure->sDisplay.imd->connectors->z,
+						pie_MatBegin();
+						pie_TRANSLATE(psStructure->sDisplay.imd->connectors->x, psStructure->sDisplay.imd->connectors->z,
 						             psStructure->sDisplay.imd->connectors->y);
 						lImd = getImdFromIndex(MI_LANDING);
 						pie_Draw3DShape(lImd, getModularScaledGraphicsTime(1024, lImd->numFrames), colour, buildingBrightness, WZCOL_BLACK, 0, 0);
-						iV_MatrixEnd();
+						pie_MatEnd();
 					}
 				}
 			}
@@ -2484,7 +2484,7 @@ void	renderStructure(STRUCTURE *psStructure)
 		psStructure->sDisplay.screenY = s.y;
 	}
 
-	iV_MatrixEnd();
+	pie_MatEnd();
 }
 
 /// draw the delivery points
@@ -2503,16 +2503,16 @@ void	renderDeliveryPoint(FLAG_POSITION *psPosition, BOOL blueprint)
 	dv.y = psPosition->coords.z;
 
 	/* Push the indentity matrix */
-	iV_MatrixBegin();
+	pie_MatBegin();
 
-	iV_TRANSLATE(dv.x,dv.y,dv.z);
+	pie_TRANSLATE(dv.x,dv.y,dv.z);
 
 	/* Get the x,z translation components */
 	rx = player.p.x & (TILE_UNITS-1);
 	rz = player.p.z & (TILE_UNITS-1);
 
 	/* Translate */
-	iV_TRANSLATE(rx,0,-rz);
+	pie_TRANSLATE(rx,0,-rz);
 
 	//quick check for invalid data
 	ASSERT( psPosition->factoryType < NUM_FLAG_TYPES && psPosition->factoryInc < MAX_FACTORY, "Invalid assembly point" );
@@ -2552,7 +2552,7 @@ void	renderDeliveryPoint(FLAG_POSITION *psPosition, BOOL blueprint)
 	psPosition->screenY = y;
 	psPosition->screenR = r;
 
-	iV_MatrixEnd();
+	pie_MatEnd();
 }
 
 /// Draw a piece of wall
@@ -2620,20 +2620,20 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 		}
 
 		/* Push the indentity matrix */
-		iV_MatrixBegin();
+		pie_MatBegin();
 
 		/* Translate */
-		iV_TRANSLATE(dv.x,dv.y,dv.z);
+		pie_TRANSLATE(dv.x,dv.y,dv.z);
 
 		/* Get the x,z translation components */
 		rx = player.p.x & (TILE_UNITS-1);
 		rz = player.p.z & (TILE_UNITS-1);
 
 		/* Translate */
-		iV_TRANSLATE(rx, 0, -rz);
+		pie_TRANSLATE(rx, 0, -rz);
 
 		rotation = psStructure->rot.direction;
-		iV_MatrixRotateY(UNDEG(-rotation));
+		pie_MatRotY(-rotation);
 
 		if(imd != NULL)
 		{
@@ -2692,7 +2692,7 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 			psStructure->sDisplay.screenY = s.y;
 		}
 
-		iV_MatrixEnd();
+		pie_MatEnd();
 
 		return(true);
 	}
@@ -2715,20 +2715,20 @@ void renderShadow( DROID *psDroid, iIMDShape *psShadowIMD )
 	dv.y = map_Height(psDroid->pos.x, psDroid->pos.y);
 
 	/* Push the indentity matrix */
-	iV_MatrixBegin();
+	pie_MatBegin();
 
-	iV_TRANSLATE(dv.x,dv.y,dv.z);
+	pie_TRANSLATE(dv.x,dv.y,dv.z);
 
 	/* Get the x,z translation components */
 	rx = player.p.x & (TILE_UNITS-1);
 	rz = player.p.z & (TILE_UNITS-1);
 
 	/* Translate */
-	iV_TRANSLATE(rx,0,-rz);
+	pie_TRANSLATE(rx,0,-rz);
 
 	if(psDroid->droidType == DROID_TRANSPORTER)
 	{
-		iV_MatrixRotateY(UNDEG(-psDroid->rot.direction));
+		pie_MatRotY(-psDroid->rot.direction);
 	}
 
 	pVecTemp = psShadowIMD->points;
@@ -2740,15 +2740,15 @@ void renderShadow( DROID *psDroid, iIMDShape *psShadowIMD )
 	}
 	else
 	{
-		pie_MatRotY(UNDEG(-psDroid->rot.direction));
-		pie_MatRotX(UNDEG(psDroid->rot.pitch));
-		pie_MatRotZ(UNDEG(psDroid->rot.roll));
+		pie_MatRotY(-psDroid->rot.direction);
+		pie_MatRotX(psDroid->rot.pitch);
+		pie_MatRotZ(psDroid->rot.roll);
 	}
 
 	pie_Draw3DShape(psShadowIMD, 0, 0, WZCOL_WHITE, WZCOL_BLACK, pie_TRANSLUCENT, 128);
 	psShadowIMD->points = pVecTemp;
 
-	iV_MatrixEnd();
+	pie_MatEnd();
 }
 
 /// Draw all pieces of a droid and register it as a target
@@ -3700,7 +3700,7 @@ static void renderSurroundings(void)
 	pie_MATTRANS(0, 0, distance);
 
 	// rotate it
-	pie_MatRotY(wind);
+	pie_MatRotY(DEG(wind));
 
 	// move it somewhat below ground level for the blending effect
 	pie_TRANSLATE(0, -skybox_scale/8, 0);

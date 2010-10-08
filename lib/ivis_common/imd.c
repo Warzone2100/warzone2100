@@ -20,7 +20,7 @@
 #include "imd.h"
 #include "ivisdef.h"
 #include "tex.h"
-#include "ivispatch.h"
+#include "pietypes.h"
 
 //*************************************************************************
 //*** free IMD shape memory

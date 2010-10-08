@@ -8,7 +8,6 @@ noinst_HEADERS = \
 	imd.h \
 	ivi.h \
 	ivisdef.h \
-	ivispatch.h \
 	jpeg_encoder.h \
 	pieblitfunc.h \
 	pieclip.h \

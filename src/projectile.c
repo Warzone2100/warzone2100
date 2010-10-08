@@ -1860,12 +1860,12 @@ void	objectShimmy(BASE_OBJECT *psObj)
 {
 	if(justBeenHitByEW(psObj))
 	{
-		iV_MatrixRotateX(UNDEG(SKY_SHIMMY));
-		iV_MatrixRotateY(UNDEG(SKY_SHIMMY));
-		iV_MatrixRotateZ(UNDEG(SKY_SHIMMY));
+		pie_MatRotX(SKY_SHIMMY);
+		pie_MatRotY(SKY_SHIMMY);
+		pie_MatRotZ(SKY_SHIMMY);
 		if(psObj->type == OBJ_DROID)
 		{
-			iV_TRANSLATE(1-rand()%3,0,1-rand()%3);
+			pie_TRANSLATE(1-rand()%3,0,1-rand()%3);
 		}
 	}
 }
