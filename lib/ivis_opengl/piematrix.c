@@ -180,7 +180,7 @@ void pie_MatScale(float scale)
 //*
 //******
 
-void pie_MatRotY(float y)
+void pie_MatRotY(uint16_t y)
 {
 	/*
 	 * a := angle
@@ -194,10 +194,10 @@ void pie_MatRotY(float y)
 	 * curMatrix = curMatrix . [ -s  0  c  0 ]
 	 *                         [  0  0  0  1 ]
 	 */
-	if (y != 0.f)
+	if (y != 0)
 	{
 		int t;
-		int64_t cra = iCos(DEG(y)), sra = iSin(DEG(y));
+		int64_t cra = iCos(y), sra = iSin(y);
 
 		t = (cra*psMatrix->a - sra*psMatrix->g)>>16;
 		psMatrix->g = (sra*psMatrix->a + cra*psMatrix->g)>>16;
@@ -211,7 +211,7 @@ void pie_MatRotY(float y)
 		psMatrix->i = (sra*psMatrix->c + cra*psMatrix->i)>>16;
 		psMatrix->c = t;
 
-		glRotatef(y, 0.0f, 1.0f, 0.0f);
+		glRotatef(UNDEG(y), 0.0f, 1.0f, 0.0f);
 	}
 }
 
@@ -221,7 +221,7 @@ void pie_MatRotY(float y)
 //*
 //******
 
-void pie_MatRotZ(float z)
+void pie_MatRotZ(uint16_t z)
 {
 	/*
 	 * a := angle
@@ -235,10 +235,10 @@ void pie_MatRotZ(float z)
 	 * curMatrix = curMatrix . [ 0   0  1  0 ]
 	 *                         [ 0   0  0  1 ]
 	 */
-	if (z != 0.f)
+	if (z != 0)
 	{
 		int t;
-		int64_t cra = iCos(DEG(z)), sra = iSin(DEG(z));
+		int64_t cra = iCos(z), sra = iSin(z);
 
 		t = (cra*psMatrix->a + sra*psMatrix->d)>>16;
 		psMatrix->d = (cra*psMatrix->d - sra*psMatrix->a)>>16;
@@ -252,7 +252,7 @@ void pie_MatRotZ(float z)
 		psMatrix->f = (cra*psMatrix->f - sra*psMatrix->c)>>16;
 		psMatrix->c = t;
 
-		glRotatef(z, 0.0f, 0.0f, 1.0f);
+		glRotatef(UNDEG(z), 0.0f, 0.0f, 1.0f);
 	}
 }
 
@@ -262,7 +262,7 @@ void pie_MatRotZ(float z)
 //*
 //******
 
-void pie_MatRotX(float x)
+void pie_MatRotX(uint16_t x)
 {
 	/*
 	 * a := angle
@@ -279,7 +279,7 @@ void pie_MatRotX(float x)
 	if (x != 0.f)
 	{
 		int t;
-		int64_t cra = iCos(DEG(x)), sra = iSin(DEG(x));
+		int64_t cra = iCos(x), sra = iSin(x);
 
 		t = (cra*psMatrix->d + sra*psMatrix->g)>>16;
 		psMatrix->g = (cra*psMatrix->g - sra*psMatrix->d)>>16;
@@ -293,7 +293,7 @@ void pie_MatRotX(float x)
 		psMatrix->i = (cra*psMatrix->i - sra*psMatrix->f)>>16;
 		psMatrix->f = t;
 
-		glRotatef(x, 1.0f, 0.0f, 0.0f);
+		glRotatef(UNDEG(x), 1.0f, 0.0f, 0.0f);
 	}
 }
 

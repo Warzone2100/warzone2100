@@ -1626,12 +1626,12 @@ static void renderFirework(const EFFECT *psEffect)
 
 	positionEffect(psEffect);
 
-	pie_MatRotY(UNDEG(-player.r.y));
-	pie_MatRotX(UNDEG(-player.r.x));
+	pie_MatRotY(-player.r.y);
+	pie_MatRotX(-player.r.x);
 
 	pie_MatScale(psEffect->size / 100.f);
  	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, WZCOL_WHITE, WZCOL_BLACK, pie_ADDITIVE, EFFECT_EXPLOSION_ADDITIVE);
- 	pie_MatEnd();
+	pie_MatEnd();
 }
 
 /** drawing func for blood. */
@@ -1639,8 +1639,8 @@ static void renderBloodEffect(const EFFECT *psEffect)
 {
 	positionEffect(psEffect);
 
-	pie_MatRotY(UNDEG(-player.r.y));
-	pie_MatRotX(UNDEG(-player.r.x));
+	pie_MatRotY(-player.r.y);
+	pie_MatRotX(-player.r.x);
 	pie_MatScale(psEffect->size / 100.f);
 
 	pie_Draw3DShape(getImdFromIndex(MI_BLOOD), psEffect->frameNumber, 0, WZCOL_WHITE, WZCOL_BLACK, pie_TRANSLUCENT, EFFECT_BLOOD_TRANSPARENCY);
@@ -1668,9 +1668,9 @@ static void renderDestructionEffect(const EFFECT *psEffect)
 
 	if(!gamePaused())
 	{
-		pie_MatRotX(UNDEG(SKY_SHIMMY));
-		pie_MatRotY(UNDEG(SKY_SHIMMY));
-		pie_MatRotZ(UNDEG(SKY_SHIMMY));
+		pie_MatRotX(SKY_SHIMMY);
+		pie_MatRotY(SKY_SHIMMY);
+		pie_MatRotZ(SKY_SHIMMY);
 	}
  	pie_Draw3DShape(psEffect->imd, 0, 0, WZCOL_WHITE, WZCOL_BLACK, pie_RAISE, percent);
 
@@ -1722,8 +1722,8 @@ static void renderExplosionEffect(const EFFECT *psEffect)
 	if(TEST_FACING(psEffect))
 	{
 		/* Always face the viewer! */
-/*		TEST_FLIPPED_Y(psEffect) ? pie_MatRotY(UNDEG(-player.r.y+iV_DEG(180))) :*/ pie_MatRotY(UNDEG(-player.r.y));
-/*		TEST_FLIPPED_X(psEffect) ? pie_MatRotX(UNDEG(-player.r.x+iV_DEG(180))) :*/ pie_MatRotX(UNDEG(-player.r.x));
+		pie_MatRotY(-player.r.y);
+		pie_MatRotX(-player.r.x);
 	}
 
 	/* Tesla explosions diminish in size */
@@ -1767,9 +1767,9 @@ static void renderGravitonEffect(const EFFECT *psEffect)
 
 	positionEffect(psEffect);
 
-	pie_MatRotX(UNDEG(psEffect->rotation.x));
-	pie_MatRotY(UNDEG(psEffect->rotation.y));
-	pie_MatRotZ(UNDEG(psEffect->rotation.z));
+	pie_MatRotX(psEffect->rotation.x);
+	pie_MatRotY(psEffect->rotation.y);
+	pie_MatRotZ(psEffect->rotation.z);
 
 	/* Buildings emitted by gravitons are chunkier */
 	if(psEffect->type == GRAVITON_TYPE_EMITTING_ST)
@@ -1800,8 +1800,8 @@ static void renderConstructionEffect(const EFFECT *psEffect)
 	/* Bit in comments doesn't quite work yet? */
 	if(TEST_FACING(psEffect))
 	{
-/*		TEST_FLIPPED_Y(psEffect) ? pie_MatRotY(UNDEG(-player.r.y+iV_DEG(180))) :*/ pie_MatRotY(UNDEG(-player.r.y));
-/*		TEST_FLIPPED_X(psEffect) ? pie_MatRotX(UNDEG(-player.r.x+iV_DEG(180))) :*/ pie_MatRotX(UNDEG(-player.r.x));
+		pie_MatRotY(-player.r.y);
+		pie_MatRotX(-player.r.x);
 	}
 
 	/* Scale size according to age */
@@ -1841,8 +1841,8 @@ static void renderSmokeEffect(const EFFECT *psEffect)
 	if(TEST_FACING(psEffect))
 	{
  		/* Always face the viewer! */
-/*		TEST_FLIPPED_Y(psEffect) ? pie_MatRotY(UNDEG(-player.r.y+iV_DEG(180))) : */pie_MatRotY(UNDEG(-player.r.y));
-/*		TEST_FLIPPED_X(psEffect) ? pie_MatRotX(UNDEG(-player.r.x+iV_DEG(180))) : */pie_MatRotX(UNDEG(-player.r.x));
+		pie_MatRotY(-player.r.y);
+		pie_MatRotX(-player.r.x);
 	}
 
 	/* Small smoke - used for the droids */

@@ -246,9 +246,9 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 							psCompObj->position.y );
 
 			/* object (animation) rotations */
-			pie_MatRotY(UNDEG(-psCompObj->orientation.z));
-			pie_MatRotZ(UNDEG(-psCompObj->orientation.y));
-			pie_MatRotX(UNDEG(-psCompObj->orientation.x));
+			pie_MatRotY(-psCompObj->orientation.z);
+			pie_MatRotZ(-psCompObj->orientation.y);
+			pie_MatRotX(-psCompObj->orientation.x);
 
 			z = pie_RotateProject(&position,&pixel);
 

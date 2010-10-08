@@ -292,7 +292,7 @@ void drawRadar(void)
 		if (rotateRadar)
 		{
 			// rotate the map
-			pie_MatRotZ(UNDEG(player.r.y));
+			pie_MatRotZ(player.r.y);
 			DrawNorth();
 		}
 		// draw the box at the dimensions of the map

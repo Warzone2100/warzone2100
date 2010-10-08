@@ -3069,14 +3069,14 @@ BOOL calcDroidMuzzleLocation(DROID *psDroid, Vector3f *muzzle, int weapon_slot)
 		pie_TRANSLATE(psDroid->pos.x, -psDroid->pos.z, psDroid->pos.y);
 
 		//matrix = the center of droid
-		pie_MatRotY(UNDEG(psDroid->rot.direction));
-		pie_MatRotX(UNDEG(psDroid->rot.pitch));
-		pie_MatRotZ(UNDEG(-psDroid->rot.roll));
+		pie_MatRotY(psDroid->rot.direction);
+		pie_MatRotX(psDroid->rot.pitch);
+		pie_MatRotZ(-psDroid->rot.roll);
 		pie_TRANSLATE(psBodyImd->connectors[weapon_slot].x, -psBodyImd->connectors[weapon_slot].z,
 					 -psBodyImd->connectors[weapon_slot].y);//note y and z flipped
 
 		//matrix = the weapon[slot] mount on the body
-		pie_MatRotY(UNDEG(psDroid->asWeaps[weapon_slot].rot.direction));	// +ve anticlockwise
+		pie_MatRotY(psDroid->asWeaps[weapon_slot].rot.direction);  // +ve anticlockwise
 
 		// process turret mount
 		if (psMountImd && psMountImd->nconnectors)
@@ -3085,7 +3085,7 @@ BOOL calcDroidMuzzleLocation(DROID *psDroid, Vector3f *muzzle, int weapon_slot)
 		}
 
 		//matrix = the turret connector for the gun
-		pie_MatRotX(UNDEG(psDroid->asWeaps[weapon_slot].rot.pitch));		// +ve up
+		pie_MatRotX(psDroid->asWeaps[weapon_slot].rot.pitch);      // +ve up
 
 		//process the gun
 		if (psWeaponImd && psWeaponImd->nconnectors)

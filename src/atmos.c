@@ -352,14 +352,14 @@ void	renderParticle( ATPART *psPart )
 	dv.x = ((UDWORD)x - player.p.x) - terrainMidX * TILE_UNITS;
 	dv.y = (UDWORD)y;
 	dv.z = terrainMidY * TILE_UNITS - ((UDWORD)z - player.p.z);
-	pie_MatBegin();							/* Push the indentity matrix */
+	pie_MatBegin();                                 /* Push the identity matrix */
 	pie_TRANSLATE(dv.x,dv.y,dv.z);
 	rx = map_round(player.p.x);			/* Get the x,z translation components */
 	rz = map_round(player.p.z);
-	pie_TRANSLATE(rx,0,-rz);						/* Translate */
+	pie_TRANSLATE(rx,0,-rz);                        /* Translate */
 	/* Make it face camera */
-	pie_MatRotY(UNDEG(-player.r.y));
-	pie_MatRotX(UNDEG(-player.r.x));
+	pie_MatRotY(-player.r.y);
+	pie_MatRotY(-player.r.x);
 	/* Scale it... */
 	pie_MatScale(psPart->size / 100.f);
 	/* Draw it... */

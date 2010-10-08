@@ -74,13 +74,13 @@ static void setMatrix(Vector3i *Position, Vector3i *Rotation, BOOL RotXYZ)
 	pie_TRANSLATE(Position->x,Position->y,Position->z);
 
 	if(RotXYZ) {
-		pie_MatRotX(Rotation->x);
-		pie_MatRotY(Rotation->y);
-		pie_MatRotZ(Rotation->z);
+		pie_MatRotX(DEG(Rotation->x));
+		pie_MatRotY(DEG(Rotation->y));
+		pie_MatRotZ(DEG(Rotation->z));
 	} else {
-		pie_MatRotY(Rotation->y);
-		pie_MatRotX(Rotation->x);
-		pie_MatRotZ(Rotation->z);
+		pie_MatRotY(DEG(Rotation->y));
+		pie_MatRotX(DEG(Rotation->x));
+		pie_MatRotZ(DEG(Rotation->z));
 	}
 }
 
@@ -265,7 +265,7 @@ void displayStructureButton(STRUCTURE *psStructure, Vector3i *rotation, Vector3i
 
 				pie_MatBegin();
 				pie_TRANSLATE(strImd->connectors[i].x,strImd->connectors[i].z,strImd->connectors[i].y);
-				pie_MatRotY(UNDEG(-rot.direction));
+				pie_MatRotY(-rot.direction);
 				if (mountImd[i] != NULL)
 				{
 					pie_Draw3DShape(mountImd[i], 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, WZCOL_BLACK, pie_BUTTON, 0);
@@ -274,7 +274,7 @@ void displayStructureButton(STRUCTURE *psStructure, Vector3i *rotation, Vector3i
 						pie_TRANSLATE(mountImd[i]->connectors->x,mountImd[i]->connectors->z,mountImd[i]->connectors->y);
 					}
 				}
-				pie_MatRotX(UNDEG(rot.pitch));
+				pie_MatRotX(rot.pitch);
 				pie_Draw3DShape(weaponImd[i], 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, WZCOL_BLACK, pie_BUTTON, 0);
 				//we have a droid weapon so do we draw a muzzle flash
 				pie_MatEnd();
@@ -715,12 +715,12 @@ static void displayCompObj(DROID *psDroid, BOOL bButton)
 											   psShapeTemp->connectors[iConnector + i].y  );
 							}
 
-							pie_MatRotY(UNDEG(-rot.direction));
+							pie_MatRotY(-rot.direction);
 
 							/* vtol weapons inverted */
 							if ( iConnector >= VTOL_CONNECTOR_START )
 							{
-								pie_MatRotZ(180.f);//this might affect gun rotation
+								pie_MatRotZ(65536/2);  //this might affect gun rotation
 							}
 
 							/* Get the mount graphic */
@@ -746,12 +746,12 @@ static void displayCompObj(DROID *psDroid, BOOL bButton)
 							if ( iConnector >= VTOL_CONNECTOR_START )
 							{
 								//pitch the barrel down
-								pie_MatRotX(UNDEG(-rot.pitch));
+								pie_MatRotX(-rot.pitch);
 							}
 							else
 							{
 								//pitch the barrel up
-								pie_MatRotX(UNDEG(rot.pitch));
+								pie_MatRotX(rot.pitch);
 							}
 
 							/* Get the weapon (gun?) graphic */
@@ -856,14 +856,14 @@ static void displayCompObj(DROID *psDroid, BOOL bButton)
 				/* vtol weapons inverted */
 				if ( iConnector >= VTOL_CONNECTOR_START )
 				{
-					pie_MatRotZ(180.f);//this might affect gun rotation
+					pie_MatRotZ(65536/2);  //this might affect gun rotation
 				}
 
 				pie_TRANSLATE( psShapeTemp->connectors[0].x,
 							   psShapeTemp->connectors[0].z,
 							   psShapeTemp->connectors[0].y  );
 
-				pie_MatRotY(UNDEG(-rot.direction));
+				pie_MatRotY(-rot.direction);
 				/* Draw it */
 				if (psMountShape)
 				{
@@ -898,21 +898,21 @@ static void displayCompObj(DROID *psDroid, BOOL bButton)
 						psShape = getImdFromIndex(MI_FLAME);
 
 						/* Rotate for droid */
-						pie_MatRotY(UNDEG(st.rot.direction));
-						pie_MatRotX(UNDEG(-st.rot.pitch));
-						pie_MatRotZ(UNDEG(-st.rot.roll));
+						pie_MatRotY(st.rot.direction);
+						pie_MatRotX(-st.rot.pitch);
+						pie_MatRotZ(-st.rot.roll);
 						//rotate Y
-						pie_MatRotY(UNDEG(rot.direction));
+						pie_MatRotY(rot.direction);
 
-						pie_MatRotY(UNDEG(-player.r.y));
-						pie_MatRotX(UNDEG(-player.r.x));
+						pie_MatRotY(-player.r.y);
+						pie_MatRotX(-player.r.x);
 							/* Dither on software */
 
 						pie_Draw3DShape(psShape, getModularScaledGraphicsTime(100, psShape->numFrames), 0, brightness, WZCOL_BLACK, pie_ADDITIVE, 140);
 							/* Dither off software */
 
-						pie_MatRotX(UNDEG(player.r.x));
-						pie_MatRotY(UNDEG(player.r.y));
+						pie_MatRotX(player.r.x);
+						pie_MatRotY(player.r.y);
 					}
 				}
 				/* Pop Matrix */
@@ -1062,9 +1062,9 @@ void displayComponentObject(DROID *psDroid)
 	pie_TRANSLATE(position.x,position.y,position.z);
 
 	/* Rotate for droid */
-	pie_MatRotY(UNDEG(rotation.y));
-	pie_MatRotX(UNDEG(rotation.x));
-	pie_MatRotZ(UNDEG(rotation.z));
+	pie_MatRotY(rotation.y);
+	pie_MatRotX(rotation.x);
+	pie_MatRotZ(rotation.z);
 
 	if( (gameTime-psDroid->timeLastHit < GAME_TICKS_PER_SEC) && psDroid->lastHitWeapon == WSC_ELECTRONIC)
 	{

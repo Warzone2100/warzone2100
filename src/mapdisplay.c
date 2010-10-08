@@ -55,7 +55,7 @@ void renderResearchToBuffer(RESEARCH *psResearch,
 	pie_SetGeometricOffset(OriginX+10,OriginY+10);
 
 	// Pitch down a bit
-	//pie_MatRotX(-30);
+	//pie_MatRotX(-65536/12);
 
     // Rotate round
 	// full rotation once every 2 seconds..
