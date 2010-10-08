@@ -34,7 +34,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/vector.h"
 #include "ivisdef.h"
-#include "ivispatch.h"
+#include "pietypes.h"
 
 /***************************************************************************/
 /*

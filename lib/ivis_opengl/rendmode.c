@@ -22,7 +22,6 @@
 #include "lib/ivis_common/textdraw.h"
 #include "lib/ivis_common/piepalette.h"
 #include "lib/ivis_common/piestate.h"
-#include "lib/ivis_common/ivispatch.h"
 
 //*************************************************************************
 

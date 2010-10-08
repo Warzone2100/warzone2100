@@ -263,21 +263,21 @@ void displayStructureButton(STRUCTURE *psStructure, Vector3i *rotation, Vector3i
 			{
 				Rotation rot = structureGetInterpolatedWeaponRotation(psStructure, i, graphicsTime);
 
-				iV_MatrixBegin();
-				iV_TRANSLATE(strImd->connectors[i].x,strImd->connectors[i].z,strImd->connectors[i].y);
+				pie_MatBegin();
+				pie_TRANSLATE(strImd->connectors[i].x,strImd->connectors[i].z,strImd->connectors[i].y);
 				pie_MatRotY(UNDEG(-rot.direction));
 				if (mountImd[i] != NULL)
 				{
 					pie_Draw3DShape(mountImd[i], 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, WZCOL_BLACK, pie_BUTTON, 0);
 					if(mountImd[i]->nconnectors)
 					{
-						iV_TRANSLATE(mountImd[i]->connectors->x,mountImd[i]->connectors->z,mountImd[i]->connectors->y);
+						pie_TRANSLATE(mountImd[i]->connectors->x,mountImd[i]->connectors->z,mountImd[i]->connectors->y);
 					}
 				}
-				iV_MatrixRotateX(UNDEG(rot.pitch));
+				pie_MatRotX(UNDEG(rot.pitch));
 				pie_Draw3DShape(weaponImd[i], 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, WZCOL_BLACK, pie_BUTTON, 0);
 				//we have a droid weapon so do we draw a muzzle flash
-				iV_MatrixEnd();
+				pie_MatEnd();
 			}
 		}
 	}
@@ -367,19 +367,19 @@ void displayStructureStatButton(STRUCTURE_STATS *Stats, Vector3i *Rotation, Vect
 		{
 			for (i = 0; i < MAX(1, Stats->numWeaps); i++)
 			{
-				iV_MatrixBegin();
-				iV_TRANSLATE(strImd->connectors[i].x,strImd->connectors[i].z,strImd->connectors[i].y);
+				pie_MatBegin();
+				pie_TRANSLATE(strImd->connectors[i].x,strImd->connectors[i].z,strImd->connectors[i].y);
 				if (mountImd[i] != NULL)
 				{
 					pie_Draw3DShape(mountImd[i], 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, WZCOL_BLACK, pie_BUTTON, 0);
 					if(mountImd[i]->nconnectors)
 					{
-						iV_TRANSLATE(mountImd[i]->connectors->x,mountImd[i]->connectors->z,mountImd[i]->connectors->y);
+						pie_TRANSLATE(mountImd[i]->connectors->x,mountImd[i]->connectors->z,mountImd[i]->connectors->y);
 					}
 				}
 				pie_Draw3DShape(weaponImd[i], 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, WZCOL_BLACK, pie_BUTTON, 0);
 				//we have a droid weapon so do we draw a muzzle flash
-				iV_MatrixEnd();
+				pie_MatEnd();
 			}
 		}
 	}
@@ -904,15 +904,15 @@ static void displayCompObj(DROID *psDroid, BOOL bButton)
 						//rotate Y
 						pie_MatRotY(UNDEG(rot.direction));
 
-						iV_MatrixRotateY(UNDEG(-player.r.y));
-						iV_MatrixRotateX(UNDEG(-player.r.x));
+						pie_MatRotY(UNDEG(-player.r.y));
+						pie_MatRotX(UNDEG(-player.r.x));
 							/* Dither on software */
 
 						pie_Draw3DShape(psShape, getModularScaledGraphicsTime(100, psShape->numFrames), 0, brightness, WZCOL_BLACK, pie_ADDITIVE, 140);
 							/* Dither off software */
 
-						iV_MatrixRotateX(UNDEG(player.r.x));
-						iV_MatrixRotateY(UNDEG(player.r.y));
+						pie_MatRotX(UNDEG(player.r.x));
+						pie_MatRotY(UNDEG(player.r.y));
 					}
 				}
 				/* Pop Matrix */
