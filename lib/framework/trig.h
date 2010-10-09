@@ -34,9 +34,6 @@ extern "C"
 {
 #endif //__cplusplus
 
-/* The number of units around a full circle */
-#define TRIG_DEGREES	360
-
 /* Initialise the Trig tables */
 extern bool trigInitialise(void);
 
