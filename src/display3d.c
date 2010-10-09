@@ -3613,6 +3613,11 @@ static void renderSurroundings(void)
 	// undo the translation
 	pie_TRANSLATE(rx,player.p.y,-rz);
 
+	// undo rotation
+	pie_MatRotY(-player.r.y);
+	pie_MatRotX(-player.r.x);
+	pie_MatRotZ(-player.r.z);
+
 	// Skybox //
 	// rotate it
 	pie_MatRotY(DEG(1) * wind);
