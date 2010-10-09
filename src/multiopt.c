@@ -70,7 +70,7 @@ void sendOptions()
 {
 	unsigned int i;
 
-	NETbeginEncode(NET_OPTIONS, NET_ALL_PLAYERS);
+	NETbeginEncode(NETbroadcastQueue(), NET_OPTIONS);
 
 	// First send information about the game
 	NETuint8_t(&game.type);
@@ -114,6 +114,8 @@ void sendOptions()
 		NETuint8_t(&ingame.pStructureLimits[i].id);
 		NETuint8_t(&ingame.pStructureLimits[i].limit);
 	}
+	updateLimitFlags();
+	NETuint8_t(&ingame.flags);
 
 	NETend();
 }
@@ -139,12 +141,12 @@ static BOOL checkGameWdg(const char *nm)
 
 // ////////////////////////////////////////////////////////////////////////////
 // options for a game. (usually recvd in frontend)
-void recvOptions()
+void recvOptions(NETQUEUE queue)
 {
 	unsigned int i;
 
 	debug(LOG_NET, "Receiving options from host");
-	NETbeginDecode(NET_OPTIONS);
+	NETbeginDecode(queue, NET_OPTIONS);
 
 	// Get general information about the game
 	NETuint8_t(&game.type);
@@ -202,6 +204,9 @@ void recvOptions()
 		NETuint8_t(&ingame.pStructureLimits[i].id);
 		NETuint8_t(&ingame.pStructureLimits[i].limit);
 	}
+	NETuint8_t(&ingame.flags);
+
+	NETend();
 
 	// Do the skirmish slider settings if they are up
 	for (i = 0; i < MAX_PLAYERS; i++)
@@ -224,7 +229,7 @@ void recvOptions()
 
 		debug(LOG_NET, "Map was not found, requesting map %s from host.", game.map);
 		// Request the map from the host
-		NETbeginEncode(NET_FILE_REQUESTED, NET_HOST_ONLY);
+		NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_FILE_REQUESTED);
 		NETuint32_t(&player);
 		NETend();
 
@@ -315,7 +320,7 @@ BOOL joinCampaign(UDWORD gameNumber, char *sPlayer)
 BOOL sendLeavingMsg(void)
 {
 	debug(LOG_NET, "We are leaving 'nicely'");
-	NETbeginEncode(NET_PLAYER_LEAVING, NET_HOST_ONLY);
+	NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_PLAYER_LEAVING);
 	{
 		BOOL host = NetPlay.isHost;
 		uint32_t id = selectedPlayer;
@@ -578,7 +583,7 @@ void playerResponding(void)
 	cameraToHome(selectedPlayer, false);
 
 	// Tell the world we're here
-	NETbeginEncode(NET_PLAYERRESPONDING, NET_ALL_PLAYERS);
+	NETbeginEncode(NETbroadcastQueue(), NET_PLAYERRESPONDING);
 	NETuint32_t(&selectedPlayer);
 	NETend();
 }
@@ -634,6 +639,7 @@ BOOL multiGameShutdown(void)
 		free(ingame.pStructureLimits);
 		ingame.pStructureLimits = NULL;
 	}
+	ingame.flags = 0;
 
 	ingame.localJoiningInProgress = false; // Clean up
 	ingame.localOptionsReceived = false;

@@ -439,34 +439,21 @@ static void positionEffect(const EFFECT *psEffect)
 	};
 
 	/* Push the indentity matrix */
-	iV_MatrixBegin();
+	pie_MatBegin();
 
 	/* Move to position */
-	iV_TRANSLATE(dv.x, dv.y, dv.z);
+	pie_TRANSLATE(dv.x, dv.y, dv.z);
 
 	/* Get the x,z translation components */
 	rx = map_round(player.p.x);
 	rz = map_round(player.p.z);
 
 	/* Move to camera reference */
-	iV_TRANSLATE(rx, 0, -rz);
+	pie_TRANSLATE(rx, 0, -rz);
 }
 
 static void killEffect(EFFECT *e)
 {
-	if (e->group == EFFECT_FIRE && psMapTiles)
-	{
-		const int posX = map_coord(e->position.x);
-		const int posY = map_coord(e->position.z);
-		MAPTILE *psTile = mapTile(posX, posY);
-
-		ASSERT(psTile, "Fire effect on non-existing tile (%d, %d)", posX, posY);
-		if (psTile)
-		{
-			psTile->tileInfoBits &= ~BITS_ON_FIRE;	// clear fire bit
-		}
-	}
-
 	/* Put effect back into pool */
 	Effect_free(e);
 }
@@ -1626,7 +1613,7 @@ static void renderWaypointEffect(const EFFECT *psEffect)
 	positionEffect(psEffect);
 
 	pie_Draw3DShape(psEffect->imd, 0, 0, WZCOL_WHITE, WZCOL_BLACK, 0, 0);
-	iV_MatrixEnd();
+	pie_MatEnd();
 }
 
 static void renderFirework(const EFFECT *psEffect)
@@ -1639,12 +1626,12 @@ static void renderFirework(const EFFECT *psEffect)
 
 	positionEffect(psEffect);
 
-	iV_MatrixRotateY(-player.r.y);
-	iV_MatrixRotateX(-player.r.x);
+	pie_MatRotY(-player.r.y);
+	pie_MatRotX(-player.r.x);
 
-	pie_MatScale(psEffect->size);
+	pie_MatScale(psEffect->size / 100.f);
  	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, WZCOL_WHITE, WZCOL_BLACK, pie_ADDITIVE, EFFECT_EXPLOSION_ADDITIVE);
- 	iV_MatrixEnd();
+	pie_MatEnd();
 }
 
 /** drawing func for blood. */
@@ -1652,12 +1639,12 @@ static void renderBloodEffect(const EFFECT *psEffect)
 {
 	positionEffect(psEffect);
 
-	iV_MatrixRotateY(-player.r.y);
-	iV_MatrixRotateX(-player.r.x);
-	pie_MatScale(psEffect->size);
+	pie_MatRotY(-player.r.y);
+	pie_MatRotX(-player.r.x);
+	pie_MatScale(psEffect->size / 100.f);
 
 	pie_Draw3DShape(getImdFromIndex(MI_BLOOD), psEffect->frameNumber, 0, WZCOL_WHITE, WZCOL_BLACK, pie_TRANSLUCENT, EFFECT_BLOOD_TRANSPARENCY);
-	iV_MatrixEnd();
+	pie_MatEnd();
 }
 
 static void renderDestructionEffect(const EFFECT *psEffect)
@@ -1681,13 +1668,13 @@ static void renderDestructionEffect(const EFFECT *psEffect)
 
 	if(!gamePaused())
 	{
- 		iV_MatrixRotateX(SKY_SHIMMY);
- 		iV_MatrixRotateY(SKY_SHIMMY);
- 		iV_MatrixRotateZ(SKY_SHIMMY);
+		pie_MatRotX(SKY_SHIMMY);
+		pie_MatRotY(SKY_SHIMMY);
+		pie_MatRotZ(SKY_SHIMMY);
 	}
  	pie_Draw3DShape(psEffect->imd, 0, 0, WZCOL_WHITE, WZCOL_BLACK, pie_RAISE, percent);
 
-	iV_MatrixEnd();
+	pie_MatEnd();
 }
 
 static bool rejectLandLight(LAND_LIGHT_SPEC type)
@@ -1719,7 +1706,6 @@ static bool rejectLandLight(LAND_LIGHT_SPEC type)
 /** Renders the standard explosion effect */
 static void renderExplosionEffect(const EFFECT *psEffect)
 {
-	SDWORD	percent;
 	const PIELIGHT brightness = WZCOL_WHITE;
 
 	if(psEffect->type == EXPLOSION_TYPE_LAND_LIGHT)
@@ -1736,26 +1722,28 @@ static void renderExplosionEffect(const EFFECT *psEffect)
 	if(TEST_FACING(psEffect))
 	{
 		/* Always face the viewer! */
-/*		TEST_FLIPPED_Y(psEffect) ? iV_MatrixRotateY(-player.r.y+iV_DEG(180)) :*/ iV_MatrixRotateY(-player.r.y);
-/*		TEST_FLIPPED_X(psEffect) ? iV_MatrixRotateX(-player.r.x+iV_DEG(180)) :*/ iV_MatrixRotateX(-player.r.x);
+		pie_MatRotY(-player.r.y);
+		pie_MatRotX(-player.r.x);
 	}
 
 	/* Tesla explosions diminish in size */
 	if(psEffect->type == EXPLOSION_TYPE_TESLA)
 	{
-		percent = PERCENT(graphicsTime - psEffect->birthTime, psEffect->lifeSpan);
-		if(percent<0) percent = 0;
-		if(percent>45) percent = 45;
-		pie_MatScale(psEffect->size - percent);
+		float scale = (graphicsTime - psEffect->birthTime) / (float)psEffect->lifeSpan;
+		if      (scale < 0.f)
+			scale = 0.f;
+		else if (scale > .45f)
+			scale = .45f;
+		pie_MatScale(psEffect->size / 100.f - scale);
 	}
 	else if(psEffect->type == EXPLOSION_TYPE_PLASMA)
 	{
-		percent = PERCENT(graphicsTime - psEffect->birthTime, psEffect->lifeSpan) / 3;
-		pie_MatScale(BASE_PLASMA_SIZE + percent);
+		float scale = (graphicsTime - psEffect->birthTime) / (float)psEffect->lifeSpan / 3.f;
+		pie_MatScale(BASE_PLASMA_SIZE / 100.f + scale);
 	}
 	else
 	{
-		pie_MatScale(psEffect->size);
+		pie_MatScale(psEffect->size / 100.f);
 	}
 
 	if(psEffect->type == EXPLOSION_TYPE_PLASMA)
@@ -1771,7 +1759,7 @@ static void renderExplosionEffect(const EFFECT *psEffect)
 		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, WZCOL_BLACK, pie_ADDITIVE, EFFECT_EXPLOSION_ADDITIVE);
 	}
 
-	iV_MatrixEnd();
+	pie_MatEnd();
 }
 
 static void renderGravitonEffect(const EFFECT *psEffect)
@@ -1779,25 +1767,21 @@ static void renderGravitonEffect(const EFFECT *psEffect)
 
 	positionEffect(psEffect);
 
-	iV_MatrixRotateX(psEffect->rotation.x);
-	iV_MatrixRotateY(psEffect->rotation.y);
-	iV_MatrixRotateZ(psEffect->rotation.z);
+	pie_MatRotX(psEffect->rotation.x);
+	pie_MatRotY(psEffect->rotation.y);
+	pie_MatRotZ(psEffect->rotation.z);
 
 	/* Buildings emitted by gravitons are chunkier */
 	if(psEffect->type == GRAVITON_TYPE_EMITTING_ST)
 	{
 		/* Twice as big - 150 percent */
-		pie_MatScale(psEffect->size);
-	}
-	else
-	{
-		pie_MatScale(100);
+		pie_MatScale(psEffect->size / 100.f);
 	}
 
 	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, WZCOL_WHITE, WZCOL_BLACK, 0, 0);
 
 	/* Pop the matrix */
-	iV_MatrixEnd();
+	pie_MatEnd();
 }
 
 /** Renders the standard construction effect */
@@ -1806,7 +1790,7 @@ static void renderConstructionEffect(const EFFECT *psEffect)
 	Vector3i null;
 	SDWORD	percent;
 	UDWORD	translucency;
-	UDWORD	size;
+	float size;
 
 	/* No rotation about arbitrary axis */
 	null.x = null.y = null.z = 0;
@@ -1816,8 +1800,8 @@ static void renderConstructionEffect(const EFFECT *psEffect)
 	/* Bit in comments doesn't quite work yet? */
 	if(TEST_FACING(psEffect))
 	{
-/*		TEST_FLIPPED_Y(psEffect) ? iV_MatrixRotateY(-player.r.y+iV_DEG(180)) :*/ iV_MatrixRotateY(-player.r.y);
-/*		TEST_FLIPPED_X(psEffect) ? iV_MatrixRotateX(-player.r.x+iV_DEG(180)) :*/ iV_MatrixRotateX(-player.r.x);
+		pie_MatRotY(-player.r.y);
+		pie_MatRotX(-player.r.x);
 	}
 
 	/* Scale size according to age */
@@ -1835,14 +1819,13 @@ static void renderConstructionEffect(const EFFECT *psEffect)
 		translucency = (100 - percent) * 2;
 	}
 	translucency+=10;
-	size = 2*translucency;
-	if(size>90) size = 90;
+	size = MIN(2.f * translucency / 100.f, .90f);
 	pie_MatScale(size);
 
 	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, WZCOL_WHITE, WZCOL_BLACK, pie_TRANSLUCENT, (UBYTE)(translucency));
 
 	/* Pop the matrix */
-	iV_MatrixEnd();
+	pie_MatEnd();
 }
 
 /** Renders the standard smoke effect - it is now scaled in real-time as well */
@@ -1858,8 +1841,8 @@ static void renderSmokeEffect(const EFFECT *psEffect)
 	if(TEST_FACING(psEffect))
 	{
  		/* Always face the viewer! */
-/*		TEST_FLIPPED_Y(psEffect) ? iV_MatrixRotateY(-player.r.y+iV_DEG(180)) : */iV_MatrixRotateY(-player.r.y);
-/*		TEST_FLIPPED_X(psEffect) ? iV_MatrixRotateX(-player.r.x+iV_DEG(180)) : */iV_MatrixRotateX(-player.r.x);
+		pie_MatRotY(-player.r.y);
+		pie_MatRotX(-player.r.x);
 	}
 
 	/* Small smoke - used for the droids */
@@ -1886,7 +1869,7 @@ static void renderSmokeEffect(const EFFECT *psEffect)
 			percent = 100;
 
 
-		pie_MatScale(percent + psEffect->baseScale);
+		pie_MatScale((percent + psEffect->baseScale) / 100.f);
 		transparency = (EFFECT_SMOKE_TRANSPARENCY * (100 - percent))/100;
 	}
 
@@ -1910,7 +1893,7 @@ static void renderSmokeEffect(const EFFECT *psEffect)
 	}
 
 	/* Pop the matrix */
-	iV_MatrixEnd();
+	pie_MatEnd();
 }
 
 
@@ -2262,15 +2245,6 @@ void	effectSetupConstruction(EFFECT *psEffect)
 
 void	effectSetupFire(EFFECT *psEffect)
 {
-	const int posX = map_coord(psEffect->position.x);
-	const int posY = map_coord(psEffect->position.z);
-	MAPTILE *psTile = mapTile(posX, posY);
-
-	ASSERT(psTile, "Cannot place a fire effect %d, %d - outside map!", posX, posY);
-	if (psTile)
-	{
-		psTile->tileInfoBits |= BITS_ON_FIRE;
-	}
 	psEffect->frameDelay = 300;	   // needs to be investigated...
 	psEffect->radius = auxVar;	// needs to be investigated
 	psEffect->lifeSpan = (UWORD)auxVarSec;

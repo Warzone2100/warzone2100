@@ -3,6 +3,7 @@
 
 %.lex.h %.lex.c:: %.l
 	$(LEX) $(LFLAGS) $(AM_LFLAGS) -o$@ $<
+#	sed -i 's/\(fwrite(.*)\)/abs(\1)/' $@
 
 # Required to force using a C++ linker
 force-linker.cpp:
@@ -10,6 +11,7 @@ force-linker.cpp:
 
 AM_CPPFLAGS = -DYY_NO_INPUT $(PHYSFS_CFLAGS) $(PNG_CFLAGS) $(OGGVORBIS_CFLAGS) $(OPENAL_CFLAGS) $(OPENGLC_CFLAGS) $(OPENGL_CFLAGS) $(WZ_CPPFLAGS) $(GLee_CFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS)
+AM_CXXFLAGS = $(WZ_CXXFLAGS)
 AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
 
@@ -169,7 +171,7 @@ warzone2100_SOURCES = \
 	advvis.c \
 	ai.c \
 	aiexperience.c \
-	astar.c \
+	astar.cpp \
 	atmos.c \
 	aud.c \
 	baseobject.c \
@@ -231,7 +233,7 @@ warzone2100_SOURCES = \
 	miscimd.c \
 	mission.c \
 	move.c \
-	multibot.c \
+	multibot.cpp \
 	multigifts.c \
 	multiint.c \
 	multijoin.c \

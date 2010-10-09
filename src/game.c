@@ -2165,7 +2165,8 @@ typedef enum _droid_save_type
  *	Local Variables
  */
 /***************************************************************************/
-extern	UDWORD				objID;					// unique ID creation thing..
+extern uint32_t unsynchObjID;  // unique ID creation thing..
+extern uint32_t synchObjID;    // unique ID creation thing..
 
 static UDWORD			saveGameVersion = 0;
 static BOOL				saveGameOnMission = false;
@@ -2401,6 +2402,7 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 			//clear all the messages?
 			apsProxDisp[player] = NULL;
 			apsSensorList[0] = NULL;
+			apsOilList[0] = NULL;
 		}
 		initFactoryNumFlag();
 	}
@@ -2416,6 +2418,8 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 			mission.apsFeatureLists[player] = NULL;
 			mission.apsFlagPosLists[player] = NULL;
 		}
+		mission.apsOilList[0] = NULL;
+		mission.apsSensorList[0] = NULL;
 
 		//JPS 25 feb
 		//initialise upgrades
@@ -3447,7 +3451,8 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		//reset the objId for new objects
 		if (saveGameVersion >= VERSION_17)
 		{
-			objID = savedObjId;
+			unsynchObjID = (savedObjId + 1)/2;  // Make new object ID start at savedObjId*8.
+			synchObjID   = savedObjId*4;        // Make new object ID start at savedObjId*8.
 		}
 	}
 
@@ -4608,7 +4613,8 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 
 	if (version >= VERSION_17)
 	{
-		objID = saveGameData.objId;// this must be done before any new Ids added
+		unsynchObjID = (saveGameData.objId + 1)/2;  // Make new object ID start at savedObjId*8.
+		synchObjID   = saveGameData.objId*4;        // Make new object ID start at savedObjId*8.
 		savedObjId = saveGameData.objId;
 	}
 
@@ -4948,7 +4954,7 @@ static bool writeGameFile(const char* fileName, SDWORD saveType)
 	}
 
 	//version 17
-	saveGame.objId = objID;
+	saveGame.objId = MAX(unsynchObjID*2, (synchObjID + 3)/4);
 
 	//version 18
 	ASSERT(strlen(__DATE__) < MAX_STR_LENGTH, "BuildDate; String error" );
@@ -5115,7 +5121,7 @@ BOOL loadSaveDroidInitV2(char *pFileData, UDWORD filesize,UDWORD quantity)
 		else
 		{
 			ASSERT(psTemplate != NULL, "Invalid template pointer");
-			psDroid = buildDroid(psTemplate, (pDroidInit->x & (~TILE_MASK)) + TILE_UNITS/2, (pDroidInit->y  & (~TILE_MASK)) + TILE_UNITS/2,	pDroidInit->player, false);
+			psDroid = reallyBuildDroid(psTemplate, (pDroidInit->x & ~TILE_MASK) + TILE_UNITS/2, (pDroidInit->y  & ~TILE_MASK) + TILE_UNITS/2, pDroidInit->player, false);
 
 			if (psDroid)
 			{
@@ -5278,8 +5284,7 @@ static DROID* buildDroidFromSaveDroidV11(SAVE_DROID_V11* psSaveDroid)
 	// ignore brains for now
 	psTemplate->asParts[COMP_BRAIN] = 0;
 
-	psDroid = buildDroid(psTemplate, psSaveDroid->x, psSaveDroid->y,
-		psSaveDroid->player, false);
+	psDroid = reallyBuildDroid(psTemplate, psSaveDroid->x, psSaveDroid->y, psSaveDroid->player, false);
 
 	//copy the droid's weapon stats
 	for (i=0; i < psDroid->numWeaps; i++)
@@ -5386,18 +5391,15 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 
 	if(psSaveDroid->x == INVALID_XY)
 	{
-		psDroid = buildDroid(psTemplate, psSaveDroid->x, psSaveDroid->y,
-			psSaveDroid->player, true);
+		psDroid = reallyBuildDroid(psTemplate, psSaveDroid->x, psSaveDroid->y, psSaveDroid->player, true);
 	}
 	else if(psSaveDroid->saveType == DROID_ON_TRANSPORT)
 	{
-		psDroid = buildDroid(psTemplate, 0, 0,
-			psSaveDroid->player, true);
+		psDroid = reallyBuildDroid(psTemplate, 0, 0, psSaveDroid->player, true);
 	}
 	else
 	{
-		psDroid = buildDroid(psTemplate, psSaveDroid->x, psSaveDroid->y,
-			psSaveDroid->player, false);
+		psDroid = reallyBuildDroid(psTemplate, psSaveDroid->x, psSaveDroid->y, psSaveDroid->player, false);
 	}
 
 	ASSERT_OR_RETURN(NULL, psDroid != NULL, "Failed to build unit");
@@ -5563,11 +5565,11 @@ static void SaveDroidMoveControl(SAVE_DROID * const psSaveDroid, DROID const * c
 	psSaveDroid->sMove.targetY      = PHYSFS_swapSLE32(psDroid->sMove.targetY);
 
 	// Little endian floats
-	psSaveDroid->sMove.fx           = PHYSFS_swapSLE32(psDroid->sMove.fx);
-	psSaveDroid->sMove.fy           = PHYSFS_swapSLE32(psDroid->sMove.fy);
+	psSaveDroid->sMove.fx           = 0;
+	psSaveDroid->sMove.fy           = 0;
 	psSaveDroid->sMove.speed        = PHYSFS_swapSLE32(psDroid->sMove.speed);
 	psSaveDroid->sMove.moveDir      = PHYSFS_swapSLE32(UNDEG(psDroid->sMove.moveDir));
-	psSaveDroid->sMove.fz           = PHYSFS_swapSLE32(psDroid->sMove.fz);
+	psSaveDroid->sMove.fz           = 0;
 
 	// Little endian SWORDs
 	psSaveDroid->sMove.boundX       = PHYSFS_swapSLE16(psDroid->sMove.boundX);
@@ -5635,21 +5637,8 @@ static void LoadDroidMoveControl(DROID * const psDroid, SAVE_DROID const * const
 	psDroid->sMove.targetY      = PHYSFS_swapSLE32(psSaveDroid->sMove.targetY);
 
 	// Little endian floats
-	psDroid->sMove.fx           = PHYSFS_swapSLE32(psSaveDroid->sMove.fx);
-	psDroid->sMove.fy           = PHYSFS_swapSLE32(psSaveDroid->sMove.fy);
 	psDroid->sMove.speed        = PHYSFS_swapSLE32(psSaveDroid->sMove.speed);
 	psDroid->sMove.moveDir      = DEG(PHYSFS_swapSLE32(psSaveDroid->sMove.moveDir));
-	psDroid->sMove.fz           = PHYSFS_swapSLE32(psSaveDroid->sMove.fz);
-
-	// Hack to fix bad droids in savegames
-	if (!droidOnMap(psDroid))
-	{
-		psDroid->sMove.fx = 0;
-		psDroid->sMove.fy = 0;
-		psDroid->sMove.fz = 0;
-		debug(LOG_ERROR, "%s had bad movement coordinates - fixed!", psDroid->aName);
-	}
-	ASSERT(droidOnMap(psDroid), "loaded droid standing or moving off the map");
 
 	// Little endian SWORDs
 	psDroid->sMove.boundX       = PHYSFS_swapSLE16(psSaveDroid->sMove.boundX);
@@ -5773,18 +5762,15 @@ static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 
 	if(psSaveDroid->x == INVALID_XY)
 	{
-		psDroid = buildDroid(psTemplate, psSaveDroid->x, psSaveDroid->y,
-			psSaveDroid->player, true);
+		psDroid = reallyBuildDroid(psTemplate, psSaveDroid->x, psSaveDroid->y, psSaveDroid->player, true);
 	}
 	else if(psSaveDroid->saveType == DROID_ON_TRANSPORT)
 	{
-		psDroid = buildDroid(psTemplate, 0, 0,
-			psSaveDroid->player, true);
+		psDroid = reallyBuildDroid(psTemplate, 0, 0, psSaveDroid->player, true);
 	}
 	else
 	{
-		psDroid = buildDroid(psTemplate, psSaveDroid->x, psSaveDroid->y,
-			psSaveDroid->player, false);
+		psDroid = reallyBuildDroid(psTemplate, psSaveDroid->x, psSaveDroid->y, psSaveDroid->player, false);
 	}
 
 	ASSERT_OR_RETURN(NULL, psDroid != NULL, "Failed to build unit");
@@ -7323,7 +7309,7 @@ BOOL loadSaveStructureV19(char *pFileData, UDWORD filesize, UDWORD numStructures
 					psFactory->capacity = 0;//capacity reset during module build (UBYTE)psSaveStructure->capacity;
                     //this is set up during module build - if the stats have changed it will also set up with the latest value
 					//psFactory->productionOutput = (UBYTE)psSaveStructure->output;
-					psFactory->quantity = (UBYTE)psSaveStructure->quantity;
+					psFactory->productionLoops = (UBYTE)psSaveStructure->quantity;
 					psFactory->timeStarted = psSaveStructure->droidTimeStarted;
 					psFactory->powerAccrued = psSaveStructure->powerAccrued;
 					psFactory->timeToBuild = psSaveStructure->timeToBuild;
@@ -7731,7 +7717,7 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 				psFactory->capacity = 0;//capacity reset during module build (UBYTE)psSaveStructure->capacity;
 				//this is set up during module build - if the stats have changed it will also set up with the latest value
 				//psFactory->productionOutput = (UBYTE)psSaveStructure->output;
-				psFactory->quantity = (UBYTE)psSaveStructure->quantity;
+				psFactory->productionLoops = (UBYTE)psSaveStructure->quantity;
 				psFactory->timeStarted = psSaveStructure->droidTimeStarted;
 				psFactory->powerAccrued = psSaveStructure->powerAccrued;
 				psFactory->timeToBuild = psSaveStructure->timeToBuild;
@@ -8058,7 +8044,7 @@ BOOL writeStructFile(char *pFileName)
 				case REF_VTOL_FACTORY:
 					psFactory = ((FACTORY *)psCurr->pFunctionality);
 					psSaveStruct->capacity	= psFactory->capacity;
-					psSaveStruct->quantity			= psFactory->quantity;
+					psSaveStruct->quantity                  = psFactory->productionLoops;
 					psSaveStruct->droidTimeStarted	= psFactory->timeStarted;
 					psSaveStruct->powerAccrued		= psFactory->powerAccrued;
 					psSaveStruct->timeToBuild		= psFactory->timeToBuild;

@@ -24,9 +24,12 @@
  *
  */
 
+#include <physfs.h>
+
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
 #include "lib/framework/strres.h"
+#include "lib/framework/crc.h"
 #include "lib/gamelib/parser.h"
 #include "lib/ivis_common/bitimage.h"
 #include "lib/ivis_common/tex.h"
@@ -46,12 +49,6 @@
 #include "text.h"
 #include "texture.h"
 
-#ifndef WZ_OS_WIN
-#include <arpa/inet.h>
-#else
-#include <Winsock2.h>
-#endif
-
 #define DT_TEXPAGE "TEXPAGE"
 #define DT_TCMASK "TCMASK"
 
@@ -68,75 +65,32 @@ uint32_t	DataHash[DATA_MAXDATA]= {0};
 *
 *	Note, this is obviously not a very complex hash routine.  This most likely has many collisions possible.
 *	This is almost the same routine that Pumpkin had, minus the ugly bug :)
+*	And minus the old algorithm and debugging trace, replaced with a simple CRC...
 */
 static UDWORD	hashBuffer(uint8_t *pData, uint32_t size)
 {
-	uint32_t hashval = 0,*val;
-	uint32_t pt = 0, newsize, i;
-	int fillbytes = 0, CRtoStrip = 0;
-	uint8_t *NewData = NULL;
-	bool isWindowsFormat = false;
-
-	// find out how many CRs are in the buffer
-	for (i=0; i < size; i++)
+	char nl = '\n';
+	uint32_t crc = 0;
+	uint32_t i, j;
+	uint32_t lines = 0;
+	uint32_t bytes = 0;
+	for (i = 0; i < size; i = j + 1)
 	{
-		if (pData[i] == '\r')
+		for (j = i; j < size && pData[j] != '\n' && pData[j] != '\r'; ++j)
+		{}
+
+		if (i != j)  // CRC non-empty lines only.
 		{
-			CRtoStrip++;
+			crc = crcSum(crc, pData + i, j - i);  // CRC the line.
+			crc = crcSum(crc, &nl, 1);            // CRC the line ending.
+
+			++lines;
+			bytes += j - i + 1;
 		}
 	}
+	debug(LOG_NET, "The size of the old buffer (%u bytes - %d stripped), New buffer size of %u bytes, %u non-empty lines.", size, size - bytes, bytes, lines);
 
-	// Calculate the new size of the buffer we need to create, on a 4 byte boundry
-	fillbytes = (size - CRtoStrip) % 4;
-	if (fillbytes == 0)
-	{
-		newsize = size - CRtoStrip;	//don't need to do anything
-	}
-	else
-	{
-		newsize = (size - CRtoStrip) + (4- fillbytes);
-		fillbytes = newsize % 4;
-	}
-
-	NewData = malloc(newsize * sizeof(uint8_t));
-	if (!NewData)
-	{
-		debug(LOG_FATAL, "Out of memory!");
-		abort();
-	}
-	memset(NewData, 0xff, newsize);		// fill the new buffer with bit pattern 0xff for easier debug purposes
-
-	// convert CRLF (windows) to LF
-	for(i = 0; i < size- CRtoStrip; i++, pData++)
-	{
-		if (*pData == '\r' && *(pData + 1) == '\n')
-		{
-			NewData[i] = *(++pData);			// for windows change CRLF to LF
-			isWindowsFormat = true;
-		}
-		else
-		{
-			NewData[i] = *(pData);				// straight copy
-		}
-	}
-
-	debug(LOG_NEVER, "NewData is {%.10s}\n size is %u bytes \n", NewData, newsize );	// this is a bit spammy...
-
-	ASSERT_OR_RETURN(0, newsize != 0, "Empty file being checked!");
-	while (pt < newsize)
-	{
-		val = (uint32_t *)(NewData+pt);
-		hashval ^= *val;
-
-		// spams a ton--but useful for debugging.
-		//	debug(LOG_NET, "hash %08x pt %08x val is %08x", hashval, pt, *val);
-		pt += 4;
-	}
-
-	free(NewData);
-
-	debug(LOG_NET, "The size of the old buffer (%u bytes - %d stripped ), New buffer size of %u bytes. Format is: %s", size, CRtoStrip, newsize,  isWindowsFormat ? "windows" : "linux/mac");
-	return hashval;
+	return ~crc;
 }
 
 // create the hash for that data block.
@@ -150,15 +104,14 @@ static void calcDataHash(uint8_t *pBuffer, uint32_t size, uint32_t index)
 		return;
 	}
 
-	// create the hash for that data block.
-	DataHash[index] ^= htonl(hashBuffer(pBuffer, size));
+	DataHash[index] ^= PHYSFS_swapUBE32(hashBuffer(pBuffer, size));
 
 	if (!DataHash[index] && oldHash)
 	{
 		debug(LOG_NET, "The new hash is 0, the old hash was %u. We XOR'ed the same value!", oldHash);
 	}
 
-	debug(LOG_NET, "DataHash[%2u] = %08x", index, htonl(DataHash[index])); 
+	debug(LOG_NET, "DataHash[%2u] = %08x", index, PHYSFS_swapUBE32(DataHash[index])); 
 
 	return;
 }

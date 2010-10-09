@@ -236,6 +236,7 @@ extern void kf_SlowDown( void );
 extern void kf_NormalSpeed( void );
 
 extern void kf_CloneSelected( void );
+extern void kf_Reload( void );
 
 extern void kf_ToggleLogical(void);
 
@@ -255,6 +256,7 @@ extern void	kf_ToggleWatchWindow( void );
 bool runningMultiplayer(void);
 
 void	kf_ForceSync( void );
+void    kf_ForceDesync(void);
 void	kf_PowerInfo( void );
 
 #ifdef __cplusplus

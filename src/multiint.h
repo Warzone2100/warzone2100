@@ -42,6 +42,8 @@ extern	void	intProcessConnection	(UDWORD id);
 extern	void	runGameFind				(void);
 extern	void	startGameFind			(void);
 
+void updateLimitFlags(void);
+
 extern	void	runMultiOptions			(void);
 extern	BOOL	startMultiOptions		(BOOL bReenter);
 extern	void	frontendMultiMessages	(void);
@@ -265,6 +267,10 @@ void loadMapPreview(bool hideInterface);
 #define MULTIOP_PASSWORD	920010
 #define MULTIOP_PASSWORD_BUT 920012
 #define MULTIOP_PASSWORD_EDIT 920013
+
+#define MULTIOP_NO_SOMETHING            10331  // Up to 10340 reserved for future use.
+#define MULTIOP_NO_SOMETHINGX           3
+#define MULTIOP_NO_SOMETHINGY           MROW5
 
 // ///////////////////////////////
 // Many Button Variations..

@@ -119,7 +119,7 @@ RES_EMP_PODTOW
 {
 	{
 		_("New Defensive Structure Available"),
-		_("Armored guard tower with Mini-Pod Rocket"),
+		_("Armored guard tower with Mini-Rocket Pod"),
 		_("Automatically targets enemies within sensor range"),
 		_("Defensive Strength: Medium"),
 	},
@@ -704,10 +704,10 @@ RES_W_RK_MP1
 RES_W_RK_AC1
 {
 	{
-		_("Mini-Rocket Upgrade"),
+		_("Rocket Upgrade"),
 		_("Fin-stabilization improves flight trajectory"),
-		_("Mini-Rocket accuracy +10%"),
-		_("All mini-rockets upgraded automatically"),
+		_("Rocket accuracy +10%"),
+		_("All rockets upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
@@ -717,10 +717,10 @@ RES_W_RK_AC1
 RES_W_RK_D1
 {
 	{
-		_("Mini-Rocket Upgrade"),
+		_("Rocket Upgrade"),
 		_("Improved shaped charge warhead"),
-		_("Mini-Rocket damage +25%"),
-		_("All mini-rockets upgraded automatically"),
+		_("Rocket damage +25%"),
+		_("All rockets upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,
@@ -730,10 +730,10 @@ RES_W_RK_D1
 RES_W_RK_ROF1
 {
 	{
-		_("Mini-Rocket Upgrade"),
+		_("Rocket Upgrade"),
 		_("Automated reload system"),
-		_("Mini-Rocket reload time -15%"),
-		_("All mini-rockets upgraded automatically"),
+		_("Rocket reload time -15%"),
+		_("All rockets upgraded automatically"),
 	},
 	.imdName = "MICAPSUL.PIE",
 	.imdName2 = NULL,

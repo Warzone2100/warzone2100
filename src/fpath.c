@@ -25,6 +25,8 @@
  */
 
 #include "lib/framework/frame.h"
+#include "lib/netplay/netplay.h"
+
 #include "lib/framework/wzapp_c.h"
 
 #include "objects.h"
@@ -79,6 +81,9 @@ static WZ_SEMAPHORE     *fpathSemaphore = NULL;
 static PATHJOB		*firstJob = NULL;
 static PATHRESULT	*firstResult = NULL;
 
+static bool             waitingForResult = false;
+static uint32_t         waitingForResultId;
+static WZ_SEMAPHORE     *waitingForResultSemaphore = NULL;
 
 static void fpathExecute(PATHJOB *psJob, PATHRESULT *psResult);
 
@@ -147,6 +152,7 @@ static int fpathThreadFunc(WZ_DECL_UNUSED void *data)
 
 		if (!gotWork)
 		{
+			ASSERT(!waitingForResult, "Waiting for a result (id %u) that doesn't exist.", waitingForResultId);
 			wzMutexUnlock(fpathMutex);
 			wzSemaphoreWait(fpathSemaphore);  // Go to sleep until needed.
 			wzMutexLock(fpathMutex);
@@ -158,6 +164,7 @@ static int fpathThreadFunc(WZ_DECL_UNUSED void *data)
 		psResult->done = false;
 		psResult->droidID = job.droidID;
 		psResult->sMove.asPath = NULL;
+		psResult->sMove.numPoints = 0;
 		psResult->retval = FPR_FAILED;
 
 		// Add to beginning of result list
@@ -188,6 +195,14 @@ static int fpathThreadFunc(WZ_DECL_UNUSED void *data)
 			psResult->retval = result.retval;
 			psResult->done = true;
 		}
+
+		// Unblock the main thread, if it was waiting for this particular result.
+		if (waitingForResult && waitingForResultId == job.droidID)
+		{
+			waitingForResult = false;
+			objTrace(waitingForResultId, "These are the droids you are looking for.");
+			wzSemaphorePost(waitingForResultSemaphore);
+		}
 	}
 	wzMutexUnlock(fpathMutex);
 	return 0;
@@ -204,6 +219,7 @@ BOOL fpathInitialise(void)
 	{
 		fpathMutex = wzMutexCreate();
 		fpathSemaphore = wzSemaphoreCreate(0);
+		waitingForResultSemaphore = wzSemaphoreCreate(0);
 		fpathThread = wzThreadCreate(fpathThreadFunc, NULL);
 		wzThreadStart(fpathThread);
 	}
@@ -227,6 +243,8 @@ void fpathShutdown()
 		fpathMutex = NULL;
 		wzSemaphoreDestroy(fpathSemaphore);
 		fpathSemaphore = NULL;
+		wzSemaphoreDestroy(waitingForResultSemaphore);
+		waitingForResultSemaphore = NULL;
 	}
 }
 
@@ -240,6 +258,43 @@ void fpathUpdate(void)
 	// Nothing now
 }
 
+
+bool fpathIsEquivalentBlocking(PROPULSION_TYPE propulsion1, int player1, FPATH_MOVETYPE moveType1,
+                               PROPULSION_TYPE propulsion2, int player2, FPATH_MOVETYPE moveType2)
+{
+	int domain1, domain2;
+	switch (propulsion1)
+	{
+		default:                        domain1 = 0; break;  // Land
+		case PROPULSION_TYPE_LIFT:      domain1 = 1; break;  // Air
+		case PROPULSION_TYPE_PROPELLOR: domain1 = 2; break;  // Water
+		case PROPULSION_TYPE_HOVER:     domain1 = 3; break;  // Land and water
+	}
+	switch (propulsion2)
+	{
+		default:                        domain2 = 0; break;  // Land
+		case PROPULSION_TYPE_LIFT:      domain2 = 1; break;  // Air
+		case PROPULSION_TYPE_PROPELLOR: domain2 = 2; break;  // Water
+		case PROPULSION_TYPE_HOVER:     domain2 = 3; break;  // Land and water
+	}
+
+	if (domain1 != domain2)
+	{
+		return false;
+	}
+
+	if (domain1 == 1)
+	{
+		return true;  // Air units ignore move type and player.
+	}
+
+	if (moveType1 != moveType2 || player1 != player2)
+	{
+		return false;
+	}
+
+	return true;
+}
 
 // Check if the map tile at a location blocks a droid
 BOOL fpathBaseBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion, int player, FPATH_MOVETYPE moveType)
@@ -262,15 +317,12 @@ BOOL fpathBaseBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion, int p
 	psTile = mapTile(x, y);
 
 	// Only tall structures are blocking VTOL now
-	if (propulsion == PROPULSION_TYPE_LIFT && !TileHasTallStructure(psTile))
+	if (propulsion == PROPULSION_TYPE_LIFT)
 	{
-		return false;
+		return TileHasTallStructure(psTile);
 	}
-	else if (propulsion == PROPULSION_TYPE_LIFT)
-	{
-		return true;
-	}
-	else if (propulsion == PROPULSION_TYPE_PROPELLOR && terrainType(psTile) != TER_WATER)
+
+	if (propulsion == PROPULSION_TYPE_PROPELLOR && terrainType(psTile) != TER_WATER)
 	{
 		return true;
 	}
@@ -409,7 +461,8 @@ void fpathRemoveDroidData(int id)
 }
 
 
-static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int startY, int tX, int tY, PROPULSION_TYPE propulsionType, DROID_TYPE droidType, FPATH_MOVETYPE moveType, int owner)
+static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int startY, int tX, int tY, PROPULSION_TYPE propulsionType, 
+                               DROID_TYPE droidType, FPATH_MOVETYPE moveType, int owner, bool acceptNearest)
 {
 	PATHJOB		*psJob = NULL;
 	int 		count;
@@ -421,11 +474,12 @@ static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int sta
 	{
 		// return failed to stop them moving anywhere
 		objTrace(id, "Tried to move nowhere");
+		syncDebug("fpathRoute(..., %d, %d, %d, %d, %d, %d, %d, %d, %d) = FPR_FAILED", id, startX, startY, tX, tY, propulsionType, droidType, moveType, owner);
 		return FPR_FAILED;
 	}
 
 	// Check if waiting for a result
-	if (psMove->Status == MOVEWAITROUTE)
+	while (psMove->Status == MOVEWAITROUTE)
 	{
 		PATHRESULT *psPrev = NULL, *psNext;
 
@@ -471,23 +525,23 @@ static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int sta
 				wzMutexUnlock(fpathMutex);
 				objTrace(id, "Got a path to (%d, %d)! Length=%d Retval=%d", (int)psMove->DestinationX,
 				         (int)psMove->DestinationY, (int)psMove->numPoints, (int)retval);
+				syncDebug("fpathRoute(..., %d, %d, %d, %d, %d, %d, %d, %d, %d) = %d (%d points)", id, startX, startY, tX, tY, propulsionType, droidType, moveType, owner, retval, psMove->numPoints);
 				return retval;
 			}
 			psPrev = psNext;
 			psNext = psNext->next;
 		}
-		wzMutexUnlock(fpathMutex);
+
 		objTrace(id, "No path yet. Waiting.");
-		return FPR_WAIT;	// keep waiting
+		waitingForResult = true;
+		waitingForResultId = id;
+		wzMutexUnlock(fpathMutex);
+		wzSemaphoreWait(waitingForResultSemaphore);  // keep waiting
 	}
 
 	// We were not waiting for a result, and found no trivial path, so create new job and start waiting
 	psJob = malloc(sizeof(*psJob));
-	ASSERT(psJob, "Out of memory");
-	if (!psJob)
-	{
-		return FPR_FAILED;
-	}
+	ASSERT_OR_RETURN(FPR_FAILED, psJob, "Out of memory");
 	psJob->origX = startX;
 	psJob->origY = startY;
 	psJob->droidID = id;
@@ -498,6 +552,8 @@ static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int sta
 	psJob->propulsion = propulsionType;
 	psJob->moveType = moveType;
 	psJob->owner = owner;
+	psJob->acceptNearest = acceptNearest;
+	fpathSetBlockingMap(psJob);
 
 	// Clear any results or jobs waiting already. It is a vital assumption that there is only one
 	// job or result for each droid in the system at any time.
@@ -529,6 +585,7 @@ static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int sta
 	wzMutexUnlock(fpathMutex);
 
 	objTrace(id, "Queued up a path-finding request to (%d, %d), %d items earlier in queue", tX, tY, count);
+	syncDebug("fpathRoute(..., %d, %d, %d, %d, %d, %d, %d, %d, %d) = FPR_WAIT", id, startX, startY, tX, tY, propulsionType, droidType, moveType, owner);
 	return FPR_WAIT;	// wait while polling result queue
 }
 
@@ -536,7 +593,8 @@ static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int sta
 // Find a route for an DROID to a location in world coordinates
 FPATH_RETVAL fpathDroidRoute(DROID* psDroid, SDWORD tX, SDWORD tY, FPATH_MOVETYPE moveType)
 {
-	PROPULSION_STATS	*psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
+	bool acceptNearest;
+	PROPULSION_STATS *psPropStats = getPropulsionStats(psDroid);
 
 	// override for AI to blast our way through stuff
 	if (!isHumanPlayer(psDroid->player) && moveType == FMT_MOVE)
@@ -588,12 +646,26 @@ FPATH_RETVAL fpathDroidRoute(DROID* psDroid, SDWORD tX, SDWORD tY, FPATH_MOVETYP
 		}
 		else
 		{
-			tX = world_coord(map_coord(tX) + aDirOffset[nearestDir].x) + TILE_SHIFT / 2;
-			tY = world_coord(map_coord(tY) + aDirOffset[nearestDir].y) + TILE_SHIFT / 2;
+			tX = world_coord(map_coord(tX) + aDirOffset[nearestDir].x) + TILE_UNITS / 2;
+			tY = world_coord(map_coord(tY) + aDirOffset[nearestDir].y) + TILE_UNITS / 2;
 			objTrace(psDroid->id, "Workaround found at (%d, %d)", map_coord(tX), map_coord(tY));
 		}
 	}
-	return fpathRoute(&psDroid->sMove, psDroid->id, psDroid->pos.x, psDroid->pos.y, tX, tY, psPropStats->propulsionType, psDroid->droidType, moveType, psDroid->player);
+	switch (psDroid->order)
+	{
+	case DORDER_BUILD:
+	case DORDER_HELPBUILD:                       // help to build a structure
+	case DORDER_LINEBUILD:                       // 6 - build a number of structures in a row (walls + bridges)
+	case DORDER_DEMOLISH:                        // demolish a structure
+	case DORDER_REPAIR:
+		acceptNearest = false;
+		break;
+	default:
+		acceptNearest = true;
+		break;
+	}
+	return fpathRoute(&psDroid->sMove, psDroid->id, psDroid->pos.x, psDroid->pos.y, tX, tY, psPropStats->propulsionType, 
+	                  psDroid->droidType, moveType, psDroid->player, acceptNearest);
 }
 
 // Run only from path thread
@@ -606,8 +678,16 @@ static void fpathExecute(PATHJOB *psJob, PATHRESULT *psResult)
 	switch (retval)
 	{
 	case ASR_NEAREST:
-		objTrace(psJob->droidID, "** Nearest route **");
-		psResult->retval = FPR_OK;
+		if (psJob->acceptNearest)
+		{
+			objTrace(psJob->droidID, "** Nearest route -- accepted **");
+			psResult->retval = FPR_OK;
+		}
+		else
+		{
+			objTrace(psJob->droidID, "** Nearest route -- rejected **");
+			psResult->retval = FPR_FAILED;
+		}
 		break;
 	case ASR_FAILED:
 		objTrace(psJob->droidID, "** Failed route **");
@@ -637,12 +717,9 @@ static BOOL		obstruction;
  */
 static bool fpathVisCallback(Vector3i pos, int32_t dist, void *data)
 {
-	/* Has to be -1 to make sure that it doesn't match any enumerated
-	 * constant from PROPULSION_TYPE.
-	 */
-	static const PROPULSION_TYPE prop = (PROPULSION_TYPE)-1;
+	DROID *psDroid = (DROID *)data;
 
-	if (fpathBlockingTile(map_coord(pos.x), map_coord(pos.y), prop))
+	if (fpathBlockingTile(map_coord(pos.x), map_coord(pos.y), getPropulsionStats(psDroid)->propulsionType))
 	{
 		// found an obstruction
 		obstruction = true;
@@ -652,21 +729,21 @@ static bool fpathVisCallback(Vector3i pos, int32_t dist, void *data)
 	return true;
 }
 
-BOOL fpathTileLOS(Vector3i orig, Vector3i dest)
+BOOL fpathTileLOS(DROID *psDroid, Vector3i dest)
 {
-	Vector3i dir = Vector3i_Sub(dest, orig);
+	Vector3i dir = Vector3i_Sub(dest, psDroid->pos);
 
 	// Initialise the callback variables
 	obstruction = false;
 
-	rayCast(orig, iAtan2(dir.x, dir.y), iHypot(dir.x, dir.y), fpathVisCallback, NULL);
+	rayCast(psDroid->pos, iAtan2(dir.x, dir.y), iHypot(dir.x, dir.y), fpathVisCallback, psDroid);
 
 	return !obstruction;
 }
 
 static FPATH_RETVAL fpathSimpleRoute(MOVE_CONTROL *psMove, int id, int startX, int startY, int tX, int tY)
 {
-	return fpathRoute(psMove, id, startX, startY, tX, tY, PROPULSION_TYPE_WHEELED, DROID_WEAPON, FMT_MOVE, 0);
+	return fpathRoute(psMove, id, startX, startY, tX, tY, PROPULSION_TYPE_WHEELED, DROID_WEAPON, FMT_MOVE, 0, true);
 }
 
 void fpathTest(int x, int y, int x2, int y2)

@@ -34,15 +34,6 @@
 
 /*!
  * Rotate and translate v with the worldmatrix. Store the result in s
- * int variant
- * \param[in] v Vector to translate
- * \param[out] s Resulting vector
- */
-void pie_RotateTranslate3iv(const Vector3i *v, Vector3i *s);
-
-
-/*!
- * Rotate and translate v with the worldmatrix. Store the result in s
  * Float variant
  * \param[in] v Vector to translate
  * \param[out] s Resulting vector
@@ -97,12 +88,12 @@ extern void pie_MatInit(void);
 
 extern void pie_MatBegin(void);
 extern void pie_MatEnd(void);
-extern void pie_MATTRANS(int x, int y, int z);
-extern void pie_TRANSLATE(int x, int y, int z);
-extern void pie_MatScale( unsigned int percent );
-extern void pie_MatRotX(int x);
-extern void pie_MatRotY(int y);
-extern void pie_MatRotZ(int z);
+extern void pie_MATTRANS(float x, float y, float z);
+extern void pie_TRANSLATE(float x, float y, float z);
+extern void pie_MatScale(float scale);
+extern void pie_MatRotX(uint16_t x);
+extern void pie_MatRotY(uint16_t y);
+extern void pie_MatRotZ(uint16_t z);
 extern int32_t pie_RotateProject(const Vector3i *src, Vector2i *dest);
 
 //*************************************************************************

@@ -46,7 +46,7 @@ typedef struct {
 
 extern DROIDSTORE *tempDroidList;
 extern void ShowMOTD(void);
-extern bool recvDataCheck(void);
+extern bool recvDataCheck(NETQUEUE queue);
 extern bool sendDataCheck(void);
 
 #ifdef __cplusplus

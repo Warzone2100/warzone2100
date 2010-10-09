@@ -21,8 +21,8 @@
  *  Matrix manipulation functions.
  */
 
-#include <GLee.h>
 #include "lib/framework/frame.h"
+#include "lib/framework/opengl.h"
 
 #include "lib/framework/fixedpoint.h"
 #include "lib/ivis_common/pieclip.h"
@@ -37,6 +37,13 @@
 
 #define MATRIX_MAX 8
 
+/*
+ * Matrices are of this form:
+ * [ a d g j ]
+ * [ b e h k ]
+ * [ c f i l ]
+ * [ 0 0 0 1 ]
+ */
 typedef struct { SDWORD a, b, c,  d, e, f,  g, h, i,  j, k, l; } SDMATRIX;
 static SDMATRIX	aMatrixStack[MATRIX_MAX];
 static SDMATRIX *psMatrix = &aMatrixStack[0];
@@ -45,8 +52,12 @@ BOOL drawing_interface = true;
 
 //*************************************************************************
 
-// We use FP12_MULTIPLIER.
-static SDMATRIX _MATRIX_ID = {FP12_MULTIPLIER, 0, 0, 0, FP12_MULTIPLIER, 0, 0, 0, FP12_MULTIPLIER, 0L, 0L, 0L};
+static const SDMATRIX Identitymatrix = {
+	FP12_MULTIPLIER,                  0,               0,
+	              0,    FP12_MULTIPLIER,               0,
+	              0,                  0, FP12_MULTIPLIER,
+	              0,                  0,               0,
+};
 static SDWORD _MATRIX_INDEX;
 
 //*************************************************************************
@@ -59,7 +70,7 @@ static void pie_MatReset(void)
 	psMatrix = &aMatrixStack[0];
 
 	// make 1st matrix identity
-	*psMatrix = _MATRIX_ID;
+	*psMatrix = Identitymatrix;
 
 	glLoadIdentity();
 }
@@ -98,13 +109,13 @@ void pie_MatEnd(void)
 }
 
 
-void pie_MATTRANS(int x, int y, int z)
+void pie_MATTRANS(float x, float y, float z)
 {
 	GLfloat matrix[16];
 
-	psMatrix->j = x<<FP12_SHIFT;
-	psMatrix->k = y<<FP12_SHIFT;
-	psMatrix->l = z<<FP12_SHIFT;
+	psMatrix->j = x * FP12_MULTIPLIER;
+	psMatrix->k = y * FP12_MULTIPLIER;
+	psMatrix->l = z * FP12_MULTIPLIER;
 
 	glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
 	matrix[12] = x;
@@ -113,11 +124,19 @@ void pie_MATTRANS(int x, int y, int z)
 	glLoadMatrixf(matrix);
 }
 
-void pie_TRANSLATE(int x, int y, int z)
+void pie_TRANSLATE(float x, float y, float z)
 {
-	psMatrix->j += ((x) * psMatrix->a + (y) * psMatrix->d + (z) * psMatrix->g);
-	psMatrix->k += ((x) * psMatrix->b + (y) * psMatrix->e + (z) * psMatrix->h);
-	psMatrix->l += ((x) * psMatrix->c + (y) * psMatrix->f + (z) * psMatrix->i);
+	/*
+	 * curMatrix = curMatrix . translationMatrix(x, y, z)
+	 *
+	 *                         [ 1 0 0 x ]
+	 *                         [ 0 1 0 y ]
+	 * curMatrix = curMatrix . [ 0 0 1 z ]
+	 *                         [ 0 0 0 1 ]
+	 */
+	psMatrix->j += x * psMatrix->a + y * psMatrix->d + z * psMatrix->g;
+	psMatrix->k += x * psMatrix->b + y * psMatrix->e + z * psMatrix->h;
+	psMatrix->l += x * psMatrix->c + y * psMatrix->f + z * psMatrix->i;
 
 	glTranslatef(x, y, z);
 }
@@ -126,26 +145,33 @@ void pie_TRANSLATE(int x, int y, int z)
 //*** matrix scale current transformation matrix
 //*
 //******
-void pie_MatScale( unsigned int percent )
+void pie_MatScale(float scale)
 {
-	if (percent == 100)
-	{
-		return;
-	}
+	/*
+	 * s := scale
+	 * curMatrix = curMatrix . scaleMatrix(s, s, s)
+	 *
+	 *                         [ s 0 0 0 ]
+	 *                         [ 0 s 0 0 ]
+	 * curMatrix = curMatrix . [ 0 0 s 0 ]
+	 *                         [ 0 0 0 1 ]
+	 *
+	 * curMatrix = scale * curMatrix
+	 */
 
-	psMatrix->a = (psMatrix->a * percent) / 100;
-	psMatrix->b = (psMatrix->b * percent) / 100;
-	psMatrix->c = (psMatrix->c * percent) / 100;
+	psMatrix->a = psMatrix->a * scale;
+	psMatrix->b = psMatrix->b * scale;
+	psMatrix->c = psMatrix->c * scale;
 
-	psMatrix->d = (psMatrix->d * percent) / 100;
-	psMatrix->e = (psMatrix->e * percent) / 100;
-	psMatrix->f = (psMatrix->f * percent) / 100;
+	psMatrix->d = psMatrix->d * scale;
+	psMatrix->e = psMatrix->e * scale;
+	psMatrix->f = psMatrix->f * scale;
 
-	psMatrix->g = (psMatrix->g * percent) / 100;
-	psMatrix->h = (psMatrix->h * percent) / 100;
-	psMatrix->i = (psMatrix->i * percent) / 100;
+	psMatrix->g = psMatrix->g * scale;
+	psMatrix->h = psMatrix->h * scale;
+	psMatrix->i = psMatrix->i * scale;
 
-	glScalef(0.01f*percent, 0.01f*percent, 0.01f*percent);
+	glScalef(scale, scale, scale);
 }
 
 
@@ -154,8 +180,20 @@ void pie_MatScale( unsigned int percent )
 //*
 //******
 
-void pie_MatRotY(int y)
+void pie_MatRotY(uint16_t y)
 {
+	/*
+	 * a := angle
+	 * c := cos(a)
+	 * s := sin(a)
+	 *
+	 * curMatrix = curMatrix . rotationMatrix(a, 0, 1, 0)
+	 *
+	 *                         [  c  0  s  0 ]
+	 *                         [  0  1  0  0 ]
+	 * curMatrix = curMatrix . [ -s  0  c  0 ]
+	 *                         [  0  0  0  1 ]
+	 */
 	if (y != 0)
 	{
 		int t;
@@ -173,7 +211,7 @@ void pie_MatRotY(int y)
 		psMatrix->i = (sra*psMatrix->c + cra*psMatrix->i)>>16;
 		psMatrix->c = t;
 
-		glRotatef(y*(360.f / 65536), 0.0f, 1.0f, 0.0f);
+		glRotatef(UNDEG(y), 0.0f, 1.0f, 0.0f);
 	}
 }
 
@@ -183,8 +221,20 @@ void pie_MatRotY(int y)
 //*
 //******
 
-void pie_MatRotZ(int z)
+void pie_MatRotZ(uint16_t z)
 {
+	/*
+	 * a := angle
+	 * c := cos(a)
+	 * s := sin(a)
+	 *
+	 * curMatrix = curMatrix . rotationMatrix(a, 0, 0, 1)
+	 *
+	 *                         [ c  -s  0  0 ]
+	 *                         [ s   c  0  0 ]
+	 * curMatrix = curMatrix . [ 0   0  1  0 ]
+	 *                         [ 0   0  0  1 ]
+	 */
 	if (z != 0)
 	{
 		int t;
@@ -202,7 +252,7 @@ void pie_MatRotZ(int z)
 		psMatrix->f = (cra*psMatrix->f - sra*psMatrix->c)>>16;
 		psMatrix->c = t;
 
-		glRotatef(z*(360.f / 65536), 0.0f, 0.0f, 1.0f);
+		glRotatef(UNDEG(z), 0.0f, 0.0f, 1.0f);
 	}
 }
 
@@ -212,9 +262,21 @@ void pie_MatRotZ(int z)
 //*
 //******
 
-void pie_MatRotX(int x)
+void pie_MatRotX(uint16_t x)
 {
-	if (x != 0)
+	/*
+	 * a := angle
+	 * c := cos(a)
+	 * s := sin(a)
+	 *
+	 * curMatrix = curMatrix . rotationMatrix(a, 0, 0, 1)
+	 *
+	 *                         [ 1  0   0  0 ]
+	 *                         [ 0  c  -s  0 ]
+	 * curMatrix = curMatrix . [ 0  s   c  0 ]
+	 *                         [ 0  0   0  1 ]
+	 */
+	if (x != 0.f)
 	{
 		int t;
 		int64_t cra = iCos(x), sra = iSin(x);
@@ -231,7 +293,7 @@ void pie_MatRotX(int x)
 		psMatrix->i = (cra*psMatrix->i - sra*psMatrix->f)>>16;
 		psMatrix->f = t;
 
-		glRotatef(x*(360.f / 65536), 1.0f, 0.0f, 0.0f);
+		glRotatef(UNDEG(x), 1.0f, 0.0f, 0.0f);
 	}
 }
 
@@ -245,25 +307,26 @@ void pie_MatRotX(int x)
  */
 int32_t pie_RotateProject(const Vector3i *v3d, Vector2i *v2d)
 {
+	/*
+	 * v = curMatrix . v3d
+	 */
 	Vector3i v = {
 		v3d->x * psMatrix->a + v3d->y * psMatrix->d + v3d->z * psMatrix->g + psMatrix->j,
 		v3d->x * psMatrix->b + v3d->y * psMatrix->e + v3d->z * psMatrix->h + psMatrix->k,
 		v3d->x * psMatrix->c + v3d->y * psMatrix->f + v3d->z * psMatrix->i + psMatrix->l
 	};
 
-	int zz = v.z >> STRETCHED_Z_SHIFT;
-	int zfx = v.z >> psRendSurface->xpshift;
-	int zfy = v.z >> psRendSurface->ypshift;
+	const int zz = v.z >> STRETCHED_Z_SHIFT;
 
-	if (zfx <= 0 || zfy <= 0 || zz < MIN_STRETCHED_Z)
+	if (zz < MIN_STRETCHED_Z)
 	{
 		v2d->x = LONG_WAY; //just along way off screen
 		v2d->y = LONG_WAY;
 	}
 	else
 	{
-		v2d->x = psRendSurface->xcentre + (v.x / zfx);
-		v2d->y = psRendSurface->ycentre - (v.y / zfy);
+		v2d->x = psRendSurface->xcentre + (v.x / zz);
+		v2d->y = psRendSurface->ycentre - (v.y / zz);
 	}
 
 	return zz;
@@ -320,11 +383,13 @@ void pie_SetGeometricOffset(int x, int y)
  */
 void pie_VectorInverseRotate0(const Vector3i *v1, Vector3i *v2)
 {
-	unsigned int x = v1->x, y = v1->y, z = v1->z;
-
-	v2->x = (x * psMatrix->a + y * psMatrix->b + z * psMatrix->c) >> FP12_SHIFT;
-	v2->y = (x * psMatrix->d + y * psMatrix->e + z * psMatrix->f) >> FP12_SHIFT;
-	v2->z = (x * psMatrix->g + y * psMatrix->h + z * psMatrix->i) >> FP12_SHIFT;
+	/*
+	 * invMatrix = transpose(sub3x3Matrix(curMatrix))
+	 * v2 = invMatrix . v1
+	 */
+	v2->x = (v1->x * psMatrix->a + v1->y * psMatrix->b + v1->z * psMatrix->c) / FP12_MULTIPLIER;
+	v2->y = (v1->x * psMatrix->d + v1->y * psMatrix->e + v1->z * psMatrix->f) / FP12_MULTIPLIER;
+	v2->z = (v1->x * psMatrix->g + v1->y * psMatrix->h + v1->z * psMatrix->i) / FP12_MULTIPLIER;
 }
 
 /** Sets up transformation matrices/quaternions and trig tables
@@ -335,19 +400,11 @@ void pie_MatInit(void)
 	pie_MatReset();
 }
 
-void pie_RotateTranslate3iv(const Vector3i *v, Vector3i *s)
-{
-	s->x = ( v->x * psMatrix->a + v->z * psMatrix->d + v->y * psMatrix->g
-			+ psMatrix->j ) / FP12_MULTIPLIER;
-	s->z = ( v->x * psMatrix->b + v->z * psMatrix->e + v->y * psMatrix->h
-			+ psMatrix->k ) / FP12_MULTIPLIER;
-	s->y = ( v->x * psMatrix->c + v->z * psMatrix->f + v->y * psMatrix->i
-			+ psMatrix->l ) / FP12_MULTIPLIER;
-}
-
-
 void pie_RotateTranslate3f(const Vector3f *v, Vector3f *s)
 {
+	/*
+	 * s = curMatrix . v
+	 */
 	s->x = ( v->x * psMatrix->a + v->z * psMatrix->d + v->y * psMatrix->g
 			+ psMatrix->j ) / FP12_MULTIPLIER;
 	s->z = ( v->x * psMatrix->b + v->z * psMatrix->e + v->y * psMatrix->h

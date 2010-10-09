@@ -406,13 +406,13 @@ void	removeDroidBase(DROID *psDel)
 	}
 
 	//ajl, inform others of destruction.
+	// Everyone else should be doing this at the same time, assuming it's in synch (so everyone sends a GAME_DROIDDEST message at once)...
 	if (bMultiMessages
 	 && !(psDel->player != selectedPlayer && psDel->order == DORDER_RECYCLE))
 	{
 		ASSERT_OR_RETURN( , droidOnMap(psDel), "Asking other players to destroy droid driving off the map");
 		SendDestroyDroid(psDel);
 	}
-
 
 	/* remove animation if present */
 	if (psDel->psCurAnim != NULL)
@@ -697,6 +697,21 @@ void droidBurn(DROID *psDroid)
 	orderDroid( psDroid, DORDER_RUNBURN );
 }
 
+void _syncDebugDroid(const char *function, DROID *psDroid, char ch)
+{
+	_syncDebug(function, "%c droid%d = p%d;pos(%d.%d,%d.%d,%d),ord%d(%d,%d),act%d,so%X,bp%d, power = %"PRId64"", ch,
+	          psDroid->id,
+
+	          psDroid->player,
+	          psDroid->pos.x, psDroid->sMove.eBitX, psDroid->pos.y, psDroid->sMove.eBitY, psDroid->pos.z,
+	          psDroid->order, psDroid->orderX, psDroid->orderY,
+	          psDroid->action,
+	          psDroid->secondaryOrder,
+	          psDroid->body,
+
+	          getPrecisePower(psDroid->player));
+}
+
 /* The main update routine for all droids */
 void droidUpdate(DROID *psDroid)
 {
@@ -722,6 +737,8 @@ void droidUpdate(DROID *psDroid)
 		       droidGetName(psDroid), psDroid);
 	}
 #endif
+
+	syncDebugDroid(psDroid, '<');
 
 	// Save old droid position, update time.
 	psDroid->prevSpacetime = GET_SPACETIME(psDroid);
@@ -859,6 +876,8 @@ void droidUpdate(DROID *psDroid)
 		}
 	}
 
+	syncDebugDroid(psDroid, '>');
+
 	CHECK_DROID(psDroid);
 }
 
@@ -979,7 +998,7 @@ BOOL droidStartBuild(DROID *psDroid)
 			return false;
 		}
 		//ok to build
-		psStruct = buildStructure(psStructStat, psDroid->orderX,psDroid->orderY, psDroid->player,false);
+		psStruct = buildStructureDir(psStructStat, psDroid->orderX,psDroid->orderY, psDroid->orderDirection, psDroid->player,false);
 		if (!psStruct)
 		{
 			intBuildFinished(psDroid);
@@ -992,6 +1011,7 @@ BOOL droidStartBuild(DROID *psDroid)
 		{
 			if(myResponsibility(psDroid->player) )
 			{
+				// This message doesn't actually do anything, unless out of synch.
 				sendBuildStarted(psStruct, psDroid);
 			}
 		}
@@ -1045,8 +1065,8 @@ static void addConstructorEffect(STRUCTURE *psStruct)
 	if((ONEINTEN) && (psStruct->visible[selectedPlayer]))
 	{
 		/* This needs fixing - it's an arse effect! */
-		widthRange = (psStruct->pStructureType->baseWidth*TILE_UNITS)/4;
-		breadthRange = (psStruct->pStructureType->baseBreadth*TILE_UNITS)/4;
+		widthRange   = getStructureWidth  (psStruct)*TILE_UNITS/4;
+		breadthRange = getStructureBreadth(psStruct)*TILE_UNITS/4;
 		temp.x = psStruct->pos.x+((rand()%(2*widthRange)) - widthRange);
 		temp.y = map_TileHeight(map_coord(psStruct->pos.x), map_coord(psStruct->pos.y))+
 						(psStruct->sDisplay.imd->max.y / 6);
@@ -2408,8 +2428,7 @@ UDWORD calcDroidPoints(DROID *psDroid)
 }
 
 //Builds an instance of a Droid - the x/y passed in are in world coords.
-DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
-				  BOOL onMission)
+DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player, BOOL onMission)
 {
 	DROID			*psDroid;
 	DROID_GROUP		*psGrp;
@@ -2438,8 +2457,10 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	// Set the droids type
 	psDroid->droidType = droidTemplateType(pTemplate);  // Is set again later to the same thing, in droidSetBits.
 
-	psDroid->pos.x = (UWORD)x;
-	psDroid->pos.y = (UWORD)y;
+	psDroid->pos.x = x;
+	psDroid->pos.y = y;
+	psDroid->sMove.eBitX = 0;
+	psDroid->sMove.eBitY = 0;
 
 	//don't worry if not on homebase cos not being drawn yet
 	if (!onMission)
@@ -2494,6 +2515,7 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 
 	psDroid->listSize = 0;
 	memset(psDroid->asOrderList, 0, sizeof(ORDER_LIST)*ORDER_LIST_MAX);
+	psDroid->waitingForOwnReceiveDroidInfoMessage = false;
 
 	psDroid->iAudioID = NO_SOUND;
 	psDroid->psCurAnim = NULL;
@@ -2606,15 +2628,6 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
  		clustNewDroid(psDroid);
 	}
 
-	// ajl. droid will be created, so inform others
-	if(bMultiMessages)
-	{
-		if (SendDroid(pTemplate,  x,  y,  (UBYTE)player, psDroid->id) == false)
-		{
-			return NULL;
-		}
-	}
-
 	/* transporter-specific stuff */
 	if (psDroid->droidType == DROID_TRANSPORTER)
 	{
@@ -2639,16 +2652,25 @@ DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player,
 	return psDroid;
 }
 
+DROID *buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player, BOOL onMission, const INITIAL_DROID_ORDERS *initialOrders)
+{
+	// ajl. droid will be created, so inform others
+	if (bMultiMessages)
+	{
+		// Only sends if it's ours, otherwise the owner should send the message.
+		SendDroid(pTemplate, x, y, player, generateNewObjectId(), initialOrders);
+		return NULL;
+	}
+	else
+	{
+		return reallyBuildDroid(pTemplate, x, y, player, onMission);
+	}
+}
+
 //initialises the droid movement model
 void initDroidMovement(DROID *psDroid)
 {
 	memset(&psDroid->sMove, 0, sizeof(MOVE_CONTROL));
-
-	psDroid->sMove.fx = psDroid->pos.x;
-	psDroid->sMove.fy = psDroid->pos.y;
-	psDroid->sMove.fz = psDroid->pos.z;
-	psDroid->sMove.speed = 0.0f;
-	psDroid->sMove.moveDir = 0;
 }
 
 // Set the asBits in a DROID structure given it's template.
@@ -2703,6 +2725,8 @@ void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid)
 	psDroid->asBits[COMP_ECM].nStat = pTemplate->asParts[COMP_ECM];
 	psDroid->asBits[COMP_REPAIRUNIT].nStat = pTemplate->asParts[COMP_REPAIRUNIT];
 	psDroid->asBits[COMP_CONSTRUCT].nStat = pTemplate->asParts[COMP_CONSTRUCT];
+
+	psDroid->gameCheckDroid = NULL;
 }
 
 
@@ -3052,16 +3076,16 @@ BOOL calcDroidMuzzleLocation(DROID *psDroid, Vector3f *muzzle, int weapon_slot)
 					 -psBodyImd->connectors[weapon_slot].y);//note y and z flipped
 
 		//matrix = the weapon[slot] mount on the body
-		pie_MatRotY(psDroid->asWeaps[weapon_slot].rot.direction);	// +ve anticlockwise
+		pie_MatRotY(psDroid->asWeaps[weapon_slot].rot.direction);  // +ve anticlockwise
 
 		// process turret mount
 		if (psMountImd && psMountImd->nconnectors)
 		{
 			pie_TRANSLATE(psMountImd->connectors->x, -psMountImd->connectors->z, -psMountImd->connectors->y);
-		}		
+		}
 
 		//matrix = the turret connector for the gun
-		pie_MatRotX(psDroid->asWeaps[weapon_slot].rot.pitch);		// +ve up
+		pie_MatRotX(psDroid->asWeaps[weapon_slot].rot.pitch);      // +ve up
 
 		//process the gun
 		if (psWeaponImd && psWeaponImd->nconnectors)
@@ -4419,7 +4443,7 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
 		// make the old droid vanish
 		vanishDroid(psD);
 		// create a new droid
-		psNewDroid = buildDroid(&sTemplate, x, y, to, false);
+		psNewDroid = buildDroid(&sTemplate, x, y, to, false, NULL);
 		ASSERT(psNewDroid != NULL, "unable to build a unit");
 		if (psNewDroid)
 		{
@@ -4524,7 +4548,7 @@ BOOL checkValidWeaponForProp(DROID_TEMPLATE *psTemplate)
 }
 
 /*called when a Template is deleted in the Design screen*/
-void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player)
+static void maybeDeleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player, bool really)
 {
 	STRUCTURE   *psStruct;
 	UDWORD      inc, i;
@@ -4548,72 +4572,91 @@ void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player)
 			if (StructIsFactory(psStruct))
 			{
 				FACTORY             *psFactory = &psStruct->pFunctionality->factory;
-				DROID_TEMPLATE      *psNextTemplate = NULL;
+
+				if (psFactory->psSubject == NULL)
+				{
+					continue;
+				}
 
 				//if template belongs to the production player - check thru the production list (if struct is busy)
-				if (player == productionPlayer && psFactory->psSubject)
+				if (player == productionPlayer)
 				{
 					for (inc = 0; inc < MAX_PROD_RUN; inc++)
 					{
-						if (asProductionRun[psFactory->psAssemblyPoint->factoryType][
-							psFactory->psAssemblyPoint->factoryInc][inc].psTemplate == psTemplate)
+						PRODUCTION_RUN *productionRun = &asProductionRun[psFactory->psAssemblyPoint->factoryType][psFactory->psAssemblyPoint->factoryInc][inc];
+						if (productionRun->psTemplate == psTemplate)
 						{
-							//if this is the template currently being worked on
-							if (psTemplate == (DROID_TEMPLATE *)psFactory->psSubject)
-							{
-								//set the quantity to 1 and then use factoryProdAdjust to subtract it
-								asProductionRun[psFactory->psAssemblyPoint->factoryType][
-	    							psFactory->psAssemblyPoint->factoryInc][inc].quantity = 1;
-								factoryProdAdjust(psStruct, psTemplate, false);
-								//init the factory production
-								psFactory->psSubject = NULL;
-								//check to see if anything left to produce
-								psNextTemplate = factoryProdUpdate(psStruct, NULL);
-								//power is returned by factoryProdAdjust()
-								if (psNextTemplate)
-								{
-									structSetManufacture(psStruct, psNextTemplate,psFactory->quantity);
-								}
-								else
-								{
-									//nothing more to manufacture - reset the Subject and Tab on HCI Form
-									intManufactureFinished(psStruct);
-									//power is returned by factoryProdAdjust()
-								}
-							}
-							else
-							{
-								//just need to initialise this production run
-								asProductionRun[psFactory->psAssemblyPoint->factoryType][
-	    							psFactory->psAssemblyPoint->factoryInc][inc].psTemplate = NULL;
-								asProductionRun[psFactory->psAssemblyPoint->factoryType][
-	    							psFactory->psAssemblyPoint->factoryInc][inc].quantity = 0;
-								asProductionRun[psFactory->psAssemblyPoint->factoryType][
-	    							psFactory->psAssemblyPoint->factoryInc][inc].built = 0;
-							}
+							//just need to initialise this production run
+							productionRun->psTemplate = NULL;
+							productionRun->quantity = 0;
+							productionRun->built = 0;
 						}
 					}
 				}
-				else
+
+				// check not being built in the factory for the template player
+				if (psTemplate->multiPlayerID == ((DROID_TEMPLATE *)psFactory->psSubject)->multiPlayerID)
 				{
-					//not the production player, so check not being built in the factory for the template player
-					if (psFactory->psSubject == (BASE_STATS *)psTemplate)
+					if (really)
 					{
-						//clear the factories subject and quantity
+						syncDebugStructure(psStruct, '<');
+						syncDebug("Clearing production");
+
+						// Clear the factory's subject.
 						psFactory->psSubject = NULL;
-						psFactory->quantity = 0;
 						//return any accrued power
 						if (psFactory->powerAccrued)
 						{
 							addPower(psStruct->player, psFactory->powerAccrued);
 						}
+
+						if (player == productionPlayer)
+						{
+							//check to see if anything left to produce
+							DROID_TEMPLATE *psNextTemplate = factoryProdUpdate(psStruct, NULL);
+							//power is returned by factoryProdAdjust()
+							if (psNextTemplate)
+							{
+								structSetManufacture(psStruct, psNextTemplate);
+							}
+							else
+							{
+								//nothing more to manufacture - reset the Subject and Tab on HCI Form
+								intManufactureFinished(psStruct);
+								//power is returned by factoryProdAdjust()
+							}
+						}
+
 						//tell the interface
 						intManufactureFinished(psStruct);
+
+						syncDebugStructure(psStruct, '>');
+					}
+					else
+					{
+						DROID_TEMPLATE *template = (DROID_TEMPLATE *)malloc(sizeof(DROID_TEMPLATE));
+						debug(LOG_ERROR, "TODO: Fix this memory leak when deleting templates.");
+
+						*template = *(DROID_TEMPLATE *)psFactory->psSubject;
+						template->pName = NULL;
+						template->psNext = NULL;
+
+						psFactory->psSubject = (BASE_STATS *)template;
 					}
 				}
 			}
 		}
 	}
+}
+
+void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player)
+{
+	maybeDeleteTemplateFromProduction(psTemplate, player, false);
+}
+
+void reallyDeleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player)
+{
+	maybeDeleteTemplateFromProduction(psTemplate, player, true);
 }
 
 
@@ -4692,14 +4735,13 @@ BOOL cyborgDroid(const DROID* psDroid)
 BOOL droidOnMap(const DROID *psDroid)
 {
 	if (psDroid->died == NOT_CURRENT_LIST || psDroid->droidType == DROID_TRANSPORTER
-		|| psDroid->sMove.fx == INVALID_XY || psDroid->pos.x == INVALID_XY || missionIsOffworld()
+		|| psDroid->pos.x == INVALID_XY || psDroid->pos.y == INVALID_XY || missionIsOffworld()
 		|| mapHeight == 0)
 	{
 		// Off world or on a transport or is a transport or in mission list, or on a mission, or no map - ignore
 		return true;
 	}
-	return (worldOnMap(psDroid->sMove.fx, psDroid->sMove.fy)
-			&& worldOnMap(psDroid->pos.x, psDroid->pos.y));
+	return worldOnMap(psDroid->pos.x, psDroid->pos.y);
 }
 
 /** Teleport a droid to a new position on the map */

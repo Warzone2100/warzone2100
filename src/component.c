@@ -149,28 +149,14 @@ UDWORD getResearchRadius(BASE_STATS *Stat)
 
 UDWORD getStructureSize(STRUCTURE *psStructure)
 {
-	UDWORD size;
 	//radius based on base plate size
-
-	size = psStructure->pStructureType->baseWidth;
-	if (psStructure->pStructureType->baseBreadth > size)
-	{
-		size = psStructure->pStructureType->baseBreadth;
-	}
-	return (size);
+	return MAX(psStructure->pStructureType->baseWidth, psStructure->pStructureType->baseBreadth);
 }
 
 UDWORD getStructureStatSize(STRUCTURE_STATS *Stats)
 {
-	UDWORD size;
 	//radius based on base plate size
-
-	size = Stats->baseWidth;
-	if (Stats->baseBreadth > size)
-	{
-		size = Stats->baseBreadth;
-	}
-	return (size);
+	return MAX(Stats->baseWidth, Stats->baseBreadth);
 }
 
 static UDWORD getStructureHeight(STRUCTURE *psStructure)
@@ -192,7 +178,7 @@ UDWORD getStructureStatHeight(STRUCTURE_STATS *psStat)
 void displayIMDButton(iIMDShape *IMDShape, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale)
 {
 	setMatrix(Position, Rotation, RotXYZ);
-	pie_MatScale(scale);
+	pie_MatScale(scale / 100.f);
 
 	pie_SetFogStatus(false);
 	pie_Draw3DShape(IMDShape, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, WZCOL_BLACK, pie_BUTTON, 0);
@@ -219,7 +205,7 @@ void displayStructureButton(STRUCTURE *psStructure, Vector3i *rotation, Vector3i
 	}
 
 	setMatrix(Position, rotation, RotXYZ);
-	pie_MatScale(scale);
+	pie_MatScale(scale / 100.f);
 
 	/* Draw the building's base first */
 	baseImd = psStructure->pStructureType->pBaseIMD;
@@ -277,21 +263,21 @@ void displayStructureButton(STRUCTURE *psStructure, Vector3i *rotation, Vector3i
 			{
 				Rotation rot = structureGetInterpolatedWeaponRotation(psStructure, i, graphicsTime);
 
-				iV_MatrixBegin();
-				iV_TRANSLATE(strImd->connectors[i].x,strImd->connectors[i].z,strImd->connectors[i].y);
+				pie_MatBegin();
+				pie_TRANSLATE(strImd->connectors[i].x,strImd->connectors[i].z,strImd->connectors[i].y);
 				pie_MatRotY(-rot.direction);
 				if (mountImd[i] != NULL)
 				{
 					pie_Draw3DShape(mountImd[i], 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, WZCOL_BLACK, pie_BUTTON, 0);
 					if(mountImd[i]->nconnectors)
 					{
-						iV_TRANSLATE(mountImd[i]->connectors->x,mountImd[i]->connectors->z,mountImd[i]->connectors->y);
+						pie_TRANSLATE(mountImd[i]->connectors->x,mountImd[i]->connectors->z,mountImd[i]->connectors->y);
 					}
 				}
-				iV_MatrixRotateX(rot.pitch);
+				pie_MatRotX(rot.pitch);
 				pie_Draw3DShape(weaponImd[i], 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, WZCOL_BLACK, pie_BUTTON, 0);
 				//we have a droid weapon so do we draw a muzzle flash
-				iV_MatrixEnd();
+				pie_MatEnd();
 			}
 		}
 	}
@@ -315,7 +301,7 @@ void displayStructureStatButton(STRUCTURE_STATS *Stats, Vector3i *Rotation, Vect
 	}
 
 	setMatrix(Position, Rotation, RotXYZ);
-	pie_MatScale(scale);
+	pie_MatScale(scale / 100.f);
 
 	/* Draw the building's base first */
 	baseImd = Stats->pBaseIMD;
@@ -381,21 +367,19 @@ void displayStructureStatButton(STRUCTURE_STATS *Stats, Vector3i *Rotation, Vect
 		{
 			for (i = 0; i < MAX(1, Stats->numWeaps); i++)
 			{
-				iV_MatrixBegin();
-				iV_TRANSLATE(strImd->connectors[i].x,strImd->connectors[i].z,strImd->connectors[i].y);
-				pie_MatRotY(DEG(0));
+				pie_MatBegin();
+				pie_TRANSLATE(strImd->connectors[i].x,strImd->connectors[i].z,strImd->connectors[i].y);
 				if (mountImd[i] != NULL)
 				{
 					pie_Draw3DShape(mountImd[i], 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, WZCOL_BLACK, pie_BUTTON, 0);
 					if(mountImd[i]->nconnectors)
 					{
-						iV_TRANSLATE(mountImd[i]->connectors->x,mountImd[i]->connectors->z,mountImd[i]->connectors->y);
+						pie_TRANSLATE(mountImd[i]->connectors->x,mountImd[i]->connectors->z,mountImd[i]->connectors->y);
 					}
 				}
-				iV_MatrixRotateX(DEG(0));
 				pie_Draw3DShape(weaponImd[i], 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, WZCOL_BLACK, pie_BUTTON, 0);
 				//we have a droid weapon so do we draw a muzzle flash
-				iV_MatrixEnd();
+				pie_MatEnd();
 			}
 		}
 	}
@@ -415,7 +399,7 @@ void displayComponentButton(BASE_STATS *Stat, Vector3i *Rotation, Vector3i *Posi
 	SDWORD compID;
 
 	setMatrix(Position, Rotation, RotXYZ);
-	pie_MatScale(scale);
+	pie_MatScale(scale / 100.f);
 
 	compID = StatIsComponent(Stat);
 	if (compID > 0)	{
@@ -464,7 +448,7 @@ void displayResearchButton(BASE_STATS *Stat, Vector3i *Rotation, Vector3i *Posit
 	if(ResearchIMD)
 	{
 		setMatrix(Position, Rotation, RotXYZ);
-		pie_MatScale(scale);
+		pie_MatScale(scale / 100.f);
 
 		if(MountIMD) {
 			pie_Draw3DShape(MountIMD, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, WZCOL_BLACK, pie_BUTTON, 0);
@@ -612,7 +596,7 @@ static void displayCompObj(DROID *psDroid, BOOL bButton)
 			if ( psDroid->psCurAnim == NULL  || psDroid->psCurAnim->bVisible == false )
 			{
 				// FIXME - hideous....!!!!
-				pie_MatScale(75);
+				pie_MatScale(.75f);
 				pie_Draw3DShape(psShapeTemp, 0, psDroid->player-6, brightness, specular, pieFlag, iPieData);
 			}
 		}
@@ -736,7 +720,7 @@ static void displayCompObj(DROID *psDroid, BOOL bButton)
 							/* vtol weapons inverted */
 							if ( iConnector >= VTOL_CONNECTOR_START )
 							{
-								pie_MatRotZ( DEG_360/2 );//this might affect gun rotation
+								pie_MatRotZ(65536/2);  //this might affect gun rotation
 							}
 
 							/* Get the mount graphic */
@@ -872,7 +856,7 @@ static void displayCompObj(DROID *psDroid, BOOL bButton)
 				/* vtol weapons inverted */
 				if ( iConnector >= VTOL_CONNECTOR_START )
 				{
-					pie_MatRotZ( DEG_360/2 );//this might affect gun rotation
+					pie_MatRotZ(65536/2);  //this might affect gun rotation
 				}
 
 				pie_TRANSLATE( psShapeTemp->connectors[0].x,
@@ -920,15 +904,15 @@ static void displayCompObj(DROID *psDroid, BOOL bButton)
 						//rotate Y
 						pie_MatRotY(rot.direction);
 
-						iV_MatrixRotateY(-player.r.y);
-						iV_MatrixRotateX(-player.r.x);
+						pie_MatRotY(-player.r.y);
+						pie_MatRotX(-player.r.x);
 							/* Dither on software */
 
 						pie_Draw3DShape(psShape, getModularScaledGraphicsTime(100, psShape->numFrames), 0, brightness, WZCOL_BLACK, pie_ADDITIVE, 140);
 							/* Dither off software */
 
-						iV_MatrixRotateX(player.r.x);
-						iV_MatrixRotateY(player.r.y);
+						pie_MatRotX(player.r.x);
+						pie_MatRotY(player.r.y);
 					}
 				}
 				/* Pop Matrix */
@@ -978,7 +962,7 @@ void displayComponentButtonTemplate(DROID_TEMPLATE *psTemplate, Vector3i *Rotati
 	memset( &Droid, 0, sizeof(DROID) );
 
 	setMatrix(Position, Rotation, RotXYZ);
-	pie_MatScale(scale);
+	pie_MatScale(scale / 100.f);
 
 // Decide how to sort it.
 
@@ -1013,7 +997,7 @@ void displayComponentButtonObject(DROID *psDroid, Vector3i *Rotation, Vector3i *
 	SDWORD		difference;
 
 	setMatrix(Position, Rotation, RotXYZ);
-	pie_MatScale(scale);
+	pie_MatScale(scale / 100.f);
 
 // Decide how to sort it.
 	difference = Rotation->y%360;

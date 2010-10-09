@@ -207,7 +207,7 @@ BarbarianRKBuggy			_("Rocket Buggy")
 BabaRKJeep				_("Rocket Jeep")
 BabaFireTruck				_("Fire Truck")
 BabaPickUp				_("Pick-Up Truck")
-BabaFireCan				_("Fire Cannon")
+BabaFireCan				_("Cannon Fire Truck")
 BabaBusCan				_("School Bus")
 BaBaCivilian				_("Civilian")
 
@@ -415,7 +415,7 @@ Emplacement-RotHow			_("Hellstorm Emplacement")
 //PlasmaEmplacement			"*Plasma Weapon*"
 
 AASite-TwinBof				_("Tornado AA Site")
-AASite-QuadBof				_("Cyclone AA Site")
+AASite-QuadBof				_("AA Flak Cannon Emplacement")
 AASite-QuadMg1				_("Hurricane AA Site")
 AASite-QuadRotMg			_("Whirlwind AA Site")
 
@@ -550,7 +550,8 @@ TUTMG						_("Machinegun")
 CommandTurret1				_("Command Turret")
 
 AAGun1Mk1					_("Tornado Flak Turret")
-AAGun2Mk1					_("Cyclone Flak Turret")
+AAGun2Mk1					_("AA Flak Cannon")
+AAGun2Mk1-VTOL				_("VTOL Flak Cannon")
 
 //Supergun					"*Supergun*"
 PlasmaHeavy					"*Heavy Plasma Launcher*"
@@ -684,11 +685,11 @@ R-Cyborg-Wpn-BB				_("Bunker Blaster Cyborg")
 R-Cyborg-Wpn-Cannon			_("Heavy Gunner Cyborg")
 R-Cyborg-Wpn-Flamer			_("Flamer Cyborg")
 R-Cyborg-Wpn-MG				_("Machinegunner Cyborg")
-R-Cyborg-Wpn-Rocket			_("Lancer Cyborg")
-R-Cyborg-Wpn-RotMG-Grd			_("Assault Gunner Cyborg")
-R-Cyborg-Wpn-Rail1-Grd			_("Needle Gunner Cyborg")
-R-Cyborg-Wpn-ATMiss-Grd			_("Scourge Cyborg")
-R-Cyborg-Wpn-Laser1-Grd			_("Flashlight Gunner Cyborg")
+R-Cyborg-Wpn-Rocket			"*NOT USED Lancer Cyborg*"
+R-Cyborg-Wpn-RotMG-Grd			"*NOT USED Assault Gunner Cyborg*"
+R-Cyborg-Wpn-Rail1-Grd			"*NOT USED Needle Gunner Cyborg*"
+R-Cyborg-Wpn-ATMiss-Grd			"*NOT USED Scourge Cyborg*"
+R-Cyborg-Wpn-Laser1-Grd			"*NOT USED Flashlight Gunner Cyborg*"
 
 R-Cyborg-Wpn-BB-Jump			_("Jump Bunker Blaster")
 R-Cyborg-Wpn-Cannon-Jump		_("Jump Heavy Gunner")
@@ -721,9 +722,9 @@ R-Defense-WallUpgrade10			_("Plasteel")
 R-Defense-WallUpgrade11			_("Plasteel Mk2")
 R-Defense-WallUpgrade12			_("Plasteel Mk3")
 
-R-Defense-HardcreteGate			_("Gate")
+R-Defense-HardcreteGate			_("Hardcrete Gate")
 
-R-Defense-AASite-QuadBof		_("Cyclone AA Site")
+R-Defense-AASite-QuadBof		_("AA Flak Cannon Emplacement")
 R-Defense-AASite-QuadMg1		_("Hurricane AA Site")
 R-Defense-AASite-QuadRotMg		_("Whirlwind AA Site")
 R-Defense-AASite-TwinBof		_("Tornado AA Flak Site")
@@ -755,7 +756,7 @@ R-DefenssLas				_("Flashlight Emplacement")
 
 R-Defense-Rail2				_("Rail Gun Emplacement")
 R-Defense-Rail3				_("Gauss Cannon Emplacement")
-R-Defense-RotCannon			_("Assault Cannon Emplacement")
+R-Defense-RotCannon			"*NOT USED Assault Cannon Emplacement*"
 R-Defense-RotHow				_("Hellstorm Emplacement")
 R-Defense-RotMG				_("Rotary MG Bunker")
 R-Defense-RotMor				_("Pepperpot Pit")
@@ -784,7 +785,7 @@ R-Defense-WallTower06			_("Lancer Hardpoint")
 R-Defense-Wall-RotMg			_("Assault Gun Hardpoint")
 R-Defense-Wall-VulcanCan		_("Assault Cannon Hardpoint")
 R-Defense-WallTower-A-Tmiss		_("Scourge Missile Hardpoint")
-R-Defense-WallTower-HvyFlamer		_("Inferno Hardpoint")
+R-Defense-WallTower-HvyFlamer		"*NOT USED Inferno Hardpoint*"
 R-Defense-WallTower-HvyA-Trocket	_("Tank Killer Hardpoint")
 R-Defense-WallTower-HPVcannon		_("Hyper Velocity Cannon Hardpoint")
 R-Defense-WallTower-PulseLas		_("Pulse Laser Hardpoint")
@@ -794,25 +795,25 @@ R-Defense-WallTower-Rail3		_("Gauss Cannon Hardpoint")
 R-Struc-CommandRelay			_("Command Relay Post")
 
 R-Struc-Factory-Cyborg			_("Cyborg Factory")
-R-Struc-Factory-Cyborg-Upgrade01	_("Automated Cyborg Production")
-R-Struc-Factory-Cyborg-Upgrade02	_("Automated Cyborg Production Mk2")
-R-Struc-Factory-Cyborg-Upgrade03	_("Automated Cyborg Production Mk3")
-R-Struc-Factory-Cyborg-Upgrade04	_("Robotic Cyborg Production")
-R-Struc-Factory-Cyborg-Upgrade05	_("Robotic Cyborg Production Mk2")
-R-Struc-Factory-Cyborg-Upgrade06	_("Robotic Cyborg Production Mk3")
-R-Struc-Factory-Cyborg-Upgrade07	_("Advanced Cyborg Production")
-R-Struc-Factory-Cyborg-Upgrade08	_("Advanced Cyborg Production Mk2")
-R-Struc-Factory-Cyborg-Upgrade09	_("Advanced Cyborg Production Mk3")
-//R-Struc-Factory-Cyborg-Upgrade10	_("Self-Replicating Cyborg Production")
+R-Struc-Factory-Cyborg-Upgrade01	"*NOT USED Automated Cyborg Production*"
+R-Struc-Factory-Cyborg-Upgrade02	"*NOT USED Automated Cyborg Production Mk2*"
+R-Struc-Factory-Cyborg-Upgrade03	"*NOT USED Automated Cyborg Production Mk3*"
+R-Struc-Factory-Cyborg-Upgrade04	"*NOT USED Robotic Cyborg Production*"
+R-Struc-Factory-Cyborg-Upgrade05	"*NOT USED Robotic Cyborg Production Mk2*"
+R-Struc-Factory-Cyborg-Upgrade06	"*NOT USED Robotic Cyborg Production Mk3*"
+R-Struc-Factory-Cyborg-Upgrade07	"*NOT USED Advanced Cyborg Production*"
+R-Struc-Factory-Cyborg-Upgrade08	"*NOT USED Advanced Cyborg Production Mk2*"
+R-Struc-Factory-Cyborg-Upgrade09	"*NOT USED Advanced Cyborg Production Mk3*"
+//R-Struc-Factory-Cyborg-Upgrade10	"*NOT USED Self-Replicating Cyborg Production*"
 R-Struc-Factory-Module			_("Factory Module")
 R-Struc-Factory-Upgrade01		_("Automated Manufacturing")
-R-Struc-Factory-Upgrade02		_("Automated Manufacturing Mk2")
-R-Struc-Factory-Upgrade03		_("Automated Manufacturing Mk3")
+R-Struc-Factory-Upgrade02		"*NOT USED Automated Manufacturing Mk2*"
+R-Struc-Factory-Upgrade03		"*NOT USED Automated Manufacturing Mk3*"
 R-Struc-Factory-Upgrade04		_("Robotic Manufacturing")
-R-Struc-Factory-Upgrade05		_("Robotic Manufacturing Mk2")
-R-Struc-Factory-Upgrade06		_("Robotic Manufacturing Mk3")
+R-Struc-Factory-Upgrade05		"*NOT USED Robotic Manufacturing Mk2*"
+R-Struc-Factory-Upgrade06		"*NOT USED Robotic Manufacturing Mk3*"
 R-Struc-Factory-Upgrade07		_("Advanced Manufacturing")
-R-Struc-Factory-Upgrade08		_("Advanced Manufacturing Mk2")
+R-Struc-Factory-Upgrade08		"*NOT USED Advanced Manufacturing Mk2*"
 R-Struc-Factory-Upgrade09		_("Self-Replicating Manufacturing")
 R-Struc-Factory-Upgrade10		_("Advanced Manufacturing Mk3")
 	
@@ -833,10 +834,10 @@ R-Struc-Power-Upgrade02			_("Vapor Turbine Generator")
 
 R-Struc-RepairFacility			_("Repair Facility")
 R-Struc-RprFac-Upgrade01		_("Automated Repair Facility")
-R-Struc-RprFac-Upgrade02		_("Automated Repair Facility Mk2")
-R-Struc-RprFac-Upgrade03		_("Automated Repair Facility Mk3")
+R-Struc-RprFac-Upgrade02		"*NOT USED Automated Repair Facility Mk2*"
+R-Struc-RprFac-Upgrade03		"*NOT USED Automated Repair Facility Mk3*"
 R-Struc-RprFac-Upgrade04		_("Robotic Repair Facility")
-R-Struc-RprFac-Upgrade05		_("Robotic Repair Facility Mk2")
+R-Struc-RprFac-Upgrade05		"*NOT USED Robotic Repair Facility Mk2*"
 R-Struc-RprFac-Upgrade06		_("Advanced Repair Facility")
 R-Struc-RprFac-Upgrade07		_("Robotic Repair Facility Mk3")
 R-Struc-RprFac-Upgrade08		_("Advanced Repair Facility Mk2")
@@ -862,12 +863,12 @@ R-Struc-VTOLPad-Upgrade05		_("Robotic VTOL Rearming Mk2")
 R-Struc-VTOLPad-Upgrade06		_("Robotic VTOL Rearming Mk3")
 R-Struc-VTOLPad-Upgrade07		_("Robotic VTOL Rearming Mk4")
 R-Struc-VTOLFactory			_("VTOL Factory")
-R-Struc-VTOLFactory-Upgrade01		_("Robotic VTOL Production")
-R-Struc-VTOLFactory-Upgrade02		_("Robotic VTOL Production Mk2")
-R-Struc-VTOLFactory-Upgrade03		_("Robotic VTOL Production Mk3")
-R-Struc-VTOLFactory-Upgrade04		_("Advanced VTOL Production")
-R-Struc-VTOLFactory-Upgrade05		_("Advanced VTOL Production Mk2")
-R-Struc-VTOLFactory-Upgrade06		_("Advanced VTOL Production Mk3")
+R-Struc-VTOLFactory-Upgrade01		"*NOT USED Robotic VTOL Production*"
+R-Struc-VTOLFactory-Upgrade02		"*NOT USED Robotic VTOL Production Mk2*"
+R-Struc-VTOLFactory-Upgrade03		"*NOT USED Robotic VTOL Production Mk3*"
+R-Struc-VTOLFactory-Upgrade04		"*NOT USED Advanced VTOL Production*"
+R-Struc-VTOLFactory-Upgrade05		"*NOT USED Advanced VTOL Production Mk2*"
+R-Struc-VTOLFactory-Upgrade06		"*NOT USED Advanced VTOL Production Mk3*"
 
 R-Sys-Autorepair-Cyborg			_("Cyborg Self-Repair")
 R-Sys-Autorepair-Cyborg-Upgrade01	_("Automated Cyborg Repair Mk2")
@@ -994,7 +995,7 @@ R-Vehicle-Prop-Wheels02			_("Wheeled Propulsion II")
 //R-Vehicle-Prop-Wheels03			_("Wheeled Propulsion III")
 
 R-Wpn-AAGun01				_("Tornado Flak Turret")
-R-Wpn-AAGun02				_("Cyclone Flak Turret")
+R-Wpn-AAGun02				_("AA Flak Cannon")
 R-Wpn-AAGun03				_("Hurricane AA Turret")
 R-Wpn-AAGun04				_("Whirlwind AA Turret")
 R-Wpn-AAGun-Accuracy01			_("AA Thermal Imaging Sensor")
@@ -1166,35 +1167,35 @@ R-Wpn-Rail-ROF01				_("Rail Gun ROF")
 R-Wpn-Rail-ROF02				_("Rail Gun ROF Mk2")
 R-Wpn-Rail-ROF03				_("Rail Gun ROF Mk3")
 
-R-Wpn-Rocket-Accuracy01			_("Stabilized Mini-Rockets")
-R-Wpn-Rocket-Accuracy02			_("Stabilized Mini-Rockets Mk2")
-R-Wpn-Rocket-Damage01			_("HE Mini-Rockets")
-R-Wpn-Rocket-Damage02			_("HE Mini-Rockets Mk2")
-R-Wpn-Rocket-Damage03			_("HE Mini-Rockets Mk3")
-R-Wpn-Rocket-Damage04			_("HEAP Mini-Rockets")
-R-Wpn-Rocket-Damage05			_("HEAP Mini-Rockets Mk2")
-R-Wpn-Rocket-Damage06			_("HEAP Mini-Rockets Mk3")
-R-Wpn-Rocket-Damage07			_("HESH Mini-Rockets")
-R-Wpn-Rocket-Damage08			_("HESH Mini-Rockets Mk2")
-R-Wpn-Rocket-Damage09			_("HESH Mini-Rockets Mk3")
-R-Wpn-Rocket-ROF01			_("Fast Fire Mini-Rockets")
-R-Wpn-Rocket-ROF02			_("Fast Fire Mini-Rockets Mk2")
-R-Wpn-Rocket-ROF03			_("Fast Fire Mini-Rockets Mk3")
+R-Wpn-Rocket-Accuracy01			_("Stabilized Rockets")
+R-Wpn-Rocket-Accuracy02			_("Improved Rocket Wire Guidance")
+R-Wpn-RocketSlow-Accuracy01		_("Rocket Laser Designator")
+R-Wpn-RocketSlow-Accuracy02		_("Thermal Imaging Rockets")
+R-Wpn-Rocket-Damage01			_("HE Rockets")
+R-Wpn-Rocket-Damage02			_("HE Rockets Mk2")
+R-Wpn-Rocket-Damage03			_("HE Rockets Mk3")
+R-Wpn-Rocket-Damage04			_("HEAT Rocket Warhead")
+R-Wpn-Rocket-Damage05			_("HEAT Rocket Warhead Mk2")
+R-Wpn-Rocket-Damage06			_("HEAT Rocket Warhead Mk3")
+R-Wpn-Rocket-Damage07			_("HESH Rocket Warhead")
+R-Wpn-Rocket-Damage08			_("HESH Rocket Warhead Mk2")
+R-Wpn-Rocket-Damage09			_("HESH Rocket Warhead Mk3")
+R-Wpn-Rocket-ROF01			_("Rocket Autoloader")
+R-Wpn-Rocket-ROF02			_("Rocket Autoloader Mk2")
+R-Wpn-Rocket-ROF03			_("Rocket Autoloader Mk3")
 R-Wpn-Rocket-ROF04			_("Rapid Fire Mini-Rockets")
 R-Wpn-Rocket-ROF05			_("Rapid Fire Mini-Rockets Mk2")
 R-Wpn-Rocket-ROF06			_("Rapid Fire Mini-Rockets Mk3")
-R-Wpn-RocketSlow-Accuracy01		_("Improved Rocket Wire Guidance")
-R-Wpn-RocketSlow-Accuracy02		_("Rocket Laser Designator")
-R-Wpn-RocketSlow-Accuracy03		_("Thermal Imaging Rockets")
-R-Wpn-RocketSlow-Damage01		_("HEAT Rocket Warhead") 
-R-Wpn-RocketSlow-Damage02		_("HEAT Rocket Warhead Mk2")
-R-Wpn-RocketSlow-Damage03		_("HEAT Rocket Warhead Mk3")
-R-Wpn-RocketSlow-Damage04		_("HESH Rocket Warhead")
-R-Wpn-RocketSlow-Damage05		_("HESH Rocket Warhead Mk2")
-R-Wpn-RocketSlow-Damage06		_("HESH Rocket Warhead Mk3")
-R-Wpn-RocketSlow-ROF01			_("Rocket Autoloader")
-R-Wpn-RocketSlow-ROF02			_("Rocket Autoloader Mk2")
-R-Wpn-RocketSlow-ROF03			_("Rocket Autoloader Mk3")
+R-Wpn-RocketSlow-Accuracy03		"*NOT USED*"
+R-Wpn-RocketSlow-Damage01		"*NOT USED*"
+R-Wpn-RocketSlow-Damage02		"*NOT USED*"
+R-Wpn-RocketSlow-Damage03		"*NOT USED*"
+R-Wpn-RocketSlow-Damage04		"*NOT USED*"
+R-Wpn-RocketSlow-Damage05		"*NOT USED*"
+R-Wpn-RocketSlow-Damage06		"*NOT USED*"
+R-Wpn-RocketSlow-ROF01			"*NOT USED*"
+R-Wpn-RocketSlow-ROF02			"*NOT USED*"
+R-Wpn-RocketSlow-ROF03			"*NOT USED*"
 
 R-Wpn-Rocket01-LtAT			_("Lancer AT Rocket")
 R-Wpn-Rocket02-MRL			_("Mini-Rocket Array")
@@ -1476,7 +1477,7 @@ Emplacement-Howitzer150	_("Ground Shaker Emplacement")
 P0cam3CobCONTrk		_("Truck")
 P0cam3PyHvyATTrk	_("Tank Killer Python Tracks")
 P0cam3PyHPVcanTrk	_("Hyper Velocity Cannon Python Tracks")
-P0cam3PyFlakHT		_("Cyclone AA Python Half-tracks")
+P0cam3PyFlakHT		_("AA Flak Cannon Python Half-tracks")
 P0cam3PyAsltGnTrk	_("Assault Gun Python Tracks")
 
 R-Sys-NEXUSrepair		"*R-Sys-NEXUSrepair*"
@@ -1488,7 +1489,7 @@ Laser3BEAM-VTOL				_("VTOL Flashlight")
 
 MG4ROTARY-Pillbox			"*MG4ROTARY-Pillbox*"
 Pillbox-RotMG				_("Rotary MG Bunker")
-R-Defense-Pillbox-RotMG			_("Rotary MG Bunker")
+R-Defense-Pillbox-RotMG			"*NOT USED Rotary MG Bunker*"
 
 NX-M-Bomb4-VTOL				"*NX-M-Bomb4-VTOL*"
 
@@ -1611,24 +1612,24 @@ SK-Retre-VTOL-Scourge			"*SK-Retre-VTOL-Scourge*"
 MP-Cyb-Needle-GRD				_("Needle Gunner")
 
 // New Cyborgs - Thermite and Grenadier
-R-Cyborg-Wpn-Thermite			_("Thermite Flamer Cyborg")
+R-Cyborg-Wpn-Thermite			"*NOT USED Thermite Flamer Cyborg*"
 Cyb-Wpn-Thermite				"*Cybrog Thermite Weapon*"
 Cyb-Bod-Thermite				"*Thermite Body*"
 Cyb-Thermite				_("Thermite Flamer")
 
-R-Cyborg-Wpn-Grenade			_("Grenadier Cyborg")
+R-Cyborg-Wpn-Grenade			"*NOT USED Grenadier Cyborg*"
 Cyb-Wpn-Grenade				"*Cyborg Grenade Weapon*"
 Cyb-Bod-Grenade				"*Grenadier Body*"
 Cyb-Gren					_("Grenadier")
 
 // New Cyborgs - added by Marc 8th June 1999 Combat Engineer & Mechanic
 
-R-Cyborg-Sys-ComEng			_("Combat Engineer")
+R-Cyborg-Sys-ComEng			"*NOT USED Combat Engineer*"
 CyborgSpade					"*Combat Engineer*"
 Cyb-Bod-ComEng				"*Combat Engineer*"
 Cyb-ComEng					_("Combat Engineer")
 
-R-Cyborg-Sys-Mechanic			_("Cyborg Mechanic")
+R-Cyborg-Sys-Mechanic			"*NOT USED Cyborg Mechanic*"
 CyborgRepair				"*Cyborg Mechanic*"
 Cyb-Bod-Mechanic				"*Cyborg Mechanic*"
 Cyb-Mechanic				_("Cyborg Mechanic")
@@ -1721,6 +1722,12 @@ Laser4-PlasmaCannon			_("Plasma Cannon")
 R-Defense-PlasmaCannon			_("Plasma Cannon Emplacement")
 Emplacement-PlasmaCannon		_("Plasma Cannon Emplacement")
 
+R-Wpn-Sunburst			_("Sunburst AA Rocket Array")
+Rocket-Sunburst			_("Sunburst AA")
+Rocket-VTOL-Sunburst		_("VTOL Sunburst AA")
+R-Defense-Sunburst			_("Sunburst AA Site")
+P0-AASite-Sunburst			_("Sunburst AA Site")
+
 R-Cyborg-Hvywpn-PulseLsr		_("Super Pulse Laser Cyborg")
 Cyb-Hvy-PulseLsr				_("Super Pulse Laser Cyborg")
 Cyb-Hvybod-PulseLsr			_("Super Pulse Laser Cyborg")
@@ -1788,8 +1795,8 @@ R-Defense-WallTower-SamHvy		_("Vindicator Hardpoint")
 WallTower-SamHvy				_("Vindicator Hardpoint")
 WallTower-QuadRotAAGun			_("Whirlwind Hardpoint")
 R-Defense-WallTower-QuadRotAA		_("Whirlwind Hardpoint")
-WallTower-DoubleAAGun			_("Cyclone Hardpoint")
-R-Defense-WallTower-DoubleAAgun	_("Cyclone Hardpoint")
+WallTower-DoubleAAGun			_("AA Flak Cannon Hardpoint")
+R-Defense-WallTower-DoubleAAgun	_("AA Flak Cannon Hardpoint")
 R-Defense-WallTower-SamSite		_("Avenger Hardpoint")
 WallTower-SamSite				_("Avenger Hardpoint")
 

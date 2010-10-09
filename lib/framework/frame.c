@@ -52,7 +52,8 @@ bool selfTest = false;
  *	Player globals
  */
 
-UDWORD		selectedPlayer = 0; 	/**< Current player */
+uint32_t selectedPlayer = 0;  /**< Current player */
+uint32_t realSelectedPlayer = 0;
 
 
 /************************************************************************************
@@ -276,10 +277,6 @@ void frameShutDown(void)
 	/* Free all cursors */
 	debug(LOG_NEVER, "Free the cursors!");
 	freeCursors();
-
-	/* shutdown the trig stuff */
-	debug(LOG_NEVER, "Down with trigonometry!");
-	trigShutDown();
 
 	// Shutdown the resource stuff
 	debug(LOG_NEVER, "No more resources!");

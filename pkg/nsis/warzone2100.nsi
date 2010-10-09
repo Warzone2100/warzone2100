@@ -37,10 +37,10 @@
   OutFile "${OUTFILE}"
 
   ;Default installation folder
-  InstallDir "$PROGRAMFILES\${PACKAGE_NAME}"
+  InstallDir "$PROGRAMFILES\${PACKAGE_NAME} Trunk"
 
   ;Get installation folder from registry if available
-  InstallDirRegKey HKLM "Software\${PACKAGE_NAME}" ""
+  InstallDirRegKey HKLM "Software\${PACKAGE_NAME} Trunk" ""
 
   ;Request application privileges for Windows Vista
   RequestExecutionLevel admin
@@ -257,20 +257,6 @@ Section $(TEXT_SecDyDoAIMod) SecDyDoAIMod
 
   !insertmacro MUI_STARTMENU_WRITE_BEGIN "Application"
     CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME} - DyDo-AI.lnk" "$INSTDIR\${PACKAGE}.exe" "--mod_mp dydo-ai.wz"
-  !insertmacro MUI_STARTMENU_WRITE_END
-
-SectionEnd
-
-Section $(TEXT_SecNTWMod) SecNTWMod
-
-  SetOutPath "$INSTDIR\mods\multiplay"
-
-  File "${TOP_BUILDDIR}\data\mods\multiplay\ntw.wz"
-
-  SetOutPath "$INSTDIR"
-
-  !insertmacro MUI_STARTMENU_WRITE_BEGIN "Application"
-    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME} - NTW.lnk" "$INSTDIR\${PACKAGE}.exe" "--mod_mp ntw.wz"
   !insertmacro MUI_STARTMENU_WRITE_END
 
 SectionEnd
@@ -533,9 +519,6 @@ FunctionEnd
   LangString TEXT_SecDyDoAIMod ${LANG_ENGLISH} "DyDo-AI"
   LangString DESC_SecDyDoAIMod ${LANG_ENGLISH} "DyDo-AI: New computer opponent"
 
-  LangString TEXT_SecNTWMod ${LANG_ENGLISH} "NTW"
-  LangString DESC_SecNTWMod ${LANG_ENGLISH} "NTW: New Team War mod. Modifies most of the weapons and research."
-
   LangString TEXT_SecOriginalMod ${LANG_ENGLISH} "1.10 balance"
   LangString DESC_SecOriginalMod ${LANG_ENGLISH} "Play the game as it was back in the 1.10 days."
 
@@ -569,9 +552,6 @@ FunctionEnd
   
   LangString TEXT_SecDyDoAIMod ${LANG_DUTCH} "DyDo-AI"
   LangString DESC_SecDyDoAIMod ${LANG_DUTCH} "DyDo-AI: Nieuwe computertegenstander"  
-
-  LangString TEXT_SecNTWMod ${LANG_DUTCH} "NTW"
-  LangString DESC_SecNTWMod ${LANG_DUTCH} "NTW: New Team War mod. Wijzigd de meeste wapens en onderzoeken."
 
   LangString TEXT_SecOriginalMod ${LANG_DUTCH} "1.10 balance"
   LangString DESC_SecOriginalMod ${LANG_DUTCH} "Speel het spel met de originele 1.10 versie balans stats."
@@ -607,9 +587,6 @@ FunctionEnd
   LangString TEXT_SecDyDoAIMod ${LANG_GERMAN} "DyDo-AI"
   LangString DESC_SecDyDoAIMod ${LANG_GERMAN} "DyDo-AI: Neuer Computergegner"  
 
-  LangString TEXT_SecNTWMod ${LANG_GERMAN} "NTW"
-  LangString DESC_SecNTWMod ${LANG_GERMAN} "NTW: New Team War mod. Verдndert die meisten Forschungen und Waffen."
-
   LangString TEXT_SecOriginalMod ${LANG_GERMAN} "1.10 balance"
   LangString DESC_SecOriginalMod ${LANG_GERMAN} "Spielen Sie das Spiel mit dem Balancing aus der Originalversion 1.10."
 
@@ -644,9 +621,6 @@ FunctionEnd
   LangString TEXT_SecDyDoAIMod ${LANG_RUSSIAN} "DyDo-AI"
   LangString DESC_SecDyDoAIMod ${LANG_RUSSIAN} "DyDo-AI: Новый компьютерный противник."  
 
-  LangString TEXT_SecNTWMod ${LANG_RUSSIAN} "NTW"
-  LangString DESC_SecNTWMod ${LANG_RUSSIAN} "Модификация New Team War. Изменяет большую часть оружия и исследований."
-
   LangString TEXT_SecOriginalMod ${LANG_RUSSIAN} "Баланс 1.10"
   LangString DESC_SecOriginalMod ${LANG_RUSSIAN} "Играть в игру с балансом от оригинальной версии 1.10."
 
@@ -658,7 +632,6 @@ FunctionEnd
 
     !insertmacro MUI_DESCRIPTION_TEXT ${SecMods} $(DESC_SecMods)
     !insertmacro MUI_DESCRIPTION_TEXT ${SecDyDoAIMod} $(DESC_SecDyDoAIMod)
-    !insertmacro MUI_DESCRIPTION_TEXT ${SecNTWMod} $(DESC_SecNTWMod)
     !insertmacro MUI_DESCRIPTION_TEXT ${SecOriginalMod} $(DESC_SecOriginalMod)
 	
     !insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs} $(DESC_SecFMVs)
@@ -724,7 +697,6 @@ Section "Uninstall"
   Delete "$INSTDIR\mods\music\music_1.0.wz"
 
   Delete "$INSTDIR\mods\multiplay\dydo-ai.wz"
-  Delete "$INSTDIR\mods\multiplay\ntw.wz"
   Delete "$INSTDIR\mods\multiplay\old-1.10-balance.wz"
 
   RMDir "$INSTDIR\mods\multiplay"
@@ -859,7 +831,6 @@ Section "Uninstall"
 
   Delete "$SMPROGRAMS\$MUI_TEMP\Uninstall.lnk"
   Delete "$SMPROGRAMS\$MUI_TEMP\${PACKAGE_NAME}.lnk"
-  Delete "$SMPROGRAMS\$MUI_TEMP\${PACKAGE_NAME} - NTW.lnk"
   Delete "$SMPROGRAMS\$MUI_TEMP\${PACKAGE_NAME} - Old 1.10 Balance.lnk"
   Delete "$SMPROGRAMS\$MUI_TEMP\${PACKAGE_NAME} - DyDo-AI.lnk"
 

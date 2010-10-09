@@ -48,8 +48,6 @@ typedef struct _iSurface {
 	int32_t flags;
 	int xcentre;
 	int ycentre;
-	int xpshift;
-	int ypshift;
 	iClip clip;
 
 	UBYTE *buffer;

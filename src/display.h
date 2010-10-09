@@ -63,6 +63,9 @@ extern BOOL	getInvertMouseStatus( void );
 extern	void	setRightClickOrders( BOOL val );
 extern BOOL	getRightClickOrders( void );
 
+extern	void	setMiddleClickRotate( BOOL val );
+extern BOOL	getMiddleClickRotate( void );
+
 extern	void	setDrawShadows( BOOL val );
 extern BOOL	getDrawShadows( void );
 

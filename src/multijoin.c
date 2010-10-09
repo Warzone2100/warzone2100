@@ -24,6 +24,9 @@
  *
  * Stuff to handle the comings and goings of players.
  */
+
+#include <physfs.h>
+
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
 #include "lib/framework/math_ext.h"
@@ -64,13 +67,6 @@
 #include "multistat.h"
 #include "multigifts.h"
 #include "scriptcb.h"
-
-// For htonl().
-#ifndef WZ_OS_WIN
-#include <arpa/inet.h>
-#else
-#include <Winsock2.h>
-#endif
 
 // ////////////////////////////////////////////////////////////////////////////
 // External Variables
@@ -126,7 +122,7 @@ void clearPlayer(UDWORD player,BOOL quietly)
 	UDWORD			i;
 	STRUCTURE		*psStruct,*psNext;
 
-	debug(LOG_INFO, "R.I.P. %s (%u). quietly is %s", getPlayerName(player), player, quietly ? "true":"false");
+	debug(LOG_NET, "R.I.P. %s (%u). quietly is %s", getPlayerName(player), player, quietly ? "true":"false");
 
 	ingame.JoiningInProgress[player] = false;	// if they never joined, reset the flag
 	ingame.DataIntegrity[player] = false;
@@ -215,7 +211,7 @@ BOOL MultiPlayerLeave(UDWORD playerIndex)
 	}
 
 	NETlogEntry("Player leaving game", SYNC_FLAG, playerIndex);
-	debug(LOG_INFO,"** Player %u [%s], has left the game.", playerIndex, getPlayerName(playerIndex));
+	debug(LOG_NET,"** Player %u [%s], has left the game at game time %u.", playerIndex, getPlayerName(playerIndex), gameTime);
 
 	ssprintf(buf, _("%s has Left the Game"), getPlayerName(playerIndex));
 
@@ -237,6 +233,7 @@ BOOL MultiPlayerLeave(UDWORD playerIndex)
 		NetPlay.players[playerIndex].wzFile.isSending = false;
 		NetPlay.players[playerIndex].needFile = false;
 	}
+	NetPlay.players[playerIndex].kick = true;  // Don't wait for GAME_GAME_TIME messages from them.
 
 	if (widgGetFromID(psWScreen, IDRET_FORM))
 	{
@@ -308,7 +305,7 @@ bool sendDataCheck(void)
 	int i = 0;
 	uint32_t	player = selectedPlayer;
 
-	NETbeginEncode(NET_DATA_CHECK, NET_HOST_ONLY);		// only need to send to HOST
+	NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_DATA_CHECK);		// only need to send to HOST
 	for(i = 0; i < DATA_MAXDATA; i++)
 	{
 		NETuint32_t(&DataHash[i]);
@@ -319,13 +316,13 @@ bool sendDataCheck(void)
 	return true;
 }
 
-bool recvDataCheck(void)
+bool recvDataCheck(NETQUEUE queue)
 {
 	int i = 0;
 	uint32_t	player;
 	uint32_t tempBuffer[DATA_MAXDATA] = {0};
 
-	NETbeginDecode(NET_DATA_CHECK);
+	NETbeginDecode(queue, NET_DATA_CHECK);
 	for(i = 0; i < DATA_MAXDATA; i++)
 	{
 		NETuint32_t(&tempBuffer[i]);
@@ -357,8 +354,8 @@ bool recvDataCheck(void)
 			addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
 
 			kickPlayer(player, "your data doesn't match the host's!", ERROR_WRONGDATA);
-			debug(LOG_WARNING, "%s (%u) has an incompatible mod. ([%d] got %x, expected %x)", getPlayerName(player), player, i, htonl(tempBuffer[i]), htonl(DataHash[i]));
-			debug(LOG_POPUP, "%s (%u), has an incompatible mod. ([%d] got %x, expected %x)", getPlayerName(player), player, i, htonl(tempBuffer[i]), htonl(DataHash[i]));
+			debug(LOG_WARNING, "%s (%u) has an incompatible mod. ([%d] got %x, expected %x)", getPlayerName(player), player, i, PHYSFS_swapUBE32(tempBuffer[i]), PHYSFS_swapUBE32(DataHash[i]));
+			debug(LOG_POPUP, "%s (%u), has an incompatible mod. ([%d] got %x, expected %x)", getPlayerName(player), player, i, PHYSFS_swapUBE32(tempBuffer[i]), PHYSFS_swapUBE32(DataHash[i]));
 
 			return false;
 		}

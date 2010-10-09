@@ -3,9 +3,11 @@
 
 %.lex.c:: %.l
 	$(LEX) $(LFLAGS) $(AM_LFLAGS) -o$@ $<
+#	sed -i 's/\(fwrite(.*)\)/abs(\1)/' $@
 
 AM_CPPFLAGS = -DYY_NO_INPUT $(WZ_CPPFLAGS) $(QT4_CFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS)
+AM_CXXFLAGS = $(WZ_CXXFLAGS)
 AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
 
@@ -44,6 +46,7 @@ noinst_HEADERS = \
 	strres_parser.tab.h \
 	resource_parser.tab.h \
 	configfile.h \
+	crc.h \
 	cursors.h \
 	debug.h \
 	file.h \
@@ -74,6 +77,7 @@ noinst_HEADERS = \
 	gettext.h \
 	macros.h \
 	SDL_framerate.h \
+	wzapp_c.h \
 	wzglobal.h
 
 libframework_a_SOURCES = \
@@ -84,6 +88,7 @@ libframework_a_SOURCES = \
 	strres_lexer.lex.c \
 	strres_parser.tab.c \
 	configfile.c \
+	crc.cpp \
 	cursors16.c \
 	cursors32.c \
 	cursors.c \

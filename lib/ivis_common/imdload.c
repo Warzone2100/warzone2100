@@ -33,7 +33,6 @@
 #include "ivisdef.h" // for imd structures
 #include "imd.h" // for imd structures
 #include "rendmode.h"
-#include "ivispatch.h"
 #include "tex.h" // texture page loading
 
 static BOOL AtEndOfFile(const char *CurPos, const char *EndOfFile)

@@ -321,10 +321,21 @@ static void proj_UpdateKills(PROJECTILE *psObj, float experienceInc)
 
 /***************************************************************************/
 
+void _syncDebugProjectile(const char *function, PROJECTILE *psProj, char ch)
+{
+	_syncDebug(function, "%c projectile = p%d;pos(%d,%d,%d),rot(%d,%d,%d),state%d,edc%d,nd%d", ch,
+	          psProj->player,
+	          psProj->pos.x, psProj->pos.y, psProj->pos.z,
+	          psProj->rot.direction, psProj->rot.pitch, psProj->rot.roll,
+	          psProj->state,
+	          psProj->expectedDamageCaused,
+	          psProj->psNumDamaged);
+}
+
 static int32_t randomVariation(int32_t val)
 {
 	// Up to ±5% random variation.
-	return (int64_t)val*(95000 + rand()%10001)/100000;
+	return (int64_t)val*(95000 + gameRand(10001))/100000;
 }
 
 int32_t projCalcIndirectVelocities(const int32_t dx, const int32_t dz, int32_t v, int32_t *vx, int32_t *vz)
@@ -551,6 +562,8 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 		counterBatteryFire(psAttacker, psTarget);
 	}
 
+	syncDebugProjectile(psProj, '*');
+
 	CHECK_PROJECTILE(psProj);
 
 	return true;
@@ -646,14 +659,13 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 	const unsigned int LAS_SAT_DELAY = 4;
 	int timeSoFar;
 	int distancePercent; /* How far we are 0..100 */
-	float distanceRatio; /* How far we are, 1.0==at target */
-	float distanceExtensionFactor; /* Extended lifespan */
+	int distanceExtensionFactor; /* Extended lifespan */
 	Vector3i move;
 	// Projectile is missile:
 	bool bMissile = false;
 	WEAPON_STATS *psStats;
 	Vector3i nextPos;
-	unsigned int targetDistance, currentDistance;
+	int32_t targetDistance, currentDistance;
 	BASE_OBJECT *psTempObj, *closestCollisionObject = NULL;
 #ifdef WZ_CC_MSVC // Such hacks are assert-hell for MSVC, so avoid them..
 	SPACETIME closestCollisionSpacetime; 
@@ -683,7 +695,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 	{
 		case WSC_MGUN:
 		case WSC_COMMAND:
-			distanceExtensionFactor = 1.2f;
+			distanceExtensionFactor = 120;
 			break;
 		case WSC_CANNON:
 		case WSC_BOMB:
@@ -692,10 +704,10 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 		case WSC_FLAME:
 		case WSC_ENERGY:
 		case WSC_GAUSS:
-			distanceExtensionFactor = 1.5f;
+			distanceExtensionFactor = 150;
 			break;
 		case WSC_AAGUN: // No extended distance
-			distanceExtensionFactor = 1.0f;
+			distanceExtensionFactor = 100;
 			break;
 		case WSC_ROCKET:
 		case WSC_MISSILE:
@@ -706,14 +718,14 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 		case WSC_MORTARS:
 		case WSC_HOWITZERS:
 		case WSC_LAS_SAT:
-			distanceExtensionFactor = 1.5f;
+			distanceExtensionFactor = 150;
 			break;
 		default:
 			// WSC_NUM_WEAPON_SUBCLASSES
 			/* Uninitialized "marker", this can be used as a
 			 * condition to assert on (i.e. it shouldn't occur).
 			 */
-			distanceExtensionFactor = 0.f;
+			distanceExtensionFactor = 0;
 			break;
 	}
 
@@ -760,19 +772,18 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 		targetDistance = 1;
 	}
 
-	distanceRatio = (float)currentDistance / targetDistance;
 	distancePercent = PERCENT(currentDistance, targetDistance);
 
 	/* Calculate next position */
-	nextPos.x = psProj->startX + (distanceRatio * move.x);
-	nextPos.y = psProj->startY + (distanceRatio * move.y);
+	nextPos.x = psProj->startX + move.x * currentDistance/targetDistance;
+	nextPos.y = psProj->startY + move.y * currentDistance/targetDistance;
 	if (!bIndirect)
 	{
-		nextPos.z = (SDWORD)(psProj->srcHeight + (distanceRatio * move.z));  // Save unclamped nextPos.z value.
+		nextPos.z = psProj->srcHeight + move.z * currentDistance/targetDistance;
 	}
 	else
 	{
-		nextPos.z = (SDWORD)(psProj->srcHeight + move.z);  // Save unclamped nextPos.z value.
+		nextPos.z = psProj->srcHeight + move.z;
 	}
 
 	/* impact if about to go off map else update coordinates */
@@ -905,7 +916,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 			memset(&asWeap, 0, sizeof(asWeap));
 			asWeap.nStat = psStats - asWeaponStats;
 
-			ASSERT(distanceExtensionFactor != 0.f, "Unitialized variable used! distanceExtensionFactor is not initialized.");
+			ASSERT(distanceExtensionFactor != 0, "Unitialized variable used! distanceExtensionFactor is not initialized.");
 
 			newDest.x = clip(newDest.x, 0, world_coord(mapWidth - 1));
 			newDest.y = clip(newDest.y, 0, world_coord(mapHeight - 1));
@@ -921,9 +932,9 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 		return;
 	}
 
-	ASSERT(distanceExtensionFactor != 0.f, "Unitialized variable used! distanceExtensionFactor is not initialized.");
+	ASSERT(distanceExtensionFactor != 0, "Unitialized variable used! distanceExtensionFactor is not initialized.");
 
-	if (distanceRatio > distanceExtensionFactor || /* We've traveled our maximum range */
+	if (distancePercent >= distanceExtensionFactor || /* We've traveled our maximum range */
 		!mapObjIsAboveGround((BASE_OBJECT*)psProj)) /* trying to travel through terrain */
 	{
 		/* Miss due to range or height */
@@ -1037,6 +1048,11 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 				shakeStart();
 			}
 		}
+	}
+
+	if (psStats->incenRadius != 0 && psStats->incenTime != 0)
+	{
+		tileSetFire(psObj->pos.x, psObj->pos.y, psStats->incenTime);
 	}
 
 	// Set the effects position and radius
@@ -1389,6 +1405,8 @@ static void proj_Update(PROJECTILE *psObj)
 	unsigned n, m;
 	CHECK_PROJECTILE(psObj);
 
+	syncDebugProjectile(psObj, '<');
+
 	psObj->prevSpacetime = GET_SPACETIME(psObj);
 
 	/* See if any of the stored objects have died
@@ -1436,6 +1454,8 @@ static void proj_Update(PROJECTILE *psObj)
 			proj_PostImpactFunc( psObj );
 			break;
 	}
+
+	syncDebugProjectile(psObj, '>');
 }
 
 /***************************************************************************/
@@ -1840,12 +1860,12 @@ void	objectShimmy(BASE_OBJECT *psObj)
 {
 	if(justBeenHitByEW(psObj))
 	{
-  		iV_MatrixRotateX(SKY_SHIMMY);
- 		iV_MatrixRotateY(SKY_SHIMMY);
- 		iV_MatrixRotateZ(SKY_SHIMMY);
+		pie_MatRotX(SKY_SHIMMY);
+		pie_MatRotY(SKY_SHIMMY);
+		pie_MatRotZ(SKY_SHIMMY);
 		if(psObj->type == OBJ_DROID)
 		{
-			iV_TRANSLATE(1-rand()%3,0,1-rand()%3);
+			pie_TRANSLATE(1-rand()%3,0,1-rand()%3);
 		}
 	}
 }

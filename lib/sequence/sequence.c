@@ -55,9 +55,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <GLee.h>
 #include "lib/framework/frame.h"
 #include "lib/framework/frameint.h"
+#include "lib/framework/opengl.h"
 #include "sequence.h"
 #include "timer.h"
 #include "lib/framework/math_ext.h"
@@ -340,19 +340,31 @@ static void video_write(bool update)
 	glDepthMask(GL_FALSE);
 
 	glPushMatrix();
+	glTranslatef(ScrnvidXpos + videoX1, ScrnvidYpos + videoY1, 0);
+	glScalef(videoX2 - videoX1, videoY2 - videoY1, 1);
+	glMatrixMode(GL_TEXTURE);
+	glPushMatrix(); // texture matrix
+	glScalef((float) video_width / texture_width, (float) video_height / texture_height, 1.f);
+	{
+		const Vector2i vertices[] = {
+			{ 0, 0 },
+			{ 1, 0 },
+			{ 0, 1 },
+			{ 1, 1 },
+		};
 
-	glTranslatef(ScrnvidXpos, ScrnvidYpos, 0.0f);
-	glBegin(GL_TRIANGLE_STRIP);
-	glTexCoord2f(0, 0);
-	glVertex2f(videoX1, videoY1);
-	glTexCoord2f((float) video_width / texture_width, 0);
-	glVertex2f(videoX2, videoY1);				//screenWidth
-	glTexCoord2f(0, (float) video_height / texture_height);
-	glVertex2f(videoX1, videoY2);				//screenHeight
-	glTexCoord2f((float) video_width / texture_width, (float) video_height / texture_height);
-	glVertex2f(videoX2, videoY2);		//screenWidth,screenHeight
-	glEnd();
+		glVertexPointer(2, GL_INT, 0, vertices);
+		glEnableClientState(GL_VERTEX_ARRAY);
 
+		glTexCoordPointer(2, GL_INT, 0, vertices);
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+		glDrawArrays(GL_TRIANGLE_STRIP, 0, ARRAY_SIZE(vertices));
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+		glDisableClientState(GL_VERTEX_ARRAY);
+	}
+	glPopMatrix(); // texture matrix
+	glMatrixMode(GL_MODELVIEW);
 	glPopMatrix();
 
 	// Make sure the current texture page is reloaded after we are finished

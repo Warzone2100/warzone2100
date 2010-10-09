@@ -24,6 +24,9 @@
 #ifndef _gtime_h
 #define _gtime_h
 
+//#include "lib/netplay/nettypes.h"
+typedef struct _netqueue NETQUEUE_;
+
 #ifdef __cplusplus
 extern "C"
 {
@@ -71,12 +74,14 @@ extern void gameTimeInit(void);
 /// Changes the game (and graphics) time.
 extern void setGameTime(uint32_t newGameTime);
 
-/** Call this each loop to update the timers.
- * @param sane If true, then the game time increases in GAME_UNITS_PER_TICK increments, and deltaGameTime is either 0 or GAME_UNITS_PER_TICK. If false, the game time is equal to the graphics time, and the game always ticks.
+/** Call this each loop to update the gameTime and graphicsTime timers, and corresponding deltaGameTime and deltaRealTime.
+ * If logicalUpdates is true, then the game time increases in GAME_UNITS_PER_TICK increments, and deltaGameTime is either 0 or GAME_UNITS_PER_TICK. If false, the game time is equal to the graphics time, and the game always ticks.
  * @returns true iff the game time ticked.
  */
 extern void gameTimeUpdate(void);
-extern bool logicalUpdates;  ///< Separate logical from graphical updates. FIXME Should be constant true. But first it needs to work perfectly.
+
+/// Updates the realTime timer, and corresponding deltaRealTime.
+void realTimeUpdate(void);
 
 /* Returns true if gameTime is stopped. */
 extern BOOL gameTimeIsStopped(void);
@@ -137,14 +142,14 @@ extern void	getTimeComponents(UDWORD time, UDWORD *hours, UDWORD *minutes, UDWOR
 
 
 
-extern float gameTimeFraction;  ///< Private performance calculation. Do not use.
+extern int32_t gameTimeFraction;    ///< Private performance calculation. Do not use.
 extern float graphicsTimeFraction;  ///< Private performance calculation. Do not use.
 extern float realTimeFraction;  ///< Private performance calculation. Do not use.
 
 /// Returns the value times deltaGameTime, converted to seconds.
-static inline float gameTimeAdjustedIncrement(float value)
+static inline int gameTimeAdjustedIncrement(int value)
 {
-	return value * gameTimeFraction;
+	return value * gameTimeFraction / GAME_TICKS_PER_SEC;
 }
 /// Returns the value times deltaGraphicsTime, converted to seconds.
 static inline float graphicsTimeAdjustedIncrement(float value)
@@ -157,17 +162,12 @@ static inline float realTimeAdjustedIncrement(float value)
 	return value * realTimeFraction;
 }
 
-/**
- * Returns value times deltaGameTime (pauseTime = true) or deltaRealTime (pauseTime = false), converted to seconds.
- * @param value Amount to change something in a second.
- * @param pauseTime If true, adjust also for pause of game time. Generally use true in-game, false for GUI.
- * @return Amount to change this frame.
- * TODO Replace all calls to this function with gameTimeAdjustedIncrement or realTimeAdjustedIncrement, and delete this function.
- */
-static inline float timeAdjustedIncrement(float value, BOOL pauseTime)
-{
-	return (pauseTime ? gameTimeAdjustedIncrement : realTimeAdjustedIncrement)(value);
-}
+void sendPlayerGameTime(void);                            ///< Sends a GAME_GAME_TIME message with gameTime plus latency to our game queues.
+void recvPlayerGameTime(NETQUEUE_ queue);                 ///< Processes a GAME_GAME_TIME message.
+bool checkPlayerGameTime(unsigned player);                ///< Checks that we are not waiting for a GAME_GAME_TIME message from this player. (player can be NET_ALL_PLAYERS.)
+void setPlayerGameTime(unsigned player, uint32_t time);   ///< Sets the player's time.
+
+bool isInSync(void);                                      ///< Returns true unless there was a CRC mismatch between the last GAME_GAME_TIME messages.
 
 #ifdef __cplusplus
 }

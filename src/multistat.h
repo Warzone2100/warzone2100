@@ -25,6 +25,8 @@
 #ifndef __INCLUDED_SRC_MULTISTATS_H__
 #define __INCLUDED_SRC_MULTISTATS_H__
 
+#include "lib/netplay/netplay.h"
+
 #ifdef __cplusplus
 extern "C"
 {
@@ -54,7 +56,7 @@ void updateMultiStatsGames(void);
 void updateMultiStatsWins(void);
 void updateMultiStatsLoses(void);
 void updateMultiStatsKills(BASE_OBJECT *psKilled,UDWORD player);
-void recvMultiStats(void);
+void recvMultiStats(NETQUEUE queue);
 
 #ifdef __cplusplus
 }

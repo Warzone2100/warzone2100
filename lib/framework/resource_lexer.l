@@ -34,6 +34,10 @@ extern void res_error(const char* msg);
 
 #include "lib/framework/lexer_input.h"
 
+// fwrite declared with warn_unused_result, resulting in mysterious errors in "%%" on some distros.
+static inline bool no_warn_unused_result(int ignore) { if (ignore) {} return true; }
+#define fwrite(a, b, c, d) no_warn_unused_result(fwrite(a, b, c, d))
+
 #ifndef yyextra
 # define yyextra yyget_extra()
 #endif

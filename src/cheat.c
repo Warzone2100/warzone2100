@@ -75,6 +75,8 @@ static CHEAT_ENTRY cheatCodes[] =
 	{"pause", kf_TogglePauseMode}, // Pause the game.
 	{"sync me", kf_ForceSync},
 	{"power info", kf_PowerInfo},
+	{"reload me", kf_Reload},	// reload selected weapons immediately
+	{"desync me", kf_ForceDesync},
 };
 
 BOOL attemptCheatCode(const char* cheat_name)

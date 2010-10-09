@@ -31,9 +31,6 @@ extern "C"
 {
 #endif //__cplusplus
 
-/* The base movement speed */
-extern float	baseSpeed;
-
 // The next object that should get the router when a lot of units are
 // in a MOVEROUTE state
 extern DROID	*psNextRouteDroid;
@@ -79,6 +76,25 @@ extern BOOL moveCheckDroidMovingAndVisible( void *psObj );
 
 // set a vtol to be hovering in the air
 void moveMakeVtolHover( DROID *psDroid );
+
+/// Get high precision droid position
+static inline Position droidGetPrecisePosition(const DROID *psDroid)
+{
+	Position newPos = { (psDroid->pos.x << EXTRA_BITS) + psDroid->sMove.eBitX, (psDroid->pos.y << EXTRA_BITS) + psDroid->sMove.eBitY, 0 };
+	return newPos;
+}
+
+/// Set high precision droid position
+static inline void droidSetPrecisePosition(DROID *psDroid, Position newPos)
+{
+	// Store extra bits of precision
+	psDroid->sMove.eBitX = newPos.x & EXTRA_MASK;
+	psDroid->sMove.eBitY = newPos.y & EXTRA_MASK;
+
+	// Drop extra bits of precision
+	psDroid->pos.x = newPos.x >> EXTRA_BITS;
+	psDroid->pos.y = newPos.y >> EXTRA_BITS;
+}
 
 const char *moveDescription(MOVE_STATUS status);
 

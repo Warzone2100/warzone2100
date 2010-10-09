@@ -18,8 +18,8 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#include <GLee.h>
 #include "lib/framework/frame.h"
+#include "lib/framework/opengl.h"
 #include <stdlib.h>
 #include <string.h>
 #include "lib/framework/string_ext.h"
@@ -29,11 +29,12 @@
 #include "lib/ivis_common/pieclip.h"
 #include "lib/ivis_common/pieblitfunc.h"
 #include "lib/ivis_common/piepalette.h"
-#include "lib/ivis_common/ivispatch.h"
 #include "lib/ivis_common/textdraw.h"
 #include "lib/ivis_common/bitimage.h"
 
 #ifdef WZ_OS_MAC
+# include <CoreFoundation/CoreFoundation.h>
+# include <CoreFoundation/CFURL.h>
 # include <QuesoGLC/glc.h>
 #else
 # include <GL/glc.h>
@@ -130,6 +131,27 @@ static void iV_initializeGLC(void)
 	glcEnable(GLC_AUTO_FONT);		// We *do* want font fall-backs
 	glcRenderStyle(GLC_TEXTURE);
 	glcStringType(GLC_UTF8_QSO); // Set GLC's string type to UTF-8 FIXME should be UCS4 to avoid conversions
+
+	#ifdef WZ_OS_MAC
+	{
+		char resourcePath[PATH_MAX];
+		CFURLRef resourceURL = CFBundleCopyResourcesDirectoryURL(CFBundleGetMainBundle());
+		if (CFURLGetFileSystemRepresentation(resourceURL, true, (UInt8 *) resourcePath, PATH_MAX))
+		{
+			sstrcat(resourcePath, "/Fonts");
+			glcAppendCatalog(resourcePath);
+		}
+		else
+		{
+			debug(LOG_ERROR, "Could not change to resources directory.");
+		}
+
+		if (resourceURL != NULL)
+		{
+			CFRelease(resourceURL);
+		}
+	}
+	#endif
 
 	_glcFont_Regular = glcGenFontID();
 	_glcFont_Bold = glcGenFontID();
@@ -577,11 +599,8 @@ int iV_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width, U
 
 void iV_DrawTextRotated(const char* string, float XPos, float YPos, float rotation)
 {
-	GLint matrix_mode = 0;
-
 	pie_SetTexturePage(TEXPAGE_FONT);
 
-	glGetIntegerv(GL_MATRIX_MODE, &matrix_mode);
 	glMatrixMode(GL_TEXTURE);
 	glPushMatrix();
 	glLoadIdentity();
@@ -607,7 +626,7 @@ void iV_DrawTextRotated(const char* string, float XPos, float YPos, float rotati
 	glPopMatrix();
 	glMatrixMode(GL_TEXTURE);
 	glPopMatrix();
-	glMatrixMode(matrix_mode);
+	glMatrixMode(GL_MODELVIEW);
 
 	// Reset the current model view matrix
 	glLoadIdentity();

@@ -93,10 +93,10 @@ BOOL visInitialise(void)
 // update the visibility change levels
 void visUpdateLevel(void)
 {
-	visLevelIncAcc += timeAdjustedIncrement(VIS_LEVEL_INC, true);
+	visLevelIncAcc += gameTimeAdjustedIncrement(VIS_LEVEL_INC);
 	visLevelInc = visLevelIncAcc;
 	visLevelIncAcc -= visLevelInc;
-	visLevelDecAcc += timeAdjustedIncrement(VIS_LEVEL_DEC, true);
+	visLevelDecAcc += gameTimeAdjustedIncrement(VIS_LEVEL_DEC);
 	visLevelDec = visLevelDecAcc;
 	visLevelDecAcc -= visLevelDec;
 }
@@ -292,7 +292,7 @@ void visRemoveVisibility(BASE_OBJECT *psObj)
 			const TILEPOS pos = psObj->watchedTiles[i];
 			MAPTILE *psTile = mapTile(pos.x, pos.y);
 
-			ASSERT(psTile->watchers > 0, "Not watching watched tile (%d, %d)", (int)pos.x, (int)pos.y);
+			ASSERT(psTile->watchers[psObj->player] > 0, "Not watching watched tile (%d, %d)", (int)pos.x, (int)pos.y);
 			psTile->watchers[psObj->player]--;
 			if (psTile->watchers[psObj->player] == 0)
 			{

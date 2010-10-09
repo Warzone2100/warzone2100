@@ -237,6 +237,27 @@ static void loadOK( void )
 	}
 }
 
+static void SPinit(void)
+{
+	uint8_t playercolor;
+
+	// FIXME: We should do a SPinit() to make sure all the variables are reset correctly.
+	// game.type is switched to SKIRMISH in startMultiOptions()
+	NetPlay.bComms = false;
+	bMultiPlayer = false;
+	bMultiMessages = false;
+	game.type = CAMPAIGN;
+	NET_InitPlayers();
+	NetPlay.players[0].allocated = true;
+	game.skDiff[0] = UBYTE_MAX;
+	// make sure we have a valid color choice for our SP game. Valid values are 0, 4-7
+	playercolor = getPlayerColour(0);
+	if (playercolor >= 1 && playercolor <= 3)
+	{
+		setPlayerColour(0,0);  // default is green
+	}
+}
+
 BOOL runSinglePlayerMenu(void)
 {
 	UDWORD id;
@@ -254,48 +275,35 @@ BOOL runSinglePlayerMenu(void)
 	}
 	else
 	{
-		uint8_t playercolor = 0;
-
-		// FIXME: We should do a SPinit() to make sure all the variables are reset correctly.
-		// game.type is switched to SKIRMISH in startMultiOptions()
-		NetPlay.bComms = false;
-		bMultiPlayer = false;
-		bMultiMessages = false;
-		game.type = CAMPAIGN;
-		NET_InitPlayers();
-		NetPlay.players[0].allocated = true;
-		game.skDiff[0] = UBYTE_MAX;
-		// make sure we have a valid color choice for our SP game. Valid values are 0, 4-7
-		playercolor = getPlayerColour(0);
-		if (playercolor >= 1 && playercolor <= 3)
-		{
-			setPlayerColour(0,0);		// default is green
-		}
-
 		id = widgRunScreen(psWScreen);						// Run the current set of widgets
 
 		switch(id)
 		{
 			case FRONTEND_NEWGAME:
+				SPinit();
 				frontEndNewGame();
 				break;
 
 			case FRONTEND_LOADCAM2:
+				SPinit();
 				sstrcpy(aLevelName, "CAM_2A");
 				changeTitleMode(STARTGAME);
 				initLoadingScreen(true);
 				break;
 
 			case FRONTEND_LOADCAM3:
+				SPinit();
 				sstrcpy(aLevelName, "CAM_3A");
 				changeTitleMode(STARTGAME);
 				initLoadingScreen(true);
 				break;
 			case FRONTEND_LOADGAME:
+				SPinit();
 				addLoadSave(LOAD_FRONTEND,SaveGamePath,"gam",_("Load Saved Game"));	// change mode when loadsave returns
 				break;
 
 			case FRONTEND_SKIRMISH:
+				SPinit();
 				ingame.bHostSetup = true;
 				lastTitleMode = SINGLE;
 				changeTitleMode(MULTIOPTION);
@@ -306,6 +314,7 @@ BOOL runSinglePlayerMenu(void)
 				break;
 
 			case FRONTEND_CHALLENGES:
+				SPinit();
 				addChallenges();
 				break;
 
@@ -1000,6 +1009,18 @@ static BOOL startMouseOptionsMenu(void)
 		addTextButton(FRONTEND_MBUTTONS_R, FRONTEND_POS2M-25,  FRONTEND_POS5Y, _("Off"), 0);
 	}
 
+	////////////
+	// middle-click rotate
+	addTextButton(FRONTEND_MMROTATE,	 FRONTEND_POS2X-35,   FRONTEND_POS6Y, _("Rotate Screen"), 0);
+	if( getMiddleClickRotate() )
+	{	// right-click orders
+		addTextButton(FRONTEND_MMROTATE_R, FRONTEND_POS2M-25,  FRONTEND_POS6Y, _("Middle Mouse"), 0);
+	}
+	else
+	{	// left-click orders
+		addTextButton(FRONTEND_MMROTATE_R, FRONTEND_POS2M-25,  FRONTEND_POS6Y, _("Right Mouse"), 0);
+	}
+
 	// Add some text down the side of the form
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("MOUSE OPTIONS"));
 
@@ -1068,6 +1089,20 @@ BOOL runMouseOptionsMenu(void)
 			{
 				setRightClickOrders(true);
 				widgSetString(psWScreen,FRONTEND_MBUTTONS_R, _("On"));
+			}
+			break;
+
+		case FRONTEND_MMROTATE:
+		case FRONTEND_MMROTATE_R:
+			if( getMiddleClickRotate() )
+			{
+				setMiddleClickRotate(false);
+				widgSetString(psWScreen,FRONTEND_MMROTATE_R, _("Right Mouse"));
+			}
+			else
+			{
+				setMiddleClickRotate(true);
+				widgSetString(psWScreen,FRONTEND_MMROTATE_R, _("Middle Mouse"));
 			}
 			break;
 

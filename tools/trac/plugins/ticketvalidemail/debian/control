@@ -1,0 +1,14 @@
+Source: trac-ticketvalidemail
+Section: python
+Priority: optional
+Maintainer: Giel van Schijndel <me@mortis.eu>
+Build-Depends: debhelper (>= 5), cdbs (>= 0.4.43), python, python-support (>= 0.4), python-setuptools
+Standards-Version: 3.8.4
+Homepage: http://developer.wz2100.net/browser/trunk/tools/trac/plugins/ticketvalidemail
+
+Package: trac-ticketvalidemail
+Architecture: all
+Depends: ${misc:Depends}, ${python:Depends}, trac (>= 0.11)
+Description: Only accept valid RFC822 e-mail addresses from anonymous reporters
+ Extends Trac to only accept anonymous tickets when the reporter name is a
+ valid RFC822 e-mail address.

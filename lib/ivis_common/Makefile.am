@@ -1,5 +1,6 @@
 AM_CPPFLAGS = $(PNG_CFLAGS) $(WZ_CPPFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS)
+AM_CXXFLAGS = $(WZ_CXXFLAGS)
 
 noinst_LIBRARIES = libivis_common.a
 noinst_HEADERS = \
@@ -7,7 +8,6 @@ noinst_HEADERS = \
 	imd.h \
 	ivi.h \
 	ivisdef.h \
-	ivispatch.h \
 	jpeg_encoder.h \
 	pieblitfunc.h \
 	pieclip.h \

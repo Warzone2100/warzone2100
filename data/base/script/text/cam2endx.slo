@@ -138,7 +138,6 @@ event	start(CALL_GAMEINIT)
 {
 	//set up so that when Transporter gets to the edge of the map, it will empty and return
 	setDroidsToSafetyFlag(true);
-	randomiseSeed();
 //centre view
 	centreViewPos(centreX, centreY);
 

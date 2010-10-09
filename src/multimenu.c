@@ -1122,7 +1122,7 @@ static void addMultiPlayer(UDWORD player,UDWORD pos)
 		sButInit.height = 24;
 		sButInit.FontID = font_regular;
 		sButInit.id		= MULTIMENU_CHANNEL + player;
-		sButInit.pTip	= "channel";
+		sButInit.pTip	= _("Channel");
 		sButInit.pDisplay = displayChannelState;
 		sButInit.UserData = player;
 		widgAddButton(psWScreen, &sButInit);

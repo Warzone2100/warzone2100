@@ -18,6 +18,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 #include "random.h"
+#include "lib/netplay/netplay.h"
 
 static MersenneTwister gamePseudorandomNumberGenerator;
 
@@ -61,17 +62,17 @@ void MersenneTwister::generate()
 	// Loop tripled, to avoid using %624 everywhere.
 	for (unsigned i = 0; i != 227; ++i)
 	{
-		int v = state[i]&0x80000000 | state[i + 1      ]&0x7FFFFFFF;
+		int v = (state[i]&0x80000000) | (state[i + 1      ]&0x7FFFFFFF);
 		state[i] = state[i + 397     ] ^ v>>1 ^ ((v&0x00000001)*0x9908B0DF);
 	}
 	for (unsigned i = 227; i != 623; ++i)
 	{
-		int v = state[i]&0x80000000 | state[i + 1      ]&0x7FFFFFFF;
+		int v = (state[i]&0x80000000) | (state[i + 1      ]&0x7FFFFFFF);
 		state[i] = state[i + 397 - 624] ^ v>>1 ^ ((v&0x00000001)*0x9908B0DF);
 	}
 	for (unsigned i = 623; i != 624; ++i)  // Very short loop.
 	{
-		int v = state[i]&0x80000000 | state[i + 1 - 624]&0x7FFFFFFF;
+		int v = (state[i]&0x80000000) | (state[i + 1 - 624]&0x7FFFFFFF);
 		state[i] = state[i + 397 - 624] ^ v>>1 ^ ((v&0x00000001)*0x9908B0DF);
 	}
 }
@@ -88,5 +89,6 @@ uint32_t gameRandU32()
 
 int32_t gameRand(uint32_t limit)
 {
+	syncDebug("Used a random number.");
 	return gamePseudorandomNumberGenerator.u32()%limit;
 }

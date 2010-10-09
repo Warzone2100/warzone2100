@@ -51,6 +51,11 @@ MOVESHUFFLE,
 MOVEROUTESHUFFLE,	// unused
 } MOVE_STATUS;
 
+/// Extra precision added to movement calculations
+#define EXTRA_BITS				8
+#define EXTRA_PRECISION				((1 << EXTRA_BITS) - 1)
+#define EXTRA_MASK				0xff
+
 typedef struct _move_control
 {
 	MOVE_STATUS	Status;					// Inactive, Navigating or moving point to point status
@@ -60,9 +65,9 @@ typedef struct _move_control
 
 	SDWORD	DestinationX, DestinationY;			// World coordinates of movement destination
 	SDWORD	srcX,srcY,targetX,targetY;
-	float	fx,fy;						// droid location as a fract
-	float	speed;						// Speed of motion
+	int	speed;						// Speed of motion
 	SWORD	boundX,boundY;				// Vector for the end of path boundary
+	int32_t	eBitX, eBitY;					// extra bits stored in a temporary bit bucket
 
 	uint16_t moveDir;					// direction of motion (not the direction the droid is facing)
 	uint16_t bumpDir;					// direction at last bump
@@ -80,9 +85,6 @@ typedef struct _move_control
 
 	// iAttackRuns tracks the amount of ammunition a VTOL has remaining for each weapon
 	UDWORD	iAttackRuns[VTOL_MAXWEAPS];
-
-	// added for vtol movement
-	float	fz;
 } MOVE_CONTROL;
 
 #ifdef __cplusplus

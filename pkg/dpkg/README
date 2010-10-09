@@ -1,0 +1,21 @@
+To make Debian packages of the main game, do the following from the root of the
+source tree:
+
+ln -s pkg/dpkg debian
+dpkg-buildpackage -b -uc
+
+The second step might need additional packages to be installed, it should tell
+you which.
+
+After that you'll have three packages, warzone2100, warzone2100-data and
+warzone2100-music in the parent folder. The music package is not necessary to
+play. Install them as root with "dpkg -i warzone*.deb".
+
+
+For the videos, download the sequences.wz you want from
+http://wz2100.net/download, put it into pkg/dpkg/video, then run
+"dpkg-buildpackage -uc -b" from that folder.
+
+
+NOTE: These packages will override your repository's Warzone packages, if you
+install these, you'll have to update manually.

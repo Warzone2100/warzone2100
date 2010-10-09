@@ -194,19 +194,19 @@ BOOL sound_InitLibrary( void )
 	// to the crash handler for the dump file and debug log
 	ssprintf(buf, "OpenAL Vendor: %s", alGetString(AL_VENDOR));
 	addDumpInfo(buf);
-	debug(LOG_SOUND, buf);
+	debug(LOG_SOUND, "%s", buf);
 
 	ssprintf(buf, "OpenAL Version: %s", alGetString(AL_VERSION));
 	addDumpInfo(buf);
-	debug(LOG_SOUND, buf);
+	debug(LOG_SOUND, "%s", buf);
 
 	ssprintf(buf, "OpenAL Renderer: %s", alGetString(AL_RENDERER));
 	addDumpInfo(buf);
-	debug(LOG_SOUND, buf);
+	debug(LOG_SOUND, "%s", buf);
 
 	ssprintf(buf, "OpenAL Extensions: %s", alGetString(AL_EXTENSIONS));
 	addDumpInfo(buf);
-	debug(LOG_SOUND, buf);
+	debug(LOG_SOUND, "%s", buf);
 #endif
 
 	openal_initialized = true;

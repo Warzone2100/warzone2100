@@ -14,6 +14,7 @@ PARSERS= \
 SRC= \
 	$(PARSERS) \
 	configfile.c \
+	crc.cpp \
 	cursors16.c \
 	cursors32.c \
 	cursors.c \

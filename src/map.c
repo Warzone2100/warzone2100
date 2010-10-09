@@ -31,6 +31,7 @@
 #include "lib/framework/physfs_ext.h"
 #include "lib/framework/tagfile.h"
 #include "lib/ivis_common/tex.h"
+#include "lib/netplay/netplay.h"  // For syncDebug
 
 #include "map.h"
 #include "hci.h"
@@ -1049,99 +1050,6 @@ static void objectWeaponTagged(int num, WEAPON *asWeaps, BASE_OBJECT **psTargets
 
 static void droidSaveTagged(DROID *psDroid)
 {
-	int plr = psDroid->player;
-	uint16_t v[ARRAY_SIZE(psDroid->asBits)], i, order[4], ammo[VTOL_MAXWEAPS];
-	int32_t sv[2];
-	float fv[3];
-
-	/* common groups */
-
-	objectSaveTagged((BASE_OBJECT *)psDroid); /* 0x01 */
-	objectSensorTagged(psDroid->sensorRange, psDroid->sensorPower, 0, psDroid->ECMMod); /* 0x02 */
-	objectStatTagged((BASE_OBJECT *)psDroid, psDroid->originalBody, psDroid->resistance); /* 0x03 */
-	objectWeaponTagged(psDroid->numWeaps, psDroid->asWeaps, psDroid->psActionTarget);
-
-	/* DROID GROUP */
-
-	tagWriteEnter(0x0a, 1);
-	tagWrite(0x01, psDroid->droidType);
-	for (i = 0; i < ARRAY_SIZE(v); ++i)
-	{
-		v[i] = psDroid->asBits[i].nStat;
-	}
-	tagWrite16v(0x02, ARRAY_SIZE(v), v);
-	// transporter droid in the mission list
-	if (psDroid->droidType == DROID_TRANSPORTER && apsDroidLists[plr] == mission.apsDroidLists[plr])
-	{
-		tagWriteBool(0x03, true);
-	}
-	tagWrite(0x07, psDroid->weight);
-	tagWrite(0x08, psDroid->baseSpeed);
-	tagWriteString(0x09, psDroid->aName);
-	tagWrite(0x0a, psDroid->body);
-	tagWritef(0x0b, psDroid->experience);
-	tagWrite(0x0c, psDroid->NameVersion);
-	if (psDroid->psTarget)
-	{
-		tagWrites(0x0e, psDroid->psTarget->id); // else -1
-	}
-	if (psDroid->psTarStats)
-	{
-		tagWrites(0x0f, psDroid->psTarStats->ref); // else -1
-	}
-	if (psDroid->psBaseStruct)
-	{
-		tagWrites(0x10, psDroid->psBaseStruct->id); // else -1
-	}
-	// current order
-	tagWrite(0x11, psDroid->order);
-	order[0] = psDroid->orderX;
-	order[1] = psDroid->orderY;
-	order[2] = psDroid->orderX2;
-	order[3] = psDroid->orderX2;
-	tagWrite16v(0x12, 4, order);
-	// queued orders
-	tagWriteEnter(0x13, psDroid->listSize);
-	for (i = 0; i < psDroid->listSize; i++)
-	{
-		tagWrite(0x01, psDroid->asOrderList[i].order);
-		order[0] = psDroid->asOrderList[i].x;
-		order[1] = psDroid->asOrderList[i].y;
-		order[2] = psDroid->asOrderList[i].x2;
-		order[3] = psDroid->asOrderList[i].y2;
-		tagWrite16v(0x02, 4, order);
-		tagWriteNext();
-	}
-	tagWriteLeave(0x13);
-	// vtol ammo
-	for (i = 0; i < VTOL_MAXWEAPS; i++)
-	{
-		ammo[i] = psDroid->sMove.iAttackRuns[i];
-	}
-	tagWrite16v(0x17, VTOL_MAXWEAPS, ammo);
-	// other movement related stuff
-	sv[0] = psDroid->sMove.DestinationX;
-	sv[1] = psDroid->sMove.DestinationY;
-	tagWrites32v(0x18, 2, sv);
-	sv[0] = psDroid->sMove.srcX;
-	sv[1] = psDroid->sMove.srcY;
-	tagWrites32v(0x19, 2, sv);
-	sv[0] = psDroid->sMove.targetX;
-	sv[1] = psDroid->sMove.targetY;
-	tagWrites32v(0x1a, 2, sv);
-	fv[0] = psDroid->sMove.fx;
-	fv[1] = psDroid->sMove.fy;
-	fv[2] = psDroid->sMove.fz;
-	tagWritefv(0x1b, 3, fv);
-	tagWritef(0x1c, psDroid->sMove.speed);
-	sv[0] = psDroid->sMove.boundX;
-	sv[1] = psDroid->sMove.boundY;
-	tagWrites32v(0x1d, 2, sv);
-	v[0] = psDroid->sMove.bumpX;
-	v[1] = psDroid->sMove.bumpY;
-	tagWrite16v(0x1e, 2, v);
-
-	tagWriteLeave(0x0a);
 }
 
 static void structureSaveTagged(STRUCTURE *psStruct)
@@ -1185,7 +1093,7 @@ static void structureSaveTagged(STRUCTURE *psStruct)
 
 			tagWriteEnter(0x0d, 1); // FACTORY GROUP
 			tagWrite(0x01, psFactory->capacity);
-			tagWrite(0x02, psFactory->quantity);
+			tagWrite(0x02, psFactory->productionLoops);
 			tagWrite(0x03, psFactory->loopsPerformed);
 			//tagWrite(0x04, psFactory->productionOutput); // not used in original code, recalculated instead
 			tagWrite(0x05, psFactory->powerAccrued);
@@ -2268,6 +2176,30 @@ void mapFloodFillContinents()
 	debug(LOG_MAP, "Found %d hover continents", (int)hoverContinents);
 }
 
+void tileSetFire(int32_t x, int32_t y, uint32_t duration)
+{
+	const int posX = map_coord(x);
+	const int posY = map_coord(y);
+	MAPTILE *const tile = mapTile(posX, posY);
+
+	uint16_t currentTime =  gameTime             / GAME_TICKS_PER_UPDATE;
+	uint16_t fireEndTime = (gameTime + duration) / GAME_TICKS_PER_UPDATE;
+	if (currentTime == fireEndTime)
+	{
+		return;  // Fire already ended.
+	}
+	if ((tile->tileInfoBits & BITS_ON_FIRE) != 0 && (uint16_t)(fireEndTime - currentTime) < (uint16_t)(tile->fireEndTime - currentTime))
+	{
+		return;  // Tile already on fire, and that fire lasts longer.
+	}
+
+	// Burn, tile, burn!
+	tile->tileInfoBits |= BITS_ON_FIRE;
+	tile->fireEndTime = fireEndTime;
+
+	syncDebug("Fire tile{%d, %d} dur%u end%d", posX, posY, duration, fireEndTime);
+}
+
 /** Check if tile contained within the given world coordinates is burning. */
 bool fireOnLocation(unsigned int x, unsigned int y)
 {
@@ -2277,4 +2209,26 @@ bool fireOnLocation(unsigned int x, unsigned int y)
 
 	ASSERT(psTile, "Checking fire on tile outside the map (%d, %d)", posX, posY);
 	return psTile != NULL && TileIsBurning(psTile);
+}
+
+void mapUpdate()
+{
+	uint16_t currentTime = gameTime / GAME_TICKS_PER_UPDATE;
+
+	int posX, posY;
+	for (posY = 0; posY < mapHeight; ++posY)
+		for (posX = 0; posX < mapWidth; ++posX)
+	{
+		MAPTILE *const tile = mapTile(posX, posY);
+
+		if ((tile->tileInfoBits & BITS_ON_FIRE) != 0 && tile->fireEndTime == currentTime)
+		{
+			// Extinguish, tile, extinguish!
+			tile->tileInfoBits &= ~BITS_ON_FIRE;
+
+			syncDebug("Extinguished tile{%d, %d}", posX, posY);
+		}
+	}
+
+	// TODO Make waves in the water?
 }

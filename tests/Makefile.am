@@ -8,8 +8,8 @@ check_PROGRAMS = \
 	maptest \
 	pointtreetest
 
-astartest_SOURCES = astartest.c ../lib/framework/debug.c
-astartest_LDADD = $(SDL_LIBS)
+#astartest_SOURCES = astartest.c ../lib/framework/debug.c
+#astartest_LDADD = $(SDL_LIBS)
 
 maptest_SOURCES = ../tools/map/mapload.c maptest.c
 noinst_HEADERS = ../tools/map/mapload.h
@@ -19,7 +19,7 @@ pointtreetest_SOURCES = pointtreetest.c ../src/pointtree.cpp
 pointtreetest_CPPFLAGS = $(AM_CPPFLAGS) -DDUMP_IMAGE
 
 CLEANFILES = \
-	$(BUILT_SOURCES)
+	$(BUILT_SOURCES) pointtree.ppm
 
 TESTS = \
 	maptest \

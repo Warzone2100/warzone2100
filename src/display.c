@@ -178,6 +178,7 @@ static BOOL	anyDroidSelected(UDWORD player);
 static BOOL cyborgDroidSelected(UDWORD player);
 static BOOL bInvertMouse = true;
 static BOOL bRightClickOrders = false;
+static BOOL bMiddleClickRotate = false;
 static BOOL bDrawShadows = true;
 static SELECTION_TYPE	establishSelection(UDWORD selectedPlayer);
 static void	dealWithLMB( void );
@@ -273,6 +274,7 @@ void	setInvertMouseStatus( BOOL val )
 
 #define MOUSE_ORDER (bRightClickOrders?MOUSE_RMB:MOUSE_LMB)
 #define MOUSE_SELECT (bRightClickOrders?MOUSE_LMB:MOUSE_RMB)
+#define MOUSE_ROTATE (bMiddleClickRotate?MOUSE_MMB:MOUSE_RMB)
 
 BOOL	getRightClickOrders( void )
 {
@@ -282,6 +284,17 @@ BOOL	getRightClickOrders( void )
 void	setRightClickOrders( BOOL val )
 {
 	bRightClickOrders = val;
+}
+
+
+BOOL	getMiddleClickRotate( void )
+{
+	return bMiddleClickRotate;
+}
+
+void	setMiddleClickRotate( BOOL val )
+{
+	bMiddleClickRotate = val;
 }
 
 
@@ -550,7 +563,7 @@ static void CheckFinishedDrag(void)
 		return;
 	}
 
-	if (mouseReleased(MOUSE_LMB))
+	if (mouseReleased(MOUSE_LMB) || mouseDown(MOUSE_RMB))
 	{
 		selectAttempt = false;
 		if(dragBox3D.status == DRAG_DRAGGING)
@@ -801,7 +814,7 @@ void processMouseClickInput(void)
 				kill3DBuilding();
 				bRadarDragging = false;
 			}
-			if (mouseDrag(MOUSE_RMB,(UDWORD *)&rotX,(UDWORD *)&rotY) && !rotActive && !bRadarDragging)
+			if (mouseDrag(MOUSE_ROTATE,(UDWORD *)&rotX,(UDWORD *)&rotY) && !rotActive && !bRadarDragging)
 			{
 				rotInitial = player.r.y;
 				rotInitialUp = player.r.x;
@@ -1321,7 +1334,7 @@ void displayWorld(void)
 	
 	shakeUpdate();
 
-	if (mouseDown(MOUSE_RMB) && rotActive)
+	if (mouseDown(MOUSE_ROTATE) && rotActive)
 	{
 		if (abs(mouseX() - rotX) > 2 || xMoved > 2 || abs(mouseY() - rotY) > 2 || yMoved > 2)
 		{
@@ -1370,7 +1383,7 @@ void displayWorld(void)
 		}
 	}
 
-	if(mouseReleased(MOUSE_RMB) && rotActive)
+	if (!mouseDown(MOUSE_ROTATE) && rotActive)
 	{
 		rotActive = false;
 		xMoved = yMoved = 0;
@@ -2056,15 +2069,11 @@ static void dealWithLMBFeature(FEATURE* psFeature)
 
 					if (ctrlShiftDown())
 					{
-						orderDroidStatsLocAdd(psCurr, DORDER_BUILD,
-							(BASE_STATS*) &asStructureStats[i],
-							psFeature->pos.x, psFeature->pos.y);
+						orderDroidStatsLocDirAdd(psCurr, DORDER_BUILD, (BASE_STATS*) &asStructureStats[i], psFeature->pos.x, psFeature->pos.y, player.r.y);
 					}
 					else
 					{
-						orderDroidStatsLoc(psCurr, DORDER_BUILD,
-							(BASE_STATS*) &asStructureStats[i],
-							psFeature->pos.x, psFeature->pos.y);
+						orderDroidStatsLocDir(psCurr, DORDER_BUILD, (BASE_STATS*) &asStructureStats[i], psFeature->pos.x, psFeature->pos.y, player.r.y);
 					}
 					++numTrucks;
 				}
@@ -2142,7 +2151,7 @@ static void dealWithLMBObject(BASE_OBJECT* psClickedOn)
 
 		default:
 			// assert only when the value is outside of the valid range
-			ASSERT((type >= 0 && type < OBJ_NUM_TYPES), "Weird selection from LMB - type of clicked object is %d", (int)type);
+			ASSERT(type < OBJ_NUM_TYPES, "Weird selection from LMB - type of clicked object is %d", (int)type);
 			break;
 	}
 }

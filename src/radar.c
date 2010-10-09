@@ -292,7 +292,7 @@ void drawRadar(void)
 		if (rotateRadar)
 		{
 			// rotate the map
-			iV_MatrixRotateZ(player.r.y);
+			pie_MatRotZ(player.r.y);
 			DrawNorth();
 		}
 		// draw the box at the dimensions of the map
@@ -338,6 +338,12 @@ static PIELIGHT appliedRadarColour(RADAR_DRAW_MODE radarDrawMode, MAPTILE *WTile
 			col.byte.r = sqrtf(col.byte.r * WTile->illumination);
 			col.byte.b = sqrtf(col.byte.b * WTile->illumination);
 			col.byte.g = sqrtf(col.byte.g * WTile->illumination);
+			if (terrainType(WTile) == TER_CLIFFFACE)
+			{
+				col.byte.r /= 2;
+				col.byte.b /= 2;
+				col.byte.g /= 2;
+			}
 			if (!hasSensorOnTile(WTile, selectedPlayer))
 			{
 				col.byte.r /= 2;
@@ -355,6 +361,12 @@ static PIELIGHT appliedRadarColour(RADAR_DRAW_MODE radarDrawMode, MAPTILE *WTile
 			col.byte.r = sqrtf(col.byte.r * (WTile->illumination + WTile->height) / 2);
 			col.byte.b = sqrtf(col.byte.b * (WTile->illumination + WTile->height) / 2);
 			col.byte.g = sqrtf(col.byte.g * (WTile->illumination + WTile->height) / 2);
+			if (terrainType(WTile) == TER_CLIFFFACE)
+			{
+				col.byte.r /= 2;
+				col.byte.b /= 2;
+				col.byte.g /= 2;
+			}
 			if (!hasSensorOnTile(WTile, selectedPlayer))
 			{
 				col.byte.r /= 2;

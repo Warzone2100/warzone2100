@@ -22,7 +22,6 @@
 #include "lib/ivis_common/textdraw.h"
 #include "lib/ivis_common/piepalette.h"
 #include "lib/ivis_common/piestate.h"
-#include "lib/ivis_common/ivispatch.h"
 
 //*************************************************************************
 
@@ -35,7 +34,7 @@ iSurface	*psRendSurface;
 //*
 //******
 
-iSurface *iV_SurfaceCreate(uint32_t flags, int width, int height, int xp, int yp, UBYTE *buffer)
+iSurface *iV_SurfaceCreate(uint32_t flags, int width, int height, UBYTE *buffer)
 {
 	iSurface *s = malloc(sizeof(iSurface));
 
@@ -50,8 +49,6 @@ iSurface *iV_SurfaceCreate(uint32_t flags, int width, int height, int xp, int yp
 	s->flags = flags;
 	s->xcentre = width>>1;
 	s->ycentre = height>>1;
-	s->xpshift = xp;
-	s->ypshift = yp;
 	s->width = width;
 	s->height = height;
 	s->size = width * height;

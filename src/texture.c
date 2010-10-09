@@ -31,12 +31,6 @@
 
 #include <physfs.h>
 
-#if defined(WZ_OS_MAC)
-#include <OpenGL/glu.h>
-#else
-#include <GL/glu.h>
-#endif
-
 #include "lib/framework/file.h"
 #include "lib/framework/string_ext.h"
 

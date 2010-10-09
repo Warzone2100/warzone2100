@@ -94,9 +94,18 @@ extern BOOL loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize);
 /*initialise the template build and power points */
 extern void initTemplatePoints(void);
 
+typedef struct InitialDroidOrders
+{
+	uint32_t secondaryOrder;
+	int32_t moveToX;
+	int32_t moveToY;
+	uint32_t factoryId;
+} INITIAL_DROID_ORDERS;
 /*Builds an instance of a Structure - the x/y passed in are in world coords.*/
-extern DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y,
-						 UDWORD player, BOOL onMission);
+/// Sends a GAME_DROID message if bMultiMessages is true, or actually creates it if false. Only uses initialOrders if sending a GAME_DROID message.
+extern DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player, BOOL onMission, const INITIAL_DROID_ORDERS *initialOrders);
+/// Creates a droid locally, instead of sending a message, even if the bMultiMessages HACK is set to true.
+DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player, BOOL onMission);
 
 /* Set the asBits in a DROID structure given it's template. */
 extern void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid);
@@ -365,6 +374,7 @@ extern const char *getDroidNameForRank(UDWORD rank);
 
 /*called when a Template is deleted in the Design screen*/
 extern void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player);
+extern void reallyDeleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player);
 
 // Select a droid and do any necessary housekeeping.
 extern void SelectDroid(DROID *psDroid);
@@ -556,6 +566,9 @@ int droidSqDist(DROID *psDroid, BASE_OBJECT *psObj);
 void templateSetParts(const DROID *psDroid, DROID_TEMPLATE *psTemplate);
 
 void cancelBuild(DROID *psDroid);
+
+#define syncDebugDroid(psDroid, ch) _syncDebugDroid(__FUNCTION__, psDroid, ch)
+void _syncDebugDroid(const char *function, DROID *psDroid, char ch);
 
 #ifdef __cplusplus
 }

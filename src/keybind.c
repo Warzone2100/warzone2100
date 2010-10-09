@@ -49,6 +49,7 @@
 #include "component.h"
 #include "geometry.h"
 #include "radar.h"
+#include "structure.h"
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/screen.h"
 
@@ -178,6 +179,11 @@ void	kf_ForceSync( void )
 	
 }
 
+void kf_ForceDesync(void)
+{
+	syncDebug("Oh no!!! I went out of sync!!!");
+}
+
 void	kf_PowerInfo( void )
 {
 	int i;
@@ -302,8 +308,8 @@ void	kf_CloneSelected( void )
 	DROID_TEMPLATE	sTemplate;
 	DROID_TEMPLATE	*sTemplate2 = NULL;
 	const int	limit = 10;	// make 10 clones
-	int		i, impact_side;
-	const char* msg;
+	int             i;//, impact_side;
+	//const char *    msg;
 
 #ifndef DEBUG
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
@@ -336,7 +342,8 @@ void	kf_CloneSelected( void )
 			templateSetParts(psDroid, &sTemplate);
 
 			// create a new droid
-			psNewDroid = buildDroid(&sTemplate, psDroid->pos.x, psDroid->pos.y, psDroid->player, false);
+			psNewDroid = buildDroid(&sTemplate, psDroid->pos.x, psDroid->pos.y, psDroid->player, false, NULL);
+			/* // TODO psNewDroid is null, since we just sent a message, but haven't actually created the droid locally yet.
 			ASSERT_OR_RETURN(, psNewDroid != NULL, "Unable to build a unit");
 			addDroid(psNewDroid, apsDroidLists);
 			psNewDroid->body = psDroid->body;
@@ -363,6 +370,7 @@ void	kf_CloneSelected( void )
 			psNewDroid->selected = true;
 			psNewDroid = NULL;
 			Cheated = true;
+			*/
 		}
 	}
 }
@@ -831,7 +839,7 @@ void	kf_SystemClose( void )
 /* Zooms out from display */
 void	kf_ZoomOut( void )
 {
-	float zoomInterval = timeAdjustedIncrement(MAP_ZOOM_RATE, false);
+	float zoomInterval = graphicsTimeAdjustedIncrement(MAP_ZOOM_RATE);
 
 	distance += zoomInterval;
 	if(distance > MAXDISTANCE)
@@ -870,7 +878,7 @@ void	kf_RadarZoomOut( void )
 /* Zooms in the map */
 void	kf_ZoomIn( void )
 {
-	float zoomInterval = timeAdjustedIncrement(MAP_ZOOM_RATE, false);
+	float zoomInterval = graphicsTimeAdjustedIncrement(MAP_ZOOM_RATE);
 
 	distance -= zoomInterval;
 	if (distance < MINDISTANCE)
@@ -929,7 +937,7 @@ void	kf_ExpandScreen( void )
 /* Spins the world round left */
 void	kf_RotateLeft( void )
 {
-	float rotAmount = timeAdjustedIncrement(MAP_SPIN_RATE, false);
+	float rotAmount = graphicsTimeAdjustedIncrement(MAP_SPIN_RATE);
 
 	player.r.y += rotAmount;
 }
@@ -938,7 +946,7 @@ void	kf_RotateLeft( void )
 /* Spins the world right */
 void	kf_RotateRight( void )
 {
-	float rotAmount = timeAdjustedIncrement(MAP_SPIN_RATE, false);
+	float rotAmount = graphicsTimeAdjustedIncrement(MAP_SPIN_RATE);
 
 	player.r.y -= rotAmount;
 	if (player.r.y < 0)
@@ -951,36 +959,14 @@ void	kf_RotateRight( void )
 /* Pitches camera back */
 void	kf_PitchBack( void )
 {
-//#ifdef ALEXM
-//SDWORD	pitch;
-//SDWORD	angConcern;
-//#endif
-
-	float pitchAmount = timeAdjustedIncrement(MAP_PITCH_RATE, false);
-
-//#ifdef ALEXM
-//	pitch = getSuggestedPitch();
-//	angConcern = DEG(360-pitch);
-//
-//	if(player.r.x < angConcern)
-//	{
-//#endif
+	float pitchAmount = graphicsTimeAdjustedIncrement(MAP_PITCH_RATE);
 
 	player.r.x += pitchAmount;
 
-//#ifdef ALEXM
-//	}
-//#endif
-//#ifdef ALEXM
-//	if(getDebugMappingStatus() == false)
-//#endif
-
-//	{
 	if(player.r.x>DEG(360+MAX_PLAYER_X_ANGLE))
 	{
 		player.r.x = DEG(360+MAX_PLAYER_X_ANGLE);
 	}
-//	}
 	setDesiredPitch(player.r.x/DEG_1);
 }
 
@@ -988,7 +974,7 @@ void	kf_PitchBack( void )
 /* Pitches camera foward */
 void	kf_PitchForward( void )
 {
-	float pitchAmount = timeAdjustedIncrement(MAP_PITCH_RATE, false);
+	float pitchAmount = graphicsTimeAdjustedIncrement(MAP_PITCH_RATE);
 
 	player.r.x -= pitchAmount;
 	if (player.r.x < DEG(360 + MIN_PLAYER_X_ANGLE))
@@ -1041,6 +1027,7 @@ void	kf_SelectPlayer( void )
 	{
 		selectedPlayer = playerNumber;
 	}
+	realSelectedPlayer = selectedPlayer;
 	//	godMode = true;
 
 	if (prevPlayer == selectedPlayer)
@@ -1438,13 +1425,46 @@ void	kf_FinishAllResearch(void)
 		pPlayerRes += j; // select right tech
 		if (IsResearchCompleted(pPlayerRes) == false)
 		{
-			MakeResearchCompleted(pPlayerRes);
-			researchResult(j, selectedPlayer, false, NULL, false);
+			if (bMultiMessages)
+			{
+				SendResearch(selectedPlayer, j, false);
+				// Wait for our message before doing anything.
+			}
+			else
+			{
+				MakeResearchCompleted(pPlayerRes);
+				researchResult(j, selectedPlayer, false, NULL, false);
+			}
 		}
 	}
 	sasprintf((char**)&cmsg, _("(Player %u) is using cheat :%s"),
 				selectedPlayer, _("Researched EVERYTHING for you!"));
 	sendTextMessage(cmsg, true);
+}
+
+void kf_Reload(void)
+{
+	STRUCTURE	*psCurr;
+
+#ifndef DEBUG
+	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
+	if (runningMultiplayer())
+	{
+		noMPCheatMsg();
+		return;
+	}
+#endif
+
+	for (psCurr=interfaceStructList(); psCurr; psCurr = psCurr->psNext)
+	{
+		if (isLasSat(psCurr->pStructureType) && psCurr->selected)
+		{
+			unsigned int firePause = weaponFirePause(&asWeaponStats[psCurr->asWeaps[0].nStat], psCurr->player);
+
+			psCurr->asWeaps[0].lastFired -= firePause;
+			console("Selected buildings instantly recharged!");
+		}
+	}
 }
 
 // --------------------------------------------------------------------------
@@ -1473,7 +1493,15 @@ void	kf_FinishResearch( void )
 			pSubject = ((RESEARCH_FACILITY *)psCurr->pFunctionality)->psSubject;
 			if (pSubject)
 			{
-				researchResult((RESEARCH*)pSubject - asResearch, selectedPlayer, true, psCurr, true);
+				if (bMultiMessages)
+				{
+					SendResearch(selectedPlayer, (RESEARCH*)pSubject - asResearch, true);
+					// Wait for our message before doing anything.
+				}
+				else
+				{
+					researchResult((RESEARCH*)pSubject - asResearch, selectedPlayer, true, psCurr, true);
+				}
 				sasprintf((char**)&cmsg, _("(Player %u) is using cheat :%s %s"),
 					selectedPlayer, _("Researched"), getName(pSubject->pName) );
 				sendTextMessage(cmsg, true);
@@ -1570,7 +1598,7 @@ SDWORD	xJump,yJump;
 	}
 	else
 	{
-		addConsoleMessage(_("Unable to locate any resource extractors!"),LEFT_JUSTIFY, SYSTEM_MESSAGE);
+		addConsoleMessage(_("Unable to locate any oil derricks!"),LEFT_JUSTIFY, SYSTEM_MESSAGE);
 	}
 
 }
@@ -1902,13 +1930,13 @@ void	kf_KillEnemy( void )
 			for(psCDroid=apsDroidLists[player]; psCDroid; psCDroid=psNDroid)
 			{
 				psNDroid = psCDroid->psNext;
-				destroyDroid(psCDroid);
+				SendDestroyDroid(psCDroid);
 			}
 			// wipe out all their structures
 		  	for(psCStruct=apsStructLists[player]; psCStruct; psCStruct=psNStruct)
 		  	{
 		  		psNStruct = psCStruct->psNext;
-		  		destroyStruct(psCStruct);
+				SendDestroyStructure(psCStruct);
 		  	}
 		}
 	}
@@ -1944,7 +1972,7 @@ void kf_KillSelected(void)
 		if (psCDroid->selected)
 		{
 //			removeDroid(psCDroid);
-			destroyDroid(psCDroid);
+			SendDestroyDroid(psCDroid);
 		}
 	}
 	for(psCStruct=apsStructLists[selectedPlayer]; psCStruct; psCStruct=psNStruct)
@@ -1952,7 +1980,7 @@ void kf_KillSelected(void)
 		psNStruct = psCStruct->psNext;
 		if (psCStruct->selected)
 		{
-			destroyStruct(psCStruct);
+			SendDestroyStructure(psCStruct);
 		}
 	}
 }
@@ -2677,22 +2705,6 @@ void kf_NormalSpeed( void )
 
 // --------------------------------------------------------------------------
 
-void kf_ToggleReopenBuildMenu( void )
-{
-	intReopenBuild( !intGetReopenBuild() );
-
-	if (intGetReopenBuild())
-	{
-		CONPRINTF(ConsoleString,(ConsoleString,_("Build menu will reopen")));
-	}
-	else
-	{
-		CONPRINTF(ConsoleString,(ConsoleString,_("Build menu will not reopen")));
-	}
-}
-
-// --------------------------------------------------------------------------
-
 void kf_ToggleRadarAllyEnemy(void)
 {
 	bEnemyAllyRadarColor = !bEnemyAllyRadarColor;
@@ -2893,7 +2905,5 @@ void kf_NoAssert()
 
 void kf_ToggleLogical()
 {
-	logicalUpdates = !logicalUpdates;
-	graphicsTime = gameTime;
-	console(logicalUpdates ? "Logical update separation on" : "Logical update separation off");
+	console("Logical updates can no longer be toggled.");	// TODO remove me
 }

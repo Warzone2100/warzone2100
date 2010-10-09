@@ -1,44 +1,62 @@
 Source: warzone2100
 Section: games
 Priority: optional
-Maintainer: Angus Lees <gus@debian.org>
-Build-Depends: autoconf, automake, autotools-dev, bison, flex, gettext (>= 0.15), libgl-dev, libglc-dev (>= 0.6.5), libopenal-dev, libphysfs-dev, libpng12-dev, libpopt-dev, libsdl1.2-dev, libsqlite3-dev (>= 3.6.10), libtheora-dev, libvorbis-dev, netpbm, pkg-config, zlib1g-dev
-Build-Depends-Indep: debhelper (>= 4.2.21), zip, unzip
-Standards-Version: 3.6.2
+Maintainer: Warzone 2100 Project <warzone-dev@gna.org>
+Build-Depends: debhelper (>= 7),
+ bison,
+ flex (>= 2.5.35~) | flex (<< 2.5.34~), flex (>= 2.5.33~),
+ libopenal-dev,
+ libsdl1.2-dev,
+ libvorbis-dev,
+ libtheora-dev,
+ libphysfs-dev,
+ libpng12-dev,
+ dpkg-dev (>= 1.13.19),
+ libglc-dev,
+ pkg-config,
+ zip,
+ unzip
+Standards-Version: 3.8.4
+Homepage: http://www.wz2100.net/
 
 Package: warzone2100
 Architecture: any
-Depends: warzone2100-data (= ${Source-Version}), ${shlibs:Depends}, ${misc:Depends}, ttf-dejavu
+Depends: ${shlibs:Depends},
+ ${misc:Depends},
+ warzone2100-data (= ${source:Version})
+Recommends: warzone2100-music, warzone2100-video
 Description: Post-nuclear 3D real-time strategy game
- Warzone 2100 was an innovative 3D real-time strategy game back in
- 1999, and most will agree it didn't enjoy the commercial success it
- should have had. The game's source code was liberated on December
- 6th, 2004, under a GPL license. Soon after that, the Warzone
- Resurrection Project was formed to take care of its future.
+ In Warzone 2100 you command the forces of “The Project” in a battle to
+ rebuild the world after mankind has almost been destroyed by nuclear
+ missiles.
  .
- Features include:
-  - 400+ technologies to research
-  - 2,000+ different units to design
-  - 3 large campaign maps to conquer
-  - 24 fast play mission maps for extra action
-  - intelligence display sets objectives dynamically
-  - interactive message system
-  - fast play Interface graphically based
-  - quick screen navigation
-  - fast find system for units & structures
-  - set factories to constant production
-  - automatically send each factory's units to where you want them.
+ The game offers campaign, tutorial, multi-player and single-player skirmish
+ modes.
+ .
+ An extensive tech tree with over 400 different technologies, combined with
+ the unit design system, allows for a wide variety of possible units and
+ tactics.
+ .
+ Warzone 2100 was created by Pumpkin Studios, published by Eidos Interactive
+ and is currently developed by the Warzone 2100 Project.
 
 Package: warzone2100-data
 Architecture: all
 Depends: ${misc:Depends}
 Recommends: warzone2100
-Description: data files for warzone2100
+Description: Post-nuclear 3D real-time strategy game - data files
  This package contains data and translations for the warzone2100 game.
+ . 
+ It contains the campaign and multiplayer data, several mods (including
+ a more advanced AI, different terrain textures, new maps and scavengers).
 
-Package: warzone2100-dbg
-Architecture: any
-Priority: extra
-Depends: ${misc:Depends}, warzone2100 (= ${binary:Version})
-Description: debug files for warzone2100
- This package contains debug information for the warzone2100 game.
+Package: warzone2100-music
+Architecture: all
+Depends: ${misc:Depends}
+Recommends: warzone2100
+Description: Post-nuclear 3D real-time strategy game - music
+ This package contains official music for the warzone2100 game.
+ .
+ It contains the background music for the menu and during the game,
+ which varies between abstract, atmospheric and post-apocalyptic beats,
+ a perfect soundscape for a heated battle with the enemy.

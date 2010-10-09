@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -27,9 +27,13 @@
 #include "lib/framework/wzapp_c.h"
 #include "netsocket.h"
 
+#include "lib/framework/wzapp_c.h"
+
 #include <vector>
 #include <algorithm>
 #include <map>
+
+#include <zlib.h>
 
 #if   defined(WZ_OS_UNIX)
 # include <arpa/inet.h>
@@ -94,12 +98,23 @@ struct Socket
 	 *
 	 * All non-listening sockets will only use the first socket handle.
 	 */
-	Socket() : ready(false), writeError(false) {}
+	Socket() : ready(false), writeError(false), deleteLater(false), isCompressed(false), readDisconnected(false), zDeflateInSize(0) {}
+	~Socket();
 
 	SOCKET fd[SOCK_COUNT];
 	bool ready;
 	bool writeError;
+	bool deleteLater;
 	char textAddress[40];
+
+	bool isCompressed;
+	bool readDisconnected;  ///< True iff a call to recv() returned 0.
+	z_stream zDeflate;
+	z_stream zInflate;
+	unsigned zDeflateInSize;
+	bool zInflateNeedInput;
+	std::vector<uint8_t> zDeflateOutBuf;
+	std::vector<uint8_t> zInflateInBuf;
 };
 
 struct SocketSet
@@ -114,6 +129,9 @@ static WZ_THREAD *socketThread = NULL;
 static bool socketThreadQuit;
 typedef std::map<Socket *, std::vector<uint8_t> > SocketThreadWriteMap;
 static SocketThreadWriteMap socketThreadWrites;
+
+
+static void socketCloseNow(Socket *sock);
 
 
 bool socketReadReady(Socket const *sock)
@@ -423,9 +441,10 @@ static int socketThreadFunction(void *)
 				++i;
 
 				Socket *sock = w->first;
-				std::vector<uint8_t> &writeQueue = socketThreadWrites[sock];
+				std::vector<uint8_t> &writeQueue = w->second;
+				ASSERT(!writeQueue.empty(), "writeQueue[sock] must not be empty.");
 
-				if (writeQueue.empty() || !FD_ISSET(sock->fd[SOCK_CONNECTION], &fds))
+				if (!FD_ISSET(sock->fd[SOCK_CONNECTION], &fds))
 				{
 					continue;  // This socket is not ready for writing, or we don't have anything to write.
 				}
@@ -439,6 +458,10 @@ static int socketThreadFunction(void *)
 					if (writeQueue.empty())
 					{
 						socketThreadWrites.erase(w);  // Nothing left to write, delete from pending list.
+						if (sock->deleteLater)
+						{
+							socketCloseNow(sock);
+						}
 					}
 				}
 				else
@@ -454,6 +477,10 @@ static int socketThreadFunction(void *)
 								debug(LOG_NET, "Socket error");
 								sock->writeError = true;
 								socketThreadWrites.erase(w);  // Socket broken, don't try writing to it again.
+								if (sock->deleteLater)
+								{
+									socketCloseNow(sock);
+								}
 								break;
 							}
 						case EINTR:
@@ -466,6 +493,10 @@ static int socketThreadFunction(void *)
 						default:
 							sock->writeError = true;
 							socketThreadWrites.erase(w);  // Socket broken, don't try writing to it again.
+							if (sock->deleteLater)
+							{
+								socketCloseNow(sock);
+							}
 							break;
 					}
 				}
@@ -491,8 +522,6 @@ static int socketThreadFunction(void *)
  */
 ssize_t readNoInt(Socket* sock, void* buf, size_t max_size)
 {
-	ssize_t received;
-
 	if (sock->fd[SOCK_CONNECTION] == INVALID_SOCKET)
 	{
 		debug(LOG_ERROR, "Invalid socket");
@@ -500,14 +529,81 @@ ssize_t readNoInt(Socket* sock, void* buf, size_t max_size)
 		return SOCKET_ERROR;
 	}
 
+	if (sock->isCompressed)
+	{
+		if (sock->zInflateNeedInput)
+		{
+			// No input data, read some.
+
+			sock->zInflateInBuf.resize(max_size + 1000);
+
+			ssize_t received;
+			do
+			{  //                                                  v----- This weird cast is because recv() takes a char * on windows instead of a void *...
+				received = recv(sock->fd[SOCK_CONNECTION], (char *)&sock->zInflateInBuf[0], sock->zInflateInBuf.size(), 0);
+			} while (received == SOCKET_ERROR && getSockErr() == EINTR);
+			if (received < 0)
+			{
+				return received;
+			}
+
+			sock->zInflate.next_in = &sock->zInflateInBuf[0];
+			sock->zInflate.avail_in = received;
+
+			if (received == 0)
+			{
+				sock->readDisconnected = true;
+			}
+			else
+			{
+				sock->zInflateNeedInput = false;
+			}
+		}
+
+		sock->zInflate.next_out = (Bytef *)buf;
+		sock->zInflate.avail_out = max_size;
+		int ret = inflate(&sock->zInflate, Z_NO_FLUSH);
+		ASSERT(ret != Z_STREAM_ERROR, "zlib inflate not working!");
+		char const *err = NULL;
+		switch (ret)
+		{
+			case Z_NEED_DICT:  err = "Z_NEED_DICT";  break;
+			case Z_DATA_ERROR: err = "Z_DATA_ERROR"; break;
+			case Z_MEM_ERROR:  err = "Z_MEM_ERROR";  break;
+		}
+		if (err != NULL)
+		{
+			debug(LOG_ERROR, "Couldn't decompress data from socket. zlib error %s", err);
+			return -1;  // Bad data!
+		}
+
+		if (sock->zInflate.avail_out != 0)
+		{
+			sock->zInflateNeedInput = true;
+			ASSERT(sock->zInflate.avail_in == 0, "zlib not consuming all input!");
+		}
+
+		return max_size - sock->zInflate.avail_out;  // Got some data, return how much.
+	}
+
+	ssize_t received;
 	do
 	{
 		received = recv(sock->fd[SOCK_CONNECTION], (char*)buf, max_size, 0);
+		if (received == 0)
+		{
+			sock->readDisconnected = true;
+		}
 	} while (received == SOCKET_ERROR && getSockErr() == EINTR);
 
 	sock->ready = false;
 
 	return received;
+}
+
+bool socketReadDisconnected(Socket *sock)
+{
+	return sock->readDisconnected;
 }
 
 /**
@@ -533,17 +629,126 @@ ssize_t writeAll(Socket* sock, const void* buf, size_t size)
 
 	if (size > 0)
 	{
-		wzMutexLock(socketThreadMutex);
-		if (socketThreadWrites.empty())
+		if (!sock->isCompressed)
 		{
-			wzSemaphorePost(socketThreadSemaphore);
+			wzMutexLock(socketThreadMutex);
+			if (socketThreadWrites.empty())
+			{
+				wzSemaphorePost(socketThreadSemaphore);
+			}
+			std::vector<uint8_t> &writeQueue = socketThreadWrites[sock];
+			writeQueue.insert(writeQueue.end(), static_cast<char const *>(buf), static_cast<char const *>(buf) + size);
+			wzMutexUnlock(socketThreadMutex);
 		}
-		std::vector<uint8_t> &writeQueue = socketThreadWrites[sock];
-		writeQueue.insert(writeQueue.end(), static_cast<char const *>(buf), static_cast<char const *>(buf) + size);
-		wzMutexUnlock(socketThreadMutex);
+		else
+		{
+			sock->zDeflate.next_in = (Bytef *)buf;
+			sock->zDeflate.avail_in = size;
+			sock->zDeflateInSize += sock->zDeflate.avail_in;
+			do
+			{
+				size_t alreadyHave = sock->zDeflateOutBuf.size();
+				sock->zDeflateOutBuf.resize(alreadyHave + size + 20);  // A bit more than size should be enough to always do everything in one go.
+				sock->zDeflate.next_out = (Bytef *)&sock->zDeflateOutBuf[alreadyHave];
+				sock->zDeflate.avail_out = sock->zDeflateOutBuf.size() - alreadyHave;
+
+				int ret = deflate(&sock->zDeflate, Z_NO_FLUSH);
+				ASSERT(ret != Z_STREAM_ERROR, "zlib compression failed!");
+
+				// Remove unused part of buffer.
+				sock->zDeflateOutBuf.resize(sock->zDeflateOutBuf.size() - sock->zDeflate.avail_out);
+			} while(sock->zDeflate.avail_out == 0);
+
+			ASSERT(sock->zDeflate.avail_in == 0, "zlib didn't compress everything!");
+		}
 	}
 
 	return size;
+}
+
+void socketFlush(Socket *sock)
+{
+	if (!sock->isCompressed)
+	{
+		return;  // Not compressed, so don't mess with zlib.
+	}
+
+	// Flush data out of zlib compression state.
+	do
+	{
+		size_t alreadyHave = sock->zDeflateOutBuf.size();
+		sock->zDeflateOutBuf.resize(alreadyHave + 1000);  // 100 bytes would probably be enough to flush the rest in one go.
+		sock->zDeflate.next_out = (Bytef *)&sock->zDeflateOutBuf[alreadyHave];
+		sock->zDeflate.avail_out = sock->zDeflateOutBuf.size() - alreadyHave;
+
+		int ret = deflate(&sock->zDeflate, Z_PARTIAL_FLUSH);
+		ASSERT(ret != Z_STREAM_ERROR, "zlib compression failed!");
+
+		// Remove unused part of buffer.
+		sock->zDeflateOutBuf.resize(sock->zDeflateOutBuf.size() - sock->zDeflate.avail_out);
+	} while(sock->zDeflate.avail_out == 0);
+
+	if (sock->zDeflateOutBuf.empty())
+	{
+		return;  // No data to flush out.
+	}
+
+	wzMutexLock(socketThreadMutex);
+	if (socketThreadWrites.empty())
+	{
+		wzSemaphorePost(socketThreadSemaphore);
+	}
+	std::vector<uint8_t> &writeQueue = socketThreadWrites[sock];
+	writeQueue.insert(writeQueue.end(), sock->zDeflateOutBuf.begin(), sock->zDeflateOutBuf.end());
+	wzMutexUnlock(socketThreadMutex);
+
+	// Primitive network logging, uncomment to use.
+	//printf("Size %3u ->%3zu, buf =", sock->zDeflateInSize, sock->zDeflateOutBuf.size());
+	//for (unsigned n = 0; n < std::min<unsigned>(sock->zDeflateOutBuf.size(), 40); ++n) printf(" %02X", sock->zDeflateOutBuf[n]);
+	//printf("\n");
+
+	// Data sent, don't send again.
+	sock->zDeflateInSize = 0;
+	sock->zDeflateOutBuf.clear();
+}
+
+void socketBeginCompression(Socket *sock)
+{
+	if (sock->isCompressed)
+	{
+		return;  // Nothing to do.
+	}
+
+	wzMutexLock(socketThreadMutex);
+
+	// Init deflate.
+	sock->zDeflate.zalloc = Z_NULL;
+	sock->zDeflate.zfree = Z_NULL;
+	sock->zDeflate.opaque = Z_NULL;
+	int ret = deflateInit(&sock->zDeflate, 6);
+	ASSERT(ret == Z_OK, "deflateInit failed! Sockets won't work.");
+
+	sock->zInflate.zalloc = Z_NULL;
+	sock->zInflate.zfree = Z_NULL;
+	sock->zInflate.opaque = Z_NULL;
+	sock->zInflate.avail_in = 0;
+	sock->zInflate.next_in = Z_NULL;
+	ret = inflateInit(&sock->zInflate);
+	ASSERT(ret == Z_OK, "deflateInit failed! Sockets won't work.");
+
+	sock->zInflateNeedInput = true;
+
+	sock->isCompressed = true;
+	wzMutexUnlock(socketThreadMutex);
+}
+
+Socket::~Socket()
+{
+	if (isCompressed)
+	{
+		deflateEnd(&zDeflate);
+		deflateEnd(&zInflate);
+	}
 }
 
 SocketSet *allocSocketSet()
@@ -651,21 +856,41 @@ int checkSockets(const SocketSet* set, unsigned int timeout)
 		return 0;
 	}
 
-	int ret;
-	fd_set fds;
 #if   defined(WZ_OS_UNIX)
 	SOCKET maxfd = INT_MIN;
 #elif defined(WZ_OS_WIN)
 	SOCKET maxfd = 0;
 #endif
 
+	bool compressedReady = false;
 	for (size_t i = 0; i < set->fds.size(); ++i)
 	{
 		ASSERT(set->fds[i]->fd[SOCK_CONNECTION] != INVALID_SOCKET, "Invalid file descriptor!");
 
+		if (set->fds[i]->isCompressed && !set->fds[i]->zInflateNeedInput)
+		{
+			compressedReady = true;
+			break;
+		}
+
 		maxfd = std::max(maxfd, set->fds[i]->fd[SOCK_CONNECTION]);
 	}
 
+	if (compressedReady)
+	{
+		// A socket already has some data ready. Don't really poll the sockets.
+
+		int ret = 0;
+		for (size_t i = 0; i < set->fds.size(); ++i)
+		{
+			set->fds[i]->ready = set->fds[i]->isCompressed && !set->fds[i]->zInflateNeedInput;
+			++ret;
+		}
+		return ret;
+	}
+
+	int ret;
+	fd_set fds;
 	do
 	{
 		struct timeval tv = { timeout / 1000, (timeout % 1000) * 1000 };
@@ -711,6 +936,8 @@ int checkSockets(const SocketSet* set, unsigned int timeout)
  */
 ssize_t readAll(Socket* sock, void* buf, size_t size, unsigned int timeout)
 {
+	ASSERT(!sock->isCompressed, "readAll on compressed sockets not implemented.");
+
 	const SocketSet set = {std::vector<Socket *>(1, sock)};
 
 	size_t received = 0;
@@ -749,6 +976,7 @@ ssize_t readAll(Socket* sock, void* buf, size_t size, unsigned int timeout)
 		if (ret == 0)
 		{
 			debug(LOG_NET, "Socket %x disconnected.", sock->fd[SOCK_CONNECTION]);
+			sock->readDisconnected = true;
 			setSockErr(ECONNRESET);
 			return received;
 		}
@@ -775,41 +1003,51 @@ ssize_t readAll(Socket* sock, void* buf, size_t size, unsigned int timeout)
 	return received;
 }
 
+static void socketCloseNow(Socket *sock)
+{
+	for (unsigned i = 0; i < ARRAY_SIZE(sock->fd); ++i)
+	{
+		if (sock->fd[i] != INVALID_SOCKET)
+		{
+#if defined(WZ_OS_WIN)
+			int err = closesocket(sock->fd[i]);
+#else
+			int err = close(sock->fd[i]);
+#endif
+			if (err)
+			{
+				debug(LOG_ERROR, "Failed to close socket %p: %s", sock, strSockError(getSockErr()));
+			}
+
+			/* Make sure that dangling pointers to this
+			 * structure don't think they've got their
+			 * hands on a valid socket.
+			 */
+			sock->fd[i] = INVALID_SOCKET;
+		}
+	}
+	delete sock;
+}
+
 void socketClose(Socket* sock)
 {
-	unsigned int i;
-	int err = 0;
-
-	if (sock)
+	if (sock == NULL)
 	{
-		wzMutexLock(socketThreadMutex);
-		socketThreadWrites.erase(sock);
-		wzMutexUnlock(socketThreadMutex);
-
-		for (i = 0; i < ARRAY_SIZE(sock->fd); ++i)
-		{
-			if (sock->fd[i] != INVALID_SOCKET)
-			{
-#if   defined(WZ_OS_WIN)
-				err = closesocket(sock->fd[i]);
-#else
-				err = close(sock->fd[i]);
-#endif
-				if (err)
-				{
-					debug(LOG_ERROR, "Failed to close socket %p: %s", sock, strSockError(getSockErr()));
-				}
-
-				/* Make sure that dangling pointers to this
-				 * structure don't think they've got their
-				 * hands on a valid socket.
-				 */
-				sock->fd[i] = INVALID_SOCKET;
-			}
-		}
-		delete sock;
-		sock = NULL;
+		return;
 	}
+	wzMutexLock(socketThreadMutex);
+	//Instead of socketThreadWrites.erase(sock);, try sending the data before actually deleting.
+	if (socketThreadWrites.find(sock) != socketThreadWrites.end())
+	{
+		// Wait until the data is written, then delete the socket.
+		sock->deleteLater = true;
+	}
+	else
+	{
+		// Delete the socket.
+		socketCloseNow(sock);
+	}
+	wzMutexUnlock(socketThreadMutex);
 }
 
 Socket *socketAccept(Socket *sock)
@@ -864,7 +1102,7 @@ Socket *socketAccept(Socket *sock)
 			sock->ready = false;
 
 			addressToText((const struct sockaddr*)&addr, conn->textAddress, sizeof(conn->textAddress));
-			debug(LOG_NET, "Incoming connection from [%s]:%d", conn->textAddress, (unsigned int)ntohs(((const struct sockaddr_in*)&addr)->sin_port));
+			debug(LOG_NET, "Incoming connection from [%s]:/*%%d*/ (FIXME: gives strict-aliasing error)", conn->textAddress/*, (unsigned int)ntohs(((const struct sockaddr_in*)&addr)->sin_port)*/);
 			debug(LOG_NET, "Using socket %p", conn);
 			return conn;
 		}

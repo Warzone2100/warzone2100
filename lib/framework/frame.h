@@ -50,7 +50,8 @@ extern "C"
 {
 #endif //__cplusplus
 
-extern UDWORD selectedPlayer;
+extern uint32_t selectedPlayer;      ///< The player number corresponding to this client.
+extern uint32_t realSelectedPlayer;  ///< The player number corresponding to this client (same as selectedPlayer, unless changing players in the debug menu).
 #define MAX_PLAYERS		8	/**< Maximum number of players in the game. */
 #define MAX_PLAYER_SLOTS	10	/**< 8 players, 1 baba and 1 reserved for features. */
 

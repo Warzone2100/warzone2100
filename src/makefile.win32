@@ -20,7 +20,7 @@ SRC= \
 	advvis.c \
 	ai.c \
 	aiexperience.c \
-	astar.c \
+	astar.cpp \
 	atmos.c \
 	aud.c \
 	baseobject.c \
@@ -78,7 +78,7 @@ SRC= \
 	miscimd.c \
 	mission.c \
 	move.c \
-	multibot.c \
+	multibot.cpp \
 	multigifts.c \
 	multiint.c \
 	multijoin.c \

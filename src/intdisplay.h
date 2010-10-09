@@ -246,13 +246,13 @@ iIMDShape *DroidGetIMD(DROID *Droid);
 UDWORD DroidGetIMDIndex(DROID *Droid);
 BOOL DroidIsDemolishing(DROID *Droid);
 
-BOOL StructureIsManufacturing(STRUCTURE *Structure);
+bool StructureIsManufacturingPending(STRUCTURE *structure);   ///< Returns true iff the structure is either manufacturing or on hold (even if not yet synchronised).
+bool StructureIsOnHoldPending(STRUCTURE *structure);          ///< Returns true iff the structure is on hold (even if not yet synchronised).
+DROID_TEMPLATE *FactoryGetTemplate(FACTORY *Factory);
+
 RESEARCH_FACILITY *StructureGetResearch(STRUCTURE *Structure);
-BOOL StructureIsResearching(STRUCTURE *Structure);
 FACTORY *StructureGetFactory(STRUCTURE *Structure);
 iIMDShape *StructureGetIMD(STRUCTURE *Structure);
-
-DROID_TEMPLATE *FactoryGetTemplate(FACTORY *Factory);
 
 //iIMDShape *TemplateGetIMD(DROID_TEMPLATE *DroidTemp,UDWORD Player);
 //UDWORD TemplateGetIMDIndex(DROID_TEMPLATE *Template,UDWORD Player);

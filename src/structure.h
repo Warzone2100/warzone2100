@@ -123,17 +123,16 @@ extern void structureBuild(STRUCTURE *psStructure, DROID *psDroid, int buildPoin
 extern void structureDemolish(STRUCTURE *psStructure, DROID *psDroid, int buildPoints);
 extern BOOL structureRepair(STRUCTURE *psStruct, DROID *psDroid, int buildPoints);
 /* Set the type of droid for a factory to build */
-extern BOOL structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl,
-								 UBYTE quantity);
+extern BOOL structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl);
 
 //temp test function for creating structures at the start of the game
 extern void createTestStructures(void);
 
 //builds a specified structure at a given location
-extern STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y,
-						  UDWORD player,BOOL FromSave);
+STRUCTURE *buildStructure(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, UDWORD player, BOOL FromSave);
+STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, uint16_t direction, UDWORD player, BOOL FromSave);
 /// Create a blueprint structure, with just enough information to render it
-extern STRUCTURE *buildBlueprint(STRUCTURE_STATS *psStats, float x, float y, STRUCT_STATES state);
+extern STRUCTURE *buildBlueprint(STRUCTURE_STATS *psStats, float x, float y, uint16_t direction, STRUCT_STATES state);
 /* The main update routine for all Structures */
 void structureUpdate(STRUCTURE *psBuilding, bool mission);
 
@@ -153,8 +152,7 @@ extern UDWORD fillStructureList(STRUCTURE_STATS **ppList, UDWORD selectedPlayer,
 						 UDWORD limit);
 /* checks that the location is a valid one to build on and sets the outline colour
 x and y in tile-coords*/
-extern BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
-                          BOOL bCheckBuildQueue);
+extern bool validLocation(BASE_STATS *psStats, unsigned x, unsigned y, uint16_t direction, unsigned player, bool bCheckBuildQueue);
 
 /* for a new structure, find a location along an edge which the droid can get
 to and return this as the destination for the droid */
@@ -170,7 +168,7 @@ extern BOOL checkWidth(UDWORD maxRange, UDWORD x, UDWORD y, UDWORD *pDroidX, UDW
 /* check along the length of a structure for an empty space */
 extern BOOL checkLength(UDWORD maxRange, UDWORD x, UDWORD y, UDWORD *pDroidX, UDWORD *pDroidY);
 
-extern SWORD buildFoundation(STRUCTURE_STATS *psStructStats, UDWORD x, UDWORD y);
+extern SWORD buildFoundation(STRUCTURE *psStruct, UDWORD x, UDWORD y);
 extern void alignStructure(STRUCTURE *psBuilding);
 
 //initialise the structure limits structure
@@ -178,7 +176,7 @@ extern void initStructLimits(void);
 /* set the current number of structures of each type built */
 extern void setCurrentStructQuantity(BOOL displayError);
 /* get a stat inc based on the name */
-extern SDWORD getStructStatFromName(char *pName);
+extern int32_t getStructStatFromName(char const *pName);
 /*check to see if the structure is 'doing' anything  - return true if idle*/
 extern BOOL  structureIdle(STRUCTURE *psBuilding);
 /*checks to see if any structure exists of a specified type with a specified status */
@@ -336,6 +334,9 @@ extern void holdProduction(STRUCTURE *psBuilding);
 /*release a factory's production run from hold*/
 extern void releaseProduction(STRUCTURE *psBuilding);
 
+/// Does the next item in the production list.
+void doNextProduction(STRUCTURE *psStructure, DROID_TEMPLATE *current);
+
 /*This function is called after a game is loaded so that any resource extractors
 that are active are initialised for when to start*/
 extern void checkResExtractorsActive(void);
@@ -413,6 +414,13 @@ extern BOOL lasSatStructSelected(STRUCTURE *psStruct);
 
 BOOL structureCheckReferences(STRUCTURE *psVictimStruct);
 
+void cbNewDroid(STRUCTURE *psFactory, DROID *psDroid);
+
+unsigned getStructureWidth(const STRUCTURE *psBuilding);
+unsigned getStructureBreadth(const STRUCTURE *psBuilding);
+unsigned getStructureStatsWidth(const STRUCTURE_STATS *pStructureType, uint16_t direction);
+unsigned getStructureStatsBreadth(const STRUCTURE_STATS *pStructureType, uint16_t direction);
+
 static inline int structSensorRange(const STRUCTURE* psObj)
 {
 	return objSensorRange((const BASE_OBJECT*)psObj);
@@ -465,6 +473,9 @@ void checkStructure(const STRUCTURE* psStructure, const char * const location_de
 #define CHECK_STRUCTURE(object) checkStructure((object), AT_MACRO, __FUNCTION__, max_check_object_recursion)
 
 extern void     structureInitVars(void);
+
+#define syncDebugStructure(psStruct, ch) _syncDebugStructure(__FUNCTION__, psStruct, ch)
+void _syncDebugStructure(const char *function, STRUCTURE *psStruct, char ch);
 
 #ifdef __cplusplus
 }

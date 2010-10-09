@@ -965,6 +965,19 @@ BOOL stageTwoInitialise(void)
 
 	SetFormAudioIDs(ID_SOUND_WINDOWOPEN,ID_SOUND_WINDOWCLOSE);
 
+	// Setup game queues.
+	// Don't ask why this doesn't go in stage three. In fact, don't even ask me what stage one/two/three is supposed to mean, it seems about as descriptive as stage doStuff, stage doMoreStuff and stage doEvenMoreStuff...
+	debug(LOG_MAIN, "Init game queues, I am %d.", selectedPlayer);
+	for (i = 0; i < MAX_PLAYERS; ++i)
+	{
+		NETinitQueue(NETgameQueue(i));
+
+		if (!myResponsibility(i))
+		{
+			NETsetNoSendOverNetwork(NETgameQueue(i));
+		}
+	}
+
 	debug(LOG_MAIN, "stageTwoInitialise: done");
 
 	return true;
@@ -1224,6 +1237,7 @@ BOOL saveGameReset(void)
 static void	initMiscVars(void)
 {
 	selectedPlayer = 0;
+	realSelectedPlayer = 0;
 	godMode = false;
 
 	// ffs am

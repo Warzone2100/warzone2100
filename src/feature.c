@@ -263,14 +263,15 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 	UDWORD		startX,startY,max,min;
 	SDWORD		i;
 	UBYTE		vis;
-
 	//try and create the Feature
 	FEATURE* psFeature = createFeature();
+
 	if (psFeature == NULL)
 	{
 		debug(LOG_WARNING, "Feature couldn't be built.");
 		return NULL;
 	}
+	psFeature->psStats = psStats;
 	// features are not in the cluster system
 	// this will cause an assert when they still end up there
 	psFeature->cluster = ~0;
@@ -317,10 +318,7 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 	{
 		psFeature->rot.direction = 0;
 	}
-	//psFeature->damage = featureDamage;
 	psFeature->selected = false;
-	psFeature->psStats = psStats;
-	//psFeature->subType = psStats->subType;
 	psFeature->body = psStats->body;
 	psFeature->player = MAX_PLAYERS+1;	//set the player out of range to avoid targeting confusions
 	objSensorCache((BASE_OBJECT *)psFeature, NULL);
@@ -477,9 +475,9 @@ void featureUpdate(FEATURE *psFeat)
 // free up a feature with no visual effects
 bool removeFeature(FEATURE *psDel)
 {
-	UDWORD		mapX, mapY, width,breadth, player;
+	int		mapX, mapY, width, breadth, player;
 	MESSAGE		*psMessage;
-	Vector3i pos;
+	Vector3i	pos;
 
 	ASSERT_OR_RETURN(false, psDel != NULL, "Invalid feature pointer");
 	ASSERT_OR_RETURN(false, !psDel->died, "Feature already dead");
@@ -487,21 +485,27 @@ bool removeFeature(FEATURE *psDel)
 	if(bMultiMessages && !ingame.localJoiningInProgress)
 	{
 		SendDestroyFeature(psDel);	// inform other players of destruction
+		return true;  // Wait for our message before really destroying the feature.
 	}
 
 	//remove from the map data
-	mapX = map_coord(psDel->pos.x - psDel->psStats->baseWidth * TILE_UNITS / 2);
-	mapY = map_coord(psDel->pos.y - psDel->psStats->baseBreadth * TILE_UNITS / 2);
-	for (width = 0; width < psDel->psStats->baseWidth; width++)
+	mapX = map_coord(psDel->pos.x);
+	mapY = map_coord(psDel->pos.y);
+	for (width = -psDel->psStats->baseWidth; width < psDel->psStats->baseWidth; width++)
 	{
-		for (breadth = 0; breadth < psDel->psStats->baseBreadth; breadth++)
+		for (breadth = -psDel->psStats->baseBreadth; breadth < psDel->psStats->baseBreadth; breadth++)
 		{
-			MAPTILE *psTile = mapTile(mapX + width, mapY + breadth);
-
-			psTile->psObject = NULL;
-
-			CLEAR_TILE_TALLSTRUCTURE(psTile);
-			CLEAR_TILE_NOTBLOCKING(psTile);
+			if (tileOnMap(mapX + width, mapY + breadth))
+			{
+				MAPTILE *psTile = mapTile(mapX + width, mapY + breadth);
+	 
+				if (psTile->psObject == (BASE_OBJECT *)psDel)
+				{
+					psTile->psObject = NULL;
+					CLEAR_TILE_TALLSTRUCTURE(psTile);
+					CLEAR_TILE_NOTBLOCKING(psTile);
+				}
+			}
 		}
 	}
 

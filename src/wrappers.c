@@ -259,6 +259,7 @@ TITLECODE titleLoop(void)
 			debug( LOG_FATAL, "unknown title screen mode" );
 			abort();
 	}
+	NETflush();  // Send any pending network data.
 
 	audio_Update();
 	

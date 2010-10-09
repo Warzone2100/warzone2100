@@ -1,0 +1,17 @@
+Source: trac-ticketnotifications
+Section: python
+Priority: optional
+Maintainer: Giel van Schijndel <me@mortis.eu>
+Build-Depends: debhelper (>= 5), cdbs (>= 0.4.43), python, python-support (>= 0.4), python-setuptools
+Standards-Version: 3.8.4
+Homepage: http://developer.wz2100.net/browser/trunk/tools/trac/plugins/ticketnotifications
+
+Package: trac-ticketnotifications
+Architecture: all
+Depends: ${misc:Depends}, ${python:Depends}, trac (>= 0.11)
+Description: Notify custom addresses on ticket and attachment creation
+ Extends Trac to notify a configured set of e-mail addresses upon ticket
+ creation.
+ .
+ Additionally extends Trac to notify ticket subscribers when a new attachment
+ is created and attached to a ticket.

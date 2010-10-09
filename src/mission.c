@@ -255,6 +255,7 @@ void initMission(void)
 		apsLimboDroids[inc] = NULL;
 	}
 	mission.apsSensorList[0] = NULL;
+	mission.apsOilList[0] = NULL;
 	offWorldKeepLists = false;
 	mission.time = -1;
 	setMissionCountDown();
@@ -327,7 +328,9 @@ BOOL missionShutDown(void)
 			mission.apsFlagPosLists[inc] = NULL;
 		}
 		apsSensorList[0] = mission.apsSensorList[0];
+		apsOilList[0] = mission.apsOilList[0];
 		mission.apsSensorList[0] = NULL;
+		mission.apsOilList[0] = NULL;
 
 		psMapTiles = mission.psMapTiles;
 		mapWidth = mission.mapWidth;
@@ -804,6 +807,7 @@ static void saveMissionData(void)
 		mission.apsFlagPosLists[inc] = apsFlagPosLists[inc];
 	}
 	mission.apsSensorList[0] = apsSensorList[0];
+	mission.apsOilList[0] = apsOilList[0];
 
 	mission.playerX = player.p.x;
 	mission.playerY = player.p.z;
@@ -868,6 +872,7 @@ void restoreMissionData(void)
 		mission.apsFlagPosLists[inc] = NULL;
 	}
 	apsSensorList[0] = mission.apsSensorList[0];
+	apsOilList[0] = mission.apsOilList[0];
 	mission.apsSensorList[0] = NULL;
 	//swap mission data over
 
@@ -1458,6 +1463,9 @@ void swapMissionPointers(void)
 	pVoid = (void*)apsSensorList[0];
 	apsSensorList[0] = mission.apsSensorList[0];
 	mission.apsSensorList[0] = (BASE_OBJECT *)pVoid;
+	pVoid = (void*)apsOilList[0];
+	apsOilList[0] = mission.apsOilList[0];
+	mission.apsOilList[0] = (BASE_OBJECT *)pVoid;
 }
 
 void endMission(void)
@@ -1919,7 +1927,7 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, BOOL goingHome)
 
 			// Set the launch time so the transporter doesn't just disappear for CAMSTART/CAMCHANGE
 			transporterSetLaunchTime(gameTime);
-        }
+		}
 	}
 }
 
@@ -2682,7 +2690,7 @@ DROID * buildMissionDroid(DROID_TEMPLATE *psTempl, UDWORD x, UDWORD y,
 {
 	DROID		*psNewDroid;
 
-	psNewDroid = buildDroid(psTempl, world_coord(x), world_coord(y), player, true);
+	psNewDroid = buildDroid(psTempl, world_coord(x), world_coord(y), player, true, NULL);
 	if (!psNewDroid)
 	{
 		return NULL;
@@ -2781,7 +2789,7 @@ void saveMissionPower(void)
 
 	for (inc = 0; inc < MAX_PLAYERS; inc++)
 	{
-		mission.asPower[inc].currentPower = getPower(inc);
+		mission.asCurrentPower[inc] = getPower(inc);
 	}
 }
 
@@ -2792,7 +2800,7 @@ void adjustMissionPower(void)
 
 	for (inc = 0; inc < MAX_PLAYERS; inc++)
 	{
-		addPower(inc, mission.asPower[inc].currentPower);
+		addPower(inc, mission.asCurrentPower[inc]);
 	}
 }
 

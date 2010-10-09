@@ -26,6 +26,8 @@
 
 #include "featuredef.h"
 #include "group.h"
+#include "featuredef.h"
+#include "droid.h"  // For INITIAL_DROID_ORDERS.
 
 #ifdef __cplusplus
 extern "C"
@@ -66,10 +68,20 @@ typedef struct {
 	UDWORD				startTime;
 	UDWORD				numStructureLimits;					// number of limits
 	MULTISTRUCTLIMITS	*pStructureLimits;					// limits chunk.
+	uint8_t                         flags;  ///< Bitmask, shows which structures are disabled.
 	UDWORD		skScores[MAX_PLAYERS][2];			// score+kills for local skirmish players.
 	char		phrases[5][255];					// 5 favourite text messages.
 } MULTIPLAYERINGAME;
 
+typedef enum
+{
+	STRUCTUREINFO_MANUFACTURE,
+	STRUCTUREINFO_CANCELPRODUCTION,
+	STRUCTUREINFO_HOLDPRODUCTION,
+	STRUCTUREINFO_RELEASEPRODUCTION,
+	STRUCTUREINFO_HOLDRESEARCH,
+	STRUCTUREINFO_RELEASERESEARCH
+} STRUCTURE_INFO;
 
 // ////////////////////////////////////////////////////////////////////////////
 // Game Options and stats.
@@ -89,12 +101,11 @@ extern UBYTE				bDisplayMultiJoiningStatus;	// draw load progress?
 //       do the sync code checks anymore(!), needless to say, this can and does cause issues.
 // FIXME: We should define this externally so people with dial-up modems can configure this
 // FIXME: Use possible compression on the packets.
-// NOTE: Remember, we (now) allow 150 units max * 7 (1 human, 6 AI possible for Host) to send to the other player.
+// NOTE: Remember, we (now) allow 450 units max * 7 (1 human, 6 AI possible for Host) to send to the other player.
 
 #define MAX_BYTESPERSEC			14336
 
 #define ANYPLAYER				99
-#define ONEPLAYER				98
 
 #define CAMPAIGN				12
 #define	SKIRMISH				14
@@ -111,7 +122,7 @@ extern UBYTE				bDisplayMultiJoiningStatus;	// draw load progress?
 #define DEATHMATCHTEMPLATES		4			// game templates are stored in player x.
 #define CAMPAIGNTEMPLATES		5
 
-#define PING_LO					0			// this ping is kickin'.
+//#define PING_LO                               0                       // this ping is kickin'.
 #define PING_MED				200			// this ping is crawlin'
 #define PING_HI					400			// this ping just plain sucks :P
 #define PING_LIMIT				1000		// if ping is bigger than this, then worry and panic.
@@ -150,6 +161,7 @@ extern BOOL SendResearch(uint8_t player, uint32_t index, bool trigger);
 extern BOOL SendDestroyFeature  (FEATURE *pF);					// send a destruct feature message.
 extern BOOL sendTextMessage		(const char *pStr,BOOL cast);		// send a text message
 extern BOOL sendAIMessage		(char *pStr, UDWORD player, UDWORD to);	//send AI message
+void printConsoleNameChange(const char *oldName, const char *newName);  ///< Print message to console saying a name changed.
 
 extern void turnOffMultiMsg		(BOOL bDoit);
 
@@ -160,18 +172,18 @@ extern BOOL multiplayerWinSequence(BOOL firstCall);
 // definitions of functions in multiplay's other c files.
 
 // Buildings . multistruct
-extern BOOL	sendBuildStarted	(STRUCTURE *psStruct, DROID *psDroid);
+extern BOOL sendBuildStarted            (STRUCTURE *psStruct, DROID *psDroid);
 extern BOOL SendDestroyStructure(STRUCTURE *s);
 extern BOOL	SendBuildFinished	(STRUCTURE *psStruct);
 extern BOOL sendLasSat			(UBYTE player, STRUCTURE *psStruct, BASE_OBJECT *psObj);
-
+void sendStructureInfo                  (STRUCTURE *psStruct, STRUCTURE_INFO structureInfo, DROID_TEMPLATE *psTempl);
 
 // droids . multibot
-extern BOOL SendDroid			(const DROID_TEMPLATE* pTemplate, uint32_t x, uint32_t y, uint8_t player, uint32_t id);
+extern BOOL SendDroid                   (const DROID_TEMPLATE* pTemplate, uint32_t x, uint32_t y, uint8_t player, uint32_t id, const INITIAL_DROID_ORDERS *initialOrders);
 extern BOOL SendDestroyDroid	(const DROID* psDroid);
 extern BOOL SendDemolishFinished(STRUCTURE *psS,DROID *psD);
-extern BOOL SendDroidInfo		(const DROID* psDroid, DROID_ORDER order, uint32_t x, uint32_t y, const BASE_OBJECT* psObj);
-extern BOOL SendDroidMove		(const DROID* psDroid, uint32_t x, uint32_t y, BOOL formation);
+void sendQueuedDroidInfo(void);  ///< Actually sends the droid orders which were queued by SendDroidInfo.
+extern BOOL SendDroidInfo               (const DROID* psDroid, DROID_ORDER order, uint32_t x, uint32_t y, const BASE_OBJECT* psObj, const BASE_STATS *psStats, uint32_t x2, uint32_t y2, uint16_t direction);
 extern BOOL SendGroupOrderSelected(uint8_t player, uint32_t x, uint32_t y, const BASE_OBJECT* psObj, BOOL altOrder);
 extern BOOL SendCmdGroup		(DROID_GROUP *psGroup, UWORD x, UWORD y, BASE_OBJECT *psObj);
 
@@ -179,10 +191,8 @@ extern BOOL SendGroupOrderGroup(const DROID_GROUP* psGroup, DROID_ORDER order, u
 
 
 extern BOOL sendDroidSecondary	(const DROID* psDroid, SECONDARY_ORDER sec, SECONDARY_STATE state);
-extern BOOL sendDroidSecondaryAll(const DROID* psDroid);
 extern BOOL sendDroidEmbark     (const DROID* psDroid, const DROID* psTransporter);
 extern BOOL sendDroidDisEmbark  (const DROID* psDroid, const DROID* psTransporter);
-extern BOOL sendHappyVtol		(const DROID* psDroid);
 
 // Startup. mulitopt
 extern BOOL multiTemplateSetup	(void);
@@ -202,9 +212,9 @@ extern BOOL sendCheck			(void);							//send/recv  check info
 extern BOOL sendScoreCheck		(void);							//score check only(frontend)
 extern BOOL sendPing			(void);							// allow game to request pings.
 
-extern BOOL ForceDroidSync(DROID* droidToSend);
+extern BOOL ForceDroidSync(const DROID *droidToSend);
 // multijoin
-extern BOOL sendReseachStatus	(STRUCTURE *psBuilding ,UDWORD index, UBYTE player, BOOL bStart);
+extern BOOL sendResearchStatus  (STRUCTURE *psBuilding, UDWORD index, UBYTE player, BOOL bStart);
 
 extern void displayAIMessage	(char *pStr, SDWORD from, SDWORD to); //make AI process a message
 
@@ -228,7 +238,6 @@ extern	void startMultiplayerGame	(void);
 extern	void resetReadyStatus		(bool bSendOptions);
 
 extern	BOOL bPlayerReadyGUI[MAX_PLAYERS];
-extern bool isMPDirtyBit;
 
 #ifdef __cplusplus
 }

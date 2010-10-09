@@ -36,12 +36,8 @@
 #include "lib/ivis_common/textdraw.h"
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/pieblitfunc.h"
+#include "lib/ivis_common/pieclip.h"
 
-#if defined(WZ_OS_MAC)
-#include <OpenGL/glu.h>
-#else
-#include <GL/glu.h>
-#endif
 #include "screen.h"
 #include "src/console.h"
 #include "src/levels.h"
@@ -82,13 +78,13 @@ bool screenInitialise()
 	/* Dump general information about OpenGL implementation to the console and the dump file */
 	ssprintf(buf, "OpenGL Vendor : %s", glGetString(GL_VENDOR));
 	addDumpInfo(buf);
-	debug(LOG_3D, buf);
+	debug(LOG_3D, "%s", buf);
 	ssprintf(buf, "OpenGL Renderer : %s", glGetString(GL_RENDERER));
 	addDumpInfo(buf);
-	debug(LOG_3D, buf);
+	debug(LOG_3D, "%s", buf);
 	ssprintf(buf, "OpenGL Version : %s", glGetString(GL_VERSION));
 	addDumpInfo(buf);
-	debug(LOG_3D, buf);
+	debug(LOG_3D, "%s", buf);
 
 	/* Dump extended information about OpenGL implementation to the console */
 	debug(LOG_3D, "OpenGL Extensions : %s", glGetString(GL_EXTENSIONS)); // FIXME This is too much for MAX_LEN_LOG_LINE
@@ -324,16 +320,33 @@ void screen_Upload(const char *newBackDropBmp, BOOL preview)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	}
 
-	glBegin(GL_TRIANGLE_STRIP);
-		glTexCoord2f(0, 0);
-		glVertex2f(x1, y1);
-		glTexCoord2f(tx, 0);
-		glVertex2f(x2, y1);
-		glTexCoord2f(0, ty);
-		glVertex2f(x1, y2);
-		glTexCoord2f(tx, ty);
-		glVertex2f(x2, y2);
-	glEnd();
+	glPushMatrix();
+	glTranslatef(x1, y1, 0);
+	glScalef(x2 - x1, y2 - y1, 1);
+	glMatrixMode(GL_TEXTURE);
+	glPushMatrix(); // texture matrix
+	glScalef(tx, ty, 1);
+	{
+		const Vector2i vertices[] = {
+			{ 0, 0 },
+			{ 1, 0 },
+			{ 0, 1 },
+			{ 1, 1 },
+		};
+
+		glVertexPointer(2, GL_INT, 0, vertices);
+		glEnableClientState(GL_VERTEX_ARRAY);
+
+		glTexCoordPointer(2, GL_INT, 0, vertices);
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+		glDrawArrays(GL_TRIANGLE_STRIP, 0, ARRAY_SIZE(vertices));
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+		glDisableClientState(GL_VERTEX_ARRAY);
+	}
+	glPopMatrix(); // texture matrix
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
 
 	if (preview)
 	{

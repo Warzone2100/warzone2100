@@ -239,7 +239,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\astar.c"
+				RelativePath="..\src\astar.cpp"
 				>
 			</File>
 			<File
@@ -483,7 +483,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\multibot.c"
+				RelativePath="..\src\multibot.cpp"
 				>
 			</File>
 			<File

@@ -40,9 +40,6 @@ extern "C"
 /* Initialise the Trig tables */
 extern bool trigInitialise(void);
 
-/* Shutdown the trig tables */
-extern void trigShutDown(void);
-
 // Deterministic trig functions.
 int32_t iSin(uint16_t a);               ///< Returns sin(a*2π >> 16) << 16, rounded to nearest integer. Used as the x component in this game.
 int32_t iCos(uint16_t a);               ///< Returns cos(a*2π >> 16) << 16, rounded to nearest integer. Used as the y component in this game.

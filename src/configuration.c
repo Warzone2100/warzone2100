@@ -231,7 +231,16 @@ BOOL loadConfig(void)
 		setRightClickOrders(false);
 		setWarzoneKeyNumeric("RightClickOrders", false);
 	}
-
+	if (getWarzoneKeyNumeric("MiddleClickRotate", &val))
+	{
+		setMiddleClickRotate(val);
+	}
+	else
+	{
+		setMiddleClickRotate(false);
+		setWarzoneKeyNumeric("MiddleClickRotate", false);
+	}
+	
 	// //////////////////////////
 	// rotate radar
 	if(getWarzoneKeyNumeric("rotateRadar", &val))
@@ -268,34 +277,24 @@ BOOL loadConfig(void)
 		setWarzoneKeyString("masterserver_name", NETgetMasterserverName());
 	}
 
-	if (getWarzoneKeyString("fontname", sBuf))
+	if (getWarzoneKeyString("fontname", sBuf) && strcmp(sBuf,"Lucida Grande"))
 	{
 		iV_font(sBuf, NULL, NULL);
 	}
 	else
 	{
-#ifdef WZ_OS_MAC
-		iV_font("Lucida Grande", NULL, NULL);
-		setWarzoneKeyString("fontname", "Lucida Grande");
-#else
 		iV_font("DejaVu Sans", NULL, NULL);
 		setWarzoneKeyString("fontname", "DejaVu Sans");
-#endif
 	}
 
-	if (getWarzoneKeyString("fontface", sBuf))
+	if (getWarzoneKeyString("fontface", sBuf) && strcmp(sBuf,"Normal"))
 	{
 		iV_font(NULL, sBuf, NULL);
 	}
 	else
 	{
-#ifdef WZ_OS_MAC
-		iV_font(NULL, "Regular", NULL);
-		setWarzoneKeyString("fontface", "Regular");
-#else
 		iV_font(NULL, "Book", NULL);
 		setWarzoneKeyString("fontface", "Book");
-#endif
 	}
 
 	if (getWarzoneKeyString("fontfacebold", sBuf))
@@ -405,17 +404,6 @@ BOOL loadConfig(void)
 		}
 	}
 
-
-	// reopen the build menu after placing a structure
-	if(getWarzoneKeyNumeric("reopenBuild", &val))
-	{
-		intReopenBuild(val);
-	}
-	else
-	{
-		intReopenBuild(true);
-		setWarzoneKeyNumeric("reopenBuild", true);
-	}
 
 	// /////////////////////////
 	//  multiplayer stuff.
@@ -680,8 +668,8 @@ BOOL loadRenderMode(void)
 	{
 		// If we have an invalid or incomplete resolution specified
 		// fall back to the defaults.
-		war_SetWidth(640);
-		war_SetHeight(480);
+		war_SetWidth(0);
+		war_SetHeight(0);
 	}
 
 	if (getWarzoneKeyNumeric("bpp", &val))
@@ -730,11 +718,11 @@ BOOL saveConfig(void)
 	setWarzoneKeyNumeric("shake",(SDWORD)(getShakeStatus()));		// screenshake
 	setWarzoneKeyNumeric("mouseflip",(SDWORD)(getInvertMouseStatus()));	// flipmouse
 	setWarzoneKeyNumeric("RightClickOrders",(SDWORD)(getRightClickOrders()));
+	setWarzoneKeyNumeric("MiddleClickRotate",(SDWORD)(getMiddleClickRotate()));
 	setWarzoneKeyNumeric("shadows",(SDWORD)(getDrawShadows()));	// shadows
 	setWarzoneKeyNumeric("sound", (SDWORD)war_getSoundEnabled());
 	setWarzoneKeyNumeric("FMVmode",(SDWORD)(war_GetFMVmode()));		// sequences
 	setWarzoneKeyNumeric("subtitles",(SDWORD)(seq_GetSubtitles()));		// subtitles
-	setWarzoneKeyNumeric("reopenBuild",(SDWORD)(intGetReopenBuild()));	// build menu
 	setWarzoneKeyNumeric("radarObjectMode",(SDWORD)bEnemyAllyRadarColor);    // enemy/allies radar view
 	setWarzoneKeyNumeric("radarTerrainMode",(SDWORD)radarDrawMode);
 	setWarzoneKeyNumeric("trapCursor", war_GetTrapCursor());
