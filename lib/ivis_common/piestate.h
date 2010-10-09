@@ -84,7 +84,7 @@ typedef struct	RENDER_STATE
 typedef enum
 {
 	TEXPAGE_NONE = -1,
-	TEXPAGE_FONT = -2
+	TEXPAGE_EXTERN = -2
 } TEXPAGE_TYPE;
 
 typedef enum

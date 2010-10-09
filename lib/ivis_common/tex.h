@@ -38,10 +38,6 @@
 
 //*************************************************************************
 
-#define iV_TEXNAME(i)	((char *) (&_TEX_PAGE[(i)].name))
-
-//*************************************************************************
-
 typedef struct
 {
 	char name[iV_TEXNAME_MAX];
@@ -52,6 +48,18 @@ typedef struct
 
 extern unsigned int _TEX_INDEX;
 extern iTexPage _TEX_PAGE[iV_TEX_MAX];
+
+//*************************************************************************
+
+static inline char * iV_TexName(SDWORD pageNum)
+{
+	return _TEX_PAGE[pageNum].name;
+}
+
+static inline GLuint iV_NativeTexID(SDWORD pageNum)
+{
+	return _TEX_PAGE[pageNum].id;
+}
 
 //*************************************************************************
 
