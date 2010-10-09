@@ -27,7 +27,6 @@
 #define _trig_h
 
 #include "frame.h"
-#include "math_ext.h"
 
 #ifdef __cplusplus
 extern "C"
