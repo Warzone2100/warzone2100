@@ -3584,12 +3584,14 @@ SDWORD	xShift,yShift, index;
 void calcScreenCoords(DROID *psDroid)
 {
 	/* Get it's absolute dimensions */
-	const Vector3i zero = {0, 0, 0};
+	const Vector3i origin = {0, 0, 0};
 	Vector2i center = {0, 0};
-	SDWORD cZ;
 	UDWORD radius;
 
-	/* How big a box do we want - will ultimately be calculated using xmax, ymax, zmax etc */
+	/* get the screen corrdinates */
+	const int cZ = pie_RotateProject(&origin, &center);
+
+	// TODO: compute the droid's radius (using min/max for x,y,z)
 	if(psDroid->droidType == DROID_TRANSPORTER)
 	{
 		radius = 45;
@@ -3598,9 +3600,6 @@ void calcScreenCoords(DROID *psDroid)
 	{
 		radius = 22;
 	}
-
-	/* Pop matrices and get the screen corrdinates */
-	cZ = pie_RotateProject( &zero, &center );
 
 	//Watermelon:added a crash protection hack...
 	if (cZ != 0)
