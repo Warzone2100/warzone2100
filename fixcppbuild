@@ -13,5 +13,3 @@ do
 		echo Skipping "$a".
 	fi
 done
-# macosx weirdness:
-sed -i 's/sourcecode\.c\.c;\(.*\.cpp;\)/sourcecode.cpp.cpp;\1/' macosx/Warzone.xcodeproj/project.pbxproj
