@@ -2243,7 +2243,7 @@ void	renderStructure(STRUCTURE *psStructure)
 					flashImd[0] = NULL;
 				}
 				//check for sensor
-				else if (psStructure->pStructureType->pSensor != NULL)
+				if (psStructure->pStructureType->pSensor != NULL)
 				{
 					weaponImd[0] =  psStructure->pStructureType->pSensor->pIMD;
 					/* No recoil for sensors */
