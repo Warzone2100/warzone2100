@@ -403,12 +403,12 @@ void pie_MatInit(void)
 void pie_RotateTranslate3f(const Vector3f *v, Vector3f *s)
 {
 	/*
-	 * s = curMatrix . v
+	 *     [ 1 0 0 0 ]               [ 1 0 0 0 ]
+	 *     [ 0 0 1 0 ]               [ 0 0 1 0 ]
+	 * s = [ 0 1 0 0 ] . curMatrix . [ 0 1 0 0 ] . v
+	 *     [ 0 0 0 1 ]               [ 0 0 0 1 ]
 	 */
-	s->x = ( v->x * psMatrix->a + v->z * psMatrix->d + v->y * psMatrix->g
-			+ psMatrix->j ) / FP12_MULTIPLIER;
-	s->z = ( v->x * psMatrix->b + v->z * psMatrix->e + v->y * psMatrix->h
-			+ psMatrix->k ) / FP12_MULTIPLIER;
-	s->y = ( v->x * psMatrix->c + v->z * psMatrix->f + v->y * psMatrix->i
-			+ psMatrix->l ) / FP12_MULTIPLIER;
+	s->x = (v->x * psMatrix->a + v->y * psMatrix->g + v->z * psMatrix->d + psMatrix->j) / FP12_MULTIPLIER;
+	s->y = (v->x * psMatrix->c + v->y * psMatrix->i + v->z * psMatrix->f + psMatrix->l) / FP12_MULTIPLIER;
+	s->z = (v->x * psMatrix->b + v->y * psMatrix->h + v->z * psMatrix->e + psMatrix->k) / FP12_MULTIPLIER;
 }
