@@ -1,0 +1,7 @@
+// SDLmain settings for Release configuration
+
+#include "SDLmain-All.xcconfig"
+
+
+GCC_ENABLE_FIX_AND_CONTINUE = NO
+ZERO_LINK = NO

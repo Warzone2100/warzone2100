@@ -1,0 +1,7 @@
+// Warzone settings for StaticAnalyzer configuration
+
+#include "Warzone-Debug.xcconfig"
+
+
+RUN_CLANG_STATIC_ANALYZER = YES
+GCC_OPTIMIZATION_LEVEL = 2

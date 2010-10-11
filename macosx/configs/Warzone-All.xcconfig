@@ -1,0 +1,44 @@
+// Warzone settings for all configurations
+
+
+INSTALL_PATH = $(HOME)/Applications
+PREBINDING = NO
+APPLY_RULES_IN_COPY_FILES = YES
+INFOPLIST_FILE = Resources/Warzone-Info.plist
+INFOPLIST_OTHER_PREPROCESSOR_FLAGS = -traditional
+INFOPLIST_PREFIX_HEADER = $(SRCROOT)/build/autorevision.h
+INFOPLIST_PREPROCESS = YES
+PRODUCT_NAME = Warzone
+WRAPPER_EXTENSION = app
+FRAMEWORK_SEARCH_PATHS = $(FRAMEWORK_SEARCH_PATHS_QUOTED_1) $(FRAMEWORK_SEARCH_PATHS_QUOTED_2) $(FRAMEWORK_SEARCH_PATHS_QUOTED_3) $(inherited)
+HEADER_SEARCH_PATHS = .. $(inherited) $(HEADER_SEARCH_PATHS_QUOTED_1)
+LIBRARY_SEARCH_PATHS = $(inherited) $(LIBRARY_SEARCH_PATHS_QUOTED_1) $(LIBRARY_SEARCH_PATHS_QUOTED_3)
+GCC_ENABLE_SSE3_EXTENSIONS = YES // -msse3
+GCC_MODEL_TUNING = G5
+OTHER_CFLAGS = $(FlagsForCandCpp) $(BuildDependentFlagsForC) -Wmissing-declarations -Wno-pointer-to-int-cast -Wno-strict-aliasing -Wstrict-prototypes -Wdeclaration-after-statement $(inherited) // Warning flags that c++ does not like
+// OTHER_CFLAGS[arch=i386] = -Wno-type-limits $(inherited) // intel 32 bit only
+// OTHER_CFLAGS[arch=x86_64] = -Wno-type-limits $(inherited) // intel 64 bit only
+OTHER_CPLUSPLUSFLAGS = $(FlagsForCandCpp) // -Wc++0x-compat is not in clang
+OTHER_CPLUSPLUSFLAGS[arch=i386] = $(inherited) // intel 32 bit only
+
+
+// Warnings
+GCC_WARN_CHECK_SWITCH_STATEMENTS = YES // -Wswitch
+GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES // -Wmissing-braces
+GCC_WARN_ABOUT_RETURN_TYPE = YES // -Wreturn-type
+GCC_WARN_MISSING_PARENTHESES = YES // -Wparentheses
+GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES // -Wmissing-field-initializers
+// -Wno-clobbered is not in clang
+WARNING_CFLAGS = -Wall -Wextra -Wno-unused-parameter -Wno-sign-compare -Wcast-align -Wwrite-strings -Wpointer-arith -Wno-format-security -Wmissing-field-initializers // Wno-missing-declarations is set on GLee.c; otherwise we would have +3000 warnings
+GCC_WARN_SIGN_COMPARE = NO // FIXME: -Wsign-compare there are a lot of these and they should be fixed
+GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = NO // FIXME: -Wno-format  Hides some "format not a string literal and no format arguments" warnings; these should be fixed at some point
+GCC_WARN_UNDECLARED_SELECTOR = YES // -Wundeclared-selector
+GCC_WARN_UNUSED_FUNCTION = YES // -Wunused-function
+GCC_WARN_UNUSED_LABEL = YES // -Wunused-label
+GCC_WARN_UNUSED_PARAMETER = NO // -Wunused-parameter
+GCC_WARN_UNUSED_VALUE = YES // -Wunused-value
+GCC_WARN_UNUSED_VARIABLE = YES // -Wunused-variable
+
+// Additional build flags for both c and c++ files
+FlagsForCandCpp = $(BuildDependentFlagsForCandCpp)
+FlagsForCandCpp[arch=i386] = $(inherited) // Flags for intel 32 bit only

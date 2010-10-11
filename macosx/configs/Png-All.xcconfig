@@ -1,0 +1,12 @@
+// Png settings for all configurations
+
+
+INSTALL_PATH = @executable_path/../Frameworks
+DYLIB_COMPATIBILITY_VERSION = 1
+DYLIB_CURRENT_VERSION = 1
+PREBINDING = NO
+FRAMEWORK_VERSION = A
+INFOPLIST_FILE = Resources/GenericFramework-Info.plist
+PRODUCT_NAME = Png
+FRAMEWORK_SEARCH_PATHS = $(inherited) $(FRAMEWORK_SEARCH_PATHS_QUOTED_2)
+GCC_MODEL_TUNING = G5

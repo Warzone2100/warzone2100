@@ -1,0 +1,15 @@
+// Vorbis settings for all configurations
+
+
+GCC_VERSION = 4.2
+INSTALL_PATH = @executable_path/../Frameworks
+DYLIB_COMPATIBILITY_VERSION = 1
+DYLIB_CURRENT_VERSION = 1
+PREBINDING = NO
+FRAMEWORK_VERSION = A
+INFOPLIST_FILE = Resources/vorbis/Info.plist
+PRODUCT_NAME = Vorbis
+HEADER_SEARCH_PATHS = external/libvorbis/lib/ $(inherited)
+GCC_MODEL_TUNING = G5
+GCC_PRECOMPILE_PREFIX_HEADER = YES
+GCC_PREFIX_HEADER = 

@@ -1,0 +1,9 @@
+// Warzone settings for Release configuration
+
+#include "Warzone-All.xcconfig"
+
+
+GCC_OPTIMIZATION_LEVEL = 2
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited)
+
+// BuildDependentFlagsForCandCpp = -fstack-protector // Needs 10.5 min before being used
