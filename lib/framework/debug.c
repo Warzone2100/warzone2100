@@ -53,7 +53,7 @@ bool assertEnabled = true;
 #else
 bool assertEnabled = false;
 #endif
-#if defined(WZ_OS_MAC)
+#if defined(WZ_OS_MAC32) // FIXME: This will not work under 64bit.
 #include <Carbon/Carbon.h>
 #endif
 /*
@@ -450,7 +450,7 @@ void _debug( code_part part, const char *function, const char *str, ... )
 #elif defined(WZ_HAVE_MOTIF)
 			const char* popupBuf = useInputBuffer1 ? inputBuffer[1] : inputBuffer[0];
 			XmMessageBox(part, code_part_names[part], popupBuf);
-#elif defined(WZ_OS_MAC)
+#elif defined(WZ_OS_MAC32) // FIXME: This will not work under 64bit.
 			AlertStdCFStringAlertParamRec	param;
 			DialogRef						dialog;
 			OSStatus						err;
@@ -489,7 +489,7 @@ void _debug( code_part part, const char *function, const char *str, ... )
 # elif defined(WZ_HAVE_MOTIF)
 			XmMessageBox(part, code_part_names[part], popupBuf);
 # endif
-#elif defined (WZ_OS_MAC)
+#elif defined (WZ_OS_MAC32) // FIXME: This will not work under 64bit.
 			AlertStdCFStringAlertParamRec	param;
 			DialogRef						dialog;
 			OSStatus						err;
