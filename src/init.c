@@ -436,18 +436,27 @@ BOOL buildMapList(void)
 	char ** filelist, ** file;
 	size_t len;
 
-	if ( !loadLevFile( "gamedesc.lev", mod_campaign ) ) {
+	if ( !loadLevFile( "gamedesc.lev", mod_campaign ) )
+	{
 		return false;
 	}
 	loadLevFile( "addon.lev", mod_multiplay );
 
 	filelist = PHYSFS_enumerateFiles("");
-	for ( file = filelist; *file != NULL; ++file ) {
+	for ( file = filelist; *file != NULL; ++file )
+	{
 		len = strlen( *file );
 		if ( len > 10 // Do not add addon.lev again
-				&& !strcasecmp( *file+(len-10), ".addon.lev") ) {
+				&& !strcasecmp( *file+(len-10), ".addon.lev") )
+		{
 			loadLevFile( *file, mod_multiplay );
 		}
+		// add support for X player maps using a new name to prevent conflicts.
+		if ( len > 13 && !strcasecmp( *file+(len-13), ".xplayers.lev") )
+		{
+			loadLevFile( *file, mod_multiplay );
+		}
+
 	}
 	PHYSFS_freeList( filelist );
 	return true;

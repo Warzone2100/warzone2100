@@ -126,8 +126,12 @@ UDWORD	current_numplayers = 4;
 
 #define M_REQUEST_AP	(MULTIMENU+70)
 #define M_REQUEST_2P	(MULTIMENU+71)
-#define M_REQUEST_4P	(MULTIMENU+72)
-#define M_REQUEST_8P	(MULTIMENU+73)
+#define M_REQUEST_3P	(MULTIMENU+72)
+#define M_REQUEST_4P	(MULTIMENU+73)
+#define M_REQUEST_5P	(MULTIMENU+74)
+#define M_REQUEST_6P	(MULTIMENU+75)
+#define M_REQUEST_7P	(MULTIMENU+76)
+#define M_REQUEST_8P	(MULTIMENU+77)
 
 #define M_REQUEST_BUT	(MULTIMENU+100)		// allow loads of buttons.
 #define M_REQUEST_BUTM	(MULTIMENU+1100)
@@ -637,10 +641,34 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 		sButInit.pTip		= _("2 players");
 		widgAddButton(psRScreen, &sButInit);
 
+		sButInit.id		= M_REQUEST_3P;
+		sButInit.y		+= 22;
+		sButInit.UserData	= 3;
+		sButInit.pTip		= _("3 players");
+		widgAddButton(psRScreen, &sButInit);
+
 		sButInit.id		= M_REQUEST_4P;
 		sButInit.y		+= 22;
 		sButInit.UserData	= 4;
 		sButInit.pTip		= _("4 players");
+		widgAddButton(psRScreen, &sButInit);
+
+		sButInit.id		= M_REQUEST_5P;
+		sButInit.y		+= 22;
+		sButInit.UserData	= 5;
+		sButInit.pTip		= _("5 players");
+		widgAddButton(psRScreen, &sButInit);
+
+		sButInit.id		= M_REQUEST_6P;
+		sButInit.y		+= 22;
+		sButInit.UserData	= 6;
+		sButInit.pTip		= _("6 players");
+		widgAddButton(psRScreen, &sButInit);
+
+		sButInit.id		= M_REQUEST_7P;
+		sButInit.y		+= 22;
+		sButInit.UserData	= 7;
+		sButInit.pTip		= _("7 players");
 		widgAddButton(psRScreen, &sButInit);
 
 		sButInit.id		= M_REQUEST_8P;
@@ -702,9 +730,25 @@ BOOL runMultiRequester(UDWORD id,UDWORD *mode, char *chosen,UDWORD *chosenValue)
 			closeMultiRequester();
 			addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, current_tech, 2);
 			break;
+		case M_REQUEST_3P:
+			closeMultiRequester();
+			addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, current_tech, 3);
+			break;
 		case M_REQUEST_4P:
 			closeMultiRequester();
 			addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, current_tech, 4);
+			break;
+		case M_REQUEST_5P:
+			closeMultiRequester();
+			addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, current_tech, 5);
+			break;
+		case M_REQUEST_6P:
+			closeMultiRequester();
+			addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, current_tech, 6);
+			break;
+		case M_REQUEST_7P:
+			closeMultiRequester();
+			addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, current_tech, 7);
 			break;
 		case M_REQUEST_8P:
 			closeMultiRequester();
