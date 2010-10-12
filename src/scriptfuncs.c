@@ -5570,8 +5570,7 @@ static BOOL pickStructLocation(DROID *psDroid, int index, int *pX, int *pY, int 
 	STRUCTURE_STATS	*psStat;
 	UDWORD			numIterations = 30;
 	BOOL			found = false;
-	UDWORD			startX, startY, incX, incY;
-	SDWORD			x=0, y=0;
+	int startX, startY, incX, incY, x, y;
 
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS && player >= 0, "Invalid player number %d", player);
 
@@ -5588,7 +5587,8 @@ static BOOL pickStructLocation(DROID *psDroid, int index, int *pX, int *pY, int 
 	y = startY;
 
 	// save a lot of typing... checks whether a position is valid
-	#define LOC_OK(_x, _y) ((!psDroid || fpathCheck(psDroid->pos, Vector3i_Init(world_coord(_x), world_coord(_y), 0), PROPULSION_TYPE_WHEELED)) \
+	#define LOC_OK(_x, _y) (_x >= 0 && _y >= 0 && _x < mapWidth && _y < mapHeight && \
+	                        (!psDroid || fpathCheck(psDroid->pos, Vector3i_Init(world_coord(_x), world_coord(_y), 0), PROPULSION_TYPE_WHEELED)) \
 	                        && validLocation((BASE_STATS*)psStat, _x, _y, 0, player, false) && structDoubleCheck((BASE_STATS*)psStat, _x, _y, maxBlockingTiles))
 
 	// first try the original location
