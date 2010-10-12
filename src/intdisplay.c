@@ -2280,11 +2280,19 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 
 		if(IMDType == IMDTYPE_DROID)
 		{
-			if(((DROID*)Object)->droidType == DROID_TRANSPORTER) {
+			if(((DROID*)Object)->droidType == DROID_TRANSPORTER)
+			{
 				Position.x = 0;
 				Position.y = 0;//BUT_TRANSPORTER_ALT;
 				Position.z = BUTTON_DEPTH;
-				scale = DROID_BUT_SCALE/2;
+				if ((!strcmp("Cyborg Transport",((DROID*)Object)->aName)))
+				{
+					scale = DROID_BUT_SCALE/2;
+				}
+				else
+				{
+					scale = DROID_BUT_SCALE/3;
+				}
 			}
 			else
 			{
@@ -2294,11 +2302,19 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 		}
 		else//(IMDType == IMDTYPE_DROIDTEMPLATE)
 		{
-			if(((DROID_TEMPLATE*)Object)->droidType == DROID_TRANSPORTER) {
+			if(((DROID_TEMPLATE*)Object)->droidType == DROID_TRANSPORTER)
+			{
 				Position.x = 0;
 				Position.y = 0;//BUT_TRANSPORTER_ALT;
 				Position.z = BUTTON_DEPTH;
-				scale = DROID_BUT_SCALE/2;
+				if ((!strcmp("Cyborg Transport",((DROID_TEMPLATE*)Object)->aName)))
+				{
+					scale = DROID_BUT_SCALE/2;
+				}
+				else
+				{
+					scale = DROID_BUT_SCALE/3;
+				}
 			}
 			else
 			{
@@ -2362,6 +2378,11 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 			//scale = COMP_BUT_SCALE;
 			//ASSERT( Radius <= OBJECT_RADIUS,"Object too big for button - %s",
 			//		((BASE_STATS*)Object)->pName );
+			// NOTE: The Super transport is huge, and is considered a component type, so refit it to inside the button.
+			if ((!strcmp("MP-SuperTransportBody",((BASE_STATS*)Object)->pName)))
+			{
+				scale /= 2;
+			}
 		}
 		else if(IMDType == IMDTYPE_RESEARCH)
 		{

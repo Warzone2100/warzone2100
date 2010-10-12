@@ -890,10 +890,10 @@ void processMouseClickInput(void)
 				// Can't demolish allied objects
 				item = MT_BLOCKING;
 			}
-			//in multiPlayer can only put cyborgs onto a Transporter
+			// in multiPlayer check for what kind of unit can use it (TODO)
 			else if (bMultiPlayer && item == MT_TRANDROID)
 			{
-				if (!cyborgDroidSelected(selectedPlayer) || ObjUnderMouse->player != selectedPlayer)
+				if ( ObjUnderMouse->player != selectedPlayer)
 				{
 					item = MT_OWNDROID;
 				}
@@ -1790,15 +1790,14 @@ static void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 				addTransporterInterface(psDroid, false);
 			}
 		}
-		else if (!bMultiPlayer || cyborgDroidSelected(selectedPlayer))
-		{
+		else
+		{	// We can order all units to use the transport now
+			if (cyborgDroidSelected(selectedPlayer))
+			{
+				// TODO add special processing for cyborgDroids
+			}
 			orderSelectedObj(selectedPlayer, (BASE_OBJECT*)psDroid);
 			FeedbackOrderGiven();
-		}
-		else
-		{
-			clearSelection();
-			SelectDroid(psDroid);
 		}
 	}
 	// Clicked on a commander? Will link to it.
