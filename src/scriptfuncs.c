@@ -5583,8 +5583,7 @@ static BOOL pickStructLocation(DROID *psDroid, int index, int *pX, int *pY, int 
 	STRUCTURE_STATS	*psStat;
 	UDWORD			numIterations = 30;
 	BOOL			found = false;
-	UDWORD			startX, startY, incX, incY;
-	SDWORD			x=0, y=0;
+	int startX, startY, incX, incY, x, y;
 
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS && player >= 0, "Invalid player number %d", player);
 
