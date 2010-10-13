@@ -33,14 +33,14 @@ iSurface *iV_SurfaceCreate(int width, int height, UBYTE *buffer)
 		return NULL;
 	}
 
-	s->xcentre = width>>1;
-	s->ycentre = height>>1;
+	s->xcentre = width / 2;
+	s->ycentre = height / 2;
 	s->width = width;
 	s->height = height;
 	s->size = width * height;
 	s->buffer = buffer;
 	s->clip.left = 0;
-	s->clip.right = width-1;
+	s->clip.right = width - 1;
 	s->clip.top = 0;
 	s->clip.bottom = height-1;
 
