@@ -24,6 +24,6 @@
 #include "ivisdef.h"
 
 extern void iV_SurfaceDestroy(iSurface *s);
-extern iSurface *iV_SurfaceCreate(int width, int height, uint8_t *buffer);
+extern iSurface *iV_SurfaceCreate(int width, int height);
 
 #endif

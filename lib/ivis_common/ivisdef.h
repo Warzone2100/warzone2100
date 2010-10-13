@@ -44,11 +44,8 @@ typedef struct _iSurface {
 	int ycentre;
 	iClip clip;
 
-	UBYTE *buffer;
-
 	int width;
 	int height;
-	int32_t size;
 } iSurface;
 
 //*************************************************************************

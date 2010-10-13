@@ -53,9 +53,6 @@ BOOL pie_Initialise(void)
 {
 	pie_TexInit();
 
-	rendSurface.buffer = NULL;
-	rendSurface.size = 0;
-
 	/* Find texture compression extension */
 	if (GLEE_ARB_texture_compression)
 	{
@@ -71,7 +68,6 @@ BOOL pie_Initialise(void)
 	pie_MatInit();
 	_TEX_INDEX = 0;
 
-	rendSurface.buffer	= 0;
 	rendSurface.width	= pie_GetVideoBufferWidth();
 	rendSurface.height	= pie_GetVideoBufferHeight();
 	rendSurface.xcentre	= pie_GetVideoBufferWidth()/2;
@@ -82,16 +78,14 @@ BOOL pie_Initialise(void)
 	rendSurface.clip.bottom	= pie_GetVideoBufferHeight();
 
 	pie_SetDefaultStates();
-	debug(LOG_3D, "xcentre %d; ycentre %d; buffer %p", rendSurface.xcentre, rendSurface.ycentre, rendSurface.buffer);
+	debug(LOG_3D, "xcentre %d; ycentre %d", rendSurface.xcentre, rendSurface.ycentre);
 
 	return true;
 }
 
 
-void pie_ShutDown(void) {
-	rendSurface.buffer = NULL;
-	rendSurface.size = 0;
-
+void pie_ShutDown(void)
+{
 	pie_CleanUp();
 }
 

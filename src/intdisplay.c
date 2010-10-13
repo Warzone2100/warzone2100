@@ -1859,7 +1859,7 @@ void InitialiseButtonData(void)
 	for(i=0; i<NUM_OBJECTSURFACES; i++) {
 		ObjectSurfaces[i].Buffer = (UBYTE*)malloc(Width*Height);
 		ASSERT( ObjectSurfaces[i].Buffer!=NULL,"intInitialise : Failed to allocate Object surface" );
-		ObjectSurfaces[i].Surface = iV_SurfaceCreate(Width,Height,ObjectSurfaces[i].Buffer);
+		ObjectSurfaces[i].Surface = iV_SurfaceCreate(Width,Height);
 		ASSERT( ObjectSurfaces[i].Surface!=NULL,"intInitialise : Failed to create Object surface" );
 	}
 
@@ -1871,7 +1871,7 @@ void InitialiseButtonData(void)
 	for(i=0; i<NUM_SYSTEM0SURFACES; i++) {
 		System0Surfaces[i].Buffer = (UBYTE*)malloc(Width*Height);
 		ASSERT( System0Surfaces[i].Buffer!=NULL,"intInitialise : Failed to allocate System0 surface" );
-		System0Surfaces[i].Surface = iV_SurfaceCreate(Width,Height,System0Surfaces[i].Buffer);
+		System0Surfaces[i].Surface = iV_SurfaceCreate(Width,Height);
 		ASSERT( System0Surfaces[i].Surface!=NULL,"intInitialise : Failed to create System0 surface" );
 	}
 
@@ -1883,7 +1883,7 @@ void InitialiseButtonData(void)
 	for(i=0; i<NUM_TOPICSURFACES; i++) {
 		TopicSurfaces[i].Buffer = (UBYTE*)malloc(WidthTopic*HeightTopic);
 		ASSERT( TopicSurfaces[i].Buffer!=NULL,"intInitialise : Failed to allocate Topic surface" );
-		TopicSurfaces[i].Surface = iV_SurfaceCreate(WidthTopic,HeightTopic,TopicSurfaces[i].Buffer);
+		TopicSurfaces[i].Surface = iV_SurfaceCreate(WidthTopic,HeightTopic);
 		ASSERT( TopicSurfaces[i].Surface!=NULL,"intInitialise : Failed to create Topic surface" );
 	}
 
@@ -1895,7 +1895,7 @@ void InitialiseButtonData(void)
 	for(i=0; i<NUM_STATSURFACES; i++) {
 		StatSurfaces[i].Buffer = (UBYTE*)malloc(Width*Height);
 		ASSERT( StatSurfaces[i].Buffer!=NULL,"intInitialise : Failed to allocate Stats surface" );
-		StatSurfaces[i].Surface = iV_SurfaceCreate(Width,Height,StatSurfaces[i].Buffer);
+		StatSurfaces[i].Surface = iV_SurfaceCreate(Width,Height);
 		ASSERT( StatSurfaces[i].Surface!=NULL,"intInitialise : Failed to create Stat surface" );
 	}
 

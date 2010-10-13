@@ -21,11 +21,9 @@
 #include "lib/framework/frame.h"
 #include "lib/ivis_common/rendmode.h"
 
-iSurface *iV_SurfaceCreate(int width, int height, UBYTE *buffer)
+iSurface *iV_SurfaceCreate(int width, int height)
 {
 	iSurface *s = malloc(sizeof(iSurface));
-
-	assert(buffer!=NULL);	// on playstation this MUST be null
 
 	if (!s)
 	{
@@ -37,8 +35,6 @@ iSurface *iV_SurfaceCreate(int width, int height, UBYTE *buffer)
 	s->ycentre = height / 2;
 	s->width = width;
 	s->height = height;
-	s->size = width * height;
-	s->buffer = buffer;
 	s->clip.left = 0;
 	s->clip.right = width - 1;
 	s->clip.top = 0;
@@ -47,7 +43,6 @@ iSurface *iV_SurfaceCreate(int width, int height, UBYTE *buffer)
 	return s;
 }
 
-// user must free s->buffer before calling
 void iV_SurfaceDestroy(iSurface *s)
 {
 	free(s);
