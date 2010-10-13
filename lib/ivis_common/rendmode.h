@@ -42,12 +42,6 @@
 
 //*************************************************************************
 
-#define REND_SURFACE_UNDEFINED		0
-#define REND_SURFACE_SCREEN		1
-#define REND_SURFACE_USR		2
-
-//*************************************************************************
-
 extern iSurface rendSurface;
 extern iSurface *psRendSurface;
 
@@ -55,6 +49,6 @@ extern iSurface *psRendSurface;
 
 extern void iV_RenderAssign(iSurface *s);
 extern void iV_SurfaceDestroy(iSurface *s);
-extern iSurface *iV_SurfaceCreate(uint32_t flags, int width, int height, uint8_t *buffer);
+extern iSurface *iV_SurfaceCreate(int width, int height, uint8_t *buffer);
 
 #endif

@@ -52,7 +52,6 @@ BOOL pie_Initialise(void)
 {
 	pie_TexInit();
 
-	rendSurface.flags = REND_SURFACE_UNDEFINED;
 	rendSurface.buffer = NULL;
 	rendSurface.size = 0;
 
@@ -72,7 +71,6 @@ BOOL pie_Initialise(void)
 	_TEX_INDEX = 0;
 
 	rendSurface.buffer	= 0;
-	rendSurface.flags	= REND_SURFACE_SCREEN;
 	rendSurface.width	= pie_GetVideoBufferWidth();
 	rendSurface.height	= pie_GetVideoBufferHeight();
 	rendSurface.xcentre	= pie_GetVideoBufferWidth()/2;
@@ -91,7 +89,6 @@ BOOL pie_Initialise(void)
 
 void pie_ShutDown(void) {
 	rendSurface.buffer = NULL;
-	rendSurface.flags = REND_SURFACE_UNDEFINED;
 	rendSurface.size = 0;
 
 	pie_CleanUp();

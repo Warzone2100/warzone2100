@@ -40,7 +40,6 @@
 typedef struct { int32_t left, top, right, bottom; } iClip;
 
 typedef struct _iSurface {
-	int32_t flags;
 	int xcentre;
 	int ycentre;
 	iClip clip;

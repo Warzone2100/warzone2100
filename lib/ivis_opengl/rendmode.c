@@ -34,7 +34,7 @@ iSurface	*psRendSurface;
 //*
 //******
 
-iSurface *iV_SurfaceCreate(uint32_t flags, int width, int height, UBYTE *buffer)
+iSurface *iV_SurfaceCreate(int width, int height, UBYTE *buffer)
 {
 	iSurface *s = malloc(sizeof(iSurface));
 
@@ -42,11 +42,10 @@ iSurface *iV_SurfaceCreate(uint32_t flags, int width, int height, UBYTE *buffer)
 
 	if (!s)
 	{
-		debug(LOG_ERROR, "iV_SurfaceCreate: out of memory");
+		debug(LOG_ERROR, "of memory");
 		return NULL;
 	}
 
-	s->flags = flags;
 	s->xcentre = width>>1;
 	s->ycentre = height>>1;
 	s->width = width;
@@ -89,6 +88,6 @@ void iV_RenderAssign(iSurface *s)
 	/* Need to look into this - won't the unwanted called still set render surface? */
 	psRendSurface = s;
 
-	debug(LOG_3D, "iV_RenderAssign: flags %x; xcentre %d; ycentre %d; buffer %p",
-			s->flags, s->xcentre, s->ycentre, s->buffer);
+	debug(LOG_3D, "iV_RenderAssign: xcentre %d; ycentre %d; buffer %p",
+			s->xcentre, s->ycentre, s->buffer);
 }
