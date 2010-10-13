@@ -26,13 +26,6 @@
 #include "bitimage.h"
 #include "textdraw.h"
 
-//*************************************************************************
-// polygon flags	b0..b7: col, b24..b31: anim index
-
-#define PIE_NO_CULL			0x00002000
-
-//*************************************************************************
-
 extern iSurface rendSurface;
 extern iSurface *psRendSurface;
 
