@@ -111,12 +111,11 @@ MAPTILE	*psMapTiles = NULL;
 
 #define WATER_DEPTH	180
 
-static void SetGroundForTile(const char *filename, const char *nametype, int (*callback)(const char *type));
-static int getArizona(const char *textureType);
-static int getUrban(const char *textureType);
-static int getRocky(const char *textureType);
+static void SetGroundForTile(const char *filename, const char *nametype);
+static int getTextureType(const char *textureType);
 static BOOL hasDecals(int i, int j);
 static void SetDecals(const char *filename, const char *decal_type);
+static void init_tileNames(int type);
 
 /// The different ground types
 GROUND_TYPE *psGroundTypes;
@@ -124,10 +123,15 @@ int numGroundTypes;
 int waterGroundType;
 int cliffGroundType;
 char *tileset = NULL;
+static int numTile_names;
+static char *Tile_names = NULL;
+#define ARIZONA 1
+#define URBAN 2
+#define ROCKIE 3
 
 static int *map;			// 3D array pointer that holds the texturetype
 static int *mapDecals;		// array that tells us what tile is a decal
-#define MAX_TERRAIN_TILES 80		// max that we support (for now)
+#define MAX_TERRAIN_TILES 100		// max that we support (for now)
 
 /* Look up table that returns the terrain type of a given tile texture */
 UBYTE terrainTypes[MAX_TILE_TEXTURES];
@@ -205,42 +209,98 @@ BOOL mapNew(UDWORD width, UDWORD height)
 	return true;
 }
 
-// arizona
-enum {
-	a_red = 0,
-	a_cliff,
-	a_yellow,
-	a_concrete,
-	a_mud,
-	a_green,
-	a_water,
-};
-
-// urban
-enum
+static void init_tileNames(int type)
 {
-	u_blue,
-	u_gray,
-	u_stone,
-	u_dark,
-	u_water,
-	u_brown,
-	u_cliff,
-	u_green,
-};
+	char	*pFileData = NULL;
+	char	name[100] = {'\0'};
+	int		numlines = 0, i = 0, cnt = 0;
+	uint32_t	fileSize = 0;
 
-enum
-{
-	r_grass,
-	r_rock,
-	r_cliff,
-	r_snowrock,
-	r_brown,
-	r_water,
-	r_snowgrass,
-	r_tiles,
-	r_snow,
-};
+	pFileData = fileLoadBuffer;
+
+	switch (type)
+	{
+		case ARIZONA:
+		{
+			if (!loadFileToBuffer("tileset/arizona_enum.txt", pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
+			{
+				debug(LOG_FATAL, "tileset/arizona_enum.txt not found.  Aborting.");
+				abort();
+			}
+
+			sscanf(pFileData, "%[^','],%d%n", name, &numlines, &cnt);
+			pFileData += cnt;
+
+			if (strcmp("arizona_enum", name))
+			{
+				debug(LOG_FATAL, "%s found, but was expecting arizona_enum, aborting.", name);
+				abort();
+			}
+			break;
+		}
+		case URBAN:
+		{
+			if (!loadFileToBuffer("tileset/urban_enum.txt", pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
+			{
+				debug(LOG_FATAL, "tileset/urban_enum.txt not found.  Aborting.");
+				abort();
+			}
+
+			sscanf(pFileData, "%[^','],%d%n", name, &numlines, &cnt);
+			pFileData += cnt;
+
+			if (strcmp("urban_enum", name))
+			{
+				debug(LOG_FATAL, "%s found, but was expecting urban_enum, aborting.", name);
+				abort();
+			}
+			break;
+		}
+		case ROCKIE:
+		{
+			if (!loadFileToBuffer("tileset/rockie_enum.txt", pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
+			{
+				debug(LOG_FATAL, "tileset/rockie_enum.txt not found.  Aborting.");
+				abort();
+			}
+
+			sscanf(pFileData, "%[^','],%d%n", name, &numlines, &cnt);
+			pFileData += cnt;
+
+			if (strcmp("rockie_enum", name))
+			{
+				debug(LOG_FATAL, "%s found, but was expecting rockie_enum, aborting.", name);
+				abort();
+			}
+			break;
+		}
+		default:
+		debug(LOG_FATAL, "Unknown type (%d) given.  Aborting.", type);
+		abort();
+	}
+
+	debug(LOG_TERRAIN, "name: %s, with %d entries", name, numlines);
+	if (numlines == 0 || numlines > MAX_TERRAIN_TILES)
+	{
+		debug(LOG_FATAL, "Rockie_enum paramater is out of range (%d). Aborting.", numlines);
+		abort();
+	}
+
+	numTile_names = numlines;
+	//increment the pointer to the start of the next record
+	pFileData = strchr(pFileData,'\n') + 1;
+
+	Tile_names = malloc(numlines * sizeof(char[40]) );
+	memset(Tile_names, 0x0, (numlines * sizeof(char[40])));
+
+	for (i=0; i < numlines; i++)
+	{
+		sscanf(pFileData, "%s%n", &Tile_names[i*40], &cnt);
+		pFileData += cnt;
+		//increment the pointer to the start of the next record
+		pFileData = strchr(pFileData,'\n') + 1;
+	}
+}
 
 // This is the main loading routine to get all the map's parameters set.
 // Once it figures out what tileset we need, we then parse the files for that tileset.
@@ -262,10 +322,12 @@ static BOOL mapLoadGroundTypes(void)
 	// For Arizona
 	if (strcmp(tileset, "texpages/tertilesc1hw") == 0)
 	{
+fallback:
+		init_tileNames(ARIZONA);
 		if (!loadFileToBuffer("tileset/tertilesc1hwGtype.txt", pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 		{
-			debug(LOG_POPUP, "tileset/tertilesc1hwGtype.txt not found, using default terrain ground types.");
-			goto fallback;
+			debug(LOG_FATAL, "tileset/tertilesc1hwGtype.txt not found, aborting.");
+			abort();
 		}
 
 		sscanf(pFileData, "%[^','],%d%n", tilename, &numlines, &cnt);
@@ -273,8 +335,8 @@ static BOOL mapLoadGroundTypes(void)
 
 		if (strcmp(tilename, "tertilesc1hw"))
 		{
-			debug(LOG_POPUP, "%s found, but was expecting tertilesc1hw!", tilename);
-			goto fallback;
+			debug(LOG_FATAL, "%s found, but was expecting tertilesc1hw!  Aborting.", tilename);
+			abort();
 		}
 
 		debug(LOG_TERRAIN, "tilename: %s, with %d entries", tilename, numlines);
@@ -290,19 +352,20 @@ static BOOL mapLoadGroundTypes(void)
 			//increment the pointer to the start of the next record
 			pFileData = strchr(pFileData,'\n') + 1;
 
-			psGroundTypes[getArizona(textureType)].textureName = strdup(textureName);
-			psGroundTypes[getArizona(textureType)].textureSize = textureSize ;
+			psGroundTypes[getTextureType(textureType)].textureName = strdup(textureName);
+			psGroundTypes[getTextureType(textureType)].textureSize = textureSize ;
 		}
 
-		waterGroundType = a_water;
-		cliffGroundType = a_cliff;
+		waterGroundType = getTextureType("a_water");
+		cliffGroundType = getTextureType("a_cliff");
 
-		SetGroundForTile("tileset/arizonaground.txt", "arizona_ground", getArizona);
+		SetGroundForTile("tileset/arizonaground.txt", "arizona_ground");
 		SetDecals("tileset/arizonadecals.txt", "arizona_decals");
 	}
 	// for Urban
 	else if (strcmp(tileset, "texpages/tertilesc2hw") == 0)
 	{
+		init_tileNames(URBAN);
 		if (!loadFileToBuffer("tileset/tertilesc2hwGtype.txt", pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 		{
 			debug(LOG_POPUP, "tileset/tertilesc2hwGtype.txt not found, using default terrain ground types.");
@@ -331,19 +394,20 @@ static BOOL mapLoadGroundTypes(void)
 			//increment the pointer to the start of the next record
 			pFileData = strchr(pFileData,'\n') + 1;
 
-			psGroundTypes[getUrban(textureType)].textureName = strdup(textureName);
-			psGroundTypes[getUrban(textureType)].textureSize = textureSize;
+			psGroundTypes[getTextureType(textureType)].textureName = strdup(textureName);
+			psGroundTypes[getTextureType(textureType)].textureSize = textureSize;
 		}
 
-		waterGroundType = u_water;
-		cliffGroundType = u_cliff;
+		waterGroundType = getTextureType("u_water");
+		cliffGroundType = getTextureType("u_cliff");
 
-		SetGroundForTile("tileset/urbanground.txt", "urban_ground", getUrban);
+		SetGroundForTile("tileset/urbanground.txt", "urban_ground");
 		SetDecals("tileset/urbandecals.txt", "urban_decals");
 	}
 	// for Rockie
 	else if (strcmp(tileset, "texpages/tertilesc3hw") == 0)
 	{
+		init_tileNames(ROCKIE);
 		if (!loadFileToBuffer("tileset/tertilesc3hwGtype.txt", pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 		{
 			debug(LOG_POPUP, "tileset/tertilesc3hwGtype.txt not found, using default terrain ground types.");
@@ -372,52 +436,29 @@ static BOOL mapLoadGroundTypes(void)
 			//increment the pointer to the start of the next record
 			pFileData = strchr(pFileData,'\n') + 1;
 
-			psGroundTypes[getRocky(textureType)].textureName = strdup(textureName);
-			psGroundTypes[getRocky(textureType)].textureSize = textureSize;
+			psGroundTypes[getTextureType(textureType)].textureName = strdup(textureName);
+			psGroundTypes[getTextureType(textureType)].textureSize = textureSize;
 		}
 
-		waterGroundType = r_water;
-		cliffGroundType = r_cliff;
+		waterGroundType = getTextureType("r_water");
+		cliffGroundType = getTextureType("r_cliff");
 
-		SetGroundForTile("tileset/rockieground.txt", "rockie_ground", getRocky);
+		SetGroundForTile("tileset/rockieground.txt", "rockie_ground");
 		SetDecals("tileset/rockiedecals.txt", "rockie_decals");
 	}
 	// When a map uses something other than the above, we fallback to Arizona
 	else
 	{
-fallback:
 		debug(LOG_ERROR, "unsupported tileset: %s", tileset);
 		debug(LOG_POPUP, "This is a UNSUPPORTED map with a custom tileset.\nDefaulting to tertilesc1hw -- map may look strange!");
 		// HACK: / FIXME: For now, we just pretend this is a tertilesc1hw map.
-		free(tileset);
-		tileset = strdup("texpages/tertilesc1hw");
-		numGroundTypes = 7;
-		psGroundTypes = malloc(sizeof(GROUND_TYPE)*numGroundTypes);
-		
-		psGroundTypes[a_yellow].textureName = "page-45";
-		psGroundTypes[a_yellow].textureSize = 4.6;
-		psGroundTypes[a_red].textureName = "page-44";
-		psGroundTypes[a_red].textureSize = 6.2;
-		psGroundTypes[a_concrete].textureName = "page-47";
-		psGroundTypes[a_concrete].textureSize = 3.2;
-		psGroundTypes[a_cliff].textureName = "page-46";
-		psGroundTypes[a_cliff].textureSize = 5.8;
-		psGroundTypes[a_water].textureName = "page-42";
-		psGroundTypes[a_water].textureSize = 7.3;
-		
-		psGroundTypes[a_mud] = psGroundTypes[a_red];
-		psGroundTypes[a_green] = psGroundTypes[a_red];
-		
-		waterGroundType = a_water;
-		cliffGroundType = a_cliff;
-
-		SetGroundForTile("tileset/arizonaground.txt", "arizona_ground", getArizona);
-		SetDecals("tileset/arizonadecals.txt", "arizona_decals");
+		goto fallback;
 	}
 	return true;
 }
+
 // Parse the file to set up the ground type
-static void SetGroundForTile(const char *filename, const char *nametype, int (*callback)(const char *type))
+static void SetGroundForTile(const char *filename, const char *nametype)
 {
 	char	*pFileData = NULL;
 	char	tilename[255] = {'\0'};
@@ -459,67 +500,28 @@ static void SetGroundForTile(const char *filename, const char *nametype, int (*c
 		// in case it isn't obvious, this is a 3D array, and using pointer math to access each element.
 		// so map[10][0][1] would be map[10*2*2 + 0 + 1] == map[41]
 		// map[10][1][0] == map[10*2*2 + 2 + 0] == map[42]
-		map[i*2*2+0*2+0] = callback(val1);
-		map[i*2*2+0*2+1] = callback(val2);
-		map[i*2*2+1*2+0] = callback(val3);
-		map[i*2*2+1*2+1] = callback(val4);
+		map[i*2*2+0*2+0] = getTextureType(val1);
+		map[i*2*2+0*2+1] = getTextureType(val2);
+		map[i*2*2+1*2+0] = getTextureType(val3);
+		map[i*2*2+1*2+1] = getTextureType(val4);
 	}
 }
-// getArizona() -- just returns the enum value for that texture type.
-static int getArizona(const char *textureType)
+
+// getTextureType() -- just returns the value for that texture type.
+static int getTextureType(const char *textureType)
 {
-	if (!strcmp(textureType, "a_red"))				return a_red;
-	else if (!strcmp(textureType, "a_cliff"))		return a_cliff;
-	else if (!strcmp(textureType, "a_yellow"))		return a_yellow;
-	else if (!strcmp(textureType, "a_concrete"))	return a_concrete;
-	else if (!strcmp(textureType, "a_mud"))			return a_mud;
-	else if (!strcmp(textureType, "a_green"))		return a_green;
-	else if (!strcmp(textureType, "a_water"))		return a_water;
-	else
+	int i = 0;
+	for (i=0; i < numTile_names; i++)
 	{
-		debug(LOG_FATAL, "unknown type [%s] found, aborting!", textureType);
-		abort();
+		if (!strcmp(textureType, &Tile_names[i*40]))
+		{
+			return i;
+		}
 	}
+	debug(LOG_FATAL, "unknown type [%s] found, aborting!", textureType);
+	abort();
 }
-// getUrban() -- just returns the enum value for that texture type.
-static int getUrban(const char *textureType)
-{
-	if (!strcmp(textureType, "u_blue"))			return u_blue;
-	else if (!strcmp(textureType, "u_gray"))	return u_gray;
-	else if (!strcmp(textureType, "u_stone"))	return u_stone;
-	else if (!strcmp(textureType, "u_dark"))	return u_dark;
-	else if (!strcmp(textureType, "u_water"))	return u_water;
-	else if (!strcmp(textureType, "u_brown"))	return u_brown;
-	else if (!strcmp(textureType, "u_cliff"))	return u_cliff;
-	else if (!strcmp(textureType, "u_green"))	return u_green;
-	else
-	{
-		debug(LOG_POPUP, "unknwon type [%s] found, aborting!", textureType);
-		free(psGroundTypes);
-		psGroundTypes = NULL;
-		abort();
-	}
-}
-// getRocky() -- just returns the enum value for that texture type.
-static int getRocky(const char *textureType)
-{
-	if (!strcmp(textureType, "r_grass"))			return r_grass;
-	else if (!strcmp(textureType, "r_rock"))		return r_rock;
-	else if (!strcmp(textureType, "r_cliff"))		return r_cliff;
-	else if (!strcmp(textureType, "r_snowrock"))	return r_snowrock;
-	else if (!strcmp(textureType, "r_brown"))		return r_brown;
-	else if (!strcmp(textureType, "r_water"))		return r_water;
-	else if (!strcmp(textureType, "r_snowgrass"))	return r_snowgrass;
-	else if (!strcmp(textureType, "r_tiles"))		return r_tiles;
-	else if (!strcmp(textureType, "r_snow"))		return r_snow;
-	else
-	{
-		debug(LOG_POPUP, "unknwon type [%s] found, aborting!", textureType);
-		free(psGroundTypes);
-		psGroundTypes = NULL;
-		abort();
-	}
-}
+
 // groundFromMapTile() just a simple lookup table, using pointers to access the 3D map array
 //	(quasi) pointer math is: map[num elements][2][2]
 //	so map[10][0][1] would be map[10*2*2 + 0*2 + 1] == map[41]
@@ -602,13 +604,22 @@ static int determineGroundType(int x, int y, const char *tileset)
 			ground[i][j] = groundFromMapTile(tile, a, b);
 			
 			votes[i][j] = 0;
-			
-			if ((ground[i][j] == u_cliff && urban) ||
-			    (ground[i][j] == a_cliff && arizona) ||
-			    (ground[i][j] == r_cliff && rockies))
+
+			// cliffs are so small they won't show up otherwise
+			if (urban)
 			{
-				// cliffs are so small they won't show up otherwise
-				return ground[i][j];
+				if (ground[i][j] == getTextureType("u_cliff"))
+					return ground[i][j];
+			}
+			else if (arizona)
+			{
+				if (ground[i][j] == getTextureType("a_cliff"))
+					return ground[i][j];
+			}
+			else if (rockies)
+			{
+				if (ground[i][j] == getTextureType("r_cliff"))
+					return ground[i][j];
 			}
 		}
 	}
@@ -1749,13 +1760,18 @@ BOOL mapShutdown(void)
 	{
 		free(map);
 	}
+	if (Tile_names)
+	{
+		free(Tile_names);
+	}
 
 	map = NULL;
 	psGroundTypes = NULL;
 	mapDecals = NULL;
 	psMapTiles = NULL;
 	mapWidth = mapHeight = 0;
-
+	numTile_names = 0;
+	Tile_names = NULL;
 	return true;
 }
 
