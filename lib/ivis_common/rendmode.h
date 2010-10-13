@@ -22,13 +22,6 @@
 #define _rendmode_h_
 
 #include "ivisdef.h"
-#include "pieblitfunc.h"
-#include "bitimage.h"
-#include "textdraw.h"
-
-extern iSurface rendSurface;
-
-//*************************************************************************
 
 extern void iV_SurfaceDestroy(iSurface *s);
 extern iSurface *iV_SurfaceCreate(int width, int height, uint8_t *buffer);

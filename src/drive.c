@@ -28,8 +28,6 @@
 #include "lib/framework/strres.h"
 #include "lib/framework/input.h"
 
-#include "lib/ivis_common/rendmode.h"
-
 #include "lib/gamelib/gtime.h"
 #include "lib/gamelib/animobj.h"
 #include "lib/sound/audio.h"

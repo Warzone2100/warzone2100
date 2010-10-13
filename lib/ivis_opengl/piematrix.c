@@ -27,7 +27,7 @@
 #include "lib/framework/fixedpoint.h"
 #include "lib/ivis_common/pieclip.h"
 #include "piematrix.h"
-#include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_common/piemode.h"
 
 /***************************************************************************/
 /*

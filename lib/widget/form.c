@@ -29,7 +29,7 @@
 #include "form.h"
 #include "tip.h"
 // FIXME Direct iVis implementation include!
-#include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_common/pieblitfunc.h"
 #include "lib/ivis_common/piepalette.h"
 
 /* Control whether single tabs are displayed */

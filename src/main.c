@@ -41,8 +41,8 @@
 
 #include "lib/sound/playlist.h"
 #include "lib/gamelib/gtime.h"
+#include "lib/ivis_common/pieblitfunc.h"
 #include "lib/ivis_common/piestate.h"
-#include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_common/piepalette.h"
 #include "lib/ivis_common/piemode.h"
 #include "lib/ivis_opengl/screen.h"

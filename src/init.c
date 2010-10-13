@@ -34,7 +34,6 @@
 #include "lib/framework/strres.h"
 #include "lib/ivis_common/piemode.h"
 #include "lib/ivis_common/piestate.h"
-#include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_common/tex.h"
 #include "lib/ivis_common/ivi.h"
 #include "lib/netplay/netplay.h"

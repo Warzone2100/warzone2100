@@ -21,7 +21,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/fixedpoint.h"
-#include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_common/pieblitfunc.h"
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/piematrix.h"
 #include "lib/ivis_common/piepalette.h"

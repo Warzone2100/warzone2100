@@ -70,7 +70,6 @@
 #include "lib/widget/label.h"
 #include "lib/widget/button.h"
 #include "order.h"
-#include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_common/piestate.h"
 // FIXME Direct iVis implementation include!
 #include "lib/framework/fixedpoint.h"

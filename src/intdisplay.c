@@ -37,6 +37,7 @@
 #include "lib/ivis_common/pieblitfunc.h"
 
 // FIXME Direct iVis implementation include!
+#include "lib/ivis_common/bitimage.h"
 #include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_opengl/piematrix.h"
 

@@ -29,6 +29,7 @@
 #include "lib/framework/stdio_ext.h"
 
 /* Includes direct access to render library */
+#include "lib/ivis_common/pieblitfunc.h"
 #include "lib/ivis_common/piedef.h"
 #include "lib/ivis_common/tex.h"
 #include "lib/ivis_common/piestate.h"
@@ -37,7 +38,6 @@
 #include "lib/ivis_common/piemode.h"
 #include "lib/framework/fixedpoint.h"
 #include "lib/ivis_common/piefunc.h"
-#include "lib/ivis_common/rendmode.h"
 
 #include "lib/gamelib/gtime.h"
 #include "lib/gamelib/animobj.h"

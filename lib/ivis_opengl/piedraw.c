@@ -27,7 +27,6 @@
 #include "lib/framework/frame.h"
 #include "lib/ivis_common/ivisdef.h"
 #include "lib/ivis_common/imd.h"
-#include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_common/piefunc.h"
 #include "lib/ivis_common/tex.h"
 #include "lib/ivis_common/piedef.h"

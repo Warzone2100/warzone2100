@@ -26,7 +26,8 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
-#include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_common/bitimage.h"
+#include "lib/ivis_common/pieblitfunc.h"
 #include "lib/sound/mixer.h"
 #include "lib/widget/button.h"
 #include "lib/widget/label.h"

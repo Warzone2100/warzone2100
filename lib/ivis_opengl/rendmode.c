@@ -17,21 +17,9 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
+
+#include "lib/framework/frame.h"
 #include "lib/ivis_common/rendmode.h"
-#include "lib/ivis_common/pieclip.h"
-#include "lib/ivis_common/textdraw.h"
-#include "lib/ivis_common/piepalette.h"
-#include "lib/ivis_common/piestate.h"
-
-//*************************************************************************
-
-iSurface	rendSurface;
-
-//*************************************************************************
-//***
-//*
-//*
-//******
 
 iSurface *iV_SurfaceCreate(int width, int height, UBYTE *buffer)
 {
@@ -62,7 +50,5 @@ iSurface *iV_SurfaceCreate(int width, int height, UBYTE *buffer)
 // user must free s->buffer before calling
 void iV_SurfaceDestroy(iSurface *s)
 {
-	// if renderer assigned to surface
-	if (&rendSurface != s)
-		free(s);
+	free(s);
 }

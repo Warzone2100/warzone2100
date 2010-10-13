@@ -25,7 +25,6 @@
 #include "lib/framework/string_ext.h"
 #include "lib/ivis_common/ivisdef.h"
 #include "lib/ivis_common/piestate.h"
-#include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_common/pieclip.h"
 #include "lib/ivis_common/pieblitfunc.h"
 #include "lib/ivis_common/piepalette.h"

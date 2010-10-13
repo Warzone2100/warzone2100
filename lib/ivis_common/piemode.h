@@ -32,7 +32,7 @@
 /***************************************************************************/
 
 #include "lib/framework/frame.h"
-
+#include "ivisdef.h"
 
 /***************************************************************************/
 /*
@@ -42,6 +42,8 @@
 #define CLEAR_OFF_AND_NO_BUFFER_DOWNLOAD  0x01
 #define CLEAR_BLACK                       0x02
 #define CLEAR_SHADOW                      0x04
+
+extern iSurface rendSurface;
 
 /***************************************************************************/
 /*

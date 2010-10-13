@@ -30,7 +30,7 @@
 #include "editbox.h"
 #include "form.h"
 // FIXME Direct iVis implementation include!
-#include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_common/pieblitfunc.h"
 #include "lib/ivis_common/textdraw.h"
 #include "scrap.h"
 

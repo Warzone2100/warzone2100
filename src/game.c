@@ -33,7 +33,7 @@
 
 #include "lib/gamelib/gtime.h"
 #include "lib/ivis_common/ivisdef.h"
-#include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_common/pieblitfunc.h"
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/piepalette.h"
 #include "lib/netplay/netplay.h"

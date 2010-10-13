@@ -27,7 +27,6 @@
 
 #include "lib/gamelib/gtime.h"
 #include "lib/ivis_common/piedef.h"
-#include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_common/piefunc.h"
 #include "lib/ivis_common/piestate.h"
 #include "piematrix.h"

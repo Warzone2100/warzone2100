@@ -33,7 +33,8 @@
 #include "lib/framework/strres.h"
 #include "lib/framework/stdio_ext.h"
 #include "lib/gamelib/gtime.h"
-#include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_common/bitimage.h"
+#include "lib/ivis_common/pieblitfunc.h"
 #include "lib/ivis_common/piepalette.h"
 #include "lib/ivis_common/piestate.h"
 // FIXME Direct iVis implementation include!
