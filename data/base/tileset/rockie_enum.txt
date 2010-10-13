@@ -1,0 +1,10 @@
+rockie_enum,9
+r_grass
+r_rock
+r_cliff
+r_snowrock
+r_brown
+r_water
+r_snowgrass
+r_tiles
+r_snow
