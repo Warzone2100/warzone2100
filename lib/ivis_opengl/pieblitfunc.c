@@ -63,7 +63,7 @@ static GLfloat radarTexX, radarTexY;
  */
 /***************************************************************************/
 
-void pie_Line(int x0, int y0, int x1, int y1, PIELIGHT colour)
+void iV_Line(int x0, int y0, int x1, int y1, PIELIGHT colour)
 {
 	const Vector2i vertices[] = {
 		{ x0, y0 },
@@ -104,7 +104,7 @@ static void pie_DrawRect(float x0, float y0, float x1, float y1, PIELIGHT colour
 
 /***************************************************************************/
 
-void pie_Box(int x0,int y0, int x1, int y1, PIELIGHT colour)
+void iV_Box(int x0,int y0, int x1, int y1, PIELIGHT colour)
 {
 	pie_SetTexturePage(TEXPAGE_NONE);
 	pie_SetAlphaTest(false);
@@ -152,7 +152,7 @@ void pie_BoxFill(int x0,int y0, int x1, int y1, PIELIGHT colour)
 
 /***************************************************************************/
 
-void pie_TransBoxFill(float x0, float y0, float x1, float y1)
+void iV_TransBoxFill(float x0, float y0, float x1, float y1)
 {
 	PIELIGHT light;
 
@@ -174,7 +174,7 @@ void pie_UniTransBoxFill(float x0, float y0, float x1, float y1, PIELIGHT light)
 
 /***************************************************************************/
 
-void pie_ImageFileID(IMAGEFILE *ImageFile, UWORD ID, int x, int y)
+void iV_DrawImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y)
 {
 	IMAGEDEF *Image;
 	PIEIMAGE pieImage;
@@ -199,7 +199,7 @@ void pie_ImageFileID(IMAGEFILE *ImageFile, UWORD ID, int x, int y)
 	pie_DrawImage(&pieImage, &dest);
 }
 
-void pie_ImageFileIDTile(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width, int Height)
+void iV_DrawImageRect(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width, int Height)
 {
 	IMAGEDEF *Image;
 	SDWORD hRep, hRemainder, vRep, vRemainder;

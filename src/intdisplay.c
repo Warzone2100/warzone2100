@@ -2115,11 +2115,11 @@ void ClearButton(BOOL Down,UDWORD Size, UDWORD buttonType)
 {
 	if(Down)
 	{
-		pie_ImageFileID(IntImages,(UWORD)(IMAGE_BUT0_DOWN+(buttonType*2)),ButXPos,ButYPos);
+		iV_DrawImage(IntImages,(UWORD)(IMAGE_BUT0_DOWN+(buttonType*2)),ButXPos,ButYPos);
 	}
 	else
 	{
-		pie_ImageFileID(IntImages,(UWORD)(IMAGE_BUT0_UP+(buttonType*2)),ButXPos,ButYPos);
+		iV_DrawImage(IntImages,(UWORD)(IMAGE_BUT0_UP+(buttonType*2)),ButXPos,ButYPos);
 	}
 }
 

@@ -27,15 +27,6 @@
 #include "textdraw.h"
 
 //*************************************************************************
-//patch
-
-#define iV_Line				pie_Line
-#define iV_Box				pie_Box
-#define iV_TransBoxFill			pie_TransBoxFill
-#define iV_DrawImage			pie_ImageFileID
-#define iV_DrawImageRect		pie_ImageFileIDTile
-
-//*************************************************************************
 // polygon flags	b0..b7: col, b24..b31: anim index
 
 #define PIE_NO_CULL			0x00002000
