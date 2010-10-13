@@ -26,7 +26,6 @@
 //*************************************************************************
 
 iSurface	rendSurface;
-iSurface	*psRendSurface;
 
 //*************************************************************************
 //***
@@ -60,34 +59,10 @@ iSurface *iV_SurfaceCreate(int width, int height, UBYTE *buffer)
 	return s;
 }
 
-
 // user must free s->buffer before calling
 void iV_SurfaceDestroy(iSurface *s)
 {
 	// if renderer assigned to surface
-	if (psRendSurface == s)
-	{
-		psRendSurface = NULL;
-	}
-
-	if (s)
-	{
+	if (&rendSurface != s)
 		free(s);
-	}
-}
-
-
-//*************************************************************************
-//
-// function pointers for render assign
-//
-//*************************************************************************
-
-void iV_RenderAssign(iSurface *s)
-{
-	/* Need to look into this - won't the unwanted called still set render surface? */
-	psRendSurface = s;
-
-	debug(LOG_3D, "iV_RenderAssign: xcentre %d; ycentre %d; buffer %p",
-			s->xcentre, s->ycentre, s->buffer);
 }

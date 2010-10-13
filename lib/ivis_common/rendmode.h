@@ -27,11 +27,9 @@
 #include "textdraw.h"
 
 extern iSurface rendSurface;
-extern iSurface *psRendSurface;
 
 //*************************************************************************
 
-extern void iV_RenderAssign(iSurface *s);
 extern void iV_SurfaceDestroy(iSurface *s);
 extern iSurface *iV_SurfaceCreate(int width, int height, uint8_t *buffer);
 

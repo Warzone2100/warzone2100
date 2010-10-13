@@ -109,20 +109,20 @@ void iV_Box(int x0,int y0, int x1, int y1, PIELIGHT colour)
 	pie_SetTexturePage(TEXPAGE_NONE);
 	pie_SetAlphaTest(false);
 
-	if (x0>psRendSurface->clip.right || x1<psRendSurface->clip.left ||
-		y0>psRendSurface->clip.bottom || y1<psRendSurface->clip.top)
+	if (x0>rendSurface.clip.right || x1<rendSurface.clip.left ||
+		y0>rendSurface.clip.bottom || y1<rendSurface.clip.top)
 	{
 		return;
 	}
 
-	if (x0<psRendSurface->clip.left)
-		x0 = psRendSurface->clip.left;
-	if (x1>psRendSurface->clip.right)
-		x1 = psRendSurface->clip.right;
-	if (y0<psRendSurface->clip.top)
-		y0 = psRendSurface->clip.top;
-	if (y1>psRendSurface->clip.bottom)
-		y1 = psRendSurface->clip.bottom;
+	if (x0<rendSurface.clip.left)
+		x0 = rendSurface.clip.left;
+	if (x1>rendSurface.clip.right)
+		x1 = rendSurface.clip.right;
+	if (y0<rendSurface.clip.top)
+		y0 = rendSurface.clip.top;
+	if (y1>rendSurface.clip.bottom)
+		y1 = rendSurface.clip.bottom;
 
 	{
 		const Vector2f vertices[] = {

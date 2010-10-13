@@ -81,7 +81,7 @@ BOOL pie_Initialise(void)
 	rendSurface.clip.bottom	= pie_GetVideoBufferHeight();
 
 	pie_SetDefaultStates();
-	iV_RenderAssign(&rendSurface);
+	debug(LOG_3D, "xcentre %d; ycentre %d; buffer %p", rendSurface.xcentre, rendSurface.ycentre, rendSurface.buffer);
 
 	return true;
 }

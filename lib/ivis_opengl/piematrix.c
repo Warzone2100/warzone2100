@@ -325,8 +325,8 @@ int32_t pie_RotateProject(const Vector3i *v3d, Vector2i *v2d)
 	}
 	else
 	{
-		v2d->x = psRendSurface->xcentre + (v.x / zz);
-		v2d->y = psRendSurface->ycentre - (v.y / zz);
+		v2d->x = rendSurface.xcentre + (v.x / zz);
+		v2d->y = rendSurface.ycentre - (v.y / zz);
 	}
 
 	return zz;
@@ -342,8 +342,8 @@ void pie_PerspectiveBegin(void)
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glTranslatef(
-		(2 * psRendSurface->xcentre-width) / width,
-		(height - 2 * psRendSurface->ycentre) / height,
+		(2 * rendSurface.xcentre-width) / width,
+		(height - 2 * rendSurface.ycentre) / height,
 		0);
 	glFrustum(-xangle, xangle, -yangle, yangle, 330, 100000);
 	glScalef(1, 1, -1);
@@ -372,8 +372,8 @@ void pie_BeginInterface(void)
 
 void pie_SetGeometricOffset(int x, int y)
 {
-	psRendSurface->xcentre = x;
-	psRendSurface->ycentre = y;
+	rendSurface.xcentre = x;
+	rendSurface.ycentre = y;
 }
 
 
