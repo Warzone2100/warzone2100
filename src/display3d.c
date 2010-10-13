@@ -235,7 +235,8 @@ bool CauseCrash = false;
 char DROIDDOING[512];
 
 /// Geometric offset which will be passed to pie_SetGeometricOffset
-UDWORD geoOffset;
+static const int geoOffset = 192;
+
 /// The average terrain height for the center of the area the camera is looking at
 static int averageCentreTerrainHeight;
 
@@ -1000,9 +1001,6 @@ BOOL init3DView(void)
 	// the world centre - used for decaying lighting etc
 	gridCentreX = player.p.x + world_coord(visibleTiles.x / 2);
 	gridCentreZ = player.p.z + world_coord(visibleTiles.y / 2);
-
-	/* Base Level */
-	geoOffset = 192;
 
 	/* There are no drag boxes */
 	dragBox3D.status = DRAG_INACTIVE;

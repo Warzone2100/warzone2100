@@ -139,7 +139,6 @@ extern void showRangeAtPos(SDWORD centerX, SDWORD centerY, SDWORD radius);
 #define BAR_NONE	3
 
 extern UWORD barMode;
-extern UDWORD geoOffset;
 
 extern bool CauseCrash;
 

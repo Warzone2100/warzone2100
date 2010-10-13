@@ -1222,23 +1222,6 @@ KEY_CODE	entry;
 }
 
 // --------------------------------------------------------------------------
-/* Raises the G Offset */
-void	kf_UpGeoOffset( void )
-{
-
-	geoOffset++;
-
-}
-// --------------------------------------------------------------------------
-/* Lowers the geoOffset */
-void	kf_DownGeoOffset( void )
-{
-
-	geoOffset--;
-
-}
-
-// --------------------------------------------------------------------------
 /* Toggles the power bar display on and off*/
 void	kf_TogglePowerBar( void )
 {
