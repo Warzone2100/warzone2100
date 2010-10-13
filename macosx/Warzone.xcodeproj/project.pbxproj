@@ -593,7 +593,7 @@
 				"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.tab.h",
 				"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.tab.c",
 			);
-			script = "configs/bison.sh -y -d -o\"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.tab.c\" \"${INPUT_FILE_PATH}\"\nexit ${?}";
+			script = "bison -y -d -o\"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.tab.c\" \"${INPUT_FILE_PATH}\"\nexit ${?}";
 		};
 		0246AA730BD3E47F004D1C70 /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
@@ -685,13 +685,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 02356D820BD3BB4100E9A019;
 			remoteInfo = Zlib;
-		};
-		221052AB0E3D369C0057CD9C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 221052010E3D21E80057CD9C;
-			remoteInfo = Bison;
 		};
 		43AE78FC10F0F4F500FED5D3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -3247,7 +3240,6 @@
 				0246AA730BD3E47F004D1C70 /* PBXBuildRule */,
 			);
 			dependencies = (
-				221052AC0E3D369C0057CD9C /* PBXTargetDependency */,
 				02CDDCFF0D159C0000722688 /* PBXTargetDependency */,
 				02581C630BD5A97400957CBC /* PBXTargetDependency */,
 				022B313F0BD56915002E64E3 /* PBXTargetDependency */,
@@ -3398,20 +3390,6 @@
 			productReference = 02DDA8B10BD3C2F20049AB60 /* PhysFS.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		221052010E3D21E80057CD9C /* Bison */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 221052040E3D220C0057CD9C /* Build configuration list for PBXNativeTarget "Bison" */;
-			buildPhases = (
-				221052070E3D22540057CD9C /* Fetch source and build */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = Bison;
-			productName = Bison;
-			productType = "com.apple.product-type.tool";
-		};
 		97AEAAEA0E8C1B5200A10721 /* Theora */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 97AEAB300E8C1B5200A10721 /* Build configuration list for PBXNativeTarget "Theora" */;
@@ -3484,7 +3462,6 @@
 			projectRoot = ..;
 			targets = (
 				02356D740BD3BB3400E9A019 /* Warzone */,
-				221052010E3D21E80057CD9C /* Bison */,
 				02CDDCF30D159BC300722688 /* Autorevision */,
 				43FA570C10FF8E9B0074E914 /* Setup Prebuilt Components */,
 				02581C5C0BD5A94A00957CBC /* SDLmain */,
@@ -3718,20 +3695,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "DirectorY=\"physfs-1.1.1\"\nOutDir=\"physfs\"\nFileName=\"physfs-1.1.1.tar.gz\"\nSourceDLP=\"http://icculus.org/physfs/downloads/physfs-1.1.1.tar.gz\"\nMD5Sum=\"0359b67793c1c14f00de1d1bbeb8ed6a\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
-		};
-		221052070E3D22540057CD9C /* Fetch source and build */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Fetch source and build";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "OUTDIR=\"bison\"    # Dir in macosx/external to unpack Bison to\nSYS_BISON=\"bison\" # System Bison executable\nBISON_BIN_DIR=\"`pwd`/external/$OUTDIR/built\" # Directory to install Bison to (relative to macosx/)\nLOCAL_BISON=\"$BISON_BIN_DIR/bison\" # Local Warzone Bison executable\n\n# getLocalBison\n# \n# Attempts to build and (if needed) download a version of Bison that is\n# compatible with Warzone. Returns 0 if successful, else 1.\nfunction getLocalBison\n{\n\tlocal DIRECTORY=\"bison-2.4\"\n\tlocal EXECUTABLE=$LOCAL_BISON\n\tlocal FILENAME=\"bison-2.4.tar.bz2\"\n\tlocal SOURCE=\"http://ftp.gnu.org/gnu/bison/bison-2.3.tar.bz2\"\n\tlocal MD5=\"2b9b088b46271c7fa902a7e85f503e1e\"\n\t\n\t## Fetch source ##\n\t\n\tcd external\n\t\n\tif [ -d \"$OUTDIR\" ]; then\n\t  echo \"$OUTDIR exists, skipping\"\n\t  return 0\n\tfi\n\t\n\tif [ -d \"$DIRECTORY\" ]; then\n\t  echo \"$DIRECTORY exists, probably from an earlier failed run\" >&2\n\t  return 1\n\tfi\n\t\n\tif [ ! -r \"$FILENAME\" ]; then\n\t  echo \"Fetching $SOURCE\"\n\t  if ! curl -L -o \"$FILENAME\" \"$SOURCE\"; then\n\t    echo \"Unable to fetch $SOURCE\" >&2\n\t    return 1\n\t  fi\n\tfi\n\t\n\tlocal HAVEMD5=`md5 -q \"$FILENAME\"`\n\t\n\tif [ -z \"$HAVEMD5\" ]; then\n\t  echo \"Unable to compute md5 for $FILENAME\" >&2\n\t  return 1\n\tfi\n\t\n\tif [ \"$HAVEMD5\" != \"$MD5\" ]; then\n\t  echo \"Md5 does not match for $FILENAME\" >&2\n\t  return 1\n\tfi\n\t\n\tlocal EXTENSION=`echo $FILENAME | sed -e 's/^.*\\.\\([^.]*\\)/\\1/'`\n\t\n\tif [ \"$EXTENSION\" = \"gz\" ]; then\n\t  if ! tar -zxf \"$FILENAME\"; then\n\t    echo \"Unpacking $FILENAME failed\" >&2\n\t    return 1\n\t  fi\n\telif [ \"$EXTENSION\" = \"bz2\" ]; then\n\t  if ! tar -jxf \"$FILENAME\"; then\n\t    echo \"Unpacking $FILENAME failed\" >&2\n\t    return 1\n\t  fi\n\telse\n\t  echo \"Unable to unpack $FILENAME\" >&2\n\t  return 1\n\tfi\n\t\n\tif [ ! -d \"$DIRECTORY\" ]; then\n\t  echo \"Can't find $DIRECTORY to rename\" >&2\n\t  return 1\n\tfi\n\t\n\tmv \"$DIRECTORY\" \"$OUTDIR\"\n\t\n\t## Build source ##\n\t\n\tcd \"$OUTDIR\"\n\t\n\techo \"Configuring GNU Bison\"\n\t./configure --prefix \"$BISON_BIN_DIR\"\n\t\n\tif [ \"$?\" -ne 0 ]; then\n\t\techo \"GNU Bison configure operation failed\" >&2\n\t\treturn 1\n\tfi\n\t\n\techo \"Compiling GNU Bison\"\n\tmake && make install\n\t\n\tif [ \"$?\" -ne 0 ]; then\n\t\techo \"GNU Bison make operation failed\" >&2\n\t\treturn 1\n\tfi\n\t\n\treturn 0\n}\n\n# isValidBison executable\n#\n# Determines if a version of Bison is compatible with Warzone. The argument\n# 'executable' specifies the location of the Bison executable to test. Returns\n# 1 if the version of Bison is valid, else 0\nfunction isValidBison\n{\n\tlocal BISON=$1            # Bison command to check version of\n\tlocal MIN_BISON_MAJOR=1   # Minimum major version of Bison to allow\n\tlocal MIN_BISON_MINOR=31  # Minimum minor version of Bison to allow\n\tlocal BISON_BLACKLIST=()  # Bison versions to blacklist (e.g. \"2.1\")\n\t\n\t# Expects the Bison version to be the only token of the form #.# on the first\n\t# line of the output from ./bison --version, where the first # is the major\n\t# version and the second # is the minor version\n\tlocal BISON_VER=`$BISON --version  | sed -En '1 s:.*([0-9]+\\.[0-9]+):\\1: p'`\n\tlocal BISON_MAJOR=`echo $BISON_VER | sed -E  's:([0-9]+)\\.[0-9]+:\\1:'`\n\tlocal BISON_MINOR=`echo $BISON_VER | sed -E  's:[0-9]+\\.([0-9]+):\\1:'`\n\t\n\tlocal VALID_BISON=$(( (BISON_MAJOR > MIN_BISON_MAJOR)\n\t                   || (  BISON_MAJOR == MIN_BISON_MAJOR\n\t                      && BISON_MINOR >= MIN_BISON_MINOR) ))\n\t\n\t# If version is valid so far, check the blacklist\n\tif [ $VALID_BISON -eq 1 ]; then\n\t\tfor (( i = 0; i < ${#BISON_BLACKLIST[@]}; ++i )); do\n\t\t\tif [ $BISON_VER == ${BISON_BLACKLIST[${i}]} ]; then\n\t\t\t\tVALID_BISON=0\n\t\t\tfi\n\t\tdone\n\tfi\n\t\n\treturn $VALID_BISON\n}\n\n## Main ##\n#\n# If there is not already a local version of Bison (one in macosx/external/) and\n# the version of Bison on the system is incompatible with the build process,\n# attempt to download a compatible version of Bison.\n\n# Check any local version of Bison\nif [ -e \"$LOCAL_BISON\" ]; then\n\tisValidBison $LOCAL_BISON\n\t\n\tif [ $? -eq 1 ]; then\n\t\t# Local version is valid (nothing further needs to be done)\n\t\techo \"The local executable of GNU Bison is a compatible version and will be used.\"\n\t\texit 0\n\telse\n\t\t# Local version is invalid\n\t\techo \"The local executable of GNU Bison is of an incompatible version\" >&2\n\t\texit 1\n\tfi\nfi\n\n# If the system version of Bison is incompatible, download a compatible version\nisValidBison $SYS_BISON\nif [ $? -ne 1 ]; then\n\techo \"The version of Bison on your system is not compatible with Warzone\"\n\techo \"A compatible version will be attempted to be downloaded and used\"\n\t\n\tgetLocalBison\n\tif [ $? -ne 0 ]; then\n\t\techo \"Retrieval of a compatible version of Bison has failed\" >&2\n\t\texit 1\n\tfi\nfi\n\nexit 0\n";
 		};
 		43025CD1111FB66E006C49B1 /* i18n */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4338,11 +4301,6 @@
 			target = 02356D820BD3BB4100E9A019 /* Zlib */;
 			targetProxy = 02DDA8D20BD3C3780049AB60 /* PBXContainerItemProxy */;
 		};
-		221052AC0E3D369C0057CD9C /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 221052010E3D21E80057CD9C /* Bison */;
-			targetProxy = 221052AB0E3D369C0057CD9C /* PBXContainerItemProxy */;
-		};
 		43AE78FD10F0F4F500FED5D3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 02356D740BD3BB3400E9A019 /* Warzone */;
@@ -4612,20 +4570,6 @@
 			};
 			name = Release;
 		};
-		221052050E3D220C0057CD9C /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 43025EB41120AD17006C49B1 /* Bison-Debug.xcconfig */;
-			buildSettings = {
-			};
-			name = Debug;
-		};
-		221052060E3D220C0057CD9C /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 43025EB51120AD17006C49B1 /* Bison-Release.xcconfig */;
-			buildSettings = {
-			};
-			name = Release;
-		};
 		4389DBD4111B0A0700B98DEF /* StaticAnalyzer */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025DFE1120A4CA006C49B1 /* Project-All.xcconfig */;
@@ -4636,13 +4580,6 @@
 		4389DBD5111B0A0700B98DEF /* StaticAnalyzer */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025E021120A4CA006C49B1 /* Warzone-StaticAnalyzer.xcconfig */;
-			buildSettings = {
-			};
-			name = StaticAnalyzer;
-		};
-		4389DBD6111B0A0700B98DEF /* StaticAnalyzer */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 43025EB41120AD17006C49B1 /* Bison-Debug.xcconfig */;
 			buildSettings = {
 			};
 			name = StaticAnalyzer;
@@ -4904,16 +4841,6 @@
 				02DDA8B40BD3C2F20049AB60 /* Debug */,
 				4389DBDF111B0A0700B98DEF /* StaticAnalyzer */,
 				02DDA8B50BD3C2F20049AB60 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
-		221052040E3D220C0057CD9C /* Build configuration list for PBXNativeTarget "Bison" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				221052050E3D220C0057CD9C /* Debug */,
-				4389DBD6111B0A0700B98DEF /* StaticAnalyzer */,
-				221052060E3D220C0057CD9C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
