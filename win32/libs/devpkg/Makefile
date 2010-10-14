@@ -6,7 +6,7 @@ PKG_SOURCE:=$(PKG_SOURCEBASE).tar.bz2
 PKG_SOURCE_URL:= \
 	http://download.gna.org/warzone/development/devpkg/ \
 	http://www.il.fontys.nl/~giel/warzone/devpkg/
-PKG_MD5SUM:=6afc9f975d217fd372ddcd7bbf8e1671
+PKG_MD5SUM:=6a3a37022ffc3c0a573ad2d6c4766b6d
 
 include $(TOPDIR)/rules.mk
 

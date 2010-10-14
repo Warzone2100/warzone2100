@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@
  */
 /***************************************************************************/
 
-#include "lib/ivis_opengl/GLee.h"
+#include <GLee.h>
 #include "lib/framework/frame.h"
 
 #include <SDL.h>
@@ -38,10 +38,8 @@
 #include "lib/ivis_common/ivi.h"
 #include "lib/ivis_common/piefunc.h"
 #include "lib/ivis_common/tex.h"
-#include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_common/pieclip.h"
 #include "screen.h"
-
 
 /***************************************************************************/
 /*
@@ -49,13 +47,11 @@
  */
 /***************************************************************************/
 
+iSurface rendSurface;
+
 BOOL pie_Initialise(void)
 {
 	pie_TexInit();
-
-	rendSurface.flags = REND_SURFACE_UNDEFINED;
-	rendSurface.buffer = NULL;
-	rendSurface.size = 0;
 
 	/* Find texture compression extension */
 	if (GLEE_ARB_texture_compression)
@@ -72,8 +68,6 @@ BOOL pie_Initialise(void)
 	pie_MatInit();
 	_TEX_INDEX = 0;
 
-	rendSurface.buffer	= 0;
-	rendSurface.flags	= REND_SURFACE_SCREEN;
 	rendSurface.width	= pie_GetVideoBufferWidth();
 	rendSurface.height	= pie_GetVideoBufferHeight();
 	rendSurface.xcentre	= pie_GetVideoBufferWidth()/2;
@@ -82,21 +76,16 @@ BOOL pie_Initialise(void)
 	rendSurface.clip.top	= 0;
 	rendSurface.clip.right	= pie_GetVideoBufferWidth();
 	rendSurface.clip.bottom	= pie_GetVideoBufferHeight();
-	rendSurface.xpshift	= 10;
-	rendSurface.ypshift	= 10;
 
 	pie_SetDefaultStates();
-	iV_RenderAssign(&rendSurface);
+	debug(LOG_3D, "xcentre %d; ycentre %d", rendSurface.xcentre, rendSurface.ycentre);
 
 	return true;
 }
 
 
-void pie_ShutDown(void) {
-	rendSurface.buffer = NULL;
-	rendSurface.flags = REND_SURFACE_UNDEFINED;
-	rendSurface.size = 0;
-
+void pie_ShutDown(void)
+{
 	pie_CleanUp();
 }
 
@@ -123,7 +112,7 @@ void pie_ScreenFlip(int clearMode)
 	}
 	if (screen_GetBackDrop())
 	{
-		screen_Upload(NULL);
+		screen_Upload(NULL, screen_getMapPreview());
 	}
 }
 

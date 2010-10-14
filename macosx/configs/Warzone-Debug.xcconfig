@@ -1,0 +1,13 @@
+// Warzone settings for Debug configuration
+
+#include "Warzone-All.xcconfig"
+
+
+GCC_ENABLE_FIX_AND_CONTINUE = YES
+GCC_DYNAMIC_NO_PIC = NO
+GCC_OPTIMIZATION_LEVEL = 0
+GCC_PREPROCESSOR_DEFINITIONS = DEBUG $(inherited)
+GCC_TREAT_WARNINGS_AS_ERRORS = YES
+
+BuildDependentFlagsForCandCpp = -fstack-protector-all
+BuildDependentFlagsForC = // -Wc++-compat -Wno-error=c++-compat // For seeing c++ compat warnings

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -22,55 +22,51 @@
  * Saves your favourite options to the Registry.
  *
  */
-#include <string.h>
 
 #include "lib/framework/frame.h"
-#include "lib/framework/strres.h"
-
-#include "configuration.h"
 #include "lib/framework/configfile.h"
-#include "objmem.h"
-#include "lib/sound/track.h"		// audio
-#include "lib/sound/cdaudio.h"	// audio
-#include "warzoneconfig.h"	// renderMode
-#include "component.h"
-#include "seqdisp.h"
-#include "difficulty.h"
 #include "lib/netplay/netplay.h"
-#include "display3d.h"
-#include "multiplay.h"
-#include "ai.h"
-#include "advvis.h"
 #include "lib/sound/mixer.h"
-#include "hci.h"
-#include "radar.h"
+#include "lib/ivis_opengl/screen.h"
+
+#include "advvis.h"
+#include "ai.h"
 // HACK bAllowDebugMode shouldn't be in clparse
 #include "clparse.h"
+#include "component.h"
+#include "configuration.h"
+#include "difficulty.h"
+#include "display3d.h"
+#include "hci.h"
 #include "multiint.h"
+#include "multiplay.h"
+#include "radar.h"
+#include "seqdisp.h"
 #include "texture.h"
+#include "warzoneconfig.h"	// renderMode
 
 // ////////////////////////////////////////////////////////////////////////////
 
-#define DEFAULTFXVOL	80
-#define DEFAULTCDVOL	60
 #define DEFAULTSCROLL	1000
 
 #define MASTERSERVERPORT	9990
 #define GAMESERVERPORT		2100
 
-void	setSinglePlayerFrameLimit		(SDWORD limit);
-SDWORD	getSinglePlayerFrameLimit		(void);
-void	setDefaultFrameRateLimit		(void);
+/* Frame limit for multiplayer games (excluding skirmish and campaign) */
+#define MP_FRAME_LIMIT 45
+
+/* Default frame limit for single player: skirmish ans campaign */
+#define SP_FRAME_LIMIT 60
 
 // current frame limit for single player modes
 static SDWORD	spFrameLimit = SP_FRAME_LIMIT;
 
-void setSinglePlayerFrameLimit(SDWORD limit)
+static void setSinglePlayerFrameLimit(SDWORD limit)
 {
 	spFrameLimit = limit;
 }
 
-SDWORD getSinglePlayerFrameLimit(void)
+static SDWORD getSinglePlayerFrameLimit(void)
 {
 	return spFrameLimit;
 }
@@ -97,13 +93,6 @@ BOOL loadConfig(void)
 
 	//  options screens.
 	// //////////////////////////
-
-	// //////////////////////////
-	// subtitles
-	if(getWarzoneKeyNumeric("allowsubtitles", &val))
-	{
-		war_SetAllowSubtitles(val);
-	}
 
 	// //////////////////////////
 	// voice vol
@@ -242,7 +231,16 @@ BOOL loadConfig(void)
 		setRightClickOrders(false);
 		setWarzoneKeyNumeric("RightClickOrders", false);
 	}
-
+	if (getWarzoneKeyNumeric("MiddleClickRotate", &val))
+	{
+		setMiddleClickRotate(val);
+	}
+	else
+	{
+		setMiddleClickRotate(false);
+		setWarzoneKeyNumeric("MiddleClickRotate", false);
+	}
+	
 	// //////////////////////////
 	// rotate radar
 	if(getWarzoneKeyNumeric("rotateRadar", &val))
@@ -279,34 +277,24 @@ BOOL loadConfig(void)
 		setWarzoneKeyString("masterserver_name", NETgetMasterserverName());
 	}
 
-	if (getWarzoneKeyString("fontname", sBuf))
+	if (getWarzoneKeyString("fontname", sBuf) && strcmp(sBuf,"Lucida Grande"))
 	{
 		iV_font(sBuf, NULL, NULL);
 	}
 	else
 	{
-#ifdef WZ_OS_MAC
-		iV_font("Lucida Grande", NULL, NULL);
-		setWarzoneKeyString("fontname", "Lucida Grande");
-#else
 		iV_font("DejaVu Sans", NULL, NULL);
 		setWarzoneKeyString("fontname", "DejaVu Sans");
-#endif
 	}
 
-	if (getWarzoneKeyString("fontface", sBuf))
+	if (getWarzoneKeyString("fontface", sBuf) && strcmp(sBuf,"Normal"))
 	{
 		iV_font(NULL, sBuf, NULL);
 	}
 	else
 	{
-#ifdef WZ_OS_MAC
-		iV_font(NULL, "Regular", NULL);
-		setWarzoneKeyString("fontface", "Regular");
-#else
 		iV_font(NULL, "Book", NULL);
 		setWarzoneKeyString("fontface", "Book");
-#endif
 	}
 
 	if (getWarzoneKeyString("fontfacebold", sBuf))
@@ -389,17 +377,14 @@ BOOL loadConfig(void)
 		if(val)
 		{
 			war_SetFog(false);
-			avSetStatus(true);
 		}
 		else
 		{
-			avSetStatus(false);
 			war_SetFog(true);
 		}
 	}
 	else
 	{
-		avSetStatus(false);
 		war_SetFog(true);
 		setWarzoneKeyNumeric("visfog", 0);
 	}
@@ -419,17 +404,6 @@ BOOL loadConfig(void)
 		}
 	}
 
-
-	// reopen the build menu after placing a structure
-	if(getWarzoneKeyNumeric("reopenBuild", &val))
-	{
-		intReopenBuild(val);
-	}
-	else
-	{
-		intReopenBuild(true);
-		setWarzoneKeyNumeric("reopenBuild", true);
-	}
 
 	// /////////////////////////
 	//  multiplayer stuff.
@@ -694,8 +668,8 @@ BOOL loadRenderMode(void)
 	{
 		// If we have an invalid or incomplete resolution specified
 		// fall back to the defaults.
-		war_SetWidth(640);
-		war_SetHeight(480);
+		war_SetWidth(0);
+		war_SetHeight(0);
 	}
 
 	if (getWarzoneKeyNumeric("bpp", &val))
@@ -735,7 +709,6 @@ BOOL saveConfig(void)
 	{
 		setDifficultyLevel(DL_NORMAL);
 	}
-	setWarzoneKeyNumeric("allowSubtitles", war_GetAllowSubtitles());
 	setWarzoneKeyNumeric("debugmode", bAllowDebugMode);
 	setWarzoneKeyNumeric("framerate", (SDWORD)getFramerateLimit());
 	setWarzoneKeyNumeric("showFPS", (SDWORD)showFPS);
@@ -745,16 +718,17 @@ BOOL saveConfig(void)
 	setWarzoneKeyNumeric("shake",(SDWORD)(getShakeStatus()));		// screenshake
 	setWarzoneKeyNumeric("mouseflip",(SDWORD)(getInvertMouseStatus()));	// flipmouse
 	setWarzoneKeyNumeric("RightClickOrders",(SDWORD)(getRightClickOrders()));
+	setWarzoneKeyNumeric("MiddleClickRotate",(SDWORD)(getMiddleClickRotate()));
 	setWarzoneKeyNumeric("shadows",(SDWORD)(getDrawShadows()));	// shadows
 	setWarzoneKeyNumeric("sound", (SDWORD)war_getSoundEnabled());
 	setWarzoneKeyNumeric("FMVmode",(SDWORD)(war_GetFMVmode()));		// sequences
 	setWarzoneKeyNumeric("subtitles",(SDWORD)(seq_GetSubtitles()));		// subtitles
-	setWarzoneKeyNumeric("reopenBuild",(SDWORD)(intGetReopenBuild()));	// build menu
 	setWarzoneKeyNumeric("radarObjectMode",(SDWORD)bEnemyAllyRadarColor);    // enemy/allies radar view
 	setWarzoneKeyNumeric("radarTerrainMode",(SDWORD)radarDrawMode);
 	setWarzoneKeyNumeric("trapCursor", war_GetTrapCursor());
 	setWarzoneKeyNumeric("vsync", war_GetVsync());
 	setWarzoneKeyNumeric("textureSize", getTextureSize());
+	setWarzoneKeyNumeric("rotateRadar", rotateRadar);
 	setWarzoneKeyNumeric("PauseOnFocusLoss", war_GetPauseOnFocusLoss());
 	setWarzoneKeyNumeric("ColouredCursor", war_GetColouredCursor());
 	setWarzoneKeyString("masterserver_name", NETgetMasterserverName());

@@ -138,6 +138,14 @@ const char * dictionary_get(dictionary * d, const char * key, const char * def);
 /*--------------------------------------------------------------------------*/
 int dictionary_set(dictionary * vd, const char * key, const char * val);
 
+
+/**
+ * An overloaded member function provided for convenience. Converts the integer
+ * val to a char* and calls dictionary_set.
+ */
+int dictionary_set_int(dictionary *d, const char *key, int val);
+
+
 /*-------------------------------------------------------------------------*/
 /**
   @brief    Delete a key in a dictionary

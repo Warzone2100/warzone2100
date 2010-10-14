@@ -101,3 +101,4 @@ WallTower-QuadRotAAGun,QuadRotAAGun,NULL,NULL,NULL,165
 WallTower-DoubleAAGun,AAGun2Mk1,NULL,NULL,NULL,166
 WallTower-SamSite,Missile-LtSAM,NULL,NULL,NULL,167
 WallTower-TwinAssaultGun,MG5TWINROTARY,NULL,NULL,NULL,168
+P0-AASite-Sunburst,Rocket-Sunburst,NULL,NULL,NULL,168

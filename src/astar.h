@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -45,9 +45,13 @@ enum
  */
 SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob);
 
+/// Call from main thread.
+/// Sets psJob->blockingMap for later use by pathfinding thread, generating the required map if not already generated.
+void fpathSetBlockingMap(PATHJOB *psJob);
+
 /** Clean up the path finding node table.
  *
- *  @note Call this <em>only</em> on shutdown to prevent memory from leaking.
+ *  @note Call this on shutdown to prevent memory from leaking, or if loading/saving, to prevent stale data from being reused.
  *
  *  @ingroup pathfinding
  */

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -23,26 +23,18 @@
  * Functions for the messages shown in the Intelligence Map
  *
  */
-#include <string.h>
 
 #include "lib/framework/frame.h"
-#include "lib/framework/strres.h"
 #include "lib/framework/frameresource.h"
-#include "lib/framework/lexer_input.h"
-#include "message.h"
-#include "stats.h"
-#include "text.h"
-#include "console.h"
+#include "lib/framework/strres.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
-#include "hci.h"
-#include "lib/ivis_common/piedef.h"
-#include "objmem.h"
-#include "map.h"
-#include "message_parser.tab.h"
-#include "messagely.h"
 
-#include "multiplay.h"
+#include "console.h"
+#include "hci.h"
+#include "messagely.h"
+#include "stats.h"
+#include "text.h"
 
 //array of pointers for the view data
 static VIEWDATA_LIST		*apsViewData;
@@ -62,10 +54,6 @@ PROXIMITY_DISPLAY *apsProxDisp[MAX_PLAYERS];
 /* The IMD to use for the proximity messages */
 iIMDShape	*pProximityMsgIMD;
 
-//function declarations
-static void addProximityDisplay(MESSAGE *psMessage, BOOL proxPos, UDWORD player);
-static void removeProxDisp(MESSAGE *psMessage, UDWORD player);
-static void checkMessages(MSG_VIEWDATA *psViewData);
 
 /* Creating a new message
  * new is a pointer to a pointer to the new message
@@ -284,31 +272,6 @@ MESSAGE * addBeaconMessage(MESSAGE_TYPE msgType, BOOL proxPos, UDWORD player)
 	return psBeaconMsgToAdd;
 }
 
-/*Add a message to the list */
-MESSAGE * addMessage(MESSAGE_TYPE msgType, BOOL proxPos, UDWORD player)
-{
-	//first create a message of the required type
-	MESSAGE* psMsgToAdd = createMessage(msgType, player);
-
-	debug(LOG_MSG, "adding message for player %d, type is %d, proximity is %d", player, msgType, proxPos);
-
-	ASSERT(psMsgToAdd, "createMessage failed");
-	if (!psMsgToAdd)
-	{
-		return NULL;
-	}
-	//then add to the players' list
-	addMessageToList(apsMessages, psMsgToAdd, player);
-
-	//add a proximity display
-	if (msgType == MSG_PROXIMITY)
-	{
-		addProximityDisplay(psMsgToAdd, proxPos, player);
-	}
-
-	return psMsgToAdd;
-}
-
 /* adds a proximity display - holds variables that enable the message to be
  displayed in the Intelligence Screen*/
 static void addProximityDisplay(MESSAGE *psMessage, BOOL proxPos, UDWORD player)
@@ -360,22 +323,33 @@ static void addProximityDisplay(MESSAGE *psMessage, BOOL proxPos, UDWORD player)
 	}
 }
 
-/*remove a message */
-void removeMessage(MESSAGE *psDel, UDWORD player)
+/*Add a message to the list */
+MESSAGE * addMessage(MESSAGE_TYPE msgType, BOOL proxPos, UDWORD player)
 {
-	ASSERT_OR_RETURN( , player < MAX_PLAYERS, "Bad player");
-	ASSERT_OR_RETURN( , psDel != NULL, "Bad message");
-	debug(LOG_MSG, "removing message for player %d", player);
+	//first create a message of the required type
+	MESSAGE* psMsgToAdd = createMessage(msgType, player);
 
-	if (psDel->type == MSG_PROXIMITY)
+	debug(LOG_MSG, "adding message for player %d, type is %d, proximity is %d", player, msgType, proxPos);
+
+	ASSERT(psMsgToAdd, "createMessage failed");
+	if (!psMsgToAdd)
 	{
-		removeProxDisp(psDel, player);
+		return NULL;
 	}
-	removeMessageFromList(apsMessages, psDel, player);
+	//then add to the players' list
+	addMessageToList(apsMessages, psMsgToAdd, player);
+
+	//add a proximity display
+	if (msgType == MSG_PROXIMITY)
+	{
+		addProximityDisplay(psMsgToAdd, proxPos, player);
+	}
+
+	return psMsgToAdd;
 }
 
 /* remove a proximity display */
-void removeProxDisp(MESSAGE *psMessage, UDWORD player)
+static void removeProxDisp(MESSAGE *psMessage, UDWORD player)
 {
 	PROXIMITY_DISPLAY		*psCurr, *psPrev;
 
@@ -413,6 +387,20 @@ void removeProxDisp(MESSAGE *psMessage, UDWORD player)
 			psPrev = psCurr;
 		}
 	}
+}
+
+/*remove a message */
+void removeMessage(MESSAGE *psDel, UDWORD player)
+{
+	ASSERT_OR_RETURN( , player < MAX_PLAYERS, "Bad player");
+	ASSERT_OR_RETURN( , psDel != NULL, "Bad message");
+	debug(LOG_MSG, "removing message for player %d", player);
+
+	if (psDel->type == MSG_PROXIMITY)
+	{
+		removeProxDisp(psDel, player);
+	}
+	removeMessageFromList(apsMessages, psDel, player);
 }
 
 /* Remove all Messages*/
@@ -845,6 +833,8 @@ VIEWDATA * getViewData(const char *pName)
 	VIEWDATA_LIST *psList = NULL;
 	unsigned int i = 0;
 
+	ASSERT_OR_RETURN(NULL, pName[0] != '\0', "Trying to find empty message name");
+
 	for (psList = apsViewData; psList != NULL; psList = psList->psNext)
 	{
 		for (i = 0; i < psList->numViewData; i++)
@@ -854,6 +844,16 @@ VIEWDATA * getViewData(const char *pName)
 			{
 				return &psList->psViewData[i];
 			}
+		}
+	}
+
+	// Dump mismatched candidates
+	debug(LOG_ERROR, "No match for view data, dumping whole list:");
+	for (psList = apsViewData; psList != NULL; psList = psList->psNext)
+	{
+		for (i = 0; i < psList->numViewData; i++)
+		{
+			debug(LOG_ERROR, "%s != %s", psList->psViewData[i].pName, pName);
 		}
 	}
 
@@ -867,6 +867,25 @@ BOOL messageShutdown(void)
 	freeMessages();
 
 	return true;
+}
+
+//check for any messages using this viewdata and remove them
+static void checkMessages(MSG_VIEWDATA *psViewData)
+{
+	MESSAGE			*psCurr, *psNext;
+	UDWORD			i;
+
+	for (i=0; i < MAX_PLAYERS; i++)
+	{
+		for (psCurr = apsMessages[i]; psCurr != NULL; psCurr = psNext)
+		{
+			psNext = psCurr->psNext;
+			if (psCurr->pViewData == psViewData)
+			{
+				removeMessage(psCurr, i);
+			}
+		}
+	}
 }
 
 /* Release the viewdata memory */
@@ -1013,6 +1032,7 @@ void displayProximityMessage(PROXIMITY_DISPLAY *psProxDisp)
 	psProxDisp->psMessage->read = true;
 }
 
+// NOTE: Unused! PROXIMITY_DISPLAY * getProximityDisplay(MESSAGE *psMessage)
 PROXIMITY_DISPLAY * getProximityDisplay(MESSAGE *psMessage)
 {
 	PROXIMITY_DISPLAY	*psCurr;
@@ -1034,21 +1054,3 @@ PROXIMITY_DISPLAY * getProximityDisplay(MESSAGE *psMessage)
 	return NULL;
 }
 
-//check for any messages using this viewdata and remove them
-void checkMessages(MSG_VIEWDATA *psViewData)
-{
-	MESSAGE			*psCurr, *psNext;
-	UDWORD			i;
-
-	for (i=0; i < MAX_PLAYERS; i++)
-	{
-		for (psCurr = apsMessages[i]; psCurr != NULL; psCurr = psNext)
-		{
-			psNext = psCurr->psNext;
-			if (psCurr->pViewData == psViewData)
-			{
-				removeMessage(psCurr, i);
-			}
-		}
-	}
-}

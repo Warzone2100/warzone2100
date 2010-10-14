@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -24,19 +24,14 @@
 #ifndef __INCLUDED_SRC_CLPARSE_H__
 #define __INCLUDED_SRC_CLPARSE_H__
 
-#include "lib/framework/frame.h"
-#include "lib/framework/types.h"
-
 #ifdef __cplusplus
 extern "C"
 {
 #endif //__cplusplus
 
-#define MAX_MODS 100
-
 // parse the commandline
-extern bool ParseCommandLine(int argc, const char** argv);
-extern bool ParseCommandLineEarly(int argc, const char** argv);
+bool ParseCommandLine(int argc, const char** argv);
+bool ParseCommandLineEarly(int argc, const char** argv);
 
 extern BOOL bAllowDebugMode;
 

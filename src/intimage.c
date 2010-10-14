@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -23,47 +23,15 @@
  * Image definitions and related functions.
  *
  */
+
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
-
-/* Includes direct access to render library */
-#include "lib/ivis_common/ivisdef.h"
-#include "lib/ivis_common/piestate.h"
-#include "lib/ivis_common/piemode.h"
-
-// FIXME Direct iVis implementation include!
-#include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_common/bitimage.h"
-
-#include "lib/gamelib/gtime.h"
-#include "lib/sound/audio.h"
-#include "lib/widget/widget.h"
-#include "lib/widget/widgint.h"
-#include "lib/widget/bar.h"
-#include "lib/widget/form.h"
-#include "lib/widget/label.h"
-#include "lib/widget/button.h"
-#include "lib/widget/editbox.h"
-#include "lib/widget/slider.h"
+#include "lib/ivis_common/pieblitfunc.h"
+#include "lib/ivis_common/piepalette.h"
+#include "lib/ivis_common/piestate.h"
 
 #include "intimage.h"
-
-#include "objects.h"
-#include "loop.h"
-#include "map.h"
-
-#include "display3d.h"
-#include "edit3d.h"
-#include "structure.h"
-#include "research.h"
-#include "function.h"
-#include "hci.h"
-#include "stats.h"
-#include "game.h"
-#include "power.h"
-#include "order.h"
-#include "main.h"
-
 
 #define INCEND	(0)
 
@@ -119,14 +87,16 @@ static const uint16_t MousePointerImageIDs[CURSOR_MAX] =
 	IMAGE_CURSOR_DEFAULT,	// CURSOR_EDGEOFMAP   
 	IMAGE_CURSOR_ATTACH,	// CURSOR_ATTACH      
 	IMAGE_CURSOR_ATTACK,	// CURSOR_ATTACK      
-	IMAGE_CURSOR_DEFAULT,	// CURSOR_BOMB        
+	IMAGE_CURSOR_BOMB,	// CURSOR_BOMB        
 	IMAGE_CURSOR_BRIDGE,	// CURSOR_BRIDGE      
 	IMAGE_CURSOR_BUILD,	// CURSOR_BUILD       
 	IMAGE_CURSOR_EMBARK,	// CURSOR_EMBARK      
+	IMAGE_CURSOR_DISEMBARK,	// CURSOR_DISEMBARK      
 	IMAGE_CURSOR_FIX,	// CURSOR_FIX         
 	IMAGE_CURSOR_GUARD,	// CURSOR_GUARD       
 	IMAGE_CURSOR_ECM,	// CURSOR_JAM         
 	IMAGE_CURSOR_LOCKON,	// CURSOR_LOCKON      
+	IMAGE_CURSOR_SCOUT,	// CURSOR_SCOUT      
 	IMAGE_CURSOR_DEFAULT,	// CURSOR_MENU        
 	IMAGE_CURSOR_MOVE,	// CURSOR_MOVE        
 	IMAGE_CURSOR_NOTPOS,	// CURSOR_NOTPOSSIBLE 
@@ -184,22 +154,6 @@ TABDEF	StandardTab = {
 	IMAGE_TABSELECTED,	// Minor tab currently selected.
 };
 
-TABDEF SystemTab = {
-	IMAGE_DES_WEAPONS,
-	IMAGE_DES_WEAPONSDOWN,
-	IMAGE_DES_EXTRAHI,
-	IMAGE_DES_WEAPONSDOWN,
-
-	/*IMAGE_TAB1,
-	IMAGE_TAB1DOWN,
-	IMAGE_TABHILIGHT,
-	IMAGE_TABSELECTED,*/
-	IMAGE_SIDETAB,
-	IMAGE_SIDETABDOWN,
-	IMAGE_SIDETABHI,
-	IMAGE_SIDETABSEL,
-};
-
 TABDEF	SmallTab = {
 	IMAGE_TAB1_SM,			// Major tab normal.
 	IMAGE_TAB1DOWN_SM,		// Major tab clicked.
@@ -212,7 +166,6 @@ TABDEF	SmallTab = {
 	IMAGE_TAB1SELECTED_SM,	// Minor tab currently selected.
 };
 
-
 // Read bitmaps used by the interface.
 //
 BOOL imageInitBitmaps(void)
@@ -223,14 +176,9 @@ BOOL imageInitBitmaps(void)
 	return true;
 }
 
-void RenderWindowFrame(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD Height)
-{
-	RenderWindow(frame, x, y, Width, Height, false);
-}
-
 // Render a window frame.
 //
-void RenderWindow(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD Height, BOOL Opaque)
+static void RenderWindow(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD Height, BOOL Opaque)
 {
 	SWORD WTopRight = 0;
 	SWORD WTopLeft = 0;
@@ -405,3 +353,9 @@ void RenderWindow(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD Heig
 							iV_GetImageWidth(IntImages, Frame->RightEdge), Height - HTopRight - HBottomRight );
 	}
 }
+
+void RenderWindowFrame(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD Height)
+{
+	RenderWindow(frame, x, y, Width, Height, false);
+}
+

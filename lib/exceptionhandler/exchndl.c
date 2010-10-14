@@ -3,7 +3,7 @@
 	Copyright (C) 1997-XXXX  José Fonseca <j_r_fonseca@yahoo.co.uk>
 	 * Originally based on Matt Pietrek's MSJEXHND.CPP in Microsoft Systems Journal, April 1997.
 	Copyright (C) 2008  Giel van Schijndel
-	Copyright (C) 2008-2009  Warzone Resurrection Project
+	Copyright (C) 2008-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -19,7 +19,10 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-
+#if (_WIN32_WINNT < 0x0500)			// must force win 2k or higher
+#undef _WIN32_WINNT
+#define _WIN32_WINNT 0x0500
+#endif
 #include "lib/framework/frame.h"
 #include "dumpinfo.h"
 #include "exchndl.h"
@@ -32,7 +35,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
-
+#include <shlobj.h>
+#include <shlwapi.h>
 
 #if !defined(WZ_CC_MSVC)
 #define HAVE_BFD	1
@@ -1072,7 +1076,7 @@ void GenerateExceptionReport(PEXCEPTION_POINTERS pExceptionInfo)
 	rprintf(_T("\r\n\r\n"));
 
 	#endif
-
+	// FIXME: We *never* return from the below call!
 	StackBackTrace(GetCurrentProcess(), GetCurrentThread(), pContext);
 
 	rprintf(_T("\r\n\r\n"));
@@ -1106,6 +1110,32 @@ LONG WINAPI TopLevelExceptionFilter(PEXCEPTION_POINTERS pExceptionInfo)
 			FILE_FLAG_WRITE_THROUGH,
 			0
 		);
+		if (hReportFile == INVALID_HANDLE_VALUE)
+		{
+			// Retrieve the system error message for the last-error code
+
+			LPVOID lpMsgBuf;
+			LPVOID lpDisplayBuf;
+			DWORD dw = GetLastError();
+			TCHAR szBuffer[4196];
+
+			FormatMessage(
+				FORMAT_MESSAGE_ALLOCATE_BUFFER | 
+				FORMAT_MESSAGE_FROM_SYSTEM |
+				FORMAT_MESSAGE_IGNORE_INSERTS,
+				NULL,
+				dw,
+				MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+				(LPTSTR) &lpMsgBuf,
+				0, NULL );
+
+			wsprintf(szBuffer, _T("Exception handler failed with error %d: %s\n"), dw, lpMsgBuf);
+			MessageBox(MB_ICONEXCLAMATION, szBuffer, _T("Error"), MB_OK); 
+
+			LocalFree(lpMsgBuf);
+			LocalFree(lpDisplayBuf);
+			debug(LOG_ERROR, "Exception handler failed to create file!");
+		}
 
 #ifdef HAVE_BFD
 		bfd_set_error_handler((bfd_error_handler_type) rprintf);
@@ -1113,28 +1143,43 @@ LONG WINAPI TopLevelExceptionFilter(PEXCEPTION_POINTERS pExceptionInfo)
 
 		if (hReportFile)
 		{
+			TCHAR szBuffer[4196];
+			int err;
+
 			SetFilePointer(hReportFile, 0, 0, FILE_END);
 
+			// FIXME: We don't return from the below function call
 			GenerateExceptionReport(pExceptionInfo);
-
 			CloseHandle(hReportFile);
+
+			wsprintf(szBuffer, _T("Warzone has crashed.\r\nSee %s for more details\r\n"), szLogFileName);
+			err = MessageBox(MB_ICONERROR, szBuffer, _T("Warzone Crashed!"), MB_OK | MB_ICONERROR);
+			if (err == 0)
+			{
+				LPVOID lpMsgBuf;
+				LPVOID lpDisplayBuf;
+				DWORD dw = GetLastError();
+				TCHAR szBuffer[4196];
+
+				FormatMessage(
+					FORMAT_MESSAGE_ALLOCATE_BUFFER | 
+					FORMAT_MESSAGE_FROM_SYSTEM |
+					FORMAT_MESSAGE_IGNORE_INSERTS,
+					NULL,
+					dw,
+					MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+					(LPTSTR) &lpMsgBuf,
+					0, NULL );
+
+				wsprintf(szBuffer, _T("Exception handler failed with error %d: %s\n"), dw, lpMsgBuf);
+				MessageBox(MB_ICONEXCLAMATION, szBuffer, _T("Error"), MB_OK); 
+
+				LocalFree(lpMsgBuf);
+				LocalFree(lpDisplayBuf);
+				debug(LOG_ERROR, "Exception handler failed to create file!");
+			}
 			hReportFile = 0;
 		}
-
-		if(fuOldErrorMode & SEM_NOGPFAULTERRORBOX)
-		{
-			TCHAR szBuffer[4196];
-
-			wsprintf(szBuffer, _T("An unhandled exception ocurred\r\nSee %s for more details\r\n"), szLogFileName);
-
-			MessageBox(
-				NULL,
-				szBuffer,
-				_T("Error"),
-				MB_OK | MB_ICONERROR
-			);
-		}
-
 		SetErrorMode(fuOldErrorMode);
 	}
 
@@ -1146,35 +1191,46 @@ LONG WINAPI TopLevelExceptionFilter(PEXCEPTION_POINTERS pExceptionInfo)
 
 void ExchndlSetup()
 {
+# if defined(WZ_CC_MINGW)
+	TCHAR miniDumpPath[PATH_MAX] = {'\0'};
 	// Install the unhandled exception filter function
 	prevExceptionFilter = SetUnhandledExceptionFilter(TopLevelExceptionFilter);
 
 	// Retrieve the current version
 	formattedVersionString = strdup(version_getFormattedVersionString());
 
-	// Figure out what the report file will be named, and store it away
-	if(GetModuleFileName(NULL, szLogFileName, MAX_PATH))
+	// Because of UAC on vista / win7 we use this to write our dumps to (unless we override it via OverrideRPTDirectory())
+	// NOTE: CSIDL_PERSONAL =  C:\Users\user name\Documents
+	if ( SUCCEEDED( SHGetFolderPathA( NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, miniDumpPath ) ))
 	{
-		LPTSTR lpszDot;
+		PathAppend( miniDumpPath, TEXT( "Warzone 2100 2.3\\logs" ) );
 
-		// Look for the '.' before the "EXE" extension.  Replace the extension
-		// with "RPT"
-		if((lpszDot = _tcsrchr(szLogFileName, _T('.'))))
+		if( !PathFileExists( miniDumpPath ) )
 		{
-			lpszDot++;	// Advance past the '.'
-			_tcscpy(lpszDot, _T("RPT"));	// "RPT" -> "Report"
+			if( ERROR_SUCCESS != SHCreateDirectoryEx( NULL, miniDumpPath, NULL ) )
+			{
+				_tcscpy(miniDumpPath, _T("c:\\temp"));
+			}
 		}
-		else
-			_tcscat(szLogFileName, _T(".RPT"));
 	}
-	else if(GetWindowsDirectory(szLogFileName, MAX_PATH))
-	{
-		_tcscat(szLogFileName, _T("EXCHNDL.RPT"));
+	else
+	{	// should never fail, but if it does, we fall back to this
+		_tcscpy(miniDumpPath, _T("c:\\temp"));
 	}
+
+	_tcscat(szLogFileName, _T("Warzone2100.RPT"));
+	_tcscat(miniDumpPath, _T("\\"));
+	_tcscat(miniDumpPath,szLogFileName);
+	_tcscpy(szLogFileName, miniDumpPath);
 
 	atexit(ExchndlShutdown);
+#endif
 }
-
+void ResetRPTDirectory(char *newPath)
+{
+	debug(LOG_WZ, "New RPT directory is %s, was %s", newPath, szLogFileName);
+	_tcscpy(szLogFileName, newPath);
+}
 void ExchndlShutdown(void)
 {
 	if (prevExceptionFilter)

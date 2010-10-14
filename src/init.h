@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -59,7 +59,7 @@ typedef struct _wzSearchPath
 	struct _wzSearchPath * higherPriority, * lowerPriority;
 } wzSearchPath;
 
-typedef enum { mod_clean=0, mod_campaign=1, mod_multiplay=2 } searchPathMode;
+typedef enum { mod_clean=0, mod_campaign=1, mod_multiplay=2, mod_override=3 } searchPathMode;
 
 void cleanSearchPath( void );
 void registerSearchPath( const char path[], unsigned int priority );

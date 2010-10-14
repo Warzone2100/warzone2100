@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1992-2007  Trolltech ASA.
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -27,6 +27,12 @@
 #ifndef WZGLOBAL_H
 #define WZGLOBAL_H
 
+#ifndef __STDC_FORMAT_MACROS
+#define __STDC_FORMAT_MACROS
+#endif
+#ifndef __STDC_LIMIT_MACROS
+#define __STDC_LIMIT_MACROS
+#endif
 
 #if defined(HAVE_CONFIG_H)
 #  undef _XOPEN_SOURCE
@@ -182,6 +188,7 @@
 
      MSVC     - Microsoft Visual C/C++, Intel C++ for Windows
      GNU      - GNU C++
+     CLANG    - Clang LLVM
      INTEL    - Intel C++ for Linux, Intel C++ for Windows
      TINYC    - Fabrice Bellard's Tiny C Compiler
 
@@ -220,6 +227,17 @@
 /* Intel C++ also masquerades as GCC 3.2.0 */
 #    define WZ_CC_INTEL
 #  endif
+
+#  if defined(__llvm__)
+#    define WZ_CC_LLVM
+#  endif
+#  if defined(__clang__)
+#    define WZ_CC_CLANG
+#  endif
+/* Clang may not always masquerade as gcc */
+#elif defined(__clang__)
+#  define WZ_CC_CLANG
+#  define WZ_CC_LLVM
 
 #elif defined(__TINYC__)
 #  define WZ_CC_TINYC
@@ -533,7 +551,8 @@
 
 #  define WIN32_LEAN_AND_MEAN
 #  define WIN32_EXTRA_LEAN
-#  define NOMINMAX		// disable the min / max macros
+#  undef NOMINMAX
+#  define NOMINMAX 1		// disable the min / max macros
 #  include <windows.h>
 
 #  if defined(WZ_CC_MSVC)
@@ -591,6 +610,5 @@
  */
 # define va_copy(dest, src) (void)((dest) = (src))
 #endif // !WZ_C99 && !va_copy
-
 
 #endif /* WZGLOBAL_H */

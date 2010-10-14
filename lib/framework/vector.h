@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2007-2009  Warzone Resurrection Project
+	Copyright (C) 2007-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -37,8 +37,8 @@ typedef struct { int x, y; } Vector2i;
 typedef struct { float x, y; } Vector2f;
 typedef struct { int x, y, z; } Vector3i;
 typedef struct { float x, y, z; } Vector3f;
-typedef struct { uint16_t x, y, z; } Vector3uw; // Only used for basedef.h BASE_ELEMENTS1.
-
+typedef struct { uint16_t direction, pitch, roll; } Rotation;	///< Object rotation in 0..64k range
+typedef Vector3i Position;					///< Map position in world coordinates
 
 /*!
  * Create a Vector from x and y
@@ -135,7 +135,7 @@ static inline WZ_DECL_CONST int Vector2i_ScalarP(const Vector2i op1, const Vecto
  */
 static inline WZ_DECL_CONST int Vector2i_Length(const Vector2i v)
 {
-	return sqrtf( (float)Vector2i_ScalarP(v, v) );
+	return iHypot(v.x, v.y);
 }
 
 
@@ -281,9 +281,9 @@ static inline WZ_DECL_CONST Vector2f Vector2f_Normalise(const Vector2f v)
 static inline WZ_DECL_CONST Vector2f Vector2f_Rotate2f(Vector2f v, float degrees)
 {
 	Vector2f result;
-	float radians = (degrees / 360) * 2 * 3.14;
-	result.x = v.x*cos(radians) - v.y*sin(radians);
-	result.y = v.x*sin(radians) + v.y*cos(radians);
+	int angle = (int)((degrees*65536 + 180)/360);
+	result.x = (v.x*iCos(angle) - v.y*iSin(angle)) / 65536;
+	result.y = (v.x*iSin(angle) + v.y*iCos(angle)) / 65536;
 
 	return result;
 }
@@ -356,18 +356,6 @@ static inline WZ_DECL_CONST Vector3f Vector3f_Init(const float x, const float y,
 static inline WZ_DECL_CONST Vector3i Vector3f_To3i(const Vector3f v)
 {
 	Vector3i dest = { (int)v.x, (int)v.y, (int)v.z };
-	return dest;
-}
-
-
-/*!
- * Convert a float vector to short
- * \param v Vector to convert
- * \return Short vector
- */
-static inline WZ_DECL_CONST Vector3uw Vector3f_To3uw(const Vector3f v)
-{
-	Vector3uw dest = { (uint16_t)v.x, (uint16_t)v.y, (uint16_t)v.z };
 	return dest;
 }
 
@@ -528,43 +516,6 @@ static inline WZ_DECL_CONST bool Vector3f_InSphere (const Vector3f v, const Vect
 
 
 /*!
- * Compute the forward vector, a body's local Z axis, for a set of Euler angles
- * (pitch, yaw and roll).
- * \param v Vector containing the pitch, yaw and roll in its x, y and z members
- *          respectively. These rotations need to be expressed in radians.
- * \return Forward vector.
- */
-static inline WZ_DECL_CONST Vector3f Vector3f_EulerToForwardVector(const Vector3f v)
-{
-	Vector3f dest = {
-		cosf(v.x) * sinf(v.y),
-		-sinf(v.x),
-		cosf(v.x) * cosf(v.y)
-	};
-
-	return dest;
-}
-
-/*!
- * Compute the up vector, a body's local Y axis, for a set of Euler angles
- * (pitch, yaw and roll).
- * \param v Vector containing the pitch, yaw and roll in its x, y and z members
- *          respectively. These rotations need to be expressed in radians.
- * \return Up vector.
- */
-static inline WZ_DECL_CONST Vector3f Vector3f_EulerToUpVector(const Vector3f v)
-{
-	Vector3f dest = {
-		sinf(v.x) * sinf(v.y) * cosf(v.z) - sinf(v.z) * cosf(v.z),
-		cosf(v.x) * cosf(v.z),
-		sinf(v.x) * cosf(v.y) * cosf(v.z) + sinf(v.y) * sinf(v.z)
-	};
-
-	return dest;
-}
-
-
-/*!
  * Finds a point that lies in between two other points, a starting and ending
  * point.
  *
@@ -603,34 +554,6 @@ static inline WZ_DECL_CONST Vector3i Vector3i_Init(const int x, const int y, con
 static inline WZ_DECL_CONST Vector3f Vector3i_To3f(const Vector3i v)
 {
 	Vector3f dest = { (float)v.x, (float)v.y, (float)v.z };
-	return dest;
-}
-
-
-/*!
- * Convert an integer vector to short
- * \param v Vector to convert
- * \return Short vector
- */
-static inline WZ_DECL_CONST Vector3uw Vector3i_To3uw(const Vector3i v)
-{
-	Vector3uw dest = { (uint16_t)v.x, (uint16_t)v.y, (uint16_t)v.z };
-	return dest;
-}
-
-
-/*!
- * Convert a vector of degree angles into radians.
- * \param v Vector to convert
- * \return Radian vector
- */
-static inline WZ_DECL_CONST Vector3f Vector3f_ToRadians(const Vector3f v)
-{
-	Vector3f dest = {
-		deg2radf(v.x),
-		deg2radf(v.y),
-		deg2radf(v.z)
-	};
 	return dest;
 }
 
@@ -732,31 +655,9 @@ static inline WZ_DECL_CONST unsigned int Vector3i_ScalarP(const Vector3i op1, co
  * \param v Vector
  * \return Length
  */
-static inline WZ_DECL_CONST float Vector3i_Length(const Vector3i v)
+static inline WZ_DECL_CONST int32_t Vector3i_Length(const Vector3i v)
 {
-	return sqrtf( Vector3i_ScalarP(v, v) );
-}
-
-
-/*!
- * Normalise a Vector
- * \param v Vector
- * \return Normalised vector, nullvector when input was nullvector or very small
- */
-static inline WZ_DECL_CONST Vector3i Vector3i_Normalise(const Vector3i v)
-{
-	float length = Vector3i_Length(v);
-
-	if (length == 0.0f)
-	{
-		Vector3i dest = { 0, 0, 0 };
-		return dest;
-	}
-	else
-	{
-		Vector3i dest = { v.x / length, v.y / length, v.z / length };
-		return dest;
-	}
+	return iHypot3(v.x, v.y, v.z);
 }
 
 
@@ -819,51 +720,6 @@ static inline WZ_DECL_CONST Vector3i Vector3i_LinearInterpolate(const Vector3i f
 	return Vector3i_Add(from, Vector3f_To3i(Vector3f_Mult(Vector3i_To3f(Vector3i_Sub(to, from)), s)));
 }
 
-
-/*!
- * Print a vector to stdout
- */
-static inline void Vector3uw_Print(const Vector3uw v)
-{
-	printf("V: x:%u, y:%u, z:%u\n", v.x, v.y, v.z);
-}
-
-
-/*!
- * Set the vector field by field, same as v = (Vector3uw){x, y, z};
- * Needed for MSVC which doesn't support C99 struct assignments.
- * \param x,y,z Coordinates
- * \return New Vector
- */
-static inline WZ_DECL_CONST Vector3uw Vector3uw_Init(const unsigned int x, const unsigned int y, const unsigned int z)
-{
-	Vector3uw dest = { x, y, z };
-	return dest;
-}
-
-
-/*!
- * Convert an short vector to int
- * \param v Vector to convert
- * \return Short vector
- */
-static inline WZ_DECL_CONST Vector3i Vector3uw_To3i(const Vector3uw v)
-{
-	Vector3i dest = { (int)v.x, (int)v.y, (int)v.z };
-	return dest;
-}
-
-
-/*!
- * Convert an short vector to int
- * \param v Vector to convert
- * \return Short vector
- */
-static inline WZ_DECL_CONST Vector3f Vector3uw_To3f(const Vector3uw v)
-{
-	Vector3f dest = { (float)v.x, (float)v.y, (float)v.z };
-	return dest;
-}
 
 #ifdef __cplusplus
 }

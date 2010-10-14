@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -32,6 +32,10 @@
 
 /* Get the Yacc definitions */
 #include "script_parser.tab.h"
+
+// fwrite declared with warn_unused_result, resulting in mysterious errors in "%%" on some distros.
+static inline bool no_warn_unused_result(int ignore) { if (ignore) {} return true; }
+#define fwrite(a, b, c, d) no_warn_unused_result(fwrite(a, b, c, d))
 
 /* Maximum length for any TEXT value */
 #ifndef YYLMAX
@@ -78,6 +82,7 @@ static unsigned int scr_num_macros;       /* Number of macros defined so far */
 static int scr_macro_stack_ptr;  /* Pointer to the current flex macro input buffer */
 static char *pScrMacroBuffer[MAX_SCR_MACRO_DEPTH];
 
+#undef YY_INPUT
 #define YY_INPUT(buf,result,max_size) \
 	{ \
 		if (PHYSFS_eof(pScrInputFiles[scr_include_stack_ptr])) \
@@ -478,7 +483,7 @@ init					return INITIALISE;
 link					return LINK;
 ref						return REF;
 return					return	RET;
-function				return	FUNCTION;
+function				return	lexFUNCTION;
 "("int")"|"("INT")"			{ RULE(yytext); return TO_INT_CAST; }
 "("float")"|"("FLOAT")"			{ RULE(yytext); return TO_FLOAT_CAST; }
 public					{ scr_lval.stype = ST_PUBLIC; return STORAGE; }
@@ -854,5 +859,6 @@ int scr_lex_destroy(void)
 	/* For non-reentrant C scanner only. */
 	yy_delete_buffer(YY_CURRENT_BUFFER);
 	yy_init = 1;
+	return 0;
 }
 #endif

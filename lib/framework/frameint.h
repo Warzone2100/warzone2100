@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -36,13 +36,13 @@ extern "C"
 #endif
 
 /* Initialise the double buffered display */
-extern BOOL screenInitialise(UDWORD		width,			// Display width
+extern bool screenInitialise(UDWORD		width,			// Display width
 							 UDWORD		height,			// Display height
 							 UDWORD		bitDepth,		// Display bit depth
 							 unsigned int fsaa,         // FSAA anti aliasing level
-							 BOOL		fullScreen,		// Whether to start windowed
+							 bool		fullScreen,		// Whether to start windowed
 														// or full screen
-							 BOOL		vsync);
+							 bool		vsync);
 
 
 /* Release the DD objects */

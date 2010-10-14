@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -25,15 +25,14 @@
  */
 
 #include "lib/framework/frame.h"
+
+#include "basedef.h"
+#include "droid.h"
+#include "feature.h"
 #include "mechanics.h"
-#include "stats.h"
+#include "objmem.h"
+#include "research.h"
 #include "structure.h"
-#include "game.h"
-#include "power.h"
-#include "projectile.h"
-#include "move.h"
-#include "message.h"
-#include "visibility.h"
 
 /* Shutdown the mechanics system */
 bool mechanicsShutdown(void)
@@ -76,6 +75,11 @@ BOOL allocComponentList(COMPONENT_TYPE	type, SDWORD number)
 	//allocate the space for the Players' component lists
 	for (inc=0; inc < MAX_PLAYERS; inc++)
 	{
+		if (apCompLists[inc][type])
+		{
+			free(apCompLists[inc][type]);
+		}
+
 		apCompLists[inc][type] = (UBYTE *) malloc(sizeof(UBYTE) * number);
 		if (apCompLists[inc][type] == NULL)
 		{
@@ -85,7 +89,7 @@ BOOL allocComponentList(COMPONENT_TYPE	type, SDWORD number)
 		}
 
 		//initialise the players' lists
-		for (comp=0; comp <number; comp++)
+		for (comp=0; comp < number; comp++)
 		{
 			apCompLists[inc][type][comp] = UNAVAILABLE;
 		}
@@ -102,14 +106,46 @@ void freeComponentLists(void)
 	for (inc=0; inc < MAX_PLAYERS; inc++)
 	{
 		//free the component lists
-		free(apCompLists[inc][COMP_BODY]);
-		free(apCompLists[inc][COMP_BRAIN]);
-		free(apCompLists[inc][COMP_PROPULSION]);
-		free(apCompLists[inc][COMP_SENSOR]);
-		free(apCompLists[inc][COMP_ECM]);
-		free(apCompLists[inc][COMP_REPAIRUNIT]);
-		free(apCompLists[inc][COMP_CONSTRUCT]);
-		free(apCompLists[inc][COMP_WEAPON]);
+		if (apCompLists[inc][COMP_BODY])
+		{
+			free(apCompLists[inc][COMP_BODY]);
+			apCompLists[inc][COMP_BODY] = NULL;
+		}
+		if (apCompLists[inc][COMP_BRAIN])
+		{
+			free(apCompLists[inc][COMP_BRAIN]);
+			apCompLists[inc][COMP_BRAIN] = NULL;
+		}
+		if (apCompLists[inc][COMP_PROPULSION])
+		{
+			free(apCompLists[inc][COMP_PROPULSION]);
+			apCompLists[inc][COMP_PROPULSION] = NULL;
+		}
+		if (apCompLists[inc][COMP_SENSOR])
+		{
+			free(apCompLists[inc][COMP_SENSOR]);
+			apCompLists[inc][COMP_SENSOR] = NULL;
+		}
+		if (apCompLists[inc][COMP_ECM])
+		{
+			free(apCompLists[inc][COMP_ECM]);
+			apCompLists[inc][COMP_ECM] = NULL;
+		}
+		if (apCompLists[inc][COMP_REPAIRUNIT])
+		{
+			free(apCompLists[inc][COMP_REPAIRUNIT]);
+			apCompLists[inc][COMP_REPAIRUNIT] = NULL;
+		}
+		if (apCompLists[inc][COMP_CONSTRUCT])
+		{
+			free(apCompLists[inc][COMP_CONSTRUCT]);
+			apCompLists[inc][COMP_CONSTRUCT] = NULL;
+		}
+		if (apCompLists[inc][COMP_WEAPON])
+		{
+			free(apCompLists[inc][COMP_WEAPON]);
+			apCompLists[inc][COMP_WEAPON] = NULL;
+		}
 	}
 }
 

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -26,23 +26,12 @@
  */
 
 #include "lib/framework/frame.h"
-#include "lib/framework/strres.h"
 #include "lib/framework/file.h"
-#include "lib/netplay/netplay.h"
-#include "lib/widget/widget.h"
+#include "lib/netplay/nettypes.h"
 
-#include "objmem.h"
-#include "power.h"
-#include "map.h"
-#include "effects.h"	// for discovery flash
-#include "cmddroid.h"
-#include "multiplay.h"
-#include "multirecv.h"
-#include "multistat.h"
-#include "multiint.h"
+#include "main.h"
 #include "mission.h" // for cheats
-
-extern char	MultiPlayersPath[PATH_MAX];
+#include "multistat.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // STATS STUFF
@@ -51,21 +40,22 @@ static PLAYERSTATS playerStats[MAX_PLAYERS];
 
 // ////////////////////////////////////////////////////////////////////////////
 // Get Player's stats
-PLAYERSTATS getMultiStats(UDWORD player, BOOL bLocal)
+PLAYERSTATS getMultiStats(UDWORD player)
 {
-	static PLAYERSTATS stat;
-
-	// Copy over the data from our local array
-	memcpy(&stat, &playerStats[player], sizeof(stat));
-
-	return stat;
+	return playerStats[player];
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 // Set Player's stats
+// send stats to all players when bLocal is false
 BOOL setMultiStats(SDWORD player, PLAYERSTATS plStats, BOOL bLocal)
 {
 	uint32_t playerIndex = (uint32_t)player;
+
+	if (playerIndex >= MAX_PLAYERS)
+	{
+		return true;
+	}
 
 	// First copy over the data into our local array
 	memcpy(&playerStats[playerIndex], &plStats, sizeof(plStats));
@@ -73,7 +63,7 @@ BOOL setMultiStats(SDWORD player, PLAYERSTATS plStats, BOOL bLocal)
 	if (!bLocal)
 	{
 		// Now send it to all other players
-		NETbeginEncode(NET_PLAYER_STATS, NET_ALL_PLAYERS);
+		NETbeginEncode(NETbroadcastQueue(), NET_PLAYER_STATS);
 			// Send the ID of the player's stats we're updating
 			NETuint32_t(&playerIndex);
 
@@ -93,14 +83,19 @@ BOOL setMultiStats(SDWORD player, PLAYERSTATS plStats, BOOL bLocal)
 	return true;
 }
 
-void recvMultiStats()
+void recvMultiStats(NETQUEUE queue)
 {
 	uint32_t playerIndex;
 
-	NETbeginDecode(NET_PLAYER_STATS);
+	NETbeginDecode(queue, NET_PLAYER_STATS);
 		// Retrieve the ID number of the player for which we need to
 		// update the stats
 		NETuint32_t(&playerIndex);
+
+		if (playerIndex >= MAX_PLAYERS)
+		{
+			return;
+		}
 
 		// we don't what to update ourselves, we already know our score (FIXME: rewrite setMultiStats())
 		if (!myResponsibility(playerIndex))
@@ -215,42 +210,48 @@ void updateMultiStatsDamage(UDWORD attacker, UDWORD defender, UDWORD inflicted)
 	}
 	// FIXME: Why in the world are we using two different structs for stats when we can use only one?
 	// Host controls self + AI, so update the scores for them as well.
-	if(myResponsibility(attacker) && NetPlay.bComms)
+	if (attacker < MAX_PLAYERS)
 	{
-		st = getMultiStats(attacker,true);	// get stats
-		if(NetPlay.bComms)
+		if (myResponsibility(attacker) && NetPlay.bComms)
 		{
-			st.scoreToAdd += (2*inflicted);
+			st = getMultiStats(attacker);	// get stats
+			if (NetPlay.bComms)
+			{
+				st.scoreToAdd += (2 * inflicted);
+			}
+			else
+			{
+				st.recentScore += (2 * inflicted);
+			}
+			setMultiStats(attacker, st, true);
 		}
 		else
 		{
-			st.recentScore += (2*inflicted);
+			ingame.skScores[attacker][0] += (2 * inflicted);	// increment skirmish players rough score.
 		}
-		setMultiStats(attacker, st, true);
-	}
-	else
-	{
-		ingame.skScores[attacker][0] += (2*inflicted);	// increment skirmish players rough score.
 	}
 
 	// FIXME: Why in the world are we using two different structs for stats when we can use only one?
 	// Host controls self + AI, so update the scores for them as well.
-	if(myResponsibility(defender) && NetPlay.bComms)
+	if (defender < MAX_PLAYERS)
 	{
-		st = getMultiStats(defender,true);	// get stats
-		if(NetPlay.bComms)
+		if (myResponsibility(defender) && NetPlay.bComms)
 		{
-			st.scoreToAdd  -= inflicted;
+			st = getMultiStats(defender);	// get stats
+			if (NetPlay.bComms)
+			{
+				st.scoreToAdd  -= inflicted;
+			}
+			else
+			{
+				st.recentScore  -= inflicted;
+			}
+			setMultiStats(defender, st, true);
 		}
 		else
 		{
-			st.recentScore  -= inflicted;
+			ingame.skScores[defender][0] -= inflicted;	// increment skirmish players rough score.
 		}
-		setMultiStats(defender, st, true);
-	}
-	else
-	{
-		ingame.skScores[defender][0] -= inflicted;	// increment skirmish players rough score.
 	}
 }
 
@@ -263,7 +264,7 @@ void updateMultiStatsGames(void)
 	{
 		return;
 	}
-	st  = getMultiStats(selectedPlayer,true);
+	st  = getMultiStats(selectedPlayer);
 	st.played ++;
 	setMultiStats(selectedPlayer, st, true);
 }
@@ -276,7 +277,7 @@ void updateMultiStatsWins(void)
 	{
 		return;
 	}
-	st  = getMultiStats(selectedPlayer,true);
+	st  = getMultiStats(selectedPlayer);
 	st.wins ++;
 	setMultiStats(selectedPlayer, st, true);
 }
@@ -289,7 +290,7 @@ void updateMultiStatsLoses(void)
 	{
 		return;
 	}
-	st  = getMultiStats(selectedPlayer,true);
+	st  = getMultiStats(selectedPlayer);
 	++st.losses;
 	setMultiStats(selectedPlayer, st, true);
 }
@@ -307,7 +308,7 @@ void updateMultiStatsKills(BASE_OBJECT *psKilled,UDWORD player)
 	// Host controls self + AI, so update the scores for them as well.
 	if(myResponsibility(player) && NetPlay.bComms)
 	{
-		st  = getMultiStats(player,true);
+		st  = getMultiStats(player);
 
 		if(NetPlay.bComms)
 		{

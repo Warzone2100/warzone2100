@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -55,6 +55,7 @@
 #include "multirecv.h"
 #include "scriptfuncs.h"
 
+#include <SDL.h>
 // ////////////////////////////////////////////////////////////////////////////
 // External Variables
 
@@ -68,7 +69,7 @@ void sendOptions()
 {
 	unsigned int i;
 
-	NETbeginEncode(NET_OPTIONS, NET_ALL_PLAYERS);
+	NETbeginEncode(NETbroadcastQueue(), NET_OPTIONS);
 
 	// First send information about the game
 	NETuint8_t(&game.type);
@@ -105,13 +106,15 @@ void sendOptions()
 
 	// Send the number of structure limits to expect
 	NETuint32_t(&ingame.numStructureLimits);
-
+	debug(LOG_NET, "(Host) Structure limits to process on client is %u", ingame.numStructureLimits);
 	// Send the structures changed
 	for (i = 0; i < ingame.numStructureLimits; i++)
 	{
 		NETuint8_t(&ingame.pStructureLimits[i].id);
 		NETuint8_t(&ingame.pStructureLimits[i].limit);
 	}
+	updateLimitFlags();
+	NETuint8_t(&ingame.flags);
 
 	NETend();
 }
@@ -137,11 +140,12 @@ static BOOL checkGameWdg(const char *nm)
 
 // ////////////////////////////////////////////////////////////////////////////
 // options for a game. (usually recvd in frontend)
-void recvOptions()
+void recvOptions(NETQUEUE queue)
 {
 	unsigned int i;
 
-	NETbeginDecode(NET_OPTIONS);
+	debug(LOG_NET, "Receiving options from host");
+	NETbeginDecode(queue, NET_OPTIONS);
 
 	// Get general information about the game
 	NETuint8_t(&game.type);
@@ -187,7 +191,7 @@ void recvOptions()
 
 	// Get the number of structure limits to expect
 	NETuint32_t(&ingame.numStructureLimits);
-
+	debug(LOG_NET, "Host is sending us %u structure limits", ingame.numStructureLimits);
 	// If there were any changes allocate memory for them
 	if (ingame.numStructureLimits)
 	{
@@ -199,6 +203,9 @@ void recvOptions()
 		NETuint8_t(&ingame.pStructureLimits[i].id);
 		NETuint8_t(&ingame.pStructureLimits[i].limit);
 	}
+	NETuint8_t(&ingame.flags);
+
+	NETend();
 
 	// Do the skirmish slider settings if they are up
 	for (i = 0; i < MAX_PLAYERS; i++)
@@ -221,7 +228,7 @@ void recvOptions()
 
 		debug(LOG_NET, "Map was not found, requesting map %s from host.", game.map);
 		// Request the map from the host
-		NETbeginEncode(NET_FILE_REQUESTED, NET_HOST_ONLY);
+		NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_FILE_REQUESTED);
 		NETuint32_t(&player);
 		NETend();
 
@@ -307,12 +314,12 @@ BOOL joinCampaign(UDWORD gameNumber, char *sPlayer)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-// Broadcast that we are leaving the game 'nicely', (we wanted to) and not
+// Tell the host we are leaving the game 'nicely', (we wanted to) and not
 // because we have some kind of error. (dropped or disconnected)
 BOOL sendLeavingMsg(void)
 {
 	debug(LOG_NET, "We are leaving 'nicely'");
-	NETbeginEncode(NET_PLAYER_LEAVING, NET_ALL_PLAYERS);
+	NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_PLAYER_LEAVING);
 	{
 		BOOL host = NetPlay.isHost;
 		uint32_t id = selectedPlayer;
@@ -425,6 +432,7 @@ static BOOL cleanMap(UDWORD player)
 			   ||(psStruct->pStructureType->type == REF_WALLCORNER)
 			   ||(psStruct->pStructureType->type == REF_DEFENSE)
 			   ||(psStruct->pStructureType->type == REF_BLASTDOOR)
+			   ||(psStruct->pStructureType->type == REF_GATE)
 			   ||(psStruct->pStructureType->type == REF_CYBORG_FACTORY)
 			   ||(psStruct->pStructureType->type == REF_COMMAND_CONTROL))
 			{
@@ -482,12 +490,11 @@ static BOOL cleanMap(UDWORD player)
 						if(((POWER_GEN*)psStruct->pFunctionality)->capacity != 0)
 						{	// downgrade powergen.
 							((POWER_GEN*)psStruct->pFunctionality)->capacity = 0;
-							((POWER_GEN*)psStruct->pFunctionality)->power = ((POWER_GEN_FUNCTION*)psStruct->pStructureType->asFuncList[0])->powerOutput;
-							((POWER_GEN*)psStruct->pFunctionality)->multiplier += ((POWER_GEN_FUNCTION*)psStruct->pStructureType->asFuncList[0])->powerMultiplier;
 
 							psStruct->sDisplay.imd	= psStruct->pStructureType->pIMD;
 							psStruct->body			= (UWORD)(structureBody(psStruct));
 						}
+						structurePowerUpgrade(psStruct);
 						psStruct=psStruct->psNext;
 				}
 			}
@@ -575,7 +582,7 @@ void playerResponding(void)
 	cameraToHome(selectedPlayer, false);
 
 	// Tell the world we're here
-	NETbeginEncode(NET_PLAYERRESPONDING, NET_ALL_PLAYERS);
+	NETbeginEncode(NETbroadcastQueue(), NET_PLAYERRESPONDING);
 	NETuint32_t(&selectedPlayer);
 	NETend();
 }
@@ -610,10 +617,12 @@ BOOL multiGameShutdown(void)
 	sendLeavingMsg();							// say goodbye
 	updateMultiStatsGames();					// update games played.
 
-	st = getMultiStats(selectedPlayer, true);	// save stats
+	st = getMultiStats(selectedPlayer);	// save stats
 
 	saveMultiStats(getPlayerName(selectedPlayer), getPlayerName(selectedPlayer), &st);
 
+	// if we terminate the socket too quickly, then, it is possible not to get the leave message
+	SDL_Delay(1000);
 	// close game
 	NETclose();
 	NETremRedirects();
@@ -624,6 +633,7 @@ BOOL multiGameShutdown(void)
 		free(ingame.pStructureLimits);
 		ingame.pStructureLimits = NULL;
 	}
+	ingame.flags = 0;
 
 	ingame.localJoiningInProgress = false; // Clean up
 	ingame.localOptionsReceived = false;

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -33,8 +33,10 @@
 #include "lib/framework/strres.h"
 #include "lib/framework/stdio_ext.h"
 #include "lib/gamelib/gtime.h"
-#include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_common/bitimage.h"
+#include "lib/ivis_common/pieblitfunc.h"
 #include "lib/ivis_common/piepalette.h"
+#include "lib/ivis_common/piestate.h"
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/screen.h"
 #include "lib/script/script.h"
@@ -177,9 +179,13 @@ BOOL Refreshing = false;
 #define IDOPT_DROID			1037		// The place droid button
 #define IDOPT_STRUCT		1038		// The place struct button
 #define IDOPT_FEATURE		1039		// The place feature button
-#define IDOPT_TILE		1040		// The place tile button
-#define IDOPT_PAUSE		1041		// The edit pause button
+#define IDOPT_TILE			1040		// The place tile button
+#define IDOPT_PAUSE			1041		// The edit pause button
 #define IDOPT_ZALIGN		1042		// The z-align button
+#define IDOPT_IVISFORM		1043		// iViS engine form
+#define IDOPT_IVISLABEL		1044		// iViS form label
+#define IDOPT_IVISSHADERS	1045		// iViS shaders button
+#define IDOPT_IVISLIGHTING	1046		// iViS lighting button
 
 /* Edit screen IDs */
 #define IDED_FORM			2000		// The edit form
@@ -405,10 +411,6 @@ static BASE_OBJECT		*apsPreviousObj[IOBJ_MAX];
 
 /* The jump position for each object on the base bar */
 static Vector2i asJumpPos[IOBJ_MAX];
-
-// whether to reopen the build menu
-// chnaged back to pre Mark Donald setting at Jim's request - AlexM
-static BOOL				bReopenBuildMenu = false;
 
 /***************************************************************************************/
 /*              Function Prototypes                                                    */
@@ -689,15 +691,6 @@ BOOL intInitialise(void)
 	return true;
 }
 
-void intReopenBuild(BOOL reopen)
-{
-	bReopenBuildMenu = reopen;
-}
-
-BOOL intGetReopenBuild(void)
-{
-	return bReopenBuildMenu;
-}
 
 //initialise all the previous obj - particularly useful for when go Off world!
 void intResetPreviousObj(void)
@@ -1314,12 +1307,10 @@ void intResetScreen(BOOL NoAnim)
 
 // calulate the center world coords for a structure stat given
 // top left tile coords
-static void intCalcStructCenter(STRUCTURE_STATS *psStats, UDWORD tilex, UDWORD tiley, UDWORD *pcx, UDWORD *pcy)
+static void intCalcStructCenter(STRUCTURE_STATS *psStats, UDWORD tilex, UDWORD tiley, uint16_t direction, UDWORD *pcx, UDWORD *pcy)
 {
-	SDWORD	width, height;
-
-	width = psStats->baseWidth * TILE_UNITS;
-	height = psStats->baseBreadth * TILE_UNITS;
+	unsigned width  = getStructureStatsWidth  (psStats, direction) * TILE_UNITS;
+	unsigned height = getStructureStatsBreadth(psStats, direction) * TILE_UNITS;
 
 	*pcx = tilex * TILE_UNITS + width/2;
 	*pcy = tiley * TILE_UNITS + height/2;
@@ -1337,6 +1328,7 @@ static void intProcessOptions(UDWORD id)
 	{
 		widgSetButtonState(psWScreen, IDOPT_PLAYERSTART + selectedPlayer, 0);
 		selectedPlayer = id - IDOPT_PLAYERSTART;
+		// Do not change realSelectedPlayer here, so game doesn't pause.
 		widgSetButtonState(psWScreen, IDOPT_PLAYERSTART + selectedPlayer, WBUT_LOCK);
 	}
 	else
@@ -1456,6 +1448,39 @@ static void intProcessOptions(UDWORD id)
 			intMode = INT_NORMAL;
 //			widgSetButtonState(psWScreen, IDRET_OPTIONS, 0);
 			break;
+		case IDOPT_IVISSHADERS:
+			{
+				bool status = pie_GetShadersStatus();
+				pie_SetShadersStatus(!status);
+				if (status != pie_GetShadersStatus())
+				{
+					if (!status)
+					{
+						widgSetButtonState(psWScreen, IDOPT_IVISSHADERS, WBUT_CLICKLOCK);
+					}
+					else
+					{
+						widgSetButtonState(psWScreen, IDOPT_IVISSHADERS, 0);
+					}
+				}
+				else
+				{
+					widgSetButtonState(psWScreen, IDOPT_IVISSHADERS, WBUT_DISABLE);
+				}
+			}
+			break;
+		case IDOPT_IVISLIGHTING:
+			if (pie_GetLightingState())
+			{
+				pie_SetLightingState(false);
+				widgSetButtonState(psWScreen, IDOPT_IVISLIGHTING, 0);
+			}
+			else
+			{
+				pie_SetLightingState(true);
+				widgSetButtonState(psWScreen, IDOPT_IVISLIGHTING, WBUT_CLICKLOCK);
+			}
+			break;
 			/* Ignore these */
 		case IDOPT_FORM:
 		case IDOPT_LABEL:
@@ -1463,6 +1488,8 @@ static void intProcessOptions(UDWORD id)
 		case IDOPT_MAPLABEL:
 		case IDOPT_PLAYERFORM:
 		case IDOPT_PLAYERLABEL:
+		case IDOPT_IVISFORM:
+		case IDOPT_IVISLABEL:
 			break;
 		default:
 			ASSERT( false, "intProcessOptions: Unknown return code" );
@@ -1486,7 +1513,8 @@ static void intProcessEditStats(UDWORD id)
 		{
 			if (!checkPower(selectedPlayer, ((STRUCTURE_STATS*)psPositionStats)->powerToBuild))
 			{
-				return;
+				debug(LOG_INFO, "Ignoring power check, this is only used from the edit menu, isn't it?");
+				//return;
 			}
 		}
 		/*if it is a template - need to check there is enough power available
@@ -1496,6 +1524,7 @@ static void intProcessEditStats(UDWORD id)
 		{
 			if (!checkPower(selectedPlayer, ((DROID_TEMPLATE*)psPositionStats)->powerPoints))
 			{
+				debug(LOG_INFO, "Ignoring power check, this is only used from the edit menu, isn't it?");
 				return;
 			}
 		}
@@ -1982,31 +2011,18 @@ INT_RETVAL intRunWidgets(void)
 						    && intNumSelectedDroids(DROID_CYBORG_CONSTRUCT) == 0
 						    && psObjSelected != NULL)
 						{
-							orderDroidStatsTwoLoc((DROID *)psObjSelected, DORDER_LINEBUILD,
-											   psPositionStats, structX, structY, structX2,structY2);
+							orderDroidStatsTwoLocDir((DROID *)psObjSelected, DORDER_LINEBUILD, psPositionStats, structX, structY, structX2, structY2, player.r.y);
 						}
 						else
 						{
-							orderSelectedStatsTwoLoc(selectedPlayer, DORDER_LINEBUILD,
-							                         psPositionStats, structX, structY, structX2,
-							                         structY2, ctrlShiftDown());
+							orderSelectedStatsTwoLocDir(selectedPlayer, DORDER_LINEBUILD, psPositionStats, structX, structY, structX2, structY2, player.r.y, ctrlShiftDown());
 						}
 					}
 				}
 
-				// put the build menu up again after the structure position has been chosen
-				//or ctrl/shift is down and we're queing the build orders
-#ifdef DISABLE_BUILD_QUEUE
-				if (bReopenBuildMenu)
-#else
-				if (bReopenBuildMenu || ctrlShiftDown())
-#endif
+				if (!quickQueueMode)
 				{
-				    intAddBuild(NULL);
-				}
-				else
-				{
-					// Clear the object screen
+					// Clear the object screen, only if we aren't immediately building something else
 					intResetScreen(false);
 				}
 
@@ -2021,8 +2037,7 @@ INT_RETVAL intRunWidgets(void)
 
 					// Send the droid off to build the structure assuming the droid
 					// can get to the location chosen
-					intCalcStructCenter((STRUCTURE_STATS *)psPositionStats, structX,structY,
-												&structX,&structY);
+					intCalcStructCenter((STRUCTURE_STATS *)psPositionStats, structX, structY, player.r.y, &structX, &structY);
 
 					// Don't allow derrick to be built on burning ground.
 					if( ((STRUCTURE_STATS*)psPositionStats)->type == REF_RESOURCE_EXTRACTOR) {
@@ -2041,13 +2056,11 @@ INT_RETVAL intRunWidgets(void)
 							    && intNumSelectedDroids(DROID_CYBORG_CONSTRUCT) == 0
 							    && psObjSelected != NULL)
 							{
-								orderDroidStatsLoc((DROID *)psObjSelected, DORDER_BUILD,
-									   psPositionStats, structX, structY);
+								orderDroidStatsLocDir((DROID *)psObjSelected, DORDER_BUILD, psPositionStats, structX, structY, player.r.y);
 							}
 							else
 							{
-								orderSelectedStatsLoc(selectedPlayer, DORDER_BUILD,
-									   psPositionStats, structX, structY, ctrlShiftDown());
+								orderSelectedStatsLocDir(selectedPlayer, DORDER_BUILD, psPositionStats, structX, structY, player.r.y, ctrlShiftDown());
 							}
 						}
 					}
@@ -2057,22 +2070,15 @@ INT_RETVAL intRunWidgets(void)
 //					DeSelectDroid((DROID*)psObjSelected);
 //				}
 
-				// put the build menu up again after the structure position has been chosen
-				// or ctrl/shift is down and we're queuing the build orders
-#ifdef DISABLE_BUILD_QUEUE
-				if (bReopenBuildMenu)
+				if (!quickQueueMode)
 				{
-					intAddBuild(NULL);
-				}
-				else
-				{
-					// Clear the object screen
+					// Clear the object screen, only if we aren't immediately building something else
 					intResetScreen(false);
 				}
-#else
-				// Clear the object screen
+			}
+			if (buildState == BUILD3D_NONE)
+			{
 				intResetScreen(false);
-#endif
 			}
 		}
 		else if (intMode == INT_EDITSTAT && editPosMode == IED_POS)
@@ -2085,8 +2091,9 @@ INT_RETVAL intRunWidgets(void)
 					psPositionStats->ref < REF_STRUCTURE_START + REF_RANGE)
 				{
 					STRUCTURE_STATS *psBuilding = (STRUCTURE_STATS *)psPositionStats;
+					STRUCTURE tmp;
 
-					intCalcStructCenter(psBuilding, structX, structY, &structX, &structY);
+					intCalcStructCenter(psBuilding, structX, structY, player.r.y, &structX, &structY);
 					if (psBuilding->type == REF_DEMOLISH)
 					{
 						MAPTILE *psTile = mapTile(map_coord(structX), map_coord(structY));
@@ -2095,7 +2102,8 @@ INT_RETVAL intRunWidgets(void)
 
 						if (psStructure && psTile->psObject->type == OBJ_STRUCTURE)
 						{
-							removeStruct(psStructure, true);
+							//removeStruct(psStructure, true);
+							SendDestroyStructure(psStructure);
 						}
 						else if (psFeature && psTile->psObject->type == OBJ_FEATURE)
 						{
@@ -2105,8 +2113,15 @@ INT_RETVAL intRunWidgets(void)
 					}
 					else
 					{
-						psStructure = buildStructure(psBuilding, structX, structY,
-						                             selectedPlayer, false);
+						//psStructure = buildStructure(psBuilding, structX, structY,
+						//                             selectedPlayer, false);
+						psStructure = &tmp;
+						tmp.player = selectedPlayer;
+						tmp.id = generateNewObjectId();
+						tmp.pStructureType = (STRUCTURE_STATS *)psPositionStats;
+						tmp.pos.x = structX;
+						tmp.pos.y = structY;
+						tmp.pos.z = map_Height(structX, structY) + world_coord(1)/10;
 						if (!psStructure)
 						{
 							addConsoleMessage(_("Failed to create building"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
@@ -2123,7 +2138,7 @@ INT_RETVAL intRunWidgets(void)
 						const char* msg;
 
 						psStructure->status = SS_BUILT;
-						buildingComplete(psStructure);
+						//buildingComplete(psStructure);
 
 						// In multiplayer games be sure to send a message to the
 						// other players, telling them a new structure has been
@@ -2158,22 +2173,36 @@ INT_RETVAL intRunWidgets(void)
 				else if (psPositionStats->ref >= REF_TEMPLATE_START &&
 						 psPositionStats->ref < REF_TEMPLATE_START + REF_RANGE)
 				{
+					const char* msg;
 					psDroid = buildDroid((DROID_TEMPLATE *)psPositionStats,
 								 world_coord(structX) + TILE_UNITS / 2, world_coord(structY) + TILE_UNITS / 2,
-								 selectedPlayer, false);
+								 selectedPlayer, false, NULL);
 					if (psDroid)
 					{
-						const char* msg;
 						addDroid(psDroid, apsDroidLists);
 
 						// Send a text message to all players, notifying them of
 						// the fact that we're cheating ourselves a new droid.
 						sasprintf((char**)&msg, _("Player %u is cheating (debug menu) him/herself a new droid: %s."), selectedPlayer, psDroid->aName);
-						sendTextMessage(msg, true);
-						Cheated = true;
+
+						psScrCBNewDroid = psDroid;
+						psScrCBNewDroidFact = NULL;
+						eventFireCallbackTrigger((TRIGGER_TYPE)CALL_NEWDROID);	// notify scripts so it will get assigned jobs
+						psScrCBNewDroid = NULL;
 					}
+					else
+					{
+						// Send a text message to all players, notifying them of
+						// the fact that we're cheating ourselves a new droid.
+						sasprintf((char**)&msg, _("Player %u is cheating (debug menu) him/herself a new droid."), selectedPlayer);
+					}
+					sendTextMessage(msg, true);
+					Cheated = true;
 				}
-				editPosMode = IED_NOPOS;
+				if (!quickQueueMode)
+				{
+					editPosMode = IED_NOPOS;
+				}
 			}
 		}
 	}
@@ -2329,7 +2358,6 @@ static void intRunStats(void)
 		ProductionRun = Quantity;
 	}
 #endif
-#ifdef INCLUDE_FACTORYLISTS
 
 	BASE_OBJECT			*psOwner;
 	STRUCTURE			*psStruct;
@@ -2345,13 +2373,11 @@ static void intRunStats(void)
 
 		psFactory = (FACTORY *)psStruct->pFunctionality;
 		//adjust the loop button if necessary
-		if (psFactory->psSubject && psFactory->quantity)
+		if (psFactory->psSubject != NULL && psFactory->productionLoops != 0)
 		{
 			widgSetButtonState(psWScreen, IDSTAT_LOOP_BUTTON, WBUT_CLICKLOCK);
 		}
 	}
-
-#endif
 }
 
 
@@ -2719,7 +2745,6 @@ static void intProcessObject(UDWORD id)
 			}
 			else if (psObj->type == OBJ_STRUCTURE)
 			{
-
 //				clearSelection();
 //				psObj->selected = true;
 
@@ -2728,11 +2753,11 @@ static void intProcessObject(UDWORD id)
 					//might need to cancel the hold on production
 					releaseProduction((STRUCTURE *)psObj);
 				}
-                else if (((STRUCTURE *)psObj)->pStructureType->type == REF_RESEARCH)
-                {
+				else if (((STRUCTURE *)psObj)->pStructureType->type == REF_RESEARCH)
+				{
 					//might need to cancel the hold on research facilty
 					releaseResearch((STRUCTURE *)psObj);
-                }
+				}
 			}
 		}
 	}
@@ -2762,10 +2787,7 @@ static void intProcessStats(UDWORD id)
 	BASE_STATS		*psStats;
 	STRUCTURE		*psStruct;
 	FLAG_POSITION	*psFlag;
-
-#ifdef INCLUDE_FACTORYLISTS
-	DROID_TEMPLATE	*psNext;
-#endif
+	int compIndex;
 
 	ASSERT( widgGetFromID(psWScreen,IDOBJ_TABFORM) != NULL,"intProcessStats, missing form\n" );
 
@@ -2783,72 +2805,46 @@ static void intProcessStats(UDWORD id)
 		/* deal with LMB clicks */
 		else
 		{
-#ifdef INCLUDE_FACTORYLISTS
 			//manufacture works differently!
 			if(objMode == IOBJ_MANUFACTURE)
 			{
+				compIndex = id - IDSTAT_START;
 				//get the stats
-				psStats = ppsStatsList[id - IDSTAT_START];
-				ASSERT( psObjSelected != NULL,
-					"intProcessStats: Invalid structure pointer" );
-				ASSERT( psStats != NULL,
-					"intProcessStats: Invalid template pointer" );
-                if (productionPlayer == (SBYTE)selectedPlayer)
-                {
-                    FACTORY  *psFactory = (FACTORY *)((STRUCTURE *)psObjSelected)->
-                        pFunctionality;
+				ASSERT_OR_RETURN( , compIndex < numStatsListEntries, "Invalid range referenced for numStatsListEntries, %d > %d", compIndex, numStatsListEntries);
+				psStats = ppsStatsList[compIndex];
+				ASSERT_OR_RETURN( , psObjSelected != NULL, "Invalid structure pointer" );
+				ASSERT_OR_RETURN( , psStats != NULL, "Invalid template pointer" );
+				if (productionPlayer == (SBYTE)selectedPlayer)
+				{
+					STRUCTURE *psStructure = (STRUCTURE *)psObjSelected;
+					FACTORY  *psFactory = &psStructure->pFunctionality->factory;
+					DROID_TEMPLATE *psNext = (DROID_TEMPLATE *)psStats;
 
-                    //increase the production
-				    factoryProdAdjust((STRUCTURE *)psObjSelected, (DROID_TEMPLATE *)psStats, true);
-                    //need to check if this was the template that was mid-production
-                    if (psStats == psFactory->psSubject)
-                    {
-				        //if have wrapped round to zero then cancel the production
-				        if (getProductionQuantity((STRUCTURE *)psObjSelected,
-					        (DROID_TEMPLATE *)psStats) == 0)
-				        {
-					        //init the factory production
-					        psFactory->psSubject = NULL;
-					        //check to see if anything left to produce
-					        psNext = factoryProdUpdate((STRUCTURE *)psObjSelected, NULL);
-					        if (psNext == NULL)
-					        {
-						        intManufactureFinished((STRUCTURE *)psObjSelected);
-					        }
-					        else
-					        {
-						        if (!objSetStatsFunc(psObjSelected, (BASE_STATS *)psNext))
-						        {
-							        intSetStats(objStatID, NULL);
-						        }
-						        else
-						        {
-							        // Reset the button on the object form
-							        intSetStats(objStatID, psStats);
-						        }
-					        }
-				        }
-                    }
-				    else
-				    {
-					    //if factory wasn't currently on line then set the object button
-					    if (!psFactory->psSubject)
-					    {
-						    if (!objSetStatsFunc(psObjSelected, psStats))
-						    {
-							    intSetStats(objStatID, NULL);
-						    }
-						    else
-						    {
-							    // Reset the button on the object form
-							    intSetStats(objStatID, psStats);
-						    }
-					    }
-				    }
-                }
+					//increase the production
+					factoryProdAdjust(psStructure, psNext, true);
+
+					if (!StructureIsManufacturingPending(psStructure))
+					{
+						structSetManufacture(psStructure, psNext);
+					}
+
+					//need to check if this was the template that was mid-production
+					if (getProductionQuantity(psStructure, FactoryGetTemplate(psFactory)) == 0)
+					{
+						doNextProduction(psStructure, FactoryGetTemplate(psFactory));
+						psNext = FactoryGetTemplate(psFactory);
+					}
+
+					if (StructureIsOnHoldPending(psStructure))
+					{
+						releaseProduction(psStructure);
+					}
+
+					// Reset the button on the object form
+					intSetStats(objStatID, (BASE_STATS *)psNext);
+				}
 			}
 			else
-#endif
 			{
 				/* See if this was a click on an already selected stat */
 				psStats = objGetStatsFunc(psObjSelected);
@@ -2899,7 +2895,9 @@ static void intProcessStats(UDWORD id)
 					}
 
 					// Set the object stats
-					psStats = ppsStatsList[id - IDSTAT_START];
+					compIndex = id - IDSTAT_START;
+					ASSERT_OR_RETURN( , compIndex < numStatsListEntries, "Invalid range referenced for numStatsListEntries, %d > %d", compIndex, numStatsListEntries);
+					psStats = ppsStatsList[compIndex];
 
 					// Reset the button on the object form
 					//if this returns false, there's a problem so set the button to NULL
@@ -3011,8 +3009,7 @@ static void intProcessStats(UDWORD id)
 			{
 				factoryLoopAdjust(psStruct, false);
 			}
-			if (((FACTORY *)psStruct->pFunctionality)->psSubject &&
-				((FACTORY *)psStruct->pFunctionality)->quantity)
+			if (((FACTORY *)psStruct->pFunctionality)->psSubject != NULL && ((FACTORY *)psStruct->pFunctionality)->productionLoops != 0)
 			{
 				//lock the button
 				widgSetButtonState(psWScreen, IDSTAT_LOOP_BUTTON, WBUT_CLICKLOCK);
@@ -3842,9 +3839,7 @@ BOOL intAddPower(void)
 	sBarInit.y = (SWORD)POW_Y;
 	sBarInit.width = POW_BARWIDTH;
 	sBarInit.height = iV_GetImageHeight(IntImages,IMAGE_PBAR_EMPTY);
-	sBarInit.sCol.byte.r = POW_CLICKBARMAJORRED;
-	sBarInit.sCol.byte.g = POW_CLICKBARMAJORGREEN;
-	sBarInit.sCol.byte.b = POW_CLICKBARMAJORBLUE;
+	sBarInit.sCol = WZCOL_POWER_BAR;
 	sBarInit.pDisplay = intDisplayPowerBar;
 	sBarInit.iRange = POWERBAR_SCALE;
 
@@ -3920,7 +3915,7 @@ BOOL intAddOptions(void)
 	sLabInit.y = OPT_GAP;
 	sLabInit.width = OPT_BUTWIDTH;
 	sLabInit.height = OPT_BUTHEIGHT;
-	sLabInit.pText = "Options";
+	sLabInit.pText = _("Options");
 	sLabInit.FontID = font_regular;
 	if (!widgAddLabel(psWScreen, &sLabInit))
 	{
@@ -3962,7 +3957,7 @@ BOOL intAddOptions(void)
 	sLabInit.style = WLAB_PLAIN;
 	sLabInit.x = OPT_GAP;
 	sLabInit.y = OPT_GAP;
-	sLabInit.pText = "Map:";
+	sLabInit.pText = _("Map:");
 	sLabInit.FontID = font_regular;
 	if (!widgAddLabel(psWScreen, &sLabInit))
 	{
@@ -3976,16 +3971,16 @@ BOOL intAddOptions(void)
 	sButInit.y = OPT_GAP;
 	sButInit.width = OPT_BUTWIDTH;
 	sButInit.height = OPT_BUTHEIGHT;
-	sButInit.pText = "Load";
-	sButInit.pTip = "Load Map File";
+	sButInit.pText = _("Load");
+	sButInit.pTip = _("Load Map File");
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
 		return false;
 	}
 	sButInit.id = IDOPT_MAPSAVE;
 	sButInit.x += OPT_GAP + OPT_BUTWIDTH;
-	sButInit.pText = "Save";
-	sButInit.pTip = "Save Map File";
+	sButInit.pText = _("Save");
+	sButInit.pTip = _("Save Map File");
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
 		return false;
@@ -3993,8 +3988,8 @@ BOOL intAddOptions(void)
 	sButInit.id = IDOPT_MAPNEW;
 	sButInit.x = OPT_GAP;
 	sButInit.y = OPT_GAP*2 + OPT_BUTHEIGHT;
-	sButInit.pText = "New";
-	sButInit.pTip = "New Blank Map";
+	sButInit.pText = _("New");
+	sButInit.pTip = _("New Blank Map");
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
 		return false;
@@ -4071,7 +4066,7 @@ BOOL intAddOptions(void)
 	sButInit.x = OPT_GAP;
 	sButInit.y = OPT_EDITY + OPT_BUTHEIGHT + OPT_GAP;
 	sButInit.id = IDOPT_PAUSE;
-	sButInit.pText = "Pause";
+	sButInit.pText = _("Pause");
 	sButInit.pTip = _("Pause or unpause the game");
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
@@ -4096,8 +4091,8 @@ BOOL intAddOptions(void)
 	/* Open the edit window - whatever that is supposed to be */
 	sButInit.x += OPT_GAP;
 	sButInit.id = IDOPT_EDIT;
-	sButInit.pText = "Edit";
-	sButInit.pTip = "Start Edit Mode";
+	sButInit.pText = _("Edit");
+	sButInit.pTip = _("Start Edit Mode");
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
 		return false;
@@ -4137,7 +4132,7 @@ BOOL intAddOptions(void)
 	sLabInit.style = WLAB_PLAIN;
 	sLabInit.x = OPT_GAP;
 	sLabInit.y = OPT_GAP;
-	sLabInit.pText = "Current Player:";
+	sLabInit.pText = _("Current Player:");
 	sLabInit.FontID = font_regular;
 	if (!widgAddLabel(psWScreen, &sLabInit))
 	{
@@ -4170,6 +4165,70 @@ BOOL intAddOptions(void)
 			sButInit.x = OPT_GAP;
 			sButInit.y += OPT_BUTHEIGHT + OPT_GAP;
 		}
+	}
+
+	/* Add iViS form */
+	sFormInit.formID = IDOPT_FORM;
+	sFormInit.id = IDOPT_IVISFORM;
+	sFormInit.style = WFORM_PLAIN;
+	sFormInit.x = OPT_GAP;
+	sFormInit.y = OPT_PLAYERY + OPT_BUTHEIGHT * 3 + OPT_GAP * 5;
+	sFormInit.width = OPT_WIDTH - OPT_GAP * 2;
+	sFormInit.height = OPT_BUTHEIGHT * 3 + OPT_GAP * 4;
+	if (!widgAddForm(psWScreen, &sFormInit))
+	{
+		return false;
+	}
+
+	/* Add iViS label */
+	sLabInit.formID = IDOPT_IVISFORM;
+	sLabInit.id = IDOPT_IVISLABEL;
+	sLabInit.style = WLAB_PLAIN;
+	sLabInit.x = OPT_GAP;
+	sLabInit.y = OPT_GAP;
+	sLabInit.pText = "iViS:";
+	sLabInit.FontID = font_regular;
+	if (!widgAddLabel(psWScreen, &sLabInit))
+	{
+		return false;
+	}
+
+	/* Add iViS shaders button */
+	sButInit.formID = IDOPT_IVISFORM;
+	sButInit.id = IDOPT_IVISSHADERS;
+	sButInit.x = OPT_BUTWIDTH + OPT_GAP * 2;
+	sButInit.y = OPT_GAP;
+	sButInit.width = OPT_BUTWIDTH;
+	sButInit.height = OPT_BUTHEIGHT;
+	sButInit.FontID = font_regular;
+	sButInit.pText = "Shaders";
+	sButInit.pTip = "Toggles Shaders/FF mode.";
+	if (!widgAddButton(psWScreen, &sButInit))
+	{
+		return false;
+	}
+	if (pie_GetShadersStatus())
+	{
+		widgSetButtonState(psWScreen, IDOPT_IVISSHADERS, WBUT_CLICKLOCK);
+	}
+
+	/* Add iViS lighting button */
+	sButInit.formID = IDOPT_IVISFORM;
+	sButInit.id = IDOPT_IVISLIGHTING;
+	sButInit.x += OPT_BUTWIDTH + OPT_GAP;
+	sButInit.y = OPT_GAP;
+	sButInit.width = OPT_BUTWIDTH;
+	sButInit.height = OPT_BUTHEIGHT;
+	sButInit.FontID = font_regular;
+	sButInit.pText = "Lighting";
+	sButInit.pTip = "Toggles lighting On/Off.";
+	if (!widgAddButton(psWScreen, &sButInit))
+	{
+		return false;
+	}
+	if (pie_GetLightingState())
+	{
+		widgSetButtonState(psWScreen, IDOPT_IVISLIGHTING, WBUT_CLICKLOCK);
 	}
 
 //	widgStartScreen(psWScreen);
@@ -4209,6 +4268,7 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	BOOL			IsFactory;
 	BOOL			Animate = true;
 	UWORD           FormX,FormY;
+	int				compIndex;
 
 	// Is the form already up?
 	if(widgGetFromID(psWScreen,IDOBJ_FORM) != NULL) {
@@ -4469,12 +4529,8 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	sBarInit.width = STAT_PROGBARWIDTH;
 	sBarInit.height = STAT_PROGBARHEIGHT;
 	sBarInit.size = 0;
-	sBarInit.sCol.byte.r = STAT_PROGBARMAJORRED;
-	sBarInit.sCol.byte.g = STAT_PROGBARMAJORGREEN;
-	sBarInit.sCol.byte.b = STAT_PROGBARMAJORBLUE;
-	sBarInit.sMinorCol.byte.r = STAT_PROGBARMINORRED;
-	sBarInit.sMinorCol.byte.g = STAT_PROGBARMINORGREEN;
-	sBarInit.sMinorCol.byte.b = STAT_PROGBARMINORBLUE;
+	sBarInit.sCol = WZCOL_ACTION_PROGRESS_BAR_MAJOR;
+	sBarInit.sMinorCol = WZCOL_ACTION_PROGRESS_BAR_MINOR;
 	sBarInit.pTip = _("Progress Bar");
 
     //object output bar ie manuf power o/p, research power o/p
@@ -4495,7 +4551,7 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	sLabInit.y = OBJ_T1TEXTY;
 	sLabInit.width = 16;
 	sLabInit.height = 16;
-	sLabInit.pText = "10";
+	sLabInit.pText = "BUG! (a)";
 	sLabInit.FontID = font_regular;
 
 	memset(&sLabInitCmdFac,0,sizeof(W_LABINIT));
@@ -4505,7 +4561,7 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	sLabInitCmdFac.y = OBJ_T2TEXTY;
 	sLabInitCmdFac.width = 16;
 	sLabInitCmdFac.height = 16;
-	sLabInitCmdFac.pText = "10";
+	sLabInitCmdFac.pText = "BUG! (b)";
 	sLabInitCmdFac.FontID = font_regular;
 
 	memset(&sLabInitCmdFac2,0,sizeof(W_LABINIT));
@@ -4515,7 +4571,7 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	sLabInitCmdFac2.y = OBJ_T3TEXTY;
 	sLabInitCmdFac2.width = 16;
 	sLabInitCmdFac2.height = 16;
-	sLabInitCmdFac2.pText = "10";
+	sLabInitCmdFac2.pText = "BUG! (c)";
 	sLabInitCmdFac2.FontID = font_regular;
 
 	memset(&sLabIntObjText,0,sizeof(W_LABINIT));
@@ -4554,8 +4610,10 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 				if (Droid->droidType == DROID_CONSTRUCT ||
                     Droid->droidType == DROID_CYBORG_CONSTRUCT)
 				{
-			   		ASSERT( Droid->asBits[COMP_CONSTRUCT].nStat,"intAddObjectWindow: invalid droid type" );
-					psStats = (BASE_STATS*)(asConstructStats + Droid->asBits[COMP_CONSTRUCT].nStat);
+					compIndex = Droid->asBits[COMP_CONSTRUCT].nStat;
+					ASSERT_OR_RETURN( false, Droid->asBits[COMP_CONSTRUCT].nStat,"Invalid droid type" );
+					ASSERT_OR_RETURN( false, compIndex < numConstructStats, "Invalid range referenced for numConstructStats, %d > %d", compIndex, numConstructStats);
+					psStats = (BASE_STATS*)(asConstructStats + compIndex);
 					sBarInit2.size = (UWORD)constructorPoints((CONSTRUCT_STATS*)psStats, Droid->player);
 					if (sBarInit2.size > WBAR_SCALE)
 					{
@@ -4739,17 +4797,11 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 				widgSetButtonState(psWScreen, sBFormInit2.id, WBUT_CLICKLOCK);
 			}
 
-
-
-			if ( psObj->type != OBJ_DROID ||
-				 (((DROID *)psObj)->droidType == DROID_CONSTRUCT ||
-                 ((DROID *)psObj)->droidType == DROID_CYBORG_CONSTRUCT))
+			if (psObj->type != OBJ_DROID || (((DROID *)psObj)->droidType == DROID_CONSTRUCT || ((DROID *)psObj)->droidType == DROID_CYBORG_CONSTRUCT))
 			{
 				// Set the colour for the production run size text.
-				widgSetColour(psWScreen, sBFormInit2.id, WCOL_TEXT,
-								STAT_TEXTRED,STAT_TEXTGREEN,STAT_TEXTBLUE);
-				widgSetColour(psWScreen, sBFormInit2.id, WCOL_BKGRND,
-								STAT_PROGBARTROUGHRED,STAT_PROGBARTROUGHGREEN,STAT_PROGBARTROUGHBLUE);
+				widgSetColour(psWScreen, sBFormInit2.id, WCOL_TEXT, WZCOL_ACTION_PRODUCTION_RUN_TEXT);
+				widgSetColour(psWScreen, sBFormInit2.id, WCOL_BKGRND, WZCOL_ACTION_PRODUCTION_RUN_BACKGROUND);
 			}
 
 			// Add command droid bits
@@ -5242,12 +5294,8 @@ static void intSetStats(UDWORD id, BASE_STATS *psStats)
 	sBarInit.width = STAT_PROGBARWIDTH;
 	sBarInit.height = STAT_PROGBARHEIGHT;
 	sBarInit.size = 0;
-	sBarInit.sCol.byte.r = STAT_PROGBARMAJORRED;
-	sBarInit.sCol.byte.g = STAT_PROGBARMAJORGREEN;
-	sBarInit.sCol.byte.b = STAT_PROGBARMAJORBLUE;
-	sBarInit.sMinorCol.byte.r = STAT_PROGBARMINORRED;
-	sBarInit.sMinorCol.byte.g = STAT_PROGBARMINORGREEN;
-	sBarInit.sMinorCol.byte.b = STAT_PROGBARMINORBLUE;
+	sBarInit.sCol = WZCOL_ACTION_PROGRESS_BAR_MAJOR;
+	sBarInit.sMinorCol = WZCOL_ACTION_PROGRESS_BAR_MINOR;
 	sBarInit.iRange = GAME_TICKS_PER_SEC;
 	// Setup widget update callback and object pointer so we can update the progress bar.
 	sBarInit.pCallback = intUpdateProgressBar;
@@ -5261,7 +5309,7 @@ static void intSetStats(UDWORD id, BASE_STATS *psStats)
 	sLabInit.y = OBJ_T1TEXTY;
 	sLabInit.width = 16;
 	sLabInit.height = 16;
-	sLabInit.pText = "10";
+	sLabInit.pText = "BUG! (d)";
 	sLabInit.FontID = font_regular;
 
 
@@ -5319,14 +5367,10 @@ static void intSetStats(UDWORD id, BASE_STATS *psStats)
 
 	sFormInit.pDisplay = intDisplayStatusButton;
 
-
 	widgAddForm(psWScreen, &sFormInit);
 	// Set the colour for the production run size text.
-	widgSetColour(psWScreen, sFormInit.id, WCOL_TEXT,
-							STAT_TEXTRED,STAT_TEXTGREEN,STAT_TEXTBLUE);
-	widgSetColour(psWScreen, sFormInit.id, WCOL_BKGRND,
-							STAT_PROGBARTROUGHRED,STAT_PROGBARTROUGHGREEN,STAT_PROGBARTROUGHBLUE);
-
+	widgSetColour(psWScreen, sFormInit.id, WCOL_TEXT, WZCOL_ACTION_PRODUCTION_RUN_TEXT);
+	widgSetColour(psWScreen, sFormInit.id, WCOL_BKGRND, WZCOL_ACTION_PRODUCTION_RUN_BACKGROUND);
 
 	widgAddLabel(psWScreen, &sLabInit);
 	widgAddBarGraph(psWScreen, &sBarInit);
@@ -5431,7 +5475,7 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		sButInit.width = iV_GetImageWidth(IntImages,IMAGE_INFINITE_DOWN);
 		sButInit.height = iV_GetImageHeight(IntImages,IMAGE_INFINITE_DOWN);
 	//	sButInit.pText = pCloseText;
-		sButInit.pTip = "Infinite Production";
+		sButInit.pTip = _("Infinite Production");
 		sButInit.FontID = font_regular;
 		sButInit.pDisplay = intDisplayButtonPressed;
 		sButInit.UserData = PACKDWORD_TRI(IMAGE_INFINITE_DOWN, IMAGE_INFINITE_HI, IMAGE_INFINITE_UP);
@@ -5495,8 +5539,6 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	}
 #endif
 
-#ifdef INCLUDE_FACTORYLISTS
-
 	// Add the quantity slider ( if it's a factory ).
 	if(objMode == IOBJ_MANUFACTURE)
 	{
@@ -5541,7 +5583,7 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		if ( psOwner != NULL )
 		{
 			psFactory = (FACTORY *)((STRUCTURE *)psOwner)->pFunctionality;
-			if (psFactory->psSubject && psFactory->quantity)
+			if (psFactory->psSubject != NULL && psFactory->productionLoops != 0)
 			{
 				widgSetButtonState(psWScreen, IDSTAT_LOOP_BUTTON, WBUT_CLICKLOCK);
 			}
@@ -5580,10 +5622,6 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		sLabInit.pCallback = intAddProdQuantity;
 
 	}
-#endif
-
-
-
 
 	/* Add the close button */
 	memset(&sButInit, 0, sizeof(W_BUTINIT));
@@ -5712,12 +5750,8 @@ if (numForms(numStats, butPerForm)> MAX_TAB_SMALL_SHOWN)	//only want these butto
 	sBarInit.width = STAT_PROGBARWIDTH;
 	sBarInit.height = STAT_PROGBARHEIGHT;
 	sBarInit.size = 50;
-	sBarInit.sCol.byte.r = STAT_PROGBARMAJORRED;
-	sBarInit.sCol.byte.g = STAT_PROGBARMAJORGREEN;
-	sBarInit.sCol.byte.b = STAT_PROGBARMAJORBLUE;
-	sBarInit.sMinorCol.byte.r = STAT_PROGBARMINORRED;
-	sBarInit.sMinorCol.byte.g = STAT_PROGBARMINORGREEN;
-	sBarInit.sMinorCol.byte.b = STAT_PROGBARMINORBLUE;
+	sBarInit.sCol = WZCOL_ACTION_PROGRESS_BAR_MAJOR;
+	sBarInit.sMinorCol = WZCOL_ACTION_PROGRESS_BAR_MINOR;
 	//sBarInit.pTip = _("Power Usage");
 
 	statID = 0;
@@ -5756,7 +5790,7 @@ if (numForms(numStats, butPerForm)> MAX_TAB_SMALL_SHOWN)	//only want these butto
 		{
 			return false;
 		}
-		widgSetColour(psWScreen, sBFormInit.id, WCOL_BKGRND, 0,0,0);
+		widgSetColour(psWScreen, sBFormInit.id, WCOL_BKGRND, WZCOL_BLACK);
 
 		//Stat = ppsStatsList[i];
 		if (Stat->ref >= REF_STRUCTURE_START &&
@@ -6129,14 +6163,20 @@ static BOOL selectResearch(BASE_OBJECT *psObj)
 /* Return the stats for a research facility */
 static BASE_STATS *getResearchStats(BASE_OBJECT *psObj)
 {
-	STRUCTURE	*psBuilding;
+	STRUCTURE *psBuilding;
+	RESEARCH_FACILITY *psResearchFacility;
 
 	ASSERT( psObj != NULL && psObj->type == OBJ_STRUCTURE,
 		"getResearchTip: invalid Structure pointer" );
 	psBuilding = (STRUCTURE *)psObj;
+	psResearchFacility = &psBuilding->pFunctionality->researchFacility;
 
-	return (BASE_STATS*)(((RESEARCH_FACILITY*)psBuilding->pFunctionality)->
-		psSubject);
+	if (psResearchFacility->psSubjectPending != NULL)
+	{
+		return psResearchFacility->psSubjectPending;
+	}
+
+	return psResearchFacility->psSubject;
 }
 
 /* Set the stats for a research facility */
@@ -6152,8 +6192,28 @@ static BOOL setResearchStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 		"setResearchStats: invalid Structure pointer" );
 	/* psStats might be NULL if the operation is canceled in the middle */
 	psBuilding = (STRUCTURE *)psObj;
+	psResFacilty = &psBuilding->pFunctionality->researchFacility;
 
-	psResFacilty = (RESEARCH_FACILITY*)psBuilding->pFunctionality;
+	if (bMultiMessages)
+	{
+		if (psStats != NULL)
+		{
+			// Say that we want to do reseach [sic].
+			sendResearchStatus(psBuilding, ((RESEARCH *)psStats)->ref - REF_RESEARCH_START, selectedPlayer, true);
+
+			// Tell UI to remove from the list of available research.
+			MakeResearchStartedPending(asPlayerResList[selectedPlayer] + (((RESEARCH *)psStats)->ref - REF_RESEARCH_START));
+		}
+		else
+		{
+			cancelResearch(psBuilding);
+		}
+		psResFacilty->psSubjectPending = psStats;  // Tell UI that we are going to research.
+		//stop the button from flashing once a topic has been chosen
+		stopReticuleButtonFlash(IDRET_RESEARCH);
+		return true;
+	}
+
 	//initialise the subject
 	psResFacilty->psSubject = NULL;
 
@@ -6189,7 +6249,7 @@ static BOOL setResearchStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 			psResFacilty->powerAccrued = 0;
 		}
 
-		sendReseachStatus(psBuilding,count,selectedPlayer,true);	// inform others, I'm researching this.
+		sendResearchStatus(psBuilding,count,selectedPlayer,true);	// inform others, I'm researching this.
 
 		MakeResearchStarted(pPlayerRes);
 		//psResFacilty->timeStarted = gameTime;
@@ -6254,7 +6314,6 @@ static BOOL setManufactureStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 		"setManufactureStats: invalid Structure pointer" );
 	/* psStats might be NULL if the operation is canceled in the middle */
 
-#ifdef INCLUDE_FACTORYLISTS
 	Structure = (STRUCTURE*)psObj;
 	//check to see if the factory was already building something
 	if (!((FACTORY *)Structure->pFunctionality)->psSubject)
@@ -6263,13 +6322,12 @@ static BOOL setManufactureStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 		if (psStats != NULL)
 		{
 			/* Set the factory to build droid(s) */
-			if (!structSetManufacture(Structure, (DROID_TEMPLATE *)psStats, 1))
+			if (!structSetManufacture(Structure, (DROID_TEMPLATE *)psStats))
 			{
 				return false;
 			}
 		}
 	}
-#endif
 
 #ifdef INCLUDE_PRODSLIDER
 	if (ProductionRun == 0)
@@ -6426,78 +6484,46 @@ static BOOL intAddCommand(DROID *psSelected)
 /*Deals with the RMB click for the stats screen */
 static void intStatsRMBPressed(UDWORD id)
 {
-	DROID_TEMPLATE		*psStats;
-#ifdef INCLUDE_FACTORYLISTS
-	DROID_TEMPLATE		*psNext;
-#endif
-
-	ASSERT( id - IDSTAT_START < numStatsListEntries,
-			"intStatsRMBPressed: Invalid structure stats id" );
+	ASSERT_OR_RETURN( , id - IDSTAT_START < numStatsListEntries, "Invalid range referenced for numStatsListEntries, %d > %d",id - IDSTAT_START, numStatsListEntries);
 
 	if (objMode == IOBJ_MANUFACTURE)
 	{
-		psStats = (DROID_TEMPLATE *)ppsStatsList[id - IDSTAT_START];
+		BASE_STATS *psStats = ppsStatsList[id - IDSTAT_START];
 
 		//this now causes the production run to be decreased by one
-#ifdef INCLUDE_FACTORYLISTS
 
-		ASSERT( psObjSelected != NULL,
-			"intStatsRMBPressed: Invalid structure pointer" );
-		ASSERT( psStats != NULL,
-			"intStatsRMBPressed: Invalid template pointer" );
-        if (productionPlayer == (SBYTE)selectedPlayer)
-        {
-            FACTORY  *psFactory = (FACTORY *)((STRUCTURE *)psObjSelected)->
-                pFunctionality;
+		ASSERT_OR_RETURN( , psObjSelected != NULL, "Invalid structure pointer");
+		ASSERT_OR_RETURN( , psStats != NULL, "Invalid template pointer");
+		if (productionPlayer == (SBYTE)selectedPlayer)
+		{
+			STRUCTURE *psStructure = (STRUCTURE *)psObjSelected;
+			FACTORY  *psFactory = &psStructure->pFunctionality->factory;
+			DROID_TEMPLATE *psNext = (DROID_TEMPLATE *)psStats;
 
-		    //decrease the production
-		    factoryProdAdjust((STRUCTURE *)psObjSelected, psStats, false);
-            //need to check if this was the template that was mid-production
-            if (psStats == (DROID_TEMPLATE *)psFactory->psSubject)
-            {
-    		    //if have decreased to zero then cancel the production
-	    	    if (getProductionQuantity((STRUCTURE *)psObjSelected, psStats) == 0)
-		        {
-			        //init the factory production
-			        psFactory->psSubject = NULL;
-			        //check to see if anything left to produce
-			        psNext = factoryProdUpdate((STRUCTURE *)psObjSelected, NULL);
-			        if (psNext == NULL)
-			        {
-				        intManufactureFinished((STRUCTURE *)psObjSelected);
-			        }
-			        else
-			        {
-				        if (!objSetStatsFunc(psObjSelected, (BASE_STATS *)psNext))
-				        {
-					        intSetStats(objStatID, NULL);
-				        }
-				        else
-				        {
-					        // Reset the button on the object form
-					        intSetStats(objStatID, (BASE_STATS *)psStats);
-				        }
-			        }
-		        }
-            }
-		    else
-		    {
-			    //if factory wasn't currently on line then set the object button
-			    if (!psFactory->psSubject)
-			    {
-				    if (!objSetStatsFunc(psObjSelected, (BASE_STATS *)psStats))
-				    {
-					    intSetStats(objStatID, NULL);
-				    }
-				    else
-				    {
-					    // Reset the button on the object form
-					    intSetStats(objStatID, (BASE_STATS *)psStats);
-				    }
-			    }
-		    }
-        }
-#else
+			//decrease the production
+			factoryProdAdjust(psStructure, psNext, false);
+
+			if (!StructureIsManufacturingPending(psStructure))
+			{
+				structSetManufacture(psStructure, psNext);
+			}
+
+			//need to check if this was the template that was mid-production
+			if (getProductionQuantity(psStructure, FactoryGetTemplate(psFactory)) == 0)
+			{
+				doNextProduction(psStructure, FactoryGetTemplate(psFactory));
+				psNext = FactoryGetTemplate(psFactory);
+			}
+
+			if (StructureIsOnHoldPending(psStructure))
+			{
+				releaseProduction(psStructure);
+			}
+
+			// Reset the button on the object form
+			intSetStats(objStatID, (BASE_STATS *)psNext);
+		}
+#if 0
 		// set the current Template
 		psCurrTemplate = apsDroidTemplates[selectedPlayer];
 		while (psStats != psCurrTemplate)
@@ -6573,10 +6599,10 @@ static void intObjStatRMBPressed(UDWORD id)
 			if (StructIsFactory(psStructure))
 			{
 				//check if active
-				if (((FACTORY *)psStructure->pFunctionality)->psSubject)
+				if (StructureIsManufacturingPending(psStructure))
 				{
 					//if not curently on hold, set it
-					if (((FACTORY *)psStructure->pFunctionality)->timeStartHold == 0)
+					if (!StructureIsOnHoldPending(psStructure))
 					{
 						holdProduction(psStructure);
 					}
@@ -6584,13 +6610,13 @@ static void intObjStatRMBPressed(UDWORD id)
 					{
 						//cancel if have RMB-clicked twice
 						cancelProduction(psStructure);
-                		//play audio to indicate cancelled
-		                audio_PlayTrack(ID_SOUND_WINDOWCLOSE);
+						//play audio to indicate cancelled
+						audio_PlayTrack(ID_SOUND_WINDOWCLOSE);
 					}
 				}
 			}
-            else if (psStructure->pStructureType->type == REF_RESEARCH)
-            {
+			else if (psStructure->pStructureType->type == REF_RESEARCH)
+			{
 				//check if active
 				if (((RESEARCH_FACILITY *)psStructure->pFunctionality)->psSubject)
 				{
@@ -6602,12 +6628,12 @@ static void intObjStatRMBPressed(UDWORD id)
 					else
 					{
 						//cancel if have RMB-clicked twice
-                        cancelResearch(psStructure);
-                		//play audio to indicate cancelled
-		                audio_PlayTrack(ID_SOUND_WINDOWCLOSE);
+						cancelResearch(psStructure);
+						//play audio to indicate cancelled
+						audio_PlayTrack(ID_SOUND_WINDOWCLOSE);
 					}
 				}
-            }
+			}
 		}
 	}
 }
@@ -7044,8 +7070,8 @@ void intCheckResearchButton(void)
 		psStruct->psNext)
 	{
 		if (psStruct->pStructureType->type == REF_RESEARCH &&
-            psStruct->status == SS_BUILT &&
-			((RESEARCH_FACILITY *)psStruct->pFunctionality)->psSubject == NULL)
+		    psStruct->status == SS_BUILT &&
+		    getResearchStats((BASE_OBJECT *)psStruct) == NULL)
 		{
 			resFree = true;
 			break;
@@ -7234,14 +7260,11 @@ DROID *intGotoNextDroidType(DROID *CurrDroid,UDWORD droidType,BOOL AllowGroup)
 		}
 	}
 
-	if(Found == true) {
-
-		if (bInTutorial)
-		{
-			psCBSelectedDroid = CurrentDroid;
-			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DROID_SELECTED);
-			psCBSelectedDroid = NULL;
-		}
+	if (Found == true)
+	{
+		psCBSelectedDroid = CurrentDroid;
+		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DROID_SELECTED);
+		psCBSelectedDroid = NULL;
 
 		// Center it on screen.
 		if(CurrentDroid) {

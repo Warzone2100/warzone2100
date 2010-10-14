@@ -1,5 +1,3 @@
-R-Wpn-AAGun04,AAGun2Mk1,WEAPON,10
-R-Wpn-Cannon4AMk1,Cannon2A-TMk1,WEAPON,10
 R-Comp-CommandTurret02,CommandTurret1,WEAPON,10
 R-Comp-CommandTurret03,CommandTurret2,WEAPON,10
 R-Comp-CommandTurret04,CommandTurret3,WEAPON,10

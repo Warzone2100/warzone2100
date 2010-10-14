@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -90,6 +90,7 @@ typedef struct _order_list
 	SDWORD          order;
 	void*           psOrderTarget;  ///< this needs to cope with objects and stats
 	UWORD           x, y, x2, y2;   ///< line build requires two sets of coords
+	uint16_t        direction;      ///< Needed to align structures with viewport.
 } ORDER_LIST;
 
 typedef struct _droid_template
@@ -153,7 +154,7 @@ typedef struct DROID
 	float           experience;
 	UBYTE           NameVersion;                    ///< Version number used for generating on-the-fly names (e.g. Viper Mk "I" would be stored as 1 - Viper Mk "X" as 10)  - copied from droid template
 
-	UDWORD		lastFrustratedTime;		///< Set when eg being stuck; used for eg firing indiscriminately at map features to clear the way
+	int		lastFrustratedTime;		///< Set when eg being stuck; used for eg firing indiscriminately at map features to clear the way (note: signed, so wrap arounds after 24.9 days)
 
 	SWORD           resistance;                     ///< used in Electronic Warfare
 
@@ -167,13 +168,13 @@ typedef struct DROID
 	// queued orders
 	SDWORD          listSize;
 	ORDER_LIST      asOrderList[ORDER_LIST_MAX];
+	BOOL            waitingForOwnReceiveDroidInfoMessage;  ///< Set to true when processing a message from asOrderList, and reset to false when the message arrives.
 
 	/* Order data */
 	SDWORD          order;
 	UWORD           orderX, orderY;
 	UWORD           orderX2, orderY2;
-
-	BOOL            bTargetted;
+	uint16_t        orderDirection;
 
 	BASE_OBJECT*    psTarget;                       ///< Order target
 	BASE_STATS*     psTarStats;                     ///< What to build etc
@@ -209,6 +210,9 @@ typedef struct DROID
 	/* anim data */
 	ANIM_OBJECT     *psCurAnim;
 	SDWORD          iAudioID;
+
+	// Synch checking
+	void *          gameCheckDroid;                 ///< Last PACKAGED_CHECK, for synchronisation use only (see multisync.c). TODO Make synch perfect, so that this isn't needed at all.
 } WZ_DECL_MAY_ALIAS DROID;
 
 #ifdef __cplusplus

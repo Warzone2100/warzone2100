@@ -1,14 +1,14 @@
 0000-00-00: SVN
  * General:
-   * Fix: Tells user if mod entered on the command line / shorcut is enabled, or is invalid. Output is to stdout or stderr. (r7586)
-   * Fix: Launching the game from installer now works (7568 ticket:364)
-   * Fix: Angel missile no longer obsoletes long-range artillery, Ripple Rockets no longer autoupgrades to Archie, and Mortar Fast Loader requires Mortar Rapid Loader Mk3 (r7559, ticket:533, 292, 398)
+   * Fix: Tells user if mod entered on the command line / shorcut is enabled, or is invalid. Output is to stdout or stderr (r7586)
+   * Fix: Launching the game from installer now works (r7568, ticket:364)
+   * Fix: Angel missile no longer obsoletes long-range artillery, Ripple Rockets no longer autoupgrades to Archie, and Mortar Fast Loader requires Mortar Rapid Loader Mk3 (r7559, ticket:533, ticket:292, ticket:398)
    * New: Add a new translation:  zh_TW.po  by chtsau (r7561, ticket:239)
    * Change: Allow up to 36 savegame 'slots' (r7535)
    * Change: add 'mod/music' directory to be use for custom music. (r7557)
    * Fix: set the volume of the FMV based on the user's preferences (r7489, ticket:526)
-   * Fix: Check if the unit has weapons, before trying to see what weapons they have. (r7488, ticket:523)
-   * Change: remove 'autoload' handling.  (r7474)
+   * Fix: Check if the unit has weapons, before trying to see what weapons they have (r7488, ticket:523)
+   * Change: remove 'autoload' handling  (r7474)
    * Fix: Fix windows crash dump output (r7473)
    * Fix: Fix handling of limbo & expand missions (r7454)
    * Change: Let players save games with Num-Enter as well as Return - should make it easier on international keyboards (r7412)
@@ -18,16 +18,16 @@
    * New: Slovenian translation sl.po file by ThomasCarstein (r7422, ticket:392)
    * Fix: pt_BR.po update by Tucalipe (r7421m ticket:350)
    * Fix: Clear out old effects (prevents burning lasting between missions) (r7416)
-   * Fix: Don't allow the transporter to be controlled in SP games.  (r7414)
+   * Fix: Don't allow the transporter to be controlled in SP games  (r7414)
    * Fix: Remember player number and tech level for map selection screen (r7400)
  * Gameplay:
-   * Fix: Make AI ignore hostile structures for path-finding when armed. (r7579)
+   * Fix: Make AI ignore hostile structures for path-finding when armed (r7579)
  * Graphics:
-   * Fix: Fix issue with radar / mini-map. (r7458, ticket:333)
-   * Fix: Fix issue with radar / mini-map drawing objects outside its scope. (r7441)
-   * Change: Better map previews (patch by Florian Schanda, color scheme by Zarel). (r7434)
+   * Fix: Fix issue with radar / mini-map (r7458, ticket:333)
+   * Fix: Fix issue with radar / mini-map drawing objects outside its scope (r7441)
+   * Change: Better map previews (patch by Florian Schanda, color scheme by Zarel) (r7434)
  * Network:
-   * Change: Increase timeout delay to 2500ms for dial-up modem users. (r7556, ticket:543)
+   * Change: Increase timeout delay to 2500ms for dial-up modem users (r7556, ticket:543)
 
 2009-05-10: Version 2.2_rc1
  * General:

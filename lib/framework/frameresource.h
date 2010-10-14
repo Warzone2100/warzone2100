@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -38,10 +38,10 @@ extern "C"
 #define RESID_MAXCHAR		40
 
 /** Function pointer for a function that loads from a memory buffer. */
-typedef BOOL (*RES_BUFFERLOAD)(const char *pBuffer, UDWORD size, void **pData);
+typedef bool (*RES_BUFFERLOAD)(const char *pBuffer, UDWORD size, void **pData);
 
 /** Function pointer for a function that loads from a filename. */
-typedef BOOL (*RES_FILELOAD)(const char *pFile, void **pData);
+typedef bool (*RES_FILELOAD)(const char *pFile, void **pData);
 
 /** Function pointer for releasing a resource loaded by the above functions. */
 typedef void (*RES_FREE)(void *pData);
@@ -86,7 +86,7 @@ typedef struct _res_type
 extern void resSetLoadCallback(RESLOAD_CALLBACK funcToCall);
 
 /** Initialise the resource module. */
-extern BOOL resInitialise(void);
+extern bool resInitialise(void);
 
 /** Shutdown the resource module. */
 extern void resShutDown(void);
@@ -95,7 +95,7 @@ extern void resShutDown(void);
 extern void resSetBaseDir(const char* pResDir);
 
 /** Parse the res file. */
-BOOL resLoad(const char *pResFile, SDWORD blockID);
+bool resLoad(const char *pResFile, SDWORD blockID);
 
 /** Release all the resources currently loaded and the resource load functions. */
 extern void resReleaseAll(void);
@@ -107,27 +107,27 @@ extern void resReleaseBlockData(SDWORD blockID);
 extern void resReleaseAllData(void);
 
 /** Add a buffer load and release function for a file type. */
-extern BOOL	resAddBufferLoad(const char *pType, RES_BUFFERLOAD buffLoad,
+extern bool	resAddBufferLoad(const char *pType, RES_BUFFERLOAD buffLoad,
 							 RES_FREE release);
 
 /** Add a file name load and release function for a file type. */
-extern BOOL	resAddFileLoad(const char *pType, RES_FILELOAD fileLoad,
+extern bool	resAddFileLoad(const char *pType, RES_FILELOAD fileLoad,
 						   RES_FREE release);
 
 /** Call the load function for a file. */
-extern BOOL resLoadFile(const char *pType, const char *pFile);
+extern bool resLoadFile(const char *pType, const char *pFile);
 
 /** Add data to the resource system. */
-extern BOOL resAddData(char *pType, char *pID, void *pData);
+extern bool resAddData(char *pType, char *pID, void *pData);
 
 /** Return the resource for a type and ID */
 extern void *resGetDataFromHash(const char *pType, UDWORD HashedID);
 extern void *resGetData(const char *pType, const char *pID);
-extern BOOL resPresent(const char *pType, const char *pID);
+extern bool resPresent(const char *pType, const char *pID);
 void resToLower(char *pStr);
 
 /** Return the HashedID string for a piece of data. */
-extern BOOL resGetHashfromData(const char *pType, const void *pData, UDWORD *pHash);
+extern bool resGetHashfromData(const char *pType, const void *pData, UDWORD *pHash);
 
 /** Retrieve the resource ID string
  *  \param type the resource type string (e.g. "IMG", "IMD", "TEXPAGE", "WAV", etc.)

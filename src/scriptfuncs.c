@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -117,8 +117,6 @@ static char		strParam1[MAXSTRLEN], strParam2[MAXSTRLEN];		//these should be used
 static bool	structHasModule(STRUCTURE *psStruct);
 
 static DROID_TEMPLATE* scrCheckTemplateExists(SDWORD player, DROID_TEMPLATE *psTempl);
-
-extern	UDWORD				objID;					// unique ID creation thing..
 
 /// Hold the previously assigned player
 static int nextPlayer = 0;
@@ -759,12 +757,12 @@ static int scrAddDroidToMissionList(lua_State *L)
 static int scrAddDroid(lua_State *L)
 {
 	DROID			*psDroid;
-	
+
 	DROID_TEMPLATE	*psTemplate = luaWZObj_checktemplate(L, 1);
 	int x = luaL_checkint(L, 2);
 	int y = luaL_checkint(L, 3);
 	int player = luaL_checkint(L, 4);
-	
+
 #ifdef SCRIPT_CHECK_MAX_UNITS
 	// Don't build a new droid if player limit reached, unless it's a transporter.
 	if( IsPlayerDroidLimitReached(player) && (psTemplate->droidType != DROID_TRANSPORTER) ) {
@@ -773,7 +771,7 @@ static int scrAddDroid(lua_State *L)
 	} else
 #endif
 	{
-		psDroid = buildDroid(psTemplate, x, y, player, false);
+		psDroid = buildDroid(psTemplate, x, y, player, false, NULL);
 		if (psDroid)
 		{
 			addDroid(psDroid, apsDroidLists);
@@ -786,7 +784,7 @@ static int scrAddDroid(lua_State *L)
 		}
 		else
 		{
-			debug( LOG_LIFE, "failed to create droid for AI player %d", player );
+			debug(LOG_LIFE, "send droid create message to game queue for AI player %d", player );
 		}
 	}
 
@@ -824,7 +822,6 @@ WZ_DECL_UNUSED static BOOL scrBuildingDestroyed(void)
 {
 	SDWORD		player;
 	UDWORD		structureID;
-//	INTERP_VAL	sVal;
 	BOOL		destroyed;
 	STRUCTURE	*psCurr;
 
@@ -832,18 +829,6 @@ WZ_DECL_UNUSED static BOOL scrBuildingDestroyed(void)
 	{
 		return false;
 	}
-/*	if (!stackPop(&sVal))
-	{
-		return false;
-	}
-
-	if (sVal.type != ST_STRUCTUREID)
-	{
-		ASSERT( false, "scrBuildingDestroyed: type mismatch for object" );
-		return false;
-	}
-	structureID = (UDWORD)sVal.v.ival;
-*/
 	if (player >= MAX_PLAYERS)
 	{
 		ASSERT( false, "scrBuildingDestroyed:player number is too high" );
@@ -911,24 +896,13 @@ static int scrIsStructureAvailable(lua_State *L)
 WZ_DECL_UNUSED static BOOL scrSelectDroidByID(void)
 {
 	SDWORD			player, droidID;
-//	INTERP_VAL		sVal;
 	BOOL			selected;
 
 	if (!stackPopParams(2, ST_DROIDID, &droidID, VAL_INT, &player))
 	{
 		return false;
 	}
-/*	if (!stackPop(&sVal))
-	{
-		return false;
-	}
 
-	if (sVal.type != ST_DROIDID)
-	{
-		ASSERT( false, "scrSelectDroidByID: type mismatch for object" );
-		return false;
-	}
-*/
 	selected = false;
 	if (selectDroidByID(droidID, player))
 	{
@@ -1093,15 +1067,14 @@ static int scrRemoveReticuleButton(lua_State *L)
 static int scrAddMessage(lua_State *L)
 {
 	MESSAGE			*psMessage;
-//	INTERP_VAL		sVal;
 	VIEWDATA	*psViewData;
 	UDWORD			height;
-	
+
 	const char *message = luaL_checkstring(L, 1);
 	int msgType = luaL_checkint(L, 2);
 	int player = luaWZ_checkplayer(L, 3);
 	BOOL playImmediate = luaL_checkboolean(L, 4);
-	
+
 	psViewData = getViewData(message);
 
 	//create the message
@@ -1193,7 +1166,11 @@ static int scrBuildDroid(lua_State *L)
 	                 psTemplate->aName, psFactory->pStructureType->pName);
 	}
 
-	structSetManufacture(psFactory, psTemplate, (UBYTE)productionRun);
+	if (productionRun != 1)
+	{
+		debug(LOG_WARNING, "A script is trying to build a different number (%d) than 1 droid.", productionRun);
+	}
+	structSetManufacture(psFactory, psTemplate);
 
 	return 0;
 }
@@ -1533,6 +1510,7 @@ static int scrStructureBuilt(lua_State *L)
 	int structInc = luaWZObj_checkstructurestat(L, 1);
 	int player = luaWZ_checkplayer(L, 2);
 
+	ASSERT_OR_RETURN( false, structInc < numStructureStats, "Invalid range referenced for numStructureStats, %d > %d", structInc, numStructureStats);
 	psStats = (STRUCTURE_STATS *)(asStructureStats + structInc);
 
 	lua_pushboolean(L, checkStructureStatus(psStats, player, SS_BUILT));
@@ -3308,7 +3286,7 @@ WZ_DECL_UNUSED static BOOL scrRandom(void)
 	}
 	else
 	{
-		iResult = gameRand(abs(range));
+		iResult = rand()%abs(range);
 	}
 
 	scrFunctionResult.v.ival = iResult;
@@ -3372,11 +3350,14 @@ static int scrCompleteResearch(lua_State *L)
 		return luaL_error(L, "scrCompleteResearch: invalid research index" );
 	}
 
-	researchResult(researchIndex, (UBYTE)player, false, NULL, false);
-
 	if(bMultiMessages && (gameTime > 2 ))
 	{
-		SendResearch((UBYTE)player, researchIndex, false);
+		SendResearch(player, researchIndex, false);
+		// Wait for our message before doing anything.
+	}
+	else
+	{
+		researchResult(researchIndex, player, false, NULL, false);
 	}
 
 	return 0;
@@ -3442,7 +3423,7 @@ static int scrAddPower(lua_State *L)
 {
 	int player = luaWZ_checkplayer(L, 1);
 	float power = luaL_checknumber(L, 2);
-	addPower(player, power);
+	giftPower(ANYPLAYER, player, power, true);
 	return 0;
 }
 
@@ -3873,7 +3854,7 @@ static int scrKillStructsInArea(lua_State *L)
 			{
 				if(bVisible)
 				{
-					destroyStruct(psStructure);
+					SendDestroyStructure(psStructure);
 				}
 				else
 				{
@@ -4235,7 +4216,7 @@ UDWORD	count=0;
 			(psDroid->pos.y > y1) && (psDroid->pos.y < y2) )
 		{
 			/* then it's inside the area */
-			destroyDroid(psDroid);
+			SendDestroyDroid(psDroid);
 			count++;
 		}
 	}
@@ -4431,13 +4412,12 @@ static BOOL structDoubleCheck(BASE_STATS *psStat,UDWORD xx,UDWORD yy, SDWORD max
 	return false;
 }
 
-static BOOL pickStructLocation(int index, int *pX, int *pY, int player, int maxBlockingTiles)
+static BOOL pickStructLocation(DROID *psDroid, int index, int *pX, int *pY, int player, int maxBlockingTiles)
 {
 	STRUCTURE_STATS	*psStat;
 	UDWORD			numIterations = 30;
 	BOOL			found = false;
-	UDWORD			startX, startY, incX, incY;
-	SDWORD			x=0, y=0;
+	int startX, startY, incX, incY, x, y;
 
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS && player >= 0, "Invalid player number %d", player);
 
@@ -4453,8 +4433,13 @@ static BOOL pickStructLocation(int index, int *pX, int *pY, int player, int maxB
 	x = startX;
 	y = startY;
 
+	// save a lot of typing... checks whether a position is valid
+	#define LOC_OK(_x, _y) (_x >= 0 && _y >= 0 && _x < mapWidth && _y < mapHeight && \
+	                        (!psDroid || fpathCheck(psDroid->pos, Vector3i_Init(world_coord(_x), world_coord(_y), 0), PROPULSION_TYPE_WHEELED)) \
+	                        && validLocation((BASE_STATS*)psStat, _x, _y, 0, player, false) && structDoubleCheck((BASE_STATS*)psStat, _x, _y, maxBlockingTiles))
+
 	// first try the original location
-	if (validLocation((BASE_STATS*)psStat, startX, startY, player, false) && structDoubleCheck((BASE_STATS*)psStat, startX, startY, maxBlockingTiles))
+	if (LOC_OK(startX, startY))
 	{
 		found = true;
 	}
@@ -4465,8 +4450,7 @@ static BOOL pickStructLocation(int index, int *pX, int *pY, int player, int maxB
 		y = startY - incY;	// top
 		for (x = startX - incX; x < (SDWORD)(startX + incX); x++)
 		{
-			if (validLocation((BASE_STATS*)psStat, x, y, player, false)
-			    && structDoubleCheck((BASE_STATS*)psStat, x, y, maxBlockingTiles))
+			if (LOC_OK(x, y))
 			{
 				found = true;
 				goto endstructloc;
@@ -4475,8 +4459,7 @@ static BOOL pickStructLocation(int index, int *pX, int *pY, int player, int maxB
 		x = startX + incX;	// right
 		for (y = startY - incY; y < (SDWORD)(startY + incY); y++)
 		{
-			if (validLocation((BASE_STATS*)psStat, x, y, player, false)
-			    && structDoubleCheck((BASE_STATS*)psStat, x, y, maxBlockingTiles))
+			if (LOC_OK(x, y))
 			{
 				found = true;
 				goto endstructloc;
@@ -4485,8 +4468,7 @@ static BOOL pickStructLocation(int index, int *pX, int *pY, int player, int maxB
 		y = startY + incY;	// bottom
 		for (x = startX + incX; x > (SDWORD)(startX - incX); x--)
 		{
-			if (validLocation((BASE_STATS*)psStat, x, y, player, false)
-			    && structDoubleCheck((BASE_STATS*)psStat, x, y, maxBlockingTiles))
+			if (LOC_OK(x, y))
 			{
 				found = true;
 				goto endstructloc;
@@ -4495,8 +4477,7 @@ static BOOL pickStructLocation(int index, int *pX, int *pY, int player, int maxB
 		x = startX - incX;	// left
 		for (y = startY + incY; y > (SDWORD)(startY - incY); y--)
 		{
-			if (validLocation((BASE_STATS*)psStat, x, y, player, false)
-			    && structDoubleCheck((BASE_STATS*)psStat, x, y, maxBlockingTiles))
+			if (LOC_OK(x, y))
 			{
 				found = true;
 				goto endstructloc;
@@ -4522,7 +4503,25 @@ static int scrPickStructLocation(lua_State *L)
 	int y = luaL_checkinteger(L, 3);
 	int player = luaWZ_checkplayer(L, 4);
 	
-	BOOL success = pickStructLocation(index, &x, &y, player, MAX_BLOCKING_TILES);
+	BOOL success = pickStructLocation(NULL, index, &x, &y, player, MAX_BLOCKING_TILES);
+	
+	lua_pushboolean(L, success);
+	lua_pushinteger(L, x);
+	lua_pushinteger(L, y);
+	return 3;
+}
+
+// pick a structure location and check that we can build there (duh!)
+static int scrPickStructLocationC(lua_State *L)
+{
+	DROID *psDroid = (DROID *)luaWZObj_checkobject(L, 1, OBJ_DROID);
+	int index = luaWZObj_checkstructurestat(L, 2);
+	int x = luaL_checkinteger(L, 3);
+	int y = luaL_checkinteger(L, 4);
+	int player = luaWZ_checkplayer(L, 5);
+	int maxBlockingTiles = luaL_checkinteger(L, 6);
+
+	BOOL success = pickStructLocation(psDroid, index, &x, &y, player, maxBlockingTiles);
 	
 	lua_pushboolean(L, success);
 	lua_pushinteger(L, x);
@@ -4540,7 +4539,7 @@ static int scrPickStructLocationB(lua_State *L) // FIXME, duplicated code
 	int player = luaWZ_checkplayer(L, 4);
 	int maxBlockingTiles = luaL_checkinteger(L, 5);
 
-	BOOL success = pickStructLocation(index, &x, &y, player, maxBlockingTiles);
+	BOOL success = pickStructLocation(NULL, index, &x, &y, player, maxBlockingTiles);
 	
 	lua_pushboolean(L, success);
 	lua_pushinteger(L, x);
@@ -5078,8 +5077,9 @@ WZ_DECL_UNUSED static BOOL scrFireWeaponAtObj(void)
 {
 	Vector3i target;
 	BASE_OBJECT *psTarget;
-	WEAPON sWeapon = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+	WEAPON sWeapon;
 
+	memset(&sWeapon, 0, sizeof(sWeapon));
 	if (!stackPopParams(2, ST_WEAPON, &sWeapon.nStat, ST_BASEOBJECT, &psTarget))
 	{
 		return false;
@@ -5091,8 +5091,7 @@ WZ_DECL_UNUSED static BOOL scrFireWeaponAtObj(void)
 		return false;
 	}
 
-	// FIXME HACK Needed since we got those ugly Vector3uw floating around in BASE_OBJECT...
-	target = Vector3uw_To3i(psTarget->pos);
+	target = psTarget->pos;
 
 	// send the projectile using the selectedPlayer so that it can always be seen
 	proj_SendProjectile(&sWeapon, NULL, selectedPlayer, target, psTarget, true, 0);
@@ -5104,8 +5103,9 @@ WZ_DECL_UNUSED static BOOL scrFireWeaponAtObj(void)
 WZ_DECL_UNUSED static BOOL scrFireWeaponAtLoc(void)
 {
 	Vector3i target;
-	WEAPON sWeapon = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+	WEAPON sWeapon;
 
+	memset(&sWeapon, 0, sizeof(sWeapon));
 	if (!stackPopParams(3, ST_WEAPON, &sWeapon.nStat, VAL_INT, &target.x, VAL_INT, &target.y))
 	{
 		return false;
@@ -5766,7 +5766,7 @@ BOOL ThreatInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD rangeY, BO
 		//check structures
 		for(psStruct = apsStructLists[i]; psStruct; psStruct=psStruct->psNext)
 		{
-			if(psStruct->visible[player])	//if can see it
+			if (psStruct->visible[player] || psStruct->born == 2)	// if can see it or started there
 			{
 				if(psStruct->status == SS_BUILT)
 				{
@@ -5864,10 +5864,10 @@ static int scrFogTileInRange(lua_State *L)
 		  	{
 				//within base range
 				if (wRange <= 0
-				 || world_coord(dirtyHypot(tRangeX - i, tRangeY - j)) < wRange)		//dist in world units between baseX/baseY and the tile
+				 || world_coord(iHypot(tRangeX - i, tRangeY - j)) < wRange)		//dist in world units between baseX/baseY and the tile
 				{
 					//calc dist between this tile and looker
-					wDist = world_coord(dirtyHypot(tx - i, ty - j));
+					wDist = world_coord(iHypot(tx - i, ty - j));
 
 					//closer than last one?
 					if(wDist < wBestDist)
@@ -5940,7 +5940,7 @@ static int scrMapRevealedInRange(lua_State *L)
 			if(abs(tRangeX-i) < tRange && abs(tRangeY-j) < tRange)
 			{
 				//within range
-				if (world_coord(dirtyHypot(tRangeX - i, tRangeY - j)) < wRange 		//dist in world units between x/y and the tile
+				if (world_coord(iHypot(tRangeX - i, tRangeY - j)) < wRange  //dist in world units between x/y and the tile
 				 && TEST_TILE_VISIBLE(player, mapTile(i, j)))		//not visible
 				{
 					lua_pushboolean(L, true);
@@ -6297,7 +6297,7 @@ static UDWORD costOrAmountInRange(SDWORD player, SDWORD lookingPlayer, SDWORD ra
 			}
 
 			if (range < 0
-			 || dirtyHypot(rangeX - psDroid->pos.x, rangeY - psDroid->pos.y) < range)	//enemy in range
+			 || iHypot(rangeX - psDroid->pos.x, rangeY - psDroid->pos.y) < range)  //enemy in range
 			{
 				if (justCount)
 				{
@@ -6563,10 +6563,10 @@ WZ_DECL_UNUSED static BOOL scrNumStructsByStatInArea(void)
 		return false;
 	}
 
+	ASSERT_OR_RETURN( false, index < numStructureStats, "Invalid range referenced for numStructureStats, %d > %d", index, numStructureStats);
 	psStats = (STRUCTURE_STATS *)(asStructureStats + index);
 
-	ASSERT( psStats != NULL,
-			"scrNumStructsByStatInArea: Invalid structure pointer" );
+	ASSERT_OR_RETURN( false, psStats != NULL, "Invalid structure pointer" );
 
 	NumStruct = 0;
 
@@ -6978,6 +6978,7 @@ WZ_DECL_UNUSED static BOOL scrObjWeaponMaxRange(void)
 		psDroid = (DROID*)psObj;
 		if (psDroid->asWeaps[0].nStat != 0)
 		{
+			ASSERT_OR_RETURN(false, psDroid->asWeaps[0].nStat < numWeaponStats, "Invalid range referenced.");
 			psStats = asWeaponStats + psDroid->asWeaps[0].nStat;
 			scrFunctionResult.v.ival = psStats->longRange;
 			if (!stackPushResult(VAL_INT, &scrFunctionResult))
@@ -6993,6 +6994,7 @@ WZ_DECL_UNUSED static BOOL scrObjWeaponMaxRange(void)
 		psStruct = (STRUCTURE*)psObj;
 		if (psStruct->asWeaps[0].nStat != 0)
 		{
+			ASSERT_OR_RETURN(false, psStruct->asWeaps[0].nStat < numWeaponStats, "Invalid range referenced.");
 			psStats = asWeaponStats + psStruct->asWeaps[0].nStat;
 			scrFunctionResult.v.ival = psStats->longRange;
 			if (!stackPushResult(VAL_INT, &scrFunctionResult))
@@ -7958,18 +7960,6 @@ VIEWDATA *CreateBeaconViewData(SDWORD sender, UDWORD LocX, UDWORD LocY)
 	((VIEW_PROXIMITY *)psViewData->pData)->audioID = audioID;
 
 	//store blip location
-	if (LocX < 0)
-	{
-		ASSERT(false, "prepairHelpViewData() - Negative X coord for prox message");
-		return NULL;
-	}
-
-	if (LocY < 0)
-	{
-		ASSERT(false, "prepairHelpViewData() - Negative X coord for prox message");
-		return NULL;
-	}
-
 	((VIEW_PROXIMITY *)psViewData->pData)->x = (UDWORD)LocX;
 	((VIEW_PROXIMITY *)psViewData->pData)->y = (UDWORD)LocY;
 
@@ -8090,7 +8080,7 @@ WZ_DECL_UNUSED static BOOL scrClosestDamagedGroupDroid(void)
 	{
 		if((psDroid->body * 100 / psDroid->originalBody) <= healthLeft)	//in%
 		{
-			wDist = map_coord(dirtyHypot(psDroid->pos.x - x, psDroid->pos.y - y));	//in tiles
+			wDist = map_coord(iHypot(psDroid->pos.x - x, psDroid->pos.y - y));  //in tiles
 			if(wDist < wBestDist)
 			{
 				if((maxRepairedBy < 0) || (getNumRepairedBy(psDroid, player) <= maxRepairedBy))
@@ -8259,7 +8249,6 @@ static int scrPursueResearch(lua_State *L)
 
 	BOOL				found;
 	PLAYER_RESEARCH		*pPlayerRes;
-	char				sTemp[128];
 	RESEARCH_FACILITY	*psResFacilty;
 	RESEARCH *pResearch;
 
@@ -8402,29 +8391,40 @@ static int scrPursueResearch(lua_State *L)
 	 && foundIndex < numResearch)
 	{
 		pResearch = (asResearch + foundIndex);
-		pPlayerRes				= asPlayerResList[player]+ foundIndex;
-		psResFacilty->psSubject = (BASE_STATS*)pResearch;		  //set the subject up
-
-		if (IsResearchCancelled(pPlayerRes))
+		if (bMultiMessages)
 		{
-			psResFacilty->powerAccrued = pResearch->researchPower;//set up as if all power available for cancelled topics
+			sendResearchStatus(psBuilding, pResearch->ref - REF_RESEARCH_START, player, true);
 		}
 		else
 		{
-			psResFacilty->powerAccrued = 0;
-		}
+			pPlayerRes = asPlayerResList[player]+ foundIndex;
+			psResFacilty->psSubject = (BASE_STATS*)pResearch;              //set the subject up
 
-		MakeResearchStarted(pPlayerRes);
-		psResFacilty->timeStarted = ACTION_START_TIME;
-		psResFacilty->timeStartHold = 0;
-		psResFacilty->timeToResearch = pResearch->researchPoints / 	psResFacilty->researchPoints;
-		if (psResFacilty->timeToResearch == 0)
+			if (IsResearchCancelled(pPlayerRes))
+			{
+				psResFacilty->powerAccrued = pResearch->researchPower; //set up as if all power available for cancelled topics
+			}
+			else
+			{
+				psResFacilty->powerAccrued = 0;
+			}
+
+			MakeResearchStarted(pPlayerRes);
+			psResFacilty->timeStarted = ACTION_START_TIME;
+			psResFacilty->timeStartHold = 0;
+			psResFacilty->timeToResearch = pResearch->researchPoints / psResFacilty->researchPoints;
+			if (psResFacilty->timeToResearch == 0)
+			{
+				psResFacilty->timeToResearch = 1;
+			}
+		}
+#if defined (DEBUG)
 		{
-			psResFacilty->timeToResearch = 1;
+			char	sTemp[128];
+			sprintf(sTemp,"player:%d starts topic: %s",player, asResearch[foundIndex].pName );
+			NETlogEntry(sTemp, SYNC_FLAG, 0);
 		}
-
-		sprintf(sTemp,"player:%d starts topic: %s",player, asResearch[foundIndex].pName );
-		NETlogEntry(sTemp,0,0);
+#endif
 	}
 
 	lua_pushboolean(L, found);
@@ -9108,8 +9108,7 @@ static int scrAssembleWeaponTemplate(lua_State *L)
 		if(tempTemplate == NULL)
 		{
 			// set template id
-			pNewTemplate->multiPlayerID = (objID<<3)|player;
-			objID++;
+			pNewTemplate->multiPlayerID = generateNewObjectId();
 
 			// add template to player template list
 			pNewTemplate->psNext = apsDroidTemplates[player];
@@ -9454,6 +9453,7 @@ void registerScriptfuncs(lua_State *L)
 	lua_register(L, "allianceExistsBetween", scrAllianceExistsBetween);
 	lua_register(L, "structureBuiltInRange", scrStructureBuiltInRange);
 	lua_register(L, "pickStructLocation", scrPickStructLocation);
+	lua_register(L, "pickDroidStructLocation", scrPickStructLocationC);
 	lua_register(L, "pickStructLocationB", scrPickStructLocationB);
 	lua_register(L, "dbgMsgOn", scrDbgMsgOn);
 	lua_register(L, "dbg", scrDbg);

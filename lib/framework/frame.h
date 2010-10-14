@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -50,7 +50,8 @@ extern "C"
 {
 #endif //__cplusplus
 
-extern UDWORD selectedPlayer;
+extern uint32_t selectedPlayer;      ///< The player number corresponding to this client.
+extern uint32_t realSelectedPlayer;  ///< The player number corresponding to this client (same as selectedPlayer, unless changing players in the debug menu).
 #define MAX_PLAYERS		8	/**< Maximum number of players in the game. */
 #define MAX_PLAYER_SLOTS	10	/**< 8 players, 1 baba and 1 reserved for features. */
 
@@ -65,7 +66,7 @@ extern UDWORD selectedPlayer;
  *  @return true when the framework library is successfully initialised, false
  *          when a part of the initialisation failed.
  */
-extern BOOL frameInitialise(const char* pWindowName, UDWORD width, UDWORD height, UDWORD bitDepth, unsigned int fsaa, BOOL fullScreen, BOOL vsync);
+extern bool frameInitialise(const char* pWindowName, UDWORD width, UDWORD height, UDWORD bitDepth, unsigned int fsaa, bool fullScreen, bool vsync);
 
 extern bool selfTest;
 

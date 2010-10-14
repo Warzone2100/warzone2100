@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -34,7 +34,6 @@
 #include "lib/framework/strres.h"
 #include "lib/ivis_common/piemode.h"
 #include "lib/ivis_common/piestate.h"
-#include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_common/tex.h"
 #include "lib/ivis_common/ivi.h"
 #include "lib/netplay/netplay.h"
@@ -81,6 +80,7 @@
 #include "multiplay.h"
 #include "projectile.h"
 #include "radar.h"
+#include "research.h"
 #include "lib/framework/cursors.h"
 #include "scriptextern.h"
 #include "scripttabs.h"
@@ -97,10 +97,6 @@
 static void	initMiscVars(void);
 
 static const char UserMusicPath[] = "music";
-
-extern char * global_mods[];
-extern char * campaign_mods[];
-extern char * multiplay_mods[];
 
 // FIXME Totally inappropriate place for this.
 char fileLoadBuffer[FILE_LOAD_BUFFER_SIZE];
@@ -175,6 +171,7 @@ void cleanSearchPath( void )
 		free( curSearchPath );
 		curSearchPath = tmpSearchPath;
 	}
+	searchPathRegistry = NULL;
 }
 
 
@@ -236,11 +233,15 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 	wzSearchPath * curSearchPath = searchPathRegistry;
 	char tmpstr[PATH_MAX] = "\0";
 
-	if ( mode != current_mode || force )
+	if (mode != current_mode || force ||
+	    (use_override_mods && strcmp(override_mod_list, getModList())))
 	{
-		current_mode = mode;
+		if (mode != mod_clean)
+		{
+			rebuildSearchPath( mod_clean, false );
+		}
 
-		rebuildSearchPath( mod_clean, false );
+		current_mode = mode;
 
 		// Start at the lowest priority
 		while( curSearchPath->lowerPriority )
@@ -260,9 +261,10 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 					// Remove maps and mods
 					removeSubdirs( curSearchPath->path, "maps", NULL );
 					removeSubdirs( curSearchPath->path, "mods/music", NULL );
-					removeSubdirs( curSearchPath->path, "mods/global", global_mods );
-					removeSubdirs( curSearchPath->path, "mods/campaign", campaign_mods );
-					removeSubdirs( curSearchPath->path, "mods/multiplay", multiplay_mods );
+					removeSubdirs( curSearchPath->path, "mods/global", NULL );
+					removeSubdirs( curSearchPath->path, "mods/campaign", NULL );
+					removeSubdirs( curSearchPath->path, "mods/multiplay", NULL );
+					removeSubdirs( curSearchPath->path, "mods/autoload", NULL );
 
 					// Remove multiplay patches
 					sstrcpy(tmpstr, curSearchPath->path);
@@ -303,13 +305,13 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 					PHYSFS_addToSearchPath( curSearchPath->path, PHYSFS_APPEND );
 
 					addSubdirs( curSearchPath->path, "mods/music", PHYSFS_APPEND, NULL, false );
-					addSubdirs( curSearchPath->path, "mods/global", PHYSFS_APPEND, global_mods, true );
-					addSubdirs( curSearchPath->path, "mods", PHYSFS_APPEND, global_mods, true );
-					addSubdirs( curSearchPath->path, "mods/autoload", PHYSFS_APPEND, NULL, true );
-					addSubdirs( curSearchPath->path, "mods/campaign", PHYSFS_APPEND, campaign_mods, true );
+					addSubdirs( curSearchPath->path, "mods/global", PHYSFS_APPEND, use_override_mods?override_mods:global_mods, true );
+					addSubdirs( curSearchPath->path, "mods", PHYSFS_APPEND, use_override_mods?override_mods:global_mods, true );
+					addSubdirs( curSearchPath->path, "mods/autoload", PHYSFS_APPEND, use_override_mods?override_mods:NULL, true );
+					addSubdirs( curSearchPath->path, "mods/campaign", PHYSFS_APPEND, use_override_mods?override_mods:campaign_mods, true );
 					if (!PHYSFS_removeFromSearchPath( curSearchPath->path ))
 					{
-						info("* Failed to remove path %s again", curSearchPath->path);
+						debug(LOG_WZ, "* Failed to remove path %s again", curSearchPath->path);
 					}
 
 					// Add plain dir
@@ -344,10 +346,10 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 					PHYSFS_addToSearchPath( curSearchPath->path, PHYSFS_APPEND );
 					addSubdirs( curSearchPath->path, "maps", PHYSFS_APPEND, NULL, false );
 					addSubdirs( curSearchPath->path, "mods/music", PHYSFS_APPEND, NULL, false );
-					addSubdirs( curSearchPath->path, "mods/global", PHYSFS_APPEND, global_mods, true );
-					addSubdirs( curSearchPath->path, "mods", PHYSFS_APPEND, global_mods, true );
-					addSubdirs( curSearchPath->path, "mods/autoload", PHYSFS_APPEND, NULL, true );
-					addSubdirs( curSearchPath->path, "mods/multiplay", PHYSFS_APPEND, multiplay_mods, true );
+					addSubdirs( curSearchPath->path, "mods/global", PHYSFS_APPEND, use_override_mods?override_mods:global_mods, true );
+					addSubdirs( curSearchPath->path, "mods", PHYSFS_APPEND, use_override_mods?override_mods:global_mods, true );
+					addSubdirs( curSearchPath->path, "mods/autoload", PHYSFS_APPEND, use_override_mods?override_mods:NULL, true );
+					addSubdirs( curSearchPath->path, "mods/multiplay", PHYSFS_APPEND, use_override_mods?override_mods:multiplay_mods, true );
 					PHYSFS_removeFromSearchPath( curSearchPath->path );
 
 					// Add multiplay patches
@@ -381,6 +383,15 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 				debug(LOG_ERROR, "Can't switch to unknown mods %i", mode);
 				return false;
 		}
+		if (use_override_mods && mode != mod_clean)
+		{
+			if (strcmp(getModList(),override_mod_list))
+			{
+				debug(LOG_POPUP, _("The required mod could not be loaded: %s\n\nWarzone will try to load the game without it."), override_mod_list);
+			}
+			clearOverrideMods();
+			current_mode = mod_override;
+		}
 
 		// User's home dir must be first so we allways see what we write
 		PHYSFS_removeFromSearchPath(PHYSFS_getWriteDir());
@@ -389,6 +400,11 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 #ifdef DEBUG
 		printSearchPath();
 #endif // DEBUG
+	}
+	else if (use_override_mods)
+	{
+		// override mods are already the same as current mods, so no need to do anything
+		clearOverrideMods();
 	}
 	return true;
 }
@@ -476,9 +492,17 @@ BOOL systemInitialise(void)
 // ////////////////////////////////////////////////////////////////////////////
 // Called once at program shutdown.
 //
+extern char *mod_list;
+
 void systemShutdown(void)
 {
+	if (mod_list)
+	{
+		free(mod_list);
+	}
+
 	shutdownEffectsSystem();
+	closeLoadingScreen();
 	keyClearMappings();
 
 	// free up all the load functions (all the data should already have been freed)
@@ -486,7 +510,8 @@ void systemShutdown(void)
 
 	if (!multiShutdown()) // ajl. init net stuff
 	{
-		return;
+		debug(LOG_FATAL, "Unable to multiShutdown() cleanly!");
+		abort();
 	}
 
 	debug(LOG_MAIN, "shutting down audio subsystems");
@@ -496,18 +521,23 @@ void systemShutdown(void)
 
 	if ( audio_Disabled() == false && !audio_Shutdown() )
 	{
-		return;
+		debug(LOG_FATAL, "Unable to audio_Shutdown() cleanly!");
+		abort();
 	}
 
 	debug(LOG_MAIN, "shutting down graphics subsystem");
 	iV_ShutDown();
 	levShutDown();
 	widgShutDown();
-	pie_TerrainCleanup();
-
 	fpathShutdown();
-
-	return;
+	debug(LOG_MAIN, "shutting down everything else");
+	pal_ShutDown();		// currently unused stub
+	frameShutDown();	// close screen / SDL / resources / cursors / trig
+	closeConfig();		// "registry" close
+	cleanSearchPath();	// clean PHYSFS search paths
+	debug_exit();		// cleanup debug routines
+	PHYSFS_deinit();	// cleanup PHYSFS (If failure, state of PhysFS is undefined, and probably badly screwed up.)
+	// NOTE: Exception handler is cleaned via atexit(ExchndlShutdown);
 }
 
 /***************************************************************************/
@@ -670,6 +700,8 @@ BOOL frontendShutdown(void)
 	debug(LOG_TEXTURE, "=== frontendShutdown ===");
 	pie_TexShutDown();
 	pie_TexInit(); // ready for restart
+	freeComponentLists();
+	statsShutDown();
 
 	return true;
 }
@@ -932,6 +964,19 @@ BOOL stageTwoInitialise(void)
 
 	SetFormAudioIDs(ID_SOUND_WINDOWOPEN,ID_SOUND_WINDOWCLOSE);
 
+	// Setup game queues.
+	// Don't ask why this doesn't go in stage three. In fact, don't even ask me what stage one/two/three is supposed to mean, it seems about as descriptive as stage doStuff, stage doMoreStuff and stage doEvenMoreStuff...
+	debug(LOG_MAIN, "Init game queues, I am %d.", selectedPlayer);
+	for (i = 0; i < MAX_PLAYERS; ++i)
+	{
+		NETinitQueue(NETgameQueue(i));
+
+		if (!myResponsibility(i))
+		{
+			NETsetNoSendOverNetwork(NETgameQueue(i));
+		}
+	}
+
 	debug(LOG_MAIN, "stageTwoInitialise: done");
 
 	return true;
@@ -1191,6 +1236,7 @@ BOOL saveGameReset(void)
 static void	initMiscVars(void)
 {
 	selectedPlayer = 0;
+	realSelectedPlayer = 0;
 	godMode = false;
 
 	// ffs am

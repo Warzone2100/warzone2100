@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
  * The objects are stored in the quad-tree.
  *
  */
-#include "lib/framework/frame.h"
+#include "lib/framework/types.h"
 #include "objects.h"
 #include "map.h"
 
@@ -137,7 +137,7 @@ void gridStartIterateFiltered(int32_t x, int32_t y, uint32_t radius, PointTree::
 
 struct ConditionTrue
 {
-	bool test(BASE_OBJECT *obj) const
+	bool test(BASE_OBJECT *) const
 	{
 		return true;
 	}
@@ -168,7 +168,7 @@ struct ConditionUnseen
 	ConditionUnseen(int32_t player_) : player(player_) {}
 	bool test(BASE_OBJECT *obj) const
 	{
-		return obj->seenThisTick[player] < UBYTE_MAX;
+		return obj->seenThisTick[player] < UINT8_MAX;
 	}
 	int player;
 };

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -32,8 +32,6 @@
 
 /***************************************************************************/
 
-#include <SDL/SDL_opengl.h>
-
 #include "lib/framework/frame.h"
 #include "piedef.h"
 
@@ -48,6 +46,7 @@ typedef	enum	REND_MODE
 					REND_ALPHA,
 					REND_ADDITIVE,
 					REND_OPAQUE,
+					REND_MULTIPLICATIVE
 				}
 				REND_MODE;
 
@@ -65,7 +64,8 @@ typedef	enum	TRANSLUCENCY_MODE
 					TRANS_DECAL,
 					TRANS_FILTER,
 					TRANS_ALPHA,
-					TRANS_ADDITIVE
+					TRANS_ADDITIVE,
+					TRANS_MULTIPLICATIVE
 				}
 				TRANSLUCENCY_MODE;
 
@@ -86,6 +86,14 @@ typedef enum
 	TEXPAGE_NONE = -1,
 	TEXPAGE_FONT = -2
 } TEXPAGE_TYPE;
+
+typedef enum
+{
+	SHADER_NONE,
+	SHADER_TCMASK,
+	SHADER_TCMASK_FOGGED,
+	SHADER_MAX
+} SHADER_MODE;
 
 /***************************************************************************/
 /*
@@ -125,6 +133,23 @@ extern void pie_ShowMouse(bool visible);
 
 extern void pie_SetTranslucencyMode(TRANSLUCENCY_MODE transMode);
 
+/* Actually in piestate.c */
+
+// Shaders control center
+extern bool pie_GetShadersStatus(void);
+extern void pie_SetShadersStatus(bool);
+bool pie_LoadShaders(void);
+// Actual shaders (we do not want to export these calls)
+void pie_DeactivateShader(void);
+void pie_ActivateShader_TCMask(PIELIGHT teamcolour, SDWORD maskpage);
+
+/* Actually in piedraw.c */
+
+// Lighting cotrols
+extern void pie_SetLightingState(bool);
+extern bool pie_GetLightingState(void);
+
+/* Errors control routine */
 #define glErrors() \
 	_glerrors(__FUNCTION__, __FILE__, __LINE__)
 

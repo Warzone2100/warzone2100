@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -130,6 +130,7 @@ void	sound_SetStoppedCallback( AUDIO_CALLBACK pStopTrackCallback );
 UDWORD	sound_GetTrackTimeLastFinished( SDWORD iTrack );
 void	sound_SetTrackTimeLastFinished( SDWORD iTrack, UDWORD iTime );
 
+extern BOOL sound_isStreamPlaying(AUDIO_STREAM *stream);
 extern void sound_StopStream(AUDIO_STREAM* stream);
 extern void sound_PauseStream(AUDIO_STREAM* stream);
 extern void sound_ResumeStream(AUDIO_STREAM* stream);

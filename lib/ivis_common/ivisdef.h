@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -40,18 +40,12 @@
 typedef struct { int32_t left, top, right, bottom; } iClip;
 
 typedef struct _iSurface {
-	int32_t flags;
 	int xcentre;
 	int ycentre;
-	int xpshift;
-	int ypshift;
 	iClip clip;
-
-	UBYTE *buffer;
 
 	int width;
 	int height;
-	int32_t size;
 } iSurface;
 
 //*************************************************************************
@@ -59,11 +53,6 @@ typedef struct _iSurface {
 // imd structures
 //
 //*************************************************************************
-
-typedef struct {
-	int textureWidth;
-	int textureHeight;
-} iTexAnim;
 
 /// Stores the from and to verticles from an edge
 typedef struct edge_
@@ -80,11 +69,13 @@ typedef struct {
 	Vector3f normal;
 	VERTEXID *pindex;
 	Vector2f *texCoord;
-	iTexAnim texAnim;
+	Vector2f texAnim;
 } iIMDPoly;
 
 typedef struct _iIMDShape {
+	unsigned int flags;	
 	int texpage;
+	int tcmaskpage;
 	int sradius, radius;
 	Vector3f min, max;
 

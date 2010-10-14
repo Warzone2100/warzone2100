@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -937,13 +937,8 @@ BOOL intAddDroidsAvailForm(void)
 	sBarInit.width = STAT_PROGBARWIDTH;
 	sBarInit.height = STAT_PROGBARHEIGHT;
 	sBarInit.size = 50;
-	sBarInit.sCol.byte.r = STAT_PROGBARMAJORRED;
-	sBarInit.sCol.byte.g = STAT_PROGBARMAJORGREEN;
-	sBarInit.sCol.byte.b = STAT_PROGBARMAJORBLUE;
-	sBarInit.sMinorCol.byte.r = STAT_PROGBARMINORRED;
-	sBarInit.sMinorCol.byte.g = STAT_PROGBARMINORGREEN;
-	sBarInit.sMinorCol.byte.b = STAT_PROGBARMINORBLUE;
-
+	sBarInit.sCol = WZCOL_ACTION_PROGRESS_BAR_MAJOR;
+	sBarInit.sMinorCol = WZCOL_ACTION_PROGRESS_BAR_MINOR;
 
 	//add droids built before the mission
 	for (psDroid = mission.apsDroidLists[selectedPlayer]; psDroid != NULL;
@@ -1114,7 +1109,7 @@ BOOL OrderDroidToEmbark(DROID *psDroid)
 {
 	DROID *psTransporter;
 
-	psTransporter = FindATransporter();
+	psTransporter = FindATransporter(psDroid->player);
 
 	if(psTransporter != NULL)
 	{
@@ -1362,6 +1357,15 @@ void transporterRemoveDroid(UDWORD id)
 	DROID_GROUP	*psGroup;
 
 	ASSERT( psCurrTransporter != NULL, "transporterRemoveUnit:can't remove units" );
+
+	if (bMultiMessages)
+	{
+		// Not sure how to fix this...
+		debug(LOG_ERROR, "TODO: Can't unload single droids, sending order to unload all at once, because this code is so convoluted.");
+		// All at once is better than nothing...
+		orderDroidLoc(psCurrTransporter, DORDER_DISEMBARK, psCurrTransporter->pos.x, psCurrTransporter->pos.y);
+		return;
+	}
 
 	currID = IDTRANS_CONTSTART;
 	for (psDroid = psCurrTransporter->psGroup->psList; psDroid != NULL && psDroid !=
@@ -1814,9 +1818,6 @@ void processLaunchTransporter(void)
 
 SDWORD	bobTransporterHeight( void )
 {
-SDWORD	val;
-UDWORD	angle;
-
 	// Because 4320/12 = 360 degrees
 	// this gives us a bob frequency of 4.32 seconds.
 	// we scale amplitude to 10 (world coordinate metric).
@@ -1824,13 +1825,7 @@ UDWORD	angle;
 	// it will not 'bounce' off the top _and_ bottom of
 	// it's movemment arc.
 
-
-	angle = gameTime%4320;
-	val = angle/12;
-	val = 10 * (SIN(DEG(val)));
-
-
-	return(val/4096);
+	return iSinSR(gameTime, 4320, 10);
 }
 
 /*causes one of the mission buttons (Launch Button or Mission Timer) to start flashing*/

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -75,8 +75,9 @@ extern BUILDDETAILS	sBuildDetails;
 
 extern UDWORD buildState;
 extern UDWORD temp;
-extern bool editMode;
 extern int brushSize;
+extern bool editMode;
+extern bool quickQueueMode;
 
 /*returns true if the build state is not equal to BUILD3D_NONE*/
 extern BOOL   tryingToGetLocation(void);

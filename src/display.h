@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -35,8 +35,6 @@ extern "C"
 /* Initialise the display system */
 extern BOOL dispInitialise(void);
 
-extern uint16_t mouseXPos, mouseYPos;
-
 extern void shakeStart(void);
 extern void shakeStop(void);
 
@@ -64,6 +62,9 @@ extern BOOL	getInvertMouseStatus( void );
 
 extern	void	setRightClickOrders( BOOL val );
 extern BOOL	getRightClickOrders( void );
+
+extern	void	setMiddleClickRotate( BOOL val );
+extern BOOL	getMiddleClickRotate( void );
 
 extern	void	setDrawShadows( BOOL val );
 extern BOOL	getDrawShadows( void );
@@ -200,7 +201,7 @@ extern void	setDesiredPitch(SDWORD pitch);
 #define MAX_PLAYER_X_ANGLE	(-1)
 #define MIN_PLAYER_X_ANGLE	(-60)
 
-#define MAXDISTANCE	(3500)
+#define MAXDISTANCE	(5000)
 #define MINDISTANCE	(500)
 #define START_DISTANCE	(2000)
 #define START_HEIGHT (1500)

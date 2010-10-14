@@ -11,7 +11,7 @@ BTowerMG,mgtower.ogg,-1,169
 bTrikeMG,mgbar3.ogg,-1,170
 BuggyMG,mgbar2.ogg,-1,171
 Cannon1Mk1,smlcan.ogg,smlexpl.ogg,172
-Cannon2A-TMk1,medcan.ogg,smlexpl.ogg,173
+Cannon2A-TMk1,medcan.ogg,lrgexpl.ogg,173
 Cannon375mmMk1,lrgcan.ogg,lrgexpl.ogg,174
 Cannon4AUTOMk1,hivelcan.ogg,smlexpl.ogg,175
 Cannon5Vulcan-VTOL,rapdcan.ogg,smlexpl.ogg,176
@@ -52,6 +52,8 @@ BabaFlame,flmthrow.ogg,-1,222
 NX-CyborgMiss,rocket.ogg,smlexpl.ogg,223
 NX-CyborgChaingun,mgbar2.ogg,-1,224
 NX-CyborgPulseLas,plslsr.ogg,lsrexpl.ogg,225
+Rocket-Sunburst,rocket.ogg,smlexpl.ogg,226
+Rocket-VTOL-Sunburst,rocket.ogg,smlexpl.ogg,226
 Missile-LtSAM,rocket.ogg,smlexpl.ogg,226
 Missile-VTOL-AT,rocket.ogg,smlexpl.ogg,227
 Superweapon,mgbar2.ogg,-1,229
@@ -95,7 +97,7 @@ Mortar-Incenediary,mortar.ogg,lrgexpl.ogg,274
 Cannon6TwinAslt,rapdcan.ogg,smlexpl.ogg,275
 Cyb-Hvywpn-Acannon,rapdcan.ogg,smlexpl.ogg,276
 Cyb-Hvywpn-HPV,hivelcan.ogg,smlexpl.ogg,277
-Cyb-Hvywpn-Mcannon,medcan.ogg,smlexpl.ogg,278
+Cyb-Hvywpn-Mcannon,medcan.ogg,lrgexpl.ogg,278
 Cyb-Hvywpn-TK,rocket.ogg,lrgexpl.ogg,279
 Laser4-PlasmaCannon,bemlsr.ogg,lsrexpl.ogg,280
 HeavyLaser,hevlsr.ogg,lsrexpl.ogg,281

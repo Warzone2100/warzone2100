@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -255,6 +255,7 @@ void initMission(void)
 		apsLimboDroids[inc] = NULL;
 	}
 	mission.apsSensorList[0] = NULL;
+	mission.apsOilList[0] = NULL;
 	offWorldKeepLists = false;
 	mission.time = -1;
 	setMissionCountDown();
@@ -327,7 +328,9 @@ BOOL missionShutDown(void)
 			mission.apsFlagPosLists[inc] = NULL;
 		}
 		apsSensorList[0] = mission.apsSensorList[0];
+		apsOilList[0] = mission.apsOilList[0];
 		mission.apsSensorList[0] = NULL;
+		mission.apsOilList[0] = NULL;
 
 		psMapTiles = mission.psMapTiles;
 		mapWidth = mission.mapWidth;
@@ -633,7 +636,6 @@ void missionFlyTransportersIn( SDWORD iPlayer, BOOL bTrackTransporter )
 	DROID	*psTransporter, *psNext;
 	UWORD	iX, iY, iZ;
 	SDWORD	iLandX, iLandY, iDx, iDy;
-	double  fR;
 
 	ASSERT_OR_RETURN(, iPlayer < 8, "Flying nonexistent player %d's transporters in", iPlayer);
 
@@ -655,6 +657,11 @@ void missionFlyTransportersIn( SDWORD iPlayer, BOOL bTrackTransporter )
 			// Check that this transporter actually contains some droids
 			if (psTransporter->psGroup && psTransporter->psGroup->refCount > 1)
 			{
+				// Remove map information from previous map
+				free(psTransporter->watchedTiles);
+				psTransporter->watchedTiles = NULL;
+				psTransporter->numWatchedTiles = 0;
+
 				// Remove out of stored list and add to current Droid list
 				if (droidRemove(psTransporter, mission.apsDroidLists))
 				{
@@ -671,14 +678,7 @@ void missionFlyTransportersIn( SDWORD iPlayer, BOOL bTrackTransporter )
 			    iDx = iLandX - iX;
 			    iDy = iLandY - iY;
 
-
-			    fR = (double) atan2(iDx, iDy);
-			    if ( fR < 0.0 )
-			    {
-			    	fR += (double) (2 * M_PI);
-			    }
-			    psTransporter->direction = RAD_TO_DEG(fR);
-
+				psTransporter->rot.direction = iAtan2(iDx, iDy);
 
 				// Camera track requested and it's the selected player.
 			    if ( ( bTrackTransporter == true ) && (iPlayer == (SDWORD)selectedPlayer) )
@@ -807,6 +807,7 @@ static void saveMissionData(void)
 		mission.apsFlagPosLists[inc] = apsFlagPosLists[inc];
 	}
 	mission.apsSensorList[0] = apsSensorList[0];
+	mission.apsOilList[0] = apsOilList[0];
 
 	mission.playerX = player.p.x;
 	mission.playerY = player.p.z;
@@ -871,6 +872,7 @@ void restoreMissionData(void)
 		mission.apsFlagPosLists[inc] = NULL;
 	}
 	apsSensorList[0] = mission.apsSensorList[0];
+	apsOilList[0] = mission.apsOilList[0];
 	mission.apsSensorList[0] = NULL;
 	//swap mission data over
 
@@ -1461,6 +1463,9 @@ void swapMissionPointers(void)
 	pVoid = (void*)apsSensorList[0];
 	apsSensorList[0] = mission.apsSensorList[0];
 	mission.apsSensorList[0] = (BASE_OBJECT *)pVoid;
+	pVoid = (void*)apsOilList[0];
+	apsOilList[0] = mission.apsOilList[0];
+	mission.apsOilList[0] = (BASE_OBJECT *)pVoid;
 }
 
 void endMission(void)
@@ -1922,7 +1927,7 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, BOOL goingHome)
 
 			// Set the launch time so the transporter doesn't just disappear for CAMSTART/CAMCHANGE
 			transporterSetLaunchTime(gameTime);
-        }
+		}
 	}
 }
 
@@ -2687,7 +2692,7 @@ DROID * buildMissionDroid(DROID_TEMPLATE *psTempl, UDWORD x, UDWORD y,
 {
 	DROID		*psNewDroid;
 
-	psNewDroid = buildDroid(psTempl, world_coord(x), world_coord(y), player, true);
+	psNewDroid = buildDroid(psTempl, world_coord(x), world_coord(y), player, true, NULL);
 	if (!psNewDroid)
 	{
 		return NULL;
@@ -2786,7 +2791,7 @@ void saveMissionPower(void)
 
 	for (inc = 0; inc < MAX_PLAYERS; inc++)
 	{
-		mission.asPower[inc].currentPower = getPower(inc);
+		mission.asCurrentPower[inc] = getPower(inc);
 	}
 }
 
@@ -2797,7 +2802,7 @@ void adjustMissionPower(void)
 
 	for (inc = 0; inc < MAX_PLAYERS; inc++)
 	{
-		addPower(inc, mission.asPower[inc].currentPower);
+		addPower(inc, mission.asCurrentPower[inc]);
 	}
 }
 

@@ -1,8 +1,8 @@
-#include "../src/pointtree.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
-#include <stdio.h>
+#include "../src/pointtree.h"
 
 #define NUM_POINTS 100000
 #define NUM_SLOW_CHECKS 1

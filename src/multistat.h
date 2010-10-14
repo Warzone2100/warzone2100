@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -25,6 +25,8 @@
 #ifndef __INCLUDED_SRC_MULTISTATS_H__
 #define __INCLUDED_SRC_MULTISTATS_H__
 
+#include "lib/netplay/netplay.h"
+
 #ifdef __cplusplus
 extern "C"
 {
@@ -45,18 +47,16 @@ typedef struct
 	uint32_t scoreToAdd;
 } PLAYERSTATS;
 
-// stat defs
-extern BOOL			saveMultiStats			(const char *sFName, const char *sPlayerName, const PLAYERSTATS *playerStats);	// to disk
-extern BOOL			loadMultiStats			(char *sPlayerName, PLAYERSTATS *playerStats);					// form disk
-extern PLAYERSTATS	getMultiStats			(UDWORD player,BOOL bLocal);									// get from net
-extern BOOL			setMultiStats			(SDWORD player, PLAYERSTATS plStats,BOOL bLocal);			// send to net.
-extern void			updateMultiStatsDamage	(UDWORD attacker, UDWORD defender, UDWORD inflicted);
-extern void			updateMultiStatsGames	(void);
-extern void			updateMultiStatsWins	(void);
-extern void			updateMultiStatsLoses	(void);
-extern void			updateMultiStatsKills	(BASE_OBJECT *psKilled,UDWORD player);
-
-extern void recvMultiStats(void);
+BOOL saveMultiStats(const char *sFName, const char *sPlayerName, const PLAYERSTATS *playerStats);	// to disk
+BOOL loadMultiStats(char *sPlayerName, PLAYERSTATS *playerStats);					// form disk
+PLAYERSTATS getMultiStats(UDWORD player);									// get from net
+BOOL setMultiStats(SDWORD player, PLAYERSTATS plStats,BOOL bLocal);			// send to net.
+void updateMultiStatsDamage(UDWORD attacker, UDWORD defender, UDWORD inflicted);
+void updateMultiStatsGames(void);
+void updateMultiStatsWins(void);
+void updateMultiStatsLoses(void);
+void updateMultiStatsKills(BASE_OBJECT *psKilled,UDWORD player);
+void recvMultiStats(NETQUEUE queue);
 
 #ifdef __cplusplus
 }

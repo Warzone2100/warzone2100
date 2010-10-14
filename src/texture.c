@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -23,19 +23,13 @@
  * This is where we do texture atlas generation.
  */
 
-#include "lib/ivis_opengl/GLee.h"
+#include <GLee.h>
 #include "lib/framework/frame.h"
 
 
 #include <string.h>
 
 #include <physfs.h>
-
-#if defined(WZ_OS_MAC)
-#include <OpenGL/glu.h>
-#else
-#include <GL/glu.h>
-#endif
 
 #include "lib/framework/file.h"
 #include "lib/framework/string_ext.h"

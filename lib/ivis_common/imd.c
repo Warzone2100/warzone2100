@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 #include "imd.h"
 #include "ivisdef.h"
 #include "tex.h"
-#include "ivispatch.h"
+#include "pietypes.h"
 
 //*************************************************************************
 //*** free IMD shape memory

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@ extern struct TREAP_NODE** treapCreate(void);
 
 /* Add an object to a treap
  */
-extern BOOL treapAdd(struct TREAP_NODE** psTreap, const char *key, const char* string);
+extern bool treapAdd(struct TREAP_NODE** psTreap, const char *key, const char* string);
 
 /* Find an object in a treap */
 extern const char* treapFind(struct TREAP_NODE** psTreap, const char *key);

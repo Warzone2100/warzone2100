@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 #define __INCLUDED_SRC_SCRIPTTABS_H__
 
 #include "lib/script/event.h" // needed for _scr_user_types
+#include "lib/script/parse.h"
 
 #ifdef __cplusplus
 extern "C"
@@ -101,7 +102,8 @@ typedef enum _scr_callback_types
 	CALL_DORDER_STOP,		// Fired when droid is forced to stop via user interface
 	CALL_DROID_REACH_LOCATION,	// Fired when droid reached the destination and stopped on its own
 	CALL_KEY_PRESSED,		// Allows to process key presses, mainly for debug purposes
-	
+	CALL_VTOL_RETARGET,		// VTOL is out of targets
+
 	CALL_EVERY_FRAME, // fired at the start of every frame
 } SCR_CALLBACK_TYPES;
 

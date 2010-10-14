@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -32,7 +32,6 @@
 
 #include "lib/framework/file.h"
 #include "lib/framework/stdio_ext.h"
-#include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_common/piemode.h"
 #include "lib/ivis_opengl/screen.h"
 #include "lib/sequence/sequence.h"
@@ -381,6 +380,10 @@ BOOL seq_UpdateFullScreenVideo(int *pbClear)
 				{
 					aSeqList[currentPlaySeq].aText[i].x = 20 + D_W2;
 				}
+				iV_SetTextColour(WZCOL_GREY);
+				iV_DrawText(&(aSeqList[currentPlaySeq].aText[i].pText[0]),
+						aSeqList[currentPlaySeq].aText[i].x + 1, aSeqList[currentPlaySeq].aText[i].y + 1);
+				iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 				iV_DrawText(&(aSeqList[currentPlaySeq].aText[i].pText[0]),
 						aSeqList[currentPlaySeq].aText[i].x, aSeqList[currentPlaySeq].aText[i].y);
 			}
@@ -390,6 +393,10 @@ BOOL seq_UpdateFullScreenVideo(int *pbClear)
 				{
 					aSeqList[currentPlaySeq].aText[i].x = 20 + D_W2;
 				}
+				iV_SetTextColour(WZCOL_GREY);
+				iV_DrawText(&(aSeqList[currentPlaySeq].aText[i].pText[0]),
+						aSeqList[currentPlaySeq].aText[i].x + 1, aSeqList[currentPlaySeq].aText[i].y + 1);
+				iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 				iV_DrawText(&(aSeqList[currentPlaySeq].aText[i].pText[0]),
 						aSeqList[currentPlaySeq].aText[i].x, aSeqList[currentPlaySeq].aText[i].y);
 			}
@@ -617,7 +624,7 @@ static BOOL seq_AddTextFromFile(const char *pTextName, SEQ_TEXT_POSITIONING text
 				ASSERT(pText != NULL, "error parsing text file");
 				if (pText != NULL)
 				{
-					seq_AddTextForVideo(&pText[1], xOffset, yOffset, startFrame, endFrame, textJustification);
+					seq_AddTextForVideo(_(&pText[1]), xOffset, yOffset, startFrame, endFrame, textJustification);
 				}
 			}
 		}

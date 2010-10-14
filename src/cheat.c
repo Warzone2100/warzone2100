@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -24,10 +24,9 @@
 /* Alex M 19th - Jan. 1999 */
 
 #include "lib/framework/frame.h"
-#include "lib/framework/string_ext.h"
 #include "lib/exceptionhandler/dumpinfo.h"
+
 #include "cheat.h"
-#include "console.h"
 #include "keybind.h"
 #include "keymap.h"
 
@@ -71,16 +70,31 @@ static CHEAT_ENTRY cheatCodes[] =
 	{"showfps", kf_ToggleFPS},	//displays your average FPS
 	{"showsamples", kf_ToggleSamples}, //displays the # of Sound samples in Queue & List
 	{"showorders", kf_ToggleOrders}, //displays unit order/action state.
+	{"showlevelname", kf_ToggleLevelName}, // shows the current level name on screen
 	{"logical", kf_ToggleLogical}, //logical game updates separated from graphics updates.
 	{"pause", kf_TogglePauseMode}, // Pause the game.
 	{"sync me", kf_ForceSync},
 	{"power info", kf_PowerInfo},
+	{"reload me", kf_Reload},	// reload selected weapons immediately
+	{"desync me", kf_ForceDesync},
 };
 
 BOOL attemptCheatCode(const char* cheat_name)
 {
 	const CHEAT_ENTRY * curCheat;
 	static const CHEAT_ENTRY * const EndCheat = &cheatCodes[ARRAY_SIZE(cheatCodes)];
+
+	// there is no reason to make people enter "cheat mode" to enter following commands
+	if (!strcasecmp("showfps", cheat_name)) 
+	{
+		kf_ToggleFPS(); 
+		return true; 
+	}
+	else if (!strcasecmp("showlevelname", cheat_name))
+	{
+		kf_ToggleLevelName();
+		return true;
+	}
 
 	if (strcmp(cheat_name, "cheat on") == 0 || strcmp(cheat_name, "debug") == 0)
 	{

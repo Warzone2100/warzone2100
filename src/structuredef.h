@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -67,6 +67,7 @@ REF_LAB,
 REF_REARM_PAD,
 REF_MISSILE_SILO,
 REF_SAT_UPLINK,         //added for updates - AB 8/6/99
+REF_GATE,
 NUM_DIFF_BUILDINGS,		//need to keep a count of how many types for IMD loading
 } STRUCTURE_TYPE;
 
@@ -81,10 +82,6 @@ typedef struct _flag_position
 	struct _flag_position	*psNext;
 } FLAG_POSITION;
 
-
-#ifdef DEMO
-#define NUM_DEMO_STRUCTS	12
-#endif
 
 //only allowed one weapon per structure (more memory for Tim)
 //Watermelon:only allowed 4 weapons per structure(sorry Tim...)
@@ -103,6 +100,17 @@ typedef enum _struct_strength
 #define INVALID_STRENGTH	(NUM_STRUCT_STRENGTH + 1)
 
 typedef UWORD STRUCTSTRENGTH_MODIFIER;
+
+#define SAS_OPEN_SPEED		(GAME_TICKS_PER_SEC * 2)
+#define SAS_STAY_OPEN_TIME	(GAME_TICKS_PER_SEC * 6)
+
+typedef enum _anim_states
+{
+	SAS_NORMAL,
+	SAS_OPEN,
+	SAS_OPENING,
+	SAS_CLOSING,
+} STRUCT_ANIM_STATES;
 
 //this structure is used to hold the permenant stats for each type of building
 typedef struct _structure_stats
@@ -161,7 +169,8 @@ typedef enum _struct_states
 
 typedef struct _research_facility
 {
-	struct BASE_STATS	*psSubject;		/* the subject the structure is working on*/
+	struct BASE_STATS *     psSubject;              // The subject the structure is working on.
+	struct BASE_STATS *     psSubjectPending;       // The subject the structure is going to work on when the GAME_RESEARCHSTATUS message is received.
 	UDWORD		capacity;				/* Number of upgrade modules added*/
 	UDWORD		timeStarted;			/* The time the building started on the subject*/
 	UDWORD		researchPoints;			/* Research Points produced per research cycle*/
@@ -174,39 +183,39 @@ typedef struct _research_facility
 
 } RESEARCH_FACILITY;
 
+typedef enum
+{
+	FACTORY_NOTHING_PENDING = 0,
+	FACTORY_START_PENDING,
+	FACTORY_HOLD_PENDING,
+	FACTORY_CANCEL_PENDING
+} FACTORY_STATUS_PENDING;
+
 typedef struct _factory
 {
-
 	UBYTE				capacity;			/* The max size of body the factory
 											   can produce*/
-	UBYTE				quantity;			/* The number of droids to produce OR for
-											   selectedPlayer, how many loops to perform*/
+	uint8_t                         productionLoops;        ///< Number of loops to perform. Not synchronised, and only meaningful for selectedPlayer.
 	UBYTE				loopsPerformed;		/* how many times the loop has been performed*/
-	//struct _propulsion_types*	propulsionType;
-	//UBYTE				propulsionType;		/* The type of propulsion the facility
-	//										   can produce*/
 	UBYTE				productionOutput;	/* Droid Build Points Produced Per
 											   Build Cycle*/
 	UDWORD				powerAccrued;		/* used to keep track of power before building a droid*/
-	BASE_STATS			*psSubject;			/* the subject the structure is working on */
+	BASE_STATS *                    psSubject;              ///< The subject the structure is working on.
+	BASE_STATS *                    psSubjectPending;       ///< The subject the structure is going to working on. (Pending = not yet synchronised.)
+	FACTORY_STATUS_PENDING          statusPending;          ///< Pending = not yet synchronised.
+	unsigned                        pendingCount;           ///< Number of messages sent but not yet processed.
+
 	UDWORD				timeStarted;		/* The time the building started on the subject*/
 	UDWORD				timeToBuild;		/* Time taken to build one droid */
 	UDWORD				timeStartHold;		/* The time the factory was put on hold*/
 	FLAG_POSITION		*psAssemblyPoint;	/* Place for the new droids to assemble at */
 	struct DROID		*psCommander;	    // command droid to produce droids for (if any)
-    UDWORD              secondaryOrder;     // secondary order state for all units coming out of the factory
+	uint32_t                        secondaryOrder;         ///< Secondary order state for all units coming out of the factory.
                                             // added AB 22/04/99
-
-    //these are no longer required - yipee!
-	// The group the droids produced by this factory belong to - used for Missions
-	//struct _droid_group		*psGroup;
-	//struct DROID			*psGrpNext;
-
 } FACTORY;
 
 typedef struct _res_extractor
 {
-	UDWORD				power;				/*The max amount of power that can be extracted*/
 	UDWORD				timeLastUpdated;	/*time the Res Extr last got points*/
 	BOOL				active;				/*indicates when the extractor is on ie digging up oil*/
 	struct _structure	*psPowerGen;		/*owning power generator*/
@@ -214,13 +223,9 @@ typedef struct _res_extractor
 
 typedef struct _power_gen
 {
-	UDWORD				power;				/*The max power that can be used - NOT USED 21/04/98*/
-	UDWORD				multiplier;			/*Factor to multiply output by - percentage*/
-	UDWORD				capacity;			/* Number of upgrade modules added*/
-
-	//struct _structure	*apResExtractors[NUM_POWER_MODULES + 1];/*pointers to the res ext
-	struct _structure	*apResExtractors[NUM_POWER_MODULES];/*pointers to the res ext
-																associated with this gen*/
+	UDWORD			multiplier;				///< Factor to multiply output by - percentage
+	UDWORD			capacity;				///< Number of upgrade modules added
+	struct _structure	*apResExtractors[NUM_POWER_MODULES];	///< Pointers to associated oil derricks
 } POWER_GEN;
 
 typedef struct REPAIR_FACILITY
@@ -284,7 +289,6 @@ typedef struct _structure
 											   necessary for functionality */
 	/* The weapons on the structure */
 	UWORD		numWeaps;
-	UBYTE		targetted;
 	WEAPON		asWeaps[STRUCT_MAXWEAPS];
 	BASE_OBJECT	*psTarget[STRUCT_MAXWEAPS];
 	UWORD		targetOrigin[STRUCT_MAXWEAPS];
@@ -303,6 +307,8 @@ typedef struct _structure
 	/* anim data */
 	ANIM_OBJECT	*psCurAnim;
 
+	STRUCT_ANIM_STATES	state;
+	UDWORD			lastStateTime;
 } WZ_DECL_MAY_ALIAS STRUCTURE;
 
 #define LOTS_OF	255						/*highest number the limit can be set to */

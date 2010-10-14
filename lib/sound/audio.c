@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -555,9 +555,14 @@ void audio_Update()
 	{
 		return;
 	}
+
+#ifndef WZ_NOSOUND
 	alGetError();	// clear error codes
+#endif
 	audio_UpdateQueue();
+#ifndef WZ_NOSOUND
 	alGetError();	// clear error codes
+#endif
 	// get player position
 	playerPos = audio_GetPlayerPos();
 	audio_Get3DPlayerRotAboutVerticalAxis(&angle);
@@ -693,10 +698,12 @@ static BOOL audio_Play3DTrack( SDWORD iX, SDWORD iY, SDWORD iZ, int iTrack, void
 	//~~~~~~~~~~~~~~~~~~~~~~
 	AUDIO_SAMPLE	*psSample;
 	// coordinates
-	float	listenerX, listenerY, listenerZ, dX, dY, dZ;
+	float	listenerX = .0f, listenerY = .0f, listenerZ = .0f, dX, dY, dZ;
 	// calculation results
 	float	distance, gain, sfx3d_volume;
+#ifndef WZ_NOSOUND
 	ALenum err;
+#endif
 	//~~~~~~~~~~~~~~~~~~~~~~
 
 	// if audio not enabled return true to carry on game without audio
@@ -712,12 +719,14 @@ static BOOL audio_Play3DTrack( SDWORD iX, SDWORD iY, SDWORD iZ, int iTrack, void
 
 	// compute distance
 	// NOTE, if this call fails, expect garbage
+#ifndef WZ_NOSOUND
 	alGetListener3f(AL_POSITION, &listenerX, &listenerY, &listenerZ);
 	err = sound_GetError();
 	if (err != AL_NO_ERROR)
 	{
 		return false;
 	}
+#endif
 	dX = (float)iX - listenerX; // distances on all axis
 	dY = (float)iY - listenerY;
 	dZ = (float)iZ - listenerZ;

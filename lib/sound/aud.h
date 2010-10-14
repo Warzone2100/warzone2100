@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -37,7 +37,6 @@ void	audio_GetStaticPos( SDWORD iWorldX, SDWORD iWorldY,
 								SDWORD *piX, SDWORD *piY, SDWORD *piZ );
 BOOL	audio_ObjectDead( void * psObj );
 Vector3f audio_GetPlayerPos(void);
-void audio_GetPlayerOrientation(Vector3f* forward, Vector3f* up);
 void audio_Get3DPlayerRotAboutVerticalAxis(float *angle);
 
 #if defined(__cplusplus)

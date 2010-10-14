@@ -1,3 +1,22 @@
+/*
+	This file is part of Warzone 2100.
+	Copyright (C) 1999-2004  Eidos Interactive
+	Copyright (C) 2005-2010  Warzone 2100 Project
+
+	Warzone 2100 is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	Warzone 2100 is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with Warzone 2100; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+*/
 #include "map.h"
 #include "wavecast.h"
 #include <vector>
@@ -52,11 +71,11 @@ static std::vector<WavecastTile> generateWavecastTable(unsigned radius)
 
 	std::vector<RationalAngle> unsortedAngles;
 
-	for (int diamond = 1; diamond*TILE_UNITS < radius*2; ++diamond)  // Factor is a bit more than needed to surround the circle with diamonds.
+	for (unsigned diamond = 1; diamond*TILE_UNITS < radius*2; ++diamond)  // Factor is a bit more than needed to surround the circle with diamonds.
 	{
-		for (int quadrant = 0; quadrant < 4; ++quadrant)
+		for (unsigned quadrant = 0; quadrant < 4; ++quadrant)
 		{
-			for (int s = 0; s < diamond; ++s)
+			for (unsigned s = 0; s < diamond; ++s)
 			{
 				WavecastTile tile;
 				switch (quadrant)
@@ -73,7 +92,7 @@ static std::vector<WavecastTile> generateWavecastTable(unsigned radius)
 				{
 					continue;
 				}
-				tile.invRadius = 92681 / sqrt((double)tileRadiusSq) + 0.5;  // +0.5 = round to nearest. Result is at most 92681 / sqrt(2), approximately 65536.
+				tile.invRadius = i64Sqrt((uint64_t)2*65536*65536 / tileRadiusSq);  // Result is at most 65536, inversely proportional to the radius.
 
 				const int minCorner[4][2] = {{1, 0}, {1, 1}, {0, 1}, {0, 0}};
 				const int mcdx = minCorner[quadrant][0], mcdy = minCorner[quadrant][1];  // Corner of the tile which the minimum angle.
@@ -102,8 +121,8 @@ static std::vector<WavecastTile> generateWavecastTable(unsigned radius)
 	// sortedAngles lookup table either.)
 	for (std::vector<WavecastTile>::iterator i = tiles.begin(); i != tiles.end(); ++i)
 	{
-		i->angBegin = std::find(sortedAngles.begin(), sortedAngles.end(), unsortedAngles[i->angBegin]) - sortedAngles.begin();
-		i->angEnd   = std::find(sortedAngles.begin(), sortedAngles.end(), unsortedAngles[i->angEnd  ]) - sortedAngles.begin();
+		i->angBegin = std::lower_bound(sortedAngles.begin(), sortedAngles.end(), unsortedAngles[i->angBegin]) - sortedAngles.begin();
+		i->angEnd   = std::lower_bound(sortedAngles.begin(), sortedAngles.end(), unsortedAngles[i->angEnd  ]) - sortedAngles.begin();
 	}
 
 #if 0  // Prints wavecast table.

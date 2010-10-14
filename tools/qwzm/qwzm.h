@@ -15,65 +15,66 @@
 	License along with this program. If not, see
 	<http://www.gnu.org/licenses/>.
 */
+
 #ifndef QWZM_H
 #define QWZM_H
 
-#include <QApplication>
-#include <QMainWindow>
-#include <QtOpenGL>
+#include "ui_qwzm.h"
+
+extern "C"
+{
+#include "wzmutils.h"
+}
 
 #include <stdint.h>
 #include <ctype.h>
 #include <errno.h>
 #include <math.h>
 
-extern "C" {
-#include "wzmutils.h"
-}
-#include "ui_qwzm.h"
-#include "ui_animationview.h"
-#include "ui_connectorview.h"
+#include <QtCore/QFileInfo>
+#include <QtGui/QComboBox>
+#include <QtGui/QLabel>
+#include <QtGui/QSlider>
+#include <QtGui/QStandardItemModel>
 
-/** Animation view */
-class QAnimViewer : public QDialog, private Ui_AnimationView
+class QWzmViewer : public QMainWindow
 {
 	Q_OBJECT
-	public:
-	QAnimViewer(QWidget *parent = 0);
-	~QAnimViewer();
-	void setModel(QStandardItemModel *model);
-	void updateModel();
-	QModelIndex selectedIndex();
-	void setSelectedIndex(int idx);
-};
 
-/** Connector view */
-class QConnectorViewer : public QDialog, private Ui_ConnectorView
-{
-	Q_OBJECT
-	public:
-	QConnectorViewer(QWidget *parent = 0);
-	~QConnectorViewer();
-	void setModel(QStandardItemModel *model);
-	void updateModel();
-	QModelIndex selectedIndex();
-	void setSelectedIndex(int idx);
-};
-
-/** WZM Viewer */
-class QWzmViewer : public QMainWindow, private Ui::QWZM
-{
-	Q_OBJECT
-	public:
+public:
 	QWzmViewer(QWidget *parent = 0);
 	~QWzmViewer();
 
-	protected slots:
-	void saveAs();
-	void save();
+protected:
+	void closeEvent(QCloseEvent *event);
+	MODEL *load3DS(QString input);
+	MODEL *loadPIE(QString input);
+
+	/** PIE Export Method.
+	  *
+	  * @brief Function that saves a WZM Model to a file in the PIE format.
+	  *
+	  * @note Data may be lost in the conversion, especially
+	  *		if exporting to PIE version 2.
+	  *
+	  * @param Name of file to serialised to.
+	  * @param Pointer to WZM data structure to be serialised.
+	  * @param PIE version to export to.
+	  * @note Currently only PIE version 2 and 3 are implemented.
+	  * @param PIE flags to set.
+	  * @return Returns 0 on success, -1 on failure.
+	  * @author Safety0ff
+	  */
+	int savePIE(const char *filename, const MODEL *psModel, int pieVersion, int type);
+
+	void setModel(const QFileInfo &texPath);
+
+protected slots:
+	void actionOpen();
+	void actionSaveAs();
+	void actionSave();
 	void open3DS();
-	void openWZM();
-	void openPIE();
+	void actionAboutApplication();
 	void toggleWireframe();
 	void toggleCulling();
 	void setTeam(int index);
@@ -84,10 +85,11 @@ class QWzmViewer : public QMainWindow, private Ui::QWZM
 	void toggleReverseWinding();
 	void toggleFlipVerticalTexCoords();
 	void setMesh(int index);
-	void toggleEditAnimation();
-	void toggleEditConnectors();
+	void toggleEditAnimation(bool show);
+	void toggleEditConnectors(bool show);
 	void animLock();
 	void animUnlock();
+	void setVisibleMesh(int index);
 
 	void rowsChanged(const QModelIndex &parent, int start, int end);
 	void dataChanged(const QModelIndex &first, const QModelIndex &last);
@@ -97,15 +99,17 @@ class QWzmViewer : public QMainWindow, private Ui::QWZM
 	void appendFrame();
 	void removeFrame();
 
-	private:
-	QString filename;
+private:
+	Ui::MainWindow *ui;
 	MODEL *psModel;
-	QStandardItemModel anim, connectors;
-	void load3DS(QString input);
-	void loadPIE(QString input);
-	void setModel(QFileInfo &texPath);
-	QAnimViewer *animView;
-	QConnectorViewer *connectorView;
+	QString filename;
+	QStandardItemModel animationModel;
+	QStandardItemModel connectorsModel;
+	QComboBox *selectedMeshComboBox;
+	QComboBox *visibleMeshComboBox;
+	QComboBox *teamComboBox;
+	QSlider *scaleSlider;
+	QLabel *fileNameLabel;
+	QTimer *timer;
 };
-
 #endif

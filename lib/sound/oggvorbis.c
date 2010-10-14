@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -21,17 +21,11 @@
 #include <physfs.h>
 
 #ifndef WZ_NOSOUND
+#  if defined(WZ_OS_MAC)  // FIXME: this would be better if we could only have this for PPC builds, that may come later
+#    define OV_EXCLUDE_STATIC_CALLBACKS
+#  endif
 #  include <vorbis/vorbisfile.h>
-#  if defined(VORBIS_NEEDS_HACK)
-/* HACK: Dummy reference vorbisfile.h symbols to prevent warnings */
-static WZ_DECL_UNUSED void MKID(dummy)(void)
-{
-	(void)OV_CALLBACKS_DEFAULT;
-	(void)OV_CALLBACKS_NOCLOSE;
-	(void)OV_CALLBACKS_STREAMONLY;
-	(void)OV_CALLBACKS_STREAMONLY_NOCLOSE;
-}
-# endif
+#  include <vorbis/codec.h>
 #endif
 
 #ifdef __BIG_ENDIAN__
@@ -60,6 +54,37 @@ struct OggVorbisDecoderState
 };
 
 #ifndef WZ_NOSOUND
+static const char* wz_oggVorbis_getErrorStr(int error)
+{
+    switch(error)
+    {
+		case OV_FALSE:
+			return "OV_FALSE";
+		case OV_HOLE:
+			return "OV_HOLE";
+		case OV_EREAD:
+			return "OV_EREAD";
+		case OV_EFAULT:
+			return "OV_EFAULT";
+		case OV_EIMPL:
+			return "OV_EIMPL";
+		case OV_EINVAL:
+			return "OV_EINVAL";
+		case OV_ENOTVORBIS:
+			return "OV_ENOTVORBIS";
+		case OV_EBADHEADER:
+			return "OV_EBADHEADER";
+		case OV_EVERSION:
+			return "OV_EVERSION";
+		case OV_EBADLINK:
+			return "OV_EBADLINK";
+		case OV_ENOSEEK:
+			return "OV_ENOSEEK";
+		default:
+			return "Unknown Ogg error.";
+    }
+}
+
 static size_t wz_oggVorbis_read(void *ptr, size_t size, size_t nmemb, void *datasource)
 {
 	PHYSFS_file* fileHandle;
@@ -179,7 +204,7 @@ struct OggVorbisDecoderState* sound_CreateOggVorbisDecoder(PHYSFS_file* PHYSFS_f
 	error = ov_open_callbacks(decoder, &decoder->oggVorbis_stream, NULL, 0, wz_oggVorbis_callbacks);
 	if (error < 0)
 	{
-		debug(LOG_ERROR, "ov_open_callbacks failed with errorcode %d", error);
+		debug(LOG_ERROR, "ov_open_callbacks failed with errorcode %s", wz_oggVorbis_getErrorStr(error));
 		free(decoder);
 		return NULL;
 	}
@@ -297,7 +322,7 @@ soundDataBuffer* sound_DecodeOggVorbis(struct OggVorbisDecoderState* decoder, si
 
 		if (result < 0)
 		{
-			debug(LOG_ERROR, "error decoding from OggVorbis file; errorcode from ov_read: %d", result);
+			debug(LOG_ERROR, "error decoding from OggVorbis file; errorcode from ov_read: %s", wz_oggVorbis_getErrorStr(result));
 			free(buffer);
 			return NULL;
 		}

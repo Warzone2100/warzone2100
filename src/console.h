@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -21,8 +21,6 @@
 #ifndef __INCLUDED_SRC_CONSOLE_H__
 #define __INCLUDED_SRC_CONSOLE_H__
 
-#include "lib/ivis_common/piedef.h"
-
 #ifdef __cplusplus
 extern "C"
 {
@@ -32,11 +30,6 @@ extern "C"
 #define MAX_CONSOLE_STRING_LENGTH		(255)
 #define MAX_CONSOLE_TMP_STRING_LENGTH	(255)
 
-#define	DEFAULT_MESSAGE_DURATION		GAME_TICKS_PER_SEC * 8
-
-#define CON_BORDER_WIDTH				4
-#define CON_BORDER_HEIGHT				4
-
 typedef enum
 {
 	LEFT_JUSTIFY,
@@ -45,53 +38,31 @@ typedef enum
 	DEFAULT_JUSTIFY
 } CONSOLE_TEXT_JUSTIFICATION;
 
-typedef struct _console
-{
-	UDWORD	topX;
-	UDWORD	topY;
-	UDWORD	width;
-	UDWORD	textDepth;
-	BOOL	permanent;
-} CONSOLE;
-
 /* ID to use for addConsoleMessage() in case of a system message */
 #define	SYSTEM_MESSAGE				(-1)
 #define NOTIFY_MESSAGE				(-2)		// mainly used for lobby messages
 
-/* Definition of a message */
-typedef struct	_console_message
-{
-	char				text[MAX_CONSOLE_STRING_LENGTH];		// Text of the message
-	UDWORD				timeAdded;								// When was it added to our list?
-	//UDWORD			screenIndex;							// Info for justification
-	UDWORD				JustifyType;
-	UDWORD				id;
-	SDWORD				player;						// Player who sent this message or SYSTEM_MESSAGE
-	struct _console_message *psNext;
-} CONSOLE_MESSAGE;
-
 extern char ConsoleString[MAX_CONSOLE_TMP_STRING_LENGTH];
 
-extern void	consolePrintf				( char *layout, ... );
-extern BOOL	addConsoleMessage			( const char *messageText, CONSOLE_TEXT_JUSTIFICATION jusType, SDWORD player );
-extern void	updateConsoleMessages		( void );
-extern void	initConsoleMessages			( void );
-extern void	setConsoleMessageDuration	( UDWORD time );
-extern void	removeTopConsoleMessage		( void );
-extern void	displayConsoleMessages		( void );
-extern void	flushConsoleMessages		( void );
-extern void	setConsoleBackdropStatus	( BOOL state );
-extern void	enableConsoleDisplay		( BOOL state );
-extern BOOL getConsoleDisplayStatus		( void );
-extern void	setDefaultConsoleJust		( CONSOLE_TEXT_JUSTIFICATION defJ );
-extern void	setConsoleSizePos			( UDWORD x, UDWORD y, UDWORD width );
-extern void	setConsolePermanence		( BOOL state, BOOL bClearOld );
-extern BOOL	mouseOverConsoleBox			( void );
-extern UDWORD	getNumberConsoleMessages( void );
-extern void	setConsoleLineInfo			( UDWORD vis );
-extern UDWORD	getConsoleLineInfo		( void );
-extern void	permitNewConsoleMessages		( BOOL allow);
-extern	void	toggleConsoleDrop( void );
+void consolePrintf(char *layout, ...);
+BOOL addConsoleMessage(const char *messageText, CONSOLE_TEXT_JUSTIFICATION jusType, SDWORD player);
+void updateConsoleMessages(void);
+void initConsoleMessages(void);
+void removeTopConsoleMessage(void);
+void displayConsoleMessages(void);
+void flushConsoleMessages(void);
+void setConsoleBackdropStatus(BOOL state);
+void enableConsoleDisplay(BOOL state);
+BOOL getConsoleDisplayStatus(void);
+void setDefaultConsoleJust(CONSOLE_TEXT_JUSTIFICATION defJ);
+void setConsoleSizePos(UDWORD x, UDWORD y, UDWORD width);
+void setConsolePermanence(BOOL state, BOOL bClearOld);
+BOOL mouseOverConsoleBox(void);
+UDWORD getNumberConsoleMessages(void);
+void setConsoleLineInfo(UDWORD vis);
+UDWORD getConsoleLineInfo(void);
+void permitNewConsoleMessages(BOOL allow);
+void toggleConsoleDrop(void);
 
 #if defined(DEBUG)
 # define debug_console(...) \

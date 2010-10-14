@@ -1,6 +1,7 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2008  Warzone Resurrection Project
+	Copyright (C) 1999-2004  Eidos Interactive
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -28,13 +29,12 @@
  * The water is drawn using the hardcoded page-80 and page-81 textures. 
  */
 
-#include "lib/ivis_opengl/GLee.h"
+#include <GLee.h>
 #include <string.h>
 
 #include "lib/framework/frame.h"
 #include "lib/ivis_common/ivisdef.h"
 #include "lib/ivis_common/imd.h"
-#include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_common/piefunc.h"
 #include "lib/ivis_common/tex.h"
 #include "lib/ivis_common/piedef.h"
@@ -93,6 +93,10 @@ static GLuint lightmap_tex_num;
 static unsigned int lightmapNextUpdate;
 /// How big is the lightmap?
 static int lightmapSize;
+/// Lightmap image
+static GLubyte *lightmapPixmap;
+/// Ticks per lightmap refresh
+static const unsigned int LIGHTMAP_REFRESH = 80;
 
 /// VBOs
 static GLuint geometryVBO, geometryIndexVBO, textureVBO, textureIndexVBO, decalVBO;
@@ -626,6 +630,7 @@ static void updateSectorGeometry(int x, int y)
 	glBindBuffer(GL_ARRAY_BUFFER, decalVBO); glError();
 	glBufferSubData(GL_ARRAY_BUFFER, sizeof(DecalVertex)*sectors[x*ySectors + y].decalOffset,
 	                                 sizeof(DecalVertex)*sectors[x*ySectors + y].decalSize, decaldata); glError();
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	free (decaldata);
 }
@@ -852,6 +857,7 @@ bool initTerrain(void)
 	glBindBuffer(GL_ARRAY_BUFFER, waterIndexVBO); glError();
 	glBufferData(GL_ARRAY_BUFFER, sizeof(GLuint)*waterIndexSize, waterIndex, GL_STATIC_DRAW); glError();
 	free(waterIndex);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	
 	////////////////////
@@ -965,6 +971,7 @@ bool initTerrain(void)
 	glBindBuffer(GL_ARRAY_BUFFER, textureIndexVBO); glError();
 	glBufferData(GL_ARRAY_BUFFER, sizeof(GLuint)*textureIndexSize, textureIndex, GL_STATIC_DRAW); glError();
 	free(textureIndex);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	// and finally the decals
 	decaldata = malloc(sizeof(DecalVertex)*mapWidth*mapHeight*12);
@@ -984,6 +991,7 @@ bool initTerrain(void)
 	glBindBuffer(GL_ARRAY_BUFFER, decalVBO); glError();
 	glBufferData(GL_ARRAY_BUFFER, sizeof(DecalVertex)*decalSize, decaldata, GL_STATIC_DRAW); glError();
 	free(decaldata);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	
 	lightmap_tex_num = 0;
 	lightmapNextUpdate = 0;
@@ -1001,7 +1009,27 @@ bool initTerrain(void)
 	}
 	debug(LOG_TERRAIN, "the size of the map is %ix%i", mapWidth, mapHeight);
 	debug(LOG_TERRAIN, "lightmap texture size is %ix%i", lightmapSize, lightmapSize);
-	
+
+	// Prepare the lightmap pixmap and texture
+	lightmapPixmap = (GLubyte *)calloc(1, lightmapSize * lightmapSize * 3 * sizeof(GLubyte));
+	if (lightmapPixmap == NULL)
+	{
+		debug(LOG_FATAL, "Out of memory!");
+		abort();
+		return false;
+	}
+
+	glGenTextures(1, &lightmap_tex_num);
+	glBindTexture(GL_TEXTURE_2D, lightmap_tex_num);
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, 3, lightmapSize, lightmapSize, 0, GL_RGB, GL_UNSIGNED_BYTE, lightmapPixmap);
+
 	terrainInitalised = true;
 	
 	return true;
@@ -1030,7 +1058,11 @@ void shutdownTerrain(void)
 		}
 	}
 	free(sectors);
-	
+
+	glDeleteTextures(1, &lightmap_tex_num);
+	free(lightmapPixmap);
+	lightmapPixmap = NULL;
+
 	terrainInitalised = false;
 }
 
@@ -1052,18 +1084,19 @@ void drawTerrain(void)
 
 	glPushAttrib(GL_ENABLE_BIT | GL_COLOR_BUFFER_BIT | GL_TEXTURE_BIT | GL_DEPTH_BUFFER_BIT);
 	
-	// lightmap
-	// we limit the framerate of the lightmap, because uploading a texture is an expensive operation
-	if (gameTime > lightmapNextUpdate)
-	{
-		// allocate 3D array for our lightmap--but MSVC don't support VLA's :P
-		unsigned char *data=(unsigned char * )malloc(lightmapSize * lightmapSize * 3 * sizeof(unsigned char));
-		
-		lightmapNextUpdate = gameTime + 80;
-		glDeleteTextures(1, &lightmap_tex_num);
+	///////////////////////////////////
+	// set up the lightmap texture
 
-		glGenTextures(1, &lightmap_tex_num);
-		
+	glActiveTexture(GL_TEXTURE1);
+	// bind the texture
+	glBindTexture(GL_TEXTURE_2D, lightmap_tex_num);
+	glEnable(GL_TEXTURE_2D);
+
+	// we limit the framerate of the lightmap, because updating a texture is an expensive operation
+	if (gameTime >= lightmapNextUpdate)
+	{
+		lightmapNextUpdate = gameTime + LIGHTMAP_REFRESH;
+
 		for (i = 0; i < lightmapSize; i++)
 		{
 			for (j = 0; j < lightmapSize; j++)
@@ -1073,9 +1106,9 @@ void drawTerrain(void)
 				float playerX = (float)player.p.x/TILE_UNITS+visibleTiles.x/2;
 				float playerY = (float)player.p.z/TILE_UNITS+visibleTiles.y/2;
 				getColour(&colour, i, j, false);
-				data[(i * lightmapSize + j) * 3 + 0] = colour.byte.r;
-				data[(i * lightmapSize + j) * 3 + 1] = colour.byte.g;
-				data[(i * lightmapSize + j) * 3 + 2] = colour.byte.b;
+				lightmapPixmap[(i * lightmapSize + j) * 3 + 0] = colour.byte.r;
+				lightmapPixmap[(i * lightmapSize + j) * 3 + 1] = colour.byte.g;
+				lightmapPixmap[(i * lightmapSize + j) * 3 + 2] = colour.byte.b;
 				
 				if (!rendStates.fogEnabled)
 				{
@@ -1099,34 +1132,19 @@ void drawTerrain(void)
 					}
 					if (darken < 1)
 					{
-						data[(i * lightmapSize + j) * 3 + 0] *= darken;
-						data[(i * lightmapSize + j) * 3 + 1] *= darken;
-						data[(i * lightmapSize + j) * 3 + 2] *= darken;
+						lightmapPixmap[(i * lightmapSize + j) * 3 + 0] *= darken;
+						lightmapPixmap[(i * lightmapSize + j) * 3 + 1] *= darken;
+						lightmapPixmap[(i * lightmapSize + j) * 3 + 2] *= darken;
 					}
 				}
 			}
 		}
-		
-		glBindTexture(GL_TEXTURE_2D, lightmap_tex_num);
+
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexImage2D(GL_TEXTURE_2D, 0, 3, lightmapSize, lightmapSize, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-
-		// once lightmap has been uploaded, we free it.
-		free(data);
+		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, lightmapSize, lightmapSize, GL_RGB, GL_UNSIGNED_BYTE, lightmapPixmap);
 	}
-	
-	///////////////////////////////////
-	// now set up the lightmap texture
-	
-	glActiveTexture(GL_TEXTURE1);
-	// load the texture
-	glBindTexture(GL_TEXTURE_2D, lightmap_tex_num);
-	glEnable(GL_TEXTURE_2D);
 
+	// enable texture coord generation
 	glEnable(GL_TEXTURE_GEN_S); glError();
 	glEnable(GL_TEXTURE_GEN_T); glError();
 	glEnable(GL_BLEND);
@@ -1176,7 +1194,7 @@ void drawTerrain(void)
 	//////////////////////////////////////
 	// canvas to draw on
 	glDisable(GL_TEXTURE_2D);
-	glDisable(GL_BLEND);
+	pie_SetRendMode(REND_OPAQUE);
 	// we only draw in the depth buffer of using fog of war, as the clear color is black then
 	if (rendStates.fogEnabled)
 	{
@@ -1216,6 +1234,8 @@ void drawTerrain(void)
 		}
 	}
 	finishDrawRangeElements();
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	
 	if (rendStates.fogEnabled)
 	{
@@ -1243,8 +1263,8 @@ void drawTerrain(void)
 	glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
 
 	// additive blending
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+	pie_SetRendMode(REND_ADDITIVE);
+
 	// only draw colors
 	glDepthMask(GL_FALSE);
 	
@@ -1293,25 +1313,33 @@ void drawTerrain(void)
 		}
 		finishDrawRangeElements();
 	}
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	// we don't need this one anymore
 	glDisableClientState( GL_COLOR_ARRAY );
-	//////////////////////////////////
-	// decals
-	
-	// no texture generation
+	// no more texture generation
 	glDisable(GL_TEXTURE_GEN_S); glError();
 	glDisable(GL_TEXTURE_GEN_T); glError();
+	// prevent the terrain from getting corrupted by the decal drawing code
+	// (something with VBO + changing the texture)
+	// this happens on radeon + mesa
+	// FIXME: remove this after the driver is fixed
+	glFlush();
 	
+	//////////////////////////////////
+	// decals
+
 	// select the terrain texture page
 	pie_SetTexturePage(terrainPage); glError();
 	// use the alpha to blend
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	pie_SetRendMode(REND_ALPHA);
 	// and the texture coordinates buffer
 	glEnableClientState( GL_TEXTURE_COORD_ARRAY ); glError();
 	glEnableClientState( GL_VERTEX_ARRAY ); glError();
 	glBindBuffer(GL_ARRAY_BUFFER, decalVBO); glError();
 	glVertexPointer(3, GL_FLOAT, sizeof(DecalVertex), BUFFER_OFFSET(0)); glError();
 	glTexCoordPointer(2, GL_FLOAT, sizeof(DecalVertex), BUFFER_OFFSET(12)); glError();
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	size = 0;
 	offset = 0;
@@ -1342,18 +1370,19 @@ void drawTerrain(void)
 	////////////////////////////////
 	// disable the lightmap texture
 	glActiveTexture(GL_TEXTURE1);
-	glDisable(GL_TEXTURE_2D);
+	pie_SetTexturePage(TEXPAGE_NONE);
+	glMatrixMode(GL_TEXTURE);
+	glLoadIdentity();
 	glActiveTexture(GL_TEXTURE0);
+	glLoadIdentity();
+	glMatrixMode(GL_MODELVIEW);
 
 	// leave everything in a sane state so it won't mess up somewhere else
 	glDisableClientState( GL_TEXTURE_COORD_ARRAY );
-	glDisable(GL_TEXTURE_GEN_S);
-	glDisable(GL_TEXTURE_GEN_T);
-	
 	glDisableClientState( GL_VERTEX_ARRAY );
 	
 	glDepthMask(GL_TRUE);
-	glDisable(GL_BLEND);
+	pie_SetRendMode(REND_OPAQUE);
 	
 	glPopAttrib();
 }
@@ -1396,8 +1425,7 @@ void drawWater(void)
 	glTranslatef(waterOffset, 0, 0);
 
 	// multiplicative blending
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_ZERO, GL_SRC_COLOR);
+	pie_SetRendMode(REND_MULTIPLICATIVE);
 	
 	// second texture unit
 	glActiveTexture(GL_TEXTURE1);
@@ -1438,13 +1466,15 @@ void drawWater(void)
 		}
 	}
 	finishDrawRangeElements();
-	
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
 	glDisableClientState( GL_VERTEX_ARRAY );
 	
 	// move the water
 	if(!gamePaused())
 	{
-		waterOffset += timeAdjustedIncrement(0.1f, true);
+		waterOffset += graphicsTimeAdjustedIncrement(0.1f);
 	}
 
 	// disable second texture

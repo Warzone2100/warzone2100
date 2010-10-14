@@ -12,7 +12,7 @@ AC_DEFUN([AC_PROG_VERSION_CHECK],
 [
 [
 	for ac_prog in $1; do
-		ac_prog_version_check=`$ac_prog --version | head -n 1 | sed 's/([^)]*)//g;s/^[a-zA-Z\.\ \-\/]*//;s/ .*$//'`
+		ac_prog_version_check=`$ac_prog --version | head -n 1 | sed 's/([^)]*)//g;s/^[-a-zA-Z\.\ \/]*//;s/ .*$//'`
 		ac_prog_major_check=`echo $ac_prog_version_check | cut -d. -f1`
 		ac_prog_minor_check=`echo $ac_prog_version_check | sed s/[-,a-z,A-Z].*// | cut -d. -f2`
 		ac_prog_micro_check=`echo $ac_prog_version_check | sed s/[-,a-z,A-Z].*// | cut -d. -f3`

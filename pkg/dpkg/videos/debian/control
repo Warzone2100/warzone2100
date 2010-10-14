@@ -1,0 +1,14 @@
+Source: warzone2100-video
+Section: games
+Priority: extra
+Maintainer: Warzone 2100 Project <warzone-dev@gna.org>
+Build-Depends: debhelper (>= 7.0.50~)
+Standards-Version: 3.8.4
+Homepage: http://wz2100.net/
+
+Package: warzone2100-video
+Architecture: all
+Depends: ${misc:Depends}
+Description: Post-nuclear 3D real-time strategy game - videos
+ This package contains the videos for Warzone 2100. Those mostly tell the story
+ of the campaign, and are not needed for pure skirmish/multiplayer.

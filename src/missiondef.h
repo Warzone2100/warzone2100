@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -67,9 +67,10 @@ typedef struct _mission
 	DROID						*apsDroidLists[MAX_PLAYERS];
 	FEATURE						*apsFeatureLists[MAX_PLAYERS];
 	BASE_OBJECT			*apsSensorList[1];
+	BASE_OBJECT			*apsOilList[1];
 	//struct _proximity_display	*apsProxDisp[MAX_PLAYERS];
 	FLAG_POSITION				*apsFlagPosLists[MAX_PLAYERS];
-	PLAYER_POWER				asPower[MAX_PLAYERS];
+	int32_t                         asCurrentPower[MAX_PLAYERS];
 
 	UDWORD				startTime;			//time the mission started
 	SDWORD				time;				//how long the mission can last

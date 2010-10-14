@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2007-2009  Warzone Resurrection Project
+	Copyright (C) 2007-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -23,6 +23,9 @@
 #include "dumpinfo.h"
 
 #if defined(WZ_OS_WIN)
+#include <tchar.h>
+#include <shlobj.h>
+#include <shlwapi.h>
 
 # include "dbghelp.h"
 # include "exchndl.h"
@@ -33,6 +36,7 @@ static LPTOP_LEVEL_EXCEPTION_FILTER prevExceptionHandler = NULL;
 /**
  * Exception handling on Windows.
  * Ask the user whether he wants to safe a Minidump and then dump it into the temp directory.
+ * NOTE: This is only for MSVC compiled programs.
  *
  * \param pExceptionInfo Information on the exception, passed from Windows
  * \return whether further exception handlers (i.e. the Windows internal one) should be invoked
@@ -125,6 +129,7 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 #  define MAX_BACKTRACE 20
 # endif
 
+#define write(x, y, z) abs(write(x, y, z))  // HACK Squelch unused result warning.
 
 # define MAX_PID_STRING 16
 # define MAX_DATE_STRING 256
@@ -331,10 +336,6 @@ static void setFatalSignalHandler(SigActionHandler signalHandler)
 	if (oldAction[SIGSYS].sa_handler != SIG_IGN)
 		sigaction(SIGSYS, &new_handler, NULL);
 
-	sigaction(SIGTRAP, NULL, &oldAction[SIGTRAP]);
-	if (oldAction[SIGTRAP].sa_handler != SIG_IGN)
-		sigaction(SIGTRAP, &new_handler, NULL);
-
 	sigaction(SIGXCPU, NULL, &oldAction[SIGXCPU]);
 	if (oldAction[SIGXCPU].sa_handler != SIG_IGN)
 		sigaction(SIGXCPU, &new_handler, NULL);
@@ -342,6 +343,10 @@ static void setFatalSignalHandler(SigActionHandler signalHandler)
 	sigaction(SIGXFSZ, NULL, &oldAction[SIGXFSZ]);
 	if (oldAction[SIGXFSZ].sa_handler != SIG_IGN)
 		sigaction(SIGXFSZ, &new_handler, NULL);
+
+	// ignore SIGTRAP
+	new_handler.sa_handler = SIG_IGN;
+	sigaction(SIGTRAP, &new_handler, &oldAction[SIGTRAP]);
 #endif // _XOPEN_UNIX
 }
 
@@ -702,4 +707,44 @@ void setupExceptionHandler(int argc, char * argv[])
 
 	setFatalSignalHandler(posixExceptionHandler);
 #endif // WZ_OS_*
+}
+bool OverrideRPTDirectory(char *newPath)
+{
+# if defined(WZ_CC_MINGW)
+	TCHAR buf[MAX_PATH];
+
+	if (!MultiByteToWideChar(CP_UTF8, 0, newPath, strlen(newPath), buf, 0))
+	{
+		//conversion failed-- we won't use the user's directory.
+
+		LPVOID lpMsgBuf;
+		LPVOID lpDisplayBuf;
+		DWORD dw = GetLastError();
+		TCHAR szBuffer[4196];
+
+		FormatMessage(
+			FORMAT_MESSAGE_ALLOCATE_BUFFER | 
+			FORMAT_MESSAGE_FROM_SYSTEM |
+			FORMAT_MESSAGE_IGNORE_INSERTS,
+			NULL,
+			dw,
+			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+			(LPTSTR) &lpMsgBuf,
+			0, NULL );
+
+		wsprintf(szBuffer, _T("Exception handler failed setting new directory with error %d: %s\n"), dw, lpMsgBuf);
+		MessageBox(MB_ICONEXCLAMATION, szBuffer, _T("Error"), MB_OK); 
+
+		LocalFree(lpMsgBuf);
+		LocalFree(lpDisplayBuf);
+
+		return false;
+	}
+	_tcscpy(buf, newPath);
+	PathRemoveFileSpec(buf);
+	_tcscat(buf, _T("\\logs\\")); // stuff it in the logs directory
+	_tcscat(buf, _T("Warzone2100.RPT"));
+	ResetRPTDirectory(buf);
+#endif
+	return true;
 }

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -55,7 +55,8 @@ bool selfTest = false;
  *	Player globals
  */
 
-UDWORD		selectedPlayer = 0; 	/**< Current player */
+uint32_t selectedPlayer = 0;  /**< Current player */
+uint32_t realSelectedPlayer = 0;
 
 
 /************************************************************************************
@@ -64,7 +65,11 @@ UDWORD		selectedPlayer = 0; 	/**< Current player */
  */
 
 /* Over how many seconds is the average required? */
-#define	TIMESPAN	5
+#ifdef _DEBUG
+# define	TIMESPAN	1
+#else
+# define	TIMESPAN	5
+#endif
 
 /* Initial filler value for the averages - arbitrary */
 #define  IN_A_FRAME 70
@@ -77,7 +82,7 @@ static Uint64	lastFrames = 0;
 static Uint32	curTicks = 0; // Number of ticks since execution started
 static Uint32	lastTicks = 0;
 static FPSmanager wzFPSmanager;
-static BOOL	initFPSmanager = false;
+static bool	initFPSmanager = false;
 
 void setFramerateLimit(int fpsLimit)
 {
@@ -185,10 +190,12 @@ static void initCursors(void)
 	aCursors[CURSOR_BRIDGE]      = init_system_cursor(CURSOR_BRIDGE, cursor_type);
 	aCursors[CURSOR_BUILD]       = init_system_cursor(CURSOR_BUILD, cursor_type);
 	aCursors[CURSOR_EMBARK]      = init_system_cursor(CURSOR_EMBARK, cursor_type);
+	aCursors[CURSOR_DISEMBARK]   = init_system_cursor(CURSOR_DISEMBARK, cursor_type);
 	aCursors[CURSOR_FIX]         = init_system_cursor(CURSOR_FIX, cursor_type);
 	aCursors[CURSOR_GUARD]       = init_system_cursor(CURSOR_GUARD, cursor_type);
 	aCursors[CURSOR_JAM]         = init_system_cursor(CURSOR_JAM, cursor_type);
 	aCursors[CURSOR_LOCKON]      = init_system_cursor(CURSOR_LOCKON, cursor_type);
+	aCursors[CURSOR_SCOUT]       = init_system_cursor(CURSOR_SCOUT, cursor_type);
 	aCursors[CURSOR_MENU]        = init_system_cursor(CURSOR_MENU, cursor_type);
 	aCursors[CURSOR_MOVE]        = init_system_cursor(CURSOR_MOVE, cursor_type);
 	aCursors[CURSOR_NOTPOSSIBLE] = init_system_cursor(CURSOR_NOTPOSSIBLE, cursor_type);
@@ -212,14 +219,14 @@ static void freeCursors(void)
  *
  * Initialise the framework library. - PC version
  */
-BOOL frameInitialise(
+bool frameInitialise(
 					const char *pWindowName,// The text to appear in the window title bar
 					UDWORD width,			// The display width
 					UDWORD height,			// The display height
 					UDWORD bitDepth,		// The display bit depth
 					unsigned int fsaa,      // FSAA anti aliasing level
-					BOOL fullScreen,		// Whether to start full screen or windowed
-					BOOL vsync)				// If to sync to vblank or not
+					bool fullScreen,		// Whether to start full screen or windowed
+					bool vsync)				// If to sync to vblank or not
 {
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0)
 	{
@@ -240,7 +247,18 @@ BOOL frameInitialise(
 
 	if (!screenInitialise(width, height, bitDepth, fsaa, fullScreen, vsync))
 	{
-		return false;
+		if (fullScreen)
+		{
+			info("Trying windowed mode now.");
+			if (!screenInitialise(width, height, bitDepth, fsaa, false, vsync))
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	/* Initialise the input system */
@@ -287,9 +305,6 @@ void frameShutDown(void)
 	/* Destroy the Application window */
 	SDL_Quit();
 
-	/* shutdown the trig stuff */
-	trigShutDown();
-
 	// Shutdown the resource stuff
 	resShutDown();
 }
@@ -321,8 +336,8 @@ PHYSFS_file* openLoadFile(const char* fileName, bool hard_fail)
 
   If hard_fail is true, we will assert and report on failures.
 ***************************************************************************/
-static BOOL loadFile2(const char *pFileName, char **ppFileData, UDWORD *pFileSize,
-                      BOOL AllocateMem, BOOL hard_fail)
+static bool loadFile2(const char *pFileName, char **ppFileData, UDWORD *pFileSize,
+                      bool AllocateMem, bool hard_fail)
 {
 	PHYSFS_file *pfile;
 	PHYSFS_sint64 filesize;
@@ -421,7 +436,7 @@ PHYSFS_file* openSaveFile(const char* fileName)
 /***************************************************************************
 	Save the data in the buffer into the given file.
 ***************************************************************************/
-BOOL saveFile(const char *pFileName, const char *pFileData, UDWORD fileSize)
+bool saveFile(const char *pFileName, const char *pFileData, UDWORD fileSize)
 {
 	PHYSFS_file *pfile;
 	PHYSFS_uint32 size = fileSize;
@@ -458,20 +473,20 @@ BOOL saveFile(const char *pFileName, const char *pFileData, UDWORD fileSize)
 	return true;
 }
 
-BOOL loadFile(const char *pFileName, char **ppFileData, UDWORD *pFileSize)
+bool loadFile(const char *pFileName, char **ppFileData, UDWORD *pFileSize)
 {
 	return loadFile2(pFileName, ppFileData, pFileSize, true, true);
 }
 
 // load a file from disk into a fixed memory buffer
-BOOL loadFileToBuffer(const char *pFileName, char *pFileBuffer, UDWORD bufferSize, UDWORD *pSize)
+bool loadFileToBuffer(const char *pFileName, char *pFileBuffer, UDWORD bufferSize, UDWORD *pSize)
 {
 	*pSize = bufferSize;
 	return loadFile2(pFileName, &pFileBuffer, pSize, false, true);
 }
 
 // as above but returns quietly if no file found
-BOOL loadFileToBufferNoError(const char *pFileName, char *pFileBuffer, UDWORD bufferSize, UDWORD *pSize)
+bool loadFileToBufferNoError(const char *pFileName, char *pFileBuffer, UDWORD bufferSize, UDWORD *pSize)
 {
 	*pSize = bufferSize;
 	return loadFile2(pFileName, &pFileBuffer, pSize, false, false);

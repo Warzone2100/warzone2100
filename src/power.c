@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -49,21 +49,32 @@
 #define EASY_POWER_MOD      110
 #define NORMAL_POWER_MOD    100
 #define HARD_POWER_MOD      90
-#define MAX_POWER           100000
+#define MAX_POWER           1000000
+
+#define FP_ONE ((int64_t)1 << 32)
 
 //flag used to check for power calculations to be done or not
 BOOL	powerCalculated;
-UDWORD nextPowerSystemUpdate;
+static UDWORD nextPowerSystemUpdate;
 
 /* Updates the current power based on the extracted power and a Power Generator*/
 static void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player);
 /** Each Resource Extractor yields EXTRACT_POINTS per second until there are none left in the resource. */
-static float updateExtractedPower(STRUCTURE *psBuilding);
+static int64_t updateExtractedPower(STRUCTURE *psBuilding);
 
 //returns the relevant list based on OffWorld or OnWorld
 static STRUCTURE* powerStructList(UBYTE player);
 
-PLAYER_POWER		asPower[MAX_PLAYERS];
+typedef struct _player_power
+{
+	// All fields are 32.32 fixed point.
+	int64_t currentPower;         ///< The current amount of power avaialble to the player.
+	int64_t powerProduced;        ///< Power produced
+	int64_t powerRequested;       ///< Power requested
+	int64_t economyThrottle;      ///< Which percentage of the requested power is actually delivered
+} PLAYER_POWER;
+
+static PLAYER_POWER asPower[MAX_PLAYERS];
 
 /*allocate the space for the playerPower*/
 BOOL allocPlayerPower(void)
@@ -83,15 +94,20 @@ void clearPlayerPower(void)
 		asPower[player].currentPower = 0;
 		asPower[player].powerProduced = 0;
 		asPower[player].powerRequested = 0;
-		asPower[player].economyThrottle = 1;
+		asPower[player].economyThrottle = FP_ONE;
 	}
 	nextPowerSystemUpdate = 0;
+}
+
+static void syncDebugEconomy(unsigned player, char ch)
+{
+	syncDebug("%c economy%u = %"PRId64",%"PRId64",%"PRId64",%"PRId64"", ch, player, asPower[player].currentPower, asPower[player].economyThrottle, asPower[player].powerProduced, asPower[player].powerRequested);
 }
 
 void throttleEconomy(void)
 {
 	int player;
-	float newThrottle;
+	int64_t newThrottle;
 
 	if (gameTime < nextPowerSystemUpdate)
 	{
@@ -101,29 +117,33 @@ void throttleEconomy(void)
 
 	for (player = 0; player < MAX_PLAYERS; player++)
 	{
-		if (asPower[player].currentPower > asPower[player].powerRequested ||
+		syncDebugEconomy(player, '<');
+
+		if (asPower[player].currentPower >= asPower[player].powerRequested ||
 		    asPower[player].powerRequested <= asPower[player].powerProduced)
 		{
 			// we have enough power
-			newThrottle = 1;
+			newThrottle = FP_ONE;
 		}
 		else
 		{
-			newThrottle = (asPower[player].powerProduced + asPower[player].currentPower) / asPower[player].powerRequested;
+			newThrottle = (asPower[player].powerProduced + asPower[player].currentPower) / (asPower[player].powerRequested/FP_ONE + 1);
 		}
 		if (newThrottle <= asPower[player].economyThrottle)
 		{
 			// quickly slow down
 			asPower[player].economyThrottle = newThrottle;
 		}
-		else if (asPower[player].powerRequested * asPower[player].economyThrottle * 2 < asPower[player].currentPower)
+		else if ((asPower[player].powerRequested/FP_ONE + 1) * asPower[player].economyThrottle * 2 < asPower[player].currentPower)
 		{
 			// slowly speed up
-			asPower[player].economyThrottle += 0.02;
+			asPower[player].economyThrottle += FP_ONE/50;
 		}
-		CLIP(asPower[player].economyThrottle, 0, 1);
+		CLIP(asPower[player].economyThrottle, 0, FP_ONE);
 		asPower[player].powerProduced = 0;
 		asPower[player].powerRequested = 0;
+
+		syncDebugEconomy(player, '>');
 	}
 }
 
@@ -134,7 +154,7 @@ void releasePlayerPower(void)
 }
 
 /*check the current power - if enough return true, else return false */
-BOOL checkPower(int player, float quantity)
+BOOL checkPower(int player, uint32_t quantity)
 {
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Bad player (%d)", player);
 
@@ -144,49 +164,37 @@ BOOL checkPower(int player, float quantity)
 		return true;
 	}
 
-	if (asPower[player].currentPower >= quantity)
-	{
-		return true;
-	}
-	return false;
+	return asPower[player].currentPower >= quantity*FP_ONE;
 }
 
-void usePower(int player, float quantity)
+void usePower(int player, uint32_t quantity)
 {
 	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Bad player (%d)", player);
-	asPower[player].currentPower = MAX(0, asPower[player].currentPower - quantity);
+	syncDebug("usePower%d %"PRId64"-=%u", player, asPower[player].currentPower, quantity);
+	asPower[player].currentPower = MAX(0, asPower[player].currentPower - quantity*FP_ONE);
 }
 
-void addPower(int player, float quantity)
+void addPower(int player, int32_t quantity)
 {
 	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Bad player (%d)", player);
-	asPower[player].currentPower = MAX(0, asPower[player].currentPower + quantity);
-	if (asPower[player].currentPower > MAX_POWER)
-	{
-		asPower[player].currentPower = MAX_POWER;
-	}
+	syncDebug("addPower%d %"PRId64"+=%d", player, asPower[player].currentPower, quantity);
+	asPower[player].currentPower += quantity*FP_ONE;
+	CLIP(asPower[player].currentPower, 0, MAX_POWER*FP_ONE);
 }
 
 /*resets the power calc flag for all players*/
 void powerCalc(BOOL on)
 {
-	if (on)
-	{
-		powerCalculated = true;
-	}
-	else
-	{
-		powerCalculated = false;
-	}
+	powerCalculated = on;
 }
 
 /** Each Resource Extractor yields EXTRACT_POINTS per second FOREVER */
-float updateExtractedPower(STRUCTURE	*psBuilding)
+static int64_t updateExtractedPower(STRUCTURE *psBuilding)
 {
 	RES_EXTRACTOR		*pResExtractor;
-	UDWORD				timeDiff;
+	SDWORD				timeDiff;
 	UBYTE			modifier;
-	float pointsToAdd,extractedPoints;
+	int64_t                 extractedPoints;
 
 	pResExtractor = (RES_EXTRACTOR *) psBuilding->pFunctionality;
 	extractedPoints = 0;
@@ -195,7 +203,12 @@ float updateExtractedPower(STRUCTURE	*psBuilding)
 	//and has got some power to extract
 	if (pResExtractor->active)
 	{
-		timeDiff = gameTime - pResExtractor->timeLastUpdated;
+		// if the extractor hasn't been updated recently, now would be a good time.
+		if (pResExtractor->timeLastUpdated < 20 && gameTime >= 20)
+		{
+			pResExtractor->timeLastUpdated = gameTime;
+		}
+		timeDiff = (int)gameTime - (int)pResExtractor->timeLastUpdated;
 		// Add modifier according to difficulty level
 		if (getDifficultyLevel() == DL_EASY)
 		{
@@ -210,10 +223,19 @@ float updateExtractedPower(STRUCTURE	*psBuilding)
 			modifier = NORMAL_POWER_MOD;
 		}
 		// include modifier as a %
-		pointsToAdd = ((float)modifier * EXTRACT_POINTS * timeDiff) / (GAME_TICKS_PER_SEC * 100);
+		extractedPoints = (modifier * EXTRACT_POINTS * timeDiff)*FP_ONE / (GAME_TICKS_PER_SEC * 100);
+
+		if (timeDiff > GAME_TICKS_PER_SEC || -timeDiff > GAME_TICKS_PER_SEC)
+		{
+			// extractor is not in the right time zone
+			// we have a maximum time skip of less than a second, so this can't be caused by lag
+			ASSERT(false, "Oil derrick out of sync.");
+			extractedPoints = 0;
+		}
 
 		pResExtractor->timeLastUpdated = gameTime;
-		extractedPoints += pointsToAdd;
+
+		syncDebug("updateExtractedPower%d = %"PRId64"", psBuilding->player, extractedPoints);
 	}
 	ASSERT(extractedPoints >= 0, "extracted negative amount of power");
 	return extractedPoints;
@@ -237,7 +259,7 @@ STRUCTURE* powerStructList(UBYTE player)
 void updatePlayerPower(UDWORD player)
 {
 	STRUCTURE		*psStruct;//, *psList;
-	float powerBefore = asPower[player].currentPower;
+	int64_t powerBefore = asPower[player].currentPower;
 
 	ASSERT(player < MAX_PLAYERS, "updatePlayerPower: Bad player");
 
@@ -251,13 +273,14 @@ void updatePlayerPower(UDWORD player)
 		}
 	}
 	asPower[player].powerProduced += asPower[player].currentPower - powerBefore;
+	syncDebug("updatePlayerPower%u %"PRId64"->%"PRId64"", player, powerBefore, asPower[player].currentPower);
 }
 
 /* Updates the current power based on the extracted power and a Power Generator*/
 void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player)
 {
 	int i;
-	float extractedPower;
+	int64_t extractedPower;
 
 	ASSERT(player < MAX_PLAYERS, "updateCurrentPower: Bad player");
 
@@ -281,22 +304,39 @@ void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player)
 
 	asPower[player].currentPower += (extractedPower * psPowerGen->multiplier) / 100;
 	ASSERT(asPower[player].currentPower >= 0, "negative power");
-	if (asPower[player].currentPower > MAX_POWER)
+	if (asPower[player].currentPower > MAX_POWER*FP_ONE)
 	{
-		asPower[player].currentPower = MAX_POWER;
+		asPower[player].currentPower = MAX_POWER*FP_ONE;
 	}
 }
 
 // only used in multiplayer games.
-void setPower(int player, float power)
+void setPower(unsigned player, int32_t power)
 {
 	ASSERT(player < MAX_PLAYERS, "setPower: Bad player (%u)", player);
 
+	syncDebug("setPower%d %"PRId64"->%d", player, asPower[player].currentPower, power);
+	asPower[player].currentPower = power*FP_ONE;
+	ASSERT(asPower[player].currentPower >= 0, "negative power");
+}
+
+void setPrecisePower(unsigned player, int64_t power)
+{
+	ASSERT(player < MAX_PLAYERS, "setPower: Bad player (%u)", player);
+
+	syncDebug("setPower%d %"PRId64"->%"PRId64"", player, asPower[player].currentPower, power);
 	asPower[player].currentPower = power;
 	ASSERT(asPower[player].currentPower >= 0, "negative power");
 }
 
-float getPower(int player)
+int32_t getPower(unsigned player)
+{
+	ASSERT(player < MAX_PLAYERS, "setPower: Bad player (%u)", player);
+
+	return asPower[player].currentPower >> 32;
+}
+
+int64_t getPrecisePower(unsigned player)
 {
 	ASSERT(player < MAX_PLAYERS, "setPower: Bad player (%u)", player);
 
@@ -399,52 +439,29 @@ BOOL droidUsesPower(DROID *psDroid)
     return bUsesPower;
 }
 
-float requestPower(int player, float amount)
-{
-	// this is the amount that we are willing to give
-	float amountConsidered = amount * asPower[player].economyThrottle;
-
-	if (!powerCalculated)
-	{
-		return amount; // it's all yours
-	}
-
-	// keep track on how much energy we could possibly spend
-	asPower[player].powerRequested += amount;
-	
-	if (amountConsidered <= asPower[player].currentPower)
-	{
-		// you can have it
-		asPower[player].currentPower -= amountConsidered;
-		return amountConsidered;
-	}
-	return 0; // no power this frame
-}
-
 // Why is there randomity in the power code?
-static int randomRound(float val)
+static int randomRound(int64_t val)
 {
-	int intPart = val;
-	float floatPart = val - intPart;
-	if (gameRand(100) < floatPart*100)
-	{
-		return intPart + 1;
-	}
-	return intPart;
+	return (val + gameRandU32()) >> 32;
 }
 
-int requestPowerFor(int player, float amount, int points)
+int requestPowerFor(int player, int32_t amount, int points)
+{
+	return requestPrecisePowerFor(player, amount*FP_ONE, points);
+}
+
+int requestPrecisePowerFor(int player, int64_t amount, int points)
 {
 	int pointsConsidered = randomRound(points * asPower[player].economyThrottle);
 	// only what it needs for the n amount of points we consider giving
-	float amountConsidered;
+	int64_t amountConsidered;
 
-	if (points == 0 || amount < 0.01 || !powerCalculated)
+	if (points == 0 || amount <= 0 || !powerCalculated)
 	{
 		return points;
 	}
 
-	amountConsidered = amount * (float) pointsConsidered / points;
+	amountConsidered = amount * pointsConsidered / points;
 
 	// keep track on how much energy we could possibly spend
 	asPower[player].powerRequested += amount;
@@ -453,8 +470,9 @@ int requestPowerFor(int player, float amount, int points)
 	{
 		// you can have it
 		asPower[player].currentPower -= amountConsidered;
+		syncDebug("requestPrecisePowerFor%d give%d,want%d", player, pointsConsidered, points);
 		return pointsConsidered;
 	}
+	syncDebug("requestPrecisePowerFor%d giveNone,want%d", player, points);
 	return 0; // no power this frame
 }
-

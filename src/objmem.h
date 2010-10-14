@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -37,6 +37,7 @@ extern STRUCTURE		*apsStructLists[MAX_PLAYERS];
 extern FEATURE			*apsFeatureLists[MAX_PLAYERS];
 extern FLAG_POSITION		*apsFlagPosLists[MAX_PLAYERS];
 extern BASE_OBJECT		*apsSensorList[1];
+extern BASE_OBJECT		*apsOilList[1];
 
 /* The list of destroyed objects */
 extern BASE_OBJECT	*psDestroyedObj;
@@ -49,6 +50,11 @@ extern void objmemShutdown(void);
 
 /* General housekeeping for the object system */
 extern void objmemUpdate(void);
+
+/// Generates a new, (hopefully) unique object id.
+uint32_t generateNewObjectId(void);
+/// Generates a new, (hopefully) unique object id, which all clients agree on.
+uint32_t generateSynchronisedObjectId(void);
 
 /* Create a new droid */
 extern DROID* createDroid(UDWORD player);

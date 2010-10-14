@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -20,18 +20,16 @@
 #ifndef _tex_
 #define _tex_
 
+#include "lib/framework/opengl.h"
 #include "png_util.h"
-#if defined __APPLE__ && defined __MACH__
-#include <OpenGL/gl.h>
-#else
-#include <GL/gl.h>
-#endif
 
 //*************************************************************************
 
 #define iV_TEX_MAX 128
 #define iV_TEX_INVALID -1
 #define iV_TEXNAME_MAX 64
+
+#define iV_TEXNAME_TCSUFFIX "_tcmask"
 
 //*************************************************************************
 
@@ -56,13 +54,14 @@ extern int iV_GetTexture(const char *filename);
 extern void iV_unloadImage(iV_Image *image);
 extern unsigned int iV_getPixelFormat(const iV_Image *image);
 
-extern int pie_ReplaceTexPage(iV_Image *s, const char *texPage, int maxTextureSize);
-extern int pie_AddTexPage(iV_Image *s, const char *filename, int slot, int maxTextureSize);
+extern int pie_ReplaceTexPage(iV_Image *s, const char *texPage, int maxTextureSize, bool useMipmaping);
+extern int pie_AddTexPage(iV_Image *s, const char *filename, int slot, int maxTextureSize, bool useMipmaping);
 extern void pie_TexInit(void);
 
 extern void pie_InitSkybox(SDWORD pageNum);
 
 extern void pie_MakeTexPageName(char * filename);
+extern void pie_MakeTexPageTCMaskName(char * filename);
 
 //*************************************************************************
 

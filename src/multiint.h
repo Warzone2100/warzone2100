@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -24,6 +24,9 @@
 #ifndef __INCLUDED_SRC_MULTIINT_H__
 #define __INCLUDED_SRC_MULTIINT_H__
 
+#include "lib/netplay/netplay.h"
+#include "lib/widget/widgbase.h"
+
 #ifdef __cplusplus
 extern "C"
 {
@@ -38,6 +41,8 @@ extern	void	intProcessConnection	(UDWORD id);
 
 extern	void	runGameFind				(void);
 extern	void	startGameFind			(void);
+
+void updateLimitFlags(void);
 
 extern	void	runMultiOptions			(void);
 extern	BOOL	startMultiOptions		(BOOL bReenter);
@@ -60,7 +65,6 @@ void loadMapPreview(bool hideInterface);
 #define CON_CONTYPES_FORM	10104
 #define CON_TYPESID_START	10105
 #define CON_TYPESID_END		10128
-#define CON_TYPESID_MORE	10129
 
 #define CON_SETTINGS		10130
 #define CON_SETTINGS_LABEL	10131
@@ -263,6 +267,10 @@ void loadMapPreview(bool hideInterface);
 #define MULTIOP_PASSWORD	920010
 #define MULTIOP_PASSWORD_BUT 920012
 #define MULTIOP_PASSWORD_EDIT 920013
+
+#define MULTIOP_NO_SOMETHING            10331  // Up to 10340 reserved for future use.
+#define MULTIOP_NO_SOMETHINGX           3
+#define MULTIOP_NO_SOMETHINGY           MROW5
 
 // ///////////////////////////////
 // Many Button Variations..

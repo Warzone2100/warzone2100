@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -48,7 +48,7 @@ static unsigned short LoadTextureFile(const char *FileName)
 	}
 
 	debug(LOG_TEXTURE, "LoadTextureFile: had to upload texture!");
-	return pie_AddTexPage(pSprite, FileName, 0, 0);
+	return pie_AddTexPage(pSprite, FileName, 0, 0, true);
 }
 
 IMAGEFILE *iV_LoadImageFile(const char *fileName)

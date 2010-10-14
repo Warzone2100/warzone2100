@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -66,7 +66,6 @@ static SDWORD			visLevelInc, visLevelDec;
 typedef struct {
 	bool rayStart; // Whether this is the first point on the ray
 	const bool wallsBlock; // Whether walls block line of sight
-	const int targetDistSq; // The distance to the ray target, squared
 	const int startHeight; // The height at the view point
 	const Vector2i final; // The final tile of the ray cast
 	int lastHeight, lastDist; // The last height and distance
@@ -94,10 +93,10 @@ BOOL visInitialise(void)
 // update the visibility change levels
 void visUpdateLevel(void)
 {
-	visLevelIncAcc += timeAdjustedIncrement(VIS_LEVEL_INC, true);
+	visLevelIncAcc += gameTimeAdjustedIncrement(VIS_LEVEL_INC);
 	visLevelInc = visLevelIncAcc;
 	visLevelIncAcc -= visLevelInc;
-	visLevelDecAcc += timeAdjustedIncrement(VIS_LEVEL_DEC, true);
+	visLevelDecAcc += gameTimeAdjustedIncrement(VIS_LEVEL_DEC);
 	visLevelDec = visLevelDecAcc;
 	visLevelDecAcc -= visLevelDec;
 }
@@ -164,9 +163,9 @@ static void doWaveTerrain(int sx, int sy, int sz, unsigned radius, int rayPlayer
 #define MAX_WAVECAST_LIST_SIZE 1360  // Trivial upper bound to what a fully upgraded WSS can use (its number of angles). Should probably be some factor times the maximum possible radius. Is probably a lot more than needed. Tested to need at least 180.
 	int heights[2][MAX_WAVECAST_LIST_SIZE];
 	int angles[2][MAX_WAVECAST_LIST_SIZE + 1];
-	int readListSize, readListPos, writeListPos = 0;
+	int readListSize = 0, readListPos = 0, writeListPos = 0;  // readListSize, readListPos dummy initialisations.
 	int readList = 0;  // Reading from this list, writing to the other. Could also initialise to rand()%2.
-	int lastHeight;
+	int lastHeight = 0;  // lastHeight dummy initialisation.
 	int lastAngle = 0x7FFFFFFF;
 
 	// Start with full vision of all angles. (If someday wanting to make droids that can only look in one direction, change here, after getting the original angle values saved in the wavecast table.)
@@ -229,7 +228,6 @@ static void doWaveTerrain(int sx, int sy, int sz, unsigned radius, int rayPlayer
 		if (seen)
 		{
 			// Can see this tile.
-			psTile->tileVisBits |= alliancebits[rayPlayer];                                 // Share vision with allies
 			psTile->tileExploredBits |= alliancebits[rayPlayer];                            // Share exploration with allies too
 			visMarkTile(mapX, mapY, psTile, rayPlayer, recordTilePos, lastRecordTilePos);   // Mark this tile as seen by our sensor
 		}
@@ -237,10 +235,9 @@ static void doWaveTerrain(int sx, int sy, int sz, unsigned radius, int rayPlayer
 }
 
 /* The los ray callback */
-static bool rayLOSCallback(Vector3i pos, int distSq, void *data)
+static bool rayLOSCallback(Vector3i pos, int32_t dist, void *data)
 {
 	VisibleObjectHelp_t * help = data;
-	int dist = sqrtf(distSq);
 
 	ASSERT(pos.x >= 0 && pos.x < world_coord(mapWidth)
 		&& pos.y >= 0 && pos.y < world_coord(mapHeight),
@@ -262,12 +259,6 @@ static bool rayLOSCallback(Vector3i pos, int distSq, void *data)
 
 	help->lastDist = dist;
 	help->lastHeight = map_Height(pos.x, pos.y);
-
-	// See if the ray has reached the target
-	if (distSq >= help->targetDistSq)
-	{
-		return false;
-	}
 
 	if (help->wallsBlock)
 	{
@@ -301,7 +292,7 @@ void visRemoveVisibility(BASE_OBJECT *psObj)
 			const TILEPOS pos = psObj->watchedTiles[i];
 			MAPTILE *psTile = mapTile(pos.x, pos.y);
 
-			ASSERT(psTile->watchers > 0, "Not watching watched tile (%d, %d)", (int)pos.x, (int)pos.y);
+			ASSERT(psTile->watchers[psObj->player] > 0, "Not watching watched tile (%d, %d)", (int)pos.x, (int)pos.y);
 			psTile->watchers[psObj->player]--;
 			if (psTile->watchers[psObj->player] == 0)
 			{
@@ -336,7 +327,7 @@ void visTilesUpdate(BASE_OBJECT *psObj)
 	{
 		STRUCTURE * psStruct = (STRUCTURE *)psObj;
 		if (psStruct->status != SS_BUILT ||
-		    psStruct->pStructureType->type == REF_WALL || psStruct->pStructureType->type == REF_WALLCORNER)
+		    psStruct->pStructureType->type == REF_WALL || psStruct->pStructureType->type == REF_WALLCORNER || psStruct->pStructureType->type == REF_GATE)
 		{
 			// unbuilt structures and walls do not confer visibility.
 			return;
@@ -355,6 +346,25 @@ void visTilesUpdate(BASE_OBJECT *psObj)
 	}
 }
 
+/*reveals all the terrain in the map*/
+void revealAll(UBYTE player)
+{
+	UWORD   i, j;
+	MAPTILE	*psTile;
+	
+	//reveal all tiles
+	for(i=0; i<mapWidth; i++)
+	{
+		for(j=0; j<mapHeight; j++)
+		{
+			psTile = mapTile(i,j);
+			psTile->tileExploredBits |= alliancebits[player];
+		}
+	}
+	
+	//the objects gets revealed in processVisibility()
+}
+
 /* Check whether psViewer can see psTarget.
  * psViewer should be an object that has some form of sensor,
  * currently droids and structures.
@@ -363,8 +373,8 @@ void visTilesUpdate(BASE_OBJECT *psObj)
  */
 int visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool wallsBlock)
 {
-	Vector3i pos, dest, diff;
-	int range, distSq;
+	Vector3i diff;
+	int      range, dist;
 	int	power;
 
 	ASSERT(psViewer != NULL, "Invalid viewer pointer!");
@@ -375,10 +385,7 @@ int visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool
 		return 0;
 	}
 
-	// FIXME HACK Needed since we got those ugly Vector3uw floating around in BASE_OBJECT...
-	pos = Vector3uw_To3i(psViewer->pos);
-	dest = Vector3uw_To3i(psTarget->pos);
-	diff = Vector3i_Sub(dest, pos);
+	diff = Vector3i_Sub(psTarget->pos, psViewer->pos);
 	range = objSensorRange(psViewer);
 
 	/* Get the sensor Range and power */
@@ -411,6 +418,7 @@ int visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool
 			}
 
 			if (psStruct->pStructureType->type == REF_WALL
+				|| psStruct->pStructureType->type == REF_GATE
 				|| psStruct->pStructureType->type == REF_WALLCORNER)
 			{
 				return 0;
@@ -447,14 +455,14 @@ int visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool
 	}
 
 	/* First see if the target is in sensor range */
-	distSq = Vector3i_ScalarP(diff, diff);
-	if (distSq == 0)
+	dist = iHypot(diff.x, diff.y);
+	if (dist == 0)
 	{
 		// Should never be on top of each other, but ...
 		return UBYTE_MAX;
 	}
 
-	if (distSq > (range*range))
+	if (dist > range)
 	{
 		/* Out of sensor range */
 		return 0;
@@ -463,11 +471,11 @@ int visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool
 	power = adjustPowerByRange(psViewer->pos.x, psViewer->pos.y, psTarget->pos.x, psTarget->pos.y, range, objSensorPower(psViewer));
 	{
 		// initialise the callback variables
-		VisibleObjectHelp_t help = { true, wallsBlock, distSq, pos.z + visObjHeight(psViewer), { map_coord(dest.x), map_coord(dest.y) }, 0, 0, -UBYTE_MAX * GRAD_MUL * ELEVATION_SCALE, 0, { 0, 0 } };
+		VisibleObjectHelp_t help = { true, wallsBlock, psViewer->pos.z + visObjHeight(psViewer), { map_coord(psTarget->pos.x), map_coord(psTarget->pos.y) }, 0, 0, -UBYTE_MAX * GRAD_MUL * ELEVATION_SCALE, 0, { 0, 0 } };
 		int targetGrad, top;
 
 		// Cast a ray from the viewer to the target
-		rayCast(pos, diff, range, rayLOSCallback, &help);
+		rayCast(psViewer->pos, iAtan2(diff.x, diff.y), dist, rayLOSCallback, &help);
 
 		if (gWall != NULL && gNumWalls != NULL) // Out globals are set
 		{
@@ -476,7 +484,7 @@ int visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool
 		}
 
 		// See if the target can be seen
-		top = dest.z + visObjHeight(psTarget) - help.startHeight;
+		top = psTarget->pos.z + visObjHeight(psTarget) - help.startHeight;
 		targetGrad = top * GRAD_MUL / MAX(1, help.lastDist);
 
 		if (targetGrad >= help.currGrad)
@@ -575,14 +583,7 @@ void processVisibilitySelf(BASE_OBJECT *psObj)
 		}
 	}
 
-	// Remove any targetting locks from last update.
-	switch (psObj->type)
-	{
-		default: break;
-		case OBJ_DROID:     ((DROID     *)psObj)->bTargetted = false; break;
-		case OBJ_STRUCTURE: ((STRUCTURE *)psObj)->targetted  = 0;     break;  // Long live consistency.
-		case OBJ_FEATURE:   ((FEATURE   *)psObj)->bTargetted = false; break;
-	}
+	psObj->bTargetted = false;	// Remove any targetting locks from last update.
 }
 
 // Calculate which objects we can see. Better to call after processVisibilitySelf, since that check is cheaper.
@@ -764,7 +765,6 @@ MAPTILE		*psTile;
 			psTile = mapTile(mapX+i,mapY+j);
 			if (psTile)
 			{
-				psTile->tileVisBits |= alliancebits[player];
 				psTile->tileExploredBits |= alliancebits[player];
 			}
 		}
@@ -776,8 +776,8 @@ MAPTILE		*psTile;
  */
 bool lineOfFire(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool wallsBlock)
 {
-	Vector3i pos, dest, diff;
-	int range, distSq;
+	Vector3i diff;
+	int      dist;
 
 	ASSERT(psViewer != NULL, "Invalid shooter pointer!");
 	ASSERT(psTarget != NULL, "Invalid target pointer!");
@@ -786,14 +786,10 @@ bool lineOfFire(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool w
 		return false;
 	}
 
-	// FIXME HACK Needed since we got those ugly Vector3uw floating around in BASE_OBJECT...
-	pos = Vector3uw_To3i(psViewer->pos);
-	dest = Vector3uw_To3i(psTarget->pos);
-	diff = Vector3i_Sub(dest, pos);
-	range = objSensorRange(psViewer);
+	diff = Vector3i_Sub(psTarget->pos, psViewer->pos);
 
-	distSq = Vector3i_ScalarP(diff, diff);
-	if (distSq == 0)
+	dist = iHypot(diff.x, diff.y);
+	if (dist == 0)
 	{
 		// Should never be on top of each other, but ...
 		return true;
@@ -801,11 +797,11 @@ bool lineOfFire(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool w
 
 	// initialise the callback variables
 	{
-		VisibleObjectHelp_t help = { true, wallsBlock, distSq, pos.z + visObjHeight(psViewer), { map_coord(dest.x), map_coord(dest.y) }, 0, 0, -UBYTE_MAX * GRAD_MUL * ELEVATION_SCALE, 0, { 0, 0 } };
+		VisibleObjectHelp_t help = { true, wallsBlock, psViewer->pos.z + visObjHeight(psViewer), { map_coord(psTarget->pos.x), map_coord(psTarget->pos.y) }, 0, 0, -UBYTE_MAX * GRAD_MUL * ELEVATION_SCALE, 0, { 0, 0 } };
 		int targetGrad, top;
 
 		// Cast a ray from the viewer to the target
-		rayCast(pos, diff, range, rayLOSCallback, &help);
+		rayCast(psViewer->pos, iAtan2(diff.x, diff.y), dist, rayLOSCallback, &help);
 
 		if (gWall != NULL && gNumWalls != NULL) // Out globals are set
 		{
@@ -814,7 +810,7 @@ bool lineOfFire(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool w
 		}
 
 		// See if the target can be seen
-		top = dest.z + visObjHeight(psTarget) - help.startHeight;
+		top = psTarget->pos.z + visObjHeight(psTarget) - help.startHeight;
 		targetGrad = top * GRAD_MUL / MAX(1, help.lastDist);
 
 		return targetGrad >= help.currGrad;

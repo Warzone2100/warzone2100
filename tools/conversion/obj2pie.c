@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2007-2009  Warzone Resurrection Project
+	Copyright (C) 2007-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -17,9 +17,12 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
+// compile command: gcc obj2pie.c -o obj2pie -lm
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 #ifndef WIN32
 #include <stdbool.h>
@@ -36,19 +39,21 @@ static char *output_file = "";
 static char *texture_file;
 static bool swapYZ = true;
 static bool reverseWinding = true;
-static bool invertUV = true;
-static unsigned int baseTexFlags = 200;
+static bool invertV = true;
+static int pieVersion = 3;
+static bool twoSided = false;
+static unsigned int pieType = 0x200;
 static float scaleFactor = 1.0f;
 
-typedef struct _vector3i
+typedef struct _vector3f
 {
-	int x, y, z;
-} vector3i;
+	float x, y, z;
+} vector3f;
 
-typedef struct _vector2i
+typedef struct _vector2f
 {
-	int u, v;
-} vector2i;
+	float u, v;
+} vector2f;
 
 typedef struct _face
 {
@@ -57,56 +62,65 @@ typedef struct _face
 	int index_c_vertex, index_c_texture;
 } face;
 
-static vector3i *points;
+static vector3f *points;
 static int count_points;
 
-static vector2i *uvcoords;
+static vector2f *uvcoords;
 static int count_uvcoords;
 
 static face *faces;
 static int count_faces;
 
-void addpoint(int x, int y, int z)
+void addpoint(float x, float y, float z)
 {
 	if (points == NULL)
 	{
-		points = (vector3i*) malloc(sizeof(vector3i));
+		points = (vector3f*) malloc(sizeof(vector3f));
 		count_points = 1;
 	}
 	else
 	{
 		count_points++;
-		points = (vector3i*)realloc(points, count_points * sizeof(vector3i));
+		points = (vector3f*)realloc(points, count_points * sizeof(vector3f));
 	}
 
-	points[count_points-1].x = x;
-	points[count_points-1].y = y;
-	points[count_points-1].z = z;
+	if( pieVersion == 2)
+	{
+		points[count_points-1].x = rintf(x);
+		points[count_points-1].y = rintf(y);
+		points[count_points-1].z = rintf(z);
+	}
+	else // pieVersion == 3
+	{
+		points[count_points-1].x = x;
+		points[count_points-1].y = y;
+		points[count_points-1].z = z;
+	}
 }
 
-void adduvcoord(int u, int v)
+void adduvcoord(float u, float v)
 {
-	if (uvcoords == NULL)
+	if (uvcoords == NULL )
 	{
-		uvcoords = (vector2i*) malloc(sizeof(vector2i));
+		uvcoords = (vector2f*) malloc(sizeof(vector2f));
 		count_uvcoords = 1;
 	}
 	else
 	{
 		count_uvcoords++;
-		uvcoords = (vector2i*)realloc(uvcoords, count_uvcoords * sizeof(vector2i));
+		uvcoords = (vector2f*)realloc(uvcoords, count_uvcoords * sizeof(vector2f));
 	}
 
-	if (u > 255)
+	if( pieVersion == 2)
 	{
-		u = 255;
+		uvcoords[count_uvcoords-1].u = rintf(u*256.0f);
+		uvcoords[count_uvcoords-1].v = rintf(v*256.0f);;
 	}
-	if (v > 255)
+	else // pieVersion == 3
 	{
-		v = 255;
+		uvcoords[count_uvcoords-1].u = u;
+		uvcoords[count_uvcoords-1].v = v;
 	}
-	uvcoords[count_uvcoords-1].u = u;
-	uvcoords[count_uvcoords-1].v = v;
 }
 
 void addface(int index_a_vertex, int index_a_texture, int index_b_vertex, int index_b_texture, int index_c_vertex, int index_c_texture)
@@ -121,7 +135,6 @@ void addface(int index_a_vertex, int index_a_texture, int index_b_vertex, int in
 		count_faces++;
 		faces = (face*) realloc(faces, count_faces * sizeof(face));
 	}
-
 	faces[count_faces-1].index_a_vertex = index_a_vertex;
 	faces[count_faces-1].index_a_texture = index_a_texture;
 	faces[count_faces-1].index_b_vertex = index_b_vertex;
@@ -134,8 +147,10 @@ void readobj(FILE *input)
 {
 	char buffer[256];
 	int index_a_vertex, index_a_texture, index_b_vertex, index_b_texture, index_c_vertex, index_c_texture;
+	int ignored_a_normal, ignored_b_normal, ignored_c_normal;
 	float u, v;
 	float x, y, z;
+	bool normalsDetected = false;
 
 	if (input == NULL)
 	{
@@ -151,26 +166,55 @@ void readobj(FILE *input)
 	faces = NULL;
 	count_faces = 0;
 
-	while (!feof(input))
+	while (fgets(buffer, 256, input) != NULL)
 	{
-		fgets(buffer, 256, input);
-
-		if (buffer[0] == 'v' && buffer[1] != 't')
+		if (buffer[0] == 'v' && buffer[1] == 'n')
 		{
-			sscanf(&buffer[2], "%f %f %f", &x, &y, &z);
-			addpoint((int)(x*scaleFactor), (int)(y*scaleFactor), (int)(z*scaleFactor));
+			normalsDetected = true;
 		}
 		else if (buffer[0] == 'v' && buffer[1] == 't')
 		{
 			sscanf(&buffer[3], "%f %f", &u, &v);
-			if (invertUV)
+			if (invertV)
 				v = 1.0f - v;
-			adduvcoord((int)(u*256.f), (int)(v*256.f));
+			adduvcoord(u,v);
 		}
-		else if (buffer[0] == 'f')
+		else if (buffer[0] == 'v')		// && buffer[1] != 't' && buffer[1] != 'n'
 		{
-			sscanf(&buffer[2], "%d/%d %d/%d %d/%d", &index_a_vertex, &index_a_texture, &index_b_vertex, &index_b_texture, &index_c_vertex, &index_c_texture);
-			addface(index_a_vertex - 1, index_a_texture - 1, index_b_vertex - 1, index_b_texture - 1, index_c_vertex - 1, index_c_texture - 1);
+			sscanf(&buffer[2], "%f %f %f", &x, &y, &z);
+			addpoint(x*scaleFactor,
+					 (swapYZ?z:y)*scaleFactor,
+					 (swapYZ?y:z)*scaleFactor);
+		}
+		else if (buffer[0] == 'f' )
+		{
+			if(normalsDetected)
+			{
+				sscanf(&buffer[2], "%d/%d/%d %d/%d/%d %d/%d/%d",
+					   &index_a_vertex, &index_a_texture, &ignored_a_normal,
+					   &index_b_vertex, &index_b_texture, &ignored_b_normal,
+					   &index_c_vertex, &index_c_texture, &ignored_c_normal);
+			}
+			else
+			{
+				sscanf(&buffer[2], "%d/%d %d/%d %d/%d",
+					   &index_a_vertex, &index_a_texture,
+					   &index_b_vertex, &index_b_texture,
+					   &index_c_vertex, &index_c_texture);
+			}
+
+			if(reverseWinding || twoSided)
+			{
+				addface(index_c_vertex - 1, index_c_texture - 1,
+						index_b_vertex - 1, index_b_texture - 1,
+						index_a_vertex - 1, index_a_texture - 1);
+			}
+			if(!reverseWinding || twoSided)
+			{
+				addface(index_a_vertex - 1, index_a_texture - 1,
+						index_b_vertex - 1, index_b_texture - 1,
+						index_c_vertex - 1, index_c_texture - 1);
+			}
 		}
 	}
 }
@@ -185,53 +229,51 @@ void writepie(FILE *output)
 		return;
 	}
 
-	fprintf(output, "PIE 2\nTYPE 200\n");
+	fprintf(output, "PIE %d\nTYPE %x\n", pieVersion, pieType);
 	fprintf(output, "TEXTURE 0 %s 256 256\n", texture_file);
 	fprintf(output, "LEVELS 1\nLEVEL 1\n");
 
 	fprintf(output, "POINTS %d\n", count_points);
 	for (i = 0;i < count_points;i++)
 	{
-		if (swapYZ)
+		if( pieVersion == 2)
 		{
-			fprintf(output, "\t%d %d %d\n", points[i].x, points[i].z, points[i].y);
+			fprintf(output, "\t%d %d %d\n", (int)points[i].x, (int)points[i].y, (int)points[i].z);
 		}
-		else
+		else // pieVersion == 3
 		{
-			fprintf(output, "\t%d %d %d\n", points[i].x, points[i].y, points[i].z);
+			fprintf(output, "\t%f %f %f\n", points[i].x, points[i].y, points[i].z);
 		}
 	}
 
 	fprintf(output, "POLYGONS %d\n", count_faces);
 	for (i = 0;i < count_faces;i++)
 	{
-		if (reverseWinding)
+		if(pieVersion == 2)
 		{
-			fprintf(output, "\t%d 3 %d %d %d %d %d %d %d %d %d\n",
-			        baseTexFlags,
-			        faces[i].index_c_vertex,
-			        faces[i].index_b_vertex,
-			        faces[i].index_a_vertex,
-			        uvcoords[faces[i].index_c_texture].u,
-			        uvcoords[faces[i].index_c_texture].v,
-			        uvcoords[faces[i].index_b_texture].u,
-			        uvcoords[faces[i].index_b_texture].v,
-			        uvcoords[faces[i].index_a_texture].u,
-			        uvcoords[faces[i].index_a_texture].v);
+			fprintf(output, "\t200 3 %d %d %d %d %d %d %d %d %d\n",
+					faces[i].index_a_vertex,
+					faces[i].index_b_vertex,
+					faces[i].index_c_vertex,
+					(int)uvcoords[faces[i].index_a_texture].u,
+					(int)uvcoords[faces[i].index_a_texture].v,
+					(int)uvcoords[faces[i].index_b_texture].u,
+					(int)uvcoords[faces[i].index_b_texture].v,
+					(int)uvcoords[faces[i].index_c_texture].u,
+					(int)uvcoords[faces[i].index_c_texture].v);
 		}
-		else
+		else // pieVersion == 3
 		{
-			fprintf(output, "\t%d 3 %d %d %d %d %d %d %d %d %d\n",
-			        baseTexFlags,
-			        faces[i].index_a_vertex,
-			        faces[i].index_b_vertex,
-			        faces[i].index_c_vertex,
-			        uvcoords[faces[i].index_a_texture].u,
-			        uvcoords[faces[i].index_a_texture].v,
-			        uvcoords[faces[i].index_b_texture].u,
-			        uvcoords[faces[i].index_b_texture].v,
-			        uvcoords[faces[i].index_c_texture].u,
-			        uvcoords[faces[i].index_c_texture].v);
+			fprintf(output, "\t200 3 %d %d %d %f %f %f %f %f %f\n",
+					faces[i].index_a_vertex,
+					faces[i].index_b_vertex,
+					faces[i].index_c_vertex,
+					uvcoords[faces[i].index_a_texture].u,
+					uvcoords[faces[i].index_a_texture].v,
+					uvcoords[faces[i].index_b_texture].u,
+					uvcoords[faces[i].index_b_texture].v,
+					uvcoords[faces[i].index_c_texture].u,
+					uvcoords[faces[i].index_c_texture].v);
 		}
 	}
 }
@@ -275,11 +317,11 @@ static void parse_args(int argc, char **argv)
 		}
 		else if (argv[i][1] == 'i')
 		{
-			invertUV = false;
+			invertV = false;
 		}
 		else if (argv[i][1] == 't')
 		{
-			baseTexFlags = 2200;
+			twoSided = true;
 		}
 		else if (argv[i][1] == 'r')
 		{
@@ -302,6 +344,32 @@ static void parse_args(int argc, char **argv)
 				exit(1);
 			}
 		}
+		else if (argv[i][1] == 'v')
+		{
+			int ret;
+
+			i++;
+			if (argc < i)
+			{
+				fprintf(stderr, "Missing parameter to pie version option.\n");
+				exit(1);
+			}
+			ret = sscanf(argv[i], "%d", &pieVersion);
+			if (ret != 1)
+			{
+				fprintf(stderr, "Bad parameter to pie version option.\n");
+				exit(1);
+			}
+			if( pieVersion < 2 || pieVersion > 3)
+			{
+				fprintf(stderr, "Unsupported pie version %d.\n",pieVersion);
+				exit(1);
+			}
+		}
+		else if (argv[i][1] == 'm')
+		{
+			pieType |= 0x10000;
+		}
 		else
 		{
 			fprintf(stderr, "Unrecognized option: %s\n", argv[i]);
@@ -310,12 +378,16 @@ static void parse_args(int argc, char **argv)
 	}
 	if (argc < 3 + i)
 	{
-		fprintf(stderr, "Syntax: obj2pie [-s] [-y] [-r] [-i] [-t] input_filename output_filename texture_filename\n");
-		fprintf(stderr, "  -y    Do not swap Y and Z axis. Exporter uses Y-axis as \"up\".\n");
-		fprintf(stderr, "  -r    Do not reverse winding of all polygons.\n");
-		fprintf(stderr, "  -i    Do not invert the vertical texture coordinates.\n");
-		fprintf(stderr, "  -s N  Scale model points by N before converting.\n");
-		fprintf(stderr, "  -t    Use two sided polygons (slower; deprecated).\n");
+		fprintf(stderr, "Usage: obj2pie [options] input_filename output_filename texture_filename\n");
+		fprintf(stderr, "Options:\n");
+		fprintf(stderr, "  -y		Do not swap Y and Z axis. Exporter uses Y-axis as \"up\".\n");
+		fprintf(stderr, "  -r		Do not reverse winding of all polygons.\n");
+		fprintf(stderr, "  -i		Do not invert the vertical texture coordinates.\n");
+		fprintf(stderr, "  -s N		Scale model points by N before converting.\n");
+		fprintf(stderr, "  -t		Use two sided polygons (Create duplicate faces with reverse winding).\n");
+		fprintf(stderr, "  -v N		Pie export version ( 2 and 3 supported, 3 is default).\n");
+		fprintf(stderr, "  -m		Use tcmask pie type.\n");
+
 		exit(1);
 	}
 	input_file = argv[i++];

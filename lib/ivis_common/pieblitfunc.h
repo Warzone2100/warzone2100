@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -61,18 +61,18 @@
  *	Global ProtoTypes
  */
 /***************************************************************************/
-extern void pie_Line(int x0, int y0, int x1, int y1, PIELIGHT colour);
-extern void pie_Box(int x0,int y0, int x1, int y1, PIELIGHT colour);
+extern void iV_Line(int x0, int y0, int x1, int y1, PIELIGHT colour);
+extern void iV_Box(int x0,int y0, int x1, int y1, PIELIGHT colour);
 extern void pie_BoxFill(int x0,int y0, int x1, int y1, PIELIGHT colour);
-extern void pie_ImageFileID(IMAGEFILE *ImageFile, UWORD ID, int x, int y);
-extern void pie_ImageFileIDTile(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width, int Height);
+extern void iV_DrawImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y);
+extern void iV_DrawImageRect(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width, int Height);
 
-extern void pie_TransBoxFill(float x0, float y0, float x1, float y1);
+extern void iV_TransBoxFill(float x0, float y0, float x1, float y1);
 extern void pie_UniTransBoxFill(float x0, float y0, float x1, float y1, PIELIGHT colour);
 
 extern BOOL pie_InitRadar(void);
 extern BOOL pie_ShutdownRadar(void);
-extern void pie_DownLoadRadar(UDWORD *buffer, int width, int height);
+extern void pie_DownLoadRadar(UDWORD *buffer, int width, int height, bool filter);
 extern void pie_RenderRadar(int x, int y, int width, int height);
 
 extern void pie_UploadDisplayBuffer(void);

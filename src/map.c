@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -31,6 +31,7 @@
 #include "lib/framework/physfs_ext.h"
 #include "lib/framework/tagfile.h"
 #include "lib/ivis_common/tex.h"
+#include "lib/netplay/netplay.h"  // For syncDebug
 
 #include "map.h"
 #include "hci.h"
@@ -653,7 +654,7 @@ static int determineGroundType(int x, int y, const char *tileset)
 	}
 
 	
-	if (x <= 0 || y <= 0 || x >= mapWidth || y >= mapHeight)
+	if (x < 0 || y < 0 || x >= mapWidth || y >= mapHeight)
 	{
 		return 0; // just return the first ground type
 	}
@@ -663,7 +664,7 @@ static int determineGroundType(int x, int y, const char *tileset)
 	{
 		for(j=0;j<2;j++)
 		{
-			if (x+i-1 <= 0 || y+j-1 <= 0 || x+i-1 >= mapWidth || y+j-1 >= mapHeight)
+			if (x+i-1 < 0 || y+j-1 < 0 || x+i-1 >= mapWidth || y+j-1 >= mapHeight)
 			{
 				tile = 0;
 			}
@@ -939,10 +940,7 @@ BOOL mapLoad(char *filename)
 		// Visibility stuff
 		memset(psMapTiles[i].watchers, 0, sizeof(psMapTiles[i].watchers));
 		psMapTiles[i].sensorBits = 0;
-		for (j = 0; j < MAX_PLAYERS; j++)
-		{
-			psMapTiles[i].tileVisBits =(UBYTE)(psMapTiles[i].tileVisBits &~ (UBYTE)(1 << j));
-		}
+		psMapTiles[i].tileExploredBits = 0;
 	}
 
 	if (!PHYSFS_readULE32(fp, &version) || !PHYSFS_readULE32(fp, &numGw) || version != 1)
@@ -976,9 +974,9 @@ BOOL mapLoad(char *filename)
 	environReset();
 
 	// set the river bed
-	for (i=0;i<mapWidth;i++)
+	for (i = 0; i < mapWidth; i++)
 	{
-		for (j=0;j<mapHeight;j++)
+		for (j = 0; j < mapHeight; j++)
 		{
 			// FIXME: magic number
 			mapTile(i, j)->waterLevel = mapTile(i, j)->height - world_coord(1) / 3.0f / (float)ELEVATION_SCALE;
@@ -1009,34 +1007,9 @@ failure:
 // Object macro group
 static void objectSaveTagged(BASE_OBJECT *psObj)
 {
-	uint16_t v[MAX_PLAYERS], i;
-
-	// not written: sDisplay
-
 	tagWriteEnter(0x01, 1);
 	tagWrite(0x01, psObj->type);
 	tagWrite(0x02, psObj->id);
-	v[0] = psObj->pos.x;
-	v[1] = psObj->pos.y;
-	v[2] = psObj->pos.z;
-	tagWrite16v(0x03, 3, v);
-	tagWritef(0x04, psObj->direction);
-	tagWrites(0x05, psObj->pitch);
-	tagWrites(0x06, psObj->roll);
-	tagWrite(0x07, psObj->player);
-	tagWrite(0x08, psObj->group);
-	tagWrite(0x09, psObj->selected);
-	tagWrite(0x0a, psObj->cluster);
-	for (i = 0; i < MAX_PLAYERS; i++)
-	{
-		v[i] = psObj->visible[i];
-	}
-	tagWrite16v(0x0b, MAX_PLAYERS, v);
-	tagWrite(0x0c, psObj->died);
-	tagWrite(0x0d, psObj->lastEmission);
-	tagWriteBool(0x0e, psObj->inFire);
-	tagWrite(0x0f, psObj->burnStart);
-	tagWrite(0x10, psObj->burnDamage);
 	tagWriteLeave(0x01);
 }
 
@@ -1071,144 +1044,12 @@ static void objectStatTagged(BASE_OBJECT *psObj, int body, int resistance)
 
 static void objectWeaponTagged(int num, WEAPON *asWeaps, BASE_OBJECT **psTargets)
 {
-	int i;
-
 	tagWriteEnter(0x04, num);
-	for (i = 0; i < num; i++)
-	{
-		tagWrite(0x01, asWeaps[i].nStat);
-		tagWrite(0x02, asWeaps[i].rotation);
-		tagWrite(0x03, asWeaps[i].pitch);
-		tagWrite(0x05, asWeaps[i].ammo);
-		tagWrite(0x06, asWeaps[i].lastFired);
-		tagWrite(0x07, asWeaps[i].recoilValue);
-		if (psTargets[i] != NULL)
-		{
-			tagWrites(0x08, psTargets[i]->id); // else default -1
-		}
-		tagWriteNext();
-	}
 	tagWriteLeave(0x04);
 }
 
 static void droidSaveTagged(DROID *psDroid)
 {
-	int plr = psDroid->player;
-	uint16_t v[ARRAY_SIZE(psDroid->asBits)], i, order[4], ammo[VTOL_MAXWEAPS];
-	int32_t sv[2];
-	float fv[3];
-
-	/* common groups */
-
-	objectSaveTagged((BASE_OBJECT *)psDroid); /* 0x01 */
-	objectSensorTagged(psDroid->sensorRange, psDroid->sensorPower, 0, psDroid->ECMMod); /* 0x02 */
-	objectStatTagged((BASE_OBJECT *)psDroid, psDroid->originalBody, psDroid->resistance); /* 0x03 */
-	objectWeaponTagged(psDroid->numWeaps, psDroid->asWeaps, psDroid->psActionTarget);
-
-	/* DROID GROUP */
-
-	tagWriteEnter(0x0a, 1);
-	tagWrite(0x01, psDroid->droidType);
-	for (i = 0; i < ARRAY_SIZE(v); ++i)
-	{
-		v[i] = psDroid->asBits[i].nStat;
-	}
-	tagWrite16v(0x02, ARRAY_SIZE(v), v);
-	// transporter droid in the mission list
-	if (psDroid->droidType == DROID_TRANSPORTER && apsDroidLists[plr] == mission.apsDroidLists[plr])
-	{
-		tagWriteBool(0x03, true);
-	}
-	tagWrite(0x07, psDroid->weight);
-	tagWrite(0x08, psDroid->baseSpeed);
-	tagWriteString(0x09, psDroid->aName);
-	tagWrite(0x0a, psDroid->body);
-	tagWritef(0x0b, psDroid->experience);
-	tagWrite(0x0c, psDroid->NameVersion);
-	if (psDroid->psTarget)
-	{
-		tagWrites(0x0e, psDroid->psTarget->id); // else -1
-	}
-	if (psDroid->psTarStats)
-	{
-		tagWrites(0x0f, psDroid->psTarStats->ref); // else -1
-	}
-	if (psDroid->psBaseStruct)
-	{
-		tagWrites(0x10, psDroid->psBaseStruct->id); // else -1
-	}
-	// current order
-	tagWrite(0x11, psDroid->order);
-	order[0] = psDroid->orderX;
-	order[1] = psDroid->orderY;
-	order[2] = psDroid->orderX2;
-	order[3] = psDroid->orderX2;
-	tagWrite16v(0x12, 4, order);
-	// queued orders
-	tagWriteEnter(0x13, psDroid->listSize);
-	for (i = 0; i < psDroid->listSize; i++)
-	{
-		tagWrite(0x01, psDroid->asOrderList[i].order);
-		order[0] = psDroid->asOrderList[i].x;
-		order[1] = psDroid->asOrderList[i].y;
-		order[2] = psDroid->asOrderList[i].x2;
-		order[3] = psDroid->asOrderList[i].y2;
-		tagWrite16v(0x02, 4, order);
-		tagWriteNext();
-	}
-	tagWriteLeave(0x13);
-	if (psDroid->sMove.psFormation != NULL)
-	{
-		tagWrites(0x14, psDroid->sMove.psFormation->dir);
-		tagWrites(0x15, psDroid->sMove.psFormation->x);
-		tagWrites(0x16, psDroid->sMove.psFormation->y);
-	} // else these are zero as by default
-	// vtol ammo
-	for (i = 0; i < VTOL_MAXWEAPS; i++)
-	{
-		ammo[i] = psDroid->sMove.iAttackRuns[i];
-	}
-	tagWrite16v(0x17, VTOL_MAXWEAPS, ammo);
-	// other movement related stuff
-	sv[0] = psDroid->sMove.DestinationX;
-	sv[1] = psDroid->sMove.DestinationY;
-	tagWrites32v(0x18, 2, sv);
-	sv[0] = psDroid->sMove.srcX;
-	sv[1] = psDroid->sMove.srcY;
-	tagWrites32v(0x19, 2, sv);
-	sv[0] = psDroid->sMove.targetX;
-	sv[1] = psDroid->sMove.targetY;
-	tagWrites32v(0x1a, 2, sv);
-	fv[0] = psDroid->sMove.fx;
-	fv[1] = psDroid->sMove.fy;
-	fv[2] = psDroid->sMove.fz;
-	tagWritefv(0x1b, 3, fv);
-	tagWritef(0x1c, psDroid->sMove.speed);
-	sv[0] = psDroid->sMove.boundX;
-	sv[1] = psDroid->sMove.boundY;
-	tagWrites32v(0x1d, 2, sv);
-	v[0] = psDroid->sMove.bumpX;
-	v[1] = psDroid->sMove.bumpY;
-	tagWrite16v(0x1e, 2, v);
-	tagWrites(0x1f, psDroid->sMove.moveDir);
-	tagWrites(0x20, psDroid->sMove.bumpDir);
-	tagWrite(0x21, psDroid->sMove.bumpTime);
-	tagWrite(0x22, psDroid->sMove.lastBump);
-	tagWrite(0x23, psDroid->sMove.pauseTime);
-	tagWrite(0x24, psDroid->sMove.iVertSpeed);
-	tagWriteEnter(0x25, psDroid->sMove.numPoints);
-	for (i = 0; i < psDroid->sMove.numPoints; i++)
-	{
-		v[0] = psDroid->sMove.asPath[i].x;
-		v[1] = psDroid->sMove.asPath[i].y;
-		tagWrite16v(0x01, 2, v);
-		tagWriteNext();
-	}
-	tagWriteLeave(0x25);
-	tagWrite(0x26, psDroid->sMove.Status);
-	tagWrite(0x27, psDroid->sMove.Position);
-
-	tagWriteLeave(0x0a);
 }
 
 static void structureSaveTagged(STRUCTURE *psStruct)
@@ -1233,7 +1074,7 @@ static void structureSaveTagged(STRUCTURE *psStruct)
 	tagWrite(0x01, psStruct->pStructureType->type);
 	tagWrites(0x02, psStruct->currentPowerAccrued);
 	tagWrite(0x03, psStruct->lastResistance);
-	tagWrite(0x04, psStruct->targetted);
+	tagWrite(0x04, psStruct->bTargetted);
 	tagWrite(0x05, psStruct->timeLastHit);
 	tagWrite(0x06, psStruct->lastHitWeapon);
 	tagWrite(0x07, psStruct->status);
@@ -1252,7 +1093,7 @@ static void structureSaveTagged(STRUCTURE *psStruct)
 
 			tagWriteEnter(0x0d, 1); // FACTORY GROUP
 			tagWrite(0x01, psFactory->capacity);
-			tagWrite(0x02, psFactory->quantity);
+			tagWrite(0x02, psFactory->productionLoops);
 			tagWrite(0x03, psFactory->loopsPerformed);
 			//tagWrite(0x04, psFactory->productionOutput); // not used in original code, recalculated instead
 			tagWrite(0x05, psFactory->powerAccrued);
@@ -1296,7 +1137,6 @@ static void structureSaveTagged(STRUCTURE *psStruct)
 			RES_EXTRACTOR *psExtractor = (RES_EXTRACTOR *)psStruct->pFunctionality;
 
 			tagWriteEnter(0x0f, 1);
-			tagWrite(0x01, psExtractor->power);
 			if (psExtractor->psPowerGen)
 			{
 				tagWrites(0x02, psExtractor->psPowerGen->id);
@@ -1350,6 +1190,7 @@ static void structureSaveTagged(STRUCTURE *psStruct)
 		case REF_WALL:
 		case REF_WALLCORNER:
 		case REF_BLASTDOOR:
+		case REF_GATE:
 		case REF_RESEARCH_MODULE:
 		case REF_COMMAND_CONTROL:
 		case REF_BRIDGE:
@@ -1374,7 +1215,7 @@ static void featureSaveTagged(FEATURE *psFeat)
 	/* FEATURE GROUP */
 
 	tagWriteEnter(0x0c, 1);
-	tagWrite(0x01, psFeat->startTime);
+	tagWrite(0x01, psFeat->born);
 	tagWriteLeave(0x0c);
 }
 
@@ -1444,7 +1285,6 @@ BOOL mapSaveTagged(char *pFileName)
 		tagWrite(0x05, psTile->texture & TILE_YFLIP);
 		tagWrite(0x06, TileIsNotBlocking(psTile)); // Redundant, since already included in tileInfoBits
 		tagWrite(0x08, psTile->height);
-		tagWrite(0x09, psTile->tileVisBits);
 		tagWrite(0x0a, psTile->tileInfoBits);
 		tagWrite(0x0b, (psTile->texture & TILE_ROTMASK) >> TILE_ROTSHIFT);
 
@@ -1797,7 +1637,14 @@ BOOL mapSave(char **ppFileData, UDWORD *pFileSize)
 	for(i=0; i<mapWidth*mapHeight; i++)
 	{
 		psTileData->texture = psTile->texture;
-		psTileData->height = psTile->height;
+		if (psTile->ground == waterGroundType)
+		{
+			psTileData->height = MIN(255.0f, psTile->height + (WATER_DEPTH - 2.0f * environGetData(i % mapWidth, i / mapWidth)) / (float)ELEVATION_SCALE);
+		}
+		else
+		{
+			psTileData->height = psTile->height;
+		}
 
 		/* MAP_SAVETILE */
 		endian_uword(&psTileData->texture);
@@ -1858,7 +1705,7 @@ BOOL mapShutdown(void)
 }
 
 /// The max height of the terrain and water at the specified world coordinates
-extern SWORD map_Height(int x, int y)
+extern int32_t map_Height(int x, int y)
 {
 	int tileX, tileY;
 	int i, j;
@@ -1956,7 +1803,6 @@ extern SWORD map_Height(int x, int y)
 	onBottom = left * (1 - towardsRight) + right * towardsRight;
 	result = onBottom + (center - middle) * towardsCenter * 2;
 
-	result = MAX(result, 0);  // HACK Avoid unsigned underflow, when this is squashed into a Vector3uw later.
 	return (SDWORD)(result+0.5f);
 }
 
@@ -2071,7 +1917,7 @@ bool writeVisibilityData(const char* fileName)
 
 	for (i = 0; i < mapWidth * mapHeight; ++i)
 	{
-		if (!PHYSFS_writeUBE8(fileHandle, psMapTiles[i].tileVisBits))
+		if (!PHYSFS_writeUBE8(fileHandle, psMapTiles[i].tileExploredBits))
 		{
 			debug(LOG_ERROR, "writeVisibilityData: could not write to %s; PHYSFS error: %s", fileName, PHYSFS_getLastError());
 			PHYSFS_close(fileHandle);
@@ -2139,7 +1985,7 @@ bool readVisibilityData(const char* fileName)
 	for(i=0; i<mapWidth*mapHeight; i++)
 	{
 		/* Get the visibility data */
-		if (!PHYSFS_readUBE8(fileHandle, &psMapTiles[i].tileVisBits))
+		if (!PHYSFS_readUBE8(fileHandle, &psMapTiles[i].tileExploredBits))
 		{
 			debug(LOG_ERROR, "readVisibilityData: could not read from %s; PHYSFS error: %s", fileName, PHYSFS_getLastError());
 			PHYSFS_close(fileHandle);
@@ -2330,6 +2176,30 @@ void mapFloodFillContinents()
 	debug(LOG_MAP, "Found %d hover continents", (int)hoverContinents);
 }
 
+void tileSetFire(int32_t x, int32_t y, uint32_t duration)
+{
+	const int posX = map_coord(x);
+	const int posY = map_coord(y);
+	MAPTILE *const tile = mapTile(posX, posY);
+
+	uint16_t currentTime =  gameTime             / GAME_TICKS_PER_UPDATE;
+	uint16_t fireEndTime = (gameTime + duration) / GAME_TICKS_PER_UPDATE;
+	if (currentTime == fireEndTime)
+	{
+		return;  // Fire already ended.
+	}
+	if ((tile->tileInfoBits & BITS_ON_FIRE) != 0 && (uint16_t)(fireEndTime - currentTime) < (uint16_t)(tile->fireEndTime - currentTime))
+	{
+		return;  // Tile already on fire, and that fire lasts longer.
+	}
+
+	// Burn, tile, burn!
+	tile->tileInfoBits |= BITS_ON_FIRE;
+	tile->fireEndTime = fireEndTime;
+
+	syncDebug("Fire tile{%d, %d} dur%u end%d", posX, posY, duration, fireEndTime);
+}
+
 /** Check if tile contained within the given world coordinates is burning. */
 bool fireOnLocation(unsigned int x, unsigned int y)
 {
@@ -2339,4 +2209,26 @@ bool fireOnLocation(unsigned int x, unsigned int y)
 
 	ASSERT(psTile, "Checking fire on tile outside the map (%d, %d)", posX, posY);
 	return psTile != NULL && TileIsBurning(psTile);
+}
+
+void mapUpdate()
+{
+	uint16_t currentTime = gameTime / GAME_TICKS_PER_UPDATE;
+
+	int posX, posY;
+	for (posY = 0; posY < mapHeight; ++posY)
+		for (posX = 0; posX < mapWidth; ++posX)
+	{
+		MAPTILE *const tile = mapTile(posX, posY);
+
+		if ((tile->tileInfoBits & BITS_ON_FIRE) != 0 && tile->fireEndTime == currentTime)
+		{
+			// Extinguish, tile, extinguish!
+			tile->tileInfoBits &= ~BITS_ON_FIRE;
+
+			syncDebug("Extinguished tile{%d, %d}", posX, posY);
+		}
+	}
+
+	// TODO Make waves in the water?
 }

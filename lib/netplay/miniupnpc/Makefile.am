@@ -27,3 +27,5 @@ libminiupnpc_a_SOURCES = \
 	upnpcommands.c \
 	minissdpc.c \
 	upnperrors.c
+
+EXTRA_DIST = LICENCE README

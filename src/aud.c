@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -24,14 +24,11 @@
  */
 
 #include "lib/framework/frame.h"
-#include "basedef.h"
-#include "map.h"
-#include "display3d.h"
-#include "lib/framework/fixedpoint.h"
-#include "lib/gamelib/gtime.h"
-#include "lib/framework/math_ext.h"
 #include "lib/sound/aud.h"
 #include "lib/sound/tracklib.h"
+
+#include "display3d.h"
+#include "map.h"
 
 BOOL audio_ObjectDead(void * psObj)
 {
@@ -60,6 +57,7 @@ BOOL audio_ObjectDead(void * psObj)
 	}
 }
 // @FIXME we don't need to do this, since we are not using qsound.
+
 Vector3f audio_GetPlayerPos(void)
 {
 	Vector3f pos;
@@ -74,13 +72,6 @@ Vector3f audio_GetPlayerPos(void)
 	pos.y = world_coord(GetHeightOfMap()) - pos.y;
 
 	return pos;
-}
-
-void audio_GetPlayerOrientation(Vector3f* forward, Vector3f* up)
-{
-	const Vector3f r = Vector3f_ToRadians(Vector3iPSX_To3fDegree(player.r));
-	*forward = Vector3f_EulerToForwardVector(r);
-	*up = Vector3f_EulerToUpVector(r);
 }
 
 /**

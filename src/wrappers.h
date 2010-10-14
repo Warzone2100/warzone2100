@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -39,26 +39,24 @@ typedef enum {
 #define PLAY_WIN    1
 #define PLAY_LOSE   2
 
+extern BOOL hostlaunch;
 
-extern BOOL			frontendInitVars	    ( void );
-extern TITLECODE	titleLoop			    ( void );
+BOOL frontendInitVars(void);
+TITLECODE titleLoop(void);
 
-extern void			clearTitle	 		    ( void );
-extern void			displayTitleScreen 	    ( void );
+void initLoadingScreen(BOOL drawbdrop);
+void closeLoadingScreen(void);
+void loadingScreenCallback(void);
 
-extern void			initLoadingScreen		( BOOL drawbdrop );
-extern void			closeLoadingScreen	    ( void );
-extern void			loadingScreenCallback   ( void );
+void startCreditsScreen(void);
 
-extern void			startCreditsScreen	    ( void );
-
-extern BOOL			displayGameOver		    ( BOOL success);
-extern void			setPlayerHasLost	    ( BOOL val );
-extern BOOL			testPlayerHasLost	    ( void );
-extern BOOL			testPlayerHasWon  	    ( void );
-extern void			setPlayerHasWon		    ( BOOL val );
-extern void         setScriptWinLoseVideo   ( UBYTE val );
-extern UBYTE        getScriptWinLoseVideo   ( void );
+BOOL displayGameOver(BOOL success);
+void setPlayerHasLost(BOOL val);
+BOOL testPlayerHasLost(void);
+BOOL testPlayerHasWon(void);
+void setPlayerHasWon(BOOL val);
+void setScriptWinLoseVideo(UBYTE val);
+UBYTE getScriptWinLoseVideo(void);
 
 #ifdef __cplusplus
 }

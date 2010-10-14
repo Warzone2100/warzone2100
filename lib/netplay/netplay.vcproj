@@ -41,10 +41,11 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..&quot;;&quot;$(SolutionDir)\..\devpkg\include&quot;;&quot;$(SolutionDir)\..\devpkg\include\SDL&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;STATICLIB"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;STATICLIB;_HAS_ITERATOR_DEBUGGING=0;_SECURE_SCL=0"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
+				EnableEnhancedInstructionSet="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="true"
@@ -161,8 +162,34 @@
 				>
 			</File>
 			<File
-				RelativePath=".\nettypes.c"
+				RelativePath=".\netqueue.cpp"
 				>
+			</File>
+			<File
+				RelativePath=".\netsocket.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\nettypes.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)\$(InputName)1.obj"
+						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)\$(InputName)1.obj"
+						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+					/>
+				</FileConfiguration>
 			</File>
 			<Filter
 				Name="miniUPnP"
@@ -276,6 +303,10 @@
 			</File>
 			<File
 				RelativePath=".\netplay.h"
+				>
+			</File>
+			<File
+				RelativePath=".\netsocket.h"
 				>
 			</File>
 			<File

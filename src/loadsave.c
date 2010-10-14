@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -37,7 +37,8 @@
 #include "lib/widget/editbox.h"
 #include "lib/widget/widget.h"
 #include "lib/ivis_common/piepalette.h"		// for predefined colours.
-#include "lib/ivis_common/rendmode.h"		// for boxfill
+#include "lib/ivis_common/bitimage.h"
+#include "lib/ivis_common/pieblitfunc.h"		// for boxfill
 #include "hci.h"
 #include "loadsave.h"
 #include "multiplay.h"
@@ -627,11 +628,12 @@ void removeWildcards(char *pStr)
 	{
 		pStr[MAX_SAVE_NAME - 1] = 0;
 	}
-	
+
 	// Trim trailing spaces
-	for (i=strlen(pStr)-1; pStr[i]==' ' && i>=0; i--);
-	pStr[i+1] = 0;
-	
+	for (i = strlen(pStr); i > 0 && pStr[i - 1] == ' '; --i)
+	{}
+	pStr[i] = 0;
+
 	// Trims leading spaces (currently unused)
 	/* for (i=0; pStr[i]==' '; i++);
 	 if (i != 0)

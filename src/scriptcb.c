@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -58,6 +58,8 @@ STRUCTURE	*psScrCBNewDroidFact;	// id of factory that built it.
 // the attacker and target for a CALL_ATTACKED
 BASE_OBJECT	*psScrCBAttacker, *psScrCBTarget;
 
+// vtol target
+DROID		*psScrVtolRetarget = NULL;
 
 // alliance details
 UDWORD	CBallFrom,CBallTo;
@@ -158,6 +160,35 @@ WZ_DECL_UNUSED static BOOL scrCBStructAttacked(void)
 	}
 
 	scrFunctionResult.v.bval = triggered;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
+	{
+		return false;
+	}
+
+	return true;
+}
+
+BOOL scrCBVTOLRetarget(void)
+{
+	SDWORD			player;
+	DROID			**ppsDroid;
+
+	if (!stackPopParams(2, VAL_INT, &player, VAL_REF|ST_DROID, &ppsDroid))
+	{
+		return false;
+	}
+	ASSERT_OR_RETURN(false, player < MAX_PLAYERS && player >= 0, "Invalid player %d", player);
+
+	if (player == psScrVtolRetarget->player)
+	{
+		*ppsDroid = psScrVtolRetarget;
+		scrFunctionResult.v.bval = true;
+	}
+	else
+	{
+		*ppsDroid = NULL;
+		scrFunctionResult.v.bval = false;
+	}
 	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return false;

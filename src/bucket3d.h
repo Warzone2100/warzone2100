@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -43,10 +43,10 @@ typedef enum _render_type
 //function prototypes
 
 /* add an object to the current render list */
-extern void bucketAddTypeToList(RENDER_TYPE objectType, void *object);
+void bucketAddTypeToList(RENDER_TYPE objectType, void *object);
 
 /* render Objects in list */
-extern void bucketRenderCurrentList(void);
+void bucketRenderCurrentList(void);
 
 #ifdef __cplusplus
 }

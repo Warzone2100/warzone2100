@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2008-2009  Warzone Resurrection Project
+	Copyright (C) 2008-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -55,10 +55,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "lib/framework/frame.h"
+#include "lib/framework/frameint.h"
+#include "lib/framework/opengl.h"
 #include "sequence.h"
 #include "timer.h"
 #include "lib/framework/math_ext.h"
-#include "lib/ivis_opengl/GLee.h"
 #include "lib/ivis_common/piestate.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/openal_error.h"
@@ -165,8 +167,10 @@ static int frames = 0;
 static int dropped = 0;
 
 // Screen dimensions
-static int ScrnvidXsize = 0;
-static int ScrnvidYsize = 0;
+static int videoX1 = 0;
+static int videoX2 = 0;
+static int videoY1 = 0;
+static int videoY2 = 0;
 static int ScrnvidXpos = 0;
 static int ScrnvidYpos = 0;
 
@@ -337,21 +341,31 @@ static void video_write(bool update)
 	glDepthMask(GL_FALSE);
 
 	glPushMatrix();
+	glTranslatef(ScrnvidXpos + videoX1, ScrnvidYpos + videoY1, 0);
+	glScalef(videoX2 - videoX1, videoY2 - videoY1, 1);
+	glMatrixMode(GL_TEXTURE);
+	glPushMatrix(); // texture matrix
+	glScalef((float) video_width / texture_width, (float) video_height / texture_height, 1.f);
+	{
+		const Vector2i vertices[] = {
+			{ 0, 0 },
+			{ 1, 0 },
+			{ 0, 1 },
+			{ 1, 1 },
+		};
 
-	// NOTE: 255 * width | height, because texture matrix is set up with a
-	// call to glScalef(1/256.0, 1/256.0, 1) ... so don't blame me. :P
-	glTranslatef(ScrnvidXpos, ScrnvidYpos, 0.0f);
-	glBegin(GL_TRIANGLE_STRIP);
-	glTexCoord2f(0, 0);
-	glVertex2f(0, 0);
-	glTexCoord2f(256 * video_width / texture_width, 0);
-	glVertex2f(ScrnvidXsize, 0);				//screenWidth
-	glTexCoord2f(0, 256 * video_height / texture_height);
-	glVertex2f(0, ScrnvidYsize);				//screenHeight
-	glTexCoord2f(256 * video_width / texture_width, 256 * video_height / texture_height);
-	glVertex2f(ScrnvidXsize, ScrnvidYsize);		//screenWidth,screenHeight
-	glEnd();
+		glVertexPointer(2, GL_INT, 0, vertices);
+		glEnableClientState(GL_VERTEX_ARRAY);
 
+		glTexCoordPointer(2, GL_INT, 0, vertices);
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+		glDrawArrays(GL_TRIANGLE_STRIP, 0, ARRAY_SIZE(vertices));
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+		glDisableClientState(GL_VERTEX_ARRAY);
+	}
+	glPopMatrix(); // texture matrix
+	glMatrixMode(GL_MODELVIEW);
 	glPopMatrix();
 
 	// Make sure the current texture page is reloaded after we are finished
@@ -422,7 +436,7 @@ static void seq_InitOgg(void)
 {
 	debug(LOG_VIDEO, "seq_InitOgg");
 
-	ASSERT((ScrnvidXsize && ScrnvidYsize), "Screen dimensions not specified!");
+	ASSERT((videoX2 && videoY2), "Screen dimensions not specified!");
 
 	stateflag = false;
 	theora_p = 0;
@@ -666,6 +680,7 @@ bool seq_Play(const char* filename)
 	/* open video */
 	if (theora_p)
 	{
+		char *blackframe = calloc(1, texture_width * texture_height * 4);
 		if (videodata.ti.frame_width > texture_width ||
 				videodata.ti.frame_height > texture_height)
 		{
@@ -683,7 +698,8 @@ bool seq_Play(const char* filename)
 		glGenTextures(1, &video_texture);
 		glBindTexture(GL_TEXTURE_2D, video_texture);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture_width, texture_height,
-				0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+				0, GL_RGBA, GL_UNSIGNED_BYTE, blackframe);
+		free(blackframe);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
@@ -968,8 +984,31 @@ int seq_GetFrameNumber()
 // this controls the size of the video to display on screen
 void seq_SetDisplaySize(int sizeX, int sizeY, int posX, int posY)
 {
-	ScrnvidXsize = sizeX;
-	ScrnvidYsize = sizeY;
+	videoX1 = 0;
+	videoY1 = 0;
+	videoX2 = sizeX;
+	videoY2 = sizeY;
+
+	if (sizeX > 640 || sizeY > 480)
+	{
+		const float aspect = screenWidth / (float)screenHeight, videoAspect = 4 / (float)3;
+
+		if (aspect > videoAspect)
+		{
+			int offset = (screenWidth - screenHeight * videoAspect) / 2;
+			videoX1 += offset;
+			videoX2 -= offset;
+		}
+		else
+		{
+			int offset = (screenHeight - screenWidth / videoAspect) / 2;
+			videoY1 += offset;
+			videoY2 -= offset;
+		}
+
+
+	}
+
 	ScrnvidXpos = posX;
 	ScrnvidYpos = posY;
 }

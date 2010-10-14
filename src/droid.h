@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -94,9 +94,18 @@ extern BOOL loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize);
 /*initialise the template build and power points */
 extern void initTemplatePoints(void);
 
+typedef struct InitialDroidOrders
+{
+	uint32_t secondaryOrder;
+	int32_t moveToX;
+	int32_t moveToY;
+	uint32_t factoryId;
+} INITIAL_DROID_ORDERS;
 /*Builds an instance of a Structure - the x/y passed in are in world coords.*/
-extern DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y,
-						 UDWORD player, BOOL onMission);
+/// Sends a GAME_DROID message if bMultiMessages is true, or actually creates it if false. Only uses initialOrders if sending a GAME_DROID message.
+extern DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player, BOOL onMission, const INITIAL_DROID_ORDERS *initialOrders);
+/// Creates a droid locally, instead of sending a message, even if the bMultiMessages HACK is set to true.
+DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player, BOOL onMission);
 
 /* Set the asBits in a DROID structure given it's template. */
 extern void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid);
@@ -217,6 +226,9 @@ extern BOOL activateGroupAndMove(UDWORD playerNumber, UDWORD groupNumber);
 /* calculate muzzle tip location in 3d world added int weapon_slot to fix the always slot 0 hack*/
 extern BOOL calcDroidMuzzleLocation(DROID *psDroid, Vector3f *muzzle, int weapon_slot);
 
+/* gets a template from its aName (when pName is unknown) */ 
+extern DROID_TEMPLATE	*GetHumanDroidTemplate(char *aName);
+extern DROID_TEMPLATE	*GetAIDroidTemplate(char *aName);
 /* gets a template from its name - relies on the name being unique */
 extern DROID_TEMPLATE * getTemplateFromUniqueName(const char *pName, unsigned int player);
 /* gets a template from its name - relies on the name being unique */
@@ -309,9 +321,9 @@ extern BOOL droidUpdateClearing( DROID *psDroid );
 a defined range*/
 extern BASE_OBJECT * checkForRepairRange(DROID *psDroid,DROID *psTarget);
 
-//access function
+/// Returns true iff the droid has VTOL propulsion, and is not a transport.
 extern BOOL isVtolDroid(const DROID* psDroid);
-/*returns true if the droid has lift propulsion and is above the ground level*/
+/// Returns true iff the droid has VTOL propulsion and is moving.
 extern BOOL isFlying(const DROID* psDroid);
 /*returns true if a VTOL weapon droid which has completed all runs*/
 extern BOOL vtolEmpty(DROID *psDroid);
@@ -362,6 +374,7 @@ extern const char *getDroidNameForRank(UDWORD rank);
 
 /*called when a Template is deleted in the Design screen*/
 extern void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player);
+extern void reallyDeleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player);
 
 // Select a droid and do any necessary housekeeping.
 extern void SelectDroid(DROID *psDroid);
@@ -457,15 +470,9 @@ static inline WEAPON_STATS *getWeaponStats(DROID *psDroid, int weapon_slot)
 	return asWeaponStats + psDroid->asWeaps[weapon_slot].nStat;
 }
 
-static inline float getInterpolatedWeaponRotation(DROID *psDroid, int weaponSlot, uint32_t time)
+static inline Rotation getInterpolatedWeaponRotation(DROID *psDroid, int weaponSlot, uint32_t time)
 {
-	return interpolateDirection(psDroid->asWeaps[weaponSlot].prevRotation, psDroid->asWeaps[weaponSlot].rotation, psDroid->prevSpacetime.time, psDroid->time, time);
-}
-
-static inline float getInterpolatedWeaponPitch(DROID *psDroid, int weaponSlot, uint32_t time)
-{
-	// Aaargh, Direction[sic]. Angles can be 16-bit (65536 "degrees" in circle), or can be floats (360.0f degrees). Except here, where they are _unsigned_ integers from 0 to 360. All hail consistency!
-	return interpolateDirection(psDroid->asWeaps[weaponSlot].prevPitch, psDroid->asWeaps[weaponSlot].pitch, psDroid->prevSpacetime.time, psDroid->time, time);
+	return interpolateRot(psDroid->asWeaps[weaponSlot].prevRot, psDroid->asWeaps[weaponSlot].rot, psDroid->prevSpacetime.time, psDroid->time, time);
 }
 
 /** helper functions for future refcount patch **/
@@ -557,6 +564,11 @@ int droidSqDist(DROID *psDroid, BASE_OBJECT *psObj);
 #define	MIN_WEAPON_DAMAGE	1
 
 void templateSetParts(const DROID *psDroid, DROID_TEMPLATE *psTemplate);
+
+void cancelBuild(DROID *psDroid);
+
+#define syncDebugDroid(psDroid, ch) _syncDebugDroid(__FUNCTION__, psDroid, ch)
+void _syncDebugDroid(const char *function, DROID *psDroid, char ch);
 
 #ifdef __cplusplus
 }

@@ -4,15 +4,21 @@
 #include <stdio.h>
 #include <SDL.h>
 #include <time.h>
+
+#define mapX 64
+#define mapY 48
+#define IMPASSABLE 255
+
+int mapWidth = mapX;
+int mapHeight = mapY;
+
 #include "../lib/framework/frame.h"
+#include "../lib/framework/debug.h"
 #include "../lib/framework/types.h"
 #include "../lib/framework/macros.h"
 #include "../lib/framework/vector.h"
 #include "../src/movedef.h"
-
-#define ASSERT(expr, ...)
-#define LOG_ERROR 0
-#define debug(level, ...)
+#include "../src/map.h"
 
 /* Faux declarations */
 void fpathHardTableReset(void);
@@ -22,9 +28,6 @@ typedef enum _fpath_movetype
 	FMT_MOVE,		///< Move around all obstacles
 	FMT_ATTACK,		///< Assume that we will destroy enemy obstacles
 } FPATH_MOVETYPE;
-
-typedef int PROPULSION_TYPE;
-typedef int DROID_TYPE;
 
 typedef struct _jobNode
 {
@@ -45,21 +48,6 @@ typedef enum
 	ASR_NEAREST,    ///< found a partial route to a nearby position
 } ASTAR_RESULT;
 
-#define TILE_SHIFT 7
-
-static inline int32_t world_coord(int32_t mapCoord)
-{
-	return mapCoord << TILE_SHIFT;
-}
-
-static inline int32_t map_coord(int32_t worldCoord)
-{
-	return worldCoord >> TILE_SHIFT;
-}
-
-#define mapX 64
-#define mapY 48
-#define IMPASSABLE 255
 static unsigned char testmap[mapX][mapY];
 
 static inline BOOL fpathBaseBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion, int player, FPATH_MOVETYPE moveType)
@@ -68,7 +56,7 @@ static inline BOOL fpathBaseBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE pro
 }
 
 #define WZ_TESTING
-#include "../src/astar.c"
+#include "../src/astar.cpp"
 
 static void printmap(MOVE_CONTROL *move, PATHJOB *job)
 {

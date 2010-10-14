@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -24,6 +24,8 @@
 #ifndef __INCLUDED_LIB_WIDGET_FORM_H__
 #define __INCLUDED_LIB_WIDGET_FORM_H__
 
+#include "lib/widget/widget.h"
+
 #ifdef __cplusplus
 extern "C"
 {
@@ -37,7 +39,7 @@ extern "C"
 	UWORD		Ax0,Ay0,Ax1,Ay1; 	/* Working coords for animations. */ \
 	UDWORD		animCount; 			/* Animation counter. */ \
 	UDWORD		startTime;			/* Animation start time */ \
-	PIELIGHT	aColours[WCOL_MAX];		/* Colours for the form and its widgets. signed since aColours -1 means use bitmap. */ \
+	PIELIGHT	aColours[WCOL_MAX];		/* Colours for the form and its widgets */ \
 	WIDGET		*psLastHiLite;	/* The last widget to be hilited */ \
 								/* This is used to track when the mouse moves */ \
 								/* off something */ \

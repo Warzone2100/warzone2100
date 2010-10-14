@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -25,7 +25,6 @@
 #define __INCLUDED_SRC_ACTION_H__
 
 #include "droiddef.h"
-#include "structuredef.h" //STRUCT_MAXWEAPS
 
 #ifdef __cplusplus
 extern "C"
@@ -91,7 +90,7 @@ typedef enum _droid_action
 	DACTION_CIRCLE = 41,				///< 41 circling while engaging
 } DROID_ACTION;
 
-extern const char* getDroidActionName(DROID_ACTION action);
+const char* getDroidActionName(DROID_ACTION action);
 
 /** After failing a route ... this is the amount of time that the droid goes all defensive until it can start going aggressive. */
 #define MIN_SULK_TIME (1500)		// 1.5 sec
@@ -113,16 +112,16 @@ extern const char* getDroidActionName(DROID_ACTION action);
  *              data manipulation in this function itself. In either case, this
  *              function requires a major refactoring...
  */
-extern void actionUpdateDroid(DROID *psDroid);
+void actionUpdateDroid(DROID *psDroid);
 
 /** Give a droid an action. */
-extern void actionDroid(DROID *psDroid, DROID_ACTION action);
+void actionDroid(DROID *psDroid, DROID_ACTION action);
 
 /** Give a droid an action with a location target. */
-extern void actionDroidLoc(DROID *psDroid, DROID_ACTION action, UDWORD x, UDWORD y);
+void actionDroidLoc(DROID *psDroid, DROID_ACTION action, UDWORD x, UDWORD y);
 
 /** Give a droid an action with an object target. */
-extern void actionDroidObj(DROID *psDroid, DROID_ACTION action, BASE_OBJECT *psObj);
+void actionDroidObj(DROID *psDroid, DROID_ACTION action, BASE_OBJECT *psObj);
 
 /** Give a droid an action with an object target and a location. */
 void actionDroidObjLoc(DROID *psDroid, DROID_ACTION action,
@@ -132,16 +131,13 @@ void actionDroidObjLoc(DROID *psDroid, DROID_ACTION action,
 BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *psWeapon);
 
 /** Realign turret. */
-extern void actionAlignTurret(BASE_OBJECT *psObj, int weapon_slot);
-
-/** Check if a target is at correct range to attack. */
-extern BOOL actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot);
+void actionAlignTurret(BASE_OBJECT *psObj, int weapon_slot);
 
 /** Check if a target is within weapon range. */
-extern BOOL actionInRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot);
+BOOL actionInRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot);
 
 /** Check if a target is inside minimum weapon range. */
-extern BOOL actionInsideMinRange(DROID *psDroid, BASE_OBJECT *psObj, WEAPON_STATS *psWeapStats);
+BOOL actionInsideMinRange(DROID *psDroid, BASE_OBJECT *psObj, WEAPON_STATS *psWeapStats);
 
 /** Return whether a droid can see a target to fire on it. */
 BOOL actionVisibleTarget(DROID *psDroid, BASE_OBJECT *psTarget, int weapon_slot);
@@ -149,29 +145,8 @@ BOOL actionVisibleTarget(DROID *psDroid, BASE_OBJECT *psTarget, int weapon_slot)
 /** Check whether a droid is in the neighboring tile to a build position. */
 BOOL actionReachedBuildPos(DROID *psDroid, SDWORD x, SDWORD y, BASE_STATS *psStats);
 
-/** Check if a droid is on the foundations of a new building. */
-BOOL actionDroidOnBuildPos(DROID *psDroid, SDWORD x, SDWORD y, BASE_STATS *psStats);
-
 /** Send the vtol droid back to the nearest rearming pad - if there is one, otherwise return to base. */
-extern void moveToRearm(DROID *psDroid);
-
-/**
- * @typedef tileMatchFunction
- *
- * @brief pointer to a 'tile search function', used by spiralSearch()
- *
- * @param x,y  are the coordinates that should be inspected.
- *
- * @param data a pointer to state data, allows the search function to retain
- *             state in between calls and can be used as a means of returning
- *             its result to the caller of spiralSearch().
- *
- * @return true when the search has finished, false when the search should
- *         continue.
- */
-typedef bool (*tileMatchFunction)(int x, int y, void* matchState);
-
-bool spiralSearch(int startX, int startY, int max_radius, tileMatchFunction match, void* matchState);
+void moveToRearm(DROID *psDroid);
 
 /** Choose a landing position for a VTOL when it goes to rearm. */
 bool actionVTOLLandingPos(const DROID* psDroid, UDWORD* px, UDWORD* py);

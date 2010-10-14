@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -132,9 +132,9 @@ static void registry_set_key(const char* key, const char* value)
 
 static bool registry_load(const char* filename)
 {
-	char buffer[MAXLINESIZE];
+	char buffer[MAXLINESIZE + 1];
 	char *bptr = NULL, *bufstart = NULL;
-	char key[32];
+	char key[MAXLINESIZE];
 	int l; // sscanf expects an int to receive %n, not an unsigned int
 	UDWORD filesize;
 
@@ -159,7 +159,8 @@ static bool registry_load(const char* filename)
 		int count = 0;
 
 		/* Put a line into buffer */
-		while (*bptr != '\0' && *bptr != '\n' && count < MAXLINESIZE) {
+		while (*bptr != '\0' && *bptr != '\n' && count < MAXLINESIZE)
+		{
 			buffer[count] = *bptr;
 			bptr++;
 			count++;
@@ -202,9 +203,9 @@ static bool registry_save(const char* filename)
 
 			snprintf(linebuf, sizeof(linebuf), "%s=%s\n", j->key, j->value);
 			assert(strlen(linebuf) > 0 && strlen(linebuf) < MAXLINESIZE);
+			assert(count + strlen(linebuf) < MAXLINESIZE * ARRAY_SIZE(registry));
 			memcpy(buffer + count, linebuf, strlen(linebuf));
 			count += strlen(linebuf);
-			assert(count < MAXLINESIZE * ARRAY_SIZE(registry));
 		}
 	}
 

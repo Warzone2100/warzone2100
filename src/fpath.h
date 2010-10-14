@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -53,6 +53,8 @@ typedef struct _jobNode
 	struct _jobNode	*next;
 	FPATH_MOVETYPE	moveType;
 	int		owner;		///< Player owner
+	struct PathBlockingMap *blockingMap;  ///< Map of blocking tiles.
+	bool		acceptNearest;
 } PATHJOB;
 
 typedef enum _fpath_retval
@@ -76,6 +78,10 @@ extern void fpathUpdate(void);
  */
 extern FPATH_RETVAL fpathDroidRoute(DROID* psDroid, SDWORD targetX, SDWORD targetY, FPATH_MOVETYPE moveType);
 
+/// Returns true iff the parameters have equivalent behaviour in fpathBaseBlockingTile.
+bool fpathIsEquivalentBlocking(PROPULSION_TYPE propulsion1, int player1, FPATH_MOVETYPE moveType1,
+                               PROPULSION_TYPE propulsion2, int player2, FPATH_MOVETYPE moveType2);
+
 /** Function pointer to the currently in-use blocking tile check function.
  *  
  *  This function will check if the map tile at the given location blocks droids
@@ -98,13 +104,13 @@ extern void fpathSetDirectRoute(DROID* psDroid, SDWORD targetX, SDWORD targetY);
 /** Clean up path jobs and results for a droid. Function is thread-safe. */
 extern void fpathRemoveDroidData(int id);
 
-/** Check LOS (Line Of Sight) between two tiles
+/** Check LOS (Line Of Sight) between two world positions.
  */
-extern BOOL fpathTileLOS(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2);
+extern BOOL fpathTileLOS(DROID *psDroid, Vector3i dest);
 
 /** Quick O(1) test of whether it is theoretically possible to go from origin to destination
- *  using the given propulsion type. */
-bool fpathCheck(Vector2i orig, Vector2i dest, PROPULSION_TYPE propulsion);
+ *  using the given propulsion type. orig and dest are in world coordinates. */
+bool fpathCheck(Position orig, Position dest, PROPULSION_TYPE propulsion);
 
 /** Unit testing. */
 void fpathTest(int x, int y, int x2, int y2);

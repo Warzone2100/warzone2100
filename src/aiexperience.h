@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2006-2009  Warzone Resurrection Project
+	Copyright (C) 2006-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -25,14 +25,8 @@ extern "C"
 {
 #endif //__cplusplus
 
-#define	SAVE_FORMAT_VERSION			2
-
-#define MAX_OIL_ENTRIES				600		//(Max number of derricks or oil resources) / 2
-
 #define	MAX_OIL_DEFEND_LOCATIONS	100		//max number of attack locations to store
-#define	MAX_OIL_LOCATIONS			300		//max number of oil locations to store
 #define	MAX_BASE_DEFEND_LOCATIONS	30		//max number of base locations to store
-#define SAME_LOC_RANGE				8		//if within this range, consider it the same loc
 
 extern SDWORD baseLocation[MAX_PLAYERS][MAX_PLAYERS][2];
 extern SDWORD baseDefendLocation[MAX_PLAYERS][MAX_BASE_DEFEND_LOCATIONS][2];
@@ -41,32 +35,27 @@ extern SDWORD oilDefendLocation[MAX_PLAYERS][MAX_OIL_DEFEND_LOCATIONS][2];
 extern SDWORD baseDefendLocPrior[MAX_PLAYERS][MAX_BASE_DEFEND_LOCATIONS];
 extern SDWORD oilDefendLocPrior[MAX_PLAYERS][MAX_OIL_DEFEND_LOCATIONS];
 
-extern	BOOL SavePlayerAIExperience(SDWORD nPlayer, BOOL bNotify);
-extern	SDWORD LoadPlayerAIExperience(SDWORD nPlayer);
+BOOL SavePlayerAIExperience(SDWORD nPlayer, BOOL bNotify);
+SDWORD LoadPlayerAIExperience(SDWORD nPlayer);
 
-extern	void LoadAIExperience(BOOL bNotify);
-extern	BOOL SaveAIExperience(BOOL bNotify);
+void LoadAIExperience(BOOL bNotify);
+BOOL SaveAIExperience(BOOL bNotify);
 
 
-extern	void InitializeAIExperience(void);
+void InitializeAIExperience(void);
 
-extern	BOOL StoreBaseDefendLoc(SDWORD x, SDWORD y, SDWORD nPlayer);
-extern	BOOL StoreOilDefendLoc(SDWORD x, SDWORD y, SDWORD nPlayer);
+BOOL StoreBaseDefendLoc(SDWORD x, SDWORD y, SDWORD nPlayer);
+BOOL StoreOilDefendLoc(SDWORD x, SDWORD y, SDWORD nPlayer);
 
-extern int GetOilDefendLocIndex(SDWORD x, SDWORD y, SDWORD nPlayer);
-extern	SDWORD GetBaseDefendLocIndex(SDWORD x, SDWORD y, SDWORD nPlayer);
+int GetOilDefendLocIndex(SDWORD x, SDWORD y, SDWORD nPlayer);
+SDWORD GetBaseDefendLocIndex(SDWORD x, SDWORD y, SDWORD nPlayer);
 
-extern bool CanRememberPlayerBaseLoc(SDWORD lookingPlayer, SDWORD enemyPlayer);
-extern bool CanRememberPlayerBaseDefenseLoc(SDWORD player, SDWORD index);
-extern bool CanRememberPlayerOilDefenseLoc(SDWORD player, SDWORD index);
+bool CanRememberPlayerBaseLoc(SDWORD lookingPlayer, SDWORD enemyPlayer);
+bool CanRememberPlayerBaseDefenseLoc(SDWORD player, SDWORD index);
+bool CanRememberPlayerOilDefenseLoc(SDWORD player, SDWORD index);
 
-extern	void BaseExperienceDebug(SDWORD nPlayer);
-extern	void OilExperienceDebug(SDWORD nPlayer);
-
-//Return values of experience-loading routine
-#define EXPERIENCE_LOAD_OK			0			//no problemens encountered
-#define EXPERIENCE_LOAD_ERROR		1			//error while loading experience
-#define EXPERIENCE_LOAD_NOSAVE		(-1)		//no experience exists
+void BaseExperienceDebug(SDWORD nPlayer);
+void OilExperienceDebug(SDWORD nPlayer);
 
 #ifdef __cplusplus
 }

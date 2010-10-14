@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -25,41 +25,19 @@
  */
 
 #include "lib/framework/frame.h"
-#include "lib/framework/math_ext.h"
 #include "lib/netplay/netplay.h"
 
-#include "objects.h"
-#include "combat.h"
-#include "stats.h"
-#include "visibility.h"
-#include "lib/gamelib/gtime.h"
-#include "map.h"
-#include "move.h"
-#include "cluster.h"
-#include "messagedef.h"
-#include "miscimd.h"
-#include "projectile.h"
-#include "lib/sound/audio.h"
-#include "geometry.h"
-#include "cmddroid.h"
-#include "mapgrid.h"
-#include "order.h"
-#include "ai.h"
 #include "action.h"
+#include "cluster.h"
+#include "combat.h"
 #include "difficulty.h"
+#include "geometry.h"
+#include "mapgrid.h"
+#include "projectile.h"
 #include "random.h"
-
-/* minimum miss distance */
-#define MIN_MISSDIST	(TILE_UNITS/6)
-
-/* The number of tiles of clear space needed for indirect fire */
-#define INDIRECT_LOSDIST 2
 
 // maximum random pause for firing
 #define RANDOM_PAUSE	500
-
-// visibility level below which the to hit chances are reduced
-#define VIS_ATTACK_MOD_LEVEL	150
 
 /* direction array for missed bullets */
 typedef struct _bul_dir
@@ -79,21 +57,6 @@ static BUL_DIR aScatterDir[BUL_MAXSCATTERDIR] =
 	{ -1,-1 },
 };
 
-/* Initialise the combat system */
-BOOL combInitialise(void)
-{
-	return true;
-}
-
-
-/* Shutdown the combat system */
-BOOL combShutdown(void)
-{
-	return true;
-}
-
-unsigned int objGuessFutureDamage(WEAPON_STATS *psStats, unsigned int player, BASE_OBJECT *psTarget, HIT_SIDE impactSide);
-
 // Watermelon:real projectile
 /* Fire a weapon at something */
 void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, int weapon_slot)
@@ -103,11 +66,11 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	UDWORD			dice, damLevel;
 	SDWORD			resultHitChance=0,baseHitChance=0,fireChance;
 	UDWORD			firePause;
-	SDWORD			targetDir,dirDiff;
 	SDWORD			longRange;
 	DROID			*psDroid = NULL;
 	int				minOffset = 5;
 	SDWORD			dist;
+	int				compIndex;
 
 	CHECK_OBJECT(psAttacker);
 	CHECK_OBJECT(psTarget);
@@ -124,7 +87,9 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	}
 
 	/* Get the stats for the weapon */
-	psStats = asWeaponStats + psWeap->nStat;
+	compIndex = psWeap->nStat;
+	ASSERT_OR_RETURN( , compIndex < numWeaponStats, "Invalid range referenced for numWeaponStats, %d > %d", compIndex, numWeaponStats);
+	psStats = asWeaponStats + compIndex;
 
 	// check valid weapon/prop combination
 	if (!validTarget(psAttacker, psTarget, weapon_slot))
@@ -228,8 +193,8 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	// if the turret doesn't turn, check if the attacker is in alignment with the target
 	if (psAttacker->type == OBJ_DROID && !psStats->rotate)
 	{
-		targetDir = calcDirection(psAttacker->pos.x, psAttacker->pos.y, psTarget->pos.x, psTarget->pos.y);
-		dirDiff = labs(targetDir - (SDWORD)psAttacker->direction);
+		uint16_t targetDir = calcDirection(psAttacker->pos.x, psAttacker->pos.y, psTarget->pos.x, psTarget->pos.y);
+		int dirDiff = abs(angleDelta(targetDir - psAttacker->rot.direction));
 		if (dirDiff > FIXED_TURRET_DIR)
 		{
 			return;
@@ -240,7 +205,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	xDiff = psAttacker->pos.x - psTarget->pos.x;
 	yDiff = psAttacker->pos.y - psTarget->pos.y;
 	distSquared = xDiff*xDiff + yDiff*yDiff;
-	dist = sqrtf(distSquared);
+	dist = iSqrt(distSquared);
 	longRange = proj_GetLongRange(psStats);
 
 	if ((dist <= psStats->shortRange)  && (dist >= psStats->minRange))
@@ -338,31 +303,17 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		//Watermelon:Target prediction
 		if (psTarget->type == OBJ_DROID)
 		{
-			double flightTime;
+			int32_t flightTime;
 			SDWORD empTime = 0;
 
 			if (proj_Direct(psStats) || dist <= psStats->minRange)
 			{
-				flightTime = (double)dist / (double)psStats->flightSpeed;
+				flightTime = dist / psStats->flightSpeed;
 			}
 			else
 			{
-				/* Copied out of proj_SendProjectile.  Simplified slightly. */
-				SDWORD dz = psTarget->pos.z - psAttacker->pos.z;
-				SDWORD iRadSq = distSquared + dz*dz;
-				SDWORD iVelSq = psStats->flightSpeed * psStats->flightSpeed;
-				double fA = ACC_GRAVITY * (double)iRadSq / (2.0 * iVelSq);
-				double fC = 4.0 * fA * (dz + fA);
-				double fS = (double)iRadSq - fC;
-
-				if (fS < 0.0)
-				{
-					flightTime = sqrt((double)dist) / 30;  /* Purely a guess, but surprisingly effective */
-				}
-				else
-				{
-					flightTime = (double)dist / (double)psStats->flightSpeed;
-				}
+				int32_t vXY, vZ;  // Unused, we just want the flight time.
+				flightTime = projCalcIndirectVelocities(dist, psTarget->pos.z - psAttacker->pos.z, psStats->flightSpeed, &vXY, &vZ);
 			}
 
 			if (psTarget->lastHitWeapon == WSC_EMP)
@@ -375,17 +326,13 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 				}
 				else
 				{
-					flightTime -= (double)empTime / 1000;
-					if (flightTime < 0.0)
-					{
-						flightTime = 0.0;
-					}
+					flightTime = MAX(0, flightTime - empTime);
 				}
 			}
 
-			predict.x = trigSin( ((DROID *)psTarget)->sMove.moveDir ) * ((DROID *)psTarget)->sMove.speed * flightTime;
+			predict.x = iSinR(((DROID *)psTarget)->sMove.moveDir, ((DROID *)psTarget)->sMove.speed*flightTime / GAME_TICKS_PER_SEC);
 			predict.x += psTarget->pos.x;
-			predict.y = trigCos( ((DROID *)psTarget)->sMove.moveDir ) * ((DROID *)psTarget)->sMove.speed * flightTime;
+			predict.y = iCosR(((DROID *)psTarget)->sMove.moveDir, ((DROID *)psTarget)->sMove.speed*flightTime / GAME_TICKS_PER_SEC);
 			predict.y += psTarget->pos.y;
 
 			// Make sure we don't pass any negative or out of bounds numbers to proj_SendProjectile
@@ -411,7 +358,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	}
 	else /* Deal with a missed shot */
 	{
-		int missDir = rand() % BUL_MAXSCATTERDIR, missDist = 2 * (100 - resultHitChance);
+		int missDir = gameRand(BUL_MAXSCATTERDIR), missDist = 2 * (100 - resultHitChance);
 		Vector3i miss = {
 			aScatterDir[missDir].x * missDist + psTarget->pos.x + minOffset,
 			aScatterDir[missDir].y * missDist + psTarget->pos.y + minOffset,
@@ -504,7 +451,7 @@ void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
  * \param weaponClass the class of the weapon that deals the damage
  * \param weaponSubClass the subclass of the weapon that deals the damage
  * \param angle angle of impact (from the damage dealing projectile in relation to this object)
- * \return > 0 when the dealt damage destroys the object, < 0 when the object survives
+ * \return < 0 when the dealt damage destroys the object, > 0 when the object survives
  */
 float objDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD originalhp, UDWORD weaponClass, UDWORD weaponSubClass, HIT_SIDE impactSide)
 {
@@ -547,7 +494,13 @@ float objDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD originalhp, UDWORD wea
 
 	if (psObj->type == OBJ_STRUCTURE || psObj->type == OBJ_DROID)
 	{
+		// Force sending messages, even if messages were turned off, since a non-synchronised script will execute here. (Aaargh!)
+		bool bMultiMessagesBackup = bMultiMessages;
+		bMultiMessages = bMultiPlayer;
+
 		clustObjectAttacked((BASE_OBJECT *)psObj);
+
+		bMultiMessages = bMultiMessagesBackup;
 	}
 
 
@@ -570,13 +523,20 @@ float objDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD originalhp, UDWORD wea
 
 	objTrace(psObj->id, "objDamage: Penetrated %d", actualDamage);
 
+	// for some odd reason, we have 0 hitpoints.
+	if (!originalhp)
+	{
+		ASSERT(originalhp, "original hitpoints are 0 ?");
+		return -1.0f;	// it is dead
+	}
+
 	// If the shell did sufficient damage to destroy the object, deal with it and return
 	if (actualDamage >= psObj->body)
 	{
 		return (float) psObj->body / (float) originalhp * -1.0f;
 	}
 
-	// Substract the dealt damage from the droid's remaining body points
+	// Subtract the dealt damage from the droid's remaining body points
 	psObj->body -= actualDamage;
 
 	return (float) actualDamage / (float) originalhp;

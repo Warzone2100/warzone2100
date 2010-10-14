@@ -13,11 +13,7 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 #
 # --------------------------------------------------------------------------
-# MasterServer v0.1 by Gerard Krol (gerard_) and Tim Perrei (Kamaze)
-#              v1.0 by Freddie Witherden (EvilGuru)
-#              v2.0 by Gerhard Schaden (gschaden)
-#              v2.0a by Buginator  (fixed endian issue)
-#              v2.2 add motd, bigger GAMESTRUCT, private game notification
+# MasterServer
 # --------------------------------------------------------------------------
 #
 ################################################################################
@@ -28,10 +24,10 @@ from __future__ import with_statement
 ################################################################################
 #
 
-__author__ = "Gerard Krol, Tim Perrei, Freddie Witherden, Gerhard Schaden, Dennis Schridde, Buginator"
-__version__ = "2.2"
+__author__ = "The Warzone 2100 Project"
+__version__ = "2.3"
 __bpydoc__ = """\
-This script runs a Warzone 2100 2.2.x+ masterserver
+This script runs a Warzone 2100 2.3.x+ masterserver
 """
 
 #
@@ -55,7 +51,8 @@ from protocol import *
 
 checkInterval = 100      # Interval between requests causing a gamedb check
 
-MOTDstring = None        # our message of the day (max 255 bytes)
+MOTDstring = None        # our message of the day (max 255 bytes) (for 2.3 / trunk)
+MOTD22string = None      # the EOL message for 2.2.x
 
 logging.basicConfig(level = logging.DEBUG, format = "%(asctime)-15s %(levelname)s %(message)s")
 
@@ -182,7 +179,7 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 	def sendStatusMessage(self, status, message):
 		logging.debug("(%s) Sending response status (%d) and message: %s" % (self.gameHost, status, message))
 		try:
-			protocol.sendStatusMessage(self.gameHost, status, message, self.wfile)
+			protocol.sendStatusMessage(self.gameHost, status, str(message), self.wfile)
 		except NotImplementedError:
 			# Ignore the case where sending of status messages isn't supported
 			pass
@@ -272,13 +269,15 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 					hosts = self.g.hosts
 					newGameData = protocol.decodeSingle(self.rfile, self.g)
 					if not newGameData:
+						# might disable below, spams alot
+						#logging.debug('(%s) Failed to decode new gamedata (maybe aborted clientside)' % self.gameHost)
 						return
 					self.g.hosts = hosts
 
 					if not hasattr(self.g, 'addressCount') and self.g.gameId > 0:
 						try:
 							self.GameId = gamedb.getGameByID(self.g.gameId)
-							logging.debug("(%s) Game with same ID already present, linking games...", (self.gameHost))
+							logging.debug("(%s) Game with same ID already present, linking games..." % self.gameHost)
 
 							# Apparently a game with this ID exists already, so remove this duplicate game
 							gamedb.removeGame(self.g)
@@ -301,9 +300,17 @@ class RequestHandler(SocketServer.ThreadingMixIn, SocketServer.StreamRequestHand
 						self.sendStatusMessage(self.CLIENT_ERROR_NOT_ACCEPTABLE, 'Game unreachable, failed to open a connection to: [%s]:%d' % (self.gameHost, protocol.gamePort))
 						return
 
-					self.sendStatusMessage(self.SUCCESS_OK, MOTDstring)
+					# Only send MOTD when we can check the version
+					if self.g.lobbyVersion: 
+						if self.g.lobbyVersion == 3:
+						   self.sendStatusMessage(self.SUCCESS_OK, MOTDstring)
+						else:
+						   self.sendStatusMessage(self.SUCCESS_OK, MOTD22string)
+# After a few weeks, we will force 2.2.x clients to upgrade, by closing the connection after MOTD is sent.
+#					   self.sendStatusMessage(self.CLIENT_ERROR_NOT_ACCEPTABLE, MOTD22string)
+#					   return
 					gamedb.listGames()
-				return
+
 			# Get a game list.
 			elif netCommand == 'list':
 				# Lock the gamelist to prevent new games while output.
@@ -363,9 +370,17 @@ if __name__ == '__main__':
 	logging.info("Starting Warzone 2100 lobby server on port %d" % (protocol.lobbyPort))
 
 	# Read in the Message of the Day, max is 1 line, 255 chars
+	#for the 2.3 / trunk clients
 	in_file = open("motd.txt", "r")
 	MOTDstring = in_file.read()
 	in_file.close()
+
+	#for the 2.2.x client (farewell message)
+	in_file = open("motd2.2.txt", "r")
+	MOTD22string = in_file.read()
+	in_file.close()
+
+	logging.info("The MOTD(2.2) is (%s)" % MOTD22string)
 	logging.info("The MOTD is (%s)" % MOTDstring)
 
 

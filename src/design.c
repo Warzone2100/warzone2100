@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -35,7 +35,8 @@
 
 /* Includes direct access to render library */
 #include "lib/ivis_common/ivisdef.h"
-#include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_common/bitimage.h"
+#include "lib/ivis_common/pieblitfunc.h"
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/piematrix.h"//matrix code
 #include "lib/ivis_common/piestate.h"
@@ -271,13 +272,11 @@ char StringBuffer[STRING_BUFFER_SIZE];
 /* the widget screen */
 extern W_SCREEN		*psWScreen;
 
-extern	UDWORD				objID;					// unique ID creation thing..
-
 /* default droid design template */
 DROID_TEMPLATE sDefaultDesignTemplate;
 
 extern void intDisplayPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-void desSetupDesignTemplates( void );
+static void desSetupDesignTemplates(void);
 
 /* Set the current mode of the design screen, and display the appropriate component lists */
 static void intSetDesignMode(DES_COMPMODE newCompMode);
@@ -805,7 +804,7 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 	}
 
 	/* Set the text colour for the form */
-	widgSetColour(psWScreen, IDDES_POWERFORM, WCOL_TEXT, 0, 164, 0);
+	widgSetColour(psWScreen, IDDES_POWERFORM, WCOL_TEXT, WZCOL_DESIGN_POWER_FORM_BACKGROUND);
 
 	/* Add the design template power bar and label*/
 	sLabInit.formID	= IDDES_POWERFORM;
@@ -894,7 +893,7 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 }
 
 /* set up droid templates before going into design screen */
-void desSetupDesignTemplates( void )
+void desSetupDesignTemplates(void)
 {
 	DROID_TEMPLATE	*psTempl;
 	UDWORD			i;
@@ -1056,12 +1055,8 @@ BOOL intAddTemplateButtons(UDWORD formID, UDWORD formWidth, UDWORD formHeight,
 	sBarInit.width = STAT_PROGBARWIDTH;
 	sBarInit.height = STAT_PROGBARHEIGHT;
 	sBarInit.size = 50;
-	sBarInit.sCol.byte.r = STAT_PROGBARMAJORRED;
-	sBarInit.sCol.byte.g = STAT_PROGBARMAJORGREEN;
-	sBarInit.sCol.byte.b = STAT_PROGBARMAJORBLUE;
-	sBarInit.sMinorCol.byte.r = STAT_PROGBARMINORRED;
-	sBarInit.sMinorCol.byte.g = STAT_PROGBARMINORGREEN;
-	sBarInit.sMinorCol.byte.b = STAT_PROGBARMINORBLUE;
+	sBarInit.sCol = WZCOL_ACTION_PROGRESS_BAR_MAJOR;
+	sBarInit.sMinorCol = WZCOL_ACTION_PROGRESS_BAR_MINOR;
 	sBarInit.pTip = _("Power Usage");
 
 	droidTemplID = 0;
@@ -1284,45 +1279,46 @@ static COMPONENT_STATS *
 intChooseSystemStats( DROID_TEMPLATE *psTemplate )
 {
 	COMPONENT_STATS		*psStats = NULL;
+	int compIndex;
 
 	// Choose correct system stats
 	switch (droidTemplateType(psTemplate))
 	{
 	case DROID_COMMAND:
-		psStats = (COMPONENT_STATS *)(asBrainStats +
-								psTemplate->asParts[COMP_BRAIN]);
+		compIndex = psTemplate->asParts[COMP_BRAIN];
+		ASSERT_OR_RETURN( NULL, compIndex < numBrainStats, "Invalid range referenced for numBrainStats, %d > %d", compIndex, numBrainStats);
+		psStats = (COMPONENT_STATS *)(asBrainStats + compIndex);
 		break;
 	case DROID_SENSOR:
-		psStats = (COMPONENT_STATS *)(asSensorStats +
-								psTemplate->asParts[COMP_SENSOR]);
+		compIndex = psTemplate->asParts[COMP_SENSOR];
+		ASSERT_OR_RETURN( NULL, compIndex < numSensorStats, "Invalid range referenced for numSensorStats, %d > %d", compIndex, numSensorStats);
+		psStats = (COMPONENT_STATS *)(asSensorStats + compIndex);
 		break;
 	case DROID_ECM:
-		psStats = (COMPONENT_STATS *)(asECMStats +
-								psTemplate->asParts[COMP_ECM]);
+		compIndex = psTemplate->asParts[COMP_ECM];
+		ASSERT_OR_RETURN( NULL, compIndex < numECMStats, "Invalid range referenced for numECMStats, %d > %d", compIndex, numECMStats);
+		psStats = (COMPONENT_STATS *)(asECMStats + compIndex);
 		break;
 	case DROID_CONSTRUCT:
 	case DROID_CYBORG_CONSTRUCT:
-		psStats = (COMPONENT_STATS *)(asConstructStats +
-								psTemplate->asParts[COMP_CONSTRUCT]);
+		compIndex = psTemplate->asParts[COMP_CONSTRUCT];
+		ASSERT_OR_RETURN( NULL, compIndex < numConstructStats, "Invalid range referenced for numConstructStats, %d > %d", compIndex, numConstructStats);
+		psStats = (COMPONENT_STATS *)(asConstructStats + compIndex);
 		break;
 	case DROID_REPAIR:
 	case DROID_CYBORG_REPAIR:
-		psStats = (COMPONENT_STATS *)(asRepairStats +
-								psTemplate->asParts[COMP_REPAIRUNIT]);
+		compIndex = psTemplate->asParts[COMP_REPAIRUNIT];
+		ASSERT_OR_RETURN( NULL, compIndex < numRepairStats, "Invalid range referenced for numRepairStats, %d > %d", compIndex, numRepairStats);
+		psStats = (COMPONENT_STATS *)(asRepairStats + compIndex);
 		break;
 	case DROID_WEAPON:
-		//this is naming stuff
-		if (psTemplate->numWeaps > 0)
-		{
-			psStats = (COMPONENT_STATS *)(asWeaponStats +
-					psTemplate->asWeaps[0]);
-		}
 	case DROID_PERSON:
 	case DROID_CYBORG:
 	case DROID_CYBORG_SUPER:
 	case DROID_DEFAULT:
-		psStats = (COMPONENT_STATS *)(asWeaponStats +
-								psTemplate->asWeaps[0]);
+		compIndex = psTemplate->asWeaps[0];
+		ASSERT_OR_RETURN( NULL, compIndex < numWeaponStats, "Invalid range referenced for numWeaponStats, %d > %d", compIndex, numWeaponStats);
+		psStats = (COMPONENT_STATS *)(asWeaponStats + compIndex);
 		break;
 	default:
 		debug( LOG_ERROR, "unrecognised droid type" );
@@ -1340,13 +1336,14 @@ const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 	// NOTE:	At this time, savegames can support a max of 60. We are using WIDG_MAXSTR (currently 80 )for display
 	// We are also returning a truncated string, instead of NULL if the string is too long.
 	COMPONENT_STATS *psStats = NULL;
+	int compIndex;
 
 	/*
 		First we check for the special cases of the Transporter & Cyborgs
 	*/
 	if(psTemplate->droidType == DROID_TRANSPORTER)
 	{
-		return _("Transporter");
+		return _("Transport");
 	}
 
 	/*
@@ -1371,7 +1368,9 @@ const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 		sstrcat(aCurrName, _("Hydra "));
 	}
 
-	psStats = (COMPONENT_STATS *) (asBodyStats + psTemplate->asParts[COMP_BODY]);
+	compIndex = psTemplate->asParts[COMP_BODY];
+	ASSERT_OR_RETURN( NULL, compIndex < numBodyStats, "Invalid range referenced for numBodyStats, %d > %d", compIndex, numBodyStats);
+	psStats = (COMPONENT_STATS *) (asBodyStats + compIndex);
 	if ( psTemplate->asParts[COMP_BODY] != 0 )
 	{
 		const char * pStr = getStatName( psStats );
@@ -1386,7 +1385,9 @@ const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 		sstrcat(aCurrName, " ");
 	}
 
-	psStats = (COMPONENT_STATS *) (asPropulsionStats + psTemplate->asParts[COMP_PROPULSION]);
+	compIndex = psTemplate->asParts[COMP_PROPULSION];
+	ASSERT_OR_RETURN( NULL, compIndex < numPropulsionStats, "Invalid range referenced for numPropulsionStats, %d > %d", compIndex, numPropulsionStats);
+	psStats = (COMPONENT_STATS *) (asPropulsionStats + compIndex);
 	if ( psTemplate->asParts[COMP_PROPULSION] != 0 )
 	{
 		const char * pStr = getStatName( psStats );
@@ -4048,7 +4049,7 @@ void intProcessDesign(UDWORD id)
 		switch (id)
 		{
 			/* The four component clickable forms */
-			/* Watermelon the six component clickable forms... */
+			/* the six component clickable forms... */
 		case IDDES_WEAPONS:
 			desCompID = 0;
 			intSetDesignMode(IDES_TURRET);
@@ -4373,6 +4374,7 @@ void intRunDesign(void)
 	UDWORD				statID;
 	COMPONENT_STATS		*psStats;
 	BOOL				templateButton;
+	int compIndex;
 
 	/* Find out which button was hilited */
 	templateButton = false;
@@ -4387,11 +4389,15 @@ void intRunDesign(void)
 	}
 	else if (statID >= IDDES_COMPSTART && statID <= IDDES_COMPEND)
 	{
-		psStats = apsComponentList[statID - IDDES_COMPSTART];
+		compIndex = statID - IDDES_COMPSTART;
+		ASSERT_OR_RETURN( , compIndex < numComponent, "Invalid range referenced for numComponent, %d > %d", compIndex, numComponent);
+		psStats = apsComponentList[compIndex];
 	}
 	else if (statID >= IDDES_EXTRASYSSTART && statID <= IDDES_EXTRASYSEND)
 	{
-		psStats = apsExtraSysList[statID - IDDES_EXTRASYSSTART];
+		compIndex = statID - IDDES_EXTRASYSSTART;
+		ASSERT_OR_RETURN( , compIndex < numExtraSys, "Invalid range referenced for numExtraSys, %d > %d", compIndex, numExtraSys);
+		psStats = apsExtraSysList[compIndex];
 	}
 	else if (statID >= IDDES_TEMPLSTART && statID <= IDDES_TEMPLEND)
 	{
@@ -4471,7 +4477,7 @@ static void intDisplayStatForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 	/* inc rotation if highlighted */
 	if ( Form->state & WCLICK_HILITE )
 	{
-		iRY += timeAdjustedIncrement(BUTTONOBJ_ROTSPEED, false);
+		iRY += graphicsTimeAdjustedIncrement(BUTTONOBJ_ROTSPEED);
 		iRY %= 360;
 	}
 
@@ -4507,7 +4513,7 @@ static void intDisplayViewForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 		Rotation.z = 0;
 
 		/* inc rotation */
-		iRY += timeAdjustedIncrement(BUTTONOBJ_ROTSPEED, false);
+		iRY += graphicsTimeAdjustedIncrement(BUTTONOBJ_ROTSPEED);
 		iRY %= 360;
 
 		//fixed depth scale the pie
@@ -4652,6 +4658,8 @@ static BOOL saveTemplate(void)
 			/*ANY change to the template affect the production - even if the
 			template is changed and then changed back again!*/
 			deleteTemplateFromProduction(psTempl, (UBYTE)selectedPlayer);
+			SendDestroyTemplate(psTempl);
+			sCurrDesign.multiPlayerID = generateNewObjectId();
 		}
 
 		/* Copy the template */
@@ -4668,8 +4676,7 @@ static BOOL saveTemplate(void)
 	if (stored)
 	{
 		ASSERT_OR_RETURN( false, psTempl != NULL, "Template is NULL in saveTemplate()!");
-		psTempl->multiPlayerID = (objID<<3)|selectedPlayer;
-		objID++;
+		psTempl->multiPlayerID = generateNewObjectId();
 		if (bMultiMessages)
 		{
 			sendTemplate(psTempl);
@@ -4689,6 +4696,7 @@ void runTemplateShadowStats(UDWORD id)
 	COMPONENT_STATS	*psStats;
 	DROID_TYPE		templType;
 	UDWORD			i;
+	int				compIndex;
 
 	/* Find the template for the new button */
 	//currID = IDDES_TEMPLSTART;
@@ -4718,24 +4726,29 @@ void runTemplateShadowStats(UDWORD id)
 			switch (templType)
 			{
 			case DROID_WEAPON:
-				psStats = (COMPONENT_STATS *)(asWeaponStats + psTempl->
-					asWeaps[0]);
+				compIndex = psTempl->asWeaps[0];
+				ASSERT_OR_RETURN( , compIndex < numWeaponStats, "Invalid range referenced for numWeaponStats, %d > %d", compIndex, numWeaponStats);
+				psStats = (COMPONENT_STATS *)(asWeaponStats + compIndex);
 				break;
 			case DROID_SENSOR:
-				psStats = (COMPONENT_STATS *)(asSensorStats + psTempl->
-					asParts[COMP_SENSOR]);
+				compIndex = psTempl->asParts[COMP_SENSOR];
+				ASSERT_OR_RETURN( , compIndex < numSensorStats, "Invalid range referenced for numSensorStats, %d > %d", compIndex, numSensorStats);
+				psStats = (COMPONENT_STATS *)(asSensorStats + compIndex);
 				break;
 			case DROID_ECM:
-				psStats = (COMPONENT_STATS *)(asECMStats + psTempl->
-					asParts[COMP_ECM]);
+				compIndex = psTempl->asParts[COMP_ECM];
+				ASSERT_OR_RETURN( , compIndex < numECMStats, "Invalid range referenced for numECMStats, %d > %d", compIndex, numECMStats);
+				psStats = (COMPONENT_STATS *)(asECMStats + compIndex);
 				break;
 			case DROID_CONSTRUCT:
-				psStats = (COMPONENT_STATS *)(asConstructStats + psTempl->
-					asParts[COMP_CONSTRUCT]);
+				compIndex = psTempl->asParts[COMP_CONSTRUCT];
+				ASSERT_OR_RETURN( , compIndex < numConstructStats, "Invalid range referenced for numConstructStats, %d > %d", compIndex, numConstructStats);
+				psStats = (COMPONENT_STATS *)(asConstructStats + compIndex);
 				break;
 			case DROID_REPAIR:
-				psStats = (COMPONENT_STATS *)(asRepairStats + psTempl->
-					asParts[COMP_REPAIRUNIT]);
+				compIndex = psTempl->asParts[COMP_REPAIRUNIT];
+				ASSERT_OR_RETURN( , compIndex < numRepairStats, "Invalid range referenced for numRepairStats, %d > %d", compIndex, numRepairStats);
+				psStats = (COMPONENT_STATS *)(asRepairStats + compIndex);
 				break;
 			default:
 				break;

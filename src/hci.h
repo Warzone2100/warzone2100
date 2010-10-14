@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -155,9 +155,6 @@ extern "C"
 
 #define POW_GAPX		5
 #define POW_GAPY		2
-#define POW_CLICKBARMAJORRED	0xcc
-#define POW_CLICKBARMAJORGREEN	0
-#define POW_CLICKBARMAJORBLUE	0
 
 //tab details
 #define OBJ_TABWIDTH	26
@@ -230,19 +227,6 @@ extern "C"
 #define STAT_POWERBARX			3
 #define STAT_POWERBARY			(OBJ_BUTHEIGHT-STAT_PROGBARHEIGHT-6)
 
-#define STAT_PROGBARMAJORRED	255//0xcc
-#define STAT_PROGBARMAJORGREEN	235//0
-#define STAT_PROGBARMAJORBLUE	19//0
-#define STAT_PROGBARMINORRED	0x55
-#define STAT_PROGBARMINORGREEN	0
-#define STAT_PROGBARMINORBLUE	0
-#define STAT_PROGBARTROUGHRED	0
-#define STAT_PROGBARTROUGHGREEN	32
-#define STAT_PROGBARTROUGHBLUE	64
-#define STAT_TEXTRED	255
-#define STAT_TEXTGREEN	255
-#define STAT_TEXTBLUE	0
-
 /* maximum array sizes */
 #define	MAXSTRUCTURES	200	//bumped up from 80.  NOTE: was used for max # in build menus.
 #define	MAXRESEARCH		200 //was 80 topic displayed   "           "
@@ -277,8 +261,6 @@ typedef enum {
 
 //NOT ANYMORE! 10/08/98 AB
 //#define INCLUDE_PRODSLIDER	// Include quantity slider in manufacture window.
-
-#define INCLUDE_FACTORYLISTS
 
 extern INTMODE intMode;
 
@@ -315,6 +297,7 @@ extern BOOL ClosingIntelMap;
 extern BOOL	ClosingTrans;
 extern BOOL	ClosingTransCont;
 extern BOOL	ClosingTransDroids;
+extern BOOL ClosingOrder;
 
 /* Initialise the in game interface */
 extern BOOL intInitialise(void);
@@ -456,9 +439,6 @@ extern void intResetPreviousObj(void);
 extern void HandleClosingWindows(void);
 
 extern BOOL intIsRefreshing(void);
-
-void intReopenBuild(BOOL reopen);
-BOOL intGetReopenBuild(void);
 
 extern void intDemolishCancel(void);
 

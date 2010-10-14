@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -32,22 +32,12 @@ extern "C"
 /** Free power on collection of oildrum. */
 #define OILDRUM_POWER		100
 
-#define	POWER_PER_CYCLE		5
-
 /** Used to determine the power cost of repairing a droid.
     Definately DON'T WANT the brackets round 1/2 - it will equate to zero! */
 #define REPAIR_POWER_FACTOR 1/5
 
 /** Used to multiply all repair calculations by to avaoid rounding errors. */
 #define POWER_FACTOR        100
-
-typedef struct _player_power
-{
-	float currentPower;         ///< The current amount of power avaialble to the player.
-	float powerProduced;        ///< Power produced
-	float powerRequested;       ///< Power requested
-	float economyThrottle;      ///< Which percentage of the requested power is actually delivered
-} PLAYER_POWER;
 
 /** Allocate the space for the playerPower. */
 extern BOOL allocPlayerPower(void);
@@ -62,25 +52,25 @@ extern BOOL resetPlayerPower(UDWORD player, STRUCTURE *psStruct);
 extern void releasePlayerPower(void);
 
 /** Check the available power. */
-extern BOOL checkPower(int player, float quantity);
+BOOL checkPower(int player, uint32_t quantity);
 
-extern float requestPower(int player, float amount);
-extern int requestPowerFor(int player, float amount, int points);
+extern int requestPowerFor(int player, int32_t amount, int points);
+extern int requestPrecisePowerFor(int player, int64_t amount, int points);
 
-extern void addPower(int player, float quantity);
+extern void addPower(int player, int32_t quantity);
 
-BOOL checkPower(int player, float quantity);
-void usePower(int player, float quantity);
+void usePower(int player, uint32_t quantity);
 
 /** Update current power based on what was extracted during the last cycle and what Power Generators exist. */
 extern void updatePlayerPower(UDWORD player);
 
 /** Used in multiplayer to force power levels. */
-extern void setPower(int player, float power);
+void setPower(unsigned player, int32_t power);
+void setPrecisePower(unsigned player, int64_t power);
 
 /** Get the amount of power current held by the given player. */
-extern float getPower(int player);
-extern float getExtractedPower(int player);
+int32_t getPower(unsigned player);
+int64_t getPrecisePower(unsigned player);
 
 /** Resets the power levels for all players when power is turned back on. */
 void powerCalc(BOOL on);

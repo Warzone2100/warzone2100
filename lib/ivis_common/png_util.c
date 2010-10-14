@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/debug.h"
+#include "jpeg_encoder.h"
 #include "png_util.h"
 #include <png.h>
 #include <physfs.h>
@@ -175,20 +176,14 @@ static void internal_saveImage_PNG(const char *fileName, const iV_Image *image, 
 	unsigned char** scanlines = NULL;
 	png_infop info_ptr = NULL;
 	png_structp png_ptr = NULL;
-	unsigned int channelsPerPixel = 3;
 	PHYSFS_file* fileHandle;
-
-	if (color_type == PNG_COLOR_TYPE_GRAY)
-	{
-		channelsPerPixel = 1;
-	}
 
 	ASSERT(image->depth != 0, "Bad depth");
 
 	fileHandle = PHYSFS_openWrite(fileName);
 	if (fileHandle == NULL)
 	{
-		debug(LOG_ERROR, "pie_PNGSaveFile: PHYSFS_openWrite failed (while openening file %s) with error: %s\n", fileName, PHYSFS_getLastError());
+		debug(LOG_ERROR, "pie_PNGSaveFile: PHYSFS_openWrite failed (while opening file %s) with error: %s\n", fileName, PHYSFS_getLastError());
 		return;
 	}
 
@@ -196,14 +191,16 @@ static void internal_saveImage_PNG(const char *fileName, const iV_Image *image, 
 	if (png_ptr == NULL)
 	{
 		debug(LOG_ERROR, "pie_PNGSaveFile: Unable to create png struct\n");
-		return PNGWriteCleanup(&info_ptr, &png_ptr, fileHandle);
+		PNGWriteCleanup(&info_ptr, &png_ptr, fileHandle);
+		return;
 	}
 
 	info_ptr = png_create_info_struct(png_ptr);
 	if (info_ptr == NULL)
 	{
 		debug(LOG_ERROR, "pie_PNGSaveFile: Unable to create png info struct\n");
-		return PNGWriteCleanup(&info_ptr, &png_ptr, fileHandle);
+		PNGWriteCleanup(&info_ptr, &png_ptr, fileHandle);
+		return;
 	}
 
 	// If libpng encounters an error, it will jump into this if-branch
@@ -213,14 +210,21 @@ static void internal_saveImage_PNG(const char *fileName, const iV_Image *image, 
 	}
 	else
 	{
-		unsigned int currentRow;
-		unsigned int row_stride = image->width * channelsPerPixel * image->depth / 8;
+		unsigned int channelsPerPixel = 3;
+		unsigned int currentRow, row_stride;
+
+		if (color_type == PNG_COLOR_TYPE_GRAY)
+		{
+			channelsPerPixel = 1;
+		}
+		row_stride = image->width * channelsPerPixel * image->depth / 8;
 
 		scanlines = malloc(sizeof(const char*) * image->height);
 		if (scanlines == NULL)
 		{
 			debug(LOG_ERROR, "pie_PNGSaveFile: Couldn't allocate memory\n");
-			return PNGWriteCleanup(&info_ptr, &png_ptr, fileHandle);
+			PNGWriteCleanup(&info_ptr, &png_ptr, fileHandle);
+			return;
 		}
 
 		png_set_write_fn(png_ptr, fileHandle, wzpng_write_data, wzpng_flush_data);
@@ -268,7 +272,7 @@ static void internal_saveImage_PNG(const char *fileName, const iV_Image *image, 
 	}
 
 	free(scanlines);
-	return PNGWriteCleanup(&info_ptr, &png_ptr, fileHandle);
+	PNGWriteCleanup(&info_ptr, &png_ptr, fileHandle);
 }
 
 void iV_saveImage_PNG(const char *fileName, const iV_Image *image)
@@ -280,3 +284,53 @@ void iV_saveImage_PNG_Gray(const char *fileName, const iV_Image *image)
 {
 	internal_saveImage_PNG(fileName, image, PNG_COLOR_TYPE_GRAY);
 }
+
+void iV_saveImage_JPEG(const char *fileName, const iV_Image *image)
+{
+	unsigned char *buffer = NULL;
+	unsigned char *jpeg = NULL;
+	char newfilename[PATH_MAX];
+	unsigned int currentRow;
+	const unsigned int row_stride = image->width * 3; // 3 bytes per pixel
+	PHYSFS_file* fileHandle;
+	unsigned char *jpeg_end;
+
+	sstrcpy(newfilename, fileName);
+	memcpy(newfilename + strlen(newfilename) - 4, ".jpg", 4);
+	fileHandle = PHYSFS_openWrite(newfilename);
+	if (fileHandle == NULL)
+	{
+		debug(LOG_ERROR, "pie_JPEGSaveFile: PHYSFS_openWrite failed (while opening file %s) with error: %s\n", fileName, PHYSFS_getLastError());
+		return;
+	}
+
+	buffer = malloc(sizeof(const char*) * image->height * image->width);
+	if (buffer == NULL)
+	{
+		debug(LOG_ERROR, "pie_JPEGSaveFile: Couldn't allocate memory\n");
+		return;
+	}
+
+	// Create an array of scanlines
+	for (currentRow = 0; currentRow < image->height; ++currentRow)
+	{
+		// We're filling the scanline from the bottom up here,
+		// otherwise we'd have a vertically mirrored image.
+		memcpy(buffer + row_stride * currentRow, &image->bmp[row_stride * (image->height - currentRow - 1)], row_stride);
+	}
+
+	jpeg = malloc(sizeof(const char*) * image->height * image->width);
+	if (jpeg == NULL)
+	{
+		debug(LOG_ERROR, "pie_JPEGSaveFile: Couldn't allocate memory\n");
+		return;
+	}
+
+	jpeg_end = jpeg_encode_image(buffer, jpeg, 1, JPEG_FORMAT_RGB, image->width, image->height);
+	PHYSFS_write(fileHandle, jpeg, jpeg_end - jpeg, 1);
+
+	free(buffer);
+	free(jpeg);
+	PHYSFS_close(fileHandle);
+}
+

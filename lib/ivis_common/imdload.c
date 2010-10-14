@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -32,14 +32,7 @@
 
 #include "ivisdef.h" // for imd structures
 #include "imd.h" // for imd structures
-#include "rendmode.h"
-#include "ivispatch.h"
 #include "tex.h" // texture page loading
-
-
-// Static variables
-static VERTEXID vertexTable[iV_IMD_MAX_POINTS];
-
 
 static BOOL AtEndOfFile(const char *CurPos, const char *EndOfFile)
 {
@@ -71,7 +64,7 @@ static BOOL AtEndOfFile(const char *CurPos, const char *EndOfFile)
  * \post s->polys allocated (iFSDPoly * s->npolys)
  * \post s->pindex allocated for each poly
  */
-static BOOL _imd_load_polys( const char **ppFileData, iIMDShape *s )
+static bool _imd_load_polys( const char **ppFileData, iIMDShape *s, int pieVersion)
 {
 	const char *pFileData = *ppFileData;
 	unsigned int i, j;
@@ -118,7 +111,7 @@ static BOOL _imd_load_polys( const char **ppFileData, iIMDShape *s )
 				return false;
 			}
 			pFileData += cnt;
-			poly->pindex[j] = vertexTable[newID];
+			poly->pindex[j] = newID;
 		}
 
 		assert(poly->npnts > 2);
@@ -143,9 +136,16 @@ static BOOL _imd_load_polys( const char **ppFileData, iIMDShape *s )
 			poly->normal = pie_SurfaceNormal3fv(p0, p1, p2);
 		}
 
+		// PIE2 only
 		if (poly->flags & iV_IMD_TEXANIM)
 		{
 			unsigned int nFrames, pbRate, tWidth, tHeight;
+
+			if (pieVersion == PIE_FLOAT_VER)
+			{
+				debug(LOG_ERROR, "PIE version %d doesn't support texanim data! Use PIE2 instead.", pieVersion);
+				return false;
+			}
 
 			// even the psx needs to skip the data
 			if (sscanf(pFileData, "%d %d %d %d%n", &nFrames, &pbRate, &tWidth, &tHeight, &cnt) != 4)
@@ -162,13 +162,13 @@ static BOOL _imd_load_polys( const char **ppFileData, iIMDShape *s )
 			s->numFrames = nFrames;
 			s->animInterval = pbRate;
 
-			poly->texAnim.textureWidth = tWidth;
-			poly->texAnim.textureHeight = tHeight;
+			poly->texAnim.x = tWidth / OLD_TEXTURE_SIZE_FIX;
+			poly->texAnim.y = tHeight / OLD_TEXTURE_SIZE_FIX;
 		}
 		else
 		{
-			poly->texAnim.textureWidth = 0;
-			poly->texAnim.textureHeight = 0;
+			poly->texAnim.x = 0;
+			poly->texAnim.y = 0;
 		}
 
 		// PC texture coord routine
@@ -191,8 +191,16 @@ static BOOL _imd_load_polys( const char **ppFileData, iIMDShape *s )
 				}
 				pFileData += cnt;
 
-				poly->texCoord[j].x = VertexU;
-				poly->texCoord[j].y = VertexV;
+				if (pieVersion == PIE_FLOAT_VER)
+				{
+					poly->texCoord[j].x = VertexU;
+					poly->texCoord[j].y = VertexV;
+				}
+				else
+				{
+					poly->texCoord[j].x = VertexU / OLD_TEXTURE_SIZE_FIX;
+					poly->texCoord[j].y = VertexV / OLD_TEXTURE_SIZE_FIX;
+				}
 			}
 		}
 		else
@@ -211,54 +219,17 @@ static BOOL ReadPoints( const char **ppFileData, iIMDShape *s )
 {
 	const char *pFileData = *ppFileData;
 	unsigned int i;
-	int cnt, j, lastPoint = 0, match = -1;
-	Vector3f newVector = {0.0f, 0.0f, 0.0f};
+	int cnt;
 
 	for (i = 0; i < s->npoints; i++)
 	{
-		if (sscanf(pFileData, "%f %f %f%n", &newVector.x, &newVector.y, &newVector.z, &cnt) != 3)
+		if (sscanf(pFileData, "%f %f %f%n", &s->points[i].x, &s->points[i].y, &s->points[i].z, &cnt) != 3)
 		{
 			debug(LOG_ERROR, "(_load_points) file corrupt -K");
 			return false;
 		}
 		pFileData += cnt;
-
-		//check for duplicate points
-		match = -1;
-
-		// scan through list upto the number of points added (lastPoint) ... not up to the number of points scanned in (i)  (which will include duplicates)
-		for (j = 0; j < lastPoint; j++)
-		{
-			if (Vector3f_Compare(newVector, s->points[j]))
-			{
-				match = j;
-				break;
-			}
-		}
-
-		//check for duplicate points
-		if (match == -1)
-		{
-			// new point
-			s->points[lastPoint].x = newVector.x;
-			s->points[lastPoint].y = newVector.y;
-			s->points[lastPoint].z = newVector.z;
-			vertexTable[i] = lastPoint;
-			lastPoint++;
-		}
-		else
-		{
-			vertexTable[i] = match;
-		}
 	}
-
-	//clear remaining table
-	for (i = s->npoints; i < iV_IMD_MAX_POINTS; i++)
-	{
-		vertexTable[i] = -1;
-	}
-
-	s->npoints = lastPoint;
 
 	*ppFileData = pFileData;
 
@@ -539,7 +510,7 @@ static BOOL _imd_load_connectors(const char **ppFileData, iIMDShape *s)
  * \pre ppFileData loaded
  * \post s allocated
  */
-static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataEnd, int nlevels)
+static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataEnd, int nlevels, int pieVersion)
 {
 	const char *pFileData = *ppFileData;
 	char buffer[PATH_MAX] = {'\0'};
@@ -557,6 +528,7 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
 		return NULL;
 	}
 
+	s->flags = 0;
 	s->nconnectors = 0; // Default number of connectors must be 0
 	s->npoints = 0;
 	s->npolys = 0;
@@ -569,6 +541,7 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
 	s->shadowEdgeList = NULL;
 	s->nShadowEdges = 0;
 	s->texpage = iV_TEX_INVALID;
+	s->tcmaskpage = iV_TEX_INVALID;
 
 
 	if (sscanf(pFileData, "%s %d%n", buffer, &s->npoints, &cnt) != 2)
@@ -607,7 +580,7 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
 		return NULL;
 	}
 
-	_imd_load_polys( &pFileData, s );
+	_imd_load_polys( &pFileData, s, pieVersion);
 
 
 	// NOW load optional stuff
@@ -625,7 +598,7 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
 		if (strcmp(buffer, "LEVEL") == 0)
 		{
 			debug(LOG_3D, "imd[_load_level] = npoints %d, npolys %d", s->npoints, s->npolys);
-			s->next = _imd_load_level(&pFileData, FileDataEnd, nlevels - 1);
+			s->next = _imd_load_level(&pFileData, FileDataEnd, nlevels - 1, pieVersion);
 		}
 		else if (strcmp(buffer, "CONNECTORS") == 0)
 		{
@@ -662,7 +635,7 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 	iIMDShape *shape, *psShape;
 	UDWORD level;
 	int32_t imd_version;
-	uint32_t imd_flags; // FIXME UNUSED
+	uint32_t imd_flags;
 	BOOL bTextured = false;
 
 	if (sscanf(pFileData, "%s %d%n", buffer, &imd_version, &cnt) != 2)
@@ -679,8 +652,8 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 		return NULL;
 	}
 
-	//Now supporting version 4 files
-	if (imd_version < 2 || imd_version > 5)
+	//Now supporting version PIE_VER and PIE_FLOAT_VER files
+	if (imd_version != PIE_VER && imd_version != PIE_FLOAT_VER)
 	{
 		debug(LOG_ERROR, "iV_ProcessIMD %s version %d not supported", pFileName, imd_version);
 		return NULL;
@@ -773,7 +746,7 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 		return NULL;
 	}
 
-	shape = _imd_load_level(&pFileData, FileDataEnd, nlevels);
+	shape = _imd_load_level(&pFileData, FileDataEnd, nlevels, imd_version);
 	if (shape == NULL)
 	{
 		debug(LOG_ERROR, "iV_ProcessIMD %s unsuccessful", pFileName);
@@ -790,10 +763,33 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 			debug(LOG_ERROR, "iV_ProcessIMD %s could not load tex page %s", pFileName, texfile);
 			return NULL;
 		}
-		/* assign tex page to levels */
+
+		// assign tex page to levels
 		for (psShape = shape; psShape != NULL; psShape = psShape->next)
 		{
 			psShape->texpage = texpage;
+		}
+
+		// check if model should use team colour mask
+		if (imd_flags & iV_IMD_TCMASK)
+		{
+			pie_MakeTexPageTCMaskName(texfile);
+			texpage = iV_GetTexture(texfile);
+
+			if (texpage < 0)
+			{
+				ASSERT(false, "iV_ProcessIMD %s could not load tcmask %s", pFileName, texfile);
+				debug(LOG_ERROR, "iV_ProcessIMD %s could not load tcmask %s", pFileName, texfile);
+			}
+			else
+			{
+				// Propagate settings through levels
+				for (psShape = shape; psShape != NULL; psShape = psShape->next)
+				{
+					psShape->flags |= iV_IMD_TCMASK;
+					psShape->tcmaskpage = texpage;
+				}
+			}			
 		}
 	}
 

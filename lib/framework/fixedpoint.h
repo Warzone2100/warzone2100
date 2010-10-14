@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -21,7 +21,6 @@
  * @file
  *
  * Handles fixed point operations for degrees and matrix math.
- * @todo Get rid of this file and use floats instead.
  */
 
 #ifndef FIXEDPOINT_H
@@ -46,11 +45,8 @@ extern "C"
 static const int DEG_360 = 65536;
 static const float DEG_1 = (float)65536 / 360.f;
 
-
-static inline WZ_DECL_CONST int DEG(const float degree)
-{
-	return (int)(degree * DEG_1);
-}
+static inline WZ_DECL_CONST float UNDEG(uint16_t angle) { return angle * 360 / 65536.0f; }
+static inline WZ_DECL_CONST int DEG(const float degree) { return (int)(degree * DEG_1); }
 
 #ifdef __cplusplus
 }

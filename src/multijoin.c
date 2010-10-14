@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -24,6 +24,9 @@
  *
  * Stuff to handle the comings and goings of players.
  */
+
+#include <physfs.h>
+
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
 #include "lib/framework/math_ext.h"
@@ -64,7 +67,6 @@
 #include "multistat.h"
 #include "multigifts.h"
 #include "scriptcb.h"
-
 
 // ////////////////////////////////////////////////////////////////////////////
 // External Variables
@@ -120,7 +122,7 @@ void clearPlayer(UDWORD player,BOOL quietly)
 	UDWORD			i;
 	STRUCTURE		*psStruct,*psNext;
 
-	debug(LOG_INFO, "R.I.P. %s (%u). quietly is %s", getPlayerName(player), player, quietly ? "true":"false");
+	debug(LOG_NET, "R.I.P. %s (%u). quietly is %s", getPlayerName(player), player, quietly ? "true":"false");
 
 	ingame.JoiningInProgress[player] = false;	// if they never joined, reset the flag
 	ingame.DataIntegrity[player] = false;
@@ -152,7 +154,8 @@ void clearPlayer(UDWORD player,BOOL quietly)
 	{
 		psNext = psStruct->psNext;
 
-		if(quietly)		// don't show effects
+		// FIXME: look why destroyStruct() doesn't put back the feature like removeStruct() does
+		if(quietly || psStruct->pStructureType->type == REF_RESOURCE_EXTRACTOR)		// don't show effects
 		{
 			removeStruct(psStruct, true);
 		}
@@ -207,8 +210,8 @@ BOOL MultiPlayerLeave(UDWORD playerIndex)
 		return false;
 	}
 
-	NETlogEntry("Player leaving game", 0, playerIndex);
-	debug(LOG_WARNING,"** Warning, player %u [%s], has left the game.", playerIndex, getPlayerName(playerIndex));
+	NETlogEntry("Player leaving game", SYNC_FLAG, playerIndex);
+	debug(LOG_NET,"** Player %u [%s], has left the game at game time %u.", playerIndex, getPlayerName(playerIndex), gameTime);
 
 	ssprintf(buf, _("%s has Left the Game"), getPlayerName(playerIndex));
 
@@ -219,6 +222,18 @@ BOOL MultiPlayerLeave(UDWORD playerIndex)
 	turnOffMultiMsg(false);
 
 	addConsoleMessage(buf, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+
+	if (NetPlay.players[playerIndex].wzFile.isSending)
+	{
+		char buf[256];
+
+		ssprintf(buf, _("File transfer has been aborted for %d.") , playerIndex);
+		addConsoleMessage(buf, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		debug(LOG_INFO, "=== File has been aborted for %d ===", playerIndex);
+		NetPlay.players[playerIndex].wzFile.isSending = false;
+		NetPlay.players[playerIndex].needFile = false;
+	}
+	NetPlay.players[playerIndex].kick = true;  // Don't wait for GAME_GAME_TIME messages from them.
 
 	if (widgGetFromID(psWScreen, IDRET_FORM))
 	{
@@ -269,6 +284,18 @@ BOOL MultiPlayerJoin(UDWORD playerIndex)
 		{
 			kickPlayer(playerIndex, "the game is already full.", ERROR_FULL);
 		}
+		// send everyone's stats to the new guy
+		{
+			int i;
+
+			for (i = 0; i < MAX_PLAYERS; i++)
+			{
+				if (NetPlay.players[i].allocated)
+				{
+					setMultiStats(i, getMultiStats(i), false);
+				}
+			}
+		}
 	}
 	return true;
 }
@@ -278,7 +305,7 @@ bool sendDataCheck(void)
 	int i = 0;
 	uint32_t	player = selectedPlayer;
 
-	NETbeginEncode(NET_DATA_CHECK, NET_HOST_ONLY);		// only need to send to HOST
+	NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_DATA_CHECK);		// only need to send to HOST
 	for(i = 0; i < DATA_MAXDATA; i++)
 	{
 		NETuint32_t(&DataHash[i]);
@@ -289,13 +316,13 @@ bool sendDataCheck(void)
 	return true;
 }
 
-bool recvDataCheck(void)
+bool recvDataCheck(NETQUEUE queue)
 {
 	int i = 0;
 	uint32_t	player;
 	uint32_t tempBuffer[DATA_MAXDATA] = {0};
 
-	NETbeginDecode(NET_DATA_CHECK);
+	NETbeginDecode(queue, NET_DATA_CHECK);
 	for(i = 0; i < DATA_MAXDATA; i++)
 	{
 		NETuint32_t(&tempBuffer[i]);
@@ -327,8 +354,8 @@ bool recvDataCheck(void)
 			addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
 
 			kickPlayer(player, "your data doesn't match the host's!", ERROR_WRONGDATA);
-			debug(LOG_WARNING, "%s (%u) has an incompatible mod. ([%d] got %x, expected %x)", getPlayerName(player), player, i, tempBuffer[i], DataHash[i]);
-			debug(LOG_POPUP, "%s (%u), has an incompatible mod. ([%d] got %x, expected %x)", getPlayerName(player), player, i, tempBuffer[i], DataHash[i]);
+			debug(LOG_WARNING, "%s (%u) has an incompatible mod. ([%d] got %x, expected %x)", getPlayerName(player), player, i, PHYSFS_swapUBE32(tempBuffer[i]), PHYSFS_swapUBE32(DataHash[i]));
+			debug(LOG_POPUP, "%s (%u), has an incompatible mod. ([%d] got %x, expected %x)", getPlayerName(player), player, i, PHYSFS_swapUBE32(tempBuffer[i]), PHYSFS_swapUBE32(DataHash[i]));
 
 			return false;
 		}
@@ -359,7 +386,7 @@ void setupNewPlayer(UDWORD player)
 
 	resetMultiVisibility(player);						// set visibility flags.
 
-	setMultiStats(player, getMultiStats(player, false), true);  // get the players score from the ether.
+	setMultiStats(player, getMultiStats(player), true);  // get the players score
 
 	ssprintf(buf, _("%s is Joining the Game"), getPlayerName(player));
 	addConsoleMessage(buf, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);

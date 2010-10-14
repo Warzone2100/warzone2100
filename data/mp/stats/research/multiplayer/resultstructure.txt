@@ -10,6 +10,7 @@ R-Defense-GuardTower-ATMiss,GuardTower-ATMiss,0,219
 R-Defense-GuardTower-Rail1,GuardTower-Rail1,0,220
 R-Defense-HardcreteWall,A0HardcreteMk1CWall,0,97
 R-Defense-HardcreteWall,A0HardcreteMk1Wall,0,93
+R-Defense-HardcreteGate,A0HardcreteMk1Gate,0,666
 R-Defense-HeavyLas,Emplacement-HeavyLaser,Emplacement-PrisLas,327
 R-Defense-Howitzer,Emplacement-Howitzer105,0,134
 R-Defense-Howitzer-Incenediary,Emplacement-Howitzer-Incenediary,0,323
@@ -83,3 +84,4 @@ R-Sys-VTOLCBS-Tower01,Sys-VTOL-CB-Tower01,0,211
 R-Sys-VTOLStrike-Tower01,Sys-VTOL-RadarTower01,0,212
 R-Wpn-LasSat,A0LasSatCommand,0,328
 R-Sys-RadarDetector01,Sys-RadarDetector01,0,0
+R-Defense-Sunburst,P0-AASite-Sunburst,0,0

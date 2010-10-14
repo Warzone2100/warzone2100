@@ -3,6 +3,13 @@ top_builddir=$(top_srcdir)
 
 include $(top_srcdir)/makerules/common.mk
 
+DYDOAILIST = \
+	multiplay \
+	images \
+	messages
+
+DYDOAIARCHIVE = dydo-ai.wz
+
 OLD110LIST= \
 	doc \
 	images \
@@ -29,7 +36,7 @@ NTWLIST= \
 
 NTWARCHIVE=ntw.wz
 
-ZIPLIST=$(OLD110ARCHIVE) $(NTWARCHIVE)
+ZIPLIST=$(DYDOAIARCHIVE) $(OLD110ARCHIVE) $(NTWARCHIVE)
 
 .PHONY: all clean $(ZIPLIST)
 
@@ -40,6 +47,11 @@ endif
 
 stamp:
 	echo stamp > stamp
+
+$(DYDOAIARCHIVE): $(basename $(DYDOAIARCHIVE)) stamp $(patsubst %,$(basename $(DYDOAIARCHIVE))/%,$(DYDOAILIST))
+	cd $< && zip -r1 ..\$@ $(filter-out stamp,$(filter-out $<,$(^:$</%=%))) -x '*svn*'
+	zip -T $@
+	$(RM_F) stamp
 
 $(OLD110ARCHIVE): $(basename $(OLD110ARCHIVE)) stamp $(patsubst %,$(basename $(OLD110ARCHIVE))/%,$(OLD110LIST))
 	cd $< && zip -r1 ..\$@ $(filter-out stamp,$(filter-out $<,$(^:$</%=%))) -x '*svn*'

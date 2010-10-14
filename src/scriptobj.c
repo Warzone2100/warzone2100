@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -1627,8 +1627,8 @@ void luaWZObj_pushweapon(lua_State *L, WEAPON* weapon)
 	luaWZ_setintfield(L, "ammo", weapon->ammo);
 	luaWZ_setintfield(L, "lastFired", weapon->lastFired);
 	luaWZ_setintfield(L, "recoilValue", weapon->recoilValue);
-	luaWZ_setintfield(L, "pitch", weapon->pitch);
-	luaWZ_setintfield(L, "rotation", weapon->rotation);
+	luaWZ_setintfield(L, "pitch", weapon->rot.pitch);
+	luaWZ_setintfield(L, "rotation", weapon->rot.direction);
 }
 
 void luaWZObj_pushweaponstat(lua_State *L, int index)

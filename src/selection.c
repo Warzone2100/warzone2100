@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -530,8 +530,7 @@ STRUCTURE	*psFirst;
 BOOL		bLaterInList;
 
 	/* Firstly, start coughing if the type is invalid */
-	ASSERT( structType>=REF_HQ && structType<=NUM_DIFF_BUILDINGS,
-		"Invalid structure type in selNextSpecifiedBuilding" );
+	ASSERT(structType <= NUM_DIFF_BUILDINGS, "Invalid structure type %u in selNextSpecifiedBuilding", structType);
 
 	for(psCurr = apsStructLists[selectedPlayer], psFirst = NULL,psResult = NULL,psOldStruct=NULL,bLaterInList = false;
 		psCurr && !psResult; psCurr = psCurr->psNext)

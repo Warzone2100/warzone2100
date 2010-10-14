@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -24,11 +24,8 @@
  */
 
 #include "lib/framework/frame.h"
-#include "lib/gamelib/gtime.h"
 
 #include "advvis.h"
-#include "display3d.h"
-#include "hci.h"
 #include "map.h"
 
 // ------------------------------------------------------------------------------------
@@ -39,19 +36,12 @@ static BOOL bRevealActive = false;
 
 
 // ------------------------------------------------------------------------------------
-void	avSetStatus(BOOL var)
-{
-	debug(LOG_FOG, "avSetStatus: Setting fog of war %s", var ? "ON" : "OFF");
-	bRevealActive = var;
-}
-
-// ------------------------------------------------------------------------------------
 void	avUpdateTiles( void )
 {
 	const int len = mapHeight * mapWidth;
 	const int playermask = 1 << selectedPlayer;
 	UDWORD i = 0;
-	float maxLevel, increment = timeAdjustedIncrement(FADE_IN_TIME, true);	// call once per frame
+	float maxLevel, increment = graphicsTimeAdjustedIncrement(FADE_IN_TIME);	// call once per frame
 	MAPTILE *psTile;
 
 	/* Go through the tiles */
@@ -120,19 +110,12 @@ MAPTILE		*psTile;
 		{
 			psTile = mapTile(i,j);
 			psTile->level = 0;
-			psTile->tileExploredBits = 0;
 
-			if (TEST_TILE_VISIBLE(selectedPlayer, psTile))
-		  	{
-				psTile->tileExploredBits = 1 << selectedPlayer;
-		  	}
 			if (!bRevealActive || TEST_TILE_VISIBLE(selectedPlayer, psTile))
 			{
 				psTile->level = psTile->illumination;
 			}
 		}
 	}
-
-
 }
 // ------------------------------------------------------------------------------------

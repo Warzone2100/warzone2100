@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@
 #include "form.h"
 #include "tip.h"
 // FIXME Direct iVis implementation include!
-#include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_common/pieblitfunc.h"
 #include "lib/ivis_common/piepalette.h"
 
 /* Control whether single tabs are displayed */
@@ -49,49 +49,14 @@ typedef struct _tab_pos
 /* Set default colours for a form */
 static void formSetDefaultColours(W_FORM *psForm)
 {
-	static BOOL bDefaultsSet = false;
-	static PIELIGHT wcol_bkgrnd;
-	static PIELIGHT wcol_text;
-	static PIELIGHT wcol_light;
-	static PIELIGHT wcol_dark;
-	static PIELIGHT wcol_hilite;
-	static PIELIGHT wcol_cursor;
-	static PIELIGHT wcol_tipbkgrnd;
-	static PIELIGHT wcol_disable;
-
-	if (bDefaultsSet)
-	{
-		psForm->aColours[WCOL_BKGRND]    = wcol_bkgrnd;
-		psForm->aColours[WCOL_TEXT]      = wcol_text;
-		psForm->aColours[WCOL_LIGHT]     = wcol_light;
-		psForm->aColours[WCOL_DARK]      = wcol_dark;
-		psForm->aColours[WCOL_HILITE]    = wcol_hilite;
-		psForm->aColours[WCOL_CURSOR]    = wcol_cursor;
-		psForm->aColours[WCOL_TIPBKGRND] = wcol_tipbkgrnd;
-		psForm->aColours[WCOL_DISABLE]   = wcol_disable;
-	}
-	else
-	{
-		wcol_bkgrnd    = pal_Colour(0x7f, 0x7f, 0x7f);
-		wcol_text      = WZCOL_WHITE;
-		wcol_light     = WZCOL_WHITE;
-		wcol_dark      = WZCOL_BLACK;
-		wcol_hilite    = pal_Colour(0x40, 0x40, 0x40);
-		wcol_cursor    = pal_Colour(0xff, 0x00, 0x00);
-		wcol_tipbkgrnd = pal_Colour(0x30, 0x30, 0x60);
-		wcol_disable   = pal_Colour(0xbf, 0xbf, 0xbf);
-
-		bDefaultsSet   = true;
-
-		psForm->aColours[WCOL_BKGRND]    = wcol_bkgrnd;
-		psForm->aColours[WCOL_TEXT]      = wcol_text;
-		psForm->aColours[WCOL_LIGHT]     = wcol_light;
-		psForm->aColours[WCOL_DARK]      = wcol_dark;
-		psForm->aColours[WCOL_HILITE]    = wcol_hilite;
-		psForm->aColours[WCOL_CURSOR]    = wcol_cursor;
-		psForm->aColours[WCOL_TIPBKGRND] = wcol_tipbkgrnd;
-		psForm->aColours[WCOL_DISABLE]   = wcol_disable;
-	}
+	psForm->aColours[WCOL_BKGRND]    = WZCOL_FORM_BACKGROUND;
+	psForm->aColours[WCOL_TEXT]      = WZCOL_FORM_TEXT;
+	psForm->aColours[WCOL_LIGHT]     = WZCOL_FORM_LIGHT;
+	psForm->aColours[WCOL_DARK]      = WZCOL_FORM_DARK;
+	psForm->aColours[WCOL_HILITE]    = WZCOL_FORM_HILITE;
+	psForm->aColours[WCOL_CURSOR]    = WZCOL_FORM_CURSOR;
+	psForm->aColours[WCOL_TIPBKGRND] = WZCOL_FORM_TIP_BACKGROUND;
+	psForm->aColours[WCOL_DISABLE]   = WZCOL_FORM_DISABLE;
 }
 
 /* Create a plain form widget */
@@ -695,26 +660,13 @@ void widgGetTabs(W_SCREEN *psScreen, UDWORD id, UWORD *pMajor, UWORD *pMinor)
 
 
 /* Set a colour on a form */
-void widgSetColour(W_SCREEN *psScreen, UDWORD id, UDWORD colour,
-				   UBYTE red, UBYTE green, UBYTE blue)
+void widgSetColour(W_SCREEN *psScreen, UDWORD id, UDWORD index, PIELIGHT colour)
 {
-	W_TABFORM	*psForm;
+	W_TABFORM	*psForm = (W_TABFORM *)widgGetFromID(psScreen, id);
 
-	psForm = (W_TABFORM *)widgGetFromID(psScreen, id);
-	if (psForm == NULL || psForm->type != WIDG_FORM)
-	{
-		ASSERT( false,"widgSetColour: couldn't find form from id" );
-		return;
-	}
-	ASSERT( psForm != NULL,
-		"widgSetColour: Invalid tab form pointer" );
-
-	if (colour >= WCOL_MAX)
-	{
-		ASSERT( false, "widgSetColour: Colour id out of range" );
-		return;
-	}
-	psForm->aColours[colour] = pal_Colour(red,green,blue);
+	ASSERT_OR_RETURN(, psForm && psForm->type == WIDG_FORM, "Could not find form from id %u", id);
+	ASSERT_OR_RETURN(, index < WCOL_MAX, "Colour id %u out of range", index);
+	psForm->aColours[index] = colour;
 }
 
 

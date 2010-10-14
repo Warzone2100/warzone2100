@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -72,7 +72,6 @@
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
 // globals.
-bool						isMPDirtyBit = false;		// When we are forced to use turnOffMultiMsg() we set this
 BOOL						bMultiPlayer				= false;	// true when more than 1 player.
 BOOL						bMultiMessages				= false;	// == bMultiPlayer unless multimessages are disabled
 BOOL						openchannels[MAX_PLAYERS]={true};
@@ -103,13 +102,12 @@ static SDWORD msgStackPos = -1;				//top element pointer
 // Remote Prototypes
 extern RESEARCH*			asResearch;							//list of possible research items.
 extern PLAYER_RESEARCH*		asPlayerResList[MAX_PLAYERS];
-
 // ////////////////////////////////////////////////////////////////////////////
 // Local Prototypes
 
-static BOOL recvBeacon(void);
-static BOOL recvDestroyTemplate(void);
-static BOOL recvResearch(void);
+static BOOL recvBeacon(NETQUEUE queue);
+static BOOL recvDestroyTemplate(NETQUEUE queue);
+static BOOL recvResearch(NETQUEUE queue);
 
 bool		multiplayPlayersReady		(bool bNotifyStatus);
 void		startMultiplayerGame		(void);
@@ -124,20 +122,16 @@ void turnOffMultiMsg(BOOL bDoit)
 	}
 
 	bMultiMessages = !bDoit;
-	if (bDoit)
-	{
-		isMPDirtyBit = true;
-	}
 	return;
 }
 
 
 // ////////////////////////////////////////////////////////////////////////////
-// throw a pary when you win!
+// throw a party when you win!
 BOOL multiplayerWinSequence(BOOL firstCall)
 {
-	static Vector3i pos;
-	Vector3i pos2;
+	static Position pos;
+	Position pos2;
 	static UDWORD last=0;
 	float		rotAmount;
 	STRUCTURE	*psStruct;
@@ -166,7 +160,7 @@ BOOL multiplayerWinSequence(BOOL firstCall)
 	// rotate world
 	if (MissionResUp && !getWarCamStatus())
 	{
-		rotAmount = timeAdjustedIncrement(MAP_SPIN_RATE / 12, true);
+		rotAmount = graphicsTimeAdjustedIncrement(MAP_SPIN_RATE / 12);
 		player.r.y += rotAmount;
 	}
 
@@ -248,6 +242,7 @@ BOOL multiPlayerLoop(void)
 			if (!ingame.TimeEveryoneIsInGame)
 			{
 				ingame.TimeEveryoneIsInGame = gameTime;
+				debug(LOG_NET, "I have entered the game @ %d", ingame.TimeEveryoneIsInGame );
 				if (!NetPlay.isHost)
 				{
 					debug(LOG_NET, "=== Sending hash to host ===");
@@ -270,6 +265,7 @@ BOOL multiPlayerLoop(void)
 							sprintf(msg, _("Kicking player %s, because they tried to bypass data integrity check!"), getPlayerName(index));
 							sendTextMessage(msg, true);
 							addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
+							NETlogEntry(msg, SYNC_FLAG, index);
 
 #ifndef DEBUG
 							kickPlayer(index, "it is not nice to cheat!", ERROR_CHEAT);
@@ -281,9 +277,6 @@ BOOL multiPlayerLoop(void)
 				}
 			}
 		}
-
-	recvMessage();						// get queued messages
-
 
 	// if player has won then process the win effects...
 	if(testPlayerHasWon())
@@ -503,27 +496,13 @@ UDWORD  whosResponsible(UDWORD player)
 //returns true if selected player is responsible for 'player'
 BOOL myResponsibility(UDWORD player)
 {
-	if(whosResponsible(player) == selectedPlayer)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+	return whosResponsible(player) == selectedPlayer;
 }
 
 //returns true if 'player' is responsible for 'playerinquestion'
 BOOL responsibleFor(UDWORD player, UDWORD playerinquestion)
 {
-	if(whosResponsible(playerinquestion) == player)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+	return whosResponsible(playerinquestion) == player;
 }
 
 
@@ -582,119 +561,196 @@ Vector3i cameraToHome(UDWORD player,BOOL scroll)
 // Recv Messages. Get a message and dispatch to relevant function.
 BOOL recvMessage(void)
 {
+	NETQUEUE queue;
 	uint8_t type;
 
-	while(NETrecv(&type))			// for all incoming messages.
+	while (NETrecvNet(&queue, &type) || NETrecvGame(&queue, &type))          // for all incoming messages.
 	{
+		bool processedMessage1 = false;
+		bool processedMessage2 = false;
+
+		if (queue.queueType == QUEUE_GAME)
+		{
+			syncDebug("Processing player %d, message %s", queue.index, messageTypeToString(type));
+		}
+
+		if (queue.queueType == QUEUE_GAME && myResponsibility(queue.index))
+		{
+			switch (type)
+			{
+				// TODO Remove all these cases.
+				//case GAME_DROID:        //24 down, 18 to go.
+				//case GAME_DROIDINFO:    // 2 down, 41 to go.
+				//case GAME_DROIDDEST:    //25 down, 17 to go.
+				//case GAME_DROIDMOVE:    // 1 down, 42 to go. <--- Doesn't even exist, now. Its only effect was breaking synch...
+				//case GAME_GROUPORDER:   // 3 down, 40 to go.
+				//case GAME_CHECK_DROID:  // 4 down, 39 to go.
+				//case GAME_CHECK_STRUCT: // 5 down, 38 to go.
+				//case GAME_CHECK_POWER:  // 6 down, 37 to go.
+				//case NET_TEXTMSG:
+				//case NET_DATA_CHECK:
+				//case NET_AITEXTMSG:
+				//case NET_BEACONMSG:
+				//case GAME_BUILD:        //26 down, 16 to go.
+				//case GAME_BUILDFINISHED://27 down, 15 to go.
+				//case GAME_STRUCTDEST:   //28 down, 14 to go.
+				//case GAME_SECONDARY:    // 7 down, 36 to go.
+				//case GAME_SECONDARY_ALL://36 down,  6 to go. <--- Removed completely...
+				//case GAME_DROIDEMBARK:  //39 down,  3 to go.
+				//case GAME_DROIDDISEMBARK://40down,  2 to go.
+				//case GAME_GIFT:         //32 down, 10 to go
+				//case NET_SCORESUBMIT:
+				//case GAME_VTOL:         //37 down,  5 to go. <--- Removed completely, the VTOLs are happy without them.
+				//case GAME_LASSAT:       //38 down,  4 to go.
+
+				case GAME_TEMPLATE:
+				//case GAME_TEMPLATEDEST: //34 down,  8 to go. <--- Aaargh. This one down, but might come back as a zombie.
+				//case GAME_FEATUREDEST:  //29 down, 13 to go.
+				//case NET_PING:
+				//case GAME_DEMOLISH:     //35 down,  7 to go.
+				//case GAME_RESEARCH:     //30 down, 12 to go.
+				//case NET_OPTIONS:
+				//case NET_PLAYERRESPONDING:
+				//case NET_COLOURREQUEST:
+				//case NET_POSITIONREQUEST:
+				//case NET_TEAMREQUEST:
+				//case NET_READY_REQUEST:
+				//case GAME_ARTIFACTS:    //23 down, 19 to go.
+				case GAME_FEATURES:
+				//case GAME_ALLIANCE:     //33 down,  9 to go.
+				//case NET_KICK:
+				//case NET_FIREUP:
+				//case GAME_RESEARCHSTATUS//31 down, 11 to go.
+				//case NET_PLAYER_STATS:
+				//case NET_...:           // 22 down, 20 to go.
+				{
+					static unsigned packets[256];
+					if (++packets[type] == 1)
+					{
+						debug(LOG_WARNING, "Ignoring our own game queue message %s, which hasn't been converted yet", messageTypeToString(type));
+					}
+					NETpop(queue);
+					continue;  // HACK-TODO Ignore our own queue.
+				}
+				default:
+					break;  // Yay, we are able to process our own messages of this time.
+			}
+		}
+
 		// messages only in game.
 		if(!ingame.localJoiningInProgress)
 		{
+			processedMessage1 = true;
 			switch(type)
 			{
-			case NET_DROID:						// new droid of known type
-				recvDroid();
+			case GAME_DROID:						// new droid of known type
+				recvDroid(queue);
 				break;
-			case NET_DROIDINFO:					//droid update info
-				recvDroidInfo();
+			case GAME_DROIDINFO:					//droid update info
+				recvDroidInfo(queue);
 				break;
-			case NET_DROIDDEST:					// droid destroy
-				recvDestroyDroid();
+			case GAME_DROIDDEST:					// droid destroy
+				recvDestroyDroid(queue);
 				break;
-			case NET_DROIDMOVE:					// move a droid to x,y command.
-				recvDroidMove();
+			case GAME_CHECK_DROID:				// droid damage and position checks
+				recvDroidCheck(queue);
 				break;
-			case NET_GROUPORDER:				// an order for more than 1 droid.
-				recvGroupOrder();
+			case GAME_CHECK_STRUCT:				// structure damage checks.
+				recvStructureCheck(queue);
 				break;
-			case NET_CHECK_DROID:				// droid damage and position checks
-				recvDroidCheck();
-				break;
-			case NET_CHECK_STRUCT:				// structure damage checks.
-				recvStructureCheck();
-				break;
-			case NET_CHECK_POWER:				// Power level syncing.
-				recvPowerCheck();
+			case GAME_CHECK_POWER:				// Power level syncing.
+				recvPowerCheck(queue);
 				break;
 			case NET_TEXTMSG:					// simple text message
-				recvTextMessage();
+				recvTextMessage(queue);
 				break;
 			case NET_DATA_CHECK:
-				recvDataCheck();
+				recvDataCheck(queue);
 				break;
 			case NET_AITEXTMSG:					//multiplayer AI text message
-				recvTextMessageAI();
+				recvTextMessageAI(queue);
 				break;
 			case NET_BEACONMSG:					//beacon (blip) message
-				recvBeacon();
+				recvBeacon(queue);
 				break;
-			case NET_BUILD:						// a build order has been sent.
-				recvBuildStarted();
+			case GAME_BUILD:						// a build order has been sent.
+				recvBuildStarted(queue);
 				break;
-			case NET_BUILDFINISHED:				// a building is complete
-				recvBuildFinished();
+			case GAME_BUILDFINISHED:				// a building is complete
+				recvBuildFinished(queue);
 				break;
-			case NET_STRUCTDEST:				// structure destroy
-				recvDestroyStructure();
+			case GAME_STRUCTDEST:				// structure destroy
+				recvDestroyStructure(queue);
 				break;
-			case NET_SECONDARY:					// set a droids secondary order level.
-				recvDroidSecondary();
+			case GAME_SECONDARY:					// set a droids secondary order level.
+				recvDroidSecondary(queue);
 				break;
-			case NET_SECONDARY_ALL:					// set a droids secondary order level.
-				recvDroidSecondaryAll();
+			case GAME_DROIDEMBARK:
+				recvDroidEmbark(queue);              //droid has embarked on a Transporter
 				break;
-			case NET_DROIDEMBARK:
-				recvDroidEmbark();              //droid has embarked on a Transporter
+			case GAME_DROIDDISEMBARK:
+				recvDroidDisEmbark(queue);           //droid has disembarked from a Transporter
 				break;
-			case NET_DROIDDISEMBARK:
-				recvDroidDisEmbark();           //droid has disembarked from a Transporter
+			case GAME_GIFT:						// an alliance gift from one player to another.
+				recvGift(queue);
 				break;
-			case NET_GIFT:						// an alliance gift from one player to another.
-				recvGift();
-				break;
-			case NET_SCORESUBMIT:				//  a score update from another player [UNUSED] see NET_PLAYER_STATS
-				break;
-			case NET_VTOL:
-				recvHappyVtol();
-				break;
-			case NET_LASSAT:
-				recvLasSat();
+			case GAME_LASSAT:
+				recvLasSat(queue);
 				break;
 			default:
+				processedMessage1 = false;
 				break;
 			}
 		}
 
 		// messages usable all the time
+		processedMessage2 = true;
 		switch(type)
 		{
-		case NET_TEMPLATE:					// new template
-			recvTemplate();
+		case GAME_TEMPLATE:					// new template
+			recvTemplate(queue);
 			break;
-		case NET_TEMPLATEDEST:				// template destroy
-			recvDestroyTemplate();
+		case GAME_TEMPLATEDEST:				// template destroy
+			recvDestroyTemplate(queue);
 			break;
-		case NET_FEATUREDEST:				// feature destroy
-			recvDestroyFeature();
+		case GAME_FEATUREDEST:				// feature destroy
+			recvDestroyFeature(queue);
 			break;
 		case NET_PING:						// diagnostic ping msg.
-			recvPing();
+			recvPing(queue);
 			break;
-		case NET_DEMOLISH:					// structure demolished.
-			recvDemolishFinished();
+		case GAME_DEMOLISH:					// structure demolished.
+			recvDemolishFinished(queue);
 			break;
-		case NET_RESEARCH:					// some research has been done.
-			recvResearch();
+		case GAME_RESEARCH:					// some research has been done.
+			recvResearch(queue);
 			break;
 		case NET_OPTIONS:
-			recvOptions();
+			recvOptions(queue);
 			break;
+		case NET_PLAYER_DROPPED:				// remote player got disconnected
+		{
+			uint32_t player_id;
+
+			NETbeginDecode(queue, NET_PLAYER_DROPPED);
+			{
+				NETuint32_t(&player_id);
+			}
+			NETend();
+
+			debug(LOG_INFO,"** player %u has dropped!", player_id);
+
+			MultiPlayerLeave(player_id);		// get rid of their stuff
+			NETsetPlayerConnectionStatus(CONNECTIONSTATUS_PLAYER_DROPPED, player_id);
+			break;
+		}
 		case NET_PLAYERRESPONDING:			// remote player is now playing
 		{
 			uint32_t player_id;
 
 			resetReadyStatus(false);
 
-			NETbeginDecode(NET_PLAYERRESPONDING);
+			NETbeginDecode(queue, NET_PLAYERRESPONDING);
 				// the player that has just responded
 				NETuint32_t(&player_id);
 			NETend();
@@ -709,16 +765,16 @@ BOOL recvMessage(void)
 		}
 		// FIXME: the next 4 cases might not belong here --check (we got two loops for this)
 		case NET_COLOURREQUEST:
-			recvColourRequest();
+			recvColourRequest(queue);
 			break;
 		case NET_POSITIONREQUEST:
-			recvPositionRequest();
+			recvPositionRequest(queue);
 			break;
 		case NET_TEAMREQUEST:
-			recvTeamRequest();
+			recvTeamRequest(queue);
 			break;
 		case NET_READY_REQUEST:
-			recvReadyRequest();
+			recvReadyRequest(queue);
 
 			// if hosting try to start the game if everyone is ready
 			if(NetPlay.isHost && multiplayPlayersReady(false))
@@ -726,14 +782,14 @@ BOOL recvMessage(void)
 				startMultiplayerGame();
 			}
 			break;
-		case NET_ARTIFACTS:
-			recvMultiPlayerRandomArtifacts();
+		case GAME_ARTIFACTS:
+			recvMultiPlayerRandomArtifacts(queue);
 			break;
-		case NET_FEATURES:
-			recvMultiPlayerFeature();
+		case GAME_FEATURES:
+			recvMultiPlayerFeature(queue);
 			break;
-		case NET_ALLIANCE:
-			recvAlliance(true);
+		case GAME_ALLIANCE:
+			recvAlliance(queue, true);
 			break;
 		case NET_KICK:
 		{
@@ -741,7 +797,14 @@ BOOL recvMessage(void)
 			uint32_t player_id;
 			char reason[MAX_KICK_REASON];
 
-			NETbeginDecode(NET_KICK);
+			if (player_id == NET_HOST_ONLY)
+			{
+				debug(LOG_ERROR, "someone tried to kick the host--check your netplay logs!");
+				NETend();
+				break;
+			}
+
+			NETbeginDecode(queue, NET_KICK);
 				NETuint32_t(&player_id);
 				NETstring( reason, MAX_KICK_REASON);
 			NETend();
@@ -757,18 +820,30 @@ BOOL recvMessage(void)
 			}
 			break;
 		}
-		case NET_FIREUP:				// frontend only
-			debug(LOG_NET, "NET_FIREUP was received (frontend only?)"); 
+		case GAME_RESEARCHSTATUS:
+			recvResearchStatus(queue);
 			break;
-		case NET_RESEARCHSTATUS:
-			recvResearchStatus();
+		case GAME_STRUCTUREINFO:
+			recvStructureInfo(queue);
 			break;
 		case NET_PLAYER_STATS:
-			recvMultiStats();
+			recvMultiStats(queue);
 			break;
 		default:
+			processedMessage2 = false;
 			break;
 		}
+
+		if (processedMessage1 && processedMessage2)
+		{
+			debug(LOG_ERROR, "Processed %s message twice!", messageTypeToString(type));
+		}
+		if (!processedMessage1 && !processedMessage2)
+		{
+			debug(LOG_ERROR, "Didn't handle %s message!", messageTypeToString(type));
+		}
+
+		NETpop(queue);
 	}
 
 	return true;
@@ -779,44 +854,17 @@ BOOL recvMessage(void)
 // Research Stuff. Nat games only send the result of research procedures.
 BOOL SendResearch(uint8_t player, uint32_t index, bool trigger)
 {
-	UBYTE i;
-	PLAYER_RESEARCH *pPlayerRes;
-
 	// Send the player that is researching the topic and the topic itself
-	NETbeginEncode(NET_RESEARCH, NET_ALL_PLAYERS);
+	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_RESEARCH);
 		NETuint8_t(&player);
 		NETuint32_t(&index);
 	NETend();
-
-	/*
-	 * Since we are called when the state of research changes (completed,
-	 * stopped &c) we also need to update our own local copy of what our allies
-	 * are doing/have done.
-	 */
-	if (game.type == SKIRMISH)
-	{
-		for (i = 0; i < MAX_PLAYERS; i++)
-		{
-			if (alliances[i][player] == ALLIANCE_FORMED)
-			{
-				pPlayerRes = asPlayerResList[i] + index;
-
-				// If we have it but they don't
-				if (!IsResearchCompleted(pPlayerRes))
-				{
-					// Do the research for that player
-					MakeResearchCompleted(pPlayerRes);
-					researchResult(index, i, false, NULL, trigger);
-				}
-			}
-		}
-	}
 
 	return true;
 }
 
 // recv a research topic that is now complete.
-static BOOL recvResearch()
+static BOOL recvResearch(NETQUEUE queue)
 {
 	uint8_t			player;
 	uint32_t		index;
@@ -824,18 +872,21 @@ static BOOL recvResearch()
 	PLAYER_RESEARCH	*pPlayerRes;
 	RESEARCH		*pResearch;
 
-	NETbeginDecode(NET_RESEARCH);
+	NETbeginDecode(queue, GAME_RESEARCH);
 		NETuint8_t(&player);
 		NETuint32_t(&index);
 	NETend();
 
+	syncDebug("player%d, index%u", player, index);
+
 	if (player >= MAX_PLAYERS || index >= numResearch)
 	{
-		debug(LOG_ERROR, "Bad NET_RESEARCH received, player is %d, index is %u", (int)player, index);
+		debug(LOG_ERROR, "Bad GAME_RESEARCH received, player is %d, index is %u", (int)player, index);
 		return false;
 	}
 
 	pPlayerRes = asPlayerResList[player] + index;
+	syncDebug("research status = %d", pPlayerRes->ResearchStatus);
 
 	if (!IsResearchCompleted(pPlayerRes))
 	{
@@ -873,14 +924,14 @@ static BOOL recvResearch()
 // ////////////////////////////////////////////////////////////////////////////
 // New research stuff, so you can see what others are up to!
 // inform others that I'm researching this.
-BOOL sendReseachStatus(STRUCTURE *psBuilding, uint32_t index, uint8_t player, BOOL bStart)
+BOOL sendResearchStatus(STRUCTURE *psBuilding, uint32_t index, uint8_t player, BOOL bStart)
 {
 	if (!myResponsibility(player) || gameTime < 5)
 	{
 		return true;
 	}
 
-	NETbeginEncode(NET_RESEARCHSTATUS, NET_ALL_PLAYERS);
+	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_RESEARCHSTATUS);
 		NETuint8_t(&player);
 		NETbool(&bStart);
 
@@ -891,7 +942,8 @@ BOOL sendReseachStatus(STRUCTURE *psBuilding, uint32_t index, uint8_t player, BO
 		}
 		else
 		{
-			NETnull();
+			uint32_t zero = 0;
+			NETuint32_t(&zero);
 		}
 
 		// Finally the topic in question
@@ -901,7 +953,7 @@ BOOL sendReseachStatus(STRUCTURE *psBuilding, uint32_t index, uint8_t player, BO
 	return true;
 }
 
-BOOL recvResearchStatus()
+BOOL recvResearchStatus(NETQUEUE queue)
 {
 	STRUCTURE			*psBuilding;
 	PLAYER_RESEARCH		*pPlayerRes;
@@ -911,16 +963,18 @@ BOOL recvResearchStatus()
 	BOOL				bStart;
 	uint32_t			index, structRef;
 
-	NETbeginDecode(NET_RESEARCHSTATUS);
+	NETbeginDecode(queue, GAME_RESEARCHSTATUS);
 		NETuint8_t(&player);
 		NETbool(&bStart);
 		NETuint32_t(&structRef);
 		NETuint32_t(&index);
 	NETend();
 
+	syncDebug("player%d, bStart%d, structRef%u, index%u", player, bStart, structRef, index);
+
 	if (player >= MAX_PLAYERS || index >= numResearch)
 	{
-		debug(LOG_ERROR, "Bad NET_RESEARCHSTATUS received, player is %d, index is %u", (int)player, index);
+		debug(LOG_ERROR, "Bad GAME_RESEARCHSTATUS received, player is %d, index is %u", (int)player, index);
 		return false;
 	}
 
@@ -936,9 +990,13 @@ BOOL recvResearchStatus()
 		{
 			psResFacilty = (RESEARCH_FACILITY *) psBuilding->pFunctionality;
 
+			psResFacilty->psSubjectPending = NULL;  // Research is no longer pending, as it's actually starting now.
+
 			if (psResFacilty->psSubject)
 			{
+				turnOffMultiMsg(true);
 				cancelResearch(psBuilding);
+				turnOffMultiMsg(false);
 			}
 
 			// Set the subject up
@@ -1001,13 +1059,14 @@ BOOL recvResearchStatus()
 		// Stop the facility doing any research
 		if (psBuilding)
 		{
+			turnOffMultiMsg(true);
 			cancelResearch(psBuilding);
+			turnOffMultiMsg(false);
 		}
 	}
 
 	return true;
 }
-
 
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
@@ -1099,7 +1158,7 @@ BOOL sendTextMessage(const char *pStr, BOOL all)
 
 	if (all)	//broadcast
 	{
-		NETbeginEncode(NET_TEXTMSG, NET_ALL_PLAYERS);
+		NETbeginEncode(NETbroadcastQueue(), NET_TEXTMSG);
 		NETuint32_t(&selectedPlayer);		// who this msg is from
 		NETstring(msg,MAX_CONSOLE_STRING_LENGTH);	// the message to send
 		NETend();
@@ -1112,7 +1171,7 @@ BOOL sendTextMessage(const char *pStr, BOOL all)
 			{
 				if (isHumanPlayer(i))
 				{
-					NETbeginEncode(NET_TEXTMSG, i);
+					NETbeginEncode(NETnetQueue(i), NET_TEXTMSG);
 					NETuint32_t(&selectedPlayer);		// who this msg is from
 					NETstring(msg,MAX_CONSOLE_STRING_LENGTH);	// the message to send
 					NETend();
@@ -1132,7 +1191,7 @@ BOOL sendTextMessage(const char *pStr, BOOL all)
 			{
 				if (isHumanPlayer(i))
 				{
-					NETbeginEncode(NET_TEXTMSG, i);
+					NETbeginEncode(NETnetQueue(i), NET_TEXTMSG);
 					NETuint32_t(&selectedPlayer);				// who this msg is from
 					NETstring(display, MAX_CONSOLE_STRING_LENGTH);	// the message to send
 					NETend();
@@ -1154,6 +1213,19 @@ BOOL sendTextMessage(const char *pStr, BOOL all)
 
 	return true;
 }
+
+void printConsoleNameChange(const char *oldName, const char *newName)
+{
+	char msg[MAX_CONSOLE_STRING_LENGTH];
+
+	// Player changed name.
+	sstrcpy(msg, oldName);                               // Old name.
+	sstrcat(msg, " → ");                                 // Separator
+	sstrcat(msg, newName);  // New name.
+
+	addConsoleMessage(msg, DEFAULT_JUSTIFY, selectedPlayer);  // display
+}
+
 
 //AI multiplayer message, send from a certain player index to another player index
 BOOL sendAIMessage(char *pStr, UDWORD player, UDWORD to)
@@ -1198,7 +1270,7 @@ BOOL sendAIMessage(char *pStr, UDWORD player, UDWORD to)
 		}
 
 		//send to the player who is hosting 'to' player (might be himself if human and not AI)
-		NETbeginEncode(NET_AITEXTMSG, sendPlayer);
+		NETbeginEncode(NETnetQueue(sendPlayer), NET_AITEXTMSG);
 			NETuint32_t(&player);			//save the actual sender
 			//save the actual player that is to get this msg on the source machine (source can host many AIs)
 			NETuint32_t(&to);				//save the actual receiver (might not be the same as the one we are actually sending to, in case of AIs)
@@ -1227,8 +1299,8 @@ BOOL sendBeacon(int32_t locX, int32_t locY, int32_t forPlayer, int32_t sender, c
 	}
 
 	// I assume this is correct, looks like it sends it to ONLY that person, and the routine
-	// kf_AddHelpBlip() itterates for each player it needs.
-	NETbeginEncode(NET_BEACONMSG, sendPlayer);		// send to the player who is hosting 'to' player (might be himself if human and not AI)
+	// kf_AddHelpBlip() iterates for each player it needs.
+	NETbeginEncode(NETnetQueue(sendPlayer), NET_BEACONMSG);    // send to the player who is hosting 'to' player (might be himself if human and not AI)
 		NETint32_t(&sender);                                // save the actual sender
 
 		// save the actual player that is to get this msg on the source machine (source can host many AIs)
@@ -1258,7 +1330,7 @@ void displayAIMessage(char *pStr, SDWORD from, SDWORD to)
 }
 
 // Write a message to the console.
-BOOL recvTextMessage()
+BOOL recvTextMessage(NETQUEUE queue)
 {
 	UDWORD	playerIndex;
 	char	msg[MAX_CONSOLE_STRING_LENGTH];
@@ -1267,12 +1339,17 @@ BOOL recvTextMessage()
 	memset(msg, 0x0, sizeof(msg));
 	memset(newmsg, 0x0, sizeof(newmsg));
 
-	NETbeginDecode(NET_TEXTMSG);
+	NETbeginDecode(queue, NET_TEXTMSG);
 		// Who this msg is from
 		NETuint32_t(&playerIndex);
 		// The message to send
 		NETstring(newmsg, MAX_CONSOLE_STRING_LENGTH);
 	NETend();
+
+	if (whosResponsible(playerIndex) != queue.index)
+	{
+		playerIndex = queue.index;  // Fix corrupted playerIndex.
+	}
 
 	if (playerIndex >= MAX_PLAYERS)
 	{
@@ -1309,17 +1386,22 @@ BOOL recvTextMessage()
 }
 
 //AI multiplayer message - received message from AI (from scripts)
-BOOL recvTextMessageAI()
+BOOL recvTextMessageAI(NETQUEUE queue)
 {
 	UDWORD	sender, receiver;
 	char	msg[MAX_CONSOLE_STRING_LENGTH];
 	char	newmsg[MAX_CONSOLE_STRING_LENGTH];
 
-	NETbeginDecode(NET_AITEXTMSG);
+	NETbeginDecode(queue, NET_AITEXTMSG);
 		NETuint32_t(&sender);			//in-game player index ('normal' one)
 		NETuint32_t(&receiver);			//in-game player index
 		NETstring(newmsg,MAX_CONSOLE_STRING_LENGTH);
 	NETend();
+
+	if (whosResponsible(sender) != queue.index)
+	{
+		sender = queue.index;  // Fix corrupted sender.
+	}
 
 	//sstrcpy(msg, getPlayerName(sender));  // name
 	//sstrcat(msg, " : ");                  // seperator
@@ -1352,7 +1434,7 @@ BOOL sendTemplate(DROID_TEMPLATE *pTempl)
 	ASSERT(pTempl != NULL, "sendTemplate: Old Pumpkin bug");
 	if (!pTempl) return true; /* hack */
 
-	NETbeginEncode(NET_TEMPLATE, NET_ALL_PLAYERS);
+	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_TEMPLATE);
 		NETuint8_t(&player);
 		NETuint32_t(&pTempl->ref);
 		NETstring(pTempl->aName, sizeof(pTempl->aName));
@@ -1381,14 +1463,14 @@ BOOL sendTemplate(DROID_TEMPLATE *pTempl)
 }
 
 // receive a template created by another player
-BOOL recvTemplate()
+BOOL recvTemplate(NETQUEUE queue)
 {
 	uint8_t			player;
 	DROID_TEMPLATE	*psTempl;
 	DROID_TEMPLATE	t, *pT = &t;
 	int				i;
 
-	NETbeginDecode(NET_TEMPLATE);
+	NETbeginDecode(queue, GAME_TEMPLATE);
 		NETuint8_t(&player);
 		ASSERT(player < MAX_PLAYERS, "recvtemplate: invalid player size: %d", player);
 
@@ -1447,7 +1529,7 @@ BOOL SendDestroyTemplate(DROID_TEMPLATE *t)
 {
 	uint8_t player = selectedPlayer;
 
-	NETbeginEncode(NET_TEMPLATEDEST, NET_ALL_PLAYERS);
+	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_TEMPLATEDEST);
 		NETuint8_t(&player);
 		NETuint32_t(&t->multiPlayerID);
 	NETend();
@@ -1456,13 +1538,13 @@ BOOL SendDestroyTemplate(DROID_TEMPLATE *t)
 }
 
 // acknowledge another player no longer has a template
-static BOOL recvDestroyTemplate()
+static BOOL recvDestroyTemplate(NETQUEUE queue)
 {
 	uint8_t			player;
 	uint32_t		templateID;
 	DROID_TEMPLATE	*psTempl, *psTempPrev = NULL;
 
-	NETbeginDecode(NET_TEMPLATEDEST);
+	NETbeginDecode(queue, GAME_TEMPLATEDEST);
 		NETuint8_t(&player);
 		NETuint32_t(&templateID);
 	NETend();
@@ -1491,8 +1573,17 @@ static BOOL recvDestroyTemplate()
 			apsDroidTemplates[player] = psTempl->psNext;
 		}
 
-		// Delete the template
+		// Delete the template.
+		//before deleting the template, need to make sure not being used in production
+		reallyDeleteTemplateFromProduction(psTempl, player);
 		free(psTempl);
+	}
+	else
+	{
+		DROID_TEMPLATE aaargh;
+		aaargh.multiPlayerID = templateID;
+		reallyDeleteTemplateFromProduction(&aaargh, player);
+		debug(LOG_ERROR, "TODO: Rewrite the whole interface, so it's possible to change the code without spaghetti dependencies causing problems everywhere, and without resorting to ugly hacks.");
 	}
 
 	return true;
@@ -1506,25 +1597,25 @@ static BOOL recvDestroyTemplate()
 // send a destruct feature message.
 BOOL SendDestroyFeature(FEATURE *pF)
 {
-	NETbeginEncode(NET_FEATUREDEST, NET_ALL_PLAYERS);
+	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_FEATUREDEST);
 		NETuint32_t(&pF->id);
 	return NETend();
 }
 
 // process a destroy feature msg.
-BOOL recvDestroyFeature()
+BOOL recvDestroyFeature(NETQUEUE queue)
 {
 	FEATURE *pF;
 	uint32_t	id;
 
-	NETbeginDecode(NET_FEATUREDEST);
+	NETbeginDecode(queue, GAME_FEATUREDEST);
 		NETuint32_t(&id);
 	NETend();
 
 	pF = IdToFeature(id,ANYPLAYER);
 	if (pF == NULL)
 	{
-	debug(LOG_WARNING, "feature id %d not found? (sync error?)", id);
+		debug(LOG_FEATURE, "feature id %d not found (probably already destroyed)", id);
 		return false;
 	}
 
@@ -1539,7 +1630,7 @@ BOOL recvDestroyFeature()
 
 // ////////////////////////////////////////////////////////////////////////////
 // Network File packet processor.
-BOOL recvMapFileRequested()
+BOOL recvMapFileRequested(NETQUEUE queue)
 {
 	char mapStr[256],mapName[256],fixedname[256];
 	uint32_t player;
@@ -1554,7 +1645,7 @@ BOOL recvMapFileRequested()
 	}
 
 	//	Check to see who wants the file
-	NETbeginDecode(NET_FILE_REQUESTED);
+	NETbeginDecode(queue, NET_FILE_REQUESTED);
 	NETuint32_t(&player);
 	NETend();
 
@@ -1595,11 +1686,11 @@ BOOL recvMapFileRequested()
 		if (pFileHandle == NULL)
 		{
 			debug(LOG_ERROR, "Failed to open %s for reading: %s", mapStr, PHYSFS_getLastError());
-			debug(LOG_FATAL, "You have a map (%s) that can't be located.\n\nMake sure it is in the correct directory and or format!", mapStr);
+			debug(LOG_FATAL, "You have a map (%s) that can't be located.\n\nMake sure it is in the correct directory and or format! (No map packs!)", mapStr);
 			// NOTE: if we get here, then the game is basically over, The host can't send the file for whatever reason...
 			// Which also means, that we can't continue.
 			debug(LOG_NET, "***Host has a file issue, and is being forced to quit!***");
-			NETbeginEncode(NET_HOST_DROPPED, NET_ALL_PLAYERS);
+			NETbeginEncode(NETbroadcastQueue(), NET_HOST_DROPPED);
 			NETend();
 			abort();
 	}
@@ -1640,9 +1731,9 @@ void sendMap(void)
 }
 
 // Another player is broadcasting a map, recv a chunk. Returns false if not yet done.
-BOOL recvMapFileData()
+BOOL recvMapFileData(NETQUEUE queue)
 {
-	mapDownloadProgress = NETrecvFile();
+	mapDownloadProgress = NETrecvFile(queue);
 	if (mapDownloadProgress == 100)
 	{
 		addConsoleMessage("MAP DOWNLOADED!",DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
@@ -1915,12 +2006,12 @@ BOOL msgStackFireTop(void)
 	return true;
 }
 
-static BOOL recvBeacon(void)
+static BOOL recvBeacon(NETQUEUE queue)
 {
 	int32_t sender, receiver,locX, locY;
 	char    msg[MAX_CONSOLE_STRING_LENGTH];
 
-	NETbeginDecode(NET_BEACONMSG);
+	NETbeginDecode(queue, NET_BEACONMSG);
 	    NETint32_t(&sender);            // the actual sender
 	    NETint32_t(&receiver);          // the actual receiver (might not be the same as the one we are actually sending to, in case of AIs)
 	    NETint32_t(&locX);

@@ -3,13 +3,15 @@
 
 %.lex.h %.lex.c:: %.l
 	$(LEX) $(LFLAGS) $(AM_LFLAGS) -o$@ $<
+#	sed -i 's/\(fwrite(.*)\)/abs(\1)/' $@
 
 # Required to force using a C++ linker
 force-linker.cpp:
 	touch $@
 
-AM_CPPFLAGS = -DYY_NO_INPUT $(SDL_CFLAGS) $(PHYSFS_CFLAGS) $(PNG_CFLAGS) $(OGGVORBIS_CFLAGS) $(OPENAL_CFLAGS) $(OPENGLC_CFLAGS) $(OPENGL_CFLAGS) $(POPT_CFLAGS) $(LUA_CFLAGS) $(WZ_CPPFLAGS)
+AM_CPPFLAGS = -DYY_NO_INPUT $(SDL_CFLAGS) $(PHYSFS_CFLAGS) $(PNG_CFLAGS) $(OGGVORBIS_CFLAGS) $(OPENAL_CFLAGS) $(OPENGLC_CFLAGS) $(OPENGL_CFLAGS) $(LUA_CFLAGS) $(WZ_CPPFLAGS) $(GLee_CFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS)
+AM_CXXFLAGS = $(WZ_CXXFLAGS)
 AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
 
@@ -177,7 +179,7 @@ warzone2100_SOURCES = \
 	advvis.c \
 	ai.c \
 	aiexperience.c \
-	astar.c \
+	astar.cpp \
 	atmos.c \
 	aud.c \
 	baseobject.c \
@@ -239,7 +241,7 @@ warzone2100_SOURCES = \
 	miscimd.c \
 	mission.c \
 	move.c \
-	multibot.c \
+	multibot.cpp \
 	multigifts.c \
 	multiint.c \
 	multijoin.c \
@@ -302,7 +304,14 @@ warzone2100_LDADD = \
 	$(top_builddir)/lib/lua/liblua.a \
 	$(top_builddir)/lib/exceptionhandler/libexceptionhandler.a
 
-warzone2100_LDADD += $(LTLIBINTL) $(SDL_LIBS) $(PHYSFS_LIBS) $(PNG_LIBS) $(OGGVORBIS_LIBS) $(THEORA_LIBS) $(OPENAL_LIBS) $(OPENGLC_LIBS) $(OPENGL_LIBS) $(POPT_LIBS) $(LUA_LIBS)
+warzone2100_LDADD += $(LTLIBINTL) $(SDL_LIBS) $(PHYSFS_LIBS) $(PNG_LIBS) $(OGGVORBIS_LIBS) $(THEORA_LIBS) $(OPENAL_LIBS) $(OPENGLC_LIBS) $(OPENGL_LIBS) $(LUA_LIBS) $(X11_LIBS) $(GLee_LIBS)
 if MINGW32
 warzone2100_LDADD += $(top_builddir)/win32/warzone2100.o $(WIN32_LIBS)
 endif
+
+# HACK Don't give make errors when switching between trunk and branches.
+# Works by finding the .deps/*.Po files which refer to source files that don't exist, and replacing them with a single dependency on the correct source file.
+# Now with PD-ksh support.
+fixbrokendependencies:
+	mkdir -p ".deps" ; for ext in c cpp ; do for a in `cd $(srcdir) ; echo *.$$ext` ; do fpref="`echo "$$a" | sed "s/\.$$ext//"`" ; pofile=".deps/$$fpref.Po" ; srcfile="$(srcdir)/$$a" ; if [ -e "$$srcfile" ] && ! grep -q "\b$$a\b" "$$pofile" 2> /dev/null ; then echo "$$fpref.o: $$srcfile" | tee "$$pofile" ; fi ; done ; done
+all: fixbrokendependencies

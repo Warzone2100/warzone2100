@@ -246,8 +246,6 @@ event	periodicRTLZ;
 /* Initialisation */
 event	start(CALL_GAMEINIT)
 {
-	randomiseSeed();
-
 //set scroll limits
 //	setScrollParams(scrollX1, scrollY1, scrollX2, scrollY2);
 //centre view

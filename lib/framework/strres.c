@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -75,7 +75,7 @@ void strresDestroy(STR_RES *psRes)
 
 
 /* Store a string */
-BOOL strresStoreString(STR_RES *psRes, const char* pID, const char* pString)
+bool strresStoreString(STR_RES *psRes, const char* pID, const char* pString)
 {
 	ASSERT(psRes != NULL, "Invalid string res pointer");
 
@@ -103,7 +103,7 @@ const char* strresGetString(const STR_RES* psRes, const char* ID)
 }
 
 /* Load a string resource file */
-BOOL strresLoad(STR_RES* psRes, const char* fileName)
+bool strresLoad(STR_RES* psRes, const char* fileName)
 {
 	bool retval;
 	lexerinput_t input;

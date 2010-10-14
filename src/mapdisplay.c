@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -26,28 +26,13 @@
 	it's neater as a separate file, as the intelligence map has special requirements
 	and overlays and needs to render to a specified buffer for later use.
 */
+
 #include "lib/framework/frame.h"
-
-/* Includes direct access to render library */
-#include "lib/ivis_common/ivisdef.h"
-#include "lib/framework/fixedpoint.h"
-#include "lib/ivis_common/piestate.h"
-#include "lib/ivis_common/rendmode.h"
-#include "lib/ivis_common/piemode.h"
-
-#include "lib/gamelib/gtime.h"
 #include "lib/ivis_opengl/piematrix.h"
 
-#include "map.h"
-#include "mapdisplay.h"
 #include "component.h"
-#include "display3d.h"
-#include "hci.h"
-#include "intelmap.h"
-#include "intimage.h"
-
-#include "texture.h"
 #include "intdisplay.h"
+#include "mapdisplay.h"
 
 #define ROTATE_TIME	(2*GAME_TICKS_PER_SEC)
 
@@ -70,7 +55,7 @@ void renderResearchToBuffer(RESEARCH *psResearch,
 	pie_SetGeometricOffset(OriginX+10,OriginY+10);
 
 	// Pitch down a bit
-	//pie_MatRotX(DEG(-30));
+	//pie_MatRotX(-65536/12);
 
     // Rotate round
 	// full rotation once every 2 seconds..

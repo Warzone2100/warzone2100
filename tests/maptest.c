@@ -6,6 +6,7 @@
 
 int main(int argc, char **argv)
 {
+	char datapath[PATH_MAX];
 	FILE *fp = fopen("maplist.txt", "r");
 
 	if (!fp)
@@ -14,7 +15,9 @@ int main(int argc, char **argv)
 		return -1;
 	}
 	PHYSFS_init(argv[0]);
-	PHYSFS_addToSearchPath("../data", 1);
+	strcat(datapath, getenv("srcdir"));
+	strcat(datapath, "/../data");
+	PHYSFS_addToSearchPath(datapath, 1);
 
 	while (!feof(fp))
 	{

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -87,7 +87,7 @@ static inline unsigned short TileNumber_texture(unsigned short tilenumber)
 #define BITS_NOTBLOCKING	0x01	///< Units can drive on this even if there is a structure or feature on it
 #define BITS_DECAL		0x02	///< Does this tile has a decal? If so, the tile from "texture" is drawn on top of the terrain.
 #define BITS_FPATHBLOCK		0x10	///< Bit set temporarily by find path to mark a blocking tile
-#define BITS_ON_FIRE		0x20	///< Cache whether tile is burning
+#define BITS_ON_FIRE            0x20    ///< Whether tile is burning
 #define BITS_GATEWAY		0x40	///< Bit set to show a gateway on the tile
 #define BITS_TALLSTRUCTURE	0x80	///< Bit set to show a tall structure which camera needs to avoid.
 
@@ -101,7 +101,6 @@ typedef struct _ground_type
 typedef struct _maptile
 {
 	uint8_t			tileInfoBits;
-	uint8_t			tileVisBits;	// COMPRESSED - bit per player
 	uint8_t			tileExploredBits;
 	uint8_t			sensorBits;		// bit per player, who can see tile with sensor
 	float			height;			// The height at the top left of the tile
@@ -114,6 +113,7 @@ typedef struct _maptile
 	uint16_t		limitedContinent;	///< For land or sea limited propulsion types
 	uint16_t		hoverContinent;		///< For hover type propulsions
 	uint8_t			ground;			///< The ground type used for the terrain renderer
+	uint16_t                fireEndTime;            ///< The (uint16_t)(gameTime / GAME_TICKS_PER_UPDATE) that BITS_ON_FIRE should be cleared.
 	float			waterLevel;		///< At what height is the water for this tile
 } MAPTILE;
 
@@ -207,11 +207,11 @@ static inline bool TileHasSmallStructure(const MAPTILE* tile)
 /* Flips the triangle partition on a tile pointer */
 #define TOGGLE_TRIFLIP(x)	((x)->texture ^= TILE_TRIFLIP)
 
-/* Can player number p see tile t? */
-#define TEST_TILE_VISIBLE(p,t)	((t)->tileVisBits & (1<<(p)))
+/* Can player number p has explored tile t? */
+#define TEST_TILE_VISIBLE(p,t)	((t)->tileExploredBits & (1<<(p)))
 
 /* Set a tile to be visible for a player */
-#define SET_TILE_VISIBLE(p,t) ((t)->tileVisBits |= alliancebits[p])
+#define SET_TILE_VISIBLE(p,t) ((t)->tileExploredBits |= alliancebits[p])
 
 /* Arbitrary maximum number of terrain textures - used in look up table for terrain type */
 #define MAX_TILE_TEXTURES	255
@@ -304,22 +304,25 @@ extern BOOL mapSave(char **ppFileData, UDWORD *pFileSize);
 BOOL mapSaveTagged(char *pFileName);
 BOOL mapLoadTagged(char *pFileName);
 
-/* Return a pointer to the tile structure at x,y */
-static inline WZ_DECL_PURE MAPTILE *mapTile(SDWORD x, SDWORD y)
+/** Return a pointer to the tile structure at x,y in map coordinates */
+static inline WZ_DECL_PURE MAPTILE *mapTile(int32_t x, int32_t y)
 {
 	// Clamp x and y values to actual ones
 	// Give one tile worth of leeway before asserting, for units/transporters coming in from off-map.
 	ASSERT(x >= -1, "mapTile: x value is too small (%d,%d) in %dx%d",x,y,mapWidth,mapHeight);
 	ASSERT(y >= -1, "mapTile: y value is too small (%d,%d) in %dx%d",x,y,mapWidth,mapHeight);
-	x = (x < 0 ? 0 : x);
-	y = (y < 0 ? 0 : y);
+	x = MAX(x, 0);
+	y = MAX(y, 0);
 	ASSERT(x < mapWidth + 1, "mapTile: x value is too big (%d,%d) in %dx%d",x,y,mapWidth,mapHeight);
 	ASSERT(y < mapHeight + 1, "mapTile: y value is too big (%d,%d) in %dx%d",x,y,mapWidth,mapHeight);
-	x = (x >= mapWidth ? mapWidth - 1 : x);
-	y = (y >= mapHeight ? mapHeight - 1 : y);
+	x = MIN(x, mapWidth - 1);
+	y = MIN(y, mapHeight - 1);
 
 	return &psMapTiles[x + (y * mapWidth)];
 }
+
+/** Return a pointer to the tile structure at x,y in world coordinates */
+#define worldTile(_x, _y) mapTile(map_coord(_x), map_coord(_y))
 
 /// Return ground height of top-left corner of tile at x,y
 static inline WZ_DECL_PURE float map_TileHeight(SDWORD x, SDWORD y)
@@ -412,7 +415,7 @@ typedef struct _tile_coord
 } TILE_COORD;
 
 /// The max height of the terrain and water at the specified world coordinates
-extern SWORD map_Height(int x, int y);
+extern int32_t map_Height(int x, int y);
 
 /* returns true if object is above ground */
 extern BOOL mapObjIsAboveGround( BASE_OBJECT *psObj );
@@ -433,16 +436,19 @@ void mapFloodFillContinents(void);
 
 extern void mapTest(void);
 
+void tileSetFire(int32_t x, int32_t y, uint32_t duration);
 extern bool fireOnLocation(unsigned int x, unsigned int y);
 
 /**
  * Transitive sensor check for tile. Has to be here rather than
  * visibility.h due to header include order issues. 
  */
-static inline bool hasSensorOnTile(MAPTILE *psTile, int player)
+static inline bool hasSensorOnTile(MAPTILE *psTile, unsigned player)
 {
 	return ((player == selectedPlayer && godMode) || (alliancebits[selectedPlayer] & (satuplinkbits | psTile->sensorBits)));
 }
+
+void mapUpdate(void);
 
 #ifdef __cplusplus
 }

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -45,7 +45,9 @@ bool assertEnabled = true;
 #else
 bool assertEnabled = false;
 #endif
-
+#if defined(WZ_OS_MAC32) // FIXME: Needs to be made compatible with 64bit
+#include <Carbon/Carbon.h>
+#endif
 /*
  * This list _must_ match the enum in debug.h!
  * Names must be 8 chars long at max!
@@ -116,7 +118,7 @@ static code_part code_part_from_str(const char *str)
  */
 void debug_callback_stderr( WZ_DECL_UNUSED void ** data, const char * outputBuffer )
 {
-	if ( !strchr( outputBuffer, '\n' ) ) {
+	if ( outputBuffer[strlen(outputBuffer) - 1] != '\n' ) {
 		fprintf( stderr, "%s\n", outputBuffer );
 	} else {
 		fprintf( stderr, "%s", outputBuffer );
@@ -215,6 +217,29 @@ void debugFlushStderr()
 {
 	debug_flush_stderr = true;
 }
+// MSVC specific rotuines to set/clear allocation tracking
+#if defined(WZ_CC_MSVC) && defined(DEBUG)
+void debug_MEMCHKOFF(void)
+{
+	// Disable allocation tracking
+	int flags = _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG);
+	flags &= ~_CRTDBG_ALLOC_MEM_DF;
+	_CrtSetDbgFlag(flags);
+}
+void debug_MEMCHKON(void)
+{
+	// Enable allocation tracking
+	int flags = _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG);
+	flags |= _CRTDBG_ALLOC_MEM_DF;
+	_CrtSetDbgFlag(flags);
+}
+void debug_MEMSTATS(void)
+{
+	_CrtMemState state;
+	_CrtMemCheckpoint(&state);
+	_CrtMemDumpStatistics(&state);
+}
+#endif
 
 void debug_init(void)
 {
@@ -409,8 +434,29 @@ void _debug( code_part part, const char *function, const char *str, ... )
 			MessageBoxA( NULL,
 				wbuf,
 				"Warzone has terminated unexpectedly", MB_OK|MB_ICONERROR);
+#elif defined(WZ_OS_MAC32) // FIXME: Needs to be made compatible with 64bit
+			AlertStdCFStringAlertParamRec	param;
+			DialogRef						dialog;
+			OSStatus						err;
+			DialogItemIndex					itemHit;
+			char aBuffer[512];
+
+			GetStandardAlertDefaultParams( &param, kStdCFStringAlertVersionOne );
+			param.movable = true;
+			
+			ssprintf(aBuffer, "%s\n\nPlease check your logs for more details.\n", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0] );
+			
+			err = CreateStandardAlert( kAlertStopAlert, CFStringCreateWithCString( nil, aBuffer, kCFStringEncodingMacRoman),
+				CFSTR( "Run Console.app and search for wz2100 and copy that to a file.\
+					  \n\nFor the Crash report on 10.4/10.5 check\
+					  \n~/Library/Logs/CrashReporter,\
+					  \non 10.6 check ~/Library/Logs/DiagnosticReports\
+					  \nDo not forget to upload and attach those to a bug report at http://developer.wz2100.net/newticket\
+					  \nThanks!" ), &param, &dialog );
+			SetWindowTitleWithCFString( GetDialogWindow( dialog ), CFSTR( "Warzone has terminated unexpectedly" ) );
+			
+			RunStandardAlert( dialog, NULL, &itemHit );
 #endif
-		// TODO: Add Mac OS X dialog as well?
 		}
 
 		// Throw up a dialog box for windows users since most don't have a clue to check the stderr.txt file for information
@@ -423,8 +469,23 @@ void _debug( code_part part, const char *function, const char *str, ... )
 			MessageBoxA( NULL,
 				wbuf,
 				"Warzone has detected a problem.", MB_OK|MB_ICONINFORMATION);
+#elif defined (WZ_OS_MAC32) // FIXME: Needs to be made compatible with 64bit
+			AlertStdCFStringAlertParamRec	param;
+			DialogRef						dialog;
+			OSStatus						err;
+			DialogItemIndex					itemHit;
+			char aBuffer[512];
+			
+			GetStandardAlertDefaultParams( &param, kStdCFStringAlertVersionOne );
+			param.movable = true;
+			
+			ssprintf(aBuffer, "A non fatal error has occurred.\n\n%s\n\n", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0] );
+			
+			err = CreateStandardAlert( kAlertNoteAlert, CFStringCreateWithCString( nil, aBuffer, kCFStringEncodingMacRoman), NULL, &param, &dialog );
+			SetWindowTitleWithCFString( GetDialogWindow( dialog ), CFSTR( "Warzone has detected a problem" ) );
+			
+			RunStandardAlert( dialog, NULL, &itemHit );
 #endif
-		// TODO: Add Mac OS X dialog as well?
 		}
 
 	}

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -33,41 +33,9 @@
 #include "hci.h"
 #include "display.h"
 
-#define AMPLITUDE_HEIGHT        100
-#define SIZE_SINE_TABLE         100
-#define deg (M_PI / SIZE_SINE_TABLE)
-
-/* The arc over which bullets fly */
-static UBYTE sineHeightTable[SIZE_SINE_TABLE];
-
-void initBulletTable( void )
+uint16_t calcDirection(int32_t x0, int32_t y0, int32_t x1, int32_t y1)
 {
-	UDWORD i;
-	UBYTE height;
-
-	for (i = 0; i < SIZE_SINE_TABLE; i++)
-	{
-		height = AMPLITUDE_HEIGHT * sin(i*deg);
-		sineHeightTable[i] = height;
-	}
-}
-
-/* Angle returned is reflected in line x=0 */
-SDWORD calcDirection(UDWORD x0, UDWORD y0, UDWORD x1, UDWORD y1)
-{
-	/* Watch out here - should really be y1-y0, but coordinate system is reversed in Y */
-	SDWORD	xDif = (x1-x0), yDif = (y0-y1);
-	double	angle = atan2(yDif, xDif) * 180.0 / M_PI;
-	SDWORD	angleInt = (SDWORD) angle;
-
-	angleInt+=90;
-	if (angleInt<0)
-		angleInt+=360;
-
-	ASSERT( angleInt >= 0 && angleInt < 360,
-		"calcDirection: droid direction out of range" );
-
-	return(angleInt);
+	return iAtan2(x1 - x0, y1 - y0);
 }
 
 
@@ -82,7 +50,6 @@ SDWORD calcDirection(UDWORD x0, UDWORD y0, UDWORD x1, UDWORD y1)
 DROID	*getNearestDroid(UDWORD x, UDWORD y, BOOL bSelected)
 {
 DROID	*psDroid,*psBestUnit;
-UDWORD	xDif,yDif,dist;
 UDWORD	bestSoFar;
 
 	/* Go thru' all the droids  - how often have we seen this - a MACRO maybe? */
@@ -92,13 +59,9 @@ UDWORD	bestSoFar;
         if (!isVtolDroid(psDroid))
         {
 		    /* Clever (?) bit that reads whether we're interested in droids being selected or not */
-		    if( (bSelected ? psDroid->selected : true ) )
+			if (!bSelected || psDroid->selected)
 		    {
-			    /* Get the differences */
-			    xDif = abs(psDroid->pos.x - x);
-			    yDif = abs(psDroid->pos.y - y);
-			    /* Approximates the distance away - using a sqrt approximation */
-			    dist = MAX(xDif,yDif) + MIN(xDif,yDif)/2;	// approximates, but never more than 11% out...
+				uint32_t dist = iHypot(psDroid->pos.x - x, psDroid->pos.y - y);
 			    /* Is this the nearest one we got so far? */
 			    if(dist<bestSoFar)
 			    {
@@ -135,46 +98,6 @@ int inQuad(const Vector2i *pt, const QUAD *quad)
 	}
 
 	return c;
-}
-
-UDWORD	adjustDirection(SDWORD present, SDWORD difference)
-{
-SDWORD	sum;
-
-	sum = present+difference;
-	if(sum>=0 && sum<=360)
-	{
-		return(UDWORD)(sum);
-	}
-
-	if (sum<0)
-	{
-		return(UDWORD)(360+sum);
-	}
-
-	if (sum>360)
-	{
-		return(UDWORD)(sum-360);
-	}
-	return 0;
-}
-
-/**
- * Approximates the euclidian distance function, never moret than 11% out.
- * 
- * Mathematically equivalent to sqrt(deltaX * deltaX + deltaY * deltaY).
- *
- * @Deprecated All uses of this function should be replaced by calls to hypot()
- *             or hypotf(), the C99 functions. This because this integer
- *             optimisation is no longer required (due to hardware improvements
- *             since 1997).
- */
-unsigned int WZ_DECL_CONST dirtyHypot(int deltaX, int deltaY)
-{
-	deltaX = abs(deltaX);
-	deltaY = abs(deltaY);
-	
-	return MAX(deltaX, deltaY) + MIN(deltaX, deltaY) / 2;
 }
 
 //-----------------------------------------------------------------------------------

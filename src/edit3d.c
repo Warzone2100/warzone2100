@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -43,6 +43,7 @@ BUILDDETAILS	sBuildDetails;
 HIGHLIGHT		buildSite;
 int brushSize = 1;
 bool editMode = false;
+bool quickQueueMode = false;
 
 // Initialisation function for statis & globals in this module.
 //
@@ -137,13 +138,6 @@ void init3DBuilding(BASE_STATS *psStats,BUILDCALLBACK CallBack,void *UserData)
 		sBuildDetails.width = ((STRUCTURE_STATS *)psStats)->baseWidth;
 		sBuildDetails.height = ((STRUCTURE_STATS *)psStats)->baseBreadth;
 		sBuildDetails.psStats = psStats;
-
-		// hack to increase the size of repair facilities
-		if (((STRUCTURE_STATS *)psStats)->type == REF_REPAIR_FACILITY)
-		{
-			sBuildDetails.width += 2;
-			sBuildDetails.height += 2;
-		}
 	}
 	else if (psStats->ref >= REF_FEATURE_START &&
 			 psStats->ref < (REF_FEATURE_START + REF_RANGE))
@@ -180,30 +174,29 @@ BOOL process3DBuilding(void)
 	//if not trying to build ignore
 	if (buildState == BUILD3D_NONE)
   	{
+		if (quickQueueMode && !ctrlShiftDown())
+		{
+			quickQueueMode = false;
+			intDemolishCancel();
+		}
 		return true;
 	}
 
 
 	if (buildState != BUILD3D_FINISHED)// && buildState != BUILD3D_NONE)
-  	{
+	{
 		bX = mouseTileX;
 		bY = mouseTileY;
-		// lovely hack to make the repair facility 3x3 - need to offset the position by 1
-		if (((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_REPAIR_FACILITY)
-		{
-			bX += 1;
-			bY += 1;
-		}
 
-      	if (validLocation(sBuildDetails.psStats, bX, bY, selectedPlayer, true))
-        {
-  		   	buildState = BUILD3D_VALID;
-        }
-  		else
-  		{
-  			buildState = BUILD3D_POS;
+		if (validLocation(sBuildDetails.psStats, bX, bY, player.r.y, selectedPlayer, true))
+		{
+			buildState = BUILD3D_VALID;
 		}
-  	}
+		else
+		{
+			buildState = BUILD3D_POS;
+		}
+	}
 
 	/* Need to update the building locations if we're building */
 	bX = mouseTileX;
@@ -245,14 +238,28 @@ BOOL process3DBuilding(void)
 
 	sBuildDetails.x = buildSite.xTL = (UWORD)bX;
  	sBuildDetails.y = buildSite.yTL = (UWORD)bY;
-	buildSite.xBR = (UWORD)(buildSite.xTL+sBuildDetails.width-1);
-  	buildSite.yBR = (UWORD)(buildSite.yTL+sBuildDetails.height-1);
+	if (((player.r.y + 0x2000) & 0x4000) == 0)
+	{
+		buildSite.xBR = buildSite.xTL+sBuildDetails.width-1;
+		buildSite.yBR = buildSite.yTL+sBuildDetails.height-1;
+	}
+	else
+	{
+		// Rotated 90°, swap width and height
+		buildSite.xBR = buildSite.xTL+sBuildDetails.height-1;
+		buildSite.yBR = buildSite.yTL+sBuildDetails.width-1;
+	}
 
 	if( (buildState == BUILD3D_FINISHED) && (sBuildDetails.CallBack != NULL) )
 	{
 		sBuildDetails.CallBack(sBuildDetails.x,sBuildDetails.y,sBuildDetails.UserData);
 		buildState = BUILD3D_NONE;
 		return true;
+	}
+	if (quickQueueMode && !ctrlShiftDown())
+	{
+		buildState = BUILD3D_NONE;
+		quickQueueMode = false;
 	}
 
 	return false;
@@ -270,14 +277,15 @@ BOOL found3DBuilding(UDWORD *x, UDWORD *y)
 	*x = sBuildDetails.x;
 	*y = sBuildDetails.y;
 
-	// lovely hack to make the repair facility 3x3 - need to offset the position by 1
-	if (((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_REPAIR_FACILITY)
+	if (ctrlShiftDown())
 	{
-		*x += 1;
-		*y += 1;
+		quickQueueMode = true;
+		init3DBuilding(sBuildDetails.psStats, NULL, NULL);
 	}
-
-	buildState = BUILD3D_NONE;
+	else
+	{
+		buildState = BUILD3D_NONE;
+	}
 
 	return true;
 }
@@ -286,6 +294,7 @@ BOOL found3DBuilding(UDWORD *x, UDWORD *y)
 BOOL found3DBuildLocTwo(UDWORD *px1, UDWORD *py1, UDWORD *px2, UDWORD *py2)
 {
 	if ( (((STRUCTURE_STATS *)sBuildDetails.psStats)->type != REF_WALL &&
+		  ((STRUCTURE_STATS *)sBuildDetails.psStats)->type != REF_GATE &&
 		  ((STRUCTURE_STATS *)sBuildDetails.psStats)->type != REF_DEFENSE &&
 		  ((STRUCTURE_STATS *)sBuildDetails.psStats)->type != REF_REARM_PAD) ||
 		wallDrag.status != DRAG_RELEASED)
@@ -304,6 +313,13 @@ BOOL found3DBuildLocTwo(UDWORD *px1, UDWORD *py1, UDWORD *px2, UDWORD *py2)
 	*py1 = wallDrag.y1;
 	*px2 = wallDrag.x2;
 	*py2 = wallDrag.y2;
+
+	if (ctrlShiftDown())
+	{
+		quickQueueMode = true;
+		init3DBuilding(sBuildDetails.psStats, NULL, NULL);
+	}
+
 	return true;
 }
 

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -27,8 +27,6 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
 #include "lib/framework/input.h"
-
-#include "lib/ivis_common/rendmode.h"
 
 #include "lib/gamelib/gtime.h"
 #include "lib/gamelib/animobj.h"
@@ -207,7 +205,7 @@ BOOL StartDriverMode(DROID *psOldDroid)
 
 	if(psDrivenDroid) {
 
-		driveDir = (int)psDrivenDroid->direction % 360;
+		driveDir = UNDEG(psDrivenDroid->rot.direction);
 		driveSpeed = 0;
 		driveBumpTime = gameTime;
 
@@ -512,7 +510,7 @@ void driveUpdate(void)
 		if(psDrivenDroid != NULL) {
 			if(bMultiMessages && (driveBumpTime < gameTime))	// send latest info about driven droid.
 			{
-				SendDroidInfo(psDrivenDroid,DORDER_MOVE,psDrivenDroid->pos.x,psDrivenDroid->pos.y, NULL);
+				SendDroidInfo(psDrivenDroid, DORDER_MOVE, psDrivenDroid->pos.x, psDrivenDroid->pos.y, NULL, NULL, 0, 0, 0);
 			}
 
 	//TO BE DONE:
@@ -533,7 +531,7 @@ void driveUpdate(void)
 				if(psDrivenDroid->sMove.Status != MOVEDRIVE) {
 					psDrivenDroid->sMove.Status = MOVEDRIVE;
 					ASSERT( (psDrivenDroid->droidType != DROID_TRANSPORTER),"Tried to control a transporter" );
-					driveDir = (int)psDrivenDroid->direction % 360;
+					driveDir = UNDEG(psDrivenDroid->rot.direction);
 				}
 
 				DoFollowRangeCheck = true;
@@ -594,9 +592,7 @@ SDWORD driveGetMoveDir(void)
 
 void driveSetDroidMove(DROID *psDroid)
 {
-//	psDroid->sMove.speed = (float)driveSpeed;
-//	psDroid->sMove.dir = driveDir;
-	psDroid->direction = driveDir;
+	psDroid->rot.direction = DEG(driveDir);
 }
 
 
@@ -739,20 +735,3 @@ void driveProcessRadarInput(int x,int y)
 	CalcRadarPosition(x, y, &PosX, &PosY);
 	orderSelectedLoc(selectedPlayer, PosX*TILE_UNITS, PosY*TILE_UNITS, ctrlShiftDown());  // ctrlShiftDown() = ctrl clicked a destination, add an order
 }
-/*
-void driveMarkTarget(void)
-{
-
-		BASE_OBJECT *psObj = targetGetCurrent();
-		if(psObj != NULL)
-		{
-			if(driveAllowControl())
-			{
-//				MouseMovement(false);
-				targetMarkCurrent();
-				SetMousePos(0,psObj->sDisplay.screenX,psObj->sDisplay.screenY);
-//				pie_DrawMouse(psObj->sDisplay.screenX,psObj->sDisplay.screenY);
-			}
-		}
-}
-*/

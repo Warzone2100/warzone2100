@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -34,6 +34,8 @@ extern BOOL visInitialise(void);
 
 /* Check which tiles can be seen by an object */
 extern void visTilesUpdate(BASE_OBJECT *psObj);
+
+extern void revealAll(UBYTE player);
 
 /* Check whether psViewer can see psTarget
  * psViewer should be an object that has some form of sensor,

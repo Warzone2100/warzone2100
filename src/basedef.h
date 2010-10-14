@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -64,12 +64,12 @@ typedef struct _tilePos
 #define BASE_ELEMENTS1(pointerType) \
 	OBJECT_TYPE     type;                           /**< The type of object */ \
 	UDWORD          id;                             /**< ID number of the object */ \
-	Vector3uw       pos;                            /**< Position of the object */ \
-	float           direction;                      /**< Object's yaw +ve rotation around up-axis */ \
-	SWORD           pitch;                          /**< Object's pitch +ve rotation around right-axis (nose up/down) */ \
+	Position	pos;                            /**< Position of the object */ \
+	Rotation	rot;				/**< Object's yaw +ve rotation around up-axis */ \
 	UBYTE           player;                         /**< Which player the object belongs to */ \
-	SWORD           roll;                           /**< Object's roll +ve rotation around forward-axis (left wing up/down) */ \
-	uint32_t        time                           /**< Game time of given space-time position. */
+	UDWORD          born;				/**< Time the game object was born */ \
+	UDWORD          died;                           /**< When an object was destroyed, if 0 still alive */ \
+	uint32_t        time                            /**< Game time of given space-time position. */
 
 #define BASE_ELEMENTS2(pointerType) \
 	SCREEN_DISP_DATA    sDisplay;                   /**< screen coordinate details */ \
@@ -78,18 +78,18 @@ typedef struct _tilePos
 	UBYTE               cluster;                    /**< Which cluster the object is a member of */ \
 	UBYTE               visible[MAX_PLAYERS];       /**< Whether object is visible to specific player */ \
 	UBYTE               seenThisTick[MAX_PLAYERS];  /**< Whether object has been seen this tick by the specific player. */ \
-	UDWORD              died;                       /**< When an object was destroyed, if 0 still alive */ \
+	UBYTE               inFire;                     /**< true if the object is in a fire */ \
+	UWORD               numWatchedTiles;		/**< Number of watched tiles, zero for features */ \
 	UDWORD              lastEmission;               /**< When did it last puff out smoke? */ \
 	UDWORD              lastHitWeapon;		/**< The weapon that last hit it */ \
 	UDWORD              timeLastHit;		/**< The time the structure was last attacked */ \
 	UDWORD              body;			/**< Hit points with lame name */ \
-	BOOL                inFire;                     /**< true if the object is in a fire */ \
 	UDWORD              burnStart;                  /**< When the object entered the fire */ \
 	UDWORD              burnDamage;                 /**< How much damage has been done since the object entered the fire */ \
 	SDWORD              sensorPower;		/**< Active sensor power */ \
 	SDWORD              sensorRange;		/**< Range of sensor */ \
 	SDWORD              ECMMod;			/**< Ability to conceal oneself from sensors */ \
-	UWORD               numWatchedTiles;		/**< Number of watched tiles, zero for features */ \
+	BOOL                bTargetted;			/**< Whether object is targetted by a selectedPlayer droid sensor (quite the hack) */ \
 	TILEPOS             *watchedTiles;		/**< Variable size array of watched tiles, NULL for features */ \
 	UDWORD              armour[NUM_HIT_SIDES][WC_NUM_WEAPON_CLASSES]
 
@@ -122,28 +122,23 @@ typedef struct SpaceTime
 {
 	uint32_t  time;        ///< Game time
 
-	Vector3uw pos;         ///< Position of the object
-	int16_t   pitch;       ///< Object's pitch +ve rotation around right-axis (nose up/down)
-	float     direction;   ///< Object's yaw +ve rotation around up-axis
-	int16_t   roll;        ///< Object's roll +ve rotation around forward-axis (left wing up/down)
+	Position  pos;         ///< Position of the object
+	Rotation  rot;         ///< Rotation of the object
 } SPACETIME;
 
-static inline SPACETIME constructSpacetime(Vector3uw pos, float direction, int16_t pitch, int16_t roll, uint32_t time)
+static inline SPACETIME constructSpacetime(Position pos, Rotation rot, uint32_t time)
 {	// we don't support C99 struct assignments
 	SPACETIME ret;
+
 	ret.time = time;
-	ret.pos.x = pos.x;
-	ret.pos.y = pos.y;
-	ret.pos.z = pos.z;
-	ret.pitch = pitch;
-	ret.direction = direction;
-	ret.roll = roll;
+	ret.pos = pos;
+	ret.rot = rot;
 
 	return ret;
 }
 
-#define GET_SPACETIME(psObj) constructSpacetime(psObj->pos, psObj->direction, psObj->pitch, psObj->roll, psObj->time)
-#define SET_SPACETIME(psObj, st) do { psObj->pos = st.pos; psObj->direction = st.direction; psObj->pitch = st.pitch; psObj->roll = st.roll; psObj->time = st.time; } while(0)
+#define GET_SPACETIME(psObj) constructSpacetime(psObj->pos, psObj->rot, psObj->time)
+#define SET_SPACETIME(psObj, st) do { psObj->pos = st.pos; psObj->rot = st.rot; psObj->time = st.time; } while(0)
 
 static inline bool isDead(const BASE_OBJECT* psObj)
 {
@@ -151,7 +146,7 @@ static inline bool isDead(const BASE_OBJECT* psObj)
 	return (psObj->died > NOT_CURRENT_LIST);
 }
 
-static inline int objPosDiffSq(Vector3uw pos1, Vector3uw pos2)
+static inline int objPosDiffSq(Position pos1, Position pos2)
 {
 	const int xdiff = pos1.x - pos2.x;
 	const int ydiff = pos1.y - pos2.y;

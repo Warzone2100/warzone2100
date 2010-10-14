@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -30,9 +30,9 @@
 #include "lib/widget/widget.h"
 #include "lib/widget/button.h"
 /* Includes direct access to render library */
+#include "lib/ivis_common/pieblitfunc.h"
 #include "lib/ivis_common/piedef.h"
 #include "lib/ivis_common/piestate.h"
-#include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_common/piepalette.h"
 #include "lib/ivis_opengl/screen.h"
 #include "lib/ivis_common/piemode.h"
@@ -62,6 +62,7 @@
 #include "multiplay.h"
 #include "lib/sound/cdaudio.h"
 #include "lib/sequence/sequence.h"
+#include "lib/sound/track.h"
 
 #include "scriptextern.h"
 
@@ -968,32 +969,39 @@ void intIntelButtonPressed(BOOL proxMsg, UDWORD id)
 			if (psResearch != NULL)
 			{
 				static const float maxVolume = 1.f;
+				static AUDIO_STREAM *playing = NULL;
+
+				// only play the sample once, otherwise, they tend to overlap each other
+				if (sound_isStreamPlaying(playing))
+				{
+					sound_StopStream(playing);
+				}
 
 				switch(psResearch->iconID)
 				{
 				case IMAGE_RES_DROIDTECH:
-					audio_PlayStream("sequenceaudio/res_droid.ogg", maxVolume, NULL, NULL);
+					playing = audio_PlayStream("sequenceaudio/res_droid.ogg", maxVolume, NULL, NULL);
 						break;
 				case IMAGE_RES_WEAPONTECH:
-					audio_PlayStream("sequenceaudio/res_weapons.ogg", maxVolume, NULL, NULL);
+					playing = audio_PlayStream("sequenceaudio/res_weapons.ogg", maxVolume, NULL, NULL);
 						break;
 				case IMAGE_RES_COMPUTERTECH:
-					audio_PlayStream("sequenceaudio/res_com.ogg", maxVolume, NULL, NULL);
+					playing = audio_PlayStream("sequenceaudio/res_com.ogg", maxVolume, NULL, NULL);
 						break;
 				case IMAGE_RES_POWERTECH:
-					audio_PlayStream("sequenceaudio/res_pow.ogg", maxVolume, NULL, NULL);
+					playing = audio_PlayStream("sequenceaudio/res_pow.ogg", maxVolume, NULL, NULL);
 						break;
 				case IMAGE_RES_SYSTEMTECH:
-					audio_PlayStream("sequenceaudio/res_systech.ogg", maxVolume, NULL, NULL);
+					playing = audio_PlayStream("sequenceaudio/res_systech.ogg", maxVolume, NULL, NULL);
 						break;
 				case IMAGE_RES_STRUCTURETECH:
-					audio_PlayStream("sequenceaudio/res_strutech.ogg", maxVolume, NULL, NULL);
+					playing = audio_PlayStream("sequenceaudio/res_strutech.ogg", maxVolume, NULL, NULL);
 						break;
 				case IMAGE_RES_CYBORGTECH:
-					audio_PlayStream("sequenceaudio/res_droid.ogg", maxVolume, NULL, NULL);
+					playing = audio_PlayStream("sequenceaudio/res_droid.ogg", maxVolume, NULL, NULL);
 						break;
 				case IMAGE_RES_DEFENCE:
-					audio_PlayStream("sequenceaudio/res_strutech.ogg", maxVolume, NULL, NULL);
+					playing = audio_PlayStream("sequenceaudio/res_strutech.ogg", maxVolume, NULL, NULL);
 						break;
 				}
 			}

@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2006-2009  Warzone Resurrection Project
+	Copyright (C) 2006-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -17,23 +17,23 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#include <physfs.h>
-#include <string.h>
-
-#include "objmem.h"
-#include "objectdef.h"
-#include "map.h"
 #include "lib/framework/frame.h"
-#include "lib/script/interpreter.h"
-#include "lib/script/stack.h"
-#include "lib/script/codeprint.h"
-#include "lib/script/script.h"
-#include "multiplay.h"
-
-#include "console.h"		//for RIGHT_JUSTIFY
-#include "geometry.h"
 
 #include "aiexperience.h"
+#include "console.h"
+#include "map.h"
+
+#define	SAVE_FORMAT_VERSION			2
+
+#define MAX_OIL_ENTRIES				600		//(Max number of derricks or oil resources) / 2
+#define	MAX_OIL_LOCATIONS			300		//max number of oil locations to store
+
+#define SAME_LOC_RANGE				8		//if within this range, consider it the same loc
+
+//Return values of experience-loading routine
+#define EXPERIENCE_LOAD_OK			0			//no problemens encountered
+#define EXPERIENCE_LOAD_ERROR		1			//error while loading experience
+#define EXPERIENCE_LOAD_NOSAVE		(-1)		//no experience exists
 
 static PHYSFS_file* aiSaveFile[8];
 
@@ -45,12 +45,6 @@ SDWORD baseDefendLocPrior[MAX_PLAYERS][MAX_BASE_DEFEND_LOCATIONS];		//Priority
 
 SDWORD oilDefendLocation[MAX_PLAYERS][MAX_OIL_DEFEND_LOCATIONS][2];
 SDWORD oilDefendLocPrior[MAX_PLAYERS][MAX_OIL_DEFEND_LOCATIONS];
-
-static bool WriteAISaveData(SDWORD nPlayer);
-static int ReadAISaveData(SDWORD nPlayer);
-static bool canRecallOilAt(SDWORD nPlayer, SDWORD x, SDWORD y);
-static bool SortBaseDefendLoc(SDWORD nPlayer);
-static bool SortOilDefendLoc(SDWORD nPlayer);
 
 void InitializeAIExperience(void)
 {
@@ -127,6 +121,240 @@ BOOL SaveAIExperience(BOOL bNotify)
 	return true;
 }
 
+static bool SetUpInputFile(const unsigned int nPlayer)
+{
+	char* FileName;
+
+	/* Create filename */
+	sasprintf(&FileName, "multiplay/learndata/player%u/%s.lrn", nPlayer, game.map);
+
+	aiSaveFile[nPlayer] = PHYSFS_openRead(FileName);
+
+	if (aiSaveFile[nPlayer] == NULL)
+	{
+		debug(LOG_ERROR, "Couldn't open input file: [directory: %s] '%s' for player %u: %s", PHYSFS_getRealDir(FileName), FileName, nPlayer, PHYSFS_getLastError());
+		return false;
+	}
+
+	return true;
+}
+
+static int ReadAISaveData(SDWORD nPlayer)
+{
+	FEATURE		*psFeature;
+	SDWORD		NumEntries=0;		//How many derricks/oil resources will be saved
+	UDWORD		PosXY[MAX_OIL_ENTRIES];		//Locations, 0=x,1=y,2=x etc
+	UDWORD		i,j;
+	BOOL		Found,bTileVisible;
+	UDWORD		version;
+
+	if(!SetUpInputFile(nPlayer))
+	{
+		//debug(LOG_ERROR,"No experience data loaded for %d",nPlayer);
+		return EXPERIENCE_LOAD_NOSAVE;
+	}
+	else
+	{
+		/* Read data version */
+		if (PHYSFS_read(aiSaveFile[nPlayer], &version, sizeof(NumEntries), 1 ) != 1 )
+		{
+			debug(LOG_ERROR, "Failed to read version number for player '%d'",nPlayer);
+			return EXPERIENCE_LOAD_ERROR;
+		}
+
+		// Check version, assume backward compatibility
+		if(version > SAVE_FORMAT_VERSION)
+		{
+			debug(LOG_ERROR, "Incompatible version of the learn data (%d, expected %d) for player '%d'", version, SAVE_FORMAT_VERSION, nPlayer);
+		}
+
+		/************************/
+		/*		Enemy bases		*/
+		/************************/
+
+		/* read max number of players (usually 8) */
+		if (PHYSFS_read(aiSaveFile[nPlayer], &NumEntries, sizeof(NumEntries), 1 ) != 1 )
+		{
+			debug(LOG_ERROR, "Failed to read number of players for player '%d'",nPlayer);
+			return EXPERIENCE_LOAD_ERROR;
+		}
+
+		/* read base locations of all players */
+		if (PHYSFS_read(aiSaveFile[nPlayer], baseLocation[nPlayer], sizeof(SDWORD), NumEntries * 2 ) != (NumEntries * 2) )
+		{
+			debug(LOG_ERROR, "Failed to load baseLocation for player '%d'",nPlayer);
+			return EXPERIENCE_LOAD_ERROR;
+		}
+
+		/************************************/
+		/*		Base attack locations		*/
+		/************************************/
+
+		/* read MAX_BASE_DEFEND_LOCATIONS */
+		if (PHYSFS_read(aiSaveFile[nPlayer], &NumEntries, sizeof(SDWORD), 1 ) != 1 )
+		{
+			debug(LOG_ERROR, "Failed to read MAX_BASE_DEFEND_LOCATIONS for player '%d'",nPlayer);
+			return EXPERIENCE_LOAD_ERROR;
+		}
+
+		/* check it's the same as current MAX_BASE_DEFEND_LOCATIONS */
+		if(NumEntries > MAX_BASE_DEFEND_LOCATIONS)
+		{
+			debug(LOG_ERROR, "saved MAX_BASE_DEFEND_LOCATIONS and current one don't match (%d / %d)", NumEntries, MAX_BASE_DEFEND_LOCATIONS);
+			return EXPERIENCE_LOAD_ERROR;
+		}
+
+		//debug(LOG_ERROR,"num base attack loc: %d", NumEntries);
+
+		/* read base defence locations */
+		if (PHYSFS_read(aiSaveFile[nPlayer], baseDefendLocation[nPlayer], sizeof(SDWORD), NumEntries * 2 ) != (NumEntries * 2) )
+		{
+			debug(LOG_ERROR, "Failed to load baseDefendLocation for player '%d'",nPlayer);
+			return EXPERIENCE_LOAD_ERROR;
+		}
+
+		/* read base defend priorities */
+		if (PHYSFS_read(aiSaveFile[nPlayer], baseDefendLocPrior[nPlayer], sizeof(SDWORD), NumEntries * 2 ) != (NumEntries * 2) )
+		{
+			debug(LOG_ERROR, "Failed to load baseDefendLocPrior for player '%d'",nPlayer);
+			return EXPERIENCE_LOAD_ERROR;
+		}
+
+		/************************************/
+		/*		Oil attack locations		*/
+		/************************************/
+
+		/* read MAX_OIL_DEFEND_LOCATIONS */
+		if (PHYSFS_read(aiSaveFile[nPlayer], &NumEntries, sizeof(NumEntries), 1 ) != 1 )
+		{
+			debug(LOG_ERROR, "Failed to read max number of oil attack locations for player '%d'",nPlayer);
+			return EXPERIENCE_LOAD_ERROR;
+		}
+
+		/* check it's the same as current MAX_OIL_DEFEND_LOCATIONS */
+		if(NumEntries > MAX_OIL_DEFEND_LOCATIONS)
+		{
+			debug(LOG_ERROR, "saved MAX_OIL_DEFEND_LOCATIONS and current one don't match (%d / %d)", NumEntries, MAX_OIL_DEFEND_LOCATIONS);
+			return EXPERIENCE_LOAD_ERROR;
+		}
+
+		//debug(LOG_ERROR,"num oil attack loc: %d", NumEntries);
+
+		/* read oil locations */
+		if (PHYSFS_read(aiSaveFile[nPlayer], oilDefendLocation[nPlayer], sizeof(SDWORD), NumEntries * 2 ) != (NumEntries * 2) )
+		{
+			debug(LOG_ERROR, "Failed to load oilDefendLocation for player '%d'",nPlayer);
+			return EXPERIENCE_LOAD_ERROR;
+		}
+
+		/* read oil location priority */
+		if (PHYSFS_read(aiSaveFile[nPlayer], oilDefendLocPrior[nPlayer], sizeof(SDWORD), NumEntries * 2 ) != (NumEntries * 2) )
+		{
+			debug(LOG_ERROR, "Failed to load oilDefendLocPrior for player '%d'",nPlayer);
+			return EXPERIENCE_LOAD_ERROR;
+		}
+
+		/****************************/
+		/*		Oil Resources		*/
+		/****************************/
+
+		/* read MAX_OIL_LOCATIONS */
+		if (PHYSFS_read(aiSaveFile[nPlayer], &NumEntries, sizeof(NumEntries), 1 ) != 1 )
+		{
+			debug(LOG_ERROR, "Failed to load MAX_OIL_LOCATIONS for player '%d'",nPlayer);
+			return EXPERIENCE_LOAD_ERROR;
+		}
+
+		/* check it's the same as current MAX_OIL_LOCATIONS */
+		if(NumEntries > MAX_OIL_LOCATIONS)
+		{
+			debug(LOG_ERROR, "saved MAX_OIL_LOCATIONS and current one don't match (%d / %d)", NumEntries, MAX_OIL_LOCATIONS);
+			return EXPERIENCE_LOAD_ERROR;
+		}
+
+
+		/* Read number of Oil Resources */
+		if (PHYSFS_read(aiSaveFile[nPlayer], &NumEntries, sizeof(NumEntries), 1 ) != 1 )
+		{
+			debug(LOG_ERROR, "Failed to read Oil Resources count for player '%d'",nPlayer);
+			return EXPERIENCE_LOAD_ERROR;
+		}
+
+		//debug(LOG_ERROR,"Num oil: %d", NumEntries);
+
+		if(NumEntries > 0)	//any oil resources were saved?
+		{
+			/* Read Oil Resources coordinates */
+			if (PHYSFS_read(aiSaveFile[nPlayer], PosXY, sizeof(UDWORD), NumEntries * 2 ) != (NumEntries * 2) )
+			{
+				debug(LOG_ERROR, "Failed to read Oil Resources coordinates for player '%d'",nPlayer);
+				return EXPERIENCE_LOAD_ERROR;
+			}
+
+			for(i=0; i<NumEntries; i++)
+			{
+				Found = false;
+
+				//re-read into remory
+				if(i < MAX_OIL_LOCATIONS)	//didn't max out?
+				{
+					oilLocation[nPlayer][i][0] = PosXY[i * 2];		//x
+					oilLocation[nPlayer][i][1] = PosXY[i * 2 + 1];	//y
+				}
+
+				/* Iterate through all Oil Resources and try to match coordinates */
+				for(psFeature = apsFeatureLists[0]; psFeature != NULL; psFeature = psFeature->psNext)
+				{
+					if(psFeature->psStats->subType == FEAT_OIL_RESOURCE)	//Oil resource
+					{
+						if (!(psFeature->visible[nPlayer]))		//Not visible yet
+						{
+							if((PosXY[i * 2] == psFeature->pos.x) && (PosXY[i * 2 + 1] == psFeature->pos.y))	/* Found it */
+							{
+								//debug_console("Matched oil resource at x: %d y: %d", PosXY[i * 2]/128,PosXY[i * 2 + 1]/128);
+
+								psFeature->visible[nPlayer] = true;		//Make visible for AI
+								Found = true;
+								break;
+							}
+						}
+
+					}
+				}
+
+				//if(!Found)		//Couldn't find oil resource with this coords on the map
+				//	debug_console("!!Failed to match oil resource #%d at x: %d y: %d", i,PosXY[i * 2]/128,PosXY[i * 2 + 1]/128);
+			}
+
+			/************************/
+			/*		Fog of War		*/
+			/************************/
+			if(version >= 2)
+			{
+				for(i=0;i<mapWidth;i++)
+				{
+					for(j=0;j<mapWidth;j++)
+					{
+						if (PHYSFS_read(aiSaveFile[nPlayer], &bTileVisible, sizeof(BOOL), 1 ) != 1 )
+						{
+							debug(LOG_ERROR, "Failed to load tile visibility at tile %d-%d for player '%d'", i, j, nPlayer);
+							return EXPERIENCE_LOAD_ERROR;
+						}
+
+						// Restore tile visibility
+						if(bTileVisible)
+						{
+							SET_TILE_VISIBLE(selectedPlayer,mapTile(i,j));
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return PHYSFS_close(aiSaveFile[nPlayer]) ? EXPERIENCE_LOAD_OK : EXPERIENCE_LOAD_ERROR;
+}
+
 SDWORD LoadPlayerAIExperience(SDWORD nPlayer)
 {
 	if((nPlayer > -1) && (nPlayer < MAX_PLAYERS))
@@ -135,28 +363,6 @@ SDWORD LoadPlayerAIExperience(SDWORD nPlayer)
 	}
 
 	return EXPERIENCE_LOAD_ERROR;
-}
-
-BOOL SavePlayerAIExperience(SDWORD nPlayer, BOOL bNotify)
-{
-	if((nPlayer > -1) && (nPlayer < MAX_PLAYERS))
-	{
-		if(!WriteAISaveData(nPlayer))
-		{
-			debug(LOG_ERROR,"SavePlayerAIExperience - failed to save exper");
-
-			//addConsoleMessage("Failed to save experience.",RIGHT_JUSTIFY,SYSTEM_MESSAGE);
-			console("Failed to save experience for player %d.", nPlayer);
-			return false;
-		}
-	}
-
-	if(bNotify)
-	{
-		console("Experience for player %d saved successfully.", nPlayer);
-	}
-
-	return true;
 }
 
 static bool SetUpOutputFile(unsigned int nPlayer)
@@ -188,24 +394,24 @@ static bool SetUpOutputFile(unsigned int nPlayer)
 	return true;
 }
 
-static bool SetUpInputFile(const unsigned int nPlayer)
+static bool canRecallOilAt(SDWORD nPlayer, SDWORD x, SDWORD y)
 {
-	char* FileName;
+	unsigned int i;
 
-	/* Create filename */
-	sasprintf(&FileName, "multiplay/learndata/player%u/%s.lrn", nPlayer, game.map);
-
-	aiSaveFile[nPlayer] = PHYSFS_openRead(FileName);
-
-	if (aiSaveFile[nPlayer] == NULL)
+	/* go through all remembered oil and check */
+	for(i = 0; i < MAX_OIL_LOCATIONS; ++i)
 	{
-		debug(LOG_ERROR, "Couldn't open input file: [directory: %s] '%s' for player %u: %s", PHYSFS_getRealDir(FileName), FileName, nPlayer, PHYSFS_getLastError());
-		return false;
+		if (oilLocation[nPlayer][i][0] != x)
+			continue;
+
+		if (oilLocation[nPlayer][i][1] != y)
+			continue;
+
+		return true;		//yep, both matched
 	}
 
-	return true;
+	return false;			//no
 }
-
 
 static bool WriteAISaveData(SDWORD nPlayer)
 {
@@ -454,239 +660,85 @@ static bool WriteAISaveData(SDWORD nPlayer)
 	return PHYSFS_close(aiSaveFile[nPlayer]);
 }
 
-static bool canRecallOilAt(SDWORD nPlayer, SDWORD x, SDWORD y)
+BOOL SavePlayerAIExperience(SDWORD nPlayer, BOOL bNotify)
 {
-	unsigned int i;
-
-	/* go through all remembered oil and check */
-	for(i = 0; i < MAX_OIL_LOCATIONS; ++i)
+	if((nPlayer > -1) && (nPlayer < MAX_PLAYERS))
 	{
-		if (oilLocation[nPlayer][i][0] != x)
-			continue;
+		if(!WriteAISaveData(nPlayer))
+		{
+			debug(LOG_ERROR,"SavePlayerAIExperience - failed to save exper");
 
-		if (oilLocation[nPlayer][i][1] != y)
-			continue;
-
-		return true;		//yep, both matched
+			//addConsoleMessage("Failed to save experience.",RIGHT_JUSTIFY,SYSTEM_MESSAGE);
+			console("Failed to save experience for player %d.", nPlayer);
+			return false;
+		}
 	}
 
-	return false;			//no
+	if(bNotify)
+	{
+		console("Experience for player %d saved successfully.", nPlayer);
+	}
+
+	return true;
 }
 
-static int ReadAISaveData(SDWORD nPlayer)
+
+//sort the priorities, placing the higher ones at the top
+static bool SortBaseDefendLoc(SDWORD nPlayer)
 {
-	FEATURE		*psFeature;
-	SDWORD		NumEntries=0;		//How many derricks/oil resources will be saved
-	UDWORD		PosXY[MAX_OIL_ENTRIES];		//Locations, 0=x,1=y,2=x etc
-	UDWORD		i,j;
-	BOOL		Found,bTileVisible;
-	UDWORD		version;
+	SDWORD i, prior, temp,LowestPrior,LowestIndex,SortBound;
 
-	if(!SetUpInputFile(nPlayer))
+
+
+	SortBound = MAX_BASE_DEFEND_LOCATIONS-1;	//nothing sorted yet, point at last elem
+
+	while(SortBound >= 0)		//while didn't reach the top
 	{
-		//debug(LOG_ERROR,"No experience data loaded for %d",nPlayer);
-		return EXPERIENCE_LOAD_NOSAVE;
-	}
-	else
-	{
-		/* Read data version */
-		if (PHYSFS_read(aiSaveFile[nPlayer], &version, sizeof(NumEntries), 1 ) != 1 )
+		LowestPrior = (SDWORD_MAX - 1);
+
+		LowestIndex = -1;
+
+		//find lowest element
+		for(i=0; i <= SortBound; i++)
 		{
-			debug(LOG_ERROR, "Failed to read version number for player '%d'",nPlayer);
-			return EXPERIENCE_LOAD_ERROR;
-		}
-
-		// Check version, assume backward compatibility
-		if(version > SAVE_FORMAT_VERSION)
-		{
-			debug(LOG_ERROR, "Incompatible version of the learn data (%d, expected %d) for player '%d'", version, SAVE_FORMAT_VERSION, nPlayer);
-		}
-
-		/************************/
-		/*		Enemy bases		*/
-		/************************/
-
-		/* read max number of players (usually 8) */
-		if (PHYSFS_read(aiSaveFile[nPlayer], &NumEntries, sizeof(NumEntries), 1 ) != 1 )
-		{
-			debug(LOG_ERROR, "Failed to read number of players for player '%d'",nPlayer);
-			return EXPERIENCE_LOAD_ERROR;
-		}
-
-		/* read base locations of all players */
-		if (PHYSFS_read(aiSaveFile[nPlayer], baseLocation[nPlayer], sizeof(SDWORD), NumEntries * 2 ) != (NumEntries * 2) )
-		{
-			debug(LOG_ERROR, "Failed to load baseLocation for player '%d'",nPlayer);
-			return EXPERIENCE_LOAD_ERROR;
-		}
-
-		/************************************/
-		/*		Base attack locations		*/
-		/************************************/
-
-		/* read MAX_BASE_DEFEND_LOCATIONS */
-		if (PHYSFS_read(aiSaveFile[nPlayer], &NumEntries, sizeof(SDWORD), 1 ) != 1 )
-		{
-			debug(LOG_ERROR, "Failed to read MAX_BASE_DEFEND_LOCATIONS for player '%d'",nPlayer);
-			return EXPERIENCE_LOAD_ERROR;
-		}
-
-		/* check it's the same as current MAX_BASE_DEFEND_LOCATIONS */
-		if(NumEntries > MAX_BASE_DEFEND_LOCATIONS)
-		{
-			debug(LOG_ERROR, "saved MAX_BASE_DEFEND_LOCATIONS and current one don't match (%d / %d)", NumEntries, MAX_BASE_DEFEND_LOCATIONS);
-			return EXPERIENCE_LOAD_ERROR;
-		}
-
-		//debug(LOG_ERROR,"num base attack loc: %d", NumEntries);
-
-		/* read base defence locations */
-		if (PHYSFS_read(aiSaveFile[nPlayer], baseDefendLocation[nPlayer], sizeof(SDWORD), NumEntries * 2 ) != (NumEntries * 2) )
-		{
-			debug(LOG_ERROR, "Failed to load baseDefendLocation for player '%d'",nPlayer);
-			return EXPERIENCE_LOAD_ERROR;
-		}
-
-		/* read base defend priorities */
-		if (PHYSFS_read(aiSaveFile[nPlayer], baseDefendLocPrior[nPlayer], sizeof(SDWORD), NumEntries * 2 ) != (NumEntries * 2) )
-		{
-			debug(LOG_ERROR, "Failed to load baseDefendLocPrior for player '%d'",nPlayer);
-			return EXPERIENCE_LOAD_ERROR;
-		}
-
-		/************************************/
-		/*		Oil attack locations		*/
-		/************************************/
-
-		/* read MAX_OIL_DEFEND_LOCATIONS */
-		if (PHYSFS_read(aiSaveFile[nPlayer], &NumEntries, sizeof(NumEntries), 1 ) != 1 )
-		{
-			debug(LOG_ERROR, "Failed to read max number of oil attack locations for player '%d'",nPlayer);
-			return EXPERIENCE_LOAD_ERROR;
-		}
-
-		/* check it's the same as current MAX_OIL_DEFEND_LOCATIONS */
-		if(NumEntries > MAX_OIL_DEFEND_LOCATIONS)
-		{
-			debug(LOG_ERROR, "saved MAX_OIL_DEFEND_LOCATIONS and current one don't match (%d / %d)", NumEntries, MAX_OIL_DEFEND_LOCATIONS);
-			return EXPERIENCE_LOAD_ERROR;
-		}
-
-		//debug(LOG_ERROR,"num oil attack loc: %d", NumEntries);
-
-		/* read oil locations */
-		if (PHYSFS_read(aiSaveFile[nPlayer], oilDefendLocation[nPlayer], sizeof(SDWORD), NumEntries * 2 ) != (NumEntries * 2) )
-		{
-			debug(LOG_ERROR, "Failed to load oilDefendLocation for player '%d'",nPlayer);
-			return EXPERIENCE_LOAD_ERROR;
-		}
-
-		/* read oil location priority */
-		if (PHYSFS_read(aiSaveFile[nPlayer], oilDefendLocPrior[nPlayer], sizeof(SDWORD), NumEntries * 2 ) != (NumEntries * 2) )
-		{
-			debug(LOG_ERROR, "Failed to load oilDefendLocPrior for player '%d'",nPlayer);
-			return EXPERIENCE_LOAD_ERROR;
-		}
-
-		/****************************/
-		/*		Oil Resources		*/
-		/****************************/
-
-		/* read MAX_OIL_LOCATIONS */
-		if (PHYSFS_read(aiSaveFile[nPlayer], &NumEntries, sizeof(NumEntries), 1 ) != 1 )
-		{
-			debug(LOG_ERROR, "Failed to load MAX_OIL_LOCATIONS for player '%d'",nPlayer);
-			return EXPERIENCE_LOAD_ERROR;
-		}
-
-		/* check it's the same as current MAX_OIL_LOCATIONS */
-		if(NumEntries > MAX_OIL_LOCATIONS)
-		{
-			debug(LOG_ERROR, "saved MAX_OIL_LOCATIONS and current one don't match (%d / %d)", NumEntries, MAX_OIL_LOCATIONS);
-			return EXPERIENCE_LOAD_ERROR;
-		}
-
-
-		/* Read number of Oil Resources */
-		if (PHYSFS_read(aiSaveFile[nPlayer], &NumEntries, sizeof(NumEntries), 1 ) != 1 )
-		{
-			debug(LOG_ERROR, "Failed to read Oil Resources count for player '%d'",nPlayer);
-			return EXPERIENCE_LOAD_ERROR;
-		}
-
-		//debug(LOG_ERROR,"Num oil: %d", NumEntries);
-
-		if(NumEntries > 0)	//any oil resources were saved?
-		{
-			/* Read Oil Resources coordinates */
-			if (PHYSFS_read(aiSaveFile[nPlayer], PosXY, sizeof(UDWORD), NumEntries * 2 ) != (NumEntries * 2) )
+			prior = baseDefendLocPrior[nPlayer][i];
+			if(prior < LowestPrior)	//lower and isn't a flag meaning this one wasn't initialized with anything
 			{
-				debug(LOG_ERROR, "Failed to read Oil Resources coordinates for player '%d'",nPlayer);
-				return EXPERIENCE_LOAD_ERROR;
-			}
-
-			for(i=0; i<NumEntries; i++)
-			{
-				Found = false;
-
-				//re-read into remory
-				if(i < MAX_OIL_LOCATIONS)	//didn't max out?
-				{
-					oilLocation[nPlayer][i][0] = PosXY[i * 2];		//x
-					oilLocation[nPlayer][i][1] = PosXY[i * 2 + 1];	//y
-				}
-
-				/* Iterate through all Oil Resources and try to match coordinates */
-				for(psFeature = apsFeatureLists[0]; psFeature != NULL; psFeature = psFeature->psNext)
-				{
-					if(psFeature->psStats->subType == FEAT_OIL_RESOURCE)	//Oil resource
-					{
-						if (!(psFeature->visible[nPlayer]))		//Not visible yet
-						{
-							if((PosXY[i * 2] == psFeature->pos.x) && (PosXY[i * 2 + 1] == psFeature->pos.y))	/* Found it */
-							{
-								//debug_console("Matched oil resource at x: %d y: %d", PosXY[i * 2]/128,PosXY[i * 2 + 1]/128);
-
-								psFeature->visible[nPlayer] = true;		//Make visible for AI
-								Found = true;
-								break;
-							}
-						}
-
-					}
-				}
-
-				//if(!Found)		//Couldn't find oil resource with this coords on the map
-				//	debug_console("!!Failed to match oil resource #%d at x: %d y: %d", i,PosXY[i * 2]/128,PosXY[i * 2 + 1]/128);
-			}
-
-			/************************/
-			/*		Fog of War		*/
-			/************************/
-			if(version >= 2)
-			{
-				for(i=0;i<mapWidth;i++)
-				{
-					for(j=0;j<mapWidth;j++)
-					{
-						if (PHYSFS_read(aiSaveFile[nPlayer], &bTileVisible, sizeof(BOOL), 1 ) != 1 )
-						{
-							debug(LOG_ERROR, "Failed to load tile visibility at tile %d-%d for player '%d'", i, j, nPlayer);
-							return EXPERIENCE_LOAD_ERROR;
-						}
-
-						// Restore tile visibility
-						if(bTileVisible)
-						{
-							SET_TILE_VISIBLE(selectedPlayer,mapTile(i,j));
-						}
-					}
-				}
+				LowestPrior = prior;
+				LowestIndex = i;
 			}
 		}
+
+		//huh, nothing found? (probably nothing set yet, no experience)
+		if(LowestIndex < 0)
+		{
+			//debug(LOG_ERROR,"sortBaseDefendLoc() - No lowest elem found");
+			return true;
+		}
+
+		//swap
+		if(LowestPrior < baseDefendLocPrior[nPlayer][SortBound])	//need to swap? (might be the same elem)
+		{
+			//priority
+			temp = baseDefendLocPrior[nPlayer][SortBound];
+			baseDefendLocPrior[nPlayer][SortBound] = baseDefendLocPrior[nPlayer][LowestIndex];
+			baseDefendLocPrior[nPlayer][LowestIndex] = temp;
+
+			//x
+			temp = baseDefendLocation[nPlayer][SortBound][0];
+			baseDefendLocation[nPlayer][SortBound][0] = baseDefendLocation[nPlayer][LowestIndex][0];
+			baseDefendLocation[nPlayer][LowestIndex][0] = temp;
+
+			//y
+			temp = baseDefendLocation[nPlayer][SortBound][1];
+			baseDefendLocation[nPlayer][SortBound][1] = baseDefendLocation[nPlayer][LowestIndex][1];
+			baseDefendLocation[nPlayer][LowestIndex][1] = temp;
+		}
+
+		SortBound--;		//in any case lower the boundry, even if didn't swap
 	}
 
-	return PHYSFS_close(aiSaveFile[nPlayer]) ? EXPERIENCE_LOAD_OK : EXPERIENCE_LOAD_ERROR;
+	return true;
 }
 
 //x and y are passed by script, find out if this loc is close to
@@ -757,64 +809,6 @@ SDWORD GetBaseDefendLocIndex(SDWORD x, SDWORD y, SDWORD nPlayer)
 	return -1;
 }
 
-//sort the priorities, placing the higher ones at the top
-static bool SortBaseDefendLoc(SDWORD nPlayer)
-{
-	SDWORD i, prior, temp,LowestPrior,LowestIndex,SortBound;
-
-
-
-	SortBound = MAX_BASE_DEFEND_LOCATIONS-1;	//nothing sorted yet, point at last elem
-
-	while(SortBound >= 0)		//while didn't reach the top
-	{
-		LowestPrior = (SDWORD_MAX - 1);
-
-		LowestIndex = -1;
-
-		//find lowest element
-		for(i=0; i <= SortBound; i++)
-		{
-			prior = baseDefendLocPrior[nPlayer][i];
-			if(prior < LowestPrior)	//lower and isn't a flag meaning this one wasn't initialized with anything
-			{
-				LowestPrior = prior;
-				LowestIndex = i;
-			}
-		}
-
-		//huh, nothing found? (probably nothing set yet, no experience)
-		if(LowestIndex < 0)
-		{
-			//debug(LOG_ERROR,"sortBaseDefendLoc() - No lowest elem found");
-			return true;
-		}
-
-		//swap
-		if(LowestPrior < baseDefendLocPrior[nPlayer][SortBound])	//need to swap? (might be the same elem)
-		{
-			//priority
-			temp = baseDefendLocPrior[nPlayer][SortBound];
-			baseDefendLocPrior[nPlayer][SortBound] = baseDefendLocPrior[nPlayer][LowestIndex];
-			baseDefendLocPrior[nPlayer][LowestIndex] = temp;
-
-			//x
-			temp = baseDefendLocation[nPlayer][SortBound][0];
-			baseDefendLocation[nPlayer][SortBound][0] = baseDefendLocation[nPlayer][LowestIndex][0];
-			baseDefendLocation[nPlayer][LowestIndex][0] = temp;
-
-			//y
-			temp = baseDefendLocation[nPlayer][SortBound][1];
-			baseDefendLocation[nPlayer][SortBound][1] = baseDefendLocation[nPlayer][LowestIndex][1];
-			baseDefendLocation[nPlayer][LowestIndex][1] = temp;
-		}
-
-		SortBound--;		//in any case lower the boundry, even if didn't swap
-	}
-
-	return true;
-}
-
 void BaseExperienceDebug(SDWORD nPlayer)
 {
 	SDWORD i;
@@ -841,6 +835,61 @@ void OilExperienceDebug(SDWORD nPlayer)
 	debug_console("-------------");
 }
 
+
+//sort the priorities, placing the higher ones at the top
+static bool SortOilDefendLoc(SDWORD nPlayer)
+{
+	int SortBound;
+
+	//while didn't reach the top
+	for (SortBound = MAX_OIL_DEFEND_LOCATIONS - 1; SortBound >= 0; --SortBound)
+	{
+		int LowestPrior = SDWORD_MAX - 1,
+		    LowestIndex = -1;
+		int i;
+
+		//find lowest element
+		for (i = 0; i <= SortBound; ++i)
+		{
+			const int prior = oilDefendLocPrior[nPlayer][i];
+			if (prior < LowestPrior)	//lower and isn't a flag meaning this one wasn't initialized with anything
+			{
+				LowestPrior = prior;
+				LowestIndex = i;
+			}
+		}
+
+		//huh, nothing found? (probably nothing set yet, no experience)
+		if (LowestIndex < 0)
+		{
+			//debug(LOG_ERROR,"sortBaseDefendLoc() - No lowest elem found");
+			return true;
+		}
+
+		//swap
+		if (LowestPrior < oilDefendLocPrior[nPlayer][SortBound])	//need to swap? (might be the same elem)
+		{
+			int temp;
+
+			//priority
+			temp = oilDefendLocPrior[nPlayer][SortBound];
+			oilDefendLocPrior[nPlayer][SortBound] = oilDefendLocPrior[nPlayer][LowestIndex];
+			oilDefendLocPrior[nPlayer][LowestIndex] = temp;
+
+			//x
+			temp = oilDefendLocation[nPlayer][SortBound][0];
+			oilDefendLocation[nPlayer][SortBound][0] = oilDefendLocation[nPlayer][LowestIndex][0];
+			oilDefendLocation[nPlayer][LowestIndex][0] = temp;
+
+			//y
+			temp = oilDefendLocation[nPlayer][SortBound][1];
+			oilDefendLocation[nPlayer][SortBound][1] = oilDefendLocation[nPlayer][LowestIndex][1];
+			oilDefendLocation[nPlayer][LowestIndex][1] = temp;
+		}
+	}
+
+	return true;
+}
 
 //x and y are passed by script, find out if this loc is close to
 //an already stored loc, if yes then increase its priority
@@ -908,61 +957,6 @@ int GetOilDefendLocIndex(SDWORD x, SDWORD y, SDWORD nPlayer)
 	}
 
 	return -1;
-}
-
-//sort the priorities, placing the higher ones at the top
-static bool SortOilDefendLoc(SDWORD nPlayer)
-{
-	int SortBound;
-
-	//while didn't reach the top
-	for (SortBound = MAX_OIL_DEFEND_LOCATIONS - 1; SortBound >= 0; --SortBound)
-	{
-		int LowestPrior = SDWORD_MAX - 1,
-		    LowestIndex = -1;
-		int i;
-
-		//find lowest element
-		for (i = 0; i <= SortBound; ++i)
-		{
-			const int prior = oilDefendLocPrior[nPlayer][i];
-			if (prior < LowestPrior)	//lower and isn't a flag meaning this one wasn't initialized with anything
-			{
-				LowestPrior = prior;
-				LowestIndex = i;
-			}
-		}
-
-		//huh, nothing found? (probably nothing set yet, no experience)
-		if (LowestIndex < 0)
-		{
-			//debug(LOG_ERROR,"sortBaseDefendLoc() - No lowest elem found");
-			return true;
-		}
-
-		//swap
-		if (LowestPrior < oilDefendLocPrior[nPlayer][SortBound])	//need to swap? (might be the same elem)
-		{
-			int temp;
-
-			//priority
-			temp = oilDefendLocPrior[nPlayer][SortBound];
-			oilDefendLocPrior[nPlayer][SortBound] = oilDefendLocPrior[nPlayer][LowestIndex];
-			oilDefendLocPrior[nPlayer][LowestIndex] = temp;
-
-			//x
-			temp = oilDefendLocation[nPlayer][SortBound][0];
-			oilDefendLocation[nPlayer][SortBound][0] = oilDefendLocation[nPlayer][LowestIndex][0];
-			oilDefendLocation[nPlayer][LowestIndex][0] = temp;
-
-			//y
-			temp = oilDefendLocation[nPlayer][SortBound][1];
-			oilDefendLocation[nPlayer][SortBound][1] = oilDefendLocation[nPlayer][LowestIndex][1];
-			oilDefendLocation[nPlayer][LowestIndex][1] = temp;
-		}
-	}
-
-	return true;
 }
 
 bool CanRememberPlayerBaseLoc(SDWORD lookingPlayer, SDWORD enemyPlayer)

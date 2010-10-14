@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -87,8 +87,6 @@ typedef struct _feature
 	BASE_ELEMENTS(struct _feature);
 
 	FEATURE_STATS*  psStats;
-	UDWORD          startTime;              ///< Time the feature was created. Valid for wrecked droids and structures.
-	BOOL            bTargetted;
 } WZ_DECL_MAY_ALIAS FEATURE;
 
 #ifdef __cplusplus

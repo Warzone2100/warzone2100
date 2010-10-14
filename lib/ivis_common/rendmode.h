@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -22,39 +22,8 @@
 #define _rendmode_h_
 
 #include "ivisdef.h"
-#include "pieblitfunc.h"
-#include "bitimage.h"
-#include "textdraw.h"
 
-//*************************************************************************
-//patch
-
-#define iV_Line				pie_Line
-#define iV_Box				pie_Box
-#define iV_TransBoxFill			pie_TransBoxFill
-#define iV_DrawImage			pie_ImageFileID
-#define iV_DrawImageRect		pie_ImageFileIDTile
-
-//*************************************************************************
-// polygon flags	b0..b7: col, b24..b31: anim index
-
-#define PIE_NO_CULL			0x00002000
-
-//*************************************************************************
-
-#define REND_SURFACE_UNDEFINED		0
-#define REND_SURFACE_SCREEN		1
-#define REND_SURFACE_USR		2
-
-//*************************************************************************
-
-extern iSurface rendSurface;
-extern iSurface *psRendSurface;
-
-//*************************************************************************
-
-extern void iV_RenderAssign(iSurface *s);
 extern void iV_SurfaceDestroy(iSurface *s);
-extern iSurface *iV_SurfaceCreate(uint32_t flags, int width, int height, int xp, int yp, uint8_t *buffer);
+extern iSurface *iV_SurfaceCreate(int width, int height);
 
 #endif

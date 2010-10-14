@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -21,6 +21,9 @@
 #ifndef __INCLUDED_SRC_ATMOS_H__
 #define __INCLUDED_SRC_ATMOS_H__
 
+#include "lib/framework/vector.h"
+#include "lib/ivis_common/ivisdef.h"
+
 #ifdef __cplusplus
 extern "C"
 {
@@ -28,36 +31,27 @@ extern "C"
 
 typedef struct _atmosParticle
 {
-UBYTE		status;
-UBYTE		type;
-UDWORD		size;
-Vector3f	position;
-Vector3f	velocity;
-iIMDShape	*imd;
+	UBYTE		status;
+	UBYTE		type;
+	UDWORD		size;
+	Vector3f	position;
+	Vector3f	velocity;
+	iIMDShape	*imd;
 } ATPART;
 
 typedef	enum
 {
-WT_RAINING,
-WT_SNOWING,
-WT_NONE
+	WT_RAINING,
+	WT_SNOWING,
+	WT_NONE
 } WT_CLASS;
 
-extern void		atmosInitSystem			( void );
-extern void		atmosUpdateSystem		( void );
-extern void		renderParticle		( ATPART *psPart );
-extern void		atmosDrawParticles	( void );
-extern void		atmosSetWeatherType	( WT_CLASS type );
-extern WT_CLASS		atmosGetWeatherType ( void );
-typedef struct _mistlocale
-{
-UBYTE	type;
-UBYTE	val;
-UBYTE	base;
-SBYTE	vec;
-} MISTAREA;
-
-extern MISTAREA *pMistValues;
+void atmosInitSystem(void);
+void atmosUpdateSystem(void);
+void renderParticle(ATPART *psPart);
+void atmosDrawParticles(void);
+void atmosSetWeatherType(WT_CLASS type);
+WT_CLASS atmosGetWeatherType(void);
 
 #ifdef __cplusplus
 }

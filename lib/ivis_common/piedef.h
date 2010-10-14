@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -32,8 +32,9 @@
 /***************************************************************************/
 
 #include "lib/framework/frame.h"
+#include "lib/framework/vector.h"
 #include "ivisdef.h"
-#include "ivispatch.h"
+#include "pietypes.h"
 
 /***************************************************************************/
 /*
@@ -52,7 +53,7 @@
 //Render style flags for all pie draw functions
 #define pie_TRANSLUCENT         0x2
 #define pie_ADDITIVE            0x4
-#define pie_NO_BILINEAR         0x8
+#define pie_FORCE_FOG			0x8
 #define pie_HEIGHT_SCALED       0x10
 #define pie_RAISE               0x20
 #define pie_BUTTON              0x40
@@ -93,25 +94,20 @@ typedef struct {SDWORD texPage; SWORD tu, tv, tw, th;} PIEIMAGE;	/**< An area of
  *	Global ProtoTypes
  */
 /***************************************************************************/
-extern void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, PIELIGHT specular, int pieFlag, int pieData);
+extern void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, PIELIGHT specular, int pieFlag, int pieFlagData);
 extern void pie_DrawImage(const PIEIMAGE *image, const PIERECT *dest);
-
-void pie_TerrainInit(int sizex, int sizey);
-void pie_TerrainCleanup(void);
-void pie_DrawTerrain(int x1, int y1, int x2, int y2);
-void pie_DrawTerrainTriangle(int x, int y, int triangle, const TERRAIN_VERTEX *aVrts);
-void pie_DrawWaterTriangle(const TERRAIN_VERTEX *aVrts);
 
 extern void pie_GetResetCounts(unsigned int* pPieCount, unsigned int* pTileCount, unsigned int* pPolyCount, unsigned int* pStateCount);
 
 /** Setup stencil shadows and OpenGL lighting. */
-void pie_BeginLighting(const Vector3f * light);
+void pie_BeginLighting(const Vector3f * light, bool drawshadows);
 
 /* Stop using stencil shadows and OpenGL lighting (if enabled). */
 void pie_EndLighting(void);
 
 void pie_RemainingPasses(void);
 
-void pie_CleanUp( void );
+void pie_SetUp(void);
+void pie_CleanUp(void);
 
 #endif // _piedef_h

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -267,6 +267,14 @@ enum {
 	IMAGE_SCAVENGERS_OFF,
 	IMAGE_SCAVENGERS_ON_HI,
 	IMAGE_SCAVENGERS_OFF_HI,
+	IMAGE_KICK,
+	IMAGE_VTOL,
+	IMAGE_CYBORG,
+	IMAGE_TANK,
+	IMAGE_KICK_TRANS,
+	IMAGE_NO_VTOL,
+	IMAGE_NO_CYBORG,
+	IMAGE_NO_TANK,
 };
 
 #ifdef __cplusplus

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -21,32 +21,12 @@
 #ifndef __INCLUDED_SRC_MAPDISPLAY_H__
 #define __INCLUDED_SRC_MAPDISPLAY_H__
 
-#include "lib/ivis_common/pietypes.h"
-
 #ifdef __cplusplus
 extern "C"
 {
 #endif //__cplusplus
 
-#define BUFFER_GRIDX	22
-#define BUFFER_GRIDY	22
-
-
-/*Flag to switch code for bucket sorting in renderFeatures etc
-  for the renderMapToBuffer code */
-  /*This is no longer used but may be useful for testing so I've left it in - maybe
-  get rid of it eventually? - AB 1/4/98*/
-extern BOOL	doBucket;
-
-// The surface to render Message information into for the Intelligence Screen
-extern iSurface	*mapSurface;
-
-/* renders up to two IMDs into the surface - used by message display in Intelligence Map */
-extern void renderIMDToBuffer(iSurface *pSurface, iIMDShape *pIMD,
-							  iIMDShape *pIMD2, UDWORD WindowX,UDWORD WindowY,
-							  UDWORD OriginX,UDWORD OriginY);
-extern void renderResearchToBuffer(RESEARCH *psResearch,
-                            UDWORD OriginX, UDWORD OriginY);
+void renderResearchToBuffer(RESEARCH *psResearch, UDWORD OriginX, UDWORD OriginY);
 
 #ifdef __cplusplus
 }

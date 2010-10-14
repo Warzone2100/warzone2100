@@ -56,7 +56,7 @@ GAMEMAP *mapLoad(char *filename)
 
 	if (!fp)
 	{
-		debug("Could not open %s", path);
+		debug(LOG_ERROR, "Could not open %s", path);
 		map->mapVersion = 0;
 		map->width = UINT32_MAX;
 		map->height = UINT32_MAX;

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -33,6 +33,10 @@
 extern void res_error(const char* msg);
 
 #include "lib/framework/lexer_input.h"
+
+// fwrite declared with warn_unused_result, resulting in mysterious errors in "%%" on some distros.
+static inline bool no_warn_unused_result(int ignore) { if (ignore) {} return true; }
+#define fwrite(a, b, c, d) no_warn_unused_result(fwrite(a, b, c, d))
 
 #ifndef yyextra
 # define yyextra yyget_extra()
@@ -148,5 +152,6 @@ int res_lex_destroy(void)
 	/* For non-reentrant C scanner only. */
 	yy_delete_buffer(YY_CURRENT_BUFFER);
 	yy_init = 1;
+	return 0;
 }
 #endif

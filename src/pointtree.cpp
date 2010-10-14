@@ -1,3 +1,23 @@
+/*
+	This file is part of Warzone 2100.
+	Copyright (C) 1999-2004  Eidos Interactive
+	Copyright (C) 2005-2010  Warzone 2100 Project
+
+	Warzone 2100 is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	Warzone 2100 is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with Warzone 2100; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+*/
+#include <stdio.h>
 #include "pointtree.h"
 #include <algorithm>
 #include <vector>
@@ -66,9 +86,14 @@ void PointTree::clear()
 	points.clear();
 }
 
+static bool pointTreeSortFunction(std::pair<uint64_t, void *> const &a, std::pair<uint64_t, void *> const &b)
+{
+	return a.first < b.first;  // Sort only by position, not by pointer address, even if two units are in the same place.
+}
+
 void PointTree::sort()
 {
-	std::sort(points.begin(), points.end());
+	std::stable_sort(points.begin(), points.end(), pointTreeSortFunction);  // Stable sort to avoid unspecified behaviour when two objects are in exactly the same place.
 }
 
 //#define DUMP_IMAGE  // All x and y coordinates must be in range -500 to 499, if dumping an image.
@@ -210,8 +235,10 @@ PointTree::ResultVector &PointTree::queryMaybeFilter(Filter &filter, int32_t x, 
 	}
 	for (int r = 0; r != numRanges; ++r)
 	{
-		unsigned i1 = std::lower_bound(points.begin(),      points.end(), Point(ranges[r].a,     NULL)) - points.begin();
-		unsigned i2 = std::lower_bound(points.begin() + i1, points.end(), Point(ranges[r].z + 1, NULL)) - points.begin();
+		// Find range of points which may be close enough. Range is [i1 ... i2 - 1]. The pointers are ignored when searching.
+		unsigned i1 = std::lower_bound(points.begin(),      points.end(), Point(ranges[r].a, NULL), pointTreeSortFunction) - points.begin();
+		unsigned i2 = std::upper_bound(points.begin() + i1, points.end(), Point(ranges[r].z, NULL), pointTreeSortFunction) - points.begin();
+
 		for (unsigned i = current<IsFiltered>(filter.data, i1); i < i2; i = current<IsFiltered>(filter.data, i + 1))
 		{
 			uint64_t px = points[i].first & 0xAAAAAAAAAAAAAAAAULL;

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -27,11 +27,10 @@
 #include "lib/framework/input.h"
 #include "lib/framework/strres.h"
 
-#include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_common/pieblitfunc.h"
 #include "lib/ivis_common/piestate.h" //ivis render code
 #include "lib/ivis_common/piemode.h"
 // FIXME Direct iVis implementation include!
-#include "lib/ivis_common/rendmode.h" //ivis render code
 #include "lib/ivis_opengl/screen.h"
 
 #include "lib/gamelib/gtime.h"
@@ -84,6 +83,7 @@
 #include "cmddroid.h"
 #include "keybind.h"
 #include "wrappers.h"
+#include "random.h"
 
 #include "warzoneconfig.h"
 
@@ -147,7 +147,31 @@ GAMECODE gameLoop(void)
 	BOOL		quitting=false;
 	INT_RETVAL	intRetVal;
 	int	        clearMode = 0;
-	bool gameTicked = deltaGameTime != 0;
+	bool            gameTicked;                     // true iff we are doing a logical update.
+	uint32_t        lastFlushTime = 0;
+
+	// Receive NET_BLAH messages.
+	// Receive GAME_BLAH messages, and if it's time, process exactly as many GAME_BLAH messages as required to be able to tick the gameTime.
+	recvMessage();
+
+	// Update gameTime and graphicsTime, and corresponding deltas. Note that gameTime and graphicsTime pause, if we aren't getting our GAME_GAME_TIME messages.
+	gameTimeUpdate();
+	gameTicked = deltaGameTime != 0;
+
+	if (gameTicked)
+	{
+		// Actually send pending droid orders.
+		sendQueuedDroidInfo();
+
+		sendPlayerGameTime();
+		gameSRand(gameTime);   // Brute force way of synchronising the random number generator, which can't go out of synch.
+	}
+
+	if (gameTicked || realTime - lastFlushTime < 400u)
+	{
+		lastFlushTime = realTime;
+		NETflush();  // Make sure the game time tick message is really sent over the network, and that we aren't waiting too long to send data.
+	}
 
 	if (bMultiPlayer && !NetPlay.isHostAlive && NetPlay.bComms && !NetPlay.isHost)
 	{
@@ -251,6 +275,9 @@ GAMECODE gameLoop(void)
 				// Check which objects are visible.
 				processVisibility();
 
+				// Update the map.
+				mapUpdate();
+
 				//update the findpath system
 				fpathUpdate();
 
@@ -266,6 +293,7 @@ GAMECODE gameLoop(void)
 			}
 
 			//ajl. get the incoming netgame messages and process them.
+			// FIXME Previous comment is deprecated. multiPlayerLoop does some other weird stuff, but not that anymore.
 			if (bMultiPlayer)
 			{
 				multiPlayerLoop();

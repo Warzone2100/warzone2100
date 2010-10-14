@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -23,32 +23,21 @@
  * alexl.
  */
 
-// ////////////////////////////////////////////////////////////////////////////
-// includes
-#include <string.h>
-#include <SDL.h>
-#include <physfs.h>
-
 #include "lib/framework/frame.h"
-#include "lib/framework/strres.h"
-#include "lib/framework/input.h"
+#include "lib/ivis_common/bitimage.h"
+#include "lib/ivis_common/pieblitfunc.h"
 #include "lib/sound/audio.h"
+#include "lib/sound/audio_id.h"
 
-#include "lib/widget/widget.h"
-#include "frontend.h"
 #include "frend.h"
-#include "lib/ivis_common/textdraw.h"
-#include "lib/ivis_common/piepalette.h"
+#include "frontend.h"
 #include "hci.h"
 #include "init.h"
-#include "loadsave.h"
-#include "keymap.h"
-#include "intimage.h"
-#include "lib/ivis_common/bitimage.h"
 #include "intdisplay.h"
-#include "lib/sound/audio_id.h"
-#include "lib/ivis_common/pieblitfunc.h"
-#include "lib/netplay/netplay.h"
+#include "keyedit.h"
+#include "keymap.h"
+#include "loadsave.h"
+#include "main.h"
 #include "multiint.h"
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -67,9 +56,6 @@
 #define KM_X				30
 #define KM_Y				20
 
-#define KM_RETURNX			(KM_W-90)
-#define KM_RETURNY			(KM_H-42)
-
 #define BUTTONSPERKEYMAPPAGE 20
 
 #define KM_ENTRYW			480
@@ -80,19 +66,7 @@
 // variables
 
 static KEY_MAPPING	*selectedKeyMap;
-// ////////////////////////////////////////////////////////////////////////////
-// protos
-
-BOOL		runKeyMapEditor		(void);
-static BOOL keyMapToString		(char *pStr, KEY_MAPPING *psMapping);
-static void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-BOOL		startKeyMapEditor	(BOOL first);
-BOOL		saveKeyMap		(void);
-BOOL		loadKeyMap		(void);
-static BOOL	pushedKeyMap		(UDWORD key);
-
-char	keymapVersion[8] = "KM_0002";
-extern char    KeyMapPath[];
+static char keymapVersion[8] = "KM_0002";
 
 // ////////////////////////////////////////////////////////////////////////////
 // funcs
@@ -263,7 +237,7 @@ BOOL runKeyMapEditor(void)
 	if(id == KM_RETURN)			// return
 	{
 		saveKeyMap();
-		changeTitleMode(TITLE);
+		changeTitleMode(OPTIONS);
 	}
 	if(id == KM_DEFAULT)
 	{
@@ -287,6 +261,11 @@ BOOL runKeyMapEditor(void)
 	}
 
 	widgDisplayScreen(psWScreen);				// show the widgets currently running
+
+	if (CancelPressed())
+	{
+		changeTitleMode(OPTIONS);
+	}
 
 	return true;
 }
@@ -318,7 +297,7 @@ static BOOL keyMapToString(char *pStr, KEY_MAPPING *psMapping)
 
 // ////////////////////////////////////////////////////////////////////////////
 // display a keymap on the interface.
-void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+static void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	UDWORD		x = xOffset+psWidget->x;
 	UDWORD		y = yOffset+psWidget->y;
@@ -345,7 +324,7 @@ void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNU
 	iV_SetFont(font_regular);											// font type
 	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 
-	iV_DrawText(psMapping->pName, x + 2, y + (psWidget->height / 2) + 3);
+	iV_DrawText(_(psMapping->pName), x + 2, y + (psWidget->height / 2) + 3);
 
 	// draw binding
 	keyMapToString(sKey,psMapping);
@@ -353,7 +332,7 @@ void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNU
 	if (psMapping->subKeyCode >= KEY_KP_0 && psMapping->subKeyCode <= KEY_KPENTER)
 	{
 		iV_SetTextColour(WZCOL_YELLOW);
-		ssprintf(sKey, "(numpad)%s", SDL_GetKeyName(psMapping->subKeyCode));
+		ssprintf(sKey, "(numpad)%s", SDL_GetKeyName((SDLKey)psMapping->subKeyCode));
 }
 	iV_DrawText(sKey, x + 364, y + (psWidget->height / 2) + 3);
 }
@@ -613,8 +592,7 @@ BOOL loadKeyMap(void)
 
 	if (!PHYSFS_exists(KeyMapPath))
 	{
-		// NOTE: Changed to LOG_FATAL, since we want to inform user via pop-up (windows only)
-		debug(LOG_FATAL, "%s not found", KeyMapPath);
+		debug(LOG_WZ, "%s not found", KeyMapPath);
 		return false;
 	}
 	pfile = PHYSFS_openRead(KeyMapPath);

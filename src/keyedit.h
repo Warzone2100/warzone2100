@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -26,10 +26,10 @@ extern "C"
 {
 #endif //__cplusplus
 
-extern BOOL runKeyMapEditor		(void);
-extern BOOL startKeyMapEditor	(BOOL first);
-extern BOOL saveKeyMap			(void);
-extern BOOL loadKeyMap			(void);
+BOOL runKeyMapEditor(void);
+BOOL startKeyMapEditor(BOOL first);
+BOOL saveKeyMap(void);
+BOOL loadKeyMap(void);
 
 #ifdef __cplusplus
 }

@@ -1,5 +1,5 @@
 ;  This file is part of Warzone 2100.
-;  Copyright (C) 2006-2009  Warzone 2100 Project
+;  Copyright (C) 2006-2010  Warzone 2100 Project
 ;  Copyright (C) 2006       Dennis Schridde
 ;
 ;  Warzone 2100 is free software; you can redistribute it and/or modify
@@ -37,10 +37,10 @@
   OutFile "${OUTFILE}"
 
   ;Default installation folder
-  InstallDir "$PROGRAMFILES\${PACKAGE_NAME}"
+  InstallDir "$PROGRAMFILES\${PACKAGE_NAME} Trunk"
 
   ;Get installation folder from registry if available
-  InstallDirRegKey HKLM "Software\${PACKAGE_NAME}" ""
+  InstallDirRegKey HKLM "Software\${PACKAGE_NAME} Trunk" ""
 
   ;Request application privileges for Windows Vista
   RequestExecutionLevel admin
@@ -53,7 +53,7 @@ VIAddVersionKey "CompanyName"		"Warzone 2100 Project"
 VIAddVersionKey "FileDescription"	"${PACKAGE_NAME} Installer"
 VIAddVersionKey "FileVersion"		"${PACKAGE_VERSION}"
 VIAddVersionKey "InternalName"		"${PACKAGE_NAME}"
-VIAddVersionKey "LegalCopyright"	"Copyright © 2006-2009 Warzone 2100 Project"
+VIAddVersionKey "LegalCopyright"	"Copyright © 2006-2010 Warzone 2100 Project"
 VIAddVersionKey "OriginalFilename"	"${PACKAGE}-${PACKAGE_VERSION}.exe"
 VIAddVersionKey "ProductName"		"${PACKAGE_NAME}"
 VIAddVersionKey "ProductVersion"	"${PACKAGE_VERSION}"
@@ -86,12 +86,7 @@ VIAddVersionKey "ProductVersion"	"${PACKAGE_VERSION}"
 
   ; These indented statements modify settings for MUI_PAGE_FINISH
   !define MUI_FINISHPAGE_NOAUTOCLOSE
-  !define MUI_FINISHPAGE_RUN
-  !define MUI_FINISHPAGE_RUN_NOTCHECKED
-  !define MUI_FINISHPAGE_RUN_TEXT $(TEXT_RunWarzone)
-  !define MUI_FINISHPAGE_RUN_FUNCTION "LaunchLink"
-  !define MUI_FINISHPAGE_SHOWREADME_NOTCHECKED
-  !define MUI_FINISHPAGE_SHOWREADME $(TEXT_Readme)
+  !define MUI_UNFINISHPAGE_NOAUTOCLOSE
 
 ;--------------------------------
 ;Pages
@@ -195,6 +190,7 @@ Section $(TEXT_SecBase) SecBase
   File "${TOP_SRCDIR}\data\music\menu.ogg"
   File "${TOP_SRCDIR}\data\music\track1.ogg"
   File "${TOP_SRCDIR}\data\music\track2.ogg"
+  File "${TOP_SRCDIR}\data\music\track3.ogg"
   File "${TOP_SRCDIR}\data\music\music.wpl"
 
   SetOutPath "$INSTDIR\styles"
@@ -249,19 +245,18 @@ Section $(TEXT_SecOpenAL) SecOpenAL
 
 SectionEnd
 
-
 SectionGroup /e $(TEXT_SecMods) secMods
 
-Section $(TEXT_SecNTWMod) SecNTWMod
+Section $(TEXT_SecDyDoAIMod) SecDyDoAIMod
 
   SetOutPath "$INSTDIR\mods\multiplay"
 
-  File "${TOP_BUILDDIR}\data\mods\multiplay\ntw.wz"
+  File "${TOP_BUILDDIR}\data\mods\multiplay\dydo-ai.wz"
 
   SetOutPath "$INSTDIR"
 
   !insertmacro MUI_STARTMENU_WRITE_BEGIN "Application"
-    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME} - NTW.lnk" "$INSTDIR\${PACKAGE}.exe" "--mod_mp ntw.wz"
+    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME} - DyDo-AI.lnk" "$INSTDIR\${PACKAGE}.exe" "--mod_mp dydo-ai.wz"
   !insertmacro MUI_STARTMENU_WRITE_END
 
 SectionEnd
@@ -353,6 +348,9 @@ Section "-NLS files" SecNLS_files
   SetOutPath "$INSTDIR\locale\it\LC_MESSAGES"
   File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\it.gmo"
 
+  SetOutPath "$INSTDIR\locale\ko\LC_MESSAGES"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\ko.gmo"
+
   SetOutPath "$INSTDIR\locale\la\LC_MESSAGES"
   File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\la.gmo"
 
@@ -379,6 +377,9 @@ Section "-NLS files" SecNLS_files
 
   SetOutPath "$INSTDIR\locale\ru\LC_MESSAGES"
   File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\ru.gmo"
+
+  SetOutPath "$INSTDIR\locale\sk\LC_MESSAGES"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\sk.gmo"
 
   SetOutPath "$INSTDIR\locale\sl\LC_MESSAGES"
   File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\sl.gmo"
@@ -444,10 +445,6 @@ ${OrIf} ${SectionIsSelected} ${SecFMVs_EngLo}
 ;		!insertmacro RadioButton ${SecFMVs_Ger}
 	!insertmacro EndRadioButtons
 ${EndIf}
-FunctionEnd
-
-Function LaunchLink
-  Exec '$INSTDIR\${PACKAGE}.exe'
 FunctionEnd
 
 Function unix2dos
@@ -519,15 +516,12 @@ FunctionEnd
   LangString TEXT_SecNLS_WinFonts ${LANG_ENGLISH} "WinFonts"
   LangString DESC_SecNLS_WinFonts ${LANG_ENGLISH} "Include Windows Fonts folder into the search path. Enable this if you want to use custom fonts in config file or having troubles with standard font. Can be slow on Vista and later!"
   
-  LangString TEXT_SecNTWMod ${LANG_ENGLISH} "NTW"
-  LangString DESC_SecNTWMod ${LANG_ENGLISH} "NTW: New Team War mod. Modifies most of the weapons and research."
+  LangString TEXT_SecDyDoAIMod ${LANG_ENGLISH} "DyDo-AI"
+  LangString DESC_SecDyDoAIMod ${LANG_ENGLISH} "DyDo-AI: New computer opponent"
 
   LangString TEXT_SecOriginalMod ${LANG_ENGLISH} "1.10 balance"
   LangString DESC_SecOriginalMod ${LANG_ENGLISH} "Play the game as it was back in the 1.10 days."
 
-  LangString TEXT_RunWarzone ${LANG_ENGLISH} "Run ${PACKAGE_NAME}"
-  LangString TEXT_Readme ${LANG_ENGLISH} "$INSTDIR\Readme.en.html"
-  
   ;Dutch
   LangString TEXT_SecBase ${LANG_DUTCH} "Core files"
   LangString DESC_SecBase ${LANG_DUTCH} "The core files required to run Warzone 2100."
@@ -556,15 +550,12 @@ FunctionEnd
   LangString TEXT_SecNLS_WinFonts ${LANG_DUTCH} "WinFonts"
   LangString DESC_SecNLS_WinFonts ${LANG_DUTCH} "Include Windows Fonts folder into the search path. Enable this if you want to use custom fonts in config file or having troubles with standard font. Can be slow on Vista and later!"
   
-  LangString TEXT_SecNTWMod ${LANG_DUTCH} "NTW"
-  LangString DESC_SecNTWMod ${LANG_DUTCH} "NTW: New Team War mod. Wijzigd de meeste wapens en onderzoeken."
+  LangString TEXT_SecDyDoAIMod ${LANG_DUTCH} "DyDo-AI"
+  LangString DESC_SecDyDoAIMod ${LANG_DUTCH} "DyDo-AI: Nieuwe computertegenstander"  
 
   LangString TEXT_SecOriginalMod ${LANG_DUTCH} "1.10 balance"
   LangString DESC_SecOriginalMod ${LANG_DUTCH} "Speel het spel met de originele 1.10 versie balans stats."
 
-  LangString TEXT_RunWarzone ${LANG_DUTCH} "Start ${PACKAGE_NAME}"
-  LangString TEXT_Readme ${LANG_DUTCH}   "$INSTDIR\Readme.en.html"
-  
   ;German
   LangString TEXT_SecBase ${LANG_GERMAN} "Core files"
   LangString DESC_SecBase ${LANG_GERMAN} "Die Kerndateien, die fьr Warzone 2100 benцtigt werden."
@@ -593,14 +584,11 @@ FunctionEnd
   LangString TEXT_SecNLS_WinFonts ${LANG_GERMAN} "WinFonts"
   LangString DESC_SecNLS_WinFonts ${LANG_GERMAN} "Den Windows-Schriftarten-Ordner in den Suchpfad aufnehmen. Nutzen Sie dies, falls Sie spдter eigene Schriftarten in der Konfigurationsdatei eingeben wollen oder es zu Problemen mit der Standardschriftart kommt. Kann unter Vista und spдter langsam sein!"
   
-  LangString TEXT_SecNTWMod ${LANG_GERMAN} "NTW"
-  LangString DESC_SecNTWMod ${LANG_GERMAN} "NTW: New Team War mod. Verдndert die meisten Forschungen und Waffen."
+  LangString TEXT_SecDyDoAIMod ${LANG_GERMAN} "DyDo-AI"
+  LangString DESC_SecDyDoAIMod ${LANG_GERMAN} "DyDo-AI: Neuer Computergegner"  
 
   LangString TEXT_SecOriginalMod ${LANG_GERMAN} "1.10 balance"
   LangString DESC_SecOriginalMod ${LANG_GERMAN} "Spielen Sie das Spiel mit dem Balancing aus der Originalversion 1.10."
-
-  LangString TEXT_RunWarzone ${LANG_GERMAN} "Starte ${PACKAGE_NAME}"
-  LangString TEXT_Readme ${LANG_GERMAN}  "$INSTDIR\Readme.de.html"
 
   ;Russian
   LangString TEXT_SecBase ${LANG_RUSSIAN} "Базовые файлы"
@@ -630,15 +618,12 @@ FunctionEnd
   LangString TEXT_SecNLS_WinFonts ${LANG_RUSSIAN} "WinШрифты"
   LangString DESC_SecNLS_WinFonts ${LANG_RUSSIAN} "Задействовать папку шрифтов Windows при поиске. Помогает если есть проблемы с поставляемыми шрифтами. На Висте возможно замедление при загрузке!"
 
-  LangString TEXT_SecNTWMod ${LANG_RUSSIAN} "NTW"
-  LangString DESC_SecNTWMod ${LANG_RUSSIAN} "Модификация New Team War. Изменяет большую часть оружия и исследований."
+  LangString TEXT_SecDyDoAIMod ${LANG_RUSSIAN} "DyDo-AI"
+  LangString DESC_SecDyDoAIMod ${LANG_RUSSIAN} "DyDo-AI: Новый компьютерный противник."  
 
   LangString TEXT_SecOriginalMod ${LANG_RUSSIAN} "Баланс 1.10"
   LangString DESC_SecOriginalMod ${LANG_RUSSIAN} "Играть в игру с балансом от оригинальной версии 1.10."
 
-  LangString TEXT_RunWarzone ${LANG_RUSSIAN} "Запуск ${PACKAGE_NAME}"
-  LangString TEXT_Readme ${LANG_RUSSIAN} "$INSTDIR\Readme.en.html"
-  
   ;Assign language strings to sections
   !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
     !insertmacro MUI_DESCRIPTION_TEXT ${SecBase} $(DESC_SecBase)
@@ -646,7 +631,7 @@ FunctionEnd
     !insertmacro MUI_DESCRIPTION_TEXT ${SecOpenAL} $(DESC_SecOpenAL)
 
     !insertmacro MUI_DESCRIPTION_TEXT ${SecMods} $(DESC_SecMods)
-    !insertmacro MUI_DESCRIPTION_TEXT ${SecNTWMod} $(DESC_SecNTWMod)
+    !insertmacro MUI_DESCRIPTION_TEXT ${SecDyDoAIMod} $(DESC_SecDyDoAIMod)
     !insertmacro MUI_DESCRIPTION_TEXT ${SecOriginalMod} $(DESC_SecOriginalMod)
 	
     !insertmacro MUI_DESCRIPTION_TEXT ${SecFMVs} $(DESC_SecFMVs)
@@ -691,6 +676,7 @@ Section "Uninstall"
   Delete "$INSTDIR\music\menu.ogg"
   Delete "$INSTDIR\music\track1.ogg"
   Delete "$INSTDIR\music\track2.ogg"
+  Delete "$INSTDIR\music\track3.ogg"
   Delete "$INSTDIR\music\music.wpl"
   RMDir "$INSTDIR\music"
 
@@ -710,7 +696,7 @@ Section "Uninstall"
   Delete "$INSTDIR\mods\music\music_1.0.AUTHORS.txt"
   Delete "$INSTDIR\mods\music\music_1.0.wz"
 
-  Delete "$INSTDIR\mods\multiplay\ntw.wz"
+  Delete "$INSTDIR\mods\multiplay\dydo-ai.wz"
   Delete "$INSTDIR\mods\multiplay\old-1.10-balance.wz"
 
   RMDir "$INSTDIR\mods\multiplay"
@@ -770,6 +756,10 @@ Section "Uninstall"
   RMDir "$INSTDIR\locale\it\LC_MESSAGES"
   RMDir "$INSTDIR\locale\it"
 
+  Delete "$INSTDIR\locale\ko\LC_MESSAGES\${PACKAGE}.mo"
+  RMDir "$INSTDIR\locale\ko\LC_MESSAGES"
+  RMDir "$INSTDIR\locale\ko"
+
   Delete "$INSTDIR\locale\la\LC_MESSAGES\${PACKAGE}.mo"
   RMDir "$INSTDIR\locale\la\LC_MESSAGES"
   RMDir "$INSTDIR\locale\la"
@@ -806,6 +796,10 @@ Section "Uninstall"
   RMDir "$INSTDIR\locale\ru\LC_MESSAGES"
   RMDir "$INSTDIR\locale\ru"
 
+  Delete "$INSTDIR\locale\sk\LC_MESSAGES\${PACKAGE}.mo"
+  RMDir "$INSTDIR\locale\sk\LC_MESSAGES"
+  RMDir "$INSTDIR\locale\sk"
+
   Delete "$INSTDIR\locale\sl\LC_MESSAGES\${PACKAGE}.mo"
   RMDir "$INSTDIR\locale\sl\LC_MESSAGES"
   RMDir "$INSTDIR\locale\sl"
@@ -837,8 +831,8 @@ Section "Uninstall"
 
   Delete "$SMPROGRAMS\$MUI_TEMP\Uninstall.lnk"
   Delete "$SMPROGRAMS\$MUI_TEMP\${PACKAGE_NAME}.lnk"
-  Delete "$SMPROGRAMS\$MUI_TEMP\${PACKAGE_NAME} - NTW.lnk"
   Delete "$SMPROGRAMS\$MUI_TEMP\${PACKAGE_NAME} - Old 1.10 Balance.lnk"
+  Delete "$SMPROGRAMS\$MUI_TEMP\${PACKAGE_NAME} - DyDo-AI.lnk"
 
   ;Delete empty start menu parent diretories
   StrCpy $MUI_TEMP "$SMPROGRAMS\$MUI_TEMP"

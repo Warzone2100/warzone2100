@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@
 #include "display3d.h"
 #include "intdisplay.h"
 // FIXME Direct iVis implementation include!
-#include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_common/pieblitfunc.h"
 #include "lib/ivis_common/piedef.h"
 #include "lib/ivis_common/piepalette.h"
 #include "lib/gamelib/gtime.h"
@@ -472,7 +472,7 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 	sButInit.formID = M_REQUEST;
 	sButInit.id = M_REQUEST_CLOSE;
 	sButInit.style = WBUT_PLAIN;
-	sButInit.x = M_REQUEST_W - CLOSE_WIDTH;
+	sButInit.x = M_REQUEST_W - CLOSE_WIDTH - 3;
 	sButInit.y = 0;
 	sButInit.width = CLOSE_WIDTH;
 	sButInit.height = CLOSE_HEIGHT;
@@ -799,7 +799,8 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 	UDWORD			x					= xOffset+psWidget->x;
 	UDWORD			y					= yOffset+psWidget->y;
 	UDWORD			player = psWidget->UserData; //get the in game player number.
-	Vector3i Rotation, Position;
+	Position		position;
+	Vector3i 		rotation;
 
 	if( responsibleFor(player,0) )
 	{
@@ -871,11 +872,11 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 		if (NetPlay.bComms)
 		{
 			//c8:score,
-			sprintf(str,"%d",getMultiStats(player,true).recentScore);
+			sprintf(str,"%d",getMultiStats(player).recentScore);
 			iV_DrawText(str, x+MULTIMENU_C8, y+MULTIMENU_FONT_OSET);
 
 			//c9:kills,
-			sprintf(str,"%d",getMultiStats(player,true).recentKills);
+			sprintf(str,"%d",getMultiStats(player).recentKills);
 			iV_DrawText(str, x+MULTIMENU_C9, y+MULTIMENU_FONT_OSET);
 		}
 		else
@@ -935,11 +936,11 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 		if (NetPlay.bComms)
 		{
 			//c8:score,
-			sprintf(str,"%d",getMultiStats(player,true).recentScore);
+			sprintf(str,"%d",getMultiStats(player).recentScore);
 			iV_DrawText(str, x+MULTIMENU_C8, y+MULTIMENU_FONT_OSET);
 
 			//c9:kills,
-			sprintf(str,"%d",getMultiStats(player,true).recentKills);
+			sprintf(str,"%d",getMultiStats(player).recentKills);
 			iV_DrawText(str, x+MULTIMENU_C9, y+MULTIMENU_FONT_OSET);
 		}
 		else
@@ -959,26 +960,26 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 	if(getDebugMappingStatus())			//Won't pass this when in both release and multiplayer modes
 	{
 		//c10: Total number of player units in possession
-		sprintf(str,"%d",getNumDroids(player));
+		sprintf(str,"%d",getNumDroids(player) + getNumTransporterDroids(player));
 		iV_DrawText(str, x+MULTIMENU_C10, y+MULTIMENU_FONT_OSET);
 
 		//c11: Player power
 		sprintf(str, "%u", (int)getPower(player));
-		iV_DrawText(str, MULTIMENU_FORM_X+MULTIMENU_C11,  y+MULTIMENU_FONT_OSET);
+		iV_DrawText(str, MULTIMENU_FORM_X+MULTIMENU_C11, y+MULTIMENU_FONT_OSET);
 	}
 
 	// a droid of theirs.
 	if(apsDroidLists[player])
 	{
 		pie_SetGeometricOffset( MULTIMENU_FORM_X+MULTIMENU_C1 ,y+MULTIMENU_PLAYER_H);
-		Rotation.x = -15;
-		Rotation.y = 45;
-		Rotation.z = 0;
-		Position.x = 0;
-		Position.y = 0;
-		Position.z = 2000;		//scale them!
+		rotation.x = -15;
+		rotation.y = 45;
+		rotation.z = 0;
+		position.x = 0;
+		position.y = 0;
+		position.z = 2000;		//scale them!
 
-		displayComponentButtonObject(apsDroidLists[player],&Rotation,&Position,false, 100);
+		displayComponentButtonObject(apsDroidLists[player],&rotation,&position,false, 100);
 	}
 
 	// clean up widgets if player leaves while menu is up.
@@ -1121,7 +1122,7 @@ static void addMultiPlayer(UDWORD player,UDWORD pos)
 		sButInit.height = 24;
 		sButInit.FontID = font_regular;
 		sButInit.id		= MULTIMENU_CHANNEL + player;
-		sButInit.pTip	= "channel";
+		sButInit.pTip	= _("Channel");
 		sButInit.pDisplay = displayChannelState;
 		sButInit.UserData = player;
 		widgAddButton(psWScreen, &sButInit);

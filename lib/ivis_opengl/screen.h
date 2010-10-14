@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -48,7 +48,7 @@ extern void screen_SetBackDropFromFile(const char* filename);
 extern void screen_StopBackDrop(void);
 extern void screen_RestartBackDrop(void);
 extern BOOL screen_GetBackDrop(void);
-extern void screen_Upload(const char *newBackDropBmp);
+extern void screen_Upload(const char *newBackDropBmp, BOOL preview);
 
 /* screendump */
 extern void screenDumpToDisk(const char* path);
@@ -60,6 +60,8 @@ extern int wz_texture_compression;
 
 extern void screenDoDumpToDiskIfRequired(void);
 
-extern BOOL Init_FBO(unsigned int width, unsigned int height);
-extern void Delete_FBO(void);
+void screen_enableMapPreview(char *name, int width, int height, Vector2i *playerpositions);
+void screen_disableMapPreview(void);
+BOOL screen_getMapPreview(void);
+const char *screen_getMapName(void);
 #endif

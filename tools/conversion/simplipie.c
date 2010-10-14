@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2007-2009  Warzone Resurrection Project
+	Copyright (C) 2007-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -39,9 +39,8 @@ typedef int bool;
 #define iV_IMD_TEX	0x00000200
 #define iV_IMD_XNOCUL	0x00002000
 #define iV_IMD_TEXANIM	0x00004000
-#define MAX_POLYGON_SIZE 16
+#define MAX_POLYGON_SIZE 6 // the game can't handle more
 
-static char *input = "";
 static bool verbose = false;
 
 typedef struct {
@@ -53,18 +52,20 @@ typedef struct {
 } WZ_FACE;
 
 typedef struct {
-	int x, y, z;
+	int x, y, z, reindex;
+	bool dupe;
 } WZ_POSITION;
 
-static void parse_args(int argc, char **argv)
+static int parse_args(int argc, char **argv)
 {
-	unsigned int i = 1;
+	unsigned int i, result = 1;
 
 	for (i = 1; argc >= 2 + i && argv[i][0] == '-'; i++)
 	{
 		if (argv[i][1] == 'v')
 		{
 			verbose = true;
+			result++;
 		}
 	}
 	if (argc < 1 + i)
@@ -73,10 +74,10 @@ static void parse_args(int argc, char **argv)
 		fprintf(stderr, "  -v  Verbose mode.\n");
 		exit(1);
 	}
-	input = argv[i++];
+	return result;
 }
 
-static void dump_to_pie(FILE *ctl, FILE *fp)
+static void dump_to_pie(FILE *ctl, FILE *fp, const char *input)
 {
 	int num, x, y, z, levels, level;
 	char s[200];
@@ -87,7 +88,13 @@ static void dump_to_pie(FILE *ctl, FILE *fp)
 		fprintf(stderr, "Bad PIE file %s\n", input);
 		exit(1);
 	}
-	fprintf(ctl, "PIE 3\n");
+	
+ 	if (x != 2)
+	{
+		fprintf(stderr, "Unknown PIE version %d in %s\n", x, input);
+		exit(1);
+	}	
+	fprintf(ctl, "PIE 2\n");
 
 	num = fscanf(fp, "TYPE %d\n", &x); // ignore
 	if (num != 1)
@@ -95,7 +102,7 @@ static void dump_to_pie(FILE *ctl, FILE *fp)
 		fprintf(stderr, "Bad TYPE directive in %s\n", input);
 		exit(1);
 	}
-	fprintf(ctl, "TYPE 0\n");
+	fprintf(ctl, "TYPE 200\n");
 
 	num = fscanf(fp, "TEXTURE %d %s %d %d\n", &z, s, &x, &y);
 	if (num != 4)
@@ -103,7 +110,7 @@ static void dump_to_pie(FILE *ctl, FILE *fp)
 		fprintf(stderr, "Bad TEXTURE directive in %s\n", input);
 		exit(1);
 	}
-	fprintf(ctl, "TEXTURE 0 %s 0 0\n", s);
+	fprintf(ctl, "TEXTURE %d %s 256 256\n", z, s);
 
 	num = fscanf(fp, "LEVELS %d\n", &levels);
 	if (num != 1)
@@ -138,8 +145,6 @@ static void dump_to_pie(FILE *ctl, FILE *fp)
 			fprintf(stderr, "Bad POINTS directive in %s, level %d.\n", input, level);
 			exit(1);
 		}
-		// TODO check for duplicate points and replace them below, but skip in list here
-		fprintf(ctl, "POINTS %d", points);
 
 		posList = malloc(sizeof(WZ_POSITION) * points);
 		for (j = 0; j < points; j++)
@@ -147,9 +152,10 @@ static void dump_to_pie(FILE *ctl, FILE *fp)
 			num = fscanf(fp, "%d %d %d\n", &posList[j].x, &posList[j].y, &posList[j].z);
 			if (num != 3)
 			{
-				fprintf(stderr, "Bad POINTS entry level %d, number %d\n", level, j);
+				fprintf(stderr, "File %s. Bad POINTS entry level %d, number %d.\n", input, level, j);
 				exit(1);
 			}
+			posList[j].dupe = false;
 		}
 
 		num = fscanf(fp, "POLYGONS %d", &faces);
@@ -169,12 +175,12 @@ static void dump_to_pie(FILE *ctl, FILE *fp)
 			num = fscanf(fp, "\n%x", &flags);
 			if (num != 1)
 			{
-				fprintf(stderr, "Bad POLYGONS texture flag entry level %d, number %d\n", level, j);
+				fprintf(stderr, "File %s. Bad POLYGONS texture flag entry level %d, number %d\n", input, level, j);
 				exit(1);
 			}
 			if (!(flags & iV_IMD_TEX))
 			{
-				fprintf(stderr, "Bad texture flag entry level %d, number %d - no texture flag!\n", level, j);
+				fprintf(stderr, "File %s. Bad texture flag entry level %d, number %d - no texture flag!\n", input, level, j);
 				exit(1);
 			}
 
@@ -191,7 +197,7 @@ static void dump_to_pie(FILE *ctl, FILE *fp)
 			num = fscanf(fp, "%d", &faceList[j].vertices);
 			if (num != 1)
 			{
-				fprintf(stderr, "Bad POLYGONS vertices entry level %d, number %d\n", level, j);
+				fprintf(stderr, "File %s. Bad POLYGONS vertices entry level %d, number %d\n", input, level, j);
 				exit(1);
 			}
 			assert(faceList[j].vertices <= MAX_POLYGON_SIZE); // larger polygons not supported
@@ -203,7 +209,7 @@ static void dump_to_pie(FILE *ctl, FILE *fp)
 				num = fscanf(fp, "%d", &faceList[j].index[k]);
 				if (num != 1)
 				{
-					fprintf(stderr, "Bad vertex position entry level %d, number %d\n", level, j);
+					fprintf(stderr, "File %s. Bad vertex position entry level %d, number %d\n", input, level, j);
 					exit(1);
 				}
 			}
@@ -212,12 +218,13 @@ static void dump_to_pie(FILE *ctl, FILE *fp)
 				num = fscanf(fp, "%d %d %d %d", &faceList[j].frames, &faceList[j].rate, &faceList[j].width, &faceList[j].height);
 				if (num != 4)
 				{
-					fprintf(stderr, "Bad texture animation entry level %d, number %d.\n", level, j);
+					fprintf(stderr, "File %s. Bad texture animation entry level %d, number %d.\n", input, level, j);
 					exit(1);
 				}
 				if (faceList[j].frames <= 1)
 				{
-					fprintf(stderr, "File %slevel %d, polygon %d has a single animation frame. That makes no sense.\n", input, level, j);
+					fprintf(stderr, "File %s. Level %d, polygon %d has a single animation frame. Disabled.\n", input, level, j);
+					faceList[j].frames = 0;
 				}
 				if (textureArrays < faceList[j].frames)
 				{
@@ -236,17 +243,64 @@ static void dump_to_pie(FILE *ctl, FILE *fp)
 				num = fscanf(fp, "%d %d", &faceList[j].texCoord[k][0], &faceList[j].texCoord[k][1]);
 				if (num != 2)
 				{
-					fprintf(stderr, "Bad texture coordinate entry level %d, number %d\n", level, j);
+					fprintf(stderr, "File %s. Bad texture coordinate entry level %d, number %d\n", input, level, j);
 					exit(1);
 				}
 			}
 		}
 
+		/* Remove duplicate points */
+		x = 0;
 		for (j = 0; j < points; j++)
 		{
-			fprintf(ctl, " \n\t%d %d %d", posList[j].x, posList[j].y, posList[j].z);
+			int k;
+
+			for (k = j + 1; k < points; k++)
+			{
+				// if points in k are equal to points in j, replace all k with j in face list
+				if (posList[k].x == posList[j].x && posList[k].y == posList[j].y && posList[k].z == posList[j].z && !posList[k].dupe)
+				{
+					posList[k].dupe	= true;	// oh noes, a dupe! let's skip it when we write them out again.
+					posList[k].reindex = x;	// rewrite face list to point here
+				}
+			}
+			if (!posList[j].dupe)
+			{
+				posList[j].reindex = x;
+				x++;
+			}
 		}
 
+		fprintf(ctl, "POINTS %d", x);
+		for (j = 0; j < points; j++)
+		{
+			if (!posList[j].dupe)
+			{
+				fprintf(ctl, " \n\t%d %d %d", posList[j].x, posList[j].y, posList[j].z);
+			}
+		}
+		
+		if (verbose && (points - x))
+		{
+			printf("Duplicated vertexes: %d ", points - x);
+		}
+		
+		// Rewrite face table
+		for (j = 0; j < faces; j++)
+		{
+			int m;
+
+			for (m = 0; m < faceList[j].vertices; m++)
+			{
+				faceList[j].index[m] = posList[faceList[j].index[m]].reindex;
+			}
+		}
+
+		if (verbose && (facesPIE3 - faces))
+		{
+			printf("Corrected 2faces: %d ", facesPIE3 - faces);
+		}
+		
 		fprintf(ctl, "\nPOLYGONS %d", facesPIE3);
 		for (j = 0; j < faces; j++)
 		{
@@ -293,7 +347,7 @@ static void dump_to_pie(FILE *ctl, FILE *fp)
 				num = fscanf(fp, "\n%d %d %d", &a, &b, &c);
 				if (num != 3)
 				{
-					fprintf(stderr, "Bad CONNECTORS directive entry level %d, number %d\n", level, j);
+					fprintf(stderr, "File %s. Bad CONNECTORS directive entry level %d, number %d\n", input, level, j);
 					exit(1);
 				}
 				fprintf(ctl, "\n\t%d %d %d", a, b, c);
@@ -306,18 +360,16 @@ static void dump_to_pie(FILE *ctl, FILE *fp)
 	}
 }
 
-int main(int argc, char **argv)
+int convert(const char *filename)
 {
 	FILE *p, *f;
 	char buffer[1024];
 	size_t rsize;
 
-	parse_args(argc, argv);
-	
-	p = fopen(input, "r");
+	p = fopen(filename, "r");
 	if (!p)
 	{
-		fprintf(stderr, "Cannot open \"%s\" for reading: %s\n", input, strerror(errno));
+		fprintf(stderr, "Cannot open \"%s\" for reading: %s\n", filename, strerror(errno));
 		exit(1);
 	}
 	f = tmpfile();
@@ -326,12 +378,13 @@ int main(int argc, char **argv)
 		fprintf(stderr, "Cannot open temporary file for writing: %s\n", strerror(errno));
 		exit(1);
 	}
-	dump_to_pie(f, p);
+
+	dump_to_pie(f, p, filename);
 	fclose(p);
 
 	// Now copy temporary file to original
 	rewind(f);
-	p = fopen(input, "w");
+	p = fopen(filename, "w");
 	while (!feof(f) && !ferror(p) && !ferror(f))
 	{
 		rsize = fread(buffer, 1, sizeof(buffer), f);
@@ -342,6 +395,19 @@ int main(int argc, char **argv)
 
 	fclose(p);
 	fclose(f);	// also deletes temporary file
+
+	return 0;
+}
+
+int main(int argc, char **argv)
+{
+	int i;
+
+	for (i = parse_args(argc, argv); i < argc; i++)
+	{
+		printf("Processing %s\n", argv[i]);
+		convert(argv[i]);
+	}
 
 	return 0;
 }

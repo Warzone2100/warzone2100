@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -25,15 +25,14 @@
 #define __INCLUDED_LIB_FRAMEWORK_TYPES_H__
 
 #include "wzglobal.h"
-#include <limits.h>
-#include <ctype.h>
 
-#ifdef WZ_C99
+#ifdef HAVE_INTTYPES_H // defined WZ_C99
 /* Compilers that have support for C99 have all values below defined in stdint.h */
-# include <stdint.h>
+# include <inttypes.h>
 #else
 // Defines C99 types for C99 incompatible compilers (e.g. MSVC)
 #include <SDL_stdinc.h>
+#ifndef WZ_CC_MINGW
 # define INT8_MIN               (-128)
 # define INT16_MIN              (-32767-1)
 # define INT32_MIN              (-2147483647-1)
@@ -43,10 +42,17 @@
 # define UINT8_MAX              (255)
 # define UINT16_MAX             (65535)
 # define UINT32_MAX             (4294967295U)
+#endif
 #ifdef WZ_CC_MSVC
-#define PRIu64  "I64u"
+# define PRIu32					"u"
+# define PRIu64					"I64u"
+# define PRId64					"I64d"
+typedef SSIZE_T ssize_t;
 #endif
 #endif // WZ_C99
+
+#include <limits.h>
+#include <ctype.h>
 
 /* Basic numeric types */
 typedef uint8_t  UBYTE;

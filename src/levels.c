@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -57,7 +57,7 @@ extern int lev_lex_destroy(void);
 // block ID number start for the current level data (as opposed to a dataset)
 #define CURRENT_DATAID		LEVEL_MAXFILES
 
-static	char	currentLevelName[32];
+static	char	currentLevelName[32] = { "main" };
 
 // the current level descriptions
 LEVEL_DATASET	*psLevels = NULL;
@@ -677,7 +677,10 @@ BOOL levLoadData(const char* name, char *pSaveName, GAME_TYPE saveType)
 		}
 	}
 
-	rebuildSearchPath(psNewLevel->dataDir, false);
+	if (!rebuildSearchPath(psNewLevel->dataDir, false))
+	{
+		return false;
+	}
 
 	// reset the old mission data if necessary
 	if (psCurrLevel != NULL)

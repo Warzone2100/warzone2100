@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -31,7 +31,12 @@
 # error Framework header files MUST be included from Frame.h ONLY.
 #endif
 
+#include "wzglobal.h"
+
 #include <assert.h>
+#if !defined(WZ_OS_WIN)
+#include <signal.h>
+#endif
 #include "macros.h"
 #include "types.h"
 
@@ -54,13 +59,22 @@ extern char last_called_script_event[MAX_EVENT_NAME_LEN];
 /** Whether asserts are currently enabled. */
 extern bool assertEnabled;
 
+
+/* Do the correct assert call for each compiler */
+#if defined(WZ_OS_WIN)
+#define wz_assert(expr) assert(expr)
+#else
+#define wz_assert(expr) raise(SIGTRAP)
+#endif
+
+
 /** Deals with failure in an assert. Expression is (re-)evaluated for output in the assert() call. */
 #define ASSERT_FAILURE(expr, expr_string, location_description, function, ...) \
 	( \
 		(void)_debug(LOG_ERROR, function, __VA_ARGS__), \
 		(void)_debug(LOG_ERROR, function, "Assert in Warzone: %s (%s), last script event: '%s'", \
 	                                  location_description, expr_string, last_called_script_event), \
-		( assertEnabled ? assert(expr) : (void)0 )\
+		( assertEnabled ? (void)wz_assert(expr) : (void)0 )\
 	)
 
 /**
@@ -264,6 +278,13 @@ extern UDWORD traceID;
 void _realObjTrace(int id, const char *function, const char *str, ...) WZ_DECL_FORMAT(printf, 3, 4);
 static inline void objTraceEnable(UDWORD id) { traceID = id; }
 static inline void objTraceDisable(void) { traceID = (UDWORD)-1; }
+
+// MSVC specific rotuines to set/clear allocation tracking
+#if defined(WZ_CC_MSVC) && defined(DEBUG)
+void debug_MEMCHKOFF(void);
+void debug_MEMCHKON(void);
+void debug_MEMSTATS(void);
+#endif
 
 #if defined(__cplusplus)
 }

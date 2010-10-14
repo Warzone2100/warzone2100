@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2005-2006  Free Software Foundation, Inc.
-	Copyright (C) 2009 Warzone Resurrection Project
+	Copyright (C) 1999-2004  Eidos Interactive
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -15,8 +15,7 @@
 
 	You should have received a copy of the GNU General Public License
 	along with Warzone 2100; if not, write to the Free Software
-	Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
-	MA 02110-1301, USA.
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 #ifndef STRING_EXT_H
 #define STRING_EXT_H
@@ -29,6 +28,37 @@
 
 #ifdef __cplusplus
 extern "C" {
+#endif
+
+
+/*!
+ * On MSVC, in order to squelch tons of 'memory leaks' we set the allocator
+ * to not count the memory received by strdup() calls.
+ *
+ */
+#if defined(WZ_CC_MSVC)
+#	ifdef strdup
+#		undef strdup
+#	endif
+#	if defined(DEBUG)
+#		define strdup(s) \
+			strdup2(s,__FILE__,__LINE__)
+static inline char *strdup2(const char *s, char *fileName, int line)
+{
+	char *result;
+
+	(void)debug_MEMCHKOFF();
+	result = (char*)malloc(strlen(s) + 1);
+	(void)debug_MEMCHKON();
+	debug(LOG_NEVER, "allocator toggled in %s %d",fileName,line);
+	if (result == (char*)0)
+		return (char*)0;
+	strcpy(result, s); 
+	return result; 
+}
+#	else	// for release builds
+#		define strdup _strdup
+#	endif	//debug block
 #endif
 
 /*!

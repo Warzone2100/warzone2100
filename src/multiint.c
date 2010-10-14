@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -25,7 +25,6 @@
  * along with connection and game options.
  */
 
-#include "lib/ivis_opengl/GLee.h"
 #include "lib/framework/frame.h"
 
 #include <time.h>
@@ -36,11 +35,13 @@
 #include "lib/framework/stdio_ext.h"
 
 /* Includes direct access to render library */
+#include "lib/ivis_common/bitimage.h"
+#include "lib/ivis_common/pieblitfunc.h"
 #include "lib/ivis_common/piedef.h"
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/pieclip.h"
+#include "lib/ivis_common/piemode.h"
 #include "lib/ivis_common/piepalette.h"
-#include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_opengl/piematrix.h"			// for setgeometricoffset
 #include "lib/ivis_opengl/screen.h"
 
@@ -88,17 +89,12 @@
 #include "multirecv.h"
 #include "multimenu.h"
 #include "multilimit.h"
+#include "multigifts.h"
 
 #include "warzoneconfig.h"
 
 #include "init.h"
 #include "levels.h"
-
-#if defined(WZ_OS_MAC)
-#include <QuesoGLC/glc.h>
-#else
-#include <GL/glc.h>
-#endif
 
 #define MAP_PREVIEW_DISPLAY_TIME 2500	// number of milliseconds to show map in preview
 
@@ -135,22 +131,7 @@
 extern char	MultiCustomMapsPath[PATH_MAX];
 extern char	MultiPlayersPath[PATH_MAX];
 extern char VersionString[80];		// from netplay.c
-extern GLuint fbo;					// Our handle to the FBO
-extern GLuint FBOtexture;			// The texture we are going to use
-extern GLuint FBOdepthbuffer;		// Our handle to the depth render buffer
-extern BOOL bFboProblem;			// hack to work around people with bad drivers. (*cough*intel*cough*)
 extern BOOL bSendingMap;			// used to indicate we are sending a map
-
-extern void intDisplayTemplateButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-extern void NETsetGamePassword(const char *password);	// in netplay.c
-extern void NETresetGamePassword(void);					// in netplay.c
-extern void NETGameLocked(bool flag);					// in netplay.c
-extern void NETsetGamePassword(const char *password);	// in netplay.c
-extern void NETresetGamePassword(void);					// in netplay.c
-extern void NETGameLocked(bool flag);					// in netplay.c
-extern void NETsetGamePassword(const char *password);	// in netplay.c
-extern void NETresetGamePassword(void);					// in netplay.c
-extern void NETGameLocked(bool flag);					// in netplay.c
 
 BOOL						bHosted			= false;				//we have set up a game
 char						sPlayer[128];							// player name (to be used)
@@ -165,7 +146,6 @@ static BOOL					safeSearch		= false;				// allow auto game finding.
 static bool disableLobbyRefresh = false;	// if we allow lobby to be refreshed or not.
 static UDWORD hideTime=0;
 static bool EnablePasswordPrompt = false;	// if we need the password prompt
-extern int NET_PlayerConnectionStatus;		// from src/display3d.c
 LOBBY_ERROR_TYPES LobbyError = ERROR_NOERROR;
 static BOOL allowChangePosition = true;
 
@@ -180,41 +160,29 @@ static void drawReadyButton(UDWORD player);
 static void displayPasswordEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours);
 
 // Drawing Functions
-void		displayChatEdit				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-void		displayMultiBut				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-void		intDisplayFeBox				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-void		displayRemoteGame			(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-void		displayPlayer				(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-void		displayTeamChooser			(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-void		displayMultiEditBox			(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-void		setLockedTeamsMode			(void);
+static void displayChatEdit     (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+static void displayMultiBut     (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+static void intDisplayFeBox     (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+static void displayRemoteGame   (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+static void displayPlayer       (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+static void displayTeamChooser  (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+static void displayMultiEditBox (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+static void setLockedTeamsMode  (void);
 
 // find games
 static void addGames				(void);
 static void removeGames				(void);
-void		runGameFind				(void);
-void		startGameFind			(void);
 
 // password form functions
 static void hidePasswordForm(void);
 static void showPasswordForm(void);
 
-// Connection option functions
-static void addConnections			(UDWORD);
-void		runConnectionScreen		(void);
-BOOL		startConnectionScreen	(void);
-
 // Game option functions
 static	void	addGameOptions		(BOOL bRedo);				// options (rhs) boxV
-UDWORD	addPlayerBox		(BOOL);				// players (mid) box
 static	void	addChatBox			(void);
 static	void	disableMultiButs	(void);
 static	void	processMultiopWidgets(UDWORD);
 static	void	SendFireUp			(void);
-
-void			runMultiOptions		(void);
-BOOL			startMultiOptions	(BOOL);
-void			frontendMultiMessages(void);
 
 static	UDWORD	bestPlayer			(UDWORD);
 static	void	decideWRF			(void);
@@ -225,8 +193,6 @@ static BOOL		SendColourRequest	(UBYTE player, UBYTE col);
 static BOOL		SendPositionRequest	(UBYTE player, UBYTE chosenPlayer);
 static BOOL		safeToUseColour		(UDWORD player,UDWORD col);
 static BOOL		changeReadyStatus	(UBYTE player, BOOL bReady);
-void			resetReadyStatus	(bool bSendOptions);
-void			initTeams( void );
 static	void stopJoining(void);
 // ////////////////////////////////////////////////////////////////////////////
 // map previews..
@@ -258,18 +224,18 @@ static int guessMapTilesetType(void)
 /// a picture of it
 void loadMapPreview(bool hideInterface)
 {
-	char			aFileName[256];
+	static char			aFileName[256], bFileName[256];
 	UDWORD			fileSize;
 	char			*pFileData = NULL;
 	LEVEL_DATASET	*psLevel = NULL;
 	PIELIGHT		plCliffL, plCliffH, plWater, plRoadL, plRoadH, plGroundL, plGroundH;
 
-	UDWORD			i, j, x, y, height, offX2, offY2;
-	UBYTE			scale,col;
+	UDWORD			x, y, height;
+	UBYTE			col;
 	MAPTILE			*psTile,*WTile;
 	UDWORD oursize;
 	Vector2i playerpos[MAX_PLAYERS];	// Will hold player positions
-	char  *ptr = NULL, *imageData = NULL, *fboData = NULL;
+	char  *ptr = NULL, *imageData = NULL;
 
 	if(psMapTiles)
 	{
@@ -278,12 +244,22 @@ void loadMapPreview(bool hideInterface)
 
 	// load the terrain types
 	psLevel = levFindDataSet(game.map);
-	ASSERT_OR_RETURN(, psLevel, "Could not find level dataset!");
+	ASSERT_OR_RETURN(, psLevel != NULL, "Could not find level dataset!");
 	rebuildSearchPath(psLevel->dataDir, false);
 	sstrcpy(aFileName,psLevel->apDataFiles[0]);
 	aFileName[strlen(aFileName)-4] = '\0';
 	sstrcat(aFileName, "/ttypes.ttp");
 	pFileData = fileLoadBuffer;
+	sstrcpy(bFileName, screen_getMapName());
+	if (!sstrcmp(aFileName, bFileName))
+	{
+		if (hideInterface)
+		{
+			hideTime = gameTime;
+		}
+		return;
+	}
+	sstrcpy(bFileName, aFileName);
 	if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 	{
 		debug(LOG_ERROR, "loadMapPreview: Failed to load terrain types file");
@@ -341,23 +317,6 @@ void loadMapPreview(bool hideInterface)
 		break;
 	}
 
-	scale = 1;
-	if((mapHeight <  240)&&(mapWidth < 320))
-	{
-		scale = 2;
-	}
-	if((mapHeight <  120)&&(mapWidth < 160))
-	{
-		scale = 3;
-	}
-	if((mapHeight <  60)&&(mapWidth < 80))
-	{
-		scale = 4;
-	}
-	if((mapHeight <  30)&&(mapWidth < 40))
-	{
-		scale = 5;
-	}
 	oursize = sizeof(char) * BACKDROP_HACK_WIDTH * BACKDROP_HACK_HEIGHT;
 	imageData = (char*)malloc(oursize * 3);		// used for the texture
 	if( !imageData )
@@ -366,57 +325,41 @@ void loadMapPreview(bool hideInterface)
 		abort();	// should be a fatal error ?
 		return;
 	}
-	fboData = (char*)malloc(oursize* 3);		// used for the FBO texture
-	if( !fboData )
-	{
-		debug(LOG_FATAL,"Out of memory for FBO texture!");
-		free(imageData);
-		abort();	// should be a fatal error?
-		return ;
-	}
 	ptr = imageData;
-	memset(ptr, 0x45, sizeof(char) * BACKDROP_HACK_WIDTH * BACKDROP_HACK_HEIGHT * 3); //dunno about background color
+	memset(ptr, 0, sizeof(char) * BACKDROP_HACK_WIDTH * BACKDROP_HACK_HEIGHT * 3); //dunno about background color
 	psTile = psMapTiles;
-	offX2 = (BACKDROP_HACK_WIDTH / 2) - ((scale * mapWidth) / 2);
-	offY2 = (BACKDROP_HACK_HEIGHT / 2 )  - ((scale * mapHeight) / 2);
 
-	for (i = 0; i < mapHeight; i++)
+	for (y = 0; y < mapHeight; y++)
 	{
 		WTile = psTile;
-		for (j = 0; j < mapWidth; j++)
+		for (x = 0; x < mapWidth; x++)
 		{
+			char * const p = imageData + (3 * (y * BACKDROP_HACK_WIDTH + x));
 			height = WTile->height;
 			col = height;
 
-			for (x = (j * scale); x < (j * scale) + scale; x++)
+			switch (terrainType(WTile))
 			{
-				for (y = (i * scale); y < (i * scale) + scale; y++)
-				{
-					char * const p = imageData + (3 * ((offY2 + y) * BACKDROP_HACK_WIDTH + (x + offX2)));
-					switch (terrainType(WTile))
-					{
-					case TER_CLIFFFACE:
-						p[0] = plCliffL.byte.r + (plCliffH.byte.r-plCliffL.byte.r) * col / 256;
-						p[1] = plCliffL.byte.g + (plCliffH.byte.g-plCliffL.byte.g) * col / 256;
-						p[2] = plCliffL.byte.b + (plCliffH.byte.b-plCliffL.byte.b) * col / 256;
-						break;
-					case TER_WATER:
-						p[0] = plWater.byte.r;
-						p[1] = plWater.byte.g;
-						p[2] = plWater.byte.b;
-						break;
-					case TER_ROAD:
-						p[0] = plRoadL.byte.r + (plRoadH.byte.r-plRoadL.byte.r) * col / 256;
-						p[1] = plRoadL.byte.g + (plRoadH.byte.g-plRoadL.byte.g) * col / 256;
-						p[2] = plRoadL.byte.b + (plRoadH.byte.b-plRoadL.byte.b) * col / 256;
-						break;
-					default:
-						p[0] = plGroundL.byte.r + (plGroundH.byte.r-plGroundL.byte.r) * col / 256;
-						p[1] = plGroundL.byte.g + (plGroundH.byte.g-plGroundL.byte.g) * col / 256;
-						p[2] = plGroundL.byte.b + (plGroundH.byte.b-plGroundL.byte.b) * col / 256;
-						break;
-					}
-				}
+				case TER_CLIFFFACE:
+					p[0] = plCliffL.byte.r + (plCliffH.byte.r-plCliffL.byte.r) * col / 256;
+					p[1] = plCliffL.byte.g + (plCliffH.byte.g-plCliffL.byte.g) * col / 256;
+					p[2] = plCliffL.byte.b + (plCliffH.byte.b-plCliffL.byte.b) * col / 256;
+					break;
+				case TER_WATER:
+					p[0] = plWater.byte.r;
+					p[1] = plWater.byte.g;
+					p[2] = plWater.byte.b;
+					break;
+				case TER_ROAD:
+					p[0] = plRoadL.byte.r + (plRoadH.byte.r-plRoadL.byte.r) * col / 256;
+					p[1] = plRoadL.byte.g + (plRoadH.byte.g-plRoadL.byte.g) * col / 256;
+					p[2] = plRoadL.byte.b + (plRoadH.byte.b-plRoadL.byte.b) * col / 256;
+					break;
+				default:
+					p[0] = plGroundL.byte.r + (plGroundH.byte.r-plGroundL.byte.r) * col / 256;
+					p[1] = plGroundL.byte.g + (plGroundH.byte.g-plGroundL.byte.g) * col / 256;
+					p[2] = plGroundL.byte.b + (plGroundH.byte.b-plGroundL.byte.b) * col / 256;
+					break;
 			}
 			WTile += 1;
 		}
@@ -425,94 +368,12 @@ void loadMapPreview(bool hideInterface)
 	// Slight hack to init array with a special value used to determine how many players on map
 	memset(playerpos,0x77,sizeof(playerpos));
 	// color our texture with clancolors @ correct position
-	plotStructurePreview16(imageData, scale, offX2, offY2,playerpos);
-	glErrors();					// clear openGL errorcodes
-	// and now, for those that have FBO available on their card
-	// added hack to work around bad drivers that report FBO available, when it is not.
-	if(Init_FBO(BACKDROP_HACK_WIDTH,BACKDROP_HACK_HEIGHT) && !bFboProblem)
-	{
-		// Save the view port and set it to the size of the texture
-		glPushAttrib(GL_VIEWPORT_BIT);
+	plotStructurePreview16(imageData, playerpos);
 
-		// First we bind the FBO so we can render to it
-		glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fbo);
-		bFboProblem |= glErrors();
+	screen_enableMapPreview(bFileName, mapWidth, mapHeight, playerpos);
 
-		//set up projection & model matrix for the texture(!)
-		glMatrixMode(GL_PROJECTION);
-		glPushMatrix();
-		glLoadIdentity();
-		glOrtho(0.0f,(double)BACKDROP_HACK_HEIGHT,0,(double)BACKDROP_HACK_WIDTH,-1.0f,1.0f);
+	screen_Upload(imageData, true);
 
-		glMatrixMode(GL_MODELVIEW);
-		glPushMatrix();
-		glLoadIdentity();
-		glViewport( 0, 0, BACKDROP_HACK_WIDTH, BACKDROP_HACK_HEIGHT );
-		// Then render as normal
-		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-		glClear(GL_COLOR_BUFFER_BIT );		//| GL_DEPTH_BUFFER_BIT);	
-		glLoadIdentity();
-		// and start drawing here
-		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, FBOtexture);
-		//upload the texture to the FBO
-		glTexSubImage2D(GL_TEXTURE_2D,0,0,0,BACKDROP_HACK_WIDTH,BACKDROP_HACK_HEIGHT,GL_RGB,GL_UNSIGNED_BYTE,imageData);
-
-		iV_SetFont(font_large);
-		glDisable(GL_CULL_FACE);
-		for(i=0;i < MAX_PLAYERS;i++)//
-		{
-			float fx,fy;
-			if(playerpos[i].x==0x77777777) continue;	// no player is available, so skip
-			fx =(float)playerpos[i].x;
-			fy =(float)playerpos[i].y;
-			fx*=(float)scale;
-			fy*=(float)scale;
-			fx+=(float)offX2;
-			fy+=(float)offY2;
-
-			glcRenderStyle(GLC_TEXTURE);
-			// first draw a slightly bigger font of the number using said color
-			iV_SetTextColour(WZCOL_DBLUE);
-			iV_SetTextSize(28.f);
-			iV_DrawTextF(fx,fy,"%d",i);
-			// now draw it again using smaller font and said color
-			iV_SetTextColour(WZCOL_LBLUE);
-			iV_SetTextSize(24.f);
-			iV_DrawTextF(fx,fy,"%d",i);
-		}
-		glcRenderStyle(GLC_TEXTURE);
-
-		// set rendering back to default frame buffer
-		glReadBuffer(GL_COLOR_ATTACHMENT0_EXT);
-		glReadPixels(0, 0, BACKDROP_HACK_WIDTH, BACKDROP_HACK_HEIGHT,GL_RGB,GL_UNSIGNED_BYTE,fboData);
-
-		//done with the FBO, so unbind it.
-		glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
-		glMatrixMode(GL_PROJECTION);
-		glPopMatrix();
-		glMatrixMode(GL_MODELVIEW);
-		glPopMatrix();
-		glPopAttrib();
-		bFboProblem |= glErrors();
-		// if we detected a error, then we must fallback to old texture, or user will not see anything.
-		if(!bFboProblem)
-		{
-			screen_Upload(fboData);
-		}
-		else
-		{
-			screen_Upload(imageData);
-		}
-		bFboProblem |= glErrors();
-	}
-	else
-	{
-		// no FBO was available, just show them what we got.
-		screen_Upload(imageData);
-	}
-
-	free(fboData);
 	free(imageData);
 
 	if (hideInterface)
@@ -520,7 +381,6 @@ void loadMapPreview(bool hideInterface)
 		hideTime = gameTime;
 	}
 	mapShutdown();
-	Delete_FBO();
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -636,17 +496,12 @@ BOOL startConnectionScreen(void)
 	addMultiBut(psWScreen,FRONTEND_BOTFORM,CON_CANCEL,10,10,MULTIOP_OKW,MULTIOP_OKH,
 		_("Return To Previous Screen"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);	// goback buttpn levels
 
-	addConnections(0);
+	addTextButton(CON_TYPESID_START+0,FRONTEND_POS2X,FRONTEND_POS2Y, _("Lobby"), WBUT_TXTCENTRE);
+	addTextButton(CON_TYPESID_START+1,FRONTEND_POS3X,FRONTEND_POS3Y, _("IP"), WBUT_TXTCENTRE);
 
 	return true;
 }
 
-// add connections
-static void addConnections(UDWORD begin)
-{
-	addTextButton(CON_TYPESID_START+begin+0,FRONTEND_POS2X,FRONTEND_POS2Y, _("Lobby"), WBUT_TXTCENTRE);
-	addTextButton(CON_TYPESID_START+begin+1,FRONTEND_POS3X,FRONTEND_POS3Y, _("IP"), WBUT_TXTCENTRE);
-}
 
 void runConnectionScreen(void )
 {
@@ -669,18 +524,6 @@ void runConnectionScreen(void )
 			bMultiPlayer = false;
 			bMultiMessages = false;
 			break;
-		case CON_TYPESID_MORE:
-			widgDelete(psWScreen,FRONTEND_BOTFORM);
-
-			SettingsUp = false;
-			InitialProto +=5;
-
-			addBottomForm();
-			addMultiBut(psWScreen,FRONTEND_BOTFORM,CON_CANCEL,10,10,MULTIOP_OKW,MULTIOP_OKH,
-			_("Return To Previous Screen"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);	// goback buttpn levels
-
-			addConnections(InitialProto);
-			break;
 		case CON_TYPESID_START+0: // Lobby button
 			NETsetupTCPIP(""); //inet
 			if ((LobbyError != ERROR_KICKED) && (LobbyError != ERROR_CHEAT))
@@ -694,6 +537,10 @@ void runConnectionScreen(void )
 			break;
 		case CON_OK:
 			sstrcpy(addr, widgGetString(psConScreen, CON_IP));
+			if (addr[0] == '\0')
+			{
+				sstrcpy(addr, "127.0.0.1");  // Default to localhost.
+			}
 
 			if(SettingsUp == true)
 			{
@@ -718,6 +565,11 @@ void runConnectionScreen(void )
 	if(SettingsUp == true)
 	{
 		widgDisplayScreen(psConScreen);						// show the widgets currently running
+	}
+
+	if (CancelPressed())
+	{
+		changeTitleMode(MULTI);
 	}
 }
 
@@ -925,6 +777,7 @@ void runGameFind(void )
 
 	if(id == MULTIOP_REFRESH)
 	{
+		ingame.localOptionsReceived = true;
 		NETfindGame();								// find games synchronously
 		addGames();										//redraw list.
 	}
@@ -1009,6 +862,11 @@ FAIL:
 	{
 		iV_SetFont(font_large);
 		iV_DrawText(_("Searching"), D_W+260, D_H+460);
+	}
+
+	if (CancelPressed())
+	{
+		changeTitleMode(PROTOCOL);
 	}
 }
 
@@ -1226,6 +1084,39 @@ static void addBlueForm(UDWORD parent,UDWORD id, const char *txt,UDWORD x,UDWORD
 	return;
 }
 
+
+typedef struct
+{
+	char const *stat;
+	char const *desc;
+	int         icon;
+} LimitIcon;
+static const LimitIcon limitIcons[] =
+{
+	{"A0LightFactory",  N_("Tanks disabled!!"),  IMAGE_NO_TANK},
+	{"A0CyborgFactory", N_("Cyborgs disabled."), IMAGE_NO_CYBORG},
+	{"A0VTolFactory1",  N_("VTOLs disabled."),   IMAGE_NO_VTOL}
+};
+
+void updateLimitFlags()
+{
+	unsigned i;
+	unsigned flags = 0;
+
+	if (!ingame.bHostSetup)
+	{
+		return;  // The host works out the flags.
+	}
+
+	for (i = 0; i < ARRAY_SIZE(limitIcons); ++i)
+	{
+		int stat = getStructStatFromName(limitIcons[i].stat);
+		bool disabled = asStructLimits[0] != NULL && stat >= 0 && asStructLimits[0][stat].limit == 0;
+		flags |= disabled<<i;
+	}
+
+	ingame.flags = flags;
+}
 
 // FIX ME: bRedo is not used anymore since the removal of the forced screenClearFocus()
 // need to check for side effects.
@@ -1469,7 +1360,30 @@ static void addGameOptions(BOOL bRedo)
 		            IMAGE_SLIM, IMAGE_SLIM_HI, IMAGE_SLIM_HI);
 	}
 
-	return;
+	// Add any relevant factory disabled icons.
+	updateLimitFlags();
+	{
+		int i;
+		int y = 2;
+		bool skip = false;
+
+		for (i = 0; i < ARRAY_SIZE(limitIcons); ++i)
+		{
+			if ((ingame.flags & 1<<i) != 0)
+			{
+				if (!skip)
+				{	// only add this once.
+					addBlueForm(MULTIOP_OPTIONS, MULTIOP_NO_SOMETHING, "", MULTIOP_HOSTX, MULTIOP_NO_SOMETHINGY, 41, 90 );
+				}
+
+				addMultiBut(psWScreen, MULTIOP_NO_SOMETHING, MULTIOP_NO_SOMETHINGY + i, MULTIOP_NO_SOMETHINGX, y,
+				            35, 28, _(limitIcons[i].desc),
+				            limitIcons[i].icon, limitIcons[i].icon, limitIcons[i].icon);
+				y += 28 + 3;
+				skip = true;
+			}
+		}
+	}
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -1595,7 +1509,7 @@ static BOOL SendTeamRequest(UBYTE player, UBYTE chosenTeam)
 	}
 	else
 	{
-		NETbeginEncode(NET_TEAMREQUEST, NET_HOST_ONLY);
+		NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_TEAMREQUEST);
 
 		NETuint8_t(&player);
 		NETuint8_t(&chosenTeam);
@@ -1606,7 +1520,7 @@ static BOOL SendTeamRequest(UBYTE player, UBYTE chosenTeam)
 	return true;
 }
 
-BOOL recvTeamRequest()
+BOOL recvTeamRequest(NETQUEUE queue)
 {
 	UBYTE	player, team;
 
@@ -1615,7 +1529,7 @@ BOOL recvTeamRequest()
 		return true;
 	}
 
-	NETbeginDecode(NET_TEAMREQUEST);
+	NETbeginDecode(queue, NET_TEAMREQUEST);
 	NETuint8_t(&player);
 	NETuint8_t(&team);
 	NETend();
@@ -1623,7 +1537,7 @@ BOOL recvTeamRequest()
 	if (player > MAX_PLAYERS || team > MAX_PLAYERS)
 	{
 		debug(LOG_ERROR, "Invalid NET_TEAMREQUEST from player %d: Tried to change player %d (team %d)",
-		      NETgetSource(), (int)player, (int)team);
+		      queue.index, (int)player, (int)team);
 		return false;
 	}
 
@@ -1644,7 +1558,7 @@ static BOOL SendReadyRequest(UBYTE player, BOOL bReady)
 	}
 	else
 	{
-		NETbeginEncode(NET_READY_REQUEST, NET_ALL_PLAYERS);
+		NETbeginEncode(NETbroadcastQueue(), NET_READY_REQUEST);
 			NETuint8_t(&player);
 			NETbool(&bReady);
 		NETend();
@@ -1652,7 +1566,7 @@ static BOOL SendReadyRequest(UBYTE player, BOOL bReady)
 	return true;
 }
 
-BOOL recvReadyRequest()
+BOOL recvReadyRequest(NETQUEUE queue)
 {
 	UBYTE	player;
 	BOOL	bReady;
@@ -1662,7 +1576,7 @@ BOOL recvReadyRequest()
 		return true;
 	}
 
-	NETbeginDecode(NET_READY_REQUEST);
+	NETbeginDecode(queue, NET_READY_REQUEST);
 		NETuint8_t(&player);
 		NETbool(&bReady);
 	NETend();
@@ -1670,7 +1584,7 @@ BOOL recvReadyRequest()
 	if (player > MAX_PLAYERS)
 	{
 		debug(LOG_ERROR, "Invalid NET_READY_REQUEST from player %d: player id = %d",
-		      NETgetSource(), (int)player);
+		      queue.index, (int)player);
 		return false;
 	}
 
@@ -1706,8 +1620,7 @@ static BOOL changePosition(UBYTE player, UBYTE position)
 			      player, NetPlay.players[player].position, i, NetPlay.players[i].position);
 			NetPlay.players[i].position = NetPlay.players[player].position;
 			NetPlay.players[player].position = position;
-			NETBroadcastPlayerInfo(player);
-			NETBroadcastPlayerInfo(i);
+			NETBroadcastTwoPlayerInfo(player, i);
 			netPlayersUpdated = true;
 			return true;
 		}
@@ -1738,8 +1651,7 @@ static BOOL changeColour(UBYTE player, UBYTE col)
 			NetPlay.players[i].colour = getPlayerColour(player);
 			setPlayerColour(player, col);
 			NetPlay.players[player].colour = col;
-			NETBroadcastPlayerInfo(player);
-			NETBroadcastPlayerInfo(i);
+			NETBroadcastTwoPlayerInfo(player, i);
 			netPlayersUpdated = true;
 			return true;
 		}
@@ -1766,7 +1678,7 @@ static BOOL SendColourRequest(UBYTE player, UBYTE col)
 	else
 	{
 		// clients tell the host which color they want
-		NETbeginEncode(NET_COLOURREQUEST, NET_HOST_ONLY);
+		NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_COLOURREQUEST);
 			NETuint8_t(&player);
 			NETuint8_t(&col);
 		NETend();
@@ -1784,7 +1696,7 @@ static BOOL SendPositionRequest(UBYTE player, UBYTE position)
 	{
 		debug(LOG_NET, "Requesting the host to change our position. From %d to %d", player, position);
 		// clients tell the host which position they want
-		NETbeginEncode(NET_POSITIONREQUEST, NET_HOST_ONLY);
+		NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_POSITIONREQUEST);
 			NETuint8_t(&player);
 			NETuint8_t(&position);
 		NETend();
@@ -1792,7 +1704,7 @@ static BOOL SendPositionRequest(UBYTE player, UBYTE position)
 	return true;
 }
 
-BOOL recvColourRequest()
+BOOL recvColourRequest(NETQUEUE queue)
 {
 	UBYTE	player, col;
 
@@ -1801,7 +1713,7 @@ BOOL recvColourRequest()
 		return true;
 	}
 
-	NETbeginDecode(NET_COLOURREQUEST);
+	NETbeginDecode(queue, NET_COLOURREQUEST);
 		NETuint8_t(&player);
 		NETuint8_t(&col);
 	NETend();
@@ -1809,7 +1721,7 @@ BOOL recvColourRequest()
 	if (player > MAX_PLAYERS)
 	{
 		debug(LOG_ERROR, "Invalid NET_COLOURREQUEST from player %d: Tried to change player %d to colour %d",
-		      NETgetSource(), (int)player, (int)col);
+		      queue.index, (int)player, (int)col);
 		return false;
 	}
 
@@ -1818,7 +1730,7 @@ BOOL recvColourRequest()
 	return changeColour(player, col);
 }
 
-BOOL recvPositionRequest()
+BOOL recvPositionRequest(NETQUEUE queue)
 {
 	UBYTE	player, position;
 
@@ -1827,7 +1739,7 @@ BOOL recvPositionRequest()
 		return true;
 	}
 
-	NETbeginDecode(NET_POSITIONREQUEST);
+	NETbeginDecode(queue, NET_POSITIONREQUEST);
 		NETuint8_t(&player);
 		NETuint8_t(&position);
 	NETend();
@@ -1835,7 +1747,7 @@ BOOL recvPositionRequest()
 	if (player > MAX_PLAYERS || position > MAX_PLAYERS)
 	{
 		debug(LOG_ERROR, "Invalid NET_POSITIONREQUEST from player %d: Tried to change player %d to %d",
-		      NETgetSource(), (int)player, (int)position);
+		      queue.index, (int)player, (int)position);
 		return false;
 	}
 
@@ -2051,7 +1963,7 @@ UDWORD addPlayerBox(BOOL players)
 				sButInit.height = MULTIOP_TEAMSHEIGHT;
 				if (canChooseTeamFor(i))
 				{
-					sButInit.pTip = "Choose team";
+					sButInit.pTip = _("Choose Team");
 				}
 				else
 				{
@@ -2091,7 +2003,7 @@ UDWORD addPlayerBox(BOOL players)
 				sButInit.height = MULTIOP_PLAYERHEIGHT;
 				if (selectedPlayer == i)
 				{
-					sButInit.pTip = "Click to change player settings";
+					sButInit.pTip = _("Click to change player settings");
 				}
 				else
 				{
@@ -2122,7 +2034,7 @@ UDWORD addPlayerBox(BOOL players)
 				sFormInit.height = MULTIOP_PLAYERHEIGHT;
 				if (NetPlay.isHost && !challengeActive)
 				{
-					sFormInit.pTip = "Click to adjust AI difficulty";
+					sFormInit.pTip = _("Click to adjust AI difficulty");
 				}
 				else
 				{
@@ -2131,7 +2043,7 @@ UDWORD addPlayerBox(BOOL players)
 				sFormInit.pDisplay = displayPlayer;
 				sFormInit.UserData = i;
 				widgAddForm(psWScreen, &sFormInit);
-				addFESlider(MULTIOP_SKSLIDE+i,sFormInit.id, 35,9, DIFF_SLIDER_STOPS,
+				addFEAISlider(MULTIOP_SKSLIDE+i,sFormInit.id, 35,9, DIFF_SLIDER_STOPS,
 							(game.skDiff[i] <= DIFF_SLIDER_STOPS ? game.skDiff[i] : DIFF_SLIDER_STOPS / 2));	//set to 50% (value of UBYTE_MAX == human player)
 			}
 		}
@@ -2152,7 +2064,7 @@ UDWORD addPlayerBox(BOOL players)
  */
 static void SendFireUp(void)
 {
-	NETbeginEncode(NET_FIREUP, NET_ALL_PLAYERS);
+	NETbeginEncode(NETbroadcastQueue(), NET_FIREUP);
 		// no payload necessary
 	NETend();
 }
@@ -2161,7 +2073,7 @@ static void SendFireUp(void)
 void kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type)
 {
 	// send a kick msg
-	NETbeginEncode(NET_KICK, NET_ALL_PLAYERS);
+	NETbeginEncode(NETbroadcastQueue(), NET_KICK);
 		NETuint32_t(&player_id);
 		NETstring( (char *) reason, MAX_KICK_REASON);
 		NETenum(&type);
@@ -2208,7 +2120,7 @@ static void addChatBox(void)
 	enableConsoleDisplay(true);
 	setConsoleBackdropStatus(false);
 	setDefaultConsoleJust(LEFT_JUSTIFY);
-	setConsoleSizePos(MULTIOP_CHATBOXX+4+D_W, MULTIOP_CHATBOXY+10+D_H, MULTIOP_CHATBOXW-4);
+	setConsoleSizePos(MULTIOP_CHATBOXX+4+D_W, MULTIOP_CHATBOXY+14+D_H, MULTIOP_CHATBOXW-4);
 	setConsolePermanence(true,true);
 	setConsoleLineInfo(5);											// use x lines on chat window
 
@@ -2230,7 +2142,7 @@ static void addChatBox(void)
 	if (*getModList())
 	{
 		char modListMessage[WIDG_MAXSTR] = "";
-		sstrcat(modListMessage, _("Active mods: "));
+		sstrcat(modListMessage, _("Mod: "));
 		sstrcat(modListMessage, getModList());
 		addConsoleMessage(modListMessage,DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 		if (NetPlay.bComms)
@@ -2293,7 +2205,7 @@ static void stopJoining(void)
 		{
 			// annouce we are leaving...
 			debug(LOG_NET, "Host is quitting game...");
-			NETbeginEncode(NET_HOST_DROPPED, NET_ALL_PLAYERS);
+			NETbeginEncode(NETbroadcastQueue(), NET_HOST_DROPPED);
 			NETend();
 			sendLeavingMsg();								// say goodbye
 			NETclose();										// quit running game.
@@ -2310,6 +2222,13 @@ static void stopJoining(void)
 			sendLeavingMsg();								// say goodbye
 			NETclose();										// quit running game.
 
+			// if we were in a midle of transfering a file, then close the file handle
+			if (NetPlay.pMapFileHandle)
+			{
+				debug(LOG_NET, "closing aborted file");		// no need to delete it, we do size check on (map) file
+				PHYSFS_close(NetPlay.pMapFileHandle);
+				NetPlay.pMapFileHandle = NULL;
+			}
 			ingame.localJoiningInProgress = false;			// reset local flags
 			ingame.localOptionsReceived = false;
 			if(!ingame.bHostSetup && NetPlay.isHost)			// joining and host was transfered.
@@ -2320,18 +2239,19 @@ static void stopJoining(void)
 			if(NetPlay.bComms)	// not even connected.
 			{
 				changeTitleMode(GAMEFIND);
-				selectedPlayer =0;
 			}
 			else
 			{
 				changeTitleMode(MULTI);
-				selectedPlayer =0;
 			}
+			selectedPlayer = 0;
+			realSelectedPlayer = 0;
 			return;
 		}
 		debug(LOG_NET, "We have stopped joining.");
-		changeTitleMode(TITLE);		// Go back to top level menu
+		changeTitleMode(lastTitleMode);
 		selectedPlayer = 0;
+		realSelectedPlayer = 0;
 
 		if (ingame.bHostSetup)
 		{
@@ -2346,7 +2266,6 @@ static void stopJoining(void)
 static void processMultiopWidgets(UDWORD id)
 {
 	PLAYERSTATS playerStats;
-	char	tmp[255];
 
 	// host, who is setting up the game
 	if((ingame.bHostSetup && !bHosted))
@@ -2610,8 +2529,7 @@ static void processMultiopWidgets(UDWORD id)
 
 		removeWildcards((char*)sPlayer);
 
-		ssprintf(tmp, "-> %s", sPlayer);
-		sendTextMessage(tmp,true);
+		printConsoleNameChange(NetPlay.players[selectedPlayer].name, sPlayer);
 
 		NETchangePlayerName(selectedPlayer, (char*)sPlayer);			// update if joined.
 		loadMultiStats((char*)sPlayer,&playerStats);
@@ -2627,6 +2545,7 @@ static void processMultiopWidgets(UDWORD id)
 		break;
 
 	case MULTIOP_HOST:
+		debug(LOG_NET, "MULTIOP_HOST enabled");
 		sstrcpy(game.name, widgGetString(psWScreen, MULTIOP_GNAME));	// game name
 		sstrcpy(sPlayer, widgGetString(psWScreen, MULTIOP_PNAME));	// pname
 		sstrcpy(game.map, widgGetString(psWScreen, MULTIOP_MAP));		// add the name
@@ -2740,7 +2659,7 @@ static void processMultiopWidgets(UDWORD id)
 			{
 				startMultiplayerGame();
 				// reset flag in case people dropped/quit on join screen
-				NET_PlayerConnectionStatus = 0;
+				NETsetPlayerConnectionStatus(CONNECTIONSTATUS_NORMAL, NET_ALL_PLAYERS);
 			}
 		}
 	}
@@ -2749,7 +2668,7 @@ static void processMultiopWidgets(UDWORD id)
 	if((id >= MULTIOP_PLAYER_START) && (id <= MULTIOP_PLAYER_END))	// clicked on a player
 	{
 		// options for kicking
-		if(NetPlay.isHost)
+		if(NetPlay.isHost && (id - MULTIOP_PLAYER_START != NET_HOST_ONLY) )	// can't kick self!
 		{
 			if(mouseDown(MOUSE_RMB)) // both buttons....
 			{
@@ -2835,32 +2754,43 @@ void startMultiplayerGame(void)
 	decideWRF();										// set up swrf & game.map
 	bMultiPlayer = true;
 	bMultiMessages = true;
-	NET_PlayerConnectionStatus = 0; // reset disconnect conditions
+	NETsetPlayerConnectionStatus(CONNECTIONSTATUS_NORMAL, NET_ALL_PLAYERS);  // reset disconnect conditions
 
 	if (NetPlay.isHost)
 	{
-		if (!bLimiterLoaded)	// if they set limits, then skip this
+		// This sets the limits to whatever the defaults are for the limiter screen
+		// If host sets limits, then we do not need to do the following routine.
+		if (!bLimiterLoaded)
 		{
+			debug(LOG_NET, "limiter was NOT activated, setting defaults");
+
+			// NOTE: TRUNK <->svn/2.3 difference, we don't load limiter_tex!
 			if (!resLoad("wrf/limiter_tex.wrf", 501))
 			{
-				debug(LOG_WARNING, "Unable to load limiter_tex.  Defaults not set.");
+				debug(LOG_INFO, "Unable to load limiter_tex.  Defaults not set.");
 			}
-			else if (!resLoad("wrf/piestats.wrf", 502))
+			if (!resLoad("wrf/piestats.wrf", 502))
 			{
-				debug(LOG_WARNING, "Unable to load limits.  Defaults not set.");
+				debug(LOG_INFO, "Unable to load piestats.  Defaults not set.");
 			}
 			else if (!resLoad("wrf/limiter_data.wrf", 503))
 			{
-				debug(LOG_WARNING, "Unable to load limits?");
+				debug(LOG_INFO, "Unable to load limiter_data.");
 			}
-			resetDataHash();	// need to reset it, since host's data has changed.
-			createLimitSet();
 		}
-		sendOptions();
+		else
+		{
+			debug(LOG_NET, "limiter was activated");
+		}
+
+		resetDataHash();	// need to reset it, since host's data has changed.
+		createLimitSet();
+		debug(LOG_NET,"sending our options to all clients");
+		sendOptions(); 
 		NEThaltJoining();							// stop new players entering.
 		ingame.TimeEveryoneIsInGame = 0;
 		ingame.isAllPlayersDataOK = false;
-		memset(&ingame.DataIntegrity, 0x0, sizeof(ingame.DataIntegrity));
+		memset(&ingame.DataIntegrity, 0x0, sizeof(ingame.DataIntegrity));	//clear all player's array
 		SendFireUp();								//bcast a fireup message
 	}
 
@@ -2868,6 +2798,7 @@ void startMultiplayerGame(void)
 	setRevealStatus(game.fog);
 	war_SetFog(!game.fog);
 
+	debug(LOG_NET, "title mode STARTGAME is set--Starting Game!"); 
 	changeTitleMode(STARTGAME);
 
 	bHosted = false;
@@ -2883,20 +2814,21 @@ void startMultiplayerGame(void)
 
 void frontendMultiMessages(void)
 {
+	NETQUEUE queue;
 	uint8_t type;
 
-	while(NETrecv(&type))
+	while (NETrecvNet(&queue, &type))
 	{
 		// Copy the message to the global one used by the new NET API
 		switch(type)
 		{
 		case NET_FILE_REQUESTED:
-			recvMapFileRequested();
+			recvMapFileRequested(queue);
 			break;
 
 		case NET_FILE_PAYLOAD:
 			widgSetButtonState(psWScreen, MULTIOP_MAP_BUT, 1);	// turn preview button off
-			if (recvMapFileData())
+			if (recvMapFileData(queue))
 			{
 				widgSetButtonState(psWScreen, MULTIOP_MAP_BUT, 0);	// turn it back on again
 			}
@@ -2907,7 +2839,7 @@ void frontendMultiMessages(void)
 				uint32_t reason;
 				uint32_t victim;
 
-				NETbeginDecode(NET_FILE_CANCELLED);
+				NETbeginDecode(queue, NET_FILE_CANCELLED);
 					NETuint32_t(&victim);
 					NETuint32_t(&reason);
 				NETend();
@@ -2931,7 +2863,7 @@ void frontendMultiMessages(void)
 			break;
 
 		case NET_OPTIONS:					// incoming options file.
-			recvOptions();
+			recvOptions(queue);
 			ingame.localOptionsReceived = true;
 
 			if(titleMode == MULTIOPTION)
@@ -2942,24 +2874,24 @@ void frontendMultiMessages(void)
 			}
 			break;
 
-		case NET_ALLIANCE:
-			recvAlliance(false);
+		case GAME_ALLIANCE:
+			recvAlliance(queue, false);
 			break;
 
 		case NET_COLOURREQUEST:
-			recvColourRequest();
+			recvColourRequest(queue);
 			break;
 
 		case NET_POSITIONREQUEST:
-			recvPositionRequest();
+			recvPositionRequest(queue);
 			break;
 
 		case NET_TEAMREQUEST:
-			recvTeamRequest();
+			recvTeamRequest(queue);
 			break;
 
 		case NET_READY_REQUEST:
-			recvReadyRequest();
+			recvReadyRequest(queue);
 
 			// if hosting try to start the game if everyone is ready
 			if(NetPlay.isHost && multiplayPlayersReady(false))
@@ -2969,28 +2901,33 @@ void frontendMultiMessages(void)
 			break;
 
 		case NET_PING:						// diagnostic ping msg.
-			recvPing();
+			recvPing(queue);
 			break;
 
 		case NET_PLAYER_DROPPED:		// remote player got disconnected
 		{
-			BOOL host;
-			uint32_t player_id;
+			uint32_t player_id = MAX_PLAYERS;
 
 			resetReadyStatus(false);
 
-			NETbeginDecode(NET_PLAYER_DROPPED);
+			NETbeginDecode(queue, NET_PLAYER_DROPPED);
 			{
 				NETuint32_t(&player_id);
-				NETbool(&host);
 			}
 			NETend();
 
-			debug(LOG_INFO,"** player %u has dropped! Host is %s", player_id, host?"true":"false");
+			if (player_id >= MAX_PLAYERS)
+			{
+				debug(LOG_INFO, "** player %u has dropped - huh?", player_id);
+				break;
+			}
+
+			debug(LOG_INFO,"** player %u has dropped!", player_id);
 
 			MultiPlayerLeave(player_id);		// get rid of their stuff
-			NET_PlayerConnectionStatus = 2;		//DROPPED_CONNECTION
-			if (host)					// host has quit, need to quit too.
+			NET_InitPlayer(player_id, false);           // sets index player's array to false
+			NETsetPlayerConnectionStatus(CONNECTIONSTATUS_PLAYER_DROPPED, player_id);
+			if (player_id == NetPlay.hostPlayer || player_id == selectedPlayer)	// if host quits or we quit, abort out
 			{
 				stopJoining();
 			}
@@ -3002,7 +2939,7 @@ void frontendMultiMessages(void)
 
 			resetReadyStatus(false);
 
-			NETbeginDecode(NET_PLAYERRESPONDING);
+			NETbeginDecode(queue, NET_PLAYERRESPONDING);
 				// the player that has just responded
 				NETuint32_t(&player_id);
 			NETend();
@@ -3028,8 +2965,13 @@ void frontendMultiMessages(void)
 				bMultiMessages = true;
 				changeTitleMode(STARTGAME);
 				bHosted = false;
-				break;
+
+				// Start the game before processing more messages.
+				NETpop(queue);
+				return;
 			}
+			ASSERT(false, "NET_FIREUP was received, but !ingame.localOptionsReceived.");
+			break;
 
 		case NET_KICK:						// player is forcing someone to leave
 		{
@@ -3037,7 +2979,14 @@ void frontendMultiMessages(void)
 			char reason[MAX_KICK_REASON];
 			LOBBY_ERROR_TYPES KICK_TYPE = ERROR_NOERROR;
 
-			NETbeginDecode(NET_KICK);
+			if (player_id == NET_HOST_ONLY)
+			{
+				debug(LOG_ERROR, "someone tried to kick the host--check your netplay logs!");
+				NETend();
+				break;
+			}
+
+			NETbeginDecode(queue, NET_KICK);
 				NETuint32_t(&player_id);
 				NETstring( reason, MAX_KICK_REASON);
 				NETenum(&KICK_TYPE);
@@ -3060,7 +3009,7 @@ void frontendMultiMessages(void)
 			break;
 		}
 		case NET_HOST_DROPPED:
-			NETbeginDecode(NET_HOST_DROPPED);
+			NETbeginDecode(queue, NET_HOST_DROPPED);
 			NETend();
 			stopJoining();
 			debug(LOG_NET, "The host has quit!");
@@ -3070,10 +3019,16 @@ void frontendMultiMessages(void)
 		case NET_TEXTMSG:					// Chat message
 			if(ingame.localOptionsReceived)
 			{
-				recvTextMessage();
+				recvTextMessage(queue);
 			}
 			break;
+
+		default:
+			debug(LOG_ERROR, "Didn't handle %s message!", messageTypeToString(type));
+			break;
 		}
+
+		NETpop(queue);
 	}
 }
 
@@ -3180,8 +3135,9 @@ void runMultiOptions(void)
 				sstrcpy(sPlayer, sTemp);
 				widgSetString(psWScreen,MULTIOP_PNAME,sTemp);
 
-				ssprintf(sTemp, " -> %s", sPlayer);
-				sendTextMessage(sTemp,true);
+				removeWildcards((char*)sPlayer);
+
+				printConsoleNameChange(NetPlay.players[selectedPlayer].name, sPlayer);
 
 				NETchangePlayerName(selectedPlayer, (char*)sPlayer);
 				loadMultiStats((char*)sPlayer,&playerStats);
@@ -3231,6 +3187,11 @@ void runMultiOptions(void)
 	{
 		iV_SetFont(font_regular);											// switch to small font.
 		displayConsoleMessages();									// draw the chatbox
+	}
+
+	if (CancelPressed())
+	{
+		changeTitleMode(lastTitleMode);
 	}
 }
 
@@ -3377,7 +3338,7 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 	BOOL Hilight = false;
 	BOOL Down = false;
 	UDWORD	i = psWidget->UserData;
-	char	tmp[8];
+	char	tmp[8], gamename[StringSize];
 	unsigned int ping;
 
 	if (LobbyError != ERROR_NOERROR)
@@ -3454,7 +3415,7 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 
 	// ping rating
 	ping = NETgetGameFlagsUnjoined(i, 2);
-	if (ping >= PING_LO && ping < PING_MED)
+	if (ping < PING_MED)
 	{
 		iV_DrawImage(FrontImages,IMAGE_LAMP_GREEN,x+70,y+26);
 	}
@@ -3468,11 +3429,12 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 	}
 
 	//draw game name
-	while(iV_GetTextWidth(NetPlay.games[i].name) > (psWidget->width-110) )
+	sstrcpy(gamename, NetPlay.games[i].name);
+	while(iV_GetTextWidth(gamename) > (psWidget->width-110) )
 	{
-		NetPlay.games[i].name[strlen(NetPlay.games[i].name)-1]='\0';
+		gamename[strlen(gamename)-1]='\0';
 	}
-	iV_DrawText(NetPlay.games[i].name, x + 100, y + 18);	// name
+	iV_DrawText(gamename, x + 100, y + 18);	// name
 
 	iV_SetFont(font_small);											// font
 	iV_DrawText(NetPlay.games[i].versionstring, x + 100, y + 32);	// version
@@ -3485,13 +3447,13 @@ static UDWORD bestPlayer(UDWORD player)
 
 	UDWORD i, myscore,  score, count=1;
 
-	myscore =  getMultiStats(player,false).totalScore;
+	myscore =  getMultiStats(player).totalScore;
 
 	for(i=0;i<MAX_PLAYERS;i++)
 	{
 		if(isHumanPlayer(i) && i!=player )
 		{
-			score = getMultiStats(i, false).totalScore;
+			score = getMultiStats(i).totalScore;
 
 			if(score >= myscore)
 			{
@@ -3539,8 +3501,17 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 
 	//bluboxes.
 	drawBlueBox(x,y,psWidget->width,psWidget->height);							// right
+	if (NetPlay.isHost && NetPlay.players[j].wzFile.isSending)
+	{
+		static char mapProgressString[MAX_STR_LENGTH] = {'\0'};
+		int progress = (NetPlay.players[j].wzFile.currPos * 100) / NetPlay.players[j].wzFile.fileSize_32;
 
-	if (mapDownloadProgress != 100 && j == selectedPlayer)
+		snprintf(mapProgressString, MAX_STR_LENGTH, _("Sending Map: %d%% "), progress);
+		iV_SetFont(font_regular); // font
+		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+		iV_DrawText(mapProgressString, x + 15, y + 22);
+	}
+	else if (mapDownloadProgress != 100 && j == selectedPlayer)
 	{
 		static char mapProgressString[MAX_STR_LENGTH] = {'\0'};
 		snprintf(mapProgressString, MAX_STR_LENGTH, _("Map: %d%% downloaded"), mapDownloadProgress);
@@ -3579,7 +3550,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 		}
 		
 		// ping rating
-		if(ingame.PingTimes[j] >= PING_LO && ingame.PingTimes[j] < PING_MED)
+		if (ingame.PingTimes[j] < PING_MED)
 		{
 			iV_DrawImage(FrontImages,IMAGE_LAMP_GREEN,x,y);
 		}else
@@ -3591,37 +3562,6 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 			iV_DrawImage(FrontImages,IMAGE_LAMP_RED,x,y);
 		}
 
-
-		// player number
-		switch (NetPlay.players[j].position)
-		{
-		case 0:
-			iV_DrawImage(IntImages,IMAGE_GN_0,x+4,y+29);
-			break;
-		case 1:
-			iV_DrawImage(IntImages,IMAGE_GN_1,x+5,y+29);
-			break;
-		case 2:
-			iV_DrawImage(IntImages,IMAGE_GN_2,x+4,y+29);
-			break;
-		case 3:
-			iV_DrawImage(IntImages,IMAGE_GN_3,x+4,y+29);
-			break;
-		case 4:
-			iV_DrawImage(IntImages,IMAGE_GN_4,x+4,y+29);
-			break;
-		case 5:
-			iV_DrawImage(IntImages,IMAGE_GN_5,x+4,y+29);
-			break;
-		case 6:
-			iV_DrawImage(IntImages,IMAGE_GN_6,x+4,y+29);
-			break;
-		case 7:
-			iV_DrawImage(IntImages,IMAGE_GN_7,x+4,y+29);
-			break;
-		default:
-			break;
-		}
 
 		// ranking against other players.
 		eval = bestPlayer(j);
@@ -3652,13 +3592,13 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 			break;
 		}
 
-		if(getMultiStats(j,false).played < 5)
+		if(getMultiStats(j).played < 5)
 		{
 			iV_DrawImage(FrontImages,IMAGE_MEDAL_DUMMY,x+37,y+13);
 		}
 		else
 		{
-			stat = getMultiStats(j,false);
+			stat = getMultiStats(j);
 
 			// star 1 total droid kills
 			eval = stat.totalKills;
@@ -3727,36 +3667,6 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 				}
 			}
 		}
-
-		switch(getPlayerColour(j))		//flag icon
-		{
-		case 0:
-			iV_DrawImage(FrontImages,IMAGE_PLAYER0,x+7,y+9);
-			break;
-		case 1:
-			iV_DrawImage(FrontImages,IMAGE_PLAYER1,x+7,y+9);
-			break;
-		case 2:
-			iV_DrawImage(FrontImages,IMAGE_PLAYER2,x+7,y+9);
-			break;
-		case 3:
-			iV_DrawImage(FrontImages,IMAGE_PLAYER3,x+7,y+9);
-			break;
-		case 4:
-			iV_DrawImage(FrontImages,IMAGE_PLAYER4,x+7,y+9);
-			break;
-		case 5:
-			iV_DrawImage(FrontImages,IMAGE_PLAYER5,x+7,y+9);
-			break;
-		case 6:
-			iV_DrawImage(FrontImages,IMAGE_PLAYER6,x+7,y+9);
-			break;
-		case 7:
-			iV_DrawImage(FrontImages,IMAGE_PLAYER7,x+7,y+9);
-			break;
-		default:
-			break;
-		}
 		game.skDiff[j] = UBYTE_MAX;	// set AI difficulty to 0xFF (i.e. not an AI)
 	}
 	else
@@ -3766,9 +3676,11 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 	}
 	// Draw for both AI and human players
 
-	// player number
-	switch (NetPlay.players[j].position)
+	if (!NetPlay.players[j].wzFile.isSending)
 	{
+		// player number
+		switch (NetPlay.players[j].position)
+		{
 		case 0:
 			iV_DrawImage(IntImages,IMAGE_GN_0,x+4,y+29);
 			break;
@@ -3795,12 +3707,12 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 			break;
 		default:
 			break;
-	}
+		}
 
-	if (game.skDiff[j]) // not isabled
-	{
-		switch (getPlayerColour(j))		// flag icon
+		if (game.skDiff[j]) // not disabled
 		{
+			switch (getPlayerColour(j))		// flag icon
+			{
 			case 0:
 				iV_DrawImage(FrontImages,IMAGE_PLAYER0,x+7,y+9);
 				break;
@@ -3827,6 +3739,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 				break;
 			default:
 				break;
+			}
 		}
 	}
 

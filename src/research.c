@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -280,7 +280,7 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 
 		//allocate storage for the name
 		pResearch->pName = allocateName(ResearchName);
-		ASSERT_OR_RETURN(false, pResearch->pName, "Failed allocating research name");
+		ASSERT_OR_RETURN(false, pResearch->pName != NULL, "Failed allocating research name");
 
 		//check the name hasn't been used already
 		ASSERT_OR_RETURN(false, checkResearchName(pResearch, i), "Research name %s used already", pResearch->pName);
@@ -385,7 +385,7 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 		{
 			//find the component stat
 			psComp = getComponentDetails(compType, compName);
-			ASSERT_OR_RETURN(false, psComp, "Cannot find the component Stat for Research %s", getResearchName(pResearch));
+			ASSERT_OR_RETURN(false, psComp != NULL, "Cannot find the component Stat for Research %s", getResearchName(pResearch));
 			pResearch->psStat = (BASE_STATS *)psComp;
 		}
 		else
@@ -395,7 +395,7 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 		if (strcmp(imdName, "0"))
 		{
 			pResearch->pIMD = (iIMDShape *) resGetData("IMD", imdName);
-			ASSERT_OR_RETURN(false, pResearch->pIMD, "Cannot find the research PIE for record %s", getResearchName(pResearch));
+			ASSERT_OR_RETURN(false, pResearch->pIMD != NULL, "Cannot find the research PIE for record %s", getResearchName(pResearch));
 		}
 		else
 		{
@@ -405,7 +405,7 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 		if (strcmp(imdName2, "0"))
 		{
 			pResearch->pIMD2 = (iIMDShape *) resGetData("IMD", imdName2);
-			ASSERT_OR_RETURN(false, pResearch->pIMD2, "Cannot find the 2nd research PIE for record %s", getResearchName(pResearch));
+			ASSERT_OR_RETURN(false, pResearch->pIMD2 != NULL, "Cannot find the 2nd research PIE for record %s", getResearchName(pResearch));
 		}
 		else
 		{
@@ -1029,14 +1029,14 @@ UWORD fillResearchList(UWORD *plist, UDWORD playerID, UWORD topic, UWORD limit)
 			goto add_research;
 		}
 		//if its a cancelled topic - add to list
-		if (IsResearchCancelled(&pPlayerRes[inc]))
+		if (IsResearchCancelledPending(&pPlayerRes[inc]))
 		{
 			goto add_research;
 		}
 		//if the topic is possible and has not already been researched - add to list
 		if ((IsResearchPossible(&pPlayerRes[inc])))
 		{
-			if ((IsResearchCompleted(&pPlayerRes[inc])==false) && (IsResearchStarted(&pPlayerRes[inc])==false))
+			if (!IsResearchCompleted(&pPlayerRes[inc]) && !IsResearchStartedPending(&pPlayerRes[inc]))
 			{
 				goto add_research;
 			}
@@ -1053,7 +1053,7 @@ UWORD fillResearchList(UWORD *plist, UDWORD playerID, UWORD topic, UWORD limit)
 		}
 
 		// make sure that the research is not completed  or started by another researchfac
-		if ((IsResearchCompleted(&pPlayerRes[inc])==false) && (IsResearchStarted(&pPlayerRes[inc])==false))
+		if (!IsResearchCompleted(&pPlayerRes[inc]) && !IsResearchStartedPending(&pPlayerRes[inc]))
 		{
 			// Research is not completed  ... also  it has not been started by another researchfac
 
@@ -1126,7 +1126,8 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay, STRUCTURE
 
 	ASSERT( researchIndex < numResearch, "researchResult: invalid research index" );
 
-	sendReseachStatus(NULL, researchIndex, player, false);
+	sendResearchStatus(NULL, researchIndex, player, false);
+	// Confused whether we should wait for our message before doing anything, and confused what this function does...
 
 	MakeResearchCompleted(&pPlayerRes[researchIndex]);
 
@@ -1868,11 +1869,16 @@ void ResearchRelease(void)
 /*puts research facility on hold*/
 void holdResearch(STRUCTURE *psBuilding)
 {
-
 	RESEARCH_FACILITY		*psResFac;
 
 	ASSERT( psBuilding->pStructureType->type == REF_RESEARCH,
 		"holdResearch: structure not a research facility" );
+
+	if (bMultiMessages)
+	{
+		sendStructureInfo(psBuilding, STRUCTUREINFO_HOLDRESEARCH, NULL);
+		return;
+	}
 
 	psResFac = (RESEARCH_FACILITY *)psBuilding->pFunctionality;
 
@@ -1896,6 +1902,12 @@ void releaseResearch(STRUCTURE *psBuilding)
 
 	ASSERT( psBuilding->pStructureType->type == REF_RESEARCH,
 		"releaseResearch: structure not a research facility" );
+
+	if (bMultiMessages)
+	{
+		sendStructureInfo(psBuilding, STRUCTUREINFO_RELEASERESEARCH, NULL);
+		return;
+	}
 
 	psResFac = (RESEARCH_FACILITY *)psBuilding->pFunctionality;
 
@@ -1964,6 +1976,15 @@ void cancelResearch(STRUCTURE *psBuilding)
 
 	if (psBuilding->pStructureType->type == REF_RESEARCH)
 	{
+		if (bMultiMessages)
+		{
+			// Tell others that we want to stop researching something.
+			sendResearchStatus(NULL, topicInc, psBuilding->player, false);
+			// Immediately tell the UI that we can research this now. (But don't change the game state.)
+			MakeResearchCancelledPending(pPlayerRes);
+			return;  // Wait for our message before doing anything. (Whatever this function does...)
+		}
+
 		//check if waiting to accrue power
 		if (psResFac->timeStarted == ACTION_START_TIME)
 		{
@@ -1986,7 +2007,6 @@ void cancelResearch(STRUCTURE *psBuilding)
 			MakeResearchCancelled(pPlayerRes);
 		}
 
-		 sendReseachStatus(psBuilding, topicInc, psBuilding->player, false);
 
 		// Initialise the research facility's subject
 		psResFac->psSubject = NULL;
@@ -2734,10 +2754,8 @@ BOOL selfRepairEnabled(UBYTE player)
 /*checks the stat to see if its of type wall or defence*/
 BOOL wallDefenceStruct(STRUCTURE_STATS *psStats)
 {
-	if (psStats->type == REF_DEFENSE ||
-		psStats->type == REF_WALL ||
-		psStats->type == REF_WALLCORNER ||
-        psStats->type == REF_BLASTDOOR)
+	if (psStats->type == REF_DEFENSE || psStats->type == REF_WALL || psStats->type == REF_GATE
+	    || psStats->type == REF_WALLCORNER || psStats->type == REF_BLASTDOOR)
 	{
 		return true;
 	}

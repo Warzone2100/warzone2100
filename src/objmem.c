@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -29,6 +29,7 @@
 #include "lib/sound/audio.h"
 #include "objects.h"
 #include "lib/gamelib/gtime.h"
+#include "lib/netplay/netplay.h"
 #include "hci.h"
 #include "map.h"
 #include "power.h"
@@ -52,18 +53,20 @@ static SDWORD factoryDeliveryPointCheck[MAX_PLAYERS][NUM_FLAG_TYPES][MAX_FACTORY
 #endif
 
 // the initial value for the object ID
-#define OBJ_ID_INIT		20000
+#define OBJ_ID_INIT 20000
 
 /* The id number for the next object allocated
  * Each object will have a unique id number irrespective of type
  */
-UDWORD	objID;
+uint32_t                unsynchObjID;
+uint32_t                synchObjID;
 
 /* The lists of objects allocated */
 DROID			*apsDroidLists[MAX_PLAYERS];
 STRUCTURE		*apsStructLists[MAX_PLAYERS];
 FEATURE			*apsFeatureLists[MAX_PLAYERS];		///< Only player zero is valid for features. TODO: Reduce to single list.
 BASE_OBJECT		*apsSensorList[1];			///< List of sensors in the game.
+BASE_OBJECT		*apsOilList[1];
 
 /*The list of Flag Positions allocated */
 FLAG_POSITION	*apsFlagPosLists[MAX_PLAYERS];
@@ -81,7 +84,8 @@ static void objListIntegCheck(void);
 BOOL objmemInitialise(void)
 {
 	// reset the object ID number
-	objID = OBJ_ID_INIT;
+	unsynchObjID = OBJ_ID_INIT/2;  // /2 so that object IDs start around OBJ_ID_INIT*8, in case that's important when loading maps.
+	synchObjID   = OBJ_ID_INIT*4;  // *4 so that object IDs start around OBJ_ID_INIT*8, in case that's important when loading maps.
 
 	return true;
 }
@@ -179,6 +183,18 @@ void objmemUpdate(void)
 	}
 }
 
+uint32_t generateNewObjectId(void)
+{
+	return unsynchObjID++*MAX_PLAYERS*2 + selectedPlayer*2;  // Was taken from createObject, where 'player' was used instead of 'selectedPlayer'. Hope there are no stupid hacks that try to recover 'player' from the last 3 bits.
+}
+
+uint32_t generateSynchronisedObjectId(void)
+{
+	uint32_t ret = synchObjID++*2 + 1;
+	syncDebug("New objectId = %u", ret);
+	return ret;
+}
+
 /**************************************************************************************
  *
  * Inlines for the object memory functions
@@ -221,13 +237,13 @@ static inline BASE_OBJECT* createObject(UDWORD player, OBJECT_TYPE objType)
 	}
 
 	newObject->type = objType;
-	newObject->id = (objID << 3) | player;
-	objID++;
+	newObject->id = generateSynchronisedObjectId();
 	newObject->player = (UBYTE)player;
 	newObject->died = 0;
 	newObject->psNextFunc = NULL;
 	newObject->numWatchedTiles = 0;
 	newObject->watchedTiles = NULL;
+	newObject->born = gameTime;
 
 	return newObject;
 }
@@ -240,8 +256,11 @@ static inline void addObjectToList(BASE_OBJECT *list[], BASE_OBJECT *object, int
 	ASSERT(object != NULL, "Invalid pointer");
 
 	// Prepend the object to the top of the list
-	object->psNext = list[player];
-	list[player] = object;
+	//object->psNext = list[player];
+	//list[player] = object;
+	// Do the above two lines without breaking strict-aliasing rules. (Otherwise things may break when compiled with optimisations.)
+	memcpy(&object->psNext, &list[player], sizeof(BASE_OBJECT *));
+	memcpy(&list[player], &object, sizeof(BASE_OBJECT *));
 }
 
 static void doDestroyedCallback(BASE_OBJECT *object)
@@ -425,7 +444,9 @@ static inline void releaseAllObjectsInList(BASE_OBJECT *list[], OBJECT_DESTRUCTO
 			// Call a specialized destruction function
 			// (will do all cleanup except for releasing memory of object)
 			objectDestructor(psCurr);
-
+			// FIXME: the next call is disabled for now, yes, it will leak memory again.
+			// issue is with campaign games, and the swapping pointers 'trick' Pumpkin uses.
+			//	visRemoveVisibility(psCurr);
 			// Release object's memory
 			free(psCurr);
 		}
@@ -503,6 +524,7 @@ void killDroid(DROID *psDel)
 	{
 		removeObjectFromFuncList(apsSensorList, (BASE_OBJECT*)psDel, 0);
 	}
+	free(psDel->gameCheckDroid);
 
 	destroyObject((BASE_OBJECT**)apsDroidLists, (BASE_OBJECT*)psDel);
 }
@@ -571,6 +593,10 @@ void addStructure(STRUCTURE *psStructToAdd)
 	{
 		addObjectToFuncList(apsSensorList, (BASE_OBJECT*)psStructToAdd, 0);
 	}
+	else if (psStructToAdd->type == REF_RESOURCE_EXTRACTOR)
+	{
+		addObjectToFuncList(apsOilList, (BASE_OBJECT*)psStructToAdd, 0);
+	}
 }
 
 /* Destroy a structure */
@@ -587,6 +613,10 @@ void killStruct(STRUCTURE *psBuilding)
 	    && psBuilding->pStructureType->pSensor->location == LOC_TURRET)
 	{
 		removeObjectFromFuncList(apsSensorList, (BASE_OBJECT*)psBuilding, 0);
+	}
+	else if (psBuilding->type == REF_RESOURCE_EXTRACTOR)
+	{
+		removeObjectFromFuncList(apsOilList, (BASE_OBJECT*)psBuilding, 0);
 	}
 
 	for (i = 0; i < STRUCT_MAXWEAPS; i++)
@@ -648,6 +678,10 @@ void removeStructureFromList(STRUCTURE *psStructToRemove, STRUCTURE *pList[MAX_P
 	{
 		removeObjectFromFuncList(apsSensorList, (BASE_OBJECT*)psStructToRemove, 0);
 	}
+	else if (psStructToRemove->type == REF_RESOURCE_EXTRACTOR)
+	{
+		removeObjectFromFuncList(apsOilList, (BASE_OBJECT*)psStructToRemove, 0);
+	}
 }
 
 /**************************  FEATURE  *********************************/
@@ -659,10 +693,14 @@ FEATURE* createFeature()
 }
 
 /* add the feature to the Feature Lists */
- void addFeature(FEATURE *psFeatureToAdd)
- {
+void addFeature(FEATURE *psFeatureToAdd)
+{
 	addObjectToList((BASE_OBJECT**)apsFeatureLists, (BASE_OBJECT*)psFeatureToAdd, 0);
- }
+	if (psFeatureToAdd->psStats->subType == FEAT_OIL_RESOURCE)
+	{
+		addObjectToFuncList(apsOilList, (BASE_OBJECT*)psFeatureToAdd, 0);
+	}
+}
 
 /* Destroy a feature */
 // set the player to 0 since features have player = maxplayers+1. This screws up destroyObject
@@ -673,6 +711,11 @@ void killFeature(FEATURE *psDel)
 		"killFeature: pointer is not a feature" );
 	psDel->player = 0;
 	destroyObject((BASE_OBJECT**)apsFeatureLists, (BASE_OBJECT*)psDel);
+
+	if (psDel->psStats->subType == FEAT_OIL_RESOURCE)
+	{
+		removeObjectFromFuncList(apsOilList, (BASE_OBJECT*)psDel, 0);
+	}
 }
 
 /* Remove all features */

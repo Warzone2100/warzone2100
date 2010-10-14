@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -127,7 +127,7 @@ TYPE_SYMBOL asTypeTable[] =
  */
 FUNC_SYMBOL asFuncTable[] =
 {
-    /* This final entry marks the end of the function list */
+	/* This final entry marks the end of the function list */
 	{ "FUNCTION LIST END", NULL, VAL_VOID, 0, { VAL_VOID }, 0, 0, NULL, 0, 0, NULL, NULL }
 };
 
@@ -581,11 +581,15 @@ CONST_SYMBOL asConstantTable[] =
 
 	{ "IMAGE_CURSOR_BUILD",	  VAL_INT,	false,	IMAGE_CURSOR_BUILD,		NULL, NULL, 0.0f },
 	{ "IMAGE_CURSOR_GUARD",	  VAL_INT,	false,	IMAGE_CURSOR_GUARD,		NULL, NULL, 0.0f },
-	{ "IMAGE_CURSOR_BRIDGE",  VAL_INT,	false,	IMAGE_CURSOR_BRIDGE,	NULL, NULL, 0.0f },
+	{ "IMAGE_CURSOR_SCOUT",   VAL_INT,	false,	IMAGE_CURSOR_SCOUT,		NULL, NULL, 0.0f },
+	{ "IMAGE_CURSOR_DISEMBARK",VAL_INT,	false,	IMAGE_CURSOR_DISEMBARK,	NULL, NULL, 0.0f },
 	{ "IMAGE_CURSOR_ATTACH",  VAL_INT,	false,	IMAGE_CURSOR_ATTACH,	NULL, NULL, 0.0f },
 	{ "IMAGE_CURSOR_LOCKON",  VAL_INT,	false,	IMAGE_CURSOR_LOCKON,	NULL, NULL, 0.0f },
 	{ "IMAGE_CURSOR_FIX",	  VAL_INT,	false,	IMAGE_CURSOR_FIX,	    NULL, NULL, 0.0f },
 	{ "IMAGE_CURSOR_EMBARK",  VAL_INT,	false,	IMAGE_CURSOR_EMBARK, 	NULL, NULL, 0.0f },
+
+	{ "IMAGE_CURSOR_BRIDGE",  VAL_INT,	false,	IMAGE_CURSOR_BRIDGE,	NULL, NULL, 0.0f },
+	{ "IMAGE_CURSOR_BOMB",    VAL_INT,	false,	IMAGE_CURSOR_BOMB,		NULL, NULL, 0.0f },
 
 	// game mode types  (possible values for intMode)
 	{ "INT_NORMAL",			VAL_INT,	false,	INT_NORMAL,		NULL, NULL, 0.0f }, // Standard mode (just the reticule)
@@ -791,6 +795,7 @@ CONST_SYMBOL asConstantTable[] =
 	{ "CALL_VTOL_OFF_MAP",		VAL_INT,	false,		CALL_VTOL_OFF_MAP,		NULL, NULL, 0.0f },
 	{ "CALL_KEY_PRESSED",		VAL_INT,	false,		CALL_KEY_PRESSED,		NULL, NULL, 0.0f },
 	{ "CALL_DROID_REACH_LOCATION",		VAL_INT,	false,		CALL_DROID_REACH_LOCATION,		NULL, NULL, 0.0f },
+	{ "CALL_VTOL_RETARGET",		VAL_INT,	false,		CALL_VTOL_RETARGET,		NULL, NULL, 0.0f },
 
 	{ "CALL_EVERY_FRAME",		VAL_INT,	false,		CALL_EVERY_FRAME,		NULL, NULL, 0.0f },
 

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -28,26 +28,15 @@
 	Changed to allow seperate modifiers for enemy and player damage.
 */
 
-
-// ------------------------------------------------------------------------------------
 #include "lib/framework/frame.h"
-
-#include <math.h>
+#include "difficulty.h"
 #include "lib/framework/math_ext.h"
 
-#include "difficulty.h"
 // ------------------------------------------------------------------------------------
 
 static DIFFICULTY_LEVEL	presDifLevel = DL_NORMAL;
 static float		fDifPlayerModifier;
 static float		fDifEnemyModifier;
-
-
-void setModifiers(float Player,float Enemy)
-{
-	fDifPlayerModifier = Player;
-	fDifEnemyModifier = Enemy;
-}
 
 
 // ------------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -541,7 +541,7 @@ UDWORD	retVal;
 	if(lightVal>255) lightVal = 255;
 	presVal = psDroid->illumination;
 	adjust = (float)lightVal - (float)presVal;
-	adjust *= timeAdjustedIncrement(DROID_SEEK_LIGHT_SPEED, true);
+	adjust *= graphicsTimeAdjustedIncrement(DROID_SEEK_LIGHT_SPEED);
 	retVal = presVal + adjust;
 	if(retVal > 255) retVal = 255;
 	psDroid->illumination = (UBYTE)retVal;

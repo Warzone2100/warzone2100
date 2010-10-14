@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -278,7 +278,7 @@ void inputHandleKeyEvent(SDL_KeyboardEvent * keyEvent)
 					break;
 			}
 
-			debug( LOG_INPUT, "Key Code (pressed): 0x%x, %d, [%c] SDLkey=[%s]", vk, vk, (vk < 128) && (vk > 31) ? (char) vk : '?' , SDL_GetKeyName(keyCodeToSDLKey(keyEvent->keysym.sym)));
+			debug( LOG_INPUT, "Key Code (pressed): 0x%x, %d, [%c] SDLkey=[%s]", vk, vk, (vk < 128) && (vk > 31) ? (char) vk : '?' , SDL_GetKeyName(keyCodeToSDLKey((KEY_CODE)keyEvent->keysym.sym)));
 			if (unicode < 32)
 			{
 				unicode = 0;
@@ -328,7 +328,7 @@ void inputHandleMouseButtonEvent(SDL_MouseButtonEvent * buttonEvent)
 					&& buttonEvent->button != SDL_BUTTON_WHEELDOWN))
 				{
 				//whether double click or not
-					if ( gameTime - aMouseState[buttonEvent->button].lastdown < DOUBLE_CLICK_INTERVAL )
+					if ( realTime - aMouseState[buttonEvent->button].lastdown < DOUBLE_CLICK_INTERVAL )
 					{
 						aMouseState[buttonEvent->button].state = KEY_DOUBLECLICK;
 						aMouseState[buttonEvent->button].lastdown = 0;
@@ -336,7 +336,7 @@ void inputHandleMouseButtonEvent(SDL_MouseButtonEvent * buttonEvent)
 					else
 					{
 						aMouseState[buttonEvent->button].state = KEY_PRESSED;
-						aMouseState[buttonEvent->button].lastdown = gameTime;
+						aMouseState[buttonEvent->button].lastdown = realTime;
 					}
 
 				}
@@ -380,20 +380,17 @@ void inputHandleMouseMotionEvent(SDL_MouseMotionEvent * motionEvent)
 	switch (motionEvent->type)
 	{
 		case SDL_MOUSEMOTION:
-			if(!mouseDown(MOUSE_MMB))
-			{
-				/* store the current mouse position */
-				mouseXPos = motionEvent->x;
-				mouseYPos = motionEvent->y;
+			/* store the current mouse position */
+			mouseXPos = motionEvent->x;
+			mouseYPos = motionEvent->y;
 
-				/* now see if a drag has started */
-				if (  ( aMouseState[dragKey].state == KEY_PRESSED ||
-						aMouseState[dragKey].state == KEY_DOWN )
-				&& ( ABSDIF(dragX, mouseXPos) > DRAG_THRESHOLD ||
-						ABSDIF(dragY, mouseYPos) > DRAG_THRESHOLD ) )
-				{
-					aMouseState[dragKey].state = KEY_DRAG;
-				}
+			/* now see if a drag has started */
+			if ((aMouseState[dragKey].state == KEY_PRESSED ||
+			     aMouseState[dragKey].state == KEY_DOWN) &&
+			    (ABSDIF(dragX, mouseXPos) > DRAG_THRESHOLD ||
+			     ABSDIF(dragY, mouseYPos) > DRAG_THRESHOLD))
+			{
+				aMouseState[dragKey].state = KEY_DRAG;
 			}
 			break;
 		default:
@@ -460,21 +457,21 @@ void inputLooseFocus(void)
 }
 
 /* This returns true if the key is currently depressed */
-BOOL keyDown(KEY_CODE code)
+bool keyDown(KEY_CODE code)
 {
 	ASSERT( keyCodeToSDLKey(code) < KEY_MAXSCAN, "Invalid key code: %d", code );
 	return (aKeyState[code].state != KEY_UP);
 }
 
 /* This returns true if the key went from being up to being down this frame */
-BOOL keyPressed(KEY_CODE code)
+bool keyPressed(KEY_CODE code)
 {
 	ASSERT( keyCodeToSDLKey(code) < KEY_MAXSCAN, "Invalid key code: %d", code );
 	return ((aKeyState[code].state == KEY_PRESSED) || (aKeyState[code].state == KEY_PRESSRELEASE));
 }
 
 /* This returns true if the key went from being down to being up this frame */
-BOOL keyReleased(KEY_CODE code)
+bool keyReleased(KEY_CODE code)
 {
 	ASSERT( keyCodeToSDLKey(code) < KEY_MAXSCAN, "Invalid key code: %d", code );
 	return ((aKeyState[code].state == KEY_RELEASED) || (aKeyState[code].state == KEY_PRESSRELEASE));
@@ -493,19 +490,22 @@ Uint16 mouseY(void)
 }
 
 /* This returns true if the mouse key is currently depressed */
-BOOL mouseDown(MOUSE_KEY_CODE code)
+bool mouseDown(MOUSE_KEY_CODE code)
 {
-	return (aMouseState[code].state != KEY_UP);
+	return (aMouseState[code].state != KEY_UP) ||
+
+	       // holding down LMB and RMB counts as holding down MMB
+	       (code == MOUSE_MMB && aMouseState[MOUSE_LMB].state != KEY_UP && aMouseState[MOUSE_RMB].state != KEY_UP);
 }
 
 /* This returns true if the mouse key was double clicked */
-BOOL mouseDClicked(MOUSE_KEY_CODE code)
+bool mouseDClicked(MOUSE_KEY_CODE code)
 {
 	return (aMouseState[code].state == KEY_DOUBLECLICK);
 }
 
 /* This returns true if the mouse key went from being up to being down this frame */
-BOOL mousePressed(MOUSE_KEY_CODE code)
+bool mousePressed(MOUSE_KEY_CODE code)
 {
 	return ((aMouseState[code].state == KEY_PRESSED) ||
 			(aMouseState[code].state == KEY_DOUBLECLICK) ||
@@ -513,7 +513,7 @@ BOOL mousePressed(MOUSE_KEY_CODE code)
 }
 
 /* This returns true if the mouse key went from being down to being up this frame */
-BOOL mouseReleased(MOUSE_KEY_CODE code)
+bool mouseReleased(MOUSE_KEY_CODE code)
 {
 	return ((aMouseState[code].state == KEY_RELEASED) ||
 			(aMouseState[code].state == KEY_DOUBLECLICK) ||
@@ -521,9 +521,13 @@ BOOL mouseReleased(MOUSE_KEY_CODE code)
 }
 
 /* Check for a mouse drag, return the drag start coords if dragging */
-BOOL mouseDrag(MOUSE_KEY_CODE code, UDWORD *px, UDWORD *py)
+bool mouseDrag(MOUSE_KEY_CODE code, UDWORD *px, UDWORD *py)
 {
-	if (aMouseState[code].state == KEY_DRAG)
+	if ((aMouseState[code].state == KEY_DRAG) ||
+
+	    // dragging LMB and RMB counts as dragging MMB
+	    (code == MOUSE_MMB && ((aMouseState[MOUSE_LMB].state == KEY_DRAG && aMouseState[MOUSE_RMB].state != KEY_UP) ||
+	     (aMouseState[MOUSE_LMB].state != KEY_UP && aMouseState[MOUSE_RMB].state == KEY_DRAG))))
 	{
 		*px = dragX;
 		*py = dragY;

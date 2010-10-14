@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -194,19 +194,19 @@ BOOL sound_InitLibrary( void )
 	// to the crash handler for the dump file and debug log
 	ssprintf(buf, "OpenAL Vendor: %s", alGetString(AL_VENDOR));
 	addDumpInfo(buf);
-	debug(LOG_SOUND, buf);
+	debug(LOG_SOUND, "%s", buf);
 
 	ssprintf(buf, "OpenAL Version: %s", alGetString(AL_VERSION));
 	addDumpInfo(buf);
-	debug(LOG_SOUND, buf);
+	debug(LOG_SOUND, "%s", buf);
 
 	ssprintf(buf, "OpenAL Renderer: %s", alGetString(AL_RENDERER));
 	addDumpInfo(buf);
-	debug(LOG_SOUND, buf);
+	debug(LOG_SOUND, "%s", buf);
 
 	ssprintf(buf, "OpenAL Extensions: %s", alGetString(AL_EXTENSIONS));
 	addDumpInfo(buf);
-	debug(LOG_SOUND, buf);
+	debug(LOG_SOUND, "%s", buf);
 #endif
 
 	openal_initialized = true;
@@ -479,7 +479,15 @@ static inline TRACK* sound_DecodeOggVorbisTrack(TRACK *psTrack, PHYSFS_file* PHY
 	{
 		return NULL;
 	}
+
 	decoder = sound_CreateOggVorbisDecoder(PHYSFS_fileHandle, true);
+	if (decoder == NULL)
+	{
+		debug(LOG_WARNING, "Failed to open audio file for decoding");
+		free(psTrack);
+		return NULL;
+	}
+
 	soundBuffer = sound_DecodeOggVorbis(decoder, 0);
 	sound_DestroyOggVorbisDecoder(decoder);
 
@@ -945,6 +953,30 @@ AUDIO_STREAM* sound_PlayStreamWithBuf(PHYSFS_file* fileHandle, float volume, voi
 	return stream;
 #else
 	return NULL;
+#endif
+}
+
+/** Checks if the stream is playing.
+ *  \param stream the stream to check
+ *  \post true if playing, false otherwise.
+ *
+ */
+BOOL sound_isStreamPlaying(AUDIO_STREAM *stream)
+{
+#if !defined(WZ_NOSOUND)
+	ALint state;
+
+	if (stream)
+	{
+		alGetSourcei(stream->source, AL_SOURCE_STATE, &state);
+		sound_GetError();
+		if (state == AL_PLAYING)
+		{
+			return true;
+		}
+	}
+	return false;
+
 #endif
 }
 

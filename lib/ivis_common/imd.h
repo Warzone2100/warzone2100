@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@
 #define PIE_NAME				"PIE"  // Pumpkin image export data file
 #define IMD_VER				1
 #define PIE_VER				2
+#define PIE_FLOAT_VER		3
 
 //*************************************************************************
 
@@ -34,6 +35,9 @@
 #define iV_IMD_MAX_POLYS pie_MAX_POLYGONS
 
 //*************************************************************************
+
+// PIE model flags
+#define iV_IMD_TCMASK 0x00010000
 
 // polygon flags	b0..b7: col, b24..b31: anim index
 

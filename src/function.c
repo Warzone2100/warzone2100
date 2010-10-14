@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -995,6 +995,7 @@ void structureBodyUpgrade(FUNCTION *pFunction, STRUCTURE *psBuilding)
 	case REF_WALLCORNER:
 	case REF_DEFENSE:
 	case REF_BLASTDOOR:
+	case REF_GATE:
 		increase = ((WALLDEFENCE_UPGRADE_FUNCTION *)pFunction)->body;
 		break;
 	default:
@@ -1025,6 +1026,7 @@ void structureArmourUpgrade(FUNCTION *pFunction, STRUCTURE *psBuilding)
 	case REF_WALLCORNER:
 	case REF_DEFENSE:
 	case REF_BLASTDOOR:
+	case REF_GATE:
 		increase = ((WALLDEFENCE_UPGRADE_FUNCTION *)pFunction)->armour;
 		break;
 	default:
@@ -1160,30 +1162,25 @@ void structureReArmUpgrade(STRUCTURE *psBuilding)
 
 void structurePowerUpgrade(STRUCTURE *psBuilding)
 {
-	POWER_GEN					*pPowerGen = &psBuilding->pFunctionality->powerGenerator;
-	POWER_GEN_FUNCTION			*pPGFunc;
-    UDWORD                       baseOutput;
-    STRUCTURE_STATS             *psStat;
+	POWER_GEN		*pPowerGen = &psBuilding->pFunctionality->powerGenerator;
+	POWER_GEN_FUNCTION	*pPGFunc = (POWER_GEN_FUNCTION *)psBuilding->pStructureType->asFuncList[0];
+	UDWORD			multiplier;
+	STRUCTURE_STATS		*psStat;
 
-	//upgrade the research points
-	ASSERT(pPowerGen != NULL, "structurePowerUpgrade: invalid Power Gen pointer");
+	ASSERT(pPowerGen != NULL, "Invalid Power Gen pointer");
+	ASSERT(pPGFunc != NULL, "Invalid function pointer");
 
-	pPGFunc = (POWER_GEN_FUNCTION *)psBuilding->pStructureType->asFuncList[0];
-	ASSERT( pPGFunc != NULL,
-		"structurePowerUpgrade: invalid Function pointer" );
-
-    //current base value depends on whether there are modules attached to the structure
-    baseOutput = pPGFunc->powerMultiplier;
-    psStat = getModuleStat(psBuilding);
-    if (psStat)
-    {
-        if (pPowerGen->capacity)
-        {
-            baseOutput += ((POWER_GEN_FUNCTION*)psStat->asFuncList[0])->powerOutput;
-        }
-    }
-	pPowerGen->multiplier = baseOutput + (pPGFunc->powerMultiplier *
-		asPowerUpgrade[psBuilding->player].modifier) / 100;
+	// Current base value depends on whether there are modules attached to the structure
+	multiplier = pPGFunc->powerMultiplier;
+	psStat = getModuleStat(psBuilding);
+	if (psStat)
+	{
+		if (pPowerGen->capacity)
+		{
+			multiplier += ((POWER_GEN_FUNCTION*)psStat->asFuncList[0])->powerMultiplier;
+		}
+	}
+	pPowerGen->multiplier = multiplier + (pPGFunc->powerMultiplier * asPowerUpgrade[psBuilding->player].modifier) / 100;
 }
 
 void structureRepairUpgrade(STRUCTURE *psBuilding)

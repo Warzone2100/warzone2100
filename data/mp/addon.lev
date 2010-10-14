@@ -890,3 +890,33 @@ dataset	MULTI_T3_C2
 game	"multiplay/maps/4c-urban-chaos.gam"
 data	"wrf/multi/t3-skirmish4.wrf"
 data	"wrf/multi/fog2.wrf"
+
+// Skirmish Tech Level 1
+
+level	Sk-Pyramidal-T1
+players	4
+type	14
+dataset	MULTI_CAM_1
+game	"multiplay/maps/4c-pyramidal.gam"
+data	"wrf/multi/skirmish4.wrf"
+data	"wrf/multi/fog1.wrf"
+
+// Skirmish Tech Level 2
+
+level	Sk-Pyramidal-T2
+players	4
+type	18
+dataset	MULTI_T2_C1
+game	"multiplay/maps/4c-pyramidal.gam"
+data	"wrf/multi/t2-skirmish4.wrf"
+data	"wrf/multi/fog1.wrf"
+
+// Skirmish Tech Level 3
+
+level	Sk-Pyramidal-T3
+players	4
+type	19
+dataset	MULTI_T3_C1
+game	"multiplay/maps/4c-pyramidal.gam"
+data	"wrf/multi/t3-skirmish4.wrf"
+data	"wrf/multi/fog1.wrf"

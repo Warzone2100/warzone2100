@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -44,6 +44,7 @@
 #include "geometry.h"
 #include "src/scriptfuncs.h"
 #include "fpath.h"
+#include "multigifts.h"
 
 // Lua
 #include <lua.h>
@@ -493,7 +494,7 @@ static int scrOrderDroidStatsLoc(lua_State *L)
 			return true;
 		}
 
-		orderDroidStatsLoc(psDroid, order, psStats, (UDWORD)x,(UDWORD)y);
+		orderDroidStatsLocDir(psDroid, order, psStats, (UDWORD)x, (UDWORD)y, 0);
 	}
 
 	return 0;
@@ -809,6 +810,7 @@ static UDWORD scrStructTargetMask(STRUCTURE *psStruct)
 	case REF_BRIDGE:
 	case REF_DEMOLISH:
 	case REF_BLASTDOOR:
+	case REF_GATE:
 	default:
 		ASSERT( false,
 			"scrStructTargetMask: unknown or invalid target structure type" );
@@ -1420,7 +1422,6 @@ BOOL skTopicAvail(UWORD inc, UDWORD player)
 static int scrSkDoResearch(lua_State *L)
 {
 	UWORD				i;
-	char				sTemp[128];
 	RESEARCH_FACILITY	*psResFacilty;
 	PLAYER_RESEARCH		*pPlayerRes;
 	RESEARCH			*pResearch;
@@ -1449,32 +1450,42 @@ static int scrSkDoResearch(lua_State *L)
 
 	if(i != numResearch)
 	{
-		pResearch = (asResearch+i);
-		pPlayerRes				= asPlayerResList[player]+ i;
-		psResFacilty->psSubject = (BASE_STATS*)pResearch;		  //set the subject up
-
-		if (IsResearchCancelled(pPlayerRes))
+		pResearch = asResearch + i;
+		if (bMultiMessages)
 		{
-			psResFacilty->powerAccrued = pResearch->researchPower;//set up as if all power available for cancelled topics
+			sendResearchStatus(psBuilding, pResearch->ref - REF_RESEARCH_START, player, true);
 		}
 		else
 		{
-			psResFacilty->powerAccrued = 0;
+			pPlayerRes				= asPlayerResList[player]+ i;
+			psResFacilty->psSubject = (BASE_STATS*)pResearch;		  //set the subject up
+
+			if (IsResearchCancelled(pPlayerRes))
+			{
+				psResFacilty->powerAccrued = pResearch->researchPower;//set up as if all power available for cancelled topics
+			}
+			else
+			{
+				psResFacilty->powerAccrued = 0;
+			}
+
+			MakeResearchStarted(pPlayerRes);
+			psResFacilty->timeStarted = ACTION_START_TIME;
+			psResFacilty->timeStartHold = 0;
+			psResFacilty->timeToResearch = pResearch->researchPoints / 	psResFacilty->researchPoints;
+			if (psResFacilty->timeToResearch == 0)
+			{
+				psResFacilty->timeToResearch = 1;
+			}
 		}
 
-		MakeResearchStarted(pPlayerRes);
-		psResFacilty->timeStarted = ACTION_START_TIME;
-        psResFacilty->timeStartHold = 0;
-		psResFacilty->timeToResearch = pResearch->researchPoints / 	psResFacilty->researchPoints;
-		if (psResFacilty->timeToResearch == 0)
+#if defined (DEBUG)
 		{
-			psResFacilty->timeToResearch = 1;
+			char				sTemp[128];
+			sprintf(sTemp,"player:%d starts topic: %s",player, asResearch[i].pName );
+			NETlogEntry(sTemp, SYNC_FLAG, 0);
 		}
-
-		sprintf(sTemp,"player:%d starts topic: %s",player, asResearch[i].pName );
-		NETlogEntry(sTemp,0,0);
-
-
+#endif
 	}
 
 	return 0;
@@ -1539,7 +1550,7 @@ static int scrSkDifficultyModifier(lua_State *L)
 	}
 
 	// power modifier, range: 0-1000
-	addPower(player, game.skDiff[player] * 50);
+	giftPower(ANYPLAYER, player, game.skDiff[player] * 50, true);
 
 	//research modifier
 	for (psStr=apsStructLists[player];psStr;psStr=psStr->psNext)
@@ -1583,7 +1594,10 @@ static int defenseLocation(lua_State *L, BOOL noNarrowGateways)
 	DROID *psDroid = (DROID*)luaWZObj_checkobject(L, 5, OBJ_DROID);
 	// and eventual last player argument is ignored
 
+	ASSERT_OR_RETURN( false, statIndex < numStructureStats, "Invalid range referenced for numStructureStats, %d > %d", statIndex, numStructureStats);
 	psStats = (BASE_STATS *)(asStructureStats + statIndex);
+
+	ASSERT_OR_RETURN( false, statIndex2 < numStructureStats, "Invalid range referenced for numStructureStats, %d > %d", statIndex2, numStructureStats);
 	psWStats = (BASE_STATS *)(asStructureStats + statIndex2);
 
     // check for wacky coords.
@@ -1658,7 +1672,7 @@ static int defenseLocation(lua_State *L, BOOL noNarrowGateways)
 			gX = (psGate->x1 + psGate->x2)/2;
 			gY = (psGate->y1 + psGate->y2)/2;
 			/* Estimate the distance to it */
-			dist = dirtyHypot(x - gX, y - gY);
+			dist = iHypot(x - gX, y - gY);
 			/* Is it best we've found? */
 			if(dist<nearestSoFar && dist<30)
 			{
@@ -1740,21 +1754,21 @@ static int defenseLocation(lua_State *L, BOOL noNarrowGateways)
 	// first section.
 	if(x1 == x2 && y1 == y2)	//first sec is 1 tile only: ((2 tile gate) or (3 tile gate and first sec))
 	{
-		orderDroidStatsLoc(psDroid, DORDER_BUILD, psWStats, x1, y1);
+		orderDroidStatsLocDir(psDroid, DORDER_BUILD, psWStats, x1, y1, 0);
 	}
 	else
 	{
-		orderDroidStatsTwoLoc(psDroid, DORDER_LINEBUILD, psWStats,  x1, y1,x2,y2);
+		orderDroidStatsTwoLocDir(psDroid, DORDER_LINEBUILD, psWStats,  x1, y1, x2, y2, 0);
 	}
 
 	// second section
 	if(x3 == x4 && y3 == y4)
 	{
-		orderDroidStatsLocAdd(psDroid, DORDER_BUILD, psWStats, x3, y3);
+		orderDroidStatsLocDirAdd(psDroid, DORDER_BUILD, psWStats, x3, y3, 0);
 	}
 	else
 	{
-		orderDroidStatsTwoLocAdd(psDroid, DORDER_LINEBUILD, psWStats,  x3, y3,x4,y4);
+		orderDroidStatsTwoLocDirAdd(psDroid, DORDER_LINEBUILD, psWStats,  x3, y3, x4, y4, 0);
 	}
 
 	// back to world coords and return result.
@@ -1880,12 +1894,10 @@ static int scrDroidCanReach(lua_State *L)
 	int x = luaL_checkint(L, 2);
 	int y = luaL_checkint(L, 3);
 
-
 	const PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-	const Vector2i dPos = { map_coord(psDroid->pos.x), map_coord(psDroid->pos.y) };
-	const Vector2i rPos = { map_coord(x), map_coord(y) };
+	const Vector3i rPos = {x, y, 0};
 
-	lua_pushboolean(L, fpathCheck(dPos, rPos, psPropStats->propulsionType));
+	lua_pushboolean(L, fpathCheck(psDroid->pos, rPos, psPropStats->propulsionType));
 	return 1;
 }
 

@@ -14,10 +14,20 @@
 	<string>6.0</string>
 	<key>CFBundleName</key>
 	<string>Warzone</string>
+	<key>CFBundleDisplayName</key>
+	<string>Warzone</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>LSMultipleInstancesProhibited</key>
+	<true/>
+	<key>LSHasLocalizedDisplayName</key>
+	<true/>
+	<key>CFBundleAllowMixedLocalizations</key>
+	<true/>
+	<key>ATSApplicationFontsPath</key>
+	<string>Fonts/</string>
 	<key>CFBundleVersion</key>
 	<string>SVN_REV</string>
 	<key>CFBundleShortVersionString</key>
@@ -28,6 +38,8 @@
 	<string>SVN_URI, Copyright © 1999-2004 Eidos Interactive, Copyright © 2005-2010 The Warzone 2100 Project</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>10.4.0</string>
+	<key>LSRequiresNativeExecution</key>
+	<true/>
 	<key>UTExportedTypeDeclarations</key>
 	<array>
 		<dict>
@@ -39,13 +51,89 @@
 			<string>Warzone 2100 Map / Mod File</string>
 			<key>UTTypeConformsTo</key>
 			<array>
-				<string>public.zip</string>
+				<string>public.zip-archive</string>
 			</array>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
 				<array>
 					<string>wz</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>net.wz2100.wz.mod</string>
+			<key>UTTypeReferenceURL</key>
+			<string>http://developer.wz2100.net/wiki/.wz</string>
+			<key>UTTypeDescription</key>
+			<string>Warzone 2100 Multiplayer Mod File</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>net.wz2100.wz</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>mod.wz</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>net.wz2100.wz.cam</string>
+			<key>UTTypeReferenceURL</key>
+			<string>http://developer.wz2100.net/wiki/.wz</string>
+			<key>UTTypeDescription</key>
+			<string>Warzone 2100 Campaign Mod File</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>net.wz2100.wz</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>cam.wz</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>net.wz2100.wz.gmod</string>
+			<key>UTTypeReferenceURL</key>
+			<string>http://developer.wz2100.net/wiki/.wz</string>
+			<key>UTTypeDescription</key>
+			<string>Warzone 2100 Global Mod File</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>net.wz2100.wz</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>gmod.wz</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>net.wz2100.wz.music</string>
+			<key>UTTypeReferenceURL</key>
+			<string>http://developer.wz2100.net/wiki/.wz</string>
+			<key>UTTypeDescription</key>
+			<string>Warzone 2100 Music Mod File</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>net.wz2100.wz</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>music.wz</string>
 				</array>
 			</dict>
 		</dict>

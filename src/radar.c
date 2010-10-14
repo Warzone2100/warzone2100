@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/fixedpoint.h"
-#include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_common/pieblitfunc.h"
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/piematrix.h"
 #include "lib/ivis_common/piepalette.h"
@@ -83,20 +83,31 @@ static PIELIGHT flashColours[MAX_PLAYERS]=
 };
 
 static SDWORD radarWidth, radarHeight, radarCenterX, radarCenterY, radarTexWidth, radarTexHeight;
-static float RadarZoom;
+static uint8_t RadarZoom;
+static float RadarZoomMultiplier = 1.0f;
 static UDWORD radarBufferSize = 0;
+static int frameSkip = 0;
 
 static void DrawRadarTiles(void);
 static void DrawRadarObjects(void);
 static void DrawRadarExtras(float radarX, float radarY, float pixSizeH, float pixSizeV);
 static void DrawNorth(void);
 
-static void radarSize(float zoom)
+static void radarSize(int ZoomLevel)
 {
+	float zoom = (float)ZoomLevel * RadarZoomMultiplier / 16.0;
 	radarWidth = radarTexWidth * zoom;
 	radarHeight = radarTexHeight * zoom;
-	radarCenterX = pie_GetVideoBufferWidth() - BASE_GAP * 4 - MAX(radarHeight, radarWidth)/2;
-	radarCenterY = pie_GetVideoBufferHeight() - BASE_GAP * 4 - MAX(radarWidth, radarHeight)/2;
+	if (rotateRadar)
+	{
+		radarCenterX = pie_GetVideoBufferWidth() - BASE_GAP * 4 - MAX(radarHeight, radarWidth) / 2;
+		radarCenterY = pie_GetVideoBufferHeight() - BASE_GAP * 4 - MAX(radarWidth, radarHeight) / 2;
+	}
+	else
+	{
+		radarCenterX = pie_GetVideoBufferWidth() - BASE_GAP * 4 - radarWidth / 2;
+		radarCenterY = pie_GetVideoBufferHeight() - BASE_GAP * 4 - radarHeight / 2;
+	}
 	debug(LOG_WZ, "radar=(%u,%u) tex=(%u,%u) size=(%u,%u)", radarCenterX, radarCenterY, radarTexWidth, radarTexHeight, radarWidth, radarHeight);
 }
 
@@ -104,8 +115,8 @@ void radarInitVars(void)
 {
 	radarTexWidth = 0;
 	radarTexHeight = 0;
-	RadarZoom = 1.0f;
-	debug(LOG_WZ, "Resetting radar zoom to %f", RadarZoom);
+	RadarZoom = DEFAULT_RADARZOOM;
+	debug(LOG_WZ, "Resetting radar zoom to %u", RadarZoom);
 	radarSize(RadarZoom);
 }
 
@@ -145,8 +156,15 @@ BOOL resizeRadar(void)
 		return false;
 	}
 	memset(radarBuffer, 0, radarBufferSize);
-	RadarZoom = (float)MAX(RADWIDTH, RADHEIGHT) / (float)MAX(radarTexWidth, radarTexHeight);
-	debug(LOG_WZ, "Setting radar zoom to %f", RadarZoom);
+        if (rotateRadar)
+	{
+		RadarZoomMultiplier = (float)MAX(RADWIDTH, RADHEIGHT) / (float)MAX(radarTexWidth, radarTexHeight);
+	}
+	else
+	{
+		RadarZoomMultiplier = 1.0f;
+	}
+	debug(LOG_WZ, "Setting radar zoom to %u", RadarZoom);
 	radarSize(RadarZoom);
 
 	return true;
@@ -162,17 +180,27 @@ BOOL ShutdownRadar(void)
 	return true;
 }
 
-void SetRadarZoom(float ZoomLevel)
+void SetRadarZoom(uint8_t ZoomLevel)
 {
-	if (ZoomLevel <= MAX_RADARZOOM && ZoomLevel >= MIN_RADARZOOM)
+	if (ZoomLevel < 4) // old savegame format didn't save zoom levels very well
 	{
-		debug(LOG_WZ, "Setting radar zoom to %f from %f", ZoomLevel, RadarZoom);
-		RadarZoom = ZoomLevel;
-		radarSize(ZoomLevel);
+		ZoomLevel = DEFAULT_RADARZOOM;
 	}
+	if (ZoomLevel > MAX_RADARZOOM)
+	{
+		ZoomLevel = MAX_RADARZOOM;
+	}
+	if (ZoomLevel < MIN_RADARZOOM)
+	{
+		ZoomLevel = MIN_RADARZOOM;
+	}
+	debug(LOG_WZ, "Setting radar zoom to %u from %u", ZoomLevel, RadarZoom);
+	RadarZoom = ZoomLevel;
+	radarSize(RadarZoom);
+	frameSkip = 0;
 }
 
-float GetRadarZoom(void)
+uint8_t GetRadarZoom(void)
 {
 	return RadarZoom;
 }
@@ -236,7 +264,6 @@ void CalcRadarPosition(int mX, int mY, int *PosX, int *PosY)
 void drawRadar(void)
 {
 	float	pixSizeH, pixSizeV;
-	static int frameSkip = 0;
 
 	ASSERT(radarBuffer, "No radar buffer allocated");
 	if (!radarBuffer)
@@ -248,9 +275,14 @@ void drawRadar(void)
 
 	if (frameSkip <= 0)
 	{
+		bool filter = true;
+		if (!rotateRadar)
+		{
+			filter = RadarZoom % 16 != 0;
+		}
 		DrawRadarTiles();
 		DrawRadarObjects();
-		pie_DownLoadRadar(radarBuffer, radarTexWidth, radarTexHeight);
+		pie_DownLoadRadar(radarBuffer, radarTexWidth, radarTexHeight, filter);
 		frameSkip = RADAR_FRAME_SKIP;
 	}
 	frameSkip--;
@@ -260,7 +292,7 @@ void drawRadar(void)
 		if (rotateRadar)
 		{
 			// rotate the map
-			iV_MatrixRotateZ(player.r.y);
+			pie_MatRotZ(player.r.y);
 			DrawNorth();
 		}
 		// draw the box at the dimensions of the map
@@ -306,6 +338,12 @@ static PIELIGHT appliedRadarColour(RADAR_DRAW_MODE radarDrawMode, MAPTILE *WTile
 			col.byte.r = sqrtf(col.byte.r * WTile->illumination);
 			col.byte.b = sqrtf(col.byte.b * WTile->illumination);
 			col.byte.g = sqrtf(col.byte.g * WTile->illumination);
+			if (terrainType(WTile) == TER_CLIFFFACE)
+			{
+				col.byte.r /= 2;
+				col.byte.b /= 2;
+				col.byte.g /= 2;
+			}
 			if (!hasSensorOnTile(WTile, selectedPlayer))
 			{
 				col.byte.r /= 2;
@@ -323,6 +361,12 @@ static PIELIGHT appliedRadarColour(RADAR_DRAW_MODE radarDrawMode, MAPTILE *WTile
 			col.byte.r = sqrtf(col.byte.r * (WTile->illumination + WTile->height) / 2);
 			col.byte.b = sqrtf(col.byte.b * (WTile->illumination + WTile->height) / 2);
 			col.byte.g = sqrtf(col.byte.g * (WTile->illumination + WTile->height) / 2);
+			if (terrainType(WTile) == TER_CLIFFFACE)
+			{
+				col.byte.r /= 2;
+				col.byte.b /= 2;
+				col.byte.g /= 2;
+			}
 			if (!hasSensorOnTile(WTile, selectedPlayer))
 			{
 				col.byte.r /= 2;
@@ -487,8 +531,8 @@ static void DrawRadarObjects(void)
 /** Rotate an array of 2d vectors about a given angle, also translates them after rotating. */
 static void RotateVector2D(Vector3i *Vector, Vector3i *TVector, Vector3i *Pos, int Angle, int Count)
 {
-	int Cos = COS(Angle);
-	int Sin = SIN(Angle);
+	int64_t Cos = iCos(Angle);
+	int64_t Sin = iSin(Angle);
 	int ox = 0;
 	int oy = 0;
 	int i;
@@ -503,8 +547,8 @@ static void RotateVector2D(Vector3i *Vector, Vector3i *TVector, Vector3i *Pos, i
 
 	for (i = 0; i < Count; i++)
 	{
-		TVec->x = ( (Vec->x*Cos + Vec->y*Sin) >> FP12_SHIFT ) + ox;
-		TVec->y = ( (Vec->y*Cos - Vec->x*Sin) >> FP12_SHIFT ) + oy;
+		TVec->x = ((Vec->x*Cos + Vec->y*Sin) >> 16) + ox;
+		TVec->y = ((Vec->y*Cos - Vec->x*Sin) >> 16) + oy;
 		Vec++;
 		TVec++;
 	}

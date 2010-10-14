@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -48,7 +48,7 @@ extern void strresDestroy(struct STR_RES *psRes);
 extern const char* strresGetString(const struct STR_RES* psRes, const char* ID);
 
 /* Load a string resource file */
-extern BOOL strresLoad(struct STR_RES* psRes, const char* fileName);
+extern bool strresLoad(struct STR_RES* psRes, const char* fileName);
 
 /* Get the ID string for a string */
 extern const char* strresGetIDfromString(struct STR_RES *psRes, const char *pString);

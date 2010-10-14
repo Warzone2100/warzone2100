@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -21,7 +21,6 @@
 #include "lib/framework/file.h"
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/piepalette.h"
-#include "lib/ivis_common/rendmode.h"
 #include "screen.h"
 
 PIELIGHT psPalette[WZCOL_MAX];
@@ -57,4 +56,44 @@ void pal_Init(void)
 void pal_ShutDown(void)
 {
 	// placeholder
+}
+
+PIELIGHT pal_GetTeamColour(int team)
+{
+	PIELIGHT tcolour;
+
+	// set correct team colour based on team
+	switch (team)
+	{
+		case 0: 
+			tcolour = WZCOL_TEAM1; //green
+			break;
+		case 1:
+			tcolour = WZCOL_TEAM2; //orange
+			break;
+		case 2:
+			tcolour = WZCOL_TEAM3; //gray
+			break;
+		case 3:
+			tcolour = WZCOL_TEAM4; //black
+			break;
+		case 4:
+			tcolour = WZCOL_TEAM5; //red
+			break;
+		case 5:
+			tcolour = WZCOL_TEAM6; //blue
+			break;
+		case 6:
+			tcolour = WZCOL_TEAM7; //purple
+			break;
+		case 7:
+			tcolour = WZCOL_TEAM8; //teal
+			break;
+		default:
+			ASSERT(false, "Attempting to get colour for non-existing team %u", (unsigned int)team);
+			tcolour = WZCOL_WHITE; //default is white
+			break;
+	}
+
+	return tcolour;
 }

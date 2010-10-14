@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -32,10 +32,6 @@
 // Also PERCENT(int,int);	// returns a int value 0->100 of the percentage of the first param over the second
 #define PERCENT(a,b) (((a)*100)/(b))
 #define PERNUM(range,a,b) (((a)*range)/(b))
-
-/* conversion macros */
-#define RAD_TO_DEG(x)	(x * 180.0 / M_PI)
-
 
 #ifndef M_PI
 # define M_PI 3.14159265358979323846
@@ -111,28 +107,6 @@ static inline WZ_DECL_CONST float hypotf(float x, float y)
 }
 #endif
 
-
-
-/*!
- * Converts x from degrees to radian
- * \param x Degree value to convert
- * \return Radian value
- */
-static inline WZ_DECL_CONST float deg2radf(float x)
-{
-	return x * (float)M_PI / 180.0f;
-}
-
-
-/*!
- * Converts x from radian to degrees
- * \param x Radian value to convert
- * \return Degree value
- */
-static inline WZ_DECL_CONST float rad2degf(float x)
-{
-	return x / (float)M_PI * 180.0f;
-}
 
 
 /*!

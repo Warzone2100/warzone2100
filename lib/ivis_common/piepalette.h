@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -63,7 +63,7 @@
 #define WZCOL_CONS_TEXT_DEBUG		psPalette[38]
 #define WZCOL_GREY					psPalette[39]
 #define WZCOL_MAP_PREVIEW_AIPLAYER  psPalette[40]
-#define WZCOL_MENU_SHADOW	psPalette[41]
+#define WZCOL_MENU_SHADOW			psPalette[41]
 #define WZCOL_DBLUE					psPalette[42]
 #define WZCOL_LBLUE					psPalette[43]
 #define WZCOL_BLUEPRINT_VALID		psPalette[44]
@@ -73,8 +73,31 @@
 #define WZCOL_HEALTH_MEDIUM_SHADOW	psPalette[48]
 #define WZCOL_HEALTH_LOW_SHADOW		psPalette[49]
 #define WZCOL_HEALTH_RESISTANCE		psPalette[50]
+#define WZCOL_TEAM1					psPalette[51]
+#define WZCOL_TEAM2					psPalette[52]
+#define WZCOL_TEAM3					psPalette[53]
+#define WZCOL_TEAM4					psPalette[54]
+#define WZCOL_TEAM5					psPalette[55]
+#define WZCOL_TEAM6					psPalette[56]
+#define WZCOL_TEAM7					psPalette[57]
+#define WZCOL_TEAM8					psPalette[58]
+#define WZCOL_FORM_BACKGROUND				psPalette[59]
+#define WZCOL_FORM_TEXT					psPalette[60]
+#define WZCOL_FORM_LIGHT				psPalette[61]
+#define WZCOL_FORM_DARK					psPalette[62]
+#define WZCOL_FORM_HILITE				psPalette[63]
+#define WZCOL_FORM_CURSOR				psPalette[64]
+#define WZCOL_FORM_TIP_BACKGROUND			psPalette[65]
+#define WZCOL_FORM_DISABLE				psPalette[66]
+#define WZCOL_DESIGN_POWER_FORM_BACKGROUND		psPalette[67]
+#define WZCOL_POWER_BAR					psPalette[68]
+#define WZCOL_ACTION_PROGRESS_BAR_MAJOR			psPalette[69]
+#define WZCOL_ACTION_PROGRESS_BAR_MINOR			psPalette[70]
+#define WZCOL_ACTION_PRODUCTION_RUN_TEXT		psPalette[71]
+#define WZCOL_ACTION_PRODUCTION_RUN_BACKGROUND		psPalette[72]
+#define WZCOL_LOADING_BAR_BACKGROUND			psPalette[73]
 
-#define WZCOL_MAX			51
+#define WZCOL_MAX			74
 
 //*************************************************************************
 
@@ -84,6 +107,7 @@ extern PIELIGHT		psPalette[];
 
 extern void		pal_Init(void);
 extern void		pal_ShutDown(void);
+extern PIELIGHT		pal_GetTeamColour(int team);
 
 static inline PIELIGHT pal_Colour(UBYTE r, UBYTE g, UBYTE b)
 {
@@ -107,6 +131,26 @@ static inline PIELIGHT pal_SetBrightness(UBYTE brightness)
 	c.byte.a = UBYTE_MAX;
 
 	return c;
+}
+
+static inline PIELIGHT pal_RGBA(UBYTE r, UBYTE g, UBYTE b, UBYTE a)
+{
+	PIELIGHT c;
+
+	c.byte.r = r;
+	c.byte.g = g;
+	c.byte.b = b;
+	c.byte.a = a;
+
+	return c;
+}
+
+static inline void pal_PIELIGHTtoRGBA4f(float *rgba4f, PIELIGHT rgba)
+{
+	rgba4f[0] = rgba.byte.r / 255.0;
+	rgba4f[1] = rgba.byte.g / 255.0;
+	rgba4f[2] = rgba.byte.b / 255.0;
+	rgba4f[3] = rgba.byte.a / 255.0;
 }
 
 #endif

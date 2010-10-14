@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -24,16 +24,7 @@
 #ifndef __INCLUDED_SRC_MECHANICS_H__
 #define __INCLUDED_SRC_MECHANICS_H__
 
-#include "lib/framework/frame.h"
-#include "combat.h"
-#include "lib/gamelib/gtime.h"
-#include "map.h"
-#include "mechanics.h"
-#include "move.h"
-#include "stats.h"
-#include "function.h"
-#include "research.h"
-#include "visibility.h"
+#include "statsdef.h"
 
 #ifdef __cplusplus
 extern "C"
@@ -41,22 +32,22 @@ extern "C"
 #endif //__cplusplus
 
 /* Shutdown the mechanics system */
-extern bool mechanicsShutdown(void);
+bool mechanicsShutdown(void);
 
 // Allocate the list for a component
-extern BOOL allocComponentList(COMPONENT_TYPE	type, SDWORD number);
+BOOL allocComponentList(COMPONENT_TYPE	type, SDWORD number);
 
 // release all the component lists
-extern void freeComponentLists(void);
+void freeComponentLists(void);
 
 //allocate the space for the Players' structure lists
-extern BOOL allocStructLists(void);
+BOOL allocStructLists(void);
 
 // release the structure lists
-extern void freeStructureLists(void);
+void freeStructureLists(void);
 
 //TEST FUNCTION - MAKE EVERYTHING AVAILABLE
-extern void makeAllAvailable(void);
+void makeAllAvailable(void);
 
 #ifdef __cplusplus
 }

@@ -45,6 +45,7 @@
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
+				EnableEnhancedInstructionSet="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="true"
@@ -161,6 +162,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\jpeg_encoder.c"
+				>
+			</File>
+			<File
 				RelativePath=".\pieclip.c"
 				>
 			</File>
@@ -196,6 +201,10 @@
 			</File>
 			<File
 				RelativePath=".\ivispatch.h"
+				>
+			</File>
+			<File
+				RelativePath=".\jpeg_encoder.h"
 				>
 			</File>
 			<File

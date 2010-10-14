@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -23,21 +23,13 @@
  * Link droids together into a group for AI etc.
  *
  */
-#include <string.h>
 
 #include "lib/framework/frame.h"
-#include "objects.h"
-#include "group.h"
-#include "orderdef.h"
 
 #include "multiplay.h"
 
 static DROID_GROUP *firstGroup = NULL;
 static BOOL grpInitialized = false;
-
-// sizes for the group heap
-#define GRP_HEAP_INIT	45
-#define GRP_HEAP_EXT	15
 
 // initialise the group system
 BOOL grpInitialise(void)
@@ -149,6 +141,7 @@ void grpJoin(DROID_GROUP *psGroup, DROID *psDroid)
 }
 
 // add a droid to a group at the end of the list
+// NOTE: Unused! void grpJoinEnd(DROID_GROUP *psGroup, DROID *psDroid)
 void grpJoinEnd(DROID_GROUP *psGroup, DROID *psDroid)
 {
 	DROID		*psPrev, *psCurr;
@@ -346,6 +339,7 @@ void orderGroupLoc(DROID_GROUP *psGroup, DROID_ORDER order, UDWORD x, UDWORD y)
 	if(bMultiMessages)
 	{
 		SendGroupOrderGroup(psGroup,order,x,y,NULL);
+		return;  // Wait for our order before changing the droids.
 		bMultiMessages = false;
 
 		for(psCurr=psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
@@ -375,6 +369,7 @@ void orderGroupObj(DROID_GROUP *psGroup, DROID_ORDER order, BASE_OBJECT *psObj)
 	if(bMultiMessages)
 	{
 		SendGroupOrderGroup(psGroup,order,0,0,psObj);
+		return;  // Wait for our order before changing the droids.
 		bMultiMessages = false;
 
 		for(psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)

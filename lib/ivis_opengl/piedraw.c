@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -21,17 +21,17 @@
  *  Render routines for 3D coloured and shaded transparency rendering.
  */
 
-#include "lib/ivis_opengl/GLee.h"
+#include <GLee.h>
 #include <string.h>
 
 #include "lib/framework/frame.h"
 #include "lib/ivis_common/ivisdef.h"
 #include "lib/ivis_common/imd.h"
-#include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_common/piefunc.h"
 #include "lib/ivis_common/tex.h"
 #include "lib/ivis_common/piedef.h"
 #include "lib/ivis_common/piestate.h"
+#include "lib/ivis_common/piepalette.h"
 #include "lib/ivis_common/pieclip.h"
 #include "piematrix.h"
 #include "screen.h"
@@ -45,12 +45,6 @@
 #define TRIANGLES_PER_TILE 2
 #define VERTICES_PER_TILE (TRIANGLES_PER_TILE * VERTICES_PER_TRIANGLE)
 
-static GLubyte *aColour = NULL;
-static GLfloat *aTexCoord = NULL;
-static GLfloat *aVertex = NULL;
-static GLint allocX = 0, allocY = 0;
-static size_t sizeColour = 0, sizeTexCoord = 0, sizeVertex = 0;
-
 extern BOOL drawing_interface;
 
 /*
@@ -60,14 +54,15 @@ extern BOOL drawing_interface;
 static unsigned int pieCount = 0;
 static unsigned int tileCount = 0;
 static unsigned int polyCount = 0;
-static BOOL lighting = false;
-static BOOL shadows = false;
+static bool lighting = false;
+static bool lightingstate = false;
+static bool shadows = false;
 
 /*
  *	Source
  */
 
-void pie_BeginLighting(const Vector3f * light)
+void pie_BeginLighting(const Vector3f * light, bool drawshadows)
 {
 	const float pos[4] = {light->x, light->y, light->z, 0.0f};
 	const float zero[4] = {0.0f, 0.0f, 0.0f, 0.0f};
@@ -83,8 +78,21 @@ void pie_BeginLighting(const Vector3f * light)
 	glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
 	glEnable(GL_LIGHT0);
 
-//	lighting = true;
-	shadows = true;
+	lighting = lightingstate;
+	if (drawshadows)
+	{
+		shadows = true;
+	}
+}
+
+bool pie_GetLightingState(void)
+{
+	return lightingstate;
+}
+
+void pie_SetLightingState(bool val)
+{
+	lightingstate = val;
 }
 
 void pie_EndLighting(void)
@@ -126,24 +134,33 @@ static transluscent_shape_t* tshapes = NULL;
 static unsigned int tshapes_size = 0;
 static unsigned int nb_tshapes = 0;
 
-static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, WZ_DECL_UNUSED PIELIGHT specular, int pieFlag, int pieFlagData)
+static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELIGHT teamcolour, WZ_DECL_UNUSED PIELIGHT specular, int pieFlag, int pieFlagData)
 {
 	iIMDPoly *pPolys;
-	BOOL light = lighting;
+	bool light = lighting;
 
 	pie_SetAlphaTest(true);
 
+	/* Set fog status */
+	if (!(pieFlag & pie_FORCE_FOG) && 
+		(pieFlag & pie_ADDITIVE || pieFlag & pie_TRANSLUCENT || pieFlag & pie_BUTTON))
+	{
+		pie_SetFogStatus(false);
+	}
+	else
+	{
+		pie_SetFogStatus(true);
+	}
+
 	/* Set tranlucency */
 	if (pieFlag & pie_ADDITIVE)
-	{ //Assume also translucent
-		pie_SetFogStatus(false);
+	{
 		pie_SetRendMode(REND_ADDITIVE);
 		colour.byte.a = (UBYTE)pieFlagData;
 		light = false;
 	}
 	else if (pieFlag & pie_TRANSLUCENT)
 	{
-		pie_SetFogStatus(false);
 		pie_SetRendMode(REND_ALPHA);
 		colour.byte.a = (UBYTE)pieFlagData;
 		light = false;
@@ -152,12 +169,7 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, WZ_DE
 	{
 		if (pieFlag & pie_BUTTON)
 		{
-			pie_SetFogStatus(false);
 			pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
-		}
-		else
-		{
-			pie_SetFogStatus(true);
 		}
 		pie_SetRendMode(REND_OPAQUE);
 	}
@@ -178,8 +190,6 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, WZ_DE
 		glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
 	}
 
-	pie_SetTexturePage(shape->texpage);
-
 	if (pieFlag & pie_HEIGHT_SCALED)	// construct
 	{
 		glScalef(1.0f, (float)pieFlagData / (float)pie_RAISE_SCALE, 1.0f);
@@ -190,6 +200,72 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, WZ_DE
 	}
 
 	glColor4ubv(colour.vector);	// Only need to set once for entire model
+	pie_SetTexturePage(shape->texpage);
+
+	// Activate TCMask if needed
+	if (shape->flags & iV_IMD_TCMASK &&	rendStates.rendMode == REND_OPAQUE)
+	{
+#ifdef _DEBUG
+	glErrors();
+#endif
+		if (pie_GetShadersStatus())
+		{
+			pie_ActivateShader_TCMask(teamcolour, shape->tcmaskpage);
+		}
+		else
+		{
+			//Set the environment colour with tcmask
+			GLfloat tc_env_colour[4];  
+			pal_PIELIGHTtoRGBA4f(&tc_env_colour[0], teamcolour);
+
+			// TU0
+			glActiveTexture(GL_TEXTURE0);
+			glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,	GL_COMBINE);
+			glTexEnvfv(GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, tc_env_colour);
+
+			// TU0 RGB
+			glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB,		GL_ADD_SIGNED);
+			glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_RGB,		GL_TEXTURE);
+			glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_RGB,		GL_SRC_COLOR);
+			glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE1_RGB,		GL_CONSTANT);
+			glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND1_RGB,		GL_SRC_COLOR);
+
+			// TU0 Alpha
+			glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA,		GL_REPLACE);
+			glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_ALPHA,		GL_TEXTURE);
+			glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_ALPHA,	GL_SRC_ALPHA);
+
+			// TU1
+			glActiveTexture(GL_TEXTURE1);
+			glEnable(GL_TEXTURE_2D);
+			glBindTexture(GL_TEXTURE_2D, _TEX_PAGE[shape->tcmaskpage].id);
+			glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,	GL_COMBINE);
+
+			// TU1 RGB
+			glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB,		GL_INTERPOLATE);
+			glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_RGB,		GL_PREVIOUS);
+			glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_RGB,		GL_SRC_COLOR);
+			glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE1_RGB,		GL_TEXTURE0);
+			glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND1_RGB,		GL_SRC_COLOR);
+			glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE2_RGB,		GL_TEXTURE);
+			glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND2_RGB,		GL_SRC_ALPHA);
+
+			// TU1 Alpha
+			glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA,		GL_REPLACE);
+			glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_ALPHA,		GL_PREVIOUS);
+			glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_ALPHA,	GL_SRC_ALPHA);
+
+
+			// This is why we are doing in opaque mode.
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_CONSTANT_COLOR, GL_ZERO);
+			glBlendColor(colour.byte.r / 255.0, colour.byte.g / 255.0,
+						colour.byte.b / 255.0, colour.byte.a / 255.0);
+		}
+#ifdef _DEBUG
+	glErrors();
+#endif
+	}
 
 	for (pPolys = shape->polys; pPolys < shape->polys + shape->npolys; pPolys++)
 	{
@@ -211,38 +287,78 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, WZ_DE
 
 		polyCount++;
 
-		if (frame != 0 && pPolys->flags & iV_IMD_TEXANIM)
+		// Run TextureAnimation (exluding the new teamcoloured models)
+		if (frame && pPolys->flags & iV_IMD_TEXANIM && !(shape->flags & iV_IMD_TCMASK))
 		{
 			frame %= shape->numFrames;
 
 			if (frame > 0)
 			{
-				const int framesPerLine = 256 / pPolys->texAnim.textureWidth;
-				const int uFrame = (frame % framesPerLine) * pPolys->texAnim.textureWidth;
-				const int vFrame = (frame / framesPerLine) * pPolys->texAnim.textureHeight;
+				const int framesPerLine = OLD_TEXTURE_SIZE_FIX / (pPolys->texAnim.x * OLD_TEXTURE_SIZE_FIX);
+				const int uFrame = (frame % framesPerLine) * (pPolys->texAnim.x * OLD_TEXTURE_SIZE_FIX);
+				const int vFrame = (frame / framesPerLine) * (pPolys->texAnim.y * OLD_TEXTURE_SIZE_FIX);
 
 				for (n = 0; n < pPolys->npnts; n++)
 				{
-					texCoords[n].x += uFrame;
-					texCoords[n].y += vFrame;
+					texCoords[n].x += uFrame / OLD_TEXTURE_SIZE_FIX;
+					texCoords[n].y += vFrame / OLD_TEXTURE_SIZE_FIX;
 				}
 			}
 		}
 
-		glBegin(GL_TRIANGLE_FAN);
-
-		if (light)
 		{
-			glNormal3fv((GLfloat*)&pPolys->normal);
-		}
+			Vector3f normals[pie_MAX_VERTICES_PER_POLYGON];
 
-		for (n = 0; n < pPolys->npnts; n++)
+			if (light)
+			{
+				for (n = 0; n < pPolys->npnts; ++n)
+					normals[n] = pPolys->normal;
+				glNormalPointer(GL_FLOAT, 0, normals);
+				glEnableClientState(GL_NORMAL_ARRAY);
+			}
+
+			glVertexPointer(3, GL_FLOAT, 0, vertexCoords);
+			glEnableClientState(GL_VERTEX_ARRAY);
+
+			glTexCoordPointer(2, GL_FLOAT, 0, texCoords);
+			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+			glClientActiveTexture(GL_TEXTURE1);
+
+			if (shape->flags & iV_IMD_TCMASK
+			 && rendStates.rendMode == REND_OPAQUE
+			 && !pie_GetShadersStatus())
+			{
+				glTexCoordPointer(2, GL_FLOAT, 0, texCoords);
+				glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+			}
+
+			glDrawArrays(GL_TRIANGLE_FAN, 0, pPolys->npnts);
+			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+			glClientActiveTexture(GL_TEXTURE0);
+			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+			glDisableClientState(GL_VERTEX_ARRAY);
+			glDisableClientState(GL_NORMAL_ARRAY);
+		}
+	}
+
+	// Deactivate TCMask if it was previously enabled
+	if (shape->flags & iV_IMD_TCMASK && rendStates.rendMode == REND_OPAQUE)
+	{
+		if (pie_GetShadersStatus())
 		{
-			glTexCoord2fv((GLfloat*)&texCoords[n]);
-			glVertex3fv((GLfloat*)&vertexCoords[n]);
+			pie_DeactivateShader();
 		}
+		else
+		{
+			glDisable(GL_BLEND);
 
-		glEnd();
+			glActiveTexture(GL_TEXTURE1);
+			glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+			glDisable(GL_TEXTURE_2D);
+
+			glActiveTexture(GL_TEXTURE0);
+			glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+		}
 	}
 
 	if (pieFlag & pie_BUTTON)
@@ -414,40 +530,50 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, Vector3f* 
 	}
 
 	// draw the shadow volume
-	glBegin(GL_QUADS);
-	for(i=0;i<edge_count;i++)
+	glEnableClientState(GL_VERTEX_ARRAY);
+	for (i = 0; i < edge_count; i++)
 	{
 		int a = drawlist[i].from, b = drawlist[i].to;
-		if(a < 0)
-		{
+		if (a < 0)
 			continue;
-		}
 
-		glVertex3f(pVertices[b].x, scale_y(pVertices[b].y, flag, flag_data), pVertices[b].z);
-		glVertex3f(pVertices[b].x+light->x, scale_y(pVertices[b].y, flag, flag_data)+light->y, pVertices[b].z+light->z);
-		glVertex3f(pVertices[a].x+light->x, scale_y(pVertices[a].y, flag, flag_data)+light->y, pVertices[a].z+light->z);
-		glVertex3f(pVertices[a].x, scale_y(pVertices[a].y, flag, flag_data), pVertices[a].z);
+		{
+			const Vector3f vertices[] = {
+				{            pVertices[b].x,            scale_y(pVertices[b].y, flag, flag_data),            pVertices[b].z },
+				{ light->x + pVertices[b].x, light->y + scale_y(pVertices[b].y, flag, flag_data), light->z + pVertices[b].z },
+				{ light->x + pVertices[a].x, light->y + scale_y(pVertices[a].y, flag, flag_data), light->z + pVertices[a].z },
+				{            pVertices[a].x,            scale_y(pVertices[a].y, flag, flag_data),            pVertices[a].z },
+			};
+
+			glVertexPointer(3, GL_FLOAT, 0, vertices);
+			glDrawArrays(GL_QUADS, 0, ARRAY_SIZE(vertices));
+		}
 	}
-	glEnd();
+	glDisableClientState(GL_VERTEX_ARRAY);
 
 #ifdef SHOW_SHADOW_EDGES
 	glDisable(GL_DEPTH_TEST);
 	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 
 	glColor4ub(0xFF, 0, 0, 0xFF);
-	glBegin(GL_LINES);
+	glEnableClientState(GL_VERTEX_ARRAY);
 	for(i = 0; i < edge_count; i++)
 	{
 		int a = drawlist[i].from, b = drawlist[i].to;
-		if(a < 0)
-		{
+		if (a < 0)
 			continue;
-		}
 
-		glVertex3f(pVertices[b].x, scale_y(pVertices[b].y, flag, flag_data), pVertices[b].z);
-		glVertex3f(pVertices[a].x, scale_y(pVertices[a].y, flag, flag_data), pVertices[a].z);
+		{
+			const Vector3f vertices[] = {
+				{ pVertices[b].x, scale_y(pVertices[b].y, flag, flag_data), pVertices[b].z },
+				{ pVertices[a].x, scale_y(pVertices[a].y, flag, flag_data), pVertices[a].z },
+			};
+
+			glVertexPointer(3, GL_FLOAT, 0, vertices);
+			glDrawArrays(GL_LINES, 0, ARRAY_SIZE(vertices));
+		}
 	}
-	glEnd();
+	glDisableClientState(GL_VERTEX_ARRAY);
 	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
 	glEnable(GL_DEPTH_TEST);
 #endif
@@ -469,6 +595,11 @@ static void inverse_matrix(const float * src, float * dst)
 	dst[8] = invdet * (src[0]*src[5] - src[4]*src[1]);
 }
 
+void pie_SetUp(void)
+{
+	// initialise pie engine (just a placeholder for now)
+}
+
 void pie_CleanUp( void )
 {
 	free( tshapes );
@@ -479,7 +610,12 @@ void pie_CleanUp( void )
 
 void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, PIELIGHT specular, int pieFlag, int pieFlagData)
 {
+	PIELIGHT teamcolour;
+
 	ASSERT_OR_RETURN(, shape, "Attempting to draw null sprite");
+
+	teamcolour = pal_GetTeamColour(team);
+
 	pieCount++;
 
 	if (frame == 0)
@@ -489,7 +625,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, PIE
 
 	if (drawing_interface || !shadows)
 	{
-		pie_Draw3DShape2(shape, frame, colour, specular, pieFlag, pieFlagData);
+		pie_Draw3DShape2(shape, frame, colour, teamcolour, specular, pieFlag, pieFlagData);
 	}
 	else
 	{
@@ -569,7 +705,8 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, PIE
 					nb_scshapes++;
 				}
 			}
-			pie_Draw3DShape2(shape, frame, colour, specular, pieFlag, pieFlagData);
+
+			pie_Draw3DShape2(shape, frame, colour, teamcolour, specular, pieFlag, pieFlagData);
 		}
 	}
 }
@@ -656,27 +793,36 @@ static void pie_DrawShadows(void)
 		pie_ShadowDrawLoop();
 	}
 
+	pie_SetRendMode(REND_ALPHA);
 	glEnable(GL_CULL_FACE);
 	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 	glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 	glStencilMask(~0);
 	glStencilFunc(GL_LESS, 0, ~0);
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glColor4f(0, 0, 0, 0.5);
 
 	pie_PerspectiveEnd();
-	glLoadIdentity();
 	glDisable(GL_DEPTH_TEST);
-	glBegin(GL_TRIANGLE_STRIP);
-		glVertex2f(0, 0);
-		glVertex2f(width, 0);
-		glVertex2f(0, height);
-		glVertex2f(width, height);
-	glEnd();
+	glLoadIdentity();
+	glScalef(width, height, 1.f);
+	{
+		const Vector2i vertices[] = {
+			{ 0, 0 },
+			{ 1, 0 },
+			{ 0, 1 },
+			{ 1, 1 },
+		};
+
+		glVertexPointer(2, GL_INT, 0, vertices);
+		glEnableClientState(GL_VERTEX_ARRAY);
+
+		glDrawArrays(GL_TRIANGLE_STRIP, 0, ARRAY_SIZE(vertices));
+		glDisableClientState(GL_VERTEX_ARRAY);
+	}
+	glLoadIdentity();
 	pie_PerspectiveBegin();
 
-	glDisable(GL_BLEND);
+	pie_SetRendMode(REND_OPAQUE);
 	glDisable(GL_STENCIL_TEST);
 	glEnable(GL_DEPTH_TEST);
 	glDepthMask(GL_TRUE);
@@ -694,7 +840,7 @@ static void pie_DrawRemainingTransShapes(void)
 	for (i = 0; i < nb_tshapes; ++i)
 	{
 		glLoadMatrixf(tshapes[i].matrix);
-		pie_Draw3DShape2(tshapes[i].shape, tshapes[i].frame, tshapes[i].colour,
+		pie_Draw3DShape2(tshapes[i].shape, tshapes[i].frame, tshapes[i].colour, tshapes[i].colour,
 				 tshapes[i].specular, tshapes[i].flag, tshapes[i].flag_data);
 	}
 	glPopMatrix();
@@ -731,128 +877,36 @@ void pie_DrawImage(const PIEIMAGE *image, const PIERECT *dest)
 
 	glColor4ubv(colour.vector);
 
-	glBegin(GL_TRIANGLE_STRIP);
-		//set up 4 pie verts
-		glTexCoord2f(image->tu, image->tv);
-		glVertex2f(dest->x, dest->y);
-
-		glTexCoord2f(image->tu + image->tw, image->tv);
-		glVertex2f(dest->x + dest->w, dest->y);
-
-		glTexCoord2f(image->tu, image->tv + image->th);
-		glVertex2f(dest->x, dest->y + dest->h);
-
-		glTexCoord2f(image->tu + image->tw, image->tv + image->th);
-		glVertex2f(dest->x + dest->w, dest->y + dest->h);
-	glEnd();
-}
-
-static inline void pie_ClearArrays(void)
-{
-	memset(aColour, 0, sizeColour);
-	memset(aVertex, 0, sizeVertex);
-}
-
-void pie_TerrainInit(int sizex, int sizey)
-{
-	int size = sizex * sizey;
-
-	assert(sizex > 0 && sizey > 0);
-	pie_TerrainCleanup();
-	sizeColour = size * sizeof(GLubyte) * COLOUR_COMPONENTS * VERTICES_PER_TILE;
-	sizeTexCoord = size * sizeof(GLfloat) * TEXCOORD_COMPONENTS * VERTICES_PER_TILE;
-	sizeVertex = size * sizeof(GLfloat) * VERTEX_COMPONENTS * VERTICES_PER_TILE;
-	aColour = malloc(sizeColour);
-	aTexCoord = malloc(sizeTexCoord);
-	aVertex = malloc(sizeVertex);
-	allocX = sizex;
-	allocY = sizey;
-	pie_ClearArrays();	// hack, removes seams
-}
-
-void pie_TerrainCleanup()
-{
-	if (aColour)
-	{
-		free(aColour);
-	}
-	if (aTexCoord)
-	{
-		free(aTexCoord);
-	}
-	if (aVertex)
-	{
-		free(aVertex);
-	}
-	aColour = NULL;
-	aTexCoord = NULL;
-	aVertex = NULL;
-}
-
-void pie_DrawTerrain(int x1, int y1, int x2, int y2)
-{
-	int y;
-
-	assert(x1 >= 0 && y1 >= 0 && x2 < allocX && y2 < allocY);
-	glEnableClientState(GL_COLOR_ARRAY);
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-	glColorPointer(COLOUR_COMPONENTS, GL_UNSIGNED_BYTE, 0, aColour);
-	glTexCoordPointer(TEXCOORD_COMPONENTS, GL_FLOAT, 0, aTexCoord);
-	glVertexPointer(VERTEX_COMPONENTS, GL_FLOAT, 0, aVertex);
+	glPushMatrix();
+	glTranslatef(dest->x, dest->y, 0);
+	glScalef(dest->w, dest->h, 1);
 	glMatrixMode(GL_TEXTURE);
-	glLoadIdentity();
-	for (y = y1; y < y2; y++)
+	glPushMatrix(); // texture matrix
+	glScalef(1.f / OLD_TEXTURE_SIZE_FIX, 1.f / OLD_TEXTURE_SIZE_FIX, 1.f);
+	glTranslatef(image->tu, image->tv, 0);
+	glScalef(image->tw, image->th, 1);
 	{
-		glDrawArrays(GL_TRIANGLES, (y * allocX + x1) * VERTICES_PER_TILE, (x2 - x1) * VERTICES_PER_TILE);
+		//set up 4 pie verts
+		const Vector2i vertices[] = {
+			{ 0, 0 },
+			{ 1, 0 },
+			{ 0, 1 },
+			{ 1, 1 },
+		};
+
+		glVertexPointer(2, GL_INT, 0, vertices);
+		glEnableClientState(GL_VERTEX_ARRAY);
+
+		glTexCoordPointer(2, GL_INT, 0, vertices);
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+		glDrawArrays(GL_TRIANGLE_STRIP, 0, ARRAY_SIZE(vertices));
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+		glDisableClientState(GL_VERTEX_ARRAY);
 	}
-	pie_ClearArrays();
-	glDisableClientState(GL_COLOR_ARRAY);
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-}
-
-// index gives us the triangle
-void pie_DrawTerrainTriangle(int x, int y, int triangle, const TERRAIN_VERTEX *aVrts)
-{
-	int i, j;
-
-	assert(x >= 0 && y >= 0 && triangle >= 0 && triangle < 3 && aVrts);
-
-	j = (y * allocX + x) * VERTICES_PER_TILE + triangle * VERTICES_PER_TRIANGLE;
-
-	tileCount++;
-
-	for ( i = 0; i < 3; i++ )
-	{
-		aColour[j * COLOUR_COMPONENTS + 0] = aVrts[i].light.byte.r;
-		aColour[j * COLOUR_COMPONENTS + 1] = aVrts[i].light.byte.g;
-		aColour[j * COLOUR_COMPONENTS + 2] = aVrts[i].light.byte.b;
-		aColour[j * COLOUR_COMPONENTS + 3] = aVrts[i].light.byte.a;
-		aTexCoord[j * TEXCOORD_COMPONENTS + 0] = aVrts[i].u;
-		aTexCoord[j * TEXCOORD_COMPONENTS + 1] = aVrts[i].v;
-		aVertex[j * VERTEX_COMPONENTS + 0] = aVrts[i].pos.x;
-		aVertex[j * VERTEX_COMPONENTS + 1] = aVrts[i].pos.y;
-		aVertex[j * VERTEX_COMPONENTS + 2] = aVrts[i].pos.z;
-		j++;
-	}
-}
-
-void pie_DrawWaterTriangle(const TERRAIN_VERTEX *aVrts)
-{
-	unsigned int i = 0;
-
-	/* Since this is only used from within source for the terrain draw - we can backface cull the polygons. */
-	tileCount++;
-
-	glBegin(GL_TRIANGLE_FAN);
-		for ( i = 0; i < 3; i++ )
-		{
-			glColor4ubv(aVrts[i].light.vector);
-			glTexCoord2f(aVrts[i].u, aVrts[i].v);
-			glVertex3f( aVrts[i].pos.x, aVrts[i].pos.y, aVrts[i].pos.z );
-		}
-	glEnd();
+	glPopMatrix(); // texture matrix
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
 }
 
 void pie_GetResetCounts(unsigned int* pPieCount, unsigned int* pTileCount, unsigned int* pPolyCount, unsigned int* pStateCount)
@@ -866,5 +920,4 @@ void pie_GetResetCounts(unsigned int* pPieCount, unsigned int* pTileCount, unsig
 	tileCount = 0;
 	polyCount = 0;
 	pieStateCount = 0;
-	return;
 }

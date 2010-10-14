@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -21,11 +21,8 @@
 #ifndef __INCLUDED_SRC_PROJECTILE_H__
 #define __INCLUDED_SRC_PROJECTILE_H__
 
-#include "lib/framework/types.h"
-#include "basedef.h"
-#include "statsdef.h"
-#include "movedef.h"
-#include "lib/gamelib/anim.h"
+#include "projectiledef.h"
+#include "weapondef.h"
 
 #ifdef __cplusplus
 extern "C"
@@ -60,6 +57,9 @@ PROJECTILE *proj_GetFirst(void);	///< Get first projectile in the list.
 PROJECTILE *proj_GetNext(void);		///< Get next projectile in the list.
 
 void	proj_FreeAllProjectiles(void);	///< Free all projectiles in the list.
+
+/// Calculate the initial velocities of an indirect projectile. Returns the flight time.
+int32_t projCalcIndirectVelocities(const int32_t dx, const int32_t dz, int32_t v, int32_t *vx, int32_t *vz);
 
 /** Send a single projectile against the given target. */
 BOOL	proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Vector3i target, BASE_OBJECT *psTarget, BOOL bVisible, int weapon_slot);
@@ -101,7 +101,9 @@ static inline void setProjectileSource(PROJECTILE *psProj, BASE_OBJECT *psObj)
 
 static inline void setProjectileDamaged(PROJECTILE *psProj, BASE_OBJECT *psObj)
 {
-	psProj->psDamaged = psObj;
+	++psProj->psNumDamaged;
+	psProj->psDamaged = (BASE_OBJECT **)realloc(psProj->psDamaged, psProj->psNumDamaged*sizeof(BASE_OBJECT *));
+	psProj->psDamaged[psProj->psNumDamaged - 1] = psObj;
 }
 
 /* @} */
@@ -110,6 +112,9 @@ void checkProjectile(const PROJECTILE* psProjectile, const char * const location
 
 /* assert if projectile is bad */
 #define CHECK_PROJECTILE(object) checkProjectile((object), AT_MACRO, __FUNCTION__, max_check_object_recursion)
+
+#define syncDebugProjectile(psProj, ch) _syncDebugProjectile(__FUNCTION__, psProj, ch)
+void _syncDebugProjectile(const char *function, PROJECTILE *psProj, char ch);
 
 #ifdef __cplusplus
 }

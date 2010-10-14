@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2009  Warzone Resurrection Project
+	Copyright (C) 2005-2010  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -340,6 +340,7 @@ void createLimitSet(void)
 	UDWORD			i, numchanges = 0, bufSize, idx = 0;
 	MULTISTRUCTLIMITS	*pEntry;
 
+	debug(LOG_NET, "LimitSet created");
 	// free old limiter structure
 	freeLimitSet();
 
@@ -423,7 +424,8 @@ static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 	UDWORD	w = psWidget->width;
 	UDWORD	h = psWidget->height;
 	STRUCTURE_STATS	*stat = asStructureStats + psWidget->UserData;
-	Vector3i Rotation, Position;
+	Position position;
+	Vector3i rotation;
 	char	str[3];
 
 	UDWORD scale,Radius;
@@ -432,12 +434,12 @@ static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 
 	// draw image
 	pie_SetGeometricOffset( x+35 ,y+(psWidget->height/2)+9);
-	Rotation.x = -15;
-	Rotation.y = ((gameTime2/45)%360) ; //45
-	Rotation.z = 0;
-	Position.x = 0;
-	Position.y = 0;
-	Position.z = BUTTON_DEPTH*2;//getStructureStatSize(stat)  * 38 * OBJECT_RADIUS;
+	rotation.x = -15;
+	rotation.y = ((gameTime2/45)%360) ; //45
+	rotation.z = 0;
+	position.x = 0;
+	position.y = 0;
+	position.z = BUTTON_DEPTH*2;//getStructureStatSize(stat)  * 38 * OBJECT_RADIUS;
 
 	Radius = getStructureStatSize(stat);
 	if(Radius <= 128) {
@@ -449,7 +451,7 @@ static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 	}
 
 	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
-	displayStructureStatButton(stat, &Rotation, &Position, true, scale);
+	displayStructureStatButton(stat, &rotation, &position, true, scale);
 	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 
 	// draw name
