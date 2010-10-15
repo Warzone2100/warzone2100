@@ -503,11 +503,11 @@ void draw3DScene( void )
 	}
 	if (errorWaiting)
 	{
-		if (lastErrorTime + (30 * GAME_TICKS_PER_SEC) < gameTime2)
+		if (lastErrorTime + (60 * GAME_TICKS_PER_SEC) < gameTime2)
 		{
 			char trimMsg[255];
 			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
-			ssprintf(trimMsg, "Error! (Check your logs!): %200s", errorMessage);
+			ssprintf(trimMsg, "Error! (Check your logs!): %.78s", errorMessage);
 			addConsoleMessage(trimMsg, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 			errorWaiting = false;
 		}
