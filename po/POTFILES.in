@@ -354,6 +354,7 @@ src/seqdisp.c
 src/stats.c
 src/structure.c
 src/target.c
+src/terrain.c
 src/text.c
 src/texture.c
 src/transporter.c
