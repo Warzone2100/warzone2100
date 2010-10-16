@@ -222,6 +222,12 @@ void gameTimeUpdate()
 		gameTime     += deltaGameTime;
 		graphicsTime += deltaGraphicsTime;
 	}
+	else
+	{
+		// The game is paused, so the change in time is zero.
+		deltaGameTime = 0;
+		deltaGraphicsTime = 0;
+	}
 
 	// Pre-calculate fraction used in timeAdjustedIncrement
 	gameTimeFraction = deltaGameTime;
