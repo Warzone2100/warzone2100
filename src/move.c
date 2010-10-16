@@ -184,8 +184,6 @@
 
 /* Function prototypes */
 static void	moveUpdatePersonModel(DROID *psDroid, SDWORD speed, uint16_t direction);
-// Calculate the boundary vector
-static void	moveCalcBoundary(DROID *psDroid);
 
 const char *moveDescription(MOVE_STATUS status)
 {
@@ -444,8 +442,6 @@ static void moveShuffleDroid(DROID *psDroid, UDWORD shuffleStart, SDWORD sx, SDW
 	psDroid->sMove.targetY = tarY;
 	psDroid->sMove.numPoints = 0;
 	psDroid->sMove.Position = 0;
-
-	moveCalcBoundary(psDroid);
 
 	CHECK_DROID(psDroid);
 }
@@ -1224,7 +1220,6 @@ static void moveGetObstacleVector(DROID *psDroid, int32_t *pX, int32_t *pY)
 	BASE_OBJECT *           psObj;
 	int32_t                 numObst = 0, distTot = 0;
 	int32_t                 dirX = 0, dirY = 0;
-	int32_t                 mapOX, mapOY, mapX, mapY;
 	PROPULSION_STATS *      psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
 
 	ASSERT(psPropStats, "invalid propulsion stats pointer");
@@ -1269,34 +1264,6 @@ static void moveGetObstacleVector(DROID *psDroid, int32_t *pX, int32_t *pY)
 		numObst += 1;
 	}
 
-	// now scan for blocking tiles
-	mapOX = map_coord(psDroid->pos.x);
-	mapOY = map_coord(psDroid->pos.y);
-	for (mapY = mapOY - 2; mapY <= mapOY + 2; ++mapY)
-	{
-		for (mapX = mapOX - 2; mapX <= mapOX + 2; ++mapX)
-		{
-			xdiff = world_coord(mapX) + TILE_UNITS/2 - psDroid->pos.x;
-			ydiff = world_coord(mapY) + TILE_UNITS/2 - psDroid->pos.y;
-			if (xdiff * *pX + ydiff * *pY <= 0)
-			{
-				// object behind
-				continue;
-			}
-			if (fpathBlockingTile(mapX, mapY, psPropStats->propulsionType))
-			{
-				distSq = xdiff*xdiff + ydiff*ydiff + 1;
-				if (distSq < AVOID_DIST*AVOID_DIST)
-				{
-					dirX += xdiff * 65536 / distSq;
-					dirY += ydiff * 65536 / distSq;
-					distTot += distSq;
-					numObst += 1;
-				}
-			}
-		}
-	}
-
 	if (dirX != 0 || dirY != 0)
 	{
 		int32_t avoidX, avoidY;
@@ -1329,7 +1296,6 @@ static void moveGetObstacleVector(DROID *psDroid, int32_t *pX, int32_t *pY)
 	}
 }
 
-
 /*!
  * Get a direction for a droid to avoid obstacles etc.
  * \param psDroid Which droid to examine
@@ -1350,106 +1316,31 @@ static uint16_t moveGetDirection(DROID *psDroid)
 	return iAtan2(dest.x, dest.y);
 }
 
-
-// Calculate the boundary vector
-static void moveCalcBoundary(DROID *psDroid)
-{
-	Vector2i
-		src = { psDroid->sMove.srcX, psDroid->sMove.srcY },
-		target = { psDroid->sMove.targetX, psDroid->sMove.targetY },
-		prev, next, nextTarget;
-	SDWORD	absX, absY;
-	SDWORD	prevMag, nextMag;
-	SDWORD	sumX, sumY;
-
-	// No points left - simple case for the bound vector
-	if (psDroid->sMove.Position == psDroid->sMove.numPoints)
-	{
-		psDroid->sMove.boundX = src.x - target.x;
-		psDroid->sMove.boundY = src.y - target.y;
-		return;
-	}
-
-	// Calculate the vector back along the current path
-	prev = Vector2i_Sub(src, target),
-	absX = abs(prev.x);
-	absY = abs(prev.y);
-	prevMag = (absX > absY) ? (absX + absY/2) : (absY + absX/2);
-//	prevMag = Vector2i_Length(prev);
-
-	// Calculate the vector to the next target
-	nextTarget = movePeekNextTarget(psDroid);
-
-	next = Vector2i_Sub(nextTarget, target);
-	absX = abs(next.x);
-	absY = abs(next.y);
-	nextMag = (absX > absY) ? (absX + absY/2) : (absY + absX/2);
-//	nextMag = Vector2i_Length(next);
-
-	if (prevMag != 0 && nextMag == 0)
-	{
-		// don't bother mixing the boundaries - cos there isn't a next vector anyway
-		psDroid->sMove.boundX = src.x - target.x;
-		psDroid->sMove.boundY = src.y - target.y;
-		return;
-	}
-	else if (prevMag == 0 || nextMag == 0)
-	{
-		psDroid->sMove.boundX = 0;
-		psDroid->sMove.boundY = 0;
-		return;
-	}
-
-	// Calculate the vector between the two
-	sumX = (prev.x * BOUND_ACC)/prevMag + (next.x * BOUND_ACC)/nextMag;
-	sumY = (prev.y * BOUND_ACC)/prevMag + (next.y * BOUND_ACC)/nextMag;
-
-	// Rotate by 90 degrees one way and see if it is the same side as the src vector
-	// if not rotate 90 the other.
-	if (prev.y*sumY - prev.y*sumX < 0)
-	{
-		psDroid->sMove.boundX = -sumY;
-		psDroid->sMove.boundY = sumX;
-	}
-	else
-	{
-		psDroid->sMove.boundX = sumY;
-		psDroid->sMove.boundY = -sumX;
-	}
-}
-
 // Check if a droid has got to a way point
 static BOOL moveReachedWayPoint(DROID *psDroid)
 {
 	// Calculate the vector to the droid
 	const int droidX = psDroid->pos.x - psDroid->sMove.targetX;
 	const int droidY = psDroid->pos.y - psDroid->sMove.targetY;
+	const bool last = (psDroid->sMove.Position == psDroid->sMove.numPoints);
+	const int sqprecision = last ? ((TILE_UNITS / 4) * (TILE_UNITS / 4)) : ((TILE_UNITS / 2) * (TILE_UNITS / 2));
 
-	if (psDroid->droidType == DROID_TRANSPORTER || (isVtolDroid(psDroid) && psDroid->sMove.numPoints == psDroid->sMove.Position))
+	// See if we have reached the next waypoint - occasionally happens due to bumping
+	if (!last)
 	{
-		const int iRange = TILE_UNITS / 4;
+		const int nsqprecision = (TILE_UNITS / 2) * (TILE_UNITS / 2);
+		const Vector2i next = movePeekNextTarget(psDroid); 
+		const int ndroidX = psDroid->pos.x - next.x; 
+		const int ndroidY = psDroid->pos.y - next.y; 
 
-		if (droidX*droidX + droidY*droidY < iRange*iRange)
+		if (ndroidX * ndroidX + ndroidY * ndroidY < nsqprecision)
 		{
 			return true;
 		}
 	}
-	else
-	{
-		// if the dot product is -ve the droid has got past the way point
-		// but only move onto the next way point if we can see the previous one
-		// (this helps units that have got nudged off course).
-		if ((psDroid->sMove.boundX * droidX + psDroid->sMove.boundY * droidY <= 0) &&
-			fpathTileLOS(psDroid, Vector3i_Init(psDroid->sMove.targetX, psDroid->sMove.targetY, 0)))
-		{
-			objTrace(psDroid->id, "Next waypoint: droid %d bound (%d,%d) target (%d,%d)",
-			         (int)psDroid->id, (int)psDroid->sMove.boundX, (int)psDroid->sMove.boundY, (int)droidX, (int)droidY);
 
-			return true;
-		}
-	}
-
-	return false;
+	// Else check current waypoint
+	return (droidX * droidX + droidY * droidY < sqprecision);
 }
 
 #define MAX_SPEED_PITCH  60
@@ -2517,8 +2408,6 @@ void moveUpdateDroid(DROID *psDroid)
 			break;
 		}
 
-		moveCalcBoundary(psDroid);
-
 		if (isVtolDroid(psDroid))
 		{
 			psDroid->rot.pitch = 0;
@@ -2557,7 +2446,6 @@ void moveUpdateDroid(DROID *psDroid)
 				objTrace(psDroid->id, "Arrived at destination!");
 				break;
 			}
-			moveCalcBoundary(psDroid);
 		}
 
 		moveDir = moveGetDirection(psDroid);
