@@ -2627,29 +2627,103 @@ UDWORD calcDroidSpeed(UDWORD baseSpeed, UDWORD terrainType, UDWORD propIndex, UD
 /* Calculate the points required to build the template - used to calculate time*/
 UDWORD calcTemplateBuild(DROID_TEMPLATE *psTemplate)
 {
-	UDWORD	build, i;
+	UDWORD build = 0, i;
+	COMPONENT_STATS	*psStats = NULL;
+	int compIndex;
 
-	build = (asBodyStats + psTemplate->asParts[COMP_BODY])->buildPoints +
-	(asBrainStats + psTemplate->asParts[COMP_BRAIN])->buildPoints +
-	(asSensorStats + psTemplate->asParts[COMP_SENSOR])->buildPoints +
-	(asECMStats + psTemplate->asParts[COMP_ECM])->buildPoints +
-	(asRepairStats + psTemplate->asParts[COMP_REPAIRUNIT])->buildPoints +
-	(asConstructStats + psTemplate->asParts[COMP_CONSTRUCT])->buildPoints;
-
-	/* propulsion build points are a percentage of the bodys' build points */
-	build += (((asPropulsionStats + psTemplate->asParts[COMP_PROPULSION])->buildPoints *
-		(asBodyStats + psTemplate->asParts[COMP_BODY])->buildPoints) / 100);
-
-	//add weapon power
-	for(i=0; i<psTemplate->numWeaps; i++)
+	compIndex = psTemplate->asParts[COMP_BRAIN];
+	if (compIndex > numBrainStats)
 	{
-		// FIX ME:
-		ASSERT( psTemplate->asWeaps[i]<numWeaponStats,
-			//"Invalid Template weapon for %s", psTemplate->pName );
-			"Invalid Template weapon for %s", getTemplateName(psTemplate) );
-		build += (asWeaponStats + psTemplate->asWeaps[i])->buildPoints;
+		ASSERT(false, "Invalid range referenced for numBrainStats, %d > %d", compIndex, numBrainStats);
+	}
+	else
+	{
+		psStats = (COMPONENT_STATS *)(asBrainStats + compIndex);
+		build = (psStats)->buildPoints;
 	}
 
+	compIndex = psTemplate->asParts[COMP_BODY];
+	if (compIndex > numBodyStats)
+	{
+		ASSERT(false, "Invalid range referenced for numBodyStats, %d > %d", compIndex, numBodyStats);
+	}
+	else
+	{
+		psStats = (COMPONENT_STATS *)(asBodyStats + compIndex);
+		build += (psStats)->buildPoints;
+	}
+
+	compIndex = psTemplate->asParts[COMP_SENSOR];
+	if (compIndex > numSensorStats)
+	{
+		ASSERT(false, "Invalid range referenced for numSensorStats, %d > %d", compIndex, numSensorStats);
+	}
+	else
+	{
+		psStats = (COMPONENT_STATS *)(asSensorStats + compIndex);
+		build += (psStats)->buildPoints;
+	}
+
+	compIndex = psTemplate->asParts[COMP_ECM];
+	if (compIndex > numECMStats)
+	{
+		ASSERT(false, "Invalid range referenced for numECMStats, %d > %d", compIndex, numECMStats);
+	}
+	else
+	{
+		psStats = (COMPONENT_STATS *)(asECMStats + compIndex);
+		build += (psStats)->buildPoints;
+	}
+
+	compIndex = psTemplate->asParts[COMP_REPAIRUNIT];
+	if (compIndex > numRepairStats)
+	{
+		ASSERT(false, "Invalid range referenced for numRepairStats, %d > %d", compIndex, numRepairStats);
+	}
+	else
+	{
+		psStats = (COMPONENT_STATS *)(asRepairStats + compIndex);
+		build += (psStats)->buildPoints;
+	}
+
+	compIndex = psTemplate->asParts[COMP_CONSTRUCT];
+	if (compIndex > numConstructStats)
+	{
+		ASSERT(false, "Invalid range referenced for numConstructStats, %d > %d", compIndex, numConstructStats);
+	}
+	else
+	{
+		psStats = (COMPONENT_STATS *)(asConstructStats + compIndex);
+		build += (psStats)->buildPoints;
+	}
+
+	compIndex = psTemplate->asParts[COMP_PROPULSION];
+	if (compIndex > numPropulsionStats)
+	{
+		ASSERT(false, "Invalid range referenced for numPropulsionStats, %d > %d", compIndex, numPropulsionStats);
+	}
+	else
+	{
+		psStats = (COMPONENT_STATS *) (asPropulsionStats + compIndex);
+		/* propulsion build points are a percentage of the bodys' build points */
+		build += (psStats)->buildPoints * (asBodyStats + psTemplate->asParts[COMP_BODY])->buildPoints / 100;
+	}
+
+	//add weapon power
+	for(i=0; i < psTemplate->numWeaps; i++)
+	{
+		compIndex = psTemplate->asWeaps[i];
+		if (compIndex > numWeaponStats)
+		{
+			ASSERT( psTemplate->asWeaps[i] < numWeaponStats, "Invalid Template weapon for %s", getTemplateName(psTemplate));
+			debug(LOG_ERROR, "Invalid range referenced for numWeaponStats, %d > %d", compIndex, numWeaponStats);
+		}
+		else
+		{
+			psStats = (COMPONENT_STATS *) (asWeaponStats + compIndex);
+			build += (psStats)->buildPoints;
+		}
+	}
 	return build;
 }
 
@@ -2657,26 +2731,104 @@ UDWORD calcTemplateBuild(DROID_TEMPLATE *psTemplate)
 /* Calculate the power points required to build/maintain a template */
 UDWORD	calcTemplatePower(DROID_TEMPLATE *psTemplate)
 {
-	UDWORD power, i;
+	UDWORD power = 0, i = 0;
+	COMPONENT_STATS	*psStats = NULL;
+	int compIndex;
 
 	//get the component power
-	power = (asBodyStats + psTemplate->asParts[COMP_BODY])->buildPower;
-	power += (asBrainStats + psTemplate->asParts[COMP_BRAIN])->buildPower;
-	power += (asSensorStats + psTemplate->asParts[COMP_SENSOR])->buildPower;
-	power += (asECMStats + psTemplate->asParts[COMP_ECM])->buildPower;
-	power += (asRepairStats + psTemplate->asParts[COMP_REPAIRUNIT])->buildPower;
-	power += (asConstructStats + psTemplate->asParts[COMP_CONSTRUCT])->buildPower;
-
-	/* propulsion power points are a percentage of the bodys' power points */
-	power += (((asPropulsionStats + psTemplate->asParts[COMP_PROPULSION])->buildPower *
-		(asBodyStats + psTemplate->asParts[COMP_BODY])->buildPower) / 100);
-
-	//add weapon power
-	for(i=0; i<psTemplate->numWeaps; i++)
+	compIndex = psTemplate->asParts[COMP_BRAIN];
+	if (compIndex > numBrainStats)
 	{
-		power += (asWeaponStats + psTemplate->asWeaps[i])->buildPower;
+		ASSERT(false, "Invalid range referenced for numBrainStats, %d > %d", compIndex, numBrainStats);
+	}
+	else
+	{
+		psStats = (COMPONENT_STATS *)(asBrainStats + compIndex);
+		power = (psStats)->buildPower;
 	}
 
+	compIndex = psTemplate->asParts[COMP_BODY];
+	if (compIndex > numBodyStats)
+	{
+		ASSERT(false, "Invalid range referenced for numBodyStats, %d > %d", compIndex, numBodyStats);
+	}
+	else
+	{
+		psStats = (COMPONENT_STATS *)(asBodyStats + compIndex);
+		power += (psStats)->buildPower;
+	}
+
+	compIndex = psTemplate->asParts[COMP_SENSOR];
+	if (compIndex > numSensorStats)
+	{
+		ASSERT(false, "Invalid range referenced for numSensorStats, %d > %d", compIndex, numSensorStats);
+	}
+	else
+	{
+		psStats = (COMPONENT_STATS *)(asSensorStats + compIndex);
+		power += (psStats)->buildPower;
+	}
+
+	compIndex = psTemplate->asParts[COMP_ECM];
+	if (compIndex > numECMStats)
+	{
+		ASSERT(false, "Invalid range referenced for numECMStats, %d > %d", compIndex, numECMStats);
+	}
+	else
+	{
+		psStats = (COMPONENT_STATS *)(asECMStats + compIndex);
+		power += (psStats)->buildPower;
+	}
+
+	compIndex = psTemplate->asParts[COMP_REPAIRUNIT];
+	if (compIndex > numRepairStats)
+	{
+		ASSERT(false, "Invalid range referenced for numRepairStats, %d > %d", compIndex, numRepairStats);
+	}
+	else
+	{
+		psStats = (COMPONENT_STATS *)(asRepairStats + compIndex);
+		power += (psStats)->buildPower;
+	}
+
+	compIndex = psTemplate->asParts[COMP_CONSTRUCT];
+	if (compIndex > numConstructStats)
+	{
+		ASSERT(false, "Invalid range referenced for numConstructStats, %d > %d", compIndex, numConstructStats);
+	}
+	else
+	{
+		psStats = (COMPONENT_STATS *)(asConstructStats + compIndex);
+		power += (psStats)->buildPower;
+	}
+
+	compIndex = psTemplate->asParts[COMP_PROPULSION];
+	if (compIndex > numPropulsionStats)
+	{
+		ASSERT(false, "Invalid range referenced for numPropulsionStats, %d > %d", compIndex, numPropulsionStats);
+	}
+	else
+	{
+		psStats = (COMPONENT_STATS *) (asPropulsionStats + compIndex);
+		/* propulsion power points are a percentage of the bodys' power points */
+		power += (psStats)->buildPower * (asBodyStats + psTemplate->asParts[COMP_BODY])->buildPower / 100;
+	}
+
+	//add weapon power
+	for(i = 0; i < psTemplate->numWeaps; i++)
+	{
+		compIndex = psTemplate->asWeaps[i];
+		if (compIndex > numWeaponStats)
+		{
+			ASSERT( psTemplate->asWeaps[i] < numWeaponStats, "Invalid Template weapon for %s", getTemplateName(psTemplate));
+			debug(LOG_ERROR, "Invalid range referenced for numWeaponStats, %d > %d", compIndex, numWeaponStats);
+		}
+		else
+		{
+			psStats = (COMPONENT_STATS *) (asWeaponStats + compIndex);
+			power += (psStats)->buildPower;
+		}
+	}
 	return power;
 }
 
@@ -2684,29 +2836,106 @@ UDWORD	calcTemplatePower(DROID_TEMPLATE *psTemplate)
 /* Calculate the power points required to build/maintain a droid */
 UDWORD	calcDroidPower(DROID *psDroid)
 {
-	//re-enabled i
-	UDWORD      power, i;
+	UDWORD	power = 0, i;
+	COMPONENT_STATS	*psStats = NULL;
+	int compIndex;
+
 
 	//get the component power
-	power = (asBodyStats + psDroid->asBits[COMP_BODY].nStat)->buildPower +
-	(asBrainStats + psDroid->asBits[COMP_BRAIN].nStat)->buildPower +
-	//(asPropulsionStats + psDroid->asBits[COMP_PROPULSION])->buildPower +
-	(asSensorStats + psDroid->asBits[COMP_SENSOR].nStat)->buildPower +
-	(asECMStats + psDroid->asBits[COMP_ECM].nStat)->buildPower +
-	(asRepairStats + psDroid->asBits[COMP_REPAIRUNIT].nStat)->buildPower +
-	(asConstructStats + psDroid->asBits[COMP_CONSTRUCT].nStat)->buildPower;
+	compIndex = psDroid->asBits[COMP_BODY].nStat;
+	if (compIndex > numBodyStats)
+	{
+		ASSERT(false, "Invalid range referenced for numBodyStats, %d > %d", compIndex, numBodyStats);
+	}
+	else
+	{
+		psStats = (COMPONENT_STATS *)(asBodyStats + compIndex);
+		power = (psStats)->buildPower;
+	}
 
-	/* propulsion power points are a percentage of the bodys' power points */
-	power += (((asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat)->buildPower *
-		(asBodyStats + psDroid->asBits[COMP_BODY].nStat)->buildPower) / 100);
+	compIndex = psDroid->asBits[COMP_BRAIN].nStat;
+	if (compIndex > numBrainStats)
+	{
+		ASSERT(false, "Invalid range referenced for numBrainStats, %d > %d", compIndex, numBrainStats);
+	}
+	else
+	{
+		psStats = (COMPONENT_STATS *)(asBrainStats + compIndex);
+		power += (psStats)->buildPower;
+	}
+
+	compIndex = psDroid->asBits[COMP_SENSOR].nStat;
+	if (compIndex > numSensorStats)
+	{
+		ASSERT(false, "Invalid range referenced for numSensorStats, %d > %d", compIndex, numSensorStats);
+	}
+	else
+	{
+		psStats = (COMPONENT_STATS *)(asSensorStats + compIndex);
+		power += (psStats)->buildPower;
+	}
+
+	compIndex = psDroid->asBits[COMP_ECM].nStat;
+	if (compIndex > numECMStats)
+	{
+		ASSERT(false, "Invalid range referenced for numECMStats, %d > %d", compIndex, numECMStats);
+	}
+	else
+	{
+		psStats = (COMPONENT_STATS *)(asECMStats + compIndex);
+		power += (psStats)->buildPower;
+	}
+
+	compIndex = psDroid->asBits[COMP_REPAIRUNIT].nStat;
+	if (compIndex > numRepairStats)
+	{
+		ASSERT(false, "Invalid range referenced for numRepairStats, %d > %d", compIndex, numRepairStats);
+	}
+	else
+	{
+		psStats = (COMPONENT_STATS *)(asRepairStats + compIndex);
+		power += (psStats)->buildPower;
+	}
+
+	compIndex = psDroid->asBits[COMP_CONSTRUCT].nStat;
+	if (compIndex > numConstructStats)
+	{
+		ASSERT(false, "Invalid range referenced for numConstructStats, %d > %d", compIndex, numConstructStats);
+	}
+	else
+	{
+		psStats = (COMPONENT_STATS *)(asConstructStats + compIndex);
+		power += (psStats)->buildPower;
+	}
+
+	compIndex = psDroid->asBits[COMP_PROPULSION].nStat;
+	if (compIndex > numPropulsionStats)
+	{
+		ASSERT(false, "Invalid range referenced for numPropulsionStats, %d > %d", compIndex, numPropulsionStats);
+	}
+	else
+	{
+		psStats = (COMPONENT_STATS *) (asPropulsionStats + compIndex);
+		/* propulsion power points are a percentage of the bodys' power points */
+		power += (psStats)->buildPower * (asBodyStats + psDroid->asBits[COMP_BODY].nStat)->buildPower / 100;
+	}
 
 	//add weapon power
-	for(i=0; i<psDroid->numWeaps; i++)
+	for(i = 0; i < psDroid->numWeaps; i++)
 	{
 		if (psDroid->asWeaps[i].nStat > 0)
 		{
-			//power += (asWeaponStats + psDroid->asWeaps[i].nStat)->buildPower;
-			power += (asWeaponStats + psDroid->asWeaps[i].nStat)->buildPower;
+			compIndex = psDroid->asWeaps[i].nStat;
+			if (compIndex > numWeaponStats)
+			{
+				ASSERT( psDroid->asWeaps[i].nStat < numWeaponStats, "Invalid Droid weapon for %s", psDroid->aName);
+				debug(LOG_ERROR, "Invalid range referenced for numWeaponStats, %d > %d", compIndex, numWeaponStats);
+			}
+			else
+			{
+				psStats = (COMPONENT_STATS *) (asWeaponStats + compIndex);
+				power += (psStats)->buildPower;
+			}
 		}
 	}
 
@@ -2717,6 +2946,7 @@ UDWORD calcDroidPoints(DROID *psDroid)
 {
 	unsigned int i;
 	int points;
+	int compIndex;
 
 	points  = getBodyStats(psDroid)->buildPoints;
 	points += getBrainStats(psDroid)->buildPoints;
@@ -2728,7 +2958,16 @@ UDWORD calcDroidPoints(DROID *psDroid)
 
 	for (i = 0; i < psDroid->numWeaps; i++)
 	{
-		points += (asWeaponStats + psDroid->asWeaps[i].nStat)->buildPoints;
+		compIndex = psDroid->asWeaps[i].nStat;
+		if (compIndex > numWeaponStats)
+		{
+			ASSERT( psDroid->asWeaps[i].nStat < numWeaponStats, "Invalid Droid weapon for %s", psDroid->aName);
+			debug(LOG_ERROR, "Invalid range referenced for numWeaponStats, %d > %d", compIndex, numWeaponStats);
+		}
+		else
+		{
+			points += (asWeaponStats + psDroid->asWeaps[i].nStat)->buildPoints;
+		}
 	}
 
 	return points;
