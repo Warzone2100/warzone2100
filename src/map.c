@@ -44,7 +44,6 @@
 #include "advvis.h"
 #include "research.h"
 #include "mission.h"
-#include "formationdef.h"
 #include "gateway.h"
 #include "wrappers.h"
 #include "mapgrid.h"

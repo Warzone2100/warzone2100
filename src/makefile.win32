@@ -47,7 +47,6 @@ SRC= \
 	effects.c \
 	environ.c \
 	feature.c \
-	formation.c \
 	fpath.c \
 	frontend.c \
 	function.c \

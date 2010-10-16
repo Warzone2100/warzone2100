@@ -40,8 +40,6 @@
 #include "loop.h"
 #include "geometry.h"
 #include "anim_id.h"
-#include "formationdef.h"
-#include "formation.h"
 #include "action.h"
 #include "order.h"
 #include "combat.h"

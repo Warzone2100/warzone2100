@@ -68,8 +68,6 @@
 #include "component.h"
 #include "radar.h"
 #include "cmddroid.h"
-#include "formation.h"
-#include "formationdef.h"
 #include "warzoneconfig.h"
 #include "multiplay.h"
 #include "frontend.h"
@@ -5593,24 +5591,10 @@ static void SaveDroidMoveControl(SAVE_DROID * const psSaveDroid, DROID const * c
 	psSaveDroid->sMove.bumpX        = PHYSFS_swapULE16(psDroid->sMove.bumpX);
 	psSaveDroid->sMove.bumpY        = PHYSFS_swapULE16(psDroid->sMove.bumpY);
 
-	if (psDroid->sMove.psFormation != NULL)
-	{
-		psSaveDroid->sMove.isInFormation = true;
-		psSaveDroid->formationDir = UNDEG(psDroid->sMove.psFormation->direction);
-		psSaveDroid->formationX   = psDroid->sMove.psFormation->x;
-		psSaveDroid->formationY   = psDroid->sMove.psFormation->y;
-	}
-	else
-	{
-		psSaveDroid->sMove.isInFormation = false;
-		psSaveDroid->formationDir = 0;
-		psSaveDroid->formationX   = 0;
-		psSaveDroid->formationY   = 0;
-	}
-
-	endian_sword(&psSaveDroid->formationDir);
-	endian_sdword(&psSaveDroid->formationX);
-	endian_sdword(&psSaveDroid->formationY);
+	psSaveDroid->sMove.isInFormation = false;
+	psSaveDroid->formationDir = 0;
+	psSaveDroid->formationX   = 0;
+	psSaveDroid->formationY   = 0;
 }
 
 static void LoadDroidMoveControl(DROID * const psDroid, SAVE_DROID const * const psSaveDroid)
@@ -5661,25 +5645,6 @@ static void LoadDroidMoveControl(DROID * const psDroid, SAVE_DROID const * const
 	psDroid->sMove.pauseTime    = PHYSFS_swapULE16(psSaveDroid->sMove.pauseTime);
 	psDroid->sMove.bumpX        = PHYSFS_swapULE16(psSaveDroid->sMove.bumpX);
 	psDroid->sMove.bumpY        = PHYSFS_swapULE16(psSaveDroid->sMove.bumpY);
-
-	if (psSaveDroid->sMove.isInFormation)
-	{
-		psDroid->sMove.psFormation = formationFind(psSaveDroid->formationX, psSaveDroid->formationY);
-		// join a formation if it exists at the destination
-		if (psDroid->sMove.psFormation)
-		{
-			formationJoin(psDroid->sMove.psFormation, psDroid);
-		}
-		else
-		{
-			// no formation so create a new one
-			if (formationNew(&psDroid->sMove.psFormation, FT_LINE, psSaveDroid->formationX, psSaveDroid->formationY,
-					(SDWORD)psSaveDroid->formationDir))
-			{
-				formationJoin(psDroid->sMove.psFormation, psDroid);
-			}
-		}
-	}
 
 	// Recreate path-finding jobs
 	if (psDroid->sMove.Status == MOVEWAITROUTE)

@@ -32,10 +32,8 @@
 #include "objmem.h"
 #include "power.h"						// for powercalculated
 #include "order.h"
-#include "geometry.h"					// for formations.
 #include "map.h"
 #include "group.h"
-#include "formation.h"
 #include "lib/netplay/netplay.h"					// the netplay library.
 #include "multiplay.h"					// warzone net stuff.
 #include "multijoin.h"

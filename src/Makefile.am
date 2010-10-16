@@ -79,8 +79,6 @@ noinst_HEADERS = \
 	environ.h \
 	featuredef.h \
 	feature.h \
-	formationdef.h \
-	formation.h \
 	fpath.h \
 	frend.h \
 	frontend.h \
@@ -207,7 +205,6 @@ warzone2100_SOURCES = \
 	environ.c \
 	feature.c \
 	force-linker.cpp \
-	formation.c \
 	fpath.c \
 	frontend.c \
 	function.c \

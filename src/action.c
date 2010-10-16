@@ -32,7 +32,6 @@
 
 #include "action.h"
 #include "combat.h"
-#include "formation.h"
 #include "geometry.h"
 #include "intdisplay.h"
 #include "mission.h"
@@ -966,12 +965,6 @@ void actionUpdateDroid(DROID *psDroid)
 
 		break;
 	case DACTION_WAITDURINGREPAIR:
-		// don't want to be in a formation for this move
-		if (psDroid->sMove.psFormation != NULL)
-		{
-			formationLeave(psDroid->sMove.psFormation, psDroid);
-			psDroid->sMove.psFormation = NULL;
-		}
 		// Check that repair facility still exists
 		if (!psDroid->psTarget)
 		{
@@ -1220,13 +1213,6 @@ void actionUpdateDroid(DROID *psDroid)
 	case DACTION_ATTACK:
 		ASSERT_OR_RETURN( , psDroid->psActionTarget[0] != NULL, "target is NULL while attacking");
 
-		// don't wan't formations for this one
-		if (psDroid->sMove.psFormation)
-		{
-			formationLeave(psDroid->sMove.psFormation, psDroid);
-			psDroid->sMove.psFormation = NULL;
-		}
-
 		//check the target hasn't become one the same player ID - Electronic Warfare
 		if ((electronicDroid(psDroid) && (psDroid->player == psDroid->psActionTarget[0]->player)))
 		{
@@ -1465,13 +1451,6 @@ void actionUpdateDroid(DROID *psDroid)
 		break;
 	}
 	case DACTION_MOVETOATTACK:
-		// don't wan't formations for this one
-		if (psDroid->sMove.psFormation)
-		{
-			formationLeave(psDroid->sMove.psFormation, psDroid);
-			psDroid->sMove.psFormation = NULL;
-		}
-
 		// send vtols back to rearm
 		if (isVtolDroid(psDroid) &&
 			vtolEmpty(psDroid))
@@ -1638,13 +1617,6 @@ void actionUpdateDroid(DROID *psDroid)
 			psDroid->action = DACTION_NONE;
 			break;
 		}
-		// The droid cannot be in a formation
-		if (psDroid->sMove.psFormation != NULL)
-		{
-			formationLeave(psDroid->sMove.psFormation, psDroid);
-			psDroid->sMove.psFormation = NULL;
-		}
-
 		// moving to a location to build a structure
 		if (actionReachedBuildPos(psDroid,
 						(SDWORD)psDroid->orderX,(SDWORD)psDroid->orderY, psDroid->psTarStats) &&
@@ -1832,13 +1804,6 @@ void actionUpdateDroid(DROID *psDroid)
 			psDroid->action = DACTION_NONE;
 			break;
 		}
-		// The droid cannot be in a formation
-		if (psDroid->sMove.psFormation != NULL)
-		{
-			formationLeave(psDroid->sMove.psFormation, psDroid);
-			psDroid->sMove.psFormation = NULL;
-		}
-
 		if (DROID_STOPPED(psDroid) &&
 			!actionReachedBuildPos(psDroid,
 						(SDWORD)psDroid->orderX,(SDWORD)psDroid->orderY, psDroid->psTarStats))
@@ -1875,13 +1840,6 @@ void actionUpdateDroid(DROID *psDroid)
 			psDroid->action = DACTION_NONE;
 			break;
 		}
-		// The droid cannot be in a formation
-		if (psDroid->sMove.psFormation != NULL)
-		{
-			formationLeave(psDroid->sMove.psFormation, psDroid);
-			psDroid->sMove.psFormation = NULL;
-		}
-
 		// see if the droid is at the edge of what it is moving to
 		if (actionReachedBuildPos(psDroid,
 						(SDWORD)psDroid->actionX,(SDWORD)psDroid->actionY, psDroid->psTarStats) &&
@@ -2018,12 +1976,6 @@ void actionUpdateDroid(DROID *psDroid)
 		}
 		break;
 	case DACTION_MOVETOREPAIRPOINT:
-		// don't want to be in a formation for this move
-		if (psDroid->sMove.psFormation != NULL)
-		{
-			formationLeave(psDroid->sMove.psFormation, psDroid);
-			psDroid->sMove.psFormation = NULL;
-		}
 		/* moving from front to rear of repair facility or rearm pad */
 		if (actionReachedBuildPos(psDroid, psDroid->psActionTarget[0]->pos.x,psDroid->psActionTarget[0]->pos.y,
 							(BASE_STATS *)((STRUCTURE *)psDroid->psActionTarget[0])->pStructureType))

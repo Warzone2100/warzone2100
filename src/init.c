@@ -59,7 +59,6 @@
 #include "edit3d.h"
 #include "effects.h"
 #include "environ.h"
-#include "formation.h"
 #include "fpath.h"
 #include "frend.h"
 #include "frontend.h"
@@ -769,11 +768,6 @@ BOOL stageOneInitialise(void)
 		return false;
 	}
 
-	if (!formationInitialise())		// Initialise the formation system
-	{
-		return false;
-	}
-
 	// initialise the visibility stuff
 	if (!visInitialise())
 	{
@@ -848,7 +842,6 @@ BOOL stageOneShutDown(void)
 
 	grpShutDown();
 
-	formationShutDown();
 	releasePlayerPower();
 
 	ResearchRelease();

@@ -59,8 +59,6 @@
 #include "lib/script/script.h"
 #include "scripttabs.h"
 #include "scriptcb.h"
-#include "formationdef.h"
-#include "formation.h"
 #include "text.h"
 #include "action.h"
 #include "group.h"

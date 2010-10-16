@@ -60,8 +60,6 @@
 #include "function.h"
 #include "lighting.h"
 #include "multiplay.h"
-#include "formationdef.h"
-#include "formation.h"
 #include "warcam.h"
 #include "display3d.h"
 #include "group.h"
@@ -317,12 +315,6 @@ void droidRelease(DROID *psDroid)
 
 	fpathRemoveDroidData(psDroid->id);
 
-	// leave the current formation if any
-	if (psDroid->sMove.psFormation)
-	{
-		formationLeave(psDroid->sMove.psFormation, psDroid);
-	}
-
 	// leave the current group if any
 	if (psDroid->psGroup)
 	{
@@ -420,13 +412,6 @@ void	removeDroidBase(DROID *psDel)
 		const bool bRet = animObj_Remove(psDel->psCurAnim, psDel->psCurAnim->psAnim->uwID);
 		ASSERT(bRet, "animObj_Remove failed");
 		psDel->psCurAnim = NULL;
-	}
-
-	// leave the current formation if any
-	if (psDel->sMove.psFormation)
-	{
-		formationLeave(psDel->sMove.psFormation, psDel);
-		psDel->sMove.psFormation = NULL;
 	}
 
 	//kill all the droids inside the transporter
@@ -584,13 +569,6 @@ BOOL droidRemove(DROID *psDroid, DROID *pList[MAX_PLAYERS])
 	{
 		// droid has already been killed, quit
 		return false;
-	}
-
-	// leave the current formation if any
-	if (psDroid->sMove.psFormation)
-	{
-		formationLeave(psDroid->sMove.psFormation, psDroid);
-		psDroid->sMove.psFormation = NULL;
 	}
 
 	// leave the current group if any - not if its a Transporter droid
