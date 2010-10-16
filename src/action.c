@@ -676,29 +676,29 @@ BOOL actionVisibleTarget(DROID *psDroid, BASE_OBJECT *psTarget, int weapon_slot)
 	ASSERT_OR_RETURN( false, compIndex < numWeaponStats, "Invalid range referenced for numWeaponStats, %d > %d", compIndex, numWeaponStats);
 	psStats = asWeaponStats + compIndex;
 
-	if (proj_Direct(psStats))
+	if (lineOfFire((BASE_OBJECT*)psDroid, psTarget, weapon_slot, true))
 	{
-		if (visibleObject((BASE_OBJECT*)psDroid, psTarget, true))
+		if (proj_Direct(psStats))
 		{
 			return true;
 		}
-	}
-	else
-	{
-		// indirect can only attack things they can see unless attacking
-		// through a sensor droid - see DORDER_FIRESUPPORT
-		if (orderState(psDroid, DORDER_FIRESUPPORT))
-		{
-			if (psTarget->visible[psDroid->player])
-			{
-				return true;
-			}
-		}
 		else
 		{
-			if (visibleObject((BASE_OBJECT*)psDroid, psTarget, false))
+			// indirect can only attack things they can see unless attacking
+			// through a sensor droid - see DORDER_FIRESUPPORT
+			if (orderState(psDroid, DORDER_FIRESUPPORT))
 			{
-				return true;
+				if (psTarget->visible[psDroid->player])
+				{
+					return true;
+				}
+			}
+			else
+			{
+				if (visibleObject((BASE_OBJECT*)psDroid, psTarget, false))
+				{
+					return true;
+				}
 			}
 		}
 	}

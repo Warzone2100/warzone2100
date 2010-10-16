@@ -398,6 +398,9 @@ typedef struct _tile_coord
 	MAPTILE	*psTile;
 } TILE_COORD;
 
+/* Intersect a line with the map and report tile intersection points */
+extern BOOL map_Intersect(int *Cx, int *Cy, int *Vx, int* Vy, int *Sx, int *Sy);
+
 /* Return height of x,y */
 extern SWORD map_Height(int x, int y);
 
@@ -421,6 +424,7 @@ void mapFloodFillContinents(void);
 extern void mapTest(void);
 
 extern bool fireOnLocation(unsigned int x, unsigned int y);
+extern BOOL map_Intersect(int* Cx, int* Cy, int* Vx, int* Vy, int* Sx, int* Sy);
 
 /**
  * Transitive sensor check for tile. Has to be here rather than

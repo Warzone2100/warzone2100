@@ -5526,6 +5526,45 @@ BOOL getLasSatExists(UDWORD player)
 	return lasSatExists[player];
 }
 
+/* calculate muzzle base location in 3d world */
+BOOL calcStructureMuzzleBaseLocation(STRUCTURE *psStructure, Vector3f *muzzle, int weapon_slot)
+{
+	iIMDShape *psShape = psStructure->pStructureType->pIMD, *psWeaponImd = NULL;
+
+	CHECK_STRUCTURE(psStructure);
+
+	if (psStructure->asWeaps[weapon_slot].nStat > 0)
+	{
+		psWeaponImd = asWeaponStats[psStructure->asWeaps[weapon_slot].nStat].pIMD;
+	}
+
+	if(psShape && psShape->nconnectors)
+	{
+		Vector3f barrel = {0.0f, 0.0f, 0.0f};
+
+		pie_MatBegin();
+
+		pie_TRANSLATE(psStructure->pos.x, -psStructure->pos.z, psStructure->pos.y);
+
+		//matrix = the center of droid
+		pie_MatRotY( DEG( psStructure->direction ) );
+		pie_MatRotX( DEG( psStructure->pitch ) );
+		pie_MatRotZ( DEG( -psStructure->roll ) );
+		pie_TRANSLATE( psShape->connectors[weapon_slot].x, -psShape->connectors[weapon_slot].z,
+					-psShape->connectors[weapon_slot].y);	//note y and z flipped
+
+		pie_RotateTranslate3f(&barrel, muzzle);
+		muzzle->z = -muzzle->z;
+
+		pie_MatEnd();
+	}
+	else
+	{
+		*muzzle = Vector3f_Init(psStructure->pos.x, psStructure->pos.y, psStructure->pos.z + psStructure->sDisplay.imd->max.y);
+	}
+
+	return true;
+}
 
 /* calculate muzzle tip location in 3d world */
 BOOL calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3f *muzzle, int weapon_slot)

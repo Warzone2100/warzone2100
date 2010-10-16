@@ -66,9 +66,7 @@ static BOOL aiStructHasRange(STRUCTURE *psStruct, BASE_OBJECT *psTarget, int wea
 	longRange = proj_GetLongRange(psWStats);
 	if (xdiff*xdiff + ydiff*ydiff < longRange*longRange)
 	{
-		// in range
-		return true;
-
+		return (lineOfFire((BASE_OBJECT*)psStruct, psTarget, weapon_slot, true));
 	}
 
 	return false;

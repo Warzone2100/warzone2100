@@ -60,7 +60,6 @@
 #include "multistat.h"
 #include "mapgrid.h"
 
-#define	PROJ_MAX_PITCH			30
 #define	DIRECT_PROJ_SPEED		500
 #define VTOL_HITBOX_MODIFICATOR 100
 
@@ -74,7 +73,7 @@ typedef struct _interval
 #define PROJ_NAYBOR_RANGE		(TILE_UNITS*4)
 // used to create a specific ID for projectile objects to facilitate tracking them.
 static const UDWORD ProjectileTrackerID =	0xdead0000;
-// Watermelon:neighbour global info ripped from droid.c
+// neighbour global info ripped from droid.c
 static PROJ_NAYBOR_INFO	asProjNaybors[MAX_NAYBORS];
 static UDWORD		numProjNaybors = 0;
 
@@ -95,7 +94,6 @@ BASE_OBJECT		*g_pProjLastAttacker;
 /***************************************************************************/
 
 static UDWORD	establishTargetRadius( BASE_OBJECT *psTarget );
-static UDWORD	establishTargetHeight( BASE_OBJECT *psTarget );
 static void	proj_ImpactFunc( PROJECTILE *psObj );
 static void	proj_PostImpactFunc( PROJECTILE *psObj );
 static void	proj_checkBurnDamage( BASE_OBJECT *apsList, PROJECTILE *psProj);
@@ -326,6 +324,13 @@ static void proj_UpdateKills(PROJECTILE *psObj, float experienceInc)
 
 BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Vector3i target, BASE_OBJECT *psTarget, BOOL bVisible, int weapon_slot)
 {
+	return proj_SendProjectileAngled(psWeap, psAttacker, player, target, psTarget, bVisible, weapon_slot, 0);
+}
+
+/***************************************************************************/
+
+BOOL proj_SendProjectileAngled(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Vector3i target, BASE_OBJECT *psTarget, BOOL bVisible, int weapon_slot, int min_angle)
+{
 	PROJECTILE		*psProj = malloc(sizeof(PROJECTILE));
 	SDWORD			tarHeight, srcHeight, iMinSq;
 	SDWORD			altChange, dx, dy, dz, iVelSq, iVel;
@@ -405,7 +410,10 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 	if (psTarget)
 	{
 		const float maxHeight = establishTargetHeight(psTarget);
-		unsigned int heightVariance = frandom() * maxHeight;
+		const float minHight = MAX(0, MIN(maxHeight,maxHeight + 2 * LINE_OF_FIRE_MINIMUM - areaOfFire(psAttacker, psTarget, weapon_slot, true)));
+		unsigned int heightVariance = minHight + frandom() * (maxHeight - minHight);
+		// store visible part (LOCK ON this part for homing :)
+		psProj->partVisible = (maxHeight - minHight);
 
 		scoreUpdateVar(WD_SHOTS_ON_TARGET);
 
@@ -522,8 +530,23 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 			}
 		}
 
+		// Check against min_angle
+		if (psProj->pitch<min_angle)
+		{
+			// set pitch to pass terrain
+			psProj->pitch = min_angle;
+
+			fS = trigSin(min_angle);
+			fC = trigCos(min_angle);
+			fT = fS / fC;
+			fS = ACC_GRAVITY * (1. + fT * fT);
+			fS = fS / (2.0 * (fR * fT - dz));
+			
+			iVel = trigIntSqrt(fS * (fR * fR));
+		}
+
 		/* if droid set muzzle pitch */
-		//Watermelon:fix turret pitch for more turrets
+		// fix turret pitch for more turrets
 		if (psAttacker != NULL && weapon_slot >= 0)
 		{
 			if (psAttacker->type == OBJ_DROID)
@@ -751,7 +774,8 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 		/* If it's homing and it has a target (not a miss)... */
 		move.x = psProj->psDest->pos.x - psProj->startX;
 		move.y = psProj->psDest->pos.y - psProj->startY;
-		move.z = psProj->psDest->pos.z + establishTargetHeight(psProj->psDest)/2 - psProj->srcHeight;
+		// Home at the center of the part that was visible when firing
+		move.z = psProj->psDest->pos.z + (establishTargetHeight(psProj->psDest) - psProj->partVisible/2) - psProj->srcHeight;
 	}
 	else
 	{
@@ -1967,7 +1991,7 @@ static void projGetNaybors(PROJECTILE *psObj)
 #define BULLET_FLIGHT_HEIGHT 16
 
 
-static UDWORD	establishTargetHeight(BASE_OBJECT *psTarget)
+UDWORD	establishTargetHeight(BASE_OBJECT *psTarget)
 {
 	if (psTarget == NULL)
 	{
@@ -2038,6 +2062,7 @@ static UDWORD	establishTargetHeight(BASE_OBJECT *psTarget)
 					return height;
 			}
 
+			// TODO: check the /2 - does this really make sense? why + ?
 			utilityHeight = (yMax + yMin)/2;
 
 			return height + utilityHeight;
@@ -2045,11 +2070,11 @@ static UDWORD	establishTargetHeight(BASE_OBJECT *psTarget)
 		case OBJ_STRUCTURE:
 		{
 			STRUCTURE_STATS * psStructureStats = ((STRUCTURE *)psTarget)->pStructureType;
-			return (psStructureStats->pIMD->max.y + psStructureStats->pIMD->min.y) / 2;
+			return (psStructureStats->pIMD->max.y + psStructureStats->pIMD->min.y);
 		}
 		case OBJ_FEATURE:
 			// Just use imd ymax+ymin
-			return (psTarget->sDisplay.imd->max.y + psTarget->sDisplay.imd->min.y) / 2;
+			return (psTarget->sDisplay.imd->max.y + psTarget->sDisplay.imd->min.y);
 		case OBJ_PROJECTILE:
 			return BULLET_FLIGHT_HEIGHT;
 		default:
@@ -2082,3 +2107,4 @@ void checkProjectile(const PROJECTILE* psProjectile, const char * const location
 	for (n = 0; n != psProjectile->psNumDamaged; ++n)
 		checkObject(psProjectile->psDamaged[n], location_description, function, recurse - 1);
 }
+

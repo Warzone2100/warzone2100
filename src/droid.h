@@ -239,6 +239,8 @@ extern UDWORD	getNumDroidsForLevel(UDWORD	level);
 extern BOOL activateGroupAndMove(UDWORD playerNumber, UDWORD groupNumber);
 /* calculate muzzle tip location in 3d world added int weapon_slot to fix the always slot 0 hack*/
 extern BOOL calcDroidMuzzleLocation(DROID *psDroid, Vector3f *muzzle, int weapon_slot);
+/* calculate muzzle base location in 3d world added int weapon_slot to fix the always slot 0 hack*/
+extern BOOL calcDroidMuzzleBaseLocation(DROID *psDroid, Vector3f *muzzle, int weapon_slot);
 
 /* gets a template from its aName (when pName is unknown) */ 
 extern DROID_TEMPLATE	*GetHumanDroidTemplate(char *aName);

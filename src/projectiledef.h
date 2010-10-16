@@ -59,6 +59,7 @@ typedef struct PROJECTILE
 	SDWORD          altChange;              ///< Change in altitude
 	UDWORD          born;
 	UDWORD          died;
+	int		partVisible;		///< how much of target was visible on shooting (important for homing)
 } PROJECTILE;
 
 #endif // __INCLUDED_PROJECTILEDEF_H__
