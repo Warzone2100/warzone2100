@@ -1017,7 +1017,7 @@ bool initTerrain(void)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, 3, lightmapWidth, lightmapHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, lightmapPixmap);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, lightmapWidth, lightmapHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, lightmapPixmap);
 
 	terrainInitalised = true;
 	
@@ -1224,7 +1224,7 @@ void drawTerrain(void)
 	}
 	finishDrawRangeElements();
 	
-	if (rendStates.fogEnabled)
+	if (pie_GetFogStatus())
 	{
 		glEnable(GL_FOG); // resync fog state
 		glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
@@ -1416,7 +1416,7 @@ void drawWater(void)
 
 	// multiplicative blending
 	pie_SetRendMode(REND_MULTIPLICATIVE);
-	
+
 	// second texture unit
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, iV_NativeTexID(iV_GetTexture("page-81")));

@@ -286,7 +286,7 @@ void pie_ActivateShader_TCMask(PIELIGHT teamcolour, SDWORD maskpage)
 	glUniform4fv(loc, 1, &colour4f[0]);
 
 	glActiveTexture(GL_TEXTURE1);
-	pie_SetTexturePage(maskpage);
+	glBindTexture(GL_TEXTURE_2D, _TEX_PAGE[maskpage].id);
 	glActiveTexture(GL_TEXTURE0);
 
 #ifdef _DEBUG
@@ -405,7 +405,7 @@ void pie_SetTexturePage(SDWORD num)
 				glDisable(GL_TEXTURE_2D);
 				break;
 			case TEXPAGE_EXTERN:
-				// GLC will set the texture, we just need to enable texturing
+				// The texture will be set outside of ivis, we just need to enable texturing
 				glEnable(GL_TEXTURE_2D);
 				break;
 			default:

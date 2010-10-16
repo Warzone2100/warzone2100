@@ -119,6 +119,9 @@ void pie_DrawSkybox(float scale, int u, int v, int w, int h)
 {
 	const float r = 1.0f; // just because it is shorter than 1.0f
 
+	// enable alpha
+	pie_SetRendMode(REND_ALPHA);
+
 	glPushAttrib(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_ENABLE_BIT | GL_FOG_BIT);
 	// no use in updating the depth buffer
 	glDepthMask(GL_FALSE);
@@ -128,9 +131,6 @@ void pie_DrawSkybox(float scale, int u, int v, int w, int h)
 
 	// So we have realistic colors
 	glColor4ub(0xFF,0xFF,0xFF,0xFF);
-
-	// enable alpha
-	pie_SetRendMode(REND_ALPHA);
 
 	// for the nice blend of the sky with the fog
 	glDisable(GL_ALPHA_TEST);
