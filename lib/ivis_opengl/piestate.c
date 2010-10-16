@@ -410,12 +410,12 @@ void pie_SetTexturePage(SDWORD num)
 			case TEXPAGE_NONE:
 				glDisable(GL_TEXTURE_2D);
 				break;
-			case TEXPAGE_FONT:
+			case TEXPAGE_EXTERN:
 				// GLC will set the texture, we just need to enable texturing
 				glEnable(GL_TEXTURE_2D);
 				break;
 			default:
-				if (rendStates.texPage == TEXPAGE_NONE || rendStates.texPage == TEXPAGE_FONT)
+				if (rendStates.texPage == TEXPAGE_NONE)
 				{
 					glEnable(GL_TEXTURE_2D);
 				}

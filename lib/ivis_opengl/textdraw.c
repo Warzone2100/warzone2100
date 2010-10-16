@@ -598,7 +598,7 @@ int iV_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width, U
 
 void iV_DrawTextRotated(const char* string, float XPos, float YPos, float rotation)
 {
-	pie_SetTexturePage(TEXPAGE_FONT);
+	pie_SetTexturePage(TEXPAGE_EXTERN);
 
 	glMatrixMode(GL_TEXTURE);
 	glPushMatrix();
