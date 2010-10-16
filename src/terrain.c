@@ -1360,6 +1360,8 @@ void drawTerrain(void)
 	// disable the lightmap texture
 	glActiveTexture(GL_TEXTURE1);
 	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_TEXTURE_GEN_S);
+	glDisable(GL_TEXTURE_GEN_T);
 	glMatrixMode(GL_TEXTURE);
 	glLoadIdentity();
 	glActiveTexture(GL_TEXTURE0);
