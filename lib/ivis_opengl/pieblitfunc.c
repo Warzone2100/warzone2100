@@ -80,6 +80,7 @@ void pie_Line(int x0, int y0, int x1, int y1, PIELIGHT colour)
  */
 static void pie_DrawRect(float x0, float y0, float x1, float y1, PIELIGHT colour)
 {
+	pie_SetTexturePage(TEXPAGE_NONE);
 	pie_SetAlphaTest(false);
 
 	glColor4ubv(colour.vector);
