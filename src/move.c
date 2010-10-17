@@ -551,6 +551,77 @@ static void moveCalcTurn(uint16_t *pCurr, uint16_t target, int rate)
 	*pCurr += clip(diff, -change, change);
 }
 
+typedef struct
+{
+	PROPULSION_TYPE propulsionType;
+	bool blocking;
+} BLOCKING_CALLBACK_DATA;
+
+static bool moveBlockingTileCallback(Vector3i pos, int32_t dist, void *data_)
+{
+	BLOCKING_CALLBACK_DATA *data = (BLOCKING_CALLBACK_DATA *)data_;
+	data->blocking |= fpathBlockingTile(map_coord(pos.x), map_coord(pos.y), data->propulsionType);
+	return !data->blocking;
+}
+
+// Returns -1 - distance if the direct path to the waypoint is blocked, otherwise returns the distance to the waypoint.
+static int32_t moveDirectPathToWaypoint(DROID *psDroid, unsigned positionIndex)
+{
+	Vector3i src = {psDroid->pos.x, psDroid->pos.y, 0};
+	Vector2i dst = psDroid->sMove.asPath[positionIndex];
+	Vector2i delta = {dst.x - src.x, dst.y - src.y};
+	uint16_t dir = iAtan2(delta.x, delta.y);
+	int32_t dist = iHypot(delta.x, delta.y);
+	BLOCKING_CALLBACK_DATA data;
+	data.propulsionType = getPropulsionStats(psDroid)->propulsionType;
+	data.blocking = false;
+	rayCast(src, dir, dist, &moveBlockingTileCallback, &data);
+	return data.blocking? -1 - dist : dist;
+}
+
+// Returns true if still able to find the path.
+static bool moveBestTarget(DROID *psDroid)
+{
+	int positionIndex = psDroid->sMove.Position - 1;
+	int32_t dist = moveDirectPathToWaypoint(psDroid, positionIndex);
+	if (dist >= 0)
+	{
+		// Look ahead in the path.
+		while (dist >= 0 && dist < TILE_UNITS*5)
+		{
+			++positionIndex;
+			if (positionIndex >= psDroid->sMove.numPoints)
+			{
+				dist = -1;
+				break;  // Reached end of path.
+			}
+			dist = moveDirectPathToWaypoint(psDroid, positionIndex);
+		}
+		if (dist < 0)
+		{
+			--positionIndex;
+		}
+	}
+	else
+	{
+		// Lost sight of path, backtrack.
+		while (dist < 0 && dist >= -TILE_UNITS*7 && positionIndex > 0)
+		{
+			--positionIndex;
+			dist = moveDirectPathToWaypoint(psDroid, positionIndex);
+		}
+		if (dist < 0)
+		{
+			return false;  // Couldn't find path, and backtracking didn't help.
+		}
+	}
+	psDroid->sMove.Position = positionIndex + 1;
+	psDroid->sMove.srcX = psDroid->pos.x;
+	psDroid->sMove.srcY = psDroid->pos.y;
+	psDroid->sMove.targetX = psDroid->sMove.asPath[positionIndex].x;
+	psDroid->sMove.targetY = psDroid->sMove.asPath[positionIndex].y;
+	return true;
+}
 
 /* Get the next target point from the route */
 static BOOL moveNextTarget(DROID *psDroid)
@@ -2427,6 +2498,13 @@ void moveUpdateDroid(DROID *psDroid)
 	case MOVEPOINTTOPOINT:
 	case MOVEPAUSE:
 		// moving between two way points
+
+		// Get the best control point.
+		if (!moveBestTarget(psDroid))
+		{
+			// Got stuck somewhere, can't find the path.
+			moveDroidTo(psDroid, psDroid->sMove.DestinationX, psDroid->sMove.DestinationY);
+		}
 
 		// See if the target point has been reached
 		if (moveReachedWayPoint(psDroid))
