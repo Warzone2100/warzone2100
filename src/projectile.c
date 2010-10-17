@@ -858,7 +858,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 			continue;
 		}
 		
-		if (psStats->surfaceToAir == SHOOT_IN_AIR &&
+		if (!(psStats->surfaceToAir & SHOOT_ON_GROUND) &&
 			(psTempObj->type == OBJ_STRUCTURE ||
 				psTempObj->type == OBJ_FEATURE ||
 				(psTempObj->type == OBJ_DROID && !isFlying((DROID *)psTempObj))
@@ -1227,9 +1227,8 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 					bool bTargetInAir = (asPropulsionTypes[asPropulsionStats[psCurrD->asBits[COMP_PROPULSION].nStat].propulsionType].travel == AIR && ((DROID *)psCurrD)->sMove.Status != MOVEINACTIVE);
 
 					// Check whether we can hit it and it is in hit radius
-					if (!((psStats->surfaceToAir == SHOOT_IN_AIR && !bTargetInAir) ||
-						 (psStats->surfaceToAir == SHOOT_ON_GROUND && bTargetInAir)) &&
-					    Vector3i_InSphere(psCurrD->pos, psObj->pos, psStats->radius))
+					if ((((psStats->surfaceToAir & SHOOT_IN_AIR) && bTargetInAir) || ((psStats->surfaceToAir & SHOOT_ON_GROUND) && !bTargetInAir))
+					    && Vector3i_InSphere(psCurrD->pos, psObj->pos, psStats->radius))
 					{
 						int dice = gameRand(100);
 						if (dice < weaponRadiusHit(psStats, psObj->player))
@@ -1264,7 +1263,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 			}
 
 			// FIXME Check whether we hit above maximum structure height, to skip unnecessary calculations!
-			if (psStats->surfaceToAir != SHOOT_IN_AIR)
+			if (psStats->surfaceToAir & SHOOT_ON_GROUND)
 			{
 				STRUCTURE *psCurrS, *psNextS;
 

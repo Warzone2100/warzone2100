@@ -9392,8 +9392,7 @@ BOOL scrNumAAinRange(void)
 	{
 		if(psStruct->visible[lookingPlayer])	//if can see it
 		{
-			if(objHasWeapon((BASE_OBJECT *) psStruct) &&
-				(asWeaponStats[psStruct->asWeaps[0].nStat].surfaceToAir == SHOOT_IN_AIR) )
+			if (objHasWeapon((BASE_OBJECT *) psStruct) && (asWeaponStats[psStruct->asWeaps[0].nStat].surfaceToAir & SHOOT_IN_AIR))
 			{
 				if (range < 0
 				 || world_coord(hypotf(tx - map_coord(psStruct->pos.x), ty - map_coord(psStruct->pos.y))) < range)	//enemy in range

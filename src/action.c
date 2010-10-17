@@ -434,14 +434,6 @@ BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *
 	pitchRate = gameTimeAdjustedIncrement(pitchRate);
 	pitchRate = MAX(pitchRate, DEG(1));
 
-/*	if ( (psAttacker->type == OBJ_STRUCTURE) &&
-		 (((STRUCTURE *)psAttacker)->pStructureType->type == REF_DEFENSE) &&
-		 (asWeaponStats[((STRUCTURE *)psAttacker)->asWeaps[0].nStat].surfaceToAir == SHOOT_IN_AIR) )
-	{
-		rotRate = DEG(180);
-		pitchRate = DEG(180);
-	}*/
-
 	//and point the turret at target
 	targetRotation = calcDirection(psAttacker->pos.x, psAttacker->pos.y, psTarget->pos.x, psTarget->pos.y);
 
