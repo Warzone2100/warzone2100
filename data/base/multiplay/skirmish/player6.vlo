@@ -329,6 +329,7 @@ run
 	// SENSORS / REPAIR TEMPLATES
 
 	constructor	TEMPLATE	"ConstructorDroid"
+	hovertruck	TEMPLATE	"ScorpHoverTruck"
 	repairUnit	TEMPLATE	"ViperRepairHalftrack"
 
 	numSenseTemplates		int		10
@@ -369,7 +370,7 @@ run
 	/////////////////////////////////////////////////////////////////////
 	// VTOL TEMPLATES
 
-	numVtolTemplates		int		7
+	numVtolTemplates		int		8
 
 	vtols[0]	TEMPLATE	"P6-L-LTAT-V"		//Viper Lancer
 	vtols[1]	TEMPLATE	"P6-L-Bomb1-V"		//Viper Cluster Bombs Bay
@@ -378,7 +379,8 @@ run
 	vtols[4]	TEMPLATE	"H-Scorp-VTOL-Lancer"
 	vtols[5]	TEMPLATE	"H-Scorp-VTOL-BB"
 	vtols[6]	TEMPLATE	"H-Scorp-VTOL-Lancer"
-	
+	vtols[7]	TEMPLATE	"SK-Retre-VTOL-Thermite"
+
 	/*
 	vtols[7]	TEMPLATE	"SK-Mantis-VTOL-BB"
 	vtols[8]	TEMPLATE	"SK-Leopard-VTOL-BB"
@@ -404,19 +406,19 @@ run
 	vtolTarget[2]		STRUCTURESTAT	"A0CyborgFactory"
 	vtolTargetWeight[2]	int				60
 	vtolTarget[3]		STRUCTURESTAT	"A0VTolFactory1"
-	vtolTargetWeight[3]	int				70
+	vtolTargetWeight[3]	int				100
 	vtolTarget[4]		STRUCTURESTAT	"A0LasSatCommand"
-	vtolTargetWeight[4]	int				40
+	vtolTargetWeight[4]	int				90
 	vtolTarget[5]		STRUCTURESTAT	"A0Sat-linkCentre"
-	vtolTargetWeight[5]	int				90
+	vtolTargetWeight[5]	int				10
 	vtolTarget[6]		STRUCTURESTAT	"A0ResearchFacility"
-	vtolTargetWeight[6]	int				55
+	vtolTargetWeight[6]	int				10
 	vtolTarget[7]		STRUCTURESTAT	"A0PowerGenerator"
-	vtolTargetWeight[7]	int				95
+	vtolTargetWeight[7]	int				15
 	vtolTarget[8]		STRUCTURESTAT	"A0ResourceExtractor"
-	vtolTargetWeight[8]	int				100
+	vtolTargetWeight[8]	int				20
 	vtolTarget[9]		STRUCTURESTAT	"A0RepairCentre3"
-	vtolTargetWeight[9]	int				20
+	vtolTargetWeight[9]	int				10
 	
 	
 	// Structure types AI will rebuild when they get destroyed (per tech branch basis)
