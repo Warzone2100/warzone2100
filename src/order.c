@@ -60,6 +60,7 @@
 #include "fpath.h"
 #include "display3d.h"
 #include "combat.h"
+#include "console.h"
 
 #include "random.h"
 
@@ -824,46 +825,59 @@ void orderUpdateDroid(DROID *psDroid)
 		}
 		break;
 	case DORDER_EMBARK:
-		// only place it can be trapped - in multiPlayer can only put cyborgs onto a Transporter
-		if (bMultiPlayer && !cyborgDroid(psDroid))
 		{
-			psDroid->order = DORDER_NONE;
-			actionDroid(psDroid, DACTION_NONE);
-		}
-		else
-		{
-			// Wait for the action to finish then assign to Transporter (if not already flying)
-			if (psDroid->psTarget == NULL || transporterFlying((DROID *)psDroid->psTarget))
+			// only place it can be trapped - in multiPlayer can only put cyborgs onto a Cyborg Transporter
+			DROID *temp = NULL;
+
+			temp = (DROID*)psDroid->psTarget;
+			if (!strcmp("Cyborg Transport", temp->aName) && !cyborgDroid(psDroid))
 			{
+				// NOTE: since we only have one type of transport (DROID_TRANSPORT), it isn't worth changing tons of code
+				// to have two types available (DROID_TRANSPORT_SUPER), so we just check the name which can never be
+				// renamed anyway, so we should be safe with this kludge.
 				psDroid->order = DORDER_NONE;
 				actionDroid(psDroid, DACTION_NONE);
+				audio_PlayTrack( ID_SOUND_BUILD_FAIL );
+				addConsoleMessage(_("We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"), DEFAULT_JUSTIFY, selectedPlayer);
 			}
-			else if (abs((SDWORD)psDroid->pos.x - (SDWORD)psDroid->psTarget->pos.x) < TILE_UNITS
-			         && abs((SDWORD)psDroid->pos.y - (SDWORD)psDroid->psTarget->pos.y) < TILE_UNITS)
+			else
 			{
-				// save the target of current droid (the transporter)
-				DROID * transporter = (DROID *)psDroid->psTarget;
+				// Wait for the action to finish then assign to Transporter (if not already flying)
+				if (psDroid->psTarget == NULL || transporterFlying((DROID *)psDroid->psTarget))
+				{
+					psDroid->order = DORDER_NONE;
+					actionDroid(psDroid, DACTION_NONE);
+				}
+				else if (abs((SDWORD)psDroid->pos.x - (SDWORD)psDroid->psTarget->pos.x) < TILE_UNITS
+					&& abs((SDWORD)psDroid->pos.y - (SDWORD)psDroid->psTarget->pos.y) < TILE_UNITS)
+				{
+					// if in multiPlayer, only want to process if this player's droid
+					if (!bMultiPlayer || psDroid->player == selectedPlayer)
+					{
+						// save the target of current droid (the transporter)
+						DROID * transporter = (DROID *)psDroid->psTarget;
 
-				// Make sure that it really is a valid droid
-				CHECK_DROID(transporter);
+						// Make sure that it really is a valid droid
+						CHECK_DROID(transporter);
 
-				// order the droid to stop so moveUpdateDroid does not process this unit
-				orderDroid(psDroid, DORDER_STOP);
-				setDroidTarget(psDroid, NULL);
-				psDroid->psTarStats = NULL;
-				secondarySetState(psDroid, DSO_RETURN_TO_LOC, DSS_NONE);
+						// order the droid to stop so moveUpdateDroid does not process this unit
+						orderDroid(psDroid, DORDER_STOP);
+						setDroidTarget(psDroid, NULL);
+						psDroid->psTarStats = NULL;
+						secondarySetState(psDroid, DSO_RETURN_TO_LOC, DSS_NONE);
 
-				/* We must add the droid to the transporter only *after*
-				 * processing changing its orders (see above).
-				 */
-				transporterAddDroid(transporter, psDroid);
-			}
-			else if (psDroid->action == DACTION_NONE)
-			{
-				actionDroidLoc(psDroid, DACTION_MOVE, psDroid->psTarget->pos.x,psDroid->psTarget->pos.y);
+						/* We must add the droid to the transporter only *after*
+						* processing changing its orders (see above).
+					 */
+						transporterAddDroid(transporter, psDroid);
+					}
+				}
+				else if (psDroid->action == DACTION_NONE)
+				{
+					actionDroidLoc(psDroid, DACTION_MOVE, psDroid->psTarget->pos.x,psDroid->psTarget->pos.y);
+				}
 			}
 		}
-
 		// Do we need to clear the secondary order "DSO_EMBARK" here? (PD)
 		break;
     case DORDER_DISEMBARK:

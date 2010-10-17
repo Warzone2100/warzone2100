@@ -232,6 +232,21 @@ RES_CYTRANS
 	.sequenceName = "res_droid.ogg",
 	.audioName = NULL,
 };
+
+RES_SUPERTRANS
+{
+	{
+		_("Super Transport Available"),
+		_("Armed with Machinegun"),
+		_("Body Points: Medium"),
+		_("Requires heavy VTOL factory to produce"),
+	},
+	.imdName = "MICAPSUL.pie",
+	.imdName2 = NULL,
+	.sequenceName = "res_droid.ogg",
+	.audioName = NULL,
+};
+
 RES_EMP_INH
 {
 	{
