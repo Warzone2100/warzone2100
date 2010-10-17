@@ -336,9 +336,9 @@ void intUpdateQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 		Quantity = getProductionQuantity(Structure, psTemplate);
 		Built = getProductionBuilt(Structure, psTemplate);
 		snprintf(Label->aText, sizeof(Label->aText), "%02d", Quantity - Built);
-		if (Quantity - Built <= 0)
+		if (Quantity - Built <= 0)	// zero is always the case for script added production
 		{
-			snprintf(Label->aText, sizeof(Label->aText), "BUG! (e) %d-%d", Quantity, Built);
+			sstrcpy(Label->aText, "01");
 		}
 		Label->style &= ~WIDG_HIDDEN;
 	}
