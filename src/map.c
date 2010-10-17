@@ -2210,9 +2210,127 @@ bool fireOnLocation(unsigned int x, unsigned int y)
 	return psTile != NULL && TileIsBurning(psTile);
 }
 
+static void dangerFloodFill(int player)
+{
+	struct ffnode *open = NULL;
+	int i;
+	Vector2i pos = getPlayerStartPosition(player);
+
+	pos.x = map_coord(pos.x);
+	pos.y = map_coord(pos.y);
+
+	do
+	{
+		MAPTILE *currTile = mapTile(pos.x, pos.y);
+
+		// Add accessible neighbouring tiles to the open list
+		for (i = 0; i < NUM_DIR; i++)
+		{
+			Vector2i npos = { pos.x + aDirOffset[i].x, pos.y + aDirOffset[i].y };
+			MAPTILE *psTile;
+
+			if (!tileOnMap(npos.x, npos.y) || (npos.x == pos.x && npos.y == pos.y))
+			{
+				continue;
+			}
+			psTile = mapTile(npos.x, npos.y);
+
+			if (!(psTile->threatBits & (1 << player)) && (psTile->dangerBits & (1 <<player)) && !fpathBlockingTile(npos.x, npos.y, PROPULSION_TYPE_WHEELED))
+			{
+				struct ffnode *node = malloc(sizeof(*node));
+
+				node->next = open;	// add to beginning of open list
+				node->x = npos.x;
+				node->y = npos.y;
+				open = node;
+			}
+		}
+
+		// Clear danger
+		currTile->dangerBits &= ~(1 << player);
+
+		// Pop the first open node off the list for the next iteration
+		if (open)
+		{
+			struct ffnode *tmp = open;
+
+			pos.x = open->x;
+			pos.y = open->y;
+			open = open->next;
+			free(tmp);
+		}
+	} while (open);
+}
+
+static inline void threatUpdate(int player, BASE_OBJECT *psObj)
+{
+	int i;
+
+	if ((psObj->visible[player] || psObj->born == 2) && !aiCheckAlliances(player, psObj->player))
+	{
+		for (i = 0; i < psObj->numWatchedTiles; i++)
+		{
+			const TILEPOS pos = psObj->watchedTiles[i];
+			MAPTILE *psTile = mapTile(pos.x, pos.y);
+			psTile->threatBits |= (1 << player);			// set threat for this tile
+		}
+	}
+}
+
+static void dangerUpdate(int player)
+{
+	MAPTILE *psTile = psMapTiles;
+	int i;
+
+	// Step 1: Clear our threat bits, set our danger bits
+	for (i = 0; i < mapWidth * mapHeight; i++, psTile++)
+	{
+		psTile->threatBits &= ~(1 << player);
+		psTile->dangerBits |= (1 << player);
+	}
+
+	// Step 2: Set threat bits
+	for (i = 0; i < MAX_PLAYERS; i++)
+	{
+		DROID *psDroid;
+		STRUCTURE *psStruct;
+
+		for (psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
+		{
+			if (psDroid->droidType != DROID_CONSTRUCT && psDroid->droidType != DROID_CYBORG_CONSTRUCT
+			    && psDroid->droidType != DROID_REPAIR && psDroid->droidType != DROID_CYBORG_REPAIR)
+			{
+				threatUpdate(player, (BASE_OBJECT *)psDroid);
+			}
+		}
+
+		for (psStruct = apsStructLists[i]; psStruct; psStruct = psStruct->psNext)
+		{
+			if (psStruct->pStructureType->pSensor->location == LOC_TURRET || psStruct->numWeaps > 0)
+			{
+				threatUpdate(player, (BASE_OBJECT *)psStruct);
+			}
+		}
+	}
+
+	// Step 3: Clear danger bits using a flood fill from start position
+	dangerFloodFill(player);
+}
+
+void mapInit()
+{
+	int player;
+
+	for (player = 0; player < MAX_PLAYERS; player++)
+	{
+		dangerUpdate(player);
+	}
+}
+
 void mapUpdate()
 {
 	uint16_t currentTime = gameTime / GAME_TICKS_PER_UPDATE;
+	int updatedPlayer = currentTime % game.maxPlayers;
 
 	int posX, posY;
 	for (posY = 0; posY < mapHeight; ++posY)
@@ -2229,5 +2347,5 @@ void mapUpdate()
 		}
 	}
 
-	// TODO Make waves in the water?
+	dangerUpdate(updatedPlayer);
 }

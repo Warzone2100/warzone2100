@@ -1063,8 +1063,8 @@ BOOL stageThreeInitialise(void)
 		return false;
 	}
 
+	mapInit();
 	clustInitialise();
-
 	gridReset();
 
 	//if mission screen is up, close it.

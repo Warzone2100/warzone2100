@@ -103,6 +103,8 @@ typedef struct _maptile
 	uint8_t			tileInfoBits;
 	uint8_t			tileExploredBits;
 	uint8_t			sensorBits;		// bit per player, who can see tile with sensor
+	uint8_t			dangerBits;		// bit per player, does AI sense danger going there? not always up to date
+	uint8_t			threatBits;		// bit per player, can hostile player shoot here? not always up to date
 	float			height;			// The height at the top left of the tile
 	uint8_t			illumination;	// How bright is this tile?
 	uint16_t		texture;		// Which graphics texture is on this tile
@@ -448,6 +450,7 @@ static inline bool hasSensorOnTile(MAPTILE *psTile, unsigned player)
 	return ((player == selectedPlayer && godMode) || (alliancebits[selectedPlayer] & (satuplinkbits | psTile->sensorBits)));
 }
 
+void mapInit(void);
 void mapUpdate(void);
 
 #ifdef __cplusplus
