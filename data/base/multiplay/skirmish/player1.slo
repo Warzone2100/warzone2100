@@ -111,7 +111,7 @@ public	int				numTemplates[TECHS];
 public	TEMPLATE		tmpl[TECHS][70];
 private	TEMPLATE		tmplChoice[5];
 
-public	TEMPLATE		cybTempl[10],superCyb[4],cybMechanic,cybEngineer;
+public	TEMPLATE		cybTempl[10],superCyb[4],cybMechanic,cybEngineer,hovertruck;
 
 public	TEMPLATE		vtols[18];
 public	int				numVtolTemplates;
@@ -596,7 +596,6 @@ event buildOilDefenseOrRetreat(buildOilDefenseOrRetreatTr)
 {
 	local	int		_numBuilders,_maxBuilders;
 
-
 	_maxBuilders = 1;
 
 	// check idle.
@@ -632,20 +631,8 @@ event buildOilDefenseOrRetreat(buildOilDefenseOrRetreatTr)
 					{
 						if( isStructureAvailable(defStructs[count],me))
 						{
-
-							// don't build multiple sensors together.
-							if(count == 5)
-							{
-								structure = structureBuiltInRange(defStructs[count], buildX, buildY,(6*128), me);
-								if(structure != NULLOBJECT)
-								{
-									count = 8;
-								}
-							}
-
 							structChoice[count2] = defStructs[count];
 							count2 = count2 + 1;
-
 						}
 						count = count - 1;
 					}
@@ -655,7 +642,7 @@ event buildOilDefenseOrRetreat(buildOilDefenseOrRetreatTr)
 						count = random(count2);						 //count = choice!
 
 						// pick a location
-						boolResult = pickStructLocation(structChoice[count], ref buildX, ref buildY,me);
+						boolResult = pickDroidStructLocation(droid, structChoice[count], ref buildX, ref buildY, me, -1);
 
 						_numBuilders = numBuildSameBuilding(NULLSTRUCTURESTAT, buildX, buildY);
 
@@ -862,6 +849,10 @@ event incendry(incendryTr)
 // build a power gen for every 4 derricks. VITAL!
 event buildPowerGenerators(buildPowerGeneratorsTr)
 {
+	if (!isStructureAvailable(powGen, me))
+	{
+		exit;
+	}
 	initEnumStruct(FALSE,derrick,me,me);					// count = numderricks
 	structure= enumStruct();
 	count	 = 0;
@@ -886,10 +877,10 @@ event buildPowerGenerators(buildPowerGeneratorsTr)
 		droid = iterateGroup(buildGroup);
 		while(droid != NULLOBJECT)
 		{
-			buildX = baseX;								// try build powergen.
-			buildY = baseY;
-			if (droid.order != DORDER_HELPBUILD and droid.order != DORDER_BUILD and droid.order != DORDER_LINEBUILD and droidCanReach(droid, buildX, buildY))
+			if (droid.order != DORDER_HELPBUILD and droid.order != DORDER_BUILD and droid.order != DORDER_LINEBUILD)
 			{
+				buildX = baseX;							// try build powergen.
+				buildY = baseY;
 				if (pickDroidStructLocation(droid, powGen, ref buildX, ref buildY, me, 1))
 				{
 					orderDroidStatsLoc(droid, DORDER_BUILD, powGen, buildX, buildY);
@@ -905,10 +896,9 @@ event buildPowerGenerators(buildPowerGeneratorsTr)
 // ensure we have everything in the vital structs list.
 event buildBase(buildBaseTr)
 {
-	local	int		_numBuilders,_maxBuilders;
+	local int	_numBuilders,_maxBuilders;
 
-
-	if( idleGroup(buildGroup) >= (buildGroup.members/2) )
+	if (idleGroup(buildGroup) >= (buildGroup.members / 2))
 	{
 		count = 0;
 		while(count < numStructs)
@@ -1491,11 +1481,17 @@ event conDroids(conDroidsTr)
 	initEnumStruct(FALSE,factory,me,me);
 	_factory = enumStruct();
 	
-	while((_factory != NULLOBJECT) and (_numBuilding < _maxTruckFactories)
-		and (_totalTrucks < _maxTrucks))
+	while ((_factory != NULLOBJECT) and (_numBuilding < _maxTruckFactories) and (_totalTrucks < _maxTrucks))
 	{
 		//Try to build a truck
-		_bStartedBuilding = buildUnit(constructor, _factory, factory, FALSE);	//build truck even if not idle
+		if (skCanBuildTemplate(me, _factory, hovertruck))
+		{
+			_bStartedBuilding = buildUnit(hovertruck, _factory, factory, FALSE);	//build truck even if not idle
+		}
+		else
+		{
+			_bStartedBuilding = buildUnit(constructor, _factory, factory, FALSE);	//build truck even if not idle
+		}
 		
 		//Update statistics if started building a truck
 		if(_bStartedBuilding)
@@ -2577,10 +2573,7 @@ event vtolAttack(inactive)
 		{
 			if(defendObj != NULLOBJECT)
 			{
-				if(not isHumanPlayer(defendObj.player) )	// new in wdg1 	//TODO:is this check needed?
-				{
-					orderGroupObj(vtolDefendGr, DORDER_ATTACK,defendObj);		// get the defend target
-				}
+				orderGroupObj(vtolDefendGr, DORDER_ATTACK,defendObj);		// get the defend target
 			}
 		}
 	}
@@ -2924,8 +2917,8 @@ event vtolDefend(vtolDefendTr)
 						}
 						if(count2 != (-1) )
 						{
-							boolResult = pickStructLocation(vtolDefStruct[count2], ref buildX, ref buildY,me);
-							if((boolResult == TRUE) and (_numBuilders < _maxBuilders) and droidCanReach(droid, buildX, buildY))	// build a vtol defense near the attacked struct...
+							boolResult = pickDroidStructLocation(droid, vtolDefStruct[count2], ref buildX, ref buildY, me, 1);
+							if (boolResult == TRUE and (_numBuilders < _maxBuilders))	// build a vtol defense near the attacked struct...
 							{
 								orderDroidStatsLoc(droid, DORDER_BUILD,vtolDefStruct[count2],buildX,buildY);
 								_numBuilders++;
@@ -4050,11 +4043,11 @@ function void buildOnExactLocation(DROID _truck, int _x, int _y, STRUCTURESTAT _
 	_newX = _x;
 	_newY = _y;
 
-	if(pickStructLocationB(_stat, ref _newX, ref _newY, me, -1))
+	if (pickDroidStructLocation(_truck, _stat, ref _newX, ref _newY, me, -1))
 	{
 		dbg("trying to rebuild on (" & _newX & "/" & _newY & ")", me);
 
-		if((_x != _newX) or (_y != _newY) or !droidCanReach(_truck, _x, _y))
+		if ((_x != _newX) or (_y != _newY))
 		{
 			return;
 		}
