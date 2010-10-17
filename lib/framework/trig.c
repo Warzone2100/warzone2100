@@ -33,6 +33,10 @@
 
 #include <assert.h>
 #include <stdlib.h>
+// for M_PI
+#if defined(WZ_CC_MSVC)
+	#define _USE_MATH_DEFINES
+#endif
 
 #include <math.h>
 
