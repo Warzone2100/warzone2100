@@ -104,11 +104,12 @@ typedef struct _maptile
 	uint8_t			tileExploredBits;
 	uint8_t			sensorBits;		// bit per player, who can see tile with sensor
 	uint8_t			dangerBits;		// bit per player, does AI sense danger going there? not always up to date
-	uint8_t			threatBits;		// bit per player, can hostile player shoot here? not always up to date
-	float			height;			// The height at the top left of the tile
+	uint8_t			threatBits;		// bit per player, can hostile players shoot here? not always up to date
+	uint8_t			aaThreatBits;		// bit per player, can hostile players shoot at my VTOLs here?
 	uint8_t			illumination;	// How bright is this tile?
-	uint16_t		texture;		// Which graphics texture is on this tile
 	uint8_t			watchers[MAX_PLAYERS];		// player sees through fog of war here with this many objects
+	uint16_t		texture;		// Which graphics texture is on this tile
+	float			height;			// The height at the top left of the tile
 	float			level;
 	BASE_OBJECT		*psObject;		// Any object sitting on the location (e.g. building)
 	PIELIGHT		colour;

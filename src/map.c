@@ -2262,7 +2262,7 @@ static void dangerFloodFill(int player)
 	} while (open);
 }
 
-static inline void threatUpdate(int player, BASE_OBJECT *psObj)
+static inline void threatUpdate(int player, BASE_OBJECT *psObj, bool ground, bool air)
 {
 	int i;
 
@@ -2272,7 +2272,14 @@ static inline void threatUpdate(int player, BASE_OBJECT *psObj)
 		{
 			const TILEPOS pos = psObj->watchedTiles[i];
 			MAPTILE *psTile = mapTile(pos.x, pos.y);
-			psTile->threatBits |= (1 << player);			// set threat for this tile
+			if (ground)
+			{
+				psTile->threatBits |= (1 << player);			// set ground threat for this tile
+			}
+			if (air)
+			{
+				psTile->aaThreatBits |= (1 << player);			// set air threat for this tile
+			}
 		}
 	}
 }
@@ -2280,7 +2287,7 @@ static inline void threatUpdate(int player, BASE_OBJECT *psObj)
 static void dangerUpdate(int player)
 {
 	MAPTILE *psTile = psMapTiles;
-	int i;
+	int i, weapon;
 
 	// Step 1: Clear our threat bits, set our danger bits
 	for (i = 0; i < mapWidth * mapHeight; i++, psTile++)
@@ -2297,18 +2304,42 @@ static void dangerUpdate(int player)
 
 		for (psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
 		{
-			if (psDroid->droidType != DROID_CONSTRUCT && psDroid->droidType != DROID_CYBORG_CONSTRUCT
-			    && psDroid->droidType != DROID_REPAIR && psDroid->droidType != DROID_CYBORG_REPAIR)
+			UBYTE mode = 0;
+
+			if (psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT
+			    || psDroid->droidType == DROID_REPAIR || psDroid->droidType == DROID_CYBORG_REPAIR)
 			{
-				threatUpdate(player, (BASE_OBJECT *)psDroid);
+				continue;	// hack that really should not be needed, but is -- trucks can SHOOT_ON_GROUND...!
+			}
+			for (weapon = 0; weapon < psDroid->numWeaps; weapon++)
+			{
+				mode |= asWeaponStats[psDroid->asWeaps[weapon].nStat].surfaceToAir;
+			}
+			if (psDroid->droidType == DROID_SENSOR)	// special treatment for sensor turrets, no multiweapon support
+			{
+				mode |= SHOOT_ON_GROUND;		// assume it only shoots at ground targets for now
+			}
+			if (mode > 0)
+			{
+				threatUpdate(player, (BASE_OBJECT *)psDroid, mode & SHOOT_ON_GROUND, mode & SHOOT_IN_AIR);
 			}
 		}
 
 		for (psStruct = apsStructLists[i]; psStruct; psStruct = psStruct->psNext)
 		{
-			if (psStruct->pStructureType->pSensor->location == LOC_TURRET || psStruct->numWeaps > 0)
+			UBYTE mode = 0;
+
+			for (weapon = 0; weapon < psStruct->numWeaps; weapon++)
 			{
-				threatUpdate(player, (BASE_OBJECT *)psStruct);
+				mode |= asWeaponStats[psStruct->asWeaps[weapon].nStat].surfaceToAir;
+			}
+			if (psStruct->pStructureType->pSensor->location == LOC_TURRET)	// special treatment for sensor turrets
+			{
+				mode |= SHOOT_ON_GROUND;		// assume it only shoots at ground targets for now
+			}
+			if (mode > 0)
+			{
+				threatUpdate(player, (BASE_OBJECT *)psStruct, mode & SHOOT_ON_GROUND, mode & SHOOT_IN_AIR);
 			}
 		}
 	}
