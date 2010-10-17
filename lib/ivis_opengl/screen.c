@@ -418,9 +418,8 @@ void screen_Upload(const char *newBackDropBmp, BOOL preview)
 
 	// Make sure the current texture page is reloaded after we are finished
 	// Otherwise WZ will think it is still loaded and not load it again
-	pie_SetTexturePage(TEXPAGE_NONE);
+	pie_SetTexturePage(TEXPAGE_EXTERN);
 
-	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, backDropTexture);
 	glColor3f(1, 1, 1);
 
