@@ -5118,14 +5118,19 @@ BOOL loadSaveDroidInitV2(char *pFileData, UDWORD filesize,UDWORD quantity)
 		}
 		else
 		{
-			ASSERT(psTemplate != NULL, "Invalid template pointer");
 			psDroid = reallyBuildDroid(psTemplate, (pDroidInit->x & ~TILE_MASK) + TILE_UNITS/2, (pDroidInit->y  & ~TILE_MASK) + TILE_UNITS/2, pDroidInit->player, false);
 
 			if (psDroid)
 			{
+				Vector2i startpos = getPlayerStartPosition(psDroid->player);
+
 				psDroid->id = pDroidInit->id;
 				psDroid->rot.direction = DEG(pDroidInit->direction);
 				addDroid(psDroid, apsDroidLists);
+				if (psDroid->droidType == DROID_CONSTRUCT && startpos.x == 0 && startpos.y == 0)
+				{
+					scriptSetStartPos(psDroid->player, psDroid->pos.x, psDroid->pos.y);
+				}
 			}
 			else
 			{
@@ -5236,6 +5241,7 @@ static DROID* buildDroidFromSaveDroidV11(SAVE_DROID_V11* psSaveDroid)
 	UDWORD					i;
 	SDWORD					compInc;
 	UDWORD					burnTime;
+	Vector2i				startpos = getPlayerStartPosition(psSaveDroid->player);
 
 	psTemplate = &sTemplate;
 
@@ -5319,6 +5325,10 @@ static DROID* buildDroidFromSaveDroidV11(SAVE_DROID_V11* psSaveDroid)
 		psDroid->asWeaps[i].rot.pitch = DEG(psSaveDroid->turretPitch);
 	}
 
+	if (psDroid->droidType == DROID_CONSTRUCT && startpos.x == 0 && startpos.y == 0)
+	{
+		scriptSetStartPos(psDroid->player, psDroid->pos.x, psDroid->pos.y);
+	}
 
 	psDroid->psGroup = NULL;
 	psDroid->psGrpNext = NULL;
@@ -5336,6 +5346,7 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 	UDWORD					i, id;
 	SDWORD					compInc;
 	UDWORD					burnTime;
+	Vector2i				startpos = getPlayerStartPosition(psSaveDroid->player);
 
 	psTemplate = &sTemplate;
 
@@ -5431,6 +5442,11 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 	psDroid->experience = (float)psSaveDroid->numKills;
 	//version 14
 	psDroid->resistance = droidResistance(psDroid);
+
+	if (psDroid->droidType == DROID_CONSTRUCT && startpos.x == 0 && startpos.y == 0)
+	{
+		scriptSetStartPos(psDroid->player, psDroid->pos.x, psDroid->pos.y);
+	}
 
 	if (version >= VERSION_11)//version 11
 	{
@@ -5663,6 +5679,7 @@ static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 	UDWORD					i, id;
 	SDWORD					compInc;
 	UDWORD					burnTime;
+	Vector2i				startpos = getPlayerStartPosition(psSaveDroid->player);
 
 	psTemplate = &sTemplate;
 
@@ -5861,6 +5878,12 @@ static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 		psDroid->resistance = (SWORD)psSaveDroid->resistance;
 		LoadDroidMoveControl(psDroid, psSaveDroid);
 	}
+
+	if (psDroid->droidType == DROID_CONSTRUCT && startpos.x == 0 && startpos.y == 0)
+	{
+		scriptSetStartPos(psDroid->player, psDroid->pos.x, psDroid->pos.y);
+	}
+
 	return psDroid;
 }
 
