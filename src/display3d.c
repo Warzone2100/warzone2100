@@ -928,18 +928,6 @@ static void drawTiles(iView *player)
 	// draw skybox
 	renderSurroundings();
 	
-	// clear the terrain highlight
-	for (i = 0; i < visibleTiles.y; i++)
-	{
-		for (j = 0; j < visibleTiles.x; j++)
-		{
-			if (tileOnMap(playerXTile + j, playerZTile + i))
-			{
-				CLEAR_TILE_HIGHLIGHT(mapTile(playerXTile + j, playerZTile + i));
-			}
-		}
-	}
-
 	// and prepare for rendering the models
 	pie_SetRendMode(REND_OPAQUE);
 	pie_SetAlphaTest(true);

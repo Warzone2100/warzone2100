@@ -68,8 +68,6 @@ typedef enum _terrain_type
 #define TILE_ROTMASK	0x3000
 #define TILE_ROTSHIFT	12
 #define TILE_TRIFLIP	0x0800	// This bit describes the direction the tile is split into 2 triangles (same as triangleFlip)
-#define TILE_HILIGHT	0x0400	// set when the tile has the structure cursor over it
-
 #define TILE_NUMMASK	0x01ff
 
 
@@ -164,12 +162,6 @@ static inline bool tileIsExplored(const MAPTILE *psTile)
 	return psTile->tileExploredBits & (1 << selectedPlayer);
 }
 
-/** Check if tile is highlighted by the user. Function is thread-safe. */
-static inline bool TileIsHighlighted(const MAPTILE* tile)
-{
-	return tile->texture & TILE_HILIGHT;
-}
-
 /** Check if tile is not blocking, even if structure or feature on it */
 static inline bool TileIsNotBlocking(const MAPTILE *tile)
 {
@@ -195,9 +187,6 @@ static inline bool TileHasSmallStructure(const MAPTILE* tile)
 #define SET_TILE_DECAL(x)	((x)->tileInfoBits |= BITS_DECAL)
 #define CLEAR_TILE_DECAL(x)	((x)->tileInfoBits &= ~BITS_DECAL)
 #define TILE_HAS_DECAL(x)	((x)->tileInfoBits & BITS_DECAL)
-
-#define SET_TILE_HIGHLIGHT(x)	((x)->texture |= TILE_HILIGHT)
-#define CLEAR_TILE_HIGHLIGHT(x)	((x)->texture &= ~TILE_HILIGHT)
 
 #define SET_TILE_TALLSTRUCTURE(x)	((x)->tileInfoBits |= BITS_TALLSTRUCTURE)
 #define CLEAR_TILE_TALLSTRUCTURE(x)	((x)->tileInfoBits &= ~BITS_TALLSTRUCTURE)
