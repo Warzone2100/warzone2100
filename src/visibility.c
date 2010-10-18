@@ -975,7 +975,12 @@ static int checkFireLine(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarge
 	int distSq, partSq, oldPartSq;
 	double angletan;
 
-	ASSERT_OR_RETURN(-1, psViewer || psTarget, "Invalid shooter pointer!");
+	ASSERT_OR_RETURN(-1, psTarget, "Invalid target pointer!");
+	if (!psViewer)
+	{
+		// lassat always has a line of sight
+		return 1000;
+	}
 
 	// get muzzle offset (code from projectile.c)
 	if (psViewer->type == OBJ_DROID && weapon_slot >= 0)
