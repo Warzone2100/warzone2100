@@ -82,6 +82,7 @@
 #include "research.h"
 #include "lib/framework/cursors.h"
 #include "scriptextern.h"
+#include "scriptfuncs.h"
 #include "scripttabs.h"
 #include "scriptvals.h"
 #include "text.h"
