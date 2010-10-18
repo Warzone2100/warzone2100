@@ -811,6 +811,7 @@ BOOL stageOneInitialise(void)
 
 	initMission();
 	initTransporters();
+	scriptInit();
 
     //do this here so that the very first mission has it initialised
     initRunData();
@@ -1057,11 +1058,6 @@ BOOL stageThreeInitialise(void)
 		debug( LOG_WZ, "multiGameInit()\n" );
 		multiGameInit();
 		cmdDroidMultiExpBoost(true);
-	}
-	else
-	{
-		//ensure single player games do not have this set
-		game.maxPlayers = 0;
 	}
 
 	preProcessVisibility();

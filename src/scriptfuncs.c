@@ -123,6 +123,12 @@ void scriptSetStartPos(int position, int x, int y)
 
 BOOL scriptInit()
 {
+	int i;
+
+	for (i = 0; i < MAX_PLAYERS; i++)
+	{
+		scriptSetStartPos(i, 0, 0);
+	}
 	nextPlayer = 0;
 	return true;
 }

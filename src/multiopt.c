@@ -525,8 +525,6 @@ static BOOL gameInit(void)
 {
 	UDWORD			player;
 
-	scriptInit();
-
 	// If this is from a savegame, stop here!
 	if (getSaveGameType() == GTYPE_SAVE_START || getSaveGameType() == GTYPE_SAVE_MIDMISSION)
 	{
