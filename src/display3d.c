@@ -3590,7 +3590,7 @@ static void locateMouse(void)
 static void renderSurroundings(void)
 {
 	static float wind = 0.0f;
-	const float skybox_scale = 20000.0f;
+	const float skybox_scale = 10000.0f;
 // check with TRUNK
 	const float height = 20.0f * TILE_UNITS;
 	const float wider  = 2.0f * (visibleTiles.x * TILE_UNITS);
