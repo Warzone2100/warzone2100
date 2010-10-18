@@ -28,6 +28,7 @@ BASELIST = \
 	structs \
 	tagdefinitions \
 	texpages \
+	tileset \
 	wrf
 
 PATCHLIST = \
