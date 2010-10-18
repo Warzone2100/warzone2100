@@ -2168,11 +2168,11 @@ static void dangerFloodFill(int player)
 	} while (open);
 }
 
-static inline void threatUpdate(int player, BASE_OBJECT *psObj, bool ground, bool air)
+static inline void threatUpdateTarget(int player, BASE_OBJECT *psObj, bool ground, bool air)
 {
 	int i;
 
-	if ((psObj->visible[player] || psObj->born == 2) && !aiCheckAlliances(player, psObj->player))
+	if (psObj->visible[player] || psObj->born == 2)
 	{
 		for (i = 0; i < psObj->numWatchedTiles; i++)
 		{
@@ -2190,16 +2190,15 @@ static inline void threatUpdate(int player, BASE_OBJECT *psObj, bool ground, boo
 	}
 }
 
-static void dangerUpdate(int player)
+static void threatUpdate(int player)
 {
 	MAPTILE *psTile = psMapTiles;
 	int i, weapon;
 
-	// Step 1: Clear our threat bits, set our danger bits
+	// Step 1: Clear our threat bits
 	for (i = 0; i < mapWidth * mapHeight; i++, psTile++)
 	{
 		psTile->threatBits &= ~(1 << player);
-		psTile->dangerBits |= (1 << player);
 	}
 
 	// Step 2: Set threat bits
@@ -2207,6 +2206,12 @@ static void dangerUpdate(int player)
 	{
 		DROID *psDroid;
 		STRUCTURE *psStruct;
+
+		if (aiCheckAlliances(player, i))
+		{
+			// No need to iterate friendly objects
+			continue;
+		}
 
 		for (psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
 		{
@@ -2227,7 +2232,7 @@ static void dangerUpdate(int player)
 			}
 			if (mode > 0)
 			{
-				threatUpdate(player, (BASE_OBJECT *)psDroid, mode & SHOOT_ON_GROUND, mode & SHOOT_IN_AIR);
+				threatUpdateTarget(player, (BASE_OBJECT *)psDroid, mode & SHOOT_ON_GROUND, mode & SHOOT_IN_AIR);
 			}
 		}
 
@@ -2245,12 +2250,22 @@ static void dangerUpdate(int player)
 			}
 			if (mode > 0)
 			{
-				threatUpdate(player, (BASE_OBJECT *)psStruct, mode & SHOOT_ON_GROUND, mode & SHOOT_IN_AIR);
+				threatUpdateTarget(player, (BASE_OBJECT *)psStruct, mode & SHOOT_ON_GROUND, mode & SHOOT_IN_AIR);
 			}
 		}
 	}
+}
 
-	// Step 3: Clear danger bits using a flood fill from start position
+static void dangerUpdate(int player)
+{
+	MAPTILE *psTile = psMapTiles;
+	int i;
+
+	// Set our danger bits
+	for (i = 0; i < mapWidth * mapHeight; i++, psTile++)
+	{
+		psTile->dangerBits |= (1 << player);
+	}
 	dangerFloodFill(player);
 }
 
@@ -2260,6 +2275,7 @@ void mapInit()
 
 	for (player = 0; player < MAX_PLAYERS; player++)
 	{
+		threatUpdate(player);
 		dangerUpdate(player);
 	}
 }
@@ -2267,9 +2283,11 @@ void mapInit()
 void mapUpdate()
 {
 	uint16_t currentTime = gameTime / GAME_TICKS_PER_UPDATE;
-	int updatedPlayer = currentTime % game.maxPlayers;
-
+	int updatedBase = currentTime % (game.maxPlayers * 2);
+	int updatedPlayer = updatedBase / 2;
+	bool updateThreat = updatedBase % 2;
 	int posX, posY;
+
 	for (posY = 0; posY < mapHeight; ++posY)
 		for (posX = 0; posX < mapWidth; ++posX)
 	{
@@ -2284,5 +2302,13 @@ void mapUpdate()
 		}
 	}
 
-	dangerUpdate(updatedPlayer);
+	// We do only a bit of danger map update each logical frame to avoid overheating the CPU
+	if (updateThreat)
+	{
+		threatUpdate(updatedPlayer);
+	}
+	else
+	{
+		dangerUpdate(updatedPlayer);
+	}
 }
