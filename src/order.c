@@ -1577,7 +1577,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 			break;
 		}
 		//in multiPlayer, cannot move Transporter to blocking tile either
-		if (game.maxPlayers > 0
+		if (game.type == SKIRMISH
 		    && psDroid->droidType == DROID_TRANSPORTER
 		    && fpathBlockingTile(map_coord(psOrder->x), map_coord(psOrder->y), getPropulsionStats(psDroid)->propulsionType))
 		{
@@ -1639,7 +1639,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		else if (!psOrder->psObj->died)
 		{
 			//cannot attack a Transporter with EW in multiPlayer
-			if (game.maxPlayers > 0 && electronicDroid(psDroid)
+			if (game.type == SKIRMISH && electronicDroid(psDroid)
 			    && psOrder->psObj->type == OBJ_DROID && ((DROID *)psOrder->psObj)->droidType == DROID_TRANSPORTER)
 			{
 				break;
@@ -1837,7 +1837,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 
 				psDroid->order = DORDER_RTB;
 				// Find a place to land for vtols. And Transporters in a multiPlay game.
-				if (isVtolDroid(psDroid) || ((game.maxPlayers > 0) && (psDroid->droidType == DROID_TRANSPORTER)))
+				if (isVtolDroid(psDroid) || (game.type == SKIRMISH && psDroid->droidType == DROID_TRANSPORTER))
 				{
 					actionVTOLLandingPos(psDroid, &droidX,&droidY);
 				}
@@ -1929,7 +1929,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 				setDroidTarget(psDroid, (BASE_OBJECT *) psRepairFac);
 				/* If in multiPlayer, and the Transporter has been sent to be
 				 * repaired, need to find a suitable location to drop down. */
-				if (game.maxPlayers > 0 && psDroid->droidType == DROID_TRANSPORTER)
+				if (game.type == SKIRMISH && psDroid->droidType == DROID_TRANSPORTER)
 				{
 					UDWORD droidX, droidY;
 					droidX = psDroid->orderX;
@@ -2723,7 +2723,7 @@ DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x,UDWORD y, BOOL altOrder)
 	}
 
 	// and now we want Transporters to fly! - in multiPlayer!!
-	if (psDroid->droidType == DROID_TRANSPORTER && game.maxPlayers != 0)
+	if (psDroid->droidType == DROID_TRANSPORTER && game.type == SKIRMISH)
 	{
 		/* in MultiPlayer - if ALT-key is pressed then need to get the Transporter
 		 * to fly to location and all units disembark */
