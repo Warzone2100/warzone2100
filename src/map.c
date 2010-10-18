@@ -2266,7 +2266,11 @@ static void dangerUpdate(int player)
 	{
 		psTile->dangerBits |= (1 << player);
 	}
-	dangerFloodFill(player);
+	if (game.type == SKIRMISH)
+	{
+		dangerFloodFill(player);
+	}
+	// else everything is equally dangerous
 }
 
 void mapInit()
