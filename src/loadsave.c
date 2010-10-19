@@ -628,7 +628,12 @@ void removeWildcards(char *pStr)
 	{
 		pStr[MAX_SAVE_NAME - 1] = 0;
 	}
-
+	else if (strlen(pStr) == 0)
+	{
+		pStr[0] = '!';
+		pStr[1] = 0;
+		return;
+	}
 	// Trim trailing spaces
 	for (i = strlen(pStr); i > 0 && pStr[i - 1] == ' '; --i)
 	{}
