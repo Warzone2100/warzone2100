@@ -789,7 +789,7 @@ BOOL mapLoad(char *filename)
 	if (width <=1 || height <=1)
 	{
 		debug(LOG_ERROR, "Map is too small : %u, %u", width, height);
-		return false;
+		goto failure;
 	}
 
 	/* See if this is the first time a map has been loaded */
