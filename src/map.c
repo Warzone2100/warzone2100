@@ -2255,7 +2255,7 @@ static void threatUpdate(int player)
 			{
 				mode |= asWeaponStats[psStruct->asWeaps[weapon].nStat].surfaceToAir;
 			}
-			if (psStruct->pStructureType->pSensor->location == LOC_TURRET)	// special treatment for sensor turrets
+			if (psStruct->pStructureType->pSensor && psStruct->pStructureType->pSensor->location == LOC_TURRET)	// special treatment for sensor turrets
 			{
 				mode |= SHOOT_ON_GROUND;		// assume it only shoots at ground targets for now
 			}
