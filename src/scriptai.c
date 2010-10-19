@@ -1640,7 +1640,7 @@ BOOL scrSkDoResearch(void)
 	PLAYER_RESEARCH		*pPlayerRes;
 	RESEARCH			*pResearch;
 
-	if (!stackPopParams(3,ST_STRUCTURE, &psBuilding, VAL_INT, &player, VAL_INT,&bias ))
+	if (!stackPopParams(3, ST_STRUCTURE, &psBuilding, VAL_INT, &player, VAL_INT, &bias))
 	{
 		return false;
 	}
@@ -1654,7 +1654,7 @@ BOOL scrSkDoResearch(void)
 	}
 
 	// choose a topic to complete.
-	for(i=0;i<numResearch;i++)
+	for(i=0; i < numResearch; i++)
 	{
 		if (skTopicAvail(i, player) && (!bMultiPlayer || !beingResearchedByAlly(i, player)))
 		{
@@ -1664,10 +1664,13 @@ BOOL scrSkDoResearch(void)
 
 	if(i != numResearch)
 	{
-		pResearch = asResearch + i;
-		if (bMultiMessages)
+		pResearch = (asResearch + i);
+		pPlayerRes = asPlayerResList[player] + i;
+		psResFacilty->psSubject = (BASE_STATS*)pResearch;			//set the subject up
+
+		if (IsResearchCancelled(pPlayerRes))
 		{
-			sendResearchStatus(psBuilding, pResearch->ref - REF_RESEARCH_START, player, true);
+			psResFacilty->powerAccrued = pResearch->researchPower;	//set up as if all power available for cancelled topics
 		}
 		else
 		{
@@ -1693,6 +1696,16 @@ BOOL scrSkDoResearch(void)
 			}
 		}
 
+		sendResearchStatus(psBuilding, i, player, true);			// inform others, I'm researching this.
+		MakeResearchStarted(pPlayerRes);
+		psResFacilty->timeStarted = ACTION_START_TIME;
+		psResFacilty->timeStartHold = 0;
+		psResFacilty->timeToResearch = pResearch->researchPoints / 	psResFacilty->researchPoints;
+
+		if (psResFacilty->timeToResearch == 0)
+		{
+			psResFacilty->timeToResearch = 1;
+		}
 #if defined (DEBUG)
 		{
 			char	sTemp[128];
