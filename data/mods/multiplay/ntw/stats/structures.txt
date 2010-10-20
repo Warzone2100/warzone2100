@@ -7,6 +7,7 @@ Laser-Sat,DEFENSE,Level All,HARD,1,2,2,Concrete,2000,3,10,500,10,1000,20,300,1,0
 A0ComDroidControl,COMMAND RELAY,Level All,HARD,0,2,2,Concrete,500,2,10,500,10,100,30,300,1,1,ZNULLECM,DefaultSensor1Mk1,0,bldrdcm0.Pie,BLBDRDCM.pie,1,0
 A0CommandCentreDEL,HQ,Level All,HARD,0,2,2,Concrete,500,3,10,500,10,100,30,300,1,1,ZNULLECM,CCSensor,1,blhq.Pie,blbhq.pie,0,0
 A0CommandCentre,DEFENSE,Level One,MEDIUM,0,1,1,Concrete,50,2,5,200,0,20,1,0,255,1,ZNULLECM,CCSensor,1,blbrlook.Pie,0,1,0
+A0CommandCentreCO,HQ,Level Two,HARD,0,2,2,Concrete,500,3,10,500,10,100,30,300,1,1,ZNULLECM,CCSensor,0,blhq3.pie,0,1,0
 A0CommandCentreNE,HQ,Level Three,HARD,0,2,2,Concrete,500,3,10,500,10,100,30,300,1,1,ZNULLECM,CCSensor,1,blhq4.Pie,0,1,0
 A0CommandCentreNP,HQ,Level One,HARD,0,2,2,Concrete,500,3,10,500,10,100,30,300,1,1,ZNULLECM,CCSensor,1,blhq2.Pie,0,1,0
 A0CyborgFactory,CYBORG FACTORY,Level All,MEDIUM,1,1,2,Concrete,500,2,10,500,100,100,30,150,5,20,ZNULLECM,DefaultSensor1Mk1,0,blcfact1.Pie,blbcfact.pie,1,0
@@ -163,4 +164,3 @@ ContaMine8,DEFENSE,Level Three,MEDIUM,0,1,1,Concrete,100,1,20,200,1,500,1,150,25
 AAShield,DEFENSE,Level Three,HARD,1,2,2,Concrete,1000,3,20,1000,20,1000,20,150,255,0,ZNULLECM,ZNULLSENSOR2,1,shield.pie,0,0,1
 GShield,DEFENSE,Level Three,HARD,1,2,2,Concrete,1000,3,20,1000,20,1000,20,150,255,0,ZNULLECM,ZNULLSENSOR2,1,shield2.pie,0,0,1
 A0TankTrap2,DEFENSE,Level All,HARD,1,1,1,Concrete,150,1,25,800,10,50,10,100,255,0,ZNULLECM,ZNULLSENSOR,0,MITRAP2.PIE,0,0,0
-A0CommandCentreCO,HQ,Level Two,HARD,0,2,2,Concrete,500,3,10,500,10,100,30,300,1,1,ZNULLECM,CCSensor,0,blhq3.pie,0,1,0

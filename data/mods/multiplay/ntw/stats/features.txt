@@ -4,7 +4,7 @@ OilResource,1,1,0,0,0,mislick.pie,OIL RESOURCE,1,1,0
 Boulder1,1,1,0,0,0,mibould1.pie,BOULDER,1,0,1
 Boulder2,1,1,0,0,0,mibould2.pie,BOULDER,1,0,1
 Boulder3,1,1,0,5,25,mibould3.pie,BOULDER,1,0,1
-WreckedDroidHub,1,1,1,1,1,drwreck.pie,VEHICLE,1,1,0
+WreckedDroidHub,1,1,1,7,60,drwreck.pie,VEHICLE,1,1,0
 WreckedVertCampVan,1,1,1,5,50,micamper.pie,VEHICLE,1,0,0
 WreckedSuzukiJeep,1,1,1,2,40,mijeep.pie,VEHICLE,1,0,0
 WreckedTankerV,1,2,1,2,75,mitanker.pie,TANK WRECK,1,0,0
