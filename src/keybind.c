@@ -99,6 +99,8 @@
 	Alex McLean, Pumpkin Studios, EIDOS Interactive.
 */
 
+//#define DEBUG_SCROLLTABS 	//enable to see tab scroll button info for buttons
+
 #define	MAP_ZOOM_RATE	(1000)
 #define MAP_PITCH_RATE	(SPIN_SCALING/SECS_PER_SPIN)
 
@@ -2804,3 +2806,106 @@ void kf_NoAssert()
 	console("Asserts turned off");
 	debug(LOG_ERROR, "Asserts turned off");
 }
+
+// rotuine to decrement the tab-scroll 'buttons'
+void kf_BuildPrevPage()
+{
+	W_TABFORM *psTForm;
+	int temp;
+#ifdef DEBUG_SCROLLTABS
+	int numTabs;
+	int maxTabs;
+#endif
+	int tabPos;
+
+	ASSERT_OR_RETURN( , psWScreen != NULL, " Invalid screen pointer!");
+	psTForm = (W_TABFORM *)widgGetFromID(psWScreen, IDSTAT_TABFORM);	//get our form
+	if (psTForm == NULL)
+	{
+		return;
+	}
+
+	if (psTForm->TabMultiplier < 1)
+	{
+		psTForm->TabMultiplier = 1;				// 1-based
+	}
+
+#ifdef DEBUG_SCROLLTABS
+	numTabs = numForms(psTForm->numStats,psTForm->numButtons);
+	maxTabs = ((numTabs /TAB_SEVEN) + 1);		// (Total tabs needed / 7(max tabs that fit))+1
+#endif
+	temp = psTForm->majorT - 1;
+	if (temp < 0)
+	{
+		temp = 0 ;
+		audio_PlayTrack(ID_SOUND_BUILD_FAIL);
+		return;
+	}
+
+	psTForm->majorT = temp;
+	tabPos = ((psTForm->majorT) % TAB_SEVEN);	 // The tabs position on the page
+	if ((tabPos == (TAB_SEVEN - 1)) && (psTForm->TabMultiplier > 1))
+	{
+		psTForm->TabMultiplier -= 1;
+	}
+	audio_PlayTrack(ID_SOUND_BUTTON_CLICK_5);
+
+#ifdef  DEBUG_SCROLLTABS
+	console("Tabs: %d - MaxTabs: %d - MajorT: %d - numMajor: %d - TabMultiplier: %d",numTabs, maxTabs, psTForm->majorT, psTForm->numMajor, psTForm->TabMultiplier);
+#endif
+}
+
+// rotuine to advance the tab-scroll 'buttons'
+void kf_BuildNextPage()
+{
+	W_TABFORM	*psTForm;
+	int numTabs;
+	int maxTabs;
+	int tabPos;
+
+	ASSERT_OR_RETURN( , psWScreen != NULL, " Invalid screen pointer!");
+
+	psTForm = (W_TABFORM *)widgGetFromID(psWScreen, IDSTAT_TABFORM);
+	if (psTForm == NULL)
+	{
+		return;
+	}
+
+	if (psTForm->TabMultiplier < 1)
+	{
+		psTForm->TabMultiplier = 1;				// 1-based
+		audio_PlayTrack(ID_SOUND_BUILD_FAIL);
+	}
+	numTabs = numForms(psTForm->numStats,psTForm->numButtons);
+	maxTabs = ((numTabs /TAB_SEVEN));			// (Total tabs needed / 7(max tabs that fit))+1
+
+	if (psTForm->majorT < numTabs - 1)
+	{
+		// Increase tab if we are not on the last one
+		psTForm->majorT += 1;					 // set tab # to next "page"
+	}
+	else
+	{
+		// went over max
+		audio_PlayTrack(ID_SOUND_BUILD_FAIL);
+		return;
+	}
+	tabPos = ((psTForm->majorT) % TAB_SEVEN);	 // The tabs position on the page
+	// 7 mod 7 = 0, since we are going forward we can assume it's the next tab
+	if ((tabPos == 0) && (psTForm->TabMultiplier <= maxTabs))
+	{
+		psTForm->TabMultiplier += 1;
+	}
+
+	if (psTForm->majorT >= psTForm->numMajor)
+	{
+		psTForm->majorT = psTForm->numMajor - 1;
+	}
+	audio_PlayTrack( ID_SOUND_BUTTON_CLICK_5 );
+
+#ifdef  DEBUG_SCROLLTABS
+	console("Tabs: %d - MaxTabs: %d - MajorT: %d - numMajor: %d - TabMultiplier: %d",numTabs, maxTabs, psTForm->majorT, psTForm->numMajor, psTForm->TabMultiplier);
+#endif
+}
+
+

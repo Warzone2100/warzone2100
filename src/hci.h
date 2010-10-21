@@ -315,6 +315,9 @@ extern BOOL ClosingOrder;
 /* Initialise the in game interface */
 extern BOOL intInitialise(void);
 
+// Check of coordinate is in the build menu
+extern BOOL CoordInBuild(int x, int y);
+
 /* Shut down the in game interface */
 extern void interfaceShutDown(void);
 

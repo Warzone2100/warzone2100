@@ -1508,14 +1508,20 @@ static void intProcessEditStats(UDWORD id)
 		if (psTForm->TabMultiplier < 1 )
 		{
 			psTForm->TabMultiplier = 1;			//Must be at least 1.
+			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
 		}
 		// add routine to update tab widgets now...
 		temp = psTForm->majorT;					//set tab # to previous "page"
 		temp -=TAB_SEVEN;						//7 = 1 "page" of tabs
 		if ( temp < 0)
+		{
 			psTForm->majorT = 0;
+			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
+		}
 		else
+		{
 			psTForm->majorT = temp;
+		}
 #ifdef  DEBUG_SCROLLTABS
 		sprintf(buf,"[debug menu]Clicked LT %d tab #=%d",psTForm->TabMultiplier,psTForm->majorT);
 		addConsoleMessage(buf,DEFAULT_JUSTIFY,SYSTEM_MESSAGE);
@@ -1535,6 +1541,7 @@ static void intProcessEditStats(UDWORD id)
 		if (psTForm->TabMultiplier > numTabs)			// add 'Bzzt' sound effect?
 		{
 			psTForm->TabMultiplier -= 1;					// to signify past max?
+			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
 		}
 	//add routine to update tab widgets now...
 		psTForm->majorT += TAB_SEVEN;					// set tab # to next "page"
@@ -3027,6 +3034,7 @@ static void intProcessStats(UDWORD id)
 		if (psTForm->TabMultiplier < 1)
 		{
 			psTForm->TabMultiplier = 1;			// Must be at least 1.
+			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
 		}
 		//add routine to update tab widgets now...
 		temp = psTForm->majorT;					// set tab # to previous "page"
@@ -3054,6 +3062,7 @@ static void intProcessStats(UDWORD id)
 		if (psTForm->TabMultiplier > numTabs)		//add 'Bzzt' sound effect?
 		{
 			psTForm->TabMultiplier -= 1;				//to signify past max?
+			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
 		}
 	//add routine to update tab widgets now...
 		psTForm->majorT += TAB_SEVEN;				// set tab # to next "page"
@@ -7280,3 +7289,24 @@ BASE_OBJECT * getCurrentSelected(void)
 {
 	return psObjSelected;
 }
+
+// Checks if a coordinate is over the build menu
+BOOL CoordInBuild(int x, int y)
+{
+	// This measurement is valid for the menu, so the buildmenu_height
+	// value is used to "nudge" it all upwards from the command menu.
+	// FIXME: hardcoded value (?)
+	const int buildmenu_height = 300;
+	Vector2f pos;
+	
+	pos.x = x - RET_X;
+	pos.y = y - RET_Y + buildmenu_height; // guesstimation
+
+	if (pos.x < 0 || pos.y < 0 || pos.x >= RET_FORMWIDTH || pos.y >= buildmenu_height)
+	{
+		return false;
+	}
+
+	return true;
+}
+
