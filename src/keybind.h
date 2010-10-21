@@ -247,4 +247,7 @@ extern void	kf_ToggleWatchWindow( void );
 
 bool runningMultiplayer(void);
 
+void	kf_BuildNextPage( void );
+void	kf_BuildPrevPage( void );
+
 #endif // __INCLUDED_SRC_KEYBIND_H__

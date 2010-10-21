@@ -462,6 +462,8 @@ void resetInput(void)
 void processInput(void)
 {
 	BOOL mOverRadar = false;
+	BOOL mOverConstruction = false;
+
 	int WheelZoomIterator;
 
 	if (InGameOpUp || isInGamePopupUp)
@@ -472,6 +474,11 @@ void processInput(void)
 	if(radarOnScreen && getHQExists(selectedPlayer) && CoordInRadar(mouseX(), mouseY()))
 	{
 		mOverRadar = true;
+	}
+
+	if(CoordInBuild(mouseX(), mouseY()))
+	{
+		mOverConstruction = true;
 	}
 
 	StartOfLastFrame = currentFrame;
@@ -496,6 +503,10 @@ void processInput(void)
 		{
 			kf_RadarZoomIn();
 		}
+		else if (mOverConstruction)
+		{
+			kf_BuildPrevPage();
+		}
 		else
 		{
 			for (WheelZoomIterator = 0; WheelZoomIterator < 10; WheelZoomIterator++)
@@ -514,6 +525,10 @@ void processInput(void)
 		else if (mOverRadar)
 		{
 			kf_RadarZoomOut();
+		}
+		else if (mOverConstruction)
+		{
+			kf_BuildNextPage();
 		}
 		else
 		{
