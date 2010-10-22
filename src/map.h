@@ -292,10 +292,6 @@ extern BOOL mapLoad(char *filename);
 /* Save the map data */
 extern BOOL mapSave(char **ppFileData, UDWORD *pFileSize);
 
-/* New savegame format */
-BOOL mapSaveTagged(char *pFileName);
-BOOL mapLoadTagged(char *pFileName);
-
 /** Return a pointer to the tile structure at x,y in map coordinates */
 static inline WZ_DECL_PURE MAPTILE *mapTile(int32_t x, int32_t y)
 {
