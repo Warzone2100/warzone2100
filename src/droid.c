@@ -4608,7 +4608,7 @@ static void maybeDeleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE 
 							//power is returned by factoryProdAdjust()
 							if (psNextTemplate)
 							{
-								structSetManufacture(psStruct, psNextTemplate);
+								structSetManufacture(psStruct, psNextTemplate, ModeQueue);  // ModeQueue because production lists aren't synchronised.
 							}
 							else
 							{

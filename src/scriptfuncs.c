@@ -1468,7 +1468,7 @@ BOOL scrBuildDroid(void)
 	{
 		debug(LOG_ERROR, "A script is trying to build a different number (%d) than 1 droid.", productionRun);
 	}
-	structSetManufacture(psFactory, psTemplate);
+	structSetManufacture(psFactory, psTemplate, ModeQueue);
 
 	return true;
 }

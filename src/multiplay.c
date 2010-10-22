@@ -151,7 +151,7 @@ BOOL multiplayerWinSequence(BOOL firstCall)
 			{
 				if (((FACTORY *)psStruct->pFunctionality)->psSubject)//check if active
 				{
-					cancelProduction(psStruct);
+					cancelProduction(psStruct, ModeQueue);
 				}
 			}
 		}
@@ -1012,9 +1012,7 @@ BOOL recvResearchStatus(NETQUEUE queue)
 
 			if (psResFacilty->psSubject)
 			{
-				turnOffMultiMsg(true);
-				cancelResearch(psBuilding);
-				turnOffMultiMsg(false);
+				cancelResearch(psBuilding, ModeImmediate);
 			}
 
 			// Set the subject up
@@ -1077,9 +1075,7 @@ BOOL recvResearchStatus(NETQUEUE queue)
 		// Stop the facility doing any research
 		if (psBuilding)
 		{
-			turnOffMultiMsg(true);
-			cancelResearch(psBuilding);
-			turnOffMultiMsg(false);
+			cancelResearch(psBuilding, ModeImmediate);
 		}
 	}
 

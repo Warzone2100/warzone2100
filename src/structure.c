@@ -1311,7 +1311,7 @@ BOOL structureRepair(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 }
 
 /* Set the type of droid for a factory to build */
-BOOL structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl)
+BOOL structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, QUEUE_MODE mode)
 {
 	FACTORY *psFact;
 
@@ -1325,7 +1325,7 @@ BOOL structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl)
 
 	psFact = &psStruct->pFunctionality->factory;
 
-	if (bMultiMessages)
+	if (mode == ModeQueue)
 	{
 		sendStructureInfo(psStruct, STRUCTUREINFO_MANUFACTURE, psTempl);
 		psStruct->pFunctionality->factory.psSubjectPending = (BASE_STATS *)psTempl;
@@ -1927,9 +1927,7 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 				++psBuilding->pFunctionality->factory.capacity;
 				bUpgraded = true;
 				//put any production on hold
-				turnOffMultiMsg(true);
-				holdProduction(psBuilding);
-				turnOffMultiMsg(false);
+				holdProduction(psBuilding, ModeImmediate);
 
 				//quick check not trying to add too much
 				ASSERT_OR_RETURN(NULL, psBuilding->pFunctionality->factory.productionOutput +
@@ -2000,9 +1998,7 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 				if (psBuilding->pFunctionality->researchFacility.psSubject)
 				{
 					//cancel the topic
-					turnOffMultiMsg(true);
-					holdResearch(psBuilding);
-					turnOffMultiMsg(false);
+					holdResearch(psBuilding, ModeImmediate);
 				}
 
 				//need to change which IMD is used for player 0
@@ -3551,9 +3547,8 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				psFactory->psSubject = NULL;
 
 				// If quantity not 0 then kick of another manufacture.
-				turnOffMultiMsg(true);  // Do instantly, since quantity is synchronised.
-				structSetManufacture(psStructure, (DROID_TEMPLATE *)pSubject);
-				turnOffMultiMsg(false);
+				// Do instantly, since quantity is synchronised.
+				structSetManufacture(psStructure, (DROID_TEMPLATE *)pSubject, ModeImmediate);
 
 				//script callback, must be called after factory was flagged as idle
 				if (bDroidPlaced)
@@ -4938,7 +4933,7 @@ BOOL removeStruct(STRUCTURE *psDel, BOOL bDestroy)
 		if (psDel->pFunctionality->researchFacility.psSubject)
 		{
 			//cancel the topic
-			cancelResearch(psDel);
+			cancelResearch(psDel, ModeImmediate);
 		}
 	}
 
@@ -4954,7 +4949,7 @@ BOOL removeStruct(STRUCTURE *psDel, BOOL bDestroy)
 		psFactory = &psDel->pFunctionality->factory;
 
 		//need to initialise the production run as well
-		cancelProduction(psDel);
+		cancelProduction(psDel, ModeImmediate);
 
 		psAssemblyPoint = psFactory->psAssemblyPoint;
 	}
@@ -5957,18 +5952,14 @@ void buildingComplete(STRUCTURE *psBuilding)
 			break;
 		case REF_RESEARCH:
 			intCheckResearchButton();
-			//this deals with researc facilities that are upgraded whilst mid-research
-			turnOffMultiMsg(true);
-			releaseResearch(psBuilding);
-			turnOffMultiMsg(false);
+			//this deals with research facilities that are upgraded whilst mid-research
+			releaseResearch(psBuilding, ModeImmediate);
 			break;
 		case REF_FACTORY:
 		case REF_CYBORG_FACTORY:
 		case REF_VTOL_FACTORY:
 			//this deals with factories that are upgraded whilst mid-production
-			turnOffMultiMsg(true);
-			releaseProduction(psBuilding);
-			turnOffMultiMsg(false);
+			releaseProduction(psBuilding, ModeImmediate);
 			break;
 		case REF_SAT_UPLINK:
 			revealAll(psBuilding->player);
@@ -6868,7 +6859,7 @@ STRUCTURE	*findDeliveryFactory(FLAG_POSITION *psDelPoint)
 
 /*cancels the production run for the factory and returns any power that was
 accrued but not used*/
-void cancelProduction(STRUCTURE *psBuilding)
+void cancelProduction(STRUCTURE *psBuilding, QUEUE_MODE mode)
 {
 	FACTORY *psFactory;
 
@@ -6876,15 +6867,8 @@ void cancelProduction(STRUCTURE *psBuilding)
 
 	psFactory = &psBuilding->pFunctionality->factory;
 
-	if (bMultiMessages)
+	if (mode == ModeQueue)
 	{
-		if (psBuilding->player == productionPlayer)
-		{
-			//clear the production run for this factory
-			memset(asProductionRun[psFactory->psAssemblyPoint->factoryType][psFactory->psAssemblyPoint->factoryInc], 0, sizeof(PRODUCTION_RUN) * MAX_PROD_RUN);
-			psFactory->productionLoops = 0;
-		}
-
 		sendStructureInfo(psBuilding, STRUCTUREINFO_CANCELPRODUCTION, NULL);
 
 		psFactory->psSubjectPending = NULL;
@@ -6893,6 +6877,10 @@ void cancelProduction(STRUCTURE *psBuilding)
 
 		if (psBuilding->player == productionPlayer)
 		{
+			//clear the production run for this factory
+			memset(asProductionRun[psFactory->psAssemblyPoint->factoryType][psFactory->psAssemblyPoint->factoryInc], 0, sizeof(PRODUCTION_RUN) * MAX_PROD_RUN);
+			psFactory->productionLoops = 0;
+
 			//tell the interface
 			intManufactureFinished(psBuilding);
 		}
@@ -6919,17 +6907,12 @@ void cancelProduction(STRUCTURE *psBuilding)
 
 		//clear the factory's subject
 		psFactory->psSubject = NULL;
-		if (psBuilding->player == productionPlayer && !bMultiPlayer)
-		{
-			//tell the interface
-			intManufactureFinished(psBuilding);
-		}
 	}
 }
 
 
 /*set a factory's production run to hold*/
-void holdProduction(STRUCTURE *psBuilding)
+void holdProduction(STRUCTURE *psBuilding, QUEUE_MODE mode)
 {
 	FACTORY *psFactory;
 
@@ -6937,7 +6920,7 @@ void holdProduction(STRUCTURE *psBuilding)
 
 	psFactory = &psBuilding->pFunctionality->factory;
 
-	if (bMultiMessages)
+	if (mode == ModeQueue)
 	{
 		sendStructureInfo(psBuilding, STRUCTUREINFO_HOLDPRODUCTION, NULL);
 
@@ -6945,7 +6928,7 @@ void holdProduction(STRUCTURE *psBuilding)
 		{
 			psFactory->psSubjectPending = psFactory->psSubject;
 		}
-		if (psFactory->psSubjectPending != NULL)
+		else
 		{
 			psFactory->statusPending = FACTORY_HOLD_PENDING;
 		}
@@ -6968,7 +6951,7 @@ void holdProduction(STRUCTURE *psBuilding)
 }
 
 /*release a factory's production run from hold*/
-void releaseProduction(STRUCTURE *psBuilding)
+void releaseProduction(STRUCTURE *psBuilding, QUEUE_MODE mode)
 {
 	FACTORY *psFactory = &psBuilding->pFunctionality->factory;
 
@@ -6976,7 +6959,7 @@ void releaseProduction(STRUCTURE *psBuilding)
 
 	psFactory = &psBuilding->pFunctionality->factory;
 
-	if (bMultiMessages)
+	if (mode == ModeQueue)
 	{
 		sendStructureInfo(psBuilding, STRUCTUREINFO_RELEASEPRODUCTION, NULL);
 
@@ -7010,12 +6993,12 @@ void doNextProduction(STRUCTURE *psStructure, DROID_TEMPLATE *current)
 
 	if (psNextTemplate != NULL)
 	{
-		structSetManufacture(psStructure, psNextTemplate);
+		structSetManufacture(psStructure, psNextTemplate, ModeQueue);
 	}
 	else
 	{
 		//nothing more to manufacture
-		cancelProduction(psStructure);
+		cancelProduction(psStructure, ModeQueue);
 	}
 }
 

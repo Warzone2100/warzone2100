@@ -4094,11 +4094,7 @@ void intProcessDesign(UDWORD id)
 			/* remove template if found */
 			if ( psTempl )
 			{
-
-				if (bMultiMessages)		//ajl. inform others of template destruction.
-				{
-					SendDestroyTemplate(psTempl);
-				}
+				SendDestroyTemplate(psTempl);
 
 				//update player template list.
 				{

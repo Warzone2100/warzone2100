@@ -949,11 +949,11 @@ void saveMissionLimboData(void)
 	{
 		if (StructIsFactory(psStruct))
 		{
-			holdProduction(psStruct);
+			holdProduction(psStruct, ModeQueue);
 		}
 		else if (psStruct->pStructureType->type == REF_RESEARCH)
 		{
-			holdResearch(psStruct);
+			holdResearch(psStruct, ModeQueue);
 		}
 	}
 }

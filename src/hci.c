@@ -2758,12 +2758,12 @@ static void intProcessObject(UDWORD id)
 				if (StructIsFactory((STRUCTURE *)psObj))
 				{
 					//might need to cancel the hold on production
-					releaseProduction((STRUCTURE *)psObj);
+					releaseProduction((STRUCTURE *)psObj, ModeQueue);
 				}
 				else if (((STRUCTURE *)psObj)->pStructureType->type == REF_RESEARCH)
 				{
 					//might need to cancel the hold on research facilty
-					releaseResearch((STRUCTURE *)psObj);
+					releaseResearch((STRUCTURE *)psObj, ModeQueue);
 				}
 			}
 		}
@@ -2832,7 +2832,7 @@ static void intProcessStats(UDWORD id)
 
 					if (!StructureIsManufacturingPending(psStructure))
 					{
-						structSetManufacture(psStructure, psNext);
+						structSetManufacture(psStructure, psNext, ModeQueue);
 					}
 
 					//need to check if this was the template that was mid-production
@@ -2844,7 +2844,7 @@ static void intProcessStats(UDWORD id)
 
 					if (StructureIsOnHoldPending(psStructure))
 					{
-						releaseProduction(psStructure);
+						releaseProduction(psStructure, ModeQueue);
 					}
 
 					// Reset the button on the object form
@@ -2864,7 +2864,7 @@ static void intProcessStats(UDWORD id)
 					{
 						if (psObjSelected->type == OBJ_STRUCTURE )
 						{
-							cancelResearch((STRUCTURE *)psObjSelected);
+							cancelResearch((STRUCTURE *)psObjSelected, ModeQueue);
 						}
 					}
 
@@ -2889,7 +2889,7 @@ static void intProcessStats(UDWORD id)
 							if (((RESEARCH_FACILITY *)((STRUCTURE *)psObjSelected)->
 								pFunctionality)->psSubject)
 							{
-								cancelResearch((STRUCTURE *)psObjSelected);
+								cancelResearch((STRUCTURE *)psObjSelected, ModeQueue);
 							}
 						}
 					}
@@ -6219,7 +6219,7 @@ static BOOL setResearchStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 		}
 		else
 		{
-			cancelResearch(psBuilding);
+			cancelResearch(psBuilding, ModeQueue);
 		}
 		psResFacilty->psSubjectPending = psStats;  // Tell UI that we are going to research.
 		//stop the button from flashing once a topic has been chosen
@@ -6335,7 +6335,7 @@ static BOOL setManufactureStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 		if (psStats != NULL)
 		{
 			/* Set the factory to build droid(s) */
-			if (!structSetManufacture(Structure, (DROID_TEMPLATE *)psStats))
+			if (!structSetManufacture(Structure, (DROID_TEMPLATE *)psStats, ModeQueue))
 			{
 				return false;
 			}
@@ -6518,7 +6518,7 @@ static void intStatsRMBPressed(UDWORD id)
 
 			if (!StructureIsManufacturingPending(psStructure))
 			{
-				structSetManufacture(psStructure, psNext);
+				structSetManufacture(psStructure, psNext, ModeQueue);
 			}
 
 			//need to check if this was the template that was mid-production
@@ -6530,7 +6530,7 @@ static void intStatsRMBPressed(UDWORD id)
 
 			if (StructureIsOnHoldPending(psStructure))
 			{
-				releaseProduction(psStructure);
+				releaseProduction(psStructure, ModeQueue);
 			}
 
 			// Reset the button on the object form
@@ -6617,12 +6617,12 @@ static void intObjStatRMBPressed(UDWORD id)
 					//if not curently on hold, set it
 					if (!StructureIsOnHoldPending(psStructure))
 					{
-						holdProduction(psStructure);
+						holdProduction(psStructure, ModeQueue);
 					}
 					else
 					{
 						//cancel if have RMB-clicked twice
-						cancelProduction(psStructure);
+						cancelProduction(psStructure, ModeQueue);
 						//play audio to indicate cancelled
 						audio_PlayTrack(ID_SOUND_WINDOWCLOSE);
 					}
@@ -6636,12 +6636,12 @@ static void intObjStatRMBPressed(UDWORD id)
 					//if not curently on hold, set it
 					if (((RESEARCH_FACILITY *)psStructure->pFunctionality)->timeStartHold == 0)
 					{
-						holdResearch(psStructure);
+						holdResearch(psStructure, ModeQueue);
 					}
 					else
 					{
 						//cancel if have RMB-clicked twice
-						cancelResearch(psStructure);
+						cancelResearch(psStructure, ModeQueue);
 						//play audio to indicate cancelled
 						audio_PlayTrack(ID_SOUND_WINDOWCLOSE);
 					}
