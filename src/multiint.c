@@ -2608,35 +2608,54 @@ static void processMultiopWidgets(UDWORD id)
 		break;
 
 	case MULTIOP_HOST:
-		debug(LOG_NET, "MULTIOP_HOST enabled");
-		sstrcpy(game.name, widgGetString(psWScreen, MULTIOP_GNAME));	// game name
-		sstrcpy(sPlayer, widgGetString(psWScreen, MULTIOP_PNAME));	// pname
-		sstrcpy(game.map, widgGetString(psWScreen, MULTIOP_MAP));		// add the name
-
-		resetReadyStatus(false);
-		resetDataHash();
-		removeWildcards((char*)sPlayer);
-
-		if (!hostCampaign((char*)game.name,(char*)sPlayer))
 		{
-			addConsoleMessage(_("Sorry! Failed to host the game."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+			MULTISTRUCTLIMITS *plimits = NULL;
+			int limitcount = 0;
+
+			debug(LOG_NET, "MULTIOP_HOST enabled (trying to host a game)");
+			sstrcpy(game.name, widgGetString(psWScreen, MULTIOP_GNAME));	// game name
+			sstrcpy(sPlayer, widgGetString(psWScreen, MULTIOP_PNAME));	// pname
+			sstrcpy(game.map, widgGetString(psWScreen, MULTIOP_MAP));		// add the name
+
+			if (ingame.numStructureLimits)
+			{
+				plimits = ingame.pStructureLimits;			// save limits if it was already set
+				limitcount = ingame.numStructureLimits;
+			}
+			// clear out old values
+			memset(&ingame, 0x0, sizeof(ingame));
+			// fix the things we reset
+			ingame.bHostSetup = true;
+			ingame.localOptionsReceived = true;
+			if (limitcount)
+			{
+				ingame.pStructureLimits = plimits;
+				ingame.numStructureLimits = limitcount;
+			}
+			resetReadyStatus(false);
+			resetDataHash();
+			removeWildcards((char*)sPlayer);
+
+			if (!hostCampaign((char*)game.name,(char*)sPlayer))
+			{
+				addConsoleMessage(_("Sorry! Failed to host the game."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+				break;
+			}
+			bHosted = true;
+
+			widgDelete(psWScreen,MULTIOP_REFRESH);
+			widgDelete(psWScreen,MULTIOP_HOST);
+
+			ingame.localOptionsReceived = true;
+
+			addGameOptions(false);									// update game options box.
+			addChatBox();
+
+			disableMultiButs();
+
+			addPlayerBox(!ingame.bHostSetup || bHosted);	//to make sure host can't skip player selection menu (sets game.skdiff to UBYTE_MAX for humans)
 			break;
 		}
-		bHosted = true;
-
-		widgDelete(psWScreen,MULTIOP_REFRESH);
-		widgDelete(psWScreen,MULTIOP_HOST);
-
-		ingame.localOptionsReceived = true;
-
-		addGameOptions(false);									// update game options box.
-		addChatBox();
-
-		disableMultiButs();
-
-		addPlayerBox(!ingame.bHostSetup || bHosted);	//to make sure host can't skip player selection menu (sets game.skdiff to UBYTE_MAX for humans)
-		break;
-
 	case MULTIOP_CHATEDIT:
 
 		// don't send empty lines to other players in the lobby

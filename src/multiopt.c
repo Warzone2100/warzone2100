@@ -68,6 +68,7 @@ void sendOptions()
 {
 	unsigned int i;
 
+	debug(LOG_NET, "Broadcasting NET_OPTIONS");
 	NETbeginEncode(NET_OPTIONS, NET_ALL_PLAYERS);
 
 	// First send information about the game

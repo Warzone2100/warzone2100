@@ -250,6 +250,8 @@ BOOL MultiPlayerLeave(UDWORD playerIndex)
 // A Remote Player has joined the game.
 BOOL MultiPlayerJoin(UDWORD playerIndex)
 {
+	debug(LOG_NET, "Remote Player %u has joined, isHost :%s", playerIndex, NetPlay.isHost ? "true": "false");
+
 	if(widgGetFromID(psWScreen,IDRET_FORM))	// if ingame.
 	{
 		audio_QueueTrack( ID_CLAN_ENTER );

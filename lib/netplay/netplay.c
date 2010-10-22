@@ -3476,7 +3476,7 @@ static void NETallowJoining(void)
 			}
 			else if (strcmp(buffer, "join") == 0)
 			{
-				debug(LOG_NET, "cmd: join.  Sending GAMESTRUCT");
+				debug(LOG_NET, "cmd: join.  Sending GAMESTRUCT to %u", i);
 				if (!NETsendGAMESTRUCT(tmp_socket[i], &gamestruct))
 				{
 					debug(LOG_ERROR, "Failed to respond (with GAMESTRUCT) to 'join' command, socket (%p) error: %s", tmp_socket[i], strSockError(getSockErr()));
@@ -3908,17 +3908,18 @@ BOOL NETfindGame(void)
 		return false;
 	}
 
-	debug(LOG_NET, "receiving info on %u game(s)", (unsigned int)gamesavailable);
+	debug(LOG_NET, "receiving info on %u game(s)", gamesavailable);
 
 	// Clear old games from list.
 	memset(NetPlay.games, 0x00, sizeof(NetPlay.games));
 
 	while (gamecount < gamesavailable)
 	{
+		debug(LOG_NET, "trying to retrieve GAMESTRUCT from %u", gamecount);
 		// Attempt to receive a game description structure
 		if (!NETrecvGAMESTRUCT(&NetPlay.games[gamecount]))
 		{
-			debug(LOG_NET, "only %u game(s) received", (unsigned int)gamecount);
+			debug(LOG_NET, "only %u game(s) received", gamecount);
 			// If we fail, success depends on the amount of games that we've read already
 			freeaddrinfo(hosts);
 			return gamecount;
