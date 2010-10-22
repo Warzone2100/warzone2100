@@ -4121,7 +4121,7 @@ void intProcessDesign(UDWORD id)
 
 				// Delete the template.
 				//before deleting the template, need to make sure not being used in production
-				deleteTemplateFromProduction(psTempl, (UBYTE)selectedPlayer);
+				deleteTemplateFromProduction(psTempl, selectedPlayer, ModeQueue);
 				free(psTempl);
 
 				/* get previous template and set as current */
@@ -4653,7 +4653,7 @@ static BOOL saveTemplate(void)
 			newTemplate = false;
 			/*ANY change to the template affect the production - even if the
 			template is changed and then changed back again!*/
-			deleteTemplateFromProduction(psTempl, (UBYTE)selectedPlayer);
+			deleteTemplateFromProduction(psTempl, selectedPlayer, ModeQueue);
 			SendDestroyTemplate(psTempl);
 			sCurrDesign.multiPlayerID = generateNewObjectId();
 		}

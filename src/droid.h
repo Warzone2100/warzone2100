@@ -373,8 +373,7 @@ extern BOOL checkValidWeaponForProp(DROID_TEMPLATE *psTemplate);
 extern const char *getDroidNameForRank(UDWORD rank);
 
 /*called when a Template is deleted in the Design screen*/
-extern void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player);
-extern void reallyDeleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player);
+extern void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player, QUEUE_MODE mode);
 
 // Select a droid and do any necessary housekeeping.
 extern void SelectDroid(DROID *psDroid);

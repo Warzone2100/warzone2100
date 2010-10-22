@@ -1589,14 +1589,14 @@ static BOOL recvDestroyTemplate(NETQUEUE queue)
 
 		// Delete the template.
 		//before deleting the template, need to make sure not being used in production
-		reallyDeleteTemplateFromProduction(psTempl, player);
+		deleteTemplateFromProduction(psTempl, player, ModeImmediate);
 		free(psTempl);
 	}
 	else
 	{
 		DROID_TEMPLATE aaargh;
 		aaargh.multiPlayerID = templateID;
-		reallyDeleteTemplateFromProduction(&aaargh, player);
+		deleteTemplateFromProduction(&aaargh, player, ModeImmediate);
 		debug(LOG_ERROR, "TODO: Rewrite the whole interface, so it's possible to change the code without spaghetti dependencies causing problems everywhere, and without resorting to ugly hacks.");
 	}
 

@@ -4539,7 +4539,7 @@ BOOL checkValidWeaponForProp(DROID_TEMPLATE *psTemplate)
 }
 
 /*called when a Template is deleted in the Design screen*/
-static void maybeDeleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player, bool really)
+void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player, QUEUE_MODE mode)
 {
 	STRUCTURE   *psStruct;
 	UDWORD      inc, i;
@@ -4588,7 +4588,7 @@ static void maybeDeleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE 
 				// check not being built in the factory for the template player
 				if (psTemplate->multiPlayerID == ((DROID_TEMPLATE *)psFactory->psSubject)->multiPlayerID)
 				{
-					if (really)
+					if (mode == ModeImmediate)
 					{
 						syncDebugStructure(psStruct, '<');
 						syncDebug("Clearing production");
@@ -4625,29 +4625,19 @@ static void maybeDeleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE 
 					}
 					else
 					{
-						DROID_TEMPLATE *template = (DROID_TEMPLATE *)malloc(sizeof(DROID_TEMPLATE));
+						DROID_TEMPLATE *oldTemplate = (DROID_TEMPLATE *)malloc(sizeof(DROID_TEMPLATE));
 						debug(LOG_ERROR, "TODO: Fix this memory leak when deleting templates.");
 
-						*template = *(DROID_TEMPLATE *)psFactory->psSubject;
-						template->pName = NULL;
-						template->psNext = NULL;
+						*oldTemplate = *(DROID_TEMPLATE *)psFactory->psSubject;
+						oldTemplate->pName = NULL;
+						oldTemplate->psNext = NULL;
 
-						psFactory->psSubject = (BASE_STATS *)template;
+						psFactory->psSubject = (BASE_STATS *)oldTemplate;
 					}
 				}
 			}
 		}
 	}
-}
-
-void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player)
-{
-	maybeDeleteTemplateFromProduction(psTemplate, player, false);
-}
-
-void reallyDeleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player)
-{
-	maybeDeleteTemplateFromProduction(psTemplate, player, true);
 }
 
 
