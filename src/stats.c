@@ -3342,7 +3342,7 @@ SENSOR_STATS *objActiveRadar(BASE_OBJECT *psObj)
 		break;
 	case OBJ_STRUCTURE:
 		psStats = ((STRUCTURE *)psObj)->pStructureType->pSensor;
-		if (psStats == NULL || psStats->location != LOC_TURRET)
+		if (psStats == NULL || psStats->location != LOC_TURRET || ((STRUCTURE *)psObj)->status != SS_BUILT)
 		{
 			return NULL;
 		}
@@ -3359,7 +3359,7 @@ bool objRadarDetector(BASE_OBJECT *psObj)
 	{
 		STRUCTURE *psStruct = (STRUCTURE *)psObj;
 
-		return (psStruct->pStructureType->pSensor && psStruct->pStructureType->pSensor->type == RADAR_DETECTOR_SENSOR);
+		return (psStruct->status == SS_BUILT && psStruct->pStructureType->pSensor && psStruct->pStructureType->pSensor->type == RADAR_DETECTOR_SENSOR);
 	}
 	else if (psObj->type == OBJ_DROID)
 	{
