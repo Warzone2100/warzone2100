@@ -84,7 +84,8 @@ BOOL sendBuildStarted(STRUCTURE *psStruct, DROID *psDroid)
 		}
 		else
 		{
-			NETnull();
+			uint32_t zero = 0;
+			NETuint32_t(&zero);
 		}
 
 	return NETend();
