@@ -7009,6 +7009,7 @@ DROID_TEMPLATE * factoryProdUpdate(STRUCTURE *psStructure, DROID_TEMPLATE *psTem
 {
 	UDWORD		inc, factoryType, factoryInc;
 	FACTORY		*psFactory;
+	bool            somethingInQueue = false;
 
 	CHECK_STRUCTURE(psStructure);
 	ASSERT_OR_RETURN(NULL, psStructure->player == productionPlayer, "%s called for incorrect player", __FUNCTION__);
@@ -7022,6 +7023,8 @@ DROID_TEMPLATE * factoryProdUpdate(STRUCTURE *psStructure, DROID_TEMPLATE *psTem
 		//find the entry in the array for this template
 		for (inc=0; inc < MAX_PROD_RUN; inc++)
 		{
+			somethingInQueue = somethingInQueue || asProductionRun[factoryType][factoryInc][inc].quantity != 0;
+
 			if (asProductionRun[factoryType][factoryInc][inc].psTemplate != NULL && asProductionRun[factoryType][factoryInc][inc].psTemplate->multiPlayerID == psTemplate->multiPlayerID)
 			{
 				asProductionRun[factoryType][factoryInc][inc].built++;
@@ -7042,6 +7045,11 @@ DROID_TEMPLATE * factoryProdUpdate(STRUCTURE *psStructure, DROID_TEMPLATE *psTem
 		{
 			return asProductionRun[factoryType][factoryInc][inc].psTemplate;
 		}
+	}
+	// Check that we aren't looping doing nothing.
+	if (!somethingInQueue)
+	{
+		psFactory->productionLoops = 0;  // Don't do nothing infinitely many times.
 	}
 	/*If you've got here there's nothing left to build unless factory is
 	on loop production*/
