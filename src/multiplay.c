@@ -904,7 +904,7 @@ static BOOL recvResearch(NETQUEUE queue)
 	}
 
 	pPlayerRes = asPlayerResList[player] + index;
-	syncDebug("research status = %d", pPlayerRes->ResearchStatus);
+	syncDebug("research status = %d", pPlayerRes->ResearchStatus & RESBITS);
 
 	if (!IsResearchCompleted(pPlayerRes))
 	{
@@ -967,6 +967,9 @@ BOOL sendResearchStatus(STRUCTURE *psBuilding, uint32_t index, uint8_t player, B
 		// Finally the topic in question
 		NETuint32_t(&index);
 	NETend();
+
+	// Tell UI to remove from the list of available research.
+	MakeResearchStartedPending(asPlayerResList[selectedPlayer] + index);
 
 	return true;
 }

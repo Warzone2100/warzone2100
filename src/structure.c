@@ -3825,14 +3825,39 @@ static float CalcStructureSmokeInterval(float damage)
 
 void _syncDebugStructure(const char *function, STRUCTURE *psStruct, char ch)
 {
-	// TODO psBuilding->status == SS_BEING_BUILT test is because structure ids are not synchronised until after they start building...
-	_syncDebug(function, "%c structure%d = p%d;pos(%d,%d,%d),stat%d,type%d,bld%d,pwr%d,bp%d, power = %"PRId64"", ch,
+	int ref = 0;
+	char const *refStr = "";
+
+	// Print what the structure is producing, too.
+	switch (psStruct->pStructureType->type)
+	{
+		case REF_RESEARCH:
+			if (psStruct->pFunctionality->researchFacility.psSubject != NULL)
+			{
+				ref = psStruct->pFunctionality->researchFacility.psSubject->ref;
+				refStr = ",research";
+			}
+			break;
+		case REF_FACTORY:
+		case REF_CYBORG_FACTORY:
+		case REF_VTOL_FACTORY:
+			if (psStruct->pFunctionality->factory.psSubject != NULL)
+			{
+				ref = psStruct->pFunctionality->factory.psSubject->ref;
+				refStr = ",production";
+			}
+			break;
+		default:
+			break;
+	}
+
+	_syncDebug(function, "%c structure%d = p%d;pos(%d,%d,%d),stat%d,type%d%s%.0d,bld%d,pwr%d,bp%d, power = %"PRId64"", ch,
 	          psStruct->id,
 
 	          psStruct->player,
 	          psStruct->pos.x, psStruct->pos.y, psStruct->pos.z,
 	          psStruct->status,
-	          psStruct->pStructureType->type,
+	          psStruct->pStructureType->type, refStr, ref,
 	          psStruct->currentBuildPts,
 	          psStruct->currentPowerAccrued,
 	          psStruct->body,

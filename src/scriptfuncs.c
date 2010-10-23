@@ -10448,7 +10448,6 @@ BOOL scrPursueResearch(void)
 	PLAYER_RESEARCH		*pPlayerRes;
 	STRUCTURE			*psBuilding;
 	RESEARCH_FACILITY	*psResFacilty;
-	RESEARCH			*pResearch;
 
 	if (!stackPopParams(3,ST_STRUCTURE, &psBuilding, VAL_INT, &player, ST_RESEARCH, &psResearch ))
 	{
@@ -10586,29 +10585,7 @@ BOOL scrPursueResearch(void)
 
 	if (found && foundIndex < numResearch)
 	{
-		pResearch = (asResearch + foundIndex);
-		pPlayerRes = asPlayerResList[player] + foundIndex;
-		psResFacilty->psSubject = (BASE_STATS*)pResearch;			//set the subject up
-
-		if (IsResearchCancelled(pPlayerRes))
-		{
-			psResFacilty->powerAccrued = pResearch->researchPower;	//set up as if all power available for cancelled topics
-		}
-		else
-		{
-			psResFacilty->powerAccrued = 0;
-		}
-
 		sendResearchStatus(psBuilding, foundIndex, player, true);	// inform others, I'm researching this.
-		MakeResearchStarted(pPlayerRes);
-		psResFacilty->timeStarted = ACTION_START_TIME;
-		psResFacilty->timeStartHold = 0;
-		psResFacilty->timeToResearch = pResearch->researchPoints / 	psResFacilty->researchPoints;
-
-		if (psResFacilty->timeToResearch == 0)
-		{
-			psResFacilty->timeToResearch = 1;
-		}
 #if defined (DEBUG)
 		{
 			char	sTemp[128];

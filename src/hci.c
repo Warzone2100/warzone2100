@@ -6213,9 +6213,6 @@ static BOOL setResearchStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 		{
 			// Say that we want to do reseach [sic].
 			sendResearchStatus(psBuilding, ((RESEARCH *)psStats)->ref - REF_RESEARCH_START, selectedPlayer, true);
-
-			// Tell UI to remove from the list of available research.
-			MakeResearchStartedPending(asPlayerResList[selectedPlayer] + (((RESEARCH *)psStats)->ref - REF_RESEARCH_START));
 		}
 		else
 		{
