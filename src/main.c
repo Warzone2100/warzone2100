@@ -88,13 +88,13 @@
 
 
 #if defined(WZ_OS_WIN)
-# define WZ_WRITEDIR "Warzone 2100 2.3"
+# define WZ_WRITEDIR "Warzone 2100 3.0"
 #elif defined(WZ_OS_MAC)
 # include <CoreServices/CoreServices.h>
 # include <unistd.h>
-# define WZ_WRITEDIR "Warzone 2100 2.3"
+# define WZ_WRITEDIR "Warzone 2100 3.0"
 #else
-# define WZ_WRITEDIR ".warzone2100-2.3"
+# define WZ_WRITEDIR ".warzone2100-3.0"
 #endif
 
 char datadir[PATH_MAX] = "\0"; // Global that src/clparse.c:ParseCommandLine can write to, so it can override the default datadir on runtime. Needs to be \0 on startup for ParseCommandLine to work!
