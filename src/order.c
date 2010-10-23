@@ -851,26 +851,24 @@ void orderUpdateDroid(DROID *psDroid)
 				else if (abs((SDWORD)psDroid->pos.x - (SDWORD)psDroid->psTarget->pos.x) < TILE_UNITS
 					&& abs((SDWORD)psDroid->pos.y - (SDWORD)psDroid->psTarget->pos.y) < TILE_UNITS)
 				{
-					// if in multiPlayer, only want to process if this player's droid
-					if (!bMultiPlayer || psDroid->player == selectedPlayer)
-					{
-						// save the target of current droid (the transporter)
-						DROID * transporter = (DROID *)psDroid->psTarget;
+					// save the target of current droid (the transporter)
+					DROID * transporter = (DROID *)psDroid->psTarget;
 
-						// Make sure that it really is a valid droid
-						CHECK_DROID(transporter);
+					// Make sure that it really is a valid droid
+					CHECK_DROID(transporter);
 
-						// order the droid to stop so moveUpdateDroid does not process this unit
-						orderDroid(psDroid, DORDER_STOP);
-						setDroidTarget(psDroid, NULL);
-						psDroid->psTarStats = NULL;
-						secondarySetState(psDroid, DSO_RETURN_TO_LOC, DSS_NONE);
+					// order the droid to stop so moveUpdateDroid does not process this unit
+					turnOffMultiMsg(true);  // Do this now, since synchronised. If sending later, it's too late.
+					orderDroid(psDroid, DORDER_STOP);
+					turnOffMultiMsg(false);
+					setDroidTarget(psDroid, NULL);
+					psDroid->psTarStats = NULL;
+					secondarySetState(psDroid, DSO_RETURN_TO_LOC, DSS_NONE);
 
-						/* We must add the droid to the transporter only *after*
-						* processing changing its orders (see above).
-					 */
-						transporterAddDroid(transporter, psDroid);
-					}
+					/* We must add the droid to the transporter only *after*
+					* processing changing its orders (see above).
+					*/
+					transporterAddDroid(transporter, psDroid);
 				}
 				else if (psDroid->action == DACTION_NONE)
 				{
