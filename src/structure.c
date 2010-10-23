@@ -5635,7 +5635,7 @@ BOOL getLasSatExists(UDWORD player)
 
 
 /* calculate muzzle tip location in 3d world */
-BOOL calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3f *muzzle, int weapon_slot)
+bool calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3i *muzzle, int weapon_slot)
 {
 	iIMDShape *psShape = psStructure->pStructureType->pIMD;
 
@@ -5643,7 +5643,7 @@ BOOL calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3f *muzzle, int w
 
 	if(psShape && psShape->nconnectors)
 	{
-		Vector3f barrel = {0.0f, 0.0f, 0.0f};
+		Vector3i barrel = {0, 0, 0};
 		unsigned int nWeaponStat = psStructure->asWeaps[weapon_slot].nStat;
 		iIMDShape *psWeaponImd = 0, *psMountImd = 0;
 
@@ -5688,19 +5688,19 @@ BOOL calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3f *muzzle, int w
 				connector_num = (psStructure->asWeaps[weapon_slot].shotsFired - 1) % (psWeaponImd->nconnectors);
 			}
 			
-			barrel = Vector3f_Init(psWeaponImd->connectors[connector_num].x,
+			barrel = Vector3i_Init(psWeaponImd->connectors[connector_num].x,
 									-psWeaponImd->connectors[connector_num].y,
 									-psWeaponImd->connectors[connector_num].z);
 		}
-		
-		pie_RotateTranslate3f(&barrel, muzzle);
+
+		pie_RotateTranslate3i(&barrel, muzzle);
 		muzzle->z = -muzzle->z;
 
 		pie_MatEnd();
 	}
 	else
 	{
-		*muzzle = Vector3f_Init(psStructure->pos.x, psStructure->pos.y, psStructure->pos.z + psStructure->sDisplay.imd->max.y);
+		*muzzle = Vector3i_Init(psStructure->pos.x, psStructure->pos.y, psStructure->pos.z + psStructure->sDisplay.imd->max.y);
 	}
 
 	return true;

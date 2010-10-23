@@ -382,7 +382,7 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 	SDWORD			tarHeight, srcHeight;
 	int32_t                 altChange, dx, dy, dz;
 	uint32_t                dxy;
-	Vector3f		muzzle;
+	Vector3i		muzzle;
 	WEAPON_STATS *psStats = &asWeaponStats[psWeap->nStat];
 
 	ASSERT_OR_RETURN( false, psWeap->nStat < numWeaponStats, "Invalid range referenced for numWeaponStats, %d > %d", psWeap->nStat, numWeaponStats);
@@ -394,7 +394,7 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 	{
 		// if there isn't an attacker just start at the target position
 		// NB this is for the script function to fire the las sats
-		muzzle = Vector3i_To3f(target);
+		muzzle = target;
 	}
 	else if (psAttacker->type == OBJ_DROID && weapon_slot >= 0)
 	{
@@ -408,7 +408,7 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 	}
 	else // incase anything wants a projectile
 	{
-		muzzle = Vector3i_To3f(psAttacker->pos);
+		muzzle = psAttacker->pos;
 	}
 
 	/* Initialise the structure */
@@ -416,7 +416,7 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 	psProj->type		    = OBJ_PROJECTILE;
 	psProj->psWStats		= psStats;
 
-	psProj->pos		= Vector3f_To3i(muzzle);
+	psProj->pos		= muzzle;
 	psProj->startX		= muzzle.x;
 	psProj->startY		= muzzle.y;
 	psProj->tarX			= target.x;

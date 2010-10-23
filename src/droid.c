@@ -3025,7 +3025,7 @@ void	setSelectedCommander(UDWORD commander)
 /**
  * calculate muzzle tip location in 3d world
  */
-BOOL calcDroidMuzzleLocation(DROID *psDroid, Vector3f *muzzle, int weapon_slot)
+bool calcDroidMuzzleLocation(DROID *psDroid, Vector3i *muzzle, int weapon_slot)
 {
 	iIMDShape *psBodyImd = BODY_IMD(psDroid, psDroid->player);
 
@@ -3033,7 +3033,7 @@ BOOL calcDroidMuzzleLocation(DROID *psDroid, Vector3f *muzzle, int weapon_slot)
 
 	if (psBodyImd && psBodyImd->nconnectors)
 	{
-		Vector3f barrel = {0.0f, 0.0f, 0.0f};
+		Vector3i barrel = {0, 0, 0};
 		iIMDShape *psWeaponImd = 0, *psMountImd = 0;
 
 		if (psDroid->asWeaps[weapon_slot].nStat)
@@ -3077,19 +3077,19 @@ BOOL calcDroidMuzzleLocation(DROID *psDroid, Vector3f *muzzle, int weapon_slot)
 				connector_num = (psDroid->asWeaps[weapon_slot].shotsFired - 1) % (psWeaponImd->nconnectors);
 			}
 			
-			barrel = Vector3f_Init(psWeaponImd->connectors[connector_num].x,
+			barrel = Vector3i_Init(psWeaponImd->connectors[connector_num].x,
 									-psWeaponImd->connectors[connector_num].y,
 									-psWeaponImd->connectors[connector_num].z);
 		}
 
-		pie_RotateTranslate3f(&barrel, muzzle);
+		pie_RotateTranslate3i(&barrel, muzzle);
 		muzzle->z = -muzzle->z;
 
 		pie_MatEnd();
 	}
 	else
 	{
-		*muzzle = Vector3f_Init(psDroid->pos.x, psDroid->pos.y, psDroid->pos.z + psDroid->sDisplay.imd->max.y);
+		*muzzle = Vector3i_Init(psDroid->pos.x, psDroid->pos.y, psDroid->pos.z + psDroid->sDisplay.imd->max.y);
 	}
 
 	CHECK_DROID(psDroid);

@@ -400,7 +400,7 @@ void pie_MatInit(void)
 	pie_MatReset();
 }
 
-void pie_RotateTranslate3f(const Vector3f *v, Vector3f *s)
+void pie_RotateTranslate3i(const Vector3i *v, Vector3i *s)
 {
 	/*
 	 *     [ 1 0 0 0 ]               [ 1 0 0 0 ]
@@ -408,7 +408,7 @@ void pie_RotateTranslate3f(const Vector3f *v, Vector3f *s)
 	 * s = [ 0 1 0 0 ] . curMatrix . [ 0 1 0 0 ] . v
 	 *     [ 0 0 0 1 ]               [ 0 0 0 1 ]
 	 */
-	s->x = (v->x * psMatrix->a + v->y * psMatrix->g + v->z * psMatrix->d + psMatrix->j) / FP12_MULTIPLIER;
-	s->y = (v->x * psMatrix->c + v->y * psMatrix->i + v->z * psMatrix->f + psMatrix->l) / FP12_MULTIPLIER;
-	s->z = (v->x * psMatrix->b + v->y * psMatrix->h + v->z * psMatrix->e + psMatrix->k) / FP12_MULTIPLIER;
+	s->x = ((int64_t)v->x * psMatrix->a + (int64_t)v->y * psMatrix->g + (int64_t)v->z * psMatrix->d + psMatrix->j) / FP12_MULTIPLIER;
+	s->y = ((int64_t)v->x * psMatrix->c + (int64_t)v->y * psMatrix->i + (int64_t)v->z * psMatrix->f + psMatrix->l) / FP12_MULTIPLIER;
+	s->z = ((int64_t)v->x * psMatrix->b + (int64_t)v->y * psMatrix->h + (int64_t)v->z * psMatrix->e + psMatrix->k) / FP12_MULTIPLIER;
 }
