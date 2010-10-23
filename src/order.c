@@ -361,7 +361,9 @@ void orderUpdateDroid(DROID *psDroid)
 		         secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_GUARD &&
 		         !isVtolDroid(psDroid))
 		{
+			turnOffMultiMsg(true);
 			orderDroidLoc(psDroid, DORDER_GUARD, psDroid->pos.x, psDroid->pos.y);
+			turnOffMultiMsg(false);
 		}
 
 		break;
