@@ -111,6 +111,9 @@ MAPTILE	*psMapTiles = NULL;
 
 #define WATER_DEPTH	180
 
+// Enable the below define to render cliffs that are small, and otherwise wouldn't show up.
+//#define SMALL_CLIFFS
+
 static void SetGroundForTile(const char *filename, const char *nametype);
 static int getTextureType(const char *textureType);
 static BOOL hasDecals(int i, int j);
@@ -605,6 +608,7 @@ static int determineGroundType(int x, int y, const char *tileset)
 			
 			votes[i][j] = 0;
 
+#ifdef SMALL_CLIFFS
 			// cliffs are so small they won't show up otherwise
 			if (urban)
 			{
@@ -621,6 +625,7 @@ static int determineGroundType(int x, int y, const char *tileset)
 				if (ground[i][j] == getTextureType("r_cliff"))
 					return ground[i][j];
 			}
+#endif
 		}
 	}
 
