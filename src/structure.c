@@ -2682,10 +2682,11 @@ static BOOL structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 
 		if ( psFact->psCommander != NULL )
 		{
+			syncDebug("Has commander.");
 			if (idfDroid(psNewDroid) ||
 				isVtolDroid(psNewDroid))
 			{
-				orderDroidObj(psNewDroid, DORDER_FIRESUPPORT, (BASE_OBJECT *)psFact->psCommander);
+				orderDroidObj(psNewDroid, DORDER_FIRESUPPORT, (BASE_OBJECT *)psFact->psCommander, ModeImmediate);
 				moveToRearm(psNewDroid);
 			}
 			else
@@ -2725,11 +2726,11 @@ static BOOL structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 					UDWORD droidY = psFlag->coords.y;
 					//find a suitable location near the delivery point
 					actionVTOLLandingPos(psNewDroid, &droidX, &droidY);
-					orderDroidLoc(psNewDroid,DORDER_MOVE,droidX,droidY);
+					orderDroidLoc(psNewDroid, DORDER_MOVE, droidX, droidY, ModeQueue);
 				}
 				else
 				{
-					orderDroidLoc(psNewDroid,DORDER_MOVE,psFlag->coords.x,psFlag->coords.y);
+					orderDroidLoc(psNewDroid, DORDER_MOVE, psFlag->coords.x, psFlag->coords.y, ModeQueue);
 				}
 			}
 		}
@@ -3154,15 +3155,15 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 								// return a droid to it's command group
 								DROID	*psCommander = psDroid->psGroup->psCommander;
 
-								orderDroidObj(psDroid, DORDER_GUARD, (BASE_OBJECT *)psCommander);
+								orderDroidObj(psDroid, DORDER_GUARD, (BASE_OBJECT *)psCommander, ModeImmediate);
 							}
 							else if (psRepairFac->psDeliveryPoint != NULL)
 							{
 								// move the droid out the way
 								objTrace(psDroid->id, "Repair not needed - move to delivery point");
-								orderDroidLoc( psDroid, DORDER_MOVE,
+								orderDroidLoc(psDroid, DORDER_MOVE,
 									psRepairFac->psDeliveryPoint->coords.x,
-									psRepairFac->psDeliveryPoint->coords.y );
+									psRepairFac->psDeliveryPoint->coords.y, ModeImmediate);
 							}
 							continue;
 						}
@@ -3650,7 +3651,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 							DROID	*psCommander = psDroid->psGroup->psCommander;
 
 							objTrace(psDroid->id, "Repair complete - move to commander");
-							orderDroidObj(psDroid, DORDER_GUARD, (BASE_OBJECT *)psCommander);
+							orderDroidObj(psDroid, DORDER_GUARD, (BASE_OBJECT *)psCommander, ModeImmediate);
 						}
 						else if (psRepairFac->psDeliveryPoint != NULL)
 						{
@@ -3658,7 +3659,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 							objTrace(psDroid->id, "Repair complete - move to delivery point");
 							orderDroidLoc( psDroid, DORDER_MOVE,
 								psRepairFac->psDeliveryPoint->coords.x,
-								psRepairFac->psDeliveryPoint->coords.y );
+								psRepairFac->psDeliveryPoint->coords.y, ModeImmediate);
 						}
 					}
 				}
@@ -7816,14 +7817,14 @@ STRUCTURE * giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, BOOL
 			{
 				if (psCurr->psTarget == (BASE_OBJECT *)psStructure)
 				{
-					orderDroid(psCurr, DORDER_STOP);
+					orderDroid(psCurr, DORDER_STOP, ModeImmediate);
 					break;
 				}
 				for (i = 0;i < psCurr->numWeaps;i++)
 				{
 					if (psCurr->psActionTarget[i] == (BASE_OBJECT *)psStructure)
 					{
-						orderDroid(psCurr, DORDER_STOP);
+						orderDroid(psCurr, DORDER_STOP, ModeImmediate);
 						break;
 					}
 				}

@@ -2018,7 +2018,7 @@ INT_RETVAL intRunWidgets(void)
 						    && intNumSelectedDroids(DROID_CYBORG_CONSTRUCT) == 0
 						    && psObjSelected != NULL)
 						{
-							orderDroidStatsTwoLocDir((DROID *)psObjSelected, DORDER_LINEBUILD, psPositionStats, structX, structY, structX2, structY2, player.r.y);
+							orderDroidStatsTwoLocDir((DROID *)psObjSelected, DORDER_LINEBUILD, psPositionStats, structX, structY, structX2, structY2, player.r.y, ModeQueue);
 						}
 						else
 						{
@@ -2063,7 +2063,7 @@ INT_RETVAL intRunWidgets(void)
 							    && intNumSelectedDroids(DROID_CYBORG_CONSTRUCT) == 0
 							    && psObjSelected != NULL)
 							{
-								orderDroidStatsLocDir((DROID *)psObjSelected, DORDER_BUILD, psPositionStats, structX, structY, player.r.y);
+								orderDroidStatsLocDir((DROID *)psObjSelected, DORDER_BUILD, psPositionStats, structX, structY, player.r.y, ModeQueue);
 							}
 							else
 							{
@@ -6142,13 +6142,13 @@ static BOOL setConstructionStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 		}
 		else
 		{
-			orderDroid(psDroid,DORDER_STOP);
+			orderDroid(psDroid, DORDER_STOP, ModeQueue);
 		}
 	}
 	else
 	{
 		psDroid = (DROID *)psObj;
-		orderDroid(psDroid,DORDER_STOP);
+		orderDroid(psDroid, DORDER_STOP, ModeQueue);
 	}
 	return true;
 }

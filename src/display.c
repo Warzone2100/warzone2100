@@ -1811,7 +1811,7 @@ static void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 			    droidSensorDroidWeapon((BASE_OBJECT *)psDroid, psCurr))
 			{
 				bSensorAssigned = true;
-				orderDroidObj(psCurr, DORDER_FIRESUPPORT, (BASE_OBJECT *)psDroid);
+				orderDroidObj(psCurr, DORDER_FIRESUPPORT, (BASE_OBJECT *)psDroid, ModeQueue);
 				FeedbackOrderGiven();
 			}
 		}
@@ -2091,7 +2091,7 @@ static void dealWithLMBFeature(FEATURE* psFeature)
 					}
 					else
 					{
-						orderDroidStatsLocDir(psCurr, DORDER_BUILD, (BASE_STATS*) &asStructureStats[i], psFeature->pos.x, psFeature->pos.y, player.r.y);
+						orderDroidStatsLocDir(psCurr, DORDER_BUILD, (BASE_STATS*) &asStructureStats[i], psFeature->pos.x, psFeature->pos.y, player.r.y, ModeQueue);
 					}
 					++numTrucks;
 				}
@@ -2125,7 +2125,7 @@ static void dealWithLMBFeature(FEATURE* psFeature)
 				/* If so then find the nearest unit! */
 				if (psNearestUnit)	// bloody well should be!!!
 				{
-					orderDroidObj(psNearestUnit, DORDER_RECOVER, (BASE_OBJECT *)psFeature);
+					orderDroidObj(psNearestUnit, DORDER_RECOVER, (BASE_OBJECT *)psFeature, ModeQueue);
 					FeedbackOrderGiven();
 				}
 				else

@@ -3766,7 +3766,7 @@ BOOL saveGame(char *aFileName, GAME_TYPE saveType)
 			//this is mainly for VTOLs
 			setSaveDroidBase(psDroid, NULL);
 			psDroid->cluster = 0;
-			orderDroid(psDroid, DORDER_STOP);
+			orderDroid(psDroid, DORDER_STOP, ModeImmediate);
 		}
 	}
 
@@ -5501,7 +5501,7 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 			{
 				ASSERT( false,"loadUnit TargetStat not found" );
 				psDroid->psTarStats = NULL;
-                orderDroid(psDroid, DORDER_STOP);
+				orderDroid(psDroid, DORDER_STOP, ModeImmediate);
 			}
 		}
 		//warning V14 - v17 only

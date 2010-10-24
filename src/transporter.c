@@ -1072,71 +1072,6 @@ bool transporterIsEmpty(const DROID* psTransporter)
 	     || psTransporter->psGroup->psList == psTransporter);
 }
 
-#define MAX_TRANSPORTERS	8
-
-
-// Order all selected droids to embark all avaialable transporters.
-//
-BOOL OrderDroidsToEmbark(void)
-{
-	UWORD NumTransporters = 0;
-	UWORD CurrentTransporter;
-	DROID *psTransporters[MAX_TRANSPORTERS];
-	DROID *psDroid;
-	BOOL Ok = false;
-
-	// First build a list of transporters.
-	for(psDroid = apsDroidLists[selectedPlayer]; (psDroid != NULL); psDroid = psDroid->psNext) {
-		if( psDroid->droidType == DROID_TRANSPORTER ) {
-			psTransporters[NumTransporters] = psDroid;
-			NumTransporters++;
-			ASSERT( NumTransporters <= MAX_TRANSPORTERS,"MAX_TRANSPORTERS Exceeded" );
-		}
-	}
-
-	// Now order any selected droids to embark them.
-	if(NumTransporters) {
-		CurrentTransporter = 0;
-		for(psDroid = apsDroidLists[selectedPlayer]; (psDroid != NULL); psDroid =
-			psDroid->psNext)
-		{
-			if( psDroid->selected  && (psDroid->droidType != DROID_TRANSPORTER) )
-			{
-				orderDroidObj(psDroid, DORDER_EMBARK, (BASE_OBJECT *)psTransporters[CurrentTransporter]);
-
-				// Step through the available transporters.
-				CurrentTransporter++;
-				if(CurrentTransporter >= NumTransporters) {
-					CurrentTransporter = 0;
-				}
-
-				Ok = true;
-			}
-		}
-	}
-
-	return false;
-}
-
-
-// Order a single droid to embark any available transporters.
-//
-BOOL OrderDroidToEmbark(DROID *psDroid)
-{
-	DROID *psTransporter;
-
-	psTransporter = FindATransporter(psDroid->player);
-
-	if(psTransporter != NULL)
-	{
-		orderDroidObj(psDroid, DORDER_EMBARK, (BASE_OBJECT *)psTransporter);
-		return true;
-	}
-
-	return false;
-}
-
-
 static void intSetTransCapacityLabel(char *Label)
 {
 	UDWORD capacity = TRANSPORTER_CAPACITY;
@@ -1379,7 +1314,7 @@ void transporterRemoveDroid(UDWORD id)
 		// Not sure how to fix this...
 		debug(LOG_ERROR, "TODO: Can't unload single droids, sending order to unload all at once, because this code is so convoluted.");
 		// All at once is better than nothing...
-		orderDroidLoc(psCurrTransporter, DORDER_DISEMBARK, psCurrTransporter->pos.x, psCurrTransporter->pos.y);
+		orderDroidLoc(psCurrTransporter, DORDER_DISEMBARK, psCurrTransporter->pos.x, psCurrTransporter->pos.y, ModeQueue);
 		return;
 	}
 
@@ -1456,7 +1391,7 @@ void transporterRemoveDroid(UDWORD id)
 		//initialise the movement data
 		initDroidMovement(psDroid);
 		//reset droid orders
-		orderDroid(psDroid, DORDER_STOP);
+		orderDroid(psDroid, DORDER_STOP, ModeImmediate);
 		psDroid->cluster = 0;
 		// check if it is a commander
 		if (psDroid->droidType == DROID_COMMAND)
@@ -1676,7 +1611,7 @@ BOOL launchTransporter(DROID *psTransporter)
 	{
 		//tell the transporter to move to the new offworld location
 		missionGetTransporterExit( psTransporter->player, &iX, &iY );
-		orderDroidLoc(psTransporter, DORDER_TRANSPORTOUT, iX, iY );
+		orderDroidLoc(psTransporter, DORDER_TRANSPORTOUT, iX, iY, ModeQueue);
 		//g_iLaunchTime = gameTime;
         transporterSetLaunchTime(gameTime);
 	}
@@ -1697,7 +1632,7 @@ BOOL launchTransporter(DROID *psTransporter)
 		//psTransporter->pos.y = getLandingY(psTransporter->player);
 		//unloadTransporter(psTransporter, psTransporter->pos.x, psTransporter->pos.y, false);
 
-		orderDroid( psTransporter, DORDER_TRANSPORTIN );
+		orderDroid(psTransporter, DORDER_TRANSPORTIN, ModeImmediate);
 		/* set action transporter waits for timer */
 		actionDroid( psTransporter, DACTION_TRANSPORTWAITTOFLYIN );
 

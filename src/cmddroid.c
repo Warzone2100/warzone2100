@@ -104,7 +104,7 @@ void cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
 		secondarySetState(psDroid, DSO_ATTACK_LEVEL, (SECONDARY_STATE)(psCommander->secondaryOrder & DSS_ALEV_MASK));
 		secondarySetState(psDroid, DSO_HALTTYPE, (SECONDARY_STATE)(psCommander->secondaryOrder & DSS_HALT_MASK));
 
-		orderDroidObj(psDroid, DORDER_GUARD, (BASE_OBJECT *)psCommander);
+		orderDroidObj(psDroid, DORDER_GUARD, (BASE_OBJECT *)psCommander, ModeQueue);
 	}
 }
 

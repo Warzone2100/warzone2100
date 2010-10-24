@@ -991,7 +991,7 @@ void actionUpdateDroid(DROID *psDroid)
 				psDroid->pos.y = droidY;
 				//fly Transporter back to get some more droids
 				orderDroidLoc( psDroid, DORDER_TRANSPORTIN,
-					getLandingX(selectedPlayer), getLandingY(selectedPlayer));
+					getLandingX(selectedPlayer), getLandingY(selectedPlayer), ModeImmediate);
 			}
 			else
 			{
@@ -1951,7 +1951,7 @@ void actionUpdateDroid(DROID *psDroid)
 			psDroid->action = DACTION_NONE;
 			if (psNextWreck)
 			{
-				orderDroidObj(psDroid, DORDER_CLEARWRECK, (BASE_OBJECT *)psNextWreck);
+				orderDroidObj(psDroid, DORDER_CLEARWRECK, (BASE_OBJECT *)psNextWreck, ModeImmediate);
 			}
 		}
 		else
@@ -2273,7 +2273,7 @@ void actionUpdateDroid(DROID *psDroid)
 				//if the order is RTR then resubmit order so that the unit will go to repair facility point
 				if (orderState(psDroid,DORDER_RTR))
 				{
-					orderDroid(psDroid, DORDER_RTR);
+					orderDroid(psDroid, DORDER_RTR, ModeImmediate);
 				}
 			}
 			else
@@ -2343,7 +2343,7 @@ void actionUpdateDroid(DROID *psDroid)
 			{
 				// totally bunged up - give up
 				objTrace(psDroid->id, "Couldn't find a clear tile near rearm pad - returning to base");
-				orderDroid(psDroid, DORDER_RTB);
+				orderDroid(psDroid, DORDER_RTB, ModeImmediate);
 				break;
 			}
 			moveDroidToDirect(psDroid, droidX,droidY);
@@ -2526,7 +2526,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		if (!actionVTOLLandingPos(psDroid, &droidX, &droidY))
 		{
 			// totally bunged up - give up
-			orderDroid(psDroid, DORDER_RTB);
+			orderDroid(psDroid, DORDER_RTB, ModeImmediate);
 			break;
 		}
 		moveDroidToDirect(psDroid, droidX, droidY);
@@ -2540,7 +2540,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		if (!actionVTOLLandingPos(psDroid, &droidX, &droidY))
 		{
 			// totally bunged up - give up
-			orderDroid(psDroid, DORDER_RTB);
+			orderDroid(psDroid, DORDER_RTB, ModeImmediate);
 			break;
 		}
 		moveDroidToDirect(psDroid, droidX, droidY);
@@ -2826,7 +2826,7 @@ void moveToRearm(DROID *psDroid)
 		{
 			// no order set - use the rearm order to ensure the unit goes back
 			// to the landing pad
-			orderDroidObj(psDroid, DORDER_REARM, (BASE_OBJECT *)psStruct);
+			orderDroidObj(psDroid, DORDER_REARM, (BASE_OBJECT *)psStruct, ModeImmediate);
 			chosen=1;
 		}
 		else
@@ -2838,7 +2838,7 @@ void moveToRearm(DROID *psDroid)
 	else
 	{
 		//return to base un-armed
-		orderDroid( psDroid, DORDER_RTB );
+		orderDroid(psDroid, DORDER_RTB, ModeImmediate);
 		chosen =3;
 	}
 }

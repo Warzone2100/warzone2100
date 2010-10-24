@@ -153,7 +153,7 @@ extern void initRunData(void);
 extern void orderUpdateDroid(DROID *psDroid);
 
 /* Give a droid an order */
-extern void orderDroid(DROID *psDroid, DROID_ORDER order);
+extern void orderDroid(DROID *psDroid, DROID_ORDER order, QUEUE_MODE mode);
 
 /* Check the order state of a droid */
 extern BOOL orderState(DROID *psDroid, DROID_ORDER order);
@@ -165,26 +165,26 @@ BOOL validOrderForLoc(DROID_ORDER order);
 BOOL validOrderForObj(DROID_ORDER order);
 
 /* Give a droid an order with a location target */
-extern void orderDroidLoc(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD y);
+void orderDroidLoc(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD y, QUEUE_MODE mode);
 
 /* Get the state of a droid order with a location */
 extern BOOL orderStateLoc(DROID *psDroid, DROID_ORDER order, UDWORD *pX, UDWORD *pY);
 
 /* Give a droid an order with an object target */
-extern void orderDroidObj(DROID *psDroid, DROID_ORDER order, BASE_OBJECT *psObj);
+void orderDroidObj(DROID *psDroid, DROID_ORDER order, BASE_OBJECT *psObj, QUEUE_MODE mode);
 
 /* Get the state of a droid order with an object */
 extern BASE_OBJECT* orderStateObj(DROID *psDroid, DROID_ORDER order);
 
 /* Give a droid an order with a location and a stat */
-extern void orderDroidStatsLocDir(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStats, UDWORD x, UDWORD y, uint16_t direction);
+void orderDroidStatsLocDir(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStats, UDWORD x, UDWORD y, uint16_t direction, QUEUE_MODE mode);
 
 /* Get the state of a droid order with a location and a stat */
 extern BOOL orderStateStatsLoc(DROID *psDroid, DROID_ORDER order,
 						BASE_STATS **ppsStats, UDWORD *pX, UDWORD *pY);
 
 /* Give a droid an order with a location and a stat */
-void orderDroidStatsTwoLocDir(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStats, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2, uint16_t direction);
+void orderDroidStatsTwoLocDir(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStats, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2, uint16_t direction, QUEUE_MODE mode);
 
 void orderDroidStatsTwoLocDirAdd(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStats, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2, uint16_t direction);
 

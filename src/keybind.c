@@ -2339,7 +2339,7 @@ void	kf_SetDroidMoveHold( void )
 	{
 		if (psDroid->selected)
 		{
-			orderDroid(psDroid, DORDER_TEMP_HOLD);
+			orderDroid(psDroid, DORDER_TEMP_HOLD, ModeQueue);
 		}
 	}
 }

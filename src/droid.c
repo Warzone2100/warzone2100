@@ -672,7 +672,7 @@ void droidBurn(DROID *psDroid)
 	audio_PlayObjDynamicTrack( psDroid, ID_SOUND_BARB_SCREAM+(rand()%3), NULL );
 
 	/* set droid running */
-	orderDroid( psDroid, DORDER_RUNBURN );
+	orderDroid(psDroid, DORDER_RUNBURN, ModeImmediate);
 }
 
 void _syncDebugDroid(const char *function, DROID *psDroid, char ch)
@@ -4294,7 +4294,7 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
 	if (bMultiPlayer)
 	{
 		// reset order
-		orderDroid(psD, DORDER_STOP);
+		orderDroid(psD, DORDER_STOP, ModeQueue);
 
 		if (droidRemove(psD, apsDroidLists)) 		// remove droid from one list
 		{
@@ -4363,7 +4363,7 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
 			{
 				if (psCurr->psTarget == (BASE_OBJECT *)psD || psCurr->psActionTarget[0] == (BASE_OBJECT *)psD)
 				{
-					orderDroid(psCurr, DORDER_STOP);
+					orderDroid(psCurr, DORDER_STOP, ModeQueue);
 				}
 				// check through order list
 				for (i = 0; i < psCurr->listSize; i++)

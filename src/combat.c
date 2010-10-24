@@ -434,7 +434,7 @@ void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 				//inform viewer of target
 				if (psViewer->type == OBJ_DROID)
 				{
-					orderDroidObj((DROID *)psViewer, DORDER_OBSERVE, psAttacker);
+					orderDroidObj((DROID *)psViewer, DORDER_OBSERVE, psAttacker, ModeImmediate);
 				}
 				else if (psViewer->type == OBJ_STRUCTURE)
 				{

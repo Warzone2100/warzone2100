@@ -461,7 +461,7 @@ static void driveMoveFollower(DROID *psDroid)
 			// if the droid is currently guarding we need to change the order to a move
 			if (psDroid->order==DORDER_GUARD)
 			{
-				orderDroidLoc(psDroid,DORDER_MOVE, psDrivenDroid->pos.x,psDrivenDroid->pos.y);
+				orderDroidLoc(psDroid, DORDER_MOVE, psDrivenDroid->pos.x, psDrivenDroid->pos.y, ModeQueue);
 			}
 			else
 			{

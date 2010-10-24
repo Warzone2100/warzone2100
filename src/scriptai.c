@@ -514,7 +514,7 @@ BOOL scrOrderDroid(void)
 		return false;
 	}
 
-	orderDroid(psDroid, order);
+	orderDroid(psDroid, order, ModeQueue);
 
 	return true;
 }
@@ -556,7 +556,7 @@ BOOL scrOrderDroidLoc(void)
 		return false;
 	}
 
-	orderDroidLoc(psDroid, order, (UDWORD)x,(UDWORD)y);
+	orderDroidLoc(psDroid, order, x, y, ModeQueue);
 
 	return true;
 }
@@ -597,7 +597,7 @@ BOOL scrOrderDroidObj(void)
 		return false;
 	}
 
-	orderDroidObj(psDroid, order, psObj);
+	orderDroidObj(psDroid, order, psObj, ModeQueue);
 
 	return true;
 }
@@ -658,7 +658,7 @@ BOOL scrOrderDroidStatsLoc(void)
 			return true;
 		}
 
-		orderDroidStatsLocDir(psDroid, order, psStats, (UDWORD)x, (UDWORD)y, 0);
+		orderDroidStatsLocDir(psDroid, order, psStats, x, y, 0, ModeQueue);
 	}
 
 	return true;
@@ -1989,11 +1989,11 @@ static BOOL defenseLocation(BOOL variantB)
 	// first section.
 	if(x1 == x2 && y1 == y2)	//first sec is 1 tile only: ((2 tile gate) or (3 tile gate and first sec))
 	{
-		orderDroidStatsLocDir(psDroid, DORDER_BUILD, psWStats, x1, y1, 0);
+		orderDroidStatsLocDir(psDroid, DORDER_BUILD, psWStats, x1, y1, 0, ModeQueue);
 	}
 	else
 	{
-		orderDroidStatsTwoLocDir(psDroid, DORDER_LINEBUILD, psWStats,  x1, y1, x2, y2, 0);
+		orderDroidStatsTwoLocDir(psDroid, DORDER_LINEBUILD, psWStats,  x1, y1, x2, y2, 0, ModeQueue);
 	}
 
 	// second section
@@ -2080,6 +2080,7 @@ BOOL scrActionDroidObj(void)
 		return false;
 	}
 
+	syncDebug("TODO: Synchronise this!");
 	actionDroidObj(psDroid, action, (BASE_OBJECT *)psObj);
 
 	return true;
