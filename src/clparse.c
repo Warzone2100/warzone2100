@@ -24,8 +24,6 @@
  *
  */
 
-#include <popt.h>
-
 #include "lib/framework/frame.h"
 #include "lib/netplay/netplay.h"
 
@@ -42,6 +40,171 @@
 
 //! Let the end user into debug mode....
 BOOL	bAllowDebugMode = false;
+
+//////
+// Our fine replacement for the popt abomination follows
+
+#define POPT_ARG_STRING true
+#define POPT_ARG_NONE false
+#define POPT_ERROR_BADOPT -1
+#define POPT_ARGFLAG_DOC_HIDDEN 0
+
+struct poptOption
+{
+	const char *string;
+	char short_form;
+	bool argument;
+	void *nullptr;		// unused
+	int enumeration;
+	const char *descrip;
+	const char *argDescrip;
+};
+
+typedef struct _poptContext
+{
+	int argc, current, size;
+	const char **argv;
+	const char *parameter;
+	const char *bad;
+	const struct poptOption *table;
+} *poptContext;
+
+static void poptPrintUsage(poptContext ctx, FILE *output, WZ_DECL_UNUSED int unused)
+{
+	// TODO ?
+}
+
+static void poptPrintHelp(poptContext ctx, FILE *output, WZ_DECL_UNUSED int unused)
+{
+	int i;
+
+	fprintf(output, "Usage: %s [OPTION...]\n", ctx->argv[0]);
+	for (i = 0; i < ctx->size; i++)
+	{
+		char txt[128];
+
+		if (ctx->table[i].short_form != '\0')
+		{
+			ssprintf(txt, "  -%c, --%s", ctx->table[i].short_form, ctx->table[i].string);
+		}
+		else
+		{
+			ssprintf(txt, "  --%s", ctx->table[i].string);
+		}
+
+		if (ctx->table[i].argument)
+		{
+			sstrcat(txt, "=");
+			sstrcat(txt, ctx->table[i].argDescrip);
+		}
+
+		fprintf(output, "%-40s", txt);
+		if (ctx->table[i].descrip)
+		{
+			fprintf(output, "%s", ctx->table[i].descrip);
+		}
+		fprintf(output, "\n");
+	}
+}
+
+static void poptFreeContext(WZ_DECL_UNUSED poptContext ctx)
+{
+	// Nothing!
+}
+
+static const char *poptBadOption(poptContext ctx, WZ_DECL_UNUSED int unused)
+{
+	return ctx->bad;
+}
+
+static const char *poptGetOptArg(poptContext ctx)
+{
+	return ctx->parameter;
+}
+
+static int poptGetNextOpt(poptContext ctx)
+{
+	static char match[PATH_MAX];		// static for bad function
+	static char parameter[PATH_MAX];	// static for arg function
+	char *pparam;
+	int i;
+
+	ctx->bad = NULL;
+	ctx->parameter = NULL;
+	parameter[0] = '\0';
+	match[0] = '\0';
+
+	if (ctx->current >= ctx->argc)	// counts from 1
+	{
+		return 0;
+	}
+
+	sstrcpy(match, ctx->argv[ctx->current]);
+	ctx->current++;
+	pparam = strrchr(match, '=');
+	if (pparam)									// option's got a parameter
+	{
+		*pparam++ = '\0';							// split option from parameter and increment past '='
+		if (pparam[0] == '"')							// found scary quotes
+		{
+			pparam++;							// skip start quote
+			sstrcpy(parameter, pparam);					// copy first parameter
+			if (!strrchr(pparam, '"'))					// if no end quote, then find it
+			{
+				while (!strrchr(parameter, '"') && ctx->current < ctx->argc)
+				{
+					sstrcat(parameter, " ");			// insert space
+					sstrcat(parameter, ctx->argv[ctx->current]);
+					ctx->current++;					// next part, please!
+				}
+			}
+			if (strrchr(parameter, '"'))					// its not an else for above!
+			{
+				*strrchr(parameter, '"') = '\0';			// remove end qoute
+			}
+		}
+		else
+		{
+			sstrcpy(parameter, pparam);					// copy parameter
+		}
+	}
+
+	for (i = 0; i < ctx->size; i++)
+	{
+		char sshort[3];
+		char slong[64];
+
+		ssprintf(sshort, "-%c", ctx->table[i].short_form);
+		ssprintf(slong, "--%s", ctx->table[i].string);
+		if ((strcmp(sshort, match) == 0 && ctx->table[i].short_form != '\0') || strcmp(slong, match) == 0)
+		{
+			if (ctx->table[i].argument && pparam)
+			{
+				ctx->parameter = parameter;
+			}
+			return ctx->table[i].enumeration;
+		}
+	}
+	ctx->bad = match;
+	ctx->current++;
+	return POPT_ERROR_BADOPT;
+}
+
+static poptContext poptGetContext(WZ_DECL_UNUSED void *unused, int argc, const char **argv, const struct poptOption *table, WZ_DECL_UNUSED int none)
+{
+	static struct _poptContext ctx;
+
+	ctx.argc = argc;
+	ctx.argv = argv;
+	ctx.table = table;
+	ctx.current = 1;
+	ctx.parameter = NULL;
+
+	for (ctx.size = 0; table[ctx.size].string; ctx.size++) ;	// count table size
+
+	return &ctx;
+}
+
 
 typedef enum
 {
@@ -79,8 +242,8 @@ static const struct poptOption* getOptionsTable(void)
 	static const struct poptOption optionsTable[] =
 	{
 		{ "cheat",      '\0', POPT_ARG_NONE,   NULL, CLI_CHEAT,      N_("Run in cheat mode"),                 NULL },
-		{ "datadir",    '\0', POPT_ARG_STRING, NULL, CLI_DATADIR,    N_("Set default data directory"),        N_("data directory") },
 		{ "configdir",  '\0', POPT_ARG_STRING, NULL, CLI_CONFIGDIR,  N_("Set configuration directory"),       N_("configuration directory") },
+		{ "datadir",    '\0', POPT_ARG_STRING, NULL, CLI_DATADIR,    N_("Set default data directory"),        N_("data directory") },
 		{ "debug",      '\0', POPT_ARG_STRING, NULL, CLI_DEBUG,      N_("Show debug for given level"),        N_("debug level") },
 		{ "debugfile",  '\0', POPT_ARG_STRING, NULL, CLI_DEBUGFILE,  N_("Log debug output to file"),          N_("file") },
 		{ "flush-debug-stderr", '\0', POPT_ARG_NONE, NULL, CLI_FLUSHDEBUGSTDERR, N_("Flush all debug output written to stderr"), NULL },
