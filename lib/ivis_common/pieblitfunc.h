@@ -40,7 +40,7 @@
  *	Global Definitions
  */
 /***************************************************************************/
-#define NUM_BACKDROPS 6
+#define NUM_BACKDROPS 7
 
 #define BACKDROP_WIDTH	640
 #define BACKDROP_HEIGHT	480
