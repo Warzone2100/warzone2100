@@ -1,7 +1,9 @@
-urban_enum,8
+urban_enum,10
 u_blue
 u_gray
 u_stone
+u_mstone
+u_bstone
 u_dark
 u_water
 u_brown
