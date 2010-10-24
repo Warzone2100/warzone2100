@@ -15,8 +15,6 @@ EXTRA_DIST = __BUILD_SCRIPT \
 	     libs/iconv/Makefile \
 	     libs/ogg/Makefile \
 	     libs/png/Makefile \
-	     libs/popt/Makefile \
-	     libs/popt/patches \
 	     libs/quesoglc/Makefile \
 	     libs/quesoglc/patches \
 	     libs/sdl/Makefile \
