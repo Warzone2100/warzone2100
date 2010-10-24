@@ -2603,7 +2603,7 @@ void kf_SpeedUp( void )
 	unsigned int    i;
 
 	// Bail out if we're running a _true_ multiplayer game or are playing a tutorial
-	if (runningMultiplayer() || bInTutorial)
+	if ((runningMultiplayer() && !getDebugMappingStatus()) || bInTutorial)
 	{
 		if (!bInTutorial)
 		{
@@ -2646,7 +2646,7 @@ void kf_SlowDown( void )
 	int		i;
 
 	// Bail out if we're running a _true_ multiplayer game or are playing a tutorial
-	if (runningMultiplayer() || bInTutorial)
+	if ((runningMultiplayer() && !getDebugMappingStatus()) || bInTutorial)
 	{
 		if (!bInTutorial)
 		{
