@@ -12,7 +12,7 @@ a_yellow,a_yellow,a_yellow,a_yellow
 a_yellow,a_yellow,a_yellow,a_yellow
 a_yellow,a_yellow,a_yellow,a_yellow
 a_yellow,a_yellow,a_yellow,a_yellow
-a_water,a_yellow,a_yellow,a_yellow
+a_water,a_yellow,a_mud,a_yellow
 a_water,a_water,a_yellow,a_yellow
 a_yellow,a_water,a_yellow,a_yellow
 a_water,a_water,a_yellow,a_water
