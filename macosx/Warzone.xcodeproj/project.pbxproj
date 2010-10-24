@@ -157,7 +157,6 @@
 		0246A3B50BD3CD0B004D1C70 /* Ogg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02356E090BD3BCFE00E9A019 /* Ogg.framework */; };
 		0246A3B60BD3CD0B004D1C70 /* Vorbis.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02DDA7EE0BD3C03F0049AB60 /* Vorbis.framework */; };
 		0246A3B70BD3CD0B004D1C70 /* PhysFS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02DDA8B10BD3C2F20049AB60 /* PhysFS.framework */; };
-		02548E070D159F4000B4B3B9 /* Popt.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02F5CC6D0D1494AA0000A2D0 /* Popt.framework */; };
 		02548E0A0D159F4400B4B3B9 /* QuesoGLC.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 0223BBD10CFE3D5C0056EF85 /* QuesoGLC.framework */; };
 		02581C640BD5A98900957CBC /* libSDLmain.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02581C5D0BD5A94A00957CBC /* libSDLmain.a */; };
 		02581C810BD5AD1100957CBC /* Gettext.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 022B2F220BD55814002E64E3 /* Gettext.framework */; };
@@ -181,13 +180,6 @@
 		02DDA8D10BD3C3600049AB60 /* unix.c in Sources */ = {isa = PBXBuildFile; fileRef = 02DDA8CF0BD3C3600049AB60 /* unix.c */; };
 		02DDA8D40BD3C3820049AB60 /* Zlib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02356D830BD3BB4100E9A019 /* Zlib.framework */; };
 		02F5CC570D1490620000A2D0 /* database.c in Sources */ = {isa = PBXBuildFile; fileRef = 02F5CC560D1490620000A2D0 /* database.c */; };
-		02F5CC8B0D1496580000A2D0 /* popt.c in Sources */ = {isa = PBXBuildFile; fileRef = 02F5CC820D1496580000A2D0 /* popt.c */; };
-		02F5CC8C0D1496580000A2D0 /* popt.h in Headers */ = {isa = PBXBuildFile; fileRef = 02F5CC830D1496580000A2D0 /* popt.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		02F5CC8E0D1496580000A2D0 /* popthelp.c in Sources */ = {isa = PBXBuildFile; fileRef = 02F5CC850D1496580000A2D0 /* popthelp.c */; };
-		02F5CC8F0D1496580000A2D0 /* poptint.h in Headers */ = {isa = PBXBuildFile; fileRef = 02F5CC860D1496580000A2D0 /* poptint.h */; };
-		02F5CC900D1496580000A2D0 /* poptparse.c in Sources */ = {isa = PBXBuildFile; fileRef = 02F5CC870D1496580000A2D0 /* poptparse.c */; };
-		02F5CC910D1496580000A2D0 /* system.h in Headers */ = {isa = PBXBuildFile; fileRef = 02F5CC880D1496580000A2D0 /* system.h */; };
-		02F5CCC00D1498A30000A2D0 /* Popt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02F5CC6D0D1494AA0000A2D0 /* Popt.framework */; };
 		43228BEF11BABEE900C26C1C /* export.h in Headers */ = {isa = PBXBuildFile; fileRef = 43228BEC11BABEE900C26C1C /* export.h */; };
 		43228BF011BABEE900C26C1C /* setlocale.c in Sources */ = {isa = PBXBuildFile; fileRef = 43228BED11BABEE900C26C1C /* setlocale.c */; };
 		43228BF111BABEE900C26C1C /* threadlib.c in Sources */ = {isa = PBXBuildFile; fileRef = 43228BEE11BABEE900C26C1C /* threadlib.c */; };
@@ -540,7 +532,6 @@
 		43BCDE0D126358C7003827B0 /* codec.h in Headers */ = {isa = PBXBuildFile; fileRef = 43BCDE0A126358C7003827B0 /* codec.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43BCDE0E126358C7003827B0 /* vorbisenc.h in Headers */ = {isa = PBXBuildFile; fileRef = 43BCDE0B126358C7003827B0 /* vorbisenc.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43BCDE0F126358C7003827B0 /* vorbisfile.h in Headers */ = {isa = PBXBuildFile; fileRef = 43BCDE0C126358C7003827B0 /* vorbisfile.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		43BCDE6012635E2D003827B0 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BCDE5F12635E2D003827B0 /* Carbon.framework */; };
 		43F3001410D3410C00707B6E /* macosx.c in Sources */ = {isa = PBXBuildFile; fileRef = 43F3FFFE10D33F4D00707B6E /* macosx.c */; };
 		43F3003310D341F000707B6E /* hog.c in Sources */ = {isa = PBXBuildFile; fileRef = 02DDA8C20BD3C3450049AB60 /* hog.c */; };
 		43F3003410D341F100707B6E /* mvl.c in Sources */ = {isa = PBXBuildFile; fileRef = 02DDA8C30BD3C3450049AB60 /* mvl.c */; };
@@ -599,7 +590,6 @@
 		43F300C110D344B000707B6E /* x86enc.h in Headers */ = {isa = PBXBuildFile; fileRef = 43F3008A10D344B000707B6E /* x86enc.h */; };
 		43F300C210D344B000707B6E /* x86int.h in Headers */ = {isa = PBXBuildFile; fileRef = 43F3008B10D344B000707B6E /* x86int.h */; };
 		43F300C310D344B000707B6E /* x86state.c in Sources */ = {isa = PBXBuildFile; fileRef = 43F3008C10D344B000707B6E /* x86state.c */; };
-		43F300CF10D3470600707B6E /* poptint.c in Sources */ = {isa = PBXBuildFile; fileRef = 43F300CE10D346FF00707B6E /* poptint.c */; };
 		43F300D710D3496D00707B6E /* encode.c in Sources */ = {isa = PBXBuildFile; fileRef = 43F3006710D344AF00707B6E /* encode.c */; };
 		97AEAB780E8C1C5100A10721 /* Ogg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02356E090BD3BCFE00E9A019 /* Ogg.framework */; };
 		97AEAB790E8C1C5100A10721 /* Vorbis.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02DDA7EE0BD3C03F0049AB60 /* Vorbis.framework */; };
@@ -709,13 +699,6 @@
 			remoteGlobalIDString = 02356D820BD3BB4100E9A019;
 			remoteInfo = Zlib;
 		};
-		02F5CCC30D1498BB0000A2D0 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 02F5CC6C0D1494AA0000A2D0;
-			remoteInfo = Popt;
-		};
 		43AE78FC10F0F4F500FED5D3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
@@ -777,7 +760,6 @@
 				432BE41A10D9D32000A486AB /* SDL.framework in Copy frameworks */,
 				023ECC500E9318D600D9E7C3 /* Theora.framework in Copy frameworks */,
 				02548E0A0D159F4400B4B3B9 /* QuesoGLC.framework in Copy frameworks */,
-				02548E070D159F4000B4B3B9 /* Popt.framework in Copy frameworks */,
 				02581C810BD5AD1100957CBC /* Gettext.framework in Copy frameworks */,
 				02581C820BD5AD1100957CBC /* Ogg.framework in Copy frameworks */,
 				02581C830BD5AD1100957CBC /* PhysFS.framework in Copy frameworks */,
@@ -932,14 +914,6 @@
 		02DDA8CE0BD3C3600049AB60 /* posix.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = posix.c; path = external/physfs/platform/posix.c; sourceTree = "<group>"; };
 		02DDA8CF0BD3C3600049AB60 /* unix.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = unix.c; path = external/physfs/platform/unix.c; sourceTree = "<group>"; };
 		02F5CC560D1490620000A2D0 /* database.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = database.c; path = external/quesoglc/src/database.c; sourceTree = "<group>"; };
-		02F5CC6D0D1494AA0000A2D0 /* Popt.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Popt.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		02F5CC820D1496580000A2D0 /* popt.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = popt.c; path = external/popt/popt.c; sourceTree = SOURCE_ROOT; };
-		02F5CC830D1496580000A2D0 /* popt.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = popt.h; path = external/popt/popt.h; sourceTree = SOURCE_ROOT; };
-		02F5CC840D1496580000A2D0 /* poptconfig.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = poptconfig.c; path = external/popt/poptconfig.c; sourceTree = SOURCE_ROOT; };
-		02F5CC850D1496580000A2D0 /* popthelp.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = popthelp.c; path = external/popt/popthelp.c; sourceTree = SOURCE_ROOT; };
-		02F5CC860D1496580000A2D0 /* poptint.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = poptint.h; path = external/popt/poptint.h; sourceTree = SOURCE_ROOT; };
-		02F5CC870D1496580000A2D0 /* poptparse.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = poptparse.c; path = external/popt/poptparse.c; sourceTree = SOURCE_ROOT; };
-		02F5CC880D1496580000A2D0 /* system.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = system.h; path = external/popt/system.h; sourceTree = SOURCE_ROOT; };
 		43228BEC11BABEE900C26C1C /* export.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = export.h; path = "external/gettext/gettext-runtime/intl/export.h"; sourceTree = "<group>"; };
 		43228BED11BABEE900C26C1C /* setlocale.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = setlocale.c; path = "external/gettext/gettext-runtime/intl/setlocale.c"; sourceTree = "<group>"; };
 		43228BEE11BABEE900C26C1C /* threadlib.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = threadlib.c; path = "external/gettext/gettext-runtime/intl/threadlib.c"; sourceTree = "<group>"; };
@@ -1407,9 +1381,6 @@
 		4347E2001262D3DD007E6676 /* Png-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Png-All.xcconfig"; path = "configs/Png-All.xcconfig"; sourceTree = "<group>"; };
 		4347E2011262D3DD007E6676 /* Png-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Png-Debug.xcconfig"; path = "configs/Png-Debug.xcconfig"; sourceTree = "<group>"; };
 		4347E2021262D3DD007E6676 /* Png-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Png-Release.xcconfig"; path = "configs/Png-Release.xcconfig"; sourceTree = "<group>"; };
-		4347E2031262D3DD007E6676 /* Popt-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Popt-All.xcconfig"; path = "configs/Popt-All.xcconfig"; sourceTree = "<group>"; };
-		4347E2041262D3DD007E6676 /* Popt-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Popt-Debug.xcconfig"; path = "configs/Popt-Debug.xcconfig"; sourceTree = "<group>"; };
-		4347E2051262D3DD007E6676 /* Popt-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Popt-Release.xcconfig"; path = "configs/Popt-Release.xcconfig"; sourceTree = "<group>"; };
 		4347E2061262D3DD007E6676 /* Project-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Project-All.xcconfig"; path = "configs/Project-All.xcconfig"; sourceTree = "<group>"; };
 		4347E2071262D3DD007E6676 /* QuesoGLC-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "QuesoGLC-All.xcconfig"; path = "configs/QuesoGLC-All.xcconfig"; sourceTree = "<group>"; };
 		4347E2081262D3DD007E6676 /* QuesoGLC-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "QuesoGLC-Debug.xcconfig"; path = "configs/QuesoGLC-Debug.xcconfig"; sourceTree = "<group>"; };
@@ -1650,8 +1621,6 @@
 		43F3008A10D344B000707B6E /* x86enc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = x86enc.h; sourceTree = "<group>"; };
 		43F3008B10D344B000707B6E /* x86int.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = x86int.h; sourceTree = "<group>"; };
 		43F3008C10D344B000707B6E /* x86state.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = x86state.c; sourceTree = "<group>"; };
-		43F300CE10D346FF00707B6E /* poptint.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = poptint.c; path = external/popt/poptint.c; sourceTree = "<group>"; };
-		43F3013210D3590800707B6E /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = config.h; path = external/popt/config.h; sourceTree = "<group>"; };
 		43F3FFFE10D33F4D00707B6E /* macosx.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = macosx.c; path = external/physfs/platform/macosx.c; sourceTree = "<group>"; };
 		43F3FFFF10D33F6600707B6E /* physfs_unicode.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = physfs_unicode.c; path = external/physfs/physfs_unicode.c; sourceTree = "<group>"; };
 		97AEAB330E8C1B5200A10721 /* Theora.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Theora.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1690,7 +1659,6 @@
 				97AEAC560E8C261B00A10721 /* Theora.framework in Frameworks */,
 				02CDDD130D159DF600722688 /* QuesoGLC.framework in Frameworks */,
 				022B31400BD5691D002E64E3 /* Gettext.framework in Frameworks */,
-				02F5CCC00D1498A30000A2D0 /* Popt.framework in Frameworks */,
 				439F327012667F7B00D5EE2A /* Carbon.framework in Frameworks */,
 				439F326012667F5100D5EE2A /* Cocoa.framework in Frameworks */,
 				439F322B12667E9200D5EE2A /* OpenAL.framework in Frameworks */,
@@ -1752,14 +1720,6 @@
 				02DDA8D40BD3C3820049AB60 /* Zlib.framework in Frameworks */,
 				439F30A31266796100D5EE2A /* Carbon.framework in Frameworks */,
 				439F30BA1266797A00D5EE2A /* IOKit.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		02F5CC6B0D1494AA0000A2D0 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				43BCDE6012635E2D003827B0 /* Carbon.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1911,7 +1871,6 @@
 				022B2F220BD55814002E64E3 /* Gettext.framework */,
 				02581C5D0BD5A94A00957CBC /* libSDLmain.a */,
 				0223BBD10CFE3D5C0056EF85 /* QuesoGLC.framework */,
-				02F5CC6D0D1494AA0000A2D0 /* Popt.framework */,
 				02CDDCF40D159BC300722688 /* Autorevision */,
 				97AEAB330E8C1B5200A10721 /* Theora.framework */,
 			);
@@ -2057,22 +2016,6 @@
 			name = "System frameworks";
 			sourceTree = "<group>";
 		};
-		02F5CC7F0D1495EB0000A2D0 /* Popt sources */ = {
-			isa = PBXGroup;
-			children = (
-				43F3013210D3590800707B6E /* config.h */,
-				02F5CC820D1496580000A2D0 /* popt.c */,
-				02F5CC830D1496580000A2D0 /* popt.h */,
-				02F5CC840D1496580000A2D0 /* poptconfig.c */,
-				02F5CC850D1496580000A2D0 /* popthelp.c */,
-				02F5CC860D1496580000A2D0 /* poptint.h */,
-				43F300CE10D346FF00707B6E /* poptint.c */,
-				02F5CC870D1496580000A2D0 /* poptparse.c */,
-				02F5CC880D1496580000A2D0 /* system.h */,
-			);
-			name = "Popt sources";
-			sourceTree = "<group>";
-		};
 		430B59F010D45990008EA88A /* Third Party */ = {
 			isa = PBXGroup;
 			children = (
@@ -2085,7 +2028,6 @@
 				02DDA8DE0BD3C3930049AB60 /* PhysFS sources */,
 				0223BBE50CFE3F4B0056EF85 /* QuesoGLC sources */,
 				9730E8000E8CEB3B009C9481 /* Theora sources */,
-				02F5CC7F0D1495EB0000A2D0 /* Popt sources */,
 			);
 			name = "Third Party";
 			sourceTree = "<group>";
@@ -2700,6 +2642,7 @@
 		4347E1F31262D3B1007E6676 /* Configurations */ = {
 			isa = PBXGroup;
 			children = (
+				4347E2061262D3DD007E6676 /* Project-All.xcconfig */,
 				4347E1F41262D3DC007E6676 /* Autorevision-All.xcconfig */,
 				4347E1F51262D3DC007E6676 /* Autorevision-Debug.xcconfig */,
 				4347E1F61262D3DC007E6676 /* Autorevision-Release.xcconfig */,
@@ -2715,10 +2658,6 @@
 				4347E2001262D3DD007E6676 /* Png-All.xcconfig */,
 				4347E2011262D3DD007E6676 /* Png-Debug.xcconfig */,
 				4347E2021262D3DD007E6676 /* Png-Release.xcconfig */,
-				4347E2031262D3DD007E6676 /* Popt-All.xcconfig */,
-				4347E2041262D3DD007E6676 /* Popt-Debug.xcconfig */,
-				4347E2051262D3DD007E6676 /* Popt-Release.xcconfig */,
-				4347E2061262D3DD007E6676 /* Project-All.xcconfig */,
 				4347E2071262D3DD007E6676 /* QuesoGLC-All.xcconfig */,
 				4347E2081262D3DD007E6676 /* QuesoGLC-Debug.xcconfig */,
 				4347E2091262D3DD007E6676 /* QuesoGLC-Release.xcconfig */,
@@ -3222,16 +3161,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		02F5CC680D1494AA0000A2D0 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				02F5CC8C0D1496580000A2D0 /* popt.h in Headers */,
-				02F5CC8F0D1496580000A2D0 /* poptint.h in Headers */,
-				02F5CC910D1496580000A2D0 /* system.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		97AEAAEE0E8C1B5200A10721 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -3330,7 +3259,6 @@
 				0246A3030BD3CCF3004D1C70 /* PBXTargetDependency */,
 				0246A3050BD3CCF6004D1C70 /* PBXTargetDependency */,
 				0246A3070BD3CCF9004D1C70 /* PBXTargetDependency */,
-				02F5CCC40D1498BB0000A2D0 /* PBXTargetDependency */,
 				97B1D6680D1541C000737638 /* PBXTargetDependency */,
 				97AEAC550E8C261600A10721 /* PBXTargetDependency */,
 				43FA571310FF8EE90074E914 /* PBXTargetDependency */,
@@ -3473,25 +3401,6 @@
 			productReference = 02DDA8B10BD3C2F20049AB60 /* PhysFS.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		02F5CC6C0D1494AA0000A2D0 /* Popt */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 02F5CC6F0D1494AB0000A2D0 /* Build configuration list for PBXNativeTarget "Popt" */;
-			buildPhases = (
-				02F5CC740D1494C30000A2D0 /* Fetch source */,
-				02F5CC680D1494AA0000A2D0 /* Headers */,
-				02F5CC690D1494AA0000A2D0 /* Resources */,
-				02F5CC6A0D1494AA0000A2D0 /* Sources */,
-				02F5CC6B0D1494AA0000A2D0 /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = Popt;
-			productName = Popt;
-			productReference = 02F5CC6D0D1494AA0000A2D0 /* Popt.framework */;
-			productType = "com.apple.product-type.framework";
-		};
 		97AEAAEA0E8C1B5200A10721 /* Theora */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 97AEAB300E8C1B5200A10721 /* Build configuration list for PBXNativeTarget "Theora" */;
@@ -3575,7 +3484,6 @@
 				02DDA8B00BD3C2F20049AB60 /* PhysFS */,
 				0223BBD00CFE3D5C0056EF85 /* QuesoGLC */,
 				97AEAAEA0E8C1B5200A10721 /* Theora */,
-				02F5CC6C0D1494AA0000A2D0 /* Popt */,
 				43F77C7710F0125E00E04615 /* Make DMGs for Release */,
 			);
 		};
@@ -3638,13 +3546,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		02DDA8AD0BD3C2F20049AB60 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		02F5CC690D1494AA0000A2D0 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -3735,20 +3636,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "cd external/quesoglc\n\nif [ ! -r src/database.c ]; then\n  cd database\n  python buildDB.py\nfi\n";
-		};
-		02F5CC740D1494C30000A2D0 /* Fetch source */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Fetch source";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"popt-1.15\"\nOutDir=\"popt\"\nFileName=\"popt-1.15.tar.gz\"\nSourceDLP=\"http://rpm5.org/files/popt/popt-1.15.tar.gz\"\nMD5Sum=\"c61ef795fa450eb692602a661ec8d7f1\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
 		};
 		02FD38210BD3FE9A00776FD3 /* Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4306,17 +4193,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		02F5CC6A0D1494AA0000A2D0 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				02F5CC8B0D1496580000A2D0 /* popt.c in Sources */,
-				02F5CC8E0D1496580000A2D0 /* popthelp.c in Sources */,
-				02F5CC900D1496580000A2D0 /* poptparse.c in Sources */,
-				43F300CF10D3470600707B6E /* poptint.c in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		97AEAB170E8C1B5200A10721 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -4415,11 +4291,6 @@
 			isa = PBXTargetDependency;
 			target = 02356D820BD3BB4100E9A019 /* Zlib */;
 			targetProxy = 02DDA8D20BD3C3780049AB60 /* PBXContainerItemProxy */;
-		};
-		02F5CCC40D1498BB0000A2D0 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 02F5CC6C0D1494AA0000A2D0 /* Popt */;
-			targetProxy = 02F5CCC30D1498BB0000A2D0 /* PBXContainerItemProxy */;
 		};
 		43AE78FD10F0F4F500FED5D3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -4690,20 +4561,6 @@
 			};
 			name = Release;
 		};
-		02F5CC700D1494AB0000A2D0 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4347E2041262D3DD007E6676 /* Popt-Debug.xcconfig */;
-			buildSettings = {
-			};
-			name = Debug;
-		};
-		02F5CC710D1494AB0000A2D0 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4347E2051262D3DD007E6676 /* Popt-Release.xcconfig */;
-			buildSettings = {
-			};
-			name = Release;
-		};
 		439F381D12668B1E00D5EE2A /* StaticAnalyzer */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4347E2061262D3DD007E6676 /* Project-All.xcconfig */;
@@ -4794,13 +4651,6 @@
 		439F382912668B1E00D5EE2A /* StaticAnalyzer */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4347E20E1262D3DD007E6676 /* Theora-Debug.xcconfig */;
-			buildSettings = {
-			};
-			name = StaticAnalyzer;
-		};
-		439F382A12668B1E00D5EE2A /* StaticAnalyzer */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4347E2041262D3DD007E6676 /* Popt-Debug.xcconfig */;
 			buildSettings = {
 			};
 			name = StaticAnalyzer;
@@ -4980,16 +4830,6 @@
 				02DDA8B40BD3C2F20049AB60 /* Debug */,
 				439F382712668B1E00D5EE2A /* StaticAnalyzer */,
 				02DDA8B50BD3C2F20049AB60 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
-		02F5CC6F0D1494AB0000A2D0 /* Build configuration list for PBXNativeTarget "Popt" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				02F5CC700D1494AB0000A2D0 /* Debug */,
-				439F382A12668B1E00D5EE2A /* StaticAnalyzer */,
-				02F5CC710D1494AB0000A2D0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
