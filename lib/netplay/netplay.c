@@ -166,10 +166,9 @@ unsigned NET_PlayerConnectionStatus[CONNECTIONSTATUS_NORMAL][MAX_PLAYERS];
  **            ie ("trunk", "2.1.3", "3.0", ...)
  ************************************************************************************
 **/
-char VersionString[VersionStringSize] = "trunk, netcode 4.1001";
+char VersionString[VersionStringSize] = "master, netcode 4.1002";
 static int NETCODE_VERSION_MAJOR = 4;
-static int NETCODE_VERSION_MINOR = 1001;
-static int NETCODE_HASH = 0;			// unused for now
+static int NETCODE_VERSION_MINOR = 1002;
 
 bool NETisCorrectVersion(uint32_t game_version_major, uint32_t game_version_minor)
 {
@@ -2236,7 +2235,6 @@ static void NETallowJoining(void)
 					int32_t MinorVersion = 0;
 					char ModList[modlist_string_size] = { '\0' };
 					char GamePassword[password_string_size] = { '\0' };
-					int32_t Hash_Data = 0;				// Not currently used
 
 					if (onBanList(clientAddress))
 					{
@@ -2258,7 +2256,6 @@ static void NETallowJoining(void)
 						NETint32_t(&MinorVersion);	// NETCODE_VERSION_MINOR
 						NETstring(ModList, sizeof(ModList));
 						NETstring(GamePassword, sizeof(GamePassword));
-						NETint32_t(&Hash_Data);		// NETCODE_HASH, not currently used
 					NETend();
 					NETpop(NETnetTmpQueue(i));
 
@@ -2756,7 +2753,6 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 		NETint32_t(&NETCODE_VERSION_MINOR);
 		NETstring(getModList(), modlist_string_size);
 		NETstring(NetPlay.gamePassword, sizeof(NetPlay.gamePassword));
-		NETint32_t(&NETCODE_HASH); //unused
 	NETend();
 	socketFlush(bsocket);  // Make sure the message was completely sent.
 
