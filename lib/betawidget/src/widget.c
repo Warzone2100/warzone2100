@@ -1485,32 +1485,19 @@ void widgetCompositeImpl(widget *self)
 	// Composite ourself
 	glBindTexture(GL_TEXTURE_RECTANGLE_ARB, self->textureId);
 
-	glPushMatrix();
-	glScalef(self->size.x, self->size.y, 1.f);
-	glMatrixMode(GL_TEXTURE);
-	glPushMatrix(); // texture matrix
-	glScalef(self->size.x, self->size.y, 1.f);
-	{
-		const short vertices[][2] = {
-			{ 0, 1 },
-			{ 0, 0 },
-			{ 1, 1 },
-			{ 1, 0 },
-		};
+	glBegin(GL_TRIANGLE_STRIP);
+		glTexCoord2f(0.0f, self->size.y);
+		glVertex2f(0.0f, self->size.y);
 
-		glVertexPointer(2, GL_SHORT, 0, vertices);
-		glEnableClientState(GL_VERTEX_ARRAY);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex2f(0.0f, 0.0f);
 
-		glTexCoordPointer(2, GL_SHORT, 0, vertices);
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		glTexCoord2f(self->size.x, self->size.y);
+		glVertex2f(self->size.x, self->size.y);
 
-		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-		glDisableClientState(GL_VERTEX_ARRAY);
-	}
-	glPopMatrix(); // texture matrix
-	glMatrixMode(GL_MODELVIEW);
-	glPopMatrix();
+		glTexCoord2f(self->size.x, 0.0f);
+		glVertex2f(self->size.x, 0.0f);
+	glEnd();
 
 	// Now our children
 	for (i = 0; i < vectorSize(self->children); i++)

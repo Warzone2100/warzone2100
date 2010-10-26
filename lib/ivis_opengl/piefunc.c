@@ -50,47 +50,74 @@ void pie_ClipEnd()
 
 void pie_DrawViewingWindow(Vector3i *v, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2, PIELIGHT colour)
 {
-	const Vector2i vertices[] = {
-		{ v[1].x, v[1].y },
-		{ v[0].x, v[0].y },
-		{ v[2].x, v[2].y },
-		{ v[3].x, v[3].y },
-		{ v[1].x, v[1].y },
-	};
-	const int alpha = colour.byte.a;
+	CLIP_VERTEX pieVrts[pie_MAX_VERTICES_PER_POLYGON];
+	SDWORD i;
 
 	pie_SetTexturePage(TEXPAGE_NONE);
 	pie_SetRendMode(REND_ALPHA);
 
-	glVertexPointer(2, GL_INT, 0, vertices);
-	glEnableClientState(GL_VERTEX_ARRAY);
+	pieVrts[0].pos.x = v[1].x;
+	pieVrts[0].pos.y = v[1].y;
+	//cull triangles with off screen points
+	pieVrts[0].pos.z  = INTERFACE_DEPTH;
 
-	colour.byte.a = alpha / 2;
-	glColor4ubv(colour.vector);
-	glDrawArrays(GL_TRIANGLE_FAN, 0, ARRAY_SIZE(vertices));
+	pieVrts[0].u = 0;
+	pieVrts[0].v = 0;
+	pieVrts[0].light = colour;
 
-	colour.byte.a = alpha;
-	glColor4ubv(colour.vector);
-	glDrawArrays(GL_LINE_STRIP, 0, ARRAY_SIZE(vertices));
+	pieVrts[1] = pieVrts[0];
+	pieVrts[2] = pieVrts[0];
+	pieVrts[3] = pieVrts[0];
+	pieVrts[4] = pieVrts[0];
 
-	glDisableClientState(GL_VERTEX_ARRAY);
+	pieVrts[1].pos.x = v[0].x;
+	pieVrts[1].pos.y = v[0].y;
+
+	pieVrts[2].pos.x = v[2].x;
+	pieVrts[2].pos.y = v[2].y;
+
+	pieVrts[3].pos.x = v[3].x;
+	pieVrts[3].pos.y = v[3].y;
+
+	glColor4ub(colour.byte.r, colour.byte.g, colour.byte.b, colour.byte.a >> 1);
+	glBegin(GL_TRIANGLE_FAN);
+		for (i = 0; i < 5; i++)
+		{
+			glVertex2f(pieVrts[i].pos.x, pieVrts[i].pos.y);
+		}
+	glEnd();
+
+	glColor4ub(colour.byte.r, colour.byte.g, colour.byte.b, colour.byte.a);
+	glBegin(GL_LINE_STRIP);
+		for (i = 0; i < 5; i++)
+		{
+			glVertex2f(pieVrts[i].pos.x, pieVrts[i].pos.y);
+		}
+	glVertex2f(pieVrts[0].pos.x, pieVrts[0].pos.y);
+	glEnd();
 }
 
 void pie_TransColouredTriangle(Vector3f *vrt, PIELIGHT c)
 {
+	UDWORD i;
+
 	pie_SetTexturePage(TEXPAGE_NONE);
 	pie_SetRendMode(REND_ADDITIVE);
 
 	glColor4ub(c.byte.r, c.byte.g, c.byte.b, 128);
 
-	glVertexPointer(3, GL_FLOAT, 0, vrt);
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glDrawArrays(GL_TRIANGLE_FAN, 0, 3);
-	glDisableClientState(GL_VERTEX_ARRAY);
+	glBegin(GL_TRIANGLE_FAN);
+		for (i = 0; i < 3; ++i)
+		{
+			glVertex3f(vrt[i].x, vrt[i].y, vrt[i].z);
+		}
+	glEnd();
 }
 
 void pie_DrawSkybox(float scale, int u, int v, int w, int h)
 {
+	const float r = 1.0f; // just because it is shorter than 1.0f
+
 	glPushAttrib(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_ENABLE_BIT | GL_FOG_BIT);
 	// no use in updating the depth buffer
 	glDepthMask(GL_FALSE);
@@ -110,56 +137,25 @@ void pie_DrawSkybox(float scale, int u, int v, int w, int h)
 	// Apply scale matrix
 	glScalef(scale, scale/2.0f, scale);
 
-	glMatrixMode(GL_TEXTURE);
-	glPushMatrix(); // texture matrix
-	glTranslatef(u, v, 0);
-	glScalef(w, h, 1);
-	{
-		const Vector3i vertices[] = {
-			// Front
-			{ -1,  0,  1 }, // bottom left
-			{ -1,  1,  1 }, // top left
-			{  1,  0,  1 }, // bottom right
-			{  1,  1,  1 }, // top right
-			// Right
-			{  1,  0, -1 }, // bottom r
-			{  1,  1, -1 }, // top r
-			// Back
-			{ -1,  0, -1 }, // bottom right
-			{ -1,  1, -1 }, // top right
-			// Left
-			{ -1,  0,  1 }, // bottom r
-			{ -1,  1,  1 }, // top r
-		};
-		const Vector2i texcoords[] = {
-			// Front
-			{ 0, 1 }, // bottom left
-			{ 0, 0 }, // top left
-			{ 2, 1 }, // bottom right
-			{ 2, 0 }, // top right
-			// Right
-			{ 4, 1 }, // bottom r
-			{ 4, 0 }, // top r
-			// Back
-			{ 6, 1 }, // bottom right
-			{ 6, 0 }, // top right
-			// Left
-			{ 8, 1 }, // bottom r
-			{ 8, 0 }, // top r
-		};
+	glBegin(GL_QUAD_STRIP);
+		// Front
+		glTexCoord2f(u + w * 0, v + h);	glVertex3f(-r, 0, r); // bottom left
+		glTexCoord2f(u + w * 0, v);		glVertex3f(-r, r, r); // top left
+		glTexCoord2f(u + w * 2, v + h);	glVertex3f( r, 0, r); // bottom right
+		glTexCoord2f(u + w * 2, v); 	glVertex3f( r, r, r); // top right
 
-		glVertexPointer(3, GL_INT, 0, vertices);
-		glEnableClientState(GL_VERTEX_ARRAY);
+		// Right
+		glTexCoord2f(u + w * 4, v + h);	glVertex3f( r, 0,-r); // bottom r
+		glTexCoord2f(u + w * 4, v); 	glVertex3f( r, r,-r); // top r
 
-		glTexCoordPointer(2, GL_INT, 0, texcoords);
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		// Back
+		glTexCoord2f(u + w * 6, v + h);	glVertex3f(-r, 0, -r); // bottom right
+		glTexCoord2f(u + w * 6, v); 	glVertex3f(-r, r, -r); // top right
 
-		glDrawArrays(GL_QUAD_STRIP, 0, ARRAY_SIZE(vertices));
-		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-		glDisableClientState(GL_VERTEX_ARRAY);
-	}
-	glPopMatrix(); // texture matrix
-	glMatrixMode(GL_MODELVIEW);
+		// Left
+		glTexCoord2f(u + w * 8, v + h);	glVertex3f(-r, 0, r); // bottom r
+		glTexCoord2f(u + w * 8, v); 	glVertex3f(-r, r, r); // top r
+	glEnd();
 
 	glPopAttrib();
 }
@@ -179,33 +175,25 @@ void pie_DrawFogBox(float left, float right, float front, float back, float heig
 	// no use in updating the depth buffer
 	glDepthMask(GL_FALSE);
 	glDisable(GL_FOG);
-	glPushMatrix();
-	glScalef(1, height, 1);
-	{
-		const Vector3f vertices[] = {
-			// Front
-			{ -(         left), 0,  (        front) }, // bottom left
-			{ -(wider +  left), 1,  (wider + front) }, // top left
-			{  (        right), 0,  (        front) }, // bottom right
-			{  (wider + right), 1,  (wider + front) }, // top right
-			// Right
-			{  (        right), 0, -(         back) }, // bottom r
-			{  (wider + right), 1, -(wider +  back) }, // top r
-			// Back
-			{ -(         left), 0, -(         back) }, // bottom right
-			{ -(wider +  left), 1, -(wider +  back) }, // top right
-			// Left
-			{ -(         left), 0,  (        front) }, // bottom r
-			{ -(wider +  left), 1,  (wider + front) }, // top r
-		};
+	glBegin(GL_QUAD_STRIP);
+		// Front
+		glVertex3f(-left, 0, front); // bottom left
+		glVertex3f(-left-wider, height, front+wider); // top left
+		glVertex3f( right, 0, front); // bottom right
+		glVertex3f( right+wider, height, front+wider); // top right
 
-		glVertexPointer(3, GL_FLOAT, 0, vertices);
-		glEnableClientState(GL_VERTEX_ARRAY);
+		// Right
+		glVertex3f( right, 0,-back); // bottom r
+		glVertex3f( right+wider, height,-back-wider); // top r
 
-		glDrawArrays(GL_TRIANGLE_STRIP, 0, ARRAY_SIZE(vertices));
-		glDisableClientState(GL_VERTEX_ARRAY);
-	}
-	glPopMatrix();
+		// Back
+		glVertex3f(-left, 0, -back); // bottom right
+		glVertex3f(-left-wider, height, -back-wider); // top right
+
+		// Left
+		glVertex3f(-left, 0, front); // bottom r
+		glVertex3f(-left-wider, height, front+wider); // top r
+	glEnd();
 	glPopAttrib();
 }
 
