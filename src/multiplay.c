@@ -969,7 +969,7 @@ BOOL sendResearchStatus(STRUCTURE *psBuilding, uint32_t index, uint8_t player, B
 	NETend();
 
 	// Tell UI to remove from the list of available research.
-	MakeResearchStartedPending(asPlayerResList[selectedPlayer] + index);
+	MakeResearchStartedPending(asPlayerResList[player] + index);
 
 	return true;
 }
