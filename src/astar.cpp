@@ -123,7 +123,7 @@ struct PathfindContext
 	bool isBlocked(int x, int y) const
 	{
 		// Not sure whether the out-of-bounds check is needed, can only happen if pathfinding is started on a blocking tile (or off the map).
-		return x < 0 || y < 0 || x >= mapWidth || y >= mapWidth || blockingMap->map[x + y*mapWidth];
+		return x < 0 || y < 0 || x >= mapWidth || y >= mapHeight || blockingMap->map[x + y*mapWidth];
 	}
 	bool isDangerous(int x, int y) const
 	{
