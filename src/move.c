@@ -2409,10 +2409,6 @@ void moveUpdateDroid(DROID *psDroid)
 	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
 	ASSERT_OR_RETURN(, psPropStats != NULL, "Invalid propulsion stats pointer");
 
-//	if(driveModeActive()) {
-//		driveUpdateDroid(psDroid);
-//	}
-
 	// If the droid has been attacked by an EMP weapon, it is temporarily disabled
 	if (psDroid->lastHitWeapon == WSC_EMP)
 	{

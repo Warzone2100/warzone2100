@@ -677,15 +677,21 @@ void droidBurn(DROID *psDroid)
 
 void _syncDebugDroid(const char *function, DROID *psDroid, char ch)
 {
-	_syncDebug(function, "%c droid%d = p%d;pos(%d.%d,%d.%d,%d),ord%d(%d,%d),act%d,so%X,bp%d, power = %"PRId64"", ch,
+	_syncDebug(function, "%c droid%d = p%d;pos(%d.%d,%d.%d,%d),rot(%d,%d,%d),ord%d(%d,%d),act%d,so%X,bp%d,sMove(st%d,spd%d,mdir%d,path%d/%d,src(%d,%d),tar(%d,%d),dst(%d,%d),bump(%d,%d,%d,%d,(%d,%d),%d)), power = %"PRId64"", ch,
 	          psDroid->id,
 
 	          psDroid->player,
 	          psDroid->pos.x, psDroid->sMove.eBitX, psDroid->pos.y, psDroid->sMove.eBitY, psDroid->pos.z,
+	          psDroid->rot.direction, psDroid->rot.pitch, psDroid->rot.roll,
 	          psDroid->order, psDroid->orderX, psDroid->orderY,
 	          psDroid->action,
 	          psDroid->secondaryOrder,
 	          psDroid->body,
+	          psDroid->sMove.Status,
+	          psDroid->sMove.speed, psDroid->sMove.moveDir,
+	          psDroid->sMove.Position, psDroid->sMove.numPoints,
+	          psDroid->sMove.srcX, psDroid->sMove.srcY, psDroid->sMove.targetX, psDroid->sMove.targetY, psDroid->sMove.DestinationX, psDroid->sMove.DestinationY,
+	          psDroid->sMove.bumpDir, psDroid->sMove.bumpTime, psDroid->sMove.lastBump, psDroid->sMove.pauseTime, psDroid->sMove.bumpX, psDroid->sMove.bumpY, psDroid->sMove.shuffleStart,
 
 	          getPrecisePower(psDroid->player));
 }
@@ -744,6 +750,8 @@ void droidUpdate(DROID *psDroid)
 
 	// update the action of the droid
 	actionUpdateDroid(psDroid);
+
+	syncDebugDroid(psDroid, 'M');
 
 	// update the move system
 	moveUpdateDroid(psDroid);
