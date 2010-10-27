@@ -677,14 +677,23 @@ void droidBurn(DROID *psDroid)
 
 void _syncDebugDroid(const char *function, DROID *psDroid, char ch)
 {
-	_syncDebug(function, "%c droid%d = p%d;pos(%d.%d,%d.%d,%d),rot(%d,%d,%d),ord%d(%d,%d),act%d,so%X,bp%d,sMove(st%d,spd%d,mdir%d,path%d/%d,src(%d,%d),tar(%d,%d),dst(%d,%d),bump(%d,%d,%d,%d,(%d,%d),%d)), power = %"PRId64"", ch,
+	char actTar[DROID_MAXWEAPS*15];
+	unsigned actTarLen = 0;
+	unsigned i;
+	actTar[0] = '\0';
+	for (i = 0; i < psDroid->numWeaps; ++i)
+	{
+		actTarLen += sprintf(actTar + actTarLen, "_%u", psDroid->psActionTarget[i]? psDroid->psActionTarget[i]->id : 0);
+	}
+
+	_syncDebug(function, "%c droid%d = p%d;pos(%d.%d,%d.%d,%d),rot(%d,%d,%d),ord%d(%d,%d),act%d%s,so%X,bp%d,sMove(st%d,spd%d,mdir%d,path%d/%d,src(%d,%d),tar(%d,%d),dst(%d,%d),bump(%d,%d,%d,%d,(%d,%d),%d)), power = %"PRId64"", ch,
 	          psDroid->id,
 
 	          psDroid->player,
 	          psDroid->pos.x, psDroid->sMove.eBitX, psDroid->pos.y, psDroid->sMove.eBitY, psDroid->pos.z,
 	          psDroid->rot.direction, psDroid->rot.pitch, psDroid->rot.roll,
 	          psDroid->order, psDroid->orderX, psDroid->orderY,
-	          psDroid->action,
+	          psDroid->action, actTar,
 	          psDroid->secondaryOrder,
 	          psDroid->body,
 	          psDroid->sMove.Status,

@@ -1140,7 +1140,8 @@ void aiUpdateDroid(DROID *psDroid)
 	}
 
 	// don't look for a target if there are any queued orders
-	if (psDroid->listSize > 0)
+	//if (psDroid->listSize > 0)
+	if (false)  // Order queues are not currently synchronised!
 	{
 		lookForTarget = false;
 		updateTarget = false;
