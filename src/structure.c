@@ -4051,6 +4051,7 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 	UDWORD				min, max;
 	HIGHLIGHT			site;
 	FLAG_POSITION		*psCurrFlag;
+	float fheight = 0.0f;
 
 	//make sure we are not too near map edge and not going to go over it
 	if( !tileInsideBuildRange((SDWORD)x, (SDWORD)y) )
@@ -4146,11 +4147,29 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 		site.yBR = (UWORD)y;
 	}
 
-	for (i = site.xTL; i <= site.xBR && valid; i++) {
-		for (j = site.yTL; j <= site.yBR && valid; j++) {
+	// Check to make sure we are not on/close to water...
+	for (j=0; j < 2; j++)
+	{
+		for (i=0; i < 2; i++)
+		{
+			fheight = map_TileHeight(x+i, y+j);
+			if (fheight < 0.0f)
+			{
+				valid = false;
+				goto failed;
+			}
+		}
+	}
+
+
+	for (i = site.xTL; i <= site.xBR && valid; i++)
+	{
+		for (j = site.yTL; j <= site.yBR && valid; j++)
+		{
 			// Can't build outside of scroll limits.
 			if( ((SDWORD)i < scrollMinX+2) || ((SDWORD)i > scrollMaxX-5) ||
-				((SDWORD)j < scrollMinY+2) || ((SDWORD)j > scrollMaxY-5)) {
+				((SDWORD)j < scrollMinY+2) || ((SDWORD)j > scrollMaxY-5))
+			{
 				valid = false;
 				goto failed;
 			}
@@ -4161,7 +4180,6 @@ BOOL validLocation(BASE_STATS *psStats, UDWORD x, UDWORD y, UDWORD player,
 				valid = false;
 				goto failed;
 			}
-
 			//don't check tile is visible for placement of a delivery point
 			if (psStats->ref >= REF_STRUCTURE_START &&
 				psStats->ref < (REF_STRUCTURE_START + REF_RANGE))
