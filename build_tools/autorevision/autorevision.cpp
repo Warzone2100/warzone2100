@@ -62,6 +62,11 @@ class assign_once : public T
             _assigned(false)
         {}
 
+        const assign_once<T>& operator=(const assign_once<T>& data)
+        {
+            return *this = static_cast<const T&>(data);
+        }
+
         const assign_once<T>& operator=(const T& data)
         {
             if (!_assigned)
@@ -94,6 +99,9 @@ struct RevisionInformation
 
     assign_once<std::string> low_revision;
     assign_once<std::string> revision;
+    assign_once<std::string> low_revisionCount;
+    assign_once<std::string> revisionCount;
+    assign_once<std::string> tag;
 
     assign_once<std::string> date;
 
@@ -320,6 +328,9 @@ int main(int argc, char** argv)
 
     if (rev_info.date == "")
         rev_info.date = "0000-00-00 00:00:00";
+
+    rev_info.low_revisionCount = rev_info.low_revision;
+    rev_info.revisionCount = rev_info.revision;
 
     WriteOutput(outputFile, rev_info);
 
@@ -651,10 +662,27 @@ bool RevGitQuery::extractRevision(RevisionInformation& rev_info)
             rev_info.wc_modified = system("git diff --quiet HEAD");
         }
     }
+    std::string tag = runCommand("git describe --exact-match --tags");
+    if (!tag.empty())
+    {
+        rev_info.tag = tag;
+    }
     std::string branch = runCommand("git symbolic-ref HEAD");
     if (!branch.empty())
     {
         rev_info.wc_uri = branch;
+        rev_info.tag = branch;
+    }
+    std::string revCount = runCommand("git rev-list --count HEAD");
+    if (!revCount.empty())
+    {
+        rev_info.low_revisionCount = revCount;
+        rev_info.revisionCount = revCount;
+    }
+    std::string date = runCommand("git log -1 --pretty=format:%ci");
+    if (!date.empty())
+    {
+        rev_info.date = date;
     }
 
     // The working copy URI still needs to be extracted. "svnversion" cannot
@@ -804,12 +832,16 @@ bool WriteOutput(const string& outputFile, const RevisionInformation& rev_info)
     if(do_wx)
         header << "#include <wx/string.h>\n";
 
-    header << "\n#define SVN_LOW_REV      " << integerOnly(rev_info.low_revision.empty() ? rev_info.revision : rev_info.low_revision)
+    header << "\n#define SVN_LOW_REV      " << (rev_info.low_revisionCount.empty() ? rev_info.revisionCount : rev_info.low_revisionCount)
            << "\n#define SVN_LOW_REV_STR \"" << (rev_info.low_revision.empty() ? rev_info.revision : rev_info.low_revision) << "\""
-           << "\n#define SVN_REV          " << integerOnly(rev_info.revision)
+           << "\n#define SVN_REV          " << rev_info.revisionCount
            << "\n#define SVN_REV_STR     \"" << rev_info.revision << "\""
            << "\n#define SVN_DATE        \"" << rev_info.date << "\""
-           << "\n#define SVN_URI         \"" << rev_info.wc_uri << "\"\n";
+           << "\n#define SVN_URI         \"" << rev_info.wc_uri << "\""
+           << "\n#define SVN_TAG         \"" << rev_info.tag << "\"\n"
+           << "\n#define SVN_SHORT_HASH  \"" << rev_info.revision.substr(0, 7) << "\""
+           << "\n#define SVN_SHORT_HASH_WITHOUT_QUOTES " << rev_info.revision.substr(0, 7)
+           << "\n";
 
     header << "\n#define SVN_WC_MODIFIED " << rev_info.wc_modified
            << "\n#define SVN_WC_SWITCHED " << rev_info.wc_switched << "\n\n";
