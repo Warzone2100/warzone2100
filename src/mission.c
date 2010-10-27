@@ -870,8 +870,12 @@ void restoreMissionData(void)
 	freeAllStructs();
 	freeAllFeatures();
 	gwShutDown();
-	mapShutdown();
-
+	if (game.type != CAMPAIGN)
+	{
+		// we don't want this to happen on missions
+		ASSERT(false, "mapShutDown() is being called");
+		mapShutdown();
+	}
 	//restore the game pointers
 	for (inc = 0; inc < MAX_PLAYERS; inc++)
 	{
