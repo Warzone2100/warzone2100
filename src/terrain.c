@@ -1278,6 +1278,8 @@ void drawTerrain(void)
 
 	glBindBuffer(GL_ARRAY_BUFFER, textureVBO);
 
+	ASSERT_OR_RETURN( , psGroundTypes, "Ground type was not set, no textures will be seen.");
+
 	// draw each layer separately
 	for (layer = 0; layer < numGroundTypes; layer++)
 	{
