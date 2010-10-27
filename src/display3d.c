@@ -3594,10 +3594,6 @@ static void renderSurroundings(void)
 {
 	static float wind = 0.0f;
 	const float skybox_scale = 10000.0f;
-// check with TRUNK
-	const float height = 20.0f * TILE_UNITS;
-	const float wider  = 2.0f * (visibleTiles.x * TILE_UNITS);
-	int left, right, front, back, rx, rz;
 
 	// Push identity matrix onto stack
 	pie_MatBegin();
@@ -3608,32 +3604,6 @@ static void renderSurroundings(void)
 	// Set the camera position
 	pie_MATTRANS(0, 0, distance);
 
-	// Rotate for the player and for the wind
-	pie_MatRotZ(player.r.z);
-	pie_MatRotX(player.r.x);
-	pie_MatRotY(player.r.y);
-// check with TRUNK
-	// Fogbox //
-	rx = (player.p.x) & (TILE_UNITS-1);
-	rz = (player.p.z) & (TILE_UNITS-1);
-	pie_TRANSLATE(-rx, -player.p.y, rz);
-
-	left  = TILE_UNITS * MIN(visibleTiles.x/2, playerXTile+visibleTiles.x/2+1);
-	right = TILE_UNITS * MIN(visibleTiles.x/2, mapWidth-playerXTile-visibleTiles.x/2);
-	front = TILE_UNITS * MIN(visibleTiles.y/2, playerZTile+visibleTiles.y/2+1);
-	back  = TILE_UNITS * MIN(visibleTiles.y/2, mapHeight-playerZTile-visibleTiles.y/2);
-
-	pie_DrawFogBox(left, right, front, back, height, wider);
-
-	// undo the translation
-	pie_TRANSLATE(rx,player.p.y,-rz);
-
-	// undo rotation
-	pie_MatRotY(-player.r.y);
-	pie_MatRotX(-player.r.x);
-	pie_MatRotZ(-player.r.z);
-
-	// Skybox //
 	// rotate it
 	pie_MatRotY(DEG(1) * wind);
 
