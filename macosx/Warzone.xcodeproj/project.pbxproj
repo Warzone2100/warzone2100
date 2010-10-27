@@ -3719,7 +3719,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd ..\nexport PATH=$PATH:/sw/bin:/opt/local/bin\n\n# Wait a bit if Autorevision does not exist\ntick=0\nwhile [ ! -s \"./macosx/build/${CONFIGURATION}/Autorevision\" ]; do\n    let tick=${tick}+1\n    if [ ${tick} == 11 ]; then\n        break\n    fi\n    sleep 1\ndone\n\n\nif ! ./macosx/build/${CONFIGURATION}/Autorevision +cstr . src/autorevision.h; then\n    echo \"error: Could not run Autorevision\"\n    exit 1\nfi\n\nsed -n 's:#define:&:p' src/autorevision.h | sed 's:\"::g' | sed -e 's:tags/::' -e 's:branches/\\(.*\\)$:\\1 (SVN_REV):' -e 's:trunk:Trunk (SVN_REV):' | sed -e 's:_beta: Beta :' -e 's:_rc: RC :' >macosx/build/autorevision.h";
+			shellScript = "cd ..\nexport PATH=$PATH:/sw/bin:/opt/local/bin\n\n# Wait a bit if Autorevision does not exist\ntick=0\nwhile [ ! -s \"./macosx/build/${CONFIGURATION}/Autorevision\" ]; do\n    let tick=${tick}+1\n    if [ ${tick} == 11 ]; then\n        break\n    fi\n    sleep 1\ndone\n\n\nif ! ./macosx/build/${CONFIGURATION}/Autorevision +cstr . src/autorevision.h; then\n    echo \"error: Could not run Autorevision\"\n    exit 1\nfi\n\nsed -n 's:#define:&:p' src/autorevision.h | sed 's:\"::g' | sed -e 's:refs/heads/:branch/:' -e 's:master:Master:' | sed -e 's:_beta: Beta :' -e 's:_rc: RC :' >macosx/build/autorevision.h\n";
 		};
 		439A2897114F2DB6004F1266 /* i18n */ = {
 			isa = PBXShellScriptBuildPhase;
