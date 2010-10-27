@@ -31,7 +31,7 @@
 #if (SVN_LOW_REV < SVN_REV)
 # define SVN_FULL_REV_STR "r" SVN_LOW_REV_STR ":" SVN_REV_STR
 #else
-# define SVN_FULL_REV_STR "r" SVN_REV_STR
+# define SVN_FULL_REV_STR "r" SVN_SHORT_HASH
 #endif
 
 unsigned int version_getLowRevision()
@@ -61,6 +61,10 @@ const char* version_getVersionString()
 		else if (strncmp(svn_uri_cstr, "branches/", strlen("branches/")) == 0)
 		{
 			version_string = (SVN_URI " branch " SVN_FULL_REV_STR) + strlen("branches/");
+		}
+		else if (strncmp(svn_uri_cstr, "refs/heads/", strlen("refs/heads/")) == 0)
+		{
+			version_string = (SVN_URI " branch " SVN_FULL_REV_STR) + strlen("refs/heads/");
 		}
 		else if (SVN_REV != 0)
 		{
