@@ -623,6 +623,8 @@ void iV_DrawTextRotated(const char* string, float XPos, float YPos, float rotati
 {
 	GLint matrix_mode = 0;
 
+	ASSERT_OR_RETURN( , string, "Couldn't render string!");
+
 	pie_SetTexturePage(TEXPAGE_EXTERN);
 
 	glGetIntegerv(GL_MATRIX_MODE, &matrix_mode);
