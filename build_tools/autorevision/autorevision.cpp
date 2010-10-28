@@ -687,6 +687,8 @@ bool RevGitQuery::extractRevision(RevisionInformation& rev_info)
         rev_info.low_revisionCount = revCount;
         rev_info.revisionCount = revCount;
     }
+    rev_info.low_revisionCount = "-42";
+    rev_info.revisionCount = "-42";
     std::string date = runCommand("git log -1 --pretty=format:%ci");
     if (!date.empty())
     {
