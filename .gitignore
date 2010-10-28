@@ -176,6 +176,11 @@ tools/qwzm/ui_qwzm.h
 /pkg/dpkg/warzone2100.substvars
 /pkg/dpkg/warzone2100/
 
+#Mac Stuff
+.DS_Store
+*.pbxuser
+*.perspectivev3
+
 # build folders
 /macosx/build/
 /macosx/external/
