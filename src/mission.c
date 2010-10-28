@@ -1329,7 +1329,7 @@ static void processMission(void)
 		//reset order - do this to all the droids that are returning from offWorld
 		orderDroid(psDroid, DORDER_STOP, ModeImmediate);
 		// clean up visibility 
-		visRemoveVisibility(psDroid);
+		visRemoveVisibility((BASE_OBJECT *)psDroid);
 		//remove out of stored list and add to current Droid list
 		if (droidRemove(psDroid, apsDroidLists))
 		{
