@@ -2353,6 +2353,8 @@ void orderDroidStatsLoc(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStats, 
 	ASSERT(psDroid != NULL, "Invalid unit pointer");
 	ASSERT(order == DORDER_BUILD, "Invalid order for location");
 
+	orderClearDroidList(psDroid);
+
 	memset(&sOrder,0,sizeof(DROID_ORDER_DATA));
 	sOrder.order = order;
 	sOrder.x = (UWORD)x;
@@ -2391,6 +2393,8 @@ void orderDroidStatsTwoLoc(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStat
 	ASSERT(psDroid != NULL,	"Invalid unit pointer");
 	ASSERT(order == DORDER_LINEBUILD, "Invalid order for location");
 	ASSERT(x1 == x2 || y1 == y2, "Invalid locations for LINEBUILD");
+
+	orderClearDroidList(psDroid);
 
 	memset(&sOrder,0,sizeof(DROID_ORDER_DATA));
 	sOrder.order = order;
