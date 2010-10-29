@@ -1016,7 +1016,7 @@ BOOL sendScoreCheck(void)
 	{
 		uint8_t			i;
 
-		for (i = 0; i < MAX_PLAYERS; i++)
+		for (i = 0; i < game.maxPlayers; i++)
 		{
 			PLAYERSTATS		stats;
 
