@@ -490,27 +490,6 @@ BOOL recvDroid(NETQUEUE queue)
 }
 
 
-// ////////////////////////////////////////////////////////////////////////////
-/*!
- * Droid Group/selection orders.
- * The SendDroidInfo function minimises comms by sending orders for whole groups, rather than each droid.
- */
-BOOL SendGroupOrderSelected(uint8_t player, uint32_t x, uint32_t y, const BASE_OBJECT* psObj, BOOL altOrder)
-{
-	if (!bMultiMessages)
-		return true;
-
-	for (DROID *psDroid = apsDroidLists[player]; psDroid != NULL; psDroid = psDroid->psNext)
-	{
-		if (psDroid->selected)
-		{
-			DROID_ORDER order = psObj? chooseOrderObj(psDroid, const_cast<BASE_OBJECT *>(psObj), altOrder) : chooseOrderLoc(psDroid, x, y, altOrder);
-			SendDroidInfo(psDroid, order, x, y, psObj, NULL, 0, 0, 0);
-		}
-	}
-
-	return true;
-}
 /*
 *	This routine is called by the AI scripts
 *
