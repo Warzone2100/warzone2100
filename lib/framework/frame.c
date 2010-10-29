@@ -384,8 +384,7 @@ static bool loadFile2(const char *pFileName, char **ppFileData, UDWORD *pFileSiz
 			*ppFileData = NULL;
 		}
 
-		debug(LOG_ERROR, "loadFile2: Reading %s short: %s",
-		      pFileName, PHYSFS_getLastError());
+		debug(LOG_ERROR, "Reading %s short: %s", pFileName, PHYSFS_getLastError());
 		assert(false);
 		return false;
 	}
@@ -398,8 +397,7 @@ static bool loadFile2(const char *pFileName, char **ppFileData, UDWORD *pFileSiz
 			*ppFileData = NULL;
 		}
 
-		debug(LOG_ERROR, "loadFile2: Error closing %s: %s", pFileName,
-		      PHYSFS_getLastError());
+		debug(LOG_ERROR, "Error closing %s: %s", pFileName, PHYSFS_getLastError());
 		assert(false);
 		return false;
 	}
@@ -420,13 +418,14 @@ PHYSFS_file* openSaveFile(const char* fileName)
 	{
 		const char *found = PHYSFS_getRealDir(fileName);
 
-		debug(LOG_ERROR, "saveFile: %s could not be opened: %s", fileName, PHYSFS_getLastError());
+		debug(LOG_ERROR, "%s could not be opened: %s", fileName, PHYSFS_getLastError());
 		if (found)
 		{
-			debug(LOG_ERROR, "saveFile: %s found as %s", fileName, found);
+			debug(LOG_ERROR, "%s found as %s", fileName, found);
 		}
 
 		assert(!"openSaveFile: couldn't open file for writing");
+		return NULL;
 	}
 
 	return fileHandle;
@@ -444,30 +443,31 @@ bool saveFile(const char *pFileName, const char *pFileData, UDWORD fileSize)
 	pfile = openSaveFile(pFileName);
 	if (!pfile)
 	{
+		ASSERT(false, "Couldn't save file %s (%s)?", pFileName, PHYSFS_getLastError());
 		return false;
 	}
 
-	if (PHYSFS_write(pfile, pFileData, 1, size) != size) {
-		debug(LOG_ERROR, "saveFile: %s could not write: %s", pFileName,
-		      PHYSFS_getLastError());
+	if (PHYSFS_write(pfile, pFileData, 1, size) != size) 
+	{
+		debug(LOG_ERROR, "%s could not write: %s", pFileName, PHYSFS_getLastError());
 		assert(false);
 		return false;
 	}
-	if (!PHYSFS_close(pfile)) {
-		debug(LOG_ERROR, "saveFile: Error closing %s: %s", pFileName,
-		      PHYSFS_getLastError());
+	if (!PHYSFS_close(pfile))
+	{
+		debug(LOG_ERROR, "Error closing %s: %s", pFileName, PHYSFS_getLastError());
 		assert(false);
 		return false;
 	}
 
-	if (PHYSFS_getRealDir(pFileName) == NULL) {
+	if (PHYSFS_getRealDir(pFileName) == NULL) 
+	{
 		// weird
-		debug(LOG_ERROR, "saveFile: PHYSFS_getRealDir(%s) returns NULL?!",
-		      pFileName);
-	} else {
-	  debug(LOG_WZ, "Successfully wrote to %s%s%s with %d bytes",
-		      PHYSFS_getRealDir(pFileName), PHYSFS_getDirSeparator(),
-		      pFileName, size);
+		debug(LOG_ERROR, "PHYSFS_getRealDir(%s) returns NULL (%s)?!", pFileName, PHYSFS_getLastError());
+	}
+	else
+	{
+		debug(LOG_WZ, "Successfully wrote to %s%s%s with %d bytes", PHYSFS_getRealDir(pFileName), PHYSFS_getDirSeparator(), pFileName, size);
 	}
 	return true;
 }
