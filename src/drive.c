@@ -28,8 +28,6 @@
 #include "lib/framework/strres.h"
 #include "lib/framework/input.h"
 
-#include "lib/ivis_common/rendmode.h"
-
 #include "lib/gamelib/gtime.h"
 #include "lib/gamelib/animobj.h"
 #include "lib/sound/audio.h"
@@ -42,8 +40,6 @@
 #include "loop.h"
 #include "geometry.h"
 #include "anim_id.h"
-#include "formationdef.h"
-#include "formation.h"
 #include "action.h"
 #include "order.h"
 #include "combat.h"
@@ -465,7 +461,7 @@ static void driveMoveFollower(DROID *psDroid)
 			// if the droid is currently guarding we need to change the order to a move
 			if (psDroid->order==DORDER_GUARD)
 			{
-				orderDroidLoc(psDroid,DORDER_MOVE, psDrivenDroid->pos.x,psDrivenDroid->pos.y);
+				orderDroidLoc(psDroid, DORDER_MOVE, psDrivenDroid->pos.x, psDrivenDroid->pos.y, ModeQueue);
 			}
 			else
 			{

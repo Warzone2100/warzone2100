@@ -33,7 +33,7 @@
 
 #include "lib/gamelib/gtime.h"
 #include "lib/ivis_common/ivisdef.h"
-#include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_common/pieblitfunc.h"
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/piepalette.h"
 #include "lib/netplay/netplay.h"
@@ -68,8 +68,6 @@
 #include "component.h"
 #include "radar.h"
 #include "cmddroid.h"
-#include "formation.h"
-#include "formationdef.h"
 #include "warzoneconfig.h"
 #include "multiplay.h"
 #include "frontend.h"
@@ -3768,7 +3766,7 @@ BOOL saveGame(char *aFileName, GAME_TYPE saveType)
 			//this is mainly for VTOLs
 			setSaveDroidBase(psDroid, NULL);
 			psDroid->cluster = 0;
-			orderDroid(psDroid, DORDER_STOP);
+			orderDroid(psDroid, DORDER_STOP, ModeImmediate);
 		}
 	}
 
@@ -5120,14 +5118,19 @@ BOOL loadSaveDroidInitV2(char *pFileData, UDWORD filesize,UDWORD quantity)
 		}
 		else
 		{
-			ASSERT(psTemplate != NULL, "Invalid template pointer");
 			psDroid = reallyBuildDroid(psTemplate, (pDroidInit->x & ~TILE_MASK) + TILE_UNITS/2, (pDroidInit->y  & ~TILE_MASK) + TILE_UNITS/2, pDroidInit->player, false);
 
 			if (psDroid)
 			{
+				Vector2i startpos = getPlayerStartPosition(psDroid->player);
+
 				psDroid->id = pDroidInit->id;
 				psDroid->rot.direction = DEG(pDroidInit->direction);
 				addDroid(psDroid, apsDroidLists);
+				if (psDroid->droidType == DROID_CONSTRUCT && startpos.x == 0 && startpos.y == 0)
+				{
+					scriptSetStartPos(psDroid->player, psDroid->pos.x, psDroid->pos.y);
+				}
 			}
 			else
 			{
@@ -5238,6 +5241,7 @@ static DROID* buildDroidFromSaveDroidV11(SAVE_DROID_V11* psSaveDroid)
 	UDWORD					i;
 	SDWORD					compInc;
 	UDWORD					burnTime;
+	Vector2i				startpos = getPlayerStartPosition(psSaveDroid->player);
 
 	psTemplate = &sTemplate;
 
@@ -5321,6 +5325,10 @@ static DROID* buildDroidFromSaveDroidV11(SAVE_DROID_V11* psSaveDroid)
 		psDroid->asWeaps[i].rot.pitch = DEG(psSaveDroid->turretPitch);
 	}
 
+	if (psDroid->droidType == DROID_CONSTRUCT && startpos.x == 0 && startpos.y == 0)
+	{
+		scriptSetStartPos(psDroid->player, psDroid->pos.x, psDroid->pos.y);
+	}
 
 	psDroid->psGroup = NULL;
 	psDroid->psGrpNext = NULL;
@@ -5338,6 +5346,7 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 	UDWORD					i, id;
 	SDWORD					compInc;
 	UDWORD					burnTime;
+	Vector2i				startpos = getPlayerStartPosition(psSaveDroid->player);
 
 	psTemplate = &sTemplate;
 
@@ -5434,6 +5443,11 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 	//version 14
 	psDroid->resistance = droidResistance(psDroid);
 
+	if (psDroid->droidType == DROID_CONSTRUCT && startpos.x == 0 && startpos.y == 0)
+	{
+		scriptSetStartPos(psDroid->player, psDroid->pos.x, psDroid->pos.y);
+	}
+
 	if (version >= VERSION_11)//version 11
 	{
 		//Watermelon:make it back-compatible with older versions of save
@@ -5487,7 +5501,7 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 			{
 				ASSERT( false,"loadUnit TargetStat not found" );
 				psDroid->psTarStats = NULL;
-                orderDroid(psDroid, DORDER_STOP);
+				orderDroid(psDroid, DORDER_STOP, ModeImmediate);
 			}
 		}
 		//warning V14 - v17 only
@@ -5572,8 +5586,8 @@ static void SaveDroidMoveControl(SAVE_DROID * const psSaveDroid, DROID const * c
 	psSaveDroid->sMove.fz           = 0;
 
 	// Little endian SWORDs
-	psSaveDroid->sMove.boundX       = PHYSFS_swapSLE16(psDroid->sMove.boundX);
-	psSaveDroid->sMove.boundY       = PHYSFS_swapSLE16(psDroid->sMove.boundY);
+	psSaveDroid->sMove.boundX       = 0;
+	psSaveDroid->sMove.boundY       = 0;
 	psSaveDroid->sMove.bumpDir      = PHYSFS_swapSLE16(UNDEG(psDroid->sMove.bumpDir));
 	psSaveDroid->sMove.iVertSpeed   = PHYSFS_swapSLE16(psDroid->sMove.iVertSpeed);
 
@@ -5593,24 +5607,10 @@ static void SaveDroidMoveControl(SAVE_DROID * const psSaveDroid, DROID const * c
 	psSaveDroid->sMove.bumpX        = PHYSFS_swapULE16(psDroid->sMove.bumpX);
 	psSaveDroid->sMove.bumpY        = PHYSFS_swapULE16(psDroid->sMove.bumpY);
 
-	if (psDroid->sMove.psFormation != NULL)
-	{
-		psSaveDroid->sMove.isInFormation = true;
-		psSaveDroid->formationDir = UNDEG(psDroid->sMove.psFormation->direction);
-		psSaveDroid->formationX   = psDroid->sMove.psFormation->x;
-		psSaveDroid->formationY   = psDroid->sMove.psFormation->y;
-	}
-	else
-	{
-		psSaveDroid->sMove.isInFormation = false;
-		psSaveDroid->formationDir = 0;
-		psSaveDroid->formationX   = 0;
-		psSaveDroid->formationY   = 0;
-	}
-
-	endian_sword(&psSaveDroid->formationDir);
-	endian_sdword(&psSaveDroid->formationX);
-	endian_sdword(&psSaveDroid->formationY);
+	psSaveDroid->sMove.isInFormation = false;
+	psSaveDroid->formationDir = 0;
+	psSaveDroid->formationX   = 0;
+	psSaveDroid->formationY   = 0;
 }
 
 static void LoadDroidMoveControl(DROID * const psDroid, SAVE_DROID const * const psSaveDroid)
@@ -5641,8 +5641,6 @@ static void LoadDroidMoveControl(DROID * const psDroid, SAVE_DROID const * const
 	psDroid->sMove.moveDir      = DEG(PHYSFS_swapSLE32(psSaveDroid->sMove.moveDir));
 
 	// Little endian SWORDs
-	psDroid->sMove.boundX       = PHYSFS_swapSLE16(psSaveDroid->sMove.boundX);
-	psDroid->sMove.boundY       = PHYSFS_swapSLE16(psSaveDroid->sMove.boundY);
 	psDroid->sMove.bumpDir      = DEG(PHYSFS_swapSLE16(psSaveDroid->sMove.bumpDir));
 	psDroid->sMove.iVertSpeed   = PHYSFS_swapSLE16(psSaveDroid->sMove.iVertSpeed);
 
@@ -5661,25 +5659,6 @@ static void LoadDroidMoveControl(DROID * const psDroid, SAVE_DROID const * const
 	psDroid->sMove.pauseTime    = PHYSFS_swapULE16(psSaveDroid->sMove.pauseTime);
 	psDroid->sMove.bumpX        = PHYSFS_swapULE16(psSaveDroid->sMove.bumpX);
 	psDroid->sMove.bumpY        = PHYSFS_swapULE16(psSaveDroid->sMove.bumpY);
-
-	if (psSaveDroid->sMove.isInFormation)
-	{
-		psDroid->sMove.psFormation = formationFind(psSaveDroid->formationX, psSaveDroid->formationY);
-		// join a formation if it exists at the destination
-		if (psDroid->sMove.psFormation)
-		{
-			formationJoin(psDroid->sMove.psFormation, psDroid);
-		}
-		else
-		{
-			// no formation so create a new one
-			if (formationNew(&psDroid->sMove.psFormation, FT_LINE, psSaveDroid->formationX, psSaveDroid->formationY,
-					(SDWORD)psSaveDroid->formationDir))
-			{
-				formationJoin(psDroid->sMove.psFormation, psDroid);
-			}
-		}
-	}
 
 	// Recreate path-finding jobs
 	if (psDroid->sMove.Status == MOVEWAITROUTE)
@@ -5700,6 +5679,7 @@ static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 	UDWORD					i, id;
 	SDWORD					compInc;
 	UDWORD					burnTime;
+	Vector2i				startpos = getPlayerStartPosition(psSaveDroid->player);
 
 	psTemplate = &sTemplate;
 
@@ -5898,6 +5878,12 @@ static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 		psDroid->resistance = (SWORD)psSaveDroid->resistance;
 		LoadDroidMoveControl(psDroid, psSaveDroid);
 	}
+
+	if (psDroid->droidType == DROID_CONSTRUCT && startpos.x == 0 && startpos.y == 0)
+	{
+		scriptSetStartPos(psDroid->player, psDroid->pos.x, psDroid->pos.y);
+	}
+
 	return psDroid;
 }
 
@@ -8247,16 +8233,16 @@ BOOL loadStructSetPointers(void)
 							}
 							else
 							{
-                                if (list == 1) //ie offWorld
-                                {
-                                    //don't need to worry about the Flag
-                                    ((FACTORY *)psStruct->pFunctionality)->psCommander =
-                                        psCommander;
-                                }
-                                else
-                                {
-								    assignFactoryCommandDroid(psStruct, psCommander);
-                                }
+								if (list == 1) //ie offWorld
+								{
+									//don't need to worry about the Flag
+									((FACTORY *)psStruct->pFunctionality)->psCommander =
+										psCommander;
+								}
+								else
+								{
+									assignFactoryCommandDroid(psStruct, psCommander);
+								}
 							}
 						}
 						else
@@ -8274,6 +8260,11 @@ BOOL loadStructSetPointers(void)
 						else
 						{
 							psRepair->psObj = getBaseObjFromId(_tmpid);
+							if (!psRepair->psObj)
+							{
+								ASSERT(psRepair->psObj, "Can't find object from ID %x", _tmpid);
+								break;
+							}
 							ASSERT(psRepair->psObj->type == OBJ_DROID, "%s cannot repair %s", 
 							       objInfo((BASE_OBJECT *)psStruct), objInfo(psRepair->psObj));
 							//if the build has started set the powerAccrued =

@@ -29,8 +29,9 @@
 */
 
 #include "lib/framework/frame.h"
-
 #include "difficulty.h"
+#include "lib/framework/math_ext.h"
+
 // ------------------------------------------------------------------------------------
 
 static DIFFICULTY_LEVEL	presDifLevel = DL_NORMAL;

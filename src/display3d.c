@@ -29,6 +29,7 @@
 #include "lib/framework/stdio_ext.h"
 
 /* Includes direct access to render library */
+#include "lib/ivis_common/pieblitfunc.h"
 #include "lib/ivis_common/piedef.h"
 #include "lib/ivis_common/tex.h"
 #include "lib/ivis_common/piestate.h"
@@ -37,7 +38,6 @@
 #include "lib/ivis_common/piemode.h"
 #include "lib/framework/fixedpoint.h"
 #include "lib/ivis_common/piefunc.h"
-#include "lib/ivis_common/rendmode.h"
 
 #include "lib/gamelib/gtime.h"
 #include "lib/gamelib/animobj.h"
@@ -235,7 +235,8 @@ bool CauseCrash = false;
 char DROIDDOING[512];
 
 /// Geometric offset which will be passed to pie_SetGeometricOffset
-UDWORD geoOffset;
+static const int geoOffset = 192;
+
 /// The average terrain height for the center of the area the camera is looking at
 static int averageCentreTerrainHeight;
 
@@ -593,7 +594,7 @@ void draw3DScene( void )
 
 	pie_Begin3DScene();
 	/* Set 3D world origins */
-	pie_SetGeometricOffset((rendSurface.width >> 1), geoOffset);
+	pie_SetGeometricOffset(rendSurface.width / 2, geoOffset);
 
 	// draw terrain
 	displayTerrain();
@@ -927,18 +928,6 @@ static void drawTiles(iView *player)
 	// draw skybox
 	renderSurroundings();
 	
-	// clear the terrain highlight
-	for (i = 0; i < visibleTiles.y; i++)
-	{
-		for (j = 0; j < visibleTiles.x; j++)
-		{
-			if (tileOnMap(playerXTile + j, playerZTile + i))
-			{
-				CLEAR_TILE_HIGHLIGHT(mapTile(playerXTile + j, playerZTile + i));
-			}
-		}
-	}
-
 	// and prepare for rendering the models
 	pie_SetRendMode(REND_OPAQUE);
 	pie_SetAlphaTest(true);
@@ -1000,9 +989,6 @@ BOOL init3DView(void)
 	// the world centre - used for decaying lighting etc
 	gridCentreX = player.p.x + world_coord(visibleTiles.x / 2);
 	gridCentreZ = player.p.z + world_coord(visibleTiles.y / 2);
-
-	/* Base Level */
-	geoOffset = 192;
 
 	/* There are no drag boxes */
 	dragBox3D.status = DRAG_INACTIVE;
@@ -1467,6 +1453,32 @@ static void drawWallDrag(STRUCTURE_STATS *psStats, int left, int right, int up, 
 	free(blueprint);
 }
 
+static void renderBuildOrder(int32_t order, BASE_STATS *stats, int32_t x, int32_t y, int32_t x2, int32_t y2, uint16_t dir, STRUCT_STATES state)
+{
+	//draw the current build site if its a line of structures
+	if (order == DORDER_LINEBUILD && stats != NULL)
+	{
+		int left, right, up, down;
+		// a wall (or something like that)
+
+		left = MIN(map_coord(x), map_coord(x2));
+		right = MAX(map_coord(x), map_coord(x2));
+		up = MIN(map_coord(y), map_coord(y2));
+		down = MAX(map_coord(y), map_coord(y2));
+
+		drawWallDrag((STRUCTURE_STATS *)stats, left, right, up, down, dir, state);
+	}
+	if (order == DORDER_BUILD && stats != NULL)
+	{
+		if (!TileHasStructure(mapTile(map_coord(x), map_coord(y))))
+		{
+			STRUCTURE *blueprint = buildBlueprint((STRUCTURE_STATS *)stats, x, y, dir, state);
+			renderStructure(blueprint);
+			free(blueprint);
+		}
+	}
+}
+
 void displayBlueprints(void)
 {
 	STRUCTURE *blueprint;
@@ -1558,61 +1570,17 @@ void displayBlueprints(void)
 	{
 		if (psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT)
 		{
-			//draw the current build site if its a line of structures
-			if (psDroid->order == DORDER_LINEBUILD && psDroid->psTarStats)
+			renderBuildOrder(psDroid->order, psDroid->psTarStats, psDroid->orderX, psDroid->orderY, psDroid->orderX2, psDroid->orderY2, psDroid->orderDirection, SS_BLUEPRINT_PLANNED);
+			if (psDroid->waitingForOwnReceiveDroidInfoMessage)
 			{
-				int left, right, up, down;
-				// a wall (or something like that)
-
-				left = MIN(map_coord(psDroid->orderX), map_coord(psDroid->orderX2));
-				right = MAX(map_coord(psDroid->orderX), map_coord(psDroid->orderX2));
-				up = MIN(map_coord(psDroid->orderY), map_coord(psDroid->orderY2));
-				down = MAX(map_coord(psDroid->orderY), map_coord(psDroid->orderY2));
-
-				drawWallDrag((STRUCTURE_STATS *)psDroid->psTarStats, left, right, up, down, psDroid->orderDirection, SS_BLUEPRINT_PLANNED);
-			}
-			if (psDroid->order == DORDER_BUILD && psDroid->psTarStats)
-			{
-				if (!TileHasStructure(mapTile(map_coord(psDroid->orderX),map_coord(psDroid->orderY))))
-				{
-					blueprint = buildBlueprint((STRUCTURE_STATS *)psDroid->psTarStats,
-											   psDroid->orderX,
-											   psDroid->orderY,
-											   psDroid->orderDirection,
-											   SS_BLUEPRINT_PLANNED);
-					renderStructure(blueprint);
-					free(blueprint);
-				}
+				ORDER_LIST const *o = &psDroid->asOrderPending;
+				renderBuildOrder(o->order, (BASE_STATS *)o->psOrderTarget, o->x, o->y, o->x2, o->y2, o->direction, SS_BLUEPRINT_PLANNED);
 			}
 			//now look thru' the list of orders to see if more building sites
 			for (order = 0; order < psDroid->listSize; order++)
 			{
-				if (psDroid->asOrderList[order].order == DORDER_BUILD)
-				{
-					// a single building
-					if (!TileHasStructure(mapTile(map_coord(psDroid->asOrderList[order].x),map_coord(psDroid->asOrderList[order].y))))
-					{
-						blueprint = buildBlueprint((STRUCTURE_STATS *)psDroid->asOrderList[order].psOrderTarget,
-						                           psDroid->asOrderList[order].x,
-						                           psDroid->asOrderList[order].y,
-									   psDroid->asOrderList[order].direction,
-						                           SS_BLUEPRINT_PLANNED);
-						renderStructure(blueprint);
-						free(blueprint);
-					}
-				}
-				else if (psDroid->asOrderList[order].order == DORDER_LINEBUILD)
-				{
-					int left, right, up, down;
-					// a wall (or something like that)
-
-					left = MIN(map_coord(psDroid->asOrderList[order].x), map_coord(psDroid->asOrderList[order].x2));
-					right = MAX(map_coord(psDroid->asOrderList[order].x), map_coord(psDroid->asOrderList[order].x2));
-					up = MIN(map_coord(psDroid->asOrderList[order].y), map_coord(psDroid->asOrderList[order].y2));
-					down = MAX(map_coord(psDroid->asOrderList[order].y), map_coord(psDroid->asOrderList[order].y2));
-
-					drawWallDrag((STRUCTURE_STATS *)psDroid->asOrderList[order].psOrderTarget, left, right, up, down, psDroid->asOrderList[order].direction, SS_BLUEPRINT_PLANNED);
-				}
+				ORDER_LIST const *o = &psDroid->asOrderList[order];
+				renderBuildOrder(o->order, (BASE_STATS *)o->psOrderTarget, o->x, o->y, o->x2, o->y2, o->direction, SS_BLUEPRINT_PLANNED);
 			}
 		}
 	}
@@ -3584,12 +3552,14 @@ SDWORD	xShift,yShift, index;
 void calcScreenCoords(DROID *psDroid)
 {
 	/* Get it's absolute dimensions */
-	const Vector3i zero = {0, 0, 0};
+	const Vector3i origin = {0, 0, 0};
 	Vector2i center = {0, 0};
-	SDWORD cZ;
 	UDWORD radius;
 
-	/* How big a box do we want - will ultimately be calculated using xmax, ymax, zmax etc */
+	/* get the screen corrdinates */
+	const int cZ = pie_RotateProject(&origin, &center);
+
+	// TODO: compute the droid's radius (using min/max for x,y,z)
 	if(psDroid->droidType == DROID_TRANSPORTER)
 	{
 		radius = 45;
@@ -3598,9 +3568,6 @@ void calcScreenCoords(DROID *psDroid)
 	{
 		radius = 22;
 	}
-
-	/* Pop matrices and get the screen corrdinates */
-	cZ = pie_RotateProject( &zero, &center );
 
 	//Watermelon:added a crash protection hack...
 	if (cZ != 0)

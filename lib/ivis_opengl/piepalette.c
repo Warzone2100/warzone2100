@@ -21,7 +21,6 @@
 #include "lib/framework/file.h"
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/piepalette.h"
-#include "lib/ivis_common/rendmode.h"
 #include "screen.h"
 
 PIELIGHT psPalette[WZCOL_MAX];

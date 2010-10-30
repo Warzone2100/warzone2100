@@ -35,7 +35,8 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
 #include "lib/iniparser/iniparser.h"
-#include "lib/ivis_common/rendmode.h"		// for boxfill
+#include "lib/ivis_common/bitimage.h"
+#include "lib/ivis_common/pieblitfunc.h"
 #include "lib/widget/button.h"
 
 #include "challenge.h"

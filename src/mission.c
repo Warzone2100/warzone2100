@@ -699,9 +699,9 @@ void missionFlyTransportersIn( SDWORD iPlayer, BOOL bTrackTransporter )
                 //little hack to ensure all Transporters are fully repaired by time enter world
                 psTransporter->body = psTransporter->originalBody;
 
-			    /* set fly-in order */
-			    orderDroidLoc( psTransporter, DORDER_TRANSPORTIN,
-			    				iLandX, iLandY );
+				/* set fly-in order */
+				orderDroidLoc(psTransporter, DORDER_TRANSPORTIN,
+				    iLandX, iLandY, ModeImmediate);
 
 				audio_PlayObjDynamicTrack( psTransporter, ID_SOUND_BLIMP_FLIGHT,
 									moveCheckDroidMovingAndVisible );
@@ -790,12 +790,12 @@ static void saveMissionData(void)
 		{
 			if (psStructBeingBuilt->status == SS_BUILT)
 			{
-				orderDroid(psDroid, DORDER_STOP);
+				orderDroid(psDroid, DORDER_STOP, ModeImmediate);
 			}
 		}
 		else
 		{
-			orderDroid(psDroid, DORDER_STOP);
+			orderDroid(psDroid, DORDER_STOP, ModeImmediate);
 		}
 	}
 
@@ -850,8 +850,12 @@ void restoreMissionData(void)
 	freeAllStructs();
 	freeAllFeatures();
 	gwShutDown();
-	mapShutdown();
-
+	if (game.type != CAMPAIGN)
+	{
+		// we don't want this to happen on missions
+		ASSERT(false, "mapShutDown() is being called");
+		mapShutdown();
+	}
 	//restore the game pointers
 	for (inc = 0; inc < MAX_PLAYERS; inc++)
 	{
@@ -949,11 +953,11 @@ void saveMissionLimboData(void)
 	{
 		if (StructIsFactory(psStruct))
 		{
-			holdProduction(psStruct);
+			holdProduction(psStruct, ModeImmediate);
 		}
 		else if (psStruct->pStructureType->type == REF_RESEARCH)
 		{
-			holdResearch(psStruct);
+			holdResearch(psStruct, ModeImmediate);
 		}
 	}
 }
@@ -1032,8 +1036,8 @@ void restoreMissionLimboData(void)
         {
     		addDroid(psDroid, apsDroidLists);
 	    	psDroid->cluster = 0;
-    		//reset droid orders
-	    	orderDroid(psDroid, DORDER_STOP);
+			//reset droid orders
+			orderDroid(psDroid, DORDER_STOP, ModeImmediate);
             //the location of the droid should be valid!
         }
     }
@@ -1309,7 +1313,7 @@ static void clearCampaignUnits(void)
 
 	for (psDroid = apsDroidLists[selectedPlayer]; psDroid != NULL; psDroid = psDroid->psNext)
 	{
-		orderDroid(psDroid, DORDER_STOP);
+		orderDroid(psDroid, DORDER_STOP, ModeImmediate);
 		setDroidBase(psDroid, NULL);
 		visRemoveVisibilityOffWorld((BASE_OBJECT *)psDroid);
 		CHECK_DROID(psDroid);
@@ -1329,7 +1333,7 @@ static void processMission(void)
 	{
 		psNext = psDroid->psNext;
 		//reset order - do this to all the droids that are returning from offWorld
-		orderDroid(psDroid, DORDER_STOP);
+		orderDroid(psDroid, DORDER_STOP, ModeImmediate);
 
 		//remove out of stored list and add to current Droid list
 		if (droidRemove(psDroid, apsDroidLists))
@@ -1400,7 +1404,7 @@ void processMissionLimbo(void)
 					// This is mainly for VTOLs
 					setDroidBase(psDroid, NULL);
 					psDroid->cluster = 0;
-					orderDroid(psDroid, DORDER_STOP);
+					orderDroid(psDroid, DORDER_STOP, ModeImmediate);
 					numDroidsAddedToLimboList++;
 				}
 			}
@@ -1685,7 +1689,7 @@ static void missionResetDroids(void)
 			}
 			else
 			{
-				orderDroid(psDroid, DORDER_STOP);
+				orderDroid(psDroid, DORDER_STOP, ModeImmediate);
 			}
 
 			//KILL OFF TRANSPORTER
@@ -1877,7 +1881,7 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, BOOL goingHome)
 			}
 
 			//reset droid orders
-			orderDroid(psDroid, DORDER_STOP);
+			orderDroid(psDroid, DORDER_STOP, ModeImmediate);
 			psDroid->selected = false;
 			if (!bMultiPlayer)
 			{
@@ -1923,7 +1927,7 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, BOOL goingHome)
 
 			/* Send transporter offworld */
 			missionGetTransporterExit( psTransporter->player, &iX, &iY );
-			orderDroidLoc(psTransporter, DORDER_TRANSPORTRETURN, iX, iY );
+			orderDroidLoc(psTransporter, DORDER_TRANSPORTRETURN, iX, iY, ModeImmediate);
 
 			// Set the launch time so the transporter doesn't just disappear for CAMSTART/CAMCHANGE
 			transporterSetLaunchTime(gameTime);

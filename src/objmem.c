@@ -42,7 +42,6 @@
 #include "structuredef.h"
 #include "structure.h"
 #include "droid.h"
-#include "formation.h"
 #include "mapgrid.h"
 #include "combat.h"
 #include "visibility.h"

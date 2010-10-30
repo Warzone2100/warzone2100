@@ -34,7 +34,6 @@
 #include "lib/ivis_common/piedef.h"
 #include "lib/ivis_common/piemode.h"
 #include "lib/ivis_common/piestate.h"
-#include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_common/pieclip.h"
 #include "lib/ivis_common/piefunc.h"
 #include "lib/ivis_common/piepalette.h"
@@ -63,21 +62,16 @@ static GLfloat radarTexX, radarTexY;
  */
 /***************************************************************************/
 
-void pie_Line(int x0, int y0, int x1, int y1, PIELIGHT colour)
+void iV_Line(int x0, int y0, int x1, int y1, PIELIGHT colour)
 {
-	const Vector2i vertices[] = {
-		{ x0, y0 },
-		{ x1, y1 },
-	};
-
 	pie_SetTexturePage(TEXPAGE_NONE);
 	pie_SetAlphaTest(false);
 
 	glColor4ubv(colour.vector);
-	glVertexPointer(2, GL_INT, 0, vertices);
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glDrawArrays(GL_LINE_STRIP, 0, ARRAY_SIZE(vertices));
-	glDisableClientState(GL_VERTEX_ARRAY);
+	glBegin(GL_LINE_STRIP);
+	glVertex2i(x0, y0);
+	glVertex2i(x1, y1);
+	glEnd();
 }
 
 /**
@@ -85,60 +79,48 @@ void pie_Line(int x0, int y0, int x1, int y1, PIELIGHT colour)
  */
 static void pie_DrawRect(float x0, float y0, float x1, float y1, PIELIGHT colour)
 {
-	const Vector2f vertices[] = {
-		{ x0, y0 },
-		{ x1, y0 },
-		{ x0, y1 },
-		{ x1, y1 },
-	};
-
 	pie_SetAlphaTest(false);
 
 	glColor4ubv(colour.vector);
-	glVertexPointer(2, GL_FLOAT, 0, vertices);
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, ARRAY_SIZE(vertices));
-	glDisableClientState(GL_VERTEX_ARRAY);
+	glBegin(GL_TRIANGLE_STRIP);
+		glVertex2f(x0, y0);
+		glVertex2f(x1, y0);
+		glVertex2f(x0, y1);
+		glVertex2f(x1, y1);
+	glEnd();
 }
 
 
 /***************************************************************************/
 
-void pie_Box(int x0,int y0, int x1, int y1, PIELIGHT colour)
+void iV_Box(int x0,int y0, int x1, int y1, PIELIGHT colour)
 {
 	pie_SetTexturePage(TEXPAGE_NONE);
 	pie_SetAlphaTest(false);
 
-	if (x0>psRendSurface->clip.right || x1<psRendSurface->clip.left ||
-		y0>psRendSurface->clip.bottom || y1<psRendSurface->clip.top)
+	if (x0>rendSurface.clip.right || x1<rendSurface.clip.left ||
+		y0>rendSurface.clip.bottom || y1<rendSurface.clip.top)
 	{
 		return;
 	}
 
-	if (x0<psRendSurface->clip.left)
-		x0 = psRendSurface->clip.left;
-	if (x1>psRendSurface->clip.right)
-		x1 = psRendSurface->clip.right;
-	if (y0<psRendSurface->clip.top)
-		y0 = psRendSurface->clip.top;
-	if (y1>psRendSurface->clip.bottom)
-		y1 = psRendSurface->clip.bottom;
+	if (x0<rendSurface.clip.left)
+		x0 = rendSurface.clip.left;
+	if (x1>rendSurface.clip.right)
+		x1 = rendSurface.clip.right;
+	if (y0<rendSurface.clip.top)
+		y0 = rendSurface.clip.top;
+	if (y1>rendSurface.clip.bottom)
+		y1 = rendSurface.clip.bottom;
 
-	{
-		const Vector2f vertices[] = {
-			{ x0, y0 },
-			{ x1, y0 },
-			{ x1, y1 },
-			{ x0, y1 },
-			{ x0, y0 },
-		};
-
-		glColor4ubv(colour.vector);
-		glVertexPointer(2, GL_FLOAT, 0, vertices);
-		glEnableClientState(GL_VERTEX_ARRAY);
-		glDrawArrays(GL_LINE_STRIP, 0, ARRAY_SIZE(vertices));
-		glDisableClientState(GL_VERTEX_ARRAY);
-	}
+	glColor4ubv(colour.vector);
+	glBegin(GL_LINE_STRIP);
+	glVertex2f(x0, y0);
+	glVertex2f(x1, y0);
+	glVertex2f(x1, y1);
+	glVertex2f(x0, y1);
+	glVertex2f(x0, y0);
+	glEnd();
 }
 
 /***************************************************************************/
@@ -152,7 +134,7 @@ void pie_BoxFill(int x0,int y0, int x1, int y1, PIELIGHT colour)
 
 /***************************************************************************/
 
-void pie_TransBoxFill(float x0, float y0, float x1, float y1)
+void iV_TransBoxFill(float x0, float y0, float x1, float y1)
 {
 	PIELIGHT light;
 
@@ -174,7 +156,7 @@ void pie_UniTransBoxFill(float x0, float y0, float x1, float y1, PIELIGHT light)
 
 /***************************************************************************/
 
-void pie_ImageFileID(IMAGEFILE *ImageFile, UWORD ID, int x, int y)
+void iV_DrawImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y)
 {
 	IMAGEDEF *Image;
 	PIEIMAGE pieImage;
@@ -199,7 +181,7 @@ void pie_ImageFileID(IMAGEFILE *ImageFile, UWORD ID, int x, int y)
 	pie_DrawImage(&pieImage, &dest);
 }
 
-void pie_ImageFileIDTile(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width, int Height)
+void iV_DrawImageRect(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width, int Height)
 {
 	IMAGEDEF *Image;
 	SDWORD hRep, hRemainder, vRep, vRemainder;
@@ -339,33 +321,12 @@ void pie_RenderRadar(int x, int y, int width, int height)
 	pie_SetRendMode(REND_ALPHA);
 
 	glColor4ubv(WZCOL_WHITE.vector);
-	glPushMatrix();
-	glTranslatef(x, y, 0);
-	glScalef(width, height, 1);
-	glMatrixMode(GL_TEXTURE);
-	glPushMatrix(); // texture matrix
-	glScalef(radarTexX, radarTexY, 1);
-	{
-		const Vector2i vertices[] = {
-			{ 0, 0 },
-			{ 1, 0 },
-			{ 0, 1 },
-			{ 1, 1 },
-		};
-
-		glVertexPointer(2, GL_INT, 0, vertices);
-		glEnableClientState(GL_VERTEX_ARRAY);
-
-		glTexCoordPointer(2, GL_INT, 0, vertices);
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-
-		glDrawArrays(GL_TRIANGLE_STRIP, 0, ARRAY_SIZE(vertices));
-		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-		glDisableClientState(GL_VERTEX_ARRAY);
-	}
-	glPopMatrix(); // texture matrix
-	glMatrixMode(GL_MODELVIEW);
-	glPopMatrix();
+	glBegin(GL_TRIANGLE_STRIP);
+		glTexCoord2f(0, 0);			glVertex2f(x, y);
+		glTexCoord2f(radarTexX, 0);		glVertex2f(x + width, y);
+		glTexCoord2f(0, radarTexY);		glVertex2f(x, y + height);
+		glTexCoord2f(radarTexX, radarTexY);	glVertex2f(x + width, y + height);
+	glEnd();
 }
 
 void pie_LoadBackDrop(SCREENTYPE screenType)

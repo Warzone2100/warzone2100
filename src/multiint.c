@@ -35,12 +35,13 @@
 #include "lib/framework/stdio_ext.h"
 
 /* Includes direct access to render library */
+#include "lib/ivis_common/bitimage.h"
+#include "lib/ivis_common/pieblitfunc.h"
 #include "lib/ivis_common/piedef.h"
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/pieclip.h"
 #include "lib/ivis_common/piemode.h"
 #include "lib/ivis_common/piepalette.h"
-#include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_opengl/piematrix.h"			// for setgeometricoffset
 #include "lib/ivis_opengl/screen.h"
 
@@ -2303,15 +2304,17 @@ static void processMultiopWidgets(UDWORD id)
 				{
 					sstrcpy(game_password, widgGetString(psWScreen, MULTIOP_PASSWORD_EDIT));
 					NETsetGamePassword(game_password);
-					widgSetButtonState(psWScreen, MULTIOP_PASSWORD_BUT, WBUT_CLICKLOCK);  
+					widgSetButtonState(psWScreen, MULTIOP_PASSWORD_BUT, WBUT_CLICKLOCK);
+					widgSetButtonState(psWScreen, MULTIOP_PASSWORD_EDIT, WEDBS_DISABLE);
 					// say password is now required to join games?
-					ssprintf(buf, _("*** password is now required! ***"));
+					ssprintf(buf, _("*** password [%s] is now required! ***"), NetPlay.gamePassword);
 					addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 					NETGameLocked(true);
 				}
 				else
 				{
 					widgSetButtonState(psWScreen, MULTIOP_PASSWORD_BUT , 0);
+					widgSetButtonState(psWScreen, MULTIOP_PASSWORD_EDIT, 0);
 					ssprintf(buf, _("*** password is NOT required! ***"));
 					addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 					NETresetGamePassword();
@@ -3539,6 +3542,19 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 			iV_SetFont(font_small);
 			iV_SetTextColour(WZCOL_TEXT_MEDIUM);
 			iV_DrawText(_("HOST"), x + 65, y + 28);
+			iV_SetFont(font_regular);
+			iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+		}
+		else if (NetPlay.bComms && NetPlay.isHost)
+		{
+			char buf[250] = {'\0'};
+
+			// show "actual" ping time
+			iV_DrawText(NetPlay.players[j].name, x + 65, y + 18);
+			iV_SetFont(font_small);
+			iV_SetTextColour(WZCOL_TEXT_MEDIUM);
+			ssprintf(buf, "Ping: %03d", ingame.PingTimes[j]);
+			iV_DrawText(buf, x + 65, y + 28);
 			iV_SetFont(font_regular);
 			iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 		}

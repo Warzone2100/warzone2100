@@ -33,7 +33,8 @@
 #include "lib/framework/strres.h"
 #include "lib/framework/stdio_ext.h"
 #include "lib/gamelib/gtime.h"
-#include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_common/bitimage.h"
+#include "lib/ivis_common/pieblitfunc.h"
 #include "lib/ivis_common/piepalette.h"
 #include "lib/ivis_common/piestate.h"
 // FIXME Direct iVis implementation include!
@@ -1549,14 +1550,20 @@ static void intProcessEditStats(UDWORD id)
 		if (psTForm->TabMultiplier < 1 )
 		{
 			psTForm->TabMultiplier = 1;			//Must be at least 1.
+			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
 		}
 		// add routine to update tab widgets now...
 		temp = psTForm->majorT;					//set tab # to previous "page"
 		temp -=TAB_SEVEN;						//7 = 1 "page" of tabs
 		if ( temp < 0)
+		{
 			psTForm->majorT = 0;
+			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
+		}
 		else
+		{
 			psTForm->majorT = temp;
+		}
 #ifdef  DEBUG_SCROLLTABS
 		sprintf(buf,"[debug menu]Clicked LT %d tab #=%d",psTForm->TabMultiplier,psTForm->majorT);
 		addConsoleMessage(buf,DEFAULT_JUSTIFY,SYSTEM_MESSAGE);
@@ -1576,6 +1583,7 @@ static void intProcessEditStats(UDWORD id)
 		if (psTForm->TabMultiplier > numTabs)			// add 'Bzzt' sound effect?
 		{
 			psTForm->TabMultiplier -= 1;					// to signify past max?
+			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
 		}
 	//add routine to update tab widgets now...
 		psTForm->majorT += TAB_SEVEN;					// set tab # to next "page"
@@ -2010,7 +2018,7 @@ INT_RETVAL intRunWidgets(void)
 						    && intNumSelectedDroids(DROID_CYBORG_CONSTRUCT) == 0
 						    && psObjSelected != NULL)
 						{
-							orderDroidStatsTwoLocDir((DROID *)psObjSelected, DORDER_LINEBUILD, psPositionStats, structX, structY, structX2, structY2, player.r.y);
+							orderDroidStatsTwoLocDir((DROID *)psObjSelected, DORDER_LINEBUILD, psPositionStats, structX, structY, structX2, structY2, player.r.y, ModeQueue);
 						}
 						else
 						{
@@ -2055,7 +2063,7 @@ INT_RETVAL intRunWidgets(void)
 							    && intNumSelectedDroids(DROID_CYBORG_CONSTRUCT) == 0
 							    && psObjSelected != NULL)
 							{
-								orderDroidStatsLocDir((DROID *)psObjSelected, DORDER_BUILD, psPositionStats, structX, structY, player.r.y);
+								orderDroidStatsLocDir((DROID *)psObjSelected, DORDER_BUILD, psPositionStats, structX, structY, player.r.y, ModeQueue);
 							}
 							else
 							{
@@ -2750,12 +2758,12 @@ static void intProcessObject(UDWORD id)
 				if (StructIsFactory((STRUCTURE *)psObj))
 				{
 					//might need to cancel the hold on production
-					releaseProduction((STRUCTURE *)psObj);
+					releaseProduction((STRUCTURE *)psObj, ModeQueue);
 				}
 				else if (((STRUCTURE *)psObj)->pStructureType->type == REF_RESEARCH)
 				{
 					//might need to cancel the hold on research facilty
-					releaseResearch((STRUCTURE *)psObj);
+					releaseResearch((STRUCTURE *)psObj, ModeQueue);
 				}
 			}
 		}
@@ -2824,7 +2832,7 @@ static void intProcessStats(UDWORD id)
 
 					if (!StructureIsManufacturingPending(psStructure))
 					{
-						structSetManufacture(psStructure, psNext);
+						structSetManufacture(psStructure, psNext, ModeQueue);
 					}
 
 					//need to check if this was the template that was mid-production
@@ -2836,7 +2844,7 @@ static void intProcessStats(UDWORD id)
 
 					if (StructureIsOnHoldPending(psStructure))
 					{
-						releaseProduction(psStructure);
+						releaseProduction(psStructure, ModeQueue);
 					}
 
 					// Reset the button on the object form
@@ -2856,7 +2864,7 @@ static void intProcessStats(UDWORD id)
 					{
 						if (psObjSelected->type == OBJ_STRUCTURE )
 						{
-							cancelResearch((STRUCTURE *)psObjSelected);
+							cancelResearch((STRUCTURE *)psObjSelected, ModeQueue);
 						}
 					}
 
@@ -2881,7 +2889,7 @@ static void intProcessStats(UDWORD id)
 							if (((RESEARCH_FACILITY *)((STRUCTURE *)psObjSelected)->
 								pFunctionality)->psSubject)
 							{
-								cancelResearch((STRUCTURE *)psObjSelected);
+								cancelResearch((STRUCTURE *)psObjSelected, ModeQueue);
 							}
 						}
 					}
@@ -3048,6 +3056,7 @@ static void intProcessStats(UDWORD id)
 		if (psTForm->TabMultiplier < 1)
 		{
 			psTForm->TabMultiplier = 1;			// Must be at least 1.
+			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
 		}
 		//add routine to update tab widgets now...
 		temp = psTForm->majorT;					// set tab # to previous "page"
@@ -3075,6 +3084,7 @@ static void intProcessStats(UDWORD id)
 		if (psTForm->TabMultiplier > numTabs)		//add 'Bzzt' sound effect?
 		{
 			psTForm->TabMultiplier -= 1;				//to signify past max?
+			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
 		}
 	//add routine to update tab widgets now...
 		psTForm->majorT += TAB_SEVEN;				// set tab # to next "page"
@@ -3530,6 +3540,10 @@ static void orderFactories(void)
 		{
 			inc = 0;
 			type++;
+			if (type > NUM_FACTORY_TYPES)
+			{
+				type = 0;
+			}
 		}
 		objectInc = 0;
 	}
@@ -6128,13 +6142,13 @@ static BOOL setConstructionStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 		}
 		else
 		{
-			orderDroid(psDroid,DORDER_STOP);
+			orderDroid(psDroid, DORDER_STOP, ModeQueue);
 		}
 	}
 	else
 	{
 		psDroid = (DROID *)psObj;
-		orderDroid(psDroid,DORDER_STOP);
+		orderDroid(psDroid, DORDER_STOP, ModeQueue);
 	}
 	return true;
 }
@@ -6199,13 +6213,10 @@ static BOOL setResearchStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 		{
 			// Say that we want to do reseach [sic].
 			sendResearchStatus(psBuilding, ((RESEARCH *)psStats)->ref - REF_RESEARCH_START, selectedPlayer, true);
-
-			// Tell UI to remove from the list of available research.
-			MakeResearchStartedPending(asPlayerResList[selectedPlayer] + (((RESEARCH *)psStats)->ref - REF_RESEARCH_START));
 		}
 		else
 		{
-			cancelResearch(psBuilding);
+			cancelResearch(psBuilding, ModeQueue);
 		}
 		psResFacilty->psSubjectPending = psStats;  // Tell UI that we are going to research.
 		//stop the button from flashing once a topic has been chosen
@@ -6321,7 +6332,7 @@ static BOOL setManufactureStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 		if (psStats != NULL)
 		{
 			/* Set the factory to build droid(s) */
-			if (!structSetManufacture(Structure, (DROID_TEMPLATE *)psStats))
+			if (!structSetManufacture(Structure, (DROID_TEMPLATE *)psStats, ModeQueue))
 			{
 				return false;
 			}
@@ -6504,7 +6515,7 @@ static void intStatsRMBPressed(UDWORD id)
 
 			if (!StructureIsManufacturingPending(psStructure))
 			{
-				structSetManufacture(psStructure, psNext);
+				structSetManufacture(psStructure, psNext, ModeQueue);
 			}
 
 			//need to check if this was the template that was mid-production
@@ -6516,7 +6527,7 @@ static void intStatsRMBPressed(UDWORD id)
 
 			if (StructureIsOnHoldPending(psStructure))
 			{
-				releaseProduction(psStructure);
+				releaseProduction(psStructure, ModeQueue);
 			}
 
 			// Reset the button on the object form
@@ -6603,12 +6614,12 @@ static void intObjStatRMBPressed(UDWORD id)
 					//if not curently on hold, set it
 					if (!StructureIsOnHoldPending(psStructure))
 					{
-						holdProduction(psStructure);
+						holdProduction(psStructure, ModeQueue);
 					}
 					else
 					{
 						//cancel if have RMB-clicked twice
-						cancelProduction(psStructure);
+						cancelProduction(psStructure, ModeQueue);
 						//play audio to indicate cancelled
 						audio_PlayTrack(ID_SOUND_WINDOWCLOSE);
 					}
@@ -6622,12 +6633,12 @@ static void intObjStatRMBPressed(UDWORD id)
 					//if not curently on hold, set it
 					if (((RESEARCH_FACILITY *)psStructure->pFunctionality)->timeStartHold == 0)
 					{
-						holdResearch(psStructure);
+						holdResearch(psStructure, ModeQueue);
 					}
 					else
 					{
 						//cancel if have RMB-clicked twice
-						cancelResearch(psStructure);
+						cancelResearch(psStructure, ModeQueue);
 						//play audio to indicate cancelled
 						audio_PlayTrack(ID_SOUND_WINDOWCLOSE);
 					}
@@ -7281,3 +7292,24 @@ BASE_OBJECT * getCurrentSelected(void)
 {
 	return psObjSelected;
 }
+
+// Checks if a coordinate is over the build menu
+BOOL CoordInBuild(int x, int y)
+{
+	// This measurement is valid for the menu, so the buildmenu_height
+	// value is used to "nudge" it all upwards from the command menu.
+	// FIXME: hardcoded value (?)
+	const int buildmenu_height = 300;
+	Vector2f pos;
+	
+	pos.x = x - RET_X;
+	pos.y = y - RET_Y + buildmenu_height; // guesstimation
+
+	if (pos.x < 0 || pos.y < 0 || pos.x >= RET_FORMWIDTH || pos.y >= buildmenu_height)
+	{
+		return false;
+	}
+
+	return true;
+}
+

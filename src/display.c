@@ -461,11 +461,23 @@ void resetInput(void)
 void processInput(void)
 {
 	BOOL mOverRadar = false;
+	BOOL mOverConstruction = false;
+
 	int WheelZoomIterator;
+
+	if (InGameOpUp || isInGamePopupUp)
+	{
+		dragBox3D.status = DRAG_RELEASED;	// disengage the dragging since it stops menu input
+	}
 
 	if(radarOnScreen && getHQExists(selectedPlayer) && CoordInRadar(mouseX(), mouseY()))
 	{
 		mOverRadar = true;
+	}
+
+	if(CoordInBuild(mouseX(), mouseY()))
+	{
+		mOverConstruction = true;
 	}
 
 	StartOfLastFrame = currentFrame;
@@ -490,6 +502,10 @@ void processInput(void)
 		{
 			kf_RadarZoomIn();
 		}
+		else if (mOverConstruction)
+		{
+			kf_BuildPrevPage();
+		}
 		else
 		{
 			for (WheelZoomIterator = 0; WheelZoomIterator < 10; WheelZoomIterator++)
@@ -508,6 +524,10 @@ void processInput(void)
 		else if (mOverRadar)
 		{
 			kf_RadarZoomOut();
+		}
+		else if (mOverConstruction)
+		{
+			kf_BuildNextPage();
 		}
 		else
 		{
@@ -888,10 +908,10 @@ void processMouseClickInput(void)
 				// Can't demolish allied objects
 				item = MT_BLOCKING;
 			}
-			//in multiPlayer can only put cyborgs onto a Transporter
+			// in multiPlayer check for what kind of unit can use it (TODO)
 			else if (bMultiPlayer && item == MT_TRANDROID)
 			{
-				if (!cyborgDroidSelected(selectedPlayer) || ObjUnderMouse->player != selectedPlayer)
+				if ( ObjUnderMouse->player != selectedPlayer)
 				{
 					item = MT_OWNDROID;
 				}
@@ -1751,15 +1771,14 @@ static void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 				addTransporterInterface(psDroid, false);
 			}
 		}
-		else if (!bMultiPlayer || cyborgDroidSelected(selectedPlayer))
-		{
+		else
+		{	// We can order all units to use the transport now
+			if (cyborgDroidSelected(selectedPlayer))
+			{
+				// TODO add special processing for cyborgDroids
+			}
 			orderSelectedObj(selectedPlayer, (BASE_OBJECT*)psDroid);
 			FeedbackOrderGiven();
-		}
-		else
-		{
-			clearSelection();
-			SelectDroid(psDroid);
 		}
 	}
 	// Clicked on a commander? Will link to it.
@@ -1793,7 +1812,7 @@ static void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 			    droidSensorDroidWeapon((BASE_OBJECT *)psDroid, psCurr))
 			{
 				bSensorAssigned = true;
-				orderDroidObj(psCurr, DORDER_FIRESUPPORT, (BASE_OBJECT *)psDroid);
+				orderDroidObj(psCurr, DORDER_FIRESUPPORT, (BASE_OBJECT *)psDroid, ModeQueue);
 				FeedbackOrderGiven();
 			}
 		}
@@ -2073,7 +2092,7 @@ static void dealWithLMBFeature(FEATURE* psFeature)
 					}
 					else
 					{
-						orderDroidStatsLocDir(psCurr, DORDER_BUILD, (BASE_STATS*) &asStructureStats[i], psFeature->pos.x, psFeature->pos.y, player.r.y);
+						orderDroidStatsLocDir(psCurr, DORDER_BUILD, (BASE_STATS*) &asStructureStats[i], psFeature->pos.x, psFeature->pos.y, player.r.y, ModeQueue);
 					}
 					++numTrucks;
 				}
@@ -2107,7 +2126,7 @@ static void dealWithLMBFeature(FEATURE* psFeature)
 				/* If so then find the nearest unit! */
 				if (psNearestUnit)	// bloody well should be!!!
 				{
-					orderDroidObj(psNearestUnit, DORDER_RECOVER, (BASE_OBJECT *)psFeature);
+					orderDroidObj(psNearestUnit, DORDER_RECOVER, (BASE_OBJECT *)psFeature, ModeQueue);
 					FeedbackOrderGiven();
 				}
 				else
@@ -2211,10 +2230,11 @@ void	dealWithLMB( void )
 		{
 			MAPTILE *psTile = mapTile(mouseTileX, mouseTileY);
 
-			CONPRINTF(ConsoleString, (ConsoleString, "%s tile %d, %d [%d, %d] continent(l%d, h%d) level %g illum %d",
+			CONPRINTF(ConsoleString, (ConsoleString, "%s tile %d, %d [%d, %d] continent(l%d, h%d) level %g illum %d %s %s",
 			          tileIsExplored(psTile) ? "Explored" : "Unexplored",
 			          mouseTileX, mouseTileY, world_coord(mouseTileX), world_coord(mouseTileY),
-			          (int)psTile->limitedContinent, (int)psTile->hoverContinent, psTile->level, (int)psTile->illumination));
+			          (int)psTile->limitedContinent, (int)psTile->hoverContinent, psTile->level, (int)psTile->illumination, 
+			          psTile->dangerBits & (1 << selectedPlayer) ? "danger" : "", psTile->threatBits & (1 << selectedPlayer) ? "threat" : ""));
 		}
 
 		driveDisableTactical();

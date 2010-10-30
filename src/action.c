@@ -32,7 +32,6 @@
 
 #include "action.h"
 #include "combat.h"
-#include "formation.h"
 #include "geometry.h"
 #include "intdisplay.h"
 #include "mission.h"
@@ -434,14 +433,6 @@ BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *
 	rotRate = MAX(rotRate, DEG(1));
 	pitchRate = gameTimeAdjustedIncrement(pitchRate);
 	pitchRate = MAX(pitchRate, DEG(1));
-
-/*	if ( (psAttacker->type == OBJ_STRUCTURE) &&
-		 (((STRUCTURE *)psAttacker)->pStructureType->type == REF_DEFENSE) &&
-		 (asWeaponStats[((STRUCTURE *)psAttacker)->asWeaps[0].nStat].surfaceToAir == SHOOT_IN_AIR) )
-	{
-		rotRate = DEG(180);
-		pitchRate = DEG(180);
-	}*/
 
 	//and point the turret at target
 	targetRotation = calcDirection(psAttacker->pos.x, psAttacker->pos.y, psTarget->pos.x, psTarget->pos.y);
@@ -966,12 +957,6 @@ void actionUpdateDroid(DROID *psDroid)
 
 		break;
 	case DACTION_WAITDURINGREPAIR:
-		// don't want to be in a formation for this move
-		if (psDroid->sMove.psFormation != NULL)
-		{
-			formationLeave(psDroid->sMove.psFormation, psDroid);
-			psDroid->sMove.psFormation = NULL;
-		}
 		// Check that repair facility still exists
 		if (!psDroid->psTarget)
 		{
@@ -1006,7 +991,7 @@ void actionUpdateDroid(DROID *psDroid)
 				psDroid->pos.y = droidY;
 				//fly Transporter back to get some more droids
 				orderDroidLoc( psDroid, DORDER_TRANSPORTIN,
-					getLandingX(selectedPlayer), getLandingY(selectedPlayer));
+					getLandingX(selectedPlayer), getLandingY(selectedPlayer), ModeImmediate);
 			}
 			else
 			{
@@ -1219,13 +1204,6 @@ void actionUpdateDroid(DROID *psDroid)
 
 	case DACTION_ATTACK:
 		ASSERT_OR_RETURN( , psDroid->psActionTarget[0] != NULL, "target is NULL while attacking");
-
-		// don't wan't formations for this one
-		if (psDroid->sMove.psFormation)
-		{
-			formationLeave(psDroid->sMove.psFormation, psDroid);
-			psDroid->sMove.psFormation = NULL;
-		}
 
 		//check the target hasn't become one the same player ID - Electronic Warfare
 		if ((electronicDroid(psDroid) && (psDroid->player == psDroid->psActionTarget[0]->player)))
@@ -1465,13 +1443,6 @@ void actionUpdateDroid(DROID *psDroid)
 		break;
 	}
 	case DACTION_MOVETOATTACK:
-		// don't wan't formations for this one
-		if (psDroid->sMove.psFormation)
-		{
-			formationLeave(psDroid->sMove.psFormation, psDroid);
-			psDroid->sMove.psFormation = NULL;
-		}
-
 		// send vtols back to rearm
 		if (isVtolDroid(psDroid) &&
 			vtolEmpty(psDroid))
@@ -1638,13 +1609,6 @@ void actionUpdateDroid(DROID *psDroid)
 			psDroid->action = DACTION_NONE;
 			break;
 		}
-		// The droid cannot be in a formation
-		if (psDroid->sMove.psFormation != NULL)
-		{
-			formationLeave(psDroid->sMove.psFormation, psDroid);
-			psDroid->sMove.psFormation = NULL;
-		}
-
 		// moving to a location to build a structure
 		if (actionReachedBuildPos(psDroid,
 						(SDWORD)psDroid->orderX,(SDWORD)psDroid->orderY, psDroid->psTarStats) &&
@@ -1832,13 +1796,6 @@ void actionUpdateDroid(DROID *psDroid)
 			psDroid->action = DACTION_NONE;
 			break;
 		}
-		// The droid cannot be in a formation
-		if (psDroid->sMove.psFormation != NULL)
-		{
-			formationLeave(psDroid->sMove.psFormation, psDroid);
-			psDroid->sMove.psFormation = NULL;
-		}
-
 		if (DROID_STOPPED(psDroid) &&
 			!actionReachedBuildPos(psDroid,
 						(SDWORD)psDroid->orderX,(SDWORD)psDroid->orderY, psDroid->psTarStats))
@@ -1875,13 +1832,6 @@ void actionUpdateDroid(DROID *psDroid)
 			psDroid->action = DACTION_NONE;
 			break;
 		}
-		// The droid cannot be in a formation
-		if (psDroid->sMove.psFormation != NULL)
-		{
-			formationLeave(psDroid->sMove.psFormation, psDroid);
-			psDroid->sMove.psFormation = NULL;
-		}
-
 		// see if the droid is at the edge of what it is moving to
 		if (actionReachedBuildPos(psDroid,
 						(SDWORD)psDroid->actionX,(SDWORD)psDroid->actionY, psDroid->psTarStats) &&
@@ -2001,7 +1951,7 @@ void actionUpdateDroid(DROID *psDroid)
 			psDroid->action = DACTION_NONE;
 			if (psNextWreck)
 			{
-				orderDroidObj(psDroid, DORDER_CLEARWRECK, (BASE_OBJECT *)psNextWreck);
+				orderDroidObj(psDroid, DORDER_CLEARWRECK, (BASE_OBJECT *)psNextWreck, ModeImmediate);
 			}
 		}
 		else
@@ -2018,12 +1968,6 @@ void actionUpdateDroid(DROID *psDroid)
 		}
 		break;
 	case DACTION_MOVETOREPAIRPOINT:
-		// don't want to be in a formation for this move
-		if (psDroid->sMove.psFormation != NULL)
-		{
-			formationLeave(psDroid->sMove.psFormation, psDroid);
-			psDroid->sMove.psFormation = NULL;
-		}
 		/* moving from front to rear of repair facility or rearm pad */
 		if (actionReachedBuildPos(psDroid, psDroid->psActionTarget[0]->pos.x,psDroid->psActionTarget[0]->pos.y,
 							(BASE_STATS *)((STRUCTURE *)psDroid->psActionTarget[0])->pStructureType))
@@ -2329,7 +2273,7 @@ void actionUpdateDroid(DROID *psDroid)
 				//if the order is RTR then resubmit order so that the unit will go to repair facility point
 				if (orderState(psDroid,DORDER_RTR))
 				{
-					orderDroid(psDroid, DORDER_RTR);
+					orderDroid(psDroid, DORDER_RTR, ModeImmediate);
 				}
 			}
 			else
@@ -2399,7 +2343,7 @@ void actionUpdateDroid(DROID *psDroid)
 			{
 				// totally bunged up - give up
 				objTrace(psDroid->id, "Couldn't find a clear tile near rearm pad - returning to base");
-				orderDroid(psDroid, DORDER_RTB);
+				orderDroid(psDroid, DORDER_RTB, ModeImmediate);
 				break;
 			}
 			moveDroidToDirect(psDroid, droidX,droidY);
@@ -2582,7 +2526,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		if (!actionVTOLLandingPos(psDroid, &droidX, &droidY))
 		{
 			// totally bunged up - give up
-			orderDroid(psDroid, DORDER_RTB);
+			orderDroid(psDroid, DORDER_RTB, ModeImmediate);
 			break;
 		}
 		moveDroidToDirect(psDroid, droidX, droidY);
@@ -2596,7 +2540,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		if (!actionVTOLLandingPos(psDroid, &droidX, &droidY))
 		{
 			// totally bunged up - give up
-			orderDroid(psDroid, DORDER_RTB);
+			orderDroid(psDroid, DORDER_RTB, ModeImmediate);
 			break;
 		}
 		moveDroidToDirect(psDroid, droidX, droidY);
@@ -2882,7 +2826,7 @@ void moveToRearm(DROID *psDroid)
 		{
 			// no order set - use the rearm order to ensure the unit goes back
 			// to the landing pad
-			orderDroidObj(psDroid, DORDER_REARM, (BASE_OBJECT *)psStruct);
+			orderDroidObj(psDroid, DORDER_REARM, (BASE_OBJECT *)psStruct, ModeImmediate);
 			chosen=1;
 		}
 		else
@@ -2894,7 +2838,7 @@ void moveToRearm(DROID *psDroid)
 	else
 	{
 		//return to base un-armed
-		orderDroid( psDroid, DORDER_RTB );
+		orderDroid(psDroid, DORDER_RTB, ModeImmediate);
 		chosen =3;
 	}
 }

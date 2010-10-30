@@ -59,8 +59,6 @@
 #include "lib/script/script.h"
 #include "scripttabs.h"
 #include "scriptcb.h"
-#include "formationdef.h"
-#include "formation.h"
 #include "text.h"
 #include "action.h"
 #include "group.h"
@@ -1313,7 +1311,7 @@ BOOL structureRepair(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 }
 
 /* Set the type of droid for a factory to build */
-BOOL structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl)
+BOOL structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, QUEUE_MODE mode)
 {
 	FACTORY *psFact;
 
@@ -1327,7 +1325,7 @@ BOOL structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl)
 
 	psFact = &psStruct->pFunctionality->factory;
 
-	if (bMultiMessages)
+	if (mode == ModeQueue)
 	{
 		sendStructureInfo(psStruct, STRUCTUREINFO_MANUFACTURE, psTempl);
 		psStruct->pFunctionality->factory.psSubjectPending = (BASE_STATS *)psTempl;
@@ -1590,6 +1588,14 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 
 		ASSERT_OR_RETURN(NULL, max <= numStructureStats, "Invalid structure type");
 
+		if (!strcmp(pStructureType->pName, "A0CyborgFactory") && player == 0 && !bMultiPlayer)
+		{
+			// HACK: correcting SP bug, needs fixing in script(!!) (only applies for player 0)
+			// should be OK for Skirmish/MP games, since that is set correctly.
+			// scrSetStructureLimits() is called by scripts to set this normally.
+			asStructLimits[player][max].limit = MAX_FACTORY;
+			asStructLimits[player][max].globalLimit = MAX_FACTORY;
+		}
 		// Don't allow more than interface limits
 		if (asStructLimits[player][max].currentQuantity + 1 > asStructLimits[player][max].limit)
 		{
@@ -1921,9 +1927,7 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 				++psBuilding->pFunctionality->factory.capacity;
 				bUpgraded = true;
 				//put any production on hold
-				turnOffMultiMsg(true);
-				holdProduction(psBuilding);
-				turnOffMultiMsg(false);
+				holdProduction(psBuilding, ModeImmediate);
 
 				//quick check not trying to add too much
 				ASSERT_OR_RETURN(NULL, psBuilding->pFunctionality->factory.productionOutput +
@@ -1994,9 +1998,7 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 				if (psBuilding->pFunctionality->researchFacility.psSubject)
 				{
 					//cancel the topic
-					turnOffMultiMsg(true);
-					holdResearch(psBuilding);
-					turnOffMultiMsg(false);
+					holdResearch(psBuilding, ModeImmediate);
 				}
 
 				//need to change which IMD is used for player 0
@@ -2680,10 +2682,11 @@ static BOOL structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 
 		if ( psFact->psCommander != NULL )
 		{
+			syncDebug("Has commander.");
 			if (idfDroid(psNewDroid) ||
 				isVtolDroid(psNewDroid))
 			{
-				orderDroidObj(psNewDroid, DORDER_FIRESUPPORT, (BASE_OBJECT *)psFact->psCommander);
+				orderDroidObj(psNewDroid, DORDER_FIRESUPPORT, (BASE_OBJECT *)psFact->psCommander, ModeImmediate);
 				moveToRearm(psNewDroid);
 			}
 			else
@@ -2723,11 +2726,11 @@ static BOOL structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 					UDWORD droidY = psFlag->coords.y;
 					//find a suitable location near the delivery point
 					actionVTOLLandingPos(psNewDroid, &droidX, &droidY);
-					orderDroidLoc(psNewDroid,DORDER_MOVE,droidX,droidY);
+					orderDroidLoc(psNewDroid, DORDER_MOVE, droidX, droidY, ModeQueue);
 				}
 				else
 				{
-					orderDroidLoc(psNewDroid,DORDER_MOVE,psFlag->coords.x,psFlag->coords.y);
+					orderDroidLoc(psNewDroid, DORDER_MOVE, psFlag->coords.x, psFlag->coords.y, ModeQueue);
 				}
 			}
 		}
@@ -3152,15 +3155,15 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 								// return a droid to it's command group
 								DROID	*psCommander = psDroid->psGroup->psCommander;
 
-								orderDroidObj(psDroid, DORDER_GUARD, (BASE_OBJECT *)psCommander);
+								orderDroidObj(psDroid, DORDER_GUARD, (BASE_OBJECT *)psCommander, ModeImmediate);
 							}
 							else if (psRepairFac->psDeliveryPoint != NULL)
 							{
 								// move the droid out the way
 								objTrace(psDroid->id, "Repair not needed - move to delivery point");
-								orderDroidLoc( psDroid, DORDER_MOVE,
+								orderDroidLoc(psDroid, DORDER_MOVE,
 									psRepairFac->psDeliveryPoint->coords.x,
-									psRepairFac->psDeliveryPoint->coords.y );
+									psRepairFac->psDeliveryPoint->coords.y, ModeImmediate);
 							}
 							continue;
 						}
@@ -3545,9 +3548,8 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				psFactory->psSubject = NULL;
 
 				// If quantity not 0 then kick of another manufacture.
-				turnOffMultiMsg(true);  // Do instantly, since quantity is synchronised.
-				structSetManufacture(psStructure, (DROID_TEMPLATE *)pSubject);
-				turnOffMultiMsg(false);
+				// Do instantly, since quantity is synchronised.
+				structSetManufacture(psStructure, (DROID_TEMPLATE *)pSubject, ModeImmediate);
 
 				//script callback, must be called after factory was flagged as idle
 				if (bDroidPlaced)
@@ -3649,7 +3651,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 							DROID	*psCommander = psDroid->psGroup->psCommander;
 
 							objTrace(psDroid->id, "Repair complete - move to commander");
-							orderDroidObj(psDroid, DORDER_GUARD, (BASE_OBJECT *)psCommander);
+							orderDroidObj(psDroid, DORDER_GUARD, (BASE_OBJECT *)psCommander, ModeImmediate);
 						}
 						else if (psRepairFac->psDeliveryPoint != NULL)
 						{
@@ -3657,7 +3659,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 							objTrace(psDroid->id, "Repair complete - move to delivery point");
 							orderDroidLoc( psDroid, DORDER_MOVE,
 								psRepairFac->psDeliveryPoint->coords.x,
-								psRepairFac->psDeliveryPoint->coords.y );
+								psRepairFac->psDeliveryPoint->coords.y, ModeImmediate);
 						}
 					}
 				}
@@ -3824,14 +3826,39 @@ static float CalcStructureSmokeInterval(float damage)
 
 void _syncDebugStructure(const char *function, STRUCTURE *psStruct, char ch)
 {
-	// TODO psBuilding->status == SS_BEING_BUILT test is because structure ids are not synchronised until after they start building...
-	_syncDebug(function, "%c structure%d = p%d;pos(%d,%d,%d),stat%d,type%d,bld%d,pwr%d,bp%d, power = %"PRId64"", ch,
+	int ref = 0;
+	char const *refStr = "";
+
+	// Print what the structure is producing, too.
+	switch (psStruct->pStructureType->type)
+	{
+		case REF_RESEARCH:
+			if (psStruct->pFunctionality->researchFacility.psSubject != NULL)
+			{
+				ref = psStruct->pFunctionality->researchFacility.psSubject->ref;
+				refStr = ",research";
+			}
+			break;
+		case REF_FACTORY:
+		case REF_CYBORG_FACTORY:
+		case REF_VTOL_FACTORY:
+			if (psStruct->pFunctionality->factory.psSubject != NULL)
+			{
+				ref = psStruct->pFunctionality->factory.psSubject->ref;
+				refStr = ",production";
+			}
+			break;
+		default:
+			break;
+	}
+
+	_syncDebug(function, "%c structure%d = p%d;pos(%d,%d,%d),stat%d,type%d%s%.0d,bld%d,pwr%d,bp%d, power = %"PRId64"", ch,
 	          psStruct->id,
 
 	          psStruct->player,
 	          psStruct->pos.x, psStruct->pos.y, psStruct->pos.z,
 	          psStruct->status,
-	          psStruct->pStructureType->type,
+	          psStruct->pStructureType->type, refStr, ref,
 	          psStruct->currentBuildPts,
 	          psStruct->currentPowerAccrued,
 	          psStruct->body,
@@ -4909,7 +4936,8 @@ BOOL removeStruct(STRUCTURE *psDel, BOOL bDestroy)
 		HOW MUCH IS THERE && NOT RES EXTRACTORS */
 		if (psDel->pStructureType->type == REF_RESOURCE_EXTRACTOR)
 		{
-			buildFeature(oilResFeature, psDel->pos.x, psDel->pos.y, false);
+			FEATURE *psOil = buildFeature(oilResFeature, psDel->pos.x, psDel->pos.y, false);
+			memcpy(psOil->seenThisTick, psDel->visible, sizeof(psOil->seenThisTick));
 			resourceFound = true;
 		}
 	}
@@ -4932,7 +4960,7 @@ BOOL removeStruct(STRUCTURE *psDel, BOOL bDestroy)
 		if (psDel->pFunctionality->researchFacility.psSubject)
 		{
 			//cancel the topic
-			cancelResearch(psDel);
+			cancelResearch(psDel, ModeImmediate);
 		}
 	}
 
@@ -4948,7 +4976,7 @@ BOOL removeStruct(STRUCTURE *psDel, BOOL bDestroy)
 		psFactory = &psDel->pFunctionality->factory;
 
 		//need to initialise the production run as well
-		cancelProduction(psDel);
+		cancelProduction(psDel, ModeImmediate);
 
 		psAssemblyPoint = psFactory->psAssemblyPoint;
 	}
@@ -5609,7 +5637,7 @@ BOOL getLasSatExists(UDWORD player)
 
 
 /* calculate muzzle tip location in 3d world */
-BOOL calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3f *muzzle, int weapon_slot)
+bool calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3i *muzzle, int weapon_slot)
 {
 	iIMDShape *psShape = psStructure->pStructureType->pIMD;
 
@@ -5617,7 +5645,7 @@ BOOL calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3f *muzzle, int w
 
 	if(psShape && psShape->nconnectors)
 	{
-		Vector3f barrel = {0.0f, 0.0f, 0.0f};
+		Vector3i barrel = {0, 0, 0};
 		unsigned int nWeaponStat = psStructure->asWeaps[weapon_slot].nStat;
 		iIMDShape *psWeaponImd = 0, *psMountImd = 0;
 
@@ -5662,19 +5690,19 @@ BOOL calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3f *muzzle, int w
 				connector_num = (psStructure->asWeaps[weapon_slot].shotsFired - 1) % (psWeaponImd->nconnectors);
 			}
 			
-			barrel = Vector3f_Init(psWeaponImd->connectors[connector_num].x,
+			barrel = Vector3i_Init(psWeaponImd->connectors[connector_num].x,
 									-psWeaponImd->connectors[connector_num].y,
 									-psWeaponImd->connectors[connector_num].z);
 		}
-		
-		pie_RotateTranslate3f(&barrel, muzzle);
+
+		pie_RotateTranslate3i(&barrel, muzzle);
 		muzzle->z = -muzzle->z;
 
 		pie_MatEnd();
 	}
 	else
 	{
-		*muzzle = Vector3f_Init(psStructure->pos.x, psStructure->pos.y, psStructure->pos.z + psStructure->sDisplay.imd->max.y);
+		*muzzle = Vector3i_Init(psStructure->pos.x, psStructure->pos.y, psStructure->pos.z + psStructure->sDisplay.imd->max.y);
 	}
 
 	return true;
@@ -5951,18 +5979,14 @@ void buildingComplete(STRUCTURE *psBuilding)
 			break;
 		case REF_RESEARCH:
 			intCheckResearchButton();
-			//this deals with researc facilities that are upgraded whilst mid-research
-			turnOffMultiMsg(true);
-			releaseResearch(psBuilding);
-			turnOffMultiMsg(false);
+			//this deals with research facilities that are upgraded whilst mid-research
+			releaseResearch(psBuilding, ModeImmediate);
 			break;
 		case REF_FACTORY:
 		case REF_CYBORG_FACTORY:
 		case REF_VTOL_FACTORY:
 			//this deals with factories that are upgraded whilst mid-production
-			turnOffMultiMsg(true);
-			releaseProduction(psBuilding);
-			turnOffMultiMsg(false);
+			releaseProduction(psBuilding, ModeImmediate);
 			break;
 		case REF_SAT_UPLINK:
 			revealAll(psBuilding->player);
@@ -6774,9 +6798,17 @@ void hqReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 //
 BOOL StructIsFactory(STRUCTURE *Struct)
 {
-	return Struct->pStructureType->type == REF_FACTORY ||
-	       Struct->pStructureType->type == REF_CYBORG_FACTORY ||
-	       Struct->pStructureType->type == REF_VTOL_FACTORY;
+	ASSERT_OR_RETURN(false, Struct != NULL, "Invalid structure!");
+	ASSERT_OR_RETURN(false, Struct->pStructureType != NULL, "Invalid structureType!");
+
+	if( (Struct->pStructureType->type == REF_FACTORY) ||
+		(Struct->pStructureType->type == REF_CYBORG_FACTORY) ||
+		(Struct->pStructureType->type == REF_VTOL_FACTORY) )
+	{
+		return true;
+	}
+
+	return false;
 }
 
 
@@ -6854,7 +6886,7 @@ STRUCTURE	*findDeliveryFactory(FLAG_POSITION *psDelPoint)
 
 /*cancels the production run for the factory and returns any power that was
 accrued but not used*/
-void cancelProduction(STRUCTURE *psBuilding)
+void cancelProduction(STRUCTURE *psBuilding, QUEUE_MODE mode)
 {
 	FACTORY *psFactory;
 
@@ -6862,15 +6894,8 @@ void cancelProduction(STRUCTURE *psBuilding)
 
 	psFactory = &psBuilding->pFunctionality->factory;
 
-	if (bMultiMessages)
+	if (mode == ModeQueue)
 	{
-		if (psBuilding->player == productionPlayer)
-		{
-			//clear the production run for this factory
-			memset(asProductionRun[psFactory->psAssemblyPoint->factoryType][psFactory->psAssemblyPoint->factoryInc], 0, sizeof(PRODUCTION_RUN) * MAX_PROD_RUN);
-			psFactory->productionLoops = 0;
-		}
-
 		sendStructureInfo(psBuilding, STRUCTUREINFO_CANCELPRODUCTION, NULL);
 
 		psFactory->psSubjectPending = NULL;
@@ -6879,6 +6904,10 @@ void cancelProduction(STRUCTURE *psBuilding)
 
 		if (psBuilding->player == productionPlayer)
 		{
+			//clear the production run for this factory
+			memset(asProductionRun[psFactory->psAssemblyPoint->factoryType][psFactory->psAssemblyPoint->factoryInc], 0, sizeof(PRODUCTION_RUN) * MAX_PROD_RUN);
+			psFactory->productionLoops = 0;
+
 			//tell the interface
 			intManufactureFinished(psBuilding);
 		}
@@ -6905,17 +6934,12 @@ void cancelProduction(STRUCTURE *psBuilding)
 
 		//clear the factory's subject
 		psFactory->psSubject = NULL;
-		if (psBuilding->player == productionPlayer && !bMultiPlayer)
-		{
-			//tell the interface
-			intManufactureFinished(psBuilding);
-		}
 	}
 }
 
 
 /*set a factory's production run to hold*/
-void holdProduction(STRUCTURE *psBuilding)
+void holdProduction(STRUCTURE *psBuilding, QUEUE_MODE mode)
 {
 	FACTORY *psFactory;
 
@@ -6923,7 +6947,7 @@ void holdProduction(STRUCTURE *psBuilding)
 
 	psFactory = &psBuilding->pFunctionality->factory;
 
-	if (bMultiMessages)
+	if (mode == ModeQueue)
 	{
 		sendStructureInfo(psBuilding, STRUCTUREINFO_HOLDPRODUCTION, NULL);
 
@@ -6931,7 +6955,7 @@ void holdProduction(STRUCTURE *psBuilding)
 		{
 			psFactory->psSubjectPending = psFactory->psSubject;
 		}
-		if (psFactory->psSubjectPending != NULL)
+		else
 		{
 			psFactory->statusPending = FACTORY_HOLD_PENDING;
 		}
@@ -6954,7 +6978,7 @@ void holdProduction(STRUCTURE *psBuilding)
 }
 
 /*release a factory's production run from hold*/
-void releaseProduction(STRUCTURE *psBuilding)
+void releaseProduction(STRUCTURE *psBuilding, QUEUE_MODE mode)
 {
 	FACTORY *psFactory = &psBuilding->pFunctionality->factory;
 
@@ -6962,7 +6986,7 @@ void releaseProduction(STRUCTURE *psBuilding)
 
 	psFactory = &psBuilding->pFunctionality->factory;
 
-	if (bMultiMessages)
+	if (mode == ModeQueue)
 	{
 		sendStructureInfo(psBuilding, STRUCTUREINFO_RELEASEPRODUCTION, NULL);
 
@@ -6996,12 +7020,12 @@ void doNextProduction(STRUCTURE *psStructure, DROID_TEMPLATE *current)
 
 	if (psNextTemplate != NULL)
 	{
-		structSetManufacture(psStructure, psNextTemplate);
+		structSetManufacture(psStructure, psNextTemplate, ModeQueue);
 	}
 	else
 	{
 		//nothing more to manufacture
-		cancelProduction(psStructure);
+		cancelProduction(psStructure, ModeQueue);
 	}
 }
 
@@ -7012,6 +7036,7 @@ DROID_TEMPLATE * factoryProdUpdate(STRUCTURE *psStructure, DROID_TEMPLATE *psTem
 {
 	UDWORD		inc, factoryType, factoryInc;
 	FACTORY		*psFactory;
+	bool            somethingInQueue = false;
 
 	CHECK_STRUCTURE(psStructure);
 	ASSERT_OR_RETURN(NULL, psStructure->player == productionPlayer, "%s called for incorrect player", __FUNCTION__);
@@ -7025,6 +7050,8 @@ DROID_TEMPLATE * factoryProdUpdate(STRUCTURE *psStructure, DROID_TEMPLATE *psTem
 		//find the entry in the array for this template
 		for (inc=0; inc < MAX_PROD_RUN; inc++)
 		{
+			somethingInQueue = somethingInQueue || asProductionRun[factoryType][factoryInc][inc].quantity != 0;
+
 			if (asProductionRun[factoryType][factoryInc][inc].psTemplate != NULL && asProductionRun[factoryType][factoryInc][inc].psTemplate->multiPlayerID == psTemplate->multiPlayerID)
 			{
 				asProductionRun[factoryType][factoryInc][inc].built++;
@@ -7045,6 +7072,11 @@ DROID_TEMPLATE * factoryProdUpdate(STRUCTURE *psStructure, DROID_TEMPLATE *psTem
 		{
 			return asProductionRun[factoryType][factoryInc][inc].psTemplate;
 		}
+	}
+	// Check that we aren't looping doing nothing.
+	if (!somethingInQueue)
+	{
+		psFactory->productionLoops = 0;  // Don't do nothing infinitely many times.
 	}
 	/*If you've got here there's nothing left to build unless factory is
 	on loop production*/
@@ -7786,14 +7818,14 @@ STRUCTURE * giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, BOOL
 			{
 				if (psCurr->psTarget == (BASE_OBJECT *)psStructure)
 				{
-					orderDroid(psCurr, DORDER_STOP);
+					orderDroid(psCurr, DORDER_STOP, ModeImmediate);
 					break;
 				}
 				for (i = 0;i < psCurr->numWeaps;i++)
 				{
 					if (psCurr->psActionTarget[i] == (BASE_OBJECT *)psStructure)
 					{
-						orderDroid(psCurr, DORDER_STOP);
+						orderDroid(psCurr, DORDER_STOP, ModeImmediate);
 						break;
 					}
 				}

@@ -35,7 +35,6 @@
 #include "lib/framework/frame.h"
 #include "lib/ivis_common/ivisdef.h"
 #include "lib/ivis_common/imd.h"
-#include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_common/piefunc.h"
 #include "lib/ivis_common/tex.h"
 #include "lib/ivis_common/piedef.h"
@@ -1281,6 +1280,8 @@ void drawTerrain(void)
 	glVertexPointer(3, GL_FLOAT, sizeof(RenderVertex), BUFFER_OFFSET(0)); glError();
 
 	glBindBuffer(GL_ARRAY_BUFFER, textureVBO);
+
+	ASSERT_OR_RETURN( , psGroundTypes, "Ground type was not set, no textures will be seen.");
 
 	// draw each layer separately
 	for (layer = 0; layer < numGroundTypes; layer++)

@@ -151,7 +151,7 @@ BOOL multiplayerWinSequence(BOOL firstCall)
 			{
 				if (((FACTORY *)psStruct->pFunctionality)->psSubject)//check if active
 				{
-					cancelProduction(psStruct);
+					cancelProduction(psStruct, ModeQueue);
 				}
 			}
 		}
@@ -312,6 +312,12 @@ BOOL IdToDroid(UDWORD id, UDWORD player, DROID **psDroid)
 	}
 	else									// find the droid, given player
 	{
+		if (player >= MAX_PLAYERS)
+		{
+			debug(LOG_FEATURE, "Feature detected");
+			// feature hack, player = 9 are features
+			return false;
+		}
 		d = apsDroidLists[player];
 		while( (d != NULL ) && (d->id !=id))d=d->psNext;
 		if(d)
@@ -343,6 +349,12 @@ STRUCTURE *IdToStruct(UDWORD id,UDWORD player)
 	}
 	else
 	{
+		if (player >= MAX_PLAYERS)
+		{
+			debug(LOG_FEATURE, "Feature detected");
+			// feature hack, player = 9 are features
+			return NULL;
+		}
 		for(psStr=apsStructLists[player];((psStr != NULL )&&(psStr->id != id) );psStr=psStr->psNext);
 	}
 	return psStr;
@@ -368,6 +380,12 @@ FEATURE *IdToFeature(UDWORD id,UDWORD player)
 	}
 	else
 	{
+		if (player >= MAX_PLAYERS)
+		{
+			debug(LOG_FEATURE, "Feature detected");
+			// feature hack, player = 9 are features
+			return NULL;
+		}
 		for(psF=apsFeatureLists[player];((psF != NULL )&&(psF->id != id) );psF=psF->psNext);
 	}
 	return psF;
@@ -385,7 +403,7 @@ DROID_TEMPLATE *IdToTemplate(UDWORD tempId,UDWORD player)
 	if (psTempl) return psTempl;
 
 	// Check if we know which player this is from, in that case, assume it is a player template
-	if (player != ANYPLAYER)
+	if (player != ANYPLAYER && player < MAX_PLAYERS)
 	{
 		for (psTempl = apsDroidTemplates[player];			// follow templates
 		(psTempl && (psTempl->multiPlayerID != tempId ));
@@ -886,7 +904,7 @@ static BOOL recvResearch(NETQUEUE queue)
 	}
 
 	pPlayerRes = asPlayerResList[player] + index;
-	syncDebug("research status = %d", pPlayerRes->ResearchStatus);
+	syncDebug("research status = %d", pPlayerRes->ResearchStatus & RESBITS);
 
 	if (!IsResearchCompleted(pPlayerRes))
 	{
@@ -950,6 +968,9 @@ BOOL sendResearchStatus(STRUCTURE *psBuilding, uint32_t index, uint8_t player, B
 		NETuint32_t(&index);
 	NETend();
 
+	// Tell UI to remove from the list of available research.
+	MakeResearchStartedPending(asPlayerResList[player] + index);
+
 	return true;
 }
 
@@ -994,9 +1015,7 @@ BOOL recvResearchStatus(NETQUEUE queue)
 
 			if (psResFacilty->psSubject)
 			{
-				turnOffMultiMsg(true);
-				cancelResearch(psBuilding);
-				turnOffMultiMsg(false);
+				cancelResearch(psBuilding, ModeImmediate);
 			}
 
 			// Set the subject up
@@ -1059,9 +1078,7 @@ BOOL recvResearchStatus(NETQUEUE queue)
 		// Stop the facility doing any research
 		if (psBuilding)
 		{
-			turnOffMultiMsg(true);
-			cancelResearch(psBuilding);
-			turnOffMultiMsg(false);
+			cancelResearch(psBuilding, ModeImmediate);
 		}
 	}
 
@@ -1575,14 +1592,14 @@ static BOOL recvDestroyTemplate(NETQUEUE queue)
 
 		// Delete the template.
 		//before deleting the template, need to make sure not being used in production
-		reallyDeleteTemplateFromProduction(psTempl, player);
+		deleteTemplateFromProduction(psTempl, player, ModeImmediate);
 		free(psTempl);
 	}
 	else
 	{
 		DROID_TEMPLATE aaargh;
 		aaargh.multiPlayerID = templateID;
-		reallyDeleteTemplateFromProduction(&aaargh, player);
+		deleteTemplateFromProduction(&aaargh, player, ModeImmediate);
 		debug(LOG_ERROR, "TODO: Rewrite the whole interface, so it's possible to change the code without spaghetti dependencies causing problems everywhere, and without resorting to ugly hacks.");
 	}
 

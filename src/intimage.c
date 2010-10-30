@@ -26,8 +26,10 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
+#include "lib/ivis_common/bitimage.h"
+#include "lib/ivis_common/pieblitfunc.h"
+#include "lib/ivis_common/piepalette.h"
 #include "lib/ivis_common/piestate.h"
-#include "lib/ivis_common/rendmode.h"
 
 #include "intimage.h"
 

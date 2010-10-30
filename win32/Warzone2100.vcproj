@@ -360,10 +360,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\src\formation.c"
-					>
-				</File>
-				<File
 					RelativePath="..\src\fpath.c"
 					>
 				</File>
@@ -1171,11 +1167,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\scriptvals_parser.tab.h"
+				RelativePath=".\scriptvals_parser.tab.h"
 				>
 			</File>
 			<File
-				RelativePath=".\scriptvals_parser.tab.h"
+				RelativePath="..\src\scriptvals_parser.tab.h"
 				>
 			</File>
 			<File

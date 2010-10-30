@@ -44,7 +44,6 @@
 #include "advvis.h"
 #include "research.h"
 #include "mission.h"
-#include "formationdef.h"
 #include "gateway.h"
 #include "wrappers.h"
 #include "mapgrid.h"
@@ -113,12 +112,27 @@ MAPTILE	*psMapTiles = NULL;
 
 #define WATER_DEPTH	180
 
+static void SetGroundForTile(const char *filename, const char *nametype);
+static int getTextureType(const char *textureType);
+static BOOL hasDecals(int i, int j);
+static void SetDecals(const char *filename, const char *decal_type);
+static void init_tileNames(int type);
+
 /// The different ground types
 GROUND_TYPE *psGroundTypes;
 int numGroundTypes;
 int waterGroundType;
 int cliffGroundType;
 char *tileset = NULL;
+static int numTile_names;
+static char *Tile_names = NULL;
+#define ARIZONA 1
+#define URBAN 2
+#define ROCKIE 3
+
+static int *map;			// 3D array pointer that holds the texturetype
+static int *mapDecals;		// array that tells us what tile is a decal
+#define MAX_TERRAIN_TILES 100		// max that we support (for now)
 
 /* Look up table that returns the terrain type of a given tile texture */
 UBYTE terrainTypes[MAX_TILE_TEXTURES];
@@ -149,8 +163,13 @@ BOOL mapNew(UDWORD width, UDWORD height)
 
 	if (width*height > MAP_MAXAREA)
 	{
-		debug(LOG_ERROR, "map too large : %u %u", width, height);
+		debug(LOG_ERROR, "Map too large : %u %u", width, height);
+		return false;
+	}
 
+	if (width <=1 || height <=1)
+	{
+		debug(LOG_ERROR, "Map is too small : %u, %u", width, height);
 		return false;
 	}
 
@@ -192,415 +211,325 @@ BOOL mapNew(UDWORD width, UDWORD height)
 	return true;
 }
 
-// arizona
-enum {
-	a_red = 0,
-	a_cliff,
-	a_yellow,
-	a_concrete,
-	a_mud,
-	a_green,
-	a_water,
-};
-
-// urban
-enum
+static void init_tileNames(int type)
 {
-	u_blue,
-	u_gray,
-	u_stone,
-	u_dark,
-	u_water,
-	u_brown,
-	u_cliff,
-	u_green,
-};
+	char	*pFileData = NULL;
+	char	name[100] = {'\0'};
+	int		numlines = 0, i = 0, cnt = 0;
+	uint32_t	fileSize = 0;
 
-enum
-{
-	r_grass,
-	r_rock,
-	r_cliff,
-	r_snowrock,
-	r_brown,
-	r_water,
-	r_snowgrass,
-	r_tiles,
-	r_snow,
-};
+	pFileData = fileLoadBuffer;
 
+	switch (type)
+	{
+		case ARIZONA:
+		{
+			if (!loadFileToBuffer("tileset/arizona_enum.txt", pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
+			{
+				debug(LOG_FATAL, "tileset/arizona_enum.txt not found.  Aborting.");
+				abort();
+			}
+
+			sscanf(pFileData, "%[^','],%d%n", name, &numlines, &cnt);
+			pFileData += cnt;
+
+			if (strcmp("arizona_enum", name))
+			{
+				debug(LOG_FATAL, "%s found, but was expecting arizona_enum, aborting.", name);
+				abort();
+			}
+			break;
+		}
+		case URBAN:
+		{
+			if (!loadFileToBuffer("tileset/urban_enum.txt", pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
+			{
+				debug(LOG_FATAL, "tileset/urban_enum.txt not found.  Aborting.");
+				abort();
+			}
+
+			sscanf(pFileData, "%[^','],%d%n", name, &numlines, &cnt);
+			pFileData += cnt;
+
+			if (strcmp("urban_enum", name))
+			{
+				debug(LOG_FATAL, "%s found, but was expecting urban_enum, aborting.", name);
+				abort();
+			}
+			break;
+		}
+		case ROCKIE:
+		{
+			if (!loadFileToBuffer("tileset/rockie_enum.txt", pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
+			{
+				debug(LOG_FATAL, "tileset/rockie_enum.txt not found.  Aborting.");
+				abort();
+			}
+
+			sscanf(pFileData, "%[^','],%d%n", name, &numlines, &cnt);
+			pFileData += cnt;
+
+			if (strcmp("rockie_enum", name))
+			{
+				debug(LOG_FATAL, "%s found, but was expecting rockie_enum, aborting.", name);
+				abort();
+			}
+			break;
+		}
+		default:
+		debug(LOG_FATAL, "Unknown type (%d) given.  Aborting.", type);
+		abort();
+	}
+
+	debug(LOG_TERRAIN, "name: %s, with %d entries", name, numlines);
+	if (numlines == 0 || numlines > MAX_TERRAIN_TILES)
+	{
+		debug(LOG_FATAL, "Rockie_enum paramater is out of range (%d). Aborting.", numlines);
+		abort();
+	}
+
+	numTile_names = numlines;
+	//increment the pointer to the start of the next record
+	pFileData = strchr(pFileData,'\n') + 1;
+
+	Tile_names = malloc(numlines * sizeof(char[40]) );
+	memset(Tile_names, 0x0, (numlines * sizeof(char[40])));
+
+	for (i=0; i < numlines; i++)
+	{
+		sscanf(pFileData, "%s%n", &Tile_names[i*40], &cnt);
+		pFileData += cnt;
+		//increment the pointer to the start of the next record
+		pFileData = strchr(pFileData,'\n') + 1;
+	}
+}
+
+// This is the main loading routine to get all the map's parameters set.
+// Once it figures out what tileset we need, we then parse the files for that tileset.
+// Currently, we only support 3 tilesets.  Arizona, Urban, and Rockie
 static BOOL mapLoadGroundTypes(void)
 {
+	char	*pFileData = NULL;
+	char	tilename[255] = {'\0'};
+	char	textureName[255] = {'\0'};
+	char	textureType[255] = {'\0'};
+	double	textureSize = 0.f;
+	int		numlines = 0;
+	int		cnt = 0, i = 0;
+	uint32_t	fileSize = 0;
+
+	pFileData = fileLoadBuffer;
+
 	debug(LOG_TERRAIN, "tileset: %s", tileset);
-	// FIXME: Read these from a config file
+	// For Arizona
 	if (strcmp(tileset, "texpages/tertilesc1hw") == 0)
 	{
-		numGroundTypes = 7;
-		psGroundTypes = malloc(sizeof(GROUND_TYPE)*numGroundTypes);
-		
-		psGroundTypes[a_yellow].textureName = "page-45";
-		psGroundTypes[a_yellow].textureSize = 4.6;
-		psGroundTypes[a_red].textureName = "page-44";
-		psGroundTypes[a_red].textureSize = 6.2;
-		psGroundTypes[a_concrete].textureName = "page-47";
-		psGroundTypes[a_concrete].textureSize = 3.2;
-		psGroundTypes[a_cliff].textureName = "page-46";
-		psGroundTypes[a_cliff].textureSize = 5.8;
-		psGroundTypes[a_water].textureName = "page-42";
-		psGroundTypes[a_water].textureSize = 7.3;
-		
-		psGroundTypes[a_mud] = psGroundTypes[a_red];
-		psGroundTypes[a_green] = psGroundTypes[a_red];
-		
-		waterGroundType = a_water;
-		cliffGroundType = a_cliff;
+fallback:
+		init_tileNames(ARIZONA);
+		if (!loadFileToBuffer("tileset/tertilesc1hwGtype.txt", pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
+		{
+			debug(LOG_FATAL, "tileset/tertilesc1hwGtype.txt not found, aborting.");
+			abort();
+		}
+
+		sscanf(pFileData, "%[^','],%d%n", tilename, &numlines, &cnt);
+		pFileData += cnt;
+
+		if (strcmp(tilename, "tertilesc1hw"))
+		{
+			debug(LOG_FATAL, "%s found, but was expecting tertilesc1hw!  Aborting.", tilename);
+			abort();
+		}
+
+		debug(LOG_TERRAIN, "tilename: %s, with %d entries", tilename, numlines);
+		//increment the pointer to the start of the next record
+		pFileData = strchr(pFileData,'\n') + 1;
+		numGroundTypes = numlines;
+		psGroundTypes = malloc(sizeof(GROUND_TYPE)*numlines);
+
+		for (i=0; i < numlines; i++)
+		{
+			sscanf(pFileData, "%[^','],%[^','],%lf%n", textureType, textureName, &textureSize, &cnt);
+			pFileData += cnt;
+			//increment the pointer to the start of the next record
+			pFileData = strchr(pFileData,'\n') + 1;
+
+			psGroundTypes[getTextureType(textureType)].textureName = strdup(textureName);
+			psGroundTypes[getTextureType(textureType)].textureSize = textureSize ;
+		}
+
+		waterGroundType = getTextureType("a_water");
+		cliffGroundType = getTextureType("a_cliff");
+
+		SetGroundForTile("tileset/arizonaground.txt", "arizona_ground");
+		SetDecals("tileset/arizonadecals.txt", "arizona_decals");
 	}
+	// for Urban
 	else if (strcmp(tileset, "texpages/tertilesc2hw") == 0)
 	{
-		numGroundTypes = 8;
-		psGroundTypes = malloc(sizeof(GROUND_TYPE)*numGroundTypes);
+		init_tileNames(URBAN);
+		if (!loadFileToBuffer("tileset/tertilesc2hwGtype.txt", pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
+		{
+			debug(LOG_POPUP, "tileset/tertilesc2hwGtype.txt not found, using default terrain ground types.");
+			goto fallback;
+		}
 
-		psGroundTypes[u_gray].textureName = "page-51"; // rubble
-		psGroundTypes[u_gray].textureSize = 3.9;
-		psGroundTypes[u_green].textureName = "page-52"; // close plants
-		psGroundTypes[u_green].textureSize = 2.6;
-		psGroundTypes[u_stone].textureName = "page-47"; // pavement
-		psGroundTypes[u_stone].textureSize = 3.2;
-		psGroundTypes[u_cliff].textureName = "page-49"; // crater walls
-		psGroundTypes[u_cliff].textureSize = 4.7;
-		psGroundTypes[u_brown].textureName = "page-49"; // rocks
-		psGroundTypes[u_brown].textureSize = 4.7;
+		sscanf(pFileData, "%[^','],%d%n", tilename, &numlines, &cnt);
+		pFileData += cnt;
 
-		psGroundTypes[u_blue] = psGroundTypes[u_brown]; // burned ground
-		psGroundTypes[u_dark] = psGroundTypes[u_stone];
-		psGroundTypes[u_water] = psGroundTypes[u_cliff];
-		
-		waterGroundType = u_water;
-		cliffGroundType = u_cliff;
+		if (strcmp(tilename, "tertilesc2hw"))
+		{
+			debug(LOG_POPUP, "%s found, but was expecting tertilesc2hw!", tilename);
+			goto fallback;
+		}
+
+		debug(LOG_TERRAIN, "tilename: %s, with %d entries", tilename, numlines);
+		//increment the pointer to the start of the next record
+		pFileData = strchr(pFileData,'\n') + 1;
+		numGroundTypes = numlines;
+		psGroundTypes = malloc(sizeof(GROUND_TYPE)*numlines);
+
+		for (i=0; i < numlines; i++)
+		{
+			sscanf(pFileData, "%[^','],%[^','],%lf%n", textureType, textureName, &textureSize, &cnt);
+			pFileData += cnt;
+			//increment the pointer to the start of the next record
+			pFileData = strchr(pFileData,'\n') + 1;
+
+			psGroundTypes[getTextureType(textureType)].textureName = strdup(textureName);
+			psGroundTypes[getTextureType(textureType)].textureSize = textureSize;
+		}
+
+		waterGroundType = getTextureType("u_water");
+		cliffGroundType = getTextureType("u_cliff");
+
+		SetGroundForTile("tileset/urbanground.txt", "urban_ground");
+		SetDecals("tileset/urbandecals.txt", "urban_decals");
 	}
+	// for Rockie
 	else if (strcmp(tileset, "texpages/tertilesc3hw") == 0)
 	{
-		numGroundTypes = 9;
-		psGroundTypes = malloc(sizeof(GROUND_TYPE)*numGroundTypes);
+		init_tileNames(ROCKIE);
+		if (!loadFileToBuffer("tileset/tertilesc3hwGtype.txt", pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
+		{
+			debug(LOG_POPUP, "tileset/tertilesc3hwGtype.txt not found, using default terrain ground types.");
+			goto fallback;
+		}
 
-		psGroundTypes[r_grass].textureName = "page-55";
-		psGroundTypes[r_grass].textureSize = 4.6;
-		psGroundTypes[r_rock].textureName = "page-56";
-		psGroundTypes[r_rock].textureSize = 3.9;
-		psGroundTypes[r_cliff].textureName = "page-46";
-		psGroundTypes[r_cliff].textureSize = 5.8;
-		psGroundTypes[r_water].textureName = "page-49";
-		psGroundTypes[r_water].textureSize = 5.8;
-		psGroundTypes[r_tiles].textureName = "page-47";
-		psGroundTypes[r_tiles].textureSize = 3.2;
-		psGroundTypes[r_snowgrass].textureName = "page-54";
-		psGroundTypes[r_snowgrass].textureSize = 2.1;
-		psGroundTypes[r_snow].textureName = "page-57";
-		psGroundTypes[r_snow].textureSize = 10.2;
-		psGroundTypes[r_snowrock].textureName = "page-58";
-		psGroundTypes[r_snowrock].textureSize = psGroundTypes[r_rock].textureSize;
-		
-		psGroundTypes[r_brown] = psGroundTypes[r_water];
+		sscanf(pFileData, "%[^','],%d%n", tilename, &numlines, &cnt);
+		pFileData += cnt;
 
-		waterGroundType = r_water;
-		cliffGroundType = r_cliff;
+		if (strcmp(tilename, "tertilesc3hw"))
+		{
+			debug(LOG_POPUP, "%s found, but was expecting tertilesc3hw!", tilename);
+			goto fallback;
+		}
+
+		debug(LOG_TERRAIN, "tilename: %s, with %d entries", tilename, numlines);
+		//increment the pointer to the start of the next record
+		pFileData = strchr(pFileData,'\n') + 1;
+		numGroundTypes = numlines;
+		psGroundTypes = malloc(sizeof(GROUND_TYPE)*numlines);
+
+		for (i=0; i < numlines; i++)
+		{
+			sscanf(pFileData, "%[^','],%[^','],%lf%n", textureType, textureName, &textureSize, &cnt);
+			pFileData += cnt;
+			//increment the pointer to the start of the next record
+			pFileData = strchr(pFileData,'\n') + 1;
+
+			psGroundTypes[getTextureType(textureType)].textureName = strdup(textureName);
+			psGroundTypes[getTextureType(textureType)].textureSize = textureSize;
+		}
+
+		waterGroundType = getTextureType("r_water");
+		cliffGroundType = getTextureType("r_cliff");
+
+		SetGroundForTile("tileset/rockieground.txt", "rockie_ground");
+		SetDecals("tileset/rockiedecals.txt", "rockie_decals");
 	}
+	// When a map uses something other than the above, we fallback to Arizona
 	else
 	{
 		debug(LOG_ERROR, "unsupported tileset: %s", tileset);
 		debug(LOG_POPUP, "This is a UNSUPPORTED map with a custom tileset.\nDefaulting to tertilesc1hw -- map may look strange!");
 		// HACK: / FIXME: For now, we just pretend this is a tertilesc1hw map.
-		free(tileset);
-		tileset = strdup("texpages/tertilesc1hw");
-		numGroundTypes = 7;
-		psGroundTypes = malloc(sizeof(GROUND_TYPE)*numGroundTypes);
-		
-		psGroundTypes[a_yellow].textureName = "page-45";
-		psGroundTypes[a_yellow].textureSize = 4.6;
-		psGroundTypes[a_red].textureName = "page-44";
-		psGroundTypes[a_red].textureSize = 6.2;
-		psGroundTypes[a_concrete].textureName = "page-47";
-		psGroundTypes[a_concrete].textureSize = 3.2;
-		psGroundTypes[a_cliff].textureName = "page-46";
-		psGroundTypes[a_cliff].textureSize = 5.8;
-		psGroundTypes[a_water].textureName = "page-42";
-		psGroundTypes[a_water].textureSize = 7.3;
-		
-		psGroundTypes[a_mud] = psGroundTypes[a_red];
-		psGroundTypes[a_green] = psGroundTypes[a_red];
-		
-		waterGroundType = a_water;
-		cliffGroundType = a_cliff;
-
+		goto fallback;
 	}
 	return true;
 }
 
-static int groundFromArizonaTile(int tile, int i, int j)
+// Parse the file to set up the ground type
+static void SetGroundForTile(const char *filename, const char *nametype)
 {
-	const int map[][2][2] = {
-		{{a_yellow,a_yellow}, {a_yellow,a_yellow}},
-		{{a_yellow,a_yellow}, {a_yellow,a_yellow}},
-		{{a_yellow,a_mud}, {a_yellow,a_mud}},
-		{{a_mud,a_mud}, {a_mud,a_yellow}},
-		{{a_mud,a_yellow}, {a_yellow,a_yellow}},
-		{{a_mud,a_mud}, {a_mud,a_mud}},
-		{{a_mud,a_mud}, {a_mud,a_mud}},
-		{{a_mud,a_mud}, {a_mud,a_mud}},
-		{{a_mud,a_mud}, {a_mud,a_mud}},
-		{{a_yellow,a_yellow}, {a_yellow,a_yellow}},
-		{{a_yellow,a_yellow}, {a_yellow,a_yellow}},
-		{{a_yellow,a_yellow}, {a_yellow,a_yellow}},
-		{{a_yellow,a_yellow}, {a_yellow,a_yellow}},
-		{{a_water,a_yellow}, {a_yellow,a_yellow}},
-		{{a_water,a_water}, {a_yellow,a_yellow}},
-		{{a_yellow,a_water}, {a_yellow,a_yellow}},
-		{{a_water,a_water}, {a_yellow,a_water}},
-		{{a_water,a_water}, {a_water,a_water}},
-		{{a_cliff,a_cliff}, {a_cliff,a_cliff}},
-		{{a_concrete,a_concrete}, {a_concrete,a_red}},
-		{{a_concrete,a_red}, {a_red,a_red}},
-		{{a_concrete,a_red}, {a_concrete,a_red}},
-		{{a_concrete,a_concrete}, {a_concrete,a_concrete}},
-		{{a_green,a_green}, {a_green,a_green}},
-		{{a_green,a_mud}, {a_green,a_mud}},
-		{{a_green,a_green}, {a_green,a_mud}},
-		{{a_green,a_mud}, {a_mud,a_mud}},
-		{{a_yellow,a_red}, {a_yellow,a_red}},
-		{{a_yellow,a_yellow}, {a_yellow,a_red}},
-		{{a_yellow,a_red}, {a_red,a_red}},
-		{{a_water,a_water}, {a_red,a_green}},
-		{{a_green,a_green}, {a_water,a_water}},
-		{{a_green,a_green}, {a_green,a_water}},
-		{{a_green,a_water}, {a_water,a_water}},
-		{{a_red,a_mud}, {a_red,a_mud}},
-		{{a_red,a_red}, {a_red,a_mud}},
-		{{a_red,a_mud}, {a_mud,a_mud}},
-		{{a_red,a_red}, {a_red,a_red}},
-		{{a_yellow,a_mud}, {a_yellow,a_mud}},
-		{{a_mud,a_mud}, {a_mud,a_yellow}},
-		{{a_mud,a_yellow}, {a_yellow,a_yellow}},
-		{{a_red,a_red}, {a_red,a_yellow}},
-		{{a_red,a_yellow}, {a_yellow,a_yellow}},
-		{{a_red,a_yellow}, {a_red,a_yellow}},
-		{{a_red,a_red}, {a_red,a_red}},
-		{{a_cliff,a_cliff}, {a_red,a_cliff}},
-		{{a_cliff,a_cliff}, {a_cliff,a_cliff}},
-		{{a_red,a_red}, {a_red,a_red}},
-		{{a_red,a_red}, {a_red,a_red}},
-		{{a_red,a_red}, {a_red,a_red}},
-		{{a_red,a_red}, {a_red,a_red}},
-		{{a_red,a_red}, {a_red,a_red}},
-		{{a_red,a_red}, {a_red,a_red}},
-		{{a_red,a_red}, {a_red,a_red}},
-		{{a_red,a_red}, {a_red,a_red}},
-		{{a_yellow,a_yellow}, {a_yellow,a_yellow}},
-		{{a_red,a_red}, {a_red,a_red}},
-		{{a_red,a_red}, {a_red,a_red}},
-		{{a_mud,a_mud}, {a_mud,a_mud}},
-		{{a_red,a_red}, {a_red,a_red}},
-		{{a_red,a_red}, {a_red,a_red}},
-		{{a_red,a_red}, {a_red,a_red}},
-		{{a_green,a_green}, {a_green,a_green}},
-		{{a_yellow,a_yellow}, {a_yellow,a_yellow}},
-		{{a_yellow,a_yellow}, {a_yellow,a_yellow}},
-		{{a_yellow,a_yellow}, {a_yellow,a_yellow}},
-		{{a_yellow,a_yellow}, {a_yellow,a_yellow}},
-		{{a_red,a_red}, {a_red,a_red}},
-		{{a_red,a_red}, {a_red,a_red}},
-		{{a_red,a_red}, {a_red,a_red}},
-		{{a_red,a_red}, {a_red,a_red}},
-		{{a_cliff,a_cliff}, {a_cliff,a_cliff}},
-		{{a_red,a_red}, {a_red,a_red}},
-		{{a_red,a_red}, {a_red,a_red}},
-		{{a_red,a_red}, {a_red,a_red}},
-		{{a_cliff,a_cliff}, {a_cliff,a_red}},
-		{{a_red,a_red}, {a_red,a_red}},
-		{{a_concrete,a_concrete}, {a_concrete,a_concrete}},
-		};
-		
-	// look up
-	return map[TileNumber_tile(tile)][i][j];
+	char	*pFileData = NULL;
+	char	tilename[255] = {'\0'};
+	char	val1[25], val2[25], val3[25], val4[25];
+	int		numlines = 0;
+	int		cnt = 0, i = 0;
+	uint32_t	fileSize = 0;
+
+	pFileData = fileLoadBuffer;
+	if (!loadFileToBuffer(filename, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
+	{
+		debug(LOG_FATAL, "%s not found, aborting.", filename);
+		abort();
+	}
+
+	sscanf(pFileData, "%[^','],%d%n", tilename, &numlines, &cnt);
+	pFileData += cnt;
+
+	if (strcmp(tilename, nametype))
+	{
+		debug(LOG_FATAL, "%s found, but was expecting %s, aborting.", tilename, nametype);
+		abort();
+	}
+
+	debug(LOG_TERRAIN, "tilename: %s, with %d entries", tilename, numlines);
+	//increment the pointer to the start of the next record
+	pFileData = strchr(pFileData,'\n') + 1;
+
+	map = malloc(sizeof(int) * numlines * 2 * 2 );	// this is a 3D array map[numlines][2][2]
+
+	for (i=0; i < numlines; i++)
+	{
+		sscanf(pFileData, "%[^','],%[^','],%[^','],%s%n", val1, val2, val3, val4, &cnt);
+		pFileData += cnt;
+		//increment the pointer to the start of the next record
+		pFileData = strchr(pFileData,'\n') + 1;
+
+		// inline int iA(int i, int j, int k){ return i*N2*N3 + j*N3 + k; }
+		// in case it isn't obvious, this is a 3D array, and using pointer math to access each element.
+		// so map[10][0][1] would be map[10*2*2 + 0 + 1] == map[41]
+		// map[10][1][0] == map[10*2*2 + 2 + 0] == map[42]
+		map[i*2*2+0*2+0] = getTextureType(val1);
+		map[i*2*2+0*2+1] = getTextureType(val2);
+		map[i*2*2+1*2+0] = getTextureType(val3);
+		map[i*2*2+1*2+1] = getTextureType(val4);
+	}
 }
 
-
-static int groundFromUrbanTile(int tile, int i, int j)
+// getTextureType() -- just returns the value for that texture type.
+static int getTextureType(const char *textureType)
 {
-	const int map[][2][2] = {
-		{{u_blue, u_blue}, {u_blue, u_blue}},
-		{{u_blue, u_blue}, {u_blue, u_blue}},
-		{{u_blue, u_blue}, {u_blue, u_blue}},
-		{{u_gray, u_blue}, {u_blue, u_blue}},
-		{{u_gray, u_gray}, {u_gray, u_blue}},
-		{{u_gray, u_gray}, {u_gray, u_gray}},
-		{{u_blue, u_gray}, {u_blue, u_gray}},
-		{{u_gray, u_gray}, {u_gray, u_gray}},
-		{{u_gray, u_gray}, {u_gray, u_gray}},
-		{{u_gray, u_stone}, {u_gray, u_stone}},
-		{{u_gray, u_stone}, {u_gray, u_gray}},
-		{{u_stone, u_stone}, {u_dark, u_stone}},
-		{{u_dark, u_stone}, {u_dark, u_stone}},
-		{{u_stone, u_water}, {u_stone, u_water}},
-		{{u_water, u_water}, {u_stone, u_stone}},
-		{{u_stone, u_water}, {u_stone, u_stone}},
-		{{u_water, u_water}, {u_stone, u_water}},
-		{{u_water, u_water}, {u_water, u_water}},
-		{{u_dark, u_dark}, {u_dark, u_dark}},
-		{{u_stone, u_stone}, {u_stone, u_stone}},
-		{{u_stone, u_stone}, {u_stone, u_stone}},
-		{{u_stone, u_stone}, {u_stone, u_stone}},
-		{{u_brown, u_brown}, {u_brown, u_brown}},
-		{{u_gray, u_water}, {u_gray, u_water}},
-		{{u_gray, u_gray}, {u_water, u_water}},
-		{{u_gray, u_water}, {u_water, u_water}},
-		{{u_gray, u_gray}, {u_gray, u_water}},
-		{{u_stone, u_gray}, {u_stone, u_gray}},
-		{{u_stone, u_stone}, {u_stone, u_stone}},
-		{{u_gray, u_stone}, {u_gray, u_gray}},
-		{{u_stone, u_stone}, {u_gray, u_stone}},
-		{{u_brown, u_brown}, {u_brown, u_brown}},
-		{{u_blue, u_blue}, {u_blue, u_blue}},
-		{{u_brown, u_blue}, {u_brown, u_blue}},
-		{{u_brown, u_brown}, {u_brown, u_blue}},
-		{{u_brown, u_blue}, {u_blue, u_blue}},
-		{{u_brown, u_brown}, {u_brown, u_brown}},
-		{{u_green, u_green}, {u_green, u_brown}},
-		{{u_green, u_brown}, {u_brown, u_brown}},
-		{{u_brown, u_green}, {u_brown, u_green}},
-		{{u_stone, u_stone}, {u_stone, u_stone}},
-		{{u_blue, u_blue}, {u_blue, u_blue}},
-		{{u_stone, u_stone}, {u_stone, u_stone}},
-		{{u_gray, u_gray}, {u_gray, u_gray}},
-		{{u_gray, u_gray}, {u_gray, u_gray}},
-		{{u_green, u_green}, {u_green, u_green}},
-		{{u_stone, u_stone}, {u_stone, u_stone}},
-		{{u_gray, u_gray}, {u_gray, u_gray}},
-		{{u_stone, u_stone}, {u_stone, u_stone}},
-		{{u_stone, u_stone}, {u_stone, u_stone}},
-		{{u_green, u_green}, {u_green, u_green}},
-		{{u_stone, u_stone}, {u_stone, u_stone}},
-		{{u_stone, u_stone}, {u_stone, u_stone}},
-		{{u_gray, u_gray}, {u_gray, u_gray}},
-		{{u_gray, u_gray}, {u_gray, u_gray}},
-		{{u_gray, u_gray}, {u_gray, u_gray}},
-		{{u_stone, u_stone}, {u_stone, u_stone}},
-		{{u_blue, u_blue}, {u_blue, u_blue}},
-		{{u_gray, u_gray}, {u_gray, u_gray}},
-		{{u_stone, u_stone}, {u_stone, u_stone}},
-		{{u_brown, u_gray}, {u_brown, u_gray}},
-		{{u_stone, u_stone}, {u_stone, u_stone}},
-		{{u_gray, u_gray}, {u_gray, u_gray}},
-		{{u_blue, u_blue}, {u_blue, u_blue}},
-		{{u_blue, u_blue}, {u_blue, u_blue}},
-		{{u_blue, u_blue}, {u_blue, u_blue}},
-		{{u_blue, u_blue}, {u_blue, u_blue}},
-		{{u_gray, u_gray}, {u_gray, u_gray}},
-		{{u_cliff, u_cliff}, {u_gray, u_cliff}},
-		{{u_cliff, u_cliff}, {u_cliff, u_cliff}},
-		{{u_cliff, u_cliff}, {u_cliff, u_cliff}},
-		{{u_brown, u_stone}, {u_brown, u_stone}},
-		{{u_gray, u_gray}, {u_gray, u_brown}},
-		{{u_gray, u_brown}, {u_brown, u_brown}},
-		{{u_stone, u_stone}, {u_stone, u_stone}},
-		{{u_brown, u_stone}, {u_stone, u_stone}},
-		{{u_brown, u_brown}, {u_brown, u_stone}},
-		{{u_gray, u_green}, {u_gray, u_green}},
-		{{u_gray, u_gray}, {u_gray, u_gray}},
-		{{u_green, u_gray}, {u_green, u_green}},
-		{{u_gray, u_gray}, {u_gray, u_gray}},
-		};
-		
-	// look up
-	return map[TileNumber_tile(tile)][i][j];
+	int i = 0;
+	for (i=0; i < numTile_names; i++)
+	{
+		if (!strcmp(textureType, &Tile_names[i*40]))
+		{
+			return i;
+		}
+	}
+	debug(LOG_FATAL, "unknown type [%s] found, aborting!", textureType);
+	abort();
 }
 
-static int groundFromRockiesTile(int tile, int i, int j)
+// groundFromMapTile() just a simple lookup table, using pointers to access the 3D map array
+//	(quasi) pointer math is: map[num elements][2][2]
+//	so map[10][0][1] would be map[10*2*2 + 0*2 + 1] == map[41]
+static int groundFromMapTile(int tile, int j, int k)
 {
-	const int map[][2][2] = {
-		{{r_grass, r_grass}, {r_grass, r_grass}},
-		{{r_grass, r_grass}, {r_grass, r_grass}},
-		{{r_rock, r_grass}, {r_rock, r_grass}},
-		{{r_rock, r_grass}, {r_grass, r_grass}},
-		{{r_rock, r_rock}, {r_rock, r_grass}},
-		{{r_rock, r_rock}, {r_rock, r_rock}},
-		{{r_rock, r_rock}, {r_rock, r_rock}},
-		{{r_rock, r_rock}, {r_rock, r_rock}},
-		{{r_rock, r_rock}, {r_rock, r_rock}},
-		{{r_cliff, r_cliff}, {r_cliff, r_snowrock}},
-		{{r_snowrock, r_snowrock}, {r_snowrock, r_snowrock}},
-		{{r_snowrock, r_rock}, {r_rock, r_rock}},
-		{{r_snowrock, r_snowrock}, {r_rock, r_rock}},
-		{{r_brown, r_brown}, {r_brown, r_brown}},
-		{{r_water, r_water}, {r_grass, r_grass}},
-		{{r_grass, r_water}, {r_grass, r_grass}},
-		{{r_water, r_water}, {r_grass, r_water}},
-		{{r_water, r_water}, {r_water, r_water}},
-		{{r_cliff, r_cliff}, {r_cliff, r_rock}},
-		{{r_tiles, r_brown}, {r_brown, r_brown}},
-		{{r_tiles, r_tiles}, {r_tiles, r_brown}},
-		{{r_tiles, r_brown}, {r_tiles, r_brown}},
-		{{r_tiles, r_tiles}, {r_tiles, r_tiles}},
-		{{r_snowgrass, r_snowgrass}, {r_snowgrass, r_snowgrass}},
-		{{r_snowgrass, r_snowgrass}, {r_snowgrass, r_grass}},
-		{{r_snowgrass, r_grass}, {r_grass, r_grass}},
-		{{r_snowgrass, r_snowgrass}, {r_grass, r_grass}},
-		{{r_brown, r_brown}, {r_brown, r_brown}},
-		{{r_brown, r_brown}, {r_brown, r_brown}},
-		{{r_cliff, r_cliff}, {r_cliff, r_cliff}},
-		{{r_cliff, r_cliff}, {r_cliff, r_cliff}},
-		{{r_rock, r_rock}, {r_water, r_water}},
-		{{r_rock, r_water}, {r_water, r_water}},
-		{{r_rock, r_rock}, {r_rock, r_water}},
-		{{r_grass, r_brown}, {r_grass, r_brown}},
-		{{r_grass, r_grass}, {r_grass, r_brown}},
-		{{r_grass, r_brown}, {r_brown, r_brown}},
-		{{r_brown, r_brown}, {r_brown, r_brown}},
-		{{r_brown, r_rock}, {r_brown, r_rock}},
-		{{r_brown, r_brown}, {r_brown, r_rock}},
-		{{r_brown, r_rock}, {r_rock, r_rock}},
-		{{r_snowrock, r_snowrock}, {r_snowrock, r_snowrock}},
-		{{r_cliff, r_cliff}, {r_rock, r_cliff}},
-		{{r_cliff, r_rock}, {r_rock, r_cliff}},
-		{{r_cliff, r_cliff}, {r_rock, r_cliff}},
-		{{r_cliff, r_cliff}, {r_rock, r_cliff}},
-		{{r_cliff, r_cliff}, {r_cliff, r_cliff}},
-		{{r_grass, r_grass}, {r_grass, r_grass}},
-		{{r_snowrock, r_snowrock}, {r_rock, r_rock}},
-		{{r_brown, r_brown}, {r_brown, r_brown}},
-		{{r_brown, r_brown}, {r_brown, r_brown}},
-		{{r_brown, r_brown}, {r_brown, r_brown}},
-		{{r_brown, r_brown}, {r_brown, r_brown}},
-		{{r_brown, r_brown}, {r_brown, r_brown}},
-		{{r_snow, r_snow}, {r_snow, r_rock}},
-		{{r_rock, r_rock}, {r_rock, r_rock}},
-		{{r_brown, r_brown}, {r_brown, r_brown}},
-		{{r_rock, r_rock}, {r_rock, r_rock}},
-		{{r_grass, r_grass}, {r_grass, r_grass}},
-		{{r_brown, r_brown}, {r_brown, r_brown}},
-		{{r_brown, r_brown}, {r_brown, r_brown}},
-		{{r_cliff, r_cliff}, {r_cliff, r_cliff}},
-		{{r_rock, r_rock}, {r_rock, r_rock}},
-		{{r_cliff, r_cliff}, {r_cliff, r_snow}},
-		{{r_snow, r_snow}, {r_snow, r_snow}},
-		{{r_snow, r_snow}, {r_snow, r_snowrock}},
-		{{r_snow, r_snowrock}, {r_snowrock, r_snowrock}},
-		{{r_snow, r_snow}, {r_snowrock, r_snowrock}},
-		{{r_cliff, r_cliff}, {r_cliff, r_snow}},
-		{{r_cliff, r_cliff}, {r_cliff, r_snow}},
-		{{r_snow, r_snow}, {r_snow, r_snow}},
-		{{r_cliff, r_cliff}, {r_cliff, r_snow}},
-		{{r_brown, r_brown}, {r_brown, r_brown}},
-		{{r_snowrock, r_snowrock}, {r_snowrock, r_snowrock}},
-		{{r_grass, r_grass}, {r_grass, r_grass}},
-		{{r_snowrock, r_snowrock}, {r_snowrock, r_snowrock}},
-		{{r_cliff, r_cliff}, {r_cliff, r_cliff}},
-		{{r_cliff, r_cliff}, {r_cliff, r_cliff}},
-		{{r_cliff, r_cliff}, {r_cliff, r_cliff}},
-		{{r_tiles, r_tiles}, {r_tiles, r_tiles}},
-		};
-		
-	// look up
-	return map[TileNumber_tile(tile)][i][j];
+	return map[TileNumber_tile(tile)* 2 * 2 + j * 2 + k];
 }
 
 static void rotFlip(int tile, int *i, int *j)
@@ -653,7 +582,6 @@ static int determineGroundType(int x, int y, const char *tileset)
 		return 0;
 	}
 
-	
 	if (x < 0 || y < 0 || x >= mapWidth || y >= mapHeight)
 	{
 		return 0; // just return the first ground type
@@ -675,30 +603,29 @@ static int determineGroundType(int x, int y, const char *tileset)
 			a = i;
 			b = j;
 			rotFlip(tile, &a, &b);
-			if (arizona)
-			{
-				ground[i][j] = groundFromArizonaTile(tile, a, b);
-			}
-			if (urban)
-			{
-				ground[i][j] = groundFromUrbanTile(tile, a, b);
-			}
-			if (rockies)
-			{
-				ground[i][j] = groundFromRockiesTile(tile, a, b);
-			}
+			ground[i][j] = groundFromMapTile(tile, a, b);
 			
 			votes[i][j] = 0;
-			
-			if ((ground[i][j] == u_cliff && urban) ||
-			    (ground[i][j] == a_cliff && arizona) ||
-			    (ground[i][j] == r_cliff && rockies))
+
+			// cliffs are so small they won't show up otherwise
+			if (urban)
 			{
-				// cliffs are so small they won't show up otherwise
-				return ground[i][j];
+				if (ground[i][j] == getTextureType("u_cliff"))
+					return ground[i][j];
+			}
+			else if (arizona)
+			{
+				if (ground[i][j] == getTextureType("a_cliff"))
+					return ground[i][j];
+			}
+			else if (rockies)
+			{
+				if (ground[i][j] == getTextureType("r_cliff"))
+					return ground[i][j];
 			}
 		}
 	}
+
 	// now vote, because some maps have seams
 	for(i=0;i<2;i++)
 	{
@@ -733,102 +660,66 @@ static int determineGroundType(int x, int y, const char *tileset)
 	return ground[a][b];
 }
 
-static BOOL hasArizonaDecal(UDWORD i, UDWORD j)
+// SetDecals()
+// reads in the decal array for the requested tileset.
+static void SetDecals(const char *filename, const char *decal_type)
 {
-	switch ( TileNumber_tile(mapTile(i, j)->texture))
+	char decalname[50], *pFileData;
+	int numlines, cnt, i, tiledecal;
+	uint32_t fileSize;
+
+	pFileData = fileLoadBuffer;
+
+	if (!loadFileToBuffer(filename, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 	{
-		case 37:
-		case 47:
-		case 49:
-		case 50:
-		case 51:
-		case 52:
-		case 55:
-		case 56:
-		case 57:
-		case 58:
-		case 59:
-		case 60:
-		case 61:
-		case 62:
-		case 63:
-		case 64:
-		case 65:
-		case 66:
-		case 67:
-		case 68:
-		case 69:
-		case 70:
-		case 72:
-		case 73:
-			return true;
-		default:
-			return false;
+		debug(LOG_POPUP, "%s not found, aborting.", filename);
+		abort();
+	}
+
+	sscanf(pFileData, "%[^','],%d%n", decalname, &numlines, &cnt);
+	pFileData += cnt;
+
+	if (strcmp(decalname, decal_type))
+	{
+		debug(LOG_POPUP, "%s found, but was expecting %s, aborting.", decalname, decal_type);
+		abort();
+	}
+
+	debug(LOG_TERRAIN, "reading: %s, with %d entries", filename, numlines);
+	//increment the pointer to the start of the next record
+	pFileData = strchr(pFileData,'\n') + 1;
+	if (numlines > MAX_TERRAIN_TILES)
+	{
+		debug(LOG_FATAL, "Too many tiles, we only support %d max at this time", MAX_TERRAIN_TILES);
+		abort();
+	}
+	mapDecals = malloc(sizeof(int)*MAX_TERRAIN_TILES);		// max of 80 tiles that we support
+	memset(mapDecals, 0x0, sizeof(int)*MAX_TERRAIN_TILES);	// set everything to false;
+
+	for (i=0; i < numlines; i++)
+	{
+		sscanf(pFileData, "%d%n", &tiledecal, &cnt);
+		pFileData += cnt;
+		//increment the pointer to the start of the next record
+		pFileData = strchr(pFileData,'\n') + 1;
+		mapDecals[tiledecal] = 1;
 	}
 }
-
-static BOOL hasUrbanDecal(UDWORD i, UDWORD j)
+// hasDecals()
+// Checks to see if the requested tile has a decal on it or not.
+static BOOL hasDecals(int i, int j)
 {
-	switch ( TileNumber_tile(mapTile(i, j)->texture))
+	int index = 0;
+	index = TileNumber_tile(mapTile(i, j)->texture);
+	if (index > MAX_TERRAIN_TILES)
 	{
-		case 11:
-		case 12:
-		case 28:
-		case 32:
-		case 40:
-		case 41:
-		case 42:
-		case 43:
-		case 44:
-		case 45:
-		case 46:
-		case 47:
-		case 48:
-		case 49:
-		case 52:
-		case 53:
-		case 54:
-		case 55:
-		case 56:
-		case 57:
-		case 59:
-		case 61:
-		case 62:
-		case 63:
-		case 64:
-		case 65:
-		case 66:
-		case 67:
-		case 80:
-			return true;
-		default:
-			return false;
+		debug(LOG_FATAL, "Tile index is out of range!  Was %d, our max is %d", index, MAX_TERRAIN_TILES);
+		abort();
 	}
+	return mapDecals[index];
 }
-
-static BOOL hasRockiesDecal(UDWORD i, UDWORD j)
-{
-	switch ( TileNumber_tile(mapTile(i, j)->texture))
-	{
-		case 13:
-		case 37:
-		case 49:
-		case 50:
-		case 51:
-		case 52:
-		case 56:
-		case 58:
-		case 59:
-		case 60:
-		case 62:
-		case 72:
-		case 79:
-			return true;
-		default:
-			return false;
-	}
-}
-
+// mapSetGroundTypes()
+// Sets the ground type to be a decal or not
 static BOOL mapSetGroundTypes(void)
 {
 	int i,j;
@@ -841,9 +732,7 @@ static BOOL mapSetGroundTypes(void)
 
 			psTile->ground = determineGroundType(i,j,tileset);
 
-			if ((strcmp(tileset, "texpages/tertilesc1hw") == 0 && hasArizonaDecal(i, j))
-			    || (strcmp(tileset, "texpages/tertilesc2hw") == 0 && hasUrbanDecal(i, j))
-			    || (strcmp(tileset, "texpages/tertilesc3hw") == 0 && hasRockiesDecal(i, j)))
+			if (hasDecals(i,j))
 			{
 				SET_TILE_DECAL(psTile);
 			}
@@ -894,6 +783,12 @@ BOOL mapLoad(char *filename)
 	else if (width * height > MAP_MAXAREA)
 	{
 		debug(LOG_ERROR, "Map %s too large : %d %d", filename, width, height);
+		goto failure;
+	}
+
+	if (width <=1 || height <=1)
+	{
+		debug(LOG_ERROR, "Map is too small : %u, %u", width, height);
 		goto failure;
 	}
 
@@ -1002,584 +897,6 @@ BOOL mapLoad(char *filename)
 failure:
 	PHYSFS_close(fp);
 	return false;
-}
-
-// Object macro group
-static void objectSaveTagged(BASE_OBJECT *psObj)
-{
-	tagWriteEnter(0x01, 1);
-	tagWrite(0x01, psObj->type);
-	tagWrite(0x02, psObj->id);
-	tagWriteLeave(0x01);
-}
-
-static void objectSensorTagged(int sensorRange, int sensorPower, int ecmRange, int ecmPower)
-{
-	tagWriteEnter(0x02, 1);
-	tagWrite(0x01, sensorRange);
-	tagWrite(0x02, sensorPower);
-	tagWrite(0x03, ecmRange);
-	tagWrite(0x04, ecmPower);
-	tagWriteLeave(0x02);
-}
-
-static void objectStatTagged(BASE_OBJECT *psObj, int body, int resistance)
-{
-	int i;
-
-	tagWriteEnter(0x03, 1);
-	tagWrite(0x01, body);
-	tagWrite(0x02, WC_NUM_WEAPON_CLASSES);
-	tagWriteEnter(0x03, NUM_HIT_SIDES);
-	for (i = 0; i < NUM_HIT_SIDES; i++)
-	{
-		tagWrite(0x01, psObj->armour[i][WC_KINETIC]);
-		tagWrite(0x02, psObj->armour[i][WC_HEAT]);
-		tagWriteNext();
-	}
-	tagWriteLeave(0x03);
-	tagWrite(0x04, resistance);
-	tagWriteLeave(0x03);
-}
-
-static void objectWeaponTagged(int num, WEAPON *asWeaps, BASE_OBJECT **psTargets)
-{
-	tagWriteEnter(0x04, num);
-	tagWriteLeave(0x04);
-}
-
-static void droidSaveTagged(DROID *psDroid)
-{
-}
-
-static void structureSaveTagged(STRUCTURE *psStruct)
-{
-	int stype = NUM_DIFF_BUILDINGS;
-
-	if (psStruct->pFunctionality)
-	{
-		stype = psStruct->pStructureType->type;
-	}
-
-	/* common groups */
-
-	objectSaveTagged((BASE_OBJECT *)psStruct); /* 0x01 */
-	objectSensorTagged(psStruct->sensorRange, psStruct->sensorPower, 0, psStruct->ECMMod); /* 0x02 */
-	objectStatTagged((BASE_OBJECT *)psStruct, psStruct->pStructureType->bodyPoints, psStruct->resistance); /* 0x03 */
-	objectWeaponTagged(psStruct->numWeaps, psStruct->asWeaps, psStruct->psTarget);
-
-	/* STRUCTURE GROUP */
-
-	tagWriteEnter(0x0b, 1);
-	tagWrite(0x01, psStruct->pStructureType->type);
-	tagWrites(0x02, psStruct->currentPowerAccrued);
-	tagWrite(0x03, psStruct->lastResistance);
-	tagWrite(0x04, psStruct->bTargetted);
-	tagWrite(0x05, psStruct->timeLastHit);
-	tagWrite(0x06, psStruct->lastHitWeapon);
-	tagWrite(0x07, psStruct->status);
-	tagWrites(0x08, psStruct->currentBuildPts);
-	tagWriteLeave(0x0b);
-
-	/* Functionality groups */
-
-	switch (psStruct->pStructureType->type)
-	{
-		case REF_FACTORY:
-		case REF_CYBORG_FACTORY:
-		case REF_VTOL_FACTORY:
-		{
-			FACTORY *psFactory = (FACTORY *)psStruct->pFunctionality;
-
-			tagWriteEnter(0x0d, 1); // FACTORY GROUP
-			tagWrite(0x01, psFactory->capacity);
-			tagWrite(0x02, psFactory->productionLoops);
-			tagWrite(0x03, psFactory->loopsPerformed);
-			//tagWrite(0x04, psFactory->productionOutput); // not used in original code, recalculated instead
-			tagWrite(0x05, psFactory->powerAccrued);
-			if (psFactory->psSubject)
-			{
-				tagWrites(0x06, ((DROID_TEMPLATE *)psFactory->psSubject)->multiPlayerID);
-			}
-			tagWrite(0x07, psFactory->timeStarted);
-			tagWrite(0x08, psFactory->timeToBuild);
-			tagWrite(0x09, psFactory->timeStartHold);
-			tagWrite(0x0a, psFactory->secondaryOrder);
-			if (psFactory->psAssemblyPoint)
-			{
-				// since we save our type, the combination of type and number is enough
-				// to find our flag back on load
-				tagWrites(0x0b, psFactory->psAssemblyPoint->factoryInc);
-			}
-			if (psFactory->psCommander)
-			{
-				tagWrites(0x0c, psFactory->psCommander->id);
-			}
-			tagWriteLeave(0x0d);
-		} break;
-		case REF_RESEARCH:
-		{
-			RESEARCH_FACILITY *psResearch = (RESEARCH_FACILITY *)psStruct->pFunctionality;
-
-			tagWriteEnter(0x0e, 1);
-			tagWrite(0x01, psResearch->capacity); // number of upgrades it has
-			tagWrite(0x02, psResearch->powerAccrued);
-			tagWrite(0x03, psResearch->timeStartHold);
-			if (psResearch->psSubject)
-			{
-				tagWrite(0x04, psResearch->psSubject->ref - REF_RESEARCH_START);
-				tagWrite(0x05, psResearch->timeStarted);
-			}
-			tagWriteLeave(0x0e);
-		} break;
-		case REF_RESOURCE_EXTRACTOR:
-		{
-			RES_EXTRACTOR *psExtractor = (RES_EXTRACTOR *)psStruct->pFunctionality;
-
-			tagWriteEnter(0x0f, 1);
-			if (psExtractor->psPowerGen)
-			{
-				tagWrites(0x02, psExtractor->psPowerGen->id);
-			}
-			tagWriteLeave(0x0f);
-		} break;
-		case REF_POWER_GEN:
-		{
-			POWER_GEN *psPower = (POWER_GEN *)psStruct->pFunctionality;
-
-			tagWriteEnter(0x10, 1);
-			tagWrite(0x01, psPower->capacity); // number of upgrades
-			tagWriteLeave(0x10);
-		} break;
-		case REF_REPAIR_FACILITY:
-		{
-			REPAIR_FACILITY *psRepair = (REPAIR_FACILITY *)psStruct->pFunctionality;
-			FLAG_POSITION *psFlag = psRepair->psDeliveryPoint;
-
-			tagWriteEnter(0x11, 1);
-			tagWrite(0x01, psRepair->timeStarted);
-			tagWrite(0x02, psRepair->powerAccrued);
-			if (psRepair->psObj)
-			{
-				tagWrites(0x03, psRepair->psObj->id);
-			}
-			if (psFlag)
-			{
-				tagWrites(0x04, psFlag->factoryInc);
-			}
-			tagWriteLeave(0x11);
-		} break;
-		case REF_REARM_PAD:
-		{
-			REARM_PAD *psRearm = (REARM_PAD *)psStruct->pFunctionality;
-
-			tagWriteEnter(0x12, 1);
-			tagWrite(0x01, psRearm->reArmPoints);
-			tagWrite(0x02, psRearm->timeStarted);
-			tagWrite(0x03, psRearm->timeLastUpdated);
-			if (psRearm->psObj)
-			{
-				tagWrites(0x04, psRearm->psObj->id);
-			}
-			tagWriteLeave(0x12);
-		} break;
-		case REF_HQ:
-		case REF_FACTORY_MODULE:
-		case REF_POWER_MODULE:
-		case REF_DEFENSE:
-		case REF_WALL:
-		case REF_WALLCORNER:
-		case REF_BLASTDOOR:
-		case REF_GATE:
-		case REF_RESEARCH_MODULE:
-		case REF_COMMAND_CONTROL:
-		case REF_BRIDGE:
-		case REF_DEMOLISH:
-		case REF_LAB:
-		case REF_MISSILE_SILO:
-		case REF_SAT_UPLINK:
-		case NUM_DIFF_BUILDINGS:
-		{
-			// nothing
-		} break;
-	}
-}
-
-static void featureSaveTagged(FEATURE *psFeat)
-{
-	/* common groups */
-
-	objectSaveTagged((BASE_OBJECT *)psFeat); /* 0x01 */
-	objectStatTagged((BASE_OBJECT *)psFeat, psFeat->psStats->body, 0); /* 0x03 */
-
-	/* FEATURE GROUP */
-
-	tagWriteEnter(0x0c, 1);
-	tagWrite(0x01, psFeat->born);
-	tagWriteLeave(0x0c);
-}
-
-// the maximum number of flags: each factory type can have two, one for itself, and one for a commander
-#define MAX_FLAGS (NUM_FLAG_TYPES * MAX_FACTORY * 2)
-
-BOOL mapSaveTagged(char *pFileName)
-{
-	MAPTILE *psTile;
-	GATEWAY *psCurrGate;
-	int numGateways = 0, i = 0, x = 0, y = 0, plr, droids, structures, features;
-	float cam[3];
-	const char *definition = "tagdefinitions/savegame/map.def";
-	DROID *psDroid;
-	FEATURE *psFeat;
-	STRUCTURE *psStruct;
-
-	// find the number of non water gateways
-	for (psCurrGate = gwGetGateways(); psCurrGate; psCurrGate = psCurrGate->psNext)
-	{
-		numGateways += 1;
-	}
-
-	if (!tagOpenWrite(definition, pFileName))
-	{
-		debug(LOG_ERROR, "mapSaveTagged: Failed to create savegame %s", pFileName);
-		return false;
-	}
-	debug(LOG_MAP, "Creating tagged savegame %s with definition %s:", pFileName, definition);
-
-	tagWriteEnter(0x03, 1); // map info group
-	tagWrite(0x01, mapWidth);
-	tagWrite(0x02, mapHeight);
-	tagWriteLeave(0x03);
-
-	tagWriteEnter(0x04, 1); // camera info group
-	cam[0] = player.p.x;
-	cam[1] = player.p.y;
-	cam[2] = player.p.z; /* Transform position to float */
-	tagWritefv(0x01, 3, cam);
-	cam[0] = player.r.x;
-	cam[1] = player.r.y;
-	cam[2] = player.r.z; /* Transform rotation to float */
-	tagWritefv(0x02, 3, cam);
-	debug(LOG_MAP, " * Writing player position(%d, %d, %d) and rotation(%d, %d, %d)",
-	      (int)player.p.x, (int)player.p.y, (int)player.p.z, (int)player.r.x,
-	      (int)player.r.y, (int)player.r.z);
-	tagWriteLeave(0x04);
-
-	tagWriteEnter(0x05, _TEX_INDEX - 1); // texture group
-	for (i = 0; i < _TEX_INDEX - 1; i++)
-	{
-		tagWriteString(0x01, _TEX_PAGE[i].name);
-		tagWriteNext(); // add repeating group separator
-	}
-	debug(LOG_MAP, " * Writing info about %d texture pages", (int)_TEX_INDEX - 1);
-	tagWriteLeave(0x05);
-
-	tagWriteEnter(0x0a, mapWidth * mapHeight); // tile group
-	psTile = psMapTiles;
-	for (i = 0, x = 0, y = 0; i < mapWidth * mapHeight; i++)
-	{
-		tagWrite(0x01, terrainType(psTile));
-		tagWrite(0x02, TileNumber_tile(psTile->texture));
-		tagWrite(0x03, TRI_FLIPPED(psTile));
-		tagWrite(0x04, psTile->texture & TILE_XFLIP);
-		tagWrite(0x05, psTile->texture & TILE_YFLIP);
-		tagWrite(0x06, TileIsNotBlocking(psTile)); // Redundant, since already included in tileInfoBits
-		tagWrite(0x08, psTile->height);
-		tagWrite(0x0a, psTile->tileInfoBits);
-		tagWrite(0x0b, (psTile->texture & TILE_ROTMASK) >> TILE_ROTSHIFT);
-
-		psTile++;
-		x++;
-		if (x == mapWidth)
-		{
-			x = 0; y++;
-		}
-		tagWriteNext();
-	}
-	debug(LOG_MAP, " * Writing info about %d tiles", (int)mapWidth * mapHeight);
-	tagWriteLeave(0x0a);
-
-	tagWriteEnter(0x0b, numGateways); // gateway group
-	for (psCurrGate = gwGetGateways(); psCurrGate; psCurrGate = psCurrGate->psNext)
-	{
-		uint16_t p[4];
-
-		p[0] = psCurrGate->x1;
-		p[1] = psCurrGate->y1;
-		p[2] = psCurrGate->x2;
-		p[3] = psCurrGate->y2;
-		tagWrite16v(0x01, 4, p);
-		tagWriteNext();
-	}
-	debug(LOG_MAP, " * Writing info about %d gateways", (int)numGateways);
-	tagWriteLeave(0x0b);
-
-	tagWriteEnter(0x0c, MAX_TILE_TEXTURES); // terrain type <=> texture mapping group
-	for (i = 0; i < MAX_TILE_TEXTURES; i++)
-        {
-                tagWrite(0x01, terrainTypes[i]);
-		tagWriteNext();
-        }
-	debug(LOG_MAP, " * Writing info about %d textures' type", (int)MAX_TILE_TEXTURES);
-	tagWriteLeave(0x0c);
-
-	tagWriteEnter(0x0d, MAX_PLAYERS); // player info group
-	for (plr = 0; plr < MAX_PLAYERS; plr++)
-	{
-		RESEARCH *psResearch = asResearch;
-		STRUCTURE_STATS *psStructStats = asStructureStats;
-		FLAG_POSITION *psFlag;
-		FLAG_POSITION *flagList[MAX_FLAGS];
-		MESSAGE *psMessage;
-
-		memset(flagList, 0, sizeof(flagList));
-
-		tagWriteEnter(0x01, numResearch); // research group
-		for (i = 0; i < numResearch; i++, psResearch++)
-		{
-			tagWrite(0x01, IsResearchPossible(&asPlayerResList[plr][i]));
-			tagWrite(0x02, asPlayerResList[plr][i].ResearchStatus & RESBITS);
-			tagWrite(0x03, asPlayerResList[plr][i].currentPoints);
-			tagWriteNext();
-		}
-		tagWriteLeave(0x01);
-
-		tagWriteEnter(0x02, numStructureStats); // structure limits group
-		for (i = 0; i < numStructureStats; i++, psStructStats++)
-		{
-			tagWriteString(0x01, psStructStats->pName);
-			tagWrite(0x02, asStructLimits[plr][i].limit);
-			tagWriteNext();
-		}
-		tagWriteLeave(0x02);
-
-		// count and list flags in list
-		for (i = 0, psFlag = apsFlagPosLists[plr]; psFlag != NULL; psFlag = psFlag->psNext)
-		{
-			ASSERT(i < MAX_FLAGS, "More flags than we can handle (1)!");
-			flagList[i] = psFlag;
-			i++;
-		}
-		y = i; // remember separation point between registered and unregistered flags
-		// count flags not in list (commanders)
-		for (psStruct = apsStructLists[plr]; psStruct != NULL; psStruct = psStruct->psNext)
-		{
-			ASSERT(i < MAX_FLAGS, "More flags than we can handle (2)!");
-			if (psStruct->pFunctionality
-			    && (psStruct->pStructureType->type == REF_FACTORY
-			        || psStruct->pStructureType->type == REF_CYBORG_FACTORY
-			        || psStruct->pStructureType->type == REF_VTOL_FACTORY))
-			{
-				FACTORY *psFactory = ((FACTORY *)psStruct->pFunctionality);
-
-				if (psFactory->psCommander && psFactory->psAssemblyPoint != NULL)
-				{
-					flagList[i] = psFactory->psAssemblyPoint;
-					i++;
-				}
-			}
-		}
-		tagWriteEnter(0x03, i); // flag group
-		for (x = 0; x < i; x++)
-		{
-			uint16_t p[3];
-
-			tagWrite(0x01, flagList[x]->type);
-			tagWrite(0x02, flagList[x]->frameNumber);
-			p[0] = flagList[x]->screenX;
-			p[1] = flagList[x]->screenY;
-			p[2] = flagList[x]->screenR;
-			tagWrite16v(0x03, 3, p);
-			tagWrite(0x04, flagList[x]->player);
-			tagWriteBool(0x05, flagList[x]->selected);
-			p[0] = flagList[x]->coords.x;
-			p[1] = flagList[x]->coords.y;
-			p[2] = flagList[x]->coords.z;
-			tagWrite16v(0x06, 3, p);
-			tagWrite(0x07, flagList[x]->factoryInc);
-			tagWrite(0x08, flagList[x]->factoryType);
-			if (flagList[x]->factoryType == REPAIR_FLAG)
-			{
-				tagWrite(0x09, getRepairIdFromFlag(flagList[x]));
-			}
-			if (x >= y)
-			{
-				tagWriteBool(0x0a, 1); // do not register this flag in flag list
-			}
-			tagWriteNext();
-		}
-		tagWriteLeave(0x03);
-
-		// FIXME: Structured after old savegame logic, but surely it must be possible
-		// to simplify the mess below. It refers to non-saved file containing messages.
-		for (psMessage = apsMessages[plr], i = 0; psMessage != NULL; psMessage = psMessage->psNext, i++);
-		tagWriteEnter(0x04, i); // message group
-		for (psMessage = apsMessages[plr]; psMessage != NULL; psMessage = psMessage->psNext)
-		{
-			if (psMessage->type == MSG_PROXIMITY)
-			{
-				PROXIMITY_DISPLAY *psProx = apsProxDisp[plr];
-
-				// find the matching proximity message
-				for (; psProx != NULL && psProx->psMessage != psMessage; psProx = psProx->psNext);
-
-				ASSERT(psProx != NULL, "Save message; proximity display not found for message");
-				if (psProx->type == POS_PROXDATA)
-				{
-					// message has viewdata so store the name
-					VIEWDATA *pViewData = (VIEWDATA*)psMessage->pViewData;
-
-					tagWriteString(0x02, pViewData->pName);
-				}
-				else
-				{
-					BASE_OBJECT *psObj = (BASE_OBJECT*)psMessage->pViewData;
-
-					tagWrites(0x01, psObj->id);
-				}
-			}
-			else
-			{
-				VIEWDATA *pViewData = (VIEWDATA*)psMessage->pViewData;
-
-				tagWriteString(0x2, pViewData->pName);
-			}
-			tagWriteBool(0x3, psMessage->read);
-			tagWriteNext();
-		}
-		tagWriteLeave(0x04);
-
-		tagWriteNext();
-	}
-	debug(LOG_MAP, " * Writing info about %d players", (int)MAX_PLAYERS);
-	tagWriteLeave(0x0d);
-
-	tagWriteEnter(0x0e, NUM_FACTORY_TYPES); // production runs group
-	for (i = 0; i < NUM_FACTORY_TYPES; i++)
-	{
-		int factoryNum, runNum;
-
-		tagWriteEnter(0x01, MAX_FACTORY);
-		for (factoryNum = 0; factoryNum < MAX_FACTORY; factoryNum++)
-		{
-			tagWriteEnter(0x01, MAX_PROD_RUN);
-			for (runNum = 0; runNum < MAX_PROD_RUN; runNum++)
-			{
-				PRODUCTION_RUN *psCurrentProd = &asProductionRun[i][factoryNum][runNum];
-
-				tagWrite(0x01, psCurrentProd->quantity);
-				tagWrite(0x02, psCurrentProd->built);
-				if (psCurrentProd->psTemplate != NULL)
-                                {
-					tagWrites(0x03, psCurrentProd->psTemplate->multiPlayerID); // -1 if none
-                                }
-				tagWriteNext();
-			}
-			tagWriteLeave(0x01);
-			tagWriteNext();
-		}
-		tagWriteLeave(0x01);
-		tagWriteNext();
-	}
-	tagWriteLeave(0x0e);
-
-	objCount(&droids, &structures, &features);
-	tagWriteEnter(0x0f, droids + structures + features); // object group
-	for (plr = 0; plr < MAX_PLAYERS; plr++)
-	{
-		for (psDroid = apsDroidLists[plr]; psDroid != NULL; psDroid = psDroid->psNext)
-		{
-			droidSaveTagged(psDroid);
-			tagWriteNext();
-			if (psDroid->droidType == DROID_TRANSPORTER)
-			{
-				DROID *psTrans = psDroid->psGroup->psList;
-				for(psTrans = psTrans->psGrpNext; psTrans != NULL; psTrans = psTrans->psGrpNext)
-				{
-					droidSaveTagged(psTrans);
-					tagWriteNext();
-				}
-			}
-		}
-		for (psStruct = apsStructLists[plr]; psStruct; psStruct = psStruct->psNext)
-		{
-			structureSaveTagged(psStruct);
-			tagWriteNext();
-		}
-	}
-	for (psFeat = apsFeatureLists[0]; psFeat; psFeat = psFeat->psNext)
-	{
-		featureSaveTagged(psFeat);
-		tagWriteNext();
-	}
-	tagWriteLeave(0x0f);
-
-	tagClose();
-	return true;
-}
-
-BOOL mapLoadTagged(char *pFileName)
-{
-	int count, i, mapx, mapy;
-	float cam[3];
-	const char *definition = "tagdefinitions/savegame/map.def";
-	MAPTILE	*psTile;
-
-	if (!tagOpenRead(definition, pFileName))
-	{
-		debug(LOG_ERROR, "mapLoadTagged: Failed to open savegame %s", pFileName);
-		return false;
-	}
-	debug(LOG_MAP, "Reading tagged savegame %s with definition %s:", pFileName, definition);
-
-	tagReadEnter(0x03); // map info group
-	mapx = tagRead(0x01);
-	mapy = tagRead(0x02);
-	debug(LOG_MAP, " * Map size: %d, %d", (int)mapx, (int)mapy);
-	ASSERT(mapx == mapWidth && mapy == mapHeight, "mapLoadTagged: Wrong map size");
-	ASSERT(mapWidth * mapHeight <= MAP_MAXAREA, "mapLoadTagged: Map too large");
-	tagReadLeave(0x03);
-
-	tagReadEnter(0x04); // camera info group
-	tagReadfv(0x01, 3, cam); debug(LOG_MAP, " * Camera position: %f, %f, %f", cam[0], cam[1], cam[2]);
-	tagReadfv(0x02, 3, cam); debug(LOG_MAP, " * Camera rotation: %f, %f, %f", cam[0], cam[1], cam[2]);
-	tagReadLeave(0x04);
-
-	count = tagReadEnter(0x05); // texture group
-	for (i = 0; i < count; i++)
-	{
-		char mybuf[200];
-
-		tagReadString(0x01, 200, mybuf);
-		debug(LOG_MAP, " * Texture[%d]: %s", i, mybuf);
-		tagReadNext();
-	}
-	tagReadLeave(0x05);
-
-	i = tagReadEnter(0x0a); // tile group
-	ASSERT(i == mapWidth * mapHeight, "Map size (%d, %d) is not equal to number of tiles (%d) in mapLoadTagged()!",
-	       (int)mapWidth, (int)mapHeight, i);
-	psTile = psMapTiles;
-	for (i = 0; i < mapWidth * mapHeight; i++)
-	{
-		BOOL triflip, notblock, xflip, yflip;
-		int texture, height, terrain;
-
-		terrain = tagRead(0x01); ASSERT(terrainType(psTile) == terrain, "Wrong terrain");
-		texture = tagRead(0x02); ASSERT(TileNumber_tile(psTile->texture) == texture, "Wrong texture");
-		triflip = tagRead(0x03);
-		xflip = tagRead(0x04);
-		yflip = tagRead(0x05);
-		notblock = tagRead(0x06);
-		height = tagRead(0x08); ASSERT(psTile->height == height, "Wrong height");
-
-		psTile++;
-		tagReadNext();
-	}
-	tagReadLeave(0x0a);
-
-	tagClose();
-	return true;
 }
 
 /* Save the map data */
@@ -1694,13 +1011,34 @@ BOOL mapSave(char **ppFileData, UDWORD *pFileSize)
 /* Shutdown the map module */
 BOOL mapShutdown(void)
 {
-	if(psMapTiles)
+	if (psMapTiles)
 	{
 		free(psMapTiles);
 	}
+	if (mapDecals)
+	{
+		free(mapDecals);
+	}
+	if (psGroundTypes)
+	{
+		free(psGroundTypes);
+	}
+	if (map)
+	{
+		free(map);
+	}
+	if (Tile_names)
+	{
+		free(Tile_names);
+	}
+
+	map = NULL;
+	psGroundTypes = NULL;
+	mapDecals = NULL;
 	psMapTiles = NULL;
 	mapWidth = mapHeight = 0;
-
+	numTile_names = 0;
+	Tile_names = NULL;
 	return true;
 }
 
@@ -2211,11 +1549,182 @@ bool fireOnLocation(unsigned int x, unsigned int y)
 	return psTile != NULL && TileIsBurning(psTile);
 }
 
+static void dangerFloodFill(int player)
+{
+	struct ffnode *open = NULL;
+	int i;
+	Vector2i pos = getPlayerStartPosition(player);
+
+	pos.x = map_coord(pos.x);
+	pos.y = map_coord(pos.y);
+
+	do
+	{
+		MAPTILE *currTile = mapTile(pos.x, pos.y);
+
+		// Add accessible neighbouring tiles to the open list
+		for (i = 0; i < NUM_DIR; i++)
+		{
+			Vector2i npos = { pos.x + aDirOffset[i].x, pos.y + aDirOffset[i].y };
+			MAPTILE *psTile;
+
+			if (!tileOnMap(npos.x, npos.y) || (npos.x == pos.x && npos.y == pos.y))
+			{
+				continue;
+			}
+			psTile = mapTile(npos.x, npos.y);
+
+			if (!(psTile->threatBits & (1 << player)) && (psTile->dangerBits & (1 <<player)) && !fpathBlockingTile(npos.x, npos.y, PROPULSION_TYPE_WHEELED))
+			{
+				struct ffnode *node = malloc(sizeof(*node));
+
+				node->next = open;	// add to beginning of open list
+				node->x = npos.x;
+				node->y = npos.y;
+				open = node;
+			}
+		}
+
+		// Clear danger
+		currTile->dangerBits &= ~(1 << player);
+
+		// Pop the first open node off the list for the next iteration
+		if (open)
+		{
+			struct ffnode *tmp = open;
+
+			pos.x = open->x;
+			pos.y = open->y;
+			open = open->next;
+			free(tmp);
+		}
+	} while (open);
+}
+
+static inline void threatUpdateTarget(int player, BASE_OBJECT *psObj, bool ground, bool air)
+{
+	int i;
+
+	if (psObj->visible[player] || psObj->born == 2)
+	{
+		for (i = 0; i < psObj->numWatchedTiles; i++)
+		{
+			const TILEPOS pos = psObj->watchedTiles[i];
+			MAPTILE *psTile = mapTile(pos.x, pos.y);
+			if (ground)
+			{
+				psTile->threatBits |= (1 << player);			// set ground threat for this tile
+			}
+			if (air)
+			{
+				psTile->aaThreatBits |= (1 << player);			// set air threat for this tile
+			}
+		}
+	}
+}
+
+static void threatUpdate(int player)
+{
+	MAPTILE *psTile = psMapTiles;
+	int i, weapon;
+
+	// Step 1: Clear our threat bits
+	for (i = 0; i < mapWidth * mapHeight; i++, psTile++)
+	{
+		psTile->threatBits &= ~(1 << player);
+	}
+
+	// Step 2: Set threat bits
+	for (i = 0; i < MAX_PLAYERS; i++)
+	{
+		DROID *psDroid;
+		STRUCTURE *psStruct;
+
+		if (aiCheckAlliances(player, i))
+		{
+			// No need to iterate friendly objects
+			continue;
+		}
+
+		for (psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
+		{
+			UBYTE mode = 0;
+
+			if (psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT
+			    || psDroid->droidType == DROID_REPAIR || psDroid->droidType == DROID_CYBORG_REPAIR)
+			{
+				continue;	// hack that really should not be needed, but is -- trucks can SHOOT_ON_GROUND...!
+			}
+			for (weapon = 0; weapon < psDroid->numWeaps; weapon++)
+			{
+				mode |= asWeaponStats[psDroid->asWeaps[weapon].nStat].surfaceToAir;
+			}
+			if (psDroid->droidType == DROID_SENSOR)	// special treatment for sensor turrets, no multiweapon support
+			{
+				mode |= SHOOT_ON_GROUND;		// assume it only shoots at ground targets for now
+			}
+			if (mode > 0)
+			{
+				threatUpdateTarget(player, (BASE_OBJECT *)psDroid, mode & SHOOT_ON_GROUND, mode & SHOOT_IN_AIR);
+			}
+		}
+
+		for (psStruct = apsStructLists[i]; psStruct; psStruct = psStruct->psNext)
+		{
+			UBYTE mode = 0;
+
+			for (weapon = 0; weapon < psStruct->numWeaps; weapon++)
+			{
+				mode |= asWeaponStats[psStruct->asWeaps[weapon].nStat].surfaceToAir;
+			}
+			if (psStruct->pStructureType->pSensor && psStruct->pStructureType->pSensor->location == LOC_TURRET)	// special treatment for sensor turrets
+			{
+				mode |= SHOOT_ON_GROUND;		// assume it only shoots at ground targets for now
+			}
+			if (mode > 0)
+			{
+				threatUpdateTarget(player, (BASE_OBJECT *)psStruct, mode & SHOOT_ON_GROUND, mode & SHOOT_IN_AIR);
+			}
+		}
+	}
+}
+
+static void dangerUpdate(int player)
+{
+	MAPTILE *psTile = psMapTiles;
+	int i;
+
+	// Set our danger bits
+	for (i = 0; i < mapWidth * mapHeight; i++, psTile++)
+	{
+		psTile->dangerBits |= (1 << player);
+	}
+	if (game.type == SKIRMISH)
+	{
+		dangerFloodFill(player);
+	}
+	// else everything is equally dangerous
+}
+
+void mapInit()
+{
+	int player;
+
+	for (player = 0; player < MAX_PLAYERS; player++)
+	{
+		threatUpdate(player);
+		dangerUpdate(player);
+	}
+}
+
 void mapUpdate()
 {
 	uint16_t currentTime = gameTime / GAME_TICKS_PER_UPDATE;
-
+	int updatedBase = currentTime % (game.maxPlayers * 2);
+	int updatedPlayer = updatedBase / 2;
+	bool updateThreat = updatedBase % 2;
 	int posX, posY;
+
 	for (posY = 0; posY < mapHeight; ++posY)
 		for (posX = 0; posX < mapWidth; ++posX)
 	{
@@ -2230,5 +1739,13 @@ void mapUpdate()
 		}
 	}
 
-	// TODO Make waves in the water?
+	// We do only a bit of danger map update each logical frame to avoid overheating the CPU
+	if (updateThreat)
+	{
+		threatUpdate(updatedPlayer);
+	}
+	else
+	{
+		dangerUpdate(updatedPlayer);
+	}
 }

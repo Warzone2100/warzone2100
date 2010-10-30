@@ -123,7 +123,7 @@ extern void structureBuild(STRUCTURE *psStructure, DROID *psDroid, int buildPoin
 extern void structureDemolish(STRUCTURE *psStructure, DROID *psDroid, int buildPoints);
 extern BOOL structureRepair(STRUCTURE *psStruct, DROID *psDroid, int buildPoints);
 /* Set the type of droid for a factory to build */
-extern BOOL structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl);
+extern BOOL structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, QUEUE_MODE mode);
 
 //temp test function for creating structures at the start of the game
 extern void createTestStructures(void);
@@ -232,7 +232,7 @@ extern void setLasSatExists(BOOL state, UDWORD player);
 extern BOOL getLasSatExists(UDWORD player);
 
 /* added int weapon_slot to fix the alway slot 0 hack */
-extern BOOL calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3f *muzzle, int weapon_slot);
+bool calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3i *muzzle, int weapon_slot);
 
 /*this is called whenever a structure has finished building*/
 extern void buildingComplete(STRUCTURE *psBuilding);
@@ -326,13 +326,13 @@ extern void factoryLoopAdjust(STRUCTURE *psStruct, BOOL add);
 
 /*cancels the production run for the factory and returns any power that was
 accrued but not used*/
-extern void cancelProduction(STRUCTURE *psBuilding);
+extern void cancelProduction(STRUCTURE *psBuilding, QUEUE_MODE mode);
 
 /*set a factory's production run to hold*/
-extern void holdProduction(STRUCTURE *psBuilding);
+extern void holdProduction(STRUCTURE *psBuilding, QUEUE_MODE mode);
 
 /*release a factory's production run from hold*/
-extern void releaseProduction(STRUCTURE *psBuilding);
+extern void releaseProduction(STRUCTURE *psBuilding, QUEUE_MODE mode);
 
 /// Does the next item in the production list.
 void doNextProduction(STRUCTURE *psStructure, DROID_TEMPLATE *current);

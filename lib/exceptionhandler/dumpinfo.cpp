@@ -22,6 +22,7 @@
 #include <cerrno>
 #include <climits>
 #include <ctime>
+#include <cstdlib>
 #include <string>
 #include <vector>
 #include <deque>

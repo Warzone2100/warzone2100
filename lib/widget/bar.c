@@ -27,7 +27,7 @@
 #include "form.h"
 #include "bar.h"
 // FIXME Direct iVis implementation include!
-#include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_common/pieblitfunc.h"
 #include "lib/ivis_common/piepalette.h"
 
 /* Create a barGraph widget data structure */

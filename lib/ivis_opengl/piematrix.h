@@ -38,7 +38,7 @@
  * \param[in] v Vector to translate
  * \param[out] s Resulting vector
  */
-void pie_RotateTranslate3f(const Vector3f *v, Vector3f *s);
+void pie_RotateTranslate3i(const Vector3i *v, Vector3i *s);
 
 
 /*!

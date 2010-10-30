@@ -99,8 +99,6 @@ extern void	kf_multiAudioStart(void);
 extern void	kf_multiAudioStop(void);
 extern void	kf_JumpToMapMarker( void );
 extern void	kf_TogglePowerBar( void );
-extern void	kf_UpGeoOffset( void );
-extern void	kf_DownGeoOffset( void );
 extern void	kf_ToggleDebugMappings( void );
 extern void	kf_ToggleGodMode( void );
 extern void	kf_SeekNorth( void );
@@ -258,9 +256,12 @@ bool runningMultiplayer(void);
 void	kf_ForceSync( void );
 void    kf_ForceDesync(void);
 void	kf_PowerInfo( void );
+void	kf_BuildNextPage( void );
+void	kf_BuildPrevPage( void );
 
 #ifdef __cplusplus
 }
 #endif //__cplusplus
+
 
 #endif // __INCLUDED_SRC_KEYBIND_H__

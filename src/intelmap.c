@@ -30,9 +30,9 @@
 #include "lib/widget/widget.h"
 #include "lib/widget/button.h"
 /* Includes direct access to render library */
+#include "lib/ivis_common/pieblitfunc.h"
 #include "lib/ivis_common/piedef.h"
 #include "lib/ivis_common/piestate.h"
-#include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_common/piepalette.h"
 #include "lib/ivis_opengl/screen.h"
 #include "lib/ivis_common/piemode.h"

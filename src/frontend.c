@@ -26,7 +26,8 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
-#include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_common/bitimage.h"
+#include "lib/ivis_common/pieblitfunc.h"
 #include "lib/sound/mixer.h"
 #include "lib/widget/button.h"
 #include "lib/widget/label.h"
@@ -241,8 +242,6 @@ static void SPinit(void)
 {
 	uint8_t playercolor;
 
-	// FIXME: We should do a SPinit() to make sure all the variables are reset correctly.
-	// game.type is switched to SKIRMISH in startMultiOptions()
 	NetPlay.bComms = false;
 	bMultiPlayer = false;
 	bMultiMessages = false;
@@ -250,6 +249,7 @@ static void SPinit(void)
 	NET_InitPlayers();
 	NetPlay.players[0].allocated = true;
 	game.skDiff[0] = UBYTE_MAX;
+	game.maxPlayers = MAX_PLAYERS;
 	// make sure we have a valid color choice for our SP game. Valid values are 0, 4-7
 	playercolor = getPlayerColour(0);
 	if (playercolor >= 1 && playercolor <= 3)

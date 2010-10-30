@@ -514,7 +514,7 @@ BOOL scrOrderDroid(void)
 		return false;
 	}
 
-	orderDroid(psDroid, order);
+	orderDroid(psDroid, order, ModeQueue);
 
 	return true;
 }
@@ -556,7 +556,7 @@ BOOL scrOrderDroidLoc(void)
 		return false;
 	}
 
-	orderDroidLoc(psDroid, order, (UDWORD)x,(UDWORD)y);
+	orderDroidLoc(psDroid, order, x, y, ModeQueue);
 
 	return true;
 }
@@ -597,7 +597,7 @@ BOOL scrOrderDroidObj(void)
 		return false;
 	}
 
-	orderDroidObj(psDroid, order, psObj);
+	orderDroidObj(psDroid, order, psObj, ModeQueue);
 
 	return true;
 }
@@ -658,7 +658,7 @@ BOOL scrOrderDroidStatsLoc(void)
 			return true;
 		}
 
-		orderDroidStatsLocDir(psDroid, order, psStats, (UDWORD)x, (UDWORD)y, 0);
+		orderDroidStatsLocDir(psDroid, order, psStats, x, y, 0, ModeQueue);
 	}
 
 	return true;
@@ -1637,10 +1637,8 @@ BOOL scrSkDoResearch(void)
 
 	STRUCTURE			*psBuilding;
 	RESEARCH_FACILITY	*psResFacilty;
-	PLAYER_RESEARCH		*pPlayerRes;
-	RESEARCH			*pResearch;
 
-	if (!stackPopParams(3,ST_STRUCTURE, &psBuilding, VAL_INT, &player, VAL_INT,&bias ))
+	if (!stackPopParams(3, ST_STRUCTURE, &psBuilding, VAL_INT, &player, VAL_INT, &bias))
 	{
 		return false;
 	}
@@ -1654,7 +1652,7 @@ BOOL scrSkDoResearch(void)
 	}
 
 	// choose a topic to complete.
-	for(i=0;i<numResearch;i++)
+	for(i=0; i < numResearch; i++)
 	{
 		if (skTopicAvail(i, player) && (!bMultiPlayer || !beingResearchedByAlly(i, player)))
 		{
@@ -1664,39 +1662,11 @@ BOOL scrSkDoResearch(void)
 
 	if(i != numResearch)
 	{
-		pResearch = asResearch + i;
-		if (bMultiMessages)
-		{
-			sendResearchStatus(psBuilding, pResearch->ref - REF_RESEARCH_START, player, true);
-		}
-		else
-		{
-			pPlayerRes				= asPlayerResList[player]+ i;
-			psResFacilty->psSubject = (BASE_STATS*)pResearch;		  //set the subject up
-
-			if (IsResearchCancelled(pPlayerRes))
-			{
-				psResFacilty->powerAccrued = pResearch->researchPower;//set up as if all power available for cancelled topics
-			}
-			else
-			{
-				psResFacilty->powerAccrued = 0;
-			}
-
-			MakeResearchStarted(pPlayerRes);
-			psResFacilty->timeStarted = ACTION_START_TIME;
-			psResFacilty->timeStartHold = 0;
-			psResFacilty->timeToResearch = pResearch->researchPoints / 	psResFacilty->researchPoints;
-			if (psResFacilty->timeToResearch == 0)
-			{
-				psResFacilty->timeToResearch = 1;
-			}
-		}
-
+		sendResearchStatus(psBuilding, i, player, true);			// inform others, I'm researching this.
 #if defined (DEBUG)
 		{
-			char				sTemp[128];
-			sprintf(sTemp,"player:%d starts topic: %s",player, asResearch[i].pName );
+			char	sTemp[128];
+			sprintf(sTemp,"[debug]player:%d starts topic: %s",player, asResearch[i].pName );
 			NETlogEntry(sTemp, SYNC_FLAG, 0);
 		}
 #endif
@@ -2019,11 +1989,11 @@ static BOOL defenseLocation(BOOL variantB)
 	// first section.
 	if(x1 == x2 && y1 == y2)	//first sec is 1 tile only: ((2 tile gate) or (3 tile gate and first sec))
 	{
-		orderDroidStatsLocDir(psDroid, DORDER_BUILD, psWStats, x1, y1, 0);
+		orderDroidStatsLocDir(psDroid, DORDER_BUILD, psWStats, x1, y1, 0, ModeQueue);
 	}
 	else
 	{
-		orderDroidStatsTwoLocDir(psDroid, DORDER_LINEBUILD, psWStats,  x1, y1, x2, y2, 0);
+		orderDroidStatsTwoLocDir(psDroid, DORDER_LINEBUILD, psWStats,  x1, y1, x2, y2, 0, ModeQueue);
 	}
 
 	// second section
@@ -2110,6 +2080,7 @@ BOOL scrActionDroidObj(void)
 		return false;
 	}
 
+	syncDebug("TODO: Synchronise this!");
 	actionDroidObj(psDroid, action, (BASE_OBJECT *)psObj);
 
 	return true;

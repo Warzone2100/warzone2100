@@ -22,45 +22,14 @@
 #define _rendmode_h_
 
 #include "ivisdef.h"
-#include "pieblitfunc.h"
-#include "bitimage.h"
-#include "textdraw.h"
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif //__cplusplus
 
-//*************************************************************************
-//patch
-
-#define iV_Line				pie_Line
-#define iV_Box				pie_Box
-#define iV_TransBoxFill			pie_TransBoxFill
-#define iV_DrawImage			pie_ImageFileID
-#define iV_DrawImageRect		pie_ImageFileIDTile
-
-//*************************************************************************
-// polygon flags	b0..b7: col, b24..b31: anim index
-
-#define PIE_NO_CULL			0x00002000
-
-//*************************************************************************
-
-#define REND_SURFACE_UNDEFINED		0
-#define REND_SURFACE_SCREEN		1
-#define REND_SURFACE_USR		2
-
-//*************************************************************************
-
-extern iSurface rendSurface;
-extern iSurface *psRendSurface;
-
-//*************************************************************************
-
-extern void iV_RenderAssign(iSurface *s);
 extern void iV_SurfaceDestroy(iSurface *s);
-extern iSurface *iV_SurfaceCreate(uint32_t flags, int width, int height, uint8_t *buffer);
+extern iSurface *iV_SurfaceCreate(int width, int height);
 
 #ifdef __cplusplus
 }

@@ -31,7 +31,7 @@
 #include "editbox.h"
 #include "form.h"
 // FIXME Direct iVis implementation include!
-#include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_common/pieblitfunc.h"
 #include "lib/ivis_common/textdraw.h"
 
 
@@ -250,65 +250,93 @@ static void delCharLeft(utf_32_char *pBuffer, UDWORD *pPos)
 static void fitStringStart(utf_32_char *pBuffer, UDWORD boxWidth, UWORD *pCount, UWORD *pCharWidth)
 {
 	UDWORD		len;
-	UWORD		printWidth, printChars, width;
-	utf_32_char		*pCurr;
+	UWORD	printChars = 0, pixelWidth = 0;
+	char *utf = NULL;
+	char *utf2 = NULL;
 
-	len = utf32len(pBuffer);
-	printWidth = 0;
-	printChars = 0;
-	pCurr = pBuffer;
-
-	/* Find the number of characters that will fit in boxWidth */
-	while (printChars < len)
+	utf = UTF32toUTF8(pBuffer, NULL);
+	if (!utf)
 	{
-		width = (UWORD)(printWidth + iV_GetCharWidth(*pCurr));
-		if (width > boxWidth - WEDB_XGAP*2)
-		{
-			/* We've got as many characters as will fit in the box */
-			break;
-		}
-		printWidth = width;
-		printChars += 1;
-		pCurr += 1;
+		debug(LOG_ERROR, "Couldn't convert UTF32 to UTF8?");
+		*pCount = *pCharWidth = 0;
+		return;
 	}
+	len = strlen(utf);
 
-	/* Return the number of characters and their width */
-	*pCount = printChars;
-	*pCharWidth = printWidth;
+	// We need to calculate the whole string's pixel size.
+	// From QuesoGLC's notes: additional processing like kerning creates strings of text whose dimensions are not directly
+	// related to the simple juxtaposition of individual glyph metrics. For example, the advance width of "VA" isn't the
+	// sum of the advances of "V" and "A" taken separately.
+	pixelWidth = iV_GetTextWidth(utf);
+
+	// Find the number of characters that will fit in boxWidth
+	if (pixelWidth < boxWidth - (WEDB_XGAP*2 + WEDB_CURSORSIZE))
+	{
+		*pCharWidth = pixelWidth;	// the actual pixelWidth we use for the string
+		*pCount = len;				// and the length of said string.
+	}
+	else
+	{
+		utf2 = utf;
+		do
+		{
+			pixelWidth = iV_GetTextWidth(utf2);
+			printChars++;
+			utf2[(len - printChars)] = 0;				// keep chopping off end until it fits
+		}
+		while (pixelWidth > boxWidth - (WEDB_XGAP*2 + WEDB_CURSORSIZE) && printChars < len);
+
+		*pCharWidth = pixelWidth;				// the actual pixelWidth we use for the string
+		*pCount = len - printChars;				// and the length of the new string.
+	}
+	free(utf);	// release the utf buffer
 }
 
 
 /* Calculate how much of the end of a string can fit into the edit box */
 static void fitStringEnd(utf_32_char *pBuffer, UDWORD boxWidth, UWORD *pStart, UWORD *pCount, UWORD *pCharWidth)
 {
-	UDWORD		len;
-	UWORD		printWidth, printChars, width;
-	utf_32_char		*pCurr;
+	UDWORD	len;
+	UWORD	printChars = 0, pixelWidth = 0;
+	char *utf = NULL;
+	char *utf2 = NULL;
 
-	len = utf32len(pBuffer);
-
-	pCurr = pBuffer + len - 1;
-	printChars = 0;
-	printWidth = 0;
-
-	/* Find the number of characters that will fit in boxWidth */
-	while (printChars < len)
+	utf = UTF32toUTF8(pBuffer, NULL);
+	if (!utf)
 	{
-		width = (UWORD)(printWidth + iV_GetCharWidth(*pCurr));
-		if (width > boxWidth - (WEDB_XGAP*2 + WEDB_CURSORSIZE))
-		{
-			/* Got as many characters as will fit into the box */
-			break;
-		}
-		printWidth = width;
-		printChars += 1;
-		pCurr -= 1;
+		debug(LOG_ERROR, "Couldn't convert UTF32 to UTF8?");
+		*pCount = *pStart = *pCharWidth = 0;
+		return;
 	}
+	len = strlen(utf);
 
-	/* Return the number of characters and their width */
-	*pStart = (UWORD)(len - printChars);
-	*pCount = printChars;
-	*pCharWidth = printWidth;
+	// We need to calculate the whole string's pixel size.
+	// From QuesoGLC's notes: additional processing like kerning creates strings of text whose dimensions are not directly
+	// related to the simple juxtaposition of individual glyph metrics. For example, the advance width of "VA" isn't the
+	// sum of the advances of "V" and "A" taken separately.
+	pixelWidth = iV_GetTextWidth(utf);
+
+	// Find the number of characters that will fit in boxWidth
+	if (pixelWidth < boxWidth - (WEDB_XGAP*2 + WEDB_CURSORSIZE))
+	{
+		*pStart = 0 ;				// nothing to trim
+		*pCharWidth = pixelWidth;	// the actual pixelWidth we use for the string
+		*pCount = len;				// and the length of said string.
+	}
+	else
+	{
+		utf2 = utf;
+		while (pixelWidth > boxWidth - (WEDB_XGAP*2 + WEDB_CURSORSIZE) && printChars < len)
+		{
+			utf2++;								// new string is 1 char shorter [abc] is now [bc]
+			pixelWidth = iV_GetTextWidth(utf2);
+			printChars++;
+		}
+		*pStart = len - (len - printChars);		// the starting position of the string to display
+		*pCharWidth = pixelWidth;				// the actual pixelWidth we use for the string
+		*pCount = len - printChars;				// and the length of the new string.
+	}
+	free(utf);	// release the utf buffer
 }
 
 

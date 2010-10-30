@@ -84,7 +84,8 @@ BOOL sendBuildStarted(STRUCTURE *psStruct, DROID *psDroid)
 		}
 		else
 		{
-			NETnull();
+			uint32_t zero = 0;
+			NETuint32_t(&zero);
 		}
 
 	return NETend();
@@ -408,6 +409,7 @@ BOOL recvLasSat(NETQUEUE queue)
 	{
 		// Give enemy no quarter, unleash the lasat
 		proj_SendProjectile(&psStruct->asWeaps[0], NULL, player, psObj->pos, psObj, true, 0);
+		psStruct->asWeaps[0].lastFired = gameTime;
 
 		// Play 5 second countdown message
 		audio_QueueTrackPos( ID_SOUND_LAS_SAT_COUNTDOWN, psObj->pos.x, psObj->pos.y, psObj->pos.z);
@@ -487,19 +489,17 @@ void recvStructureInfo(NETQUEUE queue)
 
 	syncDebugStructure(psStruct, '<');
 
-	turnOffMultiMsg(true);
 	switch (structureInfo)
 	{
-		case STRUCTUREINFO_MANUFACTURE:       structSetManufacture(psStruct, psTempl); break;
-		case STRUCTUREINFO_CANCELPRODUCTION:  cancelProduction(psStruct);              break;
-		case STRUCTUREINFO_HOLDPRODUCTION:    holdProduction(psStruct);                break;
-		case STRUCTUREINFO_RELEASEPRODUCTION: releaseProduction(psStruct);             break;
-		case STRUCTUREINFO_HOLDRESEARCH:      holdResearch(psStruct);                  break;
-		case STRUCTUREINFO_RELEASERESEARCH:   releaseResearch(psStruct);               break;
+		case STRUCTUREINFO_MANUFACTURE:       structSetManufacture(psStruct, psTempl, ModeImmediate); break;
+		case STRUCTUREINFO_CANCELPRODUCTION:  cancelProduction(psStruct, ModeImmediate);              break;
+		case STRUCTUREINFO_HOLDPRODUCTION:    holdProduction(psStruct, ModeImmediate);                break;
+		case STRUCTUREINFO_RELEASEPRODUCTION: releaseProduction(psStruct, ModeImmediate);             break;
+		case STRUCTUREINFO_HOLDRESEARCH:      holdResearch(psStruct, ModeImmediate);                  break;
+		case STRUCTUREINFO_RELEASERESEARCH:   releaseResearch(psStruct, ModeImmediate);               break;
 		default:
 			debug(LOG_ERROR, "Invalid structureInfo %d", structureInfo);
 	}
-	turnOffMultiMsg(false);
 
 	syncDebugStructure(psStruct, '>');
 

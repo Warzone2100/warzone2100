@@ -45,6 +45,8 @@ extern BOOL scrGetPlayer(void);
 extern BOOL scrScavengersActive(void);
 extern BOOL scrGetPlayerStartPosition(void);
 
+extern Vector2i getPlayerStartPosition(int player);
+
 // not used in scripts, but used in code.
 extern  BOOL objectInRange(struct BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range);
 

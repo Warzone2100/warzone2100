@@ -27,7 +27,7 @@
 #include "lib/framework/fixedpoint.h"
 #include "lib/ivis_common/pieclip.h"
 #include "piematrix.h"
-#include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_common/piemode.h"
 
 /***************************************************************************/
 /*
@@ -325,8 +325,8 @@ int32_t pie_RotateProject(const Vector3i *v3d, Vector2i *v2d)
 	}
 	else
 	{
-		v2d->x = psRendSurface->xcentre + (v.x / zz);
-		v2d->y = psRendSurface->ycentre - (v.y / zz);
+		v2d->x = rendSurface.xcentre + (v.x / zz);
+		v2d->y = rendSurface.ycentre - (v.y / zz);
 	}
 
 	return zz;
@@ -342,8 +342,8 @@ void pie_PerspectiveBegin(void)
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glTranslatef(
-		(2 * psRendSurface->xcentre-width) / width,
-		(height - 2 * psRendSurface->ycentre) / height,
+		(2 * rendSurface.xcentre-width) / width,
+		(height - 2 * rendSurface.ycentre) / height,
 		0);
 	glFrustum(-xangle, xangle, -yangle, yangle, 330, 100000);
 	glScalef(1, 1, -1);
@@ -372,8 +372,8 @@ void pie_BeginInterface(void)
 
 void pie_SetGeometricOffset(int x, int y)
 {
-	psRendSurface->xcentre = x;
-	psRendSurface->ycentre = y;
+	rendSurface.xcentre = x;
+	rendSurface.ycentre = y;
 }
 
 
@@ -400,15 +400,15 @@ void pie_MatInit(void)
 	pie_MatReset();
 }
 
-void pie_RotateTranslate3f(const Vector3f *v, Vector3f *s)
+void pie_RotateTranslate3i(const Vector3i *v, Vector3i *s)
 {
 	/*
-	 * s = curMatrix . v
+	 *     [ 1 0 0 0 ]               [ 1 0 0 0 ]
+	 *     [ 0 0 1 0 ]               [ 0 0 1 0 ]
+	 * s = [ 0 1 0 0 ] . curMatrix . [ 0 1 0 0 ] . v
+	 *     [ 0 0 0 1 ]               [ 0 0 0 1 ]
 	 */
-	s->x = ( v->x * psMatrix->a + v->z * psMatrix->d + v->y * psMatrix->g
-			+ psMatrix->j ) / FP12_MULTIPLIER;
-	s->z = ( v->x * psMatrix->b + v->z * psMatrix->e + v->y * psMatrix->h
-			+ psMatrix->k ) / FP12_MULTIPLIER;
-	s->y = ( v->x * psMatrix->c + v->z * psMatrix->f + v->y * psMatrix->i
-			+ psMatrix->l ) / FP12_MULTIPLIER;
+	s->x = ((int64_t)v->x * psMatrix->a + (int64_t)v->y * psMatrix->g + (int64_t)v->z * psMatrix->d + psMatrix->j) / FP12_MULTIPLIER;
+	s->y = ((int64_t)v->x * psMatrix->c + (int64_t)v->y * psMatrix->i + (int64_t)v->z * psMatrix->f + psMatrix->l) / FP12_MULTIPLIER;
+	s->z = ((int64_t)v->x * psMatrix->b + (int64_t)v->y * psMatrix->h + (int64_t)v->z * psMatrix->e + psMatrix->k) / FP12_MULTIPLIER;
 }

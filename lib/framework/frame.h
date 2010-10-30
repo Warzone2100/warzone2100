@@ -55,6 +55,13 @@ extern uint32_t realSelectedPlayer;  ///< The player number corresponding to thi
 #define MAX_PLAYERS		8	/**< Maximum number of players in the game. */
 #define MAX_PLAYER_SLOTS	10	/**< 8 players, 1 baba and 1 reserved for features. */
 
+typedef enum
+{
+	ModeQueue,      ///< Sends a message on the game queue, which will get synchronised, by sending a GAME_ message.
+	ModeImmediate   ///< Performs the action immediately. Must already have been synchronised, for example by sending a GAME_ message.
+} QUEUE_MODE;
+
+
 /** Initialise the framework library
  *  @param pWindowName the text to appear in the window title bar
  *  @param width the display widget

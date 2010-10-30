@@ -35,7 +35,8 @@
 
 /* Includes direct access to render library */
 #include "lib/ivis_common/ivisdef.h"
-#include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_common/bitimage.h"
+#include "lib/ivis_common/pieblitfunc.h"
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/piematrix.h"//matrix code
 #include "lib/ivis_common/piestate.h"
@@ -4093,11 +4094,7 @@ void intProcessDesign(UDWORD id)
 			/* remove template if found */
 			if ( psTempl )
 			{
-
-				if (bMultiMessages)		//ajl. inform others of template destruction.
-				{
-					SendDestroyTemplate(psTempl);
-				}
+				SendDestroyTemplate(psTempl);
 
 				//update player template list.
 				{
@@ -4124,7 +4121,7 @@ void intProcessDesign(UDWORD id)
 
 				// Delete the template.
 				//before deleting the template, need to make sure not being used in production
-				deleteTemplateFromProduction(psTempl, (UBYTE)selectedPlayer);
+				deleteTemplateFromProduction(psTempl, selectedPlayer, ModeQueue);
 				free(psTempl);
 
 				/* get previous template and set as current */
@@ -4656,7 +4653,7 @@ static BOOL saveTemplate(void)
 			newTemplate = false;
 			/*ANY change to the template affect the production - even if the
 			template is changed and then changed back again!*/
-			deleteTemplateFromProduction(psTempl, (UBYTE)selectedPlayer);
+			deleteTemplateFromProduction(psTempl, selectedPlayer, ModeQueue);
 			SendDestroyTemplate(psTempl);
 			sCurrDesign.multiPlayerID = generateNewObjectId();
 		}

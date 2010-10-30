@@ -461,8 +461,6 @@ void	keyInitMappings( BOOL bForceDefaults )
 //  ------------------------ OLD STUFF - Store here!
 	/*
 	keyAddMapping(KEYMAP__DEBUG, KEY_LSHIFT, KEY_D, KEYMAP_PRESSED, kf_ToggleDrivingMode, 			"Toggle Driving Mode");
-	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_F6, KEYMAP_DOWN, kf_UpGeoOffset,"Raise the geometric offset");
-	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_F7, KEYMAP_DOWN, kf_DownGeoOffset,"Lower the geometric offset");
 	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_E, KEYMAP_PRESSED, kf_ToggleDroidInfo,"Display droid info whilst tracking");
 	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_I, KEYMAP_PRESSED, kf_ToggleWidgets,"Toggle Widgets");
 	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_J, KEYMAP_PRESSED, kf_ToggleRadarAllign,"Toggles Radar allignment");

@@ -38,7 +38,6 @@
 #include "multiplay.h"
 #include "astar.h"
 #include "action.h"
-#include "formation.h"
 
 #include "fpath.h"
 

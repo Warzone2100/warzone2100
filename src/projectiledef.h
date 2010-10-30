@@ -52,11 +52,9 @@ typedef struct PROJECTILE
 	BASE_OBJECT **  psDamaged;              ///< the targets that have already been dealt damage to (don't damage the same target twice)
 	unsigned        psNumDamaged;
 
-	UDWORD          startX, startY;         ///< Where projectile started
-	UDWORD          tarX, tarY;             ///< The target coordinates
+	Vector3i        src;                    ///< Where projectile started
+	Vector3i        dst;                    ///< The target coordinates
 	SDWORD          vXY, vZ;                ///< axis velocities
-	UDWORD          srcHeight;              ///< Height of origin
-	SDWORD          altChange;              ///< Change in altitude
 	SPACETIME       prevSpacetime;          ///< Location of projectile in previous tick.
 	UDWORD          expectedDamageCaused;   ///< Expected damage that this projectile will cause to the target.
 } PROJECTILE;

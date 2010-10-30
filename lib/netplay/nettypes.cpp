@@ -642,16 +642,6 @@ void NETbool(BOOL *bp)
 	*bp = !!i;
 }
 
-/*
- * NETnull should be used to either add 4 bytes of padding to a message, or to
- * discard 4 bytes of data from a message.
- */
-void NETnull()
-{
-	uint32_t zero = 0;
-	NETuint32_t(&zero);
-}
-
 /** Sends or receives a string to or from the current network package.
  *  \param str    When encoding a packet this is the (NUL-terminated string to
  *                be sent in the current network package. When decoding this

@@ -68,8 +68,6 @@ typedef enum _terrain_type
 #define TILE_ROTMASK	0x3000
 #define TILE_ROTSHIFT	12
 #define TILE_TRIFLIP	0x0800	// This bit describes the direction the tile is split into 2 triangles (same as triangleFlip)
-#define TILE_HILIGHT	0x0400	// set when the tile has the structure cursor over it
-
 #define TILE_NUMMASK	0x01ff
 
 
@@ -103,10 +101,13 @@ typedef struct _maptile
 	uint8_t			tileInfoBits;
 	uint8_t			tileExploredBits;
 	uint8_t			sensorBits;		// bit per player, who can see tile with sensor
-	float			height;			// The height at the top left of the tile
+	uint8_t			dangerBits;		// bit per player, does AI sense danger going there? not always up to date
+	uint8_t			threatBits;		// bit per player, can hostile players shoot here? not always up to date
+	uint8_t			aaThreatBits;		// bit per player, can hostile players shoot at my VTOLs here?
 	uint8_t			illumination;	// How bright is this tile?
-	uint16_t		texture;		// Which graphics texture is on this tile
 	uint8_t			watchers[MAX_PLAYERS];		// player sees through fog of war here with this many objects
+	uint16_t		texture;		// Which graphics texture is on this tile
+	float			height;			// The height at the top left of the tile
 	float			level;
 	BASE_OBJECT		*psObject;		// Any object sitting on the location (e.g. building)
 	PIELIGHT		colour;
@@ -161,12 +162,6 @@ static inline bool tileIsExplored(const MAPTILE *psTile)
 	return psTile->tileExploredBits & (1 << selectedPlayer);
 }
 
-/** Check if tile is highlighted by the user. Function is thread-safe. */
-static inline bool TileIsHighlighted(const MAPTILE* tile)
-{
-	return tile->texture & TILE_HILIGHT;
-}
-
 /** Check if tile is not blocking, even if structure or feature on it */
 static inline bool TileIsNotBlocking(const MAPTILE *tile)
 {
@@ -192,9 +187,6 @@ static inline bool TileHasSmallStructure(const MAPTILE* tile)
 #define SET_TILE_DECAL(x)	((x)->tileInfoBits |= BITS_DECAL)
 #define CLEAR_TILE_DECAL(x)	((x)->tileInfoBits &= ~BITS_DECAL)
 #define TILE_HAS_DECAL(x)	((x)->tileInfoBits & BITS_DECAL)
-
-#define SET_TILE_HIGHLIGHT(x)	((x)->texture |= TILE_HILIGHT)
-#define CLEAR_TILE_HIGHLIGHT(x)	((x)->texture &= ~TILE_HILIGHT)
 
 #define SET_TILE_TALLSTRUCTURE(x)	((x)->tileInfoBits |= BITS_TALLSTRUCTURE)
 #define CLEAR_TILE_TALLSTRUCTURE(x)	((x)->tileInfoBits &= ~BITS_TALLSTRUCTURE)
@@ -299,10 +291,6 @@ extern BOOL mapLoad(char *filename);
 
 /* Save the map data */
 extern BOOL mapSave(char **ppFileData, UDWORD *pFileSize);
-
-/* New savegame format */
-BOOL mapSaveTagged(char *pFileName);
-BOOL mapLoadTagged(char *pFileName);
 
 /** Return a pointer to the tile structure at x,y in map coordinates */
 static inline WZ_DECL_PURE MAPTILE *mapTile(int32_t x, int32_t y)
@@ -448,6 +436,7 @@ static inline bool hasSensorOnTile(MAPTILE *psTile, unsigned player)
 	return ((player == selectedPlayer && godMode) || (alliancebits[selectedPlayer] & (satuplinkbits | psTile->sensorBits)));
 }
 
+void mapInit(void);
 void mapUpdate(void);
 
 #ifdef __cplusplus

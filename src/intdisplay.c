@@ -37,6 +37,7 @@
 #include "lib/ivis_common/pieblitfunc.h"
 
 // FIXME Direct iVis implementation include!
+#include "lib/ivis_common/bitimage.h"
 #include "lib/ivis_common/rendmode.h"
 #include "lib/ivis_opengl/piematrix.h"
 
@@ -335,9 +336,9 @@ void intUpdateQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 		Quantity = getProductionQuantity(Structure, psTemplate);
 		Built = getProductionBuilt(Structure, psTemplate);
 		snprintf(Label->aText, sizeof(Label->aText), "%02d", Quantity - Built);
-		if (Quantity - Built <= 0)
+		if (Quantity - Built <= 0)	// zero is always the case for script added production
 		{
-			snprintf(Label->aText, sizeof(Label->aText), "BUG! (e) %d-%d", Quantity, Built);
+			sstrcpy(Label->aText, "01");
 		}
 		Label->style &= ~WIDG_HIDDEN;
 	}
@@ -1858,7 +1859,7 @@ void InitialiseButtonData(void)
 	for(i=0; i<NUM_OBJECTSURFACES; i++) {
 		ObjectSurfaces[i].Buffer = (UBYTE*)malloc(Width*Height);
 		ASSERT( ObjectSurfaces[i].Buffer!=NULL,"intInitialise : Failed to allocate Object surface" );
-		ObjectSurfaces[i].Surface = iV_SurfaceCreate(REND_SURFACE_USR,Width,Height,ObjectSurfaces[i].Buffer);
+		ObjectSurfaces[i].Surface = iV_SurfaceCreate(Width,Height);
 		ASSERT( ObjectSurfaces[i].Surface!=NULL,"intInitialise : Failed to create Object surface" );
 	}
 
@@ -1870,7 +1871,7 @@ void InitialiseButtonData(void)
 	for(i=0; i<NUM_SYSTEM0SURFACES; i++) {
 		System0Surfaces[i].Buffer = (UBYTE*)malloc(Width*Height);
 		ASSERT( System0Surfaces[i].Buffer!=NULL,"intInitialise : Failed to allocate System0 surface" );
-		System0Surfaces[i].Surface = iV_SurfaceCreate(REND_SURFACE_USR,Width,Height,System0Surfaces[i].Buffer);
+		System0Surfaces[i].Surface = iV_SurfaceCreate(Width,Height);
 		ASSERT( System0Surfaces[i].Surface!=NULL,"intInitialise : Failed to create System0 surface" );
 	}
 
@@ -1882,7 +1883,7 @@ void InitialiseButtonData(void)
 	for(i=0; i<NUM_TOPICSURFACES; i++) {
 		TopicSurfaces[i].Buffer = (UBYTE*)malloc(WidthTopic*HeightTopic);
 		ASSERT( TopicSurfaces[i].Buffer!=NULL,"intInitialise : Failed to allocate Topic surface" );
-		TopicSurfaces[i].Surface = iV_SurfaceCreate(REND_SURFACE_USR,WidthTopic,HeightTopic,TopicSurfaces[i].Buffer);
+		TopicSurfaces[i].Surface = iV_SurfaceCreate(WidthTopic,HeightTopic);
 		ASSERT( TopicSurfaces[i].Surface!=NULL,"intInitialise : Failed to create Topic surface" );
 	}
 
@@ -1894,7 +1895,7 @@ void InitialiseButtonData(void)
 	for(i=0; i<NUM_STATSURFACES; i++) {
 		StatSurfaces[i].Buffer = (UBYTE*)malloc(Width*Height);
 		ASSERT( StatSurfaces[i].Buffer!=NULL,"intInitialise : Failed to allocate Stats surface" );
-		StatSurfaces[i].Surface = iV_SurfaceCreate(REND_SURFACE_USR,Width,Height,StatSurfaces[i].Buffer);
+		StatSurfaces[i].Surface = iV_SurfaceCreate(Width,Height);
 		ASSERT( StatSurfaces[i].Surface!=NULL,"intInitialise : Failed to create Stat surface" );
 	}
 
@@ -2115,11 +2116,11 @@ void ClearButton(BOOL Down,UDWORD Size, UDWORD buttonType)
 {
 	if(Down)
 	{
-		pie_ImageFileID(IntImages,(UWORD)(IMAGE_BUT0_DOWN+(buttonType*2)),ButXPos,ButYPos);
+		iV_DrawImage(IntImages,(UWORD)(IMAGE_BUT0_DOWN+(buttonType*2)),ButXPos,ButYPos);
 	}
 	else
 	{
-		pie_ImageFileID(IntImages,(UWORD)(IMAGE_BUT0_UP+(buttonType*2)),ButXPos,ButYPos);
+		iV_DrawImage(IntImages,(UWORD)(IMAGE_BUT0_UP+(buttonType*2)),ButXPos,ButYPos);
 	}
 }
 
@@ -2203,11 +2204,19 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 
 		if(IMDType == IMDTYPE_DROID)
 		{
-			if(((DROID*)Object)->droidType == DROID_TRANSPORTER) {
+			if(((DROID*)Object)->droidType == DROID_TRANSPORTER)
+			{
 				Position.x = 0;
 				Position.y = 0;//BUT_TRANSPORTER_ALT;
 				Position.z = BUTTON_DEPTH;
-				scale = DROID_BUT_SCALE/2;
+				if ((!strcmp("Cyborg Transport",((DROID*)Object)->aName)))
+				{
+					scale = DROID_BUT_SCALE/2;
+				}
+				else
+				{
+					scale = DROID_BUT_SCALE/3;
+				}
 			}
 			else
 			{
@@ -2217,11 +2226,19 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 		}
 		else//(IMDType == IMDTYPE_DROIDTEMPLATE)
 		{
-			if(((DROID_TEMPLATE*)Object)->droidType == DROID_TRANSPORTER) {
+			if(((DROID_TEMPLATE*)Object)->droidType == DROID_TRANSPORTER)
+			{
 				Position.x = 0;
 				Position.y = 0;//BUT_TRANSPORTER_ALT;
 				Position.z = BUTTON_DEPTH;
-				scale = DROID_BUT_SCALE/2;
+				if ((!strcmp("Cyborg Transport",((DROID_TEMPLATE*)Object)->aName)))
+				{
+					scale = DROID_BUT_SCALE/2;
+				}
+				else
+				{
+					scale = DROID_BUT_SCALE/3;
+				}
 			}
 			else
 			{
@@ -2285,6 +2302,11 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 			//scale = COMP_BUT_SCALE;
 			//ASSERT( Radius <= OBJECT_RADIUS,"Object too big for button - %s",
 			//		((BASE_STATS*)Object)->pName );
+			// NOTE: The Super transport is huge, and is considered a component type, so refit it to inside the button.
+			if ((!strcmp("MP-SuperTransportBody",((BASE_STATS*)Object)->pName)))
+			{
+				scale /= 2;
+			}
 		}
 		else if(IMDType == IMDTYPE_RESEARCH)
 		{

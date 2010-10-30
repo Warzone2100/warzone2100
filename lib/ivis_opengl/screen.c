@@ -320,33 +320,16 @@ void screen_Upload(const char *newBackDropBmp, BOOL preview)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	}
 
-	glPushMatrix();
-	glTranslatef(x1, y1, 0);
-	glScalef(x2 - x1, y2 - y1, 1);
-	glMatrixMode(GL_TEXTURE);
-	glPushMatrix(); // texture matrix
-	glScalef(tx, ty, 1);
-	{
-		const Vector2i vertices[] = {
-			{ 0, 0 },
-			{ 1, 0 },
-			{ 0, 1 },
-			{ 1, 1 },
-		};
-
-		glVertexPointer(2, GL_INT, 0, vertices);
-		glEnableClientState(GL_VERTEX_ARRAY);
-
-		glTexCoordPointer(2, GL_INT, 0, vertices);
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-
-		glDrawArrays(GL_TRIANGLE_STRIP, 0, ARRAY_SIZE(vertices));
-		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-		glDisableClientState(GL_VERTEX_ARRAY);
-	}
-	glPopMatrix(); // texture matrix
-	glMatrixMode(GL_MODELVIEW);
-	glPopMatrix();
+	glBegin(GL_TRIANGLE_STRIP);
+		glTexCoord2f(0, 0);
+		glVertex2f(x1, y1);
+		glTexCoord2f(tx, 0);
+		glVertex2f(x2, y1);
+		glTexCoord2f(0, ty);
+		glVertex2f(x1, y2);
+		glTexCoord2f(tx, ty);
+		glVertex2f(x2, y2);
+	glEnd();
 
 	if (preview)
 	{

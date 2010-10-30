@@ -37,7 +37,8 @@
 #include "lib/widget/editbox.h"
 #include "lib/widget/widget.h"
 #include "lib/ivis_common/piepalette.h"		// for predefined colours.
-#include "lib/ivis_common/rendmode.h"		// for boxfill
+#include "lib/ivis_common/bitimage.h"
+#include "lib/ivis_common/pieblitfunc.h"		// for boxfill
 #include "hci.h"
 #include "loadsave.h"
 #include "multiplay.h"
@@ -627,7 +628,12 @@ void removeWildcards(char *pStr)
 	{
 		pStr[MAX_SAVE_NAME - 1] = 0;
 	}
-
+	else if (strlen(pStr) == 0)
+	{
+		pStr[0] = '!';
+		pStr[1] = 0;
+		return;
+	}
 	// Trim trailing spaces
 	for (i = strlen(pStr); i > 0 && pStr[i - 1] == ' '; --i)
 	{}

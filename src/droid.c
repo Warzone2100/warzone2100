@@ -60,8 +60,6 @@
 #include "function.h"
 #include "lighting.h"
 #include "multiplay.h"
-#include "formationdef.h"
-#include "formation.h"
 #include "warcam.h"
 #include "display3d.h"
 #include "group.h"
@@ -317,12 +315,6 @@ void droidRelease(DROID *psDroid)
 
 	fpathRemoveDroidData(psDroid->id);
 
-	// leave the current formation if any
-	if (psDroid->sMove.psFormation)
-	{
-		formationLeave(psDroid->sMove.psFormation, psDroid);
-	}
-
 	// leave the current group if any
 	if (psDroid->psGroup)
 	{
@@ -420,13 +412,6 @@ void	removeDroidBase(DROID *psDel)
 		const bool bRet = animObj_Remove(psDel->psCurAnim, psDel->psCurAnim->psAnim->uwID);
 		ASSERT(bRet, "animObj_Remove failed");
 		psDel->psCurAnim = NULL;
-	}
-
-	// leave the current formation if any
-	if (psDel->sMove.psFormation)
-	{
-		formationLeave(psDel->sMove.psFormation, psDel);
-		psDel->sMove.psFormation = NULL;
 	}
 
 	//kill all the droids inside the transporter
@@ -586,13 +571,6 @@ BOOL droidRemove(DROID *psDroid, DROID *pList[MAX_PLAYERS])
 		return false;
 	}
 
-	// leave the current formation if any
-	if (psDroid->sMove.psFormation)
-	{
-		formationLeave(psDroid->sMove.psFormation, psDroid);
-		psDroid->sMove.psFormation = NULL;
-	}
-
 	// leave the current group if any - not if its a Transporter droid
 	if (psDroid->droidType != DROID_TRANSPORTER && psDroid->psGroup)
 	{
@@ -694,20 +672,35 @@ void droidBurn(DROID *psDroid)
 	audio_PlayObjDynamicTrack( psDroid, ID_SOUND_BARB_SCREAM+(rand()%3), NULL );
 
 	/* set droid running */
-	orderDroid( psDroid, DORDER_RUNBURN );
+	orderDroid(psDroid, DORDER_RUNBURN, ModeImmediate);
 }
 
 void _syncDebugDroid(const char *function, DROID *psDroid, char ch)
 {
-	_syncDebug(function, "%c droid%d = p%d;pos(%d.%d,%d.%d,%d),ord%d(%d,%d),act%d,so%X,bp%d, power = %"PRId64"", ch,
+	char actTar[DROID_MAXWEAPS*15];
+	unsigned actTarLen = 0;
+	unsigned i;
+	actTar[0] = '\0';
+	for (i = 0; i < psDroid->numWeaps; ++i)
+	{
+		actTarLen += sprintf(actTar + actTarLen, "_%u", psDroid->psActionTarget[i]? psDroid->psActionTarget[i]->id : 0);
+	}
+
+	_syncDebug(function, "%c droid%d = p%d;pos(%d.%d,%d.%d,%d),rot(%d,%d,%d),ord%d(%d,%d),act%d%s,so%X,bp%d,sMove(st%d,spd%d,mdir%d,path%d/%d,src(%d,%d),tar(%d,%d),dst(%d,%d),bump(%d,%d,%d,%d,(%d,%d),%d)), power = %"PRId64"", ch,
 	          psDroid->id,
 
 	          psDroid->player,
 	          psDroid->pos.x, psDroid->sMove.eBitX, psDroid->pos.y, psDroid->sMove.eBitY, psDroid->pos.z,
+	          psDroid->rot.direction, psDroid->rot.pitch, psDroid->rot.roll,
 	          psDroid->order, psDroid->orderX, psDroid->orderY,
-	          psDroid->action,
+	          psDroid->action, actTar,
 	          psDroid->secondaryOrder,
 	          psDroid->body,
+	          psDroid->sMove.Status,
+	          psDroid->sMove.speed, psDroid->sMove.moveDir,
+	          psDroid->sMove.Position, psDroid->sMove.numPoints,
+	          psDroid->sMove.srcX, psDroid->sMove.srcY, psDroid->sMove.targetX, psDroid->sMove.targetY, psDroid->sMove.DestinationX, psDroid->sMove.DestinationY,
+	          psDroid->sMove.bumpDir, psDroid->sMove.bumpTime, psDroid->sMove.lastBump, psDroid->sMove.pauseTime, psDroid->sMove.bumpX, psDroid->sMove.bumpY, psDroid->sMove.shuffleStart,
 
 	          getPrecisePower(psDroid->player));
 }
@@ -766,6 +759,8 @@ void droidUpdate(DROID *psDroid)
 
 	// update the action of the droid
 	actionUpdateDroid(psDroid);
+
+	syncDebugDroid(psDroid, 'M');
 
 	// update the move system
 	moveUpdateDroid(psDroid);
@@ -3047,7 +3042,7 @@ void	setSelectedCommander(UDWORD commander)
 /**
  * calculate muzzle tip location in 3d world
  */
-BOOL calcDroidMuzzleLocation(DROID *psDroid, Vector3f *muzzle, int weapon_slot)
+bool calcDroidMuzzleLocation(DROID *psDroid, Vector3i *muzzle, int weapon_slot)
 {
 	iIMDShape *psBodyImd = BODY_IMD(psDroid, psDroid->player);
 
@@ -3055,7 +3050,7 @@ BOOL calcDroidMuzzleLocation(DROID *psDroid, Vector3f *muzzle, int weapon_slot)
 
 	if (psBodyImd && psBodyImd->nconnectors)
 	{
-		Vector3f barrel = {0.0f, 0.0f, 0.0f};
+		Vector3i barrel = {0, 0, 0};
 		iIMDShape *psWeaponImd = 0, *psMountImd = 0;
 
 		if (psDroid->asWeaps[weapon_slot].nStat)
@@ -3099,19 +3094,19 @@ BOOL calcDroidMuzzleLocation(DROID *psDroid, Vector3f *muzzle, int weapon_slot)
 				connector_num = (psDroid->asWeaps[weapon_slot].shotsFired - 1) % (psWeaponImd->nconnectors);
 			}
 			
-			barrel = Vector3f_Init(psWeaponImd->connectors[connector_num].x,
+			barrel = Vector3i_Init(psWeaponImd->connectors[connector_num].x,
 									-psWeaponImd->connectors[connector_num].y,
 									-psWeaponImd->connectors[connector_num].z);
 		}
 
-		pie_RotateTranslate3f(&barrel, muzzle);
+		pie_RotateTranslate3i(&barrel, muzzle);
 		muzzle->z = -muzzle->z;
 
 		pie_MatEnd();
 	}
 	else
 	{
-		*muzzle = Vector3f_Init(psDroid->pos.x, psDroid->pos.y, psDroid->pos.z + psDroid->sDisplay.imd->max.y);
+		*muzzle = Vector3i_Init(psDroid->pos.x, psDroid->pos.y, psDroid->pos.z + psDroid->sDisplay.imd->max.y);
 	}
 
 	CHECK_DROID(psDroid);
@@ -4316,10 +4311,18 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
 	if (bMultiPlayer)
 	{
 		// reset order
-		orderDroid(psD, DORDER_STOP);
+		orderDroid(psD, DORDER_STOP, ModeQueue);
 
 		if (droidRemove(psD, apsDroidLists)) 		// remove droid from one list
 		{
+			if (psD->droidType == DROID_CYBORG_CONSTRUCT || psD->droidType == DROID_CONSTRUCT)
+			{
+				if (getNumConstructorDroids(selectedPlayer) > MAX_CONSTRUCTOR_DROIDS)
+				{
+					CONPRINTF(ConsoleString, (ConsoleString, _("%s wanted to give you a %s but you have too many!"), getPlayerName(psD->player), psD->aName));
+					return NULL;
+				}
+			}
 			if (!isHumanPlayer(psD->player))
 			{
 				droidSetName(psD, "Enemy Unit");
@@ -4354,6 +4357,11 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
 				}
 			}
 		}
+		else
+		{
+			// if we couldn't remove it, then get rid of it.
+			return NULL;
+		}
 		// add back into cluster system
 		clustNewDroid(psD);
 
@@ -4372,7 +4380,7 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
 			{
 				if (psCurr->psTarget == (BASE_OBJECT *)psD || psCurr->psActionTarget[0] == (BASE_OBJECT *)psD)
 				{
-					orderDroid(psCurr, DORDER_STOP);
+					orderDroid(psCurr, DORDER_STOP, ModeQueue);
 				}
 				// check through order list
 				for (i = 0; i < psCurr->listSize; i++)
@@ -4548,7 +4556,7 @@ BOOL checkValidWeaponForProp(DROID_TEMPLATE *psTemplate)
 }
 
 /*called when a Template is deleted in the Design screen*/
-static void maybeDeleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player, bool really)
+void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player, QUEUE_MODE mode)
 {
 	STRUCTURE   *psStruct;
 	UDWORD      inc, i;
@@ -4597,7 +4605,7 @@ static void maybeDeleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE 
 				// check not being built in the factory for the template player
 				if (psTemplate->multiPlayerID == ((DROID_TEMPLATE *)psFactory->psSubject)->multiPlayerID)
 				{
-					if (really)
+					if (mode == ModeImmediate)
 					{
 						syncDebugStructure(psStruct, '<');
 						syncDebug("Clearing production");
@@ -4617,7 +4625,7 @@ static void maybeDeleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE 
 							//power is returned by factoryProdAdjust()
 							if (psNextTemplate)
 							{
-								structSetManufacture(psStruct, psNextTemplate);
+								structSetManufacture(psStruct, psNextTemplate, ModeQueue);  // ModeQueue because production lists aren't synchronised.
 							}
 							else
 							{
@@ -4634,29 +4642,19 @@ static void maybeDeleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE 
 					}
 					else
 					{
-						DROID_TEMPLATE *template = (DROID_TEMPLATE *)malloc(sizeof(DROID_TEMPLATE));
+						DROID_TEMPLATE *oldTemplate = (DROID_TEMPLATE *)malloc(sizeof(DROID_TEMPLATE));
 						debug(LOG_ERROR, "TODO: Fix this memory leak when deleting templates.");
 
-						*template = *(DROID_TEMPLATE *)psFactory->psSubject;
-						template->pName = NULL;
-						template->psNext = NULL;
+						*oldTemplate = *(DROID_TEMPLATE *)psFactory->psSubject;
+						oldTemplate->pName = NULL;
+						oldTemplate->psNext = NULL;
 
-						psFactory->psSubject = (BASE_STATS *)template;
+						psFactory->psSubject = (BASE_STATS *)oldTemplate;
 					}
 				}
 			}
 		}
 	}
-}
-
-void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player)
-{
-	maybeDeleteTemplateFromProduction(psTemplate, player, false);
-}
-
-void reallyDeleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player)
-{
-	maybeDeleteTemplateFromProduction(psTemplate, player, true);
 }
 
 

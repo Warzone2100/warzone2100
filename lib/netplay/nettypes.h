@@ -93,7 +93,6 @@ void NETint64_t(int64_t *ip);
 void NETuint64_t(uint64_t *ip);
 void NETfloat(float* fp);
 void NETbool(BOOL *bp);
-void NETnull(void);
 void NETstring(char *str, uint16_t maxlen);
 void NETbin(uint8_t *str, uint32_t maxlen);
 
