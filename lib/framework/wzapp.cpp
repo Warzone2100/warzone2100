@@ -1105,9 +1105,6 @@ int wzSemaphoreAvailable(WZ_SEMAPHORE *semaphore)
 /***     Font support   ***/
 /**************************/
 
-// Font and text drawing support based on Qt postponed until we can get it working properly on
-// all platforms, and with decent speed, and without clobbering existing OpenGL states.
-#if 0
 void iV_SetFont(enum iV_fonts FontID)
 {
 	WzMainWindow::instance()->setFontType(FontID);
@@ -1185,7 +1182,6 @@ void iV_SetTextSize(float size)
 {
 	WzMainWindow::instance()->setFontSize(size);
 }
-#endif
 
 void wzFatalDialog(const char *text)
 {
