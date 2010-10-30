@@ -51,9 +51,11 @@ PLAYERSTATS getMultiStats(UDWORD player)
 BOOL setMultiStats(SDWORD player, PLAYERSTATS plStats, BOOL bLocal)
 {
 	uint32_t playerIndex = (uint32_t)player;
+	char buf[250] = {'\0'};
 
 	if (playerIndex >= MAX_PLAYERS)
 	{
+		ASSERT(false, "index (%u) out of range!", playerIndex);
 		return true;
 	}
 
@@ -78,6 +80,15 @@ BOOL setMultiStats(SDWORD player, PLAYERSTATS plStats, BOOL bLocal)
 			NETuint32_t(&playerStats[playerIndex].killsToAdd);
 			NETuint32_t(&playerStats[playerIndex].scoreToAdd);
 		NETend();
+		// NOTE: These lines are to be removed before 3.0 final
+		snprintf(buf, sizeof(buf), "Sending Player's %u score to everyone: kills=%u score=%d", playerIndex, playerStats[playerIndex].totalKills, (int)playerStats[playerIndex].totalScore);
+		NETlogEntry(buf, SYNC_FLAG, 0);
+	}
+	else
+	{
+		// NOTE: These lines are to be removed before 3.0 final
+		snprintf(buf, sizeof(buf), "(local) Player's %u score: kills=%u score=%d", playerIndex, playerStats[playerIndex].totalKills, (int)playerStats[playerIndex].totalScore);
+		NETlogEntry(buf, SYNC_FLAG, 0);
 	}
 
 	return true;
@@ -94,6 +105,7 @@ void recvMultiStats()
 
 		if (playerIndex >= MAX_PLAYERS)
 		{
+			ASSERT(false, "index (%u) out of range!", playerIndex);
 			NETend();
 			return;
 		}
@@ -109,6 +121,7 @@ void recvMultiStats()
 		// we don't what to update ourselves, we already know our score (FIXME: rewrite setMultiStats())
 		if (!myResponsibility(playerIndex))
 		{
+			char buf[250] = {'\0'};
 			// Retrieve the actual stats
 			NETuint32_t(&playerStats[playerIndex].played);
 			NETuint32_t(&playerStats[playerIndex].wins);
@@ -119,6 +132,9 @@ void recvMultiStats()
 			NETuint32_t(&playerStats[playerIndex].recentScore);
 			NETuint32_t(&playerStats[playerIndex].killsToAdd);
 			NETuint32_t(&playerStats[playerIndex].scoreToAdd);
+			// NOTE: These lines are to be removed before 3.0 final
+			snprintf(buf, sizeof(buf), "Player %u score was updated: kills=%u score=%d", playerIndex, playerStats[playerIndex].totalKills, (int)playerStats[playerIndex].totalScore);
+			NETlogEntry(buf, SYNC_FLAG, 0);
 		}
 	NETend();
 }
@@ -127,9 +143,10 @@ void recvMultiStats()
 // Load Player Stats
 BOOL loadMultiStats(char *sPlayerName, PLAYERSTATS *st)
 {
-	char				fileName[255];
-	UDWORD				size;
-	char				*pFileData;
+	char	fileName[255];
+	UDWORD	size;
+	char	*pFileData;
+	char	buf[255] = {'\0'};
 
 	memset(st, 0, sizeof(PLAYERSTATS));	// clear in case we don't get to load
 
@@ -159,6 +176,7 @@ BOOL loadMultiStats(char *sPlayerName, PLAYERSTATS *st)
 
 		if (strncmp(pFileData, "WZ.STA.v3", 9) != 0)
 		{
+			ASSERT(false, "Wrong player file format!");
 			return false; // wrong version or not a stats file
 		}
 
@@ -170,6 +188,9 @@ BOOL loadMultiStats(char *sPlayerName, PLAYERSTATS *st)
 		}
 		free(pFileData);
 	}
+	// NOTE: These lines are to be removed before 3.0 final
+	snprintf(buf, sizeof(buf), "*** Player (%s),player =%u kills=%u, score=%d, wins/losses (%u/%u)", fileName, st->played, st->totalKills, (int)st->totalScore,  st->wins, st->losses);
+	NETlogEntry(buf, SYNC_FLAG, 0);
 
 	// reset recent scores
 	st->recentKills = 0;
@@ -178,10 +199,10 @@ BOOL loadMultiStats(char *sPlayerName, PLAYERSTATS *st)
 	st->scoreToAdd  = 0;
 
 	// clear any skirmish stats.
-	for(size = 0;size<MAX_PLAYERS;size++)
+	for(size = 0; size < MAX_PLAYERS; size++)
 	{
-		ingame.skScores[size][0] =0;
-		ingame.skScores[size][1] =0;
+		ingame.skScores[size][0] = 0;
+		ingame.skScores[size][1] = 0;
 	}
 
 	return true;
@@ -194,6 +215,7 @@ BOOL saveMultiStats(const char *sFileName, const char *sPlayerName, const PLAYER
 {
 	char buffer[MAX_STA_SIZE];
 	char fileName[255] = "";
+	char buf[250] = {'\0'};
 
 	snprintf(buffer, MAX_STA_SIZE, "WZ.STA.v3\n%u %u %u %u %u",
 	         st->wins, st->losses, st->totalKills, st->totalScore, st->played);
@@ -202,6 +224,8 @@ BOOL saveMultiStats(const char *sFileName, const char *sPlayerName, const PLAYER
 
 	saveFile(fileName, buffer, strlen(buffer));
 
+	snprintf(buf, sizeof(buf), "*** saving Player (%s), played =%u kills=%u, score=%d, wins/losses (%u/%u)", fileName, st->played, st->totalKills, (int)st->totalScore,  st->wins, st->losses);
+	NETlogEntry(buf, SYNC_FLAG, 0);
 	return true;
 }
 
