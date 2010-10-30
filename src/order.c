@@ -2558,6 +2558,7 @@ BOOL orderDroidList(DROID *psDroid)
 		psDroid->listSize -= 1;
 
 		// move the rest of the list down
+		memcpy(&psDroid->asOrderPending, psDroid->asOrderList, sizeof(ORDER_LIST));
 		memmove(psDroid->asOrderList, psDroid->asOrderList + 1, psDroid->listSize * sizeof(ORDER_LIST));
 		memset(psDroid->asOrderList + psDroid->listSize, 0, sizeof(ORDER_LIST));
 

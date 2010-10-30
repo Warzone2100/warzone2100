@@ -1453,6 +1453,32 @@ static void drawWallDrag(STRUCTURE_STATS *psStats, int left, int right, int up, 
 	free(blueprint);
 }
 
+static void renderBuildOrder(int32_t order, BASE_STATS *stats, int32_t x, int32_t y, int32_t x2, int32_t y2, uint16_t dir, STRUCT_STATES state)
+{
+	//draw the current build site if its a line of structures
+	if (order == DORDER_LINEBUILD && stats != NULL)
+	{
+		int left, right, up, down;
+		// a wall (or something like that)
+
+		left = MIN(map_coord(x), map_coord(x2));
+		right = MAX(map_coord(x), map_coord(x2));
+		up = MIN(map_coord(y), map_coord(y2));
+		down = MAX(map_coord(y), map_coord(y2));
+
+		drawWallDrag((STRUCTURE_STATS *)stats, left, right, up, down, dir, state);
+	}
+	if (order == DORDER_BUILD && stats != NULL)
+	{
+		if (!TileHasStructure(mapTile(map_coord(x), map_coord(y))))
+		{
+			STRUCTURE *blueprint = buildBlueprint((STRUCTURE_STATS *)stats, x, y, dir, state);
+			renderStructure(blueprint);
+			free(blueprint);
+		}
+	}
+}
+
 void displayBlueprints(void)
 {
 	STRUCTURE *blueprint;
@@ -1544,61 +1570,17 @@ void displayBlueprints(void)
 	{
 		if (psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT)
 		{
-			//draw the current build site if its a line of structures
-			if (psDroid->order == DORDER_LINEBUILD && psDroid->psTarStats)
+			renderBuildOrder(psDroid->order, psDroid->psTarStats, psDroid->orderX, psDroid->orderY, psDroid->orderX2, psDroid->orderY2, psDroid->orderDirection, SS_BLUEPRINT_PLANNED);
+			if (psDroid->waitingForOwnReceiveDroidInfoMessage)
 			{
-				int left, right, up, down;
-				// a wall (or something like that)
-
-				left = MIN(map_coord(psDroid->orderX), map_coord(psDroid->orderX2));
-				right = MAX(map_coord(psDroid->orderX), map_coord(psDroid->orderX2));
-				up = MIN(map_coord(psDroid->orderY), map_coord(psDroid->orderY2));
-				down = MAX(map_coord(psDroid->orderY), map_coord(psDroid->orderY2));
-
-				drawWallDrag((STRUCTURE_STATS *)psDroid->psTarStats, left, right, up, down, psDroid->orderDirection, SS_BLUEPRINT_PLANNED);
-			}
-			if (psDroid->order == DORDER_BUILD && psDroid->psTarStats)
-			{
-				if (!TileHasStructure(mapTile(map_coord(psDroid->orderX),map_coord(psDroid->orderY))))
-				{
-					blueprint = buildBlueprint((STRUCTURE_STATS *)psDroid->psTarStats,
-											   psDroid->orderX,
-											   psDroid->orderY,
-											   psDroid->orderDirection,
-											   SS_BLUEPRINT_PLANNED);
-					renderStructure(blueprint);
-					free(blueprint);
-				}
+				ORDER_LIST const *o = &psDroid->asOrderPending;
+				renderBuildOrder(o->order, (BASE_STATS *)o->psOrderTarget, o->x, o->y, o->x2, o->y2, o->direction, SS_BLUEPRINT_PLANNED);
 			}
 			//now look thru' the list of orders to see if more building sites
 			for (order = 0; order < psDroid->listSize; order++)
 			{
-				if (psDroid->asOrderList[order].order == DORDER_BUILD)
-				{
-					// a single building
-					if (!TileHasStructure(mapTile(map_coord(psDroid->asOrderList[order].x),map_coord(psDroid->asOrderList[order].y))))
-					{
-						blueprint = buildBlueprint((STRUCTURE_STATS *)psDroid->asOrderList[order].psOrderTarget,
-						                           psDroid->asOrderList[order].x,
-						                           psDroid->asOrderList[order].y,
-									   psDroid->asOrderList[order].direction,
-						                           SS_BLUEPRINT_PLANNED);
-						renderStructure(blueprint);
-						free(blueprint);
-					}
-				}
-				else if (psDroid->asOrderList[order].order == DORDER_LINEBUILD)
-				{
-					int left, right, up, down;
-					// a wall (or something like that)
-
-					left = MIN(map_coord(psDroid->asOrderList[order].x), map_coord(psDroid->asOrderList[order].x2));
-					right = MAX(map_coord(psDroid->asOrderList[order].x), map_coord(psDroid->asOrderList[order].x2));
-					up = MIN(map_coord(psDroid->asOrderList[order].y), map_coord(psDroid->asOrderList[order].y2));
-					down = MAX(map_coord(psDroid->asOrderList[order].y), map_coord(psDroid->asOrderList[order].y2));
-
-					drawWallDrag((STRUCTURE_STATS *)psDroid->asOrderList[order].psOrderTarget, left, right, up, down, psDroid->asOrderList[order].direction, SS_BLUEPRINT_PLANNED);
-				}
+				ORDER_LIST const *o = &psDroid->asOrderList[order];
+				renderBuildOrder(o->order, (BASE_STATS *)o->psOrderTarget, o->x, o->y, o->x2, o->y2, o->direction, SS_BLUEPRINT_PLANNED);
 			}
 		}
 	}
