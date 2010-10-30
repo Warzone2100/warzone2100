@@ -32,6 +32,10 @@
 #include "lib/ivis_common/textdraw.h"
 #include "lib/ivis_common/bitimage.h"
 
+#define ASCII_SPACE			(32)
+#define ASCII_NEWLINE			('@')
+#define ASCII_COLOURMODE		('#')
+
 /** Draws formatted text with word wrap, long word splitting, embedded newlines
  *  (uses '@' rather than '\n') and colour toggle mode ('#') which enables or
  *  disables font colouring.
@@ -180,7 +184,6 @@ int iV_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width, U
 		}
 
 		// draw the text.
-		//iV_SetTextSize(12.f);
 		iV_DrawText(FString, jx, jy);
 
 		// and move down a line.
@@ -188,37 +191,4 @@ int iV_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width, U
 	}
 
 	return jy;
-}
-
-static void iV_DrawTextRotatedFv(float x, float y, float rotation, const char* format, va_list ap)
-{
-	va_list aq;
-	size_t size;
-	char* str;
-
-	/* Required because we're using the va_list ap twice otherwise, which
-	 * results in undefined behaviour. See stdarg(3) for details.
-	 */
-	va_copy(aq, ap);
-
-	// Allocate a buffer large enough to hold our string on the stack
-	size = vsnprintf(NULL, 0, format, ap);
-	str = alloca(size + 1);
-
-	// Print into our newly created string buffer
-	vsprintf(str, format, aq);
-
-	va_end(aq);
-
-	// Draw the produced string to the screen at the given position and rotation
-	iV_DrawTextRotated(str, x, y, rotation);
-}
-
-void iV_DrawTextF(float x, float y, const char* format, ...)
-{
-	va_list ap;
-
-	va_start(ap, format);
-		iV_DrawTextRotatedFv(x, y, 0.f, format, ap);
-	va_end(ap);
 }

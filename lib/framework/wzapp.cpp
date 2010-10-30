@@ -1192,11 +1192,6 @@ void iV_DrawTextRotated(const char* string, float XPos, float YPos, float rotati
 	pie_SetRendMode(REND_OPAQUE);		// beat state machinery into submission
 }
 
-void iV_SetTextSize(float size)
-{
-	WzMainWindow::instance()->setFontSize(size);
-}
-
 void wzFatalDialog(const char *text)
 {
 	crashing = true;
