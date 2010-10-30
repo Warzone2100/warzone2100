@@ -244,7 +244,7 @@ src/cmddroid.c
 src/combat.c
 src/component.c
 src/configuration.c
-src/console.c
+src/console.cpp
 src/data.c
 src/design.c
 src/difficulty.c
