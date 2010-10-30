@@ -443,6 +443,7 @@ BOOL systemInitialise(void)
 	{
 		return false;
 	}
+	consoleInit();
 
 	buildMapList();
 

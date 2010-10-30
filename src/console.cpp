@@ -22,8 +22,13 @@
 	Functions for the in-game console.
 */
 
+#include <QtCore/QString>
+#include <QtGui/QPixmap>
+#include <QtGui/QPainter>
+
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
+#include "lib/framework/wzapp.h"
 #include "lib/gamelib/gtime.h"
 #include "lib/ivis_common/piestate.h"
 #include "lib/ivis_common/rendmode.h"
@@ -54,10 +59,9 @@ typedef struct _console
 /* Definition of a message */
 typedef struct	_console_message
 {
-	char				text[MAX_CONSOLE_STRING_LENGTH];		// Text of the message
+	QPixmap				*cache;						// Text of the message
+	QString				text;						// Text of the message
 	UDWORD				timeAdded;								// When was it added to our list?
-	//UDWORD			screenIndex;							// Info for justification
-	UDWORD				JustifyType;
 	UDWORD				id;
 	SDWORD				player;						// Player who sent this message or SYSTEM_MESSAGE
 	struct _console_message *psNext;
@@ -116,14 +120,12 @@ static UDWORD	consoleVisibleLines;
 /** Whether new messages are allowed to be added */
 static int allowNewMessages;
 
-/** What's the default justification? */
-static CONSOLE_TEXT_JUSTIFICATION	defJustification;
-
 static UDWORD	messageId;	// unique ID
 
 /// Global string for new console messages.
 char ConsoleString[MAX_CONSOLE_TMP_STRING_LENGTH];
 
+static PIELIGHT getConsoleTextColor(SDWORD player);
 
 /**
 	Specify how long messages will stay on screen.
@@ -133,11 +135,27 @@ static void	setConsoleMessageDuration(UDWORD time)
 	messageDuration = time;
 }
 
+void	consoleInit()
+{
+	int i;
+
+	for (i = 0; i < MAX_CONSOLE_MESSAGES; i++)
+	{
+		consoleStorage[i].cache = NULL;
+	}
+}
+
 /** Sets the system up */
 void	initConsoleMessages( void )
 {
-	int TextLineSize = iV_GetTextLineSize();
+	int i, TextLineSize = iV_GetTextLineSize();
 	messageIndex = 0;
+
+	for (i = 0; i < MAX_CONSOLE_MESSAGES; i++)
+	{
+		delete consoleStorage[i].cache;
+		consoleStorage[i].cache = NULL;
+	}
 
 	/* Console can extend to half screen height */
 	if (TextLineSize)
@@ -174,9 +192,6 @@ void	initConsoleMessages( void )
 
 	/* Turn on the console display */
 	enableConsoleDisplay(true);
-
-	/* Set left justification as default */
-	setDefaultConsoleJust(LEFT_JUSTIFY);
 
 	/*	Set up the console size and postion
 		x,y,width */
@@ -215,7 +230,6 @@ void	toggleConsoleDrop( void )
 BOOL addConsoleMessage(const char *messageText, CONSOLE_TEXT_JUSTIFICATION jusType,
 							   SDWORD player)
 {
-	int textLength;
 	CONSOLE_MESSAGE	*psMessage;
 
 	/* Just don't add it if there's too many already */
@@ -230,49 +244,34 @@ BOOL addConsoleMessage(const char *messageText, CONSOLE_TEXT_JUSTIFICATION jusTy
 		return false ;
 	}
 
-	/* Is the string too long? */
-	textLength = strlen(messageText);
-
-	ASSERT( textLength<MAX_CONSOLE_STRING_LENGTH,
-		"Attempt to add a message to the console that exceeds MAX_CONSOLE_STRING_LENGTH" );
-
-	/* Are we using a defualt justification? */
-	if(jusType == DEFAULT_JUSTIFY)
-	{
-		/* Then set it */
-		jusType = defJustification;
-	}
-
 	debug(LOG_CONSOLE, "(to player %d): %s", (int)player, messageText);
 
 	consoleStorage[messageIndex].player = player;
 
+	/* Draw the text of the message */
+	PIELIGHT color(getConsoleTextColor(player));
+	delete consoleStorage[messageIndex].cache;
+	consoleStorage[messageIndex].cache = new QPixmap(mainConsole.width, iV_GetTextLineSize());
+	consoleStorage[messageIndex].cache->fill(QColor(16, 16, 128, 128));	// FIXME, and fix pie_TransBoxFill, to not use hardcoded numbers
+	consoleStorage[messageIndex].text = QString::fromUtf8(messageText);
+	QPainter painter(consoleStorage[messageIndex].cache);
+	painter.setPen(QColor(color.byte.r, color.byte.g, color.byte.b, color.byte.a));
 	/* Precalculate and store (quicker!) the indent for justified text */
+	QTextOption opts;
 	switch(jusType)
 	{
-		/* Allign to left edge of screen */
+	case DEFAULT_JUSTIFY:
 	case LEFT_JUSTIFY:
-			consoleStorage[messageIndex].JustifyType = FTEXT_LEFTJUSTIFY;
+		opts.setAlignment(Qt::AlignLeft);
 		break;
-
-		/* Allign to right edge of screen */
 	case RIGHT_JUSTIFY:
-			consoleStorage[messageIndex].JustifyType = FTEXT_RIGHTJUSTIFY;
+		opts.setAlignment(Qt::AlignRight);
 		break;
-
-		/* Allign to centre of the screen,NOT TO CENTRE OF CONSOLE!!!!!! */
 	case CENTRE_JUSTIFY:
-			consoleStorage[messageIndex].JustifyType = FTEXT_CENTRE;
-		break;
-		/* Gone tits up by the looks of it */
-	default:
-		debug( LOG_FATAL, "Weirdy type of text justification for console print" );
-		abort();
+		opts.setAlignment(Qt::AlignHCenter);
 		break;
 	}
-
-	/* Copy over the text of the message */
-	sstrcpy(consoleStorage[messageIndex].text, messageText);
+	painter.drawText(QRect(0, 0, mainConsole.width, iV_GetTextLineSize()), consoleStorage[messageIndex].text, opts);
 
 	/* Set the time when it was added - this might not be needed */
 	consoleStorage[messageIndex].timeAdded = gameTime2;
@@ -416,35 +415,35 @@ void	flushConsoleMessages( void )
 }
 
 /** Sets console text color depending on message type */
-static void setConsoleTextColor(SDWORD player)
+static PIELIGHT getConsoleTextColor(SDWORD player)
 {
 	// System messages
-	if(player == SYSTEM_MESSAGE)
+	if (player == SYSTEM_MESSAGE)
 	{
-		iV_SetTextColour(WZCOL_CONS_TEXT_SYSTEM);
+		return WZCOL_CONS_TEXT_SYSTEM;
 	}
 	else if (player == NOTIFY_MESSAGE)
 	{
-		iV_SetTextColour(WZCOL_YELLOW);
+		return WZCOL_YELLOW;
 	}
 	else
 	{
 		// Don't use friend-foe colors in the lobby
-		if(bEnemyAllyRadarColor && (GetGameMode() == GS_NORMAL))
+		if (bEnemyAllyRadarColor && (GetGameMode() == GS_NORMAL))
 		{
-			if(aiCheckAlliances(player,selectedPlayer))
+			if (aiCheckAlliances(player,selectedPlayer))
 			{
-				iV_SetTextColour(WZCOL_CONS_TEXT_USER_ALLY);
+				return WZCOL_CONS_TEXT_USER_ALLY;
 			}
 			else
 			{
-				iV_SetTextColour(WZCOL_CONS_TEXT_USER_ENEMY);
+				return WZCOL_CONS_TEXT_USER_ENEMY;
 			}
 		}
 		else
 		{
 			// Friend-foe is off
-			iV_SetTextColour(WZCOL_CONS_TEXT_USER);
+			return WZCOL_CONS_TEXT_USER;
 		}
 	}
 }
@@ -514,47 +513,18 @@ static int displayOldMessages(void)
 	{
 		/* Get the line pitch */
 		linePitch = iV_GetTextLineSize();
-
-		/* How big a box is necessary? */
-		/* GET RID OF THE MAGIC NUMBERS BELOW */
-		iV_TransBoxFill(mainConsole.topX - CON_BORDER_WIDTH,mainConsole.topY-mainConsole.textDepth-CON_BORDER_HEIGHT,
-			mainConsole.topX+mainConsole.width ,mainConsole.topY+((count)*linePitch)+CON_BORDER_HEIGHT-linePitch);
 	}
-	/*
-	if(count)
-	{
-		sprintf(buildData,"%s,%s",__TIME__,__DATE__);
-
-		buildWidth = iV_GetTextWidth(buildData);
-
-		iV_DrawText(buildData,((mainConsole.topX+mainConsole.width) - buildWidth - 16),
-			mainConsole.topY);
-	}
-	*/
 	MesY = mainConsole.topY;
 	/* Render what we found */
 	for(i=count-1; i>0; i--)
 	{
-		/* Set text color depending on message type */
-		setConsoleTextColor(consoleStorage[history[i]].player);
-
 		/* Draw the text string */
-		MesY = iV_DrawFormattedText(consoleStorage[history[i]].text,
-                                    mainConsole.topX,
-                                    MesY,
-                                    mainConsole.width,
-                                    consoleStorage[history[i]].JustifyType);
+		WzMainWindow::instance()->drawPixmap(mainConsole.topX, MesY, consoleStorage[history[i]].cache);
+		MesY += iV_GetTextLineSize();
 	}
 
-	/* Set text color depending on message type */
-	setConsoleTextColor(consoleStorage[history[0]].player);
-
 	/* Draw the top one */
-	iV_DrawFormattedText(consoleStorage[history[0]].text,
-	                     mainConsole.topX,
-	                     MesY,
-	                     mainConsole.width,
-	                     consoleStorage[history[0]].JustifyType);
+	WzMainWindow::instance()->drawPixmap(mainConsole.topX, MesY, consoleStorage[history[0]].cache);
 
 	/* Return how much to drop the existing console by... Fix this for lines>screenWIDTH */
 	if(count)
@@ -615,7 +585,7 @@ void	displayConsoleMessages( void )
 		     psMessage && consoleVisibleLines > 0 && exceed < 4; // ho ho ho!!!
 		     psMessage = psMessage->psNext)
 		{
-			if (iV_GetTextWidth(psMessage->text) > mainConsole.width)
+			if (iV_GetTextWidth(psMessage->text.toAscii().constData()) > mainConsole.width)
 			{
 				++exceed;
 			}
@@ -633,9 +603,6 @@ void	displayConsoleMessages( void )
 		{
 			clipDepth = (pie_GetVideoBufferHeight() - linePitch);
 		}
-
-		iV_TransBoxFill(mainConsole.topX - CON_BORDER_WIDTH,mainConsole.topY-mainConsole.textDepth-CON_BORDER_HEIGHT+drop+1,
-			mainConsole.topX+mainConsole.width ,clipDepth);
 	}
 
 	/* Stop when we've drawn enough or we're at the end */
@@ -645,13 +612,9 @@ void	displayConsoleMessages( void )
 	     psMessage && numProcessed < consoleVisibleLines && MesY < (pie_GetVideoBufferHeight() - linePitch);
 	     psMessage = psMessage->psNext)
 	{
-
-		/* Set text color depending on message type */
-		setConsoleTextColor(psMessage->player);
-
  		/* Draw the text string */
-		MesY = iV_DrawFormattedText(psMessage->text, mainConsole.topX, MesY,
-									mainConsole.width, psMessage->JustifyType);
+		WzMainWindow::instance()->drawPixmap(mainConsole.topX, MesY, psMessage->cache);
+		MesY += iV_GetTextLineSize();
 
 		/* Move on */
 		++numProcessed;
@@ -673,23 +636,6 @@ void	setConsoleBackdropStatus(BOOL state)
 void	enableConsoleDisplay(BOOL state)
 {
 	bConsoleDisplayEnabled = state;
-}
-
-/** Sets the default justification for text */
-void	setDefaultConsoleJust(CONSOLE_TEXT_JUSTIFICATION defJ)
-{
-	switch(defJ)
-	{
-	case LEFT_JUSTIFY:
-	case RIGHT_JUSTIFY:
-	case CENTRE_JUSTIFY:
-		defJustification = defJ;
-		break;
-	default:
-		debug( LOG_FATAL, "Weird default text justification for console" );
-		abort();
-		break;
-	}
 }
 
 /** Allows positioning of the console on screen */

@@ -233,6 +233,14 @@ void WzMainWindow::initializeGL()
 {
 }
 
+void WzMainWindow::drawPixmap(int XPos, int YPos, QPixmap *pix)
+{
+	QPainter painter(context()->device());
+	painter.drawPixmap(XPos, YPos, *pix);
+	rendStates.rendMode = REND_ALPHA;
+	pie_SetRendMode(REND_OPAQUE);		// beat state machinery into submission
+}
+
 void WzMainWindow::resizeGL(int width, int height)
 {
 	screenWidth = width;
@@ -1166,14 +1174,20 @@ void iV_SetTextColour(PIELIGHT colour)
 void iV_DrawTextRotated(const char* string, float XPos, float YPos, float rotation)
 {
 	pie_SetTexturePage(TEXPAGE_FONT);
-	glDisable(GL_CULL_FACE);	// hack needed on MacOSX
+	glDisable(GL_CULL_FACE);
 	QPainter painter(WzMainWindow::instance()->context()->device());
-	painter.translate(XPos, YPos);
-	painter.rotate(rotation);
 	painter.setPen(fontColor);
-	painter.drawText(0, 0, QString::fromUtf8(string));
+	if (rotation != 0.f)
+	{
+		painter.translate(XPos, YPos);
+		painter.rotate(rotation);
+		painter.drawText(0, 0, QString::fromUtf8(string));
+	}
+	else
+	{
+		painter.drawText(XPos, YPos, QString::fromUtf8(string));
+	}
 	glEnable(GL_CULL_FACE);
-
 	rendStates.rendMode = REND_ALPHA;
 	pie_SetRendMode(REND_OPAQUE);		// beat state machinery into submission
 }
@@ -1270,4 +1284,3 @@ static int WZkeyToQtKey(int code)
 
 	return 0;	// nothing found (should never happen)
 }
-

@@ -185,7 +185,7 @@ warzone2100_SOURCES = \
 	combat.c \
 	component.c \
 	configuration.c \
-	console.c \
+	console.cpp \
 	data.c \
 	design.c \
 	difficulty.c \

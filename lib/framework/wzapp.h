@@ -73,6 +73,7 @@ public:
 	void setFontSize(float size);
 	int ticks() { return tickCount.elapsed(); }
 	void setReadyToPaint() { notReadyToPaint = false; }
+	void drawPixmap(int XPos, int YPos, QPixmap *pix);
 
 public slots:
 	void tick();
