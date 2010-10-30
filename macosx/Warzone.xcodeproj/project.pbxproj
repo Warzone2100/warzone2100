@@ -26,6 +26,7 @@
 				433360A711A0796D00380F5E /* Qt */,
 				4345290E1130F84E002AD731 /* msgfmt */,
 				433360B311A079F700380F5E /* Moc */,
+				43B8FF2D127CD57D006F5A13 /* Fonts */,
 			);
 			dependencies = (
 			);
@@ -420,6 +421,8 @@
 		43B8FE84127CB29D006F5A13 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43B8FE83127CB29D006F5A13 /* CoreFoundation.framework */; };
 		43B8FE9B127CB327006F5A13 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43B8FD2D127CB13F006F5A13 /* Carbon.framework */; };
 		43B8FE9D127CB327006F5A13 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43B8FE9C127CB327006F5A13 /* IOKit.framework */; };
+		43B8FF6C127CD9E4006F5A13 /* DejaVuSans-Bold.ttf in Copy Fonts */ = {isa = PBXBuildFile; fileRef = 43B8FF3D127CD999006F5A13 /* DejaVuSans-Bold.ttf */; };
+		43B8FF6D127CD9E4006F5A13 /* DejaVuSans.ttf in Copy Fonts */ = {isa = PBXBuildFile; fileRef = 43B8FF3E127CD99A006F5A13 /* DejaVuSans.ttf */; };
 		43BE75EA11124BB5007DF934 /* wavecast.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43BE75E811124BB4007DF934 /* wavecast.cpp */; };
 		43C18FB1114FF38B0028741B /* igd_desc_parse.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C18F7E114FF38B0028741B /* igd_desc_parse.c */; };
 		43C18FB9114FF38B0028741B /* minisoap.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C18F88114FF38B0028741B /* minisoap.c */; };
@@ -735,6 +738,18 @@
 				02581C870BD5AD1100957CBC /* Vorbis.framework in Copy frameworks */,
 			);
 			name = "Copy frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43B8FF4F127CD9BD006F5A13 /* Copy Fonts */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Fonts;
+			dstSubfolderSpec = 7;
+			files = (
+				43B8FF6C127CD9E4006F5A13 /* DejaVuSans-Bold.ttf in Copy Fonts */,
+				43B8FF6D127CD9E4006F5A13 /* DejaVuSans.ttf in Copy Fonts */,
+			);
+			name = "Copy Fonts";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -1439,6 +1454,8 @@
 		43B8FD34127CB13F006F5A13 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		43B8FE83127CB29D006F5A13 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		43B8FE9C127CB327006F5A13 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		43B8FF3D127CD999006F5A13 /* DejaVuSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "DejaVuSans-Bold.ttf"; path = "external/fonts/DejaVuSans-Bold.ttf"; sourceTree = "<group>"; };
+		43B8FF3E127CD99A006F5A13 /* DejaVuSans.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = DejaVuSans.ttf; path = external/fonts/DejaVuSans.ttf; sourceTree = "<group>"; };
 		43BE75E811124BB4007DF934 /* wavecast.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = wavecast.cpp; path = ../src/wavecast.cpp; sourceTree = SOURCE_ROOT; };
 		43BE75E911124BB4007DF934 /* wavecast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wavecast.h; path = ../src/wavecast.h; sourceTree = SOURCE_ROOT; };
 		43C18F7A114FF38B0028741B /* bsdqueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bsdqueue.h; sourceTree = "<group>"; };
@@ -1835,6 +1852,7 @@
 				432BE3FD10D9CF1300A486AB /* vorbis */,
 				0246A05C0BD3C975004D1C70 /* Warzone.icns */,
 				02356D780BD3BB3500E9A019 /* Warzone-Info.plist */,
+				43B8FF3C127CD949006F5A13 /* Fonts */,
 				43025C2B111FB072006C49B1 /* wzlocal */,
 			);
 			name = Resources;
@@ -2647,6 +2665,15 @@
 			name = lib;
 			sourceTree = "<group>";
 		};
+		43B8FF3C127CD949006F5A13 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				43B8FF3D127CD999006F5A13 /* DejaVuSans-Bold.ttf */,
+				43B8FF3E127CD99A006F5A13 /* DejaVuSans.ttf */,
+			);
+			name = Fonts;
+			sourceTree = "<group>";
+		};
 		43BE75E411124A18007DF934 /* lib */ = {
 			isa = PBXGroup;
 			children = (
@@ -3129,6 +3156,7 @@
 			buildConfigurationList = 02356D790BD3BB3600E9A019 /* Build configuration list for PBXNativeTarget "Warzone" */;
 			buildPhases = (
 				02356D710BD3BB3400E9A019 /* Resources */,
+				43B8FF4F127CD9BD006F5A13 /* Copy Fonts */,
 				43025CD1111FB66E006C49B1 /* i18n */,
 				02356D720BD3BB3400E9A019 /* Sources */,
 				02356D730BD3BB3400E9A019 /* Frameworks */,
@@ -3636,6 +3664,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "DirectorY=\"gettext-0.17.mpkg_\"\nOutDir=\"gettext-0.17.mpkg\"\nFileName=\"gettext-0.17.mpkg.tar.gz\"\nBuiltDLP=\"http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/gettext-0.17.mpkg.tar.gz\"\nMD5Sum=\"ba7984918fe0b36e2e7c786693e005f2\"\n\n# Checks\nexport PATH=$PATH:/sw/bin:/opt/local/bin\nif type -aP msgfmt; then\n    echo \"msgfmt exists, skipping\"\n    exit 0\nelif [ -x \"/opt/local/bin/port\" ]; then\n  echo \"warning: Please run the following command in the terminal: 'sudo port install gettext'.\" >&2\n  open -b com.apple.Terminal\n  exit 1\nelif [ -d \"${SRCROOT}/external/${OutDir}\" ]; then\n    touch build/notrans.dis\n    echo \"warning: Gettext support has been disabled because we could not find a binary.\" >&2\n    exit 0\nelif [ ! `sw_vers -productVersion | sed -e 's:^...\\(.\\)..$:\\1:'` -ge \"6\" ]; then\n    touch build/notrans.dis\n    echo \"warning: Gettext support has been disabled because we could not find a binary.\" >&2\n    exit 0\nfi\n\nconfigs/FetchPrebuilt.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${BuiltDLP}\" \"${MD5Sum}\"\nFetchExitStatus=$?\n\n# Install\nif [ ! \"${FetchExitStatus}\" = \"0\" ]; then\n    exit \"${FetchExitStatus}\"\nelif [ -d \"${SRCROOT}/external/${OutDir}\" ]; then\n    echo \" Please install the gettext package before continuing.\" >&2\n    open \"${SRCROOT}/external/${OutDir}\"\n    exit 1\nfi";
+		};
+		43B8FF2D127CD57D006F5A13 /* Fonts */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = Fonts;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "DirectorY=\"fonts_\"\nOutDir=\"fonts\"\nFileName=\"fonts.tar.gz\"\nBuiltDLP=\"http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/fonts.tar.gz\"\nMD5Sum=\"1b8805b36f6f1ba71026d6b5ece1ed52\"\n\nconfigs/FetchPrebuilt.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${BuiltDLP}\" \"${MD5Sum}\"\nexit ${?}\n\n# tar -czf fonts.tar.gz --exclude '.DS_Store' fonts_";
 		};
 		43F77C7610F0125E00E04615 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;

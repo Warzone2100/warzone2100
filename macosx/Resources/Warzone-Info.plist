@@ -26,6 +26,8 @@
 	<true/>
 	<key>CFBundleAllowMixedLocalizations</key>
 	<true/>
+	<key>ATSApplicationFontsPath</key>
+	<string>Fonts/</string>
 	<key>CFBundleVersion</key>
 	<string>SVN_REV</string>
 	<key>CFBundleShortVersionString</key>
