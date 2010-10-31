@@ -308,7 +308,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\src\console.c"
+					RelativePath="..\src\console.cpp"
 					>
 				</File>
 				<File
@@ -1171,11 +1171,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\scriptvals_parser.tab.h"
+				RelativePath=".\scriptvals_parser.tab.h"
 				>
 			</File>
 			<File
-				RelativePath=".\scriptvals_parser.tab.h"
+				RelativePath="..\src\scriptvals_parser.tab.h"
 				>
 			</File>
 			<File
