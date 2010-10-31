@@ -146,6 +146,8 @@ cscope.out
 /trunk
 /newnet
 /qt-trunk
+/master
+/3.0
 
 #misc
 *.orig
