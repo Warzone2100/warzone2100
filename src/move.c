@@ -2494,9 +2494,17 @@ void moveUpdateDroid(DROID *psDroid)
 	case MOVEPOINTTOPOINT:
 	case MOVEPAUSE:
 		// moving between two way points
+		if (psDroid->sMove.numPoints == 0)
+		{
+			debug(LOG_WARNING, "No path to follow, but psDroid->sMove.Status = %d", psDroid->sMove.Status);
+		}
+		else
+		{
+			ASSERT_OR_RETURN(, psDroid->sMove.asPath != NULL, "NULL path of non-zero length!");
+		}
 
 		// Get the best control point.
-		if (!moveBestTarget(psDroid))
+		if (psDroid->sMove.numPoints == 0 || !moveBestTarget(psDroid))
 		{
 			// Got stuck somewhere, can't find the path.
 			moveDroidTo(psDroid, psDroid->sMove.DestinationX, psDroid->sMove.DestinationY);

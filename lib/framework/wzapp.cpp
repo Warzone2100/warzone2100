@@ -679,6 +679,9 @@ void WzMainWindow::close()
 int wzInit(int argc, char *argv[], int fsaa, bool vsync, int w, int h, bool fullscreen)
 {
 	char buf[256];
+	QGL::setPreferredPaintEngine(QPaintEngine::OpenGL); /* Workaround for incorrect text rendering on
+														 * 	many platforms.
+														 */
 	QApplication app(argc, argv);
 
 	// Setting up OpenGL

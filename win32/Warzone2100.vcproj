@@ -308,7 +308,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\src\console.c"
+					RelativePath="..\src\console.cpp"
 					>
 				</File>
 				<File
