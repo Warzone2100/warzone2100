@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100 2.3_branch\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-10-16 23:59+0200\n"
+"POT-Creation-Date: 2010-10-31 18:31-0400\n"
 "PO-Revision-Date: 2003-01-15 11:40+0900\n"
 "Last-Translator: Joshua Shin <urgood2@gmail.com>\n"
 "Language-Team: Korean Translation Team <urgood2@gmail.com>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-Language: Korean\n"
 "X-Poedit-Bookmarks: 7,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
@@ -12259,10 +12259,10 @@ msgstr "로비 서버와 통신할 수 없습니다! TCP 포트 %u 가 보내는
 
 #: src/challenge.c:188
 #: src/hci.c:1004
-#: src/hci.c:3854
-#: src/hci.c:4005
-#: src/hci.c:4523
-#: src/hci.c:5729
+#: src/hci.c:3863
+#: src/hci.c:4014
+#: src/hci.c:4532
+#: src/hci.c:5738
 #: src/intelmap.c:542
 #: src/intorder.c:787
 #: src/loadsave.c:267
@@ -12278,147 +12278,147 @@ msgstr "닫기"
 msgid ": Unknown cheat code."
 msgstr ": 알 수 없는 치트 코드입니다."
 
-#: src/clparse.c:81
+#: src/clparse.c:232
 msgid "Run in cheat mode"
 msgstr "치트 모드(cheat mode)로 실행하기"
 
-#: src/clparse.c:82
-msgid "Set default data directory"
-msgstr "기본 자료 디렉토리로 설정"
-
-#: src/clparse.c:82
-msgid "data directory"
-msgstr "자료 디렉토리"
-
-#: src/clparse.c:83
+#: src/clparse.c:233
 msgid "Set configuration directory"
 msgstr "환경 설정 디렉토리로 설정"
 
-#: src/clparse.c:83
+#: src/clparse.c:233
 msgid "configuration directory"
 msgstr "환경 설정 디렉토리"
 
-#: src/clparse.c:84
+#: src/clparse.c:234
+msgid "Set default data directory"
+msgstr "기본 자료 디렉토리로 설정"
+
+#: src/clparse.c:234
+msgid "data directory"
+msgstr "자료 디렉토리"
+
+#: src/clparse.c:235
 msgid "Show debug for given level"
 msgstr "특정 레벨의 디버깅 표시"
 
-#: src/clparse.c:84
+#: src/clparse.c:235
 msgid "debug level"
 msgstr "레벨 디버그하기"
 
-#: src/clparse.c:85
+#: src/clparse.c:236
 msgid "Log debug output to file"
 msgstr "파일로 디버깅 출력을 로그하기"
 
-#: src/clparse.c:85
+#: src/clparse.c:236
 msgid "file"
 msgstr "파일"
 
-#: src/clparse.c:86
+#: src/clparse.c:237
 msgid "Flush all debug output written to stderr"
 msgstr "모든 디버깅 출력을 stderr로 보내기(flush)"
 
-#: src/clparse.c:87
+#: src/clparse.c:238
 msgid "Play in fullscreen mode"
 msgstr "전체 화면 모드로 실행"
 
-#: src/clparse.c:88
+#: src/clparse.c:239
 msgid "Load a specific game"
 msgstr "특정 게임을 로드하기"
 
-#: src/clparse.c:88
+#: src/clparse.c:239
 msgid "game-name"
 msgstr "게임 네임(이름)"
 
-#: src/clparse.c:89
+#: src/clparse.c:240
 msgid "Show this help message and exit"
 msgstr "이 도움말 메시지를 보인 다음 종료하기"
 
-#: src/clparse.c:90
+#: src/clparse.c:241
 msgid "Enable a global mod"
 msgstr "글로벌 mod를 활성화하기"
 
-#: src/clparse.c:90
-#: src/clparse.c:91
-#: src/clparse.c:92
+#: src/clparse.c:241
+#: src/clparse.c:242
+#: src/clparse.c:243
 msgid "mod"
 msgstr "mod"
 
-#: src/clparse.c:91
+#: src/clparse.c:242
 msgid "Enable a campaign only mod"
 msgstr "캠페인용 mod를 활성화하기"
 
-#: src/clparse.c:92
+#: src/clparse.c:243
 msgid "Enable a multiplay only mod"
 msgstr "멀티플레이어용 mod를 활성화하기"
 
-#: src/clparse.c:93
+#: src/clparse.c:244
 msgid "Disable asserts"
 msgstr "assert 비활성화하기"
 
-#: src/clparse.c:94
+#: src/clparse.c:245
 msgid "Causes a crash to test the crash handler"
 msgstr "(컴퓨터) 크래시 핸들러를 시험하기 위해 크래시를 일으킵니다"
 
-#: src/clparse.c:95
+#: src/clparse.c:246
 msgid "Load a saved game"
 msgstr "저장된 게임 로드"
 
-#: src/clparse.c:95
+#: src/clparse.c:246
 msgid "savegame"
 msgstr "세이브게임"
 
-#: src/clparse.c:98
+#: src/clparse.c:247
 msgid "Play in windowed mode"
 msgstr "창(windowed) 모드로 실행"
 
-#: src/clparse.c:99
+#: src/clparse.c:248
 msgid "Show version information and exit"
 msgstr "버젼 정보를 보인 다음 종료하기"
 
-#: src/clparse.c:100
+#: src/clparse.c:249
 msgid "Set the resolution to use"
 msgstr "사용할 화면 해상도를 설정하십시오"
 
-#: src/clparse.c:100
+#: src/clparse.c:249
 msgid "WIDTHxHEIGHT"
 msgstr "너비x높이"
 
-#: src/clparse.c:101
+#: src/clparse.c:250
 msgid "Enable shadows"
 msgstr "그림자 사용"
 
-#: src/clparse.c:102
+#: src/clparse.c:251
 msgid "Disable shadows"
 msgstr "그림자 사용 안함"
 
-#: src/clparse.c:103
+#: src/clparse.c:252
 msgid "Enable sound"
 msgstr "소리 켜짐"
 
-#: src/clparse.c:104
+#: src/clparse.c:253
 msgid "Disable sound"
 msgstr "소리 꺼짐"
 
-#: src/clparse.c:105
+#: src/clparse.c:254
 msgid "Activate self-test"
 msgstr "셀프 테스트(self-test) 활성화하기"
 
-#: src/clparse.c:106
+#: src/clparse.c:255
 msgid "connect directly to IP/hostname"
 msgstr "바로 IP 또는 호스트네임으로 연결"
 
-#: src/clparse.c:106
+#: src/clparse.c:255
 msgid "host"
 msgstr "호스트"
 
-#: src/clparse.c:107
+#: src/clparse.c:256
 msgid "go directly to host screen"
 msgstr "호스트 화면으로 바로 가기"
 
 #: src/configuration.c:441
 #: src/configuration.c:442
-#: src/multistat.c:139
+#: src/multistat.c:156
 msgid "Player"
 msgstr "플레이어"
 
@@ -12573,22 +12573,22 @@ msgstr "플레이어가 떠났습니다"
 msgid "Player dropped"
 msgstr "플레이어가 인터넷 연결 문제 또는 게임 버그 때문에 퇴장하였습니다"
 
-#: src/display.c:1732
+#: src/display.c:1747
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "건설이 불가능합니다. 석유 자원이 타고 있습니다"
 
-#: src/display.c:1911
-#: src/display.c:2526
+#: src/display.c:1926
+#: src/display.c:2541
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - 데미지 %d%% - 경험치 %d, %s"
 
-#: src/display.c:1927
+#: src/display.c:1942
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - 동맹군 - 데미지 %d%% - 경험치 %d, %s"
 
-#: src/display.c:2120
+#: src/display.c:2135
 msgid "Truck ordered to build Oil Derrick"
 msgstr "트럭이 유정탑을 건설하라는 명령을 받았습니다"
 
@@ -12601,71 +12601,71 @@ msgid "Structure Restored"
 msgstr "구조물이 복구되었습니다"
 
 # ask about form 0, 1, 2, etc
-#: src/droid.c:3315
+#: src/droid.c:3554
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "부대 %u가(이) 선택되었습니다 - 유닛 %u개"
 
-#: src/droid.c:3328
+#: src/droid.c:3567
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "유닛 %u개가 부대 %u에 할당되었습니다"
 
-#: src/droid.c:3341
+#: src/droid.c:3580
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "부대 %u를(을) 중심으로 - 유닛 %u개"
 
-#: src/droid.c:3345
+#: src/droid.c:3584
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "부대 %u와(과) 정렬하였습니다 - 유닛 %u개"
 
-#: src/droid.c:3648
+#: src/droid.c:3887
 msgid "Rookie"
 msgstr "루키"
 
-#: src/droid.c:3649
+#: src/droid.c:3888
 msgctxt "rank"
 msgid "Green"
 msgstr "그린"
 
 # finished training,
 # is now intern
-#: src/droid.c:3650
+#: src/droid.c:3889
 msgid "Trained"
 msgstr "견습병"
 
 # 정규 사병 = regular soldier
-#: src/droid.c:3651
+#: src/droid.c:3890
 msgid "Regular"
 msgstr "정규병"
 
-#: src/droid.c:3652
+#: src/droid.c:3891
 msgid "Professional"
 msgstr "프로페셔널"
 
-#: src/droid.c:3653
+#: src/droid.c:3892
 msgid "Veteran"
 msgstr "베테랑"
 
-#: src/droid.c:3654
+#: src/droid.c:3893
 msgid "Elite"
 msgstr "엘리트"
 
-#: src/droid.c:3655
+#: src/droid.c:3894
 msgid "Special"
 msgstr "스페셜"
 
-#: src/droid.c:3656
+#: src/droid.c:3895
 msgid "Hero"
 msgstr "히어로"
 
-#: src/droid.c:4673
+#: src/droid.c:4912
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
 msgstr ""
@@ -12684,7 +12684,7 @@ msgid "Tutorial"
 msgstr "튜토리얼"
 
 #: src/frontend.c:100
-#: src/hci.c:3988
+#: src/hci.c:3997
 msgid "Options"
 msgstr "옵션"
 
@@ -12745,8 +12745,8 @@ msgstr "싱글 플레이어"
 
 #: src/frontend.c:295
 #: src/ingameop.c:507
-#: src/mission.c:2842
-#: src/mission.c:2947
+#: src/mission.c:2848
+#: src/mission.c:2953
 msgid "Load Saved Game"
 msgstr "저장된 게임 로드하기"
 
@@ -13040,181 +13040,181 @@ msgstr "Mod (Modification):"
 msgid "MAP SAVED!"
 msgstr "맵이 저장되었습니다!"
 
-#: src/hci.c:1732
+#: src/hci.c:1739
 #: src/loop.c:536
 #: src/loop.c:552
-#: src/mission.c:2913
+#: src/mission.c:2919
 msgid "GAME SAVED :"
 msgstr "게임이 저장되었습니다 : "
 
-#: src/hci.c:2122
+#: src/hci.c:2129
 msgid "Failed to create building"
 msgstr "건물을 만들지 못했습니다"
 
-#: src/hci.c:2145
+#: src/hci.c:2152
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr "플레이어 %u 가 치트(디버그 메뉴)를 사용해 새로운 구조물을 지었습니다: %s."
 
-#: src/hci.c:2160
+#: src/hci.c:2167
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr "플레이어 %u 가 치트(디버그 메뉴)를 사용해 새로운 물체를 배치하였습니다: %s."
 
-#: src/hci.c:2181
+#: src/hci.c:2188
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "플레이어 %u 가 치트(디버그 메뉴)를 사용해 새로운 병사를 만들었습니다: %s."
 
-#: src/hci.c:3756
+#: src/hci.c:3765
 msgid "Commanders (F6)"
 msgstr "사령관 (F6)"
 
-#: src/hci.c:3772
+#: src/hci.c:3781
 msgid "Intelligence Display (F5)"
 msgstr "보도 디스플레이 (F5)"
 
-#: src/hci.c:3788
+#: src/hci.c:3797
 msgid "Manufacture (F1)"
 msgstr "생산 (F1)"
 
-#: src/hci.c:3804
+#: src/hci.c:3813
 msgid "Design (F4)"
 msgstr "디자인 (F4)"
 
-#: src/hci.c:3820
+#: src/hci.c:3829
 msgid "Research (F2)"
 msgstr "연구 (F2)"
 
-#: src/hci.c:3836
+#: src/hci.c:3845
 msgid "Build (F3)"
 msgstr "건축 (F3)"
 
-#: src/hci.c:3916
+#: src/hci.c:3925
 #: src/multiint.c:1287
 #: src/multimenu.c:808
 msgid "Power"
 msgstr "전력"
 
-#: src/hci.c:4030
+#: src/hci.c:4039
 msgid "Map:"
 msgstr "맵: "
 
-#: src/hci.c:4044
+#: src/hci.c:4053
 msgid "Load"
 msgstr "로드"
 
-#: src/hci.c:4045
+#: src/hci.c:4054
 msgid "Load Map File"
 msgstr "맵 파일 로드"
 
-#: src/hci.c:4052
+#: src/hci.c:4061
 msgid "Save"
 msgstr "저장"
 
-#: src/hci.c:4053
+#: src/hci.c:4062
 msgid "Save Map File"
 msgstr "맵 파일 저장"
 
-#: src/hci.c:4061
+#: src/hci.c:4070
 msgid "New"
 msgstr "새로 (New)"
 
-#: src/hci.c:4062
+#: src/hci.c:4071
 msgid "New Blank Map"
 msgstr "새로운 빈 맵"
 
-#: src/hci.c:4100
+#: src/hci.c:4109
 msgid "Tile"
 msgstr "타일"
 
-#: src/hci.c:4101
+#: src/hci.c:4110
 msgid "Place tiles on map"
 msgstr "게임 맵에서 타일을 놓기"
 
-#: src/hci.c:4110
+#: src/hci.c:4119
 msgid "Unit"
 msgstr "유닛"
 
-#: src/hci.c:4111
+#: src/hci.c:4120
 msgid "Place Unit on map"
 msgstr "게임 맵 안에 유닛 배치하기"
 
-#: src/hci.c:4119
+#: src/hci.c:4128
 msgid "Struct"
 msgstr "구조물"
 
-#: src/hci.c:4120
+#: src/hci.c:4129
 msgid "Place Structures on map"
 msgstr "게임 맵에서 구조물을 놓기"
 
-#: src/hci.c:4128
+#: src/hci.c:4137
 msgid "Feat"
 msgstr "물체"
 
-#: src/hci.c:4129
+#: src/hci.c:4138
 msgid "Place Features on map"
 msgstr "물체(Feature)를 맵위에 배치하기"
 
-#: src/hci.c:4139
+#: src/hci.c:4148
 msgid "Pause"
 msgstr "일시 정지"
 
-#: src/hci.c:4140
+#: src/hci.c:4149
 msgid "Pause or unpause the game"
 msgstr "게임을 일시 중지하거나 일시중지를 해제합니다"
 
-#: src/hci.c:4154
+#: src/hci.c:4163
 msgid "Align height of all map objects"
 msgstr "모든 맵 개체의 높이를 정렬하기 "
 
-#: src/hci.c:4164
+#: src/hci.c:4173
 msgid "Edit"
 msgstr "편집"
 
-#: src/hci.c:4165
+#: src/hci.c:4174
 msgid "Start Edit Mode"
 msgstr "편집 모드 시작하기"
 
-#: src/hci.c:4179
+#: src/hci.c:4188
 #: src/ingameop.c:119
 #: src/ingameop.c:264
 #: src/ingameop.c:269
 msgid "Quit"
 msgstr "종료"
 
-#: src/hci.c:4180
+#: src/hci.c:4189
 msgid "Exit Game"
 msgstr "게임 종료"
 
-#: src/hci.c:4205
+#: src/hci.c:4214
 msgid "Current Player:"
 msgstr "현재 플레이어: "
 
-#: src/hci.c:4608
+#: src/hci.c:4617
 #: src/intdisplay.c:209
 #: src/intdisplay.c:252
 #: src/intdisplay.c:303
 msgid "Progress Bar"
 msgstr "진행률 표시줄"
 
-#: src/hci.c:5566
+#: src/hci.c:5575
 msgid "Infinite Production"
 msgstr "무한 생산"
 
-#: src/hci.c:5644
+#: src/hci.c:5653
 msgid "Factory Delivery Point"
 msgstr "공장 배달 지점"
 
-#: src/hci.c:5663
+#: src/hci.c:5672
 msgid "Loop Production"
 msgstr "반복 생산"
 
-#: src/hci.c:5754
+#: src/hci.c:5763
 msgid "Tab Scroll left"
 msgstr "왼쪽으로 탭 스크롤"
 
-#: src/hci.c:5771
+#: src/hci.c:5780
 msgid "Tab Scroll right"
 msgstr "오른쪽으로 탭 스크롤"
 
@@ -13230,8 +13230,8 @@ msgstr "경고: 당신이 호스트입니다. 당신이 게임을 퇴장하면, 
 
 #: src/ingameop.c:283
 #: src/ingameop.c:511
-#: src/mission.c:2829
-#: src/mission.c:2950
+#: src/mission.c:2835
+#: src/mission.c:2956
 msgid "Save Game"
 msgstr "게임 저장"
 
@@ -13265,7 +13265,7 @@ msgid "Power Accrued"
 msgstr "전력 축적량"
 
 #: src/intelmap.c:246
-#: src/keybind.c:1381
+#: src/keybind.c:1383
 msgid "PAUSED"
 msgstr "게임이 일시 중지되었습니다"
 
@@ -13392,280 +13392,280 @@ msgstr "VTOL 공장 생산 할당하기"
 msgid "Circle"
 msgstr "빙빙 돌아라 "
 
-#: src/keybind.c:135
+#: src/keybind.c:137
 msgid "Sorry, that cheat is disabled in multiplayer games."
 msgstr "죄송합니다. 이 치트는 멀티플레이어 게임에서는 사용 금지입니다."
 
-#: src/keybind.c:141
+#: src/keybind.c:143
 msgid "Warning! This cheat is buggy.  We recommend to NOT use it."
 msgstr "경고: 이 치트는 불안정합니다. 이것을 사용하지 않는게 좋습니다."
 
-#: src/keybind.c:210
+#: src/keybind.c:212
 msgid "Lets us see what you see!"
 msgstr "네가 보는 걸 우리에게도 보여줘!"
 
-#: src/keybind.c:212
+#: src/keybind.c:214
 msgid "Fine, weapon & sensor display is off!"
 msgstr "흠, 그래! 무기 & 센서 보기가 꺼졌습니다"
 
-#: src/keybind.c:344
+#: src/keybind.c:346
 #, c-format
 msgid "Player %u is cheating him/herself a new droid army of %s(s)."
 msgstr "플레이어 %u이(가) 치트를 사용해 %s(으)로 이루어진 새로운 군대를 만들고 있습니다."
 
-#: src/keybind.c:383
-#: src/keybind.c:413
-#: src/keybind.c:430
-#: src/keybind.c:474
-#: src/keybind.c:582
-#: src/keybind.c:622
-#: src/keybind.c:728
-#: src/keybind.c:1271
-#: src/keybind.c:1328
-#: src/keybind.c:1430
-#: src/keybind.c:1527
-#: src/keybind.c:1838
-#: src/keybind.c:1879
+#: src/keybind.c:385
+#: src/keybind.c:415
+#: src/keybind.c:432
+#: src/keybind.c:476
+#: src/keybind.c:584
+#: src/keybind.c:624
+#: src/keybind.c:730
+#: src/keybind.c:1273
+#: src/keybind.c:1330
+#: src/keybind.c:1432
+#: src/keybind.c:1529
+#: src/keybind.c:1840
+#: src/keybind.c:1881
 #, c-format
 msgid "(Player %u) is using cheat :%s"
 msgstr "(플레이어 %u) 가 치트를 사용하고 있습니다 :%s"
 
-#: src/keybind.c:384
+#: src/keybind.c:386
 msgid "Hard as nails!!!"
 msgstr "피도 눈물도 없다!!!"
 
-#: src/keybind.c:398
+#: src/keybind.c:400
 msgid "Takings thing easy!"
 msgstr "쉽게 하자!"
 
-#: src/keybind.c:414
+#: src/keybind.c:416
 msgid "1000 big ones!!!"
 msgstr "큰 거 1000개!!!"
 
-#: src/keybind.c:431
+#: src/keybind.c:433
 msgid "Power overwhelming"
 msgstr "엄청나 압도적인 전력"
 
-#: src/keybind.c:446
+#: src/keybind.c:448
 msgid "Back to normality!"
 msgstr "노멀리티(정상 상태)로 돌아가기!"
 
-#: src/keybind.c:459
+#: src/keybind.c:461
 msgid "Getting tricky!"
 msgstr "까다로워진다!"
 
-#: src/keybind.c:475
+#: src/keybind.c:477
 msgid "Twice as nice!"
 msgstr "두 배로 좋다!"
 
-#: src/keybind.c:486
+#: src/keybind.c:488
 msgid "FPS display is enabled."
 msgstr "초당 프레임 수를 보입니다."
 
-#: src/keybind.c:490
+#: src/keybind.c:492
 msgid "FPS display is disabled."
 msgstr "초당 프레임 수를 보이지 않습니다."
 
-#: src/keybind.c:514
+#: src/keybind.c:516
 #, c-format
 msgid "FPS %d; FPS-Limit: %d; PIEs %d; polys %d; Terr. polys %d; States %d"
 msgstr "FPS %d; FPS-Limit: %d; PIEs %d; polys %d; Terr. polys %d; States %d"
 
-#: src/keybind.c:546
+#: src/keybind.c:548
 #, c-format
 msgid "(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"
 msgstr "(플레이어 %u) 가 치트를 사용하고 있습니다 :병사 수: %d  구조물 수: %d  물체 수: %d"
 
-#: src/keybind.c:583
+#: src/keybind.c:585
 msgid "Infinite power disabled"
 msgstr "무한 전력이 해제되었습니다"
 
-#: src/keybind.c:583
+#: src/keybind.c:585
 msgid "Infinite power enabled"
 msgstr "무한 전력이 활성화되었습니다"
 
-#: src/keybind.c:623
+#: src/keybind.c:625
 msgid "All items made available"
 msgstr "모든 항목이 사용할 수 있게 되었습니다"
 
-#: src/keybind.c:729
+#: src/keybind.c:731
 msgid "Fog on"
 msgstr "안개 켜짐"
 
-#: src/keybind.c:729
+#: src/keybind.c:731
 msgid "Fog off"
 msgstr "안개 꺼짐"
 
-#: src/keybind.c:1160
+#: src/keybind.c:1162
 #, c-format
 msgid "Warning!  This cheat can cause dire problems later on! [%s]"
 msgstr "경고! 이 치트를 사용하면 나중에 무서운 문재가 발생할 수 있습니다! [%s]"
 
-#: src/keybind.c:1160
+#: src/keybind.c:1162
 msgid "Ending Mission."
 msgstr "임무를 종료하고 있습니다."
 
-#: src/keybind.c:1272
+#: src/keybind.c:1274
 msgid "CHEATS ARE NOW ENABLED!"
 msgstr "이제 치트(CHEAT)키가 사용 가능합니다!"
 
-#: src/keybind.c:1272
+#: src/keybind.c:1274
 msgid "CHEATS ARE NOW DISABLED!"
 msgstr "이제 치트(CHEAT)키를 사용할 수 없습니다!"
 
-#: src/keybind.c:1329
+#: src/keybind.c:1331
 msgid "God Mode ON"
 msgstr "신(God) 모드 켜짐"
 
-#: src/keybind.c:1329
+#: src/keybind.c:1331
 msgid "God Mode OFF"
 msgstr "신(God) 모드 꺼짐"
 
-#: src/keybind.c:1341
+#: src/keybind.c:1343
 msgid "View Aligned to North"
 msgstr "카메라 보기(view)가 북쪽으로 정렬되었습니다"
 
-#: src/keybind.c:1350
+#: src/keybind.c:1352
 #, c-format
 msgid "Trap cursor %s"
 msgstr "마우스 커서 가두기 %s"
 
-#: src/keybind.c:1431
+#: src/keybind.c:1433
 msgid "Researched EVERYTHING for you!"
 msgstr "모든 것이 연구되었습니다!"
 
-#: src/keybind.c:1464
+#: src/keybind.c:1466
 #, c-format
 msgid "(Player %u) is using cheat :%s %s"
 msgstr "(플레이어 %u) 가 치트를 사용하고 있습니다 :%s %s"
 
-#: src/keybind.c:1465
+#: src/keybind.c:1467
 msgid "Researched"
 msgstr "연구 완료되었습니다"
 
-#: src/keybind.c:1485
+#: src/keybind.c:1487
 msgid "Only displaying energy bars when selected"
 msgstr "선택되었을 때 에너지량을 표시합니다"
 
-#: src/keybind.c:1488
+#: src/keybind.c:1490
 msgid "Always displaying energy bars for units"
 msgstr "항상 유닛의 에너지량을 표시합니다"
 
-#: src/keybind.c:1491
+#: src/keybind.c:1493
 msgid "Always displaying energy bars for units and structures"
 msgstr "항상 유닛과 구조물의 에너지량을 표시합니다"
 
-#: src/keybind.c:1513
+#: src/keybind.c:1515
 msgid "Demo mode off - Returning to normal game mode"
 msgstr "데모(시범) 모드 꺼짐 - 보통 게임 모드로 되돌아갑니다"
 
-#: src/keybind.c:1528
+#: src/keybind.c:1530
 msgid "Debug menu is Open"
 msgstr "디버그 메뉴가 열였습니다"
 
-#: src/keybind.c:1559
+#: src/keybind.c:1561
 msgid "Unable to locate any oil derricks!"
 msgstr "유정 탑을 찾을 수 없습니다!"
 
-#: src/keybind.c:1780
+#: src/keybind.c:1782
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr "오, 바깥 날씨가 무시무시하군요... 눈"
 
-#: src/keybind.c:1786
+#: src/keybind.c:1788
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr "빗속에서 노래, 난 비 속에서 노래 하네... 비"
 
-#: src/keybind.c:1792
+#: src/keybind.c:1794
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr "일기 예보 : 모든 영역에 맑은 하늘입니다... 청천백일"
 
-#: src/keybind.c:1837
+#: src/keybind.c:1839
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr "경고! 임무 수용 중 잘못 사용하면 엄청 안 좋은 결과를 볼 수도 있습니다."
 
-#: src/keybind.c:1839
+#: src/keybind.c:1841
 msgid "All enemies destroyed by cheating!"
 msgstr "치트로 모든 적을 파괴하였습니다!"
 
-#: src/keybind.c:1880
+#: src/keybind.c:1882
 msgid "Destroying selected droids and structures!"
 msgstr "선택된 병사와 구조물을 파괴합니다!"
 
-#: src/keybind.c:2401
+#: src/keybind.c:2403
 msgid "Centered on player HQ, direction NORTH"
 msgstr "플레이어의 본부를 중심으로, 북쪽 방향"
 
-#: src/keybind.c:2413
+#: src/keybind.c:2415
 msgid "Unable to locate HQ!"
 msgstr "본부를 찾지 못하였습니다!"
 
-#: src/keybind.c:2420
+#: src/keybind.c:2422
 msgid "Formation speed limiting has been removed from the game due to bugs."
 msgstr "편대 속도 제한은 버그로 인해 게임에서 제거되었습니다."
 
-#: src/keybind.c:2469
+#: src/keybind.c:2471
 msgid "Vertical rotation direction: Normal"
 msgstr "수직 회전 방향: 기본"
 
-#: src/keybind.c:2474
+#: src/keybind.c:2476
 msgid "Vertical rotation direction: Flipped"
 msgstr "수직 회전 방향: 뒤집어짐"
 
-#: src/keybind.c:2483
+#: src/keybind.c:2485
 msgid "Screen shake when things die: Off"
 msgstr "무엇이 죽을 때 화면 흔들림: 꺼짐"
 
-#: src/keybind.c:2488
+#: src/keybind.c:2490
 msgid "Screen shake when things die: On"
 msgstr "무엇이 죽을 때 화면 흔들림: 켜짐"
 
-#: src/keybind.c:2533
-#: src/keybind.c:2576
+#: src/keybind.c:2535
+#: src/keybind.c:2578
 msgid "Sorry, but game speed cannot be changed in multiplayer."
 msgstr "죄송합니다, 멀티플레이어 게임에서는 게임 속도를 바꿀 수 없습니다."
 
-#: src/keybind.c:2554
-#: src/keybind.c:2597
-#: src/keybind.c:2619
+#: src/keybind.c:2556
+#: src/keybind.c:2599
+#: src/keybind.c:2621
 msgid "Game Speed Reset"
 msgstr "게임 속도 리셋"
 
-#: src/keybind.c:2558
+#: src/keybind.c:2560
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "%3.1f 로 게임 속도가 증가되었습니다"
 
-#: src/keybind.c:2601
+#: src/keybind.c:2603
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "%3.1f 로 게임 속도가 감소되었습니다"
 
 # 아군/적군
-#: src/keybind.c:2631
+#: src/keybind.c:2633
 msgid "Radar showing friend-foe colors"
 msgstr "레이더에 아군-적군 색깔이 나옵니다"
 
-#: src/keybind.c:2635
+#: src/keybind.c:2637
 msgid "Radar showing player colors"
 msgstr "레이더에 플레이어들의 색깔이 나옵니다"
 
-#: src/keybind.c:2656
+#: src/keybind.c:2658
 msgid "Radar showing only objects"
 msgstr "레이더에 물체만 나옵니다"
 
-#: src/keybind.c:2659
+#: src/keybind.c:2661
 msgid "Radar blending terrain and height"
 msgstr "레이더에 지형과 고도가 혼합되 나옵니다"
 
-#: src/keybind.c:2662
+#: src/keybind.c:2664
 msgid "Radar showing terrain"
 msgstr "레이더에 지형이 나옵니다"
 
-#: src/keybind.c:2665
+#: src/keybind.c:2667
 msgid "Radar showing revealed terrain"
 msgstr "드러난 지형이 레이더에 나옵니다"
 
-#: src/keybind.c:2668
+#: src/keybind.c:2670
 msgid "Radar showing height"
 msgstr "레이더에 고도가 나옵니다"
 
@@ -14167,33 +14167,33 @@ msgstr "유닛 운전 모드 켜짐/꺼짐"
 msgid "Could not save game!"
 msgstr "게임을 저장할 수 없습니다!"
 
-#: src/mission.c:2382
+#: src/mission.c:2388
 msgid "Load Transport"
 msgstr "수송선에 싣기"
 
-#: src/mission.c:2776
+#: src/mission.c:2782
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "목표 달성 (치팅했습니다!)"
 
-#: src/mission.c:2776
+#: src/mission.c:2782
 msgid "OBJECTIVE ACHIEVED"
 msgstr "목표 달성"
 
-#: src/mission.c:2782
+#: src/mission.c:2788
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "목표 달성 실패--그리고 치트를 사용했습니다!"
 
-#: src/mission.c:2782
+#: src/mission.c:2788
 msgid "OBJECTIVE FAILED"
 msgstr "목표 달성 실패"
 
-#: src/mission.c:2808
-#: src/mission.c:2848
-#: src/mission.c:2966
+#: src/mission.c:2814
+#: src/mission.c:2854
+#: src/mission.c:2972
 msgid "Quit To Main Menu"
 msgstr "메인 메뉴로 종료하기"
 
-#: src/mission.c:2816
+#: src/mission.c:2822
 msgid "Continue Game"
 msgstr "게임 계속하기"
 
@@ -14511,40 +14511,40 @@ msgstr "*** 이제 비밀번호 [%s] 가 요구됩니다! ***"
 msgid "*** password is NOT required! ***"
 msgstr "*** 비밀번호가 요구되지 않습니다! ***"
 
-#: src/multiint.c:2622
+#: src/multiint.c:2641
 msgid "Sorry! Failed to host the game."
 msgstr "죄송합니다! 게임 호스팅이 실패하였습니다"
 
-#: src/multiint.c:2707
+#: src/multiint.c:2726
 msgid "'Locked Teams' mode enabled"
 msgstr "'팀 잠금' 모드가 켜졌습니다"
 
-#: src/multiint.c:2746
-#: src/multiint.c:2796
+#: src/multiint.c:2765
+#: src/multiint.c:2815
 #: src/multimenu.c:1538
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "호스트가 %s를 게임에서 퇴장시켰습니다!"
 
-#: src/multiint.c:2878
+#: src/multiint.c:2897
 msgid "Host is Starting Game"
 msgstr "호스트가 게임을 시작하고 있습니다"
 
-#: src/multiint.c:3488
+#: src/multiint.c:3507
 msgid "Players"
 msgstr "플레이어"
 
-#: src/multiint.c:3606
+#: src/multiint.c:3625
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "맵을 보내는 중: %d%% "
 
-#: src/multiint.c:3615
+#: src/multiint.c:3634
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "맵: %d%% 다운로드 완료"
 
-#: src/multiint.c:3641
+#: src/multiint.c:3660
 msgid "HOST"
 msgstr "호스트"
 
@@ -14563,17 +14563,17 @@ msgstr "%s가 게임을 퇴장하였습니다"
 msgid "File transfer has been aborted for %d."
 msgstr "%d에게 파일 전송이 취소되었습니다"
 
-#: src/multijoin.c:361
+#: src/multijoin.c:363
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr "%s (%u)는 호환되지 않는 mod를 사용 중이며, 게임에서 퇴장당하였습니다."
 
-#: src/multijoin.c:405
+#: src/multijoin.c:407
 #, c-format
 msgid "%s is Joining the Game"
 msgstr "%s가 게임에 참여하였습니다"
 
-#: src/multijoin.c:415
+#: src/multijoin.c:417
 msgid "System message:"
 msgstr "시스템 메시지:"
 
@@ -14912,55 +14912,55 @@ msgstr "사령관을 찾을 수 없습니다!"
 msgid "Control Limit Reached - Production Halted"
 msgstr "제어 한계에 도달하였습니다 - 생산이 중단되었습니다"
 
-#: src/structure.c:5995
-#: src/structure.c:6020
+#: src/structure.c:6013
+#: src/structure.c:6038
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - 유닛 %u개 할당되었습니다"
 
-#: src/structure.c:6025
-#: src/structure.c:6089
+#: src/structure.c:6043
+#: src/structure.c:6107
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - 데미지 %3.0f%%"
 
-#: src/structure.c:6075
+#: src/structure.c:6093
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - %u개 연결 되었습니다 (전체 %u개)"
 
-#: src/structure.c:6210
-#: src/structure.c:6259
+#: src/structure.c:6228
+#: src/structure.c:6277
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - 전자적으로 손상됨"
 
-#: src/structure.c:6492
+#: src/structure.c:6510
 msgid "Electronic Reward - Visibility Report"
 msgstr "전자적 보상 - 시계보고"
 
-#: src/structure.c:6532
+#: src/structure.c:6550
 msgid "Factory Reward - Propulsion"
 msgstr "공장 보상 - 추진력"
 
-#: src/structure.c:6556
+#: src/structure.c:6574
 msgid "Factory Reward - Body"
 msgstr "공장 보상 - 차체"
 
-#: src/structure.c:6580
+#: src/structure.c:6598
 msgid "Factory Reward - Weapon"
 msgstr "공장 보상 - 무기"
 
-#: src/structure.c:6589
+#: src/structure.c:6607
 msgid "Factory Reward - Nothing"
 msgstr "공장 보상 - 없음"
 
-#: src/structure.c:6617
+#: src/structure.c:6635
 msgid "Repair Facility Award - Repair"
 msgstr "수리 시설 상 - 수리"
 
-#: src/structure.c:6624
+#: src/structure.c:6642
 msgid "Repair Facility Award - Nothing"
 msgstr "수리 시설 상 - 없음"
 
@@ -14977,30 +14977,30 @@ msgstr ""
 msgid "Reinforcements landing"
 msgstr "지원군이 착륙하고 있습니다"
 
-#: src/version.c:139
+#: src/version.c:143
 msgid " (modified and switched locally)"
 msgstr " (로컬 수정 및 전환switch)"
 
-#: src/version.c:141
+#: src/version.c:145
 msgid " (modified locally)"
 msgstr " (로컬 수정)"
 
-#: src/version.c:143
+#: src/version.c:147
 msgid " (switched locally)"
 msgstr " (로컬 전환switch)"
 
-#: src/version.c:150
+#: src/version.c:154
 msgid " - DEBUG"
 msgstr " - 디버그(DEBUG)"
 
-#: src/version.c:159
+#: src/version.c:163
 #, c-format
 msgid " - Built %s"
 msgstr " - 빌드 날짜 %s"
 
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version <version name/number> <working copy state><BUILD DATE><BUILD TYPE>"
-#: src/version.c:169
+#: src/version.c:173
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "버젼 %s%s%s%s"
