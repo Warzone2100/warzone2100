@@ -191,6 +191,8 @@ tools/qwzm/ui_qwzm.h
 /trunk
 /newnet
 /qt-trunk
+/master
+/3.0
 
 #misc (MSVC)
 *.orig
