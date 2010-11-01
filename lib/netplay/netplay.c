@@ -46,6 +46,7 @@
 #include "src/multijoin.h"
 #include "src/multiint.h"
 #include "src/multiplay.h"
+#include "src/warzoneconfig.h"
 
 #if   defined(WZ_OS_UNIX)
 # include <arpa/inet.h>
@@ -1510,6 +1511,11 @@ void NET_InitPlayers()
 	for (i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 	{
 		NET_InitPlayer(i, true);
+	}
+	// Now switch player color of the host to what they normally use for SP games
+	if ( getPlayerColour(NET_HOST_ONLY) != war_GetSPcolor())
+	{
+		changeColour(NET_HOST_ONLY, war_GetSPcolor());
 	}
 	NetPlay.hostPlayer = NET_HOST_ONLY;	// right now, host starts always at index zero
 	NetPlay.playercount = 0;
