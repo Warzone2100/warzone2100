@@ -144,7 +144,7 @@ static int32_t updateExtractedPower(STRUCTURE *psBuilding)
 	{
 		int overflowDiff;
 		// Add modifier according to difficulty level
-		if (!NetPlay.bComms)             // ignore multiplayer games
+		if (!bMultiPlayer)  // ignore multiplayer games
 		{
 			switch (getDifficultyLevel())
 			{

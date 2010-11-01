@@ -576,7 +576,7 @@ float objDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD originalhp, UDWORD wea
 
 
 	// apply game difficulty setting
-	if(!NetPlay.bComms)		// ignore multiplayer games
+	if (bMultiPlayer)  // ignore multiplayer games
 	{
 		if (psObj->player != selectedPlayer)
 		{
