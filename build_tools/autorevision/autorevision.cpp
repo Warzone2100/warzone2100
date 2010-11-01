@@ -93,6 +93,10 @@ class assign_once : public T
 struct RevisionInformation
 {
     RevisionInformation() :
+        low_revision("unknown"),
+        revision("unknown"),
+        low_revisionCount("-1"),
+        revisionCount("-1"),
         wc_modified(false),
         wc_switched(false)
     {}
