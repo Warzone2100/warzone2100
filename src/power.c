@@ -26,6 +26,8 @@
 
 #include "lib/framework/frame.h"
 
+#include "lib/netplay/netplay.h"
+
 #include "difficulty.h"
 #include "intdisplay.h"
 #include "mission.h"
@@ -132,7 +134,7 @@ static int32_t updateExtractedPower(STRUCTURE *psBuilding)
 {
 	RES_EXTRACTOR		*pResExtractor;
 	int32_t				pointsToAdd, extractedPoints;
-	int32_t				powmodifier;
+	int32_t                         powmodifier = NORMAL_POWER_MOD/10;
 
 	pResExtractor = (RES_EXTRACTOR *) psBuilding->pFunctionality;
 	extractedPoints = 0;
@@ -142,17 +144,14 @@ static int32_t updateExtractedPower(STRUCTURE *psBuilding)
 	{
 		int overflowDiff;
 		// Add modifier according to difficulty level
-		if (getDifficultyLevel() == DL_EASY)
+		if (!NetPlay.bComms)             // ignore multiplayer games
 		{
-			powmodifier = EASY_POWER_MOD/10;
-		}
-		else if (getDifficultyLevel() == DL_HARD)
-		{
-			powmodifier = HARD_POWER_MOD/10;
-		}
-		else
-		{
-			powmodifier = NORMAL_POWER_MOD/10;
+			switch (getDifficultyLevel())
+			{
+				case DL_EASY: powmodifier = EASY_POWER_MOD/10; break;
+				case DL_HARD: powmodifier = HARD_POWER_MOD/10; break;
+				default: break;
+			}
 		}
 		// if the extractor hasn't been updated recently, now would be a good time.
 		if (pResExtractor->timeLastUpdated < 20 && gameTime >= 20)
