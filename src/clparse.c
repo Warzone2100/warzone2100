@@ -470,7 +470,7 @@ bool ParseCommandLine(int argc, const char** argv)
 				bMultiPlayer = false;
 				bMultiMessages = false;
 				NetPlay.players[0].allocated = true;
-				if (strcmp(token, "CAM_1A") && strcmp(token, "CAM_2A") && strcmp(token, "CAM_3A"))
+				if (!strcmp(token, "CAM_1A") || !strcmp(token, "CAM_2A") || !strcmp(token, "CAM_3A"))
 				{
 					game.type = CAMPAIGN;
 				}
