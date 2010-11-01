@@ -781,7 +781,16 @@ void processMouseClickInput(void)
 		}
 		else
 		{
-			dealWithLMB();
+			if (!bMultiPlayer  && establishSelection(selectedPlayer) == SC_DROID_TRANSPORTER)
+			{
+				// Never, *ever* let user control the transport in SP games--it breaks the scripts!
+				ASSERT(game.type == CAMPAIGN, "Game type was set incorrectly!");
+				return;
+			}
+			else
+			{
+				dealWithLMB();
+			}
 		}
 	}
 
