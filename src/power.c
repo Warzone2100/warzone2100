@@ -193,7 +193,7 @@ static int64_t updateExtractedPower(STRUCTURE *psBuilding)
 {
 	RES_EXTRACTOR		*pResExtractor;
 	SDWORD				timeDiff;
-	UBYTE			modifier;
+	int                     modifier = NORMAL_POWER_MOD;
 	int64_t                 extractedPoints;
 
 	pResExtractor = (RES_EXTRACTOR *) psBuilding->pFunctionality;
@@ -210,17 +210,14 @@ static int64_t updateExtractedPower(STRUCTURE *psBuilding)
 		}
 		timeDiff = (int)gameTime - (int)pResExtractor->timeLastUpdated;
 		// Add modifier according to difficulty level
-		if (getDifficultyLevel() == DL_EASY)
+		if (!NetPlay.bComms)             // ignore multiplayer games
 		{
-			modifier = EASY_POWER_MOD;
-		}
-		else if (getDifficultyLevel() == DL_HARD)
-		{
-			modifier = HARD_POWER_MOD;
-		}
-		else
-		{
-			modifier = NORMAL_POWER_MOD;
+			switch (getDifficultyLevel())
+			{
+				case DL_EASY: modifier = EASY_POWER_MOD; break;
+				case DL_HARD: modifier = HARD_POWER_MOD; break;
+				default: break;
+			}
 		}
 		// include modifier as a %
 		extractedPoints = (modifier * EXTRACT_POINTS * timeDiff)*FP_ONE / (GAME_TICKS_PER_SEC * 100);
@@ -301,6 +298,8 @@ void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player)
 			}
 		}
 	}
+
+	syncDebug("updateCurrentPower%d = %"PRId64",%u", player, extractedPower, psPowerGen->multiplier);
 
 	asPower[player].currentPower += (extractedPower * psPowerGen->multiplier) / 100;
 	ASSERT(asPower[player].currentPower >= 0, "negative power");
