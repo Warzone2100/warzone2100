@@ -569,7 +569,7 @@ unsigned int objGuessFutureDamage(WEAPON_STATS *psStats, unsigned int player, BA
 
 
 	// apply game difficulty setting
-	if(!NetPlay.bComms)		// ignore multiplayer games
+	if (!bMultiPlayer)  // ignore multiplayer games
 	{
 		if (psTarget->player != selectedPlayer)
 		{

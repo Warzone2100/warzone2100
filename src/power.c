@@ -210,7 +210,7 @@ static int64_t updateExtractedPower(STRUCTURE *psBuilding)
 		}
 		timeDiff = (int)gameTime - (int)pResExtractor->timeLastUpdated;
 		// Add modifier according to difficulty level
-		if (!NetPlay.bComms)             // ignore multiplayer games
+		if (!bMultiPlayer)  // ignore multiplayer games
 		{
 			switch (getDifficultyLevel())
 			{
