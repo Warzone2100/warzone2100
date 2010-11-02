@@ -1574,7 +1574,10 @@ static void dangerFloodFill(int player)
 			}
 			psTile = mapTile(npos.x, npos.y);
 
-			if (!(psTile->threatBits & (1 << player)) && (psTile->dangerBits & (1 <<player)) && !fpathBlockingTile(npos.x, npos.y, PROPULSION_TYPE_WHEELED))
+			if (!(psTile->tileInfoBits & BITS_TEMPORARY)
+			    && !(psTile->threatBits & (1 << player))
+			    && (psTile->dangerBits & (1 <<player))
+			    && !fpathBlockingTile(npos.x, npos.y, PROPULSION_TYPE_WHEELED))
 			{
 				struct ffnode *node = malloc(sizeof(*node));
 
@@ -1582,6 +1585,7 @@ static void dangerFloodFill(int player)
 				node->x = npos.x;
 				node->y = npos.y;
 				open = node;
+				psTile->tileInfoBits |= BITS_TEMPORARY;	// make sure we do not put it many times on the open list
 			}
 		}
 
@@ -1632,6 +1636,7 @@ static void threatUpdate(int player)
 	for (i = 0; i < mapWidth * mapHeight; i++, psTile++)
 	{
 		psTile->threatBits &= ~(1 << player);
+		psTile->tileInfoBits &= ~BITS_TEMPORARY;
 	}
 
 	// Step 2: Set threat bits
