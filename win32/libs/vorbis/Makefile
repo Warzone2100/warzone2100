@@ -1,12 +1,12 @@
 PKG_NAME:=libvorbis
-PKG_VERSION:=1.3.1
+PKG_VERSION:=1.3.2
 
 PKG_SOURCEBASE=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_SOURCEBASE).tar.gz
 PKG_SOURCE_URL:= \
 	http://downloads.xiph.org/releases/vorbis/ \
 	http://www.il.fontys.nl/~giel/warzone/devpkg/
-PKG_MD5SUM:=016e523fac70bdd786258a9d15fd36e9
+PKG_MD5SUM:=c870b9bd5858a0ecb5275c14486d9554
 
 TARGETS:= \
 	$(TOPDIR)/build/libs/include/vorbis/vorbisfile.h \
