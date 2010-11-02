@@ -12739,7 +12739,7 @@ msgstr "Multi-joueurs"
 #: src/frontend.c:99
 #: src/frontend.c:155
 msgid "Tutorial"
-msgstr "Tutorielle"
+msgstr "Tutoriel"
 
 #: src/frontend.c:100
 #: src/hci.c:3997
@@ -12764,7 +12764,7 @@ msgstr "Partie Rapide"
 
 #: src/frontend.c:157
 msgid "TUTORIALS"
-msgstr "TUTORIAUX"
+msgstr "TUTORIELS"
 
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
 #: src/frontend.c:159
