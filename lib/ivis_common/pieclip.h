@@ -61,9 +61,9 @@ typedef struct
 extern BOOL pie_SetVideoBufferDepth(UDWORD depth);
 extern BOOL pie_SetVideoBufferWidth(UDWORD width);
 extern BOOL pie_SetVideoBufferHeight(UDWORD height);
-extern UDWORD pie_GetVideoBufferDepth( void ) WZ_DECL_PURE;
-extern UDWORD pie_GetVideoBufferWidth( void ) WZ_DECL_PURE;
-extern UDWORD pie_GetVideoBufferHeight( void ) WZ_DECL_PURE;
+extern int pie_GetVideoBufferDepth( void ) WZ_DECL_PURE;
+extern int pie_GetVideoBufferWidth( void ) WZ_DECL_PURE;
+extern int pie_GetVideoBufferHeight( void ) WZ_DECL_PURE;
 
 #ifdef __cplusplus
 }

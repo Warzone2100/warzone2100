@@ -63,8 +63,8 @@ typedef struct	_console_message
 	QPixmap				*cache;						// Text of the message
 	QString				text;						// Text of the message
 	UDWORD				timeAdded;								// When was it added to our list?
-	UDWORD				id;
-	SDWORD				player;						// Player who sent this message or SYSTEM_MESSAGE
+	int				id;
+	int				player;						// Player who sent this message or SYSTEM_MESSAGE
 	struct _console_message *psNext;
 } CONSOLE_MESSAGE;
 
@@ -600,7 +600,7 @@ void	displayConsoleMessages( void )
 
 		/* GET RID OF THE MAGIC NUMBERS BELOW */
 		clipDepth = (mainConsole.topY+(boxDepth*linePitch)+CON_BORDER_HEIGHT+drop);
-		if(clipDepth > (pie_GetVideoBufferHeight() - linePitch))
+		if(clipDepth > pie_GetVideoBufferHeight() - linePitch)
 		{
 			clipDepth = (pie_GetVideoBufferHeight() - linePitch);
 		}
@@ -610,7 +610,7 @@ void	displayConsoleMessages( void )
 	MesY = mainConsole.topY + drop;
 
 	for (psMessage = consoleMessages, numProcessed = 0;
-	     psMessage && numProcessed < consoleVisibleLines && MesY < (pie_GetVideoBufferHeight() - linePitch);
+	     psMessage && numProcessed < consoleVisibleLines && MesY < pie_GetVideoBufferHeight() - linePitch;
 	     psMessage = psMessage->psNext)
 	{
  		/* Draw the text string */
