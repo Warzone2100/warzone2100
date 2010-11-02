@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-10-18 03:34+0200\n"
+"POT-Creation-Date: 2010-11-02 01:12+0100\n"
 "PO-Revision-Date: 2008-05-09 10:33+0000\n"
 "Last-Translator: Lartza <lartza@wippies.com>\n"
 "Language-Team: Finnish <fi@li.org>\n"
@@ -12004,173 +12004,173 @@ msgstr ""
 msgid "System locale"
 msgstr ""
 
-#: lib/netplay/netplay.c:202
-#: lib/netplay/netplay.c:1002
+#: lib/netplay/netplay.c:206
+#: lib/netplay/netplay.c:1006
 msgid "Enter password here"
 msgstr ""
 
-#: lib/netplay/netplay.c:1996
+#: lib/netplay/netplay.c:2000
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr ""
 
-#: lib/netplay/netplay.c:2010
+#: lib/netplay/netplay.c:2014
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr ""
 
 #: src/challenge.c:189
 #: src/hci.c:1006
-#: src/hci.c:3786
-#: src/hci.c:3935
-#: src/hci.c:4453
-#: src/hci.c:5635
+#: src/hci.c:3799
+#: src/hci.c:3948
+#: src/hci.c:4466
+#: src/hci.c:5648
 #: src/intelmap.c:544
 #: src/intorder.c:782
 #: src/loadsave.c:257
-#: src/multimenu.c:483
-#: src/multimenu.c:1401
+#: src/multimenu.c:484
+#: src/multimenu.c:1416
 #: src/transporter.c:283
 #: src/transporter.c:373
 #: src/transporter.c:856
 msgid "Close"
 msgstr "Sulje"
 
-#: src/clparse.c:232
+#: src/clparse.c:242
 msgid "Run in cheat mode"
 msgstr ""
 
-#: src/clparse.c:233
+#: src/clparse.c:243
 msgid "Set configuration directory"
 msgstr ""
 
-#: src/clparse.c:233
+#: src/clparse.c:243
 msgid "configuration directory"
 msgstr ""
 
-#: src/clparse.c:234
+#: src/clparse.c:244
 msgid "Set default data directory"
 msgstr ""
 
-#: src/clparse.c:234
+#: src/clparse.c:244
 msgid "data directory"
 msgstr ""
 
-#: src/clparse.c:235
+#: src/clparse.c:245
 msgid "Show debug for given level"
 msgstr ""
 
-#: src/clparse.c:235
+#: src/clparse.c:245
 msgid "debug level"
 msgstr ""
 
-#: src/clparse.c:236
+#: src/clparse.c:246
 msgid "Log debug output to file"
 msgstr ""
 
-#: src/clparse.c:236
+#: src/clparse.c:246
 msgid "file"
 msgstr ""
 
-#: src/clparse.c:237
+#: src/clparse.c:247
 msgid "Flush all debug output written to stderr"
 msgstr ""
 
-#: src/clparse.c:238
+#: src/clparse.c:248
 msgid "Play in fullscreen mode"
 msgstr "Pelaa kokoruudussa"
 
-#: src/clparse.c:239
+#: src/clparse.c:249
 msgid "Load a specific game"
 msgstr ""
 
-#: src/clparse.c:239
+#: src/clparse.c:249
 msgid "game-name"
 msgstr ""
 
-#: src/clparse.c:240
+#: src/clparse.c:250
 msgid "Show this help message and exit"
 msgstr ""
 
-#: src/clparse.c:241
+#: src/clparse.c:251
 msgid "Enable a global mod"
 msgstr ""
 
-#: src/clparse.c:241
-#: src/clparse.c:242
-#: src/clparse.c:243
+#: src/clparse.c:251
+#: src/clparse.c:252
+#: src/clparse.c:253
 msgid "mod"
 msgstr ""
 
-#: src/clparse.c:242
+#: src/clparse.c:252
 msgid "Enable a campaign only mod"
 msgstr ""
 
-#: src/clparse.c:243
+#: src/clparse.c:253
 msgid "Enable a multiplay only mod"
 msgstr ""
 
-#: src/clparse.c:244
+#: src/clparse.c:254
 msgid "Disable asserts"
 msgstr ""
 
-#: src/clparse.c:245
+#: src/clparse.c:255
 msgid "Causes a crash to test the crash handler"
 msgstr ""
 
-#: src/clparse.c:246
+#: src/clparse.c:256
 msgid "Load a saved game"
 msgstr "Lataa tallennettu peli"
 
-#: src/clparse.c:246
+#: src/clparse.c:256
 msgid "savegame"
 msgstr ""
 
-#: src/clparse.c:247
+#: src/clparse.c:257
 msgid "Play in windowed mode"
 msgstr "Pelaa ikkunassa"
 
-#: src/clparse.c:248
+#: src/clparse.c:258
 msgid "Show version information and exit"
 msgstr ""
 
-#: src/clparse.c:249
+#: src/clparse.c:259
 msgid "Set the resolution to use"
 msgstr ""
 
-#: src/clparse.c:249
+#: src/clparse.c:259
 msgid "WIDTHxHEIGHT"
 msgstr "LEVEYSxKORKEUS"
 
-#: src/clparse.c:250
+#: src/clparse.c:260
 msgid "Enable shadows"
 msgstr ""
 
-#: src/clparse.c:251
+#: src/clparse.c:261
 msgid "Disable shadows"
 msgstr ""
 
-#: src/clparse.c:252
+#: src/clparse.c:262
 msgid "Enable sound"
 msgstr ""
 
-#: src/clparse.c:253
+#: src/clparse.c:263
 msgid "Disable sound"
 msgstr ""
 
-#: src/clparse.c:254
+#: src/clparse.c:264
 msgid "Activate self-test"
 msgstr ""
 
-#: src/clparse.c:255
+#: src/clparse.c:265
 msgid "connect directly to IP/hostname"
 msgstr ""
 
-#: src/clparse.c:255
+#: src/clparse.c:265
 msgid "host"
 msgstr ""
 
-#: src/clparse.c:256
+#: src/clparse.c:266
 msgid "go directly to host screen"
 msgstr ""
 
@@ -12338,30 +12338,30 @@ msgstr ""
 msgid "Out of sync"
 msgstr ""
 
-#: src/display.c:1692
+#: src/display.c:1713
 msgid "Cannot Build. Oil Resource Burning."
 msgstr ""
 
-#: src/display.c:1871
-#: src/display.c:2471
+#: src/display.c:1892
+#: src/display.c:2492
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Vahinko %d%% - Kokemus %d, %s"
 
-#: src/display.c:1887
+#: src/display.c:1908
 #, fuzzy, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Vahinko %d%% - Kokemus %d, %s"
 
-#: src/display.c:2085
+#: src/display.c:2106
 msgid "Truck ordered to build Oil Derrick"
 msgstr ""
 
-#: src/display.c:2086
+#: src/display.c:2107
 msgid "2 trucks ordered to build Oil Derrick"
 msgstr ""
 
-#: src/display.c:2087
+#: src/display.c:2108
 #, c-format
 msgid "%d trucks ordered to build Oil Derrick"
 msgstr ""
@@ -12370,77 +12370,82 @@ msgstr ""
 msgid "Unit Lost!"
 msgstr ""
 
-#: src/droid.c:1345
+#: src/droid.c:1362
 msgid "Structure Restored"
 msgstr ""
 
-#: src/droid.c:2965
+#: src/droid.c:2982
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:2978
+#: src/droid.c:2995
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:2991
+#: src/droid.c:3008
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:2995
+#: src/droid.c:3012
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3279
+#: src/droid.c:3296
 msgid "Rookie"
 msgstr ""
 
-#: src/droid.c:3280
+#: src/droid.c:3297
 msgctxt "rank"
 msgid "Green"
 msgstr ""
 
-#: src/droid.c:3281
+#: src/droid.c:3298
 msgid "Trained"
 msgstr ""
 
-#: src/droid.c:3282
+#: src/droid.c:3299
 msgid "Regular"
 msgstr ""
 
-#: src/droid.c:3283
+#: src/droid.c:3300
 #, fuzzy
 msgid "Professional"
 msgstr "Ammattilainen"
 
-#: src/droid.c:3284
+#: src/droid.c:3301
 #, fuzzy
 msgid "Veteran"
 msgstr "Veteraani"
 
-#: src/droid.c:3285
+#: src/droid.c:3302
 #, fuzzy
 msgid "Elite"
 msgstr "Eliitti"
 
-#: src/droid.c:3286
+#: src/droid.c:3303
 msgid "Special"
 msgstr ""
 
-#: src/droid.c:3287
+#: src/droid.c:3304
 msgid "Hero"
 msgstr "Sankari"
+
+#: src/droid.c:4322
+#, c-format
+msgid "%s wanted to give you a %s but you have too many!"
+msgstr ""
 
 #: src/frontend.c:98
 #, fuzzy
@@ -12458,7 +12463,7 @@ msgid "Tutorial"
 msgstr ""
 
 #: src/frontend.c:101
-#: src/hci.c:3918
+#: src/hci.c:3931
 msgid "Options"
 msgstr "Asetukset"
 
@@ -12485,13 +12490,13 @@ msgstr ""
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
 #: src/frontend.c:160
 #: src/frontend.c:219
-#: src/frontend.c:362
-#: src/frontend.c:429
-#: src/frontend.c:563
-#: src/frontend.c:699
-#: src/frontend.c:806
-#: src/frontend.c:1025
-#: src/frontend.c:1186
+#: src/frontend.c:361
+#: src/frontend.c:428
+#: src/frontend.c:562
+#: src/frontend.c:698
+#: src/frontend.c:805
+#: src/frontend.c:1028
+#: src/frontend.c:1189
 msgctxt "menu"
 msgid "Return"
 msgstr "Palaa"
@@ -12517,301 +12522,301 @@ msgstr "Lataa peli"
 msgid "SINGLE PLAYER"
 msgstr "YKSINPELI"
 
-#: src/frontend.c:303
+#: src/frontend.c:302
 #: src/ingameop.c:518
-#: src/mission.c:2534
-#: src/mission.c:2639
+#: src/mission.c:2538
+#: src/mission.c:2641
 msgid "Load Saved Game"
 msgstr "Lataa tallennettu peli"
 
-#: src/frontend.c:357
+#: src/frontend.c:356
 msgid "MULTI PLAYER"
 msgstr "MONINPELI"
 
-#: src/frontend.c:359
+#: src/frontend.c:358
 msgid "Host Game"
 msgstr ""
 
-#: src/frontend.c:360
+#: src/frontend.c:359
 msgid "Join Game"
 msgstr "Liity peliin"
 
-#: src/frontend.c:422
+#: src/frontend.c:421
 #: src/multiint.c:1143
 msgid "OPTIONS"
 msgstr "ASETUKSET"
 
-#: src/frontend.c:423
+#: src/frontend.c:422
 msgid "Game Options"
 msgstr "Peliasetukset"
 
-#: src/frontend.c:424
+#: src/frontend.c:423
 msgid "Graphics Options"
 msgstr ""
 
-#: src/frontend.c:425
+#: src/frontend.c:424
 #, fuzzy
 msgid "Video Options"
 msgstr "Peliasetukset"
 
-#: src/frontend.c:426
+#: src/frontend.c:425
 #: src/ingameop.c:287
 msgid "Audio Options"
 msgstr ""
 
-#: src/frontend.c:427
+#: src/frontend.c:426
 #, fuzzy
 msgid "Mouse Options"
 msgstr "Peliasetukset"
 
-#: src/frontend.c:428
+#: src/frontend.c:427
 msgid "Key Mappings"
 msgstr ""
 
-#: src/frontend.c:490
+#: src/frontend.c:489
 msgid "Video Playback"
 msgstr ""
 
-#: src/frontend.c:494
-#: src/frontend.c:653
+#: src/frontend.c:493
+#: src/frontend.c:652
 msgid "1X"
 msgstr ""
 
-#: src/frontend.c:498
-#: src/frontend.c:643
+#: src/frontend.c:497
+#: src/frontend.c:642
 msgid "2X"
 msgstr ""
 
-#: src/frontend.c:502
-#: src/frontend.c:648
-#: src/frontend.c:774
-#: src/frontend.c:828
+#: src/frontend.c:501
+#: src/frontend.c:647
+#: src/frontend.c:773
+#: src/frontend.c:831
 msgid "Fullscreen"
 msgstr "Kokoruutu"
 
-#: src/frontend.c:512
+#: src/frontend.c:511
 msgid "Screen Shake"
 msgstr "Ruudn tärinä"
 
-#: src/frontend.c:515
-#: src/frontend.c:543
-#: src/frontend.c:551
-#: src/frontend.c:586
-#: src/frontend.c:620
-#: src/frontend.c:629
-#: src/frontend.c:795
-#: src/frontend.c:889
-#: src/frontend.c:927
-#: src/frontend.c:966
-#: src/frontend.c:978
-#: src/frontend.c:990
-#: src/frontend.c:1002
-#: src/frontend.c:1047
-#: src/frontend.c:1060
-#: src/frontend.c:1074
-#: src/frontend.c:1088
+#: src/frontend.c:514
+#: src/frontend.c:542
+#: src/frontend.c:550
+#: src/frontend.c:585
+#: src/frontend.c:619
+#: src/frontend.c:628
+#: src/frontend.c:794
+#: src/frontend.c:892
+#: src/frontend.c:930
+#: src/frontend.c:969
+#: src/frontend.c:981
+#: src/frontend.c:993
+#: src/frontend.c:1005
+#: src/frontend.c:1050
+#: src/frontend.c:1063
+#: src/frontend.c:1077
+#: src/frontend.c:1091
 msgid "On"
 msgstr "Päällä"
 
-#: src/frontend.c:519
-#: src/frontend.c:539
-#: src/frontend.c:555
-#: src/frontend.c:581
-#: src/frontend.c:615
-#: src/frontend.c:633
-#: src/frontend.c:799
-#: src/frontend.c:884
-#: src/frontend.c:922
-#: src/frontend.c:970
-#: src/frontend.c:982
-#: src/frontend.c:994
-#: src/frontend.c:1006
-#: src/frontend.c:1042
-#: src/frontend.c:1055
-#: src/frontend.c:1069
-#: src/frontend.c:1083
+#: src/frontend.c:518
+#: src/frontend.c:538
+#: src/frontend.c:554
+#: src/frontend.c:580
+#: src/frontend.c:614
+#: src/frontend.c:632
+#: src/frontend.c:798
+#: src/frontend.c:887
+#: src/frontend.c:925
+#: src/frontend.c:973
+#: src/frontend.c:985
+#: src/frontend.c:997
+#: src/frontend.c:1009
+#: src/frontend.c:1045
+#: src/frontend.c:1058
+#: src/frontend.c:1072
+#: src/frontend.c:1086
 msgid "Off"
 msgstr "Pois päältä"
 
-#: src/frontend.c:524
+#: src/frontend.c:523
 #: src/multiint.c:1212
 msgid "Fog"
 msgstr "Sumu"
 
-#: src/frontend.c:527
-#: src/frontend.c:602
+#: src/frontend.c:526
+#: src/frontend.c:601
 msgid "Mist"
 msgstr ""
 
-#: src/frontend.c:531
-#: src/frontend.c:596
+#: src/frontend.c:530
+#: src/frontend.c:595
 #: src/multiint.c:1214
 msgid "Fog Of War"
 msgstr ""
 
-#: src/frontend.c:536
+#: src/frontend.c:535
 msgid "Subtitles"
 msgstr "Tekstitykset"
 
-#: src/frontend.c:548
+#: src/frontend.c:547
 msgid "Shadows"
 msgstr "Varjot"
 
-#: src/frontend.c:559
+#: src/frontend.c:558
 #, fuzzy
 msgid "GRAPHICS OPTIONS"
 msgstr "PELIASETUKSET"
 
-#: src/frontend.c:687
+#: src/frontend.c:686
 #: src/ingameop.c:176
 msgid "Voice Volume"
 msgstr ""
 
-#: src/frontend.c:691
+#: src/frontend.c:690
 #: src/ingameop.c:181
 msgid "FX Volume"
 msgstr ""
 
-#: src/frontend.c:695
+#: src/frontend.c:694
 #: src/ingameop.c:186
 msgid "Music Volume"
 msgstr ""
 
-#: src/frontend.c:702
+#: src/frontend.c:701
 #, fuzzy
 msgid "AUDIO OPTIONS"
 msgstr "PELIASETUKSET"
 
-#: src/frontend.c:767
+#: src/frontend.c:766
 msgid "* Takes effect on game restart"
 msgstr ""
 
-#: src/frontend.c:770
+#: src/frontend.c:769
 msgid "Graphics Mode*"
 msgstr ""
 
-#: src/frontend.c:778
-#: src/frontend.c:823
+#: src/frontend.c:777
+#: src/frontend.c:826
 msgid "Windowed"
 msgstr "Ikkunoitu"
 
-#: src/frontend.c:782
+#: src/frontend.c:781
 msgid "Resolution*"
 msgstr "Resoluutio*"
 
-#: src/frontend.c:787
+#: src/frontend.c:786
 msgid "Texture size"
 msgstr ""
 
-#: src/frontend.c:791
+#: src/frontend.c:790
 msgid "Vertical sync*"
 msgstr ""
 
-#: src/frontend.c:803
+#: src/frontend.c:802
 #, fuzzy
 msgid "VIDEO OPTIONS"
 msgstr "PELIASETUKSET"
 
-#: src/frontend.c:959
+#: src/frontend.c:962
 msgid "* May negatively affect performance"
 msgstr ""
 
-#: src/frontend.c:963
+#: src/frontend.c:966
 msgid "Reverse Rotation"
 msgstr ""
 
-#: src/frontend.c:974
+#: src/frontend.c:977
 msgid "Trap Cursor"
 msgstr ""
 
-#: src/frontend.c:986
+#: src/frontend.c:989
 msgid "Colored Cursors*"
 msgstr ""
 
-#: src/frontend.c:999
+#: src/frontend.c:1002
 #, fuzzy
 msgid "Switch Mouse Buttons"
 msgstr "Peliasetukset"
 
-#: src/frontend.c:1011
+#: src/frontend.c:1014
 msgid "Rotate Screen"
 msgstr ""
 
-#: src/frontend.c:1014
-#: src/frontend.c:1102
+#: src/frontend.c:1017
+#: src/frontend.c:1105
 msgid "Middle Mouse"
 msgstr ""
 
-#: src/frontend.c:1018
-#: src/frontend.c:1097
+#: src/frontend.c:1021
+#: src/frontend.c:1100
 msgid "Right Mouse"
 msgstr ""
 
-#: src/frontend.c:1022
+#: src/frontend.c:1025
 #, fuzzy
 msgid "MOUSE OPTIONS"
 msgstr "PELIASETUKSET"
 
-#: src/frontend.c:1137
-#: src/frontend.c:1207
+#: src/frontend.c:1140
+#: src/frontend.c:1210
 msgid "Difficulty"
 msgstr "Vaikeustaso"
 
-#: src/frontend.c:1141
-#: src/frontend.c:1215
-#: src/frontend.c:1252
+#: src/frontend.c:1144
+#: src/frontend.c:1218
+#: src/frontend.c:1255
 msgid "Easy"
 msgstr "Helppo"
 
-#: src/frontend.c:1144
-#: src/frontend.c:1218
-#: src/frontend.c:1244
+#: src/frontend.c:1147
+#: src/frontend.c:1221
+#: src/frontend.c:1247
 msgid "Normal"
 msgstr ""
 
-#: src/frontend.c:1148
-#: src/frontend.c:1221
-#: src/frontend.c:1248
+#: src/frontend.c:1151
+#: src/frontend.c:1224
+#: src/frontend.c:1251
 msgid "Hard"
 msgstr "Vaikea"
 
-#: src/frontend.c:1153
-#: src/frontend.c:1208
+#: src/frontend.c:1156
+#: src/frontend.c:1211
 msgid "Scroll Speed"
 msgstr "Vieritysnopeus"
 
-#: src/frontend.c:1167
-#: src/frontend.c:1205
+#: src/frontend.c:1170
+#: src/frontend.c:1208
 msgid "Language"
 msgstr "Kieli"
 
-#: src/frontend.c:1179
-#: src/frontend.c:1206
+#: src/frontend.c:1182
+#: src/frontend.c:1209
 msgid "Unit Colour"
 msgstr ""
 
-#: src/frontend.c:1182
+#: src/frontend.c:1185
 msgid "Radar"
 msgstr ""
 
-#: src/frontend.c:1183
-#: src/frontend.c:1232
+#: src/frontend.c:1186
+#: src/frontend.c:1235
 #, fuzzy
 msgid "Rotating"
 msgstr "latina"
 
-#: src/frontend.c:1183
-#: src/frontend.c:1232
+#: src/frontend.c:1186
+#: src/frontend.c:1235
 msgid "Fixed"
 msgstr ""
 
-#: src/frontend.c:1189
-#: src/frontend.c:1209
+#: src/frontend.c:1192
+#: src/frontend.c:1212
 msgid "GAME OPTIONS"
 msgstr "PELIASETUKSET"
 
-#: src/frontend.c:1341
-#: src/multiint.c:2145
+#: src/frontend.c:1344
+#: src/multiint.c:2144
 msgid "Mod: "
 msgstr ""
 
@@ -12820,193 +12825,193 @@ msgstr ""
 msgid "MAP SAVED!"
 msgstr "Peli tallennettu"
 
-#: src/hci.c:1734
+#: src/hci.c:1741
 #: src/loop.c:556
 #: src/loop.c:572
 #, fuzzy
 msgid "GAME SAVED: "
 msgstr "Peli tallennettu"
 
-#: src/hci.c:2127
+#: src/hci.c:2134
 msgid "Failed to create building"
 msgstr ""
 
-#: src/hci.c:2150
+#: src/hci.c:2157
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr ""
 
-#: src/hci.c:2165
+#: src/hci.c:2172
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr ""
 
-#: src/hci.c:2186
+#: src/hci.c:2193
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr ""
 
-#: src/hci.c:2197
+#: src/hci.c:2204
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr ""
 
-#: src/hci.c:3688
+#: src/hci.c:3701
 msgid "Commanders (F6)"
 msgstr "Komentajat (F6)"
 
-#: src/hci.c:3704
+#: src/hci.c:3717
 msgid "Intelligence Display (F5)"
 msgstr ""
 
-#: src/hci.c:3720
+#: src/hci.c:3733
 msgid "Manufacture (F1)"
 msgstr "Valmista (F1)"
 
-#: src/hci.c:3736
+#: src/hci.c:3749
 msgid "Design (F4)"
 msgstr "Suunnittele (F4)"
 
-#: src/hci.c:3752
+#: src/hci.c:3765
 msgid "Research (F2)"
 msgstr "Tutki (F2)"
 
-#: src/hci.c:3768
+#: src/hci.c:3781
 msgid "Build (F3)"
 msgstr "Rakenna (F3)"
 
-#: src/hci.c:3846
+#: src/hci.c:3859
 #: src/multiint.c:1259
-#: src/multimenu.c:807
+#: src/multimenu.c:808
 msgid "Power"
 msgstr ""
 
-#: src/hci.c:3960
+#: src/hci.c:3973
 msgid "Map:"
 msgstr ""
 
-#: src/hci.c:3974
+#: src/hci.c:3987
 #, fuzzy
 msgid "Load"
 msgstr "Lataa peli"
 
-#: src/hci.c:3975
+#: src/hci.c:3988
 #, fuzzy
 msgid "Load Map File"
 msgstr "Lataa peli"
 
-#: src/hci.c:3982
+#: src/hci.c:3995
 #, fuzzy
 msgid "Save"
 msgstr "Tallenna peli"
 
-#: src/hci.c:3983
+#: src/hci.c:3996
 #, fuzzy
 msgid "Save Map File"
 msgstr "Tallenna peli"
 
-#: src/hci.c:3991
+#: src/hci.c:4004
 msgid "New"
 msgstr ""
 
-#: src/hci.c:3992
+#: src/hci.c:4005
 msgid "New Blank Map"
 msgstr ""
 
-#: src/hci.c:4030
+#: src/hci.c:4043
 msgid "Tile"
 msgstr ""
 
-#: src/hci.c:4031
+#: src/hci.c:4044
 msgid "Place tiles on map"
 msgstr ""
 
-#: src/hci.c:4040
+#: src/hci.c:4053
 #, fuzzy
 msgid "Unit"
 msgstr "Yksikkö"
 
-#: src/hci.c:4041
+#: src/hci.c:4054
 msgid "Place Unit on map"
 msgstr ""
 
-#: src/hci.c:4049
+#: src/hci.c:4062
 msgid "Struct"
 msgstr ""
 
-#: src/hci.c:4050
+#: src/hci.c:4063
 #, fuzzy
 msgid "Place Structures on map"
 msgstr "Vihollisrakennukset: %u"
 
-#: src/hci.c:4058
+#: src/hci.c:4071
 msgid "Feat"
 msgstr ""
 
-#: src/hci.c:4059
+#: src/hci.c:4072
 msgid "Place Features on map"
 msgstr ""
 
-#: src/hci.c:4069
+#: src/hci.c:4082
 msgid "Pause"
 msgstr ""
 
-#: src/hci.c:4070
+#: src/hci.c:4083
 msgid "Pause or unpause the game"
 msgstr ""
 
-#: src/hci.c:4084
+#: src/hci.c:4097
 msgid "Align height of all map objects"
 msgstr ""
 
-#: src/hci.c:4094
+#: src/hci.c:4107
 msgid "Edit"
 msgstr ""
 
-#: src/hci.c:4095
+#: src/hci.c:4108
 #, fuzzy
 msgid "Start Edit Mode"
 msgstr "Aloita ilman tukikohtaa"
 
-#: src/hci.c:4109
+#: src/hci.c:4122
 #: src/ingameop.c:118
 #: src/ingameop.c:275
 #: src/ingameop.c:280
 msgid "Quit"
 msgstr "Lopeta"
 
-#: src/hci.c:4110
+#: src/hci.c:4123
 msgid "Exit Game"
 msgstr "Poistu pelistä"
 
-#: src/hci.c:4135
+#: src/hci.c:4148
 #, fuzzy
 msgid "Current Player:"
 msgstr "Moninpelikampanja"
 
-#: src/hci.c:4534
+#: src/hci.c:4547
 #: src/intdisplay.c:276
 msgid "Progress Bar"
 msgstr "Edistymispalkki"
 
-#: src/hci.c:5478
+#: src/hci.c:5491
 #, fuzzy
 msgid "Infinite Production"
 msgstr "Jatkuva tuotanto"
 
-#: src/hci.c:5554
+#: src/hci.c:5567
 msgid "Factory Delivery Point"
 msgstr ""
 
-#: src/hci.c:5573
+#: src/hci.c:5586
 msgid "Loop Production"
 msgstr "Jatkuva tuotanto"
 
-#: src/hci.c:5660
+#: src/hci.c:5673
 msgid "Tab Scroll left"
 msgstr ""
 
-#: src/hci.c:5677
+#: src/hci.c:5690
 msgid "Tab Scroll right"
 msgstr ""
 
@@ -13032,8 +13037,8 @@ msgstr ""
 
 #: src/ingameop.c:294
 #: src/ingameop.c:522
-#: src/mission.c:2521
-#: src/mission.c:2642
+#: src/mission.c:2525
+#: src/mission.c:2644
 msgid "Save Game"
 msgstr "Tallenna peli"
 
@@ -13049,7 +13054,7 @@ msgstr ""
 msgid "-->  QUIT  <--"
 msgstr ""
 
-#: src/init.c:389
+#: src/init.c:390
 #, c-format
 msgid ""
 "The required mod could not be loaded: %s\n"
@@ -13071,7 +13076,7 @@ msgid "Power Accrued"
 msgstr ""
 
 #: src/intelmap.c:248
-#: src/keybind.c:1365
+#: src/keybind.c:1377
 msgid "PAUSED"
 msgstr ""
 
@@ -13198,290 +13203,290 @@ msgstr ""
 msgid "Circle"
 msgstr ""
 
-#: src/keybind.c:135
+#: src/keybind.c:138
 msgid "Sorry, that cheat is disabled in multiplayer games."
 msgstr ""
 
-#: src/keybind.c:141
+#: src/keybind.c:144
 msgid "Warning! This cheat is buggy.  We recommend to NOT use it."
 msgstr ""
 
-#: src/keybind.c:230
+#: src/keybind.c:243
 msgid "Lets us see what you see!"
 msgstr ""
 
-#: src/keybind.c:232
+#: src/keybind.c:245
 msgid "Fine, weapon & sensor display is off!"
 msgstr ""
 
-#: src/keybind.c:405
-#: src/keybind.c:435
-#: src/keybind.c:452
-#: src/keybind.c:496
-#: src/keybind.c:604
-#: src/keybind.c:644
-#: src/keybind.c:750
-#: src/keybind.c:1255
-#: src/keybind.c:1312
-#: src/keybind.c:1422
-#: src/keybind.c:1551
-#: src/keybind.c:1902
-#: src/keybind.c:1943
+#: src/keybind.c:418
+#: src/keybind.c:448
+#: src/keybind.c:465
+#: src/keybind.c:509
+#: src/keybind.c:617
+#: src/keybind.c:657
+#: src/keybind.c:763
+#: src/keybind.c:1268
+#: src/keybind.c:1325
+#: src/keybind.c:1434
+#: src/keybind.c:1563
+#: src/keybind.c:1914
+#: src/keybind.c:1955
 #, c-format
 msgid "(Player %u) is using cheat :%s"
 msgstr ""
 
-#: src/keybind.c:406
+#: src/keybind.c:419
 msgid "Hard as nails!!!"
 msgstr ""
 
-#: src/keybind.c:420
+#: src/keybind.c:433
 msgid "Takings thing easy!"
 msgstr ""
 
-#: src/keybind.c:436
+#: src/keybind.c:449
 msgid "1000 big ones!!!"
 msgstr ""
 
-#: src/keybind.c:453
+#: src/keybind.c:466
 msgid "Power overwhelming"
 msgstr ""
 
-#: src/keybind.c:468
+#: src/keybind.c:481
 msgid "Back to normality!"
 msgstr ""
 
-#: src/keybind.c:481
+#: src/keybind.c:494
 msgid "Getting tricky!"
 msgstr ""
 
-#: src/keybind.c:497
+#: src/keybind.c:510
 msgid "Twice as nice!"
 msgstr ""
 
-#: src/keybind.c:508
+#: src/keybind.c:521
 msgid "FPS display is enabled."
 msgstr ""
 
-#: src/keybind.c:512
+#: src/keybind.c:525
 msgid "FPS display is disabled."
 msgstr ""
 
-#: src/keybind.c:536
+#: src/keybind.c:549
 #, c-format
 msgid "FPS %d; FPS-Limit: %d; PIEs %d; polys %d; Terr. polys %d; States %d"
 msgstr ""
 
-#: src/keybind.c:568
+#: src/keybind.c:581
 #, c-format
 msgid "(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"
 msgstr ""
 
-#: src/keybind.c:605
+#: src/keybind.c:618
 msgid "Infinite power disabled"
 msgstr ""
 
-#: src/keybind.c:605
+#: src/keybind.c:618
 msgid "Infinite power enabled"
 msgstr ""
 
-#: src/keybind.c:645
+#: src/keybind.c:658
 msgid "All items made available"
 msgstr ""
 
-#: src/keybind.c:751
+#: src/keybind.c:764
 msgid "Fog on"
 msgstr ""
 
-#: src/keybind.c:751
+#: src/keybind.c:764
 msgid "Fog off"
 msgstr ""
 
-#: src/keybind.c:1161
+#: src/keybind.c:1174
 #, c-format
 msgid "Warning!  This cheat can cause dire problems later on! [%s]"
 msgstr ""
 
-#: src/keybind.c:1161
+#: src/keybind.c:1174
 msgid "Ending Mission."
 msgstr ""
 
-#: src/keybind.c:1256
+#: src/keybind.c:1269
 msgid "CHEATS ARE NOW ENABLED!"
 msgstr ""
 
-#: src/keybind.c:1256
+#: src/keybind.c:1269
 msgid "CHEATS ARE NOW DISABLED!"
 msgstr ""
 
-#: src/keybind.c:1313
+#: src/keybind.c:1326
 msgid "God Mode ON"
 msgstr ""
 
-#: src/keybind.c:1313
+#: src/keybind.c:1326
 msgid "God Mode OFF"
 msgstr ""
 
-#: src/keybind.c:1325
+#: src/keybind.c:1338
 msgid "View Aligned to North"
 msgstr ""
 
-#: src/keybind.c:1334
+#: src/keybind.c:1346
 #, c-format
 msgid "Trap cursor %s"
 msgstr ""
 
-#: src/keybind.c:1423
+#: src/keybind.c:1435
 msgid "Researched EVERYTHING for you!"
 msgstr ""
 
-#: src/keybind.c:1487
+#: src/keybind.c:1499
 #, c-format
 msgid "(Player %u) is using cheat :%s %s"
 msgstr ""
 
-#: src/keybind.c:1488
+#: src/keybind.c:1500
 #, fuzzy
 msgid "Researched"
 msgstr "Tutki (F2)"
 
-#: src/keybind.c:1509
+#: src/keybind.c:1521
 msgid "Only displaying energy bars when selected"
 msgstr ""
 
-#: src/keybind.c:1512
+#: src/keybind.c:1524
 msgid "Always displaying energy bars for units"
 msgstr ""
 
-#: src/keybind.c:1515
+#: src/keybind.c:1527
 msgid "Always displaying energy bars for units and structures"
 msgstr ""
 
-#: src/keybind.c:1537
+#: src/keybind.c:1549
 msgid "Demo mode off - Returning to normal game mode"
 msgstr ""
 
-#: src/keybind.c:1552
+#: src/keybind.c:1564
 msgid "Debug menu is Open"
 msgstr ""
 
-#: src/keybind.c:1583
+#: src/keybind.c:1595
 msgid "Unable to locate any oil derricks!"
 msgstr ""
 
-#: src/keybind.c:1804
+#: src/keybind.c:1816
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr ""
 
-#: src/keybind.c:1810
+#: src/keybind.c:1822
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr ""
 
-#: src/keybind.c:1816
+#: src/keybind.c:1828
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr ""
 
-#: src/keybind.c:1901
+#: src/keybind.c:1913
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr ""
 
-#: src/keybind.c:1903
+#: src/keybind.c:1915
 msgid "All enemies destroyed by cheating!"
 msgstr ""
 
-#: src/keybind.c:1944
+#: src/keybind.c:1956
 msgid "Destroying selected droids and structures!"
 msgstr ""
 
-#: src/keybind.c:2466
+#: src/keybind.c:2478
 msgid "Centered on player HQ, direction NORTH"
 msgstr ""
 
-#: src/keybind.c:2478
+#: src/keybind.c:2490
 msgid "Unable to locate HQ!"
 msgstr ""
 
-#: src/keybind.c:2485
+#: src/keybind.c:2497
 msgid "Formation speed limiting has been removed from the game due to bugs."
 msgstr ""
 
-#: src/keybind.c:2534
+#: src/keybind.c:2546
 msgid "Vertical rotation direction: Normal"
 msgstr ""
 
-#: src/keybind.c:2539
+#: src/keybind.c:2551
 msgid "Vertical rotation direction: Flipped"
 msgstr ""
 
-#: src/keybind.c:2548
+#: src/keybind.c:2560
 msgid "Screen shake when things die: Off"
 msgstr ""
 
-#: src/keybind.c:2553
+#: src/keybind.c:2565
 msgid "Screen shake when things die: On"
 msgstr ""
 
-#: src/keybind.c:2598
-#: src/keybind.c:2641
+#: src/keybind.c:2610
+#: src/keybind.c:2653
 msgid "Sorry, but game speed cannot be changed in multiplayer."
 msgstr ""
 
-#: src/keybind.c:2619
-#: src/keybind.c:2662
-#: src/keybind.c:2684
+#: src/keybind.c:2631
+#: src/keybind.c:2674
+#: src/keybind.c:2696
 msgid "Game Speed Reset"
 msgstr ""
 
-#: src/keybind.c:2623
+#: src/keybind.c:2635
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr ""
 
-#: src/keybind.c:2666
+#: src/keybind.c:2678
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr ""
 
-#: src/keybind.c:2696
+#: src/keybind.c:2708
 msgid "Radar showing friend-foe colors"
 msgstr ""
 
-#: src/keybind.c:2700
+#: src/keybind.c:2712
 msgid "Radar showing player colors"
 msgstr ""
 
-#: src/keybind.c:2721
+#: src/keybind.c:2733
 msgid "Radar showing only objects"
 msgstr ""
 
-#: src/keybind.c:2724
+#: src/keybind.c:2736
 msgid "Radar blending terrain and height"
 msgstr ""
 
-#: src/keybind.c:2727
+#: src/keybind.c:2739
 msgid "Radar showing terrain"
 msgstr ""
 
-#: src/keybind.c:2730
+#: src/keybind.c:2742
 msgid "Radar showing revealed terrain"
 msgstr ""
 
-#: src/keybind.c:2733
+#: src/keybind.c:2745
 msgid "Radar showing height"
 msgstr ""
 
-#: src/keyedit.c:352
+#: src/keyedit.c:357
 msgid "KEY MAPPING"
 msgstr ""
 
-#: src/keyedit.c:374
+#: src/keyedit.c:379
 #: src/multiint.c:497
 #: src/multiint.c:928
 #: src/multiint.c:1345
 msgid "Return To Previous Screen"
 msgstr ""
 
-#: src/keyedit.c:379
+#: src/keyedit.c:384
 msgid "Select Default"
 msgstr ""
 
@@ -13879,43 +13884,43 @@ msgstr ""
 msgid "Could not save game!"
 msgstr "Lataa tallennettu peli"
 
-#: src/mission.c:2074
+#: src/mission.c:2078
 msgid "Load Transport"
 msgstr "Lastaa kuljetus"
 
-#: src/mission.c:2468
+#: src/mission.c:2472
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr ""
 
-#: src/mission.c:2468
+#: src/mission.c:2472
 msgid "OBJECTIVE ACHIEVED"
 msgstr ""
 
-#: src/mission.c:2474
+#: src/mission.c:2478
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr ""
 
-#: src/mission.c:2474
+#: src/mission.c:2478
 msgid "OBJECTIVE FAILED"
 msgstr ""
 
-#: src/mission.c:2500
-#: src/mission.c:2540
-#: src/mission.c:2658
+#: src/mission.c:2504
+#: src/mission.c:2544
+#: src/mission.c:2660
 msgid "Quit To Main Menu"
 msgstr "Poistu päävalikkoon"
 
-#: src/mission.c:2508
+#: src/mission.c:2512
 msgid "Continue Game"
 msgstr "Jatka peliä"
 
-#: src/mission.c:2605
+#: src/mission.c:2607
 #, fuzzy
 msgid "GAME SAVED :"
 msgstr "Peli tallennettu"
 
-#: src/move.c:2293
-#: src/move.c:2309
+#: src/move.c:2364
+#: src/move.c:2380
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr ""
@@ -13965,7 +13970,7 @@ msgstr ""
 msgid "%s Forms An Alliance With %s"
 msgstr ""
 
-#: src/multigifts.c:758
+#: src/multigifts.c:754
 #, c-format
 msgid "You Discover Blueprints For %s"
 msgstr ""
@@ -14101,7 +14106,7 @@ msgid "Distance Fog"
 msgstr ""
 
 #: src/multiint.c:1226
-#: src/multimenu.c:800
+#: src/multimenu.c:801
 msgid "Alliances"
 msgstr "Liittoumat"
 
@@ -14213,51 +14218,52 @@ msgstr ""
 msgid "CHAT"
 msgstr ""
 
-#: src/multiint.c:2150
+#: src/multiint.c:2149
 msgid "All players need to have the same mods to join your game."
 msgstr ""
 
 #: src/multiint.c:2310
-msgid "*** password is now required! ***"
+#, c-format
+msgid "*** password [%s] is now required! ***"
 msgstr ""
 
-#: src/multiint.c:2317
+#: src/multiint.c:2318
 msgid "*** password is NOT required! ***"
 msgstr ""
 
-#: src/multiint.c:2559
+#: src/multiint.c:2560
 msgid "Sorry! Failed to host the game."
 msgstr ""
 
-#: src/multiint.c:2644
+#: src/multiint.c:2645
 msgid "'Locked Teams' mode enabled"
 msgstr ""
 
-#: src/multiint.c:2683
-#: src/multiint.c:2733
+#: src/multiint.c:2684
+#: src/multiint.c:2734
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr ""
 
-#: src/multiint.c:2808
+#: src/multiint.c:2809
 msgid "Host is Starting Game"
 msgstr ""
 
-#: src/multiint.c:3391
+#: src/multiint.c:3392
 msgid "Players"
 msgstr "Pelaajat"
 
-#: src/multiint.c:3509
+#: src/multiint.c:3510
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr ""
 
-#: src/multiint.c:3517
+#: src/multiint.c:3518
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr ""
 
-#: src/multiint.c:3543
+#: src/multiint.c:3544
 msgid "HOST"
 msgstr ""
 
@@ -14298,97 +14304,97 @@ msgstr ""
 msgid "Limits reset to default values"
 msgstr ""
 
-#: src/multimenu.c:613
+#: src/multimenu.c:614
 msgid "Technology level 1"
 msgstr ""
 
-#: src/multimenu.c:621
+#: src/multimenu.c:622
 msgid "Technology level 2"
 msgstr ""
 
-#: src/multimenu.c:627
+#: src/multimenu.c:628
 msgid "Technology level 3"
 msgstr ""
 
-#: src/multimenu.c:633
+#: src/multimenu.c:634
 msgid "Any number of players"
 msgstr ""
 
-#: src/multimenu.c:640
+#: src/multimenu.c:641
 msgid "2 players"
 msgstr ""
 
-#: src/multimenu.c:646
+#: src/multimenu.c:647
 #, fuzzy
 msgid "3 players"
 msgstr "Pelaajat"
 
-#: src/multimenu.c:652
+#: src/multimenu.c:653
 msgid "4 players"
 msgstr ""
 
-#: src/multimenu.c:658
+#: src/multimenu.c:659
 #, fuzzy
 msgid "5 players"
 msgstr "Pelaajat"
 
-#: src/multimenu.c:664
+#: src/multimenu.c:665
 #, fuzzy
 msgid "6 players"
 msgstr "Pelaajat"
 
-#: src/multimenu.c:670
+#: src/multimenu.c:671
 #, fuzzy
 msgid "7 players"
 msgstr "Pelaajat"
 
-#: src/multimenu.c:676
+#: src/multimenu.c:677
 msgid "8 players"
 msgstr ""
 
-#: src/multimenu.c:801
+#: src/multimenu.c:802
 msgid "Score"
 msgstr ""
 
-#: src/multimenu.c:802
+#: src/multimenu.c:803
 msgid "Kills"
 msgstr ""
 
-#: src/multimenu.c:806
-#: src/multimenu.c:811
+#: src/multimenu.c:807
+#: src/multimenu.c:812
 #, fuzzy
 msgid "Units"
 msgstr "Yksikkö"
 
-#: src/multimenu.c:816
+#: src/multimenu.c:817
 msgid "Ping"
 msgstr ""
 
-#: src/multimenu.c:820
+#: src/multimenu.c:821
 msgid "Structs"
 msgstr ""
 
-#: src/multimenu.c:1169
+#: src/multimenu.c:1184
 msgid "Channel"
 msgstr ""
 
-#: src/multimenu.c:1184
+#: src/multimenu.c:1199
 msgid "Toggle Alliance State"
 msgstr ""
 
-#: src/multimenu.c:1203
+#: src/multimenu.c:1218
 msgid "Give Visibility Report"
 msgstr ""
 
-#: src/multimenu.c:1209
+#: src/multimenu.c:1224
 msgid "Leak Technology Documents"
 msgstr ""
 
-#: src/multimenu.c:1216
+#: src/multimenu.c:1231
 msgid "Hand Over Selected Units"
 msgstr ""
 
-#: src/multimenu.c:1222
+#: src/multimenu.c:1237
 msgid "Give Power To Player"
 msgstr ""
 
@@ -14397,48 +14403,48 @@ msgstr ""
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr ""
 
-#: src/multiplay.c:1122
+#: src/multiplay.c:1139
 #, fuzzy
 msgid "(allies"
 msgstr "Liittoumat"
 
-#: src/multiplay.c:1130
+#: src/multiplay.c:1147
 msgid "(private to "
 msgstr ""
 
-#: src/multiplay.c:1143
+#: src/multiplay.c:1160
 msgid "[invalid]"
 msgstr ""
 
-#: src/multiplay.c:2034
+#: src/multiplay.c:2051
 msgid "Green"
 msgstr "Vihreä"
 
-#: src/multiplay.c:2035
+#: src/multiplay.c:2052
 msgid "Orange"
 msgstr "Oranssi"
 
-#: src/multiplay.c:2036
+#: src/multiplay.c:2053
 msgid "Grey"
 msgstr "Harmaa"
 
-#: src/multiplay.c:2037
+#: src/multiplay.c:2054
 msgid "Black"
 msgstr "Musta"
 
-#: src/multiplay.c:2038
+#: src/multiplay.c:2055
 msgid "Red"
 msgstr "Punainen"
 
-#: src/multiplay.c:2039
+#: src/multiplay.c:2056
 msgid "Blue"
 msgstr "Sininen"
 
-#: src/multiplay.c:2040
+#: src/multiplay.c:2057
 msgid "Pink"
 msgstr "Pinkki"
 
-#: src/multiplay.c:2041
+#: src/multiplay.c:2058
 msgid "Cyan"
 msgstr "Syaani"
 
@@ -14577,20 +14583,20 @@ msgstr ""
 msgid "You cheated!"
 msgstr ""
 
-#: src/scriptfuncs.c:3158
+#: src/scriptfuncs.c:3164
 msgid "YOU ARE VICTORIOUS!"
 msgstr ""
 
-#: src/scriptfuncs.c:3162
+#: src/scriptfuncs.c:3168
 msgid "YOU WERE DEFEATED!"
 msgstr ""
 
-#: src/scriptfuncs.c:10077
+#: src/scriptfuncs.c:10083
 #, c-format
 msgid "Beacon received from %s!"
 msgstr ""
 
-#: src/scriptfuncs.c:10123
+#: src/scriptfuncs.c:10129
 #, c-format
 msgid "Beacon %d"
 msgstr ""
@@ -14619,62 +14625,62 @@ msgstr ""
 msgid "Unable to locate any Commanders!"
 msgstr ""
 
-#: src/structure.c:2855
+#: src/structure.c:2860
 msgid "Command Control Limit Reached - Production Halted"
 msgstr ""
 
-#: src/structure.c:6055
-#: src/structure.c:6080
+#: src/structure.c:6081
+#: src/structure.c:6106
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/structure.c:6085
-#: src/structure.c:6153
-#: src/structure.c:6169
-#: src/structure.c:6183
+#: src/structure.c:6111
+#: src/structure.c:6179
+#: src/structure.c:6195
+#: src/structure.c:6209
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr ""
 
-#: src/structure.c:6135
+#: src/structure.c:6161
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr ""
 
-#: src/structure.c:6299
-#: src/structure.c:6344
+#: src/structure.c:6325
+#: src/structure.c:6370
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr ""
 
-#: src/structure.c:6581
+#: src/structure.c:6607
 msgid "Electronic Reward - Visibility Report"
 msgstr ""
 
-#: src/structure.c:6621
+#: src/structure.c:6647
 msgid "Factory Reward - Propulsion"
 msgstr ""
 
-#: src/structure.c:6645
+#: src/structure.c:6671
 msgid "Factory Reward - Body"
 msgstr ""
 
-#: src/structure.c:6669
+#: src/structure.c:6695
 msgid "Factory Reward - Weapon"
 msgstr ""
 
-#: src/structure.c:6678
+#: src/structure.c:6704
 msgid "Factory Reward - Nothing"
 msgstr ""
 
-#: src/structure.c:6706
+#: src/structure.c:6732
 msgid "Repair Facility Award - Repair"
 msgstr ""
 
-#: src/structure.c:6713
+#: src/structure.c:6739
 msgid "Repair Facility Award - Nothing"
 msgstr ""
 
@@ -14683,38 +14689,38 @@ msgstr ""
 msgid "Launch Transport"
 msgstr "Laukaise kuljetus"
 
-#: src/transporter.c:1527
+#: src/transporter.c:1462
 msgid "There is not enough room in the Transport!"
 msgstr ""
 
-#: src/transporter.c:1785
+#: src/transporter.c:1720
 msgid "Reinforcements landing"
 msgstr "Lisäjoukot laskeutuvat"
 
-#: src/version.c:139
+#: src/version.c:143
 msgid " (modified and switched locally)"
 msgstr ""
 
-#: src/version.c:141
+#: src/version.c:145
 msgid " (modified locally)"
 msgstr ""
 
-#: src/version.c:143
+#: src/version.c:147
 msgid " (switched locally)"
 msgstr ""
 
-#: src/version.c:150
+#: src/version.c:154
 msgid " - DEBUG"
 msgstr ""
 
-#: src/version.c:159
+#: src/version.c:163
 #, c-format
 msgid " - Built %s"
 msgstr ""
 
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version <version name/number> <working copy state><BUILD DATE><BUILD TYPE>"
-#: src/version.c:169
+#: src/version.c:173
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr ""
