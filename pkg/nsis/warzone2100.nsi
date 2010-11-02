@@ -384,6 +384,9 @@ Section "-NLS files" SecNLS_files
   SetOutPath "$INSTDIR\locale\sl\LC_MESSAGES"
   File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\sl.gmo"
 
+  SetOutPath "$INSTDIR\locale\tr\LC_MESSAGES"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\tr.gmo"
+
   SetOutPath "$INSTDIR\locale\uk\LC_MESSAGES"
   File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\uk_UA.gmo"
 
@@ -803,6 +806,10 @@ Section "Uninstall"
   Delete "$INSTDIR\locale\sl\LC_MESSAGES\${PACKAGE}.mo"
   RMDir "$INSTDIR\locale\sl\LC_MESSAGES"
   RMDir "$INSTDIR\locale\sl"
+
+  Delete "$INSTDIR\locale\tr\LC_MESSAGES\${PACKAGE}.mo"
+  RMDir "$INSTDIR\locale\tr\LC_MESSAGES"
+  RMDir "$INSTDIR\locale\tr"
 
   Delete "$INSTDIR\locale\uk\LC_MESSAGES\${PACKAGE}.mo"
   RMDir "$INSTDIR\locale\uk\LC_MESSAGES"
