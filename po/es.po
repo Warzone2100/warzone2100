@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-11-02 13:31+0100\n"
-"PO-Revision-Date: 2010-04-29 17:24+0100\n"
-"Last-Translator: Daniel Vijande <nsa_server@hotmail.com>\n"
+"POT-Creation-Date: 2010-11-02 15:26+0100\n"
+"PO-Revision-Date: 2010-10-09 12:54+0100\n"
+"Last-Translator: Saber Nyoki <nsa_server@hotmail.com>\n"
 "Language-Team: Spanish <warzone-dev@gna.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -5970,9 +5970,8 @@ msgstr "Camión de Carga"
 
 #: data/base/messages/strings/names.txt:207
 #: data/mp/messages/strings/names.txt:210
-#, fuzzy
 msgid "Cannon Fire Truck"
-msgstr "Fuego Camión"
+msgstr "Camión de bomberos con Cañón"
 
 #: data/base/messages/strings/names.txt:208
 #: data/mp/messages/strings/names.txt:211
@@ -10766,9 +10765,8 @@ msgid "Armour +35%, Body Points +30%"
 msgstr "Armadura +35% y Puntos Estructurales +30%"
 
 #: data/mp/messages/resmessages1.rmsg:122
-#, fuzzy
 msgid "Armored guard tower with Mini-Rocket Pod"
-msgstr "Torre de guardia blindada con Cohete Mini-Pod"
+msgstr "Torre de guardia blindada con Pod de Mini-Cohetes"
 
 #: data/mp/messages/resmessages1.rmsg:148
 msgid "Armored guard tower with Lancer AT rocket"
@@ -10939,9 +10937,8 @@ msgid "Howitzer reload time -10%"
 msgstr "Tiempo de carga de Lanza-obuses -10%"
 
 #: data/mp/messages/resmessages2.rmsg:928
-#, fuzzy
 msgid "High Explosive Anti-Tank warheads"
-msgstr "Ojiva Anti-tanque Altamente Explosiva"
+msgstr "Ojivas Anti-tanque Altamente Explosiva"
 
 #: data/mp/messages/resmessages3.rmsg:6
 msgid "Thermal Armor +35%"
@@ -11371,9 +11368,8 @@ msgstr "Torreta de Enlace Nexus"
 
 #: data/mp/messages/strings/names.txt:404
 #: data/mp/messages/strings/names.txt:728
-#, fuzzy
 msgid "Hardcrete Gate"
-msgstr "Muro de Hormigón Duro"
+msgstr "Puerta de Hormigón Duro"
 
 #: data/mp/messages/strings/names.txt:410
 #: data/mp/messages/strings/names.txt:739
@@ -11386,9 +11382,8 @@ msgstr "Nido AA Tornado"
 
 #: data/mp/messages/strings/names.txt:418
 #: data/mp/messages/strings/names.txt:730
-#, fuzzy
 msgid "AA Flak Cannon Emplacement"
-msgstr "Emplazamiento Cañón de Plasma"
+msgstr "Emplazamiento de Cañón Hidráulico AA"
 
 #: data/mp/messages/strings/names.txt:474
 #: data/mp/messages/strings/names.txt:794
@@ -11412,14 +11407,12 @@ msgstr "Artillería Mini-Cohetes"
 
 #: data/mp/messages/strings/names.txt:553
 #: data/mp/messages/strings/names.txt:1001
-#, fuzzy
 msgid "AA Flak Cannon"
-msgstr "Cañón de Plasma"
+msgstr "Cañón Hidráulico AA"
 
 #: data/mp/messages/strings/names.txt:554
-#, fuzzy
 msgid "VTOL Flak Cannon"
-msgstr "ADV Cañón"
+msgstr "Cañón Hidráulico ADV"
 
 #: data/mp/messages/strings/names.txt:567
 #: data/mp/messages/strings/names.txt:1702
@@ -11584,24 +11577,20 @@ msgid "Rail Target Prediction Computer"
 msgstr "Computador de Predicción de Objetivos"
 
 #: data/mp/messages/strings/names.txt:1173
-#, fuzzy
 msgid "Stabilized Rockets"
-msgstr "Mini-Cohetes Estabilizados"
+msgstr "Cohetes Estabilizados"
 
 #: data/mp/messages/strings/names.txt:1177
-#, fuzzy
 msgid "HE Rockets"
-msgstr "HE Mini-Cohetes"
+msgstr "Cohetes HE"
 
 #: data/mp/messages/strings/names.txt:1178
-#, fuzzy
 msgid "HE Rockets Mk2"
-msgstr "HE Mini-Cohetes Mk2"
+msgstr "Cohetes HE Mk2"
 
 #: data/mp/messages/strings/names.txt:1179
-#, fuzzy
 msgid "HE Rockets Mk3"
-msgstr "HE Mini-Cohetes Mk3"
+msgstr "Cohetes HE Mk3"
 
 #: data/mp/messages/strings/names.txt:1392
 msgid "Assault Gun Tower"
@@ -11616,9 +11605,8 @@ msgid "Hyper Velocity Cannon Python Tracks"
 msgstr "Cañón HPV Pitón Oruga"
 
 #: data/mp/messages/strings/names.txt:1483
-#, fuzzy
 msgid "AA Flak Cannon Python Half-tracks"
-msgstr "Cañón HPV Pitón Oruga"
+msgstr "Cañón Hidráulico AA Pitón Semi-oruga"
 
 #: data/mp/messages/strings/names.txt:1521
 msgid "Bunker Buster Cobra Hover"
@@ -11797,23 +11785,21 @@ msgid "Plasma Cannon Emplacement"
 msgstr "Emplazamiento Cañón de Plasma"
 
 #: data/mp/messages/strings/names.txt:1728
-#, fuzzy
 msgid "Sunburst AA Rocket Array"
-msgstr "Artillería Mini-Cohetes"
+msgstr "Batería de Cohetes AA Explosión Solar"
 
 #: data/mp/messages/strings/names.txt:1729
 msgid "Sunburst AA"
-msgstr ""
+msgstr "AA Explosión Solar"
 
 #: data/mp/messages/strings/names.txt:1730
 msgid "VTOL Sunburst AA"
-msgstr ""
+msgstr "AA Explosión Solar ADV"
 
 #: data/mp/messages/strings/names.txt:1731
 #: data/mp/messages/strings/names.txt:1732
-#, fuzzy
 msgid "Sunburst AA Site"
-msgstr "Nido AA Huracán"
+msgstr "Nido AA Explosión Solar"
 
 #: data/mp/messages/strings/names.txt:1734
 #: data/mp/messages/strings/names.txt:1735
@@ -11938,9 +11924,8 @@ msgstr "Defensa Torbellino"
 
 #: data/mp/messages/strings/names.txt:1801
 #: data/mp/messages/strings/names.txt:1802
-#, fuzzy
 msgid "AA Flak Cannon Hardpoint"
-msgstr "Defensa Cañón de Asalto"
+msgstr "Emplazamiento de Cañón Hidráulico AA"
 
 #: data/mp/messages/strings/names.txt:1803
 #: data/mp/messages/strings/names.txt:1804
@@ -12009,9 +11994,8 @@ msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Cañón HPV Pitón Oruga"
 
 #: data/mp/messages/strings/names.txt:1970
-#, fuzzy
 msgid "Plasmite Retribution VTOL"
-msgstr "Bahía de Bombas Múltiples Merecido ADV"
+msgstr "Plasmita Merecido ADV"
 
 #: lib/framework/i18n.c:90
 #: lib/framework/i18n.c:149
@@ -12453,7 +12437,7 @@ msgstr "Héroe"
 #: src/droid.c:4322
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
-msgstr ""
+msgstr "¡%s quiso darte un %s pero tienes demasiados!"
 
 #: src/frontend.c:98
 msgid "Single Player"
@@ -12739,19 +12723,20 @@ msgid "Switch Mouse Buttons"
 msgstr "Cambiar botones del ratón"
 
 #: src/frontend.c:1010
-#, fuzzy
 msgid "Rotate Screen"
-msgstr "Girar a la Izquierda"
+msgstr "Rotar Pantalla"
 
 #: src/frontend.c:1013
 #: src/frontend.c:1101
+#, fuzzy
 msgid "Middle Mouse"
-msgstr ""
+msgstr "Botón central"
 
 #: src/frontend.c:1017
 #: src/frontend.c:1096
+#, fuzzy
 msgid "Right Mouse"
-msgstr ""
+msgstr "Botón derecho"
 
 #: src/frontend.c:1021
 msgid "MOUSE OPTIONS"
@@ -12797,18 +12782,17 @@ msgstr "Color de las unidades"
 
 #: src/frontend.c:1181
 msgid "Radar"
-msgstr ""
+msgstr "Radar"
 
 #: src/frontend.c:1182
 #: src/frontend.c:1231
-#, fuzzy
 msgid "Rotating"
-msgstr "Girar a la derecha"
+msgstr "Rotando"
 
 #: src/frontend.c:1182
 #: src/frontend.c:1231
 msgid "Fixed"
-msgstr ""
+msgstr "Reparado"
 
 #: src/frontend.c:1188
 #: src/frontend.c:1208
@@ -12887,35 +12871,31 @@ msgstr "Energía"
 
 #: src/hci.c:3973
 msgid "Map:"
-msgstr ""
+msgstr "Mapa:"
 
 #: src/hci.c:3987
-#, fuzzy
 msgid "Load"
-msgstr "Cargar Partida"
+msgstr "Cargar"
 
 #: src/hci.c:3988
-#, fuzzy
 msgid "Load Map File"
-msgstr "Cargar Partida"
+msgstr "Cargar Mapa"
 
 #: src/hci.c:3995
-#, fuzzy
 msgid "Save"
-msgstr "Guardar Partida"
+msgstr "Guardar"
 
 #: src/hci.c:3996
-#, fuzzy
 msgid "Save Map File"
-msgstr "Guardar Partida"
+msgstr "Guardar Mapa"
 
 #: src/hci.c:4004
 msgid "New"
-msgstr ""
+msgstr "Nuevo"
 
 #: src/hci.c:4005
 msgid "New Blank Map"
-msgstr ""
+msgstr "Nuevo Mapa en Blanco"
 
 #: src/hci.c:4043
 msgid "Tile"
@@ -12951,7 +12931,7 @@ msgstr "Colocar Características en el mapa"
 
 #: src/hci.c:4082
 msgid "Pause"
-msgstr ""
+msgstr "Pausa"
 
 #: src/hci.c:4083
 msgid "Pause or unpause the game"
@@ -12963,12 +12943,11 @@ msgstr "Anchura de alineacion de todos los objetos del mapa"
 
 #: src/hci.c:4107
 msgid "Edit"
-msgstr ""
+msgstr "Editar"
 
 #: src/hci.c:4108
-#, fuzzy
 msgid "Start Edit Mode"
-msgstr "Comenzar sin Bases"
+msgstr "Iniciar modo de Edición"
 
 #: src/hci.c:4122
 #: src/ingameop.c:118
@@ -12982,9 +12961,8 @@ msgid "Exit Game"
 msgstr "Salir del Juego"
 
 #: src/hci.c:4148
-#, fuzzy
 msgid "Current Player:"
-msgstr "Juego Multijugador"
+msgstr "Jugador actual:"
 
 #: src/hci.c:4547
 #: src/intdisplay.c:276
@@ -12992,9 +12970,8 @@ msgid "Progress Bar"
 msgstr "Barra de progreso"
 
 #: src/hci.c:5491
-#, fuzzy
 msgid "Infinite Production"
-msgstr "Ciclos de Producción"
+msgstr "Producción Infinita"
 
 #: src/hci.c:5567
 msgid "Factory Delivery Point"
@@ -13371,9 +13348,8 @@ msgid "Debug menu is Open"
 msgstr "El Menú de construcción está Abierto"
 
 #: src/keybind.c:1595
-#, fuzzy
 msgid "Unable to locate any oil derricks!"
-msgstr "¡Imposible localizar ningún Camión!"
+msgstr "¡Imposible localizar ningún pozo de petróleo!"
 
 #: src/keybind.c:1816
 msgid "Oh, the weather outside is frightful... SNOW"
@@ -13540,9 +13516,8 @@ msgid "View Location of Previous Message"
 msgstr "Ver Ubicación del Mensaje Anterior"
 
 #: src/keymap.c:307
-#, fuzzy
 msgid "Toggle Sensor display"
-msgstr "Alternar Consola"
+msgstr "Alternar Muestreo de Sensores"
 
 #: src/keymap.c:311
 msgid "Assign Group 0"
@@ -13798,35 +13773,31 @@ msgstr "Enviar mensaje de Texto"
 
 #: src/keymap.c:399
 msgid "Drop a beacon"
-msgstr ""
+msgstr "Pon una baliza"
 
 #: src/keymap.c:401
-#, fuzzy
 msgid "Sensor display On"
-msgstr "Rango del Sensor"
+msgstr "Muestreo de Sensor Activado"
 
 #: src/keymap.c:402
 msgid "Sensor display Off"
-msgstr ""
+msgstr "Muestreo de sensores Desactivado"
 
 #: src/keymap.c:403
-#, fuzzy
 msgid "Toggles shadows"
 msgstr "Activar sombras"
 
 #: src/keymap.c:404
-#, fuzzy
 msgid "Trap cursor"
 msgstr "Capturar Cursor"
 
 #: src/keymap.c:405
-#, fuzzy
 msgid "Toggle radar terrain"
-msgstr "Alternar Radar"
+msgstr "Alternar Radar de Terreno"
 
 #: src/keymap.c:406
 msgid "Toggle ally-enemy radar view"
-msgstr ""
+msgstr "Cambiar a radar aliado-enemigo"
 
 #: src/keymap.c:415
 msgid "Select all Combat Units"
@@ -14063,16 +14034,15 @@ msgstr "OK"
 
 #: src/multiint.c:1096
 msgid "Tanks disabled!!"
-msgstr ""
+msgstr "¡¡Tanques deshabilitados!!"
 
 #: src/multiint.c:1097
-#, fuzzy
 msgid "Cyborgs disabled."
-msgstr "Nuevo Cyborg Disponible"
+msgstr "Cyborgs deshabilitados."
 
 #: src/multiint.c:1098
 msgid "VTOLs disabled."
-msgstr ""
+msgstr "VTOLS deshabilitados."
 
 #: src/multiint.c:1148
 #: src/multiint.c:1155
@@ -14202,17 +14172,16 @@ msgid "PLAYERS"
 msgstr "JUGADORES"
 
 #: src/multiint.c:1966
-#, fuzzy
 msgid "Choose Team"
-msgstr "Equipos Fijos"
+msgstr "Elegir equipo"
 
 #: src/multiint.c:2006
 msgid "Click to change player settings"
-msgstr ""
+msgstr "Click para cambiar la configuración de jugador."
 
 #: src/multiint.c:2037
 msgid "Click to adjust AI difficulty"
-msgstr ""
+msgstr "Click para ajustar dificultad de la IA"
 
 #: src/multiint.c:2116
 msgid "CHAT"
@@ -14223,9 +14192,9 @@ msgid "All players need to have the same mods to join your game."
 msgstr "Todos los jugadores necesitan tener los mismos mods para unirse"
 
 #: src/multiint.c:2311
-#, fuzzy, c-format
+#, c-format
 msgid "*** password [%s] is now required! ***"
-msgstr "*** ¡contraseña requerida! ***"
+msgstr "*** ¡contraseña [%s] requerida! ***"
 
 #: src/multiint.c:2319
 msgid "*** password is NOT required! ***"
@@ -14375,7 +14344,7 @@ msgstr "Estructuras"
 
 #: src/multimenu.c:1184
 msgid "Channel"
-msgstr ""
+msgstr "Canal"
 
 #: src/multimenu.c:1199
 msgid "Toggle Alliance State"
@@ -14724,67 +14693,6 @@ msgstr " - Construido %s"
 msgid "Version %s%s%s%s"
 msgstr "Versión: %s%s%s%s"
 
-#~ msgid "Mini-Rocket accuracy +10%"
-#~ msgstr "Mejora precisión de Mini-cohete en +10%"
-
-#~ msgid "Mini-Rocket damage +25%"
-#~ msgstr "Mejora daño de Mini-Cohetes en +25%"
-
-#~ msgid "Mini-Rocket reload time -15%"
-#~ msgstr "Tiempo de recarga de Mini-Cohete -15%"
-
-#~ msgid "Cyclone AA Site"
-#~ msgstr "Nido AA  Ciclón"
-
-#, fuzzy
-#~ msgid "Gate"
-#~ msgstr "Partida"
-
-#~ msgid "Automated Manufacturing Mk2"
-#~ msgstr "Construcción Automatizada Mk2"
-
-#~ msgid "Automated Manufacturing Mk3"
-#~ msgstr "Construcción Automatizada Mk3"
-
-#~ msgid "Robotic Manufacturing Mk2"
-#~ msgstr "Fabricación Robótica Mk2"
-
-#~ msgid "Robotic Manufacturing Mk3"
-#~ msgstr "Fabricación Robótica Mk3"
-
-#~ msgid "Advanced Manufacturing Mk2"
-#~ msgstr "Fabricación Avanzada Mk2"
-
-#~ msgid "Automated Repair Facility Mk2"
-#~ msgstr "Instalación de Reparación Automatizada Mk2"
-
-#~ msgid "Automated Repair Facility Mk3"
-#~ msgstr "Instalación de Reparación Automatizada Mk3"
-
-#~ msgid "Robotic Repair Facility Mk2"
-#~ msgstr "Instalación de Reparación Robotizada Mk2"
-
-#~ msgid "HESH Mini-Rockets"
-#~ msgstr "HESH Mini-Cohetes"
-
-#~ msgid "HESH Mini-Rockets Mk2"
-#~ msgstr "HESH Mini-Cohetes Mk2"
-
-#~ msgid "HESH Mini-Rockets Mk3"
-#~ msgstr "HESH Mini-Cohetes Mk3"
-
-#~ msgid "Thermite Flamer Cyborg"
-#~ msgstr "Incendiario Termita"
-
-#~ msgid "Grenadier Cyborg"
-#~ msgstr "Granadero"
-
-#~ msgid "Cyclone Hardpoint"
-#~ msgstr "Defensa Ciclón"
-
-#~ msgid "Fire Cannon"
-#~ msgstr "Cañón de Fuego"
-
 #~ msgid "Cobra Hover Heavy-Repair"
 #~ msgstr "Cobra Deslizador Reparador Pesado"
 
@@ -14821,8 +14729,8 @@ msgstr "Versión: %s%s%s%s"
 #~ msgid "Scorpion Command Turret Tracks"
 #~ msgstr "Escorpión Torreta de Comandancia Oruga"
 
-#~ msgid "mantis Command Turret Tracks"
-#~ msgstr "Mantis Torreta de Comandancia Oruga"
+#~ msgid "Mantis Command Turret Tracks"
+#~ msgstr "Mantis Torreta de Comandante Oruga"
 
 #~ msgid "Cobra Lancer Tracks"
 #~ msgstr "Cobra Lanzadera Oruga"
@@ -14911,8 +14819,146 @@ msgstr "Versión: %s%s%s%s"
 #~ msgid "Viper Flamer Half-Track"
 #~ msgstr "Víbora Reparador Semi-oruga"
 
+#~ msgid ": Unknown cheat code."
+#~ msgstr "Código de trampa desconocido"
+
+#~ msgid "Player %u is cheating him/herself a new droid army of %s(s)."
+#~ msgstr "El jugador %u está haciendo trampas con una nueva armada de droides de: %s(s)."
+
+#~ msgid "Show frame rate"
+#~ msgstr "Mostrar FPS"
+
+#~ msgid "Toggle display of droid path"
+#~ msgstr "Mostrar ruta de droide"
+
+#~ msgid "Toggle display of gateways"
+#~ msgstr "Mostrar "
+
+#~ msgid "Toggle Debug Mappings"
+#~ msgstr "Alternar Mapeos de Debug"
+
+#~ msgid "Show all keyboard mappings - use pause!"
+#~ msgstr "Mostrar mapa de teclas - Usa pausa!"
+
+#~ msgid "Toggle visibility"
+#~ msgstr "Alternar visibilidad"
+
+#~ msgid "Raise tile height"
+#~ msgstr "Subir altura de la casilla"
+
+#~ msgid "Lower tile height"
+#~ msgstr "Altura de la casilla más baja"
+
+#~ msgid "Toggles on/off DEMO Mode"
+#~ msgstr "Activa/Desactiva el modo DEMO"
+
+#~ msgid "End Mission"
+#~ msgstr "Fin de la Misión"
+
+#~ msgid "Toggles All fog"
+#~ msgstr "Alternar toda la niebla"
+
+#~ msgid "Trigger some weather"
+#~ msgstr "Cambiar clima"
+
+#~ msgid "Flip terrain triangle"
+#~ msgstr "Invertir triángulo de terreno"
+
+#~ msgid "Realign height of all objects on the map"
+#~ msgstr "Realinear alturas de todos los objetos en el mapa"
+
+#~ msgid "Make all items available"
+#~ msgstr "Hacer todos los artículos disponibles"
+
+#~ msgid "Kill Selected Unit(s)"
+#~ msgstr "Eliminar la(s) unidad(es) seleccionadas"
+
+#~ msgid "Toggle god Mode Status"
+#~ msgstr "Alternar Modo Dios"
+
+#~ msgid "Display Options Screen"
+#~ msgstr "Mostrar opciones Dentro del Juego"
+
+#~ msgid "Complete current research"
+#~ msgstr "Completar la siguiente investigación"
+
+#~ msgid "Toggle watch window"
+#~ msgstr "Mostrar ventana de visión"
+
+#~ msgid "Trace a game object"
+#~ msgstr "Rastrear un objeto del juego."
+
+#~ msgid "Toggle Driving Mode"
+#~ msgstr "Alternar Cámara de Seguimiento"
+
+#~ msgid "You found %u power in an oil drum"
+#~ msgstr "Encontraste %u energía en un barril de petróleo"
+
+#~ msgid "kicked %s : %s from the game, and added them to the banned list!"
+#~ msgstr "Expulsado %s: %s de la partida, y añadido a la lista de baneo!"
+
+#~ msgid "Mini-Rocket accuracy +10%"
+#~ msgstr "Mejora precisión de Mini-cohete en +10%"
+
+#~ msgid "Mini-Rocket damage +25%"
+#~ msgstr "Mejora daño de Mini-Cohetes en +25%"
+
+#~ msgid "Mini-Rocket reload time -15%"
+#~ msgstr "Tiempo de recarga de Mini-Cohete -15%"
+
+#~ msgid "Cyclone AA Site"
+#~ msgstr "Nido AA  Ciclón"
+
+#~ msgid "Automated Manufacturing Mk2"
+#~ msgstr "Construcción Automatizada Mk2"
+
+#~ msgid "Automated Manufacturing Mk3"
+#~ msgstr "Construcción Automatizada Mk3"
+
+#~ msgid "Robotic Manufacturing Mk2"
+#~ msgstr "Fabricación Robótica Mk2"
+
+#~ msgid "Robotic Manufacturing Mk3"
+#~ msgstr "Fabricación Robótica Mk3"
+
+#~ msgid "Advanced Manufacturing Mk2"
+#~ msgstr "Fabricación Avanzada Mk2"
+
+#~ msgid "Automated Repair Facility Mk2"
+#~ msgstr "Instalación de Reparación Automatizada Mk2"
+
+#~ msgid "Automated Repair Facility Mk3"
+#~ msgstr "Instalación de Reparación Automatizada Mk3"
+
+#~ msgid "Robotic Repair Facility Mk2"
+#~ msgstr "Instalación de Reparación Robotizada Mk2"
+
+#~ msgid "HESH Mini-Rockets"
+#~ msgstr "HESH Mini-Cohetes"
+
+#~ msgid "HESH Mini-Rockets Mk2"
+#~ msgstr "HESH Mini-Cohetes Mk2"
+
+#~ msgid "HESH Mini-Rockets Mk3"
+#~ msgstr "HESH Mini-Cohetes Mk3"
+
+#~ msgid "Thermite Flamer Cyborg"
+#~ msgstr "Incendiario Termita"
+
+#~ msgid "Grenadier Cyborg"
+#~ msgstr "Granadero"
+
+#~ msgid "Cyclone Hardpoint"
+#~ msgstr "Defensa Ciclón"
+
+#~ msgid "Fire Cannon"
+#~ msgstr "Cañón de Fuego"
+
 #~ msgid "Transporter"
 #~ msgstr "Transporte"
+
+#~ msgid "(Player %u) has detected the borg 'legs' bug! Please enter legs in your console and upload the files to us!"
+#~ msgstr "(Jugador %u) ha detectado el bug de 'borg sin piernas' ¡Por favor introduce legs en la console y súbenos los archivos!"
 
 #~ msgid "Unable to locate any resource extractors!"
 #~ msgstr "¡Incapaz de encontrar ningún extractor de recursos!"
@@ -14925,9 +14971,6 @@ msgstr "Versión: %s%s%s%s"
 
 #~ msgid "Toggle reopening the build menu"
 #~ msgstr "Alternar Reabrir el menú de construción"
-
-#~ msgid "Player %u is cheating him/herself a new droid army of %s(s)."
-#~ msgstr "El jugador %u está haciendo trampas con una nueva armada de droides de: %s(s)."
 
 #~ msgid "Z NULL BRAIN"
 #~ msgstr "Z NULL BRAIN"
@@ -15034,15 +15077,6 @@ msgstr "Versión: %s%s%s%s"
 #~ msgid "Latin"
 #~ msgstr "Latino"
 
-#~ msgid ": Unknown cheat code."
-#~ msgstr "Código de trampa desconocido"
-
-#~ msgid "(Player %u) has detected the borg 'legs' bug! Please enter legs in your console and upload the files to us!"
-#~ msgstr "(Jugador %u) ha detectado el bug de 'borg sin piernas' ¡Por favor introduce legs en la console y súbenos los archivos!"
-
-#~ msgid "You found %u power in an oil drum"
-#~ msgstr "Encontraste %u energía en un barril de petróleo"
-
 #~ msgid "Active mods: "
 #~ msgstr "Mods activos: "
 
@@ -15075,6 +15109,9 @@ msgstr "Versión: %s%s%s%s"
 
 #~ msgid "Stop Multiplayer Audio"
 #~ msgstr "Parar Audio Multijugador"
+
+#~ msgid "Game"
+#~ msgstr "Partida"
 
 #~ msgid "Mayhem"
 #~ msgstr "Caos"
