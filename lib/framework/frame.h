@@ -24,6 +24,7 @@
 #define _frame_h
 
 #include "wzglobal.h"
+#include <stdlib.h>
 
 // Workaround X11 headers #defining Status
 #ifdef Status
