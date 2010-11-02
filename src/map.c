@@ -1560,7 +1560,7 @@ static void dangerFloodFill(int player)
 
 	do
 	{
-		MAPTILE *currTile = mapTile(pos.x, pos.y);
+		MAPTILE *currTile = &psMapTiles[pos.x + (pos.y * mapWidth)];
 
 		// Add accessible neighbouring tiles to the open list
 		for (i = 0; i < NUM_DIR; i++)
@@ -1572,7 +1572,7 @@ static void dangerFloodFill(int player)
 			{
 				continue;
 			}
-			psTile = mapTile(npos.x, npos.y);
+			psTile = &psMapTiles[npos.x + (npos.y * mapWidth)];
 
 			if (!(psTile->tileInfoBits & BITS_TEMPORARY)
 			    && !(psTile->threatBits & (1 << player))

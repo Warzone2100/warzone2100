@@ -355,7 +355,7 @@ static inline void setTileHeight(SDWORD x, SDWORD y, float height)
 }
 
 /* Return whether a tile coordinate is on the map */
-static inline BOOL tileOnMap(SDWORD x, SDWORD y)
+WZ_DECL_ALWAYS_INLINE static inline BOOL tileOnMap(SDWORD x, SDWORD y)
 {
 	return (x >= 0) && (x < (SDWORD)mapWidth) && (y >= 0) && (y < (SDWORD)mapHeight);
 }
@@ -368,7 +368,7 @@ static inline BOOL tileInsideBuildRange(SDWORD x, SDWORD y)
 }
 
 /* Return whether a world coordinate is on the map */
-static inline BOOL worldOnMap(int x, int y)
+WZ_DECL_ALWAYS_INLINE static inline BOOL worldOnMap(int x, int y)
 {
 	return (x >= 0) && (x < ((SDWORD)mapWidth << TILE_SHIFT)) &&
 		   (y >= 0) && (y < ((SDWORD)mapHeight << TILE_SHIFT));
@@ -376,21 +376,21 @@ static inline BOOL worldOnMap(int x, int y)
 
 
 /* Return whether a world coordinate is on the map */
-static inline bool worldOnMap2i(Vector2i pos)
+WZ_DECL_ALWAYS_INLINE static inline bool worldOnMap2i(Vector2i pos)
 {
 	return worldOnMap(pos.x, pos.y);
 }
 
 
 /* Return whether a world coordinate is on the map */
-static inline bool worldOnMap3i(Vector3i pos)
+WZ_DECL_ALWAYS_INLINE static inline bool worldOnMap3i(Vector3i pos)
 {
 	return worldOnMap(pos.x, pos.y);
 }
 
 
 /* Return whether a world coordinate is on the map */
-static inline bool worldOnMap3f(Vector3f pos)
+WZ_DECL_ALWAYS_INLINE static inline bool worldOnMap3f(Vector3f pos)
 {
 	return worldOnMap(pos.x, pos.y);
 }
@@ -432,7 +432,7 @@ extern bool fireOnLocation(unsigned int x, unsigned int y);
  * Transitive sensor check for tile. Has to be here rather than
  * visibility.h due to header include order issues. 
  */
-static inline bool hasSensorOnTile(MAPTILE *psTile, unsigned player)
+WZ_DECL_ALWAYS_INLINE static inline bool hasSensorOnTile(MAPTILE *psTile, unsigned player)
 {
 	return ((player == selectedPlayer && godMode) || (alliancebits[selectedPlayer] & (satuplinkbits | psTile->sensorBits)));
 }

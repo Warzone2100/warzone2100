@@ -424,6 +424,19 @@
 
 
 /*!
+ * \def WZ_DECL_ALWAYS_INLINE
+ * GCC: "Generally, functions are not inlined unless optimization is specified. For functions
+ *       declared inline, this attribute inlines the function even if no optimization level 
+ *       was specified."
+ */
+#if WZ_CC_GNU_PREREQ(2,5)
+#  define WZ_DECL_ALWAYS_INLINE __attribute__((__always_inline__))
+#else
+#  define WZ_DECL_ALWAYS_INLINE
+#endif
+
+
+/*!
  * \def WZ_DECL_PURE
  * GCC: "Many functions have no effects except the return value and their return value depends
  *       only on the parameters and/or global variables. Such a function can be subject to
