@@ -21,7 +21,7 @@ $(PKG_SOURCEBASE)/configure: extract-stamp
 $(PKG_SOURCEBASE)/config.status: $(PKG_SOURCEBASE)/configure
 	cd $(PKG_SOURCEBASE) && ./configure --host=$(HOST_TRIPLET) --prefix=`pwd`/../$(TOPDIR)/build/libs --disable-shared --enable-static CPPFLAGS=-I`pwd`/../$(TOPDIR)/build/libs/include LDFLAGS=-L`pwd`/../$(TOPDIR)/build/libs/lib
 
-$(PKG_SOURCEBASE)/libpng.la: extract-stamp $(PKG_SOURCEBASE)/config.status
+$(PKG_SOURCEBASE)/libpng14.la: extract-stamp $(PKG_SOURCEBASE)/config.status
 	$(MAKE) -C $(PKG_SOURCEBASE) libpng14.la
 
 $(TARGET): $(PKG_SOURCEBASE)/libpng14.la
