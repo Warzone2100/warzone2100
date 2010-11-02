@@ -54,7 +54,6 @@
 #include "display3d.h"
 #include "random.h"
 
-
 /* The statistics for the features */
 FEATURE_STATS	*asFeatureStats;
 UDWORD			numFeatureStats;
@@ -410,12 +409,12 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 				// if it's a tall feature then flag it in the map.
 				if (psFeature->sDisplay.imd->max.y > TALLOBJECT_YMAX)
 				{
-					SET_TILE_TALLSTRUCTURE(psTile);
+					psTile->blockingBits |= AIR_BLOCKED;
 				}
 
-				if (psStats->subType == FEAT_GEN_ARTE || psStats->subType == FEAT_OIL_DRUM || psStats->subType == FEAT_BUILD_WRECK)// they're there - just can see me
+				if (psStats->subType != FEAT_GEN_ARTE && psStats->subType != FEAT_OIL_DRUM && psStats->subType != FEAT_BUILD_WRECK)
 				{
-					SET_TILE_NOTBLOCKING(psTile);
+					psTile->blockingBits |= FEATURE_BLOCKED;
 				}
 			}
 
@@ -502,8 +501,7 @@ bool removeFeature(FEATURE *psDel)
 				if (psTile->psObject == (BASE_OBJECT *)psDel)
 				{
 					psTile->psObject = NULL;
-					CLEAR_TILE_TALLSTRUCTURE(psTile);
-					CLEAR_TILE_NOTBLOCKING(psTile);
+					psTile->blockingBits &= ~FEATURE_BLOCKED;
 				}
 			}
 		}

@@ -207,6 +207,7 @@ typedef struct DROID
 	/* Movement control data */
 	MOVE_CONTROL    sMove;
 	SPACETIME       prevSpacetime;                  ///< Location of droid in previous tick.
+	uint8_t		blockedBits;			///< Bit set telling which tiles block this type of droid (TODO)
 
 	/* anim data */
 	ANIM_OBJECT     *psCurAnim;

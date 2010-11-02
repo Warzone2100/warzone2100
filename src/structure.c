@@ -1723,7 +1723,11 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 				// if it's a tall structure then flag it in the map.
 				if (psBuilding->sDisplay.imd->max.y > TALLOBJECT_YMAX)
 				{
-					SET_TILE_TALLSTRUCTURE(psTile);
+					psTile->blockingBits |= AIR_BLOCKED;
+				}
+				if (pStructureType->type != REF_REARM_PAD && pStructureType->type != REF_GATE)
+				{
+					psTile->buildingBits |= (1 << psBuilding->player);
 				}
 			}
 		}
@@ -1887,13 +1891,6 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 
 		//add the structure to the list - this enables it to be drawn whilst being built
 		addStructure(psBuilding);
-
-		if (pStructureType->type == REF_REARM_PAD)
-		{
-			MAPTILE *psTile = mapTile(map_coord(psBuilding->pos.x), map_coord(psBuilding->pos.y));
-
-			SET_TILE_NOTBLOCKING(psTile);
-		}
 
 		clustNewStruct(psBuilding);
 		asStructLimits[player][max].currentQuantity++;
@@ -3353,7 +3350,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 			// if found a droid to rearm assign it to the rearm pad
 			if (psDroid != NULL)
 			{
-
 				/* set chosen object */
 				psChosenObj = (BASE_OBJECT *)psDroid;
 				psReArmPad->psObj = psChosenObj;
@@ -3363,11 +3359,11 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 					psReArmPad->timeStarted = ACTION_START_TIME;
 					psReArmPad->timeLastUpdated = 0;
 				}
-				CLEAR_TILE_NOTBLOCKING(psTile);	// no longer passable
+				psTile->buildingBits |= (1 << psStructure->player); // no longer passable
 			}
 			else
 			{
-				SET_TILE_NOTBLOCKING(psTile);
+				psTile->buildingBits &= ~(1 << psStructure->player); // open for passage
 			}
 			break;
 		}
@@ -3797,7 +3793,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 					psDroid->action = DACTION_NONE;
 					bFinishAction = true;
 					psReArmPad->psObj = NULL;
-					CLEAR_TILE_NOTBLOCKING(mapTile(map_coord(psStructure->pos.x), map_coord(psStructure->pos.y)));
+					mapTile(map_coord(psStructure->pos.x), map_coord(psStructure->pos.y))->buildingBits &= ~(1 << psStructure->player);
 				}
 			}
 		}
@@ -3891,15 +3887,17 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 
 			if (!found)	// no droids on our tile, safe to close
 			{
+				MAPTILE *psTile = mapTile(map_coord(psBuilding->pos.x), map_coord(psBuilding->pos.y));
 				psBuilding->state = SAS_CLOSING;
-				CLEAR_TILE_NOTBLOCKING(mapTile(map_coord(psBuilding->pos.x), map_coord(psBuilding->pos.y)));
+				psTile->buildingBits |= (1 << psBuilding->player); // closed
 				psBuilding->lastStateTime = gameTime;	// reset timer
 			}
 		}
 		else if (psBuilding->state == SAS_OPENING && psBuilding->lastStateTime + SAS_OPEN_SPEED < gameTime)
 		{
+			MAPTILE *psTile = mapTile(map_coord(psBuilding->pos.x), map_coord(psBuilding->pos.y));
 			psBuilding->state = SAS_OPEN;
-			SET_TILE_NOTBLOCKING(mapTile(map_coord(psBuilding->pos.x), map_coord(psBuilding->pos.y)));
+			psTile->buildingBits &= ~(1 << psBuilding->player); // opened
 			psBuilding->lastStateTime = gameTime;	// reset timer
 		}
 		else if (psBuilding->state == SAS_CLOSING && psBuilding->lastStateTime + SAS_OPEN_SPEED < gameTime)
@@ -4905,8 +4903,8 @@ static void removeStructFromMap(STRUCTURE *psStruct)
 		{
 			psTile = mapTile(mapX+i, mapY+j);
 			psTile->psObject = NULL;
-			CLEAR_TILE_TALLSTRUCTURE(psTile);
-			CLEAR_TILE_NOTBLOCKING(psTile);
+			psTile->buildingBits = 0;
+			psTile->blockingBits &= ~AIR_BLOCKED;
 		}
 	}
 }

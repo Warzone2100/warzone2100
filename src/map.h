@@ -83,18 +83,21 @@ static inline unsigned short TileNumber_texture(unsigned short tilenumber)
 	return tilenumber & ~TILE_NUMMASK;
 }
 
-#define BITS_NOTBLOCKING	0x01	///< Units can drive on this even if there is a structure or feature on it
 #define BITS_DECAL		0x02	///< Does this tile has a decal? If so, the tile from "texture" is drawn on top of the terrain.
 #define BITS_FPATHBLOCK		0x10	///< Bit set temporarily by find path to mark a blocking tile
 #define BITS_ON_FIRE            0x20    ///< Whether tile is burning
 #define BITS_GATEWAY		0x40	///< Bit set to show a gateway on the tile
-#define BITS_TALLSTRUCTURE	0x80	///< Bit set to show a tall structure which camera needs to avoid.
 
 typedef struct _ground_type
 {
 	const char *textureName;
 	float textureSize;
 } GROUND_TYPE;
+
+#define AIR_BLOCKED		0x01	///< Aircraft cannot pass tile
+#define FEATURE_BLOCKED		0x02	///< Ground units cannot pass tile due to item in the way
+#define WATER_BLOCKED		0x04	///< Units that cannot pass water are blocked by this tile
+#define LAND_BLOCKED		0x08	///< The inverse of the above -- for propeller driven crafts
 
 /* Information stored with each tile */
 typedef struct _maptile
@@ -105,6 +108,8 @@ typedef struct _maptile
 	uint8_t			dangerBits;		// bit per player, does AI sense danger going there? not always up to date
 	uint8_t			threatBits;		// bit per player, can hostile players shoot here? not always up to date
 	uint8_t			aaThreatBits;		// bit per player, can hostile players shoot at my VTOLs here?
+	uint8_t			blockingBits;		// bit set that tells whether a tile is blocked
+	uint8_t			buildingBits;		// bit per player whether player has blocking building at tile, combine it with alliance bits and blockingBits
 	uint8_t			illumination;	// How bright is this tile?
 	uint8_t			watchers[MAX_PLAYERS];		// player sees through fog of war here with this many objects
 	uint16_t		texture;		// Which graphics texture is on this tile
@@ -163,18 +168,6 @@ static inline bool tileIsExplored(const MAPTILE *psTile)
 	return psTile->tileExploredBits & (1 << selectedPlayer);
 }
 
-/** Check if tile is not blocking, even if structure or feature on it */
-static inline bool TileIsNotBlocking(const MAPTILE *tile)
-{
-	return tile->tileInfoBits & BITS_NOTBLOCKING;
-}
-
-/** Check if tile contains a tall structure. Function is thread-safe. */
-static inline WZ_DECL_PURE bool TileHasTallStructure(const MAPTILE* tile)
-{
-	return tile->tileInfoBits & BITS_TALLSTRUCTURE;
-}
-
 /** Check if tile contains a small structure. Function is NOT thread-safe. */
 static inline bool TileHasSmallStructure(const MAPTILE* tile)
 {
@@ -182,15 +175,9 @@ static inline bool TileHasSmallStructure(const MAPTILE* tile)
 	    && ((STRUCTURE*)tile->psObject)->pStructureType->height == 1;
 }
 
-#define SET_TILE_NOTBLOCKING(x)	((x)->tileInfoBits |= BITS_NOTBLOCKING)
-#define CLEAR_TILE_NOTBLOCKING(x)	((x)->tileInfoBits &= ~BITS_NOTBLOCKING)
-
 #define SET_TILE_DECAL(x)	((x)->tileInfoBits |= BITS_DECAL)
 #define CLEAR_TILE_DECAL(x)	((x)->tileInfoBits &= ~BITS_DECAL)
 #define TILE_HAS_DECAL(x)	((x)->tileInfoBits & BITS_DECAL)
-
-#define SET_TILE_TALLSTRUCTURE(x)	((x)->tileInfoBits |= BITS_TALLSTRUCTURE)
-#define CLEAR_TILE_TALLSTRUCTURE(x)	((x)->tileInfoBits &= ~BITS_TALLSTRUCTURE)
 
 // Multiplier for the tile height
 #define	ELEVATION_SCALE	2

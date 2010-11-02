@@ -2671,6 +2671,7 @@ void initDroidMovement(DROID *psDroid)
 // Set the asBits in a DROID structure given it's template.
 void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid)
 {
+	PROPULSION_STATS *psPropStats = getPropulsionStats(psDroid);
 	UDWORD						inc;
 
 	psDroid->droidType = droidTemplateType(pTemplate);
@@ -2720,6 +2721,22 @@ void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid)
 	psDroid->asBits[COMP_ECM].nStat = pTemplate->asParts[COMP_ECM];
 	psDroid->asBits[COMP_REPAIRUNIT].nStat = pTemplate->asParts[COMP_REPAIRUNIT];
 	psDroid->asBits[COMP_CONSTRUCT].nStat = pTemplate->asParts[COMP_CONSTRUCT];
+
+	switch (psPropStats->propulsionType)
+	{
+	case PROPULSION_TYPE_LIFT:
+		psDroid->blockedBits = AIR_BLOCKED;
+		break;
+	case PROPULSION_TYPE_HOVER:
+		psDroid->blockedBits = FEATURE_BLOCKED;
+		break;
+	case PROPULSION_TYPE_PROPELLOR:
+		psDroid->blockedBits = FEATURE_BLOCKED | LAND_BLOCKED;
+		break;
+	default:
+		psDroid->blockedBits = FEATURE_BLOCKED | WATER_BLOCKED;
+		break;
+	}
 
 	psDroid->gameCheckDroid = NULL;
 }

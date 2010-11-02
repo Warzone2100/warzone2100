@@ -926,7 +926,7 @@ static void moveCalcBlockingSlide(DROID *psDroid, int32_t *pmx, int32_t *pmy, ui
 	}
 
 	// is the new tile blocking?
-	if (!fpathBlockingTile(ntx, nty, propulsion))
+	if (!fpathBaseBlockingTile(ntx, nty, propulsion, psDroid->player, FMT_MOVE))
 	{
 		// not blocking, don't change the move vector
 		return;
@@ -1919,8 +1919,6 @@ static void moveUpdateVtolModel(DROID *psDroid, SDWORD speed, uint16_t direction
 	{
 		return;
 	}
-
-	// Used to update some kind of weird neighbour list here.
 
 	moveCheckFinalWaypoint( psDroid, &speed );
 

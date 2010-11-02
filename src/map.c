@@ -751,7 +751,7 @@ BOOL mapLoad(char *filename)
 	UDWORD		numGw, width, height;
 	char		aFileType[4];
 	UDWORD		version;
-	UDWORD		i, j;
+	UDWORD		i, j, x, y;
 	PHYSFS_file	*fp = PHYSFS_openRead(filename);
 
 	if (!fp)
@@ -887,6 +887,36 @@ BOOL mapLoad(char *filename)
 	scrollMinX = scrollMinY = 0;
 	scrollMaxX = mapWidth;
 	scrollMaxY = mapHeight;
+
+	// Set our blocking bits
+	for (x = 0; x < mapWidth; x++)
+	{
+		for (y = 0; y < mapHeight; y++)
+		{
+			MAPTILE *psTile = mapTile(x, y);
+
+			psTile->blockingBits = 0;
+			psTile->buildingBits = 0;
+
+			/* All tiles outside of the map and on map border are blocking. */
+			if (x < 1 || y < 1 || x > mapWidth - 1 || y > mapHeight - 1)
+			{
+				psTile->blockingBits = 0xff; // block everything
+			}
+			if (terrainType(psTile) == TER_WATER)
+			{
+				psTile->blockingBits |= WATER_BLOCKED;
+			}
+			else
+			{
+				psTile->blockingBits |= LAND_BLOCKED;
+			}
+			if (terrainType(psTile) == TER_CLIFFFACE)
+			{
+				psTile->blockingBits |= FEATURE_BLOCKED;
+			}
+		}
+	}
 
 	/* Set continents. This should ideally be done in advance by the map editor. */
 	mapFloodFillContinents();
@@ -1408,10 +1438,11 @@ static const Vector2i aDirOffset[NUM_DIR] =
 };
 
 // Flood fill a "continent". Note that we reuse x, y inside this function.
-static void mapFloodFill(int x, int y, int continent, PROPULSION_TYPE propulsion)
+static void mapFloodFill(int x, int y, int continent, uint8_t blockedBits)
 {
 	struct ffnode *open = NULL;
 	int i;
+	bool limitedTile = (blockedBits & WATER_BLOCKED) || (blockedBits & LAND_BLOCKED);
 
 	do
 	{
@@ -1423,15 +1454,14 @@ static void mapFloodFill(int x, int y, int continent, PROPULSION_TYPE propulsion
 			// rely on the fact that all border tiles are inaccessible to avoid checking explicitly
 			Vector2i npos = { x + aDirOffset[i].x, y + aDirOffset[i].y };
 			MAPTILE *psTile;
-			bool limitedTile = (propulsion == PROPULSION_TYPE_PROPELLOR || propulsion == PROPULSION_TYPE_WHEELED);
 
-			if (!tileOnMap(npos.x, npos.y) || (npos.x == x && npos.y == y))
+			if (!tileOnMap(npos.x, npos.y))
 			{
 				continue;
 			}
 			psTile = mapTile(npos.x, npos.y);
 
-			if (!fpathBlockingTile(npos.x, npos.y, propulsion) && ((limitedTile && psTile->limitedContinent == 0) || (!limitedTile && psTile->hoverContinent == 0)))
+			if (!(psTile->blockingBits & blockedBits) && ((limitedTile && psTile->limitedContinent == 0) || (!limitedTile && psTile->hoverContinent == 0)))
 			{
 				struct ffnode *node = malloc(sizeof(*node));
 
@@ -1443,11 +1473,11 @@ static void mapFloodFill(int x, int y, int continent, PROPULSION_TYPE propulsion
 		}
 
 		// Set continent value
-		if (propulsion == PROPULSION_TYPE_PROPELLOR || propulsion == PROPULSION_TYPE_WHEELED)
+		if (limitedTile)
 		{
 			currTile->limitedContinent = continent;
 		}
-		else
+		else	// we are amphibious
 		{
 			currTile->hoverContinent = continent;
 		}
@@ -1490,11 +1520,11 @@ void mapFloodFillContinents()
 
 			if (psTile->limitedContinent == 0 && !fpathBlockingTile(x, y, PROPULSION_TYPE_WHEELED))
 			{
-				mapFloodFill(x, y, 1 + limitedContinents++, PROPULSION_TYPE_WHEELED);
+				mapFloodFill(x, y, 1 + limitedContinents++, WATER_BLOCKED | FEATURE_BLOCKED);
 			}
 			else if (psTile->limitedContinent == 0 && !fpathBlockingTile(x, y, PROPULSION_TYPE_PROPELLOR))
 			{
-				mapFloodFill(x, y, 1 + limitedContinents++, PROPULSION_TYPE_PROPELLOR);
+				mapFloodFill(x, y, 1 + limitedContinents++, LAND_BLOCKED | FEATURE_BLOCKED);
 			}
 		}
 	}
@@ -1507,7 +1537,7 @@ void mapFloodFillContinents()
 
 			if (psTile->hoverContinent == 0 && !fpathBlockingTile(x, y, PROPULSION_TYPE_HOVER))
 			{
-				mapFloodFill(x, y, 1 + hoverContinents++, PROPULSION_TYPE_HOVER);
+				mapFloodFill(x, y, 1 + hoverContinents++, FEATURE_BLOCKED);
 			}
 		}
 	}
@@ -1554,6 +1584,8 @@ static void dangerFloodFill(int player)
 	struct ffnode *open = NULL;
 	int i;
 	Vector2i pos = getPlayerStartPosition(player);
+	MAPTILE *psTile;
+	Vector2i npos;
 
 	pos.x = map_coord(pos.x);
 	pos.y = map_coord(pos.y);
@@ -1565,10 +1597,10 @@ static void dangerFloodFill(int player)
 		// Add accessible neighbouring tiles to the open list
 		for (i = 0; i < NUM_DIR; i++)
 		{
-			Vector2i npos = { pos.x + aDirOffset[i].x, pos.y + aDirOffset[i].y };
-			MAPTILE *psTile;
+			npos.x = pos.x + aDirOffset[i].x;
+			npos.y = pos.y + aDirOffset[i].y;
 
-			if (!tileOnMap(npos.x, npos.y) || (npos.x == pos.x && npos.y == pos.y))
+			if (!tileOnMap(npos.x, npos.y))
 			{
 				continue;
 			}
@@ -1577,7 +1609,7 @@ static void dangerFloodFill(int player)
 			if (!(psTile->tileInfoBits & BITS_TEMPORARY)
 			    && !(psTile->threatBits & (1 << player))
 			    && (psTile->dangerBits & (1 <<player))
-			    && !fpathBlockingTile(npos.x, npos.y, PROPULSION_TYPE_WHEELED))
+			    && !(psTile->blockingBits & FEATURE_BLOCKED))
 			{
 				struct ffnode *node = malloc(sizeof(*node));
 
@@ -1715,6 +1747,7 @@ void mapInit()
 {
 	int player;
 
+	// Initialize danger maps
 	for (player = 0; player < MAX_PLAYERS; player++)
 	{
 		threatUpdate(player);
