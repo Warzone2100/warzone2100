@@ -1,12 +1,12 @@
 PKG_NAME:=freetype
-PKG_VERSION=2.3.12
+PKG_VERSION=2.4.3
 
 PKG_SOURCEBASE:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_SOURCEBASE).tar.bz2
 PKG_SOURCE_URL:= \
 	@SF/freetype \
 	http://www.il.fontys.nl/~giel/warzone/devpkg/
-PKG_MD5SUM:=e974a82e5939be8e05ee65f07275d7c5
+PKG_MD5SUM:=75ac7082bde7b3805dc5d6bc806fa045
 
 TARGET:=$(TOPDIR)/build/libs/lib/libfreetype.la
 
