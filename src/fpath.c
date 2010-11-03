@@ -339,7 +339,7 @@ BOOL fpathBaseBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion, int p
 	psTile = mapTile(x, y);
 
 	if ((bits & FEATURE_BLOCKED)
-	    && (psTile->buildingBits && player == MAX_PLAYERS // unsophisticated blocking check used
+	    && ((psTile->buildingBits && player == MAX_PLAYERS) // unsophisticated blocking check used
 	        || (psTile->buildingBits & alliancebits[player]) // move blocked by friendly building
 	        || (moveType == FMT_MOVE && psTile->buildingBits))) // other building, and we cannot or do not want to shoot our way through
 	{
