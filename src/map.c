@@ -52,6 +52,10 @@
 #include "levels.h"
 #include "scriptfuncs.h"
 
+struct floodtile { uint8_t x; uint8_t y; };
+static struct floodtile *floodbucket = NULL;
+static int bucketcounter;
+
 struct ffnode
 {
 	struct ffnode *next;
@@ -1581,7 +1585,6 @@ bool fireOnLocation(unsigned int x, unsigned int y)
 
 static void dangerFloodFill(int player)
 {
-	struct ffnode *open = NULL;
 	int i;
 	Vector2i pos = getPlayerStartPosition(player);
 	MAPTILE *psTile;
@@ -1589,6 +1592,7 @@ static void dangerFloodFill(int player)
 
 	pos.x = map_coord(pos.x);
 	pos.y = map_coord(pos.y);
+	bucketcounter = 0;
 
 	do
 	{
@@ -1611,12 +1615,9 @@ static void dangerFloodFill(int player)
 			    && (psTile->dangerBits & (1 <<player))
 			    && !(psTile->blockingBits & FEATURE_BLOCKED))
 			{
-				struct ffnode *node = malloc(sizeof(*node));
-
-				node->next = open;	// add to beginning of open list
-				node->x = npos.x;
-				node->y = npos.y;
-				open = node;
+				floodbucket[bucketcounter].x = npos.x;
+				floodbucket[bucketcounter].y = npos.y;
+				bucketcounter++;
 				psTile->tileInfoBits |= BITS_TEMPORARY;	// make sure we do not put it many times on the open list
 			}
 		}
@@ -1624,17 +1625,14 @@ static void dangerFloodFill(int player)
 		// Clear danger
 		currTile->dangerBits &= ~(1 << player);
 
-		// Pop the first open node off the list for the next iteration
-		if (open)
+		// Pop the last open node off the bucket list for the next iteration
+		if (bucketcounter)
 		{
-			struct ffnode *tmp = open;
-
-			pos.x = open->x;
-			pos.y = open->y;
-			open = open->next;
-			free(tmp);
+			bucketcounter--;
+			pos.x = floodbucket[bucketcounter].x;
+			pos.y = floodbucket[bucketcounter].y;
 		}
-	} while (open);
+	} while (bucketcounter);
 }
 
 static inline void threatUpdateTarget(int player, BASE_OBJECT *psObj, bool ground, bool air)
@@ -1746,6 +1744,9 @@ static void dangerUpdate(int player)
 void mapInit()
 {
 	int player;
+
+	free(floodbucket);
+	floodbucket = malloc(mapWidth * mapHeight * sizeof(*floodbucket));
 
 	// Initialize danger maps
 	for (player = 0; player < MAX_PLAYERS; player++)
