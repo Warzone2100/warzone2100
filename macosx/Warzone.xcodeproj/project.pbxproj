@@ -3579,7 +3579,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"libvorbis-1.3.1\"\nOutDir=\"libvorbis\"\nFileName=\"libvorbis-1.3.1.tar.gz\"\nSourceDLP=\"http://downloads.xiph.org/releases/vorbis/libvorbis-1.3.1.tar.gz\"\nMD5Sum=\"016e523fac70bdd786258a9d15fd36e9\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
+			shellScript = "DirectorY=\"libvorbis-1.3.2\"\nOutDir=\"libvorbis\"\nFileName=\"libvorbis-1.3.2.tar.gz\"\nSourceDLP=\"http://downloads.xiph.org/releases/vorbis/libvorbis-1.3.2.tar.gz\"\nMD5Sum=\"c870b9bd5858a0ecb5275c14486d9554\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
 		};
 		02FD383C0BD4014700776FD3 /* Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
