@@ -403,6 +403,7 @@
 		432BE40210D9CF6F00A486AB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 432BE3FE10D9CF1300A486AB /* InfoPlist.strings */; };
 		432BE41A10D9D32000A486AB /* SDL.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 432BE34C10D9C21900A486AB /* SDL.framework */; };
 		4336D8AA111DDF0F0012E8E4 /* random.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4336D8A8111DDF0F0012E8E4 /* random.cpp */; };
+		4353C86E1282199C00CAFEDA /* tone.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C3B9C2118BEBE0000BBE59 /* tone.c */; };
 		4355E08010D5FADE00A19EE4 /* physfs_platforms.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E07F10D5FAC200A19EE4 /* physfs_platforms.h */; };
 		4355E13010D6028C00A19EE4 /* codec.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E12C10D6028C00A19EE4 /* codec.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4355E13110D6028C00A19EE4 /* theora.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E12D10D6028C00A19EE4 /* theora.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -412,7 +413,6 @@
 		436E3E6F1257C7910064FFC5 /* COPYING.txt in Resources */ = {isa = PBXBuildFile; fileRef = 436E3E6C1257C7910064FFC5 /* COPYING.txt */; };
 		4371B5A611D93BA3005A67AB /* pngpriv.h in Headers */ = {isa = PBXBuildFile; fileRef = 4371B5A411D93BA3005A67AB /* pngpriv.h */; };
 		438BDDF31129DC9A00998660 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 438BDDD71129DC9A00998660 /* InfoPlist.strings */; };
-		4396141511E2447100878481 /* barkmel.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C3B9C0118BEBE0000BBE59 /* barkmel.c */; };
 		439F36D61266869B00D5EE2A /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97F013D10EDEAE5C004947E5 /* Cocoa.framework */; };
 		439F36E8126686D600D5EE2A /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 439F36D11266862500D5EE2A /* CoreFoundation.framework */; };
 		439F36E91266872100D5EE2A /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 439F36D41266869B00D5EE2A /* Carbon.framework */; };
@@ -3659,7 +3659,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"libvorbis-1.3.1\"\nOutDir=\"libvorbis\"\nFileName=\"libvorbis-1.3.1.tar.gz\"\nSourceDLP=\"http://downloads.xiph.org/releases/vorbis/libvorbis-1.3.1.tar.gz\"\nMD5Sum=\"016e523fac70bdd786258a9d15fd36e9\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
+			shellScript = "DirectorY=\"libvorbis-1.3.2\"\nOutDir=\"libvorbis\"\nFileName=\"libvorbis-1.3.2.tar.gz\"\nSourceDLP=\"http://downloads.xiph.org/releases/vorbis/libvorbis-1.3.2.tar.gz\"\nMD5Sum=\"c870b9bd5858a0ecb5275c14486d9554\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
 		};
 		02FD383C0BD4014700776FD3 /* Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4156,7 +4156,7 @@
 				02DDA8410BD3C1420049AB60 /* window.c in Sources */,
 				02DDA8590BD3C18B0049AB60 /* vorbisenc.c in Sources */,
 				02DDA85A0BD3C18B0049AB60 /* vorbisfile.c in Sources */,
-				4396141511E2447100878481 /* barkmel.c in Sources */,
+				4353C86E1282199C00CAFEDA /* tone.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
