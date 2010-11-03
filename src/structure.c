@@ -3558,6 +3558,10 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				{
 					doNextProduction(psStructure, (DROID_TEMPLATE *)pSubject);
 				}
+				else if (myResponsibility(psStructure->player))
+				{
+					cancelProduction(psStructure, ModeQueue);
+				}
 			}
 		}
 	}
