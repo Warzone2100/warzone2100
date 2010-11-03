@@ -559,7 +559,7 @@ float objDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD originalhp, UDWORD wea
 		}
 	}
 
-	if (impactSide != HIT_SIDE_PIERCE)
+	if (impactSide == HIT_SIDE_PIERCE)
 	{
 		armour = 0;
 	}
