@@ -1612,13 +1612,19 @@ static void dangerFloodFill(int player)
 
 			if (!(psTile->tileInfoBits & BITS_TEMPORARY)
 			    && !(psTile->threatBits & (1 << player))
-			    && (psTile->dangerBits & (1 <<player))
-			    && !(psTile->blockingBits & FEATURE_BLOCKED))
+			    && (psTile->dangerBits & (1 <<player)))
 			{
-				floodbucket[bucketcounter].x = npos.x;
-				floodbucket[bucketcounter].y = npos.y;
-				bucketcounter++;
-				psTile->tileInfoBits |= BITS_TEMPORARY;	// make sure we do not put it many times on the open list
+				if (!(psTile->blockingBits & FEATURE_BLOCKED) && !psTile->buildingBits)
+				{
+					floodbucket[bucketcounter].x = npos.x;
+					floodbucket[bucketcounter].y = npos.y;
+					bucketcounter++;
+				}
+				else
+				{
+					psTile->dangerBits &= ~(1 << player);	// clear danger for buildings and features as well, but don't propagate
+				}
+				psTile->tileInfoBits |= BITS_TEMPORARY;	// make sure we do not process it more than once
 			}
 		}
 
