@@ -891,7 +891,8 @@ event truckRush(inactive)
 	while (droid != NULLOBJECT and _oil != NULLOBJECT)
 	{
 		curdist = distBetweenTwoPoints(startX, startY, _oil.x, _oil.y);
-		if (curdist < mindist and droidCanReach(droid, _oil.x, _oil.y) and safeDest(me, _oil.x, _oil.y))
+		// Find the closest oil to target player that we can reach safely, and that he can reach safely as well
+		if (curdist < mindist and droidCanReach(droid, _oil.x, _oil.y) and safeDest(me, _oil.x, _oil.y) && safeDest(target, _oil.x, _oil.y))
 		{
 			mindist = curdist;
 			_closestOil = _oil;
