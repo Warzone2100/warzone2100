@@ -6131,8 +6131,8 @@ void printStructureInfo(STRUCTURE *psStructure)
 #ifdef DEBUG
 		if (getDebugMappingStatus())
 		{
-			CONPRINTF(ConsoleString,(ConsoleString, "%s - Unique ID %d",
-					  getStatName(psStructure->pStructureType), psStructure->id));
+			CONPRINTF(ConsoleString,(ConsoleString, "%s - Unique ID %d - %s",
+					  getStatName(psStructure->pStructureType), psStructure->id, (mapTile(map_coord(psStructure->pos.x), map_coord(psStructure->pos.y))->dangerBits & (1 << selectedPlayer)) ? "danger" : "safe"));
 		}
 		else
 #endif

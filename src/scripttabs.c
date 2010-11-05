@@ -1503,6 +1503,14 @@ FUNC_SYMBOL asFuncTable[] =
 		6, {(INTERP_TYPE)ST_DROID, (INTERP_TYPE)ST_STRUCTURESTAT, VAL_REF | VAL_INT, VAL_REF | VAL_INT, VAL_INT, VAL_INT },
 		0, 0, NULL, 0, 0, NULL, NULL },
 
+	{ "safeDest", scrSafeDest, VAL_BOOL,
+		3, { VAL_INT, VAL_INT, VAL_INT },
+		false, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "threatAt", scrThreatAt, VAL_BOOL,
+		3, { VAL_INT, VAL_INT, VAL_INT },
+		false, 0, NULL, 0, 0, NULL, NULL },
+
 	/* This final entry marks the end of the function list */
 	{ "FUNCTION LIST END", NULL, VAL_VOID, 0, { VAL_VOID }, 0, 0, NULL, 0, 0, NULL, NULL }
 };

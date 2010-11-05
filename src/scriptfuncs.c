@@ -164,6 +164,44 @@ Vector2i getPlayerStartPosition(int player)
 	return positions[player];
 }
 
+BOOL scrSafeDest(void)
+{
+	SDWORD	x, y, player;
+	MAPTILE *psTile;
+
+	if (!stackPopParams(3, VAL_INT, &player, VAL_INT, &x, VAL_INT, &y))
+	{
+		return false;
+	}
+	ASSERT_OR_RETURN(false, player < NetPlay.maxPlayers, "Out of bounds player index");
+	psTile = worldTile(x, y);
+	scrFunctionResult.v.bval = !(psTile->dangerBits & (1 << player));
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
+	{
+		return false;
+	}
+	return true;
+}
+
+BOOL scrThreatAt(void)
+{
+	SDWORD	x, y, player;
+	MAPTILE *psTile;
+
+	if (!stackPopParams(3, VAL_INT, &player, VAL_INT, &x, VAL_INT, &y))
+	{
+		return false;
+	}
+	ASSERT_OR_RETURN(false, player < NetPlay.maxPlayers, "Out of bounds player index");
+	psTile = worldTile(x, y);
+	scrFunctionResult.v.bval = psTile->threatBits & (1 << player);
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
+	{
+		return false;
+	}
+	return true;
+}
+
 BOOL scrGetPlayerStartPosition(void)
 {
 	SDWORD	*x, *y, player;

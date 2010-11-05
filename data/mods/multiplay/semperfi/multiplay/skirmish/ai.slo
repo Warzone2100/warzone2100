@@ -881,7 +881,7 @@ event truckRush(inactive)
 	// Reserve droids
 	groupAddGroup(rushGroup, buildGroup);
 
-	// Find oil well closest to to closest enemy
+	// Find oil well closest to closest enemy
 	mindist = 999999;
 	_closestOil = NULLOBJECT;
 	initIterateGroup(rushGroup);
@@ -891,7 +891,7 @@ event truckRush(inactive)
 	while (droid != NULLOBJECT and _oil != NULLOBJECT)
 	{
 		curdist = distBetweenTwoPoints(startX, startY, _oil.x, _oil.y);
-		if (curdist < mindist and droidCanReach(droid, _oil.x, _oil.y) and !threatInRange(me, _oil.x, _oil.y, OIL_THREAT_RANGE, FALSE))
+		if (curdist < mindist and droidCanReach(droid, _oil.x, _oil.y) and safeDest(me, _oil.x, _oil.y))
 		{
 			mindist = curdist;
 			_closestOil = _oil;
