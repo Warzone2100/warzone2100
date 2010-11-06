@@ -1424,7 +1424,7 @@ static void intSetEditBoxTextFromTemplate( DROID_TEMPLATE *psTemplate )
 	}
 	else
 	{
-		GetDefaultTemplateName(psTemplate);
+		sstrcpy(aCurrName, GetDefaultTemplateName(psTemplate));
 	}
 
 	widgSetString(psWScreen, IDDES_NAMEBOX, aCurrName);
