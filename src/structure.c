@@ -1460,7 +1460,7 @@ static SDWORD structChooseWallType(UDWORD player, UDWORD mapX, UDWORD mapY)
 					if (scanType == WALL_CORNER)
 					{
 						// change to a corner
-						if (psStruct->pStructureType->asFuncList[0]->type == WALL_TYPE)
+						if (psStruct->pStructureType->asFuncList && psStruct->pStructureType->asFuncList[0]->type == WALL_TYPE)
 						{
 							const int     oldBody = psStruct->body;
 							UDWORD        oldBuildPoints = psStruct->currentBuildPts;
