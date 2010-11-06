@@ -142,11 +142,11 @@ static int32_t updateExtractedPower(STRUCTURE *psBuilding)
 	{
 		int overflowDiff;
 		// Add modifier according to difficulty level
-		if (getDifficultyLevel() == DL_EASY)
+		if (getDifficultyLevel() == DL_EASY && !bMultiPlayer)
 		{
 			powmodifier = EASY_POWER_MOD/10;
 		}
-		else if (getDifficultyLevel() == DL_HARD)
+		else if (getDifficultyLevel() == DL_HARD && !bMultiPlayer)
 		{
 			powmodifier = HARD_POWER_MOD/10;
 		}
