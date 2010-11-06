@@ -1,3 +1,41 @@
+2010-10-25: Version 3.0 beta 1
+ * General:
+   * Change: Include custom command line parser, options now need a '=' for parameters (ticket:1659, commit:2aca760ab52865660c3c30bdb84eab4d2850e6ae, commit:d42d9ed4a07f5cd63ff49c6db540828a1077ccb5, commit:96a93bca5399013b345acb84deb9ee5aae0ef7d5, commit:c741626169c516d8dcd18fc6fc000ea2a0ceb929, commit:6de0b208733c01bceebd53a1c1140c36ba7aa8d1)
+   * Fix: Don't crash when the LasSat fires (ticket:2229, commit:a32651d3b218afaf31a3830b8f2cee96bf76560b)
+   * Fix: Make hover tanks hover closely above water (ticket:2232, commit:e28711fe5537cd74925ee697f0026999a9a06e11, commit:a430a29bb36d94cbc7c868f423e63161a1263cd6, commit:e98e49f2f9d7b58e5a902741df7ea4b43c06addc)
+   * Fix: Make Super Transport faster (commit:f0b7fc5ed3a9d0de7fd41ee3039b08b50818bec2)
+   * Fix: Don't activate radar detectors before being completely built (ticket:2202, commit:0f82adabc942d6d8a85c7b710765bf60cfc132e8)
+ * UI:
+   * New: New backdrop by Jorzi (commit:b0d63c3b1fcd5b6b623de8f297db98e10fc1afe8)
+   * New: Mouse wheel can scroll through research and build menus (ticket:2110, commit:e979b6ad620f27e746f119fefd1f613bbb61b8a4, commit:55cf2a4f85dac4570aca592e165a4041c8cd0940)
+ * Graphics:
+   * Change: Try to make cliffs more prominent (commit:1864dce13090361a882ad955651249510efd8a84)
+   * Change: Adjusted terrain textures (commit:d7dcf7c32c5d8210b999574d62e6462fa89104d1)
+   * Fix: Skybox drawing (ticket:575, commit:5bb1b88f2299c75a257bfaeb0fc79cfdff4f17bb)
+   * Fix: Draw missing repair turret (commit:6bdd4cd6218b5e2303e79ae1a932bee163ca6eba)
+   * Fix: Artifacts on artifacts (ticket:2233, commit:9ba8522cb643d10e684725fcf1b158727c7a4756)
+   * Fix: Blip animation (commit:c0a12c32c6f8cd291bd154e2fef669a535732843)
+   * Fix: Transport model (commit:b923ae28d7320ae66062bed67c0a3145213b72c8)
+   * Fix: Oil derrick model/texture (commit:d82ee0b8d454f411c05a7c8de6096bbaba80735c)
+ * NTW mod:
+   * Fix: Adjust textures for 3.0 (ticket:2240, commit:50ec6245e447e6cfad5139bd8337998dd16edcf3)
+
+2010-10-18: Version pre-3.0-1
+ * General:
+   * New: Support for 3/5/6/7 player maps (commit:7836d26509e3d4e8ff1cb51c5f56c952e50de593)
+ * Graphics:
+   * New: Backport the new terrain renderer and team color masks for units from trunk/master (commits:lots)
+   * Change: Add new terrain textures by Mangust (ticket:2013)
+ * Multiplayer:
+   * Change: Add Super Transport with a capacity of 10 slots (cyborgs/small units 1 take slot, medium units 2 slots, heavy units 3 slots), prerequisite: Cyborg Transport (commit:12b7dfad707a86b4792eeaf61e2f817c7e1a9d4a)
+   * Change: Backport AI improvements from master (commit:4335203ddbd16daeb4b0666d7f78d2f5ca9993f3)
+ * NTW mod:
+   * Fix: Graphics (ticket:1748, commit:e0ced0e4fb024e0bf2b6b7de1a826b5bfbfffe9f)
+ * Translations:
+   * Update: Italian (ticket:2199, commit:39a85bb03eda8c50228405beaa6bbd886183f182)
+   * Update: German (commit:c16bf5807aa54a077878e130ca639c17e8a5154a)
+   * Update: Spanish (ticket:2214, commit fe4c68819f380e859f8b4b75dd369432f0d7cdc6)
+
 2010-09-24: Version 2.3.5
  * General:
    * Fix: Fix edit boxes so they correctly calculate the string's pixel borders. (r11668)
