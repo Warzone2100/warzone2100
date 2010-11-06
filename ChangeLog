@@ -1,3 +1,30 @@
+2010-11-XX: Version 3.0 beta 3
+ * General:
+   * Fix: Make armour work again (ticket:2273, commit:75a6c766063c6773840177d17d2ca2d5e9008100)
+   * Fix: Don't crash in the unit design screen when using unicode strings (ticket:2209, commit:3012fde61ef92151e0ec5125551a7b3481f05fb8)
+ * Graphics:
+   * Fix: Rocky tileset decals (ticket:2285, commit:6f5392f14947f0c44cedd40165031f4eb4a819a7)
+ * Campaign:
+   * Fix: Don't allow controlling the transport, to prevent the scripts from getting confused (commit:92256b2e8906c15acd418417a6628e8c38e4a918)
+ * Multiplayer:
+   * Change: Make game difficulty setting not affect skirmish games (commit:4db5d00784dc59ec34830d8f4c63fd0a4808112f)
+   * Change: Use the host's SP color as the default color when hosting games (commit:09ea0be7c30236809536db332be78b2967d3114d)
+   * Fix: Make power generator output not depend on the game difficulty setting (commit:8707a2a84542de52155b4334cf5e637b4b43fcce)
+ * Translations:
+   * New: Turkish (ticket:2261, commit:255a0e2413eb5691f9398ae2ff65680e776fce04)
+   * Updated: Spanish (ticket:2214, commit:16e015ddcff475e79066a04f9bafecbf243f2bbc)
+   * Updated: Romanian (ticket:2246, commit:52b86d4af1aec305d96dc4c358fccd9f23a1af8b)
+   * Updated: French (ticket:2268, commit:97a244d4a5007ee337fb3b99c7f9ee4f23f2b66b)
+
+2010-11-01: Version 3.0 beta 2
+ * General:
+   * Fix: Don't crash between campaign missions (ticket:2256, commit:f3406075e3cca5599bf699d0e07fc4e83266e55f, commit:c32f6f571d76d7763358af364072eee69b154011)
+   * Fix: Don't allow structures to be built on water (commit:10d69a079115d9cdb2e2ab61968dd0e83ab82147)
+ * Graphics:
+   * Fix: Models for Assault Cannon, Cluster/HEAP Bomb projectiles, Plasmite Flamer, AA Flak Cannon, Sunburst AA Rocket Array (ticket:2277, ticket:2278, commit:54646f040ac71360cefe9e847a5e3eec86c4fc7a)
+ * Multiplayer:
+   * Fix: Don't send stats for players not in the game (commit:2c68a674d33048a9927ac46d7c6f38a2c98fea75)
+
 2010-10-25: Version 3.0 beta 1
  * General:
    * Change: Include custom command line parser, options now need a '=' for parameters (ticket:1659, commit:2aca760ab52865660c3c30bdb84eab4d2850e6ae, commit:d42d9ed4a07f5cd63ff49c6db540828a1077ccb5, commit:96a93bca5399013b345acb84deb9ee5aae0ef7d5, commit:c741626169c516d8dcd18fc6fc000ea2a0ceb929, commit:6de0b208733c01bceebd53a1c1140c36ba7aa8d1)
