@@ -5,7 +5,7 @@
 /***********************************************************/
 
 directory	"texpages"
-file		TEXPAGE	"page-6-features-arizona.png"
+file		TEXPAGE	"page-6.png"
 file		TEXPAGE	"page-7-barbarians-arizona.png"
 file		TEXPAGE	"page-8-player-buildings-bases.png"
 file		TEXPAGE	"page-9-player-buildings-bases.png"
@@ -33,4 +33,7 @@ file		TEXPAGE	"page-22-fx.png"
 file		TEXPAGE	"page-23-fx.png"
 file		TEXPAGE	"page-24-fx.png"
 file		TEXPAGE	"page-28-naval.png"
+file		TEXPAGE	"page-29-features-arizona.png"
+file		TEXPAGE	"page-30-features-rockies.png"
+file		TEXPAGE	"page-31-features-urban.png"
 file		TEXPAGE	"page-59-more-weapons.png"
