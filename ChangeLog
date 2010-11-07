@@ -61,7 +61,7 @@
  * Translations:
    * Update: Italian (ticket:2199, commit:39a85bb03eda8c50228405beaa6bbd886183f182)
    * Update: German (commit:c16bf5807aa54a077878e130ca639c17e8a5154a)
-   * Update: Spanish (ticket:2214, commit fe4c68819f380e859f8b4b75dd369432f0d7cdc6)
+   * Update: Spanish (ticket:2214, commit:fe4c68819f380e859f8b4b75dd369432f0d7cdc6)
 
 2010-09-24: Version 2.3.5
  * General:
