@@ -2133,12 +2133,6 @@ INT_RETVAL intRunWidgets(void)
 						{
 							addConsoleMessage(_("Failed to create building"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
 						}
-						/* NOTE: if this was a regular buildprocess we would
-						 * have to call sendBuildStarted(psStructure, <droid>);
-						 * In this case there is no droid working on the
-						 * building though. So we cannot fill out the <droid>
-						 * part.
-						 */
 					}
 					if (psStructure)
 					{

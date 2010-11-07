@@ -166,9 +166,9 @@ unsigned NET_PlayerConnectionStatus[CONNECTIONSTATUS_NORMAL][MAX_PLAYERS];
  **            ie ("trunk", "2.1.3", "3.0", ...)
  ************************************************************************************
 **/
-char VersionString[VersionStringSize] = "master, netcode 4.1004";
+char VersionString[VersionStringSize] = "master, netcode 4.1005";
 static int NETCODE_VERSION_MAJOR = 4;
-static int NETCODE_VERSION_MINOR = 1004;
+static int NETCODE_VERSION_MINOR = 1005;
 
 bool NETisCorrectVersion(uint32_t game_version_major, uint32_t game_version_minor)
 {
@@ -3179,7 +3179,6 @@ const char *messageTypeToString(unsigned messageType_)
 		case GAME_TEMPLATE:                 return "GAME_TEMPLATE";
 		case GAME_TEMPLATEDEST:             return "GAME_TEMPLATEDEST";
 		case GAME_FEATUREDEST:              return "GAME_FEATUREDEST";
-		case GAME_BUILD:                    return "GAME_BUILD";
 		case GAME_RESEARCH:                 return "GAME_RESEARCH";
 		case GAME_FEATURES:                 return "GAME_FEATURES";
 		case GAME_SECONDARY:                return "GAME_SECONDARY";

@@ -1001,15 +1001,6 @@ BOOL droidStartBuild(DROID *psDroid)
 			return false;
 		}
 		psStruct->body /= 10; // structures start at 10% health
-
-		if (bMultiMessages)
-		{
-			if(myResponsibility(psDroid->player) )
-			{
-				// This message doesn't actually do anything, unless out of synch.
-				sendBuildStarted(psStruct, psDroid);
-			}
-		}
 	}
 	else
 	{

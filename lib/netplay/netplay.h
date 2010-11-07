@@ -100,7 +100,6 @@ typedef enum
 	GAME_TEMPLATE,                  ///< a new template
 	GAME_TEMPLATEDEST,              ///< remove template
 	GAME_FEATUREDEST,               ///< destroy a game feature.
-	GAME_BUILD,                     ///< build a new structure
 	GAME_RESEARCH,                  ///< Research has been completed.
 	GAME_FEATURES,                  ///< information regarding features.
 	GAME_SECONDARY,                 ///< set a droids secondary order
