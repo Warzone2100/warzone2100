@@ -1,10 +1,11 @@
-2010-09-24: Version 2.3.6
+2010-11-07: Version 2.3.6
  * General:
-   * Fix: Fix zero armour in damage calculation bug (ticket:2273)
-   * Fix: Don't crash in the unit design screen when using unicode strings (ticket:2209)
-   * Fix: Do not activate a radar detector before it has been completely built (ticket:2202)
+   * Fix: Fix zero armour in damage calculation bug (ticket:2273, commit:0f3bfba7345b6739167c66c7e33a57b5257952ee)
+   * Fix: Don't crash in the unit design screen when using unicode strings (ticket:2209, commit:209e12b665d23cce1cf286435ace08b86250517b)
+   * Fix: Do not activate a radar detector before it has been completely built (ticket:2202, commit:bf058bbf2005cf8b95f1fca3bc704be4739514d9)
+   * Fix: Clear a droid's order queue when it gets new orders (commit:5e1a50db8dd1bcd626dd8c74b53f603258e1b158)
  * Multiplayer:
-   * Fix: Make power generator output not depend on the game difficulty setting
+   * Fix: Make power generator output not depend on the game difficulty setting (commit:67524762633e2bae0570e8674e3ca34af184d1e9)
 
 2010-09-24: Version 2.3.5
  * General:
