@@ -69,7 +69,7 @@
 
 #include "multiplay.h"
 #include "game.h"
-
+#include "component.h"
 
 #define	GRAVITON_GRAVITY	((float)-800)
 #define	EFFECT_X_FLIP		0x1
