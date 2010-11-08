@@ -29,11 +29,11 @@
 	<key>CFBundleVersion</key>
 	<string>SVN_REV</string>
 	<key>CFBundleShortVersionString</key>
-	<string>SVN_URI</string>
+	<string>SVN_TAG [SVN_SHORT_HASH_WITHOUT_QUOTES]</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 1999-2004 Eidos Interactive, Copyright © 2005-2010 The Warzone 2100 Project</string>
 	<key>CFBundleGetInfoString</key>
-	<string>SVN_URI, Copyright © 1999-2004 Eidos Interactive, Copyright © 2005-2010 The Warzone 2100 Project</string>
+	<string>SVN_TAG [SVN_SHORT_HASH_WITHOUT_QUOTES], Copyright © 1999-2004 Eidos Interactive, Copyright © 2005-2010 The Warzone 2100 Project</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>10.4.0</string>
 	<key>LSRequiresNativeExecution</key>

@@ -133,7 +133,15 @@ cscope.out
 /pkg/dpkg/warzone2100/
 
 
+#Mac Stuff
+.DS_Store
+*.pbxuser
+*.perspectivev3
+
 # build folders
+/macosx/build/
+/macosx/external/
+/macosx/prebuilt/
 /build
 /2.3
 /trunk
