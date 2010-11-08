@@ -69,7 +69,7 @@
 
 #include "multiplay.h"
 #include "game.h"
-
+#include "component.h"
 
 #define MAX_EFFECTS	2500
 
