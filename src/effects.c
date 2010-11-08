@@ -183,8 +183,8 @@ static	UDWORD	skipped,skippedEffects,letThrough;
 static	UDWORD	auxVar; // dirty filthy hack - don't look for what this does.... //FIXME
 static	UDWORD	auxVarSec; // dirty filthy hack - don't look for what this does.... //FIXME
 static	UDWORD	specifiedSize;
-static  UDWORD	ellSpec;
-
+static	UDWORD	ellSpec;
+static	uint8_t	EffectForPlayer = 0;
 // ----------------------------------------------------------------------------------------
 /* PROTOTYPES */
 
@@ -414,6 +414,13 @@ UDWORD	getNumEvenEffects(void)
 	return(letThrough);
 }
 
+// When we need to set the effect for the player's color
+void	SetEffectForPlayer(uint8_t player)
+{
+	ASSERT(player < MAX_PLAYERS, "player is set to a invalid number of %d", (int) player);
+
+	EffectForPlayer = getPlayerColour(player);
+}
 
 void	addEffect(Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type,BOOL specified, iIMDShape *imd, int lit)
 {
@@ -493,6 +500,10 @@ void	addEffect(Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type,BOOL specifie
 	/* Now, note group and type */
 	psEffect->group = group;
 	psEffect->type = type;
+
+	// and if the effect needs the player's color for certain things
+	psEffect->player = EffectForPlayer;
+	SetEffectForPlayer(0);	// reset it
 
 	/* Set when it entered the world */
 	psEffect->birthTime = psEffect->lastFrame = gameTime;
@@ -1775,7 +1786,7 @@ static void renderGravitonEffect(EFFECT *psEffect)
 		pie_MatScale(100);
 	}
 
-	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, WZCOL_WHITE, WZCOL_BLACK, 0, 0);
+	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, psEffect->player, WZCOL_WHITE, WZCOL_BLACK, 0, 0);
 
 	/* Pop the matrix */
 	iV_MatrixEnd();
