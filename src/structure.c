@@ -1530,7 +1530,6 @@ static void buildFlatten(STRUCTURE *pStructure, UDWORD x, UDWORD y, UDWORD h)
 
 void alignStructure(STRUCTURE *psBuilding)
 {
-	int width, breadth;
 	int x = psBuilding->pos.x;
 	int y = psBuilding->pos.y;
 	unsigned sWidth   = getStructureWidth(psBuilding);
@@ -1548,17 +1547,18 @@ void alignStructure(STRUCTURE *psBuilding)
 	}
 	else
 	{
+		iIMDShape	*strImd = psBuilding->sDisplay.imd;
+		int i, pointHeight;
+
 		psBuilding->pos.z = TILE_MIN_HEIGHT;
 
-		/* Set it at the higher coord */
-		for (width = 0; width < sWidth; width++)
+		// Now we got through the shape looking for vertices on the edge
+                for (i = 0; i < strImd->npoints; i++)
 		{
-			for (breadth = 0; breadth < sBreadth; breadth++)
+			pointHeight = map_Height(psBuilding->pos.x + strImd->points[i].x, psBuilding->pos.y - strImd->points[i].z);
+			if (pointHeight > psBuilding->pos.z)
 			{
-				UDWORD tmpMax, tmpMin;
-
-				getTileMaxMin(map_coord(x) + width, map_coord(y) + breadth, &tmpMax, &tmpMin);
-				psBuilding->pos.z = MAX(tmpMax, psBuilding->pos.z);
+				psBuilding->pos.z = pointHeight;
 			}
 		}
 	}
