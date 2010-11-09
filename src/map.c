@@ -810,7 +810,6 @@ BOOL mapLoad(char *filename, BOOL preview)
 	if (!mapLoadGroundTypes())
 	{
 		goto failure;
-		return false;
 	}
 	
 	//load in the map data itself
@@ -824,7 +823,7 @@ BOOL mapLoad(char *filename, BOOL preview)
 		if (!PHYSFS_readULE16(fp, &texture) || !PHYSFS_readULE8(fp, &height))
 		{
 			debug(LOG_ERROR, "%s: Error during savegame load", filename);
-			return false;
+			goto failure;
 		}
 
 		psMapTiles[i].texture = texture;
@@ -844,7 +843,7 @@ BOOL mapLoad(char *filename, BOOL preview)
 	if (!PHYSFS_readULE32(fp, &version) || !PHYSFS_readULE32(fp, &numGw) || version != 1)
 	{
 		debug(LOG_ERROR, "Bad gateway in %s", filename);
-		return false;
+		goto failure;
 	}
 
 	for (i = 0; i < numGw; i++)
@@ -854,12 +853,12 @@ BOOL mapLoad(char *filename, BOOL preview)
 		if (!PHYSFS_readULE8(fp, &x0) || !PHYSFS_readULE8(fp, &y0) || !PHYSFS_readULE8(fp, &x1) || !PHYSFS_readULE8(fp, &y1))
 		{
 			debug(LOG_ERROR, "%s: Failed to read gateway info", filename);
-			return false;
+			goto failure;
 		}
 		if (!gwNewGateway(x0, y0, x1, y1))
 		{
 			debug(LOG_ERROR, "%s: Unable to add gateway", filename);
-			return false;
+			goto failure;
 		}
 	}
 
