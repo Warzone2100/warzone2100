@@ -292,7 +292,7 @@ extern BOOL mapShutdown(void);
 extern BOOL mapNew(UDWORD width, UDWORD height);
 
 /* Load the map data */
-extern BOOL mapLoad(char *filename);
+extern BOOL mapLoad(char *filename, BOOL preview);
 
 /* Save the map data */
 extern BOOL mapSave(char **ppFileData, UDWORD *pFileSize);
