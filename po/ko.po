@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100 2.3_branch\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-09-29 19:57+0200\n"
+"POT-Creation-Date: 2010-11-09 16:00+0100\n"
 "PO-Revision-Date: 2003-01-15 11:40+0900\n"
 "Last-Translator: Joshua Shin <urgood2@gmail.com>\n"
 "Language-Team: Korean Translation Team <urgood2@gmail.com>\n"
@@ -14931,33 +14931,61 @@ msgstr "수송선 출발"
 msgid "Reinforcements landing"
 msgstr "지원군이 착륙하고 있습니다"
 
-#: src/version.c:139
+#: src/version.c:143
 msgid " (modified and switched locally)"
 msgstr " (로컬 수정 및 전환switch)"
 
-#: src/version.c:141
+#: src/version.c:145
 msgid " (modified locally)"
 msgstr " (로컬 수정)"
 
-#: src/version.c:143
+#: src/version.c:147
 msgid " (switched locally)"
 msgstr " (로컬 전환switch)"
 
-#: src/version.c:150
+#: src/version.c:154
 msgid " - DEBUG"
 msgstr " - 디버그(DEBUG)"
 
-#: src/version.c:159
+#: src/version.c:163
 #, c-format
 msgid " - Built %s"
 msgstr " - 빌드 날짜 %s"
 
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version <version name/number> <working copy state><BUILD DATE><BUILD TYPE>"
-#: src/version.c:169
+#: src/version.c:173
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "버젼 %s%s%s%s"
+
+#, fuzzy
+#~ msgid "Super Transport Available"
+#~ msgstr "사이보그 수송선이 사용 가능합니다"
+
+#, fuzzy
+#~ msgid "Super Transport"
+#~ msgstr "수송선"
+
+#, fuzzy
+#~ msgid "Super Transport Body"
+#~ msgstr "수송 차체"
+
+#, fuzzy
+#~ msgid "3 players"
+#~ msgstr "2 플레이어"
+
+#, fuzzy
+#~ msgid "5 players"
+#~ msgstr "2 플레이어"
+
+#, fuzzy
+#~ msgid "6 players"
+#~ msgstr "2 플레이어"
+
+#, fuzzy
+#~ msgid "7 players"
+#~ msgstr "2 플레이어"
 
 #~ msgid "Mini-Rocket accuracy +10%"
 #~ msgstr "미니로케트 정확도 +10%"

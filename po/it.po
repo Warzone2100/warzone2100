@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-09-29 19:57+0200\n"
+"POT-Creation-Date: 2010-11-09 16:00+0100\n"
 "PO-Revision-Date: 2010-09-28 23:52+0100\n"
 "Last-Translator: Cristian Odorico <generalchris@hotmail.it>\n"
 "Language-Team: Italian <warzone-dev@gna.org>\n"
@@ -14890,33 +14890,61 @@ msgstr "Lancia il Trasporto"
 msgid "Reinforcements landing"
 msgstr "I rinforzi stanno atterrando"
 
-#: src/version.c:139
+#: src/version.c:143
 msgid " (modified and switched locally)"
 msgstr " (modificato e cambiato localmente)"
 
-#: src/version.c:141
+#: src/version.c:145
 msgid " (modified locally)"
 msgstr " (modificato localmente)"
 
-#: src/version.c:143
+#: src/version.c:147
 msgid " (switched locally)"
 msgstr " (cambiato localmente)"
 
-#: src/version.c:150
+#: src/version.c:154
 msgid " - DEBUG"
 msgstr " - DEBUG"
 
-#: src/version.c:159
+#: src/version.c:163
 #, c-format
 msgid " - Built %s"
 msgstr " - Costruito %s"
 
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version <version name/number> <working copy state><BUILD DATE><BUILD TYPE>"
-#: src/version.c:169
+#: src/version.c:173
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Versione %s%s%s%s"
+
+#, fuzzy
+#~ msgid "Super Transport Available"
+#~ msgstr "Trasporto Cyborg Disponibile"
+
+#, fuzzy
+#~ msgid "Super Transport"
+#~ msgstr "Trasporto"
+
+#, fuzzy
+#~ msgid "Super Transport Body"
+#~ msgstr "Corpo del Trasporto"
+
+#, fuzzy
+#~ msgid "3 players"
+#~ msgstr "2 giocatori"
+
+#, fuzzy
+#~ msgid "5 players"
+#~ msgstr "2 giocatori"
+
+#, fuzzy
+#~ msgid "6 players"
+#~ msgstr "2 giocatori"
+
+#, fuzzy
+#~ msgid "7 players"
+#~ msgstr "2 giocatori"
 
 #~ msgid "Out of sync"
 #~ msgstr "Fuori sincronia"

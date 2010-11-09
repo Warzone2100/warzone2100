@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-09-29 19:57+0200\n"
+"POT-Creation-Date: 2010-11-09 16:00+0100\n"
 "PO-Revision-Date: 2010-04-21 08:32-0500\n"
 "Last-Translator: Gilles J. Séguin <segg2@videotron.ca>\n"
 "Language-Team: French <warzone-dev@gna.org>\n"
@@ -12721,7 +12721,7 @@ msgstr "Multi-joueurs"
 #: src/frontend.c:99
 #: src/frontend.c:155
 msgid "Tutorial"
-msgstr "Tutorielle"
+msgstr "Tutoriel"
 
 #: src/frontend.c:100
 #: src/hci.c:3948
@@ -12746,7 +12746,7 @@ msgstr "Partie Rapide"
 
 #: src/frontend.c:157
 msgid "TUTORIALS"
-msgstr "TUTORIAUX"
+msgstr "TUTORIELS"
 
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
 #: src/frontend.c:159
@@ -15030,33 +15030,61 @@ msgstr "Envoyer le Transporteur"
 msgid "Reinforcements landing"
 msgstr "Les renforts sont arrivés !"
 
-#: src/version.c:139
+#: src/version.c:143
 msgid " (modified and switched locally)"
 msgstr " (modifié et changé localement)"
 
-#: src/version.c:141
+#: src/version.c:145
 msgid " (modified locally)"
 msgstr " (modifié localement)"
 
-#: src/version.c:143
+#: src/version.c:147
 msgid " (switched locally)"
 msgstr " (changé localement)"
 
-#: src/version.c:150
+#: src/version.c:154
 msgid " - DEBUG"
 msgstr " - DEBOGUER"
 
-#: src/version.c:159
+#: src/version.c:163
 #, c-format
 msgid " - Built %s"
 msgstr " - Compilation %s"
 
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version <version name/number> <working copy state><BUILD DATE><BUILD TYPE>"
-#: src/version.c:169
+#: src/version.c:173
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Version %s%s%s%s"
+
+#, fuzzy
+#~ msgid "Super Transport Available"
+#~ msgstr "Transporteur Cyborg Disponible"
+
+#, fuzzy
+#~ msgid "Super Transport"
+#~ msgstr "Transporteur"
+
+#, fuzzy
+#~ msgid "Super Transport Body"
+#~ msgstr "Châssis de Transporteur"
+
+#, fuzzy
+#~ msgid "3 players"
+#~ msgstr "2 joueurs"
+
+#, fuzzy
+#~ msgid "5 players"
+#~ msgstr "2 joueurs"
+
+#, fuzzy
+#~ msgid "6 players"
+#~ msgstr "2 joueurs"
+
+#, fuzzy
+#~ msgid "7 players"
+#~ msgstr "2 joueurs"
 
 #~ msgid "Mini-Rocket accuracy +10%"
 #~ msgstr "précision des Mini-Roquettes +10%"

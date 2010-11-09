@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100 2.3.2\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-09-29 19:57+0200\n"
+"POT-Creation-Date: 2010-11-09 16:00+0100\n"
 "PO-Revision-Date: 2010-07-30 08:44+0100\n"
 "Last-Translator: Marian Zsemlye <koapa@inmail.sk>\n"
 "Language-Team: Koapa - Marian Zsemlye <koapa@inmail.sk>\n"
@@ -14892,33 +14892,61 @@ msgstr "Spustiť transport"
 msgid "Reinforcements landing"
 msgstr "Pristály posily"
 
-#: src/version.c:139
+#: src/version.c:143
 msgid " (modified and switched locally)"
 msgstr ""
 
-#: src/version.c:141
+#: src/version.c:145
 msgid " (modified locally)"
 msgstr ""
 
-#: src/version.c:143
+#: src/version.c:147
 msgid " (switched locally)"
 msgstr ""
 
-#: src/version.c:150
+#: src/version.c:154
 msgid " - DEBUG"
 msgstr "- LADENIE"
 
-#: src/version.c:159
+#: src/version.c:163
 #, c-format
 msgid " - Built %s"
 msgstr "- Build %s"
 
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version <version name/number> <working copy state><BUILD DATE><BUILD TYPE>"
-#: src/version.c:169
+#: src/version.c:173
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Verzia %s%s%s%s"
+
+#, fuzzy
+#~ msgid "Super Transport Available"
+#~ msgstr "Dostupný novy kyborg"
+
+#, fuzzy
+#~ msgid "Super Transport"
+#~ msgstr "Spustiť transport"
+
+#, fuzzy
+#~ msgid "Super Transport Body"
+#~ msgstr "Spustiť transport"
+
+#, fuzzy
+#~ msgid "3 players"
+#~ msgstr "2 hráči"
+
+#, fuzzy
+#~ msgid "5 players"
+#~ msgstr "2 hráči"
+
+#, fuzzy
+#~ msgid "6 players"
+#~ msgstr "2 hráči"
+
+#, fuzzy
+#~ msgid "7 players"
+#~ msgstr "2 hráči"
 
 #~ msgid "Mini-Rocket accuracy +10%"
 #~ msgstr "Presnosť Mini-rakiet +10%"

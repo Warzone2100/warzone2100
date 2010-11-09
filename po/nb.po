@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-09-29 19:57+0200\n"
+"POT-Creation-Date: 2010-11-09 16:00+0100\n"
 "PO-Revision-Date: 2008-05-09 16:54+0000\n"
 "Last-Translator: Olav Andreas Lindekleiv <Unknown>\n"
 "Language-Team: none\n"
@@ -14958,33 +14958,57 @@ msgstr "Send transport"
 msgid "Reinforcements landing"
 msgstr "Forsterkninger lander"
 
-#: src/version.c:139
+#: src/version.c:143
 msgid " (modified and switched locally)"
 msgstr ""
 
-#: src/version.c:141
+#: src/version.c:145
 msgid " (modified locally)"
 msgstr ""
 
-#: src/version.c:143
+#: src/version.c:147
 msgid " (switched locally)"
 msgstr ""
 
-#: src/version.c:150
+#: src/version.c:154
 msgid " - DEBUG"
 msgstr " - DEBUG"
 
-#: src/version.c:159
+#: src/version.c:163
 #, c-format
 msgid " - Built %s"
 msgstr " - bygd %s"
 
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version <version name/number> <working copy state><BUILD DATE><BUILD TYPE>"
-#: src/version.c:169
+#: src/version.c:173
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Version %s%s%s%s"
+
+#, fuzzy
+#~ msgid "Super Transport"
+#~ msgstr "Send transport"
+
+#, fuzzy
+#~ msgid "Super Transport Body"
+#~ msgstr "Send transport"
+
+#, fuzzy
+#~ msgid "3 players"
+#~ msgstr "Spillere"
+
+#, fuzzy
+#~ msgid "5 players"
+#~ msgstr "Spillere"
+
+#, fuzzy
+#~ msgid "6 players"
+#~ msgstr "Spillere"
+
+#, fuzzy
+#~ msgid "7 players"
+#~ msgstr "Spillere"
 
 #~ msgid "Build menu will reopen"
 #~ msgstr "Byggemenyen vil gjenåpnes"

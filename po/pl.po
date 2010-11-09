@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-09-29 19:57+0200\n"
-"PO-Revision-Date: 2010-09-08 11:07+0100\n"
+"POT-Creation-Date: 2010-11-09 16:00+0100\n"
+"PO-Revision-Date: 2010-11-03 11:18+0100\n"
 "Last-Translator: Michał D. aka Emdek <emdeck@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -6117,7 +6117,7 @@ msgstr "Modliszka"
 #: data/base/messages/strings/names.txt:247
 #: data/mp/messages/strings/names.txt:250
 msgid "Transport Body"
-msgstr "Kadłub transportowca"
+msgstr "Kadłub Transportowca"
 
 #: data/base/messages/strings/names.txt:300
 #: data/base/messages/strings/names.txt:542
@@ -9912,6 +9912,7 @@ msgid "NORTHERN SECTOR"
 msgstr "SEKTOR PÓŁNOCNY"
 
 #: data/base/sequenceaudio/cam3/c003.txa:5
+#, fuzzy
 msgid "Congratulations your successfull evacuation of Beta Base."
 msgstr "Gratulujemy udanej ewakuacji Bazy Beta."
 
@@ -11509,7 +11510,7 @@ msgstr "Ulepszony komputer pola bitwy"
 #: data/mp/messages/strings/names.txt:15
 #: data/mp/messages/strings/names.txt:682
 msgid "Cyborg Transport"
-msgstr "Cyborg Transport"
+msgstr "Transportowiec cyborgów"
 
 #: data/mp/messages/strings/names.txt:144
 msgid "Light Cannon Viper Half-tracks"
@@ -12524,7 +12525,7 @@ msgstr "%s - Sojusznik - Obrażenia %d%% - Doświadczenie %d, %s"
 
 #: src/display.c:2121
 msgid "Truck ordered to build Oil Derrick"
-msgstr "Rozkazano budowniczemu zbudować platformę wydobywczą"
+msgstr "Rozkazano ciężarówce zbudować platformę wydobywczą"
 
 #: src/droid.c:192
 msgid "Unit Lost!"
@@ -12607,7 +12608,7 @@ msgstr "Bohater"
 #: src/droid.c:4633
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
-msgstr ""
+msgstr "%s chciał dać ci %s ale masz już ich zbyt wiele!"
 
 #: src/frontend.c:97
 msgid "Single Player"
@@ -12898,12 +12899,14 @@ msgstr "Obracanie ekranu"
 
 #: src/frontend.c:1006
 #: src/frontend.c:1094
+#, fuzzy
 msgctxt "middle mouse button"
 msgid "Middle Button"
 msgstr "Środkowy przycisk"
 
 #: src/frontend.c:1010
 #: src/frontend.c:1089
+#, fuzzy
 msgctxt "right mouse button"
 msgid "Right Button"
 msgstr "Prawy przycisk"
@@ -14822,6 +14825,7 @@ msgid "Unable to locate any Commanders!"
 msgstr "Niemożna odnaleźć dowódców!"
 
 #: src/structure.c:2748
+#, fuzzy
 msgid "Control Limit Reached - Production Halted"
 msgstr "Limit kontrolny osiągnięty - produkcja wstrzymana"
 
@@ -14889,30 +14893,78 @@ msgstr "Uruchom transport"
 msgid "Reinforcements landing"
 msgstr "Posiłki lądują"
 
-#: src/version.c:139
+#: src/version.c:143
 msgid " (modified and switched locally)"
 msgstr " (zmodyfikowany i zamieniony lokalnie)"
 
-#: src/version.c:141
+#: src/version.c:145
 msgid " (modified locally)"
 msgstr " (zmodyfikowany lokalnie)"
 
-#: src/version.c:143
+#: src/version.c:147
 msgid " (switched locally)"
 msgstr " (zamieniony lokalnie)"
 
-#: src/version.c:150
+#: src/version.c:154
 msgid " - DEBUG"
 msgstr " - DEBUG"
 
-#: src/version.c:159
+#: src/version.c:163
 #, c-format
 msgid " - Built %s"
 msgstr " - Zbudowana %s"
 
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version <version name/number> <working copy state><BUILD DATE><BUILD TYPE>"
-#: src/version.c:169
+#: src/version.c:173
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Wersja %s%s%s%s"
+
+#~ msgid "Super Transport Available"
+#~ msgstr "Dostępny Super Transportowiec"
+
+#~ msgid "Super Transport"
+#~ msgstr "Super Transportowiec"
+
+#~ msgid "Super Transport Body"
+#~ msgstr "Kadłub Super Transportowca"
+
+#~ msgid "3 players"
+#~ msgstr "3 graczy"
+
+#~ msgid "5 players"
+#~ msgstr "5 graczy"
+
+#~ msgid "6 players"
+#~ msgstr "6 graczy"
+
+#~ msgid "7 players"
+#~ msgstr "7 graczy"
+
+#~ msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
+#~ msgstr "Nie możemy tego zrobić! Tylko cyborgi mogą korzystać Transportowca cyborgów!"
+
+#~ msgid "There is not enough room in the Transport!"
+#~ msgstr "Nie ma dość miejsca w Transportowcu!"
+
+#~ msgid "Out of sync"
+#~ msgstr "Brak synchronizacji"
+
+#~ msgid "2 trucks ordered to build Oil Derrick"
+#~ msgstr "Rozkazano 2 ciężarówkom zbudować platformę wydobywczą"
+
+#~ msgid "%d trucks ordered to build Oil Derrick"
+#~ msgstr "Rozkazano %d ciężarówkom zbudować platformę wydobywczą"
+
+#~ msgid "GAME SAVED: "
+#~ msgstr "GRA ZAPISANA:"
+
+#~ msgid "Player %u is cheating (debug menu) him/herself a new droid."
+#~ msgstr "Gracz %u oszukuje (menu odpluskwiania) by zdobyć nową jednostkę."
+
+#~ msgid "Build Progress"
+#~ msgstr "Postęp budowania"
+
+#~ msgid "Construction Progress"
+#~ msgstr "Postęp konstruowania"
