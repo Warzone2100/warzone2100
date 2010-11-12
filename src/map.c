@@ -1230,6 +1230,7 @@ extern BOOL mapObjIsAboveGround( BASE_OBJECT *psObj )
 void getTileMaxMin(UDWORD x, UDWORD y, UDWORD *pMax, UDWORD *pMin)
 {
 	UDWORD	height, i, j;
+	int tileHeight = TILE_MIN_HEIGHT;
 
 	*pMin = TILE_MAX_HEIGHT;
 	*pMax = TILE_MIN_HEIGHT;
@@ -1238,7 +1239,18 @@ void getTileMaxMin(UDWORD x, UDWORD y, UDWORD *pMax, UDWORD *pMin)
 	{
 		for (i=0; i < 2; i++)
 		{
-			height = map_TileHeight(x+i, y+j);
+			// it tileHeight is negative, that means we are in water, and will cause a underflow
+			// FIXME: When we add structures that *can* be on water, we need to handle this differently.
+			tileHeight = map_TileHeight(x+i, y+j);
+			if (tileHeight < 0)
+			{
+				// NOTE: should we assert here ?
+				height = TILE_MIN_HEIGHT;
+			}
+			else
+			{
+				height = tileHeight;
+			}
 			if (*pMin > height)
 			{
 				*pMin = height;
