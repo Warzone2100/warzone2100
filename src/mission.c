@@ -852,9 +852,8 @@ void restoreMissionData(void)
 	gwShutDown();
 	if (game.type != CAMPAIGN)
 	{
-		// we don't want this to happen on missions
-		ASSERT(false, "mapShutDown() is being called");
-		mapShutdown();
+		ASSERT(false, "game type isn't campaign, but we are in a campaign game!");
+		game.type = CAMPAIGN;	// fix the issue, since it is obviously a bug
 	}
 	//restore the game pointers
 	for (inc = 0; inc < MAX_PLAYERS; inc++)
@@ -915,9 +914,6 @@ void restoreMissionData(void)
 	offWorldKeepLists = false;
 
 	resetRadarRedraw();
-
-	// reset the environ map back to the homebase settings
-	environReset();
 
 	//intSetMapPos(mission.playerX, mission.playerY);
 }
