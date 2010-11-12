@@ -706,8 +706,6 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 		}
 		sstrcat(texfile, ".png");
 
-		pie_MakeTexPageName(texfile);
-
 		if (sscanf(pFileData, "%d %d%n", &pwidth, &pheight, &cnt) != 2)
 		{
 			debug(LOG_ERROR, "iV_ProcessIMD %s bad texture size: %s", pFileName, buffer);
@@ -758,11 +756,7 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 	{
 		int texpage = iV_GetTexture(texfile);
 
-		if (texpage < 0)
-		{
-			debug(LOG_ERROR, "iV_ProcessIMD %s could not load tex page %s", pFileName, texfile);
-			return NULL;
-		}
+		ASSERT_OR_RETURN(NULL, texpage >= 0, "%s could not load tex page %s", pFileName, texfile);
 
 		// assign tex page to levels
 		for (psShape = shape; psShape != NULL; psShape = psShape->next)
@@ -773,23 +767,20 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 		// check if model should use team colour mask
 		if (imd_flags & iV_IMD_TCMASK)
 		{
-			pie_MakeTexPageTCMaskName(texfile);
-			texpage = iV_GetTexture(texfile);
+			int texpage_mask;
 
-			if (texpage < 0)
+			pie_MakeTexPageTCMaskName(texfile);
+			sstrcat(texfile, ".png");
+			texpage_mask = iV_GetTexture(texfile);
+
+			ASSERT_OR_RETURN(shape, texpage_mask >= 0, "%s could not load tcmask %s", pFileName, texfile);
+
+			// Propagate settings through levels
+			for (psShape = shape; psShape != NULL; psShape = psShape->next)
 			{
-				ASSERT(false, "iV_ProcessIMD %s could not load tcmask %s", pFileName, texfile);
-				debug(LOG_ERROR, "iV_ProcessIMD %s could not load tcmask %s", pFileName, texfile);
+				psShape->flags |= iV_IMD_TCMASK;
+				psShape->tcmaskpage = texpage_mask;
 			}
-			else
-			{
-				// Propagate settings through levels
-				for (psShape = shape; psShape != NULL; psShape = psShape->next)
-				{
-					psShape->flags |= iV_IMD_TCMASK;
-					psShape->tcmaskpage = texpage;
-				}
-			}			
 		}
 	}
 
