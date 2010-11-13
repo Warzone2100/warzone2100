@@ -2794,7 +2794,7 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		//load in the map file
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "mission.map");
-		if (!mapLoad(aFileName))
+		if (!mapLoad(aFileName, false))
 		{
 			debug(LOG_ERROR, "Failed to load map");
 			return false;
@@ -2942,7 +2942,7 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		//load in the map file
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "game.map");
-		if (!mapLoad(aFileName))
+		if (!mapLoad(aFileName, false))
 		{
 			debug( LOG_NEVER, "loadgame: Fail7\n" );
 			return(false);

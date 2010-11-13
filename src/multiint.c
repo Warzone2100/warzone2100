@@ -278,7 +278,7 @@ void loadMapPreview(bool hideInterface)
 	ptr = strrchr(aFileName, '/');
 	ASSERT(ptr, "this string was supposed to contain a /");
 	strcpy(ptr, "/game.map");
-	if (!mapLoad(aFileName))
+	if (!mapLoad(aFileName, true))
 	{
 		debug(LOG_ERROR, "loadMapPreview: Failed to load map");
 		return;

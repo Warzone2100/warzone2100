@@ -750,7 +750,7 @@ static BOOL mapSetGroundTypes(void)
 }
 
 /* Initialise the map structure */
-BOOL mapLoad(char *filename)
+BOOL mapLoad(char *filename, BOOL preview)
 {
 	UDWORD		numGw, width, height;
 	char		aFileType[4];
@@ -842,6 +842,12 @@ BOOL mapLoad(char *filename)
 		psMapTiles[i].tileExploredBits = 0;
 	}
 
+	if (preview)
+	{
+		// no need to do anything else for the map preview
+		goto ok;
+	}
+
 	if (!PHYSFS_readULE32(fp, &version) || !PHYSFS_readULE32(fp, &numGw) || version != 1)
 	{
 		debug(LOG_ERROR, "Bad gateway in %s", filename);
@@ -924,7 +930,7 @@ BOOL mapLoad(char *filename)
 
 	/* Set continents. This should ideally be done in advance by the map editor. */
 	mapFloodFillContinents();
-
+ok:
 	PHYSFS_close(fp);
 	return true;
 	
