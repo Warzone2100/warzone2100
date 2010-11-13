@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-10-31 18:31-0400\n"
+"POT-Creation-Date: 2010-11-13 17:42-0500\n"
 "PO-Revision-Date: 2010-09-10 22:16-0300\n"
 "Last-Translator: Artur Filipe <tucalipe@gmail.com>\n"
 "Language-Team: Brazilian Portugese <warzone-dev@gna.org>\n"
@@ -12182,17 +12182,17 @@ msgstr "VTOL Plasmite Retribuição"
 msgid "System locale"
 msgstr "Localização do Sistema"
 
-#: lib/netplay/netplay.c:1288
-#: lib/netplay/netplay.c:2223
+#: lib/netplay/netplay.c:1289
+#: lib/netplay/netplay.c:2229
 msgid "Enter password here"
 msgstr "Entre a senha aqui"
 
-#: lib/netplay/netplay.c:3284
+#: lib/netplay/netplay.c:3290
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Não foi possível resolver o nome do servidor mestre (%s)!"
 
-#: lib/netplay/netplay.c:3309
+#: lib/netplay/netplay.c:3315
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Não foi possível communicar com o servidor de lobby! A porta TCP %u está aberta para tráfego saindo?"
@@ -12507,22 +12507,22 @@ msgstr "Jogador saiu"
 msgid "Player dropped"
 msgstr "Jogador desconectou-se"
 
-#: src/display.c:1747
+#: src/display.c:1756
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Não pode construir. Recursos petrolíferos queimados."
 
-#: src/display.c:1926
-#: src/display.c:2541
+#: src/display.c:1935
+#: src/display.c:2550
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Danos %d%% - Experiência %d, %s"
 
-#: src/display.c:1942
+#: src/display.c:1951
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Aliado - Danos %d%% - Experiência %d, %s"
 
-#: src/display.c:2135
+#: src/display.c:2144
 msgid "Truck ordered to build Oil Derrick"
 msgstr "O Caminhão ordenou a construção Oil Derrick"
 
@@ -12679,8 +12679,8 @@ msgstr "UM JOGADOR"
 
 #: src/frontend.c:295
 #: src/ingameop.c:507
-#: src/mission.c:2848
-#: src/mission.c:2953
+#: src/mission.c:2844
+#: src/mission.c:2949
 msgid "Load Saved Game"
 msgstr "Carregar Jogo Salvo"
 
@@ -12976,7 +12976,7 @@ msgstr "MAPA SALVO!"
 #: src/hci.c:1739
 #: src/loop.c:536
 #: src/loop.c:552
-#: src/mission.c:2919
+#: src/mission.c:2915
 msgid "GAME SAVED :"
 msgstr "JOGO SALVO :"
 
@@ -13163,8 +13163,8 @@ msgstr "ATENÇÃO: Você é o hosp. Se você sair, o jogo acaba para todos!"
 
 #: src/ingameop.c:283
 #: src/ingameop.c:511
-#: src/mission.c:2835
-#: src/mission.c:2956
+#: src/mission.c:2831
+#: src/mission.c:2952
 msgid "Save Game"
 msgstr "Salvar"
 
@@ -14097,33 +14097,33 @@ msgstr "Liga/Desliga Modo Dirigir"
 msgid "Could not save game!"
 msgstr "Impossível salvar o jogo!"
 
-#: src/mission.c:2388
+#: src/mission.c:2384
 msgid "Load Transport"
 msgstr "Carregar Transportes"
 
-#: src/mission.c:2782
+#: src/mission.c:2778
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "OBJETIVO ARQUIVADO por trapaça!"
 
-#: src/mission.c:2782
+#: src/mission.c:2778
 msgid "OBJECTIVE ACHIEVED"
 msgstr "OBJETIVO ARQUIVADO"
 
-#: src/mission.c:2788
+#: src/mission.c:2784
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "FALHA NO OBJETIVO--e você trapaçeou!"
 
-#: src/mission.c:2788
+#: src/mission.c:2784
 msgid "OBJECTIVE FAILED"
 msgstr "FALHA NO OBJETIVO"
 
-#: src/mission.c:2814
-#: src/mission.c:2854
-#: src/mission.c:2972
+#: src/mission.c:2810
+#: src/mission.c:2850
+#: src/mission.c:2968
 msgid "Quit To Main Menu"
 msgstr "Sair para o Menu Principal"
 
-#: src/mission.c:2822
+#: src/mission.c:2818
 msgid "Continue Game"
 msgstr "Continuar o Jogo"
 
@@ -14460,21 +14460,21 @@ msgstr "O Host chutou %s do jogo!"
 msgid "Host is Starting Game"
 msgstr "O Host iniciou o Jogo"
 
-#: src/multiint.c:3507
+#: src/multiint.c:3512
 msgid "Players"
 msgstr "Jogadores"
 
-#: src/multiint.c:3625
+#: src/multiint.c:3630
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Enviando mapa: %d%%"
 
-#: src/multiint.c:3634
+#: src/multiint.c:3639
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Mapa: %d%% baixado"
 
-#: src/multiint.c:3660
+#: src/multiint.c:3665
 msgid "HOST"
 msgstr "HOSPEDEIRO"
 

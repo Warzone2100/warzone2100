@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-11-09 15:52+0100\n"
+"POT-Creation-Date: 2010-11-13 17:42-0500\n"
 "PO-Revision-Date: 2010-11-03 11:18+0100\n"
 "Last-Translator: Michał D. aka Emdek <emdeck@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
-"Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: pl\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n%10>=2) && (n%10<=4) && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
 "X-Generator: Lokalize 1.0\n"
@@ -12700,8 +12700,8 @@ msgstr "JEDEN GRACZ"
 
 #: src/frontend.c:295
 #: src/ingameop.c:507
-#: src/mission.c:2848
-#: src/mission.c:2953
+#: src/mission.c:2844
+#: src/mission.c:2949
 msgid "Load Saved Game"
 msgstr "Załaduj zapisany stan gry"
 
@@ -12999,7 +12999,7 @@ msgstr "MAPA ZAPISANA!"
 #: src/hci.c:1739
 #: src/loop.c:536
 #: src/loop.c:552
-#: src/mission.c:2919
+#: src/mission.c:2915
 msgid "GAME SAVED :"
 msgstr "GRA ZAPISANA :"
 
@@ -13186,8 +13186,8 @@ msgstr "OSTRZEŻENIE: jesteś hostem. Gdy wyjdziesz, gra zostaje zakończona dla
 
 #: src/ingameop.c:283
 #: src/ingameop.c:511
-#: src/mission.c:2835
-#: src/mission.c:2956
+#: src/mission.c:2831
+#: src/mission.c:2952
 msgid "Save Game"
 msgstr "Zapisz grę"
 
@@ -14120,33 +14120,33 @@ msgstr "Przełącz tryb kierowania "
 msgid "Could not save game!"
 msgstr "Niemożna zapisać gry!"
 
-#: src/mission.c:2388
+#: src/mission.c:2384
 msgid "Load Transport"
 msgstr "Ładuj transport"
 
-#: src/mission.c:2782
+#: src/mission.c:2778
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "CEL OSIĄGNIĘTY przez oszukiwanie!"
 
-#: src/mission.c:2782
+#: src/mission.c:2778
 msgid "OBJECTIVE ACHIEVED"
 msgstr "CEL OSIĄGNIĘTY"
 
-#: src/mission.c:2788
+#: src/mission.c:2784
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "CEL NIE OSIĄGNIĘTY--chociaż oszukiwałeś!"
 
-#: src/mission.c:2788
+#: src/mission.c:2784
 msgid "OBJECTIVE FAILED"
 msgstr "CEL NIE OSIĄGNIĘTY"
 
-#: src/mission.c:2814
-#: src/mission.c:2854
-#: src/mission.c:2972
+#: src/mission.c:2810
+#: src/mission.c:2850
+#: src/mission.c:2968
 msgid "Quit To Main Menu"
 msgstr "Wyjdź do menu głównego"
 
-#: src/mission.c:2822
+#: src/mission.c:2818
 msgid "Continue Game"
 msgstr "Kontynuuj grę"
 

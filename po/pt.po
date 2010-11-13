@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-10-31 18:31-0400\n"
+"POT-Creation-Date: 2010-11-13 17:42-0500\n"
 "PO-Revision-Date: 2009-08-04 22:59+0100\n"
 "Last-Translator: Pedro Miguel Martins da Silva Caetano <pedro.m.caetano@netcabo.pt>\n"
 "Language-Team: Portugese <warzone-dev@gna.org>\n"
@@ -12346,18 +12346,18 @@ msgstr "Chassis Médio - Retribution"
 msgid "System locale"
 msgstr "Linguagem do sistema"
 
-#: lib/netplay/netplay.c:1288
-#: lib/netplay/netplay.c:2223
+#: lib/netplay/netplay.c:1289
+#: lib/netplay/netplay.c:2229
 #, fuzzy
 msgid "Enter password here"
 msgstr "Insere Primeiro a Palavra-passe"
 
-#: lib/netplay/netplay.c:3284
+#: lib/netplay/netplay.c:3290
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Não pode ser obtido o nome do masterserver (%s)!"
 
-#: lib/netplay/netplay.c:3309
+#: lib/netplay/netplay.c:3315
 #, fuzzy, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Não foi possível comunicar com o servidor de lobby! A porta TCP %u está aberta para tráfego outgoing?"
@@ -12675,22 +12675,22 @@ msgstr "Jogador Saiu"
 msgid "Player dropped"
 msgstr "Jogador caiu"
 
-#: src/display.c:1747
+#: src/display.c:1756
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Impossível construir. Fonte de petróleo a arder."
 
-#: src/display.c:1926
-#: src/display.c:2541
+#: src/display.c:1935
+#: src/display.c:2550
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Dano %d%% - Experiência %d, %s"
 
-#: src/display.c:1942
+#: src/display.c:1951
 #, fuzzy, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Dano %d%% - Experiência %d, %s"
 
-#: src/display.c:2135
+#: src/display.c:2144
 msgid "Truck ordered to build Oil Derrick"
 msgstr "Camião ordenado a construir Extractor de Petróleo"
 
@@ -12848,8 +12848,8 @@ msgstr "UM JOGADOR"
 
 #: src/frontend.c:295
 #: src/ingameop.c:507
-#: src/mission.c:2848
-#: src/mission.c:2953
+#: src/mission.c:2844
+#: src/mission.c:2949
 msgid "Load Saved Game"
 msgstr "Carregar Jogo Gravado"
 
@@ -13152,7 +13152,7 @@ msgstr "MAPA GRAVADO!"
 #: src/hci.c:1739
 #: src/loop.c:536
 #: src/loop.c:552
-#: src/mission.c:2919
+#: src/mission.c:2915
 msgid "GAME SAVED :"
 msgstr "JOGO GRAVADO :"
 
@@ -13347,8 +13347,8 @@ msgstr ""
 
 #: src/ingameop.c:283
 #: src/ingameop.c:511
-#: src/mission.c:2835
-#: src/mission.c:2956
+#: src/mission.c:2831
+#: src/mission.c:2952
 msgid "Save Game"
 msgstr "Gravar Jogo"
 
@@ -14303,33 +14303,33 @@ msgstr "Activar/Desactivar câmara de localização"
 msgid "Could not save game!"
 msgstr "O jogo não pôde ser gravado"
 
-#: src/mission.c:2388
+#: src/mission.c:2384
 msgid "Load Transport"
 msgstr "Carregar Transporte"
 
-#: src/mission.c:2782
+#: src/mission.c:2778
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "OBJECTIVO ALCANÇADO por batotice"
 
-#: src/mission.c:2782
+#: src/mission.c:2778
 msgid "OBJECTIVE ACHIEVED"
 msgstr "OBJECTIVO ALCANÇADO"
 
-#: src/mission.c:2788
+#: src/mission.c:2784
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "OBJECTIVO FALHADO-- e fizeste batotice!"
 
-#: src/mission.c:2788
+#: src/mission.c:2784
 msgid "OBJECTIVE FAILED"
 msgstr "OBJECTIVO FALHADO"
 
-#: src/mission.c:2814
-#: src/mission.c:2854
-#: src/mission.c:2972
+#: src/mission.c:2810
+#: src/mission.c:2850
+#: src/mission.c:2968
 msgid "Quit To Main Menu"
 msgstr "Sair para o Menu Principal"
 
-#: src/mission.c:2822
+#: src/mission.c:2818
 msgid "Continue Game"
 msgstr "Continuar Jogo"
 
@@ -14675,21 +14675,21 @@ msgstr "O servidor kickou %s do jogo!"
 msgid "Host is Starting Game"
 msgstr "O servidor está a começar o jogo"
 
-#: src/multiint.c:3507
+#: src/multiint.c:3512
 msgid "Players"
 msgstr "Jogadores"
 
-#: src/multiint.c:3625
+#: src/multiint.c:3630
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr ""
 
-#: src/multiint.c:3634
+#: src/multiint.c:3639
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr ""
 
-#: src/multiint.c:3660
+#: src/multiint.c:3665
 msgid "HOST"
 msgstr ""
 

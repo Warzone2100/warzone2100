@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100 version 2.2.3\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-10-31 18:31-0400\n"
+"POT-Creation-Date: 2010-11-13 17:42-0500\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Меденцій Олександр <olexandr1986@i.ua>\n"
 "Language-Team: \n"
@@ -12223,17 +12223,17 @@ msgstr "ВЗІП Кара з Бронебійними Бомбами"
 msgid "System locale"
 msgstr "Мова локалізації системи"
 
-#: lib/netplay/netplay.c:1288
-#: lib/netplay/netplay.c:2223
+#: lib/netplay/netplay.c:1289
+#: lib/netplay/netplay.c:2229
 msgid "Enter password here"
 msgstr "Визначте Пароль"
 
-#: lib/netplay/netplay.c:3284
+#: lib/netplay/netplay.c:3290
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Неможливо отримати ім'я основного сервера (%s)!"
 
-#: lib/netplay/netplay.c:3309
+#: lib/netplay/netplay.c:3315
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Неможливо зв'язатись з сервером лоббі! Чи відкритий TCP порт %u для вихідного трафіку?"
@@ -12548,22 +12548,22 @@ msgstr "Гравець вийшов"
 msgid "Player dropped"
 msgstr "Гравець здався"
 
-#: src/display.c:1747
+#: src/display.c:1756
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Будівництво Неможливе. Через пожежу на Нафтовому Родовищі"
 
-#: src/display.c:1926
-#: src/display.c:2541
+#: src/display.c:1935
+#: src/display.c:2550
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Пошкоджень %d%% - Вбито %d, %s"
 
-#: src/display.c:1942
+#: src/display.c:1951
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Союзник - Пошкоджень %d%% - Вбито %d, %s"
 
-#: src/display.c:2135
+#: src/display.c:2144
 msgid "Truck ordered to build Oil Derrick"
 msgstr "Інженеру наказано побудувати Бурову Вежу"
 
@@ -12720,8 +12720,8 @@ msgstr "РЕЖИМ ОДНОГО ГРАВЦЯ"
 
 #: src/frontend.c:295
 #: src/ingameop.c:507
-#: src/mission.c:2848
-#: src/mission.c:2953
+#: src/mission.c:2844
+#: src/mission.c:2949
 msgid "Load Saved Game"
 msgstr "Завантажити Збережену Гру"
 
@@ -13019,7 +13019,7 @@ msgstr "МАПУ ЗБЕРЕЖЕНО!"
 #: src/hci.c:1739
 #: src/loop.c:536
 #: src/loop.c:552
-#: src/mission.c:2919
+#: src/mission.c:2915
 msgid "GAME SAVED :"
 msgstr "ГРУ ЗБЕРЕЖЕНО:"
 
@@ -13213,8 +13213,8 @@ msgstr "ОБЕРЕЖНО: Ви хост. Якщо ви вийдете, гра з
 
 #: src/ingameop.c:283
 #: src/ingameop.c:511
-#: src/mission.c:2835
-#: src/mission.c:2956
+#: src/mission.c:2831
+#: src/mission.c:2952
 msgid "Save Game"
 msgstr "Зберегти Гру"
 
@@ -14165,33 +14165,33 @@ msgstr "Задіяти Відслідковувальну Камеру"
 msgid "Could not save game!"
 msgstr "Не вдалося зберегти гру!"
 
-#: src/mission.c:2388
+#: src/mission.c:2384
 msgid "Load Transport"
 msgstr "Завантажити Транспорт"
 
-#: src/mission.c:2782
+#: src/mission.c:2778
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "ЗАВДАННЯ ВИКОНАНО за допомогою шахрайства!"
 
-#: src/mission.c:2782
+#: src/mission.c:2778
 msgid "OBJECTIVE ACHIEVED"
 msgstr "ЗАВДАННЯ ВИКОНАНО"
 
-#: src/mission.c:2788
+#: src/mission.c:2784
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "ЗАВДАННЯ ПРОВАЛЕНЕ--шахрайство вам не допомогло!"
 
-#: src/mission.c:2788
+#: src/mission.c:2784
 msgid "OBJECTIVE FAILED"
 msgstr "ЗАВДАННЯ ПРОВАЛЕНЕ"
 
-#: src/mission.c:2814
-#: src/mission.c:2854
-#: src/mission.c:2972
+#: src/mission.c:2810
+#: src/mission.c:2850
+#: src/mission.c:2968
 msgid "Quit To Main Menu"
 msgstr "Вийти В Головне Меню"
 
-#: src/mission.c:2822
+#: src/mission.c:2818
 msgid "Continue Game"
 msgstr "Продовжити Гру"
 
@@ -14530,21 +14530,21 @@ msgstr "Хост викинув %s з гри!"
 msgid "Host is Starting Game"
 msgstr "Хост Починає Гру"
 
-#: src/multiint.c:3507
+#: src/multiint.c:3512
 msgid "Players"
 msgstr "Гравці"
 
-#: src/multiint.c:3625
+#: src/multiint.c:3630
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Відправляється Карта: %d%% "
 
-#: src/multiint.c:3634
+#: src/multiint.c:3639
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Мапа: %d%% завантажена"
 
-#: src/multiint.c:3660
+#: src/multiint.c:3665
 msgid "HOST"
 msgstr "ХОСТ"
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-10-31 18:31-0400\n"
+"POT-Creation-Date: 2010-11-13 17:42-0500\n"
 "PO-Revision-Date: 2009-05-11 00:21+0800\n"
 "Last-Translator: \n"
 "Language-Team: zh_TW\n"
@@ -12379,17 +12379,17 @@ msgstr "中量級車身：懲罰者"
 msgid "System locale"
 msgstr "系統語系"
 
-#: lib/netplay/netplay.c:1288
-#: lib/netplay/netplay.c:2223
+#: lib/netplay/netplay.c:1289
+#: lib/netplay/netplay.c:2229
 msgid "Enter password here"
 msgstr ""
 
-#: lib/netplay/netplay.c:3284
+#: lib/netplay/netplay.c:3290
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr ""
 
-#: lib/netplay/netplay.c:3309
+#: lib/netplay/netplay.c:3315
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr ""
@@ -12707,22 +12707,22 @@ msgstr "玩家"
 msgid "Player dropped"
 msgstr "玩家"
 
-#: src/display.c:1747
+#: src/display.c:1756
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "油田燃燒中，無法建築鑽油井"
 
-#: src/display.c:1926
-#: src/display.c:2541
+#: src/display.c:1935
+#: src/display.c:2550
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - 損傷 %d%% - 經驗值 %d, %s"
 
-#: src/display.c:1942
+#: src/display.c:1951
 #, fuzzy, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - 損傷 %d%% - 經驗值 %d, %s"
 
-#: src/display.c:2135
+#: src/display.c:2144
 msgid "Truck ordered to build Oil Derrick"
 msgstr "命令工程車建造鑽油井"
 
@@ -12876,8 +12876,8 @@ msgstr "SINGLE PLAYER"
 
 #: src/frontend.c:295
 #: src/ingameop.c:507
-#: src/mission.c:2848
-#: src/mission.c:2953
+#: src/mission.c:2844
+#: src/mission.c:2949
 msgid "Load Saved Game"
 msgstr "載入已儲存的遊戲"
 
@@ -13182,7 +13182,7 @@ msgstr "遊戲已儲存"
 #: src/hci.c:1739
 #: src/loop.c:536
 #: src/loop.c:552
-#: src/mission.c:2919
+#: src/mission.c:2915
 #, fuzzy
 msgid "GAME SAVED :"
 msgstr "遊戲已儲存"
@@ -13377,8 +13377,8 @@ msgstr ""
 
 #: src/ingameop.c:283
 #: src/ingameop.c:511
-#: src/mission.c:2835
-#: src/mission.c:2956
+#: src/mission.c:2831
+#: src/mission.c:2952
 msgid "Save Game"
 msgstr "儲存遊戲"
 
@@ -14336,35 +14336,35 @@ msgstr "開啟或關閉追蹤視角"
 msgid "Could not save game!"
 msgstr "載入已儲存的遊戲"
 
-#: src/mission.c:2388
+#: src/mission.c:2384
 msgid "Load Transport"
 msgstr "送上運輸艦"
 
-#: src/mission.c:2782
+#: src/mission.c:2778
 #, fuzzy
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "任務完成"
 
-#: src/mission.c:2782
+#: src/mission.c:2778
 msgid "OBJECTIVE ACHIEVED"
 msgstr "任務完成"
 
-#: src/mission.c:2788
+#: src/mission.c:2784
 #, fuzzy
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "任務失敗"
 
-#: src/mission.c:2788
+#: src/mission.c:2784
 msgid "OBJECTIVE FAILED"
 msgstr "任務失敗"
 
-#: src/mission.c:2814
-#: src/mission.c:2854
-#: src/mission.c:2972
+#: src/mission.c:2810
+#: src/mission.c:2850
+#: src/mission.c:2968
 msgid "Quit To Main Menu"
 msgstr "退出至主選單"
 
-#: src/mission.c:2822
+#: src/mission.c:2818
 msgid "Continue Game"
 msgstr "繼續遊戲"
 
@@ -14714,21 +14714,21 @@ msgstr "主玩家將 %s 踢出遊戲！"
 msgid "Host is Starting Game"
 msgstr "主玩家已開始遊戲"
 
-#: src/multiint.c:3507
+#: src/multiint.c:3512
 msgid "Players"
 msgstr "玩家"
 
-#: src/multiint.c:3625
+#: src/multiint.c:3630
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr ""
 
-#: src/multiint.c:3634
+#: src/multiint.c:3639
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr ""
 
-#: src/multiint.c:3660
+#: src/multiint.c:3665
 msgid "HOST"
 msgstr ""
 
