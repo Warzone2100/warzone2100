@@ -136,6 +136,7 @@ cscope.out
 .DS_Store
 *.pbxuser
 *.perspectivev3
+macosx/configs/codeident
 
 # build folders
 /macosx/build/
