@@ -1623,6 +1623,8 @@
 		43F3008C10D344B000707B6E /* x86state.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = x86state.c; sourceTree = "<group>"; };
 		43F3FFFE10D33F4D00707B6E /* macosx.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = macosx.c; path = external/physfs/platform/macosx.c; sourceTree = "<group>"; };
 		43F3FFFF10D33F6600707B6E /* physfs_unicode.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = physfs_unicode.c; path = external/physfs/physfs_unicode.c; sourceTree = "<group>"; };
+		43FA79911290771400DA51E7 /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		43FA79921290771400DA51E7 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		97AEAB330E8C1B5200A10721 /* Theora.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Theora.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -3466,6 +3468,8 @@
 				zh_CN,
 				zh_TW,
 				ko,
+				sk,
+				tr,
 			);
 			mainGroup = 02356D640BD3BB2600E9A019;
 			productRefGroup = 02356D760BD3BB3400E9A019 /* Products */;
@@ -4400,6 +4404,8 @@
 				439A28B6114F2E14004F1266 /* zh_CN */,
 				439A28B7114F2E14004F1266 /* zh_TW */,
 				43D6166E12048CDE004B9630 /* ko */,
+				43FA79911290771400DA51E7 /* sk */,
+				43FA79921290771400DA51E7 /* tr */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
