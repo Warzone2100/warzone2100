@@ -1,15 +1,15 @@
 2010-11-14: Version 3.0 beta 3
  * General:
-   * Fix: Fix rearming pads to actually repair units. (ticket:2313, ticket:2234, commit:6421c81d7958e67334e2a3cfa190f24b40e9eb02)
-   * Change: Make map preview faster. (commit:5f42d0032a9c8dc0b4de60cbef7f9bba8b0b70f0)
+   * Change: Make map preview faster (commit:5f42d0032a9c8dc0b4de60cbef7f9bba8b0b70f0)
+   * Fix: Fix rearming pads to actually repair units (ticket:2313, ticket:2234, commit:6421c81d7958e67334e2a3cfa190f24b40e9eb02)
    * Fix: Fix unit explosion color for turret (ticket:2294, commit:f4e8221ef53c4f9af6b3f5f2af3c7e5b28c89654)
    * Fix: Make armour work again (ticket:2273, commit:75a6c766063c6773840177d17d2ca2d5e9008100)
    * Fix: Don't crash in the unit design screen when using unicode strings (ticket:2209, commit:3012fde61ef92151e0ec5125551a7b3481f05fb8)
  * Graphics:
    * Fix: Rocky tileset decals (ticket:2285, commit:6f5392f14947f0c44cedd40165031f4eb4a819a7)
  * Campaign:
-   * Fix: Water & no terrain textures should be fixed when coming back from away missions. (ticket:2262, commit:b859c3d6997a9860662b1be8753c643fc48f2a72)
-   * Fix: Don't allow controlling the transport, to prevent the scripts from getting confused (commit:92256b2e8906c15acd418417a6628e8c38e4a918)
+   * Fix: Water and no terrain bug should be fixed when coming back from away missions (ticket:2262, commit:b859c3d6997a9860662b1be8753c643fc48f2a72)
+   * Fix: Don't allow controlling the transport to prevent the scripts from getting confused (commit:92256b2e8906c15acd418417a6628e8c38e4a918)
  * Multiplayer:
    * Change: Make game difficulty setting not affect skirmish games (commit:4db5d00784dc59ec34830d8f4c63fd0a4808112f)
    * Change: Use the host's SP color as the default color when hosting games (commit:09ea0be7c30236809536db332be78b2967d3114d)
