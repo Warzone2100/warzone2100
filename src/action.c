@@ -2399,6 +2399,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 	CHECK_DROID(psDroid);
 
 	psDroid->actionStarted = gameTime;
+	syncDebugDroid(psDroid, '-');
 	syncDebug("%d does %s", psDroid->id, getDroidActionName(psAction->action));
 
 	switch (psAction->action)
@@ -2438,7 +2439,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 			(psDroid->droidType == DROID_TRANSPORTER) ||
 			(psAction->psObj == (BASE_OBJECT *)psDroid))
 		{
-			return;
+			break;
 		}
 
 		//check electronic droids only attack structures - not so anymore!
@@ -2735,6 +2736,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		ASSERT(!"unknown action", "actionUnitBase: unknown action");
 		break;
 	}
+	syncDebugDroid(psDroid, '+');
 	CHECK_DROID(psDroid);
 }
 

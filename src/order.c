@@ -1483,6 +1483,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 	const PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
 	const Vector3i rPos = { psOrder->x, psOrder->y, 0 };
 
+	syncDebugDroid(psDroid, '-');
 	syncDebug("%d ordered %s", psDroid->id, getDroidOrderName(psOrder->order));
 
 	if (psOrder->order != DORDER_TRANSPORTIN	// transporters special
@@ -1496,6 +1497,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 			      getDroidOrderName(psOrder->order), psDroid->player, droidGetName(psDroid), (int)psOrder->x, (int)psOrder->y);
 		}
 		objTrace(psDroid->id, "Invalid order %s for position (%d, %d) - ignoring", getDroidOrderName(psOrder->order), (int)psOrder->x, (int)psOrder->y);
+		syncDebugDroid(psDroid, '?');
 		return;
 	}
 
@@ -2082,6 +2084,8 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		ASSERT( false, "orderUnitBase: unknown order" );
 		break;
 	}
+
+	syncDebugDroid(psDroid, '+');
 }
 
 
@@ -2966,8 +2970,8 @@ DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, BOOL altOrder)
 		if (psDroid->droidType == DROID_CONSTRUCT ||
 		    psDroid->droidType == DROID_CYBORG_CONSTRUCT)
 		{
-            //Re-written to allow demolish order to be added to the queuing system
-            if (intDemolishSelectMode() && psObj->player == psDroid->player)
+			//Re-written to allow demolish order to be added to the queuing system
+			if (intDemolishSelectMode() && psObj->player == psDroid->player)
 			{
 				//check to see if anything is currently trying to build the structure
 				//can't build and demolish at the same time!
@@ -2975,7 +2979,6 @@ DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, BOOL altOrder)
 					checkDroidsBuilding(psStruct))
 				{
 					order = DORDER_NONE;
-					psDroid->psTarStats = NULL;
 				}
 				else
 				{
@@ -2988,8 +2991,6 @@ DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, BOOL altOrder)
 				//if something else is demolishing, then help demolish
 				if (checkDroidsDemolishing(psStruct))
 				{
-					psDroid->psTarget = psObj;
-					psDroid->psTarStats = NULL;
 					order = DORDER_DEMOLISH;
 				}
 				//else help build
