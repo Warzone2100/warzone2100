@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-11-09 16:00+0100\n"
-"PO-Revision-Date: 2010-10-26 15:23+0200\n"
-"Last-Translator: Ayhan GÖRGÜLÜ <kadavra_39@hotmail.com>\n"
+"POT-Creation-Date: 2010-11-15 23:21+0100\n"
+"PO-Revision-Date: 2010-11-11 22:01+0200\n"
+"Last-Translator: Ayhan Görgülü <ayhangorgulu@gmail.com>\n"
 "Language-Team: Turkey <warzone-dev@gna.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -14840,57 +14840,57 @@ msgid "Control Limit Reached - Production Halted"
 msgstr "Nüfüs Limitine Ulaştın - Üretim Durduruldu"
 
 # nix Gruppe! -Kreuvf
-#: src/structure.c:5956
-#: src/structure.c:5981
+#: src/structure.c:5959
+#: src/structure.c:5984
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Birim Atandı"
 msgstr[1] "%s - %u Birimler Atandı"
 
-#: src/structure.c:5986
-#: src/structure.c:6050
+#: src/structure.c:5989
+#: src/structure.c:6053
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Hasar %3.0f%%"
 
-#: src/structure.c:6036
+#: src/structure.c:6039
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - %u de %u 'e Bağlandı"
 
-#: src/structure.c:6171
-#: src/structure.c:6220
+#: src/structure.c:6174
+#: src/structure.c:6223
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektronik Hasar Aldı"
 
 # Reward ist zwar nicht Beute, aber im Krieg erbeutet man eben Dinge -Kreuvf
-#: src/structure.c:6453
+#: src/structure.c:6456
 msgid "Electronic Reward - Visibility Report"
-msgstr "Elektronische Beute - Sichtbarkeitsbericht"
+msgstr "Elektronik Ödül - Görünebilirlik Raporu"
 
-#: src/structure.c:6493
+#: src/structure.c:6496
 msgid "Factory Reward - Propulsion"
-msgstr "Fabrikbeute - Antrieb"
+msgstr "Fabrika Ödülü - Yürütücü"
 
-#: src/structure.c:6517
+#: src/structure.c:6520
 msgid "Factory Reward - Body"
-msgstr "Fabrikbeute - Rumpf"
+msgstr "Fabrika Ödülü - Beden"
 
-#: src/structure.c:6541
+#: src/structure.c:6544
 msgid "Factory Reward - Weapon"
-msgstr "Fabrikbeute - Waffe"
+msgstr "Fabrika Ödülü - Silah"
 
-#: src/structure.c:6550
+#: src/structure.c:6553
 msgid "Factory Reward - Nothing"
 msgstr "Fabrika Ödülü - Sıfır"
 
-#: src/structure.c:6578
+#: src/structure.c:6581
 msgid "Repair Facility Award - Repair"
 msgstr "Tamir Tesisi Ödülü - Tamir"
 
-#: src/structure.c:6585
+#: src/structure.c:6588
 msgid "Repair Facility Award - Nothing"
 msgstr "Tamir Tesisi Ödülü - Sıfır"
 
@@ -14931,33 +14931,32 @@ msgstr " - %s İnşa"
 msgid "Version %s%s%s%s"
 msgstr "Sürüm %s%s%s%s"
 
-#, fuzzy
 #~ msgid "Super Transport Available"
-#~ msgstr "Cyborg Taşıma Gemisi Kullanılabilir"
+#~ msgstr "Süper Taşıma Gemisi Kullanılabilir"
 
-#, fuzzy
 #~ msgid "Super Transport"
-#~ msgstr "Taşıyıcı"
+#~ msgstr "Süper Taşıyıcı"
 
-#, fuzzy
 #~ msgid "Super Transport Body"
-#~ msgstr "Taşıyıcı Bedeni"
+#~ msgstr "Süper Taşıyıcı Beden"
 
-#, fuzzy
 #~ msgid "3 players"
 #~ msgstr "2 Oyuncu"
 
-#, fuzzy
 #~ msgid "5 players"
 #~ msgstr "2 Oyuncu"
 
-#, fuzzy
 #~ msgid "6 players"
 #~ msgstr "2 Oyuncu"
 
-#, fuzzy
 #~ msgid "7 players"
 #~ msgstr "2 Oyuncu"
+
+#~ msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
+#~ msgstr "Bunu Yapamıyoruz! Biz Cyborg Taşıma Gemisi'ni kullanmak için bir Cyborg birimine sahip olmalıyız!"
+
+#~ msgid "There is not enough room in the Transport!"
+#~ msgstr "Taşıma Gemisinde yeterince yer yok!"
 
 #~ msgid "Mini-Rocket accuracy +10%"
 #~ msgstr "Mini Roket Hedef Tutturması +10%"
