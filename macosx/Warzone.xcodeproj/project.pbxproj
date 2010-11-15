@@ -1586,6 +1586,8 @@
 		43F3405A11CAA83D00D1E6C8 /* crc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = crc.h; path = ../lib/framework/crc.h; sourceTree = SOURCE_ROOT; };
 		43F3FFFE10D33F4D00707B6E /* macosx.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = macosx.c; path = external/physfs/platform/macosx.c; sourceTree = "<group>"; };
 		43F3FFFF10D33F6600707B6E /* physfs_unicode.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = physfs_unicode.c; path = external/physfs/physfs_unicode.c; sourceTree = "<group>"; };
+		43FA79911290771400DA51E7 /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		43FA79921290771400DA51E7 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		647D9C4F1039288D006D37CF /* dictionary.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = dictionary.c; path = ../lib/iniparser/dictionary.c; sourceTree = SOURCE_ROOT; };
 		647D9C501039288D006D37CF /* dictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dictionary.h; path = ../lib/iniparser/dictionary.h; sourceTree = SOURCE_ROOT; };
 		647D9C511039288D006D37CF /* iniparser.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = iniparser.c; path = ../lib/iniparser/iniparser.c; sourceTree = SOURCE_ROOT; };
@@ -3434,6 +3436,8 @@
 				et_EE,
 				ga,
 				ko,
+				sk,
+				tr,
 			);
 			mainGroup = 02356D640BD3BB2600E9A019;
 			productRefGroup = 02356D760BD3BB3400E9A019 /* Products */;
@@ -4387,6 +4391,8 @@
 				438BDDF11129DC9A00998660 /* zh_CN */,
 				438BDDF21129DC9A00998660 /* zh_TW */,
 				43D615DC120488E3004B9630 /* ko */,
+				43FA79911290771400DA51E7 /* sk */,
+				43FA79921290771400DA51E7 /* tr */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
