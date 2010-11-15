@@ -1145,7 +1145,7 @@ void destroyFXDroid(DROID	*psDroid)
 					{
 						// Tell the effect system that it needs to use this player's color for the next effect
 						SetEffectForPlayer(psDroid->player);
-						psImd = WEAPON_MOUNT_IMD(psDroid,psDroid->player);
+						psImd = WEAPON_MOUNT_IMD(psDroid, 0);
 					}
 				}
 				else
