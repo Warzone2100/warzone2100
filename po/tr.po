@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-11-13 17:29-0500\n"
-"PO-Revision-Date: 2010-10-26 15:23+0200\n"
-"Last-Translator: Ayhan GÖRGÜLÜ <kadavra_39@hotmail.com>\n"
+"POT-Creation-Date: 2010-11-15 23:09+0100\n"
+"PO-Revision-Date: 2010-11-11 22:01+0200\n"
+"Last-Translator: Ayhan Görgülü <ayhangorgulu@gmail.com>\n"
 "Language-Team: Turkey <warzone-dev@gna.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
@@ -11064,9 +11064,8 @@ msgid "Requires heavy VTOL factory to produce"
 msgstr "Ağır VTOL Fabrikası üretim için gereklidir"
 
 #: data/mp/messages/resmessagesall.rmsg:239
-#, fuzzy
 msgid "Super Transport Available"
-msgstr "Cyborg Taşıma Gemisi Kullanılabilir"
+msgstr "Süper Taşıma Gemisi Kullanılabilir"
 
 #: data/mp/messages/resmessagesall.rmsg:254
 msgid "Incendiary howitzer emplacement"
@@ -11459,14 +11458,12 @@ msgid "Nexus Corner Wall"
 msgstr "Nexus Köşe Duvarı"
 
 #: data/mp/messages/strings/names.txt:684
-#, fuzzy
 msgid "Super Transport"
-msgstr "Taşıyıcı"
+msgstr "Süper Taşıyıcı"
 
 #: data/mp/messages/strings/names.txt:685
-#, fuzzy
 msgid "Super Transport Body"
-msgstr "Taşıyıcı Bedeni"
+msgstr "Süper Taşıyıcı Beden"
 
 #: data/mp/messages/strings/names.txt:723
 msgid "Plascrete Mk3"
@@ -14324,7 +14321,6 @@ msgid "2 players"
 msgstr "2 Oyuncu"
 
 #: src/multimenu.c:647
-#, fuzzy
 msgid "3 players"
 msgstr "2 Oyuncu"
 
@@ -14333,17 +14329,14 @@ msgid "4 players"
 msgstr "4 Oyuncu"
 
 #: src/multimenu.c:659
-#, fuzzy
 msgid "5 players"
 msgstr "2 Oyuncu"
 
 #: src/multimenu.c:665
-#, fuzzy
 msgid "6 players"
 msgstr "2 Oyuncu"
 
 #: src/multimenu.c:671
-#, fuzzy
 msgid "7 players"
 msgstr "2 Oyuncu"
 
@@ -14447,7 +14440,7 @@ msgstr "Mavi"
 
 #: src/order.c:841
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
-msgstr ""
+msgstr "Bunu Yapamıyoruz! Biz Cyborg Taşıma Gemisi'ni kullanmak için bir Cyborg birimine sahip olmalıyız!"
 
 #: src/research.c:1737
 #, c-format
@@ -14658,19 +14651,19 @@ msgstr "%s - Elektronik Hasar Aldı"
 # Reward ist zwar nicht Beute, aber im Krieg erbeutet man eben Dinge -Kreuvf
 #: src/structure.c:6609
 msgid "Electronic Reward - Visibility Report"
-msgstr "Elektronische Beute - Sichtbarkeitsbericht"
+msgstr "Elektronik Ödül - Görünebilirlik Raporu"
 
 #: src/structure.c:6649
 msgid "Factory Reward - Propulsion"
-msgstr "Fabrikbeute - Antrieb"
+msgstr "Fabrika Ödülü - Yürütücü"
 
 #: src/structure.c:6673
 msgid "Factory Reward - Body"
-msgstr "Fabrikbeute - Rumpf"
+msgstr "Fabrika Ödülü - Beden"
 
 #: src/structure.c:6697
 msgid "Factory Reward - Weapon"
-msgstr "Fabrikbeute - Waffe"
+msgstr "Fabrika Ödülü - Silah"
 
 #: src/structure.c:6706
 msgid "Factory Reward - Nothing"
@@ -14691,7 +14684,7 @@ msgstr "Taşımayı Başlat"
 
 #: src/transporter.c:1462
 msgid "There is not enough room in the Transport!"
-msgstr ""
+msgstr "Taşıma Gemisinde yeterince yer yok!"
 
 #: src/transporter.c:1720
 msgid "Reinforcements landing"
