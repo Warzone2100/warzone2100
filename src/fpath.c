@@ -25,6 +25,7 @@
  */
 
 #include "lib/framework/frame.h"
+#include "lib/framework/crc.h"
 #include "lib/netplay/netplay.h"
 
 #include "lib/framework/wzapp_c.h"
