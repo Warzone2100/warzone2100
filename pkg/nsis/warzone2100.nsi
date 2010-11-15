@@ -256,7 +256,7 @@ Section $(TEXT_SecDyDoAIMod) SecDyDoAIMod
   SetOutPath "$INSTDIR"
 
   !insertmacro MUI_STARTMENU_WRITE_BEGIN "Application"
-    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME} - DyDo-AI.lnk" "$INSTDIR\${PACKAGE}.exe" "--mod_mp dydo-ai.wz"
+    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME} - DyDo-AI.lnk" "$INSTDIR\${PACKAGE}.exe" "--mod_mp=dydo-ai.wz"
   !insertmacro MUI_STARTMENU_WRITE_END
 
 SectionEnd
@@ -268,7 +268,7 @@ Section $(TEXT_SecOriginalMod) SecOriginalMod
   SetOutPath "$INSTDIR"
 
   !insertmacro MUI_STARTMENU_WRITE_BEGIN "Application"
-    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME} - Old 1.10 Balance.lnk" "$INSTDIR\${PACKAGE}.exe" "--mod_mp old-1.10-balance.wz"
+    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME} - Old 1.10 Balance.lnk" "$INSTDIR\${PACKAGE}.exe" "--mod_mp=old-1.10-balance.wz"
   !insertmacro MUI_STARTMENU_WRITE_END
 
 SectionEnd
