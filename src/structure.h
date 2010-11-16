@@ -131,7 +131,7 @@ extern void createTestStructures(void);
 STRUCTURE *buildStructure(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, UDWORD player, BOOL FromSave);
 STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, uint16_t direction, UDWORD player, BOOL FromSave);
 /// Create a blueprint structure, with just enough information to render it
-extern STRUCTURE *buildBlueprint(STRUCTURE_STATS *psStats, float x, float y, uint16_t direction, STRUCT_STATES state);
+STRUCTURE *buildBlueprint(STRUCTURE_STATS *psStats, int32_t x, int32_t y, uint16_t direction, STRUCT_STATES state);
 /* The main update routine for all Structures */
 void structureUpdate(STRUCTURE *psBuilding, bool mission);
 
@@ -278,7 +278,7 @@ extern BOOL validStructResistance(STRUCTURE *psStruct);
 stat type*/
 extern BOOL checkSpecificStructExists(UDWORD structInc, UDWORD player);
 
-extern float getStructureDamage(const STRUCTURE* psStructure);
+extern int32_t getStructureDamage(const STRUCTURE* psStructure);
 
 /*Access functions for the upgradeable stats of a structure*/
 extern UDWORD	structureBody(const STRUCTURE *psStruct);

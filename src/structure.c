@@ -1082,15 +1082,15 @@ int32_t structureDamage(STRUCTURE *psStructure, UDWORD damage, WEAPON_CLASS weap
 	return relativeDamage;
 }
 
-float getStructureDamage(const STRUCTURE* psStructure)
+int32_t getStructureDamage(const STRUCTURE *psStructure)
 {
-	float health;
+	int32_t health;
 	CHECK_STRUCTURE(psStructure);
 
-	health = (float)psStructure->body / (float)structureBody(psStructure);
-	CLIP(health, 0., 1.f);
+	health = (int64_t)65536 * psStructure->body / structureBody(psStructure);
+	CLIP(health, 0, 65536);
 
-	return 1. - health;
+	return 65536 - health;
 }
 
 /// Add buildPoints to the structures currentBuildPts, due to construction work by the droid
@@ -1897,7 +1897,7 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 	else //its an upgrade
 	{
 		BOOL		bUpgraded = false;
-		float		bodyDiff = 0.0f;
+		int32_t         bodyDiff = 0;
 
 		//don't create the Structure use existing one
 		psBuilding = getTileStructure(map_coord(x), map_coord(y));
@@ -1918,7 +1918,7 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 			if (psBuilding->pFunctionality->factory.capacity < SIZE_SUPER_HEAVY)
 			{
 				//store the % difference in body points before upgrading
-				bodyDiff = 1. - getStructureDamage(psBuilding);
+				bodyDiff = 65536 - getStructureDamage(psBuilding);
 
 				++psBuilding->pFunctionality->factory.capacity;
 				bUpgraded = true;
@@ -1981,7 +1981,7 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 			if (psBuilding->pFunctionality->researchFacility.capacity < NUM_RESEARCH_MODULES)
 			{
 				//store the % difference in body points before upgrading
-				bodyDiff = 1. - getStructureDamage(psBuilding);
+				bodyDiff = 65536 - getStructureDamage(psBuilding);
 
 				//add all the research modules in one go AB 24/06/98
 				//((RESEARCH_FACILITY*)psBuilding->pFunctionality)->capacity++;
@@ -2027,7 +2027,7 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 			if (psBuilding->pFunctionality->powerGenerator.capacity < NUM_POWER_MODULES)
 			{
 				//store the % difference in body points before upgrading
-				bodyDiff = 1. - getStructureDamage(psBuilding);
+				bodyDiff = 65536 - getStructureDamage(psBuilding);
 
 				//increment the power output, multiplier and capacity
 				//add all the research modules in one go AB 24/06/98
@@ -2051,7 +2051,7 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		if (bUpgraded)
 		{
 			//calculate the new body points of the owning structure
-			psBuilding->body = (UWORD)(structureBody(psBuilding) * bodyDiff);
+			psBuilding->body = (uint64_t)structureBody(psBuilding) * bodyDiff / 65536;
 
 			//initialise the build points
 			psBuilding->currentBuildPts = 0;
@@ -2081,7 +2081,7 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 	return psBuilding;
 }
 
-STRUCTURE *buildBlueprint(STRUCTURE_STATS *psStats, float x, float y, uint16_t direction, STRUCT_STATES state)
+STRUCTURE *buildBlueprint(STRUCTURE_STATS *psStats, int32_t x, int32_t y, uint16_t direction, STRUCT_STATES state)
 {
 	STRUCTURE *blueprint;
 
@@ -3415,7 +3415,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				if (pointsToAdd > 0 &&
 				    pResearch->researchPoints > 0) // might be a "free" research
 				{
-					int64_t powerNeeded = ((int64_t)(pResearch->researchPower * pointsToAdd) >> 32) / (float)pResearch->researchPoints;
+					int64_t powerNeeded = ((int64_t)(pResearch->researchPower * pointsToAdd) >> 32) / pResearch->researchPoints;
 					pPlayerRes->currentPoints += requestPrecisePowerFor(psStructure->player, powerNeeded, pointsToAdd);
 					psResFacility->timeStarted = gameTime;
 				}
@@ -3936,12 +3936,12 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 	/* Only add smoke if they're visible and they can 'burn' */
 	if (!mission && psBuilding->visible[selectedPlayer] && canSmoke(psBuilding))
 	{
-		const float damage = getStructureDamage(psBuilding);
+		const int32_t damage = getStructureDamage(psBuilding);
 
 		// Is there any damage?
 		if (damage > 0.)
 		{
-			emissionInterval = CalcStructureSmokeInterval(damage);
+			emissionInterval = CalcStructureSmokeInterval(damage/65536.f);
 			if(gameTime > (psBuilding->lastEmission + emissionInterval))
 			{
 				widthScatter   = getStructureWidth(psBuilding)   * TILE_UNITS/2/3;
@@ -6110,7 +6110,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		else
 		{
 			CONPRINTF(ConsoleString, (ConsoleString, _("%s - Damage %3.0f%%"),
-									  getStatName(psStructure->pStructureType), getStructureDamage(psStructure) * 100.f));
+									  getStatName(psStructure->pStructureType), getStructureDamage(psStructure) * (100.f/65536.f)));
 		}
 		break;
 	case REF_REPAIR_FACILITY:
@@ -6170,7 +6170,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		if (getDebugMappingStatus())
 		{
 			CONPRINTF(ConsoleString, (ConsoleString, "%s - Damage % 3.2f%% - Unique ID %u - Production Output: %u - TimeToBuild: %u",
-					  getStatName(psStructure->pStructureType), getStructureDamage(psStructure) * 100.f, psStructure->id,
+					  getStatName(psStructure->pStructureType), getStructureDamage(psStructure) * (100.f/65536.f), psStructure->id,
 					  psStructure->pFunctionality->factory.productionOutput,
 					  psStructure->pFunctionality->factory.timeToBuild));
 		}
@@ -6178,7 +6178,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 #endif
 		{
 			CONPRINTF(ConsoleString, (ConsoleString, _("%s - Damage %3.0f%%"),
-					  getStatName(psStructure->pStructureType), getStructureDamage(psStructure) * 100.f));
+					  getStatName(psStructure->pStructureType), getStructureDamage(psStructure) * (100.f/65536.f)));
 		}
 		break;
 	case REF_RESEARCH:
@@ -6186,7 +6186,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		if (getDebugMappingStatus())
 		{
 			CONPRINTF(ConsoleString, (ConsoleString, "%s - Damage % 3.2f%% - Unique ID %u - Research Points: %u - TimeToResearch: %u",
-					  getStatName(psStructure->pStructureType), getStructureDamage(psStructure) * 100.f, psStructure->id,
+					  getStatName(psStructure->pStructureType), getStructureDamage(psStructure) * (100.f/65536.f), psStructure->id,
 					  psStructure->pFunctionality->researchFacility.researchPoints,
 					  psStructure->pFunctionality->researchFacility.timeToResearch));
 		}
@@ -6194,7 +6194,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 #endif
 		{
 			CONPRINTF(ConsoleString, (ConsoleString, _("%s - Damage %3.0f%%"),
-					  getStatName(psStructure->pStructureType), getStructureDamage(psStructure) * 100.f));
+					  getStatName(psStructure->pStructureType), getStructureDamage(psStructure) * (100.f/65536.f)));
 		}
 		break;
 	default:
@@ -6202,13 +6202,13 @@ void printStructureInfo(STRUCTURE *psStructure)
 		if (getDebugMappingStatus())
 		{
 			CONPRINTF(ConsoleString, (ConsoleString, "%s - Damage % 3.2f%% - Unique ID %u",
-					  getStatName(psStructure->pStructureType), getStructureDamage(psStructure) * 100.f, psStructure->id));
+					  getStatName(psStructure->pStructureType), getStructureDamage(psStructure) * (100.f/65536.f), psStructure->id));
 		}
 		else
 #endif
 		{
 			CONPRINTF(ConsoleString, (ConsoleString, _("%s - Damage %3.0f%%"),
-					  getStatName(psStructure->pStructureType), getStructureDamage(psStructure) * 100.f));
+					  getStatName(psStructure->pStructureType), getStructureDamage(psStructure) * (100.f/65536.f)));
 		}
 		break;
 	}
@@ -7491,12 +7491,7 @@ float structHeightScale(STRUCTURE *psStruct)
 {
 	float retVal = (float)psStruct->currentBuildPts / (float)psStruct->pStructureType->buildPoints;
 
-	if(retVal < 0.05f)
-	{
-		retVal = 0.05f;
-	}
-	return retVal;
-
+	return MAX(retVal, 0.05f);
 }
 
 
@@ -7985,7 +7980,6 @@ void	structUpdateRecoil( STRUCTURE *psStruct )
 {
 	UDWORD	percent;
 	UDWORD	recoil;
-	float	fraction;
 
 	/* Check it's actually got a weapon */
 	if(psStruct->asWeaps[0].nStat == 0)
@@ -8015,9 +8009,7 @@ void	structUpdateRecoil( STRUCTURE *psStruct )
 		recoil = percent/5;
 	}
 
-	fraction = (float)asWeaponStats[psStruct->asWeaps[0].nStat].recoilValue / 100.f;
-
-	recoil = (float)recoil * fraction;
+	recoil = recoil * asWeaponStats[psStruct->asWeaps[0].nStat].recoilValue / 100;
 
 	/* Put it into the weapon data */
 	psStruct->asWeaps[0].recoilValue = recoil;
