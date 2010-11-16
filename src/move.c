@@ -885,7 +885,7 @@ static void moveCalcBlockingSlide(DROID *psDroid, int32_t *pmx, int32_t *pmy, ui
 {
 	PROPULSION_TYPE	propulsion = getPropulsionStats(psDroid)->propulsionType;
 	SDWORD	horizX,horizY, vertX,vertY;
-	int16_t slideDir;
+	uint16_t slideDir;
 	MAPTILE	*psTile = NULL;
 	// calculate the new coords and see if they are on a different tile
 	const int32_t mx = *pmx >> EXTRA_BITS;

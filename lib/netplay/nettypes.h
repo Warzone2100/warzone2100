@@ -91,7 +91,6 @@ void NETuint32_t(uint32_t *ip);       ///< Encodes small values (< 1 672 576) in
 void NETuint32_tLarge(uint32_t *ip);  ///< Encodes all values in exactly 4 bytes.
 void NETint64_t(int64_t *ip);
 void NETuint64_t(uint64_t *ip);
-void NETfloat(float* fp);
 void NETbool(BOOL *bp);
 void NETstring(char *str, uint16_t maxlen);
 void NETbin(uint8_t *str, uint32_t maxlen);
@@ -147,8 +146,6 @@ typedef struct PackagedCheck
 	uint32_t experience;
 	Position pos;
 	Rotation rot;
-	float sMoveX;
-	float sMoveY;
 	uint32_t targetID;  ///< Defined iff order == DORDER_ATTACK.
 	uint16_t orderX;    ///< Defined iff order == DORDER_MOVE.
 	uint16_t orderY;    ///< Defined iff order == DORDER_MOVE.

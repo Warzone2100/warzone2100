@@ -1019,8 +1019,6 @@ void displayComponentObject(DROID *psDroid)
 {
 	Vector3i	position, rotation;
 	int32_t		xShift,zShift;
-	UDWORD		worldAngle;
-	SDWORD		difference;
 	SDWORD		frame;
 	PROPULSION_STATS	*psPropStats;
 	UDWORD	tileX,tileY;
@@ -1028,10 +1026,8 @@ void displayComponentObject(DROID *psDroid)
 	SPACETIME st = interpolateObjectSpacetime((SIMPLE_OBJECT *)psDroid, graphicsTime);
 
 	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-	worldAngle = (UDWORD)(player.r.y / DEG_1) % 360;
-	difference = worldAngle - UNDEG(st.rot.direction);
 
-	leftFirst = !((difference> 0 && difference < 180) || difference < -180);
+	leftFirst = angleDelta(player.r.y - st.rot.direction) <= 0;
 
 	/* Push the matrix */
 	pie_MatBegin();
