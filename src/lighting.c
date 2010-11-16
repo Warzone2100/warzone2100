@@ -155,17 +155,17 @@ static void normalsOnTile(unsigned int tileX, unsigned int tileY, unsigned int q
 					corner1 = {
 						world_coord(tileX + 1),
 						world_coord(tileY),
-						tileRight->height - rMod
+						tileRight->height * ELEVATION_SCALE - rMod
 					},
 					corner2 = {
 						world_coord(tileX + 1),
 						world_coord(tileY + 1),
-						tileDownRight->height - drMod
+						tileDownRight->height * ELEVATION_SCALE - drMod
 					},
 					corner3 = {
 						world_coord(tileX),
 						world_coord(tileY + 1),
-						tileDown->height - dMod
+						tileDown->height * ELEVATION_SCALE - dMod
 					};
 
 				normals[(*numNormals)++] = pie_SurfaceNormal3fv( corner1, corner2, corner3);
@@ -176,17 +176,17 @@ static void normalsOnTile(unsigned int tileX, unsigned int tileY, unsigned int q
 					corner1 = {
 						world_coord(tileX),
 						world_coord(tileY),
-						psTile->height - nMod
+						psTile->height * ELEVATION_SCALE - nMod
 					},
 					corner2 = {
 						world_coord(tileX + 1),
 						world_coord(tileY),
-						tileRight->height - rMod
+						tileRight->height * ELEVATION_SCALE - rMod
 					},
 					corner3 = {
 						world_coord(tileX),
 						world_coord(tileY + 1),
-						tileDown->height - dMod
+						tileDown->height * ELEVATION_SCALE - dMod
 					};
 
 				normals[(*numNormals)++] = pie_SurfaceNormal3fv( corner1, corner2, corner3);
@@ -200,17 +200,17 @@ static void normalsOnTile(unsigned int tileX, unsigned int tileY, unsigned int q
 				corner1 = {
 					world_coord(tileX),
 					world_coord(tileY),
-					psTile->height - nMod
+					psTile->height * ELEVATION_SCALE - nMod
 				},
 				corner2 = {
 					world_coord(tileX + 1),
 					world_coord(tileY),
-					tileRight->height - rMod
+					tileRight->height * ELEVATION_SCALE - rMod
 				},
 				corner3 = {
 					world_coord(tileX + 1),
 					world_coord(tileY + 1),
-					tileDownRight->height - drMod
+					tileDownRight->height * ELEVATION_SCALE - drMod
 				};
 
 			normals[(*numNormals)++] = pie_SurfaceNormal3fv( corner1, corner2, corner3);
@@ -221,17 +221,17 @@ static void normalsOnTile(unsigned int tileX, unsigned int tileY, unsigned int q
 				corner1 = {
 					world_coord(tileX),
 					world_coord(tileY),
-					psTile->height - nMod
+					psTile->height * ELEVATION_SCALE - nMod
 				},
 				corner2 = {
 					world_coord(tileX + 1),
 					world_coord(tileY + 1),
-					tileDownRight->height - drMod
+					tileDownRight->height * ELEVATION_SCALE - drMod
 				},
 				corner3 = {
 					world_coord(tileX),
 					world_coord(tileY + 1),
-					tileDown->height - dMod
+					tileDown->height * ELEVATION_SCALE - dMod
 				};
 
 			normals[(*numNormals)++] = pie_SurfaceNormal3fv( corner1, corner2, corner3);
@@ -248,17 +248,17 @@ static void normalsOnTile(unsigned int tileX, unsigned int tileY, unsigned int q
 				corner1 = {
 					world_coord(tileX),
 					world_coord(tileY),
-					psTile->height - nMod
+					psTile->height * ELEVATION_SCALE - nMod
 				},
 				corner2 = {
 					world_coord(tileX + 1),
 					world_coord(tileY),
-					tileRight->height - rMod
+					tileRight->height * ELEVATION_SCALE - rMod
 				},
 				corner3 = {
 					world_coord(tileX),
 					world_coord(tileY + 1),
-					tileDown->height - dMod
+					tileDown->height * ELEVATION_SCALE - dMod
 				};
 
 			normals[(*numNormals)++] = pie_SurfaceNormal3fv( corner1, corner2, corner3);
@@ -269,17 +269,17 @@ static void normalsOnTile(unsigned int tileX, unsigned int tileY, unsigned int q
 				corner1 = {
 					world_coord(tileX + 1),
 					world_coord(tileY),
-					tileRight->height - rMod
+					tileRight->height * ELEVATION_SCALE - rMod
 				},
 				corner2 = {
 					world_coord(tileX + 1),
 					world_coord(tileY + 1),
-					tileDownRight->height - drMod
+					tileDownRight->height * ELEVATION_SCALE - drMod
 				},
 				corner3 = {
 					world_coord(tileX),
 					world_coord(tileY + 1),
-					tileDown->height - dMod
+					tileDown->height * ELEVATION_SCALE - dMod
 				};
 
 			normals[(*numNormals)++] = pie_SurfaceNormal3fv( corner1, corner2, corner3);
@@ -293,17 +293,17 @@ static void normalsOnTile(unsigned int tileX, unsigned int tileY, unsigned int q
 					corner1 = {
 						world_coord(tileX),
 						world_coord(tileY),
-						psTile->height - nMod
+						psTile->height * ELEVATION_SCALE - nMod
 					},
 					corner2 = {
 						world_coord(tileX + 1),
 						world_coord(tileY + 1),
-						tileDownRight->height - drMod
+						tileDownRight->height * ELEVATION_SCALE - drMod
 					},
 					corner3 = {
 						world_coord(tileX),
 						world_coord(tileY + 1),
-						tileDown->height - dMod
+						tileDown->height * ELEVATION_SCALE - dMod
 					};
 
 				normals[(*numNormals)++] = pie_SurfaceNormal3fv( corner1, corner2, corner3);
@@ -314,17 +314,17 @@ static void normalsOnTile(unsigned int tileX, unsigned int tileY, unsigned int q
 					corner1 = {
 						world_coord(tileX),
 						world_coord(tileY),
-						psTile->height - nMod
+						psTile->height * ELEVATION_SCALE - nMod
 					},
 					corner2 = {
 						world_coord(tileX + 1),
 						world_coord(tileY),
-						tileRight->height - rMod
+						tileRight->height * ELEVATION_SCALE - rMod
 					},
 					corner3 = {
 						world_coord(tileX + 1),
 						world_coord(tileY + 1),
-						tileDownRight->height - drMod
+						tileDownRight->height * ELEVATION_SCALE - drMod
 					};
 
 				normals[(*numNormals)++] = pie_SurfaceNormal3fv( corner1, corner2, corner3);
