@@ -1359,7 +1359,6 @@ void	droidUpdateRecoil( DROID *psDroid )
 {
 	UDWORD	percent;
 	UDWORD	recoil;
-	float	fraction;
 	//added multiple weapon update
 	UBYTE	i = 0;
 	UBYTE	num_weapons = 0;
@@ -1417,10 +1416,7 @@ void	droidUpdateRecoil( DROID *psDroid )
 				recoil = percent/5;
 			}
 
-			fraction =
-				(float)asWeaponStats[psDroid->asWeaps[i].nStat].recoilValue / 100.f;
-
-			recoil = (float)recoil * fraction;
+			recoil = recoil * asWeaponStats[psDroid->asWeaps[i].nStat].recoilValue / 100;
 
 			/* Put it into the weapon data */
 			psDroid->asWeaps[i].recoilValue = recoil;
@@ -2232,8 +2228,6 @@ UDWORD calcDroidBaseBody(DROID *psDroid)
 UDWORD calcDroidBaseSpeed(DROID_TEMPLATE *psTemplate, UDWORD weight, UBYTE player)
 {
 	UDWORD	speed;
-	//engine output bonus? 150%
-	float eoBonus = 1.5f;
 
 	if (psTemplate->droidType == DROID_CYBORG ||
 		psTemplate->droidType == DROID_CYBORG_SUPER ||
@@ -2269,7 +2263,7 @@ UDWORD calcDroidBaseSpeed(DROID_TEMPLATE *psTemplate, UDWORD weight, UBYTE playe
 	// Wateremelon:applies the engine output bonus if output > weight
 	if ( (asBodyStats + psTemplate->asParts[COMP_BODY])->powerOutput > weight )
 	{
-		speed *= eoBonus;
+		speed = speed * 3 / 2;
 	}
 
 	return speed;
