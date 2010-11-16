@@ -117,8 +117,7 @@ extern BOOL loadStructureStrengthModifiers(const char *pStrengthModData, UDWORD 
 
 extern BOOL	structureStatsShutDown(void);
 
-extern float structureDamage(STRUCTURE *psStructure, UDWORD damage,
-                            UDWORD weaponClass, UDWORD weaponSubClass, HIT_SIDE impactSide);
+int32_t structureDamage(STRUCTURE *psStructure, UDWORD damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, HIT_SIDE impactSide);
 extern void structureBuild(STRUCTURE *psStructure, DROID *psDroid, int buildPoints);
 extern void structureDemolish(STRUCTURE *psStructure, DROID *psDroid, int buildPoints);
 extern BOOL structureRepair(STRUCTURE *psStruct, DROID *psDroid, int buildPoints);

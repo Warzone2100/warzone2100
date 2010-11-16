@@ -6089,7 +6089,7 @@ BOOL scrTakeOverDroidsInAreaExp(void)
             (psDroid->droidType != DROID_CYBORG_CONSTRUCT) &&
             (psDroid->droidType != DROID_CYBORG_REPAIR) &&
 //			((SDWORD)getDroidLevel(psDroid) <= level) &&
-			((SDWORD)psDroid->experience <= level) &&
+			((SDWORD)psDroid->experience/65536 <= level) &&
 			psDroid->pos.x >= x1 && psDroid->pos.x <= x2 &&
             psDroid->pos.y >= y1 && psDroid->pos.y <= y2)
         {
@@ -6394,7 +6394,7 @@ BOOL scrSetDroidKills(void)
 		return false;
 	}
 
-	psDroid->experience = (float)kills * 100.0;
+	psDroid->experience = kills * 100 * 65536;
 
 	return true;
 }
@@ -6416,7 +6416,7 @@ BOOL scrGetDroidKills(void)
 		return false;
 	}
 
-	scrFunctionResult.v.ival = psDroid->experience;
+	scrFunctionResult.v.ival = psDroid->experience/65536;
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return false;

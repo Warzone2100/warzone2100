@@ -1056,10 +1056,9 @@ void handleAbandonedStructures()
  * \param weaponSubClass the subclass of the weapon that deals the damage
  * \return < 0 when the dealt damage destroys the structure, > 0 when the structure survives
  */
-float structureDamage(STRUCTURE *psStructure, UDWORD damage, UDWORD weaponClass,
-					   UDWORD weaponSubClass, HIT_SIDE impactSide)
+int32_t structureDamage(STRUCTURE *psStructure, UDWORD damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, HIT_SIDE impactSide)
 {
-	float		relativeDamage;
+	int32_t relativeDamage;
 
 	CHECK_STRUCTURE(psStructure);
 
@@ -1069,7 +1068,7 @@ float structureDamage(STRUCTURE *psStructure, UDWORD damage, UDWORD weaponClass,
 	relativeDamage = objDamage((BASE_OBJECT *)psStructure, damage, structureBody(psStructure), weaponClass, weaponSubClass, impactSide);
 
 	// If the shell did sufficient damage to destroy the structure
-	if (relativeDamage < 0.0f)
+	if (relativeDamage < 0)
 	{
 		debug(LOG_ATTACK, "Structure (id %d) DESTROYED", psStructure->id);
 		destroyStruct(psStructure);

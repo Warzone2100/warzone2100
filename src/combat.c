@@ -453,7 +453,7 @@ void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
  * \param angle angle of impact (from the damage dealing projectile in relation to this object)
  * \return < 0 when the dealt damage destroys the object, > 0 when the object survives
  */
-float objDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD originalhp, UDWORD weaponClass, UDWORD weaponSubClass, HIT_SIDE impactSide)
+int32_t objDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD originalhp, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, HIT_SIDE impactSide)
 {
 	int	actualDamage, armour, level = 1;
 
@@ -474,7 +474,7 @@ float objDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD originalhp, UDWORD wea
 
 
 	// apply game difficulty setting
-	if(!NetPlay.bComms)		// ignore multiplayer games
+	if (!bMultiPlayer)  // ignore multiplayer or skirmish games
 	{
 		if (psObj->player != selectedPlayer)
 		{
@@ -527,19 +527,19 @@ float objDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD originalhp, UDWORD wea
 	if (!originalhp)
 	{
 		ASSERT(originalhp, "original hitpoints are 0 ?");
-		return -1.0f;	// it is dead
+		return -65536;  // it is dead
 	}
 
 	// If the shell did sufficient damage to destroy the object, deal with it and return
 	if (actualDamage >= psObj->body)
 	{
-		return (float) psObj->body / (float) originalhp * -1.0f;
+		return -(int64_t)65536 * psObj->body / originalhp;
 	}
 
 	// Subtract the dealt damage from the droid's remaining body points
 	psObj->body -= actualDamage;
 
-	return (float) actualDamage / (float) originalhp;
+	return (int64_t)65536 * actualDamage / originalhp;
 }
 
 /* Guesses how damage a shot might do.

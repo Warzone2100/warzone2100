@@ -227,13 +227,13 @@ void featureStatsShutDown(void)
  *  \param damage amount of damage to deal
  *  \param weaponClass,weaponSubClass the class and subclass of the weapon that deals the damage
  *  \param impactSide the side/directon on which the feature is hit
- *  \return < 0 when the dealt damage destroys the feature, > 0 when the feature survives
+ *  \return < 0 never, >= 0 always
  */
-float featureDamage(FEATURE *psFeature, UDWORD damage, UDWORD weaponClass, UDWORD weaponSubClass, HIT_SIDE impactSide)
+int32_t featureDamage(FEATURE *psFeature, UDWORD damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, HIT_SIDE impactSide)
 {
-	float		relativeDamage;
+	int32_t relativeDamage;
 
-	ASSERT_OR_RETURN(0.0f, psFeature != NULL, "Invalid feature pointer");
+	ASSERT_OR_RETURN(0, psFeature != NULL, "Invalid feature pointer");
 
 	debug(LOG_ATTACK, "feature (id %d): body %d armour %d damage: %d",
 	      psFeature->id, psFeature->body, psFeature->armour[impactSide][weaponClass], damage);
@@ -241,11 +241,11 @@ float featureDamage(FEATURE *psFeature, UDWORD damage, UDWORD weaponClass, UDWOR
 	relativeDamage = objDamage((BASE_OBJECT *)psFeature, damage, psFeature->psStats->body, weaponClass, weaponSubClass, impactSide);
 
 	// If the shell did sufficient damage to destroy the feature
-	if (relativeDamage < 0.0f)
+	if (relativeDamage < 0)
 	{
 		debug(LOG_ATTACK, "feature (id %d) DESTROYED", psFeature->id);
 		destroyFeature(psFeature);
-		return relativeDamage * -1.0f;
+		return relativeDamage * -1;
 	}
 	else
 	{

@@ -93,7 +93,7 @@ static void	proj_PostImpactFunc( PROJECTILE *psObj );
 static void	proj_checkBurnDamage( BASE_OBJECT *apsList, PROJECTILE *psProj);
 static void	proj_Free(PROJECTILE *psObj);
 
-static float objectDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD weaponClass,UDWORD weaponSubClass, HIT_SIDE impactSide);
+static int32_t objectDamage(BASE_OBJECT *psObj, UDWORD damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, HIT_SIDE impactSide);
 static HIT_SIDE getHitSide (PROJECTILE *psObj, BASE_OBJECT *psTarget);
 
 
@@ -241,21 +241,21 @@ proj_GetNext( void )
 
 /*
  * Relates the quality of the attacker to the quality of the victim.
- * The value returned satisfies the following inequality: 0.5 <= ret <= 2.0
+ * The value returned satisfies the following inequality: 0.5 <= ret/65536 <= 2.0
  */
-static float QualityFactor(DROID *psAttacker, DROID *psVictim)
+static uint32_t qualityFactor(DROID *psAttacker, DROID *psVictim)
 {
-	float powerRatio = calcDroidPower(psVictim) / calcDroidPower(psAttacker);
-	float pointsRatio = calcDroidPoints(psVictim) / calcDroidPoints(psAttacker);
+	uint32_t powerRatio = (uint64_t)65536 * calcDroidPower(psVictim) / calcDroidPower(psAttacker);
+	uint32_t pointsRatio = (uint64_t)65536 * calcDroidPoints(psVictim) / calcDroidPoints(psAttacker);
 
-	CLIP(powerRatio, 0.5, 2.0);
-	CLIP(pointsRatio, 0.5, 2.0);
+	CLIP(powerRatio, 65536/2, 65536*2);
+	CLIP(pointsRatio, 65536/2, 65536*2);
 
-	return (powerRatio + pointsRatio) / 2.0;
+	return (powerRatio + pointsRatio) / 2;
 }
 
 // update the kills after a target is damaged/destroyed
-static void proj_UpdateKills(PROJECTILE *psObj, float experienceInc)
+static void proj_UpdateKills(PROJECTILE *psObj, int32_t experienceInc)
 {
 	DROID	        *psDroid;
 	BASE_OBJECT     *psSensor;
@@ -269,13 +269,13 @@ static void proj_UpdateKills(PROJECTILE *psObj, float experienceInc)
 	}
 
 	// If experienceInc is negative then the target was killed
-	if (bMultiPlayer && experienceInc < 0.0f)
+	if (bMultiPlayer && experienceInc < 0)
 	{
 		updateMultiStatsKills(psObj->psDest, psObj->psSource->player);
 	}
 
 	// Since we are no longer interested if it was killed or not, abs it
-	experienceInc = fabs(experienceInc);
+	experienceInc = abs(experienceInc);
 
 	if (psObj->psSource->type == OBJ_DROID)			/* update droid kills */
 	{
@@ -288,10 +288,10 @@ static void proj_UpdateKills(PROJECTILE *psObj, float experienceInc)
 		 && bMultiPlayer)
 		{
 			// Modify the experience gained by the 'quality factor' of the units
-			experienceInc *= QualityFactor(psDroid, (DROID *) psObj->psDest);
+			experienceInc = (uint64_t)experienceInc * qualityFactor(psDroid, (DROID *)psObj->psDest) / 65536;
 		}
 
-		ASSERT_OR_RETURN(, -0.1 < experienceInc && experienceInc < 2.1, "Experience increase out of range");
+		ASSERT_OR_RETURN(, 0 <= experienceInc && experienceInc < (int)(2.1*65536), "Experience increase out of range");
 
 		psDroid->experience += experienceInc;
 		cmdDroidUpdateKills(psDroid, experienceInc);
@@ -300,12 +300,12 @@ static void proj_UpdateKills(PROJECTILE *psObj, float experienceInc)
 		if (psSensor
 		 && psSensor->type == OBJ_DROID)
 		{
-		    ((DROID *) psSensor)->experience += experienceInc;
+		    ((DROID *)psSensor)->experience += experienceInc;
 		}
 	}
 	else if (psObj->psSource->type == OBJ_STRUCTURE)
 	{
-		ASSERT_OR_RETURN(, -0.1 < experienceInc && experienceInc < 2.1, "Experience increase out of range");
+		ASSERT_OR_RETURN(, 0 <= experienceInc && experienceInc < (int)(2.1*65536), "Experience increase out of range");
 
 		// See if there was a command droid designating this target
 		psDroid = cmdDroidGetDesignator(psObj->psSource->player);
@@ -976,7 +976,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 {
 	WEAPON_STATS    *psStats;
 	SDWORD          i, iAudioImpactID;
-	float           relativeDamage;
+	int32_t         relativeDamage;
 	Vector3i        position, scatter;
 	iIMDShape       *imd;
 	HIT_SIDE        impactSide = HIT_SIDE_FRONT;
@@ -1161,7 +1161,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 			}
 
 			// Damage the object
-			relativeDamage = objectDamage(psObj->psDest,damage , psStats->weaponClass,psStats->weaponSubClass, impactSide);
+			relativeDamage = objectDamage(psObj->psDest, damage, psStats->weaponClass,psStats->weaponSubClass, impactSide);
 
 			proj_UpdateKills(psObj, relativeDamage);
 
@@ -1491,7 +1491,6 @@ static void proj_checkBurnDamage( BASE_OBJECT *apsList, PROJECTILE *psProj)
 	UDWORD			radSquared;
 	UDWORD			damageSoFar;
 	SDWORD			damageToDo;
-	float			relativeDamage;
 
 	CHECK_PROJECTILE(psProj);
 
@@ -1541,6 +1540,7 @@ static void proj_checkBurnDamage( BASE_OBJECT *apsList, PROJECTILE *psProj)
 							 - (SDWORD)psCurr->burnDamage;
 				if (damageToDo > 0)
 				{
+					int32_t relativeDamage;
 					debug(LOG_NEVER, "Burn damage of %d to object %d, player %d\n",
 							damageToDo, psCurr->id, psCurr->player);
 
@@ -1698,9 +1698,10 @@ UDWORD	calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect, BASE_OBJECT *ps
  *    damage to a cyborg with 150 points left the actual damage would be taken
  *    as 150.
  *  - Should sufficient damage be done to destroy/kill a unit then the value is
- *    multiplied by -1, resulting in a negative number.
+ *    multiplied by -1, resulting in a negative number. Killed features do not
+ *    result in negative numbers.
  */
-static float objectDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD weaponClass,UDWORD weaponSubClass, HIT_SIDE impactSide)
+static int32_t objectDamage(BASE_OBJECT *psObj, UDWORD damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, HIT_SIDE impactSide)
 {
 	switch (psObj->type)
 	{

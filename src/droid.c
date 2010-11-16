@@ -160,9 +160,9 @@ BOOL droidInit(void)
  *
  * NOTE: This function will damage but _never_ destroy transports when in single player (campaign) mode
  */
-float droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weaponSubClass, HIT_SIDE impactSide)
+int32_t droidDamage(DROID *psDroid, uint32_t damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, HIT_SIDE impactSide)
 {
-	float		relativeDamage;
+	int32_t relativeDamage;
 
 	CHECK_DROID(psDroid);
 
@@ -174,7 +174,7 @@ float droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weap
 
 	relativeDamage = objDamage((BASE_OBJECT *)psDroid, damage, psDroid->originalBody, weaponClass, weaponSubClass, impactSide);
 
-	if (relativeDamage > 0.0f)
+	if (relativeDamage > 0)
 	{
 		// reset the attack level
 		if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ATTACKED)
@@ -189,14 +189,14 @@ float droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass, UDWORD weap
 
 		CHECK_DROID(psDroid);
 	}
-	else if (relativeDamage < 0.0f)
+	else if (relativeDamage < 0)
 	{
 		// HACK: Prevent transporters from being destroyed in single player
 		if ( (game.type == CAMPAIGN) && !bMultiPlayer && (psDroid->droidType == DROID_TRANSPORTER) )
 		{
 			debug(LOG_ATTACK, "Transport(%d) saved from death--since it should never die (SP only)", psDroid->id);
 			psDroid->body = 1;
-			return 0.0f;
+			return 0;
 		}
 
 		// Droid destroyed
@@ -341,11 +341,7 @@ void recycleDroid(DROID *psDroid)
 	CHECK_DROID(psDroid);
 
 	// store the droids kills
-	numKills = psDroid->experience;
-	if (numKills > UWORD_MAX)
-	{
-		numKills = UWORD_MAX;
-	}
+	numKills = psDroid->experience/65536;
 	minKills = UWORD_MAX;
 	storeIndex = 0;
 	for(i=0; i<MAX_RECYCLED_DROIDS; i++)
@@ -686,7 +682,7 @@ void _syncDebugDroid(const char *function, DROID *psDroid, char ch)
 		actTarLen += sprintf(actTar + actTarLen, "_%u", psDroid->psActionTarget[i]? psDroid->psActionTarget[i]->id : 0);
 	}
 
-	_syncDebug(function, "%c droid%d = p%d;pos(%d.%d,%d.%d,%d),rot(%d,%d,%d),ord%d(%d,%d),act%d%s,so%X,bp%d,sMove(st%d,spd%d,mdir%d,path%d/%d,src(%d,%d),tar(%d,%d),dst(%d,%d),bump(%d,%d,%d,%d,(%d,%d),%d)), power = %"PRId64"", ch,
+	_syncDebug(function, "%c droid%d = p%d;pos(%d.%d,%d.%d,%d),rot(%d,%d,%d),ord%d(%d,%d),act%d%s,so%X,bp%d,sMove(st%d,spd%d,mdir%d,path%d/%d,src(%d,%d),tar(%d,%d),dst(%d,%d),bump(%d,%d,%d,%d,(%d,%d),%d)),exp%u, power = %"PRId64"", ch,
 	          psDroid->id,
 
 	          psDroid->player,
@@ -701,6 +697,7 @@ void _syncDebugDroid(const char *function, DROID *psDroid, char ch)
 	          psDroid->sMove.Position, psDroid->sMove.numPoints,
 	          psDroid->sMove.srcX, psDroid->sMove.srcY, psDroid->sMove.targetX, psDroid->sMove.targetY, psDroid->sMove.DestinationX, psDroid->sMove.DestinationY,
 	          psDroid->sMove.bumpDir, psDroid->sMove.bumpTime, psDroid->sMove.lastBump, psDroid->sMove.pauseTime, psDroid->sMove.bumpX, psDroid->sMove.bumpY, psDroid->sMove.shuffleStart,
+	          psDroid->experience,
 
 	          getPrecisePower(psDroid->player));
 }
@@ -838,7 +835,7 @@ void droidUpdate(DROID *psDroid)
 					psDroid->burnDamage += damageToDo;
 
 					//just assume the burn damage is from FRONT
-					droidDamage(psDroid, damageToDo, WC_HEAT,WSC_FLAME, HIT_SIDE_FRONT);
+					droidDamage(psDroid, damageToDo, WC_HEAT, WSC_FLAME, HIT_SIDE_FRONT);
 				}
 			}
 		}
@@ -2419,7 +2416,6 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD pl
 	DROID			*psDroid;
 	DROID_GROUP		*psGrp;
 	UDWORD			inc;
-	UDWORD			numKills;
 	SDWORD			i, experienceLoc;
 	HIT_SIDE		impact_side;
 
@@ -2518,22 +2514,22 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD pl
 		(psDroid->droidType != DROID_CYBORG_REPAIR) &&
 		(psDroid->droidType != DROID_TRANSPORTER))
 	{
-		numKills = 0;
+		uint32_t numKills = 0;
 		experienceLoc = 0;
 		for(i=0; i<MAX_RECYCLED_DROIDS; i++)
 		{
-			if (aDroidExperience[player][i] > numKills)
+			if (aDroidExperience[player][i]*65536 > numKills)
 			{
-				numKills = aDroidExperience[player][i];
+				numKills = aDroidExperience[player][i]*65536;
 				experienceLoc = i;
 			}
 		}
 		aDroidExperience[player][experienceLoc] = 0;
-		psDroid->experience = (float)numKills;
+		psDroid->experience = numKills;
 	}
 	else
 	{
-		psDroid->experience = 0.f;
+		psDroid->experience = 0;
 	}
 
 	droidSetBits(pTemplate,psDroid);
@@ -3315,7 +3311,7 @@ unsigned int getDroidLevel(const DROID* psDroid)
 {
 	bool isCommander = (psDroid->droidType == DROID_COMMAND ||
 						psDroid->droidType == DROID_SENSOR) ? true : false;
-	unsigned int numKills = psDroid->experience;
+	unsigned int numKills = psDroid->experience/65536;
 	unsigned int i;
 
 	// Search through the array of ranks until one is found
@@ -4298,8 +4294,6 @@ BOOL standardSensorDroid(DROID *psDroid)
 DROID * giftSingleDroid(DROID *psD, UDWORD to)
 {
 	DROID_TEMPLATE	sTemplate;
-	UWORD		x, y, numKills, i;
-	float		direction;
 	DROID		*psNewDroid, *psCurr;
 	STRUCTURE	*psStruct;
 	UDWORD		body, armourK[NUM_HIT_SIDES], armourH[NUM_HIT_SIDES];
@@ -4317,6 +4311,8 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
 
 	if (bMultiPlayer)
 	{
+		int i;
+
 		// reset order
 		orderDroid(psD, DORDER_STOP, ModeQueue);
 
@@ -4431,6 +4427,10 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
 	}
 	else
 	{
+		uint32_t numKills;
+		int32_t x, y;
+		uint16_t direction;
+
 		// got to destroy the droid and build another since there are too many complications re order/action!
 
 		// create a template based on the droid
@@ -4469,7 +4469,7 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
 				psNewDroid->armour[impact_side][WC_KINETIC] = armourK[impact_side];
 				psNewDroid->armour[impact_side][WC_HEAT] = armourH[impact_side];
 			}
-			psNewDroid->experience = (float) numKills;
+			psNewDroid->experience = numKills;
 			psNewDroid->rot.direction = direction;
 			if (!(psNewDroid->droidType == DROID_PERSON || cyborgDroid(psNewDroid) || psNewDroid->droidType == DROID_TRANSPORTER))
 			{
@@ -4483,33 +4483,26 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
 /*calculates the electronic resistance of a droid based on its experience level*/
 SWORD   droidResistance(DROID *psDroid)
 {
-	SWORD   resistance;
+	unsigned resistance;
 
 	CHECK_DROID(psDroid);
 
-	resistance = (SWORD)(psDroid->experience * DROID_RESISTANCE_FACTOR);
+	resistance = psDroid->experience / (65536/DROID_RESISTANCE_FACTOR);
 
 	//ensure base minimum in MP before the upgrade effect
 	if (bMultiPlayer)
 	{
 		//ensure resistance is a base minimum
-		if (resistance < DROID_RESISTANCE_FACTOR)
-		{
-			resistance = DROID_RESISTANCE_FACTOR;
-		}
+		resistance = MAX(resistance, DROID_RESISTANCE_FACTOR);
 	}
 
 	//structure resistance upgrades are passed on to droids
-	resistance = (SWORD)(resistance  + resistance * (
-		asStructureUpgrade[psDroid->player].resistance/100));
+	resistance = resistance + resistance*asStructureUpgrade[psDroid->player].resistance / 100;
 
 	//ensure resistance is a base minimum
-	if (resistance < DROID_RESISTANCE_FACTOR)
-	{
-		resistance = DROID_RESISTANCE_FACTOR;
-	}
+	resistance = MAX(resistance, DROID_RESISTANCE_FACTOR);
 
-	return resistance;
+	return MIN(resistance, INT16_MAX);
 }
 
 /*this is called to check the weapon is 'allowed'. Check if VTOL, the weapon is

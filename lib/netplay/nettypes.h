@@ -144,7 +144,7 @@ typedef struct PackagedCheck
 	int32_t order;
 	uint32_t secondaryOrder;
 	uint32_t body;
-	float experience;
+	uint32_t experience;
 	Position pos;
 	Rotation rot;
 	float sMoveX;
