@@ -77,7 +77,7 @@ typedef struct _iIMDShape {
 	int texpage;
 	int tcmaskpage;
 	int sradius, radius;
-	Vector3f min, max;
+	Vector3i min, max;
 
 	Vector3f ocen;
 	unsigned short numFrames;

@@ -196,7 +196,7 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 	}
 	if (pieFlag & pie_RAISE)		// collapse
 	{
-		glTranslatef(1.0f, (-shape->max.y * (pie_RAISE_SCALE - pieFlagData)) / pie_RAISE_SCALE, 1.0f);
+		glTranslatef(1.0f, (-shape->max.y * (pie_RAISE_SCALE - pieFlagData)) * (1.0f / pie_RAISE_SCALE), 1.0f);
 	}
 
 	glColor4ubv(colour.vector);	// Only need to set once for entire model
