@@ -358,9 +358,9 @@ static PIELIGHT appliedRadarColour(RADAR_DRAW_MODE radarDrawMode, MAPTILE *WTile
 			// draw radar terrain on/off feature
 			PIELIGHT col = tileColours[TileNumber_tile(WTile->texture)];
 
-			col.byte.r = sqrtf(col.byte.r * (WTile->illumination + WTile->height) / 2);
-			col.byte.b = sqrtf(col.byte.b * (WTile->illumination + WTile->height) / 2);
-			col.byte.g = sqrtf(col.byte.g * (WTile->illumination + WTile->height) / 2);
+			col.byte.r = sqrtf(col.byte.r * (WTile->illumination + WTile->height / ELEVATION_SCALE) / 2);
+			col.byte.b = sqrtf(col.byte.b * (WTile->illumination + WTile->height / ELEVATION_SCALE) / 2);
+			col.byte.g = sqrtf(col.byte.g * (WTile->illumination + WTile->height / ELEVATION_SCALE) / 2);
 			if (terrainType(WTile) == TER_CLIFFFACE)
 			{
 				col.byte.r /= 2;
@@ -378,7 +378,7 @@ static PIELIGHT appliedRadarColour(RADAR_DRAW_MODE radarDrawMode, MAPTILE *WTile
 		break;
 		case RADAR_MODE_HEIGHT_MAP:
 		{
-			WScr.byte.r = WScr.byte.g = WScr.byte.b = WTile->height;
+			WScr.byte.r = WScr.byte.g = WScr.byte.b = WTile->height / ELEVATION_SCALE;
 		}
 		break;
 		case RADAR_MODE_NO_TERRAIN:

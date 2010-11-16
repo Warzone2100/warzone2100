@@ -799,7 +799,7 @@ static void calcAverageTerrainHeight(iView *player)
 				/* Get a pointer to the tile at this location */
 				MAPTILE *psTile = mapTile(playerXTile + j, playerZTile + i);
 
-				averageCentreTerrainHeight += psTile->height * ELEVATION_SCALE;
+				averageCentreTerrainHeight += psTile->height;
 				numTilesAveraged++;
 			}
 		}
@@ -811,9 +811,9 @@ static void calcAverageTerrainHeight(iView *player)
 		MAPTILE *psTile = mapTile(playerXTile + visibleTiles.x / 2, playerZTile + visibleTiles.y / 2);
 
 		averageCentreTerrainHeight /= numTilesAveraged;
-		if (averageCentreTerrainHeight < psTile->height * ELEVATION_SCALE)
+		if (averageCentreTerrainHeight < psTile->height)
 		{
-			averageCentreTerrainHeight = psTile->height * ELEVATION_SCALE;
+			averageCentreTerrainHeight = psTile->height;
 		}
 	}
 	else

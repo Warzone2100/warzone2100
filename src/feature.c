@@ -420,7 +420,7 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 
 			if( (!psStats->tileDraw) && (FromSave == false) )
 			{
-				psTile->height = (UBYTE)(height / ELEVATION_SCALE);
+				psTile->height = height;
 			}
 		}
 	}

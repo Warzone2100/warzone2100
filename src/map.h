@@ -113,15 +113,15 @@ typedef struct _maptile
 	uint8_t			illumination;	// How bright is this tile?
 	uint8_t			watchers[MAX_PLAYERS];		// player sees through fog of war here with this many objects
 	uint16_t		texture;		// Which graphics texture is on this tile
-	float			height;			// The height at the top left of the tile
-	float			level;
+	int32_t                 height;                 ///< The height at the top left of the tile
+	float                   level;                  ///< The visibility level of the top left of the tile, for this client.
 	BASE_OBJECT		*psObject;		// Any object sitting on the location (e.g. building)
 	PIELIGHT		colour;
 	uint16_t		limitedContinent;	///< For land or sea limited propulsion types
 	uint16_t		hoverContinent;		///< For hover type propulsions
 	uint8_t			ground;			///< The ground type used for the terrain renderer
 	uint16_t                fireEndTime;            ///< The (uint16_t)(gameTime / GAME_TICKS_PER_UPDATE) that BITS_ON_FIRE should be cleared.
-	float			waterLevel;		///< At what height is the water for this tile
+	int32_t                 waterLevel;             ///< At what height is the water for this tile
 } MAPTILE;
 
 
@@ -216,7 +216,6 @@ static inline unsigned char terrainType(const MAPTILE * tile)
 /* The size and contents of the map */
 extern SDWORD	mapWidth, mapHeight;
 extern MAPTILE *psMapTiles;
-extern float waterLevel;
 
 extern GROUND_TYPE *psGroundTypes;
 extern int numGroundTypes;
@@ -301,43 +300,43 @@ static inline WZ_DECL_PURE MAPTILE *mapTile(int32_t x, int32_t y)
 #define worldTile(_x, _y) mapTile(map_coord(_x), map_coord(_y))
 
 /// Return ground height of top-left corner of tile at x,y
-static inline WZ_DECL_PURE float map_TileHeight(SDWORD x, SDWORD y)
+static inline WZ_DECL_PURE int32_t map_TileHeight(int32_t x, int32_t y)
 {
-	if ( x >= mapWidth || y >= mapHeight )
+	if ( x >= mapWidth || y >= mapHeight || x < 0 || y < 0 )
 	{
 		return 0;
 	}
-	return psMapTiles[x + (y * mapWidth)].height * ELEVATION_SCALE;
+	return psMapTiles[x + (y * mapWidth)].height;
 }
 
 /// Return water height of top-left corner of tile at x,y
-static inline WZ_DECL_PURE float map_WaterHeight(SDWORD x, SDWORD y)
+static inline WZ_DECL_PURE int32_t map_WaterHeight(int32_t x, int32_t y)
 {
-	if ( x >= mapWidth || y >= mapHeight )
+	if ( x >= mapWidth || y >= mapHeight || x < 0 || y < 0 )
 	{
 		return 0;
 	}
-	return psMapTiles[x + (y * mapWidth)].waterLevel * ELEVATION_SCALE;
+	return psMapTiles[x + (y * mapWidth)].waterLevel;
 }
 
 /// Return max(ground, water) height of top-left corner of tile at x,y
-static inline WZ_DECL_PURE float map_TileHeightSurface(SDWORD x, SDWORD y)
+static inline WZ_DECL_PURE int32_t map_TileHeightSurface(int32_t x, int32_t y)
 {
-	if ( x >= mapWidth || y >= mapHeight )
+	if ( x >= mapWidth || y >= mapHeight || x < 0 || y < 0 )
 	{
 		return 0;
 	}
-	return MAX(psMapTiles[x + (y * mapWidth)].height, psMapTiles[x + (y * mapWidth)].waterLevel) * ELEVATION_SCALE;
+	return MAX(psMapTiles[x + (y * mapWidth)].height, psMapTiles[x + (y * mapWidth)].waterLevel);
 }
 
 
 /*sets the tile height */
-static inline void setTileHeight(SDWORD x, SDWORD y, float height)
+static inline void setTileHeight(int32_t x, int32_t y, int32_t height)
 {
-	ASSERT_OR_RETURN( , x < mapWidth, "x coordinate %u bigger than map width %u", x, mapWidth);
-	ASSERT_OR_RETURN( , y < mapHeight, "y coordinate %u bigger than map height %u", y, mapHeight);
+	ASSERT_OR_RETURN( , x < mapWidth && x >= 0, "x coordinate %d bigger than map width %u", x, mapWidth);
+	ASSERT_OR_RETURN( , y < mapHeight && x >= 0, "y coordinate %d bigger than map height %u", y, mapHeight);
 
-	psMapTiles[x + (y * mapWidth)].height = height / (float)ELEVATION_SCALE;
+	psMapTiles[x + (y * mapWidth)].height = height;
 	markTileDirty(x, y);
 }
 

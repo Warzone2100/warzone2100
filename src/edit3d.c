@@ -94,9 +94,9 @@ void lowerTile(int tile3dX, int tile3dY)
 /* Ensures any adjustment to tile elevation is within allowed ranges */
 void	adjustTileHeight(MAPTILE *psTile, SDWORD adjust)
 {
-	float	newHeight = psTile->height + adjust;
+	int32_t newHeight = psTile->height + adjust*ELEVATION_SCALE;
 
-	if (newHeight>=MIN_TILE_HEIGHT && newHeight<=MAX_TILE_HEIGHT)
+	if (newHeight >= MIN_TILE_HEIGHT*ELEVATION_SCALE && newHeight <= MAX_TILE_HEIGHT*ELEVATION_SCALE)
 	{
 		psTile->height = newHeight;
 	}

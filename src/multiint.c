@@ -335,7 +335,7 @@ void loadMapPreview(bool hideInterface)
 		for (x = 0; x < mapWidth; x++)
 		{
 			char * const p = imageData + (3 * (y * BACKDROP_HACK_WIDTH + x));
-			height = WTile->height;
+			height = WTile->height / ELEVATION_SCALE;
 			col = height;
 
 			switch (terrainType(WTile))

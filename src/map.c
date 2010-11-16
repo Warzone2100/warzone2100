@@ -188,7 +188,7 @@ BOOL mapNew(UDWORD width, UDWORD height)
 	psTile = psMapTiles;
 	for (i = 0; i < width * height; i++)
 	{
-		psTile->height = MAX_HEIGHT / 4;
+		psTile->height = MAX_HEIGHT*ELEVATION_SCALE / 4;
 		psTile->illumination = 255;
 		psTile->level = psTile->illumination;
 		memset(psTile->watchers, 0, sizeof(psTile->watchers));
@@ -834,7 +834,7 @@ BOOL mapLoad(char *filename, BOOL preview)
 		}
 
 		psMapTiles[i].texture = texture;
-		psMapTiles[i].height = height;
+		psMapTiles[i].height = height*ELEVATION_SCALE;
 
 		// Visibility stuff
 		memset(psMapTiles[i].watchers, 0, sizeof(psMapTiles[i].watchers));
@@ -884,11 +884,11 @@ BOOL mapLoad(char *filename, BOOL preview)
 		for (j = 0; j < mapHeight; j++)
 		{
 			// FIXME: magic number
-			mapTile(i, j)->waterLevel = mapTile(i, j)->height - world_coord(1) / 3.0f / (float)ELEVATION_SCALE;
+			mapTile(i, j)->waterLevel = mapTile(i, j)->height - world_coord(1) / 3;
 			// lower riverbed
 			if (mapTile(i, j)->ground == waterGroundType)
 			{
-				mapTile(i, j)->height -= (WATER_DEPTH - 2.0f * environGetData(i, j)) / (float)ELEVATION_SCALE;
+				mapTile(i, j)->height -= (WATER_DEPTH - 2 * environGetData(i, j));
 			}
 		}
 	}
@@ -996,11 +996,11 @@ BOOL mapSave(char **ppFileData, UDWORD *pFileSize)
 		psTileData->texture = psTile->texture;
 		if (psTile->ground == waterGroundType)
 		{
-			psTileData->height = MIN(255.0f, psTile->height + (WATER_DEPTH - 2.0f * environGetData(i % mapWidth, i / mapWidth)) / (float)ELEVATION_SCALE);
+			psTileData->height = MIN(255, (psTile->height + WATER_DEPTH - 2 * environGetData(i % mapWidth, i / mapWidth)) / ELEVATION_SCALE);
 		}
 		else
 		{
-			psTileData->height = psTile->height;
+			psTileData->height = psTile->height / ELEVATION_SCALE;
 		}
 
 		/* MAP_SAVETILE */
@@ -1087,30 +1087,30 @@ extern int32_t map_Height(int x, int y)
 {
 	int tileX, tileY;
 	int i, j;
-	float height[2][2], center;
-	float onTileX, onTileY;
-	float left, right, middle;
-	float onBottom, result;
-	float towardsCenter, towardsRight;
+	int32_t height[2][2], center;
+	int32_t onTileX, onTileY;
+	int32_t left, right, middle;
+	int32_t onBottom, result;
+	int towardsCenter, towardsRight;
 
 	// Clamp x and y values to actual ones
 	// Give one tile worth of leeway before asserting, for units/transporters coming in from off-map.
 	ASSERT(x >= -TILE_UNITS, "map_Height: x value is too small (%d,%d) in %dx%d",map_coord(x),map_coord(y),mapWidth,mapHeight);
 	ASSERT(y >= -TILE_UNITS, "map_Height: y value is too small (%d,%d) in %dx%d",map_coord(x),map_coord(y),mapWidth,mapHeight);
-	x = (x < 0 ? 0 : x);
-	y = (y < 0 ? 0 : y);
+	x = MAX(x, 0);
+	y = MAX(y, 0);
 	ASSERT(x < world_coord(mapWidth)+TILE_UNITS, "map_Height: x value is too big (%d,%d) in %dx%d",map_coord(x),map_coord(y),mapWidth,mapHeight);
 	ASSERT(y < world_coord(mapHeight)+TILE_UNITS, "map_Height: y value is too big (%d,%d) in %dx%d",map_coord(x),map_coord(y),mapWidth,mapHeight);
-	x = (x >= world_coord(mapWidth) ? world_coord(mapWidth) - 1 : x);
-	y = (y >= world_coord(mapHeight) ? world_coord(mapHeight) - 1 : y);
+	x = MIN(x, world_coord(mapWidth) - 1);
+	y = MIN(y, world_coord(mapHeight) - 1);
 
 	// on which tile are these coords?
 	tileX = map_coord(x);
 	tileY = map_coord(y);
 
 	// where on the tile? (scale to (0,1))
-	onTileX = (x - world_coord(tileX))/(float)world_coord(1);
-	onTileY = (y - world_coord(tileY))/(float)world_coord(1);
+	onTileX = x - world_coord(tileX);
+	onTileY = y - world_coord(tileY);
 
 	// get the height for the corners and center
 	center = 0;
@@ -1135,31 +1135,31 @@ extern int32_t map_Height(int x, int y)
 	// get heights for left and right corners and the distances
 	if (onTileY > onTileX)
 	{
-		if (onTileY < 1 - onTileX)
+		if (onTileY < TILE_UNITS - onTileX)
 		{
 			// A
 			right = height[0][0];
 			left  = height[0][1];
 			towardsCenter = onTileX;
-			towardsRight  = 1 - onTileY;
+			towardsRight  = TILE_UNITS - onTileY;
 		}
 		else
 		{
 			// B
 			right = height[0][1];
 			left  = height[1][1];
-			towardsCenter = 1 - onTileY;
-			towardsRight  = 1 - onTileX;
+			towardsCenter = TILE_UNITS - onTileY;
+			towardsRight  = TILE_UNITS - onTileX;
 		}
 	}
 	else
 	{
-		if (onTileX > 1 - onTileY)
+		if (onTileX > TILE_UNITS - onTileY)
 		{
 			// C
 			right = height[1][1];
 			left  = height[1][0];
-			towardsCenter = 1 - onTileX;
+			towardsCenter = TILE_UNITS - onTileX;
 			towardsRight  = onTileY;
 		}
 		else
@@ -1171,17 +1171,17 @@ extern int32_t map_Height(int x, int y)
 			towardsRight  = onTileX;
 		}
 	}
-	ASSERT(towardsCenter <= 0.5, "towardsCenter is too high");
+	ASSERT(towardsCenter <= TILE_UNITS/2, "towardsCenter is too high");
 
 	// now we have:
 	//         center
 	//    left   m    right
 
 	middle = (left + right)/2;
-	onBottom = left * (1 - towardsRight) + right * towardsRight;
+	onBottom = left * (TILE_UNITS - towardsRight) + right * towardsRight;
 	result = onBottom + (center - middle) * towardsCenter * 2;
 
-	return (SDWORD)(result+0.5f);
+	return (result + TILE_UNITS/2) / TILE_UNITS;
 }
 
 /* returns true if object is above ground */
@@ -1194,10 +1194,10 @@ extern BOOL mapObjIsAboveGround( BASE_OBJECT *psObj )
 			tileY = map_coord(psObj->pos.y),
 			tileYOffset1 = (tileY * mapWidth),
 			tileYOffset2 = ((tileY+1) * mapWidth),
-			h1 = psMapTiles[MIN(mapWidth * mapHeight - 1, tileYOffset1 + tileX)    ].height,
-			h2 = psMapTiles[MIN(mapWidth * mapHeight - 1, tileYOffset1 + tileX + 1)].height,
-			h3 = psMapTiles[MIN(mapWidth * mapHeight - 1, tileYOffset2 + tileX)    ].height,
-			h4 = psMapTiles[MIN(mapWidth * mapHeight - 1, tileYOffset2 + tileX + 1)].height;
+			h1 = psMapTiles[MIN(mapWidth * mapHeight - 1, tileYOffset1 + tileX)    ].height / ELEVATION_SCALE,
+			h2 = psMapTiles[MIN(mapWidth * mapHeight - 1, tileYOffset1 + tileX + 1)].height / ELEVATION_SCALE,
+			h3 = psMapTiles[MIN(mapWidth * mapHeight - 1, tileYOffset2 + tileX)    ].height / ELEVATION_SCALE,
+			h4 = psMapTiles[MIN(mapWidth * mapHeight - 1, tileYOffset2 + tileX + 1)].height / ELEVATION_SCALE;
 
 	/* trivial test above */
 	if ( (psObj->pos.z > h1) && (psObj->pos.z > h2) &&

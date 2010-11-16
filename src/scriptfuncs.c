@@ -11210,7 +11210,7 @@ BOOL scrSetTileHeight(void)
 
 	psTile = mapTile(tileX,tileY);
 
-	psTile->height = (UBYTE)newHeight;
+	psTile->height = (UBYTE)newHeight * ELEVATION_SCALE;
 
 	return true;
 }

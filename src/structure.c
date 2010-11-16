@@ -5246,7 +5246,7 @@ SWORD buildFoundation(STRUCTURE *psStruct, UDWORD x, UDWORD y)
 		{
 			if(TileHasStructure(mapTile(startX+width,startY+breadth)))
 			{
-				return((SWORD)map_TileHeight(startX+width,startY+breadth));
+				return map_TileHeight(startX+width, startY+breadth);
 			}
 		}
 	}
