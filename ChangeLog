@@ -2,13 +2,19 @@
  * General:
    * Fix: Prevent memory corruption in the scripting code (ticket:1656, commit:34112c9e2bb5da22eac9e4a5ecb71229b6df07d2)
    * Fix: Don't crash in the unit design screen when using unicode strings (ticket:2209, commit:209e12b665d23cce1cf286435ace08b86250517b)
-   * Fix: Fix zero armour in damage calculation bug (ticket:2273, commit:0f3bfba7345b6739167c66c7e33a57b5257952ee)
+   * Fix: Don't ignore armor (ticket:2273, commit:0f3bfba7345b6739167c66c7e33a57b5257952ee)
    * Fix: Do not activate a radar detector before it has been completely built (ticket:2202, commit:bf058bbf2005cf8b95f1fca3bc704be4739514d9)
    * Fix: Clear a droid's order queue when it gets new orders (commit:5e1a50db8dd1bcd626dd8c74b53f603258e1b158)
+   * Fix: Make rearming pads actually repair units (ticket:2234, ticket:2313, commit:81b29af81b6af95db9f1a094f12c5412b9c54b77)
+   * Fix: Projectiles going through terrain due to bad terrain height calculations, terrain shading (commit:08f9fa58789d20c64ed8eaa0e9076b08d4cf8947)
  * Multiplayer:
    * Fix: Make power generator output in multiplayer not depend on the game difficulty setting (commit:67524762633e2bae0570e8674e3ca34af184d1e9)
+ * NTW mod:
+   * Fix: Graphics (ticket:1748, commit:e0ced0e4fb024e0bf2b6b7de1a826b5bfbfffe9f)
  * Translations:
-   * New: Turkish (ticket:2261, commit:cc728d8f068e45c0ed198ca9553a946156a5a8fa)
+   * New: Turkish (ticket:2261, ticket:2316, commit:cc728d8f068e45c0ed198ca9553a946156a5a8fa, commit:1aad6e751ee657e795bd1a56924153a7a5c1e040)
+   * Updated: Italian (ticket:2199, commit:39a85bb03eda8c50228405beaa6bbd886183f182)
+   * Updated: German (commit:c16bf5807aa54a077878e130ca639c17e8a5154a)
    * Updated: French, Polish, Romanian, Spanish (commit:b2ac76f1706b535476e00cd75f0ebdcb4d16bea0)
 
 2010-09-24: Version 2.3.5
