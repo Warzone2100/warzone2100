@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-11-13 17:29-0500\n"
-"PO-Revision-Date: 2010-10-09 12:54+0100\n"
+"POT-Creation-Date: 2010-11-17 05:43+0100\n"
+"PO-Revision-Date: 2010-11-16 11:19+0100\n"
 "Last-Translator: Saber Nyoki <nsa_server@hotmail.com>\n"
 "Language-Team: Spanish <warzone-dev@gna.org>\n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: es\n"
 "Revised-by: Saberuneko <nsa_server@hotmail.com>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
@@ -9886,9 +9886,8 @@ msgid "NORTHERN SECTOR"
 msgstr "SECTOR NORTE"
 
 #: data/base/sequenceaudio/cam3/c003.txa:5
-#, fuzzy
 msgid "Congratulations your successful evacuation of Beta Base."
-msgstr "Enhorabuena por la evacuación satisfactoria de la Base Beta."
+msgstr "Enhorabuena por la satisfactoria evacuación de la Base Beta."
 
 #: data/base/sequenceaudio/cam3/c003.txa:8
 msgid "Dusk, December 3rd, 2100"
@@ -11042,9 +11041,8 @@ msgid "Requires heavy VTOL factory to produce"
 msgstr "Requiere fábrica pesada ADV para producir"
 
 #: data/mp/messages/resmessagesall.rmsg:239
-#, fuzzy
 msgid "Super Transport Available"
-msgstr "Transporte Cyborg Disponible"
+msgstr "Super Transporte Disponible"
 
 #: data/mp/messages/resmessagesall.rmsg:254
 msgid "Incendiary howitzer emplacement"
@@ -11437,14 +11435,12 @@ msgid "Nexus Corner Wall"
 msgstr "Esquina de Muro NEXUS"
 
 #: data/mp/messages/strings/names.txt:684
-#, fuzzy
 msgid "Super Transport"
-msgstr "Transporte"
+msgstr "Super Transporte"
 
 #: data/mp/messages/strings/names.txt:685
-#, fuzzy
 msgid "Super Transport Body"
-msgstr "Cuerpo de Transporte"
+msgstr "Cuerpo de Super Transporte"
 
 #: data/mp/messages/strings/names.txt:723
 msgid "Plascrete Mk3"
@@ -12330,7 +12326,7 @@ msgstr "Esperando a otros jugadores"
 
 #: src/display3d.c:547
 msgid "Out of sync"
-msgstr ""
+msgstr "Desincronizado"
 
 #: src/display.c:1712
 msgid "Cannot Build. Oil Resource Burning."
@@ -12352,89 +12348,88 @@ msgid "Truck ordered to build Oil Derrick"
 msgstr "Camión enviado a construir Torre Petrolífera"
 
 #: src/display.c:2106
-#, fuzzy
 msgid "2 trucks ordered to build Oil Derrick"
-msgstr "Camión enviado a construir Torre Petrolífera"
+msgstr "2 Camiones enviados a construir Torre Petrolífera"
 
 #: src/display.c:2107
-#, fuzzy, c-format
+#, c-format
 msgid "%d trucks ordered to build Oil Derrick"
-msgstr "Camión enviado a construir Torre Petrolífera"
+msgstr "%d camiones enviados a construir Torre Petrolífera"
 
 #: src/droid.c:208
 msgid "Unit Lost!"
 msgstr "¡Unidad destruída!"
 
-#: src/droid.c:1353
+#: src/droid.c:1350
 msgid "Structure Restored"
 msgstr "Estructura Restaurada"
 
-#: src/droid.c:2989
+#: src/droid.c:2979
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Grupo %u seleccionado - %u Unidad"
 msgstr[1] "Grupo %u seleccionado - %u Unidades"
 
-#: src/droid.c:3002
+#: src/droid.c:2992
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u unidad asignada al Grupo %u"
 msgstr[1] "%u unidades asignadas al Grupo %u"
 
-#: src/droid.c:3015
+#: src/droid.c:3005
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Centrado en el Grupo %u - %u Unidad"
 msgstr[1] "Centrado en el Grupo %u - %u Unidades"
 
-#: src/droid.c:3019
+#: src/droid.c:3009
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Alineando con el Grupo %u - %u Unidad"
 msgstr[1] "Alineando con el Grupo %u - %u Unidades"
 
-#: src/droid.c:3303
+#: src/droid.c:3293
 msgid "Rookie"
 msgstr "Novato"
 
-#: src/droid.c:3304
+#: src/droid.c:3294
 msgctxt "rank"
 msgid "Green"
 msgstr "Principiante"
 
-#: src/droid.c:3305
+#: src/droid.c:3295
 msgid "Trained"
 msgstr "Entrenado"
 
-#: src/droid.c:3306
+#: src/droid.c:3296
 msgid "Regular"
 msgstr "Regular"
 
-#: src/droid.c:3307
+#: src/droid.c:3297
 msgid "Professional"
 msgstr "Profesional"
 
-#: src/droid.c:3308
+#: src/droid.c:3298
 msgid "Veteran"
 msgstr "Veterano"
 
-#: src/droid.c:3309
+#: src/droid.c:3299
 msgid "Elite"
 msgstr "Élite"
 
-#: src/droid.c:3310
+#: src/droid.c:3300
 msgid "Special"
 msgstr "Especial"
 
-#: src/droid.c:3311
+#: src/droid.c:3301
 msgid "Hero"
 msgstr "Héroe"
 
-#: src/droid.c:4329
+#: src/droid.c:4319
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
 msgstr "¡%s quiso darte un %s pero tienes demasiados!"
@@ -12728,13 +12723,11 @@ msgstr "Rotar Pantalla"
 
 #: src/frontend.c:1013
 #: src/frontend.c:1101
-#, fuzzy
 msgid "Middle Mouse"
 msgstr "Botón central"
 
 #: src/frontend.c:1017
 #: src/frontend.c:1096
-#, fuzzy
 msgid "Right Mouse"
 msgstr "Botón derecho"
 
@@ -12811,9 +12804,8 @@ msgstr "¡MAPA GUARDADO!"
 #: src/hci.c:1741
 #: src/loop.c:556
 #: src/loop.c:572
-#, fuzzy
 msgid "GAME SAVED: "
-msgstr "¡PARTIDA GUARDADA!"
+msgstr "PARTIDA GUARDADA:"
 
 #: src/hci.c:2134
 msgid "Failed to create building"
@@ -12835,9 +12827,9 @@ msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "El jugador %u está haciendo trampas (menú depuración) con un nuevo androide: %s."
 
 #: src/hci.c:2198
-#, fuzzy, c-format
+#, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
-msgstr "El jugador %u está haciendo trampas (menú depuración) con un nuevo androide: %s."
+msgstr "El jugador %u está haciendo trampas (menú depuración) con un nuevo androide."
 
 #: src/hci.c:3695
 msgid "Commanders (F6)"
@@ -13002,12 +12994,12 @@ msgstr "¡ATENCIÓN: Eres el anfitrión. Si te vas, el juego acaba para todos!"
 #: src/ingameop.c:194
 #: src/ingameop.c:547
 msgid "Tactical UI (Target Origin Icon): Show"
-msgstr ""
+msgstr "UI Táctica (Icono de origen de objetivo): Mostrar"
 
 #: src/ingameop.c:199
 #: src/ingameop.c:551
 msgid "Tactical UI (Target Origin Icon): Hide"
-msgstr ""
+msgstr "UI Táctica (Icono de origen de objetivo): Ocultar"
 
 #: src/ingameop.c:294
 #: src/ingameop.c:522
@@ -13040,14 +13032,12 @@ msgstr ""
 "Warzone intentará cargar el la partida sin él."
 
 #: src/intdisplay.c:199
-#, fuzzy
 msgid "Build Progress"
-msgstr "Puntos estructurales"
+msgstr "Progreso de fabricación"
 
 #: src/intdisplay.c:234
-#, fuzzy
 msgid "Construction Progress"
-msgstr "Unidad de Construcción"
+msgstr "Progreso de construcción"
 
 #: src/intdisplay.c:269
 msgid "Power Accrued"
@@ -14293,28 +14283,24 @@ msgid "2 players"
 msgstr "2 jugadores"
 
 #: src/multimenu.c:647
-#, fuzzy
 msgid "3 players"
-msgstr "2 jugadores"
+msgstr "3 jugadores"
 
 #: src/multimenu.c:653
 msgid "4 players"
 msgstr "4 jugadores"
 
 #: src/multimenu.c:659
-#, fuzzy
 msgid "5 players"
-msgstr "2 jugadores"
+msgstr "5 jugadores"
 
 #: src/multimenu.c:665
-#, fuzzy
 msgid "6 players"
-msgstr "2 jugadores"
+msgstr "6 jugadores"
 
 #: src/multimenu.c:671
-#, fuzzy
 msgid "7 players"
-msgstr "2 jugadores"
+msgstr "7 jugadores"
 
 #: src/multimenu.c:677
 msgid "8 players"
@@ -14416,7 +14402,7 @@ msgstr "Cian"
 
 #: src/order.c:841
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
-msgstr ""
+msgstr "¡No podemos hacer eso! ¡Debemos ser una unidad cyborg para usar el transporte Cyborg!"
 
 #: src/research.c:1737
 #, c-format
@@ -14591,63 +14577,62 @@ msgstr "¡Imposible localizar ninguna unidad de sensores!"
 msgid "Unable to locate any Commanders!"
 msgstr "¡Imposible localizar ningún Comandante!"
 
-#: src/structure.c:2857
-#, fuzzy
+#: src/structure.c:2856
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Alcanzado Límite de Control de Unidades - Producción Detenida"
 
-#: src/structure.c:6083
-#: src/structure.c:6108
+#: src/structure.c:6082
+#: src/structure.c:6107
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Unidad asignada"
 msgstr[1] "%s - %u Unidades asignadas"
 
-#: src/structure.c:6113
-#: src/structure.c:6181
-#: src/structure.c:6197
-#: src/structure.c:6211
+#: src/structure.c:6112
+#: src/structure.c:6180
+#: src/structure.c:6196
+#: src/structure.c:6210
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Daño %3.0f%%"
 
-#: src/structure.c:6163
+#: src/structure.c:6162
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - Conectado %u de %u"
 
-#: src/structure.c:6327
-#: src/structure.c:6372
+#: src/structure.c:6326
+#: src/structure.c:6371
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Dañado Electrónicamente"
 
-#: src/structure.c:6609
+#: src/structure.c:6608
 msgid "Electronic Reward - Visibility Report"
 msgstr "Recompensa de Electrónica - Informe de Visibilidad"
 
-#: src/structure.c:6649
+#: src/structure.c:6648
 msgid "Factory Reward - Propulsion"
 msgstr "Recompensa de Fábrica - Propulsión"
 
-#: src/structure.c:6673
+#: src/structure.c:6672
 msgid "Factory Reward - Body"
 msgstr "Recompensa de Fábrica - Carrocería"
 
-#: src/structure.c:6697
+#: src/structure.c:6696
 msgid "Factory Reward - Weapon"
 msgstr "Recompensa de Fábrica - Arma"
 
-#: src/structure.c:6706
+#: src/structure.c:6705
 msgid "Factory Reward - Nothing"
 msgstr "Recompensa de Fábrica - Nada"
 
-#: src/structure.c:6734
+#: src/structure.c:6733
 msgid "Repair Facility Award - Repair"
 msgstr "Premio de Instalación de Reparación - Reparación"
 
-#: src/structure.c:6741
+#: src/structure.c:6740
 msgid "Repair Facility Award - Nothing"
 msgstr "Premio de Instalación de Reparación - Nada"
 
@@ -14658,7 +14643,7 @@ msgstr "Lanzar Transporte"
 
 #: src/transporter.c:1462
 msgid "There is not enough room in the Transport!"
-msgstr ""
+msgstr "¡No hay espacio suficiente en el transporte!"
 
 #: src/transporter.c:1720
 msgid "Reinforcements landing"
