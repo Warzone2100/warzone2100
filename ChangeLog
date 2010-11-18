@@ -56,6 +56,7 @@
 2010-10-18: Version pre-3.0-1
  * General:
    * New: Support for 3/5/6/7 player maps (commit:7836d26509e3d4e8ff1cb51c5f56c952e50de593)
+   * Change: Targetting now works by line of sight, prevents shooting through terrain or too early (ticket:2151, commit:80b27a9a48c7411abfdae3698c39cea3e1a54a25)
  * Graphics:
    * New: Backport the new terrain renderer and team color masks for units from trunk/master (commits:lots)
    * Change: Add new terrain textures by Mangust (ticket:2013)
