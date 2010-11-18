@@ -21,7 +21,8 @@
 #ifndef __INCLUDED_WZAPP_C_H__
 #define __INCLUDED_WZAPP_C_H__
 
-// TODO Replace this file during Qt merge.
+// TODO Replace this file during Qt merge:
+// git checkout origin/qt-trunk lib/framework/wzapp_c.h
 #define WZ_THREAD SDL_Thread
 #define WZ_MUTEX SDL_mutex
 #define WZ_SEMAPHORE SDL_sem
@@ -37,7 +38,9 @@
 #define wzYieldCurrentThread() SDL_Delay(10)
 #define wzThreadCreate SDL_CreateThread
 #define wzThreadStart(x)
+#define wzGetTicks() SDL_GetTicks()
 #include <SDL/SDL.h>
 #include <SDL/SDL_thread.h>
+#include <SDL/SDL_timer.h>
 
 #endif
