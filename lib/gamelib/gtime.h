@@ -148,7 +148,7 @@ extern float realTimeFraction;  ///< Private performance calculation. Do not use
 /// Returns the value times deltaGameTime, converted to seconds.
 static inline int32_t gameTimeAdjustedIncrement(int value)
 {
-	return value * deltaGameTime / GAME_TICKS_PER_SEC;
+	return value * (int)deltaGameTime / GAME_TICKS_PER_SEC;
 }
 /// Returns the value times deltaGraphicsTime, converted to seconds.
 static inline float graphicsTimeAdjustedIncrement(float value)
