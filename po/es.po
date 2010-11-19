@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-11-17 05:43+0100\n"
+"POT-Creation-Date: 2010-11-19 23:02+0100\n"
 "PO-Revision-Date: 2010-11-16 11:19+0100\n"
 "Last-Translator: Saber Nyoki <nsa_server@hotmail.com>\n"
 "Language-Team: Spanish <warzone-dev@gna.org>\n"
@@ -12429,9 +12429,14 @@ msgstr "Especial"
 msgid "Hero"
 msgstr "Héroe"
 
-#: src/droid.c:4319
+#: src/droid.c:4328
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
+msgstr "¡%s quiso darte un %s pero tienes demasiados!"
+
+#: src/droid.c:4332
+#, fuzzy, c-format
+msgid "You wanted to give %s a %s but they have too many!"
 msgstr "¡%s quiso darte un %s pero tienes demasiados!"
 
 #: src/frontend.c:98

@@ -2,14 +2,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-11-13 17:29-0500\n"
+"POT-Creation-Date: 2010-11-19 23:02+0100\n"
 "PO-Revision-Date: 2010-09-10 22:16-0300\n"
 "Last-Translator: Artur Filipe <tucalipe@gmail.com>\n"
 "Language-Team: Brazilian Portugese <warzone-dev@gna.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: \n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
@@ -12357,78 +12357,83 @@ msgstr "%d caminhões designados para a construção do Extrator de Petróleo"
 msgid "Unit Lost!"
 msgstr "Unidades Perdidas!"
 
-#: src/droid.c:1353
+#: src/droid.c:1350
 msgid "Structure Restored"
 msgstr "Estrutura Restaurada"
 
-#: src/droid.c:2989
+#: src/droid.c:2979
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Grupo %u selecionado - %u Unidade"
 msgstr[1] "Grupo %u selecionado - %u Unidades"
 
-#: src/droid.c:3002
+#: src/droid.c:2992
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u unidade atribuída ao Grupo %u"
 msgstr[1] "%u unidades atribuídas ao Grupo %u"
 
-#: src/droid.c:3015
+#: src/droid.c:3005
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Centrado no Grupo %u - %u Unidade"
 msgstr[1] "Centrado no Grupo %u - %u Unidades"
 
-#: src/droid.c:3019
+#: src/droid.c:3009
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Alinhamento com o grupo %u - %u Unidade"
 msgstr[1] "Alinhamento com o grupo %u - %u Unidades"
 
-#: src/droid.c:3303
+#: src/droid.c:3293
 msgid "Rookie"
 msgstr "Recruta"
 
-#: src/droid.c:3304
+#: src/droid.c:3294
 msgctxt "rank"
 msgid "Green"
 msgstr "Soldado"
 
-#: src/droid.c:3305
+#: src/droid.c:3295
 msgid "Trained"
 msgstr "Treinado"
 
-#: src/droid.c:3306
+#: src/droid.c:3296
 msgid "Regular"
 msgstr "Regular"
 
-#: src/droid.c:3307
+#: src/droid.c:3297
 msgid "Professional"
 msgstr "Tenente"
 
-#: src/droid.c:3308
+#: src/droid.c:3298
 msgid "Veteran"
 msgstr "Veterano"
 
-#: src/droid.c:3309
+#: src/droid.c:3299
 msgid "Elite"
 msgstr "Elite"
 
-#: src/droid.c:3310
+#: src/droid.c:3300
 msgid "Special"
 msgstr "Força Especial"
 
-#: src/droid.c:3311
+#: src/droid.c:3301
 msgid "Hero"
 msgstr "Herói"
 
-#: src/droid.c:4329
+#: src/droid.c:4328
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
+msgstr ""
+
+#: src/droid.c:4332
+#, c-format
+msgid "You wanted to give %s a %s but they have too many!"
 msgstr ""
 
 #: src/frontend.c:98
@@ -14580,63 +14585,63 @@ msgstr "Impossível localizar Unidades de Sensor!"
 msgid "Unable to locate any Commanders!"
 msgstr "Impossível localizar Comandantes!"
 
-#: src/structure.c:2857
+#: src/structure.c:2856
 #, fuzzy
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Limite de Unidade Alcançado - Produção Interrompida"
 
-#: src/structure.c:6083
-#: src/structure.c:6108
+#: src/structure.c:6082
+#: src/structure.c:6107
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Unidade designada"
 msgstr[1] "%s - %u Unidades designadas"
 
-#: src/structure.c:6113
-#: src/structure.c:6181
-#: src/structure.c:6197
-#: src/structure.c:6211
+#: src/structure.c:6112
+#: src/structure.c:6180
+#: src/structure.c:6196
+#: src/structure.c:6210
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Dano %3.0f%%"
 
-#: src/structure.c:6163
+#: src/structure.c:6162
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - %u de %u conectados"
 
-#: src/structure.c:6327
-#: src/structure.c:6372
+#: src/structure.c:6326
+#: src/structure.c:6371
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Danificado Eletronicamente"
 
-#: src/structure.c:6609
+#: src/structure.c:6608
 msgid "Electronic Reward - Visibility Report"
 msgstr "Prêmio - Relatório de Visibilidade"
 
-#: src/structure.c:6649
+#: src/structure.c:6648
 msgid "Factory Reward - Propulsion"
 msgstr "Prêmio - Propulsão"
 
-#: src/structure.c:6673
+#: src/structure.c:6672
 msgid "Factory Reward - Body"
 msgstr "Prêmio - Chassis"
 
-#: src/structure.c:6697
+#: src/structure.c:6696
 msgid "Factory Reward - Weapon"
 msgstr "Prêmio - Arma"
 
-#: src/structure.c:6706
+#: src/structure.c:6705
 msgid "Factory Reward - Nothing"
 msgstr "Prêmio - Nada"
 
-#: src/structure.c:6734
+#: src/structure.c:6733
 msgid "Repair Facility Award - Repair"
 msgstr "Prêmio - Centro de Reparos"
 
-#: src/structure.c:6741
+#: src/structure.c:6740
 msgid "Repair Facility Award - Nothing"
 msgstr "Prêmio - Nada"
 
