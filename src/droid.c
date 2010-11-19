@@ -4621,19 +4621,41 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
 
 	if (bMultiPlayer)
 	{
+		bool tooMany = false;
+
+		incNumDroids(to);
+		tooMany = tooMany || getNumDroids(to) > getMaxDroids(to);
+		if (psD->droidType == DROID_CYBORG_CONSTRUCT || psD->droidType == DROID_CONSTRUCT)
+		{
+			incNumConstructorDroids(to);
+			tooMany = tooMany || getNumConstructorDroids(to) > MAX_CONSTRUCTOR_DROIDS;
+		}
+		else if (psD->droidType == DROID_COMMAND)
+		{
+			incNumCommandDroids(to);
+			tooMany = tooMany || getNumCommandDroids(to) > MAX_COMMAND_DROIDS;
+		}
+
+		if (tooMany)
+		{
+			if (to == selectedPlayer)
+			{
+				CONPRINTF(ConsoleString, (ConsoleString, _("%s wanted to give you a %s but you have too many!"), getPlayerName(psD->player), psD->aName));
+			}
+			else if(psD->player == selectedPlayer)
+			{
+				CONPRINTF(ConsoleString, (ConsoleString, _("You wanted to give %s a %s but they have too many!"), getPlayerName(to), psD->aName));
+			}
+			return NULL;
+		}
+
 		// reset order
 		orderDroid(psD, DORDER_STOP);
 
+		visRemoveVisibility((BASE_OBJECT *)psD);
+
 		if (droidRemove(psD, apsDroidLists)) 		// remove droid from one list
 		{
-			if (psD->droidType == DROID_CYBORG_CONSTRUCT || psD->droidType == DROID_CONSTRUCT)
-			{
-				if (getNumConstructorDroids(selectedPlayer) > MAX_CONSTRUCTOR_DROIDS)
-				{
-					CONPRINTF(ConsoleString, (ConsoleString, _("%s wanted to give you a %s but you have too many!"), getPlayerName(psD->player), psD->aName));
-					return NULL;
-				}
-			}
 			if (!isHumanPlayer(psD->player))
 			{
 				droidSetName(psD, "Enemy Unit");
