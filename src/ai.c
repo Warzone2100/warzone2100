@@ -627,7 +627,7 @@ SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot
 						psTarget = targetInQuestion;
 					}
 				}
-				else if (psStruct->asWeaps[weapon_slot].nStat > 0)
+				else if (psStruct->asWeaps[0].nStat > 0)
 				{
 					// structure with weapons - go for this
 					psTarget = targetInQuestion;
