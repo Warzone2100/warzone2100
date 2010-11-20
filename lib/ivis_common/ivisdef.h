@@ -90,7 +90,7 @@ typedef struct _iIMDShape {
 	iIMDPoly *polys;
 
 	unsigned int nconnectors;
-	Vector3f *connectors;
+	Vector3i *connectors;
 
 	unsigned int nShadowEdges;
 	EDGE *shadowEdgeList;

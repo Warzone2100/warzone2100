@@ -124,7 +124,7 @@ void pie_MATTRANS(float x, float y, float z)
 	glLoadMatrixf(matrix);
 }
 
-void pie_TRANSLATE(float x, float y, float z)
+void pie_TRANSLATE(int32_t x, int32_t y, int32_t z)
 {
 	/*
 	 * curMatrix = curMatrix . translationMatrix(x, y, z)

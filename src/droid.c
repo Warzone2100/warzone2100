@@ -3047,6 +3047,8 @@ bool calcDroidMuzzleLocation(DROID *psDroid, Vector3i *muzzle, int weapon_slot)
 
 	if (psBodyImd && psBodyImd->nconnectors)
 	{
+		char debugStr[250], debugLen = 0;  // Each "(%d,%d,%d)" uses up to 34 bytes, for very large values. So 250 isn't exaggerating.
+
 		Vector3i barrel = {0, 0, 0};
 		iIMDShape *psWeaponImd = 0, *psMountImd = 0;
 
@@ -3066,6 +3068,7 @@ bool calcDroidMuzzleLocation(DROID *psDroid, Vector3i *muzzle, int weapon_slot)
 		pie_MatRotZ(-psDroid->rot.roll);
 		pie_TRANSLATE(psBodyImd->connectors[weapon_slot].x, -psBodyImd->connectors[weapon_slot].z,
 					 -psBodyImd->connectors[weapon_slot].y);//note y and z flipped
+		debugLen += sprintf(debugStr + debugLen, "connect:body[%d]=(%d,%d,%d)", weapon_slot, psBodyImd->connectors[weapon_slot].x, -psBodyImd->connectors[weapon_slot].z, -psBodyImd->connectors[weapon_slot].y);
 
 		//matrix = the weapon[slot] mount on the body
 		pie_MatRotY(psDroid->asWeaps[weapon_slot].rot.direction);  // +ve anticlockwise
@@ -3074,6 +3077,7 @@ bool calcDroidMuzzleLocation(DROID *psDroid, Vector3i *muzzle, int weapon_slot)
 		if (psMountImd && psMountImd->nconnectors)
 		{
 			pie_TRANSLATE(psMountImd->connectors->x, -psMountImd->connectors->z, -psMountImd->connectors->y);
+			debugLen += sprintf(debugStr + debugLen, ",turret=(%d,%d,%d)", psMountImd->connectors->x, -psMountImd->connectors->z, -psMountImd->connectors->y);
 		}
 
 		//matrix = the turret connector for the gun
@@ -3094,10 +3098,14 @@ bool calcDroidMuzzleLocation(DROID *psDroid, Vector3i *muzzle, int weapon_slot)
 			barrel = Vector3i_Init(psWeaponImd->connectors[connector_num].x,
 									-psWeaponImd->connectors[connector_num].y,
 									-psWeaponImd->connectors[connector_num].z);
+			debugLen += sprintf(debugStr + debugLen, ",barrel[%u]=(%d,%d,%d)", connector_num, psWeaponImd->connectors[connector_num].x, -psWeaponImd->connectors[connector_num].y, -psWeaponImd->connectors[connector_num].z);
 		}
 
 		pie_RotateTranslate3i(&barrel, muzzle);
 		muzzle->z = -muzzle->z;
+		debugLen += sprintf(debugStr + debugLen, ",muzzle=(%d,%d,%d)", muzzle->x, muzzle->y, muzzle->z);
+
+		syncDebug("%s", debugStr);
 
 		pie_MatEnd();
 	}

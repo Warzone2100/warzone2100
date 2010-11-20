@@ -475,9 +475,9 @@ static BOOL _imd_load_connectors(const char **ppFileData, iIMDShape *s)
 {
 	const char *pFileData = *ppFileData;
 	int cnt;
-	Vector3f *p = NULL, newVector = {0.0f, 0.0f, 0.0f};
+	Vector3i *p = NULL, newVector = {0, 0, 0};
 
-	s->connectors = (Vector3f*)malloc(sizeof(Vector3f) * s->nconnectors);
+	s->connectors = (Vector3i *)malloc(sizeof(Vector3i) * s->nconnectors);
 	if (s->connectors == NULL)
 	{
 		debug(LOG_ERROR, "(_load_connectors) MALLOC fail");
@@ -486,7 +486,7 @@ static BOOL _imd_load_connectors(const char **ppFileData, iIMDShape *s)
 
 	for (p = s->connectors; p < s->connectors + s->nconnectors; p++)
 	{
-		if (sscanf(pFileData, "%f %f %f%n", &newVector.x, &newVector.y, &newVector.z, &cnt) != 3)
+		if (sscanf(pFileData, "%d %d %d%n", &newVector.x, &newVector.y, &newVector.z, &cnt) != 3)
 		{
 			debug(LOG_ERROR, "(_load_connectors) file corrupt -M");
 			return false;
