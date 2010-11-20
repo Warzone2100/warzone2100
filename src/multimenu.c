@@ -602,11 +602,11 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 	if(mode == MULTIOP_MAP)
 	{
 		memset(&sButInit, 0, sizeof(W_BUTINIT));
-		sButInit.formID		= M_REQUEST;
+		sButInit.formID		= M_REQUEST_TAB;
 		sButInit.id		= M_REQUEST_C1;
 		sButInit.style		= WBUT_PLAIN;
-		sButInit.x		= 4;
-		sButInit.y		= 258;
+		sButInit.x		= 1;
+		sButInit.y		= 252;
 		sButInit.width		= 17;
 		sButInit.height		= 17;
 		sButInit.UserData	= 1;
