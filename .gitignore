@@ -215,3 +215,6 @@ data/*.dll
 data/config/*
 data/etc/*
 devpkg/*
+
+# profiler stuff
+win32/CodeAnalyst
