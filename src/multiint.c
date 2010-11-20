@@ -3348,11 +3348,6 @@ BOOL startMultiOptions(BOOL bReenter)
 			game.skDiff[i] = (DIFF_SLIDER_STOPS / 2);	// reset AI (turn it on again)
 			setPlayerColour(i,i);						//reset all colors as well
 		}
-		// Now switch player color of the host to what they normally use
-		if (getPlayerColour(NET_HOST_ONLY) != war_GetSPcolor())
-		{
-			changeColour(NET_HOST_ONLY, war_GetSPcolor());
-		}
 
 		if(!NetPlay.bComms)			// force skirmish if no comms.
 		{
