@@ -1497,7 +1497,7 @@ static void addColourChooser(UDWORD player)
 					23,													  //y
 					iV_GetImageWidth(FrontImages,IMAGE_WEE_GUY)+7,		  //w
 					iV_GetImageHeight(FrontImages,IMAGE_WEE_GUY),		  //h
-					_("Player number"), IMAGE_WEE_GUY, IMAGE_WEE_GUY, 10 + i);
+					_("Player position"), IMAGE_WEE_GUY, IMAGE_WEE_GUY, 10 + i);
 	}
 
 	if (!NetPlay.isHost)
