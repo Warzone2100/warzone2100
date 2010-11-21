@@ -2540,7 +2540,7 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD pl
 	psDroid->lastEmission = 0;
 	psDroid->bTargetted = false;
 	psDroid->timeLastHit = UDWORD_MAX;
-	psDroid->lastHitWeapon = UDWORD_MAX;	// no such weapon
+	psDroid->lastHitWeapon = WSC_NUM_WEAPON_SUBCLASSES;  // no such weapon
 
 	// it was never drawn before
 	psDroid->sDisplay.frameNumber = 0;

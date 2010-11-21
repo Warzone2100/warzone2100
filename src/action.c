@@ -891,7 +891,7 @@ void actionUpdateDroid(DROID *psDroid)
 			psDroid->actionStarted += (gameTime - psDroid->timeLastHit);
 			//reset the lastHit parameters
 			psDroid->timeLastHit = 0;
-			psDroid->lastHitWeapon = UDWORD_MAX;
+			psDroid->lastHitWeapon = WSC_NUM_WEAPON_SUBCLASSES;
 		}
 		else
 		{

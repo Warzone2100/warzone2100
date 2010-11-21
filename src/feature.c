@@ -324,6 +324,7 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 	objEcmCache((BASE_OBJECT *)psFeature, NULL);
 	psFeature->bTargetted = false;
 	psFeature->timeLastHit = 0;
+	psFeature->lastHitWeapon = WSC_NUM_WEAPON_SUBCLASSES;  // no such weapon
 
 	// it has never been drawn
 	psFeature->sDisplay.frameNumber = 0;

@@ -1745,7 +1745,7 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 
 		psBuilding->lastEmission = 0;
 		psBuilding->timeLastHit = 0;
-		psBuilding->lastHitWeapon = UDWORD_MAX;	// no such weapon
+		psBuilding->lastHitWeapon = WSC_NUM_WEAPON_SUBCLASSES;  // no such weapon
 
 		psBuilding->inFire = 0;
 		psBuilding->burnStart = 0;
