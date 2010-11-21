@@ -167,15 +167,14 @@ Vector2i getPlayerStartPosition(int player)
 BOOL scrSafeDest(void)
 {
 	SDWORD	x, y, player;
-	MAPTILE *psTile;
 
 	if (!stackPopParams(3, VAL_INT, &player, VAL_INT, &x, VAL_INT, &y))
 	{
 		return false;
 	}
 	ASSERT_OR_RETURN(false, player < NetPlay.maxPlayers, "Out of bounds player index");
-	psTile = worldTile(x, y);
-	scrFunctionResult.v.bval = !(psTile->dangerBits & (1 << player));
+	ASSERT_OR_RETURN(false, worldOnMap(x, y), "Out of bounds coordinates(%d, %d)", x, y);
+	scrFunctionResult.v.bval = !(auxTile(map_coord(x), map_coord(y), player) & AUXBITS_DANGER);
 	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return false;
@@ -186,15 +185,14 @@ BOOL scrSafeDest(void)
 BOOL scrThreatAt(void)
 {
 	SDWORD	x, y, player;
-	MAPTILE *psTile;
 
 	if (!stackPopParams(3, VAL_INT, &player, VAL_INT, &x, VAL_INT, &y))
 	{
 		return false;
 	}
 	ASSERT_OR_RETURN(false, player < NetPlay.maxPlayers, "Out of bounds player index");
-	psTile = worldTile(x, y);
-	scrFunctionResult.v.bval = psTile->threatBits & (1 << player);
+	ASSERT_OR_RETURN(false, worldOnMap(x, y), "Out of bounds coordinates(%d, %d)", x, y);
+	scrFunctionResult.v.bval = auxTile(map_coord(x), map_coord(y), player) & AUXBITS_THREAT;
 	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		return false;

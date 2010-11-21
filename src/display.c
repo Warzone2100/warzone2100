@@ -2228,12 +2228,13 @@ void	dealWithLMB( void )
 		if (getDebugMappingStatus() && tileOnMap(mouseTileX, mouseTileY))
 		{
 			MAPTILE *psTile = mapTile(mouseTileX, mouseTileY);
+			uint8_t aux = auxTile(mouseTileX, mouseTileY, selectedPlayer);
 
 			CONPRINTF(ConsoleString, (ConsoleString, "%s tile %d, %d [%d, %d] continent(l%d, h%d) level %g illum %d %s %s",
 			          tileIsExplored(psTile) ? "Explored" : "Unexplored",
 			          mouseTileX, mouseTileY, world_coord(mouseTileX), world_coord(mouseTileY),
 			          (int)psTile->limitedContinent, (int)psTile->hoverContinent, psTile->level, (int)psTile->illumination, 
-			          psTile->dangerBits & (1 << selectedPlayer) ? "danger" : "", psTile->threatBits & (1 << selectedPlayer) ? "threat" : ""));
+			          aux & AUXBITS_DANGER ? "danger" : "", aux & AUXBITS_THREAT ? "threat" : ""));
 		}
 
 		driveDisableTactical();

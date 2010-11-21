@@ -556,7 +556,7 @@ void fpathSetBlockingMap(PATHJOB *psJob)
 			for (int y = 0; y < mapHeight; ++y)
 				for (int x = 0; x < mapWidth; ++x)
 			{
-				dangerMap[x + y*mapWidth] = mapTile(x, y)->threatBits & (1 << type.owner);
+				dangerMap[x + y*mapWidth] = auxTile(x, y, type.owner) & AUXBITS_THREAT;
 			}
 		}
 	}

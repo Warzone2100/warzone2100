@@ -1841,9 +1841,7 @@ static BOOL defenseLocation(BOOL variantB)
 	psChosenGate = NULL;
 	for (psGate = gwGetGateways(); psGate; psGate = psGate->psNext)
 	{
-		MAPTILE *psTile = mapTile(psGate->x1, psGate->y1);
-
-		if (psTile->threatBits & (1 << player))
+		if (auxTile(psGate->x1, psGate->y1, player) & AUXBITS_THREAT)
 		{
 			continue;	// enemy can shoot there, not safe to build
 		}

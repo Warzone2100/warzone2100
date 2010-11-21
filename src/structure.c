@@ -201,6 +201,41 @@ Check to see if the stats is some kind of expansion module
 ... the module stuff seemed to work though ...     TJC (& AB) 8-DEC-98
 */
 
+static void auxStructureNonblocking(STRUCTURE *psStructure)
+{
+	int i, j;
+	int sWidth = getStructureWidth(psStructure);
+	int sBreadth = getStructureBreadth(psStructure);
+	int mapX = map_coord(psStructure->pos.x - sWidth * TILE_UNITS / 2);
+	int mapY = map_coord(psStructure->pos.y - sBreadth * TILE_UNITS / 2);
+
+	for (i = 0; i < sWidth; i++)
+	{
+		for (j = 0; j < sBreadth; j++)
+		{
+			auxClearAll(mapX + i, mapY + j, AUXBITS_ANY_BUILDING | AUXBITS_OUR_BUILDING);
+		}
+	}
+}
+
+static void auxStructureBlocking(STRUCTURE *psStructure)
+{
+	int i, j;
+	int sWidth = getStructureWidth(psStructure);
+	int sBreadth = getStructureBreadth(psStructure);
+	int mapX = map_coord(psStructure->pos.x - sWidth * TILE_UNITS / 2);
+	int mapY = map_coord(psStructure->pos.y - sBreadth * TILE_UNITS / 2);
+
+	for (i = 0; i < sWidth; i++)
+	{
+		for (j = 0; j < sBreadth; j++)
+		{
+			auxSetAllied(mapX + i, mapY + j, psStructure->player, AUXBITS_OUR_BUILDING);
+			auxSetAll(mapX + i, mapY + j, AUXBITS_ANY_BUILDING);
+		}
+	}
+}
+
 BOOL IsStatExpansionModule(STRUCTURE_STATS *psStats)
 {
 	// If the stat is any of the 3 expansion types ... then return true
@@ -1722,13 +1757,14 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 				// if it's a tall structure then flag it in the map.
 				if (psBuilding->sDisplay.imd->max.y > TALLOBJECT_YMAX)
 				{
-					psTile->blockingBits |= AIR_BLOCKED;
-				}
-				if (pStructureType->type != REF_REARM_PAD && pStructureType->type != REF_GATE)
-				{
-					psTile->buildingBits |= (1 << psBuilding->player);
+					auxSetBlocking(mapX + width, mapY + breadth, AIR_BLOCKED);
 				}
 			}
+		}
+
+		if (pStructureType->type != REF_REARM_PAD && pStructureType->type != REF_GATE)
+		{
+			auxStructureBlocking(psBuilding);
 		}
 
 		//set up the rest of the data
@@ -3292,7 +3328,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 		case REF_REARM_PAD:
 		{
 			REARM_PAD	*psReArmPad = &psStructure->pFunctionality->rearmPad;
-			MAPTILE		*psTile = mapTile(map_coord(psStructure->pos.x), map_coord(psStructure->pos.y));
 
 			psChosenObj = psReArmPad->psObj;
 			structureMode = REF_REARM_PAD;
@@ -3358,11 +3393,11 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 					psReArmPad->timeStarted = ACTION_START_TIME;
 					psReArmPad->timeLastUpdated = 0;
 				}
-				psTile->buildingBits |= (1 << psStructure->player); // no longer passable
+				auxStructureBlocking(psStructure);
 			}
 			else
 			{
-				psTile->buildingBits &= ~(1 << psStructure->player); // open for passage
+				auxStructureNonblocking(psStructure);
 			}
 			break;
 		}
@@ -3796,7 +3831,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 					psDroid->action = DACTION_NONE;
 					bFinishAction = true;
 					psReArmPad->psObj = NULL;
-					mapTile(map_coord(psStructure->pos.x), map_coord(psStructure->pos.y))->buildingBits &= ~(1 << psStructure->player);
+					auxClearAll(map_coord(psStructure->pos.x), map_coord(psStructure->pos.y), AUXBITS_ANY_BUILDING | AUXBITS_OUR_BUILDING);
 				}
 			}
 		}
@@ -3890,17 +3925,15 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 
 			if (!found)	// no droids on our tile, safe to close
 			{
-				MAPTILE *psTile = mapTile(map_coord(psBuilding->pos.x), map_coord(psBuilding->pos.y));
 				psBuilding->state = SAS_CLOSING;
-				psTile->buildingBits |= (1 << psBuilding->player); // closed
+				auxStructureBlocking(psBuilding); // closed
 				psBuilding->lastStateTime = gameTime;	// reset timer
 			}
 		}
 		else if (psBuilding->state == SAS_OPENING && psBuilding->lastStateTime + SAS_OPEN_SPEED < gameTime)
 		{
-			MAPTILE *psTile = mapTile(map_coord(psBuilding->pos.x), map_coord(psBuilding->pos.y));
 			psBuilding->state = SAS_OPEN;
-			psTile->buildingBits &= ~(1 << psBuilding->player); // opened
+			auxStructureNonblocking(psBuilding); // opened
 			psBuilding->lastStateTime = gameTime;	// reset timer
 		}
 		else if (psBuilding->state == SAS_CLOSING && psBuilding->lastStateTime + SAS_OPEN_SPEED < gameTime)
@@ -4897,6 +4930,8 @@ static void removeStructFromMap(STRUCTURE *psStruct)
 	unsigned sWidth   = getStructureWidth(psStruct);
 	unsigned sBreadth = getStructureBreadth(psStruct);
 
+	auxStructureNonblocking(psStruct);
+
 	/* set tiles drawing */
 	mapX = map_coord(psStruct->pos.x - sWidth * TILE_UNITS / 2);
 	mapY = map_coord(psStruct->pos.y - sBreadth * TILE_UNITS / 2);
@@ -4906,8 +4941,7 @@ static void removeStructFromMap(STRUCTURE *psStruct)
 		{
 			psTile = mapTile(mapX+i, mapY+j);
 			psTile->psObject = NULL;
-			psTile->buildingBits = 0;
-			psTile->blockingBits &= ~AIR_BLOCKED;
+			auxSetBlocking(mapX + i, mapY + j, AIR_BLOCKED);
 		}
 	}
 }
@@ -6131,7 +6165,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		if (getDebugMappingStatus())
 		{
 			CONPRINTF(ConsoleString,(ConsoleString, "%s - Unique ID %d - %s",
-					  getStatName(psStructure->pStructureType), psStructure->id, (mapTile(map_coord(psStructure->pos.x), map_coord(psStructure->pos.y))->dangerBits & (1 << selectedPlayer)) ? "danger" : "safe"));
+			          getStatName(psStructure->pStructureType), psStructure->id, (auxTile(map_coord(psStructure->pos.x), map_coord(psStructure->pos.y), selectedPlayer) & AUXBITS_DANGER) ? "danger" : "safe"));
 		}
 		else
 #endif

@@ -410,12 +410,12 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 				// if it's a tall feature then flag it in the map.
 				if (psFeature->sDisplay.imd->max.y > TALLOBJECT_YMAX)
 				{
-					psTile->blockingBits |= AIR_BLOCKED;
+					auxSetBlocking(mapX + width, mapY + breadth, AIR_BLOCKED);
 				}
 
 				if (psStats->subType != FEAT_GEN_ARTE && psStats->subType != FEAT_OIL_DRUM && psStats->subType != FEAT_BUILD_WRECK)
 				{
-					psTile->blockingBits |= FEATURE_BLOCKED;
+					auxSetBlocking(mapX + width, mapY + breadth, FEATURE_BLOCKED);
 				}
 			}
 
@@ -502,7 +502,7 @@ bool removeFeature(FEATURE *psDel)
 				if (psTile->psObject == (BASE_OBJECT *)psDel)
 				{
 					psTile->psObject = NULL;
-					psTile->blockingBits &= ~FEATURE_BLOCKED;
+					auxClearBlocking(mapX + width, mapY + breadth, FEATURE_BLOCKED | AIR_BLOCKED);
 				}
 			}
 		}
