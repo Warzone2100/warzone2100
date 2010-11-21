@@ -201,6 +201,7 @@ macosx/configs/codeident
 *.diff
 *.dep
 *.user
+# MSVC specific again
 data/*.dll
 data/config/*
 data/etc/*
