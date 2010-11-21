@@ -486,7 +486,8 @@ static BOOL _imd_load_connectors(const char **ppFileData, iIMDShape *s)
 
 	for (p = s->connectors; p < s->connectors + s->nconnectors; p++)
 	{
-		if (sscanf(pFileData, "%d %d %d%n", &newVector.x, &newVector.y, &newVector.z, &cnt) != 3)
+		if (sscanf(pFileData, "%d %d %d%n",                         &newVector.x, &newVector.y, &newVector.z, &cnt) != 3 &&
+		    sscanf(pFileData, "%d%*[.0-9] %d%*[.0-9] %d%*[.0-9]%n", &newVector.x, &newVector.y, &newVector.z, &cnt) != 3)
 		{
 			debug(LOG_ERROR, "(_load_connectors) file corrupt -M");
 			return false;
