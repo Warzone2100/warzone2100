@@ -204,6 +204,7 @@ macosx/configs/codeident
 data/*.dll
 data/config/*
 data/etc/*
+data/fonts/
 devpkg/*
 
 # profiler stuff
