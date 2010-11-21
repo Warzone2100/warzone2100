@@ -1716,6 +1716,11 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 			}
 		}
 
+		if (pStructureType->type != REF_REARM_PAD && pStructureType->type != REF_GATE)
+		{
+			auxStructureBlocking(psBuilding);
+		}
+
 		for (width = 0; width < sWidth; width++)
 		{
 			for (breadth = 0; breadth < sBreadth; breadth++)

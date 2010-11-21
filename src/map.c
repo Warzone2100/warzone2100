@@ -1627,8 +1627,10 @@ bool fireOnLocation(unsigned int x, unsigned int y)
 	return psTile != NULL && TileIsBurning(psTile);
 }
 
-static void dangerFloodFill(int player)
+// This function runs in a separate thread!
+static int dangerFloodFill(WZ_DECL_UNUSED void *data)
 {
+	int player = lastDangerPlayer;
 	int i;
 	Vector2i pos = getPlayerStartPosition(player);
 	Vector2i npos;
@@ -1690,6 +1692,7 @@ static void dangerFloodFill(int player)
 			pos.y = floodbucket[bucketcounter].y;
 		}
 	} while (bucketcounter);
+	return 0;
 }
 
 // This function runs in a separate thread!
