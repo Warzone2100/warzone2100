@@ -208,5 +208,5 @@ data/etc/*
 data/fonts/
 devpkg/*
 
-# profiler stuff
+# profiler stuff AMD / MSVC specific
 win32/CodeAnalyst
