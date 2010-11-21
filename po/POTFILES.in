@@ -162,6 +162,7 @@ lib/framework/debug.c
 lib/framework/frame.c
 lib/framework/frameresource.c
 lib/framework/i18n.c
+lib/framework/input.c
 lib/framework/lexer_input.c
 lib/framework/SDL_framerate.c
 lib/framework/stdio_ext.c
@@ -170,7 +171,6 @@ lib/framework/tagfile.c
 lib/framework/treap.c
 lib/framework/trig.c
 lib/framework/utf.c
-lib/framework/wzapp.cpp
 lib/gamelib/anim.c
 lib/gamelib/animobj.c
 lib/gamelib/gtime.c
@@ -223,6 +223,7 @@ lib/widget/button.c
 lib/widget/editbox.c
 lib/widget/form.c
 lib/widget/label.c
+lib/widget/scrap.c
 lib/widget/slider.c
 lib/widget/tip.c
 lib/widget/widget.c
@@ -244,7 +245,7 @@ src/cmddroid.c
 src/combat.c
 src/component.c
 src/configuration.c
-src/console.cpp
+src/console.c
 src/data.c
 src/design.c
 src/difficulty.c
@@ -278,7 +279,7 @@ src/levels.c
 src/lighting.c
 src/loadsave.c
 src/loop.c
-src/main.cpp
+src/main.c
 src/map.c
 src/mapdisplay.c
 src/mapgrid.cpp

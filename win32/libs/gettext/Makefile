@@ -1,12 +1,12 @@
 PKG_NAME:=gettext
-PKG_VERSION:=0.18.1
+PKG_VERSION:=0.18.1.1
 
 PKG_SOURCEBASE=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_SOURCEBASE).tar.gz
 PKG_SOURCE_URL:= \
 	http://ftp.gnu.org/pub/gnu/gettext/ \
 	http://www.il.fontys.nl/~giel/warzone/devpkg/
-PKG_MD5SUM:=2ae04f960d5fa03774636ddef19ebdbf
+PKG_MD5SUM:=3dd55b952826d2b32f51308f2f91aa89
 
 TARGET:=$(TOPDIR)/build/libs/lib/libintl.la
 SHELL:=$(shell which bash)

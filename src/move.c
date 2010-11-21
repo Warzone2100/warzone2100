@@ -885,7 +885,7 @@ static void moveCalcBlockingSlide(DROID *psDroid, int32_t *pmx, int32_t *pmy, ui
 {
 	PROPULSION_TYPE	propulsion = getPropulsionStats(psDroid)->propulsionType;
 	SDWORD	horizX,horizY, vertX,vertY;
-	int16_t slideDir;
+	uint16_t slideDir;
 	MAPTILE	*psTile = NULL;
 	// calculate the new coords and see if they are on a different tile
 	const int32_t mx = *pmx >> EXTRA_BITS;
@@ -926,7 +926,7 @@ static void moveCalcBlockingSlide(DROID *psDroid, int32_t *pmx, int32_t *pmy, ui
 	}
 
 	// is the new tile blocking?
-	if (!fpathBlockingTile(ntx, nty, propulsion))
+	if (!fpathBaseBlockingTile(ntx, nty, propulsion, psDroid->player, FMT_MOVE))
 	{
 		// not blocking, don't change the move vector
 		return;
@@ -1920,8 +1920,6 @@ static void moveUpdateVtolModel(DROID *psDroid, SDWORD speed, uint16_t direction
 		return;
 	}
 
-	// Used to update some kind of weird neighbour list here.
-
 	moveCheckFinalWaypoint( psDroid, &speed );
 
 	if ( psDroid->droidType == DROID_TRANSPORTER )
@@ -2341,8 +2339,7 @@ static void checkLocalFeatures(DROID *psDroid)
 	static uint8_t drumCount = 0;
 
 	// NOTE: Why not do this for AI units also?
-	// only do for players droids.
-	if (psDroid->player != selectedPlayer || isVtolDroid(psDroid))  // VTOLs can't pick up features!
+	if (!isHumanPlayer(psDroid->player) || isVtolDroid(psDroid))  // VTOLs can't pick up features!
 	{
 		return;
 	}
@@ -2358,10 +2355,18 @@ static void checkLocalFeatures(DROID *psDroid)
 			continue;
 		}
 
-		if(bMultiPlayer && (psObj->player == ANYPLAYER))
+		addPower(psDroid->player, OILDRUM_POWER);  // give power
+		turnOffMultiMsg(true);
+		removeFeature((FEATURE *)psObj);  // remove artifact+.
+		turnOffMultiMsg(false);
+		if (psDroid->player == selectedPlayer)
 		{
-			giftPower(ANYPLAYER, selectedPlayer, OILDRUM_POWER, true);  // give power
-			CONPRINTF(ConsoleString,(ConsoleString,_("You found %u power in an oil drum."),OILDRUM_POWER));
+			CONPRINTF(ConsoleString, (ConsoleString, _("You found %u power in an oil drum."), OILDRUM_POWER));
+		}
+
+		// TODO This code is weird. When should new oil drums actually be added?
+		if (bMultiPlayer && psObj->player == ANYPLAYER && psDroid->player == selectedPlayer)
+		{
 			// when player finds oil, we init the timer, and flag that we need a drum
 			if (!oilTimer)
 			{
@@ -2374,12 +2379,6 @@ static void checkLocalFeatures(DROID *psDroid)
 				oilTimer += GAME_TICKS_PER_SEC * 50;
 			}
 		}
-		else
-		{
-			addPower(selectedPlayer,OILDRUM_POWER);
-			CONPRINTF(ConsoleString,(ConsoleString,_("You found %u power in an oil drum."),OILDRUM_POWER));
-		}
-		removeFeature((FEATURE*)psObj);							// remove artifact+ send multiplay info.
 	}
 
 	// once they found a oil drum, we then wait ~600 secs before we pop up new one(s).

@@ -180,6 +180,7 @@ tools/qwzm/ui_qwzm.h
 .DS_Store
 *.pbxuser
 *.perspectivev3
+macosx/configs/codeident
 
 # build folders
 /macosx/build/
@@ -214,3 +215,6 @@ data/*.dll
 data/config/*
 data/etc/*
 devpkg/*
+
+# profiler stuff
+win32/CodeAnalyst

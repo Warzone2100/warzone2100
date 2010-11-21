@@ -81,7 +81,7 @@ typedef struct _tilePos
 	UBYTE               inFire;                     /**< true if the object is in a fire */ \
 	UWORD               numWatchedTiles;		/**< Number of watched tiles, zero for features */ \
 	UDWORD              lastEmission;               /**< When did it last puff out smoke? */ \
-	UDWORD              lastHitWeapon;		/**< The weapon that last hit it */ \
+	WEAPON_SUBCLASS     lastHitWeapon;              /**< The weapon that last hit it */ \
 	UDWORD              timeLastHit;		/**< The time the structure was last attacked */ \
 	UDWORD              body;			/**< Hit points with lame name */ \
 	UDWORD              burnStart;                  /**< When the object entered the fire */ \

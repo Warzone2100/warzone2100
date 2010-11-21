@@ -220,37 +220,6 @@ static void queue(const Q &q, int64_t &v)
 }
 
 template<class Q>
-void queue(const Q &q, float &v)
-{
-	/*
-	 * NB: Not portable.
-	 * This routine only works on machines with IEEE754 floating point numbers.
-	 */
-
-	#if !defined(__STDC_IEC_559__) \
-	 && !defined(__m68k__) && !defined(__sparc__) && !defined(__i386__) \
-	 && !defined(__mips__) && !defined(__ns32k__) && !defined(__alpha__) \
-	 && !defined(__arm__) && !defined(__ppc__) && !defined(__ia64__) \
-	 && !defined(__arm26__) && !defined(__sparc64__) && !defined(__amd64__) \
-	 && !defined(WZ_CC_MSVC) // Assume that all platforms supported by
-	                         // MSVC provide IEEE754 floating point numbers
-	# error "this platform hasn't been confirmed to support IEEE754 floating point numbers"
-	#endif
-
-	// IEEE754 floating point numbers can be treated the same as 32-bit integers
-	// with regards to endian conversion
-	uint32_t b;
-	std::memcpy(&b, &v, sizeof(b));
-	queue(q, b);
-	if (Q::Direction == Q::Read)
-	{
-		std::memcpy(&v, &b, sizeof(b));
-	}
-
-	STATIC_ASSERT(sizeof(b) == sizeof(v));
-}
-
-template<class Q>
 static void queue(const Q &q, Position &v)
 {
 	queue(q, v.x);
@@ -630,11 +599,6 @@ void NETuint64_t(uint64_t *ip)
 	queueAuto(*ip);
 }
 
-void NETfloat(float *fp)
-{
-	queueAuto(*fp);
-}
-
 void NETbool(BOOL *bp)
 {
 	uint8_t i = !!*bp;
@@ -732,8 +696,6 @@ void NETPACKAGED_CHECK(PACKAGED_CHECK *v)
 	queueAuto(v->experience);
 	queueAuto(v->pos);
 	queueAuto(v->rot);
-	queueAuto(v->sMoveX);
-	queueAuto(v->sMoveY);
 	if (v->order == DORDER_ATTACK)
 	{
 		queueAuto(v->targetID);

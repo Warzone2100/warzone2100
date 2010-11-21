@@ -92,13 +92,13 @@ typedef enum _focus_state
 } FOCUS_STATE;
 
 #if defined(WZ_OS_WIN)
-# define WZ_WRITEDIR "Warzone 2100 Trunk"
+# define WZ_WRITEDIR "Warzone 2100 master"
 #elif defined(WZ_OS_MAC)
 # include <CoreServices/CoreServices.h>
 # include <unistd.h>
-# define WZ_WRITEDIR "Warzone 2100 Trunk"
+# define WZ_WRITEDIR "Warzone 2100 master"
 #else
-# define WZ_WRITEDIR ".warzone2100-trunk"
+# define WZ_WRITEDIR ".warzone2100-master"
 #endif
 
 #ifdef __cplusplus

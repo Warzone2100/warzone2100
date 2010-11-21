@@ -1,5 +1,6 @@
-# Mac clutter
 syntax: glob
+
+# Mac clutter
 .DS_Store
 Icon?
 ._*
@@ -7,6 +8,7 @@ Icon?
 macosx/build/*
 macosx/external/*
 macosx/prebuilt/*
+macosx/configs/codeident
 
 *.pbxuser
 *.perspectivev3

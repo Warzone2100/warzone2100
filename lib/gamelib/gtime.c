@@ -35,7 +35,6 @@
 
 /* See header file for documentation */
 UDWORD gameTime = 0, deltaGameTime = 0, graphicsTime = 0, deltaGraphicsTime = 0, realTime = 0, deltaRealTime = 0;
-int32_t gameTimeFraction = 0;
 float graphicsTimeFraction = 0.0, realTimeFraction = 0.0;
 
 /** The current clock modifier. Set to speed up the game. */
@@ -104,7 +103,6 @@ extern void setGameTime(uint32_t newGameTime)
 	gameTime = newGameTime;
 	setPlayerGameTime(NET_ALL_PLAYERS, newGameTime);
 	deltaGameTime = 0;
-	gameTimeFraction = 0;
 
 	// Setting graphics time to game time.
 	graphicsTime = gameTime;
@@ -230,10 +228,14 @@ void gameTimeUpdate()
 	}
 
 	// Pre-calculate fraction used in timeAdjustedIncrement
-	gameTimeFraction = deltaGameTime;
 	graphicsTimeFraction = (float)deltaGraphicsTime / (float)GAME_TICKS_PER_SEC;
 
 	ASSERT(graphicsTime <= gameTime, "Trying to see the future.");
+}
+
+void gameTimeUpdateEnd()
+{
+	deltaGameTime = 0;
 }
 
 void realTimeUpdate(void)

@@ -1841,6 +1841,12 @@ static BOOL defenseLocation(BOOL variantB)
 	psChosenGate = NULL;
 	for (psGate = gwGetGateways(); psGate; psGate = psGate->psNext)
 	{
+		MAPTILE *psTile = mapTile(psGate->x1, psGate->y1);
+
+		if (psTile->threatBits & (1 << player))
+		{
+			continue;	// enemy can shoot there, not safe to build
+		}
 		count = 0;
 		noWater = true;
 		// does it have >1 tile unoccupied.

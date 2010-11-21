@@ -100,12 +100,12 @@ int pie_AddTexPage(iV_Image *s, const char* filename, int slot, int maxTextureSi
 	bmp = s->bmp;
 	if ((width & (width-1)) == 0 && (height & (height-1)) == 0)
 	{
-		if (maxTextureSize && width > maxTextureSize)
+		if (maxTextureSize > 0 && width > maxTextureSize)
 		{
 			width = maxTextureSize;
 			scaleDown = true;
 		}
-		if (maxTextureSize && height > maxTextureSize)
+		if (maxTextureSize > 0 && height > maxTextureSize)
 		{
 			height = maxTextureSize;
 			scaleDown = true;
@@ -186,11 +186,16 @@ void pie_InitSkybox(SDWORD pageNum)
  */
 void pie_MakeTexPageName(char * filename)
 {
-	if (strncmp(filename, "page-", 5) == 0)
+	char *c = strstr(filename, iV_TEXNAME_TCSUFFIX);
+	if (c)
 	{
-		int i;
-		for( i = 5; i < iV_TEXNAME_MAX-1 && isdigit(filename[i]); i++);
-		filename[i] = '\0';
+		*(c + 7) = '\0';
+		return;
+	}
+	c = strchr(filename + 5, '-');
+	if (c)
+	{
+		*c = '\0';
 	}
 }
 
@@ -237,22 +242,31 @@ static void pie_PrintLoadedTextures(void)
 int iV_GetTexture(const char *filename)
 {
 	unsigned int i = 0;
+	iV_Image sSprite;
+	char path[PATH_MAX];
 
 	/* Have we already loaded this one then? */
-	for ( i = 0; i < iV_TEX_MAX; i++ ) {
-		if (strncmp(filename, _TEX_PAGE[i].name, iV_TEXNAME_MAX) == 0) {
+	sstrcpy(path, filename);
+	pie_MakeTexPageName(path);
+	for (i = 0; i < iV_TEX_MAX; i++)
+	{
+		if (strncmp(path, _TEX_PAGE[i].name, iV_TEXNAME_MAX) == 0)
+		{
 			return i;
 		}
 	}
 
-	/* This should never happen - by now all textures should have been loaded. */
-	debug(LOG_ERROR, "*** texture %s not loaded! ***", filename);
-	debug(LOG_ERROR, "This error probably means you did not specify this texture to be preloaded in the appropriate wrf files before referencing it in some pie file");
-	debug(LOG_ERROR, "Remember that patches override several standard wrf files as well");
-
-	pie_PrintLoadedTextures();
-
-	return -1;
+	// Try to load it
+	sstrcpy(path, "texpages/");
+	sstrcat(path, filename);
+	if (!iV_loadImage_PNG(path, &sSprite))
+	{
+		debug(LOG_ERROR, "Failed to load %s", path);
+		return -1;
+	}
+	sstrcpy(path, filename);
+	pie_MakeTexPageName(path);
+	return pie_AddTexPage(&sSprite, path, 0, -1, true);	// FIXME, -1, use getTextureSize()
 }
 
 

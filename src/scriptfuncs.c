@@ -164,6 +164,44 @@ Vector2i getPlayerStartPosition(int player)
 	return positions[player];
 }
 
+BOOL scrSafeDest(void)
+{
+	SDWORD	x, y, player;
+	MAPTILE *psTile;
+
+	if (!stackPopParams(3, VAL_INT, &player, VAL_INT, &x, VAL_INT, &y))
+	{
+		return false;
+	}
+	ASSERT_OR_RETURN(false, player < NetPlay.maxPlayers, "Out of bounds player index");
+	psTile = worldTile(x, y);
+	scrFunctionResult.v.bval = !(psTile->dangerBits & (1 << player));
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
+	{
+		return false;
+	}
+	return true;
+}
+
+BOOL scrThreatAt(void)
+{
+	SDWORD	x, y, player;
+	MAPTILE *psTile;
+
+	if (!stackPopParams(3, VAL_INT, &player, VAL_INT, &x, VAL_INT, &y))
+	{
+		return false;
+	}
+	ASSERT_OR_RETURN(false, player < NetPlay.maxPlayers, "Out of bounds player index");
+	psTile = worldTile(x, y);
+	scrFunctionResult.v.bval = psTile->threatBits & (1 << player);
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
+	{
+		return false;
+	}
+	return true;
+}
+
 BOOL scrGetPlayerStartPosition(void)
 {
 	SDWORD	*x, *y, player;
@@ -6051,7 +6089,7 @@ BOOL scrTakeOverDroidsInAreaExp(void)
             (psDroid->droidType != DROID_CYBORG_CONSTRUCT) &&
             (psDroid->droidType != DROID_CYBORG_REPAIR) &&
 //			((SDWORD)getDroidLevel(psDroid) <= level) &&
-			((SDWORD)psDroid->experience <= level) &&
+			((SDWORD)psDroid->experience/65536 <= level) &&
 			psDroid->pos.x >= x1 && psDroid->pos.x <= x2 &&
             psDroid->pos.y >= y1 && psDroid->pos.y <= y2)
         {
@@ -6356,7 +6394,7 @@ BOOL scrSetDroidKills(void)
 		return false;
 	}
 
-	psDroid->experience = (float)kills * 100.0;
+	psDroid->experience = kills * 100 * 65536;
 
 	return true;
 }
@@ -6378,7 +6416,7 @@ BOOL scrGetDroidKills(void)
 		return false;
 	}
 
-	scrFunctionResult.v.ival = psDroid->experience;
+	scrFunctionResult.v.ival = psDroid->experience/65536;
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return false;
@@ -11172,7 +11210,7 @@ BOOL scrSetTileHeight(void)
 
 	psTile = mapTile(tileX,tileY);
 
-	psTile->height = (UBYTE)newHeight;
+	psTile->height = (UBYTE)newHeight * ELEVATION_SCALE;
 
 	return true;
 }

@@ -622,7 +622,13 @@ static void updateSectorGeometry(int x, int y)
 
 	free(geometry);
 	free(water);
-	
+
+	if (sectors[x*ySectors + y].decalSize <= 0)
+	{
+		// Nothing to do here, and glBufferSubData(GL_ARRAY_BUFFER, 0, 0, *) crashes in my graphics driver. Probably shouldn't crash...
+		return;
+	}
+
 	decaldata = malloc(sizeof(DecalVertex)*sectors[x*ySectors + y].decalSize);
 	setSectorDecals(x, y, decaldata, &decalSize);
 	ASSERT(decalSize == sectors[x*ySectors + y].decalSize   , "the amount of decals has changed");

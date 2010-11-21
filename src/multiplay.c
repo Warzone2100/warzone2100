@@ -691,9 +691,6 @@ BOOL recvMessage(void)
 			case NET_BEACONMSG:					//beacon (blip) message
 				recvBeacon(queue);
 				break;
-			case GAME_BUILD:						// a build order has been sent.
-				recvBuildStarted(queue);
-				break;
 			case GAME_BUILDFINISHED:				// a building is complete
 				recvBuildFinished(queue);
 				break;

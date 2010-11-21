@@ -148,7 +148,7 @@ static UDWORD hideTime=0;
 static bool EnablePasswordPrompt = false;	// if we need the password prompt
 LOBBY_ERROR_TYPES LobbyError = ERROR_NOERROR;
 static BOOL allowChangePosition = true;
-
+static char tooltipbuffer[256] ={'\0'};
 /// end of globals.
 // ////////////////////////////////////////////////////////////////////////////
 // Function protos
@@ -278,7 +278,7 @@ void loadMapPreview(bool hideInterface)
 	ptr = strrchr(aFileName, '/');
 	ASSERT(ptr, "this string was supposed to contain a /");
 	strcpy(ptr, "/game.map");
-	if (!mapLoad(aFileName))
+	if (!mapLoad(aFileName, true))
 	{
 		debug(LOG_ERROR, "loadMapPreview: Failed to load map");
 		return;
@@ -335,7 +335,7 @@ void loadMapPreview(bool hideInterface)
 		for (x = 0; x < mapWidth; x++)
 		{
 			char * const p = imageData + (3 * (y * BACKDROP_HACK_WIDTH + x));
-			height = WTile->height;
+			height = WTile->height / ELEVATION_SCALE;
 			col = height;
 
 			switch (terrainType(WTile))
@@ -671,7 +671,8 @@ static void addGames(void)
 				}
 				else
 				{
-					sButInit.pTip = NetPlay.games[i].name;
+					ssprintf(tooltipbuffer, "Map:%s, Game:%s, Hosted by %s ", NetPlay.games[i].mapname, NetPlay.games[i].name, NetPlay.games[i].hostname);
+					sButInit.pTip = tooltipbuffer;
 				}
 				sButInit.UserData = i;
 

@@ -52,6 +52,10 @@
 #include "levels.h"
 #include "scriptfuncs.h"
 
+struct floodtile { uint8_t x; uint8_t y; };
+static struct floodtile *floodbucket = NULL;
+static int bucketcounter;
+
 struct ffnode
 {
 	struct ffnode *next;
@@ -184,7 +188,7 @@ BOOL mapNew(UDWORD width, UDWORD height)
 	psTile = psMapTiles;
 	for (i = 0; i < width * height; i++)
 	{
-		psTile->height = MAX_HEIGHT / 4;
+		psTile->height = MAX_HEIGHT*ELEVATION_SCALE / 4;
 		psTile->illumination = 255;
 		psTile->level = psTile->illumination;
 		memset(psTile->watchers, 0, sizeof(psTile->watchers));
@@ -746,12 +750,12 @@ static BOOL mapSetGroundTypes(void)
 }
 
 /* Initialise the map structure */
-BOOL mapLoad(char *filename)
+BOOL mapLoad(char *filename, BOOL preview)
 {
 	UDWORD		numGw, width, height;
 	char		aFileType[4];
 	UDWORD		version;
-	UDWORD		i, j;
+	UDWORD		i, j, x, y;
 	PHYSFS_file	*fp = PHYSFS_openRead(filename);
 
 	if (!fp)
@@ -830,12 +834,18 @@ BOOL mapLoad(char *filename)
 		}
 
 		psMapTiles[i].texture = texture;
-		psMapTiles[i].height = height;
+		psMapTiles[i].height = height*ELEVATION_SCALE;
 
 		// Visibility stuff
 		memset(psMapTiles[i].watchers, 0, sizeof(psMapTiles[i].watchers));
 		psMapTiles[i].sensorBits = 0;
 		psMapTiles[i].tileExploredBits = 0;
+	}
+
+	if (preview)
+	{
+		// no need to do anything else for the map preview
+		goto ok;
 	}
 
 	if (!PHYSFS_readULE32(fp, &version) || !PHYSFS_readULE32(fp, &numGw) || version != 1)
@@ -874,11 +884,11 @@ BOOL mapLoad(char *filename)
 		for (j = 0; j < mapHeight; j++)
 		{
 			// FIXME: magic number
-			mapTile(i, j)->waterLevel = mapTile(i, j)->height - world_coord(1) / 3.0f / (float)ELEVATION_SCALE;
+			mapTile(i, j)->waterLevel = mapTile(i, j)->height - world_coord(1) / 3;
 			// lower riverbed
 			if (mapTile(i, j)->ground == waterGroundType)
 			{
-				mapTile(i, j)->height -= (WATER_DEPTH - 2.0f * environGetData(i, j)) / (float)ELEVATION_SCALE;
+				mapTile(i, j)->height -= (WATER_DEPTH - 2 * environGetData(i, j));
 			}
 		}
 	}
@@ -888,9 +898,39 @@ BOOL mapLoad(char *filename)
 	scrollMaxX = mapWidth;
 	scrollMaxY = mapHeight;
 
+	// Set our blocking bits
+	for (x = 0; x < mapWidth; x++)
+	{
+		for (y = 0; y < mapHeight; y++)
+		{
+			MAPTILE *psTile = mapTile(x, y);
+
+			psTile->blockingBits = 0;
+			psTile->buildingBits = 0;
+
+			/* All tiles outside of the map and on map border are blocking. */
+			if (x < 1 || y < 1 || x > mapWidth - 1 || y > mapHeight - 1)
+			{
+				psTile->blockingBits = 0xff; // block everything
+			}
+			if (terrainType(psTile) == TER_WATER)
+			{
+				psTile->blockingBits |= WATER_BLOCKED;
+			}
+			else
+			{
+				psTile->blockingBits |= LAND_BLOCKED;
+			}
+			if (terrainType(psTile) == TER_CLIFFFACE)
+			{
+				psTile->blockingBits |= FEATURE_BLOCKED;
+			}
+		}
+	}
+
 	/* Set continents. This should ideally be done in advance by the map editor. */
 	mapFloodFillContinents();
-
+ok:
 	PHYSFS_close(fp);
 	return true;
 	
@@ -956,11 +996,11 @@ BOOL mapSave(char **ppFileData, UDWORD *pFileSize)
 		psTileData->texture = psTile->texture;
 		if (psTile->ground == waterGroundType)
 		{
-			psTileData->height = MIN(255.0f, psTile->height + (WATER_DEPTH - 2.0f * environGetData(i % mapWidth, i / mapWidth)) / (float)ELEVATION_SCALE);
+			psTileData->height = MIN(255, (psTile->height + WATER_DEPTH - 2 * environGetData(i % mapWidth, i / mapWidth)) / ELEVATION_SCALE);
 		}
 		else
 		{
-			psTileData->height = psTile->height;
+			psTileData->height = psTile->height / ELEVATION_SCALE;
 		}
 
 		/* MAP_SAVETILE */
@@ -1047,30 +1087,30 @@ extern int32_t map_Height(int x, int y)
 {
 	int tileX, tileY;
 	int i, j;
-	float height[2][2], center;
-	float onTileX, onTileY;
-	float left, right, middle;
-	float onBottom, result;
-	float towardsCenter, towardsRight;
+	int32_t height[2][2], center;
+	int32_t onTileX, onTileY;
+	int32_t left, right, middle;
+	int32_t onBottom, result;
+	int towardsCenter, towardsRight;
 
 	// Clamp x and y values to actual ones
 	// Give one tile worth of leeway before asserting, for units/transporters coming in from off-map.
 	ASSERT(x >= -TILE_UNITS, "map_Height: x value is too small (%d,%d) in %dx%d",map_coord(x),map_coord(y),mapWidth,mapHeight);
 	ASSERT(y >= -TILE_UNITS, "map_Height: y value is too small (%d,%d) in %dx%d",map_coord(x),map_coord(y),mapWidth,mapHeight);
-	x = (x < 0 ? 0 : x);
-	y = (y < 0 ? 0 : y);
+	x = MAX(x, 0);
+	y = MAX(y, 0);
 	ASSERT(x < world_coord(mapWidth)+TILE_UNITS, "map_Height: x value is too big (%d,%d) in %dx%d",map_coord(x),map_coord(y),mapWidth,mapHeight);
 	ASSERT(y < world_coord(mapHeight)+TILE_UNITS, "map_Height: y value is too big (%d,%d) in %dx%d",map_coord(x),map_coord(y),mapWidth,mapHeight);
-	x = (x >= world_coord(mapWidth) ? world_coord(mapWidth) - 1 : x);
-	y = (y >= world_coord(mapHeight) ? world_coord(mapHeight) - 1 : y);
+	x = MIN(x, world_coord(mapWidth) - 1);
+	y = MIN(y, world_coord(mapHeight) - 1);
 
 	// on which tile are these coords?
 	tileX = map_coord(x);
 	tileY = map_coord(y);
 
 	// where on the tile? (scale to (0,1))
-	onTileX = (x - world_coord(tileX))/(float)world_coord(1);
-	onTileY = (y - world_coord(tileY))/(float)world_coord(1);
+	onTileX = x - world_coord(tileX);
+	onTileY = y - world_coord(tileY);
 
 	// get the height for the corners and center
 	center = 0;
@@ -1095,31 +1135,31 @@ extern int32_t map_Height(int x, int y)
 	// get heights for left and right corners and the distances
 	if (onTileY > onTileX)
 	{
-		if (onTileY < 1 - onTileX)
+		if (onTileY < TILE_UNITS - onTileX)
 		{
 			// A
 			right = height[0][0];
 			left  = height[0][1];
 			towardsCenter = onTileX;
-			towardsRight  = 1 - onTileY;
+			towardsRight  = TILE_UNITS - onTileY;
 		}
 		else
 		{
 			// B
 			right = height[0][1];
 			left  = height[1][1];
-			towardsCenter = 1 - onTileY;
-			towardsRight  = 1 - onTileX;
+			towardsCenter = TILE_UNITS - onTileY;
+			towardsRight  = TILE_UNITS - onTileX;
 		}
 	}
 	else
 	{
-		if (onTileX > 1 - onTileY)
+		if (onTileX > TILE_UNITS - onTileY)
 		{
 			// C
 			right = height[1][1];
 			left  = height[1][0];
-			towardsCenter = 1 - onTileX;
+			towardsCenter = TILE_UNITS - onTileX;
 			towardsRight  = onTileY;
 		}
 		else
@@ -1131,17 +1171,17 @@ extern int32_t map_Height(int x, int y)
 			towardsRight  = onTileX;
 		}
 	}
-	ASSERT(towardsCenter <= 0.5, "towardsCenter is too high");
+	ASSERT(towardsCenter <= TILE_UNITS/2, "towardsCenter is too high");
 
 	// now we have:
 	//         center
 	//    left   m    right
 
 	middle = (left + right)/2;
-	onBottom = left * (1 - towardsRight) + right * towardsRight;
+	onBottom = left * (TILE_UNITS - towardsRight) + right * towardsRight;
 	result = onBottom + (center - middle) * towardsCenter * 2;
 
-	return (SDWORD)(result+0.5f);
+	return (result + TILE_UNITS/2) / TILE_UNITS;
 }
 
 /* returns true if object is above ground */
@@ -1190,6 +1230,7 @@ extern BOOL mapObjIsAboveGround( BASE_OBJECT *psObj )
 void getTileMaxMin(UDWORD x, UDWORD y, UDWORD *pMax, UDWORD *pMin)
 {
 	UDWORD	height, i, j;
+	int tileHeight = TILE_MIN_HEIGHT;
 
 	*pMin = TILE_MAX_HEIGHT;
 	*pMax = TILE_MIN_HEIGHT;
@@ -1198,7 +1239,18 @@ void getTileMaxMin(UDWORD x, UDWORD y, UDWORD *pMax, UDWORD *pMin)
 	{
 		for (i=0; i < 2; i++)
 		{
-			height = map_TileHeight(x+i, y+j);
+			// it tileHeight is negative, that means we are in water, and will cause a underflow
+			// FIXME: When we add structures that *can* be on water, we need to handle this differently.
+			tileHeight = map_TileHeight(x+i, y+j);
+			if (tileHeight < 0)
+			{
+				// NOTE: should we assert here ?
+				height = TILE_MIN_HEIGHT;
+			}
+			else
+			{
+				height = tileHeight;
+			}
 			if (*pMin > height)
 			{
 				*pMin = height;
@@ -1408,10 +1460,11 @@ static const Vector2i aDirOffset[NUM_DIR] =
 };
 
 // Flood fill a "continent". Note that we reuse x, y inside this function.
-static void mapFloodFill(int x, int y, int continent, PROPULSION_TYPE propulsion)
+static void mapFloodFill(int x, int y, int continent, uint8_t blockedBits)
 {
 	struct ffnode *open = NULL;
 	int i;
+	bool limitedTile = (blockedBits & WATER_BLOCKED) || (blockedBits & LAND_BLOCKED);
 
 	do
 	{
@@ -1423,15 +1476,14 @@ static void mapFloodFill(int x, int y, int continent, PROPULSION_TYPE propulsion
 			// rely on the fact that all border tiles are inaccessible to avoid checking explicitly
 			Vector2i npos = { x + aDirOffset[i].x, y + aDirOffset[i].y };
 			MAPTILE *psTile;
-			bool limitedTile = (propulsion == PROPULSION_TYPE_PROPELLOR || propulsion == PROPULSION_TYPE_WHEELED);
 
-			if (!tileOnMap(npos.x, npos.y) || (npos.x == x && npos.y == y))
+			if (!tileOnMap(npos.x, npos.y))
 			{
 				continue;
 			}
 			psTile = mapTile(npos.x, npos.y);
 
-			if (!fpathBlockingTile(npos.x, npos.y, propulsion) && ((limitedTile && psTile->limitedContinent == 0) || (!limitedTile && psTile->hoverContinent == 0)))
+			if (!(psTile->blockingBits & blockedBits) && ((limitedTile && psTile->limitedContinent == 0) || (!limitedTile && psTile->hoverContinent == 0)))
 			{
 				struct ffnode *node = malloc(sizeof(*node));
 
@@ -1443,11 +1495,11 @@ static void mapFloodFill(int x, int y, int continent, PROPULSION_TYPE propulsion
 		}
 
 		// Set continent value
-		if (propulsion == PROPULSION_TYPE_PROPELLOR || propulsion == PROPULSION_TYPE_WHEELED)
+		if (limitedTile)
 		{
 			currTile->limitedContinent = continent;
 		}
-		else
+		else	// we are amphibious
 		{
 			currTile->hoverContinent = continent;
 		}
@@ -1490,11 +1542,11 @@ void mapFloodFillContinents()
 
 			if (psTile->limitedContinent == 0 && !fpathBlockingTile(x, y, PROPULSION_TYPE_WHEELED))
 			{
-				mapFloodFill(x, y, 1 + limitedContinents++, PROPULSION_TYPE_WHEELED);
+				mapFloodFill(x, y, 1 + limitedContinents++, WATER_BLOCKED | FEATURE_BLOCKED);
 			}
 			else if (psTile->limitedContinent == 0 && !fpathBlockingTile(x, y, PROPULSION_TYPE_PROPELLOR))
 			{
-				mapFloodFill(x, y, 1 + limitedContinents++, PROPULSION_TYPE_PROPELLOR);
+				mapFloodFill(x, y, 1 + limitedContinents++, LAND_BLOCKED | FEATURE_BLOCKED);
 			}
 		}
 	}
@@ -1507,7 +1559,7 @@ void mapFloodFillContinents()
 
 			if (psTile->hoverContinent == 0 && !fpathBlockingTile(x, y, PROPULSION_TYPE_HOVER))
 			{
-				mapFloodFill(x, y, 1 + hoverContinents++, PROPULSION_TYPE_HOVER);
+				mapFloodFill(x, y, 1 + hoverContinents++, FEATURE_BLOCKED);
 			}
 		}
 	}
@@ -1551,54 +1603,60 @@ bool fireOnLocation(unsigned int x, unsigned int y)
 
 static void dangerFloodFill(int player)
 {
-	struct ffnode *open = NULL;
 	int i;
 	Vector2i pos = getPlayerStartPosition(player);
+	MAPTILE *psTile;
+	Vector2i npos;
 
 	pos.x = map_coord(pos.x);
 	pos.y = map_coord(pos.y);
+	bucketcounter = 0;
 
 	do
 	{
-		MAPTILE *currTile = mapTile(pos.x, pos.y);
+		MAPTILE *currTile = &psMapTiles[pos.x + (pos.y * mapWidth)];
 
 		// Add accessible neighbouring tiles to the open list
 		for (i = 0; i < NUM_DIR; i++)
 		{
-			Vector2i npos = { pos.x + aDirOffset[i].x, pos.y + aDirOffset[i].y };
-			MAPTILE *psTile;
+			npos.x = pos.x + aDirOffset[i].x;
+			npos.y = pos.y + aDirOffset[i].y;
 
-			if (!tileOnMap(npos.x, npos.y) || (npos.x == pos.x && npos.y == pos.y))
+			if (!tileOnMap(npos.x, npos.y))
 			{
 				continue;
 			}
-			psTile = mapTile(npos.x, npos.y);
+			psTile = &psMapTiles[npos.x + (npos.y * mapWidth)];
 
-			if (!(psTile->threatBits & (1 << player)) && (psTile->dangerBits & (1 <<player)) && !fpathBlockingTile(npos.x, npos.y, PROPULSION_TYPE_WHEELED))
+			if (!(psTile->tileInfoBits & BITS_TEMPORARY)
+			    && !(psTile->threatBits & (1 << player))
+			    && (psTile->dangerBits & (1 <<player)))
 			{
-				struct ffnode *node = malloc(sizeof(*node));
-
-				node->next = open;	// add to beginning of open list
-				node->x = npos.x;
-				node->y = npos.y;
-				open = node;
+				if (!(psTile->blockingBits & FEATURE_BLOCKED) && !psTile->buildingBits)
+				{
+					floodbucket[bucketcounter].x = npos.x;
+					floodbucket[bucketcounter].y = npos.y;
+					bucketcounter++;
+				}
+				else
+				{
+					psTile->dangerBits &= ~(1 << player);	// clear danger for buildings and features as well, but don't propagate
+				}
+				psTile->tileInfoBits |= BITS_TEMPORARY;	// make sure we do not process it more than once
 			}
 		}
 
 		// Clear danger
 		currTile->dangerBits &= ~(1 << player);
 
-		// Pop the first open node off the list for the next iteration
-		if (open)
+		// Pop the last open node off the bucket list for the next iteration
+		if (bucketcounter)
 		{
-			struct ffnode *tmp = open;
-
-			pos.x = open->x;
-			pos.y = open->y;
-			open = open->next;
-			free(tmp);
+			bucketcounter--;
+			pos.x = floodbucket[bucketcounter].x;
+			pos.y = floodbucket[bucketcounter].y;
 		}
-	} while (open);
+	} while (bucketcounter);
 }
 
 static inline void threatUpdateTarget(int player, BASE_OBJECT *psObj, bool ground, bool air)
@@ -1632,6 +1690,7 @@ static void threatUpdate(int player)
 	for (i = 0; i < mapWidth * mapHeight; i++, psTile++)
 	{
 		psTile->threatBits &= ~(1 << player);
+		psTile->tileInfoBits &= ~BITS_TEMPORARY;
 	}
 
 	// Step 2: Set threat bits
@@ -1710,6 +1769,10 @@ void mapInit()
 {
 	int player;
 
+	free(floodbucket);
+	floodbucket = malloc(mapWidth * mapHeight * sizeof(*floodbucket));
+
+	// Initialize danger maps
 	for (player = 0; player < MAX_PLAYERS; player++)
 	{
 		threatUpdate(player);

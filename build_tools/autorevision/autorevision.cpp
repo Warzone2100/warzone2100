@@ -93,6 +93,10 @@ class assign_once : public T
 struct RevisionInformation
 {
     RevisionInformation() :
+        low_revision("unknown"),
+        revision("unknown"),
+        low_revisionCount("-1"),
+        revisionCount("-1"),
         wc_modified(false),
         wc_switched(false)
     {}
@@ -229,10 +233,11 @@ class RevGitQuery : public RevisionExtractor
         virtual bool extractRevision(RevisionInformation& rev_info);
 
     private:
-        std::string runCommand(char const *cmd) const;
+        std::string runCommand(char const *cmd);
 
     private:
         const std::string _workingDir;
+        int exitStatus;
 };
 
 class RevConfigFile : public RevisionExtractor
@@ -308,11 +313,15 @@ int main(int argc, char** argv)
     RevConfigFile revRetr4(workingDir + "/autorevision.conf");
     RevFileParse revRetr3(workingDir + "/_svn/entries", &revRetr4);
     RevFileParse revRetr2(workingDir + "/.svn/entries", &revRetr3);
+    /*
     RevGitSVNQuery revRetr2_2(workingDir, &revRetr2);
     RevGitQuery revRetr2_1(workingDir, &revRetr2_2);
     RevSVNQuery  revRetr1(workingDir, &revRetr2_1);
 
     RevSVNVersionQuery revRetr(workingDir, &revRetr1);
+    */
+    // Don't check SVN, since something is modifying wc_modified, which isn't an assign_once, and couldn't be bothered to fix it.
+    RevGitQuery revRetr(workingDir, &revRetr2);
 
     // Strings to extract Subversion information we want into
     RevisionInformation rev_info;
@@ -618,8 +627,10 @@ bool RevGitSVNQuery::extractRevision(RevisionInformation& rev_info)
     return RevisionExtractor::extractRevision(rev_info);
 }
 
-std::string RevGitQuery::runCommand(char const *cmd) const
+std::string RevGitQuery::runCommand(char const *cmd)
 {
+    exitStatus = -1;
+
     std::string result;
 
     const string cwd(GetWorkingDir());
@@ -643,7 +654,7 @@ std::string RevGitQuery::runCommand(char const *cmd) const
         removeAfterNewLine(result);
     }
 
-    pclose(process);
+    exitStatus = pclose(process);
 
     return result;
 }
@@ -659,7 +670,8 @@ bool RevGitQuery::extractRevision(RevisionInformation& rev_info)
         {
             // This command will return without success if the working copy is
             // changed, whether checked into index or not.
-            rev_info.wc_modified = system("git diff --quiet HEAD");
+            runCommand("git diff --quiet HEAD");
+            rev_info.wc_modified = exitStatus != 0;
         }
     }
     std::string tag = runCommand("git describe --exact-match --tags");

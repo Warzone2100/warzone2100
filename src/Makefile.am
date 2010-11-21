@@ -28,6 +28,7 @@ BUILT_SOURCES = \
 CLEANFILES = $(BUILT_SOURCES)
 
 EXTRA_DIST = \
+	autorevision.h \
 	message_lexer.l message_parser.y \
 	scriptvals_lexer.l scriptvals_parser.y \
 	level_lexer.l

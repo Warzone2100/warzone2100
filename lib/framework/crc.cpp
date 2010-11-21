@@ -47,3 +47,20 @@ uint32_t crcSumU16(uint32_t crc, const uint16_t *data, size_t dataLen)
 
 	return crc;
 }
+
+uint32_t crcSumVector2i(uint32_t crc, const Vector2i *data, size_t dataLen)
+{
+	while (dataLen-- > 0)
+	{
+		crc = crc<<8 ^ crcTable[crc>>24 ^ (uint8_t)(data->x>>24)];
+		crc = crc<<8 ^ crcTable[crc>>24 ^ (uint8_t)(data->x>>16)];
+		crc = crc<<8 ^ crcTable[crc>>24 ^ (uint8_t)(data->x>>8)];
+		crc = crc<<8 ^ crcTable[crc>>24 ^ (uint8_t)data->x];
+		crc = crc<<8 ^ crcTable[crc>>24 ^ (uint8_t)(data->y>>24)];
+		crc = crc<<8 ^ crcTable[crc>>24 ^ (uint8_t)(data->y>>16)];
+		crc = crc<<8 ^ crcTable[crc>>24 ^ (uint8_t)(data->y>>8)];
+		crc = crc<<8 ^ crcTable[crc>>24 ^ (uint8_t)data++->y];
+	}
+
+	return crc;
+}

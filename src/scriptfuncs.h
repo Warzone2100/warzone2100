@@ -44,7 +44,8 @@ extern void scriptSetStartPos(int position, int x, int	y);
 extern BOOL scrGetPlayer(void);
 extern BOOL scrScavengersActive(void);
 extern BOOL scrGetPlayerStartPosition(void);
-
+extern BOOL scrSafeDest(void);
+extern BOOL scrThreatAt(void);
 extern Vector2i getPlayerStartPosition(int player);
 
 // not used in scripts, but used in code.

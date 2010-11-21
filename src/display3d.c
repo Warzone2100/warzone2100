@@ -276,7 +276,7 @@ static PIELIGHT structureBrightness(STRUCTURE *psStructure)
 	}
 	else
 	{
-		buildingBrightness = pal_SetBrightness(200 - 100 * getStructureDamage(psStructure));
+		buildingBrightness = pal_SetBrightness(200 - 100/65536.f * getStructureDamage(psStructure));
 
 		/* If it's selected, then it's brighter */
 		if (psStructure->selected)
@@ -799,7 +799,7 @@ static void calcAverageTerrainHeight(iView *player)
 				/* Get a pointer to the tile at this location */
 				MAPTILE *psTile = mapTile(playerXTile + j, playerZTile + i);
 
-				averageCentreTerrainHeight += psTile->height * ELEVATION_SCALE;
+				averageCentreTerrainHeight += psTile->height;
 				numTilesAveraged++;
 			}
 		}
@@ -811,9 +811,9 @@ static void calcAverageTerrainHeight(iView *player)
 		MAPTILE *psTile = mapTile(playerXTile + visibleTiles.x / 2, playerZTile + visibleTiles.y / 2);
 
 		averageCentreTerrainHeight /= numTilesAveraged;
-		if (averageCentreTerrainHeight < psTile->height * ELEVATION_SCALE)
+		if (averageCentreTerrainHeight < psTile->height)
 		{
-			averageCentreTerrainHeight = psTile->height * ELEVATION_SCALE;
+			averageCentreTerrainHeight = psTile->height;
 		}
 	}
 	else
@@ -2858,7 +2858,7 @@ static void drawWeaponReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_s
 			break;
 		case OBJ_STRUCTURE:
 			psStruct = (STRUCTURE *)psObj;
-			damLevel = (1. - getStructureDamage(psStruct)) * 100;
+			damLevel = (1. - getStructureDamage(psStruct)/65536.f) * 100;
 			scale = MAX(psStruct->pStructureType->baseWidth, psStruct->pStructureType->baseBreadth);
 			scrY += scale * 10;
 			scrR = scale * 20;
@@ -2970,7 +2970,7 @@ static void drawStructureHealth(STRUCTURE *psStruct)
 	else
 	{
 		//show body points
-		health = (1. - getStructureDamage(psStruct)) * 100;
+		health = (1. - getStructureDamage(psStruct)/65536.f) * 100;
 	}
 	if (health > REPAIRLEV_HIGH)
 	{

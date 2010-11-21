@@ -171,9 +171,9 @@ unsigned NET_PlayerConnectionStatus[CONNECTIONSTATUS_NORMAL][MAX_PLAYERS];
  **            ie ("trunk", "2.1.3", "3.0", ...)
  ************************************************************************************
 **/
-char VersionString[VersionStringSize] = "master, netcode 4.1004";
+char VersionString[VersionStringSize] = "master, netcode 4.1009";
 static int NETCODE_VERSION_MAJOR = 4;
-static int NETCODE_VERSION_MINOR = 1004;
+static int NETCODE_VERSION_MINOR = 1009;
 
 bool NETisCorrectVersion(uint32_t game_version_major, uint32_t game_version_minor)
 {
@@ -607,7 +607,7 @@ static bool NETsendGAMESTRUCT(Socket* sock, const GAMESTRUCT* ourgamestruct)
 	// to zero so that we can be sure we're not sending any (undefined)
 	// memory content across the network.
 	char buf[sizeof(ourgamestruct->GAMESTRUCT_VERSION) + sizeof(ourgamestruct->name) + sizeof(ourgamestruct->desc.host) + (sizeof(int32_t) * 8) +
-		sizeof(ourgamestruct->secondaryHosts) + sizeof(ourgamestruct->extra) + sizeof(ourgamestruct->versionstring) +
+		sizeof(ourgamestruct->secondaryHosts) + sizeof(ourgamestruct->extra) + sizeof(ourgamestruct->mapname) + sizeof(ourgamestruct->hostname) + sizeof(ourgamestruct->versionstring) +
 		sizeof(ourgamestruct->modlist) + (sizeof(uint32_t) * 9) ] = { 0 };
 	char *buffer = buf;
 	unsigned int i;
@@ -653,6 +653,14 @@ static bool NETsendGAMESTRUCT(Socket* sock, const GAMESTRUCT* ourgamestruct)
 	// Copy a string
 	strlcpy(buffer, ourgamestruct->extra, sizeof(ourgamestruct->extra));
 	buffer += sizeof(ourgamestruct->extra);
+
+	// Copy a string
+	strlcpy(buffer, ourgamestruct->mapname, sizeof(ourgamestruct->mapname));
+	buffer += sizeof(ourgamestruct->mapname);
+
+	// Copy a string
+	strlcpy(buffer, ourgamestruct->hostname, sizeof(ourgamestruct->hostname));
+	buffer += sizeof(ourgamestruct->hostname);
 
 	// Copy a string
 	strlcpy(buffer, ourgamestruct->versionstring, sizeof(ourgamestruct->versionstring));
@@ -730,7 +738,7 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* ourgamestruct)
 	// A buffer that's guaranteed to have the correct size (i.e. it
 	// circumvents struct padding, which could pose a problem).
 	char buf[sizeof(ourgamestruct->GAMESTRUCT_VERSION) + sizeof(ourgamestruct->name) + sizeof(ourgamestruct->desc.host) + (sizeof(int32_t) * 8) +
-		sizeof(ourgamestruct->secondaryHosts) + sizeof(ourgamestruct->extra) + sizeof(ourgamestruct->versionstring) +
+		sizeof(ourgamestruct->secondaryHosts) + sizeof(ourgamestruct->extra) + sizeof(ourgamestruct->mapname) + sizeof(ourgamestruct->hostname) + sizeof(ourgamestruct->versionstring) +
 		sizeof(ourgamestruct->modlist) + (sizeof(uint32_t) * 9) ] = { 0 };
 	char* buffer = buf;
 	unsigned int i;
@@ -814,6 +822,14 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* ourgamestruct)
 	// Copy a string
 	sstrcpy(ourgamestruct->extra, buffer);
 	buffer += sizeof(ourgamestruct->extra);
+
+	// Copy a string
+	sstrcpy(ourgamestruct->mapname, buffer);
+	buffer += sizeof(ourgamestruct->mapname);
+
+	// Copy a string
+	sstrcpy(ourgamestruct->hostname, buffer);
+	buffer += sizeof(ourgamestruct->hostname);
 
 	// Copy a string
 	sstrcpy(ourgamestruct->versionstring, buffer);
@@ -2460,6 +2476,8 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 	gamestruct.desc.dwUserFlags[3] = four;
 	memset(gamestruct.secondaryHosts, 0, sizeof(gamestruct.secondaryHosts));
 	sstrcpy(gamestruct.extra, "Extra");						// extra string (future use)
+	sstrcpy(gamestruct.mapname, game.map);					// map we are hosting
+	sstrcpy(gamestruct.hostname, PlayerName);
 	sstrcpy(gamestruct.versionstring, VersionString);		// version (string)
 	sstrcpy(gamestruct.modlist, getModList());				// List of mods
 	gamestruct.GAMESTRUCT_VERSION = 3;						// version of this structure
@@ -2983,18 +3001,6 @@ void syncDebugBacktrace(void)
 #endif
 }
 
-const char *syncDebugFloat(float f)
-{
-	static char ret[16][20];
-	static int counter = 0;
-	uint32_t i;
-	memcpy(&i, &f, sizeof(i));
-	STATIC_ASSERT(sizeof(i) == sizeof(f));
-	counter = (counter + 1)&15;
-	sprintf(ret[counter], "%c%02X_%06X", (i & 0x80000000) == 0 ? '+' : '-', (i & 0x7F000000)>>24, i & 0x00FFFFFF);
-	return ret[counter];
-}
-
 uint32_t nextDebugSync(void)
 {
 	uint32_t ret = ~syncDebugCrcs[syncDebugNext];  // Invert bits, since everyone else seems to do that with CRCs...
@@ -3166,7 +3172,6 @@ const char *messageTypeToString(unsigned messageType_)
 		case GAME_TEMPLATE:                 return "GAME_TEMPLATE";
 		case GAME_TEMPLATEDEST:             return "GAME_TEMPLATEDEST";
 		case GAME_FEATUREDEST:              return "GAME_FEATUREDEST";
-		case GAME_BUILD:                    return "GAME_BUILD";
 		case GAME_RESEARCH:                 return "GAME_RESEARCH";
 		case GAME_FEATURES:                 return "GAME_FEATURES";
 		case GAME_SECONDARY:                return "GAME_SECONDARY";

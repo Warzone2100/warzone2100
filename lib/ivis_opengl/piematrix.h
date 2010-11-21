@@ -89,7 +89,7 @@ extern void pie_MatInit(void);
 extern void pie_MatBegin(void);
 extern void pie_MatEnd(void);
 extern void pie_MATTRANS(float x, float y, float z);
-extern void pie_TRANSLATE(float x, float y, float z);
+extern void pie_TRANSLATE(int32_t x, int32_t y, int32_t z);
 extern void pie_MatScale(float scale);
 extern void pie_MatRotX(uint16_t x);
 extern void pie_MatRotY(uint16_t y);

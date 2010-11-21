@@ -40,19 +40,6 @@
 #if !defined(WZ_C99) && !defined(__cplusplus) && !defined(WZ_CC_GNU)
 # include <float.h>
 
-static inline float fmaxf(float x, float y)
-{
-	/* Any comparison will return false if either of the arguments are NAN */
-	return (x > y || isnan(y) ? x : y);
-}
-
-
-static inline float fminf(float x, float y)
-{
-	/* Any comparison will return false if either of the arguments are NAN */
-	return (x < y || isnan(y) ? x : y);
-}
-
 
 static inline int roundf(float x)
 {
@@ -95,32 +82,11 @@ static double nearbyint(double x)
 }
 
 
-static inline WZ_DECL_CONST double hypot(double x, double y)
-{
-	return sqrt(x * x + y * y);
-}
-
-
 static inline WZ_DECL_CONST float hypotf(float x, float y)
 {
 	return sqrtf(x * x + y * y);
 }
 #endif
-
-
-
-/*!
- * Moves x into the range 0 - max
- * \param x Value to clip
- * \param max Upper range
- * \return Value in the range 0 - max
- */
-static inline WZ_DECL_CONST int wrap(int x, int max)
-{
-	while(x < 0) x += max;
-	while(x >= max) x -= max;
-	return x;
-}
 
 
 /*!

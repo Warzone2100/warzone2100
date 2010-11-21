@@ -117,8 +117,7 @@ extern BOOL loadStructureStrengthModifiers(const char *pStrengthModData, UDWORD 
 
 extern BOOL	structureStatsShutDown(void);
 
-extern float structureDamage(STRUCTURE *psStructure, UDWORD damage,
-                            UDWORD weaponClass, UDWORD weaponSubClass, HIT_SIDE impactSide);
+int32_t structureDamage(STRUCTURE *psStructure, UDWORD damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, HIT_SIDE impactSide);
 extern void structureBuild(STRUCTURE *psStructure, DROID *psDroid, int buildPoints);
 extern void structureDemolish(STRUCTURE *psStructure, DROID *psDroid, int buildPoints);
 extern BOOL structureRepair(STRUCTURE *psStruct, DROID *psDroid, int buildPoints);
@@ -132,7 +131,7 @@ extern void createTestStructures(void);
 STRUCTURE *buildStructure(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, UDWORD player, BOOL FromSave);
 STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, uint16_t direction, UDWORD player, BOOL FromSave);
 /// Create a blueprint structure, with just enough information to render it
-extern STRUCTURE *buildBlueprint(STRUCTURE_STATS *psStats, float x, float y, uint16_t direction, STRUCT_STATES state);
+STRUCTURE *buildBlueprint(STRUCTURE_STATS *psStats, int32_t x, int32_t y, uint16_t direction, STRUCT_STATES state);
 /* The main update routine for all Structures */
 void structureUpdate(STRUCTURE *psBuilding, bool mission);
 
@@ -279,7 +278,7 @@ extern BOOL validStructResistance(STRUCTURE *psStruct);
 stat type*/
 extern BOOL checkSpecificStructExists(UDWORD structInc, UDWORD player);
 
-extern float getStructureDamage(const STRUCTURE* psStructure);
+extern int32_t getStructureDamage(const STRUCTURE* psStructure);
 
 /*Access functions for the upgradeable stats of a structure*/
 extern UDWORD	structureBody(const STRUCTURE *psStruct);

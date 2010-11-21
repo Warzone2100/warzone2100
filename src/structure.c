@@ -1056,10 +1056,9 @@ void handleAbandonedStructures()
  * \param weaponSubClass the subclass of the weapon that deals the damage
  * \return < 0 when the dealt damage destroys the structure, > 0 when the structure survives
  */
-float structureDamage(STRUCTURE *psStructure, UDWORD damage, UDWORD weaponClass,
-					   UDWORD weaponSubClass, HIT_SIDE impactSide)
+int32_t structureDamage(STRUCTURE *psStructure, UDWORD damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, HIT_SIDE impactSide)
 {
-	float		relativeDamage;
+	int32_t relativeDamage;
 
 	CHECK_STRUCTURE(psStructure);
 
@@ -1069,7 +1068,7 @@ float structureDamage(STRUCTURE *psStructure, UDWORD damage, UDWORD weaponClass,
 	relativeDamage = objDamage((BASE_OBJECT *)psStructure, damage, structureBody(psStructure), weaponClass, weaponSubClass, impactSide);
 
 	// If the shell did sufficient damage to destroy the structure
-	if (relativeDamage < 0.0f)
+	if (relativeDamage < 0)
 	{
 		debug(LOG_ATTACK, "Structure (id %d) DESTROYED", psStructure->id);
 		destroyStruct(psStructure);
@@ -1083,15 +1082,15 @@ float structureDamage(STRUCTURE *psStructure, UDWORD damage, UDWORD weaponClass,
 	return relativeDamage;
 }
 
-float getStructureDamage(const STRUCTURE* psStructure)
+int32_t getStructureDamage(const STRUCTURE *psStructure)
 {
-	float health;
+	int32_t health;
 	CHECK_STRUCTURE(psStructure);
 
-	health = (float)psStructure->body / (float)structureBody(psStructure);
-	CLIP(health, 0., 1.f);
+	health = (int64_t)65536 * psStructure->body / structureBody(psStructure);
+	CLIP(health, 0, 65536);
 
-	return 1. - health;
+	return 65536 - health;
 }
 
 /// Add buildPoints to the structures currentBuildPts, due to construction work by the droid
@@ -1460,7 +1459,7 @@ static SDWORD structChooseWallType(UDWORD player, UDWORD mapX, UDWORD mapY)
 					if (scanType == WALL_CORNER)
 					{
 						// change to a corner
-						if (psStruct->pStructureType->asFuncList[0]->type == WALL_TYPE)
+						if (psStruct->pStructureType->asFuncList && psStruct->pStructureType->asFuncList[0]->type == WALL_TYPE)
 						{
 							const int     oldBody = psStruct->body;
 							UDWORD        oldBuildPoints = psStruct->currentBuildPts;
@@ -1530,7 +1529,6 @@ static void buildFlatten(STRUCTURE *pStructure, UDWORD x, UDWORD y, UDWORD h)
 
 void alignStructure(STRUCTURE *psBuilding)
 {
-	int width, breadth;
 	int x = psBuilding->pos.x;
 	int y = psBuilding->pos.y;
 	unsigned sWidth   = getStructureWidth(psBuilding);
@@ -1548,17 +1546,18 @@ void alignStructure(STRUCTURE *psBuilding)
 	}
 	else
 	{
+		iIMDShape	*strImd = psBuilding->sDisplay.imd;
+		int i, pointHeight;
+
 		psBuilding->pos.z = TILE_MIN_HEIGHT;
 
-		/* Set it at the higher coord */
-		for (width = 0; width < sWidth; width++)
+		// Now we got through the shape looking for vertices on the edge
+                for (i = 0; i < strImd->npoints; i++)
 		{
-			for (breadth = 0; breadth < sBreadth; breadth++)
+			pointHeight = map_Height(psBuilding->pos.x + strImd->points[i].x, psBuilding->pos.y - strImd->points[i].z);
+			if (pointHeight > psBuilding->pos.z)
 			{
-				UDWORD tmpMax, tmpMin;
-
-				getTileMaxMin(map_coord(x) + width, map_coord(y) + breadth, &tmpMax, &tmpMin);
-				psBuilding->pos.z = MAX(tmpMax, psBuilding->pos.z);
+				psBuilding->pos.z = pointHeight;
 			}
 		}
 	}
@@ -1723,7 +1722,11 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 				// if it's a tall structure then flag it in the map.
 				if (psBuilding->sDisplay.imd->max.y > TALLOBJECT_YMAX)
 				{
-					SET_TILE_TALLSTRUCTURE(psTile);
+					psTile->blockingBits |= AIR_BLOCKED;
+				}
+				if (pStructureType->type != REF_REARM_PAD && pStructureType->type != REF_GATE)
+				{
+					psTile->buildingBits |= (1 << psBuilding->player);
 				}
 			}
 		}
@@ -1742,7 +1745,7 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 
 		psBuilding->lastEmission = 0;
 		psBuilding->timeLastHit = 0;
-		psBuilding->lastHitWeapon = UDWORD_MAX;	// no such weapon
+		psBuilding->lastHitWeapon = WSC_NUM_WEAPON_SUBCLASSES;  // no such weapon
 
 		psBuilding->inFire = 0;
 		psBuilding->burnStart = 0;
@@ -1888,20 +1891,13 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		//add the structure to the list - this enables it to be drawn whilst being built
 		addStructure(psBuilding);
 
-		if (pStructureType->type == REF_REARM_PAD)
-		{
-			MAPTILE *psTile = mapTile(map_coord(psBuilding->pos.x), map_coord(psBuilding->pos.y));
-
-			SET_TILE_NOTBLOCKING(psTile);
-		}
-
 		clustNewStruct(psBuilding);
 		asStructLimits[player][max].currentQuantity++;
 	}
 	else //its an upgrade
 	{
 		BOOL		bUpgraded = false;
-		float		bodyDiff = 0.0f;
+		int32_t         bodyDiff = 0;
 
 		//don't create the Structure use existing one
 		psBuilding = getTileStructure(map_coord(x), map_coord(y));
@@ -1922,7 +1918,7 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 			if (psBuilding->pFunctionality->factory.capacity < SIZE_SUPER_HEAVY)
 			{
 				//store the % difference in body points before upgrading
-				bodyDiff = 1. - getStructureDamage(psBuilding);
+				bodyDiff = 65536 - getStructureDamage(psBuilding);
 
 				++psBuilding->pFunctionality->factory.capacity;
 				bUpgraded = true;
@@ -1985,7 +1981,7 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 			if (psBuilding->pFunctionality->researchFacility.capacity < NUM_RESEARCH_MODULES)
 			{
 				//store the % difference in body points before upgrading
-				bodyDiff = 1. - getStructureDamage(psBuilding);
+				bodyDiff = 65536 - getStructureDamage(psBuilding);
 
 				//add all the research modules in one go AB 24/06/98
 				//((RESEARCH_FACILITY*)psBuilding->pFunctionality)->capacity++;
@@ -2031,7 +2027,7 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 			if (psBuilding->pFunctionality->powerGenerator.capacity < NUM_POWER_MODULES)
 			{
 				//store the % difference in body points before upgrading
-				bodyDiff = 1. - getStructureDamage(psBuilding);
+				bodyDiff = 65536 - getStructureDamage(psBuilding);
 
 				//increment the power output, multiplier and capacity
 				//add all the research modules in one go AB 24/06/98
@@ -2055,7 +2051,7 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		if (bUpgraded)
 		{
 			//calculate the new body points of the owning structure
-			psBuilding->body = (UWORD)(structureBody(psBuilding) * bodyDiff);
+			psBuilding->body = (uint64_t)structureBody(psBuilding) * bodyDiff / 65536;
 
 			//initialise the build points
 			psBuilding->currentBuildPts = 0;
@@ -2085,7 +2081,7 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 	return psBuilding;
 }
 
-STRUCTURE *buildBlueprint(STRUCTURE_STATS *psStats, float x, float y, uint16_t direction, STRUCT_STATES state)
+STRUCTURE *buildBlueprint(STRUCTURE_STATS *psStats, int32_t x, int32_t y, uint16_t direction, STRUCT_STATES state)
 {
 	STRUCTURE *blueprint;
 
@@ -3353,7 +3349,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 			// if found a droid to rearm assign it to the rearm pad
 			if (psDroid != NULL)
 			{
-
 				/* set chosen object */
 				psChosenObj = (BASE_OBJECT *)psDroid;
 				psReArmPad->psObj = psChosenObj;
@@ -3363,11 +3358,11 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 					psReArmPad->timeStarted = ACTION_START_TIME;
 					psReArmPad->timeLastUpdated = 0;
 				}
-				CLEAR_TILE_NOTBLOCKING(psTile);	// no longer passable
+				psTile->buildingBits |= (1 << psStructure->player); // no longer passable
 			}
 			else
 			{
-				SET_TILE_NOTBLOCKING(psTile);
+				psTile->buildingBits &= ~(1 << psStructure->player); // open for passage
 			}
 			break;
 		}
@@ -3420,7 +3415,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				if (pointsToAdd > 0 &&
 				    pResearch->researchPoints > 0) // might be a "free" research
 				{
-					int64_t powerNeeded = ((int64_t)(pResearch->researchPower * pointsToAdd) >> 32) / (float)pResearch->researchPoints;
+					int64_t powerNeeded = ((int64_t)(pResearch->researchPower * pointsToAdd) >> 32) / pResearch->researchPoints;
 					pPlayerRes->currentPoints += requestPrecisePowerFor(psStructure->player, powerNeeded, pointsToAdd);
 					psResFacility->timeStarted = gameTime;
 				}
@@ -3561,6 +3556,10 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				if (productionPlayer == psStructure->player)
 				{
 					doNextProduction(psStructure, (DROID_TEMPLATE *)pSubject);
+				}
+				else if (myResponsibility(psStructure->player))
+				{
+					cancelProduction(psStructure, ModeQueue);
 				}
 			}
 		}
@@ -3797,7 +3796,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 					psDroid->action = DACTION_NONE;
 					bFinishAction = true;
 					psReArmPad->psObj = NULL;
-					CLEAR_TILE_NOTBLOCKING(mapTile(map_coord(psStructure->pos.x), map_coord(psStructure->pos.y)));
+					mapTile(map_coord(psStructure->pos.x), map_coord(psStructure->pos.y))->buildingBits &= ~(1 << psStructure->player);
 				}
 			}
 		}
@@ -3891,15 +3890,17 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 
 			if (!found)	// no droids on our tile, safe to close
 			{
+				MAPTILE *psTile = mapTile(map_coord(psBuilding->pos.x), map_coord(psBuilding->pos.y));
 				psBuilding->state = SAS_CLOSING;
-				CLEAR_TILE_NOTBLOCKING(mapTile(map_coord(psBuilding->pos.x), map_coord(psBuilding->pos.y)));
+				psTile->buildingBits |= (1 << psBuilding->player); // closed
 				psBuilding->lastStateTime = gameTime;	// reset timer
 			}
 		}
 		else if (psBuilding->state == SAS_OPENING && psBuilding->lastStateTime + SAS_OPEN_SPEED < gameTime)
 		{
+			MAPTILE *psTile = mapTile(map_coord(psBuilding->pos.x), map_coord(psBuilding->pos.y));
 			psBuilding->state = SAS_OPEN;
-			SET_TILE_NOTBLOCKING(mapTile(map_coord(psBuilding->pos.x), map_coord(psBuilding->pos.y)));
+			psTile->buildingBits &= ~(1 << psBuilding->player); // opened
 			psBuilding->lastStateTime = gameTime;	// reset timer
 		}
 		else if (psBuilding->state == SAS_CLOSING && psBuilding->lastStateTime + SAS_OPEN_SPEED < gameTime)
@@ -3935,12 +3936,12 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 	/* Only add smoke if they're visible and they can 'burn' */
 	if (!mission && psBuilding->visible[selectedPlayer] && canSmoke(psBuilding))
 	{
-		const float damage = getStructureDamage(psBuilding);
+		const int32_t damage = getStructureDamage(psBuilding);
 
 		// Is there any damage?
 		if (damage > 0.)
 		{
-			emissionInterval = CalcStructureSmokeInterval(damage);
+			emissionInterval = CalcStructureSmokeInterval(damage/65536.f);
 			if(gameTime > (psBuilding->lastEmission + emissionInterval))
 			{
 				widthScatter   = getStructureWidth(psBuilding)   * TILE_UNITS/2/3;
@@ -4905,8 +4906,8 @@ static void removeStructFromMap(STRUCTURE *psStruct)
 		{
 			psTile = mapTile(mapX+i, mapY+j);
 			psTile->psObject = NULL;
-			CLEAR_TILE_TALLSTRUCTURE(psTile);
-			CLEAR_TILE_NOTBLOCKING(psTile);
+			psTile->buildingBits = 0;
+			psTile->blockingBits &= ~AIR_BLOCKED;
 		}
 	}
 }
@@ -5245,7 +5246,7 @@ SWORD buildFoundation(STRUCTURE *psStruct, UDWORD x, UDWORD y)
 		{
 			if(TileHasStructure(mapTile(startX+width,startY+breadth)))
 			{
-				return((SWORD)map_TileHeight(startX+width,startY+breadth));
+				return map_TileHeight(startX+width, startY+breadth);
 			}
 		}
 	}
@@ -6109,7 +6110,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		else
 		{
 			CONPRINTF(ConsoleString, (ConsoleString, _("%s - Damage %3.0f%%"),
-									  getStatName(psStructure->pStructureType), getStructureDamage(psStructure) * 100.f));
+									  getStatName(psStructure->pStructureType), getStructureDamage(psStructure) * (100.f/65536.f)));
 		}
 		break;
 	case REF_REPAIR_FACILITY:
@@ -6129,8 +6130,8 @@ void printStructureInfo(STRUCTURE *psStructure)
 #ifdef DEBUG
 		if (getDebugMappingStatus())
 		{
-			CONPRINTF(ConsoleString,(ConsoleString, "%s - Unique ID %d",
-					  getStatName(psStructure->pStructureType), psStructure->id));
+			CONPRINTF(ConsoleString,(ConsoleString, "%s - Unique ID %d - %s",
+					  getStatName(psStructure->pStructureType), psStructure->id, (mapTile(map_coord(psStructure->pos.x), map_coord(psStructure->pos.y))->dangerBits & (1 << selectedPlayer)) ? "danger" : "safe"));
 		}
 		else
 #endif
@@ -6169,7 +6170,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		if (getDebugMappingStatus())
 		{
 			CONPRINTF(ConsoleString, (ConsoleString, "%s - Damage % 3.2f%% - Unique ID %u - Production Output: %u - TimeToBuild: %u",
-					  getStatName(psStructure->pStructureType), getStructureDamage(psStructure) * 100.f, psStructure->id,
+					  getStatName(psStructure->pStructureType), getStructureDamage(psStructure) * (100.f/65536.f), psStructure->id,
 					  psStructure->pFunctionality->factory.productionOutput,
 					  psStructure->pFunctionality->factory.timeToBuild));
 		}
@@ -6177,7 +6178,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 #endif
 		{
 			CONPRINTF(ConsoleString, (ConsoleString, _("%s - Damage %3.0f%%"),
-					  getStatName(psStructure->pStructureType), getStructureDamage(psStructure) * 100.f));
+					  getStatName(psStructure->pStructureType), getStructureDamage(psStructure) * (100.f/65536.f)));
 		}
 		break;
 	case REF_RESEARCH:
@@ -6185,7 +6186,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		if (getDebugMappingStatus())
 		{
 			CONPRINTF(ConsoleString, (ConsoleString, "%s - Damage % 3.2f%% - Unique ID %u - Research Points: %u - TimeToResearch: %u",
-					  getStatName(psStructure->pStructureType), getStructureDamage(psStructure) * 100.f, psStructure->id,
+					  getStatName(psStructure->pStructureType), getStructureDamage(psStructure) * (100.f/65536.f), psStructure->id,
 					  psStructure->pFunctionality->researchFacility.researchPoints,
 					  psStructure->pFunctionality->researchFacility.timeToResearch));
 		}
@@ -6193,7 +6194,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 #endif
 		{
 			CONPRINTF(ConsoleString, (ConsoleString, _("%s - Damage %3.0f%%"),
-					  getStatName(psStructure->pStructureType), getStructureDamage(psStructure) * 100.f));
+					  getStatName(psStructure->pStructureType), getStructureDamage(psStructure) * (100.f/65536.f)));
 		}
 		break;
 	default:
@@ -6201,13 +6202,13 @@ void printStructureInfo(STRUCTURE *psStructure)
 		if (getDebugMappingStatus())
 		{
 			CONPRINTF(ConsoleString, (ConsoleString, "%s - Damage % 3.2f%% - Unique ID %u",
-					  getStatName(psStructure->pStructureType), getStructureDamage(psStructure) * 100.f, psStructure->id));
+					  getStatName(psStructure->pStructureType), getStructureDamage(psStructure) * (100.f/65536.f), psStructure->id));
 		}
 		else
 #endif
 		{
 			CONPRINTF(ConsoleString, (ConsoleString, _("%s - Damage %3.0f%%"),
-					  getStatName(psStructure->pStructureType), getStructureDamage(psStructure) * 100.f));
+					  getStatName(psStructure->pStructureType), getStructureDamage(psStructure) * (100.f/65536.f)));
 		}
 		break;
 	}
@@ -7490,12 +7491,7 @@ float structHeightScale(STRUCTURE *psStruct)
 {
 	float retVal = (float)psStruct->currentBuildPts / (float)psStruct->pStructureType->buildPoints;
 
-	if(retVal < 0.05f)
-	{
-		retVal = 0.05f;
-	}
-	return retVal;
-
+	return MAX(retVal, 0.05f);
 }
 
 
@@ -7984,7 +7980,6 @@ void	structUpdateRecoil( STRUCTURE *psStruct )
 {
 	UDWORD	percent;
 	UDWORD	recoil;
-	float	fraction;
 
 	/* Check it's actually got a weapon */
 	if(psStruct->asWeaps[0].nStat == 0)
@@ -8014,9 +8009,7 @@ void	structUpdateRecoil( STRUCTURE *psStruct )
 		recoil = percent/5;
 	}
 
-	fraction = (float)asWeaponStats[psStruct->asWeaps[0].nStat].recoilValue / 100.f;
-
-	recoil = (float)recoil * fraction;
+	recoil = recoil * asWeaponStats[psStruct->asWeaps[0].nStat].recoilValue / 100;
 
 	/* Put it into the weapon data */
 	psStruct->asWeaps[0].recoilValue = recoil;

@@ -2794,7 +2794,7 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		//load in the map file
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "mission.map");
-		if (!mapLoad(aFileName))
+		if (!mapLoad(aFileName, false))
 		{
 			debug(LOG_ERROR, "Failed to load map");
 			return false;
@@ -2942,7 +2942,7 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		//load in the map file
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "game.map");
-		if (!mapLoad(aFileName))
+		if (!mapLoad(aFileName, false))
 		{
 			debug( LOG_NEVER, "loadgame: Fail7\n" );
 			return(false);
@@ -5317,7 +5317,7 @@ static DROID* buildDroidFromSaveDroidV11(SAVE_DROID_V11* psSaveDroid)
 	burnTime = psSaveDroid->burnStart;
 	psDroid->burnStart = burnTime;
 
-	psDroid->experience = (float)psSaveDroid->numKills;
+	psDroid->experience = psSaveDroid->numKills*65536;
 	//version 11
 	for (i=0; i < psDroid->numWeaps; i++)
 	{
@@ -5439,7 +5439,7 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 	burnTime = psSaveDroid->burnStart;
 	psDroid->burnStart = burnTime;
 
-	psDroid->experience = (float)psSaveDroid->numKills;
+	psDroid->experience = psSaveDroid->numKills*65536;
 	//version 14
 	psDroid->resistance = droidResistance(psDroid);
 
@@ -5784,7 +5784,7 @@ static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 	burnTime = psSaveDroid->burnStart;
 	psDroid->burnStart = burnTime;
 
-	psDroid->experience = (float)psSaveDroid->numKills;
+	psDroid->experience = psSaveDroid->numKills*65536;
 	//version 14
 	psDroid->resistance = droidResistance(psDroid);
 
@@ -6497,7 +6497,7 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 			}
 
 			//save out experience level
-			psSaveDroid->numKills	= (UDWORD) psCurr->experience;
+			psSaveDroid->numKills = psCurr->experience/65536;
 			//version 11
 			//Watermelon:endian_udword for new save format
 			for(i = 0;i < psCurr->numWeaps;i++)

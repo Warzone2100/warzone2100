@@ -25,7 +25,7 @@
 #include <assert.h>
 
 #include "fixedpoint.h"
-#include "types.h"
+#include "frame.h"
 #include "math_ext.h"
 
 #ifdef __cplusplus

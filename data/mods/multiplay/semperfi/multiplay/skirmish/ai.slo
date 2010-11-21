@@ -881,7 +881,7 @@ event truckRush(inactive)
 	// Reserve droids
 	groupAddGroup(rushGroup, buildGroup);
 
-	// Find oil well closest to to closest enemy
+	// Find oil well closest to closest enemy
 	mindist = 999999;
 	_closestOil = NULLOBJECT;
 	initIterateGroup(rushGroup);
@@ -891,7 +891,8 @@ event truckRush(inactive)
 	while (droid != NULLOBJECT and _oil != NULLOBJECT)
 	{
 		curdist = distBetweenTwoPoints(startX, startY, _oil.x, _oil.y);
-		if (curdist < mindist and droidCanReach(droid, _oil.x, _oil.y) and !threatInRange(me, _oil.x, _oil.y, OIL_THREAT_RANGE, FALSE))
+		// Find the closest oil to target player that we can reach safely, and that he can reach safely as well
+		if (curdist < mindist and droidCanReach(droid, _oil.x, _oil.y) and safeDest(me, _oil.x, _oil.y) && safeDest(target, _oil.x, _oil.y))
 		{
 			mindist = curdist;
 			_closestOil = _oil;
@@ -1167,27 +1168,24 @@ event buildDerrick(inactive)
 			_newDist = distBetweenTwoPoints(droid.x, droid.y, _oil.x, _oil.y);
 			_same = false;
 
-			if (_newDist < _bestDist and droidCanReach(droid, _oil.x, _oil.y))	// this one is closer
+			if (_newDist < _bestDist and droidCanReach(droid, _oil.x, _oil.y) and safeDest(me, _oil.x, _oil.y))	// this one is closer
 			{
-				if (!threatInRange(me, _oil.x, _oil.y, OIL_THREAT_RANGE, FALSE))
+				initIterateGroup(buildGroup);				// find all units in build group.
+				_search = iterateGroup(buildGroup);
+				foundOne = false;
+				while (_search != NULLOBJECT && !foundOne)
 				{
-					initIterateGroup(buildGroup);				// find all units in build group.
+					if (_search.orderx == _oil.x and _search.ordery == _oil.y and _search != droid)
+					{
+						_same = true;
+						foundOne = true;
+					}
 					_search = iterateGroup(buildGroup);
-					foundOne = false;
-					while (_search != NULLOBJECT && !foundOne)
-					{
-						if (_search.orderx == _oil.x and _search.ordery == _oil.y and _search != droid)
-						{
-							_same = true;
-							foundOne = true;
-						}
-						_search = iterateGroup(buildGroup);
-					}
-					if (!_same)	// do not go to same spot as another droid
-					{
-						_bestDist = _newDist;
-						_closestOil = _oil;
-					}
+				}
+				if (!_same)	// do not go to same spot as another droid
+				{
+					_bestDist = _newDist;
+					_closestOil = _oil;
 				}
 			}
 			_oil = getFeatureB(me);

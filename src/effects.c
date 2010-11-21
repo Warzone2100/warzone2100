@@ -69,7 +69,7 @@
 
 #include "multiplay.h"
 #include "game.h"
-
+#include "component.h"
 
 #define	GRAVITON_GRAVITY	((float)-800)
 #define	EFFECT_X_FLIP		0x1
@@ -204,8 +204,8 @@ static	UDWORD	lastUpdateStructures[EFFECT_STRUCTURE_DIVISION];
 static	UDWORD	auxVar; // dirty filthy hack - don't look for what this does.... //FIXME
 static	UDWORD	auxVarSec; // dirty filthy hack - don't look for what this does.... //FIXME
 static	UDWORD	specifiedSize;
-static  UDWORD	ellSpec;
-
+static	UDWORD	ellSpec;
+static	uint8_t	EffectForPlayer = 0;
 // ----------------------------------------------------------------------------------------
 /* PROTOTYPES */
 
@@ -506,6 +506,13 @@ void addMultiEffect(const Vector3i *basePos, Vector3i *scatter, EFFECT_GROUP gro
 	}
 }
 
+// When we need to set the effect for the player's color
+void	SetEffectForPlayer(uint8_t player)
+{
+	ASSERT(player < MAX_PLAYERS, "player is set to a invalid number of %d", (int) player);
+
+	EffectForPlayer = getPlayerColour(player);
+}
 
 void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, iIMDShape *imd, int lit)
 {
@@ -536,6 +543,10 @@ void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool s
 	/* Now, note group and type */
 	psEffect->group = group;
 	psEffect->type = type;
+
+	// and if the effect needs the player's color for certain things
+	psEffect->player = EffectForPlayer;
+	SetEffectForPlayer(0);	// reset it
 
 	/* Set when it entered the world */
 	psEffect->birthTime = psEffect->lastFrame = graphicsTime;
@@ -1778,7 +1789,7 @@ static void renderGravitonEffect(const EFFECT *psEffect)
 		pie_MatScale(psEffect->size / 100.f);
 	}
 
-	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, WZCOL_WHITE, WZCOL_BLACK, 0, 0);
+	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, psEffect->player, WZCOL_WHITE, WZCOL_BLACK, 0, 0);
 
 	/* Pop the matrix */
 	pie_MatEnd();

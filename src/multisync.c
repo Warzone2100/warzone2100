@@ -368,7 +368,7 @@ BOOL recvDroidCheck(NETQUEUE queue)
 				pD->body = pD->originalBody;
 				debug(LOG_SYNC, "Droid %u body was too high after synch, reducing to %u.", pc.droidID, pD->body);
 			}
-			MERGEDELTA(pD->experience, experience, "f");
+			MERGEDELTA(pD->experience, experience, "u");
 
 			if (pc.pos.x != pc2.pos.x || pc.pos.y != pc2.pos.y)
 			{

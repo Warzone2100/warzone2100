@@ -256,7 +256,7 @@ Section $(TEXT_SecDyDoAIMod) SecDyDoAIMod
   SetOutPath "$INSTDIR"
 
   !insertmacro MUI_STARTMENU_WRITE_BEGIN "Application"
-    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME} - DyDo-AI.lnk" "$INSTDIR\${PACKAGE}.exe" "--mod_mp dydo-ai.wz"
+    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME} - DyDo-AI.lnk" "$INSTDIR\${PACKAGE}.exe" "--mod_mp=dydo-ai.wz"
   !insertmacro MUI_STARTMENU_WRITE_END
 
 SectionEnd
@@ -268,7 +268,7 @@ Section $(TEXT_SecOriginalMod) SecOriginalMod
   SetOutPath "$INSTDIR"
 
   !insertmacro MUI_STARTMENU_WRITE_BEGIN "Application"
-    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME} - Old 1.10 Balance.lnk" "$INSTDIR\${PACKAGE}.exe" "--mod_mp old-1.10-balance.wz"
+    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME} - Old 1.10 Balance.lnk" "$INSTDIR\${PACKAGE}.exe" "--mod_mp=old-1.10-balance.wz"
   !insertmacro MUI_STARTMENU_WRITE_END
 
 SectionEnd
@@ -383,6 +383,9 @@ Section "-NLS files" SecNLS_files
 
   SetOutPath "$INSTDIR\locale\sl\LC_MESSAGES"
   File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\sl.gmo"
+
+  SetOutPath "$INSTDIR\locale\tr\LC_MESSAGES"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\tr.gmo"
 
   SetOutPath "$INSTDIR\locale\uk\LC_MESSAGES"
   File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\uk_UA.gmo"
@@ -803,6 +806,10 @@ Section "Uninstall"
   Delete "$INSTDIR\locale\sl\LC_MESSAGES\${PACKAGE}.mo"
   RMDir "$INSTDIR\locale\sl\LC_MESSAGES"
   RMDir "$INSTDIR\locale\sl"
+
+  Delete "$INSTDIR\locale\tr\LC_MESSAGES\${PACKAGE}.mo"
+  RMDir "$INSTDIR\locale\tr\LC_MESSAGES"
+  RMDir "$INSTDIR\locale\tr"
 
   Delete "$INSTDIR\locale\uk\LC_MESSAGES\${PACKAGE}.mo"
   RMDir "$INSTDIR\locale\uk\LC_MESSAGES"

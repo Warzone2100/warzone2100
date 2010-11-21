@@ -151,7 +151,7 @@ typedef struct DROID
 	UDWORD          weight;
 	UDWORD          baseSpeed;                      ///< the base speed dependant on propulsion type
 	UDWORD          originalBody;                   ///< the original body points
-	float           experience;
+	uint32_t        experience;
 	UBYTE           NameVersion;                    ///< Version number used for generating on-the-fly names (e.g. Viper Mk "I" would be stored as 1 - Viper Mk "X" as 10)  - copied from droid template
 
 	int		lastFrustratedTime;		///< Set when eg being stuck; used for eg firing indiscriminately at map features to clear the way (note: signed, so wrap arounds after 24.9 days)
@@ -207,6 +207,7 @@ typedef struct DROID
 	/* Movement control data */
 	MOVE_CONTROL    sMove;
 	SPACETIME       prevSpacetime;                  ///< Location of droid in previous tick.
+	uint8_t		blockedBits;			///< Bit set telling which tiles block this type of droid (TODO)
 
 	/* anim data */
 	ANIM_OBJECT     *psCurAnim;

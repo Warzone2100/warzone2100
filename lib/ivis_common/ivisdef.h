@@ -82,7 +82,7 @@ typedef struct _iIMDShape {
 	int texpage;
 	int tcmaskpage;
 	int sradius, radius;
-	Vector3f min, max;
+	Vector3i min, max;
 
 	Vector3f ocen;
 	unsigned short numFrames;
@@ -95,7 +95,7 @@ typedef struct _iIMDShape {
 	iIMDPoly *polys;
 
 	unsigned int nconnectors;
-	Vector3f *connectors;
+	Vector3i *connectors;
 
 	unsigned int nShadowEdges;
 	EDGE *shadowEdgeList;

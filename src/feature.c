@@ -54,7 +54,6 @@
 #include "display3d.h"
 #include "random.h"
 
-
 /* The statistics for the features */
 FEATURE_STATS	*asFeatureStats;
 UDWORD			numFeatureStats;
@@ -228,13 +227,13 @@ void featureStatsShutDown(void)
  *  \param damage amount of damage to deal
  *  \param weaponClass,weaponSubClass the class and subclass of the weapon that deals the damage
  *  \param impactSide the side/directon on which the feature is hit
- *  \return < 0 when the dealt damage destroys the feature, > 0 when the feature survives
+ *  \return < 0 never, >= 0 always
  */
-float featureDamage(FEATURE *psFeature, UDWORD damage, UDWORD weaponClass, UDWORD weaponSubClass, HIT_SIDE impactSide)
+int32_t featureDamage(FEATURE *psFeature, UDWORD damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, HIT_SIDE impactSide)
 {
-	float		relativeDamage;
+	int32_t relativeDamage;
 
-	ASSERT_OR_RETURN(0.0f, psFeature != NULL, "Invalid feature pointer");
+	ASSERT_OR_RETURN(0, psFeature != NULL, "Invalid feature pointer");
 
 	debug(LOG_ATTACK, "feature (id %d): body %d armour %d damage: %d",
 	      psFeature->id, psFeature->body, psFeature->armour[impactSide][weaponClass], damage);
@@ -242,11 +241,11 @@ float featureDamage(FEATURE *psFeature, UDWORD damage, UDWORD weaponClass, UDWOR
 	relativeDamage = objDamage((BASE_OBJECT *)psFeature, damage, psFeature->psStats->body, weaponClass, weaponSubClass, impactSide);
 
 	// If the shell did sufficient damage to destroy the feature
-	if (relativeDamage < 0.0f)
+	if (relativeDamage < 0)
 	{
 		debug(LOG_ATTACK, "feature (id %d) DESTROYED", psFeature->id);
 		destroyFeature(psFeature);
-		return relativeDamage * -1.0f;
+		return relativeDamage * -1;
 	}
 	else
 	{
@@ -325,6 +324,7 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 	objEcmCache((BASE_OBJECT *)psFeature, NULL);
 	psFeature->bTargetted = false;
 	psFeature->timeLastHit = 0;
+	psFeature->lastHitWeapon = WSC_NUM_WEAPON_SUBCLASSES;  // no such weapon
 
 	// it has never been drawn
 	psFeature->sDisplay.frameNumber = 0;
@@ -410,18 +410,18 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 				// if it's a tall feature then flag it in the map.
 				if (psFeature->sDisplay.imd->max.y > TALLOBJECT_YMAX)
 				{
-					SET_TILE_TALLSTRUCTURE(psTile);
+					psTile->blockingBits |= AIR_BLOCKED;
 				}
 
-				if (psStats->subType == FEAT_GEN_ARTE || psStats->subType == FEAT_OIL_DRUM || psStats->subType == FEAT_BUILD_WRECK)// they're there - just can see me
+				if (psStats->subType != FEAT_GEN_ARTE && psStats->subType != FEAT_OIL_DRUM && psStats->subType != FEAT_BUILD_WRECK)
 				{
-					SET_TILE_NOTBLOCKING(psTile);
+					psTile->blockingBits |= FEATURE_BLOCKED;
 				}
 			}
 
 			if( (!psStats->tileDraw) && (FromSave == false) )
 			{
-				psTile->height = (UBYTE)(height / ELEVATION_SCALE);
+				psTile->height = height;
 			}
 		}
 	}
@@ -502,8 +502,7 @@ bool removeFeature(FEATURE *psDel)
 				if (psTile->psObject == (BASE_OBJECT *)psDel)
 				{
 					psTile->psObject = NULL;
-					CLEAR_TILE_TALLSTRUCTURE(psTile);
-					CLEAR_TILE_NOTBLOCKING(psTile);
+					psTile->blockingBits &= ~FEATURE_BLOCKED;
 				}
 			}
 		}

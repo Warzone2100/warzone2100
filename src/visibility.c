@@ -186,7 +186,7 @@ static void doWaveTerrain(int sx, int sy, int sz, unsigned radius, int rayPlayer
 		}
 		psTile = mapTile(mapX, mapY);
 
-		tileHeight = psTile->height * ELEVATION_SCALE;
+		tileHeight = psTile->height;
 		perspectiveHeight = (tileHeight - sz) * tiles[i].invRadius;
 
 		if (tiles[i].angBegin < lastAngle)

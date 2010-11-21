@@ -30,7 +30,6 @@ extern "C"
 
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
-#define ABS(a) (((a) < 0) ? (-(a)) : (a))
 
 #define ABSDIF(a,b) ((a)>(b) ? (a)-(b) : (b)-(a))
 
@@ -41,101 +40,6 @@ extern "C"
     if ((val) < (min)) (val) = (min);                                         \
     else if ((val) > (max)) (val) = (max);                                    \
 } while(0)
-
-/**
- * Returns the index of the lowest value in the array.
- */
-static inline int arrayMin(const int *array, const size_t n, size_t *index)
-{
-	size_t i, minIdx;
-	
-	// Find the index of the minimum value
-	for (i = minIdx = 0; i < n; i++)
-	{
-		if (array[i] < array[minIdx])
-		{
-			minIdx = i;
-		}
-	}
-	
-	// If requested, store the index of the minimum value
-	if (index != NULL)
-	{
-		*index = minIdx;
-	}
-	
-	// Return the value
-	return array[minIdx];
-}
-
-static inline float arrayMinF(const float *array, const size_t n, size_t *index)
-{
-	size_t i, minIdx;
-	
-	// Find the index of the minimum value
-	for (i = minIdx = 0; i < n; i++)
-	{
-		if (array[i] < array[minIdx])
-		{
-			minIdx = i;
-		}
-	}
-	
-	// If requested, store the index of the minimum value
-	if (index != NULL)
-	{
-		*index = minIdx;
-	}
-	
-	// Return the value
-	return array[minIdx];
-}
-
-static inline int arrayMax(const int *array, const size_t n, size_t *index)
-{
-	size_t i, maxIdx;
-	
-	// Find the index of the maximum value
-	for (i = maxIdx = 0; i < n; i++)
-	{
-		if (array[i] > array[maxIdx])
-		{
-			maxIdx = i;
-		}
-	}
-	
-	// If requested, store the index of the maximum value
-	if (index != NULL)
-	{
-		*index = maxIdx;
-	}
-	
-	// Return the value
-	return array[maxIdx];
-}
-
-static inline float arrayMaxF(const float *array, const size_t n, size_t *index)
-{
-	size_t i, maxIdx;
-	
-	// Find the index of the maximum value
-	for (i = maxIdx = 0; i < n; i++)
-	{
-		if (array[i] > array[maxIdx])
-		{
-			maxIdx = i;
-		}
-	}
-	
-	// If requested, store the index of the maximum value
-	if (index != NULL)
-	{
-		*index = maxIdx;
-	}
-	
-	// Return the value
-	return array[maxIdx];
-}
 
 /*
    defines for ONEINX
@@ -152,9 +56,6 @@ static inline float arrayMaxF(const float *array, const size_t n, size_t *index)
 #define TOSTRING(x) MACROS_H_STRINGIFY(x)
 
 #define AT_MACRO __FILE__ ":" TOSTRING(__LINE__)
-
-#define MKID(a) MKID_(a, __LINE__)
-#define MKID_(a, b) a ## b
 
 #ifdef __cplusplus
 }
