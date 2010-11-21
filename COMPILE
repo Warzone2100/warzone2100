@@ -1,8 +1,8 @@
 ﻿Warzone Compilation Guide.
-===========
+=================================
 NOTE: This guide is out of date, we have now moved to git, not svn.
 Our repo is now at git://github.com/Warzone2100/warzone2100.git
-===========
+=================================
 The compilation method depends on your operating system.
 
 This guide will tell you how to compile warzone on its two main supported platforms: Linux and Windows.
