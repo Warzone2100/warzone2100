@@ -57,12 +57,12 @@
 
 static WZ_THREAD *dangerThread = NULL;
 static WZ_SEMAPHORE *dangerSemaphore = NULL;
+static WZ_SEMAPHORE *dangerDoneSemaphore = NULL;
 struct floodtile { uint8_t x; uint8_t y; };
 static struct floodtile *floodbucket = NULL;
 static int bucketcounter;
 static UDWORD lastDangerUpdate = 0;
-static volatile int lastDangerPlayer = -1;
-static volatile bool dangerDone = false;
+static int lastDangerPlayer = -1;
 
 struct ffnode
 {
@@ -1074,11 +1074,15 @@ BOOL mapShutdown(void)
 
 	if (dangerThread)
 	{
+		wzSemaphoreWait(dangerDoneSemaphore);
 		lastDangerPlayer = -1;
 		wzSemaphorePost(dangerSemaphore);
 		wzThreadJoin(dangerThread);
+		wzSemaphoreDestroy(dangerSemaphore);
+		wzSemaphoreDestroy(dangerDoneSemaphore);
 		dangerThread = NULL;
 		dangerSemaphore = NULL;
+		dangerDoneSemaphore = NULL;
 	}
 
 	free(psMapTiles);
@@ -1628,9 +1632,8 @@ bool fireOnLocation(unsigned int x, unsigned int y)
 }
 
 // This function runs in a separate thread!
-static int dangerFloodFill(WZ_DECL_UNUSED void *data)
+static int dangerFloodFill(int player)
 {
-	int player = lastDangerPlayer;
 	int i;
 	Vector2i pos = getPlayerStartPosition(player);
 	Vector2i npos;
@@ -1701,7 +1704,7 @@ static int dangerThreadFunc(WZ_DECL_UNUSED void *data)
 	while (lastDangerPlayer != -1)
 	{
 		dangerFloodFill(lastDangerPlayer);	// Do the actual work
-		dangerDone = true;			// Signal that we are done
+		wzSemaphorePost(dangerDoneSemaphore);   // Signal that we are done
 		wzSemaphoreWait(dangerSemaphore);	// Go to sleep until needed.
 	}
 	return 0;
@@ -1821,6 +1824,7 @@ void mapInit()
 	{
 		lastDangerPlayer = 0;
 		dangerSemaphore = wzSemaphoreCreate(0);
+		dangerDoneSemaphore = wzSemaphoreCreate(0);
 		dangerThread = wzThreadCreate(dangerThreadFunc, NULL);
 		wzThreadStart(dangerThread);
 	}
@@ -1847,12 +1851,8 @@ void mapUpdate()
 
 	if (gameTime > lastDangerUpdate + GAME_TICKS_FOR_DANGER && game.type == SKIRMISH)
 	{
-		// Spin lock if previous job not done yet
-		while (!dangerDone)
-		{
-			SDL_Delay(1);
-			ASSERT_OR_RETURN(, gameTime < lastDangerUpdate + GAME_TICKS_FOR_DANGER * 100, "Timed out waiting for danger map");
-		}
+		// Lock if previous job not done yet
+		wzSemaphoreWait(dangerDoneSemaphore);
 
 		auxMapRestore(lastDangerPlayer, AUX_DANGERMAP, AUXBITS_THREAT | AUXBITS_AATHREAT | AUXBITS_DANGER);
 		lastDangerPlayer = (lastDangerPlayer + 1 ) % game.maxPlayers;
