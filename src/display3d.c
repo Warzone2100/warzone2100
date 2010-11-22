@@ -3397,7 +3397,7 @@ static void	drawDroidSelections( void )
 		}
 	}
 
-
+	glColor3f( 1.f, 1.f, 1.f); // Reset colors
 	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 }
 
