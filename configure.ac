@@ -210,7 +210,7 @@ AC_ARG_ENABLE([motif],
 # -Wno-unused-label is necessary because flex produces unused labels that we cannot fix
 # Add later for stricter checking: -Wextra -Wmissing-declarations -Wstrict-prototypes
 AC_ARG_ENABLE([debug],
-	AS_HELP_STRING([--enable-debug[=yes/relaxed/profile/debugprofile/no]],[Compile debug version [[yes]]]),
+	AS_HELP_STRING([--enable-debug[=yes/relaxed/profile/debugprofile/optimised/no]],[Compile debug version [[yes]]]),
 	[ enable_debug=${enableval} ], [ enable_debug=yes ])
 AC_MSG_CHECKING([whether to compile in debug mode])
 AC_MSG_RESULT([${enable_debug}])
@@ -222,30 +222,55 @@ AC_MSG_RESULT([${enable_debug}])
 AX_C_CHECK_FLAG([-Werror -Wno-switch], , , CFLAGS_IGNORE_WARNINGS="${CFLAGS_IGNORE_WARNINGS} -Wno-switch")
 AX_C_CHECK_FLAG([-Werror -Wno-enum-compare], , , CFLAGS_IGNORE_WARNINGS="${CFLAGS_IGNORE_WARNINGS} -Wno-enum-compare")
 
+if test "x$enable_warnings" = "xyes" ; then
+	# Only disable -Werror for the warning.
+	WZ_Wno_="-Wno-error="
+else
+	# Disable warning completely.
+	WZ_Wno_="-Wno-"
+fi
+
+WZ_WARNINGS_GCC="-Wall -Wextra ${WZ_Wno_}unused-parameter ${WZ_Wno_}sign-compare -Wcast-align -Wwrite-strings -Wpointer-arith ${WZ_Wno_}format-security"
+WZ_WARNINGS_GCC_C="${WZ_WARNINGS_GCC} ${WZ_Wno_}pointer-to-int-cast ${WZ_Wno_}strict-aliasing -Wstrict-prototypes -Wdeclaration-after-statement -Wc++-compat ${WZ_Wno_}c++-compat ${CFLAGS_IGNORE_WARNINGS}"
+WZ_WARNINGS_GCC_CXX="${WZ_WARNINGS_GCC}"
 if test "x$enable_debug" = "xyes" ; then
 	if test "x$cc_icc" = "xyes" ; then
 		WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -Wcheck -Werror"
+		WZ_CXXFLAGS="${WZ_CXXFLAGS} -O0 -g -Wcheck -Werror"
 		WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 	else
-		WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -Wall -Werror -Wno-unused-label -Wno-pointer-to-int-cast -Wmissing-field-initializers -Wcast-align -Wwrite-strings"
-		WZ_CFLAGS="${WZ_CFLAGS} -Wmissing-declarations -Wstrict-prototypes -Wpointer-arith -Wno-format-security -Wdeclaration-after-statement"
-		WZ_CFLAGS="${WZ_CFLAGS} ${CFLAGS_IGNORE_WARNINGS}"
+		WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -Werror ${WZ_WARNINGS_GCC_C}"
+		WZ_CXXFLAGS="${WZ_CXXFLAGS} -O0 -g -Werror ${WZ_WARNINGS_GCC_CXX}"
 		WZ_C99FLAGS="${WZ_C99FLAGS} -Wno-declaration-after-statement"
 		WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 	fi
+elif test "x$enable_debug" = "xoptimised" ; then
+	WZ_CFLAGS="${WZ_CFLAGS} -O2 -g -Werror ${WZ_WARNINGS_GCC_C}"
+	WZ_CXXFLAGS="${WZ_CXXFLAGS} -O2 -g -Werror ${WZ_WARNINGS_GCC_CXX}"
+	WZ_C99FLAGS="${WZ_C99FLAGS} -Wno-declaration-after-statement"
+	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 elif test "x$enable_debug" = "xrelaxed" ; then
-	WZ_CFLAGS="${WZ_CFLAGS} -g -O0 -Wall -Wextra -Wwrite-strings"
+	WZ_CFLAGS="${WZ_CFLAGS} -g -O0 ${WZ_WARNINGS_GCC_C}"
+	WZ_CXXFLAGS="${WZ_CXXFLAGS} -g -O0 ${WZ_WARNINGS_GCC_CXX}"
 	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 elif test "x$enable_debug" = "xdebugprofile" ; then
-	WZ_CFLAGS="${WZ_CFLAGS} -g -O0 -pg -Wall -Wwrite-strings"
+	WZ_CFLAGS="${WZ_CFLAGS} -g -O0 -pg ${WZ_WARNINGS_GCC_C}"
+	WZ_CXXFLAGS="${WZ_CXXFLAGS} -g -O0 -pg ${WZ_WARNINGS_GCC_CXX}"
 	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 	LDFLAGS="-pg ${LDFLAGS}"
 elif test "x$enable_debug" = "xprofile" ; then
-	WZ_CFLAGS="${WZ_CFLAGS} -g -Os -pg -Wall -Wwrite-strings"
+	WZ_CFLAGS="${WZ_CFLAGS} -g -Os -pg ${WZ_WARNINGS_GCC_C}"
+	WZ_CXXFLAGS="${WZ_CXXFLAGS} -g -Os -pg ${WZ_WARNINGS_GCC_CXX}"
 	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DNDEBUG"
 	LDFLAGS="-pg ${LDFLAGS}"
+elif test "x$enable_debug" = "xg++" ; then
+	WZ_CFLAGS="${WZ_CFLAGS} -g -O2 ${WZ_WARNINGS_GCC_C} -fpermissive"
+	WZ_CXXFLAGS="${WZ_CXXFLAGS} -g -O2 ${WZ_WARNINGS_GCC_CXX}"
+	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
+	CC="g++"
 else
-	WZ_CFLAGS="${WZ_CFLAGS} -g -Wall -Wwrite-strings"
+	WZ_CFLAGS="${WZ_CFLAGS} -g ${WZ_WARNINGS_GCC_C}"
+	WZ_CXXFLAGS="${WZ_CXXFLAGS} -g ${WZ_WARNINGS_GCC_CXX}"
 	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DNDEBUG"
 fi
 
@@ -437,6 +462,7 @@ WZ_CPPFLAGS="${WZ_CPPFLAGS} -I\$(top_srcdir)"
 
 AC_SUBST([WZ_CPPFLAGS], [${WZ_CPPFLAGS}])
 AC_SUBST([WZ_CFLAGS], [${WZ_CFLAGS}])
+AC_SUBST([WZ_CXXFLAGS], [${WZ_CXXFLAGS}])
 AC_SUBST([WZ_C99FLAGS], [${WZ_C99FLAGS}])
 
 

@@ -857,7 +857,7 @@ static int checkFireLine( const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarg
  */
 bool lineOfFire(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, int weapon_slot, bool wallsBlock)
 {
-	WEAPON_STATS *psStats;
+	WEAPON_STATS *psStats = NULL;
 
 	ASSERT(psViewer != NULL, "Invalid shooter pointer!");
 	ASSERT(psTarget != NULL, "Invalid target pointer!");

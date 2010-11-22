@@ -29,6 +29,10 @@
 /* Get the Yacc definitions */
 #include "audp_parser.tab.h"
 
+// fwrite declared with warn_unused_result, resulting in mysterious errors in "%%" on some distros.
+static inline bool no_warn_unused_result(int ignore) { if (ignore) {} return true; }
+#define fwrite(a, b, c, d) no_warn_unused_result(fwrite(a, b, c, d))
+
 /* Maximum length for any TEXT value */
 #define YYLMAX	255
 
