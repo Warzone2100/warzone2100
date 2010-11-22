@@ -974,7 +974,7 @@ static void eventFreeTrigger(ACTIVE_TRIGGER *psTrigger)
 // Activate a callback trigger
 void eventFireCallbackTrigger(TRIGGER_TYPE callback)
 {
-	ACTIVE_TRIGGER	*psPrev = NULL, *psCurr, *psNext, **ppsNext;
+	ACTIVE_TRIGGER	*psPrev = NULL, *psCurr, *psNext;
 	TRIGGER_DATA	*psTrigDat;
 	BOOL		fired;
 
@@ -986,9 +986,9 @@ void eventFireCallbackTrigger(TRIGGER_TYPE callback)
 
 	//this can be called from eventProcessTriggers and so will wipe out all the current added ones
 	//psAddedTriggers = NULL;
-	for (psCurr = psCallbackList; psCurr && psCurr->type <= (int)callback; psCurr = *ppsNext)
+	for (psCurr = psCallbackList; psCurr && psCurr->type <= (int)callback; psCurr = psNext)
 	{
-		ppsNext = &psCurr->psNext;
+		psNext = psCurr->psNext;
 		if (psCurr->type == (int)callback)
 		{
 			// see if the callback should be fired
@@ -1035,12 +1035,10 @@ void eventFireCallbackTrigger(TRIGGER_TYPE callback)
 				if (psPrev == NULL)
 				{
 					psCallbackList = psCallbackList->psNext;
-					ppsNext = &psCallbackList;
 				}
 				else
 				{
-					psPrev->psNext = *ppsNext;
-					ppsNext = &psPrev->psNext;
+					psPrev->psNext = psNext;
 				}
 
 				triggerChanged = false;
