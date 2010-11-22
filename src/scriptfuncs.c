@@ -4142,8 +4142,7 @@ BOOL scrAllianceExistsBetween(void)
 	{
 		return false;
 	}
-	ASSERT_OR_RETURN(false, i < MAX_PLAYERS && j < MAX_PLAYERS && i >= 0 && j >= 0, 
-	                 "Invalid player parameters %d and %d", i, j);
+	ASSERT_OR_RETURN(false, i < MAX_PLAYERS && j < MAX_PLAYERS, "Invalid player parameters %d and %d", i, j);
 	if(alliances[i][j] == ALLIANCE_FORMED)
 	{
 		scrFunctionResult.v.bval = true;
@@ -5584,8 +5583,7 @@ static BOOL pickStructLocation(DROID *psDroid, int index, int *pX, int *pY, int 
 	STRUCTURE_STATS	*psStat;
 	UDWORD			numIterations = 30;
 	BOOL			found = false;
-	UDWORD			startX, startY, incX, incY;
-	SDWORD			x=0, y=0;
+	int startX, startY, incX, incY, x, y;
 
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS && player >= 0, "Invalid player number %d", player);
 
@@ -10157,18 +10155,6 @@ VIEWDATA *CreateBeaconViewData(SDWORD sender, UDWORD LocX, UDWORD LocY)
 	((VIEW_PROXIMITY *)psViewData->pData)->audioID = audioID;
 
 	//store blip location
-	if (LocX < 0)
-	{
-		ASSERT(false, "prepairHelpViewData() - Negative X coord for prox message");
-		return NULL;
-	}
-
-	if (LocY < 0)
-	{
-		ASSERT(false, "prepairHelpViewData() - Negative X coord for prox message");
-		return NULL;
-	}
-
 	((VIEW_PROXIMITY *)psViewData->pData)->x = (UDWORD)LocX;
 	((VIEW_PROXIMITY *)psViewData->pData)->y = (UDWORD)LocY;
 

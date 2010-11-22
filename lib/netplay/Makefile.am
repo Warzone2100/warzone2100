@@ -2,6 +2,7 @@ SUBDIRS = miniupnpc
 
 AM_CPPFLAGS = $(SDL_CFLAGS) $(SDL_NET_CFLAGS) $(WZ_CPPFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS)
+AM_CXXFLAGS = $(WZ_CXXFLAGS)
 
 noinst_LIBRARIES = libnetplay.a
 noinst_HEADERS = \

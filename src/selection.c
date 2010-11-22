@@ -530,8 +530,7 @@ STRUCTURE	*psFirst;
 BOOL		bLaterInList;
 
 	/* Firstly, start coughing if the type is invalid */
-	ASSERT( structType>=REF_HQ && structType<=NUM_DIFF_BUILDINGS,
-		"Invalid structure type in selNextSpecifiedBuilding" );
+	ASSERT(structType <= NUM_DIFF_BUILDINGS, "Invalid structure type %u in selNextSpecifiedBuilding", structType);
 
 	for(psCurr = apsStructLists[selectedPlayer], psFirst = NULL,psResult = NULL,bLaterInList = false;
 		psCurr && !psResult; psCurr = psCurr->psNext)

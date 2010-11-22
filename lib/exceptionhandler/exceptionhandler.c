@@ -133,6 +133,7 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 #  define MAX_BACKTRACE 20
 # endif
 
+#define write(x, y, z) abs(write(x, y, z))  // HACK Squelch unused result warning.
 
 # define MAX_PID_STRING 16
 # define MAX_DATE_STRING 256

@@ -3242,13 +3242,15 @@ error:
 	if (result == SOCKET_ERROR)
 	{
 		free(NetPlay.MOTD);
-		asprintf(&NetPlay.MOTD, "Error connecting to the lobby server: %s\nMake sure port %d can receive incoming connections.", strSockError(getSockErr()), gameserver_port);
+		if (asprintf(&NetPlay.MOTD, "Error while connecting to the lobby server: %s\nMake sure port %d can receive incoming connections.", strSockError(getSockErr()), gameserver_port) == -1)
+			NetPlay.MOTD = NULL;
 		debug(LOG_ERROR, "%s", NetPlay.MOTD);
 	}
 	else
 	{
 		free(NetPlay.MOTD);
-		asprintf(&NetPlay.MOTD, "Disconnected from lobby server. Failed to register game.");
+		if (asprintf(&NetPlay.MOTD, "Disconnected from lobby server. Failed to register game.") == -1)
+			NetPlay.MOTD = NULL;
 		debug(LOG_ERROR, "%s", NetPlay.MOTD);
 	}
 
@@ -3281,7 +3283,8 @@ static void NETregisterServer(int state)
 				{
 					debug(LOG_ERROR, "Cannot resolve masterserver \"%s\": %s", masterserver_name, strSockError(getSockErr()));
 					free(NetPlay.MOTD);
-					asprintf(&NetPlay.MOTD, _("Could not resolve masterserver name (%s)!"), masterserver_name);
+					if (asprintf(&NetPlay.MOTD, _("Could not resolve masterserver name (%s)!"), masterserver_name) == -1)
+						NetPlay.MOTD = NULL;
 					server_not_there = true;
 					return;
 				}
@@ -3306,7 +3309,8 @@ static void NETregisterServer(int state)
 				{
 					debug(LOG_ERROR, "Cannot connect to masterserver \"%s:%d\": %s", masterserver_name, masterserver_port, strSockError(getSockErr()));
 					free(NetPlay.MOTD);
-					asprintf(&NetPlay.MOTD, _("Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"), masterserver_port);
+					if (asprintf(&NetPlay.MOTD, _("Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"), masterserver_port) == -1)
+						NetPlay.MOTD = NULL;
 					server_not_there = true;
 					return;
 				}
@@ -3316,7 +3320,8 @@ static void NETregisterServer(int state)
 				 || readAll(rs_socket[0], &gameId, sizeof(gameId), 10000) != sizeof(gameId))
 				{
 					free(NetPlay.MOTD);
-					asprintf(&NetPlay.MOTD, "Failed to retrieve a game ID: %s", strSockError(getSockErr()));
+					if (asprintf(&NetPlay.MOTD, "Failed to retrieve a game ID: %s", strSockError(getSockErr())) == -1)
+						NetPlay.MOTD = NULL;
 					debug(LOG_ERROR, "%s", NetPlay.MOTD);
 
 					// The sockets have been invalidated, so get rid of it. (using them now may cause SIGPIPE).

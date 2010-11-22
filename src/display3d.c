@@ -791,7 +791,7 @@ void setTileColour(int x, int y, PIELIGHT colour)
 /// Draw the terrain and all droids, missiles and other objects on it
 static void drawTiles(iView *player)
 {
-	UDWORD i, j;
+	int i, j;
 	SDWORD rx, rz;
 
 	// Animate the water texture, just cycles the V coordinate through half the tiles height.
