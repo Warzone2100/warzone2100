@@ -83,7 +83,7 @@ typedef struct _active_trigger
 	SWORD				trigger;
 	UWORD				event;
 	UWORD				offset;
-
+	BOOL				deactivated;	// Whether the trigger is marked for deletion
 	struct _active_trigger *psNext;
 } ACTIVE_TRIGGER;
 
