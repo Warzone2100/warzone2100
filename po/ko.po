@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100 2.3_branch\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-11-09 16:00+0100\n"
-"PO-Revision-Date: 2003-01-15 11:40+0900\n"
+"POT-Creation-Date: 2010-11-24 17:53+0100\n"
+"PO-Revision-Date: 2010-11-23 21:01+0900\n"
 "Last-Translator: Joshua Shin <urgood2@gmail.com>\n"
 "Language-Team: Korean Translation Team <urgood2@gmail.com>\n"
 "Language: \n"
@@ -10174,7 +10174,7 @@ msgstr "내 인공 두뇌학 미래의 길을 열기 위해, 한때 나는 세�
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:9
 msgid "I now intend to further shape the world into my own image, by  surgically removing unwanted growths like yourself."
-msgstr "난 이제 당신 같은 원치 않는 부분들을 없애서, 세상을 더 나의 형상으로 빚을 것이다."
+msgstr "난 이제 당신 같은 원치 않는 부분들을 없애서, 세상을 나의 형상으로 더 빚을 것이다."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:11
 msgid "My Laser Satellites are now powering up. I intend to test them on you first, Commander!"
@@ -12647,10 +12647,15 @@ msgstr "스페셜"
 msgid "Hero"
 msgstr "히어로"
 
-#: src/droid.c:4633
+#: src/droid.c:4643
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
-msgstr ""
+msgstr "%s가 당신에게 %s를(을) 주고 싶어하지만 이미 수가 너무 많습니다!"
+
+#: src/droid.c:4647
+#, fuzzy, c-format
+msgid "You wanted to give %s a %s but they have too many!"
+msgstr "%s가 당신에게 %s를(을) 주고 싶어하지만 이미 수가 너무 많습니다!"
 
 #: src/frontend.c:97
 msgid "Single Player"
@@ -14870,55 +14875,55 @@ msgstr "사령관을 찾을 수 없습니다!"
 msgid "Control Limit Reached - Production Halted"
 msgstr "제어 한계에 도달하였습니다 - 생산이 중단되었습니다"
 
-#: src/structure.c:5956
-#: src/structure.c:5981
+#: src/structure.c:5959
+#: src/structure.c:5984
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - 유닛 %u개 할당되었습니다"
 
-#: src/structure.c:5986
-#: src/structure.c:6050
+#: src/structure.c:5989
+#: src/structure.c:6053
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - 데미지 %3.0f%%"
 
-#: src/structure.c:6036
+#: src/structure.c:6039
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - %u개 연결 되었습니다 (전체 %u개)"
 
-#: src/structure.c:6171
-#: src/structure.c:6220
+#: src/structure.c:6174
+#: src/structure.c:6223
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - 전자적으로 손상됨"
 
-#: src/structure.c:6453
+#: src/structure.c:6456
 msgid "Electronic Reward - Visibility Report"
 msgstr "전자적 보상 - 시계보고"
 
-#: src/structure.c:6493
+#: src/structure.c:6496
 msgid "Factory Reward - Propulsion"
 msgstr "공장 보상 - 추진력"
 
-#: src/structure.c:6517
+#: src/structure.c:6520
 msgid "Factory Reward - Body"
 msgstr "공장 보상 - 차체"
 
-#: src/structure.c:6541
+#: src/structure.c:6544
 msgid "Factory Reward - Weapon"
 msgstr "공장 보상 - 무기"
 
-#: src/structure.c:6550
+#: src/structure.c:6553
 msgid "Factory Reward - Nothing"
 msgstr "공장 보상 - 없음"
 
-#: src/structure.c:6578
+#: src/structure.c:6581
 msgid "Repair Facility Award - Repair"
 msgstr "수리 시설 상 - 수리"
 
-#: src/structure.c:6585
+#: src/structure.c:6588
 msgid "Repair Facility Award - Nothing"
 msgstr "수리 시설 상 - 없음"
 
@@ -14958,34 +14963,6 @@ msgstr " - 빌드 날짜 %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "버젼 %s%s%s%s"
-
-#, fuzzy
-#~ msgid "Super Transport Available"
-#~ msgstr "사이보그 수송선이 사용 가능합니다"
-
-#, fuzzy
-#~ msgid "Super Transport"
-#~ msgstr "수송선"
-
-#, fuzzy
-#~ msgid "Super Transport Body"
-#~ msgstr "수송 차체"
-
-#, fuzzy
-#~ msgid "3 players"
-#~ msgstr "2 플레이어"
-
-#, fuzzy
-#~ msgid "5 players"
-#~ msgstr "2 플레이어"
-
-#, fuzzy
-#~ msgid "6 players"
-#~ msgstr "2 플레이어"
-
-#, fuzzy
-#~ msgid "7 players"
-#~ msgstr "2 플레이어"
 
 #~ msgid "Mini-Rocket accuracy +10%"
 #~ msgstr "미니로케트 정확도 +10%"
