@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-11-15 23:18+0100\n"
+"POT-Creation-Date: 2010-11-24 17:56+0100\n"
 "PO-Revision-Date: 2010-11-11 22:01+0200\n"
 "Last-Translator: Ayhan Görgülü <ayhangorgulu@gmail.com>\n"
 "Language-Team: Turkey <warzone-dev@gna.org>\n"
@@ -12209,7 +12209,7 @@ msgid "System locale"
 msgstr "Yerel Sistem"
 
 #: lib/netplay/netplay.c:1289
-#: lib/netplay/netplay.c:2229
+#: lib/netplay/netplay.c:2227
 msgid "Enter password here"
 msgstr "Parolayı buraya gir"
 
@@ -12218,7 +12218,7 @@ msgstr "Parolayı buraya gir"
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Konnte Lobbyserver-Namen nicht auflösen (%s)!"
 
-#: lib/netplay/netplay.c:3315
+#: lib/netplay/netplay.c:3316
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Lobi Sunucusu ile iletişim kurulamadı! TCP-Port %u u açıkmı?"
@@ -12626,9 +12626,14 @@ msgstr "Orgeneral"
 msgid "Hero"
 msgstr "Mareşal"
 
-#: src/droid.c:4912
+#: src/droid.c:4922
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
+msgstr "%s Sana vermek isterim %s ama, Daha çok var!"
+
+#: src/droid.c:4926
+#, fuzzy, c-format
+msgid "You wanted to give %s a %s but they have too many!"
 msgstr "%s Sana vermek isterim %s ama, Daha çok var!"
 
 #: src/frontend.c:97
@@ -14423,8 +14428,9 @@ msgid "Kick player"
 msgstr "Oyundan at"
 
 #: src/multiint.c:1500
-msgid "Player number"
-msgstr "Oyuncu numarası"
+#, fuzzy
+msgid "Player position"
+msgstr "Koruma Duruşu"
 
 #: src/multiint.c:1893
 msgid "Team"
@@ -14495,21 +14501,21 @@ msgstr "Kurucu %s isimli oyuncuyu oyundan attı!"
 msgid "Host is Starting Game"
 msgstr "Kurucu oyunu başlatıyor"
 
-#: src/multiint.c:3512
+#: src/multiint.c:3507
 msgid "Players"
 msgstr "Oyuncular"
 
-#: src/multiint.c:3630
+#: src/multiint.c:3625
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Harita Gönderiliyor: %d%%"
 
-#: src/multiint.c:3639
+#: src/multiint.c:3634
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Harita: %d%% indirildi"
 
-#: src/multiint.c:3665
+#: src/multiint.c:3660
 msgid "HOST"
 msgstr "KURUCU"
 
@@ -14969,6 +14975,9 @@ msgstr " - %s İnşa"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Sürüm %s%s%s%s"
+
+#~ msgid "Player number"
+#~ msgstr "Oyuncu numarası"
 
 #~ msgid "Mini-Rocket accuracy +10%"
 #~ msgstr "Mini Roket Hedef Tutturması +10%"

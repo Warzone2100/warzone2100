@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100 2.3.2\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-11-13 17:42-0500\n"
+"POT-Creation-Date: 2010-11-24 17:56+0100\n"
 "PO-Revision-Date: 2010-07-30 08:44+0100\n"
 "Last-Translator: Marian Zsemlye <koapa@inmail.sk>\n"
 "Language-Team: Koapa - Marian Zsemlye <koapa@inmail.sk>\n"
+"Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: cs\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
@@ -12194,7 +12194,7 @@ msgid "System locale"
 msgstr "Systémové údaje"
 
 #: lib/netplay/netplay.c:1289
-#: lib/netplay/netplay.c:2229
+#: lib/netplay/netplay.c:2227
 msgid "Enter password here"
 msgstr ""
 
@@ -12203,7 +12203,7 @@ msgstr ""
 msgid "Could not resolve masterserver name (%s)!"
 msgstr ""
 
-#: lib/netplay/netplay.c:3315
+#: lib/netplay/netplay.c:3316
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr ""
@@ -12614,9 +12614,14 @@ msgstr "Špecialista"
 msgid "Hero"
 msgstr "Hrdina"
 
-#: src/droid.c:4912
+#: src/droid.c:4922
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
+msgstr ""
+
+#: src/droid.c:4926
+#, c-format
+msgid "You wanted to give %s a %s but they have too many!"
 msgstr ""
 
 #: src/frontend.c:97
@@ -14415,8 +14420,9 @@ msgid "Kick player"
 msgstr "Protihráč"
 
 #: src/multiint.c:1500
-msgid "Player number"
-msgstr "Číslo hráča"
+#, fuzzy
+msgid "Player position"
+msgstr "Bráň pozíciu"
 
 #: src/multiint.c:1893
 msgid "Team"
@@ -14487,21 +14493,21 @@ msgstr "Hostiteľ vyhodil %s z hry!"
 msgid "Host is Starting Game"
 msgstr "Hostiteľ začíná hru"
 
-#: src/multiint.c:3512
+#: src/multiint.c:3507
 msgid "Players"
 msgstr "Hráči"
 
-#: src/multiint.c:3630
+#: src/multiint.c:3625
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr ""
 
-#: src/multiint.c:3639
+#: src/multiint.c:3634
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr ""
 
-#: src/multiint.c:3665
+#: src/multiint.c:3660
 msgid "HOST"
 msgstr ""
 
@@ -14871,8 +14877,8 @@ msgstr "Nemožno nájsť žiadneho velitela!"
 msgid "Control Limit Reached - Production Halted"
 msgstr ""
 
-#: src/structure.c:6013
-#: src/structure.c:6038
+#: src/structure.c:6016
+#: src/structure.c:6041
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
@@ -14880,48 +14886,48 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: src/structure.c:6043
-#: src/structure.c:6107
+#: src/structure.c:6046
+#: src/structure.c:6110
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Poškodenie %3.0f%%"
 
-#: src/structure.c:6093
+#: src/structure.c:6096
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - Pripojených %u z %u"
 
-#: src/structure.c:6228
-#: src/structure.c:6277
+#: src/structure.c:6231
+#: src/structure.c:6280
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr ""
 
-#: src/structure.c:6510
+#: src/structure.c:6513
 msgid "Electronic Reward - Visibility Report"
 msgstr ""
 
-#: src/structure.c:6550
+#: src/structure.c:6553
 msgid "Factory Reward - Propulsion"
 msgstr ""
 
-#: src/structure.c:6574
+#: src/structure.c:6577
 msgid "Factory Reward - Body"
 msgstr ""
 
-#: src/structure.c:6598
+#: src/structure.c:6601
 msgid "Factory Reward - Weapon"
 msgstr ""
 
-#: src/structure.c:6607
+#: src/structure.c:6610
 msgid "Factory Reward - Nothing"
 msgstr ""
 
-#: src/structure.c:6635
+#: src/structure.c:6638
 msgid "Repair Facility Award - Repair"
 msgstr ""
 
-#: src/structure.c:6642
+#: src/structure.c:6645
 msgid "Repair Facility Award - Nothing"
 msgstr ""
 
@@ -14965,6 +14971,9 @@ msgstr "- Build %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Verzia %s%s%s%s"
+
+#~ msgid "Player number"
+#~ msgstr "Číslo hráča"
 
 #~ msgid "Mini-Rocket accuracy +10%"
 #~ msgstr "Presnosť Mini-rakiet +10%"
