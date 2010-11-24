@@ -42,6 +42,7 @@
 #include "texture.h"
 #include "environ.h"
 #include "advvis.h"
+#include "random.h"
 #include "research.h"
 #include "mission.h"
 #include "gateway.h"
@@ -124,7 +125,8 @@ MAPTILE	*psMapTiles = NULL;
 uint8_t *psBlockMap[AUX_MAX];
 uint8_t *psAuxMap[MAX_PLAYERS + AUX_MAX];        // yes, we waste one element... eyes wide open... makes API nicer
 
-#define WATER_DEPTH	180
+#define WATER_MIN_DEPTH 180
+#define WATER_MAX_DEPTH (WATER_MIN_DEPTH + 100)
 
 static void SetGroundForTile(const char *filename, const char *nametype);
 static int getTextureType(const char *textureType);
@@ -767,6 +769,7 @@ BOOL mapLoad(char *filename, BOOL preview)
 	UDWORD		version;
 	UDWORD		i, j, x, y;
 	PHYSFS_file	*fp = PHYSFS_openRead(filename);
+	void *          mt;
 
 	if (!fp)
 	{
@@ -888,6 +891,7 @@ BOOL mapLoad(char *filename, BOOL preview)
 	// reset the random water bottom heights
 	environReset();
 
+	mt = newMersenneTwister(12345);  // 12345 = random seed.
 	// set the river bed
 	for (i = 0; i < mapWidth; i++)
 	{
@@ -898,10 +902,11 @@ BOOL mapLoad(char *filename, BOOL preview)
 			// lower riverbed
 			if (mapTile(i, j)->ground == waterGroundType)
 			{
-				mapTile(i, j)->height -= (WATER_DEPTH - 2 * environGetData(i, j));
+				mapTile(i, j)->height -= WATER_MIN_DEPTH - mersenneTwisterU32(mt)%(WATER_MAX_DEPTH + 1 - WATER_MIN_DEPTH);
 			}
 		}
 	}
+	deleteMersenneTwister(mt);
 
 	/* set up the scroll mins and maxs - set values to valid ones for any new map */
 	scrollMinX = scrollMinY = 0;
@@ -1015,7 +1020,7 @@ BOOL mapSave(char **ppFileData, UDWORD *pFileSize)
 		psTileData->texture = psTile->texture;
 		if (psTile->ground == waterGroundType)
 		{
-			psTileData->height = MIN(255, (psTile->height + WATER_DEPTH - 2 * environGetData(i % mapWidth, i / mapWidth)) / ELEVATION_SCALE);
+			psTileData->height = (psTile->waterLevel + world_coord(1) / 3) / ELEVATION_SCALE;
 		}
 		else
 		{

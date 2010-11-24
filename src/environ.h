@@ -27,8 +27,6 @@ extern "C"
 #endif //__cplusplus
 
 extern BOOL environInit					( void );
-extern unsigned int environGetValue		(unsigned int x, unsigned int y);
-extern UDWORD	environGetData			( UDWORD x, UDWORD y );
 extern void	environShutDown				( void );
 //this function is called whenever the map changes - load new level or return from an offWorld map
 extern void environReset(void);
