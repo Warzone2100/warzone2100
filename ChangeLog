@@ -1,14 +1,16 @@
 2010-11-07: Version 2.3.6
  * General:
-   * Fix: Prevent memory corruption in the scripting code (ticket:1656, commit:34112c9e2bb5da22eac9e4a5ecb71229b6df07d2)
+   * Fix: Prevent memory corruption in the scripting code (ticket:1656, commit:ddfaeca6776aac765674bb0c2a5c58ecc63a978f)
    * Fix: Don't crash in the unit design screen when using unicode strings (ticket:2209, commit:209e12b665d23cce1cf286435ace08b86250517b)
    * Fix: Don't ignore armor (ticket:2273, commit:0f3bfba7345b6739167c66c7e33a57b5257952ee)
    * Fix: Do not activate a radar detector before it has been completely built (ticket:2202, commit:bf058bbf2005cf8b95f1fca3bc704be4739514d9)
    * Fix: Clear a droid's order queue when it gets new orders (commit:5e1a50db8dd1bcd626dd8c74b53f603258e1b158)
    * Fix: Make rearming pads actually repair units (ticket:2234, ticket:2313, commit:81b29af81b6af95db9f1a094f12c5412b9c54b77)
    * Fix: Projectiles going through terrain due to bad terrain height calculations, terrain shading (commit:08f9fa58789d20c64ed8eaa0e9076b08d4cf8947)
+   * Fix: Prevent possible crash with multi-turret units (commit:8d3cbb04888dc8216c5f516bb022089c725b5e58)
  * Multiplayer:
    * Fix: Make power generator output in multiplayer not depend on the game difficulty setting (commit:67524762633e2bae0570e8674e3ca34af184d1e9)
+   * Fix: Make sure not to give to many trucks to another player (commit:0a9b3b44a7fbdd7d017b8d4287a951531d573a04)
  * NTW mod:
    * Fix: Graphics (ticket:1748, commit:e0ced0e4fb024e0bf2b6b7de1a826b5bfbfffe9f)
  * Translations:
