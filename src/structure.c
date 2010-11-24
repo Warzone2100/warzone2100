@@ -1681,8 +1681,11 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		//fill in other details
 		psBuilding->pStructureType = pStructureType;
 
-		psBuilding->pos.x = (UWORD)x;
-		psBuilding->pos.y = (UWORD)y;
+		psBuilding->pos.x = x;
+		psBuilding->pos.y = y;
+		psBuilding->rot.direction = (direction + 0x2000)&0xC000;
+		psBuilding->rot.pitch = 0;
+		psBuilding->rot.roll = 0;
 
 		//This needs to be done before the functionality bit...
 		//load into the map data and structure list if not an upgrade
@@ -1792,9 +1795,6 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		psBuilding->burnStart = 0;
 		psBuilding->burnDamage = 0;
 
-		psBuilding->rot.direction = (direction + 0x2000)&0xC000;
-		psBuilding->rot.pitch = 0;
-		psBuilding->rot.roll = 0;
 		psBuilding->selected = false;
 		psBuilding->status = SS_BEING_BUILT;
 		psBuilding->currentBuildPts = 0;
