@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-11-09 16:00+0100\n"
+"POT-Creation-Date: 2010-11-24 17:53+0100\n"
 "PO-Revision-Date: 2009-05-11 00:21+0800\n"
 "Last-Translator: \n"
 "Language-Team: zh_TW\n"
@@ -12777,9 +12777,14 @@ msgstr "特務"
 msgid "Hero"
 msgstr "英雄"
 
-#: src/droid.c:4633
+#: src/droid.c:4643
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
+msgstr ""
+
+#: src/droid.c:4647
+#, c-format
+msgid "You wanted to give %s a %s but they have too many!"
 msgstr ""
 
 #: src/frontend.c:97
@@ -15058,55 +15063,55 @@ msgstr "找不到任何指揮官車！"
 msgid "Control Limit Reached - Production Halted"
 msgstr "已達到可控制單位總數上限，停止生產新單位"
 
-#: src/structure.c:5956
-#: src/structure.c:5981
+#: src/structure.c:5959
+#: src/structure.c:5984
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - 已指派 %u  單位"
 
-#: src/structure.c:5986
-#: src/structure.c:6050
+#: src/structure.c:5989
+#: src/structure.c:6053
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - 損傷 %3.0f%%"
 
-#: src/structure.c:6036
+#: src/structure.c:6039
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - 連接鑽油井數量 %u of %u"
 
-#: src/structure.c:6171
-#: src/structure.c:6220
+#: src/structure.c:6174
+#: src/structure.c:6223
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s -電子傷害"
 
-#: src/structure.c:6453
+#: src/structure.c:6456
 msgid "Electronic Reward - Visibility Report"
 msgstr "電子回饋—可檢視報告"
 
-#: src/structure.c:6493
+#: src/structure.c:6496
 msgid "Factory Reward - Propulsion"
 msgstr "工廠獎勵—推進動力"
 
-#: src/structure.c:6517
+#: src/structure.c:6520
 msgid "Factory Reward - Body"
 msgstr "工廠獎勵—車身"
 
-#: src/structure.c:6541
+#: src/structure.c:6544
 msgid "Factory Reward - Weapon"
 msgstr "工廠獎勵—武器"
 
-#: src/structure.c:6550
+#: src/structure.c:6553
 msgid "Factory Reward - Nothing"
 msgstr "工廠獎勵—無"
 
-#: src/structure.c:6578
+#: src/structure.c:6581
 msgid "Repair Facility Award - Repair"
 msgstr "修理中心獎勵—修理"
 
-#: src/structure.c:6585
+#: src/structure.c:6588
 msgid "Repair Facility Award - Nothing"
 msgstr "修理工廠回饋—無"
 

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-11-09 16:00+0100\n"
+"POT-Creation-Date: 2010-11-24 17:53+0100\n"
 "PO-Revision-Date: 2010-09-29 20:13+0200\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
@@ -12614,9 +12614,14 @@ msgstr "Spezialist"
 msgid "Hero"
 msgstr "Held"
 
-#: src/droid.c:4633
+#: src/droid.c:4643
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
+msgstr "%s wollte Ihnen %s geben, aber Sie besitzen zu viele davon!"
+
+#: src/droid.c:4647
+#, fuzzy, c-format
+msgid "You wanted to give %s a %s but they have too many!"
 msgstr "%s wollte Ihnen %s geben, aber Sie besitzen zu viele davon!"
 
 #: src/frontend.c:97
@@ -14843,57 +14848,57 @@ msgid "Control Limit Reached - Production Halted"
 msgstr "Kontrollgrenze erreicht - Produktion eingestellt"
 
 # nix Gruppe! -Kreuvf
-#: src/structure.c:5956
-#: src/structure.c:5981
+#: src/structure.c:5959
+#: src/structure.c:5984
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Einheit hinzugefügt"
 msgstr[1] "%s - %u Einheiten hinzugefügt"
 
-#: src/structure.c:5986
-#: src/structure.c:6050
+#: src/structure.c:5989
+#: src/structure.c:6053
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Schaden %3.0f%%"
 
-#: src/structure.c:6036
+#: src/structure.c:6039
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - %u von %u verbunden"
 
-#: src/structure.c:6171
-#: src/structure.c:6220
+#: src/structure.c:6174
+#: src/structure.c:6223
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektronisch beschädigt"
 
 # Reward ist zwar nicht Beute, aber im Krieg erbeutet man eben Dinge -Kreuvf
-#: src/structure.c:6453
+#: src/structure.c:6456
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektronische Beute - Sichtbarkeitsbericht"
 
-#: src/structure.c:6493
+#: src/structure.c:6496
 msgid "Factory Reward - Propulsion"
 msgstr "Fabrikbeute - Antrieb"
 
-#: src/structure.c:6517
+#: src/structure.c:6520
 msgid "Factory Reward - Body"
 msgstr "Fabrikbeute - Rumpf"
 
-#: src/structure.c:6541
+#: src/structure.c:6544
 msgid "Factory Reward - Weapon"
 msgstr "Fabrikbeute - Waffe"
 
-#: src/structure.c:6550
+#: src/structure.c:6553
 msgid "Factory Reward - Nothing"
 msgstr "Fabrikbeute - Nichts"
 
-#: src/structure.c:6578
+#: src/structure.c:6581
 msgid "Repair Facility Award - Repair"
 msgstr "Beute aus Reparatureinrichtung - Reparatur"
 
-#: src/structure.c:6585
+#: src/structure.c:6588
 msgid "Repair Facility Award - Nothing"
 msgstr "Beute aus Reparatureinrichtung - Nichts"
 
