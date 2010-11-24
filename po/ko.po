@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100 2.3_branch\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-11-13 17:42-0500\n"
-"PO-Revision-Date: 2003-01-15 11:40+0900\n"
+"POT-Creation-Date: 2010-11-24 17:56+0100\n"
+"PO-Revision-Date: 2010-11-23 21:01+0900\n"
 "Last-Translator: Joshua Shin <urgood2@gmail.com>\n"
 "Language-Team: Korean Translation Team <urgood2@gmail.com>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: \n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-Language: Korean\n"
 "X-Poedit-Bookmarks: 7,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
@@ -10175,7 +10175,7 @@ msgstr "내 인공 두뇌학 미래의 길을 열기 위해, 한때 나는 세�
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:9
 msgid "I now intend to further shape the world into my own image, by  surgically removing unwanted growths like yourself."
-msgstr "난 이제 당신 같은 원치 않는 부분들을 없애서, 세상을 더 나의 형상으로 빚을 것이다."
+msgstr "난 이제 당신 같은 원치 않는 부분들을 없애서, 세상을 나의 형상으로 더 빚을 것이다."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:11
 msgid "My Laser Satellites are now powering up. I intend to test them on you first, Commander!"
@@ -12243,7 +12243,7 @@ msgid "System locale"
 msgstr "사용자 시스템 언어"
 
 #: lib/netplay/netplay.c:1289
-#: lib/netplay/netplay.c:2229
+#: lib/netplay/netplay.c:2227
 msgid "Enter password here"
 msgstr "여기에 비밀번호를 입력하십시오"
 
@@ -12252,7 +12252,7 @@ msgstr "여기에 비밀번호를 입력하십시오"
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "마스터서버 이름을 확인할 수 없습니다 (%s)!"
 
-#: lib/netplay/netplay.c:3315
+#: lib/netplay/netplay.c:3316
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "로비 서버와 통신할 수 없습니다! TCP 포트 %u 가 보내는 트래픽에 대해 열려 있습니까?"
@@ -12665,10 +12665,15 @@ msgstr "스페셜"
 msgid "Hero"
 msgstr "히어로"
 
-#: src/droid.c:4912
+#: src/droid.c:4922
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
-msgstr ""
+msgstr "%s가 당신에게 %s를(을) 주고 싶어하지만 이미 수가 너무 많습니다!"
+
+#: src/droid.c:4926
+#, fuzzy, c-format
+msgid "You wanted to give %s a %s but they have too many!"
+msgstr "%s가 당신에게 %s를(을) 주고 싶어하지만 이미 수가 너무 많습니다!"
 
 #: src/frontend.c:97
 msgid "Single Player"
@@ -14459,8 +14464,9 @@ msgid "Kick player"
 msgstr "플레이어 퇴장시키기"
 
 #: src/multiint.c:1500
-msgid "Player number"
-msgstr "플레이어 숫자"
+#, fuzzy
+msgid "Player position"
+msgstr "자신의 위치 경호"
 
 #: src/multiint.c:1893
 msgid "Team"
@@ -14530,21 +14536,21 @@ msgstr "호스트가 %s를 게임에서 퇴장시켰습니다!"
 msgid "Host is Starting Game"
 msgstr "호스트가 게임을 시작하고 있습니다"
 
-#: src/multiint.c:3512
+#: src/multiint.c:3507
 msgid "Players"
 msgstr "플레이어"
 
-#: src/multiint.c:3630
+#: src/multiint.c:3625
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "맵을 보내는 중: %d%% "
 
-#: src/multiint.c:3639
+#: src/multiint.c:3634
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "맵: %d%% 다운로드 완료"
 
-#: src/multiint.c:3665
+#: src/multiint.c:3660
 msgid "HOST"
 msgstr "호스트"
 
@@ -14912,55 +14918,55 @@ msgstr "사령관을 찾을 수 없습니다!"
 msgid "Control Limit Reached - Production Halted"
 msgstr "제어 한계에 도달하였습니다 - 생산이 중단되었습니다"
 
-#: src/structure.c:6013
-#: src/structure.c:6038
+#: src/structure.c:6016
+#: src/structure.c:6041
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - 유닛 %u개 할당되었습니다"
 
-#: src/structure.c:6043
-#: src/structure.c:6107
+#: src/structure.c:6046
+#: src/structure.c:6110
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - 데미지 %3.0f%%"
 
-#: src/structure.c:6093
+#: src/structure.c:6096
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - %u개 연결 되었습니다 (전체 %u개)"
 
-#: src/structure.c:6228
-#: src/structure.c:6277
+#: src/structure.c:6231
+#: src/structure.c:6280
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - 전자적으로 손상됨"
 
-#: src/structure.c:6510
+#: src/structure.c:6513
 msgid "Electronic Reward - Visibility Report"
 msgstr "전자적 보상 - 시계보고"
 
-#: src/structure.c:6550
+#: src/structure.c:6553
 msgid "Factory Reward - Propulsion"
 msgstr "공장 보상 - 추진력"
 
-#: src/structure.c:6574
+#: src/structure.c:6577
 msgid "Factory Reward - Body"
 msgstr "공장 보상 - 차체"
 
-#: src/structure.c:6598
+#: src/structure.c:6601
 msgid "Factory Reward - Weapon"
 msgstr "공장 보상 - 무기"
 
-#: src/structure.c:6607
+#: src/structure.c:6610
 msgid "Factory Reward - Nothing"
 msgstr "공장 보상 - 없음"
 
-#: src/structure.c:6635
+#: src/structure.c:6638
 msgid "Repair Facility Award - Repair"
 msgstr "수리 시설 상 - 수리"
 
-#: src/structure.c:6642
+#: src/structure.c:6645
 msgid "Repair Facility Award - Nothing"
 msgstr "수리 시설 상 - 없음"
 
@@ -15004,6 +15010,9 @@ msgstr " - 빌드 날짜 %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "버젼 %s%s%s%s"
+
+#~ msgid "Player number"
+#~ msgstr "플레이어 숫자"
 
 #~ msgid "Mini-Rocket accuracy +10%"
 #~ msgstr "미니로케트 정확도 +10%"
