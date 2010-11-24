@@ -40,7 +40,6 @@
 #include "lighting.h"
 #include "game.h"
 #include "texture.h"
-#include "environ.h"
 #include "advvis.h"
 #include "random.h"
 #include "research.h"
@@ -214,8 +213,6 @@ BOOL mapNew(UDWORD width, UDWORD height)
 	mapHeight = height;
 
 	intSetMapPos(mapWidth * TILE_UNITS/2, mapHeight * TILE_UNITS/2);
-
-	environReset();
 
 	/*set up the scroll mins and maxs - set values to valid ones for a new map*/
 	scrollMinX = scrollMinY = 0;
@@ -889,8 +886,6 @@ BOOL mapLoad(char *filename, BOOL preview)
 	}
 
 	// reset the random water bottom heights
-	environReset();
-
 	mt = newMersenneTwister(12345);  // 12345 = random seed.
 	// set the river bed
 	for (i = 0; i < mapWidth; i++)

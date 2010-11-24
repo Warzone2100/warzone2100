@@ -58,7 +58,6 @@
 #include "drive.h"
 #include "edit3d.h"
 #include "effects.h"
-#include "environ.h"
 #include "fpath.h"
 #include "frend.h"
 #include "frontend.h"
@@ -805,11 +804,6 @@ BOOL stageOneInitialise(void)
 		return false;
 	}
 
-	if (!environInit())
-	{
-		return false;
-	}
-
 	initMission();
 	initTransporters();
 	scriptInit();
@@ -868,7 +862,6 @@ BOOL stageOneShutDown(void)
 	}
 
 	scrShutDown();
-	environShutDown();
 	gridShutDown();
 
 	if ( !anim_Shutdown() )

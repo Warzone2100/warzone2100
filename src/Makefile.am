@@ -77,7 +77,6 @@ noinst_HEADERS = \
 	e3demo.h \
 	edit3d.h \
 	effects.h \
-	environ.h \
 	featuredef.h \
 	feature.h \
 	fpath.h \
@@ -203,7 +202,6 @@ warzone2100_SOURCES = \
 	e3demo.c \
 	edit3d.c \
 	effects.c \
-	environ.c \
 	feature.c \
 	force-linker.cpp \
 	fpath.c \

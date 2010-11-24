@@ -45,7 +45,6 @@ SRC= \
 	e3demo.c \
 	edit3d.c \
 	effects.c \
-	environ.c \
 	feature.c \
 	fpath.c \
 	frontend.c \

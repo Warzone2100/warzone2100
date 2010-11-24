@@ -88,7 +88,6 @@
 #include "order.h"
 #include "scores.h"
 #include "multiplay.h"
-#include "environ.h"
 #include "advvis.h"
 #include "texture.h"
 #include "anim_id.h"

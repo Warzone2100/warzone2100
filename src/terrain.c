@@ -44,7 +44,6 @@
 #include "terrain.h"
 #include "map.h"
 #include "texture.h"
-#include "environ.h"
 #include "display3d.h"
 #include "hci.h"
 #include "loop.h"
