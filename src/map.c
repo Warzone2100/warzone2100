@@ -923,9 +923,9 @@ BOOL mapLoad(char *filename, BOOL preview)
 	}
 
 	// Set our blocking bits
-	for (x = 0; x < mapWidth; x++)
+	for (y = 0; y < mapHeight; y++)
 	{
-		for (y = 0; y < mapHeight; y++)
+		for (x = 0; x < mapWidth; x++)
 		{
 			MAPTILE *psTile = mapTile(x, y);
 
@@ -1557,9 +1557,9 @@ void mapFloodFillContinents()
 	int x, y, limitedContinents = 0, hoverContinents = 0;
 
 	/* Clear continents */
-	for (x = 0; x < mapWidth; x++)
+	for (y = 0; y < mapHeight; y++)
 	{
-		for (y = 0; y < mapHeight; y++)
+		for (x = 0; x < mapWidth; x++)
 		{
 			MAPTILE *psTile = mapTile(x, y);
 
@@ -1569,9 +1569,9 @@ void mapFloodFillContinents()
 	}
 
 	/* Iterate over the whole map, looking for unset continents */
-	for (x = 0; x < mapWidth; x++)
+	for (y = 0; y < mapHeight; y++)
 	{
-		for (y = 0; y < mapHeight; y++)
+		for (x = 0; x < mapWidth; x++)
 		{
 			MAPTILE *psTile = mapTile(x, y);
 
@@ -1586,9 +1586,9 @@ void mapFloodFillContinents()
 		}
 	}
 	debug(LOG_MAP, "Found %d limited continents", (int)limitedContinents);
-	for (x = 0; x < mapWidth; x++)
+	for (y = 0; y < mapHeight; y++)
 	{
-		for (y = 0; y < mapHeight; y++)
+		for (x = 0; x < mapWidth; x++)
 		{
 			MAPTILE *psTile = mapTile(x, y);
 
@@ -1646,9 +1646,9 @@ static int dangerFloodFill(int player)
 	int x, y;
 
 	// Set our danger bits
-	for (x = 0; x < mapWidth; x++)
+	for (y = 0; y < mapHeight; y++)
 	{
-		for (y = 0; y < mapHeight; y++)
+		for (x = 0; x < mapWidth; x++)
 		{
 			auxSet(x, y, MAX_PLAYERS + AUX_DANGERMAP, AUXBITS_DANGER);
 			auxClear(x, y, MAX_PLAYERS + AUX_DANGERMAP, AUXBITS_TEMPORARY);
@@ -1742,11 +1742,11 @@ static void threatUpdate(int player)
 	int i, weapon, x, y;
 
 	// Step 1: Clear our threat bits
-	for (x = 0; x < mapWidth; x++)
+	for (y = 0; y < mapHeight; y++)
 	{
-		for (y = 0; y < mapHeight; y++)
+		for (x = 0; x < mapWidth; x++)
 		{
-			auxClear(x, y, MAX_PLAYERS + AUX_DANGERMAP, AUXBITS_THREAT);
+			auxClear(x, y, MAX_PLAYERS + AUX_DANGERMAP, AUXBITS_THREAT | AUXBITS_AATHREAT);
 		}
 	}
 
