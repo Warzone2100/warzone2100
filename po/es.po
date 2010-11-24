@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-11-17 05:43+0100\n"
+"POT-Creation-Date: 2010-11-24 17:59+0100\n"
 "PO-Revision-Date: 2010-11-16 11:19+0100\n"
 "Last-Translator: Saber Nyoki <nsa_server@hotmail.com>\n"
 "Language-Team: Spanish <warzone-dev@gna.org>\n"
@@ -11999,16 +11999,16 @@ msgid "System locale"
 msgstr "Idioma del sistema"
 
 #: lib/netplay/netplay.c:201
-#: lib/netplay/netplay.c:1017
+#: lib/netplay/netplay.c:1023
 msgid "Enter password here"
 msgstr "Introducir contraseña aquí"
 
-#: lib/netplay/netplay.c:2011
+#: lib/netplay/netplay.c:2017
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "¡No se pudo resolver el nombre del servidor maestro (%s)!"
 
-#: lib/netplay/netplay.c:2025
+#: lib/netplay/netplay.c:2031
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "¡No se pudo comunicar con el servidor! ¿Está el puerto TCP %u abierto para tráfico saliente?"
@@ -12333,7 +12333,7 @@ msgid "Cannot Build. Oil Resource Burning."
 msgstr "No se puede construir. Yacimiento de petróleo ardiendo."
 
 #: src/display.c:1891
-#: src/display.c:2491
+#: src/display.c:2492
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Daño %d%% - Experiencia %d, %s"
@@ -12392,46 +12392,51 @@ msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Alineando con el Grupo %u - %u Unidad"
 msgstr[1] "Alineando con el Grupo %u - %u Unidades"
 
-#: src/droid.c:3293
+#: src/droid.c:3301
 msgid "Rookie"
 msgstr "Novato"
 
-#: src/droid.c:3294
+#: src/droid.c:3302
 msgctxt "rank"
 msgid "Green"
 msgstr "Principiante"
 
-#: src/droid.c:3295
+#: src/droid.c:3303
 msgid "Trained"
 msgstr "Entrenado"
 
-#: src/droid.c:3296
+#: src/droid.c:3304
 msgid "Regular"
 msgstr "Regular"
 
-#: src/droid.c:3297
+#: src/droid.c:3305
 msgid "Professional"
 msgstr "Profesional"
 
-#: src/droid.c:3298
+#: src/droid.c:3306
 msgid "Veteran"
 msgstr "Veterano"
 
-#: src/droid.c:3299
+#: src/droid.c:3307
 msgid "Elite"
 msgstr "Élite"
 
-#: src/droid.c:3300
+#: src/droid.c:3308
 msgid "Special"
 msgstr "Especial"
 
-#: src/droid.c:3301
+#: src/droid.c:3309
 msgid "Hero"
 msgstr "Héroe"
 
-#: src/droid.c:4319
+#: src/droid.c:4336
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
+msgstr "¡%s quiso darte un %s pero tienes demasiados!"
+
+#: src/droid.c:4340
+#, fuzzy, c-format
+msgid "You wanted to give %s a %s but they have too many!"
 msgstr "¡%s quiso darte un %s pero tienes demasiados!"
 
 #: src/frontend.c:98
@@ -14535,20 +14540,20 @@ msgstr "Tiempo Jugado Total: %s"
 msgid "You cheated!"
 msgstr "¡Hiciste trampa!"
 
-#: src/scriptfuncs.c:3202
+#: src/scriptfuncs.c:3200
 msgid "YOU ARE VICTORIOUS!"
 msgstr "¡ERES EL GANADOR!"
 
-#: src/scriptfuncs.c:3206
+#: src/scriptfuncs.c:3204
 msgid "YOU WERE DEFEATED!"
 msgstr "¡HAS SIDO DERROTADO!"
 
-#: src/scriptfuncs.c:10121
+#: src/scriptfuncs.c:10119
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "¡Baliza recibida de %s!"
 
-#: src/scriptfuncs.c:10167
+#: src/scriptfuncs.c:10165
 #, c-format
 msgid "Beacon %d"
 msgstr "Baliza %d"
@@ -14577,62 +14582,62 @@ msgstr "¡Imposible localizar ninguna unidad de sensores!"
 msgid "Unable to locate any Commanders!"
 msgstr "¡Imposible localizar ningún Comandante!"
 
-#: src/structure.c:2856
+#: src/structure.c:2897
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Alcanzado Límite de Control de Unidades - Producción Detenida"
 
-#: src/structure.c:6082
-#: src/structure.c:6107
+#: src/structure.c:6121
+#: src/structure.c:6146
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Unidad asignada"
 msgstr[1] "%s - %u Unidades asignadas"
 
-#: src/structure.c:6112
-#: src/structure.c:6180
-#: src/structure.c:6196
-#: src/structure.c:6210
+#: src/structure.c:6151
+#: src/structure.c:6219
+#: src/structure.c:6235
+#: src/structure.c:6249
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Daño %3.0f%%"
 
-#: src/structure.c:6162
+#: src/structure.c:6201
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - Conectado %u de %u"
 
-#: src/structure.c:6326
-#: src/structure.c:6371
+#: src/structure.c:6365
+#: src/structure.c:6410
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Dañado Electrónicamente"
 
-#: src/structure.c:6608
+#: src/structure.c:6647
 msgid "Electronic Reward - Visibility Report"
 msgstr "Recompensa de Electrónica - Informe de Visibilidad"
 
-#: src/structure.c:6648
+#: src/structure.c:6687
 msgid "Factory Reward - Propulsion"
 msgstr "Recompensa de Fábrica - Propulsión"
 
-#: src/structure.c:6672
+#: src/structure.c:6711
 msgid "Factory Reward - Body"
 msgstr "Recompensa de Fábrica - Carrocería"
 
-#: src/structure.c:6696
+#: src/structure.c:6735
 msgid "Factory Reward - Weapon"
 msgstr "Recompensa de Fábrica - Arma"
 
-#: src/structure.c:6705
+#: src/structure.c:6744
 msgid "Factory Reward - Nothing"
 msgstr "Recompensa de Fábrica - Nada"
 
-#: src/structure.c:6733
+#: src/structure.c:6772
 msgid "Repair Facility Award - Repair"
 msgstr "Premio de Instalación de Reparación - Reparación"
 
-#: src/structure.c:6740
+#: src/structure.c:6779
 msgid "Repair Facility Award - Nothing"
 msgstr "Premio de Instalación de Reparación - Nada"
 

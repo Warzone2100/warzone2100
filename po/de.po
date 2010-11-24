@@ -11,14 +11,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-11-13 17:29-0500\n"
+"POT-Creation-Date: 2010-11-24 17:59+0100\n"
 "PO-Revision-Date: 2010-06-05 07:09+0100\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
@@ -12043,16 +12043,16 @@ msgid "System locale"
 msgstr "Systemsprache"
 
 #: lib/netplay/netplay.c:201
-#: lib/netplay/netplay.c:1017
+#: lib/netplay/netplay.c:1023
 msgid "Enter password here"
 msgstr "Passwort hier eingeben"
 
-#: lib/netplay/netplay.c:2011
+#: lib/netplay/netplay.c:2017
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Konnte Lobbyserver-Namen nicht auflösen (%s)!"
 
-#: lib/netplay/netplay.c:2025
+#: lib/netplay/netplay.c:2031
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Konnte nicht mit Lobbyserver kommunizieren! Ist der TCP-Port %u für ausgehenden Verkehr geöffnet?"
@@ -12378,7 +12378,7 @@ msgid "Cannot Build. Oil Resource Burning."
 msgstr "Bau nicht möglich. Ölquelle brennt."
 
 #: src/display.c:1891
-#: src/display.c:2491
+#: src/display.c:2492
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Schaden %d%% - Erfahrung %d, %s"
@@ -12405,78 +12405,83 @@ msgstr "LKW wurde beauftragt, einen Ölbohrturm zu bauen"
 msgid "Unit Lost!"
 msgstr "Einheit verloren!"
 
-#: src/droid.c:1353
+#: src/droid.c:1350
 msgid "Structure Restored"
 msgstr "Gebäude wiederhergestellt"
 
-#: src/droid.c:2989
+#: src/droid.c:2979
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Gruppe %u ausgewählt - %u Einheit"
 msgstr[1] "Gruppe %u ausgewählt - %u Einheiten"
 
-#: src/droid.c:3002
+#: src/droid.c:2992
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u Einheit zur Gruppe %u hinzugefügt"
 msgstr[1] "%u Einheiten zur Gruppe %u hinzugefügt"
 
-#: src/droid.c:3015
+#: src/droid.c:3005
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Auf Gruppe %u zentriert - %u Einheit"
 msgstr[1] "Auf Gruppe %u zentriert - %u Einheiten"
 
-#: src/droid.c:3019
+#: src/droid.c:3009
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "An Gruppe %u ausgerichtet - %u Einheit"
 msgstr[1] "An Gruppe %u ausgerichtet - %u Einheiten"
 
-#: src/droid.c:3303
+#: src/droid.c:3301
 msgid "Rookie"
 msgstr "Anfänger"
 
-#: src/droid.c:3304
+#: src/droid.c:3302
 msgctxt "rank"
 msgid "Green"
 msgstr "Neuling"
 
-#: src/droid.c:3305
+#: src/droid.c:3303
 msgid "Trained"
 msgstr "Geübter"
 
-#: src/droid.c:3306
+#: src/droid.c:3304
 msgid "Regular"
 msgstr "Durchschnitt"
 
-#: src/droid.c:3307
+#: src/droid.c:3305
 msgid "Professional"
 msgstr "Profi"
 
-#: src/droid.c:3308
+#: src/droid.c:3306
 msgid "Veteran"
 msgstr "Veteran"
 
-#: src/droid.c:3309
+#: src/droid.c:3307
 msgid "Elite"
 msgstr "Elite"
 
-#: src/droid.c:3310
+#: src/droid.c:3308
 msgid "Special"
 msgstr "Spezialist"
 
-#: src/droid.c:3311
+#: src/droid.c:3309
 msgid "Hero"
 msgstr "Held"
 
-#: src/droid.c:4329
+#: src/droid.c:4336
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
+msgstr ""
+
+#: src/droid.c:4340
+#, c-format
+msgid "You wanted to give %s a %s but they have too many!"
 msgstr ""
 
 #: src/frontend.c:98
@@ -14610,20 +14615,20 @@ msgstr "Gesamte Spielzeit - %s"
 msgid "You cheated!"
 msgstr "Sie haben geschummelt!"
 
-#: src/scriptfuncs.c:3202
+#: src/scriptfuncs.c:3200
 msgid "YOU ARE VICTORIOUS!"
 msgstr "SIE HABEN GEWONNEN!"
 
-#: src/scriptfuncs.c:3206
+#: src/scriptfuncs.c:3204
 msgid "YOU WERE DEFEATED!"
 msgstr "SIE WURDEN BESIEGT!"
 
-#: src/scriptfuncs.c:10121
+#: src/scriptfuncs.c:10119
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Signal von %s erhalten!"
 
-#: src/scriptfuncs.c:10167
+#: src/scriptfuncs.c:10165
 #, c-format
 msgid "Beacon %d"
 msgstr "Signal %d"
@@ -14652,64 +14657,64 @@ msgstr "Kann keine Sensoreinheit finden!"
 msgid "Unable to locate any Commanders!"
 msgstr "Kann keine Commander finden!"
 
-#: src/structure.c:2857
+#: src/structure.c:2897
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Commandereinheit hat Kontrollgrenze erreicht - Produktion angehalten"
 
 # nix Gruppe! -Kreuvf
-#: src/structure.c:6083
-#: src/structure.c:6108
+#: src/structure.c:6121
+#: src/structure.c:6146
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Einheit hinzugefügt"
 msgstr[1] "%s - %u Einheiten hinzugefügt"
 
-#: src/structure.c:6113
-#: src/structure.c:6181
-#: src/structure.c:6197
-#: src/structure.c:6211
+#: src/structure.c:6151
+#: src/structure.c:6219
+#: src/structure.c:6235
+#: src/structure.c:6249
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Schaden %3.0f%%"
 
-#: src/structure.c:6163
+#: src/structure.c:6201
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - %u von %u verbunden"
 
-#: src/structure.c:6327
-#: src/structure.c:6372
+#: src/structure.c:6365
+#: src/structure.c:6410
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektronisch beschädigt"
 
 # Reward ist zwar nicht Beute, aber im Krieg erbeutet man eben Dinge -Kreuvf
-#: src/structure.c:6609
+#: src/structure.c:6647
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektronische Beute - Sichtbarkeitsbericht"
 
-#: src/structure.c:6649
+#: src/structure.c:6687
 msgid "Factory Reward - Propulsion"
 msgstr "Fabrikbeute - Antrieb"
 
-#: src/structure.c:6673
+#: src/structure.c:6711
 msgid "Factory Reward - Body"
 msgstr "Fabrikbeute - Rumpf"
 
-#: src/structure.c:6697
+#: src/structure.c:6735
 msgid "Factory Reward - Weapon"
 msgstr "Fabrikbeute - Waffe"
 
-#: src/structure.c:6706
+#: src/structure.c:6744
 msgid "Factory Reward - Nothing"
 msgstr "Fabrikbeute - Nichts"
 
-#: src/structure.c:6734
+#: src/structure.c:6772
 msgid "Repair Facility Award - Repair"
 msgstr "Beute aus Reparatureinrichtung - Reparatur"
 
-#: src/structure.c:6741
+#: src/structure.c:6779
 msgid "Repair Facility Award - Nothing"
 msgstr "Beute aus Reparatureinrichtung - Nichts"
 

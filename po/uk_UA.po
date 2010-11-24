@@ -2,14 +2,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100 version 2.2.3\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-11-13 17:29-0500\n"
+"POT-Creation-Date: 2010-11-24 17:59+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Меденцій Олександр <olexandr1986@i.ua>\n"
 "Language-Team: \n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Language: Ukrainian\n"
 "X-Poedit-Country: UKRAINE\n"
@@ -12034,16 +12034,16 @@ msgid "System locale"
 msgstr "Мова локалізації системи"
 
 #: lib/netplay/netplay.c:201
-#: lib/netplay/netplay.c:1017
+#: lib/netplay/netplay.c:1023
 msgid "Enter password here"
 msgstr "Визначте Пароль"
 
-#: lib/netplay/netplay.c:2011
+#: lib/netplay/netplay.c:2017
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Неможливо отримати ім'я основного сервера (%s)!"
 
-#: lib/netplay/netplay.c:2025
+#: lib/netplay/netplay.c:2031
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Неможливо зв'язатись з сервером лоббі! Чи відкритий TCP порт %u для вихідного трафіку?"
@@ -12368,7 +12368,7 @@ msgid "Cannot Build. Oil Resource Burning."
 msgstr "Будівництво Неможливе. Через пожежу на Нафтовому Родовищі"
 
 #: src/display.c:1891
-#: src/display.c:2491
+#: src/display.c:2492
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Пошкоджень %d%% - Вбито %d, %s"
@@ -12396,78 +12396,83 @@ msgstr "Інженеру наказано побудувати Бурову Ве
 msgid "Unit Lost!"
 msgstr "Втрачено Бойову Одиницю!"
 
-#: src/droid.c:1353
+#: src/droid.c:1350
 msgid "Structure Restored"
 msgstr "Будівлю Відновлено"
 
-#: src/droid.c:2989
+#: src/droid.c:2979
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Групу %u обрано - %u Підрозділ"
 msgstr[1] "Групу %u обрано - %u Підрозділів"
 
-#: src/droid.c:3002
+#: src/droid.c:2992
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u підрозділ призначено у Групу %u"
 msgstr[1] "%u підрозділів призначено у Групу %u"
 
-#: src/droid.c:3015
+#: src/droid.c:3005
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Центр екрану на Групі %u - %u Підрозділ"
 msgstr[1] "Центр екрану на Групі %u - %u Підрозділів"
 
-#: src/droid.c:3019
+#: src/droid.c:3009
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Вирівнювання з Групою %u - %u Підрозділ"
 msgstr[1] "Вирівнювання з Групою %u - %u Підрозділів"
 
-#: src/droid.c:3303
+#: src/droid.c:3301
 msgid "Rookie"
 msgstr "Новобранець"
 
-#: src/droid.c:3304
+#: src/droid.c:3302
 msgctxt "rank"
 msgid "Green"
 msgstr "Зелений"
 
-#: src/droid.c:3305
+#: src/droid.c:3303
 msgid "Trained"
 msgstr "Рекрут"
 
-#: src/droid.c:3306
+#: src/droid.c:3304
 msgid "Regular"
 msgstr "Досвідчений"
 
-#: src/droid.c:3307
+#: src/droid.c:3305
 msgid "Professional"
 msgstr "Професіонал"
 
-#: src/droid.c:3308
+#: src/droid.c:3306
 msgid "Veteran"
 msgstr "Ветеран"
 
-#: src/droid.c:3309
+#: src/droid.c:3307
 msgid "Elite"
 msgstr "Елітний"
 
-#: src/droid.c:3310
+#: src/droid.c:3308
 msgid "Special"
 msgstr "Особливий"
 
-#: src/droid.c:3311
+#: src/droid.c:3309
 msgid "Hero"
 msgstr "Герой"
 
-#: src/droid.c:4329
+#: src/droid.c:4336
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
+msgstr ""
+
+#: src/droid.c:4340
+#, c-format
+msgid "You wanted to give %s a %s but they have too many!"
 msgstr ""
 
 #: src/frontend.c:98
@@ -14596,20 +14601,20 @@ msgstr "Повний Час Гри - %s"
 msgid "You cheated!"
 msgstr "Ви застосували шахрайство!"
 
-#: src/scriptfuncs.c:3202
+#: src/scriptfuncs.c:3200
 msgid "YOU ARE VICTORIOUS!"
 msgstr "ВИ ПЕРЕМОГЛИ!"
 
-#: src/scriptfuncs.c:3206
+#: src/scriptfuncs.c:3204
 msgid "YOU WERE DEFEATED!"
 msgstr "ВИ ЗАЗНАЛИ ПОРАЗКИ!"
 
-#: src/scriptfuncs.c:10121
+#: src/scriptfuncs.c:10119
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Отримано Сигнал від %s!"
 
-#: src/scriptfuncs.c:10167
+#: src/scriptfuncs.c:10165
 #, c-format
 msgid "Beacon %d"
 msgstr "Сигнал %d"
@@ -14638,63 +14643,63 @@ msgstr "Не можу знайти жодного Сенсорного Підр�
 msgid "Unable to locate any Commanders!"
 msgstr "Не можу знайти  жодного Командира!"
 
-#: src/structure.c:2857
+#: src/structure.c:2897
 #, fuzzy
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Досягнуто Межі Контролю - Виробництво Призупинене"
 
-#: src/structure.c:6083
-#: src/structure.c:6108
+#: src/structure.c:6121
+#: src/structure.c:6146
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Підрозділ закріплено"
 msgstr[1] "%s - %u Підрозділи закріплено"
 
-#: src/structure.c:6113
-#: src/structure.c:6181
-#: src/structure.c:6197
-#: src/structure.c:6211
+#: src/structure.c:6151
+#: src/structure.c:6219
+#: src/structure.c:6235
+#: src/structure.c:6249
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Пошкоджено %3.0f%%"
 
-#: src/structure.c:6163
+#: src/structure.c:6201
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - Під'єднано %u з %u"
 
-#: src/structure.c:6327
-#: src/structure.c:6372
+#: src/structure.c:6365
+#: src/structure.c:6410
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Електронних Ушкоджень"
 
-#: src/structure.c:6609
+#: src/structure.c:6647
 msgid "Electronic Reward - Visibility Report"
 msgstr "Електронна Винагорода - Звіт про Зону Видимості"
 
-#: src/structure.c:6649
+#: src/structure.c:6687
 msgid "Factory Reward - Propulsion"
 msgstr "Винагорода Фабрики - Ходова"
 
-#: src/structure.c:6673
+#: src/structure.c:6711
 msgid "Factory Reward - Body"
 msgstr "Винагорода Фабрики - Корпус"
 
-#: src/structure.c:6697
+#: src/structure.c:6735
 msgid "Factory Reward - Weapon"
 msgstr "Винагорода Фабрики - Озброєння"
 
-#: src/structure.c:6706
+#: src/structure.c:6744
 msgid "Factory Reward - Nothing"
 msgstr "Винагорода Фабрики - Нічого"
 
-#: src/structure.c:6734
+#: src/structure.c:6772
 msgid "Repair Facility Award - Repair"
 msgstr "Винагорода Ремонтної Майстерні - Ремонт"
 
-#: src/structure.c:6741
+#: src/structure.c:6779
 msgid "Repair Facility Award - Nothing"
 msgstr "Винагорода Ремонтної Майстерні - Нічого"
 
