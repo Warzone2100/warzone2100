@@ -122,6 +122,10 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 # include <sys/stat.h>
 # include <sys/wait.h>
 # include <sys/utsname.h>
+# include <sys/prctl.h>
+#ifndef PR_SET_PTRACER
+# define PR_SET_PTRACER 0x59616d61  // prctl will ignore unknown options
+#endif
 
 // GNU extension for backtrace():
 # if defined(__GLIBC__)
@@ -488,6 +492,9 @@ static pid_t execGdb(int const dumpFile, int* gdbWritePipe)
 	// Check to see if we're the parent
 	if (pid != 0)
 	{
+		// Allow tracing the process, some hardened kernel configurations disallow this.
+		prctl(PR_SET_PTRACER, pid, 0, 0, 0);
+
 		// Return the write end of the pipe
 		*gdbWritePipe = gdbPipe[1];
 
