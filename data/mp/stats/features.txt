@@ -68,7 +68,7 @@ arizonatree5,1,1,1,10,50,arizonatree5.pie,TREE,1,0,1
 arizonatree6,1,1,1,10,50,arizonatree6.pie,TREE,1,0,1
 trapstraight,1,1,0,0,0,mitrapstr.pie,BOULDER,1,0,1
 trapcorner,1,1,0,0,0,MITRAPCR.pie,BOULDER,1,0,1
-hoverwreck,1,1,1,0,0,miarthov.pie,VEHICLE,1,1,0
+hoverwreck,1,1,1,0,10,miarthov.pie,VEHICLE,1,1,0
 barrier,1,1,1,1,5,MIBAR.pie,VEHICLE,1,1,0
 bridgeend,1,1,1,5,50,MiBridg1.PIE,BUILDING,1,0,1
 bridgemiddle,1,1,1,5,50,MiBridge.PIE,BUILDING,1,0,1

@@ -193,17 +193,12 @@ static void printWeaponInfo(const WEAPON_STATS* psStats)
 				(UBYTE)selectedPlayer), weaponFirePause(psStats,(UBYTE)selectedPlayer),
 				weaponDamage(psStats, (UBYTE)selectedPlayer)));
 	CONPRINTF(ConsoleString,(ConsoleString,"   rad %d radHt %d radDam %d\n"
-			  "   inTime %d inDam %d inRad %d\n",
+			  "   inDam %d inRad %d\n",
 				psStats->radius, psStats->radiusHit, psStats->radiusDamage,
-				psStats->incenTime, psStats->incenDamage, psStats->incenRadius));
-	CONPRINTF(ConsoleString,(ConsoleString,"   flSpd %d inHt %d %s\n",
-				psStats->flightSpeed, psStats->indirectHeight,
-				psStats->fireOnMove ? "fireOnMove" : "not fireOnMove"));
+				psStats->incenDamage, psStats->incenRadius));
+	CONPRINTF(ConsoleString,(ConsoleString,"   flSpd %d %s\n",
+				psStats->flightSpeed, psStats->fireOnMove ? "fireOnMove" : "not fireOnMove"));
 	CONPRINTF(ConsoleString,(ConsoleString,"   %s %s %s\n", pWC, pWSC, pMM));
-	/*CONPRINTF(ConsoleString,(ConsoleString,"   %shoming %srotate recoil %d\n"
-			  "   dLife %d radLife %d\n",
-			  psStats->homingRound ? "" : "not ", psStats->rotate ? "" : "not ",
-			  psStats->recoilValue, psStats->directLife, psStats->radiusLife));*/
 	CONPRINTF(ConsoleString,(ConsoleString,"   %srotate recoil %d\n"
 			  "   dLife %d radLife %d\n",
 			  psStats->rotate ? "" : "not ",

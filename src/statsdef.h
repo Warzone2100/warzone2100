@@ -350,7 +350,6 @@ typedef struct WEAPON_STATS
 	UDWORD			incenDamage;			///< Damage done each burn cycle
 	UDWORD			incenRadius;			///< Burn radius of	the round
 	UDWORD			flightSpeed;			///< speed ammo travels at
-	UDWORD			indirectHeight;			///< how high	the ammo travels for indirect	fire
 	FIREONMOVE		fireOnMove;				///< indicates whether the droid has to stop before firing
 	WEAPON_CLASS	weaponClass;			///< the class of weapon
 	WEAPON_SUBCLASS weaponSubClass;			///< the subclass to which the weapon	belongs

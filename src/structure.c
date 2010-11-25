@@ -603,13 +603,13 @@ BOOL loadStructureStats(const char *pStructData, UDWORD bufferSize)
 		sscanf(pStructData,"%[^','],%[^','],%[^','],%[^','],%d,%d,%d,%[^','],\
 			%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%[^','],%[^','],%d,%[^','],%[^','],\
 			%d,%d",
-			StructureName, type, dummy, strength, &psStructure->terrainType,
+			StructureName, type, dummy, strength, &dummyVal,
 			&psStructure->baseWidth, &psStructure->baseBreadth, foundation,
 			&psStructure->buildPoints, &psStructure->height,
 			&psStructure->armourValue, &psStructure->bodyPoints,
-			&psStructure->repairSystem, &psStructure->powerToBuild,
+			&dummyVal, &psStructure->powerToBuild,
 			&dummyVal, &psStructure->resistance,
-			&dummyVal, &psStructure->sizeModifier,
+			&dummyVal, &dummyVal,
 			ecmType, sensorType, &weapSlots, GfxFile,
 			baseIMD, &psStructure->numFuncs, &numWeaps);
 

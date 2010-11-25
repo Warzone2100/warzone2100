@@ -117,11 +117,8 @@ typedef struct _structure_stats
 	STATS_BASE;						/* basic stats */
 	STRUCTURE_TYPE	type;				/* the type of structure */
 	STRUCT_STRENGTH	strength;		/* strength against the weapon effects */
-	UDWORD		terrainType;		/*The type of terrain the structure has to be
-									  built next to - may be none*/
 	UDWORD		baseWidth;			/*The width of the base in tiles*/
 	UDWORD		baseBreadth;		/*The breadth of the base in tiles*/
-	UDWORD		foundationType;		/*The type of foundation for the structure*/
 	UDWORD		buildPoints;		/*The number of build points required to build
 									  the structure*/
 	UDWORD		height;				/*The height above/below the terrain - negative
@@ -130,14 +127,10 @@ typedef struct _structure_stats
 									  upgraded */
 	UDWORD		bodyPoints;			/*The structure's body points - A structure goes
 									  off-line when 50% of its body points are lost*/
-	UDWORD		repairSystem;		/*The repair system points are added to the body
-									  points until fully restored . The points are
-									  then added to the Armour Points*/
 	UDWORD		powerToBuild;		/*How much power the structure requires to build*/
 	UDWORD		resistance;			/*The number used to determine whether a
 									  structure can resist an enemy takeover -
 									  0 = cannot be attacked electrically*/
-	UDWORD		sizeModifier;		/*The larger the target, the easier to hit*/
 	iIMDShape	*pIMD;		/*The IMD to draw for this structure */
 	iIMDShape	*pBaseIMD;	/*The base IMD to draw for this structure */
 	struct ECM_STATS	*pECM;		/*Which ECM is standard for the structure -
