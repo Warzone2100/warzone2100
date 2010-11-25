@@ -1525,7 +1525,7 @@ BOOL recvTeamRequest(NETQUEUE queue)
 {
 	UBYTE	player, team;
 
-	if(!NetPlay.isHost)			// only host should act
+	if (!NetPlay.isHost || !bHosted)  // Only host should act, and only if the game hasn't started yet.
 	{
 		return true;
 	}
@@ -1572,7 +1572,7 @@ BOOL recvReadyRequest(NETQUEUE queue)
 	UBYTE	player;
 	BOOL	bReady;
 
-	if(!NetPlay.isHost)					// only host should act
+	if (!NetPlay.isHost || !bHosted)  // Only host should act, and only if the game hasn't started yet.
 	{
 		return true;
 	}
@@ -1709,7 +1709,7 @@ BOOL recvColourRequest(NETQUEUE queue)
 {
 	UBYTE	player, col;
 
-	if(!NetPlay.isHost)				// only host should act
+	if (!NetPlay.isHost || !bHosted)  // Only host should act, and only if the game hasn't started yet.
 	{
 		return true;
 	}
@@ -1735,7 +1735,7 @@ BOOL recvPositionRequest(NETQUEUE queue)
 {
 	UBYTE	player, position;
 
-	if(!NetPlay.isHost)				// only host should act
+	if (!NetPlay.isHost || !bHosted)  // Only host should act, and only if the game hasn't started yet.
 	{
 		return true;
 	}
@@ -2754,6 +2754,11 @@ static void processMultiopWidgets(UDWORD id)
 /* Start a multiplayer or skirmish game */
 void startMultiplayerGame(void)
 {
+	if (!bHosted)
+	{
+		debug(LOG_ERROR, "Multiple start requests received when we already started.");
+		return;
+	}
 	decideWRF();										// set up swrf & game.map
 	bMultiPlayer = true;
 	bMultiMessages = true;
@@ -2896,8 +2901,8 @@ void frontendMultiMessages(void)
 		case NET_READY_REQUEST:
 			recvReadyRequest(queue);
 
-			// if hosting try to start the game if everyone is ready
-			if(NetPlay.isHost && multiplayPlayersReady(false))
+			// If hosting and game not yet started, try to start the game if everyone is ready.
+			if (NetPlay.isHost && bHosted && multiplayPlayersReady(false))
 			{
 				startMultiplayerGame();
 			}
