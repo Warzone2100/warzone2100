@@ -1558,9 +1558,9 @@ BOOL recvTeamRequest()
 {
 	UBYTE	player, team;
 
-	if(!NetPlay.isHost)			// only host should act
+	if (!NetPlay.isHost || !bHosted)  // Only host should act, and only if the game hasn't started yet.
 	{
-		ASSERT(false, "Host only routine detected for client!");
+		ASSERT(NetPlay.isHost, "Host only routine detected for client!");
 		return true;
 	}
 
@@ -1614,9 +1614,9 @@ BOOL recvReadyRequest()
 	UBYTE	player;
 	BOOL	bReady;
 
-	if(!NetPlay.isHost)					// only host should act
+	if (!NetPlay.isHost || !bHosted)  // Only host should act, and only if the game hasn't started yet.
 	{
-		ASSERT(false, "Host only routine detected for client!");
+		ASSERT(NetPlay.isHost, "Host only routine detected for client!");
 		return true;
 	}
 
@@ -1760,9 +1760,9 @@ BOOL recvColourRequest()
 {
 	UBYTE	player, col;
 
-	if(!NetPlay.isHost)				// only host should act
+	if (!NetPlay.isHost || !bHosted)  // Only host should act, and only if the game hasn't started yet.
 	{
-		ASSERT(false, "Host only routine detected for client!");
+		ASSERT(NetPlay.isHost, "Host only routine detected for client!");
 		return true;
 	}
 
@@ -1793,9 +1793,9 @@ BOOL recvPositionRequest()
 {
 	UBYTE	player, position;
 
-	if(!NetPlay.isHost)				// only host should act
+	if (!NetPlay.isHost || !bHosted)  // Only host should act, and only if the game hasn't started yet.
 	{
-		ASSERT(false, "Host only routine detected for client!");
+		ASSERT(NetPlay.isHost, "Host only routine detected for client!");
 		return true;
 	}
 
@@ -2820,6 +2820,11 @@ static void processMultiopWidgets(UDWORD id)
 /* Start a multiplayer or skirmish game */
 void startMultiplayerGame(void)
 {
+	if (!bHosted)
+	{
+		debug(LOG_ERROR, "Multiple start requests received when we already started.");
+		return;
+	}
 	decideWRF();										// set up swrf & game.map
 	bMultiPlayer = true;
 	bMultiMessages = true;
@@ -2975,14 +2980,12 @@ void frontendMultiMessages(void)
 			break;
 
 		case NET_READY_REQUEST:
-			if (NetPlay.isHost)
+			recvReadyRequest();
+
+			// If hosting and game not yet started, try to start the game if everyone is ready.
+			if (NetPlay.isHost && bHosted && multiplayPlayersReady(false))
 			{
-				recvReadyRequest();
-				if (multiplayPlayersReady(false))
-				{
-					// if hosting try to start the game if everyone is ready
-					startMultiplayerGame();
-				}
+				startMultiplayerGame();
 			}
 			break;
 
