@@ -111,9 +111,6 @@ MAPTILE	*psMapTiles = NULL;
 
 #define WATER_DEPTH	180
 
-// Enable the below define to render cliffs that are small, and otherwise wouldn't show up.
-//#define SMALL_CLIFFS
-
 static void SetGroundForTile(const char *filename, const char *nametype);
 static int getTextureType(const char *textureType);
 static BOOL hasDecals(int i, int j);
@@ -608,8 +605,9 @@ static int determineGroundType(int x, int y, const char *tileset)
 			
 			votes[i][j] = 0;
 
-#ifdef SMALL_CLIFFS
-			// cliffs are so small they won't show up otherwise
+			// This controls the way cliffs look, and also plays a role with water
+			// FIXME: The current way this is done, we don't have control over how well defined the area
+			// in question behaves.  You lose definition between what is passable and what is impassable.
 			if (urban)
 			{
 				if (ground[i][j] == getTextureType("u_cliff"))
@@ -625,7 +623,6 @@ static int determineGroundType(int x, int y, const char *tileset)
 				if (ground[i][j] == getTextureType("r_cliff"))
 					return ground[i][j];
 			}
-#endif
 		}
 	}
 
