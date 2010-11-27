@@ -4591,9 +4591,6 @@
 		439F382012668B1E00D5EE2A /* StaticAnalyzer */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
 				PRODUCT_NAME = "Setup Prebuilt Components";
 			};
 			name = StaticAnalyzer;
@@ -4664,9 +4661,6 @@
 		439F382B12668B1E00D5EE2A /* StaticAnalyzer */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
 				PRODUCT_NAME = "Make DMGs for Release";
 			};
 			name = StaticAnalyzer;
@@ -4674,9 +4668,6 @@
 		43F77C8110F0125F00E04615 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
 				PRODUCT_NAME = "Make DMGs for Release";
 			};
 			name = Debug;
@@ -4684,20 +4675,13 @@
 		43F77C8210F0125F00E04615 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				PRODUCT_NAME = "Make DMGs for Release";
-				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
 		43FA570D10FF8E9D0074E914 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
 				PRODUCT_NAME = "Setup Prebuilt Components";
 			};
 			name = Debug;
@@ -4705,11 +4689,7 @@
 		43FA570E10FF8E9D0074E914 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				PRODUCT_NAME = "Setup Prebuilt Components";
-				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
