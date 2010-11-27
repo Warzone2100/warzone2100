@@ -59,7 +59,6 @@ static UDWORD nextPowerSystemUpdate;
 
 /* Updates the current power based on the extracted power and a Power Generator*/
 static void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player);
-/** Each Resource Extractor yields EXTRACT_POINTS per second until there are none left in the resource. */
 static int64_t updateExtractedPower(STRUCTURE *psBuilding);
 
 //returns the relevant list based on OffWorld or OnWorld
@@ -210,7 +209,7 @@ static int64_t updateExtractedPower(STRUCTURE *psBuilding)
 		}
 		timeDiff = (int)gameTime - (int)pResExtractor->timeLastUpdated;
 		// Add modifier according to difficulty level
-		if (!bMultiPlayer)  // ignore multiplayer games
+		if (game.type == CAMPAIGN)  // other types do not make sense
 		{
 			switch (getDifficultyLevel())
 			{
@@ -312,7 +311,7 @@ void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player)
 // only used in multiplayer games.
 void setPower(unsigned player, int32_t power)
 {
-	ASSERT(player < MAX_PLAYERS, "setPower: Bad player (%u)", player);
+	ASSERT(player < MAX_PLAYERS, "Bad player (%u)", player);
 
 	syncDebug("setPower%d %"PRId64"->%d", player, asPower[player].currentPower, power);
 	asPower[player].currentPower = power*FP_ONE;
@@ -321,7 +320,7 @@ void setPower(unsigned player, int32_t power)
 
 void setPrecisePower(unsigned player, int64_t power)
 {
-	ASSERT(player < MAX_PLAYERS, "setPower: Bad player (%u)", player);
+	ASSERT(player < MAX_PLAYERS, "Bad player (%u)", player);
 
 	syncDebug("setPower%d %"PRId64"->%"PRId64"", player, asPower[player].currentPower, power);
 	asPower[player].currentPower = power;
@@ -330,14 +329,14 @@ void setPrecisePower(unsigned player, int64_t power)
 
 int32_t getPower(unsigned player)
 {
-	ASSERT(player < MAX_PLAYERS, "setPower: Bad player (%u)", player);
+	ASSERT(player < MAX_PLAYERS, "Bad player (%u)", player);
 
 	return asPower[player].currentPower >> 32;
 }
 
 int64_t getPrecisePower(unsigned player)
 {
-	ASSERT(player < MAX_PLAYERS, "setPower: Bad player (%u)", player);
+	ASSERT(player < MAX_PLAYERS, "Bad player (%u)", player);
 
 	return asPower[player].currentPower;
 }
