@@ -1,3 +1,18 @@
+2010-11-27: Version 3.0 beta 4
+ * General:
+   * Fix: Fix multiturret droids trying to look at invalid weapon slots of structures when looking at their targets. (commit:99ec8a015e084d0283140f351b3d74fb9e4cdf6d)
+   * Change: Show tooltips for player & tech level buttons. (commit:0c77b898c2ba0e6087099f9cc67e56755c83115c)
+   * Fix: Fix an invalid pointer dereferencing issue in the script events system. (ticket:2300, commit:dfbceff8647ecf3e488733ed7e18e4901e4ee774)
+ * Graphics:
+   * Change: Revert 'Try to make cliffs more prominent' patch, it has unintended consequences.
+ * Multiplayer:
+   * Fix: Fixed crash for all players when the last player clicks "Ready" too many times. (ticket:2346, commit:eea0d0276ac0d295dcb6397d96cc32043cbca3be)
+   * Fix: Fix truck limit when giving trucks (commit: a6b3f0bd94ce8f6e64e6cc09cf5efbc2a4cb1ad0)
+   * Fix: Fix kicking of non-hosts who didn't have default color values. (ticket:2329, commit:fd2843e6431e43cc72b635c422fd18bb19d42c47)
+ * Translations:
+   * Updated: Korean (ticket:2098, commit:0a669496a1c12e5d94020aea68fc2257f7baba33)
+
+
 2010-11-14: Version 3.0 beta 3
  * General:
    * Change: Make map preview faster (commit:5f42d0032a9c8dc0b4de60cbef7f9bba8b0b70f0)
