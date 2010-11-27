@@ -5807,7 +5807,6 @@ void checkForResExtractors(STRUCTURE *psBuilding)
 					psResExtractor->psPowerGen = psBuilding;
 					//set the res Extr to active
 					psResExtractor->active = true;
-					psResExtractor->timeLastUpdated = gameTime;
 					slot++;
 					//each Power Gen can cope with 4 Extractors now - 9/6/98 AB
 					//check to see if any more vacant slots
@@ -5872,7 +5871,6 @@ void checkForPowerGen(STRUCTURE *psBuilding)
 						psPG->apResExtractors[i] = psBuilding;
 						psRE->psPowerGen = psCurr;
 						psRE->active = true;
-						psRE->timeLastUpdated = gameTime;
 						return;
 					}
 				}
@@ -7496,30 +7494,6 @@ void factoryLoopAdjust(STRUCTURE *psStruct, BOOL add)
 		else
 		{
 			psFactory->productionLoops--;
-		}
-	}
-}
-
-
-/*This function is called after a game is loaded so that any resource extractors
-that are active are initialised for when to start*/
-void checkResExtractorsActive(void)
-{
-	STRUCTURE		*psStruct;
-	UBYTE			inc;
-
-	for (inc = 0; inc < MAX_PLAYERS; inc++)
-	{
-		for (psStruct = apsStructLists[inc]; psStruct != NULL; psStruct =
-			psStruct->psNext)
-		{
-			if (psStruct->pStructureType->type == REF_RESOURCE_EXTRACTOR)
-			{
-				if (psStruct->pFunctionality->resourceExtractor.active)
-				{
-					psStruct->pFunctionality->resourceExtractor.timeLastUpdated = gameTime;
-				}
-			}
 		}
 	}
 }

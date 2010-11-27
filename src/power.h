@@ -48,9 +48,6 @@ extern void clearPlayerPower(void);
 /** Reset the power levels when a power_gen or resource_extractor is destroyed. */
 extern BOOL resetPlayerPower(UDWORD player, STRUCTURE *psStruct);
 
-/** Free the space used for playerPower. */
-extern void releasePlayerPower(void);
-
 /** Check the available power. */
 BOOL checkPower(int player, uint32_t quantity);
 

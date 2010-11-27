@@ -3466,11 +3466,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 	/* Start the game clock */
 	gameTimeStart();
 
-	//after the clock has been reset need to check if any res_extractors are active
-	checkResExtractorsActive();
-
-//	initViewPosition();
-
 	//check if limbo_expand mission has changed to an expand mission for user save game (mid-mission)
 	if (gameType == GTYPE_SAVE_MIDMISSION && missionLimboExpand())
 	{
