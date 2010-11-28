@@ -95,6 +95,9 @@ void gameTimeInit(void)
 	{
 		wantedLatencies[player] = 0;
 	}
+
+	// Don't let syncDebug from previous games cause a desynch dump at gameTime 102.
+	resetSyncDebug();
 }
 
 extern void setGameTime(uint32_t newGameTime)

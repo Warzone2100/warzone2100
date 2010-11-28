@@ -2956,13 +2956,13 @@ bool NETcheckPlayerConnectionStatus(CONNECTION_STATUS status, unsigned player)
 }
 
 #define MAX_LEN_LOG_LINE 512  // From debug.c - no use printing something longer.
-#define MAX_SYNC_MESSAGES 10000
+#define MAX_SYNC_MESSAGES 20000
 #define MAX_SYNC_HISTORY 12
 
 static unsigned syncDebugNext = 0;
 static uint32_t syncDebugNum[MAX_SYNC_HISTORY];
 static uint32_t syncDebugGameTime[MAX_SYNC_HISTORY + 1];
-static char *syncDebugFunctions[MAX_SYNC_HISTORY][MAX_SYNC_MESSAGES];
+static char const *syncDebugFunctions[MAX_SYNC_HISTORY][MAX_SYNC_MESSAGES];
 static char *syncDebugStrings[MAX_SYNC_HISTORY][MAX_SYNC_MESSAGES];
 static uint32_t syncDebugCrcs[MAX_SYNC_HISTORY + 1];
 
@@ -2977,7 +2977,7 @@ void _syncDebug(const char *function, const char *str, ...)
 
 	if (syncDebugNum[syncDebugNext] < MAX_SYNC_MESSAGES)
 	{
-		syncDebugFunctions[syncDebugNext][syncDebugNum[syncDebugNext]] = strdup(function);
+		syncDebugFunctions[syncDebugNext][syncDebugNum[syncDebugNext]] = function;  // Function names are link-time constants, no need to duplicate.
 		syncDebugStrings[syncDebugNext][syncDebugNum[syncDebugNext]] = strdup(outputBuffer);
 		syncDebugCrcs[syncDebugNext] = crcSum(syncDebugCrcs[syncDebugNext], function,     strlen(function)     + 1);
 		syncDebugCrcs[syncDebugNext] = crcSum(syncDebugCrcs[syncDebugNext], outputBuffer, strlen(outputBuffer) + 1);
@@ -3002,24 +3002,44 @@ void syncDebugBacktrace(void)
 #endif
 }
 
+static void clearSyncDebugNext(void)
+{
+	unsigned i;
+
+	for (i = 0; i != syncDebugNum[syncDebugNext]; ++i)
+	{
+		free(syncDebugStrings[syncDebugNext][i]);
+		syncDebugFunctions[syncDebugNext][i] = NULL;  // Function names are link-time constants, and therefore shouldn't and can't be freed.
+		syncDebugStrings[syncDebugNext][i] = NULL;
+	}
+	syncDebugNum[syncDebugNext] = 0;
+	syncDebugGameTime[syncDebugNext] = 0;
+	syncDebugCrcs[syncDebugNext] = 0x00000000;
+}
+
+void resetSyncDebug()
+{
+	for (syncDebugNext = 0; syncDebugNext < MAX_SYNC_HISTORY; ++syncDebugNext)
+	{
+		clearSyncDebugNext();
+	}
+
+	syncDebugGameTime[MAX_SYNC_HISTORY] = 0;
+	syncDebugCrcs[MAX_SYNC_HISTORY] = 0x00000000;
+
+	syncDebugNext = 0;
+}
+
 uint32_t nextDebugSync(void)
 {
 	uint32_t ret = ~syncDebugCrcs[syncDebugNext];  // Invert bits, since everyone else seems to do that with CRCs...
-	unsigned i;
 
 	// Save gameTime, so we know which CRC to compare with, later.
 	syncDebugGameTime[syncDebugNext] = gameTime;
 
 	// Go to next position, and free it ready for use.
 	syncDebugNext = (syncDebugNext + 1)%MAX_SYNC_HISTORY;
-	for (i = 0; i != syncDebugNum[syncDebugNext]; ++i)
-	{
-		free(syncDebugFunctions[syncDebugNext][i]);
-		free(syncDebugStrings[syncDebugNext][i]);
-	}
-	syncDebugNum[syncDebugNext] = 0;
-	syncDebugGameTime[syncDebugNext] = 0;
-	syncDebugCrcs[syncDebugNext] = 0x00000000;
+	clearSyncDebugNext();
 
 	return ret;
 }
@@ -3102,7 +3122,6 @@ bool checkDebugSync(uint32_t checkGameTime, uint32_t checkCrc)
 	for (i = 0; i < syncDebugNum[index]; ++i)
 	{
 		bufSize += snprintf((char *)debugSyncTmpBuf + bufSize, ARRAY_SIZE(debugSyncTmpBuf) - bufSize, "[%s] %s\n", syncDebugFunctions[index][i], syncDebugStrings[index][i]);
-		free(syncDebugFunctions[index][i]);
 		free(syncDebugStrings[index][i]);
 	}
 	bufSize += snprintf((char *)debugSyncTmpBuf + bufSize, ARRAY_SIZE(debugSyncTmpBuf) - bufSize, "===== END gameTime=%u, %u lines, CRC 0x%08X =====\n", syncDebugGameTime[index], syncDebugNum[index], ~syncDebugCrcs[index] & 0xFFFFFFFF);
