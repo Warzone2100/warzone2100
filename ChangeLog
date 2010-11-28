@@ -11,14 +11,16 @@
  * Multiplayer:
    * Fix: Make power generator output in multiplayer not depend on the game difficulty setting (commit:67524762633e2bae0570e8674e3ca34af184d1e9)
    * Fix: Make sure not to give to many trucks to another player (commit:0a9b3b44a7fbdd7d017b8d4287a951531d573a04)
+   * Fix: Don't crash when players click the "ready" button too often (ticket:2346, commit:b665e9d8cf1edd3ad5274bb40af32911c9719fb2)
  * NTW mod:
    * Fix: Graphics (ticket:1748, commit:e0ced0e4fb024e0bf2b6b7de1a826b5bfbfffe9f)
  * Translations:
    * New: Turkish (ticket:2261, ticket:2316, commit:cc728d8f068e45c0ed198ca9553a946156a5a8fa, commit:1aad6e751ee657e795bd1a56924153a7a5c1e040)
+   * Updated: French, Polish, Romanian, Spanish (commit:b2ac76f1706b535476e00cd75f0ebdcb4d16bea0)
    * Updated: Italian (ticket:2199, commit:39a85bb03eda8c50228405beaa6bbd886183f182)
    * Updated: German (commit:c16bf5807aa54a077878e130ca639c17e8a5154a)
    * Updated: Korean (ticket:2098, commit:134f0c962c05eadd0a5a15245bbd7874145c38db)
-   * Updated: French, Polish, Romanian, Spanish (commit:b2ac76f1706b535476e00cd75f0ebdcb4d16bea0)
+   * Updated: Polish (ticket:1347, commit:1c2df4859990f5bd6bac12f2fa7c74515f9d03a6)
 
 2010-09-24: Version 2.3.5
  * General:
