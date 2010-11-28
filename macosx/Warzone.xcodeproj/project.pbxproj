@@ -1475,6 +1475,8 @@
 		2244463B0E3EB7CB004D0F1F /* messagely.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = messagely.h; path = ../src/messagely.h; sourceTree = SOURCE_ROOT; };
 		22E244D40E65361800EC2B3E /* baseobject.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = baseobject.c; path = ../src/baseobject.c; sourceTree = SOURCE_ROOT; };
 		22E244D50E65361800EC2B3E /* baseobject.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = baseobject.h; path = ../src/baseobject.h; sourceTree = SOURCE_ROOT; };
+		4305A8B412A2C7FA00B7B555 /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		4305A8B512A2C7FA00B7B555 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		43228BEC11BABEE900C26C1C /* export.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = export.h; path = "external/gettext/gettext-runtime/intl/export.h"; sourceTree = "<group>"; };
 		43228BED11BABEE900C26C1C /* setlocale.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = setlocale.c; path = "external/gettext/gettext-runtime/intl/setlocale.c"; sourceTree = "<group>"; };
 		43228BEE11BABEE900C26C1C /* threadlib.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = threadlib.c; path = "external/gettext/gettext-runtime/intl/threadlib.c"; sourceTree = "<group>"; };
@@ -3478,6 +3480,8 @@
 				zh_CN,
 				zh_TW,
 				ko,
+				sk,
+				tr,
 			);
 			mainGroup = 02356D640BD3BB2600E9A019;
 			productRefGroup = 02356D760BD3BB3400E9A019 /* Products */;
@@ -4547,6 +4551,8 @@
 				439A28B6114F2E14004F1266 /* zh_CN */,
 				439A28B7114F2E14004F1266 /* zh_TW */,
 				43D6166E12048CDE004B9630 /* ko */,
+				4305A8B412A2C7FA00B7B555 /* sk */,
+				4305A8B512A2C7FA00B7B555 /* tr */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
