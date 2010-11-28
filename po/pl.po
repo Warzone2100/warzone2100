@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-11-24 17:53+0100\n"
-"PO-Revision-Date: 2010-11-03 11:18+0100\n"
+"POT-Creation-Date: 2010-11-28 19:04+0100\n"
+"PO-Revision-Date: 2010-11-25 22:40+0100\n"
 "Last-Translator: Michał D. aka Emdek <emdeck@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -9912,7 +9912,6 @@ msgid "NORTHERN SECTOR"
 msgstr "SEKTOR PÓŁNOCNY"
 
 #: data/base/sequenceaudio/cam3/c003.txa:5
-#, fuzzy
 msgid "Congratulations your successfull evacuation of Beta Base."
 msgstr "Gratulujemy udanej ewakuacji Bazy Beta."
 
@@ -12188,12 +12187,12 @@ msgstr "Język systemu"
 msgid "Enter password here"
 msgstr "Wpisz hasło tutaj"
 
-#: lib/netplay/netplay.c:3284
+#: lib/netplay/netplay.c:3286
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Nie można rozwinąć nazwy głównego serwera (%s)!"
 
-#: lib/netplay/netplay.c:3309
+#: lib/netplay/netplay.c:3312
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Nie można skomunikować się z serwerem lobby! Czy port %u TCP jest otwarty dla ruchu wychodzącego?"
@@ -12539,9 +12538,9 @@ msgstr "Struktura odbudowana"
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
-msgstr[0] "Wybrana grupa %u -  %u jednostka"
-msgstr[1] "Wybrana grupa %u -  %u jednostki"
-msgstr[2] "Wybrana grupa %u -  %u jednostek"
+msgstr[0] "Wybrana grupa %u - %u jednostka"
+msgstr[1] "Wybrana grupa %u - %u jednostki"
+msgstr[2] "Wybrana grupa %u - %u jednostek"
 
 #: src/droid.c:3328
 #, c-format
@@ -12611,9 +12610,9 @@ msgid "%s wanted to give you a %s but you have too many!"
 msgstr "%s chciał dać ci %s ale masz już ich zbyt wiele!"
 
 #: src/droid.c:4647
-#, fuzzy, c-format
+#, c-format
 msgid "You wanted to give %s a %s but they have too many!"
-msgstr "%s chciał dać ci %s ale masz już ich zbyt wiele!"
+msgstr "Chciałeś dać %s %s ale ma ich już ich zbyt wiele!"
 
 #: src/frontend.c:97
 msgid "Single Player"
@@ -12904,14 +12903,12 @@ msgstr "Obracanie ekranu"
 
 #: src/frontend.c:1006
 #: src/frontend.c:1094
-#, fuzzy
 msgctxt "middle mouse button"
 msgid "Middle Button"
 msgstr "Środkowy przycisk"
 
 #: src/frontend.c:1010
 #: src/frontend.c:1089
-#, fuzzy
 msgctxt "right mouse button"
 msgid "Right Button"
 msgstr "Prawy przycisk"
@@ -13420,7 +13417,7 @@ msgstr "FPS %d; FPS-Limit: %d; PIEs %d; polys %d; Terr. polys %d; States %d"
 #: src/keybind.c:546
 #, c-format
 msgid "(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"
-msgstr "(Gracz %u) używa oszustwa :Liczba droidów: %d  Liczba konstrukcji: %d  Liczba obiektów: %d"
+msgstr "(Gracz %u) używa oszustwa :Liczba droidów: %d Liczba konstrukcji: %d Liczba obiektów: %d"
 
 #: src/keybind.c:583
 msgid "Infinite power disabled"
@@ -13803,7 +13800,7 @@ msgstr "Zaznacz dowódcę 9"
 
 #: src/keymap.c:350
 msgid "Multiplayer Options / Alliance dialog"
-msgstr "Dialog opcji gry wieloosobowej  / sojuszy"
+msgstr "Dialog opcji gry wieloosobowej / sojuszy"
 
 #: src/keymap.c:353
 msgid "Snap View to North"
@@ -14469,25 +14466,25 @@ msgstr "Włączono 'zablokowane drużyny'"
 msgid "The host has kicked %s from the game!"
 msgstr "Host wyrzucił %s z gry!"
 
-#: src/multiint.c:2880
+#: src/multiint.c:2885
 msgid "Host is Starting Game"
 msgstr "Host rozpoczyna grę"
 
-#: src/multiint.c:3484
+#: src/multiint.c:3487
 msgid "Players"
 msgstr "Gracze"
 
-#: src/multiint.c:3602
+#: src/multiint.c:3605
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Przesyłanie mapy: %d%%"
 
-#: src/multiint.c:3611
+#: src/multiint.c:3614
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Mapa: %d%% pobrane"
 
-#: src/multiint.c:3637
+#: src/multiint.c:3640
 msgid "HOST"
 msgstr "HOST"
 
@@ -14794,12 +14791,12 @@ msgstr "ZWYCIĘŻYŁEŚ!"
 msgid "YOU WERE DEFEATED!"
 msgstr "ZOSTAŁEŚ POKONANY!"
 
-#: src/scriptfuncs.c:10089
+#: src/scriptfuncs.c:10087
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Sygnał otrzymany od %s!"
 
-#: src/scriptfuncs.c:10135
+#: src/scriptfuncs.c:10133
 #, c-format
 msgid "Beacon %d"
 msgstr "Sygnał %d"
@@ -14830,7 +14827,6 @@ msgid "Unable to locate any Commanders!"
 msgstr "Niemożna odnaleźć dowódców!"
 
 #: src/structure.c:2748
-#, fuzzy
 msgid "Control Limit Reached - Production Halted"
 msgstr "Limit kontrolny osiągnięty - produkcja wstrzymana"
 
@@ -14934,6 +14930,9 @@ msgstr "Wersja %s%s%s%s"
 
 #~ msgid "Super Transport Body"
 #~ msgstr "Kadłub Super Transportowca"
+
+#~ msgid "Player position"
+#~ msgstr "Położenie gracza"
 
 #~ msgid "3 players"
 #~ msgstr "3 graczy"
