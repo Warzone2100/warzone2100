@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-11-24 17:56+0100\n"
-"PO-Revision-Date: 2010-11-03 11:18+0100\n"
+"POT-Creation-Date: 2010-11-28 19:17+0100\n"
+"PO-Revision-Date: 2010-11-25 22:40+0100\n"
 "Last-Translator: Michał D. aka Emdek <emdeck@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -9913,7 +9913,6 @@ msgid "NORTHERN SECTOR"
 msgstr "SEKTOR PÓŁNOCNY"
 
 #: data/base/sequenceaudio/cam3/c003.txa:5
-#, fuzzy
 msgid "Congratulations your successfull evacuation of Beta Base."
 msgstr "Gratulujemy udanej ewakuacji Bazy Beta."
 
@@ -12554,9 +12553,9 @@ msgstr "Struktura odbudowana"
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
-msgstr[0] "Wybrana grupa %u -  %u jednostka"
-msgstr[1] "Wybrana grupa %u -  %u jednostki"
-msgstr[2] "Wybrana grupa %u -  %u jednostek"
+msgstr[0] "Wybrana grupa %u - %u jednostka"
+msgstr[1] "Wybrana grupa %u - %u jednostki"
+msgstr[2] "Wybrana grupa %u - %u jednostek"
 
 #: src/droid.c:3567
 #, c-format
@@ -12626,9 +12625,9 @@ msgid "%s wanted to give you a %s but you have too many!"
 msgstr "%s chciał dać ci %s ale masz już ich zbyt wiele!"
 
 #: src/droid.c:4926
-#, fuzzy, c-format
+#, c-format
 msgid "You wanted to give %s a %s but they have too many!"
-msgstr "%s chciał dać ci %s ale masz już ich zbyt wiele!"
+msgstr "Chciałeś dać %s %s ale ma ich już ich zbyt wiele!"
 
 #: src/frontend.c:97
 msgid "Single Player"
@@ -12919,14 +12918,12 @@ msgstr "Obracanie ekranu"
 
 #: src/frontend.c:1007
 #: src/frontend.c:1095
-#, fuzzy
 msgctxt "middle mouse button"
 msgid "Middle Button"
 msgstr "Środkowy przycisk"
 
 #: src/frontend.c:1011
 #: src/frontend.c:1090
-#, fuzzy
 msgctxt "right mouse button"
 msgid "Right Button"
 msgstr "Prawy przycisk"
@@ -13435,7 +13432,7 @@ msgstr "FPS %d; FPS-Limit: %d; PIEs %d; polys %d; Terr. polys %d; States %d"
 #: src/keybind.c:548
 #, c-format
 msgid "(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"
-msgstr "(Gracz %u) używa oszustwa :Liczba droidów: %d  Liczba konstrukcji: %d  Liczba obiektów: %d"
+msgstr "(Gracz %u) używa oszustwa :Liczba droidów: %d Liczba konstrukcji: %d Liczba obiektów: %d"
 
 #: src/keybind.c:585
 msgid "Infinite power disabled"
@@ -13818,7 +13815,7 @@ msgstr "Zaznacz dowódcę 9"
 
 #: src/keymap.c:350
 msgid "Multiplayer Options / Alliance dialog"
-msgstr "Dialog opcji gry wieloosobowej  / sojuszy"
+msgstr "Dialog opcji gry wieloosobowej / sojuszy"
 
 #: src/keymap.c:353
 msgid "Snap View to North"
@@ -14417,9 +14414,8 @@ msgid "Kick player"
 msgstr "Wyrzuć gracza"
 
 #: src/multiint.c:1500
-#, fuzzy
 msgid "Player position"
-msgstr "Chroń pozycję"
+msgstr "Położenie gracza"
 
 #: src/multiint.c:1893
 msgid "Team"
@@ -14485,25 +14481,25 @@ msgstr "Włączono 'zablokowane drużyny'"
 msgid "The host has kicked %s from the game!"
 msgstr "Host wyrzucił %s z gry!"
 
-#: src/multiint.c:2897
+#: src/multiint.c:2902
 msgid "Host is Starting Game"
 msgstr "Host rozpoczyna grę"
 
-#: src/multiint.c:3507
+#: src/multiint.c:3510
 msgid "Players"
 msgstr "Gracze"
 
-#: src/multiint.c:3625
+#: src/multiint.c:3628
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Przesyłanie mapy: %d%%"
 
-#: src/multiint.c:3634
+#: src/multiint.c:3637
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Mapa: %d%% pobrane"
 
-#: src/multiint.c:3660
+#: src/multiint.c:3663
 msgid "HOST"
 msgstr "HOST"
 
@@ -14866,7 +14862,6 @@ msgid "Unable to locate any Commanders!"
 msgstr "Niemożna odnaleźć dowódców!"
 
 #: src/structure.c:2748
-#, fuzzy
 msgid "Control Limit Reached - Production Halted"
 msgstr "Limit kontrolny osiągnięty - produkcja wstrzymana"
 
