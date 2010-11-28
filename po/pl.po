@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-11-24 17:59+0100\n"
-"PO-Revision-Date: 2010-11-03 11:18+0100\n"
+"POT-Creation-Date: 2010-11-28 19:19+0100\n"
+"PO-Revision-Date: 2010-11-25 22:40+0100\n"
 "Last-Translator: Michał D. aka Emdek <emdeck@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -9894,6 +9894,7 @@ msgid "NORTHERN SECTOR"
 msgstr "SEKTOR PÓŁNOCNY"
 
 #: data/base/sequenceaudio/cam3/c003.txa:5
+#, fuzzy
 msgid "Congratulations your successful evacuation of Beta Base."
 msgstr "Gratulujemy udanej ewakuacji Bazy Beta."
 
@@ -12322,20 +12323,20 @@ msgstr "Bronie"
 msgid "Systems"
 msgstr "Systemy"
 
-#: src/display3d.c:534
+#: src/display3d.c:533
 msgid "Player left"
 msgstr "Gracz opuścił grę"
 
-#: src/display3d.c:538
+#: src/display3d.c:537
 msgid "Player dropped"
 msgstr "Gracz odrzucony"
 
-#: src/display3d.c:542
+#: src/display3d.c:541
 #: src/multiint.c:1866
 msgid "Waiting for other players"
 msgstr "Oczekiwanie na graczy"
 
-#: src/display3d.c:547
+#: src/display3d.c:546
 msgid "Out of sync"
 msgstr "Brak synchronizacji"
 
@@ -12379,9 +12380,9 @@ msgstr "Struktura odbudowana"
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
-msgstr[0] "Wybrana grupa %u -  %u jednostka"
-msgstr[1] "Wybrana grupa %u -  %u jednostki"
-msgstr[2] "Wybrana grupa %u -  %u jednostek"
+msgstr[0] "Wybrana grupa %u - %u jednostka"
+msgstr[1] "Wybrana grupa %u - %u jednostki"
+msgstr[2] "Wybrana grupa %u - %u jednostek"
 
 #: src/droid.c:2992
 #, c-format
@@ -12451,9 +12452,9 @@ msgid "%s wanted to give you a %s but you have too many!"
 msgstr "%s chciał dać ci %s ale masz już ich zbyt wiele!"
 
 #: src/droid.c:4340
-#, fuzzy, c-format
+#, c-format
 msgid "You wanted to give %s a %s but they have too many!"
-msgstr "%s chciał dać ci %s ale masz już ich zbyt wiele!"
+msgstr "Chciałeś dać %s %s ale ma ich już ich zbyt wiele!"
 
 #: src/frontend.c:98
 msgid "Single Player"
@@ -12530,8 +12531,8 @@ msgstr "JEDEN GRACZ"
 
 #: src/frontend.c:302
 #: src/ingameop.c:518
-#: src/mission.c:2534
-#: src/mission.c:2639
+#: src/mission.c:2533
+#: src/mission.c:2638
 msgid "Load Saved Game"
 msgstr "Załaduj zapisany stan gry"
 
@@ -12744,11 +12745,13 @@ msgstr "Obracanie ekranu"
 
 #: src/frontend.c:1013
 #: src/frontend.c:1101
+#, fuzzy
 msgid "Middle Mouse"
 msgstr "Środkowy przycisk"
 
 #: src/frontend.c:1017
 #: src/frontend.c:1096
+#, fuzzy
 msgid "Right Mouse"
 msgstr "Prawy przycisk"
 
@@ -13024,8 +13027,8 @@ msgstr ""
 
 #: src/ingameop.c:294
 #: src/ingameop.c:522
-#: src/mission.c:2521
-#: src/mission.c:2642
+#: src/mission.c:2520
+#: src/mission.c:2641
 msgid "Save Game"
 msgstr "Zapisz grę"
 
@@ -13041,7 +13044,7 @@ msgstr "Gra nie może być kontynuowana bez hosta."
 msgid "-->  QUIT  <--"
 msgstr "--> WYJŚCIE <--"
 
-#: src/init.c:390
+#: src/init.c:389
 #, c-format
 msgid ""
 "The required mod could not be loaded: %s\n"
@@ -13269,7 +13272,7 @@ msgstr "FPS %d; FPS-Limit: %d; PIEs %d; polys %d; Terr. polys %d; States %d"
 #: src/keybind.c:580
 #, c-format
 msgid "(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"
-msgstr "(Gracz %u) używa oszustwa :Liczba droidów: %d  Liczba konstrukcji: %d  Liczba obiektów: %d"
+msgstr "(Gracz %u) używa oszustwa :Liczba droidów: %d Liczba konstrukcji: %d Liczba obiektów: %d"
 
 #: src/keybind.c:617
 msgid "Infinite power disabled"
@@ -13652,7 +13655,7 @@ msgstr "Zaznacz dowódcę 9"
 
 #: src/keymap.c:350
 msgid "Multiplayer Options / Alliance dialog"
-msgstr "Dialog opcji gry wieloosobowej  / sojuszy"
+msgstr "Dialog opcji gry wieloosobowej / sojuszy"
 
 #: src/keymap.c:353
 msgid "Snap View to North"
@@ -13871,41 +13874,41 @@ msgstr "Zaznacz następną Fabrykę Cyborgów"
 msgid "Could not save game!"
 msgstr "Niemożna zapisać gry!"
 
-#: src/mission.c:2074
+#: src/mission.c:2073
 msgid "Load Transport"
 msgstr "Ładuj transport"
 
-#: src/mission.c:2468
+#: src/mission.c:2467
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "CEL OSIĄGNIĘTY przez oszukiwanie!"
 
-#: src/mission.c:2468
+#: src/mission.c:2467
 msgid "OBJECTIVE ACHIEVED"
 msgstr "CEL OSIĄGNIĘTY"
 
-#: src/mission.c:2474
+#: src/mission.c:2473
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "CEL NIE OSIĄGNIĘTY--chociaż oszukiwałeś!"
 
-#: src/mission.c:2474
+#: src/mission.c:2473
 msgid "OBJECTIVE FAILED"
 msgstr "CEL NIE OSIĄGNIĘTY"
 
-#: src/mission.c:2500
-#: src/mission.c:2540
-#: src/mission.c:2658
+#: src/mission.c:2499
+#: src/mission.c:2539
+#: src/mission.c:2657
 msgid "Quit To Main Menu"
 msgstr "Wyjdź do menu głównego"
 
-#: src/mission.c:2508
+#: src/mission.c:2507
 msgid "Continue Game"
 msgstr "Kontynuuj grę"
 
-#: src/mission.c:2605
+#: src/mission.c:2604
 msgid "GAME SAVED :"
 msgstr "GRA ZAPISANA :"
 
-#: src/move.c:2364
+#: src/move.c:2340
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr "Znalazłeś %u energii w beczce z ropą."
@@ -14224,25 +14227,25 @@ msgstr "Włączono 'zablokowane drużyny'"
 msgid "The host has kicked %s from the game!"
 msgstr "Host wyrzucił %s z gry!"
 
-#: src/multiint.c:2811
+#: src/multiint.c:2816
 msgid "Host is Starting Game"
 msgstr "Host rozpoczyna grę"
 
-#: src/multiint.c:3394
+#: src/multiint.c:3399
 msgid "Players"
 msgstr "Gracze"
 
-#: src/multiint.c:3512
+#: src/multiint.c:3517
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Przesyłanie mapy: %d%%"
 
-#: src/multiint.c:3520
+#: src/multiint.c:3525
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Mapa: %d%% pobrane"
 
-#: src/multiint.c:3546
+#: src/multiint.c:3551
 msgid "HOST"
 msgstr "HOST"
 
@@ -14600,11 +14603,12 @@ msgid "Unable to locate any Commanders!"
 msgstr "Niemożna odnaleźć dowódców!"
 
 #: src/structure.c:2897
+#, fuzzy
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Limit kontrolny osiągnięty - produkcja wstrzymana"
 
-#: src/structure.c:6121
-#: src/structure.c:6146
+#: src/structure.c:6119
+#: src/structure.c:6144
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
@@ -14612,51 +14616,51 @@ msgstr[0] "%s - %u Jednostka przydzielona"
 msgstr[1] "%s - %u Jednostki przydzielone"
 msgstr[2] "%s - %u Jednostek przydzielonych"
 
-#: src/structure.c:6151
-#: src/structure.c:6219
-#: src/structure.c:6235
-#: src/structure.c:6249
+#: src/structure.c:6149
+#: src/structure.c:6217
+#: src/structure.c:6233
+#: src/structure.c:6247
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Uszkodzenia %3.0f%%"
 
-#: src/structure.c:6201
+#: src/structure.c:6199
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - Połączony %u z %u"
 
-#: src/structure.c:6365
-#: src/structure.c:6410
+#: src/structure.c:6363
+#: src/structure.c:6408
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Uszkodzony elektronicznie"
 
 # This maybe sound weird, but I translated this as 'stolen technology'
-#: src/structure.c:6647
+#: src/structure.c:6645
 msgid "Electronic Reward - Visibility Report"
 msgstr "Technologia skradziona - raport widoczności"
 
-#: src/structure.c:6687
+#: src/structure.c:6685
 msgid "Factory Reward - Propulsion"
 msgstr "Technologia skradziona - Napęd"
 
-#: src/structure.c:6711
+#: src/structure.c:6709
 msgid "Factory Reward - Body"
 msgstr "Technologia skradziona - Kadłub"
 
-#: src/structure.c:6735
+#: src/structure.c:6733
 msgid "Factory Reward - Weapon"
 msgstr "Technologia skradziona - Broń"
 
-#: src/structure.c:6744
+#: src/structure.c:6742
 msgid "Factory Reward - Nothing"
 msgstr "Technologia skradziona - Brak"
 
-#: src/structure.c:6772
+#: src/structure.c:6770
 msgid "Repair Facility Award - Repair"
 msgstr "Technologia skradziona - Naprawa"
 
-#: src/structure.c:6779
+#: src/structure.c:6777
 msgid "Repair Facility Award - Nothing"
 msgstr "Technologia skradziona - Brak"
 
@@ -14901,6 +14905,9 @@ msgstr "Wersja %s%s%s%s"
 
 #~ msgid "You found %u power in an oil drum"
 #~ msgstr "Znalazłeś %u energii w beczce z ropą"
+
+#~ msgid "Player position"
+#~ msgstr "Położenie gracza"
 
 #~ msgid "kicked %s : %s from the game, and added them to the banned list!"
 #~ msgstr "wyrzucono %s : %s z gry oraz dodano do listy zbanowanych!"
