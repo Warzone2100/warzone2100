@@ -62,6 +62,7 @@
 
 #define	DIRECT_PROJ_SPEED		500
 #define VTOL_HITBOX_MODIFICATOR 100
+#define STRUCT_HITBOX_MAPPER	32
 
 typedef struct _interval
 {
@@ -2005,8 +2006,7 @@ UDWORD	establishTargetHeight(BASE_OBJECT *psTarget)
 		case OBJ_DROID:
 		{
 			DROID * psDroid = (DROID*)psTarget;
-			unsigned int height = asBodyStats[psDroid->asBits[COMP_BODY].nStat].pIMD->max.y - asBodyStats[psDroid->asBits[COMP_BODY].nStat].pIMD->min.y;
-			unsigned int utilityHeight = 0, yMax = 0, yMin = 0; // Temporaries for addition of utility's height to total height
+			unsigned int height = asBodyStats[psDroid->asBits[COMP_BODY].nStat].pIMD->max.y;
 
 			// VTOL's don't have pIMD either it seems...
 			if (isVtolDroid(psDroid))
@@ -2023,29 +2023,24 @@ UDWORD	establishTargetHeight(BASE_OBJECT *psTarget)
 						if ((asWeaponStats[psDroid->asWeaps[0].nStat]).pIMD == NULL)
 							return height;
 
-						yMax = (asWeaponStats[psDroid->asWeaps[0].nStat]).pIMD->max.y;
-						yMin = (asWeaponStats[psDroid->asWeaps[0].nStat]).pIMD->min.y;
+						height += (asWeaponStats[psDroid->asWeaps[0].nStat]).pIMD->max.y;
 					}
 					break;
 
 				case DROID_SENSOR:
-					yMax = (asSensorStats[psDroid->asBits[COMP_SENSOR].nStat]).pIMD->max.y;
-					yMin = (asSensorStats[psDroid->asBits[COMP_SENSOR].nStat]).pIMD->min.y;
+					height += (asSensorStats[psDroid->asBits[COMP_SENSOR].nStat]).pIMD->max.y;
 					break;
 
 				case DROID_ECM:
-					yMax = (asECMStats[psDroid->asBits[COMP_ECM].nStat]).pIMD->max.y;
-					yMin = (asECMStats[psDroid->asBits[COMP_ECM].nStat]).pIMD->min.y;
+					height += (asECMStats[psDroid->asBits[COMP_ECM].nStat]).pIMD->max.y;
 					break;
 
 				case DROID_CONSTRUCT:
-					yMax = (asConstructStats[psDroid->asBits[COMP_CONSTRUCT].nStat]).pIMD->max.y;
-					yMin = (asConstructStats[psDroid->asBits[COMP_CONSTRUCT].nStat]).pIMD->min.y;
+					height += (asConstructStats[psDroid->asBits[COMP_CONSTRUCT].nStat]).pIMD->max.y;
 					break;
 
 				case DROID_REPAIR:
-					yMax = (asRepairStats[psDroid->asBits[COMP_REPAIRUNIT].nStat]).pIMD->max.y;
-					yMin = (asRepairStats[psDroid->asBits[COMP_REPAIRUNIT].nStat]).pIMD->min.y;
+					height += (asRepairStats[psDroid->asBits[COMP_REPAIRUNIT].nStat]).pIMD->max.y;
 					break;
 
 				case DROID_PERSON:
@@ -2062,19 +2057,15 @@ UDWORD	establishTargetHeight(BASE_OBJECT *psTarget)
 					return height;
 			}
 
-			// TODO: check the /2 - does this really make sense? why + ?
-			utilityHeight = (yMax + yMin)/2;
-
-			return height + utilityHeight;
+			return height;
 		}
 		case OBJ_STRUCTURE:
 		{
 			STRUCTURE_STATS * psStructureStats = ((STRUCTURE *)psTarget)->pStructureType;
-			return (psStructureStats->pIMD->max.y + psStructureStats->pIMD->min.y);
+			return psStructureStats->height * STRUCT_HITBOX_MAPPER; // Map stats to reasonable structure heights
 		}
 		case OBJ_FEATURE:
-			// Just use imd ymax+ymin
-			return (psTarget->sDisplay.imd->max.y + psTarget->sDisplay.imd->min.y);
+			return psTarget->sDisplay.imd->max.y;
 		case OBJ_PROJECTILE:
 			return BULLET_FLIGHT_HEIGHT;
 		default:
