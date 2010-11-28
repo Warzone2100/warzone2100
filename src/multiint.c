@@ -227,26 +227,33 @@ static	void stopJoining(void);
 // ////////////////////////////////////////////////////////////////////////////
 // map previews..
 
-static int guessMapTilesetType(void)
+static int guessMapTilesetType(LEVEL_DATASET *psLevel)
 {
-	if (terrainTypes[0] == 1 && terrainTypes[1] == 0 && terrainTypes[2] == 2)
+	unsigned t = 0, c = 0;
+
+	if (psLevel->psBaseData && psLevel->psBaseData->pName)
 	{
-		return TILESET_ARIZONA;
+		if (sscanf(psLevel->psBaseData->pName, "MULTI_CAM_%u", &c) != 1)
+		{
+			sscanf(psLevel->psBaseData->pName, "MULTI_T%u_C%u", &t, &c);
+		}
 	}
-	else if (terrainTypes[0] == 2 && terrainTypes[1] == 2 && terrainTypes[2] == 2)
+
+	switch (c)
 	{
-		return TILESET_URBAN;
+		case 1:
+			return TILESET_ARIZONA;
+			break;
+		case 2:
+			return TILESET_URBAN;
+			break;
+		case 3:
+			return TILESET_ROCKIES;
+			break;
 	}
-	else if (terrainTypes[0] == 0 && terrainTypes[1] == 0 && terrainTypes[2] == 2)
-	{
-		return TILESET_ROCKIES;
-	}
-	else
-	{
-		debug(LOG_MAP, "Custom level dataset: %u %u %u, using ARIZONA set",
-			terrainTypes[0], terrainTypes[1], terrainTypes[2]);
-		return TILESET_ARIZONA;
-	}
+
+	debug(LOG_MAP, "Could not guess map tileset, using ARIZONA.");
+	return TILESET_ARIZONA;
 }
 
 /// This function is a HACK
@@ -316,7 +323,7 @@ void loadMapPreview(bool hideInterface)
 	gwShutDown();
 
 	// set tileset colors
-	switch (guessMapTilesetType())
+	switch (guessMapTilesetType(psLevel))
 	{
 	case TILESET_ARIZONA:
 		plCliffL = WZCOL_TERC1_CLIFF_LOW;
