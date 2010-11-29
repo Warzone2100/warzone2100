@@ -2156,9 +2156,9 @@ INT_RETVAL intRunWidgets(void)
 				}
 				else if (psPositionStats->ref >= REF_FEATURE_START && psPositionStats->ref < REF_FEATURE_START + REF_RANGE)
 				{
-					FEATURE *result = buildFeature((FEATURE_STATS *)psPositionStats, world_coord(structX), world_coord(structY), false);
+					//FEATURE *result = buildFeature((FEATURE_STATS *)psPositionStats, world_coord(structX), world_coord(structY), false);
 
-					if (result)
+					//if (result)
 					{
 						const char* msg;
 
@@ -2168,7 +2168,8 @@ INT_RETVAL intRunWidgets(void)
 						sendTextMessage(msg, true);
 						Cheated = true;
 						// Notify the other hosts that we've just built ourselves a feature
-						sendMultiPlayerFeature(result->psStats->subType, result->pos.x, result->pos.y, result->id);
+						//sendMultiPlayerFeature(result->psStats->subType, result->pos.x, result->pos.y, result->id);
+						sendMultiPlayerFeature(((FEATURE_STATS *)psPositionStats)->subType, world_coord(structX), world_coord(structY), generateNewObjectId());
 					}
 				}
 				else if (psPositionStats->ref >= REF_TEMPLATE_START &&
