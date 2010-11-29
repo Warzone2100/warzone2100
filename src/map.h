@@ -124,19 +124,6 @@ extern int waterGroundType;
 extern int cliffGroundType;
 extern char *tileset;
 
-typedef struct _aux_maps
-{
-	struct
-	{
-		uint8_t info;
-	} player[MAX_PLAYERS * 2];
-	uint8_t			dangerBits;		// bit per player, does AI sense danger going there? not always up to date
-	uint8_t			threatBits;		// bit per player, can hostile players shoot here? not always up to date
-	uint8_t			aaThreatBits;		// bit per player, can hostile players shoot at my VTOLs here?
-	uint8_t			blockingBits;		// bit set that tells whether a tile is blocked
-	uint8_t			buildingBits;		// bit per player whether player has blocking building at tile, combine it with alliance bits and blockingBits	
-} AUXMAP;
-
 #define AIR_BLOCKED		0x01	///< Aircraft cannot pass tile
 #define FEATURE_BLOCKED		0x02	///< Ground units cannot pass tile due to item in the way
 #define WATER_BLOCKED		0x04	///< Units that cannot pass water are blocked by this tile
