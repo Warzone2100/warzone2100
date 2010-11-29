@@ -300,13 +300,23 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 	//return the average of max/min height
 	height = (foundationMin + foundationMax) / 2;
 
-	if(FromSave == true) {
-		psFeature->pos.x = (UWORD)x;
-		psFeature->pos.y = (UWORD)y;
-	} else {
-		psFeature->pos.x = (UWORD)((x & (~TILE_MASK)) + psStats->baseWidth * TILE_UNITS / 2);
-		psFeature->pos.y = (UWORD)((y & (~TILE_MASK)) + psStats->baseBreadth * TILE_UNITS / 2);
+	// snap the coords to a tile
+	if (!FromSave)
+	{
+		x = (x & ~TILE_MASK) + psStats->baseWidth  %2 * TILE_UNITS/2;
+		y = (y & ~TILE_MASK) + psStats->baseBreadth%2 * TILE_UNITS/2;
 	}
+	else
+	{
+		if ((x & TILE_MASK) != psStats->baseWidth  %2 * TILE_UNITS/2 ||
+		    (y & TILE_MASK) != psStats->baseBreadth%2 * TILE_UNITS/2)
+		{
+			debug(LOG_WARNING, "Feature not aligned. position (%d,%d), size (%d,%d)", x, y, psStats->baseWidth, psStats->baseBreadth);
+		}
+	}
+
+	psFeature->pos.x = x;
+	psFeature->pos.y = y;
 
 	/* Dump down the building wrecks at random angles - still looks shit though */
 	if(psStats->subType == FEAT_BUILD_WRECK || psStats->subType == FEAT_TREE)
@@ -360,20 +370,13 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 	memset(psFeature->visible, 0, sizeof(psFeature->visible));
 
 	//load into the map data
-	if(FromSave) {
-		mapX = map_coord(x) - psStats->baseWidth / 2;
-		mapY = map_coord(y) - psStats->baseBreadth / 2;
-	} else {
-		mapX = map_coord(x);
-		mapY = map_coord(y);
-	}
+	mapX = map_coord(x) - psStats->baseWidth/2;
+	mapY = map_coord(y) - psStats->baseBreadth/2;
 
 	// set up the imd for the feature
 	if(psFeature->psStats->subType==FEAT_BUILD_WRECK)
 	{
-
 		psFeature->sDisplay.imd = getRandomWreckageImd();
-
 	}
 	else
 	{
@@ -382,9 +385,9 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 
 	ASSERT_OR_RETURN(NULL, psFeature->sDisplay.imd, "No IMD for feature");		// make sure we have an imd.
 
-	for (width = 0; width <= psStats->baseWidth; width++)
+	for (width = 0; width < psStats->baseWidth; width++)
 	{
-		for (breadth = 0; breadth <= psStats->baseBreadth; breadth++)
+		for (breadth = 0; breadth < psStats->baseBreadth; breadth++)
 		{
 			MAPTILE *psTile = mapTile(mapX + width, mapY + breadth);
 
@@ -489,11 +492,11 @@ bool removeFeature(FEATURE *psDel)
 	}
 
 	//remove from the map data
-	mapX = map_coord(psDel->pos.x);
-	mapY = map_coord(psDel->pos.y);
-	for (width = -psDel->psStats->baseWidth; width < psDel->psStats->baseWidth; width++)
+	mapX = map_coord(psDel->pos.x) - psDel->psStats->baseWidth/2;
+	mapY = map_coord(psDel->pos.y) - psDel->psStats->baseBreadth/2;
+	for (width = 0; width < psDel->psStats->baseWidth; width++)
 	{
-		for (breadth = -psDel->psStats->baseBreadth; breadth < psDel->psStats->baseBreadth; breadth++)
+		for (breadth = 0; breadth < psDel->psStats->baseBreadth; breadth++)
 		{
 			if (tileOnMap(mapX + width, mapY + breadth))
 			{
@@ -544,7 +547,6 @@ bool destroyFeature(FEATURE *psDel)
 	Vector3i pos;
 	UDWORD			width,breadth;
 	UDWORD			mapX,mapY;
-	UDWORD			texture;
 
 	ASSERT_OR_RETURN(false, psDel != NULL, "Invalid feature pointer");
 
@@ -577,7 +579,6 @@ bool destroyFeature(FEATURE *psDel)
 			addEffect(&pos,EFFECT_EXPLOSION,explosionSize,false,NULL,0);
 		}
 
-//	  	if(psDel->sDisplay.imd->pos.ymax>300)	// WARNING - STATS CHANGE NEEDED!!!!!!!!!!!
 		if(psDel->psStats->subType == FEAT_SKYSCRAPER)
 		{
 			pos.x = psDel->pos.x;
@@ -586,42 +587,7 @@ bool destroyFeature(FEATURE *psDel)
 			addEffect(&pos,EFFECT_DESTRUCTION,DESTRUCTION_TYPE_SKYSCRAPER,true,psDel->sDisplay.imd,0);
 			initPerimeterSmoke(psDel->sDisplay.imd, pos);
 
-			// ----- Flip all the tiles under the skyscraper to a rubble tile
-			// smoke effect should disguise this happening
-			mapX = map_coord(psDel->pos.x - psDel->psStats->baseWidth * TILE_UNITS / 2);
-			mapY = map_coord(psDel->pos.y - psDel->psStats->baseBreadth * TILE_UNITS / 2);
-//			if(psDel->sDisplay.imd->pos.ymax>300)
-			if (psDel->psStats->subType == FEAT_SKYSCRAPER)
-			{
-				for (width = 0; width < psDel->psStats->baseWidth; width++)
-				{
-					for (breadth = 0; breadth < psDel->psStats->baseBreadth; breadth++)
-					{
-						MAPTILE *psTile = mapTile(mapX+width,mapY+breadth);
-						// stops water texture chnaging for underwateer festures
-					 	if (terrainType(psTile) != TER_WATER)
-						{
-							if (terrainType(psTile) != TER_CLIFFFACE)
-							{
-						   		/* Clear feature bits */
-								psTile->psObject = NULL;
-								texture = TileNumber_texture(psTile->texture) | RUBBLE_TILE;
-								psTile->texture = (UWORD)texture;
-							}
-							else
-							{
-							   /* This remains a blocking tile */
-								psTile->psObject = NULL;
-								texture = TileNumber_texture(psTile->texture) | BLOCKING_RUBBLE_TILE;
-								psTile->texture = (UWORD)texture;
-
-							}
-						}
-					}
-				}
-			// -------
 			shakeStart();
-			}
 		}
 
 		/* Then a sequence of effects */
@@ -637,12 +603,40 @@ bool destroyFeature(FEATURE *psDel)
 			audio_PlayStaticTrack( psDel->pos.x, psDel->pos.y, ID_SOUND_BUILDING_FALL );
 		}
 		else
-
 		{
 			audio_PlayStaticTrack( psDel->pos.x, psDel->pos.y, ID_SOUND_EXPLOSION );
 		}
 	}
-//---------------------------------------------------------------------------------------
+
+	if (psDel->psStats->subType == FEAT_SKYSCRAPER)
+	{
+		// ----- Flip all the tiles under the skyscraper to a rubble tile
+		// smoke effect should disguise this happening
+		mapX = map_coord(psDel->pos.x) - psDel->psStats->baseWidth/2;
+		mapY = map_coord(psDel->pos.y) - psDel->psStats->baseBreadth/2;
+		for (width = 0; width < psDel->psStats->baseWidth; width++)
+		{
+			for (breadth = 0; breadth < psDel->psStats->baseBreadth; breadth++)
+			{
+				MAPTILE *psTile = mapTile(mapX+width,mapY+breadth);
+				// stops water texture chnaging for underwateer festures
+				if (terrainType(psTile) != TER_WATER)
+				{
+					if (terrainType(psTile) != TER_CLIFFFACE)
+					{
+						/* Clear feature bits */
+						psTile->texture = TileNumber_texture(psTile->texture) | RUBBLE_TILE;
+					}
+					else
+					{
+						/* This remains a blocking tile */
+						psTile->psObject = NULL;
+						psTile->texture = TileNumber_texture(psTile->texture) | BLOCKING_RUBBLE_TILE;
+					}
+				}
+			}
+		}
+	}
 
 	removeFeature(psDel);
 	return true;
