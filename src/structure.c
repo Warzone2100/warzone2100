@@ -1640,8 +1640,8 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		}
 
 		// snap the coords to a tile
-		x = sWidth   % 2 == 0 ? (x & ~TILE_MASK) : (x & ~TILE_MASK) + TILE_UNITS/2;
-		y = sBreadth % 2 == 0 ? (y & ~TILE_MASK) : (y & ~TILE_MASK) + TILE_UNITS/2;
+		x = (x & ~TILE_MASK) + sWidth  %2 * TILE_UNITS/2;
+		y = (y & ~TILE_MASK) + sBreadth%2 * TILE_UNITS/2;
 
 		//check not trying to build too near the edge
 		if (map_coord(x) < TOO_NEAR_EDGE || map_coord(x) > (mapWidth - TOO_NEAR_EDGE))
@@ -4938,8 +4938,8 @@ static void removeStructFromMap(STRUCTURE *psStruct)
 	auxStructureNonblocking(psStruct);
 
 	/* set tiles drawing */
-	mapX = map_coord(psStruct->pos.x - sWidth * TILE_UNITS / 2);
-	mapY = map_coord(psStruct->pos.y - sBreadth * TILE_UNITS / 2);
+	mapX = map_coord(psStruct->pos.x) - sWidth/2;
+	mapY = map_coord(psStruct->pos.y) - sBreadth/2;
 	for (i = 0; i < sWidth; i++)
 	{
 		for (j = 0; j < sBreadth; j++)

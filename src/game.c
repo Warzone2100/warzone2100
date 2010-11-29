@@ -6940,8 +6940,7 @@ BOOL loadSaveStructureV7(char *pFileData, UDWORD filesize, UDWORD numStructures)
             continue;
         }
 
-        psStructure = buildStructure(psStats, psSaveStructure->x, psSaveStructure->y,
-			psSaveStructure->player,true);
+        psStructure = buildStructureDir(psStats, psSaveStructure->x, psSaveStructure->y, DEG(psSaveStructure->direction), psSaveStructure->player, true);
 		ASSERT(psStructure, "Unable to create structure");
 		if (!psStructure) continue;
 
@@ -6954,7 +6953,6 @@ BOOL loadSaveStructureV7(char *pFileData, UDWORD filesize, UDWORD numStructures)
 			//copy the values across
 			psStructure->id = psSaveStructure->id;
 			//are these going to ever change from the values set up with?
-			psStructure->rot.direction = DEG(psSaveStructure->direction);
 		}
 
 		psStructure->inFire = psSaveStructure->inFire;
@@ -7217,7 +7215,7 @@ BOOL loadSaveStructureV19(char *pFileData, UDWORD filesize, UDWORD numStructures
             continue;
         }
 
-	psStructure = buildStructure(psStats, psSaveStructure->x, psSaveStructure->y, psSaveStructure->player,true);
+	psStructure = buildStructureDir(psStats, psSaveStructure->x, psSaveStructure->y, DEG(psSaveStructure->direction), psSaveStructure->player, true);
 		ASSERT(psStructure, "Unable to create structure");
 		if (!psStructure) continue;
 
@@ -7231,7 +7229,6 @@ BOOL loadSaveStructureV19(char *pFileData, UDWORD filesize, UDWORD numStructures
 			psStructure->id = psSaveStructure->id;
 			//are these going to ever change from the values set up with?
 //			psStructure->pos.z = (UWORD)psSaveStructure->pos.z;
-			psStructure->rot.direction = DEG(psSaveStructure->direction);
 		}
 
 		psStructure->inFire = psSaveStructure->inFire;
@@ -7640,7 +7637,7 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
             continue;
         }
 
-	psStructure = buildStructure(psStats, psSaveStructure->x, psSaveStructure->y, psSaveStructure->player, true);
+	psStructure = buildStructureDir(psStats, psSaveStructure->x, psSaveStructure->y, DEG(psSaveStructure->direction), psSaveStructure->player, true);
 		ASSERT(psStructure, "Unable to create structure");
 		if (!psStructure) continue;
 
@@ -7654,7 +7651,6 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 			psStructure->id = psSaveStructure->id;
 			//are these going to ever change from the values set up with?
 //			psStructure->pos.z = (UWORD)psSaveStructure->pos.z;
-			psStructure->rot.direction = DEG(psSaveStructure->direction);
 		}
 
 		psStructure->inFire = psSaveStructure->inFire;
