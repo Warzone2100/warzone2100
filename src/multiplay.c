@@ -844,6 +844,8 @@ BOOL recvMessage(void)
 		case NET_PLAYER_STATS:
 			recvMultiStats(queue);
 			break;
+		case GAME_PLAYER_LEFT:
+			recvPlayerLeft(queue);
 		default:
 			processedMessage2 = false;
 			break;

@@ -32,6 +32,7 @@ extern "C"
 #endif //__cplusplus
 
 extern BOOL intDisplayMultiJoiningStatus(UBYTE joinCount);
+void recvPlayerLeft(NETQUEUE queue);
 extern BOOL MultiPlayerLeave			(UDWORD playerIndex);						// A player has left the game.
 extern BOOL MultiPlayerJoin				(UDWORD playerIndex);						// A Player has joined the game.
 extern void setupNewPlayer				(UDWORD player);		// stuff to do when player joins.

@@ -110,6 +110,7 @@ typedef enum
 	GAME_STRUCTUREINFO,             ///< Structure state.
 	GAME_LASSAT,                    ///< lassat firing.
 	GAME_GAME_TIME,                 ///< Game time. Used for synchronising, so that all messages are executed at the same gameTime on all clients.
+	GAME_PLAYER_LEFT,               ///< Player has left or dropped.
 	// The following messages (not including GAME_MAX_TYPE) are currently redundant, and should probably at some point not be
 	// sent, except (some of them) when using cheats in debug mode.
 	GAME_DROIDDEST,                 ///< issue a droid destruction, will be sent by all players at the same time, and have no effect, if synchronised.

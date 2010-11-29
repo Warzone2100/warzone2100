@@ -3202,6 +3202,7 @@ const char *messageTypeToString(unsigned messageType_)
 		case GAME_STRUCTUREINFO:            return "GAME_STRUCTUREINFO";
 		case GAME_LASSAT:                   return "GAME_LASSAT";
 		case GAME_GAME_TIME:                return "GAME_GAME_TIME";
+		case GAME_PLAYER_LEFT:              return "GAME_PLAYER_LEFT";
 		case GAME_DROIDDEST:                return "GAME_DROIDDEST";
 		case GAME_CHECK_DROID:              return "GAME_CHECK_DROID";
 		case GAME_CHECK_STRUCT:             return "GAME_CHECK_STRUCT";
