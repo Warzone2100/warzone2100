@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-11-24 17:59+0100\n"
+"POT-Creation-Date: 2010-11-29 18:13+0100\n"
 "PO-Revision-Date: 2010-05-10 16:59+0200\n"
 "Last-Translator: erlando <erlando112@hotmail.com>\n"
 "Language-Team: Estonian <ee@li.org>\n"
@@ -12031,10 +12031,10 @@ msgstr "Ei suuda lobby serveriga suhelda! Kas port %u on väljaminevale liikluse
 
 #: src/challenge.c:189
 #: src/hci.c:1006
-#: src/hci.c:3793
-#: src/hci.c:3942
-#: src/hci.c:4460
-#: src/hci.c:5642
+#: src/hci.c:3794
+#: src/hci.c:3943
+#: src/hci.c:4461
+#: src/hci.c:5643
 #: src/intelmap.c:544
 #: src/intorder.c:782
 #: src/loadsave.c:257
@@ -12327,20 +12327,20 @@ msgstr "Relvad"
 msgid "Systems"
 msgstr "Süsteemid"
 
-#: src/display3d.c:534
+#: src/display3d.c:533
 msgid "Player left"
 msgstr "Mängija lahkus"
 
-#: src/display3d.c:538
+#: src/display3d.c:537
 msgid "Player dropped"
 msgstr "Mängija Väjavisatud"
 
-#: src/display3d.c:542
-#: src/multiint.c:1866
+#: src/display3d.c:541
+#: src/multiint.c:1873
 msgid "Waiting for other players"
 msgstr "Teiste mängijate ootamine"
 
-#: src/display3d.c:547
+#: src/display3d.c:546
 msgid "Out of sync"
 msgstr ""
 
@@ -12470,7 +12470,7 @@ msgid "Tutorial"
 msgstr "Õpetus"
 
 #: src/frontend.c:101
-#: src/hci.c:3925
+#: src/hci.c:3926
 msgid "Options"
 msgstr "Seaded"
 
@@ -12531,8 +12531,8 @@ msgstr "ÜKSIK MÄNG"
 
 #: src/frontend.c:302
 #: src/ingameop.c:518
-#: src/mission.c:2534
-#: src/mission.c:2639
+#: src/mission.c:2533
+#: src/mission.c:2638
 msgid "Load Saved Game"
 msgstr "Laadi Salvestatud Mäng"
 
@@ -12549,7 +12549,7 @@ msgid "Join Game"
 msgstr "Liitu Mängu"
 
 #: src/frontend.c:421
-#: src/multiint.c:1144
+#: src/multiint.c:1151
 msgid "OPTIONS"
 msgstr "SEADED"
 
@@ -12644,7 +12644,7 @@ msgid "Off"
 msgstr "Väljas"
 
 #: src/frontend.c:523
-#: src/multiint.c:1213
+#: src/multiint.c:1220
 msgid "Fog"
 msgstr "Udu"
 
@@ -12655,7 +12655,7 @@ msgstr "Udu"
 
 #: src/frontend.c:530
 #: src/frontend.c:595
-#: src/multiint.c:1215
+#: src/multiint.c:1222
 msgid "Fog Of War"
 msgstr "Sõjaudu"
 
@@ -12817,7 +12817,7 @@ msgid "GAME OPTIONS"
 msgstr "MÄNGU SEADED"
 
 #: src/frontend.c:1340
-#: src/multiint.c:2146
+#: src/multiint.c:2153
 msgid "Mod: "
 msgstr "Mod:"
 
@@ -12826,8 +12826,8 @@ msgid "MAP SAVED!"
 msgstr "KAART SALVESTATUD!"
 
 #: src/hci.c:1741
-#: src/loop.c:556
-#: src/loop.c:572
+#: src/loop.c:558
+#: src/loop.c:574
 #, fuzzy
 msgid "GAME SAVED: "
 msgstr "MÄNG SALVESTATUD!"
@@ -12846,170 +12846,170 @@ msgstr "Mängija %u teeb sohki (debug menu) Talle uus ehitis: %s."
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr "Mängija %u teeb sohki (debug menu) talle uus tunnus: %s."
 
-#: src/hci.c:2187
+#: src/hci.c:2188
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "Mängija %u teeb sohki(debug menu) talle uus droid: %s."
 
-#: src/hci.c:2198
+#: src/hci.c:2199
 #, fuzzy, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "Mängija %u teeb sohki(debug menu) talle uus droid: %s."
 
-#: src/hci.c:3695
+#: src/hci.c:3696
 msgid "Commanders (F6)"
 msgstr "Komandörid (F6)"
 
-#: src/hci.c:3711
+#: src/hci.c:3712
 msgid "Intelligence Display (F5)"
 msgstr "Intelligentsus Ekraan (F5)"
 
-#: src/hci.c:3727
+#: src/hci.c:3728
 msgid "Manufacture (F1)"
 msgstr "Tootmine (F1)"
 
-#: src/hci.c:3743
+#: src/hci.c:3744
 msgid "Design (F4)"
 msgstr "Konstrueerimine (F4)"
 
-#: src/hci.c:3759
+#: src/hci.c:3760
 msgid "Research (F2)"
 msgstr "Uurimine (F2)"
 
-#: src/hci.c:3775
+#: src/hci.c:3776
 msgid "Build (F3)"
 msgstr "Ehitamine (F3)"
 
-#: src/hci.c:3853
-#: src/multiint.c:1260
+#: src/hci.c:3854
+#: src/multiint.c:1267
 #: src/multimenu.c:808
 msgid "Power"
 msgstr "Energia"
 
-#: src/hci.c:3967
+#: src/hci.c:3968
 msgid "Map:"
 msgstr ""
 
-#: src/hci.c:3981
+#: src/hci.c:3982
 #, fuzzy
 msgid "Load"
 msgstr "Laadi Mäng"
 
-#: src/hci.c:3982
+#: src/hci.c:3983
 #, fuzzy
 msgid "Load Map File"
 msgstr "Laadi Mäng"
 
-#: src/hci.c:3989
+#: src/hci.c:3990
 #, fuzzy
 msgid "Save"
 msgstr "Salvesta Mäng"
 
-#: src/hci.c:3990
+#: src/hci.c:3991
 #, fuzzy
 msgid "Save Map File"
 msgstr "Salvesta Mäng"
 
-#: src/hci.c:3998
+#: src/hci.c:3999
 msgid "New"
 msgstr ""
 
-#: src/hci.c:3999
+#: src/hci.c:4000
 msgid "New Blank Map"
 msgstr ""
 
-#: src/hci.c:4037
+#: src/hci.c:4038
 msgid "Tile"
 msgstr "Tile"
 
-#: src/hci.c:4038
+#: src/hci.c:4039
 msgid "Place tiles on map"
 msgstr "Place tiles on map"
 
-#: src/hci.c:4047
+#: src/hci.c:4048
 msgid "Unit"
 msgstr "Üksus"
 
-#: src/hci.c:4048
+#: src/hci.c:4049
 msgid "Place Unit on map"
 msgstr "Paiguta kaartile üksus"
 
-#: src/hci.c:4056
+#: src/hci.c:4057
 msgid "Struct"
 msgstr "Ehitis"
 
-#: src/hci.c:4057
+#: src/hci.c:4058
 msgid "Place Structures on map"
 msgstr "Paiguta kaartile ehitis"
 
-#: src/hci.c:4065
+#: src/hci.c:4066
 msgid "Feat"
 msgstr "Saavutus"
 
-#: src/hci.c:4066
+#: src/hci.c:4067
 msgid "Place Features on map"
 msgstr "Place Features on map"
 
-#: src/hci.c:4076
+#: src/hci.c:4077
 msgid "Pause"
 msgstr ""
 
-#: src/hci.c:4077
+#: src/hci.c:4078
 msgid "Pause or unpause the game"
 msgstr "Paus või Pausi mahavõtmine"
 
-#: src/hci.c:4091
+#: src/hci.c:4092
 msgid "Align height of all map objects"
 msgstr "Align height of all map objects"
 
-#: src/hci.c:4101
+#: src/hci.c:4102
 msgid "Edit"
 msgstr ""
 
-#: src/hci.c:4102
+#: src/hci.c:4103
 #, fuzzy
 msgid "Start Edit Mode"
 msgstr "Alusta Baasideta"
 
-#: src/hci.c:4116
+#: src/hci.c:4117
 #: src/ingameop.c:118
 #: src/ingameop.c:275
 #: src/ingameop.c:280
 msgid "Quit"
 msgstr "Välju"
 
-#: src/hci.c:4117
+#: src/hci.c:4118
 msgid "Exit Game"
 msgstr "Välju Mängust"
 
-#: src/hci.c:4142
+#: src/hci.c:4143
 #, fuzzy
 msgid "Current Player:"
 msgstr "Mitmik Mäng"
 
-#: src/hci.c:4541
+#: src/hci.c:4542
 #: src/intdisplay.c:276
 msgid "Progress Bar"
 msgstr "Progressi Riba"
 
-#: src/hci.c:5485
+#: src/hci.c:5486
 #, fuzzy
 msgid "Infinite Production"
 msgstr "Tsükkel tootmine"
 
-#: src/hci.c:5561
+#: src/hci.c:5562
 msgid "Factory Delivery Point"
 msgstr "Tehase Saatmis Koht"
 
-#: src/hci.c:5580
+#: src/hci.c:5581
 msgid "Loop Production"
 msgstr "Tsükkel tootmine"
 
-#: src/hci.c:5667
+#: src/hci.c:5668
 msgid "Tab Scroll left"
 msgstr "Tab Scroll left"
 
-#: src/hci.c:5684
+#: src/hci.c:5685
 msgid "Tab Scroll right"
 msgstr "Tab Scroll right"
 
@@ -13035,8 +13035,8 @@ msgstr ""
 
 #: src/ingameop.c:294
 #: src/ingameop.c:522
-#: src/mission.c:2521
-#: src/mission.c:2642
+#: src/mission.c:2520
+#: src/mission.c:2641
 msgid "Save Game"
 msgstr "Salvesta Mäng"
 
@@ -13052,7 +13052,7 @@ msgstr "Mäng ei saa ilma võõrustajata jätkuda."
 msgid "-->  QUIT  <--"
 msgstr "--> LOOBU <--"
 
-#: src/init.c:390
+#: src/init.c:389
 #, c-format
 msgid ""
 "The required mod could not be loaded: %s\n"
@@ -13479,9 +13479,9 @@ msgid "KEY MAPPING"
 msgstr "NUPPUDE VASTAD"
 
 #: src/keyedit.c:374
-#: src/multiint.c:497
-#: src/multiint.c:929
-#: src/multiint.c:1346
+#: src/multiint.c:504
+#: src/multiint.c:936
+#: src/multiint.c:1353
 msgid "Return To Previous Screen"
 msgstr "Naase Eelmisele Ekraanile"
 
@@ -13882,46 +13882,46 @@ msgstr "Vali järgmine energiageneraator"
 msgid "Select next Cyborg Factory"
 msgstr "Vali järgmine küborgi tehas"
 
-#: src/loop.c:563
-#: src/loop.c:579
+#: src/loop.c:565
+#: src/loop.c:581
 msgid "Could not save game!"
 msgstr "Ei suutnud mängu salvestada"
 
-#: src/mission.c:2074
+#: src/mission.c:2073
 msgid "Load Transport"
 msgstr "Laadi Transport"
 
-#: src/mission.c:2468
+#: src/mission.c:2467
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "EESMÄRK SAAVUTATUD sohki tehes"
 
-#: src/mission.c:2468
+#: src/mission.c:2467
 msgid "OBJECTIVE ACHIEVED"
 msgstr "EESMÄRK SAAVUTATUD"
 
-#: src/mission.c:2474
+#: src/mission.c:2473
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "EESMÄRK EBAÕNNESTUNUD--ja sa tegid sohki"
 
-#: src/mission.c:2474
+#: src/mission.c:2473
 msgid "OBJECTIVE FAILED"
 msgstr "EESMÄRK EBAÕNNESTUNUD"
 
-#: src/mission.c:2500
-#: src/mission.c:2540
-#: src/mission.c:2658
+#: src/mission.c:2499
+#: src/mission.c:2539
+#: src/mission.c:2657
 msgid "Quit To Main Menu"
 msgstr "Välju Peamenüüsse"
 
-#: src/mission.c:2508
+#: src/mission.c:2507
 msgid "Continue Game"
 msgstr "Jätka Mängu"
 
-#: src/mission.c:2605
+#: src/mission.c:2604
 msgid "GAME SAVED :"
 msgstr "MÄNG SALVESTATUD!"
 
-#: src/move.c:2364
+#: src/move.c:2340
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr "Sa leidsid naftatünnist %u energiat"
@@ -13976,291 +13976,291 @@ msgstr "%s Moodustab %s -ga Liitluse"
 msgid "You Discover Blueprints For %s"
 msgstr "Sa Avastasid %s joonised"
 
-#: src/multiint.c:431
+#: src/multiint.c:438
 #: src/multilimit.c:192
 msgid "Accept Settings"
 msgstr "Seaded Aksepteeritud"
 
-#: src/multiint.c:433
-#: src/multiint.c:977
+#: src/multiint.c:440
+#: src/multiint.c:984
 msgid "Cancel"
 msgstr "Tühista"
 
-#: src/multiint.c:444
+#: src/multiint.c:451
 msgid "IP Address or Machine Name"
 msgstr "IP Address Või Masina Nimi"
 
-#: src/multiint.c:494
+#: src/multiint.c:501
 msgid "CONNECTION"
 msgstr "CONNECTION"
 
-#: src/multiint.c:499
+#: src/multiint.c:506
 msgid "Lobby"
 msgstr "Lobby"
 
-#: src/multiint.c:500
+#: src/multiint.c:507
 msgid "IP"
 msgstr "IP"
 
-#: src/multiint.c:693
+#: src/multiint.c:700
 msgid "No games are available"
 msgstr "Pole ühtki mängu."
 
-#: src/multiint.c:696
+#: src/multiint.c:703
 msgid "Game is full"
 msgstr "Mäng on Täis"
 
-#: src/multiint.c:700
+#: src/multiint.c:707
 msgid "You were kicked!"
 msgstr "Sind löödi välja"
 
-#: src/multiint.c:703
+#: src/multiint.c:710
 msgid "Wrong Game Version!"
 msgstr "Vale Mängu versioon"
 
-#: src/multiint.c:706
+#: src/multiint.c:713
 msgid "You have an incompatible mod."
 msgstr "Sul on vastuolus mod."
 
-#: src/multiint.c:710
+#: src/multiint.c:717
 msgid "Host couldn't send file?"
 msgstr "Võõrustaja ei suutnud faili saata?"
 
-#: src/multiint.c:714
+#: src/multiint.c:721
 msgid "Incorrect Password!"
 msgstr "Vale Salasõna"
 
-#: src/multiint.c:717
+#: src/multiint.c:724
 msgid "Host has dropped connection!"
 msgstr "Võõrustaja lõpetas ühenduse"
 
-#: src/multiint.c:721
+#: src/multiint.c:728
 msgid "Connection Error"
 msgstr "Ühendus Error"
 
-#: src/multiint.c:865
+#: src/multiint.c:872
 msgid "Searching"
 msgstr "Otsimine"
 
-#: src/multiint.c:926
+#: src/multiint.c:933
 msgid "GAMES"
 msgstr "MÄNGUD"
 
-#: src/multiint.c:934
+#: src/multiint.c:941
 msgid "Refresh Games List"
 msgstr "Värskenda Mängulisti"
 
-#: src/multiint.c:954
+#: src/multiint.c:961
 msgid "Enter Password:"
 msgstr "Sisesta Salasõna:"
 
-#: src/multiint.c:975
+#: src/multiint.c:982
 msgid "OK"
 msgstr "OK"
 
-#: src/multiint.c:1097
+#: src/multiint.c:1104
 msgid "Tanks disabled!!"
 msgstr ""
 
-#: src/multiint.c:1098
+#: src/multiint.c:1105
 #, fuzzy
 msgid "Cyborgs disabled."
 msgstr "Uus Küborg Kasutatv"
 
-#: src/multiint.c:1099
+#: src/multiint.c:1106
 msgid "VTOLs disabled."
 msgstr ""
 
-#: src/multiint.c:1149
 #: src/multiint.c:1156
+#: src/multiint.c:1163
 msgid "Select Game Name"
 msgstr "Sisesta Mängu Nimi"
 
-#: src/multiint.c:1149
+#: src/multiint.c:1156
 msgid "One-Player Skirmish"
 msgstr "Ühe Mängja Lahing"
 
-#: src/multiint.c:1159
+#: src/multiint.c:1166
 msgid "Select Map"
 msgstr "Vali Kaart"
 
-#: src/multiint.c:1167
+#: src/multiint.c:1174
 msgid "Click to set Password"
 msgstr "Vajuta, et Salasõna sisestada"
 
-#: src/multiint.c:1177
-#: src/multiint.c:1178
+#: src/multiint.c:1184
+#: src/multiint.c:1185
 msgid "Scavengers"
 msgstr "Mässajad"
 
-#: src/multiint.c:1180
+#: src/multiint.c:1187
 msgid "No Scavengers"
 msgstr "Mässajateta"
 
-#: src/multiint.c:1210
+#: src/multiint.c:1217
 msgid "Select Player Name"
 msgstr "Sisesta Mängija nimi"
 
-#: src/multiint.c:1216
+#: src/multiint.c:1223
 msgid "Distance Fog"
 msgstr "Vahemaa Udu"
 
-#: src/multiint.c:1227
+#: src/multiint.c:1234
 #: src/multimenu.c:801
 msgid "Alliances"
 msgstr "Liitlus"
 
-#: src/multiint.c:1230
+#: src/multiint.c:1237
 msgid "No Alliances"
 msgstr "Liitluseta"
 
-#: src/multiint.c:1232
+#: src/multiint.c:1239
 msgid "Allow Alliances"
 msgstr "Luba Liitlus"
 
-#: src/multiint.c:1236
+#: src/multiint.c:1243
 msgid "Locked Teams"
 msgstr "Lukustatud Tiimid"
 
-#: src/multiint.c:1262
+#: src/multiint.c:1269
 msgid "Low Power Levels"
 msgstr "Madal Energia Level"
 
-#: src/multiint.c:1264
+#: src/multiint.c:1271
 msgid "Medium Power Levels"
 msgstr "Keskmine Energia Level"
 
-#: src/multiint.c:1266
+#: src/multiint.c:1273
 msgid "High Power Levels"
 msgstr "Kõrge Energia Level"
 
-#: src/multiint.c:1298
+#: src/multiint.c:1305
 msgid "Base"
 msgstr "Baas"
 
-#: src/multiint.c:1300
+#: src/multiint.c:1307
 msgid "Start with No Bases"
 msgstr "Alusta Baasideta"
 
-#: src/multiint.c:1302
+#: src/multiint.c:1309
 msgid "Start with Bases"
 msgstr "Alusta Baasidega"
 
-#: src/multiint.c:1304
+#: src/multiint.c:1311
 msgid "Start with Advanced Bases"
 msgstr "Alusta Arenenud Baasidega"
 
-#: src/multiint.c:1336
+#: src/multiint.c:1343
 msgid "Map Preview"
 msgstr "Kaarti Esitus"
 
-#: src/multiint.c:1338
+#: src/multiint.c:1345
 msgid "Click to see Map"
 msgstr "Vajuta, et Kaarti näha"
 
-#: src/multiint.c:1352
+#: src/multiint.c:1359
 msgid "Start Hosting Game"
 msgstr "Alusta Mängu Võõrustamist"
 
-#: src/multiint.c:1360
+#: src/multiint.c:1367
 msgid "Show Structure Limits"
 msgstr "Näita Ehitiste Limiite"
 
-#: src/multiint.c:1360
+#: src/multiint.c:1367
 msgid "Set Structure Limits"
 msgstr "Sea Ehitiste Limiidid"
 
-#: src/multiint.c:1446
+#: src/multiint.c:1453
 msgid "Player colour"
 msgstr "Mängija värv"
 
-#: src/multiint.c:1462
+#: src/multiint.c:1469
 msgid "Kick player"
 msgstr "Löö mängija välja"
 
-#: src/multiint.c:1473
+#: src/multiint.c:1480
 msgid "Player number"
 msgstr "Mängija number"
 
-#: src/multiint.c:1833
+#: src/multiint.c:1840
 msgid "Team"
 msgstr "Tiim"
 
-#: src/multiint.c:1872
+#: src/multiint.c:1879
 msgid "Click when ready"
 msgstr "Vajuta kui valmis"
 
-#: src/multiint.c:1876
+#: src/multiint.c:1883
 msgid "READY?"
 msgstr "VALMIS?"
 
-#: src/multiint.c:1913
+#: src/multiint.c:1920
 msgid "PLAYERS"
 msgstr "MÄNGIJAD"
 
-#: src/multiint.c:1967
+#: src/multiint.c:1974
 #, fuzzy
 msgid "Choose Team"
 msgstr "Lukustatud Tiimid"
 
-#: src/multiint.c:2007
+#: src/multiint.c:2014
 msgid "Click to change player settings"
 msgstr ""
 
-#: src/multiint.c:2038
+#: src/multiint.c:2045
 msgid "Click to adjust AI difficulty"
 msgstr ""
 
-#: src/multiint.c:2117
+#: src/multiint.c:2124
 msgid "CHAT"
 msgstr "VESTLUS"
 
-#: src/multiint.c:2151
+#: src/multiint.c:2158
 msgid "All players need to have the same mods to join your game."
 msgstr "Kõigil mängijatel peab olema sama mod, et sinu mänguga liituda"
 
-#: src/multiint.c:2312
+#: src/multiint.c:2319
 #, fuzzy, c-format
 msgid "*** password [%s] is now required! ***"
 msgstr "*** salasõna on vajalik! ***"
 
-#: src/multiint.c:2320
+#: src/multiint.c:2327
 msgid "*** password is NOT required! ***"
 msgstr "*** salasõna pole vaja! ***"
 
-#: src/multiint.c:2562
+#: src/multiint.c:2569
 msgid "Sorry! Failed to host the game."
 msgstr "Kahju! Ebaõnnestusid mängu võõrustamisel."
 
-#: src/multiint.c:2647
+#: src/multiint.c:2654
 msgid "'Locked Teams' mode enabled"
 msgstr "Lukustatud Tiimid, mode lubatud"
 
-#: src/multiint.c:2686
-#: src/multiint.c:2736
+#: src/multiint.c:2693
+#: src/multiint.c:2743
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "Võõrustaja lõi %s mängust välja!"
 
-#: src/multiint.c:2811
+#: src/multiint.c:2823
 msgid "Host is Starting Game"
 msgstr "Võõrustaja Alustab Mängu"
 
-#: src/multiint.c:3394
+#: src/multiint.c:3406
 msgid "Players"
 msgstr "Mängijad"
 
-#: src/multiint.c:3512
+#: src/multiint.c:3524
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Kaarti Saatmine: %d%%"
 
-#: src/multiint.c:3520
+#: src/multiint.c:3532
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Kaart: %d%% allalaaditud"
 
-#: src/multiint.c:3546
+#: src/multiint.c:3558
 msgid "HOST"
 msgstr "VÕÕRUSTJA"
 
@@ -14269,27 +14269,27 @@ msgstr "VÕÕRUSTJA"
 msgid "Players Still Joining"
 msgstr "Mängijad Ikka Liituvad"
 
-#: src/multijoin.c:216
+#: src/multijoin.c:236
 #, c-format
 msgid "%s has Left the Game"
 msgstr "%s Lahkus mängust"
 
-#: src/multijoin.c:230
+#: src/multijoin.c:250
 #, c-format
 msgid "File transfer has been aborted for %d."
 msgstr "%d -le Failide saatmine katkestatud."
 
-#: src/multijoin.c:352
+#: src/multijoin.c:372
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr "Mängijal %s (%u) on vale mod ja ta löödi mängust välja"
 
-#: src/multijoin.c:391
+#: src/multijoin.c:411
 #, c-format
 msgid "%s is Joining the Game"
 msgstr "%s Liitus Mänguga"
 
-#: src/multijoin.c:401
+#: src/multijoin.c:421
 msgid "System message:"
 msgstr "Süsteemi sõnum:"
 
@@ -14399,47 +14399,47 @@ msgstr "Anna Mängijale Energiat"
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr "Mängija %s väljalöömine, sest ta proovis infokontrollist mõõda pääseda!"
 
-#: src/multiplay.c:1136
+#: src/multiplay.c:1138
 msgid "(allies"
 msgstr "(Liitlased"
 
-#: src/multiplay.c:1144
+#: src/multiplay.c:1146
 msgid "(private to "
 msgstr "(eraviisiline"
 
-#: src/multiplay.c:1157
+#: src/multiplay.c:1159
 msgid "[invalid]"
 msgstr "[kehtetu]"
 
-#: src/multiplay.c:2048
+#: src/multiplay.c:2050
 msgid "Green"
 msgstr "Roheline"
 
-#: src/multiplay.c:2049
+#: src/multiplay.c:2051
 msgid "Orange"
 msgstr "Oranð"
 
-#: src/multiplay.c:2050
+#: src/multiplay.c:2052
 msgid "Grey"
 msgstr "Hall"
 
-#: src/multiplay.c:2051
+#: src/multiplay.c:2053
 msgid "Black"
 msgstr "Must"
 
-#: src/multiplay.c:2052
+#: src/multiplay.c:2054
 msgid "Red"
 msgstr "Punane"
 
-#: src/multiplay.c:2053
+#: src/multiplay.c:2055
 msgid "Blue"
 msgstr "Sinine"
 
-#: src/multiplay.c:2054
+#: src/multiplay.c:2056
 msgid "Pink"
 msgstr "Roosa"
 
-#: src/multiplay.c:2055
+#: src/multiplay.c:2057
 msgid "Cyan"
 msgstr "Helesinine"
 
@@ -14625,58 +14625,58 @@ msgstr "Võimetu leidma Komandöre!"
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Kontroll Limiit Saavutatud - Tootmine Peatatud"
 
-#: src/structure.c:6121
-#: src/structure.c:6146
+#: src/structure.c:6130
+#: src/structure.c:6155
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Üksus määratud"
 msgstr[1] "%s - %u Üksused määratud"
 
-#: src/structure.c:6151
-#: src/structure.c:6219
-#: src/structure.c:6235
-#: src/structure.c:6249
+#: src/structure.c:6160
+#: src/structure.c:6228
+#: src/structure.c:6244
+#: src/structure.c:6258
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Kahju %3.0f%%"
 
-#: src/structure.c:6201
+#: src/structure.c:6210
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - %u Ühendatud %u -st"
 
-#: src/structure.c:6365
-#: src/structure.c:6410
+#: src/structure.c:6374
+#: src/structure.c:6419
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektrooniliselt Kahjustatud"
 
-#: src/structure.c:6647
+#: src/structure.c:6656
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektrooniline Autasu - Nägemis Raport"
 
-#: src/structure.c:6687
+#: src/structure.c:6696
 msgid "Factory Reward - Propulsion"
 msgstr "Tehase Auhind - Liikumissüsteem"
 
-#: src/structure.c:6711
+#: src/structure.c:6720
 msgid "Factory Reward - Body"
 msgstr "Tehase Autasu - Kere"
 
-#: src/structure.c:6735
+#: src/structure.c:6744
 msgid "Factory Reward - Weapon"
 msgstr "Tehase Autasu - Relv"
 
-#: src/structure.c:6744
+#: src/structure.c:6753
 msgid "Factory Reward - Nothing"
 msgstr "Tehase Autasu - Midagi"
 
-#: src/structure.c:6772
+#: src/structure.c:6781
 msgid "Repair Facility Award - Repair"
 msgstr "Remontimiskeskuse Autasu - Remont"
 
-#: src/structure.c:6779
+#: src/structure.c:6788
 msgid "Repair Facility Award - Nothing"
 msgstr "Remontimiskeskuse Autasu - Midagi"
 
