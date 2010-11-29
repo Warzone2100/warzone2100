@@ -4255,6 +4255,48 @@ UDWORD fillStructureList(STRUCTURE_STATS **ppList, UDWORD selectedPlayer, UDWORD
 }
 
 
+typedef enum
+{
+	PACKABILITY_EMPTY = 0, PACKABILITY_DEFENSE = 1, PACKABILITY_NORMAL = 2, PACKABILITY_REPAIR = 3
+} STRUCTURE_PACKABILITY;
+
+static inline bool canPack(STRUCTURE_PACKABILITY a, STRUCTURE_PACKABILITY b)
+{
+	return (int)a + (int)b <= 3;  // Defense can be put next to anything except repair facilities, normal base structures can't be put next to each other, and anything goes next to empty tiles.
+}
+
+static STRUCTURE_PACKABILITY baseStructureTypePackability(STRUCTURE_TYPE type)
+{
+	switch (type)
+	{
+		case REF_DEFENSE:
+		case REF_WALL:
+		case REF_WALLCORNER:
+		case REF_GATE:
+		case REF_REARM_PAD:
+		case REF_MISSILE_SILO:
+			return PACKABILITY_DEFENSE;
+		default:
+			return PACKABILITY_NORMAL;
+		case REF_REPAIR_FACILITY:
+			return PACKABILITY_REPAIR;
+	}
+}
+
+static STRUCTURE_PACKABILITY baseObjectPackability(BASE_OBJECT *psObject)
+{
+	if (psObject == NULL)
+	{
+		return PACKABILITY_EMPTY;
+	}
+	switch (psObject->type)
+	{
+		case OBJ_STRUCTURE: return baseStructureTypePackability(((STRUCTURE *)psObject)->pStructureType->type);
+		case OBJ_FEATURE:   return ((FEATURE *)psObject)->psStats->subType == FEAT_OIL_RESOURCE? PACKABILITY_NORMAL : PACKABILITY_EMPTY;
+		default:            return PACKABILITY_EMPTY;
+	}
+}
+
 /* checks that the location is a valid one to build on and sets the outline colour
 x and y in tile-coords*/
 bool validLocation(BASE_STATS *psStats, unsigned x, unsigned y, uint16_t direction, unsigned player, bool bCheckBuildQueue)
@@ -4489,56 +4531,25 @@ bool validLocation(BASE_STATS *psStats, unsigned x, unsigned y, uint16_t directi
 				//don't bother checking if already found a problem
 				if (valid)
 				{
-					/* need to check there is one tile between buildings */
-					for (i = (UWORD)(site.xTL-1); i <= (UWORD)(site.xBR+1); i++)
+					STRUCTURE_PACKABILITY packThis = baseStructureTypePackability(psBuilding->type);
+
+					// skirmish AIs don't build nondefensives next to anything. (route hack)
+					if (packThis == PACKABILITY_NORMAL && bMultiPlayer && game.type == SKIRMISH && !isHumanPlayer(player))
 					{
-						for (j = (UWORD)(site.yTL-1); j <= (UWORD)(site.yBR+1); j++)
+						packThis = PACKABILITY_REPAIR;
+					}
+
+					/* need to check there is one tile between buildings */
+					for (j = site.yTL - 1; j <= site.yBR + 1 && valid; j++)
+					{
+						for (i = site.xTL - 1; i <= site.xBR + 1 && valid; i++)
 						{
 							//skip the actual area the structure will cover
-							if (i < site.xTL || i > site.xBR ||
-								j < site.yTL || j > site.yBR)
+							if (i < site.xTL || i > site.xBR || j < site.yTL || j > site.yBR)
 							{
-								FEATURE	*psFeat;
+								STRUCTURE_PACKABILITY packObj = baseObjectPackability(mapTile(i, j)->psObject);
 
-								if (TileHasStructure(mapTile(i,j)) && (psStruct = getTileStructure(i,j)))
-								{
-									if (psBuilding->type == REF_REPAIR_FACILITY ||
-									    psStruct->pStructureType->type == REF_REPAIR_FACILITY)
-									{
-										valid = false;
-									}
-									// these can be built next to anything
-									else if (!(psBuilding->type == REF_DEFENSE ||
-										  psBuilding->type == REF_WALL ||
-										  psBuilding->type == REF_WALLCORNER ||
-										  psBuilding->type == REF_GATE ||
-										  psBuilding->type == REF_REARM_PAD ||
-										  psBuilding->type == REF_MISSILE_SILO))
-									{
-										if (!(psStruct->pStructureType->type == REF_DEFENSE ||
-											  psStruct->pStructureType->type == REF_WALL ||
-											  psStruct->pStructureType->type == REF_WALLCORNER ||
-											  psStruct->pStructureType->type == REF_GATE ||
-											  psStruct->pStructureType->type == REF_REARM_PAD ||
-											  psStruct->pStructureType->type == REF_MISSILE_SILO))
-										{
-											valid = false;
-										}
-										// skirmish AIs don't build nondefensives next to anything. (route hack)
-										else if (bMultiPlayer && game.type == SKIRMISH && !isHumanPlayer(player))
-										{
-											valid = false;
-										}
-									}
-								}
-								//cannot build within one tile of a oil resource
-								if (TileHasFeature(mapTile(i,j)) && (psFeat = getTileFeature(i, j)))
-								{
-									if (psFeat->psStats->subType == FEAT_OIL_RESOURCE)
-									{
-										valid = false;
-									}
-								}
+								valid = valid && canPack(packThis, packObj);
 							}
 						}
 					}
