@@ -1,4 +1,4 @@
-2010-11-07: Version 2.3.6
+2010-11-29: Version 2.3.6
  * General:
    * Fix: Prevent memory corruption in the scripting code (ticket:1656, commit:ddfaeca6776aac765674bb0c2a5c58ecc63a978f)
    * Fix: Don't crash in the unit design screen when using unicode strings (ticket:2209, commit:209e12b665d23cce1cf286435ace08b86250517b)
