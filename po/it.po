@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-11-24 17:53+0100\n"
-"PO-Revision-Date: 2010-09-28 23:52+0100\n"
+"POT-Creation-Date: 2010-11-30 22:46+0100\n"
+"PO-Revision-Date: 2010-11-30 15:55+0100\n"
 "Last-Translator: Cristian Odorico <generalchris@hotmail.it>\n"
 "Language-Team: Italian <warzone-dev@gna.org>\n"
 "Language: it\n"
@@ -9906,9 +9906,8 @@ msgid "NORTHERN SECTOR"
 msgstr "SETTORE SETTENTRIONALE"
 
 #: data/base/sequenceaudio/cam3/c003.txa:5
-#, fuzzy
 msgid "Congratulations your successfull evacuation of Beta Base."
-msgstr "Congratulazioni nella riuscita dell'evacuazione della Base Beta."
+msgstr "Congratulazioni per la riuscita evacuazione della Base Beta."
 
 #: data/base/sequenceaudio/cam3/c003.txa:8
 msgid "Dusk, December 3rd, 2100"
@@ -10302,7 +10301,6 @@ msgid "Scorpion Command Turret Tracks"
 msgstr "Scorpion Torretta di Comando Cingoli"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1326
-#, fuzzy
 msgid "Mantis Command Turret Tracks"
 msgstr "Mantis Torretta di Comando Cingoli"
 
@@ -12180,12 +12178,12 @@ msgstr "System locale"
 msgid "Enter password here"
 msgstr "Inserisci qua la password"
 
-#: lib/netplay/netplay.c:3284
+#: lib/netplay/netplay.c:3286
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Non posso decidere il nome del server master (%s)!"
 
-#: lib/netplay/netplay.c:3309
+#: lib/netplay/netplay.c:3312
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Non posso comunicare con il server della Lobby! La porta TCP %u è aperta?"
@@ -12595,12 +12593,12 @@ msgstr "Eroe"
 #: src/droid.c:4643
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
-msgstr ""
+msgstr "%s avrebbe voluto darti un %s ma ne hai troppi!"
 
 #: src/droid.c:4647
 #, c-format
 msgid "You wanted to give %s a %s but they have too many!"
-msgstr ""
+msgstr "Volevi dare a %s un %s ma ne hanno troppi!"
 
 #: src/frontend.c:97
 msgid "Single Player"
@@ -12891,17 +12889,15 @@ msgstr "Ruota lo schermo"
 
 #: src/frontend.c:1006
 #: src/frontend.c:1094
-#, fuzzy
 msgctxt "middle mouse button"
 msgid "Middle Button"
-msgstr "Pulsante centrale del mouse"
+msgstr "Pulsante centrale"
 
 #: src/frontend.c:1010
 #: src/frontend.c:1089
-#, fuzzy
 msgctxt "right mouse button"
 msgid "Right Button"
-msgstr "Pulsante destro del mouse"
+msgstr "Pulsante destro"
 
 #: src/frontend.c:1014
 msgid "MOUSE OPTIONS"
@@ -13986,7 +13982,7 @@ msgstr "Seleziona tutte le Ruote"
 
 #: src/keymap.c:425
 msgid "Show frame rate"
-msgstr ""
+msgstr "Mostra il frame rate"
 
 #: src/keymap.c:426
 msgid "Select all Similar Units"
@@ -14010,100 +14006,87 @@ msgstr "Seleziona la prossima Fabbrica di Cyborg"
 
 #: src/keymap.c:437
 msgid "Toggle display of droid path"
-msgstr ""
+msgstr "Attiva o disattiva la visualizzazione delle rotte"
 
 #: src/keymap.c:438
 msgid "Toggle display of gateways"
-msgstr ""
+msgstr "Abilità o diabilità la visualizzazione dei gateway"
 
 #: src/keymap.c:439
-#, fuzzy
 msgid "Toggle Debug Mappings"
-msgstr "Assegnazione dei Tasti"
+msgstr "Cambia lo stato delle mappature di debug"
 
 #: src/keymap.c:440
 msgid "Show all keyboard mappings - use pause!"
-msgstr ""
+msgstr "Mostra la mappatura della tastiera - usa pausa!"
 
 #: src/keymap.c:441
-#, fuzzy
 msgid "Toggle visibility"
-msgstr "Attiva gli Overlay"
+msgstr "Cambia lo stato della visibilità"
 
 #: src/keymap.c:442
-#, fuzzy
 msgid "Raise tile height"
-msgstr "Ruota a Destra"
+msgstr "Incrementa l'altezza del terreno"
 
 #: src/keymap.c:443
 msgid "Lower tile height"
-msgstr ""
+msgstr "Abbassa l'altezza del terreno"
 
 #: src/keymap.c:444
 msgid "Toggles on/off DEMO Mode"
-msgstr ""
+msgstr "Attiva o disattiva la modalità DEMO"
 
 #: src/keymap.c:445
-#, fuzzy
 msgid "End Mission"
-msgstr "Concludo la missione."
+msgstr "Concludi la missione"
 
 #: src/keymap.c:446
-#, fuzzy
 msgid "Toggles All fog"
-msgstr "Cambia lo stato dell'Alleanza"
+msgstr "Cambia lo stato della nebbia"
 
 #: src/keymap.c:447
 msgid "Trigger some weather"
-msgstr ""
+msgstr "Attiva un effetto meteorologico"
 
 #: src/keymap.c:448
 msgid "Flip terrain triangle"
-msgstr ""
+msgstr "Inverte il triangolo del terreno"
 
 #: src/keymap.c:449
-#, fuzzy
 msgid "Realign height of all objects on the map"
 msgstr "Allinea le altezze di tutti gli oggetti della mappa"
 
 #: src/keymap.c:452
-#, fuzzy
 msgid "Make all items available"
-msgstr "Tutti gli oggetti resi disponibili"
+msgstr "Rendi tutti gli oggetti disponbili"
 
 #: src/keymap.c:453
-#, fuzzy
 msgid "Kill Selected Unit(s)"
-msgstr "Consegna le Unità Selezionate"
+msgstr "Distruggi la(e) unità selezionata(e)"
 
 #: src/keymap.c:454
-#, fuzzy
 msgid "Toggle god Mode Status"
-msgstr "Cambia lo stato dell'Alleanza"
+msgstr "Cambia lo stato della modalità Dio"
 
 #: src/keymap.c:455
-#, fuzzy
 msgid "Display Options Screen"
-msgstr "Mostra le opzioni in gioco"
+msgstr "Schermata delle opzioni del display"
 
 #: src/keymap.c:456
-#, fuzzy
 msgid "Complete current research"
-msgstr "Permette la ricerca della torretta di comando"
+msgstr "Completa la ricerca in corso"
 
 #: src/keymap.c:457
-#, fuzzy
 msgid "Toggle watch window"
-msgstr "Visualizza ombre"
+msgstr "Attiva la finestra di spettatore"
 
 #: src/keymap.c:458
 msgid "Trace a game object"
-msgstr ""
+msgstr "Traccia un oggetto del gioco"
 
 #: src/keymap.c:459
-#, fuzzy
 msgid "Toggle Driving Mode"
-msgstr "Avvia la Telecamera a Inseguimento"
+msgstr "Attiva o disattiva la Modalità di Guida"
 
 #: src/loop.c:543
 #: src/loop.c:559
@@ -14446,9 +14429,9 @@ msgid "All players need to have the same mods to join your game."
 msgstr "Tutti i giocatori devono avere gli stessi mod per entrare nella tua partita."
 
 #: src/multiint.c:2377
-#, fuzzy, c-format
+#, c-format
 msgid "*** password [%s] is now required! ***"
-msgstr "***La password ora è richiesta! ***"
+msgstr "***La password [%s] ora è richiesta! ***"
 
 #: src/multiint.c:2385
 msgid "*** password is NOT required! ***"
@@ -14469,25 +14452,25 @@ msgstr "Squadre Bloccate"
 msgid "The host has kicked %s from the game!"
 msgstr "L'host ha espulso %s dalla partita!"
 
-#: src/multiint.c:2880
+#: src/multiint.c:2885
 msgid "Host is Starting Game"
 msgstr "L'host sta avviando la partita"
 
-#: src/multiint.c:3484
+#: src/multiint.c:3487
 msgid "Players"
 msgstr "Giocatori"
 
-#: src/multiint.c:3602
+#: src/multiint.c:3605
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Invio mappa: %d%%"
 
-#: src/multiint.c:3611
+#: src/multiint.c:3614
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Mappa: %d%% scaricata"
 
-#: src/multiint.c:3637
+#: src/multiint.c:3640
 msgid "HOST"
 msgstr "HOST"
 
@@ -14604,7 +14587,7 @@ msgstr "Invia Energia al Giocatore"
 #: src/multimenu.c:1496
 #, c-format
 msgid "kicked %s : %s from the game, and added them to the banned list!"
-msgstr ""
+msgstr "Espulso %s: %s dal gioco e aggiunto alla lista dei bannati!"
 
 #: src/multiplay.c:277
 #, c-format
@@ -14794,12 +14777,12 @@ msgstr "VITTORIA!"
 msgid "YOU WERE DEFEATED!"
 msgstr "SEI STATO SCONFITTO"
 
-#: src/scriptfuncs.c:10089
+#: src/scriptfuncs.c:10087
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Segnale ricevuto da %s"
 
-#: src/scriptfuncs.c:10135
+#: src/scriptfuncs.c:10133
 #, c-format
 msgid "Beacon %d"
 msgstr "Segnale %d"
@@ -14829,9 +14812,8 @@ msgid "Unable to locate any Commanders!"
 msgstr "Impossibile localizzare alcun Comandante!"
 
 #: src/structure.c:2748
-#, fuzzy
 msgid "Control Limit Reached - Production Halted"
-msgstr "Limite di Controllo Raggiunto - Produzione Fermata"
+msgstr "Limite di Controllo Raggiunto - Produzione Arrestata"
 
 #: src/structure.c:5959
 #: src/structure.c:5984
@@ -14923,33 +14905,35 @@ msgstr " - Costruito %s"
 msgid "Version %s%s%s%s"
 msgstr "Versione %s%s%s%s"
 
-#, fuzzy
 #~ msgid "Super Transport Available"
-#~ msgstr "Trasporto Cyborg Disponibile"
+#~ msgstr "Super Trasporto Disponibile"
 
-#, fuzzy
 #~ msgid "Super Transport"
-#~ msgstr "Trasporto"
+#~ msgstr "Super Trasporto"
 
-#, fuzzy
 #~ msgid "Super Transport Body"
-#~ msgstr "Corpo del Trasporto"
+#~ msgstr "Corpo del Super Trasporto"
 
-#, fuzzy
+#~ msgid "Player position"
+#~ msgstr "Posizione del giocatore"
+
 #~ msgid "3 players"
-#~ msgstr "2 giocatori"
+#~ msgstr "3 giocatori"
 
-#, fuzzy
 #~ msgid "5 players"
-#~ msgstr "2 giocatori"
+#~ msgstr "5 giocatori"
 
-#, fuzzy
 #~ msgid "6 players"
-#~ msgstr "2 giocatori"
+#~ msgstr "6 giocatori"
 
-#, fuzzy
 #~ msgid "7 players"
-#~ msgstr "2 giocatori"
+#~ msgstr "7 giocatori"
+
+#~ msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
+#~ msgstr "Non possiamo farlo! Dobbiamo essere un'unità Cyborg per usare un trasporto Cyborg!"
+
+#~ msgid "There is not enough room in the Transport!"
+#~ msgstr "Non c'è abbastanza spazio nel Trasporto!"
 
 #~ msgid "Out of sync"
 #~ msgstr "Fuori sincronia"
