@@ -235,7 +235,11 @@ BOOL MultiPlayerLeave(UDWORD playerIndex)
 
 	ssprintf(buf, _("%s has Left the Game"), getPlayerName(playerIndex));
 
-	if (NetPlay.isHost)
+	if (ingame.localJoiningInProgress)
+	{
+		clearPlayer(playerIndex, false);
+	}
+	else if (NetPlay.isHost)  // If hosting, and game has started (not in pre-game lobby screen, that is).
 	{
 		sendPlayerLeft(playerIndex);
 	}

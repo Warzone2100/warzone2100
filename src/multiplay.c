@@ -846,6 +846,7 @@ BOOL recvMessage(void)
 			break;
 		case GAME_PLAYER_LEFT:
 			recvPlayerLeft(queue);
+			break;
 		default:
 			processedMessage2 = false;
 			break;
