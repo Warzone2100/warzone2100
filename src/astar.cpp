@@ -564,6 +564,10 @@ void fpathSetBlockingMap(PATHJOB *psJob)
 		}
 		syncDebug("blockingMap(%d,%d,%d,%d) = %08X %08X", gameTime, psJob->propulsion, psJob->owner, psJob->moveType, checksumMap, checksumDangerMap);
 	}
+	else
+	{
+		syncDebug("blockingMap(%d,%d,%d,%d) = cached", gameTime, psJob->propulsion, psJob->owner, psJob->moveType);
+	}
 
 	// i now points to the correct map. Make psJob->blockingMap point to it.
 	psJob->blockingMap = &*i;
