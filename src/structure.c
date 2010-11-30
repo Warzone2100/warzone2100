@@ -1719,11 +1719,6 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 			}
 		}
 
-		if (pStructureType->type != REF_REARM_PAD && pStructureType->type != REF_GATE)
-		{
-			auxStructureBlocking(psBuilding);
-		}
-
 		for (width = 0; width < sWidth; width++)
 		{
 			for (breadth = 0; breadth < sBreadth; breadth++)
@@ -4957,7 +4952,7 @@ static void removeStructFromMap(STRUCTURE *psStruct)
 		{
 			psTile = mapTile(mapX+i, mapY+j);
 			psTile->psObject = NULL;
-			auxSetBlocking(mapX + i, mapY + j, AIR_BLOCKED);
+			auxClearBlocking(mapX + i, mapY + j, AIR_BLOCKED);
 		}
 	}
 }
