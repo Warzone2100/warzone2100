@@ -1,10 +1,11 @@
-2010-11-27: Version 3.0 beta 4
+2010-11-29: Version 3.0 beta 4
  * General:
    * Fix: Fix multiturret droids trying to look at invalid weapon slots of structures when looking at their targets. (commit:99ec8a015e084d0283140f351b3d74fb9e4cdf6d)
    * Change: Show tooltips for player & tech level buttons. (commit:0c77b898c2ba0e6087099f9cc67e56755c83115c)
    * Fix: Fix an invalid pointer dereferencing issue in the script events system. (ticket:2300, commit:dfbceff8647ecf3e488733ed7e18e4901e4ee774)
+   * Change: Improve shooting over structures (commit:cc0756a10adaf59e67dd29e13ad60cdd75e43514)
  * Graphics:
-   * Change: Revert 'Try to make cliffs more prominent' patch, it has unintended consequences.
+   * Change: Revert 'Try to make cliffs more prominent' patch, it has unintended consequences. (commit:663bc6db06fd92c12035604e3bd372605adab4e2)
  * Multiplayer:
    * Fix: Fixed crash for all players when the last player clicks "Ready" too many times. (ticket:2346, commit:eea0d0276ac0d295dcb6397d96cc32043cbca3be)
    * Fix: Fix truck limit when giving trucks (commit: a6b3f0bd94ce8f6e64e6cc09cf5efbc2a4cb1ad0)
