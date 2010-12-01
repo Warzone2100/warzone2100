@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100 version 2.2.3\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-11-24 17:59+0100\n"
+"POT-Creation-Date: 2010-12-01 22:41+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Меденцій Олександр <olexandr1986@i.ua>\n"
 "Language-Team: \n"
@@ -12050,10 +12050,10 @@ msgstr "Неможливо зв'язатись з сервером лоббі! �
 
 #: src/challenge.c:189
 #: src/hci.c:1006
-#: src/hci.c:3793
-#: src/hci.c:3942
-#: src/hci.c:4460
-#: src/hci.c:5642
+#: src/hci.c:3794
+#: src/hci.c:3943
+#: src/hci.c:4461
+#: src/hci.c:5643
 #: src/intelmap.c:544
 #: src/intorder.c:782
 #: src/loadsave.c:257
@@ -12346,48 +12346,48 @@ msgstr "Озброєння"
 msgid "Systems"
 msgstr "Системи"
 
-#: src/display3d.c:534
+#: src/display3d.c:533
 msgid "Player left"
 msgstr "Гравець вийшов"
 
-#: src/display3d.c:538
+#: src/display3d.c:537
 msgid "Player dropped"
 msgstr "Гравець здався"
 
-#: src/display3d.c:542
-#: src/multiint.c:1866
+#: src/display3d.c:541
+#: src/multiint.c:1873
 msgid "Waiting for other players"
 msgstr "Чекаємо інших гравців"
 
-#: src/display3d.c:547
+#: src/display3d.c:546
 msgid "Out of sync"
 msgstr ""
 
-#: src/display.c:1712
+#: src/display.c:1614
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Будівництво Неможливе. Через пожежу на Нафтовому Родовищі"
 
-#: src/display.c:1891
-#: src/display.c:2492
+#: src/display.c:1793
+#: src/display.c:2394
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Пошкоджень %d%% - Вбито %d, %s"
 
-#: src/display.c:1907
+#: src/display.c:1809
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Союзник - Пошкоджень %d%% - Вбито %d, %s"
 
-#: src/display.c:2105
+#: src/display.c:2007
 msgid "Truck ordered to build Oil Derrick"
 msgstr "Інженеру наказано побудувати Бурову Вежу"
 
-#: src/display.c:2106
+#: src/display.c:2008
 #, fuzzy
 msgid "2 trucks ordered to build Oil Derrick"
 msgstr "Інженеру наказано побудувати Бурову Вежу"
 
-#: src/display.c:2107
+#: src/display.c:2009
 #, fuzzy, c-format
 msgid "%d trucks ordered to build Oil Derrick"
 msgstr "Інженеру наказано побудувати Бурову Вежу"
@@ -12489,7 +12489,7 @@ msgid "Tutorial"
 msgstr "Навчання"
 
 #: src/frontend.c:101
-#: src/hci.c:3925
+#: src/hci.c:3926
 msgid "Options"
 msgstr "Опції"
 
@@ -12550,8 +12550,8 @@ msgstr "РЕЖИМ ОДНОГО ГРАВЦЯ"
 
 #: src/frontend.c:302
 #: src/ingameop.c:518
-#: src/mission.c:2534
-#: src/mission.c:2639
+#: src/mission.c:2533
+#: src/mission.c:2638
 msgid "Load Saved Game"
 msgstr "Завантажити Збережену Гру"
 
@@ -12568,7 +12568,7 @@ msgid "Join Game"
 msgstr "Приєднатись до Гри"
 
 #: src/frontend.c:421
-#: src/multiint.c:1144
+#: src/multiint.c:1151
 msgid "OPTIONS"
 msgstr "ОПЦІЇ"
 
@@ -12663,7 +12663,7 @@ msgid "Off"
 msgstr "Вимкнено"
 
 #: src/frontend.c:523
-#: src/multiint.c:1213
+#: src/multiint.c:1220
 msgid "Fog"
 msgstr "Туман"
 
@@ -12674,7 +12674,7 @@ msgstr "Імла"
 
 #: src/frontend.c:530
 #: src/frontend.c:595
-#: src/multiint.c:1215
+#: src/multiint.c:1222
 msgid "Fog Of War"
 msgstr "Туман Війни"
 
@@ -12836,7 +12836,7 @@ msgid "GAME OPTIONS"
 msgstr "ІГРОВІ ОПЦІЇ"
 
 #: src/frontend.c:1340
-#: src/multiint.c:2146
+#: src/multiint.c:2153
 msgid "Mod: "
 msgstr ", моди: "
 
@@ -12845,8 +12845,8 @@ msgid "MAP SAVED!"
 msgstr "МАПУ ЗБЕРЕЖЕНО!"
 
 #: src/hci.c:1741
-#: src/loop.c:556
-#: src/loop.c:572
+#: src/loop.c:558
+#: src/loop.c:574
 msgid "GAME SAVED: "
 msgstr "ГРУ ЗБЕРЕЖЕНО:"
 
@@ -12864,170 +12864,170 @@ msgstr "Гравець %u за допомогою шахрайства (меню
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr "Гравець %u за допомогою шахрайства (меню налагодження) здобув(ла) нову властивість : %s."
 
-#: src/hci.c:2187
+#: src/hci.c:2188
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "Гравець %u за допомогою шахрайства (меню налагодження) здобув(ла) нову одиницю : %s."
 
-#: src/hci.c:2198
+#: src/hci.c:2199
 #, fuzzy, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "Гравець %u за допомогою шахрайства (меню налагодження) здобув(ла) нову одиницю : %s."
 
-#: src/hci.c:3695
+#: src/hci.c:3696
 msgid "Commanders (F6)"
 msgstr "Командири (F6)"
 
-#: src/hci.c:3711
+#: src/hci.c:3712
 msgid "Intelligence Display (F5)"
 msgstr "Показати Розвіддані (F5)"
 
-#: src/hci.c:3727
+#: src/hci.c:3728
 msgid "Manufacture (F1)"
 msgstr "Виробництво (F1)"
 
-#: src/hci.c:3743
+#: src/hci.c:3744
 msgid "Design (F4)"
 msgstr "Конструювання (F4)"
 
-#: src/hci.c:3759
+#: src/hci.c:3760
 msgid "Research (F2)"
 msgstr "Дослідження (F2)"
 
-#: src/hci.c:3775
+#: src/hci.c:3776
 msgid "Build (F3)"
 msgstr "Будівництво (F3)"
 
-#: src/hci.c:3853
-#: src/multiint.c:1260
+#: src/hci.c:3854
+#: src/multiint.c:1267
 #: src/multimenu.c:808
 msgid "Power"
 msgstr "Енергія"
 
-#: src/hci.c:3967
+#: src/hci.c:3968
 msgid "Map:"
 msgstr ""
 
-#: src/hci.c:3981
+#: src/hci.c:3982
 #, fuzzy
 msgid "Load"
 msgstr "Завнтажити Гру"
 
-#: src/hci.c:3982
+#: src/hci.c:3983
 #, fuzzy
 msgid "Load Map File"
 msgstr "Завнтажити Гру"
 
-#: src/hci.c:3989
+#: src/hci.c:3990
 #, fuzzy
 msgid "Save"
 msgstr "Зберегти Гру"
 
-#: src/hci.c:3990
+#: src/hci.c:3991
 #, fuzzy
 msgid "Save Map File"
 msgstr "Зберегти Гру"
 
-#: src/hci.c:3998
+#: src/hci.c:3999
 msgid "New"
 msgstr ""
 
-#: src/hci.c:3999
+#: src/hci.c:4000
 msgid "New Blank Map"
 msgstr ""
 
-#: src/hci.c:4037
+#: src/hci.c:4038
 msgid "Tile"
 msgstr "Клітинка"
 
-#: src/hci.c:4038
+#: src/hci.c:4039
 msgid "Place tiles on map"
 msgstr "Розмістити клітинки на мапі"
 
-#: src/hci.c:4047
+#: src/hci.c:4048
 msgid "Unit"
 msgstr "Підрозділ"
 
-#: src/hci.c:4048
+#: src/hci.c:4049
 msgid "Place Unit on map"
 msgstr "Розмістити Підрозділ на мапі"
 
-#: src/hci.c:4056
+#: src/hci.c:4057
 msgid "Struct"
 msgstr "Struct"
 
-#: src/hci.c:4057
+#: src/hci.c:4058
 msgid "Place Structures on map"
 msgstr "Розмістити Будівлі на мапі"
 
-#: src/hci.c:4065
+#: src/hci.c:4066
 msgid "Feat"
 msgstr "Feat"
 
-#: src/hci.c:4066
+#: src/hci.c:4067
 msgid "Place Features on map"
 msgstr "Розмістити Особливості на мапі"
 
-#: src/hci.c:4076
+#: src/hci.c:4077
 msgid "Pause"
 msgstr ""
 
-#: src/hci.c:4077
+#: src/hci.c:4078
 msgid "Pause or unpause the game"
 msgstr "Поставити гру на паузу, або зняти з паузи"
 
-#: src/hci.c:4091
+#: src/hci.c:4092
 msgid "Align height of all map objects"
 msgstr "Вирівняти висоту усіх об'єктів на мапі"
 
-#: src/hci.c:4101
+#: src/hci.c:4102
 msgid "Edit"
 msgstr ""
 
-#: src/hci.c:4102
+#: src/hci.c:4103
 #, fuzzy
 msgid "Start Edit Mode"
 msgstr "Старт без Баз"
 
-#: src/hci.c:4116
+#: src/hci.c:4117
 #: src/ingameop.c:118
 #: src/ingameop.c:275
 #: src/ingameop.c:280
 msgid "Quit"
 msgstr "Вийти"
 
-#: src/hci.c:4117
+#: src/hci.c:4118
 msgid "Exit Game"
 msgstr "Покинути Гру"
 
-#: src/hci.c:4142
+#: src/hci.c:4143
 #, fuzzy
 msgid "Current Player:"
 msgstr "Кілька Гравців"
 
-#: src/hci.c:4541
+#: src/hci.c:4542
 #: src/intdisplay.c:276
 msgid "Progress Bar"
 msgstr "Індикатор Прогресу"
 
-#: src/hci.c:5485
+#: src/hci.c:5486
 #, fuzzy
 msgid "Infinite Production"
 msgstr "Зациклити Виробництво"
 
-#: src/hci.c:5561
+#: src/hci.c:5562
 msgid "Factory Delivery Point"
 msgstr "Точка Доставки Фабрики"
 
-#: src/hci.c:5580
+#: src/hci.c:5581
 msgid "Loop Production"
 msgstr "Зациклити Виробництво"
 
-#: src/hci.c:5667
+#: src/hci.c:5668
 msgid "Tab Scroll left"
 msgstr "Прогорнути Вкладку ліворуч"
 
-#: src/hci.c:5684
+#: src/hci.c:5685
 msgid "Tab Scroll right"
 msgstr "Прогорнути Вкладку праворуч"
 
@@ -13055,8 +13055,8 @@ msgstr "Тактична UI (Іконка Походження Цілі): При
 
 #: src/ingameop.c:294
 #: src/ingameop.c:522
-#: src/mission.c:2521
-#: src/mission.c:2642
+#: src/mission.c:2520
+#: src/mission.c:2641
 msgid "Save Game"
 msgstr "Зберегти Гру"
 
@@ -13072,7 +13072,7 @@ msgstr "Гра не може продовжуватись без хосту."
 msgid "-->  QUIT  <--"
 msgstr "-->  ВИХІД  <--"
 
-#: src/init.c:390
+#: src/init.c:389
 #, c-format
 msgid ""
 "The required mod could not be loaded: %s\n"
@@ -13502,9 +13502,9 @@ msgid "KEY MAPPING"
 msgstr "ПРИЗНАЧЕННЯ КЛАВІШ"
 
 #: src/keyedit.c:374
-#: src/multiint.c:497
-#: src/multiint.c:929
-#: src/multiint.c:1346
+#: src/multiint.c:504
+#: src/multiint.c:936
+#: src/multiint.c:1353
 msgid "Return To Previous Screen"
 msgstr "Повернутися До Попереднього Екрану"
 
@@ -13905,46 +13905,46 @@ msgstr "Обрати наступний Енергогенератор"
 msgid "Select next Cyborg Factory"
 msgstr "Обрати наступну Фабрику Кіборгів"
 
-#: src/loop.c:563
-#: src/loop.c:579
+#: src/loop.c:565
+#: src/loop.c:581
 msgid "Could not save game!"
 msgstr "Не вдалося зберегти гру!"
 
-#: src/mission.c:2074
+#: src/mission.c:2073
 msgid "Load Transport"
 msgstr "Завантажити Транспорт"
 
-#: src/mission.c:2468
+#: src/mission.c:2467
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "ЗАВДАННЯ ВИКОНАНО за допомогою шахрайства!"
 
-#: src/mission.c:2468
+#: src/mission.c:2467
 msgid "OBJECTIVE ACHIEVED"
 msgstr "ЗАВДАННЯ ВИКОНАНО"
 
-#: src/mission.c:2474
+#: src/mission.c:2473
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "ЗАВДАННЯ ПРОВАЛЕНЕ--шахрайство вам не допомогло!"
 
-#: src/mission.c:2474
+#: src/mission.c:2473
 msgid "OBJECTIVE FAILED"
 msgstr "ЗАВДАННЯ ПРОВАЛЕНЕ"
 
-#: src/mission.c:2500
-#: src/mission.c:2540
-#: src/mission.c:2658
+#: src/mission.c:2499
+#: src/mission.c:2539
+#: src/mission.c:2657
 msgid "Quit To Main Menu"
 msgstr "Вийти В Головне Меню"
 
-#: src/mission.c:2508
+#: src/mission.c:2507
 msgid "Continue Game"
 msgstr "Продовжити Гру"
 
-#: src/mission.c:2605
+#: src/mission.c:2604
 msgid "GAME SAVED :"
 msgstr "ГРУ ЗБЕРЕЖЕНО:"
 
-#: src/move.c:2364
+#: src/move.c:2340
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr "Ви знайшли %u енергії в бочці нафти."
@@ -13999,291 +13999,291 @@ msgstr "%s Сформував Союз З %s"
 msgid "You Discover Blueprints For %s"
 msgstr "Ви Знайшли Креслення Для %s"
 
-#: src/multiint.c:431
+#: src/multiint.c:438
 #: src/multilimit.c:192
 msgid "Accept Settings"
 msgstr "Прийняти Налаштування"
 
-#: src/multiint.c:433
-#: src/multiint.c:977
+#: src/multiint.c:440
+#: src/multiint.c:984
 msgid "Cancel"
 msgstr "Відмінити"
 
-#: src/multiint.c:444
+#: src/multiint.c:451
 msgid "IP Address or Machine Name"
 msgstr "IP Адреса або Ім’я Машини"
 
-#: src/multiint.c:494
+#: src/multiint.c:501
 msgid "CONNECTION"
 msgstr "З’ЄДНАННЯ"
 
-#: src/multiint.c:499
+#: src/multiint.c:506
 msgid "Lobby"
 msgstr "Лоббі"
 
-#: src/multiint.c:500
+#: src/multiint.c:507
 msgid "IP"
 msgstr "IP"
 
-#: src/multiint.c:693
+#: src/multiint.c:700
 msgid "No games are available"
 msgstr "Немає доступних ігор"
 
-#: src/multiint.c:696
+#: src/multiint.c:703
 msgid "Game is full"
 msgstr "Гра повна"
 
-#: src/multiint.c:700
+#: src/multiint.c:707
 msgid "You were kicked!"
 msgstr "Вас викинуто!"
 
-#: src/multiint.c:703
+#: src/multiint.c:710
 msgid "Wrong Game Version!"
 msgstr "Невірна Версія Гри!"
 
-#: src/multiint.c:706
+#: src/multiint.c:713
 msgid "You have an incompatible mod."
 msgstr "У вас несумісний мод."
 
-#: src/multiint.c:710
+#: src/multiint.c:717
 msgid "Host couldn't send file?"
 msgstr "Хост не зміг відправити файл?"
 
-#: src/multiint.c:714
+#: src/multiint.c:721
 msgid "Incorrect Password!"
 msgstr "Невірний Пароль!"
 
-#: src/multiint.c:717
+#: src/multiint.c:724
 msgid "Host has dropped connection!"
 msgstr "Хост обірвав з'єднання!"
 
-#: src/multiint.c:721
+#: src/multiint.c:728
 msgid "Connection Error"
 msgstr "Помилка З’єднання"
 
-#: src/multiint.c:865
+#: src/multiint.c:872
 msgid "Searching"
 msgstr "Пошук"
 
-#: src/multiint.c:926
+#: src/multiint.c:933
 msgid "GAMES"
 msgstr "ІГРИ"
 
-#: src/multiint.c:934
+#: src/multiint.c:941
 msgid "Refresh Games List"
 msgstr "Оновити Список Ігор"
 
-#: src/multiint.c:954
+#: src/multiint.c:961
 msgid "Enter Password:"
 msgstr "Введіть Пароль"
 
-#: src/multiint.c:975
+#: src/multiint.c:982
 msgid "OK"
 msgstr "ОК"
 
-#: src/multiint.c:1097
+#: src/multiint.c:1104
 msgid "Tanks disabled!!"
 msgstr ""
 
-#: src/multiint.c:1098
+#: src/multiint.c:1105
 #, fuzzy
 msgid "Cyborgs disabled."
 msgstr "Доступний Новий Кіборг"
 
-#: src/multiint.c:1099
+#: src/multiint.c:1106
 msgid "VTOLs disabled."
 msgstr ""
 
-#: src/multiint.c:1149
 #: src/multiint.c:1156
+#: src/multiint.c:1163
 msgid "Select Game Name"
 msgstr "Виберіть Ім’я Гри"
 
-#: src/multiint.c:1149
+#: src/multiint.c:1156
 msgid "One-Player Skirmish"
 msgstr "Сутичка для Одного Гравця"
 
-#: src/multiint.c:1159
+#: src/multiint.c:1166
 msgid "Select Map"
 msgstr "Оберіть Мапу"
 
-#: src/multiint.c:1167
+#: src/multiint.c:1174
 msgid "Click to set Password"
 msgstr "Натисніть аби встановити Пароль"
 
-#: src/multiint.c:1177
-#: src/multiint.c:1178
+#: src/multiint.c:1184
+#: src/multiint.c:1185
 msgid "Scavengers"
 msgstr "Звалищники"
 
-#: src/multiint.c:1180
+#: src/multiint.c:1187
 msgid "No Scavengers"
 msgstr "Без Звалищників"
 
-#: src/multiint.c:1210
+#: src/multiint.c:1217
 msgid "Select Player Name"
 msgstr "Виберіть Ім’я Гравця"
 
-#: src/multiint.c:1216
+#: src/multiint.c:1223
 msgid "Distance Fog"
 msgstr "Дальній Туман"
 
-#: src/multiint.c:1227
+#: src/multiint.c:1234
 #: src/multimenu.c:801
 msgid "Alliances"
 msgstr "Союзи"
 
-#: src/multiint.c:1230
+#: src/multiint.c:1237
 msgid "No Alliances"
 msgstr "Без Союзів"
 
-#: src/multiint.c:1232
+#: src/multiint.c:1239
 msgid "Allow Alliances"
 msgstr "Союзи Дозволені"
 
-#: src/multiint.c:1236
+#: src/multiint.c:1243
 msgid "Locked Teams"
 msgstr "Закріплені Команди"
 
-#: src/multiint.c:1262
+#: src/multiint.c:1269
 msgid "Low Power Levels"
 msgstr "Низькі Рівні Енергії"
 
-#: src/multiint.c:1264
+#: src/multiint.c:1271
 msgid "Medium Power Levels"
 msgstr "Середні Рівні Енергії"
 
-#: src/multiint.c:1266
+#: src/multiint.c:1273
 msgid "High Power Levels"
 msgstr "Високі Рівні Енергії"
 
-#: src/multiint.c:1298
+#: src/multiint.c:1305
 msgid "Base"
 msgstr "База"
 
-#: src/multiint.c:1300
+#: src/multiint.c:1307
 msgid "Start with No Bases"
 msgstr "Старт без Баз"
 
-#: src/multiint.c:1302
+#: src/multiint.c:1309
 msgid "Start with Bases"
 msgstr "Старт з Базами"
 
-#: src/multiint.c:1304
+#: src/multiint.c:1311
 msgid "Start with Advanced Bases"
 msgstr "Старт з Розвиненими Базами"
 
-#: src/multiint.c:1336
+#: src/multiint.c:1343
 msgid "Map Preview"
 msgstr "Вигляд Мапи"
 
-#: src/multiint.c:1338
+#: src/multiint.c:1345
 msgid "Click to see Map"
 msgstr "Натисни, щоб побачити Мапу"
 
-#: src/multiint.c:1352
+#: src/multiint.c:1359
 msgid "Start Hosting Game"
 msgstr "Створити Гру"
 
-#: src/multiint.c:1360
+#: src/multiint.c:1367
 msgid "Show Structure Limits"
 msgstr "Показати Межу Кількості Будівель"
 
-#: src/multiint.c:1360
+#: src/multiint.c:1367
 msgid "Set Structure Limits"
 msgstr "Встановити Межу Кількості Будівель"
 
-#: src/multiint.c:1446
+#: src/multiint.c:1453
 msgid "Player colour"
 msgstr "Колір гравця"
 
-#: src/multiint.c:1462
+#: src/multiint.c:1469
 msgid "Kick player"
 msgstr "Викинути гравця"
 
-#: src/multiint.c:1473
+#: src/multiint.c:1480
 msgid "Player number"
 msgstr "Номер гравця"
 
-#: src/multiint.c:1833
+#: src/multiint.c:1840
 msgid "Team"
 msgstr "Команда"
 
-#: src/multiint.c:1872
+#: src/multiint.c:1879
 msgid "Click when ready"
 msgstr "Натисни, коли готовий"
 
-#: src/multiint.c:1876
+#: src/multiint.c:1883
 msgid "READY?"
 msgstr "ГОТОВІ?"
 
-#: src/multiint.c:1913
+#: src/multiint.c:1920
 msgid "PLAYERS"
 msgstr "ГРАВЦІ"
 
-#: src/multiint.c:1967
+#: src/multiint.c:1974
 #, fuzzy
 msgid "Choose Team"
 msgstr "Закріплені Команди"
 
-#: src/multiint.c:2007
+#: src/multiint.c:2014
 msgid "Click to change player settings"
 msgstr ""
 
-#: src/multiint.c:2038
+#: src/multiint.c:2045
 msgid "Click to adjust AI difficulty"
 msgstr ""
 
-#: src/multiint.c:2117
+#: src/multiint.c:2124
 msgid "CHAT"
 msgstr "ЧАТ"
 
-#: src/multiint.c:2151
+#: src/multiint.c:2158
 msgid "All players need to have the same mods to join your game."
 msgstr "Всі гравці повинні мати однакові моди щоб приєднатись до гри."
 
-#: src/multiint.c:2312
+#: src/multiint.c:2319
 #, fuzzy, c-format
 msgid "*** password [%s] is now required! ***"
 msgstr "*** зараз потрібен пароль! ***"
 
-#: src/multiint.c:2320
+#: src/multiint.c:2327
 msgid "*** password is NOT required! ***"
 msgstr "*** пароль НЕ потрібен! ***"
 
-#: src/multiint.c:2562
+#: src/multiint.c:2569
 msgid "Sorry! Failed to host the game."
 msgstr "Вибачте! Не далося створити гру."
 
-#: src/multiint.c:2647
+#: src/multiint.c:2654
 msgid "'Locked Teams' mode enabled"
 msgstr "'Закріплені Команди' режим активовано"
 
-#: src/multiint.c:2686
-#: src/multiint.c:2736
+#: src/multiint.c:2693
+#: src/multiint.c:2743
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "Хост викинув %s з гри!"
 
-#: src/multiint.c:2811
+#: src/multiint.c:2823
 msgid "Host is Starting Game"
 msgstr "Хост Починає Гру"
 
-#: src/multiint.c:3394
+#: src/multiint.c:3406
 msgid "Players"
 msgstr "Гравці"
 
-#: src/multiint.c:3512
+#: src/multiint.c:3524
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Відправляється Карта: %d%% "
 
-#: src/multiint.c:3520
+#: src/multiint.c:3532
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Мапа: %d%% завантажена"
 
-#: src/multiint.c:3546
+#: src/multiint.c:3558
 msgid "HOST"
 msgstr "ХОСТ"
 
@@ -14292,27 +14292,27 @@ msgstr "ХОСТ"
 msgid "Players Still Joining"
 msgstr "Гравці Продовжують Приєднуватись"
 
-#: src/multijoin.c:216
+#: src/multijoin.c:236
 #, c-format
 msgid "%s has Left the Game"
 msgstr "%s покинув Гру"
 
-#: src/multijoin.c:230
+#: src/multijoin.c:254
 #, c-format
 msgid "File transfer has been aborted for %d."
 msgstr "Передача файлу була перервана для %d."
 
-#: src/multijoin.c:352
+#: src/multijoin.c:376
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr "%s (%u) має несумісний мод, отже був викинутий."
 
-#: src/multijoin.c:391
+#: src/multijoin.c:415
 #, c-format
 msgid "%s is Joining the Game"
 msgstr "%s Приєднався до Гри"
 
-#: src/multijoin.c:401
+#: src/multijoin.c:425
 msgid "System message:"
 msgstr "Повідомлення системи:"
 
@@ -14422,47 +14422,47 @@ msgstr "Надати Енергію Гравцю"
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr "Викидуємо гравця %s, тому що він намагався обійти перевірку цілісності даних!"
 
-#: src/multiplay.c:1136
+#: src/multiplay.c:1139
 msgid "(allies"
 msgstr "(союзники"
 
-#: src/multiplay.c:1144
+#: src/multiplay.c:1147
 msgid "(private to "
 msgstr "(приватно до"
 
-#: src/multiplay.c:1157
+#: src/multiplay.c:1160
 msgid "[invalid]"
 msgstr "[невірний]"
 
-#: src/multiplay.c:2048
+#: src/multiplay.c:2051
 msgid "Green"
 msgstr "Зелений"
 
-#: src/multiplay.c:2049
+#: src/multiplay.c:2052
 msgid "Orange"
 msgstr "Помаранчовий"
 
-#: src/multiplay.c:2050
+#: src/multiplay.c:2053
 msgid "Grey"
 msgstr "Сірий"
 
-#: src/multiplay.c:2051
+#: src/multiplay.c:2054
 msgid "Black"
 msgstr "Чорний"
 
-#: src/multiplay.c:2052
+#: src/multiplay.c:2055
 msgid "Red"
 msgstr "Червоний"
 
-#: src/multiplay.c:2053
+#: src/multiplay.c:2056
 msgid "Blue"
 msgstr "Синій"
 
-#: src/multiplay.c:2054
+#: src/multiplay.c:2057
 msgid "Pink"
 msgstr "Рожевий"
 
-#: src/multiplay.c:2055
+#: src/multiplay.c:2058
 msgid "Cyan"
 msgstr "Блакитний"
 
@@ -14643,63 +14643,63 @@ msgstr "Не можу знайти жодного Сенсорного Підр�
 msgid "Unable to locate any Commanders!"
 msgstr "Не можу знайти  жодного Командира!"
 
-#: src/structure.c:2897
+#: src/structure.c:2892
 #, fuzzy
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Досягнуто Межі Контролю - Виробництво Призупинене"
 
-#: src/structure.c:6121
-#: src/structure.c:6146
+#: src/structure.c:6125
+#: src/structure.c:6150
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Підрозділ закріплено"
 msgstr[1] "%s - %u Підрозділи закріплено"
 
-#: src/structure.c:6151
-#: src/structure.c:6219
-#: src/structure.c:6235
-#: src/structure.c:6249
+#: src/structure.c:6155
+#: src/structure.c:6223
+#: src/structure.c:6239
+#: src/structure.c:6253
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Пошкоджено %3.0f%%"
 
-#: src/structure.c:6201
+#: src/structure.c:6205
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - Під'єднано %u з %u"
 
-#: src/structure.c:6365
-#: src/structure.c:6410
+#: src/structure.c:6369
+#: src/structure.c:6414
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Електронних Ушкоджень"
 
-#: src/structure.c:6647
+#: src/structure.c:6651
 msgid "Electronic Reward - Visibility Report"
 msgstr "Електронна Винагорода - Звіт про Зону Видимості"
 
-#: src/structure.c:6687
+#: src/structure.c:6691
 msgid "Factory Reward - Propulsion"
 msgstr "Винагорода Фабрики - Ходова"
 
-#: src/structure.c:6711
+#: src/structure.c:6715
 msgid "Factory Reward - Body"
 msgstr "Винагорода Фабрики - Корпус"
 
-#: src/structure.c:6735
+#: src/structure.c:6739
 msgid "Factory Reward - Weapon"
 msgstr "Винагорода Фабрики - Озброєння"
 
-#: src/structure.c:6744
+#: src/structure.c:6748
 msgid "Factory Reward - Nothing"
 msgstr "Винагорода Фабрики - Нічого"
 
-#: src/structure.c:6772
+#: src/structure.c:6776
 msgid "Repair Facility Award - Repair"
 msgstr "Винагорода Ремонтної Майстерні - Ремонт"
 
-#: src/structure.c:6779
+#: src/structure.c:6783
 msgid "Repair Facility Award - Nothing"
 msgstr "Винагорода Ремонтної Майстерні - Нічого"
 
