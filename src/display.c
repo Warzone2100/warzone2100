@@ -197,7 +197,6 @@ static UDWORD	rotInitialUp;
 static UDWORD	xMoved, yMoved;
 static STRUCTURE	*psBuilding;
 static BOOL	edgeOfMap = false;
-static UDWORD	scrollRefTime;
 static float	scrollSpeedLeftRight; //use two directions and add them because its simple
 static float	scrollStepLeftRight;
 static float	scrollSpeedUpDown;
@@ -1084,12 +1083,28 @@ void processMouseClickInput(void)
 }
 
 
+static void calcScroll(float *y, float *dydt, float accel, float targetVelocity, float dt)
+{
+	double tMid = dt;
+
+	if (accel * *dydt > accel * targetVelocity)
+	{
+		accel = -accel;
+	}
+
+	if ((*dydt - targetVelocity) * (*dydt + accel*dt - targetVelocity) < 0)
+	{
+		tMid = (targetVelocity - *dydt) / accel;
+	}
+
+	*y += *dydt * tMid + accel/2 * tMid*tMid + targetVelocity * (dt - tMid);
+	*dydt += accel * tMid;
+}
+
 void scroll(void)
 {
 	SDWORD	xDif,yDif;
-	UDWORD	timeDiff;
-	BOOL mouseAtLeft = false, mouseAtRight = false,
-		mouseAtTop = false, mouseAtBottom = false;
+	int scrollDirLeftRight = 0, scrollDirUpDown = 0;
 	float scroll_zoom_factor = 1+2*((getViewDistance()-MINDISTANCE)/((float)(MAXDISTANCE-MINDISTANCE)));
 	float scaled_max_scroll_speed = scroll_zoom_factor * MAX_SCROLL_SPEED;
 	float scaled_accel;
@@ -1101,143 +1116,31 @@ void scroll(void)
 
 	if (mouseScroll)
 	{
-		/* Scroll left */
-		if (mouseX() < BOUNDARY_X)
-		{
-			mouseAtLeft = true;
-		}
+		// Scroll left or right
+		scrollDirLeftRight += (mouseX() > (pie_GetVideoBufferWidth() - BOUNDARY_X)) -
+		                       (mouseX() < BOUNDARY_X);
 
-		/* Scroll right */
-		if (mouseX() > (pie_GetVideoBufferWidth() - BOUNDARY_X))
-		{
-			mouseAtRight = true;
-		}
-
-		/* Scroll up */
-		if (mouseY() < BOUNDARY_Y)
-		{
-			mouseAtBottom = true;
-		}
-
-		/* Scroll down */
-		if (mouseY() > (pie_GetVideoBufferHeight() - BOUNDARY_Y))
-		{
-			mouseAtTop = true;
-		}
+		// Scroll down or up
+		scrollDirUpDown += (mouseY() < BOUNDARY_Y) -
+		                    (mouseY() > (pie_GetVideoBufferHeight() - BOUNDARY_Y));
 	}
 	if (!keyDown(KEY_LCTRL) && !keyDown(KEY_RCTRL))
 	{
-		/* Scroll left */
-		if (keyDown(KEY_LEFTARROW))
-		{
-			mouseAtLeft = true;
-		}
+		// Scroll left or right
+		scrollDirLeftRight += keyDown(KEY_RIGHTARROW) - keyDown(KEY_LEFTARROW);
 
-		/* Scroll right */
-		if (keyDown(KEY_RIGHTARROW))
-		{
-			mouseAtRight = true;
-		}
+		// Scroll down or up
+		scrollDirUpDown += keyDown(KEY_UPARROW) - keyDown(KEY_DOWNARROW);
+	}
+	CLIP(scrollDirLeftRight, -1, 1);
+	CLIP(scrollDirUpDown,    -1, 1);
 
-		/* Scroll up */
-		if (keyDown(KEY_UPARROW))
-		{
-			mouseAtBottom = true;
-		}
+	scaled_accel = scroll_zoom_factor * scroll_speed_accel;
 
-		/* Scroll down */
-		if ( keyDown(KEY_DOWNARROW))
-		{
-			mouseAtTop = true;
-		}
-	}
-	/* Time to update scroll - change to should be time */
-	timeDiff = SDL_GetTicks() - scrollRefTime;
-
-	/* Store reference time */
-	scrollRefTime = SDL_GetTicks();
-
-	if (timeDiff > GTIME_MAXFRAME)
-	{
-		timeDiff = GTIME_MAXFRAME;
-	}
-	scaled_accel = scroll_zoom_factor * (float)scroll_speed_accel * (float)(timeDiff) / (float)GAME_TICKS_PER_SEC;
-	if(mouseAtLeft)
-	{
-		if(scrollSpeedLeftRight > 0)
-			scrollSpeedLeftRight = 0.0f;
-		scrollSpeedLeftRight -= scaled_accel;
-		if(scrollSpeedLeftRight < -scaled_max_scroll_speed)
-		{
-			scrollSpeedLeftRight = -scaled_max_scroll_speed;
-		}
-	}
-	else if(mouseAtRight)
-	{
-		if(scrollSpeedLeftRight < 0)
-			scrollSpeedLeftRight = 0.0f;
-		scrollSpeedLeftRight += scaled_accel;
-		if(scrollSpeedLeftRight > scaled_max_scroll_speed)
-		{
-			scrollSpeedLeftRight = scaled_max_scroll_speed;
-		}
-	}
-	else // not at left or right so retard the scroll
-	{
-		if(scrollSpeedLeftRight > 2*scaled_accel)
-		{
-			scrollSpeedLeftRight -= 2*scaled_accel;
-		}
-		else if(scrollSpeedLeftRight < -2*scaled_accel)
-		{
-			scrollSpeedLeftRight += 2*scaled_accel;
-		}
-		else
-		{
-			scrollSpeedLeftRight = 0.0f;
-		}
-	}
-	if(mouseAtBottom)//its at the top??
-	{
-		if(scrollSpeedUpDown < 0)
-			scrollSpeedUpDown = 0.0f;
-		scrollSpeedUpDown += scaled_accel;
-		if(scrollSpeedUpDown > scaled_max_scroll_speed)
-		{
-			scrollSpeedUpDown = scaled_max_scroll_speed;
-		}
-	}
-	else if(mouseAtTop)//its at the bottom??
-	{
-		if(scrollSpeedUpDown > 0)
-			scrollSpeedUpDown = 0.0f;
-		scrollSpeedUpDown -= scaled_accel;
-		if(scrollSpeedUpDown < -scaled_max_scroll_speed)
-		{
-			scrollSpeedUpDown = -scaled_max_scroll_speed;
-		}
-	}
-	else // not at top or bottom so retard the scroll
-	{
-		if(scrollSpeedUpDown > scaled_accel)
-		{
-			scrollSpeedUpDown -= 2*scaled_accel;
-		}
-		else if(scrollSpeedUpDown < -scaled_accel)
-		{
-			scrollSpeedUpDown += 2*scaled_accel;
-		}
-		else
-		{
-			scrollSpeedUpDown = 0.0f;
-		}
-	}
-
-	// scrool speeds updated in proportion to frame time calculate how far to step in each direction
-	scrollStepLeftRight = scrollSpeedLeftRight * (float)(timeDiff) /
-		(float)GAME_TICKS_PER_SEC;
-	scrollStepUpDown = scrollSpeedUpDown * (float)(timeDiff) /
-		(float)GAME_TICKS_PER_SEC;
+	scrollStepLeftRight = 0;
+	scrollStepUpDown = 0;
+	calcScroll(&scrollStepLeftRight, &scrollSpeedLeftRight, (scrollDirLeftRight != 0? 1 : 2) * scaled_accel, scrollDirLeftRight * scaled_max_scroll_speed, realTimeAdjustedIncrement(1));
+	calcScroll(&scrollStepUpDown,    &scrollSpeedUpDown,    (scrollDirUpDown    != 0? 1 : 2) * scaled_accel, scrollDirUpDown    * scaled_max_scroll_speed, realTimeAdjustedIncrement(1));
 
 	/* Get x component of movement */
 	xDif = iCosR(-player.r.y, scrollStepLeftRight) + iSinR(-player.r.y, scrollStepUpDown);
@@ -1256,7 +1159,6 @@ void scroll(void)
  */
 void resetScroll(void)
 {
-	scrollRefTime = SDL_GetTicks();
 	scrollSpeedUpDown = 0.0f;
 	scrollSpeedLeftRight = 0.0f;
 }

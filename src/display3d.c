@@ -3773,13 +3773,12 @@ static void trackHeight( float desiredHeight )
 {
 	static float heightSpeed = 0.0f;
 	float separation = desiredHeight - player.p.y;	// How far are we from desired height?
-	float acceleration = ACCEL_CONSTANT * separation - VELOCITY_CONSTANT * heightSpeed; // Work out accelertion
 
-	/* ...and now speed */
-	heightSpeed += graphicsTimeAdjustedIncrement(acceleration);
+	// d²/dt² player.p.y = -ACCEL_CONSTANT * (player.p.y - desiredHeight) - VELOCITY_CONSTANT * d/dt player.p.y
+	solveDifferential2ndOrder(&separation, &heightSpeed, ACCEL_CONSTANT, VELOCITY_CONSTANT, realTimeAdjustedIncrement(1));
 
 	/* Adjust the height accordingly */
-	player.p.y += graphicsTimeAdjustedIncrement(heightSpeed);
+	player.p.y = desiredHeight - separation;
 }
 
 /// Select the next energy bar display mode

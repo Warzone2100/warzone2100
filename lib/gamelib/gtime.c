@@ -250,6 +250,8 @@ void realTimeUpdate(void)
 	deltaRealTime = currTime - realTime;
 	realTime += deltaRealTime;
 
+	deltaRealTime = MIN(deltaRealTime, GTIME_MAXFRAME);  // Don't scroll across the map suddenly, if computer freezes for a moment.
+
 	// Pre-calculate fraction used in timeAdjustedIncrement
 	realTimeFraction = (float)deltaRealTime / (float)GAME_TICKS_PER_SEC;
 }
