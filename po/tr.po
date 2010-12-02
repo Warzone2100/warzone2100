@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-11-24 17:53+0100\n"
-"PO-Revision-Date: 2010-11-11 22:01+0200\n"
-"Last-Translator: Ayhan Görgülü <ayhangorgulu@gmail.com>\n"
+"POT-Creation-Date: 2010-12-02 21:42+0100\n"
+"PO-Revision-Date: 2010-12-02 20:25+0200\n"
+"Last-Translator: Ayhan GORGULU <ayhangorgulu@gmail.com>\n"
 "Language-Team: Turkey <warzone-dev@gna.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -257,7 +257,7 @@ msgstr "Zırhlı Havan kuyusu"
 #: data/mp/messages/strings/resstrings.txt:203
 #: data/mp/messages/strings/resstrings.txt:209
 msgid "Assigned automatically to nearest sensor or CB tower"
-msgstr "Otomatik olarak yakınlardaki bir Sensöre bağlanır"
+msgstr "Otomatik olarak yakınlardaki bir algılayıcıya veya algılayıcı kuleye bağlanır"
 
 #: data/base/messages/resmessages12.rmsg:7
 #: data/base/messages/resmessages12.rmsg:20
@@ -929,7 +929,7 @@ msgstr "Yeni Endirek Ateş Silahı Kullanılabilir"
 #: data/mp/messages/resmessages2.rmsg:902
 #: data/mp/messages/strings/resstrings.txt:933
 msgid "May be assigned to a sensor"
-msgstr "Bir sensöre bağlanabilir"
+msgstr "Bir algılayıcıya bağlanabilir"
 
 #: data/base/messages/resmessages12.rmsg:149
 #: data/base/messages/resmessages1.rmsg:669
@@ -1056,7 +1056,7 @@ msgstr "Yeni Roket Kullanılabilir"
 #: data/base/messages/resmessages12.rmsg:187
 #: data/mp/messages/resmessages12.rmsg:187
 msgid "Rocket artillery; can be assigned to a sensor"
-msgstr "Roket Bataryası; Bir sensöre bağlanabilir"
+msgstr "Roket Bataryası; bir algılayıcıya bağlanabilir"
 
 #: data/base/messages/resmessages12.rmsg:188
 #: data/mp/messages/resmessages12.rmsg:188
@@ -2205,7 +2205,7 @@ msgstr "Zırh Delici Sabotaj Mermileri"
 #: data/mp/messages/resmessages1.rmsg:669
 #: data/mp/messages/resmessagesall.rmsg:343
 msgid "May be targeted directly or assigned to a sensor turret or tower"
-msgstr "Bir sönser birime yada sensör kuleye bağlanabilir"
+msgstr "Bir algılayıcı birime yada algılayıcı kuleye bağlanabilir"
 
 #: data/base/messages/resmessages1.rmsg:681
 #: data/mp/messages/resmessages1.rmsg:682
@@ -2507,7 +2507,7 @@ msgstr "VTOL-Vuruş kulesi hedefleri görüntülemek için kullanılır"
 #: data/base/messages/resmessages23.rmsg:110
 #: data/mp/messages/resmessages23.rmsg:110
 msgid "Assigned VTOLs attack the designated targets"
-msgstr "Balirli hedeflere saldırmak için VTOL larını bağla"
+msgstr "Belirli hedeflere saldırmak için VTOL larını bağla"
 
 #: data/base/messages/resmessages23.rmsg:111
 #: data/mp/messages/resmessages23.rmsg:111
@@ -2550,7 +2550,7 @@ msgstr "VTOL Vuruş mesafesi arttırıldı"
 #: data/mp/messages/resmessages3.rmsg:553
 #: data/mp/messages/strings/resstrings.txt:530
 msgid "All VTOL Strike sensors upgraded automatically"
-msgstr "Tüm VTOL Vuruş sensörleri otomatik olarak yükseltildi"
+msgstr "Tüm VTOL Vuruş algılayıcıları otomatik olarak yükseltildi"
 
 #: data/base/messages/resmessages23.rmsg:134
 #: data/base/messages/resmessages2.rmsg:641
@@ -2673,7 +2673,7 @@ msgstr "Mermiler hedefi ısı alıcıları ile tespit eder"
 #: data/base/messages/resmessages23.rmsg:200
 #: data/mp/messages/resmessages23.rmsg:200
 msgid "105mm multi-barrel Howitzer may be assigned to a sensor"
-msgstr "105mm çoklu-bariyel Obüs bir sensöre bağlanabilir"
+msgstr "105mm çoklu-bariyel Obüs bir algılayıcıya bağlanabilir"
 
 #: data/base/messages/resmessages23.rmsg:201
 #: data/base/messages/resmessages2.rmsg:799
@@ -3067,7 +3067,7 @@ msgstr "Tüm Y. Silahlandır Rampaları otomatik olarak geliştirildi"
 #: data/mp/messages/resmessages2.rmsg:420
 #: data/mp/messages/strings/resstrings.txt:487
 msgid "Improved Sensor Tower Available"
-msgstr "Gelişmiş Sensör Kulesi Kullanılabilir"
+msgstr "Gelişmiş Algılayıcı Kulesi Kullanılabilir"
 
 #: data/base/messages/resmessages2.rmsg:421
 #: data/base/messages/strings/resstrings.txt:460
@@ -3081,7 +3081,7 @@ msgstr "Yeni inşa teknikleriyle geliştirilmiş kule"
 #: data/mp/messages/resmessages2.rmsg:422
 #: data/mp/messages/strings/resstrings.txt:489
 msgid "Replaces existing sensor tower"
-msgstr "Sensör Kule ile değiştirilecek"
+msgstr "Algılayıcı Kule ile değiştirilecek"
 
 #: data/base/messages/resmessages2.rmsg:423
 #: data/base/messages/resmessagesall.rmsg:59
@@ -3506,21 +3506,21 @@ msgstr "Proplin Oksit Jel Daha yüksek ısıda yakılacak"
 #: data/mp/messages/resmessages2.rmsg:798
 #: data/mp/messages/strings/resstrings.txt:811
 msgid "105mm Howitzer may be assigned to a sensor"
-msgstr "105mm Obüs bir sensöre bağlanabilir"
+msgstr "105mm Obüs bir algılayıcıya bağlanabilir"
 
 #: data/base/messages/resmessages2.rmsg:811
 #: data/base/messages/strings/resstrings.txt:780
 #: data/mp/messages/resmessages2.rmsg:811
 #: data/mp/messages/strings/resstrings.txt:819
 msgid "155mm Howitzer may be assigned to a sensor"
-msgstr "155mm Obüs bir sensöre bağlanabilir"
+msgstr "155mm Obüs bir algılayıcıya bağlanabilir"
 
 #: data/base/messages/resmessages2.rmsg:824
 #: data/base/messages/strings/resstrings.txt:788
 #: data/mp/messages/resmessages2.rmsg:824
 #: data/mp/messages/strings/resstrings.txt:827
 msgid "105m Howitzer firing incendiaries, may be assigned to a sensor"
-msgstr "105mm Obüs kundak mermileri ateşler, bir sensöre bağlanabilir"
+msgstr "105mm Obüs kundak mermileri ateşler, bir algılayıcıya bağlanabilir"
 
 #: data/base/messages/resmessages2.rmsg:825
 #: data/base/messages/strings/resstrings.txt:789
@@ -4471,7 +4471,7 @@ msgstr "Yeni Sistem Tareti Tasarımda Kullanılabilir"
 #: data/mp/messages/resmessagesall.rmsg:514
 #: data/mp/messages/resmessagesall.rmsg:709
 msgid "Improved sensor range"
-msgstr "Arttırılmış Sensör Görüş Mesafesi"
+msgstr "Arttırılmış algılayıcı Görüş Mesafesi"
 
 #: data/base/messages/resmessagesall.rmsg:58
 #: data/mp/messages/resmessagesall.rmsg:58
@@ -4481,7 +4481,7 @@ msgstr "Harika izci araç yapılabilir"
 #: data/base/messages/resmessagesall.rmsg:70
 #: data/mp/messages/resmessagesall.rmsg:70
 msgid "Extended sensor range"
-msgstr "Genişletilmiş Sensör Görüş Mesafesi"
+msgstr "Genişletilmiş algılayıcı Görüş Mesafesi"
 
 #: data/base/messages/resmessagesall.rmsg:71
 #: data/mp/messages/resmessagesall.rmsg:71
@@ -4496,7 +4496,7 @@ msgstr "Bulunduğu bölgeyi gözlem altında tutar"
 #: data/mp/messages/resmessagesall.rmsg:95
 #: data/mp/messages/resmessagesall.rmsg:108
 msgid "Sensors Improved"
-msgstr "Sensör Geliştirildi"
+msgstr "Algılayıcı Geliştirildi"
 
 #: data/base/messages/resmessagesall.rmsg:83
 #: data/mp/messages/resmessagesall.rmsg:83
@@ -4505,14 +4505,14 @@ msgstr "Yeni Termal Emisyon Tespit Sistemi"
 
 #: data/base/messages/resmessagesall.rmsg:84
 msgid "Extends Sensor Range"
-msgstr "Sensör Görüş Alanı Geliştirildi"
+msgstr "Algılayıcı Görüş Alanı Geliştirildi"
 
 #: data/base/messages/resmessagesall.rmsg:85
 #: data/mp/messages/resmessagesall.rmsg:85
 #: data/mp/messages/resmessagesall.rmsg:98
 #: data/mp/messages/resmessagesall.rmsg:111
 msgid "All sensors upgraded automatically"
-msgstr "Tüm Sensörler otomatik olarak geliştirildi"
+msgstr "Tüm algılayıcılar otomatik olarak geliştirildi"
 
 #: data/base/messages/resmessagesall.rmsg:96
 #: data/mp/messages/resmessagesall.rmsg:122
@@ -5794,7 +5794,7 @@ msgstr "Alev Atıcı Engerek Tekerlekler"
 #: data/base/messages/strings/names.txt:145
 #: data/mp/messages/strings/names.txt:146
 msgid "Sensor Turret Viper Wheels"
-msgstr "Sensör Tareti Engerek Tekerlekler"
+msgstr "Algılayıcı Tareti Engerek Tekerlekler"
 
 #: data/base/messages/strings/names.txt:146
 #: data/mp/messages/strings/names.txt:147
@@ -5894,7 +5894,7 @@ msgstr "Kobra Kamyon"
 
 #: data/base/messages/strings/names.txt:186
 msgid "Sensor Cobra Half-tracks"
-msgstr "Sensör Kobra Yarım Paletler"
+msgstr "Algılayıcı Kobra Yarım Paletler"
 
 #: data/base/messages/strings/names.txt:187
 #: data/mp/messages/strings/names.txt:190
@@ -6257,7 +6257,7 @@ msgstr "Tamir Tareti"
 #: data/mp/messages/strings/names.txt:431
 #: data/mp/messages/strings/names.txt:905
 msgid "Sensor Tower"
-msgstr "Sensör Kulesi"
+msgstr "Algılayıcı Kulesi"
 
 #: data/base/messages/strings/names.txt:368
 #: data/base/messages/strings/names.txt:424
@@ -6266,7 +6266,7 @@ msgstr "Sensör Kulesi"
 #: data/mp/messages/strings/names.txt:432
 #: data/mp/messages/strings/names.txt:906
 msgid "Hardened Sensor Tower"
-msgstr "Gelişmiş Sensör Kulesi"
+msgstr "Gelişmiş Algılayıcı Kulesi"
 
 # Sowohl der Sensortower als auch das Sensor Turret sind beides Türme -Kreuvf
 #: data/base/messages/strings/names.txt:369
@@ -6274,7 +6274,7 @@ msgstr "Gelişmiş Sensör Kulesi"
 #: data/mp/messages/strings/names.txt:375
 #: data/mp/messages/strings/names.txt:904
 msgid "Sensor Turret"
-msgstr "Sensör Tareti"
+msgstr "Algılayıcı Tareti"
 
 #: data/base/messages/strings/names.txt:371
 #: data/base/messages/strings/names.txt:372
@@ -6286,7 +6286,7 @@ msgstr "VTOL CB Kulesi"
 #: data/base/messages/strings/names.txt:373
 #: data/mp/messages/strings/names.txt:379
 msgid "Uplink Sensor"
-msgstr "Uydu Sensörü"
+msgstr "Uydu Algılayıcısı"
 
 #: data/base/messages/strings/names.txt:375
 #: data/mp/messages/strings/names.txt:382
@@ -6347,7 +6347,7 @@ msgstr "Güç Jeneratörü"
 #: data/mp/messages/strings/names.txt:395
 #: data/mp/messages/strings/names.txt:831
 msgid "Power Module"
-msgstr "Güç J. Eki"
+msgstr "Güç Jeneratörü Eki"
 
 #: data/base/messages/strings/names.txt:389
 #: data/mp/messages/strings/names.txt:396
@@ -7774,7 +7774,7 @@ msgstr "Otomatik Araç Tamiri Kdm3"
 #: data/base/messages/strings/names.txt:874
 #: data/mp/messages/strings/names.txt:891
 msgid "Sensor Upgrade"
-msgstr "Sensör Yükseltmesi"
+msgstr "Algılayıcı Yükseltmesi"
 
 #: data/base/messages/strings/names.txt:876
 #: data/mp/messages/strings/names.txt:893
@@ -7825,17 +7825,17 @@ msgstr "CB Tareti"
 #: data/base/messages/strings/names.txt:893
 #: data/mp/messages/strings/names.txt:910
 msgid "CB Sensor Upgrade"
-msgstr "CB Sensör Yükseltmesi"
+msgstr "CB Algılayıcı Yükseltmesi"
 
 #: data/base/messages/strings/names.txt:894
 #: data/mp/messages/strings/names.txt:911
 msgid "CB Sensor Upgrade 2"
-msgstr "CB Sensör Yükseltmesi Kdm2"
+msgstr "CB Algılayıcı Yükseltmesi Kdm2"
 
 #: data/base/messages/strings/names.txt:895
 #: data/mp/messages/strings/names.txt:912
 msgid "CB Sensor Upgrade 3"
-msgstr "CB Sensör Yükseltmesi Kdm3"
+msgstr "CB Algılayıcı Yükseltmesi Kdm3"
 
 #: data/base/messages/strings/names.txt:897
 #: data/mp/messages/strings/names.txt:914
@@ -7907,7 +7907,7 @@ msgstr "NEXUS Direnç Devreleri Kdm3"
 #: data/base/messages/strings/names.txt:918
 #: data/mp/messages/strings/names.txt:935
 msgid "Sensor Lock"
-msgstr "Sensör Kilidi"
+msgstr "Algılayıcı Kilidi"
 
 #: data/base/messages/strings/names.txt:922
 #: data/mp/messages/strings/names.txt:939
@@ -8122,7 +8122,7 @@ msgstr "Tekerlekli Yürütücü II"
 #: data/base/messages/strings/names.txt:984
 #: data/mp/messages/strings/names.txt:1001
 msgid "AA Thermal Imaging Sensor"
-msgstr "AA Termal Hedefleyici Sensör"
+msgstr "AA Termal Hedefleme Algılayıcısı"
 
 #: data/base/messages/strings/names.txt:985
 #: data/mp/messages/strings/names.txt:1002
@@ -9924,8 +9924,9 @@ msgid "NORTHERN SECTOR"
 msgstr "KUZEY BÖLGESİ"
 
 #: data/base/sequenceaudio/cam3/c003.txa:5
+#, fuzzy
 msgid "Congratulations your successfull evacuation of Beta Base."
-msgstr "Başarılı bir şekildi Beta üssünü boşalttınız için tebrikler."
+msgstr "Başarılı bir şekildi Beta üssünü boşaltınız için tebrikler."
 
 #: data/base/sequenceaudio/cam3/c003.txa:8
 msgid "Dusk, December 3rd, 2100"
@@ -11205,7 +11206,7 @@ msgstr "Demir Silahı Yeniden Yükleme Süresi -15%"
 
 #: data/mp/messages/resmessagesall.rmsg:84
 msgid "Sensor Range +25%"
-msgstr "Sensör Görüş Mesafesi +25%"
+msgstr "Algılayıcı Görüş Mesafesi +25%"
 
 #: data/mp/messages/resmessagesall.rmsg:96
 msgid "Improved Thermal Emissions detection"
@@ -11213,7 +11214,7 @@ msgstr "Gelişmiş Termal Emisyon Tespit Sistemi"
 
 #: data/mp/messages/resmessagesall.rmsg:97
 msgid "Sensor Range +15%"
-msgstr "Sensör Görüş Mesafesi +15%"
+msgstr "Algılayıcı Görüş Mesafesi +15%"
 
 #: data/mp/messages/resmessagesall.rmsg:109
 msgid "Advanced Thermal Emissions detection"
@@ -11221,11 +11222,11 @@ msgstr "Gelişmiş Termal Emisyon Tespit Sistemi"
 
 #: data/mp/messages/resmessagesall.rmsg:110
 msgid "Sensor Range +10%"
-msgstr "Sensör Görüş Mesafesi+10%"
+msgstr "Algılayıcı Görüş Mesafesi+10%"
 
 #: data/mp/messages/resmessagesall.rmsg:135
 msgid "Radar detector tower detects enemy sensors"
-msgstr "Radar tespit edici kule düşman sensörlerini tespit eder"
+msgstr "Radar tespit edici kule düşman algılayıcılarını tespit eder"
 
 #: data/mp/messages/resmessagesall.rmsg:136
 msgid "Orders assigned indirect fire units to fire at the enemy sensors"
@@ -11277,7 +11278,7 @@ msgstr "Mekanik Tamir Yeteneğine Sahiptir"
 
 #: data/mp/messages/resmessagesall.rmsg:330
 msgid "Incendiary Howitzer may be assigned to a sensor"
-msgstr "Dönüşlü Obüs bir sensöre bağlanabilir"
+msgstr "Dönüşlü Obüs bir algılayıcıya bağlanabilir"
 
 #: data/mp/messages/resmessagesall.rmsg:369
 msgid "Plasmite Flame-thrower"
@@ -11339,12 +11340,12 @@ msgstr "Savaş Alanında Tam Görüntüyü Sağlar"
 
 #: data/mp/messages/resmessagesall.rmsg:501
 msgid "Does not offer sensor targeting"
-msgstr "Sensör Hedeflemesi Yapmaz"
+msgstr "Algılayıcı Hedeflemesi Yapmaz"
 
 #: data/mp/messages/resmessagesall.rmsg:512
 #: data/mp/messages/resmessagesall.rmsg:707
 msgid "Combines standard, counter battery and VTOL sensors"
-msgstr "Standart Bileşen-, CB ve VTOL sensörleri "
+msgstr "Standart Bileşen-, CB ve VTOL algılayıcıları "
 
 #: data/mp/messages/resmessagesall.rmsg:524
 msgid "New Advanced Weapon Available"
@@ -11543,7 +11544,7 @@ msgstr "Sığınak Yokedici Roketler Engerek Tekerlekler"
 
 #: data/mp/messages/strings/names.txt:189
 msgid "Sensor Turret Cobra Half-tracks"
-msgstr "Sensör Tareti Kobra Yarım Paletler"
+msgstr "Algılayıcı Tareti Kobra Yarım Paletler"
 
 #: data/mp/messages/strings/names.txt:194
 msgid "Mini-Rocket Array Cobra Half-tracks"
@@ -11805,11 +11806,11 @@ msgstr "Sığınak Yokedici Kobra Hovercraft"
 
 #: data/mp/messages/strings/names.txt:1520
 msgid "Sensor Upgrade Mk2"
-msgstr "Sensör Yükseltme Kdm2"
+msgstr "Algılayıcı Yükseltme Kdm2"
 
 #: data/mp/messages/strings/names.txt:1521
 msgid "Sensor Upgrade Mk3"
-msgstr "Sensör Yükseltme Kdm3"
+msgstr "Algılayıcı Yükseltme Kdm3"
 
 #: data/mp/messages/strings/names.txt:1522
 msgid "Vapor Turbine Generator Mk2"
@@ -11958,12 +11959,12 @@ msgstr "Uydu Bağlantı Merkezi"
 #: data/mp/messages/strings/names.txt:1701
 #: data/mp/messages/strings/names.txt:1703
 msgid "Wide Spectrum Sensor"
-msgstr "Geniş Spektrum Sensörü"
+msgstr "Geniş Spektrum Algılayıcı"
 
 #: data/mp/messages/strings/names.txt:1702
 #: data/mp/messages/strings/names.txt:1704
 msgid "Wide Spectrum Sensor Tower"
-msgstr "Geniş Spektrum Sensörü Kulesi"
+msgstr "Geniş Spektrum Algılayıcı Kulesi"
 
 #: data/mp/messages/strings/names.txt:1720
 #: data/mp/messages/strings/names.txt:1721
@@ -12198,12 +12199,12 @@ msgstr "Yerel Sistem"
 msgid "Enter password here"
 msgstr "Parolayı buraya gir"
 
-#: lib/netplay/netplay.c:3284
+#: lib/netplay/netplay.c:3286
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Konnte Lobbyserver-Namen nicht auflösen (%s)!"
 
-#: lib/netplay/netplay.c:3309
+#: lib/netplay/netplay.c:3312
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Lobi Sunucusu ile iletişim kurulamadı! TCP-Port %u u açıkmı?"
@@ -12451,11 +12452,11 @@ msgstr "Püsküllü Bela"
 
 #: src/design.c:1573
 msgid "Sensor Range"
-msgstr "Sensör'ün Görüş Alanı"
+msgstr "Algılayıcı'nın Görüş Alanı"
 
 #: src/design.c:1582
 msgid "Sensor Power"
-msgstr "Sensör Gücü"
+msgstr "Algılayıcı Gücü"
 
 #: src/design.c:1619
 msgid "ECM Power"
@@ -12617,9 +12618,9 @@ msgid "%s wanted to give you a %s but you have too many!"
 msgstr "%s Sana vermek isterim %s ama, Daha çok var!"
 
 #: src/droid.c:4647
-#, fuzzy, c-format
+#, c-format
 msgid "You wanted to give %s a %s but they have too many!"
-msgstr "%s Sana vermek isterim %s ama, Daha çok var!"
+msgstr "%s Size vermek isterim %s ama, Daha çok var!"
 
 #: src/frontend.c:97
 msgid "Single Player"
@@ -12910,12 +12911,14 @@ msgstr "Ekranı Çevir"
 
 #: src/frontend.c:1006
 #: src/frontend.c:1094
+#, fuzzy
 msgctxt "middle mouse button"
 msgid "Middle Button"
 msgstr "Orta Tuş"
 
 #: src/frontend.c:1010
 #: src/frontend.c:1089
+#, fuzzy
 msgctxt "right mouse button"
 msgid "Right Button"
 msgstr "Sağ Tuş"
@@ -13004,17 +13007,17 @@ msgstr "Bina inşası başarısız"
 #: src/hci.c:2105
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
-msgstr "Oyuncu %u Yeni binasını (Debugmenü) inşa etti: %s."
+msgstr "Oyuncu %u Yeni binasını (debug menü) inşa etti: %s."
 
 #: src/hci.c:2120
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
-msgstr "Oyuncu %u  (Debugmenü) yeni doğal maddesini oluşturdu: %s."
+msgstr "Oyuncu %u  (debug menü) yeni doğal maddesini oluşturdu: %s."
 
 #: src/hci.c:2141
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
-msgstr "Oyuncu %u  (Debugmenü) Yeni birimini oluşturdu: %s."
+msgstr "Oyuncu %u  (debug menü) Yeni birimini oluşturdu: %s."
 
 # Commander kann als Eigenname im Deutschen allerdings mit deutschem Plural stehen bleiben -Kreuvf
 #: src/hci.c:3716
@@ -13358,7 +13361,7 @@ msgstr "Hadi ne görüyorsan bizde görelim!"
 
 #: src/keybind.c:212
 msgid "Fine, weapon & sensor display is off!"
-msgstr "İyi, Silah Sensör ışıkları kapalı!"
+msgstr "İyi, Silah & algılayıcı ışıkları kapalı!"
 
 #: src/keybind.c:344
 #, c-format
@@ -13689,7 +13692,7 @@ msgstr "Önceki Mesajın Görüntüde Konumu"
 
 #: src/keymap.c:307
 msgid "Toggle Sensor display"
-msgstr "Sensör Görünüşü Anahtarı"
+msgstr "Algılayıcı Görünüşü Anahtarı"
 
 #: src/keymap.c:311
 msgid "Assign Group 0"
@@ -13909,7 +13912,7 @@ msgstr "Sonraki Kamyonu Göster"
 
 #: src/keymap.c:376
 msgid "View next Sensor Unit"
-msgstr "Sonraki Sensör Birimini Göster"
+msgstr "Sonraki Algılayıcı Birimini Göster"
 
 #: src/keymap.c:377
 msgid "View next Commander"
@@ -13949,11 +13952,11 @@ msgstr "Bir Sinyal Bırak"
 
 #: src/keymap.c:401
 msgid "Sensor display On"
-msgstr "Sensör Görünüşü Açık"
+msgstr "Algılayıcı Görünüşü Açık"
 
 #: src/keymap.c:402
 msgid "Sensor display Off"
-msgstr "Sensör Görünüşü Kapalı"
+msgstr "Algılayıcı Görünüşü Kapalı"
 
 #: src/keymap.c:403
 msgid "Toggles shadows"
@@ -14481,25 +14484,25 @@ msgstr "\"Takım Kilidi\"-Modu Aktif"
 msgid "The host has kicked %s from the game!"
 msgstr "Kurucu %s isimli oyuncuyu oyundan attı!"
 
-#: src/multiint.c:2880
+#: src/multiint.c:2885
 msgid "Host is Starting Game"
 msgstr "Kurucu oyunu başlatıyor"
 
-#: src/multiint.c:3484
+#: src/multiint.c:3487
 msgid "Players"
 msgstr "Oyuncular"
 
-#: src/multiint.c:3602
+#: src/multiint.c:3605
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Harita Gönderiliyor: %d%%"
 
-#: src/multiint.c:3611
+#: src/multiint.c:3614
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Harita: %d%% indirildi"
 
-#: src/multiint.c:3637
+#: src/multiint.c:3640
 msgid "HOST"
 msgstr "KURUCU"
 
@@ -14806,12 +14809,12 @@ msgstr "KAZANDIN!"
 msgid "YOU WERE DEFEATED!"
 msgstr "YENİLDİN!"
 
-#: src/scriptfuncs.c:10089
+#: src/scriptfuncs.c:10087
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Sinyal alındı: %s !"
 
-#: src/scriptfuncs.c:10135
+#: src/scriptfuncs.c:10133
 #, c-format
 msgid "Beacon %d"
 msgstr "Sinyal %d"
@@ -14834,15 +14837,16 @@ msgstr "Hiç Kamyon birimi bulunamadı!"
 
 #: src/selection.c:440
 msgid "Unable to locate any Sensor Units!"
-msgstr "Hiç Sensör birimi bulunamadı!"
+msgstr "Hiç Algılayıcı birimi bulunamadı!"
 
 #: src/selection.c:443
 msgid "Unable to locate any Commanders!"
 msgstr "Hiç Komutan birimi bulunamadı!"
 
 #: src/structure.c:2748
+#, fuzzy
 msgid "Control Limit Reached - Production Halted"
-msgstr "Nüfüs Limitine Ulaştın - Üretim Durduruldu"
+msgstr "Komuta Kontrol Limitine Ulaştın - Üretim Durduruldu"
 
 # nix Gruppe! -Kreuvf
 #: src/structure.c:5959
@@ -14944,6 +14948,33 @@ msgstr "Sürüm %s%s%s%s"
 
 #~ msgid "Super Transport Body"
 #~ msgstr "Süper Taşıyıcı Beden"
+
+#~ msgid "Out of sync"
+#~ msgstr "Senkronize edilmemiş"
+
+#~ msgid "2 trucks ordered to build Oil Derrick"
+#~ msgstr "2 kamyona bir Petrol Kuyusu inşatı emri verildi."
+
+#~ msgid "%d trucks ordered to build Oil Derrick"
+#~ msgstr "%d kamyon'lara bir Petrol Kuyusu inşatı emri verildi."
+
+#~ msgid "GAME SAVED: "
+#~ msgstr "OYUN KAYDEDİLDİ :"
+
+#~ msgid "Player %u is cheating (debug menu) him/herself a new droid."
+#~ msgstr "Oyuncu %u (debug menü) Yeni birimini oluşturdu."
+
+#~ msgid "Tactical UI (Target Origin Icon): Show"
+#~ msgstr "Taktiksel UI (Hedef Kaynak Simgesi): Göster"
+
+#~ msgid "Tactical UI (Target Origin Icon): Hide"
+#~ msgstr "Taktiksel UI (Hedef Kaynak Simgesi): Gizle"
+
+#~ msgid "Build Progress"
+#~ msgstr "Bina Devam ediyor"
+
+#~ msgid "Construction Progress"
+#~ msgstr "İnşaat Devam ediyor"
 
 #~ msgid "3 players"
 #~ msgstr "2 Oyuncu"
