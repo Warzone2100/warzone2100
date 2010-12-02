@@ -1083,22 +1083,32 @@ void processMouseClickInput(void)
 }
 
 
-static void calcScroll(float *y, float *dydt, float accel, float targetVelocity, float dt)
+static void calcScroll(float *y, float *dydt, float accel, float decel, float targetVelocity, float dt)
 {
-	double tMid = dt;
+	double tMid;
 
-	if (accel * *dydt > accel * targetVelocity)
+	if (targetVelocity < *dydt)
 	{
 		accel = -accel;
+		decel = -decel;
 	}
 
-	if ((*dydt - targetVelocity) * (*dydt + accel*dt - targetVelocity) < 0)
-	{
-		tMid = (targetVelocity - *dydt) / accel;
-	}
+	// Decelerate if needed.
+	tMid = (0 - *dydt) / decel;
+	CLIP(tMid, 0, dt);
+	*y += *dydt * tMid + decel/2 * tMid*tMid;
+	*dydt += decel * tMid;
+	dt -= tMid;
 
-	*y += *dydt * tMid + accel/2 * tMid*tMid + targetVelocity * (dt - tMid);
+	// Accelerate if needed.
+	tMid = (targetVelocity - *dydt) / accel;
+	CLIP(tMid, 0, dt);
+	*y += *dydt * tMid + accel/2 * tMid*tMid;
 	*dydt += accel * tMid;
+	dt -= tMid;
+
+	// Continue at target velocity.
+	*y += *dydt * dt;
 }
 
 void scroll(void)
@@ -1139,8 +1149,8 @@ void scroll(void)
 
 	scrollStepLeftRight = 0;
 	scrollStepUpDown = 0;
-	calcScroll(&scrollStepLeftRight, &scrollSpeedLeftRight, (scrollDirLeftRight != 0? 1 : 2) * scaled_accel, scrollDirLeftRight * scaled_max_scroll_speed, realTimeAdjustedIncrement(1));
-	calcScroll(&scrollStepUpDown,    &scrollSpeedUpDown,    (scrollDirUpDown    != 0? 1 : 2) * scaled_accel, scrollDirUpDown    * scaled_max_scroll_speed, realTimeAdjustedIncrement(1));
+	calcScroll(&scrollStepLeftRight, &scrollSpeedLeftRight, scaled_accel, 2*scaled_accel, scrollDirLeftRight * scaled_max_scroll_speed, realTimeAdjustedIncrement(1));
+	calcScroll(&scrollStepUpDown,    &scrollSpeedUpDown,    scaled_accel, 2*scaled_accel, scrollDirUpDown    * scaled_max_scroll_speed, realTimeAdjustedIncrement(1));
 
 	/* Get x component of movement */
 	xDif = iCosR(-player.r.y, scrollStepLeftRight) + iSinR(-player.r.y, scrollStepUpDown);
