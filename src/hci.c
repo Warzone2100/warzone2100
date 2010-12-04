@@ -184,7 +184,6 @@ BOOL Refreshing = false;
 #define IDOPT_ZALIGN		1042		// The z-align button
 #define IDOPT_IVISFORM		1043		// iViS engine form
 #define IDOPT_IVISLABEL		1044		// iViS form label
-#define IDOPT_IVISSHADERS	1045		// iViS shaders button
 #define IDOPT_IVISLIGHTING	1046		// iViS lighting button
 
 /* Edit screen IDs */
@@ -1447,27 +1446,6 @@ static void intProcessOptions(UDWORD id)
 			intRemoveOptions();
 			intMode = INT_NORMAL;
 //			widgSetButtonState(psWScreen, IDRET_OPTIONS, 0);
-			break;
-		case IDOPT_IVISSHADERS:
-			{
-				bool status = pie_GetShadersStatus();
-				pie_SetShadersStatus(!status);
-				if (status != pie_GetShadersStatus())
-				{
-					if (!status)
-					{
-						widgSetButtonState(psWScreen, IDOPT_IVISSHADERS, WBUT_CLICKLOCK);
-					}
-					else
-					{
-						widgSetButtonState(psWScreen, IDOPT_IVISSHADERS, 0);
-					}
-				}
-				else
-				{
-					widgSetButtonState(psWScreen, IDOPT_IVISSHADERS, WBUT_DISABLE);
-				}
-			}
 			break;
 		case IDOPT_IVISLIGHTING:
 			if (pie_GetLightingState())
@@ -4199,25 +4177,6 @@ BOOL intAddOptions(void)
 	if (!widgAddLabel(psWScreen, &sLabInit))
 	{
 		return false;
-	}
-
-	/* Add iViS shaders button */
-	sButInit.formID = IDOPT_IVISFORM;
-	sButInit.id = IDOPT_IVISSHADERS;
-	sButInit.x = OPT_BUTWIDTH + OPT_GAP * 2;
-	sButInit.y = OPT_GAP;
-	sButInit.width = OPT_BUTWIDTH;
-	sButInit.height = OPT_BUTHEIGHT;
-	sButInit.FontID = font_regular;
-	sButInit.pText = "Shaders";
-	sButInit.pTip = "Toggles Shaders/FF mode.";
-	if (!widgAddButton(psWScreen, &sButInit))
-	{
-		return false;
-	}
-	if (pie_GetShadersStatus())
-	{
-		widgSetButtonState(psWScreen, IDOPT_IVISSHADERS, WBUT_CLICKLOCK);
 	}
 
 	/* Add iViS lighting button */

@@ -1,7 +1,9 @@
+#version 120
 #pragma debug(on)
-#ifdef FOG_ENABLED
+
 varying float vertexDistance;
-#endif
+
+uniform int fogEnabled;
 
 void main(void)
 {
@@ -14,8 +16,9 @@ void main(void)
 	// Translate every vertex according to the Model View and Projection Matrix
 	gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
 	
-#ifdef FOG_ENABLED
-	// Remember vertex distance
-	vertexDistance = gl_Position.z;
-#endif
+	if (fogEnabled > 0)
+	{
+		// Remember vertex distance
+		vertexDistance = gl_Position.z;
+	}
 }

@@ -90,8 +90,7 @@ typedef enum
 typedef enum
 {
 	SHADER_NONE,
-	SHADER_TCMASK,
-	SHADER_TCMASK_FOGGED,
+	SHADER_COMPONENT,
 	SHADER_MAX
 } SHADER_MODE;
 
@@ -136,12 +135,10 @@ extern void pie_SetTranslucencyMode(TRANSLUCENCY_MODE transMode);
 /* Actually in piestate.c */
 
 // Shaders control center
-extern bool pie_GetShadersStatus(void);
-extern void pie_SetShadersStatus(bool);
 bool pie_LoadShaders(void);
 // Actual shaders (we do not want to export these calls)
 void pie_DeactivateShader(void);
-void pie_ActivateShader_TCMask(PIELIGHT teamcolour, SDWORD maskpage);
+void pie_ActivateShader_TCMask(PIELIGHT teamcolour, int maskpage);
 
 /* Actually in piedraw.c */
 
