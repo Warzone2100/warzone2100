@@ -679,9 +679,7 @@ void WzMainWindow::close()
 int wzInit(int argc, char *argv[], int fsaa, bool vsync, int w, int h, bool fullscreen)
 {
 	char buf[256];
-	QGL::setPreferredPaintEngine(QPaintEngine::OpenGL); /* Workaround for incorrect text rendering on
-														 * 	many platforms.
-														 */
+	QGL::setPreferredPaintEngine(QPaintEngine::OpenGL); // Workaround for incorrect text rendering on nany platforms.
 	QApplication app(argc, argv);
 
 	// Setting up OpenGL
@@ -698,6 +696,11 @@ int wzInit(int argc, char *argv[], int fsaa, bool vsync, int w, int h, bool full
 		format.setSamples(fsaa);
 	}
 	WzMainWindow mainwindow(format);
+	if (!mainwindow.context()->isValid())
+	{
+		QMessageBox::critical(NULL, "Oops!", "Warzone2100 failed to create an OpenGL context. This probably means that your graphics drivers are out of date. Try updating them!");
+		return EXIT_FAILURE;
+	}
 	if (fullscreen)
 	{
 		QDesktopWidget *desktop = qApp->desktop();
@@ -724,7 +727,7 @@ int wzInit(int argc, char *argv[], int fsaa, bool vsync, int w, int h, bool full
 	if (finalInitialization() != 0)
 	{
 		debug(LOG_ERROR, "Failed to carry out final initialization.");
-		return -1;
+		return EXIT_FAILURE;
 	}
 
 	debug(LOG_MAIN, "Entering main loop");
