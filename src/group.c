@@ -60,7 +60,7 @@ void grpShutDown(void)
 BOOL grpCreate(DROID_GROUP	**ppsGroup)
 {
 	ASSERT(grpInitialized, "Group code not initialized yet");
-	*ppsGroup = calloc(1, sizeof(DROID_GROUP));
+	*ppsGroup = (DROID_GROUP *)calloc(1, sizeof(DROID_GROUP));
 	if (*ppsGroup == NULL)
 	{
 		debug(LOG_ERROR, "grpCreate: Out of memory");

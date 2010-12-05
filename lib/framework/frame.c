@@ -45,7 +45,7 @@ static const enum CURSOR_TYPE cursor_type =
 
 /* Linux specific stuff */
 
-static CURSOR currentCursor = ~(CURSOR)0;
+static CURSOR currentCursor = CURSOR_MAX;
 static SDL_Cursor* aCursors[CURSOR_MAX];
 
 bool selfTest = false;

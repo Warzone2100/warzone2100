@@ -335,7 +335,7 @@ char *UTF16toUTF8(const utf_16_char *unicode_string, size_t *nbytes)
 	const size_t utf8_length = utf16_utf8_buffer_length(unicode_string);
 
 	// Allocate memory to hold the UTF-8 encoded string (plus a terminating nul char)
-	char* utf8_string = malloc(utf8_length + 1);
+	char* utf8_string = (char *)malloc(utf8_length + 1);
 	char* curOutPos = utf8_string;
 
 	if (utf8_string == NULL)
@@ -398,7 +398,7 @@ utf_16_char *UTF8toUTF16(const char* utf8_string, size_t *nbytes)
 	const size_t unicode_length = utf8_as_utf16_buf_size(utf8_string);
 
 	// Allocate memory to hold the UTF-16 encoded string (plus a terminating nul)
-	utf_16_char* unicode_string = malloc(sizeof(utf_16_char) * (unicode_length + 1));
+	utf_16_char* unicode_string = (utf_16_char *)malloc(sizeof(utf_16_char) * (unicode_length + 1));
 	utf_16_char* curOutPos = unicode_string;
 
 	if (unicode_string == NULL)
@@ -463,7 +463,7 @@ char *UTF32toUTF8(const utf_32_char *unicode_string, size_t *nbytes)
 	const size_t utf8_length = utf32_utf8_buffer_length(unicode_string);
 
 	// Allocate memory to hold the UTF-8 encoded string (plus a terminating nul char)
-	char* utf8_string = malloc(utf8_length + 1);
+	char* utf8_string = (char *)malloc(utf8_length + 1);
 	char* curOutPos = utf8_string;
 
 	if (utf8_string == NULL)
@@ -495,7 +495,7 @@ utf_32_char *UTF8toUTF32(const char *utf8_string, size_t *nbytes)
 	const size_t unicode_length = UTF8CharacterCount(utf8_string);
 
 	// Allocate memory to hold the UTF-32 encoded string (plus a terminating nul)
-	utf_32_char* unicode_string = malloc(sizeof(utf_32_char) * (unicode_length + 1));
+	utf_32_char* unicode_string = (utf_32_char *)malloc(sizeof(utf_32_char) * (unicode_length + 1));
 	utf_32_char* curOutPos = unicode_string;
 
 	if (unicode_string == NULL)

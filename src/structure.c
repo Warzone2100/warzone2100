@@ -417,7 +417,7 @@ static const char* getStructName(const STRUCTURE_STATS* psStruct)
 }
 
 /*returns the structure strength based on the string name passed in */
-static UBYTE getStructStrength(const char *pStrength)
+static STRUCT_STRENGTH getStructStrength(const char *pStrength)
 {
 	if (!strcmp(pStrength, "SOFT"))
 	{
@@ -436,7 +436,7 @@ static UBYTE getStructStrength(const char *pStrength)
 		return STRENGTH_BUNKER;
 	}
 
-	return INVALID_STRENGTH;
+	return NUM_STRUCT_STRENGTH;  // Invalid strength.
 }
 
 static void initModulePIEs(char *PIEName,UDWORD i,STRUCTURE_STATS *psStructure)
@@ -631,7 +631,7 @@ BOOL loadStructureStats(const char *pStructData, UDWORD bufferSize)
 
 		//set the struct strength
 		psStructure->strength = getStructStrength(strength);
-		if (psStructure->strength == INVALID_STRENGTH)
+		if (psStructure->strength == NUM_STRUCT_STRENGTH)
 		{
 			debug(LOG_ERROR, "Unknown structure strength for %s", getStatName(psStructure));
 			return false;
@@ -745,7 +745,7 @@ BOOL loadStructureStats(const char *pStructData, UDWORD bufferSize)
 	//allocate the structureLimits structure
 	for (player = 0; player < MAX_PLAYERS; player++)
 	{
-		asStructLimits[player] = malloc(sizeof(STRUCTURE_LIMITS) * numStructureStats);
+		asStructLimits[player] = (STRUCTURE_LIMITS *)malloc(sizeof(STRUCTURE_LIMITS) * numStructureStats);
 		if (asStructLimits[player] == NULL)
 		{
 			debug( LOG_FATAL, "Unable to allocate structure limits" );
@@ -1024,7 +1024,7 @@ BOOL loadStructureStrengthModifiers(const char *pStrengthModData, UDWORD bufferS
 		}
 		//get the propulsion inc
 		strengthInc = getStructStrength(strengthName);
-		if (strengthInc == INVALID_STRENGTH)
+		if (strengthInc == NUM_STRUCT_STRENGTH)
 		{
 			debug(LOG_ERROR, "Invalid Strength type - %s", strengthName);
 			return false;
@@ -2144,7 +2144,7 @@ STRUCTURE *buildBlueprint(STRUCTURE_STATS *psStats, int32_t x, int32_t y, uint16
 	ASSERT_OR_RETURN(NULL, psStats != NULL, "No blueprint stats");
 	ASSERT_OR_RETURN(NULL, psStats->pIMD != NULL, "No blueprint model for %s", getStatName(psStats));
 
-	blueprint = malloc(sizeof(STRUCTURE));
+	blueprint = (STRUCTURE *)malloc(sizeof(STRUCTURE));
 	// construct the fake structure
 	psStats = (STRUCTURE_STATS *)psStats;
 	blueprint->pStructureType = psStats;
@@ -2160,7 +2160,7 @@ STRUCTURE *buildBlueprint(STRUCTURE_STATS *psStats, int32_t x, int32_t y, uint16
 	blueprint->selected = false;
 
 	blueprint->timeLastHit = 0;
-	blueprint->lastHitWeapon = UDWORD_MAX;  // Noone attacked the blueprint. Do not render special effects.
+	blueprint->lastHitWeapon = WSC_NUM_WEAPON_SUBCLASSES;  // Noone attacked the blueprint. Do not render special effects.
 
 	blueprint->numWeaps = 0;
 	blueprint->asWeaps[0].nStat = 0;
@@ -2203,7 +2203,7 @@ static BOOL setFunctionality(STRUCTURE	*psBuilding, STRUCTURE_TYPE functionType)
 		case REF_REPAIR_FACILITY:
 		case REF_REARM_PAD:
 			// Allocate space for the buildings functionality
-			psBuilding->pFunctionality = calloc(1, sizeof(*psBuilding->pFunctionality));
+			psBuilding->pFunctionality = (FUNCTIONALITY *)calloc(1, sizeof(*psBuilding->pFunctionality));
 			ASSERT_OR_RETURN(false, psBuilding != NULL, "Out of memory");
 			break;
 
@@ -2674,7 +2674,7 @@ static BOOL structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 			uint32_t diff = newState ^ psNewDroid->secondaryOrder;
 			if ((diff & DSS_ARANGE_MASK) != 0)
 			{  // TODO Should either do this for all states, or synchronise factory.secondaryOrder.
-				secondarySetState(psNewDroid, DSO_ATTACK_RANGE, newState & DSS_ARANGE_MASK);
+				secondarySetState(psNewDroid, DSO_ATTACK_RANGE, (SECONDARY_STATE)(newState & DSS_ARANGE_MASK));
 			}
 		}
 

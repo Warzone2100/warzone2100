@@ -195,7 +195,7 @@ void recvOptions(NETQUEUE queue)
 	// If there were any changes allocate memory for them
 	if (ingame.numStructureLimits)
 	{
-		ingame.pStructureLimits = malloc(ingame.numStructureLimits * sizeof(MULTISTRUCTLIMITS));
+		ingame.pStructureLimits = (MULTISTRUCTLIMITS *)malloc(ingame.numStructureLimits * sizeof(MULTISTRUCTLIMITS));
 	}
 
 	for (i = 0; i < ingame.numStructureLimits; i++)
@@ -355,7 +355,7 @@ BOOL multiShutdown(void)
 // copy templates from one player to another.
 BOOL addTemplateToList(DROID_TEMPLATE *psNew, DROID_TEMPLATE **ppList)
 {
-	DROID_TEMPLATE *psTempl = malloc(sizeof(DROID_TEMPLATE));
+	DROID_TEMPLATE *psTempl = (DROID_TEMPLATE *)malloc(sizeof(DROID_TEMPLATE));
 
 	if (psTempl == NULL)
 	{

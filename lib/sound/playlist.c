@@ -104,7 +104,7 @@ bool PlayList_Read(const char* path)
 			continue;
 		}
 
-		song = malloc(sizeof(*songList));
+		song = (WZ_TRACK *)malloc(sizeof(*songList));
 		if (song == NULL)
 		{
 			debug(LOG_FATAL, "Out of memory!");

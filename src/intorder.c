@@ -108,7 +108,7 @@ typedef struct {
 	SECONDARY_ORDER Order;					// The droid order.
 	UDWORD StateMask;						// It's state mask.
 	ORDBUTTONTYPE ButType;					// The group type.
-	ORDBUTTONJUSTIFY ButJustify;			// Button justification.
+	unsigned ButJustify;                            // Button justification. Type ORDBUTTONJUSTIFY, possibly ored with ORD_JUSTIFY_NEWLINE.
 	UDWORD ButBaseID;						// Starting widget ID for buttons
 	UWORD NumButs;							// Number of buttons ( = number of states )
 	UWORD AcNumButs;						// Actual bumber of buttons enabled.
@@ -116,7 +116,7 @@ typedef struct {
 	UWORD ButGreyID[MAX_ORDER_BUTS];		// Image ID's for each button ( greyed ).
 	UWORD ButHilightID[MAX_ORDER_BUTS];		// Image ID's for each button ( hilight overlay ).
 	UWORD ButTips[MAX_ORDER_BUTS];			// Tip string id for each button.
-	SECONDARY_STATE States[MAX_ORDER_BUTS];	// Order state relating to each button.
+	unsigned States[MAX_ORDER_BUTS];                // Order state relating to each button, combination of SECONDARY_STATEs ored together.
 } ORDERBUTTONS;
 
 
@@ -590,13 +590,13 @@ static BOOL BuildStructureOrderList(STRUCTURE *psStructure)
 
 // return the state for an order for all the units selected
 // if there are multiple states then don't return a state
-static SDWORD GetSecondaryStates(SECONDARY_ORDER sec)
+static SECONDARY_STATE GetSecondaryStates(SECONDARY_ORDER sec)
 {
 	SDWORD	i;
 	SECONDARY_STATE state, currState;
 	BOOL	bFirst;
 
-	state = 0;
+	state = (SECONDARY_STATE)0;
 	bFirst = true;
 	if (psSelectedFactory)
 	{
@@ -617,7 +617,7 @@ static SDWORD GetSecondaryStates(SECONDARY_ORDER sec)
 			}
 			else if (state != currState)
 			{
-				state = 0;
+				state = (SECONDARY_STATE)0;
 			}
 		}
 	}
@@ -1066,7 +1066,7 @@ void intRunOrder(void)
 // Set the secondary order state for all currently selected droids. And Factory (if one selected)
 // Returns true if successful.
 //
-static BOOL SetSecondaryState(SECONDARY_ORDER sec, SECONDARY_STATE State)
+static BOOL SetSecondaryState(SECONDARY_ORDER sec, unsigned State)
 {
 	UWORD i;
 
@@ -1075,7 +1075,7 @@ static BOOL SetSecondaryState(SECONDARY_ORDER sec, SECONDARY_STATE State)
 		{
 			//Only set the state if it's not a transporter.
 			if(SelectedDroids[i]->droidType != DROID_TRANSPORTER) {
-				if(!secondarySetState(SelectedDroids[i], sec, State)) {
+				if(!secondarySetState(SelectedDroids[i], sec, (SECONDARY_STATE)State)) {
 					return false;
 				}
 			}
@@ -1085,7 +1085,7 @@ static BOOL SetSecondaryState(SECONDARY_ORDER sec, SECONDARY_STATE State)
 	// set the Factory settings
 	if (psSelectedFactory)
 	{
-		if (!setFactoryState(psSelectedFactory, sec, State))
+		if (!setFactoryState(psSelectedFactory, sec, (SECONDARY_STATE)State))
 		{
 			return false;
 		}

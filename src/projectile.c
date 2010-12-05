@@ -378,7 +378,7 @@ int32_t projCalcIndirectVelocities(const int32_t dx, const int32_t dz, int32_t v
 
 BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Vector3i target, BASE_OBJECT *psTarget, BOOL bVisible, int weapon_slot)
 {
-	PROJECTILE		*psProj = malloc(sizeof(PROJECTILE));
+	PROJECTILE		*psProj = (PROJECTILE *)malloc(sizeof(PROJECTILE));
 	int32_t                 dx, dy, dz;
 	uint32_t                dxy;
 	WEAPON_STATS *psStats = &asWeaponStats[psWeap->nStat];
@@ -655,11 +655,8 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 	Vector3i nextPos;
 	int32_t targetDistance, currentDistance;
 	BASE_OBJECT *psTempObj, *closestCollisionObject = NULL;
-#ifdef WZ_CC_MSVC // Such hacks are assert-hell for MSVC, so avoid them..
-	SPACETIME closestCollisionSpacetime; 
-#else
-	SPACETIME closestCollisionSpacetime = closestCollisionSpacetime;  // Dummy initialisation.
-#endif
+	SPACETIME closestCollisionSpacetime;
+	memset(&closestCollisionSpacetime, 0, sizeof(SPACETIME));  // Squelch uninitialised warning.
 
 	CHECK_PROJECTILE(psProj);
 
@@ -1545,7 +1542,7 @@ static void proj_checkBurnDamage( BASE_OBJECT *apsList, PROJECTILE *psProj)
 							damageToDo, psCurr->id, psCurr->player);
 
 					//Watermelon:just assume the burn damage is from FRONT
-					relativeDamage = objectDamage(psCurr, damageToDo, psStats->weaponClass,psStats->weaponSubClass, 0);
+					relativeDamage = objectDamage(psCurr, damageToDo, psStats->weaponClass,psStats->weaponSubClass, HIT_SIDE_FRONT);
 
 					psCurr->burnDamage += damageToDo;
 

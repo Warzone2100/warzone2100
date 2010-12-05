@@ -2272,7 +2272,7 @@ CALLBACK_SYMBOL asCallbackTable[] =
 		scrCBVTOLRetarget,	2, 	{ VAL_INT, VAL_REF| (INTERP_TYPE)ST_DROID } },
 
 	/* This entry marks the end of the callback list */
-	{ "CALLBACK LIST END", 0, NULL, 0, {VAL_VOID} }
+	{ "CALLBACK LIST END", (TRIGGER_TYPE)0, NULL, 0, {VAL_VOID} }
 };
 
 
@@ -2305,7 +2305,7 @@ TYPE_EQUIV asEquivTable[] =
 	{ (INTERP_TYPE)ST_STRUCTURESTAT,1,	{ (INTERP_TYPE)ST_POINTER_STRUCTSTAT, } },
 
 	/* This marks the end of the equivalence list */
-	{ (INTERP_TYPE)0, 0, {0} }
+	{ (INTERP_TYPE)0, 0, {(INTERP_TYPE)0} }
 };
 
 

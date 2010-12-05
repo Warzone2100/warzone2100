@@ -148,7 +148,7 @@ BOOL resizeRadar(void)
 	radarTexWidth = scrollMaxX - scrollMinX;
 	radarTexHeight = scrollMaxY - scrollMinY;
 	radarBufferSize = radarTexWidth * radarTexHeight * sizeof(UDWORD);
-	radarBuffer = malloc(radarBufferSize);
+	radarBuffer = (uint32_t *)malloc(radarBufferSize);
 	if (radarBuffer == NULL)
 	{
 		debug(LOG_FATAL, "Out of memory!");

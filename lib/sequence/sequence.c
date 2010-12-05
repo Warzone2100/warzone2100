@@ -220,7 +220,7 @@ static void open_audio(void)
 	float volume = 1.0;
 
 	audiodata.audiofd_fragsize = (((videodata.vi.channels * 16) / 8) * videodata.vi.rate);
-	audiobuf = malloc(audiodata.audiofd_fragsize);
+	audiobuf = (ogg_int16_t *)malloc(audiodata.audiofd_fragsize);
 
 	// FIX ME:  This call will fail, since we have, most likely, already
 	// used up all available sources late in the game!
@@ -284,7 +284,7 @@ static double getRelativeTime(void)
  */
 static void Allocate_videoFrame(void)
 {
-	RGBAframe = malloc(videodata.ti.frame_width * videodata.ti.frame_height * 4);
+	RGBAframe = (char *)malloc(videodata.ti.frame_width * videodata.ti.frame_height * 4);
 }
 
 static int texture_width = 512;
@@ -673,7 +673,7 @@ bool seq_Play(const char* filename)
 	/* open video */
 	if (theora_p)
 	{
-		char *blackframe = calloc(1, texture_width * texture_height * 4);
+		char *blackframe = (char *)calloc(1, texture_width * texture_height * 4);
 		if (videodata.ti.frame_width > texture_width ||
 				videodata.ti.frame_height > texture_height)
 		{

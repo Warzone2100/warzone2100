@@ -71,7 +71,7 @@ static inline MESSAGE* createMessage(MESSAGE_TYPE msgType, UDWORD player)
 	}
 
 	// Allocate memory for the message, and on failure return a NULL pointer
-	newMsg = malloc(sizeof(MESSAGE));
+	newMsg = (MESSAGE *)malloc(sizeof(MESSAGE));
 	ASSERT(newMsg, "Out of memory");
 	if (newMsg == NULL)
 	{
@@ -532,7 +532,7 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 		//allocate space for text strings
 		if (psViewData->numText)
 		{
-			psViewData->ppTextMsg = malloc(psViewData->numText * sizeof(char *));
+			psViewData->ppTextMsg = (char const **)malloc(psViewData->numText * sizeof(char *));
 		}
 
 		//read in the data for the text strings
@@ -552,7 +552,7 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 		}
 
 		sscanf(pViewMsgData, ",%d%n", &readint, &cnt);
-		psViewData->type = readint;
+		psViewData->type = (VIEW_TYPE)readint;
 		pViewMsgData += cnt;
 
 		//allocate data according to type
@@ -735,7 +735,7 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 				audioName[0] = '\0';
 				sscanf( pViewMsgData, ", %d,%d,%d,%[^','],%d%n", &LocX, &LocY, &LocZ,
 						audioName, &tmp, &cnt);
-				proxType = tmp;
+				proxType = (PROX_TYPE)tmp;
 			}
 			pViewMsgData += cnt;
 

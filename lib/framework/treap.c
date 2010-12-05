@@ -144,7 +144,7 @@ bool treapAdd(TREAP_NODE** psTreap, const char* key, const char* string)
 	 */
 	const size_t key_size    = strlen(key)    + 1;
 	const size_t string_size = strlen(string) + 1;
-	TREAP_NODE * const psNew = malloc(sizeof(*psNew) + key_size + string_size);
+	TREAP_NODE * const psNew = (TREAP_NODE *)malloc(sizeof(*psNew) + key_size + string_size);
 
 	if (psNew == NULL)
 	{

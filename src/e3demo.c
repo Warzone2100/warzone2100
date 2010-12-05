@@ -125,7 +125,7 @@ PROPULSION_STATS	*psPropStats;
 		else
 		{
 			/* We're off hunting droids */
-			type = rand() % SEEK_LAST;
+			type = rand()%2 == 0? SEEK_DROID : SEEK_TARGET;
 		}
 		/* Check which */
 		switch (type)

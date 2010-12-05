@@ -342,7 +342,7 @@ static AUDIO_SAMPLE *audio_QueueSample( SDWORD iTrack )
 		return NULL;
 	}
 
-	psSample = calloc(1, sizeof(AUDIO_SAMPLE));
+	psSample = (AUDIO_SAMPLE *)calloc(1, sizeof(AUDIO_SAMPLE));
 	if ( psSample == NULL )
 	{
 		debug(LOG_ERROR, "audio_QueueSample: Out of memory");
@@ -749,7 +749,7 @@ static BOOL audio_Play3DTrack( SDWORD iX, SDWORD iY, SDWORD iZ, int iTrack, void
 		return false;
 	}
 
-	psSample = malloc(sizeof(AUDIO_SAMPLE));
+	psSample = (AUDIO_SAMPLE *)malloc(sizeof(AUDIO_SAMPLE));
 	if ( psSample == NULL )
 	{
 		debug(LOG_ERROR, "audio_Play3DTrack: Out of memory");
@@ -960,7 +960,7 @@ void audio_PlayTrack( int iTrack )
 	}
 
 	// Allocate a sample
-	psSample = malloc(sizeof(AUDIO_SAMPLE));
+	psSample = (AUDIO_SAMPLE *)malloc(sizeof(AUDIO_SAMPLE));
 	if ( psSample == NULL )
 	{
 		debug(LOG_ERROR, "audio_PlayTrack: Out of memory");

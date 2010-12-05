@@ -11323,7 +11323,7 @@ BOOL scrAssembleWeaponTemplate(void)
 		return false;
 	}
 
-	pNewTemplate  = malloc(sizeof(DROID_TEMPLATE));
+	pNewTemplate = (DROID_TEMPLATE *)malloc(sizeof(DROID_TEMPLATE));
 	if (pNewTemplate == NULL)
 	{
 		debug(LOG_ERROR, "pNewTemplate: Out of memory");

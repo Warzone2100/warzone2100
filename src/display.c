@@ -87,7 +87,7 @@ struct	_dragBox dragBox3D,wallDrag;
 
 extern char DROIDDOING[512];		// holds the string on what the droid is doing
 
-UDWORD	arnMPointers[POSSIBLE_TARGETS][POSSIBLE_SELECTIONS] =
+static const CURSOR arnMPointers[POSSIBLE_TARGETS][POSSIBLE_SELECTIONS] =
 {
 // empty terrain tile
 {CURSOR_MOVE,CURSOR_MOVE,CURSOR_MOVE,CURSOR_MOVE,CURSOR_MOVE,CURSOR_MOVE,CURSOR_MOVE,CURSOR_MOVE,CURSOR_MOVE,

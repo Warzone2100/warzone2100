@@ -305,7 +305,7 @@ bool ParseCommandLineEarly(int argc, const char** argv)
 	/* loop through command line */
 	while ((iOption = poptGetNextOpt(poptCon)) > 0 || iOption == POPT_ERROR_BADOPT)
 	{
-		CLI_OPTIONS option = iOption;
+		CLI_OPTIONS option = (CLI_OPTIONS)iOption;
 		const char* token;
 
 		if (iOption == POPT_ERROR_BADOPT)
@@ -393,7 +393,7 @@ bool ParseCommandLine(int argc, const char** argv)
 	while ((iOption = poptGetNextOpt(poptCon)) > 0)
 	{
 		const char* token;
-		CLI_OPTIONS option = iOption;
+		CLI_OPTIONS option = (CLI_OPTIONS)iOption;
 
 		switch (option)
 		{

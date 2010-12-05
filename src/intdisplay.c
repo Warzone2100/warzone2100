@@ -772,7 +772,7 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 						case REF_RESEARCH:
 							if (StructureIsResearchingPending(Structure))
 							{
-								iIMDShape * shape = Object;
+								iIMDShape *shape = (iIMDShape *)Object;
 								Stats = (BASE_STATS*)Buffer->Data2;
 								if (!Stats)
 								{
@@ -1022,7 +1022,7 @@ void intDisplayStatsButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_
 				}
 				else if(StatIsResearch(Stat))
 				{
-					iIMDShape * shape = Object;
+					iIMDShape *shape = (iIMDShape *)Object;
 					/*IMDType = IMDTYPE_RESEARCH;
 					StatGetResearchImage(Stat,&Image,(iIMDShape**)&Object,true);
 					//if Object != NULL the there must be a IMD so set the object to

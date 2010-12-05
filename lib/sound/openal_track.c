@@ -824,7 +824,7 @@ AUDIO_STREAM* sound_PlayStreamWithBuf(PHYSFS_file* fileHandle, float volume, voi
 {
 #if !defined(WZ_NOSOUND)
 	AUDIO_STREAM* stream;
-	ALuint*       buffers = alloca(sizeof(ALuint) * buffer_count);
+	ALuint *      buffers = (ALuint *)alloca(sizeof(ALuint) * buffer_count);
 	ALint error;
 	unsigned int i;
 
@@ -834,7 +834,7 @@ AUDIO_STREAM* sound_PlayStreamWithBuf(PHYSFS_file* fileHandle, float volume, voi
 		return NULL;
 	}
 
-	stream = malloc(sizeof(AUDIO_STREAM));
+	stream = (AUDIO_STREAM *)malloc(sizeof(AUDIO_STREAM));
 	if (stream == NULL)
 	{
 		debug(LOG_FATAL, "sound_PlayStream: Out of memory");
@@ -1183,7 +1183,7 @@ static void sound_DestroyStream(AUDIO_STREAM* stream)
 	}
 
 	// Detach all buffers and retrieve their ID numbers
-	buffers = alloca(buffer_count * sizeof(ALuint));
+	buffers = (ALuint *)alloca(buffer_count * sizeof(ALuint));
 	alSourceUnqueueBuffers(stream->source, buffer_count, buffers);
 	sound_GetError();
 

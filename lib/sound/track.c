@@ -102,7 +102,7 @@ unsigned int sound_SetTrackVals(const char* fileName, BOOL loop, unsigned int vo
 		return 0;
 	}
 
-	psTrack	= resGetData( "WAV", fileName );
+	psTrack = (TRACK *)resGetData( "WAV", fileName );
 	if (psTrack == NULL)
 	{
 		debug(LOG_WARNING, "track %s resource not found", fileName);

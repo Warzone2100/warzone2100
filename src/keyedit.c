@@ -90,7 +90,7 @@ static BOOL pushedKeyMap(UDWORD key)
 //			count++;
 //		}
 //	}
-	selectedKeyMap = widgGetFromID(psWScreen,key)->pUserData;
+	selectedKeyMap = (KEY_MAPPING *)widgGetFromID(psWScreen,key)->pUserData;
 	if(selectedKeyMap && selectedKeyMap->status != KEYMAP_ASSIGNABLE)
 	{
 		selectedKeyMap = NULL;
@@ -116,7 +116,7 @@ static BOOL pushedKeyCombo(KEY_CODE subkey)
 
 	// check for
 	// alt
-	alt = 0;
+	alt = (KEY_CODE)0;
 	if( keyDown(KEY_RALT) || keyDown(KEY_LALT) )
 	{
 		metakey= KEY_LALT;
@@ -203,12 +203,12 @@ static BOOL pushedKeyCombo(KEY_CODE subkey)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-static UDWORD scanKeyBoardForBinding(void)
+static KEY_CODE scanKeyBoardForBinding(void)
 {
 	UDWORD i;
 	for(i = 0; i < KEY_MAXSCAN; i++)
 	{
-		if(keyPressed(i))
+		if(keyPressed((KEY_CODE)i))
 		{
 			if(i !=	KEY_RALT			// exceptions
 			&& i !=	KEY_LALT
@@ -220,11 +220,11 @@ static UDWORD scanKeyBoardForBinding(void)
 			&& i != KEY_RMETA
 			)
 			{
-				return i;	// top row key pressed
+				return (KEY_CODE)i;             // top row key pressed
 			}
 		}
 	}
-	return 0;
+	return (KEY_CODE)0;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -253,10 +253,10 @@ BOOL runKeyMapEditor(void)
 
 	if(selectedKeyMap)
 	{
-		id = scanKeyBoardForBinding();
-		if(id)
+		KEY_CODE kc = scanKeyBoardForBinding();
+		if (kc)
 		{
-			pushedKeyCombo(id);
+			pushedKeyCombo(kc);
 		}
 	}
 

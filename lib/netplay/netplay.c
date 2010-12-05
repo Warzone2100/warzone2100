@@ -908,7 +908,7 @@ static int upnp_init(void *asdf)
 
 			debug(LOG_NET, "UPnP device found: %s %s\n", dev->descURL, dev->st);
 
-			descXML = miniwget_getaddr(dev->descURL, &descXMLsize, lanaddr, sizeof(lanaddr));
+			descXML = (char *)miniwget_getaddr(dev->descURL, &descXMLsize, lanaddr, sizeof(lanaddr));
 			debug(LOG_NET, "LAN address: %s", lanaddr);
 			if (descXML)
 			{
@@ -1957,7 +1957,7 @@ static ssize_t readLobbyResponse(Socket* sock, unsigned int timeout)
 
 	// Get status message
 	free(NetPlay.MOTD);
-	NetPlay.MOTD = malloc(MOTDLength + 1);
+	NetPlay.MOTD = (char *)malloc(MOTDLength + 1);
 	result = readAll(sock, NetPlay.MOTD, MOTDLength, timeout);
 	if (result != MOTDLength)
 		goto error;
@@ -3267,7 +3267,7 @@ static void addToBanList(const char *ip, const char *name)
 
 	if (!IPlist)
 	{
-		IPlist = malloc(sizeof(PLAYER_IP) * MAX_BANS + 1);
+		IPlist = (PLAYER_IP *)malloc(sizeof(PLAYER_IP) * MAX_BANS + 1);
 		if (!IPlist)
 		{
 			debug(LOG_FATAL, "Out of memory!");

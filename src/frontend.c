@@ -640,17 +640,17 @@ BOOL runGraphicsOptionsMenu(void)
 		switch (mode = war_GetFMVmode())
 		{
 			case FMV_1X:
-				war_SetFMVmode(mode + 1);
+				war_SetFMVmode((FMV_MODE)(mode + 1));
 				widgSetString(psWScreen, FRONTEND_FMVMODE_R, _("2X"));
 				break;
 
 			case FMV_2X:
-				war_SetFMVmode(mode + 1);
+				war_SetFMVmode((FMV_MODE)(mode + 1));
 				widgSetString(psWScreen, FRONTEND_FMVMODE_R, _("Fullscreen"));
 				break;
 
 			case FMV_FULLSCREEN:
-				war_SetFMVmode(mode + 1);
+				war_SetFMVmode((FMV_MODE)(mode + 1));
 				widgSetString(psWScreen, FRONTEND_FMVMODE_R, _("1X"));
 				break;
 

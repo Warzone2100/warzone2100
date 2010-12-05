@@ -3097,6 +3097,8 @@ static void orderPlayOrderObjAudio( UDWORD player, BASE_OBJECT *psObj )
 					case DORDER_ATTACK:
 						audio_QueueTrack( ID_SOUND_ON_OUR_WAY2 );
 						break;
+					default:
+						break;
 				}
 			}
 
@@ -3344,7 +3346,7 @@ BOOL secondarySupported(DROID *psDroid, SECONDARY_ORDER sec)
 // get the state of a secondary order, return false if unsupported
 SECONDARY_STATE secondaryGetState(DROID *psDroid, SECONDARY_ORDER sec)
 {
-	SECONDARY_STATE	state;
+	uint32_t state;
 
 	state = psDroid->secondaryOrder;
 
@@ -3496,9 +3498,10 @@ BOOL secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 {
 	UDWORD		CurrState, factType, prodType;
 	STRUCTURE	*psStruct;
-	SDWORD		factoryInc, order;
+	SDWORD		factoryInc;
 	BOOL		retVal;
 	DROID		*psTransport, *psCurr, *psNext;
+	DROID_ORDER     order;
 
 
 
@@ -3916,7 +3919,7 @@ static SECONDARY_STATE secondaryGetAverageGroupState(UDWORD player, UDWORD group
 		}
 	}
 
-	return aStateCount[max].state;
+	return (SECONDARY_STATE)aStateCount[max].state;
 }
 
 
@@ -3925,7 +3928,7 @@ void secondarySetAverageGroupState(UDWORD player, UDWORD group)
 {
 	// lookup table for orders and masks
 	#define MAX_ORDERS	4
-	struct { UDWORD order, mask; } aOrders[MAX_ORDERS] =
+	struct { SECONDARY_ORDER order; UDWORD mask; } aOrders[MAX_ORDERS] =
 	{
 		{ DSO_ATTACK_RANGE, DSS_ARANGE_MASK },
 		{ DSO_REPAIR_LEVEL, DSS_REPLEV_MASK },
@@ -3937,7 +3940,7 @@ void secondarySetAverageGroupState(UDWORD player, UDWORD group)
 	for(i=0; i<MAX_ORDERS; i++)
 	{
 		state = secondaryGetAverageGroupState(player, group, aOrders[i].mask);
-		secondarySetGroupState(player, group, aOrders[i].order, state);
+		secondarySetGroupState(player, group, aOrders[i].order, (SECONDARY_STATE)state);
 	}
 }
 
@@ -4253,7 +4256,7 @@ BOOL getFactoryState(STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_STATE *
 		*pState = (SECONDARY_STATE)(state & DSS_HALT_MASK);
 		break;
 	default:
-		*pState = 0;
+		*pState = (SECONDARY_STATE)0;
 		break;
 	}
 

@@ -82,12 +82,12 @@ static BOOL stackNewChunk(UDWORD size)
 	else
 	{
 		/* Allocate a new chunk */
-		psCurrChunk->psNext = calloc(1, sizeof(*psCurrChunk->psNext));
+		psCurrChunk->psNext = (STACK_CHUNK *)calloc(1, sizeof(*psCurrChunk->psNext));
 		if (!psCurrChunk->psNext)
 		{
 			return false;
 		}
-		psCurrChunk->psNext->aVals = calloc(size, sizeof(*psCurrChunk->psNext->aVals));
+		psCurrChunk->psNext->aVals = (INTERP_VAL *)calloc(size, sizeof(*psCurrChunk->psNext->aVals));
 		if (!psCurrChunk->psNext->aVals)
 		{
 			free(psCurrChunk->psNext);
@@ -377,12 +377,12 @@ BOOL stackPopParams(unsigned int numParams, ...)
 				{
 					if (psVal->type >= VAL_REF) // if it's a reference
 					{
-						INTERP_VAL *refVal = psVal->v.oval; // oval is a pointer to INTERP_VAL in this case
+						INTERP_VAL *refVal = (INTERP_VAL *)psVal->v.oval; // oval is a pointer to INTERP_VAL in this case
 
 						/* doublecheck types */
-						ASSERT(interpCheckEquiv(type & ~VAL_REF, refVal->type),
+						ASSERT(interpCheckEquiv((INTERP_TYPE)(type & ~VAL_REF), refVal->type),
 							"stackPopParams: type mismatch for a reference (expected %s, got %s)",
-							scriptTypeToString(type & ~VAL_REF), scriptTypeToString(refVal->type));
+							scriptTypeToString((INTERP_TYPE)(type & ~VAL_REF)), scriptTypeToString(refVal->type));
 						// type of provided container and type of the INTERP_VAL pointed by psVal->v.oval
 
 						*(void**)pData = &(refVal->v); /* get pointer to the union */
@@ -949,14 +949,14 @@ BOOL stackCastTop(INTERP_TYPE neededType)
 /* Initialise the stack */
 BOOL stackInitialise(void)
 {
-	psStackBase = calloc(1, sizeof(*psStackBase));
+	psStackBase = (STACK_CHUNK *)calloc(1, sizeof(*psStackBase));
 	if (psStackBase == NULL)
 	{
 		debug( LOG_FATAL, "Out of memory" );
 		abort();
 		return false;
 	}
-	psStackBase->aVals = calloc(INIT_SIZE, sizeof(*psStackBase->aVals));
+	psStackBase->aVals = (INTERP_VAL *)calloc(INIT_SIZE, sizeof(*psStackBase->aVals));
 	if (!psStackBase->aVals)
 	{
 		debug( LOG_FATAL, "Out of memory" );

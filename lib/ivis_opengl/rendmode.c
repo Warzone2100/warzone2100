@@ -23,7 +23,7 @@
 
 iSurface *iV_SurfaceCreate(int width, int height)
 {
-	iSurface *s = malloc(sizeof(iSurface));
+	iSurface *s = (iSurface *)malloc(sizeof(iSurface));
 
 	if (!s)
 	{

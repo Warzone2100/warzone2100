@@ -538,7 +538,7 @@ void screenDoDumpToDiskIfRequired(void)
 
 		image.width = screen->w;
 		image.height = screen->h;
-		image.bmp = malloc(channelsPerPixel * image.width * image.height);
+		image.bmp = (unsigned char *)malloc(channelsPerPixel * image.width * image.height);
 		if (image.bmp == NULL)
 		{
 			image.width = 0; image.height = 0;

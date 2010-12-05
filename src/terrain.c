@@ -606,8 +606,8 @@ static void updateSectorGeometry(int x, int y)
 	int waterSize = 0;
 	int decalSize = 0;
 	
-	geometry  = malloc(sizeof(RenderVertex)*sectors[x*ySectors + y].geometrySize);
-	water     = malloc(sizeof(RenderVertex)*sectors[x*ySectors + y].waterSize);
+	geometry  = (RenderVertex *)malloc(sizeof(RenderVertex)*sectors[x*ySectors + y].geometrySize);
+	water     = (RenderVertex *)malloc(sizeof(RenderVertex)*sectors[x*ySectors + y].waterSize);
 
 	setSectorGeometry(x, y, geometry, water, &geometrySize, &waterSize);
 	ASSERT(geometrySize == sectors[x*ySectors + y].geometrySize, "something went seriously wrong updating the terrain");
@@ -629,7 +629,7 @@ static void updateSectorGeometry(int x, int y)
 		return;
 	}
 
-	decaldata = malloc(sizeof(DecalVertex)*sectors[x*ySectors + y].decalSize);
+	decaldata = (DecalVertex *)malloc(sizeof(DecalVertex)*sectors[x*ySectors + y].decalSize);
 	setSectorDecals(x, y, decaldata, &decalSize);
 	ASSERT(decalSize == sectors[x*ySectors + y].decalSize   , "the amount of decals has changed");
 	
@@ -760,17 +760,17 @@ bool initTerrain(void)
 	// Create the sectors
 	xSectors = (mapWidth +sectorSize-1)/sectorSize;
 	ySectors = (mapHeight+sectorSize-1)/sectorSize;
-	sectors = malloc(sizeof(Sector)*xSectors*ySectors);
+	sectors = (Sector *)malloc(sizeof(Sector)*xSectors*ySectors);
 	
 	////////////////////
 	// fill the geometry part of the sectors
-	geometry = malloc(sizeof(RenderVertex)*xSectors*ySectors*(sectorSize+1)*(sectorSize+1)*2);
-	geometryIndex = malloc(sizeof(GLuint)*xSectors*ySectors*sectorSize*sectorSize*12);
+	geometry = (RenderVertex *)malloc(sizeof(RenderVertex)*xSectors*ySectors*(sectorSize+1)*(sectorSize+1)*2);
+	geometryIndex = (GLuint *)malloc(sizeof(GLuint)*xSectors*ySectors*sectorSize*sectorSize*12);
 	geometrySize = 0;
 	geometryIndexSize = 0;
 	
-	water = malloc(sizeof(RenderVertex)*xSectors*ySectors*(sectorSize+1)*(sectorSize+1)*2);
-	waterIndex = malloc(sizeof(GLuint)*xSectors*ySectors*sectorSize*sectorSize*12);
+	water = (RenderVertex *)malloc(sizeof(RenderVertex)*xSectors*ySectors*(sectorSize+1)*(sectorSize+1)*2);
+	waterIndex = (GLuint *)malloc(sizeof(GLuint)*xSectors*ySectors*sectorSize*sectorSize*12);
 	waterSize = 0;
 	waterIndexSize = 0;
 	for (x = 0; x < xSectors; x++)
@@ -867,8 +867,8 @@ bool initTerrain(void)
 	
 	////////////////////
 	// fill the texture part of the sectors
-	texture = malloc(sizeof(PIELIGHT)*xSectors*ySectors*(sectorSize+1)*(sectorSize+1)*2*numGroundTypes);
-	textureIndex = malloc(sizeof(GLuint)*xSectors*ySectors*sectorSize*sectorSize*12*numGroundTypes);
+	texture = (PIELIGHT *)malloc(sizeof(PIELIGHT)*xSectors*ySectors*(sectorSize+1)*(sectorSize+1)*2*numGroundTypes);
+	textureIndex = (GLuint *)malloc(sizeof(GLuint)*xSectors*ySectors*sectorSize*sectorSize*12*numGroundTypes);
 	textureSize = 0;
 	textureIndexSize = 0;
 	for (layer = 0; layer < numGroundTypes; layer++)
@@ -879,10 +879,10 @@ bool initTerrain(void)
 			{
 				if (layer == 0)
 				{
-					sectors[x*ySectors + y].textureOffset = malloc(sizeof(int)*numGroundTypes);
-					sectors[x*ySectors + y].textureSize = malloc(sizeof(int)*numGroundTypes);
-					sectors[x*ySectors + y].textureIndexOffset = malloc(sizeof(int)*numGroundTypes);
-					sectors[x*ySectors + y].textureIndexSize = malloc(sizeof(int)*numGroundTypes);
+					sectors[x*ySectors + y].textureOffset = (int *)malloc(sizeof(int)*numGroundTypes);
+					sectors[x*ySectors + y].textureSize = (int *)malloc(sizeof(int)*numGroundTypes);
+					sectors[x*ySectors + y].textureIndexOffset = (int *)malloc(sizeof(int)*numGroundTypes);
+					sectors[x*ySectors + y].textureIndexSize = (int *)malloc(sizeof(int)*numGroundTypes);
 				}
 
 				sectors[x*ySectors + y].textureOffset[layer] = textureSize;
@@ -979,7 +979,7 @@ bool initTerrain(void)
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	// and finally the decals
-	decaldata = malloc(sizeof(DecalVertex)*mapWidth*mapHeight*12);
+	decaldata = (DecalVertex *)malloc(sizeof(DecalVertex)*mapWidth*mapHeight*12);
 	decalSize = 0;
 	for (x = 0; x < xSectors; x++)
 	{

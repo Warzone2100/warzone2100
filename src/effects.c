@@ -177,7 +177,7 @@ struct _EffectChunk {
 
 
 /*! List containing all allocated effect chunks */
-struct {
+struct chunkList_t {
 	EffectChunk *first; //!< First element of list, used for iteration
 	EffectChunk *last; //!< Last element of list, used for appending
 } chunkList = {
@@ -186,7 +186,7 @@ struct {
 
 
 /*! Our lists of all game world effects */
-struct {
+struct activeList_t {
 	size_t num; //!< Number of effects in this list, used when saving
 	EFFECT *first; //!< First element of list, used for iteration / finding free effects
 	EFFECT *last; //!< Last element of list, used for appending
@@ -310,7 +310,7 @@ static EFFECT *Effect_malloc(void)
 	if (inactiveList.first == NULL)
 	{
 		/* Allocate new effect chunk */
-		EffectChunk *chunk = calloc(1, sizeof(EffectChunk));
+		EffectChunk *chunk = (EffectChunk *)calloc(1, sizeof(EffectChunk));
 
 		debug(LOG_MEMORY, "%zd effects in use, allocating %d extra", activeList.num, EFFECT_CHUNK_SIZE);
 
@@ -343,7 +343,7 @@ static EFFECT *Effect_malloc(void)
  */
 static void Effect_free(void *self)
 {
-	EFFECT *instance = self;
+	EFFECT *instance = (EFFECT *)self;
 
 	/* Remove from activeList and fixup endings necessary */
 	if (instance->prev != NULL) {
@@ -401,7 +401,7 @@ void initEffectsSystem(void)
 	shutdownEffectsSystem();
 
 	/* Allocate new chunk */
-	chunk = calloc(1, sizeof(EffectChunk));
+	chunk = (EffectChunk *)calloc(1, sizeof(EffectChunk));
 
 	/* Deal with out-of-memory conditions */
 	if (chunk == NULL)
@@ -2656,8 +2656,8 @@ bool readFXData(const char* fileName)
 		}
 
 		curEffect->control      = tagRead(0x01);
-		curEffect->group        = tagRead(0x02);
-		curEffect->type         = tagRead(0x03);
+		curEffect->group        = (EFFECT_GROUP)tagRead(0x02);
+		curEffect->type         = (EFFECT_TYPE)tagRead(0x03);
 		curEffect->frameNumber  = tagRead(0x04);
 		curEffect->size         = tagRead(0x05);
 		curEffect->baseScale    = tagRead(0x06);

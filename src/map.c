@@ -188,7 +188,7 @@ BOOL mapNew(UDWORD width, UDWORD height)
 		return false;
 	}
 
-	psMapTiles = calloc(width * height, sizeof(MAPTILE));
+	psMapTiles = (MAPTILE *)calloc(width * height, sizeof(MAPTILE));
 	if (psMapTiles == NULL)
 	{
 		debug(LOG_FATAL, "Out of memory");
@@ -305,7 +305,7 @@ static void init_tileNames(int type)
 	//increment the pointer to the start of the next record
 	pFileData = strchr(pFileData,'\n') + 1;
 
-	Tile_names = malloc(numlines * sizeof(char[40]) );
+	Tile_names = (char *)malloc(numlines * sizeof(char[40]) );
 	memset(Tile_names, 0x0, (numlines * sizeof(char[40])));
 
 	for (i=0; i < numlines; i++)
@@ -358,7 +358,7 @@ fallback:
 		//increment the pointer to the start of the next record
 		pFileData = strchr(pFileData,'\n') + 1;
 		numGroundTypes = numlines;
-		psGroundTypes = malloc(sizeof(GROUND_TYPE)*numlines);
+		psGroundTypes = (GROUND_TYPE *)malloc(sizeof(GROUND_TYPE)*numlines);
 
 		for (i=0; i < numlines; i++)
 		{
@@ -400,7 +400,7 @@ fallback:
 		//increment the pointer to the start of the next record
 		pFileData = strchr(pFileData,'\n') + 1;
 		numGroundTypes = numlines;
-		psGroundTypes = malloc(sizeof(GROUND_TYPE)*numlines);
+		psGroundTypes = (GROUND_TYPE *)malloc(sizeof(GROUND_TYPE)*numlines);
 
 		for (i=0; i < numlines; i++)
 		{
@@ -442,7 +442,7 @@ fallback:
 		//increment the pointer to the start of the next record
 		pFileData = strchr(pFileData,'\n') + 1;
 		numGroundTypes = numlines;
-		psGroundTypes = malloc(sizeof(GROUND_TYPE)*numlines);
+		psGroundTypes = (GROUND_TYPE *)malloc(sizeof(GROUND_TYPE)*numlines);
 
 		for (i=0; i < numlines; i++)
 		{
@@ -502,7 +502,7 @@ static void SetGroundForTile(const char *filename, const char *nametype)
 	//increment the pointer to the start of the next record
 	pFileData = strchr(pFileData,'\n') + 1;
 
-	map = malloc(sizeof(int) * numlines * 2 * 2 );	// this is a 3D array map[numlines][2][2]
+	map = (int *)malloc(sizeof(int) * numlines * 2 * 2 );	// this is a 3D array map[numlines][2][2]
 
 	for (i=0; i < numlines; i++)
 	{
@@ -706,7 +706,7 @@ static void SetDecals(const char *filename, const char *decal_type)
 		debug(LOG_FATAL, "Too many tiles, we only support %d max at this time", MAX_TERRAIN_TILES);
 		abort();
 	}
-	mapDecals = malloc(sizeof(int)*MAX_TERRAIN_TILES);		// max of 80 tiles that we support
+	mapDecals = (int *)malloc(sizeof(int)*MAX_TERRAIN_TILES);		// max of 80 tiles that we support
 	memset(mapDecals, 0x0, sizeof(int)*MAX_TERRAIN_TILES);	// set everything to false;
 
 	for (i=0; i < numlines; i++)
@@ -810,7 +810,7 @@ BOOL mapLoad(char *filename, BOOL preview)
 	ASSERT(psMapTiles == NULL, "Map has not been cleared before calling mapLoad()!");
 
 	/* Allocate the memory for the map */
-	psMapTiles = calloc(width * height, sizeof(MAPTILE));
+	psMapTiles = (MAPTILE *)calloc(width * height, sizeof(MAPTILE));
 	ASSERT(psMapTiles != NULL, "Out of memory" );
 
 	mapWidth = width;
@@ -909,12 +909,12 @@ BOOL mapLoad(char *filename, BOOL preview)
 	scrollMaxY = mapHeight;
 
 	/* Allocate aux maps */
-	psBlockMap[AUX_MAP] = malloc(mapWidth * mapHeight * sizeof(*psAuxMap[0]));
-	psBlockMap[AUX_ASTARMAP] = malloc(mapWidth * mapHeight * sizeof(*psBlockMap[0]));
-	psBlockMap[AUX_DANGERMAP] = malloc(mapWidth * mapHeight * sizeof(*psBlockMap[0]));
+	psBlockMap[AUX_MAP] = (uint8_t *)malloc(mapWidth * mapHeight * sizeof(*psAuxMap[0]));
+	psBlockMap[AUX_ASTARMAP] = (uint8_t *)malloc(mapWidth * mapHeight * sizeof(*psBlockMap[0]));
+	psBlockMap[AUX_DANGERMAP] = (uint8_t *)malloc(mapWidth * mapHeight * sizeof(*psBlockMap[0]));
 	for (x = 0; x < MAX_PLAYERS + AUX_MAX; x++)
 	{
-		psAuxMap[x] = malloc(mapWidth * mapHeight * sizeof(*psAuxMap[0]));
+		psAuxMap[x] = (uint8_t *)malloc(mapWidth * mapHeight * sizeof(*psAuxMap[0]));
 	}
 
 	// Set our blocking bits
@@ -1433,7 +1433,7 @@ static void astarTest(const char *name, int x1, int y1, int x2, int y2)
 	bool		retval;
 
 	scriptInit();
-	retval = levLoadData(name, NULL, 0);
+	retval = levLoadData(name, NULL, GTYPE_SCENARIO_START);
 	ASSERT(retval, "Could not load %s", name);
 	route.asPath = NULL;
 	for (i = 0; i < 100; i++)
@@ -1515,7 +1515,7 @@ static void mapFloodFill(int x, int y, int continent, uint8_t blockedBits)
 
 			if (!(blockTile(npos.x, npos.y, AUX_MAP) & blockedBits) && ((limitedTile && psTile->limitedContinent == 0) || (!limitedTile && psTile->hoverContinent == 0)))
 			{
-				struct ffnode *node = malloc(sizeof(*node));
+				struct ffnode *node = (struct ffnode *)malloc(sizeof(*node));
 
 				node->next = open;	// add to beginning of open list
 				node->x = npos.x;
@@ -1805,7 +1805,7 @@ void mapInit()
 	int player;
 
 	free(floodbucket);
-	floodbucket = malloc(mapWidth * mapHeight * sizeof(*floodbucket));
+	floodbucket = (struct floodtile *)malloc(mapWidth * mapHeight * sizeof(*floodbucket));
 
 	lastDangerUpdate = 0;
 	lastDangerPlayer = -1;

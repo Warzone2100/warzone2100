@@ -339,7 +339,7 @@ BOOL loadConfig(void)
 	// sequences
 	if (getWarzoneKeyNumeric("FMVmode", &val))
 	{
-		war_SetFMVmode(val);
+		war_SetFMVmode((FMV_MODE)val);
 	}
 	else
 	{
@@ -362,7 +362,7 @@ BOOL loadConfig(void)
 
 	if(getWarzoneKeyNumeric("difficulty", &val))
 	{
-		setDifficultyLevel(val);
+		setDifficultyLevel((DIFFICULTY_LEVEL)val);
 	}
 	else
 	{
@@ -535,7 +535,7 @@ BOOL loadConfig(void)
 	// mini-map terrain mode
 	if(getWarzoneKeyNumeric("radarTerrainMode", &val))
 	{
-		radarDrawMode = val;
+		radarDrawMode = (RADAR_DRAW_MODE)val;
 
 		if(radarDrawMode >= NUM_RADAR_MODES)
 		{

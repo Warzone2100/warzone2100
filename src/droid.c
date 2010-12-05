@@ -2556,7 +2556,7 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD pl
 	{
 		for (inc = 0; inc < WC_NUM_WEAPON_CLASSES; inc++)
 		{
-			for (impact_side = 0;impact_side < NUM_HIT_SIDES;impact_side=impact_side+1)
+			for (impact_side = (HIT_SIDE)0; impact_side < NUM_HIT_SIDES; impact_side = (HIT_SIDE)(impact_side + 1))
 			{
 				psDroid->armour[impact_side][inc] = bodyArmour(asBodyStats + pTemplate->
 				asParts[COMP_BODY], (UBYTE)player, CYBORG_BODY_UPGRADE, (WEAPON_CLASS)inc, impact_side);
@@ -2567,7 +2567,7 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD pl
 	{
 		for (inc = 0; inc < WC_NUM_WEAPON_CLASSES; inc++)
 		{
-			for (impact_side = 0;impact_side < NUM_HIT_SIDES;impact_side=impact_side+1)
+			for (impact_side = (HIT_SIDE)0; impact_side < NUM_HIT_SIDES; impact_side = (HIT_SIDE)(impact_side + 1))
 			{
 				psDroid->armour[impact_side][inc] = bodyArmour(asBodyStats + pTemplate->
 					asParts[COMP_BODY], (UBYTE)player, DROID_BODY_UPGRADE, (WEAPON_CLASS)inc, impact_side);
@@ -3579,7 +3579,7 @@ BOOL	pickATile(UDWORD *x, UDWORD *y, UBYTE numIterations)
 /// find a tile for a wheeled droid with only one other droid present
 PICKTILE pickHalfATile(UDWORD *x, UDWORD *y, UBYTE numIterations)
 {
-	return pickATileGen(x, y, numIterations, canFitDroid);
+	return pickATileGen(x, y, numIterations, canFitDroid)? FREE_TILE : NO_FREE_TILE;
 }
 
 /* Looks through the players list of droids to see if any of them are
@@ -4453,7 +4453,7 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
 		x = psD->pos.x;
 		y = psD->pos.y;
 		body = psD->body;
-		for (impact_side = 0;impact_side < NUM_HIT_SIDES;impact_side=impact_side+1)
+		for (impact_side = (HIT_SIDE)0;impact_side < NUM_HIT_SIDES; impact_side = (HIT_SIDE)(impact_side + 1))
 		{
 			armourK[impact_side] = psD->armour[impact_side][WC_KINETIC];
 			armourH[impact_side] = psD->armour[impact_side][WC_HEAT];
@@ -4475,7 +4475,7 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
 		{
 			addDroid(psNewDroid, apsDroidLists);
 			psNewDroid->body = body;
-			for (impact_side = 0;impact_side < NUM_HIT_SIDES;impact_side=impact_side+1)
+			for (impact_side = (HIT_SIDE)0;impact_side < NUM_HIT_SIDES; impact_side = (HIT_SIDE)(impact_side + 1))
 			{
 				psNewDroid->armour[impact_side][WC_KINETIC] = armourK[impact_side];
 				psNewDroid->armour[impact_side][WC_HEAT] = armourH[impact_side];

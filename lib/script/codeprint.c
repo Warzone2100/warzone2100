@@ -35,7 +35,7 @@ void cpPrintVal(INTERP_VAL value)
 {
 	if (value.type & VAL_REF)
 	{
-		value.type &= ~VAL_REF;
+		value.type = (INTERP_TYPE)(value.type & ~VAL_REF);
 		debug( LOG_NEVER, "type: %5s, value: %i (ref)",
 			scriptTypeToString(value.type), value.v.ival );
 		return;
@@ -77,7 +77,7 @@ void cpPrintVal(INTERP_VAL value)
 /* Display a value from a program that has been packed with an opcode */
 void cpPrintPackedVal(INTERP_VAL *ip)
 {
-	INTERP_VAL data = { (ip->v.ival & OPCODE_DATAMASK), {0} };
+	INTERP_VAL data = {(INTERP_TYPE)(ip->v.ival & OPCODE_DATAMASK), {0}};
 	data.v = (ip + 1)->v;
 
 	cpPrintVal(data);
@@ -217,7 +217,7 @@ void cpPrintProgram(SCRIPT_CODE *psProg)
 	end = (INTERP_VAL*)((UBYTE*)ip + psProg->size);
 	triggerCode = (psProg->numTriggers > 0);
 
-	opcode = (ip->v.ival >> OPCODE_SHIFT);
+	opcode = (OPCODE)(ip->v.ival >> OPCODE_SHIFT);
 	data = (ip->v.ival & OPCODE_DATAMASK);
 
 	while (ip < end)
@@ -313,7 +313,7 @@ void cpPrintProgram(SCRIPT_CODE *psProg)
 				break;
 			case OP_BINARYOP:
 			case OP_UNARYOP:
-				debug( LOG_NEVER, "-> %s", scriptOpcodeToString(data) );
+				debug( LOG_NEVER, "-> %s", scriptOpcodeToString((OPCODE)data) );
 				break;
 			case OP_EXIT:
 				break;

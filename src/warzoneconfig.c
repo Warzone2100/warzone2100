@@ -206,7 +206,7 @@ BOOL war_GetFog(void)
 /***************************************************************************/
 void war_SetFMVmode(FMV_MODE mode)
 {
-	warGlobs.FMVmode = mode % FMV_MAX;
+	warGlobs.FMVmode = (FMV_MODE)(mode % FMV_MAX);
 }
 
 FMV_MODE war_GetFMVmode(void)

@@ -374,7 +374,7 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, Vector3f* 
 						// enlarge
 						EDGE* newstack;
 						edgelistsize *= 2;
-						newstack = realloc(edgelist, sizeof(EDGE) * edgelistsize);
+						newstack = (EDGE *)realloc(edgelist, sizeof(EDGE) * edgelistsize);
 						if (newstack == NULL)
 						{
 							debug(LOG_FATAL, "pie_DrawShadow: Out of memory!");
@@ -409,7 +409,7 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, Vector3f* 
 			edge_count = j;
 			// then store it in the imd
 			shape->nShadowEdges = edge_count;
-			shape->shadowEdgeList = realloc(shape->shadowEdgeList, sizeof(EDGE) * shape->nShadowEdges);
+			shape->shadowEdgeList = (EDGE *)realloc(shape->shadowEdgeList, sizeof(EDGE) * shape->nShadowEdges);
 			memcpy(shape->shadowEdgeList, edgelist, sizeof(EDGE) * shape->nShadowEdges);
 		}
 	}

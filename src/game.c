@@ -4251,7 +4251,7 @@ bool gameLoadV7(PHYSFS_file* fileHandle)
 		//copy the level name across
 		sstrcpy(aLevelName, saveGame.levelName);
 		//load up the level dataset
-		if (!levLoadData(aLevelName, saveGameName, gameType))
+		if (!levLoadData(aLevelName, saveGameName, (GAME_TYPE)gameType))
 		{
 			return false;
 		}
@@ -4753,7 +4753,7 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 		//copy the level name across
 		sstrcpy(aLevelName, saveGameData.levelName);
 		//load up the level dataset
-		if (!levLoadData(aLevelName, saveGameName, gameType))
+		if (!levLoadData(aLevelName, saveGameName, (GAME_TYPE)gameType))
 		{
 			return false;
 		}
@@ -5279,7 +5279,7 @@ static DROID* buildDroidFromSaveDroidV11(SAVE_DROID_V11* psSaveDroid)
 
 	psTemplate->buildPoints = calcTemplateBuild(psTemplate);
 	psTemplate->powerPoints = calcTemplatePower(psTemplate);
-	psTemplate->droidType = psSaveDroid->droidType;
+	psTemplate->droidType = (DROID_TYPE)psSaveDroid->droidType;
 
 	/*create the Droid */
 
@@ -5387,7 +5387,7 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 
 	psTemplate->buildPoints = calcTemplateBuild(psTemplate);
 	psTemplate->powerPoints = calcTemplatePower(psTemplate);
-	psTemplate->droidType = psSaveDroid->droidType;
+	psTemplate->droidType = (DROID_TYPE)psSaveDroid->droidType;
 
 	/*create the Droid */
 
@@ -5457,7 +5457,7 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 	}
 	if (version >= VERSION_12)//version 12
 	{
-		psDroid->order				= psSaveDroid->order;
+		psDroid->order                          = (DROID_ORDER)psSaveDroid->order;
 		psDroid->orderX				= psSaveDroid->orderX;
 		psDroid->orderY				= psSaveDroid->orderY;
 		psDroid->orderX2				= psSaveDroid->orderX2;
@@ -5466,7 +5466,7 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 		//rebuild the object pointer from the ID
 		FIXME_CAST_ASSIGN(UDWORD, psDroid->psTarget, psSaveDroid->targetID);
 		psDroid->secondaryOrder		= psSaveDroid->secondaryOrder;
-		psDroid->action				= psSaveDroid->action;
+		psDroid->action                         = (DROID_ACTION)psSaveDroid->action;
 		psDroid->actionX				= psSaveDroid->actionX;
 		psDroid->actionY				= psSaveDroid->actionY;
 		//rebuild the object pointer from the ID
@@ -5618,10 +5618,10 @@ static void LoadDroidMoveControl(DROID * const psDroid, SAVE_DROID const * const
 	unsigned int i;
 
 	// Copy over the endian neutral stuff (all UBYTE)
-	psDroid->sMove.Status      = psSaveDroid->sMove.Status;
+	psDroid->sMove.Status      = (MOVE_STATUS)psSaveDroid->sMove.Status;
 	psDroid->sMove.Position    = psSaveDroid->sMove.Position;
 	psDroid->sMove.numPoints   = psSaveDroid->sMove.numPoints;
-	psDroid->sMove.asPath      = malloc(sizeof(*psDroid->sMove.asPath) * psDroid->sMove.numPoints);
+	psDroid->sMove.asPath      = (Vector2i *)malloc(sizeof(*psDroid->sMove.asPath) * psDroid->sMove.numPoints);
 	for (i = 0; i < psDroid->sMove.numPoints; i++)
 	{
 		psDroid->sMove.asPath[i].x = world_coord(psSaveDroid->sMove.asPath[i].x) + TILE_UNITS / 2;
@@ -5734,7 +5734,7 @@ static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 
 	psTemplate->buildPoints = calcTemplateBuild(psTemplate);
 	psTemplate->powerPoints = calcTemplatePower(psTemplate);
-	psTemplate->droidType = psSaveDroid->droidType;
+	psTemplate->droidType = (DROID_TYPE)psSaveDroid->droidType;
 
 	/*create the Droid */
 
@@ -5804,7 +5804,7 @@ static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 		}
 	}
 	//version 12
-	psDroid->order				= psSaveDroid->order;
+	psDroid->order                          = (DROID_ORDER)psSaveDroid->order;
 	psDroid->orderX				= psSaveDroid->orderX;
 	psDroid->orderY				= psSaveDroid->orderY;
 	psDroid->orderX2				= psSaveDroid->orderX2;
@@ -5813,7 +5813,7 @@ static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 	//rebuild the object pointer from the ID
 	FIXME_CAST_ASSIGN(UDWORD, psDroid->psTarget, psSaveDroid->targetID);
 	psDroid->secondaryOrder		= psSaveDroid->secondaryOrder;
-	psDroid->action				= psSaveDroid->action;
+	psDroid->action                         = (DROID_ACTION)psSaveDroid->action;
 	psDroid->actionX				= psSaveDroid->actionX;
 	psDroid->actionY				= psSaveDroid->actionY;
 	//rebuild the object pointer from the ID
@@ -6965,7 +6965,7 @@ BOOL loadSaveStructureV7(char *pFileData, UDWORD filesize, UDWORD numStructures)
 		burnTime = psSaveStructure->burnStart;
 		psStructure->burnStart = burnTime;
 
-		psStructure->status = psSaveStructure->status;
+		psStructure->status = (STRUCT_STATES)psSaveStructure->status;
 		if (psStructure->status ==SS_BUILT)
 		{
 			buildingComplete(psStructure);
@@ -7247,7 +7247,7 @@ BOOL loadSaveStructureV19(char *pFileData, UDWORD filesize, UDWORD numStructures
 				psStructure->visible[i] = psSaveStructure->visible[i];
 			}
 		}
-		psStructure->status = psSaveStructure->status;
+		psStructure->status = (STRUCT_STATES)psSaveStructure->status;
 		if (psStructure->status ==SS_BUILT)
 		{
 			buildingComplete(psStructure);
@@ -7667,7 +7667,7 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 			psStructure->visible[i] = psSaveStructure->visible[i];
 		}
 
-		psStructure->status = psSaveStructure->status;
+		psStructure->status = (STRUCT_STATES)psSaveStructure->status;
 		if (psStructure->status ==SS_BUILT)
 		{
 			buildingComplete(psStructure);
@@ -8743,7 +8743,7 @@ BOOL loadSaveTemplateV7(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 		}
 
 		//create the Template
-		psTemplate = malloc(sizeof(DROID_TEMPLATE));
+		psTemplate = (DROID_TEMPLATE *)malloc(sizeof(DROID_TEMPLATE));
 		if (psTemplate == NULL)
 		{
 			debug(LOG_FATAL, "loadSaveTemplateV7: Out of memory");
@@ -8756,7 +8756,7 @@ BOOL loadSaveTemplateV7(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 		sstrcpy(psTemplate->aName, psSaveTemplate->name);
 
 		psTemplate->ref = psSaveTemplate->ref;
-		psTemplate->droidType = psSaveTemplate->droidType;
+		psTemplate->droidType = (DROID_TYPE)psSaveTemplate->droidType;
 		found = true;
 		//for (i=0; i < DROID_MAXCOMP; i++) - not intestested in the first comp - COMP_UNKNOWN
 		for (i=1; i < DROID_MAXCOMP; i++)
@@ -8870,7 +8870,7 @@ BOOL loadSaveTemplateV14(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 		}
 
 		//create the Template
-		psTemplate = malloc(sizeof(DROID_TEMPLATE));
+		psTemplate = (DROID_TEMPLATE *)malloc(sizeof(DROID_TEMPLATE));
 		if (psTemplate == NULL)
 		{
 			debug(LOG_ERROR, "loadSaveTemplateV14: Out of memory");
@@ -8883,7 +8883,7 @@ BOOL loadSaveTemplateV14(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 		sstrcpy(psTemplate->aName, psSaveTemplate->name);
 
 		psTemplate->ref = psSaveTemplate->ref;
-		psTemplate->droidType = psSaveTemplate->droidType;
+		psTemplate->droidType = (DROID_TYPE)psSaveTemplate->droidType;
 		psTemplate->multiPlayerID = psSaveTemplate->multiPlayerID;
 		found = true;
 		//for (i=0; i < DROID_MAXCOMP; i++) - not intestested in the first comp - COMP_UNKNOWN
@@ -9024,7 +9024,7 @@ BOOL loadSaveTemplateV(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 		}
 
 		//create the Template
-		psTemplate = malloc(sizeof(DROID_TEMPLATE));
+		psTemplate = (DROID_TEMPLATE *)malloc(sizeof(DROID_TEMPLATE));
 		if (psTemplate == NULL)
 		{
 			debug(LOG_FATAL, "loadSaveTemplateV: Out of memory");
@@ -9037,7 +9037,7 @@ BOOL loadSaveTemplateV(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 		sstrcpy(psTemplate->aName, psSaveTemplate->name);
 
 		psTemplate->ref = psSaveTemplate->ref;
-		psTemplate->droidType = psSaveTemplate->droidType;
+		psTemplate->droidType = (DROID_TYPE)psSaveTemplate->droidType;
 		psTemplate->multiPlayerID = psSaveTemplate->multiPlayerID;
 		found = true;
 		//for (i=0; i < DROID_MAXCOMP; i++) - not intestested in the first comp - COMP_UNKNOWN

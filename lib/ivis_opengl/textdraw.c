@@ -104,7 +104,7 @@ static inline void iV_printFontList(void)
 		char prBuffer[1024];
 		snprintf(prBuffer, sizeof(prBuffer), "Font #%d : %s ", (int)font, (const char*)glcGetFontc(font, GLC_FAMILY));
 		prBuffer[sizeof(prBuffer) - 1] = 0;
-		sstrcat(prBuffer, glcGetFontFace(font));
+		sstrcat(prBuffer, (char const *)glcGetFontFace(font));
 		debug(LOG_NEVER, "%s", prBuffer);
 	}
 }
@@ -650,7 +650,7 @@ static void iV_DrawTextRotatedFv(float x, float y, float rotation, const char* f
 
 	// Allocate a buffer large enough to hold our string on the stack
 	size = vsnprintf(NULL, 0, format, ap);
-	str = alloca(size + 1);
+	str = (char *)alloca(size + 1);
 
 	// Print into our newly created string buffer
 	vsprintf(str, format, aq);

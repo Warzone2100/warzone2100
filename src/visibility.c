@@ -237,7 +237,7 @@ static void doWaveTerrain(int sx, int sy, int sz, unsigned radius, int rayPlayer
 /* The los ray callback */
 static bool rayLOSCallback(Vector3i pos, int32_t dist, void *data)
 {
-	VisibleObjectHelp_t * help = data;
+	VisibleObjectHelp_t *help = (VisibleObjectHelp_t *)data;
 
 	ASSERT(pos.x >= 0 && pos.x < world_coord(mapWidth)
 		&& pos.y >= 0 && pos.y < world_coord(mapHeight),
@@ -345,7 +345,7 @@ void visTilesUpdate(BASE_OBJECT *psObj)
 	// Record new map visibility provided by object
 	if (lastRecordTilePos > 0)
 	{
-		psObj->watchedTiles = malloc(lastRecordTilePos * sizeof(*psObj->watchedTiles));
+		psObj->watchedTiles = (TILEPOS *)malloc(lastRecordTilePos * sizeof(*psObj->watchedTiles));
 		psObj->numWatchedTiles = lastRecordTilePos;
 		memcpy(psObj->watchedTiles, recordTilePos, lastRecordTilePos * sizeof(*psObj->watchedTiles));
 	}

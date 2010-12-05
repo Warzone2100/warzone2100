@@ -48,11 +48,20 @@
 #include "lib/framework/lexer_input.h"
 #include "effects.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif //__cplusplus
+
 extern int lev_get_lineno(void);
 extern char* lev_get_text(void);
 extern int lev_lex(void);
 extern void lev_set_extra(YY_EXTRA_TYPE user_defined);
 extern int lev_lex_destroy(void);
+
+#ifdef __cplusplus
+}
+#endif //__cplusplus
 
 // block ID number start for the current level data (as opposed to a dataset)
 #define CURRENT_DATAID		LEVEL_MAXFILES
@@ -67,7 +76,7 @@ static LEVEL_DATASET	*psBaseData = NULL;
 static LEVEL_DATASET	*psCurrLevel = NULL;
 
 // dummy level data for single WRF loads
-static LEVEL_DATASET	sSingleWRF = { 0, 0, 0, 0, 0, { 0 }, 0, 0, 0 };
+static LEVEL_DATASET	sSingleWRF = { 0, 0, 0, 0, mod_clean, { 0 }, 0, 0, 0 };
 
 // return values from the lexer
 char *pLevToken;
@@ -776,7 +785,7 @@ BOOL levLoadData(const char* name, char *pSaveName, GAME_TYPE saveType)
 			(saveType == GTYPE_SAVE_START))
 		{
 			debug(LOG_NEVER, "Start mission - no .gam");
-			if (!startMission(psNewLevel->type, NULL))
+			if (!startMission((LEVEL_TYPE)psNewLevel->type, NULL))
 			{
 				return false;
 			}
@@ -999,7 +1008,7 @@ static void levTestLoad(const char* level)
 	static char savegameName[80];
 	bool retval;
 
-	retval = levLoadData(level, NULL, 0);
+	retval = levLoadData(level, NULL, GTYPE_SCENARIO_START);
 	ASSERT(retval, "levLoadData failed selftest");
 	ASSERT(checkResearchStats(), "checkResearchStats failed selftest");
 	ASSERT(checkStructureStats(), "checkStructureStats failed selftest");

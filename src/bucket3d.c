@@ -524,7 +524,7 @@ void bucketAddTypeToList(RENDER_TYPE objectType, void* pObject)
 	{
 		BUCKET_TAG *old = bucketArrayS;
 		size_t reserve = (bucketArrayEOS - old)*2 + 1;
-		bucketArrayS = realloc(old, reserve*sizeof(*old));
+		bucketArrayS = (BUCKET_TAG *)realloc(old, reserve*sizeof(*old));
 		bucketArrayF = bucketArrayS + (bucketArrayF - old);
 		bucketArrayEOS = bucketArrayS + reserve;
 	}

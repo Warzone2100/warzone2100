@@ -245,7 +245,7 @@ void setOverrideMods(char * modlist)
 	int i=0;
 	while ((nextmod = strstr(curmod, ", ")) && i<MAX_MODS-2)
 	{
-		override_mods[i] = malloc(nextmod-curmod+1);
+		override_mods[i] = (char *)malloc(nextmod-curmod+1);
 		strlcpy(override_mods[i], curmod, nextmod-curmod);
 		override_mods[i][nextmod-curmod] = '\0';
 		curmod = nextmod + 2;
@@ -341,7 +341,7 @@ char * getModList(void)
 		// mod list already constructed
 		return mod_list;
 	}
-	mod_list = malloc(modlist_string_size);
+	mod_list = (char *)malloc(modlist_string_size);
 	mod_list[0] = 0; //initialize
 	for (i=0; i<num_loaded_mods; i++)
 	{
@@ -714,7 +714,7 @@ static void startGameLoop(void)
 {
 	SetGameMode(GS_NORMAL);
 
-	if (!levLoadData(aLevelName, NULL, 0))
+	if (!levLoadData(aLevelName, NULL, GTYPE_SCENARIO_START))
 	{
 		debug( LOG_FATAL, "Shutting down after failure" );
 		exit(EXIT_FAILURE);

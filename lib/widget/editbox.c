@@ -158,7 +158,7 @@ static void insertChar(utf_32_char **pBuffer, size_t *pBufferAllocated, UDWORD *
 	if (len == *pBufferAllocated/sizeof(utf_32_char) - 1)
 	{
 		/* Buffer is full */
-		utf_32_char *newBuffer = realloc(*pBuffer, *pBufferAllocated*2);
+		utf_32_char *newBuffer = (utf_32_char *)realloc(*pBuffer, *pBufferAllocated*2);
 		if (!newBuffer)
 		{
 			debug(LOG_ERROR, "Couldn't realloc() string?");
@@ -299,7 +299,7 @@ static void fitStringStart(utf_32_char *pBuffer, UDWORD boxWidth, UWORD *pCount,
 		utf_32_char *tmp;
 		int printChars = 0;
 
-		tmp = malloc( sizeof(utf_32_char) * size32 + sizeof(utf_32_char));
+		tmp = (utf_32_char *)malloc(sizeof(utf_32_char) * size32 + sizeof(utf_32_char));
 		memcpy(tmp, pBuffer, sizeof(utf_32_char) * size32);
 		tmp[size32] = 0;
 
@@ -359,7 +359,7 @@ static void fitStringEnd(utf_32_char *pBuffer, UDWORD boxWidth, UWORD *pStart, U
 		utf_32_char *tmp = NULL, *utf32buf = NULL;
 		int printChars = 0;
 
-		utf32buf = malloc( sizeof(utf_32_char) * olen32 + sizeof(utf_32_char));
+		utf32buf = (utf_32_char *)malloc(sizeof(utf_32_char) * olen32 + sizeof(utf_32_char));
 		memcpy(utf32buf, pBuffer, sizeof(utf_32_char) * olen32);
 		utf32buf[olen32] = 0;
 		tmp = utf32buf;
@@ -775,7 +775,7 @@ void editBoxDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *
 
 	/* If there is more text than will fit into the box, display the bit with the cursor in it */
 	size = utf32len(psEdBox->aText);
-	UTF32string = malloc( sizeof(utf_32_char) * size + sizeof(utf_32_char));
+	UTF32string = (utf_32_char *)malloc(sizeof(utf_32_char) * size + sizeof(utf_32_char));
 	memcpy(UTF32string, psEdBox->aText, sizeof(utf_32_char) * size);
 
 	pInsPoint = UTF32string + psEdBox->printStart;		// deal with position
@@ -805,7 +805,7 @@ void editBoxDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *
 		int size=0;
 
 		size = utf32len(psEdBox->aText);
-		UTF32string = malloc( sizeof(utf_32_char) * size + sizeof(utf_32_char));
+		UTF32string = (utf_32_char *)malloc(sizeof(utf_32_char) * size + sizeof(utf_32_char));
 		memcpy(UTF32string, psEdBox->aText, sizeof(utf_32_char) * size);
 
 		pInsPoint =  UTF32string + psEdBox->insPos;		// deal with position 
@@ -829,7 +829,7 @@ void editBoxDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *
 		int size=0;
 
 		size = utf32len(psEdBox->aText);
-		UTF32string = malloc( sizeof(utf_32_char) * size + sizeof(utf_32_char));
+		UTF32string = (utf_32_char *)malloc(sizeof(utf_32_char) * size + sizeof(utf_32_char));
 		memcpy(UTF32string, psEdBox->aText, sizeof(utf_32_char) * size);
 
 		pInsPoint =  UTF32string + psEdBox->insPos;		// deal with position 

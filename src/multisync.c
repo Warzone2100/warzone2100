@@ -227,7 +227,7 @@ static BOOL sendDroidCheck(void)
 	}
 
 		// Allocate space for the list of droids to send
-		ppD = alloca(sizeof(DROID *) * toSend);
+		ppD = (DROID **)alloca(sizeof(DROID *) * toSend);
 
 		// Get the list of droids to sent
 		for (i = 0, count = 0; i < toSend; i++)
@@ -385,9 +385,9 @@ BOOL recvDroidCheck(NETQUEUE queue)
 				case DORDER_MOVE:
 					if (pc.order != pc2.order || pc.orderX != pc2.orderX || pc.orderY != pc2.orderY)
 					{
-						debug(LOG_SYNC, "Droid %u out of synch, changing order from %s to %s(%d, %d).", pc.droidID, getDroidOrderName(pc2.order), getDroidOrderName(pc.order), pc.orderX, pc.orderY);
+						debug(LOG_SYNC, "Droid %u out of synch, changing order from %s to %s(%d, %d).", pc.droidID, getDroidOrderName((DROID_ORDER)pc2.order), getDroidOrderName((DROID_ORDER)pc.order), pc.orderX, pc.orderY);
 						// reroute the droid.
-						orderDroidLoc(pD, pc.order, pc.orderX, pc.orderY, ModeImmediate);
+						orderDroidLoc(pD, (DROID_ORDER)pc.order, pc.orderX, pc.orderY, ModeImmediate);
 					}
 					break;
 				case DORDER_ATTACK:
@@ -396,13 +396,13 @@ BOOL recvDroidCheck(NETQUEUE queue)
 						BASE_OBJECT *obj = IdToPointer(pc.targetID, ANYPLAYER);
 						if (obj != NULL)
 						{
-							debug(LOG_SYNC, "Droid %u out of synch, changing order from %s to %s(%u).", pc.droidID, getDroidOrderName(pc2.order), getDroidOrderName(pc.order), pc.targetID);
+							debug(LOG_SYNC, "Droid %u out of synch, changing order from %s to %s(%u).", pc.droidID, getDroidOrderName((DROID_ORDER)pc2.order), getDroidOrderName((DROID_ORDER)pc.order), pc.targetID);
 							// remote droid is attacking, not here tho!
-							orderDroidObj(pD, pc.order, IdToPointer(pc.targetID, ANYPLAYER), ModeImmediate);
+							orderDroidObj(pD, (DROID_ORDER)pc.order, IdToPointer(pc.targetID, ANYPLAYER), ModeImmediate);
 						}
 						else
 						{
-							debug(LOG_SYNC, "Droid %u out of synch, would change order from %s to %s(%u), but can't find target.", pc.droidID, getDroidOrderName(pc2.order), getDroidOrderName(pc.order), pc.targetID);
+							debug(LOG_SYNC, "Droid %u out of synch, would change order from %s to %s(%u), but can't find target.", pc.droidID, getDroidOrderName((DROID_ORDER)pc2.order), getDroidOrderName((DROID_ORDER)pc.order), pc.targetID);
 						}
 					}
 					break;
@@ -412,9 +412,9 @@ BOOL recvDroidCheck(NETQUEUE queue)
 					{
 						DROID_ORDER_DATA sOrder;
 						memset(&sOrder, 0, sizeof(DROID_ORDER_DATA));
-						sOrder.order = pc.order;
+						sOrder.order = (DROID_ORDER)pc.order;
 
-						debug(LOG_SYNC, "Droid %u out of synch, changing order from %s to %s.", pc.droidID, getDroidOrderName(pc2.order), getDroidOrderName(pc.order));
+						debug(LOG_SYNC, "Droid %u out of synch, changing order from %s to %s.", pc.droidID, getDroidOrderName((DROID_ORDER)pc2.order), getDroidOrderName((DROID_ORDER)pc.order));
 						turnOffMultiMsg(true);
 						moveStopDroid(pD);
 						orderDroidBase(pD, &sOrder);
@@ -527,7 +527,7 @@ static BOOL sendStructureCheck(void)
 					NETuint32_t(&gameTime);
 					NETuint32_t(&pS->id);
 					NETuint32_t(&pS->body);
-					NETuint32_t(&pS->pStructureType->type);
+					NETenum(&pS->pStructureType->type);
 					NETRotation(&pS->rot);
 					if (hasCapacity)
 					{
@@ -552,14 +552,14 @@ BOOL recvStructureCheck(NETQUEUE queue)
 	uint8_t			player, ourCapacity;
 	uint32_t		body;
 	uint32_t                ref;
-	uint32_t                type;
+	STRUCTURE_TYPE          type;
 
 	NETbeginDecode(queue, GAME_CHECK_STRUCT);
 		NETuint8_t(&player);
 		NETuint32_t(&synchTime);
 		NETuint32_t(&ref);
 		NETuint32_t(&body);
-		NETuint32_t(&type);
+		NETenum(&type);
 		NETRotation(&rot);
 
 		if (player >= MAX_PLAYERS)

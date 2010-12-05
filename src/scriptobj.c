@@ -57,7 +57,7 @@ static INTERP_VAL	scrFunctionResult;	//function return value to be pushed to sta
 // Get values from a base object
 BOOL scrBaseObjGet(UDWORD index)
 {
-	INTERP_TYPE		type = 0;
+	INTERP_TYPE		type = VAL_VOID;
 	BASE_OBJECT		*psObj;
 	DROID			*psDroid;
 	STRUCTURE		*psStruct;
@@ -1246,7 +1246,7 @@ BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 				return true;
 			}
 
-			idStr = malloc(len);
+			idStr = (char *)malloc(len);
 			if (!idStr)
 			{
 				debug(LOG_ERROR, "Out of memory (tried to allocate %u bytes)", (unsigned int)len);

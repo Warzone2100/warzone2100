@@ -168,7 +168,7 @@ static BOOL bCurCallerIsEvent = false;
 
 #define TRCPRINTOPCODE(x) \
 	if (interpTrace) \
-		debug( LOG_NEVER, "%s", scriptOpcodeToString(x) )
+		debug( LOG_NEVER, "%s", scriptOpcodeToString((OPCODE)x) )
 
 #define TRCPRINTSTACKTOP() \
 	if (interpTrace) \
@@ -979,12 +979,12 @@ BOOL interpCheckEquiv(INTERP_TYPE to, INTERP_TYPE from)
 	if (to & VAL_REF)
 	{
 		toRef = true;
-		to &= ~VAL_REF;
+		to = (INTERP_TYPE)(to & ~VAL_REF);
 	}
 	if (from & VAL_REF)
 	{
 		fromRef = true;
-		from &= ~VAL_REF;
+		from = (INTERP_TYPE)(from & ~VAL_REF);
 	}
 	if (toRef != fromRef)
 	{

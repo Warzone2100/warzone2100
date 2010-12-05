@@ -94,7 +94,7 @@ static bool _imd_load_polys( const char **ppFileData, iIMDShape *s, int pieVersi
 		poly->flags = flags;
 		poly->npnts = npnts;
 
-		poly->pindex = malloc(sizeof(*poly->pindex) * poly->npnts);
+		poly->pindex = (VERTEXID *)malloc(sizeof(*poly->pindex) * poly->npnts);
 		if (poly->pindex == NULL)
 		{
 			debug(LOG_ERROR, "(_load_polys) [poly %u] memory alloc fail (poly indices)", i);
@@ -170,7 +170,7 @@ static bool _imd_load_polys( const char **ppFileData, iIMDShape *s, int pieVersi
 			int nFrames, framesPerLine, frame;
 
 			nFrames = MAX(1, s->numFrames);
-			poly->texCoord = malloc(sizeof(*poly->texCoord) * nFrames * poly->npnts);
+			poly->texCoord = (Vector2f *)malloc(sizeof(*poly->texCoord) * nFrames * poly->npnts);
 			ASSERT_OR_RETURN(false, poly->texCoord, "Out of memory allocating texture coordinates");
 			framesPerLine = OLD_TEXTURE_SIZE_FIX / (poly->texAnim.x * OLD_TEXTURE_SIZE_FIX);
 			for (j = 0; j < poly->npnts; j++)

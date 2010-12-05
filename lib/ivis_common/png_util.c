@@ -155,7 +155,7 @@ BOOL iV_loadImage_PNG(const char *fileName, iV_Image *image)
 	image->width = png_get_image_width(png_ptr, info_ptr);
 	image->height = png_get_image_height(png_ptr, info_ptr);
 	image->depth = png_get_channels(png_ptr, info_ptr);
-	image->bmp = malloc(image->height * png_get_rowbytes(png_ptr, info_ptr));
+	image->bmp = (unsigned char *)malloc(image->height * png_get_rowbytes(png_ptr, info_ptr));
 
 	{
 		unsigned int i = 0;
@@ -219,7 +219,7 @@ static void internal_saveImage_PNG(const char *fileName, const iV_Image *image, 
 		}
 		row_stride = image->width * channelsPerPixel * image->depth / 8;
 
-		scanlines = malloc(sizeof(const char*) * image->height);
+		scanlines = (unsigned char **)malloc(sizeof(unsigned char *) * image->height);
 		if (scanlines == NULL)
 		{
 			debug(LOG_ERROR, "pie_PNGSaveFile: Couldn't allocate memory\n");
@@ -304,7 +304,7 @@ void iV_saveImage_JPEG(const char *fileName, const iV_Image *image)
 		return;
 	}
 
-	buffer = malloc(sizeof(const char*) * image->height * image->width);
+	buffer = (unsigned char *)malloc(sizeof(const char*) * image->height * image->width);  // Suspect it should be sizeof(unsigned char)*3 == 3 here, not sizeof(const char *) == 8.
 	if (buffer == NULL)
 	{
 		debug(LOG_ERROR, "pie_JPEGSaveFile: Couldn't allocate memory\n");
@@ -319,7 +319,7 @@ void iV_saveImage_JPEG(const char *fileName, const iV_Image *image)
 		memcpy(buffer + row_stride * currentRow, &image->bmp[row_stride * (image->height - currentRow - 1)], row_stride);
 	}
 
-	jpeg = malloc(sizeof(const char*) * image->height * image->width);
+	jpeg = (unsigned char *)malloc(sizeof(const char*) * image->height * image->width);  // Suspect it should be something else here, but sizeof(const char *) == 8 is hopefully big enough...
 	if (jpeg == NULL)
 	{
 		debug(LOG_ERROR, "pie_JPEGSaveFile: Couldn't allocate memory\n");

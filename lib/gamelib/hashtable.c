@@ -205,7 +205,7 @@ void hashTable_InsertElement(HASHTABLE *psTable, void *psElement, intptr_t iKey1
 	udwHashIndex = hashTable_GetHashKey( psTable, iKey1, iKey2 );
 
 	/* get node from heap */
-	psNode = malloc(sizeof(HASHNODE));
+	psNode = (HASHNODE *)malloc(sizeof(HASHNODE));
 
 	/* set node elements */
 	psNode->iKey1     = iKey1;

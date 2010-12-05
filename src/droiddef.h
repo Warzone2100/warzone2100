@@ -33,6 +33,8 @@
 #include "orderdef.h"
 #include "statsdef.h"
 #include "weapondef.h"
+#include "orderdef.h"
+#include "actiondef.h"
 
 #ifdef __cplusplus
 extern "C"

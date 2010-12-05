@@ -105,7 +105,7 @@ static code_part code_part_from_str(const char *str)
 
 	for (i = 0; i < LOG_LAST; i++) {
 		if (strcasecmp(code_part_names[i], str) == 0) {
-			return i;
+			return (code_part)i;
 		}
 	}
 	return LOG_LAST;

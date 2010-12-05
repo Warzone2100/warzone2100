@@ -4612,7 +4612,7 @@ static BOOL saveTemplate(void)
 		if ( psTempl == NULL )
 		{
 			/* The design needs a new template in the list */
-			psTempl = malloc(sizeof(DROID_TEMPLATE));
+			psTempl = (DROID_TEMPLATE *)malloc(sizeof(DROID_TEMPLATE));
 			if (psTempl == NULL)
 			{
 				debug(LOG_ERROR, "saveTemplate: Out of memory");

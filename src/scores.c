@@ -400,7 +400,7 @@ UDWORD	width,height;
 				}
 			}
 			/* Now render the text by the bar */
-			sprintf(text, getDescription(infoBars[index].stringID), infoBars[index].number);
+			sprintf(text, getDescription((MR_STRING)infoBars[index].stringID), infoBars[index].number);
 			iV_DrawText(text, x + width + 16, y + 12);
 
 			/* If we're beyond STAT_ROOKIE, then we're on rankings */

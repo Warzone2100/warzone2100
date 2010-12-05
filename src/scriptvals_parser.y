@@ -874,7 +874,7 @@ void yyerror(const char* fmt, ...)
 	size = vsnprintf(NULL, 0, fmt, args);
 	va_end(args);
 
-	txtBuf = alloca(size + 1);
+	txtBuf = (char *)alloca(size + 1);
 
 	va_start(args, fmt);
 	vsprintf(txtBuf, fmt, args);

@@ -70,7 +70,7 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 		numImages += (*ptr == '\n') ? 1 : 0;
 		ptr++;
 	}
-	ImageFile = malloc(sizeof(IMAGEFILE) + sizeof(IMAGEDEF) * numImages);
+	ImageFile = (IMAGEFILE *)malloc(sizeof(IMAGEFILE) + sizeof(IMAGEDEF) * numImages);
 	ImageFile->ImageDefs = (IMAGEDEF*)(ImageFile + 1); // we allocated extra space for it
 	ptr = pFileData;
 	numImages = 0;
@@ -95,7 +95,7 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 		while (ptr < pFileData + pFileSize && *ptr++ != '\n'); // skip rest of line
 	}
 
-	dot = strrchr(fileName, '/');	// go to last path character
+	dot = (char *)strrchr(fileName, '/');  // go to last path character
 	dot++;				// skip it
 	strcpy(texFileName, dot);	// make a copy
 	dot = strchr(texFileName, '.');	// find extension

@@ -340,7 +340,7 @@ static inline RES_DATA* resDataInit(const char *DebugName, UDWORD DataIDHash, vo
 	char* resID;
 
 	// Allocate memory to hold the RES_DATA structure plus the identifying string
-	RES_DATA* psRes = malloc(sizeof(RES_DATA) + strlen(DebugName) + 1);
+	RES_DATA *psRes = (RES_DATA *)malloc(sizeof(RES_DATA) + strlen(DebugName) + 1);
 	if (!psRes)
 	{
 		debug(LOG_ERROR, "resDataInit: Out of memory");

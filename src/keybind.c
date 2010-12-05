@@ -2731,7 +2731,7 @@ void kf_ToggleRadarTerrain(void)
 	}
 	if (radarDrawMode >= NUM_RADAR_MODES)
 	{
-		radarDrawMode = 0;
+		radarDrawMode = (RADAR_DRAW_MODE)0;
 	}
 	switch (radarDrawMode)
 	{

@@ -237,15 +237,15 @@ static inline BASE_OBJECT* createObject(UDWORD player, OBJECT_TYPE objType)
 	switch (objType)
 	{
 		case OBJ_FEATURE:
-			newObject = malloc(sizeof(FEATURE));
+			newObject = (BASE_OBJECT *)malloc(sizeof(FEATURE));
 			break;
 
 		case OBJ_STRUCTURE:
-			newObject = malloc(sizeof(STRUCTURE));
+			newObject = (BASE_OBJECT *)malloc(sizeof(STRUCTURE));
 			break;
 
 		case OBJ_DROID:
-			newObject = malloc(sizeof(DROID));
+			newObject = (BASE_OBJECT *)malloc(sizeof(DROID));
 			break;
 
 		default:
@@ -732,7 +732,7 @@ BOOL createFlagPosition(FLAG_POSITION **ppsNew, UDWORD player)
 {
 	ASSERT( player<MAX_PLAYERS, "createFlagPosition: invalid player number" );
 
-	*ppsNew = malloc(sizeof(FLAG_POSITION));
+	*ppsNew = (FLAG_POSITION *)malloc(sizeof(FLAG_POSITION));
 	if (*ppsNew == NULL)
 	{
 		debug(LOG_ERROR, "Out of memory");

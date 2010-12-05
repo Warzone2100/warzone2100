@@ -187,7 +187,7 @@ struct OggVorbisDecoderState* sound_CreateOggVorbisDecoder(PHYSFS_file* PHYSFS_f
 	int error;
 #endif
 
-	struct OggVorbisDecoderState* decoder = malloc(sizeof(struct OggVorbisDecoderState));
+	struct OggVorbisDecoderState* decoder = (struct OggVorbisDecoderState *)malloc(sizeof(struct OggVorbisDecoderState));
 	if (decoder == NULL)
 	{
 		debug(LOG_FATAL, "Out of memory");
@@ -298,7 +298,7 @@ soundDataBuffer* sound_DecodeOggVorbis(struct OggVorbisDecoderState* decoder, si
 	bufferSize = 0;
 #endif
 
-	buffer = malloc(bufferSize + sizeof(soundDataBuffer));
+	buffer = (soundDataBuffer *)malloc(bufferSize + sizeof(soundDataBuffer));
 	if (buffer == NULL)
 	{
 		debug(LOG_ERROR, "couldn't allocate memory (%lu bytes requested)", (unsigned long) bufferSize + sizeof(soundDataBuffer));

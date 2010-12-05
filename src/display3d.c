@@ -413,7 +413,7 @@ static void NetworkDisplayImage(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 	UDWORD x = xOffset+psWidget->x;
 	UDWORD y = yOffset+psWidget->y;
 	UWORD ImageID;
-	unsigned status = UNPACKDWORD_TRI_A(psWidget->UserData);
+	CONNECTION_STATUS status = (CONNECTION_STATUS)UNPACKDWORD_TRI_A(psWidget->UserData);
 
 	ASSERT( psWidget->type == WIDG_BUTTON,"Not a button" );
 
@@ -3770,7 +3770,7 @@ ENERGY_BAR toggleEnergyBars(void)
 	{
 		barMode = BAR_SELECTED;
 	}
-	return barMode;
+	return (ENERGY_BAR)barMode;
 }
 
 /// Set everything up for when the player assigns the sensor target

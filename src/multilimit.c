@@ -363,7 +363,7 @@ void createLimitSet(void)
 
 	// Allocate some memory for the changes
 	bufSize = numchanges * sizeof(MULTISTRUCTLIMITS);
-	pEntry = malloc(bufSize);
+	pEntry = (MULTISTRUCTLIMITS *)malloc(bufSize);
 	memset(pEntry, 255, bufSize);
 
 	// Prepare chunk

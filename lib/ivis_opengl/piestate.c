@@ -47,7 +47,7 @@
  */
 
 // Variables for the coloured mouse cursor
-static CURSOR MouseCursor = 0;
+static CURSOR MouseCursor = CURSOR_ARROW;
 static bool ColouredMouse = false;
 static IMAGEFILE* MouseCursors = NULL;
 static uint16_t MouseCursorIDs[CURSOR_MAX];
@@ -72,7 +72,7 @@ static char *readShaderBuf(const char *name)
 	debug(LOG_3D, "Reading...[directory: %s] %s", PHYSFS_getRealDir(name), name);
 	ASSERT_OR_RETURN(0, fp != NULL, "Could not open %s", name);
 	filesize = PHYSFS_fileLength(fp);
-	buffer = malloc(filesize + 1);
+	buffer = (char *)malloc(filesize + 1);
 	if (buffer)
 	{
 		PHYSFS_read(fp, buffer, 1, filesize);

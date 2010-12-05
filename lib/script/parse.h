@@ -140,7 +140,7 @@ typedef struct _var_symbol
 	const char	*pIdent;	// variable's identifier
 	INTERP_TYPE		type;		// variable type
 	STORAGE_TYPE	storage;	// Where the variable is stored
-	INTERP_TYPE		objType;	// The object type if this is an object variable
+	uint32_t /*INTERP_TYPE*/ objType;  // The object type if this is an object variable
 	UDWORD			index;		// Index of the variable in its data space
 	SCRIPT_VARFUNC	get, set;	// Access functions if the variable is stored in an object/in-game
 	UDWORD			dimensions;						// number of dimensions of an array - 0 for normal var
@@ -198,7 +198,7 @@ typedef struct _func_symbol
 	SCRIPT_FUNC	pFunc;		// Pointer to the instinct function
 	INTERP_TYPE	type;		// function type
 	UDWORD		numParams;	// Number of parameters to the function
-	INTERP_TYPE	aParams[INST_MAXPARAMS];
+	uint32_t/*INTERP_TYPE*/ aParams[INST_MAXPARAMS];
 							// List of parameter types
 	BOOL		script;		// Whether the function is defined in the script
 							// or a C instinct function
@@ -250,7 +250,7 @@ typedef struct _callback_symbol
 	TRIGGER_TYPE	type;		// user defined callback id >= TR_CALLBACKSTART
 	SCRIPT_FUNC		pFunc;		// Pointer to the instinct function
 	UDWORD			numParams;	// Number of parameters to the function
-	INTERP_TYPE		aParams[INST_MAXPARAMS];
+	uint32_t/*INTERP_TYPE*/ aParams[INST_MAXPARAMS];
 								// List of parameter types
 } CALLBACK_SYMBOL;
 

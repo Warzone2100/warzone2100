@@ -297,13 +297,13 @@ BOOL eventInitValueFuncs(SDWORD maxType)
 {
 	ASSERT(asReleaseFuncs == NULL, "eventInitValueFuncs: array already initialised");
 
-	asCreateFuncs = calloc(maxType, sizeof(*asCreateFuncs));
+	asCreateFuncs = (VAL_CREATE_FUNC *)calloc(maxType, sizeof(*asCreateFuncs));
 	if (!asCreateFuncs)
 	{
 		debug(LOG_SCRIPT, "eventInitValueFuncs: Out of memory");
 		return false;
 	}
-	asReleaseFuncs = calloc(maxType, sizeof(*asReleaseFuncs));
+	asReleaseFuncs = (VAL_RELEASE_FUNC *)calloc(maxType, sizeof(*asReleaseFuncs));
 	if (!asReleaseFuncs)
 	{
 		debug(LOG_SCRIPT, "eventInitValueFuncs: Out of memory");
@@ -356,7 +356,7 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 	ASSERT(psCode != NULL, "eventNewContext: Invalid code pointer");
 
 	// Get a new context
-	psContext = calloc(1, sizeof(*psContext));
+	psContext = (SCRIPT_CONTEXT *)calloc(1, sizeof(*psContext));
 	if (psContext == NULL)
 	{
 		ASSERT(false, "eventNewContext: Out of memory");
@@ -436,7 +436,7 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 
 	while (val >= 0)
 	{
-		psNewChunk = malloc(sizeof(VAL_CHUNK));
+		psNewChunk = (VAL_CHUNK *)malloc(sizeof(VAL_CHUNK));
 		if (psNewChunk == NULL)
 		{
 			for(psNewChunk=psContext->psGlobals; psNewChunk; psNewChunk = psNextChunk)
@@ -850,7 +850,7 @@ static BOOL eventInitTrigger(ACTIVE_TRIGGER **ppsTrigger, SCRIPT_CONTEXT *psCont
 	}
 
 	// Get a trigger object
-	psNewTrig = malloc(sizeof(ACTIVE_TRIGGER));
+	psNewTrig = (ACTIVE_TRIGGER *)malloc(sizeof(ACTIVE_TRIGGER));
 	if (psNewTrig == NULL)
 	{
 		debug(LOG_ERROR, "eventInitTrigger: Out of memory");
@@ -887,7 +887,7 @@ BOOL eventLoadTrigger(UDWORD time, SCRIPT_CONTEXT *psContext,
 		"eventLoadTrigger: Trigger out of range" );
 
 	// Get a trigger object
-	psNewTrig = malloc(sizeof(ACTIVE_TRIGGER));
+	psNewTrig = (ACTIVE_TRIGGER *)malloc(sizeof(ACTIVE_TRIGGER));
 	if (psNewTrig == NULL)
 	{
 		debug( LOG_FATAL, "eventLoadTrigger: out of memory" );
@@ -922,7 +922,7 @@ BOOL eventAddPauseTrigger(SCRIPT_CONTEXT *psContext, UDWORD event, UDWORD offset
 		"eventAddTrigger: Event out of range" );
 
 	// Get a trigger object
-	psNewTrig = malloc(sizeof(ACTIVE_TRIGGER));
+	psNewTrig = (ACTIVE_TRIGGER *)malloc(sizeof(ACTIVE_TRIGGER));
 	if (psNewTrig == NULL)
 	{
 		debug(LOG_ERROR, "eventAddPauseTrigger: Out of memory");

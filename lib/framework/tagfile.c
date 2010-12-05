@@ -228,7 +228,7 @@ static bool scan_defines(define_t *node, define_t *group)
 			bool success;
 
 			countGroups++;
-			node->group = malloc(sizeof(*node));
+			node->group = (define_t *)malloc(sizeof(*node));
 			success = scan_defines(node->group, node);
 
 			if (!success)
@@ -243,7 +243,7 @@ static bool scan_defines(define_t *node, define_t *group)
 		}
 		if (*bufptr != '\0' && !group_end)
 		{
-			node->next = malloc(sizeof(*node));
+			node->next = (define_t *)malloc(sizeof(*node));
 			node = node->next;
 		}
 	}
@@ -272,7 +272,7 @@ static bool init(const char *definition, const char *datafile, bool write)
 	fsize = PHYSFS_fileLength(fp);
 	assert(fsize > 0);
 
-	buffer = bufptr = malloc(fsize + 1);
+	buffer = bufptr = (char *)malloc(fsize + 1);
 	if (!buffer || !bufptr)
 	{
 		debug(LOG_FATAL, "init(): Out of memory");
@@ -289,7 +289,7 @@ static bool init(const char *definition, const char *datafile, bool write)
 		return false;
 	}
 	current = NULL; // keeps track of parent group below
-	first = malloc(sizeof(*first));
+	first = (define_t *)malloc(sizeof(*first));
 	first->parent = NULL;
 	first->group = NULL;
 	first->next = NULL;
@@ -831,7 +831,7 @@ uint8_t *tagRead8vDup(element_t tag, int *size)
 		*size = -1;
 		return NULL;
 	}
-	values = malloc(count);
+	values = (uint8_t *)malloc(count);
 	*size = count;
 	for (i = 0; i < count; i++)
 	{
@@ -993,7 +993,7 @@ char *tagReadStringDup(element_t tag)
 		TF_ERROR("tagread_stringdup: Bad string format");
 		return NULL;
 	}
-	buffer = malloc(actualsize);
+	buffer = (char *)malloc(actualsize);
 	assert(buffer != NULL);
 	readsize = PHYSFS_read(handle, buffer, 1, actualsize);
 	if (readsize != actualsize || *(buffer + actualsize - 1) != '\0')

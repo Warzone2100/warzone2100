@@ -718,7 +718,7 @@ static bool dataIMDBufferLoad(const char *pBuffer, UDWORD size, void **ppData)
  */
 static bool dataImageLoad(const char *fileName, void **ppData)
 {
-	iV_Image *psSprite = malloc(sizeof(iV_Image));
+	iV_Image *psSprite = (iV_Image *)malloc(sizeof(iV_Image));
 	if (!psSprite)
 	{
 		return false;
@@ -792,13 +792,13 @@ static bool dataTexPageLoad(const char *fileName, void **ppData)
 	{
 		// replace the old texture page with the new one
 		debug(LOG_TEXTURE, "replacing %s with new texture %s", texpage, fileName);
-		(void) pie_ReplaceTexPage(*ppData, texpage, getTextureSize(), true);
+		pie_ReplaceTexPage((iV_Image *)*ppData, texpage, getTextureSize(), true);
 	}
 	else
 	{
 		debug(LOG_TEXTURE, "adding page %s with texture %s", texpage, fileName);
 		SetLastResourceFilename(texpage);
-		(void) pie_AddTexPage(*ppData, texpage, 0, getTextureSize(), true);
+		pie_AddTexPage((iV_Image *)*ppData, texpage, 0, getTextureSize(), true);
 	}
 
 	return true;
@@ -828,13 +828,13 @@ static bool dataTexPageTCMaskLoad(const char *fileName, void **ppData)
 	{
 		// replace the old texture page with the new one
 		debug(LOG_TEXTURE, "replacing %s with new tcmask %s", texpage, fileName);
-		(void) pie_ReplaceTexPage(*ppData, texpage, getTextureSize(), false);
+		pie_ReplaceTexPage((iV_Image *)*ppData, texpage, getTextureSize(), false);
 	}
 	else
 	{
 		debug(LOG_TEXTURE, "adding page %s with tcmask %s", texpage, fileName);
 		SetLastResourceFilename(texpage);
-		(void) pie_AddTexPage(*ppData, texpage, 0, getTextureSize(), false);
+		pie_AddTexPage((iV_Image *)*ppData, texpage, 0, getTextureSize(), false);
 	}
 
 	return true;
@@ -994,7 +994,7 @@ static bool dataScriptLoad(const char* fileName, void **ppData)
 	// due to the changes in r2531 we must do this routine a bit different.
 	fileSize = PHYSFS_fileLength(fileHandle);
 
-	pBuffer = malloc(fileSize * sizeof(char));
+	pBuffer = (uint8_t *)malloc(fileSize * sizeof(uint8_t));
 	if (pBuffer == NULL)
 	{
 		debug(LOG_FATAL, "Fatal memory allocation, couldn't allocate %lld buffer", fileSize);
@@ -1030,7 +1030,7 @@ static bool dataScriptLoad(const char* fileName, void **ppData)
 
 static void dataScriptRelease(void *pData)
 {
-	SCRIPT_CODE *psCode = pData;
+	SCRIPT_CODE *psCode = (SCRIPT_CODE *)pData;
 	scriptFreeCode(psCode);
 }
 
@@ -1062,7 +1062,7 @@ static bool dataScriptLoadVals(const char* fileName, void **ppData)
 	// due to the changes in r2532 we must do this routine a bit different.
 	fileSize = PHYSFS_fileLength(fileHandle);
 
-	pBuffer = malloc(fileSize * sizeof(char));
+	pBuffer = (uint8_t *)malloc(fileSize * sizeof(uint8_t));
 	if (pBuffer == NULL)
 	{
 		debug(LOG_FATAL, "Fatal memory allocation, couldn't allocate %lld buffer", fileSize);

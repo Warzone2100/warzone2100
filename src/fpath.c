@@ -160,7 +160,7 @@ static int fpathThreadFunc(WZ_DECL_UNUSED void *data)
 		}
 
 		// Create future result
-		psResult = malloc(sizeof(*psResult));
+		psResult = (PATHRESULT *)malloc(sizeof(*psResult));
 		psResult->done = false;
 		psResult->droidID = job.droidID;
 		psResult->sMove.asPath = NULL;
@@ -376,7 +376,7 @@ static inline int fpathDistToTile(int tileX, int tileY, int pointX, int pointY)
 
 static void fpathSetMove(MOVE_CONTROL *psMoveCntl, SDWORD targetX, SDWORD targetY)
 {
-	psMoveCntl->asPath = realloc(psMoveCntl->asPath, sizeof(*psMoveCntl->asPath));
+	psMoveCntl->asPath = (Vector2i *)realloc(psMoveCntl->asPath, sizeof(*psMoveCntl->asPath));
 	psMoveCntl->DestinationX = targetX;
 	psMoveCntl->DestinationY = targetY;
 	psMoveCntl->numPoints = 1;
@@ -534,7 +534,7 @@ static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int sta
 	}
 
 	// We were not waiting for a result, and found no trivial path, so create new job and start waiting
-	psJob = malloc(sizeof(*psJob));
+	psJob = (PATHJOB *)malloc(sizeof(*psJob));
 	ASSERT_OR_RETURN(FPR_FAILED, psJob, "Out of memory");
 	psJob->origX = startX;
 	psJob->origY = startY;
@@ -665,7 +665,7 @@ FPATH_RETVAL fpathDroidRoute(DROID* psDroid, SDWORD tX, SDWORD tY, FPATH_MOVETYP
 // Run only from path thread
 static void fpathExecute(PATHJOB *psJob, PATHRESULT *psResult)
 {
-	FPATH_RETVAL retval = fpathAStarRoute(&psResult->sMove, psJob);
+	ASR_RETVAL retval = fpathAStarRoute(&psResult->sMove, psJob);
 
 	ASSERT(retval != ASR_OK || psResult->sMove.asPath, "Ok result but no path in result");
 	ASSERT(retval == ASR_FAILED || psResult->sMove.numPoints > 0, "Ok result but no length of path in result");
