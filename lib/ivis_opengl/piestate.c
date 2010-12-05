@@ -53,7 +53,8 @@ static IMAGEFILE* MouseCursors = NULL;
 static uint16_t MouseCursorIDs[CURSOR_MAX];
 static bool MouseVisible = true;
 static GLuint shaderProgram[SHADER_MAX];
-static GLint locTeam, locFog;
+static GLfloat shaderStretch = 0;
+static GLint locTeam, locStretch, locTCMask, locFog;
 static SHADER_MODE currentShaderMode = SHADER_NONE;
 
 /*
@@ -240,6 +241,8 @@ static inline GLuint pie_SetShader(SHADER_MODE shaderMode)
 		locTex0 = glGetUniformLocation(shaderProgram[shaderMode], "Texture0");
 		locTex1 = glGetUniformLocation(shaderProgram[shaderMode], "Texture1");
 		locTeam = glGetUniformLocation(shaderProgram[shaderMode], "teamcolour");
+		locStretch = glGetUniformLocation(shaderProgram[shaderMode], "stretch");
+		locTCMask = glGetUniformLocation(shaderProgram[shaderMode], "tcmask");
 		locFog = glGetUniformLocation(shaderProgram[shaderMode], "fogEnabled");
 
 		// These never change
@@ -257,6 +260,11 @@ void pie_DeactivateShader(void)
 	glUseProgram(0);
 }
 
+void pie_SetShaderStretchDepth(float stretch)
+{
+	shaderStretch = stretch;
+}
+
 void pie_ActivateShader_TCMask(PIELIGHT teamcolour, int maskpage)
 {
 	GLfloat colour4f[4];
@@ -265,6 +273,8 @@ void pie_ActivateShader_TCMask(PIELIGHT teamcolour, int maskpage)
 
 	pal_PIELIGHTtoRGBA4f(&colour4f[0], teamcolour);
 	glUniform4fv(locTeam, 1, &colour4f[0]);
+	glUniform1f(locStretch, shaderStretch);
+	glUniform1i(locTCMask, maskpage != iV_TEX_INVALID);
 	glUniform1i(locFog, rendStates.fog);
 
 	if (maskpage != iV_TEX_INVALID)

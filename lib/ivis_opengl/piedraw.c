@@ -202,18 +202,20 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 	glColor4ubv(colour.vector);	// Only need to set once for entire model
 	pie_SetTexturePage(shape->texpage);
 
-	// Activate TCMask if needed
-	if (shape->flags & iV_IMD_TCMASK &&	rendStates.rendMode == REND_OPAQUE)
-	{
-		pie_ActivateShader_TCMask(teamcolour, shape->tcmaskpage);
-	}
+	pie_ActivateShader_TCMask(teamcolour, shape->tcmaskpage);
+
+	frame %= MAX(1, shape->numFrames);
 
 	for (pPolys = shape->polys; pPolys < shape->polys + shape->npolys; pPolys++)
 	{
-		Vector2f	texCoords[pie_MAX_VERTICES_PER_POLYGON];
 		Vector3f	vertexCoords[pie_MAX_VERTICES_PER_POLYGON];
-		unsigned int n;
+		unsigned int	n, fidx = frame;
 		VERTEXID	*index;
+
+		if (!(pPolys->flags & iV_IMD_TEXANIM))
+		{
+			fidx = 0;
+		}
 
 		for (n = 0, index = pPolys->pindex;
 				n < pPolys->npnts;
@@ -222,30 +224,9 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 			vertexCoords[n].x = shape->points[*index].x;
 			vertexCoords[n].y = shape->points[*index].y;
 			vertexCoords[n].z = shape->points[*index].z;
-			texCoords[n].x = pPolys->texCoord[n].x;
-			texCoords[n].y = pPolys->texCoord[n].y;
 		}
 
 		polyCount++;
-
-		// Run TextureAnimation
-		if (frame && pPolys->flags & iV_IMD_TEXANIM)
-		{
-			frame %= shape->numFrames;
-
-			if (frame > 0)
-			{
-				const int framesPerLine = OLD_TEXTURE_SIZE_FIX / (pPolys->texAnim.x * OLD_TEXTURE_SIZE_FIX);
-				const int uFrame = (frame % framesPerLine) * (pPolys->texAnim.x * OLD_TEXTURE_SIZE_FIX);
-				const int vFrame = (frame / framesPerLine) * (pPolys->texAnim.y * OLD_TEXTURE_SIZE_FIX);
-
-				for (n = 0; n < pPolys->npnts; n++)
-				{
-					texCoords[n].x += uFrame / OLD_TEXTURE_SIZE_FIX;
-					texCoords[n].y += vFrame / OLD_TEXTURE_SIZE_FIX;
-				}
-			}
-		}
 
 		glBegin(GL_TRIANGLE_FAN);
 
@@ -256,18 +237,14 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 
 		for (n = 0; n < pPolys->npnts; n++)
 		{
-			glTexCoord2fv((GLfloat*)&texCoords[n]);
+			glTexCoord2fv((GLfloat*)&pPolys->texCoord[fidx * pPolys->npnts + n]);
 			glVertex3fv((GLfloat*)&vertexCoords[n]);
 		}
 
 		glEnd();
 	}
 
-	// Deactivate TCMask if it was previously enabled
-	if (shape->flags & iV_IMD_TCMASK && rendStates.rendMode == REND_OPAQUE)
-	{
-		pie_DeactivateShader();
-	}
+	pie_DeactivateShader();
 
 	if (pieFlag & pie_BUTTON)
 	{

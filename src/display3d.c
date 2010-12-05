@@ -2047,13 +2047,13 @@ static PIELIGHT getBlueprintColour(STRUCT_STATES state)
 	}
 }
 
+
 /// Draw the structures
 void	renderStructure(STRUCTURE *psStructure)
 {
 	int			i, structX, structY, rx, rz, colour, rotation, frame, animFrame, pieFlag, pieFlagData;
 	PIELIGHT		buildingBrightness;
 	Vector3i		dv;
-	Vector3f		*temp = NULL;
 	BOOL			bHitByElectronic = false;
 	BOOL			defensive = false;
 	iIMDShape		*strImd = psStructure->sDisplay.imd;
@@ -2091,31 +2091,6 @@ void	renderStructure(STRUCTURE *psStructure)
 	/* Get it's x and y coordinates so we don't have to deref. struct later */
 	structX = psStructure->pos.x;
 	structY = psStructure->pos.y;
-
-	if (defensive && strImd != NULL)
-	{
-		// Play with the imd so its flattened
-		SDWORD strHeight;
-
-		// Get a copy of the points
-		memcpy(alteredPoints, strImd->points, strImd->npoints * sizeof(Vector3f));
-
-		// Get the height of the centre point for reference
-		strHeight = psStructure->pos.z;
-
-		// Now we got through the shape looking for vertices on the edge
-		for (i = 0; i < strImd->npoints; i++)
-		{
-			if (alteredPoints[i].y <= 0)
-			{
-				SDWORD pointHeight, shift;
-
-				pointHeight = map_Height(structX + alteredPoints[i].x, structY - alteredPoints[i].z);
-				shift = strHeight - pointHeight;
-				alteredPoints[i].y -= shift;
-			}
-		}
-	}
 
 	dv.x = (structX - player.p.x) - terrainMidX * TILE_UNITS;
 	dv.z = terrainMidY * TILE_UNITS - (structY - player.p.z);
@@ -2183,21 +2158,11 @@ void	renderStructure(STRUCTURE *psStructure)
 		objectShimmy((BASE_OBJECT *)psStructure);
 	}
 
-	if (defensive)
-	{
-		temp = strImd->points;
-		strImd->points = alteredPoints;
-	}
-
 	//first check if partially built - ANOTHER HACK!
 	if (psStructure->status == SS_BEING_BUILT || psStructure->status == SS_BEING_DEMOLISHED)
 	{
 		pie_Draw3DShape(strImd, 0, colour, buildingBrightness, WZCOL_BLACK, pie_HEIGHT_SCALED | pie_SHADOW,
 		                (SDWORD)(structHeightScale(psStructure) * pie_RAISE_SCALE));
-		if (defensive)
-		{
-			strImd->points = temp;
-		}
 	}
 	else
 	{
@@ -2211,11 +2176,12 @@ void	renderStructure(STRUCTURE *psStructure)
 			pieFlag = pie_STATIC_SHADOW;
 			pieFlagData = 0;
 		}
-		pie_Draw3DShape(strImd, animFrame, colour, buildingBrightness, WZCOL_BLACK, pieFlag, pieFlagData);
-		if (defensive)
+		if (defensive && !structureIsBlueprint(psStructure))
 		{
-			strImd->points = temp;
+			pie_SetShaderStretchDepth(psStructure->pos.z - psStructure->foundationDepth);
 		}
+		pie_Draw3DShape(strImd, animFrame, colour, buildingBrightness, WZCOL_BLACK, pieFlag, pieFlagData);
+		pie_SetShaderStretchDepth(0);
 
 		// It might have weapons on it
 		if (psStructure->sDisplay.imd->nconnectors > 0)
@@ -2223,7 +2189,7 @@ void	renderStructure(STRUCTURE *psStructure)
 			iIMDShape	*mountImd[STRUCT_MAXWEAPS];
 			iIMDShape	*weaponImd[STRUCT_MAXWEAPS];
 			iIMDShape	*flashImd[STRUCT_MAXWEAPS];
-			
+
 			for (i = 0; i < STRUCT_MAXWEAPS; i++)
 			{
 				weaponImd[i] = NULL;//weapon is gun ecm or sensor
@@ -2359,7 +2325,7 @@ void	renderStructure(STRUCTURE *psStructure)
 							{
 								// animated muzzle
 								frame = (graphicsTime - psStructure->asWeaps[i].lastFired)/flashImd[i]->animInterval;
-								if (frame < flashImd[i]->numFrames)
+								if (frame < flashImd[i]->numFrames && frame >= 0)
 								{
 									pie_Draw3DShape(flashImd[i], frame, colour, buildingBrightness, WZCOL_BLACK, pieFlag | pie_ADDITIVE, EFFECT_MUZZLE_ADDITIVE);
 								}
@@ -2375,7 +2341,6 @@ void	renderStructure(STRUCTURE *psStructure)
 					{
 						const int nWeaponStat = psStructure->asWeaps[i].nStat;
 
-						flashImd[i] = NULL;
 						// get an imd to draw on the connector priority is weapon, ECM, sensor
 						// check for weapon
 						flashImd[i] =  asWeaponStats[nWeaponStat].pMuzzleGraphic;
@@ -2413,7 +2378,7 @@ void	renderStructure(STRUCTURE *psStructure)
 								else
 								{
 									frame = (graphicsTime - psStructure->asWeaps[i].lastFired) / flashImd[i]->animInterval;
-									if (frame < flashImd[i]->numFrames)
+									if (frame < flashImd[i]->numFrames && frame >= 0)
 									{
 										pie_Draw3DShape(flashImd[i], 0, colour, buildingBrightness, WZCOL_BLACK, 0, 0); //muzzle flash
 									}

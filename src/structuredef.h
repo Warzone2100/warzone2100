@@ -298,6 +298,8 @@ typedef struct _structure
 	/* anim data */
 	ANIM_OBJECT	*psCurAnim;
 
+	float		foundationDepth;		///< Depth of structure's foundation
+
 	STRUCT_ANIM_STATES	state;
 	UDWORD			lastStateTime;
 } WZ_DECL_MAY_ALIAS STRUCTURE;

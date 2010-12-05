@@ -1578,13 +1578,16 @@ void alignStructure(STRUCTURE *psBuilding)
 
 		buildFlatten(psBuilding, mapX, mapY, mapH);
 		psBuilding->pos.z = mapH;
+		psBuilding->foundationDepth = 0.0f;
 	}
 	else
 	{
 		iIMDShape	*strImd = psBuilding->sDisplay.imd;
-		int i, pointHeight;
+		int i;
+		float pointHeight;
 
 		psBuilding->pos.z = TILE_MIN_HEIGHT;
+		psBuilding->foundationDepth = TILE_MAX_HEIGHT;
 
 		// Now we got through the shape looking for vertices on the edge
                 for (i = 0; i < strImd->npoints; i++)
@@ -1593,6 +1596,10 @@ void alignStructure(STRUCTURE *psBuilding)
 			if (pointHeight > psBuilding->pos.z)
 			{
 				psBuilding->pos.z = pointHeight;
+			}
+			if (pointHeight < psBuilding->foundationDepth)
+			{
+				psBuilding->foundationDepth = pointHeight;
 			}
 		}
 	}
@@ -6130,10 +6137,10 @@ void printStructureInfo(STRUCTURE *psStructure)
 #ifdef DEBUG
 		if (getDebugMappingStatus())
 		{
-			CONPRINTF(ConsoleString, (ConsoleString, "%s - %d Units assigned - ID %d - armour %d|%d - sensor range %hu power %hu - ECM %u - born %u",
+			CONPRINTF(ConsoleString, (ConsoleString, "%s - %d Units assigned - ID %d - armour %d|%d - sensor range %hu power %hu - ECM %u - born %u - depth %.02f",
 				getStatName(psStructure->pStructureType), countAssignedDroids(psStructure),
 				psStructure->id, psStructure->armour[0][WC_KINETIC], psStructure->armour[0][WC_HEAT],
-					structSensorRange(psStructure), structSensorPower(psStructure), structConcealment(psStructure), psStructure->born));
+					structSensorRange(psStructure), structSensorPower(psStructure), structConcealment(psStructure), psStructure->born, psStructure->foundationDepth));
 		} else
 #endif
 		if (psStructure->pStructureType->pSensor != NULL
