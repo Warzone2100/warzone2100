@@ -11,10 +11,10 @@ PARSERS= \
 
 SRC= \
 	$(PARSERS) \
-	anim.c \
-	animobj.c \
-	gtime.c \
-	hashtable.c
+	anim.cpp \
+	animobj.cpp \
+	gtime.cpp \
+	hashtable.cpp
 
 LIB=gamelib
 

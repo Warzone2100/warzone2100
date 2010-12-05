@@ -175,23 +175,23 @@
 				>
 			</File>
 			<File
-				RelativePath=".\codeprint.c"
+				RelativePath=".\codeprint.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\event.c"
+				RelativePath=".\event.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\eventsave.c"
+				RelativePath=".\eventsave.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\interpreter.c"
+				RelativePath=".\interpreter.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\script.c"
+				RelativePath=".\script.cpp"
 				>
 			</File>
 			<File
@@ -203,7 +203,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\stack.c"
+				RelativePath=".\stack.cpp"
 				>
 			</File>
 		</Filter>

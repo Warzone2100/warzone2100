@@ -150,55 +150,55 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\GLee.c"
+				RelativePath=".\GLee.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\ivi.c"
+				RelativePath=".\ivi.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\pieblitfunc.c"
+				RelativePath=".\pieblitfunc.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\piedraw.c"
+				RelativePath=".\piedraw.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\piefunc.c"
+				RelativePath=".\piefunc.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\piematrix.c"
+				RelativePath=".\piematrix.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\piemode.c"
+				RelativePath=".\piemode.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\piepalette.c"
+				RelativePath=".\piepalette.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\piestate.c"
+				RelativePath=".\piestate.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\rendmode.c"
+				RelativePath=".\rendmode.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\screen.c"
+				RelativePath=".\screen.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\tex.c"
+				RelativePath=".\tex.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\textdraw.c"
+				RelativePath=".\textdraw.cpp"
 				>
 			</File>
 		</Filter>

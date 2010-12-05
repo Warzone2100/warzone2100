@@ -47,13 +47,13 @@ noinst_HEADERS = \
 libscript_a_SOURCES = \
 	chat_lexer.lex.c \
 	chat_parser.tab.c \
-	codeprint.c \
-	event.c \
-	eventsave.c \
-	interpreter.c \
-	script.c \
+	codeprint.cpp \
+	event.cpp \
+	eventsave.cpp \
+	interpreter.cpp \
+	script.cpp \
 	script_lexer.lex.c \
 	script_parser.tab.c \
-	stack.c
+	stack.cpp
 
 libscript_a_LIBADD = $(top_builddir)/lib/framework/libframework.a

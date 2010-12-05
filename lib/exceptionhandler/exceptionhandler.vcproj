@@ -155,11 +155,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\exceptionhandler.c"
+				RelativePath=".\exceptionhandler.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\exchndl.c"
+				RelativePath=".\exchndl.cpp"
 				>
 			</File>
 		</Filter>

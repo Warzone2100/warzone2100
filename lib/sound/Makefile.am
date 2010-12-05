@@ -16,14 +16,14 @@ noinst_HEADERS = \
 	tracklib.h
 
 libsound_a_SOURCES = \
-	audio.c \
-	audio_id.c \
-	cdaudio.c \
-	oggvorbis.c \
-	openal_error.c \
-	openal_track.c \
-	playlist.c \
-	track.c
+	audio.cpp \
+	audio_id.cpp \
+	cdaudio.cpp \
+	oggvorbis.cpp \
+	openal_error.cpp \
+	openal_track.cpp \
+	playlist.cpp \
+	track.cpp
 
 libsound_a_LIBADD = $(top_builddir)/lib/gamelib/libgamelib.a \
 	$(top_builddir)/lib/framework/libframework.a
