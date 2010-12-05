@@ -4650,12 +4650,6 @@ void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player, QUEU
 							{
 								structSetManufacture(psStruct, psNextTemplate, ModeQueue);  // ModeQueue because production lists aren't synchronised.
 							}
-							else
-							{
-								//nothing more to manufacture - reset the Subject and Tab on HCI Form
-								intManufactureFinished(psStruct);
-								//power is returned by factoryProdAdjust()
-							}
 						}
 
 						//tell the interface
