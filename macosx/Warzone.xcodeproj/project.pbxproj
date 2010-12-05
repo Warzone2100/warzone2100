@@ -3630,7 +3630,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"libpng-1.4.4\"\nOutDir=\"libpng\"\nFileName=\"libpng-1.4.4.tar.gz\"\nSourceDLP=\"http://downloads.sourceforge.net/project/libpng/01-libpng-master/1.4.4/libpng-1.4.4.tar.gz\"\nMD5Sum=\"297b38f925e745061489b41b1f7c4bb1\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
+			shellScript = "DirectorY=\"libpng-1.4.4\"\nOutDir=\"libpng\"\nFileName=\"libpng-1.4.4.tar.gz\"\nSourceDLP=\"http://downloads.sourceforge.net/project/libpng/libpng-master/1.4.4/libpng-1.4.4.tar.gz\"\nMD5Sum=\"297b38f925e745061489b41b1f7c4bb1\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
 		};
 		02FD38340BD4012A00776FD3 /* Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
