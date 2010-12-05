@@ -85,7 +85,7 @@
 #define MAX_SAVE_NAME_SIZE_V19	40
 #define MAX_SAVE_NAME_SIZE	60
 
-#define NULL_ID UDWORD_MAX
+static const UDWORD NULL_ID = UDWORD_MAX;
 #define MAX_BODY			SWORD_MAX
 #define SAVEKEY_ONMISSION	0x100
 
@@ -94,7 +94,7 @@
  * The code is reusing some pointers as normal integer values apparently. This
  * should be fixed!
  */
-#define FIXME_CAST_ASSIGN(TYPE, lval, rval) { TYPE* __tmp = (TYPE*) &lval; *__tmp = (TYPE)rval; }
+#define FIXME_CAST_ASSIGN(TYPE, lval, rval) memcpy(&lval, &rval, MIN(sizeof(lval), sizeof(rval)))
 
 /// @note This represents a size internal to savegame files, so: DO NOT CHANGE THIS
 #define MAX_GAME_STR_SIZE 20
@@ -5477,10 +5477,12 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 	}
 	if ((version >= VERSION_14) && (version < VERSION_18))//version 14
 	{
+		SAVE_DROID_V14 v14;
+		memcpy(&v14, psSaveDroid, MIN(sizeof(v14), sizeof(*psSaveDroid)));
 		//warning V14 - v17 only
 		//current Save Droid V18+ uses larger tarStatName
 		//subsequent structure elements are not aligned between the two
-		psSaveDroidV14 = (SAVE_DROID_V14*)psSaveDroid;
+		psSaveDroidV14 = &v14;
 		if (psSaveDroidV14->tarStatName[0] == 0)
 		{
 			psDroid->psTarStats = NULL;
@@ -10642,7 +10644,9 @@ BOOL loadSaveFlagV(char *pFileData, UDWORD filesize, UDWORD numflags, UDWORD ver
 				{
 					if (psStruct->pStructureType->type == factoryToFind)
 					{
-						if ((UDWORD)((FACTORY *)psStruct->pFunctionality)->psAssemblyPoint == psflag->factoryInc)
+						UDWORD factoryInc;
+						FIXME_CAST_ASSIGN(UDWORD, factoryInc, ((FACTORY *)psStruct->pFunctionality)->psAssemblyPoint);
+						if (factoryInc == psflag->factoryInc)
 						{
 							//this is the one so set it
 							((FACTORY *)psStruct->pFunctionality)->psAssemblyPoint = psflag;
@@ -11500,10 +11504,9 @@ static BOOL getNameFromComp(UDWORD compType, char *pDest, UDWORD compIndex)
  */
 BOOL plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[])
 {
-	SAVE_STRUCTURE sSave;  // close eyes now.
-	// assumes save_struct is larger than all previous ones...
-	SAVE_STRUCTURE_V2 *psSaveStructure2 = (SAVE_STRUCTURE_V2*)&sSave;
-	SAVE_STRUCTURE_V20 *psSaveStructure20= (SAVE_STRUCTURE_V20*)&sSave;
+	union { SAVE_STRUCTURE_V2 v2; SAVE_STRUCTURE_V20 v20; } sSave;  // close eyes now.
+	SAVE_STRUCTURE_V2 *psSaveStructure2   = &sSave.v2;
+	SAVE_STRUCTURE_V20 *psSaveStructure20 = &sSave.v20;
 	// ok you can open them again..
 
 	STRUCT_SAVEHEADER *psHeader;
