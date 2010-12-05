@@ -528,7 +528,7 @@ SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot
 	// Check if we have a CB target to begin with
 	if (!proj_Direct(asWeaponStats + psDroid->asWeaps[weapon_slot].nStat))
 	{
-		WEAPON_STATS	*psWStats = psWStats = psDroid->asWeaps[weapon_slot].nStat + asWeaponStats;
+		WEAPON_STATS *psWStats = psDroid->asWeaps[weapon_slot].nStat + asWeaponStats;
 
 		bestTarget = aiSearchSensorTargets((BASE_OBJECT *)psDroid, weapon_slot, psWStats, &tmpOrigin);
 		bestMod = targetAttackWeight(bestTarget, (BASE_OBJECT *)psDroid, weapon_slot);
