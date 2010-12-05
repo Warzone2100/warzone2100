@@ -1694,10 +1694,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		break;
 	case DORDER_LINEBUILD:
 		// build a line of structures
-		if (!(psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT))
-		{
-			break;
-		}
+		ASSERT_OR_RETURN(, psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT, "Not a constructor droid");
 		ASSERT(psOrder->psStats != NULL, "Invalid structure stats pointer");
 
 		psDroid->order = DORDER_LINEBUILD;
@@ -1714,10 +1711,8 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		break;
 	case DORDER_HELPBUILD:
 		// help to build a structure that is starting to be built
-		if (!(psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT))
-		{
-			break;
-		}
+		ASSERT_OR_RETURN(, psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT, "Not a constructor droid");
+		ASSERT_OR_RETURN(, psOrder->psObj != NULL, "Help to build a NULL pointer?");
 		psDroid->order = DORDER_HELPBUILD;
 		psDroid->orderX = psOrder->psObj->pos.x;
 		psDroid->orderY = psOrder->psObj->pos.y;
@@ -1725,7 +1720,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		psDroid->psTarStats = (BASE_STATS *)((STRUCTURE *)psOrder->psObj)->pStructureType;
 		ASSERT((!psDroid->psTarStats || ((STRUCTURE_STATS *)psDroid->psTarStats)->type != REF_DEMOLISH), "Cannot build demolition");
 		actionDroidLoc(psDroid, DACTION_BUILD, psDroid->orderX, psDroid->orderY);
-		objTrace(psDroid->id, "Helping construction of %s", psOrder->psStats ? psOrder->psStats->pName : "NULL POINTER");
+		objTrace(psDroid->id, "Helping construction of %s", psDroid->psTarStats ? psDroid->psTarStats->pName : "NULL POINTER");
 		break;
 	case DORDER_DEMOLISH:
 		if (!(psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT))
