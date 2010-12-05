@@ -206,89 +206,64 @@ run
 	// COMBAT TEMPLATES
 
 	//branchDefault
-	numTemplates[0]	int			47
+	numTemplates	int			47
 	
-	tmpl[0][0]	TEMPLATE	"ViperMG01Wheels"		//MG
-	tmpl[0][1]	TEMPLATE	"ViperMG02Wheels"		//TMG
-	tmpl[0][2]	TEMPLATE	"ViperHMGWheels"		//HMG
-	tmpl[0][3]	TEMPLATE	"ViperPODWheels"		//POD
-	tmpl[0][4]	TEMPLATE	"ViperLtA-Twheels"		//Lancer
-	tmpl[0][5]	TEMPLATE	"ViperFlameWheels"		//Flamer
-	tmpl[0][6]	TEMPLATE	"ViperLtA-Twheels"		//Lancer
-	tmpl[0][7]	TEMPLATE	"CobraMRLHalftrack"		//MRL
-	tmpl[0][8]	TEMPLATE	"ViperLtCannonWheels"	//LC
-	tmpl[0][9]	TEMPLATE	"ViperPODWheels"		//POD
-	tmpl[0][10]	TEMPLATE	"ViperLtCannonHTracks"	//LC
+	tmpl[0]	TEMPLATE	"ViperMG01Wheels"		//MG
+	tmpl[1]	TEMPLATE	"ViperMG02Wheels"		//TMG
+	tmpl[2]	TEMPLATE	"ViperHMGWheels"		//HMG
+	tmpl[3]	TEMPLATE	"ViperPODWheels"		//POD
+	tmpl[4]	TEMPLATE	"ViperLtA-Twheels"		//Lancer
+	tmpl[5]	TEMPLATE	"ViperFlameWheels"		//Flamer
+	tmpl[6]	TEMPLATE	"ViperLtA-Twheels"		//Lancer
+	tmpl[7]	TEMPLATE	"CobraMRLHalftrack"		//MRL
+	tmpl[8]	TEMPLATE	"ViperLtCannonWheels"	//LC
+	tmpl[9]	TEMPLATE	"ViperPODWheels"		//POD
+	tmpl[10]	TEMPLATE	"ViperLtCannonHTracks"	//LC
 
-	tmpl[0][11]	TEMPLATE	"CobraLtA-Thalftrack"	//Lancer	HT
-	tmpl[0][12]	TEMPLATE	"CobraMRLHalftrack"		//MRL 	HT
-	tmpl[0][13]	TEMPLATE	"CobraInfernoHTracks"	//Inferno	HT
-	tmpl[0][14]	TEMPLATE	"SK-Cobra-Hover-Lancer"	//Lancer	H
-	tmpl[0][15]	TEMPLATE	"Sk-CobraBBHover"		//BB		H
-	tmpl[0][16]	TEMPLATE	"CobraMedCnTrks"		//MC		Tr
-	tmpl[0][17]	TEMPLATE	"SK-Cobra-Track-HVC"	//HVC	Tr
-	tmpl[0][18]	TEMPLATE	"CobraHvyCnTrks"		//HC		Tr
+	tmpl[11]	TEMPLATE	"CobraLtA-Thalftrack"	//Lancer	HT
+	tmpl[12]	TEMPLATE	"CobraMRLHalftrack"		//MRL 	HT
+	tmpl[13]	TEMPLATE	"CobraInfernoHTracks"	//Inferno	HT
+	tmpl[14]	TEMPLATE	"SK-Cobra-Hover-Lancer"	//Lancer	H
+	tmpl[15]	TEMPLATE	"Sk-CobraBBHover"		//BB		H
+	tmpl[16]	TEMPLATE	"CobraMedCnTrks"		//MC		Tr
+	tmpl[17]	TEMPLATE	"SK-Cobra-Track-HVC"	//HVC	Tr
+	tmpl[18]	TEMPLATE	"CobraHvyCnTrks"		//HC		Tr
 
 	//Campaign 2
-	tmpl[0][19]	TEMPLATE	"PythonHoverHVC"		//HVC Hover
-	tmpl[0][20]	TEMPLATE	"SK-Cobra-Track-TK"
-	tmpl[0][21]	TEMPLATE	"Sk-PythonHvCanTrack"
-	tmpl[0][22]	TEMPLATE	"Sk-PythonHvCanTrack"
+	tmpl[19]	TEMPLATE	"PythonHoverHVC"		//HVC Hover
+	tmpl[20]	TEMPLATE	"SK-Cobra-Track-TK"
+	tmpl[21]	TEMPLATE	"Sk-PythonHvCanTrack"
+	tmpl[22]	TEMPLATE	"Sk-PythonHvCanTrack"
 
-	tmpl[0][23]	TEMPLATE	"SK-Panther-Hover-HVC"
-	tmpl[0][24]	TEMPLATE	"SK-Panther-Hover-TK"
+	tmpl[23]	TEMPLATE	"SK-Panther-Hover-HVC"
+	tmpl[24]	TEMPLATE	"SK-Panther-Hover-TK"
 
-	tmpl[0][25]	TEMPLATE	"SK-Tiger-Track-Hcannon"
-	tmpl[0][26]	TEMPLATE	"SK-Tiger-Track-HVC"
-	tmpl[0][27]	TEMPLATE	"SK-Tiger-Track-Hcannon"
-	tmpl[0][28]	TEMPLATE	"SK-Tiger-Hover-TK"
+	tmpl[25]	TEMPLATE	"SK-Tiger-Track-Hcannon"
+	tmpl[26]	TEMPLATE	"SK-Tiger-Track-HVC"
+	tmpl[27]	TEMPLATE	"SK-Tiger-Track-Hcannon"
+	tmpl[28]	TEMPLATE	"SK-Tiger-Hover-TK"
 
 	//Campaign 3
-	tmpl[0][29]	TEMPLATE	"SK-Leopard-Htrk-Needle"
-	tmpl[0][30]	TEMPLATE	"SK-Tiger-Track-Hcannon"
-	tmpl[0][31]	TEMPLATE	"SK-Panther-Track-RailGun"
-	tmpl[0][32]	TEMPLATE	"SK-Panther-Hover-TK"
-	tmpl[0][33]	TEMPLATE	"SK-Tiger-Track-Scourge"
-	tmpl[0][34]	TEMPLATE	"SK-Tiger-Track-Gauss"
-	tmpl[0][35]	TEMPLATE	"SK-Tiger-Hover-Gauss"
-	tmpl[0][36]	TEMPLATE	"SK-Retre-Track-PulseLsr"
-	tmpl[0][37]	TEMPLATE	"SK-Retre-Track-FlashLight"
+	tmpl[29]	TEMPLATE	"SK-Leopard-Htrk-Needle"
+	tmpl[30]	TEMPLATE	"SK-Tiger-Track-Hcannon"
+	tmpl[31]	TEMPLATE	"SK-Panther-Track-RailGun"
+	tmpl[32]	TEMPLATE	"SK-Panther-Hover-TK"
+	tmpl[33]	TEMPLATE	"SK-Tiger-Track-Scourge"
+	tmpl[34]	TEMPLATE	"SK-Tiger-Track-Gauss"
+	tmpl[35]	TEMPLATE	"SK-Tiger-Hover-Gauss"
+	tmpl[36]	TEMPLATE	"SK-Retre-Track-PulseLsr"
+	tmpl[37]	TEMPLATE	"SK-Retre-Track-FlashLight"
 
-	tmpl[0][38]	TEMPLATE	"SK-Retre-Track-RailGun"
-	tmpl[0][39]	TEMPLATE	"SK-Veng-Track-Scourge"
-	tmpl[0][40]	TEMPLATE	"SK-Retre-Hover-RailGun"
-	tmpl[0][41]	TEMPLATE	"SK-Retre-Track-Scourge"
-	tmpl[0][42]	TEMPLATE	"SK-Veng-Track-Gauss"
-	tmpl[0][43]	TEMPLATE	"SK-Veng-Hover-Gauss"
-	tmpl[0][44]	TEMPLATE	"SK-Veng-Track-PulseLsr"
-	tmpl[0][45]	TEMPLATE	"SK-Veng-Hover-Scourge"
+	tmpl[38]	TEMPLATE	"SK-Retre-Track-RailGun"
+	tmpl[39]	TEMPLATE	"SK-Veng-Track-Scourge"
+	tmpl[40]	TEMPLATE	"SK-Retre-Hover-RailGun"
+	tmpl[41]	TEMPLATE	"SK-Retre-Track-Scourge"
+	tmpl[42]	TEMPLATE	"SK-Veng-Track-Gauss"
+	tmpl[43]	TEMPLATE	"SK-Veng-Hover-Gauss"
+	tmpl[44]	TEMPLATE	"SK-Veng-Track-PulseLsr"
+	tmpl[45]	TEMPLATE	"SK-Veng-Hover-Scourge"
 
-	tmpl[0][46]	TEMPLATE	"SK-Veng-Track-HvyLaser"
-	
-	
-	//branchVTOL
-	numTemplates[1]	int			18
-
-	tmpl[1][0]		TEMPLATE	"ViperMG01Wheels"
-	tmpl[1][1]		TEMPLATE	"ViperMG02Wheels"
-	tmpl[1][2]		TEMPLATE	"ViperHMGWheels"
-	tmpl[1][3]		TEMPLATE	"ViperHMGWheels"
-	tmpl[1][4]		TEMPLATE	"ViperLtA-Twheels"
-	tmpl[1][5]		TEMPLATE	"ViperHMGTracks"
-	tmpl[1][6]		TEMPLATE	"ViperLtA-Twheels"
-	tmpl[1][7]		TEMPLATE	"ViperLtA-Twheels"
-	tmpl[1][8]		TEMPLATE	"ViperHMGTracks"
-	tmpl[1][9]		TEMPLATE	"ViperHMGTracks"
-	tmpl[1][10]		TEMPLATE	"ViperMedCnTrks"
-
-	tmpl[1][11]		TEMPLATE	"SK-Cobra-Hover-HMG"
-	tmpl[1][12]		TEMPLATE	"SK-Cobra-Hover-Lancer"
-	
-	tmpl[1][13]		TEMPLATE	"H-Scorp-Trk-Lancer"
-	tmpl[1][14]		TEMPLATE	"H-Scorp-Trk-HC"
-	tmpl[1][15]		TEMPLATE	"H-Scorp-Trk-Lancer"
-	tmpl[1][16]		TEMPLATE	"H-Scorp-Trk-HC"
-	tmpl[1][17]		TEMPLATE	"H-Scorp-Trk-Lancer"
+	tmpl[46]	TEMPLATE	"SK-Veng-Track-HvyLaser"
 	
 	/////////////////////////////////////////////////////////////////////
 	// SENSORS / REPAIR TEMPLATES

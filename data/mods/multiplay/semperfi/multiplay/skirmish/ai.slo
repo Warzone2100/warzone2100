@@ -111,8 +111,8 @@ public	STRUCTURESTAT	powModule,facModule,resModule,vtolModule;
 public	int				extraStruct;
 
 // unit templates
-public	int				numTemplates[TECHS];
-public	TEMPLATE		tmpl[TECHS][70];
+public	int				numTemplates;
+public	TEMPLATE		tmpl[70];
 private	TEMPLATE		tmplChoice[5];
 
 public	TEMPLATE		cybTempl[10],superCyb[4],cybMechanic,cybEngineer,hovertruck;
@@ -2079,13 +2079,13 @@ function void factoryBuildDroid(STRUCTURE _factory)
 
 	if( structureIdle(_factory) )
 	{
-		_count = numTemplates[curTech] - 1;
+		_count = numTemplates - 1;
 		_count2 = 0;
 		while( (_count2 < MAX_RANDOM_TEMPLATES) and (_count >= 0) )
 		{
-			if( skCanBuildTemplate(me,_factory, tmpl[curTech][_count]) )
+			if( skCanBuildTemplate(me,_factory, tmpl[_count]) )
 			{
-				tmplChoice[_count2] = tmpl[curTech][_count];
+				tmplChoice[_count2] = tmpl[_count];
 				_count2 = _count2 + 1;
 			}
 			_count = _count - 1;
