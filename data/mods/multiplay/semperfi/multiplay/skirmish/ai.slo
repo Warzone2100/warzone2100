@@ -746,13 +746,14 @@ event buildFundamentals(inactive)
 {
 	local FEATURE	_oil;
 	local bool	needPwGen;
+	local STRUCTURE	iterstruct, closeststruct;
+	local int	closest, proximity;
 
 	needPwGen = false;
-	count = 0;
 	setEventTrigger(buildFundamentals, inactive);
 
 	// Do we need power generators?
-	if (numUnusedDerricks() > 0)
+	if ((playerPower(me) < HIGH_POWER * 2 or numFactories() > 1) and numUnusedDerricks() > 0)
 	{
 		needPwGen = true;
 		dbgPlr("More power generators needed");
@@ -773,25 +774,42 @@ event buildFundamentals(inactive)
 	}
 
 	// Help build unfinished buildings
-	// TODO: Aid closest building
-	initEnumUnbuilt(me);
-	structure = enumUnbuilt();
-	while (structure != NULLOBJECT)
-	{
-		initIterateGroup(buildGroup);				// find idle droids in build group.
-		droid = iterateGroup(buildGroup);
-		while (droid != NULLOBJECT)
+	initIterateGroup(buildGroup);				// find idle droids in build group.
+	droid = iterateGroup(buildGroup);
+	while (droid != NULLOBJECT)
+ 	{
+		initEnumUnbuilt(me);
+		iterstruct = enumUnbuilt();
+		closeststruct = NULLOBJECT;
+		closest = 99999;
+		while (iterstruct != NULLOBJECT)
 		{
-			if (conCanHelp(droid, structure.x, structure.y)
-			    and distBetweenTwoPoints(droid.x, droid.y, structure.x, structure.y) < 20 * TILE
-			    and (!needPwGen or structure.stattype == REF_POWER_GEN or structure.stattype == REF_POWER_MODULE))
+			proximity = distBetweenTwoPoints(droid.x, droid.y, iterstruct.x, iterstruct.y);
+			if (conCanHelp(droid, iterstruct.x, iterstruct.y)
+			    and (!needPwGen or iterstruct.stattype == REF_POWER_GEN or iterstruct.stattype == REF_POWER_MODULE)
+			    and (proximity < 50 * TILE)
+			    and (proximity < closest))
 			{
-				orderDroidObj(droid, DORDER_HELPBUILD, structure);
-				dbgObj(droid, "Aid construction at (" & structure.x & ", " & structure.y & ")");
+				closeststruct = iterstruct;
+				closest = proximity;
 			}
-			droid = iterateGroup(buildGroup);
+			iterstruct = enumUnbuilt();
 		}
-		structure = enumUnbuilt();
+		if (closeststruct != NULLOBJECT)
+ 		{
+			orderDroidObj(droid, DORDER_HELPBUILD, closeststruct);
+			dbgObj(droid, "Aid construction at (" & closeststruct.x & ", " & closeststruct.y & ")");
+			if (closeststruct.stattype == REF_POWER_GEN || closeststruct.stattype == REF_POWER_MODULE)
+ 			{
+				needPwGen = false;	// in progress
+ 			}
+ 		}
+		droid = iterateGroup(buildGroup);
+ 	}
+
+	if (idleGroup(buildGroup) == 0)
+	{
+		exit;
 	}
 
 	if (needPwGen)
@@ -801,8 +819,9 @@ event buildFundamentals(inactive)
 	}
 
 	// If we have power, build up base basics
-	if (playerPower(me) >= LOW_POWER and idleGroup(buildGroup) > 0)
+	if (playerPower(me) >= LOW_POWER)
 	{
+		count = 0;
 		while (count < numFundamental)
 		{
 			// check that struct.
@@ -811,7 +830,7 @@ event buildFundamentals(inactive)
 			{
 				if (isStructureAvailable(structs[count], me))
 				{
-					if (grabTrucksAndBuild(15, structs[count], 0))
+					if (grabTrucksAndBuild(100, structs[count], 0))
 					{
 						exit;
 					}
@@ -1476,7 +1495,7 @@ event buildPowerGenerators(inactive)
 {
 	if (isStructureAvailable(powGen, me))
 	{
-		if (not grabTrucksAndBuild(8, powGen, 1))
+		if (not grabTrucksAndBuild(20, powGen, 1))
 		{
 			dbgPlr("Needed power generator but could not build one");
 		}
@@ -1511,7 +1530,7 @@ event buildExpand(inactive)
 		buildY = baseY;
 		if (isStructureAvailable(cybFactory, me) and (cybfacs < factories))
 		{
-			if (grabTrucksAndBuild(8, cybFactory, 0))
+			if (grabTrucksAndBuild(10, cybFactory, 0))
 			{
 				dbgPlr("Building more cyborg factories");
 			}
@@ -1519,7 +1538,7 @@ event buildExpand(inactive)
 		}
 		if (isStructureAvailable(resLab, me) and (reslabs < factories))
 		{
-			if (grabTrucksAndBuild(8, resLab, 0))
+			if (grabTrucksAndBuild(10, resLab, 0))
 			{
 				dbgPlr("Building more research labs");
 			}
@@ -1527,7 +1546,7 @@ event buildExpand(inactive)
 		}
 		if (isStructureAvailable(vtolFactory, me) and (vtolfacs < factories))
 		{
-			if (grabTrucksAndBuild(8, vtolFactory, 0))
+			if (grabTrucksAndBuild(10, vtolFactory, 0))
 			{
 				dbgPlr("Building more VTOL factories");
 			}
@@ -1535,7 +1554,7 @@ event buildExpand(inactive)
 		}
 		if (isStructureAvailable(factory, me) and (factories < vtolfacs + cybfacs + reslabs + 1))
 		{
-			if (grabTrucksAndBuild(12, factory, 0))
+			if (grabTrucksAndBuild(25, factory, 0))
 			{
 				dbgPlr("Building more factories");
 			}
