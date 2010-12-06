@@ -302,8 +302,7 @@ BOOL missionShutDown(void)
 {
 	UDWORD		inc;
 
-	debug(LOG_SAVE, "called, mission is %s",
-	      missionIsOffworld() ? "off-world" : "main map");
+	debug(LOG_SAVE, "called, mission is %s", missionIsOffworld() ? "off-world" : "main map");
 	if (missionIsOffworld())
 	{
 		//clear out the audio
@@ -1329,7 +1328,8 @@ static void processMission(void)
 		psNext = psDroid->psNext;
 		//reset order - do this to all the droids that are returning from offWorld
 		orderDroid(psDroid, DORDER_STOP, ModeImmediate);
-
+		// clean up visibility 
+		visRemoveVisibility(psDroid);
 		//remove out of stored list and add to current Droid list
 		if (droidRemove(psDroid, apsDroidLists))
 		{
@@ -1409,6 +1409,8 @@ void processMissionLimbo(void)
 
 /*switch the pointers for the map and droid lists so that droid placement
  and orientation can occur on the map they will appear on*/
+// NOTE: This is one huge hack for campaign games!
+// Pay special attention on what is getting swapped!
 void swapMissionPointers(void)
 {
 	void		*pVoid;

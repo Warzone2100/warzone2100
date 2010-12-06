@@ -283,7 +283,7 @@ static bool rayLOSCallback(Vector3i pos, int32_t dist, void *data)
 /* Remove tile visibility from object */
 void visRemoveVisibility(BASE_OBJECT *psObj)
 {
-	if (psObj->watchedTiles && psObj->numWatchedTiles > 0)
+	if (psObj->watchedTiles && psObj->numWatchedTiles > 0 && mapWidth && mapHeight)
 	{
 		int i = 0;
 
@@ -292,6 +292,11 @@ void visRemoveVisibility(BASE_OBJECT *psObj)
 			const TILEPOS pos = psObj->watchedTiles[i];
 			MAPTILE *psTile = mapTile(pos.x, pos.y);
 
+			// FIXME: the mapTile might have been swapped out, see swapMissionPointers()
+			if (psTile->watchers[psObj->player] == 0 && game.type == CAMPAIGN)
+			{
+				continue;
+			}
 			ASSERT(psTile->watchers[psObj->player] > 0, "Not watching watched tile (%d, %d)", (int)pos.x, (int)pos.y);
 			psTile->watchers[psObj->player]--;
 			if (psTile->watchers[psObj->player] == 0)
