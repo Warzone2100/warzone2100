@@ -1473,11 +1473,11 @@ static void addColourChooser(UDWORD player)
 	for (i = 0; i < game.maxPlayers && allowChangePosition; i++)
 	{
 		addMultiBut(psWScreen,MULTIOP_COLCHOOSER_FORM, MULTIOP_PLAYCHOOSER+i,
-			(i*(iV_GetImageWidth(FrontImages,IMAGE_PLAYER0) +5)+7),//x
-			23,													  //y
-			iV_GetImageWidth(FrontImages,IMAGE_WEE_GUY)+7,		  //w
-			iV_GetImageHeight(FrontImages,IMAGE_WEE_GUY),		  //h
-			_("Player number"), IMAGE_WEE_GUY, IMAGE_WEE_GUY, 10 + i);
+					(i*(iV_GetImageWidth(FrontImages,IMAGE_PLAYER0) +5)+7),//x
+					23,													  //y
+					iV_GetImageWidth(FrontImages,IMAGE_WEE_GUY)+7,		  //w
+					iV_GetImageHeight(FrontImages,IMAGE_WEE_GUY),		  //h
+					_("Player position"), IMAGE_WEE_GUY, IMAGE_WEE_GUY, 10 + i);
 	}
 
 	if (!NetPlay.isHost)
