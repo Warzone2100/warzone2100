@@ -1885,10 +1885,10 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 						continue;	// cannot reach position
 					}
 
-					/* Choose current structure if first repair facility found or nearer than previously chosen facility */
-					if (psRepairFac == NULL || psRepairFac->pStructureType->type == REF_HQ || iRepairFacDistSq > iStructDistSq)
+					/* Choose current structure if first repair facility found or nearer than previously chosen facility, or is built */
+					if (psRepairFac == NULL || psRepairFac->pStructureType->type == REF_HQ || iRepairFacDistSq > iStructDistSq
+					    || (psRepairFac->status != SS_BUILT && psStruct->status == SS_BUILT))
 					{
-						/* first facility found */
 						psRepairFac = psStruct;
 						iRepairFacDistSq = iStructDistSq;
 					}
