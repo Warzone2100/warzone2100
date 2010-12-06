@@ -50,7 +50,7 @@ int main(int argc, char **argv)
 	}
 	else
 	{
-		path[1] = '.';
+		path[0] = '.';
 		path[1] = '\0';
 		strcpy(filename, argv[1]);
 	}
