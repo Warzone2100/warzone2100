@@ -34,7 +34,7 @@
 
 #include "src/scriptvals.h"
 #include "lib/framework/lexer_input.h"
-#include "scriptvals_parser.tab.h"
+#include "scriptvals_parser.tab.hpp"
 #include "src/scripttabs.h"
 #include "src/objects.h"
 #include "src/droid.h"

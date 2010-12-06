@@ -1,9 +1,8 @@
-%.tab.h %.tab.c:: %.y
+%.tab.hpp %.tab.cpp:: %.y
 	$(YACC) $(YFLAGS) $(AM_YFLAGS) -o$@ $<
 
-%.lex.c:: %.l
+%.lex.cpp:: %.l
 	$(LEX) $(LFLAGS) $(AM_LFLAGS) -o$@ $<
-#	sed -i 's/\(fwrite(.*)\)/abs(\1)/' $@
 
 AM_CPPFLAGS = -DYY_NO_INPUT $(SDL_CFLAGS) $(WZ_CPPFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS)
@@ -11,20 +10,20 @@ AM_CXXFLAGS = $(WZ_CXXFLAGS)
 AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
 BUILT_SOURCES = \
-	resource_lexer.lex.c \
-	resource_parser.tab.c \
-	resource_parser.tab.h \
-	strres_lexer.lex.c \
-	strres_parser.tab.c \
-	strres_parser.tab.h
+	resource_lexer.lex.cpp \
+	resource_parser.tab.cpp \
+	resource_parser.tab.hpp \
+	strres_lexer.lex.cpp \
+	strres_parser.tab.cpp \
+	strres_parser.tab.hpp
 
 CLEANFILES = \
-	resource_lexer.lex.c \
-	resource_parser.tab.c \
-	resource_parser.tab.h \
-	strres_lexer.lex.c \
-	strres_parser.tab.c \
-	strres_parser.tab.h
+	resource_lexer.lex.cpp \
+	resource_parser.tab.cpp \
+	resource_parser.tab.hpp \
+	strres_lexer.lex.cpp \
+	strres_parser.tab.cpp \
+	strres_parser.tab.hpp
 
 EXTRA_DIST = \
 	resource_lexer.l resource_parser.y \
@@ -32,8 +31,8 @@ EXTRA_DIST = \
 
 noinst_LIBRARIES = libframework.a
 noinst_HEADERS = \
-	strres_parser.tab.h \
-	resource_parser.tab.h \
+	strres_parser.tab.hpp \
+	resource_parser.tab.hpp \
 	configfile.h \
 	crc.h \
 	cursors.h \
@@ -70,10 +69,10 @@ noinst_HEADERS = \
 	wzglobal.h
 
 libframework_a_SOURCES = \
-	resource_lexer.lex.c \
-	resource_parser.tab.c \
-	strres_lexer.lex.c \
-	strres_parser.tab.c \
+	resource_lexer.lex.cpp \
+	resource_parser.tab.cpp \
+	strres_lexer.lex.cpp \
+	strres_parser.tab.cpp \
 	configfile.cpp \
 	crc.cpp \
 	cursors16.cpp \

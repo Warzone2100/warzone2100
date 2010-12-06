@@ -40,7 +40,7 @@
 			/>
 			<Tool
 				Name="FlexGenerator"
-				OutputFile="$(ProjectDir)..\src\$(InputName).lex.c"
+				OutputFile="$(ProjectDir)..\src\$(InputName).lex.cpp"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -139,7 +139,7 @@
 			/>
 			<Tool
 				Name="FlexGenerator"
-				OutputFile="$(ProjectDir)..\src\$(InputName).lex.c"
+				OutputFile="$(ProjectDir)..\src\$(InputName).lex.cpp"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -415,7 +415,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\level_lexer.lex.c"
+				RelativePath="..\src\level_lexer.lex.cpp"
 				>
 			</File>
 			<File
@@ -459,7 +459,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\message_lexer.lex.c"
+				RelativePath="..\src\message_lexer.lex.cpp"
 				>
 			</File>
 			<File
@@ -603,7 +603,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\scriptvals_lexer.lex.c"
+				RelativePath="..\src\scriptvals_lexer.lex.cpp"
 				>
 			</File>
 			<File

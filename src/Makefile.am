@@ -1,9 +1,8 @@
-%.tab.h %.tab.c:: %.y
+%.tab.hpp %.tab.cpp:: %.y
 	$(YACC) $(YFLAGS) $(AM_YFLAGS) -o$@ $<
 
-%.lex.h %.lex.c:: %.l
+%.lex.hpp %.lex.cpp:: %.l
 	$(LEX) $(LFLAGS) $(AM_LFLAGS) -o$@ $<
-#	sed -i 's/\(fwrite(.*)\)/abs(\1)/' $@
 
 # Required to force using a C++ linker
 force-linker.cpp:
@@ -17,23 +16,23 @@ AM_YFLAGS = -d
 
 BUILT_SOURCES = \
 	force-linker.cpp \
-	level_lexer.lex.c \
-	message_lexer.lex.c \
-	message_parser.tab.c \
-	message_parser.tab.h \
-	scriptvals_lexer.lex.c \
-	scriptvals_parser.tab.c \
-	scriptvals_parser.tab.h
+	level_lexer.lex.cpp \
+	message_lexer.lex.cpp \
+	message_parser.tab.cpp \
+	message_parser.tab.hpp \
+	scriptvals_lexer.lex.cpp \
+	scriptvals_parser.tab.cpp \
+	scriptvals_parser.tab.hpp
 
 CLEANFILES = \
 	force-linker.cpp \
-	level_lexer.lex.c \
-	message_lexer.lex.c \
-	message_parser.tab.c \
-	message_parser.tab.h \
-	scriptvals_lexer.lex.c \
-	scriptvals_parser.tab.c \
-	scriptvals_parser.tab.h
+	level_lexer.lex.cpp \
+	message_lexer.lex.cpp \
+	message_parser.tab.cpp \
+	message_parser.tab.hpp \
+	scriptvals_lexer.lex.cpp \
+	scriptvals_parser.tab.cpp \
+	scriptvals_parser.tab.hpp
 
 EXTRA_DIST = \
 	autorevision.h \
@@ -113,7 +112,7 @@ noinst_HEADERS = \
 	messagedef.h \
 	message.h \
 	messagely.h \
-	message_parser.tab.h \
+	message_parser.tab.hpp \
 	miscimd.h \
 	missiondef.h \
 	mission.h \
@@ -153,7 +152,7 @@ noinst_HEADERS = \
 	scriptobj.h \
 	scripttabs.h \
 	scriptvals.h \
-	scriptvals_parser.tab.h \
+	scriptvals_parser.tab.hpp \
 	selection.h \
 	seqdisp.h \
 	statsdef.h \
@@ -222,7 +221,7 @@ warzone2100_SOURCES = \
 	keybind.cpp \
 	keyedit.cpp \
 	keymap.cpp \
-	level_lexer.lex.c \
+	level_lexer.lex.cpp \
 	levels.cpp \
 	lighting.cpp \
 	loadsave.cpp \
@@ -233,8 +232,8 @@ warzone2100_SOURCES = \
 	mapgrid.cpp \
 	mechanics.cpp \
 	message.cpp \
-	message_lexer.lex.c \
-	message_parser.tab.c \
+	message_lexer.lex.cpp \
+	message_parser.tab.cpp \
 	miscimd.cpp \
 	mission.cpp \
 	move.cpp \
@@ -269,8 +268,8 @@ warzone2100_SOURCES = \
 	scriptobj.cpp \
 	scripttabs.cpp \
 	scriptvals.cpp \
-	scriptvals_lexer.lex.c \
-	scriptvals_parser.tab.c \
+	scriptvals_lexer.lex.cpp \
+	scriptvals_parser.tab.cpp \
 	selection.cpp \
 	seqdisp.cpp \
 	stats.cpp \

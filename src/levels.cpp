@@ -48,20 +48,11 @@
 #include "lib/framework/lexer_input.h"
 #include "effects.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 extern int lev_get_lineno(void);
 extern char* lev_get_text(void);
 extern int lev_lex(void);
 extern void lev_set_extra(YY_EXTRA_TYPE user_defined);
 extern int lev_lex_destroy(void);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 // block ID number start for the current level data (as opposed to a dataset)
 #define CURRENT_DATAID		LEVEL_MAXFILES

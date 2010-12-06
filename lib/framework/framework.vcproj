@@ -211,7 +211,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\resource_lexer.lex.c"
+				RelativePath=".\resource_lexer.lex.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -249,7 +249,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\strres_lexer.lex.c"
+				RelativePath=".\strres_lexer.lex.cpp"
 				>
 			</File>
 			<File

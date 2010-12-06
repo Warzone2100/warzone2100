@@ -175,7 +175,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\audp_lexer.lex.c"
+				RelativePath=".\audp_lexer.lex.cpp"
 				>
 			</File>
 			<File
