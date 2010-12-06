@@ -1992,7 +1992,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 				int iStructDistSq = droidSqDist(psDroid, (BASE_OBJECT *)psStruct);
 
 				/* Choose current structure if first facility found or nearer than previously chosen facility */
-				if (iStructDistSq > 0 && (psFactory == NULL || iFactoryDistSq > iStructDistSq))
+				if (psStruct->status == SS_BUILT && iStructDistSq > 0 && (psFactory == NULL || iFactoryDistSq > iStructDistSq))
 				{
 					psFactory = psStruct;
 					iFactoryDistSq = iStructDistSq;
@@ -3329,12 +3329,6 @@ BOOL secondarySupported(DROID *psDroid, SECONDARY_ORDER sec)
 	case DSO_RETURN_TO_LOC:
 		break;
 
-/*	case DSO_RETURN_TO_REPAIR:	// Only if player has got a repair facility.
-		if(FindARepairFacility() == NULL) {
-			supported = false;
-		}
-		break;*/
-
 	case DSO_RECYCLE:			// Only if player has got a factory.
 		if ((FindAFactory(psDroid->player, REF_FACTORY) == NULL) &&
 			(FindAFactory(psDroid->player, REF_CYBORG_FACTORY) == NULL) &&
@@ -3344,12 +3338,6 @@ BOOL secondarySupported(DROID *psDroid, SECONDARY_ORDER sec)
 			supported = false;
 		}
 		break;
-
-/*	case DSO_EMBARK:			// Only if player has got a transporter.
-		if(FindATransporter() == NULL) {
-			supported = false;
-		}
-		break;*/
 
 	default:
 		supported = false;
@@ -3672,7 +3660,6 @@ BOOL secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 				{
 					orderDroid(psDroid, DORDER_RECYCLE, ModeImmediate);
 				}
-//				CurrState &= ~(DSS_HOLD_SET|DSS_RTB_SET|DSS_RTR_SET|DSS_RECYCLE_SET);
 				CurrState &= ~(DSS_RTL_MASK|DSS_RECYCLE_MASK|DSS_HALT_MASK);
 				CurrState |= DSS_RECYCLE_SET|DSS_HALT_GUARD;
 				psDroid->group = UBYTE_MAX;
