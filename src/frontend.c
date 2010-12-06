@@ -255,9 +255,9 @@ static void SPinit(void)
 
 	if (playercolor >= 1 && playercolor <= 3)
 	{
-		setPlayerColour(0,0);		// default is green
+		playercolor = 0;	// default is green
 	}
-
+	setPlayerColour(0, playercolor);
 }
 
 BOOL runSinglePlayerMenu(void)
