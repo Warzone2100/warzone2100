@@ -33,6 +33,8 @@
 
 #include "lib/gamelib/gtime.h"
 
+extern void NotifyUserOfError(char *);		// will throw up a notifier on error
+
 #define MAX_LEN_LOG_LINE 512
 
 char last_called_script_event[MAX_EVENT_NAME_LEN];
@@ -423,6 +425,11 @@ void _debug( code_part part, const char *function, const char *str, ... )
 
 		printToDebugCallbacks(outputBuffer);
 
+		if (part == LOG_ERROR)
+		{
+			// used to signal user that there was a error condition, and to check the logs.
+			NotifyUserOfError(useInputBuffer1 ? inputBuffer[1] : inputBuffer[0]);
+		}
 		// Throw up a dialog box for windows users since most don't have a clue to check the stderr.txt file for information
 		// Use for (duh) Fatal errors, that force us to terminate the game.
 		if (part == LOG_FATAL)

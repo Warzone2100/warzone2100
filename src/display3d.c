@@ -130,6 +130,7 @@ static PIELIGHT getBlueprintColour(STRUCT_STATES state);
 
 static void NetworkDisplayPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours);
 static void NetworkDisplayImage(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours);
+void NotifyUserOfError(char *msg);
 /********************  Variables  ********************/
 // Should be cleaned up properly and be put in structures.
 
@@ -223,6 +224,9 @@ bool showORDERS = false;
 bool showLevelName = true;
 /** When we have a connection issue, we will flash a message on screen
 */
+static bool errorWaiting = false;
+static char errorMessage[512];
+static uint32_t lastErrorTime = 0;
 
 #define NETWORK_FORM_ID 0xFAAA
 #define NETWORK_BUT_ID 0xFAAB
@@ -264,6 +268,13 @@ static UDWORD	destTileX=0,destTileY=0;
 static const int BLUEPRINT_OPACITY=120;
 
 /********************  Functions  ********************/
+
+void NotifyUserOfError(char *msg)
+{
+	errorWaiting = true;
+	ssprintf(errorMessage, "%s", msg);
+	lastErrorTime = gameTime2;
+}
 
 static PIELIGHT structureBrightness(STRUCTURE *psStructure)
 {
@@ -635,6 +646,17 @@ void draw3DScene( void )
 	if(!bAllowOtherKeyPresses)
 	{
 		displayMultiChat();
+	}
+	if (errorWaiting)
+	{
+		if (lastErrorTime + (30 * GAME_TICKS_PER_SEC) < gameTime2)
+		{
+			char trimMsg[255];
+			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
+			ssprintf(trimMsg, "Error! (Check your logs!): %200s", errorMessage);
+			addConsoleMessage(trimMsg, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+			errorWaiting = false;
+		}
 	}
 	if (showSAMPLES)		//Displays the number of sound samples we currently have
 	{
