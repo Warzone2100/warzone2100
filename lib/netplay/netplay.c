@@ -49,6 +49,7 @@
 #include "src/multijoin.h"
 #include "src/multiint.h"
 #include "src/multiplay.h"
+#include "src/warzoneconfig.h"
 
 #ifdef WZ_OS_LINUX
 #include <execinfo.h>  // Nonfatal runtime backtraces.
@@ -297,6 +298,11 @@ void NET_InitPlayers()
 		NETinitQueue(NETnetQueue(i));
 	}
 	NETinitQueue(NETbroadcastQueue());
+	// Now switch player color of the host to what they normally use for SP games
+	if ( getPlayerColour(NET_HOST_ONLY) != war_GetSPcolor())
+	{
+		changeColour(NET_HOST_ONLY, war_GetSPcolor());
+	}
 	NetPlay.hostPlayer = NET_HOST_ONLY;	// right now, host starts always at index zero
 	NetPlay.playercount = 0;
 	NetPlay.pMapFileHandle = NULL;
