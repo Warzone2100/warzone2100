@@ -60,6 +60,9 @@
 #include "mapgrid.h"
 #include "random.h"
 
+#include <algorithm>
+#include <functional>
+
 #define VTOL_HITBOX_MODIFICATOR 100
 
 typedef struct _interval
@@ -74,10 +77,10 @@ typedef struct _interval
 static const UDWORD ProjectileTrackerID =	0xdead0000;
 
 /* The list of projectiles in play */
-static PROJECTILE *psProjectileList = NULL;
+static std::vector<PROJECTILE *> psProjectileList;
 
 /* The next projectile to give out in the proj_First / proj_Next methods */
-static PROJECTILE *psProjectileNext = NULL;
+static ProjectileIterator psProjectileNext;
 
 /***************************************************************************/
 
@@ -91,11 +94,15 @@ static UDWORD	establishTargetHeight( BASE_OBJECT *psTarget );
 static void	proj_ImpactFunc( PROJECTILE *psObj );
 static void	proj_PostImpactFunc( PROJECTILE *psObj );
 static void	proj_checkBurnDamage( BASE_OBJECT *apsList, PROJECTILE *psProj);
-static void	proj_Free(PROJECTILE *psObj);
 
 static int32_t objectDamage(BASE_OBJECT *psObj, UDWORD damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, HIT_SIDE impactSide);
 static HIT_SIDE getHitSide (PROJECTILE *psObj, BASE_OBJECT *psTarget);
 
+
+/*static inline bool isDead(BASE_OBJECT *psObj)
+{
+	return psObj->died != 0;
+}*/
 
 static inline void setProjectileDestination(PROJECTILE *psProj, BASE_OBJECT *psObj)
 {
@@ -167,8 +174,8 @@ BOOL gfxVisible(PROJECTILE *psObj)
 BOOL
 proj_InitSystem( void )
 {
-	psProjectileList = NULL;
-	psProjectileNext = NULL;
+	psProjectileList.clear();
+	psProjectileNext = psProjectileList.end();
 
 	return true;
 }
@@ -180,17 +187,8 @@ proj_InitSystem( void )
 void
 proj_FreeAllProjectiles( void )
 {
-	PROJECTILE *psCurr = psProjectileList, *psPrev = NULL;
-
-	while (psCurr)
-	{
-		psPrev = psCurr;
-		psCurr = psCurr->psNext;
-		proj_Free(psPrev);
-	}
-
-	psProjectileList = NULL;
-	psProjectileNext = NULL;
+	psProjectileList.clear();
+	psProjectileNext = psProjectileList.end();
 }
 
 /***************************************************************************/
@@ -205,26 +203,12 @@ proj_Shutdown( void )
 
 /***************************************************************************/
 
-// Free the memory held by a projectile, and decrement its reference counts,
-// if any. Do not call directly on a projectile in a list, because then the
-// list will be broken!
-static void proj_Free(PROJECTILE *psObj)
-{
-	/* Decrement any reference counts the projectile may have increased */
-	free(psObj->psDamaged);
-	setProjectileSource(psObj, NULL);
-
-	free(psObj);
-}
-
-/***************************************************************************/
-
 // Reset the first/next methods, and give out the first projectile in the list.
 PROJECTILE *
 proj_GetFirst( void )
 {
-	psProjectileNext = psProjectileList;
-	return psProjectileList;
+	psProjectileNext = psProjectileList.begin();
+	return psProjectileNext != psProjectileList.end()? *psProjectileNext : NULL;
 }
 
 /***************************************************************************/
@@ -233,8 +217,8 @@ proj_GetFirst( void )
 PROJECTILE *
 proj_GetNext( void )
 {
-	psProjectileNext = psProjectileNext->psNext;
-	return psProjectileNext;
+	++psProjectileNext;
+	return psProjectileNext != psProjectileList.end()? *psProjectileNext : NULL;
 }
 
 /***************************************************************************/
@@ -323,13 +307,13 @@ static void proj_UpdateKills(PROJECTILE *psObj, int32_t experienceInc)
 
 void _syncDebugProjectile(const char *function, PROJECTILE *psProj, char ch)
 {
-	_syncDebug(function, "%c projectile = p%d;pos(%d,%d,%d),rot(%d,%d,%d),state%d,edc%d,nd%d", ch,
+	_syncDebug(function, "%c projectile = p%d;pos(%d,%d,%d),rot(%d,%d,%d),state%d,edc%d,nd%zd", ch,
 	          psProj->player,
 	          psProj->pos.x, psProj->pos.y, psProj->pos.z,
 	          psProj->rot.direction, psProj->rot.pitch, psProj->rot.roll,
 	          psProj->state,
 	          psProj->expectedDamageCaused,
-	          psProj->psNumDamaged);
+	          psProj->psDamaged.size());
 }
 
 static int32_t randomVariation(int32_t val)
@@ -357,7 +341,7 @@ int32_t projCalcIndirectVelocities(const int32_t dx, const int32_t dz, int32_t v
 
 		a = i64Sqrt(b) + 1;                            // Still in units²/s². Adding +1, since i64Sqrt rounds down.
 		c = (uint64_t)a*a - b;                         // Still in units⁴/s⁴. Should be 0, plus possible rounding errors.
-	} { // Remove the useless extra bracket once -Wdeclaration-after-statement is gone.
+	}
 
 	int32_t t = MAX(1, iSqrt(2*(a - i64Sqrt(c)))*(GAME_TICKS_PER_SEC/g));   // In ticks. Note that a - √c ≥ 0, since c ≤ a². Try changing the - to +, and watch the mini-rockets.
 	*vx = dx*GAME_TICKS_PER_SEC/t;                                          // In units/sec.
@@ -374,11 +358,11 @@ int32_t projCalcIndirectVelocities(const int32_t dx, const int32_t dz, int32_t v
 	}
 
 	return t;
-} } // Remove the useless extra bracket once -Wdeclaration-after-statement is gone.
+}
 
 BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Vector3i target, BASE_OBJECT *psTarget, BOOL bVisible, int weapon_slot)
 {
-	PROJECTILE		*psProj = (PROJECTILE *)malloc(sizeof(PROJECTILE));
+	PROJECTILE *            psProj = new PROJECTILE;
 	int32_t                 dx, dy, dz;
 	uint32_t                dxy;
 	WEAPON_STATS *psStats = &asWeaponStats[psWeap->nStat];
@@ -441,9 +425,7 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 		psProj->prevSpacetime.time -=  psProj->prevSpacetime.time == psProj->time;  // Times should not be equal, for interpolation.
 
 		setProjectileSource(psProj, psOldProjectile->psSource);
-		psProj->psDamaged = (BASE_OBJECT **)malloc(psOldProjectile->psNumDamaged*sizeof(BASE_OBJECT *));
-		psProj->psNumDamaged = psOldProjectile->psNumDamaged;
-		memcpy(psProj->psDamaged, psOldProjectile->psDamaged, psOldProjectile->psNumDamaged*sizeof(BASE_OBJECT *));
+		psProj->psDamaged = psOldProjectile->psDamaged;
 
 		// TODO Should finish the tick, when penetrating.
 	}
@@ -455,8 +437,6 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 		psProj->time = psProj->prevSpacetime.time;
 
 		setProjectileSource(psProj, psAttacker);
-		psProj->psDamaged = NULL;
-		psProj->psNumDamaged = 0;
 	}
 
 	if (psTarget)
@@ -509,9 +489,8 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 		}
 	}
 
-	/* put the projectile object first in the global list */
-	psProj->psNext = psProjectileList;
-	psProjectileList = psProj;
+	/* put the projectile object in the global list */
+	psProjectileList.push_back(psProj);
 
 	/* play firing audio */
 	// only play if either object is visible, i know it's a bit of a hack, but it avoids the problem
@@ -606,7 +585,6 @@ static INTERVAL collisionXY(int32_t x1, int32_t y1, int32_t x2, int32_t y2, int3
 	int64_t c = (int64_t)x1*x1 + (int64_t)y1*y1 - (int64_t)radius*radius;  // c = v1² - r²
 	// Equation to solve is now a t^2 + 2 b t + c = 0.
 	int64_t d = b*b - a*c;                                                 // d = b² - a c
-	int32_t sd;
 	// Solution is (-b ± √d)/a.
 	INTERVAL empty = {-1, -1};
 	INTERVAL full = {0, 1024};
@@ -620,7 +598,7 @@ static INTERVAL collisionXY(int32_t x1, int32_t y1, int32_t x2, int32_t y2, int3
 		return c < 0 ? full : empty;  // Not moving. See if inside the target.
 	}
 
-	sd = i64Sqrt(d);
+	int32_t sd = i64Sqrt(d);
 	ret.begin = MAX(   0, 1024*(-b - sd)/a);
 	ret.end   = MIN(1024, 1024*(-b + sd)/a);
 	return ret;
@@ -797,20 +775,9 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 	gridStartIterate(psProj->pos.x, psProj->pos.y, PROJ_NEIGHBOUR_RANGE);
 	for (psTempObj = gridIterate(); psTempObj != NULL; psTempObj = gridIterate())
 	{
-		unsigned j;
-		bool alreadyDamaged = false;
-
 		CHECK_OBJECT(psTempObj);
 
-		for (j = 0; j != psProj->psNumDamaged; ++j)
-		{
-			if (psTempObj == psProj->psDamaged[j])
-			{
-				alreadyDamaged = true;
-				break;
-			}
-		}
-		if (alreadyDamaged)
+		if (std::find(psProj->psDamaged.begin(), psProj->psDamaged.end(), psTempObj) != psProj->psDamaged.end())
 		{
 			// Dont damage one target twice
 			continue;
@@ -868,7 +835,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 			if (collision >= 0 && collisionTime < closestCollisionSpacetime.time)
 			{
 				// We hit!
-				closestCollisionSpacetime = interpolateObjectSpacetime((SIMPLE_OBJECT *)psProj, collisionTime);
+				closestCollisionSpacetime = interpolateObjectSpacetime(psProj, collisionTime);
 				closestCollisionObject = psTempObj;
 
 				// Keep testing for more collisions, in case there was a closer target.
@@ -902,7 +869,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 			ASSERT(distanceExtensionFactor != 0, "Unitialized variable used! distanceExtensionFactor is not initialized.");
 
 			// Assume we damaged the chosen target
-			setProjectileDamaged(psProj, closestCollisionObject);
+			psProj->psDamaged.push_back(closestCollisionObject);
 
 			proj_SendProjectile(&asWeap, (BASE_OBJECT*)psProj, psProj->player, newDest, NULL, true, -1);
 		}
@@ -930,7 +897,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 		// TODO Should probably give effectTime as an extra parameter to addEffect, or make an effectGiveAuxTime parameter, with yet another 'this is naughty' comment.
 		for (effectTime = ((psProj->prevSpacetime.time + 15) & ~15); effectTime < psProj->time; effectTime += 16)
 		{
-			SPACETIME st = interpolateObjectSpacetime((SIMPLE_OBJECT *)psProj, effectTime);
+			SPACETIME st = interpolateObjectSpacetime(psProj, effectTime);
 			Vector3i posFlip = {st.pos.x, st.pos.z, st.pos.y};  // [sic] y <--> z
 			switch (psStats->weaponSubClass)
 			{
@@ -1164,7 +1131,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 
 			if (relativeDamage >= 0)	// So long as the target wasn't killed
 			{
-				setProjectileDamaged(psObj, psObj->psDest);
+				psObj->psDamaged.push_back(psObj->psDest);
 			}
 		}
 	}
@@ -1379,9 +1346,10 @@ static void proj_PostImpactFunc( PROJECTILE *psObj )
 
 /***************************************************************************/
 
-static void proj_Update(PROJECTILE *psObj)
+void PROJECTILE::update()
 {
-	unsigned n, m;
+	PROJECTILE *psObj = this;
+
 	CHECK_PROJECTILE(psObj);
 
 	syncDebugProjectile(psObj, '<');
@@ -1399,14 +1367,8 @@ static void proj_Update(PROJECTILE *psObj)
 	{
 		setProjectileDestination(psObj, NULL);
 	}
-	for (n = m = 0; n != psObj->psNumDamaged; ++n)
-	{
-		if (!psObj->psDamaged[n]->died)
-		{
-			psObj->psDamaged[m++] = psObj->psDamaged[n];
-		}
-	}
-	psObj->psNumDamaged = m;
+	// Remove dead objects from psDamaged.
+	psDamaged.erase(std::remove_if(psDamaged.begin(), psDamaged.end(), std::ptr_fun(&::isDead)), psDamaged.end());
 
 	// This extra check fixes a crash in cam2, mission1
 	if (worldOnMap(psObj->pos.x, psObj->pos.y) == false)
@@ -1442,40 +1404,13 @@ static void proj_Update(PROJECTILE *psObj)
 // iterate through all projectiles and update their status
 void proj_UpdateAll()
 {
-	PROJECTILE	*psObj, *psPrev;
+	std::vector<PROJECTILE *> psProjectileListOld = psProjectileList;
 
-	for (psObj = psProjectileList; psObj != NULL; psObj = psObj->psNext)
-	{
-		proj_Update( psObj );
-	}
+	// Update all projectiles. Penetrating projectiles may add to psProjectileList.
+	std::for_each(psProjectileListOld.begin(), psProjectileListOld.end(), std::mem_fun(&PROJECTILE::update));
 
-	// Now delete any dead projectiles
-	psObj = psProjectileList;
-
-	// is the first node dead?
-	while (psObj && psObj == psProjectileList && psObj->died)
-	{
-		psProjectileList = psObj->psNext;
-		proj_Free(psObj);
-		psObj = psProjectileList;
-	}
-
-	// first object is now either NULL or not dead, so we have time to set this below
-	psPrev = NULL;
-
-	// are any in the list dead?
-	while (psObj)
-	{
-		if (psObj->died)
-		{
-			psPrev->psNext = psObj->psNext;
-			proj_Free(psObj);
-			psObj = psPrev->psNext;
-		} else {
-			psPrev = psObj;
-			psObj = psObj->psNext;
-		}
-	}
+	// Remove and free dead projectiles.
+	psProjectileList.erase(std::remove_if(psProjectileList.begin(), psProjectileList.end(), std::mem_fun(&PROJECTILE::deleteIfDead)), psProjectileList.end());
 }
 
 /***************************************************************************/
@@ -1575,11 +1510,9 @@ bool proj_Direct(const WEAPON_STATS* psStats)
 	case MM_ERRATICDIRECT:
 	case MM_SWEEP:
 		return true;
-		break;
 	case MM_INDIRECT:
 	case MM_HOMINGINDIRECT:
 		return false;
-		break;
 	case NUM_MOVEMENT_MODEL:
 		break; // error checking in assert above; this is for no-debug case
 	}
@@ -1946,7 +1879,6 @@ static UDWORD	establishTargetHeight(BASE_OBJECT *psTarget)
 
 void checkProjectile(const PROJECTILE* psProjectile, const char * const location_description, const char * function, const int recurse)
 {
-	unsigned n;
 	if (recurse < 0)
 		return;
 
@@ -1965,6 +1897,6 @@ void checkProjectile(const PROJECTILE* psProjectile, const char * const location
 	if (psProjectile->psSource)
 		checkObject(psProjectile->psSource, location_description, function, recurse - 1);
 
-	for (n = 0; n != psProjectile->psNumDamaged; ++n)
+	for (unsigned n = 0; n != psProjectile->psDamaged.size(); ++n)
 		checkObject(psProjectile->psDamaged[n], location_description, function, recurse - 1);
 }
