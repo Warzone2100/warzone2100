@@ -34,6 +34,8 @@
 #include "map.h"
 #include "miscimd.h"
 
+#include <algorithm>
+
 #define CLIP_LEFT	((SDWORD)0)
 #define CLIP_RIGHT	((SDWORD)pie_GetVideoBufferWidth())
 #define CLIP_TOP	((SDWORD)0)
@@ -43,25 +45,16 @@
 // someone needs to take a good look at the radius calculation
 #define SCALE_DEPTH (FP12_MULTIPLIER*7)
 
-typedef struct _bucket_tag
+struct BUCKET_TAG
 {
+	bool operator <(BUCKET_TAG const &b) const { return actualZ > b.actualZ; }  // Sort in reverse z order.
+
 	RENDER_TYPE     objectType; //type of object held
 	void *          pObject;    //pointer to the object
 	int32_t         actualZ;
-} BUCKET_TAG;
+};
 
-// C version of std::vector<BUCKET_TAG>.
-static BUCKET_TAG *bucketArrayS = NULL;
-static BUCKET_TAG *bucketArrayF = NULL;
-static BUCKET_TAG *bucketArrayEOS = NULL;
-
-// C version of BUCKET_TAG::operator <().
-static int bucketArray_less_than(const void *av, const void *bv)
-{
-	BUCKET_TAG *a = (BUCKET_TAG *)av;
-	BUCKET_TAG *b = (BUCKET_TAG *)bv;
-	return (a->actualZ < b->actualZ) - (a->actualZ > b->actualZ);  // Sort in reverse z order.
-}
+static std::vector<BUCKET_TAG> bucketArray;
 
 static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 {
@@ -519,29 +512,16 @@ void bucketAddTypeToList(RENDER_TYPE objectType, void* pObject)
 	newTag.actualZ = z;
 
 	//add tag to bucketArray
-	// C version of std::vector<BUCKET_TAG>::push_back().
-	if (bucketArrayF == bucketArrayEOS)
-	{
-		BUCKET_TAG *old = bucketArrayS;
-		size_t reserve = (bucketArrayEOS - old)*2 + 1;
-		bucketArrayS = (BUCKET_TAG *)realloc(old, reserve*sizeof(*old));
-		bucketArrayF = bucketArrayS + (bucketArrayF - old);
-		bucketArrayEOS = bucketArrayS + reserve;
-	}
-	*bucketArrayF++ = newTag;
+	bucketArray.push_back(newTag);
 }
 
 
 /* render Objects in list */
 void bucketRenderCurrentList(void)
 {
-	BUCKET_TAG* thisTag;
+	std::sort(bucketArray.begin(), bucketArray.end());
 
-	// C version of std::sort().
-	qsort(bucketArrayS, bucketArrayF - bucketArrayS, sizeof(*bucketArrayS), &bucketArray_less_than);
-
-	// C version of for (std::vector<BUCKET_TAG>::iterator thisTag = bucketArray.begin(); thisTag != bucketArray.end(); ++thisTag). C wins!
-	for (thisTag = bucketArrayS; thisTag != bucketArrayF; ++thisTag) // render from back to front
+	for (std::vector<BUCKET_TAG>::const_iterator thisTag = bucketArray.begin(); thisTag != bucketArray.end(); ++thisTag)
 	{
 		switch(thisTag->objectType)
 		{
@@ -580,6 +560,5 @@ void bucketRenderCurrentList(void)
 
 	//reset the bucket array as we go
 	//reset the tag array
-	// C version of bucketArray.clear().
-	bucketArrayF = bucketArrayS;
+	bucketArray.clear();
 }
