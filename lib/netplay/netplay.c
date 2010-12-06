@@ -298,11 +298,7 @@ void NET_InitPlayers()
 		NETinitQueue(NETnetQueue(i));
 	}
 	NETinitQueue(NETbroadcastQueue());
-	// Now switch player color of the host to what they normally use for SP games
-	if ( getPlayerColour(NET_HOST_ONLY) != war_GetSPcolor())
-	{
-		changeColour(NET_HOST_ONLY, war_GetSPcolor());
-	}
+
 	NetPlay.hostPlayer = NET_HOST_ONLY;	// right now, host starts always at index zero
 	NetPlay.playercount = 0;
 	NetPlay.pMapFileHandle = NULL;
@@ -342,6 +338,8 @@ static void NETSendPlayerInfoTo(uint32_t index, unsigned to)
 static void NETSendAllPlayerInfoTo(unsigned to)
 {
 	static uint32_t indices[MAX_PLAYERS] = {0, 1, 2, 3, 4, 5, 6, 7};
+	ASSERT_OR_RETURN( , NetPlay.isHost == true, "Invalid call for non-host");
+
 	NETSendNPlayerInfoTo(indices, ARRAY_SIZE(indices), to);
 }
 
@@ -2436,6 +2434,11 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 		NetPlay.players[0].connection	= -1;
 		NetPlay.playercount		= 1;
 		debug(LOG_NET, "Hosting but no comms");
+		// Now switch player color of the host to what they normally use for SP games
+		if ( getPlayerColour(NET_HOST_ONLY) != war_GetSPcolor())
+		{
+			changeColour(NET_HOST_ONLY, war_GetSPcolor());
+		}
 		return true;
 	}
 
@@ -2506,6 +2509,12 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 	ASSERT(selectedPlayer == NET_HOST_ONLY, "For now, host must start at player index zero, was %d", (int)selectedPlayer);
 
 	MultiPlayerJoin(selectedPlayer);
+
+	// Now switch player color of the host to what they normally use for SP games
+	if ( getPlayerColour(NET_HOST_ONLY) != war_GetSPcolor())
+	{
+		changeColour(NET_HOST_ONLY, war_GetSPcolor());
+	}
 
 	allow_joining = true;
 
