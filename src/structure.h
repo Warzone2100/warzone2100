@@ -334,7 +334,7 @@ extern void holdProduction(STRUCTURE *psBuilding, QUEUE_MODE mode);
 extern void releaseProduction(STRUCTURE *psBuilding, QUEUE_MODE mode);
 
 /// Does the next item in the production list.
-void doNextProduction(STRUCTURE *psStructure, DROID_TEMPLATE *current);
+void doNextProduction(STRUCTURE *psStructure, DROID_TEMPLATE *current, QUEUE_MODE mode);
 
 /*This function is called after a game is loaded so that any resource extractors
 that are active are initialised for when to start*/

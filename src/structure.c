@@ -1394,6 +1394,10 @@ BOOL structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, QUEUE_MO
 			psFact->timeToBuild = 1;
 		}
 	}
+	if (psStruct->player == productionPlayer)
+	{
+		intUpdateManufacture(psStruct);
+	}
 	return true;
 }
 
@@ -3593,24 +3597,12 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				psFactory->timeStarted = ACTION_START_TIME;
 				psFactory->psSubject = NULL;
 
-				// If quantity not 0 then kick of another manufacture.
-				// Do instantly, since quantity is synchronised.
-				structSetManufacture(psStructure, (DROID_TEMPLATE *)pSubject, ModeImmediate);
+				doNextProduction(psStructure, (DROID_TEMPLATE *)pSubject, ModeImmediate);
 
 				//script callback, must be called after factory was flagged as idle
 				if (bDroidPlaced)
 				{
 					cbNewDroid(psStructure, psDroid);
-				}
-
-				//next bit for productionPlayer only
-				if (productionPlayer == psStructure->player)
-				{
-					doNextProduction(psStructure, (DROID_TEMPLATE *)pSubject);
-				}
-				else if (myResponsibility(psStructure->player))
-				{
-					cancelProduction(psStructure, ModeQueue);
 				}
 			}
 		}
@@ -7090,21 +7082,23 @@ void releaseProduction(STRUCTURE *psBuilding, QUEUE_MODE mode)
 	}
 }
 
-void doNextProduction(STRUCTURE *psStructure, DROID_TEMPLATE *current)
+void doNextProduction(STRUCTURE *psStructure, DROID_TEMPLATE *current, QUEUE_MODE mode)
 {
 	DROID_TEMPLATE *psNextTemplate = factoryProdUpdate(psStructure, current);
 
 	if (psNextTemplate != NULL)
 	{
+		if (mode == ModeImmediate)
+		{
+			cancelProduction(psStructure, ModeImmediate);
+		}
 		structSetManufacture(psStructure, psNextTemplate, ModeQueue);
 	}
 	else
 	{
-		//nothing more to manufacture
-		cancelProduction(psStructure, ModeQueue);
+		cancelProduction(psStructure, mode);
 	}
 }
-
 
 /*this is called when a factory produces a droid. The Template returned is the next
 one to build - if any*/
@@ -7115,7 +7109,10 @@ DROID_TEMPLATE * factoryProdUpdate(STRUCTURE *psStructure, DROID_TEMPLATE *psTem
 	bool            somethingInQueue = false;
 
 	CHECK_STRUCTURE(psStructure);
-	ASSERT_OR_RETURN(NULL, psStructure->player == productionPlayer, "%s called for incorrect player", __FUNCTION__);
+	if (psStructure->player != productionPlayer)
+	{
+		return NULL;
+	}
 
 	psFactory = &psStructure->pFunctionality->factory;
 	factoryType = psFactory->psAssemblyPoint->factoryType;

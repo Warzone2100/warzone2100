@@ -2067,13 +2067,13 @@ function void factoryBuildDroid(STRUCTURE _factory)
 	local int _count,_count2;
 
 	if(_factory == NULLOBJECT){
-		dbg("factoryBuildDroid: factory is NULLOBJECT", me);
+		dbgPlr("factoryBuildDroid: factory is NULLOBJECT");
 		return;
 	}
 
 	if(not needTank())
 	{
-		//dbg("NEED NO TANKS!! " & maxDefenders[curTech], me);
+		dbgPlr("factoryBuildDroid: NEED NO TANKS!! limit=" & maxDefenders[curTech]);
 		return;
 	}
 
@@ -2098,7 +2098,7 @@ function void factoryBuildDroid(STRUCTURE _factory)
 	}
 	else
 	{
-		dbg("factoryBuildDroid: factory is busy", me);
+		dbgPlr("factoryBuildDroid: Factory is busy!");
 	}
 }
 

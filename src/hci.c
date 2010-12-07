@@ -2794,7 +2794,7 @@ static void intProcessStats(UDWORD id)
 					//need to check if this was the template that was mid-production
 					if (getProductionQuantity(psStructure, FactoryGetTemplate(psFactory)) == 0)
 					{
-						doNextProduction(psStructure, FactoryGetTemplate(psFactory));
+						doNextProduction(psStructure, FactoryGetTemplate(psFactory), ModeQueue);
 						psNext = FactoryGetTemplate(psFactory);
 					}
 
@@ -3481,7 +3481,6 @@ void intManufactureFinished(STRUCTURE *psBuilding)
 {
 	SDWORD		    structureID;
 	STRUCTURE       *psCurr;
-	BASE_OBJECT	*psObj;
 
 	ASSERT(psBuilding != NULL, "Invalid structure pointer");
 
@@ -3509,9 +3508,10 @@ void intManufactureFinished(STRUCTURE *psBuilding)
 		orderFactories();
 
 		// now look thru the list to see which one corresponds to the factory that has just finished
-		structureID = 0;
-		for (psObj = apsObjectList[structureID]; structureID < numObjects; structureID++)
+		for (structureID = 0; structureID < numObjects; structureID++)
 		{
+			BASE_OBJECT *psObj = apsObjectList[structureID];
+
 			if ((STRUCTURE *)psObj == psBuilding)
 			{
 				intSetStats(structureID + IDOBJ_STATSTART, NULL);
@@ -3520,6 +3520,52 @@ void intManufactureFinished(STRUCTURE *psBuilding)
 				{
 					widgSetButtonState(psWScreen, IDSTAT_LOOP_BUTTON, 0);
 				}
+				break;
+			}
+		}
+	}
+}
+
+void intUpdateManufacture(STRUCTURE *psBuilding)
+{
+	SDWORD		structureID;
+	STRUCTURE       *psCurr;
+	FACTORY		*psFact;
+
+	ASSERT(psBuilding != NULL, "Invalid structure pointer");
+
+	if ((intMode == INT_OBJECT || intMode == INT_STAT) && objMode == IOBJ_MANUFACTURE)
+	{
+		/* Find which button the structure is on and update its stats */
+		structureID = 0;
+		numObjects = 0;
+		memset(apsObjectList, 0, sizeof(BASE_OBJECT *) * MAX_OBJECTS);
+		for (psCurr = interfaceStructList(); psCurr; psCurr = psCurr->psNext)
+		{
+			if (objSelectFunc((BASE_OBJECT *)psCurr))
+			{
+				// The list is ordered now so we have to get all possible entries and sort it before checking if this is the one!
+				apsObjectList[numObjects] = (BASE_OBJECT *)psCurr;
+				numObjects++;
+			}
+			// make sure the list doesn't overflow
+			if (numObjects >= MAX_OBJECTS)
+			{
+				break;
+			}
+		}
+		// order the list
+		orderFactories();
+
+		// now look thru the list to see which one corresponds to the factory that has just finished
+		for (structureID = 0; structureID < numObjects; structureID++)
+		{
+			BASE_OBJECT *psObj = apsObjectList[structureID];
+
+			if ((STRUCTURE *)psObj == psBuilding)
+			{
+				psFact = &((STRUCTURE *)psObj)->pFunctionality->factory;
+				intSetStats(structureID + IDOBJ_STATSTART, psFact->psSubject);
 				break;
 			}
 		}
@@ -6380,7 +6426,7 @@ static void intStatsRMBPressed(UDWORD id)
 			//need to check if this was the template that was mid-production
 			if (getProductionQuantity(psStructure, FactoryGetTemplate(psFactory)) == 0)
 			{
-				doNextProduction(psStructure, FactoryGetTemplate(psFactory));
+				doNextProduction(psStructure, FactoryGetTemplate(psFactory), ModeQueue);
 				psNext = FactoryGetTemplate(psFactory);
 			}
 
