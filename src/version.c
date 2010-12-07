@@ -26,7 +26,7 @@
 #include "stringdef.h"
 
 #define SVN_AUTOREVISION_STATIC static
-#include "autorevision.h"
+#include "src/autorevision.h"
 
 #if (SVN_LOW_REV < SVN_REV)
 # define SVN_FULL_REV_STR "r" SVN_LOW_REV_STR ":" SVN_REV_STR
