@@ -484,11 +484,6 @@ void screen_enableMapPreview(char *name, int width, int height, Vector2i *player
 	}
 }
 
-const char *screen_getMapName(void)
-{
-	return mapname;
-}
-
 void screen_disableMapPreview(void)
 {
 	mappreview = false;

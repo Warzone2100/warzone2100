@@ -231,7 +231,7 @@ static int guessMapTilesetType(LEVEL_DATASET *psLevel)
 /// a picture of it
 void loadMapPreview(bool hideInterface)
 {
-	static char			aFileName[256], bFileName[256];
+	static char		aFileName[256];
 	UDWORD			fileSize;
 	char			*pFileData = NULL;
 	LEVEL_DATASET	*psLevel = NULL;
@@ -257,16 +257,7 @@ void loadMapPreview(bool hideInterface)
 	aFileName[strlen(aFileName)-4] = '\0';
 	sstrcat(aFileName, "/ttypes.ttp");
 	pFileData = fileLoadBuffer;
-	sstrcpy(bFileName, screen_getMapName());
-	if (!sstrcmp(aFileName, bFileName))
-	{
-		if (hideInterface)
-		{
-			hideTime = gameTime;
-		}
-		return;
-	}
-	sstrcpy(bFileName, aFileName);
+
 	if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 	{
 		debug(LOG_ERROR, "loadMapPreview: Failed to load terrain types file");
@@ -377,7 +368,7 @@ void loadMapPreview(bool hideInterface)
 	// color our texture with clancolors @ correct position
 	plotStructurePreview16(imageData, playerpos);
 
-	screen_enableMapPreview(bFileName, mapWidth, mapHeight, playerpos);
+	screen_enableMapPreview(aFileName, mapWidth, mapHeight, playerpos);
 
 	screen_Upload(imageData, true);
 

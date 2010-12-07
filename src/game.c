@@ -100,6 +100,7 @@ static const UDWORD NULL_ID = UDWORD_MAX;
 #define MAX_GAME_STR_SIZE 20
 
 static UDWORD RemapPlayerNumber(UDWORD OldNumber);
+static void plotFeature(char *backDropSprite);
 
 typedef struct _game_save_header
 {
@@ -11637,9 +11638,7 @@ BOOL plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[])
 		{	// This shows where the HQ is on the map in a special color.
 			// We could do the same for anything else (oil/whatever) also.
 			// Possible future enhancement?
-			color.byte.b = 0xff;
-			color.byte.g = 0;
-			color.byte.r = 0xff;
+			color = WZCOL_MAP_PREVIEW_HQ;
 		}
 
 		// and now we blit the color to the texture
@@ -11648,6 +11647,108 @@ BOOL plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[])
 		backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx) + 2] = color.byte.b;
 	}
 
-	// NOTE: would do fallback if FBO is not available here.
+	// And now we need to show features.
+	plotFeature(backDropSprite);
 	return true;
 }
+
+// Show location of (at this time) oil on the map preview
+static void plotFeature(char *backDropSprite)
+{
+	FEATURE_SAVEHEADER	*psHeader;
+	SAVE_FEATURE_V2	*psSaveFeature;
+	LEVEL_DATASET *psLevel;
+	UDWORD xx, yy, count, fileSize;
+	UDWORD sizeOfSaveFeature = 0;
+	char *pFileData = NULL;
+	char aFileName[256];
+	PIELIGHT color = WZCOL_BLACK ;
+
+	psLevel = levFindDataSet(game.map);
+	strcpy(aFileName, psLevel->apDataFiles[0]);
+	aFileName[strlen(aFileName) - 4] = '\0';
+	strcat(aFileName, "/feat.bjo");
+
+	// Load in the chosen file data/
+	pFileData = fileLoadBuffer;
+	if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
+	{
+		debug( LOG_ERROR, "Unable to load file %s?", aFileName);
+		return;
+	}
+
+	// Check the file type
+	psHeader = (FEATURE_SAVEHEADER *)pFileData;
+	if (psHeader->aFileType[0] != 'f' || psHeader->aFileType[1] != 'e' || psHeader->aFileType[2] != 'a' || psHeader->aFileType[3] != 't')
+	{
+		debug( LOG_ERROR, "Incorrect file type, looking at %s", aFileName);
+		return;
+	}
+
+	endian_udword(&psHeader->version);
+	endian_udword(&psHeader->quantity);
+
+	//increment to the start of the data
+	pFileData += FEATURE_HEADER_SIZE;
+
+	// Check the file version
+	if (psHeader->version <= VERSION_19)
+	{
+		if (psHeader->version < VERSION_14)
+		{
+			// most (all?) maps use revision 8
+			sizeOfSaveFeature = sizeof(SAVE_FEATURE_V2);
+			psSaveFeature = (SAVE_FEATURE_V2*) pFileData;
+		}
+		else
+		{
+			// supposedly, All versions up to 19 are compatible with SAVE_STRUCTURE_V2
+			// so this isn't needed.  Adding check just in case.
+			//sizeOfSaveFeature = sizeof(SAVE_FEATURE_V14);
+			//psSaveFeatureV14 = (SAVE_FEATURE_V14*) pFileData;
+			debug(LOG_ERROR, "Please make a new ticket and upload %s to wz2100.net.  This map (>14) is not supported at this time.", psLevel->apDataFiles[0]);
+			return;
+		}
+	}
+	else
+	{
+		// AFAIK, at this time, nothing uses this size.
+		//sizeOfSaveFeature = sizeof(SAVE_FEATURE);
+		//psSaveFeature = (SAVE_FEATURE*) pFileData;
+		debug(LOG_ERROR, "Please make a new ticket and upload %s to wz2100.net.  This map (>19) is not supported at this time.", psLevel->apDataFiles[0]);
+		return;
+	}
+
+	if ((sizeOfSaveFeature * psHeader->quantity + FEATURE_HEADER_SIZE) > fileSize)
+	{
+		debug( LOG_ERROR, "Unexpected end of file ?" );
+		return;
+	}
+
+	// Load in the structure data
+	for (count = 0; count < psHeader->quantity; count++, pFileData += sizeOfSaveFeature)
+	{
+		// All versions up to 19 are compatible with V2.
+		memcpy(psSaveFeature, pFileData, sizeof(SAVE_STRUCTURE_V2));
+
+		// we only care about oil
+		if (strncmp(psSaveFeature->name, "OilResource", 11) == 0)
+		{
+			endian_udword(&psSaveFeature->x);
+			endian_udword(&psSaveFeature->y);
+			xx = map_coord(psSaveFeature->x);
+			yy = map_coord(psSaveFeature->y);
+		}
+		else
+		{
+			continue;
+		}
+			
+		color = WZCOL_MAP_PREVIEW_OIL;
+		// and now we blit the color to the texture
+		backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx)] = color.byte.r;
+		backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx) + 1] = color.byte.g;
+		backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx) + 2] = color.byte.b;
+	}
+}
+
