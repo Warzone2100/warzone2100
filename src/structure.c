@@ -4319,7 +4319,6 @@ bool validLocation(BASE_STATS *psStats, unsigned x, unsigned y, uint16_t directi
 	UDWORD				min, max;
 	HIGHLIGHT			site;
 	FLAG_POSITION		*psCurrFlag;
-	float fheight = 0.0f;
 
 	//make sure we are not too near map edge and not going to go over it
 	if( !tileInsideBuildRange((SDWORD)x, (SDWORD)y) )
@@ -4414,8 +4413,7 @@ bool validLocation(BASE_STATS *psStats, unsigned x, unsigned y, uint16_t directi
 	{
 		for (i=0; i < 2; i++)
 		{
-			fheight = map_TileHeight(x+i, y+j);
-			if (fheight < 0.0f)
+			if (map_TileHeight(x+i, y+j) < 0)
 			{
 				valid = false;
 				goto failed;
