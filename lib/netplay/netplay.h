@@ -364,7 +364,8 @@ const char *messageTypeToString(unsigned messageType);
 #define syncDebug(...) do { _syncDebug(__FUNCTION__, __VA_ARGS__); } while(0)
 void _syncDebug(const char *function, const char *str, ...)
 	WZ_DECL_FORMAT(printf, 2, 3);
-void syncDebugBacktrace(void);  ///< Adds a backtrace to syncDebug. (Expect lots of false positives, if all clients aren't using the exact same binaries.)
+#define syncDebugBacktrace() do { _syncDebugBacktrace(__FUNCTION__); } while(0)
+void _syncDebugBacktrace(const char *function);                  ///< Adds a backtrace to syncDebug, if the platform supports it. Can be a bit slow, don't call way too often, unless desperate.
 
 void resetSyncDebug(void);                                       ///< Resets the syncDebug, so syncDebug from a previous game doesn't cause a spurious desynch dump.
 uint32_t nextDebugSync(void);                                    ///< Returns a CRC corresponding to all syncDebug() calls since the last nextDebugSync() or resetSyncDebug() call.

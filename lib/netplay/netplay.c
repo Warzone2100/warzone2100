@@ -3000,8 +3000,10 @@ void _syncDebug(const char *function, const char *str, ...)
 	}
 }
 
-void syncDebugBacktrace(void)
+void _syncDebugBacktrace(const char *function)
 {
+	uint32_t backupCrc = syncDebugCrcs[syncDebugNext];  // Ignore CRC changes from _syncDebug(), since identical backtraces can be printed differently.
+
 #ifdef WZ_OS_LINUX
 	void *btv[20];
 	unsigned num = backtrace(btv, sizeof(btv)/sizeof(*btv));
@@ -3013,8 +3015,11 @@ void syncDebugBacktrace(void)
 	}
 	free(btc);
 #else
-	_syncDebug("BT", "Sorry, syncDebugBacktrace() not implemented on your system.");
+	_syncDebug("BT", "Sorry, syncDebugBacktrace() not implemented on your system. Called from %s.", function);
 #endif
+
+	// Use CRC of something platform-independent, to avoid false positive desynchs.
+	syncDebugCrcs[syncDebugNext] = crcSum(backupCrc, function, strlen(function) + 1);
 }
 
 static void clearSyncDebugNext(void)
