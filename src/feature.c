@@ -529,14 +529,17 @@ bool removeFeature(FEATURE *psDel)
 		}
 	}
 
-	if(psDel->psStats->subType == FEAT_GEN_ARTE)
+	if (psDel->psStats->subType == FEAT_GEN_ARTE || psDel->psStats->subType == FEAT_OIL_DRUM)
 	{
 		pos.x = psDel->pos.x;
 		pos.z = psDel->pos.y;
-		pos.y = map_Height(pos.x,pos.z);
+		pos.y = map_Height(pos.x, pos.z) + 30;
 		addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_DISCOVERY,false,NULL,0);
-		scoreUpdateVar(WD_ARTEFACTS_FOUND);
-		intRefreshScreen();
+		if (psDel->psStats->subType == FEAT_GEN_ARTE)
+		{
+			scoreUpdateVar(WD_ARTEFACTS_FOUND);
+			intRefreshScreen();
+		}
 	}
 
 	if (psDel->psStats->subType == FEAT_GEN_ARTE || psDel->psStats->subType == FEAT_OIL_RESOURCE)

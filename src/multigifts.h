@@ -42,11 +42,10 @@ extern BOOL recvGift                            (NETQUEUE queue);
 extern void technologyGiveAway				(const STRUCTURE* pS);
 extern void recvMultiPlayerRandomArtifacts      (NETQUEUE queue);
 extern void addMultiPlayerRandomArtifacts	(uint8_t quantity, FEATURE_TYPE type);
-extern void processMultiPlayerArtifacts		(void);
 extern void recvMultiPlayerFeature              (NETQUEUE queue);
 extern void sendMultiPlayerFeature(FEATURE_TYPE type, uint32_t x, uint32_t y, uint32_t id);
 
-extern void	giftArtifact					(UDWORD owner,UDWORD x,UDWORD y);
+bool pickupArtefact(int toPlayer, int fromPlayer);
 extern BOOL	addOilDrum						(uint8_t count);
 void giftPower                          (uint8_t from, uint8_t to, uint32_t amount, BOOL send);
 extern void giftRadar						(uint8_t from, uint8_t to, BOOL send);

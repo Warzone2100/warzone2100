@@ -207,7 +207,6 @@ BOOL multiPlayerLoop(void)
 	UBYTE		joinCount;
 
 	sendCheck();						// send some checking info if possible
-	processMultiPlayerArtifacts();		// process artifacts
 
 		joinCount =0;
 		for(i=0;i<MAX_PLAYERS;i++)

@@ -176,6 +176,9 @@
 // How fast vtols 'skid'
 #define VTOL_SKID_DECEL			600
 
+static uint32_t oilTimer = 0;
+static unsigned drumCount = 0;
+
 /* Function prototypes */
 static void	moveUpdatePersonModel(DROID *psDroid, SDWORD speed, uint16_t direction);
 
@@ -202,6 +205,9 @@ const char *moveDescription(MOVE_STATUS status)
  */
 BOOL moveInitialise(void)
 {
+	oilTimer = 0;
+	drumCount = 0;
+
 	return true;
 }
 
@@ -2305,14 +2311,39 @@ static void movePlayAudio( DROID *psDroid, BOOL bStarted, BOOL bStoppedBefore, S
 }
 
 
+static bool pickupOilDrum(int toPlayer, int fromPlayer)
+{
+	addPower(toPlayer, OILDRUM_POWER);  // give power
+
+	if (toPlayer == selectedPlayer)
+	{
+		CONPRINTF(ConsoleString, (ConsoleString, _("You found %u power in an oil drum."), OILDRUM_POWER));
+	}
+
+	// TODO This code is weird. When should new oil drums actually be added?
+	// fromPlayer == ANYPLAYER seems to mean that the drum was not pre-placed on the map.
+	if (bMultiPlayer && fromPlayer == ANYPLAYER && toPlayer == selectedPlayer)
+	{
+		// when player finds oil, we init the timer, and flag that we need a drum
+		if (!oilTimer)
+		{
+			oilTimer = gameTime;
+		}
+		// if player finds more than one drum (before timer expires), then we tack on ~50 sec to timer.
+		if (drumCount++ == 0)
+		{
+			oilTimer += GAME_TICKS_PER_SEC * 50;
+		}
+	}
+
+	return true;
+}
+
 // called when a droid moves to a new tile.
 // use to pick up oil, etc..
 static void checkLocalFeatures(DROID *psDroid)
 {
 	BASE_OBJECT		*psObj;
-	static int oilTimer = 0;
-	static bool GenerateDrum = false;
-	static uint8_t drumCount = 0;
 
 	// NOTE: Why not do this for AI units also?
 	if (!isHumanPlayer(psDroid->player) || isVtolDroid(psDroid))  // VTOLs can't pick up features!
@@ -2325,45 +2356,40 @@ static void checkLocalFeatures(DROID *psDroid)
 	gridStartIterate(psDroid->pos.x, psDroid->pos.y, DROIDDIST);
 	for (psObj = gridIterate(); psObj != NULL; psObj = gridIterate())
 	{
-		if (psObj->type != OBJ_FEATURE || ((FEATURE *)psObj)->psStats->subType != FEAT_OIL_DRUM || psObj->died)
+		bool pickedUp = false;
+
+		if (psObj->type == OBJ_FEATURE && !psObj->died)
 		{
-			// Object is not a living oil drum.
+			switch (((FEATURE *)psObj)->psStats->subType)
+			{
+				case FEAT_OIL_DRUM:
+					pickedUp = pickupOilDrum(psDroid->player, psObj->player);
+					break;
+				case FEAT_GEN_ARTE:
+					pickedUp = pickupArtefact(psDroid->player, psObj->player);
+					break;
+				default:
+					break;
+			}
+		}
+
+		if (!pickedUp)
+		{
+			// Object is not a living oil drum or artefact.
 			continue;
 		}
 
-		addPower(psDroid->player, OILDRUM_POWER);  // give power
 		turnOffMultiMsg(true);
 		removeFeature((FEATURE *)psObj);  // remove artifact+.
 		turnOffMultiMsg(false);
-		if (psDroid->player == selectedPlayer)
-		{
-			CONPRINTF(ConsoleString, (ConsoleString, _("You found %u power in an oil drum."), OILDRUM_POWER));
-		}
-
-		// TODO This code is weird. When should new oil drums actually be added?
-		if (bMultiPlayer && psObj->player == ANYPLAYER && psDroid->player == selectedPlayer)
-		{
-			// when player finds oil, we init the timer, and flag that we need a drum
-			if (!oilTimer)
-			{
-				oilTimer = gameTime2;
-				GenerateDrum = true;
-			}
-			// if player finds more than one drum (before timer expires), then we tack on ~50 sec to timer.
-			if(drumCount++)
-			{
-				oilTimer += GAME_TICKS_PER_SEC * 50;
-			}
-		}
 	}
 
 	// once they found a oil drum, we then wait ~600 secs before we pop up new one(s).
-	if (((oilTimer + GAME_TICKS_PER_SEC * 600u) < realTime) && GenerateDrum)
+	if (oilTimer + GAME_TICKS_PER_SEC * 600u < gameTime && drumCount > 0)
 	{
 		addOilDrum(drumCount);
 		oilTimer = 0;
 		drumCount = 0;
-		GenerateDrum = false;
 	}
 }
 

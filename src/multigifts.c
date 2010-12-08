@@ -733,13 +733,12 @@ void recvMultiPlayerRandomArtifacts(NETQUEUE queue)
 }
 
 // ///////////////////////////////////////////////////////////////
-void giftArtifact(UDWORD owner, UDWORD x, UDWORD y)
+bool pickupArtefact(int toPlayer, int fromPlayer)
 {
-	PLAYER_RESEARCH	*pR = asPlayerResList[selectedPlayer];
-
-	if (owner < MAX_PLAYERS)
+	if (fromPlayer < MAX_PLAYERS && bMultiPlayer)
 	{
-		PLAYER_RESEARCH	*pO = asPlayerResList[owner];
+		PLAYER_RESEARCH *pR = asPlayerResList[toPlayer];
+		PLAYER_RESEARCH *pO = asPlayerResList[fromPlayer];
 		int topic;
 
 		for (topic = numResearch - 1; topic >= 0; topic--)
@@ -752,8 +751,10 @@ void giftArtifact(UDWORD owner, UDWORD x, UDWORD y)
 				 && asResearch[topic].researchPoints)
 				{
 					MakeResearchPossible(&pR[topic]);
-					CONPRINTF(ConsoleString,(ConsoleString,_("You Discover Blueprints For %s"),
-						getName(asResearch[topic].pName)));
+					if (toPlayer == selectedPlayer)
+					{
+						CONPRINTF(ConsoleString,(ConsoleString,_("You Discover Blueprints For %s"), getName(asResearch[topic].pName)));
+					}
 					break;
 				}
 				// Invalid topic
@@ -763,48 +764,13 @@ void giftArtifact(UDWORD owner, UDWORD x, UDWORD y)
 				}
 			}
 		}
+
+		audio_QueueTrack(ID_SOUND_ARTIFACT_RECOVERED);
+
+		return true;
 	}
-}
 
-// ///////////////////////////////////////////////////////////////
-void processMultiPlayerArtifacts(void)
-{
-	static UDWORD lastCall;
-	FEATURE	*pF,*pFN;
-	UDWORD	x,y,pl;
-	Position position;
-	BOOL	found=false;
-
-	// only do this every now and again.
-	if(lastCall > gameTime)lastCall= 0;
-	if ( (gameTime - lastCall) <2000)
-	{
-		return;
-	}
-	lastCall = gameTime;
-
-	for(pF = apsFeatureLists[0]; pF ; pF = pFN)
-	{
-		pFN = pF->psNext;
-		// artifacts
-		if(pF->psStats->subType == FEAT_GEN_ARTE)
-		{
-			found = objectInRange((BASE_OBJECT *)apsDroidLists[selectedPlayer], pF->pos.x, pF->pos.y, (TILE_UNITS+(TILE_UNITS/3))  );
-			if(found)
-			{
-				position = pF->pos;				// Add an effect
-				addEffect(&position,EFFECT_EXPLOSION,EXPLOSION_TYPE_DISCOVERY,false,NULL,false);
-
-				x = pF->pos.x;
-				y = pF->pos.y;
-				pl= pF->player;
-				removeFeature(pF);			// remove artifact+ send info.
-				giftArtifact(pl,x,y);		// reward player.
-				pF->player = 0;
-				audio_QueueTrack( ID_SOUND_ARTIFACT_RECOVERED );
-			}
-		}
-	}
+	return false;
 }
 
 /* Ally team members with each other */
