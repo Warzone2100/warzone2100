@@ -2536,6 +2536,7 @@ static void processMultiopWidgets(UDWORD id)
 		loadMultiStats((char*)sPlayer,&playerStats);
 		setMultiStats(selectedPlayer,playerStats,false);
 		setMultiStats(selectedPlayer,playerStats,true);
+		netPlayersUpdated = true;
 		break;
 
 	case MULTIOP_PNAME_ICON:
@@ -3149,6 +3150,7 @@ void runMultiOptions(void)
 				loadMultiStats((char*)sPlayer,&playerStats);
 				setMultiStats(selectedPlayer,playerStats,false);
 				setMultiStats(selectedPlayer,playerStats,true);
+				netPlayersUpdated = true;
 				break;
 			case MULTIOP_MAP:
 				sstrcpy(game.map, sTemp);
