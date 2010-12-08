@@ -261,7 +261,8 @@ bool screenInitialise(
 	}
 	else
 	{
-		debug(LOG_INFO, "OpenGL 2.0 is not supported by your system, using fixed pipeline.");
+		debug(LOG_POPUP, "OpenGL 2.0 is not supported by your system, current shaders require this.");
+		debug(LOG_POPUP, "Team colors will not function correctly on your system.");
 	}
 
 	glViewport(0, 0, width, height);
