@@ -130,6 +130,11 @@ static void objmemDestroy(BASE_OBJECT *psObj)
 
 	visRemoveVisibility(psObj);
 	free(psObj->watchedTiles);
+#ifdef DEBUG
+	psObj->type = (OBJECT_TYPE)(psObj->type + 1000000000);  // Hopefully this will trigger an assert              if someone uses the freed object.
+	psObj->player += 1000000000;                            // Hopefully this will trigger an assert and/or crash if someone uses the freed object.
+	psObj->psNext = psObj;                                  // Hopefully this will trigger an infinite loop       if someone uses the freed object.
+#endif //DEBUG
 	free(psObj);
 	debug(LOG_MEMORY, "BASE_OBJECT* 0x%p is freed.", psObj);
 }

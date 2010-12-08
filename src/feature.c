@@ -29,6 +29,7 @@
 #include "lib/gamelib/gtime.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
+#include "lib/netplay/netplay.h"
 
 #include "feature.h"
 #include "map.h"
@@ -449,10 +450,25 @@ void featureRelease(FEATURE *psFeature)
 {
 }
 
+void _syncDebugFeature(const char *function, FEATURE *psFeature, char ch)
+{
+	_syncDebug(function, "%c feature%d = p%d;pos(%d,%d,%d),subtype%d,dam%d,bp%d", ch,
+	          psFeature->id,
+
+	          psFeature->player,
+	          psFeature->pos.x, psFeature->pos.y, psFeature->pos.z,
+	          psFeature->psStats->subType,
+	          psFeature->psStats->damageable,
+	          psFeature->body
+
+	          );
+}
 
 /* Update routine for features */
 void featureUpdate(FEATURE *psFeat)
 {
+	syncDebugFeature(psFeat, '<');
+
    //	if(getRevealStatus())
    //	{
 		// update the visibility for the feature
@@ -468,10 +484,12 @@ void featureUpdate(FEATURE *psFeat)
 //		{
 			destroyFeature(psFeat); // get rid of the now!!!
 //		}
-		break;
+		return;
 	default:
 		break;
 	}
+
+	syncDebugFeature(psFeat, '>');
 }
 
 

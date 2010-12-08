@@ -722,6 +722,7 @@ void recvMultiPlayerRandomArtifacts(NETQUEUE queue)
 		{
 			pF->id		= ref;
 			pF->player	= player;
+			syncDebugFeature(pF, '+');
 		}
 		else
 		{

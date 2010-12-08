@@ -475,6 +475,8 @@ BOOL recvDroid(NETQUEUE queue)
 			orderDroidLoc(psDroid, DORDER_MOVE, initialOrders.moveToX, initialOrders.moveToY, ModeImmediate);
 			cbNewDroid(IdToStruct(initialOrders.factoryId, ANYPLAYER), psDroid);
 		}
+
+		syncDebugDroid(psDroid, '+');
 	}
 	else
 	{
