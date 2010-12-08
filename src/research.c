@@ -1124,7 +1124,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay, STRUCTURE
 	//the message gets sent to console
 	char						consoleMsg[MAX_RESEARCH_MSG_SIZE];
 
-	ASSERT( researchIndex < numResearch, "researchResult: invalid research index" );
+	ASSERT_OR_RETURN( , researchIndex < numResearch, "Invalid research index %u", researchIndex);
 
 	sendResearchStatus(NULL, researchIndex, player, false);
 	// Confused whether we should wait for our message before doing anything, and confused what this function does...
