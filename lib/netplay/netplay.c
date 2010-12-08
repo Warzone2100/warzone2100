@@ -3056,7 +3056,7 @@ BOOL NETsetupTCPIP(const char *machine)
 #define MAX_FILE_TRANSFER_PACKET 2048
 UBYTE NETsendFile(char *fileName, UDWORD player)
 {
-	int32_t		bytesRead = 0;
+	uint32_t        bytesToRead = 0;
 	uint8_t		sendto = 0;
 	char	inBuff[MAX_FILE_TRANSFER_PACKET];
 
@@ -3070,18 +3070,19 @@ UBYTE NETsendFile(char *fileName, UDWORD player)
 	memset(inBuff, 0x0, sizeof(inBuff));
 
 	// read some bytes.
-	bytesRead = PHYSFS_read(NetPlay.players[player].wzFile.pFileHandle, inBuff,1, MAX_FILE_TRANSFER_PACKET);
+	bytesToRead = PHYSFS_read(NetPlay.players[player].wzFile.pFileHandle, inBuff, 1, MAX_FILE_TRANSFER_PACKET);
+	ASSERT_OR_RETURN(100, (int32_t)bytesToRead >= 0, "Error reading file.");
 	sendto = (uint8_t) player;
 
 	NETbeginEncode(NET_FILE_PAYLOAD, sendto);
 		NETint32_t(&NetPlay.players[player].wzFile.fileSize_32);		// total bytes in this file. (we don't support 64bit yet)
-		NETint32_t(&bytesRead);											// bytes in this packet
+		NETuint32_t(&bytesToRead);                                                // bytes in this packet
 		NETint32_t(&NetPlay.players[player].wzFile.currPos);			// start byte
 		NETstring(fileName, 256);										//256 = max filename size
-		NETbin(inBuff, bytesRead);
+		NETbin(inBuff, bytesToRead);
 	NETend();
 
-	NetPlay.players[player].wzFile.currPos += bytesRead;		// update position!
+	NetPlay.players[player].wzFile.currPos += bytesToRead;		// update position!
 	if(NetPlay.players[player].wzFile.currPos == NetPlay.players[player].wzFile.fileSize_32)
 	{
 		PHYSFS_close(NetPlay.players[player].wzFile.pFileHandle);
@@ -3096,7 +3097,8 @@ UBYTE NETsendFile(char *fileName, UDWORD player)
 // recv file. it returns % of the file so far recvd.
 UBYTE NETrecvFile(void)
 {
-	int32_t		fileSize = 0, currPos = 0, bytesRead = 0;
+	uint32_t        bytesToRead = 0;
+	int32_t		fileSize = 0, currPos = 0;
 	char		fileName[256];
 	char		outBuff[MAX_FILE_TRANSFER_PACKET];
 	static bool isLoop = false;
@@ -3107,7 +3109,7 @@ UBYTE NETrecvFile(void)
 	//read incoming bytes.
 	NETbeginDecode(NET_FILE_PAYLOAD);
 	NETint32_t(&fileSize);		// total bytes in this file.
-	NETint32_t(&bytesRead);		// bytes in this packet
+	NETuint32_t(&bytesToRead);      // bytes in this packet
 	NETint32_t(&currPos);		// start byte
 	NETstring(fileName, 256);	// read filename (only valid on 1st packet)
 	debug(LOG_NET, "Creating new file %s, position is %d", fileName, currPos);
@@ -3184,24 +3186,31 @@ UBYTE NETrecvFile(void)
 	if (!NetPlay.pMapFileHandle) // file can't be opened
 	{
 		debug(LOG_FATAL, "Fatal error while creating file: %s", PHYSFS_getLastError());
-		debug(LOG_FATAL, "Either we do not have write permission, or the Host sent us a invalid file (%s)!", fileName);
+		debug(LOG_FATAL, "Either we do not have write permission, or the host sent us a invalid file (%s)!", fileName);
 		abort();
 	}
 
-	NETbin(outBuff, bytesRead);
+	if (bytesToRead > sizeof(outBuff))
+	{
+		debug(LOG_ERROR, "Error receiving file from host.");
+		NETend();
+		return 100;
+	}
+
+	NETbin(outBuff, bytesToRead);
 	NETend();
 
 	//write packet to the file.
-	PHYSFS_write(NetPlay.pMapFileHandle, outBuff, bytesRead, 1);
+	PHYSFS_write(NetPlay.pMapFileHandle, outBuff, bytesToRead, 1);
 
-	if (currPos+bytesRead == fileSize)	// last packet
+	if (currPos + bytesToRead == fileSize)	// last packet
 	{
 		PHYSFS_close(NetPlay.pMapFileHandle);
 		NetPlay.pMapFileHandle = NULL;
 	}
 
 	//return the percentage count
-	return ((currPos + bytesRead) * 100) / fileSize;
+	return ((currPos + bytesToRead) * 100) / fileSize;
 }
 
 static ssize_t readLobbyResponse(Socket* sock, unsigned int timeout)

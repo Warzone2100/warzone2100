@@ -48,7 +48,7 @@ BOOL NETfloat(float* fp);
 BOOL NETbool(BOOL *bp);
 BOOL NETnull(void);
 BOOL NETstring(char *str, uint16_t maxlen);
-BOOL NETbin(char *str, uint16_t maxlen);
+BOOL NETbin(char *str, uint32_t len);
 
 PACKETDIR NETgetPacketDir(void);
 

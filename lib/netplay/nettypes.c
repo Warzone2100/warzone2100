@@ -368,19 +368,9 @@ BOOL NETstring(char *str, uint16_t maxlen)
 	return true;
 }
 
-BOOL NETbin(char *str, uint16_t maxlen)
+BOOL NETbin(char *str, uint32_t len)
 {
-	/*
-	 * Strings sent over the network are prefixed with their length, sent as an
-	 * unsigned 16-bit integer.
-	 */
-
-	// Work out the length of the string if we are encoding
-	uint16_t len = (NETgetPacketDir() == PACKET_ENCODE) ? maxlen : 0;
 	char *store;
-
-	// Add/fetch the length from the packet
-	NETuint16_t(&len);
 
 	// Map store to the message buffer
 	store = (char *) &NetMsg.body[NetMsg.size];
@@ -397,18 +387,11 @@ BOOL NETbin(char *str, uint16_t maxlen)
 	}
 	else if (NETgetPacketDir() == PACKET_DECODE)
 	{
-		// Truncate length if necessary
-		if (len > maxlen)
-		{
-			debug(LOG_ERROR, "NETbin: Decoding packet type %d from %d, buffer size %u truncated at %u", 
-			      NetMsg.type, NetMsg.source, len, maxlen);
-			len = maxlen;
-		}
 		memcpy(str, store, len);
 	}
 
 	// Increment the size of the message
-	NetMsg.size += sizeof(len) + len;
+	NetMsg.size += len;
 
 	return true;
 }
