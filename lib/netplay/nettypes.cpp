@@ -633,31 +633,12 @@ void NETstring(char const *str, uint16_t maxlen)
 	NETstring(const_cast<char *>(str), maxlen);
 }
 
-void NETbin(uint8_t *str, uint32_t maxlen)
+void NETbin(uint8_t *str, uint32_t len)
 {
-	/*
-	 * Bins sent over the network are prefixed with their length, sent as an
-	 * unsigned 32-bit integer.
-	 */
-
-	// Work out the length of the bin if we are encoding
-	uint32_t len = NETgetPacketDir() == PACKET_ENCODE ? maxlen : 0;
-	queueAuto(len);
-
-	// Truncate length if necessary
-	if (len > maxlen)
-	{
-		debug(LOG_ERROR, "NETbin: Decoding packet, buffer size %u truncated at %u", len, maxlen);
-		len = maxlen;
-	}
-
 	for (unsigned i = 0; i < len; ++i)
 	{
 		queueAuto(str[i]);
 	}
-
-	// Throw away length...
-	//maxlen = len;
 }
 
 void NETPosition(Position *vp)
