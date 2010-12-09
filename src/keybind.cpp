@@ -1578,7 +1578,7 @@ void	kf_JumpToResourceExtractor( void )
 {
 	int xJump, yJump;
 
-	if (psOldRE && psOldRE->psNextFunc)
+	if (psOldRE && (STRUCTURE *)psOldRE->psNextFunc)
 	{
 		psOldRE = psOldRE->psNextFunc;
 	}

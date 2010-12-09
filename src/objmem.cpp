@@ -292,7 +292,7 @@ static inline void addObjectToList(BASE_OBJECT *list[], BASE_OBJECT *object, int
 static inline void addObjectToFuncList(BASE_OBJECT *list[], BASE_OBJECT *object, int player)
 {
 	ASSERT(object != NULL, "Invalid pointer");
-	ASSERT_OR_RETURN(, object->psNextFunc == NULL, "%s(%p) is already in a function list!", objInfo(object), object);
+	ASSERT_OR_RETURN(, object->psNextFunc == (BASE_OBJECT *)NULL, "%s(%p) is already in a function list!", objInfo(object), object);
 
 	// Prepend the object to the top of the list
 	// memcpy is to avoid strict-aliasing error. Will probably break if using multiple inheritance.

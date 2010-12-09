@@ -26,11 +26,6 @@
 
 #include "lib/ivis_common/ivisdef.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 /*
 if any types are added BEFORE 'COMP_BODY' - then Save/Load Game will have to be
 altered since it loops through the components from 1->MAX_COMP
@@ -209,130 +204,58 @@ typedef enum TRAVEL_MEDIUM
 /* Elements common to all stats structures */
 
 /* Stats common to all stats structs */
-typedef struct BASE_STATS
+struct BASE_STATS
 {
 	UDWORD	ref;	/**< Unique ID of the item */
 	char	*pName; /**< pointer to the text id name (i.e. short language-independant name) */
-} WZ_DECL_MAY_ALIAS BASE_STATS;
-
-#define STATS_BASE \
-	UDWORD ref; /**< Unique ID of the item */ \
-	char *pName /**< pointer to the text id name (i.e. short language-independant name) */
+};
 
 /* Stats common to all droid components */
-typedef struct COMPONENT_STATS
+struct COMPONENT_STATS : public BASE_STATS
 {
-	UDWORD		ref;				/**< Unique ID of the item */
-	char		*pName;				/**< pointer to the text id name (i.e. short language-independant name) */
 	UDWORD		buildPower;			/**< Power required to build the component */
 	UDWORD		buildPoints;		/**< Time required to build the component */
 	UDWORD		weight;				/**< Component's weight */
 	UDWORD		body;				/**< Component's body points */
 	bool		designable;			/**< flag to indicate whether this component can be used in the design screen */
 	iIMDShape	*pIMD;				/**< The IMD to draw for this component */
-} WZ_DECL_MAY_ALIAS COMPONENT_STATS;
+};
 
-#define STATS_COMPONENT \
- \
-	UDWORD		ref;				/**< Unique ID of the item */ \
-	char		*pName;				/**< pointer to the text id name (i.e. short language-independant name) */ \
-	UDWORD		buildPower;			/**< Power required to build the component */ \
-	UDWORD		buildPoints;		/**< Time required to build the component */ \
-	UDWORD		weight;				/**< Component's weight */ \
-	UDWORD		body;				/**< Component's body points */ \
-	bool		designable;			/**< flag to indicate whether this component can be used in the design screen */ \
-	iIMDShape	*pIMD				/**< The IMD to draw for this component */
-
-typedef struct PROPULSION_STATS
+struct PROPULSION_STATS : public COMPONENT_STATS
 {
-
-	///< Common stats
-	UDWORD			ref;			/**< Unique ID of the item */
-	char			*pName;			/**< pointer to the text id name (i.e. short language-independant name) */
-	UDWORD			buildPower;		/**< Power required to build the component */
-	UDWORD			buildPoints;	/**< Time required to build the component */
-	UDWORD			weight;			/**< Component's weight */
-	UDWORD			body;			/**< Component's body points */
-	bool			designable;		/**< flag to indicate whether this component can be used in the design screen */
-	iIMDShape		*pIMD;			/**< The IMD to draw for this component */
-
 	UDWORD			maxSpeed;		///< Max speed for the droid
 	PROPULSION_TYPE propulsionType; ///< Type of propulsion used - index into PropulsionTable
-} WZ_DECL_MAY_ALIAS PROPULSION_STATS;
+};
 
-typedef struct SENSOR_STATS
+struct SENSOR_STATS : public COMPONENT_STATS
 {
-
-	///< Common stats
-	UDWORD		ref;			/**< Unique ID of the item */
-	char		*pName;			/**< pointer to the text id name (i.e. short language-independant name) */
-	UDWORD		buildPower;		/**< Power required to build the component */
-	UDWORD		buildPoints;	/**< Time required to build the component */
-	UDWORD		weight;			/**< Component's weight */
-	UDWORD		body;			/**< Component's body points */
-	bool		designable;		/**< flag to indicate whether this component can be used in the design screen */
-	iIMDShape	*pIMD;			/**< The IMD to draw for this component */
-
 	UDWORD		range;			///< Sensor range
 	UDWORD		power;			///< Sensor power (put against ecm power)
 	UDWORD		location;		///< specifies whether the Sensor is default or for the Turret
 	SENSOR_TYPE type;			///< used for combat
 	UDWORD		time;			///< time delay before associated weapon droids 'know' where the attack is from
 	iIMDShape	*pMountGraphic; ///< The turret mount to use
-} WZ_DECL_MAY_ALIAS SENSOR_STATS;
+};
 
-typedef struct ECM_STATS
+struct ECM_STATS : public COMPONENT_STATS
 {
-
-	///< Common stats
-	UDWORD		ref;			/**< Unique ID of the item */
-	char		*pName;			/**< pointer to the text id name (i.e. short language-independant name) */
-	UDWORD		buildPower;		/**< Power required to build the component */
-	UDWORD		buildPoints;	/**< Time required to build the component */
-	UDWORD		weight;			/**< Component's weight */
-	UDWORD		body;			/**< Component's body points */
-	bool		designable;		/**< flag to indicate whether this component can be used in the design screen */
-	iIMDShape	*pIMD;			/**< The IMD to draw for this component */
-
 	UDWORD		range;			///< ECM range
 	UDWORD		power;			///< ECM power (put against sensor power)
 	UDWORD		location;		///< specifies whether the ECM is default or for the Turret
 	iIMDShape	*pMountGraphic; ///< The turret mount to use
-} WZ_DECL_MAY_ALIAS ECM_STATS;
+};
 
-typedef struct REPAIR_STATS
+struct REPAIR_STATS : public COMPONENT_STATS
 {
-
-	///< Common stats
-	UDWORD		ref;			/**< Unique ID of the item */
-	char		*pName;			/**< pointer to the text id name (i.e. short language-independant name) */
-	UDWORD		buildPower;		/**< Power required to build the component */
-	UDWORD		buildPoints;	/**< Time required to build the component */
-	UDWORD		weight;			/**< Component's weight */
-	UDWORD		body;			/**< Component's body points */
-	bool		designable;		/**< flag to indicate whether this component can be used in the design screen */
-	iIMDShape	*pIMD;			/**< The IMD to draw for this component */
-
 	UDWORD		repairPoints;	///< How much damage is restored to Body Points and armour each Repair Cycle
 	bool		repairArmour;	///< whether armour can be repaired or not
 	UDWORD		location;		///< specifies whether the Repair is default or for the Turret
 	UDWORD		time;			///< time delay for repair cycle
 	iIMDShape	*pMountGraphic; ///< The turret mount to use
-} WZ_DECL_MAY_ALIAS REPAIR_STATS;
+};
 
-typedef struct WEAPON_STATS
+struct WEAPON_STATS : public COMPONENT_STATS
 {
-
-	///< Common stats
-	UDWORD			ref;		/**< Unique ID of the item */
-	char			*pName;		/**< pointer to the text id name (i.e. short language-independant name) */
-	UDWORD			buildPower; /**< Power required to build the component */
-	UDWORD			buildPoints;			/**< Time required to build the component */
-	UDWORD			weight;					/**< Component's weight */
-	UDWORD			body;					/**< Component's body points */
-	bool			designable;				/**< flag to indicate whether this component can be used in the design screen */
-	iIMDShape		*pIMD;					/**< The IMD to draw for this component */
-
 	UDWORD			shortRange;				///< Max distance to target for	short	range	shot
 	UDWORD			longRange;				///< Max distance to target for	long range shot
 	UDWORD			minRange;				///< Min distance to target for	shot
@@ -383,40 +306,19 @@ typedef struct WEAPON_STATS
 	/* Audio */
 	SDWORD			iAudioFireID;
 	SDWORD			iAudioImpactID;
-} WZ_DECL_MAY_ALIAS WEAPON_STATS;
+};
 
-typedef struct CONSTRUCT_STATS
+struct CONSTRUCT_STATS : public COMPONENT_STATS
 {
-
-	///< Common stats
-	UDWORD		ref;			/**< Unique ID of the item */
-	char		*pName;			/**< pointer to the text id name (i.e. short language-independant name) */
-	UDWORD		buildPower;		/**< Power required to build the component */
-	UDWORD		buildPoints;	/**< Time required to build the component */
-	UDWORD		weight;			/**< Component's weight */
-	UDWORD		body;			/**< Component's body points */
-	bool		designable;		/**< flag to indicate whether this component can be used in the design screen */
-	iIMDShape	*pIMD;			/**< The IMD to draw for this component */
-
 	UDWORD		constructPoints;	///< The number of points contributed each cycle
 	iIMDShape	*pMountGraphic;		///< The turret mount to use
-} WZ_DECL_MAY_ALIAS CONSTRUCT_STATS;
+};
 
-typedef struct BRAIN_STATS
+struct BRAIN_STATS : public COMPONENT_STATS
 {
-	///< Common stats
-	UDWORD			ref;			/**< Unique ID of the item */
-	char			*pName;			/**< pointer to the text id name (i.e. short language-independant name) */
-	UDWORD			buildPower;		/**< Power required to build the component */
-	UDWORD			buildPoints;	/**< Time required to build the component */
-	UDWORD			weight;			/**< Component's weight */
-	UDWORD			body;			/**< Component's body points */
-	bool			designable;		/**< flag to indicate whether this component can be used in the design screen */
-	iIMDShape		*pIMD;			/**< The IMD to draw for this component */
-
 	UDWORD			progCap;		///< Program capacity
 	WEAPON_STATS	*psWeaponStat;	///< weapon stats associated with this brain - for Command Droids
-} WZ_DECL_MAY_ALIAS BRAIN_STATS;
+};
 
 
 #define NULL_COMP	(-1)
@@ -430,10 +332,8 @@ typedef struct BRAIN_STATS
 #define HIT_ANGLE_TOP		361
 #define HIT_ANGLE_BOTTOM	362
 
-typedef struct _body_stats
+struct BODY_STATS : public COMPONENT_STATS
 {
-	STATS_COMPONENT;			///< Common stats
-
 	UBYTE		size;			///< How big the body is - affects how hit
 	UDWORD		weaponSlots;	///< The number of weapon slots on the body
 	UDWORD		armourValue[NUM_HIT_SIDES][WC_NUM_WEAPON_CLASSES];	///< A measure of how much protection the armour provides. Cross referenced with the weapon types.
@@ -442,7 +342,7 @@ typedef struct _body_stats
 	UDWORD		powerOutput;	///< this is the engine output of the body
 	iIMDShape	**ppIMDList;	///< list of IMDs to use for propulsion unit - up to numPropulsionStats
 	iIMDShape	*pFlameIMD;		///< pointer to which flame graphic to use - for VTOLs only at the moment
-} BODY_STATS;
+};
 
 /************************************************************************************
 * Additional stats tables
@@ -516,9 +416,5 @@ typedef struct _body_upgrade
 	UWORD	body;
 	UWORD	armourValue[WC_NUM_WEAPON_CLASSES];
 } BODY_UPGRADE;
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_STATSDEF_H__

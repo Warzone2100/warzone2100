@@ -36,11 +36,6 @@
 #include "orderdef.h"
 #include "actiondef.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 /*!
  * The number of components in the asParts / asBits arrays.
  * Weapons are stored seperately, thus the maximum index into the array
@@ -97,10 +92,9 @@ typedef struct _order_list
 	uint16_t        direction;      ///< Needed to align structures with viewport.
 } ORDER_LIST;
 
-typedef struct _droid_template
+struct DROID_TEMPLATE : public BASE_STATS
 {
 	// On the PC the pName entry in STATS_BASE is redundant and can be assumed to be NULL,
-	STATS_BASE;						/* basic stats */
 
 	/// on the PC this contains the full editable UTF-8 encoded name of the template
 	char            aName[MAX_STR_LENGTH];
@@ -128,15 +122,12 @@ typedef struct _droid_template
 
 	DROID_TYPE      droidType;                  ///< The type of droid
 	UDWORD          multiPlayerID;              ///< multiplayer unique descriptor(cant use id's for templates). Used for save games as well now - AB 29/10/98
-	struct _droid_template* psNext;             ///< Pointer to next template
+	DROID_TEMPLATE* psNext;                     ///< Pointer to next template
 	bool		prefab;                     ///< Not player designed, not saved, never delete or change
-} WZ_DECL_MAY_ALIAS DROID_TEMPLATE;
+};
 
-typedef struct DROID
+struct DROID : public BASE_OBJECT
 {
-	/* The common structure elements for all objects */
-	BASE_ELEMENTS(struct DROID);
-
 	/// UTF-8 name of the droid. This is generated from the droid template and cannot be changed by the game player after creation.
 	char            aName[MAX_STR_LENGTH];
 
@@ -168,7 +159,7 @@ typedef struct DROID
 	// The group the droid belongs to
 	struct _droid_group* psGroup;
 	struct DROID*  psGrpNext;
-	struct _structure* psBaseStruct;                ///< a structure that this droid might be associated with. For VTOLs this is the rearming pad
+	struct STRUCTURE *psBaseStruct;                 ///< a structure that this droid might be associated with. For VTOLs this is the rearming pad
 	// queued orders
 	SDWORD          listSize;
 	ORDER_LIST      asOrderList[ORDER_LIST_MAX];    ///< The range [0; listSize - 1] corresponds to synchronised orders, and the range [listPendingBegin; listPendingEnd - 1] corresponds to the orders that will remain, once all orders are synchronised.
@@ -219,10 +210,6 @@ typedef struct DROID
 
 	// Synch checking
 	void *          gameCheckDroid;                 ///< Last PACKAGED_CHECK, for synchronisation use only (see multisync.c). TODO Make synch perfect, so that this isn't needed at all.
-} WZ_DECL_MAY_ALIAS DROID;
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
+};
 
 #endif // __INCLUDED_DROIDDEF_H__
