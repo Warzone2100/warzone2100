@@ -115,9 +115,6 @@ typedef struct _zonemap_save_header {
 // Maximum expected return value from get height
 #define	MAX_HEIGHT			(256 * ELEVATION_SCALE)
 
-/* Number of entries in the sqrt(1/(1+x*x)) table for aaLine */
-#define	ROOT_TABLE_SIZE		1024
-
 /* The size and contents of the map */
 SDWORD	mapWidth = 0, mapHeight = 0;
 MAPTILE	*psMapTiles = NULL;

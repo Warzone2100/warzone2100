@@ -425,7 +425,7 @@ static BOOL _imd_load_points( const char **ppFileData, iIMDShape *s )
 	dz = dia2.z - cen.z;
 
 	rad_sq = dx*dx + dy*dy + dz*dz;
-	rad = sqrt(rad_sq);
+	rad = sqrt((double)rad_sq);
 
 	// second pass (find tight sphere)
 	for (p = s->points; p < s->points + s->npoints; p++)
@@ -439,7 +439,7 @@ static BOOL _imd_load_points( const char **ppFileData, iIMDShape *s )
 		if (old_to_p_sq>rad_sq)
 		{
 			// this point outside current sphere
-			old_to_p = sqrt(old_to_p_sq);
+			old_to_p = sqrt((double)old_to_p_sq);
 			// radius of new sphere
 			rad = (rad + old_to_p) / 2.;
 			// rad**2 for next compare

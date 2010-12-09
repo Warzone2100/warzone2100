@@ -718,8 +718,8 @@ bool initTerrain(void)
 	debug(LOG_TERRAIN, "GL_MAX_ELEMENTS_INDICES:  %i", (int)GLmaxElementsIndices);
 	
 	// now we know these values, determine the maximum sector size achievable
-	maxSectorSizeVertices = sqrt(GLmaxElementsVertices/2)-1;
-	maxSectorSizeIndices = sqrt(GLmaxElementsIndices/12);
+	maxSectorSizeVertices = iSqrt(GLmaxElementsVertices/2)-1;
+	maxSectorSizeIndices = iSqrt(GLmaxElementsIndices/12);
 
 	debug(LOG_TERRAIN, "preferred sector size: %i", sectorSize);
 	debug(LOG_TERRAIN, "maximum sector size due to vertices: %i", maxSectorSizeVertices);

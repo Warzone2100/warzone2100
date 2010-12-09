@@ -1123,7 +1123,7 @@ static bool fptest2(void)
 			wtf = true;
 			break;
 		}
-		b = 1/sqrt(b - (unsigned)b);
+		b = 1/sqrt((double)(b - (unsigned)b));
 	}
 	for (n = 0; n != 100; ++n)
 	{

@@ -150,7 +150,7 @@ uint16_t iAtan2(int32_t s, int32_t c)
 
 int32_t iSqrt(uint32_t n)
 {
-	uint32_t r = sqrt(n);          // Calculate square root, rounded down. Excess precision does not change the result.
+	uint32_t r = sqrt((double)n);          // Calculate square root, rounded down. Excess precision does not change the result.
 
 	// Check that we got the right result.
 	ASSERT((int32_t)(r*r - n) <= 0 && (int32_t)((r + 1)*(r + 1) - n) > 0, "Too badly broken sqrt function, iSqrt(%u) = %u.", (unsigned)n, (unsigned)r);
@@ -163,7 +163,7 @@ int32_t i64Sqrt(uint64_t n)
 	uint64_t r;
 	if (sizeof(void *) > 4)
 	{
-		r = sqrt(n);          // Calculate square root, usually rounded down. Excess precision may result in rounding down instead of up, which is fine.
+		r = sqrt((double)n);          // Calculate square root, usually rounded down. Excess precision may result in rounding down instead of up, which is fine.
 	}
 	else
 	{

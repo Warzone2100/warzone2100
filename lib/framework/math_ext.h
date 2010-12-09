@@ -155,7 +155,7 @@ static inline void solveDifferential2ndOrder(float *y_, float *dydt_, float acce
 	y = complexDouble(*y_, 0);
 	dydt = complexDouble(*dydt_, 0);
 
-	sqd = d > 0? complexDouble(sqrt(d), 0) : complexDouble(0, sqrt(-d));                               // sqd = std::sqrt(d);
+	sqd = d > 0? complexDouble(sqrt((double)d), 0) : complexDouble(0, sqrt((double)-d));               // sqd = std::sqrt(d);
 	h1 = complexDoubleAdd(complexDouble(-friction/2, 0), sqd);                                         // h1 = -friction/2 + sqd;
 	h2 = complexDoubleSub(complexDouble(-friction/2, 0), sqd);                                         // h2 = -friction/2 - sqd;
 	e1 = complexDoubleExp(complexDoubleMul(h1, complexDouble(dt, 0)));                                 // e1 = std::exp(h1*dt);
