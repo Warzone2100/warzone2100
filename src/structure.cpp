@@ -1690,7 +1690,7 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		}
 
 		// allocate memory for and initialize a structure object
-		psBuilding = createStruct(player);
+		psBuilding = new STRUCTURE(generateSynchronisedObjectId(), player);
 		if (psBuilding == NULL)
 		{
 			return NULL;
@@ -1730,6 +1730,7 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 				if (fireOnLocation(psFeature->pos.x,psFeature->pos.y))
 				{
 					// Can't build on burning oil resource
+					delete psBuilding;
 					return NULL;
 				}
 				// remove it from the map
@@ -1759,6 +1760,7 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 					{
 						if(getTileStructure(mapX+width,mapY+breadth)->pStructureType->type == REF_WALLCORNER)
 						{
+							delete psBuilding;
 							return NULL; // dont build.
 						}
 					}
@@ -1771,7 +1773,7 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 						   player,isHumanPlayer(player) ? "Human" : "AI", pStructureType->pName, mapX, mapY,
 						   getTileStructure(mapX + width, mapY + breadth)->pStructureType->pName,
 						   mapX + width, mapY + breadth);
-					free(psBuilding);
+					delete psBuilding;
 					return NULL;
 				}
 
@@ -1916,7 +1918,7 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		if(!setFunctionality(psBuilding, pStructureType->type))
 		{
 			removeStructFromMap(psBuilding);
-			free(psBuilding);
+			delete psBuilding;
 			//better reset these if you couldn't build the structure!
 			if (FromSave && player == selectedPlayer && missionLimboExpand())
 			{
@@ -2144,12 +2146,10 @@ STRUCTURE *buildBlueprint(STRUCTURE_STATS *psStats, int32_t x, int32_t y, uint16
 	ASSERT_OR_RETURN(NULL, psStats != NULL, "No blueprint stats");
 	ASSERT_OR_RETURN(NULL, psStats->pIMD != NULL, "No blueprint model for %s", getStatName(psStats));
 
-	blueprint = (STRUCTURE *)malloc(sizeof(STRUCTURE));
+	blueprint = new STRUCTURE(0, selectedPlayer);
 	// construct the fake structure
-	psStats = (STRUCTURE_STATS *)psStats;
 	blueprint->pStructureType = psStats;
 	blueprint->visible[selectedPlayer] = UBYTE_MAX;
-	blueprint->player = selectedPlayer;
 	blueprint->sDisplay.imd = psStats->pIMD;
 	blueprint->pos.x = x;
 	blueprint->pos.y = y;

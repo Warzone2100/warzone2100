@@ -70,7 +70,7 @@ static	WARCAM	trackingCamera;
 static	SDWORD	warCamLogoRotation;
 
 /* The fake target that we track when jumping to a new location on the radar */
-static	BASE_OBJECT	radarTarget;
+static BASE_OBJECT radarTarget(OBJ_TARGET, 0, 0);
 
 /* Do we trun to face when doing a radar jump? */
 static	BOOL	bRadarAllign;
@@ -307,8 +307,6 @@ static void setUpRadarTarget(SDWORD x, SDWORD y)
 	radarTarget.rot.direction = calcDirection(player.p.x, player.p.z, x, y);
 	radarTarget.rot.pitch = 0;
 	radarTarget.rot.roll = 0;
-	radarTarget.type = OBJ_TARGET;
-	radarTarget.died = 0;
 }
 
 

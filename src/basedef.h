@@ -59,6 +59,7 @@ typedef struct _tilePos
 /// NEXTOBJ is a SIMPLE_OBJECT *, which can automatically be cast to DROID *, STRUCTURE *, FEATURE * and PROJECTILE *...
 struct NEXTOBJ
 {
+	NEXTOBJ(struct SIMPLE_OBJECT *ptr_ = NULL) : ptr(ptr_) {}
 	NEXTOBJ &operator =(struct SIMPLE_OBJECT *ptr_) { ptr = ptr_; return *this; }
 	template<class T>
 	operator T * () const { return static_cast<T *>(ptr); }
@@ -68,6 +69,9 @@ struct NEXTOBJ
 
 struct SIMPLE_OBJECT
 {
+	SIMPLE_OBJECT(OBJECT_TYPE type, uint32_t id, unsigned player);
+	~SIMPLE_OBJECT();
+
 	OBJECT_TYPE     type;                           ///< The type of object
 	UDWORD          id;                             ///< ID number of the object
 	Position        pos;                            ///< Position of the object
@@ -82,6 +86,9 @@ struct SIMPLE_OBJECT
 
 struct BASE_OBJECT : public SIMPLE_OBJECT
 {
+	BASE_OBJECT(OBJECT_TYPE type, uint32_t id, unsigned player);
+	~BASE_OBJECT();
+
 	SCREEN_DISP_DATA    sDisplay;                   ///< screen coordinate details
 	UBYTE               group;                      ///< Which group selection is the droid currently in?
 	UBYTE               selected;                   ///< Whether the object is selected (might want this elsewhere)

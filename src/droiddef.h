@@ -128,6 +128,9 @@ struct DROID_TEMPLATE : public BASE_STATS
 
 struct DROID : public BASE_OBJECT
 {
+	DROID(uint32_t id, unsigned player) : BASE_OBJECT(OBJ_DROID, id, player) {}
+	~DROID();
+
 	/// UTF-8 name of the droid. This is generated from the droid template and cannot be changed by the game player after creation.
 	char            aName[MAX_STR_LENGTH];
 

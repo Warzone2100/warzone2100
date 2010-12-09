@@ -189,7 +189,7 @@ extern BOOL droidUpdateRestore( DROID *psDroid );
 extern void recycleDroid(DROID *psDel);
 
 /* Release all resources associated with a droid */
-extern void droidRelease(DROID *psDroid);
+//extern void droidRelease(DROID *psDroid);
 
 /* Remove a droid and free it's memory */
 extern void destroyDroid(DROID *psDel);

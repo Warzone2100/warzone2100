@@ -955,7 +955,7 @@ static void displayCompObj(DROID *psDroid, BOOL bButton)
 //
 void displayComponentButtonTemplate(DROID_TEMPLATE *psTemplate, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale)
 {
-	static DROID Droid;	// Made static to reduce stack usage.
+	static DROID Droid(0, 0);  // Made static to reduce stack usage.
 	SDWORD difference;
 
 	/* init to NULL */

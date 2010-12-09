@@ -249,6 +249,8 @@ typedef union
 //this structure is used whenever an instance of a building is required in game
 struct STRUCTURE : public BASE_OBJECT
 {
+	STRUCTURE(uint32_t id, unsigned player) : BASE_OBJECT(OBJ_STRUCTURE, id, player) {}
+
 	STRUCTURE_STATS     *pStructureType;            /* pointer to the structure stats for this type of building */
 	STRUCT_STATES       status;                     /* defines whether the structure is being built, doing nothing or performing a function */
 	SWORD               currentBuildPts;            /* the build points currently assigned to this structure */

@@ -362,7 +362,7 @@ int32_t projCalcIndirectVelocities(const int32_t dx, const int32_t dz, int32_t v
 
 BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Vector3i target, BASE_OBJECT *psTarget, BOOL bVisible, int weapon_slot)
 {
-	PROJECTILE *            psProj = new PROJECTILE;
+	PROJECTILE *            psProj = new PROJECTILE(ProjectileTrackerID |(gameTime2 >>4), player);
 	int32_t                 dx, dy, dz;
 	uint32_t                dxy;
 	WEAPON_STATS *psStats = &asWeaponStats[psWeap->nStat];
@@ -394,14 +394,11 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 	}
 
 	/* Initialise the structure */
-	psProj->id			= ProjectileTrackerID |(gameTime2 >>4);		// make unique id
-	psProj->type		    = OBJ_PROJECTILE;
 	psProj->psWStats		= psStats;
 
 	psProj->pos             = psProj->src;
 	psProj->dst             = target;
 
-	psProj->player = player;
 	psProj->bVisible = false;
 
 	psProj->died = 0;

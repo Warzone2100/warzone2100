@@ -19,6 +19,7 @@
 */
 
 #include "lib/framework/frame.h"
+#include "lib/sound/audio.h"
 
 #include "baseobject.h"
 #include "droid.h"
@@ -71,6 +72,38 @@ SPACETIME interpolateObjectSpacetime(const SIMPLE_OBJECT *obj, uint32_t t)
 		case OBJ_PROJECTILE:
 			return interpolateSpacetime(((PROJECTILE *)obj)->prevSpacetime, GET_SPACETIME(obj), t);
 	}
+}
+
+SIMPLE_OBJECT::SIMPLE_OBJECT(OBJECT_TYPE type, uint32_t id, unsigned player)
+	: type(type)
+	, id(id)
+	, player(player)
+	, born(gameTime)
+	, died(0)
+{}
+
+SIMPLE_OBJECT::~SIMPLE_OBJECT()
+{
+#ifdef DEBUG
+	const_cast<OBJECT_TYPE &>(type) = (OBJECT_TYPE)(type + 1000000000);  // Hopefully this will trigger an assert              if someone uses the freed object.
+	player += 100;                                                       // Hopefully this will trigger an assert and/or crash if someone uses the freed object.
+	psNext = this;                                                       // Hopefully this will trigger an infinite loop       if someone uses the freed object.
+#endif //DEBUG
+}
+
+BASE_OBJECT::BASE_OBJECT(OBJECT_TYPE type, uint32_t id, unsigned player)
+	: SIMPLE_OBJECT(type, id, player)
+	, numWatchedTiles(0)
+	, watchedTiles(NULL)
+{}
+
+BASE_OBJECT::~BASE_OBJECT()
+{
+	// Make sure to get rid of some final references in the sound code to this object first
+	audio_RemoveObj(this);
+
+	visRemoveVisibility(this);
+	free(watchedTiles);
 }
 
 void checkObject(const BASE_OBJECT* psObject, const char * const location_description, const char * function, const int recurse)

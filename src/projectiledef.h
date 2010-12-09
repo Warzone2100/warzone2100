@@ -39,8 +39,7 @@ typedef enum PROJ_STATE
 
 struct PROJECTILE : public SIMPLE_OBJECT
 {
-	/* Use only simple object elements */
-	//SIMPLE_ELEMENTS( struct PROJECTILE );
+	PROJECTILE(uint32_t id, unsigned player) : SIMPLE_OBJECT(OBJ_PROJECTILE, id, player) {}
 
 	void            update();
 	bool            deleteIfDead() { if (died == 0) return false; delete this; return true; }

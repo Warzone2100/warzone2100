@@ -2063,7 +2063,7 @@ INT_RETVAL intRunWidgets(void)
 					psPositionStats->ref < REF_STRUCTURE_START + REF_RANGE)
 				{
 					STRUCTURE_STATS *psBuilding = (STRUCTURE_STATS *)psPositionStats;
-					STRUCTURE tmp;
+					STRUCTURE tmp(0, selectedPlayer);
 
 					intCalcStructCenter(psBuilding, structX, structY, player.r.y, &structX, &structY);
 					if (psBuilding->type == REF_DEMOLISH)
@@ -2088,7 +2088,6 @@ INT_RETVAL intRunWidgets(void)
 						//psStructure = buildStructure(psBuilding, structX, structY,
 						//                             selectedPlayer, false);
 						psStructure = &tmp;
-						tmp.player = selectedPlayer;
 						tmp.id = generateNewObjectId();
 						tmp.pStructureType = (STRUCTURE_STATS *)psPositionStats;
 						tmp.pos.x = structX;

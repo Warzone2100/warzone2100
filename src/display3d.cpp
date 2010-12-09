@@ -1471,7 +1471,7 @@ static void drawWallDrag(STRUCTURE_STATS *psStats, int left, int right, int up, 
 		}
 	}
 	
-	free(blueprint);
+	delete blueprint;
 }
 
 static void renderBuildOrder(int32_t order, BASE_STATS *stats, int32_t x, int32_t y, int32_t x2, int32_t y2, uint16_t dir, STRUCT_STATES state)
@@ -1495,7 +1495,7 @@ static void renderBuildOrder(int32_t order, BASE_STATS *stats, int32_t x, int32_
 		{
 			STRUCTURE *blueprint = buildBlueprint((STRUCTURE_STATS *)stats, x, y, dir, state);
 			renderStructure(blueprint);
-			free(blueprint);
+			delete blueprint;
 		}
 	}
 }

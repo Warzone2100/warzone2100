@@ -45,7 +45,6 @@ bool mechanicsShutdown(void)
 		switch (psObj->type)
 		{
 			case OBJ_DROID:
-				droidRelease((DROID *)psObj);
 				break;
 
 			case OBJ_STRUCTURE:
@@ -59,7 +58,7 @@ bool mechanicsShutdown(void)
 			default:
 				ASSERT(!"unknown object type", "unknown object type in destroyed object list");
 		}
-		free(psObj);
+		delete psObj;
 	}
 	psDestroyedObj = NULL;
 

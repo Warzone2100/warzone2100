@@ -26,7 +26,6 @@
 #include <string.h>
 
 #include "lib/framework/frame.h"
-#include "lib/sound/audio.h"
 #include "objects.h"
 #include "lib/gamelib/gtime.h"
 #include "lib/netplay/netplay.h"
@@ -106,7 +105,6 @@ static void objmemDestroy(BASE_OBJECT *psObj)
 			{
 				return;
 			}
-			droidRelease((DROID *)psObj);
 			break;
 
 		case OBJ_STRUCTURE:
@@ -126,17 +124,7 @@ static void objmemDestroy(BASE_OBJECT *psObj)
 		default:
 			ASSERT(!"unknown object type", "objmemDestroy: unknown object type in destroyed list at 0x%p", psObj);
 	}
-	// Make sure to get rid of some final references in the sound code to this object first
-	audio_RemoveObj(psObj);
-
-	visRemoveVisibility(psObj);
-	free(psObj->watchedTiles);
-#ifdef DEBUG
-	psObj->type = (OBJECT_TYPE)(psObj->type + 1000000000);  // Hopefully this will trigger an assert              if someone uses the freed object.
-	psObj->player += 1000000000;                            // Hopefully this will trigger an assert and/or crash if someone uses the freed object.
-	psObj->psNext = psObj;                                  // Hopefully this will trigger an infinite loop       if someone uses the freed object.
-#endif //DEBUG
-	free(psObj);
+	delete psObj;
 	debug(LOG_MEMORY, "BASE_OBJECT* 0x%p is freed.", psObj);
 }
 
@@ -216,59 +204,6 @@ uint32_t generateSynchronisedObjectId(void)
 	uint32_t ret = synchObjID++*2 + 1;
 	syncDebug("New objectId = %u", ret);
 	return ret;
-}
-
-/**************************************************************************************
- *
- * Inlines for the object memory functions
- * The code is the same for the different object types only the pointer types
- * change.
- */
-
-/* Creating a new object
- */
-static inline BASE_OBJECT* createObject(UDWORD player, OBJECT_TYPE objType)
-{
-	BASE_OBJECT* newObject;
-
-	ASSERT(player < MAX_PLAYERS,
-	       "createObject: invalid player number");
-
-	switch (objType)
-	{
-		case OBJ_FEATURE:
-			newObject = (BASE_OBJECT *)malloc(sizeof(FEATURE));
-			break;
-
-		case OBJ_STRUCTURE:
-			newObject = (BASE_OBJECT *)malloc(sizeof(STRUCTURE));
-			break;
-
-		case OBJ_DROID:
-			newObject = (BASE_OBJECT *)malloc(sizeof(DROID));
-			break;
-
-		default:
-			ASSERT(!"unknown object type", "createObject: unknown object type");
-			return NULL;
-	}
-
-	if (newObject == NULL)
-	{
-		debug(LOG_ERROR, "Out of memory");
-		return NULL;
-	}
-
-	newObject->type = objType;
-	newObject->id = generateSynchronisedObjectId();
-	newObject->player = (UBYTE)player;
-	newObject->died = 0;
-	newObject->psNextFunc = NULL;
-	newObject->numWatchedTiles = 0;
-	newObject->watchedTiles = NULL;
-	newObject->born = gameTime;
-
-	return newObject;
 }
 
 /* Add the object to its list
@@ -428,6 +363,7 @@ static inline BASE_OBJECT* findObjectInList(BASE_OBJECT list[], UDWORD idNum)
 
 // Necessary for a nice looking cast in calls to releaseAllObjectsInList
 typedef void (*OBJECT_DESTRUCTOR)(BASE_OBJECT*);
+static inline void doNothing(BASE_OBJECT *) {}
 
 static inline void releaseAllObjectsInList(BASE_OBJECT *list[], OBJECT_DESTRUCTOR objectDestructor)
 {
@@ -449,7 +385,7 @@ static inline void releaseAllObjectsInList(BASE_OBJECT *list[], OBJECT_DESTRUCTO
 			// issue is with campaign games, and the swapping pointers 'trick' Pumpkin uses.
 			//	visRemoveVisibility(psCurr);
 			// Release object's memory
-			free(psCurr);
+			delete psCurr;
 		}
 		list[i] = NULL;
 	}
@@ -461,12 +397,6 @@ static inline void releaseAllObjectsInList(BASE_OBJECT *list[], OBJECT_DESTRUCTO
  */
 
 /***************************  DROID  *********************************/
-
-/* Create a new droid */
-DROID* createDroid(UDWORD player)
-{
-	return (DROID*)createObject(player, OBJ_DROID);
-}
 
 /* add the droid to the Droid Lists */
 void addDroid(DROID *psDroidToAdd, DROID *pList[MAX_PLAYERS])
@@ -533,7 +463,7 @@ void killDroid(DROID *psDel)
 /* Remove all droids */
 void freeAllDroids(void)
 {
-	releaseAllObjectsInList((BASE_OBJECT**)apsDroidLists, (OBJECT_DESTRUCTOR)droidRelease);
+	releaseAllObjectsInList((BASE_OBJECT**)apsDroidLists, doNothing);
 }
 
 /*Remove a single Droid from a list*/
@@ -568,22 +498,16 @@ void removeDroid(DROID *psDroidToRemove, DROID *pList[MAX_PLAYERS])
 /*Removes all droids that may be stored in the mission lists*/
 void freeAllMissionDroids(void)
 {
-	releaseAllObjectsInList((BASE_OBJECT**)mission.apsDroidLists, (OBJECT_DESTRUCTOR)droidRelease);
+	releaseAllObjectsInList((BASE_OBJECT**)mission.apsDroidLists, doNothing);
 }
 
 /*Removes all droids that may be stored in the limbo lists*/
 void freeAllLimboDroids(void)
 {
-	releaseAllObjectsInList((BASE_OBJECT**)apsLimboDroids, (OBJECT_DESTRUCTOR)droidRelease);
+	releaseAllObjectsInList((BASE_OBJECT**)apsLimboDroids, doNothing);
 }
 
 /**************************  STRUCTURE  *******************************/
-
-/* Create a new structure */
-STRUCTURE* createStruct(UDWORD player)
-{
-	return (STRUCTURE*)createObject(player, OBJ_STRUCTURE);
-}
 
 /* add the structure to the Structure Lists */
 void addStructure(STRUCTURE *psStructToAdd)
@@ -686,12 +610,6 @@ void removeStructureFromList(STRUCTURE *psStructToRemove, STRUCTURE *pList[MAX_P
 }
 
 /**************************  FEATURE  *********************************/
-
-/* Create a new Feature */
-FEATURE* createFeature()
-{
-	return (FEATURE*)createObject(0, OBJ_FEATURE);
-}
 
 /* add the feature to the Feature Lists */
 void addFeature(FEATURE *psFeatureToAdd)

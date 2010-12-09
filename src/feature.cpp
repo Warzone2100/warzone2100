@@ -264,7 +264,7 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 	SDWORD		i;
 	UBYTE		vis;
 	//try and create the Feature
-	FEATURE* psFeature = createFeature();
+	FEATURE *psFeature = new FEATURE(generateSynchronisedObjectId());
 
 	if (psFeature == NULL)
 	{
@@ -330,7 +330,6 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 	}
 	psFeature->selected = false;
 	psFeature->body = psStats->body;
-	psFeature->player = MAX_PLAYERS+1;	//set the player out of range to avoid targeting confusions
 	objSensorCache((BASE_OBJECT *)psFeature, NULL);
 	objEcmCache((BASE_OBJECT *)psFeature, NULL);
 	psFeature->bTargetted = false;

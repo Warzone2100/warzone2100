@@ -287,8 +287,9 @@ BOOL droidCheckReferences(DROID *psVictimDroid)
 /* droidRelease: release all resources associated with a droid -
  * should only be called by objmem - use vanishDroid preferably
  */
-void droidRelease(DROID *psDroid)
+DROID::~DROID()
 {
+	DROID *psDroid = this;
 	DROID	*psCurr, *psNext;
 
 	/* remove animation if present */
@@ -307,8 +308,7 @@ void droidRelease(DROID *psDroid)
 				psDroid; psCurr = psNext)
 			{
 				psNext = psCurr->psGrpNext;
-				droidRelease(psCurr);
-				free(psCurr);
+				delete psCurr;
 			}
 		}
 	}
@@ -2417,7 +2417,7 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD pl
 	ASSERT(!bMultiPlayer || worldOnMap(x,y), "the build locations are not on the map");
 
 	//allocate memory
-	psDroid = createDroid(player);
+	psDroid = new DROID(generateSynchronisedObjectId(), player);
 	if (psDroid == NULL)
 	{
 		debug(LOG_NEVER, "unit build: unable to create");
@@ -2455,7 +2455,7 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD pl
 		{
 			debug(LOG_NEVER, "unit build: unable to create group");
 			ASSERT(!"unable to create group", "Can't create unit because can't create group");
-			free(psDroid);
+			delete psDroid;
 			return NULL;
 		}
 		grpJoin(psGrp, psDroid);
