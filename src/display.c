@@ -30,6 +30,7 @@
 #include "lib/framework/strres.h"
 #include "lib/ivis_common/piestate.h"
 #include "lib/framework/fixedpoint.h"
+#include "lib/framework/wzapp_c.h"
 
 #include "action.h"
 #include "display.h"
@@ -197,6 +198,7 @@ static UDWORD	rotInitialUp;
 static UDWORD	xMoved, yMoved;
 static STRUCTURE	*psBuilding;
 static BOOL	edgeOfMap = false;
+static uint32_t scrollRefTime;
 static float	scrollSpeedLeftRight; //use two directions and add them because its simple
 static float	scrollStepLeftRight;
 static float	scrollSpeedUpDown;
@@ -1123,6 +1125,7 @@ static void calcScroll(float *y, float *dydt, float accel, float decel, float ta
 void scroll(void)
 {
 	SDWORD	xDif,yDif;
+	uint32_t timeDiff;
 	int scrollDirLeftRight = 0, scrollDirUpDown = 0;
 	float scroll_zoom_factor = 1+2*((getViewDistance()-MINDISTANCE)/((float)(MAXDISTANCE-MINDISTANCE)));
 	float scaled_max_scroll_speed = scroll_zoom_factor * MAX_SCROLL_SPEED;
@@ -1156,10 +1159,14 @@ void scroll(void)
 
 	scaled_accel = scroll_zoom_factor * scroll_speed_accel;
 
+	// Apparently there's stutter if using deltaRealTime, so we have our very own delta time here, just for us.
+	timeDiff = wzGetTicks() - scrollRefTime;
+	scrollRefTime += timeDiff;
+
 	scrollStepLeftRight = 0;
 	scrollStepUpDown = 0;
-	calcScroll(&scrollStepLeftRight, &scrollSpeedLeftRight, scaled_accel, 2*scaled_accel, scrollDirLeftRight * scaled_max_scroll_speed, realTimeAdjustedIncrement(1));
-	calcScroll(&scrollStepUpDown,    &scrollSpeedUpDown,    scaled_accel, 2*scaled_accel, scrollDirUpDown    * scaled_max_scroll_speed, realTimeAdjustedIncrement(1));
+	calcScroll(&scrollStepLeftRight, &scrollSpeedLeftRight, scaled_accel, 2*scaled_accel, scrollDirLeftRight * scaled_max_scroll_speed, (float)timeDiff / GAME_TICKS_PER_SEC);
+	calcScroll(&scrollStepUpDown,    &scrollSpeedUpDown,    scaled_accel, 2*scaled_accel, scrollDirUpDown    * scaled_max_scroll_speed, (float)timeDiff / GAME_TICKS_PER_SEC);
 
 	/* Get x component of movement */
 	xDif = iCosR(-player.r.y, scrollStepLeftRight) + iSinR(-player.r.y, scrollStepUpDown);
@@ -1178,6 +1185,7 @@ void scroll(void)
  */
 void resetScroll(void)
 {
+	scrollRefTime = wzGetTicks();
 	scrollSpeedUpDown = 0.0f;
 	scrollSpeedLeftRight = 0.0f;
 }
