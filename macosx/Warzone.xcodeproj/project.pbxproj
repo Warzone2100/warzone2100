@@ -3565,7 +3565,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"libogg-1.2.0\"\nOutDir=\"libogg\"\nFileName=\"libogg-1.2.0.tar.gz\"\nSourceDLP=\"http://downloads.xiph.org/releases/ogg/libogg-1.2.0.tar.gz\"\nMD5Sum=\"c95b73759acfc30712beef6ce4e88efa\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
+			shellScript = "DirectorY=\"libogg-1.2.2\"\nOutDir=\"libogg\"\nFileName=\"libogg-1.2.2.tar.gz\"\nSourceDLP=\"http://downloads.xiph.org/releases/ogg/libogg-1.2.2.tar.gz\"\nMD5Sum=\"5a9fcabc9a1b7c6f1cd75ddc78f36c56\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
 		};
 		02FD38380BD4013A00776FD3 /* Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
