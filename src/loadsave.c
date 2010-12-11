@@ -321,6 +321,7 @@ static BOOL _addLoadSave(BOOL bLoad, const char *sSearchPath, const char *sExten
 		W_BUTTON *button;
 		char savefile[256];
 		time_t savetime;
+		struct tm *timeinfo;
 
 		// See if this filename contains the extension we're looking for
 		if (!strstr(*i, checkExtension))
@@ -336,7 +337,8 @@ static BOOL _addLoadSave(BOOL bLoad, const char *sSearchPath, const char *sExten
 		/* Figure save-time */
 		snprintf(savefile, sizeof(savefile), "%s/%s", sSearchPath, *i);
 		savetime = PHYSFS_getLastModTime(savefile);
-		sstrcpy(sSlotTips[slotCount], ctime(&savetime));
+		timeinfo = localtime(&savetime);
+		strftime(sSlotTips[slotCount], sizeof(sSlotTips[slotCount]), "%x %X", timeinfo);
 
 		/* Set the button-text */
 		(*i)[strlen(*i) - 4] = '\0'; // remove .gam extension

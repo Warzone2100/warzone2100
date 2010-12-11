@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-11-24 17:56+0100\n"
+"POT-Creation-Date: 2010-12-11 16:16+0100\n"
 "PO-Revision-Date: 2010-10-24 13:31+0200\n"
 "Last-Translator: Adrian Mos <adimosh@live.com>\n"
 "Language-Team: Romanian <ro@li.org>\n"
@@ -7350,7 +7350,8 @@ msgid "Plascrete Mk2"
 msgstr "Plasbeton MK2"
 
 #: data/base/messages/strings/names.txt:709
-msgid "Plascrete MK3"
+#: data/mp/messages/strings/names.txt:723
+msgid "Plascrete Mk3"
 msgstr "Plasbeton MK3"
 
 #: data/base/messages/strings/names.txt:717
@@ -11629,10 +11630,6 @@ msgstr "Transportor"
 msgid "Super Transport Body"
 msgstr "Șasiu de transportor"
 
-#: data/mp/messages/strings/names.txt:723
-msgid "Plascrete Mk3"
-msgstr "Plasbeton MK3"
-
 #: data/mp/messages/strings/names.txt:724
 msgid "Plasteel"
 msgstr "Plasoțel"
@@ -12705,7 +12702,7 @@ msgid "Join Game"
 msgstr "Alătură-te unui joc"
 
 #: src/frontend.c:415
-#: src/multiint.c:1170
+#: src/multiint.c:1177
 msgid "OPTIONS"
 msgstr "OPȚIUNI"
 
@@ -12800,7 +12797,7 @@ msgid "Off"
 msgstr "Dezactivat"
 
 #: src/frontend.c:517
-#: src/multiint.c:1240
+#: src/multiint.c:1247
 msgid "Fog"
 msgstr "Ceață"
 
@@ -12811,7 +12808,7 @@ msgstr "Negură"
 
 #: src/frontend.c:524
 #: src/frontend.c:589
-#: src/multiint.c:1242
+#: src/multiint.c:1249
 msgid "Fog Of War"
 msgstr "Ceața bătăliei"
 
@@ -12973,7 +12970,7 @@ msgid "GAME OPTIONS"
 msgstr "OPȚIUNI DE JOC"
 
 #: src/frontend.c:1343
-#: src/multiint.c:2206
+#: src/multiint.c:2213
 msgid "Mod: "
 msgstr "Modificare:"
 
@@ -13032,7 +13029,7 @@ msgid "Build (F3)"
 msgstr "Construcție (F3)"
 
 #: src/hci.c:3925
-#: src/multiint.c:1287
+#: src/multiint.c:1294
 #: src/multimenu.c:808
 msgid "Power"
 msgstr "Energie"
@@ -13611,9 +13608,9 @@ msgid "KEY MAPPING"
 msgstr ""
 
 #: src/keyedit.c:374
-#: src/multiint.c:527
-#: src/multiint.c:955
-#: src/multiint.c:1373
+#: src/multiint.c:534
+#: src/multiint.c:962
+#: src/multiint.c:1380
 msgid "Return To Previous Screen"
 msgstr ""
 
@@ -14192,295 +14189,295 @@ msgstr "%s a format o alianță cu %s"
 msgid "You Discover Blueprints For %s"
 msgstr "Ai descoperit scheme pentru %s"
 
-#: src/multiint.c:461
+#: src/multiint.c:468
 #: src/multilimit.c:192
 msgid "Accept Settings"
 msgstr "Acceptă Setările"
 
-#: src/multiint.c:463
-#: src/multiint.c:1003
+#: src/multiint.c:470
+#: src/multiint.c:1010
 msgid "Cancel"
 msgstr "Anulare"
 
-#: src/multiint.c:474
+#: src/multiint.c:481
 msgid "IP Address or Machine Name"
 msgstr "Adresă IP sau numele calculatorului"
 
-#: src/multiint.c:524
+#: src/multiint.c:531
 msgid "CONNECTION"
 msgstr "CONEXIUNE"
 
-#: src/multiint.c:529
+#: src/multiint.c:536
 msgid "Lobby"
 msgstr "Arenă"
 
-#: src/multiint.c:530
+#: src/multiint.c:537
 msgid "IP"
 msgstr "IP"
 
-#: src/multiint.c:721
+#: src/multiint.c:728
 msgid "No games are available"
 msgstr "Nici un joc disponibil"
 
-#: src/multiint.c:724
+#: src/multiint.c:731
 msgid "Game is full"
 msgstr "Jocul este plin"
 
-#: src/multiint.c:728
+#: src/multiint.c:735
 msgid "You were kicked!"
 msgstr "Ai fost eliminat!"
 
-#: src/multiint.c:731
+#: src/multiint.c:738
 msgid "Wrong Game Version!"
 msgstr "Versiune de joc greșită!"
 
-#: src/multiint.c:734
+#: src/multiint.c:741
 msgid "You have an incompatible mod."
 msgstr "Ai o modificare incomkpatibilă."
 
-#: src/multiint.c:739
+#: src/multiint.c:746
 msgid "Host couldn't send file?"
 msgstr "Gazda nu a putut transmite fișierul?"
 
-#: src/multiint.c:743
+#: src/multiint.c:750
 msgid "Incorrect Password!"
 msgstr "Parolă incorectă!"
 
-#: src/multiint.c:746
+#: src/multiint.c:753
 msgid "Host has dropped connection!"
 msgstr "Gazda a întrerupt conexiunea!"
 
-#: src/multiint.c:750
+#: src/multiint.c:757
 msgid "Connection Error"
 msgstr "Eroare de conexiune"
 
-#: src/multiint.c:891
+#: src/multiint.c:898
 msgid "Searching"
 msgstr "Căutare"
 
-#: src/multiint.c:952
+#: src/multiint.c:959
 msgid "GAMES"
 msgstr "JOCURI"
 
-#: src/multiint.c:960
+#: src/multiint.c:967
 msgid "Refresh Games List"
 msgstr "Reîmprospătează lista de jocuri"
 
-#: src/multiint.c:980
+#: src/multiint.c:987
 msgid "Enter Password:"
 msgstr "Introdu parola:"
 
-#: src/multiint.c:1001
+#: src/multiint.c:1008
 msgid "OK"
 msgstr "Acceptă"
 
-#: src/multiint.c:1123
+#: src/multiint.c:1130
 msgid "Tanks disabled!!"
 msgstr "Tancurile dezactivate!!"
 
-#: src/multiint.c:1124
+#: src/multiint.c:1131
 msgid "Cyborgs disabled."
 msgstr "Cyborgii dezactivați."
 
-#: src/multiint.c:1125
+#: src/multiint.c:1132
 msgid "VTOLs disabled."
 msgstr "DAV-urile dezactivate."
 
-#: src/multiint.c:1175
 #: src/multiint.c:1182
+#: src/multiint.c:1189
 msgid "Select Game Name"
 msgstr "Selectează numele jocului"
 
-#: src/multiint.c:1175
+#: src/multiint.c:1182
 msgid "One-Player Skirmish"
 msgstr "Luptă individuală"
 
-#: src/multiint.c:1185
+#: src/multiint.c:1192
 msgid "Select Map"
 msgstr "Alege harta"
 
-#: src/multiint.c:1193
+#: src/multiint.c:1200
 msgid "Click to set Password"
 msgstr "Click pentru a seta o parolă"
 
-#: src/multiint.c:1203
-#: src/multiint.c:1204
+#: src/multiint.c:1210
+#: src/multiint.c:1211
 msgid "Scavengers"
 msgstr "Bandiți"
 
-#: src/multiint.c:1206
+#: src/multiint.c:1213
 msgid "No Scavengers"
 msgstr "Fără bandiți"
 
-#: src/multiint.c:1237
+#: src/multiint.c:1244
 msgid "Select Player Name"
 msgstr "Selectează numele jucătorului"
 
-#: src/multiint.c:1243
+#: src/multiint.c:1250
 msgid "Distance Fog"
 msgstr "Ceață la distanță"
 
-#: src/multiint.c:1254
+#: src/multiint.c:1261
 #: src/multimenu.c:801
 msgid "Alliances"
 msgstr "Alianțe"
 
-#: src/multiint.c:1257
+#: src/multiint.c:1264
 msgid "No Alliances"
 msgstr "Fără alianțe"
 
-#: src/multiint.c:1259
+#: src/multiint.c:1266
 msgid "Allow Alliances"
 msgstr "Permite alianțele"
 
-#: src/multiint.c:1263
+#: src/multiint.c:1270
 msgid "Locked Teams"
 msgstr "Echipe blocate"
 
-#: src/multiint.c:1289
+#: src/multiint.c:1296
 msgid "Low Power Levels"
 msgstr "Nivel mic de energie"
 
-#: src/multiint.c:1291
+#: src/multiint.c:1298
 msgid "Medium Power Levels"
 msgstr "Nivel mediu de energie"
 
-#: src/multiint.c:1293
+#: src/multiint.c:1300
 msgid "High Power Levels"
 msgstr "Nivel mare de energie"
 
-#: src/multiint.c:1325
+#: src/multiint.c:1332
 msgid "Base"
 msgstr "Bază"
 
-#: src/multiint.c:1327
+#: src/multiint.c:1334
 msgid "Start with No Bases"
 msgstr "Pornire fără baze"
 
-#: src/multiint.c:1329
+#: src/multiint.c:1336
 msgid "Start with Bases"
 msgstr "Pornire cu baze"
 
-#: src/multiint.c:1331
+#: src/multiint.c:1338
 msgid "Start with Advanced Bases"
 msgstr "Pornire cu baze avansate"
 
-#: src/multiint.c:1363
+#: src/multiint.c:1370
 msgid "Map Preview"
 msgstr "Vizionare Hartă"
 
-#: src/multiint.c:1365
+#: src/multiint.c:1372
 msgid "Click to see Map"
 msgstr "Click pentru a vedea Harta"
 
-#: src/multiint.c:1379
+#: src/multiint.c:1386
 msgid "Start Hosting Game"
 msgstr "Începe găzduirea jocului"
 
-#: src/multiint.c:1387
+#: src/multiint.c:1394
 msgid "Show Structure Limits"
 msgstr "Arată limitele pentru clădiri"
 
-#: src/multiint.c:1387
+#: src/multiint.c:1394
 msgid "Set Structure Limits"
 msgstr "Setează limitele pentru clădiri"
 
-#: src/multiint.c:1473
+#: src/multiint.c:1480
 msgid "Player colour"
 msgstr "Culoarea jucătorului"
 
-#: src/multiint.c:1489
+#: src/multiint.c:1496
 msgid "Kick player"
 msgstr "Eliminare jucător"
 
-#: src/multiint.c:1500
+#: src/multiint.c:1507
 #, fuzzy
 msgid "Player position"
 msgstr "Păzește poziția"
 
-#: src/multiint.c:1893
+#: src/multiint.c:1900
 msgid "Team"
 msgstr "Echipă"
 
-#: src/multiint.c:1926
+#: src/multiint.c:1933
 msgid "Waiting for other players"
 msgstr "Așteptare pentru alți jucători"
 
-#: src/multiint.c:1932
+#: src/multiint.c:1939
 msgid "Click when ready"
 msgstr "Click când ești pregătit"
 
-#: src/multiint.c:1936
+#: src/multiint.c:1943
 msgid "READY?"
 msgstr "PREGĂTIT?"
 
-#: src/multiint.c:1973
+#: src/multiint.c:1980
 msgid "PLAYERS"
 msgstr "JUCĂTORI"
 
-#: src/multiint.c:2027
+#: src/multiint.c:2034
 msgid "Choose Team"
 msgstr "Alege Echipa"
 
-#: src/multiint.c:2067
+#: src/multiint.c:2074
 msgid "Click to change player settings"
 msgstr "Click pentru a schimba setările jucătorului"
 
-#: src/multiint.c:2098
+#: src/multiint.c:2105
 msgid "Click to adjust AI difficulty"
 msgstr "Click pentru a ajusta dificultatea IA"
 
-#: src/multiint.c:2177
+#: src/multiint.c:2184
 msgid "CHAT"
 msgstr "CONVERSAȚIE"
 
-#: src/multiint.c:2211
+#: src/multiint.c:2218
 msgid "All players need to have the same mods to join your game."
 msgstr "Toți jucătorii trebuie să aibă aceleași modificări pentru a putea juca."
 
-#: src/multiint.c:2371
+#: src/multiint.c:2378
 #, c-format
 msgid "*** password [%s] is now required! ***"
 msgstr "*** parola [%s] este de acum necesară! ***"
 
-#: src/multiint.c:2379
+#: src/multiint.c:2386
 msgid "*** password is NOT required! ***"
 msgstr "*** parola NU este necesară! ***"
 
-#: src/multiint.c:2641
+#: src/multiint.c:2648
 msgid "Sorry! Failed to host the game."
 msgstr "Scuze! Jocul nu s-a putut găzdui."
 
-#: src/multiint.c:2726
+#: src/multiint.c:2733
 msgid "'Locked Teams' mode enabled"
 msgstr "Modul „Echipe Blocate” activat"
 
-#: src/multiint.c:2765
-#: src/multiint.c:2815
+#: src/multiint.c:2772
+#: src/multiint.c:2822
 #: src/multimenu.c:1538
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "Gazda l-a eliminat pe %s din joc!"
 
-#: src/multiint.c:2897
+#: src/multiint.c:2909
 msgid "Host is Starting Game"
 msgstr "Gazda Începe Jocul"
 
-#: src/multiint.c:3507
+#: src/multiint.c:3517
 msgid "Players"
 msgstr "Jucători"
 
-#: src/multiint.c:3625
+#: src/multiint.c:3635
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Trimitere de hartă: %d%%"
 
-#: src/multiint.c:3634
+#: src/multiint.c:3644
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Harta: %d%% descărcată"
 
-#: src/multiint.c:3660
+#: src/multiint.c:3670
 msgid "HOST"
 msgstr "GAZDĂ"
 
@@ -14944,6 +14941,9 @@ msgstr " - Compilare %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Versiunea %s%s%s%s"
+
+#~ msgid "Plascrete MK3"
+#~ msgstr "Plasbeton MK3"
 
 #~ msgid "Player number"
 #~ msgstr "Numărul jucătorului"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-12-02 21:47+0100\n"
+"POT-Creation-Date: 2010-12-11 16:16+0100\n"
 "PO-Revision-Date: 2010-12-02 20:25+0200\n"
 "Last-Translator: Ayhan GORGULU <ayhangorgulu@gmail.com>\n"
 "Language-Team: Turkey <warzone-dev@gna.org>\n"
@@ -7369,8 +7369,9 @@ msgid "Plascrete Mk2"
 msgstr "Plas Girit Kdm2"
 
 #: data/base/messages/strings/names.txt:709
-msgid "Plascrete MK3"
-msgstr "Plas Girit Kdm3"
+#: data/mp/messages/strings/names.txt:723
+msgid "Plascrete Mk3"
+msgstr "Plasgirit Kdm3"
 
 #: data/base/messages/strings/names.txt:717
 #: data/base/messages/strings/names.txt:1373
@@ -11653,10 +11654,6 @@ msgstr "Süper Taşıyıcı"
 msgid "Super Transport Body"
 msgstr "Süper Taşıyıcı Beden"
 
-#: data/mp/messages/strings/names.txt:723
-msgid "Plascrete Mk3"
-msgstr "Plasgirit Kdm3"
-
 #: data/mp/messages/strings/names.txt:724
 msgid "Plasteel"
 msgstr "Plastel"
@@ -14979,6 +14976,9 @@ msgstr " - %s İnşa"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Sürüm %s%s%s%s"
+
+#~ msgid "Plascrete MK3"
+#~ msgstr "Plas Girit Kdm3"
 
 #~ msgid "Out of sync"
 #~ msgstr "Senkronize edilmemiş"

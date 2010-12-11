@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-11-24 17:56+0100\n"
-"PO-Revision-Date: 2010-09-10 22:16-0300\n"
+"POT-Creation-Date: 2010-12-11 16:16+0100\n"
+"PO-Revision-Date: 2010-12-05 23:47-0300\n"
 "Last-Translator: Artur Filipe <tucalipe@gmail.com>\n"
 "Language-Team: Brazilian Portugese <warzone-dev@gna.org>\n"
 "Language: \n"
@@ -7347,7 +7347,8 @@ msgid "Plascrete Mk2"
 msgstr "Plascreto Mk2"
 
 #: data/base/messages/strings/names.txt:709
-msgid "Plascrete MK3"
+#: data/mp/messages/strings/names.txt:723
+msgid "Plascrete Mk3"
 msgstr "Plascreto Mk3"
 
 #: data/base/messages/strings/names.txt:717
@@ -9898,6 +9899,7 @@ msgid "NORTHERN SECTOR"
 msgstr "SETOR NORTE"
 
 #: data/base/sequenceaudio/cam3/c003.txa:5
+#, fuzzy
 msgid "Congratulations your successfull evacuation of Beta Base."
 msgstr "Parabéns pela evacuação bem sucedida da Base Beta."
 
@@ -11222,9 +11224,8 @@ msgid "Requires heavy VTOL factory to produce"
 msgstr "Precisa de uma Fábrica VTOL Lv3"
 
 #: data/mp/messages/resmessagesall.rmsg:239
-#, fuzzy
 msgid "Super Transport Available"
-msgstr "Transporte Ciborgue Disponível"
+msgstr "Super Transporte Disponível"
 
 #: data/mp/messages/resmessagesall.rmsg:254
 msgid "Incendiary howitzer emplacement"
@@ -11617,18 +11618,12 @@ msgid "Nexus Corner Wall"
 msgstr "Cantode Muro Nexus"
 
 #: data/mp/messages/strings/names.txt:684
-#, fuzzy
 msgid "Super Transport"
-msgstr "Transporte"
+msgstr "Super Transporte"
 
 #: data/mp/messages/strings/names.txt:685
-#, fuzzy
 msgid "Super Transport Body"
-msgstr "Corpo de Transporte"
-
-#: data/mp/messages/strings/names.txt:723
-msgid "Plascrete Mk3"
-msgstr "Plascreto Mk3"
+msgstr "Corpo de Super Transporte"
 
 #: data/mp/messages/strings/names.txt:724
 msgid "Plasteel"
@@ -12602,12 +12597,12 @@ msgstr "Herói"
 #: src/droid.c:4922
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
-msgstr ""
+msgstr "%s quis te dar um %s mas você já tem demais!"
 
 #: src/droid.c:4926
 #, c-format
 msgid "You wanted to give %s a %s but they have too many!"
-msgstr ""
+msgstr "Você tentou dar %s para %s, mas eles já têm demais!"
 
 #: src/frontend.c:97
 msgid "Single Player"
@@ -12702,7 +12697,7 @@ msgid "Join Game"
 msgstr "Conectar-se a um jogo"
 
 #: src/frontend.c:415
-#: src/multiint.c:1170
+#: src/multiint.c:1177
 msgid "OPTIONS"
 msgstr "OPÇÕES"
 
@@ -12797,7 +12792,7 @@ msgid "Off"
 msgstr "Desligado"
 
 #: src/frontend.c:517
-#: src/multiint.c:1240
+#: src/multiint.c:1247
 msgid "Fog"
 msgstr "Nevoeiro"
 
@@ -12808,7 +12803,7 @@ msgstr "Misto"
 
 #: src/frontend.c:524
 #: src/frontend.c:589
-#: src/multiint.c:1242
+#: src/multiint.c:1249
 msgid "Fog Of War"
 msgstr "Nevoeiro da Guerra"
 
@@ -12898,12 +12893,14 @@ msgstr "Girar a Tela"
 
 #: src/frontend.c:1007
 #: src/frontend.c:1095
+#, fuzzy
 msgctxt "middle mouse button"
 msgid "Middle Button"
 msgstr "Botão do Meio"
 
 #: src/frontend.c:1011
 #: src/frontend.c:1090
+#, fuzzy
 msgctxt "right mouse button"
 msgid "Right Button"
 msgstr "Botão Direito"
@@ -12970,7 +12967,7 @@ msgid "GAME OPTIONS"
 msgstr "OPÇÕES DE JOGO"
 
 #: src/frontend.c:1343
-#: src/multiint.c:2206
+#: src/multiint.c:2213
 msgid "Mod: "
 msgstr "Mod:"
 
@@ -13029,7 +13026,7 @@ msgid "Build (F3)"
 msgstr "Construir (F3)"
 
 #: src/hci.c:3925
-#: src/multiint.c:1287
+#: src/multiint.c:1294
 #: src/multimenu.c:808
 msgid "Power"
 msgstr "Energia"
@@ -13611,9 +13608,9 @@ msgid "KEY MAPPING"
 msgstr "CONFIGURAÇÃO DAS TECLAS"
 
 #: src/keyedit.c:374
-#: src/multiint.c:527
-#: src/multiint.c:955
-#: src/multiint.c:1373
+#: src/multiint.c:534
+#: src/multiint.c:962
+#: src/multiint.c:1380
 msgid "Return To Previous Screen"
 msgstr "Return a Tela Anterior"
 
@@ -14192,295 +14189,295 @@ msgstr "%s Formar uma alliança com %s"
 msgid "You Discover Blueprints For %s"
 msgstr "Você descobre projetos para %s"
 
-#: src/multiint.c:461
+#: src/multiint.c:468
 #: src/multilimit.c:192
 msgid "Accept Settings"
 msgstr "Aceitar Configurações"
 
-#: src/multiint.c:463
-#: src/multiint.c:1003
+#: src/multiint.c:470
+#: src/multiint.c:1010
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: src/multiint.c:474
+#: src/multiint.c:481
 msgid "IP Address or Machine Name"
 msgstr "Endereço IP ou Nome da Máquina"
 
-#: src/multiint.c:524
+#: src/multiint.c:531
 msgid "CONNECTION"
 msgstr "CONEXÃO"
 
-#: src/multiint.c:529
+#: src/multiint.c:536
 msgid "Lobby"
 msgstr "Lobby"
 
-#: src/multiint.c:530
+#: src/multiint.c:537
 msgid "IP"
 msgstr "IP"
 
-#: src/multiint.c:721
+#: src/multiint.c:728
 msgid "No games are available"
 msgstr "Não há jogos disponíveis"
 
-#: src/multiint.c:724
+#: src/multiint.c:731
 msgid "Game is full"
 msgstr "A sessão está cheia"
 
-#: src/multiint.c:728
+#: src/multiint.c:735
 msgid "You were kicked!"
 msgstr "Você foi expulso!"
 
-#: src/multiint.c:731
+#: src/multiint.c:738
 msgid "Wrong Game Version!"
 msgstr "Versão do Jogo Errada!"
 
-#: src/multiint.c:734
+#: src/multiint.c:741
 msgid "You have an incompatible mod."
 msgstr "Você tem um mod incompatível"
 
-#: src/multiint.c:739
+#: src/multiint.c:746
 msgid "Host couldn't send file?"
 msgstr "Hosp. não pôde enviar arquvo?"
 
-#: src/multiint.c:743
+#: src/multiint.c:750
 msgid "Incorrect Password!"
 msgstr "Senha Incorreta!"
 
-#: src/multiint.c:746
+#: src/multiint.c:753
 msgid "Host has dropped connection!"
 msgstr "O Hospedeiro terminou a conexão!"
 
-#: src/multiint.c:750
+#: src/multiint.c:757
 msgid "Connection Error"
 msgstr "Erro de conexão"
 
-#: src/multiint.c:891
+#: src/multiint.c:898
 msgid "Searching"
 msgstr "Pesquisando"
 
-#: src/multiint.c:952
+#: src/multiint.c:959
 msgid "GAMES"
 msgstr "JOGOS"
 
-#: src/multiint.c:960
+#: src/multiint.c:967
 msgid "Refresh Games List"
 msgstr "Atualizar Lista de Jogos"
 
-#: src/multiint.c:980
+#: src/multiint.c:987
 msgid "Enter Password:"
 msgstr "Entre a Senha:"
 
-#: src/multiint.c:1001
+#: src/multiint.c:1008
 msgid "OK"
 msgstr "OK"
 
-#: src/multiint.c:1123
+#: src/multiint.c:1130
 msgid "Tanks disabled!!"
 msgstr "Tanques desativados!!"
 
-#: src/multiint.c:1124
+#: src/multiint.c:1131
 msgid "Cyborgs disabled."
 msgstr "Ciborgues desativados."
 
-#: src/multiint.c:1125
+#: src/multiint.c:1132
 msgid "VTOLs disabled."
 msgstr "VTOLs desativados."
 
-#: src/multiint.c:1175
 #: src/multiint.c:1182
+#: src/multiint.c:1189
 msgid "Select Game Name"
 msgstr "Selecionar Nome do Jogo"
 
-#: src/multiint.c:1175
+#: src/multiint.c:1182
 msgid "One-Player Skirmish"
 msgstr "Jogador vs. Computador"
 
-#: src/multiint.c:1185
+#: src/multiint.c:1192
 msgid "Select Map"
 msgstr "Selecionar o Mapa"
 
-#: src/multiint.c:1193
+#: src/multiint.c:1200
 msgid "Click to set Password"
 msgstr "Clique para requered uma senha"
 
-#: src/multiint.c:1203
-#: src/multiint.c:1204
+#: src/multiint.c:1210
+#: src/multiint.c:1211
 msgid "Scavengers"
 msgstr "Com Catadores"
 
-#: src/multiint.c:1206
+#: src/multiint.c:1213
 msgid "No Scavengers"
 msgstr "Sem Catadores"
 
-#: src/multiint.c:1237
+#: src/multiint.c:1244
 msgid "Select Player Name"
 msgstr "Selecionar o Nome do Jogador"
 
-#: src/multiint.c:1243
+#: src/multiint.c:1250
 msgid "Distance Fog"
 msgstr "Distância do Nevoeiro"
 
-#: src/multiint.c:1254
+#: src/multiint.c:1261
 #: src/multimenu.c:801
 msgid "Alliances"
 msgstr "Alianças"
 
-#: src/multiint.c:1257
+#: src/multiint.c:1264
 msgid "No Alliances"
 msgstr "Sem Alianças"
 
-#: src/multiint.c:1259
+#: src/multiint.c:1266
 msgid "Allow Alliances"
 msgstr "Permitir Alianças"
 
-#: src/multiint.c:1263
+#: src/multiint.c:1270
 msgid "Locked Teams"
 msgstr "Trancar Times"
 
-#: src/multiint.c:1289
+#: src/multiint.c:1296
 msgid "Low Power Levels"
 msgstr "Nível de Energia Baixo"
 
-#: src/multiint.c:1291
+#: src/multiint.c:1298
 msgid "Medium Power Levels"
 msgstr "Nível de Energia Médio"
 
-#: src/multiint.c:1293
+#: src/multiint.c:1300
 msgid "High Power Levels"
 msgstr "Nível de Energia Alto"
 
-#: src/multiint.c:1325
+#: src/multiint.c:1332
 msgid "Base"
 msgstr "Bases"
 
-#: src/multiint.c:1327
+#: src/multiint.c:1334
 msgid "Start with No Bases"
 msgstr "Iniciar sem Bases"
 
-#: src/multiint.c:1329
+#: src/multiint.c:1336
 msgid "Start with Bases"
 msgstr "Iniciar com Bases"
 
-#: src/multiint.c:1331
+#: src/multiint.c:1338
 msgid "Start with Advanced Bases"
 msgstr "Iniciar com Bases Avançadas"
 
-#: src/multiint.c:1363
+#: src/multiint.c:1370
 msgid "Map Preview"
 msgstr "Previsualização do Mapa"
 
-#: src/multiint.c:1365
+#: src/multiint.c:1372
 msgid "Click to see Map"
 msgstr "Clique para ver o Mapa"
 
-#: src/multiint.c:1379
+#: src/multiint.c:1386
 msgid "Start Hosting Game"
 msgstr "Iniciar Hospedagem de Jogo"
 
-#: src/multiint.c:1387
+#: src/multiint.c:1394
 msgid "Show Structure Limits"
 msgstr "Exibir Limites da Estrutura"
 
-#: src/multiint.c:1387
+#: src/multiint.c:1394
 msgid "Set Structure Limits"
 msgstr "Definir Limites da Estrutura"
 
-#: src/multiint.c:1473
+#: src/multiint.c:1480
 msgid "Player colour"
 msgstr "Cor do jogador"
 
-#: src/multiint.c:1489
+#: src/multiint.c:1496
 msgid "Kick player"
 msgstr "Expulsar jogador"
 
-#: src/multiint.c:1500
+#: src/multiint.c:1507
 #, fuzzy
 msgid "Player position"
 msgstr "Defender Posição"
 
-#: src/multiint.c:1893
+#: src/multiint.c:1900
 msgid "Team"
 msgstr "Time"
 
-#: src/multiint.c:1926
+#: src/multiint.c:1933
 msgid "Waiting for other players"
 msgstr "Aguardando outros jogadores"
 
-#: src/multiint.c:1932
+#: src/multiint.c:1939
 msgid "Click when ready"
 msgstr "Clique quando estiver pronto"
 
-#: src/multiint.c:1936
+#: src/multiint.c:1943
 msgid "READY?"
 msgstr "PRONTO?"
 
-#: src/multiint.c:1973
+#: src/multiint.c:1980
 msgid "PLAYERS"
 msgstr "JOGADORES"
 
-#: src/multiint.c:2027
+#: src/multiint.c:2034
 msgid "Choose Team"
 msgstr "Escolher Time"
 
-#: src/multiint.c:2067
+#: src/multiint.c:2074
 msgid "Click to change player settings"
 msgstr "Clique para alterar as configs. de jogador"
 
-#: src/multiint.c:2098
+#: src/multiint.c:2105
 msgid "Click to adjust AI difficulty"
 msgstr "Clique para ajustar a dificuldade da IA"
 
-#: src/multiint.c:2177
+#: src/multiint.c:2184
 msgid "CHAT"
 msgstr "BATE-PAPO"
 
-#: src/multiint.c:2211
+#: src/multiint.c:2218
 msgid "All players need to have the same mods to join your game."
 msgstr "Todos os jogadores devem ter os mesmos mods para entrar no seu jogo."
 
-#: src/multiint.c:2371
+#: src/multiint.c:2378
 #, c-format
 msgid "*** password [%s] is now required! ***"
-msgstr "*** senha [%s] é necessária! ***"
+msgstr "*** senha [%s] agora é necessária! ***"
 
-#: src/multiint.c:2379
+#: src/multiint.c:2386
 msgid "*** password is NOT required! ***"
 msgstr "*** a sessão NÃO está protegida por senha ***"
 
-#: src/multiint.c:2641
+#: src/multiint.c:2648
 msgid "Sorry! Failed to host the game."
 msgstr "Desculpe! Falha ao hospedar uma sessão."
 
-#: src/multiint.c:2726
+#: src/multiint.c:2733
 msgid "'Locked Teams' mode enabled"
 msgstr "Modo 'Times Fixos' ativado"
 
-#: src/multiint.c:2765
-#: src/multiint.c:2815
+#: src/multiint.c:2772
+#: src/multiint.c:2822
 #: src/multimenu.c:1538
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "O Host chutou %s do jogo!"
 
-#: src/multiint.c:2897
+#: src/multiint.c:2909
 msgid "Host is Starting Game"
 msgstr "O Host iniciou o Jogo"
 
-#: src/multiint.c:3507
+#: src/multiint.c:3517
 msgid "Players"
 msgstr "Jogadores"
 
-#: src/multiint.c:3625
+#: src/multiint.c:3635
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Enviando mapa: %d%%"
 
-#: src/multiint.c:3634
+#: src/multiint.c:3644
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Mapa: %d%% baixado"
 
-#: src/multiint.c:3660
+#: src/multiint.c:3670
 msgid "HOST"
 msgstr "HOSPEDEIRO"
 
@@ -14542,28 +14539,24 @@ msgid "2 players"
 msgstr "2 jogadores"
 
 #: src/multimenu.c:647
-#, fuzzy
 msgid "3 players"
-msgstr "2 jogadores"
+msgstr "3 jogadores"
 
 #: src/multimenu.c:653
 msgid "4 players"
 msgstr "4 jogadores"
 
 #: src/multimenu.c:659
-#, fuzzy
 msgid "5 players"
-msgstr "2 jogadores"
+msgstr "5 jogadores"
 
 #: src/multimenu.c:665
-#, fuzzy
 msgid "6 players"
-msgstr "2 jogadores"
+msgstr "6 jogadores"
 
 #: src/multimenu.c:671
-#, fuzzy
 msgid "7 players"
-msgstr "2 jogadores"
+msgstr "7 jogadores"
 
 #: src/multimenu.c:677
 msgid "8 players"
@@ -14670,7 +14663,7 @@ msgstr "Ciano"
 
 #: src/order.c:864
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
-msgstr ""
+msgstr "Não podemos fazer isso! Devemos ser um Ciborgue para usar um Transporte Ciborgue!"
 
 #: src/research.c:1821
 #, c-format
@@ -14846,6 +14839,7 @@ msgid "Unable to locate any Commanders!"
 msgstr "Impossível localizar Comandantes!"
 
 #: src/structure.c:2748
+#, fuzzy
 msgid "Control Limit Reached - Production Halted"
 msgstr "Limite de Unidade Alcançado - Produção Interrompida"
 
@@ -14909,7 +14903,7 @@ msgstr "Lançar Transportes"
 
 #: src/transporter.c:1524
 msgid "There is not enough room in the Transport!"
-msgstr ""
+msgstr "Não há espaço o bastante no Transporte!"
 
 #: src/transporter.c:1782
 msgid "Reinforcements landing"
@@ -14942,6 +14936,36 @@ msgstr " - Finalizado em %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Versão %s%s%s%s"
+
+#~ msgid "Plascrete MK3"
+#~ msgstr "Plascreto Mk3"
+
+#~ msgid "Out of sync"
+#~ msgstr "Fora de sincronia"
+
+#~ msgid "2 trucks ordered to build Oil Derrick"
+#~ msgstr "2 caminhões designados para a construção do Extrator de Petróleo"
+
+#~ msgid "%d trucks ordered to build Oil Derrick"
+#~ msgstr "%d caminhões designados para a construção do Extrator de Petróleo"
+
+#~ msgid "GAME SAVED: "
+#~ msgstr "JOGO SALVO:"
+
+#~ msgid "Player %u is cheating (debug menu) him/herself a new droid."
+#~ msgstr "Jogador %u está trapaceando (debug menu)! Ele/ela ganhou um novo droide."
+
+#~ msgid "Tactical UI (Target Origin Icon): Show"
+#~ msgstr "Interface de Usuário Tática (Icone de Origem do Alvo): Exibir"
+
+#~ msgid "Tactical UI (Target Origin Icon): Hide"
+#~ msgstr "Interface de Usuário Tática (Icone de Origem do Alvo): Esconder"
+
+#~ msgid "Build Progress"
+#~ msgstr "Progresso da Construção"
+
+#~ msgid "Construction Progress"
+#~ msgstr "Progresso da Construção"
 
 #~ msgid "Player number"
 #~ msgstr "Número do jogador"
@@ -15050,27 +15074,6 @@ msgstr "Versão %s%s%s%s"
 
 #~ msgid "Gate"
 #~ msgstr "Portão"
-
-#~ msgid "2 trucks ordered to build Oil Derrick"
-#~ msgstr "2 caminhões designados para a construção do Extrator de Petróleo"
-
-#~ msgid "%d trucks ordered to build Oil Derrick"
-#~ msgstr "%d caminhões designados para a construção do Extrator de Petróleo"
-
-#~ msgid "GAME SAVED: "
-#~ msgstr "JOGO SALVO:"
-
-#~ msgid "Tactical UI (Target Origin Icon): Show"
-#~ msgstr "Interface de Usuário Tática (Icone de Origem do Alvo): Exibir"
-
-#~ msgid "Tactical UI (Target Origin Icon): Hide"
-#~ msgstr "Interface de Usuário Tática (Icone de Origem do Alvo): Esconder"
-
-#~ msgid "Build Progress"
-#~ msgstr "Progresso da Construção"
-
-#~ msgid "Construction Progress"
-#~ msgstr "Progresso da Construção"
 
 #~ msgid "Czech"
 #~ msgstr "Tcheco"

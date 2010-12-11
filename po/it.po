@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-11-30 22:44+0100\n"
+"POT-Creation-Date: 2010-12-11 16:16+0100\n"
 "PO-Revision-Date: 2010-11-30 15:55+0100\n"
 "Last-Translator: Cristian Odorico <generalchris@hotmail.it>\n"
 "Language-Team: Italian <warzone-dev@gna.org>\n"
@@ -7356,8 +7356,9 @@ msgid "Plascrete Mk2"
 msgstr "Plastitan Mk2"
 
 #: data/base/messages/strings/names.txt:709
-msgid "Plascrete MK3"
-msgstr "Plastitan Mk3"
+#: data/mp/messages/strings/names.txt:723
+msgid "Plascrete Mk3"
+msgstr "Plascrete Mk3"
 
 #: data/base/messages/strings/names.txt:717
 #: data/base/messages/strings/names.txt:1373
@@ -11632,10 +11633,6 @@ msgstr "Super Trasporto"
 msgid "Super Transport Body"
 msgstr "Corpo del Super Trasporto"
 
-#: data/mp/messages/strings/names.txt:723
-msgid "Plascrete Mk3"
-msgstr "Plascrete Mk3"
-
 #: data/mp/messages/strings/names.txt:724
 msgid "Plasteel"
 msgstr "Plasteel"
@@ -14943,6 +14940,9 @@ msgstr " - Costruito %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Versione %s%s%s%s"
+
+#~ msgid "Plascrete MK3"
+#~ msgstr "Plastitan Mk3"
 
 #~ msgid "Player number"
 #~ msgstr "Numero giocatore"
