@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2010-12-11 16:14+0100\n"
-"PO-Revision-Date: 2010-09-10 22:16-0300\n"
+"PO-Revision-Date: 2010-12-05 23:47-0300\n"
 "Last-Translator: Artur Filipe <tucalipe@gmail.com>\n"
 "Language-Team: Brazilian Portugese <warzone-dev@gna.org>\n"
 "Language: \n"
@@ -9898,6 +9898,7 @@ msgid "NORTHERN SECTOR"
 msgstr "SETOR NORTE"
 
 #: data/base/sequenceaudio/cam3/c003.txa:5
+#, fuzzy
 msgid "Congratulations your successfull evacuation of Beta Base."
 msgstr "Parabéns pela evacuação bem sucedida da Base Beta."
 
@@ -12581,12 +12582,12 @@ msgstr "Herói"
 #: src/droid.c:4643
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
-msgstr ""
+msgstr "%s quis te dar um %s mas você já tem demais!"
 
 #: src/droid.c:4647
 #, c-format
 msgid "You wanted to give %s a %s but they have too many!"
-msgstr ""
+msgstr "Você tentou dar %s para %s, mas eles já têm demais!"
 
 #: src/frontend.c:97
 msgid "Single Player"
@@ -12877,12 +12878,14 @@ msgstr "Girar a Tela"
 
 #: src/frontend.c:1006
 #: src/frontend.c:1094
+#, fuzzy
 msgctxt "middle mouse button"
 msgid "Middle Button"
 msgstr "Botão do Meio"
 
 #: src/frontend.c:1010
 #: src/frontend.c:1089
+#, fuzzy
 msgctxt "right mouse button"
 msgid "Right Button"
 msgstr "Botão Direito"
@@ -14419,7 +14422,7 @@ msgstr "Todos os jogadores devem ter os mesmos mods para entrar no seu jogo."
 #: src/multiint.c:2377
 #, c-format
 msgid "*** password [%s] is now required! ***"
-msgstr "*** senha [%s] é necessária! ***"
+msgstr "*** senha [%s] agora é necessária! ***"
 
 #: src/multiint.c:2385
 msgid "*** password is NOT required! ***"
@@ -14800,6 +14803,7 @@ msgid "Unable to locate any Commanders!"
 msgstr "Impossível localizar Comandantes!"
 
 #: src/structure.c:2748
+#, fuzzy
 msgid "Control Limit Reached - Production Halted"
 msgstr "Limite de Unidade Alcançado - Produção Interrompida"
 
@@ -14896,33 +14900,59 @@ msgstr "Versão %s%s%s%s"
 #~ msgid "Plascrete MK3"
 #~ msgstr "Plascreto Mk3"
 
-#, fuzzy
 #~ msgid "Super Transport Available"
-#~ msgstr "Transporte Ciborgue Disponível"
+#~ msgstr "Super Transporte Disponível"
 
-#, fuzzy
 #~ msgid "Super Transport"
-#~ msgstr "Transporte"
+#~ msgstr "Super Transporte"
 
-#, fuzzy
 #~ msgid "Super Transport Body"
-#~ msgstr "Corpo de Transporte"
+#~ msgstr "Corpo de Super Transporte"
 
-#, fuzzy
+#~ msgid "Out of sync"
+#~ msgstr "Fora de sincronia"
+
+#~ msgid "2 trucks ordered to build Oil Derrick"
+#~ msgstr "2 caminhões designados para a construção do Extrator de Petróleo"
+
+#~ msgid "%d trucks ordered to build Oil Derrick"
+#~ msgstr "%d caminhões designados para a construção do Extrator de Petróleo"
+
+#~ msgid "GAME SAVED: "
+#~ msgstr "JOGO SALVO:"
+
+#~ msgid "Player %u is cheating (debug menu) him/herself a new droid."
+#~ msgstr "Jogador %u está trapaceando (debug menu)! Ele/ela ganhou um novo droide."
+
+#~ msgid "Tactical UI (Target Origin Icon): Show"
+#~ msgstr "Interface de Usuário Tática (Icone de Origem do Alvo): Exibir"
+
+#~ msgid "Tactical UI (Target Origin Icon): Hide"
+#~ msgstr "Interface de Usuário Tática (Icone de Origem do Alvo): Esconder"
+
+#~ msgid "Build Progress"
+#~ msgstr "Progresso da Construção"
+
+#~ msgid "Construction Progress"
+#~ msgstr "Progresso da Construção"
+
 #~ msgid "3 players"
-#~ msgstr "2 jogadores"
+#~ msgstr "3 jogadores"
 
-#, fuzzy
 #~ msgid "5 players"
-#~ msgstr "2 jogadores"
+#~ msgstr "5 jogadores"
 
-#, fuzzy
 #~ msgid "6 players"
-#~ msgstr "2 jogadores"
+#~ msgstr "6 jogadores"
 
-#, fuzzy
 #~ msgid "7 players"
-#~ msgstr "2 jogadores"
+#~ msgstr "7 jogadores"
+
+#~ msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
+#~ msgstr "Não podemos fazer isso! Devemos ser um Ciborgue para usar um Transporte Ciborgue!"
+
+#~ msgid "There is not enough room in the Transport!"
+#~ msgstr "Não há espaço o bastante no Transporte!"
 
 #~ msgid "Mini-Rocket accuracy +10%"
 #~ msgstr "Precisão de mini-foguetes +10%"
@@ -15028,27 +15058,6 @@ msgstr "Versão %s%s%s%s"
 
 #~ msgid "Gate"
 #~ msgstr "Portão"
-
-#~ msgid "2 trucks ordered to build Oil Derrick"
-#~ msgstr "2 caminhões designados para a construção do Extrator de Petróleo"
-
-#~ msgid "%d trucks ordered to build Oil Derrick"
-#~ msgstr "%d caminhões designados para a construção do Extrator de Petróleo"
-
-#~ msgid "GAME SAVED: "
-#~ msgstr "JOGO SALVO:"
-
-#~ msgid "Tactical UI (Target Origin Icon): Show"
-#~ msgstr "Interface de Usuário Tática (Icone de Origem do Alvo): Exibir"
-
-#~ msgid "Tactical UI (Target Origin Icon): Hide"
-#~ msgstr "Interface de Usuário Tática (Icone de Origem do Alvo): Esconder"
-
-#~ msgid "Build Progress"
-#~ msgstr "Progresso da Construção"
-
-#~ msgid "Construction Progress"
-#~ msgstr "Progresso da Construção"
 
 #~ msgid "Czech"
 #~ msgstr "Tcheco"
