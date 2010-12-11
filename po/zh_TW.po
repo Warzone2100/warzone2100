@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-11-24 17:53+0100\n"
+"POT-Creation-Date: 2010-12-11 16:14+0100\n"
 "PO-Revision-Date: 2009-05-11 00:21+0800\n"
 "Last-Translator: \n"
 "Language-Team: zh_TW\n"
@@ -7362,7 +7362,8 @@ msgid "Plascrete Mk2"
 msgstr "超合金鋼筋牆二型"
 
 #: data/base/messages/strings/names.txt:709
-msgid "Plascrete MK3"
+#: data/mp/messages/strings/names.txt:720
+msgid "Plascrete Mk3"
 msgstr "超合金鋼筋牆三型"
 
 #: data/base/messages/strings/names.txt:717
@@ -11763,10 +11764,6 @@ msgstr "NEXUS鈦鋼筋牆"
 msgid "Nexus Corner Wall"
 msgstr "NEXUS鈦鋼筋角牆"
 
-#: data/mp/messages/strings/names.txt:720
-msgid "Plascrete Mk3"
-msgstr "超合金鋼筋牆三型"
-
 #: data/mp/messages/strings/names.txt:721
 msgid "Plasteel"
 msgstr "超塑鋼筋牆一型"
@@ -12366,12 +12363,12 @@ msgstr "系統語系"
 msgid "Enter password here"
 msgstr ""
 
-#: lib/netplay/netplay.c:3284
+#: lib/netplay/netplay.c:3286
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr ""
 
-#: lib/netplay/netplay.c:3309
+#: lib/netplay/netplay.c:3312
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr ""
@@ -14697,25 +14694,25 @@ msgstr "鎖定同盟模式"
 msgid "The host has kicked %s from the game!"
 msgstr "主玩家將 %s 踢出遊戲！"
 
-#: src/multiint.c:2880
+#: src/multiint.c:2885
 msgid "Host is Starting Game"
 msgstr "主玩家已開始遊戲"
 
-#: src/multiint.c:3484
+#: src/multiint.c:3487
 msgid "Players"
 msgstr "玩家"
 
-#: src/multiint.c:3602
+#: src/multiint.c:3605
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr ""
 
-#: src/multiint.c:3611
+#: src/multiint.c:3614
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr ""
 
-#: src/multiint.c:3637
+#: src/multiint.c:3640
 msgid "HOST"
 msgstr ""
 
@@ -15025,12 +15022,12 @@ msgstr "你獲勝了！"
 msgid "YOU WERE DEFEATED!"
 msgstr "你被打敗了！"
 
-#: src/scriptfuncs.c:10089
+#: src/scriptfuncs.c:10087
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "由 %s 獲得引導指標"
 
-#: src/scriptfuncs.c:10135
+#: src/scriptfuncs.c:10133
 #, c-format
 msgid "Beacon %d"
 msgstr "引導指標 %d"
@@ -15151,6 +15148,9 @@ msgstr " - Built %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "版本 %s%s%s%s"
+
+#~ msgid "Plascrete MK3"
+#~ msgstr "超合金鋼筋牆三型"
 
 #, fuzzy
 #~ msgid "Super Transport Available"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100 2.3_branch\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-11-24 17:53+0100\n"
+"POT-Creation-Date: 2010-12-11 16:14+0100\n"
 "PO-Revision-Date: 2010-11-23 21:01+0900\n"
 "Last-Translator: Joshua Shin <urgood2@gmail.com>\n"
 "Language-Team: Korean Translation Team <urgood2@gmail.com>\n"
@@ -7375,7 +7375,8 @@ msgid "Plascrete Mk2"
 msgstr "플라스크리트 Mk 2"
 
 #: data/base/messages/strings/names.txt:709
-msgid "Plascrete MK3"
+#: data/mp/messages/strings/names.txt:720
+msgid "Plascrete Mk3"
 msgstr "플라스크리트 Mk 3"
 
 #: data/base/messages/strings/names.txt:717
@@ -11667,10 +11668,6 @@ msgstr "넥서스 벽"
 msgid "Nexus Corner Wall"
 msgstr "넥서스 모서리 벽"
 
-#: data/mp/messages/strings/names.txt:720
-msgid "Plascrete Mk3"
-msgstr "플라스크리트 Mk 3"
-
 #: data/mp/messages/strings/names.txt:721
 msgid "Plasteel"
 msgstr "플라스틸(Plasteel)"
@@ -12229,12 +12226,12 @@ msgstr "사용자 시스템 언어"
 msgid "Enter password here"
 msgstr "여기에 비밀번호를 입력하십시오"
 
-#: lib/netplay/netplay.c:3284
+#: lib/netplay/netplay.c:3286
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "마스터서버 이름을 확인할 수 없습니다 (%s)!"
 
-#: lib/netplay/netplay.c:3309
+#: lib/netplay/netplay.c:3312
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "로비 서버와 통신할 수 없습니다! TCP 포트 %u 가 보내는 트래픽에 대해 열려 있습니까?"
@@ -14513,25 +14510,25 @@ msgstr "'팀 잠금' 모드가 켜졌습니다"
 msgid "The host has kicked %s from the game!"
 msgstr "호스트가 %s를 게임에서 퇴장시켰습니다!"
 
-#: src/multiint.c:2880
+#: src/multiint.c:2885
 msgid "Host is Starting Game"
 msgstr "호스트가 게임을 시작하고 있습니다"
 
-#: src/multiint.c:3484
+#: src/multiint.c:3487
 msgid "Players"
 msgstr "플레이어"
 
-#: src/multiint.c:3602
+#: src/multiint.c:3605
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "맵을 보내는 중: %d%% "
 
-#: src/multiint.c:3611
+#: src/multiint.c:3614
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "맵: %d%% 다운로드 완료"
 
-#: src/multiint.c:3637
+#: src/multiint.c:3640
 msgid "HOST"
 msgstr "호스트"
 
@@ -14838,12 +14835,12 @@ msgstr "당신이 승리했습니다!"
 msgid "YOU WERE DEFEATED!"
 msgstr "당신이 패배했습니다!"
 
-#: src/scriptfuncs.c:10089
+#: src/scriptfuncs.c:10087
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "%s이 표지를 보냈습니다!"
 
-#: src/scriptfuncs.c:10135
+#: src/scriptfuncs.c:10133
 #, c-format
 msgid "Beacon %d"
 msgstr "표지 %d"
@@ -14963,6 +14960,9 @@ msgstr " - 빌드 날짜 %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "버젼 %s%s%s%s"
+
+#~ msgid "Plascrete MK3"
+#~ msgstr "플라스크리트 Mk 3"
 
 #~ msgid "Mini-Rocket accuracy +10%"
 #~ msgstr "미니로케트 정확도 +10%"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-11-24 17:53+0100\n"
+"POT-Creation-Date: 2010-12-11 16:14+0100\n"
 "PO-Revision-Date: 2010-06-10 02:04+0300\n"
 "Last-Translator: Filipp Chertiev <f@fzfx.ru>\n"
 "Language-Team: Russian <>\n"
@@ -7355,8 +7355,9 @@ msgid "Plascrete Mk2"
 msgstr "Пласткрит Мk2"
 
 #: data/base/messages/strings/names.txt:709
-msgid "Plascrete MK3"
-msgstr "Пласткрит Мk3"
+#: data/mp/messages/strings/names.txt:720
+msgid "Plascrete Mk3"
+msgstr "Пласткрит МК3"
 
 #: data/base/messages/strings/names.txt:717
 #: data/base/messages/strings/names.txt:1373
@@ -11629,10 +11630,6 @@ msgstr "Стена НЕКСУС"
 msgid "Nexus Corner Wall"
 msgstr "Угловая стена НЕКСУС"
 
-#: data/mp/messages/strings/names.txt:720
-msgid "Plascrete Mk3"
-msgstr "Пласткрит МК3"
-
 #: data/mp/messages/strings/names.txt:721
 msgid "Plasteel"
 msgstr "Пласталь"
@@ -12200,12 +12197,12 @@ msgstr "Системная локализация"
 msgid "Enter password here"
 msgstr "Введите пароль"
 
-#: lib/netplay/netplay.c:3284
+#: lib/netplay/netplay.c:3286
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Не могу получить имя основного сервера (%s)!"
 
-#: lib/netplay/netplay.c:3309
+#: lib/netplay/netplay.c:3312
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Не удалось соединиться с лобби-сервером. проверьте, открыт-ли TCP-порт %u для исходящего траффика."
@@ -14507,25 +14504,25 @@ msgstr "Закрытые Команды"
 msgid "The host has kicked %s from the game!"
 msgstr "Хост выкинул %s из игры!"
 
-#: src/multiint.c:2880
+#: src/multiint.c:2885
 msgid "Host is Starting Game"
 msgstr "Хост стартует"
 
-#: src/multiint.c:3484
+#: src/multiint.c:3487
 msgid "Players"
 msgstr "Игроки"
 
-#: src/multiint.c:3602
+#: src/multiint.c:3605
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Отправка карты: %d%%"
 
-#: src/multiint.c:3611
+#: src/multiint.c:3614
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "карта: %d%% загружена"
 
-#: src/multiint.c:3637
+#: src/multiint.c:3640
 msgid "HOST"
 msgstr "ХОСТ"
 
@@ -14832,12 +14829,12 @@ msgstr "ПОБЕДА!"
 msgid "YOU WERE DEFEATED!"
 msgstr "ВЫ ПРОИГРАЛИ!"
 
-#: src/scriptfuncs.c:10089
+#: src/scriptfuncs.c:10087
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Маяк получен от %s!"
 
-#: src/scriptfuncs.c:10135
+#: src/scriptfuncs.c:10133
 #, c-format
 msgid "Beacon %d"
 msgstr "Маяк %d"
@@ -14961,6 +14958,9 @@ msgstr " - сборка %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Версия %s%s%s%s"
+
+#~ msgid "Plascrete MK3"
+#~ msgstr "Пласткрит Мk3"
 
 #, fuzzy
 #~ msgid "Super Transport Available"

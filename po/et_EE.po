@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-11-24 17:53+0100\n"
+"POT-Creation-Date: 2010-12-11 16:14+0100\n"
 "PO-Revision-Date: 2010-05-10 16:59+0200\n"
 "Last-Translator: erlando <erlando112@hotmail.com>\n"
 "Language-Team: Estonian <ee@li.org>\n"
@@ -7350,8 +7350,9 @@ msgid "Plascrete Mk2"
 msgstr "Raskebetoon Mk2"
 
 #: data/base/messages/strings/names.txt:709
-msgid "Plascrete MK3"
-msgstr "Raskebetoon MK3"
+#: data/mp/messages/strings/names.txt:720
+msgid "Plascrete Mk3"
+msgstr "Raskebetoon Mk3"
 
 #: data/base/messages/strings/names.txt:717
 #: data/base/messages/strings/names.txt:1373
@@ -11619,10 +11620,6 @@ msgstr "NEXUSe Müür"
 msgid "Nexus Corner Wall"
 msgstr "Nexuse NurgaMüür"
 
-#: data/mp/messages/strings/names.txt:720
-msgid "Plascrete Mk3"
-msgstr "Raskebetoon Mk3"
-
 #: data/mp/messages/strings/names.txt:721
 msgid "Plasteel"
 msgstr "Terasbetoon"
@@ -12190,12 +12187,12 @@ msgstr "Süsteemi Asukoht"
 msgid "Enter password here"
 msgstr "Sisesta salasõna siia"
 
-#: lib/netplay/netplay.c:3284
+#: lib/netplay/netplay.c:3286
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Ei suuda peaserveri nime lahendada (%s)!"
 
-#: lib/netplay/netplay.c:3309
+#: lib/netplay/netplay.c:3312
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Ei suuda lobby serveriga suhelda! Kas port %u on väljaminevale liiklusele avatud?"
@@ -14490,25 +14487,25 @@ msgstr "Lukustatud Tiimid, mode lubatud"
 msgid "The host has kicked %s from the game!"
 msgstr "Võõrustaja lõi %s mängust välja!"
 
-#: src/multiint.c:2880
+#: src/multiint.c:2885
 msgid "Host is Starting Game"
 msgstr "Võõrustaja Alustab Mängu"
 
-#: src/multiint.c:3484
+#: src/multiint.c:3487
 msgid "Players"
 msgstr "Mängijad"
 
-#: src/multiint.c:3602
+#: src/multiint.c:3605
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Kaarti Saatmine: %d%%"
 
-#: src/multiint.c:3611
+#: src/multiint.c:3614
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Kaart: %d%% allalaaditud"
 
-#: src/multiint.c:3637
+#: src/multiint.c:3640
 msgid "HOST"
 msgstr "VÕÕRUSTJA"
 
@@ -14815,12 +14812,12 @@ msgstr "SA OLED VÕIDUKAS"
 msgid "YOU WERE DEFEATED!"
 msgstr "SIND VÕIDETI!"
 
-#: src/scriptfuncs.c:10089
+#: src/scriptfuncs.c:10087
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Signaal saadud %s -lt!"
 
-#: src/scriptfuncs.c:10135
+#: src/scriptfuncs.c:10133
 #, c-format
 msgid "Beacon %d"
 msgstr "Signaal %d"
@@ -14942,6 +14939,9 @@ msgstr " - Built %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Versioon %s%s%s%s"
+
+#~ msgid "Plascrete MK3"
+#~ msgstr "Raskebetoon MK3"
 
 #, fuzzy
 #~ msgid "Super Transport Available"

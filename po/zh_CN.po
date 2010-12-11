@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-11-24 17:53+0100\n"
+"POT-Creation-Date: 2010-12-11 16:14+0100\n"
 "PO-Revision-Date: 2009-05-13 16:12+0800\n"
 "Last-Translator: Terra <wz2100cn@gmail.com>\n"
 "Language-Team: Simplified Chinese <zh_CN@li.org>\n"
@@ -7384,7 +7384,8 @@ msgid "Plascrete Mk2"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:709
-msgid "Plascrete MK3"
+#: data/mp/messages/strings/names.txt:720
+msgid "Plascrete Mk3"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:717
@@ -11723,10 +11724,6 @@ msgstr ""
 msgid "Nexus Corner Wall"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:720
-msgid "Plascrete Mk3"
-msgstr ""
-
 #: data/mp/messages/strings/names.txt:721
 msgid "Plasteel"
 msgstr ""
@@ -12314,12 +12311,12 @@ msgstr "系统语言"
 msgid "Enter password here"
 msgstr ""
 
-#: lib/netplay/netplay.c:3284
+#: lib/netplay/netplay.c:3286
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr ""
 
-#: lib/netplay/netplay.c:3309
+#: lib/netplay/netplay.c:3312
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr ""
@@ -14630,25 +14627,25 @@ msgstr "已锁定团队"
 msgid "The host has kicked %s from the game!"
 msgstr "主玩家将 %s 踢出游戏!"
 
-#: src/multiint.c:2880
+#: src/multiint.c:2885
 msgid "Host is Starting Game"
 msgstr "主玩家正在开始游戏"
 
-#: src/multiint.c:3484
+#: src/multiint.c:3487
 msgid "Players"
 msgstr "玩家"
 
-#: src/multiint.c:3602
+#: src/multiint.c:3605
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr ""
 
-#: src/multiint.c:3611
+#: src/multiint.c:3614
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr ""
 
-#: src/multiint.c:3637
+#: src/multiint.c:3640
 msgid "HOST"
 msgstr ""
 
@@ -14960,12 +14957,12 @@ msgstr "你取得了胜利! "
 msgid "YOU WERE DEFEATED!"
 msgstr "你被击败了! "
 
-#: src/scriptfuncs.c:10089
+#: src/scriptfuncs.c:10087
 #, c-format
 msgid "Beacon received from %s!"
 msgstr ""
 
-#: src/scriptfuncs.c:10135
+#: src/scriptfuncs.c:10133
 #, c-format
 msgid "Beacon %d"
 msgstr ""

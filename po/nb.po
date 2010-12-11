@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-11-24 17:53+0100\n"
+"POT-Creation-Date: 2010-12-11 16:14+0100\n"
 "PO-Revision-Date: 2008-05-09 16:54+0000\n"
 "Last-Translator: Olav Andreas Lindekleiv <Unknown>\n"
 "Language-Team: none\n"
@@ -7368,7 +7368,8 @@ msgid "Plascrete Mk2"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:709
-msgid "Plascrete MK3"
+#: data/mp/messages/strings/names.txt:720
+msgid "Plascrete Mk3"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:717
@@ -11642,10 +11643,6 @@ msgstr ""
 msgid "Nexus Corner Wall"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:720
-msgid "Plascrete Mk3"
-msgstr ""
-
 #: data/mp/messages/strings/names.txt:721
 msgid "Plasteel"
 msgstr ""
@@ -12207,12 +12204,12 @@ msgstr "Systemspråk"
 msgid "Enter password here"
 msgstr ""
 
-#: lib/netplay/netplay.c:3284
+#: lib/netplay/netplay.c:3286
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr ""
 
-#: lib/netplay/netplay.c:3309
+#: lib/netplay/netplay.c:3312
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr ""
@@ -14535,25 +14532,25 @@ msgstr "Låste lag"
 msgid "The host has kicked %s from the game!"
 msgstr "Verten har kastet ut %s fra spillet!"
 
-#: src/multiint.c:2880
+#: src/multiint.c:2885
 msgid "Host is Starting Game"
 msgstr "Vert starter spill"
 
-#: src/multiint.c:3484
+#: src/multiint.c:3487
 msgid "Players"
 msgstr "Spillere"
 
-#: src/multiint.c:3602
+#: src/multiint.c:3605
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr ""
 
-#: src/multiint.c:3611
+#: src/multiint.c:3614
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr ""
 
-#: src/multiint.c:3637
+#: src/multiint.c:3640
 msgid "HOST"
 msgstr ""
 
@@ -14863,12 +14860,12 @@ msgstr "DU HAR VUNNET!"
 msgid "YOU WERE DEFEATED!"
 msgstr "DU HAR TAPT!"
 
-#: src/scriptfuncs.c:10089
+#: src/scriptfuncs.c:10087
 #, c-format
 msgid "Beacon received from %s!"
 msgstr ""
 
-#: src/scriptfuncs.c:10135
+#: src/scriptfuncs.c:10133
 #, c-format
 msgid "Beacon %d"
 msgstr ""

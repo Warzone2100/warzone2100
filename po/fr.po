@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-11-24 17:53+0100\n"
+"POT-Creation-Date: 2010-12-11 16:14+0100\n"
 "PO-Revision-Date: 2010-04-21 08:32-0500\n"
 "Last-Translator: Gilles J. Séguin <segg2@videotron.ca>\n"
 "Language-Team: French <warzone-dev@gna.org>\n"
@@ -7367,7 +7367,8 @@ msgid "Plascrete Mk2"
 msgstr "Béton Plastifié Mk2"
 
 #: data/base/messages/strings/names.txt:709
-msgid "Plascrete MK3"
+#: data/mp/messages/strings/names.txt:720
+msgid "Plascrete Mk3"
 msgstr "Béton Plastifié Mk3"
 
 #: data/base/messages/strings/names.txt:717
@@ -11701,10 +11702,6 @@ msgstr "Mur Nexus"
 msgid "Nexus Corner Wall"
 msgstr "Angle en Béton Renforcé"
 
-#: data/mp/messages/strings/names.txt:720
-msgid "Plascrete Mk3"
-msgstr "Béton Plastifié Mk3"
-
 #: data/mp/messages/strings/names.txt:721
 msgid "Plasteel"
 msgstr "Béton Plastique-Acier"
@@ -12293,12 +12290,12 @@ msgstr "Langage du système"
 msgid "Enter password here"
 msgstr "Entrez le mot de passe "
 
-#: lib/netplay/netplay.c:3284
+#: lib/netplay/netplay.c:3286
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Impossible de résourdre le DNS du serveur maître (%s) !"
 
-#: lib/netplay/netplay.c:3309
+#: lib/netplay/netplay.c:3312
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Impossible de communiquer avec le serveur maître ! Le port TCP %u est-il ouvert en sortie ?"
@@ -14610,25 +14607,25 @@ msgstr "Verrouiller les équipes"
 msgid "The host has kicked %s from the game!"
 msgstr "L'hôte a banni %s de la partie"
 
-#: src/multiint.c:2880
+#: src/multiint.c:2885
 msgid "Host is Starting Game"
 msgstr "L'hôte démarre la partie"
 
-#: src/multiint.c:3484
+#: src/multiint.c:3487
 msgid "Players"
 msgstr "Joueurs"
 
-#: src/multiint.c:3602
+#: src/multiint.c:3605
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Carte envoyé: %d%% "
 
-#: src/multiint.c:3611
+#: src/multiint.c:3614
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Carte: %d%% téléchargé"
 
-#: src/multiint.c:3637
+#: src/multiint.c:3640
 msgid "HOST"
 msgstr "HOTE"
 
@@ -14935,12 +14932,12 @@ msgstr "VOUS ÊTES VICTORIEUX !"
 msgid "YOU WERE DEFEATED!"
 msgstr "VOUS AVEZ PERDU !"
 
-#: src/scriptfuncs.c:10089
+#: src/scriptfuncs.c:10087
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Signal émis par %s !"
 
-#: src/scriptfuncs.c:10135
+#: src/scriptfuncs.c:10133
 #, c-format
 msgid "Beacon %d"
 msgstr "Signal %d"
@@ -15062,6 +15059,9 @@ msgstr " - Compilation %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Version %s%s%s%s"
+
+#~ msgid "Plascrete MK3"
+#~ msgstr "Béton Plastifié Mk3"
 
 #, fuzzy
 #~ msgid "Super Transport Available"
