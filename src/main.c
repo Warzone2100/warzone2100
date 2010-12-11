@@ -97,6 +97,7 @@ typedef enum _focus_state
 #elif defined(WZ_OS_MAC)
 # include <CoreServices/CoreServices.h>
 # include <unistd.h>
+# include "cocoa_wrapper.h"
 # define WZ_WRITEDIR "Warzone 2100 master"
 #else
 # define WZ_WRITEDIR ".warzone2100-master"
@@ -1148,6 +1149,10 @@ static bool fptest2(void)
 int main(int argc, char *argv[])
 {
 	int ok;
+
+#ifdef WZ_OS_MAC
+	cocoaInit();
+#endif
 
 	setupExceptionHandler(argc, argv);
 
