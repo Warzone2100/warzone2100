@@ -456,18 +456,14 @@ AC_CONFIG_HEADER([config.h])
 AC_CONFIG_FILES([Makefile
 		po/Makefile.in
 		doc/Makefile
-		build_tools/Makefile
 		build_tools/autorevision/Makefile
 		icons/Makefile
 		data/Makefile
-		data/mods/Makefile
 		data/mods/multiplay/Makefile
 		data/music/Makefile
-		pkg/Makefile
 		pkg/nsis/Makefile
 		win32/Makefile
 		tests/Makefile
-		lib/Makefile
 		lib/framework/Makefile
 		lib/exceptionhandler/Makefile
 		lib/gamelib/Makefile
