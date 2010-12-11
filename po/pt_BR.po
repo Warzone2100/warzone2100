@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-12-11 15:59+0100\n"
-"PO-Revision-Date: 2010-09-10 22:16-0300\n"
+"POT-Creation-Date: 2010-12-11 16:53+0100\n"
+"PO-Revision-Date: 2010-12-05 23:47-0300\n"
 "Last-Translator: Artur Filipe <tucalipe@gmail.com>\n"
 "Language-Team: Brazilian Portugese <warzone-dev@gna.org>\n"
 "Language: \n"
@@ -9880,7 +9880,6 @@ msgid "NORTHERN SECTOR"
 msgstr "SETOR NORTE"
 
 #: data/base/sequenceaudio/cam3/c003.txa:5
-#, fuzzy
 msgid "Congratulations your successful evacuation of Beta Base."
 msgstr "Parabéns pela evacuação bem sucedida da Base Beta."
 
@@ -11036,9 +11035,8 @@ msgid "Requires heavy VTOL factory to produce"
 msgstr "Precisa de uma Fábrica VTOL Lv3"
 
 #: data/mp/messages/resmessagesall.rmsg:239
-#, fuzzy
 msgid "Super Transport Available"
-msgstr "Transporte Ciborgue Disponível"
+msgstr "Super Transporte Disponível"
 
 #: data/mp/messages/resmessagesall.rmsg:254
 msgid "Incendiary howitzer emplacement"
@@ -11431,14 +11429,12 @@ msgid "Nexus Corner Wall"
 msgstr "Cantode Muro Nexus"
 
 #: data/mp/messages/strings/names.txt:684
-#, fuzzy
 msgid "Super Transport"
-msgstr "Transporte"
+msgstr "Super Transporte"
 
 #: data/mp/messages/strings/names.txt:685
-#, fuzzy
 msgid "Super Transport Body"
-msgstr "Corpo de Transporte"
+msgstr "Corpo de Super Transporte"
 
 #: data/mp/messages/strings/names.txt:724
 msgid "Plasteel"
@@ -12320,7 +12316,7 @@ msgstr "Aguardando outros jogadores"
 
 #: src/display3d.c:557
 msgid "Out of sync"
-msgstr ""
+msgstr "Fora de sincronia"
 
 #: src/display.c:1641
 msgid "Cannot Build. Oil Resource Burning."
@@ -12426,12 +12422,12 @@ msgstr "Herói"
 #: src/droid.c:4336
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
-msgstr ""
+msgstr "%s quis te dar um %s mas você já tem demais!"
 
 #: src/droid.c:4340
 #, c-format
 msgid "You wanted to give %s a %s but they have too many!"
-msgstr ""
+msgstr "Você tentou dar %s para %s, mas eles já têm demais!"
 
 #: src/frontend.c:98
 msgid "Single Player"
@@ -12722,13 +12718,11 @@ msgstr "Girar a Tela"
 
 #: src/frontend.c:1015
 #: src/frontend.c:1103
-#, fuzzy
 msgid "Middle Mouse"
 msgstr "Botão do Meio"
 
 #: src/frontend.c:1019
 #: src/frontend.c:1098
-#, fuzzy
 msgid "Right Mouse"
 msgstr "Botão Direito"
 
@@ -12828,9 +12822,9 @@ msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "Jogador %u é batota (debug menu) ele/ela mesma é um novo droid: %s."
 
 #: src/hci.c:2164
-#, fuzzy, c-format
+#, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
-msgstr "Jogador %u é batota (debug menu) ele/ela mesma é um novo droid: %s."
+msgstr "Jogador %u está trapaceando (debug menu)! Ele/ela ganhou um novo droide."
 
 #: src/hci.c:3643
 msgid "Commanders (F6)"
@@ -14183,9 +14177,9 @@ msgid "All players need to have the same mods to join your game."
 msgstr "Todos os jogadores devem ter os mesmos mods para entrar no seu jogo."
 
 #: src/multiint.c:2310
-#, fuzzy, c-format
+#, c-format
 msgid "*** password [%s] is now required! ***"
-msgstr "*** senha [%s] é necessária! ***"
+msgstr "*** senha [%s] agora é necessária! ***"
 
 #: src/multiint.c:2318
 msgid "*** password is NOT required! ***"
@@ -14285,28 +14279,24 @@ msgid "2 players"
 msgstr "2 jogadores"
 
 #: src/multimenu.c:647
-#, fuzzy
 msgid "3 players"
-msgstr "2 jogadores"
+msgstr "3 jogadores"
 
 #: src/multimenu.c:653
 msgid "4 players"
 msgstr "4 jogadores"
 
 #: src/multimenu.c:659
-#, fuzzy
 msgid "5 players"
-msgstr "2 jogadores"
+msgstr "5 jogadores"
 
 #: src/multimenu.c:665
-#, fuzzy
 msgid "6 players"
-msgstr "2 jogadores"
+msgstr "6 jogadores"
 
 #: src/multimenu.c:671
-#, fuzzy
 msgid "7 players"
-msgstr "2 jogadores"
+msgstr "7 jogadores"
 
 #: src/multimenu.c:677
 msgid "8 players"
@@ -14408,7 +14398,7 @@ msgstr "Ciano"
 
 #: src/order.c:841
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
-msgstr ""
+msgstr "Não podemos fazer isso! Devemos ser um Ciborgue para usar um Transporte Ciborgue!"
 
 #: src/research.c:1737
 #, c-format
@@ -14584,7 +14574,6 @@ msgid "Unable to locate any Commanders!"
 msgstr "Impossível localizar Comandantes!"
 
 #: src/structure.c:2912
-#, fuzzy
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Limite de Unidade Alcançado - Produção Interrompida"
 
@@ -14650,7 +14639,7 @@ msgstr "Lançar Transportes"
 
 #: src/transporter.c:1462
 msgid "There is not enough room in the Transport!"
-msgstr ""
+msgstr "Não há espaço o bastante no Transporte!"
 
 #: src/transporter.c:1720
 msgid "Reinforcements landing"
