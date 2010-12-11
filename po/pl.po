@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2010-12-11 16:14+0100\n"
-"PO-Revision-Date: 2010-11-25 22:40+0100\n"
+"PO-Revision-Date: 2010-12-11 17:00+0100\n"
 "Last-Translator: Michał D. aka Emdek <emdeck@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -209,7 +209,7 @@ msgstr "Badania nad bronią zakończone"
 #: data/mp/messages/strings/resstrings.txt:333
 #: data/mp/messages/strings/resstrings.txt:349
 msgid "New Defensive Structure Available"
-msgstr "Nowy budynek obronny dostępny"
+msgstr "Nowa struktura obronna dostępna"
 
 #: data/base/messages/resmessages12.rmsg:5
 #: data/mp/messages/resmessages12.rmsg:5
@@ -733,7 +733,7 @@ msgstr "Ciężki karabin maszynowy"
 #: data/mp/messages/resmessagesall.rmsg:877
 #: data/mp/messages/resmessagesall.rmsg:890
 msgid "Best Targets: Infantry, base structures, wheeled vehicles"
-msgstr "Najlepsze cele: Piechota, strutury bazy, pojazdy kołowe"
+msgstr "Najlepsze cele: Piechota, struktury bazy, pojazdy kołowe"
 
 #: data/base/messages/resmessages12.rmsg:124
 #: data/base/messages/resmessages1.rmsg:45
@@ -6562,7 +6562,7 @@ msgstr "Wieża strażnicza z rakietami Lancer"
 #: data/mp/messages/strings/names.txt:451
 #: data/mp/messages/strings/names.txt:774
 msgid "Mini-Rocket Tower"
-msgstr "Bateria Wieża z minirakietami"
+msgstr "Wieża z minirakietami"
 
 #: data/base/messages/strings/names.txt:446
 #: data/base/messages/strings/names.txt:496
@@ -11272,7 +11272,7 @@ msgstr "Plazmowy miotacz ognia"
 
 #: data/mp/messages/resmessagesall.rmsg:384
 msgid "Steals technology from structures and takes control of weapons"
-msgstr "Kradnie technologię z budynków i przejmuje bronie"
+msgstr "Kradnie technologię z struktur i przejmuje kontrolę nad uzbrojeniem"
 
 #: data/mp/messages/resmessagesall.rmsg:394
 msgid "New Electronic Technology Discovered"
@@ -12994,7 +12994,7 @@ msgstr "Nie udało się utworzyć budynku"
 #: src/hci.c:2105
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
-msgstr "Gracz %u oszukuje (menu odpluskwiania) by zdobyć nową budowlę: %s."
+msgstr "Gracz %u oszukuje (menu odpluskwiania) by zdobyć nową strukturę: %s."
 
 #: src/hci.c:2120
 #, c-format
@@ -13414,7 +13414,7 @@ msgstr "FPS %d; FPS-Limit: %d; PIEs %d; polys %d; Terr. polys %d; States %d"
 #: src/keybind.c:546
 #, c-format
 msgid "(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"
-msgstr "(Gracz %u) używa oszustwa :Liczba droidów: %d Liczba konstrukcji: %d Liczba obiektów: %d"
+msgstr "(Gracz %u) używa oszustwa :Liczba droidów: %d Liczba struktur: %d Liczba obiektów: %d"
 
 #: src/keybind.c:583
 msgid "Infinite power disabled"
@@ -14381,11 +14381,11 @@ msgstr "Rozpocznij grę jako Host"
 
 #: src/multiint.c:1393
 msgid "Show Structure Limits"
-msgstr "Pokaż limit budowli"
+msgstr "Pokaż limit struktur"
 
 #: src/multiint.c:1393
 msgid "Set Structure Limits"
-msgstr "Ustaw limit budowli"
+msgstr "Ustaw limit struktur"
 
 #: src/multiint.c:1479
 msgid "Player colour"
@@ -14396,8 +14396,9 @@ msgid "Kick player"
 msgstr "Wyrzuć gracza"
 
 #: src/multiint.c:1506
+#, fuzzy
 msgid "Player number"
-msgstr "Numer gracza"
+msgstr "Kolor gracza"
 
 #: src/multiint.c:1899
 msgid "Team"
@@ -14919,9 +14920,6 @@ msgstr " - Zbudowana %s"
 msgid "Version %s%s%s%s"
 msgstr "Wersja %s%s%s%s"
 
-#~ msgid "Plascrete MK3"
-#~ msgstr "Plasbeton Mk3"
-
 #~ msgid "Super Transport Available"
 #~ msgstr "Dostępny Super Transportowiec"
 
@@ -14951,24 +14949,3 @@ msgstr "Wersja %s%s%s%s"
 
 #~ msgid "There is not enough room in the Transport!"
 #~ msgstr "Nie ma dość miejsca w Transportowcu!"
-
-#~ msgid "Out of sync"
-#~ msgstr "Brak synchronizacji"
-
-#~ msgid "2 trucks ordered to build Oil Derrick"
-#~ msgstr "Rozkazano 2 ciężarówkom zbudować platformę wydobywczą"
-
-#~ msgid "%d trucks ordered to build Oil Derrick"
-#~ msgstr "Rozkazano %d ciężarówkom zbudować platformę wydobywczą"
-
-#~ msgid "GAME SAVED: "
-#~ msgstr "GRA ZAPISANA:"
-
-#~ msgid "Player %u is cheating (debug menu) him/herself a new droid."
-#~ msgstr "Gracz %u oszukuje (menu odpluskwiania) by zdobyć nową jednostkę."
-
-#~ msgid "Build Progress"
-#~ msgstr "Postęp budowania"
-
-#~ msgid "Construction Progress"
-#~ msgstr "Postęp konstruowania"
