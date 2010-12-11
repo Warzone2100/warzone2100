@@ -4,6 +4,7 @@
 dist_noinst_DATA = warzone2100.rc
 
 EXTRA_DIST = __BUILD_SCRIPT \
+	     download.pl \
 	     rules.mk \
 	     libs/Makefile \
 	     libs/dejavu/Makefile \
