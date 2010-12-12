@@ -70,9 +70,9 @@ struct NEXTOBJ
 struct SIMPLE_OBJECT
 {
 	SIMPLE_OBJECT(OBJECT_TYPE type, uint32_t id, unsigned player);
-	~SIMPLE_OBJECT();
+	virtual ~SIMPLE_OBJECT();
 
-	OBJECT_TYPE     type;                           ///< The type of object
+	const OBJECT_TYPE type;                         ///< The type of object
 	UDWORD          id;                             ///< ID number of the object
 	Position        pos;                            ///< Position of the object
 	Rotation        rot;                            ///< Object's yaw +ve rotation around up-axis
@@ -80,8 +80,6 @@ struct SIMPLE_OBJECT
 	UDWORD          born;                           ///< Time the game object was born
 	UDWORD          died;                           ///< When an object was destroyed, if 0 still alive
 	uint32_t        time;                           ///< Game time of given space-time position.
-	NEXTOBJ         psNext;                         ///< Pointer to the next object in the object list
-	NEXTOBJ         psNextFunc;                     ///< Pointer to the next object in the function list
 };
 
 struct BASE_OBJECT : public SIMPLE_OBJECT
@@ -109,6 +107,9 @@ struct BASE_OBJECT : public SIMPLE_OBJECT
 	BOOL                bTargetted;                 ///< Whether object is targetted by a selectedPlayer droid sensor (quite the hack)
 	TILEPOS             *watchedTiles;              ///< Variable size array of watched tiles, NULL for features
 	UDWORD              armour[NUM_HIT_SIDES][WC_NUM_WEAPON_CLASSES];
+
+	NEXTOBJ             psNext;                     ///< Pointer to the next object in the object list
+	NEXTOBJ             psNextFunc;                 ///< Pointer to the next object in the function list
 };
 
 /// Space-time coordinate.

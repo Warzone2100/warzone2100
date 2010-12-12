@@ -1696,8 +1696,6 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 			return NULL;
 		}
 
-		psBuilding->psCurAnim = NULL;
-
 		//fill in other details
 		psBuilding->pStructureType = pStructureType;
 
@@ -4102,10 +4100,17 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 	CHECK_STRUCTURE(psBuilding);
 }
 
+STRUCTURE::STRUCTURE(uint32_t id, unsigned player)
+	: BASE_OBJECT(OBJ_STRUCTURE, id, player)
+	, pFunctionality(NULL)
+	, psCurAnim(NULL)
+{}
 
 /* Release all resources associated with a structure */
-void structureRelease(STRUCTURE *psBuilding)
+STRUCTURE::~STRUCTURE()
 {
+	STRUCTURE *psBuilding = this;
+
 	/* remove animation if present */
 	if (psBuilding->psCurAnim != NULL)
 	{

@@ -741,7 +741,7 @@ UDWORD		i,j;
 UDWORD		mapX, mapY, width,breadth;
 FEATURE		*psFeature;
 STRUCTURE	*psStructure;
-FEATURE_STATS	*psStats;
+FEATURE_STATS const *psStats;
 MAPTILE		*psTile;
 
 	if(psObj->type == OBJ_FEATURE)

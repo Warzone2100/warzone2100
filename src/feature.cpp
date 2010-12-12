@@ -264,14 +264,13 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 	SDWORD		i;
 	UBYTE		vis;
 	//try and create the Feature
-	FEATURE *psFeature = new FEATURE(generateSynchronisedObjectId());
+	FEATURE *psFeature = new FEATURE(generateSynchronisedObjectId(), psStats);
 
 	if (psFeature == NULL)
 	{
 		debug(LOG_WARNING, "Feature couldn't be built.");
 		return NULL;
 	}
-	psFeature->psStats = psStats;
 	// features are not in the cluster system
 	// this will cause an assert when they still end up there
 	psFeature->cluster = ~0;
@@ -444,8 +443,13 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 }
 
 
+FEATURE::FEATURE(uint32_t id, FEATURE_STATS const *psStats)
+	: BASE_OBJECT(OBJ_FEATURE, id, MAX_PLAYERS + 1)  // Set the default player out of range to avoid targeting confusions
+	, psStats(psStats)
+{}
+
 /* Release the resources associated with a feature */
-void featureRelease(FEATURE *psFeature)
+FEATURE::~FEATURE()
 {
 }
 

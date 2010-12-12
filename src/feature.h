@@ -47,9 +47,6 @@ extern void featureStatsShutDown(void);
 /* Create a feature on the map */
 extern FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave);
 
-/* Release the resources associated with a feature */
-extern void featureRelease(FEATURE *psFeature);
-
 /* Update routine for features */
 extern void featureUpdate(FEATURE *psFeat);
 

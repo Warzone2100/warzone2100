@@ -42,22 +42,6 @@ bool mechanicsShutdown(void)
 	for(psObj = psDestroyedObj; psObj != NULL; psObj = psNext)
 	{
 		psNext = psObj->psNext;
-		switch (psObj->type)
-		{
-			case OBJ_DROID:
-				break;
-
-			case OBJ_STRUCTURE:
-				structureRelease((STRUCTURE *)psObj);
-				break;
-
-			case OBJ_FEATURE:
-				featureRelease((FEATURE *)psObj);
-				break;
-
-			default:
-				ASSERT(!"unknown object type", "unknown object type in destroyed object list");
-		}
 		delete psObj;
 	}
 	psDestroyedObj = NULL;

@@ -76,9 +76,10 @@ struct FEATURE_STATS : public BASE_STATS
 
 struct FEATURE : public BASE_OBJECT
 {
-	FEATURE(uint32_t id) : BASE_OBJECT(OBJ_FEATURE, id, MAX_PLAYERS + 1) {}  // Set the default player out of range to avoid targeting confusions
+	FEATURE(uint32_t id, FEATURE_STATS const *psStats);
+	~FEATURE();
 
-	FEATURE_STATS*  psStats;
+	FEATURE_STATS const *psStats;
 };
 
 #endif // __INCLUDED_FEATUREDEF_H__

@@ -284,7 +284,17 @@ BOOL droidCheckReferences(DROID *psVictimDroid)
 }
 #undef DROIDREF
 
-/* droidRelease: release all resources associated with a droid -
+DROID::DROID(uint32_t id, unsigned player)
+	: BASE_OBJECT(OBJ_DROID, id, player)
+	, droidType(DROID_ANY)
+	, psGroup(NULL)
+	, psGrpNext(NULL)
+	, psCurAnim(NULL)
+{
+	sMove.asPath = NULL;
+}
+
+/* DROID::~DROID: release all resources associated with a droid -
  * should only be called by objmem - use vanishDroid preferably
  */
 DROID::~DROID()
@@ -324,10 +334,7 @@ DROID::~DROID()
 	// remove the droid from the cluster system
 	clustRemoveObject((BASE_OBJECT *)psDroid);
 
-	if (psDroid->sMove.asPath)
-	{
-		free(psDroid->sMove.asPath);
-	}
+	free(sMove.asPath);
 }
 
 
@@ -2424,7 +2431,6 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD pl
 		ASSERT(!"out of memory", "Cannot get the memory for the unit");
 		return NULL;
 	}
-	psDroid->sMove.asPath = NULL;
 
 	//fill in other details
 
@@ -2445,9 +2451,6 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD pl
 		psDroid->pos.z = map_Height(psDroid->pos.x, psDroid->pos.y);
 	}
 
-	psDroid->cluster = 0;
-	psDroid->psGroup = NULL;
-	psDroid->psGrpNext = NULL;
 	if ( (psDroid->droidType == DROID_TRANSPORTER) ||
 		 (psDroid->droidType == DROID_COMMAND) )
 	{

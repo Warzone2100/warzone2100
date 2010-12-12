@@ -93,6 +93,7 @@ SIMPLE_OBJECT::~SIMPLE_OBJECT()
 
 BASE_OBJECT::BASE_OBJECT(OBJECT_TYPE type, uint32_t id, unsigned player)
 	: SIMPLE_OBJECT(type, id, player)
+	, cluster(0)
 	, numWatchedTiles(0)
 	, watchedTiles(NULL)
 {}
