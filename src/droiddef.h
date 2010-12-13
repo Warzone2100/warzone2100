@@ -167,9 +167,9 @@ typedef struct DROID
 	struct _structure* psBaseStruct;                ///< a structure that this droid might be associated with. For VTOLs this is the rearming pad
 	// queued orders
 	SDWORD          listSize;
-	ORDER_LIST      asOrderList[ORDER_LIST_MAX];
-	ORDER_LIST      asOrderPending;
-	BOOL            waitingForOwnReceiveDroidInfoMessage;  ///< Set to true when processing a message from asOrderList, and reset to false when the message arrives.
+	ORDER_LIST      asOrderList[ORDER_LIST_MAX];    ///< The range [0; listSize - 1] corresponds to synchronised orders, and the range [listPendingBegin; listPendingEnd - 1] corresponds to the orders that will remain, once all orders are synchronised.
+	unsigned        listPendingBegin;               ///< Index of first order which will not be erased by a pending order. After all messages are processed, the orders in the range [listPendingBegin; listPendingEnd - 1] will remain.
+	unsigned        listPendingEnd;                 ///< Index of last order which might not yet have been synchronised, plus one.
 
 	/* Order data */
 	SDWORD          order;

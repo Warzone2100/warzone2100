@@ -1592,13 +1592,8 @@ void displayBlueprints(void)
 		if (psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT)
 		{
 			renderBuildOrder(psDroid->order, psDroid->psTarStats, psDroid->orderX, psDroid->orderY, psDroid->orderX2, psDroid->orderY2, psDroid->orderDirection, SS_BLUEPRINT_PLANNED);
-			if (psDroid->waitingForOwnReceiveDroidInfoMessage)
-			{
-				ORDER_LIST const *o = &psDroid->asOrderPending;
-				renderBuildOrder(o->order, (BASE_STATS *)o->psOrderTarget, o->x, o->y, o->x2, o->y2, o->direction, SS_BLUEPRINT_PLANNED);
-			}
 			//now look thru' the list of orders to see if more building sites
-			for (order = 0; order < psDroid->listSize; order++)
+			for (order = psDroid->listPendingBegin; order < psDroid->listPendingEnd; order++)
 			{
 				ORDER_LIST const *o = &psDroid->asOrderList[order];
 				renderBuildOrder(o->order, (BASE_STATS *)o->psOrderTarget, o->x, o->y, o->x2, o->y2, o->direction, SS_BLUEPRINT_PLANNED);

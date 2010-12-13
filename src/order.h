@@ -198,6 +198,7 @@ extern void orderSelectedObjAdd(UDWORD player, BASE_OBJECT *psObj, BOOL add);
 
 // add an order to a droids order list
 extern void orderDroidAdd(DROID *psDroid, struct _droid_order_data *psOrder);
+void orderDroidAddPending(DROID *psDroid, struct _droid_order_data *psOrder);
 // do the next order from a droids order list
 extern BOOL orderDroidList(DROID *psDroid);
 
@@ -251,17 +252,9 @@ extern BOOL getFactoryState(STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_
 //lasSat structure can select a target
 extern void orderStructureObj(UDWORD player, BASE_OBJECT *psObj);
 
-static inline void setDroidOrderTarget(DROID *psDroid, void *psNewObject, SDWORD idx)
-{
-	assert(idx >= 0 && idx < ORDER_LIST_MAX);
-	psDroid->asOrderList[idx].psOrderTarget = psNewObject;
-}
 
-static inline void removeDroidOrderTarget(DROID *psDroid, SDWORD idx)
-{
-	assert(idx >= 0 && idx < ORDER_LIST_MAX);
-	psDroid->asOrderList[idx].psOrderTarget = NULL;
-}
+void orderDroidListEraseRange(DROID *psDroid, unsigned indexBegin, unsigned indexEnd);  ///< Pops the order at position index off the beginning of the list. (Even if the order is still pending.)
+void orderClearTargetFromDroidList(DROID *psDroid, BASE_OBJECT *psTarget);              ///< Clear all orders for the given target (including pending orders) from the list
 
 extern DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x,UDWORD y, BOOL altOrder);
 extern DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, BOOL altOrder);
