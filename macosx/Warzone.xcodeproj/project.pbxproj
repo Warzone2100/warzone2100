@@ -542,6 +542,13 @@
 		4350394C12B6FE2500C6BD27 /* gzlib.c in Sources */ = {isa = PBXBuildFile; fileRef = 4350394712B6FE2500C6BD27 /* gzlib.c */; };
 		4350394D12B6FE2500C6BD27 /* gzread.c in Sources */ = {isa = PBXBuildFile; fileRef = 4350394812B6FE2500C6BD27 /* gzread.c */; };
 		4350394E12B6FE2500C6BD27 /* gzwrite.c in Sources */ = {isa = PBXBuildFile; fileRef = 4350394912B6FE2500C6BD27 /* gzwrite.c */; };
+		4350398B12B7062B00C6BD27 /* res_books_51.h in Headers */ = {isa = PBXBuildFile; fileRef = 4350398212B7062B00C6BD27 /* res_books_51.h */; };
+		4350398C12B7062B00C6BD27 /* res_books_stereo.h in Headers */ = {isa = PBXBuildFile; fileRef = 4350398312B7062B00C6BD27 /* res_books_stereo.h */; };
+		4350398D12B7062B00C6BD27 /* floor_books.h in Headers */ = {isa = PBXBuildFile; fileRef = 4350398412B7062B00C6BD27 /* floor_books.h */; };
+		4350398E12B7062B00C6BD27 /* res_books_uncoupled.h in Headers */ = {isa = PBXBuildFile; fileRef = 4350398512B7062B00C6BD27 /* res_books_uncoupled.h */; };
+		4350398F12B7062B00C6BD27 /* residue_44p51.h in Headers */ = {isa = PBXBuildFile; fileRef = 4350398612B7062B00C6BD27 /* residue_44p51.h */; };
+		4350399012B7062B00C6BD27 /* setup_44p51.h in Headers */ = {isa = PBXBuildFile; fileRef = 4350398712B7062B00C6BD27 /* setup_44p51.h */; };
+		4350399212B7062B00C6BD27 /* tone.c in Sources */ = {isa = PBXBuildFile; fileRef = 4350398912B7062B00C6BD27 /* tone.c */; };
 		4355E08010D5FADE00A19EE4 /* physfs_platforms.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E07F10D5FAC200A19EE4 /* physfs_platforms.h */; };
 		4355E13010D6028C00A19EE4 /* codec.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E12C10D6028C00A19EE4 /* codec.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4355E13110D6028C00A19EE4 /* theora.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E12D10D6028C00A19EE4 /* theora.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1532,6 +1539,15 @@
 		4350394712B6FE2500C6BD27 /* gzlib.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = gzlib.c; path = external/zlib/gzlib.c; sourceTree = "<group>"; };
 		4350394812B6FE2500C6BD27 /* gzread.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = gzread.c; path = external/zlib/gzread.c; sourceTree = "<group>"; };
 		4350394912B6FE2500C6BD27 /* gzwrite.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = gzwrite.c; path = external/zlib/gzwrite.c; sourceTree = "<group>"; };
+		4350398112B7062B00C6BD27 /* barkmel.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = barkmel.c; path = external/libvorbis/lib/barkmel.c; sourceTree = "<group>"; };
+		4350398212B7062B00C6BD27 /* res_books_51.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = res_books_51.h; path = external/libvorbis/lib/books/coupled/res_books_51.h; sourceTree = "<group>"; };
+		4350398312B7062B00C6BD27 /* res_books_stereo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = res_books_stereo.h; path = external/libvorbis/lib/books/coupled/res_books_stereo.h; sourceTree = "<group>"; };
+		4350398412B7062B00C6BD27 /* floor_books.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = floor_books.h; path = external/libvorbis/lib/books/floor/floor_books.h; sourceTree = "<group>"; };
+		4350398512B7062B00C6BD27 /* res_books_uncoupled.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = res_books_uncoupled.h; path = external/libvorbis/lib/books/uncoupled/res_books_uncoupled.h; sourceTree = "<group>"; };
+		4350398612B7062B00C6BD27 /* residue_44p51.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = residue_44p51.h; path = external/libvorbis/lib/modes/residue_44p51.h; sourceTree = "<group>"; };
+		4350398712B7062B00C6BD27 /* setup_44p51.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = setup_44p51.h; path = external/libvorbis/lib/modes/setup_44p51.h; sourceTree = "<group>"; };
+		4350398812B7062B00C6BD27 /* psytune.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = psytune.c; path = external/libvorbis/lib/psytune.c; sourceTree = "<group>"; };
+		4350398912B7062B00C6BD27 /* tone.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = tone.c; path = external/libvorbis/lib/tone.c; sourceTree = "<group>"; };
 		43536BD210DFEB37006B579C /* GenericFramework-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GenericFramework-Info.plist"; path = "Resources/GenericFramework-Info.plist"; sourceTree = "<group>"; };
 		4355E07F10D5FAC200A19EE4 /* physfs_platforms.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = physfs_platforms.h; path = external/physfs/physfs_platforms.h; sourceTree = "<group>"; };
 		4355E12C10D6028C00A19EE4 /* codec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = codec.h; path = external/libtheora/include/theora/codec.h; sourceTree = "<group>"; };
@@ -2589,6 +2605,15 @@
 		02DDA8620BD3C1BB0049AB60 /* Vorbis sources */ = {
 			isa = PBXGroup;
 			children = (
+				4350398112B7062B00C6BD27 /* barkmel.c */,
+				4350398212B7062B00C6BD27 /* res_books_51.h */,
+				4350398312B7062B00C6BD27 /* res_books_stereo.h */,
+				4350398412B7062B00C6BD27 /* floor_books.h */,
+				4350398512B7062B00C6BD27 /* res_books_uncoupled.h */,
+				4350398612B7062B00C6BD27 /* residue_44p51.h */,
+				4350398712B7062B00C6BD27 /* setup_44p51.h */,
+				4350398812B7062B00C6BD27 /* psytune.c */,
+				4350398912B7062B00C6BD27 /* tone.c */,
 				02DDA8720BD3C27D0049AB60 /* floor_all.h */,
 				02DDA8730BD3C27D0049AB60 /* psych_8.h */,
 				02DDA8740BD3C27D0049AB60 /* psych_11.h */,
@@ -3095,6 +3120,12 @@
 				02DDA8910BD3C27D0049AB60 /* setup_44.h in Headers */,
 				02DDA8920BD3C27D0049AB60 /* setup_44u.h in Headers */,
 				02DDA8930BD3C27D0049AB60 /* setup_X.h in Headers */,
+				4350398B12B7062B00C6BD27 /* res_books_51.h in Headers */,
+				4350398C12B7062B00C6BD27 /* res_books_stereo.h in Headers */,
+				4350398D12B7062B00C6BD27 /* floor_books.h in Headers */,
+				4350398E12B7062B00C6BD27 /* res_books_uncoupled.h in Headers */,
+				4350398F12B7062B00C6BD27 /* residue_44p51.h in Headers */,
+				4350399012B7062B00C6BD27 /* setup_44p51.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3752,7 +3783,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "DIRECTORY=\"libvorbis-1.2.3\"\nOUTDIR=\"libvorbis\"\nFILENAME=\"libvorbis-1.2.3.tar.gz\"\nSOURCE=\"http://downloads.xiph.org/releases/vorbis/libvorbis-1.2.3.tar.gz\"\nMD5=\"5aa77f55c0e0aab8eb8ed982335daac8\"\n\ncd external\n\nif [ -d \"$OUTDIR\" ]; then\n  echo \"$OUTDIR exists, skipping\"\n  exit 0\nfi\n\nif [ -d \"$DIRECTORY\" ]; then\n  echo \"$DIRECTORY exists, probably from an earlier failed run\" >&2\n  exit 1\nfi\n\nif [ ! -r \"$FILENAME\" ]; then\n  echo \"Fetching $SOURCE\"\n  if ! curl -L -o \"$FILENAME\" \"$SOURCE\"; then\n    echo \"Unable to fetch $SOURCE\" >&2\n    exit 1\n  fi\nfi\n\nHAVEMD5=`md5 \"$FILENAME\" | sed -n -e 's/^MD5 (\\(.*\\)) = \\(.*\\)$/\\2/p'`\n\nif [ -z \"$HAVEMD5\" ]; then\n  echo \"Unable to compute md5 for $FILENAME\" >&2\n  exit 1\nfi\n\nif [ \"$HAVEMD5\" != \"$MD5\" ]; then\n  echo \"Md5 does not match for $FILENAME\" >&2\n  exit 1\nfi\n\nEXTENSION=`echo $FILENAME | sed -e 's/^.*\\.\\([^.]*\\)/\\1/'`\n\nif [ \"$EXTENSION\" = \"gz\" ]; then\n  if ! tar -zxf \"$FILENAME\"; then\n    echo \"Unpacking $FILENAME failed\" >&2\n    exit 1\n  fi\nelif [ \"$EXTENSION\" = \"bz2\" ]; then\n  if ! tar -jxf \"$FILENAME\"; then\n    echo \"Unpacking $FILENAME failed\" >&2\n    exit 1\n  fi\nelse\n  echo \"Unable to unpack $FILENAME\" >&2\n  exit 1\nfi\n\nif [ ! -d \"$DIRECTORY\" ]; then\n  echo \"Can't find $DIRECTORY to rename\" >&2\n  exit 1\nfi\n\nmv \"$DIRECTORY\" \"$OUTDIR\"\n";
+			shellScript = "DirectorY=\"libvorbis-1.3.2\"\nOutDir=\"libvorbis\"\nFileName=\"libvorbis-1.3.2.tar.gz\"\nSourceDLP=\"http://downloads.xiph.org/releases/vorbis/libvorbis-1.3.2.tar.gz\"\nMD5Sum=\"c870b9bd5858a0ecb5275c14486d9554\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
 		};
 		02FD383C0BD4014700776FD3 /* Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4284,6 +4315,7 @@
 				02DDA8410BD3C1420049AB60 /* window.c in Sources */,
 				02DDA8590BD3C18B0049AB60 /* vorbisenc.c in Sources */,
 				02DDA85A0BD3C18B0049AB60 /* vorbisfile.c in Sources */,
+				4350399212B7062B00C6BD27 /* tone.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5140,6 +5172,7 @@
 			buildSettings = {
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_SEARCH_PATHS = "";
 				FRAMEWORK_VERSION = A;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
@@ -5147,14 +5180,13 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
-				HEADER_SEARCH_PATHS = (
-					external/libvorbis/lib/,
-					"$(inherited)",
-				);
+				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = Resources/vorbis/Info.plist;
 				INSTALL_PATH = "@executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = Vorbis;
+				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external/libvorbis/lib/\"";
 			};
 			name = Debug;
 		};
@@ -5163,19 +5195,19 @@
 			buildSettings = {
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_SEARCH_PATHS = "";
 				FRAMEWORK_VERSION = A;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
-				HEADER_SEARCH_PATHS = (
-					external/libvorbis/lib/,
-					"$(inherited)",
-				);
+				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = Resources/vorbis/Info.plist;
 				INSTALL_PATH = "@executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = Vorbis;
+				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external/libvorbis/lib/\"";
 			};
 			name = Release;
 		};
