@@ -3605,7 +3605,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd external/quesoglc\n\nif [ ! -r src/database.c ]; then\n  cd database\n  python buildDB.py\nfi\n";
+			shellScript = "cd external/quesoglc\n\nif [ ! -r src/database.c ]; then\n\tcd database\n\t/usr/bin/python buildDB.py\n\texit ${?}\nfi\nexit 0\n";
 		};
 		02FD38210BD3FE9A00776FD3 /* Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
