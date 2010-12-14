@@ -44,9 +44,9 @@ char tweakNames[tweak_num][20] = { "dummy" , "power_fact", "power_exp", "power_b
 
 //seen in power.c line 295 also power.h for asPower.lastCalc and asPower.addPower
 #define tweak_power_fact 	1	//multiply power
-#define tweak_power_exp 	2	//make power expodential !
+#define tweak_power_exp 	2	//make power exponential !
 #define tweak_power_bonus	3	//power given with no well at all
-#define tweak_power_loss	4 	//% of your power loosed every second (hint: negative act just like interest)
+#define tweak_power_loss	4 	//% of your power lost every second (hint: negative act just like interest)
 #define tweak_power_start	5 	//(not implemented yet) set how much power you start with
 
 //seen in research.c line 610
@@ -71,7 +71,7 @@ char tweakNames[tweak_num][20] = { "dummy" , "power_fact", "power_exp", "power_b
 //move.c 1949 and 2095
 #define tweak_speed_fact 18 //Multiply speed
 #define tweak_accel_fact 19 //Multiply accel (should follow speed fact most of time but who knows ? ) Should I multiply by speed_fact to ? 
-//NB:buggy... I think path finding don't take correctly into account accelaration (or I didn't found where). It result in truck running into wall. The faster the accel, the funnier it look...
+//NB:buggy... I think path finding don't take correctly into account acceleration (or I didn't found where). It result in truck running into wall. The faster the accel, the funnier it look...
 
 //seen in structure.c line 3308
 #define tweak_res_loss 20//(not implemented yet)
