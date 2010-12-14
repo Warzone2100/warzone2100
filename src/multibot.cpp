@@ -83,6 +83,7 @@ struct QueuedDroidInfo
 			if (x2 != z.x2)               return x2 < z.x2 ? -1 : 1;
 			if (y2 != z.y2)               return y2 < z.y2 ? -1 : 1;
 		}
+		if (add != z.add)             return add < z.add ? -1 : 1;
 		return 0;
 	}
 
@@ -98,6 +99,8 @@ struct QueuedDroidInfo
 	uint16_t    direction;  // if (order == DORDER_BUILD || order == DORDER_LINEBUILD)
 	uint32_t    x2;         // if (order == DORDER_LINEBUILD)
 	uint32_t    y2;         // if (order == DORDER_LINEBUILD)
+
+	BOOL        add;
 };
 
 static std::vector<QueuedDroidInfo> queuedOrders;
@@ -492,31 +495,6 @@ BOOL recvDroid(NETQUEUE queue)
 }
 
 
-/*
-*	This routine is called by the AI scripts
-*
-*/
-BOOL SendGroupOrderGroup(const DROID_GROUP* psGroup, DROID_ORDER order, uint32_t x, uint32_t y, const BASE_OBJECT* psObj)
-{
-	/* Check if the order is valid */
-	if (!(psObj? validOrderForObj(order) : validOrderForLoc(order)))
-	{
-		ASSERT(false, "SendGroupOrderGroup: Bad order");
-		return false;
-	}
-
-	if (!bMultiMessages)
-		return true;
-
-	// Add the droids to the message
-	for (DROID *psDroid = psGroup->psList; psDroid; psDroid = psDroid->psGrpNext)
-	{
-		SendDroidInfo(psDroid, order, x, y, psObj, NULL, 0, 0, 0);
-	}
-
-	return true;
-}
-
 /// Does not read/write info->droidId!
 static void NETQueuedDroidInfo(QueuedDroidInfo *info)
 {
@@ -543,6 +521,7 @@ static void NETQueuedDroidInfo(QueuedDroidInfo *info)
 		NETuint32_t(&info->x2);
 		NETuint32_t(&info->y2);
 	}
+	NETbool(&info->add);
 }
 
 // Actually send the droid info.
@@ -582,13 +561,27 @@ void sendQueuedDroidInfo()
 	queuedOrders.clear();
 }
 
+DROID_ORDER_DATA infoToOrderData(QueuedDroidInfo const &info, BASE_STATS const *psStats)
+{
+	DROID_ORDER_DATA sOrder;
+
+	memset(&sOrder, 0x00, sizeof(sOrder));
+	sOrder.order = info.order;
+	sOrder.x = info.x;
+	sOrder.y = info.y;
+	sOrder.x2 = info.x2;
+	sOrder.y2 = info.y2;
+	sOrder.direction = info.direction;
+	sOrder.psObj = processDroidTarget(info.destType, info.destId);
+	sOrder.psStats = const_cast<BASE_STATS *>(psStats);
+
+	return sOrder;
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 // Droid update information
-BOOL SendDroidInfo(const DROID* psDroid, DROID_ORDER order, uint32_t x, uint32_t y, const BASE_OBJECT* psObj, const BASE_STATS *psStats, uint32_t x2, uint32_t y2, uint16_t direction)
+bool sendDroidInfo(DROID *psDroid, DROID_ORDER order, uint32_t x, uint32_t y, const BASE_OBJECT *psObj, const BASE_STATS *psStats, uint32_t x2, uint32_t y2, uint16_t direction, bool add)
 {
-	if (!bMultiMessages)
-		return true;
-
 	if (!myResponsibility(psDroid->player))
 	{
 		return true;
@@ -622,8 +615,18 @@ BOOL SendDroidInfo(const DROID* psDroid, DROID_ORDER order, uint32_t x, uint32_t
 		info.y2 = y2;
 	}
 
+	info.add = add;
+
 	// Send later, grouped by order, so multiple droids with the same order can be encoded to much less data.
 	queuedOrders.push_back(info);
+
+	// Update pending orders, so the UI knows it happened.
+	DROID_ORDER_DATA sOrder = infoToOrderData(info, psStats);
+	if (!add)
+	{
+		psDroid->listPendingBegin = psDroid->listPendingEnd;
+	}
+	orderDroidAddPending(psDroid, &sOrder);
 
 	return true;
 }
@@ -661,16 +664,7 @@ BOOL recvDroidInfo(NETQUEUE queue)
 			syncDebug("Order=%s,(%d,%d)", getDroidOrderName(info.order), info.x, info.y);
 		}
 
-		DROID_ORDER_DATA sOrder;
-		memset(&sOrder, 0x00, sizeof(sOrder));
-		sOrder.order = info.order;
-		sOrder.x = info.x;
-		sOrder.y = info.y;
-		sOrder.x2 = info.x2;
-		sOrder.y2 = info.y2;
-		sOrder.direction = info.direction;
-		sOrder.psObj = processDroidTarget(info.destType, info.destId);
-		sOrder.psStats = (BASE_STATS *)psStats;
+		DROID_ORDER_DATA sOrder = infoToOrderData(info, (BASE_STATS *)psStats);
 
 		uint32_t num = 0;
 		NETuint32_t(&num);
@@ -695,8 +689,6 @@ BOOL recvDroidInfo(NETQUEUE queue)
 
 			syncDebugDroid(psDroid, '<');
 
-			psDroid->waitingForOwnReceiveDroidInfoMessage = false;
-
 			/*
 			* If the current order not is a command order and we are not a
 			* commander yet are in the commander group remove us from it.
@@ -708,7 +700,15 @@ BOOL recvDroidInfo(NETQUEUE queue)
 
 			if (sOrder.psObj != TargetMissing)  // Only do order if the target didn't die.
 			{
-				orderDroidBase(psDroid, &sOrder);
+				if (!info.add)
+				{
+					orderDroidListEraseRange(psDroid, 0, psDroid->listSize + 1);  // Clear all non-pending orders, plus the first pending order (which is probably the order we just received).
+					orderDroidBase(psDroid, &sOrder);  // Execute the order immediately (even if in the middle of another order.
+				}
+				else
+				{
+					orderDroidAdd(psDroid, &sOrder);   // Add the order to the (non-pending) list. Will probably overwrite the corresponding pending order, assuming all pending orders were written to the list.
+				}
 			}
 
 			syncDebugDroid(psDroid, '>');

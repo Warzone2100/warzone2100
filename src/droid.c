@@ -682,13 +682,13 @@ void _syncDebugDroid(const char *function, DROID *psDroid, char ch)
 		actTarLen += sprintf(actTar + actTarLen, "_%u", psDroid->psActionTarget[i]? psDroid->psActionTarget[i]->id : 0);
 	}
 
-	_syncDebug(function, "%c droid%d = p%d;pos(%d.%d,%d.%d,%d),rot(%d,%d,%d),ord%d(%d,%d),act%d%s,so%X,bp%d,sMove(st%d,spd%d,mdir%d,path%d/%d,src(%d,%d),tar(%d,%d),dst(%d,%d),bump(%d,%d,%d,%d,(%d,%d),%d)),exp%u, power = %"PRId64"", ch,
+	_syncDebug(function, "%c droid%d = p%d;pos(%d.%d,%d.%d,%d),rot(%d,%d,%d),ord%d(%d,%d)^%d,act%d%s,so%X,bp%d,sMove(st%d,spd%d,mdir%d,path%d/%d,src(%d,%d),tar(%d,%d),dst(%d,%d),bump(%d,%d,%d,%d,(%d,%d),%d)),exp%u, power = %"PRId64"", ch,
 	          psDroid->id,
 
 	          psDroid->player,
 	          psDroid->pos.x, psDroid->sMove.eBitX, psDroid->pos.y, psDroid->sMove.eBitY, psDroid->pos.z,
 	          psDroid->rot.direction, psDroid->rot.pitch, psDroid->rot.roll,
-	          psDroid->order, psDroid->orderX, psDroid->orderY,
+	          psDroid->order, psDroid->orderX, psDroid->orderY, psDroid->listSize,
 	          psDroid->action, actTar,
 	          psDroid->secondaryOrder,
 	          psDroid->body,
@@ -2491,7 +2491,8 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD pl
 
 	psDroid->listSize = 0;
 	memset(psDroid->asOrderList, 0, sizeof(ORDER_LIST)*ORDER_LIST_MAX);
-	psDroid->waitingForOwnReceiveDroidInfoMessage = false;
+	psDroid->listPendingBegin = 0;
+	psDroid->listPendingEnd = 0;
 
 	psDroid->iAudioID = NO_SOUND;
 	psDroid->psCurAnim = NULL;
@@ -4313,7 +4314,6 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
 
 	if (bMultiPlayer)
 	{
-		int i;
 		bool tooMany = false;
 
 		incNumDroids(to);
@@ -4409,19 +4409,7 @@ DROID * giftSingleDroid(DROID *psD, UDWORD to)
 					orderDroid(psCurr, DORDER_STOP, ModeQueue);
 				}
 				// check through order list
-				for (i = 0; i < psCurr->listSize; i++)
-				{
-					if (psCurr->asOrderList[i].psOrderTarget == (BASE_OBJECT *)psD)
-					{
-						removeDroidOrderTarget(psCurr, i);
-						// move the rest of the list down
-						memmove(&psCurr->asOrderList[i], &psCurr->asOrderList[i] + 1, (psCurr->listSize - i) * sizeof(ORDER_LIST));
-						// adjust list size
-						psCurr->listSize -= 1;
-						// initialise the empty last slot
-						memset(psCurr->asOrderList + psCurr->listSize, 0, sizeof(ORDER_LIST));
-					}
-				}
+				orderClearTargetFromDroidList(psCurr, (BASE_OBJECT *)psD);
 			}
 		}
 
@@ -4782,7 +4770,7 @@ void checkDroid(const DROID *droid, const char *const location, const char *func
 	ASSERT_HELPER(droid != NULL, location, function, "CHECK_DROID: NULL pointer");
 	ASSERT_HELPER(droid->type == OBJ_DROID, location, function, "CHECK_DROID: Not droid (type %d)", (int)droid->type);
 	ASSERT_HELPER(droid->numWeaps <= DROID_MAXWEAPS, location, function, "CHECK_DROID: Bad number of droid weapons %d", (int)droid->numWeaps);
-	ASSERT_HELPER(droid->listSize <= ORDER_LIST_MAX, location, function, "CHECK_DROID: Bad number of droid orders %d", (int)droid->listSize);
+	ASSERT_HELPER(droid->listSize <= ORDER_LIST_MAX && droid->listPendingBegin <= ORDER_LIST_MAX && droid->listPendingEnd <= ORDER_LIST_MAX && droid->listSize <= droid->listPendingEnd, location, function, "CHECK_DROID: Bad number of droid orders %d %d %d", (int)droid->listSize, (int)droid->listPendingBegin, (int)droid->listPendingEnd);
 	ASSERT_HELPER(droid->player < MAX_PLAYERS, location, function, "CHECK_DROID: Bad droid owner %d", (int)droid->player);
 	ASSERT_HELPER(droidOnMap(droid), location, function, "CHECK_DROID: Droid off map");
 	ASSERT_HELPER(droid->body <= droid->originalBody, location, function, "CHECK_DROID: More body points (%u) than original body points (%u).", (unsigned)droid->body, (unsigned)droid->originalBody);

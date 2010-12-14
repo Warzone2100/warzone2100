@@ -25,13 +25,13 @@
  */
 
 #include "lib/framework/frame.h"
-#include "messagedef.h"
+#include "src/messagedef.h"
 
 /* Get the Yacc definitions */
 #include "message_parser.tab.h"
 
 #include "lib/framework/lexer_input.h"
-#include "messagely.h"
+#include "src/messagely.h"
 
 // fwrite declared with warn_unused_result, resulting in mysterious errors in "%%" on some distros.
 static inline bool no_warn_unused_result(int ignore) { if (ignore) {} return true; }

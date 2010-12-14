@@ -4677,7 +4677,7 @@ bool validLocation(BASE_STATS *psStats, unsigned x, unsigned y, uint16_t directi
 						psDroid->droidType == DROID_CYBORG_CONSTRUCT)
 					{
 						//look thru' the list of orders to see if more building sites
-						for (order = 0; order < psDroid->listSize; order++)
+						for (order = psDroid->listPendingBegin; order < psDroid->listPendingEnd; order++)
 						{
 							if (psDroid->asOrderList[order].order == DORDER_BUILD)
 							{
@@ -7874,21 +7874,7 @@ STRUCTURE * giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, BOOL
 					}
 				}
 				//check through order list
-				for (i = 0; i < psCurr->listSize; i++)
-				{
-					if (psCurr->asOrderList[i].psOrderTarget == (BASE_OBJECT *)psStructure)
-					{
-						removeDroidOrderTarget(psCurr, i);
-						// move the rest of the list down
-						memmove(&psCurr->asOrderList[i], &psCurr->asOrderList[i] + 1,
-							(psCurr->listSize - i) * sizeof(ORDER_LIST));
-						//adjust list size
-						psCurr->listSize -= 1;
-						//initialise the empty last slot
-						memset(psCurr->asOrderList + psCurr->listSize, 0,
-							sizeof(ORDER_LIST));
-					}
-				}
+				orderClearTargetFromDroidList(psCurr, (BASE_OBJECT *)psStructure);
 			}
 
 			//check through the 'attackPlayer' players list of structures to see if any are targetting it

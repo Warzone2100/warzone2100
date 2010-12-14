@@ -419,7 +419,6 @@
 		439F36F31266877900D5EE2A /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 439F36F21266877900D5EE2A /* OpenGL.framework */; };
 		439F36F5126687A900D5EE2A /* libfreetype.6.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 439F36F4126687A900D5EE2A /* libfreetype.6.dylib */; };
 		439F36F7126687E500D5EE2A /* libfontconfig.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 439F36F6126687E500D5EE2A /* libfontconfig.1.dylib */; };
-		439F3770126688DF00D5EE2A /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 439F36D41266869B00D5EE2A /* Carbon.framework */; };
 		439F3771126688DF00D5EE2A /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97F013D10EDEAE5C004947E5 /* Cocoa.framework */; };
 		439F3772126688DF00D5EE2A /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 439F36EE1266877900D5EE2A /* OpenAL.framework */; };
 		439F3773126688DF00D5EE2A /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 439F36F01266877900D5EE2A /* OpenAL.framework */; };
@@ -579,6 +578,7 @@
 		97AEAB780E8C1C5100A10721 /* Ogg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02356E090BD3BCFE00E9A019 /* Ogg.framework */; };
 		97AEAB790E8C1C5100A10721 /* Vorbis.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02DDA7EE0BD3C03F0049AB60 /* Vorbis.framework */; };
 		97AEAC560E8C261B00A10721 /* Theora.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97AEAB330E8C1B5200A10721 /* Theora.framework */; };
+		BF4A227A12B3138300CE8688 /* cocoa_wrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = BF4A227912B3138300CE8688 /* cocoa_wrapper.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -1617,6 +1617,8 @@
 		976AE8270EA0B59A00F2473F /* timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = timer.h; path = ../lib/sequence/timer.h; sourceTree = SOURCE_ROOT; };
 		97AEAB330E8C1B5200A10721 /* Theora.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Theora.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		97F013D10EDEAE5C004947E5 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		BF4A227812B3138300CE8688 /* cocoa_wrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cocoa_wrapper.h; path = ../lib/framework/cocoa_wrapper.h; sourceTree = SOURCE_ROOT; };
+		BF4A227912B3138300CE8688 /* cocoa_wrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = cocoa_wrapper.m; path = ../lib/framework/cocoa_wrapper.m; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1652,7 +1654,6 @@
 				97AEAC560E8C261B00A10721 /* Theora.framework in Frameworks */,
 				02CDDD130D159DF600722688 /* QuesoGLC.framework in Frameworks */,
 				43EA393D11442A8900AEF27C /* Gettext.framework in Frameworks */,
-				439F3770126688DF00D5EE2A /* Carbon.framework in Frameworks */,
 				439F3771126688DF00D5EE2A /* Cocoa.framework in Frameworks */,
 				439F3772126688DF00D5EE2A /* OpenAL.framework in Frameworks */,
 				439F3773126688DF00D5EE2A /* OpenAL.framework in Frameworks */,
@@ -1933,6 +1934,8 @@
 				0246A09C0BD3CBD5004D1C70 /* cursors.h */,
 				0246A09F0BD3CBD5004D1C70 /* debug.c */,
 				0246A0A00BD3CBD5004D1C70 /* debug.h */,
+				BF4A227912B3138300CE8688 /* cocoa_wrapper.m */,
+				BF4A227812B3138300CE8688 /* cocoa_wrapper.h */,
 				0246A0A30BD3CBD5004D1C70 /* frame.c */,
 				0246A0A40BD3CBD5004D1C70 /* frame.h */,
 				0246A0A50BD3CBD5004D1C70 /* frameint.h */,
@@ -3630,7 +3633,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"libpng-1.4.4\"\nOutDir=\"libpng\"\nFileName=\"libpng-1.4.4.tar.gz\"\nSourceDLP=\"http://downloads.sourceforge.net/project/libpng/libpng-master/1.4.4/libpng-1.4.4.tar.gz\"\nMD5Sum=\"297b38f925e745061489b41b1f7c4bb1\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
+			shellScript = "DirectorY=\"libpng-1.4.4\"\nOutDir=\"libpng\"\nFileName=\"libpng-1.4.4.tar.gz\"\nSourceDLP=\"http://downloads.sourceforge.net/project/libpng/libpng14/1.4.4/libpng-1.4.4.tar.gz\"\nMD5Sum=\"297b38f925e745061489b41b1f7c4bb1\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
 		};
 		02FD38340BD4012A00776FD3 /* Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3644,7 +3647,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"libogg-1.2.0\"\nOutDir=\"libogg\"\nFileName=\"libogg-1.2.0.tar.gz\"\nSourceDLP=\"http://downloads.xiph.org/releases/ogg/libogg-1.2.0.tar.gz\"\nMD5Sum=\"c95b73759acfc30712beef6ce4e88efa\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
+			shellScript = "DirectorY=\"libogg-1.2.2\"\nOutDir=\"libogg\"\nFileName=\"libogg-1.2.2.tar.gz\"\nSourceDLP=\"http://downloads.xiph.org/releases/ogg/libogg-1.2.2.tar.gz\"\nMD5Sum=\"5a9fcabc9a1b7c6f1cd75ddc78f36c56\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
 		};
 		02FD38380BD4013A00776FD3 /* Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4056,6 +4059,7 @@
 				43F3405B11CAA83D00D1E6C8 /* crc.cpp in Sources */,
 				43C270E911DD2EBA009BC740 /* jpeg_encoder.c in Sources */,
 				43A0C82B12176C8A006C3B89 /* netqueue.cpp in Sources */,
+				BF4A227A12B3138300CE8688 /* cocoa_wrapper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

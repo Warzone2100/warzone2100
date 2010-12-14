@@ -183,10 +183,8 @@ extern BOOL SendDroid                   (const DROID_TEMPLATE* pTemplate, uint32
 extern BOOL SendDestroyDroid	(const DROID* psDroid);
 extern BOOL SendDemolishFinished(STRUCTURE *psS,DROID *psD);
 void sendQueuedDroidInfo(void);  ///< Actually sends the droid orders which were queued by SendDroidInfo.
-extern BOOL SendDroidInfo               (const DROID* psDroid, DROID_ORDER order, uint32_t x, uint32_t y, const BASE_OBJECT* psObj, const BASE_STATS *psStats, uint32_t x2, uint32_t y2, uint16_t direction);
+bool sendDroidInfo(DROID *psDroid, DROID_ORDER order, uint32_t x, uint32_t y, const BASE_OBJECT *psObj, const BASE_STATS *psStats, uint32_t x2, uint32_t y2, uint16_t direction, bool add);
 extern BOOL SendCmdGroup		(DROID_GROUP *psGroup, UWORD x, UWORD y, BASE_OBJECT *psObj);
-
-extern BOOL SendGroupOrderGroup(const DROID_GROUP* psGroup, DROID_ORDER order, uint32_t x, uint32_t y, const BASE_OBJECT* psObj);
 
 
 extern BOOL sendDroidSecondary	(const DROID* psDroid, SECONDARY_ORDER sec, SECONDARY_STATE state);

@@ -47,8 +47,8 @@ bool assertEnabled = true;
 #else
 bool assertEnabled = false;
 #endif
-#if defined(WZ_OS_MAC32) // FIXME: Needs to be made compatible with 64bit
-#include <Carbon/Carbon.h>
+#ifdef WZ_OS_MAC
+#include "cocoa_wrapper.h"
 #endif
 /*
  * This list _must_ match the enum in debug.h!
@@ -441,28 +441,16 @@ void _debug( code_part part, const char *function, const char *str, ... )
 			MessageBoxA( NULL,
 				wbuf,
 				"Warzone has terminated unexpectedly", MB_OK|MB_ICONERROR);
-#elif defined(WZ_OS_MAC32) // FIXME: Needs to be made compatible with 64bit
-			AlertStdCFStringAlertParamRec	param;
-			DialogRef						dialog;
-			OSStatus						err;
-			DialogItemIndex					itemHit;
-			char aBuffer[512];
-
-			GetStandardAlertDefaultParams( &param, kStdCFStringAlertVersionOne );
-			param.movable = true;
-			
-			ssprintf(aBuffer, "%s\n\nPlease check your logs for more details.\n", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0] );
-			
-			err = CreateStandardAlert( kAlertStopAlert, CFStringCreateWithCString( nil, aBuffer, kCFStringEncodingMacRoman),
-				CFSTR( "Run Console.app and search for wz2100 and copy that to a file.\
-					  \n\nFor the Crash report on 10.4/10.5 check\
-					  \n~/Library/Logs/CrashReporter,\
-					  \non 10.6 check ~/Library/Logs/DiagnosticReports\
-					  \nDo not forget to upload and attach those to a bug report at http://developer.wz2100.net/newticket\
-					  \nThanks!" ), &param, &dialog );
-			SetWindowTitleWithCFString( GetDialogWindow( dialog ), CFSTR( "Warzone has terminated unexpectedly" ) );
-			
-			RunStandardAlert( dialog, NULL, &itemHit );
+#elif defined(WZ_OS_MAC)
+			cocoaShowAlert("Warzone has terminated unexpectedly.",
+			               "Please check your logs for more details."
+			               "\n\nRun Console.app, search for \"wz2100\", and copy that to a file."
+			               "\n\nIf you are on 10.4 (Tiger) or 10.5 (Leopard) the crash report"
+			               " is in ~/Library/Logs/CrashReporter."
+			               " If you are on 10.6 (Snow Leopard), it is in"
+			               "\n~/Library/Logs/DiagnosticReports."
+			               "\n\nDo not forget to upload and attach those to a bug report at http://developer.wz2100.net/newticket"
+			               "\nThanks!", 2);
 #endif
 		}
 
@@ -476,22 +464,8 @@ void _debug( code_part part, const char *function, const char *str, ... )
 			MessageBoxA( NULL,
 				wbuf,
 				"Warzone has detected a problem.", MB_OK|MB_ICONINFORMATION);
-#elif defined (WZ_OS_MAC32) // FIXME: Needs to be made compatible with 64bit
-			AlertStdCFStringAlertParamRec	param;
-			DialogRef						dialog;
-			OSStatus						err;
-			DialogItemIndex					itemHit;
-			char aBuffer[512];
-			
-			GetStandardAlertDefaultParams( &param, kStdCFStringAlertVersionOne );
-			param.movable = true;
-			
-			ssprintf(aBuffer, "A non fatal error has occurred.\n\n%s\n\n", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0] );
-			
-			err = CreateStandardAlert( kAlertNoteAlert, CFStringCreateWithCString( nil, aBuffer, kCFStringEncodingMacRoman), NULL, &param, &dialog );
-			SetWindowTitleWithCFString( GetDialogWindow( dialog ), CFSTR( "Warzone has detected a problem" ) );
-			
-			RunStandardAlert( dialog, NULL, &itemHit );
+#elif defined(WZ_OS_MAC)
+			cocoaShowAlert("Warzone has detected a problem.", inputBuffer[useInputBuffer1 ? 1 : 0], 0);
 #endif
 		}
 

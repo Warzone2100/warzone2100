@@ -26,8 +26,8 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/string_ext.h"
 
-#include "levels.h"
-#include "levelint.h"
+#include "src/levels.h"
+#include "src/levelint.h"
 
 // fwrite declared with warn_unused_result, resulting in mysterious errors in "%%" on some distros.
 static inline bool no_warn_unused_result(int ignore) { if (ignore) {} return true; }

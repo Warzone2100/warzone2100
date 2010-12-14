@@ -28,8 +28,8 @@
 // FIXME: #include from src/
 #include "src/scriptfuncs.h"
 
-#include "script.h"
-#include "chat_processing.h"
+#include "lib/script/script.h"
+#include "lib/script/chat_processing.h"
 
 /* Get the Yacc definitions */
 #include "chat_parser.tab.h"
