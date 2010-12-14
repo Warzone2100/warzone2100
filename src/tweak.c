@@ -93,9 +93,9 @@ void loadTweakData(void){
 		}
 	}
 	else {
-		printf("./data/base/stats/tweak.txt is missing");	
+		printf("./data/base/stats/tweak.txt is not existing");	
 	}
 	//some debug to see if everything look fine...
-	printf("test1 = %f  \n",tweakData[0][tweak_res_exp]);	
+	//printf("test1 = %f  \n",tweakData[0][tweak_res_exp]);	
 
 }
