@@ -92,6 +92,8 @@
 #include "wrappers.h"
 #include "terrain.h"
 #include "ingameop.h"
+#include "tweak.h"
+#include "tweak.c"
 
 static void	initMiscVars(void);
 
@@ -452,7 +454,7 @@ BOOL systemInitialise(void)
 	}
 
 	buildMapList();
-
+	loadTweakData(); //load default and user preferences
 	// Initialize render engine
 	war_SetFog(war_GetFog());		// Set Fog mode based on user preferences
 	if (!pie_Initialise())

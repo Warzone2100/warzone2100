@@ -55,7 +55,7 @@ char tweakNames[tweak_num][20] = {
  */
 
 
-// /!\ The line above is a copy of ilutweak.c line 7 keep those 2 in synch
+// /!\ The line above is a copy of tweak.c line 7 keep those 2 in synch
 // under it's a list of the same tweaks keep their numbers the same as in the array. It just there to keep the code human readable. But I suggest we also keep close track of where is the tweak and what it's suppose to do here...
 
  typedef enum tweakNo { 

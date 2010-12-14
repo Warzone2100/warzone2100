@@ -44,6 +44,7 @@
 #include "frend.h"		// frontend ids.
 #include "intimage.h"
 #include "multiplay.h"
+#include "tweak.h"
 
 //used to calc the research power
 #define RESEARCH_FACTOR		32
@@ -520,10 +521,11 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 
 		//set the researchPoints
 		ASSERT_OR_RETURN(false, resPoints <= UWORD_MAX, "Research Points too high for research topic - %s ", getResearchName(pResearch));
-		pResearch->researchPoints = (UWORD)resPoints;
+		pResearch->researchPoints = pow( (UWORD)resPoints , tweakData[0][tweak_res_exp] )/pow(3600,(tweakData[0][tweak_res_exp]-1));
+		pResearch->researchPoints*= tweakData[0][tweak_res_fact];
 
 		//set the research power
-		pResearch->researchPower = pResearch->researchPoints / RESEARCH_FACTOR;
+		pResearch->researchPower = pResearch->researchPoints / RESEARCH_FACTOR * tweakData[0][tweak_res_power];
 		if (pResearch->researchPower > RESEARCH_MAX_POWER)
 		{
 			pResearch->researchPower = RESEARCH_MAX_POWER;

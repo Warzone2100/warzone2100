@@ -2,14 +2,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WZ2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-12-11 15:59+0100\n"
+"POT-Creation-Date: 2010-12-14 14:22-0500\n"
 "PO-Revision-Date: \n"
 "Last-Translator: metalwarrior95 <metalwarrioroften@gmail.com>\n"
 "Language-Team: \n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
 "X-Poedit-Language: Croatian\n"
 
 #: data/base/messages/messages.rmsg:4
@@ -12389,68 +12389,68 @@ msgstr "Jedinica Izgubljena!"
 msgid "Structure Restored"
 msgstr "Građevina Restaurirana"
 
-#: src/droid.c:2979
+#: src/droid.c:2980
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:2992
+#: src/droid.c:2993
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3005
+#: src/droid.c:3006
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3009
+#: src/droid.c:3010
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3301
+#: src/droid.c:3302
 msgid "Rookie"
 msgstr "Novak"
 
-#: src/droid.c:3302
+#: src/droid.c:3303
 msgctxt "rank"
 msgid "Green"
 msgstr ""
 
-#: src/droid.c:3303
+#: src/droid.c:3304
 msgid "Trained"
 msgstr "Treniran"
 
-#: src/droid.c:3304
+#: src/droid.c:3305
 msgid "Regular"
 msgstr "Normalan"
 
-#: src/droid.c:3305
+#: src/droid.c:3306
 msgid "Professional"
 msgstr "Profesionalac"
 
-#: src/droid.c:3306
+#: src/droid.c:3307
 msgid "Veteran"
 msgstr "Veteran"
 
-#: src/droid.c:3307
+#: src/droid.c:3308
 msgid "Elite"
 msgstr "Elita"
 
-#: src/droid.c:3308
+#: src/droid.c:3309
 msgid "Special"
 msgstr "Specijal"
 
-#: src/droid.c:3309
+#: src/droid.c:3310
 msgid "Hero"
 msgstr "Junak"
 
@@ -13060,7 +13060,7 @@ msgstr "Igra se ne može nastaviti ako nema hosta."
 msgid "-->  QUIT  <--"
 msgstr "---> IZLAZ <---"
 
-#: src/init.c:389
+#: src/init.c:391
 #, c-format
 msgid ""
 "The required mod could not be loaded: %s\n"
@@ -14455,16 +14455,16 @@ msgstr "Cijan"
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr ""
 
-#: src/research.c:1737
+#: src/research.c:1738
 #, c-format
 msgid "Research completed: %s"
 msgstr "Istraživanje završeno: %s"
 
-#: src/research.c:1742
+#: src/research.c:1743
 msgid "Research Completed"
 msgstr "Istraživanje završeno"
 
-#: src/research.c:2563
+#: src/research.c:2564
 msgid "Research Award"
 msgstr "Nagrada hakiranog Istraživačkog centra"
 

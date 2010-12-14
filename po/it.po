@@ -11,14 +11,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-12-11 15:59+0100\n"
+"POT-Creation-Date: 2010-12-14 14:22-0500\n"
 "PO-Revision-Date: 2010-11-30 15:55+0100\n"
 "Last-Translator: Cristian Odorico <generalchris@hotmail.it>\n"
 "Language-Team: Italian <warzone-dev@gna.org>\n"
-"Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: it\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Launchpad-Export-Date: 2008-09-05 09:48+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
@@ -12364,68 +12364,68 @@ msgstr "Unità Persa!"
 msgid "Structure Restored"
 msgstr "Struttura Riparata"
 
-#: src/droid.c:2979
+#: src/droid.c:2980
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Gruppo %u selezionato - %u Unità"
 msgstr[1] "Gruppo %u selezionato - %u Unità"
 
-#: src/droid.c:2992
+#: src/droid.c:2993
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u unità assegnata al Gruppo %u"
 msgstr[1] "%u unità assegnata al Gruppo %u"
 
-#: src/droid.c:3005
+#: src/droid.c:3006
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Visuale Centrata sul Gruppo %u - %u Unit"
 msgstr[1] "Visuale Centrata sul gruppo %u - %u Unità"
 
-#: src/droid.c:3009
+#: src/droid.c:3010
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Visuale affiancata al Gruppo %u - %u Unità"
 msgstr[1] "Visuale affiancata al Gruppo %u - %u Unità"
 
-#: src/droid.c:3301
+#: src/droid.c:3302
 msgid "Rookie"
 msgstr "Coscritta"
 
-#: src/droid.c:3302
+#: src/droid.c:3303
 msgctxt "rank"
 msgid "Green"
 msgstr "Inesperta"
 
-#: src/droid.c:3303
+#: src/droid.c:3304
 msgid "Trained"
 msgstr "Addestrata"
 
-#: src/droid.c:3304
+#: src/droid.c:3305
 msgid "Regular"
 msgstr "Normale"
 
-#: src/droid.c:3305
+#: src/droid.c:3306
 msgid "Professional"
 msgstr "Professionale"
 
-#: src/droid.c:3306
+#: src/droid.c:3307
 msgid "Veteran"
 msgstr "Veterana"
 
-#: src/droid.c:3307
+#: src/droid.c:3308
 msgid "Elite"
 msgstr "Elite"
 
-#: src/droid.c:3308
+#: src/droid.c:3309
 msgid "Special"
 msgstr "Speciale"
 
-#: src/droid.c:3309
+#: src/droid.c:3310
 msgid "Hero"
 msgstr "Eroe"
 
@@ -13027,7 +13027,7 @@ msgstr "Il gioco non può continuare senza l'host."
 msgid "-->  QUIT  <--"
 msgstr "--> ABBANDONA <--"
 
-#: src/init.c:389
+#: src/init.c:391
 #, c-format
 msgid ""
 "The required mod could not be loaded: %s\n"
@@ -14411,16 +14411,16 @@ msgstr "Azzurro"
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr "Non possiamo farlo! Dobbiamo essere un'unità Cyborg per usare un trasporto Cyborg!"
 
-#: src/research.c:1737
+#: src/research.c:1738
 #, c-format
 msgid "Research completed: %s"
 msgstr "Ricerca Completata: %s"
 
-#: src/research.c:1742
+#: src/research.c:1743
 msgid "Research Completed"
 msgstr "Ricerca Completata"
 
-#: src/research.c:2563
+#: src/research.c:2564
 msgid "Research Award"
 msgstr "Premio della Ricerca"
 

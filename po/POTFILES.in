@@ -257,6 +257,7 @@ src/e3demo.c
 src/edit3d.c
 src/effects.c
 src/feature.c
+src/force-linker.cpp
 src/fpath.c
 src/frontend.c
 src/function.c
@@ -326,6 +327,7 @@ src/terrain.c
 src/text.c
 src/texture.c
 src/transporter.c
+src/tweak.c
 src/version.c
 src/visibility.c
 src/warcam.c
