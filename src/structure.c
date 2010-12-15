@@ -2236,8 +2236,8 @@ static BOOL setFunctionality(STRUCTURE	*psBuilding, STRUCTURE_TYPE functionType)
 			}
 
 			// initialise the assembly point position
-			x = map_coord(psBuilding->pos.x + 256);
-			y = map_coord(psBuilding->pos.y + 256);
+			x = map_coord(psBuilding->pos.x + (getStructureWidth(psBuilding)   + 1) * TILE_UNITS/2);
+			y = map_coord(psBuilding->pos.y + (getStructureBreadth(psBuilding) + 1) * TILE_UNITS/2);
 
 			// Set the assembly point
 			setAssemblyPoint(psFactory->psAssemblyPoint, world_coord(x), world_coord(y), psBuilding->player, true);
@@ -2328,8 +2328,8 @@ static BOOL setFunctionality(STRUCTURE	*psBuilding, STRUCTURE_TYPE functionType)
 			}
 
 			// Initialise the assembly point
-			x = map_coord(psBuilding->pos.x+256);
-			y = map_coord(psBuilding->pos.y+256);
+			x = map_coord(psBuilding->pos.x + (getStructureWidth(psBuilding)   + 1) * TILE_UNITS/2);
+			y = map_coord(psBuilding->pos.y + (getStructureBreadth(psBuilding) + 1) * TILE_UNITS/2);
 
 			// Set the assembly point
 			setAssemblyPoint(psRepairFac->psDeliveryPoint, world_coord(x),
