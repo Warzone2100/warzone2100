@@ -27,7 +27,6 @@
 #include "file.h"
 
 #define REGISTRY_HASH_SIZE	32
-#define MAXLINESIZE 255
 
 typedef struct	regkey_t
 {
@@ -130,17 +129,62 @@ static void registry_set_key(const char* key, const char* value)
 	regkey->value = strdup(value);
 }
 
+static char *configUnescape(char *begin, char *end)
+{
+	char *ret = (char *)malloc(end - begin + 1);
+	char *w = ret;
+	while (begin != end)
+	{
+		uint8_t ch = *begin++;
+		if (ch == '\\')
+		{
+			int n;
+			ch = 0;
+			for (n = 0; n < 3 && begin != end; ++n)
+			{
+				ch *= 8;
+				ch += *begin++ - '0';
+			}
+		}
+		*w++ = ch;
+	}
+	*w++ = '\0';
+
+	return ret;
+}
+
+static char *configEscape(char *begin, char *end)
+{
+	char *ret = (char *)malloc((end - begin)*4 + 1);
+	char *w = ret;
+	while (begin != end)
+	{
+		uint8_t ch = *begin++;
+		if (ch == '\\' || ch == '=' || ch < ' ')
+		{
+			*w++ = '\\';
+			*w++ = '0' + ch/64;
+			*w++ = '0' + ch/8%8;
+			*w++ = '0' + ch%8;
+			continue;
+		}
+		*w++ = ch;
+	}
+	*w++ = '\0';
+
+	return ret;
+}
+
 static bool registry_load(const char* filename)
 {
-	char buffer[MAXLINESIZE + 1];
-	char *bptr = NULL, *bufstart = NULL;
-	char key[MAXLINESIZE];
-	int l; // sscanf expects an int to receive %n, not an unsigned int
+	char *bufBegin = NULL, *bufEnd;
+	char *lineEnd;
 	UDWORD filesize;
 
 	debug(LOG_WZ, "Loading the registry from [directory: %s] %s", PHYSFS_getRealDir(filename), filename);
 	if (PHYSFS_exists(filename)) {
-		if (!loadFile(filename, &bptr, &filesize)) {
+		if (!loadFile(filename, &bufBegin, &filesize))
+		{
 			return false;           // happens only in NDEBUG case
 		}
 	} else {
@@ -149,67 +193,77 @@ static bool registry_load(const char* filename)
 	}
 
 	debug(LOG_WZ, "Parsing the registry from [directory: %s] %s", PHYSFS_getRealDir(filename) , filename);
-	if (filesize == 0 || strlen(bptr) == 0) {
+	if (filesize == 0)
+	{
 		debug(LOG_WARNING, "Registry file %s is empty!", filename);
 		return false;
 	}
-	bufstart = bptr;
-	bptr[filesize - 1] = '\0'; // make sure it is terminated
-	while (*bptr != '\0') {
-		int count = 0;
-
-		/* Put a line into buffer */
-		while (*bptr != '\0' && *bptr != '\n' && count < MAXLINESIZE)
+	bufEnd = bufBegin + filesize;
+	lineEnd = bufBegin;
+	while (lineEnd != bufEnd)
+	{
+		char *lineBegin = lineEnd, *split;
+		for (lineEnd = lineBegin; lineEnd != bufEnd && (uint8_t)*lineEnd != '\n'; ++lineEnd)
+		{}
+		for (split = lineBegin; split != lineEnd && (uint8_t)*split != '='; ++split)
+		{}
+		if (lineBegin != split && split != lineEnd)  // Key may not be empty, but value may be.
 		{
-			buffer[count] = *bptr;
-			bptr++;
-			count++;
+			char *key = configUnescape(lineBegin, split);
+			char *value = configUnescape(split + 1, lineEnd);
+			registry_set_key(key, value);
+			free(key);
+			free(value);
 		}
-		if (*bptr != '\0') {
-			bptr++;	// skip EOL
-		}
-		buffer[count] = '\0';
-		if (sscanf(buffer, " %[^=] = %n", key, &l) == 1) {
-			unsigned int i;
 
-			for (i = l;; ++i) {
-				if (buffer[i] == '\0') {
-					break;
-				} else if (buffer[i] < ' ') {
-					buffer[i] = '\0';
-					break;
-				}
-			}
-			registry_set_key(key, buffer + l);
+		if (lineEnd != bufEnd)
+		{
+			++lineEnd;
 		}
 	}
-	free(bufstart);
+	free(bufBegin);
 	return true;
 }
 
 static bool registry_save(const char* filename)
 {
-	char buffer[MAXLINESIZE * ARRAY_SIZE(registry)];
+	char *buffer = NULL;
+	size_t w = 0;
+	size_t bufferSize = 0;
 	unsigned int i;
-	int count = 0;
 
 	debug(LOG_WZ, "Saving the registry to [directory: %s] %s", PHYSFS_getRealDir(filename), filename);
 	for (i = 0; i < ARRAY_SIZE(registry); ++i)
 	{
 		regkey_t *j;
 
-		for (j = registry[i]; j != NULL; j = j->next) {
-			char linebuf[MAXLINESIZE];
+		for (j = registry[i]; j != NULL; j = j->next)
+		{
+			char *key   = configEscape(j->key,   j->key   + strlen(j->key));
+			char *value = configEscape(j->value, j->value + strlen(j->value));
+			unsigned keySize = strlen(key);
+			unsigned valueSize = strlen(value);
 
-			snprintf(linebuf, sizeof(linebuf), "%s=%s\n", j->key, j->value);
-			assert(strlen(linebuf) > 0 && strlen(linebuf) < MAXLINESIZE);
-			assert(count + strlen(linebuf) < MAXLINESIZE * ARRAY_SIZE(registry));
-			memcpy(buffer + count, linebuf, strlen(linebuf));
-			count += strlen(linebuf);
+			if (bufferSize - w < keySize + 1 + valueSize + 1)
+			{
+				bufferSize = bufferSize*2 + 1000;
+				buffer = (char *)realloc(buffer, bufferSize);
+			}
+
+			// If buffer was a std::string: buffer += key; buffer += '='; buffer += valueSize; buffer += '\n';
+			memcpy(buffer + w, key, keySize);
+			w += keySize;
+			buffer[w++] = '=';
+			memcpy(buffer + w, value, valueSize);
+			w += valueSize;
+			buffer[w++] = '\n';
+
+			free(key);
+			free(value);
 		}
 	}
 
-	return saveFile(filename, buffer, count);
+	return saveFile(filename, buffer, w);
 }
 
 void setRegistryFilePath(const char* fileName)
