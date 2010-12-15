@@ -391,6 +391,16 @@ void ProcessRadarInput(void)
 
 			if (mousePressed(MOUSE_ORDER) || (mousePressed(MOUSE_MMB) && keyDown(KEY_LALT)))
 			{
+				if (mousePressed(MOUSE_ORDER))
+				{
+					x = mousePressPos(MOUSE_ORDER).x;
+					y = mousePressPos(MOUSE_ORDER).y;
+				}
+				else
+				{
+					x = mousePressPos(MOUSE_MMB).x;
+					y = mousePressPos(MOUSE_MMB).y;
+				}
 				if(driveModeActive()) {
 					driveProcessRadarInput(x,y);
 				} else {
@@ -430,6 +440,9 @@ void ProcessRadarInput(void)
 			}
 			else if (mousePressed(MOUSE_SELECT))
 			{
+				x = mousePressPos(MOUSE_SELECT).x;
+				y = mousePressPos(MOUSE_SELECT).y;
+
 				CalcRadarPosition(x, y, &PosX, &PosY);
 
 				if(bInstantRadarJump)
