@@ -327,43 +327,6 @@ void newGameInitPower(void)
 	}
 }
 
-STRUCTURE *getRExtractor(STRUCTURE *psStruct)
-{
-STRUCTURE	*psCurr;
-STRUCTURE	*psFirst;
-BOOL		bGonePastIt;
-
-	for(psCurr = apsStructLists[selectedPlayer],psFirst = NULL,bGonePastIt = false;
-		psCurr; psCurr = psCurr->psNext)
-	{
-		if( psCurr->pStructureType->type == REF_RESOURCE_EXTRACTOR )
-		{
-
-			if(!psFirst)
-			{
-				psFirst = psCurr;
-			}
-
-			if(!psStruct)
-			{
-				return(psCurr);
-			}
-			else if(psCurr!=psStruct && bGonePastIt)
-			{
-				return(psCurr);
-			}
-
-			if(psCurr==psStruct)
-			{
-				bGonePastIt = true;
-			}
-
-
-		}
-	}
-	return(psFirst);
-}
-
 /*defines which structure types draw power - returns true if use power*/
 BOOL structUsesPower(STRUCTURE *psStruct)
 {

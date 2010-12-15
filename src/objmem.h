@@ -36,8 +36,9 @@ extern DROID			*apsDroidLists[MAX_PLAYERS];
 extern STRUCTURE		*apsStructLists[MAX_PLAYERS];
 extern FEATURE			*apsFeatureLists[MAX_PLAYERS];
 extern FLAG_POSITION		*apsFlagPosLists[MAX_PLAYERS];
+extern STRUCTURE		*apsExtractorLists[MAX_PLAYERS];
 extern BASE_OBJECT		*apsSensorList[1];
-extern BASE_OBJECT		*apsOilList[1];
+extern FEATURE			*apsOilList[1];
 
 /* The list of destroyed objects */
 extern BASE_OBJECT	*psDestroyedObj;

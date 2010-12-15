@@ -1576,19 +1576,25 @@ void	kf_ToggleProximitys( void )
 // --------------------------------------------------------------------------
 void	kf_JumpToResourceExtractor( void )
 {
-STRUCTURE	*psStruct;
-SDWORD	xJump,yJump;
+	int xJump, yJump;
 
-	psStruct = getRExtractor(psOldRE);
-	if(psStruct)
+	if (psOldRE && psOldRE->psNextFunc)
 	{
-		xJump = (psStruct->pos.x - ((visibleTiles.x/2)*TILE_UNITS));
-		yJump = (psStruct->pos.y - ((visibleTiles.y/2)*TILE_UNITS));
+		psOldRE = psOldRE->psNextFunc;
+	}
+	else
+	{
+		psOldRE = apsExtractorLists[selectedPlayer];
+	}
+
+	if (psOldRE)
+	{
+		xJump = (psOldRE->pos.x - ((visibleTiles.x / 2) * TILE_UNITS));
+		yJump = (psOldRE->pos.y - ((visibleTiles.y / 2) * TILE_UNITS));
 		player.p.x = xJump;
 		player.p.z = yJump;
 		player.r.y = 0; // face north
-		setViewPos(map_coord(psStruct->pos.x), map_coord(psStruct->pos.y), true);
-		psOldRE = psStruct;
+		setViewPos(map_coord(psOldRE->pos.x), map_coord(psOldRE->pos.y), true);
 	}
 	else
 	{

@@ -5813,11 +5813,8 @@ void checkForResExtractors(STRUCTURE *psBuilding)
 	//check capacity against number of filled slots
 	if (slot < NUM_POWER_MODULES)
 	{
-		for (psCurr = apsStructLists[psBuilding->player]; psCurr != NULL;
-			psCurr = psCurr->psNext)
+		for (psCurr = apsExtractorLists[psBuilding->player]; psCurr != NULL; psCurr = psCurr->psNextFunc)
 		{
-			if (psCurr->pStructureType->type == REF_RESOURCE_EXTRACTOR)
-			{
 				psResExtractor = &psCurr->pFunctionality->resourceExtractor;
 
 				//check not connected and power left and built!
@@ -5846,7 +5843,6 @@ void checkForResExtractors(STRUCTURE *psBuilding)
 						break;
 					}
 				}
-			}
 		}
 	}
 }
@@ -5961,14 +5957,10 @@ void releaseResExtractor(STRUCTURE *psRelease)
 	psRelease->pFunctionality->resourceExtractor.psPowerGen = NULL;
 
 	//there may be spare resource extractors
-	for (psCurr = apsStructLists[psRelease->player]; psCurr != NULL; psCurr =
-		psCurr->psNext)
+	for (psCurr = apsExtractorLists[psRelease->player]; psCurr != NULL; psCurr = psCurr->psNextFunc)
 	{
 		//check not connected and power left and built!
-		if (psCurr->pStructureType->type == REF_RESOURCE_EXTRACTOR
-		 && psCurr != psRelease
-		 && !psCurr->pFunctionality->resourceExtractor.active
-		 && psCurr->status == SS_BUILT)
+		if (psCurr != psRelease && !psCurr->pFunctionality->resourceExtractor.active && psCurr->status == SS_BUILT)
 		{
 			checkForPowerGen(psCurr);
 		}

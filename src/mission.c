@@ -251,6 +251,7 @@ void initMission(void)
 		mission.apsDroidLists[inc] = NULL;
 		mission.apsFeatureLists[inc] = NULL;
 		mission.apsFlagPosLists[inc] = NULL;
+		mission.apsExtractorLists[inc] = NULL;
 		apsLimboDroids[inc] = NULL;
 	}
 	mission.apsSensorList[0] = NULL;
@@ -324,6 +325,8 @@ BOOL missionShutDown(void)
 			mission.apsFeatureLists[inc] = NULL;
 			apsFlagPosLists[inc] = mission.apsFlagPosLists[inc];
 			mission.apsFlagPosLists[inc] = NULL;
+			apsExtractorLists[inc] = mission.apsExtractorLists[inc];
+			mission.apsExtractorLists[inc] = NULL;
 		}
 		apsSensorList[0] = mission.apsSensorList[0];
 		apsOilList[0] = mission.apsOilList[0];
@@ -803,6 +806,7 @@ static void saveMissionData(void)
 		mission.apsDroidLists[inc] = apsDroidLists[inc];
 		mission.apsFeatureLists[inc] = apsFeatureLists[inc];
 		mission.apsFlagPosLists[inc] = apsFlagPosLists[inc];
+		mission.apsExtractorLists[inc] = apsExtractorLists[inc];
 	}
 	mission.apsSensorList[0] = apsSensorList[0];
 	mission.apsOilList[0] = apsOilList[0];
@@ -871,6 +875,9 @@ void restoreMissionData(void)
 
 		apsFlagPosLists[inc] = mission.apsFlagPosLists[inc];
 		mission.apsFlagPosLists[inc] = NULL;
+
+		apsExtractorLists[inc] = mission.apsExtractorLists[inc];
+		mission.apsExtractorLists[inc] = NULL;
 	}
 	apsSensorList[0] = mission.apsSensorList[0];
 	apsOilList[0] = mission.apsOilList[0];
@@ -1460,13 +1467,16 @@ void swapMissionPointers(void)
 		pVoid = (void*)apsFlagPosLists[inc];
 		apsFlagPosLists[inc] = mission.apsFlagPosLists[inc];
 		mission.apsFlagPosLists[inc] = (FLAG_POSITION *)pVoid;
+		pVoid = (void*)apsExtractorLists[inc];
+		apsExtractorLists[inc] = mission.apsExtractorLists[inc];
+		mission.apsExtractorLists[inc] = (STRUCTURE *)pVoid;
 	}
 	pVoid = (void*)apsSensorList[0];
 	apsSensorList[0] = mission.apsSensorList[0];
 	mission.apsSensorList[0] = (BASE_OBJECT *)pVoid;
 	pVoid = (void*)apsOilList[0];
 	apsOilList[0] = mission.apsOilList[0];
-	mission.apsOilList[0] = (BASE_OBJECT *)pVoid;
+	mission.apsOilList[0] = (FEATURE *)pVoid;
 }
 
 void endMission(void)
