@@ -27,7 +27,6 @@
 #include "file.h"
 
 #define REGISTRY_HASH_SIZE	32
-#define MAXLINESIZE 255
 
 typedef struct	regkey_t
 {
@@ -38,70 +37,45 @@ typedef struct	regkey_t
 static regkey_t* registry[REGISTRY_HASH_SIZE] = { NULL };
 static char      RegFilePath[PATH_MAX];
 
-//
-// =======================================================================================================================
-// =======================================================================================================================
-//
-void registry_clear( void )
+void registry_clear()
 {
-	//~~~~~~~~~~~~~~
 	unsigned int	i;
-	//~~~~~~~~~~~~~~
 
-	for ( i = 0; i < REGISTRY_HASH_SIZE; ++i )
+	for (i = 0; i < ARRAY_SIZE(registry); ++i)
 	{
-		//~~~~~~~~~~~~~
-		regkey_t	*j;
-		regkey_t	*tmp;
-		//~~~~~~~~~~~~~
+		regkey_t* j = registry[i];
 
-		for (j = registry[i]; j != NULL; j = tmp)
+		while (j)
 		{
-			tmp = j->next;
-			free(j->key);
-			free(j->value);
-			free(j);
+			regkey_t* const toDelete = j;
+			j = j->next;
+
+			free(toDelete->key);
+			free(toDelete->value);
+			free(toDelete);
 		}
 
 		registry[i] = NULL;
 	}
 }
 
-//
-// =======================================================================================================================
-// =======================================================================================================================
-//
-static unsigned int registry_hash( const char *s )
+static unsigned int registry_hash(const char* s)
 {
-	//~~~~~~~~~~~~~~~~~~
-	unsigned int	i;
-	unsigned int	h = 0;
-	//~~~~~~~~~~~~~~~~~~
+	unsigned int h = 0;
 
-	if ( s != NULL )
-	{
-		for ( i = 0; s[i] != '\0'; ++i )
-		{
-			h += s[i];
-		}
-	}
+	while (s && *s)
+		h += *s++;
 
-	return h % REGISTRY_HASH_SIZE;
+	return h % ARRAY_SIZE(registry);
 }
 
-//
-// =======================================================================================================================
-// =======================================================================================================================
-//
-static regkey_t *registry_find_key( const char *k )
+static regkey_t* registry_find_key(const char* key)
 {
-	//~~~~~~~~~~~
-	regkey_t	*i;
-	//~~~~~~~~~~~
+	regkey_t* i;
 
-	for ( i = registry[registry_hash(k)]; i != NULL; i = i->next )
+	for (i = registry[registry_hash(key)]; i != NULL; i = i->next)
 	{
-		if ( !strcmp(k, i->key) )
+		if (!strcmp(key, i->key))
 		{
 			return i;
 		}
@@ -110,79 +84,107 @@ static regkey_t *registry_find_key( const char *k )
 	return NULL;
 }
 
-//
-// =======================================================================================================================
-// =======================================================================================================================
-//
-static char *registry_get_key( const char *k )
+static char* registry_get_by_key(const char* key)
 {
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	regkey_t	*key = registry_find_key( k );
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	regkey_t* regkey = registry_find_key(key);
 
-	if ( key == NULL )
+	if (regkey == NULL)
 	{
-		//
-		// printf("registry_get_key(%s) -> key not found\n", k);
-		//
+#if 0
+		debug(LOG_NEVER, "Key \"%s\" not found", key);
+#endif
 		return NULL;
 	}
 	else
 	{
-		//
-		// printf("registry_get_key(%s) -> %s\n", k, key->value);
-		//
-		return key->value;
+#if 0
+		debug(LOG_NEVER, "Key \"%s\" has value \"%s\"", key, regkey->value);
+#endif
+		return regkey->value;
 	}
 }
 
-//
-// =======================================================================================================================
-// =======================================================================================================================
-//
-static void registry_set_key( const char *k, const char *v )
+static void registry_set_key(const char* key, const char* value)
 {
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	regkey_t	*key = registry_find_key( k );
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	regkey_t* regkey = registry_find_key(key);
 
-	//
-	// printf("registry_set_key(%s, %s)\n", k, v);
-	//
-	if ( key == NULL )
+#if 0
+	debug(LOG_NEVER, "Set key \"%s\" to value \"%s\"", key, value);
+#endif
+	if (regkey == NULL)
 	{
-		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-		unsigned int	h = registry_hash( k );
-		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		// Add a new bucked to the hashtable for the given key
+		const unsigned int h = registry_hash(key);
 
-		key = (regkey_t *) malloc( sizeof(regkey_t) );
-		key->key = strdup( k );
-		key->next = registry[h];
-		registry[h] = key;
+		regkey = (regkey_t *)malloc(sizeof(*regkey));
+		regkey->key = strdup(key);
+		regkey->next = registry[h];
+		registry[h] = regkey;
 	}
 	else
 	{
-		free( key->value );
+		free(regkey->value);
 	}
 
-	key->value = strdup( v );
+	regkey->value = strdup(value);
 }
 
-//
-// =======================================================================================================================
-// =======================================================================================================================
-//
-static bool registry_load( const char *filename )
+static char *configUnescape(char *begin, char *end)
 {
-	char buffer[MAXLINESIZE + 1];
-	char *bptr = NULL, *bufstart = NULL;
-	char key[MAXLINESIZE];
-	int l; // sscanf expects an int to receive %n, not an unsigned int
+	char *ret = (char *)malloc(end - begin + 1);
+	char *w = ret;
+	while (begin != end)
+	{
+		uint8_t ch = *begin++;
+		if (ch == '\\')
+		{
+			int n;
+			ch = 0;
+			for (n = 0; n < 3 && begin != end; ++n)
+			{
+				ch *= 8;
+				ch += *begin++ - '0';
+			}
+		}
+		*w++ = ch;
+	}
+	*w++ = '\0';
+
+	return ret;
+}
+
+static char *configEscape(char *begin, char *end)
+{
+	char *ret = (char *)malloc((end - begin)*4 + 1);
+	char *w = ret;
+	while (begin != end)
+	{
+		uint8_t ch = *begin++;
+		if (ch == '\\' || ch == '=' || ch < ' ')
+		{
+			*w++ = '\\';
+			*w++ = '0' + ch/64;
+			*w++ = '0' + ch/8%8;
+			*w++ = '0' + ch%8;
+			continue;
+		}
+		*w++ = ch;
+	}
+	*w++ = '\0';
+
+	return ret;
+}
+
+static bool registry_load(const char* filename)
+{
+	char *bufBegin = NULL, *bufEnd;
+	char *lineEnd;
 	UDWORD filesize;
 
 	debug(LOG_WZ, "Loading the registry from [directory: %s] %s", PHYSFS_getRealDir(filename), filename);
 	if (PHYSFS_exists(filename)) {
-		if (!loadFile(filename, &bptr, &filesize)) {
+		if (!loadFile(filename, &bufBegin, &filesize))
+		{
 			return false;           // happens only in NDEBUG case
 		}
 	} else {
@@ -191,73 +193,77 @@ static bool registry_load( const char *filename )
 	}
 
 	debug(LOG_WZ, "Parsing the registry from [directory: %s] %s", PHYSFS_getRealDir(filename) , filename);
-	if (filesize == 0 || strlen(bptr) == 0) {
+	if (filesize == 0)
+	{
 		debug(LOG_WARNING, "Registry file %s is empty!", filename);
 		return false;
 	}
-	bufstart = bptr;
-	bptr[filesize - 1] = '\0'; // make sure it is terminated
-	while (*bptr != '\0') {
-		int count = 0;
-
-		/* Put a line into buffer */
-		while (*bptr != '\0' && *bptr != '\n' && count < MAXLINESIZE)
+	bufEnd = bufBegin + filesize;
+	lineEnd = bufBegin;
+	while (lineEnd != bufEnd)
+	{
+		char *lineBegin = lineEnd, *split;
+		for (lineEnd = lineBegin; lineEnd != bufEnd && (uint8_t)*lineEnd != '\n'; ++lineEnd)
+		{}
+		for (split = lineBegin; split != lineEnd && (uint8_t)*split != '='; ++split)
+		{}
+		if (lineBegin != split && split != lineEnd)  // Key may not be empty, but value may be.
 		{
-			buffer[count] = *bptr;
-			bptr++;
-			count++;
+			char *key = configUnescape(lineBegin, split);
+			char *value = configUnescape(split + 1, lineEnd);
+			registry_set_key(key, value);
+			free(key);
+			free(value);
 		}
-		if (*bptr != '\0') {
-			bptr++;	// skip EOL
-		}
-		buffer[count] = '\0';
-		if (sscanf(buffer, " %[^=] = %n", key, &l) == 1) {
-			unsigned int i;
 
-			for (i = l;; ++i) {
-				if (buffer[i] == '\0') {
-					break;
-				} else if (buffer[i] < ' ') {
-					buffer[i] = '\0';
-					break;
-				}
-			}
-			registry_set_key(key, buffer + l);
+		if (lineEnd != bufEnd)
+		{
+			++lineEnd;
 		}
 	}
-	free(bufstart);
+	free(bufBegin);
 	return true;
 }
 
-//
-// =======================================================================================================================
-// =======================================================================================================================
-//
-static bool registry_save( const char *filename )
+static bool registry_save(const char* filename)
 {
-	char buffer[MAXLINESIZE * REGISTRY_HASH_SIZE];
+	char *buffer = NULL;
+	size_t w = 0;
+	size_t bufferSize = 0;
 	unsigned int i;
-	int count = 0;
 
 	debug(LOG_WZ, "Saving the registry to [directory: %s] %s", PHYSFS_getRealDir(filename), filename);
-	for (i = 0; i < REGISTRY_HASH_SIZE; ++i) {
+	for (i = 0; i < ARRAY_SIZE(registry); ++i)
+	{
 		regkey_t *j;
 
-		for (j = registry[i]; j != NULL; j = j->next) {
-			char linebuf[MAXLINESIZE];
+		for (j = registry[i]; j != NULL; j = j->next)
+		{
+			char *key   = configEscape(j->key,   j->key   + strlen(j->key));
+			char *value = configEscape(j->value, j->value + strlen(j->value));
+			unsigned keySize = strlen(key);
+			unsigned valueSize = strlen(value);
 
-			snprintf(linebuf, sizeof(linebuf), "%s=%s\n", j->key, j->value);
-			assert(strlen(linebuf) > 0 && strlen(linebuf) < MAXLINESIZE);
-			assert(count + strlen(linebuf) < MAXLINESIZE * REGISTRY_HASH_SIZE);
-			memcpy(buffer + count, linebuf, strlen(linebuf));
-			count += strlen(linebuf);
+			if (bufferSize - w < keySize + 1 + valueSize + 1)
+			{
+				bufferSize = bufferSize*2 + 1000;
+				buffer = (char *)realloc(buffer, bufferSize);
+			}
+
+			// If buffer was a std::string: buffer += key; buffer += '='; buffer += valueSize; buffer += '\n';
+			memcpy(buffer + w, key, keySize);
+			w += keySize;
+			buffer[w++] = '=';
+			memcpy(buffer + w, value, valueSize);
+			w += valueSize;
+			buffer[w++] = '\n';
+
+			free(key);
+			free(value);
 		}
 	}
 
-	if (!saveFile(filename, buffer, count)) {
-		return false; // only in NDEBUG case
-	}
-	return true;
+	return saveFile(filename, buffer, w);
 }
 
 void setRegistryFilePath(const char* fileName)
@@ -265,101 +271,61 @@ void setRegistryFilePath(const char* fileName)
 	sstrcpy(RegFilePath, fileName);
 }
 
-///
-// =======================================================================================================================
-// =======================================================================================================================
-//
-bool openWarzoneKey( void )
+bool openWarzoneKey()
 {
-	//~~~~~~~~~~~~~~~~~~~~~
 	static bool done = false;
-	//~~~~~~~~~~~~~~~~~~~~~
 
-	if ( done == false )
+	if (done == false)
 	{
-		registry_load( RegFilePath );
-		done = true;
+		done = registry_load(RegFilePath);
 	}
 
 	return true;
 }
 
-///
-// =======================================================================================================================
-// =======================================================================================================================
-//
-bool closeWarzoneKey( void )
+bool closeWarzoneKey()
 {
-	registry_save( RegFilePath );
-	return true;
+	return registry_save(RegFilePath);
 }
 
 /**
- * Read config setting pName into val
- * \param	*pName	Config setting
+ * Read config setting \c key into val
+ * \param	*key	Config setting
  * \param	*val	Place where to store the setting
  * \return	Whether we succeed to find the setting
  */
-bool getWarzoneKeyNumeric( const char *pName, SDWORD *val )
+bool getWarzoneKeyNumeric(const char* key, int* val)
 {
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	char	*value = registry_get_key( pName );
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	const char* const value = registry_get_by_key(key);
 
-	if ( value == NULL || sscanf(value, "%i", val) != 1 )
+	return (value != NULL
+	     && sscanf(value, "%i", val) == 1);
+}
+
+bool getWarzoneKeyString(const char* key, char* val)
+{
+	const char* const value = registry_get_by_key(key);
+
+	if (value == NULL)
 	{
 		return false;
 	}
-	else
-	{
-		return true;
-	}
-}
 
-///
-// =======================================================================================================================
-// =======================================================================================================================
-//
-bool getWarzoneKeyString( const char *pName, char *pString )
-{
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	char	*value = registry_get_key( pName );
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-	if ( value == NULL )
-	{
-		return false;
-	}
-	else
-	{
-		strcpy( pString, value );
-	}
-
+	strcpy(val, value);
 	return true;
 }
 
-///
-// =======================================================================================================================
-// =======================================================================================================================
-//
-bool setWarzoneKeyNumeric( const char *pName, SDWORD val )
+bool setWarzoneKeyNumeric(const char* key, int val)
 {
-	//~~~~~~~~~~~~
-	char	buf[32];
-	//~~~~~~~~~~~~
+	char* numBuf;
+	sasprintf(&numBuf, "%i", val);
 
-	snprintf(buf, sizeof(buf), "%i", val);
-
-	registry_set_key( pName, buf );
+	registry_set_key(key, numBuf);
 	return true;
 }
 
-///
-// =======================================================================================================================
-// =======================================================================================================================
-//
-bool setWarzoneKeyString( const char *pName, const char *pString )
+bool setWarzoneKeyString(const char* key, const char* val)
 {
-	registry_set_key( pName, pString );
+	registry_set_key(key, val);
 	return true;
 }
