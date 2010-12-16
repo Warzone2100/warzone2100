@@ -387,7 +387,7 @@ BOOL loadWeaponStats(const char *pWeaponData, UDWORD bufferSize)
 			&psStats->reloadTime, &psStats->damage, &psStats->radius,
 			&psStats->radiusHit, &psStats->radiusDamage, &psStats->incenTime,
 			&psStats->incenDamage, &psStats->incenRadius, &psStats->directLife,
-			&psStats->radiusLife, &psStats->flightSpeed, &psStats->indirectHeight,
+			&psStats->radiusLife, &psStats->flightSpeed, &dummyVal,
 			(char *)&fireOnMove, (char *)&weaponClass, (char *)&weaponSubClass, (char *)&movement, (char *)&weaponEffect,
 			&rotate, &maxElevation, &minElevation, (char *)&facePlayer, (char *)&faceInFlight,
 			&psStats->recoilValue, &psStats->minRange,	(char *)&lightWorld,

@@ -1,4 +1,24 @@
-SUBDIRS = build_tools win32 lib src data po doc icons pkg tests
+SUBDIRS = \
+	  build_tools/autorevision \
+	  win32 \
+	  lib/framework \
+	  lib/exceptionhandler \
+	  lib/script \
+	  lib/sequence \
+	  lib/iniparser \
+	  lib/ivis_common \
+	  lib/ivis_opengl \
+	  lib/gamelib \
+	  lib/sound \
+	  lib/netplay \
+	  lib/widget \
+	  src \
+	  data \
+	  po \
+	  doc \
+	  icons \
+	  pkg/nsis \
+	  tests
 
 dist_doc_DATA = \
 	AUTHORS \
@@ -23,3 +43,10 @@ EXTRA_DIST= \
 # get rid of SVN stuff in the tarball
 dist-hook:
 	rm -rf `find $(distdir) -type d -name .svn`
+
+# HACK Don't give make errors when switching between trunk and branches.
+# Works by finding the .deps/*.Po files which refer to source files that don't exist, and replacing them with a single dependency on the correct source file.
+.PHONY: fixbrokendeps
+fixbrokendeps:
+	$(srcdir)/fixbrokendependencies
+all: fixbrokendeps

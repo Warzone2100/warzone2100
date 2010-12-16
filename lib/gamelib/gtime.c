@@ -95,6 +95,9 @@ void gameTimeInit(void)
 	{
 		wantedLatencies[player] = 0;
 	}
+
+	// Don't let syncDebug from previous games cause a desynch dump at gameTime 102.
+	resetSyncDebug();
 }
 
 extern void setGameTime(uint32_t newGameTime)
@@ -246,6 +249,8 @@ void realTimeUpdate(void)
 	// Store the real time
 	deltaRealTime = currTime - realTime;
 	realTime += deltaRealTime;
+
+	deltaRealTime = MIN(deltaRealTime, GTIME_MAXFRAME);  // Don't scroll across the map suddenly, if computer freezes for a moment.
 
 	// Pre-calculate fraction used in timeAdjustedIncrement
 	realTimeFraction = (float)deltaRealTime / (float)GAME_TICKS_PER_SEC;

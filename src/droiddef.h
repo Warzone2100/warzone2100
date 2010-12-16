@@ -27,8 +27,10 @@
 #include "lib/gamelib/animobj.h"
 
 #include "stringdef.h"
+#include "actiondef.h"
 #include "basedef.h"
 #include "movedef.h"
+#include "orderdef.h"
 #include "statsdef.h"
 #include "weapondef.h"
 
@@ -87,7 +89,7 @@ typedef struct _component
 
 typedef struct _order_list
 {
-	SDWORD          order;
+	DROID_ORDER     order;
 	void*           psOrderTarget;  ///< this needs to cope with objects and stats
 	UWORD           x, y, x2, y2;   ///< line build requires two sets of coords
 	uint16_t        direction;      ///< Needed to align structures with viewport.
@@ -167,12 +169,12 @@ typedef struct DROID
 	struct _structure* psBaseStruct;                ///< a structure that this droid might be associated with. For VTOLs this is the rearming pad
 	// queued orders
 	SDWORD          listSize;
-	ORDER_LIST      asOrderList[ORDER_LIST_MAX];
-	ORDER_LIST      asOrderPending;
-	BOOL            waitingForOwnReceiveDroidInfoMessage;  ///< Set to true when processing a message from asOrderList, and reset to false when the message arrives.
+	ORDER_LIST      asOrderList[ORDER_LIST_MAX];    ///< The range [0; listSize - 1] corresponds to synchronised orders, and the range [listPendingBegin; listPendingEnd - 1] corresponds to the orders that will remain, once all orders are synchronised.
+	unsigned        listPendingBegin;               ///< Index of first order which will not be erased by a pending order. After all messages are processed, the orders in the range [listPendingBegin; listPendingEnd - 1] will remain.
+	unsigned        listPendingEnd;                 ///< Index of last order which might not yet have been synchronised, plus one.
 
 	/* Order data */
-	SDWORD          order;
+	DROID_ORDER     order;
 	UWORD           orderX, orderY;
 	UWORD           orderX2, orderY2;
 	uint16_t        orderDirection;
@@ -193,7 +195,7 @@ typedef struct DROID
 	UDWORD          secondaryOrder;
 
 	/* Action data */
-	SDWORD          action;
+	DROID_ACTION    action;
 	UDWORD          actionX, actionY;
 	BASE_OBJECT*    psActionTarget[DROID_MAXWEAPS]; ///< Action target object
 	UDWORD          actionStarted;                  ///< Game time action started

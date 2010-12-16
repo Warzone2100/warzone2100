@@ -419,9 +419,9 @@ int main(int argc, char **argv)
 
 	for (i = parse_args(argc, argv); i < argc; i++)
 	{
-		printf("Processing %s ", argv[i]);
+		if (verbose) printf("Processing %s ", argv[i]);
 		convert(argv[i]);
-		printf("\n");
+		if (verbose) printf("\n");
 	}
 
 	return 0;

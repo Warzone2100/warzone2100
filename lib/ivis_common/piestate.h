@@ -88,14 +88,13 @@ typedef struct	RENDER_STATE
 typedef enum
 {
 	TEXPAGE_NONE = -1,
-	TEXPAGE_FONT = -2
+	TEXPAGE_EXTERN = -2
 } TEXPAGE_TYPE;
 
 typedef enum
 {
 	SHADER_NONE,
-	SHADER_TCMASK,
-	SHADER_TCMASK_FOGGED,
+	SHADER_COMPONENT,
 	SHADER_MAX
 } SHADER_MODE;
 
@@ -137,12 +136,11 @@ extern void pie_ShowMouse(bool visible);
 /* Actually in piestate.c */
 
 // Shaders control center
-extern bool pie_GetShadersStatus(void);
-extern void pie_SetShadersStatus(bool);
 bool pie_LoadShaders(void);
 // Actual shaders (we do not want to export these calls)
 void pie_DeactivateShader(void);
-void pie_ActivateShader_TCMask(PIELIGHT teamcolour, SDWORD maskpage);
+void pie_ActivateShader_TCMask(PIELIGHT teamcolour, int maskpage);
+void pie_SetShaderStretchDepth(float stretch);
 
 /* Actually in piedraw.c */
 

@@ -251,11 +251,13 @@ static void SPinit(void)
 	game.skDiff[0] = UBYTE_MAX;
 	game.maxPlayers = MAX_PLAYERS;
 	// make sure we have a valid color choice for our SP game. Valid values are 0, 4-7
-	playercolor = getPlayerColour(0);
+	playercolor = war_GetSPcolor();
+
 	if (playercolor >= 1 && playercolor <= 3)
 	{
-		setPlayerColour(0,0);  // default is green
+		playercolor = 0;	// default is green
 	}
+	setPlayerColour(0, playercolor);
 }
 
 BOOL runSinglePlayerMenu(void)
@@ -1173,7 +1175,7 @@ static BOOL startGameOptionsMenu(void)
 	// FIXME: if playercolor = 1-3, then we Assert in widgSetButtonState() since we don't define FE_P1 - FE_P3
 	// I assume the reason is that in SP games, those are reserved for the AI?  Valid values are 0, 4-7.
 	// This is a workaround, until we find what is setting that to 1-3.  See configuration.c:701
-	playercolor = getPlayerColour(0);
+	playercolor = war_GetSPcolor();
 	if (playercolor >= 1 && playercolor <= 3)
 	{
 		playercolor = 0;
@@ -1277,7 +1279,7 @@ BOOL runGameOptionsMenu(void)
 		widgSetButtonState(psWScreen, FE_P5, 0);
 		widgSetButtonState(psWScreen, FE_P6, 0);
 		widgSetButtonState(psWScreen, FE_P7, 0);
-		setPlayerColour(0,0);
+		war_SetSPcolor(0);
 		break;
 	case FE_P4:
 		widgSetButtonState(psWScreen, FE_P0, 0);
@@ -1285,7 +1287,7 @@ BOOL runGameOptionsMenu(void)
 		widgSetButtonState(psWScreen, FE_P5, 0);
 		widgSetButtonState(psWScreen, FE_P6, 0);
 		widgSetButtonState(psWScreen, FE_P7, 0);
-		setPlayerColour(0,4);
+		war_SetSPcolor(4);
 		break;
 	case FE_P5:
 		widgSetButtonState(psWScreen, FE_P0, 0);
@@ -1293,7 +1295,7 @@ BOOL runGameOptionsMenu(void)
 		widgSetButtonState(psWScreen, FE_P5, WBUT_LOCK);
 		widgSetButtonState(psWScreen, FE_P6, 0);
 		widgSetButtonState(psWScreen, FE_P7, 0);
-		setPlayerColour(0,5);
+		war_SetSPcolor(5);
 		break;
 	case FE_P6:
 		widgSetButtonState(psWScreen, FE_P0, 0);
@@ -1301,7 +1303,7 @@ BOOL runGameOptionsMenu(void)
 		widgSetButtonState(psWScreen, FE_P5, 0);
 		widgSetButtonState(psWScreen, FE_P6, WBUT_LOCK);
 		widgSetButtonState(psWScreen, FE_P7, 0);
-		setPlayerColour(0,6);
+		war_SetSPcolor(6);
 		break;
 	case FE_P7:
 		widgSetButtonState(psWScreen, FE_P0, 0);
@@ -1309,7 +1311,7 @@ BOOL runGameOptionsMenu(void)
 		widgSetButtonState(psWScreen, FE_P5, 0);
 		widgSetButtonState(psWScreen, FE_P6, 0);
 		widgSetButtonState(psWScreen, FE_P7, WBUT_LOCK);
-		setPlayerColour(0,7);
+		war_SetSPcolor(7);
 		break;
 
 	default:

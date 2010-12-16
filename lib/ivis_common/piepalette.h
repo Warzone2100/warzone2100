@@ -101,8 +101,10 @@ extern "C"
 #define WZCOL_ACTION_PRODUCTION_RUN_TEXT		psPalette[71]
 #define WZCOL_ACTION_PRODUCTION_RUN_BACKGROUND		psPalette[72]
 #define WZCOL_LOADING_BAR_BACKGROUND			psPalette[73]
+#define WZCOL_MAP_PREVIEW_HQ					psPalette[74]
+#define WZCOL_MAP_PREVIEW_OIL					psPalette[75]
 
-#define WZCOL_MAX			74
+#define WZCOL_MAX			76
 
 //*************************************************************************
 

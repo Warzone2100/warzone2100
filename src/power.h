@@ -48,9 +48,6 @@ extern void clearPlayerPower(void);
 /** Reset the power levels when a power_gen or resource_extractor is destroyed. */
 extern BOOL resetPlayerPower(UDWORD player, STRUCTURE *psStruct);
 
-/** Free the space used for playerPower. */
-extern void releasePlayerPower(void);
-
 /** Check the available power. */
 BOOL checkPower(int player, uint32_t quantity);
 
@@ -77,11 +74,6 @@ void powerCalc(BOOL on);
 
 /** Temp function to give all players some power when a new game has been loaded. */
 void newGameInitPower(void);
-
-/**	Returns the next res. Ext. in the list from the one passed in. returns 1st one
-	in list if passed in is NULL and NULL if there's none?
-*/
-extern STRUCTURE *getRExtractor(STRUCTURE *psStruct);
 
 /** Defines which structure types draw power - returns true if use power. */
 extern BOOL structUsesPower(STRUCTURE *psStruct);

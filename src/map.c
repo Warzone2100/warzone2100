@@ -40,8 +40,8 @@
 #include "lighting.h"
 #include "game.h"
 #include "texture.h"
-#include "environ.h"
 #include "advvis.h"
+#include "random.h"
 #include "research.h"
 #include "mission.h"
 #include "gateway.h"
@@ -51,10 +51,18 @@
 #include "fpath.h"
 #include "levels.h"
 #include "scriptfuncs.h"
+#include "lib/framework/wzapp_c.h"
 
+#define GAME_TICKS_FOR_DANGER (GAME_TICKS_PER_SEC * 2)
+
+static WZ_THREAD *dangerThread = NULL;
+static WZ_SEMAPHORE *dangerSemaphore = NULL;
+static WZ_SEMAPHORE *dangerDoneSemaphore = NULL;
 struct floodtile { uint8_t x; uint8_t y; };
 static struct floodtile *floodbucket = NULL;
 static int bucketcounter;
+static UDWORD lastDangerUpdate = 0;
+static int lastDangerPlayer = -1;
 
 struct ffnode
 {
@@ -113,8 +121,11 @@ typedef struct _zonemap_save_header {
 /* The size and contents of the map */
 SDWORD	mapWidth = 0, mapHeight = 0;
 MAPTILE	*psMapTiles = NULL;
+uint8_t *psBlockMap[AUX_MAX];
+uint8_t *psAuxMap[MAX_PLAYERS + AUX_MAX];        // yes, we waste one element... eyes wide open... makes API nicer
 
-#define WATER_DEPTH	180
+#define WATER_MIN_DEPTH 180
+#define WATER_MAX_DEPTH (WATER_MIN_DEPTH + 100)
 
 static void SetGroundForTile(const char *filename, const char *nametype);
 static int getTextureType(const char *textureType);
@@ -202,8 +213,6 @@ BOOL mapNew(UDWORD width, UDWORD height)
 	mapHeight = height;
 
 	intSetMapPos(mapWidth * TILE_UNITS/2, mapHeight * TILE_UNITS/2);
-
-	environReset();
 
 	/*set up the scroll mins and maxs - set values to valid ones for a new map*/
 	scrollMinX = scrollMinY = 0;
@@ -757,6 +766,7 @@ BOOL mapLoad(char *filename, BOOL preview)
 	UDWORD		version;
 	UDWORD		i, j, x, y;
 	PHYSFS_file	*fp = PHYSFS_openRead(filename);
+	void *          mt;
 
 	if (!fp)
 	{
@@ -876,8 +886,7 @@ BOOL mapLoad(char *filename, BOOL preview)
 	}
 
 	// reset the random water bottom heights
-	environReset();
-
+	mt = newMersenneTwister(12345);  // 12345 = random seed.
 	// set the river bed
 	for (i = 0; i < mapWidth; i++)
 	{
@@ -888,42 +897,52 @@ BOOL mapLoad(char *filename, BOOL preview)
 			// lower riverbed
 			if (mapTile(i, j)->ground == waterGroundType)
 			{
-				mapTile(i, j)->height -= (WATER_DEPTH - 2 * environGetData(i, j));
+				mapTile(i, j)->height -= WATER_MIN_DEPTH - mersenneTwisterU32(mt)%(WATER_MAX_DEPTH + 1 - WATER_MIN_DEPTH);
 			}
 		}
 	}
+	deleteMersenneTwister(mt);
 
 	/* set up the scroll mins and maxs - set values to valid ones for any new map */
 	scrollMinX = scrollMinY = 0;
 	scrollMaxX = mapWidth;
 	scrollMaxY = mapHeight;
 
-	// Set our blocking bits
-	for (x = 0; x < mapWidth; x++)
+	/* Allocate aux maps */
+	psBlockMap[AUX_MAP] = malloc(mapWidth * mapHeight * sizeof(*psAuxMap[0]));
+	psBlockMap[AUX_ASTARMAP] = malloc(mapWidth * mapHeight * sizeof(*psBlockMap[0]));
+	psBlockMap[AUX_DANGERMAP] = malloc(mapWidth * mapHeight * sizeof(*psBlockMap[0]));
+	for (x = 0; x < MAX_PLAYERS + AUX_MAX; x++)
 	{
-		for (y = 0; y < mapHeight; y++)
+		psAuxMap[x] = malloc(mapWidth * mapHeight * sizeof(*psAuxMap[0]));
+	}
+
+	// Set our blocking bits
+	for (y = 0; y < mapHeight; y++)
+	{
+		for (x = 0; x < mapWidth; x++)
 		{
 			MAPTILE *psTile = mapTile(x, y);
 
-			psTile->blockingBits = 0;
-			psTile->buildingBits = 0;
+			auxClearBlocking(x, y, AUXBITS_ALL);
+			auxClearAll(x, y, AUXBITS_ALL);
 
 			/* All tiles outside of the map and on map border are blocking. */
 			if (x < 1 || y < 1 || x > mapWidth - 1 || y > mapHeight - 1)
 			{
-				psTile->blockingBits = 0xff; // block everything
+				auxSetBlocking(x, y, AUXBITS_ALL);	// block everything
 			}
 			if (terrainType(psTile) == TER_WATER)
 			{
-				psTile->blockingBits |= WATER_BLOCKED;
+				auxSetBlocking(x, y, WATER_BLOCKED);
 			}
 			else
 			{
-				psTile->blockingBits |= LAND_BLOCKED;
+				auxSetBlocking(x, y, LAND_BLOCKED);
 			}
 			if (terrainType(psTile) == TER_CLIFFFACE)
 			{
-				psTile->blockingBits |= FEATURE_BLOCKED;
+				auxSetBlocking(x, y, FEATURE_BLOCKED);
 			}
 		}
 	}
@@ -996,7 +1015,7 @@ BOOL mapSave(char **ppFileData, UDWORD *pFileSize)
 		psTileData->texture = psTile->texture;
 		if (psTile->ground == waterGroundType)
 		{
-			psTileData->height = MIN(255, (psTile->height + WATER_DEPTH - 2 * environGetData(i % mapWidth, i / mapWidth)) / ELEVATION_SCALE);
+			psTileData->height = (psTile->waterLevel + world_coord(1) / 3) / ELEVATION_SCALE;
 		}
 		else
 		{
@@ -1051,25 +1070,36 @@ BOOL mapSave(char **ppFileData, UDWORD *pFileSize)
 /* Shutdown the map module */
 BOOL mapShutdown(void)
 {
-	if (psMapTiles)
+	int x;
+
+	if (dangerThread)
 	{
-		free(psMapTiles);
+		wzSemaphoreWait(dangerDoneSemaphore);
+		lastDangerPlayer = -1;
+		wzSemaphorePost(dangerSemaphore);
+		wzThreadJoin(dangerThread);
+		wzSemaphoreDestroy(dangerSemaphore);
+		wzSemaphoreDestroy(dangerDoneSemaphore);
+		dangerThread = NULL;
+		dangerSemaphore = NULL;
+		dangerDoneSemaphore = NULL;
 	}
-	if (mapDecals)
+
+	free(psMapTiles);
+	free(mapDecals);
+	free(psGroundTypes);
+	free(map);
+	free(Tile_names);
+	free(psBlockMap[AUX_MAP]);
+	psBlockMap[AUX_MAP] = NULL;
+	free(psBlockMap[AUX_ASTARMAP]);
+	psBlockMap[AUX_ASTARMAP] = NULL;
+	free(psBlockMap[AUX_DANGERMAP]);
+	psBlockMap[AUX_DANGERMAP] = NULL;
+	for (x = 0; x < MAX_PLAYERS + AUX_MAX; x++)
 	{
-		free(mapDecals);
-	}
-	if (psGroundTypes)
-	{
-		free(psGroundTypes);
-	}
-	if (map)
-	{
-		free(map);
-	}
-	if (Tile_names)
-	{
-		free(Tile_names);
+		free(psAuxMap[x]);
+		psAuxMap[x] = NULL;
 	}
 
 	map = NULL;
@@ -1483,7 +1513,7 @@ static void mapFloodFill(int x, int y, int continent, uint8_t blockedBits)
 			}
 			psTile = mapTile(npos.x, npos.y);
 
-			if (!(psTile->blockingBits & blockedBits) && ((limitedTile && psTile->limitedContinent == 0) || (!limitedTile && psTile->hoverContinent == 0)))
+			if (!(blockTile(npos.x, npos.y, AUX_MAP) & blockedBits) && ((limitedTile && psTile->limitedContinent == 0) || (!limitedTile && psTile->hoverContinent == 0)))
 			{
 				struct ffnode *node = malloc(sizeof(*node));
 
@@ -1522,9 +1552,9 @@ void mapFloodFillContinents()
 	int x, y, limitedContinents = 0, hoverContinents = 0;
 
 	/* Clear continents */
-	for (x = 0; x < mapWidth; x++)
+	for (y = 0; y < mapHeight; y++)
 	{
-		for (y = 0; y < mapHeight; y++)
+		for (x = 0; x < mapWidth; x++)
 		{
 			MAPTILE *psTile = mapTile(x, y);
 
@@ -1534,9 +1564,9 @@ void mapFloodFillContinents()
 	}
 
 	/* Iterate over the whole map, looking for unset continents */
-	for (x = 0; x < mapWidth; x++)
+	for (y = 0; y < mapHeight; y++)
 	{
-		for (y = 0; y < mapHeight; y++)
+		for (x = 0; x < mapWidth; x++)
 		{
 			MAPTILE *psTile = mapTile(x, y);
 
@@ -1551,9 +1581,9 @@ void mapFloodFillContinents()
 		}
 	}
 	debug(LOG_MAP, "Found %d limited continents", (int)limitedContinents);
-	for (x = 0; x < mapWidth; x++)
+	for (y = 0; y < mapHeight; y++)
 	{
-		for (y = 0; y < mapHeight; y++)
+		for (x = 0; x < mapWidth; x++)
 		{
 			MAPTILE *psTile = mapTile(x, y);
 
@@ -1601,12 +1631,24 @@ bool fireOnLocation(unsigned int x, unsigned int y)
 	return psTile != NULL && TileIsBurning(psTile);
 }
 
-static void dangerFloodFill(int player)
+// This function runs in a separate thread!
+static int dangerFloodFill(int player)
 {
 	int i;
 	Vector2i pos = getPlayerStartPosition(player);
-	MAPTILE *psTile;
 	Vector2i npos;
+	uint8_t aux, block;
+	int x, y;
+
+	// Set our danger bits
+	for (y = 0; y < mapHeight; y++)
+	{
+		for (x = 0; x < mapWidth; x++)
+		{
+			auxSet(x, y, MAX_PLAYERS + AUX_DANGERMAP, AUXBITS_DANGER);
+			auxClear(x, y, MAX_PLAYERS + AUX_DANGERMAP, AUXBITS_TEMPORARY);
+		}
+	}
 
 	pos.x = map_coord(pos.x);
 	pos.y = map_coord(pos.y);
@@ -1614,25 +1656,21 @@ static void dangerFloodFill(int player)
 
 	do
 	{
-		MAPTILE *currTile = &psMapTiles[pos.x + (pos.y * mapWidth)];
-
 		// Add accessible neighbouring tiles to the open list
 		for (i = 0; i < NUM_DIR; i++)
 		{
 			npos.x = pos.x + aDirOffset[i].x;
 			npos.y = pos.y + aDirOffset[i].y;
-
 			if (!tileOnMap(npos.x, npos.y))
 			{
 				continue;
 			}
-			psTile = &psMapTiles[npos.x + (npos.y * mapWidth)];
-
-			if (!(psTile->tileInfoBits & BITS_TEMPORARY)
-			    && !(psTile->threatBits & (1 << player))
-			    && (psTile->dangerBits & (1 <<player)))
+			aux = auxTile(npos.x, npos.y, MAX_PLAYERS + AUX_DANGERMAP);
+			block = blockTile(pos.x, pos.y, AUX_DANGERMAP);
+			if (!(aux & AUXBITS_TEMPORARY) && !(aux & AUXBITS_THREAT) && (aux & AUXBITS_DANGER))
 			{
-				if (!(psTile->blockingBits & FEATURE_BLOCKED) && !psTile->buildingBits)
+				// Note that we do not consider water to be a blocker here. This may or may not be a feature...
+				if (!(block & FEATURE_BLOCKED) && !(aux & AUXBITS_ANY_BUILDING))
 				{
 					floodbucket[bucketcounter].x = npos.x;
 					floodbucket[bucketcounter].y = npos.y;
@@ -1640,14 +1678,14 @@ static void dangerFloodFill(int player)
 				}
 				else
 				{
-					psTile->dangerBits &= ~(1 << player);	// clear danger for buildings and features as well, but don't propagate
+					auxClear(npos.x, npos.y, MAX_PLAYERS + AUX_DANGERMAP, AUXBITS_DANGER);
 				}
-				psTile->tileInfoBits |= BITS_TEMPORARY;	// make sure we do not process it more than once
+				auxSet(npos.x, npos.y, MAX_PLAYERS + AUX_DANGERMAP, AUXBITS_TEMPORARY); // make sure we do not process it more than once
 			}
 		}
 
 		// Clear danger
-		currTile->dangerBits &= ~(1 << player);
+		auxClear(pos.x, pos.y, MAX_PLAYERS + AUX_DANGERMAP, AUXBITS_DANGER);
 
 		// Pop the last open node off the bucket list for the next iteration
 		if (bucketcounter)
@@ -1657,6 +1695,19 @@ static void dangerFloodFill(int player)
 			pos.y = floodbucket[bucketcounter].y;
 		}
 	} while (bucketcounter);
+	return 0;
+}
+
+// This function runs in a separate thread!
+static int dangerThreadFunc(WZ_DECL_UNUSED void *data)
+{
+	while (lastDangerPlayer != -1)
+	{
+		dangerFloodFill(lastDangerPlayer);	// Do the actual work
+		wzSemaphorePost(dangerDoneSemaphore);   // Signal that we are done
+		wzSemaphoreWait(dangerSemaphore);	// Go to sleep until needed.
+	}
+	return 0;
 }
 
 static inline void threatUpdateTarget(int player, BASE_OBJECT *psObj, bool ground, bool air)
@@ -1668,14 +1719,14 @@ static inline void threatUpdateTarget(int player, BASE_OBJECT *psObj, bool groun
 		for (i = 0; i < psObj->numWatchedTiles; i++)
 		{
 			const TILEPOS pos = psObj->watchedTiles[i];
-			MAPTILE *psTile = mapTile(pos.x, pos.y);
+
 			if (ground)
 			{
-				psTile->threatBits |= (1 << player);			// set ground threat for this tile
+				auxSet(pos.x, pos.y, MAX_PLAYERS + AUX_DANGERMAP, AUXBITS_THREAT);	// set ground threat for this tile
 			}
 			if (air)
 			{
-				psTile->aaThreatBits |= (1 << player);			// set air threat for this tile
+				auxSet(pos.x, pos.y, MAX_PLAYERS + AUX_DANGERMAP, AUXBITS_AATHREAT);	// set air threat for this tile
 			}
 		}
 	}
@@ -1683,14 +1734,15 @@ static inline void threatUpdateTarget(int player, BASE_OBJECT *psObj, bool groun
 
 static void threatUpdate(int player)
 {
-	MAPTILE *psTile = psMapTiles;
-	int i, weapon;
+	int i, weapon, x, y;
 
 	// Step 1: Clear our threat bits
-	for (i = 0; i < mapWidth * mapHeight; i++, psTile++)
+	for (y = 0; y < mapHeight; y++)
 	{
-		psTile->threatBits &= ~(1 << player);
-		psTile->tileInfoBits &= ~BITS_TEMPORARY;
+		for (x = 0; x < mapWidth; x++)
+		{
+			auxClear(x, y, MAX_PLAYERS + AUX_DANGERMAP, AUXBITS_THREAT | AUXBITS_AATHREAT);
+		}
 	}
 
 	// Step 2: Set threat bits
@@ -1748,23 +1800,6 @@ static void threatUpdate(int player)
 	}
 }
 
-static void dangerUpdate(int player)
-{
-	MAPTILE *psTile = psMapTiles;
-	int i;
-
-	// Set our danger bits
-	for (i = 0; i < mapWidth * mapHeight; i++, psTile++)
-	{
-		psTile->dangerBits |= (1 << player);
-	}
-	if (game.type == SKIRMISH)
-	{
-		dangerFloodFill(player);
-	}
-	// else everything is equally dangerous
-}
-
 void mapInit()
 {
 	int player;
@@ -1772,20 +1807,32 @@ void mapInit()
 	free(floodbucket);
 	floodbucket = malloc(mapWidth * mapHeight * sizeof(*floodbucket));
 
+	lastDangerUpdate = 0;
+	lastDangerPlayer = -1;
+
 	// Initialize danger maps
 	for (player = 0; player < MAX_PLAYERS; player++)
 	{
+		auxMapStore(player, AUX_DANGERMAP);
 		threatUpdate(player);
-		dangerUpdate(player);
+		dangerFloodFill(player);
+		auxMapRestore(player, AUX_DANGERMAP, AUXBITS_DANGER | AUXBITS_THREAT | AUXBITS_AATHREAT);
+	}
+
+	// Start thread
+	if (game.type == SKIRMISH)
+	{
+		lastDangerPlayer = 0;
+		dangerSemaphore = wzSemaphoreCreate(0);
+		dangerDoneSemaphore = wzSemaphoreCreate(0);
+		dangerThread = wzThreadCreate(dangerThreadFunc, NULL);
+		wzThreadStart(dangerThread);
 	}
 }
 
 void mapUpdate()
 {
-	uint16_t currentTime = gameTime / GAME_TICKS_PER_UPDATE;
-	int updatedBase = currentTime % (game.maxPlayers * 2);
-	int updatedPlayer = updatedBase / 2;
-	bool updateThreat = updatedBase % 2;
+	const uint16_t currentTime = gameTime / GAME_TICKS_PER_UPDATE;
 	int posX, posY;
 
 	for (posY = 0; posY < mapHeight; ++posY)
@@ -1802,13 +1849,15 @@ void mapUpdate()
 		}
 	}
 
-	// We do only a bit of danger map update each logical frame to avoid overheating the CPU
-	if (updateThreat)
+	if (gameTime > lastDangerUpdate + GAME_TICKS_FOR_DANGER && game.type == SKIRMISH)
 	{
-		threatUpdate(updatedPlayer);
-	}
-	else
-	{
-		dangerUpdate(updatedPlayer);
+		// Lock if previous job not done yet
+		wzSemaphoreWait(dangerDoneSemaphore);
+
+		auxMapRestore(lastDangerPlayer, AUX_DANGERMAP, AUXBITS_THREAT | AUXBITS_AATHREAT | AUXBITS_DANGER);
+		lastDangerPlayer = (lastDangerPlayer + 1 ) % game.maxPlayers;
+		auxMapStore(lastDangerPlayer, AUX_DANGERMAP);
+		threatUpdate(lastDangerPlayer);
+		wzSemaphorePost(dangerSemaphore);
 	}
 }

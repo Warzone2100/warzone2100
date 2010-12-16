@@ -43,7 +43,6 @@ static ACTIVE_TRIGGER	*psAddedTriggers = NULL;
 
 /** The trigger which is currently firing */
 static ACTIVE_TRIGGER	*psFiringTrigger = NULL;
-static BOOL		triggerChanged;
 static UDWORD		updateTime;
 
 /** The currently allocated contexts */
@@ -97,6 +96,15 @@ static void eventAddTrigger(ACTIVE_TRIGGER *psTrigger);
 
 // Free up a trigger
 static void eventFreeTrigger(ACTIVE_TRIGGER *psTrigger);
+
+// Remove triggers marked for deletion
+static void eventPruneList(ACTIVE_TRIGGER **psList);
+static void eventPruneLists(void)
+{
+	eventPruneList(&psTrigList);
+	eventPruneList(&psCallbackList);
+	eventPruneList(&psAddedTriggers);
+}
 
 //resets the event timer - updateTime
 void eventTimeReset(UDWORD initTime)
@@ -834,10 +842,8 @@ static BOOL eventInitTrigger(ACTIVE_TRIGGER **ppsTrigger, SCRIPT_CONTEXT *psCont
 	TRIGGER_DATA	*psTrigData;
 	UDWORD			testTime;
 
-	ASSERT( event < psContext->psCode->numEvents,
-		"eventAddTrigger: Event out of range" );
-	ASSERT( trigger < psContext->psCode->numTriggers,
-		"eventAddTrigger: Trigger out of range" );
+	ASSERT( event < psContext->psCode->numEvents, "Event out of range" );
+	ASSERT( trigger < psContext->psCode->numTriggers, "Trigger out of range" );
 	if (trigger == -1)
 	{
 		return false;
@@ -861,6 +867,7 @@ static BOOL eventInitTrigger(ACTIVE_TRIGGER **ppsTrigger, SCRIPT_CONTEXT *psCont
 	psNewTrig->type = (SWORD)psTrigData->type;
 	psNewTrig->event = (UWORD)event;
 	psNewTrig->offset = 0;
+	psNewTrig->deactivated = false;
 
 	*ppsTrigger = psNewTrig;
 
@@ -897,6 +904,7 @@ BOOL eventLoadTrigger(UDWORD time, SCRIPT_CONTEXT *psContext,
 	psNewTrig->type = (SWORD)type;
 	psNewTrig->event = (UWORD)event;
 	psNewTrig->offset = (UWORD)offset;
+	psNewTrig->deactivated = false;
 
 	eventAddTrigger(psNewTrig);
 
@@ -947,13 +955,14 @@ BOOL eventAddPauseTrigger(SCRIPT_CONTEXT *psContext, UDWORD event, UDWORD offset
 	psNewTrig->type = TR_PAUSE;
 	psNewTrig->event = (UWORD)event;
 	psNewTrig->offset = (UWORD)offset;
+	psNewTrig->deactivated = false;
 
 	// store the new trigger
 	psNewTrig->psNext = psAddedTriggers;
 	psAddedTriggers = psNewTrig;
 
-	// tell the event system the trigger has been changed
-	triggerChanged = true;
+	// mark the trigger for deletion
+	psFiringTrigger->deactivated = true;
 
 	return true;
 }
@@ -974,7 +983,7 @@ static void eventFreeTrigger(ACTIVE_TRIGGER *psTrigger)
 // Activate a callback trigger
 void eventFireCallbackTrigger(TRIGGER_TYPE callback)
 {
-	ACTIVE_TRIGGER	*psPrev = NULL, *psCurr, *psNext, **ppsNext;
+	ACTIVE_TRIGGER	*psPrev = NULL, *psCurr, *psNext;
 	TRIGGER_DATA	*psTrigDat;
 	BOOL		fired;
 
@@ -986,9 +995,9 @@ void eventFireCallbackTrigger(TRIGGER_TYPE callback)
 
 	//this can be called from eventProcessTriggers and so will wipe out all the current added ones
 	//psAddedTriggers = NULL;
-	for (psCurr = psCallbackList; psCurr && psCurr->type <= (int)callback; psCurr = *ppsNext)
+	for (psCurr = psCallbackList; psCurr && psCurr->type <= (int)callback; psCurr = psNext)
 	{
-		ppsNext = &psCurr->psNext;
+		psNext = psCurr->psNext;
 		if (psCurr->type == (int)callback)
 		{
 			// see if the callback should be fired
@@ -1035,22 +1044,19 @@ void eventFireCallbackTrigger(TRIGGER_TYPE callback)
 				if (psPrev == NULL)
 				{
 					psCallbackList = psCallbackList->psNext;
-					ppsNext = &psCallbackList;
 				}
 				else
 				{
-					psPrev->psNext = *ppsNext;
-					ppsNext = &psPrev->psNext;
+					psPrev->psNext = psNext;
 				}
 
-				triggerChanged = false;
 				psFiringTrigger = psCurr;
-				if (!interpRunScript(psCurr->psContext, IRT_EVENT, psCurr->event, psCurr->offset)) // this could set triggerChanged
+				if (!interpRunScript(psCurr->psContext, IRT_EVENT, psCurr->event, psCurr->offset)) // this could set psCurr->deactivated
 				{
 					ASSERT(false, "eventFireCallbackTrigger: event %s: code failed",
 					       eventGetEventID(psCurr->psContext->psCode, psCurr->event));
 				}
-				if (triggerChanged)
+				if (psCurr->deactivated)
 				{
 					// don't need to add the trigger again - just free it
 					eventFreeTrigger(psCurr);
@@ -1058,8 +1064,8 @@ void eventFireCallbackTrigger(TRIGGER_TYPE callback)
 				else
 				{
 					// make sure the trigger goes back into the system
-					psFiringTrigger->psNext = psAddedTriggers;
-					psAddedTriggers = psFiringTrigger;
+					psCurr->psNext = psAddedTriggers;
+					psAddedTriggers = psCurr;
 				}
 			}
 			else
@@ -1072,6 +1078,9 @@ void eventFireCallbackTrigger(TRIGGER_TYPE callback)
 			psPrev = psCurr;
 		}
 	}
+
+	// Delete marked triggers now
+	eventPruneLists();
 
 	// Now add all the new triggers
 	for(psCurr = psAddedTriggers; psCurr; psCurr=psNext)
@@ -1091,7 +1100,7 @@ static BOOL eventFireTrigger(ACTIVE_TRIGGER *psTrigger)
 	INTERP_VAL		sResult;
 
 	fired = false;
-
+	psFiringTrigger = psTrigger;
 
 	// If this is a code trigger see if it fires
 	if (psTrigger->type == TR_CODE)
@@ -1156,15 +1165,10 @@ void eventProcessTriggers(UDWORD currTime)
 		psCurr = psTrigList;
 		psTrigList = psTrigList->psNext;
 
-		// Store the trigger so that I can tell if the event changes
-		// the trigger assigned to it
-		psFiringTrigger = psCurr;
-		triggerChanged = false;
-
 		// Run the trigger
-		if (eventFireTrigger(psCurr))	// This might set triggerChanged
+		if (eventFireTrigger(psCurr))	// This might mark the trigger for deletion
 		{
-			if (triggerChanged || psCurr->type == TR_WAIT)
+			if (psCurr->deactivated || psCurr->type == TR_WAIT)
 			{
 				// remove the trigger
 				eventFreeTrigger(psCurr);
@@ -1197,6 +1201,9 @@ void eventProcessTriggers(UDWORD currTime)
 		}
 	}
 
+	// Delete marked triggers now
+	eventPruneLists();
+
 	// Now add all the new triggers
 	for(psCurr = psAddedTriggers; psCurr; psCurr=psNext)
 	{
@@ -1207,55 +1214,55 @@ void eventProcessTriggers(UDWORD currTime)
 	psAddedTriggers = NULL;
 }
 
-
-// remove a trigger from a list
-static void eventRemoveTriggerFromList(ACTIVE_TRIGGER **ppsList,
-								SCRIPT_CONTEXT *psContext,
-								SDWORD event, SDWORD *pTrigger)
+// remove all marked triggers
+static void eventPruneList(ACTIVE_TRIGGER **ppsList)
 {
-	ACTIVE_TRIGGER	*psCurr, *psPrev=NULL;
+	ACTIVE_TRIGGER	**ppsCurr = ppsList, *psTemp;
 
-	if (((*ppsList) != NULL) &&
-		(*ppsList)->event == event &&
-		(*ppsList)->psContext == psContext)
+	while (*ppsCurr)
 	{
-		if ((*ppsList)->type == TR_PAUSE)
+		if ((*ppsCurr)->deactivated)
 		{
-			// pause trigger, don't remove it,
-			// just note the type for when the pause finishes
-			(*ppsList)->trigger = (SWORD)*pTrigger;
-			*pTrigger = -1;
+			psTemp = (*ppsCurr)->psNext;
+			free(*ppsCurr);
+			*ppsCurr = psTemp;
 		}
 		else
 		{
-			psCurr = *ppsList;
-			*ppsList = (*ppsList)->psNext;
-			free(psCurr);
+			ppsCurr = &(*ppsCurr)->psNext;
 		}
+	}
+}
+
+// Mark a trigger for removal from a list
+static void eventMarkTriggerInList(ACTIVE_TRIGGER **ppsList,
+								SCRIPT_CONTEXT *psContext,
+								SDWORD event, SDWORD *pTrigger)
+{
+	ACTIVE_TRIGGER	**ppsCurr;
+
+	for (ppsCurr = ppsList;; ppsCurr = &(*ppsCurr)->psNext)
+	{
+		if (!(*ppsCurr))
+		{
+			return;
+		}
+		else if ((*ppsCurr)->event == event &&
+				 (*ppsCurr)->psContext == psContext)
+		{
+			break;
+		}
+	}
+	if ((*ppsCurr)->type == TR_PAUSE)
+	{
+		// pause trigger, don't remove it,
+		// just note the type for when the pause finishes
+		(*ppsCurr)->trigger = (SWORD)*pTrigger;
+		*pTrigger = -1;
 	}
 	else
 	{
-		for(psCurr=*ppsList; psCurr; psCurr=psCurr->psNext)
-		{
-			if (psCurr->event == event &&
-				psCurr->psContext == psContext)
-			{
-				break;
-			}
-			psPrev = psCurr;
-		}
-		if (psCurr && psCurr->type == TR_PAUSE)
-		{
-			// pause trigger, don't remove it,
-			// just note the type for when the pause finishes
-			psCurr->trigger = (SWORD)*pTrigger;
-			*pTrigger = -1;
-		}
-		else if (psCurr)
-		{
-			psPrev->psNext = psCurr->psNext;
-			free(psCurr);
-		}
+		(*ppsCurr)->deactivated = true;
 	}
 }
 
@@ -1283,14 +1290,14 @@ BOOL eventSetTrigger(void)
 	psContext = psFiringTrigger->psContext;
 	if (psFiringTrigger->event == event)
 	{
-		triggerChanged = true;
+		psFiringTrigger->deactivated = true;
 	}
 	else
 	{
-		// Remove any old trigger from the list
-		eventRemoveTriggerFromList(&psTrigList, psContext, event, &trigger);
-		eventRemoveTriggerFromList(&psCallbackList, psContext, event, &trigger);
-		eventRemoveTriggerFromList(&psAddedTriggers, psContext, event, &trigger);
+		// Mark the old trigger in the lists
+		eventMarkTriggerInList(&psTrigList, psContext, event, &trigger);
+		eventMarkTriggerInList(&psCallbackList, psContext, event, &trigger);
+		eventMarkTriggerInList(&psAddedTriggers, psContext, event, &trigger);
 	}
 
 	// Create a new trigger if necessary

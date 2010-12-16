@@ -26,10 +26,10 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
 #include "lib/framework/frameresource.h"
-#include "message.h"
-#include "messagedef.h"
-#include "messagely.h"
-#include "text.h"
+#include "src/message.h"
+#include "src/messagedef.h"
+#include "src/messagely.h"
+#include "src/text.h"
 
 extern void yyerror(const char* msg);
 void yyerror(const char* msg)

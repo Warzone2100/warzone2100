@@ -38,6 +38,9 @@ using namespace std;
     #include <windows.h>
     inline void set_env(const char* k, const char* v) { SetEnvironmentVariableA(k, v); };
     #ifdef _MSC_VER
+        // NOTE: Using STLport now, so need to include these extra headers
+        #include <stdio.h>
+        #include <stdlib.h>
         #define popen  _popen
         #define pclose _pclose
     #endif

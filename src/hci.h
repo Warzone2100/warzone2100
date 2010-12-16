@@ -351,6 +351,7 @@ extern void intBuildStarted(DROID *psDroid);
 extern void intResearchFinished(STRUCTURE *psBuilding);
 /* Tell the interface a factory has completed building ALL droids */
 extern void intManufactureFinished(STRUCTURE *psBuilding);
+extern void intUpdateManufacture(STRUCTURE *psBuilding);
 
 /* Sync the interface to an object */
 extern void intObjectSelected(BASE_OBJECT *psObj);

@@ -70,6 +70,9 @@ int32_t featureDamage(FEATURE *psFeature, UDWORD damage, WEAPON_CLASS weaponClas
 
 extern void     featureInitVars(void);
 
+#define syncDebugFeature(psFeature, ch) _syncDebugFeature(__FUNCTION__, psFeature, ch)
+void _syncDebugFeature(const char *function, FEATURE *psFeature, char ch);
+
 #ifdef __cplusplus
 }
 #endif //__cplusplus

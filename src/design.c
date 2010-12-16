@@ -4473,7 +4473,7 @@ static void intDisplayStatForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 	/* inc rotation if highlighted */
 	if ( Form->state & WCLICK_HILITE )
 	{
-		iRY += graphicsTimeAdjustedIncrement(BUTTONOBJ_ROTSPEED);
+		iRY += realTimeAdjustedIncrement(BUTTONOBJ_ROTSPEED);
 		iRY %= 360;
 	}
 
@@ -4509,7 +4509,7 @@ static void intDisplayViewForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 		Rotation.z = 0;
 
 		/* inc rotation */
-		iRY += graphicsTimeAdjustedIncrement(BUTTONOBJ_ROTSPEED);
+		iRY += realTimeAdjustedIncrement(BUTTONOBJ_ROTSPEED);
 		iRY %= 360;
 
 		//fixed depth scale the pie

@@ -30,6 +30,7 @@
 #include "lib/ivis_common/piepalette.h"
 #include "lib/ivis_common/textdraw.h"
 #include "lib/ivis_common/bitimage.h"
+#include "src/multiplay.h"
 
 #define ASCII_SPACE			(32)
 #define ASCII_NEWLINE			('@')
@@ -121,7 +122,10 @@ int iV_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width, U
 			else if (*curChar == ASCII_NEWLINE
 			      || *curChar == '\n')
 			{
-				NewLine = true;
+				if (!bMultiPlayer)
+				{
+					NewLine = true;
+				}
 				++curChar;
 			}
 

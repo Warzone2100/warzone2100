@@ -55,6 +55,10 @@ uint32_t gameRandU32(void);
 /// Must not be called from graphics routines, only for making game decisions.
 int32_t gameRand(uint32_t limit);
 
+void *newMersenneTwister(uint32_t seed);
+void deleteMersenneTwister(void *this_);
+uint32_t mersenneTwisterU32(void *this_);
+
 #ifdef __cplusplus
 }
 #endif //_cplusplus

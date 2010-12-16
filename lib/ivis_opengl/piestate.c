@@ -54,8 +54,9 @@ static CURSOR MouseCursor = 0;
 static IMAGEFILE* MouseCursors = NULL;
 static uint16_t MouseCursorIDs[CURSOR_MAX];
 static GLuint shaderProgram[SHADER_MAX];
-static bool shadersAvailable = false;		// Can we use shaders?
-static bool shadersActivate = true;			// If we can, should we use them?
+static GLfloat shaderStretch = 0;
+static GLint locTeam, locStretch, locTCMask, locFog;
+static SHADER_MODE currentShaderMode = SHADER_NONE;
 
 /*
  *	Source
@@ -215,85 +216,73 @@ bool pie_LoadShaders()
 {
 	GLuint program;
 
-	// Reset shaders status
-	shadersAvailable = false;
-
-	// Try and load some shaders
-	shaderProgram[SHADER_NONE]		= 0;
+	// Try to load some shaders
+	shaderProgram[SHADER_NONE] = 0;
 
 	// TCMask shader
-	debug(LOG_3D, "Loading shader: SHADER_TCMASK");
-	if (!loadShaders(&program, "",
-					"shaders/tcmask.vert", "shaders/tcmask.frag"))
+	debug(LOG_3D, "Loading shader: SHADER_COMPONENT");
+	if (!loadShaders(&program, "", "shaders/tcmask.vert", "shaders/tcmask.frag"))
+	{
+		assert(false);
 		return false;
-	shaderProgram[SHADER_TCMASK] = program;
+	}
+	shaderProgram[SHADER_COMPONENT] = program;
+	currentShaderMode = SHADER_NONE;
 
-	debug(LOG_3D, "Loading shader: SHADER_TCMASK_FOGGED");
-	if (!loadShaders(&program, "#define FOG_ENABLED\n",
-					"shaders/tcmask.vert", "shaders/tcmask.frag"))
-		return false;
-	shaderProgram[SHADER_TCMASK_FOGGED] = program;
-
-	// Good to go
-	shadersAvailable = true;
 	return true;
 }
 
 static inline GLuint pie_SetShader(SHADER_MODE shaderMode)
 {
-	if (!shadersAvailable || shaderMode >= SHADER_MAX)
-		return shaderProgram[SHADER_NONE];
+	if (shaderMode != currentShaderMode)
+	{
+		GLint locTex0, locTex1;
 
-	glUseProgram(shaderProgram[shaderMode]);
+		glUseProgram(shaderProgram[shaderMode]);
+		locTex0 = glGetUniformLocation(shaderProgram[shaderMode], "Texture0");
+		locTex1 = glGetUniformLocation(shaderProgram[shaderMode], "Texture1");
+		locTeam = glGetUniformLocation(shaderProgram[shaderMode], "teamcolour");
+		locStretch = glGetUniformLocation(shaderProgram[shaderMode], "stretch");
+		locTCMask = glGetUniformLocation(shaderProgram[shaderMode], "tcmask");
+		locFog = glGetUniformLocation(shaderProgram[shaderMode], "fogEnabled");
+
+		// These never change
+		glUniform1i(locTex0, 0);
+		glUniform1i(locTex1, 1);
+
+		currentShaderMode  = shaderMode;
+	}
 	return shaderProgram[shaderMode];
 }
 
 void pie_DeactivateShader(void)
 {
-	pie_SetShader(SHADER_NONE);
+	currentShaderMode = SHADER_NONE;
+	glUseProgram(0);
 }
 
-bool pie_GetShadersStatus(void)
+void pie_SetShaderStretchDepth(float stretch)
 {
-	return shadersAvailable && shadersActivate;
+	shaderStretch = stretch;
 }
 
-void pie_SetShadersStatus(bool status)
+void pie_ActivateShader_TCMask(PIELIGHT teamcolour, int maskpage)
 {
-	shadersActivate = status;
-}
-
-void pie_ActivateShader_TCMask(PIELIGHT teamcolour, SDWORD maskpage)
-{
-	GLint loc;
-	GLuint shaderProgram;
 	GLfloat colour4f[4];
 
-	if (!shadersAvailable)
-		return;
+	pie_SetShader(SHADER_COMPONENT);
 
-	// Check if fog is enabled
-	if (rendStates.fog)
-	{
-		shaderProgram = pie_SetShader(SHADER_TCMASK_FOGGED);
-	}
-	else
-	{
-		shaderProgram = pie_SetShader(SHADER_TCMASK);
-	}
-
-	loc = glGetUniformLocation(shaderProgram, "Texture0"); 
-	glUniform1i(loc, 0);
-
-	loc = glGetUniformLocation(shaderProgram, "Texture1"); 
-	glUniform1i(loc, 1);
-
-	loc = glGetUniformLocation(shaderProgram, "teamcolour"); 
 	pal_PIELIGHTtoRGBA4f(&colour4f[0], teamcolour);
-	glUniform4fv(loc, 1, &colour4f[0]);
+	glUniform4fv(locTeam, 1, &colour4f[0]);
+	glUniform1f(locStretch, shaderStretch);
+	glUniform1i(locTCMask, maskpage != iV_TEX_INVALID);
+	glUniform1i(locFog, rendStates.fog);
 
-	glActiveTexture(GL_TEXTURE1);
-	pie_SetTexturePage(maskpage);
+	if (maskpage != iV_TEX_INVALID)
+	{
+		glActiveTexture(GL_TEXTURE1);
+		pie_SetTexturePage(maskpage);
+	}
 	glActiveTexture(GL_TEXTURE0);
 
 #ifdef _DEBUG
@@ -411,12 +400,12 @@ void pie_SetTexturePage(SDWORD num)
 			case TEXPAGE_NONE:
 				glDisable(GL_TEXTURE_2D);
 				break;
-			case TEXPAGE_FONT:
+			case TEXPAGE_EXTERN:
 				// GLC will set the texture, we just need to enable texturing
 				glEnable(GL_TEXTURE_2D);
 				break;
 			default:
-				if (rendStates.texPage == TEXPAGE_NONE || rendStates.texPage == TEXPAGE_FONT)
+				if (rendStates.texPage == TEXPAGE_NONE)
 				{
 					glEnable(GL_TEXTURE_2D);
 				}

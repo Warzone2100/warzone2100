@@ -1405,25 +1405,34 @@ UDWORD widgRunScreen(W_SCREEN *psScreen)
 
 	// Note which keys have been pressed
 	pressed = WKEY_NONE;
+	sContext.mx = mouseX();
+	sContext.my = mouseY();
 	if(getWidgetsStatus())
 	{
-
 		if (mousePressed(MOUSE_LMB))
 		{
 			pressed = WKEY_PRIMARY;
+			sContext.mx = mousePressPos(MOUSE_LMB).x;
+			sContext.my = mousePressPos(MOUSE_LMB).y;
 		}
 		else if (mousePressed(MOUSE_RMB))
 		{
 			pressed = WKEY_SECONDARY;
+			sContext.mx = mousePressPos(MOUSE_RMB).x;
+			sContext.my = mousePressPos(MOUSE_RMB).y;
 		}
 		released = WKEY_NONE;
 		if (mouseReleased(MOUSE_LMB))
 		{
 			released = WKEY_PRIMARY;
+			sContext.mx = mouseReleasePos(MOUSE_LMB).x;
+			sContext.my = mouseReleasePos(MOUSE_LMB).y;
 		}
 		else if (mouseReleased(MOUSE_RMB))
 		{
 			released = WKEY_SECONDARY;
+			sContext.mx = mouseReleasePos(MOUSE_RMB).x;
+			sContext.my = mouseReleasePos(MOUSE_RMB).y;
 		}
 	}
 	/* Initialise the context */
@@ -1431,8 +1440,6 @@ UDWORD widgRunScreen(W_SCREEN *psScreen)
 	sContext.psForm = (W_FORM *)psScreen->psForm;
 	sContext.xOffset = 0;
 	sContext.yOffset = 0;
-	sContext.mx = mouseX();
-	sContext.my = mouseY();
 	psMouseOverWidget = NULL;
 
 	/* Process the screen's widgets */

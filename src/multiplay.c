@@ -207,7 +207,6 @@ BOOL multiPlayerLoop(void)
 	UBYTE		joinCount;
 
 	sendCheck();						// send some checking info if possible
-	processMultiPlayerArtifacts();		// process artifacts
 
 		joinCount =0;
 		for(i=0;i<MAX_PLAYERS;i++)
@@ -634,7 +633,7 @@ BOOL recvMessage(void)
 				//case NET_TEAMREQUEST:
 				//case NET_READY_REQUEST:
 				//case GAME_ARTIFACTS:    //23 down, 19 to go.
-				case GAME_FEATURES:
+				//case GAME_FEATURES:     //41 down,  1 to go.
 				//case GAME_ALLIANCE:     //33 down,  9 to go.
 				//case NET_KICK:
 				//case NET_FIREUP:
@@ -843,6 +842,9 @@ BOOL recvMessage(void)
 			break;
 		case NET_PLAYER_STATS:
 			recvMultiStats(queue);
+			break;
+		case GAME_PLAYER_LEFT:
+			recvPlayerLeft(queue);
 			break;
 		default:
 			processedMessage2 = false;

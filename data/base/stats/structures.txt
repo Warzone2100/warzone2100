@@ -1,4 +1,4 @@
-Structure key,Type,Unused,Strength,Terrain Type,Base Width,Base Breadth,Foundation,Build points,Height,Armour,Body points,Repair system,Build power,Unused,Resistance,Unused,Size Modifier,ECM key,Sensor key,Weapon Slots,Structure model,Base model,Functions,Weapons
+Structure key,Type,Unused,Strength,Unused,Base Width,Base Breadth,Unused,Build points,Height,Armour,Body points,Unused,Build power,Unused,Resistance,Unused,Unused,ECM key,Sensor key,Weapon Slots,Structure model,Base model,Functions,Weapons
 A0ADemolishStructure,DEMOLISH,Level All,SOFT,0,1,1,Concrete,10,1,6,200,1,0,1,150,1,1,ZNULLECM,DefaultSensor1Mk1,1,icdozer.PIE,0,0,0
 A0BaBaBunker,DEFENSE,Level One-Two,BUNKER,0,1,1,Concrete,10,1,12,300,1,100,1,150,255,1,ZNULLECM,DefaultSensor1Mk1,1,blbrbbnk.PIE,0,0,1
 A0BabaCornerWall,CORNER WALL,Level All,SOFT,0,1,1,Concrete,3,2,5,150,10,20,1,0,255,0,ZNULLECM,ZNULLSENSOR,0,BLBRBCR1.PIE,0,0,0

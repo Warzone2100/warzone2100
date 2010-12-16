@@ -184,7 +184,6 @@ BOOL Refreshing = false;
 #define IDOPT_ZALIGN		1042		// The z-align button
 #define IDOPT_IVISFORM		1043		// iViS engine form
 #define IDOPT_IVISLABEL		1044		// iViS form label
-#define IDOPT_IVISSHADERS	1045		// iViS shaders button
 #define IDOPT_IVISLIGHTING	1046		// iViS lighting button
 
 /* Edit screen IDs */
@@ -1448,27 +1447,6 @@ static void intProcessOptions(UDWORD id)
 			intMode = INT_NORMAL;
 //			widgSetButtonState(psWScreen, IDRET_OPTIONS, 0);
 			break;
-		case IDOPT_IVISSHADERS:
-			{
-				bool status = pie_GetShadersStatus();
-				pie_SetShadersStatus(!status);
-				if (status != pie_GetShadersStatus())
-				{
-					if (!status)
-					{
-						widgSetButtonState(psWScreen, IDOPT_IVISSHADERS, WBUT_CLICKLOCK);
-					}
-					else
-					{
-						widgSetButtonState(psWScreen, IDOPT_IVISSHADERS, 0);
-					}
-				}
-				else
-				{
-					widgSetButtonState(psWScreen, IDOPT_IVISSHADERS, WBUT_DISABLE);
-				}
-			}
-			break;
 		case IDOPT_IVISLIGHTING:
 			if (pie_GetLightingState())
 			{
@@ -1641,18 +1619,6 @@ INT_RETVAL intRunWidgets(void)
 	/* Update the object list if necessary */
 	if (intMode == INT_OBJECT || intMode == INT_STAT || intMode == INT_CMDORDER)
 	{
-/*		switch (objMode)
-		{
-		case IOBJ_BUILD:
-			psObjList = (BASE_OBJECT *)apsDroidLists[selectedPlayer];
-			break;
-		case IOBJ_MANUFACTURE:
-			psObjList = (BASE_OBJECT *)apsStructLists[selectedPlayer];
-			break;
-		case IOBJ_RESEARCH:
-			psObjList = (BASE_OBJECT *)apsStructLists[selectedPlayer];
-			break;
-		}*/
 		// see if there is a dead object in the list
 		for(i=0; i<numObjects; i++)
 		{
@@ -1718,7 +1684,6 @@ INT_RETVAL intRunWidgets(void)
 		}
 	}
 	objectsChanged = false;
-
 
 	if(bLoadSaveUp)
 	{
@@ -2156,9 +2121,9 @@ INT_RETVAL intRunWidgets(void)
 				}
 				else if (psPositionStats->ref >= REF_FEATURE_START && psPositionStats->ref < REF_FEATURE_START + REF_RANGE)
 				{
-					FEATURE *result = buildFeature((FEATURE_STATS *)psPositionStats, world_coord(structX), world_coord(structY), false);
+					//FEATURE *result = buildFeature((FEATURE_STATS *)psPositionStats, world_coord(structX), world_coord(structY), false);
 
-					if (result)
+					//if (result)
 					{
 						const char* msg;
 
@@ -2168,7 +2133,8 @@ INT_RETVAL intRunWidgets(void)
 						sendTextMessage(msg, true);
 						Cheated = true;
 						// Notify the other hosts that we've just built ourselves a feature
-						sendMultiPlayerFeature(result->psStats->subType, result->pos.x, result->pos.y, result->id);
+						//sendMultiPlayerFeature(result->psStats->subType, result->pos.x, result->pos.y, result->id);
+						sendMultiPlayerFeature(((FEATURE_STATS *)psPositionStats)->subType, world_coord(structX), world_coord(structY), generateNewObjectId());
 					}
 				}
 				else if (psPositionStats->ref >= REF_TEMPLATE_START &&
@@ -2475,16 +2441,12 @@ static void intAddObjectStats(BASE_OBJECT *psObj, UDWORD id)
 		// NOTE! more pruning [future ref]
 		for(j=0; j<numStatsListEntries; j++)
 		{
-			//this can't be assumed cos we've added some more icons and they have higher #define values than QUESTIONMARK!
-            //entryIN = asResearch[pList[j]].iconID;
-			//if(entryIN<mapRIDToIcon(RID_ROCKET) || entryIN>mapRIDToIcon(RID_QUESTIONMARK))
-            iconNumber = mapIconToRID(asResearch[pList[j]].iconID);
-            if (iconNumber < 0)
+			iconNumber = mapIconToRID(asResearch[pList[j]].iconID);
+			if (iconNumber < 0)
 			{
 				pSList[count++] = pList[j];
 			}
 		}
-
 
 		//fill up the list with topics
 		for (i=0; i < numStatsListEntries; i++)
@@ -2832,7 +2794,7 @@ static void intProcessStats(UDWORD id)
 					//need to check if this was the template that was mid-production
 					if (getProductionQuantity(psStructure, FactoryGetTemplate(psFactory)) == 0)
 					{
-						doNextProduction(psStructure, FactoryGetTemplate(psFactory));
+						doNextProduction(psStructure, FactoryGetTemplate(psFactory), ModeQueue);
 						psNext = FactoryGetTemplate(psFactory);
 					}
 
@@ -2924,15 +2886,15 @@ static void intProcessStats(UDWORD id)
 				widgSetTabs(psWScreen, IDOBJ_TABFORM, objMajor,objMinor);
 
 				// Close the object box as well if selecting a location to build- no longer hide/reveal
-                //or if selecting a structure to demolish
+				// or if selecting a structure to demolish
 				if (objMode == IOBJ_BUILDSEL || objMode == IOBJ_DEMOLISHSEL)
 				{
-					if(driveModeActive()) {
+					if (driveModeActive())
+					{
 						// Make sure weve got a construction droid selected.
-						//if(driveGetDriven()->droidType != DROID_CONSTRUCT) {
-                        if(driveGetDriven()->droidType != DROID_CONSTRUCT &&
-                            driveGetDriven()->droidType != DROID_CYBORG_CONSTRUCT) {
-//PD30 							driveSelectionChanged();
+						if (driveGetDriven()->droidType != DROID_CONSTRUCT
+						    && driveGetDriven()->droidType != DROID_CYBORG_CONSTRUCT)
+						{
 							driveDisableControl();
 						}
 				 		driveDisableTactical();
@@ -2941,15 +2903,12 @@ static void intProcessStats(UDWORD id)
 					}
 
 					intRemoveObject();
-                    //hack to stop the stats window re-opening in demolish mode
-                    if (objMode == IOBJ_DEMOLISHSEL)
-                    {
-                        IntRefreshPending = false;
-                    }
-
+					// hack to stop the stats window re-opening in demolish mode
+					if (objMode == IOBJ_DEMOLISHSEL)
+					{
+						IntRefreshPending = false;
+					}
 				}
-
-
 			}
 		}
 	}
@@ -3111,47 +3070,24 @@ void intSetMapPos(UDWORD x, UDWORD y)
 //
 void intObjectSelected(BASE_OBJECT *psObj)
 {
-	/* Remove whatever is up */
-//	intResetScreen(false);
-
-	if(psObj) {
-//		intResetScreen(true);
+	if(psObj)
+	{
 		setWidgetsStatus(true);
 		switch(psObj->type)
 		{
 		case OBJ_DROID:
-/*			stop build interface appearing for constuction droids
-			if (droidType((DROID *)psObj) == DROID_CONSTRUCT)
-			{
-				intResetScreen(false);
-				intAddBuild((DROID *)psObj);
-			}
-			else*/
-
-//			if(!OrderUp)
-//			{
-//				intResetScreen(false);
-//			}
-//			intAddOrder((DROID *)psObj);
-//			intMode = INT_ORDER;
-
-
 			if(!OrderUp)
 			{
 				intResetScreen(false);
-                //changed to a BASE_OBJECT to accomodate the factories - AB 21/04/99
-                //intAddOrder((DROID *)psObj);
-                intAddOrder(psObj);
+				// changed to a BASE_OBJECT to accomodate the factories - AB 21/04/99
+				intAddOrder(psObj);
 				intMode = INT_ORDER;
 			}
 			else
 			{
-                //changed to a BASE_OBJECT to accomodate the factories - AB 21/04/99
-				//intAddOrder((DROID *)psObj);
-                intAddOrder(psObj);
+				// changed to a BASE_OBJECT to accomodate the factories - AB 21/04/99
+				intAddOrder(psObj);
 			}
-
-
 			break;
 
 		case OBJ_STRUCTURE:
@@ -3182,11 +3118,6 @@ void intObjectSelected(BASE_OBJECT *psObj)
 
 					//widgHide(psWScreen, IDOBJ_FORM);
 				}
-//		  		for(psStruct = apsStructLists[selectedPlayer]; psStruct; psStruct=psStruct->psNext)
-//				{
-//					psStruct->selected = false;
-//				}
-//				((STRUCTURE*)psObj)->selected = true;		// wrong place?
 			}
 			break;
 		default:
@@ -3194,9 +3125,6 @@ void intObjectSelected(BASE_OBJECT *psObj)
 		}
 	} else {
 		intResetScreen(false);
-//		if(OrderUp) {
-//			intRemoveOrder();
-//		}
 	}
 }
 
@@ -3204,7 +3132,6 @@ void intObjectSelected(BASE_OBJECT *psObj)
 // add the construction interface if a constructor droid is selected
 void intConstructorSelected(DROID *psDroid)
 {
-//	intResetScreen(false);
 	setWidgetsStatus(true);
 	intAddBuild(psDroid);
 	widgHide(psWScreen, IDOBJ_FORM);
@@ -3224,13 +3151,6 @@ extern void FinishStructurePosition(UDWORD xPos,UDWORD yPos,void *UserData);
 static void intStartStructPosition(BASE_STATS *psStats)
 {
 	init3DBuilding(psStats,NULL,NULL);
-
-	/*if ((intMode == INT_OBJECT || intMode == INT_STAT) && objMode == IOBJ_BUILDSEL) {
-		widgGetTabs(psWScreen, IDOBJ_TABFORM, &objMajor, &objMinor);
-		// Hide the object form while we select a position.
-		//widgHide(psWScreen,IDOBJ_TABFORM);	only need to hide the top form -all else follows
-		widgHide(psWScreen,IDOBJ_FORM);
-	}*/
 }
 
 
@@ -3238,26 +3158,11 @@ static void intStartStructPosition(BASE_STATS *psStats)
 static void intStopStructPosition(void)
 {
 	/* Check there is still a struct position running */
-//	if (intMode == INT_OBJECT && objMode == IOBJ_BUILDSEL) {
-	if ((intMode == INT_OBJECT || intMode == INT_STAT) && objMode == IOBJ_BUILDSEL) {
+	if ((intMode == INT_OBJECT || intMode == INT_STAT) && objMode == IOBJ_BUILDSEL)
+	{
 		// Reset the stats button
-//		widgGetTabs(psWScreen, IDOBJ_FORM, &objMajor, &objMinor);
-//		widgEndScreen(psWScreen);
-
-		/*if(DroidIsBuilding((DROID *)psObjSelected)) {
-			STRUCTURE *Structure = DroidGetBuildStructure((DROID *)psObjSelected);
-			ASSERT( Structure!=NULL,"Bad structure pointer" );
-			intSetStats(objStatID,(BASE_STATS*)Structure->pStructureType);
-		} else if(DroidGoingToBuild((DROID *)psObjSelected)) {
-			intSetStats(objStatID,DroidGetBuildStats((DROID *)psObjSelected));
-		} else {
-			intSetStats(objStatID,NULL);
-		}*/
-
-//		widgStartScreen(psWScreen);
 		objMode = IOBJ_BUILD;
 	}
-
 	kill3DBuilding();
 }
 
@@ -3367,11 +3272,9 @@ void intBuildFinished(DROID *psDroid)
 	UDWORD	droidID;
 	DROID	*psCurr;
 
-	ASSERT( psDroid != NULL,
-		"intBuildFinished: Invalid droid pointer" );
+	ASSERT(psDroid != NULL, "Invalid droid pointer");
 
 	if ((intMode == INT_OBJECT || intMode == INT_STAT) &&
-		//(objMode == IOBJ_BUILDSEL || objMode == IOBJ_BUILD))
 		objMode == IOBJ_BUILD)
 	{
 		/* Find which button the droid is on and clear it's stats */
@@ -3401,7 +3304,6 @@ void intBuildStarted(DROID *psDroid)
 		"intBuildStarted: Invalid droid pointer" );
 
 	if ((intMode == INT_OBJECT || intMode == INT_STAT) &&
-		//(objMode == IOBJ_BUILDSEL || objMode == IOBJ_BUILD))
 		objMode == IOBJ_BUILD)
 	{
 		/* Find which button the droid is on and clear it's stats */
@@ -3579,7 +3481,6 @@ void intManufactureFinished(STRUCTURE *psBuilding)
 {
 	SDWORD		    structureID;
 	STRUCTURE       *psCurr;
-	BASE_OBJECT	*psObj;
 
 	ASSERT(psBuilding != NULL, "Invalid structure pointer");
 
@@ -3602,14 +3503,15 @@ void intManufactureFinished(STRUCTURE *psBuilding)
 			{
 				break;
 			}
-        }
-        //order the list
-        orderFactories();
+		}
+		// order the list
+		orderFactories();
 
-        //now look thru the list to see which one corresponds to the factory that has just finished
-        structureID = 0;
-        for (psObj = apsObjectList[structureID]; structureID < numObjects; structureID++)
-        {
+		// now look thru the list to see which one corresponds to the factory that has just finished
+		for (structureID = 0; structureID < numObjects; structureID++)
+		{
+			BASE_OBJECT *psObj = apsObjectList[structureID];
+
 			if ((STRUCTURE *)psObj == psBuilding)
 			{
 				intSetStats(structureID + IDOBJ_STATSTART, NULL);
@@ -3618,6 +3520,52 @@ void intManufactureFinished(STRUCTURE *psBuilding)
 				{
 					widgSetButtonState(psWScreen, IDSTAT_LOOP_BUTTON, 0);
 				}
+				break;
+			}
+		}
+	}
+}
+
+void intUpdateManufacture(STRUCTURE *psBuilding)
+{
+	SDWORD		structureID;
+	STRUCTURE       *psCurr;
+	FACTORY		*psFact;
+
+	ASSERT(psBuilding != NULL, "Invalid structure pointer");
+
+	if ((intMode == INT_OBJECT || intMode == INT_STAT) && objMode == IOBJ_MANUFACTURE)
+	{
+		/* Find which button the structure is on and update its stats */
+		structureID = 0;
+		numObjects = 0;
+		memset(apsObjectList, 0, sizeof(BASE_OBJECT *) * MAX_OBJECTS);
+		for (psCurr = interfaceStructList(); psCurr; psCurr = psCurr->psNext)
+		{
+			if (objSelectFunc((BASE_OBJECT *)psCurr))
+			{
+				// The list is ordered now so we have to get all possible entries and sort it before checking if this is the one!
+				apsObjectList[numObjects] = (BASE_OBJECT *)psCurr;
+				numObjects++;
+			}
+			// make sure the list doesn't overflow
+			if (numObjects >= MAX_OBJECTS)
+			{
+				break;
+			}
+		}
+		// order the list
+		orderFactories();
+
+		// now look thru the list to see which one corresponds to the factory that has just finished
+		for (structureID = 0; structureID < numObjects; structureID++)
+		{
+			BASE_OBJECT *psObj = apsObjectList[structureID];
+
+			if ((STRUCTURE *)psObj == psBuilding)
+			{
+				psFact = &((STRUCTURE *)psObj)->pFunctionality->factory;
+				intSetStats(structureID + IDOBJ_STATSTART, psFact->psSubject);
 				break;
 			}
 		}
@@ -4198,25 +4146,6 @@ BOOL intAddOptions(void)
 	if (!widgAddLabel(psWScreen, &sLabInit))
 	{
 		return false;
-	}
-
-	/* Add iViS shaders button */
-	sButInit.formID = IDOPT_IVISFORM;
-	sButInit.id = IDOPT_IVISSHADERS;
-	sButInit.x = OPT_BUTWIDTH + OPT_GAP * 2;
-	sButInit.y = OPT_GAP;
-	sButInit.width = OPT_BUTWIDTH;
-	sButInit.height = OPT_BUTHEIGHT;
-	sButInit.FontID = font_regular;
-	sButInit.pText = "Shaders";
-	sButInit.pTip = "Toggles Shaders/FF mode.";
-	if (!widgAddButton(psWScreen, &sButInit))
-	{
-		return false;
-	}
-	if (pie_GetShadersStatus())
-	{
-		widgSetButtonState(psWScreen, IDOPT_IVISSHADERS, WBUT_CLICKLOCK);
 	}
 
 	/* Add iViS lighting button */
@@ -4937,12 +4866,7 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 		/* Note the object */
 		psObjSelected = psSelected;
 		objStatID = statID;
-// We don't want to be locking the button for command droids.
-//		widgSetButtonState(psWScreen, statID, WBUT_CLICKLOCK);
-
-        //changed to a BASE_OBJECT to accomodate the factories - AB 21/04/99
-		//intAddOrder((DROID *)psSelected);
-        intAddOrder(psSelected);
+		intAddOrder(psSelected);
 		widgSetButtonState(psWScreen, statID, WBUT_CLICKLOCK);
 
 		intMode = INT_CMDORDER;
@@ -5319,11 +5243,8 @@ static void intSetStats(UDWORD id, BASE_STATS *psStats)
 	sLabInit.pText = "BUG! (d)";
 	sLabInit.FontID = font_regular;
 
-
 	if (psStats)
 	{
-//		sButInit.pText = "S";
-		//sFormInit.pTip = psStats->pName;
 		// If it's a droid the name might not be a stringID
 		if (psStats->ref >= REF_TEMPLATE_START &&
 			psStats->ref < REF_TEMPLATE_START + REF_RANGE)
@@ -5336,8 +5257,6 @@ static void intSetStats(UDWORD id, BASE_STATS *psStats)
 		}
 
 		BufferID = (sFormInit.id-IDOBJ_STATSTART)*2+1;
-//		DBPRINTF(("2 *sFormInit.id-IDOBJ_STATSTART : %d\n",BufferID));
-//		BufferID = GetObjectBuffer();
 		ASSERT( BufferID < NUM_OBJECTBUFFERS,"BufferID > NUM_OBJECTBUFFERS" );
 		ClearObjectButtonBuffer(BufferID);
 		RENDERBUTTON_INUSE(&ObjectBuffers[BufferID]);
@@ -5348,22 +5267,16 @@ static void intSetStats(UDWORD id, BASE_STATS *psStats)
 		// Add a text label for the size of the production run.
 		sLabInit.pCallback = intUpdateQuantity;
 		sLabInit.pUserData = sBarInit.pUserData;
-//		sFormInit.pUserData = (void*)intGetObject(id);
 	}
 	else
 	{
-//		sButInit.pText = "NONE";
 		sFormInit.pTip = NULL;
 
 		BufferID = (sFormInit.id-IDOBJ_STATSTART)*2+1;
-//		DBPRINTF(("2 sFormInit.id-IDOBJ_STATSTART : %d\n",BufferID));
-//		BufferID = GetObjectBuffer();
 		ASSERT( BufferID < NUM_OBJECTBUFFERS,"BufferID > NUM_OBJECTBUFFERS" );
 		ClearObjectButtonBuffer(BufferID);
 		RENDERBUTTON_INUSE(&ObjectBuffers[BufferID]);
 		sFormInit.pUserData = &ObjectBuffers[BufferID];
-
-//		sFormInit.pUserData = NULL;
 
 		/* Reset the stats screen button if necessary */
 		if ((INTMODE)objMode == INT_STAT && statID != 0)
@@ -5387,8 +5300,6 @@ static void intSetStats(UDWORD id, BASE_STATS *psStats)
 	{
 		widgSetButtonState(psWScreen, id, WBUT_CLICKLOCK);
 	}
-
-
 }
 
 /* Add the stats widgets to the widget screen */
@@ -6515,7 +6426,7 @@ static void intStatsRMBPressed(UDWORD id)
 			//need to check if this was the template that was mid-production
 			if (getProductionQuantity(psStructure, FactoryGetTemplate(psFactory)) == 0)
 			{
-				doNextProduction(psStructure, FactoryGetTemplate(psFactory));
+				doNextProduction(psStructure, FactoryGetTemplate(psFactory), ModeQueue);
 				psNext = FactoryGetTemplate(psFactory);
 			}
 
@@ -6527,29 +6438,6 @@ static void intStatsRMBPressed(UDWORD id)
 			// Reset the button on the object form
 			intSetStats(objStatID, (BASE_STATS *)psNext);
 		}
-#if 0
-		// set the current Template
-		psCurrTemplate = apsDroidTemplates[selectedPlayer];
-		while (psStats != psCurrTemplate)
-		{
-			//if get to the last template in the list, use this one
-			if (psCurrTemplate->psNext == NULL)
-			{
-				break;
-			}
-			psCurrTemplate = psCurrTemplate->psNext;
-		}
-
-		//close the stats screen
-		intResetScreen(true);
-		// open up the design screen
-		widgSetButtonState(psWScreen, IDRET_DESIGN, WBUT_CLICKLOCK);
-
-		/*add the power bar - for looks! */
-		intShowPowerBar();
-		(void)intAddDesign( true );
-		intMode = INT_DESIGN;
-#endif
 	}
 }
 

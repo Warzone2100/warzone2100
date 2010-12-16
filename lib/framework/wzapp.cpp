@@ -67,6 +67,8 @@ typedef struct _input_state
 {
 	KEY_STATE state;	///< Last key/mouse state
 	UDWORD lastdown;	///< last key/mouse button down timestamp
+	Vector2i pressPos;      ///< Location of last mouse press event.
+	Vector2i releasePos;    ///< Location of last mouse release event.
 } INPUT_STATE;
 
 /// constant for the interval between 2 singleclicks for doubleclick event in ms
@@ -366,6 +368,9 @@ MOUSE_KEY_CODE WzMainWindow::buttonToIdx(Qt::MouseButton button)
 // TODO consider using QWidget::mouseDoubleClickEvent() for double-click
 void WzMainWindow::mousePressEvent(QMouseEvent *event)
 {
+	mouseXPos = event->x();
+	mouseYPos = event->y();
+
 	Qt::MouseButtons presses = event->buttons();	// full state info for all buttons
 	MOUSE_KEY_CODE idx = buttonToIdx(event->button());			// index of button that caused event
 
@@ -375,6 +380,9 @@ void WzMainWindow::mousePressEvent(QMouseEvent *event)
 		return; // not recognized mouse button
 	}
 
+	aMouseState[idx].pressPos.x = mouseXPos;
+	aMouseState[idx].pressPos.y = mouseYPos;
+
 	if (aMouseState[idx].state == KEY_UP
 		|| aMouseState[idx].state == KEY_RELEASED
 		|| aMouseState[idx].state == KEY_PRESSRELEASE)
@@ -382,7 +390,7 @@ void WzMainWindow::mousePressEvent(QMouseEvent *event)
 		if (!presses.testFlag(Qt::MidButton)) //skip doubleclick check for wheel
 		{
 			// whether double click or not
-			if (gameTime - aMouseState[idx].lastdown < DOUBLE_CLICK_INTERVAL)
+			if (realTime - aMouseState[idx].lastdown < DOUBLE_CLICK_INTERVAL)
 			{
 				aMouseState[idx].state = KEY_DOUBLECLICK;
 				aMouseState[idx].lastdown = 0;
@@ -390,7 +398,7 @@ void WzMainWindow::mousePressEvent(QMouseEvent *event)
 			else
 			{
 				aMouseState[idx].state = KEY_PRESSED;
-				aMouseState[idx].lastdown = gameTime;
+				aMouseState[idx].lastdown = realTime;
 			}
 		}
 		else	//mouse wheel up/down was used, so notify. FIXME.
@@ -415,23 +423,29 @@ void WzMainWindow::wheelEvent(QWheelEvent *event)
 	if (direction > 0)
 	{
 		aMouseState[MOUSE_WUP].state = KEY_PRESSED;
-		aMouseState[MOUSE_WUP].lastdown = gameTime;
+		aMouseState[MOUSE_WUP].lastdown = realTime;
 	}
 	else
 	{
 		aMouseState[MOUSE_WDN].state = KEY_PRESSED;
-		aMouseState[MOUSE_WDN].lastdown = gameTime;
+		aMouseState[MOUSE_WDN].lastdown = realTime;
 	}
 }
 
 void WzMainWindow::mouseReleaseEvent(QMouseEvent *event)
 {
+	mouseXPos = event->x();
+	mouseYPos = event->y();
+
 	MOUSE_KEY_CODE idx = buttonToIdx(event->button());
 
 	if (idx == MOUSE_BAD)
 	{
 		return; // not recognized mouse button
 	}
+
+	aMouseState[idx].releasePos.x = mouseXPos;
+	aMouseState[idx].releasePos.y = mouseYPos;
 
 	if (aMouseState[idx].state == KEY_PRESSED)
 	{
@@ -817,6 +831,16 @@ uint16_t mouseY()
 	return mouseYPos;
 }
 
+Vector2i mousePressPos(MOUSE_KEY_CODE code)
+{
+	return aMouseState[code].pressPos;
+}
+
+Vector2i mouseReleasePos(MOUSE_KEY_CODE code)
+{
+	return aMouseState[code].releasePos;
+}
+
 void SetMousePos(uint16_t x, uint16_t y)
 {
 	static int mousewarp = -1;
@@ -1179,7 +1203,7 @@ void iV_SetTextColour(PIELIGHT colour)
 
 void iV_DrawTextRotated(const char* string, float XPos, float YPos, float rotation)
 {
-	pie_SetTexturePage(TEXPAGE_FONT);
+	pie_SetTexturePage(TEXPAGE_EXTERN);
 	glDisable(GL_CULL_FACE);
 	QPainter painter(WzMainWindow::instance()->context()->device());
 	painter.setPen(fontColor);

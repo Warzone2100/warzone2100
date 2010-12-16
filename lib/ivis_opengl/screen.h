@@ -68,7 +68,6 @@ extern void screenDoDumpToDiskIfRequired(void);
 void screen_enableMapPreview(char *name, int width, int height, Vector2i *playerpositions);
 void screen_disableMapPreview(void);
 BOOL screen_getMapPreview(void);
-const char *screen_getMapName(void);
 
 #ifdef __cplusplus
 }

@@ -94,22 +94,12 @@ typedef struct _ground_type
 	float textureSize;
 } GROUND_TYPE;
 
-#define AIR_BLOCKED		0x01	///< Aircraft cannot pass tile
-#define FEATURE_BLOCKED		0x02	///< Ground units cannot pass tile due to item in the way
-#define WATER_BLOCKED		0x04	///< Units that cannot pass water are blocked by this tile
-#define LAND_BLOCKED		0x08	///< The inverse of the above -- for propeller driven crafts
-
 /* Information stored with each tile */
 typedef struct _maptile
 {
 	uint8_t			tileInfoBits;
 	uint8_t			tileExploredBits;
 	uint8_t			sensorBits;		// bit per player, who can see tile with sensor
-	uint8_t			dangerBits;		// bit per player, does AI sense danger going there? not always up to date
-	uint8_t			threatBits;		// bit per player, can hostile players shoot here? not always up to date
-	uint8_t			aaThreatBits;		// bit per player, can hostile players shoot at my VTOLs here?
-	uint8_t			blockingBits;		// bit set that tells whether a tile is blocked
-	uint8_t			buildingBits;		// bit per player whether player has blocking building at tile, combine it with alliance bits and blockingBits
 	uint8_t			illumination;	// How bright is this tile?
 	uint8_t			watchers[MAX_PLAYERS];		// player sees through fog of war here with this many objects
 	uint16_t		texture;		// Which graphics texture is on this tile
@@ -124,6 +114,131 @@ typedef struct _maptile
 	int32_t                 waterLevel;             ///< At what height is the water for this tile
 } MAPTILE;
 
+/* The size and contents of the map */
+extern SDWORD	mapWidth, mapHeight;
+extern MAPTILE *psMapTiles;
+extern float waterLevel;
+extern GROUND_TYPE *psGroundTypes;
+extern int numGroundTypes;
+extern int waterGroundType;
+extern int cliffGroundType;
+extern char *tileset;
+
+#define AIR_BLOCKED		0x01	///< Aircraft cannot pass tile
+#define FEATURE_BLOCKED		0x02	///< Ground units cannot pass tile due to item in the way
+#define WATER_BLOCKED		0x04	///< Units that cannot pass water are blocked by this tile
+#define LAND_BLOCKED		0x08	///< The inverse of the above -- for propeller driven crafts
+
+#define AUXBITS_UNUSED		0x01	///< Unused for now
+#define AUXBITS_OUR_BUILDING	0x02	///< Do we or our allies have a building at this tile
+#define AUXBITS_ANY_BUILDING	0x04	///< Is there any building that might be blocking here?
+#define AUXBITS_TEMPORARY	0x08	///< Temporary bit used in calculations
+#define AUXBITS_DANGER		0x10	///< Does AI sense danger going there?
+#define AUXBITS_THREAT		0x20	///< Can hostile players shoot here?
+#define AUXBITS_AATHREAT	0x40	///< Can hostile players shoot at my VTOLs here?
+#define AUXBITS_BUILDING	0x80	///< Whether player has blocking building at tile, combine it with alliance bits and blockingBits
+#define AUXBITS_ALL		0xff
+
+#define AUX_MAP		0
+#define AUX_ASTARMAP	1
+#define AUX_DANGERMAP	2 
+#define AUX_MAX		3
+
+extern uint8_t *psBlockMap[AUX_MAX];
+extern uint8_t *psAuxMap[MAX_PLAYERS + AUX_MAX];	// yes, we waste one element... eyes wide open... makes API nicer
+
+/// Find aux bitfield for a given tile
+WZ_DECL_ALWAYS_INLINE static inline uint8_t auxTile(int x, int y, int player)
+{
+	return psAuxMap[player][x + y * mapWidth];
+}
+
+/// Find blocking bitfield for a given tile
+WZ_DECL_ALWAYS_INLINE static inline uint8_t blockTile(int x, int y, int slot)
+{
+	return psBlockMap[slot][x + y * mapWidth];
+}
+
+/// Store a shadow copy of a player's aux map for use in threaded calculations
+static inline void auxMapStore(int player, int slot)
+{
+	memcpy(psBlockMap[slot], psBlockMap[0], sizeof(*psBlockMap[player]) * mapWidth * mapHeight);
+	memcpy(psAuxMap[MAX_PLAYERS + slot], psAuxMap[player], sizeof(*psAuxMap[player]) * mapWidth * mapHeight);
+}
+
+/// Restore selected fields from the shadow copy of a player's aux map (ignoring the block map)
+static inline void auxMapRestore(int player, int slot, int mask)
+{
+	int i;
+	uint8_t original, cached;
+
+	for (i = 0; i < mapHeight * mapWidth; i++)
+	{
+		original = psAuxMap[player][i];
+		cached = psAuxMap[MAX_PLAYERS + slot][i];
+		psAuxMap[player][i] = original ^ ((original ^ cached) & mask); 
+	}
+}
+
+/// Set aux bits. Always set identically for all players. States not set are retained.
+WZ_DECL_ALWAYS_INLINE static inline void auxSet(int x, int y, int player, int state)
+{
+	psAuxMap[player][x + y * mapWidth] |= state;
+}
+
+/// Set aux bits. Always set identically for all players. States not set are retained.
+WZ_DECL_ALWAYS_INLINE static inline void auxSetAll(int x, int y, int state)
+{
+	int i;
+
+	for (i = 0; i < MAX_PLAYERS; i++)
+	{
+		psAuxMap[i][x + y * mapWidth] |= state;
+	}
+}
+
+/// Set aux bits. Always set identically for all players. States not set are retained.
+WZ_DECL_ALWAYS_INLINE static inline void auxSetAllied(int x, int y, int player, int state)
+{
+	int i;
+
+	for (i = 0; i < MAX_PLAYERS; i++)
+	{
+		if (alliancebits[player] & (1 << i))
+		{
+			psAuxMap[i][x + y * mapWidth] |= state;
+		}
+	}
+}
+
+/// Clear aux bits. Always set identically for all players. States not cleared are retained.
+WZ_DECL_ALWAYS_INLINE static inline void auxClear(int x, int y, int player, int state)
+{
+	psAuxMap[player][x + y * mapWidth] &= ~state;
+}
+
+/// Clear all aux bits. Always set identically for all players. States not cleared are retained.
+WZ_DECL_ALWAYS_INLINE static inline void auxClearAll(int x, int y, int state)
+{
+	int i;
+
+	for (i = 0; i < MAX_PLAYERS; i++)
+	{
+		psAuxMap[i][x + y * mapWidth] &= ~state;
+	}
+}
+
+/// Set blocking bits. Always set identically for all players. States not set are retained.
+WZ_DECL_ALWAYS_INLINE static inline void auxSetBlocking(int x, int y, int state)
+{
+	psBlockMap[0][x + y * mapWidth] |= state;
+}
+
+/// Clear blocking bits. Always set identically for all players. States not cleared are retained.
+WZ_DECL_ALWAYS_INLINE static inline void auxClearBlocking(int x, int y, int state)
+{
+	psBlockMap[0][x + y * mapWidth] &= ~state;
+}
 
 /**
  * Check if tile contains a structure or feature. Function is thread-safe,

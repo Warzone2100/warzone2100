@@ -331,6 +331,9 @@ void recvStructureInfo(NETQUEUE queue)
 	NETend();
 
 	psStruct = IdToStruct(structId, player);
+
+	syncDebug("player%d,structId%u%c,structureInfo%u,templateId%u%c", player, structId, psStruct == NULL? '^' : '*', structureInfo, templateId, psTempl == NULL? '^' : '*');
+
 	if (psStruct == NULL)
 	{
 		debug(LOG_SYNC, "Couldn't find structure %u to change production.", structId);

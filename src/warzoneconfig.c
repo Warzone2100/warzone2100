@@ -27,6 +27,7 @@
 #include "warzoneconfig.h"
 #include "lib/ivis_common/piestate.h"
 #include "advvis.h"
+#include "component.h"
 
 /***************************************************************************/
 /*
@@ -53,9 +54,10 @@ typedef struct _warzoneGlobals
 	UDWORD		height;
 	unsigned int fsaa;
 	bool		vsync;
-	bool            pauseOnFocusLoss;
-	bool            ColouredCursor;
-	bool            MusicEnabled;
+	bool		pauseOnFocusLoss;
+	bool		ColouredCursor;
+	bool		MusicEnabled;
+	int8_t		SPcolor;
 } WARZONE_GLOBALS;
 
 /***************************************************************************/
@@ -92,13 +94,31 @@ void war_SetDefaultStates(void)//Sets all states
 	war_SetColouredCursor(false);
 #endif
 	war_SetMusicEnabled(true);
+	war_SetSPcolor(0);		//default color is green
 }
 
-void war_setFullscreen(BOOL b) {
+void war_SetSPcolor(int color)
+{
+	if (color >= 1 && color <= 3)		// only 0,4,5,6,7 are allowed for SP games, AI uses the other colors.
+	{
+		color = 0;
+	}
+	warGlobs.SPcolor = color;
+	setPlayerColour(0, color);
+}
+
+int8_t war_GetSPcolor(void)
+{
+	return warGlobs.SPcolor;
+}
+
+void war_setFullscreen(BOOL b)
+{
 	warGlobs.Fullscreen = b;
 }
 
-BOOL war_getFullscreen(void) {
+BOOL war_getFullscreen(void)
+{
 	return warGlobs.Fullscreen;
 }
 

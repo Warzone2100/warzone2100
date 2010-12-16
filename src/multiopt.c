@@ -642,6 +642,8 @@ BOOL multiGameShutdown(void)
 	ingame.localJoiningInProgress = false; // Clean up
 	ingame.localOptionsReceived = false;
 	ingame.bHostSetup = false;	// Dont attempt a host
+	ingame.TimeEveryoneIsInGame = 0;
+	ingame.startTime = 0;
 	NetPlay.isHost					= false;
 	bMultiPlayer					= false;	// Back to single player mode
 	bMultiMessages					= false;

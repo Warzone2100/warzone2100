@@ -198,6 +198,26 @@ static void resetMultiVisibility(UDWORD player)
 	return;
 }
 
+static void sendPlayerLeft(uint32_t playerIndex)
+{
+	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_PLAYER_LEFT);
+		NETuint32_t(&playerIndex);
+	NETend();
+}
+
+void recvPlayerLeft(NETQUEUE queue)
+{
+	uint32_t playerIndex = 0;
+
+	NETbeginDecode(queue, GAME_PLAYER_LEFT);
+		NETuint32_t(&playerIndex);
+	NETend();
+
+	turnOffMultiMsg(true);
+	clearPlayer(playerIndex, false);  // don't do it quietly
+	turnOffMultiMsg(false);
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 // A remote player has left the game
 BOOL MultiPlayerLeave(UDWORD playerIndex)
@@ -215,11 +235,15 @@ BOOL MultiPlayerLeave(UDWORD playerIndex)
 
 	ssprintf(buf, _("%s has Left the Game"), getPlayerName(playerIndex));
 
-	turnOffMultiMsg(true);
-	clearPlayer(playerIndex, false);		// don't do it quietly
+	if (ingame.localJoiningInProgress)
+	{
+		clearPlayer(playerIndex, false);
+	}
+	else if (NetPlay.isHost)  // If hosting, and game has started (not in pre-game lobby screen, that is).
+	{
+		sendPlayerLeft(playerIndex);
+	}
 	game.skDiff[playerIndex] = DIFF_SLIDER_STOPS / 2;
-
-	turnOffMultiMsg(false);
 
 	addConsoleMessage(buf, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 

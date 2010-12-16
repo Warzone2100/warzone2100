@@ -198,7 +198,7 @@ static UDWORD	rotInitialUp;
 static UDWORD	xMoved, yMoved;
 static STRUCTURE	*psBuilding;
 static BOOL	edgeOfMap = false;
-static UDWORD	scrollRefTime;
+static uint32_t scrollRefTime;
 static float	scrollSpeedLeftRight; //use two directions and add them because its simple
 static float	scrollStepLeftRight;
 static float	scrollSpeedUpDown;
@@ -391,6 +391,16 @@ void ProcessRadarInput(void)
 
 			if (mousePressed(MOUSE_ORDER) || (mousePressed(MOUSE_MMB) && keyDown(KEY_LALT)))
 			{
+				if (mousePressed(MOUSE_ORDER))
+				{
+					x = mousePressPos(MOUSE_ORDER).x;
+					y = mousePressPos(MOUSE_ORDER).y;
+				}
+				else
+				{
+					x = mousePressPos(MOUSE_MMB).x;
+					y = mousePressPos(MOUSE_MMB).y;
+				}
 				if(driveModeActive()) {
 					driveProcessRadarInput(x,y);
 				} else {
@@ -430,6 +440,9 @@ void ProcessRadarInput(void)
 			}
 			else if (mousePressed(MOUSE_SELECT))
 			{
+				x = mousePressPos(MOUSE_SELECT).x;
+				y = mousePressPos(MOUSE_SELECT).y;
+
 				CalcRadarPosition(x, y, &PosX, &PosY);
 
 				if(bInstantRadarJump)
@@ -783,7 +796,16 @@ void processMouseClickInput(void)
 		}
 		else
 		{
-			dealWithLMB();
+			if (!bMultiPlayer  && establishSelection(selectedPlayer) == SC_DROID_TRANSPORTER)
+			{
+				// Never, *ever* let user control the transport in SP games--it breaks the scripts!
+				ASSERT(game.type == CAMPAIGN, "Game type was set incorrectly!");
+				return;
+			}
+			else
+			{
+				dealWithLMB();
+			}
 		}
 	}
 
@@ -1085,12 +1107,39 @@ void processMouseClickInput(void)
 }
 
 
+static void calcScroll(float *y, float *dydt, float accel, float decel, float targetVelocity, float dt)
+{
+	double tMid;
+
+	if (targetVelocity < *dydt)
+	{
+		accel = -accel;
+		decel = -decel;
+	}
+
+	// Decelerate if needed.
+	tMid = (0 - *dydt) / decel;
+	CLIP(tMid, 0, dt);
+	*y += *dydt * tMid + decel/2 * tMid*tMid;
+	*dydt += decel * tMid;
+	dt -= tMid;
+
+	// Accelerate if needed.
+	tMid = (targetVelocity - *dydt) / accel;
+	CLIP(tMid, 0, dt);
+	*y += *dydt * tMid + accel/2 * tMid*tMid;
+	*dydt += accel * tMid;
+	dt -= tMid;
+
+	// Continue at target velocity.
+	*y += *dydt * dt;
+}
+
 void scroll(void)
 {
 	SDWORD	xDif,yDif;
-	UDWORD	timeDiff;
-	BOOL mouseAtLeft = false, mouseAtRight = false,
-		mouseAtTop = false, mouseAtBottom = false;
+	uint32_t timeDiff;
+	int scrollDirLeftRight = 0, scrollDirUpDown = 0;
 	float scroll_zoom_factor = 1+2*((getViewDistance()-MINDISTANCE)/((float)(MAXDISTANCE-MINDISTANCE)));
 	float scaled_max_scroll_speed = scroll_zoom_factor * MAX_SCROLL_SPEED;
 	float scaled_accel;
@@ -1102,143 +1151,35 @@ void scroll(void)
 
 	if (mouseScroll)
 	{
-		/* Scroll left */
-		if (mouseX() < BOUNDARY_X)
-		{
-			mouseAtLeft = true;
-		}
+		// Scroll left or right
+		scrollDirLeftRight += (mouseX() > (pie_GetVideoBufferWidth() - BOUNDARY_X)) -
+		                       (mouseX() < BOUNDARY_X);
 
-		/* Scroll right */
-		if (mouseX() > (pie_GetVideoBufferWidth() - BOUNDARY_X))
-		{
-			mouseAtRight = true;
-		}
-
-		/* Scroll up */
-		if (mouseY() < BOUNDARY_Y)
-		{
-			mouseAtBottom = true;
-		}
-
-		/* Scroll down */
-		if (mouseY() > (pie_GetVideoBufferHeight() - BOUNDARY_Y))
-		{
-			mouseAtTop = true;
-		}
+		// Scroll down or up
+		scrollDirUpDown += (mouseY() < BOUNDARY_Y) -
+		                    (mouseY() > (pie_GetVideoBufferHeight() - BOUNDARY_Y));
 	}
 	if (!keyDown(KEY_LCTRL) && !keyDown(KEY_RCTRL))
 	{
-		/* Scroll left */
-		if (keyDown(KEY_LEFTARROW))
-		{
-			mouseAtLeft = true;
-		}
+		// Scroll left or right
+		scrollDirLeftRight += keyDown(KEY_RIGHTARROW) - keyDown(KEY_LEFTARROW);
 
-		/* Scroll right */
-		if (keyDown(KEY_RIGHTARROW))
-		{
-			mouseAtRight = true;
-		}
-
-		/* Scroll up */
-		if (keyDown(KEY_UPARROW))
-		{
-			mouseAtBottom = true;
-		}
-
-		/* Scroll down */
-		if ( keyDown(KEY_DOWNARROW))
-		{
-			mouseAtTop = true;
-		}
+		// Scroll down or up
+		scrollDirUpDown += keyDown(KEY_UPARROW) - keyDown(KEY_DOWNARROW);
 	}
-	/* Time to update scroll - change to should be time */
+	CLIP(scrollDirLeftRight, -1, 1);
+	CLIP(scrollDirUpDown,    -1, 1);
+
+	scaled_accel = scroll_zoom_factor * scroll_speed_accel;
+
+	// Apparently there's stutter if using deltaRealTime, so we have our very own delta time here, just for us.
 	timeDiff = wzGetTicks() - scrollRefTime;
+	scrollRefTime += timeDiff;
 
-	/* Store reference time */
-	scrollRefTime = wzGetTicks();
-
-	if (timeDiff > GTIME_MAXFRAME)
-	{
-		timeDiff = GTIME_MAXFRAME;
-	}
-	scaled_accel = scroll_zoom_factor * (float)scroll_speed_accel * (float)(timeDiff) / (float)GAME_TICKS_PER_SEC;
-	if(mouseAtLeft)
-	{
-		if(scrollSpeedLeftRight > 0)
-			scrollSpeedLeftRight = 0.0f;
-		scrollSpeedLeftRight -= scaled_accel;
-		if(scrollSpeedLeftRight < -scaled_max_scroll_speed)
-		{
-			scrollSpeedLeftRight = -scaled_max_scroll_speed;
-		}
-	}
-	else if(mouseAtRight)
-	{
-		if(scrollSpeedLeftRight < 0)
-			scrollSpeedLeftRight = 0.0f;
-		scrollSpeedLeftRight += scaled_accel;
-		if(scrollSpeedLeftRight > scaled_max_scroll_speed)
-		{
-			scrollSpeedLeftRight = scaled_max_scroll_speed;
-		}
-	}
-	else // not at left or right so retard the scroll
-	{
-		if(scrollSpeedLeftRight > 2*scaled_accel)
-		{
-			scrollSpeedLeftRight -= 2*scaled_accel;
-		}
-		else if(scrollSpeedLeftRight < -2*scaled_accel)
-		{
-			scrollSpeedLeftRight += 2*scaled_accel;
-		}
-		else
-		{
-			scrollSpeedLeftRight = 0.0f;
-		}
-	}
-	if(mouseAtBottom)//its at the top??
-	{
-		if(scrollSpeedUpDown < 0)
-			scrollSpeedUpDown = 0.0f;
-		scrollSpeedUpDown += scaled_accel;
-		if(scrollSpeedUpDown > scaled_max_scroll_speed)
-		{
-			scrollSpeedUpDown = scaled_max_scroll_speed;
-		}
-	}
-	else if(mouseAtTop)//its at the bottom??
-	{
-		if(scrollSpeedUpDown > 0)
-			scrollSpeedUpDown = 0.0f;
-		scrollSpeedUpDown -= scaled_accel;
-		if(scrollSpeedUpDown < -scaled_max_scroll_speed)
-		{
-			scrollSpeedUpDown = -scaled_max_scroll_speed;
-		}
-	}
-	else // not at top or bottom so retard the scroll
-	{
-		if(scrollSpeedUpDown > scaled_accel)
-		{
-			scrollSpeedUpDown -= 2*scaled_accel;
-		}
-		else if(scrollSpeedUpDown < -scaled_accel)
-		{
-			scrollSpeedUpDown += 2*scaled_accel;
-		}
-		else
-		{
-			scrollSpeedUpDown = 0.0f;
-		}
-	}
-
-	// scrool speeds updated in proportion to frame time calculate how far to step in each direction
-	scrollStepLeftRight = scrollSpeedLeftRight * (float)(timeDiff) /
-		(float)GAME_TICKS_PER_SEC;
-	scrollStepUpDown = scrollSpeedUpDown * (float)(timeDiff) /
-		(float)GAME_TICKS_PER_SEC;
+	scrollStepLeftRight = 0;
+	scrollStepUpDown = 0;
+	calcScroll(&scrollStepLeftRight, &scrollSpeedLeftRight, scaled_accel, 2*scaled_accel, scrollDirLeftRight * scaled_max_scroll_speed, (float)timeDiff / GAME_TICKS_PER_SEC);
+	calcScroll(&scrollStepUpDown,    &scrollSpeedUpDown,    scaled_accel, 2*scaled_accel, scrollDirUpDown    * scaled_max_scroll_speed, (float)timeDiff / GAME_TICKS_PER_SEC);
 
 	/* Get x component of movement */
 	xDif = iCosR(-player.r.y, scrollStepLeftRight) + iSinR(-player.r.y, scrollStepUpDown);
@@ -2229,12 +2170,13 @@ void	dealWithLMB( void )
 		if (getDebugMappingStatus() && tileOnMap(mouseTileX, mouseTileY))
 		{
 			MAPTILE *psTile = mapTile(mouseTileX, mouseTileY);
+			uint8_t aux = auxTile(mouseTileX, mouseTileY, selectedPlayer);
 
 			CONPRINTF(ConsoleString, (ConsoleString, "%s tile %d, %d [%d, %d] continent(l%d, h%d) level %g illum %d %s %s",
 			          tileIsExplored(psTile) ? "Explored" : "Unexplored",
 			          mouseTileX, mouseTileY, world_coord(mouseTileX), world_coord(mouseTileY),
 			          (int)psTile->limitedContinent, (int)psTile->hoverContinent, psTile->level, (int)psTile->illumination, 
-			          psTile->dangerBits & (1 << selectedPlayer) ? "danger" : "", psTile->threatBits & (1 << selectedPlayer) ? "threat" : ""));
+			          aux & AUXBITS_DANGER ? "danger" : "", aux & AUXBITS_THREAT ? "threat" : ""));
 		}
 
 		driveDisableTactical();

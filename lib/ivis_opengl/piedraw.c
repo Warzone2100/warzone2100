@@ -202,77 +202,20 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 	glColor4ubv(colour.vector);	// Only need to set once for entire model
 	pie_SetTexturePage(shape->texpage);
 
-	// Activate TCMask if needed
-	if (shape->flags & iV_IMD_TCMASK &&	rendStates.rendMode == REND_OPAQUE)
-	{
-#ifdef _DEBUG
-	glErrors();
-#endif
-		if (pie_GetShadersStatus())
-		{
-			pie_ActivateShader_TCMask(teamcolour, shape->tcmaskpage);
-		}
-		else
-		{
-			//Set the environment colour with tcmask
-			GLfloat tc_env_colour[4];  
-			pal_PIELIGHTtoRGBA4f(&tc_env_colour[0], teamcolour);
+	pie_ActivateShader_TCMask(teamcolour, shape->tcmaskpage);
 
-			// TU0
-			glActiveTexture(GL_TEXTURE0);
-			glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,	GL_COMBINE);
-			glTexEnvfv(GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, tc_env_colour);
-
-			// TU0 RGB
-			glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB,		GL_ADD_SIGNED);
-			glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_RGB,		GL_TEXTURE);
-			glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_RGB,		GL_SRC_COLOR);
-			glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE1_RGB,		GL_CONSTANT);
-			glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND1_RGB,		GL_SRC_COLOR);
-
-			// TU0 Alpha
-			glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA,		GL_REPLACE);
-			glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_ALPHA,		GL_TEXTURE);
-			glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_ALPHA,	GL_SRC_ALPHA);
-
-			// TU1
-			glActiveTexture(GL_TEXTURE1);
-			glEnable(GL_TEXTURE_2D);
-			glBindTexture(GL_TEXTURE_2D, _TEX_PAGE[shape->tcmaskpage].id);
-			glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,	GL_COMBINE);
-
-			// TU1 RGB
-			glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB,		GL_INTERPOLATE);
-			glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_RGB,		GL_PREVIOUS);
-			glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_RGB,		GL_SRC_COLOR);
-			glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE1_RGB,		GL_TEXTURE0);
-			glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND1_RGB,		GL_SRC_COLOR);
-			glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE2_RGB,		GL_TEXTURE);
-			glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND2_RGB,		GL_SRC_ALPHA);
-
-			// TU1 Alpha
-			glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA,		GL_REPLACE);
-			glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_ALPHA,		GL_PREVIOUS);
-			glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_ALPHA,	GL_SRC_ALPHA);
-
-
-			// This is why we are doing in opaque mode.
-			glEnable(GL_BLEND);
-			glBlendFunc(GL_CONSTANT_COLOR, GL_ZERO);
-			glBlendColor(colour.byte.r / 255.0, colour.byte.g / 255.0,
-						colour.byte.b / 255.0, colour.byte.a / 255.0);
-		}
-#ifdef _DEBUG
-	glErrors();
-#endif
-	}
+	frame %= MAX(1, shape->numFrames);
 
 	for (pPolys = shape->polys; pPolys < shape->polys + shape->npolys; pPolys++)
 	{
-		Vector2f	texCoords[pie_MAX_VERTICES_PER_POLYGON];
 		Vector3f	vertexCoords[pie_MAX_VERTICES_PER_POLYGON];
-		unsigned int n;
+		unsigned int	n, fidx = frame;
 		VERTEXID	*index;
+
+		if (!(pPolys->flags & iV_IMD_TEXANIM))
+		{
+			fidx = 0;
+		}
 
 		for (n = 0, index = pPolys->pindex;
 				n < pPolys->npnts;
@@ -281,30 +224,9 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 			vertexCoords[n].x = shape->points[*index].x;
 			vertexCoords[n].y = shape->points[*index].y;
 			vertexCoords[n].z = shape->points[*index].z;
-			texCoords[n].x = pPolys->texCoord[n].x;
-			texCoords[n].y = pPolys->texCoord[n].y;
 		}
 
 		polyCount++;
-
-		// Run TextureAnimation
-		if (frame && pPolys->flags & iV_IMD_TEXANIM)
-		{
-			frame %= shape->numFrames;
-
-			if (frame > 0)
-			{
-				const int framesPerLine = OLD_TEXTURE_SIZE_FIX / (pPolys->texAnim.x * OLD_TEXTURE_SIZE_FIX);
-				const int uFrame = (frame % framesPerLine) * (pPolys->texAnim.x * OLD_TEXTURE_SIZE_FIX);
-				const int vFrame = (frame / framesPerLine) * (pPolys->texAnim.y * OLD_TEXTURE_SIZE_FIX);
-
-				for (n = 0; n < pPolys->npnts; n++)
-				{
-					texCoords[n].x += uFrame / OLD_TEXTURE_SIZE_FIX;
-					texCoords[n].y += vFrame / OLD_TEXTURE_SIZE_FIX;
-				}
-			}
-		}
 
 		glBegin(GL_TRIANGLE_FAN);
 
@@ -315,37 +237,14 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 
 		for (n = 0; n < pPolys->npnts; n++)
 		{
-			glTexCoord2fv((GLfloat*)&texCoords[n]);
-			if (shape->flags & iV_IMD_TCMASK && rendStates.rendMode == REND_OPAQUE &&
-				!pie_GetShadersStatus())
-			{
-				glMultiTexCoord2fv(GL_TEXTURE1, (GLfloat*)&texCoords[n]);
-			}
+			glTexCoord2fv((GLfloat*)&pPolys->texCoord[fidx * pPolys->npnts + n]);
 			glVertex3fv((GLfloat*)&vertexCoords[n]);
 		}
 
 		glEnd();
 	}
 
-	// Deactivate TCMask if it was previously enabled
-	if (shape->flags & iV_IMD_TCMASK && rendStates.rendMode == REND_OPAQUE)
-	{
-		if (pie_GetShadersStatus())
-		{
-			pie_DeactivateShader();
-		}
-		else
-		{
-			glDisable(GL_BLEND);
-
-			glActiveTexture(GL_TEXTURE1);
-			glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-			glDisable(GL_TEXTURE_2D);
-
-			glActiveTexture(GL_TEXTURE0);
-			glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-		}
-	}
+	pie_DeactivateShader();
 
 	if (pieFlag & pie_BUTTON)
 	{

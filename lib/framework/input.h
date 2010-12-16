@@ -32,6 +32,7 @@
 
 #include "types.h"
 #include "lib/framework/utf.h"
+#include "vector.h"
 
 #ifdef __cplusplus
 extern "C"
@@ -184,6 +185,11 @@ extern uint16_t mouseX(void) WZ_DECL_PURE;
 
 /** Return the current Y position of the mouse. */
 extern uint16_t mouseY(void) WZ_DECL_PURE;
+
+/// Return the position of the mouse where it was clicked last.
+Vector2i mousePressPos(MOUSE_KEY_CODE code) WZ_DECL_PURE;
+/// Return the position of the mouse where it was released last.
+Vector2i mouseReleasePos(MOUSE_KEY_CODE code) WZ_DECL_PURE;
 
 /** This returns true if the mouse key is currently depressed. */
 extern bool mouseDown(MOUSE_KEY_CODE code);

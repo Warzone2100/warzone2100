@@ -165,7 +165,8 @@ bool screenInitialise()
 	}
 	else
 	{
-		debug(LOG_INFO, "OpenGL 2.0 is not supported by your system, using fixed pipeline.");
+		debug(LOG_POPUP, "OpenGL 2.0 is not supported by your system, current shaders require this.");
+		debug(LOG_POPUP, "Team colors will not function correctly on your system.");
 	}
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -198,7 +199,7 @@ void screen_SetBackDropFromFile(const char* filename)
 
 	// Make sure the current texture page is reloaded after we are finished
 	// Otherwise WZ will think it is still loaded and not load it again
-	pie_SetTexturePage(TEXPAGE_FONT);
+	pie_SetTexturePage(TEXPAGE_EXTERN);
 
 	if( strcmp(extension,".png") == 0 )
 	{
@@ -289,7 +290,7 @@ void screen_Upload(const char *newBackDropBmp, BOOL preview)
 
 	// Make sure the current texture page is reloaded after we are finished
 	// Otherwise WZ will think it is still loaded and not load it again
-	pie_SetTexturePage(TEXPAGE_FONT);
+	pie_SetTexturePage(TEXPAGE_EXTERN);
 
 	glBindTexture(GL_TEXTURE_2D, backDropTexture);
 	glColor3f(1, 1, 1);
@@ -369,11 +370,6 @@ void screen_enableMapPreview(char *name, int width, int height, Vector2i *player
 		player_pos[i].x = playerpositions[i].x;
 		player_pos[i].y = playerpositions[i].y;
 	}
-}
-
-const char *screen_getMapName(void)
-{
-	return mapname;
 }
 
 void screen_disableMapPreview(void)

@@ -66,7 +66,6 @@
 #include "droid.h"
 #include "data.h"
 #include "multiplay.h"
-#include "environ.h"
 #include "loop.h"
 #include "visibility.h"
 #include "mapgrid.h"
@@ -252,6 +251,7 @@ void initMission(void)
 		mission.apsDroidLists[inc] = NULL;
 		mission.apsFeatureLists[inc] = NULL;
 		mission.apsFlagPosLists[inc] = NULL;
+		mission.apsExtractorLists[inc] = NULL;
 		apsLimboDroids[inc] = NULL;
 	}
 	mission.apsSensorList[0] = NULL;
@@ -303,8 +303,7 @@ BOOL missionShutDown(void)
 {
 	UDWORD		inc;
 
-	debug(LOG_SAVE, "called, mission is %s",
-	      missionIsOffworld() ? "off-world" : "main map");
+	debug(LOG_SAVE, "called, mission is %s", missionIsOffworld() ? "off-world" : "main map");
 	if (missionIsOffworld())
 	{
 		//clear out the audio
@@ -326,6 +325,8 @@ BOOL missionShutDown(void)
 			mission.apsFeatureLists[inc] = NULL;
 			apsFlagPosLists[inc] = mission.apsFlagPosLists[inc];
 			mission.apsFlagPosLists[inc] = NULL;
+			apsExtractorLists[inc] = mission.apsExtractorLists[inc];
+			mission.apsExtractorLists[inc] = NULL;
 		}
 		apsSensorList[0] = mission.apsSensorList[0];
 		apsOilList[0] = mission.apsOilList[0];
@@ -805,6 +806,7 @@ static void saveMissionData(void)
 		mission.apsDroidLists[inc] = apsDroidLists[inc];
 		mission.apsFeatureLists[inc] = apsFeatureLists[inc];
 		mission.apsFlagPosLists[inc] = apsFlagPosLists[inc];
+		mission.apsExtractorLists[inc] = apsExtractorLists[inc];
 	}
 	mission.apsSensorList[0] = apsSensorList[0];
 	mission.apsOilList[0] = apsOilList[0];
@@ -873,6 +875,9 @@ void restoreMissionData(void)
 
 		apsFlagPosLists[inc] = mission.apsFlagPosLists[inc];
 		mission.apsFlagPosLists[inc] = NULL;
+
+		apsExtractorLists[inc] = mission.apsExtractorLists[inc];
+		mission.apsExtractorLists[inc] = NULL;
 	}
 	apsSensorList[0] = mission.apsSensorList[0];
 	apsOilList[0] = mission.apsOilList[0];
@@ -1330,7 +1335,8 @@ static void processMission(void)
 		psNext = psDroid->psNext;
 		//reset order - do this to all the droids that are returning from offWorld
 		orderDroid(psDroid, DORDER_STOP, ModeImmediate);
-
+		// clean up visibility 
+		visRemoveVisibility((BASE_OBJECT *)psDroid);
 		//remove out of stored list and add to current Droid list
 		if (droidRemove(psDroid, apsDroidLists))
 		{
@@ -1410,6 +1416,8 @@ void processMissionLimbo(void)
 
 /*switch the pointers for the map and droid lists so that droid placement
  and orientation can occur on the map they will appear on*/
+// NOTE: This is one huge hack for campaign games!
+// Pay special attention on what is getting swapped!
 void swapMissionPointers(void)
 {
 	void		*pVoid;
@@ -1459,13 +1467,16 @@ void swapMissionPointers(void)
 		pVoid = (void*)apsFlagPosLists[inc];
 		apsFlagPosLists[inc] = mission.apsFlagPosLists[inc];
 		mission.apsFlagPosLists[inc] = (FLAG_POSITION *)pVoid;
+		pVoid = (void*)apsExtractorLists[inc];
+		apsExtractorLists[inc] = mission.apsExtractorLists[inc];
+		mission.apsExtractorLists[inc] = (STRUCTURE *)pVoid;
 	}
 	pVoid = (void*)apsSensorList[0];
 	apsSensorList[0] = mission.apsSensorList[0];
 	mission.apsSensorList[0] = (BASE_OBJECT *)pVoid;
 	pVoid = (void*)apsOilList[0];
 	apsOilList[0] = mission.apsOilList[0];
-	mission.apsOilList[0] = (BASE_OBJECT *)pVoid;
+	mission.apsOilList[0] = (FEATURE *)pVoid;
 }
 
 void endMission(void)

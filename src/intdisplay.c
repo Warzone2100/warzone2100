@@ -696,7 +696,7 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 		Hilight = Form->state & WCLICK_HILITE;
 
 		if(Hilight) {
-			Buffer->ImdRotation += graphicsTimeAdjustedIncrement(BUTTONOBJ_ROTSPEED);
+			Buffer->ImdRotation += realTimeAdjustedIncrement(BUTTONOBJ_ROTSPEED);
 		}
 
 		Hilight = formIsHilite(Form);	// Hilited or flashing.
@@ -899,7 +899,7 @@ void intDisplayObjectButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 		Hilight = Form->state & WCLICK_HILITE;
 
 		if(Hilight) {
-			Buffer->ImdRotation += graphicsTimeAdjustedIncrement(BUTTONOBJ_ROTSPEED);
+			Buffer->ImdRotation += realTimeAdjustedIncrement(BUTTONOBJ_ROTSPEED);
 		}
 
 		Hilight = formIsHilite(Form);	// Hilited or flashing.
@@ -980,7 +980,7 @@ void intDisplayStatsButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_
 		Hilight = Form->state & WCLICK_HILITE;
 
 		if(Hilight) {
-			Buffer->ImdRotation += graphicsTimeAdjustedIncrement(BUTTONOBJ_ROTSPEED);
+			Buffer->ImdRotation += realTimeAdjustedIncrement(BUTTONOBJ_ROTSPEED);
 		}
 
 		Hilight = formIsHilite(Form);
@@ -1573,7 +1573,7 @@ void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, 
 		//flashing button?
 		if (flashing)
 		{
-			if (((gameTime/250) % 2) == 0)
+			if (((realTime/250) % 2) == 0)
 			{
 				ImageID = (UWORD)(Index);//IMAGE_RETICULE_BUTDOWN;//a step in the right direction JPS 27-4-98
 			}
@@ -3054,7 +3054,7 @@ void intDisplayTransportButton(WIDGET *psWidget, UDWORD xOffset,
 
 		if(Hilight)
 		{
-			Buffer->ImdRotation += graphicsTimeAdjustedIncrement(BUTTONOBJ_ROTSPEED);
+			Buffer->ImdRotation += realTimeAdjustedIncrement(BUTTONOBJ_ROTSPEED);
 		}
 
 		Hilight = formIsHilite(Form);

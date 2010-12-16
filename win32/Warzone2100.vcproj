@@ -352,10 +352,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\src\environ.c"
-					>
-				</File>
-				<File
 					RelativePath="..\src\feature.c"
 					>
 				</File>
@@ -840,10 +836,6 @@
 			</File>
 			<File
 				RelativePath="..\src\effects.h"
-				>
-			</File>
-			<File
-				RelativePath="..\src\environ.h"
 				>
 			</File>
 			<File

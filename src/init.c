@@ -58,7 +58,6 @@
 #include "drive.h"
 #include "edit3d.h"
 #include "effects.h"
-#include "environ.h"
 #include "fpath.h"
 #include "frend.h"
 #include "frontend.h"
@@ -682,8 +681,6 @@ BOOL frontendShutdown(void)
 		return false;
 	}
 
-	releasePlayerPower();
-
 	interfaceShutDown();
 	scrShutDown();
 
@@ -806,11 +803,6 @@ BOOL stageOneInitialise(void)
 		return false;
 	}
 
-	if (!environInit())
-	{
-		return false;
-	}
-
 	initMission();
 	initTransporters();
 	scriptInit();
@@ -854,8 +846,6 @@ BOOL stageOneShutDown(void)
 
 	grpShutDown();
 
-	releasePlayerPower();
-
 	ResearchRelease();
 
 	//free up the gateway stuff?
@@ -869,7 +859,6 @@ BOOL stageOneShutDown(void)
 	}
 
 	scrShutDown();
-	environShutDown();
 	gridShutDown();
 
 	if ( !anim_Shutdown() )

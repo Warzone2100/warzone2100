@@ -850,7 +850,7 @@ void	kf_SystemClose( void )
 /* Zooms out from display */
 void	kf_ZoomOut( void )
 {
-	float zoomInterval = graphicsTimeAdjustedIncrement(MAP_ZOOM_RATE);
+	float zoomInterval = realTimeAdjustedIncrement(MAP_ZOOM_RATE);
 
 	distance += zoomInterval;
 	if(distance > MAXDISTANCE)
@@ -889,7 +889,7 @@ void	kf_RadarZoomOut( void )
 /* Zooms in the map */
 void	kf_ZoomIn( void )
 {
-	float zoomInterval = graphicsTimeAdjustedIncrement(MAP_ZOOM_RATE);
+	float zoomInterval = realTimeAdjustedIncrement(MAP_ZOOM_RATE);
 
 	distance -= zoomInterval;
 	if (distance < MINDISTANCE)
@@ -948,7 +948,7 @@ void	kf_ExpandScreen( void )
 /* Spins the world round left */
 void	kf_RotateLeft( void )
 {
-	float rotAmount = graphicsTimeAdjustedIncrement(MAP_SPIN_RATE);
+	float rotAmount = realTimeAdjustedIncrement(MAP_SPIN_RATE);
 
 	player.r.y += rotAmount;
 }
@@ -957,7 +957,7 @@ void	kf_RotateLeft( void )
 /* Spins the world right */
 void	kf_RotateRight( void )
 {
-	float rotAmount = graphicsTimeAdjustedIncrement(MAP_SPIN_RATE);
+	float rotAmount = realTimeAdjustedIncrement(MAP_SPIN_RATE);
 
 	player.r.y -= rotAmount;
 	if (player.r.y < 0)
@@ -970,7 +970,7 @@ void	kf_RotateRight( void )
 /* Pitches camera back */
 void	kf_PitchBack( void )
 {
-	float pitchAmount = graphicsTimeAdjustedIncrement(MAP_PITCH_RATE);
+	float pitchAmount = realTimeAdjustedIncrement(MAP_PITCH_RATE);
 
 	player.r.x += pitchAmount;
 
@@ -985,7 +985,7 @@ void	kf_PitchBack( void )
 /* Pitches camera foward */
 void	kf_PitchForward( void )
 {
-	float pitchAmount = graphicsTimeAdjustedIncrement(MAP_PITCH_RATE);
+	float pitchAmount = realTimeAdjustedIncrement(MAP_PITCH_RATE);
 
 	player.r.x -= pitchAmount;
 	if (player.r.x < DEG(360 + MIN_PLAYER_X_ANGLE))
@@ -1576,19 +1576,25 @@ void	kf_ToggleProximitys( void )
 // --------------------------------------------------------------------------
 void	kf_JumpToResourceExtractor( void )
 {
-STRUCTURE	*psStruct;
-SDWORD	xJump,yJump;
+	int xJump, yJump;
 
-	psStruct = getRExtractor(psOldRE);
-	if(psStruct)
+	if (psOldRE && psOldRE->psNextFunc)
 	{
-		xJump = (psStruct->pos.x - ((visibleTiles.x/2)*TILE_UNITS));
-		yJump = (psStruct->pos.y - ((visibleTiles.y/2)*TILE_UNITS));
+		psOldRE = psOldRE->psNextFunc;
+	}
+	else
+	{
+		psOldRE = apsExtractorLists[selectedPlayer];
+	}
+
+	if (psOldRE)
+	{
+		xJump = (psOldRE->pos.x - ((visibleTiles.x / 2) * TILE_UNITS));
+		yJump = (psOldRE->pos.y - ((visibleTiles.y / 2) * TILE_UNITS));
 		player.p.x = xJump;
 		player.p.z = yJump;
 		player.r.y = 0; // face north
-		setViewPos(map_coord(psStruct->pos.x), map_coord(psStruct->pos.y), true);
-		psOldRE = psStruct;
+		setViewPos(map_coord(psOldRE->pos.x), map_coord(psOldRE->pos.y), true);
 	}
 	else
 	{

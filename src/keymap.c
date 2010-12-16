@@ -948,55 +948,50 @@ void	keySetMappingStatus(KEY_MAPPING *psMapping, BOOL state)
 }
 
 
-/* Returns the key code of the first ascii key that its finds has been PRESSED */
-KEY_CODE	getQwertyKey( void )
+static const KEY_CODE qwertyCodes[26] =
 {
-UDWORD	i;
+	//  +---+   +---+   +---+   +---+   +---+   +---+   +---+   +---+   +---+   +---+
+	    KEY_Q,  KEY_W,  KEY_E,  KEY_R,  KEY_T,  KEY_Y,  KEY_U,  KEY_I,  KEY_O,  KEY_P,
+	//  +---+   +---+   +---+   +---+   +---+   +---+   +---+   +---+   +---+   +---+
+	//    +---+   +---+   +---+   +---+   +---+   +---+   +---+   +---+   +---+
+	      KEY_A,  KEY_S,  KEY_D,  KEY_F,  KEY_G,  KEY_H,  KEY_J,  KEY_K,  KEY_L,
+	//    +---+   +---+   +---+   +---+   +---+   +---+   +---+   +---+   +---+
+	//        +---+   +---+   +---+   +---+   +---+   +---+   +---+
+	          KEY_Z,  KEY_X,  KEY_C,  KEY_V,  KEY_B,  KEY_N,  KEY_M
+	//        +---+   +---+   +---+   +---+   +---+   +---+   +---+
+};
 
-	for(i = KEY_Q; i <= KEY_P; i++)
+/* Returns the key code of the first ascii key that its finds has been PRESSED */
+KEY_CODE getQwertyKey(void)
+{
+	unsigned i;
+
+	for (i = 0; i < ARRAY_SIZE(qwertyCodes); ++i)
 	{
-		if(keyPressed(i))
+		if (keyPressed(qwertyCodes[i]))
 		{
-			return(i);	// top row key pressed
+			return qwertyCodes[i];  // Top-, middle- or bottom-row key pressed.
 		}
 	}
 
-	for(i = KEY_A; i <= KEY_L; i++)
-	{
-		if(keyPressed(i))
-		{
-			return(i);	// middle row key pressed
-		}
-	}
-
-	for(i = KEY_Z; i <= KEY_M; i++)
-	{
-		if(keyPressed(i))
-		{
-			return(i);	// bottomw row key pressed
-		}
-	}
-	return(0);			// no ascii key pressed
+	return (KEY_CODE)0;                     // no ascii key pressed
 }
 
 // ----------------------------------------------------------------------------------
 /*	Returns the number (0 to 26) of a key on the keyboard
 	from it's keycode. Q is zero, through to M being 25
 */
-UDWORD	asciiKeyCodeToTable(KEY_CODE code)
+UDWORD asciiKeyCodeToTable(KEY_CODE code)
 {
-	if( code >= KEY_Q && code<=KEY_P )
+	unsigned i;
+	for (i = 0; i < ARRAY_SIZE(qwertyCodes); ++i)
 	{
-		return code - KEY_Q;  // q is the first of the ascii scan codes
+		if (code == qwertyCodes[i])
+		{
+			return i;
+		}
 	}
-	if( code >= KEY_A && code <=KEY_L )
-	{
-		return (code - KEY_A) + 10;	// ten keys from q to p
-	}
-	if( code >= KEY_Z && code<=KEY_M )
-	{
-		return (code - KEY_Z) + 19;	// 19 keys before, the 10 from q..p and the 9 from a..l
-	}
+
 	ASSERT(false, "only pass nonzero key codes from getQwertyKey to this function");
 	return 0;
 }

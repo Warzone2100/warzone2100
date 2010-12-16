@@ -136,16 +136,9 @@ static bool _imd_load_polys( const char **ppFileData, iIMDShape *s, int pieVersi
 			poly->normal = pie_SurfaceNormal3fv(p0, p1, p2);
 		}
 
-		// PIE2 only
 		if (poly->flags & iV_IMD_TEXANIM)
 		{
-			unsigned int nFrames, pbRate, tWidth, tHeight;
-
-			if (pieVersion == PIE_FLOAT_VER)
-			{
-				debug(LOG_ERROR, "PIE version %d doesn't support texanim data! Use PIE2 instead.", pieVersion);
-				return false;
-			}
+			int nFrames, pbRate, tWidth, tHeight;
 
 			// even the psx needs to skip the data
 			if (sscanf(pFileData, "%d %d %d %d%n", &nFrames, &pbRate, &tWidth, &tHeight, &cnt) != 4)
@@ -174,16 +167,16 @@ static bool _imd_load_polys( const char **ppFileData, iIMDShape *s, int pieVersi
 		// PC texture coord routine
 		if (poly->flags & iV_IMD_TEX)
 		{
-			poly->texCoord = malloc(sizeof(Vector2f) * poly->npnts);
-			if (poly->texCoord == NULL)
-			{
-				debug(LOG_ERROR, "(_load_polys) [poly %u] memory alloc fail (vertex struct)", i);
-				return false;
-			}
+			int nFrames, framesPerLine, frame;
 
+			nFrames = MAX(1, s->numFrames);
+			poly->texCoord = malloc(sizeof(*poly->texCoord) * nFrames * poly->npnts);
+			ASSERT_OR_RETURN(false, poly->texCoord, "Out of memory allocating texture coordinates");
+			framesPerLine = OLD_TEXTURE_SIZE_FIX / (poly->texAnim.x * OLD_TEXTURE_SIZE_FIX);
 			for (j = 0; j < poly->npnts; j++)
 			{
 				float VertexU, VertexV;
+
 				if (sscanf(pFileData, "%f %f%n", &VertexU, &VertexV, &cnt) != 2)
 				{
 					debug(LOG_ERROR, "(_load_polys) [poly %u] error reading tex outline", i);
@@ -191,20 +184,26 @@ static bool _imd_load_polys( const char **ppFileData, iIMDShape *s, int pieVersi
 				}
 				pFileData += cnt;
 
-				if (pieVersion == PIE_FLOAT_VER)
+				if (pieVersion != PIE_FLOAT_VER)
 				{
-					poly->texCoord[j].x = VertexU;
-					poly->texCoord[j].y = VertexV;
+					VertexU /= OLD_TEXTURE_SIZE_FIX;
+					VertexV /= OLD_TEXTURE_SIZE_FIX;
 				}
-				else
+
+				for (frame = 0; frame < nFrames; frame++)
 				{
-					poly->texCoord[j].x = VertexU / OLD_TEXTURE_SIZE_FIX;
-					poly->texCoord[j].y = VertexV / OLD_TEXTURE_SIZE_FIX;
+					const int uFrame = (frame % framesPerLine) * (poly->texAnim.x * OLD_TEXTURE_SIZE_FIX);
+					const int vFrame = (frame / framesPerLine) * (poly->texAnim.y * OLD_TEXTURE_SIZE_FIX);
+					Vector2f *c = &poly->texCoord[frame * poly->npnts + j];
+
+					c->x = VertexU + uFrame / OLD_TEXTURE_SIZE_FIX;
+					c->y = VertexV + vFrame / OLD_TEXTURE_SIZE_FIX;
 				}
 			}
 		}
 		else
 		{
+			ASSERT_OR_RETURN(false, !(poly->flags & iV_IMD_TEXANIM), "Polygons with texture animation must have textures!");
 			poly->texCoord = NULL;
 		}
 	}
@@ -660,7 +659,7 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 		return NULL;
 	}
 
-	/* Flags are ignored now. Reading them in just to pass the buffer. */
+	// Read flag
 	if (sscanf(pFileData, "%s %x%n", buffer, &imd_flags, &cnt) != 2)
 	{
 		debug(LOG_ERROR, "iV_ProcessIMD %s bad flags: %s", pFileName, buffer);

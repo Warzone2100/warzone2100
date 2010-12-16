@@ -544,10 +544,12 @@ void fpathSetBlockingMap(PATHJOB *psJob)
 		i->type = type;
 		std::vector<bool> &map = i->map;
 		map.resize(mapWidth*mapHeight);
+		uint32_t checksumMap = 0, checksumDangerMap = 0, factor = 0;
 		for (int y = 0; y < mapHeight; ++y)
 			for (int x = 0; x < mapWidth; ++x)
 		{
 			map[x + y*mapWidth] = fpathBaseBlockingTile(x, y, type.propulsion, type.owner, type.moveType);
+			checksumMap ^= map[x + y*mapWidth]*(factor = 3*factor + 1);
 		}
 		if (!isHumanPlayer(type.owner) && type.moveType == FMT_MOVE)
 		{
@@ -556,9 +558,15 @@ void fpathSetBlockingMap(PATHJOB *psJob)
 			for (int y = 0; y < mapHeight; ++y)
 				for (int x = 0; x < mapWidth; ++x)
 			{
-				dangerMap[x + y*mapWidth] = mapTile(x, y)->threatBits & (1 << type.owner);
+				dangerMap[x + y*mapWidth] = auxTile(x, y, type.owner) & AUXBITS_THREAT;
+				checksumDangerMap ^= map[x + y*mapWidth]*(factor = 3*factor + 1);
 			}
 		}
+		syncDebug("blockingMap(%d,%d,%d,%d) = %08X %08X", gameTime, psJob->propulsion, psJob->owner, psJob->moveType, checksumMap, checksumDangerMap);
+	}
+	else
+	{
+		syncDebug("blockingMap(%d,%d,%d,%d) = cached", gameTime, psJob->propulsion, psJob->owner, psJob->moveType);
 	}
 
 	// i now points to the correct map. Make psJob->blockingMap point to it.

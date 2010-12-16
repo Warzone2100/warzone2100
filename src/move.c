@@ -110,12 +110,6 @@
 // How far out from an obstruction to start avoiding it
 #define AVOID_DIST		(TILE_UNITS*2)
 
-/* Number of game units/sec for base speed in high integer precision */
-#define BASE_SPEED		(EXTRA_PRECISION / GAME_UPDATES_PER_SEC)
-
-/* Number of degrees/sec for base turn rate */
-#define BASE_TURN		(EXTRA_PRECISION / GAME_UPDATES_PER_SEC)
-
 // maximum and minimum speed to approach a final way point
 #define MAX_END_SPEED		300
 #define MIN_END_SPEED		60
@@ -182,6 +176,9 @@
 // How fast vtols 'skid'
 #define VTOL_SKID_DECEL			600
 
+static uint32_t oilTimer = 0;
+static unsigned drumCount = 0;
+
 /* Function prototypes */
 static void	moveUpdatePersonModel(DROID *psDroid, SDWORD speed, uint16_t direction);
 
@@ -196,12 +193,10 @@ const char *moveDescription(MOVE_STATUS status)
 	case MOVEPOINTTOPOINT : return "P2P";
 	case MOVETURNSTOP : return "Turnstop";
 	case MOVETURNTOTARGET : return "Turn2target";
-	case MOVEROUTE : return "Route";
 	case MOVEHOVER : return "Hover";
 	case MOVEDRIVE : return "Drive";
 	case MOVEWAITROUTE : return "Waitroute";
 	case MOVESHUFFLE : return "Shuffle";
-	case MOVEROUTESHUFFLE : return "Routeshuffle";
 	}
 	return "Error";	// satisfy compiler
 }
@@ -210,6 +205,9 @@ const char *moveDescription(MOVE_STATUS status)
  */
 BOOL moveInitialise(void)
 {
+	oilTimer = 0;
+	drumCount = 0;
+
 	return true;
 }
 
@@ -538,19 +536,6 @@ void updateDroidOrientation(DROID *psDroid)
 }
 
 
-/* Calculate the change in direction given a target angle and turn rate */
-static void moveCalcTurn(uint16_t *pCurr, uint16_t target, int rate)
-{
-	// calculate the difference in the angles
-	int diff = angleDelta(target - *pCurr);
-
-	// calculate the change in direction
-	int change = BASE_TURN * rate * (UINT16_MAX >> EXTRA_BITS) / 360;  // constant rate so we can use a normal multiplication
-
-	// Move *pCurr towards target, by at most ±change.
-	*pCurr += clip(diff, -change, change);
-}
-
 typedef struct
 {
 	PROPULSION_TYPE propulsionType;
@@ -743,8 +728,8 @@ static void moveCheckSquished(DROID *psDroid, int32_t emx, int32_t emy)
 	int32_t		rad, radSq, objR, xdiff, ydiff, distSq;
 	BASE_OBJECT     *psObj;
 	const int32_t	droidR = moveObjRadius((BASE_OBJECT *)psDroid);
-	const int32_t	mx = emx >> EXTRA_BITS;
-	const int32_t	my = emy >> EXTRA_BITS;
+	const int32_t   mx = emx / EXTRA_PRECISION;
+	const int32_t   my = emy / EXTRA_PRECISION;
 
 	gridStartIterate(psDroid->pos.x, psDroid->pos.y, OBJ_MAXRADIUS);
 	for (psObj = gridIterate(); psObj != NULL; psObj = gridIterate())
@@ -846,8 +831,8 @@ static BOOL moveBlocked(DROID *psDroid)
 static void moveCalcSlideVector(DROID *psDroid, int32_t objX, int32_t objY, int32_t *pMx, int32_t *pMy)
 {
 	int32_t dirX, dirY, dirMagSq, dotRes;
-	const int32_t mx = *pMx >> EXTRA_BITS;
-	const int32_t my = *pMy >> EXTRA_BITS;
+	const int32_t mx = *pMx / EXTRA_PRECISION;
+	const int32_t my = *pMy / EXTRA_PRECISION;
 	// Calculate the vector to the obstruction
 	const int32_t obstX = psDroid->pos.x - objX;
 	const int32_t obstY = psDroid->pos.y - objY;
@@ -874,8 +859,8 @@ static void moveCalcSlideVector(DROID *psDroid, int32_t objX, int32_t objY, int3
 	dirMagSq = MAX(1, dirX * dirX + dirY * dirY);
 
 	// Calculate the component of the movement in the direction of the tangent vector
-	*pMx = (dirX * dotRes / dirMagSq) << EXTRA_BITS;
-	*pMy = (dirY * dotRes / dirMagSq) << EXTRA_BITS;
+	*pMx = (dirX * dotRes / dirMagSq) * EXTRA_PRECISION;
+	*pMy = (dirY * dotRes / dirMagSq) * EXTRA_PRECISION;
 }
 
 
@@ -888,8 +873,8 @@ static void moveCalcBlockingSlide(DROID *psDroid, int32_t *pmx, int32_t *pmy, ui
 	uint16_t slideDir;
 	MAPTILE	*psTile = NULL;
 	// calculate the new coords and see if they are on a different tile
-	const int32_t mx = *pmx >> EXTRA_BITS;
-	const int32_t my = *pmy >> EXTRA_BITS;
+	const int32_t mx = *pmx / EXTRA_PRECISION;
+	const int32_t my = *pmy / EXTRA_PRECISION;
 	const int32_t tx = map_coord(psDroid->pos.x);
 	const int32_t ty = map_coord(psDroid->pos.y);
 	const int32_t nx = psDroid->pos.x + mx;
@@ -1180,8 +1165,8 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 	{
 		bLegs = true;
 	}
-	spmx = *pmx >> EXTRA_BITS;
-	spmy = *pmy >> EXTRA_BITS;
+	spmx = *pmx / EXTRA_PRECISION;
+	spmy = *pmy / EXTRA_PRECISION;
 
 	droidR = moveObjRadius((BASE_OBJECT *)psDroid);
 	psObst = NULL;
@@ -1496,7 +1481,7 @@ static BOOL moveDroidStopped(DROID* psDroid, SDWORD speed)
 static void moveUpdateDroidDirection(DROID *psDroid, SDWORD *pSpeed, uint16_t direction,
 		uint16_t iSpinAngle, int iSpinSpeed, int iTurnSpeed, uint16_t *pDroidDir) // direction is target-direction
 {
-	int			adiff;
+	int diff, iSpeed, maxChange;
 
 	*pDroidDir = psDroid->rot.direction;
 
@@ -1506,17 +1491,14 @@ static void moveUpdateDroidDirection(DROID *psDroid, SDWORD *pSpeed, uint16_t di
 		return;
 	}
 
-	adiff = abs(angleDelta(direction - *pDroidDir));
-	if (adiff > iSpinAngle)
-	{
-		// large change in direction, make a sharper turn
-		moveCalcTurn(pDroidDir, direction, iSpinSpeed);
-	}
-	else
-	{
-		// small change in direction, turn while moving
-		moveCalcTurn(pDroidDir, direction, iTurnSpeed);
-	}
+	diff = angleDelta(direction - *pDroidDir);
+	iSpeed = abs(diff) > iSpinAngle? iSpinSpeed : iTurnSpeed;
+
+	// Calculate the maximum change in direction
+	maxChange = DEG(iSpeed) / GAME_UPDATES_PER_SEC;
+
+	// Move *pDroidDir towards target, by at most maxChange.
+	*pDroidDir += clip(diff, -maxChange, maxChange);
 }
 
 
@@ -1527,10 +1509,10 @@ static int moveCalcPerpSpeed(DROID *psDroid, uint16_t iDroidDir, SDWORD iSkidDec
 	int		perpSpeed;
 
 	adiff = angleDelta(iDroidDir - psDroid->sMove.moveDir);
-	perpSpeed = psDroid->sMove.speed * iSin(adiff) / UINT16_MAX;
+	perpSpeed = psDroid->sMove.speed * iSin(adiff) / 65536;
 
 	// decelerate the perpendicular speed
-	perpSpeed = MAX(0, perpSpeed - iSkidDecel * BASE_SPEED);
+	perpSpeed = MAX(0, perpSpeed - iSkidDecel * EXTRA_PRECISION/GAME_UPDATES_PER_SEC);
 
 	return perpSpeed;
 }
@@ -1578,7 +1560,7 @@ static int moveCalcNormalSpeed(DROID *psDroid, int fSpeed, uint16_t iDroidDir, S
 	if (normalSpeed < fSpeed)
 	{
 		// accelerate
-		normalSpeed += (iAccel * BASE_SPEED);
+		normalSpeed += iAccel * EXTRA_PRECISION/GAME_UPDATES_PER_SEC;
 		if (normalSpeed > fSpeed)
 		{
 			normalSpeed = fSpeed;
@@ -1587,7 +1569,7 @@ static int moveCalcNormalSpeed(DROID *psDroid, int fSpeed, uint16_t iDroidDir, S
 	else
 	{
 		// decelerate
-		normalSpeed -= (iDecel * BASE_SPEED);
+		normalSpeed -= iDecel * EXTRA_PRECISION/GAME_UPDATES_PER_SEC;
 		if (normalSpeed < fSpeed)
 		{
 			normalSpeed = fSpeed;
@@ -1599,7 +1581,7 @@ static int moveCalcNormalSpeed(DROID *psDroid, int fSpeed, uint16_t iDroidDir, S
 
 static void moveGetDroidPosDiffs(DROID *psDroid, int32_t *pDX, int32_t *pDY)
 {
-	int32_t move = psDroid->sMove.speed * BASE_SPEED;	// high precision
+	int32_t move = psDroid->sMove.speed * EXTRA_PRECISION/GAME_UPDATES_PER_SEC;  // high precision
 
 	*pDX = iSinR(psDroid->sMove.moveDir, move);
 	*pDY = iCosR(psDroid->sMove.moveDir, move);
@@ -2329,14 +2311,39 @@ static void movePlayAudio( DROID *psDroid, BOOL bStarted, BOOL bStoppedBefore, S
 }
 
 
+static bool pickupOilDrum(int toPlayer, int fromPlayer)
+{
+	addPower(toPlayer, OILDRUM_POWER);  // give power
+
+	if (toPlayer == selectedPlayer)
+	{
+		CONPRINTF(ConsoleString, (ConsoleString, _("You found %u power in an oil drum."), OILDRUM_POWER));
+	}
+
+	// TODO This code is weird. When should new oil drums actually be added?
+	// fromPlayer == ANYPLAYER seems to mean that the drum was not pre-placed on the map.
+	if (bMultiPlayer && fromPlayer == ANYPLAYER && toPlayer == selectedPlayer)
+	{
+		// when player finds oil, we init the timer, and flag that we need a drum
+		if (!oilTimer)
+		{
+			oilTimer = gameTime;
+		}
+		// if player finds more than one drum (before timer expires), then we tack on ~50 sec to timer.
+		if (drumCount++ == 0)
+		{
+			oilTimer += GAME_TICKS_PER_SEC * 50;
+		}
+	}
+
+	return true;
+}
+
 // called when a droid moves to a new tile.
 // use to pick up oil, etc..
 static void checkLocalFeatures(DROID *psDroid)
 {
 	BASE_OBJECT		*psObj;
-	static int oilTimer = 0;
-	static bool GenerateDrum = false;
-	static uint8_t drumCount = 0;
 
 	// NOTE: Why not do this for AI units also?
 	if (!isHumanPlayer(psDroid->player) || isVtolDroid(psDroid))  // VTOLs can't pick up features!
@@ -2349,45 +2356,40 @@ static void checkLocalFeatures(DROID *psDroid)
 	gridStartIterate(psDroid->pos.x, psDroid->pos.y, DROIDDIST);
 	for (psObj = gridIterate(); psObj != NULL; psObj = gridIterate())
 	{
-		if (psObj->type != OBJ_FEATURE || ((FEATURE *)psObj)->psStats->subType != FEAT_OIL_DRUM || psObj->died)
+		bool pickedUp = false;
+
+		if (psObj->type == OBJ_FEATURE && !psObj->died)
 		{
-			// Object is not a living oil drum.
+			switch (((FEATURE *)psObj)->psStats->subType)
+			{
+				case FEAT_OIL_DRUM:
+					pickedUp = pickupOilDrum(psDroid->player, psObj->player);
+					break;
+				case FEAT_GEN_ARTE:
+					pickedUp = pickupArtefact(psDroid->player, psObj->player);
+					break;
+				default:
+					break;
+			}
+		}
+
+		if (!pickedUp)
+		{
+			// Object is not a living oil drum or artefact.
 			continue;
 		}
 
-		addPower(psDroid->player, OILDRUM_POWER);  // give power
 		turnOffMultiMsg(true);
 		removeFeature((FEATURE *)psObj);  // remove artifact+.
 		turnOffMultiMsg(false);
-		if (psDroid->player == selectedPlayer)
-		{
-			CONPRINTF(ConsoleString, (ConsoleString, _("You found %u power in an oil drum."), OILDRUM_POWER));
-		}
-
-		// TODO This code is weird. When should new oil drums actually be added?
-		if (bMultiPlayer && psObj->player == ANYPLAYER && psDroid->player == selectedPlayer)
-		{
-			// when player finds oil, we init the timer, and flag that we need a drum
-			if (!oilTimer)
-			{
-				oilTimer = gameTime2;
-				GenerateDrum = true;
-			}
-			// if player finds more than one drum (before timer expires), then we tack on ~50 sec to timer.
-			if(drumCount++)
-			{
-				oilTimer += GAME_TICKS_PER_SEC * 50;
-			}
-		}
 	}
 
 	// once they found a oil drum, we then wait ~600 secs before we pop up new one(s).
-	if (((oilTimer + GAME_TICKS_PER_SEC * 600u) < realTime) && GenerateDrum)
+	if (oilTimer + GAME_TICKS_PER_SEC * 600u < gameTime && drumCount > 0)
 	{
 		addOilDrum(drumCount);
 		oilTimer = 0;
 		drumCount = 0;
-		GenerateDrum = false;
 	}
 }
 
