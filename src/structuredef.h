@@ -261,23 +261,14 @@ typedef struct _structure
 	/* The common structure elements for all objects */
 	BASE_ELEMENTS(struct _structure);
 
-	STRUCTURE_STATS*	pStructureType;		/* pointer to the structure stats for this
-											   type of building */
-	UBYTE		status;						/* defines whether the structure is being
-											   built, doing nothing or performing a function*/
-    SWORD		currentBuildPts;			/* the build points currently assigned to this
-											   structure */
-    SWORD       currentPowerAccrued;        /* the power accrued for building this structure*/
-	SWORD		resistance;					/* current resistance points
-											   0 = cannot be attacked electrically*/
-	UDWORD		lastResistance;				/* time the resistance was last increased*/
+	STRUCTURE_STATS     *pStructureType;            /* pointer to the structure stats for this type of building */
+	STRUCT_STATES       status;                     /* defines whether the structure is being built, doing nothing or performing a function */
+	SWORD               currentBuildPts;            /* the build points currently assigned to this structure */
+	SWORD               currentPowerAccrued;        /* the power accrued for building this structure */
+	SWORD               resistance;                 /* current resistance points, 0 = cannot be attacked electrically */
+	UDWORD              lastResistance;             /* time the resistance was last increased*/
+	FUNCTIONALITY       *pFunctionality;            /* pointer to structure that contains fields necessary for functionality */
 
-	/* The other structure data.  These are all derived from the functions
-	 * but stored here for easy access - will need to add more for variable stuff!
-	 */
-
-	FUNCTIONALITY	*pFunctionality;		/* pointer to structure that contains fields
-											   necessary for functionality */
 	/* The weapons on the structure */
 	UWORD		numWeaps;
 	WEAPON		asWeaps[STRUCT_MAXWEAPS];

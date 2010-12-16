@@ -44,6 +44,7 @@ EXTRA_DIST = \
 bin_PROGRAMS = warzone2100
 noinst_HEADERS = \
 	action.h \
+	actiondef.h \
 	advvis.h \
 	aiexperience.h \
 	ai.h \
