@@ -295,8 +295,9 @@ static inline void addObjectToFuncList(BASE_OBJECT *list[], BASE_OBJECT *object,
 	ASSERT_OR_RETURN(, object->psNextFunc == NULL, "%s(%p) is already in a function list!", objInfo(object), object);
 
 	// Prepend the object to the top of the list
-	object->psNextFunc = list[player];
-	list[player] = object;
+	// memcpy is to avoid strict-aliasing error. Will probably break if using multiple inheritance.
+	memcpy(&object->psNextFunc, &list[player], sizeof(void *));  // object->psNextFunc = list[player];
+	memcpy(&list[player], &object, sizeof(void *));              // list[player] = object;
 }
 
 /* Move an object from the active list to the destroyed list.
@@ -383,19 +384,22 @@ static inline void removeObjectFromList(BASE_OBJECT *list[], BASE_OBJECT *object
 static inline void removeObjectFromFuncList(BASE_OBJECT *list[], BASE_OBJECT *object, int player)
 {
 	BASE_OBJECT *psPrev = NULL, *psCurr;
+	BASE_OBJECT *listPlayer;
 
 	ASSERT_OR_RETURN(, object != NULL, "Invalid pointer");
 
+	memcpy(&listPlayer, &list[player], sizeof(void *));
+
 	// If the message to remove is the first one in the list then mark the next one as the first
-	if (list[player] == object)
+	if (listPlayer == object)
 	{
-		list[player] = list[player]->psNextFunc;
+		memcpy(&list[player], &listPlayer->psNextFunc, sizeof(void *));  // list[player] = list[player]->psNextFunc;
 		object->psNextFunc = NULL;
 		return;
 	}
 	
 	// Iterate through the list and find the item before the object to delete
-	for(psCurr = list[player]; psCurr != object && psCurr != NULL; psCurr = psCurr->psNextFunc)
+	for(psCurr = listPlayer; psCurr != object && psCurr != NULL; psCurr = psCurr->psNextFunc)
 	{
 		psPrev = psCurr;
 	}
