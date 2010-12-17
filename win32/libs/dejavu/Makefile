@@ -1,12 +1,12 @@
 PKG_NAME:=dejavu-fonts-ttf
-PKG_VERSION=2.31
+PKG_VERSION=2.32
 
 PKG_SOURCEBASE:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_SOURCEBASE).tar.bz2
 PKG_SOURCE_URL:= \
 	@SF/dejavu \
 	http://www.il.fontys.nl/~giel/warzone/devpkg/
-PKG_MD5SUM:=a794a75d8c43c83f0226207cd3aaf666
+PKG_MD5SUM:=63b1bf644cd54188a2ec43aff1846104
 
 TARGETS:= \
 	$(TOPDIR)/build/libs/etc/fonts/DejaVuSans.ttf \

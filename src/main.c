@@ -93,13 +93,14 @@ typedef enum _focus_state
 } FOCUS_STATE;
 
 #if defined(WZ_OS_WIN)
-# define WZ_WRITEDIR "Warzone 2100 Trunk"
+# define WZ_WRITEDIR "Warzone 2100 master"
 #elif defined(WZ_OS_MAC)
 # include <CoreServices/CoreServices.h>
 # include <unistd.h>
-# define WZ_WRITEDIR "Warzone 2100 Trunk"
+# include "cocoa_wrapper.h"
+# define WZ_WRITEDIR "Warzone 2100 master"
 #else
-# define WZ_WRITEDIR ".warzone2100-trunk"
+# define WZ_WRITEDIR ".warzone2100-master"
 #endif
 
 char datadir[PATH_MAX] = ""; // Global that src/clparse.c:ParseCommandLine can write to, so it can override the default datadir on runtime. Needs to be empty on startup for ParseCommandLine to work!
@@ -1148,6 +1149,10 @@ static bool fptest2(void)
 int main(int argc, char *argv[])
 {
 	int ok;
+
+#ifdef WZ_OS_MAC
+	cocoaInit();
+#endif
 
 	setupExceptionHandler(argc, argv);
 

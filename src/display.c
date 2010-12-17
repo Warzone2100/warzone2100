@@ -30,6 +30,7 @@
 #include "lib/framework/strres.h"
 #include "lib/ivis_common/piestate.h"
 #include "lib/framework/fixedpoint.h"
+#include "lib/framework/wzapp_c.h"
 
 #include "action.h"
 #include "display.h"
@@ -197,7 +198,7 @@ static UDWORD	rotInitialUp;
 static UDWORD	xMoved, yMoved;
 static STRUCTURE	*psBuilding;
 static BOOL	edgeOfMap = false;
-static UDWORD	scrollRefTime;
+static uint32_t scrollRefTime;
 static float	scrollSpeedLeftRight; //use two directions and add them because its simple
 static float	scrollStepLeftRight;
 static float	scrollSpeedUpDown;
@@ -390,6 +391,16 @@ void ProcessRadarInput(void)
 
 			if (mousePressed(MOUSE_ORDER) || (mousePressed(MOUSE_MMB) && keyDown(KEY_LALT)))
 			{
+				if (mousePressed(MOUSE_ORDER))
+				{
+					x = mousePressPos(MOUSE_ORDER).x;
+					y = mousePressPos(MOUSE_ORDER).y;
+				}
+				else
+				{
+					x = mousePressPos(MOUSE_MMB).x;
+					y = mousePressPos(MOUSE_MMB).y;
+				}
 				if(driveModeActive()) {
 					driveProcessRadarInput(x,y);
 				} else {
@@ -429,6 +440,9 @@ void ProcessRadarInput(void)
 			}
 			else if (mousePressed(MOUSE_SELECT))
 			{
+				x = mousePressPos(MOUSE_SELECT).x;
+				y = mousePressPos(MOUSE_SELECT).y;
+
 				CalcRadarPosition(x, y, &PosX, &PosY);
 
 				if(bInstantRadarJump)
@@ -460,11 +474,23 @@ void resetInput(void)
 void processInput(void)
 {
 	BOOL mOverRadar = false;
+	BOOL mOverConstruction = false;
+
 	int WheelZoomIterator;
+
+	if (InGameOpUp || isInGamePopupUp)
+	{
+		dragBox3D.status = DRAG_RELEASED;	// disengage the dragging since it stops menu input
+	}
 
 	if(radarOnScreen && getHQExists(selectedPlayer) && CoordInRadar(mouseX(), mouseY()))
 	{
 		mOverRadar = true;
+	}
+
+	if(CoordInBuild(mouseX(), mouseY()))
+	{
+		mOverConstruction = true;
 	}
 
 	StartOfLastFrame = currentFrame;
@@ -489,6 +515,10 @@ void processInput(void)
 		{
 			kf_RadarZoomIn();
 		}
+		else if (mOverConstruction)
+		{
+			kf_BuildPrevPage();
+		}
 		else
 		{
 			for (WheelZoomIterator = 0; WheelZoomIterator < 10; WheelZoomIterator++)
@@ -507,6 +537,10 @@ void processInput(void)
 		else if (mOverRadar)
 		{
 			kf_RadarZoomOut();
+		}
+		else if (mOverConstruction)
+		{
+			kf_BuildNextPage();
 		}
 		else
 		{
@@ -762,7 +796,16 @@ void processMouseClickInput(void)
 		}
 		else
 		{
-			dealWithLMB();
+			if (!bMultiPlayer  && establishSelection(selectedPlayer) == SC_DROID_TRANSPORTER)
+			{
+				// Never, *ever* let user control the transport in SP games--it breaks the scripts!
+				ASSERT(game.type == CAMPAIGN, "Game type was set incorrectly!");
+				return;
+			}
+			else
+			{
+				dealWithLMB();
+			}
 		}
 	}
 
@@ -887,10 +930,10 @@ void processMouseClickInput(void)
 				// Can't demolish allied objects
 				item = MT_BLOCKING;
 			}
-			//in multiPlayer can only put cyborgs onto a Transporter
+			// in multiPlayer check for what kind of unit can use it (TODO)
 			else if (bMultiPlayer && item == MT_TRANDROID)
 			{
-				if (!cyborgDroidSelected(selectedPlayer) || ObjUnderMouse->player != selectedPlayer)
+				if ( ObjUnderMouse->player != selectedPlayer)
 				{
 					item = MT_OWNDROID;
 				}
@@ -1064,12 +1107,39 @@ void processMouseClickInput(void)
 }
 
 
+static void calcScroll(float *y, float *dydt, float accel, float decel, float targetVelocity, float dt)
+{
+	double tMid;
+
+	if (targetVelocity < *dydt)
+	{
+		accel = -accel;
+		decel = -decel;
+	}
+
+	// Decelerate if needed.
+	tMid = (0 - *dydt) / decel;
+	CLIP(tMid, 0, dt);
+	*y += *dydt * tMid + decel/2 * tMid*tMid;
+	*dydt += decel * tMid;
+	dt -= tMid;
+
+	// Accelerate if needed.
+	tMid = (targetVelocity - *dydt) / accel;
+	CLIP(tMid, 0, dt);
+	*y += *dydt * tMid + accel/2 * tMid*tMid;
+	*dydt += accel * tMid;
+	dt -= tMid;
+
+	// Continue at target velocity.
+	*y += *dydt * dt;
+}
+
 void scroll(void)
 {
 	SDWORD	xDif,yDif;
-	UDWORD	timeDiff;
-	BOOL mouseAtLeft = false, mouseAtRight = false,
-		mouseAtTop = false, mouseAtBottom = false;
+	uint32_t timeDiff;
+	int scrollDirLeftRight = 0, scrollDirUpDown = 0;
 	float scroll_zoom_factor = 1+2*((getViewDistance()-MINDISTANCE)/((float)(MAXDISTANCE-MINDISTANCE)));
 	float scaled_max_scroll_speed = scroll_zoom_factor * MAX_SCROLL_SPEED;
 	float scaled_accel;
@@ -1081,143 +1151,35 @@ void scroll(void)
 
 	if (mouseScroll)
 	{
-		/* Scroll left */
-		if (mouseX() < BOUNDARY_X)
-		{
-			mouseAtLeft = true;
-		}
+		// Scroll left or right
+		scrollDirLeftRight += (mouseX() > (pie_GetVideoBufferWidth() - BOUNDARY_X)) -
+		                       (mouseX() < BOUNDARY_X);
 
-		/* Scroll right */
-		if (mouseX() > (pie_GetVideoBufferWidth() - BOUNDARY_X))
-		{
-			mouseAtRight = true;
-		}
-
-		/* Scroll up */
-		if (mouseY() < BOUNDARY_Y)
-		{
-			mouseAtBottom = true;
-		}
-
-		/* Scroll down */
-		if (mouseY() > (pie_GetVideoBufferHeight() - BOUNDARY_Y))
-		{
-			mouseAtTop = true;
-		}
+		// Scroll down or up
+		scrollDirUpDown += (mouseY() < BOUNDARY_Y) -
+		                    (mouseY() > (pie_GetVideoBufferHeight() - BOUNDARY_Y));
 	}
 	if (!keyDown(KEY_LCTRL) && !keyDown(KEY_RCTRL))
 	{
-		/* Scroll left */
-		if (keyDown(KEY_LEFTARROW))
-		{
-			mouseAtLeft = true;
-		}
+		// Scroll left or right
+		scrollDirLeftRight += keyDown(KEY_RIGHTARROW) - keyDown(KEY_LEFTARROW);
 
-		/* Scroll right */
-		if (keyDown(KEY_RIGHTARROW))
-		{
-			mouseAtRight = true;
-		}
+		// Scroll down or up
+		scrollDirUpDown += keyDown(KEY_UPARROW) - keyDown(KEY_DOWNARROW);
+	}
+	CLIP(scrollDirLeftRight, -1, 1);
+	CLIP(scrollDirUpDown,    -1, 1);
 
-		/* Scroll up */
-		if (keyDown(KEY_UPARROW))
-		{
-			mouseAtBottom = true;
-		}
+	scaled_accel = scroll_zoom_factor * scroll_speed_accel;
 
-		/* Scroll down */
-		if ( keyDown(KEY_DOWNARROW))
-		{
-			mouseAtTop = true;
-		}
-	}
-	/* Time to update scroll - change to should be time */
-	timeDiff = SDL_GetTicks() - scrollRefTime;
+	// Apparently there's stutter if using deltaRealTime, so we have our very own delta time here, just for us.
+	timeDiff = wzGetTicks() - scrollRefTime;
+	scrollRefTime += timeDiff;
 
-	/* Store reference time */
-	scrollRefTime = SDL_GetTicks();
-
-	if (timeDiff > GTIME_MAXFRAME)
-	{
-		timeDiff = GTIME_MAXFRAME;
-	}
-	scaled_accel = scroll_zoom_factor * (float)scroll_speed_accel * (float)(timeDiff) / (float)GAME_TICKS_PER_SEC;
-	if(mouseAtLeft)
-	{
-		if(scrollSpeedLeftRight > 0)
-			scrollSpeedLeftRight = 0.0f;
-		scrollSpeedLeftRight -= scaled_accel;
-		if(scrollSpeedLeftRight < -scaled_max_scroll_speed)
-		{
-			scrollSpeedLeftRight = -scaled_max_scroll_speed;
-		}
-	}
-	else if(mouseAtRight)
-	{
-		if(scrollSpeedLeftRight < 0)
-			scrollSpeedLeftRight = 0.0f;
-		scrollSpeedLeftRight += scaled_accel;
-		if(scrollSpeedLeftRight > scaled_max_scroll_speed)
-		{
-			scrollSpeedLeftRight = scaled_max_scroll_speed;
-		}
-	}
-	else // not at left or right so retard the scroll
-	{
-		if(scrollSpeedLeftRight > 2*scaled_accel)
-		{
-			scrollSpeedLeftRight -= 2*scaled_accel;
-		}
-		else if(scrollSpeedLeftRight < -2*scaled_accel)
-		{
-			scrollSpeedLeftRight += 2*scaled_accel;
-		}
-		else
-		{
-			scrollSpeedLeftRight = 0.0f;
-		}
-	}
-	if(mouseAtBottom)//its at the top??
-	{
-		if(scrollSpeedUpDown < 0)
-			scrollSpeedUpDown = 0.0f;
-		scrollSpeedUpDown += scaled_accel;
-		if(scrollSpeedUpDown > scaled_max_scroll_speed)
-		{
-			scrollSpeedUpDown = scaled_max_scroll_speed;
-		}
-	}
-	else if(mouseAtTop)//its at the bottom??
-	{
-		if(scrollSpeedUpDown > 0)
-			scrollSpeedUpDown = 0.0f;
-		scrollSpeedUpDown -= scaled_accel;
-		if(scrollSpeedUpDown < -scaled_max_scroll_speed)
-		{
-			scrollSpeedUpDown = -scaled_max_scroll_speed;
-		}
-	}
-	else // not at top or bottom so retard the scroll
-	{
-		if(scrollSpeedUpDown > scaled_accel)
-		{
-			scrollSpeedUpDown -= 2*scaled_accel;
-		}
-		else if(scrollSpeedUpDown < -scaled_accel)
-		{
-			scrollSpeedUpDown += 2*scaled_accel;
-		}
-		else
-		{
-			scrollSpeedUpDown = 0.0f;
-		}
-	}
-
-	// scrool speeds updated in proportion to frame time calculate how far to step in each direction
-	scrollStepLeftRight = scrollSpeedLeftRight * (float)(timeDiff) /
-		(float)GAME_TICKS_PER_SEC;
-	scrollStepUpDown = scrollSpeedUpDown * (float)(timeDiff) /
-		(float)GAME_TICKS_PER_SEC;
+	scrollStepLeftRight = 0;
+	scrollStepUpDown = 0;
+	calcScroll(&scrollStepLeftRight, &scrollSpeedLeftRight, scaled_accel, 2*scaled_accel, scrollDirLeftRight * scaled_max_scroll_speed, (float)timeDiff / GAME_TICKS_PER_SEC);
+	calcScroll(&scrollStepUpDown,    &scrollSpeedUpDown,    scaled_accel, 2*scaled_accel, scrollDirUpDown    * scaled_max_scroll_speed, (float)timeDiff / GAME_TICKS_PER_SEC);
 
 	/* Get x component of movement */
 	xDif = iCosR(-player.r.y, scrollStepLeftRight) + iSinR(-player.r.y, scrollStepUpDown);
@@ -1236,7 +1198,7 @@ void scroll(void)
  */
 void resetScroll(void)
 {
-	scrollRefTime = SDL_GetTicks();
+	scrollRefTime = wzGetTicks();
 	scrollSpeedUpDown = 0.0f;
 	scrollSpeedLeftRight = 0.0f;
 }
@@ -1750,15 +1712,14 @@ static void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 				addTransporterInterface(psDroid, false);
 			}
 		}
-		else if (!bMultiPlayer || cyborgDroidSelected(selectedPlayer))
-		{
+		else
+		{	// We can order all units to use the transport now
+			if (cyborgDroidSelected(selectedPlayer))
+			{
+				// TODO add special processing for cyborgDroids
+			}
 			orderSelectedObj(selectedPlayer, (BASE_OBJECT*)psDroid);
 			FeedbackOrderGiven();
-		}
-		else
-		{
-			clearSelection();
-			SelectDroid(psDroid);
 		}
 	}
 	// Clicked on a commander? Will link to it.
@@ -1792,7 +1753,7 @@ static void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 			    droidSensorDroidWeapon((BASE_OBJECT *)psDroid, psCurr))
 			{
 				bSensorAssigned = true;
-				orderDroidObj(psCurr, DORDER_FIRESUPPORT, (BASE_OBJECT *)psDroid);
+				orderDroidObj(psCurr, DORDER_FIRESUPPORT, (BASE_OBJECT *)psDroid, ModeQueue);
 				FeedbackOrderGiven();
 			}
 		}
@@ -1847,7 +1808,7 @@ static void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 						"%s - Damage %d%% - ID %d - experience %f, %s - order %s - action %s - sensor range %hu power %hu - ECM %u - pitch %.0f",
 						droidGetName(psDroid),
 						100 - clip(PERCENT(psDroid->body, psDroid->originalBody), 0, 100), psDroid->id,
-						psDroid->experience, getDroidLevelName(psDroid), getDroidOrderName(psDroid->order), getDroidActionName(psDroid->action),
+						psDroid->experience/65536.f, getDroidLevelName(psDroid), getDroidOrderName(psDroid->order), getDroidActionName(psDroid->action),
 						droidSensorRange(psDroid), droidSensorPower(psDroid), droidConcealment(psDroid), UNDEG(psDroid->rot.pitch)));
 			FeedbackOrderGiven();
 		}
@@ -1859,7 +1820,7 @@ static void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 					"%s - Damage %d%% - Serial ID %d - Experience %f order %d action %d, %s",
 					droidGetName(psDroid),
 					100 - clip(PERCENT(psDroid->body, psDroid->originalBody), 0, 100),
-					psDroid->id, psDroid->experience, psDroid->order,
+					psDroid->id, psDroid->experience/65536.f, psDroid->order,
 					psDroid->action, getDroidLevelName(psDroid)));
 
 			FeedbackOrderGiven();
@@ -1872,7 +1833,7 @@ static void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 					_("%s - Damage %d%% - Experience %d, %s"),
 					droidGetName(psDroid),
 					100 - clip(PERCENT(psDroid->body,psDroid->originalBody), 0, 100),
-					(SDWORD) psDroid->experience, getDroidLevelName(psDroid)));
+					psDroid->experience/65536, getDroidLevelName(psDroid)));
 
 				FeedbackOrderGiven();
 			}
@@ -1888,7 +1849,7 @@ static void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 								  _("%s - Allied - Damage %d%% - Experience %d, %s"),
 								  droidGetName(psDroid),
 								  100 - clip(PERCENT(psDroid->body,psDroid->originalBody), 0, 100),
-								  (SDWORD) psDroid->experience, getDroidLevelName(psDroid)));
+								  psDroid->experience/65536, getDroidLevelName(psDroid)));
 
 		FeedbackOrderGiven();
 	}
@@ -2072,7 +2033,7 @@ static void dealWithLMBFeature(FEATURE* psFeature)
 					}
 					else
 					{
-						orderDroidStatsLocDir(psCurr, DORDER_BUILD, (BASE_STATS*) &asStructureStats[i], psFeature->pos.x, psFeature->pos.y, player.r.y);
+						orderDroidStatsLocDir(psCurr, DORDER_BUILD, (BASE_STATS*) &asStructureStats[i], psFeature->pos.x, psFeature->pos.y, player.r.y, ModeQueue);
 					}
 					++numTrucks;
 				}
@@ -2106,7 +2067,7 @@ static void dealWithLMBFeature(FEATURE* psFeature)
 				/* If so then find the nearest unit! */
 				if (psNearestUnit)	// bloody well should be!!!
 				{
-					orderDroidObj(psNearestUnit, DORDER_RECOVER, (BASE_OBJECT *)psFeature);
+					orderDroidObj(psNearestUnit, DORDER_RECOVER, (BASE_OBJECT *)psFeature, ModeQueue);
 					FeedbackOrderGiven();
 				}
 				else
@@ -2209,11 +2170,13 @@ void	dealWithLMB( void )
 		if (getDebugMappingStatus() && tileOnMap(mouseTileX, mouseTileY))
 		{
 			MAPTILE *psTile = mapTile(mouseTileX, mouseTileY);
+			uint8_t aux = auxTile(mouseTileX, mouseTileY, selectedPlayer);
 
-			CONPRINTF(ConsoleString, (ConsoleString, "%s tile %d, %d [%d, %d] continent(l%d, h%d) level %g illum %d",
+			CONPRINTF(ConsoleString, (ConsoleString, "%s tile %d, %d [%d, %d] continent(l%d, h%d) level %g illum %d %s %s",
 			          tileIsExplored(psTile) ? "Explored" : "Unexplored",
 			          mouseTileX, mouseTileY, world_coord(mouseTileX), world_coord(mouseTileY),
-			          (int)psTile->limitedContinent, (int)psTile->hoverContinent, psTile->level, (int)psTile->illumination));
+			          (int)psTile->limitedContinent, (int)psTile->hoverContinent, psTile->level, (int)psTile->illumination, 
+			          aux & AUXBITS_DANGER ? "danger" : "", aux & AUXBITS_THREAT ? "threat" : ""));
 		}
 
 		driveDisableTactical();
@@ -2446,7 +2409,7 @@ static void dealWithRMB( void )
 										"%s - Damage %d%% - ID %d - experience %f, %s - order %s - action %s - sensor range %hu power %hu - ECM %u",
 										droidGetName(psDroid),
 										100 - clip(PERCENT(psDroid->body, psDroid->originalBody), 0, 100), psDroid->id,
-										psDroid->experience, getDroidLevelName(psDroid), getDroidOrderName(psDroid->order), getDroidActionName(psDroid->action),
+										psDroid->experience/65536.f, getDroidLevelName(psDroid), getDroidOrderName(psDroid->order), getDroidActionName(psDroid->action),
 										droidSensorRange(psDroid), droidSensorPower(psDroid), droidConcealment(psDroid)));
 							FeedbackOrderGiven();
 						}
@@ -2458,7 +2421,7 @@ static void dealWithRMB( void )
 									"%s - Damage %d%% - Serial ID %d - Experience %f order %d action %d, %s",
 									droidGetName(psDroid),
 									100 - clip(PERCENT(psDroid->body, psDroid->originalBody), 0, 100),
-									psDroid->id, psDroid->experience, psDroid->order,
+									psDroid->id, psDroid->experience/65536.f, psDroid->order,
 									psDroid->action, getDroidLevelName(psDroid)));
 
 							FeedbackOrderGiven();
@@ -2471,7 +2434,7 @@ static void dealWithRMB( void )
 									_("%s - Damage %d%% - Experience %d, %s"),
 									droidGetName(psDroid),
 									100 - clip(PERCENT(psDroid->body,psDroid->originalBody), 0, 100),
-									(SDWORD) psDroid->experience, getDroidLevelName(psDroid)));
+									psDroid->experience/65536, getDroidLevelName(psDroid)));
 
 								FeedbackOrderGiven();
 							}

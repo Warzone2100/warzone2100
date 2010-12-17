@@ -24,10 +24,10 @@
  *
  */
 
-#include <SDL_timer.h>
 #include <time.h>
 
 #include "lib/framework/frame.h"
+#include "lib/framework/wzapp_c.h"
 #include "gtime.h"
 #include "src/multiplay.h"
 #include "lib/netplay/netplay.h"
@@ -35,7 +35,6 @@
 
 /* See header file for documentation */
 UDWORD gameTime = 0, deltaGameTime = 0, graphicsTime = 0, deltaGraphicsTime = 0, realTime = 0, deltaRealTime = 0;
-int32_t gameTimeFraction = 0;
 float graphicsTimeFraction = 0.0, realTimeFraction = 0.0;
 
 /** The current clock modifier. Set to speed up the game. */
@@ -96,6 +95,9 @@ void gameTimeInit(void)
 	{
 		wantedLatencies[player] = 0;
 	}
+
+	// Don't let syncDebug from previous games cause a desynch dump at gameTime 102.
+	resetSyncDebug();
 }
 
 extern void setGameTime(uint32_t newGameTime)
@@ -104,14 +106,13 @@ extern void setGameTime(uint32_t newGameTime)
 	gameTime = newGameTime;
 	setPlayerGameTime(NET_ALL_PLAYERS, newGameTime);
 	deltaGameTime = 0;
-	gameTimeFraction = 0;
 
 	// Setting graphics time to game time.
 	graphicsTime = gameTime;
 	deltaGraphicsTime = gameTime;
 	graphicsTimeFraction = 0.f;
 	timeOffset = graphicsTime;
-	baseTime = SDL_GetTicks();
+	baseTime = wzGetTicks();
 
 	// Not setting real time.
 }
@@ -134,7 +135,7 @@ UDWORD getModularScaledRealTime(UDWORD timePeriod, UDWORD requiredRange)
 /* Call this each loop to update the game timer */
 void gameTimeUpdate()
 {
-	uint32_t currTime = SDL_GetTicks();
+	uint32_t currTime = wzGetTicks();
 
 	if (currTime < baseTime)
 	{
@@ -222,22 +223,34 @@ void gameTimeUpdate()
 		gameTime     += deltaGameTime;
 		graphicsTime += deltaGraphicsTime;
 	}
+	else
+	{
+		// The game is paused, so the change in time is zero.
+		deltaGameTime = 0;
+		deltaGraphicsTime = 0;
+	}
 
 	// Pre-calculate fraction used in timeAdjustedIncrement
-	gameTimeFraction = deltaGameTime;
 	graphicsTimeFraction = (float)deltaGraphicsTime / (float)GAME_TICKS_PER_SEC;
 
 	ASSERT(graphicsTime <= gameTime, "Trying to see the future.");
 }
 
+void gameTimeUpdateEnd()
+{
+	deltaGameTime = 0;
+}
+
 void realTimeUpdate(void)
 {
-	uint32_t currTime = SDL_GetTicks();
+	uint32_t currTime = wzGetTicks();
 
 	// now update realTime which does not pause
 	// Store the real time
 	deltaRealTime = currTime - realTime;
 	realTime += deltaRealTime;
+
+	deltaRealTime = MIN(deltaRealTime, GTIME_MAXFRAME);  // Don't scroll across the map suddenly, if computer freezes for a moment.
 
 	// Pre-calculate fraction used in timeAdjustedIncrement
 	realTimeFraction = (float)deltaRealTime / (float)GAME_TICKS_PER_SEC;
@@ -247,7 +260,7 @@ void realTimeUpdate(void)
 void gameTimeResetMod(void)
 {
 	timeOffset = graphicsTime;
-	baseTime = SDL_GetTicks();
+	baseTime = wzGetTicks();
 
 	modifier = 1.0f;
 }
@@ -275,7 +288,7 @@ void gameTimeStop(void)
 {
 	if (stopCount == 0)
 	{
-		pauseStart = SDL_GetTicks();
+		pauseStart = wzGetTicks();
 		debug( LOG_NEVER, "Clock paused at %d\n", pauseStart);
 	}
 	stopCount += 1;
@@ -288,7 +301,7 @@ void gameTimeStart(void)
 	{
 		// shift the base time to now
 		timeOffset = gameTime;
-		baseTime = SDL_GetTicks();
+		baseTime = wzGetTicks();
 	}
 
 	if (stopCount > 0)
@@ -303,7 +316,7 @@ void gameTimeReset(UDWORD time)
 	// reset the game timers
 	setGameTime(time);
 	gameTimeResetMod();
-	realTime = SDL_GetTicks();
+	realTime = wzGetTicks();
 	deltaRealTime = 0;
 }
 
@@ -411,7 +424,7 @@ void recvPlayerGameTime(NETQUEUE queue)
 
 	if (updateReadyTime == 0 && checkPlayerGameTime(NET_ALL_PLAYERS))
 	{
-		updateReadyTime = SDL_GetTicks();  // This is the time we were able to tick.
+		updateReadyTime = wzGetTicks();  // This is the time we were able to tick.
 	}
 }
 

@@ -63,7 +63,7 @@ extern SDWORD cmdDroidGetIndex(DROID *psCommander);
 extern unsigned int cmdDroidMaxGroup(const DROID* psCommander);
 
 // update the kills of a command droid if psKiller is in a command group
-extern void cmdDroidUpdateKills(DROID *psKiller, float experienceInc);
+extern void cmdDroidUpdateKills(DROID *psKiller, uint32_t experienceInc);
 
 // get the level of a droids commander, if any
 extern unsigned int cmdGetCommanderLevel(const DROID* psDroid);

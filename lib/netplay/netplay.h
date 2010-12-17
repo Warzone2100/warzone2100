@@ -100,7 +100,6 @@ typedef enum
 	GAME_TEMPLATE,                  ///< a new template
 	GAME_TEMPLATEDEST,              ///< remove template
 	GAME_FEATUREDEST,               ///< destroy a game feature.
-	GAME_BUILD,                     ///< build a new structure
 	GAME_RESEARCH,                  ///< Research has been completed.
 	GAME_FEATURES,                  ///< information regarding features.
 	GAME_SECONDARY,                 ///< set a droids secondary order
@@ -111,6 +110,7 @@ typedef enum
 	GAME_STRUCTUREINFO,             ///< Structure state.
 	GAME_LASSAT,                    ///< lassat firing.
 	GAME_GAME_TIME,                 ///< Game time. Used for synchronising, so that all messages are executed at the same gameTime on all clients.
+	GAME_PLAYER_LEFT,               ///< Player has left or dropped.
 	// The following messages (not including GAME_MAX_TYPE) are currently redundant, and should probably at some point not be
 	// sent, except (some of them) when using cheats in debug mode.
 	GAME_DROIDDEST,                 ///< issue a droid destruction, will be sent by all players at the same time, and have no effect, if synchronised.
@@ -133,7 +133,9 @@ typedef enum
 #define MaxMsgSize		16384		// max size of a message in bytes.
 #define	StringSize		64			// size of strings used.
 #define MaxGames		12			// max number of concurrently playable games to allow.
-#define extra_string_size	239		// extra 255 char for future use
+#define extra_string_size	159		// extra 199 char for future use
+#define map_string_size		40
+#define	hostname_string_size	40
 #define modlist_string_size	255		// For a concatenated list of mods
 #define password_string_size 64		// longer passwords slow down the join code
 
@@ -168,6 +170,8 @@ typedef struct
 	// NOTE: do NOT save the following items in game.c--it will break savegames.
 	char		secondaryHosts[2][40];
 	char		extra[extra_string_size];		// extra string (future use)
+	char		mapname[map_string_size];		// map server is hosting
+	char		hostname[hostname_string_size];	// ...
 	char		versionstring[StringSize];		// 
 	char		modlist[modlist_string_size];	// ???
 	uint32_t	game_version_major;				// 
@@ -360,10 +364,11 @@ const char *messageTypeToString(unsigned messageType);
 #define syncDebug(...) do { _syncDebug(__FUNCTION__, __VA_ARGS__); } while(0)
 void _syncDebug(const char *function, const char *str, ...)
 	WZ_DECL_FORMAT(printf, 2, 3);
-void syncDebugBacktrace(void);  ///< Adds a backtrace to syncDebug. (Expect lots of false positives, if all clients aren't using the exact same binaries.)
-const char *syncDebugFloat(float f);  ///< Prints the float in hex.
+#define syncDebugBacktrace() do { _syncDebugBacktrace(__FUNCTION__); } while(0)
+void _syncDebugBacktrace(const char *function);                  ///< Adds a backtrace to syncDebug, if the platform supports it. Can be a bit slow, don't call way too often, unless desperate.
 
-uint32_t nextDebugSync(void);                                    ///< Returns a CRC corresponding to all syncDebug() calls since the last nextDebugSync() call.
+void resetSyncDebug(void);                                       ///< Resets the syncDebug, so syncDebug from a previous game doesn't cause a spurious desynch dump.
+uint32_t nextDebugSync(void);                                    ///< Returns a CRC corresponding to all syncDebug() calls since the last nextDebugSync() or resetSyncDebug() call.
 bool checkDebugSync(uint32_t checkGameTime, uint32_t checkCrc);  ///< Dumps all syncDebug() calls from that gameTime, if the CRC doesn't match.
 
 #ifdef __cplusplus

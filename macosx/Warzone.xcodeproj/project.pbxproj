@@ -216,9 +216,7 @@
 		0246A2A90BD3CCDC004D1C70 /* e3demo.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1D80BD3CCDB004D1C70 /* e3demo.c */; };
 		0246A2AB0BD3CCDC004D1C70 /* edit3d.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1DC0BD3CCDB004D1C70 /* edit3d.c */; };
 		0246A2AC0BD3CCDC004D1C70 /* effects.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1DE0BD3CCDB004D1C70 /* effects.c */; };
-		0246A2AD0BD3CCDC004D1C70 /* environ.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1E00BD3CCDB004D1C70 /* environ.c */; };
 		0246A2AE0BD3CCDC004D1C70 /* feature.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1E20BD3CCDB004D1C70 /* feature.c */; };
-		0246A2B00BD3CCDC004D1C70 /* formation.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1E70BD3CCDB004D1C70 /* formation.c */; };
 		0246A2B10BD3CCDC004D1C70 /* fpath.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1EA0BD3CCDB004D1C70 /* fpath.c */; };
 		0246A2B20BD3CCDC004D1C70 /* frontend.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1ED0BD3CCDB004D1C70 /* frontend.c */; };
 		0246A2B30BD3CCDC004D1C70 /* function.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1EF0BD3CCDB004D1C70 /* function.c */; };
@@ -404,6 +402,7 @@
 		432BE40210D9CF6F00A486AB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 432BE3FE10D9CF1300A486AB /* InfoPlist.strings */; };
 		432BE41A10D9D32000A486AB /* SDL.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 432BE34C10D9C21900A486AB /* SDL.framework */; };
 		4336D8AA111DDF0F0012E8E4 /* random.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4336D8A8111DDF0F0012E8E4 /* random.cpp */; };
+		4353C86E1282199C00CAFEDA /* tone.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C3B9C2118BEBE0000BBE59 /* tone.c */; };
 		4355E08010D5FADE00A19EE4 /* physfs_platforms.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E07F10D5FAC200A19EE4 /* physfs_platforms.h */; };
 		4355E13010D6028C00A19EE4 /* codec.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E12C10D6028C00A19EE4 /* codec.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4355E13110D6028C00A19EE4 /* theora.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E12D10D6028C00A19EE4 /* theora.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -413,7 +412,6 @@
 		436E3E6F1257C7910064FFC5 /* COPYING.txt in Resources */ = {isa = PBXBuildFile; fileRef = 436E3E6C1257C7910064FFC5 /* COPYING.txt */; };
 		4371B5A611D93BA3005A67AB /* pngpriv.h in Headers */ = {isa = PBXBuildFile; fileRef = 4371B5A411D93BA3005A67AB /* pngpriv.h */; };
 		438BDDF31129DC9A00998660 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 438BDDD71129DC9A00998660 /* InfoPlist.strings */; };
-		4396141511E2447100878481 /* barkmel.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C3B9C0118BEBE0000BBE59 /* barkmel.c */; };
 		439F36D61266869B00D5EE2A /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97F013D10EDEAE5C004947E5 /* Cocoa.framework */; };
 		439F36E8126686D600D5EE2A /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 439F36D11266862500D5EE2A /* CoreFoundation.framework */; };
 		439F36E91266872100D5EE2A /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 439F36D41266869B00D5EE2A /* Carbon.framework */; };
@@ -421,7 +419,6 @@
 		439F36F31266877900D5EE2A /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 439F36F21266877900D5EE2A /* OpenGL.framework */; };
 		439F36F5126687A900D5EE2A /* libfreetype.6.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 439F36F4126687A900D5EE2A /* libfreetype.6.dylib */; };
 		439F36F7126687E500D5EE2A /* libfontconfig.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 439F36F6126687E500D5EE2A /* libfontconfig.1.dylib */; };
-		439F3770126688DF00D5EE2A /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 439F36D41266869B00D5EE2A /* Carbon.framework */; };
 		439F3771126688DF00D5EE2A /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97F013D10EDEAE5C004947E5 /* Cocoa.framework */; };
 		439F3772126688DF00D5EE2A /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 439F36EE1266877900D5EE2A /* OpenAL.framework */; };
 		439F3773126688DF00D5EE2A /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 439F36F01266877900D5EE2A /* OpenAL.framework */; };
@@ -581,6 +578,7 @@
 		97AEAB780E8C1C5100A10721 /* Ogg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02356E090BD3BCFE00E9A019 /* Ogg.framework */; };
 		97AEAB790E8C1C5100A10721 /* Vorbis.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02DDA7EE0BD3C03F0049AB60 /* Vorbis.framework */; };
 		97AEAC560E8C261B00A10721 /* Theora.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97AEAB330E8C1B5200A10721 /* Theora.framework */; };
+		BF4A227A12B3138300CE8688 /* cocoa_wrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = BF4A227912B3138300CE8688 /* cocoa_wrapper.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -971,7 +969,6 @@
 		0246A0F00BD3CC29004D1C70 /* imdload.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = imdload.c; path = ../lib/ivis_common/imdload.c; sourceTree = SOURCE_ROOT; };
 		0246A0F10BD3CC29004D1C70 /* ivi.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ivi.h; path = ../lib/ivis_common/ivi.h; sourceTree = SOURCE_ROOT; };
 		0246A0F20BD3CC29004D1C70 /* ivisdef.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ivisdef.h; path = ../lib/ivis_common/ivisdef.h; sourceTree = SOURCE_ROOT; };
-		0246A0F30BD3CC29004D1C70 /* ivispatch.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ivispatch.h; path = ../lib/ivis_common/ivispatch.h; sourceTree = SOURCE_ROOT; };
 		0246A0F50BD3CC29004D1C70 /* pieblitfunc.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = pieblitfunc.h; path = ../lib/ivis_common/pieblitfunc.h; sourceTree = SOURCE_ROOT; };
 		0246A0F60BD3CC29004D1C70 /* pieclip.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = pieclip.c; path = ../lib/ivis_common/pieclip.c; sourceTree = SOURCE_ROOT; };
 		0246A0F70BD3CC29004D1C70 /* pieclip.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = pieclip.h; path = ../lib/ivis_common/pieclip.h; sourceTree = SOURCE_ROOT; };
@@ -1108,14 +1105,9 @@
 		0246A1DD0BD3CCDB004D1C70 /* edit3d.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = edit3d.h; path = ../src/edit3d.h; sourceTree = SOURCE_ROOT; };
 		0246A1DE0BD3CCDB004D1C70 /* effects.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = effects.c; path = ../src/effects.c; sourceTree = SOURCE_ROOT; };
 		0246A1DF0BD3CCDB004D1C70 /* effects.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = effects.h; path = ../src/effects.h; sourceTree = SOURCE_ROOT; };
-		0246A1E00BD3CCDB004D1C70 /* environ.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = environ.c; path = ../src/environ.c; sourceTree = SOURCE_ROOT; };
-		0246A1E10BD3CCDB004D1C70 /* environ.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = environ.h; path = ../src/environ.h; sourceTree = SOURCE_ROOT; };
 		0246A1E20BD3CCDB004D1C70 /* feature.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = feature.c; path = ../src/feature.c; sourceTree = SOURCE_ROOT; };
 		0246A1E30BD3CCDB004D1C70 /* feature.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = feature.h; path = ../src/feature.h; sourceTree = SOURCE_ROOT; };
 		0246A1E40BD3CCDB004D1C70 /* featuredef.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = featuredef.h; path = ../src/featuredef.h; sourceTree = SOURCE_ROOT; };
-		0246A1E70BD3CCDB004D1C70 /* formation.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = formation.c; path = ../src/formation.c; sourceTree = SOURCE_ROOT; };
-		0246A1E80BD3CCDB004D1C70 /* formation.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = formation.h; path = ../src/formation.h; sourceTree = SOURCE_ROOT; };
-		0246A1E90BD3CCDB004D1C70 /* formationdef.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = formationdef.h; path = ../src/formationdef.h; sourceTree = SOURCE_ROOT; };
 		0246A1EA0BD3CCDB004D1C70 /* fpath.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = fpath.c; path = ../src/fpath.c; sourceTree = SOURCE_ROOT; };
 		0246A1EB0BD3CCDB004D1C70 /* fpath.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = fpath.h; path = ../src/fpath.h; sourceTree = SOURCE_ROOT; };
 		0246A1EC0BD3CCDB004D1C70 /* frend.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = frend.h; path = ../src/frend.h; sourceTree = SOURCE_ROOT; };
@@ -1436,6 +1428,7 @@
 		436E3E6D1257C7910064FFC5 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = English; path = English.lproj/COPYING.txt; sourceTree = "<group>"; };
 		4371B5A311D93BA3005A67AB /* new_push_process_row.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = new_push_process_row.c; path = external/libpng/new_push_process_row.c; sourceTree = "<group>"; };
 		4371B5A411D93BA3005A67AB /* pngpriv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pngpriv.h; path = external/libpng/pngpriv.h; sourceTree = "<group>"; };
+		4371C3F912BAAC520055081E /* actiondef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = actiondef.h; path = ../src/actiondef.h; sourceTree = SOURCE_ROOT; };
 		438BDDD81129DC9A00998660 /* cs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		438BDDD91129DC9A00998660 /* da */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		438BDDDA1129DC9A00998660 /* de */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -1591,6 +1584,8 @@
 		43F3405A11CAA83D00D1E6C8 /* crc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = crc.h; path = ../lib/framework/crc.h; sourceTree = SOURCE_ROOT; };
 		43F3FFFE10D33F4D00707B6E /* macosx.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = macosx.c; path = external/physfs/platform/macosx.c; sourceTree = "<group>"; };
 		43F3FFFF10D33F6600707B6E /* physfs_unicode.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = physfs_unicode.c; path = external/physfs/physfs_unicode.c; sourceTree = "<group>"; };
+		43FA79911290771400DA51E7 /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		43FA79921290771400DA51E7 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		647D9C4F1039288D006D37CF /* dictionary.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = dictionary.c; path = ../lib/iniparser/dictionary.c; sourceTree = SOURCE_ROOT; };
 		647D9C501039288D006D37CF /* dictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dictionary.h; path = ../lib/iniparser/dictionary.h; sourceTree = SOURCE_ROOT; };
 		647D9C511039288D006D37CF /* iniparser.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = iniparser.c; path = ../lib/iniparser/iniparser.c; sourceTree = SOURCE_ROOT; };
@@ -1623,6 +1618,8 @@
 		976AE8270EA0B59A00F2473F /* timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = timer.h; path = ../lib/sequence/timer.h; sourceTree = SOURCE_ROOT; };
 		97AEAB330E8C1B5200A10721 /* Theora.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Theora.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		97F013D10EDEAE5C004947E5 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		BF4A227812B3138300CE8688 /* cocoa_wrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cocoa_wrapper.h; path = ../lib/framework/cocoa_wrapper.h; sourceTree = SOURCE_ROOT; };
+		BF4A227912B3138300CE8688 /* cocoa_wrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = cocoa_wrapper.m; path = ../lib/framework/cocoa_wrapper.m; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1658,7 +1655,6 @@
 				97AEAC560E8C261B00A10721 /* Theora.framework in Frameworks */,
 				02CDDD130D159DF600722688 /* QuesoGLC.framework in Frameworks */,
 				43EA393D11442A8900AEF27C /* Gettext.framework in Frameworks */,
-				439F3770126688DF00D5EE2A /* Carbon.framework in Frameworks */,
 				439F3771126688DF00D5EE2A /* Cocoa.framework in Frameworks */,
 				439F3772126688DF00D5EE2A /* OpenAL.framework in Frameworks */,
 				439F3773126688DF00D5EE2A /* OpenAL.framework in Frameworks */,
@@ -1939,6 +1935,8 @@
 				0246A09C0BD3CBD5004D1C70 /* cursors.h */,
 				0246A09F0BD3CBD5004D1C70 /* debug.c */,
 				0246A0A00BD3CBD5004D1C70 /* debug.h */,
+				BF4A227912B3138300CE8688 /* cocoa_wrapper.m */,
+				BF4A227812B3138300CE8688 /* cocoa_wrapper.h */,
 				0246A0A30BD3CBD5004D1C70 /* frame.c */,
 				0246A0A40BD3CBD5004D1C70 /* frame.h */,
 				0246A0A50BD3CBD5004D1C70 /* frameint.h */,
@@ -2001,7 +1999,6 @@
 				0246A0F00BD3CC29004D1C70 /* imdload.c */,
 				0246A0F10BD3CC29004D1C70 /* ivi.h */,
 				0246A0F20BD3CC29004D1C70 /* ivisdef.h */,
-				0246A0F30BD3CC29004D1C70 /* ivispatch.h */,
 				0246A0F50BD3CC29004D1C70 /* pieblitfunc.h */,
 				0246A0F60BD3CC29004D1C70 /* pieclip.c */,
 				0246A0F70BD3CC29004D1C70 /* pieclip.h */,
@@ -2152,6 +2149,7 @@
 		0246A1970BD3CCC3004D1C70 /* Warzone */ = {
 			isa = PBXGroup;
 			children = (
+				4371C3F912BAAC520055081E /* actiondef.h */,
 				4336D8A8111DDF0F0012E8E4 /* random.cpp */,
 				4336D8A9111DDF0F0012E8E4 /* random.h */,
 				43BE75E811124BB4007DF934 /* wavecast.cpp */,
@@ -2226,14 +2224,9 @@
 				0246A1DD0BD3CCDB004D1C70 /* edit3d.h */,
 				0246A1DE0BD3CCDB004D1C70 /* effects.c */,
 				0246A1DF0BD3CCDB004D1C70 /* effects.h */,
-				0246A1E00BD3CCDB004D1C70 /* environ.c */,
-				0246A1E10BD3CCDB004D1C70 /* environ.h */,
 				0246A1E20BD3CCDB004D1C70 /* feature.c */,
 				0246A1E30BD3CCDB004D1C70 /* feature.h */,
 				0246A1E40BD3CCDB004D1C70 /* featuredef.h */,
-				0246A1E70BD3CCDB004D1C70 /* formation.c */,
-				0246A1E80BD3CCDB004D1C70 /* formation.h */,
-				0246A1E90BD3CCDB004D1C70 /* formationdef.h */,
 				0246A1EA0BD3CCDB004D1C70 /* fpath.c */,
 				0246A1EB0BD3CCDB004D1C70 /* fpath.h */,
 				0246A1EC0BD3CCDB004D1C70 /* frend.h */,
@@ -3443,6 +3436,8 @@
 				et_EE,
 				ga,
 				ko,
+				sk,
+				tr,
 			);
 			mainGroup = 02356D640BD3BB2600E9A019;
 			productRefGroup = 02356D760BD3BB3400E9A019 /* Products */;
@@ -3598,7 +3593,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Config\nexport PATH=$PATH:/sw/bin:/opt/local/bin\ndestdata=\"build/${CONFIGURATION}/Warzone.app/Contents/Resources/data\"\ndatadir=\"../data\"\nrevckf=\"build/revck.tmp\"\ntsthg=\"../.hg\"\ntstgit=\"../.git\"\n\n# Check for hg or git\nif [ -d \"${tsthg}\" ]; then\n    revck=`hg identify`\n    mck=`hg status ${datadir}`\nelif [ -d \"${tstgit}\" ]; then\n    revck=`git rev-parse HEAD`\n    mck=`git status --porcelain ${datadir}`\nelse\n    revck=\"false\"\nfi\n\n# Try to figure out if the data dir needs updating\nif [ -d \"${destdata}\" ]; then\n    revtst=`cat ${revckf}`\n    if [[ \"${revck}\" == \"false\" ]] || [[ -z \"${revck}\" ]];then\n        echo \"Warning: State of the data directory cannot be determined; recopying\"\n        rm -rf \"${destdata}\"\n        mkdir -p \"${destdata}\"\n        cp -pPRf \"${datadir}/\" \"${destdata}/\"\n    elif [[ ! -z \"${mck}\" ]] || [[ ! \"${revck}\" = \"${revtst}\" ]];then\n        echo \"Data directory is out of date or has local modifications; recopying\"\n        rm -rf \"${destdata}\"\n        mkdir -p \"${destdata}\"\n        cp -pPRf \"${datadir}/\" \"${destdata}/\"\n    else\n        echo \"Data directory is up to date\"\n        exit 0\n    fi\nelse\n    mkdir -p \"${destdata}\"\n    cp -pPRf \"${datadir}/\" \"${destdata}/\"\nfi\n\n# Write out revckf\necho \"${revck}\" > ${revckf}\n\nexit 0";
+			shellScript = "# Config\nexport PATH=$PATH:/sw/bin:/opt/local/bin\ndestdata=\"build/${CONFIGURATION}/Warzone.app/Contents/Resources/data\"\ndatadir=\"../data\"\nrevckf=\"build/revck.tmp\"\ntsthg=\"../.hg\"\ntstgit=\"../.git\"\n\n# Check for hg or git\nif [ -d \"${tstgit}\" ]; then\n    revck=`git rev-parse HEAD`\n    mck=`git status --porcelain ${datadir}`\nelif [ -d \"${tsthg}\" ]; then\n    revck=`hg ident | sed -e 's:+::'`\n    mck=`hg status ${datadir}`\nelse\n    revck=\"false\"\nfi\n\n# Try to figure out if the data dir needs updating\nif [ -d \"${destdata}\" ]; then\n    revtst=`cat ${revckf}`\n    if [[ \"${revck}\" == \"false\" ]] || [[ -z \"${revck}\" ]];then\n        echo \"Warning: State of the data directory cannot be determined; recopying\"\n        rm -rf \"${destdata}\"\n        mkdir -p \"${destdata}\"\n        cp -pPRf \"${datadir}/\" \"${destdata}/\"\n    elif [[ ! -z \"${mck}\" ]] || [[ ! \"${revck}\" = \"${revtst}\" ]];then\n        echo \"Data directory is out of date or has local modifications; recopying\"\n        rm -rf \"${destdata}\"\n        mkdir -p \"${destdata}\"\n        cp -pPRf \"${datadir}/\" \"${destdata}/\"\n    else\n        echo \"Data directory is up to date\"\n        exit 0\n    fi\nelse\n    mkdir -p \"${destdata}\"\n    cp -pPRf \"${datadir}/\" \"${destdata}/\"\nfi\n\n# Write out revckf\necho \"${revck}\" > ${revckf}\n\nexit 0";
 		};
 		02F5CC4F0D148FC30000A2D0 /* Create database.c */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3612,7 +3607,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd external/quesoglc\n\nif [ ! -r src/database.c ]; then\n  cd database\n  python buildDB.py\nfi\n";
+			shellScript = "cd external/quesoglc\n\nif [ ! -r src/database.c ]; then\n\tcd database\n\t/usr/bin/python buildDB.py\n\texit ${?}\nfi\nexit 0\n";
 		};
 		02FD38210BD3FE9A00776FD3 /* Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3640,7 +3635,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"libpng-1.4.4\"\nOutDir=\"libpng\"\nFileName=\"libpng-1.4.4.tar.gz\"\nSourceDLP=\"http://downloads.sourceforge.net/project/libpng/01-libpng-master/1.4.4/libpng-1.4.4.tar.gz\"\nMD5Sum=\"297b38f925e745061489b41b1f7c4bb1\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
+			shellScript = "DirectorY=\"libpng-1.4.4\"\nOutDir=\"libpng\"\nFileName=\"libpng-1.4.4.tar.gz\"\nSourceDLP=\"http://downloads.sourceforge.net/project/libpng/libpng14/1.4.4/libpng-1.4.4.tar.gz\"\nMD5Sum=\"297b38f925e745061489b41b1f7c4bb1\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
 		};
 		02FD38340BD4012A00776FD3 /* Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3654,7 +3649,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"libogg-1.2.0\"\nOutDir=\"libogg\"\nFileName=\"libogg-1.2.0.tar.gz\"\nSourceDLP=\"http://downloads.xiph.org/releases/ogg/libogg-1.2.0.tar.gz\"\nMD5Sum=\"c95b73759acfc30712beef6ce4e88efa\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
+			shellScript = "DirectorY=\"libogg-1.2.2\"\nOutDir=\"libogg\"\nFileName=\"libogg-1.2.2.tar.gz\"\nSourceDLP=\"http://downloads.xiph.org/releases/ogg/libogg-1.2.2.tar.gz\"\nMD5Sum=\"5a9fcabc9a1b7c6f1cd75ddc78f36c56\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
 		};
 		02FD38380BD4013A00776FD3 /* Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3668,7 +3663,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"libvorbis-1.3.1\"\nOutDir=\"libvorbis\"\nFileName=\"libvorbis-1.3.1.tar.gz\"\nSourceDLP=\"http://downloads.xiph.org/releases/vorbis/libvorbis-1.3.1.tar.gz\"\nMD5Sum=\"016e523fac70bdd786258a9d15fd36e9\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
+			shellScript = "DirectorY=\"libvorbis-1.3.2\"\nOutDir=\"libvorbis\"\nFileName=\"libvorbis-1.3.2.tar.gz\"\nSourceDLP=\"http://downloads.xiph.org/releases/vorbis/libvorbis-1.3.2.tar.gz\"\nMD5Sum=\"c870b9bd5858a0ecb5275c14486d9554\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
 		};
 		02FD383C0BD4014700776FD3 /* Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3709,8 +3704,8 @@
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "cd ..\nexport PATH=$PATH:/sw/bin:/opt/local/bin\n\n# Wait a bit if Autorevision does not exist\ntick=0\nwhile [ ! -s \"./macosx/build/${CONFIGURATION}/Autorevision\" ]; do\n    let tick=${tick}+1\n    if [ ${tick} == 11 ]; then\n        break\n    fi\n    sleep 1\ndone\n\n\nif ! ./macosx/build/${CONFIGURATION}/Autorevision +cstr . src/autorevision.h; then\n    echo \"error: Could not run Autorevision\"\n    exit 1\nfi\n\nsed -n 's:#define:&:p' src/autorevision.h | sed 's:\"::g' | sed -e 's:tags/::' -e 's:branches/\\(.*\\)$:\\1 (SVN_REV):' -e 's:trunk:Trunk (SVN_REV):' | sed -e 's:_beta: Beta :' -e 's:_rc: RC :' >macosx/build/autorevision.h";
+			shellPath = /bin/bash;
+			shellScript = "function hfilter {\n    sed -n 's:#define:&:p' src/autorevision.h | sed 's:\"::g' | sed -e 's:refs/heads/:branch/:' -e 's:master:Master:' -e 's:^v::' | sed -e 's:_beta: Beta :' -e 's:_rc: RC :' >macosx/build/autorevision.h\n}\n\n\ncd ..\nexport PATH=$PATH:/sw/bin:/opt/local/bin\n\n# Do not run if we will not get useful information\nif [[ ! -d \".git\" ]] && [[ ! -d \".hg\" ]]; then\n    if [ -f \"src/autorevision.h\" ]; then\n        echo \"Not a repo.\"\n        hfilter\n        exit 0\n    fi\nfi\n\n# Wait a bit if Autorevision does not exist\ntick=0\nwhile [ ! -s \"./macosx/build/${CONFIGURATION}/Autorevision\" ]; do\n    let tick=${tick}+1\n    if [ ${tick} == 11 ]; then\n        break\n    fi\n    sleep 1\ndone\n\n\nif ! ./macosx/build/${CONFIGURATION}/Autorevision +cstr . src/autorevision.h; then\n    echo \"error: Could not run Autorevision\"\n    exit 1\nfi\n\nhfilter\nexit 0\n";
 		};
 		4345290E1130F84E002AD731 /* msgfmt */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3751,7 +3746,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "# Config\nsimgfl=\"http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/wztemplate.sparseimage\"\nsimgflnme=\"wztemplate.sparseimage\"\nsimgflmd5=\"da10e06f2b9b2b565e70dd8e98deaaad\"\nsequence=\"http://downloads.sourceforge.net/project/warzone2100/warzone2100/Videos/2.2/standard-quality-en/sequences.wz\"\nsequencenme=\"sequences.wz\"\nsequencelo=\"http://downloads.sourceforge.net/project/warzone2100/warzone2100/Videos/2.2/low-quality-en/sequences.wz\"\nsequencelonme=\"sequences-lo.wz\"\nrelbuild=\"build/Release/\"\ndmgout=\"build/dmgout\"\n\n# Fail if not release\nif [ ! -d \"${relbuild}Warzone.app\" ]; then\n    echo \"error: This should only be run as Release\" >&2\n    exit 1\nfi\n\n# Make a dir and get the sparseimage\nmkdir -p \"$dmgout\"\ncd  \"$dmgout\"\nif [ ! -f \"$simgflnme\" ]; then\n    echo \"Fetching $simgfl\"\n    if ! curl -L -O --connect-timeout \"30\" \"$simgfl\"; then\n        echo \"error: Unable to fetch $simgfl\" >&2\n        exit 1\n    fi\nelse\n    echo \"$simgflnme already exists, skipping\"\nfi\n\n# Get the sequences\n\n# Comment out the following to skip the high qual seq\n# if [ ! -f \"$sequencenme\" ]; then\n#     echo \"Fetching $sequencenme\"\n#     if [ -f \"${HOME}/Library/Application Support/Warzone 2100 Trunk/sequences.wz\" ]; then\n#         cp \"${HOME}/Library/Application Support/Warzone 2100 Trunk/sequences.wz\" \"$sequencenme\"\n#     elif ! curl -L --connect-timeout \"30\" -o \"$sequencenme\" \"$sequence\"; then\n#         echo \"error: Unable to fetch $sequence\" >&2\n#         exit 1\n#     fi\n# else\n#     echo \"$sequencenme already exists, skipping\"\n# fi\n#\n\n# Comment out the following to skip the low qual seq\n# if [ ! -f \"$sequencelonme\" ]; then\n#     echo \"Fetching $sequencelonme\"\n#     if [ -f \"${HOME}/Applications/Build/wz2100/dmgmaker/sequences-lo.wz\" ]; then\n#         cp \"${HOME}/Applications/Build/wz2100/dmgmaker/sequences-lo.wz\" \"$sequencelonme\"\n#     elif [ -f \"${HOME}/Library/Application Support/Warzone 2100 Trunk/sequences-lq.wz\" ]; then\n#         cp \"${HOME}/Library/Application Support/Warzone 2100 Trunk/sequences-lq.wz\" \"$sequencelonme\"\n#     elif ! curl -L --connect-timeout \"30\" -o \"$sequencelonme\" \"$sequencelo\"; then\n#         echo \"error: Unable to fetch $sequencelo\" >&2\n#         exit 1\n#     fi\n# else\n#     echo \"$sequencelonme already exists, skipping\"\n# fi\n# \n\n# Copy over the app\ncd ../../\necho \"Copying the app cleanly.\"\nrm -r -f $dmgout/Warzone.app\nif ! tar -c --exclude '.svn' --exclude 'Makefile*' --exclude 'makefile*' --exclude '.DS_Store' -C build/Release Warzone.app | tar -xC $dmgout; then\n    echo \"error: Unable to copy the app\" >&2\n    exit 1\nfi\n\n# Make the dSYM Bundle\nmkdir -p \"${dmgout}/warzone2100-dSYM\"\ncp -pPR ${relbuild}*.dSYM \"${dmgout}/warzone2100-dSYM\"\ncd \"$dmgout\"\ntar -czf warzone2100-dSYM.tar.gz --exclude '.DS_Store' warzone2100-dSYM\n\n# mkredist.bash\n\ncd Warzone.app/Contents/Resources/data/\n\necho \"== Compressing base.wz ==\"\nif [ -d base/ ]; then\n  cd base/\n  zip -r ../base.wz *\n  cd ..\n  rm -rf base/\nfi\n\necho \"== Compressing mp.wz ==\"\nif [ -d mp/ ]; then\n  cd mp/\n  zip -r ../mp.wz *\n  cd ..\n  rm -rf mp/\nfi\n\ncd mods/\n\nmodlst=`ls -1`\nfor moddr in ${modlst}; do\n    if [ -d ${moddr} ]; then\n        cd ${moddr}\n        if [ \"${moddr}\" = \"campaign\" ]; then\n            sbtyp=\".cam\"\n        elif [ \"${moddr}\" = \"global\" ]; then\n            sbtyp=\".gmod\"\n        elif [ \"${moddr}\" = \"multiplay\" ]; then\n            sbtyp=\".mod\"\n        elif [ \"${moddr}\" = \"music\" ]; then\n            sbtyp=\".music\"\n        else\n            sbtyp=\"\"\n        fi\n        modlstd=`ls -1`\n        for modwz in ${modlstd}; do\n            if [ -d ${modwz} ]; then\n                echo \"== Compressing ${modwz}${sbtyp}.wz ==\"\n                cd ${modwz}\n                zip -r ../${modwz}${sbtyp}.wz *\n                cd ..\n                rm -rf \"${modwz}/\"\n            fi\n        done\n        cd ..\n    fi\ndone\n\ncd ../../../../../\n\nrm -rf ./out ./temp\nmkdir temp/\nmkdir out/\nmv warzone2100-dSYM temp/warzone2100-dSYM\nmv warzone2100-dSYM.tar.gz out/warzone2100-dSYM.tar.gz\n\necho \"== Creating DMG ==\"\ncp wztemplate.sparseimage temp/wztemplatecopy.sparseimage\nhdiutil resize -size 150m temp/wztemplatecopy.sparseimage\nmountpt=`hdiutil mount temp/wztemplatecopy.sparseimage | tr -d \"\\t\" | sed -E 's:(/dev/disk[0-9])( +)(/Volumes/Warzone 2100):\\1:'`\ncp -r Warzone.app/* /Volumes/Warzone\\ 2100/Warzone.app\n# hdiutil detach `expr match \"$mountpt\" '\\(^[^ ]*\\)'`\nhdiutil detach \"$mountpt\"\nhdiutil convert temp/wztemplatecopy.sparseimage -format UDZO -o out/warzone2100-novideo.dmg\n\nif [ -f \"$sequencelonme\" ]; then\n    echo \"== Creating LQ DMG ==\"\n    hdiutil resize -size 350m temp/wztemplatecopy.sparseimage\n    mountpt=`hdiutil mount temp/wztemplatecopy.sparseimage | tr -d \"\\t\" | sed -E 's:(/dev/disk[0-9])( +)(/Volumes/Warzone 2100):\\1:'`\n    cp sequences-lo.wz /Volumes/Warzone\\ 2100/Warzone.app/Contents/Resources/data/sequences.wz\n    # hdiutil detach `expr match \"$mountpt\" '\\(^[^ ]*\\)'`\n    hdiutil detach \"$mountpt\"\n    hdiutil convert temp/wztemplatecopy.sparseimage -format UDZO -o out/warzone2100-lqvideo.dmg\nelse\n    echo \"$sequencelonme does not exist, skipping\"\nfi\n\n\nif [ -f \"$sequencenme\" ]; then\n    echo \"== Creating HQ DMG ==\"\n    hdiutil resize -size 700m temp/wztemplatecopy.sparseimage\n    mountpt=`hdiutil mount temp/wztemplatecopy.sparseimage | tr -d \"\\t\" | sed -E 's:(/dev/disk[0-9])( +)(/Volumes/Warzone 2100):\\1:'`\n    rm /Volumes/Warzone\\ 2100/Warzone.app/Contents/Resources/data/sequences.wz\n    cp sequences.wz /Volumes/Warzone\\ 2100/Warzone.app/Contents/Resources/data/sequences.wz\n    hdiutil detach \"$mountpt\"\n    hdiutil convert temp/wztemplatecopy.sparseimage -format UDZO  -o out/warzone2100-hqvideo.dmg\nelse\n    echo \"$sequencenme does not exist, skipping\"\nfi\n\necho \"== Cleaning up ==\"\nrm -f temp/wztemplatecopy.sparseimage\n\n# Open the dir\nopen \"out\"\n\nexit 0";
+			shellScript = "# Config\nsimgfl=\"http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/wztemplate.sparseimage\"\nsimgflnme=\"wztemplate.sparseimage\"\nsimgflmd5=\"da10e06f2b9b2b565e70dd8e98deaaad\"\nsequence=\"http://downloads.sourceforge.net/project/warzone2100/warzone2100/Videos/2.2/standard-quality-en/sequences.wz\"\nsequencenme=\"sequences.wz\"\nsequencelo=\"http://downloads.sourceforge.net/project/warzone2100/warzone2100/Videos/2.2/low-quality-en/sequences.wz\"\nsequencelonme=\"sequences-lo.wz\"\nrelbuild=\"build/Release/\"\ndmgout=\"build/dmgout\"\ncoident=\"${SRCROOT}/configs/codeident\"\n\n# Fail if not release\nif [ ! -d \"${relbuild}Warzone.app\" ]; then\n    echo \"error: This should only be run as Release\" >&2\n    exit 1\nfi\n\n# codesign setup\nsignd () {\n    if [ -f \"${coident}\" ]; then\n        # Local Config\n        local idetd=`cat ${coident}`\n        local resrul=\"${SRCROOT}/configs/codesignrules.plist\"\n        local appth=\"/Volumes/Warzone 2100/Warzone.app\"\n        \n        # Sign app\n        codesign -vfs \"${idetd}\" --keychain \"CodeSign\" --verify --resource-rules=\"${resrul}\" \"${appth}\"\n        \n        # Sign the frameworks\n        local framelst=`\\ls -1 \"${appth}/Contents/Frameworks\" | sed -n 's:.framework$:&:p'`\n        for fsignd in ${framelst}; do\n             if [ -d \"${appth}/Contents/Frameworks/${fsignd}/Versions/A\" ]; then\n                codesign -vfs \"${idetd}\" --keychain \"CodeSign\" --verify \"${appth}/Contents/Frameworks/${fsignd}/Versions/A\"\n            fi\n        done\n    else\n        echo \"warning: No codeident file found; code will not be signed.\"\n    fi\n}\n\n# Make a dir and get the sparseimage\nmkdir -p \"$dmgout\"\ncd  \"$dmgout\"\nif [ ! -f \"$simgflnme\" ]; then\n    echo \"Fetching $simgfl\"\n    if ! curl -L -O --connect-timeout \"30\" \"$simgfl\"; then\n        echo \"error: Unable to fetch $simgfl\" >&2\n        exit 1\n    fi\nelse\n    echo \"$simgflnme already exists, skipping\"\nfi\n\n# Get the sequences\n\n# Comment out the following to skip the high qual seq\n# if [ ! -f \"$sequencenme\" ]; then\n#     echo \"Fetching $sequencenme\"\n#     if [ -f \"${HOME}/Library/Application Support/Warzone 2100 Trunk/sequences.wz\" ]; then\n#         cp \"${HOME}/Library/Application Support/Warzone 2100 Trunk/sequences.wz\" \"$sequencenme\"\n#     elif ! curl -L --connect-timeout \"30\" -o \"$sequencenme\" \"$sequence\"; then\n#         echo \"error: Unable to fetch $sequence\" >&2\n#         exit 1\n#     fi\n# else\n#     echo \"$sequencenme already exists, skipping\"\n# fi\n#\n\n# Comment out the following to skip the low qual seq\n# if [ ! -f \"$sequencelonme\" ]; then\n#     echo \"Fetching $sequencelonme\"\n#     if [ -f \"${HOME}/Applications/Build/wz2100/dmgmaker/sequences-lo.wz\" ]; then\n#         cp \"${HOME}/Applications/Build/wz2100/dmgmaker/sequences-lo.wz\" \"$sequencelonme\"\n#     elif [ -f \"${HOME}/Library/Application Support/Warzone 2100 Trunk/sequences-lq.wz\" ]; then\n#         cp \"${HOME}/Library/Application Support/Warzone 2100 Trunk/sequences-lq.wz\" \"$sequencelonme\"\n#     elif ! curl -L --connect-timeout \"30\" -o \"$sequencelonme\" \"$sequencelo\"; then\n#         echo \"error: Unable to fetch $sequencelo\" >&2\n#         exit 1\n#     fi\n# else\n#     echo \"$sequencelonme already exists, skipping\"\n# fi\n# \n\n# Copy over the app\ncd ../../\necho \"Copying the app cleanly.\"\nrm -r -f $dmgout/Warzone.app\nif ! tar -c --exclude '.svn' --exclude 'Makefile*' --exclude 'makefile*' --exclude '.DS_Store' -C build/Release Warzone.app | tar -xC $dmgout; then\n    echo \"error: Unable to copy the app\" >&2\n    exit 1\nfi\n\n# Make the dSYM Bundle\nmkdir -p \"${dmgout}/warzone2100-dSYM\"\ncp -pPR ${relbuild}*.dSYM \"${dmgout}/warzone2100-dSYM\"\ncd \"$dmgout\"\ntar -czf warzone2100-dSYM.tar.gz --exclude '.DS_Store' warzone2100-dSYM\n\n# mkredist.bash\n\ncd Warzone.app/Contents/Resources/data/\n\necho \"== Compressing base.wz ==\"\nif [ -d base/ ]; then\n  cd base/\n  zip -r ../base.wz *\n  cd ..\n  rm -rf base/\nfi\n\necho \"== Compressing mp.wz ==\"\nif [ -d mp/ ]; then\n  cd mp/\n  zip -r ../mp.wz *\n  cd ..\n  rm -rf mp/\nfi\n\ncd mods/\n\nmodlst=`\\ls -1`\nfor moddr in ${modlst}; do\n    if [ -d ${moddr} ]; then\n        cd ${moddr}\n        if [ \"${moddr}\" = \"campaign\" ]; then\n            sbtyp=\".cam\"\n        elif [ \"${moddr}\" = \"global\" ]; then\n            sbtyp=\".gmod\"\n        elif [ \"${moddr}\" = \"multiplay\" ]; then\n            sbtyp=\".mod\"\n        elif [ \"${moddr}\" = \"music\" ]; then\n            sbtyp=\".music\"\n        else\n            sbtyp=\"\"\n        fi\n        modlstd=`ls -1`\n        for modwz in ${modlstd}; do\n            if [ -d ${modwz} ]; then\n                echo \"== Compressing ${modwz}${sbtyp}.wz ==\"\n                cd ${modwz}\n                zip -r ../${modwz}${sbtyp}.wz *\n                cd ..\n                rm -rf \"${modwz}/\"\n            fi\n        done\n        cd ..\n    fi\ndone\n\ncd ../../../../../\n\nrm -rf ./out ./temp\nmkdir temp/\nmkdir out/\nmv warzone2100-dSYM temp/warzone2100-dSYM\nmv warzone2100-dSYM.tar.gz out/warzone2100-dSYM.tar.gz\n\necho \"== Creating DMG ==\"\ncp wztemplate.sparseimage temp/wztemplatecopy.sparseimage\nhdiutil resize -size 220m temp/wztemplatecopy.sparseimage\nmountpt=`hdiutil mount temp/wztemplatecopy.sparseimage | tr -d \"\\t\" | sed -E 's:(/dev/disk[0-9])( +)(/Volumes/Warzone 2100):\\1:'`\ncp -r Warzone.app/* /Volumes/Warzone\\ 2100/Warzone.app\nsignd\n# hdiutil detach `expr match \"$mountpt\" '\\(^[^ ]*\\)'`\nhdiutil detach \"$mountpt\"\nhdiutil convert temp/wztemplatecopy.sparseimage -format UDZO -o out/warzone2100-novideo.dmg\n\nif [ -f \"$sequencelonme\" ]; then\n    echo \"== Creating LQ DMG ==\"\n    hdiutil resize -size 420m temp/wztemplatecopy.sparseimage\n    mountpt=`hdiutil mount temp/wztemplatecopy.sparseimage | tr -d \"\\t\" | sed -E 's:(/dev/disk[0-9])( +)(/Volumes/Warzone 2100):\\1:'`\n    cp sequences-lo.wz /Volumes/Warzone\\ 2100/Warzone.app/Contents/Resources/data/sequences.wz\n    signd\n    # hdiutil detach `expr match \"$mountpt\" '\\(^[^ ]*\\)'`\n    hdiutil detach \"$mountpt\"\n    hdiutil convert temp/wztemplatecopy.sparseimage -format UDZO -o out/warzone2100-lqvideo.dmg\nelse\n    echo \"$sequencelonme does not exist, skipping\"\nfi\n\n\nif [ -f \"$sequencenme\" ]; then\n    echo \"== Creating HQ DMG ==\"\n    hdiutil resize -size 770m temp/wztemplatecopy.sparseimage\n    mountpt=`hdiutil mount temp/wztemplatecopy.sparseimage | tr -d \"\\t\" | sed -E 's:(/dev/disk[0-9])( +)(/Volumes/Warzone 2100):\\1:'`\n    rm /Volumes/Warzone\\ 2100/Warzone.app/Contents/Resources/data/sequences.wz\n    cp sequences.wz /Volumes/Warzone\\ 2100/Warzone.app/Contents/Resources/data/sequences.wz\n    signd\n    hdiutil detach \"$mountpt\"\n    hdiutil convert temp/wztemplatecopy.sparseimage -format UDZO  -o out/warzone2100-hqvideo.dmg\nelse\n    echo \"$sequencenme does not exist, skipping\"\nfi\n\necho \"== Cleaning up ==\"\nrm -f temp/wztemplatecopy.sparseimage\n\n# Open the dir\nopen \"out\"\n\nexit 0";
 		};
 		43FA570B10FF8E9B0074E914 /* SDL */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3945,9 +3940,7 @@
 				0246A2A90BD3CCDC004D1C70 /* e3demo.c in Sources */,
 				0246A2AB0BD3CCDC004D1C70 /* edit3d.c in Sources */,
 				0246A2AC0BD3CCDC004D1C70 /* effects.c in Sources */,
-				0246A2AD0BD3CCDC004D1C70 /* environ.c in Sources */,
 				0246A2AE0BD3CCDC004D1C70 /* feature.c in Sources */,
-				0246A2B00BD3CCDC004D1C70 /* formation.c in Sources */,
 				0246A2B10BD3CCDC004D1C70 /* fpath.c in Sources */,
 				0246A2B20BD3CCDC004D1C70 /* frontend.c in Sources */,
 				0246A2B30BD3CCDC004D1C70 /* function.c in Sources */,
@@ -4068,6 +4061,7 @@
 				43F3405B11CAA83D00D1E6C8 /* crc.cpp in Sources */,
 				43C270E911DD2EBA009BC740 /* jpeg_encoder.c in Sources */,
 				43A0C82B12176C8A006C3B89 /* netqueue.cpp in Sources */,
+				BF4A227A12B3138300CE8688 /* cocoa_wrapper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4166,7 +4160,7 @@
 				02DDA8410BD3C1420049AB60 /* window.c in Sources */,
 				02DDA8590BD3C18B0049AB60 /* vorbisenc.c in Sources */,
 				02DDA85A0BD3C18B0049AB60 /* vorbisfile.c in Sources */,
-				4396141511E2447100878481 /* barkmel.c in Sources */,
+				4353C86E1282199C00CAFEDA /* tone.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4397,6 +4391,8 @@
 				438BDDF11129DC9A00998660 /* zh_CN */,
 				438BDDF21129DC9A00998660 /* zh_TW */,
 				43D615DC120488E3004B9630 /* ko */,
+				43FA79911290771400DA51E7 /* sk */,
+				43FA79921290771400DA51E7 /* tr */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";

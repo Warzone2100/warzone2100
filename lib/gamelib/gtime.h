@@ -63,10 +63,8 @@ extern UDWORD deltaGameTime;
 #define frameTime deltaGameTime
 /// The difference between the previous and current graphicsTime.
 extern UDWORD deltaGraphicsTime;
-/// The difference between the previous and current gameTime2 (FIXME gameTime2 should be called realTime).
-/// FIXME This should be renamed from frameTime2 to deltaRealTime.
+/// The difference between the previous and current realTime.
 extern UDWORD deltaRealTime;
-#define frameTime2 deltaRealTime
 
 /** Initialise the game clock. */
 extern void gameTimeInit(void);
@@ -74,11 +72,13 @@ extern void gameTimeInit(void);
 /// Changes the game (and graphics) time.
 extern void setGameTime(uint32_t newGameTime);
 
-/** Call this each loop to update the gameTime and graphicsTime timers, and corresponding deltaGameTime and deltaRealTime.
- * If logicalUpdates is true, then the game time increases in GAME_UNITS_PER_TICK increments, and deltaGameTime is either 0 or GAME_UNITS_PER_TICK. If false, the game time is equal to the graphics time, and the game always ticks.
+/** Call this each loop to update the gameTime, graphicsTime and realTime timers, and corresponding deltaGameTime, deltaGraphicsTime and deltaRealTime.
+ * The game time increases in GAME_UNITS_PER_TICK increments, and deltaGameTime is either 0 or GAME_UNITS_PER_TICK.
  * @returns true iff the game time ticked.
  */
 extern void gameTimeUpdate(void);
+/// Call after updating the state, and before processing any net messages that use deltaGameTime. (Sets deltaGameTime = 0.)
+void gameTimeUpdateEnd(void);
 
 /// Updates the realTime timer, and corresponding deltaRealTime.
 void realTimeUpdate(void);
@@ -142,14 +142,13 @@ extern void	getTimeComponents(UDWORD time, UDWORD *hours, UDWORD *minutes, UDWOR
 
 
 
-extern int32_t gameTimeFraction;    ///< Private performance calculation. Do not use.
 extern float graphicsTimeFraction;  ///< Private performance calculation. Do not use.
 extern float realTimeFraction;  ///< Private performance calculation. Do not use.
 
 /// Returns the value times deltaGameTime, converted to seconds.
-static inline int gameTimeAdjustedIncrement(int value)
+static inline int32_t gameTimeAdjustedIncrement(int value)
 {
-	return value * gameTimeFraction / GAME_TICKS_PER_SEC;
+	return value * (int)deltaGameTime / GAME_TICKS_PER_SEC;
 }
 /// Returns the value times deltaGraphicsTime, converted to seconds.
 static inline float graphicsTimeAdjustedIncrement(float value)

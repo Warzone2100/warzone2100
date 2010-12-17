@@ -24,6 +24,7 @@
 #ifndef __INCLUDED_SRC_ORDER_H__
 #define __INCLUDED_SRC_ORDER_H__
 
+#include "droiddef.h"
 #include "orderdef.h"
 #include "structuredef.h"
 
@@ -34,53 +35,6 @@ extern "C"
 
 //turn off the build queue availability until desired release date!
 //#define DISABLE_BUILD_QUEUE
-
-// The droid orders
-typedef enum _droid_order
-{
-	DORDER_NONE,				// no order set
-
-	DORDER_STOP,				// stop the current order
-	DORDER_MOVE,				// 2 - move to a location
-	DORDER_ATTACK,				// attack an enemy
-	DORDER_BUILD,				// 4 - build a structure
-	DORDER_HELPBUILD,			// help to build a structure
-	DORDER_LINEBUILD,			// 6 - build a number of structures in a row (walls + bridges)
-	DORDER_DEMOLISH,			// demolish a structure
-	DORDER_REPAIR,				// 8 - repair a structure
-	DORDER_OBSERVE,				// keep a target in sensor view
-	DORDER_FIRESUPPORT,			// 10 - attack whatever the linked sensor droid attacks
-	DORDER_RETREAT,				// return to the players retreat position
-	DORDER_DESTRUCT,			// 12 - self destruct
-	DORDER_RTB,					// return to base
-	DORDER_RTR,					// 14 - return to repair at any repair facility
-	DORDER_RUN,					// run away after moral failure
-	DORDER_EMBARK,				// 16 - board a transporter
-	DORDER_DISEMBARK,			// get off a transporter
-	DORDER_ATTACKTARGET,		// 18 - a suggestion to attack something
-								// i.e. the target was chosen because the droid could see it
-	DORDER_COMMAND,				// a command droid issuing orders to it's group
-	DORDER_BUILDMODULE,			// 20 - build a module (power, research or factory)
-	DORDER_RECYCLE,				// return to factory to be recycled
-	DORDER_TRANSPORTOUT,		// 22 - offworld transporter order
-	DORDER_TRANSPORTIN,			// onworld transporter order
-	DORDER_TRANSPORTRETURN,		// 24 - transporter return after unloading
-	DORDER_GUARD,				// guard a structure
-	DORDER_DROIDREPAIR,			// 26 - repair a droid
-	DORDER_RESTORE,				// restore resistance points for a structure
-	DORDER_SCOUT,				// 28 - same as move, but stop if an enemy is seen
-	DORDER_RUNBURN,				// run away on fire
-	DORDER_CLEARWRECK,			// 30 - constructor droid to clear up building wreckage
-	DORDER_PATROL,				// move between two way points
-	DORDER_REARM,				// 32 - order a vtol to rearming pad
-	DORDER_MOVE_ATTACKWALL,		// move to a location taking out a blocking wall on the way
-	DORDER_SCOUT_ATTACKWALL,	// 34 - scout to a location taking out a blocking wall on the way
-	DORDER_RECOVER,				// pick up an artifact
-	DORDER_LEAVEMAP,			// 36 - vtol flying off the map
-	DORDER_RTR_SPECIFIED,		// return to repair at a specified repair center
-	DORDER_CIRCLE = 40,				// circles target location and engage
-	DORDER_TEMP_HOLD,		// hold position until given next order
-} DROID_ORDER;
 
 // secondary orders for droids
 typedef enum _secondary_order
@@ -146,6 +100,9 @@ typedef enum _secondary_state
 #define DSS_FIREDES_MASK	0x800000
 #define DSS_CIRCLE_MASK		0x400100
 
+extern RUN_DATA asRunData[MAX_PLAYERS]; // retreat positions for the players
+extern void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder);
+
 //call this *AFTER* every mission so it gets reset
 extern void initRunData(void);
 
@@ -153,7 +110,7 @@ extern void initRunData(void);
 extern void orderUpdateDroid(DROID *psDroid);
 
 /* Give a droid an order */
-extern void orderDroid(DROID *psDroid, DROID_ORDER order);
+extern void orderDroid(DROID *psDroid, DROID_ORDER order, QUEUE_MODE mode);
 
 /* Check the order state of a droid */
 extern BOOL orderState(DROID *psDroid, DROID_ORDER order);
@@ -165,26 +122,26 @@ BOOL validOrderForLoc(DROID_ORDER order);
 BOOL validOrderForObj(DROID_ORDER order);
 
 /* Give a droid an order with a location target */
-extern void orderDroidLoc(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD y);
+void orderDroidLoc(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD y, QUEUE_MODE mode);
 
 /* Get the state of a droid order with a location */
 extern BOOL orderStateLoc(DROID *psDroid, DROID_ORDER order, UDWORD *pX, UDWORD *pY);
 
 /* Give a droid an order with an object target */
-extern void orderDroidObj(DROID *psDroid, DROID_ORDER order, BASE_OBJECT *psObj);
+void orderDroidObj(DROID *psDroid, DROID_ORDER order, BASE_OBJECT *psObj, QUEUE_MODE mode);
 
 /* Get the state of a droid order with an object */
 extern BASE_OBJECT* orderStateObj(DROID *psDroid, DROID_ORDER order);
 
 /* Give a droid an order with a location and a stat */
-extern void orderDroidStatsLocDir(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStats, UDWORD x, UDWORD y, uint16_t direction);
+void orderDroidStatsLocDir(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStats, UDWORD x, UDWORD y, uint16_t direction, QUEUE_MODE mode);
 
 /* Get the state of a droid order with a location and a stat */
 extern BOOL orderStateStatsLoc(DROID *psDroid, DROID_ORDER order,
 						BASE_STATS **ppsStats, UDWORD *pX, UDWORD *pY);
 
 /* Give a droid an order with a location and a stat */
-void orderDroidStatsTwoLocDir(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStats, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2, uint16_t direction);
+void orderDroidStatsTwoLocDir(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStats, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2, uint16_t direction, QUEUE_MODE mode);
 
 void orderDroidStatsTwoLocDirAdd(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStats, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2, uint16_t direction);
 
@@ -198,6 +155,7 @@ extern void orderSelectedObjAdd(UDWORD player, BASE_OBJECT *psObj, BOOL add);
 
 // add an order to a droids order list
 extern void orderDroidAdd(DROID *psDroid, struct _droid_order_data *psOrder);
+void orderDroidAddPending(DROID *psDroid, struct _droid_order_data *psOrder);
 // do the next order from a droids order list
 extern BOOL orderDroidList(DROID *psDroid);
 
@@ -251,17 +209,9 @@ extern BOOL getFactoryState(STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_
 //lasSat structure can select a target
 extern void orderStructureObj(UDWORD player, BASE_OBJECT *psObj);
 
-static inline void setDroidOrderTarget(DROID *psDroid, void *psNewObject, SDWORD idx)
-{
-	assert(idx >= 0 && idx < ORDER_LIST_MAX);
-	psDroid->asOrderList[idx].psOrderTarget = psNewObject;
-}
 
-static inline void removeDroidOrderTarget(DROID *psDroid, SDWORD idx)
-{
-	assert(idx >= 0 && idx < ORDER_LIST_MAX);
-	psDroid->asOrderList[idx].psOrderTarget = NULL;
-}
+void orderDroidListEraseRange(DROID *psDroid, unsigned indexBegin, unsigned indexEnd);  ///< Pops the order at position index off the beginning of the list. (Even if the order is still pending.)
+void orderClearTargetFromDroidList(DROID *psDroid, BASE_OBJECT *psTarget);              ///< Clear all orders for the given target (including pending orders) from the list
 
 extern DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x,UDWORD y, BOOL altOrder);
 extern DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, BOOL altOrder);

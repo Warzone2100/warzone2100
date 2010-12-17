@@ -131,6 +131,12 @@ void scriptSetStartPos(int position, int x, int y)
 
 BOOL scriptInit()
 {
+	int i;
+
+	for (i = 0; i < MAX_PLAYERS; i++)
+	{
+		scriptSetStartPos(i, 0, 0);
+	}
 	nextPlayer = 0;
 	return true;
 }
@@ -154,6 +160,33 @@ static int scrGetPlayer(lua_State *L)
 	      positions[nextPlayer].x, positions[nextPlayer].y, NetPlay.maxPlayers);
 	lua_pushinteger(L, nextPlayer);
 	nextPlayer++;
+	return 1;
+}
+
+Vector2i getPlayerStartPosition(int player)
+{
+	return positions[player];
+}
+
+static int scrSafeDest(lua_State *L)
+{
+	int player = luaWZ_checkplayer(L, 1);
+	int x = luaL_checkint(L, 2);
+	int y = luaL_checkint(L, 3);
+
+	ASSERT_OR_RETURN(0, worldOnMap(x, y), "Out of bounds coordinates(%d, %d)", x, y);
+	lua_pushboolean(L, !(auxTile(map_coord(x), map_coord(y), player) & AUXBITS_DANGER));
+	return 1;
+}
+
+static int scrThreatAt(lua_State *L)
+{
+	int player = luaWZ_checkplayer(L, 1);
+	int x = luaL_checkint(L, 2);
+	int y = luaL_checkint(L, 3);
+
+	ASSERT_OR_RETURN(0, worldOnMap(x, y), "Out of bounds coordinates(%d, %d)", x, y);
+	lua_pushboolean(L, auxTile(map_coord(x), map_coord(y), player) & AUXBITS_THREAT);
 	return 1;
 }
 
@@ -1168,9 +1201,9 @@ static int scrBuildDroid(lua_State *L)
 
 	if (productionRun != 1)
 	{
-		debug(LOG_WARNING, "A script is trying to build a different number (%d) than 1 droid.", productionRun);
+		debug(LOG_ERROR, "A script is trying to build a different number (%d) than 1 droid.", productionRun);
 	}
-	structSetManufacture(psFactory, psTemplate);
+	structSetManufacture(psFactory, psTemplate, ModeQueue);
 
 	return 0;
 }
@@ -4204,7 +4237,7 @@ UDWORD	count=0;
 		return(false);
 	}
 
-	if (player < 0 || player >= MAX_PLAYERS)
+	if (player >= MAX_PLAYERS)
 	{
 		ASSERT( false,"Invalid player number in scrKillDroidsInArea" );
 	}
@@ -4303,7 +4336,7 @@ WZ_DECL_UNUSED static BOOL scrAddTemplate(void)
 		return false;
 	}
 
-	if (player < 0 || player >= MAX_PLAYERS)
+	if (player >= MAX_PLAYERS)
 	{
 		ASSERT( false, "scrAddTemplate:player number is too high" );
 		return false;
@@ -4848,7 +4881,7 @@ WZ_DECL_UNUSED static BOOL scrTakeOverDroidsInAreaExp(void)
 			(psDroid->droidType != DROID_CYBORG_CONSTRUCT) &&
 			(psDroid->droidType != DROID_CYBORG_REPAIR) &&
 //			((SDWORD)getDroidLevel(psDroid) <= level) &&
-			((SDWORD)psDroid->experience <= level) &&
+			((SDWORD)psDroid->experience/65536 <= level) &&
 			psDroid->pos.x >= x1 && psDroid->pos.x <= x2 &&
 			psDroid->pos.y >= y1 && psDroid->pos.y <= y2)
 		{
@@ -5137,7 +5170,7 @@ WZ_DECL_UNUSED static BOOL scrSetDroidKills(void)
 		return false;
 	}
 
-	psDroid->experience = (float)kills * 100.0;
+	psDroid->experience = kills * 100 * 65536;
 
 	return true;
 }
@@ -5159,7 +5192,7 @@ WZ_DECL_UNUSED static BOOL scrGetDroidKills(void)
 		return false;
 	}
 
-	scrFunctionResult.v.ival = psDroid->experience;
+	scrFunctionResult.v.ival = psDroid->experience/65536;
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return false;
@@ -7389,8 +7422,7 @@ WZ_DECL_UNUSED static BOOL scrNumAAinRange(void)
 	{
 		if(psStruct->visible[lookingPlayer])	//if can see it
 		{
-			if(objHasWeapon((BASE_OBJECT *) psStruct) &&
-				(asWeaponStats[psStruct->asWeaps[0].nStat].surfaceToAir == SHOOT_IN_AIR) )
+			if (objHasWeapon((BASE_OBJECT *) psStruct) && (asWeaponStats[psStruct->asWeaps[0].nStat].surfaceToAir & SHOOT_IN_AIR))
 			{
 				if (range < 0
 				 || world_coord(hypotf(tx - map_coord(psStruct->pos.x), ty - map_coord(psStruct->pos.y))) < range)	//enemy in range
@@ -8243,14 +8275,12 @@ BOOL objectInRangeVis(BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range, SDW
 /// Go after a certain research
 static int scrPursueResearch(lua_State *L)
 {
-	SDWORD				foundIndex = 0,cur,tempIndex,Stack[400];
+	SDWORD				foundIndex = 0, cur, tempIndex, Stack[400];
 	UDWORD				index;
 	SWORD				top;
-
 	BOOL				found;
 	PLAYER_RESEARCH		*pPlayerRes;
 	RESEARCH_FACILITY	*psResFacilty;
-	RESEARCH *pResearch;
 
 	STRUCTURE *psBuilding = (STRUCTURE*)luaWZObj_checkobject(L, 1, OBJ_STRUCTURE);
 	int player = luaWZ_checkplayer(L, 2);
@@ -8258,14 +8288,14 @@ static int scrPursueResearch(lua_State *L)
 	
 	RESEARCH *psResearch = getResearch(researchName, false);
 
-	if(psResearch == NULL)
+	if (psResearch == NULL)
 	{
 		return luaL_error(L, "no such research topic: %s", researchName);
 	}
 
 	psResFacilty =	(RESEARCH_FACILITY*)psBuilding->pFunctionality;
 
-	if(psResFacilty->psSubject != NULL)		// not finished yet
+	if (psResFacilty->psSubject != NULL)		// not finished yet
 	{
 		scrFunctionResult.v.bval = false;
 		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
@@ -8286,28 +8316,27 @@ static int scrPursueResearch(lua_State *L)
 
 	found = false;
 
-	if(beingResearchedByAlly(index, player))		//an ally is already researching it
+	if (beingResearchedByAlly(index, player))		//an ally is already researching it
 	{
 		found = false;
 	}
-	else if(IsResearchCompleted(&pPlayerRes[index]))
+	else if (IsResearchCompleted(&pPlayerRes[index]))
 	{
 		found = false;
 		//DbgMsg("Research already completed: %d", index);
 	}
-	else if(IsResearchStarted(&pPlayerRes[index]))
+	else if (IsResearchStarted(&pPlayerRes[index]))
 	{
 		found = false;
 		//DbgMsg("Research already in progress, %d", index);
 	}
-	else if(IsResearchPossible(&pPlayerRes[index])
-		 || IsResearchCancelled(&pPlayerRes[index]))
+	else if (IsResearchPossible(&pPlayerRes[index]) || IsResearchCancelled(&pPlayerRes[index]))
 	{
 		foundIndex = index;
 		found = true;
 		//DbgMsg("Research possible or cancelled: %d", index);
 	}
-	else if(skTopicAvail(index,player))
+	else if (skTopicAvail(index, player))
 	{
 		foundIndex = index;
 		found = true;
@@ -8324,12 +8353,12 @@ static int scrPursueResearch(lua_State *L)
 		{
 			//DbgMsg("Going on with %d, numPR: %d, %s", index, asResearch[index].numPRRequired, asResearch[index].pName);
 
-			if(cur >= asResearch[index].numPRRequired)		//node has nodes?
+			if (cur >= asResearch[index].numPRRequired)		//node has nodes?
 			{
 				//DbgMsg("cur >= numPRRequired : %d (%d >= %d)", index, cur, asResearch[index].numPRRequired);
 
 				top = top - 2;
-				if(top < (-1))
+				if (top < (-1))
 				{
 					//DbgMsg("Nothing on stack");
 					break;		//end of stack
@@ -8343,17 +8372,17 @@ static int scrPursueResearch(lua_State *L)
 				tempIndex = asResearch[index].pPRList[cur];		//get cur node's index
 				//DbgMsg("evaluating node: %d, (cur = %d), %s", tempIndex, cur, asResearch[tempIndex].pName);
 
-				if(skTopicAvail(tempIndex,player) && (!beingResearchedByAlly(tempIndex, player)))	//<NEW> - ally check added
+				if (skTopicAvail(tempIndex,player) && (!beingResearchedByAlly(tempIndex, player)))	//<NEW> - ally check added
 				{
 					//DbgMsg("avail: %d (cur=%d), %s", tempIndex, cur, asResearch[tempIndex].pName);
 					found = true;
 					foundIndex = tempIndex;		//done
 					break;
 				}
-				else if((IsResearchCompleted(&pPlayerRes[tempIndex])==false) && (IsResearchStarted(&pPlayerRes[tempIndex])==false))		//not avail and not busy with it, can check this PR's PR
+				else if ((IsResearchCompleted(&pPlayerRes[tempIndex]) == false) && (IsResearchStarted(&pPlayerRes[tempIndex]) == false))		//not avail and not busy with it, can check this PR's PR
 				{
 					//DbgMsg("node not complete, not started: %d, (cur=%d), %s", tempIndex,cur, asResearch[tempIndex].pName);
-					if(asResearch[tempIndex].numPRRequired > 0)	//node has any nodes itself
+					if (asResearch[tempIndex].numPRRequired > 0)	//node has any nodes itself
 					{
 						//DbgMsg("node has nodes, so selecting as main node: %d, %s", tempIndex, asResearch[tempIndex].pName);
 
@@ -8380,44 +8409,15 @@ static int scrPursueResearch(lua_State *L)
 			cur++;				//try next node of the main node
 			if((cur >= asResearch[index].numPRRequired) && (top <= (-1)))	//nothing left
 			{
-				//DbgMsg("END");
 				break;
 			}
 
 		} // while(true)
 	}
 
-	if(found
-	 && foundIndex < numResearch)
+	if (found && foundIndex < numResearch)
 	{
-		pResearch = (asResearch + foundIndex);
-		if (bMultiMessages)
-		{
-			sendResearchStatus(psBuilding, pResearch->ref - REF_RESEARCH_START, player, true);
-		}
-		else
-		{
-			pPlayerRes = asPlayerResList[player]+ foundIndex;
-			psResFacilty->psSubject = (BASE_STATS*)pResearch;              //set the subject up
-
-			if (IsResearchCancelled(pPlayerRes))
-			{
-				psResFacilty->powerAccrued = pResearch->researchPower; //set up as if all power available for cancelled topics
-			}
-			else
-			{
-				psResFacilty->powerAccrued = 0;
-			}
-
-			MakeResearchStarted(pPlayerRes);
-			psResFacilty->timeStarted = ACTION_START_TIME;
-			psResFacilty->timeStartHold = 0;
-			psResFacilty->timeToResearch = pResearch->researchPoints / psResFacilty->researchPoints;
-			if (psResFacilty->timeToResearch == 0)
-			{
-				psResFacilty->timeToResearch = 1;
-			}
-		}
+		sendResearchStatus(psBuilding, foundIndex, player, true);	// inform others, I'm researching this.
 #if defined (DEBUG)
 		{
 			char	sTemp[128];
@@ -8905,7 +8905,7 @@ WZ_DECL_UNUSED static BOOL scrSetTileHeight(void)
 
 	psTile = mapTile(tileX,tileY);
 
-	psTile->height = (UBYTE)newHeight;
+	psTile->height = (UBYTE)newHeight * ELEVATION_SCALE;
 
 	return true;
 }
@@ -9191,7 +9191,7 @@ typedef enum {
 static int weaponXUpgrade(lua_State *L, UPGRADE_TYPE type)
 {
 	const WEAPON_STATS *psWeapStats;
-	int result;
+	int result = 0;
 	
 	int player = luaWZ_checkplayer(L, 1);
 	const char *name = luaWZObj_checkname(L, 2);
@@ -9547,6 +9547,8 @@ void registerScriptfuncs(lua_State *L)
 	lua_register(L, "getPlayer", scrGetPlayer);
 	lua_register(L, "getPlayerStartPosition", scrGetPlayerStartPosition);
 	lua_register(L, "scavengersActive", scrScavengersActive);
+	lua_register(L, "safeDest", scrSafeDest);
+	lua_register(L, "threatAt", scrThreatAt);
 	//lua_register(L, "", );
 	//lua_register(L, "", );
 	//lua_register(L, "", );

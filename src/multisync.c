@@ -368,7 +368,7 @@ BOOL recvDroidCheck(NETQUEUE queue)
 				pD->body = pD->originalBody;
 				debug(LOG_SYNC, "Droid %u body was too high after synch, reducing to %u.", pc.droidID, pD->body);
 			}
-			MERGEDELTA(pD->experience, experience, "f");
+			MERGEDELTA(pD->experience, experience, "u");
 
 			if (pc.pos.x != pc2.pos.x || pc.pos.y != pc2.pos.y)
 			{
@@ -387,9 +387,7 @@ BOOL recvDroidCheck(NETQUEUE queue)
 					{
 						debug(LOG_SYNC, "Droid %u out of synch, changing order from %s to %s(%d, %d).", pc.droidID, getDroidOrderName(pc2.order), getDroidOrderName(pc.order), pc.orderX, pc.orderY);
 						// reroute the droid.
-						turnOffMultiMsg(true);
-						orderDroidLoc(pD, pc.order, pc.orderX, pc.orderY);
-						turnOffMultiMsg(false);
+						orderDroidLoc(pD, pc.order, pc.orderX, pc.orderY, ModeImmediate);
 					}
 					break;
 				case DORDER_ATTACK:
@@ -400,9 +398,7 @@ BOOL recvDroidCheck(NETQUEUE queue)
 						{
 							debug(LOG_SYNC, "Droid %u out of synch, changing order from %s to %s(%u).", pc.droidID, getDroidOrderName(pc2.order), getDroidOrderName(pc.order), pc.targetID);
 							// remote droid is attacking, not here tho!
-							turnOffMultiMsg(true);
-							orderDroidObj(pD, pc.order, IdToPointer(pc.targetID, ANYPLAYER));
-							turnOffMultiMsg(false);
+							orderDroidObj(pD, pc.order, IdToPointer(pc.targetID, ANYPLAYER), ModeImmediate);
 						}
 						else
 						{
@@ -770,7 +766,7 @@ BOOL sendScoreCheck(void)
 	{
 		uint8_t			i;
 
-		for (i = 0; i < MAX_PLAYERS; i++)
+		for (i = 0; i < game.maxPlayers; i++)
 		{
 			PLAYERSTATS		stats;
 

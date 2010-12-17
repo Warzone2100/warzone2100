@@ -59,7 +59,6 @@ static UDWORD nextPowerSystemUpdate;
 
 /* Updates the current power based on the extracted power and a Power Generator*/
 static void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player);
-/** Each Resource Extractor yields EXTRACT_POINTS per second until there are none left in the resource. */
 static int64_t updateExtractedPower(STRUCTURE *psBuilding);
 
 //returns the relevant list based on OffWorld or OnWorld
@@ -71,7 +70,7 @@ typedef struct _player_power
 	int64_t currentPower;         ///< The current amount of power avaialble to the player.
 	int64_t powerProduced;        ///< Power produced
 	int64_t powerRequested;       ///< Power requested
-	int64_t economyThrottle;      ///< Which percentage of the requested power is actually delivered
+	int64_t economyThrottle;      ///< What fraction of the requested power is actually delivered
 } PLAYER_POWER;
 
 static PLAYER_POWER asPower[MAX_PLAYERS];
@@ -147,12 +146,6 @@ void throttleEconomy(void)
 	}
 }
 
-/*Free the space used for playerPower */
-void releasePlayerPower(void)
-{
-	// nothing now
-}
-
 /*check the current power - if enough return true, else return false */
 BOOL checkPower(int player, uint32_t quantity)
 {
@@ -192,8 +185,7 @@ void powerCalc(BOOL on)
 static int64_t updateExtractedPower(STRUCTURE *psBuilding)
 {
 	RES_EXTRACTOR		*pResExtractor;
-	SDWORD				timeDiff;
-	UBYTE			modifier;
+	int                     modifier = NORMAL_POWER_MOD;
 	int64_t                 extractedPoints;
 
 	pResExtractor = (RES_EXTRACTOR *) psBuilding->pFunctionality;
@@ -203,38 +195,18 @@ static int64_t updateExtractedPower(STRUCTURE *psBuilding)
 	//and has got some power to extract
 	if (pResExtractor->active)
 	{
-		// if the extractor hasn't been updated recently, now would be a good time.
-		if (pResExtractor->timeLastUpdated < 20 && gameTime >= 20)
-		{
-			pResExtractor->timeLastUpdated = gameTime;
-		}
-		timeDiff = (int)gameTime - (int)pResExtractor->timeLastUpdated;
 		// Add modifier according to difficulty level
-		if (getDifficultyLevel() == DL_EASY)
+		if (game.type == CAMPAIGN)  // other types do not make sense
 		{
-			modifier = EASY_POWER_MOD;
-		}
-		else if (getDifficultyLevel() == DL_HARD)
-		{
-			modifier = HARD_POWER_MOD;
-		}
-		else
-		{
-			modifier = NORMAL_POWER_MOD;
+			switch (getDifficultyLevel())
+			{
+				case DL_EASY: modifier = EASY_POWER_MOD; break;
+				case DL_HARD: modifier = HARD_POWER_MOD; break;
+				default: break;
+			}
 		}
 		// include modifier as a %
-		extractedPoints = (modifier * EXTRACT_POINTS * timeDiff)*FP_ONE / (GAME_TICKS_PER_SEC * 100);
-
-		if (timeDiff > GAME_TICKS_PER_SEC || -timeDiff > GAME_TICKS_PER_SEC)
-		{
-			// extractor is not in the right time zone
-			// we have a maximum time skip of less than a second, so this can't be caused by lag
-			ASSERT(false, "Oil derrick out of sync.");
-			extractedPoints = 0;
-		}
-
-		pResExtractor->timeLastUpdated = gameTime;
-
+		extractedPoints = modifier * EXTRACT_POINTS * FP_ONE / (100 * GAME_UPDATES_PER_SEC);
 		syncDebug("updateExtractedPower%d = %"PRId64"", psBuilding->player, extractedPoints);
 	}
 	ASSERT(extractedPoints >= 0, "extracted negative amount of power");
@@ -277,7 +249,7 @@ void updatePlayerPower(UDWORD player)
 }
 
 /* Updates the current power based on the extracted power and a Power Generator*/
-void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player)
+static void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player)
 {
 	int i;
 	int64_t extractedPower;
@@ -302,6 +274,8 @@ void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player)
 		}
 	}
 
+	syncDebug("updateCurrentPower%d = %"PRId64",%u", player, extractedPower, psPowerGen->multiplier);
+
 	asPower[player].currentPower += (extractedPower * psPowerGen->multiplier) / 100;
 	ASSERT(asPower[player].currentPower >= 0, "negative power");
 	if (asPower[player].currentPower > MAX_POWER*FP_ONE)
@@ -310,10 +284,9 @@ void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player)
 	}
 }
 
-// only used in multiplayer games.
 void setPower(unsigned player, int32_t power)
 {
-	ASSERT(player < MAX_PLAYERS, "setPower: Bad player (%u)", player);
+	ASSERT(player < MAX_PLAYERS, "Bad player (%u)", player);
 
 	syncDebug("setPower%d %"PRId64"->%d", player, asPower[player].currentPower, power);
 	asPower[player].currentPower = power*FP_ONE;
@@ -322,7 +295,7 @@ void setPower(unsigned player, int32_t power)
 
 void setPrecisePower(unsigned player, int64_t power)
 {
-	ASSERT(player < MAX_PLAYERS, "setPower: Bad player (%u)", player);
+	ASSERT(player < MAX_PLAYERS, "Bad player (%u)", player);
 
 	syncDebug("setPower%d %"PRId64"->%"PRId64"", player, asPower[player].currentPower, power);
 	asPower[player].currentPower = power;
@@ -331,14 +304,14 @@ void setPrecisePower(unsigned player, int64_t power)
 
 int32_t getPower(unsigned player)
 {
-	ASSERT(player < MAX_PLAYERS, "setPower: Bad player (%u)", player);
+	ASSERT(player < MAX_PLAYERS, "Bad player (%u)", player);
 
 	return asPower[player].currentPower >> 32;
 }
 
 int64_t getPrecisePower(unsigned player)
 {
-	ASSERT(player < MAX_PLAYERS, "setPower: Bad player (%u)", player);
+	ASSERT(player < MAX_PLAYERS, "Bad player (%u)", player);
 
 	return asPower[player].currentPower;
 }
@@ -352,43 +325,6 @@ void newGameInitPower(void)
 	{
 		addPower(inc, 400);
 	}
-}
-
-STRUCTURE *getRExtractor(STRUCTURE *psStruct)
-{
-STRUCTURE	*psCurr;
-STRUCTURE	*psFirst;
-BOOL		bGonePastIt;
-
-	for(psCurr = apsStructLists[selectedPlayer],psFirst = NULL,bGonePastIt = false;
-		psCurr; psCurr = psCurr->psNext)
-	{
-		if( psCurr->pStructureType->type == REF_RESOURCE_EXTRACTOR )
-		{
-
-			if(!psFirst)
-			{
-				psFirst = psCurr;
-			}
-
-			if(!psStruct)
-			{
-				return(psCurr);
-			}
-			else if(psCurr!=psStruct && bGonePastIt)
-			{
-				return(psCurr);
-			}
-
-			if(psCurr==psStruct)
-			{
-				bGonePastIt = true;
-			}
-
-
-		}
-	}
-	return(psFirst);
 }
 
 /*defines which structure types draw power - returns true if use power*/

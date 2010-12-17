@@ -525,8 +525,6 @@ static BOOL gameInit(void)
 {
 	UDWORD			player;
 
-	scriptInit();
-
 	// If this is from a savegame, stop here!
 	if (getSaveGameType() == GTYPE_SAVE_START || getSaveGameType() == GTYPE_SAVE_MIDMISSION)
 	{
@@ -638,6 +636,8 @@ BOOL multiGameShutdown(void)
 	ingame.localJoiningInProgress = false; // Clean up
 	ingame.localOptionsReceived = false;
 	ingame.bHostSetup = false;	// Dont attempt a host
+	ingame.TimeEveryoneIsInGame = 0;
+	ingame.startTime = 0;
 	NetPlay.isHost					= false;
 	bMultiPlayer					= false;	// Back to single player mode
 	bMultiMessages					= false;

@@ -1591,7 +1591,7 @@ void luaWZObj_pushdroid(lua_State *L, DROID* droid)
 	}
 	if (droid->psTarget)
 	{
-		BASE_OBJECT *oldTarget;
+		BASE_OBJECT *oldTarget = NULL;
 		lua_pushstring(L, "target");
 		
 		if (droid->psTarget->type == OBJ_DROID)

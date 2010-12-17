@@ -148,7 +148,7 @@ static UDWORD hideTime=0;
 static bool EnablePasswordPrompt = false;	// if we need the password prompt
 LOBBY_ERROR_TYPES LobbyError = ERROR_NOERROR;
 static BOOL allowChangePosition = true;
-
+static char tooltipbuffer[256] ={'\0'};
 /// end of globals.
 // ////////////////////////////////////////////////////////////////////////////
 // Function protos
@@ -197,26 +197,33 @@ static	void stopJoining(void);
 // ////////////////////////////////////////////////////////////////////////////
 // map previews..
 
-static int guessMapTilesetType(void)
+static int guessMapTilesetType(LEVEL_DATASET *psLevel)
 {
-	if (terrainTypes[0] == 1 && terrainTypes[1] == 0 && terrainTypes[2] == 2)
+	unsigned t = 0, c = 0;
+
+	if (psLevel->psBaseData && psLevel->psBaseData->pName)
 	{
-		return TILESET_ARIZONA;
+		if (sscanf(psLevel->psBaseData->pName, "MULTI_CAM_%u", &c) != 1)
+		{
+			sscanf(psLevel->psBaseData->pName, "MULTI_T%u_C%u", &t, &c);
+		}
 	}
-	else if (terrainTypes[0] == 2 && terrainTypes[1] == 2 && terrainTypes[2] == 2)
+
+	switch (c)
 	{
-		return TILESET_URBAN;
+		case 1:
+			return TILESET_ARIZONA;
+			break;
+		case 2:
+			return TILESET_URBAN;
+			break;
+		case 3:
+			return TILESET_ROCKIES;
+			break;
 	}
-	else if (terrainTypes[0] == 0 && terrainTypes[1] == 0 && terrainTypes[2] == 2)
-	{
-		return TILESET_ROCKIES;
-	}
-	else
-	{
-		debug(LOG_MAP, "Custom level dataset: %u %u %u, using ARIZONA set",
-			terrainTypes[0], terrainTypes[1], terrainTypes[2]);
-		return TILESET_ARIZONA;
-	}
+
+	debug(LOG_MAP, "Could not guess map tileset, using ARIZONA.");
+	return TILESET_ARIZONA;
 }
 
 /// This function is a HACK
@@ -224,7 +231,7 @@ static int guessMapTilesetType(void)
 /// a picture of it
 void loadMapPreview(bool hideInterface)
 {
-	static char			aFileName[256], bFileName[256];
+	static char		aFileName[256];
 	UDWORD			fileSize;
 	char			*pFileData = NULL;
 	LEVEL_DATASET	*psLevel = NULL;
@@ -250,16 +257,7 @@ void loadMapPreview(bool hideInterface)
 	aFileName[strlen(aFileName)-4] = '\0';
 	sstrcat(aFileName, "/ttypes.ttp");
 	pFileData = fileLoadBuffer;
-	sstrcpy(bFileName, screen_getMapName());
-	if (!sstrcmp(aFileName, bFileName))
-	{
-		if (hideInterface)
-		{
-			hideTime = gameTime;
-		}
-		return;
-	}
-	sstrcpy(bFileName, aFileName);
+
 	if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 	{
 		debug(LOG_ERROR, "loadMapPreview: Failed to load terrain types file");
@@ -278,7 +276,7 @@ void loadMapPreview(bool hideInterface)
 	ptr = strrchr(aFileName, '/');
 	ASSERT(ptr, "this string was supposed to contain a /");
 	strcpy(ptr, "/game.map");
-	if (!mapLoad(aFileName))
+	if (!mapLoad(aFileName, true))
 	{
 		debug(LOG_ERROR, "loadMapPreview: Failed to load map");
 		return;
@@ -286,7 +284,7 @@ void loadMapPreview(bool hideInterface)
 	gwShutDown();
 
 	// set tileset colors
-	switch (guessMapTilesetType())
+	switch (guessMapTilesetType(psLevel))
 	{
 	case TILESET_ARIZONA:
 		plCliffL = WZCOL_TERC1_CLIFF_LOW;
@@ -335,7 +333,7 @@ void loadMapPreview(bool hideInterface)
 		for (x = 0; x < mapWidth; x++)
 		{
 			char * const p = imageData + (3 * (y * BACKDROP_HACK_WIDTH + x));
-			height = WTile->height;
+			height = WTile->height / ELEVATION_SCALE;
 			col = height;
 
 			switch (terrainType(WTile))
@@ -370,7 +368,7 @@ void loadMapPreview(bool hideInterface)
 	// color our texture with clancolors @ correct position
 	plotStructurePreview16(imageData, playerpos);
 
-	screen_enableMapPreview(bFileName, mapWidth, mapHeight, playerpos);
+	screen_enableMapPreview(aFileName, mapWidth, mapHeight, playerpos);
 
 	screen_Upload(imageData, true);
 
@@ -671,7 +669,8 @@ static void addGames(void)
 				}
 				else
 				{
-					sButInit.pTip = NetPlay.games[i].name;
+					ssprintf(tooltipbuffer, "Map:%s, Game:%s, Hosted by %s ", NetPlay.games[i].mapname, NetPlay.games[i].name, NetPlay.games[i].hostname);
+					sButInit.pTip = tooltipbuffer;
 				}
 				sButInit.UserData = i;
 
@@ -1465,11 +1464,11 @@ static void addColourChooser(UDWORD player)
 	for (i = 0; i < game.maxPlayers && allowChangePosition; i++)
 	{
 		addMultiBut(psWScreen,MULTIOP_COLCHOOSER_FORM, MULTIOP_PLAYCHOOSER+i,
-			(i*(iV_GetImageWidth(FrontImages,IMAGE_PLAYER0) +5)+7),//x
-			23,													  //y
-			iV_GetImageWidth(FrontImages,IMAGE_WEE_GUY)+7,		  //w
-			iV_GetImageHeight(FrontImages,IMAGE_WEE_GUY),		  //h
-			_("Player number"), IMAGE_WEE_GUY, IMAGE_WEE_GUY, 10 + i);
+					(i*(iV_GetImageWidth(FrontImages,IMAGE_PLAYER0) +5)+7),//x
+					23,													  //y
+					iV_GetImageWidth(FrontImages,IMAGE_WEE_GUY)+7,		  //w
+					iV_GetImageHeight(FrontImages,IMAGE_WEE_GUY),		  //h
+					_("Player position"), IMAGE_WEE_GUY, IMAGE_WEE_GUY, 10 + i);
 	}
 
 	if (!NetPlay.isHost)
@@ -1524,7 +1523,7 @@ BOOL recvTeamRequest(NETQUEUE queue)
 {
 	UBYTE	player, team;
 
-	if(!NetPlay.isHost)			// only host should act
+	if (!NetPlay.isHost || !bHosted)  // Only host should act, and only if the game hasn't started yet.
 	{
 		return true;
 	}
@@ -1571,7 +1570,7 @@ BOOL recvReadyRequest(NETQUEUE queue)
 	UBYTE	player;
 	BOOL	bReady;
 
-	if(!NetPlay.isHost)					// only host should act
+	if (!NetPlay.isHost || !bHosted)  // Only host should act, and only if the game hasn't started yet.
 	{
 		return true;
 	}
@@ -1637,7 +1636,7 @@ static BOOL changePosition(UBYTE player, UBYTE position)
 	return false;
 }
 
-static BOOL changeColour(UBYTE player, UBYTE col)
+BOOL changeColour(UBYTE player, UBYTE col)
 {
 	int i;
 
@@ -1708,7 +1707,7 @@ BOOL recvColourRequest(NETQUEUE queue)
 {
 	UBYTE	player, col;
 
-	if(!NetPlay.isHost)				// only host should act
+	if (!NetPlay.isHost || !bHosted)  // Only host should act, and only if the game hasn't started yet.
 	{
 		return true;
 	}
@@ -1734,7 +1733,7 @@ BOOL recvPositionRequest(NETQUEUE queue)
 {
 	UBYTE	player, position;
 
-	if(!NetPlay.isHost)				// only host should act
+	if (!NetPlay.isHost || !bHosted)  // Only host should act, and only if the game hasn't started yet.
 	{
 		return true;
 	}
@@ -2305,15 +2304,17 @@ static void processMultiopWidgets(UDWORD id)
 				{
 					sstrcpy(game_password, widgGetString(psWScreen, MULTIOP_PASSWORD_EDIT));
 					NETsetGamePassword(game_password);
-					widgSetButtonState(psWScreen, MULTIOP_PASSWORD_BUT, WBUT_CLICKLOCK);  
+					widgSetButtonState(psWScreen, MULTIOP_PASSWORD_BUT, WBUT_CLICKLOCK);
+					widgSetButtonState(psWScreen, MULTIOP_PASSWORD_EDIT, WEDBS_DISABLE);
 					// say password is now required to join games?
-					ssprintf(buf, _("*** password is now required! ***"));
+					ssprintf(buf, _("*** password [%s] is now required! ***"), NetPlay.gamePassword);
 					addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 					NETGameLocked(true);
 				}
 				else
 				{
 					widgSetButtonState(psWScreen, MULTIOP_PASSWORD_BUT , 0);
+					widgSetButtonState(psWScreen, MULTIOP_PASSWORD_EDIT, 0);
 					ssprintf(buf, _("*** password is NOT required! ***"));
 					addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 					NETresetGamePassword();
@@ -2535,6 +2536,7 @@ static void processMultiopWidgets(UDWORD id)
 		loadMultiStats((char*)sPlayer,&playerStats);
 		setMultiStats(selectedPlayer,playerStats,false);
 		setMultiStats(selectedPlayer,playerStats,true);
+		netPlayersUpdated = true;
 		break;
 
 	case MULTIOP_PNAME_ICON:
@@ -2751,6 +2753,11 @@ static void processMultiopWidgets(UDWORD id)
 /* Start a multiplayer or skirmish game */
 void startMultiplayerGame(void)
 {
+	if (!bHosted)
+	{
+		debug(LOG_ERROR, "Multiple start requests received when we already started.");
+		return;
+	}
 	decideWRF();										// set up swrf & game.map
 	bMultiPlayer = true;
 	bMultiMessages = true;
@@ -2893,8 +2900,8 @@ void frontendMultiMessages(void)
 		case NET_READY_REQUEST:
 			recvReadyRequest(queue);
 
-			// if hosting try to start the game if everyone is ready
-			if(NetPlay.isHost && multiplayPlayersReady(false))
+			// If hosting and game not yet started, try to start the game if everyone is ready.
+			if (NetPlay.isHost && bHosted && multiplayPlayersReady(false))
 			{
 				startMultiplayerGame();
 			}
@@ -3143,6 +3150,7 @@ void runMultiOptions(void)
 				loadMultiStats((char*)sPlayer,&playerStats);
 				setMultiStats(selectedPlayer,playerStats,false);
 				setMultiStats(selectedPlayer,playerStats,true);
+				netPlayersUpdated = true;
 				break;
 			case MULTIOP_MAP:
 				sstrcpy(game.map, sTemp);
@@ -3226,7 +3234,7 @@ BOOL startMultiOptions(BOOL bReenter)
 	{
 		teamChooserUp = -1;
 		allowChangePosition = true;
-		for(i=0;i<MAX_PLAYERS;i++)
+		for(i=0; i < MAX_PLAYERS; i++)
 		{
 			game.skDiff[i] = (DIFF_SLIDER_STOPS / 2);	// reset AI (turn it on again)
 			setPlayerColour(i,i);						//reset all colors as well
@@ -3541,6 +3549,19 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 			iV_SetFont(font_small);
 			iV_SetTextColour(WZCOL_TEXT_MEDIUM);
 			iV_DrawText(_("HOST"), x + 65, y + 28);
+			iV_SetFont(font_regular);
+			iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+		}
+		else if (NetPlay.bComms && NetPlay.isHost)
+		{
+			char buf[250] = {'\0'};
+
+			// show "actual" ping time
+			iV_DrawText(NetPlay.players[j].name, x + 65, y + 18);
+			iV_SetFont(font_small);
+			iV_SetTextColour(WZCOL_TEXT_MEDIUM);
+			ssprintf(buf, "Ping: %03d", ingame.PingTimes[j]);
+			iV_DrawText(buf, x + 65, y + 28);
 			iV_SetFont(font_regular);
 			iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 		}

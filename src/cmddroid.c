@@ -24,7 +24,6 @@
  *
  */
 #include <string.h>
-#include <float.h>
 #include "lib/framework/frame.h"
 #include "objects.h"
 #include "cmddroiddef.h"
@@ -104,7 +103,7 @@ void cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
 		secondarySetState(psDroid, DSO_ATTACK_LEVEL, (SECONDARY_STATE)(psCommander->secondaryOrder & DSS_ALEV_MASK));
 		secondarySetState(psDroid, DSO_HALTTYPE, (SECONDARY_STATE)(psCommander->secondaryOrder & DSS_HALT_MASK));
 
-		orderDroidObj(psDroid, DORDER_GUARD, (BASE_OBJECT *)psCommander);
+		orderDroidObj(psDroid, DORDER_GUARD, (BASE_OBJECT *)psCommander, ModeQueue);
 	}
 }
 
@@ -173,23 +172,14 @@ unsigned int cmdDroidMaxGroup(const DROID* psCommander)
 }
 
 // update the kills of a command droid if psKiller is in a command group
-void cmdDroidUpdateKills(DROID *psKiller, float experienceInc)
+void cmdDroidUpdateKills(DROID *psKiller, uint32_t experienceInc)
 {
-	DROID	*psCommander;
-
 	ASSERT_OR_RETURN( , psKiller != NULL, "invalid Unit pointer" );
 
 	if (hasCommander(psKiller))
 	{
-		psCommander = psKiller->psGroup->psCommander;
-		if (psCommander->experience + experienceInc > FLT_MAX)
-		{
-			psCommander->experience = FLT_MAX;
-		}
-		else
-		{
-			psCommander->experience += experienceInc;
-		}
+		DROID *psCommander = psKiller->psGroup->psCommander;
+		psCommander->experience += MIN(experienceInc, UINT32_MAX - psCommander->experience);
 	}
 }
 

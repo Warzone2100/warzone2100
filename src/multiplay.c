@@ -151,7 +151,7 @@ BOOL multiplayerWinSequence(BOOL firstCall)
 			{
 				if (((FACTORY *)psStruct->pFunctionality)->psSubject)//check if active
 				{
-					cancelProduction(psStruct);
+					cancelProduction(psStruct, ModeQueue);
 				}
 			}
 		}
@@ -207,7 +207,6 @@ BOOL multiPlayerLoop(void)
 	UBYTE		joinCount;
 
 	sendCheck();						// send some checking info if possible
-	processMultiPlayerArtifacts();		// process artifacts
 
 		joinCount =0;
 		for(i=0;i<MAX_PLAYERS;i++)
@@ -312,6 +311,12 @@ BOOL IdToDroid(UDWORD id, UDWORD player, DROID **psDroid)
 	}
 	else									// find the droid, given player
 	{
+		if (player >= MAX_PLAYERS)
+		{
+			debug(LOG_FEATURE, "Feature detected");
+			// feature hack, player = 9 are features
+			return false;
+		}
 		d = apsDroidLists[player];
 		while( (d != NULL ) && (d->id !=id))d=d->psNext;
 		if(d)
@@ -343,6 +348,12 @@ STRUCTURE *IdToStruct(UDWORD id,UDWORD player)
 	}
 	else
 	{
+		if (player >= MAX_PLAYERS)
+		{
+			debug(LOG_FEATURE, "Feature detected");
+			// feature hack, player = 9 are features
+			return NULL;
+		}
 		for(psStr=apsStructLists[player];((psStr != NULL )&&(psStr->id != id) );psStr=psStr->psNext);
 	}
 	return psStr;
@@ -368,6 +379,12 @@ FEATURE *IdToFeature(UDWORD id,UDWORD player)
 	}
 	else
 	{
+		if (player >= MAX_PLAYERS)
+		{
+			debug(LOG_FEATURE, "Feature detected");
+			// feature hack, player = 9 are features
+			return NULL;
+		}
 		for(psF=apsFeatureLists[player];((psF != NULL )&&(psF->id != id) );psF=psF->psNext);
 	}
 	return psF;
@@ -385,7 +402,7 @@ DROID_TEMPLATE *IdToTemplate(UDWORD tempId,UDWORD player)
 	if (psTempl) return psTempl;
 
 	// Check if we know which player this is from, in that case, assume it is a player template
-	if (player != ANYPLAYER)
+	if (player != ANYPLAYER && player < MAX_PLAYERS)
 	{
 		for (psTempl = apsDroidTemplates[player];			// follow templates
 		(psTempl && (psTempl->multiPlayerID != tempId ));
@@ -616,7 +633,7 @@ BOOL recvMessage(void)
 				//case NET_TEAMREQUEST:
 				//case NET_READY_REQUEST:
 				//case GAME_ARTIFACTS:    //23 down, 19 to go.
-				case GAME_FEATURES:
+				//case GAME_FEATURES:     //41 down,  1 to go.
 				//case GAME_ALLIANCE:     //33 down,  9 to go.
 				//case NET_KICK:
 				//case NET_FIREUP:
@@ -672,9 +689,6 @@ BOOL recvMessage(void)
 				break;
 			case NET_BEACONMSG:					//beacon (blip) message
 				recvBeacon(queue);
-				break;
-			case GAME_BUILD:						// a build order has been sent.
-				recvBuildStarted(queue);
 				break;
 			case GAME_BUILDFINISHED:				// a building is complete
 				recvBuildFinished(queue);
@@ -829,6 +843,9 @@ BOOL recvMessage(void)
 		case NET_PLAYER_STATS:
 			recvMultiStats(queue);
 			break;
+		case GAME_PLAYER_LEFT:
+			recvPlayerLeft(queue);
+			break;
 		default:
 			processedMessage2 = false;
 			break;
@@ -886,7 +903,7 @@ static BOOL recvResearch(NETQUEUE queue)
 	}
 
 	pPlayerRes = asPlayerResList[player] + index;
-	syncDebug("research status = %d", pPlayerRes->ResearchStatus);
+	syncDebug("research status = %d", pPlayerRes->ResearchStatus & RESBITS);
 
 	if (!IsResearchCompleted(pPlayerRes))
 	{
@@ -950,6 +967,9 @@ BOOL sendResearchStatus(STRUCTURE *psBuilding, uint32_t index, uint8_t player, B
 		NETuint32_t(&index);
 	NETend();
 
+	// Tell UI to remove from the list of available research.
+	MakeResearchStartedPending(asPlayerResList[player] + index);
+
 	return true;
 }
 
@@ -994,9 +1014,7 @@ BOOL recvResearchStatus(NETQUEUE queue)
 
 			if (psResFacilty->psSubject)
 			{
-				turnOffMultiMsg(true);
-				cancelResearch(psBuilding);
-				turnOffMultiMsg(false);
+				cancelResearch(psBuilding, ModeImmediate);
 			}
 
 			// Set the subject up
@@ -1059,9 +1077,7 @@ BOOL recvResearchStatus(NETQUEUE queue)
 		// Stop the facility doing any research
 		if (psBuilding)
 		{
-			turnOffMultiMsg(true);
-			cancelResearch(psBuilding);
-			turnOffMultiMsg(false);
+			cancelResearch(psBuilding, ModeImmediate);
 		}
 	}
 
@@ -1575,14 +1591,14 @@ static BOOL recvDestroyTemplate(NETQUEUE queue)
 
 		// Delete the template.
 		//before deleting the template, need to make sure not being used in production
-		reallyDeleteTemplateFromProduction(psTempl, player);
+		deleteTemplateFromProduction(psTempl, player, ModeImmediate);
 		free(psTempl);
 	}
 	else
 	{
 		DROID_TEMPLATE aaargh;
 		aaargh.multiPlayerID = templateID;
-		reallyDeleteTemplateFromProduction(&aaargh, player);
+		deleteTemplateFromProduction(&aaargh, player, ModeImmediate);
 		debug(LOG_ERROR, "TODO: Rewrite the whole interface, so it's possible to change the code without spaghetti dependencies causing problems everywhere, and without resorting to ugly hacks.");
 	}
 

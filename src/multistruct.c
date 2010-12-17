@@ -52,139 +52,6 @@
 // structures
 
 // ////////////////////////////////////////////////////////////////////////////
-// INFORM others that a building has been started, and base plate should be put down.
-BOOL sendBuildStarted(STRUCTURE *psStruct, DROID *psDroid)
-{
-	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_BUILD);
-
-		// Who is building it
-		NETuint8_t(&psDroid->player);
-
-		// What they are building
-		NETuint32_t(&psDroid->psTarStats->ref);
-
-		// Where it is being built
-		NETuint16_t(&psDroid->orderX);
-		NETuint16_t(&psDroid->orderY);
-
-		// The droid building it
-		NETuint32_t(&psDroid->id);
-
-		// The ID assigned to the structure being built
-		NETuint32_t(&psStruct->id);
-
-		// The droids order
-		NETint32_t(&psDroid->order);
-
-		if (psDroid->psTarget
-		 && psDroid->psTarget->type == OBJ_STRUCTURE)
-		{
-			// The ID of the droids target (== psStruct->id ?)
-			NETuint32_t(&psDroid->psTarget->id);
-		}
-		else
-		{
-			NETnull();
-		}
-
-	return NETend();
-}
-
-// ////////////////////////////////////////////////////////////////////////////
-// put down a base plate and start droid building it!
-BOOL recvBuildStarted(NETQUEUE queue)
-{
-	STRUCTURE_STATS *psStats;
-	DROID			*psDroid;
-	unsigned int typeIndex;
-	uint8_t			player;
-	uint16_t		x, y;
-	int32_t			order;
-	uint32_t		structRef, structId, targetId,droidID;
-
-	NETbeginDecode(queue, GAME_BUILD);
-		NETuint8_t(&player);
-		NETuint32_t(&structRef);
-		NETuint16_t(&x);
-		NETuint16_t(&y);
-		NETuint32_t(&droidID);
-		NETuint32_t(&structId);
-		NETint32_t(&order);
-		NETuint32_t(&targetId);
-	NETend();
-
-	// Find structure target
-	for (typeIndex = 0;
-	     typeIndex < numStructureStats && asStructureStats[typeIndex].ref != structRef;
-	     typeIndex++);
-
-	psStats = &asStructureStats[typeIndex];
-
-	if (IdToDroid(droidID, player, &psDroid))
-	{
-		if (psDroid->psTarget)
-		{
-			// Sync IDs
-			debug(LOG_SYNC, "GAME_BUILD: Changing structureId %u to %u. (TODO: Remove this.)", ((STRUCTURE *)psDroid->psTarget)->id, structId);
-			((STRUCTURE *)psDroid->psTarget)->id = structId;
-			return true;
-		}
-		debug(LOG_SYNC, "Droid %u was not building structure %u. But that's ok, it was probably destroyed before this message arrived.", droidID, structId);
-
-		// TODO The following may be causing crashes, figure out whether to fix or remove it. (Shouldn't be needed with the new code.)
-		// sync    |11:57:00: [recvBuildStarted] Synch error, droid 162496 was not building structure 165480.
-		// error   |11:57:00: [buildStructureDir] Player 0 (Human): is building Emplacement-MortarPit01 at (42, 43) but found Emplacement-MortarPit01 already at (42, 43)
-		// error   |11:57:00: [droidUpdateBuild] Trying to update a construction, but no target!
-		// error   |11:57:00: [droidUpdateBuild] Assert in Warzone: ../../src/droid.c:1098 (psDroid->psTarget), last script event: '0 (CALL_DROID_REACH_LOCATION)'
-#if 0
-		UDWORD actionX, actionY;
-		// Tell the droid to go to where it needs to in order to build the struct
-		if (getDroidDestination((BASE_STATS *) psStats, x, y, &actionX, &actionY))
-		{
-			psDroid->order = order;
-
-			if (psDroid->order == DORDER_LINEBUILD)
-			{
-				psDroid->order = DORDER_BUILD;
-			}
-
-			psDroid->orderX = x;
-			psDroid->orderY = y;
-			psDroid->psTarStats = (BASE_STATS *) psStats;
-
-			if (targetId)
-			{
-				setDroidTarget(psDroid, IdToPointer(targetId, ANYPLAYER));
-			}
-			else
-			{
-				setDroidTarget(psDroid, NULL);
-			}
-
-			if (IsStatExpansionModule(psStats))
-			{
-				setUpBuildModule(psDroid);
-			}
-			else
-			{
-				droidStartBuild(psDroid);
-				psDroid->action = DACTION_BUILD;
-			}
-		}
-#endif
-
-		// Sync IDs
-		// TODO Synch IDs, without resorting to an ugly hack like this.
-		if (psDroid->psTarget)
-		{
-			((STRUCTURE *) psDroid->psTarget)->id = structId;
-		}
-	}
-
-	return true;
-}
-
-// ////////////////////////////////////////////////////////////////////////////
 // INFORM others that a building has been completed.
 BOOL SendBuildFinished(STRUCTURE *psStruct)
 {
@@ -408,6 +275,7 @@ BOOL recvLasSat(NETQUEUE queue)
 	{
 		// Give enemy no quarter, unleash the lasat
 		proj_SendProjectile(&psStruct->asWeaps[0], NULL, player, psObj->pos, psObj, true, 0);
+		psStruct->asWeaps[0].lastFired = gameTime;
 
 		// Play 5 second countdown message
 		audio_QueueTrackPos( ID_SOUND_LAS_SAT_COUNTDOWN, psObj->pos.x, psObj->pos.y, psObj->pos.z);
@@ -463,6 +331,9 @@ void recvStructureInfo(NETQUEUE queue)
 	NETend();
 
 	psStruct = IdToStruct(structId, player);
+
+	syncDebug("player%d,structId%u%c,structureInfo%u,templateId%u%c", player, structId, psStruct == NULL? '^' : '*', structureInfo, templateId, psTempl == NULL? '^' : '*');
+
 	if (psStruct == NULL)
 	{
 		debug(LOG_SYNC, "Couldn't find structure %u to change production.", structId);
@@ -487,19 +358,17 @@ void recvStructureInfo(NETQUEUE queue)
 
 	syncDebugStructure(psStruct, '<');
 
-	turnOffMultiMsg(true);
 	switch (structureInfo)
 	{
-		case STRUCTUREINFO_MANUFACTURE:       structSetManufacture(psStruct, psTempl); break;
-		case STRUCTUREINFO_CANCELPRODUCTION:  cancelProduction(psStruct);              break;
-		case STRUCTUREINFO_HOLDPRODUCTION:    holdProduction(psStruct);                break;
-		case STRUCTUREINFO_RELEASEPRODUCTION: releaseProduction(psStruct);             break;
-		case STRUCTUREINFO_HOLDRESEARCH:      holdResearch(psStruct);                  break;
-		case STRUCTUREINFO_RELEASERESEARCH:   releaseResearch(psStruct);               break;
+		case STRUCTUREINFO_MANUFACTURE:       structSetManufacture(psStruct, psTempl, ModeImmediate); break;
+		case STRUCTUREINFO_CANCELPRODUCTION:  cancelProduction(psStruct, ModeImmediate);              break;
+		case STRUCTUREINFO_HOLDPRODUCTION:    holdProduction(psStruct, ModeImmediate);                break;
+		case STRUCTUREINFO_RELEASEPRODUCTION: releaseProduction(psStruct, ModeImmediate);             break;
+		case STRUCTUREINFO_HOLDRESEARCH:      holdResearch(psStruct, ModeImmediate);                  break;
+		case STRUCTUREINFO_RELEASERESEARCH:   releaseResearch(psStruct, ModeImmediate);               break;
 		default:
 			debug(LOG_ERROR, "Invalid structureInfo %d", structureInfo);
 	}
-	turnOffMultiMsg(false);
 
 	syncDebugStructure(psStruct, '>');
 

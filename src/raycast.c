@@ -70,7 +70,7 @@ static bool getTileHeightCallback(Vector3i pos, int32_t dist, void *data)
 	/* Are we still on the grid? */
 	if (clipXY(pos.x, pos.y))
 	{
-		bool HasTallStructure = TileHasTallStructure(mapTile(map_coord(pos.x), map_coord(pos.y)));
+		bool HasTallStructure = blockTile(map_coord(pos.x), map_coord(pos.y), AUX_MAP) & AIR_BLOCKED;
 
 		if (dist > TILE_UNITS || HasTallStructure)
 		{

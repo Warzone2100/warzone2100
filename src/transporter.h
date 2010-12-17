@@ -66,11 +66,6 @@ extern BOOL launchTransporter(DROID *psTransporter);
 have arrived - returns true when there*/
 extern BOOL updateTransporter(DROID *psTransporter);
 
-// Order all selected droids to embark all avaialable transporters.
-extern BOOL OrderDroidsToEmbark(void);
-// Order a single droid to embark any available transporters.
-extern BOOL OrderDroidToEmbark(DROID *psDroid);
-
 extern void intUpdateTransCapacity(WIDGET *psWidget, W_CONTEXT *psContext);
 
 /* Remove the Transporter Launch widget from the screen*/

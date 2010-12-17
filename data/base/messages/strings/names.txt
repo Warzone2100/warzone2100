@@ -706,7 +706,7 @@ R-Defense-WallUpgrade05			_("Supercrete Mk2")
 R-Defense-WallUpgrade06			_("Supercrete Mk3")
 R-Defense-WallUpgrade07			_("Plascrete")
 R-Defense-WallUpgrade08			_("Plascrete Mk2")
-R-Defense-WallUpgrade09			_("Plascrete MK3")
+R-Defense-WallUpgrade09			_("Plascrete Mk3")
 //R-Defense-WallUpgrade10			_("Plasteel")
 
 R-Defense-AASite-QuadBof		_("Cyclone AA Flak Site")
@@ -1492,4 +1492,52 @@ NX-M-Bomb2-VTOL				"*NX-M-Bomb2-VTOL*"
 // Latest Additions
 NX-L-Flash-Hover			"*NX-L-Flash-Hover*"
 
+// new features by Mysteryem
 
+arizonabush1				"*ArizonaBush1*"
+arizonabush2				"*ArizonaBush2*"
+arizonabush3				"*ArizonaBush3*"
+arizonabush4				"*ArizonaBush4*"
+arizonatree1        "*ArizonaTree1*"
+arizonatree2        "*ArizonaTree2*"
+arizonatree3        "*ArizonaTree3*"
+arizonatree4        "*ArizonaTree4*"
+arizonatree5        "*ArizonaTree5*"
+arizonatree6        "*ArizonaTree6*"
+trapstraight        "*TrapStraight*"
+trapcorner          "*TrapCorner*"
+hoverwreck          "*WreckedHoverProp*"
+barrier             "*Barrier*"
+bridgeend           "*BridgeEnd*"
+bridgemiddle        "*BridgeMiddle*"
+bridgefull         "*FullBridge*"
+bigcooltowr         "*LargeCoolingTower*"
+nukepowstat         "*NuclearPowerStation*"
+Pipe1A              "*PipeFull*"
+Pipe2A              "*PipeEnd*"
+Pipe3A              "*PipeCollapsed*"
+Ruin6               "*Ruin6*"
+Ruin7               "*Ruin7*"
+Ruin8               "*Ruin8*"
+Ruin9               "*Ruin9*"
+Ruin10              "*Ruin10*"
+Wreck0              "*Wreck0*"
+Wreck1              "*Wreck1*"
+Wreck2              "*Wreck2*"
+Wreck3              "*Wreck3*"
+Wreck4              "*Wreck4*"
+Wreck5              "*Wreck5*"
+BaBaHorizontalWall  "*Babahrzwall*"
+BabaCornerWall      "*Babacrnwall*"
+Powlab              "Powerlab"
+Indirectlab         "Indirectweaponslab"
+Nanolab             "Nanolab"
+Aerodynamicslab     "Aerodynamicslab"
+Advmaterialslab     "Advancedmaterialslab"
+Heavywepslab        "Heavyweaponslab"
+Rotarywepslab       "Rotaryweaponslab"
+Laseropticslab      "Laseropticslab"
+Wall                "Wall"
+WallCorner          "Wallcorner"
+WallSmashed         "Smashedwall"
+WallCornerSmashed   "Smashedcornerwall"

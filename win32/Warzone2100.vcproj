@@ -352,15 +352,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\src\environ.c"
-					>
-				</File>
-				<File
 					RelativePath="..\src\feature.c"
-					>
-				</File>
-				<File
-					RelativePath="..\src\formation.c"
 					>
 				</File>
 				<File
@@ -847,10 +839,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\environ.h"
-				>
-			</File>
-			<File
 				RelativePath="..\src\feature.h"
 				>
 			</File>
@@ -1171,11 +1159,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\scriptvals_parser.tab.h"
+				RelativePath=".\scriptvals_parser.tab.h"
 				>
 			</File>
 			<File
-				RelativePath=".\scriptvals_parser.tab.h"
+				RelativePath="..\src\scriptvals_parser.tab.h"
 				>
 			</File>
 			<File

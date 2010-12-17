@@ -395,11 +395,11 @@ BOOL loadConfig(void)
 	{
 		if(getWarzoneKeyNumeric("colour", &val))
 		{
-			setPlayerColour(0, val);
+			war_SetSPcolor(val);
 		}
 		else
 		{
-			setPlayerColour(0, 0);
+			war_SetSPcolor(0);	//default is green (0)
 			setWarzoneKeyNumeric("colour", 0);
 		}
 	}
@@ -481,17 +481,6 @@ BOOL loadConfig(void)
 	{
 		game.fog= true;
 		setWarzoneKeyNumeric("fog", game.fog);
-	}
-
-	//type
-	if(getWarzoneKeyNumeric("type", &val))
-	{
-		game.type =(UBYTE)val;
-	}
-	else
-	{
-		game.type = CAMPAIGN;
-		setWarzoneKeyNumeric("type", game.type);
 	}
 
 	//base
@@ -751,7 +740,6 @@ BOOL saveConfig(void)
 			setWarzoneKeyString("mapName", game.map);				//  map name
 			setWarzoneKeyNumeric("maxPlayers",game.maxPlayers);		// maxPlayers
 			setWarzoneKeyNumeric("power", game.power);				// power
-			setWarzoneKeyNumeric("type", game.type);				// game type
 			setWarzoneKeyNumeric("base", game.base);				// size of base
 			setWarzoneKeyNumeric("fog", game.fog);					// fog 'o war
 			setWarzoneKeyNumeric("alliance", game.alliance);		// allow alliances
@@ -818,7 +806,6 @@ BOOL reloadMPConfig(void)
 		setWarzoneKeyString("mapName", game.map);				//  map name
 		setWarzoneKeyNumeric("maxPlayers",game.maxPlayers);		// maxPlayers
 		setWarzoneKeyNumeric("power", game.power);				// power
-		setWarzoneKeyNumeric("type", game.type);				// game type
 		setWarzoneKeyNumeric("base", game.base);				// size of base
 		setWarzoneKeyNumeric("fog", game.fog);					// fog 'o war
 		setWarzoneKeyNumeric("alliance", game.alliance);		// allow alliances
@@ -857,12 +844,6 @@ BOOL reloadMPConfig(void)
 	if(getWarzoneKeyNumeric("fog", &val))
 	{
 		game.fog= val;
-	}
-
-	//type
-	if(getWarzoneKeyNumeric("type", &val))
-	{
-		game.type =(UBYTE)val;
 	}
 
 	//base

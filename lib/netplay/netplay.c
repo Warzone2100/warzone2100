@@ -49,6 +49,7 @@
 #include "src/multijoin.h"
 #include "src/multiint.h"
 #include "src/multiplay.h"
+#include "src/warzoneconfig.h"
 
 #ifdef WZ_OS_LINUX
 #include <execinfo.h>  // Nonfatal runtime backtraces.
@@ -166,10 +167,9 @@ unsigned NET_PlayerConnectionStatus[CONNECTIONSTATUS_NORMAL][MAX_PLAYERS];
  **            ie ("trunk", "2.1.3", "3.0", ...)
  ************************************************************************************
 **/
-char VersionString[VersionStringSize] = "trunk, netcode 4.1001";
+char VersionString[VersionStringSize] = "master, netcode 4.1009";
 static int NETCODE_VERSION_MAJOR = 4;
-static int NETCODE_VERSION_MINOR = 1001;
-static int NETCODE_HASH = 0;			// unused for now
+static int NETCODE_VERSION_MINOR = 1009;
 
 bool NETisCorrectVersion(uint32_t game_version_major, uint32_t game_version_minor)
 {
@@ -271,7 +271,10 @@ void NET_InitPlayer(int i, bool initPosition)
 	NetPlay.players[i].heartattacktime = 0;
 	NetPlay.players[i].heartbeat = true;		// we always start with a hearbeat
 	NetPlay.players[i].kick = false;
-	NetPlay.players[i].name[0] = '\0';
+	if (!NetPlay.isHost)
+	{	// only clear name outside of games.
+		NetPlay.players[i].name[0] = '\0';
+	}
 	if (initPosition)
 	{
 		NetPlay.players[i].colour = i;
@@ -295,6 +298,7 @@ void NET_InitPlayers()
 		NETinitQueue(NETnetQueue(i));
 	}
 	NETinitQueue(NETbroadcastQueue());
+
 	NetPlay.hostPlayer = NET_HOST_ONLY;	// right now, host starts always at index zero
 	NetPlay.playercount = 0;
 	NetPlay.pMapFileHandle = NULL;
@@ -334,6 +338,8 @@ static void NETSendPlayerInfoTo(uint32_t index, unsigned to)
 static void NETSendAllPlayerInfoTo(unsigned to)
 {
 	static uint32_t indices[MAX_PLAYERS] = {0, 1, 2, 3, 4, 5, 6, 7};
+	ASSERT_OR_RETURN( , NetPlay.isHost == true, "Invalid call for non-host");
+
 	NETSendNPlayerInfoTo(indices, ARRAY_SIZE(indices), to);
 }
 
@@ -356,8 +362,11 @@ static signed int NET_CreatePlayer(const char* name)
 	{
 		if (NetPlay.players[index].allocated == false)
 		{
-			debug(LOG_NET, "A new player has been created. Player, %s, is set to slot %u", name, index);
-			NETlogEntry("A new player has been created.", SYNC_FLAG, index);
+			char buf[250] = {'\0'};
+
+			ssprintf(buf, "A new player has been created. Player, %s, is set to slot %u", name, index);
+			debug(LOG_NET,"%s", buf);
+			NETlogEntry(buf, SYNC_FLAG, index);
 			NET_InitPlayer(index, false);	// re-init everything
 			NetPlay.players[index].allocated = true;
 			sstrcpy(NetPlay.players[index].name, name);
@@ -603,7 +612,7 @@ static bool NETsendGAMESTRUCT(Socket* sock, const GAMESTRUCT* ourgamestruct)
 	// to zero so that we can be sure we're not sending any (undefined)
 	// memory content across the network.
 	char buf[sizeof(ourgamestruct->GAMESTRUCT_VERSION) + sizeof(ourgamestruct->name) + sizeof(ourgamestruct->desc.host) + (sizeof(int32_t) * 8) +
-		sizeof(ourgamestruct->secondaryHosts) + sizeof(ourgamestruct->extra) + sizeof(ourgamestruct->versionstring) +
+		sizeof(ourgamestruct->secondaryHosts) + sizeof(ourgamestruct->extra) + sizeof(ourgamestruct->mapname) + sizeof(ourgamestruct->hostname) + sizeof(ourgamestruct->versionstring) +
 		sizeof(ourgamestruct->modlist) + (sizeof(uint32_t) * 9) ] = { 0 };
 	char *buffer = buf;
 	unsigned int i;
@@ -649,6 +658,14 @@ static bool NETsendGAMESTRUCT(Socket* sock, const GAMESTRUCT* ourgamestruct)
 	// Copy a string
 	strlcpy(buffer, ourgamestruct->extra, sizeof(ourgamestruct->extra));
 	buffer += sizeof(ourgamestruct->extra);
+
+	// Copy a string
+	strlcpy(buffer, ourgamestruct->mapname, sizeof(ourgamestruct->mapname));
+	buffer += sizeof(ourgamestruct->mapname);
+
+	// Copy a string
+	strlcpy(buffer, ourgamestruct->hostname, sizeof(ourgamestruct->hostname));
+	buffer += sizeof(ourgamestruct->hostname);
 
 	// Copy a string
 	strlcpy(buffer, ourgamestruct->versionstring, sizeof(ourgamestruct->versionstring));
@@ -726,7 +743,7 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* ourgamestruct)
 	// A buffer that's guaranteed to have the correct size (i.e. it
 	// circumvents struct padding, which could pose a problem).
 	char buf[sizeof(ourgamestruct->GAMESTRUCT_VERSION) + sizeof(ourgamestruct->name) + sizeof(ourgamestruct->desc.host) + (sizeof(int32_t) * 8) +
-		sizeof(ourgamestruct->secondaryHosts) + sizeof(ourgamestruct->extra) + sizeof(ourgamestruct->versionstring) +
+		sizeof(ourgamestruct->secondaryHosts) + sizeof(ourgamestruct->extra) + sizeof(ourgamestruct->mapname) + sizeof(ourgamestruct->hostname) + sizeof(ourgamestruct->versionstring) +
 		sizeof(ourgamestruct->modlist) + (sizeof(uint32_t) * 9) ] = { 0 };
 	char* buffer = buf;
 	unsigned int i;
@@ -810,6 +827,14 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* ourgamestruct)
 	// Copy a string
 	sstrcpy(ourgamestruct->extra, buffer);
 	buffer += sizeof(ourgamestruct->extra);
+
+	// Copy a string
+	sstrcpy(ourgamestruct->mapname, buffer);
+	buffer += sizeof(ourgamestruct->mapname);
+
+	// Copy a string
+	sstrcpy(ourgamestruct->hostname, buffer);
+	buffer += sizeof(ourgamestruct->hostname);
 
 	// Copy a string
 	sstrcpy(ourgamestruct->versionstring, buffer);
@@ -2236,7 +2261,6 @@ static void NETallowJoining(void)
 					int32_t MinorVersion = 0;
 					char ModList[modlist_string_size] = { '\0' };
 					char GamePassword[password_string_size] = { '\0' };
-					int32_t Hash_Data = 0;				// Not currently used
 
 					if (onBanList(clientAddress))
 					{
@@ -2258,7 +2282,6 @@ static void NETallowJoining(void)
 						NETint32_t(&MinorVersion);	// NETCODE_VERSION_MINOR
 						NETstring(ModList, sizeof(ModList));
 						NETstring(GamePassword, sizeof(GamePassword));
-						NETint32_t(&Hash_Data);		// NETCODE_HASH, not currently used
 					NETend();
 					NETpop(NETnetTmpQueue(i));
 
@@ -2411,6 +2434,11 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 		NetPlay.players[0].connection	= -1;
 		NetPlay.playercount		= 1;
 		debug(LOG_NET, "Hosting but no comms");
+		// Now switch player color of the host to what they normally use for SP games
+		if ( getPlayerColour(NET_HOST_ONLY) != war_GetSPcolor())
+		{
+			changeColour(NET_HOST_ONLY, war_GetSPcolor());
+		}
 		return true;
 	}
 
@@ -2458,6 +2486,8 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 	gamestruct.desc.dwUserFlags[3] = four;
 	memset(gamestruct.secondaryHosts, 0, sizeof(gamestruct.secondaryHosts));
 	sstrcpy(gamestruct.extra, "Extra");						// extra string (future use)
+	sstrcpy(gamestruct.mapname, game.map);					// map we are hosting
+	sstrcpy(gamestruct.hostname, PlayerName);
 	sstrcpy(gamestruct.versionstring, VersionString);		// version (string)
 	sstrcpy(gamestruct.modlist, getModList());				// List of mods
 	gamestruct.GAMESTRUCT_VERSION = 3;						// version of this structure
@@ -2479,6 +2509,12 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 	ASSERT(selectedPlayer == NET_HOST_ONLY, "For now, host must start at player index zero, was %d", (int)selectedPlayer);
 
 	MultiPlayerJoin(selectedPlayer);
+
+	// Now switch player color of the host to what they normally use for SP games
+	if ( getPlayerColour(NET_HOST_ONLY) != war_GetSPcolor())
+	{
+		changeColour(NET_HOST_ONLY, war_GetSPcolor());
+	}
 
 	allow_joining = true;
 
@@ -2756,7 +2792,6 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 		NETint32_t(&NETCODE_VERSION_MINOR);
 		NETstring(getModList(), modlist_string_size);
 		NETstring(NetPlay.gamePassword, sizeof(NetPlay.gamePassword));
-		NETint32_t(&NETCODE_HASH); //unused
 	NETend();
 	socketFlush(bsocket);  // Make sure the message was completely sent.
 
@@ -2936,13 +2971,13 @@ bool NETcheckPlayerConnectionStatus(CONNECTION_STATUS status, unsigned player)
 }
 
 #define MAX_LEN_LOG_LINE 512  // From debug.c - no use printing something longer.
-#define MAX_SYNC_MESSAGES 10000
+#define MAX_SYNC_MESSAGES 20000
 #define MAX_SYNC_HISTORY 12
 
 static unsigned syncDebugNext = 0;
 static uint32_t syncDebugNum[MAX_SYNC_HISTORY];
 static uint32_t syncDebugGameTime[MAX_SYNC_HISTORY + 1];
-static char *syncDebugFunctions[MAX_SYNC_HISTORY][MAX_SYNC_MESSAGES];
+static char const *syncDebugFunctions[MAX_SYNC_HISTORY][MAX_SYNC_MESSAGES];
 static char *syncDebugStrings[MAX_SYNC_HISTORY][MAX_SYNC_MESSAGES];
 static uint32_t syncDebugCrcs[MAX_SYNC_HISTORY + 1];
 
@@ -2957,7 +2992,7 @@ void _syncDebug(const char *function, const char *str, ...)
 
 	if (syncDebugNum[syncDebugNext] < MAX_SYNC_MESSAGES)
 	{
-		syncDebugFunctions[syncDebugNext][syncDebugNum[syncDebugNext]] = strdup(function);
+		syncDebugFunctions[syncDebugNext][syncDebugNum[syncDebugNext]] = function;  // Function names are link-time constants, no need to duplicate.
 		syncDebugStrings[syncDebugNext][syncDebugNum[syncDebugNext]] = strdup(outputBuffer);
 		syncDebugCrcs[syncDebugNext] = crcSum(syncDebugCrcs[syncDebugNext], function,     strlen(function)     + 1);
 		syncDebugCrcs[syncDebugNext] = crcSum(syncDebugCrcs[syncDebugNext], outputBuffer, strlen(outputBuffer) + 1);
@@ -2965,8 +3000,10 @@ void _syncDebug(const char *function, const char *str, ...)
 	}
 }
 
-void syncDebugBacktrace(void)
+void _syncDebugBacktrace(const char *function)
 {
+	uint32_t backupCrc = syncDebugCrcs[syncDebugNext];  // Ignore CRC changes from _syncDebug(), since identical backtraces can be printed differently.
+
 #ifdef WZ_OS_LINUX
 	void *btv[20];
 	unsigned num = backtrace(btv, sizeof(btv)/sizeof(*btv));
@@ -2978,40 +3015,51 @@ void syncDebugBacktrace(void)
 	}
 	free(btc);
 #else
-	_syncDebug("BT", "Sorry, syncDebugBacktrace() not implemented on your system.");
+	_syncDebug("BT", "Sorry, syncDebugBacktrace() not implemented on your system. Called from %s.", function);
 #endif
+
+	// Use CRC of something platform-independent, to avoid false positive desynchs.
+	syncDebugCrcs[syncDebugNext] = crcSum(backupCrc, function, strlen(function) + 1);
 }
 
-const char *syncDebugFloat(float f)
+static void clearSyncDebugNext(void)
 {
-	static char ret[16][20];
-	static int counter = 0;
-	uint32_t i;
-	memcpy(&i, &f, sizeof(i));
-	STATIC_ASSERT(sizeof(i) == sizeof(f));
-	counter = (counter + 1)&15;
-	sprintf(ret[counter], "%c%02X_%06X", (i & 0x80000000) == 0 ? '+' : '-', (i & 0x7F000000)>>24, i & 0x00FFFFFF);
-	return ret[counter];
+	unsigned i;
+
+	for (i = 0; i != syncDebugNum[syncDebugNext]; ++i)
+	{
+		free(syncDebugStrings[syncDebugNext][i]);
+		syncDebugFunctions[syncDebugNext][i] = NULL;  // Function names are link-time constants, and therefore shouldn't and can't be freed.
+		syncDebugStrings[syncDebugNext][i] = NULL;
+	}
+	syncDebugNum[syncDebugNext] = 0;
+	syncDebugGameTime[syncDebugNext] = 0;
+	syncDebugCrcs[syncDebugNext] = 0x00000000;
+}
+
+void resetSyncDebug()
+{
+	for (syncDebugNext = 0; syncDebugNext < MAX_SYNC_HISTORY; ++syncDebugNext)
+	{
+		clearSyncDebugNext();
+	}
+
+	syncDebugGameTime[MAX_SYNC_HISTORY] = 0;
+	syncDebugCrcs[MAX_SYNC_HISTORY] = 0x00000000;
+
+	syncDebugNext = 0;
 }
 
 uint32_t nextDebugSync(void)
 {
 	uint32_t ret = ~syncDebugCrcs[syncDebugNext];  // Invert bits, since everyone else seems to do that with CRCs...
-	unsigned i;
 
 	// Save gameTime, so we know which CRC to compare with, later.
 	syncDebugGameTime[syncDebugNext] = gameTime;
 
 	// Go to next position, and free it ready for use.
 	syncDebugNext = (syncDebugNext + 1)%MAX_SYNC_HISTORY;
-	for (i = 0; i != syncDebugNum[syncDebugNext]; ++i)
-	{
-		free(syncDebugFunctions[syncDebugNext][i]);
-		free(syncDebugStrings[syncDebugNext][i]);
-	}
-	syncDebugNum[syncDebugNext] = 0;
-	syncDebugGameTime[syncDebugNext] = 0;
-	syncDebugCrcs[syncDebugNext] = 0x00000000;
+	clearSyncDebugNext();
 
 	return ret;
 }
@@ -3094,7 +3142,6 @@ bool checkDebugSync(uint32_t checkGameTime, uint32_t checkCrc)
 	for (i = 0; i < syncDebugNum[index]; ++i)
 	{
 		bufSize += snprintf((char *)debugSyncTmpBuf + bufSize, ARRAY_SIZE(debugSyncTmpBuf) - bufSize, "[%s] %s\n", syncDebugFunctions[index][i], syncDebugStrings[index][i]);
-		free(syncDebugFunctions[index][i]);
 		free(syncDebugStrings[index][i]);
 	}
 	bufSize += snprintf((char *)debugSyncTmpBuf + bufSize, ARRAY_SIZE(debugSyncTmpBuf) - bufSize, "===== END gameTime=%u, %u lines, CRC 0x%08X =====\n", syncDebugGameTime[index], syncDebugNum[index], ~syncDebugCrcs[index] & 0xFFFFFFFF);
@@ -3165,7 +3212,6 @@ const char *messageTypeToString(unsigned messageType_)
 		case GAME_TEMPLATE:                 return "GAME_TEMPLATE";
 		case GAME_TEMPLATEDEST:             return "GAME_TEMPLATEDEST";
 		case GAME_FEATUREDEST:              return "GAME_FEATUREDEST";
-		case GAME_BUILD:                    return "GAME_BUILD";
 		case GAME_RESEARCH:                 return "GAME_RESEARCH";
 		case GAME_FEATURES:                 return "GAME_FEATURES";
 		case GAME_SECONDARY:                return "GAME_SECONDARY";
@@ -3176,6 +3222,7 @@ const char *messageTypeToString(unsigned messageType_)
 		case GAME_STRUCTUREINFO:            return "GAME_STRUCTUREINFO";
 		case GAME_LASSAT:                   return "GAME_LASSAT";
 		case GAME_GAME_TIME:                return "GAME_GAME_TIME";
+		case GAME_PLAYER_LEFT:              return "GAME_PLAYER_LEFT";
 		case GAME_DROIDDEST:                return "GAME_DROIDDEST";
 		case GAME_CHECK_DROID:              return "GAME_CHECK_DROID";
 		case GAME_CHECK_STRUCT:             return "GAME_CHECK_STRUCT";

@@ -323,7 +323,7 @@ void orderGroup(DROID_GROUP *psGroup, DROID_ORDER order)
 
 	for (psCurr = psGroup->psList; psCurr; psCurr=psCurr->psGrpNext)
 	{
-		orderDroid(psCurr, order);
+		orderDroid(psCurr, order, ModeQueue);
 	}
 }
 
@@ -335,26 +335,11 @@ void orderGroupLoc(DROID_GROUP *psGroup, DROID_ORDER order, UDWORD x, UDWORD y)
 	ASSERT(grpInitialized, "Group code not initialized yet");
 	ASSERT_OR_RETURN(, psGroup != NULL,
 		"orderGroupLoc: invalid droid group" );
+	ASSERT_OR_RETURN(, validOrderForLoc(order), "orderGroupLoc: Bad order");
 
-	if(bMultiMessages)
+	for (psCurr = psGroup->psList; psCurr != NULL; psCurr = psCurr->psGrpNext)
 	{
-		SendGroupOrderGroup(psGroup,order,x,y,NULL);
-		return;  // Wait for our order before changing the droids.
-		bMultiMessages = false;
-
-		for(psCurr=psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
-		{
-			orderDroidLoc(psCurr, order, x,y);
-		}
-
-		bMultiMessages = true;
-	}
-	else
-	{
-		for(psCurr=psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
-		{
-			orderDroidLoc(psCurr, order, x,y);
-		}
+		orderDroidLoc(psCurr, order, x, y, bMultiMessages? ModeQueue : ModeImmediate);
 	}
 }
 
@@ -365,26 +350,11 @@ void orderGroupObj(DROID_GROUP *psGroup, DROID_ORDER order, BASE_OBJECT *psObj)
 
 	ASSERT_OR_RETURN(, psGroup != NULL,
 		"orderGroupObj: invalid droid group" );
+	ASSERT_OR_RETURN(, validOrderForObj(order), "orderGroupObj: Bad order");
 
-	if(bMultiMessages)
+	for (psCurr = psGroup->psList; psCurr != NULL; psCurr = psCurr->psGrpNext)
 	{
-		SendGroupOrderGroup(psGroup,order,0,0,psObj);
-		return;  // Wait for our order before changing the droids.
-		bMultiMessages = false;
-
-		for(psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
-		{
-			orderDroidObj(psCurr, order, (BASE_OBJECT *)psObj);
-		}
-
-		bMultiMessages = true;
-	}
-	else
-	{
-		for(psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
-		{
-			orderDroidObj(psCurr, order, (BASE_OBJECT *)psObj);
-		}
+		orderDroidObj(psCurr, order, (BASE_OBJECT *)psObj, bMultiMessages? ModeQueue : ModeImmediate);
 	}
 }
 

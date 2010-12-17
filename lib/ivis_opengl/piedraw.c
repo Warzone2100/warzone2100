@@ -196,83 +196,26 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 	}
 	if (pieFlag & pie_RAISE)		// collapse
 	{
-		glTranslatef(1.0f, (-shape->max.y * (pie_RAISE_SCALE - pieFlagData)) / pie_RAISE_SCALE, 1.0f);
+		glTranslatef(1.0f, (-shape->max.y * (pie_RAISE_SCALE - pieFlagData)) * (1.0f / pie_RAISE_SCALE), 1.0f);
 	}
 
 	glColor4ubv(colour.vector);	// Only need to set once for entire model
 	pie_SetTexturePage(shape->texpage);
 
-	// Activate TCMask if needed
-	if (shape->flags & iV_IMD_TCMASK &&	rendStates.rendMode == REND_OPAQUE)
-	{
-#ifdef _DEBUG
-	glErrors();
-#endif
-		if (pie_GetShadersStatus())
-		{
-			pie_ActivateShader_TCMask(teamcolour, shape->tcmaskpage);
-		}
-		else
-		{
-			//Set the environment colour with tcmask
-			GLfloat tc_env_colour[4];  
-			pal_PIELIGHTtoRGBA4f(&tc_env_colour[0], teamcolour);
+	pie_ActivateShader_TCMask(teamcolour, shape->tcmaskpage);
 
-			// TU0
-			glActiveTexture(GL_TEXTURE0);
-			glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,	GL_COMBINE);
-			glTexEnvfv(GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, tc_env_colour);
-
-			// TU0 RGB
-			glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB,		GL_ADD_SIGNED);
-			glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_RGB,		GL_TEXTURE);
-			glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_RGB,		GL_SRC_COLOR);
-			glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE1_RGB,		GL_CONSTANT);
-			glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND1_RGB,		GL_SRC_COLOR);
-
-			// TU0 Alpha
-			glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA,		GL_REPLACE);
-			glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_ALPHA,		GL_TEXTURE);
-			glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_ALPHA,	GL_SRC_ALPHA);
-
-			// TU1
-			glActiveTexture(GL_TEXTURE1);
-			glEnable(GL_TEXTURE_2D);
-			glBindTexture(GL_TEXTURE_2D, _TEX_PAGE[shape->tcmaskpage].id);
-			glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,	GL_COMBINE);
-
-			// TU1 RGB
-			glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB,		GL_INTERPOLATE);
-			glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_RGB,		GL_PREVIOUS);
-			glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_RGB,		GL_SRC_COLOR);
-			glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE1_RGB,		GL_TEXTURE0);
-			glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND1_RGB,		GL_SRC_COLOR);
-			glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE2_RGB,		GL_TEXTURE);
-			glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND2_RGB,		GL_SRC_ALPHA);
-
-			// TU1 Alpha
-			glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA,		GL_REPLACE);
-			glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_ALPHA,		GL_PREVIOUS);
-			glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_ALPHA,	GL_SRC_ALPHA);
-
-
-			// This is why we are doing in opaque mode.
-			glEnable(GL_BLEND);
-			glBlendFunc(GL_CONSTANT_COLOR, GL_ZERO);
-			glBlendColor(colour.byte.r / 255.0, colour.byte.g / 255.0,
-						colour.byte.b / 255.0, colour.byte.a / 255.0);
-		}
-#ifdef _DEBUG
-	glErrors();
-#endif
-	}
+	frame %= MAX(1, shape->numFrames);
 
 	for (pPolys = shape->polys; pPolys < shape->polys + shape->npolys; pPolys++)
 	{
-		Vector2f	texCoords[pie_MAX_VERTICES_PER_POLYGON];
 		Vector3f	vertexCoords[pie_MAX_VERTICES_PER_POLYGON];
-		unsigned int n;
+		unsigned int	n, fidx = frame;
 		VERTEXID	*index;
+
+		if (!(pPolys->flags & iV_IMD_TEXANIM))
+		{
+			fidx = 0;
+		}
 
 		for (n = 0, index = pPolys->pindex;
 				n < pPolys->npnts;
@@ -281,85 +224,27 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 			vertexCoords[n].x = shape->points[*index].x;
 			vertexCoords[n].y = shape->points[*index].y;
 			vertexCoords[n].z = shape->points[*index].z;
-			texCoords[n].x = pPolys->texCoord[n].x;
-			texCoords[n].y = pPolys->texCoord[n].y;
 		}
 
 		polyCount++;
 
-		// Run TextureAnimation (exluding the new teamcoloured models)
-		if (frame && pPolys->flags & iV_IMD_TEXANIM && !(shape->flags & iV_IMD_TCMASK))
+		glBegin(GL_TRIANGLE_FAN);
+
+		if (light)
 		{
-			frame %= shape->numFrames;
-
-			if (frame > 0)
-			{
-				const int framesPerLine = OLD_TEXTURE_SIZE_FIX / (pPolys->texAnim.x * OLD_TEXTURE_SIZE_FIX);
-				const int uFrame = (frame % framesPerLine) * (pPolys->texAnim.x * OLD_TEXTURE_SIZE_FIX);
-				const int vFrame = (frame / framesPerLine) * (pPolys->texAnim.y * OLD_TEXTURE_SIZE_FIX);
-
-				for (n = 0; n < pPolys->npnts; n++)
-				{
-					texCoords[n].x += uFrame / OLD_TEXTURE_SIZE_FIX;
-					texCoords[n].y += vFrame / OLD_TEXTURE_SIZE_FIX;
-				}
-			}
+			glNormal3fv((GLfloat*)&pPolys->normal);
 		}
 
+		for (n = 0; n < pPolys->npnts; n++)
 		{
-			Vector3f normals[pie_MAX_VERTICES_PER_POLYGON];
-
-			if (light)
-			{
-				for (n = 0; n < pPolys->npnts; ++n)
-					normals[n] = pPolys->normal;
-				glNormalPointer(GL_FLOAT, 0, normals);
-				glEnableClientState(GL_NORMAL_ARRAY);
-			}
-
-			glVertexPointer(3, GL_FLOAT, 0, vertexCoords);
-			glEnableClientState(GL_VERTEX_ARRAY);
-
-			glTexCoordPointer(2, GL_FLOAT, 0, texCoords);
-			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-			glClientActiveTexture(GL_TEXTURE1);
-
-			if (shape->flags & iV_IMD_TCMASK
-			 && rendStates.rendMode == REND_OPAQUE
-			 && !pie_GetShadersStatus())
-			{
-				glTexCoordPointer(2, GL_FLOAT, 0, texCoords);
-				glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-			}
-
-			glDrawArrays(GL_TRIANGLE_FAN, 0, pPolys->npnts);
-			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-			glClientActiveTexture(GL_TEXTURE0);
-			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-			glDisableClientState(GL_VERTEX_ARRAY);
-			glDisableClientState(GL_NORMAL_ARRAY);
+			glTexCoord2fv((GLfloat*)&pPolys->texCoord[fidx * pPolys->npnts + n]);
+			glVertex3fv((GLfloat*)&vertexCoords[n]);
 		}
+
+		glEnd();
 	}
 
-	// Deactivate TCMask if it was previously enabled
-	if (shape->flags & iV_IMD_TCMASK && rendStates.rendMode == REND_OPAQUE)
-	{
-		if (pie_GetShadersStatus())
-		{
-			pie_DeactivateShader();
-		}
-		else
-		{
-			glDisable(GL_BLEND);
-
-			glActiveTexture(GL_TEXTURE1);
-			glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-			glDisable(GL_TEXTURE_2D);
-
-			glActiveTexture(GL_TEXTURE0);
-			glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-		}
-	}
+	pie_DeactivateShader();
 
 	if (pieFlag & pie_BUTTON)
 	{
@@ -530,50 +415,40 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, Vector3f* 
 	}
 
 	// draw the shadow volume
-	glEnableClientState(GL_VERTEX_ARRAY);
-	for (i = 0; i < edge_count; i++)
+	glBegin(GL_QUADS);
+	for(i=0;i<edge_count;i++)
 	{
 		int a = drawlist[i].from, b = drawlist[i].to;
-		if (a < 0)
-			continue;
-
+		if(a < 0)
 		{
-			const Vector3f vertices[] = {
-				{            pVertices[b].x,            scale_y(pVertices[b].y, flag, flag_data),            pVertices[b].z },
-				{ light->x + pVertices[b].x, light->y + scale_y(pVertices[b].y, flag, flag_data), light->z + pVertices[b].z },
-				{ light->x + pVertices[a].x, light->y + scale_y(pVertices[a].y, flag, flag_data), light->z + pVertices[a].z },
-				{            pVertices[a].x,            scale_y(pVertices[a].y, flag, flag_data),            pVertices[a].z },
-			};
-
-			glVertexPointer(3, GL_FLOAT, 0, vertices);
-			glDrawArrays(GL_QUADS, 0, ARRAY_SIZE(vertices));
+			continue;
 		}
+
+		glVertex3f(pVertices[b].x, scale_y(pVertices[b].y, flag, flag_data), pVertices[b].z);
+		glVertex3f(pVertices[b].x+light->x, scale_y(pVertices[b].y, flag, flag_data)+light->y, pVertices[b].z+light->z);
+		glVertex3f(pVertices[a].x+light->x, scale_y(pVertices[a].y, flag, flag_data)+light->y, pVertices[a].z+light->z);
+		glVertex3f(pVertices[a].x, scale_y(pVertices[a].y, flag, flag_data), pVertices[a].z);
 	}
-	glDisableClientState(GL_VERTEX_ARRAY);
+	glEnd();
 
 #ifdef SHOW_SHADOW_EDGES
 	glDisable(GL_DEPTH_TEST);
 	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 
 	glColor4ub(0xFF, 0, 0, 0xFF);
-	glEnableClientState(GL_VERTEX_ARRAY);
+	glBegin(GL_LINES);
 	for(i = 0; i < edge_count; i++)
 	{
 		int a = drawlist[i].from, b = drawlist[i].to;
-		if (a < 0)
-			continue;
-
+		if(a < 0)
 		{
-			const Vector3f vertices[] = {
-				{ pVertices[b].x, scale_y(pVertices[b].y, flag, flag_data), pVertices[b].z },
-				{ pVertices[a].x, scale_y(pVertices[a].y, flag, flag_data), pVertices[a].z },
-			};
-
-			glVertexPointer(3, GL_FLOAT, 0, vertices);
-			glDrawArrays(GL_LINES, 0, ARRAY_SIZE(vertices));
+			continue;
 		}
+
+		glVertex3f(pVertices[b].x, scale_y(pVertices[b].y, flag, flag_data), pVertices[b].z);
+		glVertex3f(pVertices[a].x, scale_y(pVertices[a].y, flag, flag_data), pVertices[a].z);
 	}
-	glDisableClientState(GL_VERTEX_ARRAY);
+	glEnd();
 	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
 	glEnable(GL_DEPTH_TEST);
 #endif
@@ -802,24 +677,14 @@ static void pie_DrawShadows(void)
 	glColor4f(0, 0, 0, 0.5);
 
 	pie_PerspectiveEnd();
+	glLoadIdentity();
 	glDisable(GL_DEPTH_TEST);
-	glLoadIdentity();
-	glScalef(width, height, 1.f);
-	{
-		const Vector2i vertices[] = {
-			{ 0, 0 },
-			{ 1, 0 },
-			{ 0, 1 },
-			{ 1, 1 },
-		};
-
-		glVertexPointer(2, GL_INT, 0, vertices);
-		glEnableClientState(GL_VERTEX_ARRAY);
-
-		glDrawArrays(GL_TRIANGLE_STRIP, 0, ARRAY_SIZE(vertices));
-		glDisableClientState(GL_VERTEX_ARRAY);
-	}
-	glLoadIdentity();
+	glBegin(GL_TRIANGLE_STRIP);
+		glVertex2f(0, 0);
+		glVertex2f(width, 0);
+		glVertex2f(0, height);
+		glVertex2f(width, height);
+	glEnd();
 	pie_PerspectiveBegin();
 
 	pie_SetRendMode(REND_OPAQUE);
@@ -877,36 +742,20 @@ void pie_DrawImage(const PIEIMAGE *image, const PIERECT *dest)
 
 	glColor4ubv(colour.vector);
 
-	glPushMatrix();
-	glTranslatef(dest->x, dest->y, 0);
-	glScalef(dest->w, dest->h, 1);
-	glMatrixMode(GL_TEXTURE);
-	glPushMatrix(); // texture matrix
-	glScalef(1.f / OLD_TEXTURE_SIZE_FIX, 1.f / OLD_TEXTURE_SIZE_FIX, 1.f);
-	glTranslatef(image->tu, image->tv, 0);
-	glScalef(image->tw, image->th, 1);
-	{
+	glBegin(GL_TRIANGLE_STRIP);
 		//set up 4 pie verts
-		const Vector2i vertices[] = {
-			{ 0, 0 },
-			{ 1, 0 },
-			{ 0, 1 },
-			{ 1, 1 },
-		};
+		glTexCoord2f(image->tu / OLD_TEXTURE_SIZE_FIX, image->tv / OLD_TEXTURE_SIZE_FIX);
+		glVertex2f(dest->x, dest->y);
 
-		glVertexPointer(2, GL_INT, 0, vertices);
-		glEnableClientState(GL_VERTEX_ARRAY);
+		glTexCoord2f((image->tu + image->tw) / OLD_TEXTURE_SIZE_FIX, image->tv / OLD_TEXTURE_SIZE_FIX);
+		glVertex2f(dest->x + dest->w, dest->y);
 
-		glTexCoordPointer(2, GL_INT, 0, vertices);
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		glTexCoord2f(image->tu / OLD_TEXTURE_SIZE_FIX, (image->tv + image->th) / OLD_TEXTURE_SIZE_FIX);
+		glVertex2f(dest->x, dest->y + dest->h);
 
-		glDrawArrays(GL_TRIANGLE_STRIP, 0, ARRAY_SIZE(vertices));
-		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-		glDisableClientState(GL_VERTEX_ARRAY);
-	}
-	glPopMatrix(); // texture matrix
-	glMatrixMode(GL_MODELVIEW);
-	glPopMatrix();
+		glTexCoord2f((image->tu + image->tw) / OLD_TEXTURE_SIZE_FIX, (image->tv + image->th) / OLD_TEXTURE_SIZE_FIX);
+		glVertex2f(dest->x + dest->w, dest->y + dest->h);
+	glEnd();
 }
 
 void pie_GetResetCounts(unsigned int* pPieCount, unsigned int* pTileCount, unsigned int* pPolyCount, unsigned int* pStateCount)
@@ -920,4 +769,5 @@ void pie_GetResetCounts(unsigned int* pPieCount, unsigned int* pTileCount, unsig
 	tileCount = 0;
 	polyCount = 0;
 	pieStateCount = 0;
+	return;
 }

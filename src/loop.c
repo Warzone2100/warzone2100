@@ -160,6 +160,8 @@ GAMECODE gameLoop(void)
 
 	if (gameTicked)
 	{
+		syncDebug("map = \"%s\", humanPlayers = %d %d %d %d %d %d %d %d", game.map, isHumanPlayer(0), isHumanPlayer(1), isHumanPlayer(2), isHumanPlayer(3), isHumanPlayer(4), isHumanPlayer(5), isHumanPlayer(6), isHumanPlayer(7));
+
 		// Actually send pending droid orders.
 		sendQueuedDroidInfo();
 
@@ -591,6 +593,9 @@ GAMECODE gameLoop(void)
 			}
 		}
 	}
+
+	// Must end update, since we may or may not have ticked, and some message queue processing code may vary depending on whether it's in an update.
+	gameTimeUpdateEnd();
 
 	/* Check for quit */
 	if (intRetVal == INT_QUIT)

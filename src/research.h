@@ -120,7 +120,7 @@ extern RESEARCH * getResearch(const char *pName, BOOL resName);
 
 /* sets the status of the topic to cancelled and stores the current research
    points accquired */
-extern void cancelResearch(STRUCTURE *psBuilding);
+extern void cancelResearch(STRUCTURE *psBuilding, QUEUE_MODE mode);
 
 /* For a given view data get the research this is related to */
 extern RESEARCH * getResearchForMsg(struct _viewdata *pViewData);
@@ -141,9 +141,9 @@ extern SDWORD	mapIconToRID(UDWORD iconID);
 extern BOOL checkResearchStats(void);
 
 /*puts research facility on hold*/
-extern void holdResearch(STRUCTURE *psBuilding);
+extern void holdResearch(STRUCTURE *psBuilding, QUEUE_MODE mode);
 /*release a research facility from hold*/
-extern void releaseResearch(STRUCTURE *psBuilding);
+extern void releaseResearch(STRUCTURE *psBuilding, QUEUE_MODE mode);
 
 /*checks the stat to see if its of type wall or defence*/
 extern BOOL wallDefenceStruct(STRUCTURE_STATS *psStats);

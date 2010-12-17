@@ -1,5 +1,5 @@
 AC_PREREQ([2.56])
-AC_INIT([Warzone 2100],[TRUNK],[http://wz2100.net/],[warzone2100])
+AC_INIT([Warzone 2100],[master],[http://wz2100.net/],[warzone2100])
 
 AM_INIT_AUTOMAKE([1.10 tar-ustar])
 
@@ -230,7 +230,7 @@ else
 fi
 
 WZ_WARNINGS_GCC="-Wall -Wextra ${WZ_Wno_}unused-parameter ${WZ_Wno_}sign-compare -Wcast-align -Wwrite-strings -Wpointer-arith ${WZ_Wno_}format-security"
-WZ_WARNINGS_GCC_C="${WZ_WARNINGS_GCC} ${WZ_Wno_}pointer-to-int-cast ${WZ_Wno_}strict-aliasing -Wstrict-prototypes -Wdeclaration-after-statement -Wc++-compat ${WZ_Wno_}c++-compat ${CFLAGS_IGNORE_WARNINGS}"
+WZ_WARNINGS_GCC_C="${WZ_WARNINGS_GCC} -Wstrict-prototypes -Wdeclaration-after-statement -Wc++-compat ${WZ_Wno_}c++-compat ${CFLAGS_IGNORE_WARNINGS}"
 WZ_WARNINGS_GCC_CXX="${WZ_WARNINGS_GCC}"
 if test "x$enable_debug" = "xyes" ; then
 	if test "x$cc_icc" = "xyes" ; then
@@ -462,18 +462,14 @@ AC_CONFIG_HEADER([config.h])
 AC_CONFIG_FILES([Makefile
 		po/Makefile.in
 		doc/Makefile
-		build_tools/Makefile
 		build_tools/autorevision/Makefile
 		icons/Makefile
 		data/Makefile
-		data/mods/Makefile
 		data/mods/multiplay/Makefile
 		data/music/Makefile
-		pkg/Makefile
 		pkg/nsis/Makefile
 		win32/Makefile
 		tests/Makefile
-		lib/Makefile
 		lib/framework/Makefile
 		lib/exceptionhandler/Makefile
 		lib/gamelib/Makefile

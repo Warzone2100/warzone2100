@@ -1420,7 +1420,7 @@ static void intSetEditBoxTextFromTemplate( DROID_TEMPLATE *psTemplate )
 	}
 	else
 	{
-		GetDefaultTemplateName(psTemplate);
+		sstrcpy(aCurrName, GetDefaultTemplateName(psTemplate));
 	}
 
 	widgSetString(psWScreen, IDDES_NAMEBOX, aCurrName);
@@ -4094,11 +4094,7 @@ void intProcessDesign(UDWORD id)
 			/* remove template if found */
 			if ( psTempl )
 			{
-
-				if (bMultiMessages)		//ajl. inform others of template destruction.
-				{
-					SendDestroyTemplate(psTempl);
-				}
+				SendDestroyTemplate(psTempl);
 
 				//update player template list.
 				{
@@ -4125,7 +4121,7 @@ void intProcessDesign(UDWORD id)
 
 				// Delete the template.
 				//before deleting the template, need to make sure not being used in production
-				deleteTemplateFromProduction(psTempl, (UBYTE)selectedPlayer);
+				deleteTemplateFromProduction(psTempl, selectedPlayer, ModeQueue);
 				free(psTempl);
 
 				/* get previous template and set as current */
@@ -4477,7 +4473,7 @@ static void intDisplayStatForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 	/* inc rotation if highlighted */
 	if ( Form->state & WCLICK_HILITE )
 	{
-		iRY += graphicsTimeAdjustedIncrement(BUTTONOBJ_ROTSPEED);
+		iRY += realTimeAdjustedIncrement(BUTTONOBJ_ROTSPEED);
 		iRY %= 360;
 	}
 
@@ -4513,7 +4509,7 @@ static void intDisplayViewForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 		Rotation.z = 0;
 
 		/* inc rotation */
-		iRY += graphicsTimeAdjustedIncrement(BUTTONOBJ_ROTSPEED);
+		iRY += realTimeAdjustedIncrement(BUTTONOBJ_ROTSPEED);
 		iRY %= 360;
 
 		//fixed depth scale the pie
@@ -4657,7 +4653,7 @@ static BOOL saveTemplate(void)
 			newTemplate = false;
 			/*ANY change to the template affect the production - even if the
 			template is changed and then changed back again!*/
-			deleteTemplateFromProduction(psTempl, (UBYTE)selectedPlayer);
+			deleteTemplateFromProduction(psTempl, selectedPlayer, ModeQueue);
 			SendDestroyTemplate(psTempl);
 			sCurrDesign.multiPlayerID = generateNewObjectId();
 		}

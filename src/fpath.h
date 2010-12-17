@@ -84,12 +84,18 @@ bool fpathIsEquivalentBlocking(PROPULSION_TYPE propulsion1, int player1, FPATH_M
 
 /** Function pointer to the currently in-use blocking tile check function.
  *  
- *  This function will check if the map tile at the given location blocks droids
- *  with the currently selected propulsion type.
+ *  This function will check if the map tile at the given location should be considered to block droids
+ *  with the currently selected propulsion type. This is not identical to whether it will actually block,
+ *  which can depend on hostilities and open/closed attributes.
+ *
+ * fpathBlockingTile -- when it is irrelevant who owns what buildings, they all block unless propulsion is right
+ * fpathDroidBlockingTile -- when you may want to factor the above into account
+ * fpathBaseBlockingTile -- set all parameters; the others are convenience functions for this one
  *
  *  @return true if the given tile is blocking for this droid
  */
 BOOL fpathBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion);
+BOOL fpathDroidBlockingTile(DROID *psDroid, int x, int y, FPATH_MOVETYPE moveType);
 BOOL fpathBaseBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion, int player, FPATH_MOVETYPE moveType);
 
 /** Set a direct path to position.

@@ -58,8 +58,6 @@
 #include "drive.h"
 #include "edit3d.h"
 #include "effects.h"
-#include "environ.h"
-#include "formation.h"
 #include "fpath.h"
 #include "frend.h"
 #include "frontend.h"
@@ -83,6 +81,7 @@
 #include "research.h"
 #include "lib/framework/cursors.h"
 #include "scriptextern.h"
+#include "scriptfuncs.h"
 #include "scripttabs.h"
 #include "scriptvals.h"
 #include "text.h"
@@ -415,18 +414,27 @@ BOOL buildMapList(void)
 	char ** filelist, ** file;
 	size_t len;
 
-	if ( !loadLevFile( "gamedesc.lev", mod_campaign ) ) {
+	if ( !loadLevFile( "gamedesc.lev", mod_campaign ) )
+	{
 		return false;
 	}
 	loadLevFile( "addon.lev", mod_multiplay );
 
 	filelist = PHYSFS_enumerateFiles("");
-	for ( file = filelist; *file != NULL; ++file ) {
+	for ( file = filelist; *file != NULL; ++file )
+	{
 		len = strlen( *file );
 		if ( len > 10 // Do not add addon.lev again
-				&& !strcasecmp( *file+(len-10), ".addon.lev") ) {
+				&& !strcasecmp( *file+(len-10), ".addon.lev") )
+		{
 			loadLevFile( *file, mod_multiplay );
 		}
+		// add support for X player maps using a new name to prevent conflicts.
+		if ( len > 13 && !strcasecmp( *file+(len-13), ".xplayers.lev") )
+		{
+			loadLevFile( *file, mod_multiplay );
+		}
+
 	}
 	PHYSFS_freeList( filelist );
 	return true;
@@ -672,8 +680,6 @@ BOOL frontendShutdown(void)
 		return false;
 	}
 
-	releasePlayerPower();
-
 	interfaceShutDown();
 	scrShutDown();
 
@@ -769,11 +775,6 @@ BOOL stageOneInitialise(void)
 		return false;
 	}
 
-	if (!formationInitialise())		// Initialise the formation system
-	{
-		return false;
-	}
-
 	// initialise the visibility stuff
 	if (!visInitialise())
 	{
@@ -801,13 +802,9 @@ BOOL stageOneInitialise(void)
 		return false;
 	}
 
-	if (!environInit())
-	{
-		return false;
-	}
-
 	initMission();
 	initTransporters();
+	scriptInit();
 
     //do this here so that the very first mission has it initialised
     initRunData();
@@ -848,9 +845,6 @@ BOOL stageOneShutDown(void)
 
 	grpShutDown();
 
-	formationShutDown();
-	releasePlayerPower();
-
 	ResearchRelease();
 
 	//free up the gateway stuff?
@@ -864,7 +858,6 @@ BOOL stageOneShutDown(void)
 	}
 
 	scrShutDown();
-	environShutDown();
 	gridShutDown();
 
 	if ( !anim_Shutdown() )
@@ -1056,11 +1049,6 @@ BOOL stageThreeInitialise(void)
 		multiGameInit();
 		cmdDroidMultiExpBoost(true);
 	}
-	else
-	{
-		//ensure single player games do not have this set
-		game.maxPlayers = 0;
-	}
 
 	preProcessVisibility();
 	closeLoadingScreen();			// reset the loading screen.
@@ -1070,8 +1058,8 @@ BOOL stageThreeInitialise(void)
 		return false;
 	}
 
+	mapInit();
 	clustInitialise();
-
 	gridReset();
 
 	//if mission screen is up, close it.

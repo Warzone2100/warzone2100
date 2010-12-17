@@ -398,7 +398,7 @@ static int scrOrderDroid(lua_State *L)
 		return luaL_error(L, "Invalid order %d", order);
 	}
 
-	orderDroid(psDroid, order);
+	orderDroid(psDroid, order, ModeQueue);
 
 	return 0;
 }
@@ -425,7 +425,7 @@ static int scrOrderDroidLoc(lua_State *L)
 		return luaL_error(L, "invalid location (%i,%i)", x, y);
 	}
 
-	orderDroidLoc(psDroid, order, (UDWORD)x,(UDWORD)y);
+	orderDroidLoc(psDroid, order, x, y, ModeQueue);
 
 	return 0;
 }
@@ -450,7 +450,7 @@ static int scrOrderDroidObj(lua_State *L)
 		return luaL_error(L, "Invalid order");
 	}
 
-	orderDroidObj(psDroid, order, psObj);
+	orderDroidObj(psDroid, order, psObj, ModeQueue);
 	return 0;
 }
 
@@ -494,7 +494,7 @@ static int scrOrderDroidStatsLoc(lua_State *L)
 			return true;
 		}
 
-		orderDroidStatsLocDir(psDroid, order, psStats, (UDWORD)x, (UDWORD)y, 0);
+		orderDroidStatsLocDir(psDroid, order, psStats, x, y, 0, ModeQueue);
 	}
 
 	return 0;
@@ -1423,8 +1423,6 @@ static int scrSkDoResearch(lua_State *L)
 {
 	UWORD				i;
 	RESEARCH_FACILITY	*psResFacilty;
-	PLAYER_RESEARCH		*pPlayerRes;
-	RESEARCH			*pResearch;
 	
 	STRUCTURE *psBuilding = (STRUCTURE*)luaWZObj_checkobject(L, 1, OBJ_STRUCTURE);
 	int player            = luaWZ_checkplayer(L, 2);
@@ -1440,7 +1438,7 @@ static int scrSkDoResearch(lua_State *L)
 	}
 
 	// choose a topic to complete.
-	for(i=0;i<numResearch;i++)
+	for(i=0; i < numResearch; i++)
 	{
 		if (skTopicAvail(i, player) && (!bMultiPlayer || !beingResearchedByAlly(i, player)))
 		{
@@ -1450,39 +1448,11 @@ static int scrSkDoResearch(lua_State *L)
 
 	if(i != numResearch)
 	{
-		pResearch = asResearch + i;
-		if (bMultiMessages)
-		{
-			sendResearchStatus(psBuilding, pResearch->ref - REF_RESEARCH_START, player, true);
-		}
-		else
-		{
-			pPlayerRes				= asPlayerResList[player]+ i;
-			psResFacilty->psSubject = (BASE_STATS*)pResearch;		  //set the subject up
-
-			if (IsResearchCancelled(pPlayerRes))
-			{
-				psResFacilty->powerAccrued = pResearch->researchPower;//set up as if all power available for cancelled topics
-			}
-			else
-			{
-				psResFacilty->powerAccrued = 0;
-			}
-
-			MakeResearchStarted(pPlayerRes);
-			psResFacilty->timeStarted = ACTION_START_TIME;
-			psResFacilty->timeStartHold = 0;
-			psResFacilty->timeToResearch = pResearch->researchPoints / 	psResFacilty->researchPoints;
-			if (psResFacilty->timeToResearch == 0)
-			{
-				psResFacilty->timeToResearch = 1;
-			}
-		}
-
+		sendResearchStatus(psBuilding, i, player, true);			// inform others, I'm researching this.
 #if defined (DEBUG)
 		{
-			char				sTemp[128];
-			sprintf(sTemp,"player:%d starts topic: %s",player, asResearch[i].pName );
+			char	sTemp[128];
+			sprintf(sTemp,"[debug]player:%d starts topic: %s",player, asResearch[i].pName );
 			NETlogEntry(sTemp, SYNC_FLAG, 0);
 		}
 #endif
@@ -1589,10 +1559,10 @@ static int defenseLocation(lua_State *L, BOOL noNarrowGateways)
 
 	int worldX = luaL_checkint(L, 1);
 	int worldY = luaL_checkint(L, 2);
-	int statIndex = luaL_checkint(L, 3);
-	int statIndex2 = luaL_checkint(L, 4);
+	int statIndex = luaWZObj_checkstructurestat(L, 3);
+	int statIndex2 = luaWZObj_checkstructurestat(L, 4);
 	DROID *psDroid = (DROID*)luaWZObj_checkobject(L, 5, OBJ_DROID);
-	// and eventual last player argument is ignored
+	int player = luaWZ_checkplayer(L, 6);
 
 	ASSERT_OR_RETURN( false, statIndex < numStructureStats, "Invalid range referenced for numStructureStats, %d > %d", statIndex, numStructureStats);
 	psStats = (BASE_STATS *)(asStructureStats + statIndex);
@@ -1617,6 +1587,10 @@ static int defenseLocation(lua_State *L, BOOL noNarrowGateways)
 	psChosenGate = NULL;
 	for (psGate = gwGetGateways(); psGate; psGate = psGate->psNext)
 	{
+		if (auxTile(psGate->x1, psGate->y1, player) & AUXBITS_THREAT)
+		{
+			continue;	// enemy can shoot there, not safe to build
+		}
 		count = 0;
 		noWater = true;
 		// does it have >1 tile unoccupied.
@@ -1754,11 +1728,11 @@ static int defenseLocation(lua_State *L, BOOL noNarrowGateways)
 	// first section.
 	if(x1 == x2 && y1 == y2)	//first sec is 1 tile only: ((2 tile gate) or (3 tile gate and first sec))
 	{
-		orderDroidStatsLocDir(psDroid, DORDER_BUILD, psWStats, x1, y1, 0);
+		orderDroidStatsLocDir(psDroid, DORDER_BUILD, psWStats, x1, y1, 0, ModeQueue);
 	}
 	else
 	{
-		orderDroidStatsTwoLocDir(psDroid, DORDER_LINEBUILD, psWStats,  x1, y1, x2, y2, 0);
+		orderDroidStatsTwoLocDir(psDroid, DORDER_LINEBUILD, psWStats,  x1, y1, x2, y2, 0, ModeQueue);
 	}
 
 	// second section
@@ -1837,6 +1811,7 @@ WZ_DECL_UNUSED static BOOL scrActionDroidObj(void)
 		return false;
 	}
 
+	syncDebug("TODO: Synchronise this!");
 	actionDroidObj(psDroid, action, (BASE_OBJECT *)psObj);
 
 	return true;

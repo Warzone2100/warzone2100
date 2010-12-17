@@ -17,4 +17,3 @@ libexceptionhandler_a_SOURCES = \
 if MINGW32
 libexceptionhandler_a_SOURCES += exchndl.c
 endif
-

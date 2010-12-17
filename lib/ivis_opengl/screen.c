@@ -261,7 +261,8 @@ bool screenInitialise(
 	}
 	else
 	{
-		debug(LOG_INFO, "OpenGL 2.0 is not supported by your system, using fixed pipeline.");
+		debug(LOG_POPUP, "OpenGL 2.0 is not supported by your system, current shaders require this.");
+		debug(LOG_POPUP, "Team colors will not function correctly on your system.");
 	}
 
 	glViewport(0, 0, width, height);
@@ -402,9 +403,8 @@ void screen_Upload(const char *newBackDropBmp, BOOL preview)
 
 	// Make sure the current texture page is reloaded after we are finished
 	// Otherwise WZ will think it is still loaded and not load it again
-	pie_SetTexturePage(TEXPAGE_NONE);
+	pie_SetTexturePage(TEXPAGE_EXTERN);
 
-	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, backDropTexture);
 	glColor3f(1, 1, 1);
 
@@ -434,33 +434,16 @@ void screen_Upload(const char *newBackDropBmp, BOOL preview)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	}
 
-	glPushMatrix();
-	glTranslatef(x1, y1, 0);
-	glScalef(x2 - x1, y2 - y1, 1);
-	glMatrixMode(GL_TEXTURE);
-	glPushMatrix(); // texture matrix
-	glScalef(tx, ty, 1);
-	{
-		const Vector2i vertices[] = {
-			{ 0, 0 },
-			{ 1, 0 },
-			{ 0, 1 },
-			{ 1, 1 },
-		};
-
-		glVertexPointer(2, GL_INT, 0, vertices);
-		glEnableClientState(GL_VERTEX_ARRAY);
-
-		glTexCoordPointer(2, GL_INT, 0, vertices);
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-
-		glDrawArrays(GL_TRIANGLE_STRIP, 0, ARRAY_SIZE(vertices));
-		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-		glDisableClientState(GL_VERTEX_ARRAY);
-	}
-	glPopMatrix(); // texture matrix
-	glMatrixMode(GL_MODELVIEW);
-	glPopMatrix();
+	glBegin(GL_TRIANGLE_STRIP);
+		glTexCoord2f(0, 0);
+		glVertex2f(x1, y1);
+		glTexCoord2f(tx, 0);
+		glVertex2f(x2, y1);
+		glTexCoord2f(0, ty);
+		glVertex2f(x1, y2);
+		glTexCoord2f(tx, ty);
+		glVertex2f(x2, y2);
+	glEnd();
 
 	if (preview)
 	{
@@ -500,11 +483,6 @@ void screen_enableMapPreview(char *name, int width, int height, Vector2i *player
 		player_pos[i].x = playerpositions[i].x;
 		player_pos[i].y = playerpositions[i].y;
 	}
-}
-
-const char *screen_getMapName(void)
-{
-	return mapname;
 }
 
 void screen_disableMapPreview(void)

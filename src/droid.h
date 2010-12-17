@@ -144,7 +144,7 @@ BOOL templateIsIDF(DROID_TEMPLATE *psTemplate);
 BOOL idfDroid(DROID *psDroid);
 
 /* Do damage to a droid */
-extern float droidDamage(DROID *psDroid, UDWORD damage, UDWORD weaponClass,UDWORD weaponSubClass, HIT_SIDE impactSide);
+int32_t droidDamage(DROID *psDroid, uint32_t damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, HIT_SIDE impactSide);
 
 /* The main update routine for all droids */
 extern void droidUpdate(DROID *psDroid);
@@ -224,7 +224,7 @@ extern UDWORD	getNumDroidsForLevel(UDWORD	level);
 
 extern BOOL activateGroupAndMove(UDWORD playerNumber, UDWORD groupNumber);
 /* calculate muzzle tip location in 3d world added int weapon_slot to fix the always slot 0 hack*/
-extern BOOL calcDroidMuzzleLocation(DROID *psDroid, Vector3f *muzzle, int weapon_slot);
+bool calcDroidMuzzleLocation(DROID *psDroid, Vector3i *muzzle, int weapon_slot);
 
 /* gets a template from its aName (when pName is unknown) */ 
 extern DROID_TEMPLATE	*GetHumanDroidTemplate(char *aName);
@@ -373,8 +373,7 @@ extern BOOL checkValidWeaponForProp(DROID_TEMPLATE *psTemplate);
 extern const char *getDroidNameForRank(UDWORD rank);
 
 /*called when a Template is deleted in the Design screen*/
-extern void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player);
-extern void reallyDeleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player);
+extern void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player, QUEUE_MODE mode);
 
 // Select a droid and do any necessary housekeeping.
 extern void SelectDroid(DROID *psDroid);

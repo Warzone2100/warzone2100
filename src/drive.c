@@ -40,8 +40,6 @@
 #include "loop.h"
 #include "geometry.h"
 #include "anim_id.h"
-#include "formationdef.h"
-#include "formation.h"
 #include "action.h"
 #include "order.h"
 #include "combat.h"
@@ -463,7 +461,7 @@ static void driveMoveFollower(DROID *psDroid)
 			// if the droid is currently guarding we need to change the order to a move
 			if (psDroid->order==DORDER_GUARD)
 			{
-				orderDroidLoc(psDroid,DORDER_MOVE, psDrivenDroid->pos.x,psDrivenDroid->pos.y);
+				orderDroidLoc(psDroid, DORDER_MOVE, psDrivenDroid->pos.x, psDrivenDroid->pos.y, ModeQueue);
 			}
 			else
 			{
@@ -510,7 +508,7 @@ void driveUpdate(void)
 		if(psDrivenDroid != NULL) {
 			if(bMultiMessages && (driveBumpTime < gameTime))	// send latest info about driven droid.
 			{
-				SendDroidInfo(psDrivenDroid, DORDER_MOVE, psDrivenDroid->pos.x, psDrivenDroid->pos.y, NULL, NULL, 0, 0, 0);
+				sendDroidInfo(psDrivenDroid, DORDER_MOVE, psDrivenDroid->pos.x, psDrivenDroid->pos.y, NULL, NULL, 0, 0, 0, false);
 			}
 
 	//TO BE DONE:

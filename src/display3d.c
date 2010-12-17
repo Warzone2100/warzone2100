@@ -88,7 +88,6 @@
 #include "order.h"
 #include "scores.h"
 #include "multiplay.h"
-#include "environ.h"
 #include "advvis.h"
 #include "texture.h"
 #include "anim_id.h"
@@ -131,6 +130,7 @@ static PIELIGHT getBlueprintColour(STRUCT_STATES state);
 
 static void NetworkDisplayPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours);
 static void NetworkDisplayImage(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours);
+void NotifyUserOfError(char *msg);
 /********************  Variables  ********************/
 // Should be cleaned up properly and be put in structures.
 
@@ -224,6 +224,9 @@ bool showORDERS = false;
 bool showLevelName = true;
 /** When we have a connection issue, we will flash a message on screen
 */
+static bool errorWaiting = false;
+static char errorMessage[512];
+static uint32_t lastErrorTime = 0;
 
 #define NETWORK_FORM_ID 0xFAAA
 #define NETWORK_BUT_ID 0xFAAB
@@ -266,6 +269,13 @@ static const int BLUEPRINT_OPACITY=120;
 
 /********************  Functions  ********************/
 
+void NotifyUserOfError(char *msg)
+{
+	errorWaiting = true;
+	ssprintf(errorMessage, "%s", msg);
+	lastErrorTime = gameTime2;
+}
+
 static PIELIGHT structureBrightness(STRUCTURE *psStructure)
 {
 	PIELIGHT buildingBrightness;
@@ -276,7 +286,7 @@ static PIELIGHT structureBrightness(STRUCTURE *psStructure)
 	}
 	else
 	{
-		buildingBrightness = pal_SetBrightness(200 - 100 * getStructureDamage(psStructure));
+		buildingBrightness = pal_SetBrightness(200 - 100/65536.f * getStructureDamage(psStructure));
 
 		/* If it's selected, then it's brighter */
 		if (psStructure->selected)
@@ -637,6 +647,17 @@ void draw3DScene( void )
 	{
 		displayMultiChat();
 	}
+	if (errorWaiting)
+	{
+		if (lastErrorTime + (60 * GAME_TICKS_PER_SEC) < gameTime2)
+		{
+			char trimMsg[255];
+			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
+			ssprintf(trimMsg, "Error! (Check your logs!): %.78s", errorMessage);
+			addConsoleMessage(trimMsg, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+			errorWaiting = false;
+		}
+	}
 	if (showSAMPLES)		//Displays the number of sound samples we currently have
 	{
 		unsigned int width, height;
@@ -799,7 +820,7 @@ static void calcAverageTerrainHeight(iView *player)
 				/* Get a pointer to the tile at this location */
 				MAPTILE *psTile = mapTile(playerXTile + j, playerZTile + i);
 
-				averageCentreTerrainHeight += psTile->height * ELEVATION_SCALE;
+				averageCentreTerrainHeight += psTile->height;
 				numTilesAveraged++;
 			}
 		}
@@ -811,9 +832,9 @@ static void calcAverageTerrainHeight(iView *player)
 		MAPTILE *psTile = mapTile(playerXTile + visibleTiles.x / 2, playerZTile + visibleTiles.y / 2);
 
 		averageCentreTerrainHeight /= numTilesAveraged;
-		if (averageCentreTerrainHeight < psTile->height * ELEVATION_SCALE)
+		if (averageCentreTerrainHeight < psTile->height)
 		{
-			averageCentreTerrainHeight = psTile->height * ELEVATION_SCALE;
+			averageCentreTerrainHeight = psTile->height;
 		}
 	}
 	else
@@ -928,18 +949,6 @@ static void drawTiles(iView *player)
 	// draw skybox
 	renderSurroundings();
 	
-	// clear the terrain highlight
-	for (i = 0; i < visibleTiles.y; i++)
-	{
-		for (j = 0; j < visibleTiles.x; j++)
-		{
-			if (tileOnMap(playerXTile + j, playerZTile + i))
-			{
-				CLEAR_TILE_HIGHLIGHT(mapTile(playerXTile + j, playerZTile + i));
-			}
-		}
-	}
-
 	// and prepare for rendering the models
 	pie_SetRendMode(REND_OPAQUE);
 	pie_SetAlphaTest(true);
@@ -1465,6 +1474,32 @@ static void drawWallDrag(STRUCTURE_STATS *psStats, int left, int right, int up, 
 	free(blueprint);
 }
 
+static void renderBuildOrder(int32_t order, BASE_STATS *stats, int32_t x, int32_t y, int32_t x2, int32_t y2, uint16_t dir, STRUCT_STATES state)
+{
+	//draw the current build site if its a line of structures
+	if (order == DORDER_LINEBUILD && stats != NULL)
+	{
+		int left, right, up, down;
+		// a wall (or something like that)
+
+		left = MIN(map_coord(x), map_coord(x2));
+		right = MAX(map_coord(x), map_coord(x2));
+		up = MIN(map_coord(y), map_coord(y2));
+		down = MAX(map_coord(y), map_coord(y2));
+
+		drawWallDrag((STRUCTURE_STATS *)stats, left, right, up, down, dir, state);
+	}
+	if (order == DORDER_BUILD && stats != NULL)
+	{
+		if (!TileHasStructure(mapTile(map_coord(x), map_coord(y))))
+		{
+			STRUCTURE *blueprint = buildBlueprint((STRUCTURE_STATS *)stats, x, y, dir, state);
+			renderStructure(blueprint);
+			free(blueprint);
+		}
+	}
+}
+
 void displayBlueprints(void)
 {
 	STRUCTURE *blueprint;
@@ -1556,61 +1591,12 @@ void displayBlueprints(void)
 	{
 		if (psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT)
 		{
-			//draw the current build site if its a line of structures
-			if (psDroid->order == DORDER_LINEBUILD && psDroid->psTarStats)
-			{
-				int left, right, up, down;
-				// a wall (or something like that)
-
-				left = MIN(map_coord(psDroid->orderX), map_coord(psDroid->orderX2));
-				right = MAX(map_coord(psDroid->orderX), map_coord(psDroid->orderX2));
-				up = MIN(map_coord(psDroid->orderY), map_coord(psDroid->orderY2));
-				down = MAX(map_coord(psDroid->orderY), map_coord(psDroid->orderY2));
-
-				drawWallDrag((STRUCTURE_STATS *)psDroid->psTarStats, left, right, up, down, psDroid->orderDirection, SS_BLUEPRINT_PLANNED);
-			}
-			if (psDroid->order == DORDER_BUILD && psDroid->psTarStats)
-			{
-				if (!TileHasStructure(mapTile(map_coord(psDroid->orderX),map_coord(psDroid->orderY))))
-				{
-					blueprint = buildBlueprint((STRUCTURE_STATS *)psDroid->psTarStats,
-											   psDroid->orderX,
-											   psDroid->orderY,
-											   psDroid->orderDirection,
-											   SS_BLUEPRINT_PLANNED);
-					renderStructure(blueprint);
-					free(blueprint);
-				}
-			}
+			renderBuildOrder(psDroid->order, psDroid->psTarStats, psDroid->orderX, psDroid->orderY, psDroid->orderX2, psDroid->orderY2, psDroid->orderDirection, SS_BLUEPRINT_PLANNED);
 			//now look thru' the list of orders to see if more building sites
-			for (order = 0; order < psDroid->listSize; order++)
+			for (order = psDroid->listPendingBegin; order < psDroid->listPendingEnd; order++)
 			{
-				if (psDroid->asOrderList[order].order == DORDER_BUILD)
-				{
-					// a single building
-					if (!TileHasStructure(mapTile(map_coord(psDroid->asOrderList[order].x),map_coord(psDroid->asOrderList[order].y))))
-					{
-						blueprint = buildBlueprint((STRUCTURE_STATS *)psDroid->asOrderList[order].psOrderTarget,
-						                           psDroid->asOrderList[order].x,
-						                           psDroid->asOrderList[order].y,
-									   psDroid->asOrderList[order].direction,
-						                           SS_BLUEPRINT_PLANNED);
-						renderStructure(blueprint);
-						free(blueprint);
-					}
-				}
-				else if (psDroid->asOrderList[order].order == DORDER_LINEBUILD)
-				{
-					int left, right, up, down;
-					// a wall (or something like that)
-
-					left = MIN(map_coord(psDroid->asOrderList[order].x), map_coord(psDroid->asOrderList[order].x2));
-					right = MAX(map_coord(psDroid->asOrderList[order].x), map_coord(psDroid->asOrderList[order].x2));
-					up = MIN(map_coord(psDroid->asOrderList[order].y), map_coord(psDroid->asOrderList[order].y2));
-					down = MAX(map_coord(psDroid->asOrderList[order].y), map_coord(psDroid->asOrderList[order].y2));
-
-					drawWallDrag((STRUCTURE_STATS *)psDroid->asOrderList[order].psOrderTarget, left, right, up, down, psDroid->asOrderList[order].direction, SS_BLUEPRINT_PLANNED);
-				}
+				ORDER_LIST const *o = &psDroid->asOrderList[order];
+				renderBuildOrder(o->order, (BASE_STATS *)o->psOrderTarget, o->x, o->y, o->x2, o->y2, o->direction, SS_BLUEPRINT_PLANNED);
 			}
 		}
 	}
@@ -2078,13 +2064,13 @@ static PIELIGHT getBlueprintColour(STRUCT_STATES state)
 	}
 }
 
+
 /// Draw the structures
 void	renderStructure(STRUCTURE *psStructure)
 {
 	int			i, structX, structY, rx, rz, colour, rotation, frame, animFrame, pieFlag, pieFlagData;
 	PIELIGHT		buildingBrightness;
 	Vector3i		dv;
-	Vector3f		*temp = NULL;
 	BOOL			bHitByElectronic = false;
 	BOOL			defensive = false;
 	iIMDShape		*strImd = psStructure->sDisplay.imd;
@@ -2122,31 +2108,6 @@ void	renderStructure(STRUCTURE *psStructure)
 	/* Get it's x and y coordinates so we don't have to deref. struct later */
 	structX = psStructure->pos.x;
 	structY = psStructure->pos.y;
-
-	if (defensive && strImd != NULL)
-	{
-		// Play with the imd so its flattened
-		SDWORD strHeight;
-
-		// Get a copy of the points
-		memcpy(alteredPoints, strImd->points, strImd->npoints * sizeof(Vector3f));
-
-		// Get the height of the centre point for reference
-		strHeight = psStructure->pos.z;
-
-		// Now we got through the shape looking for vertices on the edge
-		for (i = 0; i < strImd->npoints; i++)
-		{
-			if (alteredPoints[i].y <= 0)
-			{
-				SDWORD pointHeight, shift;
-
-				pointHeight = map_Height(structX + alteredPoints[i].x, structY - alteredPoints[i].z);
-				shift = strHeight - pointHeight;
-				alteredPoints[i].y -= shift;
-			}
-		}
-	}
 
 	dv.x = (structX - player.p.x) - terrainMidX * TILE_UNITS;
 	dv.z = terrainMidY * TILE_UNITS - (structY - player.p.z);
@@ -2214,21 +2175,11 @@ void	renderStructure(STRUCTURE *psStructure)
 		objectShimmy((BASE_OBJECT *)psStructure);
 	}
 
-	if (defensive)
-	{
-		temp = strImd->points;
-		strImd->points = alteredPoints;
-	}
-
 	//first check if partially built - ANOTHER HACK!
 	if (psStructure->status == SS_BEING_BUILT || psStructure->status == SS_BEING_DEMOLISHED)
 	{
 		pie_Draw3DShape(strImd, 0, colour, buildingBrightness, WZCOL_BLACK, pie_HEIGHT_SCALED | pie_SHADOW,
 		                (SDWORD)(structHeightScale(psStructure) * pie_RAISE_SCALE));
-		if (defensive)
-		{
-			strImd->points = temp;
-		}
 	}
 	else
 	{
@@ -2242,11 +2193,12 @@ void	renderStructure(STRUCTURE *psStructure)
 			pieFlag = pie_STATIC_SHADOW;
 			pieFlagData = 0;
 		}
-		pie_Draw3DShape(strImd, animFrame, colour, buildingBrightness, WZCOL_BLACK, pieFlag, pieFlagData);
-		if (defensive)
+		if (defensive && !structureIsBlueprint(psStructure))
 		{
-			strImd->points = temp;
+			pie_SetShaderStretchDepth(psStructure->pos.z - psStructure->foundationDepth);
 		}
+		pie_Draw3DShape(strImd, animFrame, colour, buildingBrightness, WZCOL_BLACK, pieFlag, pieFlagData);
+		pie_SetShaderStretchDepth(0);
 
 		// It might have weapons on it
 		if (psStructure->sDisplay.imd->nconnectors > 0)
@@ -2254,7 +2206,7 @@ void	renderStructure(STRUCTURE *psStructure)
 			iIMDShape	*mountImd[STRUCT_MAXWEAPS];
 			iIMDShape	*weaponImd[STRUCT_MAXWEAPS];
 			iIMDShape	*flashImd[STRUCT_MAXWEAPS];
-			
+
 			for (i = 0; i < STRUCT_MAXWEAPS; i++)
 			{
 				weaponImd[i] = NULL;//weapon is gun ecm or sensor
@@ -2390,7 +2342,7 @@ void	renderStructure(STRUCTURE *psStructure)
 							{
 								// animated muzzle
 								frame = (graphicsTime - psStructure->asWeaps[i].lastFired)/flashImd[i]->animInterval;
-								if (frame < flashImd[i]->numFrames)
+								if (frame < flashImd[i]->numFrames && frame >= 0)
 								{
 									pie_Draw3DShape(flashImd[i], frame, colour, buildingBrightness, WZCOL_BLACK, pieFlag | pie_ADDITIVE, EFFECT_MUZZLE_ADDITIVE);
 								}
@@ -2406,7 +2358,6 @@ void	renderStructure(STRUCTURE *psStructure)
 					{
 						const int nWeaponStat = psStructure->asWeaps[i].nStat;
 
-						flashImd[i] = NULL;
 						// get an imd to draw on the connector priority is weapon, ECM, sensor
 						// check for weapon
 						flashImd[i] =  asWeaponStats[nWeaponStat].pMuzzleGraphic;
@@ -2444,7 +2395,7 @@ void	renderStructure(STRUCTURE *psStructure)
 								else
 								{
 									frame = (graphicsTime - psStructure->asWeaps[i].lastFired) / flashImd[i]->animInterval;
-									if (frame < flashImd[i]->numFrames)
+									if (frame < flashImd[i]->numFrames && frame >= 0)
 									{
 										pie_Draw3DShape(flashImd[i], 0, colour, buildingBrightness, WZCOL_BLACK, 0, 0); //muzzle flash
 									}
@@ -2888,7 +2839,7 @@ static void drawWeaponReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_s
 			break;
 		case OBJ_STRUCTURE:
 			psStruct = (STRUCTURE *)psObj;
-			damLevel = (1. - getStructureDamage(psStruct)) * 100;
+			damLevel = (1. - getStructureDamage(psStruct)/65536.f) * 100;
 			scale = MAX(psStruct->pStructureType->baseWidth, psStruct->pStructureType->baseBreadth);
 			scrY += scale * 10;
 			scrR = scale * 20;
@@ -3000,7 +2951,7 @@ static void drawStructureHealth(STRUCTURE *psStruct)
 	else
 	{
 		//show body points
-		health = (1. - getStructureDamage(psStruct)) * 100;
+		health = (1. - getStructureDamage(psStruct)/65536.f) * 100;
 	}
 	if (health > REPAIRLEV_HIGH)
 	{
@@ -3427,7 +3378,7 @@ static void	drawDroidSelections( void )
 		}
 	}
 
-
+	glColor3f( 1.f, 1.f, 1.f); // Reset colors
 	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 }
 
@@ -3804,13 +3755,12 @@ static void trackHeight( float desiredHeight )
 {
 	static float heightSpeed = 0.0f;
 	float separation = desiredHeight - player.p.y;	// How far are we from desired height?
-	float acceleration = ACCEL_CONSTANT * separation - VELOCITY_CONSTANT * heightSpeed; // Work out accelertion
 
-	/* ...and now speed */
-	heightSpeed += graphicsTimeAdjustedIncrement(acceleration);
+	// d²/dt² player.p.y = -ACCEL_CONSTANT * (player.p.y - desiredHeight) - VELOCITY_CONSTANT * d/dt player.p.y
+	solveDifferential2ndOrder(&separation, &heightSpeed, ACCEL_CONSTANT, VELOCITY_CONSTANT, realTimeAdjustedIncrement(1));
 
 	/* Adjust the height accordingly */
-	player.p.y += graphicsTimeAdjustedIncrement(heightSpeed);
+	player.p.y = desiredHeight - separation;
 }
 
 /// Select the next energy bar display mode

@@ -68,8 +68,6 @@
 #include "component.h"
 #include "radar.h"
 #include "cmddroid.h"
-#include "formation.h"
-#include "formationdef.h"
 #include "warzoneconfig.h"
 #include "multiplay.h"
 #include "frontend.h"
@@ -87,7 +85,7 @@
 #define MAX_SAVE_NAME_SIZE_V19	40
 #define MAX_SAVE_NAME_SIZE	60
 
-#define NULL_ID UDWORD_MAX
+static const UDWORD NULL_ID = UDWORD_MAX;
 #define MAX_BODY			SWORD_MAX
 #define SAVEKEY_ONMISSION	0x100
 
@@ -96,12 +94,13 @@
  * The code is reusing some pointers as normal integer values apparently. This
  * should be fixed!
  */
-#define FIXME_CAST_ASSIGN(TYPE, lval, rval) { TYPE* __tmp = (TYPE*) &lval; *__tmp = (TYPE)rval; }
+#define FIXME_CAST_ASSIGN(TYPE, lval, rval) memcpy(&lval, &rval, MIN(sizeof(lval), sizeof(rval)))
 
 /// @note This represents a size internal to savegame files, so: DO NOT CHANGE THIS
 #define MAX_GAME_STR_SIZE 20
 
 static UDWORD RemapPlayerNumber(UDWORD OldNumber);
+static void plotFeature(char *backDropSprite);
 
 typedef struct _game_save_header
 {
@@ -2402,8 +2401,9 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 			//clear all the messages?
 			apsProxDisp[player] = NULL;
 			apsSensorList[0] = NULL;
-			apsOilList[0] = NULL;
+			apsExtractorLists[player] = NULL;
 		}
+		apsOilList[0] = NULL;
 		initFactoryNumFlag();
 	}
 
@@ -2417,6 +2417,7 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 			mission.apsStructLists[player] = NULL;
 			mission.apsFeatureLists[player] = NULL;
 			mission.apsFlagPosLists[player] = NULL;
+			mission.apsExtractorLists[player] = NULL;
 		}
 		mission.apsOilList[0] = NULL;
 		mission.apsSensorList[0] = NULL;
@@ -2796,7 +2797,7 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		//load in the map file
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "mission.map");
-		if (!mapLoad(aFileName))
+		if (!mapLoad(aFileName, false))
 		{
 			debug(LOG_ERROR, "Failed to load map");
 			return false;
@@ -2944,7 +2945,7 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		//load in the map file
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "game.map");
-		if (!mapLoad(aFileName))
+		if (!mapLoad(aFileName, false))
 		{
 			debug( LOG_NEVER, "loadgame: Fail7\n" );
 			return(false);
@@ -3468,11 +3469,6 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 	/* Start the game clock */
 	gameTimeStart();
 
-	//after the clock has been reset need to check if any res_extractors are active
-	checkResExtractorsActive();
-
-//	initViewPosition();
-
 	//check if limbo_expand mission has changed to an expand mission for user save game (mid-mission)
 	if (gameType == GTYPE_SAVE_MIDMISSION && missionLimboExpand())
 	{
@@ -3778,7 +3774,7 @@ BOOL saveGame(char *aFileName, GAME_TYPE saveType)
 			//this is mainly for VTOLs
 			setSaveDroidBase(psDroid, NULL);
 			psDroid->cluster = 0;
-			orderDroid(psDroid, DORDER_STOP);
+			orderDroid(psDroid, DORDER_STOP, ModeImmediate);
 		}
 	}
 
@@ -5130,14 +5126,19 @@ BOOL loadSaveDroidInitV2(char *pFileData, UDWORD filesize,UDWORD quantity)
 		}
 		else
 		{
-			ASSERT(psTemplate != NULL, "Invalid template pointer");
 			psDroid = reallyBuildDroid(psTemplate, (pDroidInit->x & ~TILE_MASK) + TILE_UNITS/2, (pDroidInit->y  & ~TILE_MASK) + TILE_UNITS/2, pDroidInit->player, false);
 
 			if (psDroid)
 			{
+				Vector2i startpos = getPlayerStartPosition(psDroid->player);
+
 				psDroid->id = pDroidInit->id;
 				psDroid->rot.direction = DEG(pDroidInit->direction);
 				addDroid(psDroid, apsDroidLists);
+				if (psDroid->droidType == DROID_CONSTRUCT && startpos.x == 0 && startpos.y == 0)
+				{
+					scriptSetStartPos(psDroid->player, psDroid->pos.x, psDroid->pos.y);
+				}
 			}
 			else
 			{
@@ -5248,6 +5249,7 @@ static DROID* buildDroidFromSaveDroidV11(SAVE_DROID_V11* psSaveDroid)
 	UDWORD					i;
 	SDWORD					compInc;
 	UDWORD					burnTime;
+	Vector2i				startpos = getPlayerStartPosition(psSaveDroid->player);
 
 	psTemplate = &sTemplate;
 
@@ -5323,7 +5325,7 @@ static DROID* buildDroidFromSaveDroidV11(SAVE_DROID_V11* psSaveDroid)
 	burnTime = psSaveDroid->burnStart;
 	psDroid->burnStart = burnTime;
 
-	psDroid->experience = (float)psSaveDroid->numKills;
+	psDroid->experience = psSaveDroid->numKills*65536;
 	//version 11
 	for (i=0; i < psDroid->numWeaps; i++)
 	{
@@ -5331,6 +5333,10 @@ static DROID* buildDroidFromSaveDroidV11(SAVE_DROID_V11* psSaveDroid)
 		psDroid->asWeaps[i].rot.pitch = DEG(psSaveDroid->turretPitch);
 	}
 
+	if (psDroid->droidType == DROID_CONSTRUCT && startpos.x == 0 && startpos.y == 0)
+	{
+		scriptSetStartPos(psDroid->player, psDroid->pos.x, psDroid->pos.y);
+	}
 
 	psDroid->psGroup = NULL;
 	psDroid->psGrpNext = NULL;
@@ -5348,6 +5354,7 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 	UDWORD					i, id;
 	SDWORD					compInc;
 	UDWORD					burnTime;
+	Vector2i				startpos = getPlayerStartPosition(psSaveDroid->player);
 
 	psTemplate = &sTemplate;
 
@@ -5440,9 +5447,14 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 	burnTime = psSaveDroid->burnStart;
 	psDroid->burnStart = burnTime;
 
-	psDroid->experience = (float)psSaveDroid->numKills;
+	psDroid->experience = psSaveDroid->numKills*65536;
 	//version 14
 	psDroid->resistance = droidResistance(psDroid);
+
+	if (psDroid->droidType == DROID_CONSTRUCT && startpos.x == 0 && startpos.y == 0)
+	{
+		scriptSetStartPos(psDroid->player, psDroid->pos.x, psDroid->pos.y);
+	}
 
 	if (version >= VERSION_11)//version 11
 	{
@@ -5478,10 +5490,12 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 	}
 	if ((version >= VERSION_14) && (version < VERSION_18))//version 14
 	{
+		SAVE_DROID_V14 v14;
+		memcpy(&v14, psSaveDroid, MIN(sizeof(v14), sizeof(*psSaveDroid)));
 		//warning V14 - v17 only
 		//current Save Droid V18+ uses larger tarStatName
 		//subsequent structure elements are not aligned between the two
-		psSaveDroidV14 = (SAVE_DROID_V14*)psSaveDroid;
+		psSaveDroidV14 = &v14;
 		if (psSaveDroidV14->tarStatName[0] == 0)
 		{
 			psDroid->psTarStats = NULL;
@@ -5497,7 +5511,7 @@ static DROID* buildDroidFromSaveDroidV19(SAVE_DROID_V18* psSaveDroid, UDWORD ver
 			{
 				ASSERT( false,"loadUnit TargetStat not found" );
 				psDroid->psTarStats = NULL;
-                orderDroid(psDroid, DORDER_STOP);
+				orderDroid(psDroid, DORDER_STOP, ModeImmediate);
 			}
 		}
 		//warning V14 - v17 only
@@ -5582,8 +5596,8 @@ static void SaveDroidMoveControl(SAVE_DROID * const psSaveDroid, DROID const * c
 	psSaveDroid->sMove.fz           = 0;
 
 	// Little endian SWORDs
-	psSaveDroid->sMove.boundX       = PHYSFS_swapSLE16(psDroid->sMove.boundX);
-	psSaveDroid->sMove.boundY       = PHYSFS_swapSLE16(psDroid->sMove.boundY);
+	psSaveDroid->sMove.boundX       = 0;
+	psSaveDroid->sMove.boundY       = 0;
 	psSaveDroid->sMove.bumpDir      = PHYSFS_swapSLE16(UNDEG(psDroid->sMove.bumpDir));
 	psSaveDroid->sMove.iVertSpeed   = PHYSFS_swapSLE16(psDroid->sMove.iVertSpeed);
 
@@ -5603,24 +5617,10 @@ static void SaveDroidMoveControl(SAVE_DROID * const psSaveDroid, DROID const * c
 	psSaveDroid->sMove.bumpX        = PHYSFS_swapULE16(psDroid->sMove.bumpX);
 	psSaveDroid->sMove.bumpY        = PHYSFS_swapULE16(psDroid->sMove.bumpY);
 
-	if (psDroid->sMove.psFormation != NULL)
-	{
-		psSaveDroid->sMove.isInFormation = true;
-		psSaveDroid->formationDir = UNDEG(psDroid->sMove.psFormation->direction);
-		psSaveDroid->formationX   = psDroid->sMove.psFormation->x;
-		psSaveDroid->formationY   = psDroid->sMove.psFormation->y;
-	}
-	else
-	{
-		psSaveDroid->sMove.isInFormation = false;
-		psSaveDroid->formationDir = 0;
-		psSaveDroid->formationX   = 0;
-		psSaveDroid->formationY   = 0;
-	}
-
-	endian_sword(&psSaveDroid->formationDir);
-	endian_sdword(&psSaveDroid->formationX);
-	endian_sdword(&psSaveDroid->formationY);
+	psSaveDroid->sMove.isInFormation = false;
+	psSaveDroid->formationDir = 0;
+	psSaveDroid->formationX   = 0;
+	psSaveDroid->formationY   = 0;
 }
 
 static void LoadDroidMoveControl(DROID * const psDroid, SAVE_DROID const * const psSaveDroid)
@@ -5651,8 +5651,6 @@ static void LoadDroidMoveControl(DROID * const psDroid, SAVE_DROID const * const
 	psDroid->sMove.moveDir      = DEG(PHYSFS_swapSLE32(psSaveDroid->sMove.moveDir));
 
 	// Little endian SWORDs
-	psDroid->sMove.boundX       = PHYSFS_swapSLE16(psSaveDroid->sMove.boundX);
-	psDroid->sMove.boundY       = PHYSFS_swapSLE16(psSaveDroid->sMove.boundY);
 	psDroid->sMove.bumpDir      = DEG(PHYSFS_swapSLE16(psSaveDroid->sMove.bumpDir));
 	psDroid->sMove.iVertSpeed   = PHYSFS_swapSLE16(psSaveDroid->sMove.iVertSpeed);
 
@@ -5671,25 +5669,6 @@ static void LoadDroidMoveControl(DROID * const psDroid, SAVE_DROID const * const
 	psDroid->sMove.pauseTime    = PHYSFS_swapULE16(psSaveDroid->sMove.pauseTime);
 	psDroid->sMove.bumpX        = PHYSFS_swapULE16(psSaveDroid->sMove.bumpX);
 	psDroid->sMove.bumpY        = PHYSFS_swapULE16(psSaveDroid->sMove.bumpY);
-
-	if (psSaveDroid->sMove.isInFormation)
-	{
-		psDroid->sMove.psFormation = formationFind(psSaveDroid->formationX, psSaveDroid->formationY);
-		// join a formation if it exists at the destination
-		if (psDroid->sMove.psFormation)
-		{
-			formationJoin(psDroid->sMove.psFormation, psDroid);
-		}
-		else
-		{
-			// no formation so create a new one
-			if (formationNew(&psDroid->sMove.psFormation, FT_LINE, psSaveDroid->formationX, psSaveDroid->formationY,
-					(SDWORD)psSaveDroid->formationDir))
-			{
-				formationJoin(psDroid->sMove.psFormation, psDroid);
-			}
-		}
-	}
 
 	// Recreate path-finding jobs
 	if (psDroid->sMove.Status == MOVEWAITROUTE)
@@ -5710,6 +5689,7 @@ static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 	UDWORD					i, id;
 	SDWORD					compInc;
 	UDWORD					burnTime;
+	Vector2i				startpos = getPlayerStartPosition(psSaveDroid->player);
 
 	psTemplate = &sTemplate;
 
@@ -5814,7 +5794,7 @@ static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 	burnTime = psSaveDroid->burnStart;
 	psDroid->burnStart = burnTime;
 
-	psDroid->experience = (float)psSaveDroid->numKills;
+	psDroid->experience = psSaveDroid->numKills*65536;
 	//version 14
 	psDroid->resistance = droidResistance(psDroid);
 
@@ -5908,6 +5888,12 @@ static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 		psDroid->resistance = (SWORD)psSaveDroid->resistance;
 		LoadDroidMoveControl(psDroid, psSaveDroid);
 	}
+
+	if (psDroid->droidType == DROID_CONSTRUCT && startpos.x == 0 && startpos.y == 0)
+	{
+		scriptSetStartPos(psDroid->player, psDroid->pos.x, psDroid->pos.y);
+	}
+
 	return psDroid;
 }
 
@@ -6521,7 +6507,7 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 			}
 
 			//save out experience level
-			psSaveDroid->numKills	= (UDWORD) psCurr->experience;
+			psSaveDroid->numKills = psCurr->experience/65536;
 			//version 11
 			//Watermelon:endian_udword for new save format
 			for(i = 0;i < psCurr->numWeaps;i++)
@@ -6969,8 +6955,7 @@ BOOL loadSaveStructureV7(char *pFileData, UDWORD filesize, UDWORD numStructures)
             continue;
         }
 
-        psStructure = buildStructure(psStats, psSaveStructure->x, psSaveStructure->y,
-			psSaveStructure->player,true);
+        psStructure = buildStructureDir(psStats, psSaveStructure->x, psSaveStructure->y, DEG(psSaveStructure->direction), psSaveStructure->player, true);
 		ASSERT(psStructure, "Unable to create structure");
 		if (!psStructure) continue;
 
@@ -6983,7 +6968,6 @@ BOOL loadSaveStructureV7(char *pFileData, UDWORD filesize, UDWORD numStructures)
 			//copy the values across
 			psStructure->id = psSaveStructure->id;
 			//are these going to ever change from the values set up with?
-			psStructure->rot.direction = DEG(psSaveStructure->direction);
 		}
 
 		psStructure->inFire = psSaveStructure->inFire;
@@ -7246,7 +7230,7 @@ BOOL loadSaveStructureV19(char *pFileData, UDWORD filesize, UDWORD numStructures
             continue;
         }
 
-	psStructure = buildStructure(psStats, psSaveStructure->x, psSaveStructure->y, psSaveStructure->player,true);
+	psStructure = buildStructureDir(psStats, psSaveStructure->x, psSaveStructure->y, DEG(psSaveStructure->direction), psSaveStructure->player, true);
 		ASSERT(psStructure, "Unable to create structure");
 		if (!psStructure) continue;
 
@@ -7260,7 +7244,6 @@ BOOL loadSaveStructureV19(char *pFileData, UDWORD filesize, UDWORD numStructures
 			psStructure->id = psSaveStructure->id;
 			//are these going to ever change from the values set up with?
 //			psStructure->pos.z = (UWORD)psSaveStructure->pos.z;
-			psStructure->rot.direction = DEG(psSaveStructure->direction);
 		}
 
 		psStructure->inFire = psSaveStructure->inFire;
@@ -7669,7 +7652,7 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
             continue;
         }
 
-	psStructure = buildStructure(psStats, psSaveStructure->x, psSaveStructure->y, psSaveStructure->player, true);
+	psStructure = buildStructureDir(psStats, psSaveStructure->x, psSaveStructure->y, DEG(psSaveStructure->direction), psSaveStructure->player, true);
 		ASSERT(psStructure, "Unable to create structure");
 		if (!psStructure) continue;
 
@@ -7683,7 +7666,6 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 			psStructure->id = psSaveStructure->id;
 			//are these going to ever change from the values set up with?
 //			psStructure->pos.z = (UWORD)psSaveStructure->pos.z;
-			psStructure->rot.direction = DEG(psSaveStructure->direction);
 		}
 
 		psStructure->inFire = psSaveStructure->inFire;
@@ -8257,16 +8239,16 @@ BOOL loadStructSetPointers(void)
 							}
 							else
 							{
-                                if (list == 1) //ie offWorld
-                                {
-                                    //don't need to worry about the Flag
-                                    ((FACTORY *)psStruct->pFunctionality)->psCommander =
-                                        psCommander;
-                                }
-                                else
-                                {
-								    assignFactoryCommandDroid(psStruct, psCommander);
-                                }
+								if (list == 1) //ie offWorld
+								{
+									//don't need to worry about the Flag
+									((FACTORY *)psStruct->pFunctionality)->psCommander =
+										psCommander;
+								}
+								else
+								{
+									assignFactoryCommandDroid(psStruct, psCommander);
+								}
 							}
 						}
 						else
@@ -8284,6 +8266,11 @@ BOOL loadStructSetPointers(void)
 						else
 						{
 							psRepair->psObj = getBaseObjFromId(_tmpid);
+							if (!psRepair->psObj)
+							{
+								ASSERT(psRepair->psObj, "Can't find object from ID %x", _tmpid);
+								break;
+							}
 							ASSERT(psRepair->psObj->type == OBJ_DROID, "%s cannot repair %s", 
 							       objInfo((BASE_OBJECT *)psStruct), objInfo(psRepair->psObj));
 							//if the build has started set the powerAccrued =
@@ -10670,7 +10657,9 @@ BOOL loadSaveFlagV(char *pFileData, UDWORD filesize, UDWORD numflags, UDWORD ver
 				{
 					if (psStruct->pStructureType->type == factoryToFind)
 					{
-						if ((UDWORD)((FACTORY *)psStruct->pFunctionality)->psAssemblyPoint == psflag->factoryInc)
+						UDWORD factoryInc;
+						FIXME_CAST_ASSIGN(UDWORD, factoryInc, ((FACTORY *)psStruct->pFunctionality)->psAssemblyPoint);
+						if (factoryInc == psflag->factoryInc)
 						{
 							//this is the one so set it
 							((FACTORY *)psStruct->pFunctionality)->psAssemblyPoint = psflag;
@@ -11505,10 +11494,9 @@ static BOOL getNameFromComp(UDWORD compType, char *pDest, UDWORD compIndex)
  */
 BOOL plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[])
 {
-	SAVE_STRUCTURE sSave;  // close eyes now.
-	// assumes save_struct is larger than all previous ones...
-	SAVE_STRUCTURE_V2 *psSaveStructure2 = (SAVE_STRUCTURE_V2*)&sSave;
-	SAVE_STRUCTURE_V20 *psSaveStructure20= (SAVE_STRUCTURE_V20*)&sSave;
+	union { SAVE_STRUCTURE_V2 v2; SAVE_STRUCTURE_V20 v20; } sSave;  // close eyes now.
+	SAVE_STRUCTURE_V2 *psSaveStructure2   = &sSave.v2;
+	SAVE_STRUCTURE_V20 *psSaveStructure20 = &sSave.v20;
 	// ok you can open them again..
 
 	STRUCT_SAVEHEADER *psHeader;
@@ -11639,9 +11627,7 @@ BOOL plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[])
 		{	// This shows where the HQ is on the map in a special color.
 			// We could do the same for anything else (oil/whatever) also.
 			// Possible future enhancement?
-			color.byte.b = 0xff;
-			color.byte.g = 0;
-			color.byte.r = 0xff;
+			color = WZCOL_MAP_PREVIEW_HQ;
 		}
 
 		// and now we blit the color to the texture
@@ -11650,6 +11636,108 @@ BOOL plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[])
 		backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx) + 2] = color.byte.b;
 	}
 
-	// NOTE: would do fallback if FBO is not available here.
+	// And now we need to show features.
+	plotFeature(backDropSprite);
 	return true;
 }
+
+// Show location of (at this time) oil on the map preview
+static void plotFeature(char *backDropSprite)
+{
+	FEATURE_SAVEHEADER	*psHeader;
+	SAVE_FEATURE_V2	*psSaveFeature;
+	LEVEL_DATASET *psLevel;
+	UDWORD xx, yy, count, fileSize;
+	UDWORD sizeOfSaveFeature = 0;
+	char *pFileData = NULL;
+	char aFileName[256];
+	PIELIGHT color = WZCOL_BLACK ;
+
+	psLevel = levFindDataSet(game.map);
+	strcpy(aFileName, psLevel->apDataFiles[0]);
+	aFileName[strlen(aFileName) - 4] = '\0';
+	strcat(aFileName, "/feat.bjo");
+
+	// Load in the chosen file data/
+	pFileData = fileLoadBuffer;
+	if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
+	{
+		debug( LOG_ERROR, "Unable to load file %s?", aFileName);
+		return;
+	}
+
+	// Check the file type
+	psHeader = (FEATURE_SAVEHEADER *)pFileData;
+	if (psHeader->aFileType[0] != 'f' || psHeader->aFileType[1] != 'e' || psHeader->aFileType[2] != 'a' || psHeader->aFileType[3] != 't')
+	{
+		debug( LOG_ERROR, "Incorrect file type, looking at %s", aFileName);
+		return;
+	}
+
+	endian_udword(&psHeader->version);
+	endian_udword(&psHeader->quantity);
+
+	//increment to the start of the data
+	pFileData += FEATURE_HEADER_SIZE;
+
+	// Check the file version
+	if (psHeader->version <= VERSION_19)
+	{
+		if (psHeader->version < VERSION_14)
+		{
+			// most (all?) maps use revision 8
+			sizeOfSaveFeature = sizeof(SAVE_FEATURE_V2);
+			psSaveFeature = (SAVE_FEATURE_V2*) pFileData;
+		}
+		else
+		{
+			// supposedly, All versions up to 19 are compatible with SAVE_STRUCTURE_V2
+			// so this isn't needed.  Adding check just in case.
+			//sizeOfSaveFeature = sizeof(SAVE_FEATURE_V14);
+			//psSaveFeatureV14 = (SAVE_FEATURE_V14*) pFileData;
+			debug(LOG_ERROR, "Please make a new ticket and upload %s to wz2100.net.  This map (>14) is not supported at this time.", psLevel->apDataFiles[0]);
+			return;
+		}
+	}
+	else
+	{
+		// AFAIK, at this time, nothing uses this size.
+		//sizeOfSaveFeature = sizeof(SAVE_FEATURE);
+		//psSaveFeature = (SAVE_FEATURE*) pFileData;
+		debug(LOG_ERROR, "Please make a new ticket and upload %s to wz2100.net.  This map (>19) is not supported at this time.", psLevel->apDataFiles[0]);
+		return;
+	}
+
+	if ((sizeOfSaveFeature * psHeader->quantity + FEATURE_HEADER_SIZE) > fileSize)
+	{
+		debug( LOG_ERROR, "Unexpected end of file ?" );
+		return;
+	}
+
+	// Load in the structure data
+	for (count = 0; count < psHeader->quantity; count++, pFileData += sizeOfSaveFeature)
+	{
+		// All versions up to 19 are compatible with V2.
+		memcpy(psSaveFeature, pFileData, sizeof(SAVE_STRUCTURE_V2));
+
+		// we only care about oil
+		if (strncmp(psSaveFeature->name, "OilResource", 11) == 0)
+		{
+			endian_udword(&psSaveFeature->x);
+			endian_udword(&psSaveFeature->y);
+			xx = map_coord(psSaveFeature->x);
+			yy = map_coord(psSaveFeature->y);
+		}
+		else
+		{
+			continue;
+		}
+			
+		color = WZCOL_MAP_PREVIEW_OIL;
+		// and now we blit the color to the texture
+		backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx)] = color.byte.r;
+		backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx) + 1] = color.byte.g;
+		backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx) + 2] = color.byte.b;
+	}
+}
+

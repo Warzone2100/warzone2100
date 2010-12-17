@@ -66,7 +66,6 @@
 #include "droid.h"
 #include "data.h"
 #include "multiplay.h"
-#include "environ.h"
 #include "loop.h"
 #include "visibility.h"
 #include "mapgrid.h"
@@ -252,6 +251,7 @@ void initMission(void)
 		mission.apsDroidLists[inc] = NULL;
 		mission.apsFeatureLists[inc] = NULL;
 		mission.apsFlagPosLists[inc] = NULL;
+		mission.apsExtractorLists[inc] = NULL;
 		apsLimboDroids[inc] = NULL;
 	}
 	mission.apsSensorList[0] = NULL;
@@ -303,8 +303,7 @@ BOOL missionShutDown(void)
 {
 	UDWORD		inc;
 
-	debug(LOG_SAVE, "called, mission is %s",
-	      missionIsOffworld() ? "off-world" : "main map");
+	debug(LOG_SAVE, "called, mission is %s", missionIsOffworld() ? "off-world" : "main map");
 	if (missionIsOffworld())
 	{
 		//clear out the audio
@@ -326,6 +325,8 @@ BOOL missionShutDown(void)
 			mission.apsFeatureLists[inc] = NULL;
 			apsFlagPosLists[inc] = mission.apsFlagPosLists[inc];
 			mission.apsFlagPosLists[inc] = NULL;
+			apsExtractorLists[inc] = mission.apsExtractorLists[inc];
+			mission.apsExtractorLists[inc] = NULL;
 		}
 		apsSensorList[0] = mission.apsSensorList[0];
 		apsOilList[0] = mission.apsOilList[0];
@@ -699,9 +700,9 @@ void missionFlyTransportersIn( SDWORD iPlayer, BOOL bTrackTransporter )
                 //little hack to ensure all Transporters are fully repaired by time enter world
                 psTransporter->body = psTransporter->originalBody;
 
-			    /* set fly-in order */
-			    orderDroidLoc( psTransporter, DORDER_TRANSPORTIN,
-			    				iLandX, iLandY );
+				/* set fly-in order */
+				orderDroidLoc(psTransporter, DORDER_TRANSPORTIN,
+				    iLandX, iLandY, ModeImmediate);
 
 				audio_PlayObjDynamicTrack( psTransporter, ID_SOUND_BLIMP_FLIGHT,
 									moveCheckDroidMovingAndVisible );
@@ -790,12 +791,12 @@ static void saveMissionData(void)
 		{
 			if (psStructBeingBuilt->status == SS_BUILT)
 			{
-				orderDroid(psDroid, DORDER_STOP);
+				orderDroid(psDroid, DORDER_STOP, ModeImmediate);
 			}
 		}
 		else
 		{
-			orderDroid(psDroid, DORDER_STOP);
+			orderDroid(psDroid, DORDER_STOP, ModeImmediate);
 		}
 	}
 
@@ -805,6 +806,7 @@ static void saveMissionData(void)
 		mission.apsDroidLists[inc] = apsDroidLists[inc];
 		mission.apsFeatureLists[inc] = apsFeatureLists[inc];
 		mission.apsFlagPosLists[inc] = apsFlagPosLists[inc];
+		mission.apsExtractorLists[inc] = apsExtractorLists[inc];
 	}
 	mission.apsSensorList[0] = apsSensorList[0];
 	mission.apsOilList[0] = apsOilList[0];
@@ -850,8 +852,11 @@ void restoreMissionData(void)
 	freeAllStructs();
 	freeAllFeatures();
 	gwShutDown();
-	mapShutdown();
-
+	if (game.type != CAMPAIGN)
+	{
+		ASSERT(false, "game type isn't campaign, but we are in a campaign game!");
+		game.type = CAMPAIGN;	// fix the issue, since it is obviously a bug
+	}
 	//restore the game pointers
 	for (inc = 0; inc < MAX_PLAYERS; inc++)
 	{
@@ -870,6 +875,9 @@ void restoreMissionData(void)
 
 		apsFlagPosLists[inc] = mission.apsFlagPosLists[inc];
 		mission.apsFlagPosLists[inc] = NULL;
+
+		apsExtractorLists[inc] = mission.apsExtractorLists[inc];
+		mission.apsExtractorLists[inc] = NULL;
 	}
 	apsSensorList[0] = mission.apsSensorList[0];
 	apsOilList[0] = mission.apsOilList[0];
@@ -912,9 +920,6 @@ void restoreMissionData(void)
 
 	resetRadarRedraw();
 
-	// reset the environ map back to the homebase settings
-	environReset();
-
 	//intSetMapPos(mission.playerX, mission.playerY);
 }
 
@@ -949,11 +954,11 @@ void saveMissionLimboData(void)
 	{
 		if (StructIsFactory(psStruct))
 		{
-			holdProduction(psStruct);
+			holdProduction(psStruct, ModeImmediate);
 		}
 		else if (psStruct->pStructureType->type == REF_RESEARCH)
 		{
-			holdResearch(psStruct);
+			holdResearch(psStruct, ModeImmediate);
 		}
 	}
 }
@@ -1032,8 +1037,8 @@ void restoreMissionLimboData(void)
         {
     		addDroid(psDroid, apsDroidLists);
 	    	psDroid->cluster = 0;
-    		//reset droid orders
-	    	orderDroid(psDroid, DORDER_STOP);
+			//reset droid orders
+			orderDroid(psDroid, DORDER_STOP, ModeImmediate);
             //the location of the droid should be valid!
         }
     }
@@ -1309,7 +1314,7 @@ static void clearCampaignUnits(void)
 
 	for (psDroid = apsDroidLists[selectedPlayer]; psDroid != NULL; psDroid = psDroid->psNext)
 	{
-		orderDroid(psDroid, DORDER_STOP);
+		orderDroid(psDroid, DORDER_STOP, ModeImmediate);
 		setDroidBase(psDroid, NULL);
 		visRemoveVisibilityOffWorld((BASE_OBJECT *)psDroid);
 		CHECK_DROID(psDroid);
@@ -1329,8 +1334,9 @@ static void processMission(void)
 	{
 		psNext = psDroid->psNext;
 		//reset order - do this to all the droids that are returning from offWorld
-		orderDroid(psDroid, DORDER_STOP);
-
+		orderDroid(psDroid, DORDER_STOP, ModeImmediate);
+		// clean up visibility 
+		visRemoveVisibility((BASE_OBJECT *)psDroid);
 		//remove out of stored list and add to current Droid list
 		if (droidRemove(psDroid, apsDroidLists))
 		{
@@ -1400,7 +1406,7 @@ void processMissionLimbo(void)
 					// This is mainly for VTOLs
 					setDroidBase(psDroid, NULL);
 					psDroid->cluster = 0;
-					orderDroid(psDroid, DORDER_STOP);
+					orderDroid(psDroid, DORDER_STOP, ModeImmediate);
 					numDroidsAddedToLimboList++;
 				}
 			}
@@ -1410,6 +1416,8 @@ void processMissionLimbo(void)
 
 /*switch the pointers for the map and droid lists so that droid placement
  and orientation can occur on the map they will appear on*/
+// NOTE: This is one huge hack for campaign games!
+// Pay special attention on what is getting swapped!
 void swapMissionPointers(void)
 {
 	void		*pVoid;
@@ -1459,13 +1467,16 @@ void swapMissionPointers(void)
 		pVoid = (void*)apsFlagPosLists[inc];
 		apsFlagPosLists[inc] = mission.apsFlagPosLists[inc];
 		mission.apsFlagPosLists[inc] = (FLAG_POSITION *)pVoid;
+		pVoid = (void*)apsExtractorLists[inc];
+		apsExtractorLists[inc] = mission.apsExtractorLists[inc];
+		mission.apsExtractorLists[inc] = (STRUCTURE *)pVoid;
 	}
 	pVoid = (void*)apsSensorList[0];
 	apsSensorList[0] = mission.apsSensorList[0];
 	mission.apsSensorList[0] = (BASE_OBJECT *)pVoid;
 	pVoid = (void*)apsOilList[0];
 	apsOilList[0] = mission.apsOilList[0];
-	mission.apsOilList[0] = (BASE_OBJECT *)pVoid;
+	mission.apsOilList[0] = (FEATURE *)pVoid;
 }
 
 void endMission(void)
@@ -1685,7 +1696,7 @@ static void missionResetDroids(void)
 			}
 			else
 			{
-				orderDroid(psDroid, DORDER_STOP);
+				orderDroid(psDroid, DORDER_STOP, ModeImmediate);
 			}
 
 			//KILL OFF TRANSPORTER
@@ -1877,7 +1888,7 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, BOOL goingHome)
 			}
 
 			//reset droid orders
-			orderDroid(psDroid, DORDER_STOP);
+			orderDroid(psDroid, DORDER_STOP, ModeImmediate);
 			psDroid->selected = false;
 			if (!bMultiPlayer)
 			{
@@ -1923,7 +1934,7 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, BOOL goingHome)
 
 			/* Send transporter offworld */
 			missionGetTransporterExit( psTransporter->player, &iX, &iY );
-			orderDroidLoc(psTransporter, DORDER_TRANSPORTRETURN, iX, iY );
+			orderDroidLoc(psTransporter, DORDER_TRANSPORTRETURN, iX, iY, ModeImmediate);
 
 			// Set the launch time so the transporter doesn't just disappear for CAMSTART/CAMCHANGE
 			transporterSetLaunchTime(gameTime);

@@ -59,6 +59,7 @@ static inline FEATURE *getTileFeature(UDWORD x, UDWORD y)
 	return NULL;
 }
 
+/// WARNING: Returns NULL if tile not visible to selectedPlayer.
 static inline BASE_OBJECT *getTileOccupier(UDWORD x, UDWORD y)
 {
 	MAPTILE *psTile = mapTile(x,y);

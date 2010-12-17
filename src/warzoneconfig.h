@@ -75,7 +75,8 @@ extern bool war_GetColouredCursor(void);
 extern void war_SetColouredCursor(bool enabled);
 extern bool war_GetMusicEnabled(void);
 extern void war_SetMusicEnabled(bool enabled);
-
+extern int8_t war_GetSPcolor(void);
+extern void war_SetSPcolor(int color);
 /**
  * Enable or disable sound initialization
  * Has no effect after systemInitialize()!

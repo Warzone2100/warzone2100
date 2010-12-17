@@ -113,6 +113,7 @@ struct PathBlockingMap
 
 	PathBlockingType type;
 	std::vector<bool> map;
+	std::vector<bool> dangerMap;	// using threatBits
 };
 
 // Data structures used for pathfinding, can contain cached results.
@@ -122,7 +123,11 @@ struct PathfindContext
 	bool isBlocked(int x, int y) const
 	{
 		// Not sure whether the out-of-bounds check is needed, can only happen if pathfinding is started on a blocking tile (or off the map).
-		return x < 0 || y < 0 || x >= mapWidth || y >= mapWidth || blockingMap->map[x + y*mapWidth];
+		return x < 0 || y < 0 || x >= mapWidth || y >= mapHeight || blockingMap->map[x + y*mapWidth];
+	}
+	bool isDangerous(int x, int y) const
+	{
+		return !blockingMap->dangerMap.empty() && blockingMap->dangerMap[x + y*mapWidth];
 	}
 	bool matches(PathBlockingMap const *blockingMap_, PathCoord tileS_) const
 	{
@@ -225,8 +230,9 @@ static inline void fpathNewNode(PathfindContext &context, PathCoord dest, PathCo
 
 	// Create the node.
 	PathNode node;
+	unsigned costFactor = context.isDangerous(pos.x, pos.y) ? 5 : 1;
 	node.p = pos;
-	node.dist = prevDist + fpathEstimate(prevPos, pos);
+	node.dist = prevDist + fpathEstimate(prevPos, pos)*costFactor;
 	node.est = node.dist + fpathEstimate(pos, dest);
 
 	PathExploredTile &expl = context.map[pos.x + pos.y*mapWidth];
@@ -538,11 +544,29 @@ void fpathSetBlockingMap(PATHJOB *psJob)
 		i->type = type;
 		std::vector<bool> &map = i->map;
 		map.resize(mapWidth*mapHeight);
+		uint32_t checksumMap = 0, checksumDangerMap = 0, factor = 0;
 		for (int y = 0; y < mapHeight; ++y)
 			for (int x = 0; x < mapWidth; ++x)
 		{
 			map[x + y*mapWidth] = fpathBaseBlockingTile(x, y, type.propulsion, type.owner, type.moveType);
+			checksumMap ^= map[x + y*mapWidth]*(factor = 3*factor + 1);
 		}
+		if (!isHumanPlayer(type.owner) && type.moveType == FMT_MOVE)
+		{
+			std::vector<bool> &dangerMap = i->dangerMap;
+			dangerMap.resize(mapWidth*mapHeight);
+			for (int y = 0; y < mapHeight; ++y)
+				for (int x = 0; x < mapWidth; ++x)
+			{
+				dangerMap[x + y*mapWidth] = auxTile(x, y, type.owner) & AUXBITS_THREAT;
+				checksumDangerMap ^= map[x + y*mapWidth]*(factor = 3*factor + 1);
+			}
+		}
+		syncDebug("blockingMap(%d,%d,%d,%d) = %08X %08X", gameTime, psJob->propulsion, psJob->owner, psJob->moveType, checksumMap, checksumDangerMap);
+	}
+	else
+	{
+		syncDebug("blockingMap(%d,%d,%d,%d) = cached", gameTime, psJob->propulsion, psJob->owner, psJob->moveType);
 	}
 
 	// i now points to the correct map. Make psJob->blockingMap point to it.

@@ -528,7 +528,7 @@ SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot
 	// Check if we have a CB target to begin with
 	if (!proj_Direct(asWeaponStats + psDroid->asWeaps[weapon_slot].nStat))
 	{
-		WEAPON_STATS	*psWStats = psWStats = psDroid->asWeaps[weapon_slot].nStat + asWeaponStats;
+		WEAPON_STATS *psWStats = psDroid->asWeaps[weapon_slot].nStat + asWeaponStats;
 
 		bestTarget = aiSearchSensorTargets((BASE_OBJECT *)psDroid, weapon_slot, psWStats, &tmpOrigin);
 		bestMod = targetAttackWeight(bestTarget, (BASE_OBJECT *)psDroid, weapon_slot);
@@ -627,7 +627,7 @@ SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot
 						psTarget = targetInQuestion;
 					}
 				}
-				else if (psStruct->asWeaps[weapon_slot].nStat > 0)
+				else if (psStruct->asWeaps[0].nStat > 0)
 				{
 					// structure with weapons - go for this
 					psTarget = targetInQuestion;
@@ -1057,7 +1057,7 @@ static BOOL updateAttackTarget(BASE_OBJECT * psAttacker, SDWORD weapon_slot)
 				orderState(psDroid, DORDER_ATTACKTARGET)) &&
 				weapon_slot == 0)	//Watermelon:only primary slot(0) updates affect order
 			{
-				orderDroidObj((DROID *)psAttacker, DORDER_ATTACKTARGET, psBetterTarget);
+				orderDroidObj((DROID *)psAttacker, DORDER_ATTACKTARGET, psBetterTarget, ModeImmediate);
 			}
 			else	//can't override current order
 			{
@@ -1207,14 +1207,14 @@ void aiUpdateDroid(DROID *psDroid)
 		{
 			if (aiChooseSensorTarget((BASE_OBJECT *)psDroid, &psTarget))
 			{
-				orderDroidObj(psDroid, DORDER_OBSERVE, psTarget);
+				orderDroidObj(psDroid, DORDER_OBSERVE, psTarget, ModeImmediate);
 			}
 		}
 		else
 		{
 			if (aiChooseTarget((BASE_OBJECT *)psDroid, &psTarget, 0, true, NULL))
 			{
-				orderDroidObj(psDroid, DORDER_ATTACKTARGET, psTarget);
+				orderDroidObj(psDroid, DORDER_ATTACKTARGET, psTarget, ModeImmediate);
 			}
 		}
 	}

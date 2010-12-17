@@ -32,7 +32,7 @@
 #include "lib/script/script.h"
 #include "lib/sound/audio.h"
 
-#include "scriptvals.h"
+#include "src/scriptvals.h"
 #include "lib/framework/lexer_input.h"
 #include "scriptvals_parser.tab.h"
 #include "src/scripttabs.h"
@@ -42,7 +42,7 @@
 #include "src/message.h"
 #include "src/levels.h"
 #include "src/research.h"
-#include "text.h"
+#include "src/text.h"
 
 // The current script code
 static SCRIPT_CODE		*psCurrScript;

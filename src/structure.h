@@ -117,13 +117,12 @@ extern BOOL loadStructureStrengthModifiers(const char *pStrengthModData, UDWORD 
 
 extern BOOL	structureStatsShutDown(void);
 
-extern float structureDamage(STRUCTURE *psStructure, UDWORD damage,
-                            UDWORD weaponClass, UDWORD weaponSubClass, HIT_SIDE impactSide);
+int32_t structureDamage(STRUCTURE *psStructure, UDWORD damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, HIT_SIDE impactSide);
 extern void structureBuild(STRUCTURE *psStructure, DROID *psDroid, int buildPoints);
 extern void structureDemolish(STRUCTURE *psStructure, DROID *psDroid, int buildPoints);
 extern BOOL structureRepair(STRUCTURE *psStruct, DROID *psDroid, int buildPoints);
 /* Set the type of droid for a factory to build */
-extern BOOL structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl);
+extern BOOL structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, QUEUE_MODE mode);
 
 //temp test function for creating structures at the start of the game
 extern void createTestStructures(void);
@@ -132,7 +131,7 @@ extern void createTestStructures(void);
 STRUCTURE *buildStructure(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, UDWORD player, BOOL FromSave);
 STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, uint16_t direction, UDWORD player, BOOL FromSave);
 /// Create a blueprint structure, with just enough information to render it
-extern STRUCTURE *buildBlueprint(STRUCTURE_STATS *psStats, float x, float y, uint16_t direction, STRUCT_STATES state);
+STRUCTURE *buildBlueprint(STRUCTURE_STATS *psStats, int32_t x, int32_t y, uint16_t direction, STRUCT_STATES state);
 /* The main update routine for all Structures */
 void structureUpdate(STRUCTURE *psBuilding, bool mission);
 
@@ -232,7 +231,7 @@ extern void setLasSatExists(BOOL state, UDWORD player);
 extern BOOL getLasSatExists(UDWORD player);
 
 /* added int weapon_slot to fix the alway slot 0 hack */
-extern BOOL calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3f *muzzle, int weapon_slot);
+bool calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3i *muzzle, int weapon_slot);
 
 /*this is called whenever a structure has finished building*/
 extern void buildingComplete(STRUCTURE *psBuilding);
@@ -279,7 +278,7 @@ extern BOOL validStructResistance(STRUCTURE *psStruct);
 stat type*/
 extern BOOL checkSpecificStructExists(UDWORD structInc, UDWORD player);
 
-extern float getStructureDamage(const STRUCTURE* psStructure);
+extern int32_t getStructureDamage(const STRUCTURE* psStructure);
 
 /*Access functions for the upgradeable stats of a structure*/
 extern UDWORD	structureBody(const STRUCTURE *psStruct);
@@ -326,16 +325,16 @@ extern void factoryLoopAdjust(STRUCTURE *psStruct, BOOL add);
 
 /*cancels the production run for the factory and returns any power that was
 accrued but not used*/
-extern void cancelProduction(STRUCTURE *psBuilding);
+extern void cancelProduction(STRUCTURE *psBuilding, QUEUE_MODE mode);
 
 /*set a factory's production run to hold*/
-extern void holdProduction(STRUCTURE *psBuilding);
+extern void holdProduction(STRUCTURE *psBuilding, QUEUE_MODE mode);
 
 /*release a factory's production run from hold*/
-extern void releaseProduction(STRUCTURE *psBuilding);
+extern void releaseProduction(STRUCTURE *psBuilding, QUEUE_MODE mode);
 
 /// Does the next item in the production list.
-void doNextProduction(STRUCTURE *psStructure, DROID_TEMPLATE *current);
+void doNextProduction(STRUCTURE *psStructure, DROID_TEMPLATE *current, QUEUE_MODE mode);
 
 /*This function is called after a game is loaded so that any resource extractors
 that are active are initialised for when to start*/

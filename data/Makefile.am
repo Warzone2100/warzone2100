@@ -1,4 +1,4 @@
-SUBDIRS = mods music
+SUBDIRS = mods/multiplay music
 
 stamp:
 	touch stamp
@@ -28,6 +28,7 @@ BASELIST = \
 	structs \
 	tagdefinitions \
 	texpages \
+	tileset \
 	wrf
 
 PATCHLIST = \

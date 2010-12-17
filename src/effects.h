@@ -128,6 +128,7 @@ typedef enum
 typedef struct _effect_def EFFECT;
 struct _effect_def
 {
+	uint8_t           player;      //	when the effect in question needs a player's color
 	uint8_t           control;     // Controls the bits above - essential,flips etc
 	EFFECT_GROUP      group;       // what group is it - explosion, building effect etc....
 	EFFECT_TYPE       type;        // what type is it within the group?
@@ -168,6 +169,7 @@ bool	readFXData(const char* fileName);
 bool	writeFXData(const char* fileName);
 void	effectSetSize(UDWORD size);
 void	effectSetLandLightSpec(LAND_LIGHT_SPEC spec);
+void	SetEffectForPlayer(uint8_t player);
 
 #ifdef __cplusplus
 }

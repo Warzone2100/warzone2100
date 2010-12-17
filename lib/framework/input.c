@@ -50,6 +50,8 @@ typedef enum _key_state
 typedef struct _input_state {
 	KEY_STATE state; /// Last key/mouse state
 	UDWORD lastdown; /// last key/mouse button down timestamp
+	Vector2i pressPos;    ///< Location of last mouse press event.
+	Vector2i releasePos;  ///< Location of last mouse release event.
 } INPUT_STATE;
 
 /// constant for the interval between 2 singleclicks for doubleclick event in ms
@@ -317,9 +319,14 @@ void inputHandleKeyEvent(SDL_KeyboardEvent * keyEvent)
  */
 void inputHandleMouseButtonEvent(SDL_MouseButtonEvent * buttonEvent)
 {
+	mouseXPos = buttonEvent->x;
+	mouseYPos = buttonEvent->y;
+
 	switch (buttonEvent->type)
 	{
 		case SDL_MOUSEBUTTONDOWN:
+			aMouseState[buttonEvent->button].pressPos.x = mouseXPos;
+			aMouseState[buttonEvent->button].pressPos.y = mouseYPos;
 			if ( aMouseState[buttonEvent->button].state == KEY_UP
 				|| aMouseState[buttonEvent->button].state == KEY_RELEASED
 				|| aMouseState[buttonEvent->button].state == KEY_PRESSRELEASE )
@@ -355,6 +362,8 @@ void inputHandleMouseButtonEvent(SDL_MouseButtonEvent * buttonEvent)
 			}
 			break;
 		case SDL_MOUSEBUTTONUP:
+			aMouseState[buttonEvent->button].releasePos.x = mouseXPos;
+			aMouseState[buttonEvent->button].releasePos.y = mouseYPos;
 			if (aMouseState[buttonEvent->button].state == KEY_PRESSED)
 			{
 				aMouseState[buttonEvent->button].state = KEY_PRESSRELEASE;
@@ -487,6 +496,16 @@ Uint16 mouseX(void)
 Uint16 mouseY(void)
 {
 	return mouseYPos;
+}
+
+Vector2i mousePressPos(MOUSE_KEY_CODE code)
+{
+	return aMouseState[code].pressPos;
+}
+
+Vector2i mouseReleasePos(MOUSE_KEY_CODE code)
+{
+	return aMouseState[code].releasePos;
 }
 
 /* This returns true if the mouse key is currently depressed */

@@ -39,6 +39,7 @@ typedef int bool;
 #define iV_IMD_TEX	0x00000200
 #define iV_IMD_XNOCUL	0x00002000
 #define iV_IMD_TEXANIM	0x00004000
+#define iV_IMD_TCMASK	0x00010000
 #define MAX_POLYGON_SIZE 6 // the game can't handle more
 
 static bool verbose = false;
@@ -81,6 +82,7 @@ static void dump_to_pie(FILE *ctl, FILE *fp, const char *input)
 {
 	int num, x, y, z, levels, level;
 	char s[200];
+	bool tcmask = false;
 
 	num = fscanf(fp, "PIE %d\n", &x);
 	if (num != 1)
@@ -96,13 +98,21 @@ static void dump_to_pie(FILE *ctl, FILE *fp, const char *input)
 	}	
 	fprintf(ctl, "PIE 2\n");
 
-	num = fscanf(fp, "TYPE %d\n", &x); // ignore
+	num = fscanf(fp, "TYPE %x\n", &x); // ignore
 	if (num != 1)
 	{
 		fprintf(stderr, "Bad TYPE directive in %s\n", input);
 		exit(1);
 	}
-	fprintf(ctl, "TYPE 200\n");
+	if (x & iV_IMD_TCMASK)
+	{
+		tcmask = true;
+		fprintf(ctl, "TYPE 10200\n");
+	}
+	else
+	{
+		fprintf(ctl, "TYPE 200\n");
+	}
 
 	num = fscanf(fp, "TEXTURE %d %s %d %d\n", &z, s, &x, &y);
 	if (num != 4)
@@ -282,7 +292,7 @@ static void dump_to_pie(FILE *ctl, FILE *fp, const char *input)
 		
 		if (verbose && (points - x))
 		{
-			printf("Duplicated vertexes: %d ", points - x);
+			printf("-vertices(%d) ", points - x);
 		}
 		
 		// Rewrite face table
@@ -298,7 +308,7 @@ static void dump_to_pie(FILE *ctl, FILE *fp, const char *input)
 
 		if (verbose && (facesPIE3 - faces))
 		{
-			printf("Corrected 2faces: %d ", facesPIE3 - faces);
+			printf("=faces(%d) ", facesPIE3 - faces);
 		}
 		
 		fprintf(ctl, "\nPOLYGONS %d", facesPIE3);
@@ -308,10 +318,14 @@ static void dump_to_pie(FILE *ctl, FILE *fp, const char *input)
 			char fill[128];
 
 			fill[0] = '\0';
-			if (faceList[j].frames > 0)
+			if (faceList[j].frames > 0 && (!tcmask || faceList[j].frames != 8))	// assuming 8 means team colours, strip them
 			{
 				flags |= iV_IMD_TEXANIM;
 				sprintf(fill, " %d 1 %d %d", faceList[j].frames, faceList[j].width, faceList[j].height);
+			}
+			else if (verbose && tcmask && faceList[j].frames == 8)
+			{
+				printf("-tcol(%d) ", j);
 			}
 
 			if (faceList[j].cull)
@@ -405,8 +419,9 @@ int main(int argc, char **argv)
 
 	for (i = parse_args(argc, argv); i < argc; i++)
 	{
-		printf("Processing %s\n", argv[i]);
+		if (verbose) printf("Processing %s ", argv[i]);
 		convert(argv[i]);
+		if (verbose) printf("\n");
 	}
 
 	return 0;

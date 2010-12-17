@@ -99,7 +99,9 @@
 	Alex McLean, Pumpkin Studios, EIDOS Interactive.
 */
 
-#define	MAP_ZOOM_RATE	(1250)
+//#define DEBUG_SCROLLTABS 	//enable to see tab scroll button info for buttons
+
+#define	MAP_ZOOM_RATE	(1000)
 #define MAP_PITCH_RATE	(SPIN_SCALING/SECS_PER_SPIN)
 
 extern char	ScreenDumpPath[];
@@ -224,6 +226,16 @@ void	kf_TraceObject( void )
 //===================================================
 void kf_ToggleSensorDisplay( void )
 {
+
+#ifndef DEBUG
+	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
+	if (runningMultiplayer())
+	{
+		noMPCheatMsg();
+		return;
+	}
+#endif
+
 	rangeOnScreen = !rangeOnScreen;
 
 	if (rangeOnScreen)
@@ -664,7 +676,7 @@ void	kf_TileInfo(void)
 {
 	MAPTILE	*psTile = mapTile(mouseTileX, mouseTileY);
 
-	debug(LOG_ERROR, "Tile position=(%d, %d) Terrain=%hhu Texture=%u Height=%.0g Illumination=%hhu",
+	debug(LOG_ERROR, "Tile position=(%d, %d) Terrain=%hhu Texture=%u Height=%d Illumination=%hhu",
 	      mouseTileX, mouseTileY, terrainType(psTile), TileNumber_tile(psTile->texture), psTile->height,
 	      psTile->illumination);
 	addConsoleMessage("Tile info dumped into log", DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
@@ -837,7 +849,7 @@ void	kf_SystemClose( void )
 /* Zooms out from display */
 void	kf_ZoomOut( void )
 {
-	float zoomInterval = graphicsTimeAdjustedIncrement(MAP_ZOOM_RATE);
+	float zoomInterval = realTimeAdjustedIncrement(MAP_ZOOM_RATE);
 
 	distance += zoomInterval;
 	if(distance > MAXDISTANCE)
@@ -876,7 +888,7 @@ void	kf_RadarZoomOut( void )
 /* Zooms in the map */
 void	kf_ZoomIn( void )
 {
-	float zoomInterval = graphicsTimeAdjustedIncrement(MAP_ZOOM_RATE);
+	float zoomInterval = realTimeAdjustedIncrement(MAP_ZOOM_RATE);
 
 	distance -= zoomInterval;
 	if (distance < MINDISTANCE)
@@ -935,7 +947,7 @@ void	kf_ExpandScreen( void )
 /* Spins the world round left */
 void	kf_RotateLeft( void )
 {
-	float rotAmount = graphicsTimeAdjustedIncrement(MAP_SPIN_RATE);
+	float rotAmount = realTimeAdjustedIncrement(MAP_SPIN_RATE);
 
 	player.r.y += rotAmount;
 }
@@ -944,7 +956,7 @@ void	kf_RotateLeft( void )
 /* Spins the world right */
 void	kf_RotateRight( void )
 {
-	float rotAmount = graphicsTimeAdjustedIncrement(MAP_SPIN_RATE);
+	float rotAmount = realTimeAdjustedIncrement(MAP_SPIN_RATE);
 
 	player.r.y -= rotAmount;
 	if (player.r.y < 0)
@@ -957,7 +969,7 @@ void	kf_RotateRight( void )
 /* Pitches camera back */
 void	kf_PitchBack( void )
 {
-	float pitchAmount = graphicsTimeAdjustedIncrement(MAP_PITCH_RATE);
+	float pitchAmount = realTimeAdjustedIncrement(MAP_PITCH_RATE);
 
 	player.r.x += pitchAmount;
 
@@ -972,7 +984,7 @@ void	kf_PitchBack( void )
 /* Pitches camera foward */
 void	kf_PitchForward( void )
 {
-	float pitchAmount = graphicsTimeAdjustedIncrement(MAP_PITCH_RATE);
+	float pitchAmount = realTimeAdjustedIncrement(MAP_PITCH_RATE);
 
 	player.r.x -= pitchAmount;
 	if (player.r.x < DEG(360 + MIN_PLAYER_X_ANGLE))
@@ -1565,19 +1577,25 @@ void	kf_ToggleProximitys( void )
 // --------------------------------------------------------------------------
 void	kf_JumpToResourceExtractor( void )
 {
-STRUCTURE	*psStruct;
-SDWORD	xJump,yJump;
+	int xJump, yJump;
 
-	psStruct = getRExtractor(psOldRE);
-	if(psStruct)
+	if (psOldRE && psOldRE->psNextFunc)
 	{
-		xJump = (psStruct->pos.x - ((visibleTiles.x/2)*TILE_UNITS));
-		yJump = (psStruct->pos.y - ((visibleTiles.y/2)*TILE_UNITS));
+		psOldRE = psOldRE->psNextFunc;
+	}
+	else
+	{
+		psOldRE = apsExtractorLists[selectedPlayer];
+	}
+
+	if (psOldRE)
+	{
+		xJump = (psOldRE->pos.x - ((visibleTiles.x / 2) * TILE_UNITS));
+		yJump = (psOldRE->pos.y - ((visibleTiles.y / 2) * TILE_UNITS));
 		player.p.x = xJump;
 		player.p.z = yJump;
 		player.r.y = 0; // face north
-		setViewPos(map_coord(psStruct->pos.x), map_coord(psStruct->pos.y), true);
-		psOldRE = psStruct;
+		setViewPos(map_coord(psOldRE->pos.x), map_coord(psOldRE->pos.y), true);
 	}
 	else
 	{
@@ -2328,7 +2346,7 @@ void	kf_SetDroidMoveHold( void )
 	{
 		if (psDroid->selected)
 		{
-			orderDroid(psDroid, DORDER_TEMP_HOLD);
+			orderDroid(psDroid, DORDER_TEMP_HOLD, ModeQueue);
 		}
 	}
 }
@@ -2592,7 +2610,7 @@ void kf_SpeedUp( void )
 	unsigned int    i;
 
 	// Bail out if we're running a _true_ multiplayer game or are playing a tutorial
-	if (runningMultiplayer() || bInTutorial)
+	if ((runningMultiplayer() && !getDebugMappingStatus()) || bInTutorial)
 	{
 		if (!bInTutorial)
 		{
@@ -2635,7 +2653,7 @@ void kf_SlowDown( void )
 	int		i;
 
 	// Bail out if we're running a _true_ multiplayer game or are playing a tutorial
-	if (runningMultiplayer() || bInTutorial)
+	if ((runningMultiplayer() && !getDebugMappingStatus()) || bInTutorial)
 	{
 		if (!bInTutorial)
 		{
@@ -2890,3 +2908,101 @@ void kf_ToggleLogical()
 {
 	console("Logical updates can no longer be toggled.");	// TODO remove me
 }
+// rotuine to decrement the tab-scroll 'buttons'
+void kf_BuildPrevPage()
+{
+	W_TABFORM *psTForm;
+	int temp;
+	int numTabs;
+	int maxTabs;
+	int tabPos;
+
+	ASSERT_OR_RETURN( , psWScreen != NULL, " Invalid screen pointer!");
+	psTForm = (W_TABFORM *)widgGetFromID(psWScreen, IDSTAT_TABFORM);	//get our form
+	if (psTForm == NULL)
+	{
+		return;
+	}
+
+	if (psTForm->TabMultiplier < 1)
+	{
+		psTForm->TabMultiplier = 1;				// 1-based
+	}
+
+	numTabs = numForms(psTForm->numStats,psTForm->numButtons);
+	maxTabs = ((numTabs /TAB_SEVEN) + 1);		// (Total tabs needed / 7(max tabs that fit))+1
+	temp = psTForm->majorT - 1;
+	if (temp < 0)
+	{
+		temp = 0 ;
+		audio_PlayTrack(ID_SOUND_BUILD_FAIL);
+		return;
+	}
+
+	psTForm->majorT = temp;
+	tabPos = ((psTForm->majorT) % TAB_SEVEN);	 // The tabs position on the page
+	if ((tabPos == (TAB_SEVEN - 1)) && (psTForm->TabMultiplier > 1))
+	{
+		psTForm->TabMultiplier -= 1;
+	}
+	audio_PlayTrack(ID_SOUND_BUTTON_CLICK_5);
+
+#ifdef  DEBUG_SCROLLTABS
+	console("Tabs: %d - MaxTabs: %d - MajorT: %d - numMajor: %d - TabMultiplier: %d",numTabs, maxTabs, psTForm->majorT, psTForm->numMajor, psTForm->TabMultiplier);
+#endif
+}
+
+// rotuine to advance the tab-scroll 'buttons'
+void kf_BuildNextPage()
+{
+	W_TABFORM	*psTForm;
+	int numTabs;
+	int maxTabs;
+	int tabPos;
+
+	ASSERT_OR_RETURN( , psWScreen != NULL, " Invalid screen pointer!");
+
+	psTForm = (W_TABFORM *)widgGetFromID(psWScreen, IDSTAT_TABFORM);
+	if (psTForm == NULL)
+	{
+		return;
+	}
+
+	if (psTForm->TabMultiplier < 1)
+	{
+		psTForm->TabMultiplier = 1;				// 1-based
+		audio_PlayTrack(ID_SOUND_BUILD_FAIL);
+	}
+	numTabs = numForms(psTForm->numStats,psTForm->numButtons);
+	maxTabs = ((numTabs /TAB_SEVEN));			// (Total tabs needed / 7(max tabs that fit))+1
+
+	if (psTForm->majorT < numTabs - 1)
+	{
+		// Increase tab if we are not on the last one
+		psTForm->majorT += 1;					 // set tab # to next "page"
+	}
+	else
+	{
+		// went over max
+		audio_PlayTrack(ID_SOUND_BUILD_FAIL);
+		return;
+	}
+	tabPos = ((psTForm->majorT) % TAB_SEVEN);	 // The tabs position on the page
+	// 7 mod 7 = 0, since we are going forward we can assume it's the next tab
+	if ((tabPos == 0) && (psTForm->TabMultiplier <= maxTabs))
+	{
+		psTForm->TabMultiplier += 1;
+	}
+
+	if (psTForm->majorT >= psTForm->numMajor)
+	{
+		psTForm->majorT = psTForm->numMajor - 1;
+	}
+	audio_PlayTrack( ID_SOUND_BUTTON_CLICK_5 );
+
+#ifdef  DEBUG_SCROLLTABS
+	console("Tabs: %d - MaxTabs: %d - MajorT: %d - numMajor: %d - TabMultiplier: %d",numTabs, maxTabs, psTForm->majorT, psTForm->numMajor, psTForm->TabMultiplier);
+#endif
+}
+
+

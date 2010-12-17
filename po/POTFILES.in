@@ -256,9 +256,7 @@ src/droid.c
 src/e3demo.c
 src/edit3d.c
 src/effects.c
-src/environ.c
 src/feature.c
-src/formation.c
 src/fpath.c
 src/frontend.c
 src/function.c

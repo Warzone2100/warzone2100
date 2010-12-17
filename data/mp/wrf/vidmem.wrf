@@ -1,7 +1,6 @@
 /***********************************************************/
-/*  You may have to modify this file for it to be correct! */ 
-/*******************       wrf\VidMem.wrf      *******************/
-
+/*******************    wrf\VidMem.wrf   *******************/
+/***********************************************************/
 
 directory	"images"
 file		IMGPAGE	"intfac0.png"
@@ -10,11 +9,12 @@ file		IMGPAGE	"intfac2.png"
 file		IMGPAGE	"intfac3.png"
 file		IMGPAGE	"intfac4.png"
 file		IMGPAGE	"intfac5.png"
-file		IMG	"intfac.img"
+// must load resources before IMG file
+file		IMG		"intfac.img"
+
 directory	"texpages"
 file		TERTILES	"tertilesc1hw"
-file		TEXPAGE "page-59-more-weapons.png"
-file		TEXPAGE	"page-6-features-arizona.png"
+file		TEXPAGE	"page-6.png"
 file		TEXPAGE	"page-7-barbarians-arizona.png"
 file		TEXPAGE	"page-8-player-buildings-bases.png"
 file		TEXPAGE	"page-9-player-buildings-bases.png"
@@ -26,19 +26,19 @@ file		TEXPAGE	"page-14-droid-hubs.png"
 file		TEXPAGE	"page-15-droid-hubs.png"
 file		TEXPAGE	"page-16-droid-drives.png"
 file		TEXPAGE	"page-17-droid-weapons.png"
-file		TEXPAGE	"page-18-fx.png"
-file		TEXPAGE	"page-19-fx.png"
-file		TEXPAGE	"page-20-fx.png"
-file		TEXPAGE	"page-21-fx.png"
-file		TEXPAGE	"page-22-fx.png"
-file		TEXPAGE	"page-23-fx.png"
-file		TEXPAGE	"page-24-fx.png"
 file		TEXPAGE	"page-25-sky-arizona.png"
-file		TEXPAGE	"page-28-naval.png"
-file		TEXPAGE	"page-44-mud.png"
-file		TEXPAGE	"page-45-yellow-sand.png"
-file		TEXPAGE	"page-46-cliff.png"
-file		TEXPAGE	"page-47-tiles.png"
-file		TEXPAGE	"page-42-rock.png"
+file		TEXPAGE	"page-29-features-arizona.png"
+file		TEXPAGE	"page-30-features-rockies.png"
+file		TEXPAGE	"page-31-features-urban.png"
+file		TEXPAGE	"page-82-yellow-sand-arizona.png"
+file		TEXPAGE	"page-83-red-earth-arizona.png"
+file		TEXPAGE	"page-84-tiles-arizona.png"
+file		TEXPAGE	"page-85-cliff-arizona.png"
+file		TEXPAGE	"page-86-bottom-arizona.png"
+file		TEXPAGE	"page-87-mud-arizona.png"
+file		TEXPAGE	"page-88-grass-arizona.png"
 file		TEXPAGE	"page-80-water-1.png"
 file		TEXPAGE	"page-81-water-2.png"
+/* These are MP specific */
+file		TEXPAGE	"page-28-naval.png"
+file		TEXPAGE	"page-59-more-weapons.png"

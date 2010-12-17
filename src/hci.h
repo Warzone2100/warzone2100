@@ -302,6 +302,9 @@ extern BOOL ClosingOrder;
 /* Initialise the in game interface */
 extern BOOL intInitialise(void);
 
+// Check of coordinate is in the build menu
+extern BOOL CoordInBuild(int x, int y);
+
 /* Shut down the in game interface */
 extern void interfaceShutDown(void);
 
@@ -348,6 +351,7 @@ extern void intBuildStarted(DROID *psDroid);
 extern void intResearchFinished(STRUCTURE *psBuilding);
 /* Tell the interface a factory has completed building ALL droids */
 extern void intManufactureFinished(STRUCTURE *psBuilding);
+extern void intUpdateManufacture(STRUCTURE *psBuilding);
 
 /* Sync the interface to an object */
 extern void intObjectSelected(BASE_OBJECT *psObj);

@@ -1124,7 +1124,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay, STRUCTURE
 	//the message gets sent to console
 	char						consoleMsg[MAX_RESEARCH_MSG_SIZE];
 
-	ASSERT( researchIndex < numResearch, "researchResult: invalid research index" );
+	ASSERT_OR_RETURN( , researchIndex < numResearch, "Invalid research index %u", researchIndex);
 
 	sendResearchStatus(NULL, researchIndex, player, false);
 	// Confused whether we should wait for our message before doing anything, and confused what this function does...
@@ -1867,14 +1867,14 @@ void ResearchRelease(void)
 }
 
 /*puts research facility on hold*/
-void holdResearch(STRUCTURE *psBuilding)
+void holdResearch(STRUCTURE *psBuilding, QUEUE_MODE mode)
 {
 	RESEARCH_FACILITY		*psResFac;
 
 	ASSERT( psBuilding->pStructureType->type == REF_RESEARCH,
 		"holdResearch: structure not a research facility" );
 
-	if (bMultiMessages)
+	if (mode == ModeQueue)
 	{
 		sendStructureInfo(psBuilding, STRUCTUREINFO_HOLDRESEARCH, NULL);
 		return;
@@ -1896,14 +1896,14 @@ void holdResearch(STRUCTURE *psBuilding)
 }
 
 /*release a research facility from hold*/
-void releaseResearch(STRUCTURE *psBuilding)
+void releaseResearch(STRUCTURE *psBuilding, QUEUE_MODE mode)
 {
 	RESEARCH_FACILITY		*psResFac;
 
 	ASSERT( psBuilding->pStructureType->type == REF_RESEARCH,
 		"releaseResearch: structure not a research facility" );
 
-	if (bMultiMessages)
+	if (mode == ModeQueue)
 	{
 		sendStructureInfo(psBuilding, STRUCTUREINFO_RELEASERESEARCH, NULL);
 		return;
@@ -1942,7 +1942,7 @@ void CancelAllResearch(UDWORD pl)
 			   )
 			{
 				debug( LOG_NEVER, "canceling research for %p\n", psCurr );
-				cancelResearch(psCurr);
+				cancelResearch(psCurr, ModeQueue);
 			}
 		}
 
@@ -1951,7 +1951,7 @@ void CancelAllResearch(UDWORD pl)
 
 /* sets the status of the topic to cancelled and stores the current research
    points accquired */
-void cancelResearch(STRUCTURE *psBuilding)
+void cancelResearch(STRUCTURE *psBuilding, QUEUE_MODE mode)
 {
 	UDWORD              topicInc;
 	PLAYER_RESEARCH	    *pPlayerRes;
@@ -1976,7 +1976,7 @@ void cancelResearch(STRUCTURE *psBuilding)
 
 	if (psBuilding->pStructureType->type == REF_RESEARCH)
 	{
-		if (bMultiMessages)
+		if (mode == ModeQueue)
 		{
 			// Tell others that we want to stop researching something.
 			sendResearchStatus(NULL, topicInc, psBuilding->player, false);

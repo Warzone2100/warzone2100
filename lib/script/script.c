@@ -140,7 +140,10 @@ static char *scrSaveSingleState(lua_State *L)
 	lua_getglobal(L, "_filename");
 	scriptfile = lua_tostring(L, -1);
 	lua_pop(L,1);
-	asprintf(&save, "--[[ name of corresponding script:\n%s\n]]--\n%s", scriptfile, result);
+	if (asprintf(&save, "--[[ name of corresponding script:\n%s\n]]--\n%s", scriptfile, result) == -1)
+	{
+		save = NULL;
+	}
 	return save;
 }
 
@@ -158,7 +161,10 @@ void scrLoadStates(const char *directory)
 	//}
 	for(i=0;i<100;i++)
 	{
-		asprintf(&filename, "%s/state%i.lua", directory, i);
+		if (asprintf(&filename, "%s/state%i.lua", directory, i) == -1)
+		{
+			filename = NULL;
+		}
 		fileHandle = PHYSFS_openRead(filename);
 		if (!fileHandle)
 		{

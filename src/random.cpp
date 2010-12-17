@@ -92,3 +92,19 @@ int32_t gameRand(uint32_t limit)
 	syncDebug("Used a random number.");
 	return gamePseudorandomNumberGenerator.u32()%limit;
 }
+
+
+void *newMersenneTwister(uint32_t seed)
+{
+	return static_cast<void *>(new MersenneTwister(seed));
+}
+
+void deleteMersenneTwister(void *this_)
+{
+	delete static_cast<MersenneTwister *>(this_);
+}
+
+uint32_t mersenneTwisterU32(void *this_)
+{
+	return static_cast<MersenneTwister *>(this_)->u32();
+}

@@ -128,8 +128,8 @@
 //They all take up the same amount of space now - AB 30/10/98
 //defines how much space each sized droid takes up on the Transporter
 #define	LIGHT_DROID					1
-#define MEDIUM_DROID				1//2
-#define HEAVY_DROID					1//3
+#define MEDIUM_DROID				2
+#define HEAVY_DROID					3
 
 //max that can be available from home
 
@@ -271,9 +271,6 @@ static BOOL _intAddTransporter(DROID *psSelected, BOOL offWorld)
 		return false;
 	}
 
-
-
-
 	/* Add the close button */
 	memset(&sButInit, 0, sizeof(W_BUTINIT));
 	sButInit.formID = IDTRANS_FORM;
@@ -322,6 +319,7 @@ BOOL intAddTransporterContents(void)
 	W_FORMINIT		sFormInit;
 	W_BUTINIT		sButInit;
 	W_FORMINIT		sButFInit;
+	W_LABINIT		sLabInit;
 	BOOL			Animate = true;
 	BOOL  AlreadyUp = false;
 
@@ -380,7 +378,25 @@ BOOL intAddTransporterContents(void)
 	{
 		return false;
 	}
-
+	if (bMultiPlayer)
+	{
+		//add the capacity label
+		memset(&sLabInit,0,sizeof(W_LABINIT));
+		sLabInit.formID = IDTRANS_CONTENTFORM;
+		sLabInit.id = IDTRANS_CAPACITY;
+		sLabInit.style = WLAB_PLAIN;
+		sLabInit.x = (SWORD)sButInit.x -40;
+		sLabInit.y = 0;
+		sLabInit.width = 16;
+		sLabInit.height = 16;
+		sLabInit.pText = "00/10";
+		sLabInit.FontID = font_regular;
+		sLabInit.pCallback = intUpdateTransCapacity;
+		if (!widgAddLabel(psWScreen, &sLabInit))
+		{
+			return false;
+		}
+	}
 	//add the Launch button if on a mission
 	if (onMission)
 	{
@@ -1056,71 +1072,6 @@ bool transporterIsEmpty(const DROID* psTransporter)
 	     || psTransporter->psGroup->psList == psTransporter);
 }
 
-#define MAX_TRANSPORTERS	8
-
-
-// Order all selected droids to embark all avaialable transporters.
-//
-BOOL OrderDroidsToEmbark(void)
-{
-	UWORD NumTransporters = 0;
-	UWORD CurrentTransporter;
-	DROID *psTransporters[MAX_TRANSPORTERS];
-	DROID *psDroid;
-	BOOL Ok = false;
-
-	// First build a list of transporters.
-	for(psDroid = apsDroidLists[selectedPlayer]; (psDroid != NULL); psDroid = psDroid->psNext) {
-		if( psDroid->droidType == DROID_TRANSPORTER ) {
-			psTransporters[NumTransporters] = psDroid;
-			NumTransporters++;
-			ASSERT( NumTransporters <= MAX_TRANSPORTERS,"MAX_TRANSPORTERS Exceeded" );
-		}
-	}
-
-	// Now order any selected droids to embark them.
-	if(NumTransporters) {
-		CurrentTransporter = 0;
-		for(psDroid = apsDroidLists[selectedPlayer]; (psDroid != NULL); psDroid =
-			psDroid->psNext)
-		{
-			if( psDroid->selected  && (psDroid->droidType != DROID_TRANSPORTER) )
-			{
-				orderDroidObj(psDroid, DORDER_EMBARK, (BASE_OBJECT *)psTransporters[CurrentTransporter]);
-
-				// Step through the available transporters.
-				CurrentTransporter++;
-				if(CurrentTransporter >= NumTransporters) {
-					CurrentTransporter = 0;
-				}
-
-				Ok = true;
-			}
-		}
-	}
-
-	return false;
-}
-
-
-// Order a single droid to embark any available transporters.
-//
-BOOL OrderDroidToEmbark(DROID *psDroid)
-{
-	DROID *psTransporter;
-
-	psTransporter = FindATransporter(psDroid->player);
-
-	if(psTransporter != NULL)
-	{
-		orderDroidObj(psDroid, DORDER_EMBARK, (BASE_OBJECT *)psTransporter);
-		return true;
-	}
-
-	return false;
-}
-
-
 static void intSetTransCapacityLabel(char *Label)
 {
 	UDWORD capacity = TRANSPORTER_CAPACITY;
@@ -1363,7 +1314,7 @@ void transporterRemoveDroid(UDWORD id)
 		// Not sure how to fix this...
 		debug(LOG_ERROR, "TODO: Can't unload single droids, sending order to unload all at once, because this code is so convoluted.");
 		// All at once is better than nothing...
-		orderDroidLoc(psCurrTransporter, DORDER_DISEMBARK, psCurrTransporter->pos.x, psCurrTransporter->pos.y);
+		orderDroidLoc(psCurrTransporter, DORDER_DISEMBARK, psCurrTransporter->pos.x, psCurrTransporter->pos.y, ModeQueue);
 		return;
 	}
 
@@ -1440,7 +1391,7 @@ void transporterRemoveDroid(UDWORD id)
 		//initialise the movement data
 		initDroidMovement(psDroid);
 		//reset droid orders
-		orderDroid(psDroid, DORDER_STOP);
+		orderDroid(psDroid, DORDER_STOP, ModeImmediate);
 		psDroid->cluster = 0;
 		// check if it is a commander
 		if (psDroid->droidType == DROID_COMMAND)
@@ -1507,6 +1458,8 @@ void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd)
 	/* check for space */
 	if (!checkTransporterSpace(psTransporter, psDroidToAdd))
 	{
+		audio_PlayTrack( ID_SOUND_BUILD_FAIL );
+		addConsoleMessage(_("There is not enough room in the Transport!"), DEFAULT_JUSTIFY, selectedPlayer);
 		return;
 	}
 	if (onMission)
@@ -1591,24 +1544,30 @@ UDWORD transporterSpaceRequired(DROID *psDroid)
 {
 	UDWORD	size;
 
-	switch ((asBodyStats + psDroid->asBits[COMP_BODY].nStat)->size)
+	if (!bMultiPlayer)
 	{
-	case SIZE_LIGHT:
-		size = LIGHT_DROID;
-		break;
-	case SIZE_MEDIUM:
-		size = MEDIUM_DROID;
-		break;
-	case SIZE_HEAVY:
-	case SIZE_SUPER_HEAVY:
-		size = HEAVY_DROID;
-		break;
-	default:
-		ASSERT( false, "transporterSpaceRequired: Unknown Droid size" );
-		size = 0;
-		break;
+		size = LIGHT_DROID;		// all droids are the same weight for SP games.
 	}
-
+	else
+	{
+		switch ((asBodyStats + psDroid->asBits[COMP_BODY].nStat)->size)
+		{
+		case SIZE_LIGHT:
+			size = LIGHT_DROID;
+			break;
+		case SIZE_MEDIUM:
+			size = MEDIUM_DROID;
+			break;
+		case SIZE_HEAVY:
+		case SIZE_SUPER_HEAVY:
+			size = HEAVY_DROID;
+			break;
+		default:
+			ASSERT( false, "transporterSpaceRequired: Unknown Droid size" );
+			size = 0;
+			break;
+		}
+	}
 	return size;
 }
 
@@ -1652,7 +1611,7 @@ BOOL launchTransporter(DROID *psTransporter)
 	{
 		//tell the transporter to move to the new offworld location
 		missionGetTransporterExit( psTransporter->player, &iX, &iY );
-		orderDroidLoc(psTransporter, DORDER_TRANSPORTOUT, iX, iY );
+		orderDroidLoc(psTransporter, DORDER_TRANSPORTOUT, iX, iY, ModeQueue);
 		//g_iLaunchTime = gameTime;
         transporterSetLaunchTime(gameTime);
 	}
@@ -1673,7 +1632,7 @@ BOOL launchTransporter(DROID *psTransporter)
 		//psTransporter->pos.y = getLandingY(psTransporter->player);
 		//unloadTransporter(psTransporter, psTransporter->pos.x, psTransporter->pos.y, false);
 
-		orderDroid( psTransporter, DORDER_TRANSPORTIN );
+		orderDroid(psTransporter, DORDER_TRANSPORTIN, ModeImmediate);
 		/* set action transporter waits for timer */
 		actionDroid( psTransporter, DACTION_TRANSPORTWAITTOFLYIN );
 

@@ -68,7 +68,8 @@ typedef struct {
 	UDWORD				startTime;
 	UDWORD				numStructureLimits;					// number of limits
 	MULTISTRUCTLIMITS	*pStructureLimits;					// limits chunk.
-	uint8_t                         flags;  ///< Bitmask, shows which structures are disabled.
+	uint8_t				flags;  ///< Bitmask, shows which structures are disabled.
+	uint8_t				SPcolor;	//
 	UDWORD		skScores[MAX_PLAYERS][2];			// score+kills for local skirmish players.
 	char		phrases[5][255];					// 5 favourite text messages.
 } MULTIPLAYERINGAME;
@@ -172,7 +173,6 @@ extern BOOL multiplayerWinSequence(BOOL firstCall);
 // definitions of functions in multiplay's other c files.
 
 // Buildings . multistruct
-extern BOOL sendBuildStarted            (STRUCTURE *psStruct, DROID *psDroid);
 extern BOOL SendDestroyStructure(STRUCTURE *s);
 extern BOOL	SendBuildFinished	(STRUCTURE *psStruct);
 extern BOOL sendLasSat			(UBYTE player, STRUCTURE *psStruct, BASE_OBJECT *psObj);
@@ -183,11 +183,8 @@ extern BOOL SendDroid                   (const DROID_TEMPLATE* pTemplate, uint32
 extern BOOL SendDestroyDroid	(const DROID* psDroid);
 extern BOOL SendDemolishFinished(STRUCTURE *psS,DROID *psD);
 void sendQueuedDroidInfo(void);  ///< Actually sends the droid orders which were queued by SendDroidInfo.
-extern BOOL SendDroidInfo               (const DROID* psDroid, DROID_ORDER order, uint32_t x, uint32_t y, const BASE_OBJECT* psObj, const BASE_STATS *psStats, uint32_t x2, uint32_t y2, uint16_t direction);
-extern BOOL SendGroupOrderSelected(uint8_t player, uint32_t x, uint32_t y, const BASE_OBJECT* psObj, BOOL altOrder);
+bool sendDroidInfo(DROID *psDroid, DROID_ORDER order, uint32_t x, uint32_t y, const BASE_OBJECT *psObj, const BASE_STATS *psStats, uint32_t x2, uint32_t y2, uint16_t direction, bool add);
 extern BOOL SendCmdGroup		(DROID_GROUP *psGroup, UWORD x, UWORD y, BASE_OBJECT *psObj);
-
-extern BOOL SendGroupOrderGroup(const DROID_GROUP* psGroup, DROID_ORDER order, uint32_t x, uint32_t y, const BASE_OBJECT* psObj);
 
 
 extern BOOL sendDroidSecondary	(const DROID* psDroid, SECONDARY_ORDER sec, SECONDARY_STATE state);

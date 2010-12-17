@@ -66,9 +66,12 @@ extern SDWORD getFeatureStatFromName(const char *pName);
 wreckage to clear*/
 extern FEATURE	* checkForWreckage(DROID *psDroid);
 
-extern float featureDamage(FEATURE *psFeature, UDWORD damage, UDWORD weaponClass, UDWORD weaponSubClass, HIT_SIDE impactSide);
+int32_t featureDamage(FEATURE *psFeature, UDWORD damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, HIT_SIDE impactSide);
 
 extern void     featureInitVars(void);
+
+#define syncDebugFeature(psFeature, ch) _syncDebugFeature(__FUNCTION__, psFeature, ch)
+void _syncDebugFeature(const char *function, FEATURE *psFeature, char ch);
 
 #ifdef __cplusplus
 }
