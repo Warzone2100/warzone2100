@@ -397,14 +397,6 @@ static BOOL				powerBarUp = false;
 static BOOL				StatsUp = false;
 static BASE_OBJECT		*psStatsScreenOwner = NULL;
 
-#ifdef INCLUDE_PRODSLIDER
-// Size of a production run for manufacturing.
-static UBYTE			ProductionRun = 1;
-#endif
-
-/* pointer to hold the imd to use for a new template in the design screen */
-//iIMDShape	*pNewDesignIMD = NULL;
-
 /* The previous object for each object bar */
 static BASE_OBJECT		*apsPreviousObj[IOBJ_MAX];
 
@@ -463,9 +455,6 @@ static SWORD CurrentDroidType = 0;
 /* Add the power bars */
 static BOOL intAddPower(void);
 
-/* Remove the power bars */
-//static void intRemovePower(void);
-
 /* Set the shadow for the PowerBar */
 static void intRunPower(void);
 
@@ -504,10 +493,8 @@ BOOL intInitialise(void)
 	widgSetTipColour(WZCOL_TOOLTIP_TEXT);
 
 	if(GetGameMode() == GS_NORMAL) {
-//		WidgSetAudio(WidgetAudioCallback,ID_SOUND_HILIGHTBUTTON,ID_SOUND_SELECT);
 		WidgSetAudio(WidgetAudioCallback,-1,ID_SOUND_SELECT);
 	} else {
-//		WidgSetAudio(WidgetAudioCallback,FE_AUDIO_HILIGHTBUTTON,FE_AUDIO_SELECTBUT);
 		WidgSetAudio(WidgetAudioCallback,-1,ID_SOUND_SELECT);
 	}
 
@@ -2177,14 +2164,6 @@ static void intRunPower(void)
 			}
 		}
 
-#ifdef INCLUDE_PRODSLIDER
-		// Multiply the power quantity by the size of the production run.
-		if(objMode == IOBJ_MANUFACTURE) {
-			quantity *= widgGetSliderPos(psWScreen,IDSTAT_SLIDER) + 1;
-		}
-#endif
-
-
 		//update the power bars
 		intSetShadowPower(quantity);
 	}
@@ -2198,70 +2177,6 @@ static void intRunPower(void)
 // Process stats screen.
 static void intRunStats(void)
 {
-#ifdef INCLUDE_PRODSLIDER
-	UDWORD				statID;
-	UDWORD				Power = 0;
-	UBYTE				Quantity;
-	BASE_OBJECT			*psOwner;
-	STRUCTURE			*psStruct;
-	FACTORY				*psFactory;
-
-	if(intMode != INT_EDITSTAT && objMode == IOBJ_MANUFACTURE)
-	{
-		psOwner = (BASE_OBJECT *)widgGetUserData(psWScreen, IDSTAT_SLIDERCOUNT);
-		psStruct = (STRUCTURE *)psOwner;
-		psFactory = (FACTORY *)psStruct->pFunctionality;
-		if (psFactory->psSubject)
-		{
-			Quantity = psFactory->quantity;
-			//adjust the infinity button if necessary
-			if (Quantity == NON_STOP_PRODUCTION)
-			{
-				widgSetButtonState(psWScreen, IDSTAT_INFINITE_BUTTON,
-					WBUT_CLICKLOCK);
-			}
-		}
-		else
-		{
-			//check if the infinite production button has been pressed
-			if (widgGetButtonState(psWScreen, IDSTAT_INFINITE_BUTTON) &
-				WBUT_CLICKLOCK)
-			{
-				Quantity = STAT_SLDSTOPS + 1;
-			}
-			else
-			{
-				Quantity = (UBYTE)(widgGetSliderPos(psWScreen,IDSTAT_SLIDER) + 1);
-				//Quantity = widgGetSliderPos(psWScreen,IDSTAT_SLIDER);
-			}
-		}
-		//check for available power if not non stop production
-		if (Quantity < STAT_SLDSTOPS)
-		{
-			/* Find out which button was hilited */
-			statID = widgGetMouseOver(psWScreen);
-			if (statID >= IDSTAT_START && statID <= IDSTAT_END)
-			{
-				//get the template build points
-				Power = calcTemplatePower((DROID_TEMPLATE *)apsTemplateList[statID - IDSTAT_START]);
-				if (Power * Quantity > getPower(selectedPlayer))
-				{
-					Quantity = (UBYTE)(getPower(selectedPlayer) / Power);
-				}
-			}
-		}
-		psFactory->quantity = Quantity;
-
-		// fire the tutorial trigger if neccessary
-		if (bInTutorial && Quantity != ProductionRun && Quantity > 1)
-		{
-			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_MANURUN);
-		}
-
-		ProductionRun = Quantity;
-	}
-#endif
-
 	BASE_OBJECT			*psOwner;
 	STRUCTURE			*psStruct;
 	FACTORY				*psFactory;
@@ -2862,25 +2777,6 @@ static void intProcessStats(UDWORD id)
 	{
 		// process the proximity blip buttons.
 	}
-#ifdef INCLUDE_PRODSLIDER
-	else if(id == IDSTAT_INFINITE_BUTTON)
-	{
-		// Process the infinte button.
-		//if the button is locked - unlock and vice versa
-		if (widgGetButtonState(psWScreen, IDSTAT_INFINITE_BUTTON) &
-			WBUT_CLICKLOCK)
-		{
-			//unlock
-			widgSetButtonState(psWScreen, IDSTAT_INFINITE_BUTTON, 0);
-		}
-		else
-		{
-			//lock
-			widgSetButtonState(psWScreen, IDSTAT_INFINITE_BUTTON,
-				WBUT_CLICKLOCK);
-		}
-	}
-#endif
 	else if(id == IDSTAT_LOOP_BUTTON)
 	{
 		// Process the loop button.
@@ -3714,17 +3610,6 @@ BOOL intAddPower(void)
 	powerBarUp = true;
 	return true;
 }
-
-
-/* Remove the power bar widgets */
-/*void intRemovePower(void)
-{
-	if (powerBarUp)
-	{
-		widgDelete(psWScreen, IDPOW_POWERBAR_T);
-		powerBarUp = false;
-	}
-}*/
 
 /* Set the shadow power for the selected player */
 // Now just sets the global variable ManuPower which is used in the power bar display callback. PD
@@ -4856,14 +4741,10 @@ void intRemoveStats(void)
 {
 	W_TABFORM *Form;
 
-#ifdef INCLUDE_PRODSLIDER
-	widgDelete(psWScreen, IDSTAT_SLIDERCOUNT);
-	widgDelete(psWScreen, IDSTAT_SLIDER);
-#endif
 	widgDelete(psWScreen, IDSTAT_CLOSE);
 	widgDelete(psWScreen, IDSTAT_TABFORM);
 
-// Start the window close animation.
+	// Start the window close animation.
 	Form = (W_TABFORM*)widgGetFromID(psWScreen,IDSTAT_FORM);
 	if(Form) {
 		Form->display = intClosePlainForm;
@@ -4882,10 +4763,6 @@ void intRemoveStats(void)
 /* Remove the stats widgets from the widget screen */
 void intRemoveStatsNoAnim(void)
 {
-#ifdef INCLUDE_PRODSLIDER
-	widgDelete(psWScreen, IDSTAT_SLIDERCOUNT);
-	widgDelete(psWScreen, IDSTAT_SLIDER);
-#endif
 	widgDelete(psWScreen, IDSTAT_CLOSE);
 	widgDelete(psWScreen, IDSTAT_TABFORM);
 	widgDelete(psWScreen, IDSTAT_FORM);
@@ -5181,10 +5058,6 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	BOOL				Animate = true;
 	W_LABINIT			sLabInit;
 	FACTORY				*psFactory;
-#ifdef INCLUDE_PRODSLIDER
-	W_SLDINIT			sSldInit;
-#endif
-	//char				sCaption[6];
 
 	// should this ever be called with psOwner == NULL?
 
@@ -5228,12 +5101,12 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	sFormInit.y = (SWORD)STAT_Y;
 	sFormInit.width = STAT_WIDTH;
 	sFormInit.height = 	STAT_HEIGHT;
-// If the window was closed then do open animation.
+	// If the window was closed then do open animation.
 	if(Animate) {
 		sFormInit.pDisplay = intOpenPlainForm;
 		sFormInit.disableChildren = true;
 	} else {
-// otherwise just recreate it.
+		// otherwise just recreate it.
 		sFormInit.pDisplay = intDisplayPlainForm;
 	}
 	if (!widgAddForm(psWScreen, &sFormInit))
@@ -5241,83 +5114,6 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		debug(LOG_ERROR, "intAddStats: Failed to add form");
 		return false;
 	}
-
-#ifdef INCLUDE_PRODSLIDER
-	// Add the quantity slider ( if it's a factory ).
-	if(objMode == IOBJ_MANUFACTURE) {
-
-		//add the non stop production button
-		memset(&sButInit, 0, sizeof(W_BUTINIT));
-		sButInit.formID = IDSTAT_FORM;
-		sButInit.id = IDSTAT_INFINITE_BUTTON;
-		sButInit.style = WBUT_PLAIN;
-		sButInit.x = STAT_SLDX + STAT_SLDWIDTH + 2;
-		sButInit.y = STAT_SLDY;
-		sButInit.width = iV_GetImageWidth(IntImages,IMAGE_INFINITE_DOWN);
-		sButInit.height = iV_GetImageHeight(IntImages,IMAGE_INFINITE_DOWN);
-		sButInit.pTip = _("Infinite Production");
-		sButInit.FontID = font_regular;
-		sButInit.pDisplay = intDisplayButtonPressed;
-		sButInit.UserData = PACKDWORD_TRI(IMAGE_INFINITE_DOWN, IMAGE_INFINITE_HI, IMAGE_INFINITE_UP);
-		if (!widgAddButton(psWScreen, &sButInit))
-		{
-			return false;
-		}
-
-		//add the number display
-		memset(&sLabInit,0,sizeof(W_LABINIT));
-		sLabInit.formID = IDSTAT_FORM;	//0;
-		sLabInit.id = IDSTAT_SLIDERCOUNT;
-		sLabInit.style = WLAB_PLAIN;
-		sLabInit.x = (SWORD)(STAT_SLDX + STAT_SLDWIDTH + sButInit.width + 2);
-		sLabInit.y = STAT_SLDY + 3;
-		sLabInit.width = 16;
-		sLabInit.height = 16;
-		sLabInit.FontID = font_regular;
-		sLabInit.pUserData = psOwner;
-		//sLabInit.pCallback = intUpdateSlider;
-		sLabInit.pDisplay = intDisplayNumber;
-		if (!widgAddLabel(psWScreen, &sLabInit))
-		{
-			return false;
-		}
-
-
-		memset(&sSldInit, 0, sizeof(W_SLDINIT));
-		sSldInit.formID = IDSTAT_FORM;
-		sSldInit.id = IDSTAT_SLIDER;
-		sSldInit.style = WSLD_PLAIN;
-		sSldInit.x = STAT_SLDX;
-		sSldInit.y = STAT_SLDY;
-		sSldInit.width = STAT_SLDWIDTH;
-		sSldInit.height = STAT_SLDHEIGHT;
-		sSldInit.orientation = WSLD_LEFT;
-		sSldInit.numStops = STAT_SLDSTOPS-1;
-		sSldInit.barSize = iV_GetImageHeight(IntImages,IMAGE_SLIDER_BUT);
-		sSldInit.pos = 0;
-		if ( psOwner != NULL )
-		{
-			psFactory = (FACTORY *)((STRUCTURE *)psOwner)->pFunctionality;
-			if (psFactory->psSubject)
-			{
-				if (psFactory->quantity > sSldInit.numStops)
-				{
-					sSldInit.pos = sSldInit.numStops;
-				}
-				else
-				{
-					sSldInit.pos = (UWORD)psFactory->quantity;
-				}
-			}
-		}
-
-		sSldInit.pDisplay = intDisplaySlider;
-		if (!widgAddSlider(psWScreen, &sSldInit))
-		{
-			return false;
-		}
-	}
-#endif
 
 	// Add the quantity slider ( if it's a factory ).
 	if(objMode == IOBJ_MANUFACTURE)
@@ -6078,57 +5874,6 @@ static BOOL setManufactureStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 			}
 		}
 	}
-
-#ifdef INCLUDE_PRODSLIDER
-	if (ProductionRun == 0)
-	{
-		//check if its because there isn't enough power - warning if it is
-		if (psStats)
-		{
-			(void)checkPower(selectedPlayer, ((DROID_TEMPLATE *)psStats)->powerPoints);
-		}
-		return false;
-	}
-
-	Structure = (STRUCTURE*)psObj;
-	if (psStats != NULL)
-	{
-		//temp code to set non stop production up
-		if (ProductionRun == STAT_SLDSTOPS)
-		{
-			ProductionRun = NON_STOP_PRODUCTION;
-		}
-		/* check power if factory not on infinte production*/
-		if (ProductionRun != NON_STOP_PRODUCTION)
-		{
-			if (!checkPower(selectedPlayer, ((DROID_TEMPLATE *)psStats)->powerPoints))
-			{
-				return false;
-			}
-		}
-		/* Set the factory to build droid(s) */
-		if (!structSetManufacture(Structure, (DROID_TEMPLATE *)psStats, ProductionRun))
-		{
-			return false;
-		}
-		/*set the slider for this production */
-		widgSetSliderPos(psWScreen, IDSTAT_SLIDER, (UWORD)(ProductionRun-1));
-	} else {
-		// Stop manufacturing.
-		//return half the power cost if cancelled mid production
-		if (((FACTORY*)Structure->pFunctionality)->timeStarted != ACTION_START_TIME)
-		{
-			if (((FACTORY*)Structure->pFunctionality)->psSubject != NULL)
-			{
-				addPower(Structure->player, ((DROID_TEMPLATE *)((FACTORY*)Structure->
-					pFunctionality)->psSubject)->powerPoints / 2);
-			}
-		}
-		((FACTORY*)Structure->pFunctionality)->quantity = 0;
-		((FACTORY*)Structure->pFunctionality)->psSubject = NULL;
-		intManufactureFinished(Structure);
-	}
-#endif
 
 	return true;
 }
