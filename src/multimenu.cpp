@@ -973,7 +973,7 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 				int num;
 				STRUCTURE *temp;
 				// NOTE, This tallys up *all* the structures you have. Test out via 'start with no base'.
-				for (num = 0, temp = apsStructLists[player]; temp != NULL;num++,temp = temp->psNext);
+				for (num = 0, temp = apsStructLists[player]; temp != NULL;num++,temp = temp->psNext) {}
 				//c11: Structures
 				sprintf(str, "%d", num);
 				iV_DrawText(str, x+MULTIMENU_C11, y+MULTIMENU_FONT_OSET);

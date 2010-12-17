@@ -1003,8 +1003,8 @@ bool initTerrain(void)
 	lightmapWidth = 1;
 	lightmapHeight = 1;
 	// determine the smallest power-of-two size we can use for the lightmap
-	while (mapWidth > (lightmapWidth <<= 1));
-	while (mapHeight > (lightmapHeight <<= 1));
+	while (mapWidth > (lightmapWidth <<= 1)) {}
+	while (mapHeight > (lightmapHeight <<= 1)) {}
 	debug(LOG_TERRAIN, "the size of the map is %ix%i", mapWidth, mapHeight);
 	debug(LOG_TERRAIN, "lightmap texture size is %ix%i", lightmapWidth, lightmapHeight);
 

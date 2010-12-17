@@ -201,8 +201,8 @@ bool texLoad(const char *fileName)
 		const int yLimit = TILES_IN_PAGE_ROW * i;
 
 		// pad width and height into ^2 values
-		while (xLimit > (xSize *= 2));
-		while (yLimit > (ySize *= 2));
+		while (xLimit > (xSize *= 2)) {}
+		while (yLimit > (ySize *= 2)) {}
 
 		// Generate the empty texture buffer in VRAM
 		texPage = newPage(fileName, j, xSize, ySize, 0);

@@ -1688,7 +1688,7 @@ BOOL scrSkVtolEnableCheck(void)
 
 
 	// vtol factory
-	for(i=0;(i<numStructureStats)&&(asStructureStats[i].type != REF_VTOL_FACTORY);i++);
+	for(i=0;(i<numStructureStats)&&(asStructureStats[i].type != REF_VTOL_FACTORY);i++) {}
 	if( (i < numStructureStats) && (apStructTypeLists[player][i] == AVAILABLE) )
 	{
 		// vtol propulsion

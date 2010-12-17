@@ -167,7 +167,7 @@ static inline void addMessageToList(MESSAGE *list[MAX_PLAYERS], MESSAGE *msg, UD
 			/*add it to the bottom of the list */
 
 			// Iterate to the last item in the list
-			for(psCurr = list[player]; psCurr->psNext != NULL; psCurr = psCurr->psNext);
+			for (psCurr = list[player]; psCurr->psNext != NULL; psCurr = psCurr->psNext) {}
 
 			// Append the new message to the end of the list
 			psCurr->psNext = msg;

@@ -339,7 +339,7 @@ STRUCTURE *IdToStruct(UDWORD id,UDWORD player)
 	{
 		for(i=0;i<MAX_PLAYERS;i++)
 		{
-			for(psStr=apsStructLists[i];( (psStr != NULL) && (psStr->id != id)); psStr=psStr->psNext);
+			for (psStr=apsStructLists[i];( (psStr != NULL) && (psStr->id != id)); psStr=psStr->psNext) {}
 			if(psStr)
 			{
 				return psStr;
@@ -354,7 +354,7 @@ STRUCTURE *IdToStruct(UDWORD id,UDWORD player)
 			// feature hack, player = 9 are features
 			return NULL;
 		}
-		for(psStr=apsStructLists[player];((psStr != NULL )&&(psStr->id != id) );psStr=psStr->psNext);
+		for (psStr=apsStructLists[player];((psStr != NULL )&&(psStr->id != id) );psStr=psStr->psNext) {}
 	}
 	return psStr;
 }
@@ -370,7 +370,7 @@ FEATURE *IdToFeature(UDWORD id,UDWORD player)
 	{
 		for(i=0;i<MAX_PLAYERS;i++)
 		{
-			for(psF=apsFeatureLists[i];( (psF != NULL) && (psF->id != id)); psF=psF->psNext);
+			for(psF=apsFeatureLists[i];( (psF != NULL) && (psF->id != id)); psF=psF->psNext) {}
 			if(psF)
 			{
 				return psF;
@@ -385,7 +385,7 @@ FEATURE *IdToFeature(UDWORD id,UDWORD player)
 			// feature hack, player = 9 are features
 			return NULL;
 		}
-		for(psF=apsFeatureLists[player];((psF != NULL )&&(psF->id != id) );psF=psF->psNext);
+		for(psF=apsFeatureLists[player];((psF != NULL )&&(psF->id != id) );psF=psF->psNext) {}
 	}
 	return psF;
 }

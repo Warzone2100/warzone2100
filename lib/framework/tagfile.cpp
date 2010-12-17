@@ -388,7 +388,7 @@ static bool scan_to(element_t tag)
 	}
 	lastAccess = tag;
 	// Set the right node
-	for (; current->next && current->element < tag; current = current->next);
+	for (; current->next && current->element < tag; current = current->next) {}
 	if (current->element != tag)
 	{
 		TF_ERROR("Unknown element %#04x sought", (unsigned int)tag);

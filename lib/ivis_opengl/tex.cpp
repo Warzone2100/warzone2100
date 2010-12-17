@@ -77,7 +77,7 @@ int pie_AddTexPage(iV_Image *s, const char* filename, int slot, int maxTextureSi
 	}
 
 	/* Use first unused slot */
-	for (i = slot; i < iV_TEX_MAX && _TEX_PAGE[i].name[0] != '\0'; i++);
+	for (i = slot; i < iV_TEX_MAX && _TEX_PAGE[i].name[0] != '\0'; i++) {}
 
 	if (i == _TEX_INDEX)
 	{
@@ -208,7 +208,7 @@ void pie_MakeTexPageTCMaskName(char * filename)
 	if (strncmp(filename, "page-", 5) == 0)
 	{
 		int i;
-		for( i = 5; i < iV_TEXNAME_MAX-1 && isdigit(filename[i]); i++);
+		for ( i = 5; i < iV_TEXNAME_MAX-1 && isdigit(filename[i]); i++) {}
 		filename[i] = '\0';
 		strcat(filename, iV_TEXNAME_TCSUFFIX);
 	}

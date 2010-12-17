@@ -2005,7 +2005,7 @@ static void dealWithLMBFeature(FEATURE* psFeature)
 		// find any construction droids. and order them to build an oil resource.
 
 		// first find the derrick.
-		for(i = 0; (i < numStructureStats) && (asStructureStats[i].type != REF_RESOURCE_EXTRACTOR); ++i);
+		for (i = 0; (i < numStructureStats) && (asStructureStats[i].type != REF_RESOURCE_EXTRACTOR); ++i) {}
 
 		if( (i < numStructureStats) &&
 			(apStructTypeLists[selectedPlayer][i] == AVAILABLE) )	// dont go any further if no derrick stat found.

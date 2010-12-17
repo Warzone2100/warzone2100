@@ -287,8 +287,8 @@ void pie_DownLoadRadar(UDWORD *buffer, int width, int height, bool filter)
 	char *black;
 
 	/* Find power of two size */
-	while (width > (w *= 2));
-	while (height > (h *= 2));
+	while (width > (w *= 2)) {}
+	while (height > (h *= 2)) {}
 
 	pie_SetTexturePage(radarTexture);
 	black = (char *)calloc(1, w * h * 4);

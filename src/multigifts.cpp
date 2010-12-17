@@ -690,7 +690,7 @@ void recvMultiPlayerRandomArtifacts(NETQUEUE queue)
 		NETenum(&type);
 
 	debug(LOG_FEATURE, "receiving %u artifact(s) type: (%s)", quantity, feature_names[type]);
-	for (i = 0; i < numFeatureStats && asFeatureStats[i].subType != type; i++);
+	for (i = 0; i < numFeatureStats && asFeatureStats[i].subType != type; i++) {}
 
 	for (count = 0; count < quantity; count++)
 	{

@@ -305,7 +305,7 @@ void addLoadedMod(const char * modname)
 	// Yes, this is an online insertion sort.
 	// I swear, for the numbers of mods this is going to be dealing with
 	// (i.e. 0 to 2), it really is faster than, say, Quicksort.
-	for (i=0; i<num_loaded_mods && strcmp(loaded_mods[i], mod)>0; i++);
+	for (i=0; i<num_loaded_mods && strcmp(loaded_mods[i], mod)>0; i++) {}
 	if (i < num_loaded_mods)
 	{
 		if (strcmp(loaded_mods[i], mod) == 0)

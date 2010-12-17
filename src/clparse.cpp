@@ -494,7 +494,7 @@ bool ParseCommandLine(int argc, const char** argv)
 				}
 
 				// Find an empty place in the global_mods list
-				for (i = 0; i < 100 && global_mods[i] != NULL; ++i);
+				for (i = 0; i < 100 && global_mods[i] != NULL; ++i) {}
 				if (i >= 100 || global_mods[i] != NULL)
 				{
 					debug(LOG_FATAL, "Too many mods registered! Aborting!");
@@ -516,7 +516,7 @@ bool ParseCommandLine(int argc, const char** argv)
 				}
 
 				// Find an empty place in the campaign_mods list
-				for (i = 0; i < 100 && campaign_mods[i] != NULL; ++i);
+				for (i = 0; i < 100 && campaign_mods[i] != NULL; ++i) {}
 				if (i >= 100 || campaign_mods[i] != NULL)
 				{
 					debug(LOG_FATAL, "Too many mods registered! Aborting!");
@@ -537,7 +537,7 @@ bool ParseCommandLine(int argc, const char** argv)
 					return false;
 				}
 
-				for (i = 0; i < 100 && multiplay_mods[i] != NULL; ++i);
+				for (i = 0; i < 100 && multiplay_mods[i] != NULL; ++i) {}
 				if (i >= 100 || multiplay_mods[i] != NULL)
 				{
 					debug(LOG_FATAL, "Too many mods registered! Aborting!");
