@@ -3097,6 +3097,8 @@ static void orderPlayOrderObjAudio( UDWORD player, BASE_OBJECT *psObj )
 					case DORDER_ATTACK:
 						audio_QueueTrack( ID_SOUND_ON_OUR_WAY2 );
 						break;
+					default:
+						break;
 				}
 			}
 
