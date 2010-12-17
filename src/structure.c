@@ -1476,8 +1476,8 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 		}
 
 		// snap the coords to a tile
-		x = ((pStructureType->baseWidth % 2) == 0) ? (x & ~TILE_MASK) : (x & ~TILE_MASK) + TILE_UNITS/2;
-		y = ((pStructureType->baseBreadth % 2) == 0) ? (y & ~TILE_MASK) : (y & ~TILE_MASK) + TILE_UNITS/2;
+		x = (x & ~TILE_MASK) + pStructureType->baseWidth  %2 * TILE_UNITS/2;
+		y = (y & ~TILE_MASK) + pStructureType->baseBreadth%2 * TILE_UNITS/2;
 
 		//check not trying to build too near the edge
 		if (map_coord(x) < TOO_NEAR_EDGE || map_coord(x) > (mapWidth - TOO_NEAR_EDGE))
@@ -4817,8 +4817,8 @@ static void removeStructFromMap(STRUCTURE *psStruct)
 	MAPTILE		*psTile;
 
 	/* set tiles drawing */
-	mapX = map_coord(psStruct->pos.x - psStruct->pStructureType->baseWidth * TILE_UNITS / 2);
-	mapY = map_coord(psStruct->pos.y - psStruct->pStructureType->baseBreadth * TILE_UNITS / 2);
+	mapX = map_coord(psStruct->pos.x) - psStruct->pStructureType->baseWidth/2;
+	mapY = map_coord(psStruct->pos.y) - psStruct->pStructureType->baseBreadth/2;
 	for (i = 0; i < psStruct->pStructureType->baseWidth; i++)
 	{
 		for (j = 0; j < psStruct->pStructureType->baseBreadth; j++)
@@ -5084,8 +5084,8 @@ BOOL destroyStruct(STRUCTURE *psDel)
 		if (!resourceFound && !(psDel->pStructureType->type == REF_WALL) &&
 			!(psDel->pStructureType->type == REF_WALLCORNER))
 		{
-			mapX = map_coord(psDel->pos.x - psDel->pStructureType->baseWidth * TILE_UNITS / 2);
-			mapY = map_coord(psDel->pos.y - psDel->pStructureType->baseBreadth * TILE_UNITS / 2);
+			mapX = map_coord(psDel->pos.x) - psDel->pStructureType->baseWidth/2;
+			mapY = map_coord(psDel->pos.y) - psDel->pStructureType->baseBreadth/2;
 			for (width = 0; width < psDel->pStructureType->baseWidth; width++)
 			{
 				for (breadth = 0; breadth < psDel->pStructureType->baseBreadth; breadth++)

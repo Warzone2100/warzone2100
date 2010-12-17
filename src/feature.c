@@ -298,13 +298,22 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 	//return the average of max/min height
 	height = (foundationMin + foundationMax) / 2;
 
-	if(FromSave == true) {
-		psFeature->pos.x = (UWORD)x;
-		psFeature->pos.y = (UWORD)y;
-	} else {
-		psFeature->pos.x = (UWORD)((x & (~TILE_MASK)) + psStats->baseWidth * TILE_UNITS / 2);
-		psFeature->pos.y = (UWORD)((y & (~TILE_MASK)) + psStats->baseBreadth * TILE_UNITS / 2);
+	if (!FromSave)
+	{
+		x = (x & ~TILE_MASK) + psStats->baseWidth  %2 * TILE_UNITS/2;
+		y = (y & ~TILE_MASK) + psStats->baseBreadth%2 * TILE_UNITS/2;
 	}
+	else
+	{
+		if ((x & TILE_MASK) != psStats->baseWidth  %2 * TILE_UNITS/2 ||
+		    (y & TILE_MASK) != psStats->baseBreadth%2 * TILE_UNITS/2)
+		{
+			debug(LOG_NEVER, "Feature not aligned. position (%d,%d), size (%d,%d)", x, y, psStats->baseWidth, psStats->baseBreadth);
+		}
+	}
+
+	psFeature->pos.x = x;
+	psFeature->pos.y = y;
 
 	/* Dump down the building wrecks at random angles - still looks shit though */
 	if(psStats->subType == FEAT_BUILD_WRECK)
@@ -368,13 +377,8 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 	}
 	//load into the map data
 
-	if(FromSave) {
-		mapX = map_coord(x) - psStats->baseWidth / 2;
-		mapY = map_coord(y) - psStats->baseBreadth / 2;
-	} else {
-		mapX = map_coord(x);
-		mapY = map_coord(y);
-	}
+	mapX = map_coord(x) - psStats->baseWidth / 2;
+	mapY = map_coord(y) - psStats->baseBreadth / 2;
 
 	// set up the imd for the feature
 	if(psFeature->psStats->subType==FEAT_BUILD_WRECK)
@@ -508,11 +512,11 @@ bool removeFeature(FEATURE *psDel)
 	}
 
 	//remove from the map data
-	mapX = map_coord(psDel->pos.x);
-	mapY = map_coord(psDel->pos.y);
-	for (width = -psDel->psStats->baseWidth; width < psDel->psStats->baseWidth; width++)
+	mapX = map_coord(psDel->pos.x) - psDel->psStats->baseWidth/2;
+	mapY = map_coord(psDel->pos.y) - psDel->psStats->baseBreadth/2;
+	for (width = 0; width < psDel->psStats->baseWidth; width++)
 	{
-		for (breadth = -psDel->psStats->baseBreadth; breadth < psDel->psStats->baseBreadth; breadth++)
+		for (breadth = 0; breadth < psDel->psStats->baseBreadth; breadth++)
 		{
 			if (tileOnMap(mapX + width, mapY + breadth))
 			{
@@ -613,8 +617,8 @@ bool destroyFeature(FEATURE *psDel)
 
 			// ----- Flip all the tiles under the skyscraper to a rubble tile
 			// smoke effect should disguise this happening
-			mapX = map_coord(psDel->pos.x - psDel->psStats->baseWidth * TILE_UNITS / 2);
-			mapY = map_coord(psDel->pos.y - psDel->psStats->baseBreadth * TILE_UNITS / 2);
+			mapX = map_coord(psDel->pos.x) - psDel->psStats->baseWidth/2;
+			mapY = map_coord(psDel->pos.y) - psDel->psStats->baseBreadth/2;
 //			if(psDel->sDisplay.imd->pos.ymax>300)
 			if (psDel->psStats->subType == FEAT_SKYSCRAPER)
 			{
