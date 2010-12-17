@@ -204,35 +204,29 @@ Check to see if the stats is some kind of expansion module
 
 static void auxStructureNonblocking(STRUCTURE *psStructure)
 {
-	int i, j;
-	int sWidth = getStructureWidth(psStructure);
-	int sBreadth = getStructureBreadth(psStructure);
-	int mapX = map_coord(psStructure->pos.x - sWidth * TILE_UNITS / 2);
-	int mapY = map_coord(psStructure->pos.y - sBreadth * TILE_UNITS / 2);
+	Vector2i size = getStructureSize(psStructure);
+	Vector2i map = map_coord(removeZ(psStructure->pos)) - size/2;
 
-	for (i = 0; i < sWidth; i++)
+	for (int i = 0; i < size.x; i++)
 	{
-		for (j = 0; j < sBreadth; j++)
+		for (int j = 0; j < size.y; j++)
 		{
-			auxClearAll(mapX + i, mapY + j, AUXBITS_ANY_BUILDING | AUXBITS_OUR_BUILDING);
+			auxClearAll(map.x + i, map.y + j, AUXBITS_ANY_BUILDING | AUXBITS_OUR_BUILDING);
 		}
 	}
 }
 
 static void auxStructureBlocking(STRUCTURE *psStructure)
 {
-	int i, j;
-	int sWidth = getStructureWidth(psStructure);
-	int sBreadth = getStructureBreadth(psStructure);
-	int mapX = map_coord(psStructure->pos.x - sWidth * TILE_UNITS / 2);
-	int mapY = map_coord(psStructure->pos.y - sBreadth * TILE_UNITS / 2);
+	Vector2i size = getStructureSize(psStructure);
+	Vector2i map = map_coord(removeZ(psStructure->pos)) - size/2;
 
-	for (i = 0; i < sWidth; i++)
+	for (int i = 0; i < size.x; i++)
 	{
-		for (j = 0; j < sBreadth; j++)
+		for (int j = 0; j < size.y; j++)
 		{
-			auxSetAllied(mapX + i, mapY + j, psStructure->player, AUXBITS_OUR_BUILDING);
-			auxSetAll(mapX + i, mapY + j, AUXBITS_ANY_BUILDING);
+			auxSetAllied(map.x + i, map.y + j, psStructure->player, AUXBITS_OUR_BUILDING);
+			auxSetAll(map.x + i, map.y + j, AUXBITS_ANY_BUILDING);
 		}
 	}
 }
@@ -1554,24 +1548,55 @@ static SDWORD structChooseWallType(UDWORD player, UDWORD mapX, UDWORD mapY)
 }
 
 
-static void buildFlatten(STRUCTURE *pStructure, UDWORD x, UDWORD y, UDWORD h)
+/* For now all this does is work out what height the terrain needs to be set to
+An actual foundation structure may end up being placed down
+The x and y passed in are the CENTRE of the structure*/
+static int foundationHeight(STRUCTURE *psStruct)
 {
-	unsigned width;
-	unsigned breadth;
+	Vector2i size = getStructureSize(psStruct);
+	Vector2i map = map_coord(removeZ(psStruct->pos)) - size/2;
 
-	for (breadth = 0; breadth <= getStructureBreadth(pStructure); ++breadth)
+	//check the terrain is the correct type return -1 if not
+
+	//may also have to check that overlapping terrain can be set to the average height
+	//eg water - don't want it to 'flow' into the structure if this effect is coded!
+
+	//initialise the starting values so they get set in loop
+	int foundationMin = TILE_MAX_HEIGHT;
+	int foundationMax = TILE_MIN_HEIGHT;
+
+	for (int breadth = 0; breadth <= map.y; breadth++)
 	{
-		for (width = 0; width <= getStructureWidth(pStructure); ++width)
+		for (int width = 0; width <= map.x; width++)
+		{
+			int height = map_TileHeight(map.x + width, map.y + breadth);
+			foundationMin = std::min(foundationMin, height);
+			foundationMax = std::max(foundationMax, height);
+		}
+	}
+	//return the average of max/min height
+	return (foundationMin + foundationMax) / 2;
+}
+
+
+static void buildFlatten(STRUCTURE *pStructure, int h)
+{
+	Vector2i size = getStructureSize(pStructure);
+	Vector2i map = map_coord(removeZ(pStructure->pos)) - size/2;
+
+	for (int breadth = 0; breadth <= size.y; ++breadth)
+	{
+		for (int width = 0; width <= size.x; ++width)
 		{
 			if (pStructure->pStructureType->type != REF_WALL
 			    && pStructure->pStructureType->type != REF_WALLCORNER
 			    && pStructure->pStructureType->type != REF_GATE)
 			{
-				setTileHeight(x + width, y + breadth, h);//-1
+				setTileHeight(map.x + width, map.y + breadth, h);
 				// We need to raise features on raised tiles to the new height
-				if(TileHasFeature(mapTile(x+width,y+breadth)))
+				if (TileHasFeature(mapTile(map.x + width, map.y + breadth)))
 				{
-					getTileFeature(x+width, y+breadth)->pos.z = (UWORD)h;
+					getTileFeature(map.x + width, map.y + breadth)->pos.z = h;
 				}
 			}
 		}
@@ -1580,43 +1605,29 @@ static void buildFlatten(STRUCTURE *pStructure, UDWORD x, UDWORD y, UDWORD h)
 
 void alignStructure(STRUCTURE *psBuilding)
 {
-	int x = psBuilding->pos.x;
-	int y = psBuilding->pos.y;
-	unsigned sWidth   = getStructureWidth(psBuilding);
-	unsigned sBreadth = getStructureBreadth(psBuilding);
-	int mapX = map_coord(x) - sWidth/2;
-	int mapY = map_coord(y) - sBreadth/2;
-
 	/* DEFENSIVE structures are pulled to the terrain */
 	if (psBuilding->pStructureType->type != REF_DEFENSE)
 	{
-		int mapH = buildFoundation(psBuilding, x, y);
+		int mapH = foundationHeight(psBuilding);
 
-		buildFlatten(psBuilding, mapX, mapY, mapH);
+		buildFlatten(psBuilding, mapH);
 		psBuilding->pos.z = mapH;
 		psBuilding->foundationDepth = 0.0f;
 	}
 	else
 	{
-		iIMDShape	*strImd = psBuilding->sDisplay.imd;
-		int i;
-		float pointHeight;
+		iIMDShape *strImd = psBuilding->sDisplay.imd;
 
 		psBuilding->pos.z = TILE_MIN_HEIGHT;
 		psBuilding->foundationDepth = TILE_MAX_HEIGHT;
 
 		// Now we got through the shape looking for vertices on the edge
-                for (i = 0; i < strImd->npoints; i++)
+                for (int i = 0; i < strImd->npoints; i++)
 		{
-			pointHeight = map_Height(psBuilding->pos.x + strImd->points[i].x, psBuilding->pos.y - strImd->points[i].z);
-			if (pointHeight > psBuilding->pos.z)
-			{
-				psBuilding->pos.z = pointHeight;
-			}
-			if (pointHeight < psBuilding->foundationDepth)
-			{
-				psBuilding->foundationDepth = pointHeight;
-			}
+			int pointHeight = map_Height(psBuilding->pos.x + strImd->points[i].x, psBuilding->pos.y - strImd->points[i].z);
+			syncDebug("pointHeight=%d", pointHeight);  // Eeek, strImd->points[i] is a Vector3f! If this causes desynchs, need to fix!
+			psBuilding->pos.z = std::max(psBuilding->pos.z, pointHeight);
+			psBuilding->foundationDepth = std::min<float>(psBuilding->foundationDepth, pointHeight);
 		}
 	}
 }
@@ -1630,8 +1641,7 @@ STRUCTURE *buildStructure(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, U
 STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, uint16_t direction, UDWORD player, BOOL FromSave)
 {
 	STRUCTURE	*psBuilding = NULL;
-	unsigned sWidth   = getStructureStatsWidth  (pStructureType, direction);
-	unsigned sBreadth = getStructureStatsBreadth(pStructureType, direction);
+	Vector2i size = getStructureStatsSize(pStructureType, direction);
 
 	ASSERT_OR_RETURN(NULL, pStructureType && pStructureType->type != REF_DEMOLISH, "You cannot build demolition!");
 
@@ -1639,8 +1649,6 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 	{
 		SDWORD	wallType = 0, preScrollMinX = 0, preScrollMinY = 0, preScrollMaxX = 0, preScrollMaxY = 0;
 		UDWORD	max = pStructureType - asStructureStats;
-		UDWORD	mapX, mapY;
-		UDWORD	width, breadth;
 		int	i;
 
 		ASSERT_OR_RETURN(NULL, max <= numStructureStats, "Invalid structure type");
@@ -1672,8 +1680,8 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		}
 
 		// snap the coords to a tile
-		x = (x & ~TILE_MASK) + sWidth  %2 * TILE_UNITS/2;
-		y = (y & ~TILE_MASK) + sBreadth%2 * TILE_UNITS/2;
+		x = (x & ~TILE_MASK) + size.x%2 * TILE_UNITS/2;
+		y = (y & ~TILE_MASK) + size.y%2 * TILE_UNITS/2;
 
 		//check not trying to build too near the edge
 		if (map_coord(x) < TOO_NEAR_EDGE || map_coord(x) > (mapWidth - TOO_NEAR_EDGE))
@@ -1719,8 +1727,7 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 
 		//This needs to be done before the functionality bit...
 		//load into the map data and structure list if not an upgrade
-		mapX = map_coord(x) - sWidth/2;
-		mapY = map_coord(y) - sBreadth/2;
+		Vector2i map = map_coord(Vector2i(x, y)) - size/2;
 
 		//set up the imd to use for the display
 		psBuilding->sDisplay.imd = pStructureType->pIMD;
@@ -1750,11 +1757,11 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 			}
 		}
 
-		for (width = 0; width < sWidth; width++)
+		for (int width = 0; width < size.x; width++)
 		{
-			for (breadth = 0; breadth < sBreadth; breadth++)
+			for (int breadth = 0; breadth < size.y; breadth++)
 			{
-				MAPTILE *psTile = mapTile(mapX+width,mapY+breadth);
+				MAPTILE *psTile = mapTile(map.x + width, map.y + breadth);
 
 				/* Remove any walls underneath the building. You can build defense buildings on top
 				 * of walls, you see. This is not the place to test whether we own it! */
@@ -1766,9 +1773,9 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 				// don't really think this should be done here, but dont know otherwise.alexl
 				if(pStructureType->type == REF_WALLCORNER || pStructureType->type == REF_WALL)
 				{
-					if(TileHasStructure(mapTile(mapX+width,mapY+breadth)))
+					if (TileHasStructure(mapTile(map.x + width, map.y + breadth)))
 					{
-						if(getTileStructure(mapX+width,mapY+breadth)->pStructureType->type == REF_WALLCORNER)
+						if (getTileStructure (map.x + width, map.y + breadth)->pStructureType->type == REF_WALLCORNER)
 						{
 							delete psBuilding;
 							return NULL; // dont build.
@@ -1778,11 +1785,10 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 				// end of dodgy stuff
 				else if (TileHasStructure(psTile))
 				{
-					debug(LOG_ERROR,
-						   "Player %u (%s): is building %s at (%d, %d) but found %s already at (%d, %d)",
-						   player,isHumanPlayer(player) ? "Human" : "AI", pStructureType->pName, mapX, mapY,
-						   getTileStructure(mapX + width, mapY + breadth)->pStructureType->pName,
-						   mapX + width, mapY + breadth);
+					debug(LOG_ERROR, "Player %u (%s): is building %s at (%d, %d) but found %s already at (%d, %d)",
+						   player, isHumanPlayer(player) ? "Human" : "AI", pStructureType->pName, map.x, map.y,
+						   getTileStructure(map.x + width, map.y + breadth)->pStructureType->pName,
+						   map.x + width, map.y + breadth);
 					delete psBuilding;
 					return NULL;
 				}
@@ -1792,7 +1798,7 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 				// if it's a tall structure then flag it in the map.
 				if (psBuilding->sDisplay.imd->max.y > TALLOBJECT_YMAX)
 				{
-					auxSetBlocking(mapX + width, mapY + breadth, AIR_BLOCKED);
+					auxSetBlocking(map.x + width, map.y + breadth, AIR_BLOCKED);
 				}
 			}
 		}
@@ -4960,23 +4966,19 @@ BOOL checkLength(UDWORD maxRange, UDWORD x, UDWORD y, UDWORD *pDroidX, UDWORD *p
 static void removeStructFromMap(STRUCTURE *psStruct)
 {
 	UDWORD		i,j;
-	UDWORD		mapX, mapY;
-	MAPTILE		*psTile;
-	unsigned sWidth   = getStructureWidth(psStruct);
-	unsigned sBreadth = getStructureBreadth(psStruct);
 
 	auxStructureNonblocking(psStruct);
 
 	/* set tiles drawing */
-	mapX = map_coord(psStruct->pos.x) - sWidth/2;
-	mapY = map_coord(psStruct->pos.y) - sBreadth/2;
-	for (i = 0; i < sWidth; i++)
+	Vector2i size = getStructureSize(psStruct);
+	Vector2i map = map_coord(removeZ(psStruct->pos)) - size/2;
+	for (i = 0; i < size.x; i++)
 	{
-		for (j = 0; j < sBreadth; j++)
+		for (j = 0; j < size.y; j++)
 		{
-			psTile = mapTile(mapX+i, mapY+j);
+			MAPTILE *psTile = mapTile(map.x + i, map.y + j);
 			psTile->psObject = NULL;
-			auxClearBlocking(mapX + i, mapY + j, AIR_BLOCKED);
+			auxClearBlocking(map.x + i, map.y + j, AIR_BLOCKED);
 		}
 	}
 }
@@ -5104,10 +5106,8 @@ BOOL removeStruct(STRUCTURE *psDel, BOOL bDestroy)
 /* Remove a structure */
 BOOL destroyStruct(STRUCTURE *psDel)
 {
-	UDWORD			mapX, mapY, width,breadth;
 	UDWORD			widthScatter,breadthScatter,heightScatter;
 	BOOL			resourceFound = false;
-	MAPTILE			*psTile;
 	bool                    bMinor;
 
 	const unsigned          burnDurationWall    =  1000;
@@ -5248,15 +5248,13 @@ BOOL destroyStruct(STRUCTURE *psDel)
 		if (!resourceFound && !(psDel->pStructureType->type == REF_WALL) &&
 			!(psDel->pStructureType->type == REF_WALLCORNER))
 		{
-			unsigned sWidth   = getStructureWidth(psDel);
-			unsigned sBreadth = getStructureBreadth(psDel);
-			mapX = map_coord(psDel->pos.x - sWidth * TILE_UNITS / 2);
-			mapY = map_coord(psDel->pos.y - sBreadth * TILE_UNITS / 2);
-			for (width = 0; width < sWidth; width++)
+			Vector2i size = getStructureSize(psDel);
+			Vector2i map = map_coord(removeZ(psDel->pos)) - size/2;
+			for (int width = 0; width < size.x; width++)
 			{
-				for (breadth = 0; breadth < sBreadth; breadth++)
+				for (int breadth = 0; breadth < size.y; breadth++)
 				{
-					psTile = mapTile(mapX+width,mapY+breadth);
+					MAPTILE *psTile = mapTile(map.x + width, map.y + breadth);
 					if(TEST_TILE_VISIBLE(selectedPlayer,psTile))
 					{
 						psTile->illumination /= 2;
@@ -5287,66 +5285,6 @@ BOOL destroyStruct(STRUCTURE *psDel)
 	}
 
 	return true;
-}
-
-
-/* For now all this does is work out what height the terrain needs to be set to
-An actual foundation structure may end up being placed down
-The x and y passed in are the CENTRE of the structure*/
-SWORD buildFoundation(STRUCTURE *psStruct, UDWORD x, UDWORD y)
-{
-	UDWORD	width, breadth;
-	UDWORD	startX, startY;
-	SWORD	height,foundationMin, foundationMax;
-	unsigned sWidth   = getStructureWidth(psStruct);
-	unsigned sBreadth = getStructureBreadth(psStruct);
-
-	startX = map_coord(x) - sWidth/2;
-	startY = map_coord(y) - sBreadth/2;
-
-	//check the terrain is the correct type return -1 if not
-
-	//shouldn't need to do this but doesn't take long hey?!
-	/*check if there is a structure next to the new one - return the height of the
-	structure if found*/
-	for (breadth = 0; breadth <= sBreadth; breadth++)
-	{
-		for (width = 0; width <= sWidth; width++)
-		{
-			if(TileHasStructure(mapTile(startX+width,startY+breadth)))
-			{
-				return map_TileHeight(startX+width, startY+breadth);
-			}
-		}
-	}
-
-	//may also have to check that overlapping terrain can be set to the average height
-	//eg water - don't want it to 'flow' into the structure if this effect is coded!
-
-	startX = map_coord(x) - sWidth/2;
-	startY = map_coord(y) - sBreadth/2;
-
-	//initialise the starting values so they get set in loop
-	foundationMin = TILE_MAX_HEIGHT;
-	foundationMax = TILE_MIN_HEIGHT;
-
-	for (breadth = 0; breadth <= sBreadth; breadth++)
-	{
-		for (width = 0; width <= sWidth; width++)
-		{
-			height = map_TileHeight(startX+width,startY+breadth);
-			if (foundationMin > height)
-			{
-				foundationMin = height;
-			}
-			if (foundationMax < height)
-			{
-				foundationMax = height;
-			}
-		}
-	}
-	//return the average of max/min height
-	return ((SWORD)((foundationMin + foundationMax) / 2));
 }
 
 

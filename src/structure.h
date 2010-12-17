@@ -157,7 +157,6 @@ extern BOOL checkWidth(UDWORD maxRange, UDWORD x, UDWORD y, UDWORD *pDroidX, UDW
 /* check along the length of a structure for an empty space */
 extern BOOL checkLength(UDWORD maxRange, UDWORD x, UDWORD y, UDWORD *pDroidX, UDWORD *pDroidY);
 
-extern SWORD buildFoundation(STRUCTURE *psStruct, UDWORD x, UDWORD y);
 extern void alignStructure(STRUCTURE *psBuilding);
 
 //initialise the structure limits structure
