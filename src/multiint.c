@@ -3288,7 +3288,14 @@ void runMultiOptions(void)
 
 	if (CancelPressed())
 	{
-		changeTitleMode(lastTitleMode);
+		if (multiRequestUp)
+		{
+			changeTitleMode(lastTitleMode);
+		}
+		else
+		{
+			processMultiopWidgets(CON_CANCEL);  // "Press" the cancel button to clean up net connections and stuff.
+		}
 	}
 }
 
