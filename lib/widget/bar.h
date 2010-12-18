@@ -42,6 +42,8 @@ typedef struct _w_bargraph
 	UWORD		iRange;				// Maximum range
 	UWORD		iValue;				// Current value
 	UWORD		iOriginal;			// hack to keep uncapped value around
+	int             denominator;                    // Denominator, 1 by default.
+	int             precision;                      // Number of places after the decimal point to display, 0 by default.
 	PIELIGHT	majorCol;			// Colour for the major bar
 	PIELIGHT	minorCol;			// Colour for the minor bar
 	const char	*pTip;				// The tool tip for the graph

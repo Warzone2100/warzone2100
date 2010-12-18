@@ -2905,13 +2905,14 @@ void StatGetResearchImage(BASE_STATS *psStat, SDWORD *Image, iIMDShape **Shape,
 static void intDisplayBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, bool isPowerBar)
 {
 	W_BARGRAPH *BarGraph = (W_BARGRAPH *)psWidget;
-	char szVal[6];
+	char szVal[30];
 	char const *szCheckWidth = "00000";
 	int x0 = xOffset + BarGraph->x;
 	int y0 = yOffset + BarGraph->y;
 	int arbitaryOffset = 3;
 	int iX, iY;
 	int barWidth = 100, width;
+	int i, precisionFactor = 1, value;
 
 	if (isPowerBar)
 	{
@@ -2939,7 +2940,12 @@ static void intDisplayBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, bool
 	iV_DrawImageRect(IntImages, IMAGE_DES_STATSCURR, iX, y0, width, iV_GetImageHeight(IntImages, IMAGE_DES_STATSCURR));
 
 	/* draw text value */
-	sprintf(szVal, "%d", BarGraph->iOriginal);
+	for (i = 0; i < BarGraph->precision; ++i)
+	{
+		precisionFactor *= 10;
+	}
+	value = (BarGraph->iOriginal * precisionFactor + BarGraph->denominator/2) / BarGraph->denominator;
+	sprintf(szVal, "%d%s%.*d", value/precisionFactor, precisionFactor == 1? "" : ".", BarGraph->precision, value%precisionFactor);
 	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 	iV_DrawText(szVal, x0, iY);
 
