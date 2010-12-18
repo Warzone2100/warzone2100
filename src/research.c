@@ -521,11 +521,11 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 
 		//set the researchPoints
 		ASSERT_OR_RETURN(false, resPoints <= UWORD_MAX, "Research Points too high for research topic - %s ", getResearchName(pResearch));
-		pResearch->researchPoints = pow( (UWORD)resPoints , tweakData[0][tweak_res_exp] )/pow(3600,(tweakData[0][tweak_res_exp]-1));
-		pResearch->researchPoints*= tweakData[0][tweak_res_fact];
+		pResearch->researchPoints = pow( (UWORD)resPoints , tweakData[0][tweak_res_exp]/100 )/pow(3600,(tweakData[0][tweak_res_exp]/100-1));
+		pResearch->researchPoints*= tweakData[0][tweak_res_fact]/100;
 
 		//set the research power
-		pResearch->researchPower = pResearch->researchPoints / RESEARCH_FACTOR * tweakData[0][tweak_res_power];
+		pResearch->researchPower = pResearch->researchPoints / RESEARCH_FACTOR * tweakData[0][tweak_res_power] / 100;
 		if (pResearch->researchPower > RESEARCH_MAX_POWER)
 		{
 			pResearch->researchPower = RESEARCH_MAX_POWER;

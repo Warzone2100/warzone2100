@@ -29,34 +29,9 @@
 #define tweak_num 20
 double tweakData [MAX_PLAYERS][tweak_num]; //actual array containing the values
 
-/*
-char tweakNames[tweak_num][20] = { 
-	"dummy" ,
-	"power_fact",
-	"power_exp",
-	"power_bonus",
-	"power_loss",
-	"power_start",
-	"res_fact",
-	"res_exp",
-	"res_power", 
-	"droidbuild_fact",
-	"droidpower_fact",
-	"droidbody_fact",
-	"structbuild_fact",
-	"structarmour_fact",
-	"structcost_fact",
-	"structbody_fact",
-	"armour_fact",
-	"damage_fact",
-	"speed_fact",
-	"accel_fact"
-};
- */
 
-
-// /!\ The line above is a copy of tweak.c line 7 keep those 2 in synch
-// under it's a list of the same tweaks keep their numbers the same as in the array. It just there to keep the code human readable. But I suggest we also keep close track of where is the tweak and what it's suppose to do here...
+// /!\ These lines must be absolutly synched  with tweak.c line 7
+// under it's a list of the tweaks keep their numbers the same as in the array. It just there to keep the code human readable. But I suggest we also keep close track of where is the tweak and what it's suppose to do here...
 
  typedef enum tweakNo { 
 	tweak_dummy,		//0 will contain the last unidentified param
@@ -68,7 +43,7 @@ char tweakNames[tweak_num][20] = {
 	tweak_power_start, 	//5 (not implemented yet) set how much power you start with
 	//research.c line 610
 	tweak_res_fact, 	//6 multiply research time and cost
-	tweak_res_exp,		//7 make research expodentialy hard
+	tweak_res_exp,		//7 make research exponentialy hard
 	tweak_res_power, 	//8 multiply power cost but not time
 	//droid.c
 	tweak_droidbuild_fact, 	//9 droid build time factor
@@ -84,7 +59,7 @@ char tweakNames[tweak_num][20] = {
 	tweak_damage_fact, 	//17 Multiply the damage (after armour)
 	//move.c 1949 and 2095
 	tweak_speed_fact, 	//18 Multiply speed
-	tweak_accel_fact 	//19 Multiply accel (buggy pathfinding > 2)
+	tweak_accel_fact 	//19 Multiply accel (buggy pathfinding > 200)
 	
  } tweakNo;
 
