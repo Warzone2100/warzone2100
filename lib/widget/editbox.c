@@ -114,8 +114,6 @@ W_EDITBOX* editBoxCreate(const W_EDBINIT* psInit)
 
 	psWidget->blinkOffset = SDL_GetTicks();
 
-	init_scrap();
-
 	return psWidget;
 }
 
