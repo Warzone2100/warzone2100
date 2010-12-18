@@ -33,8 +33,6 @@
 /* Create a barGraph widget data structure */
 W_BARGRAPH* barGraphCreate(const W_BARINIT* psInit)
 {
-	W_BARGRAPH* psWidget;
-
 	if (psInit->style & ~(WBAR_PLAIN | WBAR_TROUGH | WBAR_DOUBLE | WIDG_HIDDEN))
 	{
 		ASSERT(false, "Unknown bar graph style");
@@ -61,7 +59,7 @@ W_BARGRAPH* barGraphCreate(const W_BARINIT* psInit)
 	}
 
 	/* Allocate the required memory */
-	psWidget = (W_BARGRAPH *)malloc(sizeof(W_BARGRAPH));
+	W_BARGRAPH *psWidget = new W_BARGRAPH;
 	if (psWidget == NULL)
 	{
 		debug(LOG_FATAL, "barGraphCreate: Out of memory");
@@ -132,7 +130,7 @@ void barGraphFree(W_BARGRAPH *psWidget)
 {
 	ASSERT(psWidget != NULL,"Invalid widget pointer");
 
-	free(psWidget);
+	delete psWidget;
 }
 
 /* Initialise a barGraph widget before running it */

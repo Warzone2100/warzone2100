@@ -42,8 +42,6 @@ BOOL buttonStartUp(void)
 /* Create a button widget data structure */
 W_BUTTON* buttonCreate(const W_BUTINIT* psInit)
 {
-	W_BUTTON* psWidget;
-
 	if (psInit->style & ~(WBUT_PLAIN | WIDG_HIDDEN | WFORM_NOCLICKMOVE
 	                    | WBUT_NOPRIMARY | WBUT_SECONDARY | WBUT_TXTCENTRE))
 	{
@@ -52,7 +50,7 @@ W_BUTTON* buttonCreate(const W_BUTINIT* psInit)
 	}
 
 	/* Allocate the required memory */
-	psWidget = (W_BUTTON *)malloc(sizeof(W_BUTTON));
+	W_BUTTON *psWidget = new W_BUTTON;
 	if (psWidget == NULL)
 	{
 		debug(LOG_FATAL, "buttonCreate: Out of memory" );
@@ -116,7 +114,7 @@ void buttonFree(W_BUTTON *psWidget)
 	ASSERT( psWidget != NULL,
 		"buttonFree: invalid button pointer" );
 
-	free(psWidget);
+	delete psWidget;
 }
 
 

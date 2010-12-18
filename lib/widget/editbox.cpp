@@ -57,7 +57,6 @@ static void fitStringStart(utf_32_char *pBuffer, UDWORD boxWidth, UWORD *pCount,
 /* Create an edit box widget data structure */
 W_EDITBOX* editBoxCreate(const W_EDBINIT* psInit)
 {
-	W_EDITBOX* psWidget;
 	const char *text;
 
 	if (psInit->style & ~(WEDB_PLAIN | WIDG_HIDDEN | WEDB_DISABLED))
@@ -67,7 +66,7 @@ W_EDITBOX* editBoxCreate(const W_EDBINIT* psInit)
 	}
 
 	/* Allocate the required memory */
-	psWidget = (W_EDITBOX *)malloc(sizeof(W_EDITBOX));
+	W_EDITBOX *psWidget = new W_EDITBOX;
 	if (psWidget == NULL)
 	{
 		debug(LOG_FATAL, "editBoxCreate: Out of memory");
@@ -124,7 +123,7 @@ W_EDITBOX* editBoxCreate(const W_EDBINIT* psInit)
 void editBoxFree(W_EDITBOX *psWidget)
 {
 	free(psWidget->aText);
-	free(psWidget);
+	delete psWidget;
 }
 
 

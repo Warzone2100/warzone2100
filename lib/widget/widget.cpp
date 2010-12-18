@@ -100,7 +100,7 @@ W_SCREEN* widgCreateScreen()
 	W_FORM		*psForm;
 	W_FORMINIT	sInit;
 
-	W_SCREEN* psScreen = (W_SCREEN *)malloc(sizeof(W_SCREEN));
+	W_SCREEN *psScreen = new W_SCREEN;
 	if (psScreen == NULL)
 	{
 		debug(LOG_FATAL, "widgCreateScreen: Out of memory");
@@ -119,11 +119,11 @@ W_SCREEN* widgCreateScreen()
 	psForm = formCreate(&sInit);
 	if (psForm == NULL)
 	{
-		free(psScreen);
+		delete psScreen;
 		return NULL;
 	}
 
-	psScreen->psForm = (WIDGET *)psForm;
+	psScreen->psForm = psForm;
 	psScreen->psFocus = NULL;
 	psScreen->TipFontID = font_regular;
 
@@ -157,7 +157,7 @@ void widgReleaseScreen(W_SCREEN *psScreen)
 
 	formFree((W_FORM *)psScreen->psForm);
 
-	free(psScreen);
+	delete psScreen;
 }
 
 

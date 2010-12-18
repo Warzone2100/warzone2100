@@ -37,8 +37,6 @@ void sliderEnableDrag(BOOL Enable)
 /* Create a slider widget data structure */
 W_SLIDER* sliderCreate(const W_SLDINIT* psInit)
 {
-	W_SLIDER* psWidget;
-
 	if (psInit->style & ~(WBAR_PLAIN | WIDG_HIDDEN))
 	{
 		ASSERT(false, "sliderCreate: Unknown style");
@@ -81,7 +79,7 @@ W_SLIDER* sliderCreate(const W_SLDINIT* psInit)
 	}
 
 	/* Allocate the required memory */
-	psWidget = (W_SLIDER *)malloc(sizeof(W_SLIDER));
+	W_SLIDER *psWidget = new W_SLIDER;
 	if (psWidget == NULL)
 	{
 		debug(LOG_FATAL, "sliderCreate: Out of memory");
@@ -130,7 +128,7 @@ void sliderFree(W_SLIDER *psWidget)
 	ASSERT( psWidget != NULL,
 		"sliderFree: Invalid widget pointer" );
 
-	free(psWidget);
+	delete psWidget;
 }
 
 

@@ -33,8 +33,6 @@
 /* Create a button widget data structure */
 W_LABEL* labelCreate(const W_LABINIT* psInit)
 {
-	W_LABEL* psWidget;
-
 	/* Do some validation on the initialisation struct */
 	if (psInit->style & ~(WLAB_PLAIN | WLAB_ALIGNLEFT |
 						   WLAB_ALIGNRIGHT | WLAB_ALIGNCENTRE | WIDG_HIDDEN))
@@ -44,7 +42,7 @@ W_LABEL* labelCreate(const W_LABINIT* psInit)
 	}
 
 	/* Allocate the required memory */
-	psWidget = (W_LABEL *)malloc(sizeof(W_LABEL));
+	W_LABEL *psWidget = new W_LABEL;
 	if (psWidget == NULL)
 	{
 		debug(LOG_FATAL, "labelCreate: Out of memory");
@@ -96,7 +94,7 @@ void labelFree(W_LABEL *psWidget)
 	ASSERT( psWidget != NULL,
 		"labelFree: Invalid label pointer" );
 
-	free(psWidget);
+	delete psWidget;
 }
 
 

@@ -38,13 +38,13 @@
 static inline void formFreeTips(W_TABFORM *psForm);
 
 /* Store the position of a tab */
-typedef struct _tab_pos
+struct TAB_POS
 {
 	SDWORD		index;
 	SDWORD		x,y;
 	UDWORD		width,height;
 	SDWORD		TabMultiplier;			//Added to keep track of tab scroll
-} TAB_POS;
+};
 
 /* Set default colours for a form */
 static void formSetDefaultColours(W_FORM *psForm)
@@ -63,7 +63,7 @@ static void formSetDefaultColours(W_FORM *psForm)
 static W_FORM* formCreatePlain(const W_FORMINIT* psInit)
 {
 	/* Allocate the required memory */
-	W_FORM* psWidget = (W_FORM *)malloc(sizeof(W_FORM));
+	W_FORM *psWidget = new W_FORM;
 	if (psWidget == NULL)
 	{
 		debug(LOG_FATAL, "formCreatePlain: Out of memory");
@@ -72,7 +72,6 @@ static W_FORM* formCreatePlain(const W_FORMINIT* psInit)
 	}
 
 	/* Initialise the structure */
-	memset(psWidget, 0, sizeof(W_FORM));
 	psWidget->type = WIDG_FORM;
 	psWidget->id = psInit->id;
 	psWidget->formID = psInit->formID;
@@ -99,6 +98,11 @@ static W_FORM* formCreatePlain(const W_FORMINIT* psInit)
 	psWidget->psLastHiLite = NULL;
 	formSetDefaultColours(psWidget);
 
+	// These assignments were previously done by a memset.
+	psWidget->psNext = NULL;
+	psWidget->Ax0 = psWidget->Ay0 = psWidget->Ax1 = psWidget->Ay1 = 0;
+	psWidget->startTime = 0;
+
 	formInitialise(psWidget);
 
 	return psWidget;
@@ -112,7 +116,7 @@ static void formFreePlain(W_FORM *psWidget)
 
 	widgReleaseWidgetList(psWidget->psWidgets);
 	CheckpsMouseOverWidget(psWidget);			// clear global if needed
-	free(psWidget);
+	delete psWidget;
 }
 
 
@@ -120,7 +124,7 @@ static void formFreePlain(W_FORM *psWidget)
 static W_CLICKFORM* formCreateClickable(const W_FORMINIT* psInit)
 {
 	/* Allocate the required memory */
-	W_CLICKFORM* psWidget = (W_CLICKFORM *)malloc(sizeof(W_CLICKFORM));
+	W_CLICKFORM *psWidget = new W_CLICKFORM;
 	if (psWidget == NULL)
 	{
 		debug(LOG_FATAL, "formCreateClickable: Out of memory");
@@ -129,7 +133,6 @@ static W_CLICKFORM* formCreateClickable(const W_FORMINIT* psInit)
 	}
 
 	/* Initialise the structure */
-	memset(psWidget, 0, sizeof(W_CLICKFORM));
 	psWidget->type = WIDG_FORM;
 	psWidget->id = psInit->id;
 	psWidget->formID = psInit->formID;
@@ -161,6 +164,11 @@ static W_CLICKFORM* formCreateClickable(const W_FORMINIT* psInit)
 	psWidget->pTip = psInit->pTip;
 	formSetDefaultColours((W_FORM *)psWidget);
 
+	// These assignments were previously done by a memset.
+	psWidget->psNext = NULL;
+	psWidget->Ax0 = psWidget->Ay0 = psWidget->Ax1 = psWidget->Ay1 = 0;
+	psWidget->startTime = 0;
+
 	formInitialise((W_FORM *)psWidget);
 
 	return psWidget;
@@ -175,14 +183,13 @@ static void formFreeClickable(W_CLICKFORM *psWidget)
 
 	widgReleaseWidgetList(psWidget->psWidgets);
 
-	free(psWidget);
+	delete psWidget;
 }
 
 
 /* Create a tabbed form widget */
 static W_TABFORM* formCreateTabbed(const W_FORMINIT* psInit)
 {
-	W_TABFORM* psWidget;
 	UDWORD		major,minor;
 	W_MAJORTAB	*psMajor;
 
@@ -217,14 +224,14 @@ static W_TABFORM* formCreateTabbed(const W_FORMINIT* psInit)
 	}
 
 	/* Allocate the required memory */
-	psWidget = (W_TABFORM *)malloc(sizeof(W_TABFORM));
+	W_TABFORM *psWidget = new W_TABFORM;
 	if (psWidget == NULL)
 	{
 		debug(LOG_FATAL, "formCreateTabbed: Out of memory");
 		abort();
 		return NULL;
 	}
-	memset(psWidget, 0, sizeof(W_TABFORM));
+	memset(psWidget->asMajor, 0, sizeof(psWidget->asMajor));
 
 	/* Allocate the memory for tool tips and copy them in */
 	psMajor = psWidget->asMajor;
@@ -294,6 +301,13 @@ static W_TABFORM* formCreateTabbed(const W_FORMINIT* psInit)
 		psWidget->asMajor[major].numMinor = psInit->aNumMinors[major];
 	}
 
+	// These assignments were previously done by a memset.
+	psWidget->psNext = NULL;
+	psWidget->Ax0 = psWidget->Ay0 = psWidget->Ax1 = psWidget->Ay1 = 0;
+	psWidget->startTime = 0;
+	psWidget->psWidgets = NULL;
+	psWidget->state = 0;
+
 	formInitialise((W_FORM *)psWidget);
 
 	return psWidget;
@@ -323,7 +337,7 @@ static void formFreeTabbed(W_TABFORM *psWidget)
 		widgReleaseWidgetList(psCurr);
 		psCurr = formGetAllWidgets(&sGetAll);
 	}
-	free(psWidget);
+	delete psWidget;
 }
 
 

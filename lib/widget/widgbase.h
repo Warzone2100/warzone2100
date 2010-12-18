@@ -64,6 +64,8 @@ enum WIDGET_TYPE
 /* The base widget data type */
 struct WIDGET
 {
+	virtual ~WIDGET() {}
+
 	UDWORD                  formID;                 ///< ID of the widgets base form.
 	UDWORD                  id;                     ///< The user set ID number for the widget. This is returned when e.g. a button is pressed.
 	WIDGET_TYPE             type;                   ///< The widget type
@@ -82,7 +84,7 @@ struct WIDGET
 /* The screen structure which stores all info for a widget screen */
 struct W_SCREEN
 {
-	WIDGET*          psForm;        ///< The root form of the screen
+	W_FORM *         psForm;        ///< The root form of the screen
 	WIDGET*          psFocus;       ///< The widget that has keyboard focus
 	enum iV_fonts    TipFontID;     ///< ID of the IVIS font to use for tool tips.
 	WIDGET*          psRetWidget;   ///< The widget to be returned by widgRunScreen
