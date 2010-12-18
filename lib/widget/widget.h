@@ -230,6 +230,8 @@ typedef struct
 	UWORD		size;			///< Initial percentage of the graph that is filled
 	UWORD		minorSize;		///< Percentage of second bar graph if there is one
 	UWORD		iRange;			///< Maximum range
+	int             denominator;            ///< Denominator, 1 by default.
+	int             precision;              ///< Number of places after the decimal point to display, 0 by default.
 	PIELIGHT	sCol;			///< Bar colour
 	PIELIGHT	sMinorCol;		///< Minor bar colour
 	const char	*pTip;			///< Tool tip text

@@ -1549,13 +1549,19 @@ static BOOL _intSetSystemForm(COMPONENT_STATS *psStats)
 		/* Add the bar graphs*/
 		sBarInit.id = IDDES_SENSORRANGE;
 		sBarInit.iRange = (UWORD)getMaxSensorRange();//DBAR_SENSORMAXRANGE;
+		sBarInit.pTip = _("Sensor Range");
+		sBarInit.denominator = TILE_UNITS;
+		sBarInit.precision = 1;
 		if (!widgAddBarGraph(psWScreen, &sBarInit))
 		{
 			return false;
 		}
+		sBarInit.denominator = 0;
+		sBarInit.precision = 0;
 		sBarInit.id = IDDES_SENSORPOWER;
 		sBarInit.y = DES_STATBAR_Y2;	//+= DES_CLICKBARHEIGHT + DES_CLICKGAP;
 		sBarInit.iRange = (UWORD)getMaxSensorPower();//DBAR_SENSORMAXPOWER;
+		sBarInit.pTip = _("Sensor Power");
 		if (!widgAddBarGraph(psWScreen, &sBarInit))
 		{
 			return false;
@@ -1563,6 +1569,7 @@ static BOOL _intSetSystemForm(COMPONENT_STATS *psStats)
 		sBarInit.id = IDDES_SENSORWEIGHT;
 		sBarInit.y = DES_STATBAR_Y3;	//+= DES_CLICKBARHEIGHT + DES_CLICKGAP;
 		sBarInit.iRange = (UWORD)getMaxComponentWeight();//DBAR_MAXWEIGHT;
+		sBarInit.pTip = _("Weight");
 		if (!widgAddBarGraph(psWScreen, &sBarInit))
 		{
 			return false;
@@ -1602,6 +1609,7 @@ static BOOL _intSetSystemForm(COMPONENT_STATS *psStats)
 		/* Add the bar graphs */
 		sBarInit.id = IDDES_ECMPOWER;
 		sBarInit.iRange = (UWORD)getMaxECMPower();//DBAR_ECMMAXPOWER;
+		sBarInit.pTip = _("ECM Power");
 		if (!widgAddBarGraph(psWScreen, &sBarInit))
 		{
 			return false;
@@ -1609,6 +1617,7 @@ static BOOL _intSetSystemForm(COMPONENT_STATS *psStats)
 		sBarInit.id = IDDES_ECMWEIGHT;
 		sBarInit.y = DES_STATBAR_Y2;	//+= DES_CLICKBARHEIGHT + DES_CLICKGAP;
 		sBarInit.iRange = (UWORD)getMaxComponentWeight();//DBAR_MAXWEIGHT;
+		sBarInit.pTip = _("Weight");
 		if (!widgAddBarGraph(psWScreen, &sBarInit))
 		{
 			return false;
@@ -1718,10 +1727,14 @@ static BOOL _intSetSystemForm(COMPONENT_STATS *psStats)
 		sBarInit.id = IDDES_WEAPRANGE;
 		sBarInit.iRange = (UWORD)getMaxWeaponRange();//DBAR_WEAPMAXRANGE;
 		sBarInit.pTip = _("Range");
+		sBarInit.denominator = TILE_UNITS;
+		sBarInit.precision = 1;
 		if (!widgAddBarGraph(psWScreen, &sBarInit))
 		{
 			return false;
 		}
+		sBarInit.denominator = 0;
+		sBarInit.precision = 0;
 		sBarInit.id = IDDES_WEAPDAMAGE;
 		sBarInit.y = DES_STATBAR_Y2;	//+= DES_CLICKBARHEIGHT + DES_CLICKGAP;
 		sBarInit.iRange = (UWORD)getMaxWeaponDamage();//DBAR_WEAPMAXDAMAGE;
@@ -1904,10 +1917,14 @@ static BOOL intSetPropulsionForm(PROPULSION_STATS *psStats)
 		sBarInit.id = IDDES_PROPAIR;
 		sBarInit.iRange = (UWORD)getMaxPropulsionSpeed();//DBAR_PROPMAXSPEED;
 		sBarInit.pTip = _("Air Speed");
+		sBarInit.denominator = TILE_UNITS;
+		sBarInit.precision = 2;
 		if (!widgAddBarGraph(psWScreen, &sBarInit))
 		{
 			return false;
 		}
+		sBarInit.denominator = 0;
+		sBarInit.precision = 0;
 		sBarInit.id = IDDES_PROPWEIGHT;
 		sBarInit.y = DES_STATBAR_Y2;	//+= DES_CLICKBARHEIGHT + DES_CLICKGAP;
 		sBarInit.iRange = (UWORD)getMaxComponentWeight();//DBAR_MAXWEIGHT;
@@ -1941,6 +1958,8 @@ static BOOL intSetPropulsionForm(PROPULSION_STATS *psStats)
 		sBarInit.id = IDDES_PROPROAD;
 		sBarInit.pTip = _("Road Speed");
 		sBarInit.iRange = (UWORD)getMaxPropulsionSpeed();//DBAR_PROPMAXSPEED;
+		sBarInit.denominator = TILE_UNITS;
+		sBarInit.precision = 2;
 		if (!widgAddBarGraph(psWScreen, &sBarInit))
 		{
 			return false;
@@ -1961,6 +1980,8 @@ static BOOL intSetPropulsionForm(PROPULSION_STATS *psStats)
 		{
 			return false;
 		}
+		sBarInit.denominator = 0;
+		sBarInit.precision = 0;
 		sBarInit.id = IDDES_PROPWEIGHT;
 		sBarInit.y = DES_STATBAR_Y4;	//+= DES_CLICKBARHEIGHT + DES_CLICKGAP;
 		sBarInit.pTip = _("Weight");

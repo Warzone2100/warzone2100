@@ -121,6 +121,9 @@ W_BARGRAPH* barGraphCreate(const W_BARINIT* psInit)
 		psWidget->majorCol = psInit->sMinorCol;
 	}
 
+	psWidget->denominator = MAX(psInit->denominator, 1);
+	psWidget->precision = psInit->precision;
+
 	barGraphInitialise(psWidget);
 
 	return psWidget;
