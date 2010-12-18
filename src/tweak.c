@@ -29,12 +29,12 @@ char tweakNames[tweak_num][20] =
 };
 double tweakDefault[tweak_num] = 
 {
-	 1, 
-	 1, 1, 0, 0, 1, //power
-	 1, 1, 1, //res
-	 1, 1, 1, //droid
-	 1, 1, 1, 1, //struct
-	 1, 1, 1 ,1
+	 100, 
+	 100, 100, 0, 0, 100, //power
+	 100, 100, 100, //res
+	 100, 100, 100, //droid
+	 100, 100, 100, 100, //struct
+	 100, 100, 100 ,100
 	};
 
 
