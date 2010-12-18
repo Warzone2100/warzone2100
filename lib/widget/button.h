@@ -28,11 +28,6 @@
 #include "widgbase.h"
 #include "lib/ivis_common/textdraw.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 /* Button states */
 #define WBUTS_NORMAL	0x0000
 #define WBUTS_DOWN		0x0001		// Button is down
@@ -43,11 +38,8 @@ extern "C"
 #define WBUTS_FLASH		0x0020		// Button flashing is enabled
 #define WBUTS_FLASHON	0x0040		// Button is flashing
 
-typedef struct _w_button
+struct W_BUTTON : public WIDGET
 {
-	/* The common widget data */
-	WIDGET_BASE;
-
 	UDWORD		state;				// The current button state
 	const char *pText;				// The text for the button
 	const char *pTip;				// The tool tip for the button
@@ -55,7 +47,7 @@ typedef struct _w_button
 	SWORD ClickedAudioID;				// Audio ID for form hilighted sound
 	WIDGET_AUDIOCALLBACK AudioCallback;	// Pointer to audio callback function
 	enum iV_fonts FontID;
-} W_BUTTON;
+};
 
 /* Initialise the button module */
 extern BOOL buttonStartUp(void);
@@ -95,9 +87,5 @@ extern void buttonClearFlash(W_BUTTON *psButton);
 
 /* The button display function */
 extern void buttonDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_LIB_WIDGET_BUTTON_H__

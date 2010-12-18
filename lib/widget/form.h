@@ -26,57 +26,40 @@
 
 #include "lib/widget/widget.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
-/* The basic form data */
-#define FORM_BASE \
-	WIDGET_BASE;				/* The common widget data */ \
-	\
-	BOOL		disableChildren;	/* Disable all child widgets if true */ \
-	UWORD		Ax0,Ay0,Ax1,Ay1; 	/* Working coords for animations. */ \
-	UDWORD		animCount; 			/* Animation counter. */ \
-	UDWORD		startTime;			/* Animation start time */ \
-	PIELIGHT	aColours[WCOL_MAX];		/* Colours for the form and its widgets */ \
-	WIDGET		*psLastHiLite;	/* The last widget to be hilited */ \
-								/* This is used to track when the mouse moves */ \
-								/* off something */ \
-	WIDGET		*psWidgets		/* The widgets on the form */
-
 
 /* The standard form */
-typedef struct _w_form
+struct W_FORM : public WIDGET
 {
-	/* The common form data */
-	FORM_BASE;
-} W_FORM;
+	BOOL            disableChildren;        ///< Disable all child widgets if true
+	UWORD           Ax0,Ay0,Ax1,Ay1;        ///< Working coords for animations.
+	UDWORD          animCount;              ///< Animation counter.
+	UDWORD          startTime;              ///< Animation start time
+	PIELIGHT        aColours[WCOL_MAX];     ///< Colours for the form and its widgets
+	WIDGET *        psLastHiLite;           ///< The last widget to be hilited. This is used to track when the mouse moves off something.
+	WIDGET *        psWidgets;              ///< The widgets on the form
+};
 
 /* Information for a minor tab */
-typedef struct _w_minortab
+struct W_MINORTAB
 {
 	/* Graphics data for the tab will go here */
 	WIDGET		*psWidgets;			// Widgets on the tab
 	char		*pTip;				// Tool tip
-} W_MINORTAB;
+};
 
 /* Information for a major tab */
-typedef struct _w_majortab
+struct W_MAJORTAB
 {
 	/* Graphics data for the tab will go here */
 	UWORD			lastMinor;					// Store which was the last selected minor tab
 	UWORD			numMinor;
 	W_MINORTAB		asMinor[WFORM_MAXMINOR];	// Minor tab information
 	char			*pTip;
-} W_MAJORTAB;
+};
 
 /* The tabbed form data structure */
-typedef struct _w_tabform
+struct W_TABFORM : public W_FORM
 {
-	/* The common form data */
-	FORM_BASE;
-
 	UWORD		majorPos, minorPos;		// Position of the tabs on the form
 	UWORD		majorSize,minorSize;	// the size of tabs horizontally and vertically
 	UWORD		tabMajorThickness;			// The thickness of the tabs
@@ -100,7 +83,7 @@ typedef struct _w_tabform
 	UWORD		numButtons;				//# of buttons per form
 	W_MAJORTAB	asMajor[WFORM_MAXMAJOR];	// The major tab information
 	TAB_DISPLAY pTabDisplay;			// Optional callback for display tabs.
-} W_TABFORM;
+};
 
 
 /* Button states for a clickable form */
@@ -114,17 +97,14 @@ typedef struct _w_tabform
 #define WCLICK_FLASHON		0x0040		// Button is flashing
 
 /* The clickable form data structure */
-typedef struct _w_clickform
+struct W_CLICKFORM : public W_FORM
 {
-	/* The common form data */
-	FORM_BASE;
-
 	UDWORD		state;					// Button state of the form
 	const char	*pTip;					// Tip for the form
 	SWORD HilightAudioID;				// Audio ID for form clicked sound
 	SWORD ClickedAudioID;				// Audio ID for form hilighted sound
 	WIDGET_AUDIOCALLBACK AudioCallback;	// Pointer to audio callback function
-} W_CLICKFORM;
+};
 
 extern void formClearFlash(W_FORM *psWidget);
 
@@ -147,13 +127,13 @@ extern WIDGET *formGetWidgets(W_FORM *psWidget);
 extern void formGetOrigin(W_FORM *psWidget, SDWORD *pXOrigin, SDWORD *pYOrigin);
 
 /* Variables for the formGetAllWidgets functions */
-typedef struct _w_formgetall
+struct W_FORMGETALL
 {
 	WIDGET		*psGAWList;
 	W_TABFORM	*psGAWForm;
 	W_MAJORTAB	*psGAWMajor;
 	UDWORD		GAWMajor, GAWMinor;
-} W_FORMGETALL;
+};
 
 /* Initialise the formGetAllWidgets function */
 extern void formInitGetAllWidgets(W_FORM *psWidget, W_FORMGETALL *psCtrl);
@@ -191,9 +171,5 @@ extern void formHiLiteLost(W_FORM *psWidget, W_CONTEXT *psContext);
 extern void formDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 extern void formDisplayClickable(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 extern void formDisplayTabbed(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_LIB_WIDGET_FORM_H__

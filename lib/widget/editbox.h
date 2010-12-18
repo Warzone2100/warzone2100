@@ -29,11 +29,6 @@
 #include "lib/ivis_common/textdraw.h"
 #include "lib/framework/utf.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 /* Edit Box states */
 #define WEDBS_FIXED		0x0001		// No editing is going on
 #define WEDBS_INSERT	0x0002		// Insertion editing
@@ -42,11 +37,8 @@ extern "C"
 #define WEDBS_HILITE	0x0010		//
 #define WEDBS_DISABLE   0x0020		// disable button from selection
 
-typedef struct _w_editbox
+struct W_EDITBOX : public WIDGET
 {
-	/* The common widget data */
-	WIDGET_BASE;
-
 	UDWORD		state;						// The current edit box state
 	utf_32_char	*aText;			// The text in the edit box
 	size_t		aTextAllocated;		// Allocated bytes.
@@ -61,7 +53,7 @@ typedef struct _w_editbox
 	SWORD HilightAudioID;					// Audio ID for form clicked sound
 	SWORD ClickedAudioID;					// Audio ID for form hilighted sound
 	WIDGET_AUDIOCALLBACK AudioCallback;		// Pointer to audio callback function
-} W_EDITBOX;
+};
 
 /* Create an edit box widget data structure */
 extern W_EDITBOX* editBoxCreate(const W_EDBINIT* psInit);
@@ -98,9 +90,5 @@ extern void editBoxDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIE
 
 /* set state of edit box */
 extern void editBoxSetState(W_EDITBOX *psEditBox, UDWORD state);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_LIB_WIDGET_EDITBOX_H__
