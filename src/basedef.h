@@ -56,15 +56,18 @@ typedef struct _tilePos
 */
 
 /// NEXTOBJ is an ugly hack to avoid having to fix all occurences of psNext and psNextFunc. The use of the original NEXTOBJ(pointerType) hack wasn't valid C, so in that sense, it's an improvement.
-/// NEXTOBJ is a SIMPLE_OBJECT *, which can automatically be cast to DROID *, STRUCTURE *, FEATURE * and PROJECTILE *...
+/// NEXTOBJ is a BASE_OBJECT *, which can automatically be cast to DROID *, STRUCTURE * and FEATURE *...
+
+struct BASE_OBJECT;
+
 struct NEXTOBJ
 {
-	NEXTOBJ(struct SIMPLE_OBJECT *ptr_ = NULL) : ptr(ptr_) {}
-	NEXTOBJ &operator =(struct SIMPLE_OBJECT *ptr_) { ptr = ptr_; return *this; }
+	NEXTOBJ(BASE_OBJECT *ptr_ = NULL) : ptr(ptr_) {}
+	NEXTOBJ &operator =(BASE_OBJECT *ptr_) { ptr = ptr_; return *this; }
 	template<class T>
 	operator T * () const { return static_cast<T *>(ptr); }
 
-	struct SIMPLE_OBJECT *ptr;
+	BASE_OBJECT *ptr;
 };
 
 struct SIMPLE_OBJECT
