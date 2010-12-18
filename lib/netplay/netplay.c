@@ -3089,7 +3089,7 @@ static void sendDebugSync(uint8_t *buf, uint32_t bufLen, uint32_t time)
 	NETend();
 }
 
-static uint8_t debugSyncTmpBuf[1000000];
+static uint8_t debugSyncTmpBuf[2000000];
 static void recvDebugSync(NETQUEUE queue)
 {
 	uint32_t time = 0;
@@ -3139,12 +3139,15 @@ bool checkDebugSync(uint32_t checkGameTime, uint32_t checkCrc)
 	// Dump our version, and also erase it, so we only dump it at most once.
 	debug(LOG_ERROR, "Inconsistent sync debug at gameTime %u. My version has %u lines, CRC = 0x%08X.", syncDebugGameTime[index], syncDebugNum[index], ~syncDebugCrcs[index] & 0xFFFFFFFF);
 	bufSize += snprintf((char *)debugSyncTmpBuf + bufSize, ARRAY_SIZE(debugSyncTmpBuf) - bufSize, "===== BEGIN gameTime=%u, %u lines, CRC 0x%08X =====\n", syncDebugGameTime[index], syncDebugNum[index], ~syncDebugCrcs[index] & 0xFFFFFFFF);
+	bufSize = MIN(bufSize, ARRAY_SIZE(debugSyncTmpBuf));  // snprintf will not overflow debugSyncTmpBuf, but returns as much as it would have printed if possible.
 	for (i = 0; i < syncDebugNum[index]; ++i)
 	{
 		bufSize += snprintf((char *)debugSyncTmpBuf + bufSize, ARRAY_SIZE(debugSyncTmpBuf) - bufSize, "[%s] %s\n", syncDebugFunctions[index][i], syncDebugStrings[index][i]);
+		bufSize = MIN(bufSize, ARRAY_SIZE(debugSyncTmpBuf));  // snprintf will not overflow debugSyncTmpBuf, but returns as much as it would have printed if possible.
 		free(syncDebugStrings[index][i]);
 	}
 	bufSize += snprintf((char *)debugSyncTmpBuf + bufSize, ARRAY_SIZE(debugSyncTmpBuf) - bufSize, "===== END gameTime=%u, %u lines, CRC 0x%08X =====\n", syncDebugGameTime[index], syncDebugNum[index], ~syncDebugCrcs[index] & 0xFFFFFFFF);
+	bufSize = MIN(bufSize, ARRAY_SIZE(debugSyncTmpBuf));  // snprintf will not overflow debugSyncTmpBuf, but returns as much as it would have printed if possible.
 	if (numDumps < 5)
 	{
 		++numDumps;

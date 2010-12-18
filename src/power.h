@@ -75,11 +75,6 @@ void powerCalc(BOOL on);
 /** Temp function to give all players some power when a new game has been loaded. */
 void newGameInitPower(void);
 
-/**	Returns the next res. Ext. in the list from the one passed in. returns 1st one
-	in list if passed in is NULL and NULL if there's none?
-*/
-extern STRUCTURE *getRExtractor(STRUCTURE *psStruct);
-
 /** Defines which structure types draw power - returns true if use power. */
 extern BOOL structUsesPower(STRUCTURE *psStruct);
 

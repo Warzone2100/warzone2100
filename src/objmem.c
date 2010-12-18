@@ -63,6 +63,8 @@ uint32_t                synchObjID;
 DROID			*apsDroidLists[MAX_PLAYERS];
 STRUCTURE		*apsStructLists[MAX_PLAYERS];
 FEATURE			*apsFeatureLists[MAX_PLAYERS];		///< Only player zero is valid for features. TODO: Reduce to single list.
+STRUCTURE		*apsExtractorLists[MAX_PLAYERS];
+FEATURE			*apsOilList[1];
 BASE_OBJECT		*apsSensorList[1];			///< List of sensors in the game.
 
 /*The list of Flag Positions allocated */
@@ -293,8 +295,9 @@ static inline void addObjectToFuncList(BASE_OBJECT *list[], BASE_OBJECT *object,
 	ASSERT_OR_RETURN(, object->psNextFunc == NULL, "%s(%p) is already in a function list!", objInfo(object), object);
 
 	// Prepend the object to the top of the list
-	object->psNextFunc = list[player];
-	list[player] = object;
+	// memcpy is to avoid strict-aliasing error. Will probably break if using multiple inheritance.
+	memcpy(&object->psNextFunc, &list[player], sizeof(void *));  // object->psNextFunc = list[player];
+	memcpy(&list[player], &object, sizeof(void *));              // list[player] = object;
 }
 
 /* Move an object from the active list to the destroyed list.
@@ -381,19 +384,22 @@ static inline void removeObjectFromList(BASE_OBJECT *list[], BASE_OBJECT *object
 static inline void removeObjectFromFuncList(BASE_OBJECT *list[], BASE_OBJECT *object, int player)
 {
 	BASE_OBJECT *psPrev = NULL, *psCurr;
+	BASE_OBJECT *listPlayer;
 
 	ASSERT_OR_RETURN(, object != NULL, "Invalid pointer");
 
+	memcpy(&listPlayer, &list[player], sizeof(void *));
+
 	// If the message to remove is the first one in the list then mark the next one as the first
-	if (list[player] == object)
+	if (listPlayer == object)
 	{
-		list[player] = list[player]->psNextFunc;
+		memcpy(&list[player], &listPlayer->psNextFunc, sizeof(void *));  // list[player] = list[player]->psNextFunc;
 		object->psNextFunc = NULL;
 		return;
 	}
 	
 	// Iterate through the list and find the item before the object to delete
-	for(psCurr = list[player]; psCurr != object && psCurr != NULL; psCurr = psCurr->psNextFunc)
+	for(psCurr = listPlayer; psCurr != object && psCurr != NULL; psCurr = psCurr->psNextFunc)
 	{
 		psPrev = psCurr;
 	}
@@ -588,6 +594,10 @@ void addStructure(STRUCTURE *psStructToAdd)
 	{
 		addObjectToFuncList(apsSensorList, (BASE_OBJECT*)psStructToAdd, 0);
 	}
+	else if (psStructToAdd->pStructureType->type == REF_RESOURCE_EXTRACTOR)
+	{
+		addObjectToFuncList((BASE_OBJECT **)apsExtractorLists, (BASE_OBJECT *)psStructToAdd, psStructToAdd->player);
+	}
 }
 
 /* Destroy a structure */
@@ -604,6 +614,10 @@ void killStruct(STRUCTURE *psBuilding)
 	    && psBuilding->pStructureType->pSensor->location == LOC_TURRET)
 	{
 		removeObjectFromFuncList(apsSensorList, (BASE_OBJECT*)psBuilding, 0);
+	}
+	else if (psBuilding->pStructureType->type == REF_RESOURCE_EXTRACTOR)
+	{
+		removeObjectFromFuncList((BASE_OBJECT **)apsExtractorLists, (BASE_OBJECT *)psBuilding, psBuilding->player);
 	}
 
 	for (i = 0; i < STRUCT_MAXWEAPS; i++)
@@ -665,6 +679,10 @@ void removeStructureFromList(STRUCTURE *psStructToRemove, STRUCTURE *pList[MAX_P
 	{
 		removeObjectFromFuncList(apsSensorList, (BASE_OBJECT*)psStructToRemove, 0);
 	}
+	else if (psStructToRemove->pStructureType->type == REF_RESOURCE_EXTRACTOR)
+	{
+		removeObjectFromFuncList((BASE_OBJECT **)apsExtractorLists, (BASE_OBJECT *)psStructToRemove, psStructToRemove->player);
+	}
 }
 
 /**************************  FEATURE  *********************************/
@@ -679,6 +697,10 @@ FEATURE* createFeature()
 void addFeature(FEATURE *psFeatureToAdd)
 {
 	addObjectToList((BASE_OBJECT**)apsFeatureLists, (BASE_OBJECT*)psFeatureToAdd, 0);
+	if (psFeatureToAdd->psStats->subType == FEAT_OIL_RESOURCE)
+	{
+		addObjectToFuncList((BASE_OBJECT **)apsOilList, (BASE_OBJECT *)psFeatureToAdd, 0);
+	}
 }
 
 /* Destroy a feature */
@@ -690,6 +712,11 @@ void killFeature(FEATURE *psDel)
 		"killFeature: pointer is not a feature" );
 	psDel->player = 0;
 	destroyObject((BASE_OBJECT**)apsFeatureLists, (BASE_OBJECT*)psDel);
+
+	if (psDel->psStats->subType == FEAT_OIL_RESOURCE)
+	{
+		removeObjectFromFuncList((BASE_OBJECT **)apsOilList, (BASE_OBJECT *)psDel, 0);
+	}
 }
 
 /* Remove all features */

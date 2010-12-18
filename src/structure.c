@@ -2236,8 +2236,8 @@ static BOOL setFunctionality(STRUCTURE	*psBuilding, STRUCTURE_TYPE functionType)
 			}
 
 			// initialise the assembly point position
-			x = map_coord(psBuilding->pos.x + 256);
-			y = map_coord(psBuilding->pos.y + 256);
+			x = map_coord(psBuilding->pos.x + (getStructureWidth(psBuilding)   + 1) * TILE_UNITS/2);
+			y = map_coord(psBuilding->pos.y + (getStructureBreadth(psBuilding) + 1) * TILE_UNITS/2);
 
 			// Set the assembly point
 			setAssemblyPoint(psFactory->psAssemblyPoint, world_coord(x), world_coord(y), psBuilding->player, true);
@@ -2328,8 +2328,8 @@ static BOOL setFunctionality(STRUCTURE	*psBuilding, STRUCTURE_TYPE functionType)
 			}
 
 			// Initialise the assembly point
-			x = map_coord(psBuilding->pos.x+256);
-			y = map_coord(psBuilding->pos.y+256);
+			x = map_coord(psBuilding->pos.x + (getStructureWidth(psBuilding)   + 1) * TILE_UNITS/2);
+			y = map_coord(psBuilding->pos.y + (getStructureBreadth(psBuilding) + 1) * TILE_UNITS/2);
 
 			// Set the assembly point
 			setAssemblyPoint(psRepairFac->psDeliveryPoint, world_coord(x),
@@ -3215,7 +3215,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 								objTrace(psDroid->id, "Repair not needed - move to delivery point");
 								orderDroidLoc(psDroid, DORDER_MOVE,
 									psRepairFac->psDeliveryPoint->coords.x,
-									psRepairFac->psDeliveryPoint->coords.y, ModeImmediate);
+									psRepairFac->psDeliveryPoint->coords.y, ModeQueue);  // ModeQueue because delivery points are not yet synchronised!
 							}
 							continue;
 						}
@@ -3701,7 +3701,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 							objTrace(psDroid->id, "Repair complete - move to delivery point");
 							orderDroidLoc( psDroid, DORDER_MOVE,
 								psRepairFac->psDeliveryPoint->coords.x,
-								psRepairFac->psDeliveryPoint->coords.y, ModeImmediate);
+								psRepairFac->psDeliveryPoint->coords.y, ModeQueue);  // ModeQueue because delivery points are not yet synchronised!
 						}
 					}
 				}
@@ -5813,11 +5813,8 @@ void checkForResExtractors(STRUCTURE *psBuilding)
 	//check capacity against number of filled slots
 	if (slot < NUM_POWER_MODULES)
 	{
-		for (psCurr = apsStructLists[psBuilding->player]; psCurr != NULL;
-			psCurr = psCurr->psNext)
+		for (psCurr = apsExtractorLists[psBuilding->player]; psCurr != NULL; psCurr = psCurr->psNextFunc)
 		{
-			if (psCurr->pStructureType->type == REF_RESOURCE_EXTRACTOR)
-			{
 				psResExtractor = &psCurr->pFunctionality->resourceExtractor;
 
 				//check not connected and power left and built!
@@ -5846,7 +5843,6 @@ void checkForResExtractors(STRUCTURE *psBuilding)
 						break;
 					}
 				}
-			}
 		}
 	}
 }
@@ -5961,14 +5957,10 @@ void releaseResExtractor(STRUCTURE *psRelease)
 	psRelease->pFunctionality->resourceExtractor.psPowerGen = NULL;
 
 	//there may be spare resource extractors
-	for (psCurr = apsStructLists[psRelease->player]; psCurr != NULL; psCurr =
-		psCurr->psNext)
+	for (psCurr = apsExtractorLists[psRelease->player]; psCurr != NULL; psCurr = psCurr->psNextFunc)
 	{
 		//check not connected and power left and built!
-		if (psCurr->pStructureType->type == REF_RESOURCE_EXTRACTOR
-		 && psCurr != psRelease
-		 && !psCurr->pFunctionality->resourceExtractor.active
-		 && psCurr->status == SS_BUILT)
+		if (psCurr != psRelease && !psCurr->pFunctionality->resourceExtractor.active && psCurr->status == SS_BUILT)
 		{
 			checkForPowerGen(psCurr);
 		}

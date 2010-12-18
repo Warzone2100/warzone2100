@@ -2401,7 +2401,9 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 			//clear all the messages?
 			apsProxDisp[player] = NULL;
 			apsSensorList[0] = NULL;
+			apsExtractorLists[player] = NULL;
 		}
+		apsOilList[0] = NULL;
 		initFactoryNumFlag();
 	}
 
@@ -2415,7 +2417,9 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 			mission.apsStructLists[player] = NULL;
 			mission.apsFeatureLists[player] = NULL;
 			mission.apsFlagPosLists[player] = NULL;
+			mission.apsExtractorLists[player] = NULL;
 		}
+		mission.apsOilList[0] = NULL;
 		mission.apsSensorList[0] = NULL;
 
 		//JPS 25 feb
