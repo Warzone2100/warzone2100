@@ -27,19 +27,13 @@
 #include "widget.h"
 #include "widgbase.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 /* Slider state */
 #define SLD_DRAG		0x0001		// Slider is being dragged
 #define SLD_HILITE		0x0002		// Slider is hilited
 
-typedef struct _w_slider
+struct W_SLIDER : public WIDGET
 {
-	/* The common widget data */
-	WIDGET_BASE;
+	W_SLIDER(W_SLDINIT const *init);
 
 	UWORD		orientation;		// The orientation of the slider
 	UWORD		numStops;			// Number of stop positions on the slider
@@ -47,7 +41,7 @@ typedef struct _w_slider
 	UWORD		pos;				// Current stop position of the slider
 	UWORD		state;				// Slider state
 	const char	*pTip;				// Tool tip
-} W_SLIDER;
+};
 
 /* Create a slider widget data structure */
 extern W_SLIDER* sliderCreate(const W_SLDINIT* psInit);
@@ -75,9 +69,5 @@ extern void sliderHiLiteLost(W_SLIDER *psWidget);
 
 /* The slider display function */
 extern void sliderDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_LIB_WIDGET_SLIDER_H__

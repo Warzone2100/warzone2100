@@ -150,15 +150,15 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\netjoin_stub.c"
+				RelativePath=".\netjoin_stub.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\netlog.c"
+				RelativePath=".\netlog.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\netplay.c"
+				RelativePath=".\netplay.cpp"
 				>
 			</File>
 			<File
@@ -198,39 +198,39 @@
 					Name="src files"
 					>
 					<File
-						RelativePath=".\miniupnpc\igd_desc_parse.c"
+						RelativePath=".\miniupnpc\igd_desc_parse.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\miniupnpc\minisoap.c"
+						RelativePath=".\miniupnpc\minisoap.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\miniupnpc\minissdpc.c"
+						RelativePath=".\miniupnpc\minissdpc.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\miniupnpc\miniupnpc.c"
+						RelativePath=".\miniupnpc\miniupnpc.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\miniupnpc\miniwget.c"
+						RelativePath=".\miniupnpc\miniwget.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\miniupnpc\minixml.c"
+						RelativePath=".\miniupnpc\minixml.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\miniupnpc\upnpcommands.c"
+						RelativePath=".\miniupnpc\upnpcommands.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\miniupnpc\upnperrors.c"
+						RelativePath=".\miniupnpc\upnperrors.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\miniupnpc\upnpreplyparse.c"
+						RelativePath=".\miniupnpc\upnpreplyparse.cpp"
 						>
 					</File>
 				</Filter>

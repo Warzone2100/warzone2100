@@ -171,7 +171,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\configfile.c"
+				RelativePath=".\configfile.cpp"
 				>
 			</File>
 			<File
@@ -179,39 +179,39 @@
 				>
 			</File>
 			<File
-				RelativePath=".\cursors.c"
+				RelativePath=".\cursors.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\cursors16.c"
+				RelativePath=".\cursors16.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\cursors32.c"
+				RelativePath=".\cursors32.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\debug.c"
+				RelativePath=".\debug.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\frame.c"
+				RelativePath=".\frame.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\frameresource.c"
+				RelativePath=".\frameresource.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\i18n.c"
+				RelativePath=".\i18n.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\lexer_input.c"
+				RelativePath=".\lexer_input.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\resource_lexer.lex.c"
+				RelativePath=".\resource_lexer.lex.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -237,19 +237,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\SDL_framerate.c"
+				RelativePath=".\SDL_framerate.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\stdio_ext.c"
+				RelativePath=".\stdio_ext.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\strres.c"
+				RelativePath=".\strres.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\strres_lexer.lex.c"
+				RelativePath=".\strres_lexer.lex.cpp"
 				>
 			</File>
 			<File
@@ -257,19 +257,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\tagfile.c"
+				RelativePath=".\tagfile.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\treap.c"
+				RelativePath=".\treap.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\trig.c"
+				RelativePath=".\trig.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\utf.c"
+				RelativePath=".\utf.cpp"
 				>
 			</File>
 			<File

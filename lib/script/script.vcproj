@@ -167,7 +167,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\chat_lexer.lex.c"
+				RelativePath=".\chat_lexer.lex.cpp"
 				>
 			</File>
 			<File
@@ -175,27 +175,27 @@
 				>
 			</File>
 			<File
-				RelativePath=".\codeprint.c"
+				RelativePath=".\codeprint.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\event.c"
+				RelativePath=".\event.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\eventsave.c"
+				RelativePath=".\eventsave.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\interpreter.c"
+				RelativePath=".\interpreter.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\script.c"
+				RelativePath=".\script.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\script_lexer.lex.c"
+				RelativePath=".\script_lexer.lex.cpp"
 				>
 			</File>
 			<File
@@ -203,7 +203,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\stack.c"
+				RelativePath=".\stack.cpp"
 				>
 			</File>
 		</Filter>

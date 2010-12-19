@@ -150,35 +150,35 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\bar.c"
+				RelativePath=".\bar.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\button.c"
+				RelativePath=".\button.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\editbox.c"
+				RelativePath=".\editbox.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\form.c"
+				RelativePath=".\form.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\label.c"
+				RelativePath=".\label.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\slider.c"
+				RelativePath=".\slider.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\tip.c"
+				RelativePath=".\tip.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\widget.c"
+				RelativePath=".\widget.cpp"
 				>
 			</File>
 		</Filter>

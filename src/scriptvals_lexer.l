@@ -32,7 +32,7 @@
 #include "src/scriptvals.h"
 
 /* Get the Yacc definitions */
-#include "scriptvals_parser.tab.h"
+#include "scriptvals_parser.tab.hpp"
 
 
 /* Maximum length for any TEXT value */

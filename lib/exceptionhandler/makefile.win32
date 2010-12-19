@@ -5,8 +5,8 @@ include $(top_srcdir)/makerules/common.mk
 
 SRC= \
 	dumpinfo.cpp \
-	exceptionhandler.c \
-	exchndl.c
+	exceptionhandler.cpp \
+	exchndl.cpp
 
 LIB=exceptionhandler
 

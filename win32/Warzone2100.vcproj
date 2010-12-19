@@ -39,7 +39,7 @@
 			/>
 			<Tool
 				Name="FlexGenerator"
-				OutputFile="$(ProjectDir)..\src\$(InputName).lex.c"
+				OutputFile="$(ProjectDir)..\src\$(InputName).lex.cpp"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -143,7 +143,7 @@
 			/>
 			<Tool
 				Name="FlexGenerator"
-				OutputFile="$(ProjectDir)..\src\$(InputName).lex.c"
+				OutputFile="$(ProjectDir)..\src\$(InputName).lex.cpp"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -236,19 +236,19 @@
 				Name="src"
 				>
 				<File
-					RelativePath="..\src\action.c"
+					RelativePath="..\src\action.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\advvis.c"
+					RelativePath="..\src\advvis.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\ai.c"
+					RelativePath="..\src\ai.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\aiexperience.c"
+					RelativePath="..\src\aiexperience.cpp"
 					>
 				</File>
 				<File
@@ -256,55 +256,55 @@
 					>
 				</File>
 				<File
-					RelativePath="..\src\atmos.c"
+					RelativePath="..\src\atmos.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\aud.c"
+					RelativePath="..\src\aud.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\baseobject.c"
+					RelativePath="..\src\baseobject.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\bridge.c"
+					RelativePath="..\src\bridge.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\bucket3d.c"
+					RelativePath="..\src\bucket3d.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\challenge.c"
+					RelativePath="..\src\challenge.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\cheat.c"
+					RelativePath="..\src\cheat.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\clparse.c"
+					RelativePath="..\src\clparse.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\cluster.c"
+					RelativePath="..\src\cluster.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\cmddroid.c"
+					RelativePath="..\src\cmddroid.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\combat.c"
+					RelativePath="..\src\combat.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\component.c"
+					RelativePath="..\src\component.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\configuration.c"
+					RelativePath="..\src\configuration.cpp"
 					>
 				</File>
 				<File
@@ -312,135 +312,135 @@
 					>
 				</File>
 				<File
-					RelativePath="..\src\data.c"
+					RelativePath="..\src\data.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\design.c"
+					RelativePath="..\src\design.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\difficulty.c"
+					RelativePath="..\src\difficulty.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\display.c"
+					RelativePath="..\src\display.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\display3d.c"
+					RelativePath="..\src\display3d.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\drive.c"
+					RelativePath="..\src\drive.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\droid.c"
+					RelativePath="..\src\droid.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\e3demo.c"
+					RelativePath="..\src\e3demo.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\edit3d.c"
+					RelativePath="..\src\edit3d.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\effects.c"
+					RelativePath="..\src\effects.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\feature.c"
+					RelativePath="..\src\feature.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\fpath.c"
+					RelativePath="..\src\fpath.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\frontend.c"
+					RelativePath="..\src\frontend.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\function.c"
+					RelativePath="..\src\function.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\game.c"
+					RelativePath="..\src\game.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\gateway.c"
+					RelativePath="..\src\gateway.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\geometry.c"
+					RelativePath="..\src\geometry.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\group.c"
+					RelativePath="..\src\group.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\hci.c"
+					RelativePath="..\src\hci.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\ingameop.c"
+					RelativePath="..\src\ingameop.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\init.c"
+					RelativePath="..\src\init.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\intdisplay.c"
+					RelativePath="..\src\intdisplay.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\intelmap.c"
+					RelativePath="..\src\intelmap.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\intimage.c"
+					RelativePath="..\src\intimage.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\intorder.c"
+					RelativePath="..\src\intorder.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\keybind.c"
+					RelativePath="..\src\keybind.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\keyedit.c"
+					RelativePath="..\src\keyedit.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\keymap.c"
+					RelativePath="..\src\keymap.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\level_lexer.lex.c"
+					RelativePath="..\src\level_lexer.lex.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\levels.c"
+					RelativePath="..\src\levels.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\lighting.c"
+					RelativePath="..\src\lighting.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\loadsave.c"
+					RelativePath="..\src\loadsave.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\loop.c"
+					RelativePath="..\src\loop.cpp"
 					>
 				</File>
 				<File
@@ -448,11 +448,11 @@
 					>
 				</File>
 				<File
-					RelativePath="..\src\map.c"
+					RelativePath="..\src\map.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\mapdisplay.c"
+					RelativePath="..\src\mapdisplay.cpp"
 					>
 				</File>
 				<File
@@ -460,15 +460,15 @@
 					>
 				</File>
 				<File
-					RelativePath="..\src\mechanics.c"
+					RelativePath="..\src\mechanics.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\message.c"
+					RelativePath="..\src\message.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\message_lexer.lex.c"
+					RelativePath="..\src\message_lexer.lex.cpp"
 					>
 				</File>
 				<File
@@ -476,15 +476,15 @@
 					>
 				</File>
 				<File
-					RelativePath="..\src\miscimd.c"
+					RelativePath="..\src\miscimd.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\mission.c"
+					RelativePath="..\src\mission.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\move.c"
+					RelativePath="..\src\move.cpp"
 					>
 				</File>
 				<File
@@ -492,63 +492,63 @@
 					>
 				</File>
 				<File
-					RelativePath="..\src\multigifts.c"
+					RelativePath="..\src\multigifts.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\multiint.c"
+					RelativePath="..\src\multiint.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\multijoin.c"
+					RelativePath="..\src\multijoin.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\multilimit.c"
+					RelativePath="..\src\multilimit.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\multimenu.c"
+					RelativePath="..\src\multimenu.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\multiopt.c"
+					RelativePath="..\src\multiopt.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\multiplay.c"
+					RelativePath="..\src\multiplay.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\multistat.c"
+					RelativePath="..\src\multistat.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\multistruct.c"
+					RelativePath="..\src\multistruct.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\multisync.c"
+					RelativePath="..\src\multisync.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\objects.c"
+					RelativePath="..\src\objects.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\objmem.c"
+					RelativePath="..\src\objmem.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\oprint.c"
+					RelativePath="..\src\oprint.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\order.c"
+					RelativePath="..\src\order.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\parsetest.c"
+					RelativePath="..\src\parsetest.cpp"
 					>
 				</File>
 				<File
@@ -556,15 +556,15 @@
 					>
 				</File>
 				<File
-					RelativePath="..\src\power.c"
+					RelativePath="..\src\power.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\projectile.c"
+					RelativePath="..\src\projectile.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\radar.c"
+					RelativePath="..\src\radar.cpp"
 					>
 				</File>
 				<File
@@ -572,47 +572,47 @@
 					>
 				</File>
 				<File
-					RelativePath="..\src\raycast.c"
+					RelativePath="..\src\raycast.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\research.c"
+					RelativePath="..\src\research.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\scores.c"
+					RelativePath="..\src\scores.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\scriptai.c"
+					RelativePath="..\src\scriptai.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\scriptcb.c"
+					RelativePath="..\src\scriptcb.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\scriptextern.c"
+					RelativePath="..\src\scriptextern.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\scriptfuncs.c"
+					RelativePath="..\src\scriptfuncs.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\scriptobj.c"
+					RelativePath="..\src\scriptobj.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\scripttabs.c"
+					RelativePath="..\src\scripttabs.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\scriptvals.c"
+					RelativePath="..\src\scriptvals.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\scriptvals_lexer.lex.c"
+					RelativePath="..\src\scriptvals_lexer.lex.cpp"
 					>
 				</File>
 				<File
@@ -620,51 +620,51 @@
 					>
 				</File>
 				<File
-					RelativePath="..\src\selection.c"
+					RelativePath="..\src\selection.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\seqdisp.c"
+					RelativePath="..\src\seqdisp.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\stats.c"
+					RelativePath="..\src\stats.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\structure.c"
+					RelativePath="..\src\structure.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\terrain.c"
+					RelativePath="..\src\terrain.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\text.c"
+					RelativePath="..\src\text.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\texture.c"
+					RelativePath="..\src\texture.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\transporter.c"
+					RelativePath="..\src\transporter.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\version.c"
+					RelativePath="..\src\version.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\visibility.c"
+					RelativePath="..\src\visibility.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\warcam.c"
+					RelativePath="..\src\warcam.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\warzoneconfig.c"
+					RelativePath="..\src\warzoneconfig.cpp"
 					>
 				</File>
 				<File
@@ -672,7 +672,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\src\wrappers.c"
+					RelativePath="..\src\wrappers.cpp"
 					>
 				</File>
 			</Filter>

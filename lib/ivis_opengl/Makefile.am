@@ -8,21 +8,21 @@ noinst_HEADERS = \
 	screen.h
 
 libivis_opengl_a_SOURCES = \
-	ivi.c \
-	pieblitfunc.c \
-	piedraw.c \
-	piefunc.c \
-	piematrix.c \
-	piemode.c \
-	piepalette.c \
-	piestate.c \
-	rendmode.c \
-	screen.c \
-	tex.c \
-	textdraw.c
+	ivi.cpp \
+	pieblitfunc.cpp \
+	piedraw.cpp \
+	piefunc.cpp \
+	piematrix.cpp \
+	piemode.cpp \
+	piepalette.cpp \
+	piestate.cpp \
+	rendmode.cpp \
+	screen.cpp \
+	tex.cpp \
+	textdraw.cpp
 
 if !SYSTEM_GLEE
-libivis_opengl_a_SOURCES += GLee.c
+libivis_opengl_a_SOURCES += GLee.cpp
 noinst_HEADERS += GLee.h
 endif
 

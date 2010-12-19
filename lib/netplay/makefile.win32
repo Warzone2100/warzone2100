@@ -6,9 +6,9 @@ include $(top_srcdir)/makerules/common.mk
 SUBDIRS=miniupnpc
 
 SRC= \
-	netjoin_stub.c \
-	netlog.c \
-	netplay.c \
+	netjoin_stub.cpp \
+	netlog.cpp \
+	netplay.cpp \
 	netqueue.cpp \
 	nettypes.cpp \
 	netsocket.cpp

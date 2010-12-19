@@ -26,11 +26,6 @@
 
 #include "statsdef.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 enum FUNCTION_TYPES
 {
 	PRODUCTION_TYPE,
@@ -72,35 +67,24 @@ enum FUNCTION_TYPES
 
 /*Common stats for all Structure Functions*/
 
-#define FUNCTION_STATS \
-	UDWORD		ref;			/* Unique ID of the item */ \
-	char*		pName;			/* Text name of the component */ \
-	UBYTE		type			/* The type of Function */
-
 /*Common struct for all functions*/
-typedef struct _function
+struct FUNCTION : public BASE_STATS
 {
-	FUNCTION_STATS;
-} FUNCTION;
+	UBYTE           type;                   ///< The type of Function
+};
 
 
 /*To repair droids that enter the repair facility*/
-typedef struct _repair_droid_function
+struct REPAIR_DROID_FUNCTION : public FUNCTION
 {
-	//common stats
-	FUNCTION_STATS;
-
 	UDWORD			repairPoints;	/*The number of repair points used to reduce
 									  damage to the droid. These repair points can
 									  restore even destroyed droid components*/
-} REPAIR_DROID_FUNCTION;
+};
 
 /*To generate and supply power to other structures*/
-typedef struct _power_gen_function
+struct POWER_GEN_FUNCTION : public FUNCTION
 {
-	//common stats
-	FUNCTION_STATS;
-
 	UDWORD		powerOutput;		/*How much power is generated per power cycle*/
 	UDWORD		powerMultiplier;	/*Multiplies the output - upgradeable*/
 	UDWORD		criticalMassChance;	/*The % chance of an explosion when the power
@@ -109,47 +93,36 @@ typedef struct _power_gen_function
 	UDWORD		criticalMassDamage;	/*The base amount of damage applied to targets
 									  within the primary blast area*/
 	UDWORD		radiationDecayTime;	/*How long the radiation lasts n time cycles*/
-} POWER_GEN_FUNCTION;
+};
 
 /*function used by walls to define which corner to use*/
-typedef struct _wall_function
+struct WALL_FUNCTION : public FUNCTION
 {
-	//common stats
-	FUNCTION_STATS;
 	char						*pStructName;		//storage space for the name so can work out
 													//which stat when structs are loaded in
-	struct _structure_stats		*pCornerStat;		//pointer to which stat to use as a corner wall
-} WALL_FUNCTION;
+	struct STRUCTURE_STATS *                        pCornerStat;            ///< pointer to which stat to use as a corner wall
+};
 
 /*function used by Resource Extractor to indicate how much resource is available*/
-typedef struct _resource_function
+struct RESOURCE_FUNCTION : public FUNCTION
 {
-	//common stats
-	FUNCTION_STATS;
-
 	UDWORD		maxPower;			/*The max amount output from the resource*/
-} RESOURCE_FUNCTION;
+};
 
 /*To increase a production facilities output*/
-typedef struct _production_upgrade_function
+struct PRODUCTION_UPGRADE_FUNCTION : public FUNCTION
 {
-	//common stats
-	FUNCTION_STATS;
-
 	UBYTE		outputModifier;		/*The amount added to a facility's Output*/
 
 	UBYTE		factory;			/*flag to indicate upgrades standard factories*/
 	UBYTE		cyborgFactory;		/*flag to indicate upgrades cyborg factories*/
 	UBYTE		vtolFactory;		/*flag to indicate upgrades vtol factories*/
 
-} PRODUCTION_UPGRADE_FUNCTION;
+};
 
 /*To manufacture droids designed previously*/
-typedef struct _production_function
+struct PRODUCTION_FUNCTION : public FUNCTION
 {
-	//common stats
-	FUNCTION_STATS;
-
 	UWORD					capacity;			/*The max size of body the factory
 												  can produce*/
 	UWORD					productionOutput;	/*Droid Build Points Produced Per
@@ -157,37 +130,25 @@ typedef struct _production_function
 	//struct _propulsion_types*		propulsionType;
 	//UBYTE					propulsionType;		/*The type of propulsion the facility
 	//											  can produce*/
-} PRODUCTION_FUNCTION;
+};
 
 /*To research topics available*/
-typedef struct _research_function
+struct RESEARCH_FUNCTION : public FUNCTION
 {
-	//common stats
-	FUNCTION_STATS;
-
 	UDWORD			researchPoints;	/*The number of research points added per
 									  research cycle*/
-} RESEARCH_FUNCTION;
+};
 
 /*To rearm VTOLs*/
-typedef struct _rearm_function
+struct REARM_FUNCTION : public FUNCTION
 {
-	//common stats
-	FUNCTION_STATS;
-
 	UDWORD			reArmPoints;	/*The number of reArm points added per cycle*/
-} REARM_FUNCTION;
+};
 
-/*Generic upgrade function*/
-#define UPGRADE_FUNCTION_STATS \
-	FUNCTION_STATS;						/*common stats*/ \
-    UWORD			upgradePoints	/*The % to add to the action points*/
-	//UBYTE			upgradePoints	/*The % to add to the action points*/
-
-typedef struct _upgrade_function
+struct UPGRADE_FUNCTION : public FUNCTION
 {
-	UPGRADE_FUNCTION_STATS;
-} UPGRADE_FUNCTION;
+	uint16_t                upgradePoints;  ///< The % to add to the action points
+};
 
 typedef UPGRADE_FUNCTION	RESEARCH_UPGRADE_FUNCTION;
 typedef UPGRADE_FUNCTION	REPAIR_UPGRADE_FUNCTION;
@@ -195,11 +156,8 @@ typedef UPGRADE_FUNCTION	POWER_UPGRADE_FUNCTION;
 typedef UPGRADE_FUNCTION	REARM_UPGRADE_FUNCTION;
 
 /*Upgrade the weapon ROF and accuracy for the weapons of a particular class*/
-typedef struct _weapon_upgrade_function
+struct WEAPON_UPGRADE_FUNCTION : public FUNCTION
 {
-	//common stats
-	FUNCTION_STATS;
-
 // GNU C complains about this...
 //	WEAPON_CLASS            subClass;		/*which weapons are affected */
 // So need to do it this way...
@@ -212,50 +170,40 @@ typedef struct _weapon_upgrade_function
 	UWORD			incenDamage;		/*The % to increase the incendiary damage*/
 	UWORD			radiusHit;			/*The % to increase the chance to hit in blast radius*/
 
-} WEAPON_UPGRADE_FUNCTION;
+};
 
 /*Upgrade the structure stats for all non wall and defence structures*/
-typedef struct _structure_upgrade_function
+struct STRUCTURE_UPGRADE_FUNCTION : public FUNCTION
 {
-	//common stats
-	FUNCTION_STATS;
-
 	UWORD			armour;			/*The % to increase the armour value*/
 	UWORD			body;			/*The % to increase the body points*/
 	UWORD			resistance;		/*The % to increase the resistance*/
-
-} STRUCTURE_UPGRADE_FUNCTION;
+};
 
 /*Upgrade the structure stats for all wall and defence structures*/
-typedef struct _wallDefence_upgrade_function
+struct WALLDEFENCE_UPGRADE_FUNCTION : public FUNCTION
 {
-	//common stats
-	FUNCTION_STATS;
-
 	UWORD			armour;			/*The % to increase the armour value*/
 	UWORD			body;			/*The % to increase the body points*/
-
-} WALLDEFENCE_UPGRADE_FUNCTION;
+};
 
 typedef UPGRADE_FUNCTION	DROIDREPAIR_UPGRADE_FUNCTION;
 typedef UPGRADE_FUNCTION	DROIDECM_UPGRADE_FUNCTION;
 typedef UPGRADE_FUNCTION	DROIDCONSTR_UPGRADE_FUNCTION;
 
-typedef struct _droidBody_upgrade_function
+struct DROIDBODY_UPGRADE_FUNCTION : public UPGRADE_FUNCTION
 {
-	UPGRADE_FUNCTION_STATS;
 	UWORD					body;		//The % to increase the whole vehicle body points by*/
 	UWORD					armourValue[WC_NUM_WEAPON_CLASSES];
 	UBYTE					cyborg;		//flag to specify the upgrade is valid for cyborgs
 	UBYTE					droid;		/*flag to specify the upgrade is valid
 										  for droids (non cyborgs!)*/
-} DROIDBODY_UPGRADE_FUNCTION;
+};
 
-typedef struct _droidsensor_upgrade_function
+struct DROIDSENSOR_UPGRADE_FUNCTION : public UPGRADE_FUNCTION
 {
-	UPGRADE_FUNCTION_STATS;
 	UWORD					range;		// % to increase range by
-} DROIDSENSOR_UPGRADE_FUNCTION;
+};
 
 
 #if(0)
@@ -366,9 +314,5 @@ typedef struct _function_upgrade
 //	UDWORD			weaponCapacity;	/*The size of weapon in system points that may
 //									  be added. 0 = no weapons can be added*/
 //} DEFENSIVE_STRUCTURE_FUNCTION;
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_FUNCTIONDEF_H__

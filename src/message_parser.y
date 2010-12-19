@@ -72,7 +72,7 @@ static void freeViewDataMessageList(VIEWDATAMESSAGE* list)
 		{
 			case VIEW_RES:
 			{
-				VIEW_RESEARCH* const psViewRes = toDelete->view.pData;
+				VIEW_RESEARCH* const psViewRes = (VIEW_RESEARCH *)toDelete->view.pData;
 				if (psViewRes->pAudio)
 					free(psViewRes->pAudio);
 				free(psViewRes);
@@ -168,7 +168,7 @@ file:			all_messages
 						YYABORT;
 					}
 
-					psViewData = malloc(numData * sizeof(*psViewData));
+					psViewData = (VIEWDATA *)malloc(numData * sizeof(*psViewData));
 					if (psViewData == NULL)
 					{
 						debug(LOG_ERROR, "Out of memory");
@@ -202,7 +202,7 @@ all_messages:		message
 
 message:		TEXT_T '{' message_list ',' research_message '}' ';'
 				{
-					$$ = malloc(sizeof(*$$));
+					$$ = (VIEWDATAMESSAGE *)malloc(sizeof(*$$));
 					if ($$ == NULL)
 					{
 						debug(LOG_ERROR, "Out of memory");
@@ -226,7 +226,7 @@ message:		TEXT_T '{' message_list ',' research_message '}' ';'
 
 research_message:	imd_name ',' imd_name2 ',' sequence_name ',' audio_name ','
 				{
-					$$ = malloc(sizeof(*$$));
+					$$ = (VIEW_RESEARCH *)malloc(sizeof(*$$));
 					if ($$ == NULL)
 					{
 						debug(LOG_ERROR, "Out of memory");
@@ -315,7 +315,7 @@ message_list:		'{' text_messages '}'
 
 					if ($$.count)
 					{
-						$$.stringArray = malloc(bytes);
+						$$.stringArray = (char const **)malloc(bytes);
 						if ($$.stringArray == NULL)
 						{
 							debug(LOG_ERROR, "Out of memory");
@@ -364,7 +364,7 @@ text_message: 		TEXT_T
 						YYABORT;
 					}
 
-					$$ = malloc(sizeof(*$$));
+					$$ = (TEXT_MESSAGE *)malloc(sizeof(*$$));
 					if ($$ == NULL)
 					{
 						debug(LOG_ERROR, "Out of memory");
@@ -378,7 +378,7 @@ text_message: 		TEXT_T
 				}
 			| QTEXT_T
 				{
-					$$ = malloc(sizeof(*$$));
+					$$ = (TEXT_MESSAGE *)malloc(sizeof(*$$));
 					if ($$ == NULL)
 					{
 						debug(LOG_ERROR, "Out of memory");
@@ -392,7 +392,7 @@ text_message: 		TEXT_T
 				}
 			| '_' '(' QTEXT_T ')'
 				{
-					$$ = malloc(sizeof(*$$));
+					$$ = (TEXT_MESSAGE *)malloc(sizeof(*$$));
 					if ($$ == NULL)
 					{
 						debug(LOG_ERROR, "Out of memory");

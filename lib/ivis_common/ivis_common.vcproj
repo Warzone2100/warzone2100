@@ -150,31 +150,31 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\bitimage.c"
+				RelativePath=".\bitimage.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\imd.c"
+				RelativePath=".\imd.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\imdload.c"
+				RelativePath=".\imdload.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\jpeg_encoder.c"
+				RelativePath=".\jpeg_encoder.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\pieclip.c"
+				RelativePath=".\pieclip.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\piestate.c"
+				RelativePath=".\piestate.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\png_util.c"
+				RelativePath=".\png_util.cpp"
 				>
 			</File>
 		</Filter>

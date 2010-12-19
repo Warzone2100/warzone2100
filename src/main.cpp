@@ -249,7 +249,7 @@ void setOverrideMods(char * modlist)
 	int i=0;
 	while ((nextmod = strstr(curmod, ", ")) && i<MAX_MODS-2)
 	{
-		override_mods[i] = (char *) malloc(nextmod-curmod+1);
+		override_mods[i] = (char *)malloc(nextmod-curmod+1);
 		strlcpy(override_mods[i], curmod, nextmod-curmod);
 		override_mods[i][nextmod-curmod] = '\0';
 		curmod = nextmod + 2;
@@ -310,7 +310,7 @@ void addLoadedMod(const char * modname)
 	// Yes, this is an online insertion sort.
 	// I swear, for the numbers of mods this is going to be dealing with
 	// (i.e. 0 to 2), it really is faster than, say, Quicksort.
-	for (i=0; i<num_loaded_mods && strcmp(loaded_mods[i], mod)>0; i++);
+	for (i=0; i<num_loaded_mods && strcmp(loaded_mods[i], mod)>0; i++) {}
 	if (i < num_loaded_mods)
 	{
 		if (strcmp(loaded_mods[i], mod) == 0)
@@ -1119,7 +1119,7 @@ static bool fptest2(void)
 			wtf = true;
 			break;
 		}
-		b = 1/sqrt(b - (unsigned)b);
+		b = 1/sqrt((double)(b - (unsigned)b));
 	}
 	for (n = 0; n != 100; ++n)
 	{

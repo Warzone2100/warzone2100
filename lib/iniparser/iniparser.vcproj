@@ -148,11 +148,11 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\dictionary.c"
+				RelativePath=".\dictionary.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\iniparser.c"
+				RelativePath=".\iniparser.cpp"
 				>
 			</File>
 		</Filter>

@@ -4,14 +4,14 @@ top_builddir=$(top_srcdir)
 include $(top_srcdir)/makerules/common.mk
 
 SRC= \
-	audio.c \
-	audio_id.c \
-	cdaudio.c \
-	oggvorbis.c \
-	openal_error.c \
-	openal_track.c \
-	playlist.c \
-	track.c
+	audio.cpp \
+	audio_id.cpp \
+	cdaudio.cpp \
+	oggvorbis.cpp \
+	openal_error.cpp \
+	openal_track.cpp \
+	playlist.cpp \
+	track.cpp
 
 LIB=sound
 

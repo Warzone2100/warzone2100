@@ -4,7 +4,7 @@ AC_INIT([Warzone 2100],[master],[http://wz2100.net/],[warzone2100])
 AM_INIT_AUTOMAKE([1.10 tar-ustar])
 
 AC_CONFIG_MACRO_DIR([m4])
-AC_CONFIG_SRCDIR([lib/framework/frame.c])
+AC_CONFIG_SRCDIR([lib/framework/frame.cpp])
 
 
 # HACK
@@ -246,7 +246,7 @@ fi
 
 WZ_WARNINGS_GCC="-Wall -Wextra ${WZ_Wno_}unused-parameter ${WZ_Wno_}sign-compare -Wcast-align -Wwrite-strings -Wpointer-arith ${WZ_Wno_}format-security"
 WZ_WARNINGS_GCC_C="${WZ_WARNINGS_GCC} -Wstrict-prototypes -Wdeclaration-after-statement -Wc++-compat ${WZ_Wno_}c++-compat ${CFLAGS_IGNORE_WARNINGS}"
-WZ_WARNINGS_GCC_CXX="${WZ_WARNINGS_GCC}"
+WZ_WARNINGS_GCC_CXX="${WZ_Wno_}enum-compare ${WZ_WARNINGS_GCC}"
 if test "x$enable_debug" = "xyes" ; then
 	if test "x$cc_icc" = "xyes" ; then
 		# "-fp-model precise -fp-model source -ftz -no-fma" was here
@@ -279,7 +279,7 @@ elif test "x$enable_debug" = "xprofile" ; then
 	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DNDEBUG"
 	LDFLAGS="-pg ${LDFLAGS}"
 elif test "x$enable_debug" = "xg++" ; then
-	WZ_CFLAGS="${WZ_CFLAGS} -g -O2 ${WZ_WARNINGS_GCC_C} -fpermissive"
+	WZ_CFLAGS="${WZ_CXXFLAGS} -g -O2 ${WZ_WARNINGS_GCC_CXX}"
 	WZ_CXXFLAGS="${WZ_CXXFLAGS} -g -O2 ${WZ_WARNINGS_GCC_CXX}"
 	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 	CC="g++"

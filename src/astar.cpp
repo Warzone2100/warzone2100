@@ -353,9 +353,9 @@ static void fpathInitContext(PathfindContext &context, PathBlockingMap const *bl
 	ASSERT(!context.nodes.empty(), "fpathNewNode failed to add node.");
 }
 
-SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
+ASR_RETVAL fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 {
-	int             retval = ASR_OK;
+	ASR_RETVAL      retval = ASR_OK;
 
 	bool            mustReverse = true;
 
