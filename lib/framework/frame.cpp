@@ -35,6 +35,7 @@
 #include "frameint.h"
 #include "frameresource.h"
 #include "input.h"
+#include "lib/widget/scrap.h"
 #include "SDL_framerate.h"
 #include "physfs_ext.h"
 
@@ -263,6 +264,9 @@ bool frameInitialise(
 
 	/* Initialise the input system */
 	inputInitialise();
+
+	// Initialise clipboard stuff.
+	init_scrap();
 
 	/* Initialise the frame rate stuff */
 	InitFrameStuff();

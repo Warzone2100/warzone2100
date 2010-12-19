@@ -78,8 +78,6 @@ W_EDITBOX::W_EDITBOX(W_EDBINIT const *init)
 	}
 
 	editBoxInitialise(this);
-
-	init_scrap();
 }
 
 W_EDITBOX::~W_EDITBOX()

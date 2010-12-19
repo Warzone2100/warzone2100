@@ -259,9 +259,6 @@ typedef enum {
     INT_MAXMODE,   //leave as last so we can start the objMode at this value
 } INTMODE;
 
-//NOT ANYMORE! 10/08/98 AB
-//#define INCLUDE_PRODSLIDER	// Include quantity slider in manufacture window.
-
 extern INTMODE intMode;
 
 /* The widget screen */

@@ -3213,7 +3213,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 								objTrace(psDroid->id, "Repair not needed - move to delivery point");
 								orderDroidLoc(psDroid, DORDER_MOVE,
 									psRepairFac->psDeliveryPoint->coords.x,
-									psRepairFac->psDeliveryPoint->coords.y, ModeImmediate);
+									psRepairFac->psDeliveryPoint->coords.y, ModeQueue);  // ModeQueue because delivery points are not yet synchronised!
 							}
 							continue;
 						}
@@ -3699,7 +3699,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 							objTrace(psDroid->id, "Repair complete - move to delivery point");
 							orderDroidLoc( psDroid, DORDER_MOVE,
 								psRepairFac->psDeliveryPoint->coords.x,
-								psRepairFac->psDeliveryPoint->coords.y, ModeImmediate);
+								psRepairFac->psDeliveryPoint->coords.y, ModeQueue);  // ModeQueue because delivery points are not yet synchronised!
 						}
 					}
 				}

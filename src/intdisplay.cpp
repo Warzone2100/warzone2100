@@ -2902,106 +2902,71 @@ void StatGetResearchImage(BASE_STATS *psStat, SDWORD *Image, iIMDShape **Shape,
     }
 }
 
-/* Draws a stats bar for the design screen */
-void intDisplayStatsBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+static void intDisplayBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, bool isPowerBar)
 {
-	W_BARGRAPH		*BarGraph = (W_BARGRAPH*)psWidget;
-	SDWORD			x0, y0, iX, iY;
-	static char		szVal[6], szCheckWidth[6] = "00000";
+	W_BARGRAPH *BarGraph = (W_BARGRAPH *)psWidget;
+	char szVal[30];
+	char const *szCheckWidth = "00000";
+	int x0 = xOffset + BarGraph->x;
+	int y0 = yOffset + BarGraph->y;
+	int arbitaryOffset = 3;
+	int iX, iY;
+	int barWidth = 100, width;
+	int i, precisionFactor = 1, value;
 
-	x0 = xOffset + BarGraph->x;
-	y0 = yOffset + BarGraph->y;
-
-//	//draw the background image
-//	iV_DrawImage(IntImages,IMAGE_DES_STATSBACK,x0,y0);
-
-	//increment for the position of the level indicator
-	x0 += 3;
-	y0 += 3;
-
-	/* indent to allow text value */
-	iX = x0 + iV_GetTextWidth( szCheckWidth );
-	iY = y0 + (iV_GetImageHeight(IntImages,IMAGE_DES_STATSCURR) - iV_GetTextLineSize())/2 -
-					iV_GetTextAboveBase();
-
-	//draw current value section
-	iV_DrawImageRect( IntImages, IMAGE_DES_STATSCURR, iX, y0,
-			BarGraph->majorSize, iV_GetImageHeight(IntImages,IMAGE_DES_STATSCURR));
-
-	/* draw text value */
-	sprintf(szVal, "%d", BarGraph->iOriginal);
-	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
-	iV_DrawText( szVal, x0, iY );
-
-	//draw the comparison value - only if not zero
-	if (BarGraph->minorSize != 0)
+	if (isPowerBar)
 	{
-		y0 -= 1;
-		iV_DrawImage(IntImages,IMAGE_DES_STATSCOMP,iX+BarGraph->minorSize ,y0);
+		//draw the background image
+		iV_DrawImage(IntImages, IMAGE_DES_POWERBAR_LEFT, x0, y0);
+		iV_DrawImage(IntImages, IMAGE_DES_POWERBAR_RIGHT, x0 + psWidget->width - iV_GetImageWidth(IntImages, IMAGE_DES_POWERBAR_RIGHT), y0);
 	}
-}
 
-
-
-/* Draws a Template Power Bar for the Design Screen */
-void intDisplayDesignPowerBar(WIDGET *psWidget, UDWORD xOffset,
-							  UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
-{
-	W_BARGRAPH	*BarGraph = (W_BARGRAPH*)psWidget;
-	SDWORD		x0, y0, iX, iY;
-	UDWORD		width, barWidth;
-	static char	szVal[6], szCheckWidth[6] = "00000";
-	UBYTE		arbitaryOffset;
-
-	x0 = xOffset + BarGraph->x;
-	y0 = yOffset + BarGraph->y;
-
-	//draw the background image
-	iV_DrawImage(IntImages,IMAGE_DES_POWERBAR_LEFT,x0,y0);
-	iV_DrawImage(IntImages,IMAGE_DES_POWERBAR_RIGHT,
-		//xOffset+psWidget->width-iV_GetImageWidth(IntImages, IMAGE_DES_POWERBAR_RIGHT),y0);
-        x0 + psWidget->width-iV_GetImageWidth(IntImages, IMAGE_DES_POWERBAR_RIGHT),y0);
-
-	//increment for the position of the bars within the background image
-	arbitaryOffset = 3;
+	// Arbitrary increment for the position of the bars
 	x0 += arbitaryOffset;
 	y0 += arbitaryOffset;
 
 	/* indent to allow text value */
-	iX = x0 + iV_GetTextWidth( szCheckWidth );
-	iY = y0 + (iV_GetImageHeight(IntImages,IMAGE_DES_STATSCURR) - iV_GetTextLineSize())/2 -
-					iV_GetTextAboveBase();
+	iX = x0 + iV_GetTextWidth(szCheckWidth);
+	iY = y0 + (iV_GetImageHeight(IntImages, IMAGE_DES_STATSCURR) - iV_GetTextLineSize())/2 - iV_GetTextAboveBase();
 
-	// Adjust the width based on the text drawn
-	barWidth = BarGraph->width - (iX - x0 + arbitaryOffset);
-	width = BarGraph->majorSize * barWidth / 100;
-	// Quick check that don't go over the end - ensure % is not > 100
-	if (width > barWidth)
+	if (isPowerBar)
 	{
-		width = barWidth;
+		// Adjust the width based on the text drawn
+		barWidth = BarGraph->width - (iX - x0 + arbitaryOffset);
 	}
 
 	//draw current value section
-	iV_DrawImageRect(IntImages,IMAGE_DES_STATSCURR, iX, y0,
-                        width, iV_GetImageHeight(IntImages,IMAGE_DES_STATSCURR));
+	width = MIN(BarGraph->majorSize * barWidth / 100, barWidth);
+	iV_DrawImageRect(IntImages, IMAGE_DES_STATSCURR, iX, y0, width, iV_GetImageHeight(IntImages, IMAGE_DES_STATSCURR));
 
 	/* draw text value */
-	sprintf(szVal, "%d", BarGraph->iOriginal);
+	for (i = 0; i < BarGraph->precision; ++i)
+	{
+		precisionFactor *= 10;
+	}
+	value = (BarGraph->iOriginal * precisionFactor + BarGraph->denominator/2) / BarGraph->denominator;
+	sprintf(szVal, "%d%s%.*d", value/precisionFactor, precisionFactor == 1? "" : ".", BarGraph->precision, value%precisionFactor);
 	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
-	iV_DrawText( szVal, x0, iY );
+	iV_DrawText(szVal, x0, iY);
 
 	//draw the comparison value - only if not zero
 	if (BarGraph->minorSize != 0)
 	{
-		y0 -= 1;
-        width = BarGraph->minorSize * barWidth / 100;
-        if (width > barWidth)
-        {
-            width = barWidth;
-        }
-		//iV_DrawImage(IntImages,IMAGE_DES_STATSCOMP,x0+BarGraph->minorSize ,y0);
-        iV_DrawImage(IntImages, IMAGE_DES_STATSCOMP, iX + width ,y0);
+		width = MIN(BarGraph->minorSize * barWidth / 100, barWidth);
+		iV_DrawImage(IntImages, IMAGE_DES_STATSCOMP, iX + width, y0 - 1);
 	}
+}
+
+/* Draws a stats bar for the design screen */
+void intDisplayStatsBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+{
+	intDisplayBar(psWidget, xOffset, yOffset, false);
+}
+
+/* Draws a Template Power Bar for the Design Screen */
+void intDisplayDesignPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+{
+	intDisplayBar(psWidget, xOffset, yOffset, true);
 }
 
 
