@@ -28,12 +28,10 @@
 #include "widgbase.h"
 #include "lib/ivis_common/textdraw.h"
 
-// label states.
-#define WLABEL_HILITE	0x0004		// label is hilited
-
 struct W_LABEL : public WIDGET
 {
-	UDWORD		state;					// The current button state
+	W_LABEL(W_LABINIT const *init);
+
 	char		aText[WIDG_MAXSTR];		// Text on the label
 	enum iV_fonts FontID;
 	const char	*pTip;					// The tool tip for the button

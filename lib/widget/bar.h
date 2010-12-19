@@ -28,6 +28,8 @@
 
 struct W_BARGRAPH : public WIDGET
 {
+	W_BARGRAPH(W_BARINIT const *init);
+
 	UWORD		barPos;				// Orientation of the bar on the widget
 	UWORD		majorSize;			// Percentage of the main bar that is filled
 	UWORD		minorSize;			// Percentage of the minor bar if there is one
@@ -44,9 +46,6 @@ extern W_BARGRAPH* barGraphCreate(const W_BARINIT* psInit);
 
 /* Free the memory used by a barGraph */
 extern void barGraphFree(W_BARGRAPH *psWidget);
-
-/* Initialise a barGraph widget before running it */
-extern void barGraphInitialise(W_BARGRAPH *psWidget);
 
 /* Respond to a mouse moving over a barGraph */
 extern void barGraphHiLite(W_BARGRAPH *psWidget, W_CONTEXT *psContext);

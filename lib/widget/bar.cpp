@@ -30,6 +30,43 @@
 #include "lib/ivis_common/pieblitfunc.h"
 #include "lib/ivis_common/piepalette.h"
 
+W_BARGRAPH::W_BARGRAPH(W_BARINIT const *init)
+	: WIDGET(init, WIDG_BARGRAPH)
+	, barPos(init->orientation)
+	, majorSize(init->size)
+	, minorSize(init->minorSize)
+	, iRange(init->iRange)
+	, iValue(0)
+	, iOriginal(0)
+	, majorCol(init->sCol)
+	, minorCol(init->sMinorCol)
+	, pTip(init->pTip)
+{
+	/* Set the display function */
+	if (display == NULL)
+	{
+		if (init->style & WBAR_TROUGH)
+		{
+			display = barGraphDisplayTrough;
+		}
+		else if (init->style & WBAR_DOUBLE)
+		{
+			display = barGraphDisplayDouble;
+		}
+		else
+		{
+			display = barGraphDisplay;
+		}
+	}
+
+	/* Set the minor colour if necessary */
+	// Actually, this sets the major colour to the minor colour. The minor colour used to be left completely uninitialised... Wonder what it was for..?
+	if (style & WBAR_DOUBLE)
+	{
+		majorCol = minorCol;
+	}
+}
+
 /* Create a barGraph widget data structure */
 W_BARGRAPH* barGraphCreate(const W_BARINIT* psInit)
 {
@@ -59,67 +96,13 @@ W_BARGRAPH* barGraphCreate(const W_BARINIT* psInit)
 	}
 
 	/* Allocate the required memory */
-	W_BARGRAPH *psWidget = new W_BARGRAPH;
+	W_BARGRAPH *psWidget = new W_BARGRAPH(psInit);
 	if (psWidget == NULL)
 	{
 		debug(LOG_FATAL, "barGraphCreate: Out of memory");
 		abort();
 		return NULL;
 	}
-	/* Allocate the memory for the tip and copy it if necessary */
-	if (psInit->pTip)
-	{
-		psWidget->pTip = psInit->pTip;
-	}
-	else
-	{
-		psWidget->pTip = NULL;
-	}
-
-	/* Initialise the structure */
-	psWidget->type = WIDG_BARGRAPH;
-	psWidget->id = psInit->id;
-	psWidget->formID = psInit->formID;
-	psWidget->style = psInit->style;
-	psWidget->x = psInit->x;
-	psWidget->y = psInit->y;
-	psWidget->width = psInit->width;
-	psWidget->height = psInit->height;
-	psWidget->callback = psInit->pCallback;
-	psWidget->pUserData = psInit->pUserData;
-	psWidget->UserData = psInit->UserData;
-	psWidget->barPos = psInit->orientation;
-	psWidget->majorSize = psInit->size;
-	psWidget->minorSize = psInit->minorSize;
-	psWidget->iRange = psInit->iRange;
-
-	/* Set the display function */
-	if (psInit->pDisplay)
-	{
-		psWidget->display = psInit->pDisplay;
-	}
-	else if (psInit->style & WBAR_TROUGH)
-	{
-		psWidget->display = barGraphDisplayTrough;
-	}
-	else if (psInit->style & WBAR_DOUBLE)
-	{
-		psWidget->display = barGraphDisplayDouble;
-	}
-	else
-	{
-		psWidget->display = barGraphDisplay;
-	}
-	/* Set the major colour */
-	psWidget->majorCol = psInit->sCol;
-
-	/* Set the minor colour if necessary */
-	if (psInit->style & WBAR_DOUBLE)
-	{
-		psWidget->majorCol = psInit->sMinorCol;
-	}
-
-	barGraphInitialise(psWidget);
 
 	return psWidget;
 }
@@ -131,12 +114,6 @@ void barGraphFree(W_BARGRAPH *psWidget)
 	ASSERT(psWidget != NULL,"Invalid widget pointer");
 
 	delete psWidget;
-}
-
-/* Initialise a barGraph widget before running it */
-void barGraphInitialise(W_BARGRAPH *psWidget)
-{
-	(void)psWidget;
 }
 
 

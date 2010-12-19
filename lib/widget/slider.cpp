@@ -34,6 +34,24 @@ void sliderEnableDrag(BOOL Enable)
 	DragEnabled = Enable;
 }
 
+W_SLIDER::W_SLIDER(W_SLDINIT const *init)
+	: WIDGET(init, WIDG_SLIDER)
+	, orientation(init->orientation)
+	, numStops(init->numStops)
+	, barSize(init->barSize)
+	, pTip(init->pTip)
+{
+	if (display == NULL)
+	{
+		display = sliderDisplay;
+	}
+
+	sliderInitialise(this);
+
+	pos = init->pos;  // Must be after sliderInitialise().
+}
+
+
 /* Create a slider widget data structure */
 W_SLIDER* sliderCreate(const W_SLDINIT* psInit)
 {
@@ -79,44 +97,13 @@ W_SLIDER* sliderCreate(const W_SLDINIT* psInit)
 	}
 
 	/* Allocate the required memory */
-	W_SLIDER *psWidget = new W_SLIDER;
+	W_SLIDER *psWidget = new W_SLIDER(psInit);
 	if (psWidget == NULL)
 	{
 		debug(LOG_FATAL, "sliderCreate: Out of memory");
 		abort();
 		return NULL;
 	}
-	/* Allocate the memory for the tip and copy it if necessary */
-	psWidget->pTip = psInit->pTip;
-
-	/* Initialise the structure */
-	psWidget->type = WIDG_SLIDER;
-	psWidget->id = psInit->id;
-	psWidget->formID = psInit->formID;
-	psWidget->style = psInit->style;
-	psWidget->x = psInit->x;
-	psWidget->y = psInit->y;
-	psWidget->width = psInit->width;
-	psWidget->height = psInit->height;
-
-	if (psInit->pDisplay)
-	{
-		psWidget->display = psInit->pDisplay;
-	}
-	else
-	{
-		psWidget->display = sliderDisplay;
-	}
-	psWidget->callback = psInit->pCallback;
-	psWidget->pUserData = psInit->pUserData;
-	psWidget->UserData = psInit->UserData;
-	psWidget->orientation = psInit->orientation;
-	psWidget->numStops = psInit->numStops;
-	psWidget->barSize = psInit->barSize;
-
-	sliderInitialise(psWidget);
-
-	psWidget->pos = psInit->pos;
 
 	return psWidget;
 }

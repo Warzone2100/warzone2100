@@ -46,64 +46,42 @@ struct TAB_POS
 	SDWORD		TabMultiplier;			//Added to keep track of tab scroll
 };
 
-/* Set default colours for a form */
-static void formSetDefaultColours(W_FORM *psForm)
+W_FORM::W_FORM(W_FORMINIT const *init)
+	: WIDGET(init, WIDG_FORM)
+	, disableChildren(init->disableChildren)
+	, Ax0(0), Ay0(0), Ax1(0), Ay1(0)  // These assignments were previously done by a memset.
+	, animCount(0)
+	, startTime(0)                    // This assignment was previously done by a memset.
+	, psLastHiLite(NULL)
+	, psWidgets(NULL)
 {
-	psForm->aColours[WCOL_BKGRND]    = WZCOL_FORM_BACKGROUND;
-	psForm->aColours[WCOL_TEXT]      = WZCOL_FORM_TEXT;
-	psForm->aColours[WCOL_LIGHT]     = WZCOL_FORM_LIGHT;
-	psForm->aColours[WCOL_DARK]      = WZCOL_FORM_DARK;
-	psForm->aColours[WCOL_HILITE]    = WZCOL_FORM_HILITE;
-	psForm->aColours[WCOL_CURSOR]    = WZCOL_FORM_CURSOR;
-	psForm->aColours[WCOL_TIPBKGRND] = WZCOL_FORM_TIP_BACKGROUND;
-	psForm->aColours[WCOL_DISABLE]   = WZCOL_FORM_DISABLE;
+	if (display == NULL)
+	{
+		display = formDisplay;
+	}
+
+	aColours[WCOL_BKGRND]    = WZCOL_FORM_BACKGROUND;
+	aColours[WCOL_TEXT]      = WZCOL_FORM_TEXT;
+	aColours[WCOL_LIGHT]     = WZCOL_FORM_LIGHT;
+	aColours[WCOL_DARK]      = WZCOL_FORM_DARK;
+	aColours[WCOL_HILITE]    = WZCOL_FORM_HILITE;
+	aColours[WCOL_CURSOR]    = WZCOL_FORM_CURSOR;
+	aColours[WCOL_TIPBKGRND] = WZCOL_FORM_TIP_BACKGROUND;
+	aColours[WCOL_DISABLE]   = WZCOL_FORM_DISABLE;
 }
+
 
 /* Create a plain form widget */
 static W_FORM* formCreatePlain(const W_FORMINIT* psInit)
 {
 	/* Allocate the required memory */
-	W_FORM *psWidget = new W_FORM;
+	W_FORM *psWidget = new W_FORM(psInit);
 	if (psWidget == NULL)
 	{
 		debug(LOG_FATAL, "formCreatePlain: Out of memory");
 		abort();
 		return NULL;
 	}
-
-	/* Initialise the structure */
-	psWidget->type = WIDG_FORM;
-	psWidget->id = psInit->id;
-	psWidget->formID = psInit->formID;
-	psWidget->style = psInit->style;
-	psWidget->disableChildren = psInit->disableChildren;
-	psWidget->animCount = 0;
-	psWidget->x = psInit->x;
-	psWidget->y = psInit->y;
-	psWidget->width = psInit->width;
-	psWidget->height = psInit->height;
-
-	if (psInit->pDisplay)
-	{
-		psWidget->display = psInit->pDisplay;
-	}
-	else
-	{
-		psWidget->display = formDisplay;
-	}
-	psWidget->callback = psInit->pCallback;
-	psWidget->pUserData = psInit->pUserData;
-	psWidget->UserData = psInit->UserData;
-	psWidget->psWidgets = NULL;
-	psWidget->psLastHiLite = NULL;
-	formSetDefaultColours(psWidget);
-
-	// These assignments were previously done by a memset.
-	psWidget->psNext = NULL;
-	psWidget->Ax0 = psWidget->Ay0 = psWidget->Ax1 = psWidget->Ay1 = 0;
-	psWidget->startTime = 0;
-
-	formInitialise(psWidget);
 
 	return psWidget;
 }
@@ -120,56 +98,31 @@ static void formFreePlain(W_FORM *psWidget)
 }
 
 
+W_CLICKFORM::W_CLICKFORM(W_FORMINIT const *init)
+	: W_FORM(init)
+	, state(WCLICK_NORMAL)
+	, pTip(init->pTip)
+	, HilightAudioID(WidgGetHilightAudioID())
+	, ClickedAudioID(WidgGetClickedAudioID())
+	, AudioCallback(WidgGetAudioCallback())
+{
+	if (init->pDisplay == NULL)
+	{
+		display = formDisplayClickable;
+	}
+}
+
 /* Create a plain form widget */
 static W_CLICKFORM* formCreateClickable(const W_FORMINIT* psInit)
 {
 	/* Allocate the required memory */
-	W_CLICKFORM *psWidget = new W_CLICKFORM;
+	W_CLICKFORM *psWidget = new W_CLICKFORM(psInit);
 	if (psWidget == NULL)
 	{
 		debug(LOG_FATAL, "formCreateClickable: Out of memory");
 		abort();
 		return NULL;
 	}
-
-	/* Initialise the structure */
-	psWidget->type = WIDG_FORM;
-	psWidget->id = psInit->id;
-	psWidget->formID = psInit->formID;
-	psWidget->style = psInit->style;
-	psWidget->disableChildren = psInit->disableChildren;
-	psWidget->animCount = 0;
-	psWidget->x = psInit->x;
-	psWidget->y = psInit->y;
-	psWidget->width = psInit->width;
-	psWidget->height = psInit->height;
-	psWidget->callback = psInit->pCallback;
-	psWidget->pUserData = psInit->pUserData;
-	psWidget->UserData = psInit->UserData;
-
-	psWidget->AudioCallback = WidgGetAudioCallback();
-	psWidget->HilightAudioID = WidgGetHilightAudioID();
-	psWidget->ClickedAudioID = WidgGetClickedAudioID();
-
-	if (psInit->pDisplay)
-	{
-		psWidget->display = psInit->pDisplay;
-	}
-	else
-	{
-		psWidget->display = formDisplayClickable;
-	}
-	psWidget->psWidgets = NULL;
-	psWidget->psLastHiLite = NULL;
-	psWidget->pTip = psInit->pTip;
-	formSetDefaultColours((W_FORM *)psWidget);
-
-	// These assignments were previously done by a memset.
-	psWidget->psNext = NULL;
-	psWidget->Ax0 = psWidget->Ay0 = psWidget->Ax1 = psWidget->Ay1 = 0;
-	psWidget->startTime = 0;
-
-	formInitialise((W_FORM *)psWidget);
 
 	return psWidget;
 }
@@ -187,12 +140,56 @@ static void formFreeClickable(W_CLICKFORM *psWidget)
 }
 
 
+W_TABFORM::W_TABFORM(W_FORMINIT const *init)
+	: W_FORM(init)
+	, majorPos(init->majorPos), minorPos(init->minorPos)
+	, majorSize(init->majorSize), minorSize(init->minorSize)
+	, tabMajorThickness(init->tabMajorThickness)
+	, tabMinorThickness(init->tabMinorThickness)
+	, tabMajorGap(init->tabMajorGap)
+	, tabMinorGap(init->tabMinorGap)
+	, tabVertOffset(init->tabVertOffset)
+	, tabHorzOffset(init->tabHorzOffset)
+	, majorOffset(init->majorOffset)
+	, minorOffset(init->minorOffset)
+	, majorT(0), minorT(0)
+	, state(0)  // This assignment was previously done by a memset.
+	, tabHiLite(~0)
+	, TabMultiplier(init->TabMultiplier)
+	, numStats(init->numStats)
+	, numButtons(init->numButtons)
+	, pTabDisplay(init->pTabDisplay)
+{
+	memset(asMajor, 0, sizeof(asMajor));
+
+	/* Allocate the memory for tool tips and copy them in */
+	/* Set up the tab data.
+	 * All widget pointers have been zeroed by the memset above.
+	 */
+	numMajor = init->numMajor;
+	for (unsigned major = 0; major < init->numMajor; ++major)
+	{
+		/* Check for a tip for the major tab */
+		asMajor[major].pTip = init->apMajorTips[major];
+		asMajor[major].lastMinor = 0;
+
+		/* Check for tips for the minor tab */
+		asMajor[major].numMinor = init->aNumMinors[major];
+		for (unsigned minor = 0; minor < init->aNumMinors[major]; ++minor)
+		{
+			asMajor[major].asMinor[minor].pTip = init->apMinorTips[major][minor];
+		}
+	}
+
+	if (init->pDisplay == NULL)
+	{
+		display = formDisplayTabbed;
+	}
+}
+
 /* Create a tabbed form widget */
 static W_TABFORM* formCreateTabbed(const W_FORMINIT* psInit)
 {
-	UDWORD		major,minor;
-	W_MAJORTAB	*psMajor;
-
 	if (psInit->numMajor == 0)
 	{
 		ASSERT(false, "formCreateTabbed: Must have at least one major tab on a tabbed form");
@@ -209,7 +206,7 @@ static W_TABFORM* formCreateTabbed(const W_FORMINIT* psInit)
 		ASSERT(false, "formCreateTabbed: Too many Major tabs" );
 		return NULL;
 	}
-	for(major=0; major<psInit->numMajor; major++)
+	for (unsigned major = 0; major < psInit->numMajor; ++major)
 	{
 		if (psInit->aNumMinors[major] >= WFORM_MAXMINOR)
 		{
@@ -224,91 +221,13 @@ static W_TABFORM* formCreateTabbed(const W_FORMINIT* psInit)
 	}
 
 	/* Allocate the required memory */
-	W_TABFORM *psWidget = new W_TABFORM;
+	W_TABFORM *psWidget = new W_TABFORM(psInit);
 	if (psWidget == NULL)
 	{
 		debug(LOG_FATAL, "formCreateTabbed: Out of memory");
 		abort();
 		return NULL;
 	}
-	memset(psWidget->asMajor, 0, sizeof(psWidget->asMajor));
-
-	/* Allocate the memory for tool tips and copy them in */
-	psMajor = psWidget->asMajor;
-	for (major = 0; major < psInit->numMajor; ++major)
-	{
-		/* Check for a tip for the major tab */
-		psMajor->pTip = psInit->apMajorTips[major];
-
-		/* Check for tips for the minor tab */
-		for(minor = 0; minor < psInit->aNumMinors[major]; ++minor)
-		{
-			psMajor->asMinor[minor].pTip = psInit->apMinorTips[major][minor];
-		}
-		psMajor++;
-	}
-
-	/* Initialise the structure */
-	psWidget->type = WIDG_FORM;
-	psWidget->id = psInit->id;
-	psWidget->formID = psInit->formID;
-	psWidget->style = psInit->style;
-	psWidget->disableChildren = psInit->disableChildren;
-	psWidget->animCount = 0;
-	psWidget->x = psInit->x;
-	psWidget->y = psInit->y;
-	psWidget->width = psInit->width;
-	psWidget->height = psInit->height;
-	if (psInit->pDisplay)
-	{
-		psWidget->display = psInit->pDisplay;
-	}
-	else
-	{
-		psWidget->display = formDisplayTabbed;
-	}
-	psWidget->callback = psInit->pCallback;
-	psWidget->pUserData = psInit->pUserData;
-	psWidget->UserData = psInit->UserData;
-	psWidget->psLastHiLite = NULL;
-	psWidget->majorSize = psInit->majorSize;
-	psWidget->minorSize = psInit->minorSize;
-	psWidget->tabMajorThickness = psInit->tabMajorThickness;
-	psWidget->tabMinorThickness = psInit->tabMinorThickness;
-	psWidget->tabMajorGap = psInit->tabMajorGap;
-	psWidget->tabMinorGap = psInit->tabMinorGap;
-	psWidget->tabVertOffset = psInit->tabVertOffset;
-	psWidget->tabHorzOffset = psInit->tabHorzOffset;
-	psWidget->majorOffset = psInit->majorOffset;
-	psWidget->minorOffset = psInit->minorOffset;
-	psWidget->majorPos = psInit->majorPos;
-	psWidget->minorPos = psInit->minorPos;
-	psWidget->pTabDisplay = psInit->pTabDisplay;
-	psWidget->TabMultiplier = psInit->TabMultiplier;
-	psWidget->numButtons = psInit->numButtons;
-	psWidget->numStats = psInit->numStats;
-	psWidget->majorT = 0;
-	psWidget->minorT = 0;
-	
-	formSetDefaultColours((W_FORM *)psWidget);
-
-	/* Set up the tab data.
-	 * All widget pointers have been zeroed by the memset above.
-	 */
-	psWidget->numMajor = psInit->numMajor;
-	for (major=0; major<psInit->numMajor; major++)
-	{
-		psWidget->asMajor[major].numMinor = psInit->aNumMinors[major];
-	}
-
-	// These assignments were previously done by a memset.
-	psWidget->psNext = NULL;
-	psWidget->Ax0 = psWidget->Ay0 = psWidget->Ax1 = psWidget->Ay1 = 0;
-	psWidget->startTime = 0;
-	psWidget->psWidgets = NULL;
-	psWidget->state = 0;
-
-	formInitialise((W_FORM *)psWidget);
 
 	return psWidget;
 }
@@ -733,43 +652,6 @@ void formGetOrigin(W_FORM *psWidget, SDWORD *pXOrigin, SDWORD *pYOrigin)
 		*pXOrigin = 0;
 		*pYOrigin = 0;
 	}
-}
-
-
-/* Initialise a form widget before running it */
-void formInitialise(W_FORM *psWidget)
-{
-	W_TABFORM	*psTabForm;
-	W_CLICKFORM	*psClickForm;
-	UDWORD i;
-
-	if (psWidget->style & WFORM_TABBED)
-	{
-		ASSERT( psWidget != NULL,
-			"formInitialise: invalid tab form pointer" );
-		psTabForm = (W_TABFORM *)psWidget;
-		psTabForm->majorT = 0;
-		psTabForm->minorT = 0;
-		psTabForm->tabHiLite = (UWORD)(-1);
-		for (i=0; i<psTabForm->numMajor; i++)
-		{
-			psTabForm->asMajor[i].lastMinor = 0;
-		}
-	}
-	else if (psWidget->style & WFORM_CLICKABLE)
-	{
-		ASSERT( psWidget != NULL,
-			"formInitialise: invalid clickable form pointer" );
-		psClickForm = (W_CLICKFORM *)psWidget;
-		psClickForm->state = WCLICK_NORMAL;
-	}
-	else
-	{
-		ASSERT( psWidget != NULL,
-			"formInitialise: invalid form pointer" );
-	}
-
-	psWidget->psLastHiLite = NULL;
 }
 
 

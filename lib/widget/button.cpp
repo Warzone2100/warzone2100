@@ -38,6 +38,22 @@ BOOL buttonStartUp(void)
 	return true;
 }
 
+W_BUTTON::W_BUTTON(W_BUTINIT const *init)
+	: WIDGET(init, WIDG_BUTTON)
+	, pText(init->pText)
+	, pTip(init->pTip)
+	, HilightAudioID(WidgGetHilightAudioID())
+	, ClickedAudioID(WidgGetClickedAudioID())
+	, AudioCallback(WidgGetAudioCallback())
+	, FontID(init->FontID)
+{
+	if (display == NULL)
+	{
+		display = buttonDisplay;
+	}
+
+	buttonInitialise(this);
+}
 
 /* Create a button widget data structure */
 W_BUTTON* buttonCreate(const W_BUTINIT* psInit)
@@ -50,59 +66,13 @@ W_BUTTON* buttonCreate(const W_BUTINIT* psInit)
 	}
 
 	/* Allocate the required memory */
-	W_BUTTON *psWidget = new W_BUTTON;
+	W_BUTTON *psWidget = new W_BUTTON(psInit);
 	if (psWidget == NULL)
 	{
 		debug(LOG_FATAL, "buttonCreate: Out of memory" );
 		abort();
 		return NULL;
 	}
-	/* Allocate memory for the text and copy it if necessary */
-	if (psInit->pText)
-	{
-		psWidget->pText = psInit->pText;
-	}
-	else
-	{
-		psWidget->pText = NULL;
-	}
-	/* Allocate the memory for the tip and copy it if necessary */
-	if (psInit->pTip)
-	{
-		psWidget->pTip = psInit->pTip;
-	}
-	else
-	{
-		psWidget->pTip = NULL;
-	}
-
-	/* Initialise the structure */
-	psWidget->type = WIDG_BUTTON;
-	psWidget->id = psInit->id;
-	psWidget->formID = psInit->formID;
-	psWidget->style = psInit->style;
-	psWidget->x = psInit->x;
-	psWidget->y = psInit->y;
-	psWidget->width = psInit->width;
-	psWidget->height = psInit->height;
-	psWidget->callback = psInit->pCallback;
-	psWidget->pUserData = psInit->pUserData;
-	psWidget->UserData = psInit->UserData;
-	psWidget->AudioCallback = WidgGetAudioCallback();
-	psWidget->HilightAudioID = WidgGetHilightAudioID();
-	psWidget->ClickedAudioID = WidgGetClickedAudioID();
-
-	if (psInit->pDisplay)
-	{
-		psWidget->display = psInit->pDisplay;
-	}
-	else
-	{
-		psWidget->display = buttonDisplay;
-	}
-	psWidget->FontID = psInit->FontID;
-
-	buttonInitialise(psWidget);
 
 	return psWidget;
 }

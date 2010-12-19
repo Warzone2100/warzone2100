@@ -40,6 +40,8 @@
 
 struct W_BUTTON : public WIDGET
 {
+	W_BUTTON(W_BUTINIT const *init);
+
 	UDWORD		state;				// The current button state
 	const char *pText;				// The text for the button
 	const char *pTip;				// The tool tip for the button

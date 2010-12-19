@@ -40,6 +40,7 @@
 struct WIDGET;
 struct W_CONTEXT;
 struct W_FORM;
+struct W_INIT;
 
 /* The display function prototype */
 typedef void (*WIDGET_DISPLAY)(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
@@ -64,6 +65,7 @@ enum WIDGET_TYPE
 /* The base widget data type */
 struct WIDGET
 {
+	WIDGET(W_INIT const *init, WIDGET_TYPE type);
 	virtual ~WIDGET() {}
 
 	UDWORD                  formID;                 ///< ID of the widgets base form.

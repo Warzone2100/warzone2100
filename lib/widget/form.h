@@ -30,6 +30,8 @@
 /* The standard form */
 struct W_FORM : public WIDGET
 {
+	W_FORM(W_FORMINIT const *init);
+
 	BOOL            disableChildren;        ///< Disable all child widgets if true
 	UWORD           Ax0,Ay0,Ax1,Ay1;        ///< Working coords for animations.
 	UDWORD          animCount;              ///< Animation counter.
@@ -60,6 +62,8 @@ struct W_MAJORTAB
 /* The tabbed form data structure */
 struct W_TABFORM : public W_FORM
 {
+	W_TABFORM(W_FORMINIT const *init);
+
 	UWORD		majorPos, minorPos;		// Position of the tabs on the form
 	UWORD		majorSize,minorSize;	// the size of tabs horizontally and vertically
 	UWORD		tabMajorThickness;			// The thickness of the tabs
@@ -99,6 +103,8 @@ struct W_TABFORM : public W_FORM
 /* The clickable form data structure */
 struct W_CLICKFORM : public W_FORM
 {
+	W_CLICKFORM(W_FORMINIT const *init);
+
 	UDWORD		state;					// Button state of the form
 	const char	*pTip;					// Tip for the form
 	SWORD HilightAudioID;				// Audio ID for form clicked sound
@@ -116,9 +122,6 @@ extern void formFree(W_FORM *psWidget);
 
 /* Add a widget to a form */
 extern BOOL formAddWidget(W_FORM *psForm, WIDGET *psWidget, W_INIT *psInit);
-
-/* Initialise a form widget before running it */
-extern void formInitialise(W_FORM *psWidget);
 
 /* Return the widgets currently displayed by a form */
 extern WIDGET *formGetWidgets(W_FORM *psWidget);

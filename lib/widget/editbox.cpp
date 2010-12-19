@@ -25,6 +25,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/utf.h"
+#include "lib/framework/wzapp_c.h"
 #include "widget.h"
 #include "widgint.h"
 #include "editbox.h"
@@ -54,11 +55,41 @@
 /* Calculate how much of the start of a string can fit into the edit box */
 static void fitStringStart(utf_32_char *pBuffer, UDWORD boxWidth, UWORD *pCount, UWORD *pCharWidth);
 
+W_EDITBOX::W_EDITBOX(W_EDBINIT const *init)
+	: WIDGET(init, WIDG_EDITBOX)
+	, FontID(init->FontID)
+	, blinkOffset(wzGetTicks())
+	, pBoxDisplay(init->pBoxDisplay)
+	, pFontDisplay(init->pFontDisplay)
+	, HilightAudioID(WidgGetHilightAudioID())
+	, ClickedAudioID(WidgGetClickedAudioID())
+	, AudioCallback(WidgGetAudioCallback())
+{
+	char const *text = init->pText;
+	if (!text)
+	{
+		text = "";
+	}
+	aText = UTF8toUTF32(text, &aTextAllocated);
+
+	if (display == NULL)
+	{
+		display = editBoxDisplay;
+	}
+
+	editBoxInitialise(this);
+
+	init_scrap();
+}
+
+W_EDITBOX::~W_EDITBOX()
+{
+	free(aText);
+}
+
 /* Create an edit box widget data structure */
 W_EDITBOX* editBoxCreate(const W_EDBINIT* psInit)
 {
-	const char *text;
-
 	if (psInit->style & ~(WEDB_PLAIN | WIDG_HIDDEN | WEDB_DISABLED))
 	{
 		ASSERT( false, "Unknown edit box style" );
@@ -66,54 +97,13 @@ W_EDITBOX* editBoxCreate(const W_EDBINIT* psInit)
 	}
 
 	/* Allocate the required memory */
-	W_EDITBOX *psWidget = new W_EDITBOX;
+	W_EDITBOX *psWidget = new W_EDITBOX(psInit);
 	if (psWidget == NULL)
 	{
 		debug(LOG_FATAL, "editBoxCreate: Out of memory");
 		abort();
 		return NULL;
 	}
-
-	/* Initialise the structure */
-	psWidget->type = WIDG_EDITBOX;
-	psWidget->id = psInit->id;
-	psWidget->formID = psInit->formID;
-	psWidget->style = psInit->style;
-	psWidget->x = psInit->x;
-	psWidget->y = psInit->y;
-	psWidget->width = psInit->width;
-	psWidget->height = psInit->height;
-	psWidget->FontID = psInit->FontID;
-	if (psInit->pDisplay)
-	{
-		psWidget->display = psInit->pDisplay;
-	}
-	else
-	{
-		psWidget->display = editBoxDisplay;
-	}
-	psWidget->callback = psInit->pCallback;
-	psWidget->pUserData = psInit->pUserData;
-	psWidget->UserData = psInit->UserData;
-	psWidget->pBoxDisplay = psInit->pBoxDisplay;
-	psWidget->pFontDisplay = psInit->pFontDisplay;
-
-	psWidget->AudioCallback = WidgGetAudioCallback();
-	psWidget->HilightAudioID = WidgGetHilightAudioID();
-	psWidget->ClickedAudioID = WidgGetClickedAudioID();
-
-	text = psInit->pText;
-	if (!text)
-	{
-		text = "";
-	}
-	psWidget->aText = UTF8toUTF32(text, &psWidget->aTextAllocated);
-
-	editBoxInitialise(psWidget);
-
-	psWidget->blinkOffset = SDL_GetTicks();
-
-	init_scrap();
 
 	return psWidget;
 }
@@ -122,7 +112,6 @@ W_EDITBOX* editBoxCreate(const W_EDBINIT* psInit)
 /* Free the memory used by an edit box */
 void editBoxFree(W_EDITBOX *psWidget)
 {
-	free(psWidget->aText);
 	delete psWidget;
 }
 

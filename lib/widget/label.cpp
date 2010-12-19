@@ -30,6 +30,24 @@
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_common/textdraw.h"
 
+W_LABEL::W_LABEL(W_LABINIT const *init)
+	: WIDGET(init, WIDG_LABEL)
+	, FontID(init->FontID)
+	, pTip(init->pTip)
+{
+	if (display == NULL)
+	{
+		display = labelDisplay;
+	}
+
+	aText[0] = '\0';
+	if (init->pText)
+	{
+		sstrcpy(aText, init->pText);
+	}
+}
+
+
 /* Create a button widget data structure */
 W_LABEL* labelCreate(const W_LABINIT* psInit)
 {
@@ -42,46 +60,12 @@ W_LABEL* labelCreate(const W_LABINIT* psInit)
 	}
 
 	/* Allocate the required memory */
-	W_LABEL *psWidget = new W_LABEL;
+	W_LABEL *psWidget = new W_LABEL(psInit);
 	if (psWidget == NULL)
 	{
 		debug(LOG_FATAL, "labelCreate: Out of memory");
 		abort();
 		return NULL;
-	}
-	/* Allocate the memory for the tip and copy it if necessary */
-	psWidget->pTip = psInit->pTip;
-
-	/* Initialise the structure */
-	psWidget->type = WIDG_LABEL;
-	psWidget->id = psInit->id;
-	psWidget->formID = psInit->formID;
-	psWidget->style = psInit->style;
-	psWidget->x = psInit->x;
-	psWidget->y = psInit->y;
-	psWidget->width = psInit->width;
-	psWidget->height = psInit->height;
-
-	if (psInit->pDisplay)
-	{
-		psWidget->display = psInit->pDisplay;
-	}
-	else
-	{
-		psWidget->display = labelDisplay;
-	}
-	psWidget->callback = psInit->pCallback;
-	psWidget->pUserData = psInit->pUserData;
-	psWidget->UserData = psInit->UserData;
-	psWidget->FontID = psInit->FontID;
-
-	if (psInit->pText)
-	{
-		sstrcpy(psWidget->aText, psInit->pText);
-	}
-	else
-	{
-		psWidget->aText[0] = 0;
 	}
 
 	return psWidget;
@@ -131,8 +115,6 @@ void labelDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pC
 /* Respond to a mouse moving over a label */
 void labelHiLite(W_LABEL *psWidget, W_CONTEXT *psContext)
 {
-	psWidget->state |= WLABEL_HILITE;
-
 	/* If there is a tip string start the tool tip */
 	if (psWidget->pTip)
 	{
@@ -147,7 +129,6 @@ void labelHiLite(W_LABEL *psWidget, W_CONTEXT *psContext)
 /* Respond to the mouse moving off a label */
 void labelHiLiteLost(W_LABEL *psWidget)
 {
-	psWidget->state &= ~(WLABEL_HILITE);
 	if (psWidget->pTip)
 	{
 		tipStop((WIDGET *)psWidget);

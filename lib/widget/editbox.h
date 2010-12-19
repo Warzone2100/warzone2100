@@ -39,6 +39,9 @@
 
 struct W_EDITBOX : public WIDGET
 {
+	W_EDITBOX(W_EDBINIT const *init);
+	~W_EDITBOX();
+
 	UDWORD		state;						// The current edit box state
 	utf_32_char	*aText;			// The text in the edit box
 	size_t		aTextAllocated;		// Allocated bytes.

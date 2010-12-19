@@ -33,6 +33,8 @@
 
 struct W_SLIDER : public WIDGET
 {
+	W_SLIDER(W_SLDINIT const *init);
+
 	UWORD		orientation;		// The orientation of the slider
 	UWORD		numStops;			// Number of stop positions on the slider
 	UWORD		barSize;			// Thickness of slider bar

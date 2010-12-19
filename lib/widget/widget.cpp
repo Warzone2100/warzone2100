@@ -82,6 +82,23 @@ void widgShutDown(void)
 {
 }
 
+
+WIDGET::WIDGET(W_INIT const *init, WIDGET_TYPE type)
+	: formID(init->formID)
+	, id(init->id)
+	, type(type)
+	, style(init->style)
+	, x(init->x), y(init->y)
+	, width(init->width), height(init->height)
+	, display(init->pDisplay)
+	, callback(init->pCallback)
+	, pUserData(init->pUserData)
+	, UserData(init->UserData)
+
+	, psNext(NULL)
+{}
+
+
 // reset psMouseOverWidget (a global) when needed
 void CheckpsMouseOverWidget( void *psWidget )
 {
@@ -660,7 +677,8 @@ static void widgStartForm(W_FORM *psForm)
 	W_FORMGETALL	sGetAll;
 
 	/* Initialise this form */
-	formInitialise(psForm);
+	// This whole function should be redundant, since all widgets are initialised when created...
+	//formInitialise(psForm);
 
 	/*Initialise the widgets on the form */
 	formInitGetAllWidgets(psForm, &sGetAll);
