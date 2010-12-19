@@ -9,6 +9,7 @@ SUBDIRS = \
 	  lib/ivis_common \
 	  lib/ivis_opengl \
 	  lib/gamelib \
+	  lib/lua \
 	  lib/sound \
 	  lib/netplay \
 	  lib/widget \

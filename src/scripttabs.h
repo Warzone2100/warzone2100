@@ -27,10 +27,9 @@
 #include "lib/script/event.h" // needed for _scr_user_types
 #include "lib/script/parse.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
+// Lua
+#include "lib/lua/warzone.h"
+
 
 // How many game ticks for one event tick
 #define SCR_TICKRATE	100
@@ -39,7 +38,7 @@ extern "C"
 #define BARB1		6	
 #define BARB2		7
 
-typedef enum _scr_callback_types
+enum SCR_CALLBACK_TYPES
 {
 	CALL_GAMEINIT = TR_CALLBACKSTART,
 	CALL_DELIVPOINTMOVED,
@@ -105,7 +104,7 @@ typedef enum _scr_callback_types
 	CALL_VTOL_RETARGET,		// VTOL is out of targets
 
 	CALL_EVERY_FRAME, // fired at the start of every frame
-} SCR_CALLBACK_TYPES;
+};
 
 // The table of user types for the compiler
 extern TYPE_SYMBOL asTypeTable[];
@@ -128,18 +127,7 @@ extern BOOL scrTabInitialise(void);
 // Shut down the script system
 extern void scrShutDown(void);
 
-// Lua
-#include <lua.h>
-#include <lauxlib.h>
-#include <lualib.h>
-#include "lib/lua/warzone.h"
-
 extern void scrRegisterConstants(lua_State *L);
 extern void scrRegisterCVariables(lua_State *L);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
-
 
 #endif // __INCLUDED_SRC_SCRIPTTABS_H__

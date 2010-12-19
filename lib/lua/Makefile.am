@@ -6,4 +6,4 @@ noinst_HEADERS = \
 	warzone.h
 
 liblua_a_SOURCES = \
-	warzone.c
+	warzone.cpp

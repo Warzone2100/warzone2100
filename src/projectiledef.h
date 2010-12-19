@@ -26,10 +26,8 @@
 
 #include "basedef.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
+#include <vector>
+
 
 typedef enum PROJ_STATE
 {
@@ -39,28 +37,28 @@ typedef enum PROJ_STATE
 	PROJ_POSTIMPACT
 } PROJ_STATE;
 
-typedef struct PROJECTILE
+struct PROJECTILE : public SIMPLE_OBJECT
 {
-	/* Use only simple object elements */
-	SIMPLE_ELEMENTS( struct PROJECTILE );
+	PROJECTILE(uint32_t id, unsigned player) : SIMPLE_OBJECT(OBJ_PROJECTILE, id, player) {}
+
+	void            update();
+	bool            deleteIfDead() { if (died == 0) return false; delete this; return true; }
+
 
 	UBYTE           state;                  ///< current projectile state
 	UBYTE           bVisible;               ///< whether the selected player should see the projectile
 	WEAPON_STATS*   psWStats;               ///< firing weapon stats
 	BASE_OBJECT*    psSource;               ///< what fired the projectile
 	BASE_OBJECT*    psDest;                 ///< target of this projectile
-	BASE_OBJECT **  psDamaged;              ///< the targets that have already been dealt damage to (don't damage the same target twice)
-	unsigned        psNumDamaged;
+	std::vector<BASE_OBJECT *> psDamaged;   ///< the targets that have already been dealt damage to (don't damage the same target twice)
 
 	Vector3i        src;                    ///< Where projectile started
 	Vector3i        dst;                    ///< The target coordinates
 	SDWORD          vXY, vZ;                ///< axis velocities
 	SPACETIME       prevSpacetime;          ///< Location of projectile in previous tick.
 	UDWORD          expectedDamageCaused;   ///< Expected damage that this projectile will cause to the target.
-} PROJECTILE;
+};
 
-#ifdef __cplusplus
-}
-#endif //__cplusplus
+typedef std::vector<PROJECTILE *>::const_iterator ProjectileIterator;
 
 #endif // __INCLUDED_PROJECTILEDEF_H__

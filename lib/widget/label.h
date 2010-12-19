@@ -28,24 +28,14 @@
 #include "widgbase.h"
 #include "lib/ivis_common/textdraw.h"
 
-#ifdef __cplusplus
-extern "C"
+struct W_LABEL : public WIDGET
 {
-#endif //__cplusplus
+	W_LABEL(W_LABINIT const *init);
 
-// label states.
-#define WLABEL_HILITE	0x0004		// label is hilited
-
-typedef struct _w_label
-{
-	/* The common widget data */
-	WIDGET_BASE;
-
-	UDWORD		state;					// The current button state
 	char		aText[WIDG_MAXSTR];		// Text on the label
 	enum iV_fonts FontID;
 	const char	*pTip;					// The tool tip for the button
-} W_LABEL;
+};
 
 /* Create a button widget data structure */
 extern W_LABEL* labelCreate(const W_LABINIT* psInit);
@@ -61,9 +51,5 @@ extern void labelHiLite(W_LABEL *psWidget, W_CONTEXT *psContext);
 
 /* Respond to the mouse moving off a label */
 extern void labelHiLiteLost(W_LABEL *psWidget);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_LIB_WIDGET_LABEL_H__

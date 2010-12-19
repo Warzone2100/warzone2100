@@ -31,7 +31,7 @@
 #include "lib/script/script.h"
 
 /* Get the Yacc definitions */
-#include "script_parser.tab.h"
+#include "script_parser.tab.hpp"
 
 // fwrite declared with warn_unused_result, resulting in mysterious errors in "%%" on some distros.
 static inline bool no_warn_unused_result(int ignore) { if (ignore) {} return true; }

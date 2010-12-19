@@ -23,12 +23,12 @@ noinst_HEADERS = \
 	textdraw.h
 
 libivis_common_a_SOURCES = \
-	bitimage.c \
-	imd.c \
-	imdload.c \
-	jpeg_encoder.c \
-	pieclip.c \
-	piestate.c \
-	png_util.c
+	bitimage.cpp \
+	imd.cpp \
+	imdload.cpp \
+	jpeg_encoder.cpp \
+	pieclip.cpp \
+	piestate.cpp \
+	png_util.cpp
 
 libivis_common_a_LIBADD = $(top_builddir)/lib/framework/libframework.a

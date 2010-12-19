@@ -54,7 +54,7 @@ MOVESHUFFLE,
 #define EXTRA_PRECISION                         (1 << EXTRA_BITS)
 #define EXTRA_MASK                              (EXTRA_PRECISION - 1)
 
-typedef struct _move_control
+struct MOVE_CONTROL
 {
 	MOVE_STATUS	Status;					// Inactive, Navigating or moving point to point status
 	uint16_t	Position;				// Position in asPath
@@ -82,7 +82,7 @@ typedef struct _move_control
 
 	// iAttackRuns tracks the amount of ammunition a VTOL has remaining for each weapon
 	UDWORD	iAttackRuns[VTOL_MAXWEAPS];
-} MOVE_CONTROL;
+};
 
 #ifdef __cplusplus
 }

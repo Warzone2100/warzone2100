@@ -6,8 +6,8 @@ include $(top_srcdir)/makerules/common.mk
 CPPFLAGS := $(CPPFLAGS) -I$(top_srcdir)/lib/ivis_opengl
 
 SRC= \
-	sequence.c \
-	timer.c
+	sequence.cpp \
+	timer.cpp
 
 LIB=sequence
 

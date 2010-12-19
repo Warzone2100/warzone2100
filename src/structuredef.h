@@ -24,11 +24,6 @@
 #ifndef __INCLUDED_STRUCTUREDEF_H__
 #define __INCLUDED_STRUCTUREDEF_H__
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 #include "lib/gamelib/animobj.h"
 #include "positiondef.h"
 #include "basedef.h"
@@ -97,8 +92,6 @@ typedef enum _struct_strength
 	NUM_STRUCT_STRENGTH,
 } STRUCT_STRENGTH;
 
-#define INVALID_STRENGTH	(NUM_STRUCT_STRENGTH + 1)
-
 typedef UWORD STRUCTSTRENGTH_MODIFIER;
 
 #define SAS_OPEN_SPEED		(GAME_TICKS_PER_SEC * 2)
@@ -113,9 +106,8 @@ typedef enum _anim_states
 } STRUCT_ANIM_STATES;
 
 //this structure is used to hold the permenant stats for each type of building
-typedef struct _structure_stats
+struct STRUCTURE_STATS : public BASE_STATS
 {
-	STATS_BASE;						/* basic stats */
 	STRUCTURE_TYPE	type;				/* the type of structure */
 	STRUCT_STRENGTH	strength;		/* strength against the weapon effects */
 	UDWORD		baseWidth;			/*The width of the base in tiles*/
@@ -146,9 +138,8 @@ typedef struct _structure_stats
 
 	UDWORD		numFuncs;			/*Number of functions for default*/
 	SDWORD		defaultFunc;		/*The default function*/
-	struct _function	**asFuncList;		/*List of pointers to allowable functions -
-									  unalterable*/
-} WZ_DECL_MAY_ALIAS STRUCTURE_STATS;
+	struct FUNCTION **asFuncList;           ///< List of pointers to allowable functions - unalterable
+};
 
 typedef enum _struct_states
 {
@@ -210,14 +201,14 @@ typedef struct _factory
 typedef struct _res_extractor
 {
 	BOOL				active;				/*indicates when the extractor is on ie digging up oil*/
-	struct _structure	*psPowerGen;		/*owning power generator*/
+	struct STRUCTURE *      psPowerGen;                             ///< owning power generator
 } RES_EXTRACTOR;
 
 typedef struct _power_gen
 {
 	UDWORD			multiplier;				///< Factor to multiply output by - percentage
 	UDWORD			capacity;				///< Number of upgrade modules added
-	struct _structure	*apResExtractors[NUM_POWER_MODULES];	///< Pointers to associated oil derricks
+	struct STRUCTURE *      apResExtractors[NUM_POWER_MODULES];     ///< Pointers to associated oil derricks
 } POWER_GEN;
 
 typedef struct REPAIR_FACILITY
@@ -257,10 +248,10 @@ typedef union
 } FUNCTIONALITY;
 
 //this structure is used whenever an instance of a building is required in game
-typedef struct _structure
+struct STRUCTURE : public BASE_OBJECT
 {
-	/* The common structure elements for all objects */
-	BASE_ELEMENTS(struct _structure);
+	STRUCTURE(uint32_t id, unsigned player);
+	~STRUCTURE();
 
 	STRUCTURE_STATS     *pStructureType;            /* pointer to the structure stats for this type of building */
 	STRUCT_STATES       status;                     /* defines whether the structure is being built, doing nothing or performing a function */
@@ -294,7 +285,7 @@ typedef struct _structure
 
 	STRUCT_ANIM_STATES	state;
 	UDWORD			lastStateTime;
-} WZ_DECL_MAY_ALIAS STRUCTURE;
+};
 
 #define LOTS_OF	255						/*highest number the limit can be set to */
 typedef struct _structure_limits
@@ -325,7 +316,7 @@ typedef struct _production_run
 {
 	UBYTE						quantity;			//number to build
 	UBYTE						built;				//number built on current run
-	struct _droid_template		*psTemplate;		//template to build
+	struct DROID_TEMPLATE *         psTemplate;           //template to build
 } PRODUCTION_RUN;
 
 /* structure stats which can be upgraded by research*/
@@ -353,9 +344,5 @@ typedef UPGRADE		PRODUCTION_UPGRADE;
 typedef UPGRADE		REPAIR_FACILITY_UPGRADE;
 typedef UPGRADE		POWER_UPGRADE;
 typedef UPGRADE		REARM_UPGRADE;
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_STRUCTUREDEF_H__

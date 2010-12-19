@@ -120,12 +120,14 @@ extern void luaWZObj_pushweapon(lua_State *L, WEAPON* weapon);
 extern void luaWZObj_pushweaponstat(lua_State *L, int index);
 extern const char* luaWZObj_checkname(lua_State *L, int pos);
 extern DROID_TEMPLATE* luaWZObj_checktemplate(lua_State *L, int pos);
-extern void luaWZObj_pushtemplate(lua_State *L, DROID_TEMPLATE *template);
+extern void luaWZObj_pushtemplate(lua_State *L, DROID_TEMPLATE *template_);
 
 extern void luaWZObj_pushgroup(lua_State *L, DROID_GROUP *group);
 extern DROID_GROUP *luaWZObj_checkgroup(lua_State *L, int pos);
 /// Push a droid, structure or feature when you don't know what it is
 extern void luaWZObj_pushobject(lua_State *L, BASE_OBJECT* baseobject);
+
+DROID_ORDER luaWZ_checkorder(lua_State *L, int pos);
 
 #ifdef __cplusplus
 }

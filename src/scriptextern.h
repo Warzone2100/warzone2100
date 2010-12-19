@@ -26,15 +26,7 @@
 #define __INCLUDED_SRC_SCRIPTEXTERN_H__
 
 // Lua
-#include <lua.h>
-#include <lauxlib.h>
-#include <lualib.h>
 #include "lib/lua/warzone.h"
-
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
 
 /// current game level
 extern SDWORD	scrGameLevel;
@@ -76,9 +68,5 @@ extern int scrGetCVar(lua_State *L);
 
 /// General function to set some basic game values
 extern int scrSetCVar(lua_State *L);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_SCRIPTEXTERN_H__

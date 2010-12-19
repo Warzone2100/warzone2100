@@ -27,15 +27,7 @@
 #include "lib/script/interpreter.h"
 
 // Lua
-#include <lua.h>
-#include <lauxlib.h>
-#include <lualib.h>
 #include "lib/lua/warzone.h"
-
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
 
 //console callback stuff
 //---------------------------
@@ -95,8 +87,4 @@ extern void eventFireCallbackTrigger(TRIGGER_TYPE trigger);
 // player number that left the game
 extern UDWORD	CBPlayerLeft;
 
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 #endif // __INCLUDED_SRC_SCRIPTCB_H__

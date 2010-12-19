@@ -33,14 +33,7 @@
 #include "eventsave.h"
 
 // Lua
-#include <lua.h>
-#include <lauxlib.h>
-#include <lualib.h>
-
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
+#include "lib/lua/warzone.h"
 
 extern void registerScript(lua_State *L);
 extern void freeScript(lua_State *L);
@@ -238,9 +231,5 @@ extern BOOL eventSetTrigger(void);
 //   2 - added and fired triggers
 //   3 - as 2 but show tested but not fired triggers as well
 extern BOOL eventSetTraceLevel(void);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif

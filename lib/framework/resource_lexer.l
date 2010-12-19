@@ -28,7 +28,7 @@
 #include "lib/framework/resly.h"
 
 /* Get the Yacc definitions */
-#include "resource_parser.tab.h"
+#include "resource_parser.tab.hpp"
 
 extern void res_error(const char* msg);
 

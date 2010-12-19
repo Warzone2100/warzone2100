@@ -34,7 +34,7 @@
 
 #include "src/scriptvals.h"
 #include "lib/framework/lexer_input.h"
-#include "scriptvals_parser.tab.h"
+#include "scriptvals_parser.tab.hpp"
 #include "src/scripttabs.h"
 #include "src/objects.h"
 #include "src/droid.h"
@@ -874,7 +874,7 @@ void yyerror(const char* fmt, ...)
 	size = vsnprintf(NULL, 0, fmt, args);
 	va_end(args);
 
-	txtBuf = alloca(size + 1);
+	txtBuf = (char *)alloca(size + 1);
 
 	va_start(args, fmt);
 	vsprintf(txtBuf, fmt, args);

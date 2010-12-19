@@ -8,5 +8,5 @@ noinst_HEADERS = \
 	timer.h
 
 libsequence_a_SOURCES = \
-	sequence.c \
-	timer.c
+	sequence.cpp \
+	timer.cpp

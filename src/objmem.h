@@ -57,9 +57,6 @@ uint32_t generateNewObjectId(void);
 /// Generates a new, (hopefully) unique object id, which all clients agree on.
 uint32_t generateSynchronisedObjectId(void);
 
-/* Create a new droid */
-extern DROID* createDroid(UDWORD player);
-
 /* add the droid to the Droid Lists */
 extern void addDroid(DROID *psDroidToAdd, DROID *pList[MAX_PLAYERS]);
 
@@ -78,9 +75,6 @@ extern void freeAllMissionDroids(void);
 /*Removes all droids that may be stored in the limbo lists*/
 extern void freeAllLimboDroids(void);
 
-/* Create a new structure */
-extern STRUCTURE* createStruct(UDWORD player);
-
 /* add the structure to the Structure Lists */
 extern void addStructure(STRUCTURE *psStructToAdd);
 
@@ -93,9 +87,6 @@ extern void freeAllStructs(void);
 /*Remove a single Structure from a list*/
 extern void removeStructureFromList(STRUCTURE *psStructToRemove,
                                     STRUCTURE *pList[MAX_PLAYERS]);
-
-/* Create a new Feature */
-extern FEATURE* createFeature(void);
 
 /* add the feature to the Feature Lists */
  extern void addFeature(FEATURE *psFeatureToAdd);

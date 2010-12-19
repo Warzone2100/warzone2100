@@ -150,7 +150,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\sequence.c"
+				RelativePath=".\sequence.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -162,7 +162,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\timer.c"
+				RelativePath=".\timer.cpp"
 				>
 			</File>
 		</Filter>

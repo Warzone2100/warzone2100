@@ -21,19 +21,19 @@ lib_LTLIBRARIES = libbetawidget.la
 
 libbetawidget_la_SOURCES = \
 	betawidget_wrap_lua.cpp \
-	button.c \
-	imageButton.c \
-	font.c \
-	geom.c \
-	hBox.c \
-	spacer.c \
-	svgManager.c \
-	table.c \
-	textEntry.c \
-	patternManager.c \
-	vector.c \
-	widget.c \
-	window.c
+	button.cpp \
+	imageButton.cpp \
+	font.cpp \
+	geom.cpp \
+	hBox.cpp \
+	spacer.cpp \
+	svgManager.cpp \
+	table.cpp \
+	textEntry.cpp \
+	patternManager.cpp \
+	vector.cpp \
+	widget.cpp \
+	window.cpp
 
 libbetawidget_la_CPPFLAGS = $(PANGO_CAIRO_CFLAGS) $(SVG_CAIRO_CFLAGS) $(CAIRO_CFLAGS) $(LUA_CFLAGS) -DLIB_COMPILE=1
 libbetawidget_la_LDFLAGS = $(PANGO_CAIRO_LIBS) $(SVG_CAIRO_LIBS) $(CAIRO_CFLAGS) $(LUA_LIBS) $(CAIRO_LIBS) $(OPENGL_LIBS) -version-info $(LIBTOOL_VERSION) -DLIB_COMPILE=1
@@ -63,11 +63,11 @@ pkginclude_HEADERS = \
 noinst_HEADERS = \
 	lua-wrap.h
 
-# utf.c, GLee
+# utf.cpp, GLee
 noinst_LTLIBRARIES = libutil.la
 libutil_la_SOURCES = \
-	../../framework/utf.c \
-	../../ivis_opengl/GLee.c
+	../../framework/utf.cpp \
+	../../ivis_opengl/GLee.cpp
 
 libutil_la_CPPFLAGS = $(SDL_CFLAGS) -DLIB_COMPILE=1
 noinst_HEADERS += \

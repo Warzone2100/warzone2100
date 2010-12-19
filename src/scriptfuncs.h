@@ -27,10 +27,9 @@
 #include "objectdef.h"
 #include "messagedef.h"			//for VIEWDATA
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
+// Lua
+#include "lib/lua/warzone.h"
+
 
 // AI won't build there if there are more than
 // MAX_BLOCKING_TILES on some location
@@ -69,19 +68,9 @@ extern SDWORD getNumRepairedBy(struct DROID *psDroidToCheck, SDWORD player);
 extern BOOL objectInRangeVis(struct BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range, SDWORD lookingPlayer);
 extern SDWORD getPlayerFromString(char *playerName);
 
-// Lua
-#include <lua.h>
-#include <lauxlib.h>
-#include <lualib.h>
-#include "lib/lua/warzone.h"
-
 extern void registerScriptfuncs(lua_State *L);
 
 extern BOOL addBeaconBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, char * textMsg);
 extern VIEWDATA *CreateBeaconViewData(SDWORD sender, UDWORD LocX, UDWORD LocY);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_SCRIPTFUNCS_H__

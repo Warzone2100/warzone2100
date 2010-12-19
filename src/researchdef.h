@@ -26,11 +26,6 @@
 
 #include "lib/framework/frame.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 /* Research struct type definitions */
 typedef enum
 {
@@ -38,9 +33,8 @@ typedef enum
 	TC_MINOR,
 } TECH_CODE;
 
-typedef struct research_stats
+struct RESEARCH : public BASE_STATS
 {
-	STATS_BASE;
 	UBYTE			techCode;
 	UWORD       	subGroup;			/* Subgroup of the item - an iconID from 'Framer' to depict in the button*/
 
@@ -57,8 +51,7 @@ typedef struct research_stats
 	UWORD			*pStructList;		/* List of structures that when built would
 										   enable this research */
 	UBYTE			numFunctions;
-	struct _function	**pFunctionList; /* List of functions that can be performed
-										   on completion of research */
+	struct FUNCTION **      pFunctionList;          ///< List of functions that can be performed on completion of research
 	UBYTE			numRedStructs;
 	UWORD			*pRedStructs;		/* List of Structures that become redundant */
 	UBYTE			numRedArtefacts;
@@ -79,7 +72,7 @@ typedef struct research_stats
 	                                       drawn instead of the two fields below*/
 	iIMDShape		*pIMD;		/* the IMD to draw for this research topic */
 	iIMDShape		*pIMD2;		/* the 2nd IMD for base plates/turrets*/
-} WZ_DECL_MAY_ALIAS RESEARCH;
+};
 
 typedef struct _player_research
 {
@@ -130,9 +123,5 @@ static inline void MakeResearchStartedPending(PLAYER_RESEARCH *x)       { x->Res
 
 /// clear all bits in the status except for the possible bit
 static inline void ResetResearchStatus(PLAYER_RESEARCH *x)              { x->ResearchStatus &= ~RESBITS_PENDING;                                                       }
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_RESEARCHDEF_H__

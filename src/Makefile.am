@@ -1,9 +1,8 @@
-%.tab.h %.tab.c:: %.y
+%.tab.hpp %.tab.cpp:: %.y
 	$(YACC) $(YFLAGS) $(AM_YFLAGS) -o$@ $<
 
-%.lex.h %.lex.c:: %.l
+%.lex.hpp %.lex.cpp:: %.l
 	$(LEX) $(LFLAGS) $(AM_LFLAGS) -o$@ $<
-#	sed -i 's/\(fwrite(.*)\)/abs(\1)/' $@
 
 # Required to force using a C++ linker
 force-linker.cpp:
@@ -17,23 +16,23 @@ AM_YFLAGS = -d
 
 BUILT_SOURCES = \
 	force-linker.cpp \
-	level_lexer.lex.c \
-	message_lexer.lex.c \
-	message_parser.tab.c \
-	message_parser.tab.h \
-	scriptvals_lexer.lex.c \
-	scriptvals_parser.tab.c \
-	scriptvals_parser.tab.h
+	level_lexer.lex.cpp \
+	message_lexer.lex.cpp \
+	message_parser.tab.cpp \
+	message_parser.tab.hpp \
+	scriptvals_lexer.lex.cpp \
+	scriptvals_parser.tab.cpp \
+	scriptvals_parser.tab.hpp
 
 CLEANFILES = \
 	force-linker.cpp \
-	level_lexer.lex.c \
-	message_lexer.lex.c \
-	message_parser.tab.c \
-	message_parser.tab.h \
-	scriptvals_lexer.lex.c \
-	scriptvals_parser.tab.c \
-	scriptvals_parser.tab.h
+	level_lexer.lex.cpp \
+	message_lexer.lex.cpp \
+	message_parser.tab.cpp \
+	message_parser.tab.hpp \
+	scriptvals_lexer.lex.cpp \
+	scriptvals_parser.tab.cpp \
+	scriptvals_parser.tab.hpp
 
 EXTRA_DIST = \
 	autorevision.h \
@@ -113,7 +112,7 @@ noinst_HEADERS = \
 	messagedef.h \
 	message.h \
 	messagely.h \
-	message_parser.tab.h \
+	message_parser.tab.hpp \
 	miscimd.h \
 	missiondef.h \
 	mission.h \
@@ -153,7 +152,7 @@ noinst_HEADERS = \
 	scriptobj.h \
 	scripttabs.h \
 	scriptvals.h \
-	scriptvals_parser.tab.h \
+	scriptvals_parser.tab.hpp \
 	selection.h \
 	seqdisp.h \
 	statsdef.h \
@@ -174,117 +173,117 @@ noinst_HEADERS = \
 	wrappers.h
 
 warzone2100_SOURCES = \
-	action.c \
-	advvis.c \
-	ai.c \
-	aiexperience.c \
+	action.cpp \
+	advvis.cpp \
+	ai.cpp \
+	aiexperience.cpp \
 	astar.cpp \
-	atmos.c \
-	aud.c \
-	baseobject.c \
-	bridge.c \
-	bucket3d.c \
-	challenge.c \
-	cheat.c \
-	clparse.c \
-	cluster.c \
-	cmddroid.c \
-	combat.c \
-	component.c \
-	configuration.c \
-	console.c \
-	data.c \
-	design.c \
-	difficulty.c \
-	display3d.c \
-	display.c \
-	drive.c \
-	droid.c \
-	e3demo.c \
-	edit3d.c \
-	effects.c \
-	feature.c \
+	atmos.cpp \
+	aud.cpp \
+	baseobject.cpp \
+	bridge.cpp \
+	bucket3d.cpp \
+	challenge.cpp \
+	cheat.cpp \
+	clparse.cpp \
+	cluster.cpp \
+	cmddroid.cpp \
+	combat.cpp \
+	component.cpp \
+	configuration.cpp \
+	console.cpp \
+	data.cpp \
+	design.cpp \
+	difficulty.cpp \
+	display3d.cpp \
+	display.cpp \
+	drive.cpp \
+	droid.cpp \
+	e3demo.cpp \
+	edit3d.cpp \
+	effects.cpp \
+	feature.cpp \
 	force-linker.cpp \
-	fpath.c \
-	frontend.c \
-	function.c \
-	game.c \
-	gateway.c \
-	geometry.c \
-	group.c \
-	hci.c \
-	ingameop.c \
-	init.c \
-	intdisplay.c \
-	intelmap.c \
-	intimage.c \
-	intorder.c \
-	keybind.c \
-	keyedit.c \
-	keymap.c \
-	level_lexer.lex.c \
-	levels.c \
-	lighting.c \
-	loadsave.c \
-	loop.c \
-	main.c \
-	map.c \
-	mapdisplay.c \
+	fpath.cpp \
+	frontend.cpp \
+	function.cpp \
+	game.cpp \
+	gateway.cpp \
+	geometry.cpp \
+	group.cpp \
+	hci.cpp \
+	ingameop.cpp \
+	init.cpp \
+	intdisplay.cpp \
+	intelmap.cpp \
+	intimage.cpp \
+	intorder.cpp \
+	keybind.cpp \
+	keyedit.cpp \
+	keymap.cpp \
+	level_lexer.lex.cpp \
+	levels.cpp \
+	lighting.cpp \
+	loadsave.cpp \
+	loop.cpp \
+	main.cpp \
+	map.cpp \
+	mapdisplay.cpp \
 	mapgrid.cpp \
-	mechanics.c \
-	message.c \
-	message_lexer.lex.c \
-	message_parser.tab.c \
-	miscimd.c \
-	mission.c \
-	move.c \
+	mechanics.cpp \
+	message.cpp \
+	message_lexer.lex.cpp \
+	message_parser.tab.cpp \
+	miscimd.cpp \
+	mission.cpp \
+	move.cpp \
 	multibot.cpp \
-	multigifts.c \
-	multiint.c \
-	multijoin.c \
-	multilimit.c \
-	multimenu.c \
-	multiopt.c \
-	multiplay.c \
-	multistat.c \
-	multistruct.c \
-	multisync.c \
-	objects.c \
-	objmem.c \
-	oprint.c \
-	order.c \
-	parsetest.c \
+	multigifts.cpp \
+	multiint.cpp \
+	multijoin.cpp \
+	multilimit.cpp \
+	multimenu.cpp \
+	multiopt.cpp \
+	multiplay.cpp \
+	multistat.cpp \
+	multistruct.cpp \
+	multisync.cpp \
+	objects.cpp \
+	objmem.cpp \
+	oprint.cpp \
+	order.cpp \
+	parsetest.cpp \
 	pointtree.cpp \
-	power.c \
-	projectile.c \
-	radar.c \
+	power.cpp \
+	projectile.cpp \
+	radar.cpp \
 	random.cpp \
-	raycast.c \
-	research.c \
-	scores.c \
-	scriptai.c \
-	scriptcb.c \
-	scriptextern.c \
-	scriptfuncs.c \
-	scriptobj.c \
-	scripttabs.c \
-	scriptvals.c \
-	scriptvals_lexer.lex.c \
-	scriptvals_parser.tab.c \
-	selection.c \
-	seqdisp.c \
-	stats.c \
-	structure.c \
-	terrain.c \
-	text.c \
-	texture.c \
-	transporter.c \
-	version.c \
-	visibility.c \
-	warcam.c \
-	warzoneconfig.c \
+	raycast.cpp \
+	research.cpp \
+	scores.cpp \
+	scriptai.cpp \
+	scriptcb.cpp \
+	scriptextern.cpp \
+	scriptfuncs.cpp \
+	scriptobj.cpp \
+	scripttabs.cpp \
+	scriptvals.cpp \
+	scriptvals_lexer.lex.cpp \
+	scriptvals_parser.tab.cpp \
+	selection.cpp \
+	seqdisp.cpp \
+	stats.cpp \
+	structure.cpp \
+	terrain.cpp \
+	text.cpp \
+	texture.cpp \
+	transporter.cpp \
+	version.cpp \
+	visibility.cpp \
+	warcam.cpp \
+	warzoneconfig.cpp \
 	wavecast.cpp \
-	wrappers.c
+	wrappers.cpp
 
 warzone2100_LDADD = \
 	$(top_builddir)/lib/widget/libwidget.a \

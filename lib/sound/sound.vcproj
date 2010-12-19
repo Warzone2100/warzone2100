@@ -150,35 +150,35 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\audio.c"
+				RelativePath=".\audio.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\audio_id.c"
+				RelativePath=".\audio_id.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\cdaudio.c"
+				RelativePath=".\cdaudio.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\oggvorbis.c"
+				RelativePath=".\oggvorbis.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\openal_error.c"
+				RelativePath=".\openal_error.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\openal_track.c"
+				RelativePath=".\openal_track.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\playlist.c"
+				RelativePath=".\playlist.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\track.c"
+				RelativePath=".\track.cpp"
 				>
 			</File>
 		</Filter>
