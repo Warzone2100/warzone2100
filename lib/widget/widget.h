@@ -35,11 +35,6 @@
 #include "lib/ivis_common/textdraw.h"
 #include "widgbase.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 /***********************************************************************************
  *
  * Widget style definitions - these control how the basic widget appears on screen
@@ -103,26 +98,20 @@ extern "C"
 
 /***********************************************************************************/
 
-/* Basic initialisation entries common to all widgets */
-#define WINIT_BASE \
-	UDWORD				formID;			/* ID number of form to put widget on */ \
-										/* ID == 0 specifies the default form for the screen */ \
-	UWORD				majorID,minorID;	/* Which major and minor tab to put the widget */ \
-										/* on for a tabbed form */ \
-	UDWORD				id;				/* Unique id number (chosen by user) */ \
-	UDWORD				style;			/* widget style */ \
-	SWORD				x,y;			/* screen location */ \
-	UWORD				width,height;	/* widget size */\
-	WIDGET_DISPLAY		pDisplay;		/* Optional display function */\
-	WIDGET_CALLBACK		pCallback;		/* Optional callback function */\
-	void				*pUserData;		/* Optional user data pointer */\
-	UDWORD				UserData		/* User data (if any) */
-
 /** The basic initialisation structure */
-typedef struct
+struct W_INIT
 {
-	WINIT_BASE;
-} W_INIT;
+	UDWORD                  formID;                 ///< ID number of form to put widget on. ID == 0 specifies the default form for the screen
+	UWORD                   majorID, minorID;       ///< Which major and minor tab to put the widget on for a tabbed form
+	UDWORD                  id;                     ///< Unique id number (chosen by user)
+	UDWORD                  style;                  ///< widget style
+	SWORD                   x, y;                   ///< screen location
+	UWORD                   width, height;          ///< widget size
+	WIDGET_DISPLAY          pDisplay;               ///< Optional display function
+	WIDGET_CALLBACK         pCallback;              ///< Optional callback function
+	void *                  pUserData;              ///< Optional user data pointer
+	UDWORD                  UserData;               ///< User data (if any)
+};
 
 /*
  * Flags for controlling where the tabs appear on a form -
@@ -157,11 +146,8 @@ typedef void (*TAB_DISPLAY)(WIDGET *psWidget, UDWORD TabType, UDWORD Position, U
 typedef void (*FONT_DISPLAY)(UDWORD x, UDWORD y, char *String);
 
 /** Form initialisation structure */
-typedef struct
+struct W_FORMINIT : public W_INIT
 {
-	/* The basic init entries */
-	WINIT_BASE;
-
 	/* Data for a tabbed form */
 	BOOL			disableChildren;
 	UWORD			majorPos, minorPos;		// Position of the tabs on the form
@@ -183,41 +169,32 @@ typedef struct
 	char			*apMinorTips[WFORM_MAXMAJOR][WFORM_MAXMINOR];	///< Tool tips for the minor tabs
 	TAB_DISPLAY		pTabDisplay;			///< Optional callback for displaying a tab.
 	WIDGET_DISPLAY		pFormDisplay;			///< Optional callback to display the form.
-} W_FORMINIT;
+};
 
 /** Label initialisation structure */
-typedef struct
+struct W_LABINIT : public W_INIT
 {
-	/* The basic init entries */
-	WINIT_BASE;
-
 	const char		*pText;			///< label text
 	const char		*pTip;			///< Tool tip for the label.
 	enum iV_fonts           FontID;			///< ID of the IVIS font to use for this widget.
-} W_LABINIT;
+};
 
 /** Button initialisation structure */
-typedef struct
+struct W_BUTINIT : public W_INIT
 {
-	/* The basic init entries */
-	WINIT_BASE;
-
 	const char *pText;	///< Button text
 	const char *pTip;	///< Tool tip text
 	enum iV_fonts FontID;	//< ID of the IVIS font to use for this widget.
-} W_BUTINIT;
+};
 
 /** Edit box initialisation structure */
-typedef struct
+struct W_EDBINIT : public W_INIT
 {
-	/* The basic init entries */
-	WINIT_BASE;
-
 	const char *pText;		///< initial contents of the edit box
 	enum iV_fonts FontID;		///< ID of the IVIS font to use for this widget.
 	WIDGET_DISPLAY pBoxDisplay;	///< Optional callback to display the form.
 	FONT_DISPLAY pFontDisplay;	///< Optional callback to display a string.
-} W_EDBINIT;
+};
 
 /* Orientation flags for the bar graph */
 #define WBAR_LEFT		0x0001		///< Bar graph fills from left to right
@@ -226,11 +203,8 @@ typedef struct
 #define WBAR_BOTTOM		0x0004		///< Bar graph fills from bottom to top
 
 /** Bar Graph initialisation structure */
-typedef struct
+struct W_BARINIT : public W_INIT
 {
-	/* The basic init entries */
-	WINIT_BASE;
-
 	UWORD		orientation;		///< Orientation of the bar on the widget
 	UWORD		size;			///< Initial percentage of the graph that is filled
 	UWORD		minorSize;		///< Percentage of second bar graph if there is one
@@ -240,7 +214,7 @@ typedef struct
 	PIELIGHT	sCol;			///< Bar colour
 	PIELIGHT	sMinorCol;		///< Minor bar colour
 	const char	*pTip;			///< Tool tip text
-} W_BARINIT;
+};
 
 
 /* Orientation of the slider */
@@ -250,17 +224,14 @@ typedef struct
 #define WSLD_BOTTOM		0x0004		///< Slider is vertical and starts at the bottom
 
 /** Slider initialisation structure */
-typedef struct
+struct W_SLDINIT : public W_INIT
 {
-	/* The basic init entries */
-	WINIT_BASE;
-
 	UWORD		orientation;		///< Orientation of the slider
 	UWORD		numStops;		///< Number of stops on the slider
 	UWORD		barSize;		///< Size of the bar
 	UWORD		pos;			///< Initial position of the slider bar
 	const char	*pTip;			///< Tip string
-} W_SLDINIT;
+};
 
 /***********************************************************************************/
 
@@ -465,9 +436,5 @@ extern BOOL getWidgetsStatus( void );
 
 extern void CheckpsMouseOverWidget( void *psWidget );
 /** @} */
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_LIB_WIDGET_WIDGET_H__

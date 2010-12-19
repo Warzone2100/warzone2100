@@ -12,8 +12,8 @@ noinst_HEADERS = \
 
 libexceptionhandler_a_SOURCES = \
 	dumpinfo.cpp \
-	exceptionhandler.c
+	exceptionhandler.cpp
 
 if MINGW32
-libexceptionhandler_a_SOURCES += exchndl.c
+libexceptionhandler_a_SOURCES += exchndl.cpp
 endif

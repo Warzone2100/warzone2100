@@ -13,12 +13,12 @@ PARSERS= \
 
 SRC= \
 	$(PARSERS) \
-	codeprint.c \
-	event.c \
-	eventsave.c \
-	interpreter.c \
-	script.c \
-	stack.c
+	codeprint.cpp \
+	event.cpp \
+	eventsave.cpp \
+	interpreter.cpp \
+	script.cpp \
+	stack.cpp
 
 LIB=script
 

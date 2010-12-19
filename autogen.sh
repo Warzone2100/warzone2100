@@ -4,7 +4,7 @@
 DIE=0
 SRCDIR=`dirname $0`
 BUILDDIR=`pwd`
-srcfile=src/action.c
+srcfile=src/action.cpp
 package=Warzone2100
 
 debug ()

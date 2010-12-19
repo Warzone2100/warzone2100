@@ -13,9 +13,9 @@ noinst_HEADERS = \
 	nettypes.h
 
 libnetplay_a_SOURCES = \
-	netjoin_stub.c \
-	netlog.c \
-	netplay.c \
+	netjoin_stub.cpp \
+	netlog.cpp \
+	netplay.cpp \
 	netqueue.cpp \
 	netsocket.cpp \
 	nettypes.cpp

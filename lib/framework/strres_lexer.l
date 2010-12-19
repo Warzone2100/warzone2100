@@ -34,7 +34,7 @@
 #include <physfs.h>
 
 /* Get the Yacc definitions */
-#include "strres_parser.tab.h"
+#include "strres_parser.tab.hpp"
 
 #include "lib/framework/lexer_input.h"
 

@@ -99,13 +99,6 @@ static inline void setProjectileSource(PROJECTILE *psProj, BASE_OBJECT *psObj)
 	}
 }
 
-static inline void setProjectileDamaged(PROJECTILE *psProj, BASE_OBJECT *psObj)
-{
-	++psProj->psNumDamaged;
-	psProj->psDamaged = (BASE_OBJECT **)realloc(psProj->psDamaged, psProj->psNumDamaged*sizeof(BASE_OBJECT *));
-	psProj->psDamaged[psProj->psNumDamaged - 1] = psObj;
-}
-
 /* @} */
 
 void checkProjectile(const PROJECTILE* psProjectile, const char * const location_description, const char * function, const int recurse);

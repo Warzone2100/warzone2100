@@ -1,5 +1,5 @@
 #!/bin/bash
-for a in {src,lib/*}/*.cpp
+for a in {src,lib/*{,/*}}/*.cpp
 do
 	b="${a%pp}"
 	c="${a##*/}"
@@ -8,7 +8,7 @@ do
 	then
 		#echo Checking "$a"
 		sed -i "s/\\b${b//\//\\\\}\\b/${a//\//\\\\}/" win32/*.vcproj
-		sed -i "s/\\b$d\\b/$c/" {src,lib/*}/{Makefile.am,makefile.win32} lib/*/*.vcproj
+		sed -i "s/\\b$d\\b/$c/" {src,lib/*{,/*}}/{Makefile.am,makefile.win32} lib/*/*.vcproj
 	else
 		echo Skipping "$a".
 	fi

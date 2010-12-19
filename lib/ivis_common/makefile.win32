@@ -4,13 +4,13 @@ top_builddir=$(top_srcdir)
 include $(top_srcdir)/makerules/common.mk
 
 SRC= \
-	bitimage.c \
-	imd.c \
-	imdload.c \
-	jpeg_encoder.c \
-	pieclip.c \
-	piestate.c \
-	png_util.c
+	bitimage.cpp \
+	imd.cpp \
+	imdload.cpp \
+	jpeg_encoder.cpp \
+	pieclip.cpp \
+	piestate.cpp \
+	png_util.cpp
 
 LIB=ivis_common
 

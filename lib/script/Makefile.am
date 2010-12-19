@@ -1,9 +1,8 @@
-%.tab.h %.tab.c:: %.y
+%.tab.hpp %.tab.cpp:: %.y
 	$(YACC) $(YFLAGS) $(AM_YFLAGS) -o$@ $<
 
-%.lex.c:: %.l
+%.lex.cpp:: %.l
 	$(LEX) $(LFLAGS) $(AM_LFLAGS) -o$@ $<
-#	sed -i 's/\(fwrite(.*)\)/abs(\1)/' $@
 
 AM_CPPFLAGS = -DYY_NO_INPUT $(SDL_CFLAGS) $(WZ_CPPFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS)
@@ -12,20 +11,20 @@ AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
 
 BUILT_SOURCES = \
-	chat_lexer.lex.c \
-	chat_parser.tab.c \
-	chat_parser.tab.h \
-	script_lexer.lex.c \
-	script_parser.tab.c \
-	script_parser.tab.h
+	chat_lexer.lex.cpp \
+	chat_parser.tab.cpp \
+	chat_parser.tab.hpp \
+	script_lexer.lex.cpp \
+	script_parser.tab.cpp \
+	script_parser.tab.hpp
 
 CLEANFILES = \
-	chat_lexer.lex.c \
-	chat_parser.tab.c \
-	chat_parser.tab.h \
-	script_lexer.lex.c \
-	script_parser.tab.c \
-	script_parser.tab.h
+	chat_lexer.lex.cpp \
+	chat_parser.tab.cpp \
+	chat_parser.tab.hpp \
+	script_lexer.lex.cpp \
+	script_parser.tab.cpp \
+	script_parser.tab.hpp
 
 EXTRA_DIST = \
 	chat_lexer.l chat_parser.y \
@@ -33,8 +32,8 @@ EXTRA_DIST = \
 
 noinst_LIBRARIES = libscript.a
 noinst_HEADERS = \
-	chat_parser.tab.h \
-	script_parser.tab.h \
+	chat_parser.tab.hpp \
+	script_parser.tab.hpp \
 	chat_processing.h \
 	codeprint.h \
 	event.h \
@@ -45,15 +44,15 @@ noinst_HEADERS = \
 	stack.h
 
 libscript_a_SOURCES = \
-	chat_lexer.lex.c \
-	chat_parser.tab.c \
-	codeprint.c \
-	event.c \
-	eventsave.c \
-	interpreter.c \
-	script.c \
-	script_lexer.lex.c \
-	script_parser.tab.c \
-	stack.c
+	chat_lexer.lex.cpp \
+	chat_parser.tab.cpp \
+	codeprint.cpp \
+	event.cpp \
+	eventsave.cpp \
+	interpreter.cpp \
+	script.cpp \
+	script_lexer.lex.cpp \
+	script_parser.tab.cpp \
+	stack.cpp
 
 libscript_a_LIBADD = $(top_builddir)/lib/framework/libframework.a

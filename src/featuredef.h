@@ -27,11 +27,6 @@
 #include "basedef.h"
 #include "statsdef.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 typedef enum _feature_type
 {
 	FEAT_BUILD_WRECK,
@@ -63,10 +58,8 @@ typedef enum _feature_type
 } FEATURE_TYPE;
 
 /* Stats for a feature */
-typedef struct _feature_stats
+struct FEATURE_STATS : public BASE_STATS
 {
-	STATS_BASE;
-
 	FEATURE_TYPE    subType;                ///< type of feature
 
 	iIMDShape*      psImd;                  ///< Graphic for the feature
@@ -79,18 +72,14 @@ typedef struct _feature_stats
 	BOOL            damageable;             ///< Whether the feature can be destroyed
 	UDWORD		body;			///< Number of body points
 	UDWORD          armourValue;            ///< Feature armour
-} WZ_DECL_MAY_ALIAS FEATURE_STATS;
+};
 
-typedef struct _feature
+struct FEATURE : public BASE_OBJECT
 {
-	/* The common structure elements for all objects */
-	BASE_ELEMENTS(struct _feature);
+	FEATURE(uint32_t id, FEATURE_STATS const *psStats);
+	~FEATURE();
 
-	FEATURE_STATS*  psStats;
-} WZ_DECL_MAY_ALIAS FEATURE;
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
+	FEATURE_STATS const *psStats;
+};
 
 #endif // __INCLUDED_FEATUREDEF_H__

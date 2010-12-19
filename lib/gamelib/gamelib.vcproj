@@ -167,15 +167,15 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\anim.c"
+				RelativePath=".\anim.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\animobj.c"
+				RelativePath=".\animobj.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\audp_lexer.lex.c"
+				RelativePath=".\audp_lexer.lex.cpp"
 				>
 			</File>
 			<File
@@ -183,11 +183,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\gtime.c"
+				RelativePath=".\gtime.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\hashtable.c"
+				RelativePath=".\hashtable.cpp"
 				>
 			</File>
 		</Filter>

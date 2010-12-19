@@ -135,9 +135,6 @@ STRUCTURE *buildBlueprint(STRUCTURE_STATS *psStats, int32_t x, int32_t y, uint16
 /* The main update routine for all Structures */
 void structureUpdate(STRUCTURE *psBuilding, bool mission);
 
-/* Release all resources associated with a structure */
-void structureRelease(STRUCTURE *psBuilding);
-
 /* Remove a structure and free it's memory */
 extern BOOL destroyStruct(STRUCTURE *psDel);
 

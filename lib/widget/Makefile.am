@@ -17,15 +17,15 @@ noinst_HEADERS = \
 	widgint.h
 
 libwidget_a_SOURCES = \
-	bar.c \
-	button.c \
-	editbox.c \
-	form.c \
-	label.c \
-	scrap.c \
-	slider.c \
-	tip.c \
-	widget.c
+	bar.cpp \
+	button.cpp \
+	editbox.cpp \
+	form.cpp \
+	label.cpp \
+	scrap.cpp \
+	slider.cpp \
+	tip.cpp \
+	widget.cpp
 
 libwidget_a_LIBADD = $(top_builddir)/lib/ivis_opengl/libivis_opengl.a \
 	$(top_builddir)/lib/ivis_common/libivis_common.a $(top_builddir)/lib/framework/libframework.a

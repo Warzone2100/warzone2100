@@ -28,7 +28,7 @@
 #include "src/messagedef.h"
 
 /* Get the Yacc definitions */
-#include "message_parser.tab.h"
+#include "message_parser.tab.hpp"
 
 #include "lib/framework/lexer_input.h"
 #include "src/messagely.h"
