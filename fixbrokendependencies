@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# HACK Don't give make errors when switching between trunk and branches.
+# Works by finding the .deps/*.Po files which refer to source files that don't exist, and replacing them with a single dependency on the correct source file.
+# Now with PD-ksh support.
+
+if ! rootdir="`git rev-parse --show-cdup 2> /dev/null`"
+then
+	echo "Not in a git repository."
+	exit 0
+fi
+
+for path in src/ lib/*/ lib/*/*/
+do
+	srcpath="${rootdir}${path}"
+	deppath="${path}.deps/"
+	if [ -d "${srcpath}" -a -d "${deppath}" ]
+	then
+		for ext in c cpp
+		do
+			# Iterate over all files that might have broken dependencies.
+			for fname in `cd ${srcpath} ; echo *.${ext}`
+			do
+				fpref="`echo "${fname}" | sed "s/\.${ext}//"`"
+				srcfile="${srcpath}${fname}"
+				depfile="${deppath}${fpref}.Po"
+
+				# Check if the dependency file ${depfile} exists and is broken. (The ${srcfile} check prevents looking for files literally called "*.cpp".)
+				if [ -f "${srcfile}" -a -f "${depfile}" ] && ! grep -q "\b${fname}\b" "${depfile}" 2> /dev/null
+				then
+					relpath="`echo "${path}" | sed "s/[^./]*\//..\//g"`"
+					echo "${fpref}.o: ${relpath}${srcfile}" | tee "${depfile}"
+				fi
+			done
+		done
+	fi
+done
+
+exit 0

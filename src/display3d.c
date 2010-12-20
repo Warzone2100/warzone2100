@@ -3246,16 +3246,13 @@ static void	drawStructureSelections( void )
 	/* Go thru' all the buildings */
 	for(psStruct = apsStructLists[selectedPlayer]; psStruct; psStruct = psStruct->psNext)
 	{
-		if(clipXY(psStruct->pos.x,psStruct->pos.y))
+		if (clipXY(psStruct->pos.x,psStruct->pos.y) && psStruct->sDisplay.frameNumber == currentGameFrame)
 		{
 			/* If it's selected */
-			if (psStruct->selected
-			    || (barMode == BAR_DROIDS_AND_STRUCTURES
-			        && (psStruct->pStructureType->type != REF_WALL && psStruct->pStructureType->type != REF_WALLCORNER))
-			    || (bMouseOverOwnStructure
-			        && psStruct == (STRUCTURE *) psClickedOn
-			        && ((STRUCTURE * )psClickedOn)->status == SS_BUILT
-			            && psStruct->sDisplay.frameNumber == currentGameFrame))
+			if (psStruct->selected ||
+			    (barMode == BAR_DROIDS_AND_STRUCTURES && psStruct->pStructureType->type != REF_WALL && psStruct->pStructureType->type != REF_WALLCORNER) ||
+			    (bMouseOverOwnStructure && psStruct == (STRUCTURE *)psClickedOn)
+			   )
 			{
 				drawStructureHealth(psStruct);
 				
@@ -3264,12 +3261,10 @@ static void	drawStructureSelections( void )
 					drawWeaponReloadBar((BASE_OBJECT *)psStruct, &psStruct->asWeaps[i], i);
 				}
 			}
-			else
+
+			if (psStruct->status == SS_BEING_BUILT)
 			{
-				if(psStruct->status == SS_BEING_BUILT && psStruct->sDisplay.frameNumber == currentGameFrame)
-				{
-					drawStructureBuildProgress(psStruct);
-				}
+				drawStructureBuildProgress(psStruct);
 			}
 		}
 	}
@@ -3407,12 +3402,19 @@ static void	drawDroidSelections( void )
 	pie_SetFogStatus(false);
 	for(psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
+		if (psDroid->sDisplay.frameNumber != currentGameFrame || !clipXY(psDroid->pos.x, psDroid->pos.y))
+		{
+			continue;  // Not visible, anyway. Don't bother with health bars.
+		}
+
 		/* If it's selected and on screen or it's the one the mouse is over ||*/
 		// ABSOLUTELY MAD LOGICAL EXPRESSION!!! :-)
-		if ((eitherSelected(psDroid) && psDroid->sDisplay.frameNumber == currentGameFrame)
-		 || (bMouseOverOwnDroid && psDroid == (DROID *) psClickedOn)
-		 || (droidUnderRepair(psDroid) && psDroid->sDisplay.frameNumber == currentGameFrame)
-		 ||  (barMode == BAR_DROIDS || barMode == BAR_DROIDS_AND_STRUCTURES))
+		// Now slightly less mad and slightly less buggy.
+		if (eitherSelected(psDroid) ||
+		    (bMouseOverOwnDroid && psDroid == (DROID *) psClickedOn) ||
+		    droidUnderRepair(psDroid) ||
+		    barMode == BAR_DROIDS || barMode == BAR_DROIDS_AND_STRUCTURES
+		   )
 		{
 			damage = PERCENT(psDroid->body, psDroid->originalBody);
 
