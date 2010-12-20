@@ -52,8 +52,6 @@
 /* Number of characters to jump the edit box text when moving the cursor */
 #define WEDB_CHARJUMP		6
 
-/* Calculate how much of the start of a string can fit into the edit box */
-static void fitStringStart(utf_32_char *pBuffer, UDWORD boxWidth, UWORD *pCount, UWORD *pCharWidth);
 
 W_EDITBOX::W_EDITBOX(W_EDBINIT const *init)
 	: WIDGET(init, WIDG_EDITBOX)
@@ -70,25 +68,20 @@ W_EDITBOX::W_EDITBOX(W_EDBINIT const *init)
 	{
 		text = "";
 	}
-	aText = UTF8toUTF32(text, &aTextAllocated);
+	aText = QString::fromUtf8(text);
 
 	if (display == NULL)
 	{
 		display = editBoxDisplay;
 	}
 
-	editBoxInitialise(this);
-}
-
-W_EDITBOX::~W_EDITBOX()
-{
-	free(aText);
+	initialise();
 }
 
 /* Create an edit box widget data structure */
 W_EDITBOX* editBoxCreate(const W_EDBINIT* psInit)
 {
-	if (psInit->style & ~(WEDB_PLAIN | WIDG_HIDDEN | WEDB_DISABLED))
+	if (psInit->style & ~(WEDB_PLAIN | WIDG_HIDDEN))
 	{
 		ASSERT( false, "Unknown edit box style" );
 		return NULL;
@@ -107,96 +100,55 @@ W_EDITBOX* editBoxCreate(const W_EDBINIT* psInit)
 }
 
 
-/* Free the memory used by an edit box */
-void editBoxFree(W_EDITBOX *psWidget)
-{
-	delete psWidget;
-}
-
-
 /* Initialise an edit box widget */
-void editBoxInitialise(W_EDITBOX *psWidget)
+void W_EDITBOX::initialise()
 {
-	ASSERT( psWidget != NULL,
-		"editBoxInitialise: Invalid edit box pointer" );
-
-	psWidget->state = WEDBS_FIXED;
-	psWidget->printStart = 0;
-	iV_SetFont(psWidget->FontID);
-	fitStringStart(psWidget->aText, psWidget->width,
-		&psWidget->printChars, &psWidget->printWidth);
+	state = WEDBS_FIXED;
+	printStart = 0;
+	iV_SetFont(FontID);
+	fitStringStart();
 }
 
 
 /* Insert a character into a text buffer */
-static void insertChar(utf_32_char **pBuffer, size_t *pBufferAllocated, UDWORD *pPos, utf_32_char ch, W_EDITBOX *psWidget)
+void W_EDITBOX::insertChar(QChar ch)
 {
-	utf_32_char	*pSrc, *pDest;
-	UDWORD	len, count;
-
 	if (ch == '\0') return;
 
-	ASSERT( *pPos <= utf32len(*pBuffer), "Invalid insertion point" );
-	ASSERT_OR_RETURN ( , psWidget, "No widget to modify?");
-
-	len = utf32len(*pBuffer);
-
-	if (len == *pBufferAllocated/sizeof(utf_32_char) - 1)
-	{
-		/* Buffer is full */
-		utf_32_char *newBuffer = (utf_32_char *)realloc(*pBuffer, *pBufferAllocated*2);
-		if (!newBuffer)
-		{
-			debug(LOG_ERROR, "Couldn't realloc() string?");
-			return;
-		}
-		// update old pointer from the widget
-		psWidget->aText = *pBuffer = newBuffer;
-		*pBufferAllocated *= 2;
-	}
+	ASSERT(insPos <= aText.length(), "Invalid insertion point");
 
 	/* Move the end of the string up by one (including terminating \0) */
-	count = len - *pPos + 1;
-	pSrc = *pBuffer + *pPos;
-	pDest = pSrc + 1;
-	memmove(pDest, pSrc, count*sizeof(utf_32_char));
-
 	/* Insert the character */
-	*pSrc = ch;
+	aText.insert(insPos, ch);
 
 	/* Update the insertion point */
-	*pPos += 1;
+	++insPos;
 }
 
 
 /* Put a character into a text buffer overwriting any text under the cursor */
-static void overwriteChar(utf_32_char **pBuffer, size_t *pBufferAllocated, UDWORD *pPos, utf_32_char ch, W_EDITBOX *psWidget)
+void W_EDITBOX::overwriteChar(QChar ch)
 {
-	UDWORD	len;
-
 	if (ch == '\0') return;
 
-	ASSERT( *pPos <= utf32len(*pBuffer),
-		"insertChar: Invalid insertion point" );
+	ASSERT(insPos <= aText.length(), "overwriteChar: Invalid insertion point");
 
-	len = utf32len(*pBuffer);
-
-	if (*pPos == len)
+	if (insPos == aText.length())
 	{
 		// At end of string.
-		insertChar(pBuffer, pBufferAllocated, pPos, ch, psWidget);
+		insertChar(ch);
 		return;
 	}
 
 	/* Store the character */
-	(*pBuffer)[*pPos] = ch;
+	aText[insPos] = ch;
 
 	/* Update the insertion point */
-	*pPos += 1;
+	++insPos;
 }
 
 /* Put a character into a text buffer overwriting any text under the cursor */
-static void putSelection(utf_32_char **pBuffer, size_t *pBufferAllocated, UDWORD *pPos)
+void W_EDITBOX::putSelection()
 {
 	static char* scrap = NULL;
 	int scraplen;
@@ -204,184 +156,128 @@ static void putSelection(utf_32_char **pBuffer, size_t *pBufferAllocated, UDWORD
 	get_scrap(T('T','E','X','T'), &scraplen, &scrap);
 	if (scraplen > 0 && scraplen < WIDG_MAXSTR-2)
 	{
-		free(*pBuffer);
-		*pBuffer = UTF8toUTF32(scrap, pBufferAllocated);
-		*pPos = *pBufferAllocated/sizeof(utf_32_char) - 1;
+		aText = QString::fromUtf8(scrap);
+		insPos = aText.length();
 	}
 }
 
 
 /* Delete a character to the right of the position */
-static void delCharRight(utf_32_char *pBuffer, UDWORD *pPos)
+void W_EDITBOX::delCharRight()
 {
-	utf_32_char	*pSrc, *pDest;
-	UDWORD	len, count;
-
-	ASSERT(*pPos <= utf32len(pBuffer), "Invalid insertion point" );
-
-	len = utf32len(pBuffer);
+	ASSERT(insPos <= aText.length(), "Invalid deletion point");
 
 	/* Can't delete if we are at the end of the string */
-	if (*pPos == len)
-	{
-		return;
-	}
-
 	/* Move the end of the string down by one */
-	count = len - *pPos;
-	pDest = pBuffer + *pPos;
-	pSrc = pDest + 1;
-	memmove(pDest, pSrc, count*sizeof(utf_32_char));  // Moves nul too.
+	aText.remove(insPos, 1);
 }
 
 
 /* Delete a character to the left of the position */
-static void delCharLeft(utf_32_char *pBuffer, UDWORD *pPos)
+void W_EDITBOX::delCharLeft()
 {
 	/* Can't delete if we are at the start of the string */
-	if (*pPos == 0)
+	if (insPos == 0)
 	{
 		return;
 	}
 
-	--*pPos;
-	delCharRight(pBuffer, pPos);
+	--insPos;
+	delCharRight();
 }
 
 
 /* Calculate how much of the start of a string can fit into the edit box */
-static void fitStringStart(utf_32_char *pBuffer, UDWORD boxWidth, UWORD *pCount, UWORD *pCharWidth)
+void W_EDITBOX::fitStringStart()
 {
-	UDWORD	size32;
-	UWORD	pixelWidth = 0;
-	char	*utf = NULL;
-
-	size32 = utf32len(pBuffer);
-	utf = UTF32toUTF8(pBuffer, NULL);
-	if (!utf)
-	{
-		debug(LOG_ERROR, "Couldn't convert UTF32 to UTF8?");
-		*pCount = *pCharWidth = 0;
-		return;
-	}
-
 	// We need to calculate the whole string's pixel size.
 	// From QuesoGLC's notes: additional processing like kerning creates strings of text whose dimensions are not directly
 	// related to the simple juxtaposition of individual glyph metrics. For example, the advance width of "VA" isn't the
 	// sum of the advances of "V" and "A" taken separately.
-	pixelWidth = iV_GetTextWidth(utf);
-	free(utf);		// release the utf buffer
+	QString tmp = aText;
+	tmp.remove(0, printStart);  // Ignore the first printStart characters.
 
-	// Find the number of characters that will fit in boxWidth
-	if (pixelWidth < boxWidth - (WEDB_XGAP*2 + WEDB_CURSORSIZE))
+	while (!tmp.isEmpty())
 	{
-		*pCharWidth = pixelWidth;		// the actual pixelWidth we use for the string
-		*pCount = size32;				// and the length of said string.
+		int pixelWidth = iV_GetTextWidth(tmp.toUtf8().constData());
 
-		return;
-	}
-	else
-	{
-		utf_32_char *tmp;
-		int printChars = 0;
-
-		tmp = (utf_32_char *)malloc(sizeof(utf_32_char) * size32 + sizeof(utf_32_char));
-		memcpy(tmp, pBuffer, sizeof(utf_32_char) * size32);
-		tmp[size32] = 0;
-
-		// we must do this, since it is possible to have invalid utf8 when you start removing just 1 byte at a time
-		do
+		if (pixelWidth <= width - (WEDB_XGAP*2 + WEDB_CURSORSIZE))
 		{
-			utf = UTF32toUTF8(tmp, NULL);
-			pixelWidth = iV_GetTextWidth(utf);
-			printChars++;
-			free(utf);
-			tmp[(size32 - printChars)] = 0;				// keep chopping off end until it fits
+			printChars = tmp.length();
+			printWidth = pixelWidth;
+			return;
 		}
-		while (pixelWidth > boxWidth - (WEDB_XGAP*2 + WEDB_CURSORSIZE) && printChars < size32);
 
-		size32 = utf32len(tmp);					// length we ended up with
-		free(tmp);
-		*pCharWidth = pixelWidth;				// the actual pixelWidth we use for the string
-		*pCount = size32;						// and the length of the new string.
+		tmp.remove(tmp.length() - 1);  // Erase last char.
 	}
+
+	printChars = 0;
+	printWidth = 0;
 }
 
 
 /* Calculate how much of the end of a string can fit into the edit box */
-static void fitStringEnd(utf_32_char *pBuffer, UDWORD boxWidth, UWORD *pStart, UWORD *pCount, UWORD *pCharWidth)
+void W_EDITBOX::fitStringEnd()
 {
-	UDWORD	olen32, nlen32;
-	UWORD	pixelWidth = 0;
-	char *utf = NULL;
+	QString tmp = aText;
 
-	olen32 = utf32len(pBuffer);			// original length
-	utf = UTF32toUTF8(pBuffer, NULL);
-	if (!utf)
+	printStart = 0;
+
+	while (!tmp.isEmpty())
 	{
-		debug(LOG_ERROR, "Couldn't convert UTF32 to UTF8?");
-		*pCount = *pStart = *pCharWidth = 0;
-		return;
-	}
+		int pixelWidth = iV_GetTextWidth(tmp.toUtf8().constData());
 
-	// We need to calculate the whole string's pixel size.
-	// From QuesoGLC's notes: additional processing like kerning creates strings of text whose dimensions are not directly
-	// related to the simple juxtaposition of individual glyph metrics. For example, the advance width of "VA" isn't the
-	// sum of the advances of "V" and "A" taken separately.
-	pixelWidth = iV_GetTextWidth(utf);
-	free(utf);	// release the utf buffer
-
-	// Find the number of characters that will fit in boxWidth
-	if (pixelWidth < boxWidth - (WEDB_XGAP*2 + WEDB_CURSORSIZE))
-	{
-		*pStart = 0 ;					// nothing to trim
-		*pCharWidth = pixelWidth;		// the actual pixelWidth we use for the string
-		*pCount = olen32;				// and the length of said string.
-
-		return;
-	}
-	else
-	{
-		utf_32_char *tmp = NULL, *utf32buf = NULL;
-		int printChars = 0;
-
-		utf32buf = (utf_32_char *)malloc(sizeof(utf_32_char) * olen32 + sizeof(utf_32_char));
-		memcpy(utf32buf, pBuffer, sizeof(utf_32_char) * olen32);
-		utf32buf[olen32] = 0;
-		tmp = utf32buf;
-
-		while (pixelWidth > boxWidth - (WEDB_XGAP*2 + WEDB_CURSORSIZE) && printChars < olen32)
+		if (pixelWidth <= width - (WEDB_XGAP*2 + WEDB_CURSORSIZE))
 		{
-			tmp++;								// new string is 1 char shorter [abc] is now [bc]
-			utf = UTF32toUTF8(tmp, NULL);
-			pixelWidth = iV_GetTextWidth(utf);
-			printChars++;
-			free(utf);
+			printChars = tmp.length();
+			printWidth = pixelWidth;
+			return;
 		}
 
-		nlen32 = utf32len(tmp);					// new size of string
-		*pStart = printChars;					// the starting position of the string to display
-		*pCharWidth = pixelWidth;				// the actual pixelWidth we use for the string
-		*pCount = nlen32;						// and the length of the new string.
-		free(utf32buf);
+		tmp.remove(0, 1);  // Erase first char.
+		++printStart;
 	}
+
+	printChars = 0;
+	printWidth = 0;
 }
 
 
-/* Run an edit box widget */
-void editBoxRun(W_EDITBOX *psWidget, W_CONTEXT *psContext)
+/* Calculate how much of the end of a string can fit into the edit box */
+void W_EDITBOX::setCursorPosPixels(int xPos)
 {
+	QString tmp = aText;
+	tmp.remove(0, printStart);  // Consider only the visible text.
+	tmp.remove(printChars);
 
-	UDWORD	key, len = 0, editState;
-	UDWORD	pos;
-	utf_32_char	*pBuffer, unicode;
-	size_t	pBufferAllocated;
-	BOOL	done;
-	UWORD	printStart, printWidth, printChars;
-	SDWORD	mx,my;
+	int prevDelta = INT32_MAX;
+	int prevPos = printStart + tmp.length();
+	while (!tmp.isEmpty())
+	{
+		int pixelWidth = iV_GetTextWidth(tmp.toUtf8().constData());
+		int delta = pixelWidth - (xPos - (WEDB_XGAP + WEDB_CURSORSIZE/2));
+		int pos = printStart + tmp.length();
 
+		if (delta <= 0)
+		{
+			insPos = -delta < prevDelta? pos : prevPos;
+			return;
+		}
+
+		tmp.remove(tmp.length() - 1);  // Erase last char.
+
+		prevDelta = delta;
+		prevPos = pos;
+	}
+
+	insPos = printStart;
+}
+
+
+void W_EDITBOX::run(W_CONTEXT *psContext)
+{
 	/* Note the edit state */
-	editState = psWidget->state & WEDBS_MASK;
+	unsigned editState = state & WEDBS_MASK;
 
 	/* Only have anything to do if the widget is being edited */
 	if ((editState & WEDBS_MASK) == WEDBS_FIXED)
@@ -390,84 +286,56 @@ void editBoxRun(W_EDITBOX *psWidget, W_CONTEXT *psContext)
 	}
 
 	/* If there is a mouse click outside of the edit box - stop editing */
-	mx = psContext->mx;
-	my = psContext->my;
-	if (mousePressed(MOUSE_LMB) &&
-		(mx < psWidget->x ||
-		 (mx > psWidget->x + psWidget->width) ||
-		 my < psWidget->y ||
-		 (my > psWidget->y + psWidget->height)))
+	int mx = psContext->mx;
+	int my = psContext->my;
+	if (mousePressed(MOUSE_LMB) && (mx < x || mx > x + width || my < y || my > y + height))
 	{
 		screenClearFocus(psContext->psScreen);
 		return;
 	}
 
 	/* note the widget state */
-	pos = psWidget->insPos;
-	pBuffer = psWidget->aText;
-	pBufferAllocated = psWidget->aTextAllocated;
-	printStart = psWidget->printStart;
-	printWidth = psWidget->printWidth;
-	printChars = psWidget->printChars;
-	iV_SetFont(psWidget->FontID);
+	iV_SetFont(FontID);
 
 	/* Loop through the characters in the input buffer */
-	done = false;
-	for (key = inputGetKey(&unicode); key != 0 && !done; key = inputGetKey(&unicode))
+	bool done = false;
+	utf_32_char unicode;
+	for (unsigned key = inputGetKey(&unicode); key != 0 && !done; key = inputGetKey(&unicode))
 	{
 		// Don't blink while typing.
-		psWidget->blinkOffset = SDL_GetTicks();
+		blinkOffset = wzGetTicks();
+
+		int len = 0;
 
 		/* Deal with all the control keys, assume anything else is a printable character */
 		switch (key)
 		{
 		case INPBUF_LEFT :
 			/* Move the cursor left */
-			if (pos > 0)
-			{
-				pos -= 1;
-			}
+			insPos = MAX(insPos - 1, 0);
 
 			/* If the cursor has gone off the left of the edit box,
 			 * need to update the printable text.
 			 */
-			if (pos < printStart)
+			if (insPos < printStart)
 			{
-				if (printStart <= WEDB_CHARJUMP)
-				{
-					/* Got to the start of the string */
-					printStart = 0;
-					fitStringStart(pBuffer, psWidget->width, &printChars, &printWidth);
-				}
-				else
-				{
-					printStart -= WEDB_CHARJUMP;
-					fitStringStart(pBuffer + printStart, psWidget->width,
-						&printChars, &printWidth);
-				}
+				printStart = MAX(printStart - WEDB_CHARJUMP, 0);
+				fitStringStart();
 			}
 			debug(LOG_INPUT, "EditBox cursor left");
 			break;
 		case INPBUF_RIGHT :
 			/* Move the cursor right */
-			len = utf32len(pBuffer);
-			if (pos < len)
-			{
-				pos += 1;
-			}
+			len = aText.length();
+			insPos = MIN(insPos + 1, len);
 
 			/* If the cursor has gone off the right of the edit box,
 			 * need to update the printable text.
 			 */
-			if (pos > (UDWORD)(printStart + printChars))
+			if (insPos > printStart + printChars)
 			{
-				printStart += WEDB_CHARJUMP;
-				if (printStart >= len)
-				{
-					printStart = (UWORD)(len - 1);
-				}
-				fitStringStart(pBuffer + printStart, psWidget->width,
-					&printChars, &printWidth);
+				printStart = MIN(printStart + WEDB_CHARJUMP, len - 1);
+				fitStringStart();
 			}
 			debug(LOG_INPUT, "EditBox cursor right");
 			break;
@@ -479,17 +347,17 @@ void editBoxRun(W_EDITBOX *psWidget, W_CONTEXT *psContext)
 			break;
 		case INPBUF_HOME :
 			/* Move the cursor to the start of the buffer */
-			pos = 0;
+			insPos = 0;
 			printStart = 0;
-			fitStringStart(pBuffer, psWidget->width, &printChars, &printWidth);
+			fitStringStart();
 			debug(LOG_INPUT, "EditBox cursor home");
 			break;
 		case INPBUF_END :
 			/* Move the cursor to the end of the buffer */
-			pos = utf32len(pBuffer);
-			if (pos != (UWORD)(printStart + printChars))
+			insPos = aText.length();
+			if (insPos != printStart + printChars)
 			{
-				fitStringEnd(pBuffer, psWidget->width, &printStart, &printChars, &printWidth);
+				fitStringEnd();
 			}
 			debug(LOG_INPUT, "EditBox cursor end");
 			break;
@@ -505,10 +373,10 @@ void editBoxRun(W_EDITBOX *psWidget, W_CONTEXT *psContext)
 			debug(LOG_INPUT, "EditBox cursor insert");
 			break;
 		case INPBUF_DEL :
-			delCharRight(pBuffer, &pos);
+			delCharRight();
 
 			/* Update the printable text */
-			fitStringStart(pBuffer + printStart, psWidget->width, &printChars, &printWidth);
+			fitStringStart();
 			debug(LOG_INPUT, "EditBox cursor delete");
 			break;
 		case INPBUF_PGUP :
@@ -519,40 +387,27 @@ void editBoxRun(W_EDITBOX *psWidget, W_CONTEXT *psContext)
 			break;
 		case INPBUF_BKSPACE :
 			/* Delete the character to the left of the cursor */
-			delCharLeft(pBuffer, &pos);
+			delCharLeft();
 
 			/* Update the printable text */
-			if (pos <= printStart)
+			if (insPos <= printStart)
 			{
-				if (printStart <= WEDB_CHARJUMP)
-				{
-					/* Got to the start of the string */
-					printStart = 0;
-					fitStringStart(pBuffer, psWidget->width, &printChars, &printWidth);
-				}
-				else
-				{
-					printStart -= WEDB_CHARJUMP;
-					fitStringStart(pBuffer + printStart, psWidget->width, &printChars, &printWidth);
-				}
+				printStart = MAX(printStart - WEDB_CHARJUMP, 0);
 			}
-			else
-			{
-				fitStringStart(pBuffer + printStart, psWidget->width, &printChars, &printWidth);
-			}
+			fitStringStart();
 			debug(LOG_INPUT, "EditBox cursor backspace");
 			break;
 		case INPBUF_TAB :
-			putSelection(&pBuffer, &pBufferAllocated, &pos);
+			putSelection();
 
 			/* Update the printable text */
-			fitStringEnd(pBuffer, psWidget->width, &printStart, &printChars, &printWidth);
+			fitStringEnd();
 			debug(LOG_INPUT, "EditBox cursor tab");
 			break;
 		case INPBUF_CR :
 		case SDLK_KP_ENTER:		// either normal return key || keypad enter
 			/* Finish editing */
-			editBoxFocusLost(psContext->psScreen, psWidget);
+			focusLost(psContext->psScreen);
 			screenClearFocus(psContext->psScreen);
 			debug(LOG_INPUT, "EditBox cursor return");
 			return;
@@ -565,28 +420,27 @@ void editBoxRun(W_EDITBOX *psWidget, W_CONTEXT *psContext)
 			/* Dealt with everything else this must be a printable character */
 			if (editState == WEDBS_INSERT)
 			{
-				insertChar(&pBuffer, &pBufferAllocated, &pos, unicode, psWidget);
+				insertChar(unicode);
 			}
 			else
 			{
-				overwriteChar(&pBuffer, &pBufferAllocated, &pos, unicode, psWidget);
+				overwriteChar(unicode);
 			}
-			len = utf32len(pBuffer);
+			len = aText.length();
 			/* Update the printable chars */
-			if (pos == len)
+			if (insPos == len)
 			{
-				fitStringEnd(pBuffer, psWidget->width, &printStart, &printChars, &printWidth);
+				fitStringEnd();
 			}
 			else
 			{
-				fitStringStart(pBuffer + printStart, psWidget->width, &printChars, &printWidth);
-				if (pos > (UDWORD)(printStart + printChars))
+				fitStringStart();
+				if (insPos > printStart + printChars)
 				{
-					printStart += WEDB_CHARJUMP;
+					printStart = MIN(printStart + WEDB_CHARJUMP, len - 1);
 					if (printStart >= len)
 					{
-						printStart = (UWORD)(len - 1);
-						fitStringStart(pBuffer + printStart, psWidget->width, &printChars, &printWidth);
+						fitStringStart();
 					}
 				}
 			}
@@ -595,95 +449,66 @@ void editBoxRun(W_EDITBOX *psWidget, W_CONTEXT *psContext)
 	}
 
 	/* Store the current widget state */
-	psWidget->aText = pBuffer;
-	psWidget->aTextAllocated = pBufferAllocated;
-	psWidget->insPos = (UWORD)pos;
-	psWidget->state = (psWidget->state & ~WEDBS_MASK) | editState;
-	psWidget->printStart = printStart;
-	psWidget->printWidth = printWidth;
-	psWidget->printChars = printChars;
-
+	state = (state & ~WEDBS_MASK) | editState;
 }
 
 
 /* Set the current string for the edit box */
-void editBoxSetString(W_EDITBOX *psWidget, const char *pText)
+void W_EDITBOX::setString(char const *utf8)
 {
-	ASSERT( psWidget != NULL,
-		"editBoxSetString: Invalid edit box pointer" );
-
-	free(psWidget->aText);
-	psWidget->aText = UTF8toUTF32(pText, &psWidget->aTextAllocated);
-
-	psWidget->state = WEDBS_FIXED;
-	psWidget->printStart = 0;
-	iV_SetFont(psWidget->FontID);
-	fitStringStart(psWidget->aText, psWidget->width,
-	               &psWidget->printChars, &psWidget->printWidth);
+	aText = QString::fromUtf8(utf8);
+	initialise();
 }
 
 
 /* Respond to a mouse click */
-void editBoxClicked(W_EDITBOX *psWidget, W_CONTEXT *psContext)
+void W_EDITBOX::clicked(W_CONTEXT *psContext, WIDGET_KEY)
 {
-	UDWORD		len;
-
-	if(!psWidget || (psWidget->state & WEDBS_DISABLE))	// disabled button.
+	if (state & WEDBS_DISABLE)  // disabled button.
 	{
 		return;
 	}
 
-	if ((psWidget->state & WEDBS_MASK) == WEDBS_FIXED)
+	// Set cursor position to the click location.
+	iV_SetFont(FontID);
+	setCursorPosPixels(psContext->mx - x);
+
+	// Cursor should be visible instantly.
+	blinkOffset = wzGetTicks();
+
+	if ((state & WEDBS_MASK) == WEDBS_FIXED)
 	{
-		if(!(psWidget->style & WEDB_DISABLED)) {
-			if(psWidget->AudioCallback) {
-				psWidget->AudioCallback(psWidget->ClickedAudioID);
-			}
-
-			/* Set up the widget state */
-			psWidget->state = (psWidget->state & ~WEDBS_MASK) | WEDBS_INSERT;
-			len = utf32len(psWidget->aText);
-			psWidget->insPos = (UWORD)len;
-
-			/* Calculate how much of the string can appear in the box */
-			iV_SetFont(psWidget->FontID);
-			fitStringEnd(psWidget->aText, psWidget->width,
-				&psWidget->printStart, &psWidget->printChars, &psWidget->printWidth);
-
-
-			/* Clear the input buffer */
-			inputClearBuffer();
-
-			/* Tell the form that the edit box has focus */
-			screenSetFocus(psContext->psScreen, (WIDGET *)psWidget);
-
-			// Cursor should be visible instantly.
-			psWidget->blinkOffset = SDL_GetTicks();
+		if (AudioCallback)
+		{
+			AudioCallback(ClickedAudioID);
 		}
+
+		/* Set up the widget state */
+		state = (state & ~WEDBS_MASK) | WEDBS_INSERT;
+
+		/* Calculate how much of the string can appear in the box */
+		fitStringEnd();
+
+		/* Clear the input buffer */
+		inputClearBuffer();
+
+		/* Tell the form that the edit box has focus */
+		screenSetFocus(psContext->psScreen, this);
 	}
 }
 
 
 /* Respond to loss of focus */
-void editBoxFocusLost(W_SCREEN* psScreen, W_EDITBOX *psWidget)
+void W_EDITBOX::focusLost(W_SCREEN *psScreen)
 {
-	ASSERT( !(psWidget->state & WEDBS_DISABLE),
-		"editBoxFocusLost: disabled edit box" );
+	ASSERT(!(state & WEDBS_DISABLE), "editBoxFocusLost: disabled edit box" );
 
 	/* Stop editing the widget */
-	psWidget->state = WEDBS_FIXED;
-	psWidget->printStart = 0;
-	fitStringStart(psWidget->aText,psWidget->width, &psWidget->printChars, &psWidget->printWidth);
+	state = WEDBS_FIXED;
+	printStart = 0;
+	fitStringStart();
 
-	widgSetReturn(psScreen, (WIDGET *)psWidget);
-
-}
-
-
-/* Respond to a mouse button up */
-void editBoxReleased(W_EDITBOX *psWidget)
-{
-	(void)psWidget;
+	widgSetReturn(psScreen, this);
 }
 
 
@@ -726,9 +551,6 @@ void editBoxDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *
 #if CURSOR_BLINK
 	BOOL		blink;
 #endif
-	char *utf;
-	utf_32_char	*pInsPoint, *UTF32string;
-	int size=0;
 
 	psEdBox = (W_EDITBOX *)psWidget;
 	CurrFontID = psEdBox->FontID;
@@ -760,22 +582,15 @@ void editBoxDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *
 	fy = y0 + (psEdBox->height - iV_GetTextLineSize())/2 - iV_GetTextAboveBase();
 
 	/* If there is more text than will fit into the box, display the bit with the cursor in it */
-	size = utf32len(psEdBox->aText);
-	UTF32string = (utf_32_char *)malloc(sizeof(utf_32_char) * size + sizeof(utf_32_char));
-	memcpy(UTF32string, psEdBox->aText, sizeof(utf_32_char) * size);
-
-	pInsPoint = UTF32string + psEdBox->printStart;		// deal with position
-	pInsPoint[psEdBox->printChars] = 0;
-
-	utf = UTF32toUTF8(pInsPoint, NULL);
+	QString tmp = psEdBox->aText;
+	tmp.remove(0, psEdBox->printStart);  // Erase anything there isn't room to display.
+	tmp.remove(psEdBox->printChars);
 
 //	if(psEdBox->pFontDisplay) {
 //		psEdBox->pFontDisplay(fx,fy, pPrint);
 //	} else {
-		iV_DrawText(utf, fx, fy);
+		iV_DrawText(tmp.toUtf8().constData(), fx, fy);
 //	}
-	free(utf);
-	free(UTF32string);
 
 	// Display the cursor if editing
 #if CURSOR_BLINK
@@ -786,21 +601,12 @@ void editBoxDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *
 #endif
 	{
 		// insert mode
+		QString tmp = psEdBox->aText;
+		tmp.remove(psEdBox->insPos);         // Erase from the cursor on, to find where the cursor should be.
+		tmp.remove(0, psEdBox->printStart);
 
-		utf_32_char	*pInsPoint, *UTF32string;
-		int size=0;
-
-		size = utf32len(psEdBox->aText);
-		UTF32string = (utf_32_char *)malloc(sizeof(utf_32_char) * size + sizeof(utf_32_char));
-		memcpy(UTF32string, psEdBox->aText, sizeof(utf_32_char) * size);
-
-		pInsPoint =  UTF32string + psEdBox->insPos;		// deal with position 
-		*pInsPoint = 0;
-		utf = UTF32toUTF8(UTF32string + psEdBox->printStart, NULL);
-		cx = x0 + WEDB_XGAP + iV_GetTextWidth(utf);
+		cx = x0 + WEDB_XGAP + iV_GetTextWidth(tmp.toUtf8().constData());
 		cx += iV_GetTextWidth("-");
-		free(utf);
-		free(UTF32string);
 		cy = fy;
 		iV_Line(cx, cy + iV_GetTextAboveBase(), cx, cy - iV_GetTextBelowBase(), pColours[WCOL_CURSOR]);
 	}
@@ -811,19 +617,11 @@ void editBoxDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *
 #endif
 	{
 		// overwrite mode
-		utf_32_char	*pInsPoint, *UTF32string;
-		int size=0;
+		QString tmp = psEdBox->aText;
+		tmp.remove(psEdBox->insPos);         // Erase from the cursor on, to find where the cursor should be.
+		tmp.remove(0, psEdBox->printStart);
 
-		size = utf32len(psEdBox->aText);
-		UTF32string = (utf_32_char *)malloc(sizeof(utf_32_char) * size + sizeof(utf_32_char));
-		memcpy(UTF32string, psEdBox->aText, sizeof(utf_32_char) * size);
-
-		pInsPoint =  UTF32string + psEdBox->insPos;		// deal with position 
-		*pInsPoint = 0;
-		utf = UTF32toUTF8(UTF32string + psEdBox->printStart, NULL);
-		cx = x0 + WEDB_XGAP + iV_GetTextWidth(utf);
-		free(utf);
-		free(UTF32string);
+		cx = x0 + WEDB_XGAP + iV_GetTextWidth(tmp.toUtf8().constData());
 		cy = fy;
 		iV_Line(cx, cy, cx + WEDB_CURSORSIZE, cy, pColours[WCOL_CURSOR]);
 	}

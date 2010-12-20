@@ -505,7 +505,7 @@ BOOL runLoadSave(BOOL bResetMissionWidgets)
 				context.yOffset		= 0;
 				context.mx			= mouseX();
 				context.my			= mouseY();
-				editBoxClicked((W_EDITBOX*)widgGetFromID(psRequestScreen,SAVEENTRY_EDIT), &context);
+				widgGetFromID(psRequestScreen, SAVEENTRY_EDIT)->clicked(&context);
 			}
 			else
 			{

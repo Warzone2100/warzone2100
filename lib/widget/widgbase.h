@@ -61,12 +61,21 @@ enum WIDGET_TYPE
 	WIDG_SLIDER,
 };
 
+/* The keys that can be used to press a button */
+enum WIDGET_KEY
+{
+	WKEY_NONE,
+	WKEY_PRIMARY,
+	WKEY_SECONDARY,
+};
 
 /* The base widget data type */
 struct WIDGET
 {
 	WIDGET(W_INIT const *init, WIDGET_TYPE type);
 	virtual ~WIDGET() {}
+
+	virtual void clicked(W_CONTEXT *, WIDGET_KEY = WKEY_PRIMARY) {}
 
 	UDWORD                  formID;                 ///< ID of the widgets base form.
 	UDWORD                  id;                     ///< The user set ID number for the widget. This is returned when e.g. a button is pressed.

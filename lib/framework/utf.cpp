@@ -520,11 +520,3 @@ utf_32_char *UTF8toUTF32(const char *utf8_string, size_t *nbytes)
 
 	return unicode_string;
 }
-
-size_t utf32len(const utf_32_char *unicode_string)
-{
-	size_t ret = 0;
-	while (*unicode_string++)
-		++ret;
-	return ret;
-}
