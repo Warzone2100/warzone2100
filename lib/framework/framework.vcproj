@@ -233,7 +233,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\resource_parser.tab.c"
+				RelativePath=".\resource_parser.tab.cpp"
 				>
 			</File>
 			<File
@@ -253,7 +253,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\strres_parser.tab.c"
+				RelativePath=".\strres_parser.tab.cpp"
 				>
 			</File>
 			<File
