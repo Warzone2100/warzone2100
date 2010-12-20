@@ -29,11 +29,6 @@
 #include "featuredef.h"
 #include "droid.h"  // For INITIAL_DROID_ORDERS.
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 // Game Options Structure. Enough info to completely describe the static stuff in amultiplay game.
 typedef struct {
@@ -91,7 +86,6 @@ extern MULTIPLAYERINGAME	ingame;						// the game description.
 
 extern BOOL					bMultiPlayer;				// true when more than 1 player.
 extern BOOL					bMultiMessages;				// == bMultiPlayer unless multi messages are disabled
-extern UDWORD				selectedPlayer;
 extern BOOL					openchannels[MAX_PLAYERS];
 extern UBYTE				bDisplayMultiJoiningStatus;	// draw load progress?
 
@@ -235,9 +229,5 @@ extern	void startMultiplayerGame	(void);
 extern	void resetReadyStatus		(bool bSendOptions);
 
 extern	BOOL bPlayerReadyGUI[MAX_PLAYERS];
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_MULTIPLAY_H__
