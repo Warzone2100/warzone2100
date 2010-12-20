@@ -1229,7 +1229,7 @@ void ExchndlSetup()
 void ResetRPTDirectory(char *newPath)
 {
 	debug(LOG_WZ, "New RPT directory is %s, was %s", newPath, szLogFileName);
-	_tcscpy(szLogFileName, _T(newPath));
+	_tcscpy(szLogFileName, CW2T(newPath));
 }
 void ExchndlShutdown(void)
 {
