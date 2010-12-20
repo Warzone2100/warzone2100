@@ -126,6 +126,8 @@ struct DROID_TEMPLATE : public BASE_STATS
 	bool		prefab;                     ///< Not player designed, not saved, never delete or change
 };
 
+struct PACKAGED_CHECK;
+
 struct DROID : public BASE_OBJECT
 {
 	DROID(uint32_t id, unsigned player);
@@ -212,7 +214,7 @@ struct DROID : public BASE_OBJECT
 	SDWORD          iAudioID;
 
 	// Synch checking
-	void *          gameCheckDroid;                 ///< Last PACKAGED_CHECK, for synchronisation use only (see multisync.c). TODO Make synch perfect, so that this isn't needed at all.
+	PACKAGED_CHECK *gameCheckDroid;                 ///< Last PACKAGED_CHECK, for synchronisation use only (see multisync.c). TODO Make synch perfect, so that this isn't needed at all.
 };
 
 #endif // __INCLUDED_DROIDDEF_H__

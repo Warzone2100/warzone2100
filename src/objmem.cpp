@@ -448,7 +448,6 @@ void killDroid(DROID *psDel)
 	{
 		removeObjectFromFuncList(apsSensorList, (BASE_OBJECT*)psDel, 0);
 	}
-	free(psDel->gameCheckDroid);
 
 	destroyObject((BASE_OBJECT**)apsDroidLists, (BASE_OBJECT*)psDel);
 }

@@ -27,11 +27,6 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/vector.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 typedef enum packetDirectionEnum
 {
 	PACKET_ENCODE,
@@ -92,13 +87,11 @@ void NETuint32_tLarge(uint32_t *ip);  ///< Encodes all values in exactly 4 bytes
 void NETint64_t(int64_t *ip);
 void NETuint64_t(uint64_t *ip);
 void NETbool(BOOL *bp);
+void NETbool(bool *bp);
 void NETstring(char *str, uint16_t maxlen);
 void NETbin(uint8_t *str, uint32_t maxlen);
 
 PACKETDIR NETgetPacketDir(void);
-
-#if defined(__cplusplus)
-}
 
 template <typename EnumT>
 static void NETenum(EnumT* enumPtr)
@@ -114,50 +107,25 @@ static void NETenum(EnumT* enumPtr)
 		*enumPtr = static_cast<EnumT>(val);
 }
 
-extern "C"
-{
-#else
-// FIXME: Somehow still causes tons of warnings: <enumPtr> is used unitialised in this function
-static inline void squelchUninitialisedUseWarning(void *ptr) { (void)ptr; }
-#define NETenum(enumPtr) \
-do \
-{ \
-	uint32_t _val; \
-	squelchUninitialisedUseWarning(enumPtr); \
-	_val = (NETgetPacketDir() == PACKET_ENCODE) ? *(enumPtr) : 0; \
-\
-	NETuint32_t(&_val); \
-\
-	*(enumPtr) = _val; \
-} while(0)
-#endif
-
 void NETPosition(Position *vp);
 void NETRotation(Rotation *vp);
 
-typedef struct PackagedCheck
-{
-	uint32_t gameTime;  ///< Game time that this synch check was made. Not touched by NETPACKAGED_CHECK().
-	uint8_t player;
-	uint32_t droidID;
-	int32_t order;
-	uint32_t secondaryOrder;
-	uint32_t body;
-	uint32_t experience;
-	Position pos;
-	Rotation rot;
-	uint32_t targetID;  ///< Defined iff order == DORDER_ATTACK.
-	uint16_t orderX;    ///< Defined iff order == DORDER_MOVE.
-	uint16_t orderY;    ///< Defined iff order == DORDER_MOVE.
-} PACKAGED_CHECK;
-void NETPACKAGED_CHECK(PACKAGED_CHECK *v);
+static inline void NETauto(int8_t *ip)    { NETint8_t(ip); }
+static inline void NETauto(uint8_t *ip)   { NETuint8_t(ip); }
+static inline void NETauto(int16_t *ip)   { NETint16_t(ip); }
+static inline void NETauto(uint16_t *ip)  { NETuint16_t(ip); }
+static inline void NETauto(int32_t *ip)   { NETint32_t(ip); }
+static inline void NETauto(uint32_t *ip)  { NETuint32_t(ip); }
+static inline void NETauto(int64_t *ip)   { NETint64_t(ip); }
+static inline void NETauto(uint64_t *ip)  { NETuint64_t(ip); }
+static inline void NETauto(bool *bp)      { NETbool(bp); }
+static inline void NETauto(Position *vp)  { NETPosition(vp); }
+static inline void NETauto(Rotation *vp)  { NETRotation(vp); }
+
+
 void NETNETMESSAGE(NETMESSAGE *message);  ///< If decoding, must destroy the NETMESSAGE.
 void NETdestroyNETMESSAGE(NETMESSAGE message);
 
 void NETtest(void);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif
