@@ -6229,9 +6229,7 @@ BOOL intAddProximityButton(PROXIMITY_DISPLAY *psProxDisp, UDWORD inc)
 	{
 		for(cnt = IDPROX_START;cnt<IDPROX_END;cnt++)
 		{							// go down the prox msgs and see if it's free.
-			for (psProxDisp2 = apsProxDisp[selectedPlayer];
-				psProxDisp2 &&(psProxDisp2->buttonID!=cnt) ;
-				psProxDisp2 = psProxDisp2->psNext);
+			for (psProxDisp2 = apsProxDisp[selectedPlayer]; psProxDisp2 && psProxDisp2->buttonID != cnt; psProxDisp2 = psProxDisp2->psNext) {}
 
 			if(psProxDisp == NULL)	// value was unused.
 			{

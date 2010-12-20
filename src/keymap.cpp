@@ -730,7 +730,7 @@ SDWORD		i;
 			break;
 		}
 
-		if(keyToProcess->subKeyCode == KEY_MAXSCAN)
+		if (keyToProcess->subKeyCode == (KEY_CODE)KEY_MAXSCAN)
 		{
 			continue;
 		}
