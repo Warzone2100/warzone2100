@@ -30,6 +30,7 @@
 			/>
 			<Tool
 				Name="FlexGenerator"
+				OutputFile="$(InputName).lex.cpp"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -37,6 +38,7 @@
 			<Tool
 				Name="BisonParser"
 				Defines="true"
+				OutputFile="$(InputName).tab.cpp"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"

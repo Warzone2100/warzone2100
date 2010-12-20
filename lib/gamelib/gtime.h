@@ -27,11 +27,6 @@
 //#include "lib/netplay/nettypes.h"
 typedef struct _netqueue NETQUEUE_;
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 /// The number of time units per second of the game clock.
 #define GAME_TICKS_PER_SEC 1000
 /// The number of game state updates per second of the game clock.
@@ -167,9 +162,5 @@ bool checkPlayerGameTime(unsigned player);                ///< Checks that we ar
 void setPlayerGameTime(unsigned player, uint32_t time);   ///< Sets the player's time.
 
 bool isInSync(void);                                      ///< Returns true unless there was a CRC mismatch between the last GAME_GAME_TIME messages.
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif
