@@ -549,9 +549,7 @@ BOOL saveKeyMap(void)
 		WRITE(&psMapping->action, sizeof(KEY_ACTION)); // action
 
 		// function to map to!
-		for (count = 0;  keyMapSaveTable[count] != NULL
-					 && keyMapSaveTable[count] != psMapping->function;
-			count++);
+		for (count = 0;  keyMapSaveTable[count] != NULL && keyMapSaveTable[count] != psMapping->function; count++) {}
 		if(keyMapSaveTable[count] == NULL)
 		{
 			debug( LOG_FATAL, "can't find keymapped function %s in the keymap save table at %d!", name, count );

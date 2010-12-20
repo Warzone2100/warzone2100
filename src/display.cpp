@@ -944,12 +944,10 @@ void processMouseClickInput(void)
 				// can't build if res extractors arent available.
 				if (item == MT_RESOURCE)
 				{
-					for (i=0;(i<numStructureStats)&&(asStructureStats[i].type != REF_RESOURCE_EXTRACTOR);i++);	// find resource stat
+					for (i = 0; i < numStructureStats && asStructureStats[i].type != REF_RESOURCE_EXTRACTOR; i++) {} // find resource stat
+					if (i < numStructureStats && apStructTypeLists[selectedPlayer][i] != AVAILABLE)		// check if you can build it!
 					{
-						if( (i < numStructureStats) && (apStructTypeLists[selectedPlayer][i] != AVAILABLE))		// check if you can build it!
-						{
-							item = MT_BLOCKING;				// don't allow build pointer.
-						}
+						item = MT_BLOCKING;				// don't allow build pointer.
 					}
 				}
 

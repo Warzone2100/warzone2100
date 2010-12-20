@@ -2768,7 +2768,7 @@ static BOOL structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 				for(psFlag = apsFlagPosLists[psFact->psAssemblyPoint->player];
 						!( (psFlag->factoryInc == psFact->psAssemblyPoint->factoryInc) // correct fact.
 						&&(psFlag->factoryType == factoryType)); // correct type
-					psFlag = psFlag->psNext);
+					psFlag = psFlag->psNext) {}
 
 				if (isVtolDroid(psNewDroid))
 				{
