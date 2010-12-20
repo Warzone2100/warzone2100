@@ -1251,7 +1251,7 @@ static void updateDestruction(EFFECT *psEffect)
 	UDWORD	widthScatter = 0, breadthScatter = 0, heightScatter = 0;
 	SDWORD	iX, iY;
 	LIGHT	light;
-	UDWORD	percent;
+	int     percent;
 	UDWORD	range;
 	float	div;
 	UDWORD	height;

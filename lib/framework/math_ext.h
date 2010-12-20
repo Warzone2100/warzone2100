@@ -26,9 +26,9 @@
 #define MATH_EXT_H
 
 #include "wzglobal.h"
-#include <math.h>
+#include <cmath>
 #include <complex>
-#include <stdlib.h>
+#include <cstdlib>
 
 // Also PERCENT(int,int);	// returns a int value 0->100 of the percentage of the first param over the second
 #define PERCENT(a,b) (((a)*100)/(b))
@@ -38,7 +38,7 @@
 # define M_PI 3.14159265358979323846
 #endif
 
-#if !defined(WZ_C99) && !defined(__cplusplus) && !defined(WZ_CC_GNU)
+#if (!defined(WZ_C99) && !defined(__cplusplus) && !defined(WZ_CC_GNU)) || (defined _MSC_VER)
 # include <float.h>
 
 
@@ -150,5 +150,10 @@ static inline void solveDifferential2ndOrder(float *y_, float *dydt_, double acc
 	                     *y_    = (g1*e1    + g2*e2).real();     // .imag() should be 0.
 	                     *dydt_ = (g1*h1*e1 + g2*h2*e2).real();  // .imag() should be 0.
 }
+
+// Windows unfortunately appears to do this, so do this too for compatibility...
+using std::abs;
+using std::sqrt;
+using std::pow;
 
 #endif // MATH_EXT_H

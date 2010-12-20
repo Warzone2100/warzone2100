@@ -50,14 +50,14 @@ and end points. We can also check other stuff here like what it's going
 over. Also, it has to be between a minimum and maximum length and
 one of the axes must share the same values.
 */
-BOOL	bridgeValid(UDWORD startX, UDWORD startY, UDWORD endX, UDWORD endY)
+bool bridgeValid(int startX, int startY, int endX, int endY)
 {
 	BOOL	xBridge, yBridge;
 	int	bridgeLength, i, minX, minY, maxX, maxY;
 
 	/* Establish axes allignment */
-	xBridge = ((startX == endX) ? true : false);
-	yBridge = ((startY == endY) ? true : false);
+	xBridge = startX == endX;
+	yBridge = startY == endY;
 
 	/* At least one axis must be constant */
 	if (!xBridge && !yBridge)
@@ -153,7 +153,7 @@ BOOL	renderBridgeSection(STRUCTURE *psStructure)
 	what you need to alter start and end terrain heights by to establish to
 	connection.
 */
-void	getBridgeInfo(UDWORD startX, UDWORD startY, UDWORD endX, UDWORD endY, BRIDGE_INFO *info)
+void getBridgeInfo(int startX, int startY, int endX, int endY, BRIDGE_INFO *info)
 {
 	int	startHeight, endHeight;
 
