@@ -9,5 +9,5 @@ GCC_OPTIMIZATION_LEVEL = 0
 GCC_PREPROCESSOR_DEFINITIONS = DEBUG $(inherited)
 GCC_TREAT_WARNINGS_AS_ERRORS = YES
 
-BuildDependentFlagsForCandCpp = -fstack-protector-all
+BuildDependentFlagsForCandCpp = // -fstack-protector // Needs 10.6 min for build before being used
 BuildDependentFlagsForC = // -Wc++-compat -Wno-error=c++-compat // For seeing c++ compat warnings

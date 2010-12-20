@@ -53,6 +53,27 @@
 #include "multirecv.h"
 #include "random.h"
 
+static void NETauto(PACKAGED_CHECK *v)
+{
+	NETauto(&v->player);
+	NETauto(&v->droidID);
+	NETauto(&v->order);
+	NETauto(&v->secondaryOrder);
+	NETauto(&v->body);
+	NETauto(&v->experience);
+	NETauto(&v->pos);
+	NETauto(&v->rot);
+	if (v->order == DORDER_ATTACK)
+	{
+		NETauto(&v->targetID);
+	}
+	else if (v->order == DORDER_MOVE)
+	{
+		NETauto(&v->orderX);
+		NETauto(&v->orderY);
+	}
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 // function definitions
 
@@ -194,7 +215,7 @@ BOOL ForceDroidSync(const DROID* droidToSend)
 	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_CHECK_DROID);
 		NETuint8_t(&count);
 		NETuint32_t(&gameTime);  // Send game time.
-		NETPACKAGED_CHECK(&pc);
+		NETauto(&pc);
 	return NETend();
 }
 
@@ -234,7 +255,7 @@ static BOOL sendDroidCheck(void)
 		{
 			pD = pickADroid();
 
-			if (pD == NULL || (pD->gameCheckDroid != NULL && ((PACKAGED_CHECK *)pD->gameCheckDroid)->gameTime > gameTime))
+			if (pD == NULL || (pD->gameCheckDroid != NULL && pD->gameCheckDroid->gameTime > gameTime))
 			{
 				continue;  // Didn't find a droid, or droid was synched recently.
 			}
@@ -244,9 +265,8 @@ static BOOL sendDroidCheck(void)
 			{
 				ppD[count++] = pD;
 			}
-			free(pD->gameCheckDroid);
-			pD->gameCheckDroid = (PACKAGED_CHECK *)malloc(sizeof(PACKAGED_CHECK));
-			*(PACKAGED_CHECK *)pD->gameCheckDroid = packageCheck(pD);
+			delete pD->gameCheckDroid;
+			pD->gameCheckDroid = new PACKAGED_CHECK(packageCheck(pD));
 		}
 
 		if (!isInSync())  // Don't really send anything, unless out of synch.
@@ -258,7 +278,7 @@ static BOOL sendDroidCheck(void)
 			// Add the droids to the packet
 			for (i = 0; i < count; i++)
 			{
-				NETPACKAGED_CHECK((PACKAGED_CHECK *)ppD[i]->gameCheckDroid);
+				NETauto(ppD[i]->gameCheckDroid);
 			}
 		}
 
@@ -321,10 +341,10 @@ BOOL recvDroidCheck(NETQUEUE queue)
 		for (i = 0; i < count; i++)
 		{
 			DROID *         pD;
-			PACKAGED_CHECK  pc, pc2;
+			PACKAGED_CHECK  pc;
 			Position        precPos;
 
-			NETPACKAGED_CHECK(&pc);
+			NETauto(&pc);
 
 			// Find the droid in question
 			if (!IdToDroid(pc.droidID, pc.player, &pD))
@@ -342,12 +362,12 @@ BOOL recvDroidCheck(NETQUEUE queue)
 				continue;  // Can't synch, since we didn't save data to be able to calculate a delta.
 			}
 
-			pc2 = *(PACKAGED_CHECK *)pD->gameCheckDroid;  // pc2 should be declared here, as const.
+			PACKAGED_CHECK const pc2 = *pD->gameCheckDroid;
 
 			if (pc2.gameTime != synchTime + MIN_DELAY_BETWEEN_DROID_SYNCHS)
 			{
 				debug(LOG_SYNC, "We got a droid %u synch, but we didn't choose the same droid to synch.", pc.droidID);
-				((PACKAGED_CHECK *)pD->gameCheckDroid)->gameTime = synchTime + MIN_DELAY_BETWEEN_DROID_SYNCHS;  // Get droid synch time back in synch.
+				pD->gameCheckDroid->gameTime = synchTime + MIN_DELAY_BETWEEN_DROID_SYNCHS;  // Get droid synch time back in synch.
 				continue;  // Can't synch, since we didn't save data to be able to calculate a delta.
 			}
 

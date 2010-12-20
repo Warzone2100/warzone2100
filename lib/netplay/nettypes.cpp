@@ -602,6 +602,14 @@ void NETbool(BOOL *bp)
 	*bp = !!i;
 }
 
+void NETbool(bool *bp)
+{
+	uint8_t i = !!*bp;
+	queueAuto(i);
+	*bp = !!i;
+}
+
+
 /** Sends or receives a string to or from the current network package.
  *  \param str    When encoding a packet this is the (NUL-terminated string to
  *                be sent in the current network package. When decoding this
@@ -680,27 +688,6 @@ void NETPosition(Position *vp)
 void NETRotation(Rotation *vp)
 {
 	queueAuto(*vp);
-}
-
-void NETPACKAGED_CHECK(PACKAGED_CHECK *v)
-{
-	queueAuto(v->player);
-	queueAuto(v->droidID);
-	queueAuto(v->order);
-	queueAuto(v->secondaryOrder);
-	queueAuto(v->body);
-	queueAuto(v->experience);
-	queueAuto(v->pos);
-	queueAuto(v->rot);
-	if (v->order == DORDER_ATTACK)
-	{
-		queueAuto(v->targetID);
-	}
-	else if (v->order == DORDER_MOVE)
-	{
-		queueAuto(v->orderX);
-		queueAuto(v->orderY);
-	}
 }
 
 void NETNETMESSAGE(NETMESSAGE *message)

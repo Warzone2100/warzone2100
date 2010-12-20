@@ -290,6 +290,7 @@ DROID::DROID(uint32_t id, unsigned player)
 	, psGroup(NULL)
 	, psGrpNext(NULL)
 	, psCurAnim(NULL)
+	, gameCheckDroid(NULL)
 {
 	sMove.asPath = NULL;
 }
@@ -335,6 +336,8 @@ DROID::~DROID()
 	clustRemoveObject((BASE_OBJECT *)psDroid);
 
 	free(sMove.asPath);
+
+	delete gameCheckDroid;
 }
 
 
@@ -2721,8 +2724,6 @@ void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid)
 		psDroid->blockedBits = FEATURE_BLOCKED | WATER_BLOCKED;
 		break;
 	}
-
-	psDroid->gameCheckDroid = NULL;
 }
 
 

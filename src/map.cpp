@@ -763,7 +763,7 @@ BOOL mapLoad(char *filename, BOOL preview)
 	UDWORD		version;
 	UDWORD		i, j, x, y;
 	PHYSFS_file	*fp = PHYSFS_openRead(filename);
-	void *          mt;
+	MersenneTwister mt(12345);  // 12345 = random seed.
 
 	if (!fp)
 	{
@@ -883,7 +883,6 @@ BOOL mapLoad(char *filename, BOOL preview)
 	}
 
 	// reset the random water bottom heights
-	mt = newMersenneTwister(12345);  // 12345 = random seed.
 	// set the river bed
 	for (i = 0; i < mapWidth; i++)
 	{
@@ -894,11 +893,10 @@ BOOL mapLoad(char *filename, BOOL preview)
 			// lower riverbed
 			if (mapTile(i, j)->ground == waterGroundType)
 			{
-				mapTile(i, j)->height -= WATER_MIN_DEPTH - mersenneTwisterU32(mt)%(WATER_MAX_DEPTH + 1 - WATER_MIN_DEPTH);
+				mapTile(i, j)->height -= WATER_MIN_DEPTH - mt.u32()%(WATER_MAX_DEPTH + 1 - WATER_MIN_DEPTH);
 			}
 		}
 	}
-	deleteMersenneTwister(mt);
 
 	/* set up the scroll mins and maxs - set values to valid ones for any new map */
 	scrollMinX = scrollMinY = 0;

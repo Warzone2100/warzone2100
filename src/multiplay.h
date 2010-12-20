@@ -79,6 +79,22 @@ typedef enum
 	STRUCTUREINFO_RELEASERESEARCH
 } STRUCTURE_INFO;
 
+struct PACKAGED_CHECK
+{
+	uint32_t gameTime;  ///< Game time that this synch check was made. Not touched by NETauto().
+	uint8_t player;
+	uint32_t droidID;
+	int32_t order;
+	uint32_t secondaryOrder;
+	uint32_t body;
+	uint32_t experience;
+	Position pos;
+	Rotation rot;
+	uint32_t targetID;  ///< Defined iff order == DORDER_ATTACK.
+	uint16_t orderX;    ///< Defined iff order == DORDER_MOVE.
+	uint16_t orderY;    ///< Defined iff order == DORDER_MOVE.
+};
+
 // ////////////////////////////////////////////////////////////////////////////
 // Game Options and stats.
 extern MULTIPLAYERGAME		game;						// the game description.

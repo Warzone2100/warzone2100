@@ -283,39 +283,3 @@ PointTree::ResultVector &PointTree::query(Filter &filter, int32_t x, int32_t y, 
 {
 	return queryMaybeFilter<true>(filter, x, y, radius);
 }
-
-/////////////////
-// C interface //
-/////////////////
-
-PointTree *pointTreeCreate(void)
-{
-	return new PointTree;
-}
-
-void pointTreeDestroy(PointTree *pointTree)
-{
-	delete pointTree;
-}
-
-void pointTreeInsert(PointTree *pointTree, void *pointData, int32_t x, int32_t y)
-{
-	pointTree->insert(pointData, x, y);
-}
-
-void pointTreeClear(POINT_TREE *pointTree)
-{
-	pointTree->clear();
-}
-
-void pointTreeSort(POINT_TREE *pointTree)
-{
-	pointTree->sort();
-}
-
-void **pointTreeQuery(POINT_TREE *pointTree, int32_t x, int32_t y, uint32_t radius)
-{
-	pointTree->query(x, y, radius);
-	pointTree->lastQueryResults.push_back(NULL);  // So it's possible to know when the list ends.
-	return &pointTree->lastQueryResults[0];
-}
