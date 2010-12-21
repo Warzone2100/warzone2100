@@ -257,7 +257,7 @@ struct coff_link_hash_entry
   unsigned short type;
 
   /* Symbol class.  */
-  unsigned char class;
+  unsigned char class_;
 
   /* Number of auxiliary entries.  */
   char numaux;
@@ -395,7 +395,7 @@ struct coff_debug_merge_type
   struct coff_debug_merge_type *next;
 
   /* Class of type.  */
-  int class;
+  int class_;
 
   /* Symbol index where this type is defined.  */
   long indx;

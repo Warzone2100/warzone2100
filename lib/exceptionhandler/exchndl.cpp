@@ -394,7 +394,7 @@ BOOL ImagehlpDemangleSymName(LPCTSTR lpName, LPTSTR lpDemangledName, DWORD nSize
 	pSymbol->SizeOfStruct = sizeof(symbolBuffer);
 	pSymbol->MaxNameLength = 512;
 
-	lstrcpyn((LPWSTR)pSymbol->Name, lpName, pSymbol->MaxNameLength);
+	lstrcpyn((LPTSTR)pSymbol->Name, lpName, pSymbol->MaxNameLength);
 
 	if(!j_SymUnDName(pSymbol, (PSTR)lpDemangledName, nSize))
 		return FALSE;
@@ -425,7 +425,7 @@ BOOL ImagehlpGetSymFromAddr(HANDLE hProcess, DWORD dwAddress, LPTSTR lpSymName, 
 	if(!j_SymGetSymFromAddr(hProcess, dwAddress, &dwDisplacement, pSymbol))
 		return FALSE;
 
-	lstrcpyn(lpSymName, (LPCWSTR)pSymbol->Name, nSize);
+	lstrcpyn(lpSymName, (LPCTSTR)pSymbol->Name, nSize);
 
 	return TRUE;
 }
@@ -467,7 +467,7 @@ BOOL ImagehlpGetLineFromAddr(HANDLE hProcess, DWORD dwAddress,  LPTSTR lpFileNam
 
 	assert(lpFileName && lpLineNumber);
 
-	lstrcpyn(lpFileName, (LPCWSTR)Line.FileName, nSize);
+	lstrcpyn(lpFileName, (LPTCSTR)Line.FileName, nSize);
 	*lpLineNumber = Line.LineNumber;
 
 	return TRUE;
@@ -593,20 +593,20 @@ BOOL WINAPI IntelStackWalk(
 		StackFrame->AddrFrame.Offset = ContextRecord->Ebp;
 
 		StackFrame->AddrReturn.Mode = AddrModeFlat;
-		if(!ReadMemoryRoutine((HANDLE)hProcess, (DWORD) (StackFrame->AddrFrame.Offset + sizeof(DWORD)), &StackFrame->AddrReturn.Offset, sizeof(DWORD), NULL))
+		if(!ReadMemoryRoutine((HANDLE)hProcess, (DWORD) (StackFrame->AddrFrame.Offset + sizeof(DWORD)), (void *)&StackFrame->AddrReturn.Offset, sizeof(DWORD), NULL))
 			return FALSE;
 	}
 	else
 	{
 		StackFrame->AddrPC.Offset = StackFrame->AddrReturn.Offset;
 		//AddrStack = AddrFrame + 2*sizeof(DWORD);
-		if(!ReadMemoryRoutine((HANDLE)hProcess, (DWORD) StackFrame->AddrFrame.Offset, &StackFrame->AddrFrame.Offset, sizeof(DWORD), NULL))
+		if(!ReadMemoryRoutine((HANDLE)hProcess, (DWORD) StackFrame->AddrFrame.Offset, (void *)&StackFrame->AddrFrame.Offset, sizeof(DWORD), NULL))
 			return FALSE;
-		if(!ReadMemoryRoutine((HANDLE)hProcess, (DWORD) (StackFrame->AddrFrame.Offset + sizeof(DWORD)), &StackFrame->AddrReturn.Offset, sizeof(DWORD), NULL))
+		if(!ReadMemoryRoutine((HANDLE)hProcess, (DWORD) (StackFrame->AddrFrame.Offset + sizeof(DWORD)), (void *)&StackFrame->AddrReturn.Offset, sizeof(DWORD), NULL))
 			return FALSE;
 	}
 
-	ReadMemoryRoutine((HANDLE)hProcess, (DWORD) (StackFrame->AddrFrame.Offset + 2*sizeof(DWORD)), StackFrame->Params, sizeof(StackFrame->Params), NULL);
+	ReadMemoryRoutine((HANDLE)hProcess, (DWORD) (StackFrame->AddrFrame.Offset + 2*sizeof(DWORD)), (void *)StackFrame->Params, sizeof(StackFrame->Params), NULL);
 
 	return TRUE;
 }
