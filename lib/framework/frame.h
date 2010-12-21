@@ -46,11 +46,6 @@
 #include "trig.h"
 #include "cursors.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 extern uint32_t selectedPlayer;      ///< The player number corresponding to this client.
 extern uint32_t realSelectedPlayer;  ///< The player number corresponding to this client (same as selectedPlayer, unless changing players in the debug menu).
 #define MAX_PLAYERS		8	/**< Maximum number of players in the game. */
@@ -114,9 +109,9 @@ extern UDWORD frameGetAverageRate(void);
 extern UDWORD HashString( const char *String );
 extern UDWORD HashStringIgnoreCase( const char *String );
 
-#ifdef __cplusplus
-}
-#endif //__cplusplus
+#if defined(WZ_OS_WIN)
+extern "C" int isatty(int);  // Apparently flex declares isatty with C++ linkage on Windows. Don't ask why. Declaring here instead.
+#endif
 
 static inline WZ_DECL_CONST const char * bool2string(bool var)
 {

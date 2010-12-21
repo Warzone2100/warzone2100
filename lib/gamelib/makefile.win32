@@ -6,8 +6,8 @@ include $(top_srcdir)/makerules/common.mk
 # Due to the lexer's dependencies on the parser's header we need to compile the
 # parsers first
 PARSERS= \
-	audp_parser.tab.c \
-	audp_lexer.lex.c
+	audp_parser.tab.cpp \
+	audp_lexer.lex.cpp
 
 SRC= \
 	$(PARSERS) \

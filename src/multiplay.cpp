@@ -404,9 +404,7 @@ DROID_TEMPLATE *IdToTemplate(UDWORD tempId,UDWORD player)
 	// Check if we know which player this is from, in that case, assume it is a player template
 	if (player != ANYPLAYER && player < MAX_PLAYERS)
 	{
-		for (psTempl = apsDroidTemplates[player];			// follow templates
-		(psTempl && (psTempl->multiPlayerID != tempId ));
-		 psTempl = psTempl->psNext);
+		for (psTempl = apsDroidTemplates[player]; psTempl && (psTempl->multiPlayerID != tempId); psTempl = psTempl->psNext) {}		// follow templates
 
 		return psTempl;
 	}
@@ -531,9 +529,7 @@ Vector3i cameraToHome(UDWORD player,BOOL scroll)
 	UDWORD x,y;
 	STRUCTURE	*psBuilding;
 
-	for (psBuilding = apsStructLists[player];
-		 psBuilding && (psBuilding->pStructureType->type != REF_HQ);
-		 psBuilding= psBuilding->psNext);
+	for (psBuilding = apsStructLists[player]; psBuilding && (psBuilding->pStructureType->type != REF_HQ); psBuilding= psBuilding->psNext) {}
 
 	if(psBuilding)
 	{

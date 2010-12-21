@@ -801,7 +801,7 @@ static void updateCameraRotationAcceleration( UBYTE update )
 		psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
 		if(psPropStats->propulsionType == PROPULSION_TYPE_LIFT)
 		{
-			UDWORD	droidHeight, difHeight, droidMapHeight;
+			int droidHeight, difHeight, droidMapHeight;
 
 			bGotFlying = true;
 			droidHeight = psDroid->pos.z;

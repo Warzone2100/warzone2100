@@ -7376,7 +7376,7 @@ BOOL scrFogTileInRange(void)
 BOOL scrMapRevealedInRange(void)
 {
 	SDWORD		wRangeX,wRangeY,tRangeX,tRangeY,wRange,tRange,player;
-	UDWORD		i,j;
+	int             i, j;
 
 	if (!stackPopParams(4, VAL_INT, &wRangeX, VAL_INT, &wRangeY,
 		VAL_INT, &wRange, VAL_INT, &player))

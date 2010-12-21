@@ -944,12 +944,10 @@ void processMouseClickInput(void)
 				// can't build if res extractors arent available.
 				if (item == MT_RESOURCE)
 				{
-					for (i=0;(i<numStructureStats)&&(asStructureStats[i].type != REF_RESOURCE_EXTRACTOR);i++);	// find resource stat
+					for (i = 0; i < numStructureStats && asStructureStats[i].type != REF_RESOURCE_EXTRACTOR; i++) {} // find resource stat
+					if (i < numStructureStats && apStructTypeLists[selectedPlayer][i] != AVAILABLE)		// check if you can build it!
 					{
-						if( (i < numStructureStats) && (apStructTypeLists[selectedPlayer][i] != AVAILABLE))		// check if you can build it!
-						{
-							item = MT_BLOCKING;				// don't allow build pointer.
-						}
+						item = MT_BLOCKING;				// don't allow build pointer.
 					}
 				}
 
@@ -1427,6 +1425,11 @@ UDWORD		dispX,dispY,dispR;
 	/*	Not a droid, so maybe a structure or feature?
 		If still NULL after this then nothing */
 	psReturn = getTileOccupier(mouseTileX, mouseTileY);
+
+	if (psReturn == NULL)
+	{
+		psReturn = getTileBlueprint(mouseTileX, mouseTileY);
+	}
 
 	/* Send the result back - if it's null then we clicked on an area of terrain */
 	return(psReturn);
@@ -2748,8 +2751,14 @@ STRUCTURE	*psStructure;
 		If still NULL after this then nothing */
 	if(driveModeActive() && !driveTacticalActive()) {
 		psNotDroid = NULL;
-	} else {
+	}
+	else
+	{
 		psNotDroid = getTileOccupier(mouseTileX, mouseTileY);
+		if (psNotDroid == NULL)
+		{
+			psNotDroid = getTileBlueprint(mouseTileX, mouseTileY);
+		}
 	}
 
 	if(psNotDroid!=NULL)
@@ -2786,7 +2795,7 @@ STRUCTURE	*psStructure;
 
 			if (aiCheckAlliances(psNotDroid->player, selectedPlayer))
 			{
-				if(psStructure->status == SS_BEING_BUILT)
+				if (psStructure->status == SS_BEING_BUILT || isBlueprint(psStructure))
 				{
 					retVal = MT_OWNSTRINCOMP;
 				}

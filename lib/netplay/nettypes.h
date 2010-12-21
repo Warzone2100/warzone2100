@@ -26,11 +26,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/vector.h"
-
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
+#include "lib/netplay/netqueue.h"
 
 typedef enum packetDirectionEnum
 {
@@ -55,22 +51,15 @@ typedef struct _netqueue
 	uint8_t queueType;
 } NETQUEUE;
 
-typedef const struct NetMessage *NETMESSAGE;
-
 NETQUEUE NETnetTmpQueue(unsigned tmpPlayer);  ///< One of the temp queues from before a client has joined the game. (See comments on tmpQueues in nettypes.cpp.)
 NETQUEUE NETnetQueue(unsigned player);        ///< The queue pair used for sending and receiving data directly from another client. (See comments on netQueues in nettypes.cpp.)
 NETQUEUE NETgameQueue(unsigned player);       ///< The game action queue. (See comments on gameQueues in nettypes.cpp.)
 NETQUEUE NETbroadcastQueue(void);             ///< The queue for sending data directly to the netQueues of all clients, not just a specific one. (See comments on broadcastQueue in nettypes.cpp.)
 
 void NETinsertRawData(NETQUEUE queue, uint8_t *data, size_t dataLen);  ///< Dump raw data from sockets and raw data sent via host here.
-void NETinsertMessageFromNet(NETQUEUE queue, NETMESSAGE message);      ///< Dump whole NetMessages into the queue.
+void NETinsertMessageFromNet(NETQUEUE queue, NetMessage const *message);     ///< Dump whole NetMessages into the queue.
 BOOL NETisMessageReady(NETQUEUE queue);       ///< Returns true if there is a complete message ready to deserialise in this queue.
-NETMESSAGE NETgetMessage(NETQUEUE queue);     ///< Returns the current message in the queue which is ready to be deserialised. Do not delete the message.
-uint8_t NETmessageType(NETMESSAGE message);   ///< Returns the type of the message.
-uint32_t NETmessageSize(NETMESSAGE message);  ///< Returns the size of the message data.
-uint8_t *NETmessageRawData(NETMESSAGE message);///<Returns the raw data, must be deleted again with NETmessageDestroyRawData().
-void NETmessageDestroyRawData(uint8_t *data); ///< Destroys the data returned by NETmessageRawData().
-size_t NETmessageRawSize(NETMESSAGE message); ///< Returns the size of the message, including headers.
+NetMessage const *NETgetMessage(NETQUEUE queue);///< Returns the current message in the queue which is ready to be deserialised. Do not delete the message.
 
 void NETinitQueue(NETQUEUE queue);             ///< Allocates the queue. Deletes the old queue, if there was one. Avoids a crash on NULL pointer deference when trying to use the queue.
 void NETsetNoSendOverNetwork(NETQUEUE queue);  ///< Used to mark that a game queue should not be sent over the network (for example, if it is being sent to us, instead).
@@ -92,13 +81,11 @@ void NETuint32_tLarge(uint32_t *ip);  ///< Encodes all values in exactly 4 bytes
 void NETint64_t(int64_t *ip);
 void NETuint64_t(uint64_t *ip);
 void NETbool(BOOL *bp);
+void NETbool(bool *bp);
 void NETstring(char *str, uint16_t maxlen);
 void NETbin(uint8_t *str, uint32_t maxlen);
 
 PACKETDIR NETgetPacketDir(void);
-
-#if defined(__cplusplus)
-}
 
 template <typename EnumT>
 static void NETenum(EnumT* enumPtr)
@@ -114,50 +101,24 @@ static void NETenum(EnumT* enumPtr)
 		*enumPtr = static_cast<EnumT>(val);
 }
 
-extern "C"
-{
-#else
-// FIXME: Somehow still causes tons of warnings: <enumPtr> is used unitialised in this function
-static inline void squelchUninitialisedUseWarning(void *ptr) { (void)ptr; }
-#define NETenum(enumPtr) \
-do \
-{ \
-	uint32_t _val; \
-	squelchUninitialisedUseWarning(enumPtr); \
-	_val = (NETgetPacketDir() == PACKET_ENCODE) ? *(enumPtr) : 0; \
-\
-	NETuint32_t(&_val); \
-\
-	*(enumPtr) = _val; \
-} while(0)
-#endif
-
 void NETPosition(Position *vp);
 void NETRotation(Rotation *vp);
 
-typedef struct PackagedCheck
-{
-	uint32_t gameTime;  ///< Game time that this synch check was made. Not touched by NETPACKAGED_CHECK().
-	uint8_t player;
-	uint32_t droidID;
-	int32_t order;
-	uint32_t secondaryOrder;
-	uint32_t body;
-	uint32_t experience;
-	Position pos;
-	Rotation rot;
-	uint32_t targetID;  ///< Defined iff order == DORDER_ATTACK.
-	uint16_t orderX;    ///< Defined iff order == DORDER_MOVE.
-	uint16_t orderY;    ///< Defined iff order == DORDER_MOVE.
-} PACKAGED_CHECK;
-void NETPACKAGED_CHECK(PACKAGED_CHECK *v);
-void NETNETMESSAGE(NETMESSAGE *message);  ///< If decoding, must destroy the NETMESSAGE.
-void NETdestroyNETMESSAGE(NETMESSAGE message);
+static inline void NETauto(int8_t *ip)    { NETint8_t(ip); }
+static inline void NETauto(uint8_t *ip)   { NETuint8_t(ip); }
+static inline void NETauto(int16_t *ip)   { NETint16_t(ip); }
+static inline void NETauto(uint16_t *ip)  { NETuint16_t(ip); }
+static inline void NETauto(int32_t *ip)   { NETint32_t(ip); }
+static inline void NETauto(uint32_t *ip)  { NETuint32_t(ip); }
+static inline void NETauto(int64_t *ip)   { NETint64_t(ip); }
+static inline void NETauto(uint64_t *ip)  { NETuint64_t(ip); }
+static inline void NETauto(bool *bp)      { NETbool(bp); }
+static inline void NETauto(Position *vp)  { NETPosition(vp); }
+static inline void NETauto(Rotation *vp)  { NETRotation(vp); }
+
+
+void NETnetMessage(NetMessage const **message);  ///< If decoding, must delete the NETMESSAGE.
 
 void NETtest(void);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif

@@ -2197,6 +2197,7 @@ void orderDroidObj(DROID *psDroid, DROID_ORDER order, BASE_OBJECT *psObj, QUEUE_
 
 	ASSERT(psDroid != NULL, "Invalid unit pointer");
 	ASSERT(validOrderForObj(order), "Invalid order for object");
+	ASSERT(!isBlueprint(psObj), "Target is a blueprint");
 
 	if (mode == ModeQueue && bMultiPlayer) //ajl
 	{
@@ -2324,7 +2325,7 @@ void orderDroidStatsLocDir(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStat
 }
 
 /* add an order with a location and a stat to the droids order list*/
-void orderDroidStatsLocDirAdd(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStats, UDWORD x, UDWORD y, uint16_t direction)
+void orderDroidStatsLocDirAdd(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStats, UDWORD x, UDWORD y, uint16_t direction, bool add)
 {
 	ASSERT(psDroid != NULL, "Invalid unit pointer");
 
@@ -2334,7 +2335,7 @@ void orderDroidStatsLocDirAdd(DROID *psDroid, DROID_ORDER order, BASE_STATS *psS
 		return;
 	}
 
-	sendDroidInfo(psDroid, order, x, y, NULL, psStats, 0, 0, direction,  true);
+	sendDroidInfo(psDroid, order, x, y, NULL, psStats, 0, 0, direction,  add);
 }
 
 
@@ -2635,7 +2636,7 @@ void orderCheckList(DROID *psDroid)
 
 
 // add a location order to a droids order list
-static BOOL orderDroidLocAdd(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD y)
+static bool orderDroidLocAdd(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD y, bool add = true)
 {
 	// can only queue move, scout, and disembark orders
 	if (order != DORDER_MOVE && order != DORDER_SCOUT && order != DORDER_DISEMBARK)
@@ -2643,7 +2644,7 @@ static BOOL orderDroidLocAdd(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD
 		return false;
 	}
 
-	sendDroidInfo(psDroid,  order,  x, y, NULL, NULL, 0, 0, 0,  true);
+	sendDroidInfo(psDroid,  order,  x, y, NULL, NULL, 0, 0, 0,  add);
 
 	return true;
 }
@@ -2652,6 +2653,8 @@ static BOOL orderDroidLocAdd(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD
 // add an object order to a droids order list
 static BOOL orderDroidObjAdd(DROID *psDroid, DROID_ORDER order, BASE_OBJECT *psObj[DROID_MAXWEAPS])
 {
+	ASSERT(!isBlueprint(psObj[0]), "Target is a blueprint");
+
 	// check can queue the order
 	if (order != DORDER_ATTACK &&
 		order != DORDER_REPAIR &&
@@ -3098,6 +3101,21 @@ void orderSelectedObjAdd(UDWORD player, BASE_OBJECT *psObj, BOOL add)
 	{
 		if (psCurr->selected)
 		{
+			if (isBlueprint(psObj))
+			{
+				if (isConstructionDroid(psCurr))
+				{
+					// Help build the planned structure.
+					orderDroidStatsLocDirAdd(psCurr, DORDER_BUILD, castStructure(psObj)->pStructureType, psObj->pos.x, psObj->pos.y, castStructure(psObj)->rot.direction, add);
+				}
+				else
+				{
+					// Help watch the structure being built.
+					orderDroidLocAdd(psCurr, DORDER_MOVE, psObj->pos.x, psObj->pos.y, add);
+				}
+				continue;
+			}
+
 			order = chooseOrderObj(psCurr, psObj, (keyDown(KEY_LALT) || keyDown(KEY_RALT)));
 			if (order == DORDER_DEMOLISH && player == selectedPlayer)
 			{

@@ -307,13 +307,13 @@ static void proj_UpdateKills(PROJECTILE *psObj, int32_t experienceInc)
 
 void _syncDebugProjectile(const char *function, PROJECTILE *psProj, char ch)
 {
-	_syncDebug(function, "%c projectile = p%d;pos(%d,%d,%d),rot(%d,%d,%d),state%d,edc%d,nd%zd", ch,
+	_syncDebug(function, "%c projectile = p%d;pos(%d,%d,%d),rot(%d,%d,%d),state%d,edc%d,nd%lu", ch,
 	          psProj->player,
 	          psProj->pos.x, psProj->pos.y, psProj->pos.z,
 	          psProj->rot.direction, psProj->rot.pitch, psProj->rot.roll,
 	          psProj->state,
 	          psProj->expectedDamageCaused,
-	          psProj->psDamaged.size());
+	          (unsigned long)psProj->psDamaged.size());
 }
 
 static int32_t randomVariation(int32_t val)

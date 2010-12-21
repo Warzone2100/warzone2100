@@ -312,7 +312,7 @@ static EFFECT *Effect_malloc(void)
 		/* Allocate new effect chunk */
 		EffectChunk *chunk = (EffectChunk *)calloc(1, sizeof(EffectChunk));
 
-		debug(LOG_MEMORY, "%zd effects in use, allocating %d extra", activeList.num, EFFECT_CHUNK_SIZE);
+		debug(LOG_MEMORY, "%lu effects in use, allocating %d extra", (unsigned long)activeList.num, EFFECT_CHUNK_SIZE);
 
 		/* Deal with out-of-memory conditions */
 		if (chunk == NULL) {
@@ -1251,7 +1251,7 @@ static void updateDestruction(EFFECT *psEffect)
 	UDWORD	widthScatter = 0, breadthScatter = 0, heightScatter = 0;
 	SDWORD	iX, iY;
 	LIGHT	light;
-	UDWORD	percent;
+	int     percent;
 	UDWORD	range;
 	float	div;
 	UDWORD	height;

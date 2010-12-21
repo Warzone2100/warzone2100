@@ -436,27 +436,14 @@ UDWORD	percent;
 
 static UDWORD calcDistToTile(UDWORD tileX, UDWORD tileY, Vector3i *pos)
 {
-	UDWORD	x1,y1,z1;
-	UDWORD	x2,y2,z2;
-	UDWORD	xDif,yDif,zDif;
-	UDWORD	total;
+	int x1, y1, z1;
 
 	/* The coordinates of the tile corner */
 	x1 = tileX * TILE_UNITS;
 	y1 = map_TileHeight(tileX,tileY);
 	z1 = tileY * TILE_UNITS;
 
-	/* The coordinates of the position */
-	x2 = pos->x;
-	y2 = pos->y;
-	z2 = pos->z;
-
-	xDif = abs(x1-x2);
-	yDif = abs(y1-y2);
-	zDif = abs(z1-z2);
-
-	total = (xDif*xDif) + (yDif*yDif) + (zDif*zDif);
-	return (UDWORD)sqrtf(total);
+	return iHypot3(x1 - pos->x, y1 - pos->y, z1 - pos->z);
 }
 
 // FIXME: Is the percent variable misnamed here, or is the code wrong? Because we do

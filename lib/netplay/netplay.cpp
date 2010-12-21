@@ -34,6 +34,7 @@
 #include <time.h>			// for stats
 #include <physfs.h>
 #include <string.h>
+#include <memory>
 
 #if defined(WZ_OS_WIN)
 # include <winsock2.h>	// for sockets
@@ -249,7 +250,7 @@ static size_t NET_fillBuffer(Socket **pSocket, SocketSet* socket_set, uint8_t *b
 
 		if (size > bufsize)
 		{
-			debug(LOG_ERROR, "Fatal connection error: buffer size of (%d) was too small, current byte count was %zd", bufsize, size);
+			debug(LOG_ERROR, "Fatal connection error: buffer size of (%d) was too small, current byte count was %ld", bufsize, (long)size);
 			NETlogEntry("Fatal connection error: buffer size was too small!", SYNC_FLAG, selectedPlayer);
 		}
 		if (tcp_socket == socket)
@@ -1220,7 +1221,7 @@ UDWORD NETgetPacketsRecvd(void)
 
 // ////////////////////////////////////////////////////////////////////////
 // Send a message to a player, option to guarantee message
-BOOL NETsend(uint8_t player, NETMESSAGE message)
+bool NETsend(uint8_t player, NetMessage const *message)
 {
 	ssize_t result = 0;
 
@@ -1240,10 +1241,10 @@ BOOL NETsend(uint8_t player, NETMESSAGE message)
 			// We are the host, send directly to player.
 			if (connected_bsocket[player] != NULL)
 			{
-				uint8_t *rawData = NETmessageRawData(message);
-				size_t rawLen    = NETmessageRawSize(message);
+				uint8_t *rawData = message->rawDataDup();
+				ssize_t rawLen   = message->rawLen();
 				result = writeAll(connected_bsocket[player], rawData, rawLen);
-				NETmessageDestroyRawData(rawData);  // Done with the data.
+				delete[] rawData;  // Done with the data.
 
 				if (result == rawLen)
 				{
@@ -1266,10 +1267,10 @@ BOOL NETsend(uint8_t player, NETMESSAGE message)
 		// We are a client, send directly to player, who happens to be the host.
 		if (tcp_socket)
 		{
-			uint8_t *rawData = NETmessageRawData(message);
-			size_t rawLen    = NETmessageRawSize(message);
+			uint8_t *rawData = message->rawDataDup();
+			ssize_t rawLen   = message->rawLen();
 			result = writeAll(tcp_socket, rawData, rawLen);
-			NETmessageDestroyRawData(rawData);  // Done with the data.
+			delete[] rawData;  // Done with the data.
 
 			if (result == rawLen)
 			{
@@ -1300,7 +1301,7 @@ BOOL NETsend(uint8_t player, NETMESSAGE message)
 		NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_SEND_TO_PLAYER);
 			NETuint8_t(&sender);
 			NETuint8_t(&player);
-			NETNETMESSAGE(&message);
+			NETnetMessage(&message);
 		NETend();
 	}
 
@@ -1347,15 +1348,15 @@ static BOOL NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 		{
 			uint8_t sender;
 			uint8_t receiver;
-			NETMESSAGE message = NULL;
+			NetMessage const *message = NULL;
 			NETbeginDecode(playerQueue, NET_SEND_TO_PLAYER);
 				NETuint8_t(&sender);
 				NETuint8_t(&receiver);
-				NETNETMESSAGE(&message);  // Must destroy message later.
+				NETnetMessage(&message);  // Must delete message later.
+				std::auto_ptr<NetMessage const> deleteLater(message);
 			if (!NETend())
 			{
 				debug(LOG_ERROR, "Incomplete NET_SEND_TO_PLAYER.");
-				NETdestroyNETMESSAGE(message);
 				break;
 			}
 			if ((receiver == selectedPlayer || receiver == NET_ALL_PLAYERS) && playerQueue.index == NetPlay.hostPlayer)
@@ -1372,7 +1373,7 @@ static BOOL NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 				NETbeginEncode(NETnetQueue(receiver), NET_SEND_TO_PLAYER);
 					NETuint8_t(&sender);
 					NETuint8_t(&receiver);
-					NETNETMESSAGE(&message);
+					NETnetMessage(&message);
 				NETend();
 
 				if (receiver == NET_ALL_PLAYERS)
@@ -1387,14 +1388,13 @@ static BOOL NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 				debug(LOG_ERROR, "Player %d sent us a NET_SEND_TO_PLAYER addressed to %d from %d. We are %d.", playerQueue.index, receiver, sender, selectedPlayer);
 			}
 
-			NETdestroyNETMESSAGE(message);
 			break;
 		}
 		case NET_SHARE_GAME_QUEUE:
 		{
 			uint8_t player = 0;
 			uint32_t num = 0, n;
-			NETMESSAGE message = NULL;
+			NetMessage const *message = NULL;
 
 			// Encoded in NETprocessSystemMessage in nettypes.cpp.
 			NETbeginDecode(playerQueue, NET_SHARE_GAME_QUEUE);
@@ -1402,12 +1402,12 @@ static BOOL NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 				NETuint32_t(&num);
 				for (n = 0; n < num; ++n)
 				{
-					NETNETMESSAGE(&message);
+					NETnetMessage(&message);
 
 					// TODO Check that playerQueue is actually responsible for this game queue.
 					NETinsertMessageFromNet(NETgameQueue(player), message);
 
-					NETdestroyNETMESSAGE(message);
+					delete message;
 					message = NULL;
 				}
 			if (!NETend() || player > MAX_PLAYERS)
@@ -1711,7 +1711,7 @@ checkMessages:
 		*queue = NETnetQueue(current);
 		while (NETisMessageReady(*queue))
 		{
-			*type = NETmessageType(NETgetMessage(*queue));
+			*type = NETgetMessage(*queue)->type;
 			if (!NETprocessSystemMessage(*queue, *type))
 			{
 				return true;  // We couldn't process the message, let the caller deal with it..
@@ -1732,7 +1732,7 @@ BOOL NETrecvGame(NETQUEUE *queue, uint8_t *type)
 		*queue = NETgameQueue(current);
 		while (!checkPlayerGameTime(current) && NETisMessageReady(*queue))  // Check for any messages that are scheduled to be read now.
 		{
-			*type = NETmessageType(NETgetMessage(*queue));
+			*type = NETgetMessage(*queue)->type;
 
 			if (*type == GAME_GAME_TIME)
 			{
@@ -2254,7 +2254,7 @@ static void NETallowJoining(void)
 
 				NETinsertRawData(NETnetTmpQueue(i), buffer, size);
 
-				if (NETisMessageReady(NETnetTmpQueue(i)) && NETmessageType(NETgetMessage(NETnetTmpQueue(i))) == NET_JOIN)
+				if (NETisMessageReady(NETnetTmpQueue(i)) && NETgetMessage(NETnetTmpQueue(i))->type == NET_JOIN)
 				{
 					uint8_t j;
 					uint8_t index;
@@ -2322,7 +2322,7 @@ static void NETallowJoining(void)
 						// Wrong password. Reject.
 						rejected = (uint8_t)ERROR_WRONGPASSWORD;
 					}
-					else if (NetPlay.playercount > gamestruct.desc.dwMaxPlayers)
+					else if ((int)NetPlay.playercount > gamestruct.desc.dwMaxPlayers)
 					{
 						// Game full. Reject.
 						rejected = (uint8_t)ERROR_FULL;

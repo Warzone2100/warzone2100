@@ -92,10 +92,10 @@ extern UDWORD scroll_speed_accel;			// now user modifyable.
 
 struct	_dragBox
 {
-UDWORD	x1;
-UDWORD	y1;
-UDWORD	x2;
-UDWORD	y2;
+	int x1;
+	int y1;
+	int x2;
+	int y2;
 UDWORD	status;
 UDWORD	lastTime;
 UDWORD	pulse;

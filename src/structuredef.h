@@ -140,7 +140,7 @@ struct STRUCTURE_STATS : public BASE_STATS
 	struct FUNCTION **asFuncList;           ///< List of pointers to allowable functions - unalterable
 };
 
-typedef enum _struct_states
+enum STRUCT_STATES
 {
 	SS_BEING_BUILT,
 	SS_BUILT,
@@ -148,7 +148,7 @@ typedef enum _struct_states
 	SS_BLUEPRINT_VALID,
 	SS_BLUEPRINT_INVALID,
 	SS_BLUEPRINT_PLANNED,
-} STRUCT_STATES;
+};
 
 typedef struct _research_facility
 {

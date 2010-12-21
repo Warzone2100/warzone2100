@@ -31,11 +31,6 @@
 #include "stats.h"
 #include "visibility.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 #define OFF_SCREEN 9999		// world->screen check - alex
 
 #define REPAIRLEV_LOW	50	// percentage of body points remaining at which to repair droid automatically.
@@ -48,8 +43,6 @@ extern "C"
 //storage
 extern DROID_TEMPLATE			*apsDroidTemplates[MAX_PLAYERS];
 extern DROID_TEMPLATE			*apsStaticTemplates;			// for AIs and scripts
-
-extern bool runningMultiplayer(void);
 
 //used to stop structures being built too near the edge and droids being placed down - pickATile
 #define TOO_NEAR_EDGE	3
@@ -390,6 +383,9 @@ extern BOOL droidAudioTrackStopped( void *psObj );
 /*returns true if droid type is one of the Cyborg types*/
 extern BOOL cyborgDroid(const DROID* psDroid);
 
+bool isConstructionDroid(DROID const *psDroid);
+bool isConstructionDroid(BASE_OBJECT const *psObject);
+
 // check for illegal references to droid we want to release
 BOOL droidCheckReferences(DROID *psVictimDroid);
 
@@ -566,8 +562,13 @@ void cancelBuild(DROID *psDroid);
 #define syncDebugDroid(psDroid, ch) _syncDebugDroid(__FUNCTION__, psDroid, ch)
 void _syncDebugDroid(const char *function, DROID *psDroid, char ch);
 
-#ifdef __cplusplus
-}
-#endif //__cplusplus
+
+// True iff object is a droid.
+static inline bool isDroid(BASE_OBJECT const *psObject)           { return psObject->type == OBJ_DROID; }
+// Returns DROID * if droid or NULL if not.
+static inline DROID *castDroid(BASE_OBJECT *psObject)             { return isDroid(psObject)? (DROID *)psObject : (DROID *)NULL; }
+// Returns DROID const * if droid or NULL if not.
+static inline DROID const *castDroid(BASE_OBJECT const *psObject) { return isDroid(psObject)? (DROID const *)psObject : (DROID const *)NULL; }
+
 
 #endif // __INCLUDED_SRC_DROID_H__

@@ -251,11 +251,16 @@ BOOL IsStatExpansionModule(STRUCTURE_STATS *psStats)
 		}
 }
 
-BOOL structureIsBlueprint(STRUCTURE *psStructure)
+bool structureIsBlueprint(STRUCTURE *psStructure)
 {
 	return (psStructure->status == SS_BLUEPRINT_VALID ||
 	        psStructure->status == SS_BLUEPRINT_INVALID ||
 	        psStructure->status == SS_BLUEPRINT_PLANNED);
+}
+
+bool isBlueprint(BASE_OBJECT *psObject)
+{
+	return psObject->type == OBJ_STRUCTURE && structureIsBlueprint((STRUCTURE *)psObject);
 }
 
 void structureInitVars(void)
@@ -1819,9 +1824,9 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		alignStructure(psBuilding);
 
 		// rotate a wall if necessary
-		if (!FromSave && (pStructureType->type == REF_WALL || pStructureType->type == REF_GATE ) && wallType == WALL_VERT)
+		if (!FromSave && (pStructureType->type == REF_WALL || pStructureType->type == REF_GATE))
 		{
-			psBuilding->rot.direction = DEG(90);
+			psBuilding->rot.direction = wallType == WALL_VERT? DEG(90) : DEG(0);
 		}
 
 		//set up the sensor stats
@@ -2768,7 +2773,7 @@ static BOOL structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 				for(psFlag = apsFlagPosLists[psFact->psAssemblyPoint->player];
 						!( (psFlag->factoryInc == psFact->psAssemblyPoint->factoryInc) // correct fact.
 						&&(psFlag->factoryType == factoryType)); // correct type
-					psFlag = psFlag->psNext);
+					psFlag = psFlag->psNext) {}
 
 				if (isVtolDroid(psNewDroid))
 				{
@@ -6127,6 +6132,11 @@ void printStructureInfo(STRUCTURE *psStructure)
 	POWER_GEN	*psPowerGen;
 
 	ASSERT_OR_RETURN( , psStructure != NULL, "Invalid Structure pointer");
+
+	if (isBlueprint(psStructure))
+	{
+		return;  // Don't print anything about imaginary structures. Would crash, anyway.
+	}
 
 	switch (psStructure->pStructureType->type)
 	{

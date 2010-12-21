@@ -30,10 +30,9 @@
 
 #include "types.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
+#include <string>
+#include <cstdlib>
+#include <QtCore/QString>
 
 /** Used to store a UTF-32 character in
  */
@@ -104,12 +103,5 @@ char *UTF32toUTF8(const utf_32_char *unicode_string, size_t *nbytes);
  *  \return a UTF-32 nul terminated string (use free() to deallocate it)
  */
 utf_32_char *UTF8toUTF32(const char *utf8_string, size_t *nbytes);
-
-/** Returns number of characters, not including terminating nul. */
-size_t utf32len(const utf_32_char *unicode_string);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDE_LIB_FRAMEWORK_UTF8_H__

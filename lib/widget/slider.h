@@ -31,9 +31,14 @@
 #define SLD_DRAG		0x0001		// Slider is being dragged
 #define SLD_HILITE		0x0002		// Slider is hilited
 
+/* Respond to a mouse click */
+void sliderClicked(struct W_SLIDER *psWidget, W_CONTEXT *psContext);
+
 struct W_SLIDER : public WIDGET
 {
 	W_SLIDER(W_SLDINIT const *init);
+
+	void clicked(W_CONTEXT *context, WIDGET_KEY) { sliderClicked(this, context); }
 
 	UWORD		orientation;		// The orientation of the slider
 	UWORD		numStops;			// Number of stop positions on the slider
@@ -54,9 +59,6 @@ extern void sliderInitialise(W_SLIDER *psWidget);
 
 /* Run a slider widget */
 extern void sliderRun(W_SLIDER *psWidget, W_CONTEXT *psContext);
-
-/* Respond to a mouse click */
-extern void sliderClicked(W_SLIDER *psWidget, W_CONTEXT *psContext);
 
 /* Respond to a mouse up */
 extern void sliderReleased(W_SLIDER *psWidget);

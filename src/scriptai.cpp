@@ -1535,8 +1535,7 @@ BOOL scrSkLocateEnemy(void)
 			|| psStruct->pStructureType->type == REF_CYBORG_FACTORY
 			|| psStruct->pStructureType->type == REF_VTOL_FACTORY
 			);
-		psStruct=psStruct->psNext);
-
+		psStruct = psStruct->psNext) {}
 
 	// set the x and y accordingly..
 	if(psStruct)

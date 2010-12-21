@@ -29,11 +29,6 @@
 #include "featuredef.h"
 #include "droid.h"  // For INITIAL_DROID_ORDERS.
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 // Game Options Structure. Enough info to completely describe the static stuff in amultiplay game.
 typedef struct {
@@ -84,6 +79,22 @@ typedef enum
 	STRUCTUREINFO_RELEASERESEARCH
 } STRUCTURE_INFO;
 
+struct PACKAGED_CHECK
+{
+	uint32_t gameTime;  ///< Game time that this synch check was made. Not touched by NETauto().
+	uint8_t player;
+	uint32_t droidID;
+	int32_t order;
+	uint32_t secondaryOrder;
+	uint32_t body;
+	uint32_t experience;
+	Position pos;
+	Rotation rot;
+	uint32_t targetID;  ///< Defined iff order == DORDER_ATTACK.
+	uint16_t orderX;    ///< Defined iff order == DORDER_MOVE.
+	uint16_t orderY;    ///< Defined iff order == DORDER_MOVE.
+};
+
 // ////////////////////////////////////////////////////////////////////////////
 // Game Options and stats.
 extern MULTIPLAYERGAME		game;						// the game description.
@@ -91,7 +102,6 @@ extern MULTIPLAYERINGAME	ingame;						// the game description.
 
 extern BOOL					bMultiPlayer;				// true when more than 1 player.
 extern BOOL					bMultiMessages;				// == bMultiPlayer unless multi messages are disabled
-extern UDWORD				selectedPlayer;
 extern BOOL					openchannels[MAX_PLAYERS];
 extern UBYTE				bDisplayMultiJoiningStatus;	// draw load progress?
 
@@ -235,9 +245,5 @@ extern	void startMultiplayerGame	(void);
 extern	void resetReadyStatus		(bool bSendOptions);
 
 extern	BOOL bPlayerReadyGUI[MAX_PLAYERS];
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_MULTIPLAY_H__

@@ -372,7 +372,7 @@ void NETinsertRawData(NETQUEUE queue, uint8_t *data, size_t dataLen)
 	receiveQueue(queue)->writeRawData(data, dataLen);
 }
 
-void NETinsertMessageFromNet(NETQUEUE queue, NETMESSAGE message)
+void NETinsertMessageFromNet(NETQUEUE queue, NetMessage const *message)
 {
 	receiveQueue(queue)->pushMessage(*message);
 }
@@ -382,36 +382,10 @@ BOOL NETisMessageReady(NETQUEUE queue)
 	return receiveQueue(queue)->haveMessage();
 }
 
-NETMESSAGE NETgetMessage(NETQUEUE queue)
+NetMessage const *NETgetMessage(NETQUEUE queue)
 {
 	return &receiveQueue(queue)->getMessage();
 }
-
-uint8_t NETmessageType(NETMESSAGE message)
-{
-	return message->type;
-}
-
-uint32_t NETmessageSize(NETMESSAGE message)
-{
-	return message->data.size();
-}
-
-uint8_t *NETmessageRawData(NETMESSAGE message)
-{
-	return message->rawDataDup();
-}
-
-void NETmessageDestroyRawData(uint8_t *data)
-{
-	delete[] data;
-}
-
-size_t NETmessageRawSize(NETMESSAGE message)
-{
-	return message->rawLen();
-}
-
 
 /*
  * Begin & End functions
@@ -606,6 +580,14 @@ void NETbool(BOOL *bp)
 	*bp = !!i;
 }
 
+void NETbool(bool *bp)
+{
+	uint8_t i = !!*bp;
+	queueAuto(i);
+	*bp = !!i;
+}
+
+
 /** Sends or receives a string to or from the current network package.
  *  \param str    When encoding a packet this is the (NUL-terminated string to
  *                be sent in the current network package. When decoding this
@@ -686,28 +668,7 @@ void NETRotation(Rotation *vp)
 	queueAuto(*vp);
 }
 
-void NETPACKAGED_CHECK(PACKAGED_CHECK *v)
-{
-	queueAuto(v->player);
-	queueAuto(v->droidID);
-	queueAuto(v->order);
-	queueAuto(v->secondaryOrder);
-	queueAuto(v->body);
-	queueAuto(v->experience);
-	queueAuto(v->pos);
-	queueAuto(v->rot);
-	if (v->order == DORDER_ATTACK)
-	{
-		queueAuto(v->targetID);
-	}
-	else if (v->order == DORDER_MOVE)
-	{
-		queueAuto(v->orderX);
-		queueAuto(v->orderY);
-	}
-}
-
-void NETNETMESSAGE(NETMESSAGE *message)
+void NETnetMessage(NetMessage const **message)
 {
 	if (NETgetPacketDir() == PACKET_ENCODE)
 	{
@@ -723,16 +684,11 @@ void NETNETMESSAGE(NETMESSAGE *message)
 	}
 }
 
-void NETdestroyNETMESSAGE(NETMESSAGE message)
-{
-	delete message;
-}
-
-typedef enum
+/*typedef enum
 {
 	test_a,
 	test_b,
-} test_enum;
+} test_enum;*/
 
 static void NETcoder(PACKETDIR dir)
 {

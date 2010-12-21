@@ -82,7 +82,7 @@ int vasprintf(char** strp, const char* format, va_list ap)
 	assert(strp != NULL);
 
 	// Allocate memory for our string
-	*strp = malloc(count + 1);
+	*strp = (char *)malloc(count + 1);
 	if (*strp == NULL)
 	{
 		debug(LOG_FATAL, "Out of memory!");

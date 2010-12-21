@@ -55,6 +55,7 @@
 #include "mission.h"
 #include "scores.h"
 #include "keymap.h"
+#include "keybind.h"
 #include "loop.h"
 #include "lib/framework/frameint.h"
 

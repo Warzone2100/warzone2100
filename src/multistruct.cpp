@@ -105,9 +105,7 @@ BOOL recvBuildFinished(NETQUEUE queue)
 	// The building wasn't started, so we'll have to just plonk it down in the map.
 
 	// Find the structures stats
-	for (typeindex=0;						// Find structure target
-		(typeindex<numStructureStats ) && (asStructureStats[typeindex].ref != type);
-		typeindex++);
+	for (typeindex = 0; typeindex < numStructureStats && asStructureStats[typeindex].ref != type; typeindex++) {}	// Find structure target
 
 	// Check for similar buildings, to avoid overlaps
 	if (TileHasStructure(mapTile(map_coord(pos.x), map_coord(pos.y))))

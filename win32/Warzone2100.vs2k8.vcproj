@@ -36,7 +36,7 @@
 				ExecutionBucket="2"
 				Defines="true"
 				NoGenLineDirectives="true"
-				OutputFile="$(SolutionDir)..\src\$(InputName).tab.c"
+				OutputFile="$(SolutionDir)..\src\$(InputName).tab.cpp"
 			/>
 			<Tool
 				Name="FlexGenerator"
@@ -135,7 +135,7 @@
 				Name="BisonParser"
 				ExecutionBucket="2"
 				Defines="true"
-				OutputFile="$(SolutionDir)..\src\$(InputName).tab.c"
+				OutputFile="$(SolutionDir)..\src\$(InputName).tab.cpp"
 			/>
 			<Tool
 				Name="FlexGenerator"
@@ -343,7 +343,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\formation.c"
+				RelativePath="..\src\formation.cpp"
 				>
 			</File>
 			<File
@@ -463,7 +463,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\message_parser.tab.c"
+				RelativePath="..\src\message_parser.tab.cpp"
 				>
 			</File>
 			<File
@@ -607,7 +607,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\scriptvals_parser.tab.c"
+				RelativePath="..\src\scriptvals_parser.tab.cpp"
 				>
 			</File>
 			<File
