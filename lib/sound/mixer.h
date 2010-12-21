@@ -24,20 +24,11 @@
 #include "lib/framework/frame.h"
 #include "audio.h"
 
-#if defined(__cplusplus)
-extern "C"
-{
-#endif
-
 float sound_GetMusicVolume(void);
 void  sound_SetMusicVolume(float volume);
 float sound_GetUIVolume(void );
 void  sound_SetUIVolume(float volume);
 float sound_GetEffectsVolume(void);
 void  sound_SetEffectsVolume(float volume);
-
-#if defined(__cplusplus)
-}
-#endif
 
 #endif // __INCLUDED_LIB_SOUND_MIXER_H__

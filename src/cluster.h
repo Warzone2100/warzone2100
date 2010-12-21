@@ -27,11 +27,6 @@
 #include "droiddef.h"
 #include "structuredef.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 // maximum number of clusters in a game
 #define CLUSTER_MAX		UBYTE_MAX
 
@@ -87,9 +82,5 @@ BASE_OBJECT *clustIterate(void);
 
 // reset the visibility for all clusters for a particular player
 void clustResetVisibility(SDWORD player);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_CLUSTER_H__

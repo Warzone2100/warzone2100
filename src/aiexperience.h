@@ -20,11 +20,6 @@
 #ifndef __INCLUDED_SRC_AIEXPERIENCE_H__
 #define __INCLUDED_SRC_AIEXPERIENCE_H__
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 #define	MAX_OIL_DEFEND_LOCATIONS	100		//max number of attack locations to store
 #define	MAX_BASE_DEFEND_LOCATIONS	30		//max number of base locations to store
 
@@ -56,9 +51,5 @@ bool CanRememberPlayerOilDefenseLoc(SDWORD player, SDWORD index);
 
 void BaseExperienceDebug(SDWORD nPlayer);
 void OilExperienceDebug(SDWORD nPlayer);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_AIEXPERIENCE_H__

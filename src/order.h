@@ -29,11 +29,6 @@
 #include "droiddef.h"
 #include "structuredef.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 extern RUN_DATA asRunData[MAX_PLAYERS]; // retreat positions for the players
 extern void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder);
 
@@ -151,9 +146,5 @@ extern DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x,UDWORD y, BOOL altOrd
 extern DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, BOOL altOrder);
 
 extern void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_ORDER_H__

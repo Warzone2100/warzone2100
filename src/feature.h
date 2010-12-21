@@ -26,11 +26,6 @@
 
 #include "objectdef.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 /* The statistics for the features */
 extern FEATURE_STATS	*asFeatureStats;
 extern UDWORD			numFeatureStats;
@@ -69,9 +64,5 @@ extern void     featureInitVars(void);
 
 #define syncDebugFeature(psFeature, ch) _syncDebugFeature(__FUNCTION__, psFeature, ch)
 void _syncDebugFeature(const char *function, FEATURE *psFeature, char ch);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_FEATURE_H__

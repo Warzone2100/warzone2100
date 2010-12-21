@@ -29,11 +29,6 @@
 #include "basedef.h"
 #include <physfs.h>
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 // The possible types of initialisation values
 typedef enum _init_type
 {
@@ -114,9 +109,5 @@ extern BOOL scrvLoad(PHYSFS_file* fileHandle);
 
 // Link any object types to the actual pointer values
 //extern BOOL scrvLinkValues(void);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_SCRIPTVALS_H__

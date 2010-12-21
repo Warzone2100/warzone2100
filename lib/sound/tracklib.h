@@ -28,11 +28,6 @@
 #include "track.h"
 #include "lib/framework/vector.h"
 
-#if defined(__cplusplus)
-extern "C"
-{
-#endif
-
 BOOL	sound_InitLibrary( void );
 void	sound_ShutdownLibrary( void );
 
@@ -72,9 +67,5 @@ void	sound_Update( void );
 unsigned int sound_GetActiveSamplesCount(void);
 
 UDWORD	sound_GetGameTime( void );
-
-#if defined(__cplusplus)
-}
-#endif
 
 #endif	// __INCLUDED_LIB_SOUND_TRACKLIB_H__

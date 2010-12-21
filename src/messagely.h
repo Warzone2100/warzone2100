@@ -23,11 +23,6 @@
 
 #include "lib/framework/lexer_input.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 extern int message_parse(void* ppsViewData);
 extern void message_set_extra(YY_EXTRA_TYPE user_defined);
 extern int message_lex_destroy(void);
@@ -37,9 +32,5 @@ extern int message_get_lineno(void);
 extern char* message_get_text(void);
 
 extern void message_error(const char* msg);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_MESSAGELY_H__

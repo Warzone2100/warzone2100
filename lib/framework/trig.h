@@ -28,11 +28,6 @@
 
 #include "frame.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 /* Initialise the Trig tables */
 extern bool trigInitialise(void);
 
@@ -54,9 +49,5 @@ static inline WZ_DECL_CONST int32_t angleDelta(int32_t a)
 {
 	return (int16_t)a;  // Cast wrapping intended.
 }
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif

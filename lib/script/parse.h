@@ -29,11 +29,6 @@
 
 #include "interpreter.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 #ifndef MAXSTRLEN
 #define MAXSTRLEN 255
 #endif
@@ -365,9 +360,5 @@ extern BOOL popArguments(INTERP_VAL **ip_temp, SDWORD numParams);
 extern void widgCopyString(char *pDest, const char *pSrc); // FIXME Duplicate declaration of internal widget function
 
 extern void script_debug(const char *pFormat, ...);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif

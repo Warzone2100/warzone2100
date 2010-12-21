@@ -24,11 +24,6 @@
 #ifndef __INCLUDED_SRC_CONFIGURATION_H__
 #define __INCLUDED_SRC_CONFIGURATION_H__
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 BOOL loadConfig(void);
 BOOL loadRenderMode(void);
 BOOL saveConfig(void);
@@ -38,9 +33,5 @@ void setDefaultFrameRateLimit(void);
 
 /// Default map for Skirmish
 static const char DEFAULTSKIRMISHMAP[] = "Sk-Rush";
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_CONFIGURATION_H__

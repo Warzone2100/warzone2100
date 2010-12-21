@@ -26,11 +26,6 @@
 
 #include "lib/framework/frame.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 /***************************************************************************/
 /*
  *	Global Definitions
@@ -91,9 +86,5 @@ void war_setSoundEnabled( BOOL soundEnabled );
  * \return	Enable sound (or not)
  */
 BOOL war_getSoundEnabled( void );
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_WARZONECONFIG_H__

@@ -23,11 +23,6 @@
 
 #include "lib/ivis_common/pietypes.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 bool initTerrain(void);
 void shutdownTerrain(void);
 
@@ -38,9 +33,5 @@ PIELIGHT getTileColour(int x, int y);
 void setTileColour(int x, int y, PIELIGHT colour);
 
 void markTileDirty(int i, int j);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif

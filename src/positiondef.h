@@ -26,11 +26,6 @@
 
 #include "lib/framework/frame.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 typedef enum POSITION_TYPE
 {
 	POS_DELIVERY,		//Delivery Points NOT wayPoints
@@ -52,9 +47,5 @@ typedef struct _object_position
 {
 	POSITION_OBJ;
 } OBJECT_POSITION;
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_POSITIONDEF_H__

@@ -26,11 +26,6 @@
 
 #include "statsdef.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 /* Shutdown the mechanics system */
 bool mechanicsShutdown(void);
 
@@ -48,9 +43,5 @@ void freeStructureLists(void);
 
 //TEST FUNCTION - MAKE EVERYTHING AVAILABLE
 void makeAllAvailable(void);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_MECHANICS_H__

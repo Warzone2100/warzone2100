@@ -24,16 +24,7 @@
 #ifndef __INCLUDED_SRC_OPRINT_H__
 #define __INCLUDED_SRC_OPRINT_H__
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 // print out information about a droid and it's components
 extern void printDroidInfo(const DROID* psDroid);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_OPRINT_H__

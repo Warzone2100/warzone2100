@@ -26,11 +26,6 @@
 
 #include "objectdef.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 //holder for all functions
 extern FUNCTION **asFunctions;
 extern UDWORD numFunctions;
@@ -67,9 +62,5 @@ extern void upgradeTransporterDroids(DROID *psTransporter,
                               void(*pUpgradeFunction)(DROID *psDroid));
 
 extern BOOL FunctionShutDown(void);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_FUNCTION_H__

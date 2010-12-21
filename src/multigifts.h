@@ -24,11 +24,6 @@
 #ifndef __INCLUDED_SRC_MULTIGIFTS_H__
 #define __INCLUDED_SRC_MULTIGIFTS_H__
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 extern void requestAlliance		(uint8_t from, uint8_t to, BOOL prop, BOOL allowAudio);
 extern void breakAlliance		(uint8_t p1, uint8_t p2, BOOL prop, BOOL allowAudio);
 extern void formAlliance		(uint8_t p1, uint8_t p2, BOOL prop, BOOL allowAudio, BOOL allowNotification);
@@ -55,9 +50,5 @@ extern void giftRadar						(uint8_t from, uint8_t to, BOOL send);
 #define RESEARCH_GIFT	3
 #define POWER_GIFT		4
 #define STRUCTURE_GIFT	5	// Unused
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_MULTIGIFTS_H__

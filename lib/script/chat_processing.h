@@ -28,11 +28,6 @@
 #include "lib/framework/frame.h"
 #include "script.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 #ifndef MAXSTRLEN
 #define MAXSTRLEN 255
 #endif
@@ -73,9 +68,5 @@ extern void chatSetInputBuffer(char *pBuffer, UDWORD size);
 
 // Load message
 extern BOOL chatLoad(char *pData, UDWORD size);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif

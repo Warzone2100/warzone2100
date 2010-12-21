@@ -29,11 +29,6 @@
 #include "positiondef.h"
 #include "stringdef.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 /// max number of text strings or sequences for VIEWDATA
 static const unsigned int MAX_DATA = 4;
 
@@ -167,9 +162,5 @@ typedef struct _viewData_list
 	UBYTE					numViewData;	//number in array
 	struct _viewData_list	*psNext;		//next array of data
 } VIEWDATA_LIST;
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_MESSAGEDEF_H__

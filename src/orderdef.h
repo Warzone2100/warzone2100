@@ -28,11 +28,6 @@
 
 #include "basedef.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 // The droid orders
 typedef enum _droid_order
 {
@@ -162,9 +157,5 @@ typedef struct _droid_order_data
 	BASE_OBJECT		*psObj;
 	BASE_STATS		*psStats;
 } DROID_ORDER_DATA;
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_ORDERDEF_H__

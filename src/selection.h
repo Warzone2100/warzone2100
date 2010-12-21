@@ -21,11 +21,6 @@
 #ifndef __INCLUDED_SRC_SELECTION_H__
 #define __INCLUDED_SRC_SELECTION_H__
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 typedef enum _selection_class
 {
 DS_ALL_UNITS,
@@ -56,9 +51,5 @@ extern void	selNextSpecifiedBuilding	( UDWORD structType );
 extern	void	selNextSpecifiedUnit	(UDWORD unitType);
 // select the n'th command droid
 extern void selCommander(SDWORD n);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_SELECTION_H__

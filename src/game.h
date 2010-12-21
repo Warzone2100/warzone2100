@@ -31,11 +31,6 @@
 
 #include "lib/framework/vector.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 /***************************************************************************/
 /*
  *	Global Definitions
@@ -146,9 +141,5 @@ extern void game_SetValidityKey(UDWORD keys);
 extern UDWORD getSaveGameType(void);
 
 BOOL plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[]);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_GAME_H__

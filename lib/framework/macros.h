@@ -23,11 +23,6 @@
 #ifndef MACROS_H
 #define MACROS_H
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
 
@@ -56,9 +51,5 @@ extern "C"
 #define TOSTRING(x) MACROS_H_STRINGIFY(x)
 
 #define AT_MACRO __FILE__ ":" TOSTRING(__LINE__)
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // MACROS_H

@@ -21,11 +21,6 @@
 #ifndef __INCLUDED_SRC_ANIM_ID_H__
 #define __INCLUDED_SRC_ANIM_ID_H__
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 #define	ID_ANIM_DROIDWALK				 0
 #define	ID_ANIM_DROIDFIRE				 1
 #define	ID_ANIM_DROIDRUN				 2
@@ -37,9 +32,5 @@ extern "C"
 #define	ID_ANIM_CYBORG_PACK_LAND		 8
 #define	ID_ANIM_CYBORG_PACK_RUN			 9
 #define	ID_ANIM_SUPERCYBORG_RUN			10
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_ANIM_ID_H__

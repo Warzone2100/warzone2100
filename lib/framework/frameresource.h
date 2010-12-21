@@ -26,11 +26,6 @@
 
 #include "lib/framework/frame.h"
 
-#if defined(__cplusplus)
-extern "C"
-{
-#endif
-
 /** Maximum number of characters in a resource type. */
 #define RESTYPE_MAXCHAR		20
 
@@ -142,9 +137,5 @@ const char *GetLastResourceFilename(void) WZ_DECL_PURE;
 
 /** Set the resource name of the last resource file loaded. */
 void SetLastResourceFilename(const char *pName);
-
-#if defined(__cplusplus)
-}
-#endif
 
 #endif // _frameresource_h

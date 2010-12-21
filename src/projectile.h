@@ -24,11 +24,6 @@
 #include "projectiledef.h"
 #include "weapondef.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 /**
  *	@file projectile.h
  *	Projectile types and function headers
@@ -108,9 +103,5 @@ void checkProjectile(const PROJECTILE* psProjectile, const char * const location
 
 #define syncDebugProjectile(psProj, ch) _syncDebugProjectile(__FUNCTION__, psProj, ch)
 void _syncDebugProjectile(const char *function, PROJECTILE *psProj, char ch);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_PROJECTILE_H__

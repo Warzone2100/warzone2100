@@ -20,15 +20,6 @@
 #ifndef STRINGDEF_H
 #define STRINGDEF_H
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 #define MAX_STR_LENGTH 256
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif

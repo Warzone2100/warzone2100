@@ -28,11 +28,6 @@
 #include "objectdef.h"
 #include "message.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 
 /*!
  * Special tile types
@@ -145,9 +140,5 @@ extern UWORD barMode;
 extern bool CauseCrash;
 
 extern bool tuiTargetOrigin;
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_DISPLAY3D_H__
