@@ -244,8 +244,8 @@ static BOOL _imd_load_points( const char **ppFileData, iIMDShape *s )
 	double dx, dy, dz, rad_sq, rad, old_to_p_sq, old_to_p, old_to_new;
 	double xspan, yspan, zspan, maxspan;
 	Vector3f dia1, dia2, cen;
-	Vector3f vxmin = { 0, 0, 0 }, vymin = { 0, 0, 0 }, vzmin = { 0, 0, 0 },
-	         vxmax = { 0, 0, 0 }, vymax = { 0, 0, 0 }, vzmax = { 0, 0, 0 };
+	Vector3f vxmin(0, 0, 0), vymin(0, 0, 0), vzmin(0, 0, 0),
+	         vxmax(0, 0, 0), vymax(0, 0, 0), vzmax(0, 0, 0);
 
 	//load the points then pass through a second time to setup bounding datavalues
 	s->points = (Vector3f*)malloc(sizeof(Vector3f) * s->npoints);
@@ -474,7 +474,7 @@ static BOOL _imd_load_connectors(const char **ppFileData, iIMDShape *s)
 {
 	const char *pFileData = *ppFileData;
 	int cnt;
-	Vector3i *p = NULL, newVector = {0, 0, 0};
+	Vector3i *p = NULL, newVector(0, 0, 0);
 
 	s->connectors = (Vector3i *)malloc(sizeof(Vector3i) * s->nconnectors);
 	if (s->connectors == NULL)

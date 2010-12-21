@@ -4474,7 +4474,7 @@ static void intDisplayStatForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 
 	SWORD templateRadius = getComponentRadius(psStats);
 
-	Vector3i Rotation = {-30, iRY, 0}, Position = {0, -templateRadius / 4, BUTTON_DEPTH /* templateRadius * 12 */};
+	Vector3i Rotation(-30, iRY, 0), Position(0, -templateRadius / 4, BUTTON_DEPTH /* templateRadius * 12 */);
 
 	//scale the object around the BUTTON_RADIUS so that half size objects are draw are draw 75% the size of normal objects
 	SDWORD falseScale = (DESIGN_COMPONENT_SCALE * COMPONENT_RADIUS) / templateRadius / 2 + (DESIGN_COMPONENT_SCALE / 2);

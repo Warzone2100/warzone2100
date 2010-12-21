@@ -358,12 +358,8 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	}
 	else /* Deal with a missed shot */
 	{
-		int missDir = gameRand(BUL_MAXSCATTERDIR), missDist = 2 * (100 - resultHitChance);
-		Vector3i miss = {
-			aScatterDir[missDir].x * missDist + psTarget->pos.x + minOffset,
-			aScatterDir[missDir].y * missDist + psTarget->pos.y + minOffset,
-			psTarget->pos.z
-		};
+		int missDir = gameRand(BUL_MAXSCATTERDIR), missDist = 2 * (100 - resultHitChance) + minOffset;
+		Vector3i miss = Vector3i(aScatterDir[missDir].x, aScatterDir[missDir].y, 0)*missDist + psTarget->pos;
 
 		objTrace(psAttacker->id, "combFire: Missed shot (%d) ended up at (%4d,%4d)", dice, miss.x, miss.y);
 

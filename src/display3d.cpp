@@ -192,7 +192,7 @@ static Vector3f alteredPoints[iV_IMD_MAX_POINTS];
 /** Number of tiles visible
  * \todo This should become dynamic! (A function of resolution, angle and zoom maybe.)
  */
-Vector2i visibleTiles = { VISIBLE_XTILES, VISIBLE_YTILES };
+Vector2i visibleTiles(VISIBLE_XTILES, VISIBLE_YTILES);
 
 /// The X position (in tile coordinates) of the middle of the visible map
 UDWORD	terrainMidX;
@@ -309,12 +309,12 @@ static inline void clearBlueprints()
 
 STRUCTURE *getTileBlueprint(int mapX, int mapY)
 {
-	Vector2i mouse = {world_coord(mapX) + TILE_UNITS/2, world_coord(mapY) + TILE_UNITS/2};
+	Vector2i mouse(world_coord(mapX) + TILE_UNITS/2, world_coord(mapY) + TILE_UNITS/2);
 
 	for (std::vector<STRUCTURE *>::const_iterator i = blueprints.begin(); i != blueprints.end(); ++i)
 	{
 		STRUCTURE *psStruct = *i;
-		Vector2i size = {getStructureWidth(psStruct)*TILE_UNITS, getStructureBreadth(psStruct)*TILE_UNITS};
+		Vector2i size(getStructureWidth(psStruct)*TILE_UNITS, getStructureBreadth(psStruct)*TILE_UNITS);
 		if (abs(mouse.x - psStruct->pos.x) < size.x/2 && abs(mouse.y - psStruct->pos.y) < size.y/2)
 		{
 			return psStruct;  // This blueprint was clicked on.
@@ -1051,7 +1051,7 @@ static void drawTiles(iView *player)
 BOOL init3DView(void)
 {
 	/* Arbitrary choice - from direct read! */
-	Vector3f theSun = { 225.0f, -600.0f, 450.0f };
+	Vector3f theSun(225.0f, -600.0f, 450.0f);
 
 	setTheSun(theSun);
 
@@ -1141,8 +1141,8 @@ BOOL clipXY(SDWORD x, SDWORD y)
 static void	calcFlagPosScreenCoords(SDWORD *pX, SDWORD *pY, SDWORD *pR)
 {
 	/* Get it's absolute dimensions */
-	Vector3i center3d = {0, 0, 0};
-	Vector2i center2d = {0, 0};
+	Vector3i center3d(0, 0, 0);
+	Vector2i center2d(0, 0);
 	/* How big a box do we want - will ultimately be calculated using xmax, ymax, zmax etc */
 	UDWORD	radius = 22;
 
@@ -1308,11 +1308,11 @@ void	renderAnimComponent( const COMPONENT_OBJECT *psObj )
 	if( clipXY( posX, posY ) )
 	{
 		/* get parent object translation */
-		const Vector3i dv = {
+		const Vector3i dv(
 			(spacetime.pos.x - player.p.x) - terrainMidX * TILE_UNITS,
 			spacetime.pos.z,
 			terrainMidY * TILE_UNITS - (spacetime.pos.y - player.p.z)
-		};
+		);
 		SDWORD iPlayer;
 		PIELIGHT brightness;
 
@@ -1362,8 +1362,8 @@ void	renderAnimComponent( const COMPONENT_OBJECT *psObj )
 		//brightness and fog calculation
 		if (psParentObj->type == OBJ_STRUCTURE)
 		{
-			const Vector3i zero = {0, 0, 0};
-			Vector2i s = {0, 0};
+			const Vector3i zero(0, 0, 0);
+			Vector2i s(0, 0);
 			STRUCTURE *psStructure = (STRUCTURE*)psParentObj;
 
 			brightness = structureBrightness(psStructure);
@@ -1883,7 +1883,6 @@ void	setViewDistance(UDWORD dist)
 /// Draw a feature (tree/rock/etc.)
 void	renderFeature(FEATURE *psFeature)
 {
-	UDWORD		featX,featY;
 	SDWORD		rotation, rx, rz;
 	PIELIGHT	brightness;
 	Vector3i dv;
@@ -1899,20 +1898,16 @@ void	renderFeature(FEATURE *psFeature)
 	/* Mark it as having been drawn */
 	psFeature->sDisplay.frameNumber = currentGameFrame;
 
-	/* Get it's x and y coordinates so we don't have to deref. struct later */
-	featX = psFeature->pos.x;
-	featY = psFeature->pos.y;
-
 	/* Daft hack to get around the oild derrick issue */
-	if (!TileHasFeature(mapTile(map_coord(featX), map_coord(featY))))
+	if (!TileHasFeature(mapTile(map_coord(removeZ(psFeature->pos)))))
 	{
 		return;
 	}
 
-	dv = Vector3i_Init(
-		(featX - player.p.x) - terrainMidX*TILE_UNITS,
-		dv.y = psFeature->pos.z, // features sits at the height of the tile it's centre is on
-		terrainMidY*TILE_UNITS - (featY - player.p.z)
+	dv = Vector3i(
+		(psFeature->pos.x - player.p.x) - terrainMidX*TILE_UNITS,
+		psFeature->pos.z, // features sits at the height of the tile it's centre is on
+		terrainMidY*TILE_UNITS - (psFeature->pos.y - player.p.z)
 	);
 
 	/* Push the indentity matrix */
@@ -1976,8 +1971,8 @@ void	renderFeature(FEATURE *psFeature)
 	}
 
 	{
-		Vector3i zero = {0, 0, 0};
-		Vector2i s = {0, 0};
+		Vector3i zero(0, 0, 0);
+		Vector2i s(0, 0);
 
 		pie_RotateProject( &zero, &s );
 		psFeature->sDisplay.screenX = s.x;
@@ -1991,7 +1986,7 @@ void	renderFeature(FEATURE *psFeature)
 void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp)
 {
 	UDWORD			msgX = 0, msgY = 0;
-	Vector3i			dv = { 0, 0, 0 };
+	Vector3i                dv(0, 0, 0);
 	VIEW_PROXIMITY	*pViewProximity = NULL;
 	SDWORD			x, y, r, rx, rz;
 	iIMDShape		*proxImd = NULL;
@@ -2475,8 +2470,8 @@ void	renderStructure(STRUCTURE *psStructure)
 	}
 
 	{
-		Vector3i zero = { 0, 0, 0 };
-		Vector2i s = { 0, 0 };
+		Vector3i zero(0, 0, 0);
+		Vector2i s(0, 0);
 
 		pie_RotateProject(&zero, &s);
 		psStructure->sDisplay.screenX = s.x;
@@ -2683,8 +2678,8 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 		imd->points = temp;
 
 		{
-			Vector3i zero = {0, 0, 0};
-			Vector2i s = {0, 0};
+			Vector3i zero(0, 0, 0);
+			Vector2i s(0, 0);
 
 			pie_RotateProject( &zero, &s );
 			psStructure->sDisplay.screenX = s.x;
@@ -3586,8 +3581,8 @@ SDWORD	xShift,yShift, index;
 void calcScreenCoords(DROID *psDroid)
 {
 	/* Get it's absolute dimensions */
-	const Vector3i origin = {0, 0, 0};
-	Vector2i center = {0, 0};
+	const Vector3i origin(0, 0, 0);
+	Vector2i center(0, 0);
 	UDWORD radius;
 
 	/* get the screen corrdinates */
@@ -3636,7 +3631,7 @@ void calcScreenCoords(DROID *psDroid)
  */
 static void locateMouse(void)
 {
-	const Vector2i pt = {mouseX(), mouseY()};
+	const Vector2i pt(mouseX(), mouseY());
 	unsigned int i;
 	int nearestZ = INT_MAX;
 
@@ -4187,7 +4182,7 @@ static void showSensorRange2(BASE_OBJECT *psObj)
 /// Draw a circle on the map (to show the range of something)
 static void drawRangeAtPos(SDWORD centerX, SDWORD centerY, SDWORD radius)
 {
-	Position pos = {centerX, centerY, 0};  // .z ignored.
+	Position pos(centerX, centerY, 0);  // .z ignored.
 	showEffectCircle(pos, radius, 80, EFFECT_EXPLOSION, EXPLOSION_TYPE_SMALL);
 }
 

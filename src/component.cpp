@@ -501,7 +501,7 @@ static iIMDShape *getRightPropulsionIMD(DROID *psDroid)
 static void displayCompObj(DROID *psDroid, BOOL bButton)
 {
 	iIMDShape               *psShape, *psJet, *psShapeTemp = NULL, *psMountShape;
-	Vector3i				zero = {0, 0, 0};
+	Vector3i                zero(0, 0, 0);
 	Vector2i				screenCoords;
 	SDWORD				dummyZ, iConnector;
 	PROPULSION_STATS	*psPropStats;

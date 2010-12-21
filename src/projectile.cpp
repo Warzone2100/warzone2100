@@ -817,26 +817,22 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 			continue;
 		}
 
-		// Actual collision test.
+		Vector3i psTempObjPrevPos = isDroid(psTempObj)? castDroid(psTempObj)->prevSpacetime.pos : psTempObj->pos;
+
+		const Vector3i diff = psProj->pos - psTempObj->pos;
+		const Vector3i prevDiff = psProj->prevSpacetime.pos - psTempObjPrevPos;
+		const unsigned int targetHeight = establishTargetHeight(psTempObj);
+		const unsigned int targetRadius = establishTargetRadius(psTempObj);
+		const int32_t collision = collisionXYZ(prevDiff, diff, targetRadius, targetHeight);
+		const uint32_t collisionTime = psProj->prevSpacetime.time + (psProj->time - psProj->prevSpacetime.time)*collision/1024;
+
+		if (collision >= 0 && collisionTime < closestCollisionSpacetime.time)
 		{
-			const Vector3i posProj = psProj->pos;
-			const Vector3i prevPosProj = psProj->prevSpacetime.pos;
-			const Vector3i posTemp = psTempObj->pos;
-			const Vector3i diff = Vector3i_Sub(posProj, posTemp);
-			const Vector3i prevDiff = Vector3i_Sub(prevPosProj, posTemp);  // HACK Ignore that target might be moving. The projectile is probably moving faster, so it's better than nothing...
-			const unsigned int targetHeight = establishTargetHeight(psTempObj);
-			const unsigned int targetRadius = establishTargetRadius(psTempObj);
-			const int32_t collision = collisionXYZ(prevDiff, diff, targetRadius, targetHeight);
-			const uint32_t collisionTime = psProj->prevSpacetime.time + (psProj->time - psProj->prevSpacetime.time)*collision/1024;
+			// We hit!
+			closestCollisionSpacetime = interpolateObjectSpacetime(psProj, collisionTime);
+			closestCollisionObject = psTempObj;
 
-			if (collision >= 0 && collisionTime < closestCollisionSpacetime.time)
-			{
-				// We hit!
-				closestCollisionSpacetime = interpolateObjectSpacetime(psProj, collisionTime);
-				closestCollisionObject = psTempObj;
-
-				// Keep testing for more collisions, in case there was a closer target.
-			}
+			// Keep testing for more collisions, in case there was a closer target.
 		}
 	}
 
@@ -855,11 +851,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 		{
 			WEAPON asWeap;
 			// Determine position to fire a missile at
-			Vector3i newDest = {
-				psProj->src.x + move.x * distanceExtensionFactor/100,
-				psProj->src.y + move.y * distanceExtensionFactor/100,
-				psProj->src.z + move.z * distanceExtensionFactor/100
-			};
+			Vector3i newDest = psProj->src + move * distanceExtensionFactor/100;
 			memset(&asWeap, 0, sizeof(asWeap));
 			asWeap.nStat = psStats - asWeaponStats;
 
@@ -895,7 +887,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 		for (effectTime = ((psProj->prevSpacetime.time + 15) & ~15); effectTime < psProj->time; effectTime += 16)
 		{
 			SPACETIME st = interpolateObjectSpacetime(psProj, effectTime);
-			Vector3i posFlip = {st.pos.x, st.pos.z, st.pos.y};  // [sic] y <--> z
+			Vector3i posFlip = swapYZ(st.pos);
 			switch (psStats->weaponSubClass)
 			{
 				case WSC_FLAME:

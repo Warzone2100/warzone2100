@@ -259,7 +259,7 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 }
 
 /// returns true if the edges are adjacent
-static int compare_edge (EDGE *A, EDGE *B, const Vector3f *pVertices )
+static bool compare_edge (EDGE *A, EDGE *B, const Vector3f *pVertices )
 {
 	if(A->from == B->to)
 	{
@@ -267,10 +267,10 @@ static int compare_edge (EDGE *A, EDGE *B, const Vector3f *pVertices )
 		{
 			return true;
 		}
-		return Vector3f_Compare(pVertices[A->to], pVertices[B->from]);
+		return pVertices[A->to] == pVertices[B->from];
 	}
 
-	if(!Vector3f_Compare(pVertices[A->from], pVertices[B->to]))
+	if (pVertices[A->from] != pVertices[B->to])
 	{
 		return false;
 	}
@@ -279,7 +279,7 @@ static int compare_edge (EDGE *A, EDGE *B, const Vector3f *pVertices )
 	{
 		return true;
 	}
-	return Vector3f_Compare(pVertices[A->to], pVertices[B->from]);
+	return pVertices[A->to] == pVertices[B->from];
 }
 
 /// Add an edge to an edgelist
@@ -351,18 +351,16 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, Vector3f* 
 	{
 
 		for (i = 0, pPolys = shape->polys; i < shape->npolys; ++i, ++pPolys) {
-			Vector3f p[3], v[2], normal = {0.0f, 0.0f, 0.0f};
+			Vector3f p[3];
 			VERTEXID current, first;
 			for(j = 0; j < 3; j++)
 			{
 				current = pPolys->pindex[j];
-				p[j] = Vector3f_Init(pVertices[current].x, scale_y(pVertices[current].y, flag, flag_data), pVertices[current].z);
+				p[j] = Vector3f(pVertices[current].x, scale_y(pVertices[current].y, flag, flag_data), pVertices[current].z);
 			}
 
-			v[0] = Vector3f_Sub(p[2], p[0]);
-			v[1] = Vector3f_Sub(p[1], p[0]);
-			normal = Vector3f_CrossP(v[0], v[1]);
-			if (Vector3f_ScalarP(normal, *light) > 0)
+			Vector3f normal = crossProduct(p[2] - p[0], p[1] - p[0]);
+			if (normal * *light > 0)
 			{
 				first = pPolys->pindex[0];
 				for (n = 1; n < pPolys->npnts; n++) {

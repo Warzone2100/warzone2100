@@ -258,20 +258,20 @@ static bool rayLOSCallback(Vector3i pos, int32_t dist, void *data)
 	}
 
 	help->lastDist = dist;
-	help->lastHeight = map_Height(pos.x, pos.y);
+	help->lastHeight = map_Height(removeZ(pos));
 
 	if (help->wallsBlock)
 	{
 		// Store the height at this tile for next time round
-		Vector2i tile = { map_coord(pos.x), map_coord(pos.y) };
+		Vector2i tile = map_coord(removeZ(pos));
 
-		if (!Vector2i_Compare(tile, help->final))
+		if (tile != help->final)
 		{
-			MAPTILE *psTile = mapTile(tile.x, tile.y);
+			MAPTILE *psTile = mapTile(tile);
 			if (TileHasWall(psTile) && !TileHasSmallStructure(psTile))
 			{
 				help->lastHeight = 2*UBYTE_MAX * ELEVATION_SCALE;
-				help->wall = Vector2i_Init(pos.x, pos.y);
+				help->wall = removeZ(pos);
 				help->numWalls++;
 			}
 		}
@@ -378,20 +378,10 @@ void revealAll(UBYTE player)
  */
 int visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool wallsBlock)
 {
-	Vector3i diff;
-	int      range, dist;
-	int	power;
+	ASSERT_OR_RETURN(0, psViewer != NULL, "Invalid viewer pointer!");
+	ASSERT_OR_RETURN(0, psTarget != NULL, "Invalid viewed pointer!");
 
-	ASSERT(psViewer != NULL, "Invalid viewer pointer!");
-	ASSERT(psTarget != NULL, "Invalid viewed pointer!");
-
-	if (!psViewer || !psTarget)
-	{
-		return 0;
-	}
-
-	diff = Vector3i_Sub(psTarget->pos, psViewer->pos);
-	range = objSensorRange(psViewer);
+	int range = objSensorRange(psViewer);
 
 	/* Get the sensor Range and power */
 	switch (psViewer->type)
@@ -459,8 +449,10 @@ int visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool
 		range = 4 * range / 3;
 	}
 
+	Vector2i diff = removeZ(psTarget->pos - psViewer->pos);
+
 	/* First see if the target is in sensor range */
-	dist = iHypot(diff.x, diff.y);
+	int dist = iHypot(diff);
 	if (dist == 0)
 	{
 		// Should never be on top of each other, but ...
@@ -473,14 +465,14 @@ int visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool
 		return 0;
 	}
 
-	power = adjustPowerByRange(psViewer->pos.x, psViewer->pos.y, psTarget->pos.x, psTarget->pos.y, range, objSensorPower(psViewer));
+	int power = adjustPowerByRange(psViewer->pos.x, psViewer->pos.y, psTarget->pos.x, psTarget->pos.y, range, objSensorPower(psViewer));
 	{
 		// initialise the callback variables
-		VisibleObjectHelp_t help = { true, wallsBlock, psViewer->pos.z + visObjHeight(psViewer), { map_coord(psTarget->pos.x), map_coord(psTarget->pos.y) }, 0, 0, -UBYTE_MAX * GRAD_MUL * ELEVATION_SCALE, 0, { 0, 0 } };
+		VisibleObjectHelp_t help = { true, wallsBlock, psViewer->pos.z + visObjHeight(psViewer), map_coord(removeZ(psTarget->pos)), 0, 0, -UBYTE_MAX * GRAD_MUL * ELEVATION_SCALE, 0, Vector2i(0, 0)};
 		int targetGrad, top;
 
 		// Cast a ray from the viewer to the target
-		rayCast(psViewer->pos, iAtan2(diff.x, diff.y), dist, rayLOSCallback, &help);
+		rayCast(psViewer->pos, iAtan2(diff), dist, rayLOSCallback, &help);
 
 		if (gWall != NULL && gNumWalls != NULL) // Out globals are set
 		{
@@ -526,7 +518,7 @@ STRUCTURE* visGetBlockingWall(const BASE_OBJECT* psViewer, const BASE_OBJECT* ps
 	// see if there was a wall in the way
 	if (numWalls > 0)
 	{
-		Vector2i tile = { map_coord(wall.x), map_coord(wall.y) };
+		Vector2i tile = map_coord(wall);
 		unsigned int player;
 
 		for (player = 0; player < MAX_PLAYERS; player++)
@@ -535,8 +527,7 @@ STRUCTURE* visGetBlockingWall(const BASE_OBJECT* psViewer, const BASE_OBJECT* ps
 
 			for (psWall = apsStructLists[player]; psWall; psWall = psWall->psNext)
 			{
-				if (map_coord(psWall->pos.x) == tile.x
-				 && map_coord(psWall->pos.y) == tile.y)
+				if (map_coord(removeZ(psWall->pos)) == tile)
 				{
 					return psWall;
 				}
@@ -781,19 +772,12 @@ MAPTILE		*psTile;
  */
 bool lineOfFire(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool wallsBlock)
 {
-	Vector3i diff;
-	int      dist;
+	ASSERT_OR_RETURN(false, psViewer != NULL, "Invalid shooter pointer!");
+	ASSERT_OR_RETURN(false, psTarget != NULL, "Invalid target pointer!");
 
-	ASSERT(psViewer != NULL, "Invalid shooter pointer!");
-	ASSERT(psTarget != NULL, "Invalid target pointer!");
-	if (!psViewer || !psTarget)
-	{
-		return false;
-	}
+	Vector2i diff = removeZ(psTarget->pos - psViewer->pos);
 
-	diff = Vector3i_Sub(psTarget->pos, psViewer->pos);
-
-	dist = iHypot(diff.x, diff.y);
+	int dist = iHypot(diff);
 	if (dist == 0)
 	{
 		// Should never be on top of each other, but ...
@@ -802,11 +786,11 @@ bool lineOfFire(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool w
 
 	// initialise the callback variables
 	{
-		VisibleObjectHelp_t help = { true, wallsBlock, psViewer->pos.z + visObjHeight(psViewer), { map_coord(psTarget->pos.x), map_coord(psTarget->pos.y) }, 0, 0, -UBYTE_MAX * GRAD_MUL * ELEVATION_SCALE, 0, { 0, 0 } };
+		VisibleObjectHelp_t help = { true, wallsBlock, psViewer->pos.z + visObjHeight(psViewer), map_coord(removeZ(psTarget->pos)), 0, 0, -UBYTE_MAX * GRAD_MUL * ELEVATION_SCALE, 0, Vector2i(0, 0)};
 		int targetGrad, top;
 
 		// Cast a ray from the viewer to the target
-		rayCast(psViewer->pos, iAtan2(diff.x, diff.y), dist, rayLOSCallback, &help);
+		rayCast(psViewer->pos, iAtan2(diff), dist, rayLOSCallback, &help);
 
 		if (gWall != NULL && gNumWalls != NULL) // Out globals are set
 		{

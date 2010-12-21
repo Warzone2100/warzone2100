@@ -6,7 +6,7 @@ include $(top_srcdir)/makerules/common.mk
 CPPFLAGS := $(CPPFLAGS) -I$(top_srcdir)/lib/ivis_opengl
 
 SRC= \
-	GLee.cpp \
+	GLee.c \
 	ivi.cpp \
 	pieblitfunc.cpp \
 	piedraw.cpp \

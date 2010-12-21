@@ -391,7 +391,7 @@ BOOL SendDroid(const DROID_TEMPLATE* pTemplate, uint32_t x, uint32_t y, uint8_t 
 	debug(LOG_SYNC, "Droid sent with id of %u", id);
 	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DROID);
 	{
-		Position pos = { x, y, 0 };
+		Position pos(x, y, 0);
 		uint32_t templateID = pTemplate->multiPlayerID;
 		BOOL haveInitialOrders = initialOrdersP != NULL;
 

@@ -5725,7 +5725,7 @@ bool calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3i *muzzle, int w
 
 	if(psShape && psShape->nconnectors)
 	{
-		Vector3i barrel = {0, 0, 0};
+		Vector3i barrel(0, 0, 0);
 		unsigned int nWeaponStat = psStructure->asWeaps[weapon_slot].nStat;
 		iIMDShape *psWeaponImd = 0, *psMountImd = 0;
 
@@ -5770,9 +5770,7 @@ bool calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3i *muzzle, int w
 				connector_num = (psStructure->asWeaps[weapon_slot].shotsFired - 1) % (psWeaponImd->nconnectors);
 			}
 			
-			barrel = Vector3i_Init(psWeaponImd->connectors[connector_num].x,
-									-psWeaponImd->connectors[connector_num].y,
-									-psWeaponImd->connectors[connector_num].z);
+			barrel = Vector3i(psWeaponImd->connectors[connector_num].x, -psWeaponImd->connectors[connector_num].y, -psWeaponImd->connectors[connector_num].z);
 		}
 
 		pie_RotateTranslate3i(&barrel, muzzle);
@@ -5782,7 +5780,7 @@ bool calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3i *muzzle, int w
 	}
 	else
 	{
-		*muzzle = Vector3i_Init(psStructure->pos.x, psStructure->pos.y, psStructure->pos.z + psStructure->sDisplay.imd->max.y);
+		*muzzle = psStructure->pos + Vector3i(0, 0, 0 + psStructure->sDisplay.imd->max.y);
 	}
 
 	return true;

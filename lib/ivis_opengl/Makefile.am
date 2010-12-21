@@ -22,7 +22,7 @@ libivis_opengl_a_SOURCES = \
 	textdraw.cpp
 
 if !SYSTEM_GLEE
-libivis_opengl_a_SOURCES += GLee.cpp
+libivis_opengl_a_SOURCES += GLee.c
 noinst_HEADERS += GLee.h
 endif
 

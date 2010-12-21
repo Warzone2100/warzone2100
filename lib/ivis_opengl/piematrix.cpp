@@ -310,11 +310,11 @@ int32_t pie_RotateProject(const Vector3i *v3d, Vector2i *v2d)
 	/*
 	 * v = curMatrix . v3d
 	 */
-	Vector3i v = {
+	Vector3i v(
 		v3d->x * psMatrix->a + v3d->y * psMatrix->d + v3d->z * psMatrix->g + psMatrix->j,
 		v3d->x * psMatrix->b + v3d->y * psMatrix->e + v3d->z * psMatrix->h + psMatrix->k,
 		v3d->x * psMatrix->c + v3d->y * psMatrix->f + v3d->z * psMatrix->i + psMatrix->l
-	};
+	);
 
 	const int zz = v.z >> STRETCHED_Z_SHIFT;
 
