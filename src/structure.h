@@ -31,11 +31,6 @@
 #include "visibility.h"
 #include "baseobject.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 // how long to wait between CALL_STRUCT_ATTACKED's - plus how long to flash on radar for
 #define ATTACK_CB_PAUSE		5000
 
@@ -390,7 +385,8 @@ extern void changeProductionPlayer(UBYTE player);
 extern BOOL IsStatExpansionModule(STRUCTURE_STATS *psStats);
 
 /// is this a blueprint and not a real structure?
-extern BOOL structureIsBlueprint(STRUCTURE *psStructure);
+bool structureIsBlueprint(STRUCTURE *psStructure);
+bool isBlueprint(BASE_OBJECT *psObject);
 
 /*checks that the structure stats have loaded up as expected - must be done after
 all StructureStats parts have been loaded*/
@@ -473,8 +469,13 @@ extern void     structureInitVars(void);
 #define syncDebugStructure(psStruct, ch) _syncDebugStructure(__FUNCTION__, psStruct, ch)
 void _syncDebugStructure(const char *function, STRUCTURE *psStruct, char ch);
 
-#ifdef __cplusplus
-}
-#endif //__cplusplus
+
+// True iff object is a structure.
+static inline bool isStructure(BASE_OBJECT const *psObject)               { return psObject->type == OBJ_STRUCTURE; }
+// Returns STRUCTURE * if structure or NULL if not.
+static inline STRUCTURE *castStructure(BASE_OBJECT *psObject)             { return isStructure(psObject)? (STRUCTURE *)psObject : (STRUCTURE *)NULL; }
+// Returns STRUCTURE const * if structure or NULL if not.
+static inline STRUCTURE const *castStructure(BASE_OBJECT const *psObject) { return isStructure(psObject)? (STRUCTURE const *)psObject : (STRUCTURE const *)NULL; }
+
 
 #endif // __INCLUDED_SRC_STRUCTURE_H__

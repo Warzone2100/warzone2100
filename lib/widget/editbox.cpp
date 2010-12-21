@@ -208,7 +208,7 @@ void W_EDITBOX::fitStringStart()
 			return;
 		}
 
-		tmp.remove(tmp.length() - 1);  // Erase last char.
+		tmp.remove(tmp.length() - 1, 1);  // Erase last char.
 	}
 
 	printChars = 0;
@@ -248,7 +248,7 @@ void W_EDITBOX::setCursorPosPixels(int xPos)
 {
 	QString tmp = aText;
 	tmp.remove(0, printStart);  // Consider only the visible text.
-	tmp.remove(printChars);
+	tmp.remove(printChars, tmp.length());
 
 	int prevDelta = INT32_MAX;
 	int prevPos = printStart + tmp.length();
@@ -264,7 +264,7 @@ void W_EDITBOX::setCursorPosPixels(int xPos)
 			return;
 		}
 
-		tmp.remove(tmp.length() - 1);  // Erase last char.
+		tmp.remove(tmp.length() - 1, 1);  // Erase last char.
 
 		prevDelta = delta;
 		prevPos = pos;
@@ -584,7 +584,7 @@ void editBoxDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *
 	/* If there is more text than will fit into the box, display the bit with the cursor in it */
 	QString tmp = psEdBox->aText;
 	tmp.remove(0, psEdBox->printStart);  // Erase anything there isn't room to display.
-	tmp.remove(psEdBox->printChars);
+	tmp.remove(psEdBox->printChars, tmp.length());
 
 //	if(psEdBox->pFontDisplay) {
 //		psEdBox->pFontDisplay(fx,fy, pPrint);
@@ -602,7 +602,7 @@ void editBoxDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *
 	{
 		// insert mode
 		QString tmp = psEdBox->aText;
-		tmp.remove(psEdBox->insPos);         // Erase from the cursor on, to find where the cursor should be.
+		tmp.remove(psEdBox->insPos, tmp.length());         // Erase from the cursor on, to find where the cursor should be.
 		tmp.remove(0, psEdBox->printStart);
 
 		cx = x0 + WEDB_XGAP + iV_GetTextWidth(tmp.toUtf8().constData());
@@ -618,7 +618,7 @@ void editBoxDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *
 	{
 		// overwrite mode
 		QString tmp = psEdBox->aText;
-		tmp.remove(psEdBox->insPos);         // Erase from the cursor on, to find where the cursor should be.
+		tmp.remove(psEdBox->insPos, tmp.length());         // Erase from the cursor on, to find where the cursor should be.
 		tmp.remove(0, psEdBox->printStart);
 
 		cx = x0 + WEDB_XGAP + iV_GetTextWidth(tmp.toUtf8().constData());
