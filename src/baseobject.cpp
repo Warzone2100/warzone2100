@@ -26,12 +26,6 @@
 #include "projectile.h"
 #include "structure.h"
 
-static inline int32_t interpolateInt(int32_t v1, int32_t v2, uint32_t t1, uint32_t t2, uint32_t t)
-{
-	int32_t numer = t - t1, denom = t2 - t1;
-	return v1 + (v2 - v1) * numer/denom;
-}
-
 static inline uint16_t interpolateAngle(uint16_t v1, uint16_t v2, uint32_t t1, uint32_t t2, uint32_t t)
 {
 	int32_t numer = t - t1, denom = t2 - t1;
@@ -40,20 +34,16 @@ static inline uint16_t interpolateAngle(uint16_t v1, uint16_t v2, uint32_t t1, u
 
 static Position interpolatePos(Position p1, Position p2, uint32_t t1, uint32_t t2, uint32_t t)
 {
-	Position ret = { interpolateInt(p1.x, p2.x, t1, t2, t),
-	                 interpolateInt(p1.y, p2.y, t1, t2, t),
-	                 interpolateInt(p1.z, p2.z, t1, t2, t)
-	               };
-	return ret;
+	return p1 + (p2 - p1) * int(t - t1) / int(t2 - t1);
 }
 
 Rotation interpolateRot(Rotation v1, Rotation v2, uint32_t t1, uint32_t t2, uint32_t t)
 {
-	Rotation rot = { interpolateAngle(v1.direction, v2.direction, t1, t2, t),
+	//return v1 + (v2 - v1) * (t - t1) / (t2 - t1);
+	return Rotation( interpolateAngle(v1.direction, v2.direction, t1, t2, t),
 	                 interpolateAngle(v1.pitch,     v2.pitch,     t1, t2, t),
 	                 interpolateAngle(v1.roll,      v2.roll,      t1, t2, t)
-	               };
-	return rot;
+	               );
 }
 
 static SPACETIME interpolateSpacetime(SPACETIME st1, SPACETIME st2, uint32_t t)

@@ -1472,16 +1472,16 @@ void mapTest()
 // Convert a direction into an offset.
 // dir 0 => x = 0, y = -1
 #define NUM_DIR		8
-static const Vector2i aDirOffset[NUM_DIR] =
+static const Vector2i aDirOffset[] =
 {
-        { 0, 1},
-        {-1, 1},
-        {-1, 0},
-        {-1,-1},
-        { 0,-1},
-        { 1,-1},
-        { 1, 0},
-        { 1, 1},
+	Vector2i( 0, 1),
+	Vector2i(-1, 1),
+	Vector2i(-1, 0),
+	Vector2i(-1,-1),
+	Vector2i( 0,-1),
+	Vector2i( 1,-1),
+	Vector2i( 1, 0),
+	Vector2i( 1, 1),
 };
 
 // Flood fill a "continent". Note that we reuse x, y inside this function.
@@ -1499,7 +1499,7 @@ static void mapFloodFill(int x, int y, int continent, uint8_t blockedBits)
 		for (i = 0; i < NUM_DIR; i++)
 		{
 			// rely on the fact that all border tiles are inaccessible to avoid checking explicitly
-			Vector2i npos = { x + aDirOffset[i].x, y + aDirOffset[i].y };
+			Vector2i npos = Vector2i(x, y) + aDirOffset[i];
 			MAPTILE *psTile;
 
 			if (!tileOnMap(npos.x, npos.y))

@@ -69,9 +69,9 @@ typedef struct _jobDone
 // Convert a direction into an offset, spanning two tiles
 static const Vector2i aDirOffset[NUM_DIR] =
 {
-	{  0,  1 }, { -1,  1 }, { -1,  0 }, { -1, -1 }, {  0, -1 }, {  1, -1 }, {  1,  0 }, {  1,  1 },
-	{ -2, -2 }, { -1, -2 }, {  0, -2 }, {  1, -2 }, {  2, -2 }, { -2, -1 }, {  2, -1 }, { -2,  0 },
-	{  2,  0 }, { -2,  1 }, {  2,  1 }, { -2,  2 }, { -1,  2 }, {  0,  2 }, {  1,  2 }, {  2,  2 },
+	Vector2i( 0,  1), Vector2i(-1,  1), Vector2i(-1,  0), Vector2i(-1, -1), Vector2i( 0, -1), Vector2i( 1, -1), Vector2i( 1,  0), Vector2i( 1,  1),
+	Vector2i(-2, -2), Vector2i(-1, -2), Vector2i( 0, -2), Vector2i( 1, -2), Vector2i( 2, -2), Vector2i(-2, -1), Vector2i( 2, -1), Vector2i(-2,  0),
+	Vector2i( 2,  0), Vector2i(-2,  1), Vector2i( 2,  1), Vector2i(-2,  2), Vector2i(-1,  2), Vector2i( 0,  2), Vector2i( 1,  2), Vector2i( 2,  2),
 };
 
 // threading stuff
@@ -725,12 +725,12 @@ static bool fpathVisCallback(Vector3i pos, int32_t dist, void *data)
 
 BOOL fpathTileLOS(DROID *psDroid, Vector3i dest)
 {
-	Vector3i dir = Vector3i_Sub(dest, psDroid->pos);
+	Vector2i dir = removeZ(dest - psDroid->pos);
 
 	// Initialise the callback variables
 	obstruction = false;
 
-	rayCast(psDroid->pos, iAtan2(dir.x, dir.y), iHypot(dir.x, dir.y), fpathVisCallback, psDroid);
+	rayCast(psDroid->pos, iAtan2(dir), iHypot(dir), fpathVisCallback, psDroid);
 
 	return !obstruction;
 }

@@ -3054,7 +3054,7 @@ bool calcDroidMuzzleLocation(DROID *psDroid, Vector3i *muzzle, int weapon_slot)
 	{
 		char debugStr[250], debugLen = 0;  // Each "(%d,%d,%d)" uses up to 34 bytes, for very large values. So 250 isn't exaggerating.
 
-		Vector3i barrel = {0, 0, 0};
+		Vector3i barrel(0, 0, 0);
 		iIMDShape *psWeaponImd = 0, *psMountImd = 0;
 
 		if (psDroid->asWeaps[weapon_slot].nStat)
@@ -3100,9 +3100,9 @@ bool calcDroidMuzzleLocation(DROID *psDroid, Vector3i *muzzle, int weapon_slot)
 				connector_num = (psDroid->asWeaps[weapon_slot].shotsFired - 1) % (psWeaponImd->nconnectors);
 			}
 			
-			barrel = Vector3i_Init(psWeaponImd->connectors[connector_num].x,
-									-psWeaponImd->connectors[connector_num].y,
-									-psWeaponImd->connectors[connector_num].z);
+			barrel = Vector3i(psWeaponImd->connectors[connector_num].x,
+			                  -psWeaponImd->connectors[connector_num].y,
+			                  -psWeaponImd->connectors[connector_num].z);
 			debugLen += sprintf(debugStr + debugLen, ",barrel[%u]=(%d,%d,%d)", connector_num, psWeaponImd->connectors[connector_num].x, -psWeaponImd->connectors[connector_num].y, -psWeaponImd->connectors[connector_num].z);
 		}
 
@@ -3116,7 +3116,7 @@ bool calcDroidMuzzleLocation(DROID *psDroid, Vector3i *muzzle, int weapon_slot)
 	}
 	else
 	{
-		*muzzle = Vector3i_Init(psDroid->pos.x, psDroid->pos.y, psDroid->pos.z + psDroid->sDisplay.imd->max.y);
+		*muzzle = psDroid->pos + Vector3i(0, 0, psDroid->sDisplay.imd->max.y);
 	}
 
 	CHECK_DROID(psDroid);
@@ -3528,7 +3528,7 @@ BOOL	pickATileGenThreat(UDWORD *x, UDWORD *y, UBYTE numIterations, SDWORD threat
 	SDWORD		i, j;
 	SDWORD		startX, endX, startY, endY;
 	UDWORD		passes;
-	Vector3i	origin = { world_coord(*x), world_coord(*y), 0 };
+	Vector3i	origin(world_coord(*x), world_coord(*y), 0);
 
 	ASSERT_OR_RETURN(false, *x<mapWidth,"x coordinate is off-map for pickATileGen" );
 	ASSERT_OR_RETURN(false, *y<mapHeight,"y coordinate is off-map for pickATileGen" );
@@ -3552,7 +3552,7 @@ BOOL	pickATileGenThreat(UDWORD *x, UDWORD *y, UBYTE numIterations, SDWORD threat
 				/* Test only perimeter as internal tested previous iteration */
 				if(i==startX || i==endX || j==startY || j==endY)
 				{
-					Vector3i newPos = { world_coord(i), world_coord(j), 0 };
+					Vector3i newPos(world_coord(i), world_coord(j), 0);
 
 					/* Good enough? */
 					if (function(i, j)

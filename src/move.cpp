@@ -552,15 +552,15 @@ static bool moveBlockingTileCallback(Vector3i pos, int32_t dist, void *data_)
 // Returns -1 - distance if the direct path to the waypoint is blocked, otherwise returns the distance to the waypoint.
 static int32_t moveDirectPathToWaypoint(DROID *psDroid, unsigned positionIndex)
 {
-	Vector3i src = {psDroid->pos.x, psDroid->pos.y, 0};
+	Vector2i src = removeZ(psDroid->pos);
 	Vector2i dst = psDroid->sMove.asPath[positionIndex];
-	Vector2i delta = {dst.x - src.x, dst.y - src.y};
-	uint16_t dir = iAtan2(delta.x, delta.y);
-	int32_t dist = iHypot(delta.x, delta.y);
+	Vector2i delta = dst - src;
+	uint16_t dir = iAtan2(delta);
+	int32_t dist = iHypot(delta);
 	BLOCKING_CALLBACK_DATA data;
 	data.propulsionType = getPropulsionStats(psDroid)->propulsionType;
 	data.blocking = false;
-	rayCast(src, dir, dist, &moveBlockingTileCallback, &data);
+	rayCast(Vector3i(src, 0), dir, dist, &moveBlockingTileCallback, &data);
 	return data.blocking? -1 - dist : dist;
 }
 
@@ -651,19 +651,13 @@ static Vector2i movePeekNextTarget(DROID *psDroid)
 	{
 		// No points left - fudge one to continue the same direction
 		Vector2i
-			src = { psDroid->sMove.srcX, psDroid->sMove.srcY },
-			target = { psDroid->sMove.targetX, psDroid->sMove.targetY },
-			diff = Vector2i_Sub(target, src),
-			p = Vector2i_Add(diff, target);
-		return p;
+			src(psDroid->sMove.srcX, psDroid->sMove.srcY),
+			target(psDroid->sMove.targetX, psDroid->sMove.targetY);
+		return target*2 - src;
 	}
 	else
 	{
-		Vector2i p = {
-			psDroid->sMove.asPath[psDroid->sMove.Position].x,
-			psDroid->sMove.asPath[psDroid->sMove.Position].y
-		};
-		return p;
+		return psDroid->sMove.asPath[psDroid->sMove.Position];
 	}
 }
 
@@ -813,7 +807,7 @@ static BOOL moveBlocked(DROID *psDroid)
 		// if the unit cannot see the next way point - reroute it's got stuck
 		if ( ( bMultiPlayer || (psDroid->player == selectedPlayer) ) &&
 			(psDroid->sMove.Position != psDroid->sMove.numPoints) &&
-			!fpathTileLOS(psDroid, Vector3i_Init(psDroid->sMove.DestinationX, psDroid->sMove.DestinationY, 0)))
+			!fpathTileLOS(psDroid, Vector3i(psDroid->sMove.DestinationX, psDroid->sMove.DestinationY, 0)))
 		{
 			objTrace(psDroid->id, "Trying to reroute to (%d,%d)", psDroid->sMove.DestinationX, psDroid->sMove.DestinationY);
 			moveDroidTo(psDroid, psDroid->sMove.DestinationX, psDroid->sMove.DestinationY);
@@ -1359,9 +1353,9 @@ static void moveGetObstacleVector(DROID *psDroid, int32_t *pX, int32_t *pY)
  */
 static uint16_t moveGetDirection(DROID *psDroid)
 {
-	Position src = psDroid->pos;  // Do not want precice precision here, would overflow.
-	Position target = {psDroid->sMove.targetX, psDroid->sMove.targetY, 0};
-	Position dest = Vector3i_Sub(target, src);
+	Vector2i src = removeZ(psDroid->pos);  // Do not want precice precision here, would overflow.
+	Vector2i target(psDroid->sMove.targetX, psDroid->sMove.targetY);
+	Vector2i dest = target - src;
 
 	// Transporters don't need to avoid obstacles, but everyone else should
 	if (psDroid->droidType != DROID_TRANSPORTER)
@@ -1369,7 +1363,7 @@ static uint16_t moveGetDirection(DROID *psDroid)
 		moveGetObstacleVector(psDroid, &dest.x, &dest.y);
 	}
 
-	return iAtan2(dest.x, dest.y);
+	return iAtan2(dest);
 }
 
 // Check if a droid has got to a way point

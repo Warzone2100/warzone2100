@@ -432,11 +432,11 @@ static void positionEffect(const EFFECT *psEffect)
 	int rx, rz;
 
 	/* Establish world position */
-	Vector3i dv = {
+	Vector3i dv(
 		(psEffect->position.x - player.p.x) - terrainMidX * TILE_UNITS,
 		psEffect->position.y,
 		terrainMidY * TILE_UNITS - (psEffect->position.z - player.p.z)
-	};
+	);
 
 	/* Push the indentity matrix */
 	pie_MatBegin();
@@ -489,18 +489,16 @@ void addMultiEffect(const Vector3i *basePos, Vector3i *scatter, EFFECT_GROUP gro
 		unsigned int i;
 
 		/* Fix for jim */
-		scatter->x/=10;
-		scatter->y/=10;
-		scatter->z/=10;
+		*scatter = *scatter / 10;
 
 		/* There are multiple effects - so scatter them around according to parameter */
 		for(i=0; i<number; i++)
 		{
-			Vector3i scatPos = {
-				basePos->x + (scatter->x ? ( scatter->x	- (rand()%(2*scatter->x)) ) : 0 ),
-				basePos->y + (scatter->y ? ( scatter->y	- (rand()%(2*scatter->y)) ) : 0 ),
-				basePos->z + (scatter->z ? ( scatter->z	- (rand()%(2*scatter->z)) ) : 0 )
-			};
+			// This scatters in a cube - is there a good reason for that, or just legacy?
+			Vector3i scatPos = *basePos + *scatter - Vector3i(rand()%(scatter->x*2 + 1),
+			                                                  rand()%(scatter->y*2 + 1),
+			                                                  rand()%(scatter->z*2 + 1)
+			                                                 );
 			addEffect(&scatPos,group,type,specified,imd,lit);
 		}
 	}
@@ -2324,11 +2322,7 @@ void initPerimeterSmoke(iIMDShape *pImd, Vector3i base)
 
 	for (i = varStart; i < varEnd; i += varStride)
 	{
-		Vector3i pos = {
-			base.x + i + shift,
-			base.y,
-			base.z + inStart + shift
-		};
+		Vector3i pos = base + Vector3i(i + shift, 0, inStart + shift);
 
 		if (rand()%6 == 1)
 		{
@@ -2339,7 +2333,7 @@ void initPerimeterSmoke(iIMDShape *pImd, Vector3i base)
 			addEffect(&pos, EFFECT_SMOKE, SMOKE_TYPE_BILLOW, false, NULL, 0);
 		}
 
-		pos = Vector3i_Init(base.x + i + shift, base.y, base.z + inEnd + shift);
+		pos = base + Vector3i(i + shift, 0, inEnd + shift);
 
 		if (rand()%6 == 1)
 		{
@@ -2360,11 +2354,7 @@ void initPerimeterSmoke(iIMDShape *pImd, Vector3i base)
 
 	for (i = varStart; i < varEnd; i += varStride)
 	{
-		Vector3i pos = {
-			base.x + inStart + shift,
-			base.y,
-			base.z + i + shift
-		};
+		Vector3i pos = base + Vector3i(inStart + shift, 0, i + shift);
 
 		if (rand()%6 == 1)
 		{
@@ -2375,7 +2365,7 @@ void initPerimeterSmoke(iIMDShape *pImd, Vector3i base)
 			addEffect(&pos, EFFECT_SMOKE, SMOKE_TYPE_BILLOW, false, NULL, 0);
 		}
 
-		pos = Vector3i_Init(base.x + inEnd + shift, base.y, base.z + i + shift);
+		pos = base + Vector3i(inEnd + shift, 0, i + shift);
 
 		if (rand()%6 == 1)
 		{
@@ -2438,17 +2428,14 @@ static void effectDroidUpdates(void)
 					if ((int)psDroid->sMove.speed != 0)
 					{
 						/* Present direction is important */
-						Vector2i behind = {
-							iSinR(psDroid->rot.direction, 50),
-							iCosR(psDroid->rot.direction, 50)
-						};
-						Vector3i pos = {
+						Vector2i behind = iSinCosR(psDroid->rot.direction, 50);
+						Vector3i pos(
 							clip(psDroid->pos.x - behind.x, 0, mapWidth),
 							clip(psDroid->pos.y - behind.y, 0, mapHeight),
 							0
-						};
+						);
 
-						pos.z = map_Height(pos.x, pos.z);
+						pos.z = map_Height(pos.x, pos.y);
 
 						// FIXME This does not do anything!!
 					}
@@ -2497,11 +2484,11 @@ static void effectStructureUpdates(void)
 						{
 							if (psStructure->sDisplay.imd->nconnectors == 1)
 							{
-								Vector3i eventPos = {
-									psStructure->pos.x + psStructure->sDisplay.imd->connectors->x,
-									psStructure->pos.z + psStructure->sDisplay.imd->connectors->z,
-									psStructure->pos.y - psStructure->sDisplay.imd->connectors->y
-								};
+								Vector3i eventPos = swapYZ(psStructure->pos) + Vector3i(
+									psStructure->sDisplay.imd->connectors->x,
+									psStructure->sDisplay.imd->connectors->z,
+									-psStructure->sDisplay.imd->connectors->y
+								);
 
 								addEffect(&eventPos, EFFECT_SMOKE, SMOKE_TYPE_STEAM, false, NULL, 0);
 
@@ -2515,15 +2502,11 @@ static void effectStructureUpdates(void)
 						{
 							bool active = false;
 							POWER_GEN *psPowerGen = &psStructure->pFunctionality->powerGenerator;
-							Vector3i eventPos = {
-								psStructure->pos.x,
-								psStructure->pos.z,
-								psStructure->pos.y
-							};
+							Vector3i eventPos = swapYZ(psStructure->pos);
 
 							if (psStructure->sDisplay.imd->nconnectors > 0)
 							{
-								eventPos.y = psStructure->pos.z+psStructure->sDisplay.imd->connectors->z;
+								eventPos.y += psStructure->sDisplay.imd->connectors->z;
 							}
 
 							/* Add an effect over the central spire - if

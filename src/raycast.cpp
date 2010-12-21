@@ -42,7 +42,7 @@ void rayCast(Vector3i src, uint16_t direction, uint32_t length, RAY_CALLBACK cal
 	uint32_t currLen;
 	for (currLen = 0; currLen < length; currLen += TILE_UNITS)
 	{
-		Vector3i curr = {src.x + iSinR(direction, currLen), src.y + iCosR(direction, currLen), src.z};
+		Vector3i curr = src + Vector3i(iSinCosR(direction, currLen), 0);
 		// stop at the edge of the map
 		if (curr.x < 0 || curr.x >= world_coord(mapWidth) ||
 			curr.y < 0 || curr.y >= world_coord(mapHeight))
@@ -123,10 +123,9 @@ static bool getTileHeightCallback(Vector3i pos, int32_t dist, void *data)
 
 void getBestPitchToEdgeOfGrid(UDWORD x, UDWORD y, uint16_t direction, uint16_t *pitch)
 {
-	Vector3i pos = { x, y, 0 };
 	HeightCallbackHelp_t help = { map_Height(x,y), 0.0f };
 
-	rayCast(pos, direction, 5430, getTileHeightCallback, &help); // FIXME Magic value
+	rayCast(Vector3i(x, y, 0), direction, 5430, getTileHeightCallback, &help); // FIXME Magic value
 
 	*pitch = help.pitch;
 }

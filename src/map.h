@@ -358,6 +358,16 @@ static inline int32_t map_coord(int32_t worldCoord)
 	return worldCoord >> TILE_SHIFT;
 }
 
+static inline Vector2i world_coord(Vector2i const &mapCoord)
+{
+	return Vector2i(world_coord(mapCoord.x), world_coord(mapCoord.y));
+}
+
+static inline Vector2i map_coord(Vector2i const &worldCoord)
+{
+	return Vector2i(map_coord(worldCoord.x), map_coord(worldCoord.y));
+}
+
 /* Make sure world coordinates are inside the map */
 /** Clip world coordinates to make sure they're inside the map's boundaries
  *  \param worldX a pointer to a X coordinate inside the map
@@ -405,6 +415,8 @@ static inline WZ_DECL_PURE MAPTILE *mapTile(int32_t x, int32_t y)
 
 	return &psMapTiles[x + (y * mapWidth)];
 }
+
+static inline WZ_DECL_PURE MAPTILE *mapTile(Vector2i const &v) { return mapTile(v.x, v.y); }
 
 /** Return a pointer to the tile structure at x,y in world coordinates */
 #define worldTile(_x, _y) mapTile(map_coord(_x), map_coord(_y))
@@ -501,6 +513,8 @@ typedef struct _tile_coord
 
 /// The max height of the terrain and water at the specified world coordinates
 extern int32_t map_Height(int x, int y);
+
+static inline int32_t map_Height(Vector2i const &v) { return map_Height(v.x, v.y); }
 
 /* returns true if object is above ground */
 extern BOOL mapObjIsAboveGround( BASE_OBJECT *psObj );

@@ -2174,7 +2174,7 @@ BOOL scrDroidCanReach(void)
 	if (psDroid)
 	{
 		const PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-		const Vector3i rPos = { x, y, 0 };
+		const Vector3i rPos(x, y, 0);
 
 		scrFunctionResult.v.bval = fpathCheck(psDroid->pos, rPos, psPropStats->propulsionType);
 		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))

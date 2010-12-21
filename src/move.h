@@ -71,8 +71,7 @@ void moveMakeVtolHover( DROID *psDroid );
 /// Get high precision droid position
 static inline Position droidGetPrecisePosition(const DROID *psDroid)
 {
-	Position newPos = {psDroid->pos.x * EXTRA_PRECISION + psDroid->sMove.eBitX, psDroid->pos.y * EXTRA_PRECISION + psDroid->sMove.eBitY, 0};
-	return newPos;
+	return Position(psDroid->pos.x * EXTRA_PRECISION + psDroid->sMove.eBitX, psDroid->pos.y * EXTRA_PRECISION + psDroid->sMove.eBitY, 0);
 }
 
 /// Set high precision droid position
