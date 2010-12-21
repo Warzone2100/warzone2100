@@ -48,5 +48,5 @@ dist-hook:
 # Works by finding the .deps/*.Po files which refer to source files that don't exist, and replacing them with a single dependency on the correct source file.
 .PHONY: fixbrokendeps
 fixbrokendeps:
-	$(srcdir)/fixbrokendependencies
+	$(srcdir)/fixbrokendependencies || echo "Ignore the missing script, it's not useful when building from a tarball."
 all: fixbrokendeps
