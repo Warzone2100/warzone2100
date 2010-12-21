@@ -1426,6 +1426,11 @@ UDWORD		dispX,dispY,dispR;
 		If still NULL after this then nothing */
 	psReturn = getTileOccupier(mouseTileX, mouseTileY);
 
+	if (psReturn == NULL)
+	{
+		psReturn = getTileBlueprint(mouseTileX, mouseTileY);
+	}
+
 	/* Send the result back - if it's null then we clicked on an area of terrain */
 	return(psReturn);
 }
@@ -2746,8 +2751,14 @@ STRUCTURE	*psStructure;
 		If still NULL after this then nothing */
 	if(driveModeActive() && !driveTacticalActive()) {
 		psNotDroid = NULL;
-	} else {
+	}
+	else
+	{
 		psNotDroid = getTileOccupier(mouseTileX, mouseTileY);
+		if (psNotDroid == NULL)
+		{
+			psNotDroid = getTileBlueprint(mouseTileX, mouseTileY);
+		}
 	}
 
 	if(psNotDroid!=NULL)
@@ -2784,7 +2795,7 @@ STRUCTURE	*psStructure;
 
 			if (aiCheckAlliances(psNotDroid->player, selectedPlayer))
 			{
-				if(psStructure->status == SS_BEING_BUILT)
+				if (psStructure->status == SS_BEING_BUILT || isBlueprint(psStructure))
 				{
 					retVal = MT_OWNSTRINCOMP;
 				}

@@ -4739,6 +4739,16 @@ BOOL cyborgDroid(const DROID* psDroid)
 	 || psDroid->droidType == DROID_CYBORG_SUPER);
 }
 
+bool isConstructionDroid(DROID const *psDroid)
+{
+	return psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT;
+}
+
+bool isConstructionDroid(BASE_OBJECT const *psObject)
+{
+	return isDroid(psObject) && isConstructionDroid(castDroid(psObject));
+}
+
 BOOL droidOnMap(const DROID *psDroid)
 {
 	if (psDroid->died == NOT_CURRENT_LIST || psDroid->droidType == DROID_TRANSPORTER

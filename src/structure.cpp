@@ -251,11 +251,16 @@ BOOL IsStatExpansionModule(STRUCTURE_STATS *psStats)
 		}
 }
 
-BOOL structureIsBlueprint(STRUCTURE *psStructure)
+bool structureIsBlueprint(STRUCTURE *psStructure)
 {
 	return (psStructure->status == SS_BLUEPRINT_VALID ||
 	        psStructure->status == SS_BLUEPRINT_INVALID ||
 	        psStructure->status == SS_BLUEPRINT_PLANNED);
+}
+
+bool isBlueprint(BASE_OBJECT *psObject)
+{
+	return psObject->type == OBJ_STRUCTURE && structureIsBlueprint((STRUCTURE *)psObject);
 }
 
 void structureInitVars(void)
@@ -6127,6 +6132,11 @@ void printStructureInfo(STRUCTURE *psStructure)
 	POWER_GEN	*psPowerGen;
 
 	ASSERT_OR_RETURN( , psStructure != NULL, "Invalid Structure pointer");
+
+	if (isBlueprint(psStructure))
+	{
+		return;  // Don't print anything about imaginary structures. Would crash, anyway.
+	}
 
 	switch (psStructure->pStructureType->type)
 	{
