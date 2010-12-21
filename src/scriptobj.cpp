@@ -677,7 +677,7 @@ static char *scrGetStatName(INTERP_TYPE type, UDWORD data)
 {
 	char	*pName = NULL;
 
-	switch (type)
+	switch ((unsigned)type)  // Unsigned cast to suppress compiler warnings due to enum abuse.
 	{
 	case ST_STRUCTURESTAT:
 		if (data < numStructureStats)
@@ -769,7 +769,7 @@ BOOL scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize)
 	BASE_OBJECT	*psObj;
 #endif
 
-	switch (psVal->type)
+	switch ((unsigned)psVal->type)  // Unsigned cast to suppress compiler warnings due to enum abuse.
 	{
 	case ST_INTMESSAGE:
 		// save the name
@@ -1014,7 +1014,7 @@ BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 	const char              *pName;
 	BOOL			bObjectDefined;
 
-	switch (psVal->type)
+	switch ((unsigned)psVal->type)  // Unsigned cast to suppress compiler warnings due to enum abuse.
 	{
 	case ST_INTMESSAGE:
 		if ((size == 1) &&
