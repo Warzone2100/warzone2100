@@ -45,7 +45,6 @@ typedef enum
 extern char ConsoleString[MAX_CONSOLE_TMP_STRING_LENGTH];
 
 void consoleInit(void);
-void consolePrintf(char *layout, ...);
 BOOL addConsoleMessage(const char *messageText, CONSOLE_TEXT_JUSTIFICATION jusType, SDWORD player);
 void updateConsoleMessages(void);
 void initConsoleMessages(void);

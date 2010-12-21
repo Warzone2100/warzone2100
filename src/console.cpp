@@ -703,22 +703,6 @@ UDWORD getConsoleLineInfo(void)
 	return consoleVisibleLines;
 }
 
-/// Function with printf arguments to print to the console
-// NOTE: Unused! void consolePrintf(char *layout, ...)
-void	consolePrintf(char *layout, ...)
-{
-	char	consoleString[MAX_CONSOLE_STRING_LENGTH];
-	va_list	arguments;		// Formatting info
-
-	/* 'print' it out into our buffer */
-	va_start(arguments,layout);
-	vsnprintf(consoleString, sizeof(consoleString), layout, arguments);
-	va_end(arguments);
-
-	/* Add the message through the normal channels! */
-	addConsoleMessage(consoleString,DEFAULT_JUSTIFY,SYSTEM_MESSAGE);
-}
-
 /// Set if new messages may be added to the console
 void	permitNewConsoleMessages(BOOL allow)
 {
