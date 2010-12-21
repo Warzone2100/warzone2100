@@ -84,7 +84,6 @@
 /*********** Edit Box styles *************/
 
 #define WEDB_PLAIN		0	///< Plain edit box (text with a box around it)
-#define WEDB_DISABLED		1	///< Disabled. Displayed but never gets focus.
 
 /*********** Bar Graph styles ************/
 
@@ -383,11 +382,6 @@ extern UDWORD widgGetButtonState(W_SCREEN *psScreen, UDWORD id);
 /** Set a button or clickable form's state */
 extern void widgSetButtonState(W_SCREEN *psScreen, UDWORD id, UDWORD state);
 
-
-/* The keys that can be used to press a button */
-#define WKEY_NONE		0
-#define WKEY_PRIMARY		1
-#define WKEY_SECONDARY		2
 
 /** Return which key was used to press the last returned widget */
 extern UDWORD widgGetButtonKey(W_SCREEN *psScreen);

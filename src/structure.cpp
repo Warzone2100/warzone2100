@@ -1819,9 +1819,9 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		alignStructure(psBuilding);
 
 		// rotate a wall if necessary
-		if (!FromSave && (pStructureType->type == REF_WALL || pStructureType->type == REF_GATE ) && wallType == WALL_VERT)
+		if (!FromSave && (pStructureType->type == REF_WALL || pStructureType->type == REF_GATE))
 		{
-			psBuilding->rot.direction = DEG(90);
+			psBuilding->rot.direction = wallType == WALL_VERT? DEG(90) : DEG(0);
 		}
 
 		//set up the sensor stats

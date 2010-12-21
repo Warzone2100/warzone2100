@@ -468,7 +468,7 @@ static BOOL OptionsInet(void)			//internet options
 	sContext.yOffset	= 0;
 	sContext.mx			= 0;
 	sContext.my			= 0;
-	editBoxClicked((W_EDITBOX*)widgGetFromID(psConScreen,CON_IP), &sContext);
+	widgGetFromID(psConScreen, CON_IP)->clicked(&sContext);
 	
 	SettingsUp = true;
 	return true;
@@ -1040,7 +1040,7 @@ static void showPasswordForm(void)
 	sContext.yOffset	= 0;
 	sContext.mx			= 0;
 	sContext.my			= 0;
-	editBoxClicked((W_EDITBOX*)widgGetFromID(psWScreen,CON_PASSWORD), &sContext);
+	widgGetFromID(psWScreen, CON_PASSWORD)->clicked(&sContext);
 }
 
 
@@ -3115,7 +3115,7 @@ void runMultiOptions(void)
 		if(widgGetFromID(psWScreen,MULTIOP_CHATEDIT))
 		{
 			widgSetString(psWScreen, MULTIOP_CHATEDIT, (char*)&str);	// start it up!
-			editBoxClicked((W_EDITBOX*)widgGetFromID(psWScreen,MULTIOP_CHATEDIT), &context);
+			widgGetFromID(psWScreen, MULTIOP_CHATEDIT)->clicked(&context);
 		}
 	}
 

@@ -43,7 +43,7 @@ static	BOOL	bWidgetsActive = true;
 /* The widget the mouse is over this update */
 static WIDGET	*psMouseOverWidget = NULL;
 
-static UDWORD	pressed, released;
+static WIDGET_KEY pressed, released;
 static WIDGET_AUDIOCALLBACK AudioCallback = NULL;
 static SWORD HilightAudioID = -1;
 static SWORD ClickedAudioID = -1;
@@ -51,7 +51,6 @@ static SWORD ClickedAudioID = -1;
 /* Function prototypes */
 void widgHiLite(WIDGET *psWidget, W_CONTEXT *psContext);
 void widgHiLiteLost(WIDGET *psWidget, W_CONTEXT *psContext);
-static void widgClicked(WIDGET *psWidget, UDWORD key, W_CONTEXT *psContext);
 static void widgReleased(WIDGET *psWidget, UDWORD key, W_CONTEXT *psContext);
 static void widgRun(WIDGET *psWidget, W_CONTEXT *psContext);
 static void widgDisplayForm(W_FORM *psForm, UDWORD xOffset, UDWORD yOffset);
@@ -193,7 +192,7 @@ static void widgRelease(WIDGET *psWidget)
 		buttonFree((W_BUTTON *)psWidget);
 		break;
 	case WIDG_EDITBOX:
-		editBoxFree((W_EDITBOX *)psWidget);
+		delete psWidget;
 		break;
 	case WIDG_BARGRAPH:
 		barGraphFree((W_BARGRAPH *)psWidget);
@@ -696,7 +695,7 @@ static void widgStartForm(W_FORM *psForm)
 			buttonInitialise((W_BUTTON *)psCurr);
 			break;
 		case WIDG_EDITBOX:
-			editBoxInitialise((W_EDITBOX *)psCurr);
+			((W_EDITBOX *)psCurr)->initialise();
 			break;
 		case WIDG_BARGRAPH:
 			break;
@@ -1127,9 +1126,7 @@ const char *widgGetString(W_SCREEN *psScreen, UDWORD id)
 				break;
 			case WIDG_EDITBOX:
 			{
-				char *utf = UTF32toUTF8(((W_EDITBOX *)psWidget)->aText, NULL);
-				sstrcpy(aStringRetBuffer, utf);
-				free(utf);
+				sstrcpy(aStringRetBuffer, ((W_EDITBOX *)psWidget)->aText.toUtf8().constData());
 				break;
 			}
 			case WIDG_BARGRAPH:
@@ -1191,7 +1188,7 @@ void widgSetString(W_SCREEN *psScreen, UDWORD id, const char *pText)
 			{
 				screenClearFocus(psScreen);
 			}
-			editBoxSetString((W_EDITBOX *)psWidget, pText);
+			((W_EDITBOX *)psWidget)->setString(pText);
 			break;
 
 		case WIDG_BARGRAPH:
@@ -1361,7 +1358,7 @@ static void widgProcessForm(W_CONTEXT *psContext)
    					if (pressed != WKEY_NONE && psCurr->type != WIDG_FORM)
    					{
    						/* Tell the widget it has been clicked */
-   						widgClicked(psCurr, pressed, &sWidgContext);
+						psCurr->clicked(&sWidgContext, pressed);
    					}
    					if (released != WKEY_NONE && psCurr->type != WIDG_FORM)
    					{
@@ -1382,7 +1379,7 @@ static void widgProcessForm(W_CONTEXT *psContext)
 			(psOver == NULL || (psForm->style & WFORM_CLICKABLE)))
 		{
 			/* Tell the form it has been clicked */
-			widgClicked((WIDGET *)psForm, pressed, psContext);
+			psForm->clicked(psContext, pressed);
 		}
 		if (released != WKEY_NONE &&
 			(psOver == NULL || (psForm->style & WFORM_CLICKABLE)))
@@ -1554,7 +1551,7 @@ static void widgFocusLost(W_SCREEN* psScreen, WIDGET *psWidget)
 	case WIDG_BUTTON:
 		break;
 	case WIDG_EDITBOX:
-		editBoxFocusLost(psScreen, (W_EDITBOX *)psWidget);
+		((W_EDITBOX *)psWidget)->focusLost(psScreen);
 		break;
 	case WIDG_BARGRAPH:
 		break;
@@ -1648,34 +1645,6 @@ void widgHiLiteLost(WIDGET *psWidget, W_CONTEXT *psContext)
 	}
 }
 
-/* Call the correct function for mouse pressed */
-static void widgClicked(WIDGET *psWidget, UDWORD key, W_CONTEXT *psContext)
-{
-	switch (psWidget->type)
-	{
-	case WIDG_FORM:
-		formClicked((W_FORM *)psWidget, key);
-		break;
-	case WIDG_LABEL:
-		break;
-	case WIDG_BUTTON:
-		buttonClicked((W_BUTTON *)psWidget, key);
-		break;
-	case WIDG_EDITBOX:
-		editBoxClicked((W_EDITBOX *)psWidget, psContext);
-		break;
-	case WIDG_BARGRAPH:
-		break;
-	case WIDG_SLIDER:
-		sliderClicked((W_SLIDER *)psWidget, psContext);
-		break;
-	default:
-		ASSERT(!"Unknown widget type", "Unknown widget type");
-		break;
-	}
-}
-
-
 /* Call the correct function for mouse released */
 static void widgReleased(WIDGET *psWidget, UDWORD key, W_CONTEXT *psContext)
 {
@@ -1690,7 +1659,6 @@ static void widgReleased(WIDGET *psWidget, UDWORD key, W_CONTEXT *psContext)
 		buttonReleased(psContext->psScreen, (W_BUTTON *)psWidget, key);
 		break;
 	case WIDG_EDITBOX:
-		editBoxReleased((W_EDITBOX *)psWidget);
 		break;
 	case WIDG_BARGRAPH:
 		break;
@@ -1718,7 +1686,7 @@ static void widgRun(WIDGET *psWidget, W_CONTEXT *psContext)
 		buttonRun((W_BUTTON *)psWidget);
 		break;
 	case WIDG_EDITBOX:
-		editBoxRun((W_EDITBOX *)psWidget, psContext);
+		((W_EDITBOX *)psWidget)->run(psContext);
 		break;
 	case WIDG_BARGRAPH:
 		break;
