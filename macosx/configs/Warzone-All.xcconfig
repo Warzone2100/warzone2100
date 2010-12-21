@@ -14,10 +14,14 @@ FRAMEWORK_SEARCH_PATHS = $(FRAMEWORK_SEARCH_PATHS_QUOTED_1) $(FRAMEWORK_SEARCH_P
 HEADER_SEARCH_PATHS = .. $(inherited)
 LIBRARY_SEARCH_PATHS = $(inherited) $(LIBRARY_SEARCH_PATHS_QUOTED_1) $(LIBRARY_SEARCH_PATHS_QUOTED_3)
 GCC_MODEL_TUNING = G5
-OTHER_CFLAGS = $(FlagsForCandCpp) -Wno-pointer-to-int-cast -Wmissing-declarations -Wstrict-prototypes -Wdeclaration-after-statement $(inherited) // Warning flags that c++ does not like
+
+OTHER_CFLAGS = $(FlagsForCandCpp) $(WarnForC) $(inherited)
 OTHER_CFLAGS[arch=i386] = $(inherited) // intel 32 bit only
-OTHER_CPLUSPLUSFLAGS = $(FlagsForCandCpp) -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS
+OTHER_CFLAGS[arch=x86_64] = $(inherited) // intel 64 bit only
+
+OTHER_CPLUSPLUSFLAGS = -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS $(FlagsForCandCpp) $(WarnForCpp)
 OTHER_CPLUSPLUSFLAGS[arch=i386] = $(inherited) // intel 32 bit only
+OTHER_CPLUSPLUSFLAGS[arch=x86_64] = $(inherited) // intel 64 bit only
 
 
 // Warnings
@@ -26,8 +30,6 @@ GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES // -Wmissing-braces
 GCC_WARN_ABOUT_RETURN_TYPE = YES // -Wreturn-type
 GCC_WARN_MISSING_PARENTHESES = YES // -Wparentheses
 GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES // -Wmissing-field-initializers
-WARNING_CFLAGS = -Wall -Wno-unused-label -Wno-format-security -Wno-strict-aliasing -Wmissing-field-initializers -Wcast-align -Wwrite-strings -Wpointer-arith // Wno-missing-declarations is set on GLee.c; otherwise we would have +3000 warnings
-GCC_WARN_SIGN_COMPARE = NO // FIXME: -Wsign-compare there are a lot of these and they should be fixed
 GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = NO // FIXME: -Wno-format  Hides some "format not a string literal and no format arguments" warnings; these should be fixed at some point
 GCC_WARN_UNDECLARED_SELECTOR = YES // -Wundeclared-selector
 GCC_WARN_UNUSED_FUNCTION = YES // -Wunused-function
@@ -35,6 +37,11 @@ GCC_WARN_UNUSED_LABEL = YES // -Wunused-label
 GCC_WARN_UNUSED_VALUE = YES // -Wunused-value
 GCC_WARN_UNUSED_VARIABLE = YES // -Wunused-variable
 
+// Build setting dependent warnings
+WarnForCandCpp = -Wall -Wextra -Wcast-align -Wwrite-strings -Wpointer-arith $(WarnForCandCppDep) // Wno-missing-declarations is set on GLee.c; otherwise we would have +3000 warnings
+WarnForC = -Wstrict-prototypes -Wdeclaration-after-statement $(WarnForCDep)
+WarnForCpp = $(WarnForCppDep)
+
 // Additional build flags for both c and c++ files
-FlagsForCandCpp = $(BuildDependentFlagsForCandCpp)
+FlagsForCandCpp = $(BuildDependentFlagsForCandCpp) $(WarnForCandCpp)
 FlagsForCandCpp[arch=i386] = $(inherited) // Flags for intel 32 bit only
