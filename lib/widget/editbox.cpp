@@ -22,6 +22,8 @@
  */
 
 #include <string.h>
+#include <QtGui/QApplication>
+#include <QtGui/QClipboard>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/utf.h"
@@ -382,9 +384,12 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 			debug(LOG_INPUT, "EditBox cursor backspace");
 			break;
 		case INPBUF_TAB :
-			aText = QString::fromUtf8(wzGetClipboard());  // get clipboard contents
+			{
+				QClipboard *clipboard = QApplication::clipboard();
+				aText = clipboard->text(QClipboard::Selection);                           // try X11 specific buffer first
+				if (aText.isEmpty()) aText = clipboard->text(QClipboard::Clipboard);      // if not, try generic clipboard
+			}
 			insPos = aText.length();
-
 			/* Update the printable text */
 			fitStringEnd();
 			debug(LOG_INPUT, "EditBox cursor tab");
