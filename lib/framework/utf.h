@@ -137,7 +137,7 @@ struct QString  // TODO Use the real QString instead.
 	int length() const                                   { return s.length(); }
 	bool isEmpty() const                                 { return s.empty(); }
 	QString &insert(int position, QChar ch)              { s.insert(position, 1, ch); return *this; }
-	QString &remove(int position, size_t n = S::npos)    { s.erase(position, n); return *this; }
+	QString &remove(int position, int n)                 { s.erase(position, n); return *this; }
 	QChar &operator [](int position)                     { return s[position]; }
 	QChar operator [](int position) const                { return s[position]; }
 
