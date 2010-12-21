@@ -467,7 +467,7 @@ BOOL ImagehlpGetLineFromAddr(HANDLE hProcess, DWORD dwAddress,  LPTSTR lpFileNam
 
 	assert(lpFileName && lpLineNumber);
 
-	lstrcpyn(lpFileName, (LPTCSTR)Line.FileName, nSize);
+	lstrcpyn(lpFileName, (LPCTSTR)Line.FileName, nSize);
 	*lpLineNumber = Line.LineNumber;
 
 	return TRUE;
