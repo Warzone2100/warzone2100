@@ -136,15 +136,14 @@ typedef struct _message
 } MESSAGE;
 
 //used to display the proximity messages
-typedef struct _proximity_display
+struct PROXIMITY_DISPLAY : public OBJECT_POSITION
 {
-	POSITION_OBJ;
 	MESSAGE			*psMessage;				//message associated with this 'button'
 	UDWORD			timeLastDrawn;			//stores the time the 'button' was last drawn for animation
 	UDWORD			strobe;					//id of image last used
 	UDWORD			buttonID;				//id of the button for the interface
-	struct _proximity_display	*psNext;	//pointer to the next in the list
-} PROXIMITY_DISPLAY;
+	PROXIMITY_DISPLAY *     psNext;                         //pointer to the next in the list
+};
 
 //used to display the text messages in 3D view of the Intel display
 typedef struct _text_display
