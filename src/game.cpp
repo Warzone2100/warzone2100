@@ -2858,7 +2858,7 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 			for(pl=0;pl<MAX_PLAYERS;pl++)// ajl. must do for every player to stop multiplay/pc players going gaga.
 			{
 				//reverse the structure lists so the Research Facilities are in the same order as when saved
-				reverseObjectList((BASE_OBJECT**)&apsStructLists[pl]);
+				reverseObjectList(&apsStructLists[pl]);
 			}
 		}
 
@@ -3176,7 +3176,7 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		for(pl=0;pl<MAX_PLAYERS;pl++)	// ajl. must do for every player to stop multiplay/pc players going gaga.
 		{
 			//reverse the structure lists so the Research Facilities are in the same order as when saved
-			reverseObjectList((BASE_OBJECT**)&apsStructLists[pl]);
+			reverseObjectList(&apsStructLists[pl]);
 		}
 	}
 
@@ -3379,43 +3379,43 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		for(pl=0;pl<MAX_PLAYERS;pl++)	// ajl. must do for every player to stop multiplay/pc players going gaga.
 		{
 			//reverse the structure lists so the Research Facilities are in the same order as when saved
-			reverseTemplateList((DROID_TEMPLATE**)&apsDroidTemplates[pl]);
+			reverseTemplateList(&apsDroidTemplates[pl]);
 		}
 
 		for(pl=0;pl<MAX_PLAYERS;pl++)
 		{
 			//reverse the droid lists so selections occur in the same order
-			reverseObjectList((BASE_OBJECT**)&apsLimboDroids[pl]);
+			reverseObjectList(&apsLimboDroids[pl]);
 		}
 
 		for(pl=0;pl<MAX_PLAYERS;pl++)
 		{
 			//reverse the droid lists so selections occur in the same order
-			reverseObjectList((BASE_OBJECT**)&apsDroidLists[pl]);
+			reverseObjectList(&apsDroidLists[pl]);
 		}
 
 		for(pl=0;pl<MAX_PLAYERS;pl++)
 		{
 			//reverse the droid lists so selections occur in the same order
-			reverseObjectList((BASE_OBJECT**)&mission.apsDroidLists[pl]);
+			reverseObjectList(&mission.apsDroidLists[pl]);
 		}
 
 		for(pl=0;pl<MAX_PLAYERS;pl++)
 		{
 			//reverse the struct lists so selections occur in the same order
-			reverseObjectList((BASE_OBJECT**)&mission.apsStructLists[pl]);
+			reverseObjectList(&mission.apsStructLists[pl]);
 		}
 
 		for(pl=0;pl<MAX_PLAYERS;pl++)
 		{
 			//reverse the droid lists so selections occur in the same order
-			reverseObjectList((BASE_OBJECT**)&apsFeatureLists[pl]);
+			reverseObjectList(&apsFeatureLists[pl]);
 		}
 
 		for(pl=0;pl<MAX_PLAYERS;pl++)
 		{
 			//reverse the droid lists so selections occur in the same order
-			reverseObjectList((BASE_OBJECT**)&mission.apsFeatureLists[pl]);
+			reverseObjectList(&mission.apsFeatureLists[pl]);
 		}
 	}
 
@@ -10255,8 +10255,8 @@ BOOL loadSaveMessage36(char *pFileData, UDWORD filesize, UDWORD numMessages, UDW
 		psSaveMessage = (SAVE_MESSAGE_36 *) pFileData;
 
 		/* SAVE_MESSAGE_36 */
-		endian_sdword((SDWORD*)&psSaveMessage->type);	/* FIXME: enum may not be this type! */
-		endian_sdword((SDWORD*)&psSaveMessage->dataType);
+		endian_enum(&psSaveMessage->type);  /* FIXME: enum may not be this type! */
+		endian_enum(&psSaveMessage->dataType);
 		endian_udword(&psSaveMessage->objId);
 		endian_udword(&psSaveMessage->player);
 
@@ -10481,8 +10481,8 @@ static BOOL writeMessageFile(char *pFileName)
 			psSaveMessage->read = psMessage->read;			//flag to indicate whether message has been read
 			psSaveMessage->player = psMessage->player;		//which player this message belongs to
 
-			endian_sdword((SDWORD*)&psSaveMessage->type); /* FIXME: enum may be different type! */
-			endian_sdword((SDWORD*)&psSaveMessage->dataType);
+			endian_enum(&psSaveMessage->type); /* FIXME: enum may be different type! */
+			endian_enum(&psSaveMessage->dataType);
 			endian_udword(&psSaveMessage->objId);
 			endian_udword(&psSaveMessage->player);
 
@@ -10572,7 +10572,7 @@ BOOL loadSaveFlagV(char *pFileData, UDWORD filesize, UDWORD numflags, UDWORD ver
 		psSaveflag = (SAVE_FLAG *) pFileData;
 
 		/* SAVE_FLAG */
-		endian_sdword((SDWORD*) &psSaveflag->type); /* FIXME: enum may not be this type! */
+		endian_enum(&psSaveflag->type);  /* FIXME: enum may not be this type! */
 		endian_udword(&psSaveflag->frameNumber);
 		endian_udword(&psSaveflag->screenX);
 		endian_udword(&psSaveflag->screenY);
@@ -10774,7 +10774,7 @@ static BOOL writeFlagFile(char *pFileName)
 			}
 
 			/* SAVE_FLAG */
-			endian_sdword((SDWORD*)&psSaveflag->type); /* FIXME: enum may be different type! */
+			endian_enum(&psSaveflag->type); /* FIXME: enum may be different type! */
 			endian_udword(&psSaveflag->frameNumber);
 			endian_udword(&psSaveflag->screenX);
 			endian_udword(&psSaveflag->screenY);
@@ -10825,7 +10825,7 @@ static BOOL writeFlagFile(char *pFileName)
 							}
 
 							/* SAVE_FLAG */
-							endian_sdword((SDWORD*)&psSaveflag->type); /* FIXME: enum may be different type! */
+							endian_enum(&psSaveflag->type);  /* FIXME: enum may be different type! */
 							endian_udword(&psSaveflag->frameNumber);
 							endian_udword(&psSaveflag->screenX);
 							endian_udword(&psSaveflag->screenY);

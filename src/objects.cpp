@@ -54,22 +54,18 @@ BOOL objShutdown(void)
 the last and the last entry becomes the first!*/
 void reverseObjectList(BASE_OBJECT **ppsList)
 {
-    BASE_OBJECT     *psPrev, *psNext, *psCurrent, *psObjList;
+	BASE_OBJECT *psPrev = NULL;
+	BASE_OBJECT *psCurrent = *ppsList;
 
-    //initialise the pointers
-    psObjList = *ppsList;
-    psPrev = psNext = NULL;
-    psCurrent = psObjList;
-
-    while(psCurrent != NULL)
-    {
-        psNext = psCurrent->psNext;
-        psCurrent->psNext = psPrev;
-        psPrev = psCurrent;
-        psCurrent = psNext;
-    }
-    //set the list passed in to point to the new top
-    *ppsList = psPrev;
+	while (psCurrent != NULL)
+	{
+		BASE_OBJECT *psNext = psCurrent->psNext;
+		psCurrent->psNext = psPrev;
+		psPrev = psCurrent;
+		psCurrent = psNext;
+	}
+	//set the list passed in to point to the new top
+	*ppsList = psPrev;
 }
 
 const char *objInfo(const BASE_OBJECT *psObj)

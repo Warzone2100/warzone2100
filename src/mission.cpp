@@ -1111,7 +1111,7 @@ void saveCampaignData(void)
     {
         /*now that every unit for the selected player has been moved into the
         mission list - reverse it and fill the transporter with the first ten units*/
-        reverseObjectList((BASE_OBJECT**)&mission.apsDroidLists[selectedPlayer]);
+        reverseObjectList(&mission.apsDroidLists[selectedPlayer]);
 
         //find the *first* transporter
         for (psDroid = mission.apsDroidLists[selectedPlayer]; psDroid != NULL;
