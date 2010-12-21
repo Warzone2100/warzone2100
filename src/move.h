@@ -26,11 +26,6 @@
 
 #include "objectdef.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 /* Initialise the movement system */
 extern BOOL moveInitialise(void);
 
@@ -93,9 +88,5 @@ static inline void droidSetPrecisePosition(DROID *psDroid, Position newPos)
 }
 
 const char *moveDescription(MOVE_STATUS status);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_MOVE_H__

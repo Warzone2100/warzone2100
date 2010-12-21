@@ -23,11 +23,6 @@
 
 #include "track.h"
 
-#if defined(__cplusplus)
-extern "C"
-{
-#endif
-
 extern BOOL		audio_Init( AUDIO_CALLBACK pStopTrackCallback );
 extern void		audio_Update(void);
 extern BOOL		audio_Shutdown(void);
@@ -70,10 +65,6 @@ extern void audio_RemoveObj(const void* psObj);
 extern unsigned int audio_GetSampleQueueCount(void);
 extern unsigned int audio_GetSampleListCount(void);
 extern unsigned int sound_GetActiveSamplesCount(void);
-
-#if defined(__cplusplus)
-}
-#endif
 
 extern void 		audioTest(void);
 

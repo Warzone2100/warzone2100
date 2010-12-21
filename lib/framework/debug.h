@@ -40,11 +40,6 @@
 #include "macros.h"
 #include "types.h"
 
-#if defined(__cplusplus)
-extern "C"
-{
-#endif
-
 /****************************************************************************************
  *
  * Basic debugging macro's
@@ -131,18 +126,10 @@ extern bool assertEnabled;
  *
  * \note BUILD_BUG_ON_ZERO from <linux/kernel.h>
  */
-#ifndef __cplusplus
-#define STATIC_ASSERT_EXPR( expr ) \
-	(sizeof(struct { int:-!(expr); }))
-#else //cplusplus
-}
 template<bool> class StaticAssert;
 template<> class StaticAssert<true>{};
 #define STATIC_ASSERT_EXPR(expr) \
 	(sizeof(StaticAssert<(expr)>))
-extern "C"
-{
-#endif //cplusplus
 /**
  * Compile time assert
  * Not to be used in global context!
@@ -284,10 +271,6 @@ static inline void objTraceDisable(void) { traceID = (UDWORD)-1; }
 void debug_MEMCHKOFF(void);
 void debug_MEMCHKON(void);
 void debug_MEMSTATS(void);
-#endif
-
-#if defined(__cplusplus)
-}
 #endif
 
 /** Checks if a particular debub flag was enabled */

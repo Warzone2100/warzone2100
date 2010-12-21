@@ -27,11 +27,6 @@
 #ifndef __INCLUDED_SRC_MULTIRECV_H__
 #define __INCLUDED_SRC_MULTIRECV_H__
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 extern BOOL recvDroid               (NETQUEUE queue);
 extern BOOL recvDroidInfo           (NETQUEUE queue);
 extern BOOL recvDestroyDroid        (NETQUEUE queue);
@@ -66,9 +61,5 @@ extern BOOL recvMapFileRequested    (NETQUEUE queue);
 extern BOOL recvTextMessageAI       (NETQUEUE queue);  //AI multiplayer message
 extern BOOL recvTeamRequest         (NETQUEUE queue);
 extern BOOL recvReadyRequest        (NETQUEUE queue);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_MULTIRECV_H__

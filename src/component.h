@@ -24,11 +24,6 @@
 #include "droiddef.h"
 #include "structuredef.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 /*
 	Header file for component.c
 	Pumpkin Studios, EIDOS Interactive.
@@ -103,9 +98,5 @@ void destroyFXDroid(DROID *psDroid);
 #define REPAIR_MOUNT_IMD(DROID,PLAYER)	(asRepairStats[DROID->asBits[COMP_REPAIRUNIT].nStat].pMountGraphic)
 /* Get a muzzle flash pie*/
 #define MUZZLE_FLASH_PIE(DROID,WEAPON_NUM)	(asWeaponStats[DROID->asWeaps[WEAPON_NUM].nStat].pMuzzleGraphic)
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_COMPONENT_H__

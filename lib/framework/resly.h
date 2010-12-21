@@ -27,11 +27,6 @@
 
 #include "lib/framework/lexer_input.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 /* The initial resource directory and the current resource directory */
 extern char aResDir[PATH_MAX];
 extern char aCurrResDir[PATH_MAX];
@@ -45,9 +40,5 @@ extern int res_parse(void);
 
 /* Destroy the lexer */
 extern int res_lex_destroy(void);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif

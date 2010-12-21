@@ -32,11 +32,6 @@
 # endif
 #endif
 
-#if defined(__cplusplus)
-extern "C"
-{
-#endif
-
 #define ATTENUATION_FACTOR	0.0003f
 
 #define	SAMPLE_NOT_ALLOCATED	-1
@@ -137,10 +132,6 @@ extern void sound_ResumeStream(AUDIO_STREAM* stream);
 extern AUDIO_STREAM* sound_PlayStreamWithBuf(PHYSFS_file* fileHandle, float volume, void (*onFinished)(void*), void* user_data, size_t streamBufferSize, unsigned int buffer_count);
 extern float sound_GetStreamVolume(const AUDIO_STREAM* stream);
 extern void sound_SetStreamVolume(AUDIO_STREAM* stream, float volume);
-
-#if defined(__cplusplus)
-}
-#endif
 
 void soundTest(void);
 

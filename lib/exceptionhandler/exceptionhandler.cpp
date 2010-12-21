@@ -724,7 +724,7 @@ bool OverrideRPTDirectory(char *newPath)
 # if defined(WZ_CC_MINGW)
 	TCHAR buf[MAX_PATH];
 
-	if (!MultiByteToWideChar(CP_UTF8, 0, newPath, strlen(newPath), buf, 0))
+	if (!MultiByteToWideChar(CP_UTF8, 0, newPath, strlen(newPath), (WCHAR *)buf, 0))
 	{
 		//conversion failed-- we won't use the user's directory.
 
@@ -744,7 +744,7 @@ bool OverrideRPTDirectory(char *newPath)
 			0, NULL );
 
 		wsprintf(szBuffer, _T("Exception handler failed setting new directory with error %d: %s\n"), dw, lpMsgBuf);
-		MessageBox(MB_ICONEXCLAMATION, szBuffer, _T("Error"), MB_OK); 
+		MessageBox((HWND)MB_ICONEXCLAMATION, szBuffer, _T("Error"), MB_OK); 
 
 		LocalFree(lpMsgBuf);
 		LocalFree(lpDisplayBuf);

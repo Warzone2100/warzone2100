@@ -859,7 +859,7 @@ static void intDoScreenRefresh(void)
 			if (psFlag != NULL)
 			{
 				// need to restart the delivery point position
-				StartDeliveryPosition( (OBJECT_POSITION *)psFlag );
+				StartDeliveryPosition(psFlag);
 			}
 
 			// make sure the commander order screen is in the right state
@@ -2816,7 +2816,7 @@ static void intProcessStats(UDWORD id)
 			psFlag = FindFactoryDelivery(psStruct);
 			if (psFlag)
 			{
-				StartDeliveryPosition( (OBJECT_POSITION *)psFlag );
+				StartDeliveryPosition(psFlag);
 			}
 		}
 	}

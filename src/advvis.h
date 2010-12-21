@@ -23,19 +23,10 @@
 
 #include "basedef.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 void avUpdateTiles(void);
 UDWORD avGetObjLightLevel(BASE_OBJECT *psObj, UDWORD origLevel);
 void setRevealStatus(BOOL val);
 BOOL getRevealStatus(void);
 void preProcessVisibility(void);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_ADVVIS_H__

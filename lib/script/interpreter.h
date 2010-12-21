@@ -25,11 +25,6 @@
 #ifndef _interp_h
 #define _interp_h
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 /* The type of function called by an OP_CALL */
 typedef BOOL (*SCRIPT_FUNC)(void);
 
@@ -288,9 +283,5 @@ extern BOOL interpProcessorActive(void);
 
 /* Output script call stack trace */
 extern void scrOutputCallTrace(code_part part);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif

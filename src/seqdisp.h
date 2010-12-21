@@ -26,11 +26,6 @@
 
 #include "lib/framework/types.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 /***************************************************************************/
 /*
  *	Global Definitions
@@ -96,9 +91,5 @@ extern BOOL seq_GetSubtitles(void);
 
 /*returns the next sequence in the list to play*/
 extern void seq_StartNextFullScreenVideo(void);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif	// __INCLUDED_SRC_SEQDISP_H__

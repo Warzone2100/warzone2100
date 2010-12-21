@@ -26,11 +26,6 @@
 
 #include "lib/framework/vector.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 //Watermelon:num of VTOL weapons should be same as DROID_MAXWEAPS
 #define VTOL_MAXWEAPS		3
 
@@ -83,9 +78,5 @@ struct MOVE_CONTROL
 	// iAttackRuns tracks the amount of ammunition a VTOL has remaining for each weapon
 	UDWORD	iAttackRuns[VTOL_MAXWEAPS];
 };
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_MOVEDEF_H__

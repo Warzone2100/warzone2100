@@ -23,11 +23,6 @@
 
 #include "map.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 #define TILE_RAISE	1
 #define TILE_LOWER	-1
 #define MAX_TILE_HEIGHT 255
@@ -81,9 +76,5 @@ extern bool quickQueueMode;
 
 /*returns true if the build state is not equal to BUILD3D_NONE*/
 extern BOOL   tryingToGetLocation(void);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_EDIT3D_H__

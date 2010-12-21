@@ -27,11 +27,6 @@
 #include "lib/script/event.h" // needed for _scr_user_types
 #include "lib/script/parse.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 // How many game ticks for one event tick
 #define SCR_TICKRATE	100
 
@@ -125,9 +120,5 @@ extern BOOL scrTabInitialise(void);
 
 // Shut down the script system
 extern void scrShutDown(void);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_SCRIPTTABS_H__

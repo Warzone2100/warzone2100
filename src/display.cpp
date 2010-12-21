@@ -2314,14 +2314,10 @@ static void dealWithLMBDClick(void)
 when the mouse button was pressed */
 static OBJECT_POSITION *	checkMouseLoc(void)
 {
-	OBJECT_POSITION		*psReturn;
 	FLAG_POSITION		*psPoint;
 	//PROXIMITY_DISPLAY	*psProxDisp;
 	UDWORD				i;
 	UDWORD				dispX,dispY,dispR;
-
-	// We haven't found anything yet
-	psReturn = NULL;
 
 	// First have a look through the DeliveryPoint lists
 	for (i=0; i<MAX_PLAYERS; i++)
@@ -2337,9 +2333,7 @@ static OBJECT_POSITION *	checkMouseLoc(void)
 				if (mouseInBox(dispX-dispR, dispY-dispR, dispX+dispR, dispY+dispR))
 				{
 					// We HAVE clicked on DP!
-					psReturn = (OBJECT_POSITION *)psPoint;
-					//There's no point in checking other object types
-					return(psReturn);
+					return psPoint;
 				}
 			}
 		}
@@ -2357,9 +2351,7 @@ static OBJECT_POSITION *	checkMouseLoc(void)
 			if (mouseInBox(dispX-dispR, dispY-dispR, dispX+dispR, dispY+dispR))
 			{
 				// We HAVE clicked on Proximity Message!
-				psReturn = (OBJECT_POSITION *)psProxDisp;
-				//There's no point in checking other object types
-				return(psReturn);
+				return psProxDisp;
 			}
 		}
 	}*/

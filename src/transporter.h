@@ -26,11 +26,6 @@
 
 #include "lib/widget/widget.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 #define IDTRANS_FORM			9000	//The Transporter base form
 #define IDTRANS_CONTENTFORM		9003	//The Transporter Contents form
 #define IDTRANS_DROIDS			9006	//The Droid base form
@@ -103,9 +98,5 @@ extern void stopMissionButtonFlash(UDWORD buttonID);
 extern BOOL transporterFlying(DROID *psTransporter);
 //initialise the flag to indicate the first transporter has arrived - set in startMission()
 extern void initFirstTransporterFlag(void);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_TRANSPORTER_H__

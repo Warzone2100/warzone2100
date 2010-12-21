@@ -24,11 +24,6 @@
 #ifndef __INCLUDED_SRC_SCRIPTEXTERN_H__
 #define __INCLUDED_SRC_SCRIPTEXTERN_H__
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 // current game level
 extern SDWORD	scrGameLevel;
 // whether the tutorial is active
@@ -69,9 +64,5 @@ extern BOOL scrGenExternGet(UDWORD index);
 
 // General function to set some basic game values
 extern BOOL scrGenExternSet(UDWORD index);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_SCRIPTEXTERN_H__

@@ -23,20 +23,11 @@
 
 #include "lib/framework/types.h"
 
-#if defined(__cplusplus)
-extern "C"
-{
-#endif
-
 void PlayList_Init(void);
 void PlayList_Quit(void);
 bool PlayList_Read(const char* path);
 const char* PlayList_CurrentSong(void);
 const char* PlayList_NextSong(void);
 void playListTest(void);
-
-#if defined(__cplusplus)
-}
-#endif
 
 #endif // __INCLUDED_LIB_SOUND_PLAYLIST_H__

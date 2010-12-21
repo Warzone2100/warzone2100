@@ -29,11 +29,6 @@
 #include "positiondef.h"
 #include "stringdef.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 /// max number of text strings or sequences for VIEWDATA
 static const unsigned int MAX_DATA = 4;
 
@@ -141,15 +136,14 @@ typedef struct _message
 } MESSAGE;
 
 //used to display the proximity messages
-typedef struct _proximity_display
+struct PROXIMITY_DISPLAY : public OBJECT_POSITION
 {
-	POSITION_OBJ;
 	MESSAGE			*psMessage;				//message associated with this 'button'
 	UDWORD			timeLastDrawn;			//stores the time the 'button' was last drawn for animation
 	UDWORD			strobe;					//id of image last used
 	UDWORD			buttonID;				//id of the button for the interface
-	struct _proximity_display	*psNext;	//pointer to the next in the list
-} PROXIMITY_DISPLAY;
+	PROXIMITY_DISPLAY *     psNext;                         //pointer to the next in the list
+};
 
 //used to display the text messages in 3D view of the Intel display
 typedef struct _text_display
@@ -167,9 +161,5 @@ typedef struct _viewData_list
 	UBYTE					numViewData;	//number in array
 	struct _viewData_list	*psNext;		//next array of data
 } VIEWDATA_LIST;
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_MESSAGEDEF_H__

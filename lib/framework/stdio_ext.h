@@ -25,10 +25,6 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-#if defined(__cplusplus)
-extern "C" {
-#endif
-
 /** A variant on snprintf which appends its output string to the given string
  *  buffer, rather than to replace it.
  *  \param str the string to append to
@@ -114,9 +110,5 @@ do { \
 	/* Print into our newly created string-buffer */ \
 	sprintf(*var, fmt,  __VA_ARGS__); \
 } while(0)
-
-#if defined(__cplusplus)
-}
-#endif
 
 #endif // STDIO_EXT_H

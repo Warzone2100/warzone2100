@@ -24,18 +24,9 @@
 
 #include "netplay.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 BOOL NETstartLogging(void);
 BOOL NETstopLogging(void);
 BOOL NETlogEntry( const char *str, UDWORD a, UDWORD b );
 void NETlogPacket(uint8_t type, uint32_t size, BOOL received);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // _netlog_h

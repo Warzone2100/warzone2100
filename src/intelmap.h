@@ -26,11 +26,6 @@
 
 #include "messagedef.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 /* Intelligence Map screen IDs */
 #define IDINTMAP_FORM			6000	//The intelligence map base form
 #define IDINTMAP_MSGVIEW		6002	//The message 3D view for the intelligence screen
@@ -92,9 +87,5 @@ extern void displayImmediateMessage(MESSAGE *psMessage);
 extern BOOL messageIsImmediate(void);
 /*sets the flag*/
 extern void setMessageImmediate(BOOL state);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif	// __INCLUDED_SRC_INTELMAP_H__

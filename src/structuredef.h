@@ -65,16 +65,15 @@ REF_GATE,
 NUM_DIFF_BUILDINGS,		//need to keep a count of how many types for IMD loading
 } STRUCTURE_TYPE;
 
-typedef struct _flag_position
+struct FLAG_POSITION : public OBJECT_POSITION
 {
-	POSITION_OBJ;
 	Vector3i		coords;							//the world coords of the Position
 	UBYTE		factoryInc;						//indicates whether the first, second etc factory
 	UBYTE		factoryType;					//indicates whether standard, cyborg or vtol factory
 //	UBYTE		factorySub;						//sub value. needed to order production points.
 //	UBYTE		primary;
-	struct _flag_position	*psNext;
-} FLAG_POSITION;
+	FLAG_POSITION * psNext;
+};
 
 
 //only allowed one weapon per structure (more memory for Tim)

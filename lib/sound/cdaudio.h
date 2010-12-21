@@ -21,11 +21,6 @@
 #ifndef __INCLUDED_LIB_SOUND_CDAUDIO_H__
 #define __INCLUDED_LIB_SOUND_CDAUDIO_H__
 
-#if defined(__cplusplus)
-extern "C"
-{
-#endif
-
 typedef enum
 {
 	SONG_FRONTEND,
@@ -38,9 +33,5 @@ BOOL cdAudio_PlayTrack(SONG_CONTEXT context);
 void cdAudio_Stop(void);
 void cdAudio_Pause(void);
 void cdAudio_Resume(void);
-
-#if defined(__cplusplus)
-}
-#endif
 
 #endif // __INCLUDED_LIB_SOUND_CDAUDIO_H__

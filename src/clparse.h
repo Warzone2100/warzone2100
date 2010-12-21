@@ -24,19 +24,10 @@
 #ifndef __INCLUDED_SRC_CLPARSE_H__
 #define __INCLUDED_SRC_CLPARSE_H__
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 // parse the commandline
 bool ParseCommandLine(int argc, const char** argv);
 bool ParseCommandLineEarly(int argc, const char** argv);
 
 extern BOOL bAllowDebugMode;
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_CLPARSE_H__

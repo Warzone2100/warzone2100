@@ -21,11 +21,6 @@
 
 #include <physfs.h>
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 #define PHYSFS_APPEND 1
 #define PHYSFS_PREPEND 0
 
@@ -91,9 +86,5 @@ static inline bool PHYSFS_readBEFloat(PHYSFS_file* file, float* val)
 }
 
 bool PHYSFS_printf(PHYSFS_file *file, const char *format, ...) WZ_DECL_FORMAT(printf, 2, 3);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // _physfs_ext_h

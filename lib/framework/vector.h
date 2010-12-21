@@ -28,11 +28,6 @@
 #include "frame.h"
 #include "math_ext.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 typedef struct { int x, y; } Vector2i;
 typedef struct { float x, y; } Vector2f;
 typedef struct { int x, y, z; } Vector3i;
@@ -719,10 +714,5 @@ static inline WZ_DECL_CONST Vector3i Vector3i_LinearInterpolate(const Vector3i f
 
 	return Vector3i_Add(from, Vector3f_To3i(Vector3f_Mult(Vector3i_To3f(Vector3i_Sub(to, from)), s)));
 }
-
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // VECTOR_H

@@ -21,11 +21,6 @@
 #ifndef __INCLUDED_SRC_DIFFICULTY_H__
 #define __INCLUDED_SRC_DIFFICULTY_H__
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 typedef enum _difficulty_level
 {
 	DL_EASY,
@@ -38,9 +33,5 @@ typedef enum _difficulty_level
 void setDifficultyLevel(DIFFICULTY_LEVEL lev);
 DIFFICULTY_LEVEL getDifficultyLevel(void);
 int modifyForDifficultyLevel(int basicVal, bool IsPlayer);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_DIFFICULTY_H__

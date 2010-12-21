@@ -24,11 +24,6 @@
 #ifndef __INCLUDED_SRC_SCRIPTCB_H__
 #define __INCLUDED_SRC_SCRIPTCB_H__
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 //console callback stuff
 //---------------------------
 #ifndef MAXSTRLEN
@@ -159,9 +154,5 @@ extern BOOL scrCBTransporterLandedB(void);
 extern BOOL scrCBDorderStop(void);
 extern BOOL scrCBDorderReachedLocation(void);
 extern BOOL scrCBProcessKeyPress(void);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_SCRIPTCB_H__

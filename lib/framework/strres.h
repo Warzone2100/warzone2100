@@ -23,11 +23,6 @@
 #ifndef _strres_h
 #define _strres_h
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 // Forward declaration to allow pointers to this type
 struct STR_RES;
 
@@ -52,9 +47,5 @@ extern bool strresLoad(struct STR_RES* psRes, const char* fileName);
 
 /* Get the ID string for a string */
 extern const char* strresGetIDfromString(struct STR_RES *psRes, const char *pString);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif
