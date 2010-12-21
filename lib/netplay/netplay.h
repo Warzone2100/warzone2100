@@ -29,11 +29,6 @@
 #include "nettypes.h"
 #include <physfs.h>
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 // Lobby Connection errors
 
 typedef enum
@@ -297,7 +292,7 @@ extern char iptoconnect[PATH_MAX]; // holds IP/hostname from command line
 // ////////////////////////////////////////////////////////////////////////
 // functions available to you.
 extern int   NETinit(BOOL bFirstCall);				// init
-BOOL NETsend(uint8_t player, NETMESSAGE message);                        ///< send to player, or broadcast if player == NET_ALL_PLAYERS.
+bool NETsend(uint8_t player, NetMessage const *message);                 ///< send to player, or broadcast if player == NET_ALL_PLAYERS.
 extern BOOL NETrecvNet(NETQUEUE *queue, uint8_t *type);                  ///< recv a message from the net queues if possible.
 extern BOOL NETrecvGame(NETQUEUE *queue, uint8_t *type);                 ///< recv a message from the game queues which is sceduled to execute by time, if possible.
 void NETflush(void);                                                     ///< Flushes any data stuck in compression buffers.
@@ -370,9 +365,5 @@ void _syncDebugBacktrace(const char *function);                  ///< Adds a bac
 void resetSyncDebug(void);                                       ///< Resets the syncDebug, so syncDebug from a previous game doesn't cause a spurious desynch dump.
 uint32_t nextDebugSync(void);                                    ///< Returns a CRC corresponding to all syncDebug() calls since the last nextDebugSync() or resetSyncDebug() call.
 bool checkDebugSync(uint32_t checkGameTime, uint32_t checkCrc);  ///< Dumps all syncDebug() calls from that gameTime, if the CRC doesn't match.
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif
