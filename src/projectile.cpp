@@ -89,7 +89,19 @@ BASE_OBJECT		*g_pProjLastAttacker;
 
 /***************************************************************************/
 
-static UDWORD	establishTargetRadius( BASE_OBJECT *psTarget );
+struct ObjectShape
+{
+	ObjectShape() {}
+	ObjectShape(int radius) : isRectangular(false), size(radius, radius) {}
+	ObjectShape(int width, int breadth) : isRectangular(true), size(width, breadth) {}
+	ObjectShape(Vector2i widthBreadth) : isRectangular(true), size(widthBreadth) {}
+	int radius() const { return size.x; }
+
+	bool     isRectangular;  ///< True if rectangular, false if circular.
+	Vector2i size;           ///< x == y if circular.
+};
+
+static ObjectShape establishTargetShape(BASE_OBJECT *psTarget);
 static UDWORD	establishTargetHeight( BASE_OBJECT *psTarget );
 static void	proj_ImpactFunc( PROJECTILE *psObj );
 static void	proj_PostImpactFunc( PROJECTILE *psObj );
@@ -596,12 +608,24 @@ static INTERVAL collisionXY(int32_t x1, int32_t y1, int32_t x2, int32_t y2, int3
 	return ret;
 }
 
-static int32_t collisionXYZ(Vector3i v1, Vector3i v2, int32_t radius, int32_t height)
+static int32_t collisionXYZ(Vector3i v1, Vector3i v2, ObjectShape shape, int32_t height)
 {
-	INTERVAL iz = collisionZ(v1.z, v2.z, height);
-	if (!intervalEmpty(iz))  // Don't bother checking x and y unless z passes.
+	INTERVAL i = collisionZ(v1.z, v2.z, height);
+	if (!intervalEmpty(i))  // Don't bother checking x and y unless z passes.
 	{
-		INTERVAL i = intervalIntersection(iz, collisionXY(v1.x, v1.y, v2.x, v2.y, radius));
+		if (shape.isRectangular)
+		{
+			i = intervalIntersection(i, collisionZ(v1.x, v2.x, shape.size.x));
+			if (!intervalEmpty(i))  // Don't bother checking y unless x and z pass.
+			{
+				i = intervalIntersection(i, collisionZ(v1.y, v2.y, shape.size.y));
+			}
+		}
+		else  // Else is circular.
+		{
+			i = intervalIntersection(i, collisionXY(v1.x, v1.y, v2.x, v2.y, shape.radius()));
+		}
+
 		if (!intervalEmpty(i))
 		{
 			return MAX(0, i.begin);
@@ -817,8 +841,8 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 		const Vector3i diff = psProj->pos - psTempObj->pos;
 		const Vector3i prevDiff = psProj->prevSpacetime.pos - psTempObjPrevPos;
 		const unsigned int targetHeight = establishTargetHeight(psTempObj);
-		const unsigned int targetRadius = establishTargetRadius(psTempObj);
-		const int32_t collision = collisionXYZ(prevDiff, diff, targetRadius, targetHeight);
+		const ObjectShape targetShape = establishTargetShape(psTempObj);
+		const int32_t collision = collisionXYZ(prevDiff, diff, targetShape, targetHeight);
 		const uint32_t collisionTime = psProj->prevSpacetime.time + (psProj->time - psProj->prevSpacetime.time)*collision/1024;
 
 		if (collision >= 0 && collisionTime < closestCollisionSpacetime.time)
@@ -1513,19 +1537,14 @@ SDWORD proj_GetLongRange(const WEAPON_STATS* psStats)
 
 
 /***************************************************************************/
-static UDWORD	establishTargetRadius(BASE_OBJECT *psTarget)
+static ObjectShape establishTargetShape(BASE_OBJECT *psTarget)
 {
-	UDWORD		radius;
-	STRUCTURE	*psStructure;
-	FEATURE		*psFeat;
-
 	CHECK_OBJECT(psTarget);
-	radius = 0;
 
-	switch(psTarget->type)
+	switch (psTarget->type)
 	{
-		case OBJ_DROID:
-			switch(((DROID *)psTarget)->droidType)
+		case OBJ_DROID:  // Circular.
+			switch (castDroid(psTarget)->droidType)
 			{
 				case DROID_WEAPON:
 				case DROID_SENSOR:
@@ -1539,31 +1558,25 @@ static UDWORD	establishTargetRadius(BASE_OBJECT *psTarget)
 				case DROID_CYBORG_REPAIR:
 				case DROID_CYBORG_SUPER:
 					//Watermelon:'hitbox' size is now based on imd size
-					radius = abs(psTarget->sDisplay.imd->radius) * 2;
-					break;
+					return abs(psTarget->sDisplay.imd->radius) * 2;
 				case DROID_DEFAULT:
 				case DROID_TRANSPORTER:
 				default:
-					radius = TILE_UNITS/4;	// how will we arrive at this?
+					return TILE_UNITS/4;  // how will we arrive at this?
 			}
 			break;
-		case OBJ_STRUCTURE:
-			psStructure = (STRUCTURE*)psTarget;
-			radius = (MAX(psStructure->pStructureType->baseBreadth, psStructure->pStructureType->baseWidth) * TILE_UNITS) / 2;
-			break;
-		case OBJ_FEATURE:
-//			radius = TILE_UNITS/4;	// how will we arrive at this?
-			psFeat = (FEATURE *)psTarget;
-			radius = (MAX(psFeat->psStats->baseBreadth,psFeat->psStats->baseWidth) * TILE_UNITS) / 2;
-			break;
-		case OBJ_PROJECTILE:
+		case OBJ_STRUCTURE:  // Rectangular.
+			return getStructureSize(castStructure(psTarget)) * TILE_UNITS/2;
+		case OBJ_FEATURE:  // Rectangular.
+			return Vector2i(castFeature(psTarget)->psStats->baseWidth, castFeature(psTarget)->psStats->baseBreadth) * TILE_UNITS/2;
+		case OBJ_PROJECTILE:  // Circular, but can't happen since a PROJECTILE isn't a BASE_OBJECT.
 			//Watermelon 1/2 radius of a droid?
-			radius = TILE_UNITS/8;
+			return TILE_UNITS/8;
 		default:
 			break;
 	}
 
-	return(radius);
+	return 0;  // Huh?
 }
 /***************************************************************************/
 
