@@ -48,6 +48,8 @@ typedef struct __audio_stream AUDIO_STREAM;
 
 /* structs */
 
+struct SIMPLE_OBJECT;
+
 typedef struct AUDIO_SAMPLE
 {
 	SDWORD                  iTrack;         // ID number identifying a specific sound; currently (r1182) mapped in audio_id.c
@@ -63,7 +65,7 @@ typedef struct AUDIO_SAMPLE
 	float                   fVol;           // computed volume of sample
 	BOOL                    bFinishedPlaying;
 	AUDIO_CALLBACK          pCallback;
-	void                    *psObj;
+	SIMPLE_OBJECT *         psObj;
 	struct AUDIO_SAMPLE     *psPrev;
 	struct AUDIO_SAMPLE     *psNext;
 } AUDIO_SAMPLE;

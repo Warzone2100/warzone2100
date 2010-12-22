@@ -30,10 +30,8 @@
 #include "display3d.h"
 #include "map.h"
 
-BOOL audio_ObjectDead(void * psObj)
+bool audio_ObjectDead(SIMPLE_OBJECT *psSimpleObj)
 {
-	SIMPLE_OBJECT * const psSimpleObj = (SIMPLE_OBJECT *) psObj;
-
 	/* check is valid simple object pointer */
 	if (psSimpleObj == NULL)
 	{
@@ -42,18 +40,14 @@ BOOL audio_ObjectDead(void * psObj)
 	}
 
 	/* check projectiles */
-	if (psSimpleObj->type == OBJ_PROJECTILE)
+	if (isProjectile(psSimpleObj))
 	{
-		PROJECTILE * const psProj = (PROJECTILE *) psSimpleObj;
-
-		return (psProj->state == PROJ_POSTIMPACT);
+		return castProjectile(psSimpleObj)->state == PROJ_POSTIMPACT;
 	}
 	else
 	{
 		/* check base object */
-		BASE_OBJECT *psBaseObj  = (BASE_OBJECT *) psObj;
-
-		return psBaseObj->died;
+		return psSimpleObj->died;
 	}
 }
 // @FIXME we don't need to do this, since we are not using qsound.
@@ -95,10 +89,8 @@ void audio_GetStaticPos(SDWORD iWorldX, SDWORD iWorldY, SDWORD *piX, SDWORD *piY
 }
 
 // @FIXME we don't need to do this, since we are not using qsound.
-void audio_GetObjectPos(void *psObj, SDWORD *piX, SDWORD *piY, SDWORD *piZ)
+void audio_GetObjectPos(SIMPLE_OBJECT *psBaseObj, SDWORD *piX, SDWORD *piY, SDWORD *piZ)
 {
-	BASE_OBJECT	*psBaseObj = (BASE_OBJECT *) psObj;
-
 	/* check is valid pointer */
 	ASSERT( psBaseObj != NULL,
 			"audio_GetObjectPos: game object pointer invalid" );

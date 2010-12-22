@@ -367,7 +367,7 @@ int32_t projCalcIndirectVelocities(const int32_t dx, const int32_t dz, int32_t v
 	return t;
 }
 
-BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Vector3i target, BASE_OBJECT *psTarget, BOOL bVisible, int weapon_slot)
+bool proj_SendProjectile(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int player, Vector3i target, BASE_OBJECT *psTarget, BOOL bVisible, int weapon_slot)
 {
 	PROJECTILE *            psProj = new PROJECTILE(ProjectileTrackerID |(gameTime2 >>4), player);
 	int32_t                 dx, dy, dz;
@@ -510,13 +510,11 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 			if ( psProj->psSource )
 			{
 				/* firing sound emitted from source */
-				audio_PlayObjDynamicTrack( (BASE_OBJECT *) psProj->psSource,
-									psStats->iAudioFireID, NULL );
+				audio_PlayObjDynamicTrack(psProj->psSource, psStats->iAudioFireID, NULL);
 				/* GJ HACK: move howitzer sound with shell */
 				if ( psStats->weaponSubClass == WSC_HOWITZERS )
 				{
-					audio_PlayObjDynamicTrack( (BASE_OBJECT *) psProj,
-									ID_SOUND_HOWITZ_FLIGHT, NULL );
+					audio_PlayObjDynamicTrack(psProj, ID_SOUND_HOWITZ_FLIGHT, NULL);
 				}
 			}
 			//don't play the sound for a LasSat in multiPlayer
@@ -527,10 +525,10 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 		}
 	}
 
-	if ((psAttacker != NULL) && !proj_Direct(psStats))
+	if (psAttacker != NULL && !proj_Direct(psStats))
 	{
 		//check for Counter Battery Sensor in range of target
-		counterBatteryFire(psAttacker, psTarget);
+		counterBatteryFire(castBaseObject(psAttacker), psTarget);
 	}
 
 	syncDebugProjectile(psProj, '*');
@@ -878,7 +876,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 			// Assume we damaged the chosen target
 			psProj->psDamaged.push_back(closestCollisionObject);
 
-			proj_SendProjectile(&asWeap, (BASE_OBJECT*)psProj, psProj->player, newDest, NULL, true, -1);
+			proj_SendProjectile(&asWeap, psProj, psProj->player, newDest, NULL, true, -1);
 		}
 
 		psProj->state = PROJ_IMPACT;
@@ -889,7 +887,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 	ASSERT(distanceExtensionFactor != 0, "Unitialized variable used! distanceExtensionFactor is not initialized.");
 
 	if (distancePercent >= distanceExtensionFactor || /* We've traveled our maximum range */
-		!mapObjIsAboveGround((BASE_OBJECT*)psProj)) /* trying to travel through terrain */
+		!mapObjIsAboveGround(psProj)) /* trying to travel through terrain */
 	{
 		/* Miss due to range or height */
 		psProj->state = PROJ_IMPACT;

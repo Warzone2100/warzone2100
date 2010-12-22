@@ -6015,7 +6015,7 @@ void buildingComplete(STRUCTURE *psBuilding)
 
 			if(selectedPlayer == psBuilding->player)
 			{
-				audio_PlayObjStaticTrack( (void *) psBuilding, ID_SOUND_POWER_HUM );
+				audio_PlayObjStaticTrack(psBuilding, ID_SOUND_POWER_HUM);
 			}
 
 			break;

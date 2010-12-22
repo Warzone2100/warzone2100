@@ -1447,14 +1447,14 @@ void displayStaticObjects( void )
 							displayAnimation( psAnimObj, false );
 							if(selectedPlayer == psStructure->player)
 							{
-								audio_PlayObjStaticTrack( (void *) psStructure, ID_SOUND_OIL_PUMP_2 );
+								audio_PlayObjStaticTrack(psStructure, ID_SOUND_OIL_PUMP_2);
 							}
 						}
 						else
 						{
 							/* hold anim on first frame */
 							displayAnimation( psAnimObj, true );
-							audio_StopObjTrack( (void *) psStructure, ID_SOUND_OIL_PUMP_2 );
+							audio_StopObjTrack(psStructure, ID_SOUND_OIL_PUMP_2);
 						}
 
 					}

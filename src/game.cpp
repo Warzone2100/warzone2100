@@ -7462,7 +7462,7 @@ BOOL loadSaveStructureV19(char *pFileData, UDWORD filesize, UDWORD numStructures
 					checkForResExtractors(psStructure);
 					if(selectedPlayer == psStructure->player)
 					{
-						audio_PlayObjStaticTrack( (void *) psStructure, ID_SOUND_POWER_HUM );
+						audio_PlayObjStaticTrack(psStructure, ID_SOUND_POWER_HUM);
 					}
 					break;
 				case REF_RESOURCE_EXTRACTOR:
@@ -7869,7 +7869,7 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 					checkForResExtractors(psStructure);
 					if(selectedPlayer == psStructure->player)
 					{
-						audio_PlayObjStaticTrack( (void *) psStructure, ID_SOUND_POWER_HUM );
+						audio_PlayObjStaticTrack(psStructure, ID_SOUND_POWER_HUM);
 					}
 					break;
 				case REF_RESOURCE_EXTRACTOR:

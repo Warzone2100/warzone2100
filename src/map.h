@@ -517,7 +517,7 @@ extern int32_t map_Height(int x, int y);
 static inline int32_t map_Height(Vector2i const &v) { return map_Height(v.x, v.y); }
 
 /* returns true if object is above ground */
-extern BOOL mapObjIsAboveGround( BASE_OBJECT *psObj );
+bool mapObjIsAboveGround(SIMPLE_OBJECT *psObj);
 
 /* returns the max and min height of a tile by looking at the four corners
    in tile coords */
