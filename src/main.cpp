@@ -1183,6 +1183,9 @@ int main(int argc, char *argv[])
 
 	debug(LOG_WZ, "Using language: %s", getLanguage());
 
+	debug(LOG_MEMORY, "sizeof: SIMPLE_OBJECT=%ld, BASE_OBJECT=%ld, DROID=%ld, STRUCTURE=%ld, FEATURE=%ld, PROJECTILE=%ld",
+	      (long)sizeof(SIMPLE_OBJECT), (long)sizeof(BASE_OBJECT), (long)sizeof(DROID), (long)sizeof(STRUCTURE), (long)sizeof(FEATURE), (long)sizeof(PROJECTILE));
+
 	/* Initialize the write/config directory for PhysicsFS.
 	 * This needs to be done __after__ the early commandline parsing,
 	 * because the user might tell us to use an alternative configuration
