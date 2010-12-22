@@ -2091,7 +2091,7 @@ UDWORD addPlayerBox(BOOL players)
 			}
 			else	// AI player
 			{
-				memset(&sFormInit, 0, sizeof(W_BUTINIT));
+				memset(&sFormInit, 0, sizeof(W_FORMINIT));
 				sFormInit.formID = MULTIOP_PLAYERS;
 				sFormInit.id = MULTIOP_PLAYER_START+i;
 				sFormInit.style = WBUT_PLAIN;

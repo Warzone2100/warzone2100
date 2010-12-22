@@ -231,7 +231,7 @@ BOOL startLimitScreen(void)
 	widgAddForm(psWScreen, &sFormInit);
 
 	//Put the buttons on it
-	memset(&sButInit, 0, sizeof(W_BUTINIT));
+	memset(&sButInit, 0, sizeof(W_FORMINIT));  // [sic], W_FORMINIT sButInit;
 	sButInit.formID   = IDLIMITS_TABS;//IDLIMITS;
 	sButInit.style	  = WFORM_PLAIN;
 	sButInit.width    = BARWIDTH;

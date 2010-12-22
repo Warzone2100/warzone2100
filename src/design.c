@@ -1033,7 +1033,7 @@ BOOL intAddTemplateButtons(UDWORD formID, UDWORD formWidth, UDWORD formHeight,
 	ClearStatBuffers();
 
 	memset(aButText, 0, DES_COMPBUTMAXCHAR + 1);
-	memset(&sButInit, 0, sizeof(W_BUTINIT));
+	memset(&sButInit, 0, sizeof(W_FORMINIT));  // [sic], W_FORMINIT sButInit;
 
 	/* Set up the button struct */
 	sButInit.formID = formID;
@@ -2197,7 +2197,7 @@ static BOOL intAddComponentButtons(COMPONENT_STATS *psStats, UDWORD size,
 	ClearObjectBuffers();
 
 	memset(aButText, 0, DES_COMPBUTMAXCHAR + 1);
-	memset(&sButInit, 0, sizeof(W_BUTINIT));
+	memset(&sButInit, 0, sizeof(W_FORMINIT));  // [sic], W_FORMINIT sButInit;
 
 	/* Set up the button struct */
 	sButInit.formID = IDDES_COMPFORM;
@@ -2405,7 +2405,7 @@ static BOOL intAddExtraSystemButtons(UDWORD sensorIndex, UDWORD ecmIndex,
 	SDWORD			BufferID;
 
 	memset(aButText, 0, DES_COMPBUTMAXCHAR + 1);
-	memset(&sButInit, 0, sizeof(W_BUTINIT));
+	memset(&sButInit, 0, sizeof(W_FORMINIT));  // [sic], W_FORMINIT sButInit;
 
 	// Set up the button struct
 	sButInit.formID = IDDES_COMPFORM;
