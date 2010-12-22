@@ -508,8 +508,6 @@ static void NetworkDisplayImage(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 
 static void setupConnectionStatusForm(void)
 {
-	static W_FORMINIT        sFormInit;
-	static W_BUTINIT         sButInit;
 	static unsigned          prevStatusMask = 0;
 
 	const int separation = 3;
@@ -545,7 +543,7 @@ static void setupConnectionStatusForm(void)
 	{
 		unsigned n = 0;
 		// Create the basic form
-		memset(&sFormInit, 0, sizeof(W_FORMINIT));
+		W_FORMINIT sFormInit;
 		sFormInit.formID = 0;
 		sFormInit.id = NETWORK_FORM_ID;
 		sFormInit.style = WFORM_PLAIN;
@@ -568,12 +566,11 @@ static void setupConnectionStatusForm(void)
 			}
 
 			//set up default button data
-			memset(&sButInit, 0, sizeof(W_BUTINIT));
+			W_BUTINIT sButInit;
 			sButInit.formID = NETWORK_FORM_ID;
 			sButInit.id = NETWORK_BUT_ID + i;
 			sButInit.width = 36;
 			sButInit.height = 24;
-			sButInit.FontID = font_regular;
 
 			//add button
 			sButInit.style = WBUT_PLAIN;

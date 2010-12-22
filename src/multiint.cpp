@@ -406,15 +406,10 @@ static void decideWRF(void)
 
 static BOOL OptionsInet(void)			//internet options
 {
-	W_EDBINIT		sEdInit;
-	W_FORMINIT		sFormInit;
-	W_LABINIT		sLabInit;
-	W_CONTEXT		sContext;
-
 	psConScreen = widgCreateScreen();
 	widgSetTipFont(psConScreen,font_regular);
 
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));		//Connection Settings
+	W_FORMINIT sFormInit;           //Connection Settings
 	sFormInit.formID = 0;
 	sFormInit.id = CON_SETTINGS;
 	sFormInit.style = WFORM_PLAIN;
@@ -431,7 +426,7 @@ static BOOL OptionsInet(void)			//internet options
 				_("Cancel"),IMAGE_NO,IMAGE_NO,true);
 
 	//label.
-	memset(&sLabInit, 0, sizeof(W_LABINIT));
+	W_LABINIT sLabInit;
 	sLabInit.formID = CON_SETTINGS;
 	sLabInit.id		= CON_SETTINGS_LABEL;
 	sLabInit.style	= WLAB_ALIGNCENTRE;
@@ -440,20 +435,17 @@ static BOOL OptionsInet(void)			//internet options
 	sLabInit.width	= CON_SETTINGSWIDTH;
 	sLabInit.height = 20;
 	sLabInit.pText	= _("IP Address or Machine Name");
-	sLabInit.FontID = font_regular;
 	widgAddLabel(psConScreen, &sLabInit);
 
 
-	memset(&sEdInit, 0, sizeof(W_EDBINIT));			// address
+	W_EDBINIT sEdInit;             // address
 	sEdInit.formID = CON_SETTINGS;
 	sEdInit.id = CON_IP;
-	sEdInit.style = WEDB_PLAIN;
 	sEdInit.x = CON_IPX;
 	sEdInit.y = CON_IPY;
 	sEdInit.width = CON_NAMEBOXWIDTH;
 	sEdInit.height = CON_NAMEBOXHEIGHT;
 	sEdInit.pText = "";									//_("IP Address or Machine Name");
-	sEdInit.FontID = font_regular;
 //	sEdInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_DES_EDITBOXLEFTH , IMAGE_DES_EDITBOXLEFT);
 //	sEdInit.pBoxDisplay = intDisplayButtonHilight;
 	sEdInit.pBoxDisplay = intDisplayEditBox;
@@ -462,6 +454,7 @@ static BOOL OptionsInet(void)			//internet options
 		return false;
 	}
 	// auto click in the text box
+	W_CONTEXT sContext;
 	sContext.psScreen	= psConScreen;
 	sContext.psForm		= (W_FORM *)psConScreen->psForm;
 	sContext.xOffset	= 0;
@@ -597,7 +590,6 @@ void setLobbyError (LOBBY_ERROR_TYPES error_type)
 static void addGames(void)
 {
 	UDWORD i,gcount=0;
-	W_BUTINIT	sButInit;
 	static const char *wrongVersionTip = "Your version of Warzone is incompatible with this game.";
 	static const char *badModTip = "Your loaded mods are incompatible with this game. (Check mods/autoload/?)";
 
@@ -609,12 +601,10 @@ static void addGames(void)
 			gcount++;
 		}
 	}
-	memset(&sButInit, 0, sizeof(W_BUTINIT));
+	W_BUTINIT sButInit;
 	sButInit.formID = FRONTEND_BOTFORM;
-	sButInit.style = WBUT_PLAIN;
 	sButInit.width = GAMES_GAMEWIDTH;
 	sButInit.height = GAMES_GAMEHEIGHT;
-	sButInit.FontID = font_regular;
 	sButInit.pDisplay = displayRemoteGame;
 
 	// we want the old games deleted, and only list games when we should
@@ -723,12 +713,12 @@ static void addGames(void)
 		// delete old widget if necessary
 		widgDelete(psWScreen,FRONTEND_NOGAMESAVAILABLE);
 
-		memset(&sButInit, 0, sizeof(W_BUTINIT));
+		sButInit = W_BUTINIT();
 		sButInit.formID = FRONTEND_BOTFORM;
 		sButInit.id = FRONTEND_NOGAMESAVAILABLE;
 		sButInit.x = 70;
 		sButInit.y = 50;
-		sButInit.style = WBUT_PLAIN | WBUT_TXTCENTRE;
+		sButInit.style = WBUT_TXTCENTRE;
 		sButInit.width = FRONTEND_BUTWIDTH;
 		sButInit.UserData = 0; // store disable state
 		sButInit.height = FRONTEND_BUTHEIGHT;
@@ -901,14 +891,10 @@ static void showPasswordLabel( WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 // This is what starts the lobby screen
 void startGameFind(void)
 {
-	W_FORMINIT	sFormInit;
-	W_EDBINIT	sEdInit;
-	W_LABINIT	sLabInit;
-
 	addBackdrop();										//background image
 
 	// draws the background of the games listed
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
+	W_FORMINIT sFormInit;
 	sFormInit.formID = FRONTEND_BACKDROP;
 	sFormInit.id = FRONTEND_BOTFORM;
 	sFormInit.style = WFORM_PLAIN;
@@ -941,7 +927,7 @@ void startGameFind(void)
 	// Password stuff. Hidden by default.
 
 	// password label.
-	memset(&sLabInit, 0, sizeof(W_LABINIT));
+	W_LABINIT sLabInit;
 	sLabInit.formID = FRONTEND_BACKDROP;
 	sLabInit.id		= CON_PASSWORD_LABEL;
 	sLabInit.style	= WLAB_ALIGNCENTRE;
@@ -950,21 +936,18 @@ void startGameFind(void)
 	sLabInit.width	= CON_SETTINGSWIDTH;
 	sLabInit.height = 20;
 	sLabInit.pText	= _("Enter Password:");
-	sLabInit.FontID = font_regular;
 	sLabInit.pDisplay = showPasswordLabel;
 	widgAddLabel(psWScreen, &sLabInit);
 
 	// and finally draw the password entry box
-	memset(&sEdInit, 0, sizeof(W_EDBINIT));
+	W_EDBINIT sEdInit;
 	sEdInit.formID = FRONTEND_BACKDROP;
 	sEdInit.id = CON_PASSWORD;
-	sEdInit.style = WEDB_PLAIN;
 	sEdInit.x = 180;
 	sEdInit.y = 200;
 	sEdInit.width = 280;
 	sEdInit.height = 20;
 	sEdInit.pText = "";
-	sEdInit.FontID = font_regular;
 	sEdInit.pBoxDisplay = displayPasswordEditBox;
 
 	widgAddEditBox(psWScreen, &sEdInit);
@@ -975,7 +958,7 @@ void startGameFind(void)
 	            _("Cancel"),IMAGE_NO,IMAGE_NO,true);
 
 	// draws the background of the password box
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
+	sFormInit = W_FORMINIT();
 	sFormInit.formID = FRONTEND_BACKDROP;
 	sFormInit.id = FRONTEND_PASSWORDFORM;
 	sFormInit.style = WFORM_PLAIN;
@@ -1051,10 +1034,7 @@ static void showPasswordForm(void)
 
 static void addBlueForm(UDWORD parent,UDWORD id, const char *txt,UDWORD x,UDWORD y,UDWORD w,UDWORD h)
 {
-	W_FORMINIT	sFormInit;
-	W_LABINIT	sLabInit;
-
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));				// draw options box.
+	W_FORMINIT sFormInit;                  // draw options box.
 	sFormInit.formID= parent;
 	sFormInit.id	= id;
 	sFormInit.x		=(UWORD) x;
@@ -1067,17 +1047,15 @@ static void addBlueForm(UDWORD parent,UDWORD id, const char *txt,UDWORD x,UDWORD
 
 	if(strlen(txt)>0)
 	{
-		memset(&sLabInit, 0, sizeof(W_LABINIT));
+		W_LABINIT sLabInit;
 		sLabInit.formID = id;
 		sLabInit.id		= id+1;
-		sLabInit.style	= WLAB_PLAIN;
 		sLabInit.x		= 3;
 		sLabInit.y		= 4;
 		sLabInit.width	= 80;
 		sLabInit.height = 20;
 		sLabInit.pText	= txt;
 //		sLabInit.pDisplay = displayFeText;
-		sLabInit.FontID = font_regular;
 		widgAddLabel(psWScreen, &sLabInit);
 	}
 	return;
@@ -1121,14 +1099,12 @@ void updateLimitFlags()
 // need to check for side effects.
 static void addGameOptions(BOOL bRedo)
 {
-	W_FORMINIT		sFormInit;
-
 	widgDelete(psWScreen,MULTIOP_OPTIONS);  				// clear options list
 	widgDelete(psWScreen,FRONTEND_SIDETEXT3);				// del text..
 
 	iV_SetFont(font_regular);
 
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));				// draw options box.
+	W_FORMINIT sFormInit;                          // draw options box.
 	sFormInit.formID = FRONTEND_BACKDROP;
 	sFormInit.id = MULTIOP_OPTIONS;
 	sFormInit.x = MULTIOP_OPTIONSX;
@@ -1884,8 +1860,6 @@ static bool canChooseTeamFor(int i)
 
 UDWORD addPlayerBox(BOOL players)
 {
-	W_FORMINIT		sFormInit;
-	W_BUTINIT		sButInit;
 	UDWORD			i=0;
 
 	// if background isn't there, then return since were not ready to draw the box yet!
@@ -1897,7 +1871,7 @@ UDWORD addPlayerBox(BOOL players)
 	widgDelete(psWScreen,MULTIOP_PLAYERS);		// del player window
 	widgDelete(psWScreen,FRONTEND_SIDETEXT2);	// del text too,
 
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));	// draw player window
+	W_FORMINIT sFormInit;                           // draw player window
 	sFormInit.formID = FRONTEND_BACKDROP;
 	sFormInit.id = MULTIOP_PLAYERS;
 	sFormInit.x = MULTIOP_PLAYERSX;
@@ -1952,10 +1926,9 @@ UDWORD addPlayerBox(BOOL players)
 			if(ingame.localOptionsReceived)
 			{
 				//add team chooser
-				memset(&sButInit, 0, sizeof(W_BUTINIT));
+				W_BUTINIT sButInit;
 				sButInit.formID = MULTIOP_PLAYERS;
 				sButInit.id = MULTIOP_TEAMS_START+i;
-				sButInit.style = WBUT_PLAIN;
 				sButInit.x = 7;
 				sButInit.y = (UWORD)(( (MULTIOP_TEAMSHEIGHT+5)*NetPlay.players[i].position)+4);
 				sButInit.width = MULTIOP_TEAMSWIDTH;
@@ -1968,7 +1941,6 @@ UDWORD addPlayerBox(BOOL players)
 				{
 					sButInit.pTip = NULL;
 				}
-				sButInit.FontID = font_regular;
 				sButInit.pDisplay = displayTeamChooser;
 				sButInit.UserData = i;
 
@@ -1992,10 +1964,9 @@ UDWORD addPlayerBox(BOOL players)
 				}
 
 				// draw player info box
-				memset(&sButInit, 0, sizeof(W_BUTINIT));
+				W_BUTINIT sButInit;
 				sButInit.formID = MULTIOP_PLAYERS;
 				sButInit.id = MULTIOP_PLAYER_START+i;
-				sButInit.style = WBUT_PLAIN;
 				sButInit.x = 7 + MULTIOP_TEAMSWIDTH;
 				sButInit.y = (UWORD)(( (MULTIOP_PLAYERHEIGHT+5)*NetPlay.players[i].position)+4);
 				sButInit.width = MULTIOP_PLAYERWIDTH - MULTIOP_TEAMSWIDTH - MULTIOP_READY_WIDTH;
@@ -2008,7 +1979,6 @@ UDWORD addPlayerBox(BOOL players)
 				{
 					sButInit.pTip = NULL;
 				}
-				sButInit.FontID = font_regular;
 				sButInit.pDisplay = displayPlayer;
 				sButInit.UserData = i;
 
@@ -2023,7 +1993,7 @@ UDWORD addPlayerBox(BOOL players)
 			}
 			else	// AI player
 			{
-				memset(&sFormInit, 0, sizeof(W_BUTINIT));
+				sFormInit = W_FORMINIT();  // This used to be an buggy memset using sizeof(W_BUTINIT)...
 				sFormInit.formID = MULTIOP_PLAYERS;
 				sFormInit.id = MULTIOP_PLAYER_START+i;
 				sFormInit.style = WBUT_PLAIN;
@@ -2086,9 +2056,6 @@ void kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type)
 
 static void addChatBox(void)
 {
-	W_FORMINIT		sFormInit;
-	W_EDBINIT		sEdInit;
-
 	if(widgGetFromID(psWScreen,FRONTEND_TOPFORM))
 	{
 		widgDelete(psWScreen,FRONTEND_TOPFORM);
@@ -2099,7 +2066,7 @@ static void addChatBox(void)
 		return;
 	}
 
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
+	W_FORMINIT sFormInit;
 
 	sFormInit.formID = FRONTEND_BACKDROP;							// add the form
 	sFormInit.id = MULTIOP_CHATBOX;
@@ -2123,15 +2090,13 @@ static void addChatBox(void)
 	setConsolePermanence(true,true);
 	setConsoleLineInfo(5);											// use x lines on chat window
 
-	memset(&sEdInit, 0, sizeof(W_EDBINIT));							// add the edit box
+	W_EDBINIT sEdInit;                                                                                      // add the edit box
 	sEdInit.formID = MULTIOP_CHATBOX;
 	sEdInit.id = MULTIOP_CHATEDIT;
 	sEdInit.x = MULTIOP_CHATEDITX;
 	sEdInit.y = MULTIOP_CHATEDITY;
-	sEdInit.style = WEDB_PLAIN;
 	sEdInit.width = MULTIOP_CHATEDITW;
 	sEdInit.height = MULTIOP_CHATEDITH;
-	sEdInit.FontID = font_regular;
 
 	sEdInit.pUserData = NULL;
 	sEdInit.pBoxDisplay = displayChatEdit;
@@ -3929,18 +3894,14 @@ void displayMultiBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT 
 
 static BOOL addMultiEditBox(UDWORD formid, UDWORD id, UDWORD x, UDWORD y, char const *tip, char const *tipres, UDWORD icon, UDWORD iconhi, UDWORD iconid)
 {
-	W_EDBINIT		sEdInit;
-
-	memset(&sEdInit, 0, sizeof(W_EDBINIT));			// editbox
+	W_EDBINIT sEdInit;                           // editbox
 	sEdInit.formID = formid;
 	sEdInit.id = id;
-	sEdInit.style = WEDB_PLAIN;
 	sEdInit.x = (short)x;
 	sEdInit.y = (short)y;
 	sEdInit.width = MULTIOP_EDITBOXW;
 	sEdInit.height = MULTIOP_EDITBOXH;
 	sEdInit.pText = tipres;
-	sEdInit.FontID = font_regular;
 	sEdInit.pBoxDisplay = displayMultiEditBox;
 	if (!widgAddEditBox(psWScreen, &sEdInit))
 	{
@@ -3955,18 +3916,14 @@ static BOOL addMultiEditBox(UDWORD formid, UDWORD id, UDWORD x, UDWORD y, char c
 
 BOOL addMultiBut(W_SCREEN *screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char* tipres, UDWORD norm, UDWORD down, UDWORD hi)
 {
-	W_BUTINIT		sButInit;
-
-	memset(&sButInit, 0, sizeof(W_BUTINIT));
+	W_BUTINIT sButInit;
 	sButInit.formID = formid;
 	sButInit.id = id;
-	sButInit.style = WFORM_PLAIN;
 	sButInit.x = (short) x;
 	sButInit.y = (short) y;
 	sButInit.width = (unsigned short) width;
 	sButInit.height= (unsigned short) height;
 	sButInit.pTip = tipres;
-	sButInit.FontID = font_regular;
 	sButInit.pDisplay = displayMultiBut;
 	sButInit.UserData = PACKDWORD_TRI(norm, down, hi);
 

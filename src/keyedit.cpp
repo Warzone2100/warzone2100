@@ -340,8 +340,6 @@ static void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_D
 // ////////////////////////////////////////////////////////////////////////////
 BOOL startKeyMapEditor(BOOL first)
 {
-	W_BUTINIT	sButInit;
-	W_FORMINIT	sFormInit;
 	KEY_MAPPING	*psMapping;
 	UDWORD		i,mapcount =0;
 	UDWORD		bubbleCount;
@@ -355,7 +353,7 @@ BOOL startKeyMapEditor(BOOL first)
 	{
 		loadKeyMap();									// get the current mappings.
 	}
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));			// draw blue form...
+	W_FORMINIT sFormInit;
 	sFormInit.formID	= FRONTEND_BACKDROP;
 	sFormInit.id		= KM_FORM;
 	sFormInit.style		= WFORM_PLAIN;
@@ -400,7 +398,7 @@ BOOL startKeyMapEditor(BOOL first)
 	}
 
 	// add tab form..
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
+	sFormInit = W_FORMINIT();
 	sFormInit.formID		= KM_FORM;
 	sFormInit.id			= KM_FORM_TABS;
 	sFormInit.style			= WFORM_TABBED;
@@ -426,9 +424,8 @@ BOOL startKeyMapEditor(BOOL first)
 	widgAddForm(psWScreen, &sFormInit);
 
 	//Put the buttons on it
-	memset(&sButInit, 0, sizeof(W_BUTINIT));
+	W_BUTINIT sButInit;
 	sButInit.formID   = KM_FORM_TABS;
-	sButInit.style	  = WFORM_PLAIN;
 	sButInit.width    = KM_ENTRYW;
 	sButInit.height	  = KM_ENTRYH;
 	sButInit.pDisplay = displayKeyMap;

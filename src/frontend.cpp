@@ -1496,9 +1496,7 @@ void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL
 
 void addBackdrop(void)
 {
-	W_FORMINIT		sFormInit;
-
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));				// Backdrop
+	W_FORMINIT sFormInit;                              // Backdrop
 	sFormInit.formID = 0;
 	sFormInit.id = FRONTEND_BACKDROP;
 	sFormInit.style = WFORM_PLAIN;
@@ -1513,9 +1511,7 @@ void addBackdrop(void)
 // ////////////////////////////////////////////////////////////////////////////
 void addTopForm(void)
 {
-	W_FORMINIT		sFormInit;
-
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
+	W_FORMINIT sFormInit;
 
 	sFormInit.formID = FRONTEND_BACKDROP;
 	sFormInit.id = FRONTEND_TOPFORM;
@@ -1552,8 +1548,7 @@ void addTopForm(void)
 // ////////////////////////////////////////////////////////////////////////////
 void addBottomForm(void)
 {
-	W_FORMINIT		sFormInit;
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
+	W_FORMINIT sFormInit;
 
 	sFormInit.formID = FRONTEND_BACKDROP;
 	sFormInit.id = FRONTEND_BOTFORM;
@@ -1572,19 +1567,16 @@ void addBottomForm(void)
 // ////////////////////////////////////////////////////////////////////////////
 void addTextHint(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt)
 {
-	W_LABINIT		sLabInit;
-	memset(&sLabInit, 0, sizeof(W_LABINIT));
+	W_LABINIT sLabInit;
 
 	sLabInit.formID = FRONTEND_BOTFORM;
 	sLabInit.id = id;
 	sLabInit.x = (short)PosX;
 	sLabInit.y = (short)PosY;
-	sLabInit.style = WLAB_PLAIN;
 
 	sLabInit.width = MULTIOP_READY_WIDTH;
 	sLabInit.height = FRONTEND_BUTHEIGHT;
 	sLabInit.pDisplay = displayText;
-	sLabInit.FontID = font_regular;
 	sLabInit.pText = txt;
 	widgAddLabel(psWScreen, &sLabInit);
 }
@@ -1592,14 +1584,13 @@ void addTextHint(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt)
 // ////////////////////////////////////////////////////////////////////////////
 void addText(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt, UDWORD formID)
 {
-	W_LABINIT		sLabInit;
-	memset(&sLabInit, 0, sizeof(W_LABINIT));
+	W_LABINIT sLabInit;
 
 	sLabInit.formID = formID;
 	sLabInit.id = id;
 	sLabInit.x = (short)PosX;
 	sLabInit.y = (short)PosY;
-	sLabInit.style = (WLAB_PLAIN | WLAB_ALIGNCENTRE);
+	sLabInit.style = WLAB_ALIGNCENTRE;
 
 	// Align
 	sLabInit.width = MULTIOP_READY_WIDTH;
@@ -1615,12 +1606,10 @@ void addText(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt, UDWORD formID
 // ////////////////////////////////////////////////////////////////////////////
 void addSideText(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt)
 {
-	W_LABINIT	sLabInit;
-	memset(&sLabInit, 0, sizeof(W_LABINIT));
+	W_LABINIT sLabInit;
 
 	sLabInit.formID = FRONTEND_BACKDROP;
 	sLabInit.id = id;
-	sLabInit.style = WLAB_PLAIN;
 	sLabInit.x = (short) PosX;
 	sLabInit.y = (short) PosY;
 	sLabInit.width = 30;
@@ -1636,14 +1625,12 @@ void addSideText(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt)
 // ////////////////////////////////////////////////////////////////////////////
 void addTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt, unsigned int style)
 {
-	W_BUTINIT		sButInit;
-	memset(&sButInit, 0, sizeof(W_BUTINIT));
+	W_BUTINIT sButInit;
 
 	sButInit.formID = FRONTEND_BOTFORM;
 	sButInit.id = id;
 	sButInit.x = (short)PosX;
 	sButInit.y = (short)PosY;
-	sButInit.style = WBUT_PLAIN;
 
 	// Align
 	if ( !(style & WBUT_TXTCENTRE) )
@@ -1681,17 +1668,13 @@ void addTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt, unsign
 // ////////////////////////////////////////////////////////////////////////////
 void addFESlider(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, UDWORD pos)
 {
-	W_SLDINIT		sSldInit;
-
-	memset(&sSldInit, 0, sizeof(W_SLDINIT));
+	W_SLDINIT sSldInit;
 	sSldInit.formID		= parent;
 	sSldInit.id			= id;
-	sSldInit.style		= WSLD_PLAIN;
 	sSldInit.x			= (short)x;
 	sSldInit.y			= (short)y;
 	sSldInit.width		= iV_GetImageWidth(IntImages,IMAGE_SLIDER_BIG);
 	sSldInit.height		= iV_GetImageHeight(IntImages,IMAGE_SLIDER_BIG);
-	sSldInit.orientation= WSLD_LEFT;
 	sSldInit.numStops	= (UBYTE) stops;
 	sSldInit.barSize	= iV_GetImageHeight(IntImages,IMAGE_SLIDER_BIG);
 	sSldInit.pos		= (UBYTE) pos;
@@ -1702,17 +1685,13 @@ void addFESlider(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, UDW
 
 void addFEAISlider(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, UDWORD pos)
 {
-	W_SLDINIT		sSldInit;
-	
-	memset(&sSldInit, 0, sizeof(W_SLDINIT));
+	W_SLDINIT sSldInit;
 	sSldInit.formID		= parent;
 	sSldInit.id			= id;
-	sSldInit.style		= WSLD_PLAIN;
 	sSldInit.x			= (short)x;
 	sSldInit.y			= (short)y;
 	sSldInit.width		= iV_GetImageWidth(IntImages,IMAGE_SLIDER_BIG);
 	sSldInit.height		= iV_GetImageHeight(IntImages,IMAGE_SLIDER_BIG);
-	sSldInit.orientation= WSLD_LEFT;
 	sSldInit.numStops	= (UBYTE) stops;
 	sSldInit.barSize	= iV_GetImageHeight(IntImages,IMAGE_SLIDER_BIG);
 	sSldInit.pos		= (UBYTE) pos;

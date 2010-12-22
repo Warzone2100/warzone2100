@@ -852,7 +852,6 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 			WEAPON asWeap;
 			// Determine position to fire a missile at
 			Vector3i newDest = psProj->src + move * distanceExtensionFactor/100;
-			memset(&asWeap, 0, sizeof(asWeap));
 			asWeap.nStat = psStats - asWeaponStats;
 
 			ASSERT(distanceExtensionFactor != 0, "Unitialized variable used! distanceExtensionFactor is not initialized.");

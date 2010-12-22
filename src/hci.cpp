@@ -917,10 +917,6 @@ static BOOL intAddEdit(void)
 	W_LABINIT sLabInit;
 	W_BUTINIT sButInit;
 
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
-	memset(&sLabInit, 0, sizeof(W_LABINIT));
-	memset(&sButInit, 0, sizeof(W_BUTINIT));
-
 	/* Add the edit form */
 	sFormInit.formID = 0;
 	sFormInit.id = IDED_FORM;
@@ -937,13 +933,11 @@ static BOOL intAddEdit(void)
 	/* Add the Option screen label */
 	sLabInit.formID = IDED_FORM;
 	sLabInit.id = IDED_LABEL;
-	sLabInit.style = WLAB_PLAIN;
 	sLabInit.x = ED_GAP;
 	sLabInit.y = ED_GAP;
 	sLabInit.width = ED_WIDTH;
 	sLabInit.height = ED_BUTHEIGHT;
 	sLabInit.pText = "Edit";
-	sLabInit.FontID = font_regular;
 	if (!widgAddLabel(psWScreen, &sLabInit))
 	{
 		return false;
@@ -952,12 +946,10 @@ static BOOL intAddEdit(void)
 	/* Add the close box */
 	sButInit.formID = IDED_FORM;
 	sButInit.id = IDED_CLOSE;
-	sButInit.style = WBUT_PLAIN;
 	sButInit.x = ED_WIDTH - ED_GAP - CLOSE_SIZE;
 	sButInit.y = ED_GAP;
 	sButInit.width = CLOSE_SIZE;
 	sButInit.height = CLOSE_SIZE;
-	sButInit.FontID = font_regular;
 	sButInit.pText = pCloseText;
 	sButInit.pTip = _("Close");
 	if (!widgAddButton(psWScreen, &sButInit))
@@ -3425,13 +3417,12 @@ UWORD numForms(UDWORD total, UDWORD perForm)
 /* Add the reticule widgets to the widget screen */
 BOOL intAddReticule(void)
 {
-	if(ReticuleUp == false) {
-		W_FORMINIT		sFormInit;
-		W_BUTINIT		sButInit;
+	if (!ReticuleUp)
+	{
 
 		/* Create the basic form */
 
-		memset(&sFormInit, 0, sizeof(W_FORMINIT));
+		W_FORMINIT sFormInit;
 		sFormInit.formID = 0;
 		sFormInit.id = IDRET_FORM;
 		sFormInit.style = WFORM_PLAIN;
@@ -3448,18 +3439,17 @@ BOOL intAddReticule(void)
 		/* Now add the buttons */
 
 		//set up default button data
-		memset(&sButInit, 0, sizeof(W_BUTINIT));
+		W_BUTINIT sButInit;
 		sButInit.formID = IDRET_FORM;
 		sButInit.id = IDRET_COMMAND;
 		sButInit.width = RET_BUTWIDTH;
 		sButInit.height = RET_BUTHEIGHT;
-		sButInit.FontID = font_regular;
 
 		//add buttons as required...
 
 		//options button
-		sButInit.style = WBUT_PLAIN;
 		SetReticuleButPos(RETBUT_COMMAND,&sButInit);
+		sButInit.style = WBUT_PLAIN;
 		sButInit.pTip = _("Commanders (F6)");
 		sButInit.pDisplay = intDisplayReticuleButton;
 		sButInit.UserData = IMAGE_COMMANDDROID_UP;
@@ -3470,7 +3460,7 @@ BOOL intAddReticule(void)
 		}
 
 		/* Intelligence Map button - this needs to respond to RMB as well*/
-		sButInit.style = WBUT_PLAIN | WFORM_SECONDARY;
+		sButInit.style = WBUT_SECONDARY;
 		sButInit.id = IDRET_INTEL_MAP;
 		SetReticuleButPos(RETBUT_INTELMAP,&sButInit);
 		sButInit.pTip = _("Intelligence Display (F5)");
@@ -3581,16 +3571,13 @@ void togglePowerBar(void)
 /* Add the power bars to the screen */
 BOOL intAddPower(void)
 {
-	W_BARINIT	sBarInit;
-
-	memset(&sBarInit, 0, sizeof(W_BARINIT));
+	W_BARINIT sBarInit;
 
 	/* Add the trough bar */
 	sBarInit.formID = 0;	//IDPOW_FORM;
 	sBarInit.id = IDPOW_POWERBAR_T;
 	//start the power bar off in view (default)
 	sBarInit.style = WBAR_TROUGH;
-	sBarInit.orientation = WBAR_LEFT;
 	sBarInit.x = (SWORD)POW_X;
 	sBarInit.y = (SWORD)POW_Y;
 	sBarInit.width = POW_BARWIDTH;
@@ -3628,11 +3615,6 @@ BOOL intAddOptions(void)
 	UDWORD		player;
 	char		aText[WIDG_MAXSTR];
 
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
-	memset(&sLabInit, 0, sizeof(W_LABINIT));
-	memset(&sButInit, 0, sizeof(W_BUTINIT));
-	memset(&sEdInit, 0, sizeof(W_EDBINIT));
-
 	/* Add the option form */
 
 	sFormInit.formID = 0;
@@ -3653,13 +3635,11 @@ BOOL intAddOptions(void)
 	/* Add the Option screen label */
 	sLabInit.formID = IDOPT_FORM;
 	sLabInit.id = IDOPT_LABEL;
-	sLabInit.style = WLAB_PLAIN;
 	sLabInit.x = OPT_GAP;
 	sLabInit.y = OPT_GAP;
 	sLabInit.width = OPT_BUTWIDTH;
 	sLabInit.height = OPT_BUTHEIGHT;
 	sLabInit.pText = _("Options");
-	sLabInit.FontID = font_regular;
 	if (!widgAddLabel(psWScreen, &sLabInit))
 	{
 		return false;
@@ -3668,12 +3648,10 @@ BOOL intAddOptions(void)
 	/* Add the close box */
 	sButInit.formID = IDOPT_FORM;
 	sButInit.id = IDOPT_CLOSE;
-	sButInit.style = WBUT_PLAIN;
 	sButInit.x = OPT_WIDTH - OPT_GAP - CLOSE_SIZE;
 	sButInit.y = OPT_GAP;
 	sButInit.width = CLOSE_SIZE;
 	sButInit.height = CLOSE_SIZE;
-	sButInit.FontID = font_regular;
 	sButInit.pText = pCloseText;
 	sButInit.pTip = _("Close");
 	if (!widgAddButton(psWScreen, &sButInit))
@@ -3697,11 +3675,9 @@ BOOL intAddOptions(void)
 	/* Add the map label */
 	sLabInit.formID = IDOPT_MAPFORM;
 	sLabInit.id = IDOPT_MAPLABEL;
-	sLabInit.style = WLAB_PLAIN;
 	sLabInit.x = OPT_GAP;
 	sLabInit.y = OPT_GAP;
 	sLabInit.pText = _("Map:");
-	sLabInit.FontID = font_regular;
 	if (!widgAddLabel(psWScreen, &sLabInit))
 	{
 		return false;
@@ -3743,14 +3719,12 @@ BOOL intAddOptions(void)
 	newMapHeight = mapHeight;
 	sEdInit.formID = IDOPT_MAPFORM;
 	sEdInit.id = IDOPT_MAPWIDTH;
-	sEdInit.style = WEDB_PLAIN;
 	sEdInit.x = OPT_GAP*2 + OPT_BUTWIDTH;
 	sEdInit.y = OPT_GAP*2 + OPT_BUTHEIGHT;
 	sEdInit.width = OPT_BUTWIDTH;
 	sEdInit.height = OPT_BUTHEIGHT;
 	sEdInit.pText = aText;
 	sprintf(aText, "%d", mapWidth);
-	sEdInit.FontID = font_regular;
 	if (!widgAddEditBox(psWScreen, &sEdInit))
 	{
 		return false;
@@ -3872,11 +3846,9 @@ BOOL intAddOptions(void)
 	/* Add the player label */
 	sLabInit.formID = IDOPT_PLAYERFORM;
 	sLabInit.id = IDOPT_PLAYERLABEL;
-	sLabInit.style = WLAB_PLAIN;
 	sLabInit.x = OPT_GAP;
 	sLabInit.y = OPT_GAP;
 	sLabInit.pText = _("Current Player:");
-	sLabInit.FontID = font_regular;
 	if (!widgAddLabel(psWScreen, &sLabInit))
 	{
 		return false;
@@ -3885,12 +3857,10 @@ BOOL intAddOptions(void)
 	/* Add the player buttons */
 	sButInit.formID = IDOPT_PLAYERFORM;
 	sButInit.id = IDOPT_PLAYERSTART;
-	sButInit.style = WBUT_PLAIN;
 	sButInit.x = OPT_GAP;
 	sButInit.y = OPT_BUTHEIGHT + OPT_GAP*2;
 	sButInit.width = OPT_BUTWIDTH;
 	sButInit.height = OPT_BUTHEIGHT;
-	sButInit.FontID = font_regular;
 	for(player = 0; player < MAX_PLAYERS; player++)
 	{
 		sButInit.pText = apPlayerText[player];
@@ -3926,11 +3896,9 @@ BOOL intAddOptions(void)
 	/* Add iViS label */
 	sLabInit.formID = IDOPT_IVISFORM;
 	sLabInit.id = IDOPT_IVISLABEL;
-	sLabInit.style = WLAB_PLAIN;
 	sLabInit.x = OPT_GAP;
 	sLabInit.y = OPT_GAP;
 	sLabInit.pText = "iViS:";
-	sLabInit.FontID = font_regular;
 	if (!widgAddLabel(psWScreen, &sLabInit))
 	{
 		return false;
@@ -3943,7 +3911,6 @@ BOOL intAddOptions(void)
 	sButInit.y = OPT_GAP;
 	sButInit.width = OPT_BUTWIDTH;
 	sButInit.height = OPT_BUTHEIGHT;
-	sButInit.FontID = font_regular;
 	sButInit.pText = "Lighting";
 	sButInit.pTip = "Toggles lighting On/Off.";
 	if (!widgAddButton(psWScreen, &sButInit))
@@ -3970,11 +3937,6 @@ BOOL intAddOptions(void)
  */
 static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,BOOL bForceStats)
 {
-	W_FORMINIT		sFormInit;
-	W_FORMINIT		sBFormInit,sBFormInit2;
-	W_BARINIT		sBarInit;
-	W_BARINIT		sBarInit2;
-	W_BUTINIT		sButInit;
 	UDWORD			displayForm;
 	UDWORD			i, statID=0;
 	SDWORD			objLoop;
@@ -3983,11 +3945,6 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	SDWORD			BufferID;
 	DROID			*Droid;
 	STRUCTURE		*Structure;
-	W_LABINIT		sLabInit;
-	W_LABINIT		sLabIntObjText;
-	W_LABINIT		sLabInitCmdExp;
-	W_LABINIT		sLabInitCmdFac;
-	W_LABINIT		sLabInitCmdFac2;
 	BOOL			IsFactory;
 	BOOL			Animate = true;
 	UWORD           FormX,FormY;
@@ -4008,11 +3965,6 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 
 	ClearObjectBuffers();
 	ClearTopicBuffers();
-
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
-	memset(&sBFormInit, 0, sizeof(W_FORMINIT));
-	memset(&sBFormInit2, 0, sizeof(W_FORMINIT));
-	memset(&sBarInit, 0, sizeof(W_BARINIT));
 
 	/* See how many objects the player has */
 	numObjects = 0;
@@ -4134,6 +4086,7 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 
 	/* Create the basic form */
 
+	W_FORMINIT sFormInit;
 	sFormInit.formID = 0;
 	sFormInit.id = IDOBJ_FORM;
 	sFormInit.style = WFORM_PLAIN;
@@ -4157,16 +4110,14 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	}
 
 	/* Add the close button */
-	memset(&sButInit, 0, sizeof(W_BUTINIT));
+	W_BUTINIT sButInit;
 	sButInit.formID = IDOBJ_FORM;
 	sButInit.id = IDOBJ_CLOSE;
-	sButInit.style = WBUT_PLAIN;
 	sButInit.x = OBJ_BACKWIDTH - CLOSE_WIDTH;
 	sButInit.y = 0;
 	sButInit.width = CLOSE_WIDTH;
 	sButInit.height = CLOSE_HEIGHT;
 	sButInit.pTip = _("Close");
-	sButInit.FontID = font_regular;
 	sButInit.pDisplay = intDisplayImageHilight;
 	sButInit.UserData = PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
 	if (!widgAddButton(psWScreen, &sButInit))
@@ -4176,7 +4127,7 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 
 
 	/*add the tabbed form */
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
+	sFormInit = W_FORMINIT();
 	sFormInit.formID = IDOBJ_FORM;
 	sFormInit.id = IDOBJ_TABFORM;
 	sFormInit.style = WFORM_TABBED;
@@ -4219,6 +4170,7 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	objNumTabs = sFormInit.numMajor;
 
 	/* Add the object and stats buttons */
+	W_FORMINIT sBFormInit;
 	sBFormInit.formID = IDOBJ_TABFORM;
 	sBFormInit.id = IDOBJ_OBJSTART;
 	sBFormInit.majorID = 0;
@@ -4228,17 +4180,17 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	sBFormInit.y = OBJ_STARTY;
 	sBFormInit.width = OBJ_BUTWIDTH;
 	sBFormInit.height = OBJ_BUTHEIGHT;
-	memcpy(&sBFormInit2,&sBFormInit,sizeof(W_FORMINIT));
+	W_FORMINIT sBFormInit2 = sBFormInit;
 	sBFormInit2.id = IDOBJ_STATSTART;
 	sBFormInit2.y = OBJ_STATSTARTY;
 	//right click on a Template will put the production on hold
 	sBFormInit2.style = WFORM_CLICKABLE | WFORM_SECONDARY;
 
 	// Action progress bar.
+	W_BARINIT sBarInit;
 	sBarInit.formID = IDOBJ_OBJSTART;
 	sBarInit.id = IDOBJ_PROGBARSTART;
 	sBarInit.style = WBAR_TROUGH | WIDG_HIDDEN;
-	sBarInit.orientation = WBAR_LEFT;
 	sBarInit.x = STAT_PROGBARX;
 	sBarInit.y = STAT_PROGBARY;
 	sBarInit.width = STAT_PROGBARWIDTH;
@@ -4249,7 +4201,7 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	sBarInit.pTip = _("Progress Bar");
 
 	// object output bar ie manuf power o/p, research power o/p
-	memcpy(&sBarInit2,&sBarInit,sizeof(W_BARINIT));
+	W_BARINIT sBarInit2 = sBarInit;
 	sBarInit2.id = IDOBJ_POWERBARSTART;
 	sBarInit2.style = WBAR_PLAIN;
 	sBarInit2.x = STAT_POWERBARX;
@@ -4258,55 +4210,50 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	// don't set the tip cos we haven't got a suitable text string at this point - 2/2/99
 	sBarInit2.pTip = NULL;
 
-	memset(&sLabInit,0,sizeof(W_LABINIT));
+	W_LABINIT sLabInit;
 	sLabInit.id = IDOBJ_COUNTSTART;
-	sLabInit.style = WLAB_PLAIN | WIDG_HIDDEN;
+	sLabInit.style = WIDG_HIDDEN;
 	sLabInit.x = OBJ_TEXTX;
 	sLabInit.y = OBJ_T1TEXTY;
 	sLabInit.width = 16;
 	sLabInit.height = 16;
 	sLabInit.pText = "BUG! (a)";
-	sLabInit.FontID = font_regular;
 
-	memset(&sLabInitCmdFac,0,sizeof(W_LABINIT));
+	W_LABINIT sLabInitCmdFac;
 	sLabInitCmdFac.id = IDOBJ_CMDFACSTART;
-	sLabInitCmdFac.style = WLAB_PLAIN | WIDG_HIDDEN;
+	sLabInitCmdFac.style = WIDG_HIDDEN;
 	sLabInitCmdFac.x = OBJ_TEXTX;
 	sLabInitCmdFac.y = OBJ_T2TEXTY;
 	sLabInitCmdFac.width = 16;
 	sLabInitCmdFac.height = 16;
 	sLabInitCmdFac.pText = "BUG! (b)";
-	sLabInitCmdFac.FontID = font_regular;
 
-	memset(&sLabInitCmdFac2,0,sizeof(W_LABINIT));
+	W_LABINIT sLabInitCmdFac2;
 	sLabInitCmdFac2.id = IDOBJ_CMDVTOLFACSTART;
-	sLabInitCmdFac2.style = WLAB_PLAIN | WIDG_HIDDEN;
+	sLabInitCmdFac2.style = WIDG_HIDDEN;
 	sLabInitCmdFac2.x = OBJ_TEXTX;
 	sLabInitCmdFac2.y = OBJ_T3TEXTY;
 	sLabInitCmdFac2.width = 16;
 	sLabInitCmdFac2.height = 16;
 	sLabInitCmdFac2.pText = "BUG! (c)";
-	sLabInitCmdFac2.FontID = font_regular;
 
-	memset(&sLabIntObjText,0,sizeof(W_LABINIT));
+	W_LABINIT sLabIntObjText;
 	sLabIntObjText.id = IDOBJ_FACTORYSTART;
-	sLabIntObjText.style = WLAB_PLAIN | WIDG_HIDDEN;
+	sLabIntObjText.style = WIDG_HIDDEN;
 	sLabIntObjText.x = OBJ_TEXTX;
 	sLabIntObjText.y = OBJ_B1TEXTY;
 	sLabIntObjText.width = 16;
 	sLabIntObjText.height = 16;
 	sLabIntObjText.pText = "xxx/xxx - overrun";
-	sLabIntObjText.FontID = font_regular;
 
-	memset(&sLabInitCmdExp,0,sizeof(W_LABINIT));
+	W_LABINIT sLabInitCmdExp;
 	sLabInitCmdExp.id = IDOBJ_CMDEXPSTART;
-	sLabInitCmdExp.style = WLAB_PLAIN | WIDG_HIDDEN;
+	sLabInitCmdExp.style = WIDG_HIDDEN;
 	sLabInitCmdExp.x = STAT_POWERBARX;
 	sLabInitCmdExp.y = STAT_POWERBARY;
 	sLabInitCmdExp.width = 16;
 	sLabInitCmdExp.height = 16;
 	sLabInitCmdExp.pText = "@@@@@ - overrun";
-	sLabInitCmdExp.FontID = font_regular;
 
 	displayForm = 0;
 	for(i=0; i<(UDWORD)numObjects; i++)
@@ -4929,9 +4876,6 @@ static BASE_OBJECT *intGetObject(UDWORD id)
 /* Reset the stats button for an object */
 static void intSetStats(UDWORD id, BASE_STATS *psStats)
 {
-	W_FORMINIT	sFormInit;
-	W_BARINIT	sBarInit;
-	W_LABINIT	sLabInit;
 	UDWORD		butPerForm, butPos;
 	SDWORD BufferID;
 	BASE_OBJECT	*psObj;
@@ -4939,9 +4883,7 @@ static void intSetStats(UDWORD id, BASE_STATS *psStats)
 	/* Update the button on the object screen */
 	widgDelete(psWScreen, id);
 
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
-	memset(&sBarInit, 0, sizeof(W_BARINIT));
-
+	W_FORMINIT sFormInit;
 	sFormInit.formID = IDOBJ_TABFORM;
 	butPerForm = (OBJ_WIDTH - OBJ_GAP) / (OBJ_BUTWIDTH + OBJ_GAP);
 	sFormInit.majorID = (UWORD)((id - IDOBJ_STATSTART) / butPerForm);
@@ -4955,10 +4897,10 @@ static void intSetStats(UDWORD id, BASE_STATS *psStats)
 	sFormInit.height = OBJ_BUTHEIGHT;
 
 	// Action progress bar.
+	W_BARINIT sBarInit;
 	sBarInit.formID = id;
 	sBarInit.id = (id - IDOBJ_STATSTART) + IDOBJ_PROGBARSTART;
 	sBarInit.style = WBAR_TROUGH;
-	sBarInit.orientation = WBAR_LEFT;
 	sBarInit.x = STAT_PROGBARX;
 	sBarInit.y = STAT_PROGBARY;
 	sBarInit.width = STAT_PROGBARWIDTH;
@@ -4971,16 +4913,15 @@ static void intSetStats(UDWORD id, BASE_STATS *psStats)
 	sBarInit.pCallback = intUpdateProgressBar;
 	sBarInit.pUserData = intGetObject(id);
 
-	memset(&sLabInit,0,sizeof(W_LABINIT));
+	W_LABINIT sLabInit;
 	sLabInit.formID = id;
 	sLabInit.id = (id - IDOBJ_STATSTART) + IDOBJ_COUNTSTART;
-	sLabInit.style = WLAB_PLAIN | WIDG_HIDDEN;
+	sLabInit.style = WIDG_HIDDEN;
 	sLabInit.x = OBJ_TEXTX;
 	sLabInit.y = OBJ_T1TEXTY;
 	sLabInit.width = 16;
 	sLabInit.height = 16;
 	sLabInit.pText = "BUG! (d)";
-	sLabInit.FontID = font_regular;
 
 	if (psStats)
 	{
@@ -5047,15 +4988,10 @@ static void intSetStats(UDWORD id, BASE_STATS *psStats)
 static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 						BASE_STATS *psSelected, BASE_OBJECT *psOwner)
 {
-	W_FORMINIT			sFormInit;
-	W_BUTINIT			sButInit;
-	W_FORMINIT			sBFormInit;
-	W_BARINIT			sBarInit;
 	UDWORD				i, butPerForm, statForm;
 	SDWORD				BufferID;
 	BASE_STATS			*Stat;
 	BOOL				Animate = true;
-	W_LABINIT			sLabInit;
 	FACTORY				*psFactory;
 
 	// should this ever be called with psOwner == NULL?
@@ -5092,7 +5028,7 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 
 	/* Create the basic form */
 
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
+	W_FORMINIT sFormInit;
 	sFormInit.formID = 0;
 	sFormInit.id = IDSTAT_FORM;
 	sFormInit.style = WFORM_PLAIN;
@@ -5114,20 +5050,21 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		return false;
 	}
 
+	W_LABINIT sLabInit;
+
 	// Add the quantity slider ( if it's a factory ).
 	if(objMode == IOBJ_MANUFACTURE)
 	{
 		//add the Factory DP button
-		memset(&sButInit, 0, sizeof(W_BUTINIT));
+		W_BUTINIT sButInit;
 		sButInit.formID = IDSTAT_FORM;
 		sButInit.id = IDSTAT_DP_BUTTON;
-		sButInit.style = WBUT_PLAIN | WFORM_SECONDARY;
+		sButInit.style = WBUT_SECONDARY;
 		sButInit.x = 4;
 		sButInit.y = STAT_SLDY;
 		sButInit.width = iV_GetImageWidth(IntImages,IMAGE_FDP_DOWN);
 		sButInit.height = iV_GetImageHeight(IntImages,IMAGE_FDP_DOWN);
 		sButInit.pTip = _("Factory Delivery Point");
-		sButInit.FontID = font_regular;
 		sButInit.pDisplay = intDisplayDPButton;
 		sButInit.pUserData = psOwner;
 
@@ -5137,16 +5074,15 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		}
 
 		//add the Factory Loop button!
-		memset(&sButInit, 0, sizeof(W_BUTINIT));
+		sButInit = W_BUTINIT();
 		sButInit.formID = IDSTAT_FORM;
 		sButInit.id = IDSTAT_LOOP_BUTTON;
-		sButInit.style = WBUT_PLAIN | WFORM_SECONDARY;
+		sButInit.style = WBUT_SECONDARY;
 		sButInit.x = STAT_SLDX + STAT_SLDWIDTH + 2;
 		sButInit.y = STAT_SLDY;
 		sButInit.width = iV_GetImageWidth(IntImages,IMAGE_LOOP_DOWN);
 		sButInit.height = iV_GetImageHeight(IntImages,IMAGE_LOOP_DOWN);
 		sButInit.pTip = _("Loop Production");
-		sButInit.FontID = font_regular;
 		sButInit.pDisplay = intDisplayButtonPressed;
 		sButInit.UserData = PACKDWORD_TRI(IMAGE_LOOP_DOWN, IMAGE_LOOP_HI, IMAGE_LOOP_UP);
 
@@ -5165,15 +5101,13 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		}
 
 		// create a text label for the loop quantity.
-		memset(&sLabInit,0,sizeof(W_LABINIT));
 		sLabInit.formID = IDSTAT_FORM;
 		sLabInit.id = IDSTAT_LOOP_LABEL;
-		sLabInit.style = WLAB_PLAIN | WIDG_HIDDEN;
+		sLabInit.style = WIDG_HIDDEN;
 		sLabInit.x = (UWORD)(sButInit.x - 15);
 		sLabInit.y = sButInit.y;
 		sLabInit.width = 12;
 		sLabInit.height = 15;
-		sLabInit.FontID = font_regular;
 		sLabInit.pUserData = psOwner;
 		sLabInit.pCallback = intAddLoopQuantity;
 		if (!widgAddLabel(psWScreen, &sLabInit))
@@ -5184,31 +5118,28 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 
 		/* store the common values for the text labels for the quantity
 		to produce (on each button).*/
-		memset(&sLabInit,0,sizeof(W_LABINIT));
+		sLabInit = W_LABINIT();
 		sLabInit.id = IDSTAT_PRODSTART;
-		sLabInit.style = WLAB_PLAIN | WIDG_HIDDEN;
+		sLabInit.style = WIDG_HIDDEN;
 
 		sLabInit.x = STAT_BUTWIDTH-12;
 		sLabInit.y = 2;
 
 		sLabInit.width = 12;
 		sLabInit.height = 15;
-		sLabInit.FontID = font_regular;
 		sLabInit.pCallback = intAddProdQuantity;
 
 	}
 
 	/* Add the close button */
-	memset(&sButInit, 0, sizeof(W_BUTINIT));
+	W_BUTINIT sButInit;
 	sButInit.formID = IDSTAT_FORM;
 	sButInit.id = IDSTAT_CLOSE;
-	sButInit.style = WBUT_PLAIN;
 	sButInit.x = STAT_WIDTH - CLOSE_WIDTH;
 	sButInit.y = 0;
 	sButInit.width = CLOSE_WIDTH;
 	sButInit.height = CLOSE_HEIGHT;
 	sButInit.pTip = _("Close");
-	sButInit.FontID = font_regular;
 	sButInit.pDisplay = intDisplayImageHilight;
 	sButInit.UserData = PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
 	if (!widgAddButton(psWScreen, &sButInit))
@@ -5224,33 +5155,29 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	if (numForms(numStats, butPerForm)> MAX_TAB_SMALL_SHOWN)	//only want these buttons when tab count >8
 	{
 		// Add the left tab scroll button
-		memset(&sButInit, 0, sizeof(W_BUTINIT));
+		sButInit = W_BUTINIT();
 		sButInit.formID = IDSTAT_FORM;
 		sButInit.id = IDSTAT_TABSCRL_LEFT;
-		sButInit.style = WBUT_PLAIN;
 		sButInit.x = STAT_TABFORMX + 4;
 		sButInit.y = STAT_TABFORMY;
 		sButInit.width = TABSCRL_WIDTH;
 		sButInit.height = TABSCRL_HEIGHT;
 		sButInit.pTip = _("Tab Scroll left");
-		sButInit.FontID = font_regular;
 		sButInit.pDisplay = intDisplayImageHilight;
 		sButInit.UserData = PACKDWORD_TRI(0, IMAGE_LFTTABD, IMAGE_LFTTAB);
 		if (!widgAddButton(psWScreen, &sButInit))
 		{
-		return false;
+			return false;
 		}
 		// Add the right tab scroll button
-		memset(&sButInit, 0, sizeof(W_BUTINIT));
+		sButInit = W_BUTINIT();
 		sButInit.formID = IDSTAT_FORM;
 		sButInit.id = IDSTAT_TABSCRL_RIGHT;
-		sButInit.style = WBUT_PLAIN;
 		sButInit.x = STAT_WIDTH - 14;
 		sButInit.y = STAT_TABFORMY;
 		sButInit.width = TABSCRL_WIDTH;
 		sButInit.height = TABSCRL_HEIGHT;
 		sButInit.pTip = _("Tab Scroll right");
-		sButInit.FontID = font_regular;
 		sButInit.pDisplay = intDisplayImageHilight;
 		sButInit.UserData = PACKDWORD_TRI(0, IMAGE_RGTTABD, IMAGE_RGTTAB);
 		if (!widgAddButton(psWScreen, &sButInit))
@@ -5260,7 +5187,7 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	}
 	//==============buttons before tabbed form!==========================
 	// Add the tabbed form
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
+	sFormInit = W_FORMINIT();
 	sFormInit.formID = IDSTAT_FORM;
 	sFormInit.id = IDSTAT_TABFORM;
 	sFormInit.style = WFORM_TABBED;
@@ -5304,7 +5231,7 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	}
 
 	/* Add the stat buttons */
-	memset(&sBFormInit, 0, sizeof(W_FORMINIT));
+	W_FORMINIT sBFormInit;
 	sBFormInit.formID = IDSTAT_TABFORM;
 	sBFormInit.majorID = 0;
 	sBFormInit.minorID = 0;
@@ -5315,10 +5242,8 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	sBFormInit.width = STAT_BUTWIDTH;
 	sBFormInit.height = STAT_BUTHEIGHT;
 
-	memset(&sBarInit, 0, sizeof(W_BARINIT));
+	W_BARINIT sBarInit;
 	sBarInit.id = IDSTAT_TIMEBARSTART;
-	sBarInit.style = WBAR_PLAIN;
-	sBarInit.orientation = WBAR_LEFT;
 	sBarInit.x = STAT_TIMEBARX;
 	sBarInit.y = STAT_TIMEBARY;
 	sBarInit.width = STAT_PROGBARWIDTH;
@@ -5413,17 +5338,16 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 				Stat->ref < REF_RESEARCH_START + REF_RANGE)				// It's a Research topic.
 		{
             //new icon in for groups - AB 12/01/99
-			memset(&sLabInit,0,sizeof(W_LABINIT));
+			sLabInit = W_LABINIT();
 			sLabInit.formID = sBFormInit.id ;
 			sLabInit.id = IDSTAT_RESICONSTART+(sBFormInit.id - IDSTAT_START);
-			sLabInit.style = WLAB_PLAIN;
 
 			sLabInit.x = STAT_BUTWIDTH - 16;
 			sLabInit.y = 3;
 
 			sLabInit.width = 12;
 			sLabInit.height = 15;
-            sLabInit.pUserData = Stat;
+			sLabInit.pUserData = Stat;
 			sLabInit.pDisplay = intDisplayResSubGroup;
 			widgAddLabel(psWScreen, &sLabInit);
 
@@ -5453,10 +5377,9 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 							  )
 							{
 								// add a label.
-								memset(&sLabInit,0,sizeof(W_LABINIT));
+								sLabInit = W_LABINIT();
 								sLabInit.formID = sBFormInit.id ;
 								sLabInit.id = IDSTAT_ALLYSTART+(sBFormInit.id - IDSTAT_START);
-								sLabInit.style = WLAB_PLAIN;
 								sLabInit.x = STAT_BUTWIDTH  - 19;
 								sLabInit.y = STAT_BUTHEIGHT - 19;
 								sLabInit.width = 12;
@@ -6214,11 +6137,10 @@ void forceHidePowerBar(void)
 /* Add the Proximity message buttons */
 BOOL intAddProximityButton(PROXIMITY_DISPLAY *psProxDisp, UDWORD inc)
 {
-	W_FORMINIT			sBFormInit;
 	PROXIMITY_DISPLAY	*psProxDisp2;
 	UDWORD				cnt;
 
-	memset(&sBFormInit, 0, sizeof(W_FORMINIT));
+	W_FORMINIT sBFormInit;
 	sBFormInit.formID = 0;
 	sBFormInit.id = IDPROX_START + inc;
 	//store the ID so we can detect which one has been clicked on

@@ -82,8 +82,13 @@ SIMPLE_OBJECT::~SIMPLE_OBJECT()
 
 BASE_OBJECT::BASE_OBJECT(OBJECT_TYPE type, uint32_t id, unsigned player)
 	: SIMPLE_OBJECT(type, id, player)
+	, selected(false)
 	, cluster(0)
 	, numWatchedTiles(0)
+	, lastEmission(0)
+	, lastHitWeapon(WSC_NUM_WEAPON_SUBCLASSES)  // No such weapon.
+	, timeLastHit(UDWORD_MAX)
+	, bTargetted(false)
 	, watchedTiles(NULL)
 {}
 

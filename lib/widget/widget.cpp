@@ -82,6 +82,19 @@ void widgShutDown(void)
 }
 
 
+W_INIT::W_INIT()
+	: formID(0)
+	, majorID(0), minorID(0)
+	, id(0)
+	, style(0)
+	, x(0), y(0)
+	, width(0), height(0)
+	, pDisplay(NULL)
+	, pCallback(NULL)
+	, pUserData(NULL)
+	, UserData(0)
+{}
+
 WIDGET::WIDGET(W_INIT const *init, WIDGET_TYPE type)
 	: formID(init->formID)
 	, id(init->id)
@@ -113,9 +126,6 @@ void CheckpsMouseOverWidget( void *psWidget )
 /* Create an empty widget screen */
 W_SCREEN* widgCreateScreen()
 {
-	W_FORM		*psForm;
-	W_FORMINIT	sInit;
-
 	W_SCREEN *psScreen = new W_SCREEN;
 	if (psScreen == NULL)
 	{
@@ -124,7 +134,7 @@ W_SCREEN* widgCreateScreen()
 		return NULL;
 	}
 
-	memset(&sInit, 0, sizeof(W_FORMINIT));
+	W_FORMINIT sInit;
 	sInit.id = 0;
 	sInit.style = WFORM_PLAIN | WFORM_INVISIBLE;
 	sInit.x = 0;
@@ -132,7 +142,7 @@ W_SCREEN* widgCreateScreen()
 	sInit.width = (UWORD)(screenWidth - 1);
 	sInit.height = (UWORD)(screenHeight - 1);
 
-	psForm = formCreate(&sInit);
+	W_FORM *psForm = formCreate(&sInit);
 	if (psForm == NULL)
 	{
 		delete psScreen;

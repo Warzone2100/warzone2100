@@ -425,12 +425,6 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 	//initialise flags
 	newTemplate = false;
 
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
-	memset(&sLabInit, 0, sizeof(W_LABINIT));
-	memset(&sEdInit, 0, sizeof(W_EDBINIT));
-	memset(&sButInit, 0, sizeof(W_BUTINIT));
-	memset(&sBarInit, 0, sizeof(W_BARINIT));
-
 	/* Add the main design form */
 	sFormInit.formID = 0;
 	sFormInit.id = IDDES_FORM;
@@ -448,13 +442,11 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 	/* add the edit name box */
 	sEdInit.formID = IDDES_FORM;
 	sEdInit.id = IDDES_NAMEBOX;
-	sEdInit.style = WEDB_PLAIN;
 	sEdInit.x = DES_NAMEBOXX;
 	sEdInit.y = DES_NAMEBOXY;
 	sEdInit.width = DES_NAMEBOXWIDTH;
 	sEdInit.height = DES_NAMEBOXHEIGHT;
 	sEdInit.pText = _("New Vehicle");
-	sEdInit.FontID = font_regular;
 	sEdInit.pBoxDisplay = intDisplayEditBox;
 	if (!widgAddEditBox(psWScreen, &sEdInit))
 	{
@@ -466,13 +458,13 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 	/* Initialise the current design */
 	if (psCurrTemplate != NULL)
 	{
-		memcpy(&sCurrDesign, psCurrTemplate, sizeof(DROID_TEMPLATE));
+		sCurrDesign = *psCurrTemplate;
 		sstrcpy(aCurrName, getStatName(psCurrTemplate));
 		sstrcpy(sCurrDesign.aName, aCurrName);
 	}
 	else
 	{
-		memcpy(&sCurrDesign, &sDefaultDesignTemplate, sizeof(DROID_TEMPLATE));
+		sCurrDesign = sDefaultDesignTemplate;
 		sCurrDesign.pName = NULL;
 		sstrcpy(aCurrName, _("New Vehicle"));
 		sstrcpy(sCurrDesign.aName, aCurrName);
@@ -516,13 +508,11 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 	// add the body part button
 	sButInit.formID = IDDES_PARTFORM;
 	sButInit.id = IDDES_BODYBUTTON;
-	sButInit.style = WBUT_PLAIN;
 	sButInit.x = DES_PARTSEPARATIONX;
 	sButInit.y = DES_PARTSEPARATIONY;
 	sButInit.width = iV_GetImageWidth(IntImages, IMAGE_DES_BODY);
 	sButInit.height = iV_GetImageHeight(IntImages, IMAGE_DES_BODY);
 	sButInit.pTip = _("Vehicle Body");
-	sButInit.FontID = font_regular;
 #ifdef FLASH_BUTTONS
 	sButInit.pDisplay = intDisplayButtonFlash;
 #else
@@ -537,14 +527,12 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 	// add the propulsion part button
 	sButInit.formID = IDDES_PARTFORM;
 	sButInit.id = IDDES_PROPBUTTON;
-	sButInit.style = WBUT_PLAIN;
 	sButInit.x = DES_PARTSEPARATIONX;
 	sButInit.y = (UWORD)(iV_GetImageHeight(IntImages, IMAGE_DES_PROPULSION) +
 					2 * DES_PARTSEPARATIONY);
 	sButInit.width = iV_GetImageWidth(IntImages, IMAGE_DES_PROPULSION);
 	sButInit.height = iV_GetImageHeight(IntImages, IMAGE_DES_PROPULSION);
 	sButInit.pTip = _("Vehicle Propulsion");
-	sButInit.FontID = font_regular;
 #ifdef FLASH_BUTTONS
 	sButInit.pDisplay = intDisplayButtonFlash;
 #else
@@ -559,7 +547,6 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 	// add the turret part button
 	sButInit.formID = IDDES_PARTFORM;
 	sButInit.id = IDDES_SYSTEMBUTTON;
-	sButInit.style = WBUT_PLAIN;
 	sButInit.x = DES_PARTSEPARATIONX;
 	sButInit.y = (UWORD)(iV_GetImageHeight(IntImages, IMAGE_DES_PROPULSION) +
 				 iV_GetImageHeight(IntImages, IMAGE_DES_BODY)   +
@@ -567,7 +554,6 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 	sButInit.width = iV_GetImageWidth(IntImages, IMAGE_DES_TURRET);
 	sButInit.height = iV_GetImageHeight(IntImages, IMAGE_DES_TURRET);
 	sButInit.pTip = _("Vehicle Turret");
-	sButInit.FontID = font_regular;
 #ifdef FLASH_BUTTONS
 	sButInit.pDisplay = intDisplayButtonFlash;
 #else
@@ -582,7 +568,6 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 	// add the turret_a button
 	sButInit.formID = IDDES_PARTFORM;
 	sButInit.id = IDDES_WPABUTTON;
-	sButInit.style = WBUT_PLAIN;
 	sButInit.x = DES_PARTSEPARATIONX;
 	// use BODY height for now
 	sButInit.y = (UWORD)(iV_GetImageHeight(IntImages, IMAGE_DES_PROPULSION) +
@@ -592,7 +577,6 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 	sButInit.width = iV_GetImageWidth(IntImages, IMAGE_DES_TURRET);
 	sButInit.height = iV_GetImageHeight(IntImages, IMAGE_DES_TURRET);
 	sButInit.pTip = _("Vehicle Turret");
-	sButInit.FontID = font_regular;
 #ifdef FLASH_BUTTONS
 	sButInit.pDisplay = intDisplayButtonFlash;
 #else
@@ -607,7 +591,6 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 	// add the turret_b button
 	sButInit.formID = IDDES_PARTFORM;
 	sButInit.id = IDDES_WPBBUTTON;
-	sButInit.style = WBUT_PLAIN;
 	sButInit.x = DES_PARTSEPARATIONX;
 	//use body height for now
 	sButInit.y = (UWORD)(iV_GetImageHeight(IntImages, IMAGE_DES_PROPULSION) +
@@ -618,7 +601,6 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 	sButInit.width = iV_GetImageWidth(IntImages, IMAGE_DES_TURRET);
 	sButInit.height = iV_GetImageHeight(IntImages, IMAGE_DES_TURRET);
 	sButInit.pTip = _("Vehicle Turret");
-	sButInit.FontID = font_regular;
 #ifdef FLASH_BUTTONS
 	sButInit.pDisplay = intDisplayButtonFlash;
 #else
@@ -633,13 +615,11 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 	/* add the delete button */
 	sButInit.formID = IDDES_PARTFORM;
 	sButInit.id = IDDES_BIN;
-	sButInit.style = WBUT_PLAIN;
 	sButInit.width = iV_GetImageWidth(IntImages, IMAGE_DES_BIN);
 	sButInit.height = iV_GetImageHeight(IntImages, IMAGE_DES_BIN);
 	sButInit.x = DES_PARTSEPARATIONX;
 	sButInit.y = (UWORD)(DES_PARTFORMHEIGHT - sButInit.height - DES_PARTSEPARATIONY);
 	sButInit.pTip = _("Delete Design");
-	sButInit.FontID = font_regular;
 	sButInit.pDisplay = intDisplayButtonHilight;
 	sButInit.UserData = PACKDWORD_TRI(0,IMAGE_DES_BINH, IMAGE_DES_BIN);
 	if (!widgAddButton(psWScreen, &sButInit))
@@ -678,8 +658,6 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 	/* Add the graphs for the Body */
 	sBarInit.formID = IDDES_BODYFORM;
 	sBarInit.id = IDDES_BODYARMOUR_K;
-	sBarInit.style = WBAR_PLAIN;
-	sBarInit.orientation = WBAR_LEFT;
 	sBarInit.x = DES_CLICKBARX;
 	sBarInit.y = DES_STATBAR_Y1;	//DES_CLICKBARY;
 	sBarInit.width = DES_CLICKBARWIDTH;
@@ -735,13 +713,11 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 	/* Add the labels for the Body */
 	sLabInit.formID = IDDES_BODYFORM;
 	sLabInit.id = IDDES_BODYARMOURKLAB;
-	sLabInit.style = WLAB_PLAIN;
 	sLabInit.x = DES_CLICKBARNAMEX;
 	sLabInit.y = DES_CLICKBARY - DES_CLICKBARHEIGHT/3;
 	sLabInit.width = DES_CLICKBARNAMEWIDTH;
 	sLabInit.height = DES_CLICKBARHEIGHT;
 	sLabInit.pTip = _("Kinetic Armour");
-	sLabInit.FontID = font_regular;
 	sLabInit.pDisplay = intDisplayImage;
 	//just to confuse things even more - the graphics were named incorrectly!
 	sLabInit.UserData = IMAGE_DES_ARMOUR_EXPLOSIVE;//IMAGE_DES_ARMOUR_KINETIC;
@@ -789,7 +765,7 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 	}
 
 	/* add power/points bar subform */
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
+	sFormInit = W_FORMINIT();
 	sFormInit.formID = IDDES_FORM;
 	sFormInit.id = IDDES_POWERFORM;
 	sFormInit.style = WFORM_PLAIN;
@@ -819,11 +795,9 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 		return true;
 	}
 
-	memset(&sBarInit, 0, sizeof(W_BARINIT));
+	sBarInit = W_BARINIT();
 	sBarInit.formID = IDDES_POWERFORM;
 	sBarInit.id = IDDES_POWERBAR;
-	sBarInit.style = WBAR_PLAIN;
-	sBarInit.orientation = WBAR_LEFT;
 	sBarInit.x = (SWORD)(DES_POWERX + DES_POWERSEPARATIONX +
 					iV_GetImageWidth(IntImages,IMAGE_DES_BODYPOINTS));
 	sBarInit.y = DES_POWERY;
@@ -852,11 +826,9 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 		return true;
 	}
 
-	memset(&sBarInit, 0, sizeof(W_BARINIT));
+	sBarInit = W_BARINIT();
 	sBarInit.formID = IDDES_POWERFORM;
 	sBarInit.id = IDDES_BODYPOINTS;
-	sBarInit.style = WBAR_PLAIN;
-	sBarInit.orientation = WBAR_LEFT;
 	sBarInit.x = (SWORD)(DES_POWERX + DES_POWERSEPARATIONX +
 					iV_GetImageWidth(IntImages,IMAGE_DES_BODYPOINTS));
 	sBarInit.y = (SWORD)(DES_POWERY + DES_POWERSEPARATIONY + 4 +
@@ -927,7 +899,6 @@ void desSetupDesignTemplates(void)
 /* Add the design template form */
 static BOOL _intAddTemplateForm(DROID_TEMPLATE *psSelected)
 {
-	W_FORMINIT	sFormInit;
 	UDWORD		numButtons, butPerForm;
 	UDWORD		i;
 
@@ -949,7 +920,7 @@ static BOOL _intAddTemplateForm(DROID_TEMPLATE *psSelected)
 						(DES_TABBUTHEIGHT + DES_TABBUTGAP));
 
 	/* add a form to place the tabbed form on */
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
+	W_FORMINIT sFormInit;
 	sFormInit.formID = 0;
 	sFormInit.id = IDDES_TEMPLBASE;
 	sFormInit.style = WFORM_PLAIN;
@@ -964,7 +935,7 @@ static BOOL _intAddTemplateForm(DROID_TEMPLATE *psSelected)
 	}
 
 	/* Add the design templates form */
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
+	sFormInit = W_FORMINIT();
 	sFormInit.formID = IDDES_TEMPLBASE;	//IDDES_FORM;
 	sFormInit.id = IDDES_TEMPLFORM;
 	sFormInit.style = WFORM_TABBED;
@@ -1022,8 +993,6 @@ BOOL intAddTemplateButtons(UDWORD formID, UDWORD formWidth, UDWORD formHeight,
 								  UDWORD butWidth, UDWORD butHeight, UDWORD gap,
 								  DROID_TEMPLATE *psSelected)
 {
-	W_FORMINIT		sButInit;
-	W_BARINIT		sBarInit;
 	DROID_TEMPLATE	*psTempl = NULL;
 	char			aButText[DES_COMPBUTMAXCHAR + 1];
 	SDWORD			BufferID;
@@ -1034,9 +1003,9 @@ BOOL intAddTemplateButtons(UDWORD formID, UDWORD formWidth, UDWORD formHeight,
 	ClearStatBuffers();
 
 	memset(aButText, 0, DES_COMPBUTMAXCHAR + 1);
-	memset(&sButInit, 0, sizeof(W_BUTINIT));
 
 	/* Set up the button struct */
+	W_FORMINIT sButInit;
 	sButInit.formID = formID;
 	sButInit.id = IDDES_TEMPLSTART;
 	sButInit.style = WFORM_CLICKABLE;
@@ -1046,10 +1015,8 @@ BOOL intAddTemplateButtons(UDWORD formID, UDWORD formWidth, UDWORD formHeight,
 	sButInit.height = OBJ_BUTHEIGHT;		//DES_TABBUTHEIGHT;
 
 	/* Add each button */
-	memset(&sBarInit, 0, sizeof(W_BARINIT));
+	W_BARINIT sBarInit;
 	sBarInit.id = IDDES_BARSTART;
-	sBarInit.style = WBAR_PLAIN;
-	sBarInit.orientation = WBAR_LEFT;
 	sBarInit.x = STAT_TIMEBARX;
 	sBarInit.y = STAT_TIMEBARY;
 	sBarInit.width = STAT_PROGBARWIDTH;
@@ -1448,14 +1415,7 @@ static void intSetDesignStats( DROID_TEMPLATE *psTemplate )
 /* Set up the system clickable form of the design screen given a set of stats */
 static BOOL _intSetSystemForm(COMPONENT_STATS *psStats)
 {
-	W_FORMINIT		sFormInit;
-	W_BARINIT		sBarInit;
-	W_LABINIT		sLabInit;
 	DES_SYSMODE		newSysMode=(DES_SYSMODE)0;
-
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
-	memset(&sLabInit, 0, sizeof(W_LABINIT));
-	memset(&sBarInit, 0, sizeof(W_BARINIT));
 
 	/* Figure out what the new mode should be */
 	switch (statType(psStats->ref))
@@ -1498,6 +1458,7 @@ static BOOL _intSetSystemForm(COMPONENT_STATS *psStats)
 	desSysMode = newSysMode;
 
 	/* Add the system form */
+	W_FORMINIT sFormInit;
 	sFormInit.formID = IDDES_STATSFORM;
 	sFormInit.id = IDDES_SYSTEMFORM;
 	sFormInit.style = (WFORM_CLICKABLE | WFORM_NOCLICKMOVE);
@@ -1514,9 +1475,9 @@ static BOOL _intSetSystemForm(COMPONENT_STATS *psStats)
 	}
 
 	/* Initialise the bargraph struct */
+	W_BARINIT sBarInit;
 	sBarInit.formID = IDDES_SYSTEMFORM;
-	sBarInit.style = WBAR_PLAIN;//WBAR_DOUBLE;
-	sBarInit.orientation = WBAR_LEFT;
+	//sBarInit.style = WBAR_DOUBLE;
 	sBarInit.x = DES_CLICKBARX;
 	sBarInit.y = DES_STATBAR_Y1;	//DES_CLICKBARY;
 	sBarInit.width = DES_CLICKBARWIDTH;
@@ -1530,13 +1491,13 @@ static BOOL _intSetSystemForm(COMPONENT_STATS *psStats)
 	sBarInit.pDisplay = intDisplayStatsBar;
 
 	/* Initialise the label struct */
+	W_LABINIT sLabInit;
 	sLabInit.formID = IDDES_SYSTEMFORM;
-	sLabInit.style = WLAB_PLAIN;
 	sLabInit.x = DES_CLICKBARNAMEX;
 	sLabInit.y = DES_CLICKBARY - DES_CLICKBARHEIGHT/3;
 	sLabInit.width = DES_CLICKBARNAMEWIDTH;
 	sLabInit.height = DES_CLICKBARHEIGHT;
-	sLabInit.FontID = font_regular;
+	sLabInit.pDisplay = intDisplayImage;
 
 	/* See what type of system stats we've got */
 	if (psStats->ref >= REF_SENSOR_START &&
@@ -1574,7 +1535,6 @@ static BOOL _intSetSystemForm(COMPONENT_STATS *psStats)
 		/* Add the labels */
 		sLabInit.id = IDDES_SENSORRANGELAB;
 		sLabInit.pTip = _("Sensor Range");
-		sLabInit.pDisplay = intDisplayImage;
 		sLabInit.UserData = IMAGE_DES_RANGE;
 		if (!widgAddLabel(psWScreen, &sLabInit))
 		{
@@ -1583,7 +1543,6 @@ static BOOL _intSetSystemForm(COMPONENT_STATS *psStats)
 		sLabInit.id = IDDES_SENSORPOWERLAB;
 		sLabInit.y += DES_CLICKBARHEIGHT + DES_CLICKGAP;
 		sLabInit.pTip = _("Sensor Power");
-		sLabInit.pDisplay = intDisplayImage;
 		sLabInit.UserData = IMAGE_DES_POWER;
 		if (!widgAddLabel(psWScreen, &sLabInit))
 		{
@@ -1592,7 +1551,6 @@ static BOOL _intSetSystemForm(COMPONENT_STATS *psStats)
 		sLabInit.id = IDDES_SENSORWEIGHTLAB;
 		sLabInit.y += DES_CLICKBARHEIGHT + DES_CLICKGAP;
 		sLabInit.pTip = _("Weight");
-		sLabInit.pDisplay = intDisplayImage;
 		sLabInit.UserData = IMAGE_DES_WEIGHT;
 		if (!widgAddLabel(psWScreen, &sLabInit))
 		{
@@ -1622,7 +1580,6 @@ static BOOL _intSetSystemForm(COMPONENT_STATS *psStats)
 		/* Add the labels */
 		sLabInit.id = IDDES_ECMPOWERLAB;
 		sLabInit.pTip = _("ECM Power");
-		sLabInit.pDisplay = intDisplayImage;
 		sLabInit.UserData = IMAGE_DES_POWER;
 		if (!widgAddLabel(psWScreen, &sLabInit))
 		{
@@ -1631,7 +1588,6 @@ static BOOL _intSetSystemForm(COMPONENT_STATS *psStats)
 		sLabInit.id = IDDES_ECMWEIGHTLAB;
 		sLabInit.y += DES_CLICKBARHEIGHT + DES_CLICKGAP;
 		sLabInit.pTip = _("Weight");
-		sLabInit.pDisplay = intDisplayImage;
 		sLabInit.UserData = IMAGE_DES_WEIGHT;
 		if (!widgAddLabel(psWScreen, &sLabInit))
 		{
@@ -1661,7 +1617,6 @@ static BOOL _intSetSystemForm(COMPONENT_STATS *psStats)
 		/* Add the labels */
 		sLabInit.id = IDDES_CONSTPOINTSLAB;
 		sLabInit.pTip = _("Build Points");
-		sLabInit.pDisplay = intDisplayImage;
 		sLabInit.UserData = IMAGE_DES_BUILDRATE;
 		if (!widgAddLabel(psWScreen, &sLabInit))
 		{
@@ -1670,7 +1625,6 @@ static BOOL _intSetSystemForm(COMPONENT_STATS *psStats)
 		sLabInit.id = IDDES_CONSTWEIGHTLAB;
 		sLabInit.y += DES_CLICKBARHEIGHT + DES_CLICKGAP;
 		sLabInit.pTip = _("Weight");
-		sLabInit.pDisplay = intDisplayImage;
 		sLabInit.UserData = IMAGE_DES_WEIGHT;
 		if (!widgAddLabel(psWScreen, &sLabInit))
 		{
@@ -1700,7 +1654,6 @@ static BOOL _intSetSystemForm(COMPONENT_STATS *psStats)
 		/* Add the labels */
 		sLabInit.id = IDDES_REPAIRPTLAB;
 		sLabInit.pTip = _("Build Points");
-		sLabInit.pDisplay = intDisplayImage;
 		sLabInit.UserData = IMAGE_DES_BUILDRATE;
 		if (!widgAddLabel(psWScreen, &sLabInit))
 		{
@@ -1709,7 +1662,6 @@ static BOOL _intSetSystemForm(COMPONENT_STATS *psStats)
 		sLabInit.id = IDDES_REPAIRWGTLAB;
 		sLabInit.y += DES_CLICKBARHEIGHT + DES_CLICKGAP;
 		sLabInit.pTip = _("Weight");
-		sLabInit.pDisplay = intDisplayImage;
 		sLabInit.UserData = IMAGE_DES_WEIGHT;
 		if (!widgAddLabel(psWScreen, &sLabInit))
 		{
@@ -1729,7 +1681,7 @@ static BOOL _intSetSystemForm(COMPONENT_STATS *psStats)
 		{
 			return false;
 		}
-		sBarInit.denominator = 0;
+		sBarInit.denominator = 1;
 		sBarInit.precision = 0;
 		sBarInit.id = IDDES_WEAPDAMAGE;
 		sBarInit.y = DES_STATBAR_Y2;	//+= DES_CLICKBARHEIGHT + DES_CLICKGAP;
@@ -1759,7 +1711,6 @@ static BOOL _intSetSystemForm(COMPONENT_STATS *psStats)
 		/* Add the labels */
 		sLabInit.id = IDDES_WEAPRANGELAB;
 		sLabInit.pTip = _("Range");
-		sLabInit.pDisplay = intDisplayImage;
 		sLabInit.UserData = IMAGE_DES_RANGE;
 		if (!widgAddLabel(psWScreen, &sLabInit))
 		{
@@ -1768,7 +1719,6 @@ static BOOL _intSetSystemForm(COMPONENT_STATS *psStats)
 		sLabInit.id = IDDES_WEAPDAMAGELAB;
 		sLabInit.y += DES_CLICKBARHEIGHT + DES_CLICKGAP;
 		sLabInit.pTip = _("Damage");
-		sLabInit.pDisplay = intDisplayImage;
 		sLabInit.UserData = IMAGE_DES_DAMAGE;
 		if (!widgAddLabel(psWScreen, &sLabInit))
 		{
@@ -1777,7 +1727,6 @@ static BOOL _intSetSystemForm(COMPONENT_STATS *psStats)
 		sLabInit.id = IDDES_WEAPROFLAB;
 		sLabInit.y += DES_CLICKBARHEIGHT + DES_CLICKGAP;
 		sLabInit.pTip = _("Rate-of-Fire");
-		sLabInit.pDisplay = intDisplayImage;
 		sLabInit.UserData = IMAGE_DES_FIRERATE;
 		if (!widgAddLabel(psWScreen, &sLabInit))
 		{
@@ -1786,7 +1735,6 @@ static BOOL _intSetSystemForm(COMPONENT_STATS *psStats)
 		sLabInit.id = IDDES_WEAPWEIGHTLAB;
 		sLabInit.y += DES_CLICKBARHEIGHT + DES_CLICKGAP;
 		sLabInit.pTip = _("Weight");
-		sLabInit.pDisplay = intDisplayImage;
 		sLabInit.UserData = IMAGE_DES_WEIGHT;
 		if (!widgAddLabel(psWScreen, &sLabInit))
 		{
@@ -1827,16 +1775,9 @@ static BOOL _intSetSystemForm(COMPONENT_STATS *psStats)
 /* Set up the propulsion clickable form of the design screen given a set of stats */
 static BOOL intSetPropulsionForm(PROPULSION_STATS *psStats)
 {
-	W_FORMINIT		sFormInit;
-	W_BARINIT		sBarInit;
-	W_LABINIT		sLabInit;
 	DES_PROPMODE	newPropMode=(DES_PROPMODE)0;
 
 	ASSERT_OR_RETURN(false, psStats != NULL, "Invalid propulsion stats pointer");
-
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
-	memset(&sLabInit, 0, sizeof(W_LABINIT));
-	memset(&sBarInit, 0, sizeof(W_BARINIT));
 
 	/* figure out what the new mode should be */
 	switch (asPropulsionTypes[psStats->propulsionType].travel)
@@ -1866,6 +1807,7 @@ static BOOL intSetPropulsionForm(PROPULSION_STATS *psStats)
 	desPropMode = newPropMode;
 
 	/* Add the propulsion form */
+	W_FORMINIT sFormInit;
 	sFormInit.formID = IDDES_STATSFORM;
 	sFormInit.id = IDDES_PROPFORM;
 	sFormInit.style = WFORM_CLICKABLE | WFORM_NOCLICKMOVE;
@@ -1881,9 +1823,9 @@ static BOOL intSetPropulsionForm(PROPULSION_STATS *psStats)
 	}
 
 	/* Initialise the bargraph struct */
+	W_BARINIT sBarInit;
 	sBarInit.formID = IDDES_PROPFORM;
-	sBarInit.style = WBAR_PLAIN;//WBAR_DOUBLE;
-	sBarInit.orientation = WBAR_LEFT;
+	//sBarInit.style = WBAR_DOUBLE;
 	sBarInit.x = DES_CLICKBARX;
 	sBarInit.y = DES_STATBAR_Y1;	//DES_CLICKBARY;
 	sBarInit.width = DES_CLICKBARWIDTH;
@@ -1897,13 +1839,13 @@ static BOOL intSetPropulsionForm(PROPULSION_STATS *psStats)
 	sBarInit.pDisplay = intDisplayStatsBar;
 
 	/* Initialise the label struct */
+	W_LABINIT sLabInit;
 	sLabInit.formID = IDDES_PROPFORM;
-	sLabInit.style = WLAB_PLAIN;
 	sLabInit.x = DES_CLICKBARNAMEX;
 	sLabInit.y = DES_CLICKBARY - DES_CLICKBARHEIGHT/3;
 	sLabInit.width = DES_CLICKBARNAMEWIDTH;
 	sLabInit.height = DES_CLICKBARNAMEHEIGHT;	//DES_CLICKBARHEIGHT;
-	sLabInit.FontID = font_regular;
+	sLabInit.pDisplay = intDisplayImage;
 
 	/* See what type of propulsion we've got */
 	switch (desPropMode)
@@ -1919,7 +1861,7 @@ static BOOL intSetPropulsionForm(PROPULSION_STATS *psStats)
 		{
 			return false;
 		}
-		sBarInit.denominator = 0;
+		sBarInit.denominator = 1;
 		sBarInit.precision = 0;
 		sBarInit.id = IDDES_PROPWEIGHT;
 		sBarInit.y = DES_STATBAR_Y2;	//+= DES_CLICKBARHEIGHT + DES_CLICKGAP;
@@ -1933,7 +1875,6 @@ static BOOL intSetPropulsionForm(PROPULSION_STATS *psStats)
 		/* Add the labels */
 		sLabInit.id = IDDES_PROPAIRLAB;
 		sLabInit.pTip = _("Air Speed");
-		sLabInit.pDisplay = intDisplayImage;
 		sLabInit.UserData = IMAGE_DES_HOVER;
 		if (!widgAddLabel(psWScreen, &sLabInit))
 		{
@@ -1942,7 +1883,6 @@ static BOOL intSetPropulsionForm(PROPULSION_STATS *psStats)
 		sLabInit.id = IDDES_PROPWEIGHTLAB;
 		sLabInit.y += DES_CLICKBARHEIGHT + DES_CLICKGAP;
 		sLabInit.pTip = _("Weight");
-		sLabInit.pDisplay = intDisplayImage;
 		sLabInit.UserData = IMAGE_DES_WEIGHT;
 		if (!widgAddLabel(psWScreen, &sLabInit))
 		{
@@ -1976,7 +1916,7 @@ static BOOL intSetPropulsionForm(PROPULSION_STATS *psStats)
 		{
 			return false;
 		}
-		sBarInit.denominator = 0;
+		sBarInit.denominator = 1;
 		sBarInit.precision = 0;
 		sBarInit.id = IDDES_PROPWEIGHT;
 		sBarInit.y = DES_STATBAR_Y4;	//+= DES_CLICKBARHEIGHT + DES_CLICKGAP;
@@ -1990,7 +1930,6 @@ static BOOL intSetPropulsionForm(PROPULSION_STATS *psStats)
 		/* Add the labels */
 		sLabInit.id = IDDES_PROPROADLAB;
 		sLabInit.pTip = _("Road Speed");
-		sLabInit.pDisplay = intDisplayImage;
 		sLabInit.UserData = IMAGE_DES_ROAD;
 		if (!widgAddLabel(psWScreen, &sLabInit))
 		{
@@ -1999,7 +1938,6 @@ static BOOL intSetPropulsionForm(PROPULSION_STATS *psStats)
 		sLabInit.id = IDDES_PROPCOUNTRYLAB;
 		sLabInit.y += DES_CLICKBARHEIGHT + DES_CLICKGAP;
 		sLabInit.pTip = _("Off-Road Speed");
-		sLabInit.pDisplay = intDisplayImage;
 		sLabInit.UserData = IMAGE_DES_CROSSCOUNTRY;
 		if (!widgAddLabel(psWScreen, &sLabInit))
 		{
@@ -2008,7 +1946,6 @@ static BOOL intSetPropulsionForm(PROPULSION_STATS *psStats)
 		sLabInit.id = IDDES_PROPWATERLAB;
 		sLabInit.y += DES_CLICKBARHEIGHT + DES_CLICKGAP;
 		sLabInit.pTip = _("Water Speed");
-		sLabInit.pDisplay = intDisplayImage;
 		sLabInit.UserData = IMAGE_DES_HOVER;	//WATER;
 		if (!widgAddLabel(psWScreen, &sLabInit))
 		{
@@ -2017,7 +1954,6 @@ static BOOL intSetPropulsionForm(PROPULSION_STATS *psStats)
 		sLabInit.id = IDDES_PROPWEIGHTLAB;
 		sLabInit.y += DES_CLICKBARHEIGHT + DES_CLICKGAP;
 		sLabInit.pTip = _("Weight");
-		sLabInit.pDisplay = intDisplayImage;
 		sLabInit.UserData = IMAGE_DES_WEIGHT;
 		if (!widgAddLabel(psWScreen, &sLabInit))
 		{
@@ -2068,14 +2004,12 @@ static UDWORD intNumAvailable(UBYTE *aAvailable, UDWORD numEntries,
 /* Add the component tab form to the design screen */
 static BOOL intAddComponentForm(UDWORD numButtons)
 {
-	W_FORMINIT		sFormInit;
 	UDWORD			i, butPerForm, numFrm;
 
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
 	butPerForm = DES_BUTSPERFORM;
 
 	/* add a form to place the tabbed form on */
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
+	W_FORMINIT sFormInit;
 	sFormInit.formID = 0;
 	sFormInit.id = IDDES_RIGHTBASE;
 	sFormInit.style = WFORM_PLAIN;
@@ -2090,7 +2024,7 @@ static BOOL intAddComponentForm(UDWORD numButtons)
 	}
 
 	//now a single form
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
+	sFormInit = W_FORMINIT();
 	sFormInit.formID = IDDES_RIGHTBASE;
 	sFormInit.id = IDDES_COMPFORM;
 	sFormInit.style = WFORM_TABBED;
@@ -2129,20 +2063,15 @@ static BOOL intAddComponentForm(UDWORD numButtons)
 /* Add the system buttons (weapons, command droid, etc) to the design screen */
 static BOOL intAddSystemButtons(DES_COMPMODE mode)
 {
-	W_BUTINIT	sButInit;
-
-	memset(&sButInit, 0, sizeof(W_BUTINIT));
-
 	// add the weapon button
+	W_BUTINIT sButInit;
 	sButInit.formID = IDDES_RIGHTBASE;
 	sButInit.id = IDDES_WEAPONS;
-	sButInit.style = WBUT_PLAIN;
 	sButInit.x = DES_WEAPONBUTTON_X;
 	sButInit.y = DES_SYSTEMBUTTON_Y;
 	sButInit.width = iV_GetImageWidth(IntImages, IMAGE_DES_WEAPONS);
 	sButInit.height = iV_GetImageHeight(IntImages, IMAGE_DES_WEAPONS);
 	sButInit.pTip = _("Weapons");
-	sButInit.FontID = font_regular;
 	sButInit.pDisplay = intDisplayButtonHilight;
 	sButInit.UserData = PACKDWORD_TRI(0,IMAGE_DES_EXTRAHI , IMAGE_DES_WEAPONS);
 	if (!widgAddButton(psWScreen, &sButInit))
@@ -2158,13 +2087,11 @@ static BOOL intAddSystemButtons(DES_COMPMODE mode)
 	    // add the system button
 	    sButInit.formID = IDDES_RIGHTBASE;
 	    sButInit.id = IDDES_SYSTEMS;
-	    sButInit.style = WBUT_PLAIN;
 	    sButInit.x = DES_SYSTEMBUTTON_X;
 	    sButInit.y = DES_SYSTEMBUTTON_Y;
 	    sButInit.width = iV_GetImageWidth(IntImages, IMAGE_DES_SYSTEMS);
 	    sButInit.height = iV_GetImageHeight(IntImages, IMAGE_DES_SYSTEMS);
 	    sButInit.pTip = _("Systems");
-	    sButInit.FontID = font_regular;
 	    sButInit.pDisplay = intDisplayButtonHilight;
 	    sButInit.UserData = PACKDWORD_TRI(0,IMAGE_DES_EXTRAHI , IMAGE_DES_SYSTEMS);
 	    if (!widgAddButton(psWScreen, &sButInit))
@@ -2201,7 +2128,6 @@ static BOOL intAddComponentButtons(COMPONENT_STATS *psStats, UDWORD size,
 								   UBYTE *aAvailable,	UDWORD numEntries,
 								   UDWORD compID,UDWORD WhichTab)
 {
-	W_FORMINIT			sButInit;
 	W_TABFORM           *psTabForm;
 	UDWORD				i, maxComponents;
 	COMPONENT_STATS		*psCurrStats;
@@ -2214,9 +2140,9 @@ static BOOL intAddComponentButtons(COMPONENT_STATS *psStats, UDWORD size,
 	ClearObjectBuffers();
 
 	memset(aButText, 0, DES_COMPBUTMAXCHAR + 1);
-	memset(&sButInit, 0, sizeof(W_BUTINIT));
 
 	/* Set up the button struct */
+	W_FORMINIT sButInit;
 	sButInit.formID = IDDES_COMPFORM;
 	sButInit.majorID = IDES_MAINTAB;
 	sButInit.minorID = 0;
@@ -2413,7 +2339,6 @@ static BOOL intAddExtraSystemButtons(UDWORD sensorIndex, UDWORD ecmIndex,
 									 UDWORD constIndex, UDWORD repairIndex,
 									 UDWORD brainIndex)
 {
-	W_FORMINIT		sButInit;
 	UDWORD			i, buttonType, size=0;
 	UDWORD			compIndex=0, numStats=0;
 	COMPONENT_STATS	*psCurrStats=0;
@@ -2422,9 +2347,9 @@ static BOOL intAddExtraSystemButtons(UDWORD sensorIndex, UDWORD ecmIndex,
 	SDWORD			BufferID;
 
 	memset(aButText, 0, DES_COMPBUTMAXCHAR + 1);
-	memset(&sButInit, 0, sizeof(W_BUTINIT));
 
 	// Set up the button struct
+	W_FORMINIT sButInit;
 	sButInit.formID = IDDES_COMPFORM;
 	sButInit.majorID = 0;
 	sButInit.minorID = 0;

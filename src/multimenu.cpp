@@ -360,8 +360,6 @@ static unsigned int check_tip_index(unsigned int i) {
  */
 void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mode, UBYTE mapCam, UBYTE numPlayers)
 {
-	W_FORMINIT         sFormInit;
-	W_BUTINIT          sButInit;
 	UDWORD             players;
 	char**             fileList;
 	char**             currFile;
@@ -424,7 +422,7 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 						(R_BUT_H+ 4));
 
 	/* add a form to place the tabbed form on */
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
+	W_FORMINIT sFormInit;
 	sFormInit.formID = 0;
 	sFormInit.id = M_REQUEST;
 	sFormInit.style = WFORM_PLAIN;
@@ -437,7 +435,7 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 	widgAddForm(psRScreen, &sFormInit);
 
 	/* Add the tabs */
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
+	sFormInit = W_FORMINIT();
 	sFormInit.formID = M_REQUEST;
 	sFormInit.id = M_REQUEST_TAB;
 	sFormInit.style = WFORM_TABBED;
@@ -474,32 +472,28 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 	widgAddForm(psRScreen, &sFormInit);
 
 	// Add the close button.
-	memset(&sButInit, 0, sizeof(W_BUTINIT));
+	W_BUTINIT sButInit;
 	sButInit.formID = M_REQUEST;
 	sButInit.id = M_REQUEST_CLOSE;
-	sButInit.style = WBUT_PLAIN;
 	sButInit.x = M_REQUEST_W - CLOSE_WIDTH - 3;
 	sButInit.y = 0;
 	sButInit.width = CLOSE_WIDTH;
 	sButInit.height = CLOSE_HEIGHT;
 	sButInit.pTip = _("Close");
-	sButInit.FontID = font_regular;
 	sButInit.pDisplay = intDisplayImageHilight;
 	sButInit.UserData = PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
 	widgAddButton(psRScreen, &sButInit);
 
 	/* Put the buttons on it *//* Set up the button struct */
-	memset(&sButInit, 0, sizeof(W_BUTINIT));
+	sButInit = W_BUTINIT();
 	sButInit.formID		= M_REQUEST_TAB;
 	sButInit.id		= M_REQUEST_BUT;
-	sButInit.style		= WBUT_PLAIN;
 	sButInit.x		= buttonsX;
 	sButInit.y		= 4;
 	sButInit.width		= R_BUT_W;
 	sButInit.height		= R_BUT_H;
 	sButInit.pUserData	= NULL;
 	sButInit.pDisplay	= displayRequestOption;
-	sButInit.FontID		= font_regular;
 
 	for (currFile = fileList, count = 0; *currFile != NULL && count < (butPerForm * 4); ++currFile)
 	{
@@ -602,16 +596,14 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 	// if it's map select then add the cam style buttons.
 	if(mode == MULTIOP_MAP)
 	{
-		memset(&sButInit, 0, sizeof(W_BUTINIT));
+		sButInit = W_BUTINIT();
 		sButInit.formID		= M_REQUEST_TAB;
 		sButInit.id		= M_REQUEST_C1;
-		sButInit.style		= WBUT_PLAIN;
 		sButInit.x		= 1;
 		sButInit.y		= 252;
 		sButInit.width		= 17;
 		sButInit.height		= 17;
 		sButInit.UserData	= 1;
-		sButInit.FontID		= font_regular;
 		sButInit.pTip		= _("Technology level 1");
 		sButInit.pDisplay	= displayCamTypeBut;
 
@@ -1146,13 +1138,11 @@ static void displayChannelState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 static void addMultiPlayer(UDWORD player,UDWORD pos)
 {
 	UDWORD			y,id;
-	W_BUTINIT		sButInit;
-	W_FORMINIT		sFormInit;
 	y	= MULTIMENU_PLAYER_H*(pos+1);					// this is the top of the pos.
 	id	= MULTIMENU_PLAYER+player;
 
 	// add the whole thing.
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
+	W_FORMINIT sFormInit;
 	sFormInit.formID		  = MULTIMENU_FORM;
 	sFormInit.id			  = id;
 	sFormInit.style			  = WFORM_PLAIN;
@@ -1170,17 +1160,16 @@ static void addMultiPlayer(UDWORD player,UDWORD pos)
 	//ping
 	//ALL DONE IN THE DISPLAY FUNC.
 
+	W_BUTINIT sButInit;
+
 	// add channel opener.
 	if(player != selectedPlayer)
 	{
-		memset(&sButInit, 0, sizeof(W_BUTINIT));
 		sButInit.formID = id;
-		sButInit.style	= WBUT_PLAIN;
 		sButInit.x		= MULTIMENU_C0;
 		sButInit.y		= 5;
 		sButInit.width	= 35;
 		sButInit.height = 24;
-		sButInit.FontID = font_regular;
 		sButInit.id		= MULTIMENU_CHANNEL + player;
 		sButInit.pTip	= _("Channel");
 		sButInit.pDisplay = displayChannelState;
@@ -1195,7 +1184,6 @@ static void addMultiPlayer(UDWORD player,UDWORD pos)
 		sButInit.y		= 5;
 		sButInit.width	= 35;
 		sButInit.height = 24;
-		sButInit.FontID = font_regular;
 		sButInit.id		= MULTIMENU_ALLIANCE_BASE + player;
 		sButInit.pTip	= _("Toggle Alliance State");
 		sButInit.pDisplay = displayAllianceState;
@@ -1278,7 +1266,6 @@ void intCloseDebugMenuNoAnim(void)
  */
 BOOL addDebugMenu(BOOL bAdd)
 {
-	W_FORMINIT		sFormInit;
 	UDWORD			i,pos = 0,formHeight=0;
 
 	/* Close */
@@ -1299,7 +1286,7 @@ BOOL addDebugMenu(BOOL bAdd)
 	}
 
 	// add form
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
+	W_FORMINIT sFormInit;
 	sFormInit.formID		  = 0;
 	sFormInit.id			  = DEBUGMENU;
 	sFormInit.style			  = WFORM_PLAIN;
@@ -1322,7 +1309,7 @@ BOOL addDebugMenu(BOOL bAdd)
 		if(strcmp(debugMenuEntry[i],""))
 		{
 			// add form
-			memset(&sFormInit, 0, sizeof(W_FORMINIT));
+			sFormInit = W_FORMINIT();
 			sFormInit.formID		  = DEBUGMENU;
 			sFormInit.id			  = DEBUGMENU_CLOSE + pos + 1;
 			sFormInit.style			  = WFORM_PLAIN;
@@ -1339,7 +1326,7 @@ BOOL addDebugMenu(BOOL bAdd)
 	}
 
 	// Add the close button.
-	/* memset(&sButInit, 0, sizeof(W_BUTINIT));
+	/*
 	sButInit.formID = DEBUGMENU;
 	sButInit.id = DEBUGMENU_CLOSE;
 	sButInit.style = WBUT_PLAIN;
@@ -1363,8 +1350,6 @@ BOOL addDebugMenu(BOOL bAdd)
 
 BOOL intAddMultiMenu(void)
 {
-	W_FORMINIT		sFormInit;
-	W_BUTINIT		sButInit;
 	UDWORD			i;
 
 	//check for already open.
@@ -1380,7 +1365,7 @@ BOOL intAddMultiMenu(void)
 	}
 
 	// add form
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
+	W_FORMINIT sFormInit;
 	sFormInit.formID		  = 0;
 	sFormInit.id			  = MULTIMENU_FORM;
 	sFormInit.style			  = WFORM_PLAIN;
@@ -1406,16 +1391,14 @@ BOOL intAddMultiMenu(void)
 	}
 
 	// Add the close button.
-	memset(&sButInit, 0, sizeof(W_BUTINIT));
+	W_BUTINIT sButInit;
 	sButInit.formID = MULTIMENU_FORM;
 	sButInit.id = MULTIMENU_CLOSE;
-	sButInit.style = WBUT_PLAIN;
 	sButInit.x = MULTIMENU_FORM_W - CLOSE_WIDTH;
 	sButInit.y = 0;
 	sButInit.width = CLOSE_WIDTH;
 	sButInit.height = CLOSE_HEIGHT;
 	sButInit.pTip = _("Close");
-	sButInit.FontID = font_regular;
 	sButInit.pDisplay = intDisplayImageHilight;
 	sButInit.UserData = PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
 	if (!widgAddButton(psWScreen, &sButInit))

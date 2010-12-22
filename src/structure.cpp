@@ -1805,21 +1805,14 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 			psBuilding->psTarget[i] = NULL;
 			psBuilding->targetOrigin[i] = ORIGIN_UNKNOWN;
 		}
-		psBuilding->bTargetted = false;
-
-		psBuilding->lastEmission = 0;
-		psBuilding->timeLastHit = 0;
-		psBuilding->lastHitWeapon = WSC_NUM_WEAPON_SUBCLASSES;  // no such weapon
 
 		psBuilding->inFire = 0;
 		psBuilding->burnStart = 0;
 		psBuilding->burnDamage = 0;
 
-		psBuilding->selected = false;
 		psBuilding->status = SS_BEING_BUILT;
 		psBuilding->currentBuildPts = 0;
 		psBuilding->currentPowerAccrued = 0;
-		psBuilding->cluster = 0;
 
 		alignStructure(psBuilding);
 
@@ -2161,9 +2154,6 @@ STRUCTURE *buildBlueprint(STRUCTURE_STATS *psStats, int32_t x, int32_t y, uint16
 	blueprint->rot.pitch = 0;
 	blueprint->rot.roll = 0;
 	blueprint->selected = false;
-
-	blueprint->timeLastHit = 0;
-	blueprint->lastHitWeapon = WSC_NUM_WEAPON_SUBCLASSES;  // Noone attacked the blueprint. Do not render special effects.
 
 	blueprint->numWeaps = 0;
 	blueprint->asWeaps[0].nStat = 0;

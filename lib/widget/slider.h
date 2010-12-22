@@ -40,7 +40,7 @@ struct W_SLIDER : public WIDGET
 
 	void clicked(W_CONTEXT *context, WIDGET_KEY) { sliderClicked(this, context); }
 
-	UWORD		orientation;		// The orientation of the slider
+	WSLD_ORIENTATION orientation;                   // The orientation of the slider
 	UWORD		numStops;			// Number of stop positions on the slider
 	UWORD		barSize;			// Thickness of slider bar
 	UWORD		pos;				// Current stop position of the slider

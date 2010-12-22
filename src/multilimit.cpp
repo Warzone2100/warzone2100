@@ -114,8 +114,6 @@ static inline void freeLimitSet(void)
 // ////////////////////////////////////////////////////////////////////////////
 BOOL startLimitScreen(void)
 {
-	W_FORMINIT		sButInit;
-	W_FORMINIT		sFormInit;
 	UDWORD			numButtons = 0;
 	UDWORD			i;
 
@@ -166,7 +164,7 @@ BOOL startLimitScreen(void)
 
 	addSideText(FRONTEND_SIDETEXT1,LIMITSX-2,LIMITSY,"LIMITS");	// draw sidetext...
 
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));				// draw blue form...
+	W_FORMINIT sFormInit;
 	sFormInit.formID	= FRONTEND_BACKDROP;
 	sFormInit.id		= IDLIMITS;
 	sFormInit.style		= WFORM_PLAIN;
@@ -205,7 +203,7 @@ BOOL startLimitScreen(void)
 	if(numButtons >(4*BUTPERFORM)) numButtons =(4*BUTPERFORM);
 
 	// add tab form..
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
+	sFormInit = W_FORMINIT();
 	sFormInit.formID = IDLIMITS;
 	sFormInit.id = IDLIMITS_TABS;
 	sFormInit.style = WFORM_TABBED;
@@ -231,7 +229,7 @@ BOOL startLimitScreen(void)
 	widgAddForm(psWScreen, &sFormInit);
 
 	//Put the buttons on it
-	memset(&sButInit, 0, sizeof(W_BUTINIT));
+	W_FORMINIT sButInit;
 	sButInit.formID   = IDLIMITS_TABS;//IDLIMITS;
 	sButInit.style	  = WFORM_PLAIN;
 	sButInit.width    = BARWIDTH;
