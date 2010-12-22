@@ -205,7 +205,7 @@ struct DROID : public BASE_OBJECT
 
 	/* Movement control data */
 	MOVE_CONTROL    sMove;
-	SPACETIME       prevSpacetime;                  ///< Location of droid in previous tick.
+	Spacetime       prevSpacetime;                  ///< Location of droid in previous tick.
 	uint8_t		blockedBits;			///< Bit set telling which tiles block this type of droid (TODO)
 
 	/* anim data */

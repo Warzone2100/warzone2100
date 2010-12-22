@@ -68,7 +68,7 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 	SIMPLE_OBJECT		*psSimpObj;
 	COMPONENT_OBJECT	*psCompObj;
 	const iIMDShape		*pImd;
-	SPACETIME               spacetime;
+	Spacetime               spacetime;
 
    	pie_MatBegin();
 

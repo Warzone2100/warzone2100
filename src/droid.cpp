@@ -751,7 +751,7 @@ void droidUpdate(DROID *psDroid)
 	syncDebugDroid(psDroid, '<');
 
 	// Save old droid position, update time.
-	psDroid->prevSpacetime = GET_SPACETIME(psDroid);
+	psDroid->prevSpacetime = getSpacetime(psDroid);
 	psDroid->time = gameTime;
 	for (i = 0; i < MAX(1, psDroid->numWeaps); ++i)
 	{

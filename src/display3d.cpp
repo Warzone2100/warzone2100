@@ -1217,7 +1217,7 @@ void	renderProjectile(PROJECTILE *psCurr)
 	Vector3i			dv;
 	iIMDShape		*pIMD;
 	SDWORD			rx, rz;
-	SPACETIME       st;
+	Spacetime       st;
 
 	psStats = psCurr->psWStats;
 	/* Reject flame or command since they have interim drawn fx */
@@ -1231,7 +1231,7 @@ void	renderProjectile(PROJECTILE *psCurr)
 		return;
 	}
 
-	st = interpolateObjectSpacetime((SIMPLE_OBJECT *)psCurr, graphicsTime);
+	st = interpolateObjectSpacetime(psCurr, graphicsTime);
 
 	//the weapon stats holds the reference to which graphic to use
 	/*Need to draw the graphic depending on what the projectile is doing - hitting target,
@@ -1287,7 +1287,7 @@ void	renderProjectile(PROJECTILE *psCurr)
 void	renderAnimComponent( const COMPONENT_OBJECT *psObj )
 {
 	BASE_OBJECT *psParentObj = (BASE_OBJECT*)psObj->psParent;
-	SPACETIME spacetime = interpolateObjectSpacetime((SIMPLE_OBJECT *)psParentObj, graphicsTime);
+	Spacetime spacetime = interpolateObjectSpacetime(psParentObj, graphicsTime);
 	const SDWORD posX = spacetime.pos.x + psObj->position.x,
 	             posY = spacetime.pos.y + psObj->position.y;
 	SWORD rx, rz;

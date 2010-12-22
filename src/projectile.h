@@ -104,4 +104,12 @@ void checkProjectile(const PROJECTILE* psProjectile, const char * const location
 #define syncDebugProjectile(psProj, ch) _syncDebugProjectile(__FUNCTION__, psProj, ch)
 void _syncDebugProjectile(const char *function, PROJECTILE *psProj, char ch);
 
+
+// True iff object is a projectile.
+static inline bool isProjectile(SIMPLE_OBJECT const *psObject)                { return psObject->type == OBJ_PROJECTILE; }
+// Returns PROJECTILE * if projectile or NULL if not.
+static inline PROJECTILE *castProjectile(SIMPLE_OBJECT *psObject)             { return isProjectile(psObject)? (PROJECTILE *)psObject : (PROJECTILE *)NULL; }
+// Returns PROJECTILE const * if projectile or NULL if not.
+static inline PROJECTILE const *castProjectile(SIMPLE_OBJECT const *psObject) { return isProjectile(psObject)? (PROJECTILE const *)psObject : (PROJECTILE const *)NULL; }
+
 #endif // __INCLUDED_SRC_PROJECTILE_H__

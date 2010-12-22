@@ -65,4 +65,12 @@ extern void     featureInitVars(void);
 #define syncDebugFeature(psFeature, ch) _syncDebugFeature(__FUNCTION__, psFeature, ch)
 void _syncDebugFeature(const char *function, FEATURE *psFeature, char ch);
 
+
+// True iff object is a feature.
+static inline bool isFeature(SIMPLE_OBJECT const *psObject)             { return psObject->type == OBJ_FEATURE; }
+// Returns FEATURE * if feature or NULL if not.
+static inline FEATURE *castFeature(SIMPLE_OBJECT *psObject)             { return isFeature(psObject)? (FEATURE *)psObject : (FEATURE *)NULL; }
+// Returns FEATURE const * if feature or NULL if not.
+static inline FEATURE const *castFeature(SIMPLE_OBJECT const *psObject) { return isFeature(psObject)? (FEATURE const *)psObject : (FEATURE const *)NULL; }
+
 #endif // __INCLUDED_SRC_FEATURE_H__

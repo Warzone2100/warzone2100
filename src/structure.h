@@ -474,11 +474,11 @@ void _syncDebugStructure(const char *function, STRUCTURE *psStruct, char ch);
 
 
 // True iff object is a structure.
-static inline bool isStructure(BASE_OBJECT const *psObject)               { return psObject->type == OBJ_STRUCTURE; }
+static inline bool isStructure(SIMPLE_OBJECT const *psObject)               { return psObject->type == OBJ_STRUCTURE; }
 // Returns STRUCTURE * if structure or NULL if not.
-static inline STRUCTURE *castStructure(BASE_OBJECT *psObject)             { return isStructure(psObject)? (STRUCTURE *)psObject : (STRUCTURE *)NULL; }
+static inline STRUCTURE *castStructure(SIMPLE_OBJECT *psObject)             { return isStructure(psObject)? (STRUCTURE *)psObject : (STRUCTURE *)NULL; }
 // Returns STRUCTURE const * if structure or NULL if not.
-static inline STRUCTURE const *castStructure(BASE_OBJECT const *psObject) { return isStructure(psObject)? (STRUCTURE const *)psObject : (STRUCTURE const *)NULL; }
+static inline STRUCTURE const *castStructure(SIMPLE_OBJECT const *psObject) { return isStructure(psObject)? (STRUCTURE const *)psObject : (STRUCTURE const *)NULL; }
 
 
 #endif // __INCLUDED_SRC_STRUCTURE_H__

@@ -55,7 +55,7 @@ struct PROJECTILE : public SIMPLE_OBJECT
 	Vector3i        src;                    ///< Where projectile started
 	Vector3i        dst;                    ///< The target coordinates
 	SDWORD          vXY, vZ;                ///< axis velocities
-	SPACETIME       prevSpacetime;          ///< Location of projectile in previous tick.
+	Spacetime       prevSpacetime;          ///< Location of projectile in previous tick.
 	UDWORD          expectedDamageCaused;   ///< Expected damage that this projectile will cause to the target.
 };
 

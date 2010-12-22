@@ -115,11 +115,11 @@ struct BASE_OBJECT : public SIMPLE_OBJECT
 	NEXTOBJ             psNextFunc;                 ///< Pointer to the next object in the function list
 };
 
-/// Space-time coordinate.
-struct SpaceTime
+/// Space-time coordinate, including orientation.
+struct Spacetime
 {
-	SpaceTime() {}
-	SpaceTime(Position pos_, Rotation rot_, uint32_t time_) : time(time_), pos(pos_), rot(rot_) {}
+	Spacetime() {}
+	Spacetime(Position pos_, Rotation rot_, uint32_t time_) : time(time_), pos(pos_), rot(rot_) {}
 
 	uint32_t  time;        ///< Game time
 
@@ -127,15 +127,8 @@ struct SpaceTime
 	Rotation  rot;         ///< Rotation of the object
 };
 
-typedef SpaceTime SPACETIME;
-
-static inline SpaceTime constructSpacetime(Position pos, Rotation rot, uint32_t time)
-{
-	return SpaceTime(pos, rot, time);
-}
-
-#define GET_SPACETIME(psObj) constructSpacetime(psObj->pos, psObj->rot, psObj->time)
-#define SET_SPACETIME(psObj, st) do { psObj->pos = st.pos; psObj->rot = st.rot; psObj->time = st.time; } while(0)
+static inline Spacetime getSpacetime(SIMPLE_OBJECT const *psObj) { return Spacetime(psObj->pos, psObj->rot, psObj->time); }
+static inline void setSpacetime(SIMPLE_OBJECT *psObj, Spacetime const &st) { psObj->pos = st.pos; psObj->rot = st.rot; psObj->time = st.time; }
 
 static inline bool isDead(const BASE_OBJECT* psObj)
 {

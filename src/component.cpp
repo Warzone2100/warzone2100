@@ -887,7 +887,7 @@ static void displayCompObj(DROID *psDroid, BOOL bButton)
 					if ((psDroid->droidType == DROID_REPAIR || psDroid->droidType == DROID_CYBORG_REPAIR) &&
 					    psShape->nconnectors && psDroid->action == DACTION_DROIDREPAIR)
 					{
-						SPACETIME st = interpolateObjectSpacetime((SIMPLE_OBJECT *)psDroid, graphicsTime);
+						Spacetime st = interpolateObjectSpacetime(psDroid, graphicsTime);
 						Rotation rot = getInterpolatedWeaponRotation(psDroid, 0, graphicsTime);
 
 						pie_TRANSLATE( psShape->connectors[0].x,
@@ -1007,7 +1007,7 @@ void displayComponentObject(DROID *psDroid)
 	PROPULSION_STATS	*psPropStats;
 	UDWORD	tileX,tileY;
 	MAPTILE	*psTile;
-	SPACETIME st = interpolateObjectSpacetime((SIMPLE_OBJECT *)psDroid, graphicsTime);
+	Spacetime st = interpolateObjectSpacetime(psDroid, graphicsTime);
 
 	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
 

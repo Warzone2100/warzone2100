@@ -99,11 +99,6 @@ static int32_t objectDamage(BASE_OBJECT *psObj, UDWORD damage, WEAPON_CLASS weap
 static HIT_SIDE getHitSide (PROJECTILE *psObj, BASE_OBJECT *psTarget);
 
 
-/*static inline bool isDead(BASE_OBJECT *psObj)
-{
-	return psObj->died != 0;
-}*/
-
 static inline void setProjectileDestination(PROJECTILE *psProj, BASE_OBJECT *psObj)
 {
 	aiObjectAddExpectedDamage(psProj->psDest, -psProj->expectedDamageCaused);  // The old target shouldn't be expecting any more damage from this projectile.
@@ -630,8 +625,8 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 	Vector3i nextPos;
 	int32_t targetDistance, currentDistance;
 	BASE_OBJECT *psTempObj, *closestCollisionObject = NULL;
-	SPACETIME closestCollisionSpacetime;
-	memset(&closestCollisionSpacetime, 0, sizeof(SPACETIME));  // Squelch uninitialised warning.
+	Spacetime closestCollisionSpacetime;
+	memset(&closestCollisionSpacetime, 0, sizeof(Spacetime));  // Squelch uninitialised warning.
 
 	CHECK_PROJECTILE(psProj);
 
@@ -839,7 +834,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 	if (closestCollisionObject != NULL)
 	{
 		// We hit!
-		SET_SPACETIME(psProj, closestCollisionSpacetime);
+		setSpacetime(psProj, closestCollisionSpacetime);
 		if(psProj->time == psProj->prevSpacetime.time)
 		{
 			--psProj->prevSpacetime.time;
@@ -885,7 +880,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 		// TODO Should probably give effectTime as an extra parameter to addEffect, or make an effectGiveAuxTime parameter, with yet another 'this is naughty' comment.
 		for (effectTime = ((psProj->prevSpacetime.time + 15) & ~15); effectTime < psProj->time; effectTime += 16)
 		{
-			SPACETIME st = interpolateObjectSpacetime(psProj, effectTime);
+			Spacetime st = interpolateObjectSpacetime(psProj, effectTime);
 			Vector3i posFlip = swapYZ(st.pos);
 			switch (psStats->weaponSubClass)
 			{
@@ -1342,7 +1337,7 @@ void PROJECTILE::update()
 
 	syncDebugProjectile(psObj, '<');
 
-	psObj->prevSpacetime = GET_SPACETIME(psObj);
+	psObj->prevSpacetime = getSpacetime(psObj);
 
 	/* See if any of the stored objects have died
 	 * since the projectile was created
