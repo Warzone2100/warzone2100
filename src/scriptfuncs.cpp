@@ -879,7 +879,7 @@ BOOL scrEnableComponent(void)
 	}
 
 	// enable the appropriate component
-	switch (sVal.type)
+	switch ((unsigned)sVal.type)  // Unsigned cast to suppress compiler warnings due to enum abuse.
 	{
 	case ST_BODY:
 		apCompLists[player][COMP_BODY][sVal.v.ival] = FOUND;
@@ -936,7 +936,7 @@ BOOL scrMakeComponentAvailable(void)
 	}
 
 	// make the appropriate component available
-	switch (sVal.type)
+	switch ((unsigned)sVal.type)  // Unsigned cast to suppress compiler warnings due to enum abuse.
 	{
 	case ST_BODY:
 		apCompLists[player][COMP_BODY][sVal.v.ival] = AVAILABLE;
@@ -2413,7 +2413,7 @@ BOOL scrGetTemplate(void)
 	for (psTemplate = apsDroidTemplates[player]; psTemplate != NULL; psTemplate =
 		psTemplate->psNext)
 	{
-		switch( sVal.type)
+		switch ((unsigned)sVal.type)  // Unsigned cast to suppress compiler warnings due to enum abuse.
 		{
 		case ST_BODY:
 			if (psTemplate->asParts[COMP_BODY] == sVal.v.ival)
@@ -2518,7 +2518,7 @@ BOOL scrGetDroid(void)
 	for (psDroid = apsDroidLists[player]; psDroid != NULL; psDroid =
 		psDroid->psNext)
 	{
-		switch( sVal.type)
+		switch ((unsigned)sVal.type)  // Unsigned cast to suppress compiler warnings due to enum abuse.
 		{
 		case ST_BODY:
 			if (psDroid->asBits[COMP_BODY].nStat == (UDWORD)sVal.v.ival)
@@ -6919,7 +6919,7 @@ BOOL scrNumDroidsByComponent(void)
 	{
 		if(psDroid->visible[lookingPlayer])		//can see this droid?
 		{
-			switch(sVal.type)
+			switch ((unsigned)sVal.type)  // Unsigned cast to suppress compiler warnings due to enum abuse.
 			{
 			case ST_BODY:
 				if (psDroid->asBits[COMP_BODY].nStat == comp)
@@ -11560,7 +11560,7 @@ BOOL scrIsComponentAvailable(void)
 		return false;
 	}
 
-	switch (sVal.type)
+	switch ((unsigned)sVal.type)  // Unsigned cast to suppress compiler warnings due to enum abuse.
 	{
 	case ST_BODY:
 		bAvailable = (apCompLists[player][COMP_BODY][sVal.v.ival] == AVAILABLE);
