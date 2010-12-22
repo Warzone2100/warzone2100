@@ -4669,14 +4669,10 @@ bool validLocation(BASE_STATS *psStats, unsigned x, unsigned y, uint16_t directi
 		//if setting up a build queue need to check against future sites as well - AB 4/5/99
 		if (ctrlShiftDown() && player == selectedPlayer && bCheckBuildQueue)
 		{
-			DROID   *psDroid;
-			SDWORD  order,left,right,up,down,size;
-			BOOL    validCombi;
-
 			//defense and missile silo's can be built next to anything so don't need to check
 			if (!(psBuilding->type == REF_DEFENSE || psBuilding->type == REF_MISSILE_SILO || psBuilding->type == REF_REARM_PAD))
 			{
-				for (psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
+				for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
 				{
 					//once its invalid stop checking
 					if (valid == false)
@@ -4687,17 +4683,15 @@ bool validLocation(BASE_STATS *psStats, unsigned x, unsigned y, uint16_t directi
 						psDroid->droidType == DROID_CYBORG_CONSTRUCT)
 					{
 						//look thru' the list of orders to see if more building sites
-						for (order = psDroid->listPendingBegin; order < psDroid->listPendingEnd; order++)
+						for (unsigned order = psDroid->listPendingBegin; order < psDroid->asOrderList.size(); order++)
 						{
 							if (psDroid->asOrderList[order].order == DORDER_BUILD)
 							{
 								STRUCTURE_STATS *orderTarget = (STRUCTURE_STATS *)psDroid->asOrderList[order].psOrderTarget;
 
-								validCombi = false;
-								if (((STRUCTURE_STATS *)psDroid->asOrderList[order].
-									psOrderTarget)->type == REF_DEFENSE ||
-									((STRUCTURE_STATS *)psDroid->asOrderList[order].
-									psOrderTarget)->type == REF_MISSILE_SILO)
+								bool validCombi = false;
+								if (orderTarget->type == REF_DEFENSE ||
+								    orderTarget->type == REF_MISSILE_SILO)
 								{
 									validCombi = true;
 								}
@@ -4714,12 +4708,11 @@ bool validLocation(BASE_STATS *psStats, unsigned x, unsigned y, uint16_t directi
 									//check if any corner is within the build site
 									STRUCTURE_STATS *target = (STRUCTURE_STATS *)psDroid->asOrderList[order].psOrderTarget;
 									uint16_t dir = psDroid->asOrderList[order].direction;
-									size = getStructureStatsWidth(target, dir);
-									left = map_coord(psDroid->asOrderList[order].x) - size/2;
-									right = left + size;
-									size = getStructureStatsBreadth(target, dir);
-									up = map_coord(psDroid->asOrderList[order].y) - size/2;
-									down = up + size;
+									Vector2i size = getStructureStatsSize(target, dir);
+									int left = map_coord(psDroid->asOrderList[order].x) - size.x/2;
+									int right = left + size.x;
+									int up = map_coord(psDroid->asOrderList[order].y) - size.y/2;
+									int down = up + size.y;
 									if (((left > site.xTL-1 && left <= site.xBR+1) &&
 										(up > site.yTL-1 && up <= site.yBR+1)) ||
 										((right > site.xTL-1 && right <= site.xBR+1) &&
@@ -8201,38 +8194,22 @@ void cbNewDroid(STRUCTURE *psFactory, DROID *psDroid)
 	psScrCBNewDroidFact = NULL;
 }
 
-unsigned getStructureWidth(const STRUCTURE *psBuilding)
+Vector2i getStructureSize(STRUCTURE const *psBuilding)
 {
-	return getStructureStatsWidth(psBuilding->pStructureType, psBuilding->rot.direction);
+	return getStructureStatsSize(psBuilding->pStructureType, psBuilding->rot.direction);
 }
 
-unsigned getStructureBreadth(const STRUCTURE *psBuilding)
+Vector2i getStructureStatsSize(STRUCTURE_STATS const *pStructureType, uint16_t direction)
 {
-	return getStructureStatsBreadth(psBuilding->pStructureType, psBuilding->rot.direction);
-}
-
-unsigned getStructureStatsWidth(const STRUCTURE_STATS *pStructureType, uint16_t direction)
-{
+	Vector2i size(pStructureType->baseWidth, pStructureType->baseBreadth);
 	if (((direction + 0x2000) & 0x4000) != 0)
 	{
 		// Building is rotated left or right by 90°, swap width and height.
-		return pStructureType->baseBreadth;
+		std::swap(size.x, size.y);
 	}
 
 	// Building has normal orientation (or upsidedown).
-	return pStructureType->baseWidth;
-}
-
-unsigned getStructureStatsBreadth(const STRUCTURE_STATS *pStructureType, uint16_t direction)
-{
-	if (((direction + 0x2000) & 0x4000) != 0)
-	{
-		// Building is rotated left or right by 90°, swap width and height.
-		return pStructureType->baseWidth;
-	}
-
-	// Building has normal orientation (or upsidedown).
-	return pStructureType->baseBreadth;
+	return size;
 }
 
 // Check that psVictimStruct is not referred to by any other object in the game

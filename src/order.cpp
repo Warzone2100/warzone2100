@@ -2425,9 +2425,9 @@ BOOL orderStateStatsLoc(DROID *psDroid, DROID_ORDER order, BASE_STATS **ppsStats
 	return false;
 }
 
-static ORDER_LIST orderDataToOrderList(DROID_ORDER_DATA const *psOrder)
+static OrderListEntry orderDataToOrderList(DROID_ORDER_DATA const *psOrder)
 {
-	ORDER_LIST list;
+	OrderListEntry list;
 	bool useStats = psOrder->order == DORDER_BUILD || psOrder->order == DORDER_LINEBUILD;
 
 	list.order         = psOrder->order;
@@ -2445,14 +2445,7 @@ void orderDroidAddPending(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 {
 	ASSERT(psDroid != NULL, "Invalid unit pointer");
 
-	if (psDroid->listPendingEnd >= ORDER_LIST_MAX)
-	{
-		// no room to store the order, quit
-		return;
-	}
-
-	psDroid->asOrderList[psDroid->listPendingEnd] = orderDataToOrderList(psOrder);
-	++psDroid->listPendingEnd;
+	psDroid->asOrderList.push_back(orderDataToOrderList(psOrder));
 
 	//don't display the arrow-effects with build orders since unnecessary
 	if (!bOrderEffectDisplayed && (psOrder->order != DORDER_BUILD || psOrder->order != DORDER_LINEBUILD || psOrder->order != DORDER_BUILDMODULE || psOrder->order != DORDER_HELPBUILD))
@@ -2475,15 +2468,14 @@ void orderDroidAdd(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 {
 	ASSERT(psDroid != NULL, "Invalid unit pointer");
 
-	if (psDroid->listSize >= ORDER_LIST_MAX)
+	if (psDroid->listSize >= psDroid->asOrderList.size())
 	{
-		// no room to store the order, quit
-		return;
+		// Make more room to store the order.
+		psDroid->asOrderList.push_back(OrderListEntry());
 	}
 
 	psDroid->asOrderList[psDroid->listSize] = orderDataToOrderList(psOrder);
 	psDroid->listSize += 1;
-	psDroid->listPendingEnd = MAX(psDroid->listPendingEnd, psDroid->listSize);  // Does nothing, unless there wasn't room to store the pending orders.
 
 	// if not doing anything - do it immediately
 	if (psDroid->listSize <= 1 &&
@@ -2556,17 +2548,16 @@ BOOL orderDroidList(DROID *psDroid)
 
 void orderDroidListEraseRange(DROID *psDroid, unsigned indexBegin, unsigned indexEnd)
 {
-	// move the rest of the list down
-	indexEnd = MIN(indexEnd, psDroid->listPendingEnd);  // Do nothing if trying to pop an empty list.
-	memmove(psDroid->asOrderList + indexBegin, psDroid->asOrderList + indexEnd, (psDroid->listPendingEnd - indexEnd) * sizeof(ORDER_LIST));
-	memset(psDroid->asOrderList + psDroid->listPendingEnd - (indexEnd - indexBegin), 0, (indexEnd - indexBegin) * sizeof(ORDER_LIST));
+	// Erase elements
+	indexEnd = MIN(indexEnd, psDroid->asOrderList.size());  // Do nothing if trying to pop an empty list.
+	psDroid->asOrderList.erase(psDroid->asOrderList.begin() + indexBegin, psDroid->asOrderList.begin() + indexEnd);
 
+	// Update indices into list.
 	psDroid->listSize         -= MIN(indexEnd, psDroid->listSize)         - MIN(indexBegin, psDroid->listSize);
 	psDroid->listPendingBegin -= MIN(indexEnd, psDroid->listPendingBegin) - MIN(indexBegin, psDroid->listPendingBegin);
-	psDroid->listPendingEnd   -= MIN(indexEnd, psDroid->listPendingEnd)   - MIN(indexBegin, psDroid->listPendingEnd);
 }
 
-// clear all the orders from the list
+// clear all the synchronised orders from the list
 void orderClearDroidList(DROID *psDroid)
 {
 	syncDebug("droid%d list cleared", psDroid->id);
@@ -2575,8 +2566,7 @@ void orderClearDroidList(DROID *psDroid)
 
 void orderClearTargetFromDroidList(DROID *psDroid, BASE_OBJECT *psTarget)
 {
-	unsigned i;
-	for (i = 0; i < psDroid->listPendingEnd; i++)
+	for (unsigned i = 0; i < psDroid->asOrderList.size(); ++i)
 	{
 		if (psDroid->asOrderList[i].psOrderTarget == psTarget)
 		{
@@ -2585,7 +2575,7 @@ void orderClearTargetFromDroidList(DROID *psDroid, BASE_OBJECT *psTarget)
 				syncDebug("droid%d list erase%d", psDroid->id, psTarget->id);
 			}
 			orderDroidListEraseRange(psDroid, i, i + 1);
-			--i;
+			--i;  // If this underflows, the ++i will overflow it back.
 		}
 	}
 }
@@ -2593,45 +2583,32 @@ void orderClearTargetFromDroidList(DROID *psDroid, BASE_OBJECT *psTarget)
 // check all the orders in the list for died objects
 void orderCheckList(DROID *psDroid)
 {
-	SDWORD	i;
-
-	i=0;
-	while (i<psDroid->listSize)
+	for (unsigned i = 0; i < psDroid->asOrderList.size(); ++i)
 	{
-        //if (psDroid->asOrderList[i].psObj &&
-	    //	(psDroid->asOrderList[i].psObj)->died)
-
-        //if order requires an object
-        if (psDroid->asOrderList[i].order == DORDER_ATTACK ||
-            psDroid->asOrderList[i].order == DORDER_REPAIR ||
-            psDroid->asOrderList[i].order == DORDER_OBSERVE ||
-            psDroid->asOrderList[i].order == DORDER_DROIDREPAIR ||
-            psDroid->asOrderList[i].order == DORDER_FIRESUPPORT ||
-            psDroid->asOrderList[i].order == DORDER_CLEARWRECK ||
-            psDroid->asOrderList[i].order == DORDER_DEMOLISH ||
-            psDroid->asOrderList[i].order == DORDER_HELPBUILD ||
-            psDroid->asOrderList[i].order == DORDER_BUILDMODULE)
-        {
-    		if ((BASE_OBJECT *)psDroid->asOrderList[i].psOrderTarget &&
-	    		((BASE_OBJECT *)psDroid->asOrderList[i].psOrderTarget)->died)
-		    {
-			    // copy any other orders down the stack
-			    psDroid->listSize -= 1;
-			    memmove(psDroid->asOrderList + i, psDroid->asOrderList + i + 1,
-                    (psDroid->listSize - i) * sizeof(ORDER_LIST));
-			    memset(psDroid->asOrderList + psDroid->listSize, 0, sizeof(ORDER_LIST));
-            }
-            else
-            {
-                i++;
-            }
-		}
-		else
+		DROID_ORDER order = psDroid->asOrderList[i].order;
+		//if order requires an object
+		if (order == DORDER_ATTACK ||
+		    order == DORDER_REPAIR ||
+		    order == DORDER_OBSERVE ||
+		    order == DORDER_DROIDREPAIR ||
+		    order == DORDER_FIRESUPPORT ||
+		    order == DORDER_CLEARWRECK ||
+		    order == DORDER_DEMOLISH ||
+		    order == DORDER_HELPBUILD ||
+		    order == DORDER_BUILDMODULE)
 		{
-			i ++;
+			BASE_OBJECT *psTarget = (BASE_OBJECT *)psDroid->asOrderList[i].psOrderTarget;
+			if (psTarget != NULL && psTarget->died)
+			{
+				if (i < psDroid->listSize)
+				{
+					syncDebug("droid%d list erase dead droid%d", psDroid->id, psTarget->id);
+				}
+				orderDroidListEraseRange(psDroid, i, i + 1);
+				--i;  // If this underflows, the ++i will overflow it back.
+			}
 		}
 	}
-
 }
 
 
