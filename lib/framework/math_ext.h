@@ -63,7 +63,7 @@ static inline int roundf(float x)
  * @return The rounded integer value. If @c x is integral or infinite, @c x
  *         itself is returned.
  */
-static double nearbyint(double x)
+static inline double nearbyint(double x)
 {
 	if (ceil(x + 0.5) == floor(x + 0.5))
 	{
