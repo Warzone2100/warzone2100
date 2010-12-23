@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2010-12-11 16:14+0100\n"
-"PO-Revision-Date: 2010-12-02 20:25+0200\n"
+"PO-Revision-Date: 2010-12-17 20:51+0200\n"
 "Last-Translator: Ayhan GORGULU <ayhangorgulu@gmail.com>\n"
 "Language-Team: Turkey <warzone-dev@gna.org>\n"
 "Language: \n"
@@ -1417,7 +1417,7 @@ msgstr "Savunmalar geliştirildi"
 #: data/base/messages/resmessages1.rmsg:96
 #: data/mp/messages/resmessages1.rmsg:96
 msgid "Improved Titanium-reinforced concrete"
-msgstr "Titanyum destekli güçlendirilmiş sert girit"
+msgstr "Titanyum destekli güçlendirilmiş sert Girit "
 
 #: data/base/messages/resmessages1.rmsg:97
 msgid "Increases Armour and Body Points"
@@ -2046,7 +2046,7 @@ msgstr "Hız: Orta"
 #: data/base/messages/resmessages1.rmsg:499
 #: data/mp/messages/resmessages1.rmsg:500
 msgid "Amphibious hover propulsion"
-msgstr "Amfibi HoverCraft"
+msgstr "Suda gidebilen HoverCraft Yürütücü"
 
 #: data/base/messages/resmessages1.rmsg:500
 #: data/base/messages/resmessages1.rmsg:526
@@ -3763,12 +3763,12 @@ msgstr "Üretmek için Cyborg Fabrikası gerekli"
 #: data/base/messages/resmessages3.rmsg:213
 #: data/mp/messages/resmessages3.rmsg:213
 msgid "High tensile concrete-plastic composite"
-msgstr "Yüksek gerilimli plastik, M. alaşımla destekli Girit"
+msgstr "Yüksek gerilimli plastik, Maden alaşımla destekli duvar "
 
 #: data/base/messages/resmessages3.rmsg:226
 #: data/mp/messages/resmessages3.rmsg:226
 msgid "Bonded metallic laminates formed into walls and defenses"
-msgstr "Metalık Laminler duvarlar ve saunmalar ile bağlandı"
+msgstr "Metalik Laminler duvarlar ve savunmalar ile bağlandı"
 
 #: data/base/messages/resmessages3.rmsg:239
 #: data/mp/messages/resmessages3.rmsg:239
@@ -4408,7 +4408,7 @@ msgstr "Titanyum-destekli Girit"
 #: data/base/messages/resmessagesall.rmsg:6
 #: data/mp/messages/resmessagesall.rmsg:6
 msgid "Enables Hardcrete walls"
-msgstr "Sert Girit Duvarlarını aktif eder"
+msgstr "Sert Girit duvarları aktif eder"
 
 #: data/base/messages/resmessagesall.rmsg:18
 #: data/mp/messages/resmessagesall.rmsg:18
@@ -4459,7 +4459,7 @@ msgstr "Hasarlı Birimleri otomatik olarak tamir eder"
 #: data/mp/messages/resmessagesall.rmsg:358
 #: data/mp/messages/strings/resstrings.txt:472
 msgid "Or damaged units may be selected as target"
-msgstr "Yada hasarblı birim direk hedef olarak seçilebilir"
+msgstr "Yada hasarlı birim direk hedef olarak seçilebilir"
 
 #: data/base/messages/resmessagesall.rmsg:56
 #: data/mp/messages/resmessagesall.rmsg:56
@@ -4985,7 +4985,7 @@ msgstr "Kod çözülüyor..."
 #: data/base/messages/strings/cam2strings.txt:18
 #: data/base/messages/strings/cam2strings.txt:22
 msgid "TRANSPORT MISSION: Transport Down"
-msgstr "TAŞIMA GÖREVİ: Taşıma G. Düştü"
+msgstr "TAŞIMA GÖREVİ: Taşıma Gemisi Düştü"
 
 #: data/base/messages/strings/cam2strings.txt:19
 msgid "Our transport carrying units from team Alpha Base has been shot down."
@@ -4997,7 +4997,7 @@ msgstr "Bu bölgeden saldırı altındalar.."
 
 #: data/base/messages/strings/cam2strings.txt:24
 msgid "Assemble a rescue team to recover the transport and its cargo."
-msgstr "Kargoyu ve Taşıma G. kurtarmak için bir saldırı düzenle."
+msgstr "Kargoyu ve Taşıma Gemisini kurtarmak için bir saldırı düzenle."
 
 #: data/base/messages/strings/cam2strings.txt:27
 msgid "IN-FLIGHT BRIEFING"
@@ -5136,7 +5136,7 @@ msgstr "Onlar bilinmeyen bir bölgeye uçuyorlar."
 
 #: data/base/messages/strings/cam2strings.txt:92
 msgid "Destroy or drive off The Collective's transport."
-msgstr "Kolektif Taşıma G. sürücüsünü öldür."
+msgstr "Kolektif Taşıma Gemisi sürücüsünü öldür."
 
 #: data/base/messages/strings/cam2strings.txt:93
 msgid "Rescue as many civilians as possible."
@@ -5195,7 +5195,7 @@ msgstr "NEXUS, K.A.S.S.A uyduları ile kendisininkileri tekrar bağladı."
 
 #: data/base/messages/strings/cam2strings.txt:122
 msgid "Use the transport to carry a strike force to this site."
-msgstr "Bölgeye bir vuruş gücü taşımak için Taşıma G. kullan."
+msgstr "Bölgeye bir vuruş gücü taşımak için Taşıma Gemini kullan."
 
 #: data/base/messages/strings/cam2strings.txt:123
 msgid "Destroy the site and return to your base."
@@ -7251,7 +7251,7 @@ msgstr "Alev Atıcı Cyborg"
 #: data/base/messages/strings/names.txt:676
 #: data/mp/messages/strings/names.txt:687
 msgid "Machinegunner Cyborg"
-msgstr "M.T'li Cyborg"
+msgstr "Makinalı Tüfekli Cyborg"
 
 #: data/base/messages/strings/names.txt:677
 msgid "Lancer Cyborg"
@@ -7360,7 +7360,7 @@ msgstr "Süper Girit Kdm3"
 #: data/base/messages/strings/names.txt:707
 #: data/mp/messages/strings/names.txt:718
 msgid "Plascrete"
-msgstr "Plas Girit"
+msgstr "Plas Girit "
 
 #: data/base/messages/strings/names.txt:708
 #: data/mp/messages/strings/names.txt:719
@@ -7370,7 +7370,7 @@ msgstr "Plas Girit Kdm2"
 #: data/base/messages/strings/names.txt:709
 #: data/mp/messages/strings/names.txt:720
 msgid "Plascrete Mk3"
-msgstr "Plasgirit Kdm3"
+msgstr "Plas Duvar Kdm3"
 
 #: data/base/messages/strings/names.txt:717
 #: data/base/messages/strings/names.txt:1373
@@ -9906,7 +9906,7 @@ msgstr "Ödülünüz yolda."
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:4
 msgid "The Project is fleeing its base and stealing your technology."
-msgstr "Proje üssünüze sızıyor ve teknolojinizi çalıyor."
+msgstr "Proje kendi üssüne sızıyor ve teknolojinizi çalıyor."
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:5
 msgid "You must stop them!"
@@ -9927,11 +9927,11 @@ msgstr "KUZEY BÖLGESİ"
 #: data/base/sequenceaudio/cam3/c003.txa:5
 #, fuzzy
 msgid "Congratulations your successfull evacuation of Beta Base."
-msgstr "Başarılı bir şekildi Beta üssünü boşaltınız için tebrikler."
+msgstr "Başarılı bir şekilde Beta üssünü boşaltınız için tebrikler."
 
 #: data/base/sequenceaudio/cam3/c003.txa:8
 msgid "Dusk, December 3rd, 2100"
-msgstr "Alaca Karanlık, 3 Aralık, 2100"
+msgstr "Alacakaranlık, 3 Aralık, 2100"
 
 #: data/base/sequenceaudio/cam3/c003.txa:9
 msgid "In-flight to Northern Sector"
@@ -10212,7 +10212,7 @@ msgstr "NASDA sistemleri bizi korumak için geliştirilmiştir. O Nükleer sald�
 
 #: data/base/sequenceaudio/devastation.txt:3
 msgid "Reports said that NASDA developed a fault during a routine systems check. Don't believe it. Someone wanted it to take us out."
-msgstr "Raporlara göre sistemde bir arıza olmuş ve NASDA kontrol ediyormuş. İnanmayın. Birileri bizi dışarı çıkarmak için aradılar."
+msgstr "Raporlara göre sistemde bir arıza olmuş ve NASDA kontrol ediyormuş. İnanmayın. Birileri bizi öldürmek istiyordu."
 
 #: data/base/sequenceaudio/devastation.txt:5
 msgid "Those nukes were targeted on every major city around the world. NASDA was programmed to start the Collapse. When the counterstrikes launched, its laser defenses and anti-missile ground sites failed."
@@ -10220,7 +10220,7 @@ msgstr "O Nükleer füzeler Dünyadaki bütün büyük şehirleri hedefliyordu. 
 
 #: data/base/sequenceaudio/devastation.txt:7
 msgid "The world as we knew it ended..."
-msgstr "Bizim bildiğmiz Dünya yok oldu..."
+msgstr "Bizim bildiğimiz Dünya yok oldu..."
 
 #: data/base/sequenceaudio/devastation.txt:9
 msgid "The Nuclear Winter hit hard. Disease and famine claimed most of us who had survived the nuclear strikes. Wars over cans of dog food took even more."
@@ -12612,12 +12612,12 @@ msgstr "Mareşal"
 #: src/droid.c:4643
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
-msgstr "%s Sana vermek isterim %s ama, Daha çok var!"
+msgstr "%s Sana vermek istedi %s ama, Sende daha çok var!"
 
 #: src/droid.c:4647
 #, c-format
 msgid "You wanted to give %s a %s but they have too many!"
-msgstr "%s Size vermek isterim %s ama, Daha çok var!"
+msgstr "Sen %s 'a %s vermek istedin ama, Onda  daha çok var!"
 
 #: src/frontend.c:97
 msgid "Single Player"
@@ -13313,7 +13313,7 @@ msgstr "Genel Merkeze Dön"
 #: src/intorder.c:176
 #: src/keymap.c:395
 msgid "Go to Transport"
-msgstr "Taşıma G.'sine git"
+msgstr "Taşıma Gemisine git"
 
 #: src/intorder.c:177
 #: src/keymap.c:419
@@ -13518,13 +13518,13 @@ msgstr "Debug-Menüsü açıldı"
 
 #: src/keybind.c:1559
 msgid "Unable to locate any oil derricks!"
-msgstr "Yerel Petrol Kuyuları Devre Dışı!"
+msgstr "Yerel Petrol Pompaları Devre Dışı!"
 
 # Let it snow, let it snow, let it snow..
 # Von daher sollte das unübersetzt bleiben -Kreuvf
 #: src/keybind.c:1780
 msgid "Oh, the weather outside is frightful... SNOW"
-msgstr "Oh, dışarda hava korkunç.. KAR"
+msgstr "Vay canına, dışarda hava korkunç.. KAR"
 
 # Das Lied ist im Original Englisch --> bleibt unübersetzt -Kreuvf
 #: src/keybind.c:1786
@@ -14336,7 +14336,7 @@ msgstr "Oyuncu İsmi Seç"
 
 #: src/multiint.c:1249
 msgid "Distance Fog"
-msgstr "Sis Mesafesi"
+msgstr "Yoğun Sis"
 
 #: src/multiint.c:1260
 #: src/multimenu.c:757
@@ -14907,19 +14907,19 @@ msgstr "Taşımayı Başlat"
 
 #: src/transporter.c:1758
 msgid "Reinforcements landing"
-msgstr "Takviyeler İniyor"
+msgstr "Destek kuvvetler iniyor"
 
 #: src/version.c:143
 msgid " (modified and switched locally)"
-msgstr " (düzenlenmiş ve anahtarlanmış yerel dil dosyası)"
+msgstr " (duzenlenmis ve anahtarlanmis yerel dil dosyasi)"
 
 #: src/version.c:145
 msgid " (modified locally)"
-msgstr " (düzenlenmiş yerel)"
+msgstr " (duzenlenmis yerel)"
 
 #: src/version.c:147
 msgid " (switched locally)"
-msgstr " (yerel anahtarlı)"
+msgstr " (yerel anahtarli)"
 
 #: src/version.c:154
 msgid " - DEBUG"
@@ -14936,9 +14936,6 @@ msgstr " - %s İnşa"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Sürüm %s%s%s%s"
-
-#~ msgid "Plascrete MK3"
-#~ msgstr "Plas Girit Kdm3"
 
 #~ msgid "Super Transport Available"
 #~ msgstr "Süper Taşıma Gemisi Kullanılabilir"
@@ -14976,6 +14973,9 @@ msgstr "Sürüm %s%s%s%s"
 #~ msgid "Construction Progress"
 #~ msgstr "İnşaat Devam ediyor"
 
+#~ msgid "Player position"
+#~ msgstr "Oyuncu pozisyonu"
+
 #~ msgid "3 players"
 #~ msgstr "2 Oyuncu"
 
@@ -14993,6 +14993,9 @@ msgstr "Sürüm %s%s%s%s"
 
 #~ msgid "There is not enough room in the Transport!"
 #~ msgstr "Taşıma Gemisinde yeterince yer yok!"
+
+#~ msgid "Plascrete MK3"
+#~ msgstr "Plas Girit Kdm3"
 
 #~ msgid "Mini-Rocket accuracy +10%"
 #~ msgstr "Mini Roket Hedef Tutturması +10%"
@@ -15748,7 +15751,7 @@ msgstr "Sürüm %s%s%s%s"
 #~ msgstr "Uydu Yer-Üssü Merkezi"
 
 #~ msgid "NASDA Central"
-#~ msgstr "K.A.S.S.A Merkezi"
+#~ msgstr "NASDA Merkezi"
 
 #~ msgid "SAM Site"
 #~ msgstr "SAM Sitesi"
