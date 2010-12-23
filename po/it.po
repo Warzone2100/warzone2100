@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2010-12-11 16:16+0100\n"
-"PO-Revision-Date: 2010-11-30 15:55+0100\n"
+"PO-Revision-Date: 2010-12-14 22:19+0100\n"
 "Last-Translator: Cristian Odorico <generalchris@hotmail.it>\n"
 "Language-Team: Italian <warzone-dev@gna.org>\n"
 "Language: it\n"
@@ -11749,7 +11749,7 @@ msgstr "Testata Bomba avanzata"
 
 #: data/mp/messages/strings/names.txt:1100
 msgid "Howitzer Fast Loader"
-msgstr "Caricatore rapido per mortaio"
+msgstr "Caricatore rapido per Obice"
 
 #: data/mp/messages/strings/names.txt:1116
 msgid "Rapid Fire Chaingun"
