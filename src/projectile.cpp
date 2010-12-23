@@ -370,8 +370,6 @@ int32_t projCalcIndirectVelocities(const int32_t dx, const int32_t dz, int32_t v
 bool proj_SendProjectile(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int player, Vector3i target, BASE_OBJECT *psTarget, BOOL bVisible, int weapon_slot)
 {
 	PROJECTILE *            psProj = new PROJECTILE(ProjectileTrackerID |(gameTime2 >>4), player);
-	int32_t                 dx, dy, dz;
-	uint32_t                dxy;
 	WEAPON_STATS *psStats = &asWeaponStats[psWeap->nStat];
 
 	ASSERT_OR_RETURN( false, psWeap->nStat < numWeaponStats, "Invalid range referenced for numWeaponStats, %d > %d", psWeap->nStat, numWeaponStats);
@@ -454,28 +452,26 @@ bool proj_SendProjectile(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int player, 
 		scoreUpdateVar(WD_SHOTS_OFF_TARGET);
 	}
 
-	dx = psProj->dst.x - psProj->src.x;
-	dy = psProj->dst.y - psProj->src.y;
-	dz = psProj->dst.z - psProj->src.z;
+	Vector3i deltaPos = psProj->dst - psProj->src;
 
 	/* roll never set */
 	psProj->rot.roll = 0;
 
-	psProj->rot.direction = iAtan2(dx, dy);
+	psProj->rot.direction = iAtan2(removeZ(deltaPos));
 
 
-	/* get target distance */
-	dxy = iHypot(dx, dy);
+	// Get target distance, horizontal distance only.
+	uint32_t dist = iHypot(removeZ(deltaPos));
 
-	if (proj_Direct(psStats) || (!proj_Direct(psStats) && dxy <= psStats->minRange))
+	if (proj_Direct(psStats) || (!proj_Direct(psStats) && dist <= psStats->minRange))
 	{
-		psProj->rot.pitch = iAtan2(dz, dxy);
+		psProj->rot.pitch = iAtan2(deltaPos.z, dist);
 		psProj->state = PROJ_INFLIGHTDIRECT;
 	}
 	else
 	{
 		/* indirect */
-		projCalcIndirectVelocities(dxy, dz, psStats->flightSpeed, &psProj->vXY, &psProj->vZ);
+		projCalcIndirectVelocities(dist, deltaPos.z, psStats->flightSpeed, &psProj->vXY, &psProj->vZ);
 		psProj->rot.pitch = iAtan2(psProj->vZ, psProj->vXY);
 		psProj->state = PROJ_INFLIGHTINDIRECT;
 	}
