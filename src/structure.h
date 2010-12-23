@@ -53,8 +53,6 @@
 /*This should correspond to the structLimits! */
 #define	MAX_FACTORY			5
 
-#define MAX_PROD_RUN	20
-
 
 
 //used to flag when the Factory is ready to start building
@@ -67,7 +65,7 @@ extern iIMDShape * factoryModuleIMDs[NUM_FACTORY_MODULES][NUM_FACMOD_TYPES];
 extern iIMDShape * researchModuleIMDs[NUM_RESEARCH_MODULES];
 extern iIMDShape * powerModuleIMDs[NUM_POWER_MODULES];
 
-extern PRODUCTION_RUN		asProductionRun[NUM_FACTORY_TYPES][MAX_FACTORY][MAX_PROD_RUN];
+extern ProductionRun asProductionRun[NUM_FACTORY_TYPES][MAX_FACTORY];
 
 //Value is stored for easy access to this structure stat
 extern UDWORD	factoryModuleStat;
@@ -301,10 +299,7 @@ extern DROID_TEMPLATE * factoryProdUpdate(STRUCTURE *psStructure, DROID_TEMPLATE
 extern void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, BOOL add);
 
 //returns the quantity of a specific template in the production list
-extern UDWORD	getProductionQuantity(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate);
-/*returns the quantity of a specific template in the production list that
-have already been built*/
-extern UDWORD	getProductionBuilt(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate);
+ProductionRunEntry getProduction(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate);
 
 //looks through a players production list to see if a command droid is being built
 extern UBYTE checkProductionForCommand(UBYTE player);

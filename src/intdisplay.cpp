@@ -323,7 +323,6 @@ void intUpdateQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 	STRUCTURE		*Structure;
 	DROID_TEMPLATE *        psTemplate;
 	W_LABEL			*Label = (W_LABEL*)psWidget;
-	int                     Quantity, Built;
 
 	psObj = (BASE_OBJECT*)Label->pUserData;  // Get the object associated with this widget.
 	Structure = (STRUCTURE*)psObj;
@@ -333,13 +332,8 @@ void intUpdateQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 		ASSERT(!isDead(psObj),"intUpdateQuantity: object is dead");
 
 		psTemplate = FactoryGetTemplate(StructureGetFactory(Structure));
-		Quantity = getProductionQuantity(Structure, psTemplate);
-		Built = getProductionBuilt(Structure, psTemplate);
-		snprintf(Label->aText, sizeof(Label->aText), "%02d", Quantity - Built);
-		if (Quantity - Built <= 0)	// zero is always the case for script added production
-		{
-			sstrcpy(Label->aText, "01");
-		}
+		int remaining = getProduction(Structure, psTemplate).numRemaining();
+		snprintf(Label->aText, sizeof(Label->aText), "%02d", remaining);
 		Label->style &= ~WIDG_HIDDEN;
 	}
 	else
@@ -358,7 +352,7 @@ void intAddFactoryInc(WIDGET *psWidget, W_CONTEXT *psContext)
 	if (psObj != NULL && !isDead(psObj))
 	{
 		STRUCTURE	*Structure = (STRUCTURE*)psObj;
-		FACTORY		*Factory = (FACTORY *)Structure->pFunctionality;
+		FACTORY		*Factory = &Structure->pFunctionality->factory;
 
 		ASSERT( (Structure->pStructureType->type == REF_FACTORY ||
 			Structure->pStructureType->type == REF_CYBORG_FACTORY ||
@@ -379,39 +373,29 @@ void intAddFactoryInc(WIDGET *psWidget, W_CONTEXT *psContext)
 void intAddProdQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 {
 	W_LABEL				*Label = (W_LABEL*)psWidget;
-	BASE_STATS			*psStat = (BASE_STATS *)Label->pUserData;
+	DROID_TEMPLATE *                psTemplate = (DROID_TEMPLATE *)Label->pUserData;
 
 	// Get the object associated with this widget.
-	if (psStat != NULL)
+	if (psTemplate != NULL)
 	{
-		DROID_TEMPLATE	*psTemplate = (DROID_TEMPLATE *)psStat;
 		STRUCTURE	*psStructure = NULL;
 		BASE_OBJECT	*psObj = getCurrentSelected();
-		UDWORD		quantity = 0, remaining = 0;
 
 		if (psObj != NULL && psObj->type == OBJ_STRUCTURE && !isDead(psObj))
 		{
 			psStructure = (STRUCTURE *)psObj;
 		}
 
+		ProductionRunEntry entry;
 		if (psStructure != NULL && StructIsFactory(psStructure))
 		{
-			quantity = getProductionQuantity(psStructure, psTemplate);
-			remaining = getProductionBuilt(psStructure, psTemplate);
+			entry = getProduction(psStructure, psTemplate);
 		}
 
 		// now find out how many we have built
-		if (quantity > remaining)
+		if (entry.isValid())
 		{
-			quantity -= remaining;
-		}
-		else
-		{
-			quantity = 0;
-		}
-		if (quantity != 0)
-		{
-			snprintf(Label->aText, sizeof(Label->aText), "%u", quantity);
+			snprintf(Label->aText, sizeof(Label->aText), "%u", entry.numRemaining());
 			Label->style &= ~WIDG_HIDDEN;
 		}
 		else

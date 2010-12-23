@@ -7316,15 +7316,13 @@ BOOL loadSaveStructureV19(char *pFileData, UDWORD filesize, UDWORD numStructures
 					}
 					else
 					{
-						psFactory->psSubject = (BASE_STATS*)
-                            getTemplateFromMultiPlayerID(psSaveStructure->subjectInc);
+						psFactory->psSubject = getTemplateFromMultiPlayerID(psSaveStructure->subjectInc);
                         //if the build has started set the powerAccrued =
                         //powerRequired to sync the interface
                         if (psFactory->timeStarted != ACTION_START_TIME &&
                             psFactory->psSubject)
                         {
-                            psFactory->powerAccrued = ((DROID_TEMPLATE *)psFactory->
-                                psSubject)->powerPoints;
+							psFactory->powerAccrued = psFactory->psSubject->powerPoints;
                         }
 					}
 				}
@@ -7722,15 +7720,13 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 				}
 				else
 				{
-					psFactory->psSubject = (BASE_STATS*)
-                        getTemplateFromMultiPlayerID(psSaveStructure->subjectInc);
+					psFactory->psSubject = getTemplateFromMultiPlayerID(psSaveStructure->subjectInc);
                     //if the build has started set the powerAccrued =
                     //powerRequired to sync the interface
                     if (psFactory->timeStarted != ACTION_START_TIME &&
                         psFactory->psSubject)
                     {
-                        psFactory->powerAccrued = ((DROID_TEMPLATE *)psFactory->
-                            psSubject)->powerPoints;
+						psFactory->powerAccrued = psFactory->psSubject->powerPoints;
                     }
 				}
 				if (version >= VERSION_21)//version 21
@@ -10883,10 +10879,10 @@ BOOL loadSaveProduction(char *pFileData, UDWORD filesize)
 BOOL loadSaveProductionV(char *pFileData, UDWORD filesize, UDWORD version)
 {
 	SAVE_PRODUCTION	*psSaveProduction;
-	PRODUCTION_RUN	*psCurrentProd;
 	UDWORD			factoryType,factoryNum,runNum;
 
 	//check file
+#define MAX_PROD_RUN 20
 	if ((sizeof(SAVE_PRODUCTION) * NUM_FACTORY_TYPES * MAX_FACTORY * MAX_PROD_RUN + PRODUCTION_HEADER_SIZE) >
 		filesize)
 	{
@@ -10903,20 +10899,20 @@ BOOL loadSaveProductionV(char *pFileData, UDWORD filesize, UDWORD version)
 			for (runNum = 0; runNum < MAX_PROD_RUN; runNum++)
 			{
 				psSaveProduction = (SAVE_PRODUCTION *)pFileData;
-				psCurrentProd = &asProductionRun[factoryType][factoryNum][runNum];
+				ProductionRunEntry currentProd;
 
 				/* SAVE_PRODUCTION */
 				endian_udword(&psSaveProduction->multiPlayerID);
 
-				psCurrentProd->quantity = psSaveProduction->quantity;
-				psCurrentProd->built = psSaveProduction->built;
+				currentProd.quantity = psSaveProduction->quantity;
+				currentProd.built = psSaveProduction->built;
 				if (psSaveProduction->multiPlayerID != NULL_ID)
 				{
-					psCurrentProd->psTemplate = getTemplateFromMultiPlayerID(psSaveProduction->multiPlayerID);
-				}
-				else
-				{
-					psCurrentProd->psTemplate = NULL;
+					currentProd.psTemplate = getTemplateFromMultiPlayerID(psSaveProduction->multiPlayerID);
+					if (currentProd.isValid())
+					{
+						asProductionRun[factoryType][factoryNum].push_back(currentProd);
+					}
 				}
 				pFileData += sizeof(SAVE_PRODUCTION);
 			}
@@ -10934,7 +10930,6 @@ static BOOL writeProductionFile(char *pFileName)
 	SAVE_PRODUCTION			*psSaveProduction;
 	char				*pFileData;
 	UDWORD				fileSize;
-	PRODUCTION_RUN	*psCurrentProd;
 	UDWORD				factoryType,factoryNum,runNum;
 
 	fileSize = PRODUCTION_HEADER_SIZE + (sizeof(SAVE_PRODUCTION) *
@@ -10965,14 +10960,10 @@ static BOOL writeProductionFile(char *pFileName)
 		{
 			for (runNum = 0; runNum < MAX_PROD_RUN; runNum++)
 			{
-				psCurrentProd = &asProductionRun[factoryType][factoryNum][runNum];
-				psSaveProduction->quantity = psCurrentProd->quantity;
-				psSaveProduction->built = psCurrentProd->built;
-				psSaveProduction->multiPlayerID = NULL_ID;
-				if (psCurrentProd->psTemplate != NULL)
-				{
-					psSaveProduction->multiPlayerID = psCurrentProd->psTemplate->multiPlayerID;
-				}
+				ProductionRunEntry psCurrentProd = runNum < asProductionRun[factoryType][factoryNum].size()? asProductionRun[factoryType][factoryNum][runNum] : ProductionRunEntry();
+				psSaveProduction->quantity = psCurrentProd.quantity;
+				psSaveProduction->built = psCurrentProd.built;
+				psSaveProduction->multiPlayerID = psCurrentProd.psTemplate != NULL? psCurrentProd.psTemplate->multiPlayerID : NULL_ID;
 
 				/* SAVE_PRODUCTION */
 				endian_udword(&psSaveProduction->multiPlayerID);

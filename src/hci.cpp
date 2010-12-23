@@ -2626,7 +2626,7 @@ static void intProcessStats(UDWORD id)
 					}
 
 					//need to check if this was the template that was mid-production
-					if (getProductionQuantity(psStructure, FactoryGetTemplate(psFactory)) == 0)
+					if (getProduction(psStructure, FactoryGetTemplate(psFactory)).quantity == 0)
 					{
 						doNextProduction(psStructure, FactoryGetTemplate(psFactory), ModeQueue);
 						psNext = FactoryGetTemplate(psFactory);
@@ -5908,7 +5908,7 @@ static void intStatsRMBPressed(UDWORD id)
 			}
 
 			//need to check if this was the template that was mid-production
-			if (getProductionQuantity(psStructure, FactoryGetTemplate(psFactory)) == 0)
+			if (getProduction(psStructure, FactoryGetTemplate(psFactory)).quantity == 0)
 			{
 				doNextProduction(psStructure, FactoryGetTemplate(psFactory), ModeQueue);
 				psNext = FactoryGetTemplate(psFactory);
