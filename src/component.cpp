@@ -887,7 +887,7 @@ static void displayCompObj(DROID *psDroid, BOOL bButton)
 					if ((psDroid->droidType == DROID_REPAIR || psDroid->droidType == DROID_CYBORG_REPAIR) &&
 					    psShape->nconnectors && psDroid->action == DACTION_DROIDREPAIR)
 					{
-						SPACETIME st = interpolateObjectSpacetime((SIMPLE_OBJECT *)psDroid, graphicsTime);
+						Spacetime st = interpolateObjectSpacetime(psDroid, graphicsTime);
 						Rotation rot = getInterpolatedWeaponRotation(psDroid, 0, graphicsTime);
 
 						pie_TRANSLATE( psShape->connectors[0].x,
@@ -955,36 +955,20 @@ static void displayCompObj(DROID *psDroid, BOOL bButton)
 //
 void displayComponentButtonTemplate(DROID_TEMPLATE *psTemplate, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale)
 {
-	static DROID Droid(0, 0);  // Made static to reduce stack usage.
-	SDWORD difference;
-
-	/* init to NULL */
-	memset( &Droid, 0, sizeof(DROID) );
-
 	setMatrix(Position, Rotation, RotXYZ);
 	pie_MatScale(scale / 100.f);
 
-// Decide how to sort it.
+	// Decide how to sort it.
+	leftFirst = angleDelta(DEG(Rotation->y)) < 0;
 
-	difference = Rotation->y%360;
-
-	if((difference>0 && difference <180) || difference<-180)
-	{
-		leftFirst = false;
-	}
-	else
-	{
-		leftFirst = true;
-	}
-
+	DROID Droid(0, selectedPlayer);
+	memset(Droid.asBits, 0, sizeof(Droid.asBits));
 	droidSetBits(psTemplate,&Droid);
-	Droid.player = (UBYTE)selectedPlayer;
 
-	Droid.pos.x = Droid.pos.y = Droid.pos.z = 0;
+	Droid.pos = Vector3i(0, 0, 0);
 
 	//draw multi component object as a button object
 	displayCompObj(&Droid, true);
-
 
 	unsetMatrix();
 }
@@ -1023,7 +1007,7 @@ void displayComponentObject(DROID *psDroid)
 	PROPULSION_STATS	*psPropStats;
 	UDWORD	tileX,tileY;
 	MAPTILE	*psTile;
-	SPACETIME st = interpolateObjectSpacetime((SIMPLE_OBJECT *)psDroid, graphicsTime);
+	Spacetime st = interpolateObjectSpacetime(psDroid, graphicsTime);
 
 	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
 

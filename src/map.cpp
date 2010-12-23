@@ -1210,7 +1210,7 @@ extern int32_t map_Height(int x, int y)
 }
 
 /* returns true if object is above ground */
-extern BOOL mapObjIsAboveGround( BASE_OBJECT *psObj )
+bool mapObjIsAboveGround(SIMPLE_OBJECT *psObj)
 {
 	// min is used to make sure we don't go over array bounds!
 	// TODO Using the corner of the map instead doesn't make sense. Fix this...

@@ -34,6 +34,14 @@ void sliderEnableDrag(BOOL Enable)
 	DragEnabled = Enable;
 }
 
+W_SLDINIT::W_SLDINIT()
+	: orientation(WSLD_LEFT)
+	, numStops(0)
+	, barSize(0)
+	, pos(0)
+	, pTip(NULL)
+{}
+
 W_SLIDER::W_SLIDER(W_SLDINIT const *init)
 	: WIDGET(init, WIDG_SLIDER)
 	, orientation(init->orientation)

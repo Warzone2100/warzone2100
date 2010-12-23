@@ -327,13 +327,9 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 	{
 		psFeature->rot.direction = 0;
 	}
-	psFeature->selected = false;
 	psFeature->body = psStats->body;
 	objSensorCache((BASE_OBJECT *)psFeature, NULL);
 	objEcmCache((BASE_OBJECT *)psFeature, NULL);
-	psFeature->bTargetted = false;
-	psFeature->timeLastHit = 0;
-	psFeature->lastHitWeapon = WSC_NUM_WEAPON_SUBCLASSES;  // no such weapon
 
 	// it has never been drawn
 	psFeature->sDisplay.frameNumber = 0;

@@ -53,6 +53,13 @@
 #define WEDB_CHARJUMP		6
 
 
+W_EDBINIT::W_EDBINIT()
+	: pText(NULL)
+	, FontID(font_regular)
+	, pBoxDisplay(NULL)
+	, pFontDisplay(NULL)
+{}
+
 W_EDITBOX::W_EDITBOX(W_EDBINIT const *init)
 	: WIDGET(init, WIDG_EDITBOX)
 	, FontID(init->FontID)

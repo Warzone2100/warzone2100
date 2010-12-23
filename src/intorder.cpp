@@ -643,8 +643,6 @@ static UDWORD GetImageHeight(IMAGEFILE *ImageFile,UDWORD ImageID)
 //changed to a BASE_OBJECT to accomodate the factories - AB 21/04/99
 BOOL intAddOrder(BASE_OBJECT *psObj)
 {
-	W_FORMINIT			sFormInit;
-	W_BUTINIT			sButInit;
 	BOOL Animate = true;
 	SECONDARY_STATE State;
 	UWORD i,j;//,k;
@@ -747,7 +745,7 @@ BOOL intAddOrder(BASE_OBJECT *psObj)
 
 	/* Create the basic form */
 
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
+	W_FORMINIT sFormInit;
 	sFormInit.formID = 0;
 	sFormInit.id = IDORDER_FORM;
 	sFormInit.style = WFORM_PLAIN;
@@ -771,16 +769,14 @@ BOOL intAddOrder(BASE_OBJECT *psObj)
 
 
 	// Add the close button.
-	memset(&sButInit, 0, sizeof(W_BUTINIT));
+	W_BUTINIT sButInit;
 	sButInit.formID = IDORDER_FORM;
 	sButInit.id = IDORDER_CLOSE;
-	sButInit.style = WBUT_PLAIN;
 	sButInit.x = ORDER_WIDTH - CLOSE_WIDTH;
 	sButInit.y = 0;
 	sButInit.width = CLOSE_WIDTH;
 	sButInit.height = CLOSE_HEIGHT;
 	sButInit.pTip = _("Close");
-	sButInit.FontID = font_regular;
 	sButInit.pDisplay = intDisplayImageHilight;
 	sButInit.UserData = PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
 	if (!widgAddButton(psWScreen, &sButInit))
@@ -789,12 +785,10 @@ BOOL intAddOrder(BASE_OBJECT *psObj)
 	}
 
 
-	memset(&sButInit, 0, sizeof(W_BUTINIT));
+	sButInit = W_BUTINIT();
 	sButInit.formID = IDORDER_FORM;
 	sButInit.id = IDORDER_CLOSE+1;
-	sButInit.style = WBUT_PLAIN;
 	sButInit.pDisplay = intDisplayButtonHilight;
-	sButInit.FontID = font_regular;
 	sButInit.y = ORDER_BUTY;
 
 	Height = 0;

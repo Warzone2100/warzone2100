@@ -289,10 +289,20 @@ DROID::DROID(uint32_t id, unsigned player)
 	, droidType(DROID_ANY)
 	, psGroup(NULL)
 	, psGrpNext(NULL)
+	, order(DORDER_NONE)
+	, orderX(0), orderY(0)
+	, orderX2(0), orderY2(0)
+	, orderDirection(0)
+	, psTarget(NULL)
+	, psTarStats(NULL)
+	, secondaryOrder(DSS_ARANGE_DEFAULT | DSS_REPLEV_NEVER | DSS_ALEV_ALWAYS | DSS_HALT_GUARD)
+	, action(DACTION_NONE)
+	, actionX(0), actionY(0)
 	, psCurAnim(NULL)
 	, gameCheckDroid(NULL)
 {
 	sMove.asPath = NULL;
+	sMove.Status = MOVEINACTIVE;
 }
 
 /* DROID::~DROID: release all resources associated with a droid -
@@ -741,7 +751,7 @@ void droidUpdate(DROID *psDroid)
 	syncDebugDroid(psDroid, '<');
 
 	// Save old droid position, update time.
-	psDroid->prevSpacetime = GET_SPACETIME(psDroid);
+	psDroid->prevSpacetime = getSpacetime(psDroid);
 	psDroid->time = gameTime;
 	for (i = 0; i < MAX(1, psDroid->numWeaps); ++i)
 	{
@@ -2467,38 +2477,10 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD pl
 		grpJoin(psGrp, psDroid);
 	}
 
-	psDroid->order = DORDER_NONE;
-	psDroid->orderX = 0;
-	psDroid->orderY = 0;
-	psDroid->orderX2 = 0;
-	psDroid->orderY2 = 0;
-	psDroid->secondaryOrder = DSS_ARANGE_DEFAULT | DSS_REPLEV_NEVER | DSS_ALEV_ALWAYS | DSS_HALT_GUARD;
-	psDroid->action = DACTION_NONE;
-	psDroid->actionX = 0;
-	psDroid->actionY = 0;
-	psDroid->psTarStats = NULL;
-	psDroid->psTarget = NULL;
 	psDroid->lastFrustratedTime = -UINT16_MAX;	// make sure we do not start the game frustrated
 
-	// Is setting asWeaps here needed? The first numWeaps entries are set in droidSetBits, too.)
-	for(i = 0;i < DROID_MAXWEAPS;i++)
-	{
-		psDroid->psActionTarget[i] = NULL;
-		psDroid->asWeaps[i].lastFired = 0;
-		psDroid->asWeaps[i].shotsFired = 0;
-		psDroid->asWeaps[i].nStat = 0;
-		psDroid->asWeaps[i].ammo = 0;
-		psDroid->asWeaps[i].recoilValue = 0;
-		psDroid->asWeaps[i].rot.direction = 0;
-		psDroid->asWeaps[i].rot.roll = 0;
-		psDroid->asWeaps[i].rot.pitch = 0;
-		psDroid->asWeaps[i].prevRot = psDroid->asWeaps[i].rot;
-	}
-
 	psDroid->listSize = 0;
-	memset(psDroid->asOrderList, 0, sizeof(ORDER_LIST)*ORDER_LIST_MAX);
 	psDroid->listPendingBegin = 0;
-	psDroid->listPendingEnd = 0;
 
 	psDroid->iAudioID = NO_SOUND;
 	psDroid->psCurAnim = NULL;
@@ -2542,12 +2524,6 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD pl
 	psDroid->baseSpeed = calcDroidBaseSpeed(pTemplate, psDroid->weight, (UBYTE)player);
 
 	initDroidMovement(psDroid);
-
-	psDroid->selected = false;
-	psDroid->lastEmission = 0;
-	psDroid->bTargetted = false;
-	psDroid->timeLastHit = UDWORD_MAX;
-	psDroid->lastHitWeapon = WSC_NUM_WEAPON_SUBCLASSES;  // no such weapon
 
 	// it was never drawn before
 	psDroid->sDisplay.frameNumber = 0;
@@ -2659,8 +2635,6 @@ void initDroidMovement(DROID *psDroid)
 // Set the asBits in a DROID structure given it's template.
 void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid)
 {
-	UDWORD						inc;
-
 	psDroid->droidType = droidTemplateType(pTemplate);
 	psDroid->rot.direction = 0;
 	psDroid->rot.pitch =  0;
@@ -2673,26 +2647,25 @@ void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid)
 	psDroid->prevSpacetime.time = psDroid->time - 1;  // -1 for interpolation.
 
 	//create the droids weapons
-	if (pTemplate->numWeaps > 0)
+	for (int inc = 0; inc < DROID_MAXWEAPS; inc++)
 	{
-		for (inc=0; inc < pTemplate->numWeaps; inc++)
-		{
-			psDroid->asWeaps[inc].lastFired=0;
-			psDroid->asWeaps[inc].shotsFired=0;
-			psDroid->asWeaps[inc].nStat = pTemplate->asWeaps[inc];
-			psDroid->asWeaps[inc].recoilValue = 0;
-			psDroid->asWeaps[inc].ammo = (asWeaponStats + psDroid->asWeaps[inc].nStat)->numRounds;
-			psDroid->asWeaps[inc].rot.direction = 0;
-			psDroid->asWeaps[inc].rot.pitch = 0;
-			psDroid->asWeaps[inc].rot.roll = 0;
-			psDroid->asWeaps[inc].prevRot = psDroid->asWeaps[inc].rot;
-		}
-	}
-	else
-	{
+		psDroid->psActionTarget[inc] = NULL;
+		psDroid->asWeaps[inc].lastFired=0;
+		psDroid->asWeaps[inc].shotsFired=0;
 		// no weapon (could be a construction droid for example)
 		// this is also used to check if a droid has a weapon, so zero it
-		psDroid->asWeaps[0].nStat = 0;
+		psDroid->asWeaps[inc].nStat = 0;
+		psDroid->asWeaps[inc].recoilValue = 0;
+		psDroid->asWeaps[inc].ammo = 0;
+		psDroid->asWeaps[inc].rot.direction = 0;
+		psDroid->asWeaps[inc].rot.pitch = 0;
+		psDroid->asWeaps[inc].rot.roll = 0;
+		psDroid->asWeaps[inc].prevRot = psDroid->asWeaps[inc].rot;
+		if (inc < pTemplate->numWeaps)
+		{
+			psDroid->asWeaps[inc].nStat = pTemplate->asWeaps[inc];
+			psDroid->asWeaps[inc].ammo = (asWeaponStats + psDroid->asWeaps[inc].nStat)->numRounds;
+		}
 	}
 	//allocate the components hit points
 	psDroid->asBits[COMP_BODY].nStat = (UBYTE)pTemplate->asParts[COMP_BODY];
@@ -4784,7 +4757,7 @@ void checkDroid(const DROID *droid, const char *const location, const char *func
 	ASSERT_HELPER(droid != NULL, location, function, "CHECK_DROID: NULL pointer");
 	ASSERT_HELPER(droid->type == OBJ_DROID, location, function, "CHECK_DROID: Not droid (type %d)", (int)droid->type);
 	ASSERT_HELPER(droid->numWeaps <= DROID_MAXWEAPS, location, function, "CHECK_DROID: Bad number of droid weapons %d", (int)droid->numWeaps);
-	ASSERT_HELPER(droid->listSize <= ORDER_LIST_MAX && droid->listPendingBegin <= ORDER_LIST_MAX && droid->listPendingEnd <= ORDER_LIST_MAX && droid->listSize <= droid->listPendingEnd, location, function, "CHECK_DROID: Bad number of droid orders %d %d %d", (int)droid->listSize, (int)droid->listPendingBegin, (int)droid->listPendingEnd);
+	ASSERT_HELPER((unsigned)droid->listSize <= droid->asOrderList.size() && (unsigned)droid->listPendingBegin <= droid->asOrderList.size(), location, function, "CHECK_DROID: Bad number of droid orders %d %d %d", (int)droid->listSize, (int)droid->listPendingBegin, (int)droid->asOrderList.size());
 	ASSERT_HELPER(droid->player < MAX_PLAYERS, location, function, "CHECK_DROID: Bad droid owner %d", (int)droid->player);
 	ASSERT_HELPER(droidOnMap(droid), location, function, "CHECK_DROID: Droid off map");
 	ASSERT_HELPER(droid->body <= droid->originalBody, location, function, "CHECK_DROID: More body points (%u) than original body points (%u).", (unsigned)droid->body, (unsigned)droid->originalBody);

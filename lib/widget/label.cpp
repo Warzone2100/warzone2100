@@ -30,6 +30,12 @@
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_common/textdraw.h"
 
+W_LABINIT::W_LABINIT()
+	: pText(NULL)
+	, pTip(NULL)
+	, FontID(font_regular)
+{}
+
 W_LABEL::W_LABEL(W_LABINIT const *init)
 	: WIDGET(init, WIDG_LABEL)
 	, FontID(init->FontID)

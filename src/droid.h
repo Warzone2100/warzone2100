@@ -564,11 +564,11 @@ void _syncDebugDroid(const char *function, DROID *psDroid, char ch);
 
 
 // True iff object is a droid.
-static inline bool isDroid(BASE_OBJECT const *psObject)           { return psObject->type == OBJ_DROID; }
+static inline bool isDroid(SIMPLE_OBJECT const *psObject)           { return psObject->type == OBJ_DROID; }
 // Returns DROID * if droid or NULL if not.
-static inline DROID *castDroid(BASE_OBJECT *psObject)             { return isDroid(psObject)? (DROID *)psObject : (DROID *)NULL; }
+static inline DROID *castDroid(SIMPLE_OBJECT *psObject)             { return isDroid(psObject)? (DROID *)psObject : (DROID *)NULL; }
 // Returns DROID const * if droid or NULL if not.
-static inline DROID const *castDroid(BASE_OBJECT const *psObject) { return isDroid(psObject)? (DROID const *)psObject : (DROID const *)NULL; }
+static inline DROID const *castDroid(SIMPLE_OBJECT const *psObject) { return isDroid(psObject)? (DROID const *)psObject : (DROID const *)NULL; }
 
 
 #endif // __INCLUDED_SRC_DROID_H__

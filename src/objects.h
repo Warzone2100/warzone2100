@@ -47,7 +47,7 @@ void reverseObjectList(BASE_OBJECT **ppsList);
 template <typename OBJECT>
 void reverseObjectList(OBJECT **ppsList)
 {
-	BASE_OBJECT *baseList;
+	BASE_OBJECT *baseList = *ppsList;
 	reverseObjectList(&baseList);
 	*ppsList = static_cast<OBJECT *>(baseList);
 }

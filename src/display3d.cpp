@@ -508,8 +508,6 @@ static void NetworkDisplayImage(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 
 static void setupConnectionStatusForm(void)
 {
-	static W_FORMINIT        sFormInit;
-	static W_BUTINIT         sButInit;
 	static unsigned          prevStatusMask = 0;
 
 	const int separation = 3;
@@ -545,7 +543,7 @@ static void setupConnectionStatusForm(void)
 	{
 		unsigned n = 0;
 		// Create the basic form
-		memset(&sFormInit, 0, sizeof(W_FORMINIT));
+		W_FORMINIT sFormInit;
 		sFormInit.formID = 0;
 		sFormInit.id = NETWORK_FORM_ID;
 		sFormInit.style = WFORM_PLAIN;
@@ -568,12 +566,11 @@ static void setupConnectionStatusForm(void)
 			}
 
 			//set up default button data
-			memset(&sButInit, 0, sizeof(W_BUTINIT));
+			W_BUTINIT sButInit;
 			sButInit.formID = NETWORK_FORM_ID;
 			sButInit.id = NETWORK_BUT_ID + i;
 			sButInit.width = 36;
 			sButInit.height = 24;
-			sButInit.FontID = font_regular;
 
 			//add button
 			sButInit.style = WBUT_PLAIN;
@@ -1220,7 +1217,7 @@ void	renderProjectile(PROJECTILE *psCurr)
 	Vector3i			dv;
 	iIMDShape		*pIMD;
 	SDWORD			rx, rz;
-	SPACETIME       st;
+	Spacetime       st;
 
 	psStats = psCurr->psWStats;
 	/* Reject flame or command since they have interim drawn fx */
@@ -1234,7 +1231,7 @@ void	renderProjectile(PROJECTILE *psCurr)
 		return;
 	}
 
-	st = interpolateObjectSpacetime((SIMPLE_OBJECT *)psCurr, graphicsTime);
+	st = interpolateObjectSpacetime(psCurr, graphicsTime);
 
 	//the weapon stats holds the reference to which graphic to use
 	/*Need to draw the graphic depending on what the projectile is doing - hitting target,
@@ -1290,7 +1287,7 @@ void	renderProjectile(PROJECTILE *psCurr)
 void	renderAnimComponent( const COMPONENT_OBJECT *psObj )
 {
 	BASE_OBJECT *psParentObj = (BASE_OBJECT*)psObj->psParent;
-	SPACETIME spacetime = interpolateObjectSpacetime((SIMPLE_OBJECT *)psParentObj, graphicsTime);
+	Spacetime spacetime = interpolateObjectSpacetime(psParentObj, graphicsTime);
 	const SDWORD posX = spacetime.pos.x + psObj->position.x,
 	             posY = spacetime.pos.y + psObj->position.y;
 	SWORD rx, rz;
@@ -1450,14 +1447,14 @@ void displayStaticObjects( void )
 							displayAnimation( psAnimObj, false );
 							if(selectedPlayer == psStructure->player)
 							{
-								audio_PlayObjStaticTrack( (void *) psStructure, ID_SOUND_OIL_PUMP_2 );
+								audio_PlayObjStaticTrack(psStructure, ID_SOUND_OIL_PUMP_2);
 							}
 						}
 						else
 						{
 							/* hold anim on first frame */
 							displayAnimation( psAnimObj, true );
-							audio_StopObjTrack( (void *) psStructure, ID_SOUND_OIL_PUMP_2 );
+							audio_StopObjTrack(psStructure, ID_SOUND_OIL_PUMP_2);
 						}
 
 					}
@@ -1643,9 +1640,9 @@ void displayBlueprints(void)
 		{
 			renderBuildOrder(psDroid->order, psDroid->psTarStats, psDroid->orderX, psDroid->orderY, psDroid->orderX2, psDroid->orderY2, psDroid->orderDirection, SS_BLUEPRINT_PLANNED);
 			//now look thru' the list of orders to see if more building sites
-			for (order = psDroid->listPendingBegin; order < psDroid->listPendingEnd; order++)
+			for (order = psDroid->listPendingBegin; order < (int)psDroid->asOrderList.size(); order++)
 			{
-				ORDER_LIST const *o = &psDroid->asOrderList[order];
+				OrderListEntry const *o = &psDroid->asOrderList[order];
 				renderBuildOrder(o->order, (BASE_STATS *)o->psOrderTarget, o->x, o->y, o->x2, o->y2, o->direction, SS_BLUEPRINT_PLANNED);
 			}
 		}

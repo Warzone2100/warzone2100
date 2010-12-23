@@ -79,7 +79,7 @@ sed -i 's/\(AC_INIT(\[Warzone 2100\],\[\)'"${BASE}"'\(\],\[http:\/\/wz2100.net\/
        ' "${GITROOT}"configure.ac
 sed -i 's/\(char VersionString\[VersionStringSize\] = "\).*\(";\)/\1'"${FULLVERSTR}"'\2/;
         s/\(static int NETCODE_VERSION_MINOR = \)[0-9]*\(;\)/\1'"${DATENUM}"'\2/
-       ' "${GITROOT}"lib/netplay/netplay.c
+       ' "${GITROOT}"lib/netplay/netplay.c*
 sed -i 's/\(VALUE "FileVersion", "\)'"${BASE}"'\("\)/\1'"${FULLVERSTR}"'\2/;
         s/\(VALUE "ProductVersion", "\)'"${BASE}"'\("\)/\1'"${FULLVERSTR}"'\2/;
        ' "${GITROOT}"win32/warzone2100.rc "${GITROOT}"win32/warzone2100.vs2k5.rc "${GITROOT}"win32/warzone2100.vs2k8.rc

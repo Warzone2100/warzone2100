@@ -2528,7 +2528,7 @@ static void effectStructureUpdates(void)
 
 								if (selectedPlayer == psStructure->player)
 								{
-									audio_PlayObjStaticTrack((void*)psStructure, ID_SOUND_POWER_SPARK);
+									audio_PlayObjStaticTrack(psStructure, ID_SOUND_POWER_SPARK);
 								}
 							}
 						}

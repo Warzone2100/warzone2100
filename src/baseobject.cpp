@@ -46,21 +46,21 @@ Rotation interpolateRot(Rotation v1, Rotation v2, uint32_t t1, uint32_t t2, uint
 	               );
 }
 
-static SPACETIME interpolateSpacetime(SPACETIME st1, SPACETIME st2, uint32_t t)
+static Spacetime interpolateSpacetime(Spacetime st1, Spacetime st2, uint32_t t)
 {
-	return constructSpacetime(interpolatePos(st1.pos, st2.pos, st1.time, st2.time, t), interpolateRot(st1.rot, st2.rot, st1.time, st2.time, t), t);
+	return Spacetime(interpolatePos(st1.pos, st2.pos, st1.time, st2.time, t), interpolateRot(st1.rot, st2.rot, st1.time, st2.time, t), t);
 }
 
-SPACETIME interpolateObjectSpacetime(const SIMPLE_OBJECT *obj, uint32_t t)
+Spacetime interpolateObjectSpacetime(const SIMPLE_OBJECT *obj, uint32_t t)
 {
 	switch (obj->type)
 	{
 		default:
-			return GET_SPACETIME(obj);
+			return getSpacetime(obj);
 		case OBJ_DROID:
-			return interpolateSpacetime(((DROID *)obj)->prevSpacetime, GET_SPACETIME(obj), t);
+			return interpolateSpacetime(castDroid(obj)->prevSpacetime, getSpacetime(obj), t);
 		case OBJ_PROJECTILE:
-			return interpolateSpacetime(((PROJECTILE *)obj)->prevSpacetime, GET_SPACETIME(obj), t);
+			return interpolateSpacetime(castProjectile(obj)->prevSpacetime, getSpacetime(obj), t);
 	}
 }
 
@@ -82,8 +82,13 @@ SIMPLE_OBJECT::~SIMPLE_OBJECT()
 
 BASE_OBJECT::BASE_OBJECT(OBJECT_TYPE type, uint32_t id, unsigned player)
 	: SIMPLE_OBJECT(type, id, player)
+	, selected(false)
 	, cluster(0)
 	, numWatchedTiles(0)
+	, lastEmission(0)
+	, lastHitWeapon(WSC_NUM_WEAPON_SUBCLASSES)  // No such weapon.
+	, timeLastHit(UDWORD_MAX)
+	, bTargetted(false)
 	, watchedTiles(NULL)
 {}
 

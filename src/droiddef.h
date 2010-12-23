@@ -24,6 +24,8 @@
 #ifndef __INCLUDED_DROIDDEF_H__
 #define __INCLUDED_DROIDDEF_H__
 
+#include <vector>
+
 #include "lib/gamelib/animobj.h"
 
 #include "stringdef.h"
@@ -58,7 +60,7 @@
 /* The different types of droid */
 // NOTE, if you add to, or change this list then you'll need
 // to update the DroidSelectionWeights lookup table in Display.c
-typedef enum _droid_type
+enum DROID_TYPE
 {
 	DROID_WEAPON,           ///< Weapon droid
 	DROID_SENSOR,           ///< Sensor droid
@@ -74,23 +76,21 @@ typedef enum _droid_type
 	DROID_CYBORG_REPAIR,    ///< cyborg repair droid - new for update 28/5/99
 	DROID_CYBORG_SUPER,     ///< cyborg repair droid - new for update 7/6/99
 	DROID_ANY,              ///< Any droid. Only used as a parameter for intGotoNextDroidType(DROID_TYPE).
-} DROID_TYPE;
+};
 
-typedef struct _component
+struct COMPONENT
 {
 	UBYTE           nStat;          ///< Allowing a maximum of 255 stats per file
-} COMPONENT;
+};
 
-// maximum number of queued orders
-#define ORDER_LIST_MAX		10
-
-typedef struct _order_list
+struct OrderListEntry
 {
 	DROID_ORDER     order;
-	void*           psOrderTarget;  ///< this needs to cope with objects and stats
 	UWORD           x, y, x2, y2;   ///< line build requires two sets of coords
 	uint16_t        direction;      ///< Needed to align structures with viewport.
-} ORDER_LIST;
+	void*           psOrderTarget;  ///< this needs to cope with objects and stats
+};
+typedef std::vector<OrderListEntry> OrderList;
 
 struct DROID_TEMPLATE : public BASE_STATS
 {
@@ -166,10 +166,9 @@ struct DROID : public BASE_OBJECT
 	struct DROID*  psGrpNext;
 	struct STRUCTURE *psBaseStruct;                 ///< a structure that this droid might be associated with. For VTOLs this is the rearming pad
 	// queued orders
-	SDWORD          listSize;
-	ORDER_LIST      asOrderList[ORDER_LIST_MAX];    ///< The range [0; listSize - 1] corresponds to synchronised orders, and the range [listPendingBegin; listPendingEnd - 1] corresponds to the orders that will remain, once all orders are synchronised.
+	SDWORD          listSize;                       ///< Gives the number of synchronised orders. Orders from listSize to the real end of the list may not affect game state.
+	OrderList       asOrderList;                    ///< The range [0; listSize - 1] corresponds to synchronised orders, and the range [listPendingBegin; listPendingEnd - 1] corresponds to the orders that will remain, once all orders are synchronised.
 	unsigned        listPendingBegin;               ///< Index of first order which will not be erased by a pending order. After all messages are processed, the orders in the range [listPendingBegin; listPendingEnd - 1] will remain.
-	unsigned        listPendingEnd;                 ///< Index of last order which might not yet have been synchronised, plus one.
 
 	/* Order data */
 	DROID_ORDER     order;
@@ -206,7 +205,7 @@ struct DROID : public BASE_OBJECT
 
 	/* Movement control data */
 	MOVE_CONTROL    sMove;
-	SPACETIME       prevSpacetime;                  ///< Location of droid in previous tick.
+	Spacetime       prevSpacetime;                  ///< Location of droid in previous tick.
 	uint8_t		blockedBits;			///< Bit set telling which tiles block this type of droid (TODO)
 
 	/* anim data */

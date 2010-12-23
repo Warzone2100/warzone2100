@@ -167,6 +167,7 @@ void statsInitVars(void)
 	memset(asSensorUpgrade, 0, sizeof(asSensorUpgrade));
 	memset(asECMUpgrade, 0, sizeof(asECMUpgrade));
 	memset(asRepairUpgrade, 0, sizeof(asRepairUpgrade));
+	memset(asConstUpgrade, 0, sizeof(asConstUpgrade));
 	memset(asBodyUpgrade, 0, sizeof(asBodyUpgrade));
 
 	// init the max values

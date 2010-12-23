@@ -151,9 +151,6 @@ BOOL bLoad;
 //*****************************************************************************************
 static BOOL _addLoadSave(BOOL bLoad, const char *sSearchPath, const char *sExtension, const char *title)
 {
-	W_FORMINIT		sFormInit;
-	W_BUTINIT		sButInit;
-	W_LABINIT		sLabInit;
 	UDWORD			slotCount;
 // removed hardcoded values!  change with the defines above! -Q
 	static char	sSlotCaps[totalslots][totalslotspace];
@@ -202,7 +199,7 @@ static BOOL _addLoadSave(BOOL bLoad, const char *sSearchPath, const char *sExten
 	widgSetTipFont(psRequestScreen,font_regular);
 
 	/* add a form to place the tabbed form on */
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
+	W_FORMINIT sFormInit;
 	sFormInit.formID = 0;				//this adds the blue background, and the "box" behind the buttons -Q
 	sFormInit.id = LOADSAVE_FORM;
 	sFormInit.style = WFORM_PLAIN;
@@ -230,7 +227,7 @@ static BOOL _addLoadSave(BOOL bLoad, const char *sSearchPath, const char *sExten
 
 
 	// Add Banner Label
-	memset(&sLabInit, 0, sizeof(W_LABINIT));
+	W_LABINIT sLabInit;
 	sLabInit.formID = LOADSAVE_BANNER;
 	sLabInit.id		= LOADSAVE_LABEL;
 	sLabInit.style	= WLAB_ALIGNCENTRE;
@@ -239,12 +236,11 @@ static BOOL _addLoadSave(BOOL bLoad, const char *sSearchPath, const char *sExten
 	sLabInit.width	= LOADSAVE_W-(2*LOADSAVE_HGAP);	//LOADSAVE_W;
 	sLabInit.height = LOADSAVE_BANNER_DEPTH;		//This looks right -Q
 	sLabInit.pText	= title;
-	sLabInit.FontID = font_regular;
 	widgAddLabel(psRequestScreen, &sLabInit);
 
 
 	// add cancel.
-	memset(&sButInit, 0, sizeof(W_BUTINIT));
+	W_BUTINIT sButInit;
 	sButInit.formID = LOADSAVE_BANNER;
 	sButInit.x = 8;
 	sButInit.y = 8;
@@ -255,18 +251,16 @@ static BOOL _addLoadSave(BOOL bLoad, const char *sSearchPath, const char *sExten
 	sButInit.id = LOADSAVE_CANCEL;
 	sButInit.style = WBUT_PLAIN;
 	sButInit.pTip = _("Close");
-	sButInit.FontID = font_regular;
 	sButInit.pDisplay = intDisplayImageHilight;
 	widgAddButton(psRequestScreen, &sButInit);
 
 	// add slots
-	memset(&sButInit, 0, sizeof(W_BUTINIT));
+	sButInit = W_BUTINIT();
 	sButInit.formID		= LOADSAVE_FORM;
 	sButInit.style		= WBUT_PLAIN;
 	sButInit.width		= LOADENTRY_W;
 	sButInit.height		= LOADENTRY_H;
 	sButInit.pDisplay	= displayLoadSlot;
-	sButInit.FontID		= font_regular;
 
 	for(slotCount = 0; slotCount< totalslots; slotCount++)
 	{
@@ -432,7 +426,6 @@ void deleteSaveGame(char* saveGameName)
 BOOL runLoadSave(BOOL bResetMissionWidgets)
 {
 	UDWORD		id=0;
-	W_EDBINIT	sEdInit;
 	static char     sDelete[PATH_MAX];
 	UDWORD		i, campaign;
 	W_CONTEXT		context;
@@ -470,16 +463,14 @@ BOOL runLoadSave(BOOL bResetMissionWidgets)
 			if( ! widgGetFromID(psRequestScreen,SAVEENTRY_EDIT))
 			{
 				// add blank box.
-				memset(&sEdInit, 0, sizeof(W_EDBINIT));
+				W_EDBINIT sEdInit;
 				sEdInit.formID= LOADSAVE_FORM;
 				sEdInit.id    = SAVEENTRY_EDIT;
-				sEdInit.style = WEDB_PLAIN;
 				sEdInit.x	  =	widgGetFromID(psRequestScreen,id)->x;
 				sEdInit.y     =	widgGetFromID(psRequestScreen,id)->y;
 				sEdInit.width = widgGetFromID(psRequestScreen,id)->width;
 				sEdInit.height= widgGetFromID(psRequestScreen,id)->height;
 				sEdInit.pText = ((W_BUTTON *)widgGetFromID(psRequestScreen,id))->pText;
-				sEdInit.FontID= font_regular;
 				sEdInit.pBoxDisplay = displayLoadSaveEdit;
 				widgAddEditBox(psRequestScreen, &sEdInit);
 

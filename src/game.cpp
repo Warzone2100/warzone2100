@@ -2425,20 +2425,10 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		//JPS 25 feb
 		//initialise upgrades
 		//initialise the structure upgrade arrays
-		memset(asStructureUpgrade, 0, sizeof(asStructureUpgrade));
-		memset(asWallDefenceUpgrade, 0, sizeof(asWallDefenceUpgrade));
-		memset(asResearchUpgrade, 0, sizeof(asResearchUpgrade));
-		memset(asPowerUpgrade, 0, sizeof(asPowerUpgrade));
-		memset(asRepairFacUpgrade, 0, sizeof(asRepairFacUpgrade));
-		memset(asProductionUpgrade, 0, sizeof(asProductionUpgrade));
-		memset(asReArmUpgrade, 0, sizeof(asReArmUpgrade));
+		// *Duplicate code to loadStructureStats() removed.*
 
 		//initialise the upgrade structures
-		memset(asWeaponUpgrade, 0, sizeof(asWeaponUpgrade));
-		memset(asSensorUpgrade, 0, sizeof(asSensorUpgrade));
-		memset(asECMUpgrade, 0, sizeof(asECMUpgrade));
-		memset(asRepairUpgrade, 0, sizeof(asRepairUpgrade));
-		memset(asBodyUpgrade, 0, sizeof(asBodyUpgrade));
+		// *Duplicate and buggy code to statsInitVars() removed.*
 		//JPS 25 feb
 	}
 
@@ -7472,7 +7462,7 @@ BOOL loadSaveStructureV19(char *pFileData, UDWORD filesize, UDWORD numStructures
 					checkForResExtractors(psStructure);
 					if(selectedPlayer == psStructure->player)
 					{
-						audio_PlayObjStaticTrack( (void *) psStructure, ID_SOUND_POWER_HUM );
+						audio_PlayObjStaticTrack(psStructure, ID_SOUND_POWER_HUM);
 					}
 					break;
 				case REF_RESOURCE_EXTRACTOR:
@@ -7879,7 +7869,7 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 					checkForResExtractors(psStructure);
 					if(selectedPlayer == psStructure->player)
 					{
-						audio_PlayObjStaticTrack( (void *) psStructure, ID_SOUND_POWER_HUM );
+						audio_PlayObjStaticTrack(psStructure, ID_SOUND_POWER_HUM);
 					}
 					break;
 				case REF_RESOURCE_EXTRACTOR:

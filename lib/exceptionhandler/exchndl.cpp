@@ -78,9 +78,12 @@ DWORD GetModuleBase(DWORD dwAddress)
 #ifdef HAVE_BFD
 
 #include <bfd.h>
+extern "C"
+{
 #include "include/demangle.h"
 #include "include/coff/internal.h"
 #include "include/libcoff.h"
+}
 
 // Read in the symbol table.
 static bfd_boolean
@@ -593,20 +596,20 @@ BOOL WINAPI IntelStackWalk(
 		StackFrame->AddrFrame.Offset = ContextRecord->Ebp;
 
 		StackFrame->AddrReturn.Mode = AddrModeFlat;
-		if(!ReadMemoryRoutine((HANDLE)hProcess, (DWORD) (StackFrame->AddrFrame.Offset + sizeof(DWORD)), (void *)&StackFrame->AddrReturn.Offset, sizeof(DWORD), NULL))
+		if(!ReadMemoryRoutine((HANDLE)hProcess, (void *) (StackFrame->AddrFrame.Offset + sizeof(DWORD)), (void *)&StackFrame->AddrReturn.Offset, sizeof(DWORD), NULL))
 			return FALSE;
 	}
 	else
 	{
 		StackFrame->AddrPC.Offset = StackFrame->AddrReturn.Offset;
 		//AddrStack = AddrFrame + 2*sizeof(DWORD);
-		if(!ReadMemoryRoutine((HANDLE)hProcess, (DWORD) StackFrame->AddrFrame.Offset, (void *)&StackFrame->AddrFrame.Offset, sizeof(DWORD), NULL))
+		if(!ReadMemoryRoutine((HANDLE)hProcess, (void *) StackFrame->AddrFrame.Offset, (void *)&StackFrame->AddrFrame.Offset, sizeof(DWORD), NULL))
 			return FALSE;
-		if(!ReadMemoryRoutine((HANDLE)hProcess, (DWORD) (StackFrame->AddrFrame.Offset + sizeof(DWORD)), (void *)&StackFrame->AddrReturn.Offset, sizeof(DWORD), NULL))
+		if(!ReadMemoryRoutine((HANDLE)hProcess, (void *) (StackFrame->AddrFrame.Offset + sizeof(DWORD)), (void *)&StackFrame->AddrReturn.Offset, sizeof(DWORD), NULL))
 			return FALSE;
 	}
 
-	ReadMemoryRoutine((HANDLE)hProcess, (DWORD) (StackFrame->AddrFrame.Offset + 2*sizeof(DWORD)), (void *)StackFrame->Params, sizeof(StackFrame->Params), NULL);
+	ReadMemoryRoutine((HANDLE)hProcess, (void *) (StackFrame->AddrFrame.Offset + 2*sizeof(DWORD)), (void *)StackFrame->Params, sizeof(StackFrame->Params), NULL);
 
 	return TRUE;
 }

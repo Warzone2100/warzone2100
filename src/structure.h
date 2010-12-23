@@ -408,10 +408,13 @@ BOOL structureCheckReferences(STRUCTURE *psVictimStruct);
 
 void cbNewDroid(STRUCTURE *psFactory, DROID *psDroid);
 
-unsigned getStructureWidth(const STRUCTURE *psBuilding);
-unsigned getStructureBreadth(const STRUCTURE *psBuilding);
-unsigned getStructureStatsWidth(const STRUCTURE_STATS *pStructureType, uint16_t direction);
-unsigned getStructureStatsBreadth(const STRUCTURE_STATS *pStructureType, uint16_t direction);
+WZ_DECL_PURE Vector2i getStructureSize(STRUCTURE const *psBuilding);
+WZ_DECL_PURE Vector2i getStructureStatsSize(STRUCTURE_STATS const *pStructureType, uint16_t direction);
+
+static inline unsigned getStructureWidth(const STRUCTURE *psBuilding)   { return getStructureSize(psBuilding).x; }
+static inline unsigned getStructureBreadth(const STRUCTURE *psBuilding) { return getStructureSize(psBuilding).y; }
+static inline WZ_DECL_PURE unsigned getStructureStatsWidth(const STRUCTURE_STATS *pStructureType, uint16_t direction)   { return getStructureStatsSize(pStructureType, direction).x; }
+static inline WZ_DECL_PURE unsigned getStructureStatsBreadth(const STRUCTURE_STATS *pStructureType, uint16_t direction) { return getStructureStatsSize(pStructureType, direction).y; }
 
 static inline int structSensorRange(const STRUCTURE* psObj)
 {
@@ -471,11 +474,11 @@ void _syncDebugStructure(const char *function, STRUCTURE *psStruct, char ch);
 
 
 // True iff object is a structure.
-static inline bool isStructure(BASE_OBJECT const *psObject)               { return psObject->type == OBJ_STRUCTURE; }
+static inline bool isStructure(SIMPLE_OBJECT const *psObject)               { return psObject->type == OBJ_STRUCTURE; }
 // Returns STRUCTURE * if structure or NULL if not.
-static inline STRUCTURE *castStructure(BASE_OBJECT *psObject)             { return isStructure(psObject)? (STRUCTURE *)psObject : (STRUCTURE *)NULL; }
+static inline STRUCTURE *castStructure(SIMPLE_OBJECT *psObject)             { return isStructure(psObject)? (STRUCTURE *)psObject : (STRUCTURE *)NULL; }
 // Returns STRUCTURE const * if structure or NULL if not.
-static inline STRUCTURE const *castStructure(BASE_OBJECT const *psObject) { return isStructure(psObject)? (STRUCTURE const *)psObject : (STRUCTURE const *)NULL; }
+static inline STRUCTURE const *castStructure(SIMPLE_OBJECT const *psObject) { return isStructure(psObject)? (STRUCTURE const *)psObject : (STRUCTURE const *)NULL; }
 
 
 #endif // __INCLUDED_SRC_STRUCTURE_H__

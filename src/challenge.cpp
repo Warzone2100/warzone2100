@@ -121,9 +121,6 @@ bool addChallenges()
 {
 	char			sPath[PATH_MAX];
 	const char *sSearchPath	= "challenges";
-	W_FORMINIT		sFormInit;
-	W_BUTINIT		sButInit;
-	W_LABINIT		sLabInit;
 	UDWORD			slotCount;
 	static char		sSlotCaps[totalslots][totalslotspace];
 	static char		sSlotTips[totalslots][totalslotspace];
@@ -136,7 +133,7 @@ bool addChallenges()
 	widgSetTipFont(psRequestScreen, font_regular);
 
 	/* add a form to place the tabbed form on */
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
+	W_FORMINIT sFormInit;
 	sFormInit.formID = 0;				//this adds the blue background, and the "box" behind the buttons -Q
 	sFormInit.id = CHALLENGE_FORM;
 	sFormInit.style = WFORM_PLAIN;
@@ -163,7 +160,7 @@ bool addChallenges()
 	widgAddForm(psRequestScreen, &sFormInit);
 
 	// Add Banner Label
-	memset(&sLabInit, 0, sizeof(W_LABINIT));
+	W_LABINIT sLabInit;
 	sLabInit.formID		= CHALLENGE_BANNER;
 	sLabInit.id		= CHALLENGE_LABEL;
 	sLabInit.style		= WLAB_ALIGNCENTRE;
@@ -172,11 +169,10 @@ bool addChallenges()
 	sLabInit.width		= CHALLENGE_W - (2 * CHALLENGE_HGAP);	//CHALLENGE_W;
 	sLabInit.height		= CHALLENGE_BANNER_DEPTH;		//This looks right -Q
 	sLabInit.pText		= "Challenge";
-	sLabInit.FontID		= font_regular;
 	widgAddLabel(psRequestScreen, &sLabInit);
 
 	// add cancel.
-	memset(&sButInit, 0, sizeof(W_BUTINIT));
+	W_BUTINIT sButInit;
 	sButInit.formID = CHALLENGE_BANNER;
 	sButInit.x = 8;
 	sButInit.y = 8;
@@ -185,20 +181,16 @@ bool addChallenges()
 	sButInit.UserData	= PACKDWORD_TRI(0, IMAGE_NRUTER , IMAGE_NRUTER);
 
 	sButInit.id = CHALLENGE_CANCEL;
-	sButInit.style = WBUT_PLAIN;
 	sButInit.pTip = _("Close");
-	sButInit.FontID = font_regular;
 	sButInit.pDisplay = intDisplayImageHilight;
 	widgAddButton(psRequestScreen, &sButInit);
 
 	// add slots
-	memset(&sButInit, 0, sizeof(W_BUTINIT));
+	sButInit = W_BUTINIT();
 	sButInit.formID		= CHALLENGE_FORM;
-	sButInit.style		= WBUT_PLAIN;
 	sButInit.width		= CHALLENGE_ENTRY_W;
 	sButInit.height		= CHALLENGE_ENTRY_H;
 	sButInit.pDisplay	= displayLoadSlot;
-	sButInit.FontID		= font_regular;
 
 	for (slotCount = 0; slotCount < totalslots; slotCount++)
 	{

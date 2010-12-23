@@ -46,6 +46,33 @@ struct TAB_POS
 	SDWORD		TabMultiplier;			//Added to keep track of tab scroll
 };
 
+W_FORMINIT::W_FORMINIT()
+	: disableChildren(false)
+	, majorPos(0), minorPos(0)
+	, majorSize(0), minorSize(0)
+	, majorOffset(0), minorOffset(0)
+	, tabVertOffset(0)
+	, tabHorzOffset(0)
+	, tabMajorThickness(0)
+	, tabMinorThickness(0)
+	, tabMajorGap(0)
+	, tabMinorGap(0)
+	, numStats(0)
+	, numButtons(0)
+	, numMajor(0)
+	// aNumMinors
+	, TabMultiplier(0)
+	, pTip(NULL)
+	// apMajorTips
+	// apMinorTips
+	, pTabDisplay(NULL)
+	, pFormDisplay(NULL)
+{
+	memset(aNumMinors, 0, sizeof(aNumMinors));
+	memset(apMajorTips, 0, sizeof(apMajorTips));
+	memset(apMinorTips, 0, sizeof(apMinorTips));
+}
+
 W_FORM::W_FORM(W_FORMINIT const *init)
 	: WIDGET(init, WIDG_FORM)
 	, disableChildren(init->disableChildren)

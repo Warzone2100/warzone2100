@@ -38,6 +38,12 @@ BOOL buttonStartUp(void)
 	return true;
 }
 
+W_BUTINIT::W_BUTINIT()
+	: pText(NULL)
+	, pTip(NULL)
+	, FontID(font_regular)
+{}
+
 W_BUTTON::W_BUTTON(W_BUTINIT const *init)
 	: WIDGET(init, WIDG_BUTTON)
 	, pText(init->pText)

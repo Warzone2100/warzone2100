@@ -624,7 +624,7 @@ bool sendDroidInfo(DROID *psDroid, DROID_ORDER order, uint32_t x, uint32_t y, co
 	DROID_ORDER_DATA sOrder = infoToOrderData(info, psStats);
 	if (!add)
 	{
-		psDroid->listPendingBegin = psDroid->listPendingEnd;
+		psDroid->listPendingBegin = psDroid->asOrderList.size();
 	}
 	orderDroidAddPending(psDroid, &sOrder);
 
