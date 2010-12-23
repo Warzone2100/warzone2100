@@ -566,6 +566,17 @@ BOOL PEGetSymFromAddr(HANDLE hProcess, DWORD dwAddress, LPTSTR lpSymName, DWORD 
 	return TRUE;
 }
 
+// Cross platform compatibility.
+// If you change this, make sure it doesn't break the cross compile or the native compile.
+// Don't ask why this is needed, have no idea.
+struct ItDoesntMatterIfItsADWORDOrAVoidPointer_JustCompileTheDamnThing
+{
+	ItDoesntMatterIfItsADWORDOrAVoidPointer_JustCompileTheDamnThing(void *whatever) : whatever(whatever) {}
+	operator void *() const { return whatever; }        // Oooh, look compiler1, I'm a void *, just what you wanted!
+	operator DWORD() const { return (DWORD)whatever; }  // Oooh, look compiler2, I'm a DWORD, just what you wanted!
+	void *whatever;
+};
+
 static
 BOOL WINAPI IntelStackWalk(
 	DWORD MachineType,
@@ -596,20 +607,28 @@ BOOL WINAPI IntelStackWalk(
 		StackFrame->AddrFrame.Offset = ContextRecord->Ebp;
 
 		StackFrame->AddrReturn.Mode = AddrModeFlat;
-		if(!ReadMemoryRoutine((HANDLE)hProcess, (void *) (StackFrame->AddrFrame.Offset + sizeof(DWORD)), (void *)&StackFrame->AddrReturn.Offset, sizeof(DWORD), NULL))
+// Error   26      error C2664: 'BOOL (HANDLE,DWORD,PVOID,DWORD,PDWORD)' :
+// cannot convert parameter 2 from 'void *' to 'DWORD'
+// c:\warzone\lib\exceptionhandler\exchndl.cpp     599
+// Error   27      error C2664: 'BOOL (HANDLE,DWORD,PVOID,DWORD,PDWORD)' :
+// cannot convert parameter 1 from 'DWORD' to 'HANDLE'  <----------------------- What the??! Ok, I'll cast "(HANDLE)hProcess" to a HANDLE again then.
+// c:\warzone\lib\exceptionhandler\exchndl.cpp     599
+// ../../../../lib/exceptionhandler/exchndl.cpp: In function ‘BOOL IntelStackWalk(DWORD, void*, void*, _tagSTACKFRAME*, CONTEXT*, BOOL (*)(void*, const void*, void*, DWORD, DWORD*), void* (*)(void*, DWORD), DWORD (*)(void*, DWORD), DWORD (*)(void*, void*, _tagADDRESS*))’:
+// ../../../../lib/exceptionhandler/exchndl.cpp:599: error: invalid conversion from ‘long unsigned int’ to ‘const void*’
+		if(!ReadMemoryRoutine((HANDLE)(HANDLE)hProcess, ItDoesntMatterIfItsADWORDOrAVoidPointer_JustCompileTheDamnThing((void *) (StackFrame->AddrFrame.Offset + sizeof(DWORD))), (void *)&StackFrame->AddrReturn.Offset, sizeof(DWORD), NULL))
 			return FALSE;
 	}
 	else
 	{
 		StackFrame->AddrPC.Offset = StackFrame->AddrReturn.Offset;
 		//AddrStack = AddrFrame + 2*sizeof(DWORD);
-		if(!ReadMemoryRoutine((HANDLE)hProcess, (void *) StackFrame->AddrFrame.Offset, (void *)&StackFrame->AddrFrame.Offset, sizeof(DWORD), NULL))
+		if(!ReadMemoryRoutine((HANDLE)(HANDLE)hProcess, ItDoesntMatterIfItsADWORDOrAVoidPointer_JustCompileTheDamnThing((void *) StackFrame->AddrFrame.Offset), (void *)&StackFrame->AddrFrame.Offset, sizeof(DWORD), NULL))
 			return FALSE;
-		if(!ReadMemoryRoutine((HANDLE)hProcess, (void *) (StackFrame->AddrFrame.Offset + sizeof(DWORD)), (void *)&StackFrame->AddrReturn.Offset, sizeof(DWORD), NULL))
+		if(!ReadMemoryRoutine((HANDLE)(HANDLE)hProcess, ItDoesntMatterIfItsADWORDOrAVoidPointer_JustCompileTheDamnThing((void *) (StackFrame->AddrFrame.Offset + sizeof(DWORD))), (void *)&StackFrame->AddrReturn.Offset, sizeof(DWORD), NULL))
 			return FALSE;
 	}
 
-	ReadMemoryRoutine((HANDLE)hProcess, (void *) (StackFrame->AddrFrame.Offset + 2*sizeof(DWORD)), (void *)StackFrame->Params, sizeof(StackFrame->Params), NULL);
+	ReadMemoryRoutine((HANDLE)(HANDLE)hProcess, ItDoesntMatterIfItsADWORDOrAVoidPointer_JustCompileTheDamnThing((void *) (StackFrame->AddrFrame.Offset + 2*sizeof(DWORD))), (void *)StackFrame->Params, sizeof(StackFrame->Params), NULL);
 
 	return TRUE;
 }
