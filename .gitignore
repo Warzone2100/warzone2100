@@ -76,7 +76,6 @@ win32/release/*
 *.lex.[ch]
 *.tab.[ch]
 /src/autorevision.h
-/src/force-linker.cpp
 /tests/maplist.txt
 
 # Generated executables:
