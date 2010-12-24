@@ -177,8 +177,8 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
-						ObjectFile="$(IntDir)\$(InputName)1.obj"
-						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						ObjectFile="$(IntDir)\"
+						XMLDocumentationFileName="$(IntDir)\"
 					/>
 				</FileConfiguration>
 				<FileConfiguration

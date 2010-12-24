@@ -357,7 +357,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\resource_parser.tab.h"
+				RelativePath=".\resource_parser.tab.hpp"
 				>
 			</File>
 			<File
@@ -377,7 +377,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\strres_parser.tab.h"
+				RelativePath=".\strres_parser.tab.hpp"
 				>
 			</File>
 			<File
