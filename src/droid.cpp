@@ -2752,7 +2752,7 @@ UDWORD fillTemplateList(DROID_TEMPLATE **ppList, STRUCTURE *psFactory, UDWORD li
 		psCurr = psCurr->psNext)
 	{
 		//must add Command Droid if currently in production
-		if (!getProductionQuantity(psFactory, psCurr))
+		if (!getProduction(psFactory, psCurr).quantity)
 		{
 			//can only have (MAX_CMDDROIDS) in the world at any one time
 			if (psCurr->droidType == DROID_COMMAND)
@@ -4547,11 +4547,10 @@ BOOL checkValidWeaponForProp(DROID_TEMPLATE *psTemplate)
 void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player, QUEUE_MODE mode)
 {
 	STRUCTURE   *psStruct;
-	UDWORD      inc, i;
 	STRUCTURE	*psList;
 
 	//see if any factory is currently using the template
-	for (i=0; i<2; i++)
+	for (unsigned i = 0; i < 2; ++i)
 	{
 		psList = NULL;
 		switch (i)
@@ -4569,25 +4568,20 @@ void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player, QUEU
 			{
 				FACTORY             *psFactory = &psStruct->pFunctionality->factory;
 
+				ProductionRun &productionRun = asProductionRun[psFactory->psAssemblyPoint->factoryType][psFactory->psAssemblyPoint->factoryInc];
+				for (unsigned inc = 0; inc < productionRun.size(); ++inc)
+				{
+					if (productionRun[inc].psTemplate == psTemplate)
+					{
+						//just need to erase this production run entry
+						productionRun.erase(productionRun.begin() + inc);
+						--inc;
+					}
+				}
+
 				if (psFactory->psSubject == NULL)
 				{
 					continue;
-				}
-
-				//if template belongs to the production player - check thru the production list (if struct is busy)
-				if (player == productionPlayer)
-				{
-					for (inc = 0; inc < MAX_PROD_RUN; inc++)
-					{
-						PRODUCTION_RUN *productionRun = &asProductionRun[psFactory->psAssemblyPoint->factoryType][psFactory->psAssemblyPoint->factoryInc][inc];
-						if (productionRun->psTemplate == psTemplate)
-						{
-							//just need to initialise this production run
-							productionRun->psTemplate = NULL;
-							productionRun->quantity = 0;
-							productionRun->built = 0;
-						}
-					}
 				}
 
 				// check not being built in the factory for the template player
@@ -4627,11 +4621,11 @@ void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player, QUEU
 						DROID_TEMPLATE *oldTemplate = (DROID_TEMPLATE *)malloc(sizeof(DROID_TEMPLATE));
 						debug(LOG_ERROR, "TODO: Fix this memory leak when deleting templates.");
 
-						*oldTemplate = *(DROID_TEMPLATE *)psFactory->psSubject;
+						*oldTemplate = *psFactory->psSubject;
 						oldTemplate->pName = NULL;
 						oldTemplate->psNext = NULL;
 
-						psFactory->psSubject = (BASE_STATS *)oldTemplate;
+						psFactory->psSubject = oldTemplate;
 					}
 				}
 			}

@@ -2620,16 +2620,15 @@ static void intProcessStats(UDWORD id)
 					//increase the production
 					factoryProdAdjust(psStructure, psNext, true);
 
-					if (!StructureIsManufacturingPending(psStructure))
-					{
-						structSetManufacture(psStructure, psNext, ModeQueue);
-					}
-
 					//need to check if this was the template that was mid-production
-					if (getProductionQuantity(psStructure, FactoryGetTemplate(psFactory)) == 0)
+					if (getProduction(psStructure, FactoryGetTemplate(psFactory)).numRemaining() == 0)
 					{
 						doNextProduction(psStructure, FactoryGetTemplate(psFactory), ModeQueue);
 						psNext = FactoryGetTemplate(psFactory);
+					}
+					else if (!StructureIsManufacturingPending(psStructure))
+					{
+						structSetManufacture(psStructure, psNext, ModeQueue);
 					}
 
 					if (StructureIsOnHoldPending(psStructure))
@@ -5120,9 +5119,9 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		to produce (on each button).*/
 		sLabInit = W_LABINIT();
 		sLabInit.id = IDSTAT_PRODSTART;
-		sLabInit.style = WIDG_HIDDEN;
+		sLabInit.style = WIDG_HIDDEN | WLAB_ALIGNRIGHT;
 
-		sLabInit.x = STAT_BUTWIDTH-12;
+		sLabInit.x = STAT_BUTWIDTH-12-6;
 		sLabInit.y = 2;
 
 		sLabInit.width = 12;
@@ -5902,16 +5901,15 @@ static void intStatsRMBPressed(UDWORD id)
 			//decrease the production
 			factoryProdAdjust(psStructure, psNext, false);
 
-			if (!StructureIsManufacturingPending(psStructure))
-			{
-				structSetManufacture(psStructure, psNext, ModeQueue);
-			}
-
 			//need to check if this was the template that was mid-production
-			if (getProductionQuantity(psStructure, FactoryGetTemplate(psFactory)) == 0)
+			if (getProduction(psStructure, FactoryGetTemplate(psFactory)).numRemaining() == 0)
 			{
 				doNextProduction(psStructure, FactoryGetTemplate(psFactory), ModeQueue);
 				psNext = FactoryGetTemplate(psFactory);
+			}
+			else if (!StructureIsManufacturingPending(psStructure))
+			{
+				structSetManufacture(psStructure, psNext, ModeQueue);
 			}
 
 			if (StructureIsOnHoldPending(psStructure))

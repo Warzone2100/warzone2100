@@ -26,6 +26,7 @@
  * file is almost as evil as hci.c
  */
 #include <string.h>
+#include <algorithm>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
@@ -156,7 +157,7 @@ uint32_t                factoryNumFlag[MAX_PLAYERS][NUM_FLAG_TYPES];
 #define MAX_IN_RUN		9
 
 //the list of what to build - only for selectedPlayer
-PRODUCTION_RUN		asProductionRun[NUM_FACTORY_TYPES][MAX_FACTORY][MAX_PROD_RUN];
+ProductionRun asProductionRun[NUM_FACTORY_TYPES][MAX_FACTORY];
 
 //stores which player the production list has been set up for
 SBYTE               productionPlayer;
@@ -300,8 +301,11 @@ void structureInitVars(void)
 		lasSatExists[i] = false;
 	}
 	//initialise the selectedPlayer's production run
-	memset(&asProductionRun, 0, sizeof(PRODUCTION_RUN) * NUM_FACTORY_TYPES *
-		MAX_FACTORY * MAX_PROD_RUN);
+	for (unsigned type = 0; type < NUM_FACTORY_TYPES; ++type)
+		for (unsigned facNum = 0; facNum < MAX_FACTORY; ++facNum)
+	{
+		asProductionRun[type][facNum].clear();
+	}
 	//set up at beginning of game which player will have a production list
 	productionPlayer = (SBYTE)selectedPlayer;
 
@@ -312,8 +316,11 @@ void structureInitVars(void)
 void changeProductionPlayer(UBYTE player)
 {
 	//clear the production run
-	memset(&asProductionRun, 0, sizeof(PRODUCTION_RUN) * NUM_FACTORY_TYPES *
-		MAX_FACTORY * MAX_PROD_RUN);
+	for (unsigned type = 0; type < NUM_FACTORY_TYPES; ++type)
+		for (unsigned facNum = 0; facNum < MAX_FACTORY; ++facNum)
+	{
+		asProductionRun[type][facNum].clear();
+	}
 	//set this player to have the production list
 	productionPlayer = player;
 }
@@ -1367,7 +1374,7 @@ BOOL structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, QUEUE_MO
 	if (mode == ModeQueue)
 	{
 		sendStructureInfo(psStruct, STRUCTUREINFO_MANUFACTURE, psTempl);
-		psStruct->pFunctionality->factory.psSubjectPending = (BASE_STATS *)psTempl;
+		psStruct->pFunctionality->factory.psSubjectPending = psTempl;
 		psStruct->pFunctionality->factory.statusPending = FACTORY_START_PENDING;
 		++psFact->pendingCount;
 
@@ -1375,7 +1382,7 @@ BOOL structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, QUEUE_MO
 	}
 
 	//assign it to the Factory
-	psFact->psSubject = (BASE_STATS *)psTempl;
+	psFact->psSubject = psTempl;
 
 	//set up the start time and build time
 	if (psTempl != NULL)
@@ -6944,11 +6951,19 @@ STRUCTURE	*findDeliveryFactory(FLAG_POSITION *psDelPoint)
 accrued but not used*/
 void cancelProduction(STRUCTURE *psBuilding, QUEUE_MODE mode)
 {
-	FACTORY *psFactory;
-
 	ASSERT_OR_RETURN( , StructIsFactory(psBuilding), "structure not a factory");
 
-	psFactory = &psBuilding->pFunctionality->factory;
+	FACTORY *psFactory = &psBuilding->pFunctionality->factory;
+
+	if (psBuilding->player == productionPlayer)
+	{
+		//clear the production run for this factory
+		asProductionRun[psFactory->psAssemblyPoint->factoryType][psFactory->psAssemblyPoint->factoryInc].clear();
+		psFactory->productionLoops = 0;
+
+		//tell the interface
+		intManufactureFinished(psBuilding);
+	}
 
 	if (mode == ModeQueue)
 	{
@@ -6958,16 +6973,6 @@ void cancelProduction(STRUCTURE *psBuilding, QUEUE_MODE mode)
 		psFactory->statusPending = FACTORY_CANCEL_PENDING;
 		++psFactory->pendingCount;
 
-		if (psBuilding->player == productionPlayer)
-		{
-			//clear the production run for this factory
-			memset(asProductionRun[psFactory->psAssemblyPoint->factoryType][psFactory->psAssemblyPoint->factoryInc], 0, sizeof(PRODUCTION_RUN) * MAX_PROD_RUN);
-			psFactory->productionLoops = 0;
-
-			//tell the interface
-			intManufactureFinished(psBuilding);
-		}
-
 		return;
 	}
 
@@ -6975,7 +6980,7 @@ void cancelProduction(STRUCTURE *psBuilding, QUEUE_MODE mode)
 	if (psFactory->psSubject)
 	{
 		// give the power back that was used until now
-		int secondsToBuild = ((DROID_TEMPLATE*)psFactory->psSubject)->buildPoints/psFactory->productionOutput;
+		int secondsToBuild = psFactory->psSubject->buildPoints/psFactory->productionOutput;
 		int secondsElapsed = secondsToBuild - psFactory->timeToBuild;
 		int powerUsed = 0;
 		if (secondsElapsed > secondsToBuild) // can happen if factory's been upgraded since droid was created
@@ -6984,7 +6989,7 @@ void cancelProduction(STRUCTURE *psBuilding, QUEUE_MODE mode)
 		}
 		if (secondsElapsed > 0)
 		{
-			powerUsed = (int)(((DROID_TEMPLATE *)psFactory->psSubject)->powerPoints*secondsElapsed)/secondsToBuild;
+			powerUsed = (int)psFactory->psSubject->powerPoints*secondsElapsed / secondsToBuild;
 		}
 		addPower(psBuilding->player, powerUsed);
 
@@ -7076,11 +7081,7 @@ void doNextProduction(STRUCTURE *psStructure, DROID_TEMPLATE *current, QUEUE_MOD
 
 	if (psNextTemplate != NULL)
 	{
-		if (mode == ModeImmediate)
-		{
-			cancelProduction(psStructure, ModeImmediate);
-		}
-		structSetManufacture(psStructure, psNextTemplate, ModeQueue);
+		structSetManufacture(psStructure, psNextTemplate, ModeQueue);  // ModeQueue instead of mode, since production lists aren't currently synchronised.
 	}
 	else
 	{
@@ -7088,60 +7089,58 @@ void doNextProduction(STRUCTURE *psStructure, DROID_TEMPLATE *current, QUEUE_MOD
 	}
 }
 
+bool ProductionRunEntry::operator ==(DROID_TEMPLATE *t) const
+{
+	return psTemplate->multiPlayerID == t->multiPlayerID;
+}
+
 /*this is called when a factory produces a droid. The Template returned is the next
 one to build - if any*/
 DROID_TEMPLATE * factoryProdUpdate(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate)
 {
-	UDWORD		inc, factoryType, factoryInc;
-	FACTORY		*psFactory;
-	bool            somethingInQueue = false;
-
 	CHECK_STRUCTURE(psStructure);
 	if (psStructure->player != productionPlayer)
 	{
-		return NULL;
+		return NULL;  // Production lists not currently synchronised.
 	}
 
-	psFactory = &psStructure->pFunctionality->factory;
-	factoryType = psFactory->psAssemblyPoint->factoryType;
-	factoryInc = psFactory->psAssemblyPoint->factoryInc;
+	FACTORY *psFactory = &psStructure->pFunctionality->factory;
+	ProductionRun &productionRun = asProductionRun[psFactory->psAssemblyPoint->factoryType][psFactory->psAssemblyPoint->factoryInc];
 
 	if (psTemplate != NULL)
 	{
 		//find the entry in the array for this template
-		for (inc=0; inc < MAX_PROD_RUN; inc++)
+		ProductionRun::iterator entry = std::find(productionRun.begin(), productionRun.end(), psTemplate);
+		if (entry != productionRun.end())
 		{
-			somethingInQueue = somethingInQueue || asProductionRun[factoryType][factoryInc][inc].quantity != 0;
-
-			if (asProductionRun[factoryType][factoryInc][inc].psTemplate != NULL && asProductionRun[factoryType][factoryInc][inc].psTemplate->multiPlayerID == psTemplate->multiPlayerID)
+			entry->built = std::min(entry->built + 1, entry->quantity);
+			if (!entry->isComplete())
 			{
-				asProductionRun[factoryType][factoryInc][inc].built++;
-				if (asProductionRun[factoryType][factoryInc][inc].built <
-					asProductionRun[factoryType][factoryInc][inc].quantity)
-				{
-					return psTemplate;
-				}
-				break;
+				return psTemplate;  // Build another of the same type.
+			}
+			if (psFactory->productionLoops == 0)
+			{
+				productionRun.erase(entry);
 			}
 		}
 	}
 	//find the next template to build - this just looks for the first uncompleted run
-	for (inc=0; inc < MAX_PROD_RUN; inc++)
+	for (unsigned inc = 0; inc < productionRun.size(); ++inc)
 	{
-		if (asProductionRun[factoryType][factoryInc][inc].built <
-			asProductionRun[factoryType][factoryInc][inc].quantity)
+		if (!productionRun[inc].isComplete())
 		{
-			return asProductionRun[factoryType][factoryInc][inc].psTemplate;
+			return productionRun[inc].psTemplate;
 		}
 	}
 	// Check that we aren't looping doing nothing.
-	if (!somethingInQueue)
+	if (productionRun.empty())
 	{
-		psFactory->productionLoops = 0;  // Don't do nothing infinitely many times.
+		if (psFactory->productionLoops != INFINITE_PRODUCTION)
+		{
+			psFactory->productionLoops = 0;  // Reset number of loops, unless set to infinite.
+		}
 	}
-	/*If you've got here there's nothing left to build unless factory is
-	on loop production*/
-	if (psFactory->productionLoops != 0)
+	else if (psFactory->productionLoops != 0)  //If you've got here there's nothing left to build unless factory is on loop production
 	{
 		//reduce the loop count if not infinite
 		if (psFactory->productionLoops != INFINITE_PRODUCTION)
@@ -7150,19 +7149,13 @@ DROID_TEMPLATE * factoryProdUpdate(STRUCTURE *psStructure, DROID_TEMPLATE *psTem
 		}
 
 		//need to reset the quantity built for each entry in the production list
-		for (inc=0; inc < MAX_PROD_RUN; inc++)
-		{
-			if (asProductionRun[factoryType][factoryInc][inc].psTemplate)
-			{
-				asProductionRun[factoryType][factoryInc][inc].built = 0;
-			}
-		}
+		std::for_each(productionRun.begin(), productionRun.end(), std::mem_fun_ref(&ProductionRunEntry::restart));
+
 		//get the first to build again
-		return factoryProdUpdate(psStructure, NULL);
+		return productionRun[0].psTemplate;
 	}
 	//if got to here then nothing left to produce so clear the array
-	memset(asProductionRun[factoryType][factoryInc], 0,
-		sizeof(PRODUCTION_RUN) * MAX_PROD_RUN);
+	productionRun.clear();
 	return NULL;
 }
 
@@ -7170,165 +7163,75 @@ DROID_TEMPLATE * factoryProdUpdate(STRUCTURE *psStructure, DROID_TEMPLATE *psTem
 //adjust the production run for this template type
 void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, BOOL add)
 {
-	SDWORD		spare = -1;
-	UDWORD		inc, factoryType, factoryInc;
-	FACTORY		*psFactory;
-	BOOL		bAssigned = false, bCheckForCancel = false;
-	UBYTE	built, quantity, remaining;
-
 	CHECK_STRUCTURE(psStructure);
 	ASSERT_OR_RETURN( , psStructure->player == productionPlayer, "called for incorrect player");
+	ASSERT_OR_RETURN( , psTemplate != NULL, "NULL template");
 
-	psFactory = &psStructure->pFunctionality->factory;
-	factoryType = psFactory->psAssemblyPoint->factoryType;
-	factoryInc = psFactory->psAssemblyPoint->factoryInc;
+	FACTORY *psFactory = &psStructure->pFunctionality->factory;
+	ProductionRun &productionRun = asProductionRun[psFactory->psAssemblyPoint->factoryType][psFactory->psAssemblyPoint->factoryInc];
 
 	//see if the template is already in the list
-	for (inc=0; inc < MAX_PROD_RUN; inc++)
-	{
-		if (asProductionRun[factoryType][factoryInc][inc].psTemplate == psTemplate)
-		{
-			//adjust the prod run
-			if (add)	//user left clicked, so increase # in queue
-			{
-				// Allows us to queue up more units up to MAX_IN_RUN instead of ignoring how many we have built from that queue
-				quantity = ++asProductionRun[factoryType][factoryInc][inc].quantity;
-				built = asProductionRun[factoryType][factoryInc][inc].built;
-				remaining = quantity - built;
-				// check to see if user canceled all orders in queue
-				if (remaining > MAX_IN_RUN)
-				{
-					asProductionRun[factoryType][factoryInc][inc].quantity = 0;
-					//initialise the template
-					asProductionRun[factoryType][factoryInc][inc].psTemplate = NULL;
-					bCheckForCancel = true;
-					//add power back if we were working on this one
-					if (psFactory->psSubject == (BASE_STATS *)psTemplate)
-					{
-						// FIXME: give power back
-					}
-				}
-			}
-			else	//user right clicked, so we subtract form queue
-			{
-				if (asProductionRun[factoryType][factoryInc][inc].quantity == 0)
-				{
-					asProductionRun[factoryType][factoryInc][inc].quantity = MAX_IN_RUN;
-				}
-				else
-				{
-					asProductionRun[factoryType][factoryInc][inc].quantity--;
-					//add power back if we were working on this one
-					if (psFactory->psSubject == (BASE_STATS *)psTemplate)
-					{
-						// FIXME: give power back
-					}
+	ProductionRun::iterator entry = std::find(productionRun.begin(), productionRun.end(), psTemplate);
 
-					if (asProductionRun[factoryType][factoryInc][inc].quantity == 0)
-					{
-						//initialise the template
-						asProductionRun[factoryType][factoryInc][inc].psTemplate = NULL;
-						bCheckForCancel = true;
-					}
-				}
-			}
-			bAssigned = true;
-			break;
-		}
-		//check to see if any empty slots
-		if (spare == -1 && asProductionRun[factoryType][factoryInc][inc].quantity == 0)
+	if (entry != productionRun.end())
+	{
+		if (psFactory->productionLoops == 0)
 		{
-			spare = inc;
+			entry->removeComplete();  // We are not looping, so remove the built droids from the list, so that quantity corresponds to the displayed number.
+		}
+
+		//adjust the prod run
+		entry->quantity += add? 1 : -1;
+		entry->built = std::min(entry->built, entry->quantity);
+
+		// Allows us to queue up more units up to MAX_IN_RUN instead of ignoring how many we have built from that queue
+		// check to see if user canceled all orders in queue
+		if (entry->quantity <= 0 || entry->quantity > MAX_IN_RUN)
+		{
+			productionRun.erase(entry);  // Entry empty, so get rid of it.
 		}
 	}
-
-	if (!bAssigned && spare != -1)
+	else
 	{
 		//start off a new template
-		asProductionRun[factoryType][factoryInc][spare].psTemplate = psTemplate;
-		if (add)
-		{
-			asProductionRun[factoryType][factoryInc][spare].quantity = 1;
-		}
-		else
-		{
-			//wrap around to max value
-			asProductionRun[factoryType][factoryInc][spare].quantity = MAX_IN_RUN;
-		}
+		ProductionRunEntry entry;
+		entry.psTemplate = psTemplate;
+		entry.quantity = add? 1 : MAX_IN_RUN;  //wrap around to max value
+		entry.built = 0;
+		productionRun.push_back(entry);
 	}
 	//if nothing is allocated then the current factory may have been cancelled
-	if (bCheckForCancel)
+	if (productionRun.empty())
 	{
-		for (inc=0; inc < MAX_PROD_RUN; inc++)
+		//must have cancelled eveything - so tell the struct
+		if (psFactory->productionLoops != INFINITE_PRODUCTION)
 		{
-			if (asProductionRun[factoryType][factoryInc][inc].psTemplate != NULL)
-			{
-				break;
-			}
-		}
-		if (inc == MAX_PROD_RUN)
-		{
-			//must have cancelled eveything - so tell the struct
-			psFactory->productionLoops = 0;
+			psFactory->productionLoops = 0;  // Reset number of loops, unless set to infinite.
 		}
 	}
 }
 
 /** checks the status of the production of a template
- * if totalquantity is true, it will return the total ordered amount
- * it it is false, it will return the amount that has already been built
  */
-static int getProduction(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, BOOL totalQuantity)
+ProductionRunEntry getProduction(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate)
 {
-	if (psTemplate == NULL)
+	if (psStructure == NULL || psStructure->player != productionPlayer || psTemplate == NULL)
 	{
-		return 0;  // Not producing any NULL pointers.
+		return ProductionRunEntry();  // Not producing any NULL pointers.
 	}
 
-	if (psStructure != NULL && psStructure->player == productionPlayer)
+	FACTORY *psFactory = &psStructure->pFunctionality->factory;
+	ProductionRun &productionRun = asProductionRun[psFactory->psAssemblyPoint->factoryType][psFactory->psAssemblyPoint->factoryInc];
+
+	//see if the template is in the list
+	ProductionRun::iterator entry = std::find(productionRun.begin(), productionRun.end(), psTemplate);
+	if (entry != productionRun.end())
 	{
-		FACTORY *psFactory = &psStructure->pFunctionality->factory;
-		unsigned factoryType = psFactory->psAssemblyPoint->factoryType;
-		unsigned factoryInc = psFactory->psAssemblyPoint->factoryInc;
-
-		//see if the template is in the list
-		unsigned inc;
-		for (inc=0; inc < MAX_PROD_RUN; inc++)
-		{
-			if (asProductionRun[factoryType][factoryInc][inc].psTemplate == NULL)
-			{
-				continue;
-			}
-
-			if (asProductionRun[factoryType][factoryInc][inc].psTemplate->multiPlayerID == psTemplate->multiPlayerID)
-			{
-				if (totalQuantity)
-				{
-					return asProductionRun[factoryType][factoryInc][inc].quantity;
-				}
-				else
-				{
-					return asProductionRun[factoryType][factoryInc][inc].built;
-				}
-			}
-		}
+		return *entry;
 	}
 
 	//not in the list so none being produced
-	return 0;
-}
-
-/// the total amount ordered of a specific template in the production list
-UDWORD	getProductionQuantity(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate)
-{
-	return getProduction(psStructure, psTemplate, true);
-}
-
-
-/// the number of times a specific template in the production list has been built
-UDWORD	getProductionBuilt(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate)
-{
-	return getProduction(psStructure, psTemplate, false);
+	return ProductionRunEntry();
 }
 
 
@@ -7336,31 +7239,25 @@ UDWORD	getProductionBuilt(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate)
 are being built*/
 UBYTE checkProductionForCommand(UBYTE player)
 {
-	UBYTE		factoryInc, inc, factoryType;
-	uint32_t        mask = 1;
-	UBYTE           quantity = 0;
+	unsigned quantity = 0;
 
 	if (player == productionPlayer)
 	{
 		//assumes Cyborg or VTOL droids are not Command types!
-		factoryType = FACTORY_FLAG;
+		unsigned factoryType = FACTORY_FLAG;
 
-		for (factoryInc = 0; factoryInc < MAX_FACTORY; factoryInc++)
+		uint32_t mask = 1;
+		for (unsigned factoryInc = 0; factoryInc < MAX_FACTORY; ++factoryInc)
 		{
 			//check to see if there is a factory
 			if ((factoryNumFlag[player][factoryType] & mask) == mask)
 			{
-				for (inc=0; inc < MAX_PROD_RUN; inc++)
+				ProductionRun &productionRun = asProductionRun[factoryType][factoryInc];
+				for (unsigned inc = 0; inc < productionRun.size(); ++inc)
 				{
-					if (asProductionRun[factoryType][factoryInc][inc].psTemplate)
+					if (productionRun[inc].psTemplate->droidType == DROID_COMMAND)
 					{
-						if (asProductionRun[factoryType][factoryInc][inc].psTemplate->
-							droidType == DROID_COMMAND)
-						{
-							quantity = (UBYTE)(quantity  + (asProductionRun[factoryType][
-								factoryInc][inc].quantity -	asProductionRun[
-								factoryType][factoryInc][inc].built));
-						}
+						quantity += productionRun[inc].numRemaining();
 					}
 				}
 			}
