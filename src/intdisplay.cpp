@@ -333,7 +333,7 @@ void intUpdateQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 
 		psTemplate = FactoryGetTemplate(StructureGetFactory(Structure));
 		int remaining = getProduction(Structure, psTemplate).numRemaining();
-		snprintf(Label->aText, sizeof(Label->aText), "%02d", remaining);
+		snprintf(Label->aText, sizeof(Label->aText), "%d", remaining);
 		Label->style &= ~WIDG_HIDDEN;
 	}
 	else
@@ -395,7 +395,14 @@ void intAddProdQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 		// now find out how many we have built
 		if (entry.isValid())
 		{
-			snprintf(Label->aText, sizeof(Label->aText), "%u", entry.numRemaining());
+			if (psStructure->pFunctionality->factory.productionLoops != 0)
+			{
+				snprintf(Label->aText, sizeof(Label->aText), "%u/%u", entry.numRemaining(), entry.quantity);
+			}
+			else
+			{
+				snprintf(Label->aText, sizeof(Label->aText), "%u", entry.numRemaining());
+			}
 			Label->style &= ~WIDG_HIDDEN;
 		}
 		else
@@ -415,15 +422,19 @@ void intAddLoopQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 	//loop depends on the factory
 	if (psStruct && psStruct->pFunctionality && !psStruct->died)
 	{
-		FACTORY		*psFactory = (FACTORY *)psStruct->pFunctionality;
+		FACTORY *psFactory = &psStruct->pFunctionality->factory;
 
 		if (psFactory->productionLoops == INFINITE_PRODUCTION)
 		{
 			sstrcpy(Label->aText, "∞");
 		}
+		else if (psFactory->productionLoops != 0)
+		{
+			snprintf(Label->aText, sizeof(Label->aText), "%u", psFactory->productionLoops + DEFAULT_LOOP);
+		}
 		else
 		{
-			snprintf(Label->aText, sizeof(Label->aText), "%02u", psFactory->productionLoops + DEFAULT_LOOP);
+			Label->aText[0] = '\0';  // Don't show "1" loop.
 		}
 		Label->style &= ~WIDG_HIDDEN;
 	}

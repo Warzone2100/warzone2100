@@ -7107,18 +7107,20 @@ DROID_TEMPLATE * factoryProdUpdate(STRUCTURE *psStructure, DROID_TEMPLATE *psTem
 	FACTORY *psFactory = &psStructure->pFunctionality->factory;
 	ProductionRun &productionRun = asProductionRun[psFactory->psAssemblyPoint->factoryType][psFactory->psAssemblyPoint->factoryInc];
 
-	//ASSERT(productionRun[inc].isValid(), "Bad ProductionRunEntry");
-
 	if (psTemplate != NULL)
 	{
 		//find the entry in the array for this template
 		ProductionRun::iterator entry = std::find(productionRun.begin(), productionRun.end(), psTemplate);
 		if (entry != productionRun.end())
 		{
-			++entry->built;
+			entry->built = std::min(entry->built + 1, entry->quantity);
 			if (!entry->isComplete())
 			{
-				return psTemplate;
+				return psTemplate;  // Build another of the same type.
+			}
+			if (psFactory->productionLoops == 0)
+			{
+				productionRun.erase(entry);
 			}
 		}
 	}
@@ -7133,11 +7135,12 @@ DROID_TEMPLATE * factoryProdUpdate(STRUCTURE *psStructure, DROID_TEMPLATE *psTem
 	// Check that we aren't looping doing nothing.
 	if (productionRun.empty())
 	{
-		psFactory->productionLoops = 0;  // Don't do nothing infinitely many times.
+		if (psFactory->productionLoops != INFINITE_PRODUCTION)
+		{
+			psFactory->productionLoops = 0;  // Reset number of loops, unless set to infinite.
+		}
 	}
-	/*If you've got here there's nothing left to build unless factory is
-	on loop production*/
-	if (psFactory->productionLoops != 0)
+	else if (psFactory->productionLoops != 0)  //If you've got here there's nothing left to build unless factory is on loop production
 	{
 		//reduce the loop count if not infinite
 		if (psFactory->productionLoops != INFINITE_PRODUCTION)
@@ -7172,12 +7175,18 @@ void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, BOOL 
 
 	if (entry != productionRun.end())
 	{
+		if (psFactory->productionLoops == 0)
+		{
+			entry->removeComplete();  // We are not looping, so remove the built droids from the list, so that quantity corresponds to the displayed number.
+		}
+
 		//adjust the prod run
 		entry->quantity += add? 1 : -1;
+		entry->built = std::min(entry->built, entry->quantity);
 
 		// Allows us to queue up more units up to MAX_IN_RUN instead of ignoring how many we have built from that queue
 		// check to see if user canceled all orders in queue
-		if (entry->isComplete() || entry->numRemaining() > MAX_IN_RUN)
+		if (entry->quantity <= 0 || entry->quantity > MAX_IN_RUN)
 		{
 			productionRun.erase(entry);  // Entry empty, so get rid of it.
 		}
@@ -7195,7 +7204,10 @@ void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, BOOL 
 	if (productionRun.empty())
 	{
 		//must have cancelled eveything - so tell the struct
-		psFactory->productionLoops = 0;
+		if (psFactory->productionLoops != INFINITE_PRODUCTION)
+		{
+			psFactory->productionLoops = 0;  // Reset number of loops, unless set to infinite.
+		}
 	}
 }
 

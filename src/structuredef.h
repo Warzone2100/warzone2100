@@ -321,13 +321,14 @@ struct ProductionRunEntry
 {
 	ProductionRunEntry() : quantity(0), built(0), psTemplate(NULL) {}
 	void restart() { built = 0; }
-	unsigned numRemaining() const { return quantity - built; }
+	void removeComplete() { quantity -= built; built = 0; }
+	int numRemaining() const { return quantity - built; }
 	bool isComplete() const { return numRemaining() <= 0; }
 	bool isValid() const { return psTemplate != NULL && quantity > 0 && built <= quantity; }
 	bool operator ==(DROID_TEMPLATE *t) const;
 
-	unsigned                        quantity;             //number to build
-	unsigned                        built;                //number built on current run
+	int                             quantity;             //number to build
+	int                             built;                //number built on current run
 	DROID_TEMPLATE *                psTemplate;           //template to build
 };
 typedef std::vector<ProductionRunEntry> ProductionRun;
