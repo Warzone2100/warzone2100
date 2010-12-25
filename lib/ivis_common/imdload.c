@@ -582,7 +582,7 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
 	s->texpage = iV_TEX_INVALID;
 
 
-	if (sscanf(pFileData, "%s %d%n", buffer, &s->npoints, &cnt) != 2)
+	if (sscanf(pFileData, "%255s %d%n", buffer, &s->npoints, &cnt) != 2)
 	{
 		debug(LOG_ERROR, "_imd_load_level(2): file corrupt");
 		return NULL;
@@ -605,7 +605,7 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
 	_imd_load_points( &pFileData, s );
 
 
-	if (sscanf(pFileData, "%s %d%n", buffer, &s->npolys, &cnt) != 2)
+	if (sscanf(pFileData, "%255s %d%n", buffer, &s->npolys, &cnt) != 2)
 	{
 		debug(LOG_ERROR, "_imd_load_level(3): file corrupt");
 		return NULL;
@@ -625,7 +625,7 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
 	while (!AtEndOfFile(pFileData, FileDataEnd)) // check for end of file (give or take white space)
 	{
 		// Scans in the line ... if we don't get 2 parameters then quit
-		if (sscanf(pFileData, "%s %d%n", buffer, &n, &cnt) != 2)
+		if (sscanf(pFileData, "%255s %d%n", buffer, &n, &cnt) != 2)
 		{
 			break;
 		}
@@ -676,7 +676,7 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 	Uint32 imd_flags; // FIXME UNUSED
 	BOOL bTextured = false;
 
-	if (sscanf(pFileData, "%s %d%n", buffer, &imd_version, &cnt) != 2)
+	if (sscanf(pFileData, "%255s %d%n", buffer, &imd_version, &cnt) != 2)
 	{
 		debug(LOG_ERROR, "iV_ProcessIMD %s bad version: (%s)", pFileName, buffer);
 		assert(false);
@@ -698,7 +698,7 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 	}
 
 	/* Flags are ignored now. Reading them in just to pass the buffer. */
-	if (sscanf(pFileData, "%s %x%n", buffer, &imd_flags, &cnt) != 2)
+	if (sscanf(pFileData, "%255s %x%n", buffer, &imd_flags, &cnt) != 2)
 	{
 		debug(LOG_ERROR, "iV_ProcessIMD %s bad flags: %s", pFileName, buffer);
 		return NULL;
@@ -706,7 +706,7 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 	pFileData += cnt;
 
 	/* This can be either texture or levels */
-	if (sscanf(pFileData, "%s %d%n", buffer, &nlevels, &cnt) != 2)
+	if (sscanf(pFileData, "%255s %d%n", buffer, &nlevels, &cnt) != 2)
 	{
 		debug(LOG_ERROR, "iV_ProcessIMD %s expecting TEXTURE or LEVELS: %s", pFileName, buffer);
 		return NULL;
@@ -730,7 +730,7 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 		}
 		texfile[i] = '\0';
 
-		if (sscanf(pFileData, "%s%n", texType, &cnt) != 1)
+		if (sscanf(pFileData, "%255s%n", texType, &cnt) != 1)
 		{
 			debug(LOG_ERROR, "iV_ProcessIMD %s texture info corrupt: %s", pFileName, buffer);
 			return NULL;
@@ -754,7 +754,7 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 		pFileData += cnt;
 
 		/* Now read in LEVELS directive */
-		if (sscanf(pFileData, "%s %d%n", buffer, &nlevels, &cnt) != 2)
+		if (sscanf(pFileData, "%255s %d%n", buffer, &nlevels, &cnt) != 2)
 		{
 			debug(LOG_ERROR, "iV_ProcessIMD %s bad levels info: %s", pFileName, buffer);
 			return NULL;
@@ -771,7 +771,7 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 	}
 
 	/* Read first LEVEL directive */
-	if (sscanf(pFileData, "%s %d%n", buffer, &level, &cnt) != 2)
+	if (sscanf(pFileData, "%255s %d%n", buffer, &level, &cnt) != 2)
 	{
 		debug(LOG_ERROR, "(_load_level) file corrupt -J");
 		return NULL;

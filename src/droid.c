@@ -1850,7 +1850,7 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 		memset(pDroidDesign, 0, sizeof(DROID_TEMPLATE));
 
 		//read the data into the storage - the data is delimited using comma's
-		sscanf(pDroidData, "%[^','],%d,%n", componentName, &pDroidDesign->multiPlayerID, &cnt);
+		sscanf(pDroidData, "%255[^,'\r\n],%d,%n", componentName, &pDroidDesign->multiPlayerID, &cnt);
 		pDroidData += cnt;
 
 		// Store unique name in pName
@@ -1865,7 +1865,7 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 		sstrcpy(pDroidDesign->aName, componentName);
 
 		//read in Body Name
-		sscanf(pDroidData, "%[^','],%n", componentName, &cnt);
+		sscanf(pDroidData, "%255[^,'\r\n],%n", componentName, &cnt);
 		pDroidData += cnt;
 
 		//get the Body stats pointer
@@ -1895,7 +1895,7 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 		}
 
 		//read in Brain Name
-		sscanf(pDroidData, "%[^','],%n", componentName, &cnt);
+		sscanf(pDroidData, "%255[^,'\r\n],%n", componentName, &cnt);
 		pDroidData += cnt;
 
 		//get the Brain stats pointer
@@ -1925,7 +1925,7 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 		}
 
 		//read in Construct Name
-		sscanf(pDroidData, "%[^','],%n", componentName, &cnt);
+		sscanf(pDroidData, "%255[^,'\r\n],%n", componentName, &cnt);
 				pDroidData += cnt;
 
 		//get the Construct stats pointer
@@ -1955,7 +1955,7 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 		}
 
 		//read in Ecm Name
-		sscanf(pDroidData, "%[^','],%n", componentName, &cnt);
+		sscanf(pDroidData, "%255[^,'\r\n],%n", componentName, &cnt);
 		pDroidData += cnt;
 
 		//get the Ecm stats pointer
@@ -1985,7 +1985,7 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 		}
 
 		//read in player type - decides whether or not humans can access it
-		sscanf(pDroidData, "%[^','],%n", playerType,&cnt);
+		sscanf(pDroidData, "%255[^,'\r\n],%n", playerType,&cnt);
 		pDroidData += cnt;
 
 		if (getTemplateFromUniqueName(pDroidDesign->pName, 0))
@@ -1995,7 +1995,7 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 		}
 
 		//read in Propulsion Name
-		sscanf(pDroidData, "%[^','],%n", componentName, &cnt);
+		sscanf(pDroidData, "%255[^,'\r\n],%n", componentName, &cnt);
 		pDroidData += cnt;
 
 		//get the Propulsion stats pointer
@@ -2025,7 +2025,7 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 		}
 
 		//read in Repair Name
-		sscanf(pDroidData, "%[^','],%n", componentName, &cnt);
+		sscanf(pDroidData, "%255[^,'\r\n],%n", componentName, &cnt);
 		pDroidData += cnt;
 
 		//get the Repair stats pointer
@@ -2055,7 +2055,7 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 		}
 
 		//read in droid type - only interested if set to PERSON
-		sscanf(pDroidData, "%[^','],%n", componentName, &cnt);
+		sscanf(pDroidData, "%255[^,'\r\n],%n", componentName, &cnt);
 		pDroidData += cnt;
 
 		if (!strcmp(componentName, "PERSON"))
@@ -2089,7 +2089,7 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 		}
 
 		//read in Sensor Name
-		sscanf(pDroidData, "%[^','],%n", componentName, &cnt);
+		sscanf(pDroidData, "%255[^,'\r\n],%n", componentName, &cnt);
 		pDroidData += cnt;
 
 		//get the Sensor stats pointer
@@ -2327,7 +2327,7 @@ BOOL loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize)
 			TemplateName[MAX_STR_LENGTH] = {'\0'};
 
 		//read the data into the storage - the data is delimeted using comma's
-		sscanf(pWeaponData, "%[^','],%[^','],%[^','],%[^','],%d",
+		sscanf(pWeaponData, "%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%d",
 			TemplateName, WeaponName[0], WeaponName[1], WeaponName[2], &player);
 
 		for (i = 0; i < MAX_PLAYERS + 1; i++)

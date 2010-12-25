@@ -157,7 +157,7 @@ BOOL loadFeatureStats(const char *pFeatureData, UDWORD bufferSize)
 
 
 		//read the data into the storage - the data is delimeted using comma's
-		sscanf(pFeatureData, "%[^','],%d,%d,%d,%d,%d,%[^','],%[^','],%d,%d,%d",
+		sscanf(pFeatureData, "%255[^,'\r\n],%d,%d,%d,%d,%d,%255[^,'\r\n],%255[^,'\r\n],%d,%d,%d",
 			featureName, &Width, &Breadth,
 			&damageable, &psFeature->armourValue, &psFeature->body,
 			GfxFile, type, &tileDraw, &allowLOS,

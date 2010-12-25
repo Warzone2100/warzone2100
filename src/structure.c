@@ -563,8 +563,8 @@ BOOL loadStructureStats(const char *pStructData, UDWORD bufferSize)
 		sensorType[0] = '\0';
 		baseIMD[0] = '\0';
 
-		sscanf(pStructData,"%[^','],%[^','],%[^','],%[^','],%d,%d,%d,%[^','],\
-			%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%[^','],%[^','],%d,%[^','],%[^','],\
+		sscanf(pStructData,"%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%d,%d,%d,%255[^,'\r\n],\
+			%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%255[^,'\r\n],%255[^,'\r\n],%d,%255[^,'\r\n],%255[^,'\r\n],\
 			%d,%d",
 			StructureName, type, dummy, strength, &psStructure->terrainType,
 			&psStructure->baseWidth, &psStructure->baseBreadth, foundation,
@@ -822,7 +822,7 @@ BOOL loadStructureWeapons(const char *pWeaponData, UDWORD bufferSize)
 			WeaponName[j][0] = '\0';
 		}
 
-		sscanf(pWeaponData, "%[^','],%[^','],%[^','],%[^','],%[^','],%*d", StructureName, WeaponName[0], WeaponName[1], WeaponName[2], WeaponName[3]);
+		sscanf(pWeaponData, "%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%*d", StructureName, WeaponName[0], WeaponName[1], WeaponName[2], WeaponName[3]);
 
 		weaponFound = structureFound = false;
 		//loop through each Structure_Stat to compare the name
@@ -884,7 +884,7 @@ BOOL loadStructureFunctions(const char *pFunctionData, UDWORD bufferSize)
 		//read the data into the storage - the data is delimeted using comma's
 		StructureName[0] = '\0';
 		FunctionName[0] = '\0';
-		sscanf(pFunctionData, "%[^','],%[^','],%*d", StructureName, FunctionName);
+		sscanf(pFunctionData, "%255[^,'\r\n],%255[^,'\r\n],%*d", StructureName, FunctionName);
 		functionFound = structureFound = false;
 
 		//loop through each Structure_Stat to compare the name
@@ -990,7 +990,7 @@ BOOL loadStructureStrengthModifiers(const char *pStrengthModData, UDWORD bufferS
 	for (i=0; i < NumRecords; i++)
 	{
 		//read the data into the storage - the data is delimeted using comma's
-		sscanf(pStrengthModData,"%[^','],%[^','],%d",
+		sscanf(pStrengthModData,"%255[^,'\r\n],%255[^,'\r\n],%d",
 			weaponEffectName, strengthName, &modifier);
 
 		//get the weapon effect inc

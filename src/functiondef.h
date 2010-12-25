@@ -145,13 +145,9 @@ typedef struct _production_function
 	//common stats
 	FUNCTION_STATS;
 
-	UWORD					capacity;			/*The max size of body the factory
-												  can produce*/
+	UBYTE                                   capacity;               // The max size of body the factory can produce
 	UWORD					productionOutput;	/*Droid Build Points Produced Per
 												  Build Cycle*/
-	//struct _propulsion_types*		propulsionType;
-	//UBYTE					propulsionType;		/*The type of propulsion the facility
-	//											  can produce*/
 } PRODUCTION_FUNCTION;
 
 /*To research topics available*/
