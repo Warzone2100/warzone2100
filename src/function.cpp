@@ -175,13 +175,13 @@ static BOOL loadProduction(const char *pData)
 	//read the data in
 	functionName[0] = '\0';
 	bodySize[0] = '\0';
-	sscanf(pData, "%[^','],%[^','],%d", functionName, bodySize,
+	sscanf(pData, "%255[^,'\r\n],%255[^,'\r\n],%d", functionName, bodySize,
 		&productionOutput);
 
 	//allocate storage for the name
 	storeName((FUNCTION *)psFunction, functionName);
 
-	if (!getBodySize(bodySize, (UBYTE*)&psFunction->capacity))
+	if (!getBodySize(bodySize, &psFunction->capacity))
 	{
 
 		ASSERT( false, "loadProduction: unknown body size for %s",psFunction->pName );
@@ -233,7 +233,7 @@ static BOOL loadProductionUpgradeFunction(const char *pData)
 
 	//read the data in
 	functionName[0] = '\0';
-	sscanf(pData, "%[^','],%d,%d,%d,%d", functionName, &factory,
+	sscanf(pData, "%255[^,'\r\n],%d,%d,%d,%d", functionName, &factory,
 		&cyborg, &vtol,&outputModifier);
 
 
@@ -298,7 +298,7 @@ static BOOL loadResearchFunction(const char *pData)
 
 	//read the data in
 	functionName[0] = '\0';
-	sscanf(pData, "%[^','],%d", functionName, &psFunction->researchPoints);
+	sscanf(pData, "%255[^,'\r\n],%d", functionName, &psFunction->researchPoints);
 
 	//allocate storage for the name
 	storeName((FUNCTION *)psFunction, functionName);
@@ -332,7 +332,7 @@ static BOOL loadReArmFunction(const char *pData)
 
 	//read the data in
 	functionName[0] = '\0';
-	sscanf(pData, "%[^','],%d", functionName, &psFunction->reArmPoints);
+	sscanf(pData, "%255[^,'\r\n],%d", functionName, &psFunction->reArmPoints);
 
 	//allocate storage for the name
 	storeName((FUNCTION *)psFunction, functionName);
@@ -369,7 +369,7 @@ static BOOL loadUpgradeFunction(const char *pData, UBYTE type)
 
 	//read the data in
 	functionName[0] = '\0';
-	sscanf(pData, "%[^','],%d", functionName, &modifier);
+	sscanf(pData, "%255[^,'\r\n],%d", functionName, &modifier);
 
 	//allocate storage for the name
 	storeName((FUNCTION *)psFunction, functionName);
@@ -453,7 +453,7 @@ static BOOL loadDroidBodyUpgradeFunction(const char *pData)
 
 	//read the data in
 	functionName[0] = '\0';
-	sscanf(pData, "%[^','],%d,%d,%d,%d,%d,%d", functionName, &modifier,
+	sscanf(pData, "%255[^,'\r\n],%d,%d,%d,%d,%d,%d", functionName, &modifier,
 		&body, &armourKinetic,	&armourHeat, &droid, &cyborg);
 
 	//allocate storage for the name
@@ -520,7 +520,7 @@ static BOOL loadDroidSensorUpgradeFunction(const char *pData)
 
 	//read the data in
 	functionName[0] = '\0';
-	sscanf(pData, "%[^','],%d,%d", functionName, &modifier, &range);
+	sscanf(pData, "%255[^,'\r\n],%d,%d", functionName, &modifier, &range);
 
 	//allocate storage for the name
 	storeName((FUNCTION *)psFunction, functionName);
@@ -570,7 +570,7 @@ static BOOL loadWeaponUpgradeFunction(const char *pData)
 	//read the data in
 	functionName[0] = '\0';
 	weaponSubClass[0] = '\0';
-	sscanf(pData, "%[^','],%[^','],%d,%d,%d,%d,%d,%d,%d", functionName,
+	sscanf(pData, "%255[^,'\r\n],%255[^,'\r\n],%d,%d,%d,%d,%d,%d,%d", functionName,
 		weaponSubClass, &firePause, &shortHit, &longHit, &damage, &radiusDamage,
 		&incenDamage, &radiusHit);
 
@@ -639,7 +639,7 @@ static BOOL loadStructureUpgradeFunction(const char *pData)
 
 	//read the data in
 	functionName[0] = '\0';
-	sscanf(pData, "%[^','],%d,%d,%d", functionName, &armour, &body, &resistance);
+	sscanf(pData, "%255[^,'\r\n],%d,%d,%d", functionName, &armour, &body, &resistance);
 
 	//allocate storage for the name
 	storeName((FUNCTION *)psFunction, functionName);
@@ -690,7 +690,7 @@ static BOOL loadWallDefenceUpgradeFunction(const char *pData)
 
 	//read the data in
 	functionName[0] = '\0';
-	sscanf(pData, "%[^','],%d,%d", functionName, &armour, &body);
+	sscanf(pData, "%255[^,'\r\n],%d,%d", functionName, &armour, &body);
 
 	//allocate storage for the name
 	storeName((FUNCTION *)psFunction, functionName);
@@ -739,7 +739,7 @@ static BOOL loadPowerGenFunction(const char *pData)
 
 	//read the data in
 	functionName[0] = '\0';
-	sscanf(pData, "%[^','],%d,%d,%d,%d,%d,%d", functionName,
+	sscanf(pData, "%255[^,'\r\n],%d,%d,%d,%d,%d,%d", functionName,
 		&psFunction->powerOutput, &psFunction->powerMultiplier,
 		&psFunction->criticalMassChance, &psFunction->criticalMassRadius,
 		&psFunction->criticalMassDamage, &psFunction->radiationDecayTime);
@@ -801,7 +801,7 @@ static BOOL loadResourceFunction(const char *pData)
 
 	//read the data in
 	functionName[0] = '\0';
-	sscanf(pData, "%[^','],%d", functionName, &psFunction->maxPower);
+	sscanf(pData, "%255[^,'\r\n],%d", functionName, &psFunction->maxPower);
 
 	//allocate storage for the name
 	storeName((FUNCTION *)psFunction, functionName);
@@ -837,7 +837,7 @@ static BOOL loadRepairDroidFunction(const char *pData)
 
 	//read the data in
 	functionName[0] = '\0';
-	sscanf(pData, "%[^','],%d", functionName,
+	sscanf(pData, "%255[^,'\r\n],%d", functionName,
 		&psFunction->repairPoints);
 
 	//allocate storage for the name
@@ -878,7 +878,7 @@ static BOOL loadWallFunction(const char *pData)
 	//read the data in
 	functionName[0] = '\0';
 	structureName[0] = '\0';
-	sscanf(pData, "%[^','],%[^','],%*d", functionName, structureName);
+	sscanf(pData, "%255[^,'\r\n],%255[^,'\r\n],%*d", functionName, structureName);
 
 	//allocate storage for the name
 	storeName((FUNCTION *)psFunction, functionName);
@@ -1541,7 +1541,7 @@ BOOL loadFunctionStats(const char *pFunctionData, UDWORD bufferSize)
 	{
 		//read the data into the storage - the data is delimeted using comma's
 		FunctionType[0] = '\0';
-		sscanf(pFunctionData, "%[^',']", FunctionType);
+		sscanf(pFunctionData, "%255[^,'\r\n]", FunctionType);
 		type = functionType(FunctionType);
 		pFunctionData += (strlen(FunctionType)+1);
 

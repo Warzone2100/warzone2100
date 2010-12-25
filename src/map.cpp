@@ -224,7 +224,7 @@ BOOL mapNew(UDWORD width, UDWORD height)
 static void init_tileNames(int type)
 {
 	char	*pFileData = NULL;
-	char	name[100] = {'\0'};
+	char	name[MAX_STR_LENGTH] = {'\0'};
 	int		numlines = 0, i = 0, cnt = 0;
 	uint32_t	fileSize = 0;
 
@@ -240,7 +240,7 @@ static void init_tileNames(int type)
 				abort();
 			}
 
-			sscanf(pFileData, "%[^','],%d%n", name, &numlines, &cnt);
+			sscanf(pFileData, "%255[^,'\r\n],%d%n", name, &numlines, &cnt);
 			pFileData += cnt;
 
 			if (strcmp("arizona_enum", name))
@@ -258,7 +258,7 @@ static void init_tileNames(int type)
 				abort();
 			}
 
-			sscanf(pFileData, "%[^','],%d%n", name, &numlines, &cnt);
+			sscanf(pFileData, "%255[^,'\r\n],%d%n", name, &numlines, &cnt);
 			pFileData += cnt;
 
 			if (strcmp("urban_enum", name))
@@ -276,7 +276,7 @@ static void init_tileNames(int type)
 				abort();
 			}
 
-			sscanf(pFileData, "%[^','],%d%n", name, &numlines, &cnt);
+			sscanf(pFileData, "%255[^,'\r\n],%d%n", name, &numlines, &cnt);
 			pFileData += cnt;
 
 			if (strcmp("rockie_enum", name))
@@ -302,12 +302,12 @@ static void init_tileNames(int type)
 	//increment the pointer to the start of the next record
 	pFileData = strchr(pFileData,'\n') + 1;
 
-	Tile_names = (char *)malloc(numlines * sizeof(char[40]) );
-	memset(Tile_names, 0x0, (numlines * sizeof(char[40])));
+	Tile_names = (char *)malloc(numlines * sizeof(char[MAX_STR_LENGTH]) );
+	memset(Tile_names, 0x0, (numlines * sizeof(char[MAX_STR_LENGTH])));
 
 	for (i=0; i < numlines; i++)
 	{
-		sscanf(pFileData, "%s%n", &Tile_names[i*40], &cnt);
+		sscanf(pFileData, "%255[^,'\r\n]%n", &Tile_names[i*MAX_STR_LENGTH], &cnt);
 		pFileData += cnt;
 		//increment the pointer to the start of the next record
 		pFileData = strchr(pFileData,'\n') + 1;
@@ -320,9 +320,9 @@ static void init_tileNames(int type)
 static BOOL mapLoadGroundTypes(void)
 {
 	char	*pFileData = NULL;
-	char	tilename[255] = {'\0'};
-	char	textureName[255] = {'\0'};
-	char	textureType[255] = {'\0'};
+	char	tilename[MAX_STR_LENGTH] = {'\0'};
+	char	textureName[MAX_STR_LENGTH] = {'\0'};
+	char	textureType[MAX_STR_LENGTH] = {'\0'};
 	double	textureSize = 0.f;
 	int		numlines = 0;
 	int		cnt = 0, i = 0;
@@ -342,7 +342,7 @@ fallback:
 			abort();
 		}
 
-		sscanf(pFileData, "%[^','],%d%n", tilename, &numlines, &cnt);
+		sscanf(pFileData, "%255[^,'\r\n],%d%n", tilename, &numlines, &cnt);
 		pFileData += cnt;
 
 		if (strcmp(tilename, "tertilesc1hw"))
@@ -359,7 +359,7 @@ fallback:
 
 		for (i=0; i < numlines; i++)
 		{
-			sscanf(pFileData, "%[^','],%[^','],%lf%n", textureType, textureName, &textureSize, &cnt);
+			sscanf(pFileData, "%255[^,'\r\n],%255[^,'\r\n],%lf%n", textureType, textureName, &textureSize, &cnt);
 			pFileData += cnt;
 			//increment the pointer to the start of the next record
 			pFileData = strchr(pFileData,'\n') + 1;
@@ -384,7 +384,7 @@ fallback:
 			goto fallback;
 		}
 
-		sscanf(pFileData, "%[^','],%d%n", tilename, &numlines, &cnt);
+		sscanf(pFileData, "%255[^,'\r\n],%d%n", tilename, &numlines, &cnt);
 		pFileData += cnt;
 
 		if (strcmp(tilename, "tertilesc2hw"))
@@ -401,7 +401,7 @@ fallback:
 
 		for (i=0; i < numlines; i++)
 		{
-			sscanf(pFileData, "%[^','],%[^','],%lf%n", textureType, textureName, &textureSize, &cnt);
+			sscanf(pFileData, "%255[^,'\r\n],%255[^,'\r\n],%lf%n", textureType, textureName, &textureSize, &cnt);
 			pFileData += cnt;
 			//increment the pointer to the start of the next record
 			pFileData = strchr(pFileData,'\n') + 1;
@@ -426,7 +426,7 @@ fallback:
 			goto fallback;
 		}
 
-		sscanf(pFileData, "%[^','],%d%n", tilename, &numlines, &cnt);
+		sscanf(pFileData, "%255[^,'\r\n],%d%n", tilename, &numlines, &cnt);
 		pFileData += cnt;
 
 		if (strcmp(tilename, "tertilesc3hw"))
@@ -443,7 +443,7 @@ fallback:
 
 		for (i=0; i < numlines; i++)
 		{
-			sscanf(pFileData, "%[^','],%[^','],%lf%n", textureType, textureName, &textureSize, &cnt);
+			sscanf(pFileData, "%255[^,'\r\n],%255[^,'\r\n],%lf%n", textureType, textureName, &textureSize, &cnt);
 			pFileData += cnt;
 			//increment the pointer to the start of the next record
 			pFileData = strchr(pFileData,'\n') + 1;
@@ -473,8 +473,8 @@ fallback:
 static void SetGroundForTile(const char *filename, const char *nametype)
 {
 	char	*pFileData = NULL;
-	char	tilename[255] = {'\0'};
-	char	val1[25], val2[25], val3[25], val4[25];
+	char	tilename[MAX_STR_LENGTH] = {'\0'};
+	char	val1[MAX_STR_LENGTH], val2[MAX_STR_LENGTH], val3[MAX_STR_LENGTH], val4[MAX_STR_LENGTH];
 	int		numlines = 0;
 	int		cnt = 0, i = 0;
 	uint32_t	fileSize = 0;
@@ -486,7 +486,7 @@ static void SetGroundForTile(const char *filename, const char *nametype)
 		abort();
 	}
 
-	sscanf(pFileData, "%[^','],%d%n", tilename, &numlines, &cnt);
+	sscanf(pFileData, "%255[^,'\r\n],%d%n", tilename, &numlines, &cnt);
 	pFileData += cnt;
 
 	if (strcmp(tilename, nametype))
@@ -503,7 +503,7 @@ static void SetGroundForTile(const char *filename, const char *nametype)
 
 	for (i=0; i < numlines; i++)
 	{
-		sscanf(pFileData, "%[^','],%[^','],%[^','],%s%n", val1, val2, val3, val4, &cnt);
+		sscanf(pFileData, "%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n]%n", val1, val2, val3, val4, &cnt);
 		pFileData += cnt;
 		//increment the pointer to the start of the next record
 		pFileData = strchr(pFileData,'\n') + 1;
@@ -525,7 +525,7 @@ static int getTextureType(const char *textureType)
 	int i = 0;
 	for (i=0; i < numTile_names; i++)
 	{
-		if (!strcmp(textureType, &Tile_names[i*40]))
+		if (!strcmp(textureType, &Tile_names[i*MAX_STR_LENGTH]))
 		{
 			return i;
 		}
@@ -674,7 +674,7 @@ static int determineGroundType(int x, int y, const char *tileset)
 // reads in the decal array for the requested tileset.
 static void SetDecals(const char *filename, const char *decal_type)
 {
-	char decalname[50], *pFileData;
+	char decalname[MAX_STR_LENGTH], *pFileData;
 	int numlines, cnt, i, tiledecal;
 	uint32_t fileSize;
 
@@ -686,7 +686,7 @@ static void SetDecals(const char *filename, const char *decal_type)
 		abort();
 	}
 
-	sscanf(pFileData, "%[^','],%d%n", decalname, &numlines, &cnt);
+	sscanf(pFileData, "%255[^,'\r\n],%d%n", decalname, &numlines, &cnt);
 	pFileData += cnt;
 
 	if (strcmp(decalname, decal_type))

@@ -40,8 +40,6 @@
 
 // The current message being displayed
 extern MESSAGE			*psCurrentMsg;
-// The display stats for the current messages' text
-extern TEXT_DISPLAY		currentTextDisplay;
 
 /* Add the Intelligence Map widgets to the widget screen */
 //extern BOOL intAddIntelMap(BOOL playCurrent);

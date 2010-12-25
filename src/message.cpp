@@ -509,7 +509,7 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 		name[0] = '\0';
 
 		//read the data into the storage - the data is delimeted using comma's
-		sscanf(pViewMsgData,"%[^','],%d%n",name, &numText,&cnt);
+		sscanf(pViewMsgData,"%255[^,'\r\n],%d%n",name, &numText,&cnt);
 		pViewMsgData += cnt;
 
 		//check not loading up too many text strings
@@ -539,7 +539,7 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 		for (dataInc = 0; dataInc < psViewData->numText; dataInc++)
 		{
 			name[0] = '\0';
-			sscanf(pViewMsgData,",%[^',']%n",name,&cnt);
+			sscanf(pViewMsgData,",%255[^,'\r\n]%n",name,&cnt);
 			pViewMsgData += cnt;
 
 			// Get the string from the ID string
@@ -569,7 +569,7 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 			imdName2[0] = '\0';
 			string[0] = '\0';
 			audioName[0] = '\0';
-			sscanf(pViewMsgData,",%[^','],%[^','],%[^','],%[^','],%d%n",
+			sscanf(pViewMsgData,",%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%d%n",
 				imdName, imdName2, string, audioName, &dummy, &cnt);
 			pViewMsgData += cnt;
 			psViewRes = (VIEW_RESEARCH *)psViewData->pData;
@@ -645,7 +645,7 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 				//load extradat for extended type only
 				if (psViewData->type == VIEW_RPL)
 				{
-					sscanf(pViewMsgData, ",%[^','],%d%n", name, &count,&cnt);
+					sscanf(pViewMsgData, ",%255[^,'\r\n],%d%n", name, &count,&cnt);
 					pViewMsgData += cnt;
 					if (count > MAX_DATA)
 					{
@@ -658,7 +658,7 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 				}
 				else //extended type
 				{
-					sscanf(pViewMsgData, ",%[^','],%d,%d%n", name, &count,	&count2,&cnt);
+					sscanf(pViewMsgData, ",%255[^,'\r\n],%d,%d%n", name, &count,	&count2,&cnt);
 					pViewMsgData += cnt;
 					if (count > MAX_DATA)
 					{
@@ -688,7 +688,7 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 					seqInc++)
 				{
 					name[0] = '\0';
-					sscanf(pViewMsgData,",%[^',']%n", name,&cnt);
+					sscanf(pViewMsgData,",%255[^,'\r\n]%n", name,&cnt);
 					pViewMsgData += cnt;
 
 					// Get the string from the ID string
@@ -700,7 +700,7 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 					}
 				}
 				//get the audio text string
-				sscanf(pViewMsgData,",%[^','],%d%n", audioName, &dummy, &cnt);
+				sscanf(pViewMsgData,",%255[^,'\r\n],%d%n", audioName, &dummy, &cnt);
 				pViewMsgData += cnt;
 
 				if (strcmp(audioName, "0"))
@@ -733,7 +733,7 @@ VIEWDATA *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 				int tmp;
 
 				audioName[0] = '\0';
-				sscanf( pViewMsgData, ", %d,%d,%d,%[^','],%d%n", &LocX, &LocY, &LocZ,
+				sscanf( pViewMsgData, ", %d,%d,%d,%255[^,'\r\n],%d%n", &LocX, &LocY, &LocZ,
 						audioName, &tmp, &cnt);
 				proxType = (PROX_TYPE)tmp;
 			}

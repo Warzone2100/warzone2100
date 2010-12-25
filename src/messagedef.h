@@ -86,9 +86,6 @@ typedef struct _view_replay
 {
 	UBYTE		numSeq;
 	SEQ_DISPLAY *pSeqList;
-	//char		**ppSeqName;
-	//UBYTE		numText;	//the number of textmessages associated with this sequence
-	//char		**ppTextMsg;	//Pointer to text messages - if any
 } VIEW_REPLAY;
 
 // info required to view a proximity message
@@ -144,16 +141,6 @@ struct PROXIMITY_DISPLAY : public OBJECT_POSITION
 	UDWORD			buttonID;				//id of the button for the interface
 	PROXIMITY_DISPLAY *     psNext;                         //pointer to the next in the list
 };
-
-//used to display the text messages in 3D view of the Intel display
-typedef struct _text_display
-{
-	UDWORD			totalFrames;			//number of frames for whole message to be displayed
-	UDWORD			startTime;				//time started text display
-	UDWORD			font;					//id of which font to use
-	UWORD			fontColour;				//colour number
-	char			text[MAX_STR_LENGTH-1];	//storage to hold the currently displayed text
-} TEXT_DISPLAY;
 
 typedef struct _viewData_list
 {
