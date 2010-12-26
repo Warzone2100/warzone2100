@@ -23,6 +23,8 @@
 #ifndef __INCLUDED_SRC_STATS_H__
 #define __INCLUDED_SRC_STATS_H__
 
+#include <utility>
+
 #include "objectdef.h"
 
 /**************************************************************************************

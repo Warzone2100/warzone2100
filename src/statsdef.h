@@ -26,6 +26,84 @@
 
 #include "lib/ivis_opengl/ivisdef.h"
 
+#include <vector>
+#include <algorithm>
+#include "lib/framework/utf.h"  // For QString.
+
+static inline bool stringToEnumSortFunction(std::pair<char const *, unsigned> const &a, std::pair<char const *, unsigned> const &b) { return strcmp(a.first, b.first) < 0; }
+
+template <typename Enum>
+struct StringToEnum
+{
+	operator std::pair<char const *, unsigned>() const { return std::make_pair(string, value); }
+
+	char const *    string;
+	Enum            value;
+};
+
+template <typename Enum>
+struct StringToEnumMap : public std::vector<std::pair<char const *, unsigned> >
+{
+	typedef std::vector<std::pair<char const *, unsigned> > V;
+
+	StringToEnumMap(StringToEnum<Enum> const entries[], unsigned numEntries) : V(entries, entries + numEntries) { std::sort(V::begin(), V::end(), stringToEnumSortFunction); }
+};
+
+/// Read-only view of file data in "A,1,2\nB,3,4" format as a 2D array-like object. Note — does not copy the file data.
+class TableView
+{
+public:
+	TableView(char const *buffer, unsigned size);
+
+	bool isError() const { return parseError.isEmpty(); }
+	QString getError() const { return parseError; }
+
+	unsigned size() const { return lines.size(); }
+
+private:
+	friend class LineView;
+	char const *                                buffer;
+	std::vector<uint32_t>                       cells;
+	std::vector<std::pair<uint32_t, uint32_t> > lines;
+	QString                                     parseError;
+	std::string                                 returnString;
+};
+
+/// Read-only view of a line of file data in "A,1,2" format as an array-like object. Note — does not copy the file data.
+class LineView
+{
+public:
+	LineView(class TableView &table, unsigned lineNumber) : table(table), cells(&table.cells[table.lines.at(lineNumber).first]), numCells(table.lines.at(lineNumber).second), lineNumber(lineNumber) {}  ///< This LineView is only valid for the lifetime of the TableView.
+
+	void setError(unsigned index, char const *error);  ///< Only the first error is saved.
+
+	unsigned size() const { return numCells; }
+	unsigned line() const { return lineNumber; }
+
+	bool b(unsigned index) { return i(index, 0, 1); }
+	int64_t i(unsigned index, int min, int max);
+	uint32_t i8(unsigned index)  { return i(index, INT8_MIN,  INT8_MAX);   }
+	uint32_t u8(unsigned index)  { return i(index, 0,         UINT8_MAX);  }
+	uint32_t i16(unsigned index) { return i(index, INT16_MIN, INT16_MAX);  }
+	uint32_t u16(unsigned index) { return i(index, 0,         UINT16_MAX); }
+	uint32_t i32(unsigned index) { return i(index, INT32_MIN, INT32_MAX);  }
+	uint32_t u32(unsigned index) { return i(index, 0,         UINT32_MAX); }
+	float f(unsigned index, float min = -1.e30f, float max = 1.e30f);
+	std::string const &s(unsigned index);
+	template <typename Enum>
+	Enum e(unsigned index, StringToEnumMap<Enum> const &map) { return (Enum)eu(index, map); }
+
+	iIMDShape *imdShape(unsigned index);
+
+private:
+	unsigned eu(unsigned index, std::vector<std::pair<char const *, unsigned> > const &map);
+	bool checkRange(unsigned index);
+	class TableView &       table;
+	unsigned const *        cells;
+	unsigned                numCells;
+	unsigned                lineNumber;
+};
+
 /*
 if any types are added BEFORE 'COMP_BODY' - then Save/Load Game will have to be
 altered since it loops through the components from 1->MAX_COMP
@@ -206,6 +284,12 @@ typedef enum TRAVEL_MEDIUM
 /* Stats common to all stats structs */
 struct BASE_STATS
 {
+	BASE_STATS() : ref(0), pName(NULL) {}   ///< Only initialised here when using new/delete! TODO Use new/delete only, not malloc()/free().
+	BASE_STATS(unsigned ref, std::string const &str);   ///< Only initialised here when using new/delete! TODO Use new/delete only, not malloc()/free(). TODO Then pName could be a QString...
+	//Gah, too soon to add destructors to BASE_STATS, thanks to local temporaries that are copied with memcpy()... --- virtual ~BASE_STATS() { free(pName); }  ///< pName is only freed here when using new/delete! TODO Use new/delete only, not malloc()/free().
+	//So this one isn't needed for now, maybe not ever. --- BASE_STATS(BASE_STATS const &stats) : ref(stats.ref), pName(strdup(stats.pName)) {}  // TODO Not needed when pName is a QString...
+	//So this one isn't needed for now, maybe not ever. --- BASE_STATS const &operator =(BASE_STATS const &stats) { ref = stats.ref; free(pName); pName = strdup(stats.pName); return *this; }  // TODO Not needed when pName is a QString...
+
 	UDWORD	ref;	/**< Unique ID of the item */
 	char	*pName; /**< pointer to the text id name (i.e. short language-independant name) */
 };

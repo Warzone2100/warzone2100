@@ -72,13 +72,7 @@ FEATURE_STATS* oilResFeature = NULL;
 //specifies how far round (in tiles) a constructor droid sound look for more wreckage
 #define WRECK_SEARCH 3
 
-struct featureTypeMap
-{
-	const char *typeStr;
-	FEATURE_TYPE type;
-};
-
-static const struct featureTypeMap map[] =
+static const StringToEnum<FEATURE_TYPE> mapUnsorted_FEATURE_TYPE[] =
 {
 	{ "PROPULSION_TYPE_HOVER WRECK", FEAT_HOVER },
 	{ "TANK WRECK", FEAT_TANK },
@@ -93,6 +87,7 @@ static const struct featureTypeMap map[] =
 	{ "TREE", FEAT_TREE },
 	{ "SKYSCRAPER", FEAT_SKYSCRAPER }
 };
+static const StringToEnumMap<FEATURE_TYPE> map_FEATURE_TYPE(mapUnsorted_FEATURE_TYPE, ARRAY_SIZE(mapUnsorted_FEATURE_TYPE));
 
 
 void featureInitVars(void)
@@ -102,112 +97,54 @@ void featureInitVars(void)
 	oilResFeature = NULL;
 }
 
-static void featureType(FEATURE_STATS* psFeature, const char *pType)
+FEATURE_STATS::FEATURE_STATS(LineView line)
+	: BASE_STATS(REF_FEATURE_START + line.line(), line.s(0))
+	, subType(line.e(7, map_FEATURE_TYPE))
+	, psImd(line.imdShape(6))
+	, baseWidth(line.u16(1))
+	, baseBreadth(line.u16(2))
+	, tileDraw(line.b(8))
+	, allowLOS(line.b(9))
+	, visibleAtStart(line.b(10))
+	, damageable(line.b(3))
+	, body(line.u32(5))
+	, armourValue(line.u32(4))
 {
-	unsigned int i;
-
-	for (i = 0; i < ARRAY_SIZE(map); i++)
+	if (damageable && body == 0)
 	{
-		if (strcmp(pType, map[i].typeStr) == 0)
-		{
-			psFeature->subType = map[i].type;
-			return;
-		}
+		debug(LOG_ERROR, "The feature \"%s\", ref %d is damageable, but has no body points!  The files need to be updated / fixed.  Assigning 1 body point to feature.", pName, ref);
+		body = 1;
 	}
-
-	ASSERT(false, "featureType: Unknown feature type");
 }
 
 /* Load the feature stats */
 BOOL loadFeatureStats(const char *pFeatureData, UDWORD bufferSize)
 {
-	FEATURE_STATS		*psFeature;
-	unsigned int		i;
-	char				featureName[MAX_STR_LENGTH], GfxFile[MAX_STR_LENGTH],
-						type[MAX_STR_LENGTH];
-
-	numFeatureStats = numCR(pFeatureData, bufferSize);
-
 	// Skip descriptive header
 	if (strncmp(pFeatureData,"Feature ",8)==0)
 	{
 		pFeatureData = strchr(pFeatureData,'\n') + 1;
-		numFeatureStats--;
-	}
-	
-	asFeatureStats = (FEATURE_STATS*)malloc(sizeof(FEATURE_STATS) * numFeatureStats);
-
-	if (asFeatureStats == NULL)
-	{
-		debug( LOG_FATAL, "Feature Stats - Out of memory" );
-		abort();
-		return false;
 	}
 
-	psFeature = asFeatureStats;
+	TableView table(pFeatureData, bufferSize);
 
-	for (i = 0; i < numFeatureStats; i++)
+	asFeatureStats = new FEATURE_STATS[table.size()];
+	numFeatureStats = table.size();
+
+	for (unsigned i = 0; i < table.size(); ++i)
 	{
-		UDWORD Width, Breadth;
-		int damageable = 0, tileDraw = 0, allowLOS = 0, visibleAtStart = 0;
-
-		memset(psFeature, 0, sizeof(FEATURE_STATS));
-
-		featureName[0] = '\0';
-		GfxFile[0] = '\0';
-		type[0] = '\0';
-
-		//read the data into the storage - the data is delimeted using comma's
-		sscanf(pFeatureData, "%[^','],%d,%d,%d,%d,%d,%[^','],%[^','],%d,%d,%d",
-			featureName, &Width, &Breadth,
-			&damageable, &psFeature->armourValue, &psFeature->body,
-			GfxFile, type, &tileDraw, &allowLOS,
-			&visibleAtStart);
-
-		psFeature->damageable = damageable;
-		psFeature->tileDraw = tileDraw;
-		psFeature->allowLOS = allowLOS;
-		psFeature->visibleAtStart = visibleAtStart;
-
-		// These are now only 16 bits wide - so we need to copy them
-		psFeature->baseWidth = Width;
-		psFeature->baseBreadth = Breadth;
-
-		psFeature->pName = allocateName(featureName);
-		if (!psFeature->pName)
+		asFeatureStats[i] = FEATURE_STATS(LineView(table, i));
+		if (table.isError())
 		{
+			debug(LOG_ERROR, "%s", table.getError().toUtf8().constData());
 			return false;
 		}
-
-		if (psFeature->damageable && psFeature->body == 0)
-		{
-			debug(LOG_ERROR, "The feature %s, ref %d, is damageable, but has no body points!  The files need to be updated / fixed.  " \
-							 "Assigning 1 body point to feature.", psFeature->pName, psFeature->ref);
-			psFeature->body = 1;
-		}
-		//determine the feature type
-		featureType(psFeature, type);
 
 		//and the oil resource - assumes only one!
-		if (psFeature->subType == FEAT_OIL_RESOURCE)
+		if (asFeatureStats[i].subType == FEAT_OIL_RESOURCE)
 		{
-			oilResFeature = psFeature;
+			oilResFeature = &asFeatureStats[i];
 		}
-
-		//get the IMD for the feature
-		psFeature->psImd = (iIMDShape *) resGetData("IMD", GfxFile);
-		if (psFeature->psImd == NULL)
-		{
-			debug( LOG_ERROR, "Cannot find the feature PIE for record %s",  getName( psFeature->pName ) );
-			return false;
-		}
-
-		psFeature->ref = REF_FEATURE_START + i;
-
-		//increment the pointer to the start of the next record
-		pFeatureData = strchr(pFeatureData,'\n') + 1;
-		//increment the list to the start of the next storage block
-		psFeature++;
 	}
 
 	return true;
@@ -216,11 +153,13 @@ BOOL loadFeatureStats(const char *pFeatureData, UDWORD bufferSize)
 /* Release the feature stats memory */
 void featureStatsShutDown(void)
 {
-	if(numFeatureStats)
+	for (unsigned i = 0; i < numFeatureStats; ++i)
 	{
-		free(asFeatureStats);
-		asFeatureStats = NULL;
+		free(asFeatureStats[i].pName);
 	}
+	delete[] asFeatureStats;
+	asFeatureStats = NULL;
+	numFeatureStats = 0;
 }
 
 /** Deals with damage to a feature

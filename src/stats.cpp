@@ -24,6 +24,7 @@
  *
  */
 #include <string.h>
+#include <algorithm>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
@@ -122,6 +123,228 @@ static void updateMaxRepairStats(UWORD maxValue);
 static void updateMaxECMStats(UWORD maxValue);
 static void updateMaxBodyStats(UWORD maxBody, UWORD maxPower, UWORD maxArmour);
 static void updateMaxConstStats(UWORD maxValue);
+
+
+BASE_STATS::BASE_STATS(unsigned ref, std::string const &str)
+	: ref(ref)
+	, pName(allocateName(str.c_str()))
+{}
+
+
+TableView::TableView(char const *buffer, unsigned size)
+	: buffer(buffer)
+{
+	size = std::min<unsigned>(size, UINT32_MAX - 1);  // Shouldn't be a problem...
+
+	char const *bufferEnd = buffer + size;
+	bufferEnd = std::find(buffer, bufferEnd, '\0');  // Truncate buffer at first null character, if any.
+
+	// Split into lines.
+	char const *lineNext = buffer;
+	while (lineNext != bufferEnd)
+	{
+		char const *lineBegin = lineNext;
+		char const *lineEnd = std::find(lineBegin, bufferEnd, '\n');
+		lineNext = lineEnd + (lineEnd != bufferEnd);
+
+		// Remove stuff that isn't data.
+		lineEnd = std::find(lineBegin, lineEnd, '#');  // Remove comments, if present.
+		while (lineBegin != lineEnd && uint8_t(*(lineEnd - 1)) <= ' ')
+		{
+			--lineEnd;  // Remove trailing whitespace, if present.
+		}
+		while (lineBegin != lineEnd && uint8_t(*lineBegin) <= ' ')
+		{
+			++lineBegin;  // Remove leading whitespace, if present.
+		}
+		if (lineBegin == lineEnd)
+		{
+			continue;  // Remove empty lines.
+		}
+
+		// Split into cells.
+		size_t firstCell = cells.size();
+		char const *cellNext = lineBegin;
+		while (cellNext != lineEnd)
+		{
+			char const *cellBegin = cellNext;
+			char const *cellEnd = std::find(cellBegin, lineEnd, ',');
+			cellNext = cellEnd + (cellEnd != lineEnd);
+
+			cells.push_back(cellBegin - buffer);
+		}
+		cells.push_back(lineEnd - buffer + 1);
+		lines.push_back(std::make_pair(firstCell, cells.size() - firstCell));
+	}
+}
+
+void LineView::setError(unsigned index, char const *error)
+{
+	if (!table.parseError.isEmpty())
+	{
+		return;  // Already have an error.
+	}
+
+	if (index < numCells)
+	{
+		char const *cellBegin = table.buffer + cells[index];
+		char const *cellEnd = table.buffer + (cells[index + 1] - 1);
+
+		char cellDesc[150];
+		ssprintf(cellDesc, "Line %u, column %u \"%*s\": ", lineNumber, index, std::min<unsigned>(100, cellEnd - cellBegin), cellBegin);
+		table.parseError = QString::fromUtf8((std::string(cellDesc) + error).c_str());
+	}
+	else
+	{
+		char cellDesc[50];
+		ssprintf(cellDesc, "Line %u, column %u: ", lineNumber, index);
+		table.parseError = QString::fromUtf8((std::string(cellDesc) + error).c_str());
+	}
+}
+
+bool LineView::checkRange(unsigned index)
+{
+	if (index < numCells)
+	{
+		return true;
+	}
+
+	setError(index, "Not enough cells.");
+	return false;
+}
+
+int64_t LineView::i(unsigned index, int min, int max)
+{
+	int errorReturn = std::min(std::max(0, min), max);  // On error, return 0 if possible.
+
+	if (!checkRange(index))
+	{
+		return errorReturn;
+	}
+
+	char const *cellBegin = table.buffer + cells[index];
+	char const *cellEnd   = table.buffer + (cells[index + 1] - 1);
+	if (cellBegin != cellEnd)
+	{
+		bool negative = false;
+		switch (*cellBegin++)
+		{
+			case '-':
+				negative = true;
+				break;
+			case '+':
+				break;
+			default:
+				--cellBegin;
+				break;
+		}
+		int64_t absolutePart = 0;
+		while (cellBegin != cellEnd && absolutePart < int64_t(1000000000)*1000000000)
+		{
+			unsigned digit = *cellBegin - '0';
+			if (digit > 9)
+			{
+				break;
+			}
+			absolutePart = absolutePart*10 + digit;
+			++cellBegin;
+		}
+		if (cellBegin == cellEnd)
+		{
+			int64_t result = negative? -absolutePart : absolutePart;
+			if (result >= min && result <= max)
+			{
+				return result;  // Maybe should just have copied the string to null-terminate it, and used scanf...
+			}
+			setError(index, "Integer out of range.");
+			return errorReturn;
+		}
+	}
+
+	setError(index, "Expected integer.");
+	return errorReturn;
+}
+
+float LineView::f(unsigned index, float min, float max)
+{
+	float errorReturn = std::min(std::max(0.f, min), max);  // On error, return 0 if possible.
+
+	std::string const &str = s(index);
+	if (!str.empty())
+	{
+		int parsed = 0;
+		float result;
+		sscanf(str.c_str(), "%f%n", &result, &parsed);
+		if ((unsigned)parsed == str.size())
+		{
+			if (result >= min && result <= max)
+			{
+				return result;
+			}
+			setError(index, "Float out of range.");
+			return errorReturn;
+		}
+	}
+
+	setError(index, "Expected float.");
+	return errorReturn;
+}
+
+std::string const &LineView::s(unsigned index)
+{
+	if (!checkRange(index))
+	{
+		table.returnString.clear();
+		return table.returnString;
+	}
+
+	char const *cellBegin = table.buffer + cells[index];
+	char const *cellEnd   = table.buffer + (cells[index + 1] - 1);
+	table.returnString.assign(cellBegin, cellEnd);
+	return table.returnString;
+}
+
+iIMDShape *LineView::imdShape(unsigned int index)
+{
+	std::string const &str = s(index);
+	iIMDShape *result = (iIMDShape *)resGetData("IMD", str.c_str());
+	if (result == NULL)
+	{
+		setError(index, "Expected PIE shape.");
+	}
+	return result;
+}
+
+static inline bool stringToEnumFindFunction(std::pair<char const *, unsigned> const &a, char const *b)
+{
+	return strcmp(a.first, b) < 0;
+}
+
+unsigned LineView::eu(unsigned int index, std::vector<std::pair<char const *, unsigned> > const &map)
+{
+	typedef std::vector<std::pair<char const *, unsigned> > M;
+
+	std::string const &str = s(index);
+	M::const_iterator i = std::lower_bound(map.begin(), map.end(), str.c_str(), stringToEnumFindFunction);
+	if (i != map.end() && strcmp(i->first, str.c_str()) == 0)
+	{
+		return i->second;
+	}
+
+	// Didn't find it, give error and return 0.
+	if (table.parseError.isEmpty())
+	{
+		std::string values = "Expected one of";
+		for (i = map.begin(); i != map.end(); ++i)
+		{
+			values += std::string(" \"") + i->first + '"';
+		}
+		values = values + '.';
+		setError(index, "Expected one of");
+	}
+	return 0;
+}
+
 
 /*******************************************************************************
 *		Generic stats macros/functions
