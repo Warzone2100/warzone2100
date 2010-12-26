@@ -1565,9 +1565,9 @@ static int foundationHeight(STRUCTURE *psStruct)
 	int foundationMin = TILE_MAX_HEIGHT;
 	int foundationMax = TILE_MIN_HEIGHT;
 
-	for (int breadth = 0; breadth <= map.y; breadth++)
+	for (int breadth = 0; breadth <= size.y; breadth++)
 	{
-		for (int width = 0; width <= map.x; width++)
+		for (int width = 0; width <= size.x; width++)
 		{
 			int height = map_TileHeight(map.x + width, map.y + breadth);
 			foundationMin = std::min(foundationMin, height);
