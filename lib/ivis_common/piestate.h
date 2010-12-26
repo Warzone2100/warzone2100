@@ -29,7 +29,6 @@
 #ifndef _piestate_h
 #define _piestate_h
 
-
 /***************************************************************************/
 
 #include "lib/framework/frame.h"
@@ -40,34 +39,6 @@
  *	Global Definitions
  */
 /***************************************************************************/
-
-typedef	enum	REND_MODE
-				{
-					REND_ALPHA,
-					REND_ADDITIVE,
-					REND_OPAQUE,
-					REND_MULTIPLICATIVE
-				}
-				REND_MODE;
-
-typedef	enum	DEPTH_MODE
-				{
-					DEPTH_CMP_LEQ_WRT_ON,
-					DEPTH_CMP_ALWAYS_WRT_ON,
-					DEPTH_CMP_LEQ_WRT_OFF,
-					DEPTH_CMP_ALWAYS_WRT_OFF
-				}
-				DEPTH_MODE;
-
-typedef	enum	TRANSLUCENCY_MODE
-				{
-					TRANS_DECAL,
-					TRANS_FILTER,
-					TRANS_ALPHA,
-					TRANS_ADDITIVE,
-					TRANS_MULTIPLICATIVE
-				}
-				TRANSLUCENCY_MODE;
 
 typedef struct	RENDER_STATE
 				{
@@ -80,19 +51,6 @@ typedef struct	RENDER_STATE
 					TRANSLUCENCY_MODE	transMode;
 				}
 				RENDER_STATE;
-
-typedef enum
-{
-	TEXPAGE_NONE = -1,
-	TEXPAGE_EXTERN = -2
-} TEXPAGE_TYPE;
-
-typedef enum
-{
-	SHADER_NONE,
-	SHADER_COMPONENT,
-	SHADER_MAX
-} SHADER_MODE;
 
 /***************************************************************************/
 /*

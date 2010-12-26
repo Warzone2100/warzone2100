@@ -184,7 +184,6 @@ BOOL Refreshing = false;
 #define IDOPT_ZALIGN		1042		// The z-align button
 #define IDOPT_IVISFORM		1043		// iViS engine form
 #define IDOPT_IVISLABEL		1044		// iViS form label
-#define IDOPT_IVISLIGHTING	1046		// iViS lighting button
 
 /* Edit screen IDs */
 #define IDED_FORM			2000		// The edit form
@@ -1370,18 +1369,6 @@ static void intProcessOptions(UDWORD id)
 		case IDOPT_CLOSE:
 			intRemoveOptions();
 			intMode = INT_NORMAL;
-			break;
-		case IDOPT_IVISLIGHTING:
-			if (pie_GetLightingState())
-			{
-				pie_SetLightingState(false);
-				widgSetButtonState(psWScreen, IDOPT_IVISLIGHTING, 0);
-			}
-			else
-			{
-				pie_SetLightingState(true);
-				widgSetButtonState(psWScreen, IDOPT_IVISLIGHTING, WBUT_CLICKLOCK);
-			}
 			break;
 			/* Ignore these */
 		case IDOPT_FORM:
@@ -3890,35 +3877,6 @@ BOOL intAddOptions(void)
 	if (!widgAddForm(psWScreen, &sFormInit))
 	{
 		return false;
-	}
-
-	/* Add iViS label */
-	sLabInit.formID = IDOPT_IVISFORM;
-	sLabInit.id = IDOPT_IVISLABEL;
-	sLabInit.x = OPT_GAP;
-	sLabInit.y = OPT_GAP;
-	sLabInit.pText = "iViS:";
-	if (!widgAddLabel(psWScreen, &sLabInit))
-	{
-		return false;
-	}
-
-	/* Add iViS lighting button */
-	sButInit.formID = IDOPT_IVISFORM;
-	sButInit.id = IDOPT_IVISLIGHTING;
-	sButInit.x += OPT_BUTWIDTH + OPT_GAP;
-	sButInit.y = OPT_GAP;
-	sButInit.width = OPT_BUTWIDTH;
-	sButInit.height = OPT_BUTHEIGHT;
-	sButInit.pText = "Lighting";
-	sButInit.pTip = "Toggles lighting On/Off.";
-	if (!widgAddButton(psWScreen, &sButInit))
-	{
-		return false;
-	}
-	if (pie_GetLightingState())
-	{
-		widgSetButtonState(psWScreen, IDOPT_IVISLIGHTING, WBUT_CLICKLOCK);
 	}
 
 	widgSetButtonState(psWScreen, IDOPT_PLAYERSTART + selectedPlayer, WBUT_LOCK);

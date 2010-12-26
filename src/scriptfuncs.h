@@ -42,6 +42,8 @@ extern BOOL scrGetPlayerStartPosition(void);
 extern BOOL scrSafeDest(void);
 extern BOOL scrThreatAt(void);
 extern Vector2i getPlayerStartPosition(int player);
+extern BOOL scrSetSunPosition(void);
+extern BOOL scrSetSunIntensity(void);
 
 // not used in scripts, but used in code.
 extern  BOOL objectInRange(struct BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range);

@@ -94,6 +94,8 @@ typedef struct _iIMDShape {
 
 	unsigned int nShadowEdges;
 	EDGE *shadowEdgeList;
+	float material[LIGHT_MAX][4];
+	float shininess;
 
 	struct _iIMDShape *next; // next pie in multilevel pies (NULL for non multilevel !)
 } iIMDShape;

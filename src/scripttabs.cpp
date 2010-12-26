@@ -1511,6 +1511,14 @@ FUNC_SYMBOL asFuncTable[] =
 		3, { VAL_INT, VAL_INT, VAL_INT },
 		false, 0, NULL, 0, 0, NULL, NULL },
 
+	{ "setSunPosition", scrSetSunPosition, VAL_VOID,
+		3, { VAL_FLOAT, VAL_FLOAT, VAL_FLOAT },
+		false, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "setSunIntensity", scrSetSunIntensity, VAL_VOID,
+		9, { VAL_FLOAT, VAL_FLOAT, VAL_FLOAT, VAL_FLOAT, VAL_FLOAT, VAL_FLOAT, VAL_FLOAT, VAL_FLOAT, VAL_FLOAT },
+		false, 0, NULL, 0, 0, NULL, NULL },
+
 	/* This final entry marks the end of the function list */
 	{ "FUNCTION LIST END", NULL, VAL_VOID, 0, { VAL_VOID }, 0, 0, NULL, 0, 0, NULL, NULL }
 };

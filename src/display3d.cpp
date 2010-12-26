@@ -644,9 +644,6 @@ void draw3DScene( void )
 		dragQuad.coords[3].y = dragBox3D.y2;
 	}
 
-	/* Calculate the position of the sun */
-//	findSunVector();
-
 	pie_Begin3DScene();
 	/* Set 3D world origins */
 	pie_SetGeometricOffset(rendSurface.width / 2, geoOffset);

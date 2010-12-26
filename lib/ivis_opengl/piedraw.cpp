@@ -54,31 +54,33 @@ extern BOOL drawing_interface;
 static unsigned int pieCount = 0;
 static unsigned int tileCount = 0;
 static unsigned int polyCount = 0;
-static bool lighting = false;
-static bool lightingstate = false;
 static bool shadows = false;
+static GLfloat lighting0[LIGHT_MAX][4] = {{0.0f, 0.0f, 0.0f, 0.0f},  {0.6f, 0.6f, 0.6f, 1.0f},  {0.8f, 0.8f, 0.8f, 1.0f},  {1.0f, 1.0f, 1.0f, 1.0f}};
 
 /*
  *	Source
  */
 
-void pie_BeginLighting(const Vector3f * light, bool drawshadows)
+void pie_Lighting0(LIGHTING_TYPE entry, float value[4])
+{
+	lighting0[entry][0] = value[0];
+	lighting0[entry][1] = value[1];
+	lighting0[entry][2] = value[2];
+	lighting0[entry][3] = value[3];
+}
+
+void pie_BeginLighting(const Vector3f *light, bool drawshadows)
 {
 	const float pos[4] = {light->x, light->y, light->z, 0.0f};
-	const float zero[4] = {0.0f, 0.0f, 0.0f, 0.0f};
-	const float ambient[4] = {0.3f, 0.3f, 0.3f, 1.0f};
-	const float diffuse[4] = {0.8f, 0.8f, 0.8f, 1.0f};
-	const float specular[4] = {1.0f, 1.0f, 1.0f, 1.0f};
 
-	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, zero);
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, lighting0[LIGHT_EMISSIVE]);
 	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_FALSE);
 	glLightfv(GL_LIGHT0, GL_POSITION, pos);
-	glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
+	glLightfv(GL_LIGHT0, GL_AMBIENT, lighting0[LIGHT_AMBIENT]);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, lighting0[LIGHT_DIFFUSE]);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, lighting0[LIGHT_SPECULAR]);
 	glEnable(GL_LIGHT0);
 
-	lighting = lightingstate;
 	if (drawshadows)
 	{
 		shadows = true;
@@ -87,18 +89,16 @@ void pie_BeginLighting(const Vector3f * light, bool drawshadows)
 
 bool pie_GetLightingState(void)
 {
-	return lightingstate;
+	return true;
 }
 
 void pie_SetLightingState(bool val)
 {
-	lightingstate = val;
 }
 
 void pie_EndLighting(void)
 {
 	shadows = false;
-	lighting = false;
 }
 
 /***************************************************************************
@@ -137,7 +137,7 @@ static unsigned int nb_tshapes = 0;
 static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELIGHT teamcolour, WZ_DECL_UNUSED PIELIGHT specular, int pieFlag, int pieFlagData)
 {
 	iIMDPoly *pPolys;
-	bool light = lighting;
+	bool light = true;
 
 	pie_SetAlphaTest(true);
 
@@ -176,18 +176,13 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 
 	if (light)
 	{
-		const float ambient[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
-		const float diffuse[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
-		const float specular[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
-		const float shininess = 10;
-
 		glEnable(GL_LIGHTING);
 		glEnable(GL_NORMALIZE);
 
-		glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
-		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
-		glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
-		glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
+		glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, shape->material[LIGHT_AMBIENT]);
+		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, shape->material[LIGHT_DIFFUSE]);
+		glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, shape->material[LIGHT_SPECULAR]);
+		glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shape->shininess);
 	}
 
 	if (pieFlag & pie_HEIGHT_SCALED)	// construct
@@ -230,11 +225,7 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 
 		glBegin(GL_TRIANGLE_FAN);
 
-		if (light)
-		{
-			glNormal3fv((GLfloat*)&pPolys->normal);
-		}
-
+		glNormal3fv((GLfloat*)&pPolys->normal);
 		for (n = 0; n < pPolys->npnts; n++)
 		{
 			glTexCoord2fv((GLfloat*)&pPolys->texCoord[fidx * pPolys->npnts + n]);
@@ -414,6 +405,7 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, Vector3f* 
 
 	// draw the shadow volume
 	glBegin(GL_QUADS);
+	glNormal3f(0.0, 1.0, 0.0);
 	for(i=0;i<edge_count;i++)
 	{
 		int a = drawlist[i].from, b = drawlist[i].to;

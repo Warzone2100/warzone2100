@@ -164,6 +164,44 @@ Vector2i getPlayerStartPosition(int player)
 	return positions[player];
 }
 
+BOOL scrSetSunPosition(void)
+{
+	float x, y, z, pos[4];
+
+	if (!stackPopParams(3, VAL_FLOAT, &x, VAL_FLOAT, &y, VAL_FLOAT, &z))
+	{
+		return false;
+	}
+	pos[0] = x;
+	pos[1] = y;
+	pos[2] = z;
+	pos[3] = 0.0;
+	setTheSun(Vector3f(x, y, z));
+	return true;
+}
+
+BOOL scrSetSunIntensity(void)
+{
+	float ambient[4], diffuse[4], specular[4];
+
+	// Scary list of parameters... ambient, diffuse and specular RGB components
+	// One day we should add support for vectors to our scripting language to cut
+	// down on such noise.
+	if (!stackPopParams(9, VAL_FLOAT, &ambient[0], VAL_FLOAT, &ambient[1], VAL_FLOAT, &ambient[2],
+	                       VAL_FLOAT, &diffuse[0], VAL_FLOAT, &diffuse[1], VAL_FLOAT, &diffuse[2],
+	                       VAL_FLOAT, &specular[0], VAL_FLOAT, &specular[1], VAL_FLOAT, &specular[2]))
+	{
+		return false;
+	}
+	ambient[3] = 1.0;
+	diffuse[3] = 1.0;
+	specular[3] = 1.0;
+	pie_Lighting0(LIGHT_AMBIENT, ambient);
+	pie_Lighting0(LIGHT_DIFFUSE, diffuse);
+	pie_Lighting0(LIGHT_SPECULAR, specular);
+	return true;
+}
+
 BOOL scrSafeDest(void)
 {
 	SDWORD	x, y, player;

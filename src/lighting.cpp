@@ -401,7 +401,7 @@ void	doBuildingLights( void )
 	}
 }
 
-
+#if 0
 /* Experimental moving shadows code */
 void	findSunVector( void )
 {
@@ -413,3 +413,4 @@ void	findSunVector( void )
 
 	setTheSun(val);
 }
+#endif

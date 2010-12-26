@@ -38,36 +38,6 @@
 
 /***************************************************************************/
 /*
- *	Global Definitions (CONSTANTS)
- */
-/***************************************************************************/
-#define STRETCHED_Z_SHIFT		10 // stretchs z range for (1000 to 4000) to (8000 to 32000)
-#define MAX_Z				(32000) // raised to 32000 from 6000 when stretched
-#define MIN_STRETCHED_Z			256
-#define LONG_WAY			(1<<15)
-#define INTERFACE_DEPTH		(MAX_Z - 1)
-#define BUTTON_DEPTH		2000 // will be stretched to 16000
-
-#define OLD_TEXTURE_SIZE_FIX 256.0f
-
-//Render style flags for all pie draw functions
-#define pie_TRANSLUCENT         0x2
-#define pie_ADDITIVE            0x4
-#define pie_FORCE_FOG			0x8
-#define pie_HEIGHT_SCALED       0x10
-#define pie_RAISE               0x20
-#define pie_BUTTON              0x40
-#define pie_SHADOW              0x80
-#define pie_STATIC_SHADOW       0x100
-
-#define pie_RAISE_SCALE			256
-
-#define pie_MAX_VERTICES		768
-#define pie_MAX_POLYGONS		512
-#define pie_MAX_VERTICES_PER_POLYGON	6
-
-/***************************************************************************/
-/*
  *	Global Definitions (STRUCTURES)
  */
 /***************************************************************************/
@@ -104,6 +74,8 @@ void pie_BeginLighting(const Vector3f * light, bool drawshadows);
 
 /* Stop using stencil shadows and OpenGL lighting (if enabled). */
 void pie_EndLighting(void);
+
+void pie_Lighting0(LIGHTING_TYPE entry, float value[4]);
 
 void pie_RemainingPasses(void);
 

@@ -512,9 +512,9 @@ static BOOL _imd_load_connectors(const char **ppFileData, iIMDShape *s)
  */
 static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataEnd, int nlevels, int pieVersion)
 {
-	const char *pFileData = *ppFileData;
+	const char *pTmp, *pFileData = *ppFileData;
 	char buffer[PATH_MAX] = {'\0'};
-	int cnt = 0, n = 0;
+	int cnt = 0, n = 0, i;
 	iIMDShape *s = NULL;
 
 	if (nlevels == 0)
@@ -543,6 +543,39 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
 	s->texpage = iV_TEX_INVALID;
 	s->tcmaskpage = iV_TEX_INVALID;
 
+	// Load optional MATERIALS directive
+	pTmp = pFileData;	// remember position
+	i = sscanf(pFileData, "%s %n", buffer, &cnt);
+	ASSERT_OR_RETURN(NULL, i == 1, "Bad directive following LEVEL");
+	memset(s->material, 0, sizeof(s->material));
+	s->material[LIGHT_AMBIENT][3] = 1.0f;
+	s->material[LIGHT_DIFFUSE][3] = 1.0f;
+	s->material[LIGHT_SPECULAR][3] = 1.0f;
+	if (strcmp(buffer, "MATERIALS") == 0)
+	{
+		i = sscanf(pFileData, "%s %f %f %f %f %f %f %f %f %f %f%n", buffer, 
+		           &s->material[LIGHT_AMBIENT][0], &s->material[LIGHT_AMBIENT][1], &s->material[LIGHT_AMBIENT][2],
+		           &s->material[LIGHT_DIFFUSE][0], &s->material[LIGHT_DIFFUSE][1], &s->material[LIGHT_DIFFUSE][2],
+	                   &s->material[LIGHT_SPECULAR][0], &s->material[LIGHT_SPECULAR][1], &s->material[LIGHT_SPECULAR][2],
+		           &s->shininess, &cnt);
+		ASSERT_OR_RETURN(NULL, i == 11, "Bad MATERIALS directive");
+		pFileData += cnt;
+	}
+	else
+	{
+		// Set default values
+		s->material[LIGHT_AMBIENT][0] = 1.0f;
+		s->material[LIGHT_AMBIENT][1] = 1.0f;
+		s->material[LIGHT_AMBIENT][2] = 1.0f;
+		s->material[LIGHT_DIFFUSE][0] = 1.0f;
+		s->material[LIGHT_DIFFUSE][1] = 1.0f;
+		s->material[LIGHT_DIFFUSE][2] = 1.0f;
+		s->material[LIGHT_SPECULAR][0] = 1.0f;
+		s->material[LIGHT_SPECULAR][1] = 1.0f;
+		s->material[LIGHT_SPECULAR][2] = 1.0f;
+		s->shininess = 10;
+		pFileData = pTmp;
+	}
 
 	if (sscanf(pFileData, "%s %d%n", buffer, &s->npoints, &cnt) != 2)
 	{
@@ -552,17 +585,9 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
 	pFileData += cnt;
 
 	// load points
-	if (strcmp(buffer, "POINTS") != 0)
-	{
-		debug(LOG_ERROR, "_imd_load_level: expecting 'POINTS' directive, got: %s", buffer);
-		return NULL;
-	}
 
-	if (s->npoints > iV_IMD_MAX_POINTS)
-	{
-		debug(LOG_ERROR, "_imd_load_level: too many points in IMD");
-		return NULL;
-	}
+	ASSERT_OR_RETURN(NULL, strcmp(buffer, "POINTS") == 0, "Expecting 'POINTS' directive, got: %s", buffer);
+	ASSERT_OR_RETURN(NULL, s->npoints < iV_IMD_MAX_POINTS, "Too many points in IMD, max %d", iV_IMD_MAX_POINTS);
 
 	_imd_load_points( &pFileData, s );
 
@@ -574,11 +599,7 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
 	}
 	pFileData += cnt;
 
-	if (strcmp(buffer, "POLYGONS") != 0)
-	{
-		debug(LOG_ERROR,"_imd_load_level: expecting 'POLYGONS' directive");
-		return NULL;
-	}
+	ASSERT_OR_RETURN(NULL, strcmp(buffer, "POLYGONS") == 0, "Expecting 'POLYGONS' directive, got: %s", buffer);
 
 	_imd_load_polys( &pFileData, s, pieVersion);
 
