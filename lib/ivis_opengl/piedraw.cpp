@@ -55,7 +55,7 @@ static unsigned int pieCount = 0;
 static unsigned int tileCount = 0;
 static unsigned int polyCount = 0;
 static bool shadows = false;
-static GLfloat lighting0[LIGHT_MAX][4] = {{0.0f, 0.0f, 0.0f, 0.0f},  {0.6f, 0.6f, 0.6f, 1.0f},  {0.8f, 0.8f, 0.8f, 1.0f},  {1.0f, 1.0f, 1.0f, 1.0f}};
+static GLfloat lighting0[LIGHT_MAX][4] = {{0.0f, 0.0f, 0.0f, 1.0f},  {0.5f, 0.5f, 0.5f, 1.0f},  {0.8f, 0.8f, 0.8f, 1.0f},  {1.0f, 1.0f, 1.0f, 1.0f}};
 
 /*
  *	Source
@@ -90,10 +90,6 @@ void pie_BeginLighting(const Vector3f *light, bool drawshadows)
 bool pie_GetLightingState(void)
 {
 	return true;
-}
-
-void pie_SetLightingState(bool val)
-{
 }
 
 void pie_EndLighting(void)
@@ -176,13 +172,12 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 
 	if (light)
 	{
-		glEnable(GL_LIGHTING);
-		glEnable(GL_NORMALIZE);
-
-		glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, shape->material[LIGHT_AMBIENT]);
-		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, shape->material[LIGHT_DIFFUSE]);
-		glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, shape->material[LIGHT_SPECULAR]);
-		glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shape->shininess);
+		glMaterialfv(GL_FRONT, GL_AMBIENT, shape->material[LIGHT_AMBIENT]);
+		glMaterialfv(GL_FRONT, GL_DIFFUSE, shape->material[LIGHT_DIFFUSE]);
+		glMaterialfv(GL_FRONT, GL_SPECULAR, shape->material[LIGHT_SPECULAR]);
+		glMaterialf(GL_FRONT, GL_SHININESS, shape->shininess);
+		glMaterialfv(GL_FRONT, GL_EMISSION, shape->material[LIGHT_EMISSIVE]);
+		pie_ActivateShader_TCMask(teamcolour, shape->tcmaskpage);
 	}
 
 	if (pieFlag & pie_HEIGHT_SCALED)	// construct
@@ -196,8 +191,6 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 
 	glColor4ubv(colour.vector);	// Only need to set once for entire model
 	pie_SetTexturePage(shape->texpage);
-
-	pie_ActivateShader_TCMask(teamcolour, shape->tcmaskpage);
 
 	frame %= MAX(1, shape->numFrames);
 
@@ -235,17 +228,14 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 		glEnd();
 	}
 
-	pie_DeactivateShader();
+	if (light)
+	{
+		pie_DeactivateShader();
+	}
 
 	if (pieFlag & pie_BUTTON)
 	{
 		pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
-	}
-
-	if (light)
-	{
-		glDisable(GL_LIGHTING);
-		glDisable(GL_NORMALIZE);
 	}
 }
 

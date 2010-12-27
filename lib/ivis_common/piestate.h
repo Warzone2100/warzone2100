@@ -101,10 +101,6 @@ void pie_SetShaderStretchDepth(float stretch);
 
 /* Actually in piedraw.c */
 
-// Lighting cotrols
-extern void pie_SetLightingState(bool);
-extern bool pie_GetLightingState(void);
-
 /* Errors control routine */
 #define glErrors() \
 	_glerrors(__FUNCTION__, __FILE__, __LINE__)
