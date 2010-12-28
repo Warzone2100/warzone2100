@@ -18,7 +18,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#include <GLee.h>
+#include <GL/glew.h>
 #include "lib/framework/frame.h"
 
 #if defined(WZ_OS_MAC)
@@ -154,7 +154,7 @@ int pie_AddTexPage(iV_Image *s, const char* filename, int slot, int maxTextureSi
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	// Use anisotropic filtering, if available, but only max 4.0 to reduce processor burden
-	if (GLEE_EXT_texture_filter_anisotropic)
+	if (GL_EXT_texture_filter_anisotropic)
 	{
 		GLfloat max;
 

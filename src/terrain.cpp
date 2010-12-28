@@ -29,7 +29,7 @@
  * The water is drawn using the hardcoded page-80 and page-81 textures. 
  */
 
-#include <GLee.h>
+#include <GL/glew.h>
 #include <string.h>
 
 #include "lib/framework/frame.h"

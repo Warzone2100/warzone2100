@@ -26,7 +26,7 @@
  */
 /***************************************************************************/
 
-#include <GLee.h>
+#include <GL/glew.h>
 #include "lib/framework/frame.h"
 
 #include <SDL.h>
@@ -54,7 +54,7 @@ bool pie_Initialise(void)
 	pie_TexInit();
 
 	/* Find texture compression extension */
-	if (GLEE_ARB_texture_compression)
+	if (GL_ARB_texture_compression)
 	{
 		debug(LOG_TEXTURE, "Texture compression: Yes");
 		wz_texture_compression = GL_COMPRESSED_RGBA_ARB;

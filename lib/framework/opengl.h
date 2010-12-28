@@ -24,31 +24,6 @@
 #ifndef __INCLUDED_LIB_FRAMEWORK_OPENGL_H__
 #define __INCLUDED_LIB_FRAMEWORK_OPENGL_H__
 
-#include "wzglobal.h"
-
-#if defined(__glext_h_)
-# define FRAMEWORK_GLEXT_INCLUDED
-#else
-// Prevent inclusion of glext.h by gl.h, requiring explicit inclusion by the user
-# define __glext_h_
-#endif
-
-#if   defined(WZ_OS_MAC)
-# include <OpenGL/gl.h>
-#else
-# include <GL/gl.h>
-#endif
-
-// Restore the previous definition state of the __glext_h_ symbol
-#if defined(FRAMEWORK_GLEXT_INCLUDED)
-# undef FRAMEWORK_GLEXT_INCLUDED
-#else
-# undef __glext_h_
-#endif
-
-// Workaround X11 headers #defining Status
-#ifdef Status
-# undef Status
-#endif
+#include <GL/glew.h>
 
 #endif
