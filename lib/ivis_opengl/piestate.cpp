@@ -214,25 +214,43 @@ static bool loadShaders(GLuint *program, const char *definitions,
 bool pie_LoadShaders()
 {
 	GLuint program;
+	bool result;
 
 	// Try to load some shaders
 	shaderProgram[SHADER_NONE] = 0;
 
-	// TCMask shader
+	// TCMask shader for map-placed models with advanced lighting
 	debug(LOG_3D, "Loading shader: SHADER_COMPONENT");
-	if (!loadShaders(&program, "", "shaders/tcmask.vert", "shaders/tcmask.frag"))
-	{
-		assert(false);
-		return false;
-	}
+	result = loadShaders(&program, "", "shaders/tcmask.vert", "shaders/tcmask.frag");
+	ASSERT_OR_RETURN(false, result, "Failed to load component shader");
 	shaderProgram[SHADER_COMPONENT] = program;
+
+	// TCMask shader for buttons with flat lighting
+	debug(LOG_3D, "Loading shader: SHADER_BUTTON");
+	result = loadShaders(&program, "", "shaders/button.vert", "shaders/button.frag");
+	ASSERT_OR_RETURN(false, result, "Failed to load button shader");
+	shaderProgram[SHADER_BUTTON] = program;
+
 	currentShaderMode = SHADER_NONE;
 
 	return true;
 }
 
-static inline GLuint pie_SetShader(SHADER_MODE shaderMode)
+void pie_DeactivateShader(void)
 {
+	currentShaderMode = SHADER_NONE;
+	glUseProgram(0);
+}
+
+void pie_SetShaderStretchDepth(float stretch)
+{
+	shaderStretch = stretch;
+}
+
+void pie_ActivateShader(SHADER_MODE shaderMode, PIELIGHT teamcolour, int maskpage)
+{
+	GLfloat colour4f[4];
+
 	if (shaderMode != currentShaderMode)
 	{
 		GLint locTex0, locTex1;
@@ -251,25 +269,6 @@ static inline GLuint pie_SetShader(SHADER_MODE shaderMode)
 
 		currentShaderMode  = shaderMode;
 	}
-	return shaderProgram[shaderMode];
-}
-
-void pie_DeactivateShader(void)
-{
-	currentShaderMode = SHADER_NONE;
-	glUseProgram(0);
-}
-
-void pie_SetShaderStretchDepth(float stretch)
-{
-	shaderStretch = stretch;
-}
-
-void pie_ActivateShader_TCMask(PIELIGHT teamcolour, int maskpage)
-{
-	GLfloat colour4f[4];
-
-	pie_SetShader(SHADER_COMPONENT);
 
 	pal_PIELIGHTtoRGBA4f(&colour4f[0], teamcolour);
 	glUniform4fv(locTeam, 1, &colour4f[0]);

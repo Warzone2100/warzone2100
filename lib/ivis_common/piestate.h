@@ -96,7 +96,7 @@ extern void pie_SetTranslucencyMode(TRANSLUCENCY_MODE transMode);
 bool pie_LoadShaders(void);
 // Actual shaders (we do not want to export these calls)
 void pie_DeactivateShader(void);
-void pie_ActivateShader_TCMask(PIELIGHT teamcolour, int maskpage);
+void pie_ActivateShader(SHADER_MODE shaderMode, PIELIGHT teamcolour, int maskpage);
 void pie_SetShaderStretchDepth(float stretch);
 
 /* Actually in piedraw.c */

@@ -256,8 +256,7 @@ bool screenInitialise(
 		glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &glMaxTIUs);
 		debug(LOG_3D, "  * Total number of Texture Image Units (TIUs) supported is %d.", (int) glMaxTIUs);
 
-		if (!pie_LoadShaders())
-			debug(LOG_INFO, "Can't use shaders, switching back to fixed pipeline.");;
+		pie_LoadShaders();
 	}
 	else
 	{

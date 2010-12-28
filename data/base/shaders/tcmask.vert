@@ -1,31 +1,26 @@
 #version 120
 #pragma debug(on)
 
-varying float vertexDistance;
-varying vec3 normal;
-
 uniform float stretch;
-uniform int fogEnabled;
+
+varying float vertexDistance;
+varying vec3 normal, lightDir, eyeVec;
 
 void main(void)
 {
-	vec3 lightDir;
-	vec4 diffuse, ambient, globalAmbient;
-	float NdotL;
+	vec3 vVertex = vec3(gl_ModelViewMatrix * gl_Vertex);
 	vec4 position = gl_Vertex;
 
 	// Pass texture coordinates to fragment shader
 	gl_TexCoord[0] = gl_TextureMatrix[0] * gl_MultiTexCoord0;
 
-	// Lighting
-	normal = normalize(gl_NormalMatrix * gl_Normal);
-	lightDir = normalize(vec3(gl_LightSource[0].position));
-	NdotL = max(dot(normal, lightDir), 0.0);
-	diffuse = gl_FrontMaterial.diffuse * gl_LightSource[0].diffuse;
-	ambient = gl_FrontMaterial.ambient * gl_LightSource[0].ambient;
-	globalAmbient = gl_LightModel.ambient * gl_FrontMaterial.ambient;
-	gl_FrontColor =  (NdotL * diffuse + globalAmbient + ambient) * gl_Color;
+	// Lighting -- we pass these to the fragment shader
+	normal = gl_NormalMatrix * gl_Normal;
+	lightDir = vec3(gl_LightSource[0].position.xyz - vVertex);
+	eyeVec = -vVertex;
+	gl_FrontColor = gl_Color;
 
+	// Implement building stretching to accomodate terrain
 	if (position.y <= 0.0)
 	{
 		position.y -= stretch;
@@ -34,9 +29,6 @@ void main(void)
 	// Translate every vertex according to the Model View and Projection Matrix
 	gl_Position = gl_ModelViewProjectionMatrix * position;
 
-	if (fogEnabled > 0)
-	{
-		// Remember vertex distance
-		vertexDistance = gl_Position.z;
-	}
+	// Remember vertex distance
+	vertexDistance = gl_Position.z;
 }

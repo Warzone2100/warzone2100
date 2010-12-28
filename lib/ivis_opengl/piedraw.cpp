@@ -166,6 +166,8 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 		if (pieFlag & pie_BUTTON)
 		{
 			pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
+			light = false;
+			pie_ActivateShader(SHADER_BUTTON, teamcolour, shape->tcmaskpage);
 		}
 		pie_SetRendMode(REND_OPAQUE);
 	}
@@ -177,7 +179,7 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 		glMaterialfv(GL_FRONT, GL_SPECULAR, shape->material[LIGHT_SPECULAR]);
 		glMaterialf(GL_FRONT, GL_SHININESS, shape->shininess);
 		glMaterialfv(GL_FRONT, GL_EMISSION, shape->material[LIGHT_EMISSIVE]);
-		pie_ActivateShader_TCMask(teamcolour, shape->tcmaskpage);
+		pie_ActivateShader(SHADER_COMPONENT, teamcolour, shape->tcmaskpage);
 	}
 
 	if (pieFlag & pie_HEIGHT_SCALED)	// construct
@@ -228,7 +230,7 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 		glEnd();
 	}
 
-	if (light)
+	if (light || (pieFlag & pie_BUTTON))
 	{
 		pie_DeactivateShader();
 	}
