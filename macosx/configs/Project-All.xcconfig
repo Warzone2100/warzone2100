@@ -27,3 +27,4 @@ LIBRARY_SEARCH_PATHS_QUOTED_2 = "$(SDK_DIR)/usr/lib"
 LIBRARY_SEARCH_PATHS_QUOTED_3 = "$(SRCROOT)/external/SDL"
 
 HEADER_SEARCH_PATHS_QUOTED_1 = "$(SRCROOT)/external/SDL/SDL.framework/Headers"
+HEADER_SEARCH_PATHS_QUOTED_2 = "$(SRCROOT)/external/glew/include/**"
