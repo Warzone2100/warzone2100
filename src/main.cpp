@@ -1232,8 +1232,6 @@ int main(int argc, char *argv[])
 
 	loadConfig();
 
-	loadRenderMode(); //get the registry entry for clRendMode
-
 	NETinit(true);
 
 	// parse the command line

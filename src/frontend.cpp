@@ -1779,8 +1779,5 @@ void changeTitleMode(tMode mode)
 		break;
 	}
 
-	/* Set default frame rate limit */
-	setDefaultFrameRateLimit();
-
 	return;
 }
