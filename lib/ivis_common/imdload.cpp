@@ -587,10 +587,8 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
 	// load points
 
 	ASSERT_OR_RETURN(NULL, strcmp(buffer, "POINTS") == 0, "Expecting 'POINTS' directive, got: %s", buffer);
-	ASSERT_OR_RETURN(NULL, s->npoints < iV_IMD_MAX_POINTS, "Too many points in IMD, max %d", iV_IMD_MAX_POINTS);
 
 	_imd_load_points( &pFileData, s );
-
 
 	if (sscanf(pFileData, "%s %d%n", buffer, &s->npolys, &cnt) != 2)
 	{
