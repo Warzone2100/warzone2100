@@ -2690,9 +2690,8 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 /// Draws a shadow under a droid
 void renderShadow( DROID *psDroid, iIMDShape *psShadowIMD )
 {
-	Vector3i			dv;
-	Vector3f			*pVecTemp;
-	SDWORD			shadowScale, rx, rz;
+	Vector3i dv;
+	SDWORD rx, rz;
 
 	dv.x = (psDroid->pos.x - player.p.x) - terrainMidX*TILE_UNITS;
 	if(psDroid->droidType == DROID_TRANSPORTER)
@@ -2714,27 +2713,11 @@ void renderShadow( DROID *psDroid, iIMDShape *psShadowIMD )
 	/* Translate */
 	pie_TRANSLATE(rx,0,-rz);
 
-	if(psDroid->droidType == DROID_TRANSPORTER)
-	{
-		pie_MatRotY(-psDroid->rot.direction);
-	}
-
-	pVecTemp = psShadowIMD->points;
-	if(psDroid->droidType == DROID_TRANSPORTER)
-	{
-		flattenImd( psShadowIMD, psDroid->pos.x, psDroid->pos.y, 0);
-		shadowScale = 100-(psDroid->pos.z/100);
-		if(shadowScale < 50) shadowScale = 50;
-	}
-	else
-	{
-		pie_MatRotY(-psDroid->rot.direction);
-		pie_MatRotX(psDroid->rot.pitch);
-		pie_MatRotZ(psDroid->rot.roll);
-	}
+	pie_MatRotY(-psDroid->rot.direction);
+	pie_MatRotX(psDroid->rot.pitch);
+	pie_MatRotZ(psDroid->rot.roll);
 
 	pie_Draw3DShape(psShadowIMD, 0, 0, WZCOL_WHITE, WZCOL_BLACK, pie_TRANSLUCENT, 128);
-	psShadowIMD->points = pVecTemp;
 
 	pie_MatEnd();
 }
