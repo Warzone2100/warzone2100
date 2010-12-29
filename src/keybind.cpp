@@ -849,13 +849,13 @@ void	kf_SystemClose( void )
 /* Zooms out from display */
 void	kf_ZoomOut( void )
 {
-	float zoomInterval = realTimeAdjustedIncrement(MAP_ZOOM_RATE);
+	distance = std::min<int>(distance + realTimeAdjustedIncrement(MAP_ZOOM_RATE), MAXDISTANCE);
+	UpdateFogDistance(distance);
+}
 
-	distance += zoomInterval;
-	if(distance > MAXDISTANCE)
-	{
-		distance = MAXDISTANCE;
-	}
+void kf_ZoomOutStep(void)
+{
+	distance = std::min<int>(distance + MAP_ZOOM_RATE/3, MAXDISTANCE);
 	UpdateFogDistance(distance);
 }
 
@@ -888,13 +888,13 @@ void	kf_RadarZoomOut( void )
 /* Zooms in the map */
 void	kf_ZoomIn( void )
 {
-	float zoomInterval = realTimeAdjustedIncrement(MAP_ZOOM_RATE);
+	distance = std::max<int>(distance - realTimeAdjustedIncrement(MAP_ZOOM_RATE), MINDISTANCE);
+	UpdateFogDistance(distance);
+}
 
-	distance -= zoomInterval;
-	if (distance < MINDISTANCE)
-	{
-		distance = MINDISTANCE;
-	}
+void kf_ZoomInStep(void)
+{
+	distance = std::max<int>(distance - MAP_ZOOM_RATE/3, MINDISTANCE);
 	UpdateFogDistance(distance);
 }
 
