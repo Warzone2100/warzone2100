@@ -129,7 +129,7 @@ extern bool assertEnabled;
 template<bool> class StaticAssert;
 template<> class StaticAssert<true>{};
 #define STATIC_ASSERT_EXPR(expr) \
-	(sizeof(StaticAssert<(expr)>))
+	(0*sizeof(StaticAssert<(expr)>))
 /**
  * Compile time assert
  * Not to be used in global context!
