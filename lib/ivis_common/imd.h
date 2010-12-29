@@ -37,12 +37,13 @@
 //*************************************************************************
 
 // PIE model flags
-#define iV_IMD_TCMASK 0x00010000
+#define iV_IMD_NOSTRETCH     0x00001000
+#define iV_IMD_TCMASK        0x00010000
 
 // polygon flags	b0..b7: col, b24..b31: anim index
 
 
-#define iV_IMD_TEX 0x00000200
+#define iV_IMD_TEX 0x00000200		// this is both a polygon and pie flag
 #define iV_IMD_TEXANIM 0x00004000 // iV_IMD_TEX must be set also
 
 //*************************************************************************
