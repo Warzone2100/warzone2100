@@ -3265,10 +3265,10 @@ BOOL scrGameOverMessage(void)
 
 	if (challengeActive)
 	{
-		char sPath[64], key[64], timestr[32], *fStr;
+		char sPath[64], timestr[32], *fStr;
 		int seconds = 0, newtime = (gameTime - mission.startTime) / GAME_TICKS_PER_SEC;
 		bool victory = false;
-		dictionary *dict = iniparser_load(CHALLENGE_SCORES);
+		inifile *inif = inifile_load(CHALLENGE_SCORES);
 
 		fStr = strrchr(sRequestResult, '/');
 		fStr++;	// skip slash
@@ -3279,16 +3279,15 @@ BOOL scrGameOverMessage(void)
 		}
 		sstrcpy(sPath, fStr);
 		sPath[strlen(sPath) - 4] = '\0';	// remove .ini
-		if (dict)
+		if (inif)
 		{
-			ssprintf(key, "%s:Victory", sPath);
-			victory = iniparser_getboolean(dict, key, false);
-			ssprintf(key, "%s:seconds", sPath);
-			seconds = iniparser_getint(dict, key, 0);
+			inifile_set_current_section(inif, sPath);
+			victory = inifile_get_as_bool(inif, "Victory", false);
+			seconds = inifile_get_as_int(inif, "seconds", 0);
 		}
 		else
 		{
-			dict = dictionary_new(3);
+			inif = inifile_new();
 		}
 
 		// Update score if we have a victory and best recorded was a loss,
@@ -3298,17 +3297,14 @@ BOOL scrGameOverMessage(void)
 		    || (!gameWon && !victory && newtime > seconds)
 		    || (gameWon && victory && newtime < seconds))
 		{
-			dictionary_set(dict, sPath, NULL);
-			ssprintf(key, "%s:Seconds", sPath);
+			inifile_set_current_section(inif, sPath);
 			ssprintf(timestr, "%d", newtime);
-			iniparser_setstring(dict, key, timestr);
-			ssprintf(key, "%s:Player", sPath);
-			iniparser_setstring(dict, key, NetPlay.players[selectedPlayer].name);
-			ssprintf(key, "%s:Victory", sPath);
-			iniparser_setstring(dict, key, gameWon ? "true": "false");
+			inifile_set(inif, "Seconds", timestr);
+			inifile_set(inif, "Player", NetPlay.players[selectedPlayer].name);
+			inifile_set(inif, "Victory", gameWon ? "true": "false");
 		}
-		iniparser_dump_ini(dict, CHALLENGE_SCORES);
-		iniparser_freedict(dict);
+		inifile_save_as(inif, CHALLENGE_SCORES);
+		inifile_delete(inif);
 	}
 
 	return true;

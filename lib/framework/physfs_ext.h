@@ -87,4 +87,54 @@ static inline bool PHYSFS_readBEFloat(PHYSFS_file* file, float* val)
 
 bool PHYSFS_printf(PHYSFS_file *file, const char *format, ...) WZ_DECL_FORMAT(printf, 2, 3);
 
+/**
+ * @brief      fgets() implemented using PHYSFS.
+ * @param      s Pointer to an array where the read chars will be stored.
+ * @param      size Maximum number of chars to read (includes terminating null character).
+ * @param      stream PHYSFS file handle.
+ * @return     s on success, NULL on error or if no characters were read.
+ * @note       PHYSFS_getLastError() or PHYSFS_eof() can help find the source
+ *                     of the error.
+ * @note       If a EOF is encountered before any chars are read, the chars
+ *                     pointed by s are not changed.
+ *
+ * This function reads in at most size - 1 characters from stream
+ * and stores them into the buffer pointed to by s.
+ * Reading stops after an EOF or a newline and a null char is automatically appended.
+ * If a newline is read, it is stored into the buffer.
+ */
+static inline char *PHYSFS_fgets(char *s, int size, PHYSFS_file *stream)
+{
+	char c;
+	int i = 0;
+	PHYSFS_sint64 retval;
+
+	if (size <= 0 || !stream || !s || PHYSFS_eof(stream))
+	{
+		return NULL;
+	}
+	do
+	{
+		retval = PHYSFS_read(stream, &c, 1, 1);
+
+		if (retval < 1)
+		{
+			break;
+		}
+		s[i++] = c;
+	} while (c != '\n' && i < size - 1);
+	s[i] = '\0';
+
+	// Success conditions
+	if (retval == 1 // Read maximum chars or newline
+	 || (i != 0 && PHYSFS_eof(stream) != 0)) /* Read something and stopped at EOF
+	                                          * (note: i!=0 *should* be redundant) */
+	{
+		return s;
+	}
+
+	// Complete failure
+	return NULL;
+}
+
 #endif // _physfs_ext_h

@@ -3227,7 +3227,8 @@ BOOL startMultiOptions(BOOL bReenter)
 		if (challengeActive)
 		{
 			int		i;
-			dictionary	*dict = iniparser_load(sRequestResult);
+			inifile	*inif = inifile_load(sRequestResult);
+			inifile_set_current_section(inif, "challenge");
 
 			resetReadyStatus(false);
 			removeWildcards((char*)sPlayer);
@@ -3239,36 +3240,37 @@ BOOL startMultiOptions(BOOL bReenter)
 			}
 			bHosted = true;
 
-			sstrcpy(game.map, iniparser_getstring(dict, "challenge:Map", game.map));
-			game.maxPlayers = iniparser_getint(dict, "challenge:MaxPlayers", game.maxPlayers);	// TODO, read from map itself, not here!!
+			sstrcpy(game.map, inifile_get(inif, "Map", game.map));
+			game.maxPlayers = inifile_get_as_int(inif, "MaxPlayers", game.maxPlayers);	// TODO, read from map itself, not here!!
 			NetPlay.maxPlayers = game.maxPlayers;
-			game.scavengers = iniparser_getboolean(dict, "challenge:Scavengers", game.scavengers);
+			game.scavengers = inifile_get_as_bool(inif, "Scavengers", game.scavengers);
 			game.alliance = ALLIANCES_TEAMS;
 			netPlayersUpdated = true;
 			mapDownloadProgress = 100;
-			game.power = iniparser_getint(dict, "challenge:Power", game.power);
-			game.base = iniparser_getint(dict, "challenge:Bases", game.base + 1) - 1;		// count from 1 like the humans do
-			allowChangePosition = iniparser_getboolean(dict, "challenge:AllowPositionChange", false);
+			game.power = inifile_get_as_int(inif, "challenge:Power", game.power);
+			game.base = inifile_get_as_int(inif, "challenge:Bases", game.base + 1) - 1;		// count from 1 like the humans do
+			allowChangePosition = inifile_get_as_bool(inif, "challenge:AllowPositionChange", false);
 
 			for (i = 0; i < MAX_PLAYERS; i++)
 			{
 				char key[64];
 
+
 				ssprintf(key, "player_%d:team", i + 1);
-				NetPlay.players[i].team = iniparser_getint(dict, key, NetPlay.players[i].team + 1) - 1;
+				NetPlay.players[i].team = inifile_get_as_int(inif, key, NetPlay.players[i].team + 1) - 1;
 				ssprintf(key, "player_%d:position", i + 1);
-				if (iniparser_find_entry(dict, key))
+				if (inifile_key_exists(inif, key))
 				{
-					changePosition(i, iniparser_getint(dict, key, NetPlay.players[i].position));
+					changePosition(i, inifile_get_as_int(inif, key, NetPlay.players[i].position));
 				}
 				if (i != 0)
 				{
 					ssprintf(key, "player_%d:difficulty", i + 1);
-					game.skDiff[i] = iniparser_getint(dict, key, game.skDiff[i]);
+					game.skDiff[i] = inifile_get_as_int(inif, key, game.skDiff[i]);
 				}
 			}
 
-			iniparser_freedict(dict);
+			inifile_delete(inif);
 
 			ingame.localOptionsReceived = true;
 			addGameOptions(false);									// update game options box.
