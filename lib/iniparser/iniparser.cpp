@@ -485,11 +485,10 @@ void inifile_save_as(inifile *inif, const char *path)
 		const char *currsec = inifile_get_section(inif, i);
 
 		/*
-		 * Only print the section title if there are multiple sections in the
-		 * file; otherwise if we are the only section just dump the keys
-		 * directly.
+		 * Print the section title if there are either multiple sections in the
+		 * file or if the singular section has been explicitly named.
 		 */
-		if (nsec > 1)
+		if (nsec > 1 || strcmp("main", currsec) != 0)
 		{
 			// Print out the section title
 			PHYSFS_printf(f, "[%s]\n", currsec);
