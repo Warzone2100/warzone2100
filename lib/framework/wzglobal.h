@@ -618,7 +618,7 @@
 #if defined(__cplusplus)
    template <typename T, int N>
    static inline char _WZ_ASSERT_ARRAY_EXPR_FUNCTION(T (&)[N]) { return '\0'; }      // Regular array.
-   static inline char _WZ_ASSERT_ARRAY_EXPR_FUNCTION(void const *) { return NULL; }  // Catch static arrays of unnamed structs.
+   static inline char _WZ_ASSERT_ARRAY_EXPR_FUNCTION(void const *) { return '\0'; }  // Catch static arrays of unnamed structs.
    template <typename T>
    static inline char *_WZ_ASSERT_ARRAY_EXPR_FUNCTION(T *&) { return NULL; }         // Eeek, it's a pointer!
 #  define WZ_ASSERT_ARRAY_EXPR(_var) STATIC_ASSERT_EXPR(sizeof(_WZ_ASSERT_ARRAY_EXPR_FUNCTION(_var)) == sizeof(char))
