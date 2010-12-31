@@ -196,15 +196,16 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 
 	frame %= MAX(1, shape->numFrames);
 
+	glBegin(GL_TRIANGLES);
 	for (pPolys = shape->polys; pPolys < shape->polys + shape->npolys; pPolys++)
 	{
 		Vector3f	vertexCoords[3];
-		unsigned int	n, fidx = frame;
+		unsigned int	n, frameidx = frame;
 		int	*index;
 
 		if (!(pPolys->flags & iV_IMD_TEXANIM))
 		{
-			fidx = 0;
+			frameidx = 0;
 		}
 
 		for (n = 0, index = pPolys->pindex;
@@ -218,17 +219,14 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 
 		polyCount++;
 
-		glBegin(GL_TRIANGLE_FAN);
-
 		glNormal3fv((GLfloat*)&pPolys->normal);
 		for (n = 0; n < pPolys->npnts; n++)
 		{
-			glTexCoord2fv((GLfloat*)&pPolys->texCoord[fidx * pPolys->npnts + n]);
+			glTexCoord2fv((GLfloat*)&pPolys->texCoord[frameidx * pPolys->npnts + n]);
 			glVertex3fv((GLfloat*)&vertexCoords[n]);
 		}
-
-		glEnd();
 	}
+	glEnd();
 
 	if (light || (pieFlag & pie_BUTTON))
 	{
