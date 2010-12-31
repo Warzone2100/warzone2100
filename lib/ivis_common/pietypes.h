@@ -58,10 +58,6 @@
 
 #define pie_RAISE_SCALE			256
 
-#define pie_MAX_VERTICES		768
-#define pie_MAX_POLYGONS		512
-#define pie_MAX_VERTICES_PER_POLYGON	6
-
 typedef enum
 {
 	LIGHT_EMISSIVE,

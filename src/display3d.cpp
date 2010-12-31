@@ -187,6 +187,7 @@ static UDWORD currentGameFrame;
 static QUAD dragQuad;
 
 /// temporary buffer used for flattening IMDs
+#define iV_IMD_MAX_POINTS 500
 static Vector3f alteredPoints[iV_IMD_MAX_POINTS];
 
 /** Number of tiles visible

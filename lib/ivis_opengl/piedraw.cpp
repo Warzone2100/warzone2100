@@ -198,9 +198,9 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 
 	for (pPolys = shape->polys; pPolys < shape->polys + shape->npolys; pPolys++)
 	{
-		Vector3f	vertexCoords[pie_MAX_VERTICES_PER_POLYGON];
+		Vector3f	vertexCoords[3];
 		unsigned int	n, fidx = frame;
-		VERTEXID	*index;
+		int	*index;
 
 		if (!(pPolys->flags & iV_IMD_TEXANIM))
 		{
@@ -335,7 +335,7 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, Vector3f* 
 
 		for (i = 0, pPolys = shape->polys; i < shape->npolys; ++i, ++pPolys) {
 			Vector3f p[3];
-			VERTEXID current, first;
+			int current, first;
 			for(j = 0; j < 3; j++)
 			{
 				current = pPolys->pindex[j];

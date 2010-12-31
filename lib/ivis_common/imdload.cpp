@@ -93,28 +93,13 @@ static bool _imd_load_polys( const char **ppFileData, iIMDShape *s, int pieVersi
 
 		poly->flags = flags;
 		poly->npnts = npnts;
-
-		poly->pindex = (VERTEXID *)malloc(sizeof(*poly->pindex) * poly->npnts);
-		if (poly->pindex == NULL)
+		ASSERT_OR_RETURN(false, npnts == 3, "Invalid polygon size (%d)", npnts);
+		if (sscanf(pFileData, "%d %d %d%n", &poly->pindex[0], &poly->pindex[1], &poly->pindex[2], &cnt) != 3)
 		{
-			debug(LOG_ERROR, "(_load_polys) [poly %u] memory alloc fail (poly indices)", i);
+			debug(LOG_ERROR, "failed reading triangle, point %d", i);
 			return false;
 		}
-
-		for (j = 0; j < poly->npnts; j++)
-		{
-			int newID;
-
-			if (sscanf(pFileData, "%d%n", &newID, &cnt) != 1)
-			{
-				debug(LOG_ERROR, "failed poly %u. point %d", i, j);
-				return false;
-			}
-			pFileData += cnt;
-			poly->pindex[j] = newID;
-		}
-
-		assert(poly->npnts > 2);
+		pFileData += cnt;
 
 		// calc poly normal
 		{
@@ -665,7 +650,7 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 	}
 	pFileData += cnt;
 
-	if (strcmp(IMD_NAME, buffer) != 0 && strcmp(PIE_NAME, buffer) !=0 )
+	if (strcmp(PIE_NAME, buffer) != 0)
 	{
 		debug(LOG_ERROR, "iV_ProcessIMD %s not an IMD file (%s %d)", pFileName, buffer, imd_version);
 		return NULL;

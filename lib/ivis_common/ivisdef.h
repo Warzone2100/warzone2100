@@ -60,14 +60,12 @@ typedef struct edge_
 	int from, to;
 } EDGE;
 
-typedef int VERTEXID;	// Size of the entry for vertex id in the imd polygon structure
-
 typedef struct {
 	uint32_t flags;
 	int32_t zcentre;
 	unsigned int npnts;
 	Vector3f normal;
-	VERTEXID *pindex;
+	int pindex[3];
 	Vector2f *texCoord;
 	Vector2f texAnim;
 } iIMDPoly;

@@ -23,16 +23,9 @@
 
 #include "ivisdef.h"
 
-#define IMD_NAME				"IMD"
 #define PIE_NAME				"PIE"  // Pumpkin image export data file
-#define IMD_VER				1
 #define PIE_VER				2
 #define PIE_FLOAT_VER		3
-
-//*************************************************************************
-
-#define iV_IMD_MAX_POINTS pie_MAX_VERTICES
-#define iV_IMD_MAX_POLYS pie_MAX_POLYGONS
 
 //*************************************************************************
 
