@@ -50,7 +50,6 @@
 #include "multiint.h"
 #include "multilimit.h"
 #include "multigifts.h"
-#include "aiexperience.h"	//for beacon messages
 #include "multiint.h"
 #include "multirecv.h"
 #include "scriptfuncs.h"
@@ -597,8 +596,6 @@ BOOL multiGameInit(void)
 	}
 
 	gameInit();
-
-	InitializeAIExperience();
 	msgStackReset();	//for multiplayer msgs, reset message stack
 
 	return true;

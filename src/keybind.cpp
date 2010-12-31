@@ -87,7 +87,6 @@
 #include "selection.h"
 #include "difficulty.h"
 #include "scriptcb.h"		/* for console callback */
-#include "aiexperience.h"	/* for console commands */
 #include "scriptfuncs.h"
 #include "clparse.h"
 #include "research.h"
@@ -115,7 +114,6 @@ static STRUCTURE	*psOldRE = NULL;
 static char	sCurrentConsoleText[MAX_CONSOLE_STRING_LENGTH];			//remember what user types in console for beacon msg
 
 /* Support functions to minimise code size */
-static BOOL	processConsoleCommands( char *pName );
 static void kfsf_SetSelectedDroidsState( SECONDARY_ORDER sec, SECONDARY_STATE State );
 
 /** A function to determine wether we're running a multiplayer game, not just a
@@ -2046,15 +2044,6 @@ void kf_SendTextMessage(void)
 			if(!strcmp(sTextToSend, ""))
 				return;
 
-			/* process console commands (only if skirmish or multiplayer, not a campaign) */
-			if((game.type == SKIRMISH) || bMultiPlayer)
-			{
-				if(processConsoleCommands(sTextToSend))
-				{
-					return;	//it was a console command, so don't send
-				}
-			}
-
 			//console callback message
 			//--------------------------
 			ConsolePlayer = selectedPlayer;
@@ -2754,82 +2743,6 @@ void kf_ToggleRadarTerrain(void)
 			assert(false);
 			break;
 	}
-}
-
-
-//Returns true if the engine should dofurther text processing, false if just exit
-BOOL	processConsoleCommands( char *pName )
-{
-#ifdef DEBUG
-	BOOL	bFound = false;
-	SDWORD	i;
-
-	if(strcmp(pName,"/loadai") == false)
-	{
-		(void)LoadAIExperience(true);
-		return true;
-	}
-	else if(strcmp(pName,"/saveai") == false)
-	{
-		(void)SaveAIExperience(true);
-		return true;
-	}
-	else if(strcmp(pName,"/maxplayers") == false)
-	{
-		console("game.maxPlayers: &d", game.maxPlayers);
-		return true;
-	}
-	else if(strcmp(pName,"/bd") == false)
-	{
-		BaseExperienceDebug(selectedPlayer);
-
-		return true;
-	}
-	else if(strcmp(pName,"/sm") == false)
-	{
-		for(i=0; i<MAX_PLAYERS;i++)
-		{
-			console("%d - %d", i, game.skDiff[i]);
-		}
-
-		return true;
-	}
-	else if(strcmp(pName,"/od") == false)
-	{
-		OilExperienceDebug(selectedPlayer);
-
-		return true;
-	}
-	else
-	{
-		char tmpStr[255];
-
-		/* saveai x */
-		for(i=0;i<MAX_PLAYERS;i++)
-		{
-			sprintf(tmpStr,"/saveai %d", i);		//"saveai 0"
-			if(strcmp(pName,tmpStr) == false)
-			{
-				SavePlayerAIExperience(i, true);
-				return true;
-			}
-		}
-
-		/* loadai x */
-		for(i=0;i<MAX_PLAYERS;i++)
-		{
-			sprintf(tmpStr,"/loadai %d", i);		//"loadai 0"
-			if(strcmp(pName,tmpStr) == false)
-			{
-				(void)LoadPlayerAIExperience(i);
-				return true;
-			}
-		}
-	}
-	return bFound;
-#else
-	return false;
-#endif
 }
 
 //Add a beacon (blip)

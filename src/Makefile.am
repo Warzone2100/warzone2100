@@ -39,7 +39,6 @@ noinst_HEADERS = \
 	action.h \
 	actiondef.h \
 	advvis.h \
-	aiexperience.h \
 	ai.h \
 	anim_id.h \
 	astar.h \
@@ -170,7 +169,6 @@ warzone2100_SOURCES = \
 	action.cpp \
 	advvis.cpp \
 	ai.cpp \
-	aiexperience.cpp \
 	astar.cpp \
 	atmos.cpp \
 	aud.cpp \
