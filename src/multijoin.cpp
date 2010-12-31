@@ -32,7 +32,7 @@
 #include "lib/framework/math_ext.h"
 
 #include "lib/gamelib/gtime.h"
-#include "lib/ivis_common/textdraw.h"
+#include "lib/ivis_opengl/textdraw.h"
 #include "lib/netplay/netplay.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"

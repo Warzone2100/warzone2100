@@ -35,13 +35,13 @@
 #include "lib/framework/stdio_ext.h"
 
 /* Includes direct access to render library */
-#include "lib/ivis_common/bitimage.h"
-#include "lib/ivis_common/pieblitfunc.h"
-#include "lib/ivis_common/piedef.h"
-#include "lib/ivis_common/piestate.h"
-#include "lib/ivis_common/pieclip.h"
-#include "lib/ivis_common/piemode.h"
-#include "lib/ivis_common/piepalette.h"
+#include "lib/ivis_opengl/bitimage.h"
+#include "lib/ivis_opengl/pieblitfunc.h"
+#include "lib/ivis_opengl/piedef.h"
+#include "lib/ivis_opengl/piestate.h"
+#include "lib/ivis_opengl/pieclip.h"
+#include "lib/ivis_opengl/piemode.h"
+#include "lib/ivis_opengl/piepalette.h"
 #include "lib/ivis_opengl/piematrix.h"			// for setgeometricoffset
 #include "lib/ivis_opengl/screen.h"
 

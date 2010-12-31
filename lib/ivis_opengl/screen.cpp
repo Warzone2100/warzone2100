@@ -30,14 +30,14 @@
 #include <SDL.h>
 #include <physfs.h>
 #include <png.h>
-#include "lib/ivis_common/png_util.h"
-#include "lib/ivis_common/tex.h"
+#include "lib/ivis_opengl/png_util.h"
+#include "lib/ivis_opengl/tex.h"
 
 #include "lib/framework/frameint.h"
-#include "lib/ivis_common/textdraw.h"
-#include "lib/ivis_common/piestate.h"
-#include "lib/ivis_common/pieblitfunc.h"
-#include "lib/ivis_common/pieclip.h"
+#include "lib/ivis_opengl/textdraw.h"
+#include "lib/ivis_opengl/piestate.h"
+#include "lib/ivis_opengl/pieblitfunc.h"
+#include "lib/ivis_opengl/pieclip.h"
 
 #include "screen.h"
 #include "src/console.h"

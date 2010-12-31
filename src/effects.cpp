@@ -41,13 +41,13 @@
 #include "lib/framework/tagfile.h"
 #include "lib/framework/math_ext.h"
 
-#include "lib/ivis_common/ivisdef.h" //ivis matrix code
-#include "lib/ivis_common/piedef.h" //ivis matrix code
+#include "lib/ivis_opengl/ivisdef.h" //ivis matrix code
+#include "lib/ivis_opengl/piedef.h" //ivis matrix code
 #include "lib/framework/fixedpoint.h"
-#include "lib/ivis_common/piepalette.h"
-#include "lib/ivis_common/piestate.h"
+#include "lib/ivis_opengl/piepalette.h"
+#include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/piematrix.h"
-#include "lib/ivis_common/piemode.h"
+#include "lib/ivis_opengl/piemode.h"
 
 #include "lib/gamelib/gtime.h"
 #include "lib/sound/audio.h"

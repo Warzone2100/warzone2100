@@ -20,7 +20,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
 #include "lib/gamelib/gtime.h"
-#include "lib/ivis_common/pietypes.h"
+#include "lib/ivis_opengl/pietypes.h"
 
 #include "tracklib.h"
 #include "aud.h"

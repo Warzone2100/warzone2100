@@ -23,8 +23,8 @@
 
 #include "display.h"
 #include "display3ddef.h"	// This should be the only place including this file
-#include "lib/ivis_common/pietypes.h"
-#include "lib/ivis_common/piedef.h"
+#include "lib/ivis_opengl/pietypes.h"
+#include "lib/ivis_opengl/piedef.h"
 #include "objectdef.h"
 #include "message.h"
 

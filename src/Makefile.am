@@ -286,7 +286,6 @@ warzone2100_LDADD = \
 	$(top_builddir)/lib/netplay/libnetplay.a \
 	$(top_builddir)/lib/netplay/miniupnpc/libminiupnpc.a \
 	$(top_builddir)/lib/ivis_opengl/libivis_opengl.a \
-	$(top_builddir)/lib/ivis_common/libivis_common.a \
 	$(top_builddir)/lib/gamelib/libgamelib.a \
 	$(top_builddir)/lib/framework/libframework.a \
 	$(top_builddir)/lib/iniparser/libiniparser.a \

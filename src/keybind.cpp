@@ -70,7 +70,7 @@
 #include "lib/widget/label.h"
 #include "lib/widget/button.h"
 #include "order.h"
-#include "lib/ivis_common/piestate.h"
+#include "lib/ivis_opengl/piestate.h"
 // FIXME Direct iVis implementation include!
 #include "lib/framework/fixedpoint.h"
 #include "lib/ivis_opengl/piematrix.h"

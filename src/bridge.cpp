@@ -20,7 +20,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/ivis_opengl/piematrix.h"
-#include "lib/ivis_common/piepalette.h"
+#include "lib/ivis_opengl/piepalette.h"
 
 #include "bridge.h"
 #include "display3d.h"

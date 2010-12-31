@@ -26,7 +26,7 @@
 
 #include "widget.h"
 #include "widgbase.h"
-#include "lib/ivis_common/textdraw.h"
+#include "lib/ivis_opengl/textdraw.h"
 
 /* Button states */
 #define WBUTS_NORMAL	0x0000

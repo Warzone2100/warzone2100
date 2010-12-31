@@ -30,7 +30,7 @@
 #include "lib/framework/file.h"
 #include "lib/framework/physfs_ext.h"
 #include "lib/framework/tagfile.h"
-#include "lib/ivis_common/tex.h"
+#include "lib/ivis_opengl/tex.h"
 #include "lib/netplay/netplay.h"  // For syncDebug
 
 #include "map.h"

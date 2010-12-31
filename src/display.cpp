@@ -28,7 +28,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
 #include "lib/framework/strres.h"
-#include "lib/ivis_common/piestate.h"
+#include "lib/ivis_opengl/piestate.h"
 #include "lib/framework/fixedpoint.h"
 #include "lib/framework/wzapp_c.h"
 

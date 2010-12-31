@@ -29,7 +29,7 @@
 #include "lib/framework/math_ext.h"
 #include "lib/widget/label.h"
 #include "lib/widget/widget.h"
-#include "lib/ivis_common/textdraw.h"
+#include "lib/ivis_opengl/textdraw.h"
 
 #include "stats.h"
 #include "hci.h"
@@ -47,7 +47,7 @@
 #include "action.h"
 #include "lib/gamelib/gtime.h"
 #include "console.h"
-#include "lib/ivis_common/bitimage.h"
+#include "lib/ivis_opengl/bitimage.h"
 #include "warcam.h"
 #include "selection.h"
 #include "lib/sound/audio.h"

@@ -6,7 +6,6 @@ SUBDIRS = \
 	  lib/script \
 	  lib/sequence \
 	  lib/iniparser \
-	  lib/ivis_common \
 	  lib/ivis_opengl \
 	  lib/gamelib \
 	  lib/sound \

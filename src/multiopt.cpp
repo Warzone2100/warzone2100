@@ -37,7 +37,7 @@
 #include "hci.h"
 #include "configuration.h"			// lobby cfg.
 #include "clparse.h"
-#include "lib/ivis_common/piestate.h"
+#include "lib/ivis_opengl/piestate.h"
 
 #include "component.h"
 #include "console.h"

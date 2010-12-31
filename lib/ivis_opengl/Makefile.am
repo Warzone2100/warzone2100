@@ -5,7 +5,24 @@ AM_CXXFLAGS = $(WZ_CXXFLAGS)
 noinst_LIBRARIES = libivis_opengl.a
 noinst_HEADERS = \
 	piematrix.h \
-	screen.h
+	screen.h \
+        bitimage.h \
+        imd.h \
+        ivi.h \
+        ivisdef.h \
+        jpeg_encoder.h \
+        pieblitfunc.h \
+        pieclip.h \
+        piedef.h \
+        piefunc.h \
+        piemode.h \
+        piepalette.h \
+        piestate.h \
+        pietypes.h \
+        png_util.h \
+        rendmode.h \
+        tex.h \
+        textdraw.h
 
 libivis_opengl_a_SOURCES = \
 	ivi.cpp \
@@ -19,12 +36,17 @@ libivis_opengl_a_SOURCES = \
 	rendmode.cpp \
 	screen.cpp \
 	tex.cpp \
-	textdraw.cpp
+	textdraw.cpp \
+        bitimage.cpp \
+        imd.cpp \
+        imdload.cpp \
+        jpeg_encoder.cpp \
+        pieclip.cpp \
+        png_util.cpp
 
 if !SYSTEM_GLEE
 libivis_opengl_a_SOURCES += GLee.c
 noinst_HEADERS += GLee.h
 endif
 
-libivis_opengl_a_LIBADD = $(top_builddir)/lib/ivis_common/libivis_common.a \
-	$(top_builddir)/lib/framework/libframework.a
+libivis_opengl_a_LIBADD = $(top_builddir)/lib/framework/libframework.a

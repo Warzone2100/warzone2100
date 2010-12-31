@@ -31,8 +31,8 @@
 #define __INCLUDED_LIB_WIDGET_WIDGET_H__
 
 #include "lib/framework/frame.h"
-#include "lib/ivis_common/piepalette.h"
-#include "lib/ivis_common/textdraw.h"
+#include "lib/ivis_opengl/piepalette.h"
+#include "lib/ivis_opengl/textdraw.h"
 #include "widgbase.h"
 
 /***********************************************************************************

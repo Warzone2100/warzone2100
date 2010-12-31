@@ -20,7 +20,7 @@
 #ifndef _piePalette_
 #define _piePalette_
 
-#include "lib/ivis_common/piedef.h"
+#include "lib/ivis_opengl/piedef.h"
 
 #define WZCOL_BLACK					psPalette[0]
 #define WZCOL_WHITE					psPalette[1]

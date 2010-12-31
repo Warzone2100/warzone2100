@@ -21,7 +21,7 @@
 #ifndef __INCLUDED_SRC_TERRAIN_H__
 #define __INCLUDED_SRC_TERRAIN_H__
 
-#include "lib/ivis_common/pietypes.h"
+#include "lib/ivis_opengl/pietypes.h"
 
 bool initTerrain(void);
 void shutdownTerrain(void);

@@ -21,7 +21,7 @@
 #ifndef __INCLUDED_SRC_WARCAM_H__
 #define __INCLUDED_SRC_WARCAM_H__
 
-#include "lib/ivis_common/pietypes.h"
+#include "lib/ivis_opengl/pietypes.h"
 #include "objectdef.h"
 
 #define X_UPDATE 0x1

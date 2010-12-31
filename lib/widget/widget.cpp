@@ -25,7 +25,7 @@
 #include "lib/framework/string_ext.h"
 #include "lib/framework/frameint.h"
 #include "lib/framework/utf.h"
-#include "lib/ivis_common/textdraw.h"
+#include "lib/ivis_opengl/textdraw.h"
 
 #include "widget.h"
 #include "widgint.h"

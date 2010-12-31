@@ -24,7 +24,7 @@
 #ifndef __INCLUDED_STATSDEF_H__
 #define __INCLUDED_STATSDEF_H__
 
-#include "lib/ivis_common/ivisdef.h"
+#include "lib/ivis_opengl/ivisdef.h"
 
 /*
 if any types are added BEFORE 'COMP_BODY' - then Save/Load Game will have to be

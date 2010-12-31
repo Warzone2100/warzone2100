@@ -24,7 +24,7 @@
 #ifndef __INCLUDED_SRC_HCI_H__
 #define __INCLUDED_SRC_HCI_H__
 
-#include "lib/ivis_common/pieclip.h"
+#include "lib/ivis_opengl/pieclip.h"
 #include "lib/widget/widget.h"
 
 #include "message.h"

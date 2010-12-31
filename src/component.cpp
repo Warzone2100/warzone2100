@@ -23,7 +23,7 @@
 */
 
 #include "lib/framework/frame.h"
-#include "lib/ivis_common/piestate.h"
+#include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/piematrix.h"
 #include "lib/netplay/netplay.h"
 

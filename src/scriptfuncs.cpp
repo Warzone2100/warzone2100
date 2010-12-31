@@ -74,7 +74,7 @@
 #include "multilimit.h"
 #include "advvis.h"
 #include "mapgrid.h"
-#include "lib/ivis_common/piestate.h"
+#include "lib/ivis_opengl/piestate.h"
 #include "wrappers.h"
 #include "order.h"
 #include "orderdef.h"

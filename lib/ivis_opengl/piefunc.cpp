@@ -26,12 +26,12 @@
 #include "lib/framework/opengl.h"
 
 #include "lib/gamelib/gtime.h"
-#include "lib/ivis_common/piedef.h"
-#include "lib/ivis_common/piefunc.h"
-#include "lib/ivis_common/piestate.h"
+#include "lib/ivis_opengl/piedef.h"
+#include "lib/ivis_opengl/piefunc.h"
+#include "lib/ivis_opengl/piestate.h"
 #include "piematrix.h"
-#include "lib/ivis_common/piemode.h"
-#include "lib/ivis_common/pieclip.h"
+#include "lib/ivis_opengl/piemode.h"
+#include "lib/ivis_opengl/pieclip.h"
 
 /*
  *	Source
