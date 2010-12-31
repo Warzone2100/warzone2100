@@ -9,7 +9,6 @@ SRC= \
 	imdload.cpp \
 	jpeg_encoder.cpp \
 	pieclip.cpp \
-	piestate.cpp \
 	png_util.cpp
 
 LIB=ivis_common

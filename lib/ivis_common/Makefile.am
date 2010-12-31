@@ -28,7 +28,6 @@ libivis_common_a_SOURCES = \
 	imdload.cpp \
 	jpeg_encoder.cpp \
 	pieclip.cpp \
-	piestate.cpp \
 	png_util.cpp
 
 libivis_common_a_LIBADD = $(top_builddir)/lib/framework/libframework.a

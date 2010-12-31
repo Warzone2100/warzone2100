@@ -59,7 +59,6 @@ typedef struct	RENDER_STATE
 /***************************************************************************/
 
 extern unsigned int pieStateCount;
-extern RENDER_STATE rendStates;
 
 /***************************************************************************/
 /*
