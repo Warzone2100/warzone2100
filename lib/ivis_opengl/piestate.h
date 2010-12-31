@@ -48,7 +48,6 @@ typedef struct	RENDER_STATE
 					SDWORD				texPage;
 					REND_MODE			rendMode;
 					BOOL				keyingOn;
-					TRANSLUCENCY_MODE	transMode;
 				}
 				RENDER_STATE;
 
@@ -87,10 +86,6 @@ extern void pie_SetMouse(CURSOR cursor, bool coloured);
 extern void pie_DrawMouse(unsigned int X, unsigned int Y);
 extern void pie_ShowMouse(bool visible);
 
-extern void pie_SetTranslucencyMode(TRANSLUCENCY_MODE transMode);
-
-/* Actually in piestate.c */
-
 // Shaders control center
 bool pie_LoadShaders(void);
 // Actual shaders (we do not want to export these calls)
@@ -98,13 +93,10 @@ void pie_DeactivateShader(void);
 void pie_ActivateShader(SHADER_MODE shaderMode, PIELIGHT teamcolour, int maskpage);
 void pie_SetShaderStretchDepth(float stretch);
 
-/* Actually in piedraw.c */
-
 /* Errors control routine */
 #define glErrors() \
 	_glerrors(__FUNCTION__, __FILE__, __LINE__)
 
 extern bool _glerrors(const char *, const char *, int);
-
 
 #endif // _pieState_h

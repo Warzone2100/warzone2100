@@ -79,8 +79,8 @@ void pie_SetDefaultStates(void)//Sets all states
 	//depth Buffer on
 	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 
-	rendStates.transMode = TRANS_ALPHA;//to force reset to DECAL
-	pie_SetTranslucencyMode(TRANS_DECAL);
+	rendStates.rendMode = REND_ALPHA;	// to force reset to REND_OPAQUE
+	pie_SetRendMode(REND_OPAQUE);
 
 	//chroma keying on black
 	rendStates.keyingOn = false;//to force reset to true
@@ -156,26 +156,25 @@ void pie_SetRendMode(REND_MODE rendMode)
 		switch (rendMode)
 		{
 			case REND_OPAQUE:
-				pie_SetTranslucencyMode(TRANS_DECAL);
+				glDisable(GL_BLEND);
 				break;
 
 			case REND_ALPHA:
-				pie_SetTranslucencyMode(TRANS_ALPHA);
+				glEnable(GL_BLEND);
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 				break;
 
 			case REND_ADDITIVE:
-				pie_SetTranslucencyMode(TRANS_ADDITIVE);
+				glEnable(GL_BLEND);
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 				break;
 
 			case REND_MULTIPLICATIVE:
-				pie_SetTranslucencyMode(TRANS_MULTIPLICATIVE);
-				break;
-
-			default:
+				glEnable(GL_BLEND);
+				glBlendFunc(GL_ZERO, GL_SRC_COLOR);
 				break;
 		}
 	}
-	return;
 }
 
 // Read shader into text buffer
@@ -542,36 +541,6 @@ void pie_SetAlphaTest(BOOL keyingOn)
 			glAlphaFunc(GL_GREATER, 0.1f);
 		} else {
 			glDisable(GL_ALPHA_TEST);
-		}
-	}
-}
-
-void pie_SetTranslucencyMode(TRANSLUCENCY_MODE transMode)
-{
-	if (transMode != rendStates.transMode) {
-		rendStates.transMode = transMode;
-		switch (transMode) {
-			case TRANS_ALPHA:
-				glEnable(GL_BLEND);
-				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-				break;
-			case TRANS_ADDITIVE:
-				glEnable(GL_BLEND);
-				glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-				break;
-			case TRANS_MULTIPLICATIVE:
-				glEnable(GL_BLEND);
-				glBlendFunc(GL_ZERO, GL_SRC_COLOR);
-				break;
-			case TRANS_DECAL:
-				glDisable(GL_BLEND);
-				break;
-			case TRANS_FILTER:
-				glEnable(GL_BLEND);
-				glBlendFunc(GL_ONE, GL_ONE);
-				break;
-			default:
-				break;
 		}
 	}
 }
