@@ -124,6 +124,8 @@ static void updateMaxECMStats(UWORD maxValue);
 static void updateMaxBodyStats(UWORD maxBody, UWORD maxPower, UWORD maxArmour);
 static void updateMaxConstStats(UWORD maxValue);
 
+static bool getWeaponEffect(const char* weaponEffect, WEAPON_EFFECT* effect);  // Kill this function, when rewriting stats.cpp.
+
 
 BASE_STATS::BASE_STATS(unsigned ref, std::string const &str)
 	: ref(ref)
@@ -191,13 +193,13 @@ void LineView::setError(unsigned index, char const *error)
 		char const *cellEnd = table.buffer + (cells[index + 1] - 1);
 
 		char cellDesc[150];
-		ssprintf(cellDesc, "Line %u, column %u \"%*s\": ", lineNumber, index, std::min<unsigned>(100, cellEnd - cellBegin), cellBegin);
+		ssprintf(cellDesc, "Line %u, column %d \"%.*s\": ", lineNumber, index, std::min<unsigned>(100, cellEnd - cellBegin), cellBegin);
 		table.parseError = QString::fromUtf8((std::string(cellDesc) + error).c_str());
 	}
 	else
 	{
 		char cellDesc[50];
-		ssprintf(cellDesc, "Line %u, column %u: ", lineNumber, index);
+		ssprintf(cellDesc, "Line %u, column %d: ", lineNumber, index);
 		table.parseError = QString::fromUtf8((std::string(cellDesc) + error).c_str());
 	}
 }
@@ -213,9 +215,9 @@ bool LineView::checkRange(unsigned index)
 	return false;
 }
 
-int64_t LineView::i(unsigned index, int min, int max)
+int64_t LineView::i(unsigned index, int64_t min, int64_t max)
 {
-	int errorReturn = std::min(std::max(0, min), max);  // On error, return 0 if possible.
+	int errorReturn = std::min(std::max<int64_t>(0, min), max);  // On error, return 0 if possible.
 
 	if (!checkRange(index))
 	{
@@ -304,9 +306,13 @@ std::string const &LineView::s(unsigned index)
 	return table.returnString;
 }
 
-iIMDShape *LineView::imdShape(unsigned int index)
+iIMDShape *LineView::imdShape(unsigned int index, bool accept0AsNULL)
 {
 	std::string const &str = s(index);
+	if (accept0AsNULL && str == "0")
+	{
+		return NULL;
+	}
 	iIMDShape *result = (iIMDShape *)resGetData("IMD", str.c_str());
 	if (result == NULL)
 	{
@@ -2962,7 +2968,19 @@ bool getMovementModel(const char* movementModel, MOVEMENT_MODEL* model)
 	return true;
 }
 
-bool getWeaponEffect(const char* weaponEffect, WEAPON_EFFECT* effect)
+const StringToEnum<WEAPON_EFFECT> mapUnsorted_WEAPON_EFFECT[] =
+{
+	{"ANTI PERSONNEL",      WE_ANTI_PERSONNEL       },
+	{"ANTI TANK",           WE_ANTI_TANK            },
+	{"BUNKER BUSTER",       WE_BUNKER_BUSTER        },
+	{"ARTILLERY ROUND",     WE_ARTILLERY_ROUND      },
+	{"FLAMER",              WE_FLAMER               },
+	{"ANTI AIRCRAFT",       WE_ANTI_AIRCRAFT        },
+	{"ALL ROUNDER",         WE_ANTI_AIRCRAFT        },  // Alternative name for WE_ANTI_AIRCRAFT.
+};
+const StringToEnumMap<WEAPON_EFFECT> map_WEAPON_EFFECT = mapUnsorted_WEAPON_EFFECT;
+
+static bool getWeaponEffect(const char* weaponEffect, WEAPON_EFFECT* effect)
 {
 	if      (strcmp(weaponEffect, "ANTI PERSONNEL") == 0)
 	{

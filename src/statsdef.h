@@ -31,6 +31,32 @@
 #include "lib/framework/utf.h"  // For QString.
 
 static inline bool stringToEnumSortFunction(std::pair<char const *, unsigned> const &a, std::pair<char const *, unsigned> const &b) { return strcmp(a.first, b.first) < 0; }
+template <typename STATS>
+static inline STATS *findStatsByName(std::string const &name, STATS *asStats, unsigned numStats)
+{
+	for (unsigned inc = 0; inc < numStats; ++inc)  // Could be more efficient, if the stats were sorted by name...
+	{
+		//compare the names
+		if (name == asStats[inc].pName)
+		{
+			return &asStats[inc];
+		}
+	}
+	return NULL;  // Not found.
+}
+template <typename STATS>
+static inline STATS *findStatsByName(std::string const &name, STATS **asStats, unsigned numStats)
+{
+	for (unsigned inc = 0; inc < numStats; ++inc)  // Could be more efficient, if the stats were sorted by name...
+	{
+		//compare the names
+		if (name == asStats[inc]->pName)
+		{
+			return asStats[inc];
+		}
+	}
+	return NULL;  // Not found.
+}
 
 template <typename Enum>
 struct StringToEnum
@@ -46,7 +72,17 @@ struct StringToEnumMap : public std::vector<std::pair<char const *, unsigned> >
 {
 	typedef std::vector<std::pair<char const *, unsigned> > V;
 
-	StringToEnumMap(StringToEnum<Enum> const entries[], unsigned numEntries) : V(entries, entries + numEntries) { std::sort(V::begin(), V::end(), stringToEnumSortFunction); }
+	template <int N>
+	static StringToEnumMap<Enum> const &FromArray(StringToEnum<Enum> const (&map)[N])
+	{
+		static StringToEnum<Enum> const (&myMap)[N] = map;
+		static const StringToEnumMap<Enum> sortedMap(map);
+		assert(map == myMap);
+		return sortedMap;
+	}
+
+	template <int N>
+	StringToEnumMap(StringToEnum<Enum> const (&entries)[N]) : V(entries, entries + N) { std::sort(V::begin(), V::end(), stringToEnumSortFunction); }
 };
 
 /// Read-only view of file data in "A,1,2\nB,3,4" format as a 2D array-like object. Note — does not copy the file data.
@@ -55,7 +91,7 @@ class TableView
 public:
 	TableView(char const *buffer, unsigned size);
 
-	bool isError() const { return parseError.isEmpty(); }
+	bool isError() const { return !parseError.isEmpty(); }
 	QString getError() const { return parseError; }
 
 	unsigned size() const { return lines.size(); }
@@ -75,13 +111,14 @@ class LineView
 public:
 	LineView(class TableView &table, unsigned lineNumber) : table(table), cells(&table.cells[table.lines.at(lineNumber).first]), numCells(table.lines.at(lineNumber).second), lineNumber(lineNumber) {}  ///< This LineView is only valid for the lifetime of the TableView.
 
+	bool isError() const { return !table.parseError.isEmpty(); }
 	void setError(unsigned index, char const *error);  ///< Only the first error is saved.
 
 	unsigned size() const { return numCells; }
 	unsigned line() const { return lineNumber; }
 
 	bool b(unsigned index) { return i(index, 0, 1); }
-	int64_t i(unsigned index, int min, int max);
+	int64_t i(unsigned index, int64_t min, int64_t max);
 	uint32_t i8(unsigned index)  { return i(index, INT8_MIN,  INT8_MAX);   }
 	uint32_t u8(unsigned index)  { return i(index, 0,         UINT8_MAX);  }
 	uint32_t i16(unsigned index) { return i(index, INT16_MIN, INT16_MAX);  }
@@ -92,8 +129,41 @@ public:
 	std::string const &s(unsigned index);
 	template <typename Enum>
 	Enum e(unsigned index, StringToEnumMap<Enum> const &map) { return (Enum)eu(index, map); }
+	template <typename Enum, int N>
+	Enum e(unsigned index, StringToEnum<Enum> const (&map)[N]) { return e(index, StringToEnumMap<Enum>::FromArray(map)); }
 
-	iIMDShape *imdShape(unsigned index);
+	iIMDShape *imdShape(unsigned index, bool accept0AsNULL = false);
+	template <typename STATS>
+	inline STATS *stats(unsigned index, STATS *asStats, unsigned numStats, bool accept0AsNULL = false)
+	{
+		std::string const &name = s(index);
+		if (accept0AsNULL && name == "0")
+		{
+			return NULL;
+		}
+		STATS *ret = findStatsByName(name, asStats, numStats);
+		if (ret == NULL)
+		{
+			setError(index, "Couldn't find stats.");
+		}
+		return ret;
+	}
+	template <typename STATS>
+	inline STATS *stats(unsigned index, STATS **asStats, unsigned numStats, bool accept0AsNULL = false)
+	{
+		std::string const &name = s(index);
+		if (accept0AsNULL && name == "0")
+		{
+			return NULL;
+		}
+		STATS *ret = findStatsByName(name, asStats, numStats);
+		if (ret == NULL)
+		{
+			setError(index, "Couldn't find stats.");
+		}
+		return ret;
+	}
+
 
 private:
 	unsigned eu(unsigned index, std::vector<std::pair<char const *, unsigned> > const &map);
@@ -108,7 +178,7 @@ private:
 if any types are added BEFORE 'COMP_BODY' - then Save/Load Game will have to be
 altered since it loops through the components from 1->MAX_COMP
 */
-typedef enum COMPONENT_TYPE
+enum COMPONENT_TYPE
 {
 	COMP_UNKNOWN,
 	COMP_BODY,
@@ -120,39 +190,39 @@ typedef enum COMPONENT_TYPE
 	COMP_CONSTRUCT,
 	COMP_WEAPON,
 	COMP_NUMCOMPONENTS,			/** The number of enumerators in this enum.	 */
-} COMPONENT_TYPE;
+};
 
 /**
  * LOC used for holding locations for Sensors and ECM's
  */
-typedef enum LOC
+enum LOC
 {
 	LOC_DEFAULT,
 	LOC_TURRET,
-} LOC;
+};
 
 /**
  * SIZE used for specifying body size
  */
-typedef enum BODY_SIZE
+enum BODY_SIZE
 {
 	SIZE_LIGHT,
 	SIZE_MEDIUM,
 	SIZE_HEAVY,
 	SIZE_SUPER_HEAVY,
-} BODY_SIZE;
+};
 
 /**
  * only using KINETIC and HEAT for now
  */
-typedef enum WEAPON_CLASS
+enum WEAPON_CLASS
 {
 	WC_KINETIC,					///< bullets etc
 	//WC_EXPLOSIVE,				///< rockets etc - classed as WC_KINETIC now to save space in DROID
 	WC_HEAT,					///< laser etc
 	//WC_MISC					///< others we haven't thought of! - classed as WC_HEAT now to save space in DROID
 	WC_NUM_WEAPON_CLASSES		/** The number of enumerators in this enum.	 */
-} WEAPON_CLASS;
+};
 
 /**
  * weapon subclasses used to define which weapons are affected by weapon upgrade
@@ -160,7 +230,7 @@ typedef enum WEAPON_CLASS
  *
  * Watermelon:added a new subclass to do some tests
  */
-typedef enum WEAPON_SUBCLASS
+enum WEAPON_SUBCLASS
 {
 	WSC_MGUN,
 	WSC_CANNON,
@@ -183,12 +253,12 @@ typedef enum WEAPON_SUBCLASS
 	WSC_EMP,
 	WSC_COUNTER,				// Counter missile
 	WSC_NUM_WEAPON_SUBCLASSES,	/** The number of enumerators in this enum.	 */
-} WEAPON_SUBCLASS;
+};
 
 /**
  * Used to define which projectile model to use for the weapon.
  */
-typedef enum MOVEMENT_MODEL
+enum MOVEMENT_MODEL
 {
 	MM_DIRECT,
 	MM_INDIRECT,
@@ -197,13 +267,13 @@ typedef enum MOVEMENT_MODEL
 	MM_ERRATICDIRECT,
 	MM_SWEEP,
 	NUM_MOVEMENT_MODEL,			/**  The number of enumerators in this enum. */
-} MOVEMENT_MODEL;
+};
 
 /**
  * Used to modify the damage to a propuslion type (or structure) based on
  * weapon.
  */
-typedef enum WEAPON_EFFECT
+enum WEAPON_EFFECT
 {
 	WE_ANTI_PERSONNEL,
 	WE_ANTI_TANK,
@@ -212,12 +282,12 @@ typedef enum WEAPON_EFFECT
 	WE_FLAMER,
 	WE_ANTI_AIRCRAFT,
 	WE_NUMEFFECTS,			/**  The number of enumerators in this enum. */
-} WEAPON_EFFECT;
+};
 
 /**
  * Sides used for droid impact
  */
-typedef enum HIT_SIDE
+enum HIT_SIDE
 {
 	HIT_SIDE_FRONT,
 	HIT_SIDE_REAR,
@@ -226,19 +296,19 @@ typedef enum HIT_SIDE
 	HIT_SIDE_TOP,
 	HIT_SIDE_BOTTOM,
 	NUM_HIT_SIDES,			/**  The number of enumerators in this enum. */
-} HIT_SIDE;
+};
 
 /**
  * Defines the left and right sides for propulsion IMDs
  */
-typedef enum PROP_SIDE
+enum PROP_SIDE
 {
 	LEFT_PROP,
 	RIGHT_PROP,
 	NUM_PROP_SIDES,			/**  The number of enumerators in this enum. */
-} PROP_SIDE;
+};
 
-typedef enum PROPULSION_TYPE
+enum PROPULSION_TYPE
 {
 	PROPULSION_TYPE_WHEELED,
 	PROPULSION_TYPE_TRACKED,
@@ -250,9 +320,9 @@ typedef enum PROPULSION_TYPE
 	PROPULSION_TYPE_HALF_TRACKED,
 	PROPULSION_TYPE_JUMP,
 	PROPULSION_TYPE_NUM,	/**  The number of enumerators in this enum. */
-} PROPULSION_TYPE;
+};
 
-typedef enum SENSOR_TYPE
+enum SENSOR_TYPE
 {
 	STANDARD_SENSOR,
 	INDIRECT_CB_SENSOR,
@@ -260,20 +330,20 @@ typedef enum SENSOR_TYPE
 	VTOL_INTERCEPT_SENSOR,
 	SUPER_SENSOR,			///< works as all of the above together! - new for updates
 	RADAR_DETECTOR_SENSOR,
-} SENSOR_TYPE;
+};
 
-typedef enum FIREONMOVE
+enum FIREONMOVE
 {
 	FOM_NO,			///< no capability - droid must stop
 	FOM_PARTIAL,	///< partial capability - droid has 50% chance to hit
 	FOM_YES,		///< full capability - droid fires normally on move
-} FIREONMOVE;
+};
 
-typedef enum TRAVEL_MEDIUM
+enum TRAVEL_MEDIUM
 {
 	GROUND,
 	AIR,
-} TRAVEL_MEDIUM;
+};
 
 /*
 * Stats structures type definitions
@@ -431,7 +501,7 @@ struct BODY_STATS : public COMPONENT_STATS
 /************************************************************************************
 * Additional stats tables
 ************************************************************************************/
-typedef struct _propulsion_types
+struct PROPULSION_TYPES
 {
 	UWORD	powerRatioMult; ///< Multiplier for the calculated power ratio of the droid
 	UDWORD	travel;			///< Which medium the propulsion travels in
@@ -441,22 +511,22 @@ typedef struct _propulsion_types
 	SWORD	moveID;			///< sound to play when this prop type is moving
 	SWORD	hissID;			///< sound to link moveID and idleID
 	SWORD	shutDownID;		///< sound to play when this prop type shuts down
-} PROPULSION_TYPES;
+};
 
-typedef struct _terrain_table
+struct TERRAIN_TABLE
 {
 	UDWORD	speedFactor;	///< factor to multiply the speed by depending on the method of propulsion and the terrain type - to be divided by 100 before use
-} TERRAIN_TABLE;
+};
 
-typedef struct _special_ability
+struct SPECIAL_ABILITY
 {
 	char	*pName;			///< Text name of the component
-} SPECIAL_ABILITY;
+};
 
 typedef UWORD	WEAPON_MODIFIER;
 
 /* weapon stats which can be upgraded by research*/
-typedef struct _weapon_upgrade
+struct WEAPON_UPGRADE
 {
 	UBYTE	firePause;
 	UWORD	shortHit;
@@ -465,40 +535,40 @@ typedef struct _weapon_upgrade
 	UWORD	radiusDamage;
 	UWORD	incenDamage;
 	UWORD	radiusHit;
-} WEAPON_UPGRADE;
+};
 
 /*sensor stats which can be upgraded by research*/
-typedef struct _sensor_upgrade
+struct SENSOR_UPGRADE
 {
 	UWORD	power;
 	UWORD	range;
-} SENSOR_UPGRADE;
+};
 
 /*ECM stats which can be upgraded by research*/
-typedef struct _ecm_upgrade
+struct ECM_UPGRADE
 {
 	UWORD	power;
 	UDWORD	range;
-} ECM_UPGRADE;
+};
 
 /*repair stats which can be upgraded by research*/
-typedef struct _repair_upgrade
+struct REPAIR_UPGRADE
 {
 	UWORD	repairPoints;
-} REPAIR_UPGRADE;
+};
 
 /*constructor stats which can be upgraded by research*/
-typedef struct _constructor_upgrade
+struct CONSTRUCTOR_UPGRADE
 {
 	UWORD	constructPoints;
-} CONSTRUCTOR_UPGRADE;
+};
 
 /*body stats which can be upgraded by research*/
-typedef struct _body_upgrade
+struct BODY_UPGRADE
 {
 	UWORD	powerOutput;
 	UWORD	body;
 	UWORD	armourValue[WC_NUM_WEAPON_CLASSES];
-} BODY_UPGRADE;
+};
 
 #endif // __INCLUDED_STATSDEF_H__

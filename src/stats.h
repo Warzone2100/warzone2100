@@ -311,7 +311,7 @@ extern bool getPropulsionType(const char* typeName, PROPULSION_TYPE* type);
  *         contain a valid weapon effect enumerator, otherwise its value will
  *         be left unchanged.
  */
-extern bool getWeaponEffect(const char* weaponEffect, WEAPON_EFFECT* effect);
+extern const StringToEnumMap<WEAPON_EFFECT> map_WEAPON_EFFECT;
 
 extern UWORD weaponROF(WEAPON_STATS *psStat, SBYTE player);
 /*Access functions for the upgradeable stats of a weapon*/

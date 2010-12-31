@@ -368,11 +368,7 @@ void resetFactoryNumFlag(void)
 	}
 }
 
-static const struct
-{
-	const char*     typeName;
-	STRUCTURE_TYPE  type;
-} structureTypeNames[] =
+static const StringToEnum<STRUCTURE_TYPE> map_STRUCTURE_TYPE[] =
 {
 	{ "HQ",                 REF_HQ                  },
 	{ "FACTORY",            REF_FACTORY             },
@@ -398,107 +394,62 @@ static const struct
 	{ "GATE",               REF_GATE                },
 };
 
-static STRUCTURE_TYPE structureType(const char* typeName)
+static const StringToEnum<STRUCT_STRENGTH> map_STRUCT_STRENGTH[] =
 {
-	unsigned int i;
+	{"SOFT",        STRENGTH_SOFT           },
+	{"MEDIUM",      STRENGTH_MEDIUM         },
+	{"HARD",        STRENGTH_HARD           },
+	{"BUNKER",      STRENGTH_BUNKER         },
+};
 
-	for (i = 0; i < ARRAY_SIZE(structureTypeNames); ++i)
-	{
-		if (strcmp(typeName, structureTypeNames[i].typeName) == 0)
-		{
-			return structureTypeNames[i].type;
-		}
-	}
-
-	ASSERT(!"unknown structure type", "Unknown Structure Type (%s)", typeName);
-
-	// Dummy value to prevent warnings about missing return from function
-	return NUM_DIFF_BUILDINGS;
-}
-
-
-static const char* getStructName(const STRUCTURE_STATS* psStruct)
+static void initModulePIEs(std::string const &PIEName, unsigned i, STRUCTURE_TYPE type)
 {
-	return getName(psStruct->pName);
-}
-
-/*returns the structure strength based on the string name passed in */
-static STRUCT_STRENGTH getStructStrength(const char *pStrength)
-{
-	if (!strcmp(pStrength, "SOFT"))
-	{
-		return STRENGTH_SOFT;
-	}
-	else if (!strcmp(pStrength, "MEDIUM"))
-	{
-		return STRENGTH_MEDIUM;
-	}
-	else if (!strcmp(pStrength, "HARD"))
-	{
-		return STRENGTH_HARD;
-	}
-	else if (!strcmp(pStrength, "BUNKER"))
-	{
-		return STRENGTH_BUNKER;
-	}
-
-	return NUM_STRUCT_STRENGTH;  // Invalid strength.
-}
-
-static void initModulePIEs(char *PIEName,UDWORD i,STRUCTURE_STATS *psStructure)
-{
-	char GfxFile[MAX_STR_LENGTH];
+	std::string GfxFile = PIEName;
 	char charNum[2];
 	UDWORD length, module = 0;
 
-	strcpy(GfxFile,PIEName);
-
-		//need to work out the IMD's for the modules - HACK!
-		if (psStructure->type == REF_FACTORY_MODULE)
-		{
-			length = strlen(GfxFile) - 5;
+	//need to work out the IMD's for the modules - HACK!
+	switch (type)
+	{
+		case REF_FACTORY_MODULE:
+			length = GfxFile.size() - 5;
 			for (module = 1; module < NUM_FACTORY_MODULES+1; module++)
 			{
 				sprintf(charNum,"%d",module);
 				GfxFile[length] = *charNum;
-				factoryModuleIMDs[module-1][0] = (iIMDShape*) resGetData("IMD",
-					GfxFile);
+				factoryModuleIMDs[module-1][0] = (iIMDShape *)resGetData("IMD", GfxFile.c_str());
 				if (factoryModuleIMDs[module-1][0] == NULL)
 				{
-					debug(LOG_ERROR, "Cannot find the PIE for factory module %d - %s", module, GfxFile);
+					debug(LOG_ERROR, "Cannot find the PIE for factory module %d - %s", module, GfxFile.c_str());
 					return;
 				}
 			}
 			//store the stat for easy access later on
 			factoryModuleStat = i;
-		}
-		if (psStructure->type == REF_VTOL_FACTORY)
-		{
-			length = strlen(GfxFile) - 5;
+			break;
+		case REF_VTOL_FACTORY:
+			length = GfxFile.size() - 5;
 			for (module = 1; module < NUM_FACTORY_MODULES+1; module++)
 			{
 				sprintf(charNum,"%d",module);
 				GfxFile[length] = *charNum;
-				factoryModuleIMDs[module-1][1] = (iIMDShape*) resGetData("IMD",
-					GfxFile);
+				factoryModuleIMDs[module-1][1] = (iIMDShape *)resGetData("IMD", GfxFile.c_str());
 				if (factoryModuleIMDs[module-1][1] == NULL)
 				{
-					debug(LOG_ERROR, "Cannot find the PIE for vtol factory module %d - %s", module, GfxFile);
+					debug(LOG_ERROR, "Cannot find the PIE for vtol factory module %d - %s", module, GfxFile.c_str());
 					return;
 				}
 			}
-		}
-
+			break;
 		// Setup the PIE's for the research modules.
-		if (psStructure->type == REF_RESEARCH_MODULE)
-		{
-			length = strlen(GfxFile) - 5;
+		case REF_RESEARCH_MODULE:
+			length = GfxFile.size() - 5;
 			GfxFile[length] = '4';
 
-			researchModuleIMDs[0] = (iIMDShape*) resGetData("IMD", GfxFile);
+			researchModuleIMDs[0] = (iIMDShape *)resGetData("IMD", GfxFile.c_str());
 			if (researchModuleIMDs[0] == NULL)
 			{
-				debug(LOG_ERROR, "Cannot find the PIE for research module %d - %s", module, GfxFile);
+				debug(LOG_ERROR, "Cannot find the PIE for research module %d - %s", module, GfxFile.c_str());
 				return;
 			}
 
@@ -508,19 +459,18 @@ static void initModulePIEs(char *PIEName,UDWORD i,STRUCTURE_STATS *psStructure)
 
 			//store the stat for easy access later on
 			researchModuleStat = i;
-		}
+			break;
 
 		// Setup the PIE's for the power modules.
-		if (psStructure->type == REF_POWER_MODULE)
-		{
-			length = strlen(GfxFile) - 5;
+		case REF_POWER_MODULE:
+			length = GfxFile.size() - 5;
 
 			GfxFile[length] = '4';
 
-			powerModuleIMDs[0] = (iIMDShape*) resGetData("IMD", GfxFile);
+			powerModuleIMDs[0] = (iIMDShape *)resGetData("IMD", GfxFile.c_str());
 			if (powerModuleIMDs[0] == NULL)
 			{
-				debug(LOG_ERROR, "Cannot find the PIE for power module %d - %s", module, GfxFile);
+				debug(LOG_ERROR, "Cannot find the PIE for power module %d - %s", module, GfxFile.c_str());
 				return;
 			}
 
@@ -530,36 +480,58 @@ static void initModulePIEs(char *PIEName,UDWORD i,STRUCTURE_STATS *psStructure)
 
 			//store the stat for easy access later on
 			powerModuleStat = i;
-		}
+			break;
+		default:
+			break;
+	}
+}
+
+STRUCTURE_STATS::STRUCTURE_STATS(LineView line)
+	: BASE_STATS(REF_STRUCTURE_START + line.line(), line.s(0))
+	, type(line.e(1, map_STRUCTURE_TYPE))
+	, strength(line.e(3, map_STRUCT_STRENGTH))
+	, baseWidth(line.i(5, 0, 100))
+	, baseBreadth(line.i(6, 0, 100))
+	, buildPoints(line.u32(8))
+	, height(line.u32(9))
+	, armourValue(line.u32(10))
+	, bodyPoints(line.u32(11))
+	, powerToBuild(line.u32(13))
+	, resistance(line.u32(15))
+	, pIMD(line.imdShape(21))
+	, pBaseIMD(line.imdShape(22, true))
+	, pECM(line.stats(18, asECMStats, numECMStats, true))
+	, pSensor(line.stats(19, asSensorStats, numSensorStats, true))
+	, weaponSlots(line.i(20, 0, STRUCT_MAXWEAPS))  // Is this one used anywhere?
+	, numWeaps(line.i(24, 0, weaponSlots))
+	//, psWeapStat
+	, defaultFunc(-1)
+	, asFuncList(line.i(23, 0, 1000), (FUNCTION *)NULL)
+	// Ignored columns: 2, 4, 7, 12, 14, 16, 17
+{
+	int types = 0;
+	types += numWeaps != 0;
+	types += pECM != NULL && pECM->location == LOC_TURRET;
+	types += pSensor != NULL && pSensor->location == LOC_TURRET;
+	if (types > 1)
+	{
+		line.setError(-1, "Too many turret types.");
+	}
+
+	std::fill_n(psWeapStat, STRUCT_MAXWEAPS, (WEAPON_STATS *)NULL);
 }
 
 /* load the Structure stats from the Access database */
 BOOL loadStructureStats(const char *pStructData, UDWORD bufferSize)
 {
-	unsigned int        NumStructures = numCR(pStructData, bufferSize);
-	UDWORD i, inc, player, numWeaps, weapSlots;
-	char				StructureName[MAX_STR_LENGTH], foundation[MAX_STR_LENGTH],
-						type[MAX_STR_LENGTH], dummy[MAX_STR_LENGTH],
-						strength[MAX_STR_LENGTH];
-	char				GfxFile[MAX_STR_LENGTH], baseIMD[MAX_STR_LENGTH];
-	char				ecmType[MAX_STR_LENGTH], sensorType[MAX_STR_LENGTH];
-	STRUCTURE_STATS		*psStructure, *pStartStats;
-	ECM_STATS*			pECMType;
-	SENSOR_STATS*		pSensorType;
 	UDWORD				module;
 	UDWORD				iID;
-	UDWORD              dummyVal;
 
 	// Skip descriptive header
 	if (strncmp(pStructData,"Structure ",10)==0)
 	{
 		pStructData = strchr(pStructData,'\n') + 1;
-		NumStructures--;
 	}
-	
-#if (MAX_PLAYERS != 8)
-	char NotUsedString[MAX_STR_LENGTH];
-#endif
 
 	//initialise the module IMD structs
 	for (module = 0; module < NUM_FACTORY_MODULES; module++)
@@ -576,162 +548,24 @@ BOOL loadStructureStats(const char *pStructData, UDWORD bufferSize)
 		powerModuleIMDs[module] = NULL;
 	}
 
-	asStructureStats = (STRUCTURE_STATS*)malloc(sizeof(STRUCTURE_STATS)* NumStructures);
-	numStructureStats = NumStructures;
+	TableView table(pStructData, bufferSize);
 
-	if (asStructureStats == NULL)
+	asStructureStats = new STRUCTURE_STATS[table.size()];
+	numStructureStats = table.size();
+
+	for (unsigned i = 0; i < table.size(); ++i)
 	{
-		debug( LOG_FATAL, "Structure Stats - Out of memory" );
-		abort(); // FIXME exit(EXIT_FAILURE)?
-		return false;
+		LineView line(table, i);
+
+		asStructureStats[i] = STRUCTURE_STATS(line);
+		if (table.isError())
+		{
+			debug(LOG_ERROR, "%s", table.getError().toUtf8().constData());
+			return false;
+		}
+
+		initModulePIEs(line.s(21), i, asStructureStats[i].type);  // This function looks like a hack.
 	}
-
-	//save the starting address
-	pStartStats = asStructureStats;
-
-	//get the start of the structure_stats storage
-	psStructure = asStructureStats;
-
-	for (i = 0; i < NumStructures; i++)
-	{
-		memset(psStructure, 0, sizeof(STRUCTURE_STATS));
-
-		//read the data into the storage - the data is delimeted using comma's
-		GfxFile[0] = '\0';
-		StructureName[0] = '\0';
-		type[0] = '\0';
-		strength[0] = '\0';
-		foundation[0] = '\0';
-		ecmType[0] = '\0';
-		sensorType[0] = '\0';
-		baseIMD[0] = '\0';
-
-		sscanf(pStructData,"%[^','],%[^','],%[^','],%[^','],%d,%d,%d,%[^','],\
-			%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%[^','],%[^','],%d,%[^','],%[^','],\
-			%d,%d",
-			StructureName, type, dummy, strength, &dummyVal,
-			&psStructure->baseWidth, &psStructure->baseBreadth, foundation,
-			&psStructure->buildPoints, &psStructure->height,
-			&psStructure->armourValue, &psStructure->bodyPoints,
-			&dummyVal, &psStructure->powerToBuild,
-			&dummyVal, &psStructure->resistance,
-			&dummyVal, &dummyVal,
-			ecmType, sensorType, &weapSlots, GfxFile,
-			baseIMD, &psStructure->numFuncs, &numWeaps);
-
-#if MAX_PLAYERS != 4 && MAX_PLAYERS != 8
-# error Invalid number of players
-#endif
-
-		//allocate storage for the name
-		psStructure->pName = allocateName(StructureName);
-		if (!psStructure->pName)
-		{
-			return false;
-		}
-
-		psStructure->ref = REF_STRUCTURE_START + i;
-
-		//determine the structure type
-		psStructure->type = structureType(type);
-
-		//set the struct strength
-		psStructure->strength = getStructStrength(strength);
-		if (psStructure->strength == NUM_STRUCT_STRENGTH)
-		{
-			debug(LOG_ERROR, "Unknown structure strength for %s", getStatName(psStructure));
-			return false;
-		}
-
-		//get the ecm stats pointer
-		if (!strcmp(ecmType,"0"))
-		{
-			psStructure->pECM = NULL;
-		}
-		else
-		{
-			pECMType = asECMStats;
-
-			for (inc=0; inc < numECMStats; inc++)
-			{
-				//compare the names
-				if (!strcmp(ecmType, pECMType->pName))
-				{
-					psStructure->pECM = pECMType;
-					break;
-				}
-				pECMType++;
-			}
-		}
-		//get the sensor stats pointer
-		if (!strcmp(sensorType,"0"))
-		{
-			psStructure->pSensor = NULL;
-		}
-		else
-		{
-			pSensorType = asSensorStats;
-			for (inc=0; inc < numSensorStats; inc++)
-			{
-				//compare the names
-				if (!strcmp(sensorType, pSensorType->pName))
-				{
-					psStructure->pSensor = pSensorType;
-					break;
-				}
-				pSensorType++;
-			}
-			//check not allocating a turret sensor if have weapons attached
-			ASSERT_OR_RETURN(false, psStructure->pSensor != NULL, "Should have a sensor attached to %s!", StructureName);
-			ASSERT_OR_RETURN(false, !(numWeaps && psStructure->pSensor->location == LOC_TURRET),
-			                 "Both turret sensor and weapon have been assigned to %s", StructureName);
-		}
-
-		//get the IMD for the structure
-		psStructure->pIMD = (iIMDShape *) resGetData("IMD", GfxFile);
-		ASSERT_OR_RETURN(false, psStructure->pIMD != NULL, "Cannot find the structure PIE for record %s", getStructName(psStructure));
-
-		if (strcmp(baseIMD, "0"))
-		{
-			psStructure->pBaseIMD = (iIMDShape *) resGetData("IMD", baseIMD);
-			ASSERT_OR_RETURN(false, psStructure->pIMD != NULL, "Cannot find the structure base PIE for record %s", getStructName(psStructure));
-		}
-		else
-		{
-			psStructure->pBaseIMD = NULL;
-		}
-
-		initModulePIEs(GfxFile,i,psStructure);
-
-		//Only having one weapon per structure now...AB 24/01/99
-		if (weapSlots > STRUCT_MAXWEAPS || numWeaps > weapSlots)
-		{
-			debug(LOG_ERROR, "Allocated more weapons than allowed for Structure");
-			return false;
-		}
-		//I need numWeaps to draw multiple weapons
-		psStructure->numWeaps = numWeaps;
-
-		//allocate storage for the functions - if any
-		psStructure->defaultFunc = -1;
-		if (psStructure->numFuncs > 0)
-		{
-			psStructure->asFuncList = (FUNCTION **)malloc(psStructure->numFuncs *
-				sizeof(FUNCTION*));
-			if (psStructure->asFuncList == NULL)
-			{
-				debug( LOG_FATAL, "Out of memory assigning structure Functions" );
-				abort();
-				return false;
-			}
-		}
-		//increment the pointer to the start of the next record
-		pStructData = strchr(pStructData,'\n') + 1;
-		//increment the list to the start of the next storage block
-		psStructure++;
-	}
-
-	asStructureStats = pStartStats;
 
 	/* get global dummy stat pointer - GJ */
 	for (iID = 0; iID < numStructureStats; iID++)
@@ -741,7 +575,7 @@ BOOL loadStructureStats(const char *pStructData, UDWORD bufferSize)
 			break;
 		}
 	}
-	if (iID > numStructureStats)
+	if (iID >= numStructureStats)
 	{
 		debug(LOG_ERROR, "destroy structure stat not found");
 		return false;
@@ -749,7 +583,7 @@ BOOL loadStructureStats(const char *pStructData, UDWORD bufferSize)
 	g_psStatDestroyStruct = asStructureStats + iID;
 
 	//allocate the structureLimits structure
-	for (player = 0; player < MAX_PLAYERS; player++)
+	for (unsigned player = 0; player < MAX_PLAYERS; ++player)
 	{
 		asStructLimits[player] = (STRUCTURE_LIMITS *)malloc(sizeof(STRUCTURE_LIMITS) * numStructureStats);
 		if (asStructLimits[player] == NULL)
@@ -824,7 +658,7 @@ void setCurrentStructQuantity(BOOL displayError)
 			{
 				//check quantity never exceeds the limit
 				ASSERT(psStructLimits[inc].currentQuantity <= psStructLimits[inc].limit,
-				       "There appears to be too many %s on this map!", getStructName(&asStructureStats[inc]));
+				       "There appears to be too many %s on this map!", asStructureStats[inc].pName);
 			}
 		}
 	}
@@ -833,65 +667,22 @@ void setCurrentStructQuantity(BOOL displayError)
 //Load the weapons assigned to Structure in the Access database
 BOOL loadStructureWeapons(const char *pWeaponData, UDWORD bufferSize)
 {
-	const unsigned int NumToAlloc = numCR(pWeaponData, bufferSize);
-	UDWORD				i, incS, incW;
-	char				StructureName[MAX_STR_LENGTH];//, WeaponName[MAX_STR_LENGTH];
-	char				WeaponName[STRUCT_MAXWEAPS][MAX_STR_LENGTH];
-	STRUCTURE_STATS		*pStructure = asStructureStats;
-	WEAPON_STATS		*pWeapon = asWeaponStats;
-	BOOL				weaponFound, structureFound;
-	UBYTE				j;
+	TableView table(pWeaponData, bufferSize);
 
-	for (i=0; i < NumToAlloc; i++)
+	for (unsigned i = 0; i < table.size(); ++i)
 	{
-		//read the data into the storage - the data is delimeted using comma's
-		StructureName[0] = '\0';
-		for (j = 0;j < STRUCT_MAXWEAPS;j++)
+		LineView line(table, i);
+
+		STRUCTURE_STATS *structureStats = line.stats(0, asStructureStats, numStructureStats);
+		for (unsigned j = 0; j < structureStats->numWeaps && !table.isError(); ++j)
 		{
-			WeaponName[j][0] = '\0';
+			structureStats->psWeapStat[j] = line.stats(1 + j, asWeaponStats, numWeaponStats);
 		}
-
-		sscanf(pWeaponData, "%[^','],%[^','],%[^','],%[^','],%[^','],%*d", StructureName, WeaponName[0], WeaponName[1], WeaponName[2], WeaponName[3]);
-
-		weaponFound = structureFound = false;
-		//loop through each Structure_Stat to compare the name
-
-		for (incS=0; incS < numStructureStats; incS++)
+		if (table.isError())
 		{
-			if (!(strcmp(StructureName, pStructure[incS].pName)))
-			{
-				//Structure found, so loop through each weapon
-				structureFound = true;
-				for (j = 0;j < pStructure[incS].numWeaps;j++)
-				{
-					for (incW=0; incW < numWeaponStats; incW++)
-					{
-						if (!(strcmp(WeaponName[j], pWeapon[incW].pName)))
-						{
-							weaponFound = true;
-
-							//read and store multiple weapon Stats
-							pStructure[incS].psWeapStat[j] = &pWeapon[incW];
-							break;
-						}
-					}
-					//if weapon not found - error
-					if (!weaponFound)
-					{
-						debug(LOG_ERROR, "Unable to find stats for weapon %s for structure %s", WeaponName[i], StructureName);
-						return false;
-					}
-				}
-			}
-		}
-		//if structure not found - error
-		if (!structureFound)
-		{
-			debug(LOG_ERROR, "Unable to find stats for structure %s", StructureName);
+			debug(LOG_ERROR, "%s", table.getError().toUtf8().constData());
 			return false;
 		}
-		//increment the pointer to the start of the next record
-		pWeaponData = strchr(pWeaponData,'\n') + 1;
 	}
 	return true;
 }
@@ -899,100 +690,45 @@ BOOL loadStructureWeapons(const char *pWeaponData, UDWORD bufferSize)
 //Load the programs assigned to Droids in the Access database
 BOOL loadStructureFunctions(const char *pFunctionData, UDWORD bufferSize)
 {
-	const unsigned int NumToAlloc = numCR(pFunctionData, bufferSize);
-	UDWORD				i, incS, incF;
-	char				StructureName[MAX_STR_LENGTH], FunctionName[MAX_STR_LENGTH];
-	STRUCTURE_STATS		*pStructure = asStructureStats;
-	FUNCTION			*pFunction, **pStartFunctions = asFunctions;
-	BOOL				functionFound, structureFound;
+	TableView table(pFunctionData, bufferSize);
 
-
-
-	for (i=0; i < NumToAlloc; i++)
+	for (unsigned i = 0; i < table.size(); ++i)
 	{
-		//read the data into the storage - the data is delimeted using comma's
-		StructureName[0] = '\0';
-		FunctionName[0] = '\0';
-		sscanf(pFunctionData, "%[^','],%[^','],%*d", StructureName, FunctionName);
-		functionFound = structureFound = false;
+		LineView line(table, i);
 
-		//loop through each Structure_Stat to compare the name
-		for (incS=0; incS < numStructureStats; incS++)
+		STRUCTURE_STATS *structureStats = line.stats(0, asStructureStats, numStructureStats);
+		FUNCTION *function = line.stats(1, asFunctions, numFunctions);
+		if (table.isError())
 		{
-			if (!(strcmp(StructureName, pStructure[incS].pName)))
-			{
-				//Structure found, so loop through each Function
-				structureFound = true;
-				pStartFunctions = asFunctions;
-				for (incF=0; incF < numFunctions; incF++)
-				{
-					pFunction = *pStartFunctions;
-					if (!(strcmp(FunctionName, pFunction->pName)))
-					{
-						//function found alloc this function to the current Structure
-						functionFound = true;
-						pStructure[incS].defaultFunc++;
-						//check not allocating more than allowed
-						if (pStructure[incS].defaultFunc >
-										(SDWORD)pStructure[incS].numFuncs)
-						{
-							debug(LOG_ERROR, "Trying to allocate more functions than allowed for Structure");
-							return false;
-						}
-						pStructure[incS].asFuncList[pStructure[incS].defaultFunc] =
-							pFunction;
-						break;
-					}
-					pStartFunctions++;
-				}
-				//if function not found - error
-				if (!functionFound)
-				{
-					debug(LOG_ERROR, "Unable to find stats for function %s for structure %s", FunctionName, StructureName);
-					return false;
-				}
-			}
-		}
-		//if structure not found - error
-		if (!structureFound)
-		{
-			debug(LOG_ERROR, "Unable to find stats for structure %s", StructureName);
+			debug(LOG_ERROR, "%s", table.getError().toUtf8().constData());
 			return false;
 		}
-		//increment the pointer to the start of the next record
-		pFunctionData = strchr(pFunctionData,'\n') + 1;
+		++structureStats->defaultFunc;
+		if (structureStats->defaultFunc > (int)structureStats->asFuncList.size())
+		{
+			debug(LOG_ERROR, "Trying to allocate more functions than allowed for Structure");
+			return false;
+		}
+		structureStats->asFuncList[structureStats->defaultFunc] = function;
 	}
 
 	/**************************************************************************/
 	//Wall Function requires a structure stat so can allocate it now
-	pStartFunctions = asFunctions;
-	for (incF=0; incF < numFunctions; incF++)
+	for (unsigned i = 0; i < numFunctions; ++i)
 	{
-		pFunction = *pStartFunctions;
-		if (pFunction->type == WALL_TYPE)
+		if (asFunctions[i]->type != WALL_TYPE)
 		{
-			//loop through all structures to find the stat
-			pStructure = asStructureStats;
-			((WALL_FUNCTION *)pFunction)->pCornerStat = NULL;
-
-			for (i=0; i < numStructureStats; i++)
-			{
-				//compare the names
-				if (!strcmp(((WALL_FUNCTION *)pFunction)->pStructName, pStructure->pName))
-				{
-					((WALL_FUNCTION *)pFunction)->pCornerStat = pStructure;
-					break;
-				}
-				pStructure++;
-			}
-			//if haven't found the STRUCTURE STAT, then problem
-			if (!((WALL_FUNCTION *)pFunction)->pCornerStat)
-			{
-				debug(LOG_ERROR, "Unknown Corner Wall stat for function %s", pFunction->pName);
-				return false;
-			}
+			continue;
 		}
-		pStartFunctions++;
+		WALL_FUNCTION *wallFunction = (WALL_FUNCTION *)asFunctions[i];
+
+		wallFunction->pCornerStat = findStatsByName(wallFunction->pStructName, asStructureStats, numStructureStats);
+		//if haven't found the STRUCTURE STAT, then problem
+		if (wallFunction->pCornerStat == NULL)
+		{
+			debug(LOG_ERROR, "Unknown Corner Wall stat for function %s", wallFunction->pName);
+			return false;
+		}
 	}
 
 	return true;
@@ -1001,51 +737,28 @@ BOOL loadStructureFunctions(const char *pFunctionData, UDWORD bufferSize)
 /*Load the Structure Strength Modifiers from the file exported from Access*/
 BOOL loadStructureStrengthModifiers(const char *pStrengthModData, UDWORD bufferSize)
 {
-	const unsigned int NumRecords = numCR(pStrengthModData, bufferSize);
-	STRUCT_STRENGTH		strengthInc;
-	WEAPON_EFFECT		effectInc;
-	UDWORD				i, j, modifier;
-	char				weaponEffectName[MAX_STR_LENGTH], strengthName[MAX_STR_LENGTH];
-
 	//initialise to 100%
-	for (i=0; i < WE_NUMEFFECTS; i++)
+	for (unsigned i = 0; i < WE_NUMEFFECTS; ++i)
 	{
-		for (j=0; j < NUM_STRUCT_STRENGTH; j++)
+		for (unsigned j = 0; j < NUM_STRUCT_STRENGTH; ++j)
 		{
 			asStructStrengthModifier[i][j] = 100;
 		}
 	}
 
-	for (i=0; i < NumRecords; i++)
+	TableView table(pStrengthModData, bufferSize);
+
+	for (unsigned i = 0; i < table.size(); ++i)
 	{
-		//read the data into the storage - the data is delimeted using comma's
-		sscanf(pStrengthModData,"%[^','],%[^','],%d",
-			weaponEffectName, strengthName, &modifier);
+		LineView line(table, i);
 
-		//get the weapon effect inc
-		if (!getWeaponEffect(weaponEffectName, &effectInc))
+		asStructStrengthModifier[line.e(0, map_WEAPON_EFFECT)][line.e(1, map_STRUCT_STRENGTH)] = line.u16(2);
+
+		if (table.isError())
 		{
-			debug(LOG_ERROR, "Invalid Weapon Effect - %s", weaponEffectName);
+			debug(LOG_ERROR, "%s", table.getError().toUtf8().constData());
 			return false;
 		}
-		//get the propulsion inc
-		strengthInc = getStructStrength(strengthName);
-		if (strengthInc == NUM_STRUCT_STRENGTH)
-		{
-			debug(LOG_ERROR, "Invalid Strength type - %s", strengthName);
-			return false;
-		}
-
-		if (modifier > UWORD_MAX)
-		{
-			debug(LOG_ERROR, "modifier for effect %s, strength %s is too large", weaponEffectName, strengthName);
-			return false;
-		}
-		//store in the appropriate index
-		asStructStrengthModifier[effectInc][strengthInc] = (UWORD)modifier;
-
-		//increment the pointer to the start of the next record
-		pStrengthModData = strchr(pStrengthModData,'\n') + 1;
 	}
 
 	return true;
@@ -1055,21 +768,10 @@ BOOL loadStructureStrengthModifiers(const char *pStrengthModData, UDWORD bufferS
 BOOL structureStatsShutDown(void)
 {
 	UDWORD	inc;
-	STRUCTURE_STATS*	pStructure = asStructureStats;
 
-	for(inc=0; inc < numStructureStats; inc++, pStructure++)
-	{
-		if (pStructure->numFuncs > 0)
-		{
-			free(pStructure->asFuncList);
-			pStructure->asFuncList = NULL;
-		}
-	}
-
-	if(numStructureStats) {
-		free(asStructureStats);
-		asStructureStats = NULL;
-	}
+	delete[] asStructureStats;
+	asStructureStats = NULL;
+	numStructureStats = 0;
 
 	//free up the structLimits structure
 	for (inc = 0; inc < MAX_PLAYERS ; inc++)
@@ -1504,7 +1206,7 @@ static SDWORD structChooseWallType(UDWORD player, UDWORD mapX, UDWORD mapY)
 					if (scanType == WALL_CORNER)
 					{
 						// change to a corner
-						if (psStruct->pStructureType->asFuncList && psStruct->pStructureType->asFuncList[0]->type == WALL_TYPE)
+						if (!psStruct->pStructureType->asFuncList.empty() && psStruct->pStructureType->asFuncList[0]->type == WALL_TYPE)
 						{
 							const int     oldBody = psStruct->body;
 							UDWORD        oldBuildPoints = psStruct->currentBuildPts;
@@ -7881,20 +7583,10 @@ BOOL checkStructureStats(void)
 
 	for (structInc=0; structInc < numStructureStats; structInc++)
 	{
-		if (asStructureStats[structInc].numFuncs != 0)
+		for (inc = 0; inc < asStructureStats[structInc].asFuncList.size(); inc++)
 		{
-			for (inc = 0; inc < asStructureStats[structInc].numFuncs; inc++)
-			{
+			ASSERT_OR_RETURN(false, asStructureStats[structInc].asFuncList[inc] != NULL, "Invalid function for structure %s", asStructureStats[structInc].pName);
 
-				ASSERT_OR_RETURN(false, asStructureStats[structInc].asFuncList[inc] != NULL,
-				                 "Invalid function for structure %s", asStructureStats[structInc].pName);
-
-			}
-		}
-		else
-		{
-			ASSERT_OR_RETURN(false, asStructureStats[structInc].asFuncList == NULL, "Invalid functions attached to structure %s",
-			                 asStructureStats[structInc].pName);
 		}
 	}
 	return true;

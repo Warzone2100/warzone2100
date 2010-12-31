@@ -72,7 +72,7 @@ FEATURE_STATS* oilResFeature = NULL;
 //specifies how far round (in tiles) a constructor droid sound look for more wreckage
 #define WRECK_SEARCH 3
 
-static const StringToEnum<FEATURE_TYPE> mapUnsorted_FEATURE_TYPE[] =
+static const StringToEnum<FEATURE_TYPE> map_FEATURE_TYPE[] =
 {
 	{ "PROPULSION_TYPE_HOVER WRECK", FEAT_HOVER },
 	{ "TANK WRECK", FEAT_TANK },
@@ -87,7 +87,6 @@ static const StringToEnum<FEATURE_TYPE> mapUnsorted_FEATURE_TYPE[] =
 	{ "TREE", FEAT_TREE },
 	{ "SKYSCRAPER", FEAT_SKYSCRAPER }
 };
-static const StringToEnumMap<FEATURE_TYPE> map_FEATURE_TYPE(mapUnsorted_FEATURE_TYPE, ARRAY_SIZE(mapUnsorted_FEATURE_TYPE));
 
 
 void featureInitVars(void)
