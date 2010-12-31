@@ -305,6 +305,10 @@ static void dump_to_pie(FILE *ctl, FILE *fp, const char *input)
 				faceList[j].index[m] = posList[faceList[j].index[m]].reindex;
 			}
 			facesPIE3 += faceList[j].vertices - 3;	// easy tessellation
+			if (faceList[j].cull)
+			{
+				facesPIE3 += faceList[j].vertices - 3;	// must add additional face that is faced in the opposite direction also for tessellated faces
+			}
 		}
 
 		if (verbose && (facesPIE3 - faces))
