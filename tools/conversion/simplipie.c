@@ -304,6 +304,7 @@ static void dump_to_pie(FILE *ctl, FILE *fp, const char *input)
 			{
 				faceList[j].index[m] = posList[faceList[j].index[m]].reindex;
 			}
+			facesPIE3 += faceList[j].vertices - 3;	// easy tessellation
 		}
 
 		if (verbose && (facesPIE3 - faces))
@@ -330,19 +331,32 @@ static void dump_to_pie(FILE *ctl, FILE *fp, const char *input)
 
 			if (faceList[j].cull)
 			{
-				fprintf(ctl, "\n\t%x %d", flags, faceList[j].vertices);
-				for (k = faceList[j].vertices - 1; k >= 0; k--)
-					fprintf(ctl, " %d", faceList[j].index[k]);
-				fprintf(ctl, "%s", fill);
-				for (k = faceList[j].vertices - 1; k >= 0; k--)
-					fprintf(ctl, " %d %d", faceList[j].texCoord[k][0], faceList[j].texCoord[k][1]);
+				fprintf(ctl, "\n\t%x 3 %d %d %d %s%d %d %d %d %d %d", flags, faceList[j].index[2], faceList[j].index[1], faceList[j].index[0], fill,
+						faceList[j].texCoord[2][0], faceList[j].texCoord[2][1],
+						faceList[j].texCoord[1][0], faceList[j].texCoord[1][1],
+						faceList[j].texCoord[0][0], faceList[j].texCoord[0][1]);
+				printf("+nocull(%d) ", j);
 			}
-			fprintf(ctl, "\n\t%x %d", flags, faceList[j].vertices);
-			for (k = 0; k < faceList[j].vertices; k++)
-				fprintf(ctl, " %d", faceList[j].index[k]);
-			fprintf(ctl, "%s", fill);
-			for (k = 0; k < faceList[j].vertices; k++)
-				fprintf(ctl, " %d %d", faceList[j].texCoord[k][0], faceList[j].texCoord[k][1]);
+			fprintf(ctl, "\n\t%x 3 %d %d %d %s%d %d %d %d %d %d", flags, faceList[j].index[0], faceList[j].index[1], faceList[j].index[2], fill,
+					faceList[j].texCoord[0][0], faceList[j].texCoord[0][1],
+					faceList[j].texCoord[1][0], faceList[j].texCoord[1][1],
+					faceList[j].texCoord[2][0], faceList[j].texCoord[2][1]);
+
+			// Tessellate higher than triangle polygons
+			for (k = 3; k < faceList[j].vertices; k++)
+			{
+				if (faceList[j].cull)
+				{
+					fprintf(ctl, "\n\t%x 3 %d %d %d %s%d %d %d %d %d %d", flags, faceList[j].index[0], faceList[j].index[k], faceList[j].index[k - 1], fill,
+							faceList[j].texCoord[0][0], faceList[j].texCoord[0][1],
+							faceList[j].texCoord[k][0], faceList[j].texCoord[k][1],
+							faceList[j].texCoord[k - 1][0], faceList[j].texCoord[k - 1][1]);
+				}
+				fprintf(ctl, "\n\t%x 3 %d %d %d %s%d %d %d %d %d %d", flags, faceList[j].index[0], faceList[j].index[k - 1], faceList[j].index[k], fill,
+						faceList[j].texCoord[0][0], faceList[j].texCoord[0][1],
+						faceList[j].texCoord[k - 1][0], faceList[j].texCoord[k - 1][1],
+						faceList[j].texCoord[k][0], faceList[j].texCoord[k][1]);
+			}
 		}
 
 		num = fscanf(fp, "\nCONNECTORS %d", &x);
