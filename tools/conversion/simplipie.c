@@ -331,13 +331,13 @@ static void dump_to_pie(FILE *ctl, FILE *fp, const char *input)
 
 			if (faceList[j].cull)
 			{
-				fprintf(ctl, "\n\t%x 3 %d %d %d %s%d %d %d %d %d %d", flags, faceList[j].index[2], faceList[j].index[1], faceList[j].index[0], fill,
+				fprintf(ctl, "\n\t%x 3 %d %d %d%s %d %d %d %d %d %d", flags, faceList[j].index[2], faceList[j].index[1], faceList[j].index[0], fill,
 						faceList[j].texCoord[2][0], faceList[j].texCoord[2][1],
 						faceList[j].texCoord[1][0], faceList[j].texCoord[1][1],
 						faceList[j].texCoord[0][0], faceList[j].texCoord[0][1]);
 				printf("+nocull(%d) ", j);
 			}
-			fprintf(ctl, "\n\t%x 3 %d %d %d %s%d %d %d %d %d %d", flags, faceList[j].index[0], faceList[j].index[1], faceList[j].index[2], fill,
+			fprintf(ctl, "\n\t%x 3 %d %d %d%s %d %d %d %d %d %d", flags, faceList[j].index[0], faceList[j].index[1], faceList[j].index[2], fill,
 					faceList[j].texCoord[0][0], faceList[j].texCoord[0][1],
 					faceList[j].texCoord[1][0], faceList[j].texCoord[1][1],
 					faceList[j].texCoord[2][0], faceList[j].texCoord[2][1]);
@@ -347,12 +347,12 @@ static void dump_to_pie(FILE *ctl, FILE *fp, const char *input)
 			{
 				if (faceList[j].cull)
 				{
-					fprintf(ctl, "\n\t%x 3 %d %d %d %s%d %d %d %d %d %d", flags, faceList[j].index[0], faceList[j].index[k], faceList[j].index[k - 1], fill,
+					fprintf(ctl, "\n\t%x 3 %d %d %d%s %d %d %d %d %d %d", flags, faceList[j].index[0], faceList[j].index[k], faceList[j].index[k - 1], fill,
 							faceList[j].texCoord[0][0], faceList[j].texCoord[0][1],
 							faceList[j].texCoord[k][0], faceList[j].texCoord[k][1],
 							faceList[j].texCoord[k - 1][0], faceList[j].texCoord[k - 1][1]);
 				}
-				fprintf(ctl, "\n\t%x 3 %d %d %d %s%d %d %d %d %d %d", flags, faceList[j].index[0], faceList[j].index[k - 1], faceList[j].index[k], fill,
+				fprintf(ctl, "\n\t%x 3 %d %d %d%s %d %d %d %d %d %d", flags, faceList[j].index[0], faceList[j].index[k - 1], faceList[j].index[k], fill,
 						faceList[j].texCoord[0][0], faceList[j].texCoord[0][1],
 						faceList[j].texCoord[k - 1][0], faceList[j].texCoord[k - 1][1],
 						faceList[j].texCoord[k][0], faceList[j].texCoord[k][1]);
