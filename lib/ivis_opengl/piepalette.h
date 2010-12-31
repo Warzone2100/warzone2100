@@ -98,8 +98,9 @@
 #define WZCOL_LOADING_BAR_BACKGROUND			psPalette[73]
 #define WZCOL_MAP_PREVIEW_HQ					psPalette[74]
 #define WZCOL_MAP_PREVIEW_OIL					psPalette[75]
+#define WZCOL_FOG					psPalette[76]
 
-#define WZCOL_MAX			76
+#define WZCOL_MAX			77
 
 //*************************************************************************
 

@@ -73,4 +73,5 @@ ff,ff,0,ff	// production run text
 0,20,40,ff	// production run background
 0,0,0,18	// game loading bar background
 ff,0,ff,ff	// WZCOL_MAP_PREVIEW_HQ
-ff,ff,00,ff // WZCOL_MAP_PREVIEW_OIL
+ff,ff,00,ff	// WZCOL_MAP_PREVIEW_OIL
+b0,08,5f,ff	// fog colour

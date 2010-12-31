@@ -74,7 +74,7 @@ void pie_SetDefaultStates(void)//Sets all states
 	pie_SetFogStatus(false);
 	black.rgba = 0;
 	black.byte.a = 255;
-	pie_SetFogColour(black);//nicks colour
+	pie_SetFogColour(black);
 
 	//depth Buffer on
 	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
@@ -102,13 +102,7 @@ void pie_EnableFog(BOOL val)
 		rendStates.fogEnabled = val;
 		if (val == true)
 		{
-			PIELIGHT nickscolour;
-
-			nickscolour.byte.r = 0xB0;
-			nickscolour.byte.g = 0x08;
-			nickscolour.byte.b = 0x5f;
-			nickscolour.byte.a = 0xff;
-			pie_SetFogColour(nickscolour); // nicks colour
+			pie_SetFogColour(WZCOL_FOG);
 		}
 		else
 		{
