@@ -47,15 +47,6 @@ typedef struct { UBYTE r, g, b, a; } PIELIGHTBYTES;
 /** Our basic colour type. Use whenever you want to define a colour.
  *  Set bytes separetely, and do not assume a byte order between the components. */
 typedef union  { PIELIGHTBYTES byte; UDWORD rgba; UBYTE vector[4]; } PIELIGHT;
-
-typedef struct
-{
-	Vector3i pos;
-	float u, v;
-	PIELIGHT light;
-	Vector3i screen; //! Screenspace tile coordinates
-} TERRAIN_VERTEX;
-
 typedef struct {SWORD x, y, w, h;} PIERECT;				/**< Screen rectangle. */
 typedef struct {SDWORD texPage; SWORD tu, tv, tw, th;} PIEIMAGE;	/**< An area of texture. */
 

@@ -161,7 +161,7 @@ static Vector3i	imdRot,imdRot2;
 UDWORD		distance;
 
 /// Stores the screen coordinates of the transformed terrain tiles
-static TERRAIN_VERTEX tileScreenInfo[VISIBLE_YTILES+1][VISIBLE_XTILES+1];
+static Vector3i tileScreenInfo[VISIBLE_YTILES+1][VISIBLE_XTILES+1];
 
 /// Records the present X and Y values for the current mouse tile (in tiles)
 SDWORD mouseTileX, mouseTileY;
@@ -934,39 +934,29 @@ static void drawTiles(iView *player)
 	theSun = getTheSun();
 	pie_BeginLighting(&theSun, getDrawShadows());
 
-	// update the fog of war
+	// update the fog of war... FIXME: Remove this
 	for (i = 0; i < visibleTiles.y+1; i++)
 	{
 		/* Go through the x's */
 		for (j = 0; j < visibleTiles.x+1; j++)
 		{
-			Vector2i screen;
-			PIELIGHT TileIllum = WZCOL_BLACK;
+			Vector2i screen(0, 0);
+			Position pos;
 
-			tileScreenInfo[i][j].pos.x = world_coord(j - terrainMidX);
-			tileScreenInfo[i][j].pos.z = world_coord(terrainMidY - i);
-			tileScreenInfo[i][j].pos.y = 0;
+			pos.x = world_coord(j - terrainMidX);
+			pos.z = world_coord(terrainMidY - i);
+			pos.y = 0;
 
-			if (!tileOnMap(playerXTile + j, playerZTile + i))
-			{
-				// Special past-edge-of-map tiles
-				tileScreenInfo[i][j].u = 0;
-				tileScreenInfo[i][j].v = 0;
-			}
-			else
+			if (tileOnMap(playerXTile + j, playerZTile + i))
 			{
 				MAPTILE *psTile = mapTile(playerXTile + j, playerZTile + i);
 
-				tileScreenInfo[i][j].pos.y = map_TileHeight(playerXTile + j, playerZTile + i);
-				TileIllum = pal_SetBrightness(psTile->level);
-				setTileColour(playerXTile + j, playerZTile + i, TileIllum);
+				pos.y = map_TileHeight(playerXTile + j, playerZTile + i);
+				setTileColour(playerXTile + j, playerZTile + i, pal_SetBrightness(psTile->level));
 			}
-			// hack since tileScreenInfo[i][j].screen is Vector3i and pie_RotateProject takes Vector2i as 2nd param
-			screen.x = tileScreenInfo[i][j].screen.x;
-			screen.y = tileScreenInfo[i][j].screen.y;
-			tileScreenInfo[i][j].screen.z = pie_RotateProject(&tileScreenInfo[i][j].pos, &screen);
-			tileScreenInfo[i][j].screen.x = screen.x;
-			tileScreenInfo[i][j].screen.y = screen.y;
+			tileScreenInfo[i][j].z = pie_RotateProject(&pos, &screen);
+			tileScreenInfo[i][j].x = screen.x;
+			tileScreenInfo[i][j].y = screen.y;
 		}
 	}
 
@@ -3599,23 +3589,23 @@ static void locateMouse(void)
 		unsigned int j;
 		for(j = 0; j < visibleTiles.y; ++j)
 		{
-			int tileZ = tileScreenInfo[i][j].screen.z;
+			int tileZ = tileScreenInfo[i][j].z;
 
 			if(tileZ <= nearestZ)
 			{
 				QUAD quad;
 
-				quad.coords[0].x = tileScreenInfo[i+0][j+0].screen.x;
-				quad.coords[0].y = tileScreenInfo[i+0][j+0].screen.y;
+				quad.coords[0].x = tileScreenInfo[i+0][j+0].x;
+				quad.coords[0].y = tileScreenInfo[i+0][j+0].y;
 
-				quad.coords[1].x = tileScreenInfo[i+0][j+1].screen.x;
-				quad.coords[1].y = tileScreenInfo[i+0][j+1].screen.y;
+				quad.coords[1].x = tileScreenInfo[i+0][j+1].x;
+				quad.coords[1].y = tileScreenInfo[i+0][j+1].y;
 
-				quad.coords[2].x = tileScreenInfo[i+1][j+1].screen.x;
-				quad.coords[2].y = tileScreenInfo[i+1][j+1].screen.y;
+				quad.coords[2].x = tileScreenInfo[i+1][j+1].x;
+				quad.coords[2].y = tileScreenInfo[i+1][j+1].y;
 
-				quad.coords[3].x = tileScreenInfo[i+1][j+0].screen.x;
-				quad.coords[3].y = tileScreenInfo[i+1][j+0].screen.y;
+				quad.coords[3].x = tileScreenInfo[i+1][j+0].x;
+				quad.coords[3].y = tileScreenInfo[i+1][j+0].y;
 
 				/* We've got a match for our mouse coords */
 				if (inQuad(&pt, &quad))
