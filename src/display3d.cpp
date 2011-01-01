@@ -1881,7 +1881,6 @@ void	renderFeature(FEATURE *psFeature)
 	SDWORD		rotation, rx, rz;
 	PIELIGHT	brightness;
 	Vector3i dv;
-	Vector3f *vecTemp;
 	BOOL bForceDraw = ( !getRevealStatus() && psFeature->psStats->visibleAtStart);
 	int shadowFlags = 0;
 
@@ -1952,27 +1951,13 @@ void	renderFeature(FEATURE *psFeature)
 		shadowFlags = pie_STATIC_SHADOW;
 	}
 
-	if (psFeature->psStats->subType == FEAT_OIL_RESOURCE)
-	{
-		vecTemp = psFeature->sDisplay.imd->points;
-		flattenImd(psFeature->sDisplay.imd, psFeature->pos.x, psFeature->pos.y, 0);
-		/* currentGameFrame/2 set anim running - GJ hack */
-		pie_Draw3DShape(psFeature->sDisplay.imd, currentGameFrame/2, 0, brightness, 0, 0);
-		psFeature->sDisplay.imd->points = vecTemp;
-	}
-	else
-	{
-		pie_Draw3DShape(psFeature->sDisplay.imd, 0, 0, brightness, shadowFlags, 0);
-	}
+	pie_Draw3DShape(psFeature->sDisplay.imd, 0, 0, brightness, shadowFlags, 0);
 
-	{
-		Vector3i zero(0, 0, 0);
-		Vector2i s(0, 0);
-
-		pie_RotateProject( &zero, &s );
-		psFeature->sDisplay.screenX = s.x;
-		psFeature->sDisplay.screenY = s.y;
-	}
+	Vector3i zero(0, 0, 0);
+	Vector2i s(0, 0);
+	pie_RotateProject(&zero, &s);
+	psFeature->sDisplay.screenX = s.x;
+	psFeature->sDisplay.screenY = s.y;
 
 	pie_MatEnd();
 }
@@ -2058,11 +2043,9 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp)
 	else
 	{
 		//object Proximity displays are for oil resources and artefacts
-		ASSERT( ((BASE_OBJECT *)psProxDisp->psMessage->pViewData)->type ==
-			OBJ_FEATURE, "renderProximityMsg: invalid feature" );
+		ASSERT(((BASE_OBJECT *)psProxDisp->psMessage->pViewData)->type == OBJ_FEATURE, "Invalid object type for proximity display");
 
-		if (((FEATURE *)psProxDisp->psMessage->pViewData)->psStats->subType ==
-			FEAT_OIL_RESOURCE)
+		if (((FEATURE *)psProxDisp->psMessage->pViewData)->psStats->subType == FEAT_OIL_RESOURCE)
 		{
 			//resource
 			proxImd = getImdFromIndex(MI_BLIP_RESOURCE);
