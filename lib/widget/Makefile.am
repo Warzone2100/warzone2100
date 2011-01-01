@@ -27,5 +27,6 @@ libwidget_a_SOURCES = \
 	tip.cpp \
 	widget.cpp
 
-libwidget_a_LIBADD = $(top_builddir)/lib/ivis_opengl/libivis_opengl.a \
-	$(top_builddir)/lib/ivis_common/libivis_common.a $(top_builddir)/lib/framework/libframework.a
+libwidget_a_LIBADD = \
+	$(top_builddir)/lib/ivis_opengl/libivis_opengl.a \
+	$(top_builddir)/lib/framework/libframework.a
