@@ -2983,6 +2983,10 @@ static uint32_t syncDebugCrcs[MAX_SYNC_HISTORY + 1];
 
 void _syncDebug(const char *function, const char *str, ...)
 {
+#ifdef WZ_CC_MSVC
+	char const *f = function; while (*f != '\0') if (*f++ == ':') function = f;  // Strip "Class::" from "Class::myFunction".
+#endif
+
 	va_list ap;
 	char outputBuffer[MAX_LEN_LOG_LINE];
 
@@ -3002,6 +3006,10 @@ void _syncDebug(const char *function, const char *str, ...)
 
 void _syncDebugBacktrace(const char *function)
 {
+#ifdef WZ_CC_MSVC
+	char const *f = function; while (*f != '\0') if (*f++ == ':') function = f;  // Strip "Class::" from "Class::myFunction".
+#endif
+
 	uint32_t backupCrc = syncDebugCrcs[syncDebugNext];  // Ignore CRC changes from _syncDebug(), since identical backtraces can be printed differently.
 
 #ifdef WZ_OS_LINUX
