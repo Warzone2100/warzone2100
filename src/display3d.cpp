@@ -1269,11 +1269,11 @@ void	renderProjectile(PROJECTILE *psCurr)
 		if (psStats->weaponSubClass == WSC_ROCKET || psStats->weaponSubClass == WSC_MISSILE
 		    || psStats->weaponSubClass == WSC_SLOWROCKET || psStats->weaponSubClass == WSC_SLOWMISSILE)
 		{
-			pie_Draw3DShape(pIMD, 0, 0, WZCOL_WHITE, WZCOL_BLACK, pie_ADDITIVE, 164);
+			pie_Draw3DShape(pIMD, 0, 0, WZCOL_WHITE, pie_ADDITIVE, 164);
 		}
 		else
 		{
-			pie_Draw3DShape(pIMD, 0, 0, WZCOL_WHITE, WZCOL_BLACK, 0, 0);
+			pie_Draw3DShape(pIMD, 0, 0, WZCOL_WHITE, 0, 0);
 		}
 
 		pie_MatEnd();
@@ -1384,7 +1384,7 @@ void	renderAnimComponent( const COMPONENT_OBJECT *psObj )
 		pie_MatRotZ(-psObj->orientation.y);
 		pie_MatRotX(-psObj->orientation.x);
 
-		pie_Draw3DShape(psObj->psShape, 0, iPlayer, brightness, WZCOL_BLACK, pie_STATIC_SHADOW, 0);
+		pie_Draw3DShape(psObj->psShape, 0, iPlayer, brightness, pie_STATIC_SHADOW, 0);
 
 		/* clear stack */
 		pie_MatEnd();
@@ -1957,12 +1957,12 @@ void	renderFeature(FEATURE *psFeature)
 		vecTemp = psFeature->sDisplay.imd->points;
 		flattenImd(psFeature->sDisplay.imd, psFeature->pos.x, psFeature->pos.y, 0);
 		/* currentGameFrame/2 set anim running - GJ hack */
-		pie_Draw3DShape(psFeature->sDisplay.imd, currentGameFrame/2, 0, brightness, WZCOL_BLACK, 0, 0);
+		pie_Draw3DShape(psFeature->sDisplay.imd, currentGameFrame/2, 0, brightness, 0, 0);
 		psFeature->sDisplay.imd->points = vecTemp;
 	}
 	else
 	{
-		pie_Draw3DShape(psFeature->sDisplay.imd, 0, 0, brightness, WZCOL_BLACK, shadowFlags,0);
+		pie_Draw3DShape(psFeature->sDisplay.imd, 0, 0, brightness, shadowFlags, 0);
 	}
 
 	{
@@ -2077,7 +2077,7 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp)
 	pie_MatRotY(-player.r.y);
 	pie_MatRotX(-player.r.x);
 
-	pie_Draw3DShape(proxImd, getModularScaledGraphicsTime(1000, 4), 0, WZCOL_WHITE, WZCOL_BLACK, pie_ADDITIVE, 192);
+	pie_Draw3DShape(proxImd, getModularScaledGraphicsTime(1000, 4), 0, WZCOL_WHITE, pie_ADDITIVE, 192);
 
 	//get the screen coords for determining when clicked on
 	calcFlagPosScreenCoords(&x, &y, &r);
@@ -2200,7 +2200,7 @@ void	renderStructure(STRUCTURE *psStructure)
 				pieFlag = pie_TRANSLUCENT | pie_FORCE_FOG;
 				pieFlagData = 255;
 			}
-			pie_Draw3DShape(psStructure->pStructureType->pBaseIMD, 0, colour, buildingBrightness, WZCOL_BLACK, pieFlag, pieFlagData);
+			pie_Draw3DShape(psStructure->pStructureType->pBaseIMD, 0, colour, buildingBrightness, pieFlag, pieFlagData);
 		}
 
 		// override
@@ -2218,8 +2218,7 @@ void	renderStructure(STRUCTURE *psStructure)
 	//first check if partially built - ANOTHER HACK!
 	if (psStructure->status == SS_BEING_BUILT || psStructure->status == SS_BEING_DEMOLISHED)
 	{
-		pie_Draw3DShape(strImd, 0, colour, buildingBrightness, WZCOL_BLACK, pie_HEIGHT_SCALED | pie_SHADOW,
-		                (SDWORD)(structHeightScale(psStructure) * pie_RAISE_SCALE));
+		pie_Draw3DShape(strImd, 0, colour, buildingBrightness, pie_HEIGHT_SCALED | pie_SHADOW, structHeightScale(psStructure) * pie_RAISE_SCALE);
 	}
 	else
 	{
@@ -2237,7 +2236,7 @@ void	renderStructure(STRUCTURE *psStructure)
 		{
 			pie_SetShaderStretchDepth(psStructure->pos.z - psStructure->foundationDepth);
 		}
-		pie_Draw3DShape(strImd, animFrame, colour, buildingBrightness, WZCOL_BLACK, pieFlag, pieFlagData);
+		pie_Draw3DShape(strImd, animFrame, colour, buildingBrightness, pieFlag, pieFlagData);
 		pie_SetShaderStretchDepth(0);
 
 		// It might have weapons on it
@@ -2310,7 +2309,7 @@ void	renderStructure(STRUCTURE *psStructure)
 					{
 						pie_TRANSLATE(0, 0, psStructure->asWeaps[i].recoilValue / 3);
 
-						pie_Draw3DShape(mountImd[i], animFrame, colour, buildingBrightness, WZCOL_BLACK, pieFlag, pieFlagData);
+						pie_Draw3DShape(mountImd[i], animFrame, colour, buildingBrightness, pieFlag, pieFlagData);
 						if(mountImd[i]->nconnectors)
 						{
 							pie_TRANSLATE(mountImd[i]->connectors->x, mountImd[i]->connectors->z, mountImd[i]->connectors->y);
@@ -2319,7 +2318,7 @@ void	renderStructure(STRUCTURE *psStructure)
 					pie_MatRotX(rot.pitch);
 					pie_TRANSLATE(0, 0, psStructure->asWeaps[i].recoilValue);
 
-					pie_Draw3DShape(weaponImd[i], 0, colour, buildingBrightness, WZCOL_BLACK, pieFlag, pieFlagData);
+					pie_Draw3DShape(weaponImd[i], 0, colour, buildingBrightness, pieFlag, pieFlagData);
 					if (psStructure->status == SS_BUILT && psStructure->visible[selectedPlayer] > (UBYTE_MAX / 2))
 					{
 						if (psStructure->pStructureType->type == REF_REPAIR_FACILITY)
@@ -2344,7 +2343,7 @@ void	renderStructure(STRUCTURE *psStructure)
 
 									pie_MatRotY(-player.r.y);
 									pie_MatRotX(-player.r.x);
-									pie_Draw3DShape(pRepImd, getModularScaledGraphicsTime(100, pRepImd->numFrames), colour, buildingBrightness, WZCOL_BLACK, pie_ADDITIVE, 192);
+									pie_Draw3DShape(pRepImd, getModularScaledGraphicsTime(100, pRepImd->numFrames), colour, buildingBrightness, pie_ADDITIVE, 192);
 
 									pie_MatRotX(player.r.x);
 									pie_MatRotY(player.r.y);
@@ -2375,7 +2374,7 @@ void	renderStructure(STRUCTURE *psStructure)
 								// no anim so display one frame for a fixed time
 								if (graphicsTime < (psStructure->asWeaps[i].lastFired + BASE_MUZZLE_FLASH_DURATION))
 								{
-									pie_Draw3DShape(flashImd[i], 0, colour, buildingBrightness, WZCOL_BLACK, pieFlag | pie_ADDITIVE, EFFECT_MUZZLE_ADDITIVE);
+									pie_Draw3DShape(flashImd[i], 0, colour, buildingBrightness, pieFlag | pie_ADDITIVE, EFFECT_MUZZLE_ADDITIVE);
 								}
 							}
 							else
@@ -2384,7 +2383,7 @@ void	renderStructure(STRUCTURE *psStructure)
 								frame = (graphicsTime - psStructure->asWeaps[i].lastFired)/flashImd[i]->animInterval;
 								if (frame < flashImd[i]->numFrames && frame >= 0)
 								{
-									pie_Draw3DShape(flashImd[i], frame, colour, buildingBrightness, WZCOL_BLACK, pieFlag | pie_ADDITIVE, EFFECT_MUZZLE_ADDITIVE);
+									pie_Draw3DShape(flashImd[i], frame, colour, buildingBrightness, pieFlag | pie_ADDITIVE, EFFECT_MUZZLE_ADDITIVE);
 								}
 							}
 						}
@@ -2429,7 +2428,7 @@ void	renderStructure(STRUCTURE *psStructure)
 									// no anim so display one frame for a fixed time
 									if (graphicsTime < psStructure->asWeaps[i].lastFired + BASE_MUZZLE_FLASH_DURATION)
 									{
-										pie_Draw3DShape(flashImd[i], 0, colour, buildingBrightness, WZCOL_BLACK, 0, 0); //muzzle flash
+										pie_Draw3DShape(flashImd[i], 0, colour, buildingBrightness, 0, 0); //muzzle flash
 									}
 								}
 								else
@@ -2437,7 +2436,7 @@ void	renderStructure(STRUCTURE *psStructure)
 									frame = (graphicsTime - psStructure->asWeaps[i].lastFired) / flashImd[i]->animInterval;
 									if (frame < flashImd[i]->numFrames && frame >= 0)
 									{
-										pie_Draw3DShape(flashImd[i], 0, colour, buildingBrightness, WZCOL_BLACK, 0, 0); //muzzle flash
+										pie_Draw3DShape(flashImd[i], 0, colour, buildingBrightness, 0, 0); //muzzle flash
 									}
 								}
 							}
@@ -2456,7 +2455,7 @@ void	renderStructure(STRUCTURE *psStructure)
 						pie_TRANSLATE(psStructure->sDisplay.imd->connectors->x, psStructure->sDisplay.imd->connectors->z,
 						             psStructure->sDisplay.imd->connectors->y);
 						lImd = getImdFromIndex(MI_LANDING);
-						pie_Draw3DShape(lImd, getModularScaledGraphicsTime(1024, lImd->numFrames), colour, buildingBrightness, WZCOL_BLACK, 0, 0);
+						pie_Draw3DShape(lImd, getModularScaledGraphicsTime(1024, lImd->numFrames), colour, buildingBrightness, 0, 0);
 						pie_MatEnd();
 					}
 				}
@@ -2527,7 +2526,7 @@ void	renderDeliveryPoint(FLAG_POSITION *psPosition, BOOL blueprint)
 		pieFlag |= pie_FORCE_FOG;
 		colour = WZCOL_WHITE;
 	}
-	pie_Draw3DShape(pAssemblyPointIMDs[psPosition->factoryType][psPosition->factoryInc], 0, 0, colour, WZCOL_BLACK, pieFlag, pieFlagData);
+	pie_Draw3DShape(pAssemblyPointIMDs[psPosition->factoryType][psPosition->factoryInc], 0, 0, colour, pieFlag, pieFlagData);
 
 
 	if(!psPosition->selected && !blueprint)
@@ -2548,7 +2547,7 @@ void	renderDeliveryPoint(FLAG_POSITION *psPosition, BOOL blueprint)
 static BOOL	renderWallSection(STRUCTURE *psStructure)
 {
 	SDWORD			structX, structY, rx, rz, height;
-	PIELIGHT		brightness, specular = WZCOL_BLACK;
+	PIELIGHT		brightness;
 	iIMDShape		*imd;
 	SDWORD			rotation;
 	Vector3i			dv;
@@ -2630,7 +2629,7 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 			temp = imd->points;
 			imd->points = alteredPoints;
 			// Actually render it
-			pie_Draw3DShape(imd, 0, getPlayerColour(psStructure->player), brightness, specular, 0, 0);
+			pie_Draw3DShape(imd, 0, getPlayerColour(psStructure->player), brightness, 0, 0);
 			imd->points = temp;
 		}
 
@@ -2645,8 +2644,7 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 			(psStructure->status == SS_BEING_BUILT && psStructure->pStructureType->type == REF_RESOURCE_EXTRACTOR) )
 		{
 			pie_Draw3DShape(psStructure->sDisplay.imd, 0, getPlayerColour(psStructure->player),
-							brightness, specular, pie_HEIGHT_SCALED|pie_SHADOW,
-							(SDWORD)(structHeightScale(psStructure) * pie_RAISE_SCALE) );
+			                brightness, pie_HEIGHT_SCALED|pie_SHADOW, structHeightScale(psStructure) * pie_RAISE_SCALE);
 		}
 		else
 		{
@@ -2668,7 +2666,7 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 				}
 				pieFlagData = 0;
 			}
-			pie_Draw3DShape(imd, 0, getPlayerColour(psStructure->player), brightness, specular, pieFlag, pieFlagData);
+			pie_Draw3DShape(imd, 0, getPlayerColour(psStructure->player), brightness, pieFlag, pieFlagData);
 		}
 		imd->points = temp;
 
@@ -2718,7 +2716,7 @@ void renderShadow( DROID *psDroid, iIMDShape *psShadowIMD )
 	pie_MatRotX(psDroid->rot.pitch);
 	pie_MatRotZ(psDroid->rot.roll);
 
-	pie_Draw3DShape(psShadowIMD, 0, 0, WZCOL_WHITE, WZCOL_BLACK, pie_TRANSLUCENT, 128);
+	pie_Draw3DShape(psShadowIMD, 0, 0, WZCOL_WHITE, pie_TRANSLUCENT, 128);
 
 	pie_MatEnd();
 }

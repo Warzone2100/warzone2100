@@ -118,7 +118,6 @@ typedef struct {
 	iIMDShape*	shape;
 	int		frame;
 	PIELIGHT	colour;
-	PIELIGHT	specular;
 	int		flag;
 	int		flag_data;
 } transluscent_shape_t;
@@ -130,7 +129,7 @@ static transluscent_shape_t* tshapes = NULL;
 static unsigned int tshapes_size = 0;
 static unsigned int nb_tshapes = 0;
 
-static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELIGHT teamcolour, WZ_DECL_UNUSED PIELIGHT specular, int pieFlag, int pieFlagData)
+static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELIGHT teamcolour, int pieFlag, int pieFlagData)
 {
 	iIMDPoly *pPolys;
 	bool light = true;
@@ -463,7 +462,7 @@ void pie_CleanUp( void )
 	scshapes = NULL;
 }
 
-void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, PIELIGHT specular, int pieFlag, int pieFlagData)
+void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int pieFlag, int pieFlagData)
 {
 	PIELIGHT teamcolour;
 
@@ -480,7 +479,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, PIE
 
 	if (drawing_interface || !shadows)
 	{
-		pie_Draw3DShape2(shape, frame, colour, teamcolour, specular, pieFlag, pieFlagData);
+		pie_Draw3DShape2(shape, frame, colour, teamcolour, pieFlag, pieFlagData);
 	}
 	else
 	{
@@ -506,7 +505,6 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, PIE
 			tshapes[nb_tshapes].shape = shape;
 			tshapes[nb_tshapes].frame = frame;
 			tshapes[nb_tshapes].colour = colour;
-			tshapes[nb_tshapes].specular = specular;
 			tshapes[nb_tshapes].flag = pieFlag;
 			tshapes[nb_tshapes].flag_data = pieFlagData;
 			nb_tshapes++;
@@ -561,7 +559,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, PIE
 				}
 			}
 
-			pie_Draw3DShape2(shape, frame, colour, teamcolour, specular, pieFlag, pieFlagData);
+			pie_Draw3DShape2(shape, frame, colour, teamcolour, pieFlag, pieFlagData);
 		}
 	}
 }
@@ -686,7 +684,7 @@ static void pie_DrawRemainingTransShapes(void)
 	{
 		glLoadMatrixf(tshapes[i].matrix);
 		pie_Draw3DShape2(tshapes[i].shape, tshapes[i].frame, tshapes[i].colour, tshapes[i].colour,
-				 tshapes[i].specular, tshapes[i].flag, tshapes[i].flag_data);
+				 tshapes[i].flag, tshapes[i].flag_data);
 	}
 	glPopMatrix();
 
