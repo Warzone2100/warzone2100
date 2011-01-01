@@ -627,6 +627,12 @@ void NETstring(char *str, uint16_t maxlen)
 	}
 }
 
+void NETstring(char const *str, uint16_t maxlen)
+{
+	ASSERT(NETgetPacketDir() == PACKET_ENCODE, "Writing to const!");
+	NETstring(const_cast<char *>(str), maxlen);
+}
+
 void NETbin(uint8_t *str, uint32_t maxlen)
 {
 	/*

@@ -253,6 +253,7 @@ static size_t NET_fillBuffer(Socket **pSocket, SocketSet* socket_set, uint8_t *b
 			debug(LOG_NET, "Host connection was lost!");
 			NETlogEntry("Host connection was lost!", SYNC_FLAG, selectedPlayer);
 			tcp_socket = NULL;
+			bsocket = NULL;  // Because tcp_socket == bsocket...
 			//Game is pretty much over --should just end everything when HOST dies.
 			NetPlay.isHostAlive = false;
 			setLobbyError(ERROR_HOSTDROPPED);
@@ -1281,6 +1282,7 @@ bool NETsend(uint8_t player, NetMessage const *message)
 				SocketSet_DelSocket(socket_set, tcp_socket);            // mark it invalid
 				socketClose(tcp_socket);
 				tcp_socket = NULL;
+				bsocket = NULL;  // Because tcp_socket == bsocket...
 				NetPlay.players[NetPlay.hostPlayer].heartbeat = false;	// mark host as dead
 				//Game is pretty much over --should just end everything when HOST dies.
 				NetPlay.isHostAlive = false;
@@ -2785,14 +2787,16 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 
 	// Send a join message to the host
 	NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_JOIN);
-		// Casting constness away, because NETstring is const-incorrect
-		// when sending/encoding a packet.
-		NETstring((char*)playername, 64);
+		NETstring(playername, 64);
 		NETint32_t(&NETCODE_VERSION_MAJOR);
 		NETint32_t(&NETCODE_VERSION_MINOR);
 		NETstring(getModList(), modlist_string_size);
 		NETstring(NetPlay.gamePassword, sizeof(NetPlay.gamePassword));
 	NETend();
+	if (bsocket == NULL)
+	{
+		return false;  // Connection dropped while sending NET_JOIN.
+	}
 	socketFlush(bsocket);  // Make sure the message was completely sent.
 
 	i = SDL_GetTicks();
