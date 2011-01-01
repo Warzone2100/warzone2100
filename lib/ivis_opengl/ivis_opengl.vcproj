@@ -150,7 +150,19 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\bitimage.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\GLee.c"
+				>
+			</File>
+			<File
+				RelativePath=".\imd.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\imdload.cpp"
 				>
 			</File>
 			<File
@@ -158,7 +170,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\jpeg_encoder.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\pieblitfunc.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\pieclip.cpp"
 				>
 			</File>
 			<File
@@ -183,6 +203,10 @@
 			</File>
 			<File
 				RelativePath=".\piestate.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\png_util.cpp"
 				>
 			</File>
 			<File

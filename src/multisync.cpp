@@ -371,7 +371,7 @@ BOOL recvDroidCheck(NETQUEUE queue)
 				continue;  // Can't synch, since we didn't save data to be able to calculate a delta.
 			}
 
-#define MERGECOPY(x, y, z)  if (pc.y != pc2.y) { debug(LOG_SYNC, "Droid %u out of synch, changing "#x" from %"z" to %"z".", pc.droidID, x, pc.y);             x = pc.y; }
+#define MERGECOPYSYNC(x, y, z)  if (pc.y != pc2.y) { debug(LOG_SYNC, "Droid %u out of synch, changing "#x" from %"z" to %"z".", pc.droidID, x, pc.y);             x = pc.y; }
 #define MERGEDELTA(x, y, z) if (pc.y != pc2.y) { debug(LOG_SYNC, "Droid %u out of synch, changing "#x" from %"z" to %"z".", pc.droidID, x, x + pc.y - pc2.y); x += pc.y - pc2.y; }
 			// player not synched here...
 			precPos = droidGetPrecisePosition(pD);
@@ -445,8 +445,8 @@ BOOL recvDroidCheck(NETQUEUE queue)
 					break;  // Don't know what to do, but at least won't be actively breaking anything.
 			}
 
-			MERGECOPY(pD->secondaryOrder, secondaryOrder, "u");  // The old code set this after changing orders, so doing that in case.
-#undef MERGECOPY
+			MERGECOPYSYNC(pD->secondaryOrder, secondaryOrder, "u");  // The old code set this after changing orders, so doing that in case.
+#undef MERGECOPYSYNC
 #undef MERGEDELTA
 
 			syncDebugDroid(pD, '>');

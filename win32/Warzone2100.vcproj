@@ -248,10 +248,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\src\aiexperience.cpp"
-					>
-				</File>
-				<File
 					RelativePath="..\src\astar.cpp"
 					>
 				</File>

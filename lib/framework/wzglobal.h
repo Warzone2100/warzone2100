@@ -532,6 +532,8 @@
 #      include <stdlib.h>
 #      include <crtdbg.h>
 #    endif /* _DEBUG */
+// Required for alloca
+#    include <malloc.h>
 #  endif /* WZ_CC_* */
 
 #  define WIN32_LEAN_AND_MEAN
@@ -542,7 +544,7 @@
 
 #  if defined(WZ_CC_MSVC)
 //   notify people we are disabling these warning messages.
-#    pragma message (" *** Warnings 4018,4100,4127,4204,4244,4267,4389,4800 have been squelched. ***")
+#    pragma message (" *** Warnings 4018,4100,4127,4204,4244,4267,4389,4512,4800 have been squelched. ***")
 #    pragma warning (disable : 4018) // Shut up: '>' : signed/unsigned mismatch
 #    pragma warning (disable : 4100) // Shut up: unreferenced formal parameter (FIXME)
 #    pragma warning (disable : 4127) // Shut up: conditional expression is constant (eg. "while(0)")
@@ -551,6 +553,7 @@
 #    pragma warning (disable : 4267) // Shut up: conversion from 'size_t' to 'type', possible loss of data
 #    pragma warning (disable : 4389) // Shut up: '==' : signed/unsigned mismatch
 #    pragma warning (disable : 4800) // Shut up: 'BOOL' : forcing value to bool 'true' or 'false' (performance warning)
+#    pragma warning (disable : 4512) // Shut up: 'class' : assignment operator could not be generated
 
 #    define strcasecmp _stricmp
 #    define strncasecmp _strnicmp
