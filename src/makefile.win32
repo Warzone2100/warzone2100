@@ -19,7 +19,6 @@ SRC= \
 	action.cpp \
 	advvis.cpp \
 	ai.cpp \
-	aiexperience.cpp \
 	astar.cpp \
 	atmos.cpp \
 	aud.cpp \

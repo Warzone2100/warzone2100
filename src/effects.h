@@ -28,9 +28,9 @@
 	temporary world 'effects
 	Alex McLean, Pumpkin Studios, EIDOS Interactive, 1998.
 */
-#include "lib/ivis_common/piedef.h"
+#include "lib/ivis_opengl/piedef.h"
 #include "lib/framework/fixedpoint.h"
-#include "lib/ivis_common/pietypes.h"
+#include "lib/ivis_opengl/pietypes.h"
 
 #define SHOCK_WAVE_HEIGHT	(64)
 

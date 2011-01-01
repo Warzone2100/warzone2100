@@ -1233,67 +1233,6 @@ FUNC_SYMBOL asFuncTable[] =
 		5, { VAL_INT, VAL_INT, VAL_REF|VAL_INT, VAL_REF|VAL_INT, VAL_INT },
 		0, 0, NULL, 0, 0, NULL, NULL },
 
-
-	/* learn functions */
-
-	{ "learnPlayerBaseLoc",		scrLearnPlayerBaseLoc,		VAL_BOOL,
-		4, { VAL_INT, VAL_INT, VAL_INT, VAL_INT },
-		0, 0, NULL, 0, 0, NULL, NULL },
-
-	{ "recallPlayerBaseLoc",	scrRecallPlayerBaseLoc,		VAL_BOOL,
-		4, { VAL_INT, VAL_INT, VAL_REF|VAL_INT, VAL_REF|VAL_INT },
-		0, 0, NULL, 0, 0, NULL, NULL },
-
-	{ "canRememberPlayerBaseLoc",scrCanRememberPlayerBaseLoc,VAL_BOOL,
-		2, { VAL_INT, VAL_INT },
-		0, 0, NULL, 0, 0, NULL, NULL },
-
-	{ "learnBaseDefendLoc",		scrLearnBaseDefendLoc,		VAL_BOOL,
-		4, { VAL_INT, VAL_INT, VAL_INT, VAL_INT },
-		0, 0, NULL, 0, 0, NULL, NULL },
-
-	{ "learnOilDefendLoc",		scrLearnOilDefendLoc,		VAL_BOOL,
-		4, { VAL_INT, VAL_INT, VAL_INT, VAL_INT },
-		0, 0, NULL, 0, 0, NULL, NULL },
-
-	{ "getBaseDefendLocIndex",	scrGetBaseDefendLocIndex,	VAL_INT,
-		3, { VAL_INT, VAL_INT, VAL_INT },
-		0, 0, NULL, 0, 0, NULL, NULL },
-
-	{ "getOilDefendLocIndex",	scrGetOilDefendLocIndex,	VAL_INT,
-		3, { VAL_INT, VAL_INT, VAL_INT },
-		0, 0, NULL, 0, 0, NULL, NULL },
-
-	{ "getBaseDefendLocCount",	scrGetBaseDefendLocCount,	VAL_INT,
-		0, { VAL_VOID },
-		0, 0, NULL, 0, 0, NULL, NULL },
-
-	{ "getOilDefendLocCount",	scrGetOilDefendLocCount,	VAL_INT,
-		0, { VAL_VOID },
-		0, 0, NULL, 0, 0, NULL, NULL },
-
-	{ "recallBaseDefendLoc",	scrRecallBaseDefendLoc,		VAL_BOOL,
-		5, { VAL_INT, VAL_INT, VAL_REF|VAL_INT, VAL_REF|VAL_INT, VAL_REF|VAL_INT },
-		0, 0, NULL, 0, 0, NULL, NULL },
-
-	{ "recallOilDefendLoc",		scrRecallOilDefendLoc,		VAL_BOOL,
-		5, { VAL_INT, VAL_INT, VAL_REF|VAL_INT, VAL_REF|VAL_INT, VAL_REF|VAL_INT },
-		0, 0, NULL, 0, 0, NULL, NULL },
-
-	{ "recallPlayerVisibility",	scrRecallPlayerVisibility,	VAL_BOOL,
-		1, { VAL_INT },
-		0, 0, NULL, 0, 0, NULL, NULL },
-
-	{ "savePlayerAIExperience",	scrSavePlayerAIExperience,	VAL_BOOL,
-		2, { VAL_INT, VAL_BOOL },
-		0, 0, NULL, 0, 0, NULL, NULL },
-
-	{ "loadPlayerAIExperience",	scrLoadPlayerAIExperience,	VAL_INT,
-		1, { VAL_INT },
-		0, 0, NULL, 0, 0, NULL, NULL },
-
-	/* end of learn functions */
-
 	{ "structInRangeVis",		scrStructInRangeVis,		VAL_BOOL,
 		5, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT },
 		0, 0, NULL, 0, 0, NULL, NULL },
@@ -1509,6 +1448,14 @@ FUNC_SYMBOL asFuncTable[] =
 
 	{ "threatAt", scrThreatAt, VAL_BOOL,
 		3, { VAL_INT, VAL_INT, VAL_INT },
+		false, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "setSunPosition", scrSetSunPosition, VAL_VOID,
+		3, { VAL_FLOAT, VAL_FLOAT, VAL_FLOAT },
+		false, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "setSunIntensity", scrSetSunIntensity, VAL_VOID,
+		9, { VAL_FLOAT, VAL_FLOAT, VAL_FLOAT, VAL_FLOAT, VAL_FLOAT, VAL_FLOAT, VAL_FLOAT, VAL_FLOAT, VAL_FLOAT },
 		false, 0, NULL, 0, 0, NULL, NULL },
 
 	/* This final entry marks the end of the function list */

@@ -46,7 +46,7 @@
 #include "group.h"
 #include "cmddroid.h"
 #include "feature.h"
-#include "lib/ivis_common/piestate.h"
+#include "lib/ivis_opengl/piestate.h"
 #include "loop.h"
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/piematrix.h"

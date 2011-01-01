@@ -601,8 +601,11 @@
  * Asserts that the given string is statically allocated.
  */
 #if defined(__cplusplus)
-#  include <typeinfo>
-#  define WZ_ASSERT_STATIC_STRING(_var) assert(typeid(_var) == typeid(char[sizeof(_var)]))
+   template <int N>
+   static inline char _WZ_ASSERT_STATIC_STRING_FUNCTION(char const (&)[N]) { return '\0'; }  // Regular array.
+   static inline char *_WZ_ASSERT_STATIC_STRING_FUNCTION(char const *&) { return NULL; }     // Eeek, it's a pointer!
+   static inline char *_WZ_ASSERT_STATIC_STRING_FUNCTION(char *&) { return NULL; }           // Eeek, it's a pointer!
+#  define WZ_ASSERT_STATIC_STRING(_var) STATIC_ASSERT(sizeof(_WZ_ASSERT_STATIC_STRING_FUNCTION(_var)) == sizeof(char))
 #elif defined(WZ_CC_GNU) || defined(WZ_CC_INTEL)
 #  define WZ_ASSERT_STATIC_STRING(_var) STATIC_ASSERT(__builtin_types_compatible_p(typeof(_var), char[]))
 #else
@@ -613,7 +616,12 @@
  * Asserts that the given variable is a (statically sized) array, not just a pointer.
  */
 #if defined(__cplusplus)
-#  define WZ_ASSERT_ARRAY_EXPR(a) 0
+   template <typename T, int N>
+   static inline char _WZ_ASSERT_ARRAY_EXPR_FUNCTION(T (&)[N]) { return '\0'; }      // Regular array.
+   static inline char _WZ_ASSERT_ARRAY_EXPR_FUNCTION(void const *) { return '\0'; }  // Catch static arrays of unnamed structs.
+   template <typename T>
+   static inline char *_WZ_ASSERT_ARRAY_EXPR_FUNCTION(T *&) { return NULL; }         // Eeek, it's a pointer!
+#  define WZ_ASSERT_ARRAY_EXPR(_var) STATIC_ASSERT_EXPR(sizeof(_WZ_ASSERT_ARRAY_EXPR_FUNCTION(_var)) == sizeof(char))
 #elif defined(WZ_CC_GNU) || defined(WZ_CC_INTEL)
 /* &a[0] degrades to a pointer: a different type from an array */
 #  define WZ_ASSERT_ARRAY_EXPR(a) STATIC_ASSERT_EXPR(!__builtin_types_compatible_p(typeof(a), typeof(&(a)[0])))

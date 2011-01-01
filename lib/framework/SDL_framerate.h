@@ -16,7 +16,7 @@
 
 /* Some rates in Hz */
 
-#define FPS_UPPER_LIMIT		200
+#define FPS_UPPER_LIMIT		500
 #define FPS_LOWER_LIMIT		1
 #define FPS_DEFAULT		30
 

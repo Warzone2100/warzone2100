@@ -60,14 +60,12 @@ typedef struct edge_
 	int from, to;
 } EDGE;
 
-typedef int VERTEXID;	// Size of the entry for vertex id in the imd polygon structure
-
 typedef struct {
 	uint32_t flags;
 	int32_t zcentre;
 	unsigned int npnts;
 	Vector3f normal;
-	VERTEXID *pindex;
+	int pindex[3];
 	Vector2f *texCoord;
 	Vector2f texAnim;
 } iIMDPoly;
@@ -94,6 +92,8 @@ typedef struct _iIMDShape {
 
 	unsigned int nShadowEdges;
 	EDGE *shadowEdgeList;
+	float material[LIGHT_MAX][4];
+	float shininess;
 
 	struct _iIMDShape *next; // next pie in multilevel pies (NULL for non multilevel !)
 } iIMDShape;

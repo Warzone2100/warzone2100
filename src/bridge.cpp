@@ -20,7 +20,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/ivis_opengl/piematrix.h"
-#include "lib/ivis_common/piepalette.h"
+#include "lib/ivis_opengl/piepalette.h"
 
 #include "bridge.h"
 #include "display3d.h"
@@ -141,7 +141,7 @@ BOOL	renderBridgeSection(STRUCTURE *psStructure)
 	/* Translate */
 	pie_TRANSLATE(rx, 0, -rz);
 
-	pie_Draw3DShape(psStructure->sDisplay.imd, 0, 0, WZCOL_WHITE, WZCOL_BLACK, 0, 0);
+	pie_Draw3DShape(psStructure->sDisplay.imd, 0, 0, WZCOL_WHITE, 0, 0);
 
 	pie_MatEnd();
 	return(true);

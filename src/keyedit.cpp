@@ -24,8 +24,8 @@
  */
 
 #include "lib/framework/frame.h"
-#include "lib/ivis_common/bitimage.h"
-#include "lib/ivis_common/pieblitfunc.h"
+#include "lib/ivis_opengl/bitimage.h"
+#include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
 

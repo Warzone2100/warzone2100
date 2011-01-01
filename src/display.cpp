@@ -28,7 +28,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
 #include "lib/framework/strres.h"
-#include "lib/ivis_common/piestate.h"
+#include "lib/ivis_opengl/piestate.h"
 #include "lib/framework/fixedpoint.h"
 #include "lib/framework/wzapp_c.h"
 
@@ -476,8 +476,6 @@ void processInput(void)
 	BOOL mOverRadar = false;
 	BOOL mOverConstruction = false;
 
-	int WheelZoomIterator;
-
 	if (InGameOpUp || isInGamePopupUp)
 	{
 		dragBox3D.status = DRAG_RELEASED;	// disengage the dragging since it stops menu input
@@ -521,8 +519,7 @@ void processInput(void)
 		}
 		else
 		{
-			for (WheelZoomIterator = 0; WheelZoomIterator < 10; WheelZoomIterator++)
-				kf_ZoomIn();
+			kf_ZoomInStep();
 		}
 	}
 
@@ -544,8 +541,7 @@ void processInput(void)
 		}
 		else
 		{
-			for (WheelZoomIterator = 0; WheelZoomIterator < 10; WheelZoomIterator++)
-				kf_ZoomOut();
+			kf_ZoomOutStep();
 		}
 	}
 

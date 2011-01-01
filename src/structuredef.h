@@ -72,14 +72,10 @@ struct FLAG_POSITION : public OBJECT_POSITION
 	Vector3i		coords;							//the world coords of the Position
 	UBYTE		factoryInc;						//indicates whether the first, second etc factory
 	UBYTE		factoryType;					//indicates whether standard, cyborg or vtol factory
-//	UBYTE		factorySub;						//sub value. needed to order production points.
-//	UBYTE		primary;
 	FLAG_POSITION * psNext;
 };
 
 
-//only allowed one weapon per structure (more memory for Tim)
-//Watermelon:only allowed 4 weapons per structure(sorry Tim...)
 #define STRUCT_MAXWEAPS		4
 
 typedef enum _struct_strength
@@ -215,28 +211,24 @@ typedef struct _power_gen
 
 typedef struct REPAIR_FACILITY
 {
-	UDWORD				power;				/* Power used in repairing */
-	UDWORD				timeStarted;		/* Time repair started on current object */
-	BASE_OBJECT			*psObj;				/* Object being repaired */
-	UDWORD				powerAccrued;		/* used to keep track of power before
-											   repairing a droid */
-	FLAG_POSITION		*psDeliveryPoint;	/* Place for the repaired droids to assemble
-                                               at */
-    UDWORD              currentPtsAdded;    /* stores the amount of body points added to the unit
-                                               that is being worked on */
+	UDWORD                          power;                  /* Power used in repairing */
+	UDWORD                          timeStarted;            /* Time repair started on current object */
+	BASE_OBJECT                     *psObj;                 /* Object being repaired */
+	UDWORD                          powerAccrued;           /* Used to keep track of power before repairing a droid */
+	FLAG_POSITION                   *psDeliveryPoint;       /* Place for the repaired droids to assemble at */
+	UDWORD                          currentPtsAdded;        /* stores the amount of body points added to the unit that is being worked on */
 
 	// The group the droids to be repaired by this facility belong to
-	struct _droid_group		*psGroup;
-	struct DROID			*psGrpNext;
-	int				droidQueue;		///< Last count of droid queue for this facility
+	struct _droid_group             *psGroup;
+	int                             droidQueue;              ///< Last count of droid queue for this facility
 } REPAIR_FACILITY;
 
 typedef struct _rearm_pad
 {
-	UDWORD				reArmPoints;		/* rearm points per cycle				 */
-	UDWORD				timeStarted;		/* Time reArm started on current object	 */
-	BASE_OBJECT			*psObj;				/* Object being rearmed		             */
-    UDWORD              timeLastUpdated;    /* Time rearm was last updated */
+	UDWORD                          reArmPoints;            /* rearm points per cycle */
+	UDWORD                          timeStarted;            /* Time reArm started on current object */
+	BASE_OBJECT                     *psObj;                 /* Object being rearmed */
+	UDWORD                          timeLastUpdated;        /* Time rearm was last updated */
 } REARM_PAD;
 
 typedef union

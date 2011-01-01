@@ -19,7 +19,7 @@
 */
 
 #include "lib/framework/frame.h"
-#include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_opengl/rendmode.h"
 
 iSurface *iV_SurfaceCreate(int width, int height)
 {

@@ -41,13 +41,13 @@
 #include "lib/framework/tagfile.h"
 #include "lib/framework/math_ext.h"
 
-#include "lib/ivis_common/ivisdef.h" //ivis matrix code
-#include "lib/ivis_common/piedef.h" //ivis matrix code
+#include "lib/ivis_opengl/ivisdef.h" //ivis matrix code
+#include "lib/ivis_opengl/piedef.h" //ivis matrix code
 #include "lib/framework/fixedpoint.h"
-#include "lib/ivis_common/piepalette.h"
-#include "lib/ivis_common/piestate.h"
+#include "lib/ivis_opengl/piepalette.h"
+#include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/piematrix.h"
-#include "lib/ivis_common/piemode.h"
+#include "lib/ivis_opengl/piemode.h"
 
 #include "lib/gamelib/gtime.h"
 #include "lib/sound/audio.h"
@@ -1621,7 +1621,7 @@ static void renderWaypointEffect(const EFFECT *psEffect)
 {
 	positionEffect(psEffect);
 
-	pie_Draw3DShape(psEffect->imd, 0, 0, WZCOL_WHITE, WZCOL_BLACK, 0, 0);
+	pie_Draw3DShape(psEffect->imd, 0, 0, WZCOL_WHITE, 0, 0);
 	pie_MatEnd();
 }
 
@@ -1639,7 +1639,7 @@ static void renderFirework(const EFFECT *psEffect)
 	pie_MatRotX(-player.r.x);
 
 	pie_MatScale(psEffect->size / 100.f);
- 	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, WZCOL_WHITE, WZCOL_BLACK, pie_ADDITIVE, EFFECT_EXPLOSION_ADDITIVE);
+ 	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, WZCOL_WHITE, pie_ADDITIVE, EFFECT_EXPLOSION_ADDITIVE);
 	pie_MatEnd();
 }
 
@@ -1652,7 +1652,7 @@ static void renderBloodEffect(const EFFECT *psEffect)
 	pie_MatRotX(-player.r.x);
 	pie_MatScale(psEffect->size / 100.f);
 
-	pie_Draw3DShape(getImdFromIndex(MI_BLOOD), psEffect->frameNumber, 0, WZCOL_WHITE, WZCOL_BLACK, pie_TRANSLUCENT, EFFECT_BLOOD_TRANSPARENCY);
+	pie_Draw3DShape(getImdFromIndex(MI_BLOOD), psEffect->frameNumber, 0, WZCOL_WHITE, pie_TRANSLUCENT, EFFECT_BLOOD_TRANSPARENCY);
 	pie_MatEnd();
 }
 
@@ -1681,7 +1681,7 @@ static void renderDestructionEffect(const EFFECT *psEffect)
 		pie_MatRotY(SKY_SHIMMY);
 		pie_MatRotZ(SKY_SHIMMY);
 	}
- 	pie_Draw3DShape(psEffect->imd, 0, 0, WZCOL_WHITE, WZCOL_BLACK, pie_RAISE, percent);
+ 	pie_Draw3DShape(psEffect->imd, 0, 0, WZCOL_WHITE, pie_RAISE, percent);
 
 	pie_MatEnd();
 }
@@ -1757,15 +1757,15 @@ static void renderExplosionEffect(const EFFECT *psEffect)
 
 	if(psEffect->type == EXPLOSION_TYPE_PLASMA)
 	{
-		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, WZCOL_BLACK, pie_ADDITIVE, EFFECT_PLASMA_ADDITIVE);
+		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_ADDITIVE, EFFECT_PLASMA_ADDITIVE);
 	}
 	else if(psEffect->type == EXPLOSION_TYPE_KICKUP)
 	{
-		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, WZCOL_BLACK, pie_TRANSLUCENT, 128);
+		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_TRANSLUCENT, 128);
 	}
 	else
 	{
-		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, WZCOL_BLACK, pie_ADDITIVE, EFFECT_EXPLOSION_ADDITIVE);
+		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_ADDITIVE, EFFECT_EXPLOSION_ADDITIVE);
 	}
 
 	pie_MatEnd();
@@ -1787,7 +1787,7 @@ static void renderGravitonEffect(const EFFECT *psEffect)
 		pie_MatScale(psEffect->size / 100.f);
 	}
 
-	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, psEffect->player, WZCOL_WHITE, WZCOL_BLACK, 0, 0);
+	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, psEffect->player, WZCOL_WHITE, 0, 0);
 
 	/* Pop the matrix */
 	pie_MatEnd();
@@ -1797,8 +1797,7 @@ static void renderGravitonEffect(const EFFECT *psEffect)
 static void renderConstructionEffect(const EFFECT *psEffect)
 {
 	Vector3i null;
-	SDWORD	percent;
-	UDWORD	translucency;
+	int percent, translucency;
 	float size;
 
 	/* No rotation about arbitrary axis */
@@ -1831,7 +1830,7 @@ static void renderConstructionEffect(const EFFECT *psEffect)
 	size = MIN(2.f * translucency / 100.f, .90f);
 	pie_MatScale(size);
 
-	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, WZCOL_WHITE, WZCOL_BLACK, pie_TRANSLUCENT, (UBYTE)(translucency));
+	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, WZCOL_WHITE, pie_TRANSLUCENT, translucency);
 
 	/* Pop the matrix */
 	pie_MatEnd();
@@ -1840,9 +1839,8 @@ static void renderConstructionEffect(const EFFECT *psEffect)
 /** Renders the standard smoke effect - it is now scaled in real-time as well */
 static void renderSmokeEffect(const EFFECT *psEffect)
 {
-	UDWORD	transparency = 0;
+	int transparency = 0;
 	const PIELIGHT brightness = WZCOL_WHITE;
-	const PIELIGHT specular = WZCOL_BLACK;
 
 	positionEffect(psEffect);
 
@@ -1853,9 +1851,6 @@ static void renderSmokeEffect(const EFFECT *psEffect)
 		pie_MatRotY(-player.r.y);
 		pie_MatRotX(-player.r.x);
 	}
-
-	/* Small smoke - used for the droids */
-//		if(psEffect->type == SMOKE_TYPE_DRIFTING_SMALL || psEffect->type == SMOKE_TYPE_TRAIL)
 
 	if(TEST_SCALED(psEffect))
 	{
@@ -1887,17 +1882,17 @@ static void renderSmokeEffect(const EFFECT *psEffect)
 	/* Make imds be transparent on 3dfx */
 	if(psEffect->type==SMOKE_TYPE_STEAM)
 	{
-		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, specular, pie_TRANSLUCENT, (UBYTE)(EFFECT_STEAM_TRANSPARENCY)/2);
+		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_TRANSLUCENT, EFFECT_STEAM_TRANSPARENCY / 2);
 	}
 	else
 	{
 		if(psEffect->type == SMOKE_TYPE_TRAIL)
 		{
-			pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, specular, pie_TRANSLUCENT, (UBYTE)((2*transparency)/3));
+			pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_TRANSLUCENT, (2 * transparency) / 3);
 		}
 		else
 		{
-			pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, specular, pie_TRANSLUCENT, (UBYTE)(transparency)/2);
+			pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_TRANSLUCENT, transparency / 2);
 		}
 	}
 

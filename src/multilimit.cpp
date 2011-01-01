@@ -39,17 +39,17 @@
 #include "wrappers.h"	// for loading screen
 #include "lib/gamelib/gtime.h"
 #include "console.h"
-#include "lib/ivis_common/bitimage.h"	// GFX incs
-#include "lib/ivis_common/textdraw.h"
+#include "lib/ivis_opengl/bitimage.h"	// GFX incs
+#include "lib/ivis_opengl/textdraw.h"
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/piematrix.h"
-#include "lib/ivis_common/piestate.h"
+#include "lib/ivis_opengl/piestate.h"
 #include "lib/netplay/netplay.h"
 #include "multiplay.h"
 #include "multirecv.h"
 #include "multiint.h"
 #include "multilimit.h"
-#include "lib/ivis_common/piemode.h"
+#include "lib/ivis_opengl/piemode.h"
 #include "lib/script/script.h"
 #include "challenge.h"
 

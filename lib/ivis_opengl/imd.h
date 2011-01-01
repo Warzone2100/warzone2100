@@ -17,49 +17,39 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#include "imd.h"
+#ifndef _imd_
+#define _imd_
+
+
 #include "ivisdef.h"
-#include "tex.h"
-#include "pietypes.h"
+
+#define PIE_NAME				"PIE"  // Pumpkin image export data file
+#define PIE_VER				2
+#define PIE_FLOAT_VER		3
 
 //*************************************************************************
-//*** free IMD shape memory
-//*
-//* pre		shape successfully allocated
-//*
-//* params	shape = pointer to IMD shape
-//*
-//******
-void iV_IMDRelease(iIMDShape *s)
-{
-   unsigned int i;
-   iIMDShape *d;
 
-   if (s) {
-		if (s->points) {
-			free(s->points);
-		}
-		if (s->connectors) {
-			free(s->connectors);
-		}
-		if (s->polys) {
-			for (i = 0; i < s->npolys; i++) {
-				if (s->polys[i].pindex) {
-					free(s->polys[i].pindex);
-				}
-				if (s->polys[i].texCoord) {
-					free(s->polys[i].texCoord);
-				}
-			}
-			free(s->polys);
-		}
-		if (s->shadowEdgeList)
-		{
-			free(s->shadowEdgeList);
-			s->shadowEdgeList = NULL;
-		}
-		d = s->next;
-		free(s);
-		iV_IMDRelease(d);
-	}
-}
+// PIE model flags
+#define iV_IMD_NOSTRETCH     0x00001000
+#define iV_IMD_TCMASK        0x00010000
+
+// polygon flags	b0..b7: col, b24..b31: anim index
+
+
+#define iV_IMD_TEX 0x00000200		// this is both a polygon and pie flag
+#define iV_IMD_TEXANIM 0x00004000 // iV_IMD_TEX must be set also
+
+//*************************************************************************
+
+extern iIMDShape *iV_ProcessIMD(const char **ppFileData, const char *FileDataEnd );
+
+extern BOOL iV_IMDSave(char *filename, iIMDShape *s, BOOL PieIMD);
+extern void iV_IMDRelease(iIMDShape *s);
+
+// How high up do we want to stop looking
+#define DROID_VIS_UPPER	100
+
+// How low do we stop looking?
+#define DROID_VIS_LOWER	10
+
+#endif

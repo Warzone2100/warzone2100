@@ -6,6 +6,12 @@ include $(top_srcdir)/makerules/common.mk
 CPPFLAGS := $(CPPFLAGS) -I$(top_srcdir)/lib/ivis_opengl
 
 SRC= \
+	bitimage.cpp \
+	imd.cpp \
+	imdload.cpp \
+	jpeg_encoder.cpp \
+	pieclip.cpp \
+	png_util.cpp \
 	GLee.c \
 	ivi.cpp \
 	pieblitfunc.cpp \

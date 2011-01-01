@@ -19,26 +19,27 @@
 */
 /***************************************************************************/
 /*
- * pieTypes.h
+ * piefunc.h
  *
- * type defines for simple pies.
+ * type defines for extended image library functions.
  *
  */
 /***************************************************************************/
 
-#ifndef _pieTypes_h
-#define _pieTypes_h
+#ifndef _piefunc_h
+#define _piefunc_h
 
 #include "lib/framework/frame.h"
-#include "lib/framework/vector.h"
+#include "lib/ivis_opengl/piedef.h"
+#include "lib/ivis_opengl/pieclip.h"
 
-//*************************************************************************
-//
-// Simple derived types
-//
-//*************************************************************************
-typedef struct { Vector3i p, r; } iView;
+extern UBYTE pie_ByteScale(UBYTE a, UBYTE b) WZ_DECL_CONST;
+extern void pie_TransColouredTriangle(Vector3f *vrt, PIELIGHT c);
+extern void pie_DrawSkybox(float scale, int u, int v, int w, int h);
+extern void pie_DrawFogBox(float left, float right, float front, float back, float height, float wider);
+extern void pie_DrawViewingWindow( Vector3i *v, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2, PIELIGHT colour);
 
-typedef struct { unsigned int width, height, depth; unsigned char *bmp; } iV_Image;
+void pie_ClipBegin(int x1, int y1, int x2, int y2);
+void pie_ClipEnd(void);
 
-#endif // _pieTypes_h
+#endif // _piedef_h

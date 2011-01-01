@@ -19,7 +19,7 @@
 */
 
 #include "lib/framework/frame.h"
-#include "lib/ivis_common/bitimage.h"//bitmap routines
+#include "lib/ivis_opengl/bitimage.h"//bitmap routines
 
 #include "hci.h"
 #include "intdisplay.h"

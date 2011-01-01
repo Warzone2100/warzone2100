@@ -35,8 +35,8 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
 #include "lib/iniparser/iniparser.h"
-#include "lib/ivis_common/bitimage.h"
-#include "lib/ivis_common/pieblitfunc.h"
+#include "lib/ivis_opengl/bitimage.h"
+#include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/widget/button.h"
 
 #include "challenge.h"
@@ -233,7 +233,7 @@ bool addChallenges()
 		char description[totalslotspace];
 		char highscore[totalslotspace];
 		const char *name, *difficulty, *map, *givendescription;
-		dictionary *dict;
+		inifile *inif;
 
 		// See if this filename contains the extension we're looking for
 		if (!strstr(*i, ".ini"))
@@ -243,41 +243,42 @@ bool addChallenges()
 		}
 
 		/* First grab any high score associated with this challenge */
-		dict = iniparser_load(CHALLENGE_SCORES);
+		inif = inifile_load(CHALLENGE_SCORES);
 		sstrcpy(sPath, *i);
 		sPath[strlen(sPath) - 4] = '\0';	// remove .ini
 		sstrcpy(highscore, "no score");
-		if (dict)
+		if (inif)
 		{
 			char key[64];
 			bool victory;
 			int seconds;
 
 			ssprintf(key, "%s:Player", sPath);
-			name = iniparser_getstring(dict, key, "NO NAME");
+			name = inifile_get(inif, key, "NO NAME");
 			ssprintf(key, "%s:Victory", sPath);
-			victory = iniparser_getboolean(dict, key, false);
+			victory = inifile_get_as_bool(inif, key, false);
 			ssprintf(key, "%s:Seconds", sPath);
-			seconds = iniparser_getint(dict, key, -1);
+			seconds = inifile_get_as_int(inif, key, -1);
 			if (seconds > 0)
 			{
 				getAsciiTime(key, seconds * GAME_TICKS_PER_SEC);
 				ssprintf(highscore, "%s by %s (%s)", key, name, victory ? "Victory" : "Survived");
 			}
-			iniparser_freedict(dict);
+			inifile_delete(inif);
 		}
 
 		ssprintf(sPath, "%s/%s", sSearchPath, *i);
-		dict = iniparser_load(sPath);
-		if (!dict)
+		inif = inifile_load(sPath);
+		inifile_set_current_section(inif, "challenge");
+		if (!inif)
 		{
 			debug(LOG_ERROR, "Could not open \"%s\"", sPath);
 			continue;
 		}
-		name = iniparser_getstring(dict, "challenge:Name", "BAD NAME");
-		map = iniparser_getstring(dict, "challenge:Map", "BAD MAP");
-		difficulty = iniparser_getstring(dict, "challenge:difficulty", "BAD DIFFICULTY");
-		givendescription = iniparser_getstring(dict, "challenge:description", "");
+		name = inifile_get(inif, "Name", "BAD NAME");
+		map = inifile_get(inif, "Map", "BAD MAP");
+		difficulty = inifile_get(inif, "difficulty", "BAD DIFFICULTY");
+		givendescription = inifile_get(inif, "description", "");
 		ssprintf(description, "%s, %s, %s. %s", map, difficulty, highscore, givendescription);
 
 		button = (W_BUTTON*)widgGetFromID(psRequestScreen, CHALLENGE_ENTRY_START + slotCount);
@@ -288,7 +289,7 @@ bool addChallenges()
 		sstrcpy(sSlotCaps[slotCount], name);		// store it!
 		sstrcpy(sSlotTips[slotCount], description);	// store it, too!
 		sstrcpy(sSlotFile[slotCount], sPath);		// store filename
-		iniparser_freedict(dict);
+		inifile_delete(inif);
 
 		/* Add button */
 		button->pTip = sSlotTips[slotCount];

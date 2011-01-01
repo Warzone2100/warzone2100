@@ -220,19 +220,16 @@ unsigned int cmdGetCommanderLevel(const DROID* psDroid)
 }
 
 // Selects all droids for a given commander
-void	cmdSelectSubDroids(DROID *psDroid)
+void cmdSelectSubDroids(DROID *psDroid)
 {
-DROID	*psCurr;
+	DROID *psCurr;
 
 	for (psCurr = apsDroidLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
 	{
-		if( hasCommander(psCurr) )
+		if (hasCommander(psCurr)
+		 && psCurr->psGroup->psCommander == psDroid)
 		{
-			if(psCurr->psGroup->psCommander == psDroid)
-			{
-//				psCurr->selected = true;
-				SelectDroid(psCurr);
-			}
+			SelectDroid(psCurr);
 		}
 	}
 }

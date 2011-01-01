@@ -37,7 +37,7 @@
 #include "hci.h"
 #include "configuration.h"			// lobby cfg.
 #include "clparse.h"
-#include "lib/ivis_common/piestate.h"
+#include "lib/ivis_opengl/piestate.h"
 
 #include "component.h"
 #include "console.h"
@@ -50,7 +50,6 @@
 #include "multiint.h"
 #include "multilimit.h"
 #include "multigifts.h"
-#include "aiexperience.h"	//for beacon messages
 #include "multiint.h"
 #include "multirecv.h"
 #include "scriptfuncs.h"
@@ -597,8 +596,6 @@ BOOL multiGameInit(void)
 	}
 
 	gameInit();
-
-	InitializeAIExperience();
 	msgStackReset();	//for multiplayer msgs, reset message stack
 
 	return true;

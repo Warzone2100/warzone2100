@@ -29,7 +29,6 @@
 #ifndef _piestate_h
 #define _piestate_h
 
-
 /***************************************************************************/
 
 #include "lib/framework/frame.h"
@@ -41,34 +40,6 @@
  */
 /***************************************************************************/
 
-typedef	enum	REND_MODE
-				{
-					REND_ALPHA,
-					REND_ADDITIVE,
-					REND_OPAQUE,
-					REND_MULTIPLICATIVE
-				}
-				REND_MODE;
-
-typedef	enum	DEPTH_MODE
-				{
-					DEPTH_CMP_LEQ_WRT_ON,
-					DEPTH_CMP_ALWAYS_WRT_ON,
-					DEPTH_CMP_LEQ_WRT_OFF,
-					DEPTH_CMP_ALWAYS_WRT_OFF
-				}
-				DEPTH_MODE;
-
-typedef	enum	TRANSLUCENCY_MODE
-				{
-					TRANS_DECAL,
-					TRANS_FILTER,
-					TRANS_ALPHA,
-					TRANS_ADDITIVE,
-					TRANS_MULTIPLICATIVE
-				}
-				TRANSLUCENCY_MODE;
-
 typedef struct	RENDER_STATE
 				{
 					BOOL				fogEnabled;
@@ -77,22 +48,8 @@ typedef struct	RENDER_STATE
 					SDWORD				texPage;
 					REND_MODE			rendMode;
 					BOOL				keyingOn;
-					TRANSLUCENCY_MODE	transMode;
 				}
 				RENDER_STATE;
-
-typedef enum
-{
-	TEXPAGE_NONE = -1,
-	TEXPAGE_EXTERN = -2
-} TEXPAGE_TYPE;
-
-typedef enum
-{
-	SHADER_NONE,
-	SHADER_COMPONENT,
-	SHADER_MAX
-} SHADER_MODE;
 
 /***************************************************************************/
 /*
@@ -101,7 +58,6 @@ typedef enum
 /***************************************************************************/
 
 extern unsigned int pieStateCount;
-extern RENDER_STATE rendStates;
 
 /***************************************************************************/
 /*
@@ -130,28 +86,17 @@ extern void pie_SetMouse(CURSOR cursor, bool coloured);
 extern void pie_DrawMouse(unsigned int X, unsigned int Y);
 extern void pie_ShowMouse(bool visible);
 
-extern void pie_SetTranslucencyMode(TRANSLUCENCY_MODE transMode);
-
-/* Actually in piestate.c */
-
 // Shaders control center
 bool pie_LoadShaders(void);
 // Actual shaders (we do not want to export these calls)
 void pie_DeactivateShader(void);
-void pie_ActivateShader_TCMask(PIELIGHT teamcolour, int maskpage);
+void pie_ActivateShader(SHADER_MODE shaderMode, PIELIGHT teamcolour, int maskpage);
 void pie_SetShaderStretchDepth(float stretch);
-
-/* Actually in piedraw.c */
-
-// Lighting cotrols
-extern void pie_SetLightingState(bool);
-extern bool pie_GetLightingState(void);
 
 /* Errors control routine */
 #define glErrors() \
 	_glerrors(__FUNCTION__, __FILE__, __LINE__)
 
 extern bool _glerrors(const char *, const char *, int);
-
 
 #endif // _pieState_h

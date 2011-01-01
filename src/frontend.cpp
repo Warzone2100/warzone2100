@@ -26,8 +26,8 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
-#include "lib/ivis_common/bitimage.h"
-#include "lib/ivis_common/pieblitfunc.h"
+#include "lib/ivis_opengl/bitimage.h"
+#include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/sound/mixer.h"
 #include "lib/widget/button.h"
 #include "lib/widget/label.h"
@@ -88,7 +88,6 @@ BOOL CancelPressed(void)
 // Title Screen
 static BOOL startTitleMenu(void)
 {
-//	widgDelete(psWScreen,1);	// close reticule if it's open. MAGIC NUMBERS?
 	intRemoveReticule();
 
 	addBackdrop();
@@ -458,7 +457,6 @@ BOOL runOptionsMenu(void)
 	case FRONTEND_KEYMAP:
 		changeTitleMode(KEYMAP);
 		break;
-
 	case FRONTEND_QUIT:
 		changeTitleMode(TITLE);
 		break;
@@ -1714,36 +1712,24 @@ void changeTitleMode(tMode mode)
 
 	switch(mode)
 	{
-/*	case DEMOMODE:// demo case. remove for release
-		startDemoMenu();
-		break;
-	case VIDEO:
-		startVideoOptionsMenu();
-		break;
-*/
 	case SINGLE:
 		startSinglePlayerMenu();
 		break;
 	case GAME:
 		startGameOptionsMenu();
 		break;
-
 	case GRAPHICS_OPTIONS:
 		startGraphicsOptionsMenu();
 		break;
-
 	case AUDIO_OPTIONS:
 		startAudioOptionsMenu();
 		break;
-
 	case VIDEO_OPTIONS:
 		startVideoOptionsMenu();
 		break;
-
 	case MOUSE_OPTIONS:
 		startMouseOptionsMenu();
 		break;
-
 	case TUTORIAL:
 		startTutorialMenu();
 		break;
@@ -1753,14 +1739,9 @@ void changeTitleMode(tMode mode)
 	case TITLE:
 		startTitleMenu();
 		break;
-
-//	case GRAPHICS:
-//		startGraphicsOptionsMenu();
-//		break;
 	case CREDITS:
 		startCreditsScreen();
 		break;
-
  	case MULTI:
 		startMultiPlayerMenu();		// goto multiplayer menu
 		break;
@@ -1786,23 +1767,17 @@ void changeTitleMode(tMode mode)
 	case KEYMAP:
 		startKeyMapEditor(true);
 		break;
-
 	case STARTGAME:
 	case QUIT:
 	case LOADSAVEGAME:
 		bLimiterLoaded = false;
 	case SHOWINTRO:
 		break;
-
 	default:
 		debug( LOG_FATAL, "Unknown title mode requested" );
 		abort();
 		break;
 	}
 
-	/* Set default frame rate limit */
-	setDefaultFrameRateLimit();
-
 	return;
 }
-

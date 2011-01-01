@@ -1,12 +1,12 @@
 PKG_NAME:=libpng
-PKG_VERSION=1.4.4
+PKG_VERSION=1.4.5
 
 PKG_SOURCEBASE:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_SOURCEBASE).tar.bz2
 PKG_SOURCE_URL:= \
 	@SF/libpng \
 	http://www.il.fontys.nl/~giel/warzone/devpkg/
-PKG_MD5SUM:=e6446d6cc10621ce0ed27ff82a70a7e8
+PKG_MD5SUM:=d500e117e4a08d5ca3bd51dca0a0bc5f
 
 TARGET:=$(TOPDIR)/build/libs/lib/libpng14.la
 

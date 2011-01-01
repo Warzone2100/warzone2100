@@ -42,6 +42,8 @@ extern BOOL scrGetPlayerStartPosition(void);
 extern BOOL scrSafeDest(void);
 extern BOOL scrThreatAt(void);
 extern Vector2i getPlayerStartPosition(int player);
+extern BOOL scrSetSunPosition(void);
+extern BOOL scrSetSunIntensity(void);
 
 // not used in scripts, but used in code.
 extern  BOOL objectInRange(struct BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range);
@@ -605,23 +607,6 @@ extern BOOL scrGetClosestEnemyStructByType(void);
 extern BOOL scrSkDefenseLocationB(void);
 extern BOOL scrCirclePerimPoint(void);
 
-extern BOOL scrLearnPlayerBaseLoc(void);
-extern BOOL scrLearnBaseDefendLoc(void);
-extern BOOL scrLearnOilDefendLoc(void);
-extern BOOL scrSavePlayerAIExperience(void);
-extern BOOL scrLoadPlayerAIExperience(void);
-extern BOOL scrGetBaseDefendLocIndex(void);
-extern BOOL scrGetOilDefendLocIndex(void);
-extern BOOL scrRecallPlayerBaseLoc(void);
-extern BOOL scrRecallPlayerVisibility(void);
-extern BOOL scrCanRememberPlayerBaseLoc(void);
-extern BOOL scrStructInRangeVis(void);
-extern BOOL scrDroidInRangeVis(void);
-extern BOOL scrRecallBaseDefendLoc(void);
-extern BOOL scrRecallOilDefendLoc(void);
-extern BOOL scrGetBaseDefendLocCount(void);
-extern BOOL scrGetOilDefendLocCount(void);
-
 extern BOOL scrGiftRadar(void);
 extern BOOL scrNumAllies(void);
 extern BOOL scrNumAAinRange(void);
@@ -636,6 +621,8 @@ extern BOOL scrMsgBox(void);
 extern BOOL scrGetStructureType(void);
 extern BOOL scrGetPlayerName(void);
 extern BOOL scrSetPlayerName(void);
+extern BOOL scrStructInRangeVis(void);
+extern BOOL scrDroidInRangeVis(void);
 
 extern BOOL scrGetBit(void);
 extern BOOL scrSetBit(void);

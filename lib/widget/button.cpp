@@ -28,7 +28,7 @@
 #include "button.h"
 #include "form.h"
 #include "tip.h"
-#include "lib/ivis_common/pieblitfunc.h"
+#include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/gamelib/gtime.h"
 
 
