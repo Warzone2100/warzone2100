@@ -222,7 +222,7 @@ extern DROID_TEMPLATE	*GetAIDroidTemplate(char *aName);
 /* gets a template from its name - relies on the name being unique */
 extern DROID_TEMPLATE * getTemplateFromUniqueName(const char *pName, unsigned int player);
 /* gets a template from its name - relies on the name being unique */
-extern DROID_TEMPLATE* getTemplateFromTranslatedNameNoPlayer(char *pName);
+extern DROID_TEMPLATE* getTemplateFromTranslatedNameNoPlayer(char const *pName);
 /*getTemplateFromMultiPlayerID gets template for unique ID  searching all lists */
 extern DROID_TEMPLATE* getTemplateFromMultiPlayerID(UDWORD multiPlayerID);
 
@@ -289,7 +289,7 @@ extern UDWORD	getSelectedCommander( void );
 extern void	setSelectedCommander(UDWORD commander);
 
 
-extern BOOL getDroidResourceName(char *pName);
+extern char const *getDroidResourceName(char const *pName);
 
 
 /*checks to see if an electronic warfare weapon is attached to the droid*/

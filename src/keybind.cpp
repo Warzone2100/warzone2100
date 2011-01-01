@@ -346,7 +346,7 @@ void	kf_CloneSelected( void )
 				debug(LOG_ERROR, "We can't find the template for this droid: %s, id:%u, type:%d!", psDroid->aName, psDroid->id, psDroid->droidType);
 				return;
 			}
-			memcpy(&sTemplate, sTemplate2, sizeof(DROID_TEMPLATE));
+			sTemplate = *sTemplate2;
 			templateSetParts(psDroid, &sTemplate);
 
 			// create a new droid

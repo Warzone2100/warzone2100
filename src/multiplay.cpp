@@ -1450,7 +1450,6 @@ BOOL sendTemplate(DROID_TEMPLATE *pTempl)
 		NETuint8_t(&player);
 		NETuint32_t(&pTempl->ref);
 		NETstring(pTempl->aName, sizeof(pTempl->aName));
-		NETuint8_t(&pTempl->NameVersion);
 
 		for (i = 0; i < ARRAY_SIZE(pTempl->asParts); ++i)
 		{
@@ -1488,7 +1487,6 @@ BOOL recvTemplate(NETQUEUE queue)
 
 		NETuint32_t(&pT->ref);
 		NETstring(pT->aName, sizeof(pT->aName));
-		NETuint8_t(&pT->NameVersion);
 
 		for (i = 0; i < ARRAY_SIZE(pT->asParts); ++i)
 		{
@@ -1520,7 +1518,7 @@ BOOL recvTemplate(NETQUEUE queue)
 	if (psTempl)
 	{
 		t.psNext = psTempl->psNext;
-		memcpy(psTempl, &t, sizeof(DROID_TEMPLATE));
+		*psTempl = t;
 		debug(LOG_SYNC, "Updating MP template %d", (int)t.multiPlayerID);
 	}
 	else
@@ -1588,7 +1586,7 @@ static BOOL recvDestroyTemplate(NETQUEUE queue)
 		// Delete the template.
 		//before deleting the template, need to make sure not being used in production
 		deleteTemplateFromProduction(psTempl, player, ModeImmediate);
-		free(psTempl);
+		delete psTempl;
 	}
 	else
 	{

@@ -94,12 +94,13 @@ typedef std::vector<OrderListEntry> OrderList;
 
 struct DROID_TEMPLATE : public BASE_STATS
 {
+	DROID_TEMPLATE();
+	DROID_TEMPLATE(LineView line);
+
 	// On the PC the pName entry in STATS_BASE is redundant and can be assumed to be NULL,
 
 	/// on the PC this contains the full editable UTF-8 encoded name of the template
 	char            aName[MAX_STR_LENGTH];
-
-	UBYTE           NameVersion;                //< Version number used in name (e.g. Viper Mk "I" would be stored as 1 - Viper Mk "X" as 10)
 
 	/*!
 	 * The droid components.
@@ -152,7 +153,6 @@ struct DROID : public BASE_OBJECT
 	UDWORD          baseSpeed;                      ///< the base speed dependant on propulsion type
 	UDWORD          originalBody;                   ///< the original body points
 	uint32_t        experience;
-	UBYTE           NameVersion;                    ///< Version number used for generating on-the-fly names (e.g. Viper Mk "I" would be stored as 1 - Viper Mk "X" as 10)  - copied from droid template
 
 	int		lastFrustratedTime;		///< Set when eg being stuck; used for eg firing indiscriminately at map features to clear the way (note: signed, so wrap arounds after 24.9 days)
 

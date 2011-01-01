@@ -3412,7 +3412,7 @@ BOOL intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName)
 static void desCreateDefaultTemplate( void )
 {
 	/* set current design to default */
-	memcpy( &sCurrDesign, &sDefaultDesignTemplate, sizeof(DROID_TEMPLATE) );
+	sCurrDesign = sDefaultDesignTemplate;
 	sCurrDesign.pName = NULL;
 
 	/* reset stats */
@@ -3541,7 +3541,7 @@ void intProcessDesign(UDWORD id)
 			if ( psTempl != NULL )
 			{
 				/* Set the new template */
-				memcpy(&sCurrDesign, psTempl, sizeof(DROID_TEMPLATE));
+				sCurrDesign = *psTempl;
 				sstrcpy(aCurrName, getTemplateName(psTempl));
 
 				/* reveal body/propulsion/turret component buttons */
@@ -4068,7 +4068,7 @@ void intProcessDesign(UDWORD id)
 				// Delete the template.
 				//before deleting the template, need to make sure not being used in production
 				deleteTemplateFromProduction(psTempl, selectedPlayer, ModeQueue);
-				free(psTempl);
+				delete psTempl;
 
 				/* get previous template and set as current */
 				psTempl = apsTemplateList[i-1];
@@ -4083,7 +4083,7 @@ void intProcessDesign(UDWORD id)
 				intAddTemplateForm( psTempl );
 
 				/* Set the new template */
-				memcpy(&sCurrDesign, psTempl, sizeof(DROID_TEMPLATE));
+				sCurrDesign = *psTempl;
 				sstrcpy(aCurrName, getTemplateName(psTempl));
 
 				intSetEditBoxTextFromTemplate( psTempl );
@@ -4558,7 +4558,7 @@ static BOOL saveTemplate(void)
 		if ( psTempl == NULL )
 		{
 			/* The design needs a new template in the list */
-			psTempl = (DROID_TEMPLATE *)malloc(sizeof(DROID_TEMPLATE));
+			psTempl = new DROID_TEMPLATE;
 			if (psTempl == NULL)
 			{
 				debug(LOG_ERROR, "saveTemplate: Out of memory");
@@ -4605,7 +4605,7 @@ static BOOL saveTemplate(void)
 		}
 
 		/* Copy the template */
-		memcpy(psTempl, &sCurrDesign, sizeof(DROID_TEMPLATE));
+		*psTempl = sCurrDesign;
 		sstrcpy(psTempl->aName, aCurrName);
 
 		/* Now update the droid template form */

@@ -6569,16 +6569,13 @@ BOOL scrIsVtol(void)
 
 
 // do the setting up of the template list for the tutorial.
+// This function looks like it searches for a template called "ViperLtMGWheels", and deletes it. Why?
 BOOL scrTutorialTemplates(void)
 {
 	DROID_TEMPLATE	*psCurr, *psPrev;
-	char			pName[MAX_STR_LENGTH];
 
 	// find ViperLtMGWheels
-	sstrcpy(pName, "ViperLtMGWheels");
-
-	getDroidResourceName(pName);
-
+	char const *pName = getDroidResourceName("ViperLtMGWheels");
 
 	for (psCurr = apsDroidTemplates[selectedPlayer],psPrev = NULL;
 			psCurr != NULL;
@@ -6603,7 +6600,7 @@ BOOL scrTutorialTemplates(void)
 	// Delete the template.
 	if(psCurr)
 	{
-		free(psCurr);
+		delete psCurr;
 	}
 	else
 	{
@@ -10848,14 +10845,12 @@ BOOL scrAssembleWeaponTemplate(void)
 		return false;
 	}
 
-	pNewTemplate = (DROID_TEMPLATE *)malloc(sizeof(DROID_TEMPLATE));
+	pNewTemplate = new DROID_TEMPLATE;
 	if (pNewTemplate == NULL)
 	{
 		debug(LOG_ERROR, "pNewTemplate: Out of memory");
 		return false;
 	}
-
-	memset(pNewTemplate, 0, sizeof(DROID_TEMPLATE));
 
 	// set template body
 	pNewTemplate->asParts[COMP_BODY] = bodyIndex;
@@ -10911,7 +10906,7 @@ BOOL scrAssembleWeaponTemplate(void)
 		else
 		{
 			// free resources
-			free(pNewTemplate);
+			delete pNewTemplate;
 
 			// already exists, so return it
 			pNewTemplate = tempTemplate;

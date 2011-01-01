@@ -2730,7 +2730,7 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 				pTemplate = pNext)
 			{
 				pNext = pTemplate->psNext;
-				free(pTemplate);
+				delete pTemplate;
 			}
 			apsDroidTemplates[0] = NULL;
 		}
@@ -2745,7 +2745,7 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 				{
 					DROID_TEMPLATE	*psTempl;
 					psTempl = apsDroidTemplates[inc]->psNext;
-					free(apsDroidTemplates[inc]);
+					delete apsDroidTemplates[inc];
 					apsDroidTemplates[inc] = psTempl;
 				}
 			}
@@ -8729,7 +8729,7 @@ BOOL loadSaveTemplateV7(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 		}
 
 		//create the Template
-		psTemplate = (DROID_TEMPLATE *)malloc(sizeof(DROID_TEMPLATE));
+		psTemplate = new DROID_TEMPLATE;
 		if (psTemplate == NULL)
 		{
 			debug(LOG_FATAL, "loadSaveTemplateV7: Out of memory");
@@ -8769,7 +8769,7 @@ BOOL loadSaveTemplateV7(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 		if (!found)
 		{
 			//ignore this record
-			free(psTemplate);
+			delete psTemplate;
 			continue;
 		}
 		psTemplate->numWeaps = psSaveTemplate->numWeaps;
@@ -8793,7 +8793,7 @@ BOOL loadSaveTemplateV7(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 		if (!found)
 		{
 			//ignore this record
-			free(psTemplate);
+			delete psTemplate;
 			continue;
 		}
 
@@ -8856,7 +8856,7 @@ BOOL loadSaveTemplateV14(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 		}
 
 		//create the Template
-		psTemplate = (DROID_TEMPLATE *)malloc(sizeof(DROID_TEMPLATE));
+		psTemplate = new DROID_TEMPLATE;
 		if (psTemplate == NULL)
 		{
 			debug(LOG_ERROR, "loadSaveTemplateV14: Out of memory");
@@ -8897,7 +8897,7 @@ BOOL loadSaveTemplateV14(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 		if (!found)
 		{
 			//ignore this record
-			free(psTemplate);
+			delete psTemplate;
 			continue;
 		}
 		psTemplate->numWeaps = psSaveTemplate->numWeaps;
@@ -8920,7 +8920,7 @@ BOOL loadSaveTemplateV14(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 		if (!found)
 		{
 			//ignore this record
-			free(psTemplate);
+			delete psTemplate;
 			continue;
 		}
 
@@ -8949,7 +8949,7 @@ BOOL loadSaveTemplateV14(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 		if (psDestTemplate != NULL)
 		{
 			psTemplate->psNext = psDestTemplate->psNext;//preserve the list
-			memcpy(psDestTemplate,psTemplate,sizeof(DROID_TEMPLATE));
+			*psDestTemplate = *psTemplate;
 		}
 		else
 		{
@@ -9010,7 +9010,7 @@ BOOL loadSaveTemplateV(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 		}
 
 		//create the Template
-		psTemplate = (DROID_TEMPLATE *)malloc(sizeof(DROID_TEMPLATE));
+		psTemplate = new DROID_TEMPLATE;
 		if (psTemplate == NULL)
 		{
 			debug(LOG_FATAL, "loadSaveTemplateV: Out of memory");
@@ -9068,7 +9068,7 @@ BOOL loadSaveTemplateV(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 		if (!found)
 		{
 			//ignore this record
-			free(psTemplate);
+			delete psTemplate;
 			continue;
 		}
 		psTemplate->numWeaps = psSaveTemplate->numWeaps;
@@ -9092,7 +9092,7 @@ BOOL loadSaveTemplateV(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 		if (!found)
 		{
 			//ignore this record
-			free(psTemplate);
+			delete psTemplate;
 			continue;
 		}
 
@@ -9121,7 +9121,7 @@ BOOL loadSaveTemplateV(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 		if (psDestTemplate != NULL)
 		{
 			psTemplate->psNext = psDestTemplate->psNext;//preserve the list
-			memcpy(psDestTemplate,psTemplate,sizeof(DROID_TEMPLATE));
+			*psDestTemplate = *psTemplate;
 		}
 		else
 		{

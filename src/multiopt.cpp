@@ -354,14 +354,7 @@ BOOL multiShutdown(void)
 // copy templates from one player to another.
 BOOL addTemplateToList(DROID_TEMPLATE *psNew, DROID_TEMPLATE **ppList)
 {
-	DROID_TEMPLATE *psTempl = (DROID_TEMPLATE *)malloc(sizeof(DROID_TEMPLATE));
-
-	if (psTempl == NULL)
-	{
-		debug(LOG_ERROR, "addTemplate: Out of memory");
-		return false;
-	}
-	memcpy(psTempl, psNew, sizeof(DROID_TEMPLATE));
+	DROID_TEMPLATE *psTempl = new DROID_TEMPLATE(*psNew);
 	psTempl->pName = NULL;
 
 	if (psNew->pName)
