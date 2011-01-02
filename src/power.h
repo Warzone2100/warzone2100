@@ -27,7 +27,7 @@
 /** Free power on collection of oildrum. */
 #define OILDRUM_POWER		100
 
-#define	POWER_PER_CYCLE		5
+#define	POWER_PER_SECOND        25
 
 /** Used to determine the power cost of repairing a droid.
     Definately DON'T WANT the brackets round 1/2 - it will equate to zero! */
@@ -40,7 +40,6 @@ typedef struct _player_power
 {
 	int32_t		currentPower;		/**< The current amount of power avaialble to the player. */
 	int32_t		extractedPower;		/**< The power extracted but not converted. */
-	BASE_OBJECT	*psLastPowered;		/**< The last object that received power before it ran out. */
 } PLAYER_POWER;
 
 /** Allocate the space for the playerPower. */
@@ -76,31 +75,19 @@ void setPlayerPower(UDWORD power, UDWORD player);
 /** Temp function to give all players some power when a new game has been loaded. */
 void newGameInitPower(void);
 
-/** Informs the power array that a Object has been destroyed. */
-void powerDestroyObject(BASE_OBJECT *psObject);
-
 /** Accrue the power in the facilities that require it. */
-BOOL accruePower(BASE_OBJECT *psObject);
-
-/** Inform the players power struct that the last Object to receive power has changed. */
-void updateLastPowered(BASE_OBJECT *psObject,UBYTE player);
+void accruePower(BASE_OBJECT *psObject);
 
 /**	Returns the next res. Ext. in the list from the one passed in. returns 1st one
 	in list if passed in is NULL and NULL if there's none?
 */
 STRUCTURE *getRExtractor(STRUCTURE *psStruct);
 
-/** Checks if the object to be powered next - returns true if power. */
-BOOL getLastPowered(BASE_OBJECT *psStructure);
-
 /** Defines which structure types draw power - returns true if use power. */
 BOOL structUsesPower(STRUCTURE *psStruct);
 
 /** Defines which droid types draw power - returns true if use power. */
 BOOL droidUsesPower(DROID *psDroid);
-
-/** This is a check cos there is a problem with the power but not sure where!! */
-void powerCheck(BOOL bBeforePowerUsed, UBYTE player);
 
 /** @todo Wrap access to this global and make it static for easier sanity checking! */
 extern PLAYER_POWER		asPower[MAX_PLAYERS];

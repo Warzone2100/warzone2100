@@ -900,8 +900,6 @@ void restoreMissionData(void)
 		apsFlagPosLists[inc] = mission.apsFlagPosLists[inc];
 		mission.apsFlagPosLists[inc] = NULL;
 		//asPower[inc].usedPower = mission.usedPower[inc];
-		//init the next structure to be powered
-		asPower[inc].psLastPowered = NULL;
 	}
 	apsSensorList[0] = mission.apsSensorList[0];
 	mission.apsSensorList[0] = NULL;
@@ -1685,19 +1683,8 @@ void aiUpdateMissionStructure(STRUCTURE *psStructure)
 	}
 
 	//check if any power available
-	if ((asPower[psStructure->player].currentPower > POWER_PER_CYCLE) ||
-		(!powerCalculated))
-	{
-		//check if this structure is due some power
-		if (getLastPowered((BASE_OBJECT *)psStructure))
-		{
-			//get some power if necessary
-			if (accruePower((BASE_OBJECT *)psStructure))
-			{
-				updateLastPowered((BASE_OBJECT *)psStructure, psStructure->player);
-			}
-		}
-	}
+	//check if this structure is due some power
+	accruePower((BASE_OBJECT *)psStructure);
 	//determine the Subject
 	switch (psStructure->pStructureType->type)
 	{

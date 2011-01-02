@@ -1964,8 +1964,6 @@ STRUCTURE* buildStructure(STRUCTURE_STATS* pStructureType, UDWORD x, UDWORD y, U
 			{
 				intRefreshScreen();
 			}
-			//inform power system that won't be needing power until built
-			powerDestroyObject((BASE_OBJECT *)psBuilding);
 		}
 	}
 	if(pStructureType->type!=REF_WALL && pStructureType->type!=REF_WALLCORNER)
@@ -2913,18 +2911,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 	//check if any power available
 	if (structUsesPower(psStructure))
 	{
-		if (checkPower(psStructure->player, POWER_PER_CYCLE))
-		{
-			//check if this structure is due some power
-			if (getLastPowered((BASE_OBJECT *)psStructure))
-			{
-				//get some power if necessary
-				if (accruePower((BASE_OBJECT *)psStructure))
-				{
-					updateLastPowered((BASE_OBJECT *)psStructure, psStructure->player);
-				}
-			}
-		}
+		accruePower((BASE_OBJECT *)psStructure);
 	}
 
 	/* Process the functionality according to type
@@ -4848,9 +4835,6 @@ BOOL removeStruct(STRUCTURE *psDel, BOOL bDestroy)
 	{
 		removeStructFromMap(psDel);
 	}
-
-	//tell the power system its gone
-	powerDestroyObject((BASE_OBJECT *)psDel);
 
 	if (bDestroy)
 	{

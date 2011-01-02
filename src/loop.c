@@ -282,9 +282,6 @@ GAMECODE gameLoop(void)
 				//update the current power available for a player
 				updatePlayerPower(i);
 
-				//this is a check cos there is a problem with the power but not sure where!!
-				powerCheck(true, (UBYTE)i);
-
 				//set the flag for each player
 				setHQExists(false, i);
 				setSatUplinkExists(false, i);
@@ -435,8 +432,6 @@ GAMECODE gameLoop(void)
 						setLasSatExists(true, i);
 					}
 				}
-				//this is a check cos there is a problem with the power but not sure where!!
-				powerCheck(false, (UBYTE)i);
 			}
 
 			missionTimerUpdate();

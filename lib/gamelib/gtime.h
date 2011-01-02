@@ -29,7 +29,7 @@
 
 /** The maximum time for one frame (stops the clock running away when debugging)
  * changed to /6 by ajl. if this needs to go back to ticks/10 then tell me. */
-#define GTIME_MAXFRAME (GAME_TICKS_PER_SEC/6)
+#define GTIME_MAXFRAME (GAME_TICKS_PER_SEC/4)
 
 /** The current time in the game world. */
 extern UDWORD gameTime;

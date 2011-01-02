@@ -384,9 +384,6 @@ void	removeDroidBase(DROID *psDel)
 
 	CHECK_DROID(psDel);
 
-	//tell the power system its gone
-	powerDestroyObject((BASE_OBJECT *)psDel);
-
 	if (isDead((BASE_OBJECT *)psDel))
 	{
 		// droid has already been killed, quit
@@ -571,9 +568,6 @@ BOOL droidRemove(DROID *psDroid, DROID *pList[MAX_PLAYERS])
 
 	driveDroidKilled(psDroid);	// Tell the driver system it's gone.
 
-	//tell the power system its gone
-	powerDestroyObject((BASE_OBJECT *)psDroid);
-
 	if (isDead((BASE_OBJECT *) psDroid))
 	{
 		// droid has already been killed, quit
@@ -604,9 +598,6 @@ BOOL droidRemove(DROID *psDroid, DROID *pList[MAX_PLAYERS])
 	gridRemoveObject((BASE_OBJECT *)psDroid);
 
 	removeDroid(psDroid, pList);
-
-	// tell the power system it is gone
-	powerDestroyObject((BASE_OBJECT *)psDroid);
 
 	if (psDroid->player == selectedPlayer)
 	{
@@ -818,18 +809,7 @@ void droidUpdate(DROID *psDroid)
 	// May need power
 	if (droidUsesPower(psDroid))
 	{
-		if (checkPower(psDroid->player, POWER_PER_CYCLE))
-		{
-			// Check if this droid is due some power
-			if (getLastPowered((BASE_OBJECT *)psDroid))
-			{
-				// Get some power if necessary
-				if (accruePower((BASE_OBJECT *)psDroid))
-				{
-					updateLastPowered((BASE_OBJECT *)psDroid, psDroid->player);
-				}
-			}
-		}
+		accruePower((BASE_OBJECT *)psDroid);
 	}
 
 	// ai update droid
