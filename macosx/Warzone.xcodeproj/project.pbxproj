@@ -160,7 +160,6 @@
 		0246A1210BD3CC43004D1C70 /* piematrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A10F0BD3CC43004D1C70 /* piematrix.cpp */; };
 		0246A1220BD3CC43004D1C70 /* piemode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1110BD3CC43004D1C70 /* piemode.cpp */; };
 		0246A1230BD3CC43004D1C70 /* piepalette.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1120BD3CC43004D1C70 /* piepalette.cpp */; };
-		0246A1240BD3CC43004D1C70 /* piestate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1130BD3CC43004D1C70 /* piestate.cpp */; };
 		0246A1270BD3CC43004D1C70 /* rendmode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1170BD3CC43004D1C70 /* rendmode.cpp */; };
 		0246A1280BD3CC43004D1C70 /* screen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1180BD3CC43004D1C70 /* screen.cpp */; };
 		0246A1290BD3CC43004D1C70 /* tex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A11A0BD3CC43004D1C70 /* tex.cpp */; };
@@ -191,7 +190,6 @@
 		0246A28D0BD3CCDC004D1C70 /* action.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1980BD3CCDB004D1C70 /* action.cpp */; };
 		0246A28E0BD3CCDC004D1C70 /* advvis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A19A0BD3CCDB004D1C70 /* advvis.cpp */; };
 		0246A28F0BD3CCDC004D1C70 /* ai.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A19C0BD3CCDB004D1C70 /* ai.cpp */; };
-		0246A2900BD3CCDC004D1C70 /* aiexperience.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A19E0BD3CCDB004D1C70 /* aiexperience.cpp */; };
 		0246A2920BD3CCDC004D1C70 /* astar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1A30BD3CCDB004D1C70 /* astar.cpp */; };
 		0246A2930BD3CCDC004D1C70 /* atmos.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1A50BD3CCDB004D1C70 /* atmos.cpp */; };
 		0246A2940BD3CCDC004D1C70 /* aud.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1A70BD3CCDB004D1C70 /* aud.cpp */; };
@@ -564,7 +562,6 @@
 		43F300C310D344B000707B6E /* x86state.c in Sources */ = {isa = PBXBuildFile; fileRef = 43F3008C10D344B000707B6E /* x86state.c */; };
 		43F300D710D3496D00707B6E /* encode.c in Sources */ = {isa = PBXBuildFile; fileRef = 43F3006710D344AF00707B6E /* encode.c */; };
 		43F3405B11CAA83D00D1E6C8 /* crc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43F3405911CAA83D00D1E6C8 /* crc.cpp */; };
-		647D9C531039288D006D37CF /* dictionary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 647D9C4F1039288D006D37CF /* dictionary.cpp */; };
 		647D9C541039288D006D37CF /* iniparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 647D9C511039288D006D37CF /* iniparser.cpp */; };
 		647D9C571039289A006D37CF /* challenge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 647D9C551039289A006D37CF /* challenge.cpp */; };
 		9742E5730DF9975E000A5D41 /* lexer_input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9742E5710DF9975E000A5D41 /* lexer_input.cpp */; };
@@ -962,26 +959,26 @@
 		0246A0DD0BD3CC0B004D1C70 /* gtime.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = gtime.cpp; path = ../lib/gamelib/gtime.cpp; sourceTree = SOURCE_ROOT; };
 		0246A0DE0BD3CC0B004D1C70 /* gtime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = gtime.h; path = ../lib/gamelib/gtime.h; sourceTree = SOURCE_ROOT; };
 		0246A0E20BD3CC0B004D1C70 /* parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = parser.h; path = ../lib/gamelib/parser.h; sourceTree = SOURCE_ROOT; };
-		0246A0EA0BD3CC29004D1C70 /* bitimage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = bitimage.cpp; path = ../lib/ivis_common/bitimage.cpp; sourceTree = SOURCE_ROOT; };
-		0246A0EB0BD3CC29004D1C70 /* bitimage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = bitimage.h; path = ../lib/ivis_common/bitimage.h; sourceTree = SOURCE_ROOT; };
-		0246A0EE0BD3CC29004D1C70 /* imd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = imd.cpp; path = ../lib/ivis_common/imd.cpp; sourceTree = SOURCE_ROOT; };
-		0246A0EF0BD3CC29004D1C70 /* imd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = imd.h; path = ../lib/ivis_common/imd.h; sourceTree = SOURCE_ROOT; };
-		0246A0F00BD3CC29004D1C70 /* imdload.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = imdload.cpp; path = ../lib/ivis_common/imdload.cpp; sourceTree = SOURCE_ROOT; };
-		0246A0F10BD3CC29004D1C70 /* ivi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = ivi.h; path = ../lib/ivis_common/ivi.h; sourceTree = SOURCE_ROOT; };
-		0246A0F20BD3CC29004D1C70 /* ivisdef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = ivisdef.h; path = ../lib/ivis_common/ivisdef.h; sourceTree = SOURCE_ROOT; };
-		0246A0F50BD3CC29004D1C70 /* pieblitfunc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = pieblitfunc.h; path = ../lib/ivis_common/pieblitfunc.h; sourceTree = SOURCE_ROOT; };
-		0246A0F60BD3CC29004D1C70 /* pieclip.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = pieclip.cpp; path = ../lib/ivis_common/pieclip.cpp; sourceTree = SOURCE_ROOT; };
-		0246A0F70BD3CC29004D1C70 /* pieclip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = pieclip.h; path = ../lib/ivis_common/pieclip.h; sourceTree = SOURCE_ROOT; };
-		0246A0F80BD3CC29004D1C70 /* piedef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = piedef.h; path = ../lib/ivis_common/piedef.h; sourceTree = SOURCE_ROOT; };
-		0246A0F90BD3CC29004D1C70 /* piefunc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = piefunc.h; path = ../lib/ivis_common/piefunc.h; sourceTree = SOURCE_ROOT; };
-		0246A0FA0BD3CC29004D1C70 /* piemode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = piemode.h; path = ../lib/ivis_common/piemode.h; sourceTree = SOURCE_ROOT; };
-		0246A0FB0BD3CC29004D1C70 /* piepalette.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = piepalette.h; path = ../lib/ivis_common/piepalette.h; sourceTree = SOURCE_ROOT; };
-		0246A0FC0BD3CC29004D1C70 /* piestate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = piestate.cpp; path = ../lib/ivis_common/piestate.cpp; sourceTree = SOURCE_ROOT; };
-		0246A0FD0BD3CC29004D1C70 /* piestate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = piestate.h; path = ../lib/ivis_common/piestate.h; sourceTree = SOURCE_ROOT; };
-		0246A0FE0BD3CC29004D1C70 /* pietypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = pietypes.h; path = ../lib/ivis_common/pietypes.h; sourceTree = SOURCE_ROOT; };
-		0246A1000BD3CC29004D1C70 /* rendmode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = rendmode.h; path = ../lib/ivis_common/rendmode.h; sourceTree = SOURCE_ROOT; };
-		0246A1010BD3CC29004D1C70 /* tex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = tex.h; path = ../lib/ivis_common/tex.h; sourceTree = SOURCE_ROOT; };
-		0246A1020BD3CC29004D1C70 /* textdraw.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = textdraw.h; path = ../lib/ivis_common/textdraw.h; sourceTree = SOURCE_ROOT; };
+		0246A0EA0BD3CC29004D1C70 /* bitimage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = bitimage.cpp; path = ../lib/ivis_opengl/bitimage.cpp; sourceTree = SOURCE_ROOT; };
+		0246A0EB0BD3CC29004D1C70 /* bitimage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = bitimage.h; path = ../lib/ivis_opengl/bitimage.h; sourceTree = SOURCE_ROOT; };
+		0246A0EE0BD3CC29004D1C70 /* imd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = imd.cpp; path = ../lib/ivis_opengl/imd.cpp; sourceTree = SOURCE_ROOT; };
+		0246A0EF0BD3CC29004D1C70 /* imd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = imd.h; path = ../lib/ivis_opengl/imd.h; sourceTree = SOURCE_ROOT; };
+		0246A0F00BD3CC29004D1C70 /* imdload.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = imdload.cpp; path = ../lib/ivis_opengl/imdload.cpp; sourceTree = SOURCE_ROOT; };
+		0246A0F10BD3CC29004D1C70 /* ivi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = ivi.h; path = ../lib/ivis_opengl/ivi.h; sourceTree = SOURCE_ROOT; };
+		0246A0F20BD3CC29004D1C70 /* ivisdef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = ivisdef.h; path = ../lib/ivis_opengl/ivisdef.h; sourceTree = SOURCE_ROOT; };
+		0246A0F50BD3CC29004D1C70 /* pieblitfunc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = pieblitfunc.h; path = ../lib/ivis_opengl/pieblitfunc.h; sourceTree = SOURCE_ROOT; };
+		0246A0F60BD3CC29004D1C70 /* pieclip.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = pieclip.cpp; path = ../lib/ivis_opengl/pieclip.cpp; sourceTree = SOURCE_ROOT; };
+		0246A0F70BD3CC29004D1C70 /* pieclip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = pieclip.h; path = ../lib/ivis_opengl/pieclip.h; sourceTree = SOURCE_ROOT; };
+		0246A0F80BD3CC29004D1C70 /* piedef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = piedef.h; path = ../lib/ivis_opengl/piedef.h; sourceTree = SOURCE_ROOT; };
+		0246A0F90BD3CC29004D1C70 /* piefunc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = piefunc.h; path = ../lib/ivis_opengl/piefunc.h; sourceTree = SOURCE_ROOT; };
+		0246A0FA0BD3CC29004D1C70 /* piemode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = piemode.h; path = ../lib/ivis_opengl/piemode.h; sourceTree = SOURCE_ROOT; };
+		0246A0FB0BD3CC29004D1C70 /* piepalette.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = piepalette.h; path = ../lib/ivis_opengl/piepalette.h; sourceTree = SOURCE_ROOT; };
+		0246A0FC0BD3CC29004D1C70 /* piestate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = piestate.cpp; path = ../lib/ivis_opengl/piestate.cpp; sourceTree = SOURCE_ROOT; };
+		0246A0FD0BD3CC29004D1C70 /* piestate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = piestate.h; path = ../lib/ivis_opengl/piestate.h; sourceTree = SOURCE_ROOT; };
+		0246A0FE0BD3CC29004D1C70 /* pietypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = pietypes.h; path = ../lib/ivis_opengl/pietypes.h; sourceTree = SOURCE_ROOT; };
+		0246A1000BD3CC29004D1C70 /* rendmode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = rendmode.h; path = ../lib/ivis_opengl/rendmode.h; sourceTree = SOURCE_ROOT; };
+		0246A1010BD3CC29004D1C70 /* tex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = tex.h; path = ../lib/ivis_opengl/tex.h; sourceTree = SOURCE_ROOT; };
+		0246A1020BD3CC29004D1C70 /* textdraw.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = textdraw.h; path = ../lib/ivis_opengl/textdraw.h; sourceTree = SOURCE_ROOT; };
 		0246A10B0BD3CC43004D1C70 /* ivi.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = ivi.cpp; path = ../lib/ivis_opengl/ivi.cpp; sourceTree = SOURCE_ROOT; };
 		0246A10C0BD3CC43004D1C70 /* pieblitfunc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = pieblitfunc.cpp; path = ../lib/ivis_opengl/pieblitfunc.cpp; sourceTree = SOURCE_ROOT; };
 		0246A10D0BD3CC43004D1C70 /* piedraw.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = piedraw.cpp; path = ../lib/ivis_opengl/piedraw.cpp; sourceTree = SOURCE_ROOT; };
@@ -1051,8 +1048,6 @@
 		0246A19B0BD3CCDB004D1C70 /* advvis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = advvis.h; path = ../src/advvis.h; sourceTree = SOURCE_ROOT; };
 		0246A19C0BD3CCDB004D1C70 /* ai.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = ai.cpp; path = ../src/ai.cpp; sourceTree = SOURCE_ROOT; };
 		0246A19D0BD3CCDB004D1C70 /* ai.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = ai.h; path = ../src/ai.h; sourceTree = SOURCE_ROOT; };
-		0246A19E0BD3CCDB004D1C70 /* aiexperience.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = aiexperience.cpp; path = ../src/aiexperience.cpp; sourceTree = SOURCE_ROOT; };
-		0246A19F0BD3CCDB004D1C70 /* aiexperience.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = aiexperience.h; path = ../src/aiexperience.h; sourceTree = SOURCE_ROOT; };
 		0246A1A00BD3CCDB004D1C70 /* anim_id.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = anim_id.h; path = ../src/anim_id.h; sourceTree = SOURCE_ROOT; };
 		0246A1A30BD3CCDB004D1C70 /* astar.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = astar.cpp; path = ../src/astar.cpp; sourceTree = SOURCE_ROOT; };
 		0246A1A40BD3CCDB004D1C70 /* astar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = astar.h; path = ../src/astar.h; sourceTree = SOURCE_ROOT; };
@@ -1269,8 +1264,8 @@
 		02B2132C0DA8755F0059E864 /* cursors32.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = cursors32.cpp; path = ../lib/framework/cursors32.cpp; sourceTree = SOURCE_ROOT; };
 		02BBB2070DA874F6002D438B /* exceptionhandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = exceptionhandler.cpp; path = ../lib/exceptionhandler/exceptionhandler.cpp; sourceTree = SOURCE_ROOT; };
 		02BBB2080DA874F6002D438B /* exceptionhandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = exceptionhandler.h; path = ../lib/exceptionhandler/exceptionhandler.h; sourceTree = SOURCE_ROOT; };
-		02C8AEF60BE68A5600E9D8A7 /* png_util.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = png_util.cpp; path = ../lib/ivis_common/png_util.cpp; sourceTree = SOURCE_ROOT; };
-		02C8AEF70BE68A5600E9D8A7 /* png_util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = png_util.h; path = ../lib/ivis_common/png_util.h; sourceTree = SOURCE_ROOT; };
+		02C8AEF60BE68A5600E9D8A7 /* png_util.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = png_util.cpp; path = ../lib/ivis_opengl/png_util.cpp; sourceTree = SOURCE_ROOT; };
+		02C8AEF70BE68A5600E9D8A7 /* png_util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = png_util.h; path = ../lib/ivis_opengl/png_util.h; sourceTree = SOURCE_ROOT; };
 		02C8AEFA0BE68A6800E9D8A7 /* oggvorbis.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = oggvorbis.cpp; path = ../lib/sound/oggvorbis.cpp; sourceTree = SOURCE_ROOT; };
 		02C8AEFB0BE68A6800E9D8A7 /* oggvorbis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = oggvorbis.h; path = ../lib/sound/oggvorbis.h; sourceTree = SOURCE_ROOT; };
 		02CDDCF40D159BC300722688 /* Autorevision */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Autorevision; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1502,8 +1497,8 @@
 		43C18FAD114FF38B0028741B /* netsocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = netsocket.h; path = ../lib/netplay/netsocket.h; sourceTree = SOURCE_ROOT; };
 		43C18FAE114FF38B0028741B /* nettypes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = nettypes.cpp; path = ../lib/netplay/nettypes.cpp; sourceTree = SOURCE_ROOT; };
 		43C18FAF114FF38B0028741B /* nettypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = nettypes.h; path = ../lib/netplay/nettypes.h; sourceTree = SOURCE_ROOT; };
-		43C270E711DD2EBA009BC740 /* jpeg_encoder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = jpeg_encoder.cpp; path = ../lib/ivis_common/jpeg_encoder.cpp; sourceTree = SOURCE_ROOT; };
-		43C270E811DD2EBA009BC740 /* jpeg_encoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = jpeg_encoder.h; path = ../lib/ivis_common/jpeg_encoder.h; sourceTree = SOURCE_ROOT; };
+		43C270E711DD2EBA009BC740 /* jpeg_encoder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = jpeg_encoder.cpp; path = ../lib/ivis_opengl/jpeg_encoder.cpp; sourceTree = SOURCE_ROOT; };
+		43C270E811DD2EBA009BC740 /* jpeg_encoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = jpeg_encoder.h; path = ../lib/ivis_opengl/jpeg_encoder.h; sourceTree = SOURCE_ROOT; };
 		43C3B90F118BB545000BBE59 /* gzclose.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = gzclose.c; path = external/zlib/gzclose.c; sourceTree = "<group>"; };
 		43C3B910118BB545000BBE59 /* gzguts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gzguts.h; path = external/zlib/gzguts.h; sourceTree = "<group>"; };
 		43C3B911118BB545000BBE59 /* gzlib.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = gzlib.c; path = external/zlib/gzlib.c; sourceTree = "<group>"; };
@@ -1588,8 +1583,6 @@
 		43F3FFFF10D33F6600707B6E /* physfs_unicode.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = physfs_unicode.c; path = external/physfs/physfs_unicode.c; sourceTree = "<group>"; };
 		43FA79911290771400DA51E7 /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		43FA79921290771400DA51E7 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		647D9C4F1039288D006D37CF /* dictionary.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = dictionary.cpp; path = ../lib/iniparser/dictionary.cpp; sourceTree = SOURCE_ROOT; };
-		647D9C501039288D006D37CF /* dictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = dictionary.h; path = ../lib/iniparser/dictionary.h; sourceTree = SOURCE_ROOT; };
 		647D9C511039288D006D37CF /* iniparser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = iniparser.cpp; path = ../lib/iniparser/iniparser.cpp; sourceTree = SOURCE_ROOT; };
 		647D9C521039288D006D37CF /* iniparser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = iniparser.h; path = ../lib/iniparser/iniparser.h; sourceTree = SOURCE_ROOT; };
 		647D9C551039289A006D37CF /* challenge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = challenge.cpp; path = ../src/challenge.cpp; sourceTree = SOURCE_ROOT; };
@@ -1989,7 +1982,7 @@
 			name = Gamelib;
 			sourceTree = "<group>";
 		};
-		0246A0E90BD3CC10004D1C70 /* Ivis Common */ = {
+		0246A1090BD3CC2D004D1C70 /* Ivis OpenGL */ = {
 			isa = PBXGroup;
 			children = (
 				43C270E711DD2EBA009BC740 /* jpeg_encoder.cpp */,
@@ -2016,13 +2009,6 @@
 				0246A1000BD3CC29004D1C70 /* rendmode.h */,
 				0246A1010BD3CC29004D1C70 /* tex.h */,
 				0246A1020BD3CC29004D1C70 /* textdraw.h */,
-			);
-			name = "Ivis Common";
-			sourceTree = "<group>";
-		};
-		0246A1090BD3CC2D004D1C70 /* Ivis OpenGL */ = {
-			isa = PBXGroup;
-			children = (
 				02DE76040DC3B84800D48F58 /* GLee.c */,
 				02DE76050DC3B84800D48F58 /* GLee.h */,
 				0246A10B0BD3CC43004D1C70 /* ivi.cpp */,
@@ -2175,8 +2161,6 @@
 				0246A19B0BD3CCDB004D1C70 /* advvis.h */,
 				0246A19C0BD3CCDB004D1C70 /* ai.cpp */,
 				0246A19D0BD3CCDB004D1C70 /* ai.h */,
-				0246A19E0BD3CCDB004D1C70 /* aiexperience.cpp */,
-				0246A19F0BD3CCDB004D1C70 /* aiexperience.h */,
 				0246A1A00BD3CCDB004D1C70 /* anim_id.h */,
 				0246A1A30BD3CCDB004D1C70 /* astar.cpp */,
 				0246A1A40BD3CCDB004D1C70 /* astar.h */,
@@ -2724,7 +2708,6 @@
 				0246A0D00BD3CBE1004D1C70 /* Framework */,
 				0246A0D60BD3CBF6004D1C70 /* Gamelib */,
 				43BE75E611124A32007DF934 /* iniparser */,
-				0246A0E90BD3CC10004D1C70 /* Ivis Common */,
 				0246A1090BD3CC2D004D1C70 /* Ivis OpenGL */,
 				0246A12B0BD3CC47004D1C70 /* Netplay */,
 				0246A13A0BD3CC5B004D1C70 /* Script */,
@@ -2738,8 +2721,6 @@
 		43BE75E611124A32007DF934 /* iniparser */ = {
 			isa = PBXGroup;
 			children = (
-				647D9C4F1039288D006D37CF /* dictionary.cpp */,
-				647D9C501039288D006D37CF /* dictionary.h */,
 				647D9C511039288D006D37CF /* iniparser.cpp */,
 				647D9C521039288D006D37CF /* iniparser.h */,
 			);
@@ -3889,7 +3870,6 @@
 				0246A1210BD3CC43004D1C70 /* piematrix.cpp in Sources */,
 				0246A1220BD3CC43004D1C70 /* piemode.cpp in Sources */,
 				0246A1230BD3CC43004D1C70 /* piepalette.cpp in Sources */,
-				0246A1240BD3CC43004D1C70 /* piestate.cpp in Sources */,
 				0246A1270BD3CC43004D1C70 /* rendmode.cpp in Sources */,
 				0246A1280BD3CC43004D1C70 /* screen.cpp in Sources */,
 				0246A1290BD3CC43004D1C70 /* tex.cpp in Sources */,
@@ -3920,7 +3900,6 @@
 				0246A28D0BD3CCDC004D1C70 /* action.cpp in Sources */,
 				0246A28E0BD3CCDC004D1C70 /* advvis.cpp in Sources */,
 				0246A28F0BD3CCDC004D1C70 /* ai.cpp in Sources */,
-				0246A2900BD3CCDC004D1C70 /* aiexperience.cpp in Sources */,
 				0246A2920BD3CCDC004D1C70 /* astar.cpp in Sources */,
 				0246A2930BD3CCDC004D1C70 /* atmos.cpp in Sources */,
 				0246A2940BD3CCDC004D1C70 /* aud.cpp in Sources */,
@@ -4041,7 +4020,6 @@
 				974964330F5ABC3F00A38899 /* eventsave.cpp in Sources */,
 				974964340F5ABC3F00A38899 /* interpreter.cpp in Sources */,
 				975BCF3F0FED360000C36BEC /* dumpinfo.cpp in Sources */,
-				647D9C531039288D006D37CF /* dictionary.cpp in Sources */,
 				647D9C541039288D006D37CF /* iniparser.cpp in Sources */,
 				647D9C571039289A006D37CF /* challenge.cpp in Sources */,
 				43A8417811028EDD00733CCB /* pointtree.cpp in Sources */,
