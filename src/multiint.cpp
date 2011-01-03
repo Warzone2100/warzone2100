@@ -3876,6 +3876,7 @@ void displayColour(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 	{
 		drawBlueBox(x, y, psWidget->width, psWidget->height);
 		int player = getPlayerColour(j);
+		STATIC_ASSERT(MAX_PLAYERS <= 16);
 		iV_DrawImage(FrontImages, IMAGE_PLAYER0 + player, x + 7, y + 9);
 	}
 }
