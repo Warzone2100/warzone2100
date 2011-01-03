@@ -141,5 +141,6 @@ extern void game_SetValidityKey(UDWORD keys);
 extern UDWORD getSaveGameType(void);
 
 BOOL plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[]);
+extern bool foundScavengerPlayerInMap;
 
 #endif // __INCLUDED_SRC_GAME_H__

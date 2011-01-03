@@ -481,7 +481,7 @@ static void NetworkDisplayImage(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 		unsigned width, height;
 		unsigned n, c = 0;
 		char players[MAX_PLAYERS + 1];
-		unsigned playerMaskMapped = 0;
+		PlayerMask playerMaskMapped = 0;
 		for (n = 0; n < MAX_PLAYERS; ++n)
 		{
 			if (NETcheckPlayerConnectionStatus(status, n))
@@ -493,7 +493,8 @@ static void NetworkDisplayImage(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 		{
 			if ((playerMaskMapped & 1<<n) != 0)
 			{
-				players[c++] = "0123456789ABCDEF"[n];
+				STATIC_ASSERT(MAX_PLAYERS <= 32);  // If increasing MAX_PLAYERS, check all the 1<<playerNumber shifts, since the 1 is usually a 32-bit type.
+				players[c++] = "0123456789ABCDEFGHIJKLMNOPQRSTUV"[n];
 			}
 		}
 		players[c] = '\0';

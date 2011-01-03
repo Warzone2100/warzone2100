@@ -133,8 +133,8 @@ BOOL scriptInit()
 
 BOOL scrScavengersActive()
 {
-	scrFunctionResult.v.bval = game.scavengers;
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
+	scrFunctionResult.v.ival = scavengerPlayer();
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return false;
 	}

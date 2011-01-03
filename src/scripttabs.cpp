@@ -1428,7 +1428,7 @@ FUNC_SYMBOL asFuncTable[] =
 		3, { VAL_INT, VAL_INT|VAL_REF, VAL_INT|VAL_REF },
 		false, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "scavengersActive", scrScavengersActive, VAL_BOOL,
+	{ "scavengersActive", scrScavengersActive, VAL_INT,
 		0, { VAL_VOID },
 		false, 0, NULL, 0, 0, NULL, NULL },
 
@@ -1728,10 +1728,6 @@ CONST_SYMBOL asConstantTable[] =
 	{ "NULLSTAT",		(INTERP_TYPE)ST_POINTER_S,	false,	0,	NULL, NULL, 0.0f },
 	{ "NULLSTRING",		(INTERP_TYPE)ST_TEXTSTRING,	false,	0,	NULL, NULL, 0.0f },
 	{ "NULLSTRUCTURESTAT",(INTERP_TYPE)ST_POINTER_STRUCTSTAT,	false,	0,	NULL, NULL, 0.0f },	//for NULLSTRUCTURESTAT
-
-	//barbarian player ids
-	{ "BARBARIAN1",	VAL_INT,	false,	BARB1,	NULL, NULL, 0.0f },
-	{ "BARBARIAN2",	VAL_INT,	false,	BARB2,	NULL, NULL, 0.0f },
 
     //#define used to set the reinforcement timer with
 	{ "LZ_COMPROMISED_TIME",VAL_INT,	false,	SCR_LZ_COMPROMISED_TIME,	NULL, NULL, 0.0f },

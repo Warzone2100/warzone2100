@@ -99,8 +99,16 @@
 #define WZCOL_MAP_PREVIEW_HQ					psPalette[74]
 #define WZCOL_MAP_PREVIEW_OIL					psPalette[75]
 #define WZCOL_FOG					psPalette[76]
+#define WZCOL_TEAM9                                     psPalette[77]
+#define WZCOL_TEAM10                                    psPalette[78]
+#define WZCOL_TEAM11                                    psPalette[79]
+#define WZCOL_TEAM12                                    psPalette[80]
+#define WZCOL_TEAM13                                    psPalette[81]
+#define WZCOL_TEAM14                                    psPalette[82]
+#define WZCOL_TEAM15                                    psPalette[83]
+#define WZCOL_TEAM16                                    psPalette[84]
 
-#define WZCOL_MAX			77
+#define WZCOL_MAX                                       85
 
 //*************************************************************************
 

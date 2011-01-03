@@ -260,6 +260,7 @@ static char pCloseText[] = "X";
 static const char	*apPlayerText[] =
 {
 	"0", "1", "2", "3", "4", "5", "6", "7",
+	"8", "9", "A", "B", "C", "D", "E", "F",
 };
 static const char	*apPlayerTip[] =
 {
@@ -271,7 +272,14 @@ static const char	*apPlayerTip[] =
 	"Select Player 5",
 	"Select Player 6",
 	"Select Player 7",
-
+	"Select Player 8",
+	"Select Player 9",
+	"Select Player A",
+	"Select Player B",
+	"Select Player C",
+	"Select Player D",
+	"Select Player E",
+	"Select Player F",
 };
 
 /* The widget screen */
@@ -3674,6 +3682,7 @@ BOOL intAddOptions(void)
 	sButInit.height = OPT_BUTHEIGHT;
 	sButInit.pText = _("Quit");
 	sButInit.pTip = _("Exit Game");
+	int quitButtonY = sButInit.y - OPT_GAP;
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
 		return false;
@@ -3686,7 +3695,8 @@ BOOL intAddOptions(void)
 	sFormInit.x = OPT_GAP;
 	sFormInit.y = OPT_PLAYERY;
 	sFormInit.width = OPT_WIDTH - OPT_GAP*2;
-	sFormInit.height = OPT_BUTHEIGHT*3 + OPT_GAP*4;
+	sFormInit.height = (OPT_BUTHEIGHT + OPT_GAP)*(1 + (MAX_PLAYERS + 3)/4) + OPT_GAP;
+	int nextFormY = sFormInit.y + sFormInit.height + OPT_GAP;
 	if (!widgAddForm(psWScreen, &sFormInit))
 	{
 		return false;
@@ -3712,6 +3722,7 @@ BOOL intAddOptions(void)
 	sButInit.height = OPT_BUTHEIGHT;
 	for(player = 0; player < MAX_PLAYERS; player++)
 	{
+		STATIC_ASSERT(MAX_PLAYERS <= ARRAY_SIZE(apPlayerText) && MAX_PLAYERS <= ARRAY_SIZE(apPlayerTip));
 		sButInit.pText = apPlayerText[player];
 		sButInit.pTip = apPlayerTip[player];
 		if (!widgAddButton(psWScreen, &sButInit))
@@ -3734,9 +3745,9 @@ BOOL intAddOptions(void)
 	sFormInit.id = IDOPT_IVISFORM;
 	sFormInit.style = WFORM_PLAIN;
 	sFormInit.x = OPT_GAP;
-	sFormInit.y = OPT_PLAYERY + OPT_BUTHEIGHT * 3 + OPT_GAP * 5;
+	sFormInit.y = nextFormY;  //OPT_PLAYERY + OPT_BUTHEIGHT * 3 + OPT_GAP * 5;
 	sFormInit.width = OPT_WIDTH - OPT_GAP * 2;
-	sFormInit.height = OPT_BUTHEIGHT * 3 + OPT_GAP * 4;
+	sFormInit.height = quitButtonY - nextFormY;  //OPT_BUTHEIGHT * 3 + OPT_GAP * 4;
 	if (!widgAddForm(psWScreen, &sFormInit))
 	{
 		return false;

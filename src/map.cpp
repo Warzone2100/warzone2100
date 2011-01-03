@@ -1330,13 +1330,18 @@ bool writeVisibilityData(const char* fileName)
 		return false;
 	}
 
-	for (i = 0; i < mapWidth * mapHeight; ++i)
+	int planes = (game.maxPlayers + 7)/8;
+
+	for (unsigned plane = 0; plane < planes; ++plane)
 	{
-		if (!PHYSFS_writeUBE8(fileHandle, psMapTiles[i].tileExploredBits))
+		for (i = 0; i < mapWidth * mapHeight; ++i)
 		{
-			debug(LOG_ERROR, "writeVisibilityData: could not write to %s; PHYSFS error: %s", fileName, PHYSFS_getLastError());
-			PHYSFS_close(fileHandle);
-			return false;
+			if (!PHYSFS_writeUBE8(fileHandle, psMapTiles[i].tileExploredBits >> (plane*8)))
+			{
+				debug(LOG_ERROR, "writeVisibilityData: could not write to %s; PHYSFS error: %s", fileName, PHYSFS_getLastError());
+				PHYSFS_close(fileHandle);
+				return false;
+			}
 		}
 	}
 
@@ -1385,8 +1390,10 @@ bool readVisibilityData(const char* fileName)
 		return false;
 	}
 
+	int planes = (game.maxPlayers + 7)/8;
+
 	// Validate the filesize
-	expectedFileSize = sizeof(fileHeader.aFileType) + sizeof(fileHeader.version) + mapWidth * mapHeight * sizeof(uint8_t);
+	expectedFileSize = sizeof(fileHeader.aFileType) + sizeof(fileHeader.version) + mapWidth * mapHeight * planes;
 	fileSize = PHYSFS_fileLength(fileHandle);
 	if (fileSize != expectedFileSize)
 	{
@@ -1399,12 +1406,21 @@ bool readVisibilityData(const char* fileName)
 	// For every tile...
 	for(i=0; i<mapWidth*mapHeight; i++)
 	{
-		/* Get the visibility data */
-		if (!PHYSFS_readUBE8(fileHandle, &psMapTiles[i].tileExploredBits))
+		psMapTiles[i].tileExploredBits = 0;
+	}
+	for (unsigned plane = 0; plane < planes; ++plane)
+	{
+		for(i=0; i<mapWidth*mapHeight; i++)
 		{
-			debug(LOG_ERROR, "readVisibilityData: could not read from %s; PHYSFS error: %s", fileName, PHYSFS_getLastError());
-			PHYSFS_close(fileHandle);
-			return false;
+			/* Get the visibility data */
+			uint8_t val = 0;
+			if (!PHYSFS_readUBE8(fileHandle, &val))
+			{
+				debug(LOG_ERROR, "readVisibilityData: could not read from %s; PHYSFS error: %s", fileName, PHYSFS_getLastError());
+				PHYSFS_close(fileHandle);
+				return false;
+			}
+			psMapTiles[i].tileExploredBits |= val << (plane*8);
 		}
 	}
 

@@ -55,8 +55,8 @@ A0,70,00,ff	// team2 - orange
 20,20,20,ff	// team4 - black
 80,00,00,ff	// team5 - red
 20,30,60,ff	// team6 - blue
-90,00,70,ff	// team7 - purple
-00,80,80,ff	// team8 - teal
+90,00,70,ff	// team7 - pink
+00,80,80,ff	// team8 - cyan
 7f,7f,7f,ff	// default form background
 ff,ff,ff,ff	// default form text
 ff,ff,ff,ff	// default form light
@@ -75,3 +75,11 @@ ff,ff,0,ff	// production run text
 ff,0,ff,ff	// WZCOL_MAP_PREVIEW_HQ
 ff,ff,00,ff	// WZCOL_MAP_PREVIEW_OIL
 b0,08,5f,ff	// fog colour
+80,C0,00,ff	// team9 - yellow
+B0,70,70,ff	// team10 - purple
+E0,E0,E0,ff	// team11 - white
+20,20,FF,ff	// team12 - bright blue
+00,A0,00,ff	// team13 - neon green
+40,00,00,ff	// team14 - infrared
+10,00,40,ff	// team15 - ultraviolet
+40,60,00,ff	// team16 - brown

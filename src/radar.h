@@ -62,7 +62,7 @@ extern RADAR_DRAW_MODE	radarDrawMode;			///< Current minimap mode
 extern BOOL rotateRadar;
 
 extern void radarInitVars(void);			///< Recalculate minimap variables. For initialization code only.
-extern PIELIGHT clanColours[MAX_PLAYERS];
+extern PIELIGHT clanColours[];
 
 /** @} */
 

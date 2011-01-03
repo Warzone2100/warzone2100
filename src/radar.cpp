@@ -57,7 +57,7 @@ static PIELIGHT		colRadarAlly, colRadarMe, colRadarEnemy;
 static PIELIGHT		tileColours[MAX_TILES];
 static UDWORD		*radarBuffer = NULL;
 
-PIELIGHT clanColours[MAX_PLAYERS]=
+PIELIGHT clanColours[]=
 {	// see frontend2.png for team color order.
 	// [r,g,b,a]
 	{{0,255,0,255}},		// green  Player 0
@@ -66,11 +66,19 @@ PIELIGHT clanColours[MAX_PLAYERS]=
 	{{0,0,0,255}},			// black  Player 3
 	{{255,0,0,255}},		// red    Player 4
 	{{20,20,255,255}},		// blue   Player 5
-	{{255,0,255,255}},		// pink   Player 6
+	{{255,0,255,255}},		// pink   Player 6 (called purple in palette.txt)
 	{{0,255,255,255}},		// cyan   Player 7
+	{{255,255,0,255}},              // yellow Player 8
+	{{192,0,255,255}},              // pink   Player 9
+	{{200,255,255,255}},            // white  Player A (Should be brighter than grey, but grey is already maximum.)
+	{{128,128,255,255}},            // bright blue Player B
+	{{128,255,128,255}},            // neon green  Player C
+	{{128,0,0,255}},                // infrared    Player D
+	{{64,0,128,255}},               // ultraviolet Player E
+	{{128,128,0,255}},              // brown       Player F
 };
 
-static PIELIGHT flashColours[MAX_PLAYERS]=
+static PIELIGHT flashColours[]=
 {	//right now the flash color is all bright red
 	{{254,37,37,200}},	// Player 0
 	{{254,37,37,200}},	// Player 1
@@ -79,7 +87,15 @@ static PIELIGHT flashColours[MAX_PLAYERS]=
 	{{254,37,37,200}},	// Player 4  (notice, brighter red)
 	{{254,37,37,200}},	// Player 5
 	{{254,37,37,200}},	// Player 6
-	{{254,37,37,200}}		// Player 7
+	{{254,37,37,200}},      // Player 7
+	{{254,37,37,200}},      // Player 8
+	{{254,37,37,200}},      // Player 9
+	{{254,37,37,200}},      // Player A
+	{{254,37,37,200}},      // Player B
+	{{254,37,37,200}},      // Player C
+	{{254,37,37,200}},      // Player D
+	{{254,37,37,200}},      // Player E
+	{{254,37,37,200}},      // Player F
 };
 
 static SDWORD radarWidth, radarHeight, radarCenterX, radarCenterY, radarTexWidth, radarTexHeight;
@@ -441,9 +457,11 @@ static void DrawRadarObjects(void)
 		else
 		{
 			//original 8-color mode
+			STATIC_ASSERT(MAX_PLAYERS <= ARRAY_SIZE(clanColours));
 			playerCol = clanColours[getPlayerColour(clan)];
 		}
 
+		STATIC_ASSERT(MAX_PLAYERS <= ARRAY_SIZE(flashColours));
 		flashCol = flashColours[getPlayerColour(clan)];
 
    		/* Go through all droids */

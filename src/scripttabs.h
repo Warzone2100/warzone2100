@@ -31,10 +31,7 @@
 #define SCR_TICKRATE	100
 
 
-#define BARB1		6	
-#define BARB2		7
-
-typedef enum _scr_callback_types
+enum SCR_CALLBACK_TYPES
 {
 	CALL_GAMEINIT = TR_CALLBACKSTART,
 	CALL_DELIVPOINTMOVED,
@@ -98,7 +95,7 @@ typedef enum _scr_callback_types
 	CALL_DROID_REACH_LOCATION,	// Fired when droid reached the destination and stopped on its own
 	CALL_KEY_PRESSED,		// Allows to process key presses, mainly for debug purposes
 	CALL_VTOL_RETARGET,		// VTOL is out of targets
-} SCR_CALLBACK_TYPES;
+};
 
 // The table of user types for the compiler
 extern TYPE_SYMBOL asTypeTable[];

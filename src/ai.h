@@ -38,8 +38,8 @@
 
 // alliances
 extern uint8_t alliances[MAX_PLAYER_SLOTS][MAX_PLAYER_SLOTS];
-extern uint8_t alliancebits[MAX_PLAYER_SLOTS];
-extern uint8_t satuplinkbits;
+extern PlayerMask alliancebits[MAX_PLAYER_SLOTS];
+extern PlayerMask satuplinkbits;
 
 /** Check no alliance has formed. This is a define to make sure we inline it. */
 #define aiCheckAlliances(_s1, _s2) (alliances[_s1][_s2] == ALLIANCE_FORMED)

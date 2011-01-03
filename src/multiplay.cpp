@@ -314,7 +314,7 @@ BOOL IdToDroid(UDWORD id, UDWORD player, DROID **psDroid)
 		if (player >= MAX_PLAYERS)
 		{
 			debug(LOG_FEATURE, "Feature detected");
-			// feature hack, player = 9 are features
+			// feature hack, player = PLAYER_FEATURE are features
 			return false;
 		}
 		d = apsDroidLists[player];
@@ -351,7 +351,7 @@ STRUCTURE *IdToStruct(UDWORD id,UDWORD player)
 		if (player >= MAX_PLAYERS)
 		{
 			debug(LOG_FEATURE, "Feature detected");
-			// feature hack, player = 9 are features
+			// feature hack, player = PLAYER_FEATURE are features
 			return NULL;
 		}
 		for (psStr=apsStructLists[player];((psStr != NULL )&&(psStr->id != id) );psStr=psStr->psNext) {}
@@ -366,6 +366,7 @@ FEATURE *IdToFeature(UDWORD id,UDWORD player)
 	FEATURE	*psF =NULL;
 	UDWORD	i;
 
+	STATIC_ASSERT(MAX_PLAYERS + 2 < ANYPLAYER);
 	if(player == ANYPLAYER)
 	{
 		for(i=0;i<MAX_PLAYERS;i++)
@@ -382,7 +383,7 @@ FEATURE *IdToFeature(UDWORD id,UDWORD player)
 		if (player >= MAX_PLAYERS)
 		{
 			debug(LOG_FEATURE, "Feature detected");
-			// feature hack, player = 9 are features
+			// feature hack, player = PLAYER_FEATURE are features - but we're in a function called IdTo **Feature**...
 			return NULL;
 		}
 		for(psF=apsFeatureLists[player];((psF != NULL )&&(psF->id != id) );psF=psF->psNext) {}
@@ -520,6 +521,17 @@ BOOL responsibleFor(UDWORD player, UDWORD playerinquestion)
 	return whosResponsible(playerinquestion) == player;
 }
 
+int scavengerSlot()
+{
+	// Scavengers used to always be in position 7, when scavengers were only supported in less than 8 player maps.
+	// Scavengers should be in position N in N-player maps, where N ≥ 8.
+	return MAX(game.maxPlayers, 7);
+}
+
+int scavengerPlayer()
+{
+	return game.scavengers? scavengerSlot() : -1;
+}
 
 // ////////////////////////////////////////////////////////////////////////////
 // probably temporary. Places the camera on the players 1st droid or struct.
@@ -2049,8 +2061,17 @@ const char* getPlayerColourName(unsigned int player)
 		N_("Red"),
 		N_("Blue"),
 		N_("Pink"),
-		N_("Cyan")
+		N_("Cyan"),
+		N_("Yellow"),
+		N_("Purple"),
+		N_("White"),
+		N_("Bright blue"),
+		N_("Neon green"),
+		N_("Infrared"),
+		N_("Ultraviolet"),
+		N_("Brown"),
 	};
+	STATIC_ASSERT(MAX_PLAYERS <= ARRAY_SIZE(playerColors));
 
 	ASSERT(player < ARRAY_SIZE(playerColors), "player number (%d) exceeds maximum (%lu)", player, (unsigned long) ARRAY_SIZE(playerColors));
 

@@ -5145,6 +5145,8 @@ BOOL loadSaveDroidInitV2(char *pFileData, UDWORD filesize,UDWORD quantity)
 	return true;
 }
 
+bool foundScavengerPlayerInMap = true;  // A bit hackish to check for scavengers here, don't know if there's a better way.
+
 // -----------------------------------------------------------------------------------------
 // Remaps old player number based on position on map to new owner
 static UDWORD RemapPlayerNumber(UDWORD OldNumber)
@@ -5160,6 +5162,7 @@ static UDWORD RemapPlayerNumber(UDWORD OldNumber)
 	{
 		if (OldNumber == NetPlay.players[i].position)
 		{
+			foundScavengerPlayerInMap = foundScavengerPlayerInMap || i == scavengerSlot();
 			return i;
 		}
 	}
@@ -11472,6 +11475,8 @@ static BOOL getNameFromComp(UDWORD compType, char *pDest, UDWORD compIndex)
  */
 BOOL plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[])
 {
+	foundScavengerPlayerInMap = false;
+
 	union { SAVE_STRUCTURE_V2 v2; SAVE_STRUCTURE_V20 v20; } sSave;  // close eyes now.
 	SAVE_STRUCTURE_V2 *psSaveStructure2   = &sSave.v2;
 	SAVE_STRUCTURE_V20 *psSaveStructure20 = &sSave.v20;

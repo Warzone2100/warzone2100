@@ -361,7 +361,7 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 
 
 FEATURE::FEATURE(uint32_t id, FEATURE_STATS const *psStats)
-	: BASE_OBJECT(OBJ_FEATURE, id, MAX_PLAYERS + 1)  // Set the default player out of range to avoid targeting confusions
+	: BASE_OBJECT(OBJ_FEATURE, id, PLAYER_FEATURE)  // Set the default player out of range to avoid targeting confusions
 	, psStats(psStats)
 {}
 

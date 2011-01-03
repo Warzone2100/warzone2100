@@ -68,13 +68,13 @@
 
 // alliances
 // players are 0-7; player 8 appears to be unused; player 9 is features
-UBYTE	alliances[MAX_PLAYERS + 2][MAX_PLAYERS + 2];
+uint8_t alliances[MAX_PLAYER_SLOTS][MAX_PLAYER_SLOTS];
 
 /// A bitfield of vision sharing in alliances, for quick manipulation of vision information
-uint8_t	alliancebits[MAX_PLAYERS + 2];
+PlayerMask alliancebits[MAX_PLAYER_SLOTS];
 
 /// A bitfield for the satellite uplink
-uint8_t satuplinkbits;
+PlayerMask satuplinkbits;
 
 // see if a structure has the range to fire on a target
 static BOOL aiStructHasRange(STRUCTURE *psStruct, BASE_OBJECT *psTarget, int weapon_slot)
@@ -152,10 +152,10 @@ BOOL aiInitialise(void)
 
 	// The +1 is for features, that are owned by player 9 for hackish reasons
 	// Yes, we do mean "player 9", as in "the players are 0-7, and we skip over player 8"
-	for (i = 0; i < MAX_PLAYERS + 2; i++)
+	for (i = 0; i < MAX_PLAYER_SLOTS; i++)
 	{
 		alliancebits[i] = 0;
-		for (j = 0; j < MAX_PLAYERS + 2; j++)
+		for (j = 0; j < MAX_PLAYER_SLOTS; j++)
 		{
 			bool valid = (i == j && i < MAX_PLAYERS);
 
@@ -641,7 +641,7 @@ SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot
 			else if (targetInQuestion->type == OBJ_FEATURE
 			         && gameTime - psDroid->lastFrustratedTime < FRUSTRATED_TIME
 			         && ((FEATURE *)targetInQuestion)->psStats->damageable
-			         && !(game.scavengers && psDroid->player == 7))			// hack to avoid scavs blowing up their nice feature walls
+			         && psDroid->player != scavengerPlayer())  // hack to avoid scavs blowing up their nice feature walls
 			{
 				psTarget = targetInQuestion;
 			}

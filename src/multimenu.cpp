@@ -133,6 +133,16 @@ UDWORD	current_numplayers = 4;
 #define M_REQUEST_6P	(MULTIMENU+75)
 #define M_REQUEST_7P	(MULTIMENU+76)
 #define M_REQUEST_8P	(MULTIMENU+77)
+#define M_REQUEST_9P    (MULTIMENU+78)
+#define M_REQUEST_10P   (MULTIMENU+79)
+#define M_REQUEST_11P   (MULTIMENU+80)
+#define M_REQUEST_12P   (MULTIMENU+81)
+#define M_REQUEST_13P   (MULTIMENU+82)
+#define M_REQUEST_14P   (MULTIMENU+83)
+#define M_REQUEST_15P   (MULTIMENU+84)
+#define M_REQUEST_16P   (MULTIMENU+85)
+static const unsigned M_REQUEST_NP[] = {M_REQUEST_2P,    M_REQUEST_3P,    M_REQUEST_4P,    M_REQUEST_5P,    M_REQUEST_6P,    M_REQUEST_7P,    M_REQUEST_8P,    M_REQUEST_9P,    M_REQUEST_10P,    M_REQUEST_11P,    M_REQUEST_12P,    M_REQUEST_13P,    M_REQUEST_14P,    M_REQUEST_15P,    M_REQUEST_16P};
+static char const * M_REQUEST_NP_TIPS[] = {   N_("2 players"), N_("3 players"), N_("4 players"), N_("5 players"), N_("6 players"), N_("7 players"), N_("8 players"), N_("9 players"), N_("10 players"), N_("11 players"), N_("12 players"), N_("13 players"), N_("14 players"), N_("15 players"), N_("16 players")};
 
 #define M_REQUEST_BUT	(MULTIMENU+100)		// allow loads of buttons.
 #define M_REQUEST_BUTM	(MULTIMENU+1100)
@@ -332,6 +342,7 @@ static void displayNumPlayersBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffse
 		sprintf(buffer, " *");
 	} else {
 		sprintf(buffer, "%iP", (int)(psWidget->UserData));
+		buffer[2] = '\0';  // Truncate 'P' if 2 digits, since there isn't room.
 	}
 	iV_DrawText(buffer, x+2, y+12);
 
@@ -628,47 +639,15 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 		sButInit.pDisplay	= displayNumPlayersBut;
 		widgAddButton(psRScreen, &sButInit);
 
-		sButInit.id		= M_REQUEST_2P;
-		sButInit.y		+= 22;
-		sButInit.UserData	= 2;
-		sButInit.pTip		= _("2 players");
-		widgAddButton(psRScreen, &sButInit);
-
-		sButInit.id		= M_REQUEST_3P;
-		sButInit.y		+= 22;
-		sButInit.UserData	= 3;
-		sButInit.pTip		= _("3 players");
-		widgAddButton(psRScreen, &sButInit);
-
-		sButInit.id		= M_REQUEST_4P;
-		sButInit.y		+= 22;
-		sButInit.UserData	= 4;
-		sButInit.pTip		= _("4 players");
-		widgAddButton(psRScreen, &sButInit);
-
-		sButInit.id		= M_REQUEST_5P;
-		sButInit.y		+= 22;
-		sButInit.UserData	= 5;
-		sButInit.pTip		= _("5 players");
-		widgAddButton(psRScreen, &sButInit);
-
-		sButInit.id		= M_REQUEST_6P;
-		sButInit.y		+= 22;
-		sButInit.UserData	= 6;
-		sButInit.pTip		= _("6 players");
-		widgAddButton(psRScreen, &sButInit);
-
-		sButInit.id		= M_REQUEST_7P;
-		sButInit.y		+= 22;
-		sButInit.UserData	= 7;
-		sButInit.pTip		= _("7 players");
-		widgAddButton(psRScreen, &sButInit);
-
-		sButInit.id		= M_REQUEST_8P;
-		sButInit.y		+= 22;
-		sButInit.UserData	= 8;
-		sButInit.pTip		= _("8 players");
-		widgAddButton(psRScreen, &sButInit);
+		STATIC_ASSERT(MAX_PLAYERS_IN_GUI <= ARRAY_SIZE(M_REQUEST_NP) + 1 && MAX_PLAYERS <= ARRAY_SIZE(M_REQUEST_NP_TIPS) + 1);
+		for (unsigned numPlayers = 2; numPlayers <= MAX_PLAYERS_IN_GUI; ++numPlayers)
+		{
+			sButInit.id             = M_REQUEST_NP[numPlayers - 2];
+			sButInit.y		+= 22;
+			sButInit.UserData	= numPlayers;
+			sButInit.pTip		= gettext(M_REQUEST_NP_TIPS[numPlayers - 2]);
+			widgAddButton(psRScreen, &sButInit);
+		}
 	}
 
 }
@@ -719,33 +698,16 @@ BOOL runMultiRequester(UDWORD id,UDWORD *mode, char *chosen,UDWORD *chosenValue)
 			closeMultiRequester();
 			addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, current_tech, 0);
 			break;
-		case M_REQUEST_2P:
-			closeMultiRequester();
-			addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, current_tech, 2);
-			break;
-		case M_REQUEST_3P:
-			closeMultiRequester();
-			addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, current_tech, 3);
-			break;
-		case M_REQUEST_4P:
-			closeMultiRequester();
-			addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, current_tech, 4);
-			break;
-		case M_REQUEST_5P:
-			closeMultiRequester();
-			addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, current_tech, 5);
-			break;
-		case M_REQUEST_6P:
-			closeMultiRequester();
-			addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, current_tech, 6);
-			break;
-		case M_REQUEST_7P:
-			closeMultiRequester();
-			addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, current_tech, 7);
-			break;
-		case M_REQUEST_8P:
-			closeMultiRequester();
-			addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, current_tech, 8);
+		default:
+			for (unsigned numPlayers = 2; numPlayers <= MAX_PLAYERS_IN_GUI; ++numPlayers)
+			{
+				if (id == M_REQUEST_NP[numPlayers - 2])
+				{
+					closeMultiRequester();
+					addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, current_tech, numPlayers);
+					break;
+				}
+			}
 			break;
 	}
 

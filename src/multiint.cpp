@@ -1324,7 +1324,7 @@ static void addGameOptions()
 		}
 	}
 
-	if (game.maxPlayers == 8)
+	if (game.maxPlayers == MAX_PLAYERS || !foundScavengerPlayerInMap)
 	{
 		widgSetButtonState(psWScreen, MULTIOP_SKIRMISH, WBUT_LOCK);
 		widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN, WBUT_DISABLE);	// full, cannot enable scavenger player
@@ -1660,6 +1660,15 @@ static void closePositionChooser()
 	positionChooserUp = -1;
 }
 
+static int playerBoxHeight(int player)
+{
+	int gap = MULTIOP_PLAYERSH - 4 - 3 - MULTIOP_TEAMSHEIGHT*game.maxPlayers;
+	int gapDiv = game.maxPlayers - 1;
+	gap = std::min(gap, 5*gapDiv);
+	STATIC_ASSERT(MULTIOP_TEAMSHEIGHT == MULTIOP_PLAYERHEIGHT);  // Why are these different defines?
+	return (MULTIOP_TEAMSHEIGHT*gapDiv + gap)*NetPlay.players[player].position/gapDiv + 4;
+}
+
 static void addPositionChooser(int player)
 {
 	closeColourChooser();
@@ -1680,17 +1689,20 @@ static void addColourChooser(UDWORD player)
 	// add form.
 	addBlueForm(MULTIOP_PLAYERS,MULTIOP_COLCHOOSER_FORM,"",
 				7,
-				((MULTIOP_PLAYERHEIGHT+5)*NetPlay.players[player].position)+4,
+				playerBoxHeight(player),
 				MULTIOP_ROW_WIDTH,MULTIOP_PLAYERHEIGHT);
 
 	// add the flags
-	for (i = 0; i < MAX_PLAYERS; i++)
+	int flagW = iV_GetImageWidth(FrontImages, IMAGE_PLAYER0);
+	int flagH = iV_GetImageHeight(FrontImages, IMAGE_PLAYER0);
+	int space = MULTIOP_ROW_WIDTH - 7 - flagW*MAX_PLAYERS_IN_GUI;
+	int spaceDiv = MAX_PLAYERS_IN_GUI;
+	space = std::min(space, 5*spaceDiv);
+	for (i = 0; i < MAX_PLAYERS_IN_GUI; i++)
 	{
 		addMultiBut(psWScreen,MULTIOP_COLCHOOSER_FORM, MULTIOP_COLCHOOSER+i,
-			(i*(iV_GetImageWidth(FrontImages,IMAGE_PLAYER0) +5)+7) ,//x
-			4,													  //y
-			iV_GetImageWidth(FrontImages,IMAGE_PLAYER0),		  //w
-			iV_GetImageHeight(FrontImages,IMAGE_PLAYER0),		  //h
+			i*(flagW*spaceDiv + space)/spaceDiv + 7,  4,  // x, y
+			flagW, flagH,  // w, h
 			_("Player colour"), IMAGE_PLAYER0 + i, IMAGE_PLAYER0_HI + i, IMAGE_PLAYER0_HI + i);
 
 			if( !safeToUseColour(selectedPlayer,i))
@@ -1989,52 +2001,35 @@ static void addTeamChooser(UDWORD player)
 	// add form.
 	addBlueForm(MULTIOP_PLAYERS,MULTIOP_TEAMCHOOSER_FORM,"",
 				7,
-				((MULTIOP_TEAMSHEIGHT+5)*NetPlay.players[player].position)+4,
+				playerBoxHeight(player),
 				MULTIOP_ROW_WIDTH,MULTIOP_TEAMSHEIGHT);
 
 	// tally up the team counts
 	for (i=0; i< game.maxPlayers ; i++)
 	{
-		inSlot[NetPlay.players[i].team]++;
-	}
-
-	// Make sure all players can't be on same team.
-	if ( game.maxPlayers <= 2 )	// 2p game
-	{
-		disallow = player ? NetPlay.players[0].team : NetPlay.players[1].team;
-	}
-	else
-		if ( game.maxPlayers > 2 && game.maxPlayers <= 8)	// 4 or 8p game
+		if (i != player)
 		{
-			int maxslot = 0 , tmpslot =0 , range = 0;
-
-			for(i=0; i < game.maxPlayers ; i++)
+			inSlot[NetPlay.players[i].team]++;
+			if (inSlot[NetPlay.players[i].team] >= game.maxPlayers - 1)
 			{
-				if( inSlot[i] >= tmpslot )
-				{
-					maxslot = i;
-					tmpslot = inSlot[i];
-				}
-			}
-			range = game.maxPlayers <= 4 ? 2 : 6 ;
-			if ( inSlot[maxslot] <= range  || NetPlay.players[player].team == maxslot)
-			{
-				disallow = ANYENTRY;	// we can pick any slot
-			}
-			else
-			{
-				disallow = maxslot;		// can't pick this slot
+				// Make sure all players can't be on same team.
+				disallow = NetPlay.players[i].team;
 			}
 		}
+	}
+
+	int teamW = iV_GetImageWidth(FrontImages, IMAGE_TEAM0);
+	int teamH = iV_GetImageHeight(FrontImages, IMAGE_TEAM0);
+	int space = MULTIOP_ROW_WIDTH - 7 - teamW*(game.maxPlayers + 1);
+	int spaceDiv = game.maxPlayers;
+	space = std::min(space, 3*spaceDiv);
 
 	// add the teams, skipping the one we CAN'T be on (if applicable)
 	for (i = 0; i < game.maxPlayers; i++)
 	{
 		if (i != disallow)
 		{
-			addMultiBut(psWScreen, MULTIOP_TEAMCHOOSER_FORM, MULTIOP_TEAMCHOOSER + i, i * (iV_GetImageWidth(FrontImages,
-						IMAGE_TEAM0) + 3) + 3, 6, iV_GetImageWidth(FrontImages, IMAGE_TEAM0), iV_GetImageHeight(FrontImages,
-						IMAGE_TEAM0), _("Team"), IMAGE_TEAM0 + i , IMAGE_TEAM0_HI + i, IMAGE_TEAM0_HI + i);
+			addMultiBut(psWScreen, MULTIOP_TEAMCHOOSER_FORM, MULTIOP_TEAMCHOOSER + i, i * (teamW*spaceDiv + space)/spaceDiv + 3, 6, teamW, teamH, _("Team"), IMAGE_TEAM0 + i , IMAGE_TEAM0_HI + i, IMAGE_TEAM0_HI + i);
 		}
 		// may want to add some kind of 'can't do' icon instead of being blank?
 	}
@@ -2043,7 +2038,7 @@ static void addTeamChooser(UDWORD player)
 	if (player != selectedPlayer && NetPlay.bComms && NetPlay.isHost && NetPlay.players[player].allocated)
 	{
 		addMultiBut(psWScreen,MULTIOP_TEAMCHOOSER_FORM, MULTIOP_TEAMCHOOSER_KICK,
-					(8*(iV_GetImageWidth(FrontImages,IMAGE_PLAYER0) +5)+7), 8,
+					8*(teamW + 5) + 7, 8,
 					iV_GetImageWidth(FrontImages,IMAGE_NOJOIN),		  //w
 					iV_GetImageHeight(FrontImages,IMAGE_NOJOIN),		  //h
 					_("Kick player"), IMAGE_NOJOIN, IMAGE_NOJOIN, IMAGE_NOJOIN);
@@ -2069,7 +2064,7 @@ static void drawReadyButton(UDWORD player)
 	// add form to hold 'ready' botton
 	addBlueForm(MULTIOP_PLAYERS,MULTIOP_READY_FORM_ID + player,"",
 				8 + MULTIOP_PLAYERWIDTH - MULTIOP_READY_WIDTH,
-				(UWORD)(( (MULTIOP_PLAYERHEIGHT+5)*NetPlay.players[player].position)+4),
+				playerBoxHeight(player),
 				MULTIOP_READY_WIDTH,MULTIOP_READY_HEIGHT);
 
 	if (!NetPlay.players[player].allocated && NetPlay.players[player].ai >= 0)
@@ -2173,7 +2168,7 @@ void addPlayerBox(BOOL players)
 				sButInit.formID = MULTIOP_PLAYERS;
 				sButInit.id = MULTIOP_PLAYER_START + i;
 				sButInit.x = 7;
-				sButInit.y = ((MULTIOP_PLAYERHEIGHT + 5) * NetPlay.players[i].position) + 4;
+				sButInit.y = playerBoxHeight(i);
 				sButInit.width = MULTIOP_PLAYERWIDTH + 1;
 				sButInit.height = MULTIOP_PLAYERHEIGHT;
 				sButInit.pTip = _("Click to change to this slot");
@@ -2199,7 +2194,7 @@ void addPlayerBox(BOOL players)
 				sButInit.formID = MULTIOP_PLAYERS;
 				sButInit.id = MULTIOP_TEAMS_START+i;
 				sButInit.x = 7;
-				sButInit.y = (UWORD)(( (MULTIOP_TEAMSHEIGHT+5)*NetPlay.players[i].position)+4);
+				sButInit.y = playerBoxHeight(i);
 				sButInit.width = MULTIOP_TEAMSWIDTH;
 				sButInit.height = MULTIOP_TEAMSHEIGHT;
 				if (canChooseTeamFor(i))
@@ -2229,7 +2224,7 @@ void addPlayerBox(BOOL players)
 			sColInit.formID = MULTIOP_PLAYERS;
 			sColInit.id = MULTIOP_COLOUR_START + i;
 			sColInit.x = 7 + MULTIOP_TEAMSWIDTH;
-			sColInit.y = ((MULTIOP_PLAYERHEIGHT + 5) * NetPlay.players[i].position) + 4;
+			sColInit.y = playerBoxHeight(i);
 			sColInit.width = MULTIOP_COLOUR_WIDTH;
 			sColInit.height = MULTIOP_PLAYERHEIGHT;
 			if (selectedPlayer == i || !NetPlay.players[i].allocated || NetPlay.isHost)
@@ -2256,7 +2251,7 @@ void addPlayerBox(BOOL players)
 				sButInit.formID = MULTIOP_PLAYERS;
 				sButInit.id = MULTIOP_PLAYER_START+i;
 				sButInit.x = 7 + MULTIOP_TEAMSWIDTH + MULTIOP_COLOUR_WIDTH;
-				sButInit.y = ((MULTIOP_PLAYERHEIGHT + 5) * NetPlay.players[i].position) + 4;
+				sButInit.y = playerBoxHeight(i);
 				sButInit.width = MULTIOP_PLAYERWIDTH - MULTIOP_TEAMSWIDTH - MULTIOP_READY_WIDTH - MULTIOP_COLOUR_WIDTH;
 				sButInit.height = MULTIOP_PLAYERHEIGHT;
 				sButInit.pTip = NULL;
@@ -2843,7 +2838,8 @@ static void processMultiopWidgets(UDWORD id)
 		addPlayerBox(!ingame.bHostSetup || bHosted);
 	}
 
-	if (id >= MULTIOP_TEAMS_START && id <= MULTIOP_TEAMS_END && !challengeActive)		// Clicked on a team chooser
+	STATIC_ASSERT(MULTIOP_TEAMS_START + MAX_PLAYERS - 1 <= MULTIOP_TEAMS_END);
+	if (id >= MULTIOP_TEAMS_START && id <= MULTIOP_TEAMS_START + MAX_PLAYERS - 1 && !challengeActive)  // Clicked on a team chooser
 	{
 		int clickedMenuID = id - MULTIOP_TEAMS_START;
 
@@ -2855,7 +2851,8 @@ static void processMultiopWidgets(UDWORD id)
 	}
 
 	//clicked on a team
-	if((id >= MULTIOP_TEAMCHOOSER) && (id <= MULTIOP_TEAMCHOOSER_END))
+	STATIC_ASSERT(MULTIOP_TEAMCHOOSER + MAX_PLAYERS - 1 <= MULTIOP_TEAMCHOOSER_END);
+	if(id >= MULTIOP_TEAMCHOOSER && id <= MULTIOP_TEAMCHOOSER + MAX_PLAYERS - 1)
 	{
 		ASSERT(teamChooserUp >= 0, "teamChooserUp < 0");
 		ASSERT(id >= MULTIOP_TEAMCHOOSER
@@ -2882,7 +2879,7 @@ static void processMultiopWidgets(UDWORD id)
 	}
 
 	// 'ready' button
-	if((id >= MULTIOP_READY_START) && (id <= MULTIOP_READY_END))	// clicked on a player
+	if(id >= MULTIOP_READY_START && id <= MULTIOP_READY_END)  // clicked on a player
 	{
 		UBYTE player = (UBYTE)(id-MULTIOP_READY_START);
 
@@ -2909,7 +2906,8 @@ static void processMultiopWidgets(UDWORD id)
 	}
 
 	// clicked on a player
-	if (id >= MULTIOP_PLAYER_START && id <= MULTIOP_PLAYER_END && (id - MULTIOP_PLAYER_START == selectedPlayer || NetPlay.isHost))
+	STATIC_ASSERT(MULTIOP_PLAYER_START + MAX_PLAYERS - 1 <= MULTIOP_PLAYER_END);
+	if (id >= MULTIOP_PLAYER_START && id <= MULTIOP_PLAYER_START + MAX_PLAYERS - 1 && (id - MULTIOP_PLAYER_START == selectedPlayer || NetPlay.isHost))
 	{
 		int player = id - MULTIOP_PLAYER_START;
 		if ((player == selectedPlayer || (NetPlay.players[player].allocated && NetPlay.isHost))
@@ -2944,7 +2942,8 @@ static void processMultiopWidgets(UDWORD id)
 		addPlayerBox(!ingame.bHostSetup || bHosted);
 	}
 
-	if((id >= MULTIOP_COLCHOOSER) && (id <= MULTIOP_COLCHOOSER_END)) // chose a new colour.
+	STATIC_ASSERT(MULTIOP_COLCHOOSER + MAX_PLAYERS - 1 <= MULTIOP_COLCHOOSER_END);
+	if (id >= MULTIOP_COLCHOOSER && id < MULTIOP_COLCHOOSER + MAX_PLAYERS - 1)  // chose a new colour.
 	{
 		resetReadyStatus(false);		// will reset only locally if not a host
 		SendColourRequest(colourChooserUp, id - MULTIOP_COLCHOOSER);
@@ -3552,7 +3551,7 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 	UDWORD x = xOffset+psWidget->x;
 	UDWORD y = yOffset+psWidget->y;
 	UDWORD	i = psWidget->UserData;
-	char	tmp[8], gamename[StringSize];
+	char tmp[80], gamename[StringSize];
 	unsigned int ping;
 
 	if (LobbyError != ERROR_NOERROR)
