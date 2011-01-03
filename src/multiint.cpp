@@ -126,6 +126,8 @@
 #define WZCOL_TERC3_GROUND_LOW  pal_Colour(0x00, 0x1C, 0x0E)
 #define WZCOL_TERC3_GROUND_HIGH WZCOL_TERC3_CLIFF_HIGH
 
+static const unsigned gnImage[] = {IMAGE_GN_0, IMAGE_GN_1, IMAGE_GN_2, IMAGE_GN_3, IMAGE_GN_4, IMAGE_GN_5, IMAGE_GN_6, IMAGE_GN_7, IMAGE_GN_8, IMAGE_GN_9, IMAGE_GN_10, IMAGE_GN_11, IMAGE_GN_12, IMAGE_GN_13, IMAGE_GN_14, IMAGE_GN_15};
+
 // ////////////////////////////////////////////////////////////////////////////
 // vars
 extern char	MultiCustomMapsPath[PATH_MAX];
