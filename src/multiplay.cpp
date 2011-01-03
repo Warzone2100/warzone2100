@@ -801,31 +801,31 @@ BOOL recvMessage(void)
 		case GAME_ALLIANCE:
 			recvAlliance(queue, true);
 			break;
-		case NET_KICK:
+		case NET_KICK:	// in-game kick message
 		{
-			// FIX ME: in game kick ?  Is this even possible with current code?
 			uint32_t player_id;
 			char reason[MAX_KICK_REASON];
+			LOBBY_ERROR_TYPES KICK_TYPE = ERROR_NOERROR;
+
+			NETbeginDecode(queue, NET_KICK);
+				NETuint32_t(&player_id);
+				NETstring(reason, MAX_KICK_REASON);
+				NETenum(&KICK_TYPE);
+			NETend();
 
 			if (player_id == NET_HOST_ONLY)
 			{
 				debug(LOG_ERROR, "someone tried to kick the host--check your netplay logs!");
-				NETend();
 				break;
 			}
-
-			NETbeginDecode(queue, NET_KICK);
-				NETuint32_t(&player_id);
-				NETstring( reason, MAX_KICK_REASON);
-			NETend();
-
-			if (selectedPlayer == player_id)  // we've been told to leave.
+			else if (selectedPlayer == player_id)  // we've been told to leave.
 			{
 				debug(LOG_ERROR, "You were kicked because %s", reason);
 				setPlayerHasLost(true);
 			}
 			else
 			{
+				debug(LOG_NET, "Player %d was kicked: %s", player_id, reason);
 				NETplayerKicked(player_id);
 			}
 			break;
