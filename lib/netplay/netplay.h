@@ -232,7 +232,7 @@ typedef enum
 }	wzFileEnum;
 // ////////////////////////////////////////////////////////////////////////
 // Player information. Filled when players join, never re-ordered. selectedPlayer global points to 
-// currently controlled player. This array is indexed by GUI slots in pregame.
+// currently controlled player.
 typedef struct
 {
 	char		name[StringSize];	///< Player name

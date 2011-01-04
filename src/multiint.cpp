@@ -137,6 +137,7 @@ BOOL						bHosted			= false;				//we have set up a game
 char						sPlayer[128];							// player name (to be used)
 static int					colourChooserUp = -1;
 static int					teamChooserUp = -1;
+static int					positionChooserUp = -1;
 static BOOL				SettingsUp		= false;
 static UBYTE				InitialProto	= 0;
 static W_SCREEN				*psConScreen;
@@ -165,6 +166,8 @@ static void displayMultiBut     (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffse
 static void intDisplayFeBox     (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 static void displayRemoteGame   (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 static void displayPlayer       (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+static void displayPosition     (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+static void displayColour       (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 static void displayTeamChooser  (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 static void displayMultiEditBox (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 static void setLockedTeamsMode  (void);
@@ -178,17 +181,17 @@ static void hidePasswordForm(void);
 static void showPasswordForm(void);
 
 // Game option functions
-static	void	addGameOptions		(BOOL bRedo);				// options (rhs) boxV
+static	void	addGameOptions();
 static	void	addChatBox			(void);
 static	void	disableMultiButs	(void);
 static	void	processMultiopWidgets(UDWORD);
 static	void	SendFireUp			(void);
 
-static	UDWORD	bestPlayer			(UDWORD);
 static	void	decideWRF			(void);
 
 static void		closeColourChooser	(void);
 static void		closeTeamChooser	(void);
+static void		closePositionChooser	(void);
 static BOOL		SendColourRequest	(UBYTE player, UBYTE col);
 static BOOL		SendPositionRequest	(UBYTE player, UBYTE chosenPlayer);
 static BOOL		safeToUseColour		(UDWORD player,UDWORD col);
@@ -226,9 +229,7 @@ static int guessMapTilesetType(LEVEL_DATASET *psLevel)
 	return TILESET_ARIZONA;
 }
 
-/// This function is a HACK
-/// Loads the entire map (including calculating gateways) just to show
-/// a picture of it
+/// Loads the entire map just to show a picture of it
 void loadMapPreview(bool hideInterface)
 {
 	static char		aFileName[256];
@@ -260,14 +261,14 @@ void loadMapPreview(bool hideInterface)
 
 	if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 	{
-		debug(LOG_ERROR, "loadMapPreview: Failed to load terrain types file");
+		debug(LOG_ERROR, "Failed to load terrain types file");
 		return;
 	}
 	if (pFileData)
 	{
 		if (!loadTerrainTypeMap(pFileData, fileSize))
 		{
-			debug(LOG_ERROR, "loadMapPreview: Failed to load terrain types");
+			debug(LOG_ERROR, "Failed to load terrain types");
 			return;
 		}
 	}
@@ -278,7 +279,7 @@ void loadMapPreview(bool hideInterface)
 	strcpy(ptr, "/game.map");
 	if (!mapLoad(aFileName, true))
 	{
-		debug(LOG_ERROR, "loadMapPreview: Failed to load map");
+		debug(LOG_ERROR, "Failed to load map");
 		return;
 	}
 	gwShutDown();
@@ -446,8 +447,6 @@ static BOOL OptionsInet(void)			//internet options
 	sEdInit.width = CON_NAMEBOXWIDTH;
 	sEdInit.height = CON_NAMEBOXHEIGHT;
 	sEdInit.pText = "";									//_("IP Address or Machine Name");
-//	sEdInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_DES_EDITBOXLEFTH , IMAGE_DES_EDITBOXLEFT);
-//	sEdInit.pBoxDisplay = intDisplayButtonHilight;
 	sEdInit.pBoxDisplay = intDisplayEditBox;
 	if (!widgAddEditBox(psConScreen, &sEdInit))
 	{
@@ -493,8 +492,7 @@ BOOL startConnectionScreen(void)
 	return true;
 }
 
-
-void runConnectionScreen(void )
+void runConnectionScreen(void)
 {
 	UDWORD id;
 	static char addr[128];
@@ -784,18 +782,6 @@ void runGameFind(void )
 
 		if (!(NetPlay.games[gameNumber].desc.dwFlags & SESSION_JOINDISABLED)) // if still joinable
 		{
-			// TODO: Check whether this code is used at all in skirmish games, if not, remove it.
-			// if skirmish, check it wont take the last slot
-			// We also now check for the version string, to not allow people to join in the first place
-			if ((bMultiPlayer
-			 && !NetPlay.bComms
-			 && NETgetGameFlagsUnjoined(gameNumber,1) == SKIRMISH
-			 && (NetPlay.games[gameNumber].desc.dwCurrentPlayers >= NetPlay.games[gameNumber].desc.dwMaxPlayers - 1))
-			 || (!NETgameIsCorrectVersion(&NetPlay.games[gameNumber]) != 0 ))
-			{
-				goto FAIL;
-			}
-
 			if (NetPlay.games[gameNumber].privateGame)
 			{
 				showPasswordForm();
@@ -844,8 +830,6 @@ void runGameFind(void )
 		hidePasswordForm();
 	}
 	
-FAIL:
-
 	widgDisplayScreen(psWScreen);								// show the widgets currently running
 	if(safeSearch)
 	{
@@ -999,6 +983,7 @@ static void hidePasswordForm(void)
 	}
 	addGames();
 }
+
 static void showPasswordForm(void)
 {
 	W_CONTEXT sContext;
@@ -1055,7 +1040,6 @@ static void addBlueForm(UDWORD parent,UDWORD id, const char *txt,UDWORD x,UDWORD
 		sLabInit.width	= 80;
 		sLabInit.height = 20;
 		sLabInit.pText	= txt;
-//		sLabInit.pDisplay = displayFeText;
 		widgAddLabel(psWScreen, &sLabInit);
 	}
 	return;
@@ -1095,9 +1079,8 @@ void updateLimitFlags()
 	ingame.flags = flags;
 }
 
-// FIX ME: bRedo is not used anymore since the removal of the forced screenClearFocus()
 // need to check for side effects.
-static void addGameOptions(BOOL bRedo)
+static void addGameOptions()
 {
 	widgDelete(psWScreen,MULTIOP_OPTIONS);  				// clear options list
 	widgDelete(psWScreen,FRONTEND_SIDETEXT3);				// del text..
@@ -1387,21 +1370,44 @@ static BOOL safeToUseColour(UDWORD player,UDWORD col)
 	return true;
 }
 
+static void initChooser(int player)
+{
+	// delete that players box,
+	widgDelete(psWScreen, MULTIOP_PLAYER_START + player);
+
+	// delete team chooser button
+	widgDelete(psWScreen, MULTIOP_TEAMS_START + player);
+
+	// delete 'ready' button
+	widgDelete(psWScreen, MULTIOP_READY_FORM_ID + player);
+
+	// delete 'colour' button
+	widgDelete(psWScreen, MULTIOP_COLOUR_START + player);
+
+	// remove any choosers already up
+	closeColourChooser();
+	closeTeamChooser();
+}
+
+static void closePositionChooser()
+{
+	positionChooserUp = -1;
+}
+
+static void addPositionChooser(int player)
+{
+	closeColourChooser();
+	closeTeamChooser();
+	closePositionChooser();
+	positionChooserUp = player;
+	addPlayerBox(true);
+}
+
 static void addColourChooser(UDWORD player)
 {
 	UDWORD i;
 
-	// delete that players box,
-	widgDelete(psWScreen,MULTIOP_PLAYER_START+player);
-
-	// delete team chooser button
-	widgDelete(psWScreen,MULTIOP_TEAMS_START+player);
-
-	// delete 'ready' button
-	widgDelete(psWScreen,MULTIOP_READY_FORM_ID+player);
-
-	// remove colour chooser, if it's already up
-	closeColourChooser();
+	initChooser(player);
 
 	// add form.
 	addBlueForm(MULTIOP_PLAYERS,MULTIOP_COLCHOOSER_FORM,"",
@@ -1425,46 +1431,12 @@ static void addColourChooser(UDWORD player)
 			}
 	}
 
-	// add a kick button
-	if (player != selectedPlayer)
-	{
-		addMultiBut(psWScreen,MULTIOP_COLCHOOSER_FORM, MULTIOP_COLCHOOSER_KICK,
-					(8*(iV_GetImageWidth(FrontImages,IMAGE_PLAYER0) +5)+7) ,//x
-					4,													  //y
-					iV_GetImageWidth(FrontImages,IMAGE_NOJOIN),		  //w
-					iV_GetImageHeight(FrontImages,IMAGE_NOJOIN),		  //h
-					_("Kick player"), IMAGE_NOJOIN, IMAGE_NOJOIN, IMAGE_NOJOIN);
-	}
-	
-	//add the position chooser.
-	for (i = 0; i < game.maxPlayers && allowChangePosition; i++)
-	{
-		addMultiBut(psWScreen,MULTIOP_COLCHOOSER_FORM, MULTIOP_PLAYCHOOSER+i,
-					(i*(iV_GetImageWidth(FrontImages,IMAGE_PLAYER0) +5)+7),//x
-					23,													  //y
-					iV_GetImageWidth(FrontImages,IMAGE_WEE_GUY)+7,		  //w
-					iV_GetImageHeight(FrontImages,IMAGE_WEE_GUY),		  //h
-					_("Player position"), IMAGE_WEE_GUY, IMAGE_WEE_GUY, 10 + i);
-	}
-
-	if (!NetPlay.isHost)
-	{
-		for (i=0;i<game.maxPlayers;i++)
-		{
-			if (isHumanPlayer(i) && i!=selectedPlayer )
-			{
-				widgSetButtonState(psWScreen, MULTIOP_PLAYCHOOSER+NetPlay.players[i].position, WBUT_DISABLE);
-			}
-		}
-	}
-
 	colourChooserUp = player;
 }
 
 static void closeColourChooser(void)
 {
 	colourChooserUp = -1;
-
 	widgDelete(psWScreen,MULTIOP_COLCHOOSER_FORM);
 }
 
@@ -1744,17 +1716,7 @@ static void addTeamChooser(UDWORD player)
 
 	debug(LOG_NET, "Opened team chooser for %d, current team: %d", player, NetPlay.players[player].team);
 
-	// delete colour chooser button
-	closeColourChooser();
-
-	// delete team chooser botton
-	widgDelete(psWScreen,MULTIOP_TEAMS_START+player);
-
-	// delete that players box
-	widgDelete(psWScreen,MULTIOP_PLAYER_START+player);
-
-	// delete 'ready' button
-	widgDelete(psWScreen,MULTIOP_READY_FORM_ID+player);
+	initChooser(player);
 
 	// add form.
 	addBlueForm(MULTIOP_PLAYERS,MULTIOP_TEAMCHOOSER_FORM,"",
@@ -1809,6 +1771,16 @@ static void addTeamChooser(UDWORD player)
 		// may want to add some kind of 'can't do' icon instead of being blank?
 	}
 
+	// add a kick button
+	if (player != selectedPlayer && NetPlay.bComms && NetPlay.isHost && NetPlay.players[player].allocated)
+	{
+		addMultiBut(psWScreen,MULTIOP_TEAMCHOOSER_FORM, MULTIOP_TEAMCHOOSER_KICK,
+					(8*(iV_GetImageWidth(FrontImages,IMAGE_PLAYER0) +5)+7), 8,
+					iV_GetImageWidth(FrontImages,IMAGE_NOJOIN),		  //w
+					iV_GetImageHeight(FrontImages,IMAGE_NOJOIN),		  //h
+					_("Kick player"), IMAGE_NOJOIN, IMAGE_NOJOIN, IMAGE_NOJOIN);
+	}
+
 	teamChooserUp = player;
 }
 
@@ -1858,14 +1830,12 @@ static bool canChooseTeamFor(int i)
 // ////////////////////////////////////////////////////////////////////////////
 // box for players.
 
-UDWORD addPlayerBox(BOOL players)
+void addPlayerBox(BOOL players)
 {
-	UDWORD			i=0;
-
 	// if background isn't there, then return since were not ready to draw the box yet!
 	if(widgGetFromID(psWScreen,FRONTEND_BACKDROP) == NULL)
 	{
-		return 0;
+		return;
 	}
 
 	widgDelete(psWScreen,MULTIOP_PLAYERS);		// del player window
@@ -1889,7 +1859,7 @@ UDWORD addPlayerBox(BOOL players)
 		int numPlayers = 0, team = -1;
 		bool allOnSameTeam = true;
 
-		for (i=0;i<game.maxPlayers;i++)
+		for (int i = 0; i < game.maxPlayers; i++)
 		{
 			if (game.skDiff[i] || isHumanPlayer(i))
 			{
@@ -1905,7 +1875,7 @@ UDWORD addPlayerBox(BOOL players)
 		{
 			allOnSameTeam = false;
 		}
-		else for (i=0; i<game.maxPlayers; i++)
+		else for (int i = 0; i < game.maxPlayers; i++)
 		{
 			if (game.skDiff[i] || isHumanPlayer(i))
 			{
@@ -1921,9 +1891,34 @@ UDWORD addPlayerBox(BOOL players)
 			}
 		}
 
-		for (i=0;i<game.maxPlayers;i++)
+		for (int i = 0; i < game.maxPlayers; i++)
 		{
-			if(ingame.localOptionsReceived)
+			if (positionChooserUp >= 0 && positionChooserUp != i)
+			{
+				W_BUTINIT sButInit;
+				sButInit.formID = MULTIOP_PLAYERS;
+				sButInit.id = MULTIOP_PLAYER_START + i;
+				sButInit.x = 7;
+				sButInit.y = ((MULTIOP_PLAYERHEIGHT + 5) * NetPlay.players[i].position) + 4;
+				sButInit.width = MULTIOP_PLAYERWIDTH + 1;
+				sButInit.height = MULTIOP_PLAYERHEIGHT;
+				sButInit.pTip = _("Click to change to this slot");
+				sButInit.pDisplay = displayPosition;
+				sButInit.UserData = i;
+				widgAddButton(psWScreen, &sButInit);
+				continue;
+			}
+			else if (i == colourChooserUp)
+			{
+				addColourChooser(i);
+				continue;
+			}
+			else if (i == teamChooserUp)
+			{
+				addTeamChooser(i);
+				continue;
+			}
+			else if (ingame.localOptionsReceived)
 			{
 				//add team chooser
 				W_BUTINIT sButInit;
@@ -1955,6 +1950,26 @@ UDWORD addPlayerBox(BOOL players)
 				}
 			}
 
+			// draw player colour
+			W_BUTINIT sColInit;
+			sColInit.formID = MULTIOP_PLAYERS;
+			sColInit.id = MULTIOP_COLOUR_START + i;
+			sColInit.x = 7 + MULTIOP_TEAMSWIDTH;
+			sColInit.y = ((MULTIOP_PLAYERHEIGHT + 5) * NetPlay.players[i].position) + 4;
+			sColInit.width = MULTIOP_COLOUR_WIDTH;
+			sColInit.height = MULTIOP_PLAYERHEIGHT;
+			if (selectedPlayer == i || !NetPlay.players[i].allocated || NetPlay.isHost)
+			{
+				sColInit.pTip = _("Click to change player colour");
+			}
+			else
+			{
+				sColInit.pTip = NULL;
+			}
+			sColInit.pDisplay = displayColour;
+			sColInit.UserData = i;
+			widgAddButton(psWScreen, &sColInit);
+
 			if (ingame.localOptionsReceived && NetPlay.players[i].allocated)	// only draw if real player!
 			{
 				// add a 'ready' button
@@ -1967,13 +1982,13 @@ UDWORD addPlayerBox(BOOL players)
 				W_BUTINIT sButInit;
 				sButInit.formID = MULTIOP_PLAYERS;
 				sButInit.id = MULTIOP_PLAYER_START+i;
-				sButInit.x = 7 + MULTIOP_TEAMSWIDTH;
-				sButInit.y = (UWORD)(( (MULTIOP_PLAYERHEIGHT+5)*NetPlay.players[i].position)+4);
-				sButInit.width = MULTIOP_PLAYERWIDTH - MULTIOP_TEAMSWIDTH - MULTIOP_READY_WIDTH;
+				sButInit.x = 7 + MULTIOP_TEAMSWIDTH + MULTIOP_COLOUR_WIDTH;
+				sButInit.y = ((MULTIOP_PLAYERHEIGHT + 5) * NetPlay.players[i].position) + 4;
+				sButInit.width = MULTIOP_PLAYERWIDTH - MULTIOP_TEAMSWIDTH - MULTIOP_READY_WIDTH - MULTIOP_COLOUR_WIDTH;
 				sButInit.height = MULTIOP_PLAYERHEIGHT;
 				if (selectedPlayer == i)
 				{
-					sButInit.pTip = _("Click to change player settings");
+					sButInit.pTip = _("Click to change player position");
 				}
 				else
 				{
@@ -1981,19 +1996,11 @@ UDWORD addPlayerBox(BOOL players)
 				}
 				sButInit.pDisplay = displayPlayer;
 				sButInit.UserData = i;
-
-				if (teamChooserUp < 0 && i == colourChooserUp)
-				{
-					addColourChooser(i);
-				}
-				else if (i != teamChooserUp)	// Display player number/color only if not selecting team for this player
-				{
-					widgAddButton(psWScreen, &sButInit);
-				}
+				widgAddButton(psWScreen, &sButInit);
 			}
 			else	// AI player
 			{
-				sFormInit = W_FORMINIT();  // This used to be an buggy memset using sizeof(W_BUTINIT)...
+				sFormInit = W_FORMINIT();
 				sFormInit.formID = MULTIOP_PLAYERS;
 				sFormInit.id = MULTIOP_PLAYER_START+i;
 				sFormInit.style = WBUT_PLAIN;
@@ -2024,8 +2031,6 @@ UDWORD addPlayerBox(BOOL players)
 	}else{
 		sliderEnableDrag(false);
 	}
-
-	return i;
 }
 
 /*
@@ -2041,13 +2046,14 @@ static void SendFireUp(void)
 // host kicks a player from a game.
 void kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type)
 {
+debug(LOG_ERROR, "kicking %u: %s", player_id, reason);
 	// send a kick msg
 	NETbeginEncode(NETbroadcastQueue(), NET_KICK);
 		NETuint32_t(&player_id);
 		NETstring( (char *) reason, MAX_KICK_REASON);
 		NETenum(&type);
 	NETend();
-
+	NETflush();
 	debug(LOG_NET, "Kicking player %u (%s).",
 	      (unsigned int)player_id, getPlayerName(player_id));
 
@@ -2236,14 +2242,12 @@ static void processMultiopWidgets(UDWORD id)
 	{
 		switch(id)												// Options buttons
 		{
-
 		case MULTIOP_GNAME:										// we get this when nec.
 			sstrcpy(game.name,widgGetString(psWScreen, MULTIOP_GNAME));
 			break;
 
 		case MULTIOP_MAP:
 			widgSetString(psWScreen, MULTIOP_MAP,game.map);
-//			sstrcpy(game.map,widgGetString(psWScreen, MULTIOP_MAP));
 			break;
 
 		case MULTIOP_GNAME_ICON:
@@ -2353,7 +2357,7 @@ static void processMultiopWidgets(UDWORD id)
 
 		case MULTIOP_CLEAN:
 			game.base = CAMP_CLEAN;
-			addGameOptions(false);
+			addGameOptions();
 
 			resetReadyStatus(false);
 
@@ -2366,7 +2370,7 @@ static void processMultiopWidgets(UDWORD id)
 
 		case MULTIOP_BASE:
 			game.base = CAMP_BASE;
-			addGameOptions(false);
+			addGameOptions();
 
 			resetReadyStatus(false);
 
@@ -2379,7 +2383,7 @@ static void processMultiopWidgets(UDWORD id)
 
 		case MULTIOP_DEFENCE:
 			game.base = CAMP_WALLS;
-			addGameOptions(false);
+			addGameOptions();
 
 			resetReadyStatus(false);
 
@@ -2533,7 +2537,7 @@ static void processMultiopWidgets(UDWORD id)
 
 		ingame.localOptionsReceived = true;
 
-		addGameOptions(false);									// update game options box.
+		addGameOptions();									// update game options box.
 		addChatBox();
 
 		disableMultiButs();
@@ -2579,7 +2583,7 @@ static void processMultiopWidgets(UDWORD id)
 		int clickedMenuID = id - MULTIOP_TEAMS_START;
 
 		//make sure team chooser is not up before adding new one for another player
-		if (teamChooserUp < 0 && colourChooserUp < 0 && canChooseTeamFor(clickedMenuID))
+		if (teamChooserUp < 0 && colourChooserUp < 0 && canChooseTeamFor(clickedMenuID) && positionChooserUp < 0)
 		{
 			addTeamChooser(clickedMenuID);
 		}
@@ -2617,7 +2621,7 @@ static void processMultiopWidgets(UDWORD id)
 	{
 		UBYTE player = (UBYTE)(id-MULTIOP_READY_START);
 
-		if (player == selectedPlayer)
+		if (player == selectedPlayer && teamChooserUp < 0 && positionChooserUp < 0)
 		{
 			SendReadyRequest(selectedPlayer, !NetPlay.players[player].ready);
 
@@ -2630,35 +2634,34 @@ static void processMultiopWidgets(UDWORD id)
 			}
 		}
 	}
-		
 
-	if((id >= MULTIOP_PLAYER_START) && (id <= MULTIOP_PLAYER_END))	// clicked on a player
+	if (id >= MULTIOP_COLOUR_START && id <= MULTIOP_COLOUR_END && (id - MULTIOP_COLOUR_START == selectedPlayer || NetPlay.isHost))
 	{
-		// options for kicking
-		if(NetPlay.isHost && (id - MULTIOP_PLAYER_START != NET_HOST_ONLY) )	// can't kick self!
+		if (teamChooserUp < 0 && positionChooserUp < 0)		// not choosing something else already
 		{
-			if(mouseDown(MOUSE_RMB)) // both buttons....
-			{
-				int victim = id - MULTIOP_PLAYER_START;		// who to kick out
-				int j = 0;
-				char *msg;
-				
-				while (j != victim && j < MAX_PLAYERS)
-				{
-					j++; // find out ID of player
-				}
-				sasprintf(&msg, _("The host has kicked %s from the game!"), getPlayerName(j));
-				sendTextMessage(msg, true);
-				kickPlayer(victim, "you are unwanted by the host.", ERROR_KICKED);
-				resetReadyStatus(true);		//reset and send notification to all clients
-			}
+			addColourChooser(id - MULTIOP_COLOUR_START);
 		}
-		if (id - MULTIOP_PLAYER_START == selectedPlayer || (NetPlay.isHost && isHumanPlayer(id - MULTIOP_PLAYER_START)))
+	}
+
+	if (id >= MULTIOP_PLAYER_START && id <= MULTIOP_PLAYER_END)	// clicked on a player
+	{
+		int player = id - MULTIOP_PLAYER_START;
+		if (player == selectedPlayer && positionChooserUp < 0)
 		{
-			if (teamChooserUp < 0)		// not choosing team already
-			{
-				addColourChooser(id-MULTIOP_PLAYER_START);
-			}
+			addPositionChooser(player);
+		}
+		else if (positionChooserUp == player)
+		{
+			closePositionChooser();	// changed his mind
+			addPlayerBox(!ingame.bHostSetup || bHosted);
+		}
+		else if (positionChooserUp >= 0)
+		{
+			// Switch player
+			resetReadyStatus(false);		// will reset only locally if not a host
+			SendPositionRequest(positionChooserUp, NetPlay.players[player].position);
+			closePositionChooser();
+			addPlayerBox(!ingame.bHostSetup || bHosted);
 		}
 	}
 
@@ -2683,35 +2686,23 @@ static void processMultiopWidgets(UDWORD id)
 		sendOptions();
 	}
 
-	// don't kill last player
 	if((id >= MULTIOP_COLCHOOSER) && (id <= MULTIOP_COLCHOOSER_END)) // chose a new colour.
 	{
 		resetReadyStatus(false);		// will reset only locally if not a host
-
 		SendColourRequest(colourChooserUp, id - MULTIOP_COLCHOOSER);
 		closeColourChooser();
-		addPlayerBox(  !ingame.bHostSetup || bHosted);
+		addPlayerBox(!ingame.bHostSetup || bHosted);
 	}
 
-	if (id == MULTIOP_COLCHOOSER_KICK)
+	if (id == MULTIOP_TEAMCHOOSER_KICK)
 	{
 		char *msg;
 
-		sasprintf(&msg, _("The host has kicked %s from the game!"), getPlayerName(colourChooserUp));
+		sasprintf(&msg, _("The host has kicked %s from the game!"), getPlayerName(teamChooserUp));
 		sendTextMessage(msg, true);
-		kickPlayer(colourChooserUp, "you are unwanted by the host.", ERROR_KICKED);
+		kickPlayer(teamChooserUp, "you are unwanted by the host.", ERROR_KICKED);
 		resetReadyStatus(true);		//reset and send notification to all clients
-		closeColourChooser();
-	}
-
-	// request a player number.
-	if((id >= MULTIOP_PLAYCHOOSER) && (id <= MULTIOP_PLAYCHOOSER_END) && allowChangePosition) // chose a new starting position
-	{
-		resetReadyStatus(false);		// will reset only locally if not a host
-
-		SendPositionRequest(colourChooserUp, id - MULTIOP_PLAYCHOOSER);
-		closeColourChooser();
-		addPlayerBox(  !ingame.bHostSetup || bHosted);
+		closeTeamChooser();
 	}
 }
 
@@ -2840,7 +2831,7 @@ void frontendMultiMessages(void)
 
 			if(titleMode == MULTIOPTION)
 			{
-				addGameOptions(true);
+				addGameOptions();
 				disableMultiButs();
 				addChatBox();
 			}
@@ -2951,18 +2942,17 @@ void frontendMultiMessages(void)
 			char reason[MAX_KICK_REASON];
 			LOBBY_ERROR_TYPES KICK_TYPE = ERROR_NOERROR;
 
+			NETbeginDecode(queue, NET_KICK);
+				NETuint32_t(&player_id);
+				NETstring(reason, MAX_KICK_REASON);
+				NETenum(&KICK_TYPE);
+			NETend();
+
 			if (player_id == NET_HOST_ONLY)
 			{
 				debug(LOG_ERROR, "someone tried to kick the host--check your netplay logs!");
-				NETend();
 				break;
 			}
-
-			NETbeginDecode(queue, NET_KICK);
-				NETuint32_t(&player_id);
-				NETstring( reason, MAX_KICK_REASON);
-				NETenum(&KICK_TYPE);
-			NETend();
 
 			if (selectedPlayer == player_id)	// we've been told to leave.
 			{
@@ -2970,9 +2960,8 @@ void frontendMultiMessages(void)
 				stopJoining();
 				//screen_RestartBackDrop();
 				//changeTitleMode(TITLE);
-				// maybe we want a custom 'kick' backdrop instead?
 				pie_LoadBackDrop(SCREEN_RANDOMBDROP);
-				debug(LOG_ERROR, "You have been kicked, because %s ", reason );
+				debug(LOG_ERROR, "You have been kicked, because %s ", reason);
 			}
 			else
 			{
@@ -3054,6 +3043,7 @@ void runMultiOptions(void)
 
 
 			addPlayerBox(true);				// update the player box.
+			loadMapPreview(false);
 		}
 	}
 
@@ -3123,7 +3113,7 @@ void runMultiOptions(void)
 				loadMapPreview(true);
 
 				widgSetString(psWScreen,MULTIOP_MAP,sTemp);
-				addGameOptions(false);
+				addGameOptions();
 				break;
 			default:
 				break;
@@ -3133,7 +3123,6 @@ void runMultiOptions(void)
 	}
 	else
 	{
-
 		if(hideTime != 0)
 		{
 			// we abort the 'hidetime' on press of a mouse button.
@@ -3205,6 +3194,8 @@ BOOL startMultiOptions(BOOL bReenter)
 	if(!bReenter)
 	{
 		teamChooserUp = -1;
+		positionChooserUp = -1;
+		colourChooserUp = -1;
 		allowChangePosition = true;
 		for(i=0; i < MAX_PLAYERS; i++)
 		{
@@ -3273,7 +3264,7 @@ BOOL startMultiOptions(BOOL bReenter)
 			inifile_delete(inif);
 
 			ingame.localOptionsReceived = true;
-			addGameOptions(false);									// update game options box.
+			addGameOptions();									// update game options box.
 			addChatBox();
 			disableMultiButs();
 			addPlayerBox(true);
@@ -3281,7 +3272,7 @@ BOOL startMultiOptions(BOOL bReenter)
 	}
 
 	addPlayerBox(false);								// Players
-	addGameOptions(false);
+	addGameOptions();
 
 	addChatBox();
 
@@ -3293,7 +3284,6 @@ BOOL startMultiOptions(BOOL bReenter)
 
 	return true;
 }
-
 
 /////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -3310,7 +3300,6 @@ void displayChatEdit(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT 
 
 	return;
 }
-
 
 // ////////////////////////////////////////////////////////////////////////////
 void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
@@ -3422,31 +3411,6 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 	iV_DrawText(NetPlay.games[i].versionstring, x + 100, y + 32);	// version
 }
 
-
-// ////////////////////////////////////////////////////////////////////////////
-static UDWORD bestPlayer(UDWORD player)
-{
-
-	UDWORD i, myscore,  score, count=1;
-
-	myscore =  getMultiStats(player).totalScore;
-
-	for(i=0;i<MAX_PLAYERS;i++)
-	{
-		if(isHumanPlayer(i) && i!=player )
-		{
-			score = getMultiStats(i).totalScore;
-
-			if(score >= myscore)
-			{
-				count++;
-			}
-		}
-	}
-
-	return count;
-}
-
 void displayTeamChooser(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 	UDWORD		x = xOffset+psWidget->x;
@@ -3465,6 +3429,17 @@ void displayTeamChooser(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIG
 	drawBlueBox(x,y,psWidget->width,psWidget->height);							// right
 
 	iV_DrawImage(FrontImages, IMAGE_TEAM0 + NetPlay.players[i].team, x + 2, y + 8);
+}
+
+void displayPosition(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+{
+	const int x = xOffset + psWidget->x;
+	const int y = yOffset + psWidget->y;
+
+	drawBlueBox(x, y, psWidget->width, psWidget->height);
+	iV_SetFont(font_regular);
+	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+	iV_DrawText("Click here to select this slot", x + 10, y + 22);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -3504,10 +3479,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 	}
 	else if (ingame.localOptionsReceived && NetPlay.players[j].allocated)					// only draw if real player!
 	{
-		//bluboxes.
 		drawBlueBox(x,y,psWidget->width,psWidget->height);							// right
-		drawBlueBox(x,y,60,psWidget->height);
-		drawBlueBox(x,y,31,psWidget->height);										// left.
 
 		iV_SetFont(font_regular);											// font
 		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
@@ -3519,10 +3491,10 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 		}
 		if (j == NET_HOST_ONLY && NetPlay.bComms)
 		{
-			iV_DrawText(NetPlay.players[j].name, x + 65, y + 18);
+			iV_DrawText(NetPlay.players[j].name, x + 32, y + 18);
 			iV_SetFont(font_small);
 			iV_SetTextColour(WZCOL_TEXT_MEDIUM);
-			iV_DrawText(_("HOST"), x + 65, y + 28);
+			iV_DrawText(_("HOST"), x + 32, y + 28);
 			iV_SetFont(font_regular);
 			iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 		}
@@ -3531,65 +3503,22 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 			char buf[250] = {'\0'};
 
 			// show "actual" ping time
-			iV_DrawText(NetPlay.players[j].name, x + 65, y + 18);
+			iV_DrawText(NetPlay.players[j].name, x + 32, y + 18);
 			iV_SetFont(font_small);
 			iV_SetTextColour(WZCOL_TEXT_MEDIUM);
 			ssprintf(buf, "Ping: %03d", ingame.PingTimes[j]);
-			iV_DrawText(buf, x + 65, y + 28);
+			iV_DrawText(buf, x + 32, y + 28);
 			iV_SetFont(font_regular);
 			iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 		}
 		else
 		{
-			iV_DrawText(NetPlay.players[j].name, x + 65, y + 22);
+			iV_DrawText(NetPlay.players[j].name, x + 32, y + 22);
 		}
 		
-		// ping rating
-		if (ingame.PingTimes[j] < PING_MED)
-		{
-			iV_DrawImage(FrontImages,IMAGE_LAMP_GREEN,x,y);
-		}else
-		if(ingame.PingTimes[j] >= PING_MED && ingame.PingTimes[j] < PING_HI)
-		{
-			iV_DrawImage(FrontImages,IMAGE_LAMP_AMBER,x,y);
-		}else
-		{
-			iV_DrawImage(FrontImages,IMAGE_LAMP_RED,x,y);
-		}
-
-
-		// ranking against other players.
-		eval = bestPlayer(j);
-		switch (eval)
-		{
-		case 1:
-			iV_DrawImage(IntImages,IMAGE_GN_1,x+5,y+3);
-			break;
-		case 2:
-			iV_DrawImage(IntImages,IMAGE_GN_2,x+4,y+3);
-			break;
-		case 3:
-			iV_DrawImage(IntImages,IMAGE_GN_3,x+4,y+3);
-			break;
-		case 4:
-			iV_DrawImage(IntImages,IMAGE_GN_4,x+4,y+3);
-			break;
-		case 5:
-			iV_DrawImage(IntImages,IMAGE_GN_5,x+4,y+3);
-			break;
-		case 6:
-			iV_DrawImage(IntImages,IMAGE_GN_6,x+4,y+3);
-			break;
-		case 7:
-			iV_DrawImage(IntImages,IMAGE_GN_7,x+4,y+3);
-			break;
-		default:
-			break;
-		}
-
 		if(getMultiStats(j).played < 5)
 		{
-			iV_DrawImage(FrontImages,IMAGE_MEDAL_DUMMY,x+37,y+13);
+			iV_DrawImage(FrontImages, IMAGE_MEDAL_DUMMY, x + 4, y + 13);
 		}
 		else
 		{
@@ -3599,47 +3528,45 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 			eval = stat.totalKills;
 			if(eval >600)
 			{
-				iV_DrawImage(FrontImages,IMAGE_MULTIRANK1,x+37,y+3);
+				iV_DrawImage(FrontImages, IMAGE_MULTIRANK1, x + 4, y + 3);
 			}
 			else if(eval >300)
 			{
-				iV_DrawImage(FrontImages,IMAGE_MULTIRANK2,x+37,y+3);
+				iV_DrawImage(FrontImages, IMAGE_MULTIRANK2, x + 4, y + 3);
 			}
 			else if(eval >150)
 			{
-				iV_DrawImage(FrontImages,IMAGE_MULTIRANK3,x+37,y+3);
+				iV_DrawImage(FrontImages, IMAGE_MULTIRANK3, x + 4, y + 3);
 			}
-
 
 			// star 2 games played
 			eval = stat.played;
 			if(eval >200)
 			{
-				iV_DrawImage(FrontImages,IMAGE_MULTIRANK1,x+37,y+13);
+				iV_DrawImage(FrontImages, IMAGE_MULTIRANK1, x + 4, y + 13);
 			}
 			else if(eval >100)
 			{
-				iV_DrawImage(FrontImages,IMAGE_MULTIRANK2,x+37,y+13);
+				iV_DrawImage(FrontImages, IMAGE_MULTIRANK2, x + 4, y + 13);
 			}
 			else if(eval >50)
 			{
-				iV_DrawImage(FrontImages,IMAGE_MULTIRANK3,x+37,y+13);
+				iV_DrawImage(FrontImages, IMAGE_MULTIRANK3, x + 4, y + 13);
 			}
-
 
 			// star 3 games won.
 			eval = stat.wins;
 			if(eval >80)
 			{
-				iV_DrawImage(FrontImages,IMAGE_MULTIRANK1,x+37,y+23);
+				iV_DrawImage(FrontImages, IMAGE_MULTIRANK1, x + 4, y + 23);
 			}
 			else if(eval >40)
 			{
-				iV_DrawImage(FrontImages,IMAGE_MULTIRANK2,x+37,y+23);
+				iV_DrawImage(FrontImages, IMAGE_MULTIRANK2, x + 4, y + 23);
 			}
 			else if(eval >10)
 			{
-				iV_DrawImage(FrontImages,IMAGE_MULTIRANK3,x+37,y+23);
+				iV_DrawImage(FrontImages, IMAGE_MULTIRANK3, x + 4, y + 23);
 			}
 
 			// medals.
@@ -3649,98 +3576,40 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 				{
 					if ((stat.wins >= 24) && (stat.wins > (8 * stat.losses))) // gold requirement
 					{
-						iV_DrawImage(FrontImages,IMAGE_MEDAL_GOLD,x+49,y+11);
+						iV_DrawImage(FrontImages, IMAGE_MEDAL_GOLD, x + 16, y + 11);
 					}
 					else
 					{
-						iV_DrawImage(FrontImages,IMAGE_MEDAL_SILVER,x+49,y+11);
+						iV_DrawImage(FrontImages, IMAGE_MEDAL_SILVER, x + 16, y + 11);
 					}
 				}
 				else
 				{
-					iV_DrawImage(FrontImages,IMAGE_MEDAL_BRONZE,x+49,y+11);
+					iV_DrawImage(FrontImages, IMAGE_MEDAL_BRONZE, x + 16, y + 11);
 				}
 			}
 		}
 		game.skDiff[j] = UBYTE_MAX;	// set AI difficulty to 0xFF (i.e. not an AI)
 	}
-	else
+	else	// AI
 	{
-		// AI
 		drawBlueBox(x,y,31,psWidget->height);	// left.
 	}
-	// Draw for both AI and human players
-
-	if (!NetPlay.players[j].wzFile.isSending)
-	{
-		// player number
-		switch (NetPlay.players[j].position)
-		{
-		case 0:
-			iV_DrawImage(IntImages,IMAGE_GN_0,x+4,y+29);
-			break;
-		case 1:
-			iV_DrawImage(IntImages,IMAGE_GN_1,x+5,y+29);
-			break;
-		case 2:
-			iV_DrawImage(IntImages,IMAGE_GN_2,x+4,y+29);
-			break;
-		case 3:
-			iV_DrawImage(IntImages,IMAGE_GN_3,x+4,y+29);
-			break;
-		case 4:
-			iV_DrawImage(IntImages,IMAGE_GN_4,x+4,y+29);
-			break;
-		case 5:
-			iV_DrawImage(IntImages,IMAGE_GN_5,x+4,y+29);
-			break;
-		case 6:
-			iV_DrawImage(IntImages,IMAGE_GN_6,x+4,y+29);
-			break;
-		case 7:
-			iV_DrawImage(IntImages,IMAGE_GN_7,x+4,y+29);
-			break;
-		default:
-			break;
-		}
-
-		if (game.skDiff[j]) // not disabled
-		{
-			switch (getPlayerColour(j))		// flag icon
-			{
-			case 0:
-				iV_DrawImage(FrontImages,IMAGE_PLAYER0,x+7,y+9);
-				break;
-			case 1:
-				iV_DrawImage(FrontImages,IMAGE_PLAYER1,x+7,y+9);
-				break;
-			case 2:
-				iV_DrawImage(FrontImages,IMAGE_PLAYER2,x+7,y+9);
-				break;
-			case 3:
-				iV_DrawImage(FrontImages,IMAGE_PLAYER3,x+7,y+9);
-				break;
-			case 4:
-				iV_DrawImage(FrontImages,IMAGE_PLAYER4,x+7,y+9);
-				break;
-			case 5:
-				iV_DrawImage(FrontImages,IMAGE_PLAYER5,x+7,y+9);
-				break;
-			case 6:
-				iV_DrawImage(FrontImages,IMAGE_PLAYER6,x+7,y+9);
-				break;
-			case 7:
-				iV_DrawImage(FrontImages,IMAGE_PLAYER7,x+7,y+9);
-				break;
-			default:
-				break;
-			}
-		}
-	}
-
 }
 
+void displayColour(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+{
+	const int x = xOffset + psWidget->x;
+	const int y = yOffset + psWidget->y;
+	const int j = psWidget->UserData;
 
+	if (!NetPlay.players[j].wzFile.isSending && game.skDiff[j])
+	{
+		drawBlueBox(x, y, psWidget->width, psWidget->height);
+		int player = getPlayerColour(j);
+		iV_DrawImage(FrontImages, IMAGE_PLAYER0 + player, x + 7, y + 9);
+	}
+}
 
 // ////////////////////////////////////////////////////////////////////////////
 // Display blue box
@@ -3752,7 +3621,6 @@ void intDisplayFeBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT 
 	UDWORD	h = psWidget->height;
 
 	drawBlueBox(x,y,w,h);
-
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -3834,8 +3702,6 @@ void displayMultiBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT 
 			break;
 		default:
 			hiToUse = 0;
-			// This line spams a TON.  (Game options screen, hover mouse over one of the flag colors)
-//			debug(LOG_WARNING, "no automatic multibut highlight for width = %d", iV_GetImageWidth(FrontImages, im_norm));
 			break;
 		}
 	}
@@ -3887,7 +3753,6 @@ void displayMultiBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT 
 		iV_TransBoxFill(x, y, x + psWidget->width, y + psWidget->height);
 	}
 }
-
 
 
 /////////////////////////////////////////////////////////////////////////////////////////

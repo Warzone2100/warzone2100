@@ -48,7 +48,7 @@ extern BOOL changeColour(UBYTE player, UBYTE col);
 extern	char	sPlayer[128];
 
 void	kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type);
-UDWORD	addPlayerBox(BOOL);			// players (mid) box
+void	addPlayerBox(BOOL);			// players (mid) box
 void loadMapPreview(bool hideInterface);
 
 
@@ -129,6 +129,7 @@ void loadMapPreview(bool hideInterface);
 #define MULTIOP_TEAMCHOOSER_FORM	102800
 #define MULTIOP_TEAMCHOOSER			102810
 #define MULTIOP_TEAMCHOOSER_END		102817
+#define MULTIOP_TEAMCHOOSER_KICK	10289
 
 // 'Ready' button
 #define MULTIOP_READY_FORM_ID		102900
@@ -233,7 +234,6 @@ void loadMapPreview(bool hideInterface);
 #define MULTIOP_COLCHOOSER_FORM	10280
 #define MULTIOP_COLCHOOSER		10281
 #define MULTIOP_COLCHOOSER_END	10288
-#define MULTIOP_COLCHOOSER_KICK	10289
 
 #define MULTIOP_LIMIT			10292	// 2 for this (+label)
 #define MULTIOP_GAMETYPE		10294
@@ -263,9 +263,13 @@ void loadMapPreview(bool hideInterface);
 #define MULTIOP_PASSWORD_BUT 920012
 #define MULTIOP_PASSWORD_EDIT 920013
 
-#define MULTIOP_NO_SOMETHING            10331  // Up to 10340 reserved for future use.
+#define MULTIOP_NO_SOMETHING            10331
 #define MULTIOP_NO_SOMETHINGX           3
 #define MULTIOP_NO_SOMETHINGY           MROW5
+
+#define MULTIOP_COLOUR_START		10332
+#define MULTIOP_COLOUR_END		(MULTIOP_COLOUR_START + MAX_PLAYERS)
+#define MULTIOP_COLOUR_WIDTH		31
 
 // ///////////////////////////////
 // Many Button Variations..
