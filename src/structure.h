@@ -51,7 +51,7 @@
 #define INFINITE_PRODUCTION	 9//10
 
 /*This should correspond to the structLimits! */
-#define	MAX_FACTORY			5
+#define	MAX_FACTORY             30
 
 
 
