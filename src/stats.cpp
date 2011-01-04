@@ -133,6 +133,7 @@ BASE_STATS::BASE_STATS(unsigned ref, std::string const &str)
 {}
 
 
+// This constructor parses the file data in buffer, and stores a pointer to the buffer, along with a list of the starts and ends of each cell in the table.
 TableView::TableView(char const *buffer, unsigned size)
 	: buffer(buffer)
 {
@@ -173,9 +174,9 @@ TableView::TableView(char const *buffer, unsigned size)
 			char const *cellEnd = std::find(cellBegin, lineEnd, ',');
 			cellNext = cellEnd + (cellEnd != lineEnd);
 
-			cells.push_back(cellBegin - buffer);
+			cells.push_back(cellBegin - buffer);  // Save the offset of the cell. The size of the cell is then the next offset minus 1 (the ',') minus this offset.
 		}
-		cells.push_back(lineEnd - buffer + 1);
+		cells.push_back(lineEnd - buffer + 1);  // Save the end of the last cell, must add 1 to skip a fake ',', because the code later assumes it's the start of a following cell.
 		lines.push_back(std::make_pair(firstCell, cells.size() - firstCell));
 	}
 }
@@ -192,12 +193,14 @@ void LineView::setError(unsigned index, char const *error)
 		char const *cellBegin = table.buffer + cells[index];
 		char const *cellEnd = table.buffer + (cells[index + 1] - 1);
 
+		// Print the location and contents of the cell along with the error message.
 		char cellDesc[150];
 		ssprintf(cellDesc, "Line %u, column %d \"%.*s\": ", lineNumber, index, std::min<unsigned>(100, cellEnd - cellBegin), cellBegin);
 		table.parseError = QString::fromUtf8((std::string(cellDesc) + error).c_str());
 	}
 	else
 	{
+		// The cell does not exist. Print the location of where the cell would have been along with the error message.
 		char cellDesc[50];
 		ssprintf(cellDesc, "Line %u, column %d: ", lineNumber, index);
 		table.parseError = QString::fromUtf8((std::string(cellDesc) + error).c_str());
