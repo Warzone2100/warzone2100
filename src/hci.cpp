@@ -28,6 +28,7 @@
  */
 
 #include <string.h>
+#include <algorithm>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
@@ -371,25 +372,12 @@ COMPONENT_STATS	**apsComponentList;
 UDWORD			numExtraSys;
 COMPONENT_STATS	**apsExtraSysList;
 
-//defined in HCI.h now
 // store the objects that are being used for the object bar
-//#define			MAX_OBJECTS		15//10 we need at least 15 for the 3 different types of factory
-BASE_OBJECT		**apsObjectList;
-SDWORD			numObjects;
-//this list is used for sorting the objects - at the mo' this is just factories
-BASE_OBJECT		**apsListToOrder;
-/*max size required to store unordered factories */
-#define			ORDERED_LIST_SIZE		(NUM_FACTORY_TYPES * MAX_FACTORY)
+std::vector<BASE_OBJECT *> apsObjectList;
 
 
 /* The current design being edited on the design screen */
 extern DROID_TEMPLATE	sCurrDesign;
-
-/* The button id of the component that is in the design */
-//UDWORD			desCompID;
-
-/* The button id of the droid template that has been locked down */
-//UDWORD			droidTemplID;
 
 /* Flags to check whether the power bars are currently on the screen */
 static BOOL				powerBarUp = false;
@@ -400,7 +388,7 @@ static BASE_OBJECT		*psStatsScreenOwner = NULL;
 static BASE_OBJECT		*apsPreviousObj[IOBJ_MAX];
 
 /* The jump position for each object on the base bar */
-static Vector2i asJumpPos[IOBJ_MAX];
+static std::vector<Vector2i> asJumpPos;
 
 /***************************************************************************************/
 /*              Function Prototypes                                                    */
@@ -575,22 +563,7 @@ BOOL intInitialise(void)
 	}
 
 	// allocate the object list
-	apsObjectList = (BASE_OBJECT **)malloc(sizeof(BASE_OBJECT *) * MAX_OBJECTS);
-	if (!apsObjectList)
-	{
-		debug( LOG_FATAL, "Out of memory" );
-		abort();
-		return false;
-	}
-
-	//allocate the order list - ONLY SIZED FOR FACTORIES AT PRESENT!!
-	apsListToOrder = (BASE_OBJECT **)malloc(sizeof(BASE_OBJECT *) * ORDERED_LIST_SIZE);
-	if (!apsListToOrder)
-	{
-		debug( LOG_FATAL, "Out of memory" );
-		abort();
-		return false;
-	}
+	apsObjectList.clear();
 
 	intInitialiseGraphics();
 
@@ -637,7 +610,7 @@ BOOL intInitialise(void)
 	intResetPreviousObj();
 
 	// reset the jump positions
-	memset(asJumpPos, 0, sizeof(asJumpPos));
+	asJumpPos.clear();
 
 	/* make demolish stat always available */
 	if(!bInTutorial)
@@ -684,8 +657,7 @@ void interfaceShutDown(void)
 	free(apsFeatureList);
 	free(apsComponentList);
 	free(apsExtraSysList);
-	free(apsObjectList);
-	free(apsListToOrder);
+	apsObjectList.clear();
 
 	apsStructStatsList = NULL;
 	ppResearchList = NULL;
@@ -695,8 +667,6 @@ void interfaceShutDown(void)
 	apsFeatureList = NULL;
 	apsComponentList = NULL;
 	apsExtraSysList = NULL;
-	apsObjectList = NULL;
-	apsListToOrder = NULL;
 
 	interfaceDeleteGraphics();
 
@@ -1529,7 +1499,7 @@ INT_RETVAL intRunWidgets(void)
 	if (intMode == INT_OBJECT || intMode == INT_STAT || intMode == INT_CMDORDER)
 	{
 		// see if there is a dead object in the list
-		for(i=0; i<numObjects; i++)
+		for(unsigned i = 0; i < apsObjectList.size(); ++i)
 		{
 			if (apsObjectList[i] && apsObjectList[i]->died)
 			{
@@ -2457,13 +2427,14 @@ static void intProcessObject(UDWORD id)
                         {
     						// set the map position - either the object position, or the position jumped from
 	    					butIndex = id - IDOBJ_OBJSTART;
-		    				if (butIndex >= 0 && butIndex < IOBJ_MAX)
+							if (butIndex >= 0 && butIndex <= IDOBJ_OBJEND - IDOBJ_OBJSTART)
 			    			{
+								asJumpPos.resize(IDOBJ_OBJEND - IDOBJ_OBJSTART, Vector2i(0, 0));
 				    			if (((asJumpPos[butIndex].x == 0) && (asJumpPos[butIndex].y == 0)) ||
 					    			!DrawnInLastFrame((SDWORD)psObj->sDisplay.frameNumber) ||
 						    		((psObj->sDisplay.screenX > pie_GetVideoBufferWidth()) || (psObj->sDisplay.screenY > pie_GetVideoBufferHeight())))
 							    {
-								    getPlayerPos((SDWORD*)&asJumpPos[butIndex].x, (SDWORD*)&asJumpPos[butIndex].y);
+									asJumpPos[butIndex] = getPlayerPos();
 
 
     								setPlayerPos(psObj->pos.x, psObj->pos.y);
@@ -3156,101 +3127,52 @@ void intDemolishCancel(void)
 //reorder the research facilities so that first built is first in the list
 static void orderResearch(void)
 {
-	BASE_OBJECT *psTemp;
-	UDWORD i, maxLoop  = (UDWORD)(numObjects / 2);
-
-	for (i = 0; i < maxLoop; i++)
-	{
-		psTemp = apsObjectList[i];
-		apsObjectList[i] = apsObjectList[(numObjects - 1) - i];
-		apsObjectList[(numObjects - 1) - i] = psTemp;
-	}
+	std::reverse(apsObjectList.begin(), apsObjectList.end());  // Why reverse this list, instead of sorting it?
 }
 
+
+static inline bool sortObjectByIdFunction(BASE_OBJECT *a, BASE_OBJECT *b)
+{
+	return (a == NULL? 0 : a->id) < (b == NULL? 0 : b->id);
+}
 
 // reorder the commanders
 static void orderDroids(void)
 {
-	SDWORD i, j;
-	BASE_OBJECT *psTemp;
-
 	debug( LOG_NEVER, "orderUnit\n" );
 
 	// bubble sort on the ID - first built will always be first in the list
-	for (i = 0; i < MAX_OBJECTS; i++)
-	{
-		for(j = i + 1; j < MAX_OBJECTS; j++)
-		{
-			if (apsObjectList[i] != NULL && apsObjectList[j] != NULL &&
-				apsObjectList[i]->id > apsObjectList[j]->id)
-			{
-				psTemp = apsObjectList[i];
-				apsObjectList[i] = apsObjectList[j];
-				apsObjectList[j] = psTemp;
-			}
-		}
-	}
+	std::sort(apsObjectList.begin(), apsObjectList.end(), sortObjectByIdFunction);  // Why sort this list, instead of reversing it?
 }
 
+static inline bool sortFactoryByTypeFunction(BASE_OBJECT *a, BASE_OBJECT *b)
+{
+	if (a == NULL || b == NULL)
+	{
+		return (a == NULL) < (b == NULL);
+	}
+	STRUCTURE *s = castStructure(a), *t = castStructure(b);
+	ASSERT(s != NULL && StructIsFactory(s) && t != NULL && StructIsFactory(t), "object is not a factory");
+	FACTORY *x = (FACTORY *)s->pFunctionality, *y = (FACTORY *)t->pFunctionality;
+	if (x->psAssemblyPoint->factoryType != y->psAssemblyPoint->factoryType)
+	{
+		return x->psAssemblyPoint->factoryType < y->psAssemblyPoint->factoryType;
+	}
+	return x->psAssemblyPoint->factoryInc < y->psAssemblyPoint->factoryInc;
+}
 
 /*puts the selected players factories in order - Standard factories 1-5, then
 cyborg factories 1-5 and then Vtol factories 1-5*/
 static void orderFactories(void)
 {
-	STRUCTURE *psStruct, *psNext;
-	SDWORD entry = 0;
-	UDWORD inc = 0, type = FACTORY_FLAG, objectInc = 0;
-
-	ASSERT(numObjects <= NUM_FACTORY_TYPES * MAX_FACTORY, "too many factories!");
-
-	//copy the object list into the list to order
-	memcpy(apsListToOrder, apsObjectList, sizeof(BASE_OBJECT*) * ORDERED_LIST_SIZE);
-
-	//go through the list of structures and extract them in order
-	while (entry < numObjects)
-	{
-		for (psStruct = (STRUCTURE*)apsListToOrder[objectInc]; psStruct != NULL; psStruct = psNext)
-		{
-			psNext = (STRUCTURE*)apsListToOrder[++objectInc];
-			if ((SDWORD)objectInc >= numObjects)
-			{
-				psNext = NULL;
-			}
-
-			ASSERT(StructIsFactory(psStruct), "structure is not a factory");
-
-			if (((FACTORY*)psStruct->pFunctionality)->psAssemblyPoint->factoryInc == inc
-			    && ((FACTORY*)psStruct->pFunctionality)->psAssemblyPoint->factoryType == type)
-			{
-				apsObjectList[entry++] = (BASE_OBJECT*)psStruct;
-				//quick check that don't end up with more!
-				if (entry > numObjects)
-				{
-					ASSERT(false, "too many objects!");
-					return;
-				}
-				break;
-			}
-		}
-		inc++;
-		if (inc > MAX_FACTORY)
-		{
-			inc = 0;
-			type++;
-			if (type > NUM_FACTORY_TYPES)
-			{
-				type = 0;
-			}
-		}
-		objectInc = 0;
-	}
+	std::sort(apsObjectList.begin(), apsObjectList.end(), sortFactoryByTypeFunction);
 }
 
 
 /** Order the objects in the bottom bar according to their type. */
 static void orderObjectInterface(void)
 {
-	if (!apsObjectList || !apsObjectList[0])
+	if (apsObjectList.empty())
 	{
 		//no objects so nothing to order!
 		return;
@@ -3276,52 +3198,40 @@ static void orderObjectInterface(void)
 	}
 }
 
+// Rebuilds apsObjectList, and returns the index of psBuilding in apsObjectList, or returns apsObjectList.size() if not present (not sure whether that's supposed to be possible).
+static unsigned rebuildFactoryListAndFindIndex(STRUCTURE *psBuilding)
+{
+	apsObjectList.clear();
+	for (STRUCTURE *psCurr = interfaceStructList(); psCurr; psCurr = psCurr->psNext)
+	{
+		if (objSelectFunc(psCurr))
+		{
+			// The list is ordered now so we have to get all possible entries and sort it before checking if this is the one!
+			apsObjectList.push_back(psCurr);
+		}
+	}
+	// order the list
+	orderFactories();
+	// now look thru the list to see which one corresponds to the factory that has just finished
+	return std::find(apsObjectList.begin(), apsObjectList.end(), psBuilding) - apsObjectList.begin();
+}
 
 /* Tell the interface a factory has completed building ALL droids */
 void intManufactureFinished(STRUCTURE *psBuilding)
 {
-	SDWORD		    structureID;
-	STRUCTURE       *psCurr;
-
 	ASSERT(psBuilding != NULL, "Invalid structure pointer");
 
 	if ((intMode == INT_OBJECT || intMode == INT_STAT) && objMode == IOBJ_MANUFACTURE)
 	{
 		/* Find which button the structure is on and clear it's stats */
-		structureID = 0;
-		numObjects = 0;
-		memset(apsObjectList, 0, sizeof(BASE_OBJECT *) * MAX_OBJECTS);
-		for (psCurr = interfaceStructList(); psCurr; psCurr = psCurr->psNext)
+		unsigned structureIndex = rebuildFactoryListAndFindIndex(psBuilding);
+		if (structureIndex != apsObjectList.size())
 		{
-			if (objSelectFunc((BASE_OBJECT *)psCurr))
+			intSetStats(structureIndex + IDOBJ_STATSTART, NULL);
+			// clear the loop button if interface is up
+			if (widgGetFromID(psWScreen, IDSTAT_LOOP_BUTTON))
 			{
-				// The list is ordered now so we have to get all possible entries and sort it before checking if this is the one!
-				apsObjectList[numObjects] = (BASE_OBJECT *)psCurr;
-				numObjects++;
-			}
-			// make sure the list doesn't overflow
-			if (numObjects >= MAX_OBJECTS)
-			{
-				break;
-			}
-		}
-		// order the list
-		orderFactories();
-
-		// now look thru the list to see which one corresponds to the factory that has just finished
-		for (structureID = 0; structureID < numObjects; structureID++)
-		{
-			BASE_OBJECT *psObj = apsObjectList[structureID];
-
-			if ((STRUCTURE *)psObj == psBuilding)
-			{
-				intSetStats(structureID + IDOBJ_STATSTART, NULL);
-				// clear the loop button if interface is up
-				if (widgGetFromID(psWScreen,IDSTAT_LOOP_BUTTON))
-				{
-					widgSetButtonState(psWScreen, IDSTAT_LOOP_BUTTON, 0);
-				}
-				break;
+				widgSetButtonState(psWScreen, IDSTAT_LOOP_BUTTON, 0);
 			}
 		}
 	}
@@ -3329,46 +3239,15 @@ void intManufactureFinished(STRUCTURE *psBuilding)
 
 void intUpdateManufacture(STRUCTURE *psBuilding)
 {
-	SDWORD		structureID;
-	STRUCTURE       *psCurr;
-	FACTORY		*psFact;
-
 	ASSERT(psBuilding != NULL, "Invalid structure pointer");
 
 	if ((intMode == INT_OBJECT || intMode == INT_STAT) && objMode == IOBJ_MANUFACTURE)
 	{
 		/* Find which button the structure is on and update its stats */
-		structureID = 0;
-		numObjects = 0;
-		memset(apsObjectList, 0, sizeof(BASE_OBJECT *) * MAX_OBJECTS);
-		for (psCurr = interfaceStructList(); psCurr; psCurr = psCurr->psNext)
+		unsigned structureIndex = rebuildFactoryListAndFindIndex(psBuilding);
+		if (structureIndex != apsObjectList.size())
 		{
-			if (objSelectFunc((BASE_OBJECT *)psCurr))
-			{
-				// The list is ordered now so we have to get all possible entries and sort it before checking if this is the one!
-				apsObjectList[numObjects] = (BASE_OBJECT *)psCurr;
-				numObjects++;
-			}
-			// make sure the list doesn't overflow
-			if (numObjects >= MAX_OBJECTS)
-			{
-				break;
-			}
-		}
-		// order the list
-		orderFactories();
-
-		// now look thru the list to see which one corresponds to the factory that has just finished
-		for (structureID = 0; structureID < numObjects; structureID++)
-		{
-			BASE_OBJECT *psObj = apsObjectList[structureID];
-
-			if ((STRUCTURE *)psObj == psBuilding)
-			{
-				psFact = &((STRUCTURE *)psObj)->pFunctionality->factory;
-				intSetStats(structureID + IDOBJ_STATSTART, psFact->psSubject);
-				break;
-			}
+			intSetStats(structureIndex + IDOBJ_STATSTART, psBuilding->pFunctionality->factory.psSubject);
 		}
 	}
 }
@@ -3389,14 +3268,7 @@ void intResearchFinished(STRUCTURE *psBuilding)
  */
 UWORD numForms(UDWORD total, UDWORD perForm)
 {
-	/* If the buttons fit exactly, don't have to add one */
-	if (total != 0 && (total % perForm) == 0)
-	{
-		return (UWORD)(total/perForm);
-	}
-
-	/* Otherwise add one to the div */
-	return (UWORD)(total/perForm + 1);
+	return std::max((total + perForm - 1)/perForm, 1u);
 }
 
 
@@ -3895,9 +3767,8 @@ BOOL intAddOptions(void)
 static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,BOOL bForceStats)
 {
 	UDWORD			displayForm;
-	UDWORD			i, statID=0;
-	SDWORD			objLoop;
-	BASE_OBJECT		*psObj, *psFirst;
+	UDWORD                  statID = 0;
+	BASE_OBJECT *           psFirst;
 	BASE_STATS		*psStats;
 	SDWORD			BufferID;
 	DROID			*Droid;
@@ -3915,7 +3786,7 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	else
 	{
 		// reset the object position array
-		memset(asJumpPos, 0, sizeof(asJumpPos));
+		asJumpPos.clear();
 	}
 
 	Animate = false;
@@ -3924,29 +3795,17 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	ClearTopicBuffers();
 
 	/* See how many objects the player has */
-	numObjects = 0;
-	psFirst = NULL;
-	memset(apsObjectList, 0, sizeof(BASE_OBJECT *) * MAX_OBJECTS);
-	for(psObj=psObjects; psObj; psObj = psObj->psNext)
+	apsObjectList.clear();
+	for (BASE_OBJECT *psObj = psObjects; psObj; psObj = psObj->psNext)
 	{
 		if (objSelectFunc(psObj))
 		{
-			apsObjectList[numObjects] = psObj;
-			numObjects++;
-			if (numObjects == 1)
-			{
-				psFirst = psObj;
-			}
-
-			// make sure the list doesn't overflow
-			if (numObjects >= MAX_OBJECTS)
-			{
-				break;
-			}
+			apsObjectList.push_back(psObj);
 		}
 	}
 
-	if(numObjects == 0) {
+	if (apsObjectList.empty())
+	{
 		// No objects so close the stats window if it's up...
 		if(widgGetFromID(psWScreen,IDSTAT_FORM) != NULL) {
 			intRemoveStatsNoAnim();
@@ -3954,27 +3813,16 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 		// and return.
 		return false;
 	}
+	psFirst = apsObjectList.front();
 
     /*if psSelected != NULL then check its in the list of suitable objects for
     this instance of the interface - this could happen when a structure is upgraded*/
-	objLoop = 0;
-    if (psSelected != NULL)
-    {
-        for(objLoop = 0; objLoop < numObjects; objLoop++)
-        {
-            if (psSelected == apsObjectList[objLoop])
-            {
-                //found it so quit loop
-                break;
-            }
-        }
-    }
     //if have reached the end of the loop and not quit out, then can't have found the selected object in the list
-    if (objLoop == numObjects)
-    {
-        //initialise psSelected so gets set up with an iten in the list
-        psSelected = NULL;
-    }
+	if (std::find(apsObjectList.begin(), apsObjectList.end(), psSelected) == apsObjectList.end())
+	{
+		//initialise psSelected so gets set up with an iten in the list
+		psSelected = NULL;
+	}
 
 	//order the objects according to what they are
 	orderObjectInterface();
@@ -4092,8 +3940,7 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	sFormInit.y = OBJ_TABY;
 	sFormInit.width = OBJ_WIDTH;
 	sFormInit.height = OBJ_HEIGHT;
-	sFormInit.numMajor = numForms((OBJ_BUTWIDTH + OBJ_GAP) * numObjects,
-								  OBJ_WIDTH - OBJ_GAP);
+	sFormInit.numMajor = numForms(apsObjectList.size(), (OBJ_WIDTH - OBJ_GAP) / (OBJ_BUTWIDTH + OBJ_GAP));
 	sFormInit.majorPos = WFORM_TABTOP;
 	sFormInit.minorPos = WFORM_TABNONE;
 	sFormInit.majorSize = OBJ_TABWIDTH;
@@ -4104,17 +3951,14 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	sFormInit.pUserData = &StandardTab;
 	sFormInit.pTabDisplay = intDisplayTab;
 
-	if (sFormInit.numMajor > MAX_TAB_STD_SHOWN)
+	if (sFormInit.numMajor*(sFormInit.majorSize + sFormInit.tabMajorGap) > sFormInit.width)
 	{
-		// We do NOT want more than this amount of tabs, 40 items should be more than enough(?)
-		sFormInit.numMajor = MAX_TAB_STD_SHOWN;
-		// If we were to change this in future then :
-		//Just switching from normal sized tabs to smaller ones to fit more in form.
-		//		sFormInit.pUserData = &SmallTab;
-		//		sFormInit.majorSize /= 2;
-		// Change MAX_TAB_STD_SHOWN to ..SMALL_SHOWN, this will give us 80 items max.
+		sFormInit.pUserData = &SmallTab;
+		sFormInit.majorSize /= 2;
 	}
-	for (i=0; i< sFormInit.numMajor; i++)
+	sFormInit.maxTabsShown = WFORM_MAXMAJOR;
+	sFormInit.numMajor = std::min<unsigned>(sFormInit.numMajor, WFORM_MAXMAJOR);
+	for (unsigned i = 0; i < sFormInit.numMajor; ++i)
 	{
 		sFormInit.aNumMinors[i] = 1;
 	}
@@ -4213,9 +4057,9 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	sLabInitCmdExp.pText = "@@@@@ - overrun";
 
 	displayForm = 0;
-	for(i=0; i<(UDWORD)numObjects; i++)
+	for (unsigned i = 0; i < apsObjectList.size(); ++i)
 	{
-		psObj = apsObjectList[i];
+		BASE_OBJECT *psObj = apsObjectList[i];
 		if(psObj->died == 0) {	// Don't add the button if the objects dead.
 			IsFactory = false;
 
@@ -4823,7 +4667,7 @@ static BASE_OBJECT *intGetObject(UDWORD id)
 	}
 
 	/* Find the object that the ID refers to */
-	ASSERT_OR_RETURN(NULL, (SDWORD)id - IDOBJ_OBJSTART >= 0 && (SDWORD)id - IDOBJ_OBJSTART < numObjects, "Invalid button ID %u", id);
+	ASSERT_OR_RETURN(NULL, id - IDOBJ_OBJSTART < apsObjectList.size(), "Invalid button ID %u", id);
 	psObj = apsObjectList[id - IDOBJ_OBJSTART];
 
 	return psObj;
@@ -5887,8 +5731,7 @@ static void intObjectRMBPressed(UDWORD id)
 	BASE_OBJECT		*psObj;
 	STRUCTURE		*psStructure;
 
-	ASSERT( (SDWORD)id - IDOBJ_OBJSTART < numObjects,
-			"intObjectRMBPressed: Invalid object id" );
+	ASSERT(id - IDOBJ_OBJSTART < apsObjectList.size(), "intObjectRMBPressed: Invalid object id");
 
 	/* Find the object that the ID refers to */
 	psObj = intGetObject(id);
@@ -5917,8 +5760,7 @@ static void intObjStatRMBPressed(UDWORD id)
 	BASE_OBJECT		*psObj;
 	STRUCTURE		*psStructure;
 
-	ASSERT( (SDWORD)id - IDOBJ_STATSTART < numObjects,
-			"intObjStatRMBPressed: Invalid stat id" );
+	ASSERT(id - IDOBJ_STATSTART < apsObjectList.size(), "intObjStatRMBPressed: Invalid stat id" );
 
 	/* Find the object that the ID refers to */
 	psObj = intGetObject(id);

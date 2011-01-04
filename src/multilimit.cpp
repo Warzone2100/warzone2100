@@ -424,7 +424,7 @@ static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 	STRUCTURE_STATS	*stat = asStructureStats + psWidget->UserData;
 	Position position;
 	Vector3i rotation;
-	char	str[3];
+	char str[20];
 
 	UDWORD scale,Radius;
 
@@ -458,7 +458,7 @@ static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 	iV_DrawText(_(getName(stat->pName)), x + 80, y + (psWidget->height / 2) + 3);
 
 	// draw limit
-	sprintf(str,"%d",((W_SLIDER*)(widgGetFromID(psWScreen,psWidget->id+1)))->pos);
+	ssprintf(str, "%d", ((W_SLIDER *)widgGetFromID(psWScreen, psWidget->id + 1))->pos);
 	iV_DrawText(str, x+270, y+(psWidget->height/2)+3);
 
 	return;

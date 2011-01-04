@@ -29,8 +29,6 @@
 
 #include "message.h"
 
-// store the objects that are being used for the object bar
-#define MAX_OBJECTS 15 //10 we need at least 15 for the 3 different types of factory
 
 #define BASE_COORDS_X	(640)
 #define BASE_COORDS_Y	(480)
@@ -61,7 +59,7 @@
 #define IDOBJ_FORM			3000		// The object back form for build/manufacture/research
 #define IDOBJ_CLOSE			3001		// The form for the close button
 #define IDOBJ_OBJSTART		3002		// The first ID for droids/factories/research
-#define IDOBJ_OBJEND		3021		// The last ID for droids/factories/research
+#define IDOBJ_OBJEND            3099            // The last ID for droids/factories/research
 #define IDOBJ_STATSTART		3100		// The first ID for stats
 #define IDOBJ_STATEND		3199		// The last ID for stats
 #define IDOBJ_PROGBARSTART  3200		// The first ID for stats progress bars.

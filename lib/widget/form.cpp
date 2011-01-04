@@ -62,6 +62,7 @@ W_FORMINIT::W_FORMINIT()
 	, numMajor(0)
 	// aNumMinors
 	, TabMultiplier(0)
+	, maxTabsShown(MAX_TAB_SMALL_SHOWN - 1)  // Equal to TAB_SEVEN, which is equal to 7.
 	, pTip(NULL)
 	// apMajorTips
 	// apMinorTips
@@ -183,6 +184,7 @@ W_TABFORM::W_TABFORM(W_FORMINIT const *init)
 	, state(0)  // This assignment was previously done by a memset.
 	, tabHiLite(~0)
 	, TabMultiplier(init->TabMultiplier)
+	, maxTabsShown(init->maxTabsShown)
 	, numStats(init->numStats)
 	, numButtons(init->numButtons)
 	, pTabDisplay(init->pTabDisplay)
@@ -689,7 +691,7 @@ void formGetOrigin(W_FORM *psWidget, SDWORD *pXOrigin, SDWORD *pYOrigin)
 static BOOL formPickHTab(TAB_POS *psTabPos,
 						 SDWORD x0, SDWORD y0,
 						 UDWORD width, UDWORD height, UDWORD gap,
-						 UDWORD number, SDWORD fx, SDWORD fy)
+						 UDWORD number, SDWORD fx, SDWORD fy, unsigned maxTabsShown)
 {	
 	SDWORD	x, y1;
 	UDWORD	i;
@@ -711,21 +713,18 @@ static BOOL formPickHTab(TAB_POS *psTabPos,
 	// Also need to check if the TabMultiplier is set or not, if not then it means 
 	// we have not yet added the code to display/handle the tab scroll buttons.
 	// At this time, I think only the design screen has this limitation of only 8 tabs.
-	if (number > (MAX_TAB_SMALL_SHOWN - 1)  && psTabPos->TabMultiplier) // of course only do this if we actually need >8 tabs.
+	if (number > maxTabsShown  && psTabPos->TabMultiplier) // of course only do this if we actually need >8 tabs.
 	{
-		number -= (psTabPos->TabMultiplier - 1) * TAB_SEVEN;
-		if (number > TAB_SEVEN)	// is it still > than TAB_SEVEN?
-		{
-			number = TAB_SEVEN;
-		}
+		number -= (psTabPos->TabMultiplier - 1) * maxTabsShown;
+		number = std::min(number, maxTabsShown);  // is it still > than maxTabsShown?
 	}
-	else if (number > MAX_TAB_SMALL_SHOWN)
+	else if (number > maxTabsShown + 1)
 	{
 		// we need to clip the tab count to max amount *without* the scrolltabs visible.
 		// The reason for this, is that in design screen & 'feature' debug & others(?),
 		// we can get over max # of tabs that the game originally supported.
 		// This made it look bad.
-		number = MAX_TAB_SMALL_SHOWN;
+		number = maxTabsShown + 1;
 	}
 
 	for (i=0; i < number; i++)
@@ -737,7 +736,7 @@ static BOOL formPickHTab(TAB_POS *psTabPos,
 			// found a tab under the coordinate 
 			if (psTabPos->TabMultiplier)	//Checks to see we need the extra tab scroll buttons
 			{	// holds the VIRTUAL tab #, since obviously, we can't display more than 7
-				psTabPos->index = (i % TAB_SEVEN)+ ((psTabPos->TabMultiplier -1)*TAB_SEVEN);		
+				psTabPos->index = (i % maxTabsShown)+ ((psTabPos->TabMultiplier -1)*maxTabsShown);
 			}
 			else
 			{	// This is a normal request.
@@ -884,7 +883,7 @@ static BOOL formPickTab(W_TABFORM *psForm, UDWORD fx, UDWORD fy,
 	case WFORM_TABTOP:
 		if (formPickHTab(psTabPos, x0+psForm->majorOffset - xOffset, y0 - psForm->tabMajorThickness,
 					 psForm->majorSize, psForm->tabMajorThickness, psForm->tabMajorGap,
-					 psForm->numMajor, fx, fy))
+					 psForm->numMajor, fx, fy, psForm->maxTabsShown))
 		{
 			return true;
 		}
@@ -893,7 +892,7 @@ static BOOL formPickTab(W_TABFORM *psForm, UDWORD fx, UDWORD fy,
 	case WFORM_TABBOTTOM:
 		if (formPickHTab(psTabPos, x0+psForm->majorOffset - xOffset, y1,
 					 psForm->majorSize, psForm->tabMajorThickness, psForm->tabMajorGap,
-					 psForm->numMajor, fx, fy))
+					 psForm->numMajor, fx, fy, psForm->maxTabsShown))
 		{
 			return true;
 		}
@@ -927,7 +926,7 @@ static BOOL formPickTab(W_TABFORM *psForm, UDWORD fx, UDWORD fy,
 	case WFORM_TABTOP:
 		if (formPickHTab(psTabPos, x0+psForm->minorOffset - xOffset2, y0 - psForm->tabMinorThickness,
 					 psForm->minorSize, psForm->tabMinorThickness, psForm->tabMinorGap,
-					 psMajor->numMinor, fx, fy))
+					 psMajor->numMinor, fx, fy, psForm->maxTabsShown))
 		{
 			psTabPos->index += psForm->numMajor;
 			return true;
@@ -936,7 +935,7 @@ static BOOL formPickTab(W_TABFORM *psForm, UDWORD fx, UDWORD fy,
 	case WFORM_TABBOTTOM:
 		if (formPickHTab(psTabPos, x0+psForm->minorOffset - xOffset2, y1,
 					 psForm->minorSize, psForm->tabMinorThickness, psForm->tabMinorGap,
-					 psMajor->numMinor, fx, fy))
+					 psMajor->numMinor, fx, fy, psForm->maxTabsShown))
 		{
 			psTabPos->index += psForm->numMajor;
 			return true;
@@ -1260,18 +1259,18 @@ static void formDisplayTTabs(W_TABFORM *psForm,SDWORD x0, SDWORD y0,
 	x = x0 + 2;
 	x1 = x + width - 2;
 	y1 = y0 + height;
-	if (number > (MAX_TAB_SMALL_SHOWN - 1))	//we can display 8 tabs fine with no extra voodoo.
+	if (number > psForm->maxTabsShown)  //we can display 8 tabs fine with no extra voodoo.
 	{	// We do NOT want to draw all the tabs once we have drawn 7 tabs
 		// Both selected & hilite are converted from virtual tab range, to a range
 		// that is seen on the form itself.  This would be 0-6 (7 tabs)
 		// We also fix drawnumber, so we don't display too many tabs since the pages
 		// will be empty.
-		drawnumber =  (number - (( psForm->TabMultiplier -1) * TAB_SEVEN));
-		if (drawnumber > TAB_SEVEN) drawnumber = TAB_SEVEN ;	
-		selected = (selected % TAB_SEVEN);	//Go from Virtual range, to our range
+		drawnumber =  (number - (( psForm->TabMultiplier -1) * psForm->maxTabsShown));
+		if (drawnumber > psForm->maxTabsShown) drawnumber = psForm->maxTabsShown ;
+		selected = (selected % psForm->maxTabsShown);	//Go from Virtual range, to our range
 
 		if(hilite != 65535)			//sigh.  Don't blame me for this!It is THEIR 'hack'.
-		hilite = hilite % TAB_SEVEN; //we want to hilite tab 0 - 6.
+		hilite = hilite % psForm->maxTabsShown; //we want to hilite tab 0 - 6.
 	}
 	else
 	{	// normal draw

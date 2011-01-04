@@ -1822,10 +1822,9 @@ void setViewPos( UDWORD x, UDWORD y, WZ_DECL_UNUSED BOOL Pan )
 }
 
 /// Get the player position
-void getPlayerPos(SDWORD *px, SDWORD *py)
+Vector2i getPlayerPos()
 {
-	*px = player.p.x + (visibleTiles.x/2)*TILE_UNITS;
-	*py = player.p.z + (visibleTiles.y/2)*TILE_UNITS;
+	return removeZ(swapYZ(player.p)) + visibleTiles/2*TILE_UNITS;
 }
 
 /// Set the player position

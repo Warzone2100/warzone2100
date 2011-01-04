@@ -60,7 +60,7 @@ extern BOOL	radarOnScreen;
 extern bool rangeOnScreen; // Added to get sensor/gun range on screen.  -Q 5-10-05
 extern void	scaleMatrix( UDWORD percent );
 extern void setViewPos( UDWORD x, UDWORD y, BOOL Pan);
-extern void getPlayerPos(SDWORD *px, SDWORD *py);
+Vector2i    getPlayerPos();
 extern void setPlayerPos(SDWORD x, SDWORD y);
 extern void disp3d_setView(iView *newView);
 extern void disp3d_resetView(void);

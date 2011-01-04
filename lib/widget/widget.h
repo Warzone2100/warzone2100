@@ -167,6 +167,7 @@ struct W_FORMINIT : public W_INIT
 	UWORD			numMajor;			///< Number of major tabs
 	UWORD			aNumMinors[WFORM_MAXMAJOR];	///< Number of minor tabs for each major
 	SWORD			TabMultiplier;			///< Used to tell system we got lots of (virtual) tabs to display
+	unsigned                maxTabsShown;                   ///< Maximum number of tabs shown at once.
 	const char		*pTip;				///< Tool tip for the form itself
 	char			*apMajorTips[WFORM_MAXMAJOR];	///< Tool tips for the major tabs
 	char			*apMinorTips[WFORM_MAXMAJOR][WFORM_MAXMINOR];	///< Tool tips for the minor tabs
