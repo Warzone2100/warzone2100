@@ -638,7 +638,7 @@ void missionFlyTransportersIn( SDWORD iPlayer, BOOL bTrackTransporter )
 	UWORD	iX, iY, iZ;
 	SDWORD	iLandX, iLandY, iDx, iDy;
 
-	ASSERT_OR_RETURN(, iPlayer < 8, "Flying nonexistent player %d's transporters in", iPlayer);
+	ASSERT_OR_RETURN(, iPlayer < MAX_PLAYERS, "Flying nonexistent player %d's transporters in", iPlayer);
 
 	bTrackingTransporter = bTrackTransporter;
 

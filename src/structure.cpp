@@ -2543,9 +2543,6 @@ static bool IsFactoryCommanderGroupFull(const FACTORY* psFactory)
 // Disallow manufacture of units once these limits are reached,
 // doesn't mean that these numbers can't be exceeded if units are
 // put down in the editor or by the scripts.
-static UWORD MaxDroidsAllowedPerPlayer[MAX_PLAYERS] = {100, 999, 999, 999, 999, 999, 999, 999};
-// FIXME: We should have this variable user defined.
-static UWORD MaxDroidsAllowedPerPlayerMultiPlayer[MAX_PLAYERS] = {450, 450, 450, 450, 450, 450, 450, 450};
 
 BOOL IsPlayerStructureLimitReached(UDWORD PlayerNumber)
 {
@@ -2556,7 +2553,7 @@ BOOL IsPlayerStructureLimitReached(UDWORD PlayerNumber)
 
 UDWORD getMaxDroids(UDWORD PlayerNumber)
 {
-	return (bMultiPlayer ? MaxDroidsAllowedPerPlayerMultiPlayer[PlayerNumber] : MaxDroidsAllowedPerPlayer[PlayerNumber] );
+	return bMultiPlayer? 450 : PlayerNumber == 0? 100 : 999;
 
 }
 
@@ -2565,18 +2562,7 @@ BOOL IsPlayerDroidLimitReached(UDWORD PlayerNumber)
 {
 	unsigned int numDroids = getNumDroids(PlayerNumber) + getNumMissionDroids(PlayerNumber) + getNumTransporterDroids(PlayerNumber);
 
-	if (bMultiPlayer)
-	{
-		if ( numDroids >= MaxDroidsAllowedPerPlayerMultiPlayer[PlayerNumber] )
-			return true;
-	}
-	else
-	{
-		if( numDroids >= MaxDroidsAllowedPerPlayer[PlayerNumber] )
-			return true;
-	}
-
-	return false;
+	return numDroids >= getMaxDroids(PlayerNumber);
 }
 
 

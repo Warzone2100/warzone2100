@@ -30,7 +30,6 @@
 // Base threat range in world units
 #define	W_BASE_THREAT_RANGE		((17 + (mapWidth + mapHeight) / 2 / 35) * TILE)
 #define ALL_ALLIES				-1
-#define	MAX_PLAYERS				8
 
 #define	BASE_DEFEND_DURATION	(3 * 60)
 #define	BASE_DEFEND_RADIUS		(15 * TILE)

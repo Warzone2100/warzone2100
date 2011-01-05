@@ -136,7 +136,7 @@ typedef enum
 
 #define SESSION_JOINDISABLED	1
 
-#define MAX_CONNECTED_PLAYERS   8
+#define MAX_CONNECTED_PLAYERS   MAX_PLAYERS
 #define MAX_TMP_SOCKETS         16
 
 typedef struct {					//Available game storage... JUST FOR REFERENCE!

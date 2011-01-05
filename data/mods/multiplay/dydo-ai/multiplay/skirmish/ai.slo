@@ -101,7 +101,6 @@ Improve the way the units are gathered. dyDo should be abale to attack from vari
 #define EVENT_CHECK_NUMBER 23
 
 #define NUM_AI_PERSONALITIES 4
-#define	MAX_PLAYERS	8
 #define	TILE				128
 #define	MAX_DROIDS	150
 
