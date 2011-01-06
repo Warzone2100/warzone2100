@@ -104,7 +104,7 @@ enum STRUCT_ANIM_STATES
 //this structure is used to hold the permenant stats for each type of building
 struct STRUCTURE_STATS : public BASE_STATS
 {
-	STRUCTURE_STATS() : asFuncList(NULL) {}
+	STRUCTURE_STATS() {}
 	STRUCTURE_STATS(LineView line);
 
 	STRUCTURE_TYPE	type;				/* the type of structure */
