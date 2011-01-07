@@ -102,6 +102,12 @@ static inline WZ_DECL_PURE Vector3i operator -(Vector3i const &a, Vector3i const
 static inline WZ_DECL_PURE Vector3f operator -(Vector3f const &a, Vector3f const &b) { return Vector3f(a.x - b.x, a.y - b.y, a.z - b.z); }
 //static inline WZ_DECL_PURE Rotation operator -(Rotation const &a, Rotation const &b) { return Rotation((int16_t)a.direction - (int16_t)b.direction, (int16_t)a.pitch - (int16_t)b.pitch, (int16_t)a.roll - (int16_t)b.roll); }
 
+// -vector -> vector
+static inline WZ_DECL_PURE Vector2i operator -(Vector2i const &a) { return Vector2i(-a.x, -a.y); }
+static inline WZ_DECL_PURE Vector2f operator -(Vector2f const &a) { return Vector2f(-a.x, -a.y); }
+static inline WZ_DECL_PURE Vector3i operator -(Vector3i const &a) { return Vector3i(-a.x, -a.y, -a.z); }
+static inline WZ_DECL_PURE Vector3f operator -(Vector3f const &a) { return Vector3f(-a.x, -a.y, -a.z); }
+
 // vector * scalar -> vector
 static inline WZ_DECL_PURE Vector2i operator *(Vector2i const &a, int   s) { return Vector2i(a.x*s, a.y*s); }
 static inline WZ_DECL_PURE Vector2f operator *(Vector2f const &a, float s) { return Vector2f(a.x*s, a.y*s); }

@@ -1412,15 +1412,13 @@ void actionUpdateDroid(DROID *psDroid)
 		else
 		{
 			// if the vtol is close to the target, go around again
-			const int xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psDroid->psActionTarget[0]->pos.x;
-			const int ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psDroid->psActionTarget[0]->pos.y;
-			const int rangeSq = xdiff * xdiff + ydiff * ydiff;
-			if (rangeSq < (VTOL_ATTACK_TARDIST*VTOL_ATTACK_TARDIST))
+			const Vector2i diff = removeZ(psDroid->pos - psDroid->psActionTarget[0]->pos);
+			const int rangeSq = diff*diff;
+			if (rangeSq < VTOL_ATTACK_TARDIST*VTOL_ATTACK_TARDIST)
 			{
 				// don't do another attack run if already moving away from the target
-				const int xdiff = (SDWORD)psDroid->sMove.DestinationX - (SDWORD)psDroid->psActionTarget[0]->pos.x;
-				const int ydiff = (SDWORD)psDroid->sMove.DestinationY - (SDWORD)psDroid->psActionTarget[0]->pos.y;
-				if ((xdiff*xdiff + ydiff*ydiff) < (VTOL_ATTACK_TARDIST*VTOL_ATTACK_TARDIST))
+				const Vector2i diff = psDroid->sMove.destination - removeZ(psDroid->psActionTarget[0]->pos);
+				if (diff*diff < VTOL_ATTACK_TARDIST*VTOL_ATTACK_TARDIST)
 				{
 					actionAddVtolAttackRun( psDroid );
 				}
@@ -1431,9 +1429,8 @@ void actionUpdateDroid(DROID *psDroid)
 				if (rangeSq > (SDWORD)(psWeapStats->longRange * psWeapStats->longRange))
 				{
 					// don't do another attack run if already heading for the target
-					const int xdiff = (SDWORD)psDroid->sMove.DestinationX - (SDWORD)psDroid->psActionTarget[0]->pos.x;
-					const int ydiff = (SDWORD)psDroid->sMove.DestinationY - (SDWORD)psDroid->psActionTarget[0]->pos.y;
-					if ((xdiff*xdiff + ydiff*ydiff) > (VTOL_ATTACK_TARDIST*VTOL_ATTACK_TARDIST))
+					const Vector2i diff = psDroid->sMove.destination - removeZ(psDroid->psActionTarget[0]->pos);
+					if (diff*diff > VTOL_ATTACK_TARDIST*VTOL_ATTACK_TARDIST)
 					{
 						moveDroidToDirect(psDroid, psDroid->psActionTarget[0]->pos.x,psDroid->psActionTarget[0]->pos.y);
 					}
@@ -2112,11 +2109,10 @@ void actionUpdateDroid(DROID *psDroid)
 				(psDroid->psTarget->type != OBJ_STRUCTURE))
 			{
 				//move droids to within short range of the sensor now!!!!
-				int xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psDroid->psTarget->pos.x;
-				int ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psDroid->psTarget->pos.y;
+				Vector2i diff = removeZ(psDroid->pos - psDroid->psTarget->pos);
 				int rangeSq = asWeaponStats[psDroid->asWeaps[0].nStat].shortRange;
 				rangeSq = rangeSq * rangeSq;
-				if (xdiff*xdiff + ydiff*ydiff < rangeSq)
+				if (diff*diff < rangeSq)
 				{
 					if (!DROID_STOPPED(psDroid))
 					{
@@ -2127,12 +2123,10 @@ void actionUpdateDroid(DROID *psDroid)
 				{
 					if (!DROID_STOPPED(psDroid))
 					{
-						xdiff = (SDWORD)psDroid->psTarget->pos.x - (SDWORD)psDroid->sMove.DestinationX;
-						ydiff = (SDWORD)psDroid->psTarget->pos.y - (SDWORD)psDroid->sMove.DestinationY;
+						diff = removeZ(psDroid->psTarget->pos) - psDroid->sMove.destination;
 					}
 
-					if (DROID_STOPPED(psDroid) ||
-						(xdiff*xdiff + ydiff*ydiff > rangeSq))
+					if (DROID_STOPPED(psDroid) || diff*diff > rangeSq)
 					{
 						if (secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_HOLD)
 						{
@@ -2961,7 +2955,7 @@ static bool vtolLandingTileSearchFunction(int x, int y, void* matchState)
 // choose a landing position for a VTOL when it goes to rearm
 bool actionVTOLLandingPos(const DROID* psDroid, UDWORD* px, UDWORD* py)
 {
-	int startX, startY, tx, ty;
+	int startX, startY;
 	DROID* psCurr;
 	bool   foundTile;
 	Vector2i xyCoords;
@@ -2975,21 +2969,20 @@ bool actionVTOLLandingPos(const DROID* psDroid, UDWORD* px, UDWORD* py)
 	// set blocking flags for all the other droids
 	for(psCurr=apsDroidLists[psDroid->player]; psCurr; psCurr = psCurr->psNext)
 	{
+		Vector2i t;
 		if (DROID_STOPPED(psCurr))
 		{
-			tx = map_coord(psCurr->pos.x);
-			ty = map_coord(psCurr->pos.y);
+			t = map_coord(removeZ(psCurr->pos));
 		}
 		else
 		{
-			tx = map_coord(psCurr->sMove.DestinationX);
-			ty = map_coord(psCurr->sMove.DestinationY);
+			t = map_coord(psCurr->sMove.destination);
 		}
 		if (psCurr != psDroid)
 		{
-			if (tileOnMap(tx, ty))
+			if (tileOnMap(t))
 			{
-				mapTile(tx,ty)->tileInfoBits |= BITS_FPATHBLOCK;
+				mapTile(t)->tileInfoBits |= BITS_FPATHBLOCK;
 			}
 		}
 	}
@@ -3008,19 +3001,18 @@ bool actionVTOLLandingPos(const DROID* psDroid, UDWORD* px, UDWORD* py)
 	// clear blocking flags for all the other droids
 	for(psCurr=apsDroidLists[psDroid->player]; psCurr; psCurr = psCurr->psNext)
 	{
+		Vector2i t;
 		if (DROID_STOPPED(psCurr))
 		{
-			tx = map_coord(psCurr->pos.x);
-			ty = map_coord(psCurr->pos.y);
+			t = map_coord(removeZ(psCurr->pos));
 		}
 		else
 		{
-			tx = map_coord(psCurr->sMove.DestinationX);
-			ty = map_coord(psCurr->sMove.DestinationY);
+			t = map_coord(psCurr->sMove.destination);
 		}
-		if (tileOnMap(tx, ty))
+		if (tileOnMap(t))
 		{
-			mapTile(tx,ty)->tileInfoBits &= ~BITS_FPATHBLOCK;
+			mapTile(t)->tileInfoBits &= ~BITS_FPATHBLOCK;
 		}
 	}
 

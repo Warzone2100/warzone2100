@@ -305,11 +305,9 @@ static inline int fpathDistToTile(int tileX, int tileY, int pointX, int pointY)
 static void fpathSetMove(MOVE_CONTROL *psMoveCntl, SDWORD targetX, SDWORD targetY)
 {
 	psMoveCntl->asPath = (Vector2i *)realloc(psMoveCntl->asPath, sizeof(*psMoveCntl->asPath));
-	psMoveCntl->DestinationX = targetX;
-	psMoveCntl->DestinationY = targetY;
+	psMoveCntl->destination = Vector2i(targetX, targetY);
 	psMoveCntl->numPoints = 1;
-	psMoveCntl->asPath[0].x = targetX;
-	psMoveCntl->asPath[0].y = targetY;
+	psMoveCntl->asPath[0] = Vector2i(targetX, targetY);
 }
 
 
@@ -377,8 +375,7 @@ static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int sta
 			ASSERT(psResult->retval != FPR_OK || psResult->sMove.asPath, "Ok result but no path in list");
 
 			// Copy over select fields - preserve others
-			psMove->DestinationX = psResult->sMove.DestinationX;
-			psMove->DestinationY = psResult->sMove.DestinationY;
+			psMove->destination = psResult->sMove.destination;
 			psMove->numPoints = psResult->sMove.numPoints;
 			psMove->Position = 0;
 			psMove->Status = MOVENAVIGATE;
@@ -393,8 +390,8 @@ static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int sta
 
 			wzMutexUnlock(fpathMutex);
 
-			objTrace(id, "Got a path to (%d, %d)! Length=%d Retval=%d", psMove->DestinationX, psMove->DestinationY, psMove->numPoints, (int)retval);
-			syncDebug("fpathRoute(..., %d, %d, %d, %d, %d, %d, %d, %d, %d) = %d, path[%d] = %08X->(%d, %d)", id, startX, startY, tX, tY, propulsionType, droidType, moveType, owner, retval, psMove->numPoints, ~crcSumVector2i(0, psMove->asPath, psMove->numPoints), psMove->DestinationX, psMove->DestinationY);
+			objTrace(id, "Got a path to (%d, %d)! Length=%d Retval=%d", psMove->destination.x, psMove->destination.y, psMove->numPoints, (int)retval);
+			syncDebug("fpathRoute(..., %d, %d, %d, %d, %d, %d, %d, %d, %d) = %d, path[%d] = %08X->(%d, %d)", id, startX, startY, tX, tY, propulsionType, droidType, moveType, owner, retval, psMove->numPoints, ~crcSumVector2i(0, psMove->asPath, psMove->numPoints), psMove->destination.x, psMove->destination.y);
 
 			return retval;
 		}

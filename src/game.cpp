@@ -5561,12 +5561,12 @@ static void SaveDroidMoveControl(SAVE_DROID * const psSaveDroid, DROID const * c
 	}
 
 	// Little endian SDWORDs
-	psSaveDroid->sMove.DestinationX = PHYSFS_swapSLE32(psDroid->sMove.DestinationX);
-	psSaveDroid->sMove.DestinationY = PHYSFS_swapSLE32(psDroid->sMove.DestinationY);
-	psSaveDroid->sMove.srcX         = PHYSFS_swapSLE32(psDroid->sMove.srcX);
-	psSaveDroid->sMove.srcY         = PHYSFS_swapSLE32(psDroid->sMove.srcY);
-	psSaveDroid->sMove.targetX      = PHYSFS_swapSLE32(psDroid->sMove.targetX);
-	psSaveDroid->sMove.targetY      = PHYSFS_swapSLE32(psDroid->sMove.targetY);
+	psSaveDroid->sMove.DestinationX = PHYSFS_swapSLE32(psDroid->sMove.destination.x);
+	psSaveDroid->sMove.DestinationY = PHYSFS_swapSLE32(psDroid->sMove.destination.y);
+	psSaveDroid->sMove.srcX         = PHYSFS_swapSLE32(psDroid->sMove.src.x);
+	psSaveDroid->sMove.srcY         = PHYSFS_swapSLE32(psDroid->sMove.src.y);
+	psSaveDroid->sMove.targetX      = PHYSFS_swapSLE32(psDroid->sMove.target.x);
+	psSaveDroid->sMove.targetY      = PHYSFS_swapSLE32(psDroid->sMove.target.y);
 
 	// Little endian floats
 	psSaveDroid->sMove.fx           = 0;
@@ -5619,12 +5619,12 @@ static void LoadDroidMoveControl(DROID * const psDroid, SAVE_DROID const * const
 	}
 
 	// Little endian SDWORDs
-	psDroid->sMove.DestinationX = PHYSFS_swapSLE32(psSaveDroid->sMove.DestinationX);
-	psDroid->sMove.DestinationY = PHYSFS_swapSLE32(psSaveDroid->sMove.DestinationY);
-	psDroid->sMove.srcX         = PHYSFS_swapSLE32(psSaveDroid->sMove.srcX);
-	psDroid->sMove.srcY         = PHYSFS_swapSLE32(psSaveDroid->sMove.srcY);
-	psDroid->sMove.targetX      = PHYSFS_swapSLE32(psSaveDroid->sMove.targetX);
-	psDroid->sMove.targetY      = PHYSFS_swapSLE32(psSaveDroid->sMove.targetY);
+	psDroid->sMove.destination.x = PHYSFS_swapSLE32(psSaveDroid->sMove.DestinationX);
+	psDroid->sMove.destination.y = PHYSFS_swapSLE32(psSaveDroid->sMove.DestinationY);
+	psDroid->sMove.src.x         = PHYSFS_swapSLE32(psSaveDroid->sMove.srcX);
+	psDroid->sMove.src.y         = PHYSFS_swapSLE32(psSaveDroid->sMove.srcY);
+	psDroid->sMove.target.x      = PHYSFS_swapSLE32(psSaveDroid->sMove.targetX);
+	psDroid->sMove.target.y      = PHYSFS_swapSLE32(psSaveDroid->sMove.targetY);
 
 	// Little endian floats
 	psDroid->sMove.speed        = PHYSFS_swapSLE32(psSaveDroid->sMove.speed);
@@ -5654,7 +5654,7 @@ static void LoadDroidMoveControl(DROID * const psDroid, SAVE_DROID const * const
 	if (psDroid->sMove.Status == MOVEWAITROUTE)
 	{
 		psDroid->sMove.Status = MOVEINACTIVE;
-		fpathDroidRoute(psDroid, psDroid->sMove.DestinationX, psDroid->sMove.DestinationY, FMT_MOVE);
+		fpathDroidRoute(psDroid, psDroid->sMove.destination.x, psDroid->sMove.destination.y, FMT_MOVE);
 		psDroid->sMove.Status = MOVEWAITROUTE;
 	}
 }

@@ -468,6 +468,11 @@ WZ_DECL_ALWAYS_INLINE static inline BOOL tileOnMap(SDWORD x, SDWORD y)
 	return (x >= 0) && (x < (SDWORD)mapWidth) && (y >= 0) && (y < (SDWORD)mapHeight);
 }
 
+WZ_DECL_ALWAYS_INLINE static inline BOOL tileOnMap(Vector2i pos)
+{
+	return tileOnMap(pos.x, pos.y);
+}
+
 /* Return true if a tile is not too near the map edge and not outside of the map */
 static inline BOOL tileInsideBuildRange(SDWORD x, SDWORD y)
 {

@@ -151,8 +151,8 @@ static void orderCheckGuardPosition(DROID *psDroid, SDWORD range)
 			((psDroid->action == DACTION_MOVE) ||
 			 (psDroid->action == DACTION_MOVEFIRE)))
 		{
-			xdiff = (SDWORD)psDroid->sMove.DestinationX - (SDWORD)psDroid->orderX;
-			ydiff = (SDWORD)psDroid->sMove.DestinationY - (SDWORD)psDroid->orderY;
+			xdiff = psDroid->sMove.destination.x - psDroid->orderX;
+			ydiff = psDroid->sMove.destination.y - psDroid->orderY;
 			if (xdiff*xdiff + ydiff*ydiff > range*range)
 			{
  				actionDroidLoc(psDroid, DACTION_MOVE, psDroid->orderX, psDroid->orderY);

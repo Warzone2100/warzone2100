@@ -715,7 +715,7 @@ void _syncDebugDroid(const char *function, DROID *psDroid, char ch)
 	          psDroid->sMove.Status,
 	          psDroid->sMove.speed, psDroid->sMove.moveDir,
 	          psDroid->sMove.Position, psDroid->sMove.numPoints,
-	          psDroid->sMove.srcX, psDroid->sMove.srcY, psDroid->sMove.targetX, psDroid->sMove.targetY, psDroid->sMove.DestinationX, psDroid->sMove.DestinationY,
+	          psDroid->sMove.src.x, psDroid->sMove.src.y, psDroid->sMove.target.x, psDroid->sMove.target.y, psDroid->sMove.destination.x, psDroid->sMove.destination.y,
 	          psDroid->sMove.bumpDir, psDroid->sMove.bumpTime, psDroid->sMove.lastBump, psDroid->sMove.pauseTime, psDroid->sMove.bumpX, psDroid->sMove.bumpY, psDroid->sMove.shuffleStart,
 	          psDroid->experience,
 

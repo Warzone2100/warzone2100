@@ -507,8 +507,7 @@ ASR_RETVAL fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 		fpathContexts.splice(fpathContexts.begin(), fpathContexts, contextIterator);
 	}
 
-	psMove->DestinationX = psMove->asPath[path.size() - 1].x;
-	psMove->DestinationY = psMove->asPath[path.size() - 1].y;
+	psMove->destination = psMove->asPath[path.size() - 1];
 
 	return retval;
 }
