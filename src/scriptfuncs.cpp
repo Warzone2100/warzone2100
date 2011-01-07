@@ -147,8 +147,7 @@ BOOL scrGetPlayer()
 	ASSERT_OR_RETURN(false, nextPlayer < MAX_PLAYERS, "Invalid player");
 
 	scrFunctionResult.v.ival = nextPlayer;
-	debug(LOG_SCRIPT, "Initialized player %d, starts at position (%d, %d), max %d players", nextPlayer, 
-	      positions[nextPlayer].x, positions[nextPlayer].y, NetPlay.maxPlayers);
+	debug(LOG_SCRIPT, "Initialized player %d, starts at position (%d, %d), max %d players", nextPlayer, positions[nextPlayer].x, positions[nextPlayer].y, game.maxPlayers);
 	nextPlayer++;
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
@@ -209,7 +208,7 @@ BOOL scrSafeDest(void)
 	{
 		return false;
 	}
-	ASSERT_OR_RETURN(false, player < NetPlay.maxPlayers, "Out of bounds player index");
+	ASSERT_OR_RETURN(false, player < game.maxPlayers, "Out of bounds player index");
 	ASSERT_OR_RETURN(false, worldOnMap(x, y), "Out of bounds coordinates(%d, %d)", x, y);
 	scrFunctionResult.v.bval = !(auxTile(map_coord(x), map_coord(y), player) & AUXBITS_DANGER);
 	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
@@ -227,7 +226,7 @@ BOOL scrThreatAt(void)
 	{
 		return false;
 	}
-	ASSERT_OR_RETURN(false, player < NetPlay.maxPlayers, "Out of bounds player index");
+	ASSERT_OR_RETURN(false, player < game.maxPlayers, "Out of bounds player index");
 	ASSERT_OR_RETURN(false, worldOnMap(x, y), "Out of bounds coordinates(%d, %d)", x, y);
 	scrFunctionResult.v.bval = auxTile(map_coord(x), map_coord(y), player) & AUXBITS_THREAT;
 	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
@@ -245,7 +244,7 @@ BOOL scrGetPlayerStartPosition(void)
 	{
 		return false;
 	}
-	if (player < NetPlay.maxPlayers)
+	if (player < game.maxPlayers)
 	{
 		*x = positions[player].x;
 		*y = positions[player].y;

@@ -25,7 +25,6 @@
  */
 
 #include "lib/framework/frame.h"
-#include "lib/netplay/netplay.h"
 
 #include "multiplay.h"
 
@@ -103,8 +102,6 @@ void grpJoin(DROID_GROUP *psGroup, DROID *psDroid)
 	// if psDroid == NULL just increase the refcount don't add anything to the list
 	if (psDroid != NULL)
 	{
-		syncDebug("Droid %d joining group.", psDroid->id);
-
 		if (psGroup->psList && psDroid->player != psGroup->psList->player)
 		{
 			ASSERT( false,"grpJoin: Cannot have more than one players droids in a group" );
@@ -188,8 +185,6 @@ void grpLeave(DROID_GROUP *psGroup, DROID *psDroid)
 
 	if (psDroid)
 	{
-		syncDebug("Droid %d leaving group.", psDroid->id);
-
 		psDroid->psGroup = NULL;
 		psDroid->psGrpNext = NULL;
 
