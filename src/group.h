@@ -26,22 +26,22 @@
 
 #include "order.h"
 
-typedef enum _group_type
+enum GROUP_TYPE
 {
 	GT_NORMAL,			// standard group
 	GT_COMMAND,			// command droid group
 	GT_TRANSPORTER,		// transporter group
-} GROUP_TYPE;
+};
 
-typedef struct _droid_group
+struct DROID_GROUP
 {
 	SWORD		type;
 	SWORD		refCount;
 	DROID		*psList;			// list of droids in the group
 	DROID		*psCommander;		// the command droid of a command group
 	RUN_DATA	sRunData;			// where the group should retreat to
-	struct _droid_group *psNext, *psPrev;	// keep linked to destroy all (a workaround hack)
-} DROID_GROUP;
+	DROID_GROUP     *psNext, *psPrev;       // keep linked to destroy all (a workaround hack)
+};
 
 // initialise the group system
 BOOL grpInitialise(void);
@@ -54,9 +54,6 @@ BOOL grpCreate(DROID_GROUP	**ppsGroup);
 
 // add a droid to a group
 void grpJoin(DROID_GROUP *psGroup, DROID *psDroid);
-
-// add a droid to a group at the end of the list
-void grpJoinEnd(DROID_GROUP *psGroup, DROID *psDroid);
 
 // remove a droid from a group
 void grpLeave(DROID_GROUP *psGroup, DROID *psDroid);

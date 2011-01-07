@@ -1771,6 +1771,9 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 			orderPlayFireSupportAudio( psOrder->psObj );
 		}
 		break;
+	case DORDER_COMMANDERSUPPORT:
+		cmdDroidAddDroid((DROID *)psOrder->psObj, psDroid);
+		break;
 	case DORDER_RETREAT:
 	case DORDER_RUNBURN:
 	case DORDER_RUN:
@@ -2183,7 +2186,7 @@ BOOL orderStateLoc(DROID *psDroid, DROID_ORDER order, UDWORD *pX, UDWORD *pY)
 BOOL validOrderForObj(DROID_ORDER order)
 {
 	return (order == DORDER_NONE || order == DORDER_HELPBUILD || order == DORDER_DEMOLISH ||
-		order == DORDER_REPAIR || order == DORDER_ATTACK || order == DORDER_FIRESUPPORT ||
+		order == DORDER_REPAIR || order == DORDER_ATTACK || order == DORDER_FIRESUPPORT || order == DORDER_COMMANDERSUPPORT ||
 		order == DORDER_OBSERVE || order == DORDER_ATTACKTARGET || order == DORDER_RTR ||
 		order == DORDER_RTR_SPECIFIED || order == DORDER_EMBARK || order == DORDER_GUARD ||
 		order == DORDER_DROIDREPAIR || order == DORDER_RESTORE || order == DORDER_BUILDMODULE ||
@@ -2872,9 +2875,8 @@ DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, BOOL altOrder)
               psDroid->droidType != DROID_CYBORG_CONSTRUCT)
 	{
 		// get a droid to join a command droids group
-		cmdDroidAddDroid((DROID *) psObj, psDroid);
 		DeSelectDroid(psDroid);
-		order = DORDER_NONE;
+		order = DORDER_COMMANDERSUPPORT;
 	}
 	//repair droid
 	else if (aiCheckAlliances(psObj->player, psDroid->player) &&
@@ -3451,7 +3453,7 @@ void secondaryCheckDamageLevel(DROID *psDroid)
 
 
 // set the state of a secondary order, return false if failed.
-BOOL secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE State)
+BOOL secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE State, QUEUE_MODE mode)
 {
 	UDWORD		CurrState, factType, prodType;
 	STRUCTURE	*psStruct;
@@ -3460,9 +3462,7 @@ BOOL secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 	DROID		*psTransport, *psCurr, *psNext;
 	DROID_ORDER     order;
 
-
-
-	if(bMultiMessages)
+	if (bMultiMessages && mode == ModeQueue)
 	{
 		sendDroidSecondary(psDroid,sec,State);
 		return true;  // Wait for our order before changing the droid.
@@ -4263,7 +4263,7 @@ const char* getDroidOrderName(DROID_ORDER order)
 		"DORDER_DISEMBARK",			// get off a transporter
 		"DORDER_ATTACKTARGET",		// 18 - a suggestion to attack something
 									// i.e. the target was chosen because the droid could see it
-		"DORDER_COMMAND",				// a command droid issuing orders to it's group
+		"DORDER_COMMANDERSUPPORT",
 		"DORDER_BUILDMODULE",			// 20 - build a module (power, research or factory)
 		"DORDER_RECYCLE",				// return to factory to be recycled
 		"DORDER_TRANSPORTOUT",		// 22 - offworld transporter order

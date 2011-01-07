@@ -211,6 +211,8 @@ struct POWER_GEN
 	struct STRUCTURE *      apResExtractors[NUM_POWER_MODULES];     ///< Pointers to associated oil derricks
 };
 
+struct DROID_GROUP;
+
 struct REPAIR_FACILITY
 {
 	UDWORD                          power;                  /* Power used in repairing */
@@ -221,7 +223,7 @@ struct REPAIR_FACILITY
 	UDWORD                          currentPtsAdded;        /* stores the amount of body points added to the unit that is being worked on */
 
 	// The group the droids to be repaired by this facility belong to
-	struct _droid_group             *psGroup;
+	DROID_GROUP *                   psGroup;
 	int                             droidQueue;              ///< Last count of droid queue for this facility
 };
 

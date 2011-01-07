@@ -52,7 +52,7 @@ typedef enum _droid_order
 	DORDER_DISEMBARK,			// get off a transporter
 	DORDER_ATTACKTARGET,		// 18 - a suggestion to attack something
 								// i.e. the target was chosen because the droid could see it
-	DORDER_COMMAND,				// a command droid issuing orders to it's group
+	DORDER_COMMANDERSUPPORT,                // Assigns droid to the target commander.
 	DORDER_BUILDMODULE,			// 20 - build a module (power, research or factory)
 	DORDER_RECYCLE,				// return to factory to be recycled
 	DORDER_TRANSPORTOUT,		// 22 - offworld transporter order

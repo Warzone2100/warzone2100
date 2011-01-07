@@ -128,6 +128,8 @@ struct DROID_TEMPLATE : public BASE_STATS
 };
 
 struct PACKAGED_CHECK;
+struct DROID_GROUP;
+struct STRUCTURE;
 
 struct DROID : public BASE_OBJECT
 {
@@ -162,9 +164,9 @@ struct DROID : public BASE_OBJECT
 	WEAPON          asWeaps[DROID_MAXWEAPS];
 
 	// The group the droid belongs to
-	struct _droid_group* psGroup;
-	struct DROID*  psGrpNext;
-	struct STRUCTURE *psBaseStruct;                 ///< a structure that this droid might be associated with. For VTOLs this is the rearming pad
+	DROID_GROUP *   psGroup;
+	DROID *         psGrpNext;
+	STRUCTURE *     psBaseStruct;                   ///< a structure that this droid might be associated with. For VTOLs this is the rearming pad
 	// queued orders
 	SDWORD          listSize;                       ///< Gives the number of synchronised orders. Orders from listSize to the real end of the list may not affect game state.
 	OrderList       asOrderList;                    ///< The range [0; listSize - 1] corresponds to synchronised orders, and the range [listPendingBegin; listPendingEnd - 1] corresponds to the orders that will remain, once all orders are synchronised.

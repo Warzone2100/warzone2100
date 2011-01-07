@@ -104,7 +104,7 @@ extern BOOL secondarySupported(DROID *psDroid, SECONDARY_ORDER sec);
 extern SECONDARY_STATE secondaryGetState(DROID *psDroid, SECONDARY_ORDER sec);
 
 // set the state of a secondary order, return false if failed.
-extern BOOL secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE State);
+extern BOOL secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE State, QUEUE_MODE mode = ModeQueue);
 
 // check the damage level of a droid against it's secondary state
 extern void secondaryCheckDamageLevel(DROID *psDroid);
@@ -116,7 +116,7 @@ extern void secondarySetAverageGroupState(UDWORD player, UDWORD group);
 extern void orderMoralCheck(UDWORD player);
 
 // do a moral check for a group
-extern void orderGroupMoralCheck(struct _droid_group *psGroup);
+extern void orderGroupMoralCheck(DROID_GROUP *psGroup);
 
 extern const char* getDroidOrderName(DROID_ORDER order);
 
