@@ -310,14 +310,12 @@ static BOOL _intAddTransporter(DROID *psSelected, BOOL offWorld)
 BOOL intAddTransporterContents(void)
 {
 	BOOL			Animate = true;
-	BOOL  AlreadyUp = false;
 
     // Is the form already up?
 	if(widgGetFromID(psWScreen,IDTRANS_CONTENTFORM) != NULL)
 	{
 		intRemoveTransContentNoAnim();
 		Animate = false;
-		AlreadyUp = true;
 	}
 
 	if(intIsRefreshing()) {
@@ -659,7 +657,7 @@ BOOL intAddTransButtonForm(void)
 /* Add the Transporter Contents form */
 BOOL intAddTransContentsForm(void)
 {
-	UDWORD			numButtons, i;
+	UDWORD			i;
 	SDWORD			BufferID;
 	DROID			*psDroid, *psNext;
 
@@ -679,8 +677,6 @@ BOOL intAddTransContentsForm(void)
 	sFormInit.majorOffset = OBJ_TABOFFSET;
 	sFormInit.tabVertOffset = (OBJ_TABHEIGHT/2);
 	sFormInit.tabMajorThickness = OBJ_TABHEIGHT;
-
-	numButtons = TRANSPORTER_CAPACITY;
 
 	//set the number of tabs required
 	//sFormInit.numMajor = numForms((OBJ_BUTWIDTH + OBJ_GAP) * numButtons,

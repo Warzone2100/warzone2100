@@ -200,7 +200,6 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 	UDWORD		width,breadth, foundationMin,foundationMax, height;
 	UDWORD		startX,startY,max,min;
 	SDWORD		i;
-	UBYTE		vis;
 	//try and create the Feature
 	FEATURE *psFeature = new FEATURE(generateSynchronisedObjectId(), psStats);
 
@@ -271,22 +270,6 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
 
 	// it has never been drawn
 	psFeature->sDisplay.frameNumber = 0;
-
-	if(getRevealStatus())
-	{
-		vis = 0;
-	}
-	else
-	{
-		if(psStats->visibleAtStart)
-		{
-  			vis = UBYTE_MAX;
-		}
-		else
-		{
-			vis = 0;
-		}
-	}
 
 	// note that the advanced armour system current unused for features
 	for (i = 0; i < NUM_HIT_SIDES; i++)

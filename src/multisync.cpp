@@ -572,7 +572,7 @@ BOOL recvStructureCheck(NETQUEUE queue)
 	uint8_t			player, ourCapacity;
 	uint32_t		body;
 	uint32_t                ref;
-	STRUCTURE_TYPE          type;
+	STRUCTURE_TYPE          type = REF_HQ;  // Dummy initialisation.
 
 	NETbeginDecode(queue, GAME_CHECK_STRUCT);
 		NETuint8_t(&player);

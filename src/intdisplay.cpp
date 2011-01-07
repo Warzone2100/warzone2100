@@ -1238,13 +1238,11 @@ void intOpenPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_
 void intClosePlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	W_TABFORM *Form = (W_TABFORM*)psWidget;
-	UDWORD Tx0,Ty0,Tx1,Ty1;
+	UDWORD Ty0, Ty1;
 	UDWORD Range;
 	UDWORD Duration;
 	UDWORD APos;
 
-	Tx0 = xOffset+Form->x;
-	Tx1 = Tx0 + Form->width;
 	Ty0 = yOffset+Form->y + (Form->height/2) - 4;
 	Ty1 = yOffset+Form->y + (Form->height/2) + 4;
 
@@ -2126,12 +2124,9 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 	UDWORD Size;
 	Vector3i Rotation, Position, NullVector;
 	UDWORD ox,oy;
-	BUTTON_SURFACE *ButSurf;
 	UDWORD Radius;
 	UDWORD basePlateSize;
 	SDWORD scale;
-
-	ButSurf = Buffer->ButSurf;
 
 	if(Down) {
 		ox = oy = 2;

@@ -1792,7 +1792,7 @@ static BOOL defenseLocation(BOOL variantB)
 	UDWORD		x,y,gX,gY,dist,player,nearestSoFar,count;
 	GATEWAY		*psGate,*psChosenGate;
 	DROID		*psDroid;
-	BASE_STATS	*psStats,*psWStats;
+	BASE_STATS	*psWStats;
 	UDWORD		x1,x2,x3,x4,y1,y2,y3,y4;
 	BOOL		noWater;
 	UDWORD      minCount;
@@ -1817,7 +1817,6 @@ static BOOL defenseLocation(BOOL variantB)
 	}
 
 	ASSERT_OR_RETURN( false, statIndex < numStructureStats, "Invalid range referenced for numStructureStats, %d > %d", statIndex, numStructureStats);
-	psStats = (BASE_STATS *)(asStructureStats + statIndex);
 
 	ASSERT_OR_RETURN( false, statIndex2 < numStructureStats, "Invalid range referenced for numStructureStats, %d > %d", statIndex2, numStructureStats);
 	psWStats = (BASE_STATS *)(asStructureStats + statIndex2);

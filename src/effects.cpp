@@ -846,7 +846,6 @@ static void updateSatLaser(EFFECT *psEffect)
 	UDWORD	xDif,yDif;
 	UDWORD	i;
 	UDWORD	startHeight,endHeight;
-	iIMDShape	*pie;
 	UDWORD	xPos,yPos;
 	LIGHT	light;
 
@@ -859,7 +858,6 @@ static void updateSatLaser(EFFECT *psEffect)
 	if(psEffect->baseScale)
 	{
 		psEffect->baseScale = 0;
-		pie = getImdFromIndex(MI_FLAME);
 
 		/* Add some big explosions....! */
 
@@ -2495,7 +2493,6 @@ static void effectStructureUpdates(void)
 						}
 						else if (psStructure->pStructureType->type == REF_POWER_GEN)
 						{
-							bool active = false;
 							POWER_GEN *psPowerGen = &psStructure->pFunctionality->powerGenerator;
 							Vector3i eventPos = swapYZ(psStructure->pos);
 
@@ -2511,7 +2508,6 @@ static void effectStructureUpdates(void)
 								if (psPowerGen->apResExtractors[i]
 								 && psPowerGen->apResExtractors[i]->pFunctionality->resourceExtractor.active)
 								{
-									active = true;
 									break;
 								}
 							}

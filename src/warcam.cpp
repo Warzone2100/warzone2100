@@ -723,21 +723,6 @@ static void updateCameraVelocity(UBYTE update)
 
 static void	updateCameraPosition(UBYTE update)
 {
-BOOL	bFlying;
-DROID	*psDroid;
-PROPULSION_STATS	*psPropStats;
-
-	bFlying = false;
-	if(trackingCamera.target->type == OBJ_DROID)
-	{
-		psDroid = (DROID*)trackingCamera.target;
-		psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-		if(psPropStats->propulsionType == PROPULSION_TYPE_LIFT)
-		{
-			bFlying = true;
-		}
-	}
-
 	if(update & X_UPDATE)
 	{
 		/* Need to update position along x axis */

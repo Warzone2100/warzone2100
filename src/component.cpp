@@ -503,7 +503,7 @@ static void displayCompObj(DROID *psDroid, BOOL bButton)
 	iIMDShape               *psShape, *psJet, *psShapeTemp = NULL, *psMountShape;
 	Vector3i                zero(0, 0, 0);
 	Vector2i				screenCoords;
-	SDWORD				dummyZ, iConnector;
+	SDWORD				iConnector;
 	PROPULSION_STATS	*psPropStats;
 	SDWORD				frame;
 	SDWORD				pieFlag, iPieData;
@@ -543,9 +543,6 @@ static void displayCompObj(DROID *psDroid, BOOL bButton)
 	{
 		brightness = WZCOL_WHITE;
 	}
-
-	/* We've got a z value here _and_ screen coords of origin */
-	dummyZ = pie_RotateProject(&zero, &screenCoords);
 
 	/* set default components transparent */
 	if ( psDroid->asBits[COMP_PROPULSION].nStat == 0 )
@@ -697,8 +694,6 @@ static void displayCompObj(DROID *psDroid, BOOL bButton)
 							Rotation rot = getInterpolatedWeaponRotation(psDroid, i, graphicsTime);
 
 							pie_MatBegin();
-							//reset Z?
-							dummyZ = pie_RotateProject(&zero, &screenCoords);
 
 							//to skip number of VTOL_CONNECTOR_START ground unit connectors
 							if ( iConnector < VTOL_CONNECTOR_START )
@@ -850,8 +845,6 @@ static void displayCompObj(DROID *psDroid, BOOL bButton)
 				fall on it's arse......*/
 				//sensor and cyborg and ecm uses connectors[0]
 				pie_MatBegin();
-				//reset Z?
-				dummyZ = pie_RotateProject(&zero, &screenCoords);
 				/* vtol weapons inverted */
 				if ( iConnector >= VTOL_CONNECTOR_START )
 				{
@@ -1001,12 +994,9 @@ void displayComponentObject(DROID *psDroid)
 	Vector3i	position, rotation;
 	int32_t		xShift,zShift;
 	SDWORD		frame;
-	PROPULSION_STATS	*psPropStats;
 	UDWORD	tileX,tileY;
 	MAPTILE	*psTile;
 	Spacetime st = interpolateObjectSpacetime(psDroid, graphicsTime);
-
-	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
 
 	leftFirst = angleDelta(player.r.y - st.rot.direction) <= 0;
 
@@ -1182,7 +1172,6 @@ void	compPersonToBits(DROID *psDroid)
 {
 	Vector3i position;	//,rotation,velocity;
 	iIMDShape	*headImd, *legsImd, *armImd, *bodyImd;
-	UDWORD		groundHeight;
 	UDWORD		col;
 
 	if(!psDroid->visible[selectedPlayer])
@@ -1209,9 +1198,7 @@ void	compPersonToBits(DROID *psDroid)
 	/* Get where he's at */
 	position.x = psDroid->pos.x;
 	position.y = psDroid->pos.z+1;
-	groundHeight = psDroid->pos.z;
 	position.z = psDroid->pos.y;
-
 
 	/* Tell about player colour */
 	col = getPlayerColour(psDroid->player);

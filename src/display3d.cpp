@@ -728,8 +728,7 @@ void draw3DScene( void )
 	}
 	if (showORDERS)
 	{
-		unsigned int width, height;
-		width = iV_GetTextWidth(DROIDDOING);
+		unsigned int height;
 		height = iV_GetTextHeight(DROIDDOING);
 		iV_DrawText(DROIDDOING, 0, pie_GetVideoBufferHeight()- height);
 	}
@@ -1861,7 +1860,7 @@ UDWORD getViewDistance(void)
 /// Set the distance at which the player views the world
 void	setViewDistance(UDWORD dist)
 {
-	dist = distance;
+	distance = dist;
 }
 
 /// Draw a feature (tree/rock/etc.)

@@ -312,7 +312,7 @@ DROID	*psDroid;
 
 void	kf_CloneSelected( void )
 {
-	DROID		*psDroid, *psNewDroid = NULL;
+	DROID		*psDroid;
 	DROID_TEMPLATE	sTemplate;
 	DROID_TEMPLATE	*sTemplate2 = NULL;
 	const int	limit = 10;	// make 10 clones
@@ -350,7 +350,7 @@ void	kf_CloneSelected( void )
 			templateSetParts(psDroid, &sTemplate);
 
 			// create a new droid
-			psNewDroid = buildDroid(&sTemplate, psDroid->pos.x, psDroid->pos.y, psDroid->player, false, NULL);
+			// psNewDroid = buildDroid(&sTemplate, psDroid->pos.x, psDroid->pos.y, psDroid->player, false, NULL);
 			/* // TODO psNewDroid is null, since we just sent a message, but haven't actually created the droid locally yet.
 			ASSERT_OR_RETURN(, psNewDroid != NULL, "Unable to build a unit");
 			addDroid(psNewDroid, apsDroidLists);
@@ -2417,7 +2417,6 @@ void	kf_TriggerRayCast( void )
 {
 DROID	*psDroid;
 BOOL	found;
-DROID	*psOther;
 
 	found = false;
 	for(psDroid = apsDroidLists[selectedPlayer]; psDroid && !found;
@@ -2426,7 +2425,6 @@ DROID	*psOther;
 			if(psDroid->selected)
 			{
 				found = true;
-				psOther = psDroid;
 			}
 			/* NOP */
 		}
@@ -2825,8 +2823,6 @@ void kf_BuildPrevPage()
 {
 	W_TABFORM *psTForm;
 	int temp;
-	int numTabs;
-	int maxTabs;
 	int tabPos;
 
 	ASSERT_OR_RETURN( , psWScreen != NULL, " Invalid screen pointer!");
@@ -2841,8 +2837,6 @@ void kf_BuildPrevPage()
 		psTForm->TabMultiplier = 1;				// 1-based
 	}
 
-	numTabs = numForms(psTForm->numStats,psTForm->numButtons);
-	maxTabs = ((numTabs /TAB_SEVEN) + 1);		// (Total tabs needed / 7(max tabs that fit))+1
 	temp = psTForm->majorT - 1;
 	if (temp < 0)
 	{

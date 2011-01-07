@@ -164,16 +164,12 @@ Vector2i getPlayerStartPosition(int player)
 
 BOOL scrSetSunPosition(void)
 {
-	float x, y, z, pos[4];
+	float x, y, z;
 
 	if (!stackPopParams(3, VAL_FLOAT, &x, VAL_FLOAT, &y, VAL_FLOAT, &z))
 	{
 		return false;
 	}
-	pos[0] = x;
-	pos[1] = y;
-	pos[2] = z;
-	pos[3] = 0.0;
 	setTheSun(Vector3f(x, y, z));
 	return true;
 }
@@ -6773,7 +6769,6 @@ BOOL scrEnumDroid(void)
 {
 	UDWORD			count;
 	DROID		 *psDroid;
-	BOOL			found;
 
 	count = 0;
 	for(psDroid=apsDroidLists[playerToEnumDroid];psDroid && count<enumDroidCount;count++)
@@ -6781,9 +6776,7 @@ BOOL scrEnumDroid(void)
 		psDroid = psDroid->psNext;
 	}
 
-
 	//search the players' list of droid to see if one exists and is visible
-	found = false;
 	while(psDroid)
 	{
 		if(psDroid->visible[playerVisibleDroid])
@@ -7516,7 +7509,6 @@ BOOL scrNumResearchLeft(void)
 
 	UWORD				Stack[400];
 
-	BOOL				found;
 	PLAYER_RESEARCH		*pPlayerRes;
 
 
@@ -7540,8 +7532,6 @@ BOOL scrNumResearchLeft(void)
 		ASSERT( false, "scrNumResearchLeft(): invalid research index" );
 		return false;
 	}
-
-	found = false;
 
 	if(beingResearchedByAlly(index, player))
 	{
