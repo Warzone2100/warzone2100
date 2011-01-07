@@ -32,32 +32,34 @@
  *  @{
  */
 
-typedef enum _fpath_movetype
+enum FPATH_MOVETYPE
 {
 	FMT_MOVE,		///< Move around all obstacles
 	FMT_ATTACK,		///< Assume that we will destroy enemy obstacles
-} FPATH_MOVETYPE;
+};
 
-typedef struct _jobNode
+struct PathBlockingMap;
+
+struct PATHJOB
 {
 	PROPULSION_TYPE	propulsion;
 	DROID_TYPE	droidType;
 	int		destX, destY;
 	int		origX, origY;
 	UDWORD		droidID;
-	struct _jobNode	*next;
 	FPATH_MOVETYPE	moveType;
 	int		owner;		///< Player owner
-	struct PathBlockingMap *blockingMap;  ///< Map of blocking tiles.
+	PathBlockingMap *blockingMap;   ///< Map of blocking tiles.
 	bool		acceptNearest;
-} PATHJOB;
+	bool            deleted;        ///< Droid was deleted, so throw away result when complete. Must still process this PATHJOB, since processing order can affect resulting paths (but can't affect the path length).
+};
 
-typedef enum _fpath_retval
+enum FPATH_RETVAL
 {
 	FPR_OK,         ///< found a route
 	FPR_FAILED,     ///< failed to find a route
 	FPR_WAIT,       ///< route is being calculated by the path-finding thread
-} FPATH_RETVAL;
+};
 
 /** Initialise the path-finding module.
  */
