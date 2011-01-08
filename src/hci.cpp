@@ -277,11 +277,6 @@ static const char	*apPlayerTip[] =
 /* The widget screen */
 W_SCREEN		*psWScreen;
 
-//two colours used for drawing the footprint outline for objects in 2D
-PIELIGHT			outlineOK;
-PIELIGHT			outlineNotOK;
-BOOL				outlineTile = false;
-
 // The last widget ID from widgRunScreen
 UDWORD				intLastWidget;
 
@@ -601,10 +596,6 @@ BOOL intInitialise(void)
 	intMode = INT_NORMAL;
 
 	objectsChanged = false;
-
-	//set the default colours to be used for drawing outlines in 2D
-	outlineOK = WZCOL_MAP_OUTLINE_OK;
-	outlineNotOK = WZCOL_MAP_OUTLINE_BAD;
 
 	// reset the previous objects
 	intResetPreviousObj();

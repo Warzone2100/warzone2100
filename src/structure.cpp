@@ -4028,15 +4028,15 @@ bool validLocation(BASE_STATS *psStats, unsigned x, unsigned y, uint16_t directi
 	if (psStats->ref >= REF_STRUCTURE_START &&
 		psStats->ref < (REF_STRUCTURE_START + REF_RANGE))
 	{
-		unsigned sWidth   = getStructureStatsWidth((STRUCTURE_STATS *)psStats, direction);
-		unsigned sBreadth = getStructureStatsBreadth((STRUCTURE_STATS *)psStats, direction);
+		unsigned sWidth   = getStructureStatsWidth(psBuilding, direction);
+		unsigned sBreadth = getStructureStatsBreadth(psBuilding, direction);
 		site.xTL = (UWORD)x;
 		site.yTL = (UWORD)y;
 		site.xBR = (UWORD)(x + sWidth - 1);
 		site.yBR = (UWORD)(y + sBreadth - 1);
 
 		//if we're dragging the wall/defense we need to check along the current dragged size
-		if (wallDrag.status != DRAG_INACTIVE
+		if (wallDrag.status != DRAG_INACTIVE && bCheckBuildQueue
 			&& (psBuilding->type == REF_WALL || psBuilding->type == REF_DEFENSE || psBuilding->type == REF_REARM_PAD ||  psBuilding->type == REF_GATE)
 			&& !isLasSat(psBuilding))
 		{
@@ -4440,10 +4440,6 @@ bool validLocation(BASE_STATS *psStats, unsigned x, unsigned y, uint16_t directi
 
 failed:  // Succeeded if got here without jumping.
 	// Only set the hilight colour if it's the selected player.
-	if (player == selectedPlayer)
-	{
-		outlineTile = true;
-	}
 
 	return valid;
 }

@@ -228,7 +228,8 @@
 #define	MAXCOMPONENT	80
 #define	MAXEXTRASYS		80
 
-typedef enum {
+enum INTMODE
+{
 	INT_NORMAL,		// Standard mode (just the reticule)
 
 	INT_OPTION,		// Option screen
@@ -250,7 +251,7 @@ typedef enum {
 	INT_POPUPMSG,	// Adds a popup message to user
 
     INT_MAXMODE,   //leave as last so we can start the objMode at this value
-} INTMODE;
+};
 
 extern INTMODE intMode;
 
@@ -266,13 +267,6 @@ extern UDWORD			objStatID;
 /* The current template for the design screen to start with*/
 extern DROID_TEMPLATE	*psCurrTemplate;
 extern DROID_TEMPLATE	**apsTemplateList;
-
-//two colours used for drawing the footprint outline for objects in 2D
-extern PIELIGHT	outlineOK;
-extern PIELIGHT	outlineNotOK;
-
-//value gets set to colour used for drawing
-extern BOOL	outlineTile;
 
 /*Message View Buffer width and height - MAXIMUM Sizes! - only need to be
 as big as Pie View in Research Msg now*/
@@ -299,7 +293,7 @@ extern BOOL CoordInBuild(int x, int y);
 extern void interfaceShutDown(void);
 
 /* Return codes for the widget interface */
-typedef enum _int_retval
+enum INT_RETVAL
 {
 	INT_NONE,		// no key clicks have been intercepted
 	INT_INTERCEPT,	// key clicks have been intercepted
@@ -310,7 +304,7 @@ typedef enum _int_retval
 	INT_INTELNOSCROLL,		//The 3DView of the intelligence screen is up
 							// and we don't want scroll (or update!)
 	INT_QUIT,		// The game should quit
-} INT_RETVAL;
+};
 
 /* Run the widgets for the in game interface */
 extern INT_RETVAL intRunWidgets(void);
