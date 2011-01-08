@@ -1416,8 +1416,11 @@ void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd)
 	/* check for space */
 	if (!checkTransporterSpace(psTransporter, psDroidToAdd))
 	{
-		audio_PlayTrack( ID_SOUND_BUILD_FAIL );
-		addConsoleMessage(_("There is not enough room in the Transport!"), DEFAULT_JUSTIFY, selectedPlayer);
+		if (psTransporter->player == selectedPlayer)
+		{
+			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
+			addConsoleMessage(_("There is not enough room in the Transport!"), DEFAULT_JUSTIFY, selectedPlayer);
+		}
 		return;
 	}
 	if (onMission)
