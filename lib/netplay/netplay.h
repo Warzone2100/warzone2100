@@ -261,7 +261,6 @@ typedef struct {
 	uint32_t	hostPlayer;		///< Index of host in player array
 	uint32_t	bComms;			///< Actually do the comms?
 	BOOL		isHost;			///< True if we are hosting the game
-	int32_t		maxPlayers;		///< Maximum number of players in this game
 	BOOL		isUPNP;					// if we want the UPnP detection routines to run
 	BOOL		isHostAlive;	/// if the host is still alive
 	PHYSFS_file	*pMapFileHandle;

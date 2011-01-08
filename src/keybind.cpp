@@ -186,7 +186,7 @@ void	kf_PowerInfo( void )
 {
 	int i;
 
-	for (i = 0; i < NetPlay.maxPlayers; i++)
+	for (i = 0; i < game.maxPlayers; i++)
 	{
 		console("Player %d: %d power", i, (int)getPower(i));
 	}

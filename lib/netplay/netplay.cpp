@@ -2427,7 +2427,6 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 		NETaddRedirects();
 	}
 	NET_InitPlayers();
-	NetPlay.maxPlayers = MAX_PLAYERS;
 	if(!NetPlay.bComms)
 	{
 		selectedPlayer			= 0;

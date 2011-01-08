@@ -2309,7 +2309,6 @@ static void processMultiopWidgets(UDWORD id)
 			widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN, WBUT_LOCK);
 			widgSetButtonState(psWScreen, MULTIOP_SKIRMISH,0);
 			game.scavengers = true;
-			NetPlay.maxPlayers = MIN(game.maxPlayers, 7);
 			resetReadyStatus(false);
 			if(bHosted)
 			{
@@ -2321,7 +2320,6 @@ static void processMultiopWidgets(UDWORD id)
 			widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN,0 );
 			widgSetButtonState(psWScreen, MULTIOP_SKIRMISH,WBUT_LOCK);
 			game.scavengers = false;
-			NetPlay.maxPlayers = game.maxPlayers;
 			resetReadyStatus(false);
 			if(bHosted)
 			{
@@ -3233,7 +3231,6 @@ BOOL startMultiOptions(BOOL bReenter)
 
 			sstrcpy(game.map, inifile_get(inif, "Map", game.map));
 			game.maxPlayers = inifile_get_as_int(inif, "MaxPlayers", game.maxPlayers);	// TODO, read from map itself, not here!!
-			NetPlay.maxPlayers = game.maxPlayers;
 			game.scavengers = inifile_get_as_bool(inif, "Scavengers", game.scavengers);
 			game.alliance = ALLIANCES_TEAMS;
 			netPlayersUpdated = true;

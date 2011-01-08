@@ -283,7 +283,6 @@ BOOL hostCampaign(char *sGame, char *sPlayer)
 	{
 		strcpy(NetPlay.players[0].name,sPlayer);
 	}
-	NetPlay.maxPlayers = game.maxPlayers;
 
 	return true;
 }
