@@ -2111,7 +2111,7 @@ goingHome = true when returning from an off World mission*/
 void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, BOOL goingHome)
 {
 	DROID		*psDroid, *psNext;
-	DROID		**ppCurrentList, **ppStoredList;
+	DROID		**ppCurrentList;
 	UDWORD		droidX, droidY;
 	UDWORD		iX, iY;
 	DROID_GROUP	*psGroup;
@@ -2119,12 +2119,10 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, BOOL goingHome)
 	if (goingHome)
 	{
 		ppCurrentList = mission.apsDroidLists;
-		ppStoredList = apsDroidLists;
 	}
 	else
 	{
 		ppCurrentList = apsDroidLists;
-		ppStoredList = mission.apsDroidLists;
 	}
 
 	//unload all the droids from within the current Transporter

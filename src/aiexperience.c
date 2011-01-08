@@ -249,7 +249,6 @@ BOOL WriteAISaveData(SDWORD nPlayer)
 
 	FEATURE					*psFeature;
 	STRUCTURE				*psCurr;
-	SDWORD					x=0,y=0;
 	SDWORD					NumEntries=0;	//How many derricks/oil resources will be saved
 	UDWORD					PosXY[MAX_OIL_ENTRIES];		//Locations, 0=x,1=y,2=x etc
 	UDWORD					i,j;
@@ -421,9 +420,6 @@ BOOL WriteAISaveData(SDWORD nPlayer)
 						{
 							//psResExtractor = (RES_EXTRACTOR *)psCurr->pFunctionality;
 
-							x = psCurr->pos.x;
-							y = psCurr->pos.y;
-
 							//printf_console("Found derrick at x: %d, y: %d,, width: %d",psCurr->pos.x/128,psCurr->pos.y/128,mapWidth);
 
 							// Save X //
@@ -516,7 +512,7 @@ SDWORD ReadAISaveData(SDWORD nPlayer)
 	SDWORD		NumEntries=0;		//How many derricks/oil resources will be saved
 	UDWORD		PosXY[MAX_OIL_ENTRIES];		//Locations, 0=x,1=y,2=x etc
 	UDWORD		i,j;
-	BOOL		Found,bTileVisible;
+	BOOL		bTileVisible;
 	UDWORD		version;
 
 	if(!SetUpInputFile(nPlayer))
@@ -664,8 +660,6 @@ SDWORD ReadAISaveData(SDWORD nPlayer)
 
 			for(i=0; i<NumEntries; i++)
 			{
-				Found = false;
-
 				//re-read into remory
 				if(i < MAX_OIL_LOCATIONS)	//didn't max out?
 				{
@@ -685,7 +679,6 @@ SDWORD ReadAISaveData(SDWORD nPlayer)
 								//printf_console("Matched oil resource at x: %d y: %d", PosXY[i * 2]/128,PosXY[i * 2 + 1]/128);
 
 								psFeature->visible[nPlayer] = true;		//Make visible for AI
-								Found = true;
 								break;
 							}
 						}
@@ -729,7 +722,6 @@ SDWORD ReadAISaveData(SDWORD nPlayer)
 BOOL OilResourceAt(UDWORD OilX,UDWORD OilY, SDWORD VisibleToPlayer)
 {
 	FEATURE					*psFeature;
-	BOOL					Found;
 
 
 	/* Iterate through all Oil Resources and try to match coordinates */
@@ -744,7 +736,6 @@ BOOL OilResourceAt(UDWORD OilX,UDWORD OilY, SDWORD VisibleToPlayer)
 					printf_console("Matched oil resource at x: %d y: %d", OilX/128,OilY/128);
 
 					psFeature->visible[VisibleToPlayer] = true;		//Make visible for AI
-					Found = true;
 					break;
 				}
 			}
@@ -761,13 +752,11 @@ BOOL OilResourceAt(UDWORD OilX,UDWORD OilY, SDWORD VisibleToPlayer)
 BOOL StoreBaseDefendLoc(SDWORD x, SDWORD y, SDWORD nPlayer)
 {
 	SDWORD	i, index;
-	BOOL	found;
 
 	index = GetBaseDefendLocIndex(x, y, nPlayer);
 	if(index < 0)			//this one is new
 	{
 		//find an empty element
-		found = false;
 		for(i=0; i < MAX_BASE_DEFEND_LOCATIONS; i++)
 		{
 			if(baseDefendLocation[nPlayer][i][0] < 0)	//not initialized yet
@@ -778,8 +767,6 @@ BOOL StoreBaseDefendLoc(SDWORD x, SDWORD y, SDWORD nPlayer)
 				baseDefendLocation[nPlayer][i][1] = y;
 
 				baseDefendLocPrior[nPlayer][i] = 1;
-
-				found = true;
 
 				return true;
 			}
@@ -912,13 +899,11 @@ void OilExperienceDebug(SDWORD nPlayer)
 BOOL StoreOilDefendLoc(SDWORD x, SDWORD y, SDWORD nPlayer)
 {
 	SDWORD	i, index;
-	BOOL	found;
 
 	index = GetOilDefendLocIndex(x, y, nPlayer);
 	if(index < 0)			//this one is new
 	{
 		//find an empty element
-		found = false;
 		for(i=0; i < MAX_OIL_DEFEND_LOCATIONS; i++)
 		{
 			if(oilDefendLocation[nPlayer][i][0] < 0)	//not initialized yet
@@ -929,8 +914,6 @@ BOOL StoreOilDefendLoc(SDWORD x, SDWORD y, SDWORD nPlayer)
 				oilDefendLocation[nPlayer][i][1] = y;
 
 				oilDefendLocPrior[nPlayer][i] = 1;
-
-				found = true;
 
 				return true;
 			}

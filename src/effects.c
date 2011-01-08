@@ -811,7 +811,6 @@ static void updateSatLaser(EFFECT *psEffect)
 	UDWORD	xDif,yDif;
 	UDWORD	i;
 	UDWORD	startHeight,endHeight;
-	iIMDShape	*pie;
 	UDWORD	xPos,yPos;
 	LIGHT	light;
 
@@ -824,7 +823,6 @@ static void updateSatLaser(EFFECT *psEffect)
 	if(psEffect->baseScale)
 	{
 		psEffect->baseScale = 0;
-		pie = getImdFromIndex(MI_FLAME);
 
 		/* Add some big explosions....! */
 
@@ -2471,9 +2469,7 @@ static void effectStructureUpdates(void)
 	UDWORD		partition;
 	STRUCTURE	*psStructure;
 	Vector3i eventPos;
-	UDWORD		capacity;
 	POWER_GEN	*psPowerGen;
-	BOOL		active;
 
 	/* Go thru' all players */
 	for(i=0; i<MAX_PLAYERS; i++)
@@ -2534,7 +2530,6 @@ static void effectStructureUpdates(void)
 							{
 								eventPos.y = psStructure->pos.z;
 							}
-							capacity = psPowerGen->capacity;
 							/*if(capacity)
 							{
 								eventPos.y = psStructure->pos.z + 48;
@@ -2542,13 +2537,11 @@ static void effectStructureUpdates(void)
 							/* Add an effect over the central spire - if
 							connected to Res Extractor and it is active*/
 							//look through the list to see if any connected Res Extr
-							active = false;
 							for (i=0; i < NUM_POWER_MODULES; i++)
 							{
 								if (psPowerGen->apResExtractors[i]
 								 && psPowerGen->apResExtractors[i]->pFunctionality->resourceExtractor.active)
 								{
-									active = true;
 									break;
 								}
 							}

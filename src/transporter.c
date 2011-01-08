@@ -323,14 +323,12 @@ BOOL intAddTransporterContents(void)
 	W_BUTINIT		sButInit;
 	W_FORMINIT		sButFInit;
 	BOOL			Animate = true;
-	BOOL  AlreadyUp = false;
 
     // Is the form already up?
 	if(widgGetFromID(psWScreen,IDTRANS_CONTENTFORM) != NULL)
 	{
 		intRemoveTransContentNoAnim();
 		Animate = false;
-		AlreadyUp = true;
 	}
 
 	if(intIsRefreshing()) {
@@ -671,7 +669,7 @@ BOOL intAddTransContentsForm(void)
 {
 	W_FORMINIT		sFormInit;
 	W_FORMINIT		sBFormInit;
-	UDWORD			numButtons, i;
+	UDWORD			i;
 	SDWORD			BufferID;
 	DROID			*psDroid, *psNext;
 
@@ -691,8 +689,6 @@ BOOL intAddTransContentsForm(void)
 	sFormInit.majorOffset = OBJ_TABOFFSET;
 	sFormInit.tabVertOffset = (OBJ_TABHEIGHT/2);
 	sFormInit.tabMajorThickness = OBJ_TABHEIGHT;
-
-	numButtons = TRANSPORTER_CAPACITY;
 
 	//set the number of tabs required
 	//sFormInit.numMajor = numForms((OBJ_BUTWIDTH + OBJ_GAP) * numButtons,
@@ -1072,7 +1068,6 @@ BOOL OrderDroidsToEmbark(void)
 	UWORD CurrentTransporter;
 	DROID *psTransporters[MAX_TRANSPORTERS];
 	DROID *psDroid;
-	BOOL Ok = false;
 
 	// First build a list of transporters.
 	for(psDroid = apsDroidLists[selectedPlayer]; (psDroid != NULL); psDroid = psDroid->psNext) {
@@ -1098,8 +1093,6 @@ BOOL OrderDroidsToEmbark(void)
 				if(CurrentTransporter >= NumTransporters) {
 					CurrentTransporter = 0;
 				}
-
-				Ok = true;
 			}
 		}
 	}

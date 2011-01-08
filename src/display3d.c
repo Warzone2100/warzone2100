@@ -544,8 +544,7 @@ void draw3DScene( void )
 	}
 	if (showORDERS)
 	{
-		unsigned int width, height;
-		width = iV_GetTextWidth(DROIDDOING);
+		unsigned int height;
 		height = iV_GetTextHeight(DROIDDOING);
 		iV_DrawText(DROIDDOING, 0, pie_GetVideoBufferHeight()- height);
 	}
@@ -874,7 +873,6 @@ static void drawTiles(iView *player)
 			{
 				BOOL bEdgeTile = false;
 				MAPTILE *psTile = mapTile(playerXTile + j, playerZTile + i);
-				BOOL pushedDown = false;
 				float distToEdge,distA,distB,distC,distD;
 
 				tileScreenInfo[i][j].pos.y = map_TileHeight(playerXTile + j, playerZTile + i);
@@ -898,7 +896,6 @@ static void drawTiles(iView *player)
 					TileIllum.byte.r = (TileIllum.byte.r * 2) / 3;
 					TileIllum.byte.g = (TileIllum.byte.g * 2) / 3;
 					TileIllum.byte.b = (TileIllum.byte.b * 2) / 3;
-					pushedDown = true;
 				}
 				
 				// calculate the distance to the closest edge of the visible map
@@ -2042,7 +2039,7 @@ UDWORD getViewDistance(void)
 /// Set the distance at which the player views the world
 void	setViewDistance(UDWORD dist)
 {
-	dist = distance;
+	distance = dist;
 }
 
 /// Draw a feature (tree/rock/etc.)
@@ -3392,7 +3389,6 @@ static void	drawDroidSelections( void )
 	BASE_OBJECT		*psClickedOn;
 	BOOL			bMouseOverDroid = false;
 	BOOL			bMouseOverOwnDroid = false;
-	BOOL			bBeingTracked;
 	UDWORD			i,index;
 	FEATURE			*psFeature;
 	float			mulH;
@@ -3411,7 +3407,6 @@ static void	drawDroidSelections( void )
 	pie_SetFogStatus(false);
 	for(psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
-		bBeingTracked = false;
 		/* If it's selected and on screen or it's the one the mouse is over ||*/
 		// ABSOLUTELY MAD LOGICAL EXPRESSION!!! :-)
 		if ((eitherSelected(psDroid) && psDroid->sDisplay.frameNumber == currentGameFrame)
@@ -4026,7 +4021,6 @@ static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	/* Get the correct tile index for the x/y coordinates */
 	SDWORD actualX = playerXTile + j, actualY = playerZTile + i;
 	MAPTILE *psTile = NULL;
-	BOOL bOutlined = false;
 	UDWORD tileNumber = 0;
 	TERRAIN_VERTEX vertices[3];
 	PIELIGHT colour[2][2];
@@ -4084,7 +4078,6 @@ static void drawTerrainTile(UDWORD i, UDWORD j, BOOL onWaterEdge)
 	{
 		/* Clear it for next time round */
 		CLEAR_TILE_HIGHLIGHT(psTile);
-		bOutlined = true;
 		if ( i < visibleTiles.x && j < visibleTiles.y ) // FIXME
 		{
 			if (outlineTile)

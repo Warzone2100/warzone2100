@@ -536,7 +536,6 @@ static SDWORD getAverageTrackAngle( BOOL bCheckOnScreen )
 	float xTotal = 0.0, yTotal = 0.0;
 	float averageAngleFloat = 0;
 	SDWORD droidCount = 0, averageAngle = 0;
-	SDWORD retVal;
 
 	/* Got thru' all droids */
 	for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
@@ -557,12 +556,7 @@ static SDWORD getAverageTrackAngle( BOOL bCheckOnScreen )
 	}
 	if (droidCount)
 	{
-		retVal = (averageAngle / droidCount);
 		averageAngleFloat = (float)RAD_TO_DEG(atan2(xTotal, yTotal));
-	}
-	else
-	{
-		retVal = 0;
 	}
 	// FIXME: Should we return 0 when retVal is 0?
 	presAvAngle = averageAngleFloat;//retVal;
@@ -578,7 +572,6 @@ static SDWORD getGroupAverageTrackAngle(UDWORD groupNumber, BOOL bCheckOnScreen)
 	float xTotal = 0.0, yTotal = 0.0;
 	float averageAngleFloat = 0;
 	SDWORD droidCount = 0, averageAngle = 0;
-	SDWORD retVal;
 
 	/* Got thru' all droids */
 	for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
@@ -599,12 +592,7 @@ static SDWORD getGroupAverageTrackAngle(UDWORD groupNumber, BOOL bCheckOnScreen)
 	}
 	if (droidCount)
 	{
-		retVal = (averageAngle / droidCount);
 		averageAngleFloat = RAD_TO_DEG(atan2(xTotal, yTotal));
-	}
-	else
-	{
-		retVal = 0;
 	}
 	// FIXME: Return 0 when retVal is 0?
 	presAvAngle = averageAngleFloat;//retVal;
@@ -847,21 +835,6 @@ static void updateCameraVelocity(UBYTE update)
 
 static void	updateCameraPosition(UBYTE update)
 {
-BOOL	bFlying;
-DROID	*psDroid;
-PROPULSION_STATS	*psPropStats;
-
-	bFlying = false;
-	if(trackingCamera.target->type == OBJ_DROID)
-	{
-		psDroid = (DROID*)trackingCamera.target;
-		psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-		if(psPropStats->propulsionType == PROPULSION_TYPE_LIFT)
-		{
-			bFlying = true;
-		}
-	}
-
 	if(update & X_UPDATE)
 	{
 		/* Need to update position along x axis */

@@ -3431,8 +3431,6 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 {
 	UDWORD x = xOffset+psWidget->x;
 	UDWORD y = yOffset+psWidget->y;
-	BOOL Hilight = false;
-	BOOL Down = false;
 	UDWORD	i = psWidget->UserData;
 	char	tmp[8], gamename[StringSize];
 	unsigned int ping;
@@ -3440,16 +3438,6 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 	if (LobbyError != ERROR_NOERROR)
 	{
 		return;
-	}
-
-	// collate info
-	if( ((W_BUTTON*)psWidget)->state & (WBUTS_HILITE))
-	{
-		Hilight = true;
-	}
-	if( ((W_BUTTON*)psWidget)->state & (WBUT_LOCK |WBUT_CLICKLOCK)) //LOCK WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK))
-	{
-		Down = true;
 	}
 
 	// Draw blue boxes.
@@ -3565,13 +3553,7 @@ void displayTeamChooser(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIG
 {
 	UDWORD		x = xOffset+psWidget->x;
 	UDWORD		y = yOffset+psWidget->y;
-	BOOL		Hilight = false;
 	UDWORD		i = psWidget->UserData;
-
-	if( ((W_BUTTON*)psWidget)->state & (WBUTS_HILITE| WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK))
-	{
-		Hilight = true;
-	}
 
 	ASSERT(i < MAX_PLAYERS && NetPlay.players[i].team >= 0 && NetPlay.players[i].team < MAX_PLAYERS, "Team index out of bounds" );
 
@@ -3586,14 +3568,8 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 {
 	UDWORD		x = xOffset+psWidget->x;
 	UDWORD		y = yOffset+psWidget->y;
-	BOOL		Hilight = false;
 	UDWORD		j = psWidget->UserData, eval;
 	PLAYERSTATS stat;
-
-	if( ((W_BUTTON*)psWidget)->state & (WBUTS_HILITE| WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK))
-	{
-		Hilight = true;
-	}
 
 	//bluboxes.
 	drawBlueBox(x,y,psWidget->width,psWidget->height);							// right

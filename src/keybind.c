@@ -2345,7 +2345,6 @@ void	kf_TriggerRayCast( void )
 {
 DROID	*psDroid;
 BOOL	found;
-DROID	*psOther;
 
 	found = false;
 	for(psDroid = apsDroidLists[selectedPlayer]; psDroid && !found;
@@ -2354,7 +2353,6 @@ DROID	*psOther;
 			if(psDroid->selected)
 			{
 				found = true;
-				psOther = psDroid;
 			}
 			/* NOP */
 		}

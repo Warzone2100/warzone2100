@@ -1651,7 +1651,6 @@ void dealWithDroidSelect(DROID *psDroid, BOOL bDragBox)
 {
 	DROID	*psD;
 	BOOL	bGotGroup;
-	SDWORD	groupNumber = 0;
 
 	/*	Toggle selection on and off - allows you drag around a big
 		area of droids and then exclude certain individuals */
@@ -1676,7 +1675,6 @@ void dealWithDroidSelect(DROID *psDroid, BOOL bDragBox)
 			if(psD->selected && (psD->group!=UBYTE_MAX))
 			{
 				bGotGroup = true;
-				groupNumber = psD->group;
 			}
 		}
 //		psDroid->selected = true;

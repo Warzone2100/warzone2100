@@ -3142,7 +3142,7 @@ static void orderPlayOrderObjAudio( UDWORD player, BASE_OBJECT *psObj )
  */
 void orderSelectedObjAdd(UDWORD player, BASE_OBJECT *psObj, BOOL add)
 {
-	DROID		*psCurr, *psDemolish;
+	DROID		*psCurr;
 	DROID_ORDER	order;
 
 	if (!add && bMultiMessages && SendGroupOrderSelected((UBYTE)player,0,0,psObj,keyDown(KEY_LALT) || keyDown(KEY_RALT)) )
@@ -3163,7 +3163,6 @@ void orderSelectedObjAdd(UDWORD player, BASE_OBJECT *psObj, BOOL add)
 	// note that an order list graphic needs to be displayed
 	bOrderEffectDisplayed = false;
 
-    psDemolish = NULL;
     for (psCurr = apsDroidLists[player]; psCurr; psCurr=psCurr->psNext)
 	{
 		if (psCurr->selected)
@@ -3171,7 +3170,6 @@ void orderSelectedObjAdd(UDWORD player, BASE_OBJECT *psObj, BOOL add)
 			order = chooseOrderObj(psCurr, psObj, (keyDown(KEY_LALT) || keyDown(KEY_RALT)));
             if (order == DORDER_DEMOLISH && player == selectedPlayer)
             {
-                psDemolish = psCurr;
             }
 			// see if the order can be added to the list
 			if (!(add && orderDroidObjAdd(psCurr, order, &psObj)))

@@ -773,7 +773,7 @@ bool readVisibilityData(const char* fileName)
 
 static void astarTest(const char *name, int x1, int y1, int x2, int y2)
 {
-	int		asret, i;
+	int		i;
 	MOVE_CONTROL	route;
 	int		x = world_coord(x1);
 	int		y = world_coord(y1);
@@ -788,18 +788,8 @@ static void astarTest(const char *name, int x1, int y1, int x2, int y2)
 	route.asPath = NULL;
 	for (i = 0; i < 100; i++)
 	{
-		PATHJOB job;
-
 		route.numPoints = 0;
 		astarResetCounters();
-		job.origX = x;
-		job.origY = y;
-		job.destX = endx;
-		job.destY = endy;
-		job.propulsion = PROPULSION_TYPE_WHEELED;
-		job.droidID = 1;
-		job.owner = 0;
-		asret = fpathAStarRoute(&route, &job);
 		free(route.asPath);
 		route.asPath = NULL;
 	}

@@ -1278,7 +1278,6 @@ void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL
 	W_TABFORM		*Form = (W_TABFORM*)psWidget;
 	MESSAGE			*psMessage = (MESSAGE *)Form->pUserData;
 	UDWORD			x0,y0,x1,y1;
-	VIEW_RESEARCH	*psViewResearch;
 	SWORD			image = -1;
     RESEARCH        *psResearch;
 
@@ -1310,8 +1309,6 @@ void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL
 		}
 
 		//render an object
-		psViewResearch = (VIEW_RESEARCH *)((VIEWDATA *)psCurrentMsg->pViewData)->pData;
-
 		psResearch = getResearchForMsg((VIEWDATA *)psCurrentMsg->pViewData);
 		renderResearchToBuffer(psResearch, x0+(x1-x0)/2, y0+(y1-y0)/2);
 

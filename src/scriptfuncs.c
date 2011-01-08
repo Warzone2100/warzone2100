@@ -6709,7 +6709,6 @@ BOOL scrEnumDroid(void)
 {
 	UDWORD			count;
 	DROID		 *psDroid;
-	BOOL			found;
 
 	count = 0;
 	for(psDroid=apsDroidLists[playerToEnumDroid];psDroid && count<enumDroidCount;count++)
@@ -6719,7 +6718,6 @@ BOOL scrEnumDroid(void)
 
 
 	//search the players' list of droid to see if one exists and is visible
-	found = false;
 	while(psDroid)
 	{
 		if(psDroid->visible[playerVisibleDroid])
@@ -7452,7 +7450,6 @@ BOOL scrNumResearchLeft(void)
 
 	UWORD				Stack[400];
 
-	BOOL				found;
 	PLAYER_RESEARCH		*pPlayerRes;
 
 
@@ -7476,8 +7473,6 @@ BOOL scrNumResearchLeft(void)
 		ASSERT( false, "scrNumResearchLeft(): invalid research index" );
 		return false;
 	}
-
-	found = false;
 
 	if(beingResearchedByAlly(index, player))
 	{

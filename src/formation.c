@@ -573,7 +573,6 @@ void formationReorder(FORMATION *psFormation)
 BOOL formationGetPos( FORMATION *psFormation, DROID* psDroid,
 						SDWORD *pX, SDWORD *pY, BOOL bCheckLOS )
 {
-	SDWORD		xdiff,ydiff,distSq;//,rangeSq;
 	SDWORD		member, x,y;
 	F_MEMBER	*asMembers;
 
@@ -585,17 +584,6 @@ BOOL formationGetPos( FORMATION *psFormation, DROID* psDroid,
 		// nothing else in the formation so don't do anything
 		return false;
 	}*/
-
-	// see if the unit is close enough to join the formation
-	xdiff = (SDWORD)psFormation->x - (SDWORD)psDroid->pos.x;
-	ydiff = (SDWORD)psFormation->y - (SDWORD)psDroid->pos.y;
-	distSq = xdiff*xdiff + ydiff*ydiff;
-//	rangeSq = 3*psFormation->size/2;
-//	rangeSq = rangeSq*rangeSq;
-//	if (distSq > F_JOINRANGE*F_JOINRANGE)
-//	{
-//		return false;
-//	}
 
 	// see if the unit is already in the formation
 	asMembers = psFormation->asMembers;

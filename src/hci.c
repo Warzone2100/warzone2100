@@ -4233,7 +4233,6 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	W_LABINIT		sLabInitCmdFac2;
 	BOOL			IsFactory;
 	BOOL			Animate = true;
-	UWORD           FormX,FormY;
 	int				compIndex;
 
 	// Is the form already up?
@@ -4390,8 +4389,6 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	sFormInit.style = WFORM_PLAIN;
 	sFormInit.x = (SWORD)OBJ_BACKX;
 	sFormInit.y = (SWORD)OBJ_BACKY;
-	FormX = sFormInit.x;
-	FormY = sFormInit.y;
 	sFormInit.width = OBJ_BACKWIDTH;
 	sFormInit.height = 	OBJ_BACKHEIGHT;
 // If the window was closed then do open animation.

@@ -693,7 +693,6 @@ void	keyProcessMappings( BOOL bExclude )
 {
 KEY_MAPPING	*keyToProcess;
 BOOL		bMetaKeyDown;
-BOOL		bKeyProcessed;
 SDWORD		i;
 
 	/* Bomb out if there are none */
@@ -721,7 +720,6 @@ SDWORD		i;
  	for(keyToProcess = keyMappings; keyToProcess!=NULL; keyToProcess = keyToProcess->psNext)
 	{
 		/* We haven't acted upon it */
-		bKeyProcessed = false;
 		if(!keyToProcess->active)
 		{
 			/* Get out if it's inactive */
@@ -755,7 +753,6 @@ SDWORD		i;
  					lastSubKey = keyToProcess->subKeyCode;
  					/* Jump to the associated function call */
  					 keyToProcess->function();
-					 bKeyProcessed = true;
  				}
  				break;
  			case KEYMAP_DOWN:
@@ -765,7 +762,6 @@ SDWORD		i;
  					lastSubKey = keyToProcess->subKeyCode;
  					/* Jump to the associated function call */
  					 keyToProcess->function();
-					 bKeyProcessed = true;
  				}
 
  				break;
@@ -776,7 +772,6 @@ SDWORD		i;
  					lastSubKey = keyToProcess->subKeyCode;
  					/* Jump to the associated function call */
  					 keyToProcess->function();
-					 bKeyProcessed = true;
  				}
 				break;
 
@@ -796,7 +791,6 @@ SDWORD		i;
  				lastMetaKey = keyToProcess->metaKeyCode;
  				lastSubKey = keyToProcess->subKeyCode;
  				keyToProcess->function();
-				bKeyProcessed = true;
  			}
 			else if (keyToProcess->altMetaKeyCode != KEY_IGNORE)
 			{
@@ -805,7 +799,6 @@ SDWORD		i;
  					lastMetaKey = keyToProcess->metaKeyCode;
  					lastSubKey = keyToProcess->subKeyCode;
  					keyToProcess->function();
-					bKeyProcessed = true;
 				}
 			}
  		}

@@ -2484,7 +2484,6 @@ static BOOL structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 	BOOL			placed;//bTemp = false;
 	DROID			*psNewDroid;
 	FACTORY			*psFact;
-	SDWORD			apx,apy;
 	FLAG_POSITION	*psFlag;
 	Vector3i iVecEffect;
 	UBYTE			factoryType;
@@ -2555,8 +2554,6 @@ static BOOL structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 		}
 
 		psFact = &psStructure->pFunctionality->factory;
-		apx = psFact->psAssemblyPoint->coords.x;
-		apy = psFact->psAssemblyPoint->coords.y;
 
 		// if we've built a command droid - make sure that it isn't assigned to another commander
 		assignCommander = false;
@@ -2768,7 +2765,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 	REPAIR_FACILITY		*psRepairFac = NULL;
 	RESEARCH_FACILITY	*psResFacility;
 	Vector3i iVecEffect;
-	BOOL				bFinishAction, bDroidPlaced = false;
+	BOOL				bDroidPlaced = false;
 	WEAPON_STATS		*psWStats;
 	SDWORD				xdiff,ydiff, mindist, currdist;
 #ifdef INCLUDE_FACTORYLISTS
@@ -3504,7 +3501,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 					//- this was a bit exponential ...
 					pointsToAdd = (iDt * psRepairFac->power / GAME_TICKS_PER_SEC) -
 						psRepairFac->currentPtsAdded;
-					bFinishAction = false;
 
 					// do some repair
 					if (!pointsToAdd)
@@ -3593,8 +3589,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 					psReArmPad->timeStarted = gameTime;
 					psReArmPad->timeLastUpdated = gameTime;
 				}
-
-				bFinishAction = false;
 
 				// dont rearm on remote pcs.
 				if(!bMultiPlayer || myResponsibility(psDroid->player))
@@ -3688,7 +3682,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure)
 
 					//clear the rearm pad
 					psDroid->action = DACTION_NONE;
-					bFinishAction = true;
 					psReArmPad->psObj = NULL;
 					CLEAR_TILE_NOTBLOCKING(mapTile(map_coord(psStructure->pos.x), map_coord(psStructure->pos.y)));
 				}

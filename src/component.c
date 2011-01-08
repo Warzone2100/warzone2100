@@ -721,11 +721,9 @@ void displayComponentObject(BASE_OBJECT *psObj)
 	UDWORD		worldAngle;
 	SDWORD		difference;
 	SDWORD		frame;
-	PROPULSION_STATS	*psPropStats;
 	UDWORD	tileX,tileY;
 	MAPTILE	*psTile;
 
-	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
 	worldAngle = (UDWORD)(player.r.y / DEG_1) % 360;
 	difference = worldAngle - psObj->direction;
 
@@ -824,16 +822,13 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 {
 	DROID				*psDroid;
 	iIMDShape			*psShape, *psJet, *psShapeTemp = NULL;
-	Vector3i				zero = {0, 0, 0};
-	Vector2i				screenCoords;
-	SDWORD				dummyZ, iConnector;
+	SDWORD				iConnector;
 	PROPULSION_STATS	*psPropStats;
 	SDWORD				frame;
 	SDWORD				pieFlag, iPieData;
 	PIELIGHT			brightness;
 	const PIELIGHT			specular = WZCOL_BLACK;
 	UDWORD				colour;
-	UDWORD				bDarkSide = false;
 	UBYTE	i;
 
 	/* Cast the droid pointer */
@@ -841,7 +836,6 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 	if( (gameTime-psDroid->timeLastHit < GAME_TICKS_PER_SEC/4 ) && psDroid->lastHitWeapon == WSC_ELECTRONIC && !gamePaused())
 	{
 		colour = getPlayerColour(rand()%MAX_PLAYERS);
-		bDarkSide = true;
 	}
 	else
 	{
@@ -867,9 +861,6 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 	{
 		brightness = WZCOL_WHITE;
 	}
-
-	/* We've got a z value here _and_ screen coords of origin */
-	dummyZ = pie_RotateProject(&zero, &screenCoords);
 
 	/* set default components transparent */
 	if ( psDroid->asBits[COMP_PROPULSION].nStat == 0 )
@@ -1020,8 +1011,6 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 						if ( psShapeTemp->connectors )
 						{
 							pie_MatBegin();
-							//reset Z?
-							dummyZ = pie_RotateProject(&zero, &screenCoords);
 
 							//to skip number of VTOL_CONNECTOR_START ground unit connectors
 							if ( iConnector < VTOL_CONNECTOR_START )
@@ -1142,8 +1131,6 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 				fall on it's arse......*/
 				//sensor uses connectors[0]
 				pie_MatBegin();
-				//reset Z?
-				dummyZ = pie_RotateProject(&zero, &screenCoords);
 				/* vtol weapons inverted */
 				if ( iConnector >= VTOL_CONNECTOR_START )
 				{
@@ -1183,8 +1170,6 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 				fall on it's arse......*/
 				//cyborg uses connectors[0]
 				pie_MatBegin();
-				//reset Z?
-				dummyZ = pie_RotateProject(&zero, &screenCoords);
 				/* vtol weapons inverted */
 				if ( iConnector >= VTOL_CONNECTOR_START )
 				{
@@ -1230,8 +1215,6 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 				fall on it's arse......*/
 				//ecm uses connectors[0]
 				pie_MatBegin();
-				//reset Z?
-				dummyZ = pie_RotateProject(&zero, &screenCoords);
 				/* vtol weapons inverted */
 				if ( iConnector >= VTOL_CONNECTOR_START )
 				{
@@ -1269,8 +1252,6 @@ void displayCompObj(BASE_OBJECT *psObj, BOOL bButton)
 				fall on it's arse......*/
 				//cyborg uses connectors[0]
 				pie_MatBegin();
-				//reset Z?
-				dummyZ = pie_RotateProject(&zero, &screenCoords);
 				/* vtol weapons inverted */
 				if ( iConnector >= VTOL_CONNECTOR_START )
 				{
@@ -1458,7 +1439,6 @@ void	compPersonToBits(DROID *psDroid)
 {
 	Vector3i position;	//,rotation,velocity;
 	iIMDShape	*headImd, *legsImd, *armImd, *bodyImd;
-	UDWORD		groundHeight;
 	UDWORD		col;
 
 	if(!psDroid->visible[selectedPlayer])
@@ -1485,9 +1465,7 @@ void	compPersonToBits(DROID *psDroid)
 	/* Get where he's at */
 	position.x = psDroid->pos.x;
 	position.y = psDroid->pos.z+1;
-	groundHeight = psDroid->pos.z;
 	position.z = psDroid->pos.y;
-
 
 	/* Tell about player colour */
 	col = getPlayerColour(psDroid->player);

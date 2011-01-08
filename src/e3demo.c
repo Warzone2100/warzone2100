@@ -73,7 +73,6 @@ static void findSomethingInteresting(void)
 	} type;
 
 UDWORD	player,otherPlayer;
-BOOL	gotNewTarget;
 DROID	*psDroid;
 UDWORD	numWith;
 BOOL	bSeekOnlyLocations;
@@ -108,9 +107,6 @@ PROPULSION_STATS	*psPropStats;
 	{
 		bSeekOnlyLocations = true;
 	}
-
-	/* We haven't yet got a droid if we're looking for one...*/
-	gotNewTarget = false;
 
 	/* Keep going until we get one */
 //	while(!gotNewTarget)
@@ -198,7 +194,6 @@ PROPULSION_STATS	*psPropStats;
 			/* Go to a new location cos there's no droids left in the world....ahhhhhhh*/
 		case SEEK_OVERRIDE:
 			requestRadarTrack((16 + rand()%(mapWidth-31))*TILE_UNITS, (16 + rand()%(mapHeight-31)) * TILE_UNITS );
-			gotNewTarget = true;
 			break;
 		default:
 			break;

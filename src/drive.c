@@ -667,8 +667,8 @@ void driveProcessAquireButton(void)
 {
 	if(mouseReleased(MOUSE_RMB) || keyPressed(KEY_S))
 	{
-		BASE_OBJECT	*psObj;
-		psObj = targetAquireNearestObjView((BASE_OBJECT*)psDrivenDroid);
+//		BASE_OBJECT	*psObj;
+//		psObj = targetAquireNearestObjView((BASE_OBJECT*)psDrivenDroid);
 //		driveMarkTarget();
 //		pie_SetMouse(CURSOR_ATTACK, true);
 	}

@@ -147,7 +147,7 @@ const char* getDroidActionName(DROID_ACTION action)
 /* Check if a target is at correct range to attack */
 BOOL actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
 {
-	SDWORD			dx, dy, dz, radSq, rangeSq, longRange;
+	SDWORD			dx, dy, radSq, rangeSq, longRange;
 	WEAPON_STATS	*psStats;
 	int compIndex;
 
@@ -159,7 +159,6 @@ BOOL actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
 
 	dx = (SDWORD)psDroid->pos.x - (SDWORD)psObj->pos.x;
 	dy = (SDWORD)psDroid->pos.y - (SDWORD)psObj->pos.y;
-	dz = (SDWORD)psDroid->pos.z - (SDWORD)psObj->pos.z;
 
 	radSq = dx*dx + dy*dy;
 
@@ -222,7 +221,7 @@ BOOL actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
 // check if a target is within weapon range
 BOOL actionInRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
 {
-	SDWORD			dx, dy, dz, radSq, rangeSq, longRange;
+	SDWORD			dx, dy, radSq, rangeSq, longRange;
 	WEAPON_STATS	*psStats;
 	int compIndex;
 
@@ -239,7 +238,6 @@ BOOL actionInRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
 
 	dx = (SDWORD)psDroid->pos.x - (SDWORD)psObj->pos.x;
 	dy = (SDWORD)psDroid->pos.y - (SDWORD)psObj->pos.y;
-	dz = (SDWORD)psDroid->pos.z - (SDWORD)psObj->pos.z;
 
 	radSq = dx*dx + dy*dy;
 
@@ -264,7 +262,7 @@ BOOL actionInRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
 // check if a target is inside minimum weapon range
 BOOL actionInsideMinRange(DROID *psDroid, BASE_OBJECT *psObj, WEAPON_STATS *psStats)
 {
-	SDWORD	dx, dy, dz, radSq, rangeSq, minRange;
+	SDWORD	dx, dy, radSq, rangeSq, minRange;
 
 	CHECK_DROID(psDroid);
 	CHECK_OBJECT(psObj);
@@ -282,7 +280,6 @@ BOOL actionInsideMinRange(DROID *psDroid, BASE_OBJECT *psObj, WEAPON_STATS *psSt
 
 	dx = (SDWORD)psDroid->pos.x - (SDWORD)psObj->pos.x;
 	dy = (SDWORD)psDroid->pos.y - (SDWORD)psObj->pos.y;
-	dz = (SDWORD)psDroid->pos.z - (SDWORD)psObj->pos.z;
 
 	radSq = dx*dx + dy*dy;
 
@@ -2971,7 +2968,6 @@ return to base*/
 void moveToRearm(DROID *psDroid)
 {
 	STRUCTURE	*psStruct;
-	UBYTE		chosen=0;
 
 	CHECK_DROID(psDroid);
 
@@ -3003,19 +2999,16 @@ void moveToRearm(DROID *psDroid)
 			// no order set - use the rearm order to ensure the unit goes back
 			// to the landing pad
 			orderDroidObj(psDroid, DORDER_REARM, (BASE_OBJECT *)psStruct);
-			chosen=1;
 		}
 		else
 		{
 			actionDroidObj(psDroid, DACTION_MOVETOREARM, (BASE_OBJECT *)psStruct);
-			chosen=2;
 		}
 	}
 	else
 	{
 		//return to base un-armed
 		orderDroid( psDroid, DORDER_RTB );
-		chosen =3;
 	}
 }
 
