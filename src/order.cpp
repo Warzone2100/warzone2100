@@ -2146,7 +2146,7 @@ void orderDroidLoc(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD y, QUEUE_
 	ASSERT_OR_RETURN(, psDroid != NULL, "Invalid unit pointer");
 	ASSERT_OR_RETURN(, validOrderForLoc(order), "Invalid order for location");
 
-	if (mode == ModeQueue && bMultiPlayer) //ajl
+	if (mode == ModeQueue) //ajl
 	{
 		sendDroidInfo(psDroid,  order,  x,  y, NULL, NULL, 0, 0, 0,  false);
 		return;  // Wait to receive our order before changing the droid.
@@ -2206,7 +2206,7 @@ void orderDroidObj(DROID *psDroid, DROID_ORDER order, BASE_OBJECT *psObj, QUEUE_
 	ASSERT(validOrderForObj(order), "Invalid order for object");
 	ASSERT(!isBlueprint(psObj), "Target is a blueprint");
 
-	if (mode == ModeQueue && bMultiPlayer) //ajl
+	if (mode == ModeQueue) //ajl
 	{
 		sendDroidInfo(psDroid, order, 0, 0, psObj, NULL, 0, 0, 0,  false);
 		return;  // Wait for the order to be received before changing the droid.
@@ -2733,15 +2733,6 @@ void orderSelectedLoc(uint32_t player, uint32_t x, uint32_t y, bool add)
 		return;
 	}
 
-	// remove any units from their command group
-	for(psCurr = apsDroidLists[player]; psCurr; psCurr=psCurr->psNext)
-	{
-		if (psCurr->selected && hasCommander(psCurr))
-		{
-			grpLeave(psCurr->psGroup, psCurr);
-		}
-	}
-
 	// note that an order list graphic needs to be displayed
 	bOrderEffectDisplayed = false;
 
@@ -3066,15 +3057,6 @@ void orderSelectedObjAdd(UDWORD player, BASE_OBJECT *psObj, BOOL add)
 {
 	DROID		*psCurr;
 	DROID_ORDER	order;
-
-	// remove any units from their command group
-	for(psCurr = apsDroidLists[player]; psCurr; psCurr=psCurr->psNext)
-	{
-		if (psCurr->selected && hasCommander(psCurr))
-		{
-			grpLeave(psCurr->psGroup, psCurr);
-		}
-	}
 
 	// note that an order list graphic needs to be displayed
 	bOrderEffectDisplayed = false;
