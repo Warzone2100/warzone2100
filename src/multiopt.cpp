@@ -399,9 +399,21 @@ static BOOL cleanMap(UDWORD player)
 	switch(game.base)
 	{
 	case CAMP_CLEAN:									//clean map
-		while(apsStructLists[player])					//strip away structures.
+		psStruct = apsStructLists[player];
+		while (psStruct)						//strip away structures.
 		{
-			removeStruct(apsStructLists[player], true);
+			if ((psStruct->pStructureType->type != REF_WALL && psStruct->pStructureType->type != REF_WALLCORNER
+			     && psStruct->pStructureType->type != REF_DEFENSE && psStruct->pStructureType->type != REF_GATE
+			     && psStruct->pStructureType->type != REF_RESOURCE_EXTRACTOR)
+			    || NetPlay.players[player].difficulty != DIFFICULTY_INSANE || NetPlay.players[player].allocated)
+			{
+				removeStruct(psStruct, true);
+				psStruct = apsStructLists[player];			//restart,(list may have changed).
+			}
+			else
+			{
+				psStruct = psStruct->psNext;
+			}
 		}
 		psD = apsDroidLists[player];					// remove all but construction droids.
 		while(psD)
@@ -419,13 +431,12 @@ static BOOL cleanMap(UDWORD player)
 		psStruct = apsStructLists[player];
 		while(psStruct)
 		{
-			if ( (psStruct->pStructureType->type == REF_WALL)
-			   ||(psStruct->pStructureType->type == REF_WALLCORNER)
-			   ||(psStruct->pStructureType->type == REF_DEFENSE)
-			   ||(psStruct->pStructureType->type == REF_BLASTDOOR)
-			   ||(psStruct->pStructureType->type == REF_GATE)
-			   ||(psStruct->pStructureType->type == REF_CYBORG_FACTORY)
-			   ||(psStruct->pStructureType->type == REF_COMMAND_CONTROL))
+			if (((psStruct->pStructureType->type == REF_WALL || psStruct->pStructureType->type == REF_WALLCORNER
+			      || psStruct->pStructureType->type == REF_DEFENSE || psStruct->pStructureType->type == REF_GATE)
+			     && (NetPlay.players[player].difficulty != DIFFICULTY_INSANE || NetPlay.players[player].allocated))
+			    || psStruct->pStructureType->type == REF_BLASTDOOR
+			    || psStruct->pStructureType->type == REF_CYBORG_FACTORY
+			    || psStruct->pStructureType->type == REF_COMMAND_CONTROL)
 			{
 				removeStruct(psStruct, true);
 				psStruct= apsStructLists[player];			//restart,(list may have changed).

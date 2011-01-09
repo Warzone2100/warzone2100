@@ -230,6 +230,12 @@ typedef enum
 	ALREADY_HAVE_FILE,
 	STUCK_IN_FILE_LOOP
 }	wzFileEnum;
+
+enum
+{
+	DIFFICULTY_EASY, DIFFICULTY_MEDIUM, DIFFICULTY_HARD, DIFFICULTY_INSANE
+};
+
 // ////////////////////////////////////////////////////////////////////////
 // Player information. Filled when players join, never re-ordered. selectedPlayer global points to 
 // currently controlled player.
