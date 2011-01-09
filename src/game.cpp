@@ -11347,7 +11347,6 @@ BOOL loadScriptState(char *pFileName)
 {
 	char	*pFileData;
 	UDWORD	fileSize;
-	BOOL bHashed = false;
 
 	// change the file extension
 	pFileName[strlen(pFileName)-4] = (char)0;
@@ -11361,12 +11360,7 @@ BOOL loadScriptState(char *pFileName)
 		return false;
 	}
 
-	if (saveGameVersion > VERSION_12)
-	{
-		bHashed = true;
-	}
-
-	if (!eventLoadState(pFileData, fileSize, bHashed))
+	if (!eventLoadState(pFileData, fileSize))
 	{
 		return false;
 	}

@@ -198,7 +198,6 @@ BOOL scrGenExternSet(UDWORD index)
 		{
 			// Since tutorial is skirmish
 			NetPlay.players[0].allocated = true;
-debug(LOG_ERROR, "tutorial turned %s", val ? "on" : "off");
 		}
 		break;
 	case EXTID_EXTRAVICTORYFLAG:

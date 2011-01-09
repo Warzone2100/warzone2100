@@ -31,6 +31,6 @@
 extern BOOL eventSaveState(SDWORD version, char **ppBuffer, UDWORD *pFileSize);
 
 // Load the state of the event system
-extern BOOL eventLoadState(char *pBuffer, UDWORD fileSize, BOOL bHashed);
+extern BOOL eventLoadState(char *pBuffer, UDWORD fileSize);
 
 #endif

@@ -88,6 +88,7 @@ extern void resShutDown(void);
 
 /** Set the base resource directory. */
 extern void resSetBaseDir(const char* pResDir);
+extern void resForceBaseDir(const char* pResDir);
 
 /** Parse the res file. */
 bool resLoad(const char *pResFile, SDWORD blockID);
@@ -111,9 +112,6 @@ extern bool	resAddFileLoad(const char *pType, RES_FILELOAD fileLoad,
 
 /** Call the load function for a file. */
 extern bool resLoadFile(const char *pType, const char *pFile);
-
-/** Add data to the resource system. */
-extern bool resAddData(char *pType, char *pID, void *pData);
 
 /** Return the resource for a type and ID */
 extern void *resGetDataFromHash(const char *pType, UDWORD HashedID);

@@ -1677,9 +1677,6 @@ VAR_SYMBOL asObjTable[] =
  */
 CONST_SYMBOL asConstantTable[] =
 {
-/*	{ "TEST_BOOL_CONST",	VAL_BOOL, true,		0,		0 },
-	{ "TEST_INT_CONST",		VAL_INT,	0,		10,		0 },*/
-
 	//reticule button IDs	- for scrFlashOn & Off
 	// original annette styley
 	{ "OPTIONS",	VAL_INT,	false,	IDRET_OPTIONS,		NULL, NULL, 0.0f },
@@ -1690,7 +1687,6 @@ CONST_SYMBOL asConstantTable[] =
 	{ "INTELMAP",	VAL_INT,	false,	IDRET_INTEL_MAP,	NULL, NULL, 0.0f },
 	{ "DESIGN",		VAL_INT,	false,	IDRET_DESIGN,		NULL, NULL, 0.0f },
 	{ "COMMAND",	VAL_INT,	false,	IDRET_COMMAND,		NULL, NULL, 0.0f },
-
 
 	// new styley that supports many other buttons
 	{ "IDRET_OPTIONS",		VAL_INT,	false,	IDRET_OPTIONS,		NULL, NULL, 0.0f },
@@ -1719,13 +1715,11 @@ CONST_SYMBOL asConstantTable[] =
 	// the first (top-left) button on the list window (up from the reticule)
 	{ "IDSTAT_START",		VAL_INT,	false,	IDSTAT_START,		NULL, NULL, 0.0f },
 
-
 	//message Types
 	{ "RES_MSG",	VAL_INT,	false,	MSG_RESEARCH,	NULL, NULL, 0.0f },
 	{ "CAMP_MSG",	VAL_INT,	false,	MSG_CAMPAIGN,	NULL, NULL, 0.0f },
 	{ "MISS_MSG",	VAL_INT,	false,	MSG_MISSION,	NULL, NULL, 0.0f },
 	{ "PROX_MSG",	VAL_INT,	false,	MSG_PROXIMITY,	NULL, NULL, 0.0f },
-	//{ "TUT_MSG",	VAL_INT,	false,	MSG_TUTORIAL,	NULL, NULL, 0.0f }, NOT NEEDED
 
 	//used for null pointers
 	{ "NULLTEMPLATE",	(INTERP_TYPE)ST_POINTER_T,	false,	0,	NULL, NULL, 0.0f },
@@ -1940,7 +1934,6 @@ CONST_SYMBOL asConstantTable[] =
 	{ "STATUS_ReticuleIsOpen",		VAL_INT,	false, STATUS_ReticuleIsOpen,		NULL, NULL, 0.0f },		// is the reticule current being displayed (true=yes)
 	{ "STATUS_BattleMapViewEnabled",VAL_INT,	false, STATUS_BattleMapViewEnabled,	NULL, NULL, 0.0f },	// Are we currently in the battlemap view (tactical display) true=yes
 	{ "STATUS_DeliveryReposInProgress",VAL_INT,false, STATUS_DeliveryReposInProgress,	NULL, NULL, 0.0f },	// Are we currently in the delivery repos mode
-
 
 	//possible values for externed 	targetedObjectType
 	{ "MT_TERRAIN",		VAL_INT,	false,	MT_TERRAIN,			NULL, NULL, 0.0f },
@@ -2291,15 +2284,11 @@ BOOL scrTabInitialise(void)
 	// Set the object variable table
 	scriptSetObjectTab(asObjTable);
 
-
-
-
 	// Set the callback table
 	scriptSetCallbackTab(asCallbackTable);
 
 	// Set the type equivalence table
 	scriptSetTypeEquiv(asEquivTable);
-
 
 	// Set the create and release functions
 	if (!eventAddValueCreate((INTERP_TYPE)ST_BASEOBJECT, scrvAddBasePointer))
@@ -2362,14 +2351,9 @@ BOOL scrTabInitialise(void)
 	return true;
 }
 
-
 // Shut down the script system
 void scrShutDown(void)
 {
 	scrvShutDown();
 	scriptShutDown();
 }
-
-
-
-
