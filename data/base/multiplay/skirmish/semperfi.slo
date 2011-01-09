@@ -303,7 +303,7 @@ function STRUCTURE findIdleStructure(STRUCTURESTAT _structType, bool _bIdleOnly)
 event initialisedEvent(CALL_GAMEINIT)
 {
 	// initialise
-	me = getPlayer();
+	me = getPlayer("Semperfi");
 	_DEBUG = FALSE;
 	dbgMsgOn(me, _DEBUG);
 
@@ -3389,6 +3389,7 @@ function void shutDownAI()
 	setEventTrigger(buildPowerGenerators,	inactive);
 	setEventTrigger(buildExpand,inactive);
 	setEventTrigger(newfortify,	inactive);
+	setEventTrigger(droidBuiltAssign, inactive);
 	setEventTrigger(droidBuilt,	inactive);
 	setEventTrigger(structBuilt,inactive);
 	setEventTrigger(droidDestroyed,inactive);
@@ -3441,6 +3442,7 @@ function void reassignAI()
 	setEventTrigger(buildPowerGenerators, inactive);
 	setEventTrigger(buildExpand, inactive);
 	setEventTrigger(newfortify, inactive);
+	setEventTrigger(droidBuiltAssign,droidBuiltTr);
 	setEventTrigger(droidBuilt,droidBuiltTr);
 	setEventTrigger(droidDestroyed,droidDestroyedTr);
 	setEventTrigger(conDroids,conDroidsTr);

@@ -3,7 +3,7 @@
 // Generic vlo for each computer player - skirmish games
 /////////////////////////////////////////////////////////////////////
 
-script "ai.slo" 
+script "dydo.slo" 
 run
 {
    player          INT                0

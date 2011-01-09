@@ -6,12 +6,6 @@ stamp:
 	$(ZIP) -T $@
 	rm -f stamp
 
-DYDOAILIST = \
-	multiplay \
-	images
-
-DYDOAIARCHIVE = dydo-ai.wz
-
 OLD110LIST = \
 	doc \
 	images \
@@ -21,20 +15,12 @@ OLD110LIST = \
 
 OLD110ARCHIVE = old-1.10-balance.wz
 
+CLEANFILES = $(OLD110ARCHIVE)
 
-SEMPERFILIST = multiplay
-SEMPERFIARCHIVE = semperfi.wz
-
-CLEANFILES = $(DYDOAIARCHIVE) $(OLD110ARCHIVE) $(SEMPERFIARCHIVE)
-
-$(DYDOAIARCHIVE): $(DYDOAILIST:%=$(basename $(DYDOAIARCHIVE))/%)
 $(OLD110ARCHIVE): $(OLD110LIST:%=$(basename $(OLD110ARCHIVE))/%)
-$(SEMPERFIARCHIVE): $(SEMPERFILIST:%=$(basename $(SEMPERFIARCHIVE))/%)
 
 multiplaymodsdir = $(pkgdatadir)/mods/multiplay
-nodist_multiplaymods_DATA =  $(DYDOAIARCHIVE) $(OLD110ARCHIVE) $(SEMPERFIARCHIVE)
+nodist_multiplaymods_DATA =  $(OLD110ARCHIVE)
 
-dist-hook: $(DYDOAIARCHIVE) $(OLD110ARCHIVE) $(SEMPERFIARCHIVE)
-	$(UNZIP) -u $(DYDOAIARCHIVE) -d $(DESTDIR)$(distdir)/$(basename $(DYDOAIARCHIVE))
+dist-hook: $(OLD110ARCHIVE)
 	$(UNZIP) -u $(OLD110ARCHIVE) -d $(DESTDIR)$(distdir)/$(basename $(OLD110ARCHIVE))
-	$(UNZIP) -u $(SEMPERFIARCHIVE) -d $(DESTDIR)$(distdir)/$(basename $(SEMPERFIARCHIVE))

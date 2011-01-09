@@ -2,7 +2,7 @@
 // ai for skirmish game
 /////////////////////////////////////////////////////////////////////
 
-script "ai.slo"
+script "semperfi.slo"
 run
 {
 	// general constants

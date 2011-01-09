@@ -305,7 +305,7 @@ function STRUCTURE findIdleStructure(STRUCTURESTAT _structType, bool _bIdleOnly)
 event initialisedEvent(CALL_GAMEINIT)
 {
 	// initialise
-	me = getPlayer();
+	me = getPlayer("Nexus");
 	_DEBUG = FALSE;
 	dbgMsgOn(me, _DEBUG);
 

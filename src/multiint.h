@@ -27,6 +27,17 @@
 #include "lib/netplay/netplay.h"
 #include "lib/widget/widgbase.h"
 
+#define MAX_LEN_AI_NAME   40
+#define AI_OPEN           -2
+#define AI_CLOSED         -1
+#define AI_NOT_FOUND     -99
+
+void readAIs();	///< step 1, load AI definition files
+void loadAIs();	///< step 2, actually load AI scripts
+const char *getAIName(int player);	///< only run this -after- readAIs() is called
+int matchAIbyName(const char *name);	///< only run this -after- readAIs() is called
+int getNextAIAssignment(const char *name);
+
 extern LOBBY_ERROR_TYPES getLobbyError(void);
 extern void setLobbyError(LOBBY_ERROR_TYPES error_type);
 
@@ -133,8 +144,8 @@ void loadMapPreview(bool hideInterface);
 
 // 'Ready' button
 #define MULTIOP_READY_FORM_ID		102900
-#define MULTIOP_READY_START			(MULTIOP_READY_FORM_ID + MAX_PLAYERS + 1)
-#define	MULTIOP_READY_END			(MULTIOP_READY_START + 7)
+#define MULTIOP_READY_START		(MULTIOP_READY_FORM_ID + MAX_PLAYERS + 1)
+#define	MULTIOP_READY_END		(MULTIOP_READY_START + MAX_PLAYERS)
 #define MULTIOP_READY_WIDTH			41
 #define MULTIOP_READY_HEIGHT		36
 #define MULTIOP_READY_IMG_OFFSET_X	3
@@ -231,9 +242,9 @@ void loadMapPreview(bool hideInterface);
 #define	MULTIOP_CHATEDITW		MULTIOP_CHATBOXW-8
 #define MULTIOP_CHATEDITH		9
 
-#define MULTIOP_COLCHOOSER_FORM	10280
+#define MULTIOP_COLCHOOSER_FORM		10280
 #define MULTIOP_COLCHOOSER		10281
-#define MULTIOP_COLCHOOSER_END	10288
+#define MULTIOP_COLCHOOSER_END		10288
 
 #define MULTIOP_LIMIT			10292	// 2 for this (+label)
 #define MULTIOP_GAMETYPE		10294
@@ -270,6 +281,17 @@ void loadMapPreview(bool hideInterface);
 #define MULTIOP_COLOUR_START		10332
 #define MULTIOP_COLOUR_END		(MULTIOP_COLOUR_START + MAX_PLAYERS)
 #define MULTIOP_COLOUR_WIDTH		31
+
+#define MULTIOP_AI_FORM			(MULTIOP_COLOUR_END + 1)
+#define MULTIOP_AI_START		(MULTIOP_AI_FORM + 1)
+#define MULTIOP_AI_END			(MULTIOP_AI_START + MAX_PLAYERS)
+
+#define MULTIOP_DIFFICULTY_INIT_START	(MULTIOP_AI_END + 1)
+#define	MULTIOP_DIFFICULTY_INIT_END	(MULTIOP_DIFFICULTY_INIT_START + MAX_PLAYERS)
+
+#define MULTIOP_DIFFICULTY_CHOOSE_START	(MULTIOP_DIFFICULTY_INIT_END + 1)
+#define MULTIOP_DIFFICULTY_CHOOSE_END	(MULTIOP_DIFFICULTY_CHOOSE_START + MAX_PLAYERS)
+
 
 // ///////////////////////////////
 // Many Button Variations..

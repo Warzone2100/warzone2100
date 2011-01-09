@@ -72,6 +72,7 @@
 #include "multiplay.h"
 #include "multigifts.h"
 #include "multilimit.h"
+#include "multiint.h"
 #include "advvis.h"
 #include "mapgrid.h"
 #include "lib/ivis_opengl/piestate.h"
@@ -110,7 +111,6 @@ static BOOL	structHasModule(STRUCTURE *psStruct);
 static DROID_TEMPLATE* scrCheckTemplateExists(SDWORD player, DROID_TEMPLATE *psTempl);
 
 /// Hold the previously assigned player
-static int nextPlayer = 0;
 static Vector2i positions[MAX_PLAYERS];
 
 void scriptSetStartPos(int position, int x, int y)
@@ -128,7 +128,6 @@ BOOL scriptInit()
 	{
 		scriptSetStartPos(i, 0, 0);
 	}
-	nextPlayer = 0;
 	return true;
 }
 
@@ -144,11 +143,13 @@ BOOL scrScavengersActive()
 
 BOOL scrGetPlayer()
 {
-	ASSERT_OR_RETURN(false, nextPlayer < MAX_PLAYERS, "Invalid player");
-
-	scrFunctionResult.v.ival = nextPlayer;
-	debug(LOG_SCRIPT, "Initialized player %d, starts at position (%d, %d), max %d players", nextPlayer, positions[nextPlayer].x, positions[nextPlayer].y, game.maxPlayers);
-	nextPlayer++;
+	if (!stackPopParams(1, VAL_STRING, &strParam1))
+	{
+		debug(LOG_ERROR, "stack failed");
+		return false;
+	}
+	int i = scrFunctionResult.v.ival = getNextAIAssignment(strParam1);
+	debug(LOG_SCRIPT, "Initialized player %d, starts at position (%d, %d), max %d players", i, positions[i].x, positions[i].y, game.maxPlayers);
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		ASSERT(false, "Failed to initialize player");

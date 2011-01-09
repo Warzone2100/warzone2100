@@ -78,6 +78,7 @@
 #include "scripttabs.h"
 #include "scriptextern.h"
 #include "multistat.h"
+#include "multiint.h"
 #include "wrappers.h"
 #include "scriptfuncs.h"
 #include "challenge.h"
@@ -540,24 +541,37 @@ static bool deserializeGameStruct(PHYSFS_file* fileHandle, GAMESTRUCT* serialize
 	     && deserializeSessionDesc(fileHandle, &serializeGame->desc));
 }
 
-static bool serializePlayer(PHYSFS_file* fileHandle, const PLAYER* serializePlayer)
+static bool serializePlayer(PHYSFS_file* fileHandle, const PLAYER* serializePlayer, int player)
 {
 	return (PHYSFS_writeUBE32(fileHandle, serializePlayer->position)
 	     && PHYSFS_write(fileHandle, serializePlayer->name, StringSize, 1) == 1
+	     && PHYSFS_write(fileHandle, getAIName(player), MAX_LEN_AI_NAME, 1) == 1
+	     && PHYSFS_writeSBE8(fileHandle, serializePlayer->difficulty)
 	     && PHYSFS_writeUBE32(fileHandle, serializePlayer->colour)
 	     && PHYSFS_writeUBE32(fileHandle, serializePlayer->team));
 }
 
-static bool deserializePlayer(PHYSFS_file* fileHandle, PLAYER* serializePlayer)
+static bool deserializePlayer(PHYSFS_file* fileHandle, PLAYER* serializePlayer, int player)
 {
+	char aiName[MAX_LEN_AI_NAME];
 	uint32_t position, colour, team;
 	bool retval;
 
 	retval = (PHYSFS_readUBE32(fileHandle, &position)
 	          && PHYSFS_read(fileHandle, serializePlayer->name, StringSize, 1) == 1
+	          && PHYSFS_read(fileHandle, aiName, MAX_LEN_AI_NAME, 1) == 1
+	          && PHYSFS_readSBE8(fileHandle, &serializePlayer->difficulty)
 	          && PHYSFS_readUBE32(fileHandle, &colour)
 	          && PHYSFS_readUBE32(fileHandle, &team));
 
+	if (player < game.maxPlayers)
+	{
+		serializePlayer->ai = matchAIbyName(aiName);
+		if (serializePlayer->ai == AI_NOT_FOUND)
+		{
+			debug(LOG_ERROR, "AI %s not found -- script loading will fail (player %d / %d)", aiName, player, game.maxPlayers);
+		}
+	}
 	serializePlayer->position = position;
 	serializePlayer->colour = colour;
 	serializePlayer->team = team;
@@ -576,7 +590,7 @@ static bool serializeNetPlay(PHYSFS_file* fileHandle, const NETPLAY* serializeNe
 
 	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
-		if (!serializePlayer(fileHandle, &serializeNetPlay->players[i]))
+		if (!serializePlayer(fileHandle, &serializeNetPlay->players[i], i))
 			return false;
 	}
 
@@ -602,7 +616,7 @@ static bool deserializeNetPlay(PHYSFS_file* fileHandle, NETPLAY* serializeNetPla
 
 	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
-		if (!deserializePlayer(fileHandle, &serializeNetPlay->players[i]))
+		if (!deserializePlayer(fileHandle, &serializeNetPlay->players[i], i))
 			return false;
 	}
 
@@ -11347,6 +11361,8 @@ BOOL loadScriptState(char *pFileName)
 {
 	char	*pFileData;
 	UDWORD	fileSize;
+
+	loadAIs();
 
 	// change the file extension
 	pFileName[strlen(pFileName)-4] = (char)0;

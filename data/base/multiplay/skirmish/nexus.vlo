@@ -2,7 +2,7 @@
 // ai for skirmish game
 /////////////////////////////////////////////////////////////////////
 
-script "ai.slo"
+script "nexus.slo"
 run
 {
 	// research branches

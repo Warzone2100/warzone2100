@@ -1424,7 +1424,7 @@ FUNC_SYMBOL asFuncTable[] =
 		false, 0, NULL, 0, 0, NULL, NULL },
 
 	{ "getPlayer", scrGetPlayer, VAL_INT,
-		0, { VAL_VOID },
+		1, { VAL_STRING },
 		false, 0, NULL, 0, 0, NULL, NULL },
 
 	{ "getPlayerStartPosition", scrGetPlayerStartPosition, VAL_BOOL,

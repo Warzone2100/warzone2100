@@ -730,7 +730,7 @@ event initialisedEvent(CALL_GAMEINIT)
 {
 
 
-    player = getPlayer();//trunk
+    player = getPlayer("Dydo");//trunk
 
 		lassatTarget = NULLOBJECT; defSpotY = 0 ; defSpotX = 0 ; maxy = 0 ; maxx = 0;
     miny = 0 ; minx = 0 ; baseY = 0 ; baseX = 0 ;

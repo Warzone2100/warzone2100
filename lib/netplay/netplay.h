@@ -245,8 +245,8 @@ typedef struct
 	int32_t		connection;		///< Index into connection list
 	int32_t		team;			///< Which team we are on
 	BOOL		ready;			///< player ready to start?
-	uint32_t	unused_1;	///< for future usage
-	BOOL		unused_2;	///< for future usage
+	int8_t		ai;			///< index into sorted list of AIs, zero is always default AI
+	int8_t		difficulty;		///< difficulty level of AI
 	BOOL		needFile;			///< if We need a file sent to us
 	WZFile		wzFile;				///< for each player, we keep track of map progress
 	char		IPtextAddress[40];	///< IP of this player
