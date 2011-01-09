@@ -2380,8 +2380,20 @@ static BOOL structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 			uint32_t newState = psStructure->pFunctionality->factory.secondaryOrder;
 			uint32_t diff = newState ^ psNewDroid->secondaryOrder;
 			if ((diff & DSS_ARANGE_MASK) != 0)
-			{  // TODO Should either do this for all states, or synchronise factory.secondaryOrder.
+			{  // TODO Should synchronise factory.secondaryOrder and flag positions.
 				secondarySetState(psNewDroid, DSO_ATTACK_RANGE, (SECONDARY_STATE)(newState & DSS_ARANGE_MASK));
+			}
+			if ((diff & DSS_REPLEV_MASK) != 0)
+			{
+				secondarySetState(psNewDroid, DSO_REPAIR_LEVEL, (SECONDARY_STATE)(newState & DSS_REPLEV_MASK));
+			}
+			if ((diff & DSS_ALEV_MASK) != 0)
+			{
+				secondarySetState(psNewDroid, DSO_ATTACK_LEVEL, (SECONDARY_STATE)(newState & DSS_ALEV_MASK));
+			}
+			if ((diff & DSS_CIRCLE_MASK) != 0)
+			{
+				secondarySetState(psNewDroid, DSO_CIRCLE, (SECONDARY_STATE)(newState & DSS_CIRCLE_MASK));
 			}
 		}
 
@@ -2448,7 +2460,7 @@ static BOOL structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 			}
 			else
 			{
-				cmdDroidAddDroid(psFact->psCommander, psNewDroid);
+				orderDroidObj(psNewDroid, DORDER_COMMANDERSUPPORT, psFact->psCommander, ModeImmediate);
 			}
 		}
 		else

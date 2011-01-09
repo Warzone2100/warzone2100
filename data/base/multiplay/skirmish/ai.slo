@@ -2986,6 +2986,7 @@ function void shutDownAI()
 	setEventTrigger(upgradeStructures,inactive);
 	setEventTrigger(finishStructs,	inactive);
 	setEventTrigger(newfortify,	inactive);
+	setEventTrigger(droidBuiltAssign, inactive);
 	setEventTrigger(droidBuilt,	inactive);
 	setEventTrigger(structBuilt,inactive);
 	setEventTrigger(droidDestroyed,inactive);
@@ -3041,6 +3042,7 @@ function void reassignAI()
 	setEventTrigger(upgradeStructures,upgradeStructuresTr );
 	setEventTrigger(finishStructs,finishStructsTr );
 	setEventTrigger(newfortify,fortifyTr );
+	setEventTrigger(droidBuiltAssign,droidBuiltTr);
 	setEventTrigger(droidBuilt,droidBuiltTr);
 	setEventTrigger(droidDestroyed,droidDestroyedTr);
 	setEventTrigger(conDroids,conDroidsTr);

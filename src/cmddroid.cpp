@@ -28,6 +28,7 @@
 #include "objects.h"
 #include "cmddroiddef.h"
 #include "cmddroid.h"
+#include "lib/netplay/netplay.h"
 #include "lib/gamelib/gtime.h"
 #include "group.h"
 #include "order.h"

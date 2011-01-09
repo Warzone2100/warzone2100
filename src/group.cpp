@@ -25,6 +25,7 @@
  */
 
 #include "lib/framework/frame.h"
+#include "lib/netplay/netplay.h"
 
 #include "multiplay.h"
 
@@ -136,6 +137,11 @@ void grpJoin(DROID_GROUP *psGroup, DROID *psDroid)
 			psDroid->psGrpNext = psGroup->psList;
 			psGroup->psList = psDroid;
 		}
+
+		if (psGroup->type == GT_COMMAND)
+		{
+			syncDebug("Droid %d joining command group %d", psDroid->id, psGroup->psCommander != NULL? psGroup->psCommander->id : 0);
+		}
 	}
 }
 
@@ -152,6 +158,11 @@ void grpLeave(DROID_GROUP *psGroup, DROID *psDroid)
 	{
 		ASSERT( false, "grpLeave: droid group does not match" );
 		return;
+	}
+
+	if (psDroid != NULL && psGroup->type == GT_COMMAND)
+	{
+		syncDebug("Droid %d leaving command group %d", psDroid->id, psGroup->psCommander != NULL? psGroup->psCommander->id : 0);
 	}
 
 	psGroup->refCount -= 1;

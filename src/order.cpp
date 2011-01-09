@@ -1291,6 +1291,8 @@ static void orderCmdGroupBase(DROID_GROUP *psGroup, DROID_ORDER_DATA *psData)
 	ASSERT( psGroup != NULL,
 		"cmdUnitOrderGroupBase: invalid unit group" );
 
+	syncDebug("Commander group order");
+
 	if (psData->order == DORDER_RECOVER)
 	{
 		// picking up an artifact - only need to send one unit
@@ -1304,6 +1306,7 @@ static void orderCmdGroupBase(DROID_GROUP *psGroup, DROID_ORDER_DATA *psData)
 				psChosen = psCurr;
 				mindist = currdist;
 			}
+			syncDebug("command %d,%d", psCurr->id, currdist);
 		}
 		if (psChosen != NULL)
 		{
@@ -1314,6 +1317,7 @@ static void orderCmdGroupBase(DROID_GROUP *psGroup, DROID_ORDER_DATA *psData)
 	{
 		for (psCurr = psGroup->psList; psCurr; psCurr=psCurr->psGrpNext)
 		{
+			syncDebug("command %d", psCurr->id);
 			if (!orderState(psCurr, DORDER_RTR))		// if you change this, youll need to change sendcmdgroup()
 			{
 				orderDroidBase(psCurr, psData);
