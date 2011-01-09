@@ -350,7 +350,7 @@ void	kf_CloneSelected( void )
 			templateSetParts(psDroid, &sTemplate);
 
 			// create a new droid
-			// psNewDroid = buildDroid(&sTemplate, psDroid->pos.x, psDroid->pos.y, psDroid->player, false, NULL);
+			buildDroid(&sTemplate, psDroid->pos.x, psDroid->pos.y, psDroid->player, false, NULL);
 			/* // TODO psNewDroid is null, since we just sent a message, but haven't actually created the droid locally yet.
 			ASSERT_OR_RETURN(, psNewDroid != NULL, "Unable to build a unit");
 			addDroid(psNewDroid, apsDroidLists);

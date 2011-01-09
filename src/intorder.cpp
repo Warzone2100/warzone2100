@@ -28,6 +28,8 @@
 #include "order.h"
 #include "scriptextern.h"
 
+#include <set>
+
 
 #define ORDER_X			23
 #define ORDER_Y			45
@@ -38,10 +40,6 @@
 #define ORDER_BUTGAP	4
 #define ORDER_BOTTOMY	318	+ E_H
 
-
-#define MAX_SELECTED_DROIDS	100	// Max size of selected droids list.
-
-#define MAX_AVAILABLE_ORDERS 16	// Max available orders list.
 #define MAX_DISPLAYABLE_ORDERS 11	// Max number of displayable orders.
 #define MAX_ORDER_BUTS 5		// Max number of buttons for a given order.
 #define NUM_ORDERS 12			// Number of orders in OrderButtons list.
@@ -64,22 +62,24 @@
 //#define IDORDER_RETURN_TO_REPAIR		8080
 //#define IDORDER_EMBARK				8100
 
-typedef enum {
+enum ORDBUTTONTYPE
+{
 	ORD_BTYPE_RADIO,			// Only one state allowed.
 	ORD_BTYPE_BOOLEAN,			// Clicking on a button toggles it's state.
 	ORD_BTYPE_BOOLEAN_DEPEND,	// Clicking on a button toggles it's state, button
 								// is only enabled if previous button is down.
 	ORD_BTYPE_BOOLEAN_COMBINE,	// Clicking on a button toggles it's state, all
 								// the buttons states are OR'ed together to get the order state
-} ORDBUTTONTYPE;
+};
 
-typedef enum {
+enum ORDBUTTONCLASS
+{
 	ORDBUTCLASS_NORMAL,			// A normal button, one order type per line.
 //	ORDBUTCLASS_NORMALMIXED,	// A normal button but multiple order types on one line.
 	ORDBUTCLASS_FACTORY,		// A factory assignment button.
 	ORDBUTCLASS_CYBORGFACTORY,	// A cyborg factory assignment button.
 	ORDBUTCLASS_VTOLFACTORY, 	// A VTOL factory assignment button.
-} ORDBUTTONCLASS;
+};
 
 
 /*
@@ -88,14 +88,15 @@ typedef enum {
 	ie button 1 = enable destruct, button 2 = destruct
 */
 
-typedef enum {
+enum ORDBUTTONJUSTIFY
+{
 	ORD_JUSTIFY_LEFT,			// Pretty self explanatory really.
 	ORD_JUSTIFY_RIGHT,
 	ORD_JUSTIFY_CENTER,
 	ORD_JUSTIFY_COMBINE,		// allow the button to be put on the same line
 								// as other orders with the same justify type
 	ORD_NUM_JUSTIFY_TYPES,
-} ORDBUTTONJUSTIFY;
+};
 
 // maximum number of orders on one line
 #define ORD_MAX_COMBINE_BUTS	3
@@ -103,7 +104,8 @@ typedef enum {
 #define ORD_JUSTIFY_MASK	0x0f
 #define ORD_JUSTIFY_NEWLINE	0x10	// Or with ORDBUTTONJUSTIFY enum type to specify start on new line.
 
-typedef struct {
+struct ORDERBUTTONS
+{
 	ORDBUTTONCLASS Class;					// The class of button.
 	SECONDARY_ORDER Order;					// The droid order.
 	UDWORD StateMask;						// It's state mask.
@@ -117,13 +119,16 @@ typedef struct {
 	UWORD ButHilightID[MAX_ORDER_BUTS];		// Image ID's for each button ( hilight overlay ).
 	UWORD ButTips[MAX_ORDER_BUTS];			// Tip string id for each button.
 	unsigned States[MAX_ORDER_BUTS];                // Order state relating to each button, combination of SECONDARY_STATEs ored together.
-} ORDERBUTTONS;
+};
 
 
-typedef struct {
+struct AVORDER
+{
+	bool operator <(AVORDER const &b) const { return OrderIndex < b.OrderIndex; }
+	bool operator ==(AVORDER const &b) const { return OrderIndex == b.OrderIndex; }
+
 	UWORD OrderIndex;		// Index into ORDERBUTTONS array of available orders.
-	UWORD RefCount;			// Number of times this order is referenced.
-} AVORDER;
+};
 
 
 enum
@@ -452,11 +457,9 @@ ORDERBUTTONS OrderButtons[NUM_ORDERS]=
 };
 
 
-static UWORD NumSelectedDroids;
-static DROID *SelectedDroids[MAX_SELECTED_DROIDS];
+static std::vector<DROID *> SelectedDroids;
 static STRUCTURE *psSelectedFactory = NULL;
-static UWORD NumAvailableOrders;
-static AVORDER AvailableOrders[MAX_AVAILABLE_ORDERS];
+static std::vector<AVORDER> AvailableOrders;
 
 
 BOOL OrderUp = false;
@@ -485,106 +488,53 @@ static BOOL BuildSelectedDroidList(void)
 
 	for(psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext) {
 		if(psDroid->selected) {
-			if(NumSelectedDroids < MAX_SELECTED_DROIDS) {
-				SelectedDroids[NumSelectedDroids] = psDroid;
-				NumSelectedDroids++;
-			}
+			SelectedDroids.push_back(psDroid);
 		}
 	}
 
-	if(NumSelectedDroids) {
-		return true;
-	}
-
-	return false;
+	return !SelectedDroids.empty();
 }
 
 // Build a list of orders available for the selected group of droids.
 //
-static BOOL BuildDroidOrderList(void)
+static std::vector<AVORDER> buildDroidOrderList(void)
 {
-	UWORD OrdIndex;
-	UWORD i,j;
-	BOOL Found;
-	BOOL Sorted;
-	AVORDER Tmp;
+	std::set<AVORDER> orders;
 
-	NumAvailableOrders = 0;
-
-	for(j=0; j<NumSelectedDroids; j++) {
-
-		for(OrdIndex = 0; OrdIndex < NUM_ORDERS; OrdIndex++) {
-
+	for (unsigned j = 0; j < SelectedDroids.size(); j++)
+	{
+		for (unsigned OrdIndex = 0; OrdIndex < NUM_ORDERS; ++OrdIndex)
+		{
 			// Is the order available?
-			if(secondarySupported(SelectedDroids[j], OrderButtons[OrdIndex].Order)) {
-				if(NumAvailableOrders < MAX_AVAILABLE_ORDERS) {
-					// Have we already got this order?
-					Found = false;
-					for(i=0; i<NumAvailableOrders; i++) {
-						if(AvailableOrders[i].OrderIndex == OrdIndex) {
-							// Yes! Then increment it's reference count.
-							AvailableOrders[i].RefCount++;
-							Found = true;
-						}
-					}
-
-					if(!Found) {
-						// Not already got it so add it to the list of available orders.
-						AvailableOrders[NumAvailableOrders].OrderIndex = OrdIndex;
-						AvailableOrders[NumAvailableOrders].RefCount = 1;
-						NumAvailableOrders++;
-					}
-				}
+			if (secondarySupported(SelectedDroids[j], OrderButtons[OrdIndex].Order))
+			{
+				AVORDER avOrder;
+				avOrder.OrderIndex = OrdIndex;
+				// Sort by Order index, A bubble sort? I know but it's only
+				// a small list so what the hell.
+				// Herein lies the remains of a bubble sort.
+				orders.insert(avOrder);
 			}
 		}
 	}
 
-	if(NumAvailableOrders == 0) {
-		return false;
-	}
-
-	if(NumAvailableOrders > 1) {
-		// Sort by Order index, A bubble sort? I know but it's only
-		// a small list so what the hell.
-		do {
-			Sorted = true;
-			for(i=0; i<NumAvailableOrders-1; i++) {
-				if(AvailableOrders[i].OrderIndex > AvailableOrders[i+1].OrderIndex) {
-					Tmp = AvailableOrders[i];
-					AvailableOrders[i] = AvailableOrders[i+1];
-					AvailableOrders[i+1] = Tmp;
-					Sorted = false;
-				}
-			}
-		} while(!Sorted);
-	}
-
-	return true;
+	return std::vector<AVORDER>(orders.begin(), orders.end());
 }
 
 // Build a list of orders available for the selected structure.
-static BOOL BuildStructureOrderList(STRUCTURE *psStructure)
+static std::vector<AVORDER> buildStructureOrderList(STRUCTURE *psStructure)
 {
-    //only valid for Factories (at the moment)
-    if (!StructIsFactory(psStructure))
-    {
-        ASSERT( false, "BuildStructureOrderList: structure is not a factory" );
-        return false;
-    }
+	//only valid for Factories (at the moment)
+	ASSERT_OR_RETURN(std::vector<AVORDER>(), StructIsFactory(psStructure), "BuildStructureOrderList: structure is not a factory");
 
-    //this can be hard-coded!
-    AvailableOrders[0].OrderIndex = 0;//DSO_ATTACK_RANGE;
-    AvailableOrders[0].RefCount = 1;
-    AvailableOrders[1].OrderIndex = 1;//DSO_REPAIR_LEVEL;
-    AvailableOrders[1].RefCount = 1;
-    AvailableOrders[2].OrderIndex = 2;//DSO_ATTACK_LEVEL;
-    AvailableOrders[2].RefCount = 1;
-    AvailableOrders[3].OrderIndex = 5;//DSO_HALTTYPE;
-    AvailableOrders[3].RefCount = 1;
+	//this can be hard-coded!
+	std::vector<AVORDER> orders(4);
+	orders[0].OrderIndex = 0;//DSO_ATTACK_RANGE;
+	orders[1].OrderIndex = 1;//DSO_REPAIR_LEVEL;
+	orders[2].OrderIndex = 2;//DSO_ATTACK_LEVEL;
+	orders[3].OrderIndex = 5;//DSO_HALTTYPE;
 
-    NumAvailableOrders = 4;
-
-    return true;
+	return orders;
 }
 
 
@@ -592,7 +542,6 @@ static BOOL BuildStructureOrderList(STRUCTURE *psStructure)
 // if there are multiple states then don't return a state
 static SECONDARY_STATE GetSecondaryStates(SECONDARY_ORDER sec)
 {
-	SDWORD	i;
 	SECONDARY_STATE state, currState;
 	BOOL	bFirst;
 
@@ -607,7 +556,7 @@ static SECONDARY_STATE GetSecondaryStates(SECONDARY_ORDER sec)
 	}
 	else //droids
 	{
-		for (i = 0; i < NumSelectedDroids; i++)
+		for (unsigned i = 0; i < SelectedDroids.size(); ++i)
 		{
 			currState = secondaryGetState(SelectedDroids[i], sec);
 			if (bFirst)
@@ -645,7 +594,6 @@ BOOL intAddOrder(BASE_OBJECT *psObj)
 {
 	BOOL Animate = true;
 	SECONDARY_STATE State;
-	UWORD i,j;//,k;
 	UWORD OrdIndex;
 	W_FORM *Form;
 	UWORD Height, NumDisplayedOrders;
@@ -704,19 +652,19 @@ BOOL intAddOrder(BASE_OBJECT *psObj)
 
 	setWidgetsStatus(true);
 
-	NumAvailableOrders = 0;
-	NumSelectedDroids = 0;
+	AvailableOrders.clear();
+	SelectedDroids.clear();
 
 	// Selected droid is a command droid?
 	if ((Droid != NULL) && (Droid->droidType == DROID_COMMAND))
 	{
 		// displaying for a command droid - ignore any other droids
-		SelectedDroids[0] = Droid;
-		NumSelectedDroids = 1;
+		SelectedDroids.push_back(Droid);
 	}
 	else if (psStructure != NULL)
 	{
-		if (!BuildStructureOrderList(psStructure))
+		AvailableOrders = buildStructureOrderList(psStructure);
+		if (AvailableOrders.empty())
 		{
 			return false;
 		}
@@ -726,15 +674,15 @@ BOOL intAddOrder(BASE_OBJECT *psObj)
 		// If no droids selected then see if we were given a specific droid.
 		if(Droid != NULL) {
 			// and put it in the list.
-			SelectedDroids[0] = Droid;
-			NumSelectedDroids = 1;
+			SelectedDroids.push_back(Droid);
 		}
 	}
 
 	// Build a list of orders available for the list of selected droids. - if a factory has not been selected
 	if (psStructure == NULL)
 	{
-		if(!BuildDroidOrderList())
+		AvailableOrders = buildDroidOrderList();
+		if (AvailableOrders.empty())
 		{
 			// If no orders then return;
 			return false;
@@ -794,7 +742,8 @@ BOOL intAddOrder(BASE_OBJECT *psObj)
 	Height = 0;
 	NumDisplayedOrders = 0;
 
-	for(j=0; ((j<NumAvailableOrders) && (NumDisplayedOrders < MAX_DISPLAYABLE_ORDERS)); j++) {
+	for (unsigned j = 0; j < AvailableOrders.size() && NumDisplayedOrders < MAX_DISPLAYABLE_ORDERS; ++j)
+	{
    		OrdIndex = AvailableOrders[j].OrderIndex;
 
 		// Get current order state.
@@ -858,7 +807,7 @@ BOOL intAddOrder(BASE_OBJECT *psObj)
 			case ORD_JUSTIFY_COMBINE:
 				// see how many are on this line before the button
 				NumCombineBefore = 0;
-				for(i=0; i<j; i++)
+				for (unsigned i = 0; i < j; ++i)
 				{
 					if ((OrderButtons[AvailableOrders[i].OrderIndex].ButJustify & ORD_JUSTIFY_MASK)
 								== ORD_JUSTIFY_COMBINE)
@@ -869,7 +818,7 @@ BOOL intAddOrder(BASE_OBJECT *psObj)
 				NumCombineButs = (UWORD)(NumCombineBefore + 1);
 
 				// now see how many in total
-				for(i=(UWORD)(j+1); i<NumAvailableOrders; i++)
+				for (unsigned i = j + 1; i < AvailableOrders.size(); ++i)
 				{
 					if ((OrderButtons[AvailableOrders[i].OrderIndex].ButJustify & ORD_JUSTIFY_MASK)
 								== ORD_JUSTIFY_COMBINE)
@@ -906,7 +855,8 @@ BOOL intAddOrder(BASE_OBJECT *psObj)
 				break;
 		}
 
-		for(i=0; i<OrderButtons[OrdIndex].AcNumButs; i++) {
+		for (unsigned i = 0; i < OrderButtons[OrdIndex].AcNumButs; ++i)
+		{
 			sButInit.pTip = getDORDDescription(OrderButtons[OrdIndex].ButTips[i]);
 			sButInit.width = (UWORD)GetImageWidth(IntImages,OrderButtons[OrdIndex].ButImageID[i]);
 			sButInit.height = (UWORD)GetImageHeight(IntImages,OrderButtons[OrdIndex].ButImageID[i]);
@@ -1015,37 +965,20 @@ BOOL intAddOrder(BASE_OBJECT *psObj)
 // this lets the screen work with command droids - John.
 void intRunOrder(void)
 {
-	UWORD i;
- 	UDWORD NumDead = 0;
- 	UDWORD NumSelected = 0;
-
 	// Check to see if there all dead or unselected.
-	for(i = 0; i < NumSelectedDroids; i++)
+	for (unsigned i = 0; i < SelectedDroids.size(); i++)
 	{
-		if (SelectedDroids[i])
+		if (SelectedDroids[i]->died)
 		{
-			NumSelected++;
-			if (SelectedDroids[i]->died)
-			{
-				NumDead++;
-				SelectedDroids[i] = NULL;
-			}
+			SelectedDroids[i] = NULL;
 		}
 	}
+	// Remove any NULL pointers from SelectedDroids.
+	SelectedDroids.erase(std::remove(SelectedDroids.begin(), SelectedDroids.end(), (DROID *)NULL), SelectedDroids.end());
 
 	// If all dead then remove the screen.
-	if(NumDead == NumSelectedDroids)
-	{
-		// might have a factory selected
-		if (psSelectedFactory == NULL)
-		{
-			intRemoveOrder();
-			return;
-		}
-	}
-
 	// If droids no longer selected then remove screen.
-	if(NumSelected == 0)
+	if (SelectedDroids.empty())
 	{
 		// might have a factory selected
 		if (psSelectedFactory == NULL)
@@ -1062,9 +995,8 @@ void intRunOrder(void)
 //
 static BOOL SetSecondaryState(SECONDARY_ORDER sec, unsigned State)
 {
-	UWORD i;
-
-	for(i=0; i<NumSelectedDroids; i++) {
+	for (unsigned i = 0; i < SelectedDroids.size(); ++i)
+	{
 		if (SelectedDroids[i])
 		{
 			//Only set the state if it's not a transporter.
@@ -1210,117 +1142,30 @@ void intProcessOrder(UDWORD id)
 // check whether the order list has changed
 static BOOL CheckObjectOrderList(void)
 {
-	UWORD OrdIndex;
-	UWORD i,j;
-	BOOL Found;
-	BOOL Sorted;
-	AVORDER Tmp;
-	UWORD	NumNewOrders = 0;
-	AVORDER NewAvailableOrders[MAX_AVAILABLE_ORDERS];
+	std::vector<AVORDER> NewAvailableOrders;
 
 	if (psSelectedFactory != NULL)
 	{
-		// only valid for Factories (at the moment)
-		ASSERT_OR_RETURN(false, StructIsFactory(psSelectedFactory), "Selected factory is a %s!", 
-		                 objInfo((BASE_OBJECT *)psSelectedFactory));
-
-		//this can be hard-coded!
-		NewAvailableOrders[0].OrderIndex = 0;//DSO_ATTACK_RANGE;
-		NewAvailableOrders[0].RefCount = 1;
-		NewAvailableOrders[1].OrderIndex = 1;//DSO_REPAIR_LEVEL;
-		NewAvailableOrders[1].RefCount = 1;
-		NewAvailableOrders[2].OrderIndex = 2;//DSO_ATTACK_LEVEL;
-		NewAvailableOrders[2].RefCount = 1;
-		NewAvailableOrders[3].OrderIndex = 5;//DSO_HALTTYPE;
-		NewAvailableOrders[3].RefCount = 1;
-		NumNewOrders = 4;
-
-		if (NumNewOrders != NumAvailableOrders)
-		{
-			return false;
-		}
+		NewAvailableOrders = buildStructureOrderList(psSelectedFactory);
 	}
 	else
 	{
-		for(j = 0; j < NumSelectedDroids; j++)
-		{
-			for (OrdIndex = 0; OrdIndex < NUM_ORDERS; OrdIndex++)
-			{
-				// Is the order available?
-				if (secondarySupported(SelectedDroids[j], OrderButtons[OrdIndex].Order))
-				{
-					if (NumNewOrders < MAX_AVAILABLE_ORDERS)
-					{
-						// Have we already got this order?
-						Found = false;
-						for (i = 0; i<NumNewOrders; i++)
-						{
-							if (NewAvailableOrders[i].OrderIndex == OrdIndex)
-							{
-								// Yes! Then increment it's reference count.
-								NewAvailableOrders[i].RefCount++;
-								Found = true;
-							}
-						}
-
-						if (!Found)
-						{
-							// Not already got it so add it to the list of available orders.
-							NewAvailableOrders[NumNewOrders].OrderIndex = OrdIndex;
-							NewAvailableOrders[NumNewOrders].RefCount = 1;
-							NumNewOrders++;
-						}
-					}
-				}
-			}
-		}
-
-		if (NumNewOrders != NumAvailableOrders)
-		{
-			return false;
-		}
-
-		if(NumNewOrders > 1)
-		{
-			// Sort by Order index, A bubble sort? I know but it's only
-			// a small list so what the hell.
-			do {
-				Sorted = true;
-				for (i = 0; i<NumNewOrders-1; i++)
-				{
-					if (NewAvailableOrders[i].OrderIndex > NewAvailableOrders[i + 1].OrderIndex)
-					{
-						Tmp = NewAvailableOrders[i];
-						NewAvailableOrders[i] = NewAvailableOrders[i+1];
-						NewAvailableOrders[i+1] = Tmp;
-						Sorted = false;
-					}
-				}
-			} while(!Sorted);
-		}
+		NewAvailableOrders = buildDroidOrderList();
 	}
 
 	// now check that all the orders are the same
-	for (i = 0; i< NumNewOrders; i++)
-	{
-		if (NewAvailableOrders[i].OrderIndex != AvailableOrders[i].OrderIndex)
-		{
-			return false;
-		}
-	}
-
-	return true;
+	return NewAvailableOrders == AvailableOrders;
 }
 
 static BOOL intRefreshOrderButtons(void)
 {
 	SECONDARY_STATE State;
-	UWORD i,j;//,k;
 	UWORD OrdIndex;
 	UWORD NumButs;
 	UDWORD	id;
 
-	for(j=0; ((j<NumAvailableOrders) && (j < MAX_DISPLAYABLE_ORDERS)); j++) {
+	for (unsigned j = 0; j < AvailableOrders.size() && j < MAX_DISPLAYABLE_ORDERS; ++j)
+	{
    		OrdIndex = AvailableOrders[j].OrderIndex;
 
 		// Get current order state.
@@ -1347,8 +1192,8 @@ static BOOL intRefreshOrderButtons(void)
 		}
 
 		id = OrderButtons[OrdIndex].ButBaseID;
-		for(i=0; i<OrderButtons[OrdIndex].AcNumButs; i++) {
-
+		for (unsigned i = 0; i < OrderButtons[OrdIndex].AcNumButs; ++i)
+		{
 			// Set the state for the button.
 			switch(OrderButtons[OrdIndex].ButType) {
 	   			case ORD_BTYPE_RADIO:
@@ -1397,7 +1242,7 @@ BOOL intRefreshOrder(void)
 	{
 		BOOL Ret;
 
-		NumSelectedDroids = 0;
+		SelectedDroids.clear();
 
 		// check for factory selected first
 		if (!psSelectedFactory)
@@ -1448,7 +1293,7 @@ void intRemoveOrder(void)
 		Form->disableChildren = true;
 		ClosingOrder = true;
 		OrderUp = false;
-		NumSelectedDroids = 0;
+		SelectedDroids.clear();
 		psSelectedFactory = NULL;
 	}
 }
@@ -1461,7 +1306,7 @@ void intRemoveOrderNoAnim(void)
 	widgDelete(psWScreen, IDORDER_CLOSE);
 	widgDelete(psWScreen, IDORDER_FORM);
 	OrderUp = false;
-	NumSelectedDroids = 0;
+	SelectedDroids.clear();
 	psSelectedFactory = NULL;
 }
 
