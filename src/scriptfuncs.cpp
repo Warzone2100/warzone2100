@@ -141,6 +141,23 @@ BOOL scrScavengersActive()
 	return true;
 }
 
+BOOL scrGetDifficulty()
+{
+	int player;
+	if (!stackPopParams(1, VAL_INT, &player))
+	{
+		return false;
+	}
+	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Bad player index");
+	scrFunctionResult.v.ival = NetPlay.players[player].difficulty;
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
+	{
+		ASSERT(false, "Failed to initialize player");
+		return false;
+	}
+	return true;
+}
+
 BOOL scrGetPlayer()
 {
 	if (!stackPopParams(1, VAL_STRING, &strParam1))

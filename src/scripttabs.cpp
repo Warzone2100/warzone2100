@@ -56,6 +56,7 @@
 #include "intfac.h"
 #include "multimenu.h"
 #include "lib/framework/input.h"		//for key constants
+#include "lib/netplay/netplay.h"
 #include "lib/script/chat_processing.h"
 
 
@@ -293,10 +294,6 @@ FUNC_SYMBOL asFuncTable[] =
 	{ "removeMessage",		scrRemoveMessage,		VAL_VOID,
 		3, { (INTERP_TYPE)ST_INTMESSAGE, VAL_INT, VAL_INT },
 		0, 0, NULL, 0, 0, NULL, NULL },
-
-/*	{ "addTutorialMessage",	scrAddTutorialMessage,	VAL_VOID,
-		2, { (INTERP_TYPE)ST_INTMESSAGE, VAL_INT },
-		0, 0, NULL, 0, 0, NULL, NULL },*/
 
 	{ "selectDroidByID",	scrSelectDroidByID,		VAL_BOOL,
 		2, { (INTERP_TYPE)ST_DROIDID, VAL_INT },
@@ -1458,6 +1455,10 @@ FUNC_SYMBOL asFuncTable[] =
 		9, { VAL_FLOAT, VAL_FLOAT, VAL_FLOAT, VAL_FLOAT, VAL_FLOAT, VAL_FLOAT, VAL_FLOAT, VAL_FLOAT, VAL_FLOAT },
 		false, 0, NULL, 0, 0, NULL, NULL },
 
+	{ "getDifficulty", scrGetDifficulty, VAL_INT,
+		1, { VAL_INT },
+		false, 0, NULL, 0, 0, NULL, NULL },
+
 	/* This final entry marks the end of the function list */
 	{ "FUNCTION LIST END", NULL, VAL_VOID, 0, { VAL_VOID }, 0, 0, NULL, 0, 0, NULL, NULL }
 };
@@ -2062,6 +2063,11 @@ CONST_SYMBOL asConstantTable[] =
 	{ "KEY_KP_7",		VAL_INT,	false,		KEY_KP_7,		NULL, NULL, 0.0f },
 	{ "KEY_KP_8",		VAL_INT,	false,		KEY_KP_8,		NULL, NULL, 0.0f },
 	{ "KEY_KP_9",		VAL_INT,	false,		KEY_KP_9,		NULL, NULL, 0.0f },
+
+	{ "EASY",               VAL_INT,        false,  DIFFICULTY_EASY,                NULL, NULL, 0.0f },
+	{ "MEDIUM",             VAL_INT,        false,  DIFFICULTY_MEDIUM,              NULL, NULL, 0.0f },
+	{ "HARD",               VAL_INT,        false,  DIFFICULTY_HARD,                NULL, NULL, 0.0f },
+	{ "INSANE",             VAL_INT,        false,  DIFFICULTY_INSANE,              NULL, NULL, 0.0f },
 
 	/* This entry marks the end of the constant list */
 	{ "CONSTANT LIST END",VAL_VOID,	false,		0,	NULL, NULL, 0.0f }

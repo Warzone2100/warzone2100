@@ -625,7 +625,7 @@ event arrived(reachedTr)
 		exit;
 	}
 
-	if (droid.droidType == DROID_CONSTRUCT or droid.droidType == DROID_CYBORG_CONSTRUCT)
+	if (droid.droidType == DROID_CONSTRUCT or droid.droidType == DROID_CYBORG_CONSTRUCT && getDifficulty(me) > EASY)
 	{
 		dbgObj(droid, "Failed to build where we should - attempt to screw up enemy oil derrick");
 
@@ -1006,7 +1006,7 @@ event startLevel(startLevelTr)
 {
 	setEventTrigger(conDroids, chainloadTr);
 	setEventTrigger(doResearch, chainloadTr);
-	if ((numFactories() > 1) and (isStructureAvailable(defStructs[0], me)))
+	if (numFactories() > 1 and isStructureAvailable(defStructs[0], me) and getDifficulty(me) > MEDIUM)
 	{
 		dbgPlr("TRUCK RUSH!");
 		setEventTrigger(truckRush, chainloadTr);

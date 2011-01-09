@@ -37,6 +37,7 @@ struct DROID;
 extern BOOL scriptInit(void);
 extern void scriptSetStartPos(int position, int x, int	y);
 extern BOOL scrGetPlayer(void);
+extern BOOL scrGetDifficulty(void);
 extern BOOL scrScavengersActive(void);
 extern BOOL scrGetPlayerStartPosition(void);
 extern BOOL scrSafeDest(void);
