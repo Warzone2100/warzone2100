@@ -39,7 +39,7 @@
 #define ORDER_BOTTOMY	318	+ E_H
 
 
-#define MAX_SELECTED_DROIDS	100	// Max size of selected droids list.
+#define MAX_SELECTED_DROIDS	1000    // Max size of selected droids list.
 
 #define MAX_AVAILABLE_ORDERS 16	// Max available orders list.
 #define MAX_DISPLAYABLE_ORDERS 11	// Max number of displayable orders.
