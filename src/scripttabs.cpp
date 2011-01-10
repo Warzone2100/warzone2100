@@ -2297,42 +2297,6 @@ BOOL scrTabInitialise(void)
 	scriptSetTypeEquiv(asEquivTable);
 
 	// Set the create and release functions
-	if (!eventAddValueCreate((INTERP_TYPE)ST_BASEOBJECT, scrvAddBasePointer))
-	{
-		return false;
-	}
-	if (!eventAddValueRelease((INTERP_TYPE)ST_BASEOBJECT, scrvReleaseBasePointer))
-	{
-		return false;
-	}
-
-	if (!eventAddValueCreate((INTERP_TYPE)ST_DROID, scrvAddBasePointer))
-	{
-		return false;
-	}
-	if (!eventAddValueRelease((INTERP_TYPE)ST_DROID, scrvReleaseBasePointer))
-	{
-		return false;
-	}
-
-	if (!eventAddValueCreate((INTERP_TYPE)ST_STRUCTURE, scrvAddBasePointer))
-	{
-		return false;
-	}
-	if (!eventAddValueRelease((INTERP_TYPE)ST_STRUCTURE, scrvReleaseBasePointer))
-	{
-		return false;
-	}
-
-	if (!eventAddValueCreate((INTERP_TYPE)ST_FEATURE, scrvAddBasePointer))
-	{
-		return false;
-	}
-	if (!eventAddValueRelease((INTERP_TYPE)ST_FEATURE, scrvReleaseBasePointer))
-	{
-		return false;
-	}
-
 	if (!eventAddValueCreate((INTERP_TYPE)ST_GROUP, scrvNewGroup))
 	{
 		return false;

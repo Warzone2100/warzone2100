@@ -48,16 +48,10 @@ typedef struct _scrv_store
 // The list of script contexts
 static SCRV_STORE	*psContextStore=NULL;
 
-// keep a note of all base object pointers
-#define MAX_BASEPOINTER		2000		//200 - local variables require more of these ("run" error)
-static INTERP_VAL	*asBasePointers[MAX_BASEPOINTER];
-
 // Initialise the script value module
 BOOL scrvInitialise(void)
 {
 	psContextStore = NULL;
-	memset(asBasePointers, 0, sizeof(asBasePointers));
-
 	return true;
 }
 
@@ -75,7 +69,6 @@ void scrvShutDown(void)
 	}
 }
 
-
 // reset the script value module
 void scrvReset(void)
 {
@@ -88,11 +81,8 @@ void scrvReset(void)
 		free(psCurr->pIDString);
 		free(psCurr);
 	}
-
 	psContextStore = NULL;
-	memset(asBasePointers, 0, sizeof(asBasePointers));
 }
-
 
 // Add a new context to the list
 BOOL scrvAddContext(char *pID, SCRIPT_CONTEXT *psContext, SCRV_TYPE type)
@@ -100,19 +90,9 @@ BOOL scrvAddContext(char *pID, SCRIPT_CONTEXT *psContext, SCRV_TYPE type)
 	SCRV_STORE		*psNew;
 
 	psNew = (SCRV_STORE*)malloc(sizeof(SCRV_STORE));
-	if (!psNew)
-	{
-		debug( LOG_FATAL, "scrvAddContext: Out of memory" );
-		abort();
-		return false;
-	}
+	ASSERT_OR_RETURN(false, psNew, "Out of memory");
 	psNew->pIDString = (char*)malloc(strlen(pID) + 1);
-	if (!psNew->pIDString)
-	{
-		debug( LOG_FATAL, "scrvAddContext: Out of memory" );
-		abort();
-		return false;
-	}
+	ASSERT_OR_RETURN(false, psNew->pIDString, "Out of memory");
 	strcpy(psNew->pIDString, pID);
 	psNew->type = type;
 	psNew->psContext = psContext;
@@ -122,63 +102,6 @@ BOOL scrvAddContext(char *pID, SCRIPT_CONTEXT *psContext, SCRV_TYPE type)
 
 	return true;
 }
-
-
-// Add a new base pointer variable
-BOOL scrvAddBasePointer(INTERP_VAL *psVal)
-{
-	SDWORD	i;
-
-	for(i=0; i<MAX_BASEPOINTER; i++)
-	{
-		if (asBasePointers[i] == NULL)
-		{
-			asBasePointers[i] = psVal;
-			return true;
-		}
-	}
-
-	ASSERT(false, "scrvAddBasePointer: not enough base pointers left (total :%d)", MAX_BASEPOINTER);
-	return false;
-}
-
-
-// remove a base pointer from the list
-void scrvReleaseBasePointer(INTERP_VAL *psVal)
-{
-	SDWORD	i;
-
-	for(i=0; i<MAX_BASEPOINTER; i++)
-	{
-		if (asBasePointers[i] == psVal)
-		{
-			asBasePointers[i] = NULL;
-			return;
-		}
-	}
-}
-
-
-// Check all the base pointers to see if they have died
-void scrvUpdateBasePointers(void)
-{
-	unsigned int i;
-
-	for(i = 0; i < MAX_BASEPOINTER; i++)
-	{
-		if (asBasePointers[i] != NULL)
-		{
-			INTERP_VAL *psVal = asBasePointers[i];
-			BASE_OBJECT *psObj = (BASE_OBJECT *)psVal->v.oval;
-
-			if (psObj && isDead(psObj))
-			{
-				psVal->v.oval = NULL;
-			}
-		}
-	}
-}
-
 
 // create a group structure for a ST_GROUP variable
 BOOL scrvNewGroup(INTERP_VAL *psVal)
@@ -198,7 +121,6 @@ BOOL scrvNewGroup(INTERP_VAL *psVal)
 	return true;
 }
 
-
 // release a ST_GROUP variable
 void scrvReleaseGroup(INTERP_VAL *psVal)
 {
@@ -207,8 +129,7 @@ void scrvReleaseGroup(INTERP_VAL *psVal)
 	psGroup = (DROID_GROUP*)psVal->v.oval;
 	grpReset(psGroup);
 
-	ASSERT( psGroup->refCount == 1,
-		"scrvReleaseGroup: ref count is wrong" );
+	ASSERT(psGroup->refCount == 1, "Reference count is wrong");
 
 	// do a final grpLeave to free the group
 	grpLeave(psGroup, NULL);
@@ -229,7 +150,6 @@ BOOL scrvGetContext(char *pID, SCRIPT_CONTEXT **ppsContext)
 		}
 	}
 
-	debug( LOG_FATAL, "scrvGetContext: couldn't find context for id: %s", pID );
-	abort();
+	ASSERT(false, "Could not find context for id: %s", pID);
 	return false;
 }

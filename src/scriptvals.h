@@ -80,15 +80,6 @@ extern BOOL scrvAddContext(char *pID, SCRIPT_CONTEXT *psContext, SCRV_TYPE type)
 // Get a context from the list
 extern BOOL scrvGetContext(char *pID, SCRIPT_CONTEXT **ppsContext);
 
-// Add a new base pointer variable
-extern BOOL scrvAddBasePointer(INTERP_VAL *psVal);
-
-// Check all the base pointers to see if they have died
-extern void scrvUpdateBasePointers(void);
-
-// remove a base pointer from the list
-extern void scrvReleaseBasePointer(INTERP_VAL *psVal);
-
 // create a group structure for a ST_GROUP variable
 extern BOOL scrvNewGroup(INTERP_VAL *psVal);
 
@@ -106,8 +97,5 @@ extern void scrvReset(void);
 
 // Load a script value file
 extern BOOL scrvLoad(PHYSFS_file* fileHandle);
-
-// Link any object types to the actual pointer values
-//extern BOOL scrvLinkValues(void);
 
 #endif // __INCLUDED_SRC_SCRIPTVALS_H__
