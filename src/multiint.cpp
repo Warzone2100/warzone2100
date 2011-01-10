@@ -2232,7 +2232,10 @@ void addPlayerBox(BOOL players)
 
 			if (ingame.localOptionsReceived)
 			{
-				drawReadyButton(i);
+				if (!allOnSameTeam)
+				{
+					drawReadyButton(i);
+				}
 
 				// draw player info box
 				W_BUTINIT sButInit;
