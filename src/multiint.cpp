@@ -2912,6 +2912,10 @@ static void processMultiopWidgets(UDWORD id)
 			closePositionChooser();
 			addPlayerBox(!ingame.bHostSetup || bHosted);
 		}
+		else if (!NetPlay.players[id - MULTIOP_PLAYER_START].allocated && !challengeActive)
+		{
+			addAiChooser(player);
+		}
 	}
 
 	if (id >= MULTIOP_DIFFICULTY_INIT_START && id <= MULTIOP_DIFFICULTY_INIT_END && !challengeActive)
