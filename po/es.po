@@ -9,14 +9,14 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2011-01-10 15:25+0100\n"
-"PO-Revision-Date: 2010-10-09 12:54+0100\n"
-"Last-Translator: Saber Nyoki <nsa_server@hotmail.com>\n"
+"PO-Revision-Date: 2011-01-10 15:11+0100\n"
+"Last-Translator: Daniel Vijande <nsa_server@hotmail.com>\n"
 "Language-Team: Spanish <warzone-dev@gna.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Revised-by: Saberuneko <nsa_server@hotmail.com>\n"
+"Revised-by: Daniel Vijande <nsa_server@hotmail.com>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
@@ -9905,9 +9905,8 @@ msgid "NORTHERN SECTOR"
 msgstr "SECTOR NORTE"
 
 #: data/base/sequenceaudio/cam3/c003.txa:5
-#, fuzzy
 msgid "Congratulations your successful evacuation of Beta Base."
-msgstr "Enhorabuena por la evacuación satisfactoria de la Base Beta."
+msgstr "Enhorabuena por la satisfactoria evacuación de la Base Beta."
 
 #: data/base/sequenceaudio/cam3/c003.txa:8
 msgid "Dusk, December 3rd, 2100"
@@ -12592,9 +12591,9 @@ msgid "%s wanted to give you a %s but you have too many!"
 msgstr "¡%s quiso darte un %s pero tienes demasiados!"
 
 #: src/droid.c:4627
-#, fuzzy, c-format
+#, c-format
 msgid "You wanted to give %s a %s but they have too many!"
-msgstr "¡%s quiso darte un %s pero tienes demasiados!"
+msgstr "¡Intentaste dar a %s un %s pero tiene demasiados!"
 
 #: src/frontend.c:97
 msgid "Single Player"
@@ -12885,12 +12884,14 @@ msgstr "Rotar Pantalla"
 
 #: src/frontend.c:1006
 #: src/frontend.c:1094
+#, fuzzy
 msgctxt "middle mouse button"
 msgid "Middle Button"
 msgstr "Botón central"
 
 #: src/frontend.c:1010
 #: src/frontend.c:1089
+#, fuzzy
 msgctxt "right mouse button"
 msgid "Right Button"
 msgstr "Botón derecho"
@@ -14409,8 +14410,9 @@ msgid "Choose Team"
 msgstr "Elegir equipo"
 
 #: src/multiint.c:2073
+#, fuzzy
 msgid "Click to change player settings"
-msgstr "Click para cambiar la configuración de jugador."
+msgstr "Click para cambiar la posición de jugador."
 
 #: src/multiint.c:2104
 msgid "Click to adjust AI difficulty"
@@ -14808,6 +14810,7 @@ msgid "Unable to locate any Commanders!"
 msgstr "¡Imposible localizar ningún Comandante!"
 
 #: src/structure.c:2743
+#, fuzzy
 msgid "Control Limit Reached - Production Halted"
 msgstr "Alcanzado Límite de Control de Unidades - Producción Detenida"
 
@@ -14901,36 +14904,72 @@ msgstr " - Construido %s"
 msgid "Version %s%s%s%s"
 msgstr "Versión: %s%s%s%s"
 
+#~ msgid "Super Transport Available"
+#~ msgstr "Super Transporte Disponible"
+
+#~ msgid "Super Transport"
+#~ msgstr "Super Transporte"
+
+#~ msgid "Super Transport Body"
+#~ msgstr "Cuerpo de Super Transporte"
+
+#~ msgid "Out of sync"
+#~ msgstr "Desincronizado"
+
+#~ msgid "2 trucks ordered to build Oil Derrick"
+#~ msgstr "2 Camiones enviados a construir Torre Petrolífera"
+
+#~ msgid "%d trucks ordered to build Oil Derrick"
+#~ msgstr "%d camiones enviados a construir Torre Petrolífera"
+
+#~ msgid "GAME SAVED: "
+#~ msgstr "PARTIDA GUARDADA:"
+
+#~ msgid "Player %u is cheating (debug menu) him/herself a new droid."
+#~ msgstr "El jugador %u está haciendo trampas (menú depuración) con un nuevo androide."
+
+#~ msgid "Tactical UI (Target Origin Icon): Show"
+#~ msgstr "UI Táctica (Icono de origen de objetivo): Mostrar"
+
+#~ msgid "Tactical UI (Target Origin Icon): Hide"
+#~ msgstr "UI Táctica (Icono de origen de objetivo): Ocultar"
+
+#~ msgid "Build Progress"
+#~ msgstr "Progreso de fabricación"
+
+#~ msgid "Construction Progress"
+#~ msgstr "Progreso de construcción"
+
+#~ msgid "Click to change to this slot"
+#~ msgstr "Click para cambiar a esta ranura."
+
+#~ msgid "Click to change player colour"
+#~ msgstr "Click para cambiar el color de jugador."
+
+#~ msgid "3 players"
+#~ msgstr "3 jugadores"
+
+#~ msgid "5 players"
+#~ msgstr "5 jugadores"
+
+#~ msgid "6 players"
+#~ msgstr "6 jugadores"
+
+#~ msgid "7 players"
+#~ msgstr "7 jugadores"
+
+#~ msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
+#~ msgstr "¡No podemos hacer eso! ¡Debemos ser una unidad cyborg para usar el transporte Cyborg!"
+
+#~ msgid "There is not enough room in the Transport!"
+#~ msgstr "¡No hay espacio suficiente en el transporte!"
+
+#, fuzzy
+#~ msgid "Player position"
+#~ msgstr "Guardar Posición"
+
 #~ msgid "Plascrete MK3"
 #~ msgstr "Hormigón Plástico Mk3"
-
-#, fuzzy
-#~ msgid "Super Transport Available"
-#~ msgstr "Transporte Cyborg Disponible"
-
-#, fuzzy
-#~ msgid "Super Transport"
-#~ msgstr "Transporte"
-
-#, fuzzy
-#~ msgid "Super Transport Body"
-#~ msgstr "Cuerpo de Transporte"
-
-#, fuzzy
-#~ msgid "3 players"
-#~ msgstr "2 jugadores"
-
-#, fuzzy
-#~ msgid "5 players"
-#~ msgstr "2 jugadores"
-
-#, fuzzy
-#~ msgid "6 players"
-#~ msgstr "2 jugadores"
-
-#, fuzzy
-#~ msgid "7 players"
-#~ msgstr "2 jugadores"
 
 #~ msgid "Mini-Rocket accuracy +10%"
 #~ msgstr "Mejora precisión de Mini-cohete en +10%"
