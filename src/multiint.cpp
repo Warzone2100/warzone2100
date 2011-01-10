@@ -2917,33 +2917,6 @@ static void processMultiopWidgets(UDWORD id)
 		addPlayerBox(!ingame.bHostSetup || bHosted);
 	}
 
-	if((id >= MULTIOP_PLAYER_START) && (id <= MULTIOP_PLAYER_END))	// clicked on a player
-	{
-		int player = id - MULTIOP_PLAYER_START;
-
-		if (player == selectedPlayer && positionChooserUp < 0)
-		{
-			addPositionChooser(player);
-		}
-		else if (positionChooserUp == player)
-		{
-			closePositionChooser();	// changed his mind
-			addPlayerBox(!ingame.bHostSetup || bHosted);
-		}
-		else if (positionChooserUp >= 0)
-		{
-			// Switch player
-			resetReadyStatus(false);		// will reset only locally if not a host
-			SendPositionRequest(positionChooserUp, NetPlay.players[player].position);
-			closePositionChooser();
-			addPlayerBox(!ingame.bHostSetup || bHosted);
-		}
-		else if (!NetPlay.players[id - MULTIOP_PLAYER_START].allocated && !challengeActive)
-		{
-			addAiChooser(player);
-		}
-	}
-
 	if((id >= MULTIOP_COLCHOOSER) && (id <= MULTIOP_COLCHOOSER_END)) // chose a new colour.
 	{
 		resetReadyStatus(false);		// will reset only locally if not a host
