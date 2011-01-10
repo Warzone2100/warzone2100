@@ -439,19 +439,7 @@ int32_t objDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD originalhp, WEAPON_C
 
 
 	// apply game difficulty setting
-	if (!bMultiPlayer)  // ignore multiplayer or skirmish games
-	{
-		if (psObj->player != selectedPlayer)
-		{
-			// Player inflicting damage on enemy.
-			damage = (UDWORD) modifyForDifficultyLevel(damage,true);
-		}
-		else
-		{
-			// Enemy inflicting damage on player.
-			damage = (UDWORD) modifyForDifficultyLevel(damage,false);
-		}
-	}
+	damage = modifyForDifficultyLevel(damage, psObj->player != selectedPlayer);
 
 	armour = psObj->armour[impactSide][weaponClass];
 
@@ -534,19 +522,7 @@ unsigned int objGuessFutureDamage(WEAPON_STATS *psStats, unsigned int player, BA
 
 
 	// apply game difficulty setting
-	if (!bMultiPlayer)  // ignore multiplayer games
-	{
-		if (psTarget->player != selectedPlayer)
-		{
-			// Player inflicting damage on enemy.
-			damage = (UDWORD) modifyForDifficultyLevel(damage,true);
-		}
-		else
-		{
-			// Enemy inflicting damage on player.
-			damage = (UDWORD) modifyForDifficultyLevel(damage,false);
-		}
-	}
+	damage = modifyForDifficultyLevel(damage, psTarget->player != selectedPlayer);
 
 	for (impactSide = 0; impactSide != NUM_HIT_SIDES; ++impactSide)
 		armour = MAX(armour, psTarget->armour[impactSide][psStats->weaponClass]);

@@ -30,13 +30,14 @@
 
 #include "lib/framework/frame.h"
 #include "difficulty.h"
-#include "lib/framework/math_ext.h"
+#include "src/multiplay.h"
+
 
 // ------------------------------------------------------------------------------------
 
 static DIFFICULTY_LEVEL	presDifLevel = DL_NORMAL;
-static float		fDifPlayerModifier;
-static float		fDifEnemyModifier;
+static int              fDifPlayerModifier;
+static int              fDifEnemyModifier;
 
 
 // ------------------------------------------------------------------------------------
@@ -47,29 +48,29 @@ void	setDifficultyLevel(DIFFICULTY_LEVEL lev)
 	switch(lev)
 	{
 	case	DL_EASY:
-		fDifPlayerModifier = 120.f / 100.f;
-		fDifEnemyModifier = 100.f / 100.f;
+		fDifPlayerModifier = 120;
+		fDifEnemyModifier = 100;
 		break;
 	case	DL_NORMAL:
-		fDifPlayerModifier = 100.f / 100.f;
-		fDifEnemyModifier = 100.f / 100.f;
+		fDifPlayerModifier = 100;
+		fDifEnemyModifier = 100;
 		break;
 	case	DL_HARD:
-		fDifPlayerModifier = 80.f / 100.f;
-		fDifEnemyModifier = 100.f / 100.f;
+		fDifPlayerModifier = 80;
+		fDifEnemyModifier = 100;
 		break;
 	case	DL_KILLER:
-		fDifPlayerModifier = 999.f / 100.f;	// 10 times
-		fDifEnemyModifier = 1.f / 100.f;		// almost nothing
+		fDifPlayerModifier = 999;  // 10 times
+		fDifEnemyModifier = 1;     // almost nothing
 		break;
 	case	DL_TOUGH:
-		fDifPlayerModifier = 100.f / 100.f;
-		fDifEnemyModifier = 50.f / 100.f;	// they do less damage!
+		fDifPlayerModifier = 100;
+		fDifEnemyModifier = 50;    // they do less damage!
 		break;
 	default:
 		debug( LOG_ERROR, "Invalid difficulty level selected - forcing NORMAL" );
-		fDifPlayerModifier = 100.f / 100.f;
-		fDifEnemyModifier = 100.f / 100.f;
+		fDifPlayerModifier = 100;
+		fDifEnemyModifier = 100;
 		lev = DL_NORMAL;
 		break;
 	}
@@ -87,9 +88,13 @@ DIFFICULTY_LEVEL	getDifficultyLevel( void )
 // ------------------------------------------------------------------------------------
 int modifyForDifficultyLevel(int basicVal, bool IsPlayer)
 {
+	if (bMultiPlayer && presDifLevel != DL_KILLER && presDifLevel != DL_TOUGH)  // ignore multiplayer or skirmish (unless using biffer baker) games
+	{
+		return basicVal;
+	}
 	if (IsPlayer)
-		return roundf(basicVal * fDifPlayerModifier);
+		return basicVal * fDifPlayerModifier / 100;
 	else
-		return roundf(basicVal * fDifEnemyModifier);
+		return basicVal * fDifEnemyModifier / 100;
 }
 // ------------------------------------------------------------------------------------
