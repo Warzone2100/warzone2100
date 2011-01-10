@@ -1593,7 +1593,8 @@ static BOOL recvDestroyTemplate(NETQUEUE queue)
 		DROID_TEMPLATE aaargh;
 		aaargh.multiPlayerID = templateID;
 		deleteTemplateFromProduction(&aaargh, player, ModeImmediate);
-		debug(LOG_ERROR, "TODO: Rewrite the whole interface, so it's possible to change the code without spaghetti dependencies causing problems everywhere, and without resorting to ugly hacks.");
+		// TODO Memory leak, need to actually delete the template somehow.
+		//debug(LOG_ERROR, "TODO: Rewrite the whole interface, so it's possible to change the code without spaghetti dependencies causing problems everywhere, and without resorting to ugly hacks.");
 	}
 
 	return true;
