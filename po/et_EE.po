@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-12-11 16:14+0100\n"
+"POT-Creation-Date: 2011-01-10 15:25+0100\n"
 "PO-Revision-Date: 2010-05-10 16:59+0200\n"
 "Last-Translator: erlando <erlando112@hotmail.com>\n"
 "Language-Team: Estonian <ee@li.org>\n"
@@ -9902,7 +9902,8 @@ msgid "NORTHERN SECTOR"
 msgstr "PÕHJA SEKTOR"
 
 #: data/base/sequenceaudio/cam3/c003.txa:5
-msgid "Congratulations your successfull evacuation of Beta Base."
+#, fuzzy
+msgid "Congratulations your successful evacuation of Beta Base."
 msgstr "Õnnitlused eduka Beeta Baasi evakueerimise puhul."
 
 #: data/base/sequenceaudio/cam3/c003.txa:8
@@ -12201,16 +12202,16 @@ msgstr "Ei suuda lobby serveriga suhelda! Kas port %u on väljaminevale liikluse
 #: src/hci.c:999
 #: src/hci.c:3814
 #: src/hci.c:3965
-#: src/hci.c:4419
-#: src/hci.c:5625
+#: src/hci.c:4416
+#: src/hci.c:5622
 #: src/intelmap.c:542
 #: src/intorder.c:787
 #: src/loadsave.c:267
 #: src/multimenu.c:480
 #: src/multimenu.c:1371
 #: src/transporter.c:286
-#: src/transporter.c:375
-#: src/transporter.c:840
+#: src/transporter.c:373
+#: src/transporter.c:836
 msgid "Close"
 msgstr "Sulge"
 
@@ -12499,30 +12500,30 @@ msgstr "Relvad"
 msgid "Systems"
 msgstr "Süsteemid"
 
-#: src/display3d.c:591
+#: src/display3d.c:590
 msgid "Player left"
 msgstr "Mängija lahkus"
 
-#: src/display3d.c:591
+#: src/display3d.c:590
 msgid "Player dropped"
 msgstr "Mängija Väjavisatud"
 
-#: src/display.c:1732
+#: src/display.c:1730
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "EI Saa Ehitada. Naftaresurss Põleb."
 
-#: src/display.c:1912
-#: src/display.c:2527
+#: src/display.c:1910
+#: src/display.c:2525
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Kahju %d%% - Kogemus %d, %s"
 
-#: src/display.c:1928
+#: src/display.c:1926
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s -Liitlane - Kahju %d%% - Kogemus %d, %s"
 
-#: src/display.c:2121
+#: src/display.c:2119
 msgid "Truck ordered to build Oil Derrick"
 msgstr "Veoautol kästi Naftapuurtorn ehitada"
 
@@ -12530,81 +12531,81 @@ msgstr "Veoautol kästi Naftapuurtorn ehitada"
 msgid "Unit Lost!"
 msgstr "Üksus Kaotatud!"
 
-#: src/droid.c:1607
+#: src/droid.c:1587
 msgid "Structure Restored"
 msgstr "Ehitis taastatud"
 
-#: src/droid.c:3315
+#: src/droid.c:3295
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Grupp %u valitud - %u Üksus"
 msgstr[1] "Grupp %u valitud - %u Üksust"
 
-#: src/droid.c:3328
+#: src/droid.c:3308
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u üksus määratud gruppi %u"
 msgstr[1] "%u Üksust määratud Gruppi %u"
 
-#: src/droid.c:3341
+#: src/droid.c:3321
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Grupi %u Vaade - %u Üksus"
 msgstr[1] "Grupi %u Vaade - %u Üksust"
 
-#: src/droid.c:3345
+#: src/droid.c:3325
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Aligning with Group %u - %u Unit"
 msgstr[1] "Aligning with Group %u - %u Units"
 
-#: src/droid.c:3608
+#: src/droid.c:3588
 msgid "Rookie"
 msgstr "Uustulnuk"
 
-#: src/droid.c:3609
+#: src/droid.c:3589
 msgctxt "rank"
 msgid "Green"
 msgstr "Algaja"
 
-#: src/droid.c:3610
+#: src/droid.c:3590
 msgid "Trained"
 msgstr "Treenitud"
 
-#: src/droid.c:3611
+#: src/droid.c:3591
 msgid "Regular"
 msgstr "Regulaar"
 
-#: src/droid.c:3612
+#: src/droid.c:3592
 msgid "Professional"
 msgstr "Professionaal"
 
-#: src/droid.c:3613
+#: src/droid.c:3593
 msgid "Veteran"
 msgstr "Veteran"
 
-#: src/droid.c:3614
+#: src/droid.c:3594
 msgid "Elite"
 msgstr "Eliit"
 
-#: src/droid.c:3615
+#: src/droid.c:3595
 msgid "Special"
 msgstr "Eriline"
 
-#: src/droid.c:3616
+#: src/droid.c:3596
 msgid "Hero"
 msgstr "Kangelane"
 
-#: src/droid.c:4643
+#: src/droid.c:4623
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
 msgstr ""
 
-#: src/droid.c:4647
+#: src/droid.c:4627
 #, c-format
 msgid "You wanted to give %s a %s but they have too many!"
 msgstr ""
@@ -12684,8 +12685,8 @@ msgstr "ÜKSIK MÄNG"
 
 #: src/frontend.c:294
 #: src/ingameop.c:507
-#: src/mission.c:2842
-#: src/mission.c:2947
+#: src/mission.c:2827
+#: src/mission.c:2932
 msgid "Load Saved Game"
 msgstr "Laadi Salvestatud Mäng"
 
@@ -12981,9 +12982,9 @@ msgid "MAP SAVED!"
 msgstr "KAART SALVESTATUD!"
 
 #: src/hci.c:1692
-#: src/loop.c:536
-#: src/loop.c:552
-#: src/mission.c:2913
+#: src/loop.c:531
+#: src/loop.c:547
+#: src/mission.c:2898
 msgid "GAME SAVED :"
 msgstr "MÄNG SALVESTATUD!"
 
@@ -13137,31 +13138,31 @@ msgstr "Välju Mängust"
 msgid "Current Player:"
 msgstr "Mitmik Mäng"
 
-#: src/hci.c:4504
+#: src/hci.c:4501
 #: src/intdisplay.c:209
 #: src/intdisplay.c:252
 #: src/intdisplay.c:303
 msgid "Progress Bar"
 msgstr "Progressi Riba"
 
-#: src/hci.c:5462
+#: src/hci.c:5459
 #, fuzzy
 msgid "Infinite Production"
 msgstr "Tsükkel tootmine"
 
-#: src/hci.c:5540
+#: src/hci.c:5537
 msgid "Factory Delivery Point"
 msgstr "Tehase Saatmis Koht"
 
-#: src/hci.c:5559
+#: src/hci.c:5556
 msgid "Loop Production"
 msgstr "Tsükkel tootmine"
 
-#: src/hci.c:5650
+#: src/hci.c:5647
 msgid "Tab Scroll left"
 msgstr "Tab Scroll left"
 
-#: src/hci.c:5667
+#: src/hci.c:5664
 msgid "Tab Scroll right"
 msgstr "Tab Scroll right"
 
@@ -13177,8 +13178,8 @@ msgstr "HOIATUS: sa oled võõrustaja. Kui sa lahkud, lõpeb mäng kõigi jaoks"
 
 #: src/ingameop.c:283
 #: src/ingameop.c:511
-#: src/mission.c:2829
-#: src/mission.c:2950
+#: src/mission.c:2814
+#: src/mission.c:2935
 msgid "Save Game"
 msgstr "Salvesta Mäng"
 
@@ -13225,7 +13226,7 @@ msgstr "Projekti Eesmärgid"
 msgid "Current Objective"
 msgstr "Hetke Eesmärgid"
 
-#: src/intelmap.c:1519
+#: src/intelmap.c:1516
 msgid "New Intelligence Report"
 msgstr "Uus Intelligentsus Raport."
 
@@ -13536,80 +13537,80 @@ msgstr "Kõik vaenlased pettusega hävitatud"
 msgid "Destroying selected droids and structures!"
 msgstr "Hävitab valitud  üksused ja ehitised"
 
-#: src/keybind.c:2401
+#: src/keybind.c:2399
 msgid "Centered on player HQ, direction NORTH"
 msgstr "Mängija HQ Keskel, Suund PÕHI"
 
-#: src/keybind.c:2413
+#: src/keybind.c:2411
 msgid "Unable to locate HQ!"
 msgstr "Võimetu HQ leidma!"
 
-#: src/keybind.c:2420
+#: src/keybind.c:2418
 msgid "Formation speed limiting has been removed from the game due to bugs."
 msgstr "Formatsiooni kiiruse limiit eemaldati mängust vea tõttu"
 
-#: src/keybind.c:2469
+#: src/keybind.c:2467
 msgid "Vertical rotation direction: Normal"
 msgstr "Vertikaalse pöörlemise suund: Normaalne"
 
-#: src/keybind.c:2474
+#: src/keybind.c:2472
 msgid "Vertical rotation direction: Flipped"
 msgstr "Vertikaalse pöörlemise suund: Flipped"
 
-#: src/keybind.c:2483
+#: src/keybind.c:2481
 msgid "Screen shake when things die: Off"
 msgstr "Ekraani värin, kui miski sureb: Väljas"
 
-#: src/keybind.c:2488
+#: src/keybind.c:2486
 msgid "Screen shake when things die: On"
 msgstr "Ekraani värin, kui miski sureb: Sees"
 
-#: src/keybind.c:2533
-#: src/keybind.c:2576
+#: src/keybind.c:2531
+#: src/keybind.c:2574
 msgid "Sorry, but game speed cannot be changed in multiplayer."
 msgstr "Sorry, aga mängu kiirust ei saa mitmikmängus muuta."
 
-#: src/keybind.c:2554
-#: src/keybind.c:2597
-#: src/keybind.c:2619
+#: src/keybind.c:2552
+#: src/keybind.c:2595
+#: src/keybind.c:2617
 msgid "Game Speed Reset"
 msgstr "Mängu Kiirus Taastatud"
 
-#: src/keybind.c:2558
+#: src/keybind.c:2556
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "Mängu Kiirus Suurendatud %3.1f"
 
-#: src/keybind.c:2601
+#: src/keybind.c:2599
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "Mängu Kiirus Vähendatud %3.1f"
 
-#: src/keybind.c:2631
+#: src/keybind.c:2629
 msgid "Radar showing friend-foe colors"
 msgstr "Radar showing friend-foe colours"
 
-#: src/keybind.c:2635
+#: src/keybind.c:2633
 msgid "Radar showing player colors"
 msgstr "Radar showing player colours"
 
-#: src/keybind.c:2656
+#: src/keybind.c:2654
 msgid "Radar showing only objects"
 msgstr "Radar näitab ainult objekte"
 
-#: src/keybind.c:2659
+#: src/keybind.c:2657
 msgid "Radar blending terrain and height"
 msgstr "Radar blending terrain and height"
 
-#: src/keybind.c:2662
+#: src/keybind.c:2660
 msgid "Radar showing terrain"
 msgstr "Radar näitab terraini"
 
-#: src/keybind.c:2665
+#: src/keybind.c:2663
 msgid "Radar showing revealed terrain"
 msgstr "Radar näitab paljastatud terraini"
 
-#: src/keybind.c:2668
+#: src/keybind.c:2666
 msgid "Radar showing height"
 msgstr "Radar näitab kõrgust"
 
@@ -14121,38 +14122,38 @@ msgstr ""
 msgid "Toggle Driving Mode"
 msgstr "Toggle Tracking Camera"
 
-#: src/loop.c:543
-#: src/loop.c:559
+#: src/loop.c:538
+#: src/loop.c:554
 msgid "Could not save game!"
 msgstr "Ei suutnud mängu salvestada"
 
-#: src/mission.c:2382
+#: src/mission.c:2367
 msgid "Load Transport"
 msgstr "Laadi Transport"
 
-#: src/mission.c:2776
+#: src/mission.c:2761
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "EESMÄRK SAAVUTATUD sohki tehes"
 
-#: src/mission.c:2776
+#: src/mission.c:2761
 msgid "OBJECTIVE ACHIEVED"
 msgstr "EESMÄRK SAAVUTATUD"
 
-#: src/mission.c:2782
+#: src/mission.c:2767
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "EESMÄRK EBAÕNNESTUNUD--ja sa tegid sohki"
 
-#: src/mission.c:2782
+#: src/mission.c:2767
 msgid "OBJECTIVE FAILED"
 msgstr "EESMÄRK EBAÕNNESTUNUD"
 
-#: src/mission.c:2808
-#: src/mission.c:2848
-#: src/mission.c:2966
+#: src/mission.c:2793
+#: src/mission.c:2833
+#: src/mission.c:2951
 msgid "Quit To Main Menu"
 msgstr "Välju Peamenüüsse"
 
-#: src/mission.c:2816
+#: src/mission.c:2801
 msgid "Continue Game"
 msgstr "Jätka Mängu"
 
@@ -14491,21 +14492,21 @@ msgstr "Võõrustaja lõi %s mängust välja!"
 msgid "Host is Starting Game"
 msgstr "Võõrustaja Alustab Mängu"
 
-#: src/multiint.c:3487
+#: src/multiint.c:3475
 msgid "Players"
 msgstr "Mängijad"
 
-#: src/multiint.c:3605
+#: src/multiint.c:3581
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Kaarti Saatmine: %d%%"
 
-#: src/multiint.c:3614
+#: src/multiint.c:3590
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Kaart: %d%% allalaaditud"
 
-#: src/multiint.c:3640
+#: src/multiint.c:3616
 msgid "HOST"
 msgstr "VÕÕRUSTJA"
 
@@ -14812,12 +14813,12 @@ msgstr "SA OLED VÕIDUKAS"
 msgid "YOU WERE DEFEATED!"
 msgstr "SIND VÕIDETI!"
 
-#: src/scriptfuncs.c:10087
+#: src/scriptfuncs.c:10082
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Signaal saadud %s -lt!"
 
-#: src/scriptfuncs.c:10133
+#: src/scriptfuncs.c:10128
 #, c-format
 msgid "Beacon %d"
 msgstr "Signaal %d"
@@ -14846,69 +14847,69 @@ msgstr "Võimetu leidma Sensorüksusi!"
 msgid "Unable to locate any Commanders!"
 msgstr "Võimetu leidma Komandöre!"
 
-#: src/structure.c:2748
+#: src/structure.c:2743
 msgid "Control Limit Reached - Production Halted"
 msgstr "Kontroll Limiit Saavutatud - Tootmine Peatatud"
 
-#: src/structure.c:5959
-#: src/structure.c:5984
+#: src/structure.c:5936
+#: src/structure.c:5961
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Üksus määratud"
 msgstr[1] "%s - %u Üksused määratud"
 
-#: src/structure.c:5989
-#: src/structure.c:6053
+#: src/structure.c:5966
+#: src/structure.c:6030
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Kahju %3.0f%%"
 
-#: src/structure.c:6039
+#: src/structure.c:6016
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - %u Ühendatud %u -st"
 
-#: src/structure.c:6174
-#: src/structure.c:6223
+#: src/structure.c:6151
+#: src/structure.c:6200
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektrooniliselt Kahjustatud"
 
-#: src/structure.c:6456
+#: src/structure.c:6433
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektrooniline Autasu - Nägemis Raport"
 
-#: src/structure.c:6496
+#: src/structure.c:6473
 msgid "Factory Reward - Propulsion"
 msgstr "Tehase Auhind - Liikumissüsteem"
 
-#: src/structure.c:6520
+#: src/structure.c:6497
 msgid "Factory Reward - Body"
 msgstr "Tehase Autasu - Kere"
 
-#: src/structure.c:6544
+#: src/structure.c:6521
 msgid "Factory Reward - Weapon"
 msgstr "Tehase Autasu - Relv"
 
-#: src/structure.c:6553
+#: src/structure.c:6530
 msgid "Factory Reward - Nothing"
 msgstr "Tehase Autasu - Midagi"
 
-#: src/structure.c:6581
+#: src/structure.c:6558
 msgid "Repair Facility Award - Repair"
 msgstr "Remontimiskeskuse Autasu - Remont"
 
-#: src/structure.c:6588
+#: src/structure.c:6565
 msgid "Repair Facility Award - Nothing"
 msgstr "Remontimiskeskuse Autasu - Midagi"
 
-#: src/transporter.c:397
-#: src/transporter.c:451
+#: src/transporter.c:395
+#: src/transporter.c:449
 msgid "Launch Transport"
 msgstr "Saada Transport Teele"
 
-#: src/transporter.c:1758
+#: src/transporter.c:1751
 msgid "Reinforcements landing"
 msgstr "Abiväed Maanduvad"
 

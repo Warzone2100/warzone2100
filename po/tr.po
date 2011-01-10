@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2010-12-11 16:14+0100\n"
+"POT-Creation-Date: 2011-01-10 15:25+0100\n"
 "PO-Revision-Date: 2010-12-17 20:51+0200\n"
 "Last-Translator: Ayhan GORGULU <ayhangorgulu@gmail.com>\n"
 "Language-Team: Turkey <warzone-dev@gna.org>\n"
@@ -9926,7 +9926,7 @@ msgstr "KUZEY BÖLGESİ"
 
 #: data/base/sequenceaudio/cam3/c003.txa:5
 #, fuzzy
-msgid "Congratulations your successfull evacuation of Beta Base."
+msgid "Congratulations your successful evacuation of Beta Base."
 msgstr "Başarılı bir şekilde Beta üssünü boşaltınız için tebrikler."
 
 #: data/base/sequenceaudio/cam3/c003.txa:8
@@ -12210,16 +12210,16 @@ msgstr "Lobi Sunucusu ile iletişim kurulamadı! TCP-Port %u u açıkmı?"
 #: src/hci.c:999
 #: src/hci.c:3814
 #: src/hci.c:3965
-#: src/hci.c:4419
-#: src/hci.c:5625
+#: src/hci.c:4416
+#: src/hci.c:5622
 #: src/intelmap.c:542
 #: src/intorder.c:787
 #: src/loadsave.c:267
 #: src/multimenu.c:480
 #: src/multimenu.c:1371
 #: src/transporter.c:286
-#: src/transporter.c:375
-#: src/transporter.c:840
+#: src/transporter.c:373
+#: src/transporter.c:836
 msgid "Close"
 msgstr "Kapat"
 
@@ -12509,30 +12509,30 @@ msgstr "Silahlar"
 msgid "Systems"
 msgstr "Sistemler"
 
-#: src/display3d.c:591
+#: src/display3d.c:590
 msgid "Player left"
 msgstr "Oyuncu Çıktı"
 
-#: src/display3d.c:591
+#: src/display3d.c:590
 msgid "Player dropped"
 msgstr "Oyuncu Düştü"
 
-#: src/display.c:1732
+#: src/display.c:1730
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "İnşa edilemiyor. Petrol Kaynağı Yanıyor."
 
-#: src/display.c:1912
-#: src/display.c:2527
+#: src/display.c:1910
+#: src/display.c:2525
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Hasar  %d%% - Tecrübe %d, %s"
 
-#: src/display.c:1928
+#: src/display.c:1926
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Müttefik - Hasar %d%% - Tecrübe %d, %s"
 
-#: src/display.c:2121
+#: src/display.c:2119
 msgid "Truck ordered to build Oil Derrick"
 msgstr "Kamyon'a bir Petrol Kuyusu inşatı emri verildi."
 
@@ -12540,81 +12540,81 @@ msgstr "Kamyon'a bir Petrol Kuyusu inşatı emri verildi."
 msgid "Unit Lost!"
 msgstr "Birim Kaybı!"
 
-#: src/droid.c:1607
+#: src/droid.c:1587
 msgid "Structure Restored"
 msgstr "Bina Yenilendi"
 
-#: src/droid.c:3315
+#: src/droid.c:3295
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Grup %u Seçildi - %u Birim"
 msgstr[1] "Grup %u Seçildi - %u Birimler"
 
-#: src/droid.c:3328
+#: src/droid.c:3308
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u Birim şu Gruba Atandı: %u "
 msgstr[1] "%u Birimler şu Gruba Atandı: %u "
 
-#: src/droid.c:3341
+#: src/droid.c:3321
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "%u Numaralı Grup Merkezde - %u Birim"
 msgstr[1] "%u Numaralı Grup Merkezde - %u Birimler"
 
-#: src/droid.c:3345
+#: src/droid.c:3325
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Grup %u 'e - %u Birim atandı"
 msgstr[1] "Grup %u 'e - %u Birimler Atandı"
 
-#: src/droid.c:3608
+#: src/droid.c:3588
 msgid "Rookie"
 msgstr "Er"
 
-#: src/droid.c:3609
+#: src/droid.c:3589
 msgctxt "rank"
 msgid "Green"
 msgstr "Onbaşı"
 
-#: src/droid.c:3610
+#: src/droid.c:3590
 msgid "Trained"
 msgstr "Çavuş"
 
-#: src/droid.c:3611
+#: src/droid.c:3591
 msgid "Regular"
 msgstr "Teğmen"
 
-#: src/droid.c:3612
+#: src/droid.c:3592
 msgid "Professional"
 msgstr "Üsteğmen"
 
-#: src/droid.c:3613
+#: src/droid.c:3593
 msgid "Veteran"
 msgstr "Albay"
 
-#: src/droid.c:3614
+#: src/droid.c:3594
 msgid "Elite"
 msgstr "Korgeneral"
 
-#: src/droid.c:3615
+#: src/droid.c:3595
 msgid "Special"
 msgstr "Orgeneral"
 
-#: src/droid.c:3616
+#: src/droid.c:3596
 msgid "Hero"
 msgstr "Mareşal"
 
-#: src/droid.c:4643
+#: src/droid.c:4623
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
 msgstr "%s Sana vermek istedi %s ama, Sende daha çok var!"
 
-#: src/droid.c:4647
+#: src/droid.c:4627
 #, c-format
 msgid "You wanted to give %s a %s but they have too many!"
 msgstr "Sen %s 'a %s vermek istedin ama, Onda  daha çok var!"
@@ -12694,8 +12694,8 @@ msgstr "TEK OYUNCU"
 
 #: src/frontend.c:294
 #: src/ingameop.c:507
-#: src/mission.c:2842
-#: src/mission.c:2947
+#: src/mission.c:2827
+#: src/mission.c:2932
 msgid "Load Saved Game"
 msgstr "Kayıtlı Oyun Yükle"
 
@@ -12991,9 +12991,9 @@ msgid "MAP SAVED!"
 msgstr "HARİTAN KAYDEDİLDİ!"
 
 #: src/hci.c:1692
-#: src/loop.c:536
-#: src/loop.c:552
-#: src/mission.c:2913
+#: src/loop.c:531
+#: src/loop.c:547
+#: src/mission.c:2898
 msgid "GAME SAVED :"
 msgstr "OYUN KAYDEDİLDİ :"
 
@@ -13143,30 +13143,30 @@ msgstr "Oyundan Çık"
 msgid "Current Player:"
 msgstr "Geçerli Oyuncu:"
 
-#: src/hci.c:4504
+#: src/hci.c:4501
 #: src/intdisplay.c:209
 #: src/intdisplay.c:252
 #: src/intdisplay.c:303
 msgid "Progress Bar"
 msgstr "İlerleme Çubuğu"
 
-#: src/hci.c:5462
+#: src/hci.c:5459
 msgid "Infinite Production"
 msgstr "Sınırsız Üretim"
 
-#: src/hci.c:5540
+#: src/hci.c:5537
 msgid "Factory Delivery Point"
 msgstr "Fabrika Teslim Noktası"
 
-#: src/hci.c:5559
+#: src/hci.c:5556
 msgid "Loop Production"
 msgstr "Üretimi Tekrarla"
 
-#: src/hci.c:5650
+#: src/hci.c:5647
 msgid "Tab Scroll left"
 msgstr "Tabloyu Sola Kaydır"
 
-#: src/hci.c:5667
+#: src/hci.c:5664
 msgid "Tab Scroll right"
 msgstr "Tabloyu Sağa Kaydır"
 
@@ -13182,8 +13182,8 @@ msgstr "DİKKAT: Sen Kurucusun. Eğer oyundan çıkarsan , oyun herkes için bit
 
 #: src/ingameop.c:283
 #: src/ingameop.c:511
-#: src/mission.c:2829
-#: src/mission.c:2950
+#: src/mission.c:2814
+#: src/mission.c:2935
 msgid "Save Game"
 msgstr "Oyunu Kaydet"
 
@@ -13233,7 +13233,7 @@ msgstr "Proje Hedefleri"
 msgid "Current Objective"
 msgstr "Geçerli Görev"
 
-#: src/intelmap.c:1519
+#: src/intelmap.c:1516
 msgid "New Intelligence Report"
 msgstr "Yeni İstihbarat Raporu"
 
@@ -13547,80 +13547,80 @@ msgstr "Tüm düşmanların hile ile yok edildi!"
 msgid "Destroying selected droids and structures!"
 msgstr "Seçili Birimler ve Birimler Yok Ediliyor!"
 
-#: src/keybind.c:2401
+#: src/keybind.c:2399
 msgid "Centered on player HQ, direction NORTH"
 msgstr "Görüntü Merkezi: Genel Merkez, Yön: KUZEY"
 
-#: src/keybind.c:2413
+#: src/keybind.c:2411
 msgid "Unable to locate HQ!"
 msgstr "Yerel Genel Merkez Devre Dışı!"
 
-#: src/keybind.c:2420
+#: src/keybind.c:2418
 msgid "Formation speed limiting has been removed from the game due to bugs."
 msgstr "Hata nedeniyle formasyon hız limiti kaldırıldı."
 
-#: src/keybind.c:2469
+#: src/keybind.c:2467
 msgid "Vertical rotation direction: Normal"
 msgstr "Dikey Yön: Normal"
 
-#: src/keybind.c:2474
+#: src/keybind.c:2472
 msgid "Vertical rotation direction: Flipped"
 msgstr "Dikey Yön: Saygısız"
 
-#: src/keybind.c:2483
+#: src/keybind.c:2481
 msgid "Screen shake when things die: Off"
 msgstr "Bişeyler öldüğünde ekran sarsıntısı: Kapalı"
 
-#: src/keybind.c:2488
+#: src/keybind.c:2486
 msgid "Screen shake when things die: On"
 msgstr "Bişeyler öldüğünde ekran sarsıntısı: Açık"
 
-#: src/keybind.c:2533
-#: src/keybind.c:2576
+#: src/keybind.c:2531
+#: src/keybind.c:2574
 msgid "Sorry, but game speed cannot be changed in multiplayer."
 msgstr "Üzgünüm, fakat oyun hızı çoklu oyunculu oyunlarda değiştirilemez"
 
-#: src/keybind.c:2554
-#: src/keybind.c:2597
-#: src/keybind.c:2619
+#: src/keybind.c:2552
+#: src/keybind.c:2595
+#: src/keybind.c:2617
 msgid "Game Speed Reset"
 msgstr "Oyun Hızı Sıfırlandı"
 
-#: src/keybind.c:2558
+#: src/keybind.c:2556
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "Oyun Hızı %3.1f  yükseltildi"
 
-#: src/keybind.c:2601
+#: src/keybind.c:2599
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "Oyun Hızı %3.1f  ' indirildi"
 
-#: src/keybind.c:2631
+#: src/keybind.c:2629
 msgid "Radar showing friend-foe colors"
 msgstr "Radar Dost-Düşman haritasını gösterecek"
 
-#: src/keybind.c:2635
+#: src/keybind.c:2633
 msgid "Radar showing player colors"
 msgstr "Radar oyuncu renklerini gösterecek"
 
-#: src/keybind.c:2656
+#: src/keybind.c:2654
 msgid "Radar showing only objects"
 msgstr "Radar sadece nesneleri gösterecek"
 
-#: src/keybind.c:2659
+#: src/keybind.c:2657
 msgid "Radar blending terrain and height"
 msgstr "Radar bölge ve yüksekliği gösterecek"
 
-#: src/keybind.c:2662
+#: src/keybind.c:2660
 msgid "Radar showing terrain"
 msgstr "Radar bölgeyi gösterecek"
 
-#: src/keybind.c:2665
+#: src/keybind.c:2663
 msgid "Radar showing revealed terrain"
 msgstr "Radar keşfedilen alanı gösterecek"
 
-#: src/keybind.c:2668
+#: src/keybind.c:2666
 msgid "Radar showing height"
 msgstr "Radar yüksekliği gösterecek"
 
@@ -14115,38 +14115,38 @@ msgstr "Bir oyun objesini izle"
 msgid "Toggle Driving Mode"
 msgstr "Sürüş Moduna"
 
-#: src/loop.c:543
-#: src/loop.c:559
+#: src/loop.c:538
+#: src/loop.c:554
 msgid "Could not save game!"
 msgstr "Oyun Kaydedilemedi!"
 
-#: src/mission.c:2382
+#: src/mission.c:2367
 msgid "Load Transport"
 msgstr "Taşımaya Yükle"
 
-#: src/mission.c:2776
+#: src/mission.c:2761
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "GÖREV BAŞARILI--hileci seni!"
 
-#: src/mission.c:2776
+#: src/mission.c:2761
 msgid "OBJECTIVE ACHIEVED"
 msgstr "GÖREV BAŞARILI"
 
-#: src/mission.c:2782
+#: src/mission.c:2767
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "GÖREV BAŞARISIZ--ve sen hile yaptın!"
 
-#: src/mission.c:2782
+#: src/mission.c:2767
 msgid "OBJECTIVE FAILED"
 msgstr "GÖREV BAŞARISIZ"
 
-#: src/mission.c:2808
-#: src/mission.c:2848
-#: src/mission.c:2966
+#: src/mission.c:2793
+#: src/mission.c:2833
+#: src/mission.c:2951
 msgid "Quit To Main Menu"
 msgstr "Ana Menüye Dön"
 
-#: src/mission.c:2816
+#: src/mission.c:2801
 msgid "Continue Game"
 msgstr "Oyuna Devam"
 
@@ -14485,21 +14485,21 @@ msgstr "Kurucu %s isimli oyuncuyu oyundan attı!"
 msgid "Host is Starting Game"
 msgstr "Kurucu oyunu başlatıyor"
 
-#: src/multiint.c:3487
+#: src/multiint.c:3475
 msgid "Players"
 msgstr "Oyuncular"
 
-#: src/multiint.c:3605
+#: src/multiint.c:3581
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Harita Gönderiliyor: %d%%"
 
-#: src/multiint.c:3614
+#: src/multiint.c:3590
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Harita: %d%% indirildi"
 
-#: src/multiint.c:3640
+#: src/multiint.c:3616
 msgid "HOST"
 msgstr "KURUCU"
 
@@ -14806,12 +14806,12 @@ msgstr "KAZANDIN!"
 msgid "YOU WERE DEFEATED!"
 msgstr "YENİLDİN!"
 
-#: src/scriptfuncs.c:10087
+#: src/scriptfuncs.c:10082
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Sinyal alındı: %s !"
 
-#: src/scriptfuncs.c:10133
+#: src/scriptfuncs.c:10128
 #, c-format
 msgid "Beacon %d"
 msgstr "Sinyal %d"
@@ -14840,72 +14840,72 @@ msgstr "Hiç Algılayıcı birimi bulunamadı!"
 msgid "Unable to locate any Commanders!"
 msgstr "Hiç Komutan birimi bulunamadı!"
 
-#: src/structure.c:2748
+#: src/structure.c:2743
 #, fuzzy
 msgid "Control Limit Reached - Production Halted"
 msgstr "Komuta Kontrol Limitine Ulaştın - Üretim Durduruldu"
 
 # nix Gruppe! -Kreuvf
-#: src/structure.c:5959
-#: src/structure.c:5984
+#: src/structure.c:5936
+#: src/structure.c:5961
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Birim Atandı"
 msgstr[1] "%s - %u Birimler Atandı"
 
-#: src/structure.c:5989
-#: src/structure.c:6053
+#: src/structure.c:5966
+#: src/structure.c:6030
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Hasar %3.0f%%"
 
-#: src/structure.c:6039
+#: src/structure.c:6016
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - %u de %u 'e Bağlandı"
 
-#: src/structure.c:6174
-#: src/structure.c:6223
+#: src/structure.c:6151
+#: src/structure.c:6200
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektronik Hasar Aldı"
 
 # Reward ist zwar nicht Beute, aber im Krieg erbeutet man eben Dinge -Kreuvf
-#: src/structure.c:6456
+#: src/structure.c:6433
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektronik Ödül - Görünebilirlik Raporu"
 
-#: src/structure.c:6496
+#: src/structure.c:6473
 msgid "Factory Reward - Propulsion"
 msgstr "Fabrika Ödülü - Yürütücü"
 
-#: src/structure.c:6520
+#: src/structure.c:6497
 msgid "Factory Reward - Body"
 msgstr "Fabrika Ödülü - Beden"
 
-#: src/structure.c:6544
+#: src/structure.c:6521
 msgid "Factory Reward - Weapon"
 msgstr "Fabrika Ödülü - Silah"
 
-#: src/structure.c:6553
+#: src/structure.c:6530
 msgid "Factory Reward - Nothing"
 msgstr "Fabrika Ödülü - Sıfır"
 
-#: src/structure.c:6581
+#: src/structure.c:6558
 msgid "Repair Facility Award - Repair"
 msgstr "Tamir Tesisi Ödülü - Tamir"
 
-#: src/structure.c:6588
+#: src/structure.c:6565
 msgid "Repair Facility Award - Nothing"
 msgstr "Tamir Tesisi Ödülü - Sıfır"
 
-#: src/transporter.c:397
-#: src/transporter.c:451
+#: src/transporter.c:395
+#: src/transporter.c:449
 msgid "Launch Transport"
 msgstr "Taşımayı Başlat"
 
-#: src/transporter.c:1758
+#: src/transporter.c:1751
 msgid "Reinforcements landing"
 msgstr "Destek kuvvetler iniyor"
 
