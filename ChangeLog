@@ -1,9 +1,25 @@
-2011-01-??: Version 2.3.7
+2011-01-18: Version 2.3.7
  * General:
-   * Fix: Setting droid retreat on damage now works, even if selecting more than 100 droids (commit:9bab7867c8d383ab7278c6fe617aa79eb721a7ad)
-   * Fix: Construction, production and research speeds are no longer linearly dependent on framerate on high oil maps (commit:b4e33f24a2dca11fe5c28683f43ccea4fe95e811)
-   * Fix: Fix inconsistencies in structure/feature map coverage calculations (ticket:2416, commit:44cc73424e680f06048aa643cadf276203e79464)
-   * Fix: Compile fixes for gcc 4.6 (commit:93323bb714707a11563b230c641790e053c0c970)
+   * Fix: Make construction, production and research independent of framerate and number of parallel tasks (commit:b4e33f24a2dca11fe5c28683f43ccea4fe95e811)
+   * Fix: Changing droid settings now works, even if selecting more than 100 droids (commit:9bab7867c8d383ab7278c6fe617aa79eb721a7ad)
+   * Fix: Reset construction speed upgrades between games (commit:9a28d849f9d73fcadfd20f3f64ec8044f81fcc2e)
+   * Fix: Don't gain experience by shooting your own buildings/units (commit:61adc3712a5e5f8d6bd94010f23706c2dbd31c49)
+   * Fix: Don't truncate usernames at the first unicode character (commit:da4a6ea4ccc3e8f1f90234a468735d067cbd8390)
+   * Fix: Correct delivery point placement for cyborg factories and repair facilities (commit:b25bc87b3a10a90741d3fc54d80e598d11782a8d)
+ * Multiplayer:
+   * Change: Retire the current AI top model template with heavy laser in favour of two new ones. First is armed with seraph missiles, the second with both seraph missiles and gauss cannon on a dragon body (commit:4c0b8a68af17b1a211ac7d5557f71602d4486c4a)
+   * Fix: Prevent clients from getting confused when trying to leave the game setup screen by pressing the Escape key (commit:9cacfc52a413512a4cc888ffe3089fd8429521af)
+ * UI:
+   * Change: Show a savegame's timestamp tooltip in the current locale (ticket:2303, commit:ec1bbcbbafc292e37052ed919a2a50f416c2bbd1)
+   * Change: Show distances and speeds in terms of tiles (commit:e192e8a75832a4db0dff8370f486828d4f79a15e)
+   * Fix: Improve UI responsiveness under low framerates (commit:89d8b599d592a64b0e0472225c2bcc4deb94e172)
+   * Fix: Don't show health bars over empty terrain, when set to always display energy bars (ticket:912, commit:61a79c761a3872079ddc66d24793a495416b5309)
+ * Translations:
+   * Updated: Italian (ticket:2367, ticket:2408, commit:182f6ba3d21207e3bada248f7e2988e3aaaa2dc8, commit:90658df7e14908829ecc3c1222b6784bd8cced43)
+   * Updated: Turkish (ticket:2376, ticket:2418, commit:5d93fb0728927772c25298f98491f4eae49ff3d7, commit:77f651b5baee8ad8fba97817066666a5c58977ef, ticket:2443, commit:e36b4abac53c6d3c32dc855fb9af6048717fa90c)
+   * Updated: Brazilian (ticket:2387, commit:8500268900bf06e8f09da9c3299a59e0cef402ef)
+   * Updated: Polish (ticket:1347, commit:d46cf8f620f3acd91dfced411e67e539d2e26384)
+   * Updated: Spanish (ticket:2442, commit:10626ae3635a2db7b19e3c34a3fd841cbea21aca)
 
 2010-11-29: Version 2.3.6
  * General:
