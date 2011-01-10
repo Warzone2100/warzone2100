@@ -2886,7 +2886,7 @@ static void processMultiopWidgets(UDWORD id)
 
 	if (id >= MULTIOP_COLOUR_START && id <= MULTIOP_COLOUR_END && (id - MULTIOP_COLOUR_START == selectedPlayer || NetPlay.isHost))
 	{
-		if (teamChooserUp < 0 && positionChooserUp < 0)		// not choosing something else already
+		if (teamChooserUp < 0 && positionChooserUp < 0 && colourChooserUp < 0)		// not choosing something else already
 		{
 			addColourChooser(id - MULTIOP_COLOUR_START);
 		}
@@ -2895,7 +2895,7 @@ static void processMultiopWidgets(UDWORD id)
 	if (id >= MULTIOP_PLAYER_START && id <= MULTIOP_PLAYER_END)	// clicked on a player
 	{
 		int player = id - MULTIOP_PLAYER_START;
-		if (player == selectedPlayer && positionChooserUp < 0)
+		if (player == selectedPlayer && positionChooserUp < 0 && teamChooserUp < 0 && colourChooserUp < 0)
 		{
 			addPositionChooser(player);
 		}
@@ -2912,13 +2912,15 @@ static void processMultiopWidgets(UDWORD id)
 			closePositionChooser();
 			addPlayerBox(!ingame.bHostSetup || bHosted);
 		}
-		else if (!NetPlay.players[id - MULTIOP_PLAYER_START].allocated && !challengeActive)
+		else if (!NetPlay.players[id - MULTIOP_PLAYER_START].allocated && !challengeActive
+		         && positionChooserUp < 0 && teamChooserUp < 0 && colourChooserUp < 0)
 		{
 			addAiChooser(player);
 		}
 	}
 
-	if (id >= MULTIOP_DIFFICULTY_INIT_START && id <= MULTIOP_DIFFICULTY_INIT_END && !challengeActive)
+	if (id >= MULTIOP_DIFFICULTY_INIT_START && id <= MULTIOP_DIFFICULTY_INIT_END
+	    && !challengeActive && positionChooserUp < 0 && teamChooserUp < 0 && colourChooserUp < 0)
 	{
 		addDifficultyChooser(id - MULTIOP_DIFFICULTY_INIT_START);
 		addPlayerBox(!ingame.bHostSetup || bHosted);
