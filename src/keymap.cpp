@@ -422,7 +422,7 @@ void	keyInitMappings( BOOL bForceDefaults )
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_U, KEYMAP_PRESSED, kf_SelectAllUnits,         N_("Select EVERY unit"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_V, KEYMAP_PRESSED, kf_SelectAllVTOLs,         N_("Select all VTOLs"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_W, KEYMAP_PRESSED, kf_SelectAllWheeled,       N_("Select all Wheels"));
-	keyAddMapping(KEYMAP__DEBUG,     KEY_LCTRL, KEY_Y, KEYMAP_PRESSED, kf_FrameRate,              "Show frame rate");
+	keyAddMapping(KEYMAP__DEBUG,     KEY_LCTRL, KEY_Y, KEYMAP_PRESSED, kf_FrameRate,              N_("Show frame rate"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_Z, KEYMAP_PRESSED, kf_SelectAllSameType,      N_("Select all Similar Units"));
 	//                                **********************************
 	//                                **********************************
@@ -433,29 +433,29 @@ void	keyInitMappings( BOOL bForceDefaults )
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE,(KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_SelectNextCyborgFactory, N_("Select next Cyborg Factory"));
 
 	// Debug options
-	keyAddMapping(KEYMAP___HIDE, KEY_LSHIFT, KEY_BACKSPACE, KEYMAP_PRESSED, kf_ToggleDebugMappings, "Toggle Debug Mappings");
-	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_M,         KEYMAP_PRESSED, kf_ToggleShowPath,      "Toggle display of droid path");
-	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_E,         KEYMAP_PRESSED, kf_ToggleShowGateways,  "Toggle display of gateways");
-	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_M,         KEYMAP_PRESSED, kf_ShowMappings,        "Show all keyboard mappings - use pause!");
-	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_V,         KEYMAP_PRESSED, kf_ToggleVisibility,    "Toggle visibility");
-	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_W,         KEYMAP_DOWN,    kf_RaiseTile,           "Raise tile height");
-	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_A,         KEYMAP_DOWN,    kf_LowerTile,           "Lower tile height");
-	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_Y,         KEYMAP_PRESSED, kf_ToggleDemoMode,      "Toggles on/off DEMO Mode");
-	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_B,         KEYMAP_PRESSED, kf_EndMissionOffWorld,  "End Mission");
-	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_J,         KEYMAP_PRESSED, kf_ToggleFog,           "Toggles All fog");
-	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_Q,         KEYMAP_PRESSED, kf_ToggleWeather,       "Trigger some weather");
-	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_K,         KEYMAP_PRESSED, kf_TriFlip,             "Flip terrain triangle");
-	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_K,         KEYMAP_PRESSED, kf_MapCheck,            "Realign height of all objects on the map");
+	keyAddMapping(KEYMAP___HIDE, KEY_LSHIFT, KEY_BACKSPACE, KEYMAP_PRESSED, kf_ToggleDebugMappings, N_("Toggle Debug Mappings"));
+	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_M,         KEYMAP_PRESSED, kf_ToggleShowPath,      N_("Toggle display of droid path"));
+	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_E,         KEYMAP_PRESSED, kf_ToggleShowGateways,  N_("Toggle display of gateways"));
+	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_M,         KEYMAP_PRESSED, kf_ShowMappings,        N_("Show all keyboard mappings - use pause!"));
+	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_V,         KEYMAP_PRESSED, kf_ToggleVisibility,    N_("Toggle visibility"));
+	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_W,         KEYMAP_DOWN,    kf_RaiseTile,           N_("Raise tile height"));
+	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_A,         KEYMAP_DOWN,    kf_LowerTile,           N_("Lower tile height"));
+	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_Y,         KEYMAP_PRESSED, kf_ToggleDemoMode,      N_("Toggles on/off DEMO Mode"));
+	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_B,         KEYMAP_PRESSED, kf_EndMissionOffWorld,  N_("End Mission"));
+	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_J,         KEYMAP_PRESSED, kf_ToggleFog,           N_("Toggles All fog"));
+	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_Q,         KEYMAP_PRESSED, kf_ToggleWeather,       N_("Trigger some weather"));
+	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_K,         KEYMAP_PRESSED, kf_TriFlip,             N_("Flip terrain triangle"));
+	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_K,         KEYMAP_PRESSED, kf_MapCheck,            N_("Realign height of all objects on the map"));
 
 	//These ones are necessary for debugging
-	keyAddMapping(KEYMAP__DEBUG, KEY_LALT,   KEY_A, KEYMAP_PRESSED, kf_AllAvailable,      "Make all items available");
-	keyAddMapping(KEYMAP__DEBUG, KEY_LALT,   KEY_K, KEYMAP_PRESSED, kf_KillSelected,      "Kill Selected Unit(s)");
-	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_G, KEYMAP_PRESSED, kf_ToggleGodMode,     "Toggle god Mode Status");
-	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_O, KEYMAP_PRESSED, kf_ChooseOptions,     "Display Options Screen");
-	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_X, KEYMAP_PRESSED, kf_FinishResearch,    "Complete current research");
-	keyAddMapping(KEYMAP__DEBUG, KEY_LSHIFT, KEY_W, KEYMAP_PRESSED, kf_ToggleWatchWindow, "Toggle watch window");
-	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_L, KEYMAP_PRESSED, kf_TraceObject,       "Trace a game object");
-	keyAddMapping(KEYMAP__DEBUG, KEY_LSHIFT, KEY_D, KEYMAP_PRESSED, kf_ToggleDrivingMode, "Toggle Driving Mode");
+	keyAddMapping(KEYMAP__DEBUG, KEY_LALT,   KEY_A, KEYMAP_PRESSED, kf_AllAvailable,      N_("Make all items available"));
+	keyAddMapping(KEYMAP__DEBUG, KEY_LALT,   KEY_K, KEYMAP_PRESSED, kf_KillSelected,      N_("Kill Selected Unit(s)"));
+	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_G, KEYMAP_PRESSED, kf_ToggleGodMode,     N_("Toggle god Mode Status"));
+	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_O, KEYMAP_PRESSED, kf_ChooseOptions,     N_("Display Options Screen"));
+	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_X, KEYMAP_PRESSED, kf_FinishResearch,    N_("Complete current research"));
+	keyAddMapping(KEYMAP__DEBUG, KEY_LSHIFT, KEY_W, KEYMAP_PRESSED, kf_ToggleWatchWindow, N_("Toggle watch window"));
+	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_L, KEYMAP_PRESSED, kf_TraceObject,       N_("Trace a game object"));
+	keyAddMapping(KEYMAP__DEBUG, KEY_LSHIFT, KEY_D, KEYMAP_PRESSED, kf_ToggleDrivingMode, N_("Toggle Driving Mode"));
 	saveKeyMap();	// save out the default key mappings.
 
 //  ------------------------ OLD STUFF - Store here!
