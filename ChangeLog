@@ -1,3 +1,10 @@
+2011-01-??: Version 2.3.7
+ * General:
+   * Fix: Setting droid retreat on damage now works, even if selecting more than 100 droids (commit:9bab7867c8d383ab7278c6fe617aa79eb721a7ad)
+   * Fix: Construction, production and research speeds are no longer linearly dependent on framerate on high oil maps (commit:b4e33f24a2dca11fe5c28683f43ccea4fe95e811)
+   * Fix: Fix inconsistencies in structure/feature map coverage calculations (ticket:2416, commit:44cc73424e680f06048aa643cadf276203e79464)
+   * Fix: Compile fixes for gcc 4.6 (commit:93323bb714707a11563b230c641790e053c0c970)
+
 2010-11-29: Version 2.3.6
  * General:
    * Fix: Prevent memory corruption in the scripting code (ticket:1656, commit:ddfaeca6776aac765674bb0c2a5c58ecc63a978f)
