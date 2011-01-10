@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-01-09 02:24+0100\n"
+"POT-Creation-Date: 2011-01-10 14:56+0100\n"
 "PO-Revision-Date: 2008-05-09 16:08+0000\n"
 "Last-Translator: carson <Unknown>\n"
 "Language-Team: Dansk <da@li.org>\n"
@@ -12301,16 +12301,16 @@ msgid "System locale"
 msgstr "Elektronik"
 
 #: lib/netplay/netplay.cpp:203
-#: lib/netplay/netplay.cpp:1029
+#: lib/netplay/netplay.cpp:1033
 msgid "Enter password here"
 msgstr ""
 
-#: lib/netplay/netplay.cpp:2023
+#: lib/netplay/netplay.cpp:2032
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr ""
 
-#: lib/netplay/netplay.cpp:2037
+#: lib/netplay/netplay.cpp:2046
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr ""
@@ -12322,7 +12322,7 @@ msgstr ""
 #: src/hci.cpp:3913
 #: src/hci.cpp:4931
 #: src/intelmap.cpp:534
-#: src/intorder.cpp:779
+#: src/intorder.cpp:727
 #: src/loadsave.cpp:253
 #: src/multimenu.cpp:482
 #: src/multimenu.cpp:1401
@@ -12631,7 +12631,7 @@ msgid "Player dropped"
 msgstr "Spiller"
 
 #: src/display3d.cpp:598
-#: src/multiint.cpp:1812
+#: src/multiint.cpp:2062
 msgid "Waiting for other players"
 msgstr ""
 
@@ -12849,7 +12849,7 @@ msgid "Join Game"
 msgstr "Forbind til vært"
 
 #: src/frontend.cpp:422
-#: src/multiint.cpp:1101
+#: src/multiint.cpp:1239
 msgid "OPTIONS"
 msgstr "TILVALG"
 
@@ -12946,7 +12946,7 @@ msgid "Off"
 msgstr "Fra"
 
 #: src/frontend.cpp:523
-#: src/multiint.cpp:1170
+#: src/multiint.cpp:1308
 msgid "Fog"
 msgstr "Tåge"
 
@@ -12957,7 +12957,7 @@ msgstr "Afstandståge"
 
 #: src/frontend.cpp:530
 #: src/frontend.cpp:595
-#: src/multiint.cpp:1172
+#: src/multiint.cpp:1310
 msgid "Fog Of War"
 msgstr "Krigståge"
 
@@ -13127,7 +13127,7 @@ msgid "GAME OPTIONS"
 msgstr "SPIL INDSTILLINGER"
 
 #: src/frontend.cpp:1340
-#: src/multiint.cpp:2115
+#: src/multiint.cpp:2344
 msgid "Mod: "
 msgstr ""
 
@@ -13194,7 +13194,7 @@ msgid "Build (F3)"
 msgstr "Konstruktion (F3)"
 
 #: src/hci.cpp:3438
-#: src/multiint.cpp:1217
+#: src/multiint.cpp:1355
 #: src/multimenu.cpp:801
 msgid "Power"
 msgstr "Kraft"
@@ -13367,7 +13367,7 @@ msgstr ""
 msgid "-->  QUIT  <--"
 msgstr ""
 
-#: src/init.cpp:389
+#: src/init.cpp:390
 #, c-format
 msgid ""
 "The required mod could not be loaded: %s\n"
@@ -13410,113 +13410,113 @@ msgstr "Denne mission"
 msgid "New Intelligence Report"
 msgstr "Kommando Pult"
 
-#: src/intorder.cpp:161
+#: src/intorder.cpp:166
 #: src/keymap.cpp:390
 msgid "Short Range"
 msgstr "Kort rækkevide"
 
-#: src/intorder.cpp:162
+#: src/intorder.cpp:167
 #: src/keymap.cpp:397
 msgid "Long Range"
 msgstr "Lang rækkevide"
 
-#: src/intorder.cpp:163
+#: src/intorder.cpp:168
 #: src/keymap.cpp:389
 msgid "Optimum Range"
 msgstr "Optimal rækkevide"
 
-#: src/intorder.cpp:164
+#: src/intorder.cpp:169
 #: src/keymap.cpp:409
 msgid "Retreat at Medium Damage"
 msgstr "Tilbagetræk ved mellem skade"
 
-#: src/intorder.cpp:165
+#: src/intorder.cpp:170
 #: src/keymap.cpp:410
 msgid "Retreat at Heavy Damage"
 msgstr "Tilbagetræk ved sværd skade"
 
-#: src/intorder.cpp:166
+#: src/intorder.cpp:171
 #: src/keymap.cpp:411
 msgid "Do or Die!"
 msgstr "Kæmp til døden!"
 
-#: src/intorder.cpp:167
+#: src/intorder.cpp:172
 #, fuzzy
 msgid "Fire-At-Will"
 msgstr "Angrib alt"
 
-#: src/intorder.cpp:168
+#: src/intorder.cpp:173
 #: src/keymap.cpp:385
 msgid "Return Fire"
 msgstr "Besvar ild"
 
-#: src/intorder.cpp:169
+#: src/intorder.cpp:174
 #: src/keymap.cpp:383
 msgid "Hold Fire"
 msgstr "Indstil skydning"
 
-#: src/intorder.cpp:170
+#: src/intorder.cpp:175
 #: src/keymap.cpp:392
 msgid "Patrol"
 msgstr "Patrolje"
 
-#: src/intorder.cpp:171
+#: src/intorder.cpp:176
 #: src/keymap.cpp:391
 msgid "Pursue"
 msgstr "Forfølg"
 
-#: src/intorder.cpp:172
+#: src/intorder.cpp:177
 #: src/keymap.cpp:387
 msgid "Guard Position"
 msgstr "Bevogt position"
 
-#: src/intorder.cpp:173
+#: src/intorder.cpp:178
 #: src/keymap.cpp:394
 msgid "Hold Position"
 msgstr "Hold position"
 
-#: src/intorder.cpp:174
+#: src/intorder.cpp:179
 #: src/keymap.cpp:393
 msgid "Return For Repair"
 msgstr "Tilbagetrækning for reperation"
 
-#: src/intorder.cpp:175
+#: src/intorder.cpp:180
 msgid "Return To HQ"
 msgstr "Tilbagetrækning til HQ"
 
-#: src/intorder.cpp:176
+#: src/intorder.cpp:181
 #: src/keymap.cpp:395
 msgid "Go to Transport"
 msgstr "Gå til transport"
 
-#: src/intorder.cpp:177
+#: src/intorder.cpp:182
 #: src/keymap.cpp:419
 msgid "Return for Recycling"
 msgstr "Retur til genbrug"
 
-#: src/intorder.cpp:178
+#: src/intorder.cpp:183
 msgid "Recycle"
 msgstr "Genbrug"
 
-#: src/intorder.cpp:179
+#: src/intorder.cpp:184
 #, fuzzy
 msgid "Assign Factory Production"
 msgstr "Gentag produktion"
 
-#: src/intorder.cpp:180
+#: src/intorder.cpp:185
 msgid "Assign Cyborg Factory Production"
 msgstr ""
 
-#: src/intorder.cpp:181
+#: src/intorder.cpp:186
 #, fuzzy
 msgid "Assign Fire Support"
 msgstr "Tildel gruppe 1"
 
-#: src/intorder.cpp:182
+#: src/intorder.cpp:187
 msgid "Assign VTOL Factory Production"
 msgstr ""
 
-#: src/intorder.cpp:183
+#: src/intorder.cpp:188
 #, fuzzy
 msgid "Circle"
 msgstr "fil"
@@ -13802,9 +13802,9 @@ msgid "KEY MAPPING"
 msgstr "TASTATUR MAPPING"
 
 #: src/keyedit.cpp:372
-#: src/multiint.cpp:487
-#: src/multiint.cpp:897
-#: src/multiint.cpp:1303
+#: src/multiint.cpp:625
+#: src/multiint.cpp:1035
+#: src/multiint.cpp:1441
 msgid "Return To Previous Screen"
 msgstr "Tilbage"
 
@@ -14306,307 +14306,346 @@ msgstr "%s Danner aliance med %s"
 msgid "You Discover Blueprints For %s"
 msgstr "Du opdager plantegninger for %s"
 
-#: src/multiint.cpp:425
+#: src/multiint.cpp:563
 #: src/multilimit.cpp:190
 msgid "Accept Settings"
 msgstr "Akceptér opsætning"
 
-#: src/multiint.cpp:427
-#: src/multiint.cpp:942
+#: src/multiint.cpp:565
+#: src/multiint.cpp:1080
 #, fuzzy
 msgid "Cancel"
 msgstr "Turkis"
 
-#: src/multiint.cpp:438
+#: src/multiint.cpp:576
 msgid "IP Address or Machine Name"
 msgstr "IP adressse eller computernavn"
 
-#: src/multiint.cpp:484
+#: src/multiint.cpp:622
 msgid "CONNECTION"
 msgstr "FORBINDELSE"
 
-#: src/multiint.cpp:489
+#: src/multiint.cpp:627
 msgid "Lobby"
 msgstr ""
 
-#: src/multiint.cpp:490
+#: src/multiint.cpp:628
 msgid "IP"
 msgstr "IP"
 
-#: src/multiint.cpp:679
+#: src/multiint.cpp:817
 #, fuzzy
 msgid "No games are available"
 msgstr "Forstærkninger er tilgængelige."
 
-#: src/multiint.cpp:682
+#: src/multiint.cpp:820
 msgid "Game is full"
 msgstr ""
 
-#: src/multiint.cpp:686
+#: src/multiint.cpp:824
 msgid "You were kicked!"
 msgstr ""
 
-#: src/multiint.cpp:689
+#: src/multiint.cpp:827
 msgid "Wrong Game Version!"
 msgstr ""
 
-#: src/multiint.cpp:692
+#: src/multiint.cpp:830
 msgid "You have an incompatible mod."
 msgstr ""
 
-#: src/multiint.cpp:696
+#: src/multiint.cpp:834
 msgid "Host couldn't send file?"
 msgstr ""
 
-#: src/multiint.cpp:700
+#: src/multiint.cpp:838
 msgid "Incorrect Password!"
 msgstr ""
 
-#: src/multiint.cpp:703
+#: src/multiint.cpp:841
 msgid "Host has dropped connection!"
 msgstr ""
 
-#: src/multiint.cpp:707
+#: src/multiint.cpp:845
 msgid "Connection Error"
 msgstr ""
 
-#: src/multiint.cpp:837
+#: src/multiint.cpp:975
 msgid "Searching"
 msgstr "Søger"
 
-#: src/multiint.cpp:894
+#: src/multiint.cpp:1032
 msgid "GAMES"
 msgstr "SPIL"
 
-#: src/multiint.cpp:902
+#: src/multiint.cpp:1040
 msgid "Refresh Games List"
 msgstr "Opdatér spilliste"
 
-#: src/multiint.cpp:922
+#: src/multiint.cpp:1060
 msgid "Enter Password:"
 msgstr ""
 
-#: src/multiint.cpp:940
+#: src/multiint.cpp:1078
 msgid "OK"
 msgstr ""
 
-#: src/multiint.cpp:1057
+#: src/multiint.cpp:1195
 msgid "Tanks disabled!!"
 msgstr ""
 
-#: src/multiint.cpp:1058
+#: src/multiint.cpp:1196
 msgid "Cyborgs disabled."
 msgstr ""
 
-#: src/multiint.cpp:1059
+#: src/multiint.cpp:1197
 msgid "VTOLs disabled."
 msgstr ""
 
-#: src/multiint.cpp:1106
-#: src/multiint.cpp:1113
+#: src/multiint.cpp:1244
+#: src/multiint.cpp:1251
 msgid "Select Game Name"
 msgstr "Vælg spilnavn"
 
-#: src/multiint.cpp:1106
+#: src/multiint.cpp:1244
 #, fuzzy
 msgid "One-Player Skirmish"
 msgstr "Spil mod computeren"
 
-#: src/multiint.cpp:1116
+#: src/multiint.cpp:1254
 msgid "Select Map"
 msgstr "Vælg kort"
 
-#: src/multiint.cpp:1124
+#: src/multiint.cpp:1262
 msgid "Click to set Password"
 msgstr ""
 
-#: src/multiint.cpp:1134
-#: src/multiint.cpp:1135
+#: src/multiint.cpp:1272
+#: src/multiint.cpp:1273
 #, fuzzy
 msgid "Scavengers"
 msgstr "Hestekrafter"
 
-#: src/multiint.cpp:1137
+#: src/multiint.cpp:1275
 #, fuzzy
 msgid "No Scavengers"
 msgstr "Hestekrafter"
 
-#: src/multiint.cpp:1167
+#: src/multiint.cpp:1305
 #, fuzzy
 msgid "Select Player Name"
 msgstr "Flerbruger spil"
 
-#: src/multiint.cpp:1173
+#: src/multiint.cpp:1311
 msgid "Distance Fog"
 msgstr "Afstandståge"
 
-#: src/multiint.cpp:1184
+#: src/multiint.cpp:1322
 #: src/multimenu.cpp:794
 msgid "Alliances"
 msgstr "Aliancer"
 
-#: src/multiint.cpp:1187
+#: src/multiint.cpp:1325
 msgid "No Alliances"
 msgstr "Uden alliancer"
 
-#: src/multiint.cpp:1189
+#: src/multiint.cpp:1327
 msgid "Allow Alliances"
 msgstr "Med alliancer"
 
-#: src/multiint.cpp:1193
+#: src/multiint.cpp:1331
 msgid "Locked Teams"
 msgstr "Låste hold"
 
-#: src/multiint.cpp:1219
+#: src/multiint.cpp:1357
 msgid "Low Power Levels"
 msgstr "Sparsom energi"
 
-#: src/multiint.cpp:1221
+#: src/multiint.cpp:1359
 msgid "Medium Power Levels"
 msgstr "Medium energi"
 
-#: src/multiint.cpp:1223
+#: src/multiint.cpp:1361
 msgid "High Power Levels"
 msgstr "Meget energi"
 
-#: src/multiint.cpp:1255
+#: src/multiint.cpp:1393
 msgid "Base"
 msgstr "Base"
 
-#: src/multiint.cpp:1257
+#: src/multiint.cpp:1395
 msgid "Start with No Bases"
 msgstr "Start uden baser"
 
-#: src/multiint.cpp:1259
+#: src/multiint.cpp:1397
 msgid "Start with Bases"
 msgstr "Start med baser"
 
-#: src/multiint.cpp:1261
+#: src/multiint.cpp:1399
 msgid "Start with Advanced Bases"
 msgstr "Start med advancerede baser"
 
-#: src/multiint.cpp:1293
+#: src/multiint.cpp:1431
 msgid "Map Preview"
 msgstr ""
 
-#: src/multiint.cpp:1295
+#: src/multiint.cpp:1433
 msgid "Click to see Map"
 msgstr ""
 
-#: src/multiint.cpp:1309
+#: src/multiint.cpp:1447
 #, fuzzy
 msgid "Start Hosting Game"
 msgstr "Værten starter spillet"
 
-#: src/multiint.cpp:1317
+#: src/multiint.cpp:1455
 #, fuzzy
 msgid "Show Structure Limits"
 msgstr "Tabte bygninger"
 
-#: src/multiint.cpp:1317
+#: src/multiint.cpp:1455
 #, fuzzy
 msgid "Set Structure Limits"
 msgstr "Tabte bygninger"
 
-#: src/multiint.cpp:1426
+#: src/multiint.cpp:1550
+msgid "DIFFICULTY"
+msgstr ""
+
+#: src/multiint.cpp:1564
+msgid "Less aggressive and starts with less units"
+msgstr ""
+
+#: src/multiint.cpp:1565
+#, fuzzy
+msgid "Plays nice"
+msgstr "Spiller"
+
+#: src/multiint.cpp:1566
+msgid "No holds barred"
+msgstr ""
+
+#: src/multiint.cpp:1567
+msgid "Starts with advantages and gets twice as much oil from derricks"
+msgstr ""
+
+#: src/multiint.cpp:1595
+msgid "CHOOSE AI"
+msgstr ""
+
+#: src/multiint.cpp:1665
 #, fuzzy
 msgid "Player colour"
 msgstr "Spiller"
 
-#: src/multiint.cpp:1769
+#: src/multiint.cpp:2008
 #, fuzzy
 msgid "Team"
 msgstr "Hurtgigt spil"
 
-#: src/multiint.cpp:1781
+#: src/multiint.cpp:2020
 #, fuzzy
 msgid "Kick player"
 msgstr "2 spillere"
 
-#: src/multiint.cpp:1818
+#: src/multiint.cpp:2050
+msgid "You cannot change difficulty in a challenge"
+msgstr ""
+
+#: src/multiint.cpp:2050
+#, fuzzy
+msgid "Click to change difficulty"
+msgstr "Bevogt position"
+
+#: src/multiint.cpp:2067
 msgid "Click when ready"
 msgstr ""
 
-#: src/multiint.cpp:1822
+#: src/multiint.cpp:2071
 msgid "READY?"
 msgstr ""
 
-#: src/multiint.cpp:1855
+#: src/multiint.cpp:2115
 msgid "PLAYERS"
 msgstr "SPILLERE"
 
-#: src/multiint.cpp:1905
+#: src/multiint.cpp:2162
 msgid "Click to change to this slot"
 msgstr ""
 
-#: src/multiint.cpp:1933
+#: src/multiint.cpp:2190
 #, fuzzy
 msgid "Choose Team"
 msgstr "Låste hold"
 
-#: src/multiint.cpp:1963
+#: src/multiint.cpp:2220
 msgid "Click to change player colour"
 msgstr ""
 
-#: src/multiint.cpp:1991
+#: src/multiint.cpp:2245
 #, fuzzy
 msgid "Click to change player position"
 msgstr "Bevogt position"
 
-#: src/multiint.cpp:2013
-msgid "Click to adjust AI difficulty"
+#: src/multiint.cpp:2251
+#, fuzzy
+msgid "Click to change AI"
+msgstr "Bevogt position"
+
+#: src/multiint.cpp:2255
+msgid "You cannot change AI in a challenge"
 msgstr ""
 
-#: src/multiint.cpp:2088
+#: src/multiint.cpp:2317
 msgid "CHAT"
 msgstr "BESKEDER"
 
-#: src/multiint.cpp:2120
+#: src/multiint.cpp:2349
 msgid "All players need to have the same mods to join your game."
 msgstr ""
 
-#: src/multiint.cpp:2279
+#: src/multiint.cpp:2507
 #, c-format
 msgid "*** password [%s] is now required! ***"
 msgstr ""
 
-#: src/multiint.cpp:2287
+#: src/multiint.cpp:2515
 msgid "*** password is NOT required! ***"
 msgstr ""
 
-#: src/multiint.cpp:2528
+#: src/multiint.cpp:2756
 msgid "Sorry! Failed to host the game."
 msgstr ""
 
-#: src/multiint.cpp:2613
+#: src/multiint.cpp:2858
 #, fuzzy
 msgid "'Locked Teams' mode enabled"
 msgstr "Låste hold"
 
-#: src/multiint.cpp:2699
+#: src/multiint.cpp:2956
 #, fuzzy, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "%s har forladt spillet"
 
-#: src/multiint.cpp:2769
+#: src/multiint.cpp:3026
 msgid "Host is Starting Game"
 msgstr "Værten starter spillet"
 
-#: src/multiint.cpp:3347
+#: src/multiint.cpp:3592
 msgid "Players"
 msgstr "Spillere"
 
-#: src/multiint.cpp:3439
+#: src/multiint.cpp:3721
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr ""
 
-#: src/multiint.cpp:3447
+#: src/multiint.cpp:3729
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr ""
 
-#: src/multiint.cpp:3470
+#: src/multiint.cpp:3752
 msgid "HOST"
 msgstr ""
 
@@ -14929,20 +14968,20 @@ msgstr "Total anvendt tid: %s"
 msgid "You cheated!"
 msgstr ""
 
-#: src/scriptfuncs.cpp:3232
+#: src/scriptfuncs.cpp:3250
 msgid "YOU ARE VICTORIOUS!"
 msgstr ""
 
-#: src/scriptfuncs.cpp:3236
+#: src/scriptfuncs.cpp:3254
 msgid "YOU WERE DEFEATED!"
 msgstr ""
 
-#: src/scriptfuncs.cpp:9630
+#: src/scriptfuncs.cpp:9648
 #, c-format
 msgid "Beacon received from %s!"
 msgstr ""
 
-#: src/scriptfuncs.cpp:9676
+#: src/scriptfuncs.cpp:9694
 #, c-format
 msgid "Beacon %d"
 msgstr ""
@@ -14971,62 +15010,62 @@ msgstr "Kan ikke finde nogle rekonniseringsenheder!"
 msgid "Unable to locate any Commanders!"
 msgstr "Kan ikke finde nogle kommandører!"
 
-#: src/structure.cpp:2603
+#: src/structure.cpp:2615
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Kommandobegrænsning nået - indstiller produktion"
 
-#: src/structure.cpp:5759
-#: src/structure.cpp:5784
+#: src/structure.cpp:5771
+#: src/structure.cpp:5796
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/structure.cpp:5789
-#: src/structure.cpp:5857
-#: src/structure.cpp:5873
-#: src/structure.cpp:5887
+#: src/structure.cpp:5801
+#: src/structure.cpp:5869
+#: src/structure.cpp:5885
+#: src/structure.cpp:5899
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Skade %3.0f%%"
 
-#: src/structure.cpp:5839
+#: src/structure.cpp:5851
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - Forbundet %u af %u"
 
-#: src/structure.cpp:6003
-#: src/structure.cpp:6048
+#: src/structure.cpp:6015
+#: src/structure.cpp:6060
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektronisk beskadiget"
 
-#: src/structure.cpp:6285
+#: src/structure.cpp:6297
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektronisk gevinst - Rekonniseringsrapport"
 
-#: src/structure.cpp:6325
+#: src/structure.cpp:6337
 msgid "Factory Reward - Propulsion"
 msgstr "Fabriksgevinst - Fremdrift"
 
-#: src/structure.cpp:6349
+#: src/structure.cpp:6361
 msgid "Factory Reward - Body"
 msgstr "Fabriksgevinst - Skrog"
 
-#: src/structure.cpp:6373
+#: src/structure.cpp:6385
 msgid "Factory Reward - Weapon"
 msgstr "Frabriskgevinst - Våben"
 
-#: src/structure.cpp:6382
+#: src/structure.cpp:6394
 msgid "Factory Reward - Nothing"
 msgstr "Fabriksgevinst - Ingen"
 
-#: src/structure.cpp:6410
+#: src/structure.cpp:6422
 msgid "Repair Facility Award - Repair"
 msgstr "Reperationsgevinst - Reperation"
 
-#: src/structure.cpp:6417
+#: src/structure.cpp:6429
 msgid "Repair Facility Award - Nothing"
 msgstr "Reperationsgevinst - Ingen"
 
@@ -15035,11 +15074,11 @@ msgstr "Reperationsgevinst - Ingen"
 msgid "Launch Transport"
 msgstr "Afsend transportskib"
 
-#: src/transporter.cpp:1420
+#: src/transporter.cpp:1422
 msgid "There is not enough room in the Transport!"
 msgstr ""
 
-#: src/transporter.cpp:1678
+#: src/transporter.cpp:1681
 msgid "Reinforcements landing"
 msgstr "Forstærkninger er ankommet"
 

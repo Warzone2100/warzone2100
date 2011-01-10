@@ -16,8 +16,10 @@ data/base/messages/strings/scrstrings.txt
 data/base/multiplay/script/multilim.slo
 data/base/multiplay/script/multiplay.slo
 data/base/multiplay/script/scavfact.slo
-data/base/multiplay/skirmish/ai.slo
+data/base/multiplay/skirmish/dydo.slo
+data/base/multiplay/skirmish/nexus.slo
 data/base/multiplay/skirmish/rules.slo
+data/base/multiplay/skirmish/semperfi.slo
 data/base/multiplay/skirmish/sktech.slo
 data/base/script/demo/demo_global.slo
 data/base/script/demo/demo_p0.slo
@@ -137,9 +139,7 @@ data/base/sequenceaudio/cam3/cam3_cn.txt
 data/base/sequenceaudio/devastation.txa
 data/base/sequenceaudio/devastation.txt
 data/base/sequenceaudio/outro.txt
-data/mods/multiplay/dydo-ai/multiplay/skirmish/ai.slo
 data/mods/multiplay/old-1.10-balance/messages/strings/names.txt
-data/mods/multiplay/semperfi/multiplay/skirmish/ai.slo
 data/mp/messages/resmessages12.rmsg
 data/mp/messages/resmessages1.rmsg
 data/mp/messages/resmessages23.rmsg
