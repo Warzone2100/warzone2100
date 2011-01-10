@@ -2145,37 +2145,22 @@ void addPlayerBox(BOOL players)
 
 	if(players)
 	{
-		int numPlayers = 0, team = -1;
+		int  team = -1;
 		bool allOnSameTeam = true;
 
 		for (int i = 0; i < game.maxPlayers; i++)
 		{
 			if (game.skDiff[i] || isHumanPlayer(i))
 			{
-				numPlayers++;
-				if (numPlayers > 2)
-				{
-					break; // We just need to know if we have enough to start a game
-				}
-			}
-		}
-
-		if (game.alliance != ALLIANCES_TEAMS)
-		{
-			allOnSameTeam = false;
-		}
-		else for (int i = 0; i < game.maxPlayers; i++)
-		{
-			if (game.skDiff[i] || isHumanPlayer(i))
-			{
+				int myTeam = game.alliance != ALLIANCES_TEAMS? NetPlay.players[i].team : i;
 				if (team == -1)
 				{
-					team = NetPlay.players[i].team;
+					team = myTeam;
 				}
-				else if (NetPlay.players[i].team != team)
+				else if (myTeam != team)
 				{
 					allOnSameTeam = false;
-					break;
+					break;  // We just need to know if we have enough to start a game
 				}
 			}
 		}
