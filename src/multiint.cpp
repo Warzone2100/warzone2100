@@ -272,6 +272,16 @@ void loadAIs()
 			resLoadFile("SCRIPTVAL", "nexus.vlo");
 		}
 	}
+
+	// Load scavengers
+	resForceBaseDir("multiplay/script/");
+	if (game.scavengers)
+	{
+		resLoadFile("SCRIPT", "scavfact.slo");
+		resLoadFile("SCRIPTVAL", "scavfact.vlo");
+	}
+
+	// Reset resource path, otherwise things break down the line
 	resForceBaseDir("");
 }
 

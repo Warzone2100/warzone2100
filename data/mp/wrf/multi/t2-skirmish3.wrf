@@ -8,8 +8,3 @@ file		SCRIPT	"sktech.slo"
 directory	"multiplay/skirmish"
 file		SCRIPTVAL	"rules.vlo"
 file		SCRIPTVAL	"sk2tech.vlo"
-
-directory	"multiplay/script"
-file		SCRIPT		"scavfact.slo"
-file		SCRIPTVAL	"scavfact.vlo"
-

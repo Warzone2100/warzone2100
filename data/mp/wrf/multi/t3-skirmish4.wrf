@@ -14,6 +14,3 @@ directory	"multiplay/skirmish"
 file		SCRIPTVAL	"rules.vlo"
 file		SCRIPTVAL	"sk3tech.vlo"
 
-directory	"multiplay/script"
-file		SCRIPT	"scavfact.slo"
-file		SCRIPTVAL	"scavfact.vlo"

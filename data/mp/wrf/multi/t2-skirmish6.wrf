@@ -5,7 +5,6 @@ directory	"multiplay/skirmish"
 file		SCRIPT	"rules.slo"
 file		SCRIPT	"sktech.slo"
 
-
 directory	"multiplay/skirmish"
 file		SCRIPTVAL	"rules.vlo"
 file		SCRIPTVAL	"sk2tech.vlo"
