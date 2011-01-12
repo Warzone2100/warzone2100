@@ -14,7 +14,6 @@ data/base/messages/strings/names.txt
 data/base/messages/strings/resstrings.txt
 data/base/messages/strings/scrstrings.txt
 data/base/multiplay/script/multilim.slo
-data/base/multiplay/script/multiplay.slo
 data/base/multiplay/script/scavfact.slo
 data/base/multiplay/skirmish/dydo.slo
 data/base/multiplay/skirmish/nexus.slo
