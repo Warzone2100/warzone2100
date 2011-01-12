@@ -3743,15 +3743,6 @@ BOOL scrStartMission(void)
 		return false;
 	}
 
-	// check the last mission got finished
-	/*if (mission.type != MISSION_NONE)
-	{
-		DBMB(("scrStartMission: old mission incomplete\n   ending mission with success"));
-		endMission(true);
-	}*/
-
-	// tell the loop that a new level has to be loaded up - not yet!
-	//loopNewLevel = true;
 	sstrcpy(aLevelName, pGame);
 
 	// find the level dataset
@@ -3766,31 +3757,11 @@ BOOL scrStartMission(void)
 	//set the mission rolling...
 	//nextMissionType = missionType;
 	nextMissionType = psNewLevel->type;
-//	loopMissionState = LMS_SETUPMISSION;
 	loopMissionState = LMS_CLEAROBJECTS;
-
-/*	if (!setUpMission(missionType))
-	{
-		ASSERT( false, "Unable to start mission - %s", pGame );
-		return false;
-	}*/
 
 	return true;
 }
 
-//end a mission - NO LONGER CALLED FROM SCRIPT
-/*BOOL scrEndMission(void)
-{
-	BOOL	status;
-
-	if (!stackPopParams(1, VAL_BOOL, &status))
-	{
-		return false;
-	}
-
-	endMission(status);
-	return true;
-}*/
 // -----------------------------------------------------------------------------------------
 //set Snow (enable disable snow)
 BOOL scrSetSnow(void)
@@ -3871,42 +3842,6 @@ BOOL scrSetBackgroundFog(void)
 		}
 	}
 
-/* jps 17 feb 99
-	if(getRevealStatus())		// fog'o war enabled
-	{
-		pie_SetFogStatus(false);
-		pie_EnableFog(false);
-//		fogStatus = 0;
-		return true;
-	}
-
-	if (bState)//true, so go to false
-	{
-		if (war_GetFog())
-		{
-			//restart fog if it was off
-			if (fogStatus == 0)
-			{
-				pie_EnableFog(true);
-			}
-			fogStatus |= FOG_BACKGROUND;//set lowest bit of 3
-		}
-	}
-	else
-	{
-		if (war_GetFog())
-		{
-			fogStatus &= FOG_FLAGS-FOG_BACKGROUND;//clear middle bit of 3
-			//disable fog if it longer used
-			if (fogStatus == 0)
-			{
-				pie_SetFogStatus(false);
-				pie_EnableFog(false);
-			}
-		}
-	}
-*/
-
 	return true;
 }
 
@@ -3920,8 +3855,6 @@ BOOL scrSetDepthFog(void)
 	{
 		return false;
 	}
-	// ffs am
-//jps 17 feb 99 just set the status let other code worry about fogEnable/reveal
 	if (bState)//true, so go to false
 	{
 		//restart fog if it was off
@@ -3941,41 +3874,6 @@ BOOL scrSetDepthFog(void)
 			pie_EnableFog(false);
 		}
 	}
-
-/* jps 17 feb 99	if(getRevealStatus())		// fog'o war enabled
-	{
-		pie_SetFogStatus(false);
-		pie_EnableFog(false);
-//		fogStatus = 0;
-		return true;
-	}
-
-	if (bState)//true, so go to false
-	{
-		if (war_GetFog())
-		{
-			//restart fog if it was off
-			if (fogStatus == 0)
-			{
-				pie_EnableFog(true);
-			}
-			fogStatus |= FOG_DISTANCE;//set lowest bit of 3
-		}
-	}
-	else
-	{
-		if (war_GetFog())
-		{
-			fogStatus &= FOG_FLAGS-FOG_DISTANCE;//clear middle bit of 3
-			//disable fog if it longer used
-			if (fogStatus == 0)
-			{
-				pie_SetFogStatus(false);
-				pie_EnableFog(false);
-			}
-		}
-	}
-*/
 
 	return true;
 }
@@ -4023,7 +3921,6 @@ BOOL scrRefTest(void)
 
 // -----------------------------------------------------------------------------------------
 // is player a human or computer player? (multiplayer only)
-
 BOOL scrIsHumanPlayer(void)
 {
 	SDWORD	player;
@@ -4041,7 +3938,6 @@ BOOL scrIsHumanPlayer(void)
 
 	return true;
 }
-
 
 // -----------------------------------------------------------------------------------------
 // Set an alliance between two players
@@ -4072,31 +3968,8 @@ BOOL scrCreateAlliance(void)
 
 	formAlliance((UBYTE)player1, (UBYTE)player2,true,false,true);
 
-/*
-	if(bMultiPlayer)
-	{
-
-		if(game.alliance==NO_ALLIANCES || player1 >= game.maxPlayers || player2>=game.maxPlayers)
-		{
-			return true;
-		}
-
-		if(alliances[player1][player2] != ALLIANCE_FORMED)
-		{
-#ifdef DEBUG
-			CONPRINTF(ConsoleString,(ConsoleString,"%d and %d form an alliance.",player1,player2));
-#endif
-			sendAlliance((UBYTE)player1,(UBYTE)player2,ALLIANCE_FORMED,0);
-		}
-	}
-
-	alliances[player1][player2] = ALLIANCE_FORMED;
-	alliances[player2][player1] = ALLIANCE_FORMED;
-*/
 	return true;
 }
-
-
 
 // -----------------------------------------------------------------------------------------
 // offer an alliance
@@ -4120,7 +3993,6 @@ BOOL scrOfferAlliance(void)
 	return true;
 }
 
-
 // -----------------------------------------------------------------------------------------
 // Break an alliance between two players
 BOOL scrBreakAlliance(void)
@@ -4132,26 +4004,11 @@ BOOL scrBreakAlliance(void)
 		return false;
 	}
 
-	if (
-		player1 < 0 || player1 >= MAX_PLAYERS ||
-		player2 < 0 || player2 >= MAX_PLAYERS)
+	if (player1 < 0 || player1 >= MAX_PLAYERS || player2 < 0 || player2 >= MAX_PLAYERS)
 	{
 		ASSERT( false, "scrBreakAlliance: player out of range p1=%d p2=%d", player1, player2 );
 		return false;
 	}
-/*
-if(bMultiPlayer)
-	{
-
-
-		if(alliances[player1][player2] != ALLIANCE_BROKEN)
-		{
-			CONPRINTF(ConsoleString,(ConsoleString,"%d and %d break alliance.",player1,player2));
-			sendAlliance((UBYTE)player1,(UBYTE)player2,ALLIANCE_BROKEN,0);
-		}
-}
-*/
-
 
 	if(bMultiPlayer)
 	{
@@ -4166,13 +4023,9 @@ if(bMultiPlayer)
 	{
 		breakAlliance(player1,player2,false,true);
 	}
-/*
-	alliances[player1][player2] = ALLIANCE_BROKEN;
-	alliances[player2][player1] = ALLIANCE_BROKEN;
-*/
+
 	return true;
 }
-
 
 // -----------------------------------------------------------------------------------------
 // Multiplayer relevant scriptfuncs
@@ -4289,7 +4142,6 @@ BOOL scrDominatingAlliance(void)
 				return true;
 			}
 		}
-// -----------------------------------------------------------------------------------------
 	}
 
 
