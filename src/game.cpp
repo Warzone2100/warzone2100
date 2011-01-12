@@ -11333,7 +11333,10 @@ BOOL loadScriptState(char *pFileName)
 	char	*pFileData;
 	UDWORD	fileSize;
 
-	loadAIs();
+	if (bMultiPlayer)
+	{
+		loadMultiScripts();
+	}
 
 	// change the file extension
 	pFileName[strlen(pFileName) - 4] = '\0';

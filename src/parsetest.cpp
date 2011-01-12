@@ -67,7 +67,7 @@ static inline bool TEST_NAME(void) \
 
 static inline bool level_parse_test(const char* content, size_t size)
 {
-	bool retval = levParse(content, size, mod_clean);
+	bool retval = levParse(content, size, mod_clean, false);
 	return retval;
 }
 

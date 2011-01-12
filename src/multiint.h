@@ -33,7 +33,7 @@
 #define AI_NOT_FOUND     -99
 
 void readAIs();	///< step 1, load AI definition files
-void loadAIs();	///< step 2, actually load AI scripts
+void loadMultiScripts();	///< step 2, load the actual AI scripts
 const char *getAIName(int player);	///< only run this -after- readAIs() is called
 int matchAIbyName(const char *name);	///< only run this -after- readAIs() is called
 int getNextAIAssignment(const char *name);

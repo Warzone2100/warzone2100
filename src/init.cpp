@@ -135,19 +135,20 @@ static BOOL InitialiseGlobals(void)
 }
 
 
-static BOOL loadLevFile(const char* filename, searchPathMode datadir)
+static BOOL loadLevFile(const char* filename, searchPathMode datadir, bool ignoreWrf)
 {
 	char *pBuffer;
 	UDWORD size;
 
 	debug( LOG_WZ, "Loading lev file: %s\n", filename );
 
-	if (   !PHYSFS_exists(filename)
-	    || !loadFile(filename, &pBuffer, &size)) {
+	if (!PHYSFS_exists(filename) || !loadFile(filename, &pBuffer, &size))
+	{
 		debug(LOG_ERROR, "loadLevFile: File not found: %s\n", filename);
 		return false; // only in NDEBUG case
 	}
-	if (!levParse(pBuffer, size, datadir)) {
+	if (!levParse(pBuffer, size, datadir, ignoreWrf))
+	{
 		debug(LOG_ERROR, "loadLevFile: Parse error in %s\n", filename);
 		return false;
 	}
@@ -415,11 +416,11 @@ BOOL buildMapList(void)
 	char ** filelist, ** file;
 	size_t len;
 
-	if ( !loadLevFile( "gamedesc.lev", mod_campaign ) )
+	if (!loadLevFile("gamedesc.lev", mod_campaign, false))
 	{
 		return false;
 	}
-	loadLevFile( "addon.lev", mod_multiplay );
+	loadLevFile("addon.lev", mod_multiplay, false);
 
 	filelist = PHYSFS_enumerateFiles("");
 	for ( file = filelist; *file != NULL; ++file )
@@ -428,12 +429,12 @@ BOOL buildMapList(void)
 		if ( len > 10 // Do not add addon.lev again
 				&& !strcasecmp( *file+(len-10), ".addon.lev") )
 		{
-			loadLevFile( *file, mod_multiplay );
+			loadLevFile(*file, mod_multiplay, true);
 		}
 		// add support for X player maps using a new name to prevent conflicts.
 		if ( len > 13 && !strcasecmp( *file+(len-13), ".xplayers.lev") )
 		{
-			loadLevFile( *file, mod_multiplay );
+			loadLevFile(*file, mod_multiplay, true);
 		}
 
 	}
@@ -1115,7 +1116,10 @@ BOOL stageThreeInitialise(void)
 		}
 	}
 
-	loadAIs();
+	if (bMultiPlayer)
+	{
+		loadMultiScripts();
+	}
 
 	// ffs JS   (and its a global!)
 	if (getLevelLoadType() != GTYPE_SAVE_MIDMISSION)
