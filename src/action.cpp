@@ -928,16 +928,12 @@ void actionUpdateDroid(DROID *psDroid)
 					 && psWeapStats->rotate
 					 && aiBestNearestTarget(psDroid, &psTemp, i, NULL) >= 0)
 					{
-						if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) != DSS_ALEV_ALWAYS)
-						{
-							psTemp = NULL;
-						}
-						else
+						if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS)
 						{
 							psDroid->action = DACTION_ATTACK;
+							setDroidActionTarget(psDroid, psTemp, 0);
 						}
 					}
-					setDroidActionTarget(psDroid, psTemp, 0);
 				}
 			}
 		}
@@ -947,7 +943,6 @@ void actionUpdateDroid(DROID *psDroid)
 		{
 			droidSelfRepair(psDroid);
 		}
-
 		break;
 	case DACTION_WAITDURINGREPAIR:
 		// Check that repair facility still exists
@@ -1036,9 +1031,9 @@ void actionUpdateDroid(DROID *psDroid)
 						if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS)
 						{
 							psDroid->action = DACTION_MOVEFIRE;
+							setDroidActionTarget(psDroid, psTemp, 0);
 						}
 					}
-					setDroidActionTarget(psDroid, psTemp, 0);
 				}
 			}
 		}
@@ -1233,19 +1228,6 @@ void actionUpdateDroid(DROID *psDroid)
 						setDroidActionTarget(psDroid, psTargets[i], i);
 					}
 				}
-			}
-			// If main turret lost its target, but we're not ordered to attack any specific
-			// target, try to find a new one.
-			else if (psDroid->psActionTarget[0] == NULL &&
-				    psDroid->order != DORDER_ATTACK &&
-				    aiChooseTarget((BASE_OBJECT*)psDroid, &psTargets[i], i, false, NULL))
-			{
-				// FIXME What is this code path for?
-				// FIXME If psDroid->psActionTarget[0] == NULL, then actionVisibleTarget(psDroid, psActionTarget, i) crashes.
-				// FIXME And if aiChooseTarget above fails, psActionTarget stays NULL.
-				// FIXME So, assuming the game can't crash, psDroid->psActionTarget[0] is never NULL.
-				debug(LOG_NEVER, "Can this happen?");
-				setDroidActionTarget(psDroid, psTargets[i], i);
 			}
 
 			if (psDroid->psActionTarget[i])
@@ -2200,16 +2182,9 @@ void actionUpdateDroid(DROID *psDroid)
 					BASE_OBJECT *psTemp = NULL;
 
 					WEAPON_STATS* const psWeapStats = &asWeaponStats[psDroid->asWeaps[i].nStat];
-					if (psDroid->asWeaps[i].nStat > 0
-					 && psWeapStats->rotate
-					 && aiBestNearestTarget(psDroid, &psTemp, i, NULL) >= 0)
-					{
-						if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) != DSS_ALEV_ALWAYS)
-						{
-							psTemp = NULL;
-						}
-					}
-					if (psTemp)
+					if (psDroid->asWeaps[i].nStat > 0 && psWeapStats->rotate
+					    && secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS
+					    && aiBestNearestTarget(psDroid, &psTemp, i, NULL) >= 0 && psTemp)
 					{
 						psDroid->action = DACTION_ATTACK;
 						setDroidActionTarget(psDroid, psTemp, 0);
