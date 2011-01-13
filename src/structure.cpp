@@ -808,7 +808,7 @@ int32_t structureDamage(STRUCTURE *psStructure, UDWORD damage, WEAPON_CLASS weap
 	debug(LOG_ATTACK, "structure id %d, body %d, armour %d, damage: %d",
 		  psStructure->id, psStructure->body, psStructure->armour[impactSide][weaponClass], damage);
 
-	relativeDamage = objDamage((BASE_OBJECT *)psStructure, damage, structureBody(psStructure), weaponClass, weaponSubClass, impactSide);
+	relativeDamage = objDamage(psStructure, damage, structureBody(psStructure), weaponClass, weaponSubClass, impactSide);
 
 	// If the shell did sufficient damage to destroy the structure
 	if (relativeDamage < 0)
@@ -945,7 +945,7 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 			for (psIter = apsDroidLists[psDroid->player]; psIter; psIter = psIter->psNext)
 			{
 				if ((psIter->order == DORDER_BUILD || psIter->order == DORDER_HELPBUILD || psIter->order == DORDER_LINEBUILD)
-				    && psIter->psTarget == (BASE_OBJECT *)psStruct
+				    && psIter->psTarget == psStruct
 				    && (psIter->order != DORDER_LINEBUILD || (map_coord(psIter->orderX) == map_coord(psIter->orderX2)
 				                                              && map_coord(psIter->orderY) == map_coord(psIter->orderY2))))
 				{
@@ -1495,7 +1495,7 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 					return NULL;
 				}
 
-				psTile->psObject = (BASE_OBJECT*)psBuilding;
+				psTile->psObject = psBuilding;
 
 				// if it's a tall structure then flag it in the map.
 				if (psBuilding->sDisplay.imd->max.y > TALLOBJECT_YMAX)
@@ -1538,8 +1538,8 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		}
 
 		//set up the sensor stats
-		objSensorCache((BASE_OBJECT *)psBuilding, psBuilding->pStructureType->pSensor);
-		objEcmCache((BASE_OBJECT *)psBuilding, psBuilding->pStructureType->pECM);
+		objSensorCache(psBuilding, psBuilding->pStructureType->pSensor);
+		objEcmCache(psBuilding, psBuilding->pStructureType->pECM);
 
 		/* Store the weapons */
 		memset(psBuilding->asWeaps, 0, sizeof(WEAPON));
@@ -1604,7 +1604,7 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		psBuilding->visible[player] = UBYTE_MAX;
 
 		// Reveal any tiles that can be seen by the structure
-		visTilesUpdate((BASE_OBJECT *)psBuilding);
+		visTilesUpdate(psBuilding);
 
 		/*if we're coming from a SAVEGAME and we're on an Expand_Limbo mission,
 		any factories that were built previously for the selectedPlayer will
@@ -1842,7 +1842,7 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 	}
 
 	/* why is this necessary - it makes tiles under the structure visible */
-	setUnderTilesVis((BASE_OBJECT*)psBuilding,player);
+	setUnderTilesVis(psBuilding,player);
 
 	psBuilding->prevTime = gameTime - deltaGameTime;  // Structure hasn't been updated this tick, yet.
 	psBuilding->time = psBuilding->prevTime - 1;      // -1, so the times are different, even before updating.
@@ -2455,7 +2455,7 @@ static BOOL structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl,
 			if (idfDroid(psNewDroid) ||
 				isVtolDroid(psNewDroid))
 			{
-				orderDroidObj(psNewDroid, DORDER_FIRESUPPORT, (BASE_OBJECT *)psFact->psCommander, ModeImmediate);
+				orderDroidObj(psNewDroid, DORDER_FIRESUPPORT, psFact->psCommander, ModeImmediate);
 				moveToRearm(psNewDroid);
 			}
 			else
@@ -2703,7 +2703,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 			if (psStructure->asWeaps[i].nStat > 0 &&
 				asWeaponStats[psStructure->asWeaps[i].nStat].weaponSubClass != WSC_LAS_SAT)
 			{
-				if (aiChooseTarget((BASE_OBJECT *)psStructure, &psChosenObjs[i], i, true, &tmpOrigin) )
+				if (aiChooseTarget(psStructure, &psChosenObjs[i], i, true, &tmpOrigin) )
 				{
 					objTrace(psStructure->id, "Weapon %d is targeting %d at (%d, %d)", i, psChosenObjs[i]->id,
 						psChosenObjs[i]->pos.x, psChosenObjs[i]->pos.y);
@@ -2711,7 +2711,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				}
 				else
 				{
-					if ( aiChooseTarget((BASE_OBJECT *)psStructure, &psChosenObjs[0], 0, true, &tmpOrigin) )
+					if ( aiChooseTarget(psStructure, &psChosenObjs[0], 0, true, &tmpOrigin) )
 					{
 						if (psChosenObjs[0])
 						{
@@ -2742,11 +2742,11 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 					if (psWStats->pMountGraphic == NULL)//no turret so lock on whatever
 					{
 						psStructure->asWeaps[i].rot.direction = calcDirection(psStructure->pos.x, psStructure->pos.y, psChosenObjs[i]->pos.x, psChosenObjs[i]->pos.y);
-						combFire(&psStructure->asWeaps[i], (BASE_OBJECT *)psStructure, psChosenObjs[i], i);
+						combFire(&psStructure->asWeaps[i], psStructure, psChosenObjs[i], i);
 					}
-					else if (actionTargetTurret((BASE_OBJECT*)psStructure, psChosenObjs[i], &psStructure->asWeaps[i]))
+					else if (actionTargetTurret(psStructure, psChosenObjs[i], &psStructure->asWeaps[i]))
 					{
-						combFire(&psStructure->asWeaps[i], (BASE_OBJECT *)psStructure, psChosenObjs[i], i);
+						combFire(&psStructure->asWeaps[i], psStructure, psChosenObjs[i], i);
 					}
 				}
 				else
@@ -2754,7 +2754,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 					// realign the turret
 					if ((psStructure->asWeaps[i].rot.direction % DEG(90)) != 0 || psStructure->asWeaps[i].rot.pitch != 0)
 					{
-						actionAlignTurret((BASE_OBJECT *)psStructure, i);
+						actionAlignTurret(psStructure, i);
 					}
 				}
 			}
@@ -2764,12 +2764,12 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 	/* See if there is an enemy to attack for Sensor Towers that have weapon droids attached*/
 	else if (psStructure->pStructureType->pSensor)
 	{
-		if (structStandardSensor(psStructure) || structVTOLSensor(psStructure) || objRadarDetector((BASE_OBJECT *)psStructure))
+		if (structStandardSensor(psStructure) || structVTOLSensor(psStructure) || objRadarDetector(psStructure))
 		{
-			if (aiChooseSensorTarget((BASE_OBJECT *)psStructure, &psChosenObj))
+			if (aiChooseSensorTarget(psStructure, &psChosenObj))
 			{
 				objTrace(psStructure->id, "Sensing (%d)", psChosenObj->id);
-				if (objRadarDetector((BASE_OBJECT *)psStructure))
+				if (objRadarDetector(psStructure))
 				{
 					setStructureTarget(psStructure, psChosenObj, 0, ORIGIN_RADAR_DETECTOR);
 				}
@@ -2792,7 +2792,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 		// you can always see anything that a CB sensor is targeting
 		// Anyone commenting this out again will get a knee capping from John.
 		// You have been warned!!
-		if ((structCBSensor(psStructure) || structVTOLCBSensor(psStructure) || objRadarDetector((BASE_OBJECT *)psStructure)) &&
+		if ((structCBSensor(psStructure) || structVTOLCBSensor(psStructure) || objRadarDetector(psStructure)) &&
 			psStructure->psTarget[0] != NULL)
 		{
 			psStructure->psTarget[0]->visible[psStructure->player] = UBYTE_MAX;
@@ -2848,7 +2848,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 			// skip droids that are trying to get to other repair factories
 			if (psDroid != NULL
 				&& (!orderState(psDroid, DORDER_RTR)
-				|| psDroid->psTarget != (BASE_OBJECT *)psStructure))
+				|| psDroid->psTarget != psStructure))
 			{
 				psDroid = (DROID *)psChosenObj;
 				xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psStructure->pos.x;
@@ -2890,10 +2890,10 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 					// or that have been ordered to this repair facility (DORDER_RTR_SPECIFIED),
 					// or any "lost" unit with one of those two orders.
 					if (((psDroid->order == DORDER_RTR || (psDroid->order == DORDER_RTR_SPECIFIED
-					      && (!psTarget || psTarget == (BASE_OBJECT *)psStructure)))
+					      && (!psTarget || psTarget == psStructure)))
 					  && psDroid->action != DACTION_WAITFORREPAIR && psDroid->action != DACTION_MOVETOREPAIRPOINT
 					  && psDroid->action != DACTION_WAITDURINGREPAIR)
-					  || (psTarget && psTarget == (BASE_OBJECT *)psStructure))
+					  || (psTarget && psTarget == psStructure))
 					{
 						if (psDroid->body >= psDroid->originalBody)
 						{
@@ -2910,7 +2910,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 								// return a droid to it's command group
 								DROID	*psCommander = psDroid->psGroup->psCommander;
 
-								orderDroidObj(psDroid, DORDER_GUARD, (BASE_OBJECT *)psCommander, ModeImmediate);
+								orderDroidObj(psDroid, DORDER_GUARD, psCommander, ModeImmediate);
 							}
 							else if (psRepairFac->psDeliveryPoint != NULL)
 							{
@@ -2928,9 +2928,9 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 						if (currdist < mindist && currdist < (TILE_UNITS*8)*(TILE_UNITS*8))
 						{
 							mindist = currdist;
-							psChosenObj = (BASE_OBJECT *)psDroid;
+							psChosenObj = psDroid;
 						}
-						if (psTarget && psTarget == (BASE_OBJECT *)psStructure)
+						if (psTarget && psTarget == psStructure)
 						{
 							psRepairFac->droidQueue++;
 						}
@@ -2938,7 +2938,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 					// Second highest priority:
 					// Help out another nearby repair facility
 					else if (psTarget && mindist > (TILE_UNITS*8)*(TILE_UNITS*8)
-						   && psTarget != (BASE_OBJECT *)psStructure && psDroid->action == DACTION_WAITFORREPAIR)
+						   && psTarget != psStructure && psDroid->action == DACTION_WAITFORREPAIR)
 					{
 						REPAIR_FACILITY *stealFrom = &((STRUCTURE *)psTarget)->pFunctionality->repairFacility;
 						// make a wild guess about what is a good distance
@@ -2950,7 +2950,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 						if (currdist < mindist && currdist - (TILE_UNITS*8)*(TILE_UNITS*8) < distLimit)
 						{
 							mindist = currdist;
-							psChosenObj = (BASE_OBJECT *)psDroid;
+							psChosenObj = psDroid;
 							psRepairFac->droidQueue++;	// shared queue
 							objTrace(psChosenObj->id, "Stolen by another repair facility, currdist=%d, mindist=%d, distLimit=%d", (int)currdist, (int)mindist, distLimit);
 						}
@@ -2965,7 +2965,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 						if (currdist < mindist && currdist < (TILE_UNITS*5/2)*(TILE_UNITS*5/2) + (TILE_UNITS*8)*(TILE_UNITS*8)*2)
 						{
 							mindist = currdist;
-							psChosenObj = (BASE_OBJECT *)psDroid;
+							psChosenObj = psDroid;
 						}
 					}
 				}
@@ -2987,7 +2987,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 									if (currdist < mindist)
 									{
 										mindist = currdist;
-										psChosenObj = (BASE_OBJECT *)psDroid;
+										psChosenObj = psDroid;
 									}
 								}
 							}
@@ -3001,7 +3001,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 					{
 						// Hey, droid, it's your turn! Stop what you're doing and get ready to get repaired!
 						psDroid->action = DACTION_WAITFORREPAIR;
-						psDroid->psTarget = (BASE_OBJECT *)psStructure;
+						psDroid->psTarget = psStructure;
 					}
 					objTrace(psStructure->id, "Chose to repair droid %d", (int)psDroid->id);
 					objTrace(psDroid->id, "Chosen to be repaired by repair structure %d", (int)psStructure->id);
@@ -3012,7 +3012,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 			if (psDroid)
 			{
 				/* set chosen object */
-				psChosenObj = (BASE_OBJECT *)psDroid;
+				psChosenObj = psDroid;
 
 				/* move droid to repair point at rear of facility */
 				xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psStructure->pos.x;
@@ -3023,27 +3023,27 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				{
 					objTrace(psStructure->id, "Requesting droid %d to come to us", (int)psDroid->id);
 					actionDroid(psDroid, DACTION_MOVETOREPAIRPOINT,
-									  (BASE_OBJECT *) psStructure, psStructure->pos.x, psStructure->pos.y);
+									   psStructure, psStructure->pos.x, psStructure->pos.y);
 				}
 				/* reset repair started if we were previously repairing something else */
-				if (psRepairFac->psObj != (BASE_OBJECT *)psDroid)
+				if (psRepairFac->psObj != psDroid)
 				{
 					psRepairFac->timeStarted = ACTION_START_TIME;
 					psRepairFac->currentPtsAdded = 0;
 
-					psRepairFac->psObj = (BASE_OBJECT *)psDroid;
+					psRepairFac->psObj = psDroid;
 				}
 			}
 
 			// update repair arm position
 			if (psChosenObj)
 			{
-				actionTargetTurret((BASE_OBJECT*)psStructure, psChosenObj, &psStructure->asWeaps[0]);
+				actionTargetTurret(psStructure, psChosenObj, &psStructure->asWeaps[0]);
 			}
 			else if ((psStructure->asWeaps[0].rot.direction % DEG(90)) != 0 || psStructure->asWeaps[0].rot.pitch != 0)
 			{
 				// realign the turret
-				actionAlignTurret((BASE_OBJECT *)psStructure, 0);
+				actionAlignTurret(psStructure, 0);
 			}
 
 			break;
@@ -3066,7 +3066,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 					if (vtolReadyToRearm(psDroid, psStructure) &&
 						(psChosenObj == NULL || (((DROID *)psChosenObj)->actionStarted > psDroid->actionStarted)) )
 					{
-						psChosenObj = (BASE_OBJECT *)psDroid;
+						psChosenObj = psDroid;
 					}
 				}
 				if (!psChosenObj) // None available? Try allies.
@@ -3080,7 +3080,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 								// move next droid waiting on ground to rearm pad
 								if (vtolReadyToRearm(psDroid, psStructure))
 								{
-									psChosenObj = (BASE_OBJECT *)psDroid;
+									psChosenObj = psDroid;
 									break;
 								}
 							}
@@ -3090,7 +3090,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				psDroid = (DROID *)psChosenObj;
 				if (psDroid != NULL)
 				{
-					actionDroid( psDroid, DACTION_MOVETOREARMPOINT, (BASE_OBJECT *)psStructure);
+					actionDroid( psDroid, DACTION_MOVETOREARMPOINT, psStructure);
 				}
 			}
 			else
@@ -3100,7 +3100,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 					psDroid->sMove.Status == MOVEHOVER       ) &&
 					psDroid->action == DACTION_WAITFORREARM        )
 				{
-					actionDroid( psDroid, DACTION_MOVETOREARMPOINT, (BASE_OBJECT *)psStructure);
+					actionDroid( psDroid, DACTION_MOVETOREARMPOINT, psStructure);
 				}
 			}
 
@@ -3108,7 +3108,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 			if (psDroid != NULL)
 			{
 				/* set chosen object */
-				psChosenObj = (BASE_OBJECT *)psDroid;
+				psChosenObj = psDroid;
 				psReArmPad->psObj = psChosenObj;
 				if ( psDroid->action == DACTION_MOVETOREARMPOINT )
 				{
@@ -3384,7 +3384,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 					psDroid->body = psDroid->originalBody;
 
 					if ((psDroid->order == DORDER_RTR || psDroid->order == DORDER_RTR_SPECIFIED)
-					  && psDroid->psTarget == (BASE_OBJECT *)psStructure)
+					  && psDroid->psTarget == psStructure)
 					{
 						// if completely repaired reset order
 						secondarySetState(psDroid, DSO_RETURN_TO_LOC, DSS_NONE);
@@ -3395,7 +3395,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 							DROID	*psCommander = psDroid->psGroup->psCommander;
 
 							objTrace(psDroid->id, "Repair complete - move to commander");
-							orderDroidObj(psDroid, DORDER_GUARD, (BASE_OBJECT *)psCommander, ModeImmediate);
+							orderDroidObj(psDroid, DORDER_GUARD, psCommander, ModeImmediate);
 						}
 						else if (psRepairFac->psDeliveryPoint != NULL)
 						{
@@ -3698,7 +3698,7 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 
 	if (!mission)
 	{
-		processVisibilityLevel((BASE_OBJECT*)psBuilding);
+		processVisibilityLevel(psBuilding);
 	}
 
 	/* Update the fire damage data */
@@ -4768,7 +4768,7 @@ BOOL removeStruct(STRUCTURE *psDel, BOOL bDestroy)
 
 	// remove the structure from the cluster
 	cluster = psDel->cluster;
-	clustRemoveObject((BASE_OBJECT *)psDel);
+	clustRemoveObject(psDel);
 
 	if (bDestroy)
 	{
@@ -4782,7 +4782,7 @@ BOOL removeStruct(STRUCTURE *psDel, BOOL bDestroy)
 		psDel->psCurAnim = NULL;
 	}
 
-	clustUpdateCluster((BASE_OBJECT *)apsStructLists[psDel->player], cluster);
+	clustUpdateCluster(apsStructLists[psDel->player], cluster);
 
 	if(psDel->player==selectedPlayer)
 	{
@@ -5100,7 +5100,7 @@ void findAssemblyPointPosition(UDWORD *pX, UDWORD *pY, UDWORD player)
 	passes = 0;
 
 	//if the value passed in is not a valid location - find one!
-	if (!validLocation((BASE_STATS *)&sStats, *pX, *pY, 0, player, false))
+	if (!validLocation(&sStats, *pX, *pY, 0, player, false))
 	{
 		/* Keep going until we get a tile or we exceed distance */
 		while(passes < LOOK_FOR_EMPTY_TILE)
@@ -5114,7 +5114,7 @@ void findAssemblyPointPosition(UDWORD *pX, UDWORD *pY, UDWORD player)
 					if(i==startX || i==endX || j==startY || j==endY)
 					{
 						/* Good enough? */
-						if(validLocation((BASE_STATS *)&sStats, i, j, 0, player, false))
+						if(validLocation(&sStats, i, j, 0, player, false))
 						{
 							/* Set exit conditions and get out NOW */
 							*pX = i;
@@ -5640,7 +5640,7 @@ void buildingComplete(STRUCTURE *psBuilding)
 	psBuilding->currentBuildPts = (SWORD)psBuilding->pStructureType->buildPoints;
 	psBuilding->status = SS_BUILT;
 
-	visTilesUpdate((BASE_OBJECT *)psBuilding);
+	visTilesUpdate(psBuilding);
 
 	switch (psBuilding->pStructureType->type)
 	{
@@ -6002,7 +6002,7 @@ BOOL electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 			psStructure->lastHitWeapon = WSC_ELECTRONIC;
 
 			// tell the cluster system it has been attacked
-			clustObjectAttacked((BASE_OBJECT *)psStructure);
+			clustObjectAttacked(psStructure);
 
 			psStructure->resistance = (SWORD)(psStructure->resistance - damage);
 
@@ -6048,7 +6048,7 @@ BOOL electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 		else
 		{
 			// tell the cluster system it has been attacked
-			clustObjectAttacked((BASE_OBJECT *)psDroid);
+			clustObjectAttacked(psDroid);
 
 			psDroid->resistance = (SWORD)(psDroid->resistance - damage);
 
@@ -7271,7 +7271,7 @@ void ensureRearmPadClear(STRUCTURE *psStruct, DROID *psDroid)
 				 && map_coord(psCurr->pos.y) == ty
 				 && isVtolDroid(psCurr))
 				{
-					actionDroid(psCurr, DACTION_CLEARREARMPAD, (BASE_OBJECT *)psStruct);
+					actionDroid(psCurr, DACTION_CLEARREARMPAD, psStruct);
 				}
 			}
 		}
@@ -7372,28 +7372,28 @@ STRUCTURE * giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, BOOL
 			//check through the 'attackPlayer' players list of droids to see if any are targetting it
 			for (psCurr = apsDroidLists[attackPlayer]; psCurr != NULL; psCurr = psCurr->psNext)
 			{
-				if (psCurr->psTarget == (BASE_OBJECT *)psStructure)
+				if (psCurr->psTarget == psStructure)
 				{
 					orderDroid(psCurr, DORDER_STOP, ModeImmediate);
 					break;
 				}
 				for (i = 0;i < psCurr->numWeaps;i++)
 				{
-					if (psCurr->psActionTarget[i] == (BASE_OBJECT *)psStructure)
+					if (psCurr->psActionTarget[i] == psStructure)
 					{
 						orderDroid(psCurr, DORDER_STOP, ModeImmediate);
 						break;
 					}
 				}
 				//check through order list
-				orderClearTargetFromDroidList(psCurr, (BASE_OBJECT *)psStructure);
+				orderClearTargetFromDroidList(psCurr, psStructure);
 			}
 
 			//check through the 'attackPlayer' players list of structures to see if any are targetting it
 			for (psStruct = apsStructLists[attackPlayer]; psStruct != NULL; psStruct =
 				psStruct->psNext)
 			{
-				if (psStruct->psTarget[0] == (BASE_OBJECT *)psStructure)
+				if (psStruct->psTarget[0] == psStructure)
 				{
 					setStructureTarget(psStruct, NULL, 0, ORIGIN_UNKNOWN);
 				}

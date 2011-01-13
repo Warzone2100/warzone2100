@@ -623,7 +623,7 @@ BOOL scrOrderDroidStatsLoc(void)
 	}
 
 	ASSERT_OR_RETURN( false, statIndex < numStructureStats, "Invalid range referenced for numStructureStats, %d > %d", statIndex, numStructureStats);
-	psStats = (BASE_STATS *)(asStructureStats + statIndex);
+	psStats = (asStructureStats + statIndex);
 
 	ASSERT_OR_RETURN( false, psDroid != NULL, "Invalid Unit pointer" );
 	ASSERT_OR_RETURN( false, psStats != NULL, "Invalid object pointer" );
@@ -1214,14 +1214,14 @@ static BASE_OBJECT *scrTargetInArea(SDWORD tarPlayer, SDWORD visPlayer, SDWORD t
 		targetPriority = (TARGET_PREF)scrStructTargetPriority;
 		prefer = scrStructPref;
 		ignore = scrStructIgnore;
-		psCurr = (BASE_OBJECT *)apsStructLists[tarPlayer];
+		psCurr = apsStructLists[tarPlayer];
 		break;
 	case SCR_TAR_DROID:
 		getTargetMask = (TARGET_MASK)scrDroidTargetMask;
 		targetPriority = (TARGET_PREF)scrDroidTargetPriority;
 		prefer = scrDroidPref;
 		ignore = scrDroidIgnore;
-		psCurr = (BASE_OBJECT *)apsDroidLists[tarPlayer];
+		psCurr = apsDroidLists[tarPlayer];
 		break;
 	default:
 		ASSERT( false, "scrTargetInArea: invalid target type" );
@@ -1819,7 +1819,7 @@ static BOOL defenseLocation(BOOL variantB)
 	ASSERT_OR_RETURN( false, statIndex < numStructureStats, "Invalid range referenced for numStructureStats, %d > %d", statIndex, numStructureStats);
 
 	ASSERT_OR_RETURN( false, statIndex2 < numStructureStats, "Invalid range referenced for numStructureStats, %d > %d", statIndex2, numStructureStats);
-	psWStats = (BASE_STATS *)(asStructureStats + statIndex2);
+	psWStats = (asStructureStats + statIndex2);
 
     // check for wacky coords.
 	if(		*pX < 0
@@ -2083,7 +2083,7 @@ BOOL scrActionDroidObj(void)
 	}
 
 	syncDebug("TODO: Synchronise this!");
-	actionDroid(psDroid, action, (BASE_OBJECT *)psObj);
+	actionDroid(psDroid, action, psObj);
 
 	return true;
 }

@@ -395,7 +395,7 @@ int visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool
 				range = 3 * range / 2;
 			}
 			if (psDroid->psTarget == psTarget
-			    && (cbSensorDroid(psDroid) || objRadarDetector((BASE_OBJECT *)psDroid)))
+			    && (cbSensorDroid(psDroid) || objRadarDetector(psDroid)))
 			{
 				// if it is targetted by a counter battery sensor, it is seen
 				return UBYTE_MAX;
@@ -700,7 +700,7 @@ void processVisibility()
 	int player;
 	for (player = 0; player < MAX_PLAYERS; ++player)
 	{
-		BASE_OBJECT *lists[] = {(BASE_OBJECT *)apsDroidLists[player], (BASE_OBJECT *)apsStructLists[player], (BASE_OBJECT *)apsFeatureLists[player]};
+		BASE_OBJECT *lists[] = {apsDroidLists[player], apsStructLists[player], apsFeatureLists[player]};
 		unsigned list;
 		for (list = 0; list < sizeof(lists)/sizeof(*lists); ++list)
 		{
@@ -713,7 +713,7 @@ void processVisibility()
 	}
 	for (player = 0; player < MAX_PLAYERS; ++player)
 	{
-		BASE_OBJECT *lists[] = {(BASE_OBJECT *)apsDroidLists[player], (BASE_OBJECT *)apsStructLists[player]};
+		BASE_OBJECT *lists[] = {apsDroidLists[player], apsStructLists[player]};
 		unsigned list;
 		for (list = 0; list < sizeof(lists)/sizeof(*lists); ++list)
 		{
