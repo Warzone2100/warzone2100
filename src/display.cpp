@@ -2284,7 +2284,7 @@ static void dealWithLMBDClick(void)
 		{
 			/* We clicked on structure */
 			psStructure = (STRUCTURE *) psClickedOn;
-			if(psStructure->player == selectedPlayer)
+			if (psStructure->player == selectedPlayer && !structureIsBlueprint(psStructure))
 			{
 				if (StructIsFactory(psStructure))
 				{
@@ -2505,7 +2505,7 @@ static void dealWithRMB( void )
 					psStructure->selected = false;
 					intObjectSelected(NULL);
 				}
-				else
+				else if (!structureIsBlueprint(psStructure))
 				{
 // We don't actually wan't to select structures, just inform the interface weve clicked on it,
 // might wan't to do this on PC as well as it fixes the problem with the interface locking multiple
