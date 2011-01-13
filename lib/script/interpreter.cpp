@@ -204,14 +204,12 @@ static inline INTERP_VAL *interpGetVarData(VAL_CHUNK *psGlobals, UDWORD index)
 	return psChunk->asVals + index;
 }
 
-
 // get the array data for an array operation
 static BOOL interpGetArrayVarData(INTERP_VAL **pip, VAL_CHUNK *psGlobals, SCRIPT_CODE *psProg, INTERP_VAL **ppsVal)
 {
 	SDWORD		i, dimensions, vals[VAR_MAX_DIMENSIONS];
-	UBYTE		*elements; //[VAR_MAX_DIMENSIONS]
-	SDWORD		size, val;//, elementDWords;
-//	UBYTE		*pElem;
+	UBYTE		*elements;
+	SDWORD		size, val;
 	INTERP_VAL	*InstrPointer = *pip;
 	UDWORD		base, index;
 
@@ -221,18 +219,8 @@ static BOOL interpGetArrayVarData(INTERP_VAL **pip, VAL_CHUNK *psGlobals, SCRIPT
 	// get the number of dimensions
 	dimensions = (InstrPointer->v.ival & ARRAY_DIMENSION_MASK) >> ARRAY_DIMENSION_SHIFT;
 
-	if (base >= psProg->numArrays)
-	{
-		debug( LOG_ERROR,
-			"interpGetArrayVarData: array base index out of range" );
-		return false;
-	}
-	if (dimensions != psProg->psArrayInfo[base].dimensions)
-	{
-		debug( LOG_ERROR,
-			"interpGetArrayVarData: dimensions do not match" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, base < psProg->numArrays, "Arrray base index out of range (%d should be less than %d)", base, psProg->numArrays);
+	ASSERT_OR_RETURN(false, dimensions == psProg->psArrayInfo[base].dimensions, "Array dimensions do not match (%d vs %d)", dimensions, psProg->psArrayInfo[base].dimensions);
 
 	// get the number of elements for each dimension
 	elements = psProg->psArrayInfo[base].elements;
@@ -270,17 +258,13 @@ static BOOL interpGetArrayVarData(INTERP_VAL **pip, VAL_CHUNK *psGlobals, SCRIPT
 	}
 
 	// check the index is valid
-	if (index > psProg->arraySize)
-	{
-		debug( LOG_ERROR, "interpGetArrayVarData: Array indexes out of variable space" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, index <= psProg->arraySize, "Array indexes out of variable space (%d)", index);
 
 	// get the variable data
 	*ppsVal = interpGetVarData(psGlobals, psProg->psArrayInfo[base].base + index);
 
 	// update the instruction pointer
-	*pip += 1;// + elementDWords;
+	*pip += 1;
 
 	return true;
 }
