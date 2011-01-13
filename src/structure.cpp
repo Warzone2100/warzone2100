@@ -3022,7 +3022,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 					&& xdiff*xdiff + ydiff*ydiff > (TILE_UNITS*5/2)*(TILE_UNITS*5/2)))
 				{
 					objTrace(psStructure->id, "Requesting droid %d to come to us", (int)psDroid->id);
-					actionDroidObjLoc(psDroid, DACTION_MOVETOREPAIRPOINT,
+					actionDroid(psDroid, DACTION_MOVETOREPAIRPOINT,
 									  (BASE_OBJECT *) psStructure, psStructure->pos.x, psStructure->pos.y);
 				}
 				/* reset repair started if we were previously repairing something else */
@@ -3090,7 +3090,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				psDroid = (DROID *)psChosenObj;
 				if (psDroid != NULL)
 				{
-					actionDroidObj( psDroid, DACTION_MOVETOREARMPOINT, (BASE_OBJECT *)psStructure);
+					actionDroid( psDroid, DACTION_MOVETOREARMPOINT, (BASE_OBJECT *)psStructure);
 				}
 			}
 			else
@@ -3100,7 +3100,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 					psDroid->sMove.Status == MOVEHOVER       ) &&
 					psDroid->action == DACTION_WAITFORREARM        )
 				{
-					actionDroidObj( psDroid, DACTION_MOVETOREARMPOINT, (BASE_OBJECT *)psStructure);
+					actionDroid( psDroid, DACTION_MOVETOREARMPOINT, (BASE_OBJECT *)psStructure);
 				}
 			}
 
@@ -7271,7 +7271,7 @@ void ensureRearmPadClear(STRUCTURE *psStruct, DROID *psDroid)
 				 && map_coord(psCurr->pos.y) == ty
 				 && isVtolDroid(psCurr))
 				{
-					actionDroidObj(psCurr, DACTION_CLEARREARMPAD, (BASE_OBJECT *)psStruct);
+					actionDroid(psCurr, DACTION_CLEARREARMPAD, (BASE_OBJECT *)psStruct);
 				}
 			}
 		}

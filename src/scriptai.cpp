@@ -2083,7 +2083,7 @@ BOOL scrActionDroidObj(void)
 	}
 
 	syncDebug("TODO: Synchronise this!");
-	actionDroidObj(psDroid, action, (BASE_OBJECT *)psObj);
+	actionDroid(psDroid, action, (BASE_OBJECT *)psObj);
 
 	return true;
 }

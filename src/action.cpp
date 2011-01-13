@@ -863,7 +863,7 @@ void actionUpdateDroid(DROID *psDroid)
 						if (psDroid->order == DORDER_PATROL)
 						{
 							// Back to the patrol.
-							actionDroidLoc(psDroid, DACTION_MOVE, psDroid->orderX,psDroid->orderY);
+							actionDroid(psDroid, DACTION_MOVE, psDroid->orderX,psDroid->orderY);
 						}
 						else
 						{
@@ -2714,7 +2714,7 @@ void actionDroid(DROID *psDroid, DROID_ACTION action)
 }
 
 /* Give a droid an action with a location target */
-void actionDroidLoc(DROID *psDroid, DROID_ACTION action, UDWORD x, UDWORD y)
+void actionDroid(DROID *psDroid, DROID_ACTION action, UDWORD x, UDWORD y)
 {
 	DROID_ACTION_DATA	sAction;
 
@@ -2726,7 +2726,7 @@ void actionDroidLoc(DROID *psDroid, DROID_ACTION action, UDWORD x, UDWORD y)
 }
 
 /* Give a droid an action with an object target */
-void actionDroidObj(DROID *psDroid, DROID_ACTION action, BASE_OBJECT *psObj)
+void actionDroid(DROID *psDroid, DROID_ACTION action, BASE_OBJECT *psObj)
 {
 	DROID_ACTION_DATA	sAction;
 
@@ -2739,7 +2739,7 @@ void actionDroidObj(DROID *psDroid, DROID_ACTION action, BASE_OBJECT *psObj)
 }
 
 /* Give a droid an action with an object target and a location */
-void actionDroidObjLoc(DROID *psDroid, DROID_ACTION action,
+void actionDroid(DROID *psDroid, DROID_ACTION action,
 					   BASE_OBJECT *psObj, UDWORD x, UDWORD y)
 {
 	DROID_ACTION_DATA	sAction;
@@ -2793,7 +2793,7 @@ void moveToRearm(DROID *psDroid)
 		}
 		else
 		{
-			actionDroidObj(psDroid, DACTION_MOVETOREARM, (BASE_OBJECT *)psStruct);
+			actionDroid(psDroid, DACTION_MOVETOREARM, (BASE_OBJECT *)psStruct);
 		}
 	}
 	else

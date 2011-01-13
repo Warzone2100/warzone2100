@@ -62,13 +62,13 @@ void actionUpdateDroid(DROID *psDroid);
 void actionDroid(DROID *psDroid, DROID_ACTION action);
 
 /** Give a droid an action with a location target. */
-void actionDroidLoc(DROID *psDroid, DROID_ACTION action, UDWORD x, UDWORD y);
+void actionDroid(DROID *psDroid, DROID_ACTION action, UDWORD x, UDWORD y);
 
 /** Give a droid an action with an object target. */
-void actionDroidObj(DROID *psDroid, DROID_ACTION action, BASE_OBJECT *psObj);
+void actionDroid(DROID *psDroid, DROID_ACTION action, BASE_OBJECT *psObj);
 
 /** Give a droid an action with an object target and a location. */
-void actionDroidObjLoc(DROID *psDroid, DROID_ACTION action,
+void actionDroid(DROID *psDroid, DROID_ACTION action,
 					   BASE_OBJECT *psObj, UDWORD x, UDWORD y);
 
 /** Rotate turret toward  target return True if locked on (Droid and Structure). */
