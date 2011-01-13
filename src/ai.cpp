@@ -66,8 +66,6 @@
 #define	WEIGHT_CMD_RANK				(WEIGHT_DIST_TILE * 4)			//A single rank is as important as 4 tiles distance
 #define	WEIGHT_CMD_SAME_TARGET		WEIGHT_DIST_TILE				//Don't want this to be too high, since a commander can have many units assigned
 
-// alliances
-// players are 0-7; player 8 appears to be unused; player 9 is features
 uint8_t alliances[MAX_PLAYER_SLOTS][MAX_PLAYER_SLOTS];
 
 /// A bitfield of vision sharing in alliances, for quick manipulation of vision information
@@ -150,8 +148,6 @@ BOOL aiInitialise(void)
 {
 	SDWORD		i,j;
 
-	// The +1 is for features, that are owned by player 9 for hackish reasons
-	// Yes, we do mean "player 9", as in "the players are 0-7, and we skip over player 8"
 	for (i = 0; i < MAX_PLAYER_SLOTS; i++)
 	{
 		alliancebits[i] = 0;

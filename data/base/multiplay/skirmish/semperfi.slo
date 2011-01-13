@@ -157,7 +157,7 @@ private int				count,count2,result;
 private bool			powerSave,_DEBUG,bRunning;
 // Hopefully this will be at least as large as MAX_PLAYERS... Why can't I just use MAX_PLAYERS as the array size?!
 // P.S. And why can't I put a comment on the same line as a #define??!! Gah, who cares if the lua2 branch works, lets switch to it, anyway.
-#define MAX_PLAYERS_HACK 100
+#define MAX_PLAYERS_HACK 17
 private	int				allianceTime[MAX_PLAYERS_HACK];
 private int				sender,x,y,beaconX[MAX_PLAYERS_HACK],beaconY[MAX_PLAYERS_HACK],tBeacon[MAX_PLAYERS_HACK],
 						tLastHelpRequest,lastHelpPlayer,tHelp,tHelpTimeout,helpX,helpY;

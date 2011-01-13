@@ -56,17 +56,8 @@ extern uint32_t realSelectedPlayer;  ///< The player number corresponding to thi
 typedef uint8_t PlayerMask;
 #elif MAX_PLAYERS <= 16
 typedef uint16_t PlayerMask;
-#elif MAX_PLAYERS <= 32
-typedef uint32_t PlayerMask;
-#elif MAX_PLAYERS <= 64
-typedef uint64_t PlayerMask;
-#elif MAX_PLAYERS <= 128
-typedef unsigned int uint128_t __attribute__((mode(TI)));
-typedef uint128_t PlayerMask;
 #else
-#warning Warzone 2100 is not a MMO.
-#include <gmpxx.h>
-typedef mpz_class PlayerMask;
+#error Warzone 2100 is not a MMO.
 #endif
 
 typedef enum

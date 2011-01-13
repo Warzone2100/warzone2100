@@ -155,7 +155,10 @@ private int				count,count2,result,result2,tempx,tempy;
 private bool			boolResult,boolResult2;
 
 private bool			powerSave,_DEBUG,bRunning;
-private	int				allianceTime[8];
+// Hopefully this will be at least as large as MAX_PLAYERS... Why can't I just use MAX_PLAYERS as the array size?!
+// P.S. And why can't I put a comment on the same line as a #define??!! Gah, who cares if the lua2 branch works, lets switch to it, anyway.
+#define MAX_PLAYERS_HACK 17
+private	int				allianceTime[MAX_PLAYERS_HACK];
 private int				sender,x,y,beaconX[8],beaconY[8],tBeacon[8],
 						tLastHelpRequest,lastHelpPlayer,tHelp,tHelpTimeout,helpX,helpY;
 private string			message;
@@ -304,6 +307,7 @@ function STRUCTURE findIdleStructure(STRUCTURESTAT _structType, bool _bIdleOnly)
 // HouseKeeping
 event initialisedEvent(CALL_GAMEINIT)
 {
+	local int player;
 	// initialise
 	me = getPlayer("Nexus");
 	_DEBUG = FALSE;
@@ -362,14 +366,12 @@ event initialisedEvent(CALL_GAMEINIT)
 	scoutY			= scoutTLY;
 
 	// clear the alliance array...
-	allianceTime[0] = 0;
-	allianceTime[1] = 0;
-	allianceTime[2] = 0;
-	allianceTime[3] = 0;
-	allianceTime[4] = 0;
-	allianceTime[5] = 0;
-	allianceTime[6] = 0;
-	allianceTime[7] = 0;
+	player = 0;
+	while (player != MAX_PLAYERS)
+	{
+		allianceTime[player] = 0;
+		player = player + 1;
+	}
 
 	fundamentalBeingBuilt = derrick;	// to avoid ever being null
 	
@@ -3117,7 +3119,7 @@ event beaconEv(beaconTr)
 	if(_DEBUG)
 		debug(me & ") beaconEv: from " & sender);
 
-	ASSERT(sender >= 0 and sender < 8,
+	ASSERT(sender >= 0 and sender < MAX_PLAYERS,
 		"beaconEv: sender out of bounds: " & sender , me);
 
 	beaconX[sender] = x;
