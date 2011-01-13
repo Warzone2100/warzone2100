@@ -2164,7 +2164,7 @@ void addPlayerBox(BOOL players)
 
 		for (int i = 0; i < game.maxPlayers; i++)
 		{
-			if (positionChooserUp >= 0 && positionChooserUp != i)
+			if (positionChooserUp >= 0 && positionChooserUp != i && (NetPlay.isHost || !isHumanPlayer(i)))
 			{
 				W_BUTINIT sButInit;
 				sButInit.formID = MULTIOP_PLAYERS;
@@ -2909,7 +2909,7 @@ static void processMultiopWidgets(UDWORD id)
 
 	// clicked on a player
 	STATIC_ASSERT(MULTIOP_PLAYER_START + MAX_PLAYERS - 1 <= MULTIOP_PLAYER_END);
-	if (id >= MULTIOP_PLAYER_START && id <= MULTIOP_PLAYER_START + MAX_PLAYERS - 1 && (id - MULTIOP_PLAYER_START == selectedPlayer || NetPlay.isHost))
+	if (id >= MULTIOP_PLAYER_START && id <= MULTIOP_PLAYER_START + MAX_PLAYERS - 1 && (id - MULTIOP_PLAYER_START == selectedPlayer || NetPlay.isHost || (positionChooserUp >= 0 && !isHumanPlayer(id - MULTIOP_PLAYER_START))))
 	{
 		int player = id - MULTIOP_PLAYER_START;
 		if ((player == selectedPlayer || (NetPlay.players[player].allocated && NetPlay.isHost))
@@ -2938,7 +2938,7 @@ static void processMultiopWidgets(UDWORD id)
 	}
 
 	if (id >= MULTIOP_DIFFICULTY_INIT_START && id <= MULTIOP_DIFFICULTY_INIT_END
-	    && !challengeActive && positionChooserUp < 0 && teamChooserUp < 0 && colourChooserUp < 0)
+	    && !challengeActive && NetPlay.isHost && positionChooserUp < 0 && teamChooserUp < 0 && colourChooserUp < 0)
 	{
 		addDifficultyChooser(id - MULTIOP_DIFFICULTY_INIT_START);
 		addPlayerBox(!ingame.bHostSetup || bHosted);
