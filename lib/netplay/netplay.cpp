@@ -332,7 +332,6 @@ static void NETSendNPlayerInfoTo(uint32_t *index, uint32_t indexLen, unsigned to
 			NETint8_t(&NetPlay.players[index[n]].ai);
 			NETint8_t(&NetPlay.players[index[n]].difficulty);
 		}
-		NETuint32_t(&NetPlay.hostPlayer);
 	NETend();
 }
 
@@ -343,7 +342,11 @@ static void NETSendPlayerInfoTo(uint32_t index, unsigned to)
 
 static void NETSendAllPlayerInfoTo(unsigned to)
 {
-	static uint32_t indices[MAX_PLAYERS] = {0, 1, 2, 3, 4, 5, 6, 7};
+	static uint32_t indices[MAX_PLAYERS];
+	for (int i = 0; i < MAX_PLAYERS; ++i)
+	{
+		indices[i] = i;
+	}
 	ASSERT_OR_RETURN( , NetPlay.isHost == true, "Invalid call for non-host");
 
 	NETSendNPlayerInfoTo(indices, ARRAY_SIZE(indices), to);
@@ -1431,7 +1434,6 @@ static BOOL NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 			int32_t colour = 0;
 			int32_t position = 0;
 			int32_t team = 0;
-			uint32_t hostPlayer = 0;
 			int8_t ai = 0;
 			int8_t difficulty = 0;
 			bool error = false;
@@ -1457,7 +1459,6 @@ static BOOL NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 					if (index >= MAX_CONNECTED_PLAYERS || (playerQueue.index != NetPlay.hostPlayer && (playerQueue.index != index || !NetPlay.players[index].allocated)))
 					{
 						debug(LOG_ERROR, "MSG_PLAYER_INFO from %u: Player ID (%u) out of range (max %u)", playerQueue.index, index, (unsigned int)MAX_CONNECTED_PLAYERS);
-						NETend();
 						error = true;
 						break;
 					}
@@ -1496,7 +1497,6 @@ static BOOL NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 						printConsoleNameChange(oldName, NetPlay.players[index].name);
 					}
 				}
-				NETuint32_t(&hostPlayer);
 			NETend();
 			// If we're the game host make sure to send the updated
 			// data to all other clients as well.
