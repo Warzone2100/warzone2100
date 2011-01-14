@@ -21,11 +21,6 @@
 #ifndef __INCLUDED_SRC_CONSOLE_H__
 #define __INCLUDED_SRC_CONSOLE_H__
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 #define MAX_CONSOLE_MESSAGES			(64)
 #define MAX_CONSOLE_STRING_LENGTH		(255)
 #define MAX_CONSOLE_TMP_STRING_LENGTH	(255)
@@ -91,9 +86,5 @@ extern void console(const char *pFormat, ...); /// Print always to the ingame co
 #define CONPRINTF(s,x) \
 	sprintf x; \
 	addConsoleMessage(s,DEFAULT_JUSTIFY,SYSTEM_MESSAGE)
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_CONSOLE_H__

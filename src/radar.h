@@ -28,11 +28,6 @@
 #ifndef __INCLUDED_SRC_RADAR_H__
 #define __INCLUDED_SRC_RADAR_H__
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 void radarColour(UDWORD tileNumber, uint8_t r, uint8_t g, uint8_t b);	///< Set radar colour for given terrain type.
 
 #define MAX_RADARZOOM		(16 * 4)    // 3.00x
@@ -67,12 +62,8 @@ extern RADAR_DRAW_MODE	radarDrawMode;			///< Current minimap mode
 extern BOOL rotateRadar;
 
 extern void radarInitVars(void);			///< Recalculate minimap variables. For initialization code only.
-extern PIELIGHT clanColours[MAX_PLAYERS];
+extern PIELIGHT clanColours[];
 
 /** @} */
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_RADAR_H__

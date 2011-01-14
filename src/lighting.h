@@ -21,12 +21,7 @@
 #ifndef __INCLUDED_SRC_LIGHTNING_H__
 #define __INCLUDED_SRC_LIGHTNING_H__
 
-#include "lib/ivis_common/pietypes.h"
-
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
+#include "lib/ivis_opengl/pietypes.h"
 
 #define FOG_FLAGS		7
 #define FOG_BACKGROUND	1
@@ -65,11 +60,5 @@ extern void UpdateFogDistance(float distance);
 extern void	calcDroidIllumination(DROID *psDroid);
 //darkens down the tiles that are outside the scroll limits
 extern void setScrollLimitLighting(void);
-
-extern void	findSunVector(void);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_LIGHTNING_H__

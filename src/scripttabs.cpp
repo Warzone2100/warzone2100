@@ -56,6 +56,7 @@
 #include "intfac.h"
 #include "multimenu.h"
 #include "lib/framework/input.h"		//for key constants
+#include "lib/netplay/netplay.h"
 #include "lib/script/chat_processing.h"
 
 
@@ -293,10 +294,6 @@ FUNC_SYMBOL asFuncTable[] =
 	{ "removeMessage",		scrRemoveMessage,		VAL_VOID,
 		3, { (INTERP_TYPE)ST_INTMESSAGE, VAL_INT, VAL_INT },
 		0, 0, NULL, 0, 0, NULL, NULL },
-
-/*	{ "addTutorialMessage",	scrAddTutorialMessage,	VAL_VOID,
-		2, { (INTERP_TYPE)ST_INTMESSAGE, VAL_INT },
-		0, 0, NULL, 0, 0, NULL, NULL },*/
 
 	{ "selectDroidByID",	scrSelectDroidByID,		VAL_BOOL,
 		2, { (INTERP_TYPE)ST_DROIDID, VAL_INT },
@@ -1233,67 +1230,6 @@ FUNC_SYMBOL asFuncTable[] =
 		5, { VAL_INT, VAL_INT, VAL_REF|VAL_INT, VAL_REF|VAL_INT, VAL_INT },
 		0, 0, NULL, 0, 0, NULL, NULL },
 
-
-	/* learn functions */
-
-	{ "learnPlayerBaseLoc",		scrLearnPlayerBaseLoc,		VAL_BOOL,
-		4, { VAL_INT, VAL_INT, VAL_INT, VAL_INT },
-		0, 0, NULL, 0, 0, NULL, NULL },
-
-	{ "recallPlayerBaseLoc",	scrRecallPlayerBaseLoc,		VAL_BOOL,
-		4, { VAL_INT, VAL_INT, VAL_REF|VAL_INT, VAL_REF|VAL_INT },
-		0, 0, NULL, 0, 0, NULL, NULL },
-
-	{ "canRememberPlayerBaseLoc",scrCanRememberPlayerBaseLoc,VAL_BOOL,
-		2, { VAL_INT, VAL_INT },
-		0, 0, NULL, 0, 0, NULL, NULL },
-
-	{ "learnBaseDefendLoc",		scrLearnBaseDefendLoc,		VAL_BOOL,
-		4, { VAL_INT, VAL_INT, VAL_INT, VAL_INT },
-		0, 0, NULL, 0, 0, NULL, NULL },
-
-	{ "learnOilDefendLoc",		scrLearnOilDefendLoc,		VAL_BOOL,
-		4, { VAL_INT, VAL_INT, VAL_INT, VAL_INT },
-		0, 0, NULL, 0, 0, NULL, NULL },
-
-	{ "getBaseDefendLocIndex",	scrGetBaseDefendLocIndex,	VAL_INT,
-		3, { VAL_INT, VAL_INT, VAL_INT },
-		0, 0, NULL, 0, 0, NULL, NULL },
-
-	{ "getOilDefendLocIndex",	scrGetOilDefendLocIndex,	VAL_INT,
-		3, { VAL_INT, VAL_INT, VAL_INT },
-		0, 0, NULL, 0, 0, NULL, NULL },
-
-	{ "getBaseDefendLocCount",	scrGetBaseDefendLocCount,	VAL_INT,
-		0, { VAL_VOID },
-		0, 0, NULL, 0, 0, NULL, NULL },
-
-	{ "getOilDefendLocCount",	scrGetOilDefendLocCount,	VAL_INT,
-		0, { VAL_VOID },
-		0, 0, NULL, 0, 0, NULL, NULL },
-
-	{ "recallBaseDefendLoc",	scrRecallBaseDefendLoc,		VAL_BOOL,
-		5, { VAL_INT, VAL_INT, VAL_REF|VAL_INT, VAL_REF|VAL_INT, VAL_REF|VAL_INT },
-		0, 0, NULL, 0, 0, NULL, NULL },
-
-	{ "recallOilDefendLoc",		scrRecallOilDefendLoc,		VAL_BOOL,
-		5, { VAL_INT, VAL_INT, VAL_REF|VAL_INT, VAL_REF|VAL_INT, VAL_REF|VAL_INT },
-		0, 0, NULL, 0, 0, NULL, NULL },
-
-	{ "recallPlayerVisibility",	scrRecallPlayerVisibility,	VAL_BOOL,
-		1, { VAL_INT },
-		0, 0, NULL, 0, 0, NULL, NULL },
-
-	{ "savePlayerAIExperience",	scrSavePlayerAIExperience,	VAL_BOOL,
-		2, { VAL_INT, VAL_BOOL },
-		0, 0, NULL, 0, 0, NULL, NULL },
-
-	{ "loadPlayerAIExperience",	scrLoadPlayerAIExperience,	VAL_INT,
-		1, { VAL_INT },
-		0, 0, NULL, 0, 0, NULL, NULL },
-
-	/* end of learn functions */
-
 	{ "structInRangeVis",		scrStructInRangeVis,		VAL_BOOL,
 		5, { VAL_INT, VAL_INT, VAL_INT, VAL_INT, VAL_INT },
 		0, 0, NULL, 0, 0, NULL, NULL },
@@ -1485,14 +1421,14 @@ FUNC_SYMBOL asFuncTable[] =
 		false, 0, NULL, 0, 0, NULL, NULL },
 
 	{ "getPlayer", scrGetPlayer, VAL_INT,
-		0, { VAL_VOID },
+		1, { VAL_STRING },
 		false, 0, NULL, 0, 0, NULL, NULL },
 
 	{ "getPlayerStartPosition", scrGetPlayerStartPosition, VAL_BOOL,
 		3, { VAL_INT, VAL_INT|VAL_REF, VAL_INT|VAL_REF },
 		false, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "scavengersActive", scrScavengersActive, VAL_BOOL,
+	{ "scavengersActive", scrScavengersActive, VAL_INT,
 		0, { VAL_VOID },
 		false, 0, NULL, 0, 0, NULL, NULL },
 
@@ -1509,6 +1445,18 @@ FUNC_SYMBOL asFuncTable[] =
 
 	{ "threatAt", scrThreatAt, VAL_BOOL,
 		3, { VAL_INT, VAL_INT, VAL_INT },
+		false, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "setSunPosition", scrSetSunPosition, VAL_VOID,
+		3, { VAL_FLOAT, VAL_FLOAT, VAL_FLOAT },
+		false, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "setSunIntensity", scrSetSunIntensity, VAL_VOID,
+		9, { VAL_FLOAT, VAL_FLOAT, VAL_FLOAT, VAL_FLOAT, VAL_FLOAT, VAL_FLOAT, VAL_FLOAT, VAL_FLOAT, VAL_FLOAT },
+		false, 0, NULL, 0, 0, NULL, NULL },
+
+	{ "getDifficulty", scrGetDifficulty, VAL_INT,
+		1, { VAL_INT },
 		false, 0, NULL, 0, 0, NULL, NULL },
 
 	/* This final entry marks the end of the function list */
@@ -1730,9 +1678,6 @@ VAR_SYMBOL asObjTable[] =
  */
 CONST_SYMBOL asConstantTable[] =
 {
-/*	{ "TEST_BOOL_CONST",	VAL_BOOL, true,		0,		0 },
-	{ "TEST_INT_CONST",		VAL_INT,	0,		10,		0 },*/
-
 	//reticule button IDs	- for scrFlashOn & Off
 	// original annette styley
 	{ "OPTIONS",	VAL_INT,	false,	IDRET_OPTIONS,		NULL, NULL, 0.0f },
@@ -1743,7 +1688,6 @@ CONST_SYMBOL asConstantTable[] =
 	{ "INTELMAP",	VAL_INT,	false,	IDRET_INTEL_MAP,	NULL, NULL, 0.0f },
 	{ "DESIGN",		VAL_INT,	false,	IDRET_DESIGN,		NULL, NULL, 0.0f },
 	{ "COMMAND",	VAL_INT,	false,	IDRET_COMMAND,		NULL, NULL, 0.0f },
-
 
 	// new styley that supports many other buttons
 	{ "IDRET_OPTIONS",		VAL_INT,	false,	IDRET_OPTIONS,		NULL, NULL, 0.0f },
@@ -1772,13 +1716,11 @@ CONST_SYMBOL asConstantTable[] =
 	// the first (top-left) button on the list window (up from the reticule)
 	{ "IDSTAT_START",		VAL_INT,	false,	IDSTAT_START,		NULL, NULL, 0.0f },
 
-
 	//message Types
 	{ "RES_MSG",	VAL_INT,	false,	MSG_RESEARCH,	NULL, NULL, 0.0f },
 	{ "CAMP_MSG",	VAL_INT,	false,	MSG_CAMPAIGN,	NULL, NULL, 0.0f },
 	{ "MISS_MSG",	VAL_INT,	false,	MSG_MISSION,	NULL, NULL, 0.0f },
 	{ "PROX_MSG",	VAL_INT,	false,	MSG_PROXIMITY,	NULL, NULL, 0.0f },
-	//{ "TUT_MSG",	VAL_INT,	false,	MSG_TUTORIAL,	NULL, NULL, 0.0f }, NOT NEEDED
 
 	//used for null pointers
 	{ "NULLTEMPLATE",	(INTERP_TYPE)ST_POINTER_T,	false,	0,	NULL, NULL, 0.0f },
@@ -1786,10 +1728,6 @@ CONST_SYMBOL asConstantTable[] =
 	{ "NULLSTAT",		(INTERP_TYPE)ST_POINTER_S,	false,	0,	NULL, NULL, 0.0f },
 	{ "NULLSTRING",		(INTERP_TYPE)ST_TEXTSTRING,	false,	0,	NULL, NULL, 0.0f },
 	{ "NULLSTRUCTURESTAT",(INTERP_TYPE)ST_POINTER_STRUCTSTAT,	false,	0,	NULL, NULL, 0.0f },	//for NULLSTRUCTURESTAT
-
-	//barbarian player ids
-	{ "BARBARIAN1",	VAL_INT,	false,	BARB1,	NULL, NULL, 0.0f },
-	{ "BARBARIAN2",	VAL_INT,	false,	BARB2,	NULL, NULL, 0.0f },
 
     //#define used to set the reinforcement timer with
 	{ "LZ_COMPROMISED_TIME",VAL_INT,	false,	SCR_LZ_COMPROMISED_TIME,	NULL, NULL, 0.0f },
@@ -1994,7 +1932,6 @@ CONST_SYMBOL asConstantTable[] =
 	{ "STATUS_BattleMapViewEnabled",VAL_INT,	false, STATUS_BattleMapViewEnabled,	NULL, NULL, 0.0f },	// Are we currently in the battlemap view (tactical display) true=yes
 	{ "STATUS_DeliveryReposInProgress",VAL_INT,false, STATUS_DeliveryReposInProgress,	NULL, NULL, 0.0f },	// Are we currently in the delivery repos mode
 
-
 	//possible values for externed 	targetedObjectType
 	{ "MT_TERRAIN",		VAL_INT,	false,	MT_TERRAIN,			NULL, NULL, 0.0f },
 	{ "MT_RESOURCE",	VAL_INT,	false,	MT_RESOURCE,		NULL, NULL, 0.0f },
@@ -2056,6 +1993,8 @@ CONST_SYMBOL asConstantTable[] =
 	{ "DT_HOVER",		VAL_INT,	false,	SCR_DT_HOVER,		NULL, NULL, 0.0f },
 
 	// multiplayer
+
+	{ "MAX_PLAYERS",        VAL_INT,        false,  MAX_PLAYERS,                    NULL, NULL, 0.0f },
 
 	{ "CAMPAIGN",		VAL_INT,	false,	CAMPAIGN,			NULL, NULL, 0.0f },
 	{ "SKIRMISH",		VAL_INT,	false,	SKIRMISH,			NULL, NULL, 0.0f },
@@ -2120,6 +2059,11 @@ CONST_SYMBOL asConstantTable[] =
 	{ "KEY_KP_7",		VAL_INT,	false,		KEY_KP_7,		NULL, NULL, 0.0f },
 	{ "KEY_KP_8",		VAL_INT,	false,		KEY_KP_8,		NULL, NULL, 0.0f },
 	{ "KEY_KP_9",		VAL_INT,	false,		KEY_KP_9,		NULL, NULL, 0.0f },
+
+	{ "EASY",               VAL_INT,        false,  DIFFICULTY_EASY,                NULL, NULL, 0.0f },
+	{ "MEDIUM",             VAL_INT,        false,  DIFFICULTY_MEDIUM,              NULL, NULL, 0.0f },
+	{ "HARD",               VAL_INT,        false,  DIFFICULTY_HARD,                NULL, NULL, 0.0f },
+	{ "INSANE",             VAL_INT,        false,  DIFFICULTY_INSANE,              NULL, NULL, 0.0f },
 
 	/* This entry marks the end of the constant list */
 	{ "CONSTANT LIST END",VAL_VOID,	false,		0,	NULL, NULL, 0.0f }
@@ -2342,53 +2286,13 @@ BOOL scrTabInitialise(void)
 	// Set the object variable table
 	scriptSetObjectTab(asObjTable);
 
-
-
-
 	// Set the callback table
 	scriptSetCallbackTab(asCallbackTable);
 
 	// Set the type equivalence table
 	scriptSetTypeEquiv(asEquivTable);
 
-
 	// Set the create and release functions
-	if (!eventAddValueCreate((INTERP_TYPE)ST_BASEOBJECT, scrvAddBasePointer))
-	{
-		return false;
-	}
-	if (!eventAddValueRelease((INTERP_TYPE)ST_BASEOBJECT, scrvReleaseBasePointer))
-	{
-		return false;
-	}
-
-	if (!eventAddValueCreate((INTERP_TYPE)ST_DROID, scrvAddBasePointer))
-	{
-		return false;
-	}
-	if (!eventAddValueRelease((INTERP_TYPE)ST_DROID, scrvReleaseBasePointer))
-	{
-		return false;
-	}
-
-	if (!eventAddValueCreate((INTERP_TYPE)ST_STRUCTURE, scrvAddBasePointer))
-	{
-		return false;
-	}
-	if (!eventAddValueRelease((INTERP_TYPE)ST_STRUCTURE, scrvReleaseBasePointer))
-	{
-		return false;
-	}
-
-	if (!eventAddValueCreate((INTERP_TYPE)ST_FEATURE, scrvAddBasePointer))
-	{
-		return false;
-	}
-	if (!eventAddValueRelease((INTERP_TYPE)ST_FEATURE, scrvReleaseBasePointer))
-	{
-		return false;
-	}
-
 	if (!eventAddValueCreate((INTERP_TYPE)ST_GROUP, scrvNewGroup))
 	{
 		return false;
@@ -2413,14 +2317,9 @@ BOOL scrTabInitialise(void)
 	return true;
 }
 
-
 // Shut down the script system
 void scrShutDown(void)
 {
 	scrvShutDown();
 	scriptShutDown();
 }
-
-
-
-

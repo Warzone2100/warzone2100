@@ -30,11 +30,6 @@
 #ifndef __INCLUDED_LIB_FRAMEWORK_LISTMACS_H__
 #define __INCLUDED_LIB_FRAMEWORK_LISTMACS_H__
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 /**
  * Append an entry to the end of a linked list
  */
@@ -89,9 +84,5 @@ extern "C"
 		psPrev->psNext = psCurr->psNext; \
 	} \
 }
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_LIB_FRAMEWORK_LISTMACS_H__

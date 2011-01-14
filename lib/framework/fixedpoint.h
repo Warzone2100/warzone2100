@@ -28,11 +28,6 @@
 
 #include "wzglobal.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 //! PSX-style float emulation: 12 digit semi-floats stored in an int
 // FIXME!
 #define FP12_SHIFT 12
@@ -50,9 +45,5 @@ static inline WZ_DECL_CONST float UNDEG(uint16_t angle) { return angle * (360 / 
 // Should be a macro (or two separate functions), since we can't do function overloading for float and int, and we don't want to use the float version for anything game-state related.
 // 65536 / 360 = 8192 / 45, with a bit less overflow risk.
 #define DEG(degrees) ((degrees) * 8192 / 45)
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // FIXEDPOINT_H

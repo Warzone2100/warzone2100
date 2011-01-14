@@ -23,11 +23,6 @@
 
 #include "structuredef.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 typedef struct _bridge_info
 {
 	int	startX, startY, endX, endY;			// Copy of coordinates of bridge.
@@ -48,9 +43,5 @@ void getBridgeInfo(int startX, int startY, int endX, int endY, BRIDGE_INFO *info
 
 /* FIX ME - this is used in debug to test the bridge build code */
 void testBuildBridge(UDWORD startX, UDWORD startY, UDWORD endX, UDWORD endY);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_BRIDGE_H__

@@ -23,11 +23,6 @@
 
 #include "lib/framework/types.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 typedef struct Socket Socket;
 typedef struct SocketSet SocketSet;
 typedef struct addrinfo SocketAddress;
@@ -77,9 +72,5 @@ void deleteSocketSet(SocketSet *set);                                   ///< Des
 void SocketSet_AddSocket(SocketSet *set, Socket *socket);               ///< Adds a Socket to a SocketSet.
 void SocketSet_DelSocket(SocketSet *set, Socket *socket);               ///< Removes a Socket from a SocketSet.
 int checkSockets(const SocketSet *set, unsigned int timeout);           ///< Checks which Sockets are ready for reading. Returns the number of ready Sockets, or returns SOCKET_ERROR on error.
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif //_net_socket_h

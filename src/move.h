@@ -26,11 +26,6 @@
 
 #include "objectdef.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 /* Initialise the movement system */
 extern BOOL moveInitialise(void);
 
@@ -76,8 +71,7 @@ void moveMakeVtolHover( DROID *psDroid );
 /// Get high precision droid position
 static inline Position droidGetPrecisePosition(const DROID *psDroid)
 {
-	Position newPos = {psDroid->pos.x * EXTRA_PRECISION + psDroid->sMove.eBitX, psDroid->pos.y * EXTRA_PRECISION + psDroid->sMove.eBitY, 0};
-	return newPos;
+	return Position(psDroid->pos.x * EXTRA_PRECISION + psDroid->sMove.eBitX, psDroid->pos.y * EXTRA_PRECISION + psDroid->sMove.eBitY, 0);
 }
 
 /// Set high precision droid position
@@ -93,9 +87,5 @@ static inline void droidSetPrecisePosition(DROID *psDroid, Position newPos)
 }
 
 const char *moveDescription(MOVE_STATUS status);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_MOVE_H__

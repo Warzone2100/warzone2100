@@ -33,12 +33,7 @@
 #include <physfs.h>
 
 #include "lib/framework/types.h"
-#include "lib/ivis_common/imd.h"
-
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
+#include "lib/ivis_opengl/imd.h"
 
 #define	ANIM_MAX_STR			256
 #define	ANIM_DELAYED	0xFFFE
@@ -119,9 +114,5 @@ UWORD           anim_GetFrame3D(ANIM3D *psAnim, UWORD uwObj, UDWORD udwGraphicsT
 		                UDWORD udwStartDelay, Vector3i *psVecPos, Vector3i *psVecRot,
 		                Vector3i *psVecScale);
 void		anim_SetVals(char szFileName[], UWORD uwAnimID);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif	/* _ANIM_H_ */

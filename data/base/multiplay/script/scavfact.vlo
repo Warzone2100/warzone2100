@@ -4,7 +4,6 @@ script "scavFact.slo"
 run
 {
 
-enemy1		INT	7				//player number to use
 maxDroids	INT	25				// max guys to handle.
 
 factory			STRUCTURESTAT		"A0BaBaFactory"

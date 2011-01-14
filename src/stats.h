@@ -23,12 +23,9 @@
 #ifndef __INCLUDED_SRC_STATS_H__
 #define __INCLUDED_SRC_STATS_H__
 
-#include "objectdef.h"
+#include <utility>
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
+#include "objectdef.h"
 
 /**************************************************************************************
  *
@@ -314,7 +311,7 @@ extern bool getPropulsionType(const char* typeName, PROPULSION_TYPE* type);
  *         contain a valid weapon effect enumerator, otherwise its value will
  *         be left unchanged.
  */
-extern bool getWeaponEffect(const char* weaponEffect, WEAPON_EFFECT* effect);
+extern const StringToEnumMap<WEAPON_EFFECT> map_WEAPON_EFFECT;
 
 extern UWORD weaponROF(WEAPON_STATS *psStat, SBYTE player);
 /*Access functions for the upgradeable stats of a weapon*/
@@ -373,9 +370,5 @@ SENSOR_STATS *objActiveRadar(BASE_OBJECT *psObj);
 
 /** Returns whether object has a radar detector sensor. */
 bool objRadarDetector(BASE_OBJECT *psObj);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_STATS_H__

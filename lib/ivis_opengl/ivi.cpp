@@ -18,10 +18,10 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#include "lib/ivis_common/ivi.h"
-#include "lib/ivis_common/piemode.h"
-#include "lib/ivis_common/tex.h"
-#include "lib/ivis_common/textdraw.h"
+#include "lib/ivis_opengl/ivi.h"
+#include "lib/ivis_opengl/piemode.h"
+#include "lib/ivis_opengl/tex.h"
+#include "lib/ivis_opengl/textdraw.h"
 
 // pass in true to reset the palette too.
 void iV_Reset()

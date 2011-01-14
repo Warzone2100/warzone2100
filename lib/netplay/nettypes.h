@@ -83,6 +83,7 @@ void NETuint64_t(uint64_t *ip);
 void NETbool(BOOL *bp);
 void NETbool(bool *bp);
 void NETstring(char *str, uint16_t maxlen);
+void NETstring(char const *str, uint16_t maxlen);  ///< Encode-only version of NETstring.
 void NETbin(uint8_t *str, uint32_t maxlen);
 
 PACKETDIR NETgetPacketDir(void);

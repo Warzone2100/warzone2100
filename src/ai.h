@@ -26,11 +26,6 @@
 
 #include "droiddef.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 #define ALLIANCE_BROKEN		0			// states of alliance between players
 #define ALLIANCE_REQUESTED	1
 #define ALLIANCE_INVITATION	2
@@ -43,8 +38,8 @@ extern "C"
 
 // alliances
 extern uint8_t alliances[MAX_PLAYER_SLOTS][MAX_PLAYER_SLOTS];
-extern uint8_t alliancebits[MAX_PLAYER_SLOTS];
-extern uint8_t satuplinkbits;
+extern PlayerMask alliancebits[MAX_PLAYER_SLOTS];
+extern PlayerMask satuplinkbits;
 
 /** Check no alliance has formed. This is a define to make sure we inline it. */
 #define aiCheckAlliances(_s1, _s2) (alliances[_s1][_s2] == ALLIANCE_FORMED)
@@ -81,9 +76,5 @@ BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget);
 /*set of rules which determine whether the weapon associated with the object
 can fire on the propulsion type of the target*/
 BOOL validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget, int weapon_slot);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_AI_H__

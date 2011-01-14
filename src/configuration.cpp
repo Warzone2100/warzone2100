@@ -52,44 +52,17 @@
 #define MASTERSERVERPORT	9990
 #define GAMESERVERPORT		2100
 
-/* Frame limit for multiplayer games (excluding skirmish and campaign) */
-#define MP_FRAME_LIMIT 45
-
-/* Default frame limit for single player: skirmish ans campaign */
-#define SP_FRAME_LIMIT 60
-
-// current frame limit for single player modes
-static SDWORD	spFrameLimit = SP_FRAME_LIMIT;
-
-static void setSinglePlayerFrameLimit(SDWORD limit)
-{
-	spFrameLimit = limit;
-}
-
-static SDWORD getSinglePlayerFrameLimit(void)
-{
-	return spFrameLimit;
-}
-
-void setDefaultFrameRateLimit(void)
-{
-	if(bMultiPlayer && NetPlay.bComms)
-	{
-		setFramerateLimit(MP_FRAME_LIMIT);		// true multiplayer
-	}
-	else
-	{
-		setFramerateLimit(getSinglePlayerFrameLimit());		// single player
-	}
-}
-
 // ////////////////////////////////////////////////////////////////////////////
 BOOL loadConfig(void)
 {
 	int val;
 	char	sBuf[255];
+	bool bad_resolution = false;
 
-	openWarzoneKey();
+	if (!openWarzoneKey())
+	{
+		return false;
+	}
 
 	//  options screens.
 	// //////////////////////////
@@ -132,17 +105,6 @@ BOOL loadConfig(void)
 	if (getWarzoneKeyNumeric("music_enabled", &val))
 	{
 		war_SetMusicEnabled(val);
-	}
-
-	if (getWarzoneKeyNumeric("SinglePlayerFPS", &val))
-	{
-		setSinglePlayerFrameLimit(val);
-		setFramerateLimit(getSinglePlayerFrameLimit());
-	}
-	else
-	{
-		setFramerateLimit(getSinglePlayerFrameLimit());
-		setWarzoneKeyNumeric("SinglePlayerFPS", getSinglePlayerFrameLimit());
 	}
 
 	if (getWarzoneKeyString("language", sBuf))
@@ -566,18 +528,6 @@ BOOL loadConfig(void)
 		NetPlay.isUPNP = 1;
 	}
 
-	return closeWarzoneKey();
-}
-
-BOOL loadRenderMode(void)
-{
-	SDWORD val;
-	bool bad_resolution = false;
-
-	if( !openWarzoneKey() ) {
-		return false;
-	}
-
 	if (getWarzoneKeyNumeric("FSAA", &val))
 	{
 		war_setFSAA(val);
@@ -664,6 +614,11 @@ BOOL loadRenderMode(void)
 	if (getWarzoneKeyNumeric("bpp", &val))
 	{
 		pie_SetVideoBufferDepth(val);
+	}
+
+	if (getWarzoneKeyNumeric("framerate", &val))
+	{
+		setFramerateLimit(val);
 	}
 
 	return closeWarzoneKey();

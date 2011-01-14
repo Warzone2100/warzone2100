@@ -28,17 +28,17 @@
 #include "lib/framework/math_ext.h"
 
 /* Includes direct access to render library */
-#include "lib/ivis_common/ivisdef.h"
-#include "lib/ivis_common/piestate.h"
-#include "lib/ivis_common/piepalette.h"
+#include "lib/ivis_opengl/ivisdef.h"
+#include "lib/ivis_opengl/piestate.h"
+#include "lib/ivis_opengl/piepalette.h"
 
-#include "lib/ivis_common/piemode.h"			// ffs
-#include "lib/ivis_common/pieclip.h"			// ffs
-#include "lib/ivis_common/pieblitfunc.h"
+#include "lib/ivis_opengl/piemode.h"			// ffs
+#include "lib/ivis_opengl/pieclip.h"			// ffs
+#include "lib/ivis_opengl/pieblitfunc.h"
 
 // FIXME Direct iVis implementation include!
-#include "lib/ivis_common/bitimage.h"
-#include "lib/ivis_common/rendmode.h"
+#include "lib/ivis_opengl/bitimage.h"
+#include "lib/ivis_opengl/rendmode.h"
 #include "lib/ivis_opengl/piematrix.h"
 
 #include "lib/framework/input.h"
@@ -323,7 +323,6 @@ void intUpdateQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 	STRUCTURE		*Structure;
 	DROID_TEMPLATE *        psTemplate;
 	W_LABEL			*Label = (W_LABEL*)psWidget;
-	int                     Quantity, Built;
 
 	psObj = (BASE_OBJECT*)Label->pUserData;  // Get the object associated with this widget.
 	Structure = (STRUCTURE*)psObj;
@@ -333,13 +332,8 @@ void intUpdateQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 		ASSERT(!isDead(psObj),"intUpdateQuantity: object is dead");
 
 		psTemplate = FactoryGetTemplate(StructureGetFactory(Structure));
-		Quantity = getProductionQuantity(Structure, psTemplate);
-		Built = getProductionBuilt(Structure, psTemplate);
-		snprintf(Label->aText, sizeof(Label->aText), "%02d", Quantity - Built);
-		if (Quantity - Built <= 0)	// zero is always the case for script added production
-		{
-			sstrcpy(Label->aText, "01");
-		}
+		int remaining = getProduction(Structure, psTemplate).numRemaining();
+		snprintf(Label->aText, sizeof(Label->aText), "%d", remaining);
 		Label->style &= ~WIDG_HIDDEN;
 	}
 	else
@@ -358,7 +352,7 @@ void intAddFactoryInc(WIDGET *psWidget, W_CONTEXT *psContext)
 	if (psObj != NULL && !isDead(psObj))
 	{
 		STRUCTURE	*Structure = (STRUCTURE*)psObj;
-		FACTORY		*Factory = (FACTORY *)Structure->pFunctionality;
+		FACTORY		*Factory = &Structure->pFunctionality->factory;
 
 		ASSERT( (Structure->pStructureType->type == REF_FACTORY ||
 			Structure->pStructureType->type == REF_CYBORG_FACTORY ||
@@ -379,39 +373,36 @@ void intAddFactoryInc(WIDGET *psWidget, W_CONTEXT *psContext)
 void intAddProdQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 {
 	W_LABEL				*Label = (W_LABEL*)psWidget;
-	BASE_STATS			*psStat = (BASE_STATS *)Label->pUserData;
+	DROID_TEMPLATE *                psTemplate = (DROID_TEMPLATE *)Label->pUserData;
 
 	// Get the object associated with this widget.
-	if (psStat != NULL)
+	if (psTemplate != NULL)
 	{
-		DROID_TEMPLATE	*psTemplate = (DROID_TEMPLATE *)psStat;
 		STRUCTURE	*psStructure = NULL;
 		BASE_OBJECT	*psObj = getCurrentSelected();
-		UDWORD		quantity = 0, remaining = 0;
 
 		if (psObj != NULL && psObj->type == OBJ_STRUCTURE && !isDead(psObj))
 		{
 			psStructure = (STRUCTURE *)psObj;
 		}
 
+		ProductionRunEntry entry;
 		if (psStructure != NULL && StructIsFactory(psStructure))
 		{
-			quantity = getProductionQuantity(psStructure, psTemplate);
-			remaining = getProductionBuilt(psStructure, psTemplate);
+			entry = getProduction(psStructure, psTemplate);
 		}
 
 		// now find out how many we have built
-		if (quantity > remaining)
+		if (entry.isValid())
 		{
-			quantity -= remaining;
-		}
-		else
-		{
-			quantity = 0;
-		}
-		if (quantity != 0)
-		{
-			snprintf(Label->aText, sizeof(Label->aText), "%u", quantity);
+			if (psStructure->pFunctionality->factory.productionLoops != 0)
+			{
+				snprintf(Label->aText, sizeof(Label->aText), "%u/%u", entry.numRemaining(), entry.quantity);
+			}
+			else
+			{
+				snprintf(Label->aText, sizeof(Label->aText), "%u", entry.numRemaining());
+			}
 			Label->style &= ~WIDG_HIDDEN;
 		}
 		else
@@ -431,15 +422,19 @@ void intAddLoopQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 	//loop depends on the factory
 	if (psStruct && psStruct->pFunctionality && !psStruct->died)
 	{
-		FACTORY		*psFactory = (FACTORY *)psStruct->pFunctionality;
+		FACTORY *psFactory = &psStruct->pFunctionality->factory;
 
 		if (psFactory->productionLoops == INFINITE_PRODUCTION)
 		{
 			sstrcpy(Label->aText, "∞");
 		}
+		else if (psFactory->productionLoops != 0)
+		{
+			snprintf(Label->aText, sizeof(Label->aText), "%u", psFactory->productionLoops + DEFAULT_LOOP);
+		}
 		else
 		{
-			snprintf(Label->aText, sizeof(Label->aText), "%02u", psFactory->productionLoops + DEFAULT_LOOP);
+			Label->aText[0] = '\0';  // Don't show "1" loop.
 		}
 		Label->style &= ~WIDG_HIDDEN;
 	}
@@ -1243,13 +1238,11 @@ void intOpenPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_
 void intClosePlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	W_TABFORM *Form = (W_TABFORM*)psWidget;
-	UDWORD Tx0,Ty0,Tx1,Ty1;
+	UDWORD Ty0, Ty1;
 	UDWORD Range;
 	UDWORD Duration;
 	UDWORD APos;
 
-	Tx0 = xOffset+Form->x;
-	Tx1 = Tx0 + Form->width;
 	Ty0 = yOffset+Form->y + (Form->height/2) - 4;
 	Ty1 = yOffset+Form->y + (Form->height/2) + 4;
 
@@ -2131,12 +2124,9 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 	UDWORD Size;
 	Vector3i Rotation, Position, NullVector;
 	UDWORD ox,oy;
-	BUTTON_SURFACE *ButSurf;
 	UDWORD Radius;
 	UDWORD basePlateSize;
 	SDWORD scale;
-
-	ButSurf = Buffer->ButSurf;
 
 	if(Down) {
 		ox = oy = 2;

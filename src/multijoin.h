@@ -26,11 +26,6 @@
 
 #include "droiddef.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 extern BOOL intDisplayMultiJoiningStatus(UBYTE joinCount);
 void recvPlayerLeft(NETQUEUE queue);
 extern BOOL MultiPlayerLeave			(UDWORD playerIndex);						// A player has left the game.
@@ -40,18 +35,8 @@ extern void clearPlayer					(UDWORD player, BOOL quietly);// wipe a player off t
 //extern BOOL ProcessDroidOrders			(void);
 //extern UDWORD							arenaPlayersReceived;
 
-typedef struct {
-	DROID *psDroid;
-	void  *psNext;
-} DROIDSTORE, *LPDROIDSTORE;
-
-extern DROIDSTORE *tempDroidList;
 extern void ShowMOTD(void);
 extern bool recvDataCheck(NETQUEUE queue);
 extern bool sendDataCheck(void);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_MULTIJOIN_H__

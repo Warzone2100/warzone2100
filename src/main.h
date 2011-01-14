@@ -21,11 +21,6 @@
 #ifndef __INCLUDED_SRC_MAIN_H__
 #define __INCLUDED_SRC_MAIN_H__
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 typedef enum {
 	GS_TITLE_SCREEN,
 	GS_NORMAL,
@@ -56,9 +51,5 @@ extern char * multiplay_mods[MAX_MODS];
 extern char * override_mods[MAX_MODS];
 extern char * override_mod_list;
 extern bool use_override_mods;
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_MAIN_H__

@@ -22,12 +22,7 @@
 #define __INCLUDED_SRC_ATMOS_H__
 
 #include "lib/framework/vector.h"
-#include "lib/ivis_common/ivisdef.h"
-
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
+#include "lib/ivis_opengl/ivisdef.h"
 
 typedef struct _atmosParticle
 {
@@ -52,9 +47,5 @@ void renderParticle(ATPART *psPart);
 void atmosDrawParticles(void);
 void atmosSetWeatherType(WT_CLASS type);
 WT_CLASS atmosGetWeatherType(void);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_ATMOS_H__

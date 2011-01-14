@@ -29,7 +29,7 @@
 #include "lib/framework/math_ext.h"
 #include "lib/widget/label.h"
 #include "lib/widget/widget.h"
-#include "lib/ivis_common/textdraw.h"
+#include "lib/ivis_opengl/textdraw.h"
 
 #include "stats.h"
 #include "hci.h"
@@ -47,7 +47,7 @@
 #include "action.h"
 #include "lib/gamelib/gtime.h"
 #include "console.h"
-#include "lib/ivis_common/bitimage.h"
+#include "lib/ivis_opengl/bitimage.h"
 #include "warcam.h"
 #include "selection.h"
 #include "lib/sound/audio.h"
@@ -212,8 +212,6 @@ BOOL intAddTransporter(DROID *psSelected, BOOL offWorld)
 /*Add the Transporter Interface*/
 static BOOL _intAddTransporter(DROID *psSelected, BOOL offWorld)
 {
-	W_FORMINIT		sFormInit;
-	W_BUTINIT		sButInit;
 	BOOL			Animate = true;
 
 	onMission = offWorld;
@@ -243,10 +241,7 @@ static BOOL _intAddTransporter(DROID *psSelected, BOOL offWorld)
 		Animate = false;
 	}
 
-
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
-
-
+	W_FORMINIT sFormInit;
 	sFormInit.formID = 0;
 	sFormInit.id = IDTRANS_FORM;
 	sFormInit.style = WFORM_PLAIN;
@@ -272,16 +267,14 @@ static BOOL _intAddTransporter(DROID *psSelected, BOOL offWorld)
 	}
 
 	/* Add the close button */
-	memset(&sButInit, 0, sizeof(W_BUTINIT));
+	W_BUTINIT sButInit;
 	sButInit.formID = IDTRANS_FORM;
 	sButInit.id = IDTRANS_CLOSE;
-	sButInit.style = WBUT_PLAIN;
 	sButInit.x = TRANS_WIDTH - CLOSE_WIDTH;
 	sButInit.y = 0;
 	sButInit.width = CLOSE_WIDTH;
 	sButInit.height = CLOSE_HEIGHT;
 	sButInit.pTip = _("Close");
-	sButInit.FontID = font_regular;
 	sButInit.pDisplay = intDisplayImageHilight;
 	sButInit.UserData = PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
 	if (!widgAddButton(psWScreen, &sButInit))
@@ -316,27 +309,20 @@ static BOOL _intAddTransporter(DROID *psSelected, BOOL offWorld)
 // Add the main Transporter Contents Interface
 BOOL intAddTransporterContents(void)
 {
-	W_FORMINIT		sFormInit;
-	W_BUTINIT		sButInit;
-	W_FORMINIT		sButFInit;
-	W_LABINIT		sLabInit;
 	BOOL			Animate = true;
-	BOOL  AlreadyUp = false;
 
     // Is the form already up?
 	if(widgGetFromID(psWScreen,IDTRANS_CONTENTFORM) != NULL)
 	{
 		intRemoveTransContentNoAnim();
 		Animate = false;
-		AlreadyUp = true;
 	}
 
 	if(intIsRefreshing()) {
 		Animate = false;
 	}
 
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
-
+	W_FORMINIT sFormInit;
 	sFormInit.formID = 0;
 	sFormInit.id = IDTRANS_CONTENTFORM;
 	sFormInit.style = WFORM_PLAIN;
@@ -362,16 +348,14 @@ BOOL intAddTransporterContents(void)
 	}
 
 	/* Add the close button */
-	memset(&sButInit, 0, sizeof(W_BUTINIT));
+	W_BUTINIT sButInit;
 	sButInit.formID = IDTRANS_CONTENTFORM;
 	sButInit.id = IDTRANS_CONTCLOSE;
-	sButInit.style = WBUT_PLAIN;
 	sButInit.x = STAT_WIDTH - CLOSE_WIDTH;
 	sButInit.y = 0;
 	sButInit.width = CLOSE_WIDTH;
 	sButInit.height = CLOSE_HEIGHT;
 	sButInit.pTip = _("Close");
-	sButInit.FontID = font_regular;
 	sButInit.pDisplay = intDisplayImageHilight;
 	sButInit.UserData = PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
 	if (!widgAddButton(psWScreen, &sButInit))
@@ -381,16 +365,14 @@ BOOL intAddTransporterContents(void)
 	if (bMultiPlayer)
 	{
 		//add the capacity label
-		memset(&sLabInit,0,sizeof(W_LABINIT));
+		W_LABINIT sLabInit;
 		sLabInit.formID = IDTRANS_CONTENTFORM;
 		sLabInit.id = IDTRANS_CAPACITY;
-		sLabInit.style = WLAB_PLAIN;
 		sLabInit.x = (SWORD)sButInit.x -40;
 		sLabInit.y = 0;
 		sLabInit.width = 16;
 		sLabInit.height = 16;
 		sLabInit.pText = "00/10";
-		sLabInit.FontID = font_regular;
 		sLabInit.pCallback = intUpdateTransCapacity;
 		if (!widgAddLabel(psWScreen, &sLabInit))
 		{
@@ -400,7 +382,7 @@ BOOL intAddTransporterContents(void)
 	//add the Launch button if on a mission
 	if (onMission)
 	{
-		memset(&sButFInit, 0, sizeof(W_FORMINIT));
+		W_FORMINIT sButFInit;
 		sButFInit.formID = IDTRANS_CONTENTFORM;
 		sButFInit.id = IDTRANS_LAUNCH;
 		sButFInit.style = WFORM_CLICKABLE | WFORM_NOCLICKMOVE;
@@ -412,7 +394,6 @@ BOOL intAddTransporterContents(void)
 		sButFInit.height = iV_GetImageHeight(IntImages,IMAGE_LAUNCHUP);
 		sButFInit.pTip = _("Launch Transport");
 		//sButInit.pText = "Launch";
-//		sButFInit.FontID = font_regular;
 		sButFInit.pDisplay = intDisplayImageHilight;
 
 		sButFInit.UserData = PACKDWORD_TRI(0,IMAGE_LAUNCHDOWN,IMAGE_LAUNCHUP);
@@ -434,10 +415,6 @@ BOOL intAddTransporterContents(void)
 /*This is used to display the transporter button and capacity when at the home base ONLY*/
 BOOL intAddTransporterLaunch(DROID *psDroid)
 {
-
-	//W_BUTINIT		sButInit;
-	W_FORMINIT		sButInit;		//needs to be a clickable form now
-	W_LABINIT		sLabInit;
     UDWORD          capacity;
     DROID           *psCurr, *psNext;
 
@@ -456,7 +433,7 @@ BOOL intAddTransporterLaunch(DROID *psDroid)
 		return true;
 	}
 
-	memset(&sButInit, 0, sizeof(W_FORMINIT));
+	W_FORMINIT sButInit;              //needs to be a clickable form now
 	sButInit.formID = 0;
 	sButInit.id = IDTRANS_LAUNCH;
 	sButInit.style = WFORM_CLICKABLE | WFORM_NOCLICKMOVE;
@@ -473,16 +450,14 @@ BOOL intAddTransporterLaunch(DROID *psDroid)
 	}
 
 	//add the capacity label
-	memset(&sLabInit,0,sizeof(W_LABINIT));
+	W_LABINIT sLabInit;
 	sLabInit.formID = IDTRANS_LAUNCH;
 	sLabInit.id = IDTRANS_CAPACITY;
-	sLabInit.style = WLAB_PLAIN;
 	sLabInit.x = (SWORD)(sButInit.x + 20);
 	sLabInit.y = 0;
 	sLabInit.width = 16;
 	sLabInit.height = 16;
 	sLabInit.pText = "00/10";
-	sLabInit.FontID = font_regular;
 	sLabInit.pCallback = intUpdateTransCapacity;
 	if (!widgAddLabel(psWScreen, &sLabInit))
 	{
@@ -525,14 +500,12 @@ void intRemoveTransporterLaunch(void)
 /* Add the Transporter Button form */
 BOOL intAddTransButtonForm(void)
 {
-	W_FORMINIT		sFormInit;
-	W_FORMINIT		sBFormInit, sBFormInit2;
 	UDWORD			numButtons, i;
 	SDWORD			BufferID;
 	DROID			*psDroid;
 
 	/* Add the button form */
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
+	W_FORMINIT sFormInit;
 	sFormInit.formID = IDTRANS_FORM;
 	sFormInit.id = IDTRANS_TABFORM;
 	sFormInit.style = WFORM_TABBED;
@@ -591,8 +564,7 @@ BOOL intAddTransButtonForm(void)
 
 
 	/* Add the transporter and status buttons */
-	memset(&sBFormInit, 0, sizeof(W_FORMINIT));
-	memset(&sBFormInit2, 0, sizeof(W_FORMINIT));
+	W_FORMINIT sBFormInit;
 	sBFormInit.formID = IDTRANS_TABFORM;
 	sBFormInit.id = IDTRANS_START;
 	sBFormInit.majorID = 0;
@@ -603,7 +575,7 @@ BOOL intAddTransButtonForm(void)
 	sBFormInit.width = OBJ_BUTWIDTH;
 	sBFormInit.height = OBJ_BUTHEIGHT;
 
-	memcpy(&sBFormInit2,&sBFormInit,sizeof(W_FORMINIT));
+	W_FORMINIT sBFormInit2 = sBFormInit;
 	sBFormInit2.id = IDTRANS_STATSTART;
 	sBFormInit2.y = OBJ_STATSTARTY;
 
@@ -685,14 +657,12 @@ BOOL intAddTransButtonForm(void)
 /* Add the Transporter Contents form */
 BOOL intAddTransContentsForm(void)
 {
-	W_FORMINIT		sFormInit;
-	W_FORMINIT		sBFormInit;
-	UDWORD			numButtons, i;
+	UDWORD			i;
 	SDWORD			BufferID;
 	DROID			*psDroid, *psNext;
 
 	/* Add the contents form */
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
+	W_FORMINIT sFormInit;
 	sFormInit.formID = IDTRANS_CONTENTFORM;
 	sFormInit.id = IDTRANS_CONTABFORM;
 	sFormInit.style = WFORM_TABBED;
@@ -707,8 +677,6 @@ BOOL intAddTransContentsForm(void)
 	sFormInit.majorOffset = OBJ_TABOFFSET;
 	sFormInit.tabVertOffset = (OBJ_TABHEIGHT/2);
 	sFormInit.tabMajorThickness = OBJ_TABHEIGHT;
-
-	numButtons = TRANSPORTER_CAPACITY;
 
 	//set the number of tabs required
 	//sFormInit.numMajor = numForms((OBJ_BUTWIDTH + OBJ_GAP) * numButtons,
@@ -734,7 +702,7 @@ BOOL intAddTransContentsForm(void)
 
 
 	/* Add the transporter contents buttons */
-	memset(&sBFormInit, 0, sizeof(W_FORMINIT));
+	W_FORMINIT sBFormInit;
 	sBFormInit.formID = IDTRANS_CONTABFORM;
 	sBFormInit.id = IDTRANS_CONTSTART;
 	sBFormInit.majorID = 0;
@@ -792,10 +760,6 @@ BOOL intAddTransContentsForm(void)
 /* Add the Droids back at home form */
 BOOL intAddDroidsAvailForm(void)
 {
-	W_FORMINIT		sFormInit;
-	W_BUTINIT		sButInit;
-	W_FORMINIT		sBFormInit;
-	W_BARINIT		sBarInit;
 	UDWORD			numButtons, i, butPerForm;
 	SDWORD			BufferID;
 	DROID			*psDroid;
@@ -815,7 +779,7 @@ BOOL intAddDroidsAvailForm(void)
 
 
 	/* Add the droids available form */
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
+	W_FORMINIT sFormInit;
 	sFormInit.formID = 0;
 	sFormInit.id = IDTRANS_DROIDS;
 	sFormInit.style = WFORM_PLAIN;
@@ -842,19 +806,15 @@ BOOL intAddDroidsAvailForm(void)
 	}
 
 
-
-
 	/* Add the close button */
-	memset(&sButInit, 0, sizeof(W_BUTINIT));
+	W_BUTINIT sButInit;
 	sButInit.formID = IDTRANS_DROIDS;
 	sButInit.id = IDTRANS_DROIDCLOSE;
-	sButInit.style = WBUT_PLAIN;
 	sButInit.x = TRANSDROID_WIDTH - CLOSE_WIDTH;
 	sButInit.y = 0;
 	sButInit.width = CLOSE_WIDTH;
 	sButInit.height = CLOSE_HEIGHT;
 	sButInit.pTip = _("Close");
-	sButInit.FontID = font_regular;
 	sButInit.pDisplay = intDisplayImageHilight;
 	sButInit.UserData = PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
 	if (!widgAddButton(psWScreen, &sButInit))
@@ -864,7 +824,7 @@ BOOL intAddDroidsAvailForm(void)
 
 
 	//now add the tabbed droids available form
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
+	sFormInit = W_FORMINIT();
 	sFormInit.formID = IDTRANS_DROIDS;
 	sFormInit.id = IDTRANS_DROIDTAB;
 	sFormInit.style = WFORM_TABBED;
@@ -930,7 +890,7 @@ BOOL intAddDroidsAvailForm(void)
 
 
 	/* Add the droids available buttons */
-	memset(&sBFormInit, 0, sizeof(W_FORMINIT));
+	W_FORMINIT sBFormInit;
 	sBFormInit.formID = IDTRANS_DROIDTAB;
 	sBFormInit.id = IDTRANS_DROIDSTART;
 	sBFormInit.majorID = 0;
@@ -944,10 +904,8 @@ BOOL intAddDroidsAvailForm(void)
 	ClearSystem0Buffers();
 
     /* Add the state of repair bar for each droid*/
-	memset(&sBarInit, 0, sizeof(W_BARINIT));
+	W_BARINIT sBarInit;
 	sBarInit.id = IDTRANS_REPAIRBARSTART;
-	sBarInit.style = WBAR_PLAIN;
-	sBarInit.orientation = WBAR_LEFT;
 	sBarInit.x = STAT_TIMEBARX;
 	sBarInit.y = STAT_TIMEBARY;
 	sBarInit.width = STAT_PROGBARWIDTH;
@@ -1458,8 +1416,11 @@ void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd)
 	/* check for space */
 	if (!checkTransporterSpace(psTransporter, psDroidToAdd))
 	{
-		audio_PlayTrack( ID_SOUND_BUILD_FAIL );
-		addConsoleMessage(_("There is not enough room in the Transport!"), DEFAULT_JUSTIFY, selectedPlayer);
+		if (psTransporter->player == selectedPlayer)
+		{
+			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
+			addConsoleMessage(_("There is not enough room in the Transport!"), DEFAULT_JUSTIFY, selectedPlayer);
+		}
 		return;
 	}
 	if (onMission)

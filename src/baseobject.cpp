@@ -26,12 +26,6 @@
 #include "projectile.h"
 #include "structure.h"
 
-static inline int32_t interpolateInt(int32_t v1, int32_t v2, uint32_t t1, uint32_t t2, uint32_t t)
-{
-	int32_t numer = t - t1, denom = t2 - t1;
-	return v1 + (v2 - v1) * numer/denom;
-}
-
 static inline uint16_t interpolateAngle(uint16_t v1, uint16_t v2, uint32_t t1, uint32_t t2, uint32_t t)
 {
 	int32_t numer = t - t1, denom = t2 - t1;
@@ -40,37 +34,33 @@ static inline uint16_t interpolateAngle(uint16_t v1, uint16_t v2, uint32_t t1, u
 
 static Position interpolatePos(Position p1, Position p2, uint32_t t1, uint32_t t2, uint32_t t)
 {
-	Position ret = { interpolateInt(p1.x, p2.x, t1, t2, t),
-	                 interpolateInt(p1.y, p2.y, t1, t2, t),
-	                 interpolateInt(p1.z, p2.z, t1, t2, t)
-	               };
-	return ret;
+	return p1 + (p2 - p1) * int(t - t1) / int(t2 - t1);
 }
 
 Rotation interpolateRot(Rotation v1, Rotation v2, uint32_t t1, uint32_t t2, uint32_t t)
 {
-	Rotation rot = { interpolateAngle(v1.direction, v2.direction, t1, t2, t),
+	//return v1 + (v2 - v1) * (t - t1) / (t2 - t1);
+	return Rotation( interpolateAngle(v1.direction, v2.direction, t1, t2, t),
 	                 interpolateAngle(v1.pitch,     v2.pitch,     t1, t2, t),
 	                 interpolateAngle(v1.roll,      v2.roll,      t1, t2, t)
-	               };
-	return rot;
+	               );
 }
 
-static SPACETIME interpolateSpacetime(SPACETIME st1, SPACETIME st2, uint32_t t)
+static Spacetime interpolateSpacetime(Spacetime st1, Spacetime st2, uint32_t t)
 {
-	return constructSpacetime(interpolatePos(st1.pos, st2.pos, st1.time, st2.time, t), interpolateRot(st1.rot, st2.rot, st1.time, st2.time, t), t);
+	return Spacetime(interpolatePos(st1.pos, st2.pos, st1.time, st2.time, t), interpolateRot(st1.rot, st2.rot, st1.time, st2.time, t), t);
 }
 
-SPACETIME interpolateObjectSpacetime(const SIMPLE_OBJECT *obj, uint32_t t)
+Spacetime interpolateObjectSpacetime(const SIMPLE_OBJECT *obj, uint32_t t)
 {
 	switch (obj->type)
 	{
 		default:
-			return GET_SPACETIME(obj);
+			return getSpacetime(obj);
 		case OBJ_DROID:
-			return interpolateSpacetime(((DROID *)obj)->prevSpacetime, GET_SPACETIME(obj), t);
+			return interpolateSpacetime(castDroid(obj)->prevSpacetime, getSpacetime(obj), t);
 		case OBJ_PROJECTILE:
-			return interpolateSpacetime(((PROJECTILE *)obj)->prevSpacetime, GET_SPACETIME(obj), t);
+			return interpolateSpacetime(castProjectile(obj)->prevSpacetime, getSpacetime(obj), t);
 	}
 }
 
@@ -92,8 +82,13 @@ SIMPLE_OBJECT::~SIMPLE_OBJECT()
 
 BASE_OBJECT::BASE_OBJECT(OBJECT_TYPE type, uint32_t id, unsigned player)
 	: SIMPLE_OBJECT(type, id, player)
+	, selected(false)
 	, cluster(0)
 	, numWatchedTiles(0)
+	, lastEmission(0)
+	, lastHitWeapon(WSC_NUM_WEAPON_SUBCLASSES)  // No such weapon.
+	, timeLastHit(UDWORD_MAX)
+	, bTargetted(false)
 	, watchedTiles(NULL)
 {}
 

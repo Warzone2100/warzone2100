@@ -39,37 +39,15 @@
 // maximum random pause for firing
 #define RANDOM_PAUSE	500
 
-/* direction array for missed bullets */
-typedef struct _bul_dir
-{
-	SDWORD x,y;
-} BUL_DIR;
-#define BUL_MAXSCATTERDIR 8
-static BUL_DIR aScatterDir[BUL_MAXSCATTERDIR] =
-{
-	{ 0,-1 },
-	{ 1,-1 },
-	{ 1,0 },
-	{ 1,1 },
-	{ 0,1 },
-	{ -1,1 },
-	{ -1,0 },
-	{ -1,-1 },
-};
-
 // Watermelon:real projectile
 /* Fire a weapon at something */
 void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, int weapon_slot)
 {
 	WEAPON_STATS	*psStats;
-	SDWORD			xDiff, yDiff, distSquared;
-	UDWORD			dice, damLevel;
-	SDWORD			resultHitChance=0,baseHitChance=0,fireChance;
+	UDWORD                  damLevel;
 	UDWORD			firePause;
 	SDWORD			longRange;
 	DROID			*psDroid = NULL;
-	int				minOffset = 5;
-	SDWORD			dist;
 	int				compIndex;
 
 	CHECK_OBJECT(psAttacker);
@@ -140,7 +118,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	// add a random delay to the fire
 	// With logical updates, a good graphics gard no longer gives a better ROF.
 	// TODO Should still replace this with something saner, such as a ±1% random deviation in reload time.
-	fireChance = gameTime - (psWeap->lastFired + firePause);
+	int fireChance = gameTime - (psWeap->lastFired + firePause);
 	if (gameRand(RANDOM_PAUSE) > fireChance)
 	{
 		return;
@@ -190,10 +168,12 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		}
 	}
 
+	Vector3i deltaPos = psTarget->pos - psAttacker->pos;
+
 	// if the turret doesn't turn, check if the attacker is in alignment with the target
 	if (psAttacker->type == OBJ_DROID && !psStats->rotate)
 	{
-		uint16_t targetDir = calcDirection(psAttacker->pos.x, psAttacker->pos.y, psTarget->pos.x, psTarget->pos.y);
+		uint16_t targetDir = iAtan2(removeZ(deltaPos));
 		int dirDiff = abs(angleDelta(targetDir - psAttacker->rot.direction));
 		if (dirDiff > FIXED_TURRET_DIR)
 		{
@@ -202,12 +182,10 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	}
 
 	/* Now see if the target is in range  - also check not too near */
-	xDiff = psAttacker->pos.x - psTarget->pos.x;
-	yDiff = psAttacker->pos.y - psTarget->pos.y;
-	distSquared = xDiff*xDiff + yDiff*yDiff;
-	dist = iSqrt(distSquared);
+	int dist = iHypot(removeZ(deltaPos));
 	longRange = proj_GetLongRange(psStats);
 
+	int baseHitChance = 0;
 	if ((dist <= psStats->shortRange)  && (dist >= psStats->minRange))
 	{
 		// get weapon chance to hit in the short range
@@ -230,7 +208,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 
 	// apply experience accuracy modifiers to the base
 	//hit chance, not to the final hit chance
-	resultHitChance = baseHitChance;
+	int resultHitChance = baseHitChance;
 
 	// add the attacker's experience
 	if (psAttacker->type == OBJ_DROID)
@@ -291,86 +269,73 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		resultHitChance = INVISIBLE_ACCURACY_PENALTY * resultHitChance / 100;
 	}
 
-	dice = gameRand(100);
+	//Watermelon:predicted X,Y offset per sec
+	Vector3i predict = psTarget->pos;
 
-	// see if we were lucky to hit the target
-	if (dice <= resultHitChance)
+	//Watermelon:Target prediction
+	if (isDroid(psTarget))
 	{
-		//Watermelon:predicted X,Y offset per sec
-		Vector3i predict;
+		DROID *psDroid = castDroid(psTarget);
 
-		/* Kerrrbaaang !!!!! a hit */
-		//Watermelon:Target prediction
-		if (psTarget->type == OBJ_DROID)
+		int32_t flightTime;
+		if (proj_Direct(psStats) || dist <= psStats->minRange)
 		{
-			int32_t flightTime;
-			SDWORD empTime = 0;
-
-			if (proj_Direct(psStats) || dist <= psStats->minRange)
-			{
-				flightTime = dist / psStats->flightSpeed;
-			}
-			else
-			{
-				int32_t vXY, vZ;  // Unused, we just want the flight time.
-				flightTime = projCalcIndirectVelocities(dist, psTarget->pos.z - psAttacker->pos.z, psStats->flightSpeed, &vXY, &vZ);
-			}
-
-			if (psTarget->lastHitWeapon == WSC_EMP)
-			{
-				empTime = EMP_DISABLE_TIME - (gameTime - psTarget->timeLastHit);
-				CLIP(empTime, 0, EMP_DISABLE_TIME);
-				if (empTime >= EMP_DISABLE_TIME * 0.9)
-				{
-					flightTime = 0;  /* Just hit.  Assume they'll get hit again */
-				}
-				else
-				{
-					flightTime = MAX(0, flightTime - empTime);
-				}
-			}
-
-			predict.x = iSinR(((DROID *)psTarget)->sMove.moveDir, ((DROID *)psTarget)->sMove.speed*flightTime / GAME_TICKS_PER_SEC);
-			predict.x += psTarget->pos.x;
-			predict.y = iCosR(((DROID *)psTarget)->sMove.moveDir, ((DROID *)psTarget)->sMove.speed*flightTime / GAME_TICKS_PER_SEC);
-			predict.y += psTarget->pos.y;
-
-			// Make sure we don't pass any negative or out of bounds numbers to proj_SendProjectile
-			CLIP(predict.x, 0, world_coord(mapWidth - 1));
-			CLIP(predict.y, 0, world_coord(mapHeight - 1));
+			flightTime = dist / psStats->flightSpeed;
 		}
 		else
 		{
-			predict.x = psTarget->pos.x;
-			predict.y = psTarget->pos.y;
+			int32_t vXY, vZ;  // Unused, we just want the flight time.
+			flightTime = projCalcIndirectVelocities(dist, deltaPos.z, psStats->flightSpeed, &vXY, &vZ);
 		}
-		predict.z = psTarget->pos.z;
 
-		objTrace(psAttacker->id, "combFire: [%s]->%u: resultHitChance=%d, visibility=%hhu : ",
-			psStats->pName, psTarget->id, resultHitChance, psTarget->visible[psAttacker->player]);
-
-		if (!proj_SendProjectile(psWeap, psAttacker, psAttacker->player, predict, psTarget, false, weapon_slot))
+		if (psTarget->lastHitWeapon == WSC_EMP)
 		{
-			/* Out of memory - we can safely ignore this */
-			debug(LOG_ERROR, "Out of memory");
-			return;
+			int empTime = EMP_DISABLE_TIME - (gameTime - psTarget->timeLastHit);
+			CLIP(empTime, 0, EMP_DISABLE_TIME);
+			if (empTime >= EMP_DISABLE_TIME * 9/10)
+			{
+				flightTime = 0;  /* Just hit.  Assume they'll get hit again */
+			}
+			else
+			{
+				flightTime = MAX(0, flightTime - empTime);
+			}
 		}
+
+		predict += Vector3i(iSinCosR(psDroid->sMove.moveDir, psDroid->sMove.speed*flightTime / GAME_TICKS_PER_SEC), 0);
+	}
+
+	/* Fire off the bullet to the miss location. The miss is only visible if the player owns the target. (Why? - Per) */
+	// What bVisible really does is to make the projectile audible even if it misses you. Since the target is NULL, proj_SendProjectile can't check if it was fired at you.
+	bool bVisibleAnyway = psTarget->player == selectedPlayer;
+
+	// see if we were lucky to hit the target
+	bool isHit = gameRand(100) <= resultHitChance;
+	if (isHit)
+	{
+		/* Kerrrbaaang !!!!! a hit */
+		objTrace(psAttacker->id, "combFire: [%s]->%u: resultHitChance=%d, visibility=%hhu : ", psStats->pName, psTarget->id, resultHitChance, psTarget->visible[psAttacker->player]);
+		syncDebug("hit=(%d,%d,%d)", predict.x, predict.y, predict.z);
 	}
 	else /* Deal with a missed shot */
 	{
-		int missDir = gameRand(BUL_MAXSCATTERDIR), missDist = 2 * (100 - resultHitChance);
-		Vector3i miss = {
-			aScatterDir[missDir].x * missDist + psTarget->pos.x + minOffset,
-			aScatterDir[missDir].y * missDist + psTarget->pos.y + minOffset,
-			psTarget->pos.z
-		};
+		const int minOffset = 5;
 
-		objTrace(psAttacker->id, "combFire: Missed shot (%d) ended up at (%4d,%4d)", dice, miss.x, miss.y);
+		int missDist = 2 * (100 - resultHitChance) + minOffset;
+		Vector3i miss = Vector3i(iSinCosR(gameRand(DEG(360)), missDist), 0);
+		predict += miss;
 
-		/* Fire off the bullet to the miss location. The miss is only visible if the player owns the target. (Why? - Per) */
-		proj_SendProjectile(psWeap, psAttacker, psAttacker->player, miss, NULL, psTarget->player == selectedPlayer, weapon_slot);
+		psTarget = NULL;  // Missed the target, so don't expect to hit it.
+
+		objTrace(psAttacker->id, "combFire: Missed shot by (%4d,%4d)", miss.x, miss.y);
+		syncDebug("miss=(%d,%d,%d)", predict.x, predict.y, predict.z);
 	}
-	return;
+
+	// Make sure we don't pass any negative or out of bounds numbers to proj_SendProjectile
+	CLIP(predict.x, 0, world_coord(mapWidth - 1));
+	CLIP(predict.y, 0, world_coord(mapHeight - 1));
+
+	proj_SendProjectile(psWeap, psAttacker, psAttacker->player, predict, psTarget, bVisibleAnyway, weapon_slot);
 }
 
 /*checks through the target players list of structures and droids to see
@@ -474,19 +439,7 @@ int32_t objDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD originalhp, WEAPON_C
 
 
 	// apply game difficulty setting
-	if (!bMultiPlayer)  // ignore multiplayer or skirmish games
-	{
-		if (psObj->player != selectedPlayer)
-		{
-			// Player inflicting damage on enemy.
-			damage = (UDWORD) modifyForDifficultyLevel(damage,true);
-		}
-		else
-		{
-			// Enemy inflicting damage on player.
-			damage = (UDWORD) modifyForDifficultyLevel(damage,false);
-		}
-	}
+	damage = modifyForDifficultyLevel(damage, psObj->player != selectedPlayer);
 
 	armour = psObj->armour[impactSide][weaponClass];
 
@@ -569,19 +522,7 @@ unsigned int objGuessFutureDamage(WEAPON_STATS *psStats, unsigned int player, BA
 
 
 	// apply game difficulty setting
-	if (!bMultiPlayer)  // ignore multiplayer games
-	{
-		if (psTarget->player != selectedPlayer)
-		{
-			// Player inflicting damage on enemy.
-			damage = (UDWORD) modifyForDifficultyLevel(damage,true);
-		}
-		else
-		{
-			// Enemy inflicting damage on player.
-			damage = (UDWORD) modifyForDifficultyLevel(damage,false);
-		}
-	}
+	damage = modifyForDifficultyLevel(damage, psTarget->player != selectedPlayer);
 
 	for (impactSide = 0; impactSide != NUM_HIT_SIDES; ++impactSide)
 		armour = MAX(armour, psTarget->armour[impactSide][psStats->weaponClass]);

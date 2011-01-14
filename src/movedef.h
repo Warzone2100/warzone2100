@@ -26,28 +26,22 @@
 
 #include "lib/framework/vector.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 //Watermelon:num of VTOL weapons should be same as DROID_MAXWEAPS
-#define VTOL_MAXWEAPS		3
+#define VTOL_MAXWEAPS 3
 
-typedef enum _move_status
+enum MOVE_STATUS
 {
-MOVEINACTIVE,
-MOVENAVIGATE,
-MOVETURN,
-MOVEPAUSE,
-MOVEPOINTTOPOINT,
-MOVETURNSTOP,
-MOVETURNTOTARGET,
-MOVEHOVER = 8,  // = 8 for savegame compatibility.
-MOVEDRIVE,
-MOVEWAITROUTE,
-MOVESHUFFLE,
-} MOVE_STATUS;
+	MOVEINACTIVE,
+	MOVENAVIGATE,
+	MOVETURN,
+	MOVEPAUSE,
+	MOVEPOINTTOPOINT,
+	MOVETURNTOTARGET,
+	MOVEHOVER,
+	MOVEDRIVE,
+	MOVEWAITROUTE,
+	MOVESHUFFLE,
+};
 
 /// Extra precision added to movement calculations, stored in ebitX, ebitY.
 #define EXTRA_BITS                              8
@@ -61,8 +55,8 @@ struct MOVE_CONTROL
 	uint16_t	numPoints;				// number of points in asPath
 	Vector2i	 *asPath;				// Pointer to list of block X,Y map coordinates.
 
-	SDWORD	DestinationX, DestinationY;			// World coordinates of movement destination
-	SDWORD	srcX,srcY,targetX,targetY;
+	Vector2i destination;                                   // World coordinates of movement destination
+	Vector2i src, target;
 	int	speed;						// Speed of motion
 	uint8_t  eBitX, eBitY;                                  // extra bits stored in a temporary bit bucket
 
@@ -75,17 +69,11 @@ struct MOVE_CONTROL
 
 	UDWORD	shuffleStart;				// when a shuffle started
 
-	struct _formation	*psFormation;			// formation the droid is currently a member of
-
 	/* vtol movement - GJ */
 	SWORD	iVertSpeed;
 
 	// iAttackRuns tracks the amount of ammunition a VTOL has remaining for each weapon
 	UDWORD	iAttackRuns[VTOL_MAXWEAPS];
 };
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_MOVEDEF_H__

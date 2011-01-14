@@ -26,11 +26,6 @@
 
 #include "objectdef.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 /* The lists of objects allocated */
 extern DROID			*apsDroidLists[MAX_PLAYERS];
 extern STRUCTURE		*apsStructLists[MAX_PLAYERS];
@@ -118,9 +113,5 @@ void objCount(int *droids, int *structures, int *features);
 #ifdef DEBUG
 extern void checkFactoryFlags(void);
 #endif
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_OBJMEM_H__

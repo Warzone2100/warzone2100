@@ -800,7 +800,7 @@ BOOL stackUnaryOp(OPCODE opcode)
 	switch (opcode)
 	{
 	case OP_INC:
-		switch (psVal->type)
+		switch ((unsigned)psVal->type)  // Unsigned cast to suppress compiler warnings due to enum abuse.
 		{
 		case (VAL_REF | VAL_INT):
 
@@ -825,7 +825,7 @@ BOOL stackUnaryOp(OPCODE opcode)
 		}
 		break;
 	case OP_DEC:
-		switch (psVal->type)
+		switch ((unsigned)psVal->type)  // Unsigned cast to suppress compiler warnings due to enum abuse.
 		{
 		case (VAL_REF | VAL_INT):
 

@@ -54,7 +54,7 @@ struct poptOption
 	const char *string;
 	char short_form;
 	bool argument;
-	void *nullptr;		// unused
+	void *nullpointer;		// unused
 	int enumeration;
 	const char *descrip;
 	const char *argDescrip;

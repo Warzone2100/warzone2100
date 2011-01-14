@@ -160,6 +160,8 @@ extern BOOL isHumanPlayer		(UDWORD player);				//to tell if the player is a comp
 extern BOOL myResponsibility	(UDWORD player);
 extern BOOL responsibleFor		(UDWORD player, UDWORD playerinquestion);
 extern UDWORD whosResponsible	(UDWORD player);
+int scavengerSlot();    // Returns the player number that scavengers would have if they were enabled.
+int scavengerPlayer();  // Returns the player number that the scavengers have, or -1 if disabled.
 extern Vector3i cameraToHome		(UDWORD player,BOOL scroll);
 extern char		playerName[MAX_PLAYERS][MAX_STR_LENGTH];	//Array to store all player names (humans and AIs)
 

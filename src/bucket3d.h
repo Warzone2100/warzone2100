@@ -21,11 +21,6 @@
 #ifndef __INCLUDED_SRC_BUCKET3D_H__
 #define __INCLUDED_SRC_BUCKET3D_H__
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 typedef enum _render_type
 {
 	RENDER_DROID,
@@ -47,9 +42,5 @@ void bucketAddTypeToList(RENDER_TYPE objectType, void *object);
 
 /* render Objects in list */
 void bucketRenderCurrentList(void);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_BUCKET3D_H__

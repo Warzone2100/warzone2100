@@ -21,11 +21,6 @@
 #ifndef __INCLUDED_LIB_SOUND_AUDIO_ID_H__
 #define __INCLUDED_LIB_SOUND_AUDIO_ID_H__
 
-#if defined(__cplusplus)
-extern "C"
-{
-#endif
-
 /* INGAME AUDIO */
 
 typedef enum
@@ -503,9 +498,5 @@ typedef enum
 INGAME_AUDIO;
 
 INGAME_AUDIO audio_GetIDFromStr(const char *pWavStr);
-
-#if defined(__cplusplus)
-}
-#endif
 
 #endif // __INCLUDED_LIB_SOUND_AUDIO_ID_H__

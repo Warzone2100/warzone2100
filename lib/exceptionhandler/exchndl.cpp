@@ -78,9 +78,12 @@ DWORD GetModuleBase(DWORD dwAddress)
 #ifdef HAVE_BFD
 
 #include <bfd.h>
+extern "C"
+{
 #include "include/demangle.h"
 #include "include/coff/internal.h"
 #include "include/libcoff.h"
+}
 
 // Read in the symbol table.
 static bfd_boolean
@@ -394,7 +397,7 @@ BOOL ImagehlpDemangleSymName(LPCTSTR lpName, LPTSTR lpDemangledName, DWORD nSize
 	pSymbol->SizeOfStruct = sizeof(symbolBuffer);
 	pSymbol->MaxNameLength = 512;
 
-	lstrcpyn((LPWSTR)pSymbol->Name, lpName, pSymbol->MaxNameLength);
+	lstrcpyn((LPTSTR)pSymbol->Name, lpName, pSymbol->MaxNameLength);
 
 	if(!j_SymUnDName(pSymbol, (PSTR)lpDemangledName, nSize))
 		return FALSE;
@@ -425,7 +428,7 @@ BOOL ImagehlpGetSymFromAddr(HANDLE hProcess, DWORD dwAddress, LPTSTR lpSymName, 
 	if(!j_SymGetSymFromAddr(hProcess, dwAddress, &dwDisplacement, pSymbol))
 		return FALSE;
 
-	lstrcpyn(lpSymName, (LPCWSTR)pSymbol->Name, nSize);
+	lstrcpyn(lpSymName, (LPCTSTR)pSymbol->Name, nSize);
 
 	return TRUE;
 }
@@ -467,7 +470,7 @@ BOOL ImagehlpGetLineFromAddr(HANDLE hProcess, DWORD dwAddress,  LPTSTR lpFileNam
 
 	assert(lpFileName && lpLineNumber);
 
-	lstrcpyn(lpFileName, (LPCWSTR)Line.FileName, nSize);
+	lstrcpyn(lpFileName, (LPCTSTR)Line.FileName, nSize);
 	*lpLineNumber = Line.LineNumber;
 
 	return TRUE;
@@ -563,6 +566,17 @@ BOOL PEGetSymFromAddr(HANDLE hProcess, DWORD dwAddress, LPTSTR lpSymName, DWORD 
 	return TRUE;
 }
 
+// Cross platform compatibility.
+// If you change this, make sure it doesn't break the cross compile or the native compile.
+// Don't ask why this is needed, have no idea.
+struct ItDoesntMatterIfItsADWORDOrAVoidPointer_JustCompileTheDamnThing
+{
+	ItDoesntMatterIfItsADWORDOrAVoidPointer_JustCompileTheDamnThing(void *whatever) : whatever(whatever) {}
+	operator void *() const { return whatever; }        // Oooh, look compiler1, I'm a void *, just what you wanted!
+	operator DWORD() const { return (DWORD)whatever; }  // Oooh, look compiler2, I'm a DWORD, just what you wanted!
+	void *whatever;
+};
+
 static
 BOOL WINAPI IntelStackWalk(
 	DWORD MachineType,
@@ -593,20 +607,25 @@ BOOL WINAPI IntelStackWalk(
 		StackFrame->AddrFrame.Offset = ContextRecord->Ebp;
 
 		StackFrame->AddrReturn.Mode = AddrModeFlat;
-		if(!ReadMemoryRoutine((HANDLE)hProcess, (DWORD) (StackFrame->AddrFrame.Offset + sizeof(DWORD)), &StackFrame->AddrReturn.Offset, sizeof(DWORD), NULL))
+// Error   26      error C2664: 'BOOL (HANDLE,DWORD,PVOID,DWORD,PDWORD)' :
+// cannot convert parameter 2 from 'void *' to 'DWORD'
+// c:\warzone\lib\exceptionhandler\exchndl.cpp     599
+// ../../../../lib/exceptionhandler/exchndl.cpp: In function ‘BOOL IntelStackWalk(DWORD, void*, void*, _tagSTACKFRAME*, CONTEXT*, BOOL (*)(void*, const void*, void*, DWORD, DWORD*), void* (*)(void*, DWORD), DWORD (*)(void*, DWORD), DWORD (*)(void*, void*, _tagADDRESS*))’:
+// ../../../../lib/exceptionhandler/exchndl.cpp:599: error: invalid conversion from ‘long unsigned int’ to ‘const void*’
+		if(!ReadMemoryRoutine((HANDLE)hProcess, ItDoesntMatterIfItsADWORDOrAVoidPointer_JustCompileTheDamnThing((void *) (StackFrame->AddrFrame.Offset + sizeof(DWORD))), (void *)&StackFrame->AddrReturn.Offset, sizeof(DWORD), NULL))
 			return FALSE;
 	}
 	else
 	{
 		StackFrame->AddrPC.Offset = StackFrame->AddrReturn.Offset;
 		//AddrStack = AddrFrame + 2*sizeof(DWORD);
-		if(!ReadMemoryRoutine((HANDLE)hProcess, (DWORD) StackFrame->AddrFrame.Offset, &StackFrame->AddrFrame.Offset, sizeof(DWORD), NULL))
+		if(!ReadMemoryRoutine((HANDLE)hProcess, ItDoesntMatterIfItsADWORDOrAVoidPointer_JustCompileTheDamnThing((void *) StackFrame->AddrFrame.Offset), (void *)&StackFrame->AddrFrame.Offset, sizeof(DWORD), NULL))
 			return FALSE;
-		if(!ReadMemoryRoutine((HANDLE)hProcess, (DWORD) (StackFrame->AddrFrame.Offset + sizeof(DWORD)), &StackFrame->AddrReturn.Offset, sizeof(DWORD), NULL))
+		if(!ReadMemoryRoutine((HANDLE)hProcess, ItDoesntMatterIfItsADWORDOrAVoidPointer_JustCompileTheDamnThing((void *) (StackFrame->AddrFrame.Offset + sizeof(DWORD))), (void *)&StackFrame->AddrReturn.Offset, sizeof(DWORD), NULL))
 			return FALSE;
 	}
 
-	ReadMemoryRoutine((HANDLE)hProcess, (DWORD) (StackFrame->AddrFrame.Offset + 2*sizeof(DWORD)), StackFrame->Params, sizeof(StackFrame->Params), NULL);
+	ReadMemoryRoutine((HANDLE)hProcess, ItDoesntMatterIfItsADWORDOrAVoidPointer_JustCompileTheDamnThing((void *) (StackFrame->AddrFrame.Offset + 2*sizeof(DWORD))), (void *)StackFrame->Params, sizeof(StackFrame->Params), NULL);
 
 	return TRUE;
 }

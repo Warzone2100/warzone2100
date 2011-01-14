@@ -30,9 +30,9 @@
 #include "lib/framework/input.h"
 #include "lib/framework/wzapp.h"
 #include "lib/gamelib/gtime.h"
-#include "lib/ivis_common/pieblitfunc.h"
-#include "lib/ivis_common/piestate.h"
-#include "lib/ivis_common/textdraw.h"
+#include "lib/ivis_opengl/pieblitfunc.h"
+#include "lib/ivis_opengl/piestate.h"
+#include "lib/ivis_opengl/textdraw.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
 

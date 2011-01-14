@@ -24,11 +24,6 @@
 #ifndef __INCLUDED_SRC_INTFAC_H__
 #define __INCLUDED_SRC_INTFAC_H__
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 enum {
 	IMAGE_PBAR_EMPTY,
 	IMAGE_PBAR_AVAIL,
@@ -377,6 +372,12 @@ enum {
 	IMAGE_VDP_UP,
 	IMAGE_VDP_HI,
 	IMAGE_GN_STAR,
+	IMAGE_GN_15,
+	IMAGE_GN_14,
+	IMAGE_GN_13,
+	IMAGE_GN_12,
+	IMAGE_GN_11,
+	IMAGE_GN_10,
 	IMAGE_GN_9,
 	IMAGE_GN_8,
 	IMAGE_GN_7,
@@ -562,9 +563,5 @@ enum {
 	IMAGE_RAD_BURNRES5,
 	IMAGE_RAD_BURNRES6
 };
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_INTFAC_H__

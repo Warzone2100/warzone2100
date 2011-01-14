@@ -30,16 +30,19 @@
  */
 
 #include <GLee.h>
+#ifdef CursorShape
+#undef CursorShape  // Random #defines are bad.
+#endif
 #include <string.h>
 
 #include "lib/framework/frame.h"
-#include "lib/ivis_common/ivisdef.h"
-#include "lib/ivis_common/imd.h"
-#include "lib/ivis_common/piefunc.h"
-#include "lib/ivis_common/tex.h"
-#include "lib/ivis_common/piedef.h"
-#include "lib/ivis_common/piestate.h"
-#include "lib/ivis_common/pieclip.h"
+#include "lib/ivis_opengl/ivisdef.h"
+#include "lib/ivis_opengl/imd.h"
+#include "lib/ivis_opengl/piefunc.h"
+#include "lib/ivis_opengl/tex.h"
+#include "lib/ivis_opengl/piedef.h"
+#include "lib/ivis_opengl/piestate.h"
+#include "lib/ivis_opengl/pieclip.h"
 
 #include "terrain.h"
 #include "map.h"

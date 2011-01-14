@@ -31,8 +31,8 @@
 #define __INCLUDED_LIB_WIDGET_WIDGET_H__
 
 #include "lib/framework/frame.h"
-#include "lib/ivis_common/piepalette.h"
-#include "lib/ivis_common/textdraw.h"
+#include "lib/ivis_opengl/piepalette.h"
+#include "lib/ivis_opengl/textdraw.h"
 #include "widgbase.h"
 
 /***********************************************************************************
@@ -100,6 +100,8 @@
 /** The basic initialisation structure */
 struct W_INIT
 {
+	W_INIT();
+
 	UDWORD                  formID;                 ///< ID number of form to put widget on. ID == 0 specifies the default form for the screen
 	UWORD                   majorID, minorID;       ///< Which major and minor tab to put the widget on for a tabbed form
 	UDWORD                  id;                     ///< Unique id number (chosen by user)
@@ -147,8 +149,10 @@ typedef void (*FONT_DISPLAY)(UDWORD x, UDWORD y, char *String);
 /** Form initialisation structure */
 struct W_FORMINIT : public W_INIT
 {
+	W_FORMINIT();
+
 	/* Data for a tabbed form */
-	BOOL			disableChildren;
+	bool                    disableChildren;
 	UWORD			majorPos, minorPos;		// Position of the tabs on the form
 	UWORD			majorSize, minorSize;		// Size of the tabs (in pixels)
 	SWORD			majorOffset, minorOffset;	// Tab start offset.
@@ -163,6 +167,7 @@ struct W_FORMINIT : public W_INIT
 	UWORD			numMajor;			///< Number of major tabs
 	UWORD			aNumMinors[WFORM_MAXMAJOR];	///< Number of minor tabs for each major
 	SWORD			TabMultiplier;			///< Used to tell system we got lots of (virtual) tabs to display
+	unsigned                maxTabsShown;                   ///< Maximum number of tabs shown at once.
 	const char		*pTip;				///< Tool tip for the form itself
 	char			*apMajorTips[WFORM_MAXMAJOR];	///< Tool tips for the major tabs
 	char			*apMinorTips[WFORM_MAXMAJOR][WFORM_MAXMINOR];	///< Tool tips for the minor tabs
@@ -173,6 +178,8 @@ struct W_FORMINIT : public W_INIT
 /** Label initialisation structure */
 struct W_LABINIT : public W_INIT
 {
+	W_LABINIT();
+
 	const char		*pText;			///< label text
 	const char		*pTip;			///< Tool tip for the label.
 	enum iV_fonts           FontID;			///< ID of the IVIS font to use for this widget.
@@ -181,6 +188,8 @@ struct W_LABINIT : public W_INIT
 /** Button initialisation structure */
 struct W_BUTINIT : public W_INIT
 {
+	W_BUTINIT();
+
 	const char *pText;	///< Button text
 	const char *pTip;	///< Tool tip text
 	enum iV_fonts FontID;	//< ID of the IVIS font to use for this widget.
@@ -189,6 +198,8 @@ struct W_BUTINIT : public W_INIT
 /** Edit box initialisation structure */
 struct W_EDBINIT : public W_INIT
 {
+	W_EDBINIT();
+
 	const char *pText;		///< initial contents of the edit box
 	enum iV_fonts FontID;		///< ID of the IVIS font to use for this widget.
 	WIDGET_DISPLAY pBoxDisplay;	///< Optional callback to display the form.
@@ -196,15 +207,20 @@ struct W_EDBINIT : public W_INIT
 };
 
 /* Orientation flags for the bar graph */
-#define WBAR_LEFT		0x0001		///< Bar graph fills from left to right
-#define WBAR_RIGHT		0x0002		///< Bar graph fills from right to left
-#define WBAR_TOP		0x0003		///< Bar graph fills from top to bottom
-#define WBAR_BOTTOM		0x0004		///< Bar graph fills from bottom to top
+enum WBAR_ORIENTATION
+{
+	WBAR_LEFT = 1,                  ///< Bar graph fills from left to right
+	WBAR_RIGHT,                     ///< Bar graph fills from right to left
+	WBAR_TOP,                       ///< Bar graph fills from top to bottom
+	WBAR_BOTTOM,                    ///< Bar graph fills from bottom to top
+};
 
 /** Bar Graph initialisation structure */
 struct W_BARINIT : public W_INIT
 {
-	UWORD		orientation;		///< Orientation of the bar on the widget
+	W_BARINIT();
+
+	WBAR_ORIENTATION orientation;           ///< Orientation of the bar on the widget
 	UWORD		size;			///< Initial percentage of the graph that is filled
 	UWORD		minorSize;		///< Percentage of second bar graph if there is one
 	UWORD		iRange;			///< Maximum range
@@ -217,15 +233,20 @@ struct W_BARINIT : public W_INIT
 
 
 /* Orientation of the slider */
-#define WSLD_LEFT		0x0001		///< Slider is horizontal and starts at left
-#define WSLD_RIGHT		0x0002		///< Slider is horizontal and starts at the right
-#define WSLD_TOP		0x0003		///< Slider is vertical and starts at the top
-#define WSLD_BOTTOM		0x0004		///< Slider is vertical and starts at the bottom
+enum WSLD_ORIENTATION
+{
+	WSLD_LEFT = 1,                  ///< Slider is horizontal and starts at left
+	WSLD_RIGHT,                     ///< Slider is horizontal and starts at the right
+	WSLD_TOP,                       ///< Slider is vertical and starts at the top
+	WSLD_BOTTOM,                    ///< Slider is vertical and starts at the bottom
+};
 
 /** Slider initialisation structure */
 struct W_SLDINIT : public W_INIT
 {
-	UWORD		orientation;		///< Orientation of the slider
+	W_SLDINIT();
+
+	WSLD_ORIENTATION orientation;           ///< Orientation of the slider
 	UWORD		numStops;		///< Number of stops on the slider
 	UWORD		barSize;		///< Size of the bar
 	UWORD		pos;			///< Initial position of the slider bar

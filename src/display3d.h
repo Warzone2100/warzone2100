@@ -23,15 +23,10 @@
 
 #include "display.h"
 #include "display3ddef.h"	// This should be the only place including this file
-#include "lib/ivis_common/pietypes.h"
-#include "lib/ivis_common/piedef.h"
+#include "lib/ivis_opengl/pietypes.h"
+#include "lib/ivis_opengl/piedef.h"
 #include "objectdef.h"
 #include "message.h"
-
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
 
 
 /*!
@@ -65,7 +60,7 @@ extern BOOL	radarOnScreen;
 extern bool rangeOnScreen; // Added to get sensor/gun range on screen.  -Q 5-10-05
 extern void	scaleMatrix( UDWORD percent );
 extern void setViewPos( UDWORD x, UDWORD y, BOOL Pan);
-extern void getPlayerPos(SDWORD *px, SDWORD *py);
+Vector2i    getPlayerPos();
 extern void setPlayerPos(SDWORD x, SDWORD y);
 extern void disp3d_setView(iView *newView);
 extern void disp3d_resetView(void);
@@ -145,9 +140,5 @@ extern UWORD barMode;
 extern bool CauseCrash;
 
 extern bool tuiTargetOrigin;
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_DISPLAY3D_H__

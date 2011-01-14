@@ -178,7 +178,8 @@ BOOL scriptTypeIsPointer(INTERP_TYPE type)
 	ASSERT((_scr_user_types)type < ST_MAXTYPE || type >= VAL_REF, "Invalid type: %d", type);
 	// any value or'ed with VAL_REF is a pointer
 	if (type >= VAL_REF) return true;
-	switch (type) {
+	switch ((unsigned)type)  // Unsigned cast to suppress compiler warnings due to enum abuse.
+	{
 		case VAL_STRING:
 		case VAL_OBJ_GETSET:
 		case VAL_FUNC_EXTERN:

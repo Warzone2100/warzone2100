@@ -33,7 +33,7 @@
 // Qt headers MUST come before platform specific stuff!
 #include "lib/framework/frame.h"
 #include "lib/framework/cursors.h"
-#include "lib/ivis_common/textdraw.h"
+#include "lib/ivis_opengl/textdraw.h"
 #include "input.h"
 
 class WzMainWindow : public QGLWidget

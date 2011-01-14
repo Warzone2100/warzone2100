@@ -26,11 +26,6 @@
 
 #include "lib/framework/vector.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 #define NUM_RAYS 360
 
 // maximum length for a visiblity ray
@@ -61,10 +56,5 @@ extern void rayCast(Vector3i pos, uint16_t dir, uint32_t length, RAY_CALLBACK ca
 // Calculates the maximum height and distance found along a line from any
 // point to the edge of the grid
 extern void getBestPitchToEdgeOfGrid(UDWORD x, UDWORD y, uint16_t direction, uint16_t *pitch);
-
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_RAYCAST_H__

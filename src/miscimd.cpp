@@ -183,15 +183,11 @@ BOOL	initMiscImds( void )
 	for (i=0; i < MAX_FACTORY; i++)
 	{
 		unsigned n = i + 1;
-		if (n > 5)
-		{
-			n = 5;
-			debug(LOG_ERROR, "Need to add more assembly point graphics, if increasing MAX_FACTORY.");
-		}
 
-		if (!initMiscImd(i, n, "MINUM%u.pie",  FACTORY_FLAG) ||
-		    !initMiscImd(i, n, "MICNUM%u.pie", CYBORG_FLAG) ||
-		    !initMiscImd(i, n, "MIVNUM%u.pie", VTOL_FLAG) ||
+		STATIC_ASSERT(MAX_FACTORY <= 32);  // Need to add more assembly point graphics, if increasing MAX_FACTORY.
+		if (!initMiscImd(i, n, "minum%u.pie",  FACTORY_FLAG) ||
+		    !initMiscImd(i, n, "micnum%u.pie", CYBORG_FLAG) ||
+		    !initMiscImd(i, n, "mivnum%u.pie", VTOL_FLAG) ||
 		    !initMiscImd(i, 1, "mirnum%u.pie", REPAIR_FLAG))
 		{
 			return false;

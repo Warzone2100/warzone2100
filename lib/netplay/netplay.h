@@ -136,7 +136,7 @@ typedef enum
 
 #define SESSION_JOINDISABLED	1
 
-#define MAX_CONNECTED_PLAYERS   8
+#define MAX_CONNECTED_PLAYERS   MAX_PLAYERS
 #define MAX_TMP_SOCKETS         16
 
 typedef struct {					//Available game storage... JUST FOR REFERENCE!
@@ -230,9 +230,15 @@ typedef enum
 	ALREADY_HAVE_FILE,
 	STUCK_IN_FILE_LOOP
 }	wzFileEnum;
+
+enum
+{
+	DIFFICULTY_EASY, DIFFICULTY_MEDIUM, DIFFICULTY_HARD, DIFFICULTY_INSANE
+};
+
 // ////////////////////////////////////////////////////////////////////////
 // Player information. Filled when players join, never re-ordered. selectedPlayer global points to 
-// currently controlled player. This array is indexed by GUI slots in pregame.
+// currently controlled player.
 typedef struct
 {
 	char		name[StringSize];	///< Player name
@@ -245,8 +251,8 @@ typedef struct
 	int32_t		connection;		///< Index into connection list
 	int32_t		team;			///< Which team we are on
 	BOOL		ready;			///< player ready to start?
-	uint32_t	unused_1;	///< for future usage
-	BOOL		unused_2;	///< for future usage
+	int8_t		ai;			///< index into sorted list of AIs, zero is always default AI
+	int8_t		difficulty;		///< difficulty level of AI
 	BOOL		needFile;			///< if We need a file sent to us
 	WZFile		wzFile;				///< for each player, we keep track of map progress
 	char		IPtextAddress[40];	///< IP of this player
@@ -261,7 +267,6 @@ typedef struct {
 	uint32_t	hostPlayer;		///< Index of host in player array
 	uint32_t	bComms;			///< Actually do the comms?
 	BOOL		isHost;			///< True if we are hosting the game
-	int32_t		maxPlayers;		///< Maximum number of players in this game
 	BOOL		isUPNP;					// if we want the UPnP detection routines to run
 	BOOL		isHostAlive;	/// if the host is still alive
 	PHYSFS_file	*pMapFileHandle;

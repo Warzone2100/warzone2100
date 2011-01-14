@@ -4,10 +4,6 @@
 %.lex.hpp %.lex.cpp:: %.l
 	$(LEX) $(LFLAGS) $(AM_LFLAGS) -o$@ $<
 
-# Required to force using a C++ linker
-force-linker.cpp:
-	touch $@
-
 AM_CPPFLAGS = -DYY_NO_INPUT $(PHYSFS_CFLAGS) $(PNG_CFLAGS) $(OGGVORBIS_CFLAGS) $(OPENAL_CFLAGS) $(OPENGLC_CFLAGS) $(OPENGL_CFLAGS) $(WZ_CPPFLAGS) $(GLee_CFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS)
 AM_CXXFLAGS = $(WZ_CXXFLAGS) $(QT4_CFLAGS)
@@ -15,7 +11,6 @@ AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
 
 BUILT_SOURCES = \
-	force-linker.cpp \
 	level_lexer.lex.cpp \
 	message_lexer.lex.cpp \
 	message_parser.tab.cpp \
@@ -37,7 +32,6 @@ noinst_HEADERS = \
 	action.h \
 	actiondef.h \
 	advvis.h \
-	aiexperience.h \
 	ai.h \
 	anim_id.h \
 	astar.h \
@@ -168,7 +162,6 @@ warzone2100_SOURCES = \
 	action.cpp \
 	advvis.cpp \
 	ai.cpp \
-	aiexperience.cpp \
 	astar.cpp \
 	atmos.cpp \
 	aud.cpp \
@@ -195,7 +188,6 @@ warzone2100_SOURCES = \
 	edit3d.cpp \
 	effects.cpp \
 	feature.cpp \
-	force-linker.cpp \
 	fpath.cpp \
 	frontend.cpp \
 	function.cpp \
@@ -285,7 +277,6 @@ warzone2100_LDADD = \
 	$(top_builddir)/lib/netplay/libnetplay.a \
 	$(top_builddir)/lib/netplay/miniupnpc/libminiupnpc.a \
 	$(top_builddir)/lib/ivis_opengl/libivis_opengl.a \
-	$(top_builddir)/lib/ivis_common/libivis_common.a \
 	$(top_builddir)/lib/gamelib/libgamelib.a \
 	$(top_builddir)/lib/framework/libframework.a \
 	$(top_builddir)/lib/iniparser/libiniparser.a \

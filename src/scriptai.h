@@ -24,11 +24,6 @@
 #ifndef __INCLUDED_SRC_SCRIPTAI_H__
 #define __INCLUDED_SRC_SCRIPTAI_H__
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 // Add a droid to a group
 extern BOOL scrGroupAddDroid(void);
 
@@ -201,9 +196,5 @@ BOOL scrSkDefenseLocation(void);
 
 // line build.
 //BOOL scrSkOrderDroidLineBuild(void);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_SCRIPTAI_H__

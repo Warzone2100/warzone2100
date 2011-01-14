@@ -24,11 +24,6 @@
 #ifndef __INCLUDED_SRC_ACTIONDEF_H__
 #define __INCLUDED_SRC_ACTIONDEF_H__
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 /**
  * What a droid is currently doing. Not necessarily the same as its order as the micro-AI may get a droid to do
  * something else whilst carrying out an order.
@@ -80,9 +75,5 @@ typedef enum _droid_action
 	DACTION_FIRESUPPORT_RETREAT,			///< 39 used by firesupport order when sensor retreats
 	DACTION_CIRCLE = 41,				///< 41 circling while engaging
 } DROID_ACTION;
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_ACTIONDEF_H__

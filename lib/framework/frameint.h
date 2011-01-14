@@ -23,11 +23,6 @@
 #ifndef _frameint_h
 #define _frameint_h
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 /* Check the header files have been included from frame.h if they
  * are used outside of the framework library.
  */
@@ -45,9 +40,5 @@ extern void screenShutDown(void);
 extern UDWORD		screenWidth;
 extern UDWORD		screenHeight;
 extern UDWORD		screenDepth;
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif //_frameint_h

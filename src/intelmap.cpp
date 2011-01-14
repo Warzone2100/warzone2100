@@ -30,12 +30,12 @@
 #include "lib/widget/widget.h"
 #include "lib/widget/button.h"
 /* Includes direct access to render library */
-#include "lib/ivis_common/pieblitfunc.h"
-#include "lib/ivis_common/piedef.h"
-#include "lib/ivis_common/piestate.h"
-#include "lib/ivis_common/piepalette.h"
+#include "lib/ivis_opengl/pieblitfunc.h"
+#include "lib/ivis_opengl/piedef.h"
+#include "lib/ivis_opengl/piestate.h"
+#include "lib/ivis_opengl/piepalette.h"
 #include "lib/ivis_opengl/screen.h"
-#include "lib/ivis_common/piemode.h"
+#include "lib/ivis_opengl/piemode.h"
 
 #include "display3d.h"
 #include "lib/framework/cursors.h"
@@ -205,8 +205,6 @@ TEXT_DISPLAY	currentTextDisplay;
 /* Add the Intelligence Map widgets to the widget screen */
 BOOL intAddIntelMap(void)
 {
-	W_FORMINIT		sFormInit;
-	W_LABINIT		sLabInit;
 	BOOL			Animate = true;
 
 	//check playCurrent with psCurrentMsg
@@ -237,16 +235,14 @@ BOOL intAddIntelMap(void)
 	{
 		if(widgGetFromID(psWScreen,IDINTMAP_PAUSELABEL) == NULL)
 		{
-			memset(&sLabInit,0,sizeof(W_LABINIT));
+			W_LABINIT sLabInit;
 			sLabInit.id = IDINTMAP_PAUSELABEL;
 			sLabInit.formID = 0;
-			sLabInit.style = WLAB_PLAIN;
 			sLabInit.x = INTMAP_LABELX;
 			sLabInit.y = INTMAP_LABELY+PAUSEMESSAGE_YOFFSET;
 			sLabInit.width = INTMAP_LABELWIDTH;
 			sLabInit.height = INTMAP_LABELHEIGHT;
 			sLabInit.pText = _("PAUSED");
-			sLabInit.FontID = font_regular;
 			if (!widgAddLabel(psWScreen, &sLabInit))
 			{
 				return false;
@@ -257,7 +253,7 @@ BOOL intAddIntelMap(void)
 	//set pause states before putting the interface up
 	setIntelligencePauseState();
 
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
+	W_FORMINIT sFormInit;
 
 	// Add the main Intelligence Map form
 
@@ -303,15 +299,13 @@ BOOL intAddIntelMap(void)
 /* Add the Message sub form */
 static BOOL intAddMessageForm(BOOL playCurrent)
 {
-	W_FORMINIT		sFormInit;
-	W_FORMINIT		sBFormInit;
 	UDWORD			numButtons, i;
 	MESSAGE			*psMessage;
 	RESEARCH		*psResearch;
 	SDWORD			BufferID;
 
 	/* Add the Message form */
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
+	W_FORMINIT sFormInit;
 	sFormInit.formID = IDINTMAP_FORM;
 	sFormInit.id = IDINTMAP_MSGFORM;
 	sFormInit.style = WFORM_TABBED;
@@ -370,7 +364,7 @@ static BOOL intAddMessageForm(BOOL playCurrent)
 
 
 	/* Add the message buttons */
-	memset(&sBFormInit, 0, sizeof(W_FORMINIT));
+	W_FORMINIT sBFormInit;
 	sBFormInit.formID = IDINTMAP_MSGFORM;
 	sBFormInit.id = IDINTMAP_MSGSTART;
 	sBFormInit.majorID = 0;
@@ -487,9 +481,6 @@ static BOOL intAddMessageForm(BOOL playCurrent)
 /*Add the 3D world view for the particular message (only research nmessages now) */
 BOOL intAddMessageView(MESSAGE * psMessage)
 {
-	W_FORMINIT		sFormInit;
-	W_BUTINIT		sButInit;
-	W_LABINIT		sLabInit;
 	BOOL			Animate = true;
 	RESEARCH		*psResearch;
 
@@ -505,7 +496,7 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 	}
 
 	/* Add the base form */
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
+	W_FORMINIT sFormInit;
 	sFormInit.formID = 0;
 	sFormInit.id = IDINTMAP_MSGVIEW;
 	sFormInit.style = WFORM_PLAIN;
@@ -533,10 +524,9 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 	}
 
 	/* Add the close box */
-	memset(&sButInit, 0, sizeof(W_BUTINIT));
+	W_BUTINIT sButInit;
 	sButInit.formID = IDINTMAP_MSGVIEW;
 	sButInit.id = IDINTMAP_CLOSE;
-	sButInit.style = WBUT_PLAIN;
 	sButInit.x = (SWORD)(sFormInit.width - OPT_GAP - CLOSE_SIZE);
 	sButInit.y = OPT_GAP;
 	sButInit.width = CLOSE_SIZE;
@@ -552,14 +542,13 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 	if (psMessage->type != MSG_RESEARCH &&
 	    ((VIEWDATA*)psMessage->pViewData)->type == VIEW_RPL)
 	{
-		W_FORMINIT	sTabForm;
 		VIEW_REPLAY	*psViewReplay;
 		size_t		i, cur_seq, cur_seqpage;
 
 		psViewReplay = (VIEW_REPLAY *)((VIEWDATA *)psMessage->pViewData)->pData;
 
 		/* Add a big tabbed text box for the subtitle text */
-		memset(&sFormInit, 0, sizeof(W_FORMINIT));
+		sFormInit = W_FORMINIT();
 
 		sFormInit.id = IDINTMAP_SEQTEXT;
 		sFormInit.formID = IDINTMAP_MSGVIEW;
@@ -595,7 +584,7 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 			return false;
 		}
 
-		memset(&sTabForm, 0, sizeof(W_FORMINIT));
+		W_FORMINIT sTabForm;
 		sTabForm.formID = IDINTMAP_SEQTEXT;
 		sTabForm.id = IDINTMAP_SEQTEXTSTART;
 		sTabForm.majorID = 0;
@@ -622,10 +611,9 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 	}
 
 	/*add the Label for the title box*/
-	memset(&sLabInit,0,sizeof(W_LABINIT));
+	W_LABINIT sLabInit;
 	sLabInit.id = IDINTMAP_TITLELABEL;
 	sLabInit.formID = IDINTMAP_MSGVIEW;
-	sLabInit.style = WLAB_PLAIN;
 	sLabInit.x = INTMAP_TITLEX + TEXT_XINDENT;
 	sLabInit.y = INTMAP_TITLEY + TEXT_YINDENT;
 	sLabInit.width = INTMAP_TITLEWIDTH;
@@ -649,7 +637,7 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 
 	/*Add the PIE box*/
 
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
+	sFormInit = W_FORMINIT();
 	sFormInit.formID = IDINTMAP_MSGVIEW;
 	sFormInit.id = IDINITMAP_PIEVIEW;
 	sFormInit.style = WFORM_PLAIN;
@@ -666,7 +654,7 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 
 #ifndef NO_VIDEO
 	/*Add the Flic box */
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
+	sFormInit = W_FORMINIT();
 	sFormInit.formID = IDINTMAP_MSGVIEW;
 	sFormInit.id = IDINTMAP_FLICVIEW;
 	sFormInit.style = WFORM_PLAIN;
@@ -683,7 +671,7 @@ BOOL intAddMessageView(MESSAGE * psMessage)
 #endif
 
 	/*Add the text box*/
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
+	sFormInit = W_FORMINIT();
 
 	sFormInit.formID = IDINTMAP_MSGVIEW;
 
@@ -1280,7 +1268,6 @@ void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL
 	W_TABFORM		*Form = (W_TABFORM*)psWidget;
 	MESSAGE			*psMessage = (MESSAGE *)Form->pUserData;
 	UDWORD			x0,y0,x1,y1;
-	VIEW_RESEARCH	*psViewResearch;
 	SWORD			image = -1;
     RESEARCH        *psResearch;
 
@@ -1312,8 +1299,6 @@ void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL
 		}
 
 		//render an object
-		psViewResearch = (VIEW_RESEARCH *)((VIEWDATA *)psCurrentMsg->pViewData)->pData;
-
 		psResearch = getResearchForMsg((VIEWDATA *)psCurrentMsg->pViewData);
 		renderResearchToBuffer(psResearch, x0+(x1-x0)/2, y0+(y1-y0)/2);
 

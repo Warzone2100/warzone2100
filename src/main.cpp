@@ -40,10 +40,10 @@
 
 #include "lib/sound/playlist.h"
 #include "lib/gamelib/gtime.h"
-#include "lib/ivis_common/pieblitfunc.h"
-#include "lib/ivis_common/piestate.h"
-#include "lib/ivis_common/piepalette.h"
-#include "lib/ivis_common/piemode.h"
+#include "lib/ivis_opengl/pieblitfunc.h"
+#include "lib/ivis_opengl/piestate.h"
+#include "lib/ivis_opengl/piepalette.h"
+#include "lib/ivis_opengl/piemode.h"
 #include "lib/ivis_opengl/screen.h"
 #include "lib/netplay/netplay.h"
 #include "lib/script/script.h"
@@ -102,10 +102,6 @@ typedef enum _focus_state
 # define WZ_WRITEDIR ".warzone2100-master"
 #endif
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
 bool customDebugfile = false;		// Default false: user has NOT specified where to store the stdout/err file.
 
 char datadir[PATH_MAX] = ""; // Global that src/clparse.c:ParseCommandLine can write to, so it can override the default datadir on runtime. Needs to be empty on startup for ParseCommandLine to work!
@@ -134,9 +130,6 @@ char	MultiForcesPath[PATH_MAX];
 char	MultiCustomMapsPath[PATH_MAX];
 char	MultiPlayersPath[PATH_MAX];
 char	KeyMapPath[PATH_MAX];
-#ifdef __cplusplus
-}
-#endif
 // Start game in title mode:
 static GS_GAMEMODE gameStatus = GS_TITLE_SCREEN;
 // Status of the gameloop
@@ -1177,6 +1170,9 @@ int main(int argc, char *argv[])
 
 	debug(LOG_WZ, "Using language: %s", getLanguage());
 
+	debug(LOG_MEMORY, "sizeof: SIMPLE_OBJECT=%ld, BASE_OBJECT=%ld, DROID=%ld, STRUCTURE=%ld, FEATURE=%ld, PROJECTILE=%ld",
+	      (long)sizeof(SIMPLE_OBJECT), (long)sizeof(BASE_OBJECT), (long)sizeof(DROID), (long)sizeof(STRUCTURE), (long)sizeof(FEATURE), (long)sizeof(PROJECTILE));
+
 	/* Initialize the write/config directory for PhysicsFS.
 	 * This needs to be done __after__ the early commandline parsing,
 	 * because the user might tell us to use an alternative configuration
@@ -1222,8 +1218,6 @@ int main(int argc, char *argv[])
 	debug(LOG_MAIN, "initializing");
 
 	loadConfig();
-
-	loadRenderMode(); //get the registry entry for clRendMode
 
 	NETinit(true);
 

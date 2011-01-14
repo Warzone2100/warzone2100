@@ -207,7 +207,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\audp_parser.tab.h"
+				RelativePath=".\audp_parser.tab.hpp"
 				>
 			</File>
 			<File

@@ -180,14 +180,14 @@ static uint32_t fpathCurrentGameTime;
 // dir 0 => x = 0, y = -1
 static const Vector2i aDirOffset[] =
 {
-	{ 0, 1},
-	{-1, 1},
-	{-1, 0},
-	{-1,-1},
-	{ 0,-1},
-	{ 1,-1},
-	{ 1, 0},
-	{ 1, 1},
+	Vector2i( 0, 1),
+	Vector2i(-1, 1),
+	Vector2i(-1, 0),
+	Vector2i(-1,-1),
+	Vector2i( 0,-1),
+	Vector2i( 1,-1),
+	Vector2i( 1, 0),
+	Vector2i( 1, 1),
 };
 
 void fpathHardTableReset()
@@ -433,8 +433,7 @@ ASR_RETVAL fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 		ASSERT_OR_RETURN(ASR_FAILED, tileOnMap(p.x, p.y), "Assigned XY coordinates (%d, %d) not on map!", (int)p.x, (int)p.y);
 		ASSERT_OR_RETURN(ASR_FAILED, path.size() < (unsigned)mapWidth*mapHeight, "Pathfinding got in a loop.");
 
-		Vector2i v = {world_coord(p.x) + TILE_UNITS / 2, world_coord(p.y) + TILE_UNITS / 2};
-		path.push_back(v);
+		path.push_back(Vector2i(world_coord(p.x) + TILE_UNITS / 2, world_coord(p.y) + TILE_UNITS / 2));
 
 		PathExploredTile &tile = context.map[p.x + p.y*mapWidth];
 		newP = PathCoord(p.x - tile.dx, p.y - tile.dy);
@@ -446,13 +445,12 @@ ASR_RETVAL fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 	if (path.empty())
 	{
 		// We are probably already in the destination tile. Go to the exact coordinates.
-		Vector2i v = {psJob->destX, psJob->destY};
-		path.push_back(v);
+		path.push_back(Vector2i(psJob->destX, psJob->destY));
 	}
 	else if (retval == ASR_OK)
 	{
 		// Found exact path, so use exact coordinates for last point, no reason to lose precision
-		Vector2i v = {psJob->destX, psJob->destY};
+		Vector2i v(psJob->destX, psJob->destY);
 		if (mustReverse)
 		{
 			path.front() = v;
@@ -509,8 +507,7 @@ ASR_RETVAL fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 		fpathContexts.splice(fpathContexts.begin(), fpathContexts, contextIterator);
 	}
 
-	psMove->DestinationX = psMove->asPath[path.size() - 1].x;
-	psMove->DestinationY = psMove->asPath[path.size() - 1].y;
+	psMove->destination = psMove->asPath[path.size() - 1];
 
 	return retval;
 }

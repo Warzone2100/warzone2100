@@ -30,14 +30,14 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/wzapp_c.h"
 
-#include "lib/ivis_common/piedef.h"
-#include "lib/ivis_common/piestate.h"
-#include "lib/ivis_common/piemode.h"
+#include "lib/ivis_opengl/piedef.h"
+#include "lib/ivis_opengl/piestate.h"
+#include "lib/ivis_opengl/piemode.h"
 #include "piematrix.h"
-#include "lib/ivis_common/ivi.h"
-#include "lib/ivis_common/piefunc.h"
-#include "lib/ivis_common/tex.h"
-#include "lib/ivis_common/pieclip.h"
+#include "lib/ivis_opengl/ivi.h"
+#include "lib/ivis_opengl/piefunc.h"
+#include "lib/ivis_opengl/tex.h"
+#include "lib/ivis_opengl/pieclip.h"
 #include "screen.h"
 
 /***************************************************************************/

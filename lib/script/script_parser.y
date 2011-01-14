@@ -843,49 +843,6 @@ static UDWORD checkFuncParamTypes(EVENT_SYMBOL		*psFSymbol,		// The function bei
 	return 0;	//all ok
 }
 
-#ifdef UNUSED
-/*
- *  function call
- */
-static CODE_ERROR scriptCodeCallFunction(FUNC_SYMBOL	*psFSymbol,		// The function being called
-						PARAM_BLOCK		*psPBlock,		// The functions parameters
-						CODE_BLOCK		**ppsCBlock)	// The generated code block
-{
-	UDWORD		size;
-	INTERP_VAL	*ip;
-
-	//debug(LOG_SCRIPT, "scriptCodeCallFunction");
-
-	ASSERT( psFSymbol != NULL, "scriptCodeCallFunction: Invalid function symbol pointer" );
-	ASSERT( psPBlock != NULL,
-		"scriptCodeCallFunction: Invalid param block pointer" );
-	ASSERT( (psPBlock->size == 0) || psPBlock->pCode != NULL,
-		"scriptCodeCallFunction: Invalid parameter code pointer" );
-	ASSERT( ppsCBlock != NULL,
-		 "scriptCodeCallFunction: Invalid generated code block pointer" );
-
-
-	//size = psPBlock->size + sizeof(OPCODE) + sizeof(SCRIPT_FUNC);
-	size = psPBlock->size + 1 + 1;	//size + opcode + SCRIPT_FUNC
-
-	ALLOC_BLOCK(*ppsCBlock, size);
-	ip = (*ppsCBlock)->pCode;
-	(*ppsCBlock)->type = psFSymbol->type;
-
-	/* Copy in the code for the parameters */
-	PUT_BLOCK(ip, psPBlock);
-	FREE_PBLOCK(psPBlock);
-
-	/* Make the function call */
-	PUT_OPCODE(ip, OP_CALL);
-	PUT_FUNC_EXTERN(ip, psFSymbol->pFunc);
-
-	//debug(LOG_SCRIPT, "END scriptCodeCallFunction");
-
-	return CE_OK;
-}
-#endif
-
 /* Generate the code for a parameter callback, checking the parameter
  * types match.
  */
@@ -1121,9 +1078,6 @@ static CODE_ERROR scriptCodeArrayAssignment(ARRAY_BLOCK	*psVariable,// The varia
 															// assign
 								 CODE_BLOCK		**ppsBlock)	// Generated code
 {
-//	SDWORD		elementDWords, i;
-//	UBYTE		*pElement;
-
 	ASSERT( psVariable != NULL,
 		"scriptCodeObjAssignment: Invalid object variable block pointer" );
 	ASSERT( psVariable->pCode != NULL,
@@ -1144,11 +1098,6 @@ static CODE_ERROR scriptCodeArrayAssignment(ARRAY_BLOCK	*psVariable,// The varia
 		return CE_PARSE;
 	}
 
-	// calculate the number of DWORDs needed to store the number of elements for each dimension of the array
-//	elementDWords = (psVariable->psArrayVar->dimensions - 1)/4 + 1;
-
-//	ALLOC_BLOCK(*ppsBlock, psVariable->size + psValue->size + sizeof(OPCODE) + elementDWords*4);
-	//ALLOC_BLOCK(*ppsBlock, psVariable->size + psValue->size + sizeof(OPCODE));
 	ALLOC_BLOCK(*ppsBlock, psVariable->size + psValue->size + 1);	//size + size + opcode
 
 	ip = (*ppsBlock)->pCode;
@@ -1165,14 +1114,6 @@ static CODE_ERROR scriptCodeArrayAssignment(ARRAY_BLOCK	*psVariable,// The varia
 		((psVariable->psArrayVar->dimensions << ARRAY_DIMENSION_SHIFT) & ARRAY_DIMENSION_MASK) |
 		(psVariable->psArrayVar->index & ARRAY_BASE_MASK) );
 
-	// store the size of each dimension
-/*	pElement = (UBYTE *)ip;
-	for(i=0; i<psVariable->psArrayVar->dimensions; i++)
-	{
-		*pElement = (UBYTE)psVariable->psArrayVar->elements[i];
-		pElement += 1;
-	}*/
-
 	/* Free the variable block */
 	FREE_ARRAYBLOCK(psVariable);
 
@@ -1184,9 +1125,6 @@ static CODE_ERROR scriptCodeArrayAssignment(ARRAY_BLOCK	*psVariable,// The varia
 static CODE_ERROR scriptCodeArrayGet(ARRAY_BLOCK	*psVariable,// The variable to get from
 						  CODE_BLOCK	**ppsBlock)	// Generated code
 {
-//	SDWORD		elementDWords, i;
-//	UBYTE		*pElement;
-
 	ASSERT( psVariable != NULL,
 		"scriptCodeObjAssignment: Invalid object variable block pointer" );
 	ASSERT( psVariable->pCode != NULL,
@@ -1203,11 +1141,6 @@ static CODE_ERROR scriptCodeArrayGet(ARRAY_BLOCK	*psVariable,// The variable to 
 		return CE_PARSE;
 	}
 
-	// calculate the number of DWORDs needed to store the number of elements for each dimension of the array
-//	elementDWords = (psVariable->psArrayVar->dimensions - 1)/4 + 1;
-
-//	ALLOC_BLOCK(*ppsBlock, psVariable->size + sizeof(OPCODE) + elementDWords*4);
-	//ALLOC_BLOCK(*ppsBlock, psVariable->size + sizeof(OPCODE));
 	ALLOC_BLOCK(*ppsBlock, psVariable->size + 1);	//size + opcode
 
 	ip = (*ppsBlock)->pCode;
@@ -1220,14 +1153,6 @@ static CODE_ERROR scriptCodeArrayGet(ARRAY_BLOCK	*psVariable,// The variable to 
 	PUT_PKOPCODE(ip, OP_PUSHARRAYGLOBAL,
 		((psVariable->psArrayVar->dimensions << ARRAY_DIMENSION_SHIFT) & ARRAY_DIMENSION_MASK) |
 		(psVariable->psArrayVar->index & ARRAY_BASE_MASK) );
-
-	// store the size of each dimension
-/*	pElement = (UBYTE *)ip;
-	for(i=0; i<psVariable->psArrayVar->dimensions; i++)
-	{
-		*pElement = (UBYTE)psVariable->psArrayVar->elements[i];
-		pElement += 1;
-	}*/
 
 	/* Free the variable block */
 	FREE_ARRAYBLOCK(psVariable);
@@ -1427,13 +1352,6 @@ static CODE_ERROR scriptCodeArrayVariable(ARRAY_BLOCK	*psArrayCode,	// Code for 
 	ASSERT( ppsBlock != NULL,
 		"scriptCodeObjectVariable: Invalid generated code block pointer" );
 
-/*	ALLOC_ARRAYBLOCK(*ppsBlock, psArrayCode->size, psVar);
-	ip = (*ppsBlock)->pCode;
-
-	// Copy the already generated bit of code into the code block
-	PUT_BLOCK(ip, psArrayCode);
-	FREE_BLOCK(psArrayCode);*/
-
 	// Check the variable is the correct type
 	if (psVar->dimensions != psArrayCode->dimensions)
 	{
@@ -1457,7 +1375,6 @@ static CODE_ERROR scriptCodeConstant(CONST_SYMBOL	*psConst,	// The object variab
 	ASSERT( ppsBlock != NULL,
 		"scriptCodeConstant: Invalid generated code block pointer" );
 
-	//ALLOC_BLOCK(*ppsBlock, sizeof(OPCODE) + sizeof(UDWORD));
 	ALLOC_BLOCK(*ppsBlock, 1 + 1);		//OP_PUSH opcode + variable value
 
 	ip = (*ppsBlock)->pCode;
@@ -1622,104 +1539,6 @@ static CODE_ERROR scriptCodeVarRef(VAR_SYMBOL		*psVariable,	// The object variab
 
 	return CE_OK;
 }
-
-#ifdef UNUSED
-/* Generate the code for a trigger and store it in the trigger list */
-static CODE_ERROR scriptCodeTrigger(char *pIdent, CODE_BLOCK *psCode)
-{
-	CODE_BLOCK		*psNewBlock;
-	UDWORD			line;
-	char			*pDummy;
-
-	// Have to add the exit code to the end of the event
-	//ALLOC_BLOCK(psNewBlock, psCode->size + sizeof(OPCODE));
-	ALLOC_BLOCK(psNewBlock, psCode->size + 1);	//size + opcode
-
-	ip = psNewBlock->pCode;
-	PUT_BLOCK(ip, psCode);
-	PUT_OPCODE(ip, OP_EXIT);
-
-	// Add the debug info
-	ALLOC_DEBUG(psNewBlock, psCode->debugEntries + 1);
-	PUT_DEBUG(psNewBlock, psCode);
-	if (genDebugInfo)
-	{
-		/* Add debugging info for the EXIT instruction */
-		scriptGetErrorData((SDWORD *)&line, &pDummy);
-		psNewBlock->psDebug[psNewBlock->debugEntries].line = line;
-		psNewBlock->psDebug[psNewBlock->debugEntries].offset =
-				ip - psNewBlock->pCode;
-		psNewBlock->debugEntries ++;
-	}
-	FREE_BLOCK(psCode);
-
-	// Create the trigger
-/*	if (!scriptAddTrigger(pIdent, psNewBlock))
-	{
-		return CE_MEMORY;
-	}*/
-
-	return CE_OK;
-}
-#endif
-
-#ifdef UNUSED
-/* Generate the code for an event and store it in the event list */
-static CODE_ERROR scriptCodeEvent(EVENT_SYMBOL *psEvent, TRIGGER_SYMBOL *psTrig, CODE_BLOCK *psCode)
-{
-	CODE_BLOCK		*psNewBlock;
-	UDWORD			line;
-	char			*pDummy;
-
-	// Have to add the exit code to the end of the event
-	//ALLOC_BLOCK(psNewBlock, psCode->size + sizeof(OPCODE));
-	ALLOC_BLOCK(psNewBlock, psCode->size + 1);	//size + opcode
-
-	ip = psNewBlock->pCode;
-	PUT_BLOCK(ip, psCode);
-	PUT_OPCODE(ip, OP_EXIT);
-
-	// Add the debug info
-	ALLOC_DEBUG(psNewBlock, psCode->debugEntries + 1);
-	PUT_DEBUG(psNewBlock, psCode);
-	if (genDebugInfo)
-	{
-		/* Add debugging info for the EXIT instruction */
-		scriptGetErrorData((SDWORD *)&line, &pDummy);
-		psNewBlock->psDebug[psNewBlock->debugEntries].line = line;
-		psNewBlock->psDebug[psNewBlock->debugEntries].offset =
-				ip - psNewBlock->pCode;
-		psNewBlock->debugEntries ++;
-	}
-	FREE_BLOCK(psCode);
-
-	// Create the event
-	if (!scriptDefineEvent(psEvent, psNewBlock, psTrig->index))
-	{
-		return CE_MEMORY;
-	}
-
-	return CE_OK;
-}
-#endif
-
-#ifdef UNUSED
-/* Store the types of a list of variables into a code block.
- * The order of the list is reversed so that the type of the
- * first variable defined is stored first.
- */
-static void scriptStoreVarTypes(VAR_SYMBOL *psVar)
-{
-	if (psVar != NULL)
-	{
-		/* Recurse down the list to get to the end of it */
-		scriptStoreVarTypes(psVar->psNext);
-
-		/* Now store the current variable */
-		PUT_INDEX(ip, psVar->type);
-	}
-}
-#endif
 
 /* Change the error action for the ALLOC macro's to what it
  * should be inside a rule body.

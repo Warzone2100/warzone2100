@@ -248,10 +248,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\src\aiexperience.cpp"
-					>
-				</File>
-				<File
 					RelativePath="..\src\astar.cpp"
 					>
 				</File>
@@ -711,10 +707,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\audp_parser.tab.h"
-				>
-			</File>
-			<File
 				RelativePath="..\src\autorevision.h"
 				>
 			</File>
@@ -979,7 +971,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\message_parser.tab.h"
+				RelativePath="..\src\message_parser.tab.hpp"
 				>
 			</File>
 			<File
@@ -1119,15 +1111,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\resource_parser.tab.h"
-				>
-			</File>
-			<File
 				RelativePath="..\src\scores.h"
-				>
-			</File>
-			<File
-				RelativePath=".\script_parser.tab.h"
 				>
 			</File>
 			<File
@@ -1159,11 +1143,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\scriptvals_parser.tab.h"
-				>
-			</File>
-			<File
-				RelativePath="..\src\scriptvals_parser.tab.h"
+				RelativePath="..\src\scriptvals_parser.tab.hpp"
 				>
 			</File>
 			<File
@@ -1188,10 +1168,6 @@
 			</File>
 			<File
 				RelativePath="..\src\stringdef.h"
-				>
-			</File>
-			<File
-				RelativePath=".\strres_parser.tab.h"
 				>
 			</File>
 			<File

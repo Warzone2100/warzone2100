@@ -26,12 +26,12 @@
 #include "lib/framework/opengl.h"
 
 #include "lib/gamelib/gtime.h"
-#include "lib/ivis_common/piedef.h"
-#include "lib/ivis_common/piefunc.h"
-#include "lib/ivis_common/piestate.h"
+#include "lib/ivis_opengl/piedef.h"
+#include "lib/ivis_opengl/piefunc.h"
+#include "lib/ivis_opengl/piestate.h"
 #include "piematrix.h"
-#include "lib/ivis_common/piemode.h"
-#include "lib/ivis_common/pieclip.h"
+#include "lib/ivis_opengl/piemode.h"
+#include "lib/ivis_opengl/pieclip.h"
 
 /*
  *	Source
@@ -48,9 +48,10 @@ void pie_ClipEnd()
 	glDisable(GL_SCISSOR_TEST);
 }
 
+#define VW_VERTICES 5
 void pie_DrawViewingWindow(Vector3i *v, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2, PIELIGHT colour)
 {
-	CLIP_VERTEX pieVrts[pie_MAX_VERTICES_PER_POLYGON];
+	CLIP_VERTEX pieVrts[VW_VERTICES];
 	SDWORD i;
 
 	pie_SetTexturePage(TEXPAGE_NONE);
@@ -81,7 +82,7 @@ void pie_DrawViewingWindow(Vector3i *v, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD 
 
 	glColor4ub(colour.byte.r, colour.byte.g, colour.byte.b, colour.byte.a >> 1);
 	glBegin(GL_TRIANGLE_FAN);
-		for (i = 0; i < 5; i++)
+		for (i = 0; i < VW_VERTICES; i++)
 		{
 			glVertex2f(pieVrts[i].pos.x, pieVrts[i].pos.y);
 		}
@@ -89,7 +90,7 @@ void pie_DrawViewingWindow(Vector3i *v, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD 
 
 	glColor4ub(colour.byte.r, colour.byte.g, colour.byte.b, colour.byte.a);
 	glBegin(GL_LINE_STRIP);
-		for (i = 0; i < 5; i++)
+		for (i = 0; i < VW_VERTICES; i++)
 		{
 			glVertex2f(pieVrts[i].pos.x, pieVrts[i].pos.y);
 		}

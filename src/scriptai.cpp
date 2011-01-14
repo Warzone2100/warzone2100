@@ -623,7 +623,7 @@ BOOL scrOrderDroidStatsLoc(void)
 	}
 
 	ASSERT_OR_RETURN( false, statIndex < numStructureStats, "Invalid range referenced for numStructureStats, %d > %d", statIndex, numStructureStats);
-	psStats = (BASE_STATS *)(asStructureStats + statIndex);
+	psStats = (asStructureStats + statIndex);
 
 	ASSERT_OR_RETURN( false, psDroid != NULL, "Invalid Unit pointer" );
 	ASSERT_OR_RETURN( false, psStats != NULL, "Invalid object pointer" );
@@ -1214,14 +1214,14 @@ static BASE_OBJECT *scrTargetInArea(SDWORD tarPlayer, SDWORD visPlayer, SDWORD t
 		targetPriority = (TARGET_PREF)scrStructTargetPriority;
 		prefer = scrStructPref;
 		ignore = scrStructIgnore;
-		psCurr = (BASE_OBJECT *)apsStructLists[tarPlayer];
+		psCurr = apsStructLists[tarPlayer];
 		break;
 	case SCR_TAR_DROID:
 		getTargetMask = (TARGET_MASK)scrDroidTargetMask;
 		targetPriority = (TARGET_PREF)scrDroidTargetPriority;
 		prefer = scrDroidPref;
 		ignore = scrDroidIgnore;
-		psCurr = (BASE_OBJECT *)apsDroidLists[tarPlayer];
+		psCurr = apsDroidLists[tarPlayer];
 		break;
 	default:
 		ASSERT( false, "scrTargetInArea: invalid target type" );
@@ -1792,7 +1792,7 @@ static BOOL defenseLocation(BOOL variantB)
 	UDWORD		x,y,gX,gY,dist,player,nearestSoFar,count;
 	GATEWAY		*psGate,*psChosenGate;
 	DROID		*psDroid;
-	BASE_STATS	*psStats,*psWStats;
+	BASE_STATS	*psWStats;
 	UDWORD		x1,x2,x3,x4,y1,y2,y3,y4;
 	BOOL		noWater;
 	UDWORD      minCount;
@@ -1817,10 +1817,9 @@ static BOOL defenseLocation(BOOL variantB)
 	}
 
 	ASSERT_OR_RETURN( false, statIndex < numStructureStats, "Invalid range referenced for numStructureStats, %d > %d", statIndex, numStructureStats);
-	psStats = (BASE_STATS *)(asStructureStats + statIndex);
 
 	ASSERT_OR_RETURN( false, statIndex2 < numStructureStats, "Invalid range referenced for numStructureStats, %d > %d", statIndex2, numStructureStats);
-	psWStats = (BASE_STATS *)(asStructureStats + statIndex2);
+	psWStats = (asStructureStats + statIndex2);
 
     // check for wacky coords.
 	if(		*pX < 0
@@ -2084,7 +2083,7 @@ BOOL scrActionDroidObj(void)
 	}
 
 	syncDebug("TODO: Synchronise this!");
-	actionDroidObj(psDroid, action, (BASE_OBJECT *)psObj);
+	actionDroid(psDroid, action, psObj);
 
 	return true;
 }
@@ -2174,7 +2173,7 @@ BOOL scrDroidCanReach(void)
 	if (psDroid)
 	{
 		const PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-		const Vector3i rPos = { x, y, 0 };
+		const Vector3i rPos(x, y, 0);
 
 		scrFunctionResult.v.bval = fpathCheck(psDroid->pos, rPos, psPropStats->propulsionType);
 		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))

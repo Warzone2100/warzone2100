@@ -62,7 +62,7 @@ event initialisedEvent(CALL_GAMEINIT)
 	addReticuleButton(DESIGN);
 
 	playnum = 0;
-	while (playnum < 8)
+	while (playnum < MAX_PLAYERS)
 	{
 		enableStructure(command		,playnum);		//make structures available to build
 		enableStructure(factory		,playnum);
@@ -86,7 +86,7 @@ event initialisedEvent(CALL_GAMEINIT)
 event initialisedEventTwo(CALL_GAMEINIT)
 {
 	playnum = 0;
-	while (playnum < 8)
+	while (playnum < MAX_PLAYERS)
 	{
 		count = 0;
 		while (count < numBaseRes)

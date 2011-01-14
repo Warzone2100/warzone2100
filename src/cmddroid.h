@@ -27,11 +27,6 @@
 #include "cmddroiddef.h"
 #include "droiddef.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 // Initialise the command droids
 extern BOOL cmdDroidInit(void);
 
@@ -79,9 +74,5 @@ extern void cmdDroidMultiExpBoost(BOOL bDoit);
 
 // check whether commander experience should be increased
 extern BOOL cmdGetDroidMultiExpBoost(void);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_CMDDROID_H__

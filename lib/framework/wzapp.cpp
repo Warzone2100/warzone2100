@@ -40,8 +40,8 @@
 #include "lib/exceptionhandler/dumpinfo.h"
 #include "file.h"
 #include "configfile.h"
-#include "lib/ivis_common/piestate.h"
-#include "lib/ivis_common/pieclip.h"
+#include "lib/ivis_opengl/piestate.h"
+#include "lib/ivis_opengl/pieclip.h"
 #include "lib/ivis_opengl/screen.h"
 #include "wzapp_c.h"
 #include "src/main.h"
@@ -238,7 +238,7 @@ void WzMainWindow::drawPixmap(int XPos, int YPos, QPixmap *pix)
 {
 	QPainter painter(context()->device());
 	painter.drawPixmap(XPos, YPos, *pix);
-	rendStates.rendMode = REND_ALPHA;
+	rendStatesRendModeHack();  // rendStates.rendMode = REND_ALPHA;
 	pie_SetRendMode(REND_OPAQUE);		// beat state machinery into submission
 }
 
@@ -1205,7 +1205,7 @@ void iV_DrawTextRotated(const char* string, float XPos, float YPos, float rotati
 		painter.drawText(XPos, YPos, QString::fromUtf8(string));
 	}
 	glEnable(GL_CULL_FACE);
-	rendStates.rendMode = REND_ALPHA;
+	rendStatesRendModeHack();  // rendStates.rendMode = REND_ALPHA;
 	pie_SetRendMode(REND_OPAQUE);		// beat state machinery into submission
 }
 

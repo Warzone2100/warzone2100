@@ -39,17 +39,17 @@
 #include "wrappers.h"	// for loading screen
 #include "lib/gamelib/gtime.h"
 #include "console.h"
-#include "lib/ivis_common/bitimage.h"	// GFX incs
-#include "lib/ivis_common/textdraw.h"
+#include "lib/ivis_opengl/bitimage.h"	// GFX incs
+#include "lib/ivis_opengl/textdraw.h"
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/piematrix.h"
-#include "lib/ivis_common/piestate.h"
+#include "lib/ivis_opengl/piestate.h"
 #include "lib/netplay/netplay.h"
 #include "multiplay.h"
 #include "multirecv.h"
 #include "multiint.h"
 #include "multilimit.h"
-#include "lib/ivis_common/piemode.h"
+#include "lib/ivis_opengl/piemode.h"
 #include "lib/script/script.h"
 #include "challenge.h"
 
@@ -114,8 +114,6 @@ static inline void freeLimitSet(void)
 // ////////////////////////////////////////////////////////////////////////////
 BOOL startLimitScreen(void)
 {
-	W_FORMINIT		sButInit;
-	W_FORMINIT		sFormInit;
 	UDWORD			numButtons = 0;
 	UDWORD			i;
 
@@ -166,7 +164,7 @@ BOOL startLimitScreen(void)
 
 	addSideText(FRONTEND_SIDETEXT1,LIMITSX-2,LIMITSY,"LIMITS");	// draw sidetext...
 
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));				// draw blue form...
+	W_FORMINIT sFormInit;
 	sFormInit.formID	= FRONTEND_BACKDROP;
 	sFormInit.id		= IDLIMITS;
 	sFormInit.style		= WFORM_PLAIN;
@@ -205,7 +203,7 @@ BOOL startLimitScreen(void)
 	if(numButtons >(4*BUTPERFORM)) numButtons =(4*BUTPERFORM);
 
 	// add tab form..
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
+	sFormInit = W_FORMINIT();
 	sFormInit.formID = IDLIMITS;
 	sFormInit.id = IDLIMITS_TABS;
 	sFormInit.style = WFORM_TABBED;
@@ -231,7 +229,7 @@ BOOL startLimitScreen(void)
 	widgAddForm(psWScreen, &sFormInit);
 
 	//Put the buttons on it
-	memset(&sButInit, 0, sizeof(W_BUTINIT));
+	W_FORMINIT sButInit;
 	sButInit.formID   = IDLIMITS_TABS;//IDLIMITS;
 	sButInit.style	  = WFORM_PLAIN;
 	sButInit.width    = BARWIDTH;
@@ -426,7 +424,7 @@ static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 	STRUCTURE_STATS	*stat = asStructureStats + psWidget->UserData;
 	Position position;
 	Vector3i rotation;
-	char	str[3];
+	char str[20];
 
 	UDWORD scale,Radius;
 
@@ -460,7 +458,7 @@ static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 	iV_DrawText(_(getName(stat->pName)), x + 80, y + (psWidget->height / 2) + 3);
 
 	// draw limit
-	sprintf(str,"%d",((W_SLIDER*)(widgGetFromID(psWScreen,psWidget->id+1)))->pos);
+	ssprintf(str, "%d", ((W_SLIDER *)widgGetFromID(psWScreen, psWidget->id + 1))->pos);
 	iV_DrawText(str, x+270, y+(psWidget->height/2)+3);
 
 	return;

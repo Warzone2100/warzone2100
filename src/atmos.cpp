@@ -342,7 +342,6 @@ UDWORD	i;
 void	renderParticle( ATPART *psPart )
 {
 	Vector3i dv;
-	SDWORD centreX, centreZ;
 	SDWORD x, y, z, rx, rz;
 
 	x = psPart->position.x;
@@ -363,9 +362,7 @@ void	renderParticle( ATPART *psPart )
 	/* Scale it... */
 	pie_MatScale(psPart->size / 100.f);
 	/* Draw it... */
-	centreX = player.p.x + world_coord(visibleTiles.x / 2);
-	centreZ = player.p.z + world_coord(visibleTiles.y / 2);
-   	pie_Draw3DShape(psPart->imd, 0, 0, WZCOL_WHITE, WZCOL_BLACK, 0, 0);
+   	pie_Draw3DShape(psPart->imd, 0, 0, WZCOL_WHITE, 0, 0);
 	pie_MatEnd();
 }
 

@@ -28,7 +28,7 @@
 #include "button.h"
 #include "form.h"
 #include "tip.h"
-#include "lib/ivis_common/pieblitfunc.h"
+#include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/gamelib/gtime.h"
 
 
@@ -37,6 +37,12 @@ BOOL buttonStartUp(void)
 {
 	return true;
 }
+
+W_BUTINIT::W_BUTINIT()
+	: pText(NULL)
+	, pTip(NULL)
+	, FontID(font_regular)
+{}
 
 W_BUTTON::W_BUTTON(W_BUTINIT const *init)
 	: WIDGET(init, WIDG_BUTTON)
@@ -264,7 +270,6 @@ void buttonDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 {
 	W_BUTTON	*psButton;
 	SDWORD		x0,y0,x1,y1, fx,fy,fw;
-	int			CurrFontID;
 
 	ASSERT(psWidget != NULL && pColours != NULL, "Invalid pointers");
 	if (!psWidget || !pColours)
@@ -273,7 +278,6 @@ void buttonDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 	}
 
 	psButton = (W_BUTTON *)psWidget;
-	CurrFontID = psButton->FontID;
 
 	x0=psButton->x + xOffset;
 	y0=psButton->y + yOffset;

@@ -26,11 +26,6 @@
 
 #include "lib/framework/types.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 // used for multiplayer data integrity check.
 enum {
 	DATA_SWEAPON,
@@ -73,9 +68,5 @@ bool dataInitLoadFuncs(void);
 
 void dataSetSaveFlag(void);
 void dataClearSaveFlag(void);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_DATA_H__

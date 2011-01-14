@@ -33,11 +33,6 @@
 
 #include "lib/framework/types.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 typedef uint8_t element_t;
 
 /** Open definition file and data file; return true if successful. */
@@ -103,9 +98,5 @@ bool tagReads16v(element_t tag, uint16_t size, int16_t *vals);
 bool tagReads32v(element_t tag, uint16_t size, int32_t *vals);
 bool tagReadString(element_t tag, uint16_t size, char *buffer);
 char *tagReadStringDup(element_t tag);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif

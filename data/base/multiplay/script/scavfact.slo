@@ -13,7 +13,6 @@ x when a friendly structure is attacked send group to attack back
 
 
 // scavenger values
-public		int		enemy1;
 public		int		maxDroids;
 
 public		STRUCTURESTAT	factory;
@@ -36,6 +35,9 @@ private		DROID		newDroid, droid;
 private		STRUCTURE	structure;
 private		BASEOBJ		attacker;
 private		INT		lastAttack;
+
+// Our player number
+private         INT             enemy1;
 
 #region triggers
 
@@ -174,13 +176,17 @@ event structureAttacked(CALL_STRUCT_ATTACKED, enemy1, ref structure, ref attacke
 // Startup
 event startup(CALL_GAMEINIT)
 {
-	if (!scavengersActive() or !myResponsibility(enemy1))
+	enemy1 = scavengersActive();
+	if (enemy1 < 0 or !myResponsibility(enemy1))
 	{
 		setEventTrigger(startLevel, inactive);
 		setEventTrigger(droidbuilt, inactive);
 		setEventTrigger(structureAttacked, inactive);
 	}
-	lastAttack = 0;
+	else
+	{
+		lastAttack = 0;
 
-	groupAddArea(attackGroup, enemy1, 0, 0, (mapWidth * 128), (mapHeight * 128));
+		groupAddArea(attackGroup, enemy1, 0, 0, (mapWidth * 128), (mapHeight * 128));
+	}
 }

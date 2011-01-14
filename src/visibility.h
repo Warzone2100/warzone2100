@@ -24,11 +24,6 @@
 #include "objectdef.h"
 #include "raycast.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 // initialise the visibility stuff
 extern BOOL visInitialise(void);
 
@@ -99,9 +94,5 @@ static inline int objConcealment(const BASE_OBJECT* psObj)
 
 void objSensorCache(BASE_OBJECT *psObj, SENSOR_STATS *psSensor);
 void objEcmCache(BASE_OBJECT *psObj, ECM_STATS *psEcm);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_VISIBILITY__

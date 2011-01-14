@@ -7,7 +7,6 @@ SUBDIRS=framework \
 	exceptionhandler \
 	gamelib \
 	iniparser \
-	ivis_common \
 	ivis_opengl \
 	netplay \
 	script \

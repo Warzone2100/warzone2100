@@ -24,11 +24,6 @@
 #ifndef __INCLUDED_SRC_INTORDER_H__
 #define __INCLUDED_SRC_INTORDER_H__
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 #define IDORDER_FORM	8000
 #define IDORDER_CLOSE	8001
 
@@ -44,9 +39,5 @@ BOOL intRefreshOrder(void);
 
 //new function added to bring up the RMB order form for Factories as well as droids
 void intAddFactoryOrder(STRUCTURE *psStructure);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_INTORDER_H__

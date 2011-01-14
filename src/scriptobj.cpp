@@ -677,7 +677,7 @@ static char *scrGetStatName(INTERP_TYPE type, UDWORD data)
 {
 	char	*pName = NULL;
 
-	switch (type)
+	switch ((unsigned)type)  // Unsigned cast to suppress compiler warnings due to enum abuse.
 	{
 	case ST_STRUCTURESTAT:
 		if (data < numStructureStats)
@@ -769,7 +769,7 @@ BOOL scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize)
 	BASE_OBJECT	*psObj;
 #endif
 
-	switch (psVal->type)
+	switch ((unsigned)psVal->type)  // Unsigned cast to suppress compiler warnings due to enum abuse.
 	{
 	case ST_INTMESSAGE:
 		// save the name
@@ -1014,7 +1014,7 @@ BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 	const char              *pName;
 	BOOL			bObjectDefined;
 
-	switch (psVal->type)
+	switch ((unsigned)psVal->type)  // Unsigned cast to suppress compiler warnings due to enum abuse.
 	{
 	case ST_INTMESSAGE:
 		if ((size == 1) &&
@@ -1318,13 +1318,15 @@ BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 
 		if (psVal->v.oval == NULL)
 		{
-			if (!grpCreate((DROID_GROUP**)&(psVal->v.oval)))
+			DROID_GROUP *tmp = (DROID_GROUP *)psVal->v.oval;
+			if (!grpCreate(&tmp))
 			{
 				debug( LOG_FATAL, "scrValDefLoad: out of memory" );
 				abort();
 				break;
 			}
-			grpJoin((DROID_GROUP*)(psVal->v.oval), NULL);
+			grpJoin(tmp, NULL);
+			psVal->v.oval = tmp;
 		}
 
 		pPos = pBuffer;

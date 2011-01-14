@@ -29,7 +29,7 @@
 #include "lib/framework/strres.h"
 #include "lib/widget/widget.h"
 #include "lib/netplay/netplay.h"
-#include "lib/ivis_common/piestate.h"		// for getrendertype
+#include "lib/ivis_opengl/piestate.h"		// for getrendertype
 #include "lib/sound/audio.h"					// for sound.
 #include "lib/sound/cdaudio.h"
 #include "lib/sound/mixer.h"
@@ -64,8 +64,6 @@ static BOOL addIGTextButton(UDWORD id, UWORD y, UWORD width, const char *string,
 {
 	W_BUTINIT sButInit;
 
-	memset( &sButInit, 0, sizeof(W_BUTINIT) );
-
 	//resume
 	sButInit.formID		= INTINGAMEOP;
 	sButInit.id			= id;
@@ -77,7 +75,6 @@ static BOOL addIGTextButton(UDWORD id, UWORD y, UWORD width, const char *string,
 	sButInit.width		= width;
 	sButInit.height		= INTINGAMEOP_OP_H;
 
-	sButInit.FontID		= font_regular;
 	sButInit.pDisplay	= displayTextOption;
 	sButInit.pText		= string;
 	widgAddButton(psWScreen, &sButInit);
@@ -87,9 +84,6 @@ static BOOL addIGTextButton(UDWORD id, UWORD y, UWORD width, const char *string,
 
 static BOOL addQuitOptions(void)
 {
-	W_FORMINIT		sFormInit;
-	W_BUTINIT	sButInit;
-
 	if (widgGetFromID(psWScreen,INTINGAMEOP))
 	{
 		widgDelete(psWScreen, INTINGAMEOP);		// get rid of the old stuff.
@@ -100,7 +94,7 @@ static BOOL addQuitOptions(void)
 		widgDelete(psWScreen, INTINGAMEPOPUP);		// get rid of the old stuff.
 	}
 
-	memset(&sFormInit,0, sizeof(W_FORMINIT));
+	W_FORMINIT sFormInit;
 	// add form
 	sFormInit.formID	= 0;
 	sFormInit.id		= INTINGAMEOP;
@@ -127,10 +121,9 @@ static BOOL addQuitOptions(void)
 
 		widgAddForm(psWScreen, &sFormInit);
 
-		memset( &sButInit, 0, sizeof(W_BUTINIT) );
+		W_BUTINIT sButInit;
 
 		sButInit.formID		= INTINGAMEPOPUP;
-		sButInit.FontID		= font_regular;
 		sButInit.style		= OPALIGN;
 		sButInit.width		= 600;
 		sButInit.height		= 10;
@@ -149,14 +142,12 @@ static BOOL addQuitOptions(void)
 
 static BOOL addSlideOptions(void)
 {
-	W_FORMINIT		sFormInit;
-
 	if (widgGetFromID(psWScreen,INTINGAMEOP))
 	{
 		widgDelete(psWScreen, INTINGAMEOP);		// get rid of the old stuff.
 	}
 
-	memset(&sFormInit,0, sizeof(W_FORMINIT));
+	W_FORMINIT sFormInit;
 
 	// add form
 	sFormInit.formID	= 0;
@@ -209,10 +200,6 @@ static BOOL addSlideOptions(void)
 
 static BOOL _intAddInGameOptions(void)
 {
-//	UWORD WindowWidth;
-	W_FORMINIT		sFormInit;
-
-
 	audio_StopAll();
 
     //clear out any mission widgets - timers etc that may be on the screen
@@ -237,11 +224,7 @@ static BOOL _intAddInGameOptions(void)
 		kf_TogglePauseMode();
 	}
 
-
-	memset(&sFormInit,0, sizeof(W_FORMINIT));
-
-
-
+	W_FORMINIT sFormInit;
 	sFormInit.width		= INTINGAMEOP_W;
 
 	// add form
@@ -316,9 +299,6 @@ BOOL intAddInGameOptions(void)
 //
 void intAddInGamePopup(void)
 {
-	W_FORMINIT	sFormInit;
-	W_BUTINIT	sButInit;
-
 	//clear out any mission widgets - timers etc that may be on the screen
 	clearMissionWidgets();
 	setWidgetsStatus(true);
@@ -333,7 +313,7 @@ void intAddInGamePopup(void)
 		kf_TogglePauseMode();	// Pause the game.
 	}
 
-	memset(&sFormInit,0, sizeof(W_FORMINIT));
+	W_FORMINIT sFormInit;
 
 	sFormInit.formID	= 0;
 	sFormInit.id		= INTINGAMEPOPUP;
@@ -348,7 +328,7 @@ void intAddInGamePopup(void)
 	widgAddForm(psWScreen, &sFormInit);
 
 	// add the text "buttons" now
-	memset( &sButInit, 0, sizeof(W_BUTINIT) );
+	W_BUTINIT sButInit;
 
 	sButInit.formID		= INTINGAMEPOPUP;
 	sButInit.style		= OPALIGN;

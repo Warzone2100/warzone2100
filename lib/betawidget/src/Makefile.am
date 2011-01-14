@@ -67,7 +67,7 @@ noinst_HEADERS = \
 noinst_LTLIBRARIES = libutil.la
 libutil_la_SOURCES = \
 	../../framework/utf.cpp \
-	../../ivis_opengl/GLee.cpp
+	../../ivis_opengl/GLee.c
 
 libutil_la_CPPFLAGS = $(SDL_CFLAGS) -DLIB_COMPILE=1
 noinst_HEADERS += \

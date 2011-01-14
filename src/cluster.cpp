@@ -46,7 +46,7 @@ static UBYTE aClusterEmpty[CLUSTER_MAX];
 static UWORD aClusterUsage[CLUSTER_MAX];
 
 // whether a cluster can be seen by a player
-static UBYTE aClusterVisibility[CLUSTER_MAX];
+static PlayerMask aClusterVisibility[CLUSTER_MAX];
 
 // when a cluster was last attacked
 static UDWORD aClusterAttacked[CLUSTER_MAX];

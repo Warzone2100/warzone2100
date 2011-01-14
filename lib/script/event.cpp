@@ -879,7 +879,6 @@ BOOL eventLoadTrigger(UDWORD time, SCRIPT_CONTEXT *psContext,
 					  SDWORD type, SDWORD trigger, UDWORD event, UDWORD offset)
 {
 	ACTIVE_TRIGGER	*psNewTrig;
-	TRIGGER_DATA	*psTrigData;
 
 	ASSERT( event < psContext->psCode->numEvents,
 		"eventLoadTrigger: Event out of range" );
@@ -898,7 +897,6 @@ BOOL eventLoadTrigger(UDWORD time, SCRIPT_CONTEXT *psContext,
 	// Initialise the trigger
 	psNewTrig->psContext = psContext;
 	psContext->triggerCount += 1;
-	psTrigData = psContext->psCode->psTriggerData + trigger;
 	psNewTrig->testTime = time;
 	psNewTrig->trigger = (SWORD)trigger;
 	psNewTrig->type = (SWORD)type;

@@ -26,11 +26,6 @@
 
 #include "lib/framework/frame.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 typedef enum {
 	GAMECODE_CONTINUE,
 	GAMECODE_RESTARTGAME,
@@ -99,9 +94,5 @@ UDWORD	getNumConstructorDroids(UDWORD player);
 void incNumDroids(UDWORD player);
 void incNumCommandDroids(UDWORD player);
 void incNumConstructorDroids(UDWORD player);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_LOOP_H__

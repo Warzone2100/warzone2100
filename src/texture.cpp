@@ -24,6 +24,9 @@
  */
 
 #include <GLee.h>
+#ifdef CursorShape
+#undef CursorShape  // Random #defines are bad.
+#endif
 #include "lib/framework/frame.h"
 
 
@@ -34,10 +37,10 @@
 #include "lib/framework/file.h"
 #include "lib/framework/string_ext.h"
 
-#include "lib/ivis_common/pietypes.h"
-#include "lib/ivis_common/piestate.h"
-#include "lib/ivis_common/tex.h"
-#include "lib/ivis_common/piepalette.h"
+#include "lib/ivis_opengl/pietypes.h"
+#include "lib/ivis_opengl/piestate.h"
+#include "lib/ivis_opengl/tex.h"
+#include "lib/ivis_opengl/piepalette.h"
 #include "lib/ivis_opengl/screen.h"
 
 #include "display3ddef.h"

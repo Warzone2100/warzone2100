@@ -28,6 +28,7 @@
 #include "objects.h"
 #include "cmddroiddef.h"
 #include "cmddroid.h"
+#include "lib/netplay/netplay.h"
 #include "lib/gamelib/gtime.h"
 #include "group.h"
 #include "order.h"
@@ -98,12 +99,12 @@ void cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
 		psDroid->group = UBYTE_MAX;
 
 		// set the secondary states for the unit
-		secondarySetState(psDroid, DSO_ATTACK_RANGE, (SECONDARY_STATE)(psCommander->secondaryOrder & DSS_ARANGE_MASK));
-		secondarySetState(psDroid, DSO_REPAIR_LEVEL, (SECONDARY_STATE)(psCommander->secondaryOrder & DSS_REPLEV_MASK));
-		secondarySetState(psDroid, DSO_ATTACK_LEVEL, (SECONDARY_STATE)(psCommander->secondaryOrder & DSS_ALEV_MASK));
-		secondarySetState(psDroid, DSO_HALTTYPE, (SECONDARY_STATE)(psCommander->secondaryOrder & DSS_HALT_MASK));
+		secondarySetState(psDroid, DSO_ATTACK_RANGE, (SECONDARY_STATE)(psCommander->secondaryOrder & DSS_ARANGE_MASK), ModeImmediate);
+		secondarySetState(psDroid, DSO_REPAIR_LEVEL, (SECONDARY_STATE)(psCommander->secondaryOrder & DSS_REPLEV_MASK), ModeImmediate);
+		secondarySetState(psDroid, DSO_ATTACK_LEVEL, (SECONDARY_STATE)(psCommander->secondaryOrder & DSS_ALEV_MASK), ModeImmediate);
+		secondarySetState(psDroid, DSO_HALTTYPE, (SECONDARY_STATE)(psCommander->secondaryOrder & DSS_HALT_MASK), ModeImmediate);
 
-		orderDroidObj(psDroid, DORDER_GUARD, (BASE_OBJECT *)psCommander, ModeQueue);
+		orderDroidObj(psDroid, DORDER_GUARD, (BASE_OBJECT *)psCommander, ModeImmediate);
 	}
 }
 
@@ -220,19 +221,16 @@ unsigned int cmdGetCommanderLevel(const DROID* psDroid)
 }
 
 // Selects all droids for a given commander
-void	cmdSelectSubDroids(DROID *psDroid)
+void cmdSelectSubDroids(DROID *psDroid)
 {
-DROID	*psCurr;
+	DROID *psCurr;
 
 	for (psCurr = apsDroidLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
 	{
-		if( hasCommander(psCurr) )
+		if (hasCommander(psCurr)
+		 && psCurr->psGroup->psCommander == psDroid)
 		{
-			if(psCurr->psGroup->psCommander == psDroid)
-			{
-//				psCurr->selected = true;
-				SelectDroid(psCurr);
-			}
+			SelectDroid(psCurr);
 		}
 	}
 }

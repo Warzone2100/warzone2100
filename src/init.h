@@ -24,12 +24,7 @@
 #ifndef __INCLUDED_SRC_INIT_H__
 #define __INCLUDED_SRC_INIT_H__
 
-#include "lib/ivis_common/ivisdef.h"
-
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
+#include "lib/ivis_opengl/ivisdef.h"
 
 // the size of the file loading buffer
 // FIXME Totally inappropriate place for this.
@@ -68,9 +63,5 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force );
 BOOL buildMapList(void);
 
 extern IMAGEFILE	*FrontImages;
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_INIT_H__

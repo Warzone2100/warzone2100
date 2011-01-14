@@ -88,6 +88,7 @@ struct W_TABFORM : public W_FORM
 
 	UWORD		numMajor;				// The number of major tabs
 	SWORD		TabMultiplier;				//used to tell system we got lots of tabs to display
+	unsigned        maxTabsShown;                   ///< Maximum number of tabs shown at once.
 	UWORD		numStats;				//# of 'stats' (items) in list
 	UWORD		numButtons;				//# of buttons per form
 	W_MAJORTAB	asMajor[WFORM_MAXMAJOR];	// The major tab information

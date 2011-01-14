@@ -28,7 +28,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
 #include "lib/framework/strres.h"
-#include "lib/ivis_common/piestate.h"
+#include "lib/ivis_opengl/piestate.h"
 #include "lib/framework/fixedpoint.h"
 #include "lib/framework/wzapp_c.h"
 
@@ -476,8 +476,6 @@ void processInput(void)
 	BOOL mOverRadar = false;
 	BOOL mOverConstruction = false;
 
-	int WheelZoomIterator;
-
 	if (InGameOpUp || isInGamePopupUp)
 	{
 		dragBox3D.status = DRAG_RELEASED;	// disengage the dragging since it stops menu input
@@ -521,8 +519,7 @@ void processInput(void)
 		}
 		else
 		{
-			for (WheelZoomIterator = 0; WheelZoomIterator < 10; WheelZoomIterator++)
-				kf_ZoomIn();
+			kf_ZoomInStep();
 		}
 	}
 
@@ -544,8 +541,7 @@ void processInput(void)
 		}
 		else
 		{
-			for (WheelZoomIterator = 0; WheelZoomIterator < 10; WheelZoomIterator++)
-				kf_ZoomOut();
+			kf_ZoomOutStep();
 		}
 	}
 
@@ -1596,7 +1592,6 @@ void dealWithDroidSelect(DROID *psDroid, BOOL bDragBox)
 {
 	DROID	*psD;
 	BOOL	bGotGroup;
-	SDWORD	groupNumber = 0;
 
 	/*	Toggle selection on and off - allows you drag around a big
 		area of droids and then exclude certain individuals */
@@ -1611,7 +1606,6 @@ void dealWithDroidSelect(DROID *psDroid, BOOL bDragBox)
 			if(psD->selected && (psD->group!=UBYTE_MAX))
 			{
 				bGotGroup = true;
-				groupNumber = psD->group;
 			}
 		}
 		if (keyDown(KEY_LALT) || keyDown(KEY_RALT))
@@ -2290,7 +2284,7 @@ static void dealWithLMBDClick(void)
 		{
 			/* We clicked on structure */
 			psStructure = (STRUCTURE *) psClickedOn;
-			if(psStructure->player == selectedPlayer)
+			if (psStructure->player == selectedPlayer && !structureIsBlueprint(psStructure))
 			{
 				if (StructIsFactory(psStructure))
 				{
@@ -2314,14 +2308,10 @@ static void dealWithLMBDClick(void)
 when the mouse button was pressed */
 static OBJECT_POSITION *	checkMouseLoc(void)
 {
-	OBJECT_POSITION		*psReturn;
 	FLAG_POSITION		*psPoint;
 	//PROXIMITY_DISPLAY	*psProxDisp;
 	UDWORD				i;
 	UDWORD				dispX,dispY,dispR;
-
-	// We haven't found anything yet
-	psReturn = NULL;
 
 	// First have a look through the DeliveryPoint lists
 	for (i=0; i<MAX_PLAYERS; i++)
@@ -2337,9 +2327,7 @@ static OBJECT_POSITION *	checkMouseLoc(void)
 				if (mouseInBox(dispX-dispR, dispY-dispR, dispX+dispR, dispY+dispR))
 				{
 					// We HAVE clicked on DP!
-					psReturn = (OBJECT_POSITION *)psPoint;
-					//There's no point in checking other object types
-					return(psReturn);
+					return psPoint;
 				}
 			}
 		}
@@ -2357,9 +2345,7 @@ static OBJECT_POSITION *	checkMouseLoc(void)
 			if (mouseInBox(dispX-dispR, dispY-dispR, dispX+dispR, dispY+dispR))
 			{
 				// We HAVE clicked on Proximity Message!
-				psReturn = (OBJECT_POSITION *)psProxDisp;
-				//There's no point in checking other object types
-				return(psReturn);
+				return psProxDisp;
 			}
 		}
 	}*/
@@ -2519,7 +2505,7 @@ static void dealWithRMB( void )
 					psStructure->selected = false;
 					intObjectSelected(NULL);
 				}
-				else
+				else if (!structureIsBlueprint(psStructure))
 				{
 // We don't actually wan't to select structures, just inform the interface weve clicked on it,
 // might wan't to do this on PC as well as it fixes the problem with the interface locking multiple

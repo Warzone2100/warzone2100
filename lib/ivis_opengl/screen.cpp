@@ -29,14 +29,14 @@
 #include "lib/exceptionhandler/dumpinfo.h"
 #include <physfs.h>
 #include <png.h>
-#include "lib/ivis_common/png_util.h"
-#include "lib/ivis_common/tex.h"
+#include "lib/ivis_opengl/png_util.h"
+#include "lib/ivis_opengl/tex.h"
 
 #include "lib/framework/frameint.h"
-#include "lib/ivis_common/textdraw.h"
-#include "lib/ivis_common/piestate.h"
-#include "lib/ivis_common/pieblitfunc.h"
-#include "lib/ivis_common/pieclip.h"
+#include "lib/ivis_opengl/textdraw.h"
+#include "lib/ivis_opengl/piestate.h"
+#include "lib/ivis_opengl/pieblitfunc.h"
+#include "lib/ivis_opengl/pieclip.h"
 
 #include "screen.h"
 #include "src/console.h"
@@ -160,8 +160,7 @@ bool screenInitialise()
 		glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &glMaxTIUs);
 		debug(LOG_3D, "  * Total number of Texture Image Units (TIUs) supported is %d.", (int) glMaxTIUs);
 
-		if (!pie_LoadShaders())
-			debug(LOG_INFO, "Can't use shaders, switching back to fixed pipeline.");;
+		pie_LoadShaders();
 	}
 	else
 	{

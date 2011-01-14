@@ -33,8 +33,8 @@
 #include "editbox.h"
 #include "form.h"
 // FIXME Direct iVis implementation include!
-#include "lib/ivis_common/pieblitfunc.h"
-#include "lib/ivis_common/textdraw.h"
+#include "lib/ivis_opengl/pieblitfunc.h"
+#include "lib/ivis_opengl/textdraw.h"
 
 
 /* Pixel gap between edge of edit box and text */
@@ -53,6 +53,13 @@
 /* Number of characters to jump the edit box text when moving the cursor */
 #define WEDB_CHARJUMP		6
 
+
+W_EDBINIT::W_EDBINIT()
+	: pText(NULL)
+	, FontID(font_regular)
+	, pBoxDisplay(NULL)
+	, pFontDisplay(NULL)
+{}
 
 W_EDITBOX::W_EDITBOX(W_EDBINIT const *init)
 	: WIDGET(init, WIDG_EDITBOX)
