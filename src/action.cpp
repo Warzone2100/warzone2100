@@ -831,12 +831,9 @@ void actionUpdateDroid(DROID *psDroid)
 	PROPULSION_STATS	*psPropStats;
 	BOOL				(*actionUpdateFunc)(DROID *psDroid) = NULL;
 	signed int i;
-	unsigned int j;
 	//this is a bit field
 	bool nonNullWeapon[DROID_MAXWEAPS] = { false };
 	BASE_OBJECT			*psTargets[DROID_MAXWEAPS];
-	bool hasVisibleTarget = false;
-	bool targetVisibile[DROID_MAXWEAPS] = { false };
 	bool bHasTarget;
 
 	CHECK_DROID(psDroid);
@@ -995,49 +992,9 @@ void actionUpdateDroid(DROID *psDroid)
 		break;
 
 	case DACTION_MOVE:
-		// moving to a location
-		if (DROID_STOPPED(psDroid))
-		{
-			// Got to destination
-			psDroid->action = DACTION_NONE;
-
-			/* notify scripts we have reached the destination
-			*  also triggers when patrolling and reached a waypoint
-			*/
-			psScrCBOrder = psDroid->order;
-			psScrCBOrderDroid = psDroid;
-			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DROID_REACH_LOCATION);
-			psScrCBOrderDroid = NULL;
-			psScrCBOrder = DORDER_NONE;
-		}
-
-		//added multiple weapon check
-		else if (psDroid->numWeaps > 0)
-		{
-			for(i = 0;i < psDroid->numWeaps;i++)
-			{
-				if (nonNullWeapon[i])
-				{
-					BASE_OBJECT *psTemp = NULL;
-
-					//I moved psWeapStats flag update there
-					WEAPON_STATS* const psWeapStats = &asWeaponStats[psDroid->asWeaps[i].nStat];
-					if (!isVtolDroid(psDroid)
-					 && psDroid->asWeaps[i].nStat > 0
-					 && psWeapStats->rotate
-					 && psWeapStats->fireOnMove != FOM_NO
-					 && aiBestNearestTarget(psDroid, &psTemp, i, NULL) >= 0)
-					{
-						if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS)
-						{
-							psDroid->action = DACTION_MOVEFIRE;
-							setDroidActionTarget(psDroid, psTemp, 0);
-						}
-					}
-				}
-			}
-		}
-		break;
+			// moving to a location
+			actionMove(psDroid, nonNullWeapon);
+			break;
 	case DACTION_RETURNTOPOS:
 	case DACTION_FIRESUPPORT_RETREAT:
 		if (DROID_STOPPED(psDroid))
@@ -1051,144 +1008,8 @@ void actionUpdateDroid(DROID *psDroid)
 		actionUpdateTransporter( psDroid );
 		break;
 	case DACTION_MOVEFIRE:
-		//check if vtol that its armed
-		if (vtolEmpty(psDroid))
-		{
-			moveToRearm(psDroid);
-		}
-
-		bHasTarget = false;
-		//loop through weapons and look for target for each weapon
-		for (i = 0; i < psDroid->numWeaps; ++i)
-		{
-			if (psDroid->psActionTarget[i] != NULL && aiObjectIsProbablyDoomed(psDroid->psActionTarget[i]))
-			{
-				setDroidActionTarget(psDroid, NULL, i);  // Target not worth shooting at anymore.
-			}
-
-			if (psDroid->psActionTarget[i] == NULL)
-			{
-				BASE_OBJECT *psTemp;
-
-				if (aiBestNearestTarget(psDroid, &psTemp, i, NULL) >= 0)
-				{
-					bHasTarget = true;
-					setDroidActionTarget(psDroid, psTemp, i);
-				}
-			}
-
-			if (psDroid->psActionTarget[i]
-			 && visibleObject(psDroid, psDroid->psActionTarget[i], false))
-			{
-				hasVisibleTarget = true;
-				targetVisibile[i] = true;
-			}
-		}
-
-		for (j = 0;j < psDroid->numWeaps;j++)
-		{
-			//vtResult uses psActionTarget[0] for now since it's the first target
-			if (psDroid->psActionTarget[j] != NULL &&
-				validTarget(psDroid, psDroid->psActionTarget[j], j))
-			{
-				// firing on something while moving
-				if (DROID_STOPPED(psDroid))
-				{
-					// Got to desitination
-					psDroid->action = DACTION_NONE;
-					break;
-				}
-				else if (psDroid->psActionTarget[j] == NULL
-				      || !validTarget(psDroid, psDroid->psActionTarget[j], j)
-				      || (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) != DSS_ALEV_ALWAYS))
-				{
-					if (j == (psDroid->numWeaps - 1) && !bHasTarget)
-					{
-						// Target lost
-						psDroid->action = DACTION_MOVE;
-					}
-					else
-					{
-						continue;
-					}
-					//if Vtol - return to rearm pad
-					/*if (isVtolDroid(psDroid))
-					{
-						moveToRearm(psDroid);
-					}*/
-				}
-				//check the target hasn't become one the same player ID - eg Electronic Warfare
-				else if	(electronicDroid(psDroid) &&
-						(psDroid->player == psDroid->psActionTarget[j]->player))
-				{
-					setDroidActionTarget(psDroid, NULL, i);
-					psDroid->action = DACTION_NONE;
-				}
-				else
-				{
-					if (!hasVisibleTarget
-					 && !bHasTarget
-					 && j == (psDroid->numWeaps - 1))
-					{
-						// lost the target
-						psDroid->action = DACTION_MOVE;
-						for (i = 0; i < psDroid->numWeaps;i++)
-						{
-							setDroidActionTarget(psDroid, NULL, i);
-						}
-					}
-
-					if (targetVisibile[j])
-					{
-						bHasTarget = true;
-						//to fix a AA-weapon attack ground unit exploit
-						if (nonNullWeapon[j])
-						{
-							BASE_OBJECT* psActionTarget = psDroid->psActionTarget[j];
-
-							if (!psActionTarget)
-							{
-								if (targetVisibile[0])
-								{
-									psActionTarget = psDroid->psActionTarget[0];
-								}
-							}
-
-							if (psActionTarget && validTarget(psDroid, psActionTarget, j)
-							 && actionTargetTurret(psDroid, psActionTarget, &psDroid->asWeaps[j]))
-							{
-								// In range - fire !!!
-								combFire(&psDroid->asWeaps[j], psDroid, psActionTarget, j);
-							}
-						}
-					}
-				}
-			}
-		}
-
-		/* Extra bit of paranoia, in case none of the weapons have a target */
-		bHasTarget = false;
-		for (i = 0; i < psDroid->numWeaps; i++)
-		{
-			if (psDroid->psActionTarget[i] != NULL)
-			{
-				bHasTarget = true;
-				break;
-			}
-		}
-		if (!bHasTarget)
-		{
-			psDroid->action = DACTION_MOVE;
-		}
-
-		//check its a VTOL unit since adding Transporter's into multiPlayer
-		/* check vtol attack runs */
-		if (isVtolDroid(psDroid))
-		{
-			actionUpdateVtolAttack( psDroid );
-		}
-
-		break;
+			actionMoveFire(psDroid, nonNullWeapon, &bHasTarget);
+			break;
 
 	case DACTION_ATTACK:
 		ASSERT_OR_RETURN( , psDroid->psActionTarget[0] != NULL, "target is NULL while attacking");
@@ -2982,3 +2803,195 @@ bool actionVTOLLandingPos(const DROID* psDroid, UDWORD* px, UDWORD* py)
 
 	return foundTile;
 }
+
+void actionMove(DROID *psDroid, bool *nonNullWeapon)
+{
+	int i;
+	if (DROID_STOPPED(psDroid))
+	{
+		// Got to destination
+		psDroid->action = DACTION_NONE;
+		
+		/* notify scripts we have reached the destination
+		 *  also triggers when patrolling and reached a waypoint
+		 */
+		psScrCBOrder = psDroid->order;
+		psScrCBOrderDroid = psDroid;
+		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DROID_REACH_LOCATION);
+		psScrCBOrderDroid = NULL;
+		psScrCBOrder = DORDER_NONE;
+	}
+	
+	//added multiple weapon check
+	else if (psDroid->numWeaps > 0)
+	{
+		for(i = 0;i < psDroid->numWeaps;i++)
+		{
+			if (nonNullWeapon[i])
+			{
+				BASE_OBJECT *psTemp = NULL;
+				
+				//I moved psWeapStats flag update there
+				WEAPON_STATS* const psWeapStats = &asWeaponStats[psDroid->asWeaps[i].nStat];
+				if (!isVtolDroid(psDroid)
+						&& psDroid->asWeaps[i].nStat > 0
+						&& psWeapStats->rotate
+						&& psWeapStats->fireOnMove != FOM_NO
+						&& aiBestNearestTarget(psDroid, &psTemp, i, NULL) >= 0)
+				{
+					if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS)
+					{
+						psDroid->action = DACTION_MOVEFIRE;
+						setDroidActionTarget(psDroid, psTemp, 0);
+					}
+				}
+			}
+		}
+	}
+}
+
+void actionMoveFire(DROID *psDroid, bool *nonNullWeapon, bool *bHasTarget)
+{
+	signed int i;
+	unsigned int j;
+	bool hasVisibleTarget = false;
+	bool targetVisibile[DROID_MAXWEAPS] = { false };
+	
+	//check if vtol that its armed
+	if (vtolEmpty(psDroid))
+	{
+		moveToRearm(psDroid);
+	}
+	
+	*bHasTarget = false;
+	//loop through weapons and look for target for each weapon
+	for (i = 0; i < psDroid->numWeaps; ++i)
+	{
+		if (psDroid->psActionTarget[i] != NULL && aiObjectIsProbablyDoomed(psDroid->psActionTarget[i]))
+		{
+			setDroidActionTarget(psDroid, NULL, i);  // Target not worth shooting at anymore.
+		}
+		
+		if (psDroid->psActionTarget[i] == NULL)
+		{
+			BASE_OBJECT *psTemp;
+			
+			if (aiBestNearestTarget(psDroid, &psTemp, i, NULL) >= 0)
+			{
+				*bHasTarget = true;
+				setDroidActionTarget(psDroid, psTemp, i);
+			}
+		}
+		
+		if (psDroid->psActionTarget[i]
+				&& visibleObject(psDroid, psDroid->psActionTarget[i], false))
+		{
+			hasVisibleTarget = true;
+			targetVisibile[i] = true;
+		}
+	}
+	
+	for (j = 0;j < psDroid->numWeaps;j++)
+	{
+		//vtResult uses psActionTarget[0] for now since it's the first target
+		if (psDroid->psActionTarget[j] != NULL &&
+				validTarget(psDroid, psDroid->psActionTarget[j], j))
+		{
+			// firing on something while moving
+			if (DROID_STOPPED(psDroid))
+			{
+				// Got to desitination
+				psDroid->action = DACTION_NONE;
+				break;
+			}
+			else if (psDroid->psActionTarget[j] == NULL
+							 || !validTarget(psDroid, psDroid->psActionTarget[j], j)
+							 || (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) != DSS_ALEV_ALWAYS))
+			{
+				if (j == (psDroid->numWeaps - 1) && !(*bHasTarget))
+				{
+					// Target lost
+					psDroid->action = DACTION_MOVE;
+				}
+				else
+				{
+					continue;
+				}
+				//if Vtol - return to rearm pad
+				/*if (isVtolDroid(psDroid))
+				 {
+				 moveToRearm(psDroid);
+				 }*/
+			}
+			//check the target hasn't become one the same player ID - eg Electronic Warfare
+			else if	(electronicDroid(psDroid) &&
+							 (psDroid->player == psDroid->psActionTarget[j]->player))
+			{
+				setDroidActionTarget(psDroid, NULL, i);
+				psDroid->action = DACTION_NONE;
+			}
+			else
+			{
+				if (!hasVisibleTarget
+						&& !(*bHasTarget)
+						&& j == (psDroid->numWeaps - 1))
+				{
+					// lost the target
+					psDroid->action = DACTION_MOVE;
+					for (i = 0; i < psDroid->numWeaps;i++)
+					{
+						setDroidActionTarget(psDroid, NULL, i);
+					}
+				}
+				
+				if (targetVisibile[j])
+				{
+					*bHasTarget = true;
+					//to fix a AA-weapon attack ground unit exploit
+					if (nonNullWeapon[j])
+					{
+						BASE_OBJECT* psActionTarget = psDroid->psActionTarget[j];
+						
+						if (!psActionTarget)
+						{
+							if (targetVisibile[0])
+							{
+								psActionTarget = psDroid->psActionTarget[0];
+							}
+						}
+						
+						if (psActionTarget && validTarget(psDroid, psActionTarget, j)
+								&& actionTargetTurret(psDroid, psActionTarget, &psDroid->asWeaps[j]))
+						{
+							// In range - fire !!!
+							combFire(&psDroid->asWeaps[j], psDroid, psActionTarget, j);
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	/* Extra bit of paranoia, in case none of the weapons have a target */
+	*bHasTarget = false;
+	for (i = 0; i < psDroid->numWeaps; i++)
+	{
+		if (psDroid->psActionTarget[i] != NULL)
+		{
+			*bHasTarget = true;
+			break;
+		}
+	}
+	if (!(*bHasTarget))
+	{
+		psDroid->action = DACTION_MOVE;
+	}
+	
+	//check its a VTOL unit since adding Transporter's into multiPlayer
+	/* check vtol attack runs */
+	if (isVtolDroid(psDroid))
+	{
+		actionUpdateVtolAttack( psDroid );
+	}
+	
+}	

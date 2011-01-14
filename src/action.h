@@ -95,6 +95,12 @@ void moveToRearm(DROID *psDroid);
 /** Choose a landing position for a VTOL when it goes to rearm. */
 bool actionVTOLLandingPos(const DROID* psDroid, UDWORD* px, UDWORD* py);
 
+// Performs the DACTION_MOVE case in actionUpdateDroid funtion
+void actionMove(DROID *psDroid, bool *nonNullWeapon);
+
+// Performs the DACTION_MOVEFIRE case in actionUpdateDroid funtion
+void actionMoveFire(DROID *psDroid, bool *nonNullWeapon, bool *bHasTarget);
+
 /** How many frames to skip before looking for a better target. */
 #define TARGET_UPD_SKIP_FRAMES 1000
 
