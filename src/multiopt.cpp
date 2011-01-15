@@ -267,7 +267,6 @@ BOOL hostCampaign(char *sGame, char *sPlayer)
 	{
 		if (NetPlay.bComms)
 		{
-			NetPlay.players[i].ai = -2;     // set to open as default
 			game.skDiff[i] = 0;     	// disable AI
 		}
 		setPlayerName(i, ""); //Clear custom names (use default ones instead)

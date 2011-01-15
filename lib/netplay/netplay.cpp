@@ -286,7 +286,14 @@ void NET_InitPlayer(int i, bool initPosition)
 	}
 	NetPlay.players[i].ready = false;
 	NetPlay.players[i].needFile = false;
-	NetPlay.players[i].ai = 0;			// default
+	if (NetPlay.bComms)
+	{
+		NetPlay.players[i].ai = AI_OPEN;
+	}
+	else
+	{
+		NetPlay.players[i].ai = 0;			// default AI
+	}
 	NetPlay.players[i].difficulty = 1;		// normal
 	NetPlay.players[i].wzFile.isCancelled = false;
 	NetPlay.players[i].wzFile.isSending = false;
