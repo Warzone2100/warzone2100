@@ -42,7 +42,7 @@
 #define ORIGIN_RADAR_DETECTOR		8	///< Came from Radar Detector sensor
 
 /* Fire a weapon at something added int weapon_slot*/
-void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, int weapon_slot);
+bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, int weapon_slot);
 
 /*checks through the target players list of structures and droids to see
 if any support a counter battery sensor*/

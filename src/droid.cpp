@@ -2770,6 +2770,52 @@ void	setSelectedCommander(UDWORD commander)
 }
 
 /**
+ * calculate muzzle base location in 3d world
+ */
+bool calcDroidMuzzleBaseLocation(DROID *psDroid, Vector3i *muzzle, int weapon_slot)
+{
+	iIMDShape *psBodyImd = BODY_IMD(psDroid, psDroid->player);
+
+	CHECK_DROID(psDroid);
+
+	if (psBodyImd && psBodyImd->nconnectors)
+	{
+		Vector3i barrel(0, 0, 0);
+		iIMDShape *psWeaponImd = 0, *psMountImd = 0;
+
+		if (psDroid->asWeaps[weapon_slot].nStat)
+		{
+			psMountImd = WEAPON_MOUNT_IMD(psDroid, weapon_slot);
+			psWeaponImd = WEAPON_IMD(psDroid, weapon_slot);
+		}
+
+		pie_MatBegin();
+
+		pie_TRANSLATE(psDroid->pos.x, -psDroid->pos.z, psDroid->pos.y);
+
+		//matrix = the center of droid
+		pie_MatRotY(psDroid->rot.direction);
+		pie_MatRotX(psDroid->rot.pitch);
+		pie_MatRotZ(-psDroid->rot.roll);
+		pie_TRANSLATE(psBodyImd->connectors[weapon_slot].x, -psBodyImd->connectors[weapon_slot].z,
+					 -psBodyImd->connectors[weapon_slot].y);//note y and z flipped
+
+		pie_RotateTranslate3i(&barrel, muzzle);
+		muzzle->z = -muzzle->z;
+
+		pie_MatEnd();
+	}
+	else
+	{
+		*muzzle = psDroid->pos + Vector3i(0, 0, psDroid->sDisplay.imd->max.y);
+	}
+
+	CHECK_DROID(psDroid);
+
+	return true;
+}
+
+/**
  * calculate muzzle tip location in 3d world
  */
 bool calcDroidMuzzleLocation(DROID *psDroid, Vector3i *muzzle, int weapon_slot)

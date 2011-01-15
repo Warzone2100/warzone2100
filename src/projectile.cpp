@@ -102,7 +102,7 @@ struct ObjectShape
 };
 
 static ObjectShape establishTargetShape(BASE_OBJECT *psTarget);
-static UDWORD	establishTargetHeight( BASE_OBJECT *psTarget );
+//static UDWORD	establishTargetHeight( BASE_OBJECT *psTarget );
 static void	proj_ImpactFunc( PROJECTILE *psObj );
 static void	proj_PostImpactFunc( PROJECTILE *psObj );
 static void	proj_checkBurnDamage( BASE_OBJECT *apsList, PROJECTILE *psProj);
@@ -329,7 +329,7 @@ static int32_t randomVariation(int32_t val)
 	return (int64_t)val*(95000 + gameRand(10001))/100000;
 }
 
-int32_t projCalcIndirectVelocities(const int32_t dx, const int32_t dz, int32_t v, int32_t *vx, int32_t *vz)
+int32_t projCalcIndirectVelocities(const int32_t dx, const int32_t dz, int32_t v, int32_t *vx, int32_t *vz, int min_angle)
 {
 	// Find values of vx and vz, which solve the equations:
 	// dz = -1/2 g t² + vz t
@@ -364,10 +364,26 @@ int32_t projCalcIndirectVelocities(const int32_t dx, const int32_t dz, int32_t v
 		*vz = 0;                                   // Still in units/sec. (Wouldn't really matter if it was pigeons/inch, since it's 0 anyway.)
 	}
 
+	/* CorvusCorax: Check against min_angle */
+	if (iAtan2(*vz, *vx)<min_angle) {
+		/* set pitch to pass terrain */
+		// tan(min_angle)=mytan/65536
+		int64_t mytan=((int64_t)iSin(min_angle)*65536)/iCos(min_angle);
+		t = MAX(1, i64Sqrt(2*((int64_t)dx*mytan - dz*65536)*(int64_t)GAME_TICKS_PER_SEC*GAME_TICKS_PER_SEC/(int64_t)(g*65536)));  // Still in ticks.
+		*vx = dx*GAME_TICKS_PER_SEC/t;
+		// mytan=65536*vz/vx
+		*vz = (mytan*(*vx))/65536;
+	}
+
 	return t;
 }
 
 bool proj_SendProjectile(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int player, Vector3i target, BASE_OBJECT *psTarget, BOOL bVisible, int weapon_slot)
+{
+	return proj_SendProjectileAngled(psWeap, psAttacker, player, target, psTarget, bVisible, weapon_slot, 0);
+}
+
+bool proj_SendProjectileAngled(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int player, Vector3i target, BASE_OBJECT *psTarget, BOOL bVisible, int weapon_slot, int min_angle)
 {
 	PROJECTILE *            psProj = new PROJECTILE(ProjectileTrackerID |(gameTime2 >>4), player);
 	WEAPON_STATS *psStats = &asWeaponStats[psWeap->nStat];
@@ -443,12 +459,17 @@ bool proj_SendProjectile(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int player, 
 
 	if (psTarget)
 	{
+		int maxHeight = establishTargetHeight(psTarget);
+		int minHeight = MAX(0,MIN(maxHeight,maxHeight +  2 * LINE_OF_FIRE_MINIMUM - areaOfFire(psAttacker, psTarget, weapon_slot, true)));
 		scoreUpdateVar(WD_SHOTS_ON_TARGET);
 
-		psProj->dst.z = psTarget->pos.z + gameRand(establishTargetHeight(psTarget));
+		psProj->dst.z = psTarget->pos.z + minHeight + (maxHeight>minHeight?gameRand(maxHeight-minHeight):0);
+		/* store visible part (LOCK ON this part for homing :) */
+		psProj->partVisible = (maxHeight-minHeight);
 	}
 	else
 	{
+		psProj->dst.z = target.z + LINE_OF_FIRE_MINIMUM;
 		scoreUpdateVar(WD_SHOTS_OFF_TARGET);
 	}
 
@@ -471,7 +492,7 @@ bool proj_SendProjectile(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int player, 
 	else
 	{
 		/* indirect */
-		projCalcIndirectVelocities(dist, deltaPos.z, psStats->flightSpeed, &psProj->vXY, &psProj->vZ);
+		projCalcIndirectVelocities(dist, deltaPos.z, psStats->flightSpeed, &psProj->vXY, &psProj->vZ, min_angle);
 		psProj->rot.pitch = iAtan2(psProj->vZ, psProj->vXY);
 		psProj->state = PROJ_INFLIGHTINDIRECT;
 	}
@@ -709,6 +730,8 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 		move.x = psProj->psDest->pos.x - psProj->src.x;
 		move.y = psProj->psDest->pos.y - psProj->src.y;
 		move.z = psProj->psDest->pos.z + establishTargetHeight(psProj->psDest)/2 - psProj->src.z;
+		/* Home at the center of the part that was visible when firing */
+		move.z = psProj->psDest->pos.z + (establishTargetHeight(psProj->psDest) - psProj->partVisible/2) - psProj->src.z;
 	}
 	else
 	{
@@ -1777,7 +1800,7 @@ void	objectShimmy(BASE_OBJECT *psObj)
 #define BULLET_FLIGHT_HEIGHT 16
 
 
-static UDWORD	establishTargetHeight(BASE_OBJECT *psTarget)
+UDWORD	establishTargetHeight(BASE_OBJECT *psTarget)
 {
 	if (psTarget == NULL)
 	{
@@ -1848,6 +1871,7 @@ static UDWORD	establishTargetHeight(BASE_OBJECT *psTarget)
 					return height;
 			}
 
+			// TODO: check the /2 - does this really make sense? why + ?
 			utilityHeight = (yMax + yMin)/2;
 
 			return height + utilityHeight;
@@ -1855,11 +1879,11 @@ static UDWORD	establishTargetHeight(BASE_OBJECT *psTarget)
 		case OBJ_STRUCTURE:
 		{
 			STRUCTURE_STATS * psStructureStats = ((STRUCTURE *)psTarget)->pStructureType;
-			return (psStructureStats->pIMD->max.y + psStructureStats->pIMD->min.y) / 2;
+			return (psStructureStats->pIMD->max.y + psStructureStats->pIMD->min.y);
 		}
 		case OBJ_FEATURE:
 			// Just use imd ymax+ymin
-			return (psTarget->sDisplay.imd->max.y + psTarget->sDisplay.imd->min.y) / 2;
+			return (psTarget->sDisplay.imd->max.y + psTarget->sDisplay.imd->min.y);
 		case OBJ_PROJECTILE:
 			return BULLET_FLIGHT_HEIGHT;
 		default:

@@ -24,6 +24,8 @@
 #include "objectdef.h"
 #include "raycast.h"
 
+#define LINE_OF_FIRE_MINIMUM 5
+
 // initialise the visibility stuff
 extern BOOL visInitialise(void);
 
@@ -40,7 +42,13 @@ extern void revealAll(UBYTE player);
 extern int visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool wallsBlock);
 
 /** Can shooter hit target with direct fire weapon? */
-bool lineOfFire(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool wallsBlock);
+bool lineOfFire(const SIMPLE_OBJECT* psViewer, const BASE_OBJECT* psTarget, int weapon_slot, bool wallsBlock);
+
+/** How much of target can the player hit with direct fire weapon? */ 
+int areaOfFire(const SIMPLE_OBJECT* psViewer, const BASE_OBJECT* psTarget, int weapon_slot, bool wallsBlock);
+
+/** How much of target can the player hit with direct fire weapon? */
+int arcOfFire(const SIMPLE_OBJECT* psViewer, const BASE_OBJECT* psTarget, int weapon_slot, bool wallsBlock);
 
 // Find the wall that is blocking LOS to a target (if any)
 extern STRUCTURE* visGetBlockingWall(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget);
