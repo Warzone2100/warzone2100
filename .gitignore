@@ -76,7 +76,6 @@ win32/release/*
 *.lex.[ch]
 *.tab.[ch]
 /src/autorevision.h
-/src/force-linker.cpp
 /tests/maplist.txt
 
 # Generated executables:
@@ -188,6 +187,7 @@ macosx/configs/codeident
 /macosx/prebuilt/
 /build
 /build_*/
+!/build_tools/
 /2.3
 /trunk
 /newnet

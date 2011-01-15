@@ -21,11 +21,6 @@
 #ifndef __INCLUDED_SRC_DISPLAY3DDEF_H__
 #define __INCLUDED_SRC_DISPLAY3DDEF_H__
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 #define TILE_WIDTH 128
 #define TILE_HEIGHT 128
 #define TILE_SIZE (TILE_WIDTH*TILE_HEIGHT)
@@ -44,9 +39,5 @@ extern "C"
 #define SKY_MULT	1
 #define SKY_SHIMMY_BASE	((DEG(1)*SKY_MULT)/2)
 #define SKY_SHIMMY (SKY_SHIMMY_BASE - (rand()%(2*SKY_SHIMMY_BASE)))
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_DISPLAY3DDEF_H__

@@ -22,11 +22,6 @@
 
 #include "intfac.h" // Interface image id's.
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 #define FILLRED 16
 #define FILLGREEN 16
 #define FILLBLUE 128
@@ -59,9 +54,5 @@ BOOL imageInitBitmaps(void);
 
 /** Draws a transparent window. */
 void RenderWindowFrame(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD Height);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif

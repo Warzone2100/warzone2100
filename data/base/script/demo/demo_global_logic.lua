@@ -28,7 +28,6 @@ function startup()
 	-- centre on P0 base
 	centreViewPos(3392, 10944)
 	
-	randomiseSeed()
 	playnum = 0
 	while playnum < 8 do
 		enableStructure(command, playnum)
@@ -171,7 +170,6 @@ end
 ---------- stubs ----------
 
 if setEventTrigger == nil then setEventTrigger = function() print("stub: setEventTrigger"); return 0 end end
-if randomiseSeed == nil then randomiseSeed = function() print("stub: randomiseSeed"); return 0 end end
 if completeResearch == nil then completeResearch = function() print("stub: completeResearch"); return 0 end end
 if random == nil then random = function() print("stub: random"); return 0 end end
 if enableResearch == nil then enableResearch = function() print("stub: enableResearch"); return 0 end end

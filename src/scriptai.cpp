@@ -346,7 +346,7 @@ static int scrOrderGroupLoc(lua_State *L)
 
 	debug(LOG_NEVER, "group %p (%u) order %d (%d,%d)",
 		psGroup, grpNumMembers(psGroup), order, x,y);
-	orderGroupLoc(psGroup, order, (UDWORD)x,(UDWORD)y);
+	orderGroup(psGroup, order, (UDWORD)x,(UDWORD)y);
 
 	return 0;
 }
@@ -373,7 +373,7 @@ static int scrOrderGroupObj(lua_State *L)
 	debug(LOG_NEVER, "group %p (%u) order %d,  obj type %d player %d id %d",
 		psGroup, grpNumMembers(psGroup), order, psObj->type, psObj->player, psObj->id);
 
-	orderGroupObj(psGroup, order, psObj);
+	orderGroup(psGroup, order, psObj);
 
 	return 0;
 }
@@ -462,7 +462,7 @@ static int scrOrderDroidStatsLoc(lua_State *L)
 	int x = luaL_checkint(L, 4);
 	int y = luaL_checkint(L, 5);
 
-	psStats = (BASE_STATS *)(asStructureStats + statIndex);
+	psStats = (asStructureStats + statIndex);
 
 	ASSERT( psStats != NULL,
 		"scrOrderUnitStatsLoc: Invalid object pointer" );
@@ -1028,14 +1028,14 @@ static BASE_OBJECT *scrTargetInArea(SDWORD tarPlayer, SDWORD visPlayer, SDWORD t
 		targetPriority = (TARGET_PREF)scrStructTargetPriority;
 		prefer = scrStructPref;
 		ignore = scrStructIgnore;
-		psCurr = (BASE_OBJECT *)apsStructLists[tarPlayer];
+		psCurr = apsStructLists[tarPlayer];
 		break;
 	case SCR_TAR_DROID:
 		getTargetMask = (TARGET_MASK)scrDroidTargetMask;
 		targetPriority = (TARGET_PREF)scrDroidTargetPriority;
 		prefer = scrDroidPref;
 		ignore = scrDroidIgnore;
-		psCurr = (BASE_OBJECT *)apsDroidLists[tarPlayer];
+		psCurr = apsDroidLists[tarPlayer];
 		break;
 	default:
 		ASSERT( false, "scrTargetInArea: invalid target type" );
@@ -1331,8 +1331,7 @@ static int scrSkLocateEnemy(lua_State *L)
 			|| psStruct->pStructureType->type == REF_CYBORG_FACTORY
 			|| psStruct->pStructureType->type == REF_VTOL_FACTORY
 			);
-		psStruct=psStruct->psNext);
-
+		psStruct = psStruct->psNext) {}
 
 	// set the x and y accordingly..
 	if(psStruct)
@@ -1548,7 +1547,7 @@ static int defenseLocation(lua_State *L, BOOL noNarrowGateways)
 {
 	UDWORD		x,y,gX,gY,dist,nearestSoFar,count;
 	GATEWAY		*psGate,*psChosenGate;
-	BASE_STATS	*psStats,*psWStats;
+	BASE_STATS	*psWStats;
 	UDWORD		x1,x2,x3,x4,y1,y2,y3,y4;
 	BOOL		noWater;
 	UDWORD      minCount;
@@ -1562,10 +1561,9 @@ static int defenseLocation(lua_State *L, BOOL noNarrowGateways)
 	int player = luaWZ_checkplayer(L, 6);
 
 	ASSERT_OR_RETURN( false, statIndex < numStructureStats, "Invalid range referenced for numStructureStats, %d > %d", statIndex, numStructureStats);
-	psStats = (BASE_STATS *)(asStructureStats + statIndex);
 
 	ASSERT_OR_RETURN( false, statIndex2 < numStructureStats, "Invalid range referenced for numStructureStats, %d > %d", statIndex2, numStructureStats);
-	psWStats = (BASE_STATS *)(asStructureStats + statIndex2);
+	psWStats = (asStructureStats + statIndex2);
 
     // check for wacky coords.
 	if( worldX < 0 ||
@@ -1809,7 +1807,7 @@ WZ_DECL_UNUSED static BOOL scrActionDroidObj(void)
 	}
 
 	syncDebug("TODO: Synchronise this!");
-	actionDroidObj(psDroid, action, (BASE_OBJECT *)psObj);
+	actionDroid(psDroid, action, psObj);
 
 	return true;
 }
@@ -1867,7 +1865,7 @@ static int scrDroidCanReach(lua_State *L)
 	int y = luaL_checkint(L, 3);
 
 	const PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-	const Vector3i rPos = {x, y, 0};
+	const Vector3i rPos(x, y, 0);
 
 	lua_pushboolean(L, fpathCheck(psDroid->pos, rPos, psPropStats->propulsionType));
 	return 1;

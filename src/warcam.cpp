@@ -83,8 +83,7 @@ static SDWORD	presAvAngle = 0;;
 
 /* Offset from droid's world coords */
 /* How far we track relative to the droids location - direction matters */
-#define	CAM_DEFAULT_X_OFFSET	-400
-#define CAM_DEFAULT_Y_OFFSET	-400
+#define	CAM_DEFAULT_OFFSET	-400
 #define	MINCAMROTX	-20
 
 
@@ -623,12 +622,8 @@ in the case of location and degrees of arc in the case of rotation.
 
 static void updateCameraAcceleration(UBYTE update)
 {
-	Vector3i concern = {
-		trackingCamera.target->pos.x,
-		trackingCamera.target->pos.z,
-		trackingCamera.target->pos.y
-	};
-	Vector2i behind = {0, 0}; /* Irrelevant for normal radar tracking */
+	Vector3i concern = swapYZ(trackingCamera.target->pos);
+	Vector2i behind(0, 0); /* Irrelevant for normal radar tracking */
 	BOOL bFlying = false;
 
 	/*
@@ -662,65 +657,45 @@ static void updateCameraAcceleration(UBYTE update)
 			uint16_t multiAngle = getAverageTrackAngle(group, true);
 			getTrackingConcerns(&concern.x, &concern.y, &concern.z, group, true);
 
-			behind.x = iSinR(multiAngle, CAM_DEFAULT_Y_OFFSET);
-			behind.y = iCosR(multiAngle, CAM_DEFAULT_X_OFFSET);
+			behind = iSinCosR(multiAngle, CAM_DEFAULT_OFFSET);
 		}
 		else
 		{
-		 	behind.x = iSinR(trackingCamera.target->rot.direction, CAM_DEFAULT_Y_OFFSET);
-			behind.y = iCosR(trackingCamera.target->rot.direction, CAM_DEFAULT_X_OFFSET);
+			behind = iSinCosR(trackingCamera.target->rot.direction, CAM_DEFAULT_OFFSET);
 		}
 
 		concern.y += angle*5;
 	}
 
+	Vector3i realPos = concern - Vector3i(CAM_X_SHIFT - behind.x, 0, CAM_Z_SHIFT - behind.y);
+	Vector3f separation = realPos - trackingCamera.position;
+	Vector3f acceleration;
+	if (!bFlying)
+	{
+		acceleration = separation*ACCEL_CONSTANT - trackingCamera.velocity*VELOCITY_CONSTANT;
+	}
+	else
+	{
+		separation.y /= 2.0f;
+		acceleration = separation*(ACCEL_CONSTANT*4) - trackingCamera.velocity*(VELOCITY_CONSTANT*2);
+	}
+
 	if (update & X_UPDATE)
 	{
 		/* Need to update acceleration along x axis */
-		int realPos = concern.x - CAM_X_SHIFT - behind.x;
-		float separation = realPos - trackingCamera.position.x;
-
-		if (!bFlying)
-		{
-		 	trackingCamera.acceleration.x = ACCEL_CONSTANT*separation - VELOCITY_CONSTANT*trackingCamera.velocity.x;
-		}
-		else
-		{
-			trackingCamera.acceleration.x = ACCEL_CONSTANT*separation*4 - VELOCITY_CONSTANT*2*trackingCamera.velocity.x;
-		}
+		trackingCamera.acceleration.x = acceleration.x;
 	}
 
 	if (update & Y_UPDATE)
 	{
 		/* Need to update acceleration along y axis */
-		int realPos = concern.y;
-		float separation = realPos - trackingCamera.position.y;
-
-		if (!bFlying)
-		{
-		 	trackingCamera.acceleration.y = ACCEL_CONSTANT*separation - VELOCITY_CONSTANT*trackingCamera.velocity.y;
-		}
-		else
-		{
-			separation /= 2.0f;
-			trackingCamera.acceleration.y = ACCEL_CONSTANT*separation*4 - VELOCITY_CONSTANT*2*trackingCamera.velocity.y;
-		}
+		trackingCamera.acceleration.y = acceleration.y;
 	}
 
 	if (update & Z_UPDATE)
 	{
 		/* Need to update acceleration along z axis */
-		int realPos = concern.z - CAM_Z_SHIFT - behind.y;
-		float separation = realPos - trackingCamera.position.z;
-
-		if (!bFlying)
-		{
-			trackingCamera.acceleration.z = ACCEL_CONSTANT*separation - VELOCITY_CONSTANT*trackingCamera.velocity.z;
-		}
-		else
-		{
-			trackingCamera.acceleration.z = ACCEL_CONSTANT*separation*4 - VELOCITY_CONSTANT*2*trackingCamera.velocity.z;
-		}
+		trackingCamera.acceleration.z = acceleration.z;
 	}
 }
 
@@ -748,21 +723,6 @@ static void updateCameraVelocity(UBYTE update)
 
 static void	updateCameraPosition(UBYTE update)
 {
-BOOL	bFlying;
-DROID	*psDroid;
-PROPULSION_STATS	*psPropStats;
-
-	bFlying = false;
-	if(trackingCamera.target->type == OBJ_DROID)
-	{
-		psDroid = (DROID*)trackingCamera.target;
-		psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-		if(psPropStats->propulsionType == PROPULSION_TYPE_LIFT)
-		{
-			bFlying = true;
-		}
-	}
-
 	if(update & X_UPDATE)
 	{
 		/* Need to update position along x axis */
@@ -801,7 +761,7 @@ static void updateCameraRotationAcceleration( UBYTE update )
 		psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
 		if(psPropStats->propulsionType == PROPULSION_TYPE_LIFT)
 		{
-			UDWORD	droidHeight, difHeight, droidMapHeight;
+			int droidHeight, difHeight, droidMapHeight;
 
 			bGotFlying = true;
 			droidHeight = psDroid->pos.z;

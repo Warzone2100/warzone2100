@@ -73,27 +73,6 @@ typedef int32_t  SDWORD;
 #define SDWORD_MIN	INT32_MIN
 #define SDWORD_MAX	INT32_MAX
 
-// If we are C99 compatible, the "bool" macro will be defined in <stdbool.h> (as _Bool)
-// C++ comes with an integrated bool type
-#if defined(WZ_CXX98)
-#elif defined(WZ_C99)
-# include <stdbool.h>
-#else
-// Pretend we are C99 compatible (well, for the bool type then)
-# ifndef bool
-#  define bool BOOL
-# endif
-# ifndef true
-#  define true (1)
-# endif
-# ifndef false
-#  define false (0)
-# endif
-# ifndef __bool_true_false_are_defined
-#  define __bool_true_false_are_defined (1)
-# endif
-#endif /* WZ_C99 */
-
 #if !defined(WZ_OS_WIN)
 typedef int BOOL;
 #endif // WZ_OS_WIN

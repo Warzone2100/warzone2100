@@ -25,7 +25,7 @@
 #include "widgint.h"
 #include "slider.h"
 // FIXME Direct iVis implementation include!
-#include "lib/ivis_common/pieblitfunc.h"
+#include "lib/ivis_opengl/pieblitfunc.h"
 
 static BOOL DragEnabled = true;
 
@@ -33,6 +33,14 @@ void sliderEnableDrag(BOOL Enable)
 {
 	DragEnabled = Enable;
 }
+
+W_SLDINIT::W_SLDINIT()
+	: orientation(WSLD_LEFT)
+	, numStops(0)
+	, barSize(0)
+	, pos(0)
+	, pTip(NULL)
+{}
 
 W_SLIDER::W_SLIDER(W_SLDINIT const *init)
 	: WIDGET(init, WIDG_SLIDER)

@@ -30,7 +30,7 @@
 #include "lib/framework/file.h"
 #include "lib/framework/physfs_ext.h"
 #include "lib/framework/tagfile.h"
-#include "lib/ivis_common/tex.h"
+#include "lib/ivis_opengl/tex.h"
 #include "lib/netplay/netplay.h"  // For syncDebug
 
 #include "map.h"
@@ -763,7 +763,7 @@ BOOL mapLoad(char *filename, BOOL preview)
 	UDWORD		version;
 	UDWORD		i, j, x, y;
 	PHYSFS_file	*fp = PHYSFS_openRead(filename);
-	void *          mt;
+	MersenneTwister mt(12345);  // 12345 = random seed.
 
 	if (!fp)
 	{
@@ -883,7 +883,6 @@ BOOL mapLoad(char *filename, BOOL preview)
 	}
 
 	// reset the random water bottom heights
-	mt = newMersenneTwister(12345);  // 12345 = random seed.
 	// set the river bed
 	for (i = 0; i < mapWidth; i++)
 	{
@@ -894,11 +893,10 @@ BOOL mapLoad(char *filename, BOOL preview)
 			// lower riverbed
 			if (mapTile(i, j)->ground == waterGroundType)
 			{
-				mapTile(i, j)->height -= WATER_MIN_DEPTH - mersenneTwisterU32(mt)%(WATER_MAX_DEPTH + 1 - WATER_MIN_DEPTH);
+				mapTile(i, j)->height -= WATER_MIN_DEPTH - mt.u32()%(WATER_MAX_DEPTH + 1 - WATER_MIN_DEPTH);
 			}
 		}
 	}
-	deleteMersenneTwister(mt);
 
 	/* set up the scroll mins and maxs - set values to valid ones for any new map */
 	scrollMinX = scrollMinY = 0;
@@ -1212,7 +1210,7 @@ extern int32_t map_Height(int x, int y)
 }
 
 /* returns true if object is above ground */
-extern BOOL mapObjIsAboveGround( BASE_OBJECT *psObj )
+bool mapObjIsAboveGround(SIMPLE_OBJECT *psObj)
 {
 	// min is used to make sure we don't go over array bounds!
 	// TODO Using the corner of the map instead doesn't make sense. Fix this...
@@ -1332,13 +1330,18 @@ bool writeVisibilityData(const char* fileName)
 		return false;
 	}
 
-	for (i = 0; i < mapWidth * mapHeight; ++i)
+	int planes = (game.maxPlayers + 7)/8;
+
+	for (unsigned plane = 0; plane < planes; ++plane)
 	{
-		if (!PHYSFS_writeUBE8(fileHandle, psMapTiles[i].tileExploredBits))
+		for (i = 0; i < mapWidth * mapHeight; ++i)
 		{
-			debug(LOG_ERROR, "writeVisibilityData: could not write to %s; PHYSFS error: %s", fileName, PHYSFS_getLastError());
-			PHYSFS_close(fileHandle);
-			return false;
+			if (!PHYSFS_writeUBE8(fileHandle, psMapTiles[i].tileExploredBits >> (plane*8)))
+			{
+				debug(LOG_ERROR, "writeVisibilityData: could not write to %s; PHYSFS error: %s", fileName, PHYSFS_getLastError());
+				PHYSFS_close(fileHandle);
+				return false;
+			}
 		}
 	}
 
@@ -1387,8 +1390,10 @@ bool readVisibilityData(const char* fileName)
 		return false;
 	}
 
+	int planes = (game.maxPlayers + 7)/8;
+
 	// Validate the filesize
-	expectedFileSize = sizeof(fileHeader.aFileType) + sizeof(fileHeader.version) + mapWidth * mapHeight * sizeof(uint8_t);
+	expectedFileSize = sizeof(fileHeader.aFileType) + sizeof(fileHeader.version) + mapWidth * mapHeight * planes;
 	fileSize = PHYSFS_fileLength(fileHandle);
 	if (fileSize != expectedFileSize)
 	{
@@ -1401,12 +1406,21 @@ bool readVisibilityData(const char* fileName)
 	// For every tile...
 	for(i=0; i<mapWidth*mapHeight; i++)
 	{
-		/* Get the visibility data */
-		if (!PHYSFS_readUBE8(fileHandle, &psMapTiles[i].tileExploredBits))
+		psMapTiles[i].tileExploredBits = 0;
+	}
+	for (unsigned plane = 0; plane < planes; ++plane)
+	{
+		for(i=0; i<mapWidth*mapHeight; i++)
 		{
-			debug(LOG_ERROR, "readVisibilityData: could not read from %s; PHYSFS error: %s", fileName, PHYSFS_getLastError());
-			PHYSFS_close(fileHandle);
-			return false;
+			/* Get the visibility data */
+			uint8_t val = 0;
+			if (!PHYSFS_readUBE8(fileHandle, &val))
+			{
+				debug(LOG_ERROR, "readVisibilityData: could not read from %s; PHYSFS error: %s", fileName, PHYSFS_getLastError());
+				PHYSFS_close(fileHandle);
+				return false;
+			}
+			psMapTiles[i].tileExploredBits |= val << (plane*8);
 		}
 	}
 
@@ -1419,7 +1433,7 @@ bool readVisibilityData(const char* fileName)
 
 static void astarTest(const char *name, int x1, int y1, int x2, int y2)
 {
-	int		asret, i;
+	int		i;
 	MOVE_CONTROL	route;
 	int		x = world_coord(x1);
 	int		y = world_coord(y1);
@@ -1435,17 +1449,7 @@ static void astarTest(const char *name, int x1, int y1, int x2, int y2)
 	route.asPath = NULL;
 	for (i = 0; i < 100; i++)
 	{
-		PATHJOB job;
-
 		route.numPoints = 0;
-		job.origX = x;
-		job.origY = y;
-		job.destX = endx;
-		job.destY = endy;
-		job.propulsion = PROPULSION_TYPE_WHEELED;
-		job.droidID = 1;
-		job.owner = 0;
-		asret = fpathAStarRoute(&route, &job);
 		free(route.asPath);
 		route.asPath = NULL;
 	}
@@ -1474,16 +1478,16 @@ void mapTest()
 // Convert a direction into an offset.
 // dir 0 => x = 0, y = -1
 #define NUM_DIR		8
-static const Vector2i aDirOffset[NUM_DIR] =
+static const Vector2i aDirOffset[] =
 {
-        { 0, 1},
-        {-1, 1},
-        {-1, 0},
-        {-1,-1},
-        { 0,-1},
-        { 1,-1},
-        { 1, 0},
-        { 1, 1},
+	Vector2i( 0, 1),
+	Vector2i(-1, 1),
+	Vector2i(-1, 0),
+	Vector2i(-1,-1),
+	Vector2i( 0,-1),
+	Vector2i( 1,-1),
+	Vector2i( 1, 0),
+	Vector2i( 1, 1),
 };
 
 // Flood fill a "continent". Note that we reuse x, y inside this function.
@@ -1501,7 +1505,7 @@ static void mapFloodFill(int x, int y, int continent, uint8_t blockedBits)
 		for (i = 0; i < NUM_DIR; i++)
 		{
 			// rely on the fact that all border tiles are inaccessible to avoid checking explicitly
-			Vector2i npos = { x + aDirOffset[i].x, y + aDirOffset[i].y };
+			Vector2i npos = Vector2i(x, y) + aDirOffset[i];
 			MAPTILE *psTile;
 
 			if (!tileOnMap(npos.x, npos.y))

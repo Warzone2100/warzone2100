@@ -27,11 +27,6 @@
 #include "init.h"
 #include "game.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 // maximum number of WRF/WDG files
 
 #define LEVEL_MAXFILES	9
@@ -80,7 +75,7 @@ typedef struct _level_dataset
 extern LEVEL_DATASET	*psLevels;
 
 // parse a level description data file
-extern BOOL levParse(const char* buffer, size_t size, searchPathMode datadir);
+extern BOOL levParse(const char* buffer, size_t size, searchPathMode datadir, bool ignoreWrf);
 
 // shutdown the level system
 extern void levShutDown(void);
@@ -105,9 +100,5 @@ extern SDWORD getLevelLoadType(void);
 extern char *getLevelName( void );
 
 extern void levTest(void);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_LEVELS_H__

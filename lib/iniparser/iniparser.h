@@ -1,272 +1,197 @@
-/*-------------------------------------------------------------------------*/
-/**
-   @file    iniparser.h
-   @author  N. Devillard
-   @date    Sep 2007
-   @version 3.0
-   @brief   Parser for ini files.
-*/
-/*--------------------------------------------------------------------------*/
-
 /*
-	$Id: iniparser.h,v 1.24 2007-11-23 21:38:19 ndevilla Exp $
-	$Revision: 1.24 $
+	This file is part of Warzone 2100.
+	Copyright (C) 2010  Freddie Witherden <freddie@witherden.org>
+	Copyright (C) 2010  Warzone 2100 Project
+
+	Warzone 2100 is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	Warzone 2100 is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with Warzone 2100; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
 #ifndef _INIPARSER_H_
 #define _INIPARSER_H_
 
-/*---------------------------------------------------------------------------
-   								Includes
- ---------------------------------------------------------------------------*/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-/*
- * The following #include is necessary on many Unixes but not Linux.
- * It is not needed for Windows platforms.
- * Uncomment it if needed.
- */
-/* #include <unistd.h> */
+/// Opaque handle to an inifile structure.
+typedef struct _inifile inifile;
 
-#include "dictionary.h"
-
-/*-------------------------------------------------------------------------*/
 /**
-  @brief    Get number of sections in a dictionary
-  @param    d   Dictionary to examine
-  @return   int Number of sections found in dictionary
-
-  This function returns the number of sections found in a dictionary.
-  The test to recognize sections is done on the string stored in the
-  dictionary: a section name is given as "section" whereas a key is
-  stored as "section:key", thus the test looks for entries that do not
-  contain a colon.
-
-  This clearly fails in the case a section name contains a colon, but
-  this should simply be avoided.
-
-  This function returns -1 in case of error.
+ * Returns a handle to a new inifile instance. This should be used when creating
+ * a new inifile as opposed to loading an existing one.
+ *
+ * @return A handle to a newly allocated inifile.
  */
-/*--------------------------------------------------------------------------*/
+inifile *inifile_new();
 
-int iniparser_getnsec(dictionary * d);
-
-
-/*-------------------------------------------------------------------------*/
 /**
-  @brief    Get name for section n in a dictionary.
-  @param    d   Dictionary to examine
-  @param    n   Section number (from 0 to nsec-1).
-  @return   Pointer to char string
-
-  This function locates the n-th section in a dictionary and returns
-  its name as a pointer to a string statically allocated inside the
-  dictionary. Do not free or modify the returned string!
-
-  This function returns NULL in case of error.
+ * Loads the inifile referenced by path. Should the inifile referenced by path
+ * not exist or be invalid NULL is returned.
+ *
+ * @param path The path to the inifile to load.
+ * @return A handle to the inifile.
  */
-/*--------------------------------------------------------------------------*/
+inifile *inifile_load(const char *path);
 
-char * iniparser_getsecname(dictionary * d, int n);
-
-
-/*-------------------------------------------------------------------------*/
 /**
-  @brief    Save a dictionary to a loadable ini file
-  @param    d   Dictionary to dump
-  @param    f   Opened file pointer to dump to
-  @return   void
-
-  This function dumps a given dictionary into a loadable ini file.
-  It is Ok to specify @c stderr or @c stdout as output files.
+ * Returns the number of sections in inif.
+ *
+ * @param inif The inifile handle.
+ * @return The number of sections in inif.
  */
-/*--------------------------------------------------------------------------*/
+int inifile_get_section_count(inifile *inif);
 
-void iniparser_dump_ini(dictionary * d, const char *path);
-
-/*-------------------------------------------------------------------------*/
 /**
-  @brief    Dump a dictionary to an opened file pointer.
-  @param    d   Dictionary to dump.
-  @param    f   Opened file pointer to dump to.
-  @return   void
-
-  This function prints out the contents of a dictionary, one element by
-  line, onto the provided file pointer. It is OK to specify @c stderr
-  or @c stdout as output files. This function is meant for debugging
-  purposes mostly.
+ * Returns the `n'-th section in the inifile inif. The section number is
+ * subject to the constraint that 0 <= n < get_section_count().
+ *
+ * @param inif The inifile handle.
+ * @param n The number of the section, indexed from 0.
+ * @return A pointer to the section name. Valid until either the section or
+ *         inifile is deleted.
  */
-/*--------------------------------------------------------------------------*/
-void iniparser_dump(dictionary * d, FILE * f);
+const char *inifile_get_section(inifile *inif, int n);
 
-/*-------------------------------------------------------------------------*/
 /**
-  @brief    Get the string associated to a key
-  @param    d       Dictionary to search
-  @param    key     Key string to look for
-  @param    def     Default value to return if key not found.
-  @return   pointer to statically allocated character string
-
-  This function queries a dictionary for a key. A key as read from an
-  ini file is given as "section:key". If the key cannot be found,
-  the pointer passed as 'def' is returned.
-  The returned char pointer is pointing to a string allocated in
-  the dictionary, do not free or modify it.
+ * Returns a pointer to the currently active section in the inifile inif.
+ *
+ * @param inif The inifile handle.
+ * @return A pointer to the section name.
  */
-/*--------------------------------------------------------------------------*/
-const char * iniparser_getstring(dictionary * d, const char * key, const char * def);
+const char *inifile_get_current_section(inifile *inif);
 
-/*-------------------------------------------------------------------------*/
 /**
-  @brief    Get the string associated to a key, convert to an int
-  @param    d Dictionary to search
-  @param    key Key string to look for
-  @param    notfound Value to return in case of error
-  @return   integer
-
-  This function queries a dictionary for a key. A key as read from an
-  ini file is given as "section:key". If the key cannot be found,
-  the notfound value is returned.
-
-  Supported values for integers include the usual C notation
-  so decimal, octal (starting with 0) and hexadecimal (starting with 0x)
-  are supported. Examples:
-
-  - "42"      ->  42
-  - "042"     ->  34 (octal -> decimal)
-  - "0x42"    ->  66 (hexa  -> decimal)
-
-  Warning: the conversion may overflow in various ways. Conversion is
-  totally outsourced to strtol(), see the associated man page for overflow
-  handling.
-
-  Credits: Thanks to A. Becker for suggesting strtol()
+ * Sets the currently active section in inif to sec. If the section does not
+ * exist in the inifile then a new one is created.
+ *
+ * @param inif The inifile handle.
+ * @param sec The section to use. This is duplicated before the function
+ *            returns.
  */
-/*--------------------------------------------------------------------------*/
-int iniparser_getint(dictionary * d, const char * key, int notfound);
+void inifile_set_current_section(inifile *inif, const char *sec);
 
-/*-------------------------------------------------------------------------*/
 /**
-  @brief    Get the string associated to a key, convert to a double
-  @param    d Dictionary to search
-  @param    key Key string to look for
-  @param    notfound Value to return in case of error
-  @return   double
-
-  This function queries a dictionary for a key. A key as read from an
-  ini file is given as "section:key". If the key cannot be found,
-  the notfound value is returned.
+ * Checks to see if the key, key, exists in the inifile inif.
+ *
+ * @param inif The inifile handle.
+ * @param key The key to check the existence of.
+ * @return True if the key exists, false otherwise.
  */
-/*--------------------------------------------------------------------------*/
-double iniparser_getdouble(dictionary * d, char * key, double notfound);
+BOOL inifile_key_exists(inifile *inif, const char *key);
 
-/*-------------------------------------------------------------------------*/
 /**
-  @brief    Get the string associated to a key, convert to a boolean
-  @param    d Dictionary to search
-  @param    key Key string to look for
-  @param    notfound Value to return in case of error
-  @return   integer
-
-  This function queries a dictionary for a key. A key as read from an
-  ini file is given as "section:key". If the key cannot be found,
-  the notfound value is returned.
-
-  A true boolean is found if one of the following is matched:
-
-  - A string starting with 'y'
-  - A string starting with 'Y'
-  - A string starting with 't'
-  - A string starting with 'T'
-  - A string starting with '1'
-
-  A false boolean is found if one of the following is matched:
-
-  - A string starting with 'n'
-  - A string starting with 'N'
-  - A string starting with 'f'
-  - A string starting with 'F'
-  - A string starting with '0'
-
-  The notfound value returned if no boolean is identified, does not
-  necessarily have to be 0 or 1.
+ * Fetches the value of the key specified by key in the inifile inif. If the key
+ * does not exist then dflt is returned. The pointer returned is valid until
+ * either the key is set/unset or the inifile is deleted.
+ *
+ * It is necessary to specify the section to search beforehand using the
+ * set_current_section method.
+ *
+ * @param inif The inifile handle.
+ * @param key The key to fetch the value for.
+ * @param dflt The default string to return if the key is not found.
+ * @return The value associated with the key, dflt otherwise.
  */
-/*--------------------------------------------------------------------------*/
-int iniparser_getboolean(dictionary * d, const char * key, int notfound);
+const char *inifile_get(inifile *inif, const char *key, const char *dflt);
 
-
-/*-------------------------------------------------------------------------*/
 /**
-  @brief    Set an entry in a dictionary.
-  @param    ini     Dictionary to modify.
-  @param    entry   Entry to modify (entry name)
-  @param    val     New value to associate to the entry.
-  @return   int 0 if Ok, -1 otherwise.
-
-  If the given entry can be found in the dictionary, it is modified to
-  contain the provided value. If it cannot be found, -1 is returned.
-  It is Ok to set val to NULL.
+ * Sets the entry \a key to be \a value.  If \a key already exists its value is
+ * updated.
+ *
+ * @param inif The inifile handle.
+ * @param key The key to set/updated.
+ * @param value The value to set.
  */
-/*--------------------------------------------------------------------------*/
-int iniparser_setstring(dictionary * ini, const char * entry, const char * val);
+void inifile_set(inifile *inif, const char *key, const char *value);
 
-
-/*-------------------------------------------------------------------------*/
 /**
-  @brief    Delete an entry in a dictionary
-  @param    ini     Dictionary to modify
-  @param    entry   Entry to delete (entry name)
-  @return   void
-
-  If the given entry can be found, it is deleted from the dictionary.
+ * A helper function provided for convenience. Automatically converts the
+ * result returned by get method to an integer.
+ *
+ * @param inif The inifile handle.
+ * @param key The key to fetch the value for.
+ * @param dflt The default integer to return if the key is not found.
+ * @return The integer value associated with the key, dflt otherwise.
  */
-/*--------------------------------------------------------------------------*/
-void iniparser_unset(dictionary * ini, char * entry);
+int inifile_get_as_int(inifile *inif, const char *key, int dflt);
 
-/*-------------------------------------------------------------------------*/
 /**
-  @brief    Finds out if a given entry exists in a dictionary
-  @param    ini     Dictionary to search
-  @param    entry   Name of the entry to look for
-  @return   integer 1 if entry exists, 0 otherwise
-
-  Finds out if a given entry exists in the dictionary. Since sections
-  are stored as keys with NULL associated values, this is the only way
-  of querying for the presence of sections in a dictionary.
+ * A helper function provided for convenience. Automatically converts the
+ * integer to a string and sets the \a key entry in the current section to
+ * be that value.
+ *
+ * @param inif The inifile handle.
+ * @param key The key to set.
+ * @param value The integer value to set the key to.
  */
-/*--------------------------------------------------------------------------*/
-int iniparser_find_entry(dictionary * ini, char * entry) ;
+void inifile_set_as_int(inifile *inif, const char *key, int value);
 
-/*-------------------------------------------------------------------------*/
 /**
-  @brief    Parse an ini file and return an allocated dictionary object
-  @param    ininame Name of the ini file to read.
-  @return   Pointer to newly allocated dictionary
-
-  This is the parser for ini files. This function is called, providing
-  the name of the file to be read. It returns a dictionary object that
-  should not be accessed directly, but through accessor functions
-  instead.
-
-  The returned dictionary must be freed using iniparser_freedict().
+ * A helper function provided for convenience.  As \a dflt is an integer it can
+ * be used to help determine if \a key exists or not by passing say -1.
+ *
+ * @param inif The inifile handle.
+ * @param key The key to get.
+ * @param dflt Default value to return should the key not exist.
+ * @return The value associated with the key converted to a boolean value, or
+ *         \a dflt should the key not exist.
  */
-/*--------------------------------------------------------------------------*/
-dictionary * iniparser_load(const char * ininame);
+int inifile_get_as_bool(inifile *inif, const char *key, int dflt);
 
-/*-------------------------------------------------------------------------*/
 /**
-  @brief    Free all memory associated to an ini dictionary
-  @param    d Dictionary to free
-  @return   void
-
-  Free all memory associated to an ini dictionary.
-  It is mandatory to call this function before the dictionary object
-  gets out of the current context.
+ * Removes \a key from the \a inif in the section \a section.
+ *
+ * @param inif The inifile handle.
+ * @param section The section to remove the key from.
+ * @param key The key to remove.
  */
-/*--------------------------------------------------------------------------*/
-void iniparser_freedict(dictionary * d);
+void inifile_unset(inifile *inif, const char *section, const char *key);
+
+/**
+ * Saves the inifile back to the file which is was loaded from. This is only
+ * meaningful if the file was loaded using inifile_load.
+ *
+ * @param inif The inifile handle.
+ */
+void inifile_save(inifile *inif);
+
+/**
+ * Saves \a inif to the file referenced by \a path.
+ *
+ * @param inif The inifile handle.
+ * @param path The path to save the file as.
+ */
+void inifile_save_as(inifile *inif, const char *path);
+
+/**
+ * Frees the memory associated with the inifile inif. This must be called;
+ * failure to do so may result in ones program spontaneously turning to custard
+ * and other bad things.
+ *
+ * Calling this method does not affect the on-disk representation of the
+ * inifile. Therefore the file must be saved, using the inifile_save* methods
+ * first.
+ *
+ * @param inif The inifile handle.
+ */
+void inifile_delete(inifile *inif);
+
+/**
+ * Unit tests for the inifile module. Asserts should any test fail. The
+ * implementation can also serve as basic API documentation.
+ */
+void inifile_test(void);
 
 #endif

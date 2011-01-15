@@ -24,11 +24,6 @@
 #ifndef __INCLUDED_WEAPONDEF_H__
 #define __INCLUDED_WEAPONDEF_H__
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 typedef struct _weapon
 {
 	unsigned int    nStat;		///< Index into the asWeaponStats global array
@@ -39,9 +34,5 @@ typedef struct _weapon
 	Rotation	rot;
 	Rotation	prevRot;
 } WEAPON;
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_WEAPONDEF_H__

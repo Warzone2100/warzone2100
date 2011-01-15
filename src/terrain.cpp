@@ -33,13 +33,13 @@
 #include <string.h>
 
 #include "lib/framework/frame.h"
-#include "lib/ivis_common/ivisdef.h"
-#include "lib/ivis_common/imd.h"
-#include "lib/ivis_common/piefunc.h"
-#include "lib/ivis_common/tex.h"
-#include "lib/ivis_common/piedef.h"
-#include "lib/ivis_common/piestate.h"
-#include "lib/ivis_common/pieclip.h"
+#include "lib/ivis_opengl/ivisdef.h"
+#include "lib/ivis_opengl/imd.h"
+#include "lib/ivis_opengl/piefunc.h"
+#include "lib/ivis_opengl/tex.h"
+#include "lib/ivis_opengl/piedef.h"
+#include "lib/ivis_opengl/piestate.h"
+#include "lib/ivis_opengl/pieclip.h"
 
 #include "terrain.h"
 #include "map.h"
@@ -1153,7 +1153,7 @@ void drawTerrain(void)
 			yPos = world_coord(y*sectorSize+sectorSize/2);
 			distance = pow(player.p.x+world_coord(visibleTiles.x/2) - xPos, 2) + pow(player.p.z+world_coord(visibleTiles.y/2) - yPos, 2);
 			//debug(LOG_TERRAIN, "culling: %i,%i player x: %i, player z: %i, xPos: %f, yPos: %f, distance = %f, max = %f",  x,y,player.p.x, player.p.z, xPos, yPos, distance, pow(world_coord(terrainDistance),2));
-			if (distance > pow(world_coord(terrainDistance),2))
+			if (distance > pow((double)world_coord(terrainDistance), 2))
 			{
 				sectors[x*ySectors + y].draw = false;
 			}

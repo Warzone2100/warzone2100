@@ -97,7 +97,6 @@ function startEvnt()
 	-- choose target now so can check for waypoints
 	targetChoice = random(numTargets)
 	
-	randomiseSeed()
 	-- allow to build stuff
 	setStructureLimits(powerGen, numPow, 0)
 	setStructureLimits(oilDerrick, numExt, 0)
@@ -446,7 +445,6 @@ callbackEvent(timeUp, CALL_MISSION_TIME)
 
 ---------- stubs ----------
 
-if anyStructButWallsLeft == nil then anyStructButWallsLeft = function() print("stub: anyStructButWallsLeft"); return 0 end end
 if gameOverMessage == nil then gameOverMessage = function() print("stub: gameOverMessage"); return 0 end end
 if centreView == nil then centreView = function() print("stub: centreView"); return 0 end end
 if random == nil then random = function() print("stub: random"); return 0 end end
@@ -454,7 +452,7 @@ if enableResearch == nil then enableResearch = function() print("stub: enableRes
 if droidInArea == nil then droidInArea = function() print("stub: droidInArea"); return 0 end end
 if setTransporterExit == nil then setTransporterExit = function() print("stub: setTransporterExit"); return 0 end end
 if setMissionTime == nil then setMissionTime = function() print("stub: setMissionTime"); return 0 end end
-if createAlliance == nil then createAlliance = function() print("stub: createAlliance"); return 0 end end
+if anyStructButWallsLeft == nil then anyStructButWallsLeft = function() print("stub: anyStructButWallsLeft"); return 0 end end
 if addDroidToTransporter == nil then addDroidToTransporter = function() print("stub: addDroidToTransporter"); return 0 end end
 if initAllNoGoAreas == nil then initAllNoGoAreas = function() print("stub: initAllNoGoAreas"); return 0 end end
 if orderGroupLoc == nil then orderGroupLoc = function() print("stub: orderGroupLoc"); return 0 end end
@@ -473,7 +471,7 @@ if completeResearch == nil then completeResearch = function() print("stub: compl
 if setEventTrigger == nil then setEventTrigger = function() print("stub: setEventTrigger"); return 0 end end
 if setNoGoArea == nil then setNoGoArea = function() print("stub: setNoGoArea"); return 0 end end
 if numStructsButNotWallsInArea == nil then numStructsButNotWallsInArea = function() print("stub: numStructsButNotWallsInArea"); return 0 end end
-if randomiseSeed == nil then randomiseSeed = function() print("stub: randomiseSeed"); return 0 end end
+if createAlliance == nil then createAlliance = function() print("stub: createAlliance"); return 0 end end
 if playSound == nil then playSound = function() print("stub: playSound"); return 0 end end
 if flyTransporterIn == nil then flyTransporterIn = function() print("stub: flyTransporterIn"); return 0 end end
 if groupAddGroup == nil then groupAddGroup = function() print("stub: groupAddGroup"); return 0 end end

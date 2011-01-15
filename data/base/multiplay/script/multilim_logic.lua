@@ -2,14 +2,14 @@
 version(0) --- version of the script API this script is written for
 
 function initialisedEvent()
-	setStructureLimits(factory, 5, 0)
-	setStructureLimits(powerGen, 10, 0)
-	setStructureLimits(research, 5, 0)
+	setStructureLimits(factory, 30, 0)
+	setStructureLimits(powerGen, 30, 0)
+	setStructureLimits(research, 30, 0)
 	setStructureLimits(comdroid, 1, 0)
-	setStructureLimits(cybfac, 5, 0)
-	setStructureLimits(repair, 5, 0)
-	setStructureLimits(vtolfact, 5, 0)
-	setStructureLimits(vtolpad, 50, 0)
+	setStructureLimits(cybfac, 30, 0)
+	setStructureLimits(repair, 30, 0)
+	setStructureLimits(vtolfact, 30, 0)
+	setStructureLimits(vtolpad, 100, 0)
 	setStructureLimits(lassat, 1, 0)
 end
 delayedEvent(initialisedEvent, 0)

@@ -30,6 +30,7 @@
 			/>
 			<Tool
 				Name="FlexGenerator"
+				OutputFile="$(InputName).lex.cpp"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -37,6 +38,7 @@
 			<Tool
 				Name="BisonParser"
 				Defines="true"
+				OutputFile="$(InputName).tab.cpp"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -179,7 +181,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\audp_parser.tab.c"
+				RelativePath=".\audp_parser.tab.cpp"
 				>
 			</File>
 			<File
@@ -205,7 +207,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\audp_parser.tab.h"
+				RelativePath=".\audp_parser.tab.hpp"
 				>
 			</File>
 			<File

@@ -27,10 +27,15 @@
 #include "lib/widget/widget.h"
 
 
+/* Respond to a mouse click */
+extern void formClicked(W_FORM *psWidget, UDWORD key);
+
 /* The standard form */
 struct W_FORM : public WIDGET
 {
 	W_FORM(W_FORMINIT const *init);
+
+	void clicked(W_CONTEXT *, WIDGET_KEY key) { formClicked(this, key); }
 
 	BOOL            disableChildren;        ///< Disable all child widgets if true
 	UWORD           Ax0,Ay0,Ax1,Ay1;        ///< Working coords for animations.
@@ -83,6 +88,7 @@ struct W_TABFORM : public W_FORM
 
 	UWORD		numMajor;				// The number of major tabs
 	SWORD		TabMultiplier;				//used to tell system we got lots of tabs to display
+	unsigned        maxTabsShown;                   ///< Maximum number of tabs shown at once.
 	UWORD		numStats;				//# of 'stats' (items) in list
 	UWORD		numButtons;				//# of buttons per form
 	W_MAJORTAB	asMajor[WFORM_MAXMAJOR];	// The major tab information
@@ -157,9 +163,6 @@ extern void formSetClickState(W_CLICKFORM *psForm, UDWORD state);
 
 /* Run a form widget */
 extern void formRun(W_FORM *psWidget, W_CONTEXT *psContext);
-
-/* Respond to a mouse click */
-extern void formClicked(W_FORM *psWidget, UDWORD key);
 
 /* Respond to a mouse form up */
 extern void formReleased(W_FORM *psWidget, UDWORD key, W_CONTEXT *psContext);

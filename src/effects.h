@@ -28,14 +28,9 @@
 	temporary world 'effects
 	Alex McLean, Pumpkin Studios, EIDOS Interactive, 1998.
 */
-#include "lib/ivis_common/piedef.h"
+#include "lib/ivis_opengl/piedef.h"
 #include "lib/framework/fixedpoint.h"
-#include "lib/ivis_common/pietypes.h"
-
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
+#include "lib/ivis_opengl/pietypes.h"
 
 #define SHOCK_WAVE_HEIGHT	(64)
 
@@ -170,9 +165,5 @@ bool	writeFXData(const char* fileName);
 void	effectSetSize(UDWORD size);
 void	effectSetLandLightSpec(LAND_LIGHT_SPEC spec);
 void	SetEffectForPlayer(uint8_t player);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_EFFECTS_H__

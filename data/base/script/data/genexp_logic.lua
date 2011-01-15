@@ -25,6 +25,10 @@ runOffFlag = false
 -- transX[0] = entryX, transX[1] = exitX
 timeLimit = 0
 -- enemy transport entry, exit
+entryX = Array(2)
+entryY = Array(2)
+exitX = Array(2)
+exitY = Array(2)
 -- required for enemy transports landing
 transportDroid = Array(2)
 transOnMap = Array(2)
@@ -72,11 +76,8 @@ basesDead = 0
 
 -- Return to LZ Stuff
 -- must be set to have any affect
-retLZFlag = false
 -- audio to play
-retLZSnd = nil
 -- LZ blip
-retLZBlip = nil
 
 -- Groups
 -- these can be for any player!
@@ -101,6 +102,8 @@ factTime = Array(11)
 
 -- LISTS OF STUFF (INDEXED BY ARRAY)
 
+features = Array(10)
+droids = Array(10)
 sectorsX1 = Array(20)
 sectorsY1 = Array(20)
 sectorsX2 = Array(20)
@@ -114,6 +117,7 @@ sectorsY2 = Array(20)
 -- Base Under Attack Sound
 -- base detected/dead
 -- enemy transport landing
+transSnd = nil
 LZRange = 0
 
 -- General variables
@@ -147,15 +151,7 @@ feature = nil
 
 -- Trucks stuff
 -- won't work without this set to TRUE!!!
-trucksOn = false
-truckRange = 0
-defRange = 0
 -- defences to build
-numDefences = 0
-numToDefend = 0
-maxDefence = 0
-defences = Array(5)
-toDefend = Array(5)
 boolResult = false
 truckFlag = false
 truckGroup = Array(2)
@@ -165,11 +161,6 @@ truckGroup = Array(2)
 
 -- Initialisation
 function start()
-	randomiseSeed()
-	
-	-- set scroll limits
-	-- setScrollParams(scrollX1, scrollY1, scrollX2, scrollY2);
-	-- centre view
 	centreViewPos(centreX, centreY)
 	
 	-- more flexible alliance system
@@ -1614,10 +1605,9 @@ if enableResearch == nil then enableResearch = function() print("stub: enableRes
 if orderGroupObj == nil then orderGroupObj = function() print("stub: orderGroupObj"); return 0 end end
 if resetStructTargets == nil then resetStructTargets = function() print("stub: resetStructTargets"); return 0 end end
 if setStructTarPref == nil then setStructTarPref = function() print("stub: setStructTarPref"); return 0 end end
-if addFeature == nil then addFeature = function() print("stub: addFeature"); return 0 end end
 if numStructsButNotWallsInArea == nil then numStructsButNotWallsInArea = function() print("stub: numStructsButNotWallsInArea"); return 0 end end
 if setMissionTime == nil then setMissionTime = function() print("stub: setMissionTime"); return 0 end end
-if createAlliance == nil then createAlliance = function() print("stub: createAlliance"); return 0 end end
+if addFeature == nil then addFeature = function() print("stub: addFeature"); return 0 end end
 if groupAddDroid == nil then groupAddDroid = function() print("stub: groupAddDroid"); return 0 end end
 if pickStructLocation == nil then pickStructLocation = function() print("stub: pickStructLocation"); return 0 end end
 if addDroidToTransporter == nil then addDroidToTransporter = function() print("stub: addDroidToTransporter"); return 0 end end
@@ -1657,14 +1647,14 @@ if pause == nil then pause = function() print("stub: pause"); return 0 end end
 if structureBuiltInRange == nil then structureBuiltInRange = function() print("stub: structureBuiltInRange"); return 0 end end
 if setNoGoArea == nil then setNoGoArea = function() print("stub: setNoGoArea"); return 0 end end
 if setTransporterExit == nil then setTransporterExit = function() print("stub: setTransporterExit"); return 0 end end
-if addMessage == nil then addMessage = function() print("stub: addMessage"); return 0 end end
+if createAlliance == nil then createAlliance = function() print("stub: createAlliance"); return 0 end end
 if playSound == nil then playSound = function() print("stub: playSound"); return 0 end end
 if addConsoleText == nil then addConsoleText = function() print("stub: addConsoleText"); return 0 end end
 if _ == nil then _ = function() print("stub: _"); return 0 end end
 if flyTransporterIn == nil then flyTransporterIn = function() print("stub: flyTransporterIn"); return 0 end end
 if seenStructInArea == nil then seenStructInArea = function() print("stub: seenStructInArea"); return 0 end end
 if groupAddGroup == nil then groupAddGroup = function() print("stub: groupAddGroup"); return 0 end end
-if randomiseSeed == nil then randomiseSeed = function() print("stub: randomiseSeed"); return 0 end end
+if addMessage == nil then addMessage = function() print("stub: addMessage"); return 0 end end
 if iterateGroup == nil then iterateGroup = function() print("stub: iterateGroup"); return 0 end end
 if structTargetInArea == nil then structTargetInArea = function() print("stub: structTargetInArea"); return 0 end end
 if setRadarZoom == nil then setRadarZoom = function() print("stub: setRadarZoom"); return 0 end end

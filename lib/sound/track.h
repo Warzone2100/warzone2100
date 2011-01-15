@@ -32,11 +32,6 @@
 # endif
 #endif
 
-#if defined(__cplusplus)
-extern "C"
-{
-#endif
-
 #define ATTENUATION_FACTOR	0.0003f
 
 #define	SAMPLE_NOT_ALLOCATED	-1
@@ -53,6 +48,8 @@ typedef struct __audio_stream AUDIO_STREAM;
 
 /* structs */
 
+struct SIMPLE_OBJECT;
+
 typedef struct AUDIO_SAMPLE
 {
 	SDWORD                  iTrack;         // ID number identifying a specific sound; currently (r1182) mapped in audio_id.c
@@ -68,7 +65,7 @@ typedef struct AUDIO_SAMPLE
 	float                   fVol;           // computed volume of sample
 	BOOL                    bFinishedPlaying;
 	AUDIO_CALLBACK          pCallback;
-	void                    *psObj;
+	SIMPLE_OBJECT *         psObj;
 	struct AUDIO_SAMPLE     *psPrev;
 	struct AUDIO_SAMPLE     *psNext;
 } AUDIO_SAMPLE;
@@ -137,10 +134,6 @@ extern void sound_ResumeStream(AUDIO_STREAM* stream);
 extern AUDIO_STREAM* sound_PlayStreamWithBuf(PHYSFS_file* fileHandle, float volume, void (*onFinished)(void*), void* user_data, size_t streamBufferSize, unsigned int buffer_count);
 extern float sound_GetStreamVolume(const AUDIO_STREAM* stream);
 extern void sound_SetStreamVolume(AUDIO_STREAM* stream, float volume);
-
-#if defined(__cplusplus)
-}
-#endif
 
 void soundTest(void);
 

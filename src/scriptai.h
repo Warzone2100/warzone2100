@@ -24,11 +24,6 @@
 #ifndef __INCLUDED_SRC_SCRIPTAI_H__
 #define __INCLUDED_SRC_SCRIPTAI_H__
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 // types for structure targets
 typedef enum _scr_struct_tar
 {
@@ -84,9 +79,5 @@ typedef enum _scr_droid_tar
 } SCR_DROID_TAR;
 
 extern void registerScriptAIfuncs(lua_State *L);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_SCRIPTAI_H__

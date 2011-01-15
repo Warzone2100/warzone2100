@@ -5,8 +5,6 @@ version(0) -- version of the script API this script is written for
 -- Multiplayer Script for Scavenger Factory
 
 
--- player number to use
-enemy1 = 7
 -- max guys to handle.
 maxDroids = 25
 

@@ -26,21 +26,13 @@
 
 #include "lib/framework/vector.h"
 
-#if defined(__cplusplus)
-extern "C"
-{
-#endif
+struct SIMPLE_OBJECT;
 
-void	audio_GetObjectPos( void *psObj, SDWORD *piX, SDWORD *piY,
-								SDWORD *piZ );
+void     audio_GetObjectPos(SIMPLE_OBJECT *psObj, SDWORD *piX, SDWORD *piY, SDWORD *piZ);
 void	audio_GetStaticPos( SDWORD iWorldX, SDWORD iWorldY,
 								SDWORD *piX, SDWORD *piY, SDWORD *piZ );
-BOOL	audio_ObjectDead( void * psObj );
+bool     audio_ObjectDead(SIMPLE_OBJECT *psObj);
 Vector3f audio_GetPlayerPos(void);
 void audio_Get3DPlayerRotAboutVerticalAxis(float *angle);
-
-#if defined(__cplusplus)
-}
-#endif
 
 #endif // __INCLUDED_LIB_SOUND_AUD_H__

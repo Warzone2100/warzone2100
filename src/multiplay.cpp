@@ -314,7 +314,7 @@ BOOL IdToDroid(UDWORD id, UDWORD player, DROID **psDroid)
 		if (player >= MAX_PLAYERS)
 		{
 			debug(LOG_FEATURE, "Feature detected");
-			// feature hack, player = 9 are features
+			// feature hack, player = PLAYER_FEATURE are features
 			return false;
 		}
 		d = apsDroidLists[player];
@@ -351,7 +351,7 @@ STRUCTURE *IdToStruct(UDWORD id,UDWORD player)
 		if (player >= MAX_PLAYERS)
 		{
 			debug(LOG_FEATURE, "Feature detected");
-			// feature hack, player = 9 are features
+			// feature hack, player = PLAYER_FEATURE are features
 			return NULL;
 		}
 		for (psStr=apsStructLists[player];((psStr != NULL )&&(psStr->id != id) );psStr=psStr->psNext) {}
@@ -366,6 +366,7 @@ FEATURE *IdToFeature(UDWORD id,UDWORD player)
 	FEATURE	*psF =NULL;
 	UDWORD	i;
 
+	STATIC_ASSERT(MAX_PLAYERS + 2 < ANYPLAYER);
 	if(player == ANYPLAYER)
 	{
 		for(i=0;i<MAX_PLAYERS;i++)
@@ -382,7 +383,7 @@ FEATURE *IdToFeature(UDWORD id,UDWORD player)
 		if (player >= MAX_PLAYERS)
 		{
 			debug(LOG_FEATURE, "Feature detected");
-			// feature hack, player = 9 are features
+			// feature hack, player = PLAYER_FEATURE are features - but we're in a function called IdTo **Feature**...
 			return NULL;
 		}
 		for(psF=apsFeatureLists[player];((psF != NULL )&&(psF->id != id) );psF=psF->psNext) {}
@@ -404,9 +405,7 @@ DROID_TEMPLATE *IdToTemplate(UDWORD tempId,UDWORD player)
 	// Check if we know which player this is from, in that case, assume it is a player template
 	if (player != ANYPLAYER && player < MAX_PLAYERS)
 	{
-		for (psTempl = apsDroidTemplates[player];			// follow templates
-		(psTempl && (psTempl->multiPlayerID != tempId ));
-		 psTempl = psTempl->psNext);
+		for (psTempl = apsDroidTemplates[player]; psTempl && (psTempl->multiPlayerID != tempId); psTempl = psTempl->psNext) {}		// follow templates
 
 		return psTempl;
 	}
@@ -522,6 +521,17 @@ BOOL responsibleFor(UDWORD player, UDWORD playerinquestion)
 	return whosResponsible(playerinquestion) == player;
 }
 
+int scavengerSlot()
+{
+	// Scavengers used to always be in position 7, when scavengers were only supported in less than 8 player maps.
+	// Scavengers should be in position N in N-player maps, where N ≥ 8.
+	return MAX(game.maxPlayers, 7);
+}
+
+int scavengerPlayer()
+{
+	return game.scavengers? scavengerSlot() : -1;
+}
 
 // ////////////////////////////////////////////////////////////////////////////
 // probably temporary. Places the camera on the players 1st droid or struct.
@@ -531,9 +541,7 @@ Vector3i cameraToHome(UDWORD player,BOOL scroll)
 	UDWORD x,y;
 	STRUCTURE	*psBuilding;
 
-	for (psBuilding = apsStructLists[player];
-		 psBuilding && (psBuilding->pStructureType->type != REF_HQ);
-		 psBuilding= psBuilding->psNext);
+	for (psBuilding = apsStructLists[player]; psBuilding && (psBuilding->pStructureType->type != REF_HQ); psBuilding= psBuilding->psNext) {}
 
 	if(psBuilding)
 	{
@@ -805,31 +813,31 @@ BOOL recvMessage(void)
 		case GAME_ALLIANCE:
 			recvAlliance(queue, true);
 			break;
-		case NET_KICK:
+		case NET_KICK:	// in-game kick message
 		{
-			// FIX ME: in game kick ?  Is this even possible with current code?
 			uint32_t player_id;
 			char reason[MAX_KICK_REASON];
+			LOBBY_ERROR_TYPES KICK_TYPE = ERROR_NOERROR;
+
+			NETbeginDecode(queue, NET_KICK);
+				NETuint32_t(&player_id);
+				NETstring(reason, MAX_KICK_REASON);
+				NETenum(&KICK_TYPE);
+			NETend();
 
 			if (player_id == NET_HOST_ONLY)
 			{
 				debug(LOG_ERROR, "someone tried to kick the host--check your netplay logs!");
-				NETend();
 				break;
 			}
-
-			NETbeginDecode(queue, NET_KICK);
-				NETuint32_t(&player_id);
-				NETstring( reason, MAX_KICK_REASON);
-			NETend();
-
-			if (selectedPlayer == player_id)  // we've been told to leave.
+			else if (selectedPlayer == player_id)  // we've been told to leave.
 			{
 				debug(LOG_ERROR, "You were kicked because %s", reason);
 				setPlayerHasLost(true);
 			}
 			else
 			{
+				debug(LOG_NET, "Player %d was kicked: %s", player_id, reason);
 				NETplayerKicked(player_id);
 			}
 			break;
@@ -1454,7 +1462,6 @@ BOOL sendTemplate(DROID_TEMPLATE *pTempl)
 		NETuint8_t(&player);
 		NETuint32_t(&pTempl->ref);
 		NETstring(pTempl->aName, sizeof(pTempl->aName));
-		NETuint8_t(&pTempl->NameVersion);
 
 		for (i = 0; i < ARRAY_SIZE(pTempl->asParts); ++i)
 		{
@@ -1472,7 +1479,7 @@ BOOL sendTemplate(DROID_TEMPLATE *pTempl)
 			NETuint32_t(&pTempl->asWeaps[i]);
 		}
 
-		NETuint32_t((uint32_t*)&pTempl->droidType);
+		NETenum(&pTempl->droidType);
 		NETuint32_t(&pTempl->multiPlayerID);
 
 	return NETend();
@@ -1492,7 +1499,6 @@ BOOL recvTemplate(NETQUEUE queue)
 
 		NETuint32_t(&pT->ref);
 		NETstring(pT->aName, sizeof(pT->aName));
-		NETuint8_t(&pT->NameVersion);
 
 		for (i = 0; i < ARRAY_SIZE(pT->asParts); ++i)
 		{
@@ -1510,7 +1516,7 @@ BOOL recvTemplate(NETQUEUE queue)
 			NETuint32_t(&pT->asWeaps[i]);
 		}
 
-		NETuint32_t((uint32_t*)&pT->droidType);
+		NETenum(&pT->droidType);
 		NETuint32_t(&pT->multiPlayerID);
 	NETend();
 
@@ -1524,7 +1530,7 @@ BOOL recvTemplate(NETQUEUE queue)
 	if (psTempl)
 	{
 		t.psNext = psTempl->psNext;
-		memcpy(psTempl, &t, sizeof(DROID_TEMPLATE));
+		*psTempl = t;
 		debug(LOG_SYNC, "Updating MP template %d", (int)t.multiPlayerID);
 	}
 	else
@@ -1592,14 +1598,15 @@ static BOOL recvDestroyTemplate(NETQUEUE queue)
 		// Delete the template.
 		//before deleting the template, need to make sure not being used in production
 		deleteTemplateFromProduction(psTempl, player, ModeImmediate);
-		free(psTempl);
+		delete psTempl;
 	}
 	else
 	{
 		DROID_TEMPLATE aaargh;
 		aaargh.multiPlayerID = templateID;
 		deleteTemplateFromProduction(&aaargh, player, ModeImmediate);
-		debug(LOG_ERROR, "TODO: Rewrite the whole interface, so it's possible to change the code without spaghetti dependencies causing problems everywhere, and without resorting to ugly hacks.");
+		// TODO Memory leak, need to actually delete the template somehow.
+		//debug(LOG_ERROR, "TODO: Rewrite the whole interface, so it's possible to change the code without spaghetti dependencies causing problems everywhere, and without resorting to ugly hacks.");
 	}
 
 	return true;
@@ -2054,8 +2061,17 @@ const char* getPlayerColourName(unsigned int player)
 		N_("Red"),
 		N_("Blue"),
 		N_("Pink"),
-		N_("Cyan")
+		N_("Cyan"),
+		N_("Yellow"),
+		N_("Purple"),
+		N_("White"),
+		N_("Bright blue"),
+		N_("Neon green"),
+		N_("Infrared"),
+		N_("Ultraviolet"),
+		N_("Brown"),
 	};
+	STATIC_ASSERT(MAX_PLAYERS <= ARRAY_SIZE(playerColors));
 
 	ASSERT(player < ARRAY_SIZE(playerColors), "player number (%d) exceeds maximum (%lu)", player, (unsigned long) ARRAY_SIZE(playerColors));
 

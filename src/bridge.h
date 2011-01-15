@@ -23,11 +23,6 @@
 
 #include "structuredef.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 typedef struct _bridge_info
 {
 	int	startX, startY, endX, endY;			// Copy of coordinates of bridge.
@@ -38,19 +33,15 @@ typedef struct _bridge_info
 } BRIDGE_INFO;
 
 /* Establishes whether a bridge could be built along the coordinates given */
-BOOL bridgeValid(UDWORD startX, UDWORD startY, UDWORD endX, UDWORD endY);
+bool bridgeValid(int startX, int startY, int endX, int endY);
 
 /* Draws a wall section - got to be in world matrix context though! */
 BOOL renderBridgeSection(STRUCTURE *psStructure);
 
 /* Will provide you with everything you ever wanted to know about your bridge but were afraid to ask */
-void getBridgeInfo(UDWORD startX, UDWORD startY, UDWORD endX, UDWORD endY, BRIDGE_INFO *info);
+void getBridgeInfo(int startX, int startY, int endX, int endY, BRIDGE_INFO *info);
 
 /* FIX ME - this is used in debug to test the bridge build code */
 void testBuildBridge(UDWORD startX, UDWORD startY, UDWORD endX, UDWORD endY);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_BRIDGE_H__

@@ -10,20 +10,13 @@
 #ifndef _SDL_framerate_h
 #define _SDL_framerate_h
 
-/* Set up for C function definitions, even when using C++ */
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-/* --- */
-
 #include <SDL.h>
 
 /* --------- Definitions */
 
 /* Some rates in Hz */
 
-#define FPS_UPPER_LIMIT		200
+#define FPS_UPPER_LIMIT		500
 #define FPS_LOWER_LIMIT		1
 #define FPS_DEFAULT		30
 
@@ -44,10 +37,5 @@ extern "C" {
     void SDL_framerateDelay(FPSmanager * manager);
 
 /* --- */
-
-/* Ends C function definitions when using C++ */
-#ifdef __cplusplus
-}
-#endif
 
 #endif				/* _SDL_framerate_h */

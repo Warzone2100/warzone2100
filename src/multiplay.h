@@ -29,11 +29,6 @@
 #include "featuredef.h"
 #include "droid.h"  // For INITIAL_DROID_ORDERS.
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 // Game Options Structure. Enough info to completely describe the static stuff in amultiplay game.
 typedef struct {
@@ -84,6 +79,22 @@ typedef enum
 	STRUCTUREINFO_RELEASERESEARCH
 } STRUCTURE_INFO;
 
+struct PACKAGED_CHECK
+{
+	uint32_t gameTime;  ///< Game time that this synch check was made. Not touched by NETauto().
+	uint8_t player;
+	uint32_t droidID;
+	int32_t order;
+	uint32_t secondaryOrder;
+	uint32_t body;
+	uint32_t experience;
+	Position pos;
+	Rotation rot;
+	uint32_t targetID;  ///< Defined iff order == DORDER_ATTACK.
+	uint16_t orderX;    ///< Defined iff order == DORDER_MOVE.
+	uint16_t orderY;    ///< Defined iff order == DORDER_MOVE.
+};
+
 // ////////////////////////////////////////////////////////////////////////////
 // Game Options and stats.
 extern MULTIPLAYERGAME		game;						// the game description.
@@ -91,7 +102,6 @@ extern MULTIPLAYERINGAME	ingame;						// the game description.
 
 extern BOOL					bMultiPlayer;				// true when more than 1 player.
 extern BOOL					bMultiMessages;				// == bMultiPlayer unless multi messages are disabled
-extern UDWORD				selectedPlayer;
 extern BOOL					openchannels[MAX_PLAYERS];
 extern UBYTE				bDisplayMultiJoiningStatus;	// draw load progress?
 
@@ -150,6 +160,8 @@ extern BOOL isHumanPlayer		(UDWORD player);				//to tell if the player is a comp
 extern BOOL myResponsibility	(UDWORD player);
 extern BOOL responsibleFor		(UDWORD player, UDWORD playerinquestion);
 extern UDWORD whosResponsible	(UDWORD player);
+int scavengerSlot();    // Returns the player number that scavengers would have if they were enabled.
+int scavengerPlayer();  // Returns the player number that the scavengers have, or -1 if disabled.
 extern Vector3i cameraToHome		(UDWORD player,BOOL scroll);
 extern char		playerName[MAX_PLAYERS][MAX_STR_LENGTH];	//Array to store all player names (humans and AIs)
 
@@ -235,9 +247,5 @@ extern	void startMultiplayerGame	(void);
 extern	void resetReadyStatus		(bool bSendOptions);
 
 extern	BOOL bPlayerReadyGUI[MAX_PLAYERS];
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_MULTIPLAY_H__

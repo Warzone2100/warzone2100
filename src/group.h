@@ -26,27 +26,22 @@
 
 #include "order.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
-typedef enum _group_type
+enum GROUP_TYPE
 {
 	GT_NORMAL,			// standard group
 	GT_COMMAND,			// command droid group
 	GT_TRANSPORTER,		// transporter group
-} GROUP_TYPE;
+};
 
-typedef struct _droid_group
+struct DROID_GROUP
 {
 	SWORD		type;
 	SWORD		refCount;
 	DROID		*psList;			// list of droids in the group
 	DROID		*psCommander;		// the command droid of a command group
 	RUN_DATA	sRunData;			// where the group should retreat to
-	struct _droid_group *psNext, *psPrev;	// keep linked to destroy all (a workaround hack)
-} DROID_GROUP;
+	DROID_GROUP     *psNext, *psPrev;       // keep linked to destroy all (a workaround hack)
+};
 
 // initialise the group system
 BOOL grpInitialise(void);
@@ -60,9 +55,6 @@ BOOL grpCreate(DROID_GROUP	**ppsGroup);
 // add a droid to a group
 void grpJoin(DROID_GROUP *psGroup, DROID *psDroid);
 
-// add a droid to a group at the end of the list
-void grpJoinEnd(DROID_GROUP *psGroup, DROID *psDroid);
-
 // remove a droid from a group
 void grpLeave(DROID_GROUP *psGroup, DROID *psDroid);
 
@@ -72,20 +64,12 @@ unsigned int grpNumMembers(const DROID_GROUP* psGroup);
 // remove all droids from a group
 void grpReset(DROID_GROUP *psGroup);
 
-/* Give a group an order */
+// Give a group of droids an order
 void orderGroup(DROID_GROUP *psGroup, DROID_ORDER order);
-
-/* Give a group of droids an order */
-void orderGroupLoc(DROID_GROUP *psGroup, DROID_ORDER order, UDWORD x, UDWORD y);
-
-/* Give a group of droids an order */
-void orderGroupObj(DROID_GROUP *psGroup, DROID_ORDER order, BASE_OBJECT *psObj);
+void orderGroup(DROID_GROUP *psGroup, DROID_ORDER order, UDWORD x, UDWORD y);
+void orderGroup(DROID_GROUP *psGroup, DROID_ORDER order, BASE_OBJECT *psObj);
 
 /* set the secondary state for a group of droids */
 void grpSetSecondary(DROID_GROUP *psGroup, SECONDARY_ORDER sec, SECONDARY_STATE state);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_GROUP_H__

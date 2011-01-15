@@ -39,9 +39,9 @@
 #include "levelint.h"
 #include "game.h"
 #include "lighting.h"
-#include "lib/ivis_common/piestate.h"
+#include "lib/ivis_opengl/piestate.h"
 #include "data.h"
-#include "lib/ivis_common/ivi.h"
+#include "lib/ivis_opengl/ivi.h"
 #include "lib/script/script.h"
 #include "scripttabs.h"
 #include "research.h"
@@ -156,7 +156,9 @@ LEVEL_DATASET* levFindDataSet(const char* name)
 }
 
 // parse a level description data file
-BOOL levParse(const char* buffer, size_t size, searchPathMode datadir)
+// the ignoreWrf hack is for compatibility with old maps that try to link in various
+// data files that we have removed
+BOOL levParse(const char* buffer, size_t size, searchPathMode datadir, bool ignoreWrf)
 {
 	lexerinput_t input;
 	LEVELPARSER_STATE state;
@@ -404,6 +406,11 @@ BOOL levParse(const char* buffer, size_t size, searchPathMode datadir)
 				if (state == LP_GAME)
 				{
 					psDataSet->game = (SWORD)currData;
+				}
+				else if (ignoreWrf)
+				{
+					state = LP_WAITDATA;
+					break;	// ignore this wrf line
 				}
 
 				// store the data name

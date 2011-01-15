@@ -29,11 +29,6 @@
 #include "nettypes.h"
 #include <physfs.h>
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 // Lobby Connection errors
 
 typedef enum
@@ -141,7 +136,7 @@ typedef enum
 
 #define SESSION_JOINDISABLED	1
 
-#define MAX_CONNECTED_PLAYERS   8
+#define MAX_CONNECTED_PLAYERS   MAX_PLAYERS
 #define MAX_TMP_SOCKETS         16
 
 typedef struct {					//Available game storage... JUST FOR REFERENCE!
@@ -235,9 +230,15 @@ typedef enum
 	ALREADY_HAVE_FILE,
 	STUCK_IN_FILE_LOOP
 }	wzFileEnum;
+
+enum
+{
+	DIFFICULTY_EASY, DIFFICULTY_MEDIUM, DIFFICULTY_HARD, DIFFICULTY_INSANE
+};
+
 // ////////////////////////////////////////////////////////////////////////
 // Player information. Filled when players join, never re-ordered. selectedPlayer global points to 
-// currently controlled player. This array is indexed by GUI slots in pregame.
+// currently controlled player.
 typedef struct
 {
 	char		name[StringSize];	///< Player name
@@ -250,8 +251,8 @@ typedef struct
 	int32_t		connection;		///< Index into connection list
 	int32_t		team;			///< Which team we are on
 	BOOL		ready;			///< player ready to start?
-	uint32_t	unused_1;	///< for future usage
-	BOOL		unused_2;	///< for future usage
+	int8_t		ai;			///< index into sorted list of AIs, zero is always default AI
+	int8_t		difficulty;		///< difficulty level of AI
 	BOOL		needFile;			///< if We need a file sent to us
 	WZFile		wzFile;				///< for each player, we keep track of map progress
 	char		IPtextAddress[40];	///< IP of this player
@@ -266,7 +267,6 @@ typedef struct {
 	uint32_t	hostPlayer;		///< Index of host in player array
 	uint32_t	bComms;			///< Actually do the comms?
 	BOOL		isHost;			///< True if we are hosting the game
-	int32_t		maxPlayers;		///< Maximum number of players in this game
 	BOOL		isUPNP;					// if we want the UPnP detection routines to run
 	BOOL		isHostAlive;	/// if the host is still alive
 	PHYSFS_file	*pMapFileHandle;
@@ -297,7 +297,7 @@ extern char iptoconnect[PATH_MAX]; // holds IP/hostname from command line
 // ////////////////////////////////////////////////////////////////////////
 // functions available to you.
 extern int   NETinit(BOOL bFirstCall);				// init
-BOOL NETsend(uint8_t player, NETMESSAGE message);                        ///< send to player, or broadcast if player == NET_ALL_PLAYERS.
+bool NETsend(uint8_t player, NetMessage const *message);                 ///< send to player, or broadcast if player == NET_ALL_PLAYERS.
 extern BOOL NETrecvNet(NETQUEUE *queue, uint8_t *type);                  ///< recv a message from the net queues if possible.
 extern BOOL NETrecvGame(NETQUEUE *queue, uint8_t *type);                 ///< recv a message from the game queues which is sceduled to execute by time, if possible.
 void NETflush(void);                                                     ///< Flushes any data stuck in compression buffers.
@@ -370,9 +370,5 @@ void _syncDebugBacktrace(const char *function);                  ///< Adds a bac
 void resetSyncDebug(void);                                       ///< Resets the syncDebug, so syncDebug from a previous game doesn't cause a spurious desynch dump.
 uint32_t nextDebugSync(void);                                    ///< Returns a CRC corresponding to all syncDebug() calls since the last nextDebugSync() or resetSyncDebug() call.
 bool checkDebugSync(uint32_t checkGameTime, uint32_t checkCrc);  ///< Dumps all syncDebug() calls from that gameTime, if the CRC doesn't match.
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif

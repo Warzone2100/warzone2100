@@ -19,8 +19,8 @@
 */
 #include "lib/framework/frame.h"
 #include "lib/framework/file.h"
-#include "lib/ivis_common/piestate.h"
-#include "lib/ivis_common/piepalette.h"
+#include "lib/ivis_opengl/piestate.h"
+#include "lib/ivis_opengl/piepalette.h"
 #include "screen.h"
 
 PIELIGHT psPalette[WZCOL_MAX];
@@ -89,7 +89,16 @@ PIELIGHT pal_GetTeamColour(int team)
 		case 7:
 			tcolour = WZCOL_TEAM8; //teal
 			break;
+		case  8: return WZCOL_TEAM9;
+		case  9: return WZCOL_TEAM10;
+		case 10: return WZCOL_TEAM11;
+		case 11: return WZCOL_TEAM12;
+		case 12: return WZCOL_TEAM13;
+		case 13: return WZCOL_TEAM14;
+		case 14: return WZCOL_TEAM15;
+		case 15: return WZCOL_TEAM16;
 		default:
+			STATIC_ASSERT(MAX_PLAYERS <= 16);
 			ASSERT(false, "Attempting to get colour for non-existing team %u", (unsigned int)team);
 			tcolour = WZCOL_WHITE; //default is white
 			break;

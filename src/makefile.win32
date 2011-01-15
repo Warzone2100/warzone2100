@@ -8,18 +8,17 @@ CPPFLAGS := $(CPPFLAGS) -I$(top_srcdir)/lib/ivis_opengl
 # Due to the lexer's dependencies on the parser's header we need to compile the
 # parsers first
 PARSERS= \
-	message_parser.tab.c \
-	message_lexer.lex.c \
-	scriptvals_parser.tab.c \
-	scriptvals_lexer.lex.c \
-	level_lexer.lex.c
+	message_parser.tab.cpp \
+	message_lexer.lex.cpp \
+	scriptvals_parser.tab.cpp \
+	scriptvals_lexer.lex.cpp \
+	level_lexer.lex.cpp
 
 SRC= \
 	$(PARSERS) \
 	action.cpp \
 	advvis.cpp \
 	ai.cpp \
-	aiexperience.cpp \
 	astar.cpp \
 	atmos.cpp \
 	aud.cpp \

@@ -23,15 +23,6 @@
 
 #include <physfs.h>
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 extern bool ParseResourceFile(PHYSFS_file* fileHandle);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif	/* _PARSER_H_ */

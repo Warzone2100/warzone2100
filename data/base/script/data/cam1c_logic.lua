@@ -480,7 +480,6 @@ function startup()
 	setAssemblyPoint(enm2c, 9920, 3136)
 	-- setAssemblyPoint (enm2d, 14528, 3776);
 	
-	randomiseSeed()
 	-- make scavengers allies with NP
 	createAlliance(enemy1, enemy2)
 	-- set attack level for scavs
@@ -1293,7 +1292,6 @@ if anyDroidsLeft == nil then anyDroidsLeft = function() print("stub: anyDroidsLe
 if droidInRange == nil then droidInRange = function() print("stub: droidInRange"); return 0 end end
 if setEventTrigger == nil then setEventTrigger = function() print("stub: setEventTrigger"); return 0 end end
 if getFeature == nil then getFeature = function() print("stub: getFeature"); return 0 end end
-if randomiseSeed == nil then randomiseSeed = function() print("stub: randomiseSeed"); return 0 end end
 if removeMessage == nil then removeMessage = function() print("stub: removeMessage"); return 0 end end
 if destroyFeature == nil then destroyFeature = function() print("stub: destroyFeature"); return 0 end end
 if setGroupSecondary == nil then setGroupSecondary = function() print("stub: setGroupSecondary"); return 0 end end

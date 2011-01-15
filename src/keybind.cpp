@@ -70,7 +70,7 @@
 #include "lib/widget/label.h"
 #include "lib/widget/button.h"
 #include "order.h"
-#include "lib/ivis_common/piestate.h"
+#include "lib/ivis_opengl/piestate.h"
 // FIXME Direct iVis implementation include!
 #include "lib/framework/fixedpoint.h"
 #include "lib/ivis_opengl/piematrix.h"
@@ -87,7 +87,6 @@
 #include "selection.h"
 #include "difficulty.h"
 #include "scriptcb.h"		/* for console callback */
-#include "aiexperience.h"	/* for console commands */
 #include "scriptfuncs.h"
 #include "clparse.h"
 #include "research.h"
@@ -115,7 +114,6 @@ static STRUCTURE	*psOldRE = NULL;
 static char	sCurrentConsoleText[MAX_CONSOLE_STRING_LENGTH];			//remember what user types in console for beacon msg
 
 /* Support functions to minimise code size */
-static BOOL	processConsoleCommands( char *pName );
 static void kfsf_SetSelectedDroidsState( SECONDARY_ORDER sec, SECONDARY_STATE State );
 
 /** A function to determine wether we're running a multiplayer game, not just a
@@ -188,7 +186,7 @@ void	kf_PowerInfo( void )
 {
 	int i;
 
-	for (i = 0; i < NetPlay.maxPlayers; i++)
+	for (i = 0; i < game.maxPlayers; i++)
 	{
 		console("Player %d: %d power", i, (int)getPower(i));
 	}
@@ -314,7 +312,7 @@ DROID	*psDroid;
 
 void	kf_CloneSelected( void )
 {
-	DROID		*psDroid, *psNewDroid = NULL;
+	DROID		*psDroid;
 	DROID_TEMPLATE	sTemplate;
 	DROID_TEMPLATE	*sTemplate2 = NULL;
 	const int	limit = 10;	// make 10 clones
@@ -348,11 +346,11 @@ void	kf_CloneSelected( void )
 				debug(LOG_ERROR, "We can't find the template for this droid: %s, id:%u, type:%d!", psDroid->aName, psDroid->id, psDroid->droidType);
 				return;
 			}
-			memcpy(&sTemplate, sTemplate2, sizeof(DROID_TEMPLATE));
+			sTemplate = *sTemplate2;
 			templateSetParts(psDroid, &sTemplate);
 
 			// create a new droid
-			psNewDroid = buildDroid(&sTemplate, psDroid->pos.x, psDroid->pos.y, psDroid->player, false, NULL);
+			buildDroid(&sTemplate, psDroid->pos.x, psDroid->pos.y, psDroid->player, false, NULL);
 			/* // TODO psNewDroid is null, since we just sent a message, but haven't actually created the droid locally yet.
 			ASSERT_OR_RETURN(, psNewDroid != NULL, "Unable to build a unit");
 			addDroid(psNewDroid, apsDroidLists);
@@ -849,13 +847,13 @@ void	kf_SystemClose( void )
 /* Zooms out from display */
 void	kf_ZoomOut( void )
 {
-	float zoomInterval = realTimeAdjustedIncrement(MAP_ZOOM_RATE);
+	distance = std::min<int>(distance + realTimeAdjustedIncrement(MAP_ZOOM_RATE), MAXDISTANCE);
+	UpdateFogDistance(distance);
+}
 
-	distance += zoomInterval;
-	if(distance > MAXDISTANCE)
-	{
-		distance = MAXDISTANCE;
-	}
+void kf_ZoomOutStep(void)
+{
+	distance = std::min<int>(distance + MAP_ZOOM_RATE/3, MAXDISTANCE);
 	UpdateFogDistance(distance);
 }
 
@@ -888,13 +886,13 @@ void	kf_RadarZoomOut( void )
 /* Zooms in the map */
 void	kf_ZoomIn( void )
 {
-	float zoomInterval = realTimeAdjustedIncrement(MAP_ZOOM_RATE);
+	distance = std::max<int>(distance - realTimeAdjustedIncrement(MAP_ZOOM_RATE), MINDISTANCE);
+	UpdateFogDistance(distance);
+}
 
-	distance -= zoomInterval;
-	if (distance < MINDISTANCE)
-	{
-		distance = MINDISTANCE;
-	}
+void kf_ZoomInStep(void)
+{
+	distance = std::max<int>(distance - MAP_ZOOM_RATE/3, MINDISTANCE);
 	UpdateFogDistance(distance);
 }
 
@@ -2047,15 +2045,6 @@ void kf_SendTextMessage(void)
 			if(!strcmp(sTextToSend, ""))
 				return;
 
-			/* process console commands (only if skirmish or multiplayer, not a campaign) */
-			if((game.type == SKIRMISH) || bMultiPlayer)
-			{
-				if(processConsoleCommands(sTextToSend))
-				{
-					return;	//it was a console command, so don't send
-				}
-			}
-
 			//console callback message
 			//--------------------------
 			ConsolePlayer = selectedPlayer;
@@ -2429,7 +2418,6 @@ void	kf_TriggerRayCast( void )
 {
 DROID	*psDroid;
 BOOL	found;
-DROID	*psOther;
 
 	found = false;
 	for(psDroid = apsDroidLists[selectedPlayer]; psDroid && !found;
@@ -2438,7 +2426,6 @@ DROID	*psOther;
 			if(psDroid->selected)
 			{
 				found = true;
-				psOther = psDroid;
 			}
 			/* NOP */
 		}
@@ -2757,82 +2744,6 @@ void kf_ToggleRadarTerrain(void)
 	}
 }
 
-
-//Returns true if the engine should dofurther text processing, false if just exit
-BOOL	processConsoleCommands( char *pName )
-{
-#ifdef DEBUG
-	BOOL	bFound = false;
-	SDWORD	i;
-
-	if(strcmp(pName,"/loadai") == false)
-	{
-		(void)LoadAIExperience(true);
-		return true;
-	}
-	else if(strcmp(pName,"/saveai") == false)
-	{
-		(void)SaveAIExperience(true);
-		return true;
-	}
-	else if(strcmp(pName,"/maxplayers") == false)
-	{
-		console("game.maxPlayers: &d", game.maxPlayers);
-		return true;
-	}
-	else if(strcmp(pName,"/bd") == false)
-	{
-		BaseExperienceDebug(selectedPlayer);
-
-		return true;
-	}
-	else if(strcmp(pName,"/sm") == false)
-	{
-		for(i=0; i<MAX_PLAYERS;i++)
-		{
-			console("%d - %d", i, game.skDiff[i]);
-		}
-
-		return true;
-	}
-	else if(strcmp(pName,"/od") == false)
-	{
-		OilExperienceDebug(selectedPlayer);
-
-		return true;
-	}
-	else
-	{
-		char tmpStr[255];
-
-		/* saveai x */
-		for(i=0;i<MAX_PLAYERS;i++)
-		{
-			sprintf(tmpStr,"/saveai %d", i);		//"saveai 0"
-			if(strcmp(pName,tmpStr) == false)
-			{
-				SavePlayerAIExperience(i, true);
-				return true;
-			}
-		}
-
-		/* loadai x */
-		for(i=0;i<MAX_PLAYERS;i++)
-		{
-			sprintf(tmpStr,"/loadai %d", i);		//"loadai 0"
-			if(strcmp(pName,tmpStr) == false)
-			{
-				(void)LoadPlayerAIExperience(i);
-				return true;
-			}
-		}
-	}
-	return bFound;
-#else
-	return false;
-#endif
-}
-
 //Add a beacon (blip)
 void	kf_AddHelpBlip( void )
 {
@@ -2913,8 +2824,6 @@ void kf_BuildPrevPage()
 {
 	W_TABFORM *psTForm;
 	int temp;
-	int numTabs;
-	int maxTabs;
 	int tabPos;
 
 	ASSERT_OR_RETURN( , psWScreen != NULL, " Invalid screen pointer!");
@@ -2929,8 +2838,6 @@ void kf_BuildPrevPage()
 		psTForm->TabMultiplier = 1;				// 1-based
 	}
 
-	numTabs = numForms(psTForm->numStats,psTForm->numButtons);
-	maxTabs = ((numTabs /TAB_SEVEN) + 1);		// (Total tabs needed / 7(max tabs that fit))+1
 	temp = psTForm->majorT - 1;
 	if (temp < 0)
 	{

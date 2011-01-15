@@ -46,7 +46,7 @@
 #include "group.h"
 #include "cmddroid.h"
 #include "feature.h"
-#include "lib/ivis_common/piestate.h"
+#include "lib/ivis_opengl/piestate.h"
 #include "loop.h"
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/piematrix.h"
@@ -89,7 +89,19 @@ BASE_OBJECT		*g_pProjLastAttacker;
 
 /***************************************************************************/
 
-static UDWORD	establishTargetRadius( BASE_OBJECT *psTarget );
+struct ObjectShape
+{
+	ObjectShape() {}
+	ObjectShape(int radius) : isRectangular(false), size(radius, radius) {}
+	ObjectShape(int width, int breadth) : isRectangular(true), size(width, breadth) {}
+	ObjectShape(Vector2i widthBreadth) : isRectangular(true), size(widthBreadth) {}
+	int radius() const { return size.x; }
+
+	bool     isRectangular;  ///< True if rectangular, false if circular.
+	Vector2i size;           ///< x == y if circular.
+};
+
+static ObjectShape establishTargetShape(BASE_OBJECT *psTarget);
 static UDWORD	establishTargetHeight( BASE_OBJECT *psTarget );
 static void	proj_ImpactFunc( PROJECTILE *psObj );
 static void	proj_PostImpactFunc( PROJECTILE *psObj );
@@ -98,11 +110,6 @@ static void	proj_checkBurnDamage( BASE_OBJECT *apsList, PROJECTILE *psProj);
 static int32_t objectDamage(BASE_OBJECT *psObj, UDWORD damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, HIT_SIDE impactSide);
 static HIT_SIDE getHitSide (PROJECTILE *psObj, BASE_OBJECT *psTarget);
 
-
-/*static inline bool isDead(BASE_OBJECT *psObj)
-{
-	return psObj->died != 0;
-}*/
 
 static inline void setProjectileDestination(PROJECTILE *psProj, BASE_OBJECT *psObj)
 {
@@ -307,13 +314,13 @@ static void proj_UpdateKills(PROJECTILE *psObj, int32_t experienceInc)
 
 void _syncDebugProjectile(const char *function, PROJECTILE *psProj, char ch)
 {
-	_syncDebug(function, "%c projectile = p%d;pos(%d,%d,%d),rot(%d,%d,%d),state%d,edc%d,nd%zd", ch,
+	_syncDebug(function, "%c projectile = p%d;pos(%d,%d,%d),rot(%d,%d,%d),state%d,edc%d,nd%lu", ch,
 	          psProj->player,
 	          psProj->pos.x, psProj->pos.y, psProj->pos.z,
 	          psProj->rot.direction, psProj->rot.pitch, psProj->rot.roll,
 	          psProj->state,
 	          psProj->expectedDamageCaused,
-	          psProj->psDamaged.size());
+	          (unsigned long)psProj->psDamaged.size());
 }
 
 static int32_t randomVariation(int32_t val)
@@ -360,11 +367,9 @@ int32_t projCalcIndirectVelocities(const int32_t dx, const int32_t dz, int32_t v
 	return t;
 }
 
-BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Vector3i target, BASE_OBJECT *psTarget, BOOL bVisible, int weapon_slot)
+bool proj_SendProjectile(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int player, Vector3i target, BASE_OBJECT *psTarget, BOOL bVisible, int weapon_slot)
 {
 	PROJECTILE *            psProj = new PROJECTILE(ProjectileTrackerID |(gameTime2 >>4), player);
-	int32_t                 dx, dy, dz;
-	uint32_t                dxy;
 	WEAPON_STATS *psStats = &asWeaponStats[psWeap->nStat];
 
 	ASSERT_OR_RETURN( false, psWeap->nStat < numWeaponStats, "Invalid range referenced for numWeaponStats, %d > %d", psWeap->nStat, numWeaponStats);
@@ -447,28 +452,26 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 		scoreUpdateVar(WD_SHOTS_OFF_TARGET);
 	}
 
-	dx = psProj->dst.x - psProj->src.x;
-	dy = psProj->dst.y - psProj->src.y;
-	dz = psProj->dst.z - psProj->src.z;
+	Vector3i deltaPos = psProj->dst - psProj->src;
 
 	/* roll never set */
 	psProj->rot.roll = 0;
 
-	psProj->rot.direction = iAtan2(dx, dy);
+	psProj->rot.direction = iAtan2(removeZ(deltaPos));
 
 
-	/* get target distance */
-	dxy = iHypot(dx, dy);
+	// Get target distance, horizontal distance only.
+	uint32_t dist = iHypot(removeZ(deltaPos));
 
-	if (proj_Direct(psStats) || (!proj_Direct(psStats) && dxy <= psStats->minRange))
+	if (proj_Direct(psStats) || (!proj_Direct(psStats) && dist <= psStats->minRange))
 	{
-		psProj->rot.pitch = iAtan2(dz, dxy);
+		psProj->rot.pitch = iAtan2(deltaPos.z, dist);
 		psProj->state = PROJ_INFLIGHTDIRECT;
 	}
 	else
 	{
 		/* indirect */
-		projCalcIndirectVelocities(dxy, dz, psStats->flightSpeed, &psProj->vXY, &psProj->vZ);
+		projCalcIndirectVelocities(dist, deltaPos.z, psStats->flightSpeed, &psProj->vXY, &psProj->vZ);
 		psProj->rot.pitch = iAtan2(psProj->vZ, psProj->vXY);
 		psProj->state = PROJ_INFLIGHTINDIRECT;
 	}
@@ -503,13 +506,11 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 			if ( psProj->psSource )
 			{
 				/* firing sound emitted from source */
-				audio_PlayObjDynamicTrack( (BASE_OBJECT *) psProj->psSource,
-									psStats->iAudioFireID, NULL );
+				audio_PlayObjDynamicTrack(psProj->psSource, psStats->iAudioFireID, NULL);
 				/* GJ HACK: move howitzer sound with shell */
 				if ( psStats->weaponSubClass == WSC_HOWITZERS )
 				{
-					audio_PlayObjDynamicTrack( (BASE_OBJECT *) psProj,
-									ID_SOUND_HOWITZ_FLIGHT, NULL );
+					audio_PlayObjDynamicTrack(psProj, ID_SOUND_HOWITZ_FLIGHT, NULL);
 				}
 			}
 			//don't play the sound for a LasSat in multiPlayer
@@ -520,10 +521,10 @@ BOOL proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Ve
 		}
 	}
 
-	if ((psAttacker != NULL) && !proj_Direct(psStats))
+	if (psAttacker != NULL && !proj_Direct(psStats))
 	{
 		//check for Counter Battery Sensor in range of target
-		counterBatteryFire(psAttacker, psTarget);
+		counterBatteryFire(castBaseObject(psAttacker), psTarget);
 	}
 
 	syncDebugProjectile(psProj, '*');
@@ -601,12 +602,24 @@ static INTERVAL collisionXY(int32_t x1, int32_t y1, int32_t x2, int32_t y2, int3
 	return ret;
 }
 
-static int32_t collisionXYZ(Vector3i v1, Vector3i v2, int32_t radius, int32_t height)
+static int32_t collisionXYZ(Vector3i v1, Vector3i v2, ObjectShape shape, int32_t height)
 {
-	INTERVAL iz = collisionZ(v1.z, v2.z, height);
-	if (!intervalEmpty(iz))  // Don't bother checking x and y unless z passes.
+	INTERVAL i = collisionZ(v1.z, v2.z, height);
+	if (!intervalEmpty(i))  // Don't bother checking x and y unless z passes.
 	{
-		INTERVAL i = intervalIntersection(iz, collisionXY(v1.x, v1.y, v2.x, v2.y, radius));
+		if (shape.isRectangular)
+		{
+			i = intervalIntersection(i, collisionZ(v1.x, v2.x, shape.size.x));
+			if (!intervalEmpty(i))  // Don't bother checking y unless x and z pass.
+			{
+				i = intervalIntersection(i, collisionZ(v1.y, v2.y, shape.size.y));
+			}
+		}
+		else  // Else is circular.
+		{
+			i = intervalIntersection(i, collisionXY(v1.x, v1.y, v2.x, v2.y, shape.radius()));
+		}
+
 		if (!intervalEmpty(i))
 		{
 			return MAX(0, i.begin);
@@ -630,8 +643,8 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 	Vector3i nextPos;
 	int32_t targetDistance, currentDistance;
 	BASE_OBJECT *psTempObj, *closestCollisionObject = NULL;
-	SPACETIME closestCollisionSpacetime;
-	memset(&closestCollisionSpacetime, 0, sizeof(SPACETIME));  // Squelch uninitialised warning.
+	Spacetime closestCollisionSpacetime;
+	memset(&closestCollisionSpacetime, 0, sizeof(Spacetime));  // Squelch uninitialised warning.
 
 	CHECK_PROJECTILE(psProj);
 
@@ -817,33 +830,29 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 			continue;
 		}
 
-		// Actual collision test.
+		Vector3i psTempObjPrevPos = isDroid(psTempObj)? castDroid(psTempObj)->prevSpacetime.pos : psTempObj->pos;
+
+		const Vector3i diff = psProj->pos - psTempObj->pos;
+		const Vector3i prevDiff = psProj->prevSpacetime.pos - psTempObjPrevPos;
+		const unsigned int targetHeight = establishTargetHeight(psTempObj);
+		const ObjectShape targetShape = establishTargetShape(psTempObj);
+		const int32_t collision = collisionXYZ(prevDiff, diff, targetShape, targetHeight);
+		const uint32_t collisionTime = psProj->prevSpacetime.time + (psProj->time - psProj->prevSpacetime.time)*collision/1024;
+
+		if (collision >= 0 && collisionTime < closestCollisionSpacetime.time)
 		{
-			const Vector3i posProj = psProj->pos;
-			const Vector3i prevPosProj = psProj->prevSpacetime.pos;
-			const Vector3i posTemp = psTempObj->pos;
-			const Vector3i diff = Vector3i_Sub(posProj, posTemp);
-			const Vector3i prevDiff = Vector3i_Sub(prevPosProj, posTemp);  // HACK Ignore that target might be moving. The projectile is probably moving faster, so it's better than nothing...
-			const unsigned int targetHeight = establishTargetHeight(psTempObj);
-			const unsigned int targetRadius = establishTargetRadius(psTempObj);
-			const int32_t collision = collisionXYZ(prevDiff, diff, targetRadius, targetHeight);
-			const uint32_t collisionTime = psProj->prevSpacetime.time + (psProj->time - psProj->prevSpacetime.time)*collision/1024;
+			// We hit!
+			closestCollisionSpacetime = interpolateObjectSpacetime(psProj, collisionTime);
+			closestCollisionObject = psTempObj;
 
-			if (collision >= 0 && collisionTime < closestCollisionSpacetime.time)
-			{
-				// We hit!
-				closestCollisionSpacetime = interpolateObjectSpacetime(psProj, collisionTime);
-				closestCollisionObject = psTempObj;
-
-				// Keep testing for more collisions, in case there was a closer target.
-			}
+			// Keep testing for more collisions, in case there was a closer target.
 		}
 	}
 
 	if (closestCollisionObject != NULL)
 	{
 		// We hit!
-		SET_SPACETIME(psProj, closestCollisionSpacetime);
+		setSpacetime(psProj, closestCollisionSpacetime);
 		if(psProj->time == psProj->prevSpacetime.time)
 		{
 			--psProj->prevSpacetime.time;
@@ -855,12 +864,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 		{
 			WEAPON asWeap;
 			// Determine position to fire a missile at
-			Vector3i newDest = {
-				psProj->src.x + move.x * distanceExtensionFactor/100,
-				psProj->src.y + move.y * distanceExtensionFactor/100,
-				psProj->src.z + move.z * distanceExtensionFactor/100
-			};
-			memset(&asWeap, 0, sizeof(asWeap));
+			Vector3i newDest = psProj->src + move * distanceExtensionFactor/100;
 			asWeap.nStat = psStats - asWeaponStats;
 
 			ASSERT(distanceExtensionFactor != 0, "Unitialized variable used! distanceExtensionFactor is not initialized.");
@@ -868,7 +872,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 			// Assume we damaged the chosen target
 			psProj->psDamaged.push_back(closestCollisionObject);
 
-			proj_SendProjectile(&asWeap, (BASE_OBJECT*)psProj, psProj->player, newDest, NULL, true, -1);
+			proj_SendProjectile(&asWeap, psProj, psProj->player, newDest, NULL, true, -1);
 		}
 
 		psProj->state = PROJ_IMPACT;
@@ -879,7 +883,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 	ASSERT(distanceExtensionFactor != 0, "Unitialized variable used! distanceExtensionFactor is not initialized.");
 
 	if (distancePercent >= distanceExtensionFactor || /* We've traveled our maximum range */
-		!mapObjIsAboveGround((BASE_OBJECT*)psProj)) /* trying to travel through terrain */
+		!mapObjIsAboveGround(psProj)) /* trying to travel through terrain */
 	{
 		/* Miss due to range or height */
 		psProj->state = PROJ_IMPACT;
@@ -894,8 +898,8 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 		// TODO Should probably give effectTime as an extra parameter to addEffect, or make an effectGiveAuxTime parameter, with yet another 'this is naughty' comment.
 		for (effectTime = ((psProj->prevSpacetime.time + 15) & ~15); effectTime < psProj->time; effectTime += 16)
 		{
-			SPACETIME st = interpolateObjectSpacetime(psProj, effectTime);
-			Vector3i posFlip = {st.pos.x, st.pos.z, st.pos.y};  // [sic] y <--> z
+			Spacetime st = interpolateObjectSpacetime(psProj, effectTime);
+			Vector3i posFlip = swapYZ(st.pos);
 			switch (psStats->weaponSubClass)
 			{
 				case WSC_FLAME:
@@ -1351,7 +1355,7 @@ void PROJECTILE::update()
 
 	syncDebugProjectile(psObj, '<');
 
-	psObj->prevSpacetime = GET_SPACETIME(psObj);
+	psObj->prevSpacetime = getSpacetime(psObj);
 
 	/* See if any of the stored objects have died
 	 * since the projectile was created
@@ -1527,19 +1531,14 @@ SDWORD proj_GetLongRange(const WEAPON_STATS* psStats)
 
 
 /***************************************************************************/
-static UDWORD	establishTargetRadius(BASE_OBJECT *psTarget)
+static ObjectShape establishTargetShape(BASE_OBJECT *psTarget)
 {
-	UDWORD		radius;
-	STRUCTURE	*psStructure;
-	FEATURE		*psFeat;
-
 	CHECK_OBJECT(psTarget);
-	radius = 0;
 
-	switch(psTarget->type)
+	switch (psTarget->type)
 	{
-		case OBJ_DROID:
-			switch(((DROID *)psTarget)->droidType)
+		case OBJ_DROID:  // Circular.
+			switch (castDroid(psTarget)->droidType)
 			{
 				case DROID_WEAPON:
 				case DROID_SENSOR:
@@ -1553,31 +1552,25 @@ static UDWORD	establishTargetRadius(BASE_OBJECT *psTarget)
 				case DROID_CYBORG_REPAIR:
 				case DROID_CYBORG_SUPER:
 					//Watermelon:'hitbox' size is now based on imd size
-					radius = abs(psTarget->sDisplay.imd->radius) * 2;
-					break;
+					return abs(psTarget->sDisplay.imd->radius) * 2;
 				case DROID_DEFAULT:
 				case DROID_TRANSPORTER:
 				default:
-					radius = TILE_UNITS/4;	// how will we arrive at this?
+					return TILE_UNITS/4;  // how will we arrive at this?
 			}
 			break;
-		case OBJ_STRUCTURE:
-			psStructure = (STRUCTURE*)psTarget;
-			radius = (MAX(psStructure->pStructureType->baseBreadth, psStructure->pStructureType->baseWidth) * TILE_UNITS) / 2;
-			break;
-		case OBJ_FEATURE:
-//			radius = TILE_UNITS/4;	// how will we arrive at this?
-			psFeat = (FEATURE *)psTarget;
-			radius = (MAX(psFeat->psStats->baseBreadth,psFeat->psStats->baseWidth) * TILE_UNITS) / 2;
-			break;
-		case OBJ_PROJECTILE:
+		case OBJ_STRUCTURE:  // Rectangular.
+			return getStructureSize(castStructure(psTarget)) * TILE_UNITS/2;
+		case OBJ_FEATURE:  // Rectangular.
+			return Vector2i(castFeature(psTarget)->psStats->baseWidth, castFeature(psTarget)->psStats->baseBreadth) * TILE_UNITS/2;
+		case OBJ_PROJECTILE:  // Circular, but can't happen since a PROJECTILE isn't a BASE_OBJECT.
 			//Watermelon 1/2 radius of a droid?
-			radius = TILE_UNITS/8;
+			return TILE_UNITS/8;
 		default:
 			break;
 	}
 
-	return(radius);
+	return 0;  // Huh?
 }
 /***************************************************************************/
 

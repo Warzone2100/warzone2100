@@ -36,7 +36,7 @@ function initialisedEvent()
 	addReticuleButton(DESIGN)
 	
 	playnum = 0
-	while playnum < 8 do
+	while playnum < MAX_PLAYERS do
 		enableStructure(command, playnum)
 		enableStructure(factory, playnum)
 		enableStructure(oilDerrick, playnum)
@@ -61,7 +61,7 @@ callbackEvent(initialisedEvent, CALL_GAMEINIT)
 
 function initialisedEventTwo()
 	playnum = 0
-	while playnum < 8 do
+	while playnum < MAX_PLAYERS do
 		count = 0
 		while count < numBaseRes do
 			enableResearch(baseRes[count], playnum)

@@ -59,6 +59,7 @@
 #include "intfac.h"
 #include "multimenu.h"
 #include "lib/framework/input.h"		//for key constants
+#include "lib/netplay/netplay.h"
 #include "lib/script/chat_processing.h"
 
 
@@ -341,9 +342,6 @@ VAR_SYMBOL asObjTable[] =
  */
 CONST_SYMBOL asConstantTable[] =
 {
-/*	{ "TEST_BOOL_CONST",	VAL_BOOL, true,		0,		0 },
-	{ "TEST_INT_CONST",		VAL_INT,	0,		10,		0 },*/
-
 	//reticule button IDs	- for scrFlashOn & Off
 	// original annette styley
 	{ "OPTIONS",	VAL_INT,	false,	IDRET_OPTIONS,		NULL, NULL, 0.0f },
@@ -354,7 +352,6 @@ CONST_SYMBOL asConstantTable[] =
 	{ "INTELMAP",	VAL_INT,	false,	IDRET_INTEL_MAP,	NULL, NULL, 0.0f },
 	{ "DESIGN",		VAL_INT,	false,	IDRET_DESIGN,		NULL, NULL, 0.0f },
 	{ "COMMAND",	VAL_INT,	false,	IDRET_COMMAND,		NULL, NULL, 0.0f },
-
 
 	// new styley that supports many other buttons
 	{ "IDRET_OPTIONS",		VAL_INT,	false,	IDRET_OPTIONS,		NULL, NULL, 0.0f },
@@ -383,13 +380,11 @@ CONST_SYMBOL asConstantTable[] =
 	// the first (top-left) button on the list window (up from the reticule)
 	{ "IDSTAT_START",		VAL_INT,	false,	IDSTAT_START,		NULL, NULL, 0.0f },
 
-
 	//message Types
 	{ "RES_MSG",	VAL_INT,	false,	MSG_RESEARCH,	NULL, NULL, 0.0f },
 	{ "CAMP_MSG",	VAL_INT,	false,	MSG_CAMPAIGN,	NULL, NULL, 0.0f },
 	{ "MISS_MSG",	VAL_INT,	false,	MSG_MISSION,	NULL, NULL, 0.0f },
 	{ "PROX_MSG",	VAL_INT,	false,	MSG_PROXIMITY,	NULL, NULL, 0.0f },
-	//{ "TUT_MSG",	VAL_INT,	false,	MSG_TUTORIAL,	NULL, NULL, 0.0f }, NOT NEEDED
 
 	//used for null pointers
 	{ "NULLTEMPLATE",	(INTERP_TYPE)ST_POINTER_T,	false,	0,	NULL, NULL, 0.0f },
@@ -397,10 +392,6 @@ CONST_SYMBOL asConstantTable[] =
 	{ "NULLSTAT",		(INTERP_TYPE)ST_POINTER_S,	false,	0,	NULL, NULL, 0.0f },
 	{ "NULLSTRING",		(INTERP_TYPE)ST_TEXTSTRING,	false,	0,	NULL, NULL, 0.0f },
 	{ "NULLSTRUCTURESTAT",(INTERP_TYPE)ST_POINTER_STRUCTSTAT,	false,	0,	NULL, NULL, 0.0f },	//for NULLSTRUCTURESTAT
-
-	//barbarian player ids
-	{ "BARBARIAN1",	VAL_INT,	false,	BARB1,	NULL, NULL, 0.0f },
-	{ "BARBARIAN2",	VAL_INT,	false,	BARB2,	NULL, NULL, 0.0f },
 
     //#define used to set the reinforcement timer with
 	{ "LZ_COMPROMISED_TIME",VAL_INT,	false,	SCR_LZ_COMPROMISED_TIME,	NULL, NULL, 0.0f },
@@ -613,7 +604,6 @@ CONST_SYMBOL asConstantTable[] =
 	{ "STATUS_BattleMapViewEnabled",VAL_INT,	false, STATUS_BattleMapViewEnabled,	NULL, NULL, 0.0f },	// Are we currently in the battlemap view (tactical display) true=yes
 	{ "STATUS_DeliveryReposInProgress",VAL_INT,false, STATUS_DeliveryReposInProgress,	NULL, NULL, 0.0f },	// Are we currently in the delivery repos mode
 
-
 	//possible values for externed 	targetedObjectType
 	{ "MT_TERRAIN",		VAL_INT,	false,	MT_TERRAIN,			NULL, NULL, 0.0f },
 	{ "MT_RESOURCE",	VAL_INT,	false,	MT_RESOURCE,		NULL, NULL, 0.0f },
@@ -675,6 +665,8 @@ CONST_SYMBOL asConstantTable[] =
 	{ "DT_HOVER",		VAL_INT,	false,	SCR_DT_HOVER,		NULL, NULL, 0.0f },
 
 	// multiplayer
+
+	{ "MAX_PLAYERS",        VAL_INT,        false,  MAX_PLAYERS,                    NULL, NULL, 0.0f },
 
 	{ "CAMPAIGN",		VAL_INT,	false,	CAMPAIGN,			NULL, NULL, 0.0f },
 	{ "SKIRMISH",		VAL_INT,	false,	SKIRMISH,			NULL, NULL, 0.0f },
@@ -739,6 +731,11 @@ CONST_SYMBOL asConstantTable[] =
 	{ "KEY_KP_7",		VAL_INT,	false,		KEY_KP_7,		NULL, NULL, 0.0f },
 	{ "KEY_KP_8",		VAL_INT,	false,		KEY_KP_8,		NULL, NULL, 0.0f },
 	{ "KEY_KP_9",		VAL_INT,	false,		KEY_KP_9,		NULL, NULL, 0.0f },
+
+	{ "EASY",               VAL_INT,        false,  DIFFICULTY_EASY,                NULL, NULL, 0.0f },
+	{ "MEDIUM",             VAL_INT,        false,  DIFFICULTY_MEDIUM,              NULL, NULL, 0.0f },
+	{ "HARD",               VAL_INT,        false,  DIFFICULTY_HARD,                NULL, NULL, 0.0f },
+	{ "INSANE",             VAL_INT,        false,  DIFFICULTY_INSANE,              NULL, NULL, 0.0f },
 
 	{ "CALL_DROID_SELECTED",		VAL_INT,	false,		CALL_DROID_SELECTED,		NULL, NULL, 0.0f },
 	{ "CALL_MANURUN",		VAL_INT,	false,		CALL_MANURUN,		NULL, NULL, 0.0f },
@@ -895,14 +892,9 @@ BOOL scrTabInitialise(void)
 	return true;
 }
 
-
 // Shut down the script system
 void scrShutDown(void)
 {
 	scrvShutDown();
 	scriptShutDown();
 }
-
-
-
-

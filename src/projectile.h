@@ -24,11 +24,6 @@
 #include "projectiledef.h"
 #include "weapondef.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 /**
  *	@file projectile.h
  *	Projectile types and function headers
@@ -62,7 +57,7 @@ void	proj_FreeAllProjectiles(void);	///< Free all projectiles in the list.
 int32_t projCalcIndirectVelocities(const int32_t dx, const int32_t dz, int32_t v, int32_t *vx, int32_t *vz);
 
 /** Send a single projectile against the given target. */
-BOOL	proj_SendProjectile(WEAPON *psWeap, BASE_OBJECT *psAttacker, int player, Vector3i target, BASE_OBJECT *psTarget, BOOL bVisible, int weapon_slot);
+bool proj_SendProjectile(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int player, Vector3i target, BASE_OBJECT *psTarget, BOOL bVisible, int weapon_slot);
 
 /** Return whether a weapon is direct or indirect. */
 bool proj_Direct(const WEAPON_STATS* psStats);
@@ -77,25 +72,25 @@ extern BOOL gfxVisible(PROJECTILE *psObj);
 
 extern void	objectShimmy	( BASE_OBJECT *psObj );
 
-static inline void setProjectileSource(PROJECTILE *psProj, BASE_OBJECT *psObj)
+static inline void setProjectileSource(PROJECTILE *psProj, SIMPLE_OBJECT *psObj)
 {
 	// use the source of the source of psProj if psAttacker is a projectile
-	if (psObj && psObj->type == OBJ_PROJECTILE)
+	psProj->psSource = NULL;
+	if (psObj == NULL)
 	{
-		PROJECTILE *psPrevProj = (PROJECTILE*)psObj;
+	}
+	else if (isProjectile(psObj))
+	{
+		PROJECTILE *psPrevProj = castProjectile(psObj);
 
 		if (psPrevProj->psSource && !psPrevProj->psSource->died)
 		{
 			psProj->psSource = psPrevProj->psSource;
 		}
-		else
-		{
-			psProj->psSource = NULL;
-		}
 	}
 	else
 	{
-		psProj->psSource = psObj;
+		psProj->psSource = castBaseObject(psObj);
 	}
 }
 
@@ -108,9 +103,5 @@ void checkProjectile(const PROJECTILE* psProjectile, const char * const location
 
 #define syncDebugProjectile(psProj, ch) _syncDebugProjectile(__FUNCTION__, psProj, ch)
 void _syncDebugProjectile(const char *function, PROJECTILE *psProj, char ch);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_PROJECTILE_H__

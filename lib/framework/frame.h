@@ -45,15 +45,20 @@
 #include "trig.h"
 #include "cursors.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 extern uint32_t selectedPlayer;      ///< The player number corresponding to this client.
 extern uint32_t realSelectedPlayer;  ///< The player number corresponding to this client (same as selectedPlayer, unless changing players in the debug menu).
-#define MAX_PLAYERS		8	/**< Maximum number of players in the game. */
-#define MAX_PLAYER_SLOTS	10	/**< 8 players, 1 baba and 1 reserved for features. */
+#define MAX_PLAYERS         11                 ///< Maximum number of players in the game.
+#define MAX_PLAYERS_IN_GUI  (MAX_PLAYERS - 1)  ///< One player reserved for scavengers.
+#define PLAYER_FEATURE      (MAX_PLAYERS + 1)
+#define MAX_PLAYER_SLOTS    (MAX_PLAYERS + 2)  ///< Max players plus 1 baba and 1 reserved for features. Actually, if baba is a regular player, then it's plus 1 unused?
+
+#if MAX_PLAYERS <= 8
+typedef uint8_t PlayerMask;
+#elif MAX_PLAYERS <= 16
+typedef uint16_t PlayerMask;
+#else
+#error Warzone 2100 is not a MMO.
+#endif
 
 typedef enum
 {
@@ -112,10 +117,6 @@ extern UDWORD frameGetAverageRate(void);
 
 extern UDWORD HashString( const char *String );
 extern UDWORD HashStringIgnoreCase( const char *String );
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #if defined(WZ_OS_WIN)
 # include <winsock2.h> /* for struct timeval */

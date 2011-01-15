@@ -26,7 +26,7 @@
 
 #include "widget.h"
 #include "widgbase.h"
-#include "lib/ivis_common/textdraw.h"
+#include "lib/ivis_opengl/textdraw.h"
 #include "lib/framework/utf.h"
 
 /* Edit Box states */
@@ -40,47 +40,40 @@
 struct W_EDITBOX : public WIDGET
 {
 	W_EDITBOX(W_EDBINIT const *init);
-	~W_EDITBOX();
+
+	void run(W_CONTEXT *psContext);
+	void initialise();  // Moves the cursor to the end.
+	void setString(char const *utf8);
+	void clicked(W_CONTEXT *psContext, WIDGET_KEY);
+	void focusLost(W_SCREEN *psScreen);
 
 	UDWORD		state;						// The current edit box state
-	utf_32_char	*aText;			// The text in the edit box
-	size_t		aTextAllocated;		// Allocated bytes.
-	enum iV_fonts FontID;
+	QString         aText;                  // The text in the edit box
+	iV_fonts        FontID;
 	int 		blinkOffset;		// Cursor should be visible at time blinkOffset.
-	UWORD		insPos;						// The insertion point in the buffer
-	UWORD		printStart;					// Where in the string appears at the far left of the box
-	UWORD		printChars;					// The number of characters appearing in the box
-	UWORD		printWidth;					// The pixel width of the characters in the box
+	int             insPos;                 // The insertion point in the buffer
+	int             printStart;					// Where in the string appears at the far left of the box
+	int             printChars;					// The number of characters appearing in the box
+	int             printWidth;					// The pixel width of the characters in the box
 	WIDGET_DISPLAY	pBoxDisplay;			// Optional callback to display the edit box background.
 	FONT_DISPLAY pFontDisplay;				// Optional callback to display a string.
 	SWORD HilightAudioID;					// Audio ID for form clicked sound
 	SWORD ClickedAudioID;					// Audio ID for form hilighted sound
 	WIDGET_AUDIOCALLBACK AudioCallback;		// Pointer to audio callback function
+
+private:
+	void delCharRight();
+	void delCharLeft();
+	void insertChar(QChar ch);
+	void overwriteChar(QChar ch);
+	void putSelection();
+	void fitStringStart();  // Calculate how much of the start of a string can fit into the edit box
+	void fitStringEnd();
+	void setCursorPosPixels(int xPos);
 };
 
 /* Create an edit box widget data structure */
 extern W_EDITBOX* editBoxCreate(const W_EDBINIT* psInit);
-
-/* Free the memory used by an edit box */
-extern void editBoxFree(W_EDITBOX *psWidget);
-
-/* Initialise an edit box widget */
-extern void editBoxInitialise(W_EDITBOX *psWidget);
-
-/* Set the current string for the edit box */
-extern void editBoxSetString(W_EDITBOX *psWidget, const char *pText);
-
-/* Respond to loss of focus */
-extern void editBoxFocusLost(W_SCREEN* psScreen, W_EDITBOX *psWidget);
-
-/* Run an edit box widget */
-extern void editBoxRun(W_EDITBOX *psWidget, W_CONTEXT *psContext);
-
-/* Respond to a mouse click */
-extern void editBoxClicked(W_EDITBOX *psWidget, W_CONTEXT *psContext);
-
-/* Respond to a mouse button up */
-extern void editBoxReleased(W_EDITBOX *psWidget);
 
 /* Respond to a mouse moving over an edit box */
 extern void editBoxHiLite(W_EDITBOX *psWidget);

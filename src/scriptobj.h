@@ -28,11 +28,6 @@
 #include "lib/framework/types.h"
 #include "lib/script/interpreter.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 // id's for object variables
 enum _objids
 {
@@ -128,9 +123,5 @@ extern DROID_GROUP *luaWZObj_checkgroup(lua_State *L, int pos);
 extern void luaWZObj_pushobject(lua_State *L, BASE_OBJECT* baseobject);
 
 DROID_ORDER luaWZ_checkorder(lua_State *L, int pos);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_SCRIPTOBJ_H__

@@ -23,11 +23,6 @@
 
 #include "droid.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 extern BOOL DirectControl;
 extern DROID *psDrivenDroid;
 
@@ -98,9 +93,5 @@ SDWORD driveGetMoveSpeed(void);
 SDWORD driveGetMoveDir(void);
 BOOL driveSetDirectControl(BOOL Control);
 BOOL driveSetWasDriving(BOOL Driving);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_DRIVE_H__

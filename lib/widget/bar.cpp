@@ -27,8 +27,23 @@
 #include "form.h"
 #include "bar.h"
 // FIXME Direct iVis implementation include!
-#include "lib/ivis_common/pieblitfunc.h"
-#include "lib/ivis_common/piepalette.h"
+#include "lib/ivis_opengl/pieblitfunc.h"
+#include "lib/ivis_opengl/piepalette.h"
+
+W_BARINIT::W_BARINIT()
+	: orientation(WBAR_LEFT)
+	, size(0)
+	, minorSize(0)
+	, iRange(100)
+	, denominator(1)
+	, precision(0)
+	//sCol
+	//sMinorCol
+	, pTip(NULL)
+{
+	sCol.rgba = 0;
+	sMinorCol.rgba = 0;
+}
 
 W_BARGRAPH::W_BARGRAPH(W_BARINIT const *init)
 	: WIDGET(init, WIDG_BARGRAPH)

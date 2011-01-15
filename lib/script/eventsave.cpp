@@ -33,7 +33,6 @@
 #include "eventsave.h"
 
 
-
 // the event save file header
 typedef struct _event_save_header
 {
@@ -52,10 +51,8 @@ static BOOL eventSaveContext(char *pBuffer, UDWORD *pSize)
 	INTERP_VAL			*psVal;
 	SCR_VAL_SAVE		saveFunc;
 	char				*pPos;
-//not hashed	char				*pScriptID;
 	UDWORD				hashedName;
 	UWORD				*pValSize = NULL;
-
 
 	size = 0;
 	numContext = 0;
@@ -74,7 +71,6 @@ static BOOL eventSaveContext(char *pBuffer, UDWORD *pSize)
 		numContext += 1;
 
 		// save the context info
-//nothashed if (!resGetIDfromData("SCRIPT", psCCont->psCode, &hashedName))
 		if (!resGetHashfromData("SCRIPT", psCCont->psCode, &hashedName))
 		{
 			debug( LOG_FATAL, "eventSaveContext: couldn't find script resource id" );
@@ -85,8 +81,6 @@ static BOOL eventSaveContext(char *pBuffer, UDWORD *pSize)
 
 		if (pBuffer != NULL)
 		{
-//not hashed			strcpy(pPos, pScriptID);
-//not hashed			pPos += strlen(pScriptID) + 1;
 			*((UDWORD*)pPos) = (UDWORD)hashedName;
 			endian_udword((UDWORD*)pPos);
 			pPos += sizeof(UDWORD);
@@ -99,7 +93,6 @@ static BOOL eventSaveContext(char *pBuffer, UDWORD *pSize)
 			pPos += sizeof(UBYTE);
 		}
 
-//not hashed		size += strlen(pScriptID) + 1 + sizeof(SWORD) + sizeof(UBYTE);
 		size += sizeof(UDWORD) + sizeof(SWORD) + sizeof(UBYTE);
 
 		// save the context variables
@@ -220,7 +213,7 @@ static BOOL eventSaveContext(char *pBuffer, UDWORD *pSize)
 }
 
 // load the context information for the script system
-static BOOL eventLoadContext(const SDWORD version, char *pBuffer, UDWORD *pSize, BOOL bHashed)
+static BOOL eventLoadContext(const SDWORD version, char *pBuffer, UDWORD *pSize)
 {
 	UDWORD				size, valSize,stringLen;
 	SDWORD				numVars, i, numContext, context;
@@ -228,7 +221,6 @@ static BOOL eventLoadContext(const SDWORD version, char *pBuffer, UDWORD *pSize,
 	INTERP_TYPE			type;
 	SCR_VAL_LOAD		loadFunc;
 	char				*pPos;
-	char				*pScriptID = NULL;
 	UDWORD				hashedName;
 	SCRIPT_CODE			*psCode;
 	CONTEXT_RELEASE			release;
@@ -246,17 +238,11 @@ static BOOL eventLoadContext(const SDWORD version, char *pBuffer, UDWORD *pSize,
 	// go through the contexts
 	for(context=0; context < numContext; context += 1)
 	{
-	    if(bHashed) {
     		endian_udword((UDWORD*)pPos);
     		hashedName = *((UDWORD*)pPos);
     		psCode = (SCRIPT_CODE*)resGetDataFromHash("SCRIPT", hashedName);
     		pPos += sizeof(UDWORD);
-	    } else {
-    		// get the script code
-    		pScriptID = (char *)pPos;
-    		psCode = (SCRIPT_CODE*)resGetData("SCRIPT", pScriptID);
-    		pPos += strlen(pScriptID) + 1;
-    	}
+
 		// check the number of variables
 		endian_sword((SWORD*)pPos);
    		numVars = psCode->numGlobals + psCode->arraySize;
@@ -281,11 +267,7 @@ static BOOL eventLoadContext(const SDWORD version, char *pBuffer, UDWORD *pSize,
 		// bit of a hack this - note the id of the context to link it to the triggers
 		psContList->id = (SWORD)context;
 
-        if(bHashed) {
-            size += sizeof(UDWORD) + sizeof(SWORD) + sizeof(UBYTE);
-        } else {
-		    size += strlen(pScriptID) + 1 + sizeof(SWORD) + sizeof(UBYTE);
-		}
+		size += sizeof(UDWORD) + sizeof(SWORD) + sizeof(UBYTE);
 
 		// set the context variables
 		for(i=0; i < numVars; i+= 1)
@@ -601,8 +583,6 @@ BOOL eventSaveState(SDWORD version, char **ppBuffer, UDWORD *pFileSize)
 	}
 	totalSize += size;
 
-
-
 	// Allocate the buffer to save to
 	pBuffer = (char*)malloc(totalSize);
 	if (pBuffer == NULL)
@@ -612,7 +592,6 @@ BOOL eventSaveState(SDWORD version, char **ppBuffer, UDWORD *pFileSize)
 		return false;
 	}
 	pPos = pBuffer;
-
 
 	// set the header
 	psHdr = (EVENT_SAVE_HDR *)pPos;
@@ -624,7 +603,6 @@ BOOL eventSaveState(SDWORD version, char **ppBuffer, UDWORD *pFileSize)
 	endian_udword(&psHdr->version);
 
 	pPos += sizeof(EVENT_SAVE_HDR);
-
 
 	// save the contexts
 	if (!eventSaveContext(pPos, &size))
@@ -655,12 +633,11 @@ BOOL eventSaveState(SDWORD version, char **ppBuffer, UDWORD *pFileSize)
 
 
 // Load the state of the event system
-BOOL eventLoadState(char *pBuffer, UDWORD fileSize, BOOL bHashed)
+BOOL eventLoadState(char *pBuffer, UDWORD fileSize)
 {
 	UDWORD			size, totalSize, version;
 	char			*pPos;
 	EVENT_SAVE_HDR	*psHdr;
-
 
 	pPos = pBuffer;
 	totalSize = 0;
@@ -668,25 +645,13 @@ BOOL eventLoadState(char *pBuffer, UDWORD fileSize, BOOL bHashed)
 	// Get the header
 	psHdr = (EVENT_SAVE_HDR *)pPos;
 	endian_udword(&psHdr->version);
-	if (strncmp(psHdr->aFileType, "evnt", 4) != 0)
-	{
-		debug( LOG_FATAL, "eventLoadState: invalid file header" );
-		abort();
-		return false;
-	}
-/*	if ((psHdr->version != 1) &&
-		(psHdr->version != 2))
-	{
-		DBERROR(("eventLoadState: invalid file version"));
-		return false;
-	}*/
+	ASSERT_OR_RETURN(false, strncmp(psHdr->aFileType, "evnt", 4) == 0, "Invalid file header");
 	version = psHdr->version;
 	pPos += sizeof(EVENT_SAVE_HDR);
 	totalSize += sizeof(EVENT_SAVE_HDR);
 
-
 	// load the event contexts
-	if (!eventLoadContext(version, pPos, &size, bHashed))
+	if (!eventLoadContext(version, pPos, &size))
 	{
 		return false;
 	}

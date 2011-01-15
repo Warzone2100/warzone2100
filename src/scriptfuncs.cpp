@@ -72,9 +72,10 @@
 #include "multiplay.h"
 #include "multigifts.h"
 #include "multilimit.h"
+#include "multiint.h"
 #include "advvis.h"
 #include "mapgrid.h"
-#include "lib/ivis_common/piestate.h"
+#include "lib/ivis_opengl/piestate.h"
 #include "wrappers.h"
 #include "order.h"
 #include "orderdef.h"
@@ -89,7 +90,6 @@
 #include "projectile.h"
 #include "cluster.h"
 #include "multigifts.h"			//because of giftRadar()
-#include "aiexperience.h"
 #include "display3d.h"			//for showRangeAtPos()
 #include "multimenu.h"
 #include "lib/script/chat_processing.h"
@@ -113,7 +113,6 @@ static bool	structHasModule(STRUCTURE *psStruct);
 static DROID_TEMPLATE* scrCheckTemplateExists(SDWORD player, DROID_TEMPLATE *psTempl);
 
 /// Hold the previously assigned player
-static int nextPlayer = 0;
 static Vector2i positions[MAX_PLAYERS];
 
 void scriptSetStartPos(int position, int x, int y)
@@ -131,35 +130,70 @@ BOOL scriptInit()
 	{
 		scriptSetStartPos(i, 0, 0);
 	}
-	nextPlayer = 0;
 	return true;
 }
 
 static int scrScavengersActive(lua_State *L)
 {
-	lua_pushboolean(L, game.scavengers);
+	lua_pushinteger(L, scavengerPlayer());
+	return 1;
+}
+
+static int scrGetDifficulty(lua_State *L)
+{
+	int player = luaWZ_checkplayer(L, 1);
+	lua_pushinteger(L, NetPlay.players[player].difficulty);
 	return 1;
 }
 
 static int scrGetPlayer(lua_State *L)
 {
-	if (nextPlayer >= MAX_PLAYERS)
-	{
-		return luaL_error(L, "maximum number of players reached");
-		// not reached
-		return 0;
-	}
+	char const *aiName = luaL_checkstring(L, 1);
+	int nextPlayer = getNextAIAssignment(aiName);
 
 	debug(LOG_SCRIPT, "Initialized player %d, starts at position (%d, %d), max %d players", nextPlayer, 
-	      positions[nextPlayer].x, positions[nextPlayer].y, NetPlay.maxPlayers);
+	      positions[nextPlayer].x, positions[nextPlayer].y, game.maxPlayers);
 	lua_pushinteger(L, nextPlayer);
-	nextPlayer++;
 	return 1;
 }
 
 Vector2i getPlayerStartPosition(int player)
 {
 	return positions[player];
+}
+
+static int scrSetSunPosition(lua_State *L)
+{
+	float x = luaL_checknumber(L, 1);
+	float y = luaL_checknumber(L, 2);
+	float z = luaL_checknumber(L, 3);
+	setTheSun(Vector3f(x, y, z));
+	return 0;
+}
+
+static int scrSetSunIntensity(lua_State *L)
+{
+	float ambient[4], diffuse[4], specular[4];
+
+	// Scary list of parameters... ambient, diffuse and specular RGB components
+	// One day we should add support for vectors to our scripting language to cut
+	// down on such noise.
+	ambient[0] = luaL_checknumber(L, 1);
+	ambient[1] = luaL_checknumber(L, 2);
+	ambient[2] = luaL_checknumber(L, 3);
+	ambient[3] = 1.0;
+	diffuse[0] = luaL_checknumber(L, 4);
+	diffuse[1] = luaL_checknumber(L, 5);
+	diffuse[2] = luaL_checknumber(L, 6);
+	diffuse[3] = 1.0;
+	specular[0] = luaL_checknumber(L, 7);
+	specular[1] = luaL_checknumber(L, 8);
+	specular[2] = luaL_checknumber(L, 9);
+	specular[3] = 1.0;
+	pie_Lighting0(LIGHT_AMBIENT, ambient);
+	pie_Lighting0(LIGHT_DIFFUSE, diffuse);
+	pie_Lighting0(LIGHT_SPECULAR, specular);
+	return 0;
 }
 
 static int scrSafeDest(lua_State *L)
@@ -190,7 +224,7 @@ static int scrGetPlayerStartPosition(lua_State *L)
 	int x = 0;
 	int y = 0;
 
-	if (player < NetPlay.maxPlayers)
+	if (player < game.maxPlayers)
 	{
 		x = positions[player].x;
 		y = positions[player].y;
@@ -658,7 +692,7 @@ WZ_DECL_UNUSED static BOOL scrEnableComponent(void)
 	}
 
 	// enable the appropriate component
-	switch (sVal.type)
+	switch ((unsigned)sVal.type)  // Unsigned cast to suppress compiler warnings due to enum abuse.
 	{
 	case ST_BODY:
 		apCompLists[player][COMP_BODY][sVal.v.ival] = FOUND;
@@ -1677,7 +1711,7 @@ WZ_DECL_UNUSED static BOOL scrGetTemplate(void)
 	for (psTemplate = apsDroidTemplates[player]; psTemplate != NULL; psTemplate =
 		psTemplate->psNext)
 	{
-		switch( sVal.type)
+		switch ((unsigned)sVal.type)  // Unsigned cast to suppress compiler warnings due to enum abuse.
 		{
 		case ST_BODY:
 			if (psTemplate->asParts[COMP_BODY] == sVal.v.ival)
@@ -1781,7 +1815,7 @@ WZ_DECL_UNUSED static BOOL scrGetDroid(void)
 	for (psDroid = apsDroidLists[player]; psDroid != NULL; psDroid =
 		psDroid->psNext)
 	{
-		switch( sVal.type)
+		switch ((unsigned)sVal.type)  // Unsigned cast to suppress compiler warnings due to enum abuse.
 		{
 		case ST_BODY:
 			if (psDroid->asBits[COMP_BODY].nStat == (UDWORD)sVal.v.ival)
@@ -2406,10 +2440,10 @@ static int scrGameOverMessage(lua_State *L)
 
 	if (challengeActive)
 	{
-		char sPath[64], key[64], timestr[32], *fStr;
+		char sPath[64], timestr[32], *fStr;
 		int seconds = 0, newtime = (gameTime - mission.startTime) / GAME_TICKS_PER_SEC;
 		bool victory = false;
-		dictionary *dict = iniparser_load(CHALLENGE_SCORES);
+		inifile *inif = inifile_load(CHALLENGE_SCORES);
 
 		fStr = strrchr(sRequestResult, '/');
 		fStr++;	// skip slash
@@ -2420,16 +2454,15 @@ static int scrGameOverMessage(lua_State *L)
 		}
 		sstrcpy(sPath, fStr);
 		sPath[strlen(sPath) - 4] = '\0';	// remove .ini
-		if (dict)
+		if (inif)
 		{
-			ssprintf(key, "%s:Victory", sPath);
-			victory = iniparser_getboolean(dict, key, false);
-			ssprintf(key, "%s:seconds", sPath);
-			seconds = iniparser_getint(dict, key, 0);
+			inifile_set_current_section(inif, sPath);
+			victory = inifile_get_as_bool(inif, "Victory", false);
+			seconds = inifile_get_as_int(inif, "seconds", 0);
 		}
 		else
 		{
-			dict = dictionary_new(3);
+			inif = inifile_new();
 		}
 
 		// Update score if we have a victory and best recorded was a loss,
@@ -2439,17 +2472,14 @@ static int scrGameOverMessage(lua_State *L)
 		    || (!gameWon && !victory && newtime > seconds)
 		    || (gameWon && victory && newtime < seconds))
 		{
-			dictionary_set(dict, sPath, NULL);
-			ssprintf(key, "%s:Seconds", sPath);
+			inifile_set_current_section(inif, sPath);
 			ssprintf(timestr, "%d", newtime);
-			iniparser_setstring(dict, key, timestr);
-			ssprintf(key, "%s:Player", sPath);
-			iniparser_setstring(dict, key, NetPlay.players[selectedPlayer].name);
-			ssprintf(key, "%s:Victory", sPath);
-			iniparser_setstring(dict, key, gameWon ? "true": "false");
+			inifile_set(inif, "Seconds", timestr);
+			inifile_set(inif, "Player", NetPlay.players[selectedPlayer].name);
+			inifile_set(inif, "Victory", gameWon ? "true": "false");
 		}
-		iniparser_dump_ini(dict, CHALLENGE_SCORES);
-		iniparser_freedict(dict);
+		inifile_save_as(inif, CHALLENGE_SCORES);
+		inifile_delete(inif);
 	}
 
 	return 0;
@@ -2778,8 +2808,6 @@ static int scrStartMission(lua_State *L)
 		return luaL_error(L, "Invalid Mission Type" );
 	}
 
-	// tell the loop that a new level has to be loaded up - not yet!
-	//loopNewLevel = true;
 	sstrcpy(aLevelName, pGame);
 
 	// find the level dataset
@@ -2794,14 +2822,7 @@ static int scrStartMission(lua_State *L)
 	//set the mission rolling...
 	//nextMissionType = missionType;
 	nextMissionType = psNewLevel->type;
-//	loopMissionState = LMS_SETUPMISSION;
 	loopMissionState = LMS_CLEAROBJECTS;
-
-/*	if (!setUpMission(missionType))
-	{
-		ASSERT( false, "Unable to start mission - %s", pGame );
-		return false;
-	}*/
 
 	return 0;
 }
@@ -2880,42 +2901,6 @@ static int scrSetBackgroundFog(lua_State *L)
 		}
 	}
 
-/* jps 17 feb 99
-	if(getRevealStatus())		// fog'o war enabled
-	{
-		pie_SetFogStatus(false);
-		pie_EnableFog(false);
-//		fogStatus = 0;
-		return true;
-	}
-
-	if (bState)//true, so go to false
-	{
-		if (war_GetFog())
-		{
-			//restart fog if it was off
-			if (fogStatus == 0)
-			{
-				pie_EnableFog(true);
-			}
-			fogStatus |= FOG_BACKGROUND;//set lowest bit of 3
-		}
-	}
-	else
-	{
-		if (war_GetFog())
-		{
-			fogStatus &= FOG_FLAGS-FOG_BACKGROUND;//clear middle bit of 3
-			//disable fog if it longer used
-			if (fogStatus == 0)
-			{
-				pie_SetFogStatus(false);
-				pie_EnableFog(false);
-			}
-		}
-	}
-*/
-
 	return 0;
 }
 
@@ -2925,8 +2910,6 @@ static int scrSetDepthFog(lua_State *L)
 {
 	BOOL bState = luaL_checkboolean(L, 1);
 
-	// ffs am
-//jps 17 feb 99 just set the status let other code worry about fogEnable/reveal
 	if (bState)//true, so go to false
 	{
 		//restart fog if it was off
@@ -2946,41 +2929,6 @@ static int scrSetDepthFog(lua_State *L)
 			pie_EnableFog(false);
 		}
 	}
-
-/* jps 17 feb 99	if(getRevealStatus())		// fog'o war enabled
-	{
-		pie_SetFogStatus(false);
-		pie_EnableFog(false);
-//		fogStatus = 0;
-		return true;
-	}
-
-	if (bState)//true, so go to false
-	{
-		if (war_GetFog())
-		{
-			//restart fog if it was off
-			if (fogStatus == 0)
-			{
-				pie_EnableFog(true);
-			}
-			fogStatus |= FOG_DISTANCE;//set lowest bit of 3
-		}
-	}
-	else
-	{
-		if (war_GetFog())
-		{
-			fogStatus &= FOG_FLAGS-FOG_DISTANCE;//clear middle bit of 3
-			//disable fog if it longer used
-			if (fogStatus == 0)
-			{
-				pie_SetFogStatus(false);
-				pie_EnableFog(false);
-			}
-		}
-	}
-*/
 
 	return 0;
 }
@@ -3034,7 +2982,6 @@ static int scrIsHumanPlayer(lua_State *L)
 	return 1;
 }
 
-
 // -----------------------------------------------------------------------------------------
 /// Set an alliance between two players
 static int scrCreateAlliance(lua_State *L)
@@ -3079,7 +3026,6 @@ WZ_DECL_UNUSED static BOOL scrOfferAlliance(void)
 	return true;
 }
 
-
 // -----------------------------------------------------------------------------------------
 // Break an alliance between two players
 WZ_DECL_UNUSED static BOOL scrBreakAlliance(void)
@@ -3091,26 +3037,11 @@ WZ_DECL_UNUSED static BOOL scrBreakAlliance(void)
 		return false;
 	}
 
-	if (
-		player1 < 0 || player1 >= MAX_PLAYERS ||
-		player2 < 0 || player2 >= MAX_PLAYERS)
+	if (player1 < 0 || player1 >= MAX_PLAYERS || player2 < 0 || player2 >= MAX_PLAYERS)
 	{
 		ASSERT( false, "scrBreakAlliance: player out of range p1=%d p2=%d", player1, player2 );
 		return false;
 	}
-/*
-if(bMultiPlayer)
-	{
-
-
-		if(alliances[player1][player2] != ALLIANCE_BROKEN)
-		{
-			CONPRINTF(ConsoleString,(ConsoleString,"%d and %d break alliance.",player1,player2));
-			sendAlliance((UBYTE)player1,(UBYTE)player2,ALLIANCE_BROKEN,0);
-		}
-}
-*/
-
 
 	if(bMultiPlayer)
 	{
@@ -3125,13 +3056,9 @@ if(bMultiPlayer)
 	{
 		breakAlliance(player1,player2,false,true);
 	}
-/*
-	alliances[player1][player2] = ALLIANCE_BROKEN;
-	alliances[player2][player1] = ALLIANCE_BROKEN;
-*/
+
 	return true;
 }
-
 
 // -----------------------------------------------------------------------------------------
 // Multiplayer relevant scriptfuncs
@@ -3215,7 +3142,6 @@ WZ_DECL_UNUSED static BOOL scrDominatingAlliance(void)
 				return true;
 			}
 		}
-// -----------------------------------------------------------------------------------------
 	}
 
 
@@ -4461,8 +4387,8 @@ static BOOL pickStructLocation(DROID *psDroid, int index, int *pX, int *pY, int 
 	y = startY;
 
 	// save a lot of typing... checks whether a position is valid
-	#define LOC_OK(_x, _y) (_x >= 0 && _y >= 0 && _x < mapWidth && _y < mapHeight && \
-	                        (!psDroid || fpathCheck(psDroid->pos, Vector3i_Init(world_coord(_x), world_coord(_y), 0), PROPULSION_TYPE_WHEELED)) \
+	#define LOC_OK(_x, _y) (tileOnMap(_x, _y) && \
+	                        (!psDroid || fpathCheck(psDroid->pos, Vector3i(world_coord(_x), world_coord(_y), 0), PROPULSION_TYPE_WHEELED)) \
 	                        && validLocation((BASE_STATS*)psStat, _x, _y, 0, player, false) && structDoubleCheck((BASE_STATS*)psStat, _x, _y, maxBlockingTiles))
 
 	// first try the original location
@@ -5292,16 +5218,13 @@ static int scrIsVtol(lua_State *L)
 
 
 // do the setting up of the template list for the tutorial.
+// This function looks like it searches for a template called "ViperLtMGWheels", and deletes it. Why?
 WZ_DECL_UNUSED static BOOL scrTutorialTemplates(void)
 {
 	DROID_TEMPLATE	*psCurr, *psPrev;
-	char			pName[MAX_STR_LENGTH];
 
 	// find ViperLtMGWheels
-	sstrcpy(pName, "ViperLtMGWheels");
-
-	getDroidResourceName(pName);
-
+	char const *pName = getDroidResourceName("ViperLtMGWheels");
 
 	for (psCurr = apsDroidTemplates[selectedPlayer],psPrev = NULL;
 			psCurr != NULL;
@@ -5326,7 +5249,7 @@ WZ_DECL_UNUSED static BOOL scrTutorialTemplates(void)
 	// Delete the template.
 	if(psCurr)
 	{
-		free(psCurr);
+		delete psCurr;
 	}
 	else
 	{
@@ -6012,7 +5935,6 @@ WZ_DECL_UNUSED static BOOL scrNumResearchLeft(void)
 
 	UWORD				Stack[400];
 
-	BOOL				found;
 	PLAYER_RESEARCH		*pPlayerRes;
 
 
@@ -6036,8 +5958,6 @@ WZ_DECL_UNUSED static BOOL scrNumResearchLeft(void)
 		ASSERT( false, "scrNumResearchLeft(): invalid research index" );
 		return false;
 	}
-
-	found = false;
 
 	if(beingResearchedByAlly(index, player))
 	{
@@ -7506,363 +7426,6 @@ static int scrPlayerLoaded(lua_State *L)
 	return 1;
 }
 
-
-		/********************************/
-		/*		AI Experience Stuff		*/
-		/********************************/
-
-//Returns enemy base x and y for a certain player
-WZ_DECL_UNUSED static BOOL scrLearnPlayerBaseLoc(void)
-{
-	SDWORD				playerStoring,enemyPlayer, x, y;
-
-	if (!stackPopParams(4, VAL_INT, &playerStoring, VAL_INT, &enemyPlayer,
-						VAL_INT, &x, VAL_INT, &y))
-	{
-		debug(LOG_ERROR, "scrLearnPlayerBaseLoc(): stack failed");
-		return false;
-	}
-
-	if((playerStoring >= MAX_PLAYERS) || (enemyPlayer >= MAX_PLAYERS))
-	{
-		debug(LOG_ERROR, "scrLearnPlayerBaseLoc: player index too high.");
-		return false;
-	}
-
-	if((playerStoring < 0) || (enemyPlayer < 0))
-	{
-		debug(LOG_ERROR, "scrLearnPlayerBaseLoc: player index too low.");
-		return false;
-	}
-
-	if (x < 0
-	 || x >= world_coord(mapWidth)
-	 || y < 0
-	 || y >= world_coord(mapHeight))
-	{
-		debug(LOG_ERROR, "scrLearnPlayerBaseLoc: coords off map");
-		return false;
-	}
-
-	baseLocation[playerStoring][enemyPlayer][0] = x;
-	baseLocation[playerStoring][enemyPlayer][1] = y;
-
-	debug_console("Learned player base.");
-
-	scrFunctionResult.v.bval = true;
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
-}
-
-/// Saves enemy base x and y for a certain player
-static int scrRecallPlayerBaseLoc(lua_State *L)
-{
-	int x,y;
-	
-	int playerStoring = luaWZ_checkplayer(L, 1);
-	int enemyPlayer   = luaWZ_checkplayer(L, 2);
-	
-	if(!CanRememberPlayerBaseLoc(playerStoring, enemyPlayer))		//return false if this one not set yet
-	{
-		lua_pushboolean(L, false);
-		return 1;
-	}
-
-	x = baseLocation[playerStoring][enemyPlayer][0];
-	y = baseLocation[playerStoring][enemyPlayer][1];
-
-	lua_pushboolean(L, true);
-	lua_pushinteger(L, x);
-	lua_pushinteger(L, y);
-	return 3;
-}
-
-/* Checks if player base loc is stored */
-WZ_DECL_UNUSED static BOOL scrCanRememberPlayerBaseLoc(void)
-{
-	SDWORD				playerStoring,enemyPlayer;
-
-	if (!stackPopParams(2, VAL_INT, &playerStoring, VAL_INT, &enemyPlayer))
-	{
-		debug(LOG_ERROR, "scrCanRememberPlayerBaseLoc(): stack failed");
-		return false;
-	}
-
-	if((playerStoring >= MAX_PLAYERS) || (enemyPlayer >= MAX_PLAYERS))
-	{
-		debug(LOG_ERROR,"scrCanRememberPlayerBaseLoc: player index too high.");
-		return false;
-	}
-
-	if((playerStoring < 0) || (enemyPlayer < 0))
-	{
-		debug(LOG_ERROR,"scrCanRememberPlayerBaseLoc: player index too low.");
-		return false;
-	}
-
-	scrFunctionResult.v.bval = CanRememberPlayerBaseLoc(playerStoring, enemyPlayer);
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
-}
-
-/* Stores the place where we were attacked at */
-WZ_DECL_UNUSED static BOOL scrLearnBaseDefendLoc(void)
-{
-	SDWORD				playerStoring,enemyPlayer, x, y;
-
-	if (!stackPopParams(4, VAL_INT, &playerStoring, VAL_INT, &enemyPlayer,
-						VAL_INT, &x, VAL_INT, &y))
-	{
-		debug(LOG_ERROR, "scrLearnBaseDefendLoc(): stack failed");
-		return false;
-	}
-
-	if((playerStoring >= MAX_PLAYERS) || (enemyPlayer >= MAX_PLAYERS))
-	{
-		debug(LOG_ERROR,"scrLearnBaseDefendLoc: player index too high.");
-		return false;
-	}
-
-	if((playerStoring < 0) || (enemyPlayer < 0))
-	{
-		debug(LOG_ERROR,"scrLearnBaseDefendLoc: player index too low.");
-		return false;
-	}
-
-	if (x < 0
-	 || x >= world_coord(mapWidth)
-	 || y < 0
-	 || y >= world_coord(mapHeight))
-	{
-		debug(LOG_ERROR,"scrLearnBaseDefendLoc: coords off map");
-		return false;
-	}
-
-	StoreBaseDefendLoc(x, y, playerStoring);
-
-	scrFunctionResult.v.bval = true;
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
-}
-
-/* Stores the place where we were attacked at */
-WZ_DECL_UNUSED static BOOL scrLearnOilDefendLoc(void)
-{
-	SDWORD				playerStoring,enemyPlayer, x, y;
-
-	if (!stackPopParams(4, VAL_INT, &playerStoring, VAL_INT, &enemyPlayer,
-						VAL_INT, &x, VAL_INT, &y))
-	{
-		debug(LOG_ERROR, "scrLearnOilDefendLoc(): stack failed");
-		return false;
-	}
-
-	if((playerStoring >= MAX_PLAYERS) || (enemyPlayer >= MAX_PLAYERS))
-	{
-		debug(LOG_ERROR,"scrLearnOilDefendLoc: player index too high.");
-		return false;
-	}
-
-	if((playerStoring < 0) || (enemyPlayer < 0))
-	{
-		debug(LOG_ERROR,"scrLearnOilDefendLoc: player index too low.");
-		return false;
-	}
-
-	if (x < 0
-	 || x >= world_coord(mapWidth)
-	 || y < 0
-	 || y >= world_coord(mapHeight))
-	{
-		debug(LOG_ERROR,"scrLearnOilDefendLoc: coords off map");
-		return false;
-	}
-
-	StoreOilDefendLoc(x, y, playerStoring);
-
-	scrFunctionResult.v.bval = true;
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
-}
-
-/// Returns -1 if this location is not stored yet, otherwise returns index
-static int scrGetBaseDefendLocIndex(lua_State *L)
-{
-	int playerStoring = luaWZ_checkplayer(L, 1);
-	int x = luaL_checkint(L, 2);
-	int y = luaL_checkint(L, 3);
-
-	if (x < 0
-	 || x >= world_coord(mapWidth)
-	 || y < 0
-	 || y >= world_coord(mapHeight))
-	{
-		debug(LOG_ERROR, "scrGetBaseDefendLocIndex: coords off map");
-		return false;
-	}
-
-	lua_pushinteger(L, GetBaseDefendLocIndex(x,y,playerStoring));
-	return 1;
-}
-
-/// Returns -1 if this location is not stored yet, otherwise returns index
-static int scrGetOilDefendLocIndex(lua_State *L)
-{
-	int playerStoring = luaWZ_checkplayer(L, 1);
-	int x = luaL_checkint(L, 2);
-	int y = luaL_checkint(L, 3);
-
-	if (x < 0
-	 || x >= world_coord(mapWidth)
-	 || y < 0
-	 || y >= world_coord(mapHeight))
-	{
-		debug(LOG_ERROR, "scrGetOilDefendLocIndex: coords off map");
-		return false;
-	}
-
-	lua_pushinteger(L, GetOilDefendLocIndex(x,y,playerStoring));
-	return 1;
-}
-
-/// Returns number of available locations
-static int scrGetBaseDefendLocCount(lua_State *L)
-{
-	lua_pushinteger(L, MAX_BASE_DEFEND_LOCATIONS);
-	return 1;
-}
-
-/// Returns number of available locations
-static int scrGetOilDefendLocCount(lua_State *L)
-{
-	lua_pushinteger(L, MAX_OIL_DEFEND_LOCATIONS);
-	return 1;
-}
-
-/// Returns a locations and its priority
-static int scrRecallBaseDefendLoc(lua_State *L)
-{
-	int player = luaWZ_checkplayer(L, 1);
-	int index = luaL_checkint(L, 2);
-
-	if(index < 0 || index >= MAX_BASE_DEFEND_LOCATIONS)
-	{
-		return luaL_argerror(L, 2, "wrong index");
-	}
-
-	//check if can recall at this location
-	if(!CanRememberPlayerBaseDefenseLoc(player, index))
-	{
-		lua_pushboolean(L, false);
-		return 1;
-	}
-
-	lua_pushboolean(L, true);
-	lua_pushinteger(L, baseDefendLocation[player][index][0]);
-	lua_pushinteger(L, baseDefendLocation[player][index][1]);
-	lua_pushinteger(L, baseDefendLocPrior[player][index]);
-	return 4;
-}
-
-/// Returns number of available locations
-static int scrRecallOilDefendLoc(lua_State *L)
-{
-	int player = luaWZ_checkplayer(L, 1);
-	int index = luaL_checkint(L, 2);
-
-	if(index < 0 || index >= MAX_OIL_DEFEND_LOCATIONS)
-	{
-		return luaL_argerror(L, 2, "wrong index");
-	}
-
-	//check if can recall at this location
-	if(!CanRememberPlayerOilDefenseLoc(player, index))
-	{
-		lua_pushboolean(L, false);
-		return 1;
-	}
-
-	lua_pushboolean(L, true);
-	lua_pushinteger(L, oilDefendLocation[player][index][0]);
-	lua_pushinteger(L, oilDefendLocation[player][index][1]);
-	lua_pushinteger(L, oilDefendLocPrior[player][index]);
-	return 4;
-}
-
-
-/* Restores vilibility (fog of war) */
-WZ_DECL_UNUSED static BOOL scrRecallPlayerVisibility(void)
-{
-	SDWORD				player;
-
-	if (!stackPopParams(1, VAL_INT, &player))
-	{
-		debug(LOG_ERROR, "scrRecallPlayerVisibility(): stack failed");
-		return false;
-	}
-
-	if(player >= MAX_PLAYERS)
-	{
-		debug(LOG_ERROR,"scrRecallPlayerVisibility: player index too high.");
-		return false;
-	}
-
-
-
-	scrFunctionResult.v.bval = true;
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
-}
-
-WZ_DECL_UNUSED static BOOL scrSavePlayerAIExperience(void)
-{
-	SDWORD				player;
-	BOOL				bNotify;
-
-	if (!stackPopParams(2, VAL_INT, &player, VAL_BOOL, &bNotify))
-	{
-		debug(LOG_ERROR, "scrSavePlayerAIExperience(): stack failed");
-		return false;
-	}
-
-	scrFunctionResult.v.bval = SavePlayerAIExperience(player, bNotify);
-	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
-}
-
-static int scrLoadPlayerAIExperience(lua_State *L)
-{
-	int player = luaWZ_checkplayer(L, 1);
-	
-	lua_pushinteger(L, LoadPlayerAIExperience(player));
-	return 1;
-}
-
-
 /* Add a beacon (blip) */
 BOOL addBeaconBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, char * textMsg)
 {
@@ -9054,13 +8617,11 @@ static int scrAssembleWeaponTemplate(lua_State *L)
 	weapIndex = getCompFromName(COMP_WEAPON, weaponName);
 	propIndex = getCompFromName(COMP_PROPULSION, propulsionName);
 	
-	pNewTemplate = (DROID_TEMPLATE *)malloc(sizeof(DROID_TEMPLATE));
+	pNewTemplate = new DROID_TEMPLATE;
 	if (pNewTemplate == NULL)
 	{
 		return luaL_error(L, "Out of memory");
 	}
-
-	memset(pNewTemplate, 0, sizeof(DROID_TEMPLATE));
 
 	// set template body
 	pNewTemplate->asParts[COMP_BODY] = bodyIndex;
@@ -9116,7 +8677,7 @@ static int scrAssembleWeaponTemplate(lua_State *L)
 		else
 		{
 			// free resources
-			free(pNewTemplate);
+			delete pNewTemplate;
 
 			// already exists, so return it
 			pNewTemplate = tempTemplate;
@@ -9467,7 +9028,6 @@ void registerScriptfuncs(lua_State *L)
 	lua_register(L, "researchStarted", scrResearchStarted);
 	lua_register(L, "pursueResearch", scrPursueResearch);
 	lua_register(L, "getNumStructures", scrGetNumStructures);
-	lua_register(L, "recallPlayerBaseLoc", scrRecallPlayerBaseLoc);
 	lua_register(L, "playerLoaded", scrPlayerLoaded);
 	lua_register(L, "getPlayerName", scrGetPlayerName);
 	lua_register(L, "hasGroup", scrHasGroup);
@@ -9476,7 +9036,6 @@ void registerScriptfuncs(lua_State *L)
 	lua_register(L, "mapTileVisible", scrMapTileVisible);
 	lua_register(L, "getWeapon", scrGetWeapon);
 	lua_register(L, "getPlayerColourName", scrGetPlayerColourName);
-	lua_register(L, "getBaseDefendLocCount", scrGetBaseDefendLocCount);
 	lua_register(L, "getStructureLimit", scrGetStructureLimit);
 	lua_register(L, "setPlayerName", scrSetPlayerName);
 	lua_register(L, "mapRevealedInRange", scrMapRevealedInRange);
@@ -9484,10 +9043,8 @@ void registerScriptfuncs(lua_State *L)
 	lua_register(L, "structureBuilt", scrStructureBuilt);
 	lua_register(L, "alliancesLocked", scrAlliancesLocked);
 	lua_register(L, "numDroidsByComponent", scrNumDroidsByComponent);
-	lua_register(L, "loadPlayerAIExperience", scrLoadPlayerAIExperience);
 	lua_register(L, "debugFile", scrDebugFile);
 	lua_register(L, "processChatMsg", scrProcessChatMsg);
-	lua_register(L, "recallBaseDefendLoc", scrRecallBaseDefendLoc);
 	lua_register(L, "msgBox", scrMsgBox);
 	lua_register(L, "isComponentAvailable", scrIsComponentAvailable);
 	lua_register(L, "getBodySize", scrGetBodySize);
@@ -9496,10 +9053,6 @@ void registerScriptfuncs(lua_State *L)
 	lua_register(L, "weaponDamageUpgrade", scrWeaponDamageUpgrade);
 	lua_register(L, "weaponFirePauseUpgrade", scrWeaponFirePauseUpgrade);
 	lua_register(L, "threatInRange", scrThreatInRange);
-	lua_register(L, "getOilDefendLocCount", scrGetOilDefendLocCount);
-	lua_register(L, "getOilDefendLocIndex", scrGetOilDefendLocIndex);
-	lua_register(L, "getBaseDefendLocIndex", scrGetBaseDefendLocIndex);
-	lua_register(L, "recallOilDefendLoc", scrRecallOilDefendLoc);
 	lua_register(L, "assembleWeaponTemplate", scrAssembleWeaponTemplate);
 	lua_register(L, "testStructureModule", scrTestStructureModule);
 	lua_register(L, "fogTileInRange", scrFogTileInRange);
@@ -9543,6 +9096,9 @@ void registerScriptfuncs(lua_State *L)
 	lua_register(L, "scavengersActive", scrScavengersActive);
 	lua_register(L, "safeDest", scrSafeDest);
 	lua_register(L, "threatAt", scrThreatAt);
+	lua_register(L, "getDifficulty", scrGetDifficulty);
+	lua_register(L, "setSunPosition", scrSetSunPosition);
+	lua_register(L, "setSunIntensity", scrSetSunIntensity);
 	//lua_register(L, "", );
 	//lua_register(L, "", );
 	//lua_register(L, "", );

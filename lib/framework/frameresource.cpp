@@ -88,6 +88,12 @@ void resShutDown(void)
 	}
 }
 
+// force set the base resource directory
+void resForceBaseDir(const char* pResDir)
+{
+	sstrcpy(aResDir, pResDir);
+	sstrcpy(aCurrResDir, pResDir);
+}
 
 // set the base resource directory
 void resSetBaseDir(const char* pResDir)
@@ -467,7 +473,7 @@ bool resLoadFile(const char *pType, const char *pFile)
 		// Now process the buffer data
 		if (!psT->buffLoad(Resource->pBuffer, Resource->size, &pData))
 		{
-			debug(LOG_ERROR, "resLoadFile: The load function for resource type \"%s\" failed for file \"%s\"", pType, pFile);
+			ASSERT(false, "The load function for resource type \"%s\" failed for file \"%s\"", pType, pFile);
 			FreeResourceFile(Resource);
 			if (psT->release != NULL)
 			{
@@ -483,7 +489,7 @@ bool resLoadFile(const char *pType, const char *pFile)
 		// Process data directly from file
 		if (!psT->fileLoad(aFileName, &pData))
 		{
-			debug(LOG_ERROR, "resLoadFile: The load function for resource type \"%s\" failed for file \"%s\"", pType, pFile);
+			ASSERT(false, "The load function for resource type \"%s\" failed for file \"%s\"", pType, pFile);
 			if (psT->release != NULL)
 			{
 				psT->release(pData);
@@ -493,7 +499,7 @@ bool resLoadFile(const char *pType, const char *pFile)
 	}
 	else
 	{
-		debug(LOG_ERROR, "resLoadFile: No load functions for this type (%s)", pType);
+		ASSERT(false, "No load functions for this type (%s)", pType);
 		return false;
 	}
 
@@ -779,10 +785,6 @@ void resReleaseBlockData(SDWORD blockID)
 				if(psT->release != NULL)
 				{
 					psT->release( psRes->pData );
-				}
-				else
-				{
-					debug(LOG_WARNING, "resReleaseAllData: NULL release function" );
 				}
 
 				psNRes = psRes->psNext;

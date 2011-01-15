@@ -32,10 +32,10 @@
 #include "lib/framework/file.h"
 #include "lib/framework/physfs_ext.h"
 #include "lib/framework/strres.h"
-#include "lib/ivis_common/piemode.h"
-#include "lib/ivis_common/piestate.h"
-#include "lib/ivis_common/tex.h"
-#include "lib/ivis_common/ivi.h"
+#include "lib/ivis_opengl/piemode.h"
+#include "lib/ivis_opengl/piestate.h"
+#include "lib/ivis_opengl/tex.h"
+#include "lib/ivis_opengl/ivi.h"
 #include "lib/netplay/netplay.h"
 #include "lib/script/script.h"
 #include "lib/sound/audio_id.h"
@@ -74,6 +74,7 @@
 #include "miscimd.h"
 #include "mission.h"
 #include "modding.h"
+#include "multiint.h"
 #include "multigifts.h"
 #include "multiplay.h"
 #include "projectile.h"
@@ -134,19 +135,20 @@ static BOOL InitialiseGlobals(void)
 }
 
 
-static BOOL loadLevFile(const char* filename, searchPathMode datadir)
+static BOOL loadLevFile(const char* filename, searchPathMode datadir, bool ignoreWrf)
 {
 	char *pBuffer;
 	UDWORD size;
 
 	debug( LOG_WZ, "Loading lev file: %s\n", filename );
 
-	if (   !PHYSFS_exists(filename)
-	    || !loadFile(filename, &pBuffer, &size)) {
+	if (!PHYSFS_exists(filename) || !loadFile(filename, &pBuffer, &size))
+	{
 		debug(LOG_ERROR, "loadLevFile: File not found: %s\n", filename);
 		return false; // only in NDEBUG case
 	}
-	if (!levParse(pBuffer, size, datadir)) {
+	if (!levParse(pBuffer, size, datadir, ignoreWrf))
+	{
 		debug(LOG_ERROR, "loadLevFile: Parse error in %s\n", filename);
 		return false;
 	}
@@ -414,11 +416,11 @@ BOOL buildMapList(void)
 	char ** filelist, ** file;
 	size_t len;
 
-	if ( !loadLevFile( "gamedesc.lev", mod_campaign ) )
+	if (!loadLevFile("gamedesc.lev", mod_campaign, false))
 	{
 		return false;
 	}
-	loadLevFile( "addon.lev", mod_multiplay );
+	loadLevFile("addon.lev", mod_multiplay, false);
 
 	filelist = PHYSFS_enumerateFiles("");
 	for ( file = filelist; *file != NULL; ++file )
@@ -427,12 +429,12 @@ BOOL buildMapList(void)
 		if ( len > 10 // Do not add addon.lev again
 				&& !strcasecmp( *file+(len-10), ".addon.lev") )
 		{
-			loadLevFile( *file, mod_multiplay );
+			loadLevFile(*file, mod_multiplay, true);
 		}
 		// add support for X player maps using a new name to prevent conflicts.
 		if ( len > 13 && !strcasecmp( *file+(len-13), ".xplayers.lev") )
 		{
-			loadLevFile( *file, mod_multiplay );
+			loadLevFile(*file, mod_multiplay, true);
 		}
 
 	}
@@ -492,6 +494,8 @@ BOOL systemInitialise(void)
 
 	iV_Reset();								// Reset the IV library.
 	initLoadingScreen(true);
+
+	readAIs();
 
 	return true;
 }
@@ -806,12 +810,11 @@ BOOL stageOneInitialise(void)
 	initTransporters();
 	scriptInit();
 
-    //do this here so that the very first mission has it initialised
-    initRunData();
+	// do this here so that the very first mission has it initialised
+	initRunData();
 
 	gameTimeInit();
-    //need to reset the event timer too - AB 14/01/99
-    eventTimeReset(gameTime/SCR_TICKRATE);
+	eventTimeReset(gameTime / SCR_TICKRATE);
 
 	return true;
 }
@@ -1111,6 +1114,11 @@ BOOL stageThreeInitialise(void)
 				}
 			}
 		}
+	}
+
+	if (bMultiPlayer)
+	{
+		loadMultiScripts();
 	}
 
 	// ffs JS   (and its a global!)

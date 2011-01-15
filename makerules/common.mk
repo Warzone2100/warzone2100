@@ -13,8 +13,8 @@ RM_CPPFLAGS:=-I$(top_srcdir)
 %.o: %.cpp
 	$(CXX) $(RM_CPPFLAGS) $(CPPFLAGS) $(CXXFLAGS) -c -o $(subst /,\\,$@) $(subst /,\\,$<)
 
-%.lex.h %.lex.c: %.l
+%.lex.h %.lex.cpp: %.l
 	$(FLEX) $(FLEXFLAGS) -o$(subst /,\\,$@) $(subst /,\\,$<)
 
-%.tab.h %.tab.c: %.y
+%.tab.h %.tab.cpp: %.y
 	$(BISON) -d $(BISONFLAGS) -o $(subst /,\\,$@) $(subst /,\\,$<)

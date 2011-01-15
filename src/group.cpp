@@ -25,6 +25,7 @@
  */
 
 #include "lib/framework/frame.h"
+#include "lib/netplay/netplay.h"
 
 #include "multiplay.h"
 
@@ -99,7 +100,6 @@ void grpJoin(DROID_GROUP *psGroup, DROID *psDroid)
 		"grpJoin: invalid group pointer" );
 
 	psGroup->refCount += 1;
-
 	// if psDroid == NULL just increase the refcount don't add anything to the list
 	if (psDroid != NULL)
 	{
@@ -137,61 +137,10 @@ void grpJoin(DROID_GROUP *psGroup, DROID *psDroid)
 			psDroid->psGrpNext = psGroup->psList;
 			psGroup->psList = psDroid;
 		}
-	}
-}
 
-// add a droid to a group at the end of the list
-// NOTE: Unused! void grpJoinEnd(DROID_GROUP *psGroup, DROID *psDroid)
-void grpJoinEnd(DROID_GROUP *psGroup, DROID *psDroid)
-{
-	DROID		*psPrev, *psCurr;
-
-	ASSERT(grpInitialized, "Group code not initialized yet");
-	ASSERT_OR_RETURN(, psGroup != NULL,
-		"grpJoin: invalid group pointer" );
-
-	psGroup->refCount += 1;
-
-	// if psDroid == NULL just increase the refcount don't add anything to the list
-	if (psDroid != NULL)
-	{
-		if (psGroup->psList && psDroid->player != psGroup->psList->player)
+		if (psGroup->type == GT_COMMAND)
 		{
-			ASSERT( false,"grpJoin: Cannot have more than one players droids in a group" );
-			return;
-		}
-
-		if (psDroid->psGroup != NULL)
-		{
-			grpLeave(psDroid->psGroup, psDroid);
-		}
-
-		psDroid->psGroup = psGroup;
-
-		if (psDroid->droidType == DROID_COMMAND)
-		{
-			ASSERT_OR_RETURN(, (psGroup->type == GT_NORMAL) && (psGroup->psCommander == NULL),
-				"grpJoin: Cannot have two command droids in a group" );
-			psGroup->type = GT_COMMAND;
-			psGroup->psCommander = psDroid;
-		}
-		else
-		{
-			// add the droid to the end of the list
-			psPrev = NULL;
-			psDroid->psGrpNext = NULL;
-			for(psCurr = psGroup->psList; psCurr; psCurr=psCurr->psGrpNext)
-			{
-				psPrev = psCurr;
-			}
-			if (psPrev != NULL)
-			{
-				psPrev->psGrpNext = psDroid;
-			}
-			else
-			{
-				psGroup->psList = psDroid;
-			}
+			syncDebug("Droid %d joining command group %d", psDroid->id, psGroup->psCommander != NULL? psGroup->psCommander->id : 0);
 		}
 	}
 }
@@ -211,8 +160,12 @@ void grpLeave(DROID_GROUP *psGroup, DROID *psDroid)
 		return;
 	}
 
-	psGroup->refCount -= 1;
+	if (psDroid != NULL && psGroup->type == GT_COMMAND)
+	{
+		syncDebug("Droid %d leaving command group %d", psDroid->id, psGroup->psCommander != NULL? psGroup->psCommander->id : 0);
+	}
 
+	psGroup->refCount -= 1;
 	// if psDroid == NULL just decrease the refcount don't remove anything from the list
 	if (psDroid != NULL &&
 		(psDroid->droidType != DROID_COMMAND ||
@@ -312,7 +265,7 @@ void grpReset(DROID_GROUP *psGroup)
 	}
 }
 
-/* Give a group an order */
+// Give a group of droids an order
 void orderGroup(DROID_GROUP *psGroup, DROID_ORDER order)
 {
 	DROID *psCurr;
@@ -327,15 +280,15 @@ void orderGroup(DROID_GROUP *psGroup, DROID_ORDER order)
 	}
 }
 
-/* Give a group of droids an order */
-void orderGroupLoc(DROID_GROUP *psGroup, DROID_ORDER order, UDWORD x, UDWORD y)
+// Give a group of droids an order (using a Location)
+void orderGroup(DROID_GROUP *psGroup, DROID_ORDER order, UDWORD x, UDWORD y)
 {
 	DROID	*psCurr;
 
 	ASSERT(grpInitialized, "Group code not initialized yet");
 	ASSERT_OR_RETURN(, psGroup != NULL,
 		"orderGroupLoc: invalid droid group" );
-	ASSERT_OR_RETURN(, validOrderForLoc(order), "orderGroupLoc: Bad order");
+	ASSERT_OR_RETURN(, validOrderForLoc(order), "orderGroup: Bad order");
 
 	for (psCurr = psGroup->psList; psCurr != NULL; psCurr = psCurr->psGrpNext)
 	{
@@ -343,14 +296,14 @@ void orderGroupLoc(DROID_GROUP *psGroup, DROID_ORDER order, UDWORD x, UDWORD y)
 	}
 }
 
-/* Give a group of droids an order */
-void orderGroupObj(DROID_GROUP *psGroup, DROID_ORDER order, BASE_OBJECT *psObj)
+// Give a group of droids an order (using an Object)
+void orderGroup(DROID_GROUP *psGroup, DROID_ORDER order, BASE_OBJECT *psObj)
 {
 	DROID	*psCurr;
 
 	ASSERT_OR_RETURN(, psGroup != NULL,
-		"orderGroupObj: invalid droid group" );
-	ASSERT_OR_RETURN(, validOrderForObj(order), "orderGroupObj: Bad order");
+		"orderGroup: invalid droid group" );
+	ASSERT_OR_RETURN(, validOrderForObj(order), "orderGroup: Bad order");
 
 	for (psCurr = psGroup->psList; psCurr != NULL; psCurr = psCurr->psGrpNext)
 	{

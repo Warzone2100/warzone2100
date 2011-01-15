@@ -26,10 +26,10 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/math_ext.h"
-#include "lib/ivis_common/bitimage.h"
-#include "lib/ivis_common/textdraw.h"
-#include "lib/ivis_common/piestate.h"
-#include "lib/ivis_common/pieblitfunc.h"
+#include "lib/ivis_opengl/bitimage.h"
+#include "lib/ivis_opengl/textdraw.h"
+#include "lib/ivis_opengl/piestate.h"
+#include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/gamelib/gtime.h"
 #include "lib/script/script.h"
 #include "lib/sound/audio.h"
@@ -638,7 +638,7 @@ void missionFlyTransportersIn( SDWORD iPlayer, BOOL bTrackTransporter )
 	UWORD	iX, iY, iZ;
 	SDWORD	iLandX, iLandY, iDx, iDy;
 
-	ASSERT_OR_RETURN(, iPlayer < 8, "Flying nonexistent player %d's transporters in", iPlayer);
+	ASSERT_OR_RETURN(, iPlayer < MAX_PLAYERS, "Flying nonexistent player %d's transporters in", iPlayer);
 
 	bTrackingTransporter = bTrackTransporter;
 
@@ -1111,7 +1111,7 @@ void saveCampaignData(void)
     {
         /*now that every unit for the selected player has been moved into the
         mission list - reverse it and fill the transporter with the first ten units*/
-        reverseObjectList((BASE_OBJECT**)&mission.apsDroidLists[selectedPlayer]);
+        reverseObjectList(&mission.apsDroidLists[selectedPlayer]);
 
         //find the *first* transporter
         for (psDroid = mission.apsDroidLists[selectedPlayer]; psDroid != NULL;
@@ -1828,7 +1828,7 @@ goingHome = true when returning from an off World mission*/
 void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, BOOL goingHome)
 {
 	DROID		*psDroid, *psNext;
-	DROID		**ppCurrentList, **ppStoredList;
+	DROID		**ppCurrentList;
 	UDWORD		droidX, droidY;
 	UDWORD		iX, iY;
 	DROID_GROUP	*psGroup;
@@ -1836,12 +1836,10 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, BOOL goingHome)
 	if (goingHome)
 	{
 		ppCurrentList = mission.apsDroidLists;
-		ppStoredList = apsDroidLists;
 	}
 	else
 	{
 		ppCurrentList = apsDroidLists;
-		ppStoredList = mission.apsDroidLists;
 	}
 
 	//unload all the droids from within the current Transporter
@@ -2008,9 +2006,6 @@ void missionMoveTransporterOffWorld( DROID *psTransporter )
 //add the Mission timer into the top  right hand corner of the screen
 BOOL intAddMissionTimer(void)
 {
-	W_FORMINIT		sFormInit;
-	W_LABINIT		sLabInit;
-
 	//check to see if it exists already
 	if (widgGetFromID(psWScreen,IDTIMER_FORM) != NULL)
 	{
@@ -2018,7 +2013,7 @@ BOOL intAddMissionTimer(void)
 	}
 
 	// Add the background
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
+	W_FORMINIT sFormInit;
 
 	sFormInit.formID = 0;
 	sFormInit.id = IDTIMER_FORM;
@@ -2037,7 +2032,7 @@ BOOL intAddMissionTimer(void)
 	}
 
 	//add labels for the time display
-	memset(&sLabInit,0,sizeof(W_LABINIT));
+	W_LABINIT sLabInit;
 	sLabInit.formID = IDTIMER_FORM;
 	sLabInit.id = IDTIMER_DISPLAY;
 	sLabInit.style = WLAB_PLAIN | WIDG_HIDDEN;
@@ -2046,7 +2041,6 @@ BOOL intAddMissionTimer(void)
 	sLabInit.width = sFormInit.width;//TIMER_WIDTH;
 	sLabInit.height = sFormInit.height;//TIMER_HEIGHT;
 	sLabInit.pText = "00:00:00";
-	sLabInit.FontID = font_regular;
 	sLabInit.pCallback = intUpdateMissionTimer;
 
 	if (!widgAddLabel(psWScreen, &sLabInit))
@@ -2060,10 +2054,6 @@ BOOL intAddMissionTimer(void)
 //add the Transporter timer into the top left hand corner of the screen
 BOOL intAddTransporterTimer(void)
 {
-
-	W_FORMINIT		sFormInit;
-	W_LABINIT		sLabInit;
-
 	// Make sure that Transporter Launch button isn't up as well
 	intRemoveTransporterLaunch();
 
@@ -2074,7 +2064,7 @@ BOOL intAddTransporterTimer(void)
 	}
 
 	// Add the button form - clickable
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
+	W_FORMINIT sFormInit;
 	sFormInit.formID = 0;
 	sFormInit.id = IDTRANTIMER_BUTTON;
 	sFormInit.style = WFORM_CLICKABLE | WFORM_NOCLICKMOVE;
@@ -2092,15 +2082,14 @@ BOOL intAddTransporterTimer(void)
 	}
 
 	//add labels for the time display
-	memset(&sLabInit,0,sizeof(W_LABINIT));
+	W_LABINIT sLabInit;
 	sLabInit.formID = IDTRANTIMER_BUTTON;
 	sLabInit.id = IDTRANTIMER_DISPLAY;
-	sLabInit.style = WLAB_PLAIN | WIDG_HIDDEN;
+	sLabInit.style = WIDG_HIDDEN;
 	sLabInit.x = TRAN_TIMER_X;
 	sLabInit.y = TRAN_TIMER_Y;
 	sLabInit.width = TRAN_TIMER_WIDTH;
 	sLabInit.height = sFormInit.height;
-	sLabInit.FontID = font_regular;
 	sLabInit.pCallback = intUpdateTransporterTimer;
 	if (!widgAddLabel(psWScreen, &sLabInit))
 	{
@@ -2108,16 +2097,14 @@ BOOL intAddTransporterTimer(void)
 	}
 
 	//add the capacity label
-	memset(&sLabInit,0,sizeof(W_LABINIT));
+	sLabInit = W_LABINIT();
 	sLabInit.formID = IDTRANTIMER_BUTTON;
 	sLabInit.id = IDTRANS_CAPACITY;
-	sLabInit.style = WLAB_PLAIN;
 	sLabInit.x = 65;
 	sLabInit.y = 1;
 	sLabInit.width = 16;
 	sLabInit.height = 16;
 	sLabInit.pText = "00/10";
-	sLabInit.FontID = font_regular;
 	sLabInit.pCallback = intUpdateTransCapacity;
 	if (!widgAddLabel(psWScreen, &sLabInit))
 	{
@@ -2402,13 +2389,9 @@ static void missionResetInGameState( void )
 
 static BOOL _intAddMissionResult(BOOL result, BOOL bPlaySuccess)
 {
-	W_FORMINIT		sFormInit;
-	W_LABINIT		sLabInit;
-	W_BUTINIT		sButInit;
-
 	missionResetInGameState();
 
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
+	W_FORMINIT sFormInit;
 
 	// add some funky beats
 	cdAudio_PlayTrack(SONG_FRONTEND);
@@ -2462,10 +2445,10 @@ static BOOL _intAddMissionResult(BOOL result, BOOL bPlaySuccess)
 	}
 
 	// description of success/fail
-	memset(&sLabInit,0,sizeof(W_LABINIT));
+	W_LABINIT sLabInit;
 	sLabInit.formID = IDMISSIONRES_TITLE;
 	sLabInit.id = IDMISSIONRES_TXT;
-	sLabInit.style = WLAB_PLAIN | WLAB_ALIGNCENTRE;
+	sLabInit.style = WLAB_ALIGNCENTRE;
 	sLabInit.x = 0;
 	sLabInit.y = 12;
 	sLabInit.width = MISSIONRES_TITLE_W;
@@ -2490,12 +2473,11 @@ static BOOL _intAddMissionResult(BOOL result, BOOL bPlaySuccess)
 		return false;
 	}
 	// options.
-	memset(&sButInit,0,sizeof(W_BUTINIT));
+	W_BUTINIT sButInit;
 	sButInit.formID		= IDMISSIONRES_FORM;
-	sButInit.style		= WBUT_PLAIN | WBUT_TXTCENTRE;
+	sButInit.style		= WBUT_TXTCENTRE;
 	sButInit.width		= MISSION_TEXT_W;
 	sButInit.height		= MISSION_TEXT_H;
-	sButInit.FontID		= font_regular;
 	sButInit.pTip		= NULL;
 	sButInit.pDisplay	= displayTextOption;
 	// If won or in debug mode
@@ -2641,8 +2623,6 @@ static void missionContineButtonPressed( void )
 
 void intProcessMissionResult(UDWORD id)
 {
-	W_BUTINIT	sButInit;
-
 	switch(id)
 	{
 	case IDMISSIONRES_LOAD:
@@ -2655,13 +2635,11 @@ void intProcessMissionResult(UDWORD id)
 		if (widgGetFromID(psWScreen, IDMISSIONRES_QUIT) == NULL)
 		{
 			//Add Quit Button now save has been pressed
-			memset(&sButInit,0,sizeof(W_BUTINIT));
+			W_BUTINIT sButInit;
 			sButInit.formID		= IDMISSIONRES_FORM;
-			sButInit.style		= WBUT_PLAIN | WBUT_TXTCENTRE;
+			sButInit.style		= WBUT_TXTCENTRE;
 			sButInit.width		= MISSION_TEXT_W;
 			sButInit.height		= MISSION_TEXT_H;
-			sButInit.FontID		= font_regular;
-			sButInit.pTip		= NULL;
 			sButInit.pDisplay	= displayTextOption;
 			sButInit.id			= IDMISSIONRES_QUIT;
 			sButInit.x			= MISSION_3_X;

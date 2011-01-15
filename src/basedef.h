@@ -31,7 +31,7 @@
 //the died flag for a droid is set to this when it gets added to the non-current list
 #define NOT_CURRENT_LIST 1
 
-typedef enum _object_type
+enum OBJECT_TYPE
 {
 	OBJ_DROID,      ///< Droids
 	OBJ_STRUCTURE,  ///< All Buildings
@@ -39,7 +39,7 @@ typedef enum _object_type
 	OBJ_PROJECTILE, ///< Comes out of guns, stupid :-)
 	OBJ_TARGET,     ///< for the camera tracking
 	OBJ_NUM_TYPES,  ///< number of object types - MUST BE LAST
-} OBJECT_TYPE;
+};
 
 typedef struct _tilePos
 {
@@ -115,11 +115,11 @@ struct BASE_OBJECT : public SIMPLE_OBJECT
 	NEXTOBJ             psNextFunc;                 ///< Pointer to the next object in the function list
 };
 
-/// Space-time coordinate.
-struct SpaceTime
+/// Space-time coordinate, including orientation.
+struct Spacetime
 {
-	SpaceTime() {}
-	SpaceTime(Position pos_, Rotation rot_, uint32_t time_) : time(time_), pos(pos_), rot(rot_) {}
+	Spacetime() {}
+	Spacetime(Position pos_, Rotation rot_, uint32_t time_) : time(time_), pos(pos_), rot(rot_) {}
 
 	uint32_t  time;        ///< Game time
 
@@ -127,15 +127,8 @@ struct SpaceTime
 	Rotation  rot;         ///< Rotation of the object
 };
 
-typedef SpaceTime SPACETIME;
-
-static inline SpaceTime constructSpacetime(Position pos, Rotation rot, uint32_t time)
-{
-	return SpaceTime(pos, rot, time);
-}
-
-#define GET_SPACETIME(psObj) constructSpacetime(psObj->pos, psObj->rot, psObj->time)
-#define SET_SPACETIME(psObj, st) do { psObj->pos = st.pos; psObj->rot = st.rot; psObj->time = st.time; } while(0)
+static inline Spacetime getSpacetime(SIMPLE_OBJECT const *psObj) { return Spacetime(psObj->pos, psObj->rot, psObj->time); }
+static inline void setSpacetime(SIMPLE_OBJECT *psObj, Spacetime const &st) { psObj->pos = st.pos; psObj->rot = st.rot; psObj->time = st.time; }
 
 static inline bool isDead(const BASE_OBJECT* psObj)
 {
@@ -149,6 +142,14 @@ static inline int objPosDiffSq(Position pos1, Position pos2)
 	const int ydiff = pos1.y - pos2.y;
 	return (xdiff * xdiff + ydiff * ydiff);
 }
+
+
+// True iff object is a droid, structure or feature (not a projectile). Will incorrectly return true if passed a nonsense object of type OBJ_TARGET or OBJ_NUM_TYPES.
+static inline bool isBaseObject(SIMPLE_OBJECT const *psObject)                 { return psObject->type != OBJ_PROJECTILE; }
+// Returns BASE_OBJECT * if base_object or NULL if not.
+static inline BASE_OBJECT *castBaseObject(SIMPLE_OBJECT *psObject)             { return isBaseObject(psObject)? (BASE_OBJECT *)psObject : (BASE_OBJECT *)NULL; }
+// Returns BASE_OBJECT const * if base_object or NULL if not.
+static inline BASE_OBJECT const *castBaseObject(SIMPLE_OBJECT const *psObject) { return isBaseObject(psObject)? (BASE_OBJECT const *)psObject : (BASE_OBJECT const *)NULL; }
 
 // Must be #included __AFTER__ the definition of BASE_OBJECT
 #include "baseobject.h"

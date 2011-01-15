@@ -69,6 +69,24 @@ static uint16_t wantedLatencies[MAX_PLAYERS];
 
 static void updateLatency(void);
 
+static std::string listToString(char const *format, char const *separator, uint32_t const *begin, uint32_t const *end)
+{
+	std::string ret;
+	uint32_t const *i = begin;
+	while (i != end)
+	{
+		char tmp[100];
+		ssprintf(tmp, format, *i);
+		ret += tmp;
+
+		if (++i != end)
+		{
+			ret += separator;
+		}
+	}
+	return ret;
+}
+
 /* Initialise the game clock */
 void gameTimeInit(void)
 {
@@ -176,10 +194,10 @@ void gameTimeUpdate()
 			baseTime = currTime;
 			timeOffset = graphicsTime;
 
-			debug(LOG_SYNC, "Waiting for other players. gameTime = %u, player times are {%u, %u, %u, %u, %u, %u, %u, %u}", gameTime, gameQueueTime[0], gameQueueTime[1], gameQueueTime[2], gameQueueTime[3], gameQueueTime[4], gameQueueTime[5], gameQueueTime[6], gameQueueTime[7]);
+			debug(LOG_SYNC, "Waiting for other players. gameTime = %u, player times are {%s}", gameTime, listToString("%u", ", ", gameQueueTime, gameQueueTime + game.maxPlayers).c_str());
 			mayUpdate = false;
 
-			for (player = 0; player < MAX_PLAYERS; ++player)
+			for (player = 0; player < game.maxPlayers; ++player)
 			{
 				if (!checkPlayerGameTime(player))
 				{
@@ -206,11 +224,10 @@ void gameTimeUpdate()
 			deltaGameTime = GAME_TICKS_PER_UPDATE;
 
 			updateLatency();
-
 			if (crcError)
 			{
-				debug(LOG_ERROR, "Synch error, gameTimes were: {%10u, %10u, %10u, %10u, %10u, %10u, %10u, %10u}", gameQueueCheckTime[0], gameQueueCheckTime[1], gameQueueCheckTime[2], gameQueueCheckTime[3], gameQueueCheckTime[4], gameQueueCheckTime[5], gameQueueCheckTime[6], gameQueueCheckTime[7]);
-				debug(LOG_ERROR, "Synch error, CRCs were:      {0x%08X, 0x%08X, 0x%08X, 0x%08X, 0x%08X, 0x%08X, 0x%08X, 0x%08X}", gameQueueCheckCrc[0], gameQueueCheckCrc[1], gameQueueCheckCrc[2], gameQueueCheckCrc[3], gameQueueCheckCrc[4], gameQueueCheckCrc[5], gameQueueCheckCrc[6], gameQueueCheckCrc[7]);
+				debug(LOG_ERROR, "Synch error, gameTimes were: {%s}", listToString("%10u", ", ", gameQueueCheckTime, gameQueueCheckTime + game.maxPlayers).c_str());
+				debug(LOG_ERROR, "Synch error, CRCs were:      {%s}", listToString("0x%08X", ", ", gameQueueCheckCrc, gameQueueCheckCrc + game.maxPlayers).c_str());
 				crcError = false;
 			}
 		}
@@ -347,7 +364,7 @@ static void updateLatency()
 	uint16_t prevDiscreteChosenLatency = discreteChosenLatency;
 
 	// Find out what latency has been agreed on, next.
-	for (player = 0; player < MAX_PLAYERS; ++player)
+	for (player = 0; player < game.maxPlayers; ++player)
 	{
 		if (!NetPlay.players[player].kick)  // .kick: Don't wait for dropped players.
 		{
@@ -380,7 +397,7 @@ void sendPlayerGameTime()
 	uint32_t checkTime = gameTime;
 	uint32_t checkCrc = nextDebugSync();
 
-	for (player = 0; player < MAX_PLAYERS; ++player)
+	for (player = 0; player < game.maxPlayers; ++player)
 	{
 		if (!myResponsibility(player) && whosResponsible(player) != realSelectedPlayer)
 		{
@@ -434,7 +451,7 @@ bool checkPlayerGameTime(unsigned player)
 	if (player == NET_ALL_PLAYERS)
 	{
 		begin = 0;
-		end = MAX_PLAYERS;
+		end = game.maxPlayers;
 	}
 
 	for (player = begin; player < end; ++player)
@@ -452,7 +469,7 @@ void setPlayerGameTime(unsigned player, uint32_t time)
 {
 	if (player == NET_ALL_PLAYERS)
 	{
-		for (player = 0; player < MAX_PLAYERS; ++player)
+		for (player = 0; player < game.maxPlayers; ++player)
 		{
 			gameQueueTime[player] = time;
 		}

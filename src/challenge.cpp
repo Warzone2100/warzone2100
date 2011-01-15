@@ -35,8 +35,8 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
 #include "lib/iniparser/iniparser.h"
-#include "lib/ivis_common/bitimage.h"
-#include "lib/ivis_common/pieblitfunc.h"
+#include "lib/ivis_opengl/bitimage.h"
+#include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/widget/button.h"
 
 #include "challenge.h"
@@ -121,9 +121,6 @@ bool addChallenges()
 {
 	char			sPath[PATH_MAX];
 	const char *sSearchPath	= "challenges";
-	W_FORMINIT		sFormInit;
-	W_BUTINIT		sButInit;
-	W_LABINIT		sLabInit;
 	UDWORD			slotCount;
 	static char		sSlotCaps[totalslots][totalslotspace];
 	static char		sSlotTips[totalslots][totalslotspace];
@@ -136,7 +133,7 @@ bool addChallenges()
 	widgSetTipFont(psRequestScreen, font_regular);
 
 	/* add a form to place the tabbed form on */
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
+	W_FORMINIT sFormInit;
 	sFormInit.formID = 0;				//this adds the blue background, and the "box" behind the buttons -Q
 	sFormInit.id = CHALLENGE_FORM;
 	sFormInit.style = WFORM_PLAIN;
@@ -163,7 +160,7 @@ bool addChallenges()
 	widgAddForm(psRequestScreen, &sFormInit);
 
 	// Add Banner Label
-	memset(&sLabInit, 0, sizeof(W_LABINIT));
+	W_LABINIT sLabInit;
 	sLabInit.formID		= CHALLENGE_BANNER;
 	sLabInit.id		= CHALLENGE_LABEL;
 	sLabInit.style		= WLAB_ALIGNCENTRE;
@@ -172,11 +169,10 @@ bool addChallenges()
 	sLabInit.width		= CHALLENGE_W - (2 * CHALLENGE_HGAP);	//CHALLENGE_W;
 	sLabInit.height		= CHALLENGE_BANNER_DEPTH;		//This looks right -Q
 	sLabInit.pText		= "Challenge";
-	sLabInit.FontID		= font_regular;
 	widgAddLabel(psRequestScreen, &sLabInit);
 
 	// add cancel.
-	memset(&sButInit, 0, sizeof(W_BUTINIT));
+	W_BUTINIT sButInit;
 	sButInit.formID = CHALLENGE_BANNER;
 	sButInit.x = 8;
 	sButInit.y = 8;
@@ -185,20 +181,16 @@ bool addChallenges()
 	sButInit.UserData	= PACKDWORD_TRI(0, IMAGE_NRUTER , IMAGE_NRUTER);
 
 	sButInit.id = CHALLENGE_CANCEL;
-	sButInit.style = WBUT_PLAIN;
 	sButInit.pTip = _("Close");
-	sButInit.FontID = font_regular;
 	sButInit.pDisplay = intDisplayImageHilight;
 	widgAddButton(psRequestScreen, &sButInit);
 
 	// add slots
-	memset(&sButInit, 0, sizeof(W_BUTINIT));
+	sButInit = W_BUTINIT();
 	sButInit.formID		= CHALLENGE_FORM;
-	sButInit.style		= WBUT_PLAIN;
 	sButInit.width		= CHALLENGE_ENTRY_W;
 	sButInit.height		= CHALLENGE_ENTRY_H;
 	sButInit.pDisplay	= displayLoadSlot;
-	sButInit.FontID		= font_regular;
 
 	for (slotCount = 0; slotCount < totalslots; slotCount++)
 	{
@@ -241,7 +233,7 @@ bool addChallenges()
 		char description[totalslotspace];
 		char highscore[totalslotspace];
 		const char *name, *difficulty, *map, *givendescription;
-		dictionary *dict;
+		inifile *inif;
 
 		// See if this filename contains the extension we're looking for
 		if (!strstr(*i, ".ini"))
@@ -251,41 +243,42 @@ bool addChallenges()
 		}
 
 		/* First grab any high score associated with this challenge */
-		dict = iniparser_load(CHALLENGE_SCORES);
+		inif = inifile_load(CHALLENGE_SCORES);
 		sstrcpy(sPath, *i);
 		sPath[strlen(sPath) - 4] = '\0';	// remove .ini
 		sstrcpy(highscore, "no score");
-		if (dict)
+		if (inif)
 		{
 			char key[64];
 			bool victory;
 			int seconds;
 
 			ssprintf(key, "%s:Player", sPath);
-			name = iniparser_getstring(dict, key, "NO NAME");
+			name = inifile_get(inif, key, "NO NAME");
 			ssprintf(key, "%s:Victory", sPath);
-			victory = iniparser_getboolean(dict, key, false);
+			victory = inifile_get_as_bool(inif, key, false);
 			ssprintf(key, "%s:Seconds", sPath);
-			seconds = iniparser_getint(dict, key, -1);
+			seconds = inifile_get_as_int(inif, key, -1);
 			if (seconds > 0)
 			{
 				getAsciiTime(key, seconds * GAME_TICKS_PER_SEC);
 				ssprintf(highscore, "%s by %s (%s)", key, name, victory ? "Victory" : "Survived");
 			}
-			iniparser_freedict(dict);
+			inifile_delete(inif);
 		}
 
 		ssprintf(sPath, "%s/%s", sSearchPath, *i);
-		dict = iniparser_load(sPath);
-		if (!dict)
+		inif = inifile_load(sPath);
+		inifile_set_current_section(inif, "challenge");
+		if (!inif)
 		{
 			debug(LOG_ERROR, "Could not open \"%s\"", sPath);
 			continue;
 		}
-		name = iniparser_getstring(dict, "challenge:Name", "BAD NAME");
-		map = iniparser_getstring(dict, "challenge:Map", "BAD MAP");
-		difficulty = iniparser_getstring(dict, "challenge:difficulty", "BAD DIFFICULTY");
-		givendescription = iniparser_getstring(dict, "challenge:description", "");
+		name = inifile_get(inif, "Name", "BAD NAME");
+		map = inifile_get(inif, "Map", "BAD MAP");
+		difficulty = inifile_get(inif, "difficulty", "BAD DIFFICULTY");
+		givendescription = inifile_get(inif, "description", "");
 		ssprintf(description, "%s, %s, %s. %s", map, difficulty, highscore, givendescription);
 
 		button = (W_BUTTON*)widgGetFromID(psRequestScreen, CHALLENGE_ENTRY_START + slotCount);
@@ -296,7 +289,7 @@ bool addChallenges()
 		sstrcpy(sSlotCaps[slotCount], name);		// store it!
 		sstrcpy(sSlotTips[slotCount], description);	// store it, too!
 		sstrcpy(sSlotFile[slotCount], sPath);		// store filename
-		iniparser_freedict(dict);
+		inifile_delete(inif);
 
 		/* Add button */
 		button->pTip = sSlotTips[slotCount];

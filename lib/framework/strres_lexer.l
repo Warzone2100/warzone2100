@@ -84,7 +84,7 @@ extern void strres_set_debug(int bdebug);
 
 %}
 
-%option yylineno noyywrap nounput
+%option yylineno noyywrap nounput never-interactive
 %option prefix="strres_"
 
 %x COMMENT

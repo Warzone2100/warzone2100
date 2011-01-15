@@ -20,7 +20,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
 #include "lib/gamelib/gtime.h"
-#include "lib/ivis_common/pietypes.h"
+#include "lib/ivis_opengl/pietypes.h"
 
 #include "tracklib.h"
 #include "aud.h"
@@ -367,17 +367,14 @@ static AUDIO_SAMPLE *audio_QueueSample( SDWORD iTrack )
 //
 void audio_QueueTrack( SDWORD iTrack )
 {
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	AUDIO_SAMPLE	*psSample = NULL;
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 	// return if audio not enabled
 	if ( g_bAudioEnabled == false || g_bAudioPaused == true)
 	{
 		return;
 	}
 
-	psSample = audio_QueueSample( iTrack );
+	audio_QueueSample( iTrack );
+	return;
 }
 
 //*
@@ -693,14 +690,14 @@ static BOOL audio_CheckSame3DTracksPlaying( SDWORD iTrack, SDWORD iX, SDWORD iY,
 // =======================================================================================================================
 // =======================================================================================================================
 //
-static BOOL audio_Play3DTrack( SDWORD iX, SDWORD iY, SDWORD iZ, int iTrack, void *psObj, AUDIO_CALLBACK pUserCallback )
+static BOOL audio_Play3DTrack( SDWORD iX, SDWORD iY, SDWORD iZ, int iTrack, SIMPLE_OBJECT *psObj, AUDIO_CALLBACK pUserCallback )
 {
 	//~~~~~~~~~~~~~~~~~~~~~~
 	AUDIO_SAMPLE	*psSample;
 	// coordinates
 	float	listenerX = .0f, listenerY = .0f, listenerZ = .0f, dX, dY, dZ;
 	// calculation results
-	float	distance, gain, sfx3d_volume;
+	float	distance, gain;
 #ifndef WZ_NOSOUND
 	ALenum err;
 #endif
@@ -732,7 +729,6 @@ static BOOL audio_Play3DTrack( SDWORD iX, SDWORD iY, SDWORD iZ, int iTrack, void
 	dZ = (float)iZ - listenerZ;
 	distance = sqrtf(dX * dX + dY * dY + dZ * dZ); // Pythagorean theorem
 
-	sfx3d_volume = sound_GetEffectsVolume();
 	// compute gain
 	gain = (1.0 - (distance * ATTENUATION_FACTOR)) ;//* 1.0f * sfx3d_volume
 	if (gain > 1.0f)
@@ -802,7 +798,7 @@ BOOL audio_PlayStaticTrack( SDWORD iMapX, SDWORD iMapY, int iTrack )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL audio_PlayObjStaticTrack( void *psObj, int iTrack )
+bool audio_PlayObjStaticTrack(SIMPLE_OBJECT *psObj, int iTrack )
 {
 	//~~~~~~~~~~~~~~~
 	SDWORD	iX, iY, iZ;
@@ -822,7 +818,7 @@ BOOL audio_PlayObjStaticTrack( void *psObj, int iTrack )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL audio_PlayObjStaticTrackCallback( void *psObj, int iTrack, AUDIO_CALLBACK pUserCallback )
+bool audio_PlayObjStaticTrackCallback(SIMPLE_OBJECT *psObj, int iTrack, AUDIO_CALLBACK pUserCallback )
 {
 	//~~~~~~~~~~~~~~~
 	SDWORD	iX, iY, iZ;
@@ -842,7 +838,7 @@ BOOL audio_PlayObjStaticTrackCallback( void *psObj, int iTrack, AUDIO_CALLBACK p
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL audio_PlayObjDynamicTrack( void *psObj, int iTrack, AUDIO_CALLBACK pUserCallback )
+bool audio_PlayObjDynamicTrack(SIMPLE_OBJECT *psObj, int iTrack, AUDIO_CALLBACK pUserCallback )
 {
 	//~~~~~~~~~~~~~~~
 	SDWORD	iX, iY, iZ;
@@ -911,7 +907,7 @@ AUDIO_STREAM* audio_PlayStream(const char* fileName, float volume, void (*onFini
 // =======================================================================================================================
 // =======================================================================================================================
 //
-void audio_StopObjTrack( void *psObj, int iTrack )
+void audio_StopObjTrack(SIMPLE_OBJECT *psObj, int iTrack)
 {
 	//~~~~~~~~~~~~~~~~~~~~~~
 	AUDIO_SAMPLE	*psSample;
@@ -1115,7 +1111,7 @@ SDWORD audio_GetTrackID( const char *fileName )
  *  \param psObj pointer to the object for which we must destroy all of its
  *               outstanding audio samples.
  */
-void audio_RemoveObj(const void* psObj)
+void audio_RemoveObj(SIMPLE_OBJECT const *psObj)
 {
 	unsigned int count = 0;
 

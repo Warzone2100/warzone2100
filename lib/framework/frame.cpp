@@ -316,7 +316,7 @@ void frameShutDown(void)
 PHYSFS_file* openLoadFile(const char* fileName, bool hard_fail)
 {
 	PHYSFS_file* fileHandle = PHYSFS_openRead(fileName);
-	debug(LOG_WZ, "Reading...[directory: %s] %s", PHYSFS_getRealDir(fileName), fileName);
+	debug(LOG_NEVER, "Reading...[directory: %s] %s", PHYSFS_getRealDir(fileName), fileName);
 	if (!fileHandle)
 	{
 		if (hard_fail)

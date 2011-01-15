@@ -920,7 +920,7 @@ if centreView == nil then centreView = function() print("stub: centreView"); ret
 if anyStructButWallsLeft == nil then anyStructButWallsLeft = function() print("stub: anyStructButWallsLeft"); return 0 end end
 if enableResearch == nil then enableResearch = function() print("stub: enableResearch"); return 0 end end
 if numStructsButNotWallsInArea == nil then numStructsButNotWallsInArea = function() print("stub: numStructsButNotWallsInArea"); return 0 end end
-if playSoundPos == nil then playSoundPos = function() print("stub: playSoundPos"); return 0 end end
+if objectInArea == nil then objectInArea = function() print("stub: objectInArea"); return 0 end end
 if flashOff == nil then flashOff = function() print("stub: flashOff"); return 0 end end
 if addFeature == nil then addFeature = function() print("stub: addFeature"); return 0 end end
 if groupAddDroid == nil then groupAddDroid = function() print("stub: groupAddDroid"); return 0 end end
@@ -940,7 +940,7 @@ if setPowerLevel == nil then setPowerLevel = function() print("stub: setPowerLev
 if addDroidToMissionList == nil then addDroidToMissionList = function() print("stub: addDroidToMissionList"); return 0 end end
 if setStructureLimits == nil then setStructureLimits = function() print("stub: setStructureLimits"); return 0 end end
 if buildingDestroyed == nil then buildingDestroyed = function() print("stub: buildingDestroyed"); return 0 end end
-if objectInArea == nil then objectInArea = function() print("stub: objectInArea"); return 0 end end
+if playSoundPos == nil then playSoundPos = function() print("stub: playSoundPos"); return 0 end end
 if killStructsInArea == nil then killStructsInArea = function() print("stub: killStructsInArea"); return 0 end end
 if completeResearch == nil then completeResearch = function() print("stub: completeResearch"); return 0 end end
 if startMission == nil then startMission = function() print("stub: startMission"); return 0 end end

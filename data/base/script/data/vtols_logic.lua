@@ -10,9 +10,6 @@ droid = nil
 clusterID = 0
 
 -- VTOL Pads
-pad = nil
-padX = Array(8)
-padY = Array(8)
 dontStopFlag = false
 pads = Array(8)
 
@@ -27,12 +24,10 @@ attackCluster = Array(4)
 countTime = Array(4)
 
 -- area within which vtols can be killed
-killX1 = 0
-killY1 = 0
-killX2 = 0
-killY2 = 0
 
 -- where the vtols return to and vanish
+vanishX = 0
+vanishY = 0
 
 -- which player is the human player
 player = 0

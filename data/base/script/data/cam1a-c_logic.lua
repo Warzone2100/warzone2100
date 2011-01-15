@@ -116,7 +116,6 @@ function startEvnt()
 	
 	-- force to recalc
 	LZMess = numLZ + 1
-	randomiseSeed()
 	--[[//also don't allow building on 1CA's enemy LZs!
 		count = 0;
 		while (count < numLZ)
@@ -731,10 +730,9 @@ if completeResearch == nil then completeResearch = function() print("stub: compl
 if setEventTrigger == nil then setEventTrigger = function() print("stub: setEventTrigger"); return 0 end end
 if setNoGoArea == nil then setNoGoArea = function() print("stub: setNoGoArea"); return 0 end end
 if setTransporterExit == nil then setTransporterExit = function() print("stub: setTransporterExit"); return 0 end end
-if randomiseSeed == nil then randomiseSeed = function() print("stub: randomiseSeed"); return 0 end end
+if structInArea == nil then structInArea = function() print("stub: structInArea"); return 0 end end
 if playSound == nil then playSound = function() print("stub: playSound"); return 0 end end
 if flyTransporterIn == nil then flyTransporterIn = function() print("stub: flyTransporterIn"); return 0 end end
-if structInArea == nil then structInArea = function() print("stub: structInArea"); return 0 end end
 if addMessage == nil then addMessage = function() print("stub: addMessage"); return 0 end end
 if setRadarZoom == nil then setRadarZoom = function() print("stub: setRadarZoom"); return 0 end end
 if orderDroidLoc == nil then orderDroidLoc = function() print("stub: orderDroidLoc"); return 0 end end

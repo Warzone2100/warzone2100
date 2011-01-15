@@ -23,11 +23,6 @@
 
 #include "track.h"
 
-#if defined(__cplusplus)
-extern "C"
-{
-#endif
-
 extern BOOL		audio_Init( AUDIO_CALLBACK pStopTrackCallback );
 extern void		audio_Update(void);
 extern BOOL		audio_Shutdown(void);
@@ -37,14 +32,10 @@ extern BOOL		audio_LoadTrackFromFile( char szFileName[] );
 extern unsigned int audio_SetTrackVals(const char* fileName, BOOL loop, unsigned int volume, unsigned int audibleRadius);
 
 extern BOOL		audio_PlayStaticTrack( SDWORD iX, SDWORD iY, int iTrack );
-extern BOOL		audio_PlayObjStaticTrack( void * psObj, int iTrack );
-extern BOOL		audio_PlayObjStaticTrackCallback( void * psObj, int iTrack,
-									AUDIO_CALLBACK pUserCallback );
-extern BOOL		audio_PlayObjDynamicTrack( void * psObj, int iTrack,
-											AUDIO_CALLBACK pUserCallback );
-extern BOOL		audio_PlayClusterDynamicTrack( void * psClusterObj,
-								int iTrack, AUDIO_CALLBACK pUserCallback );
-extern void		audio_StopObjTrack( void * psObj, int iTrack );
+bool                    audio_PlayObjStaticTrack(SIMPLE_OBJECT *psObj, int iTrack);
+bool                    audio_PlayObjStaticTrackCallback(SIMPLE_OBJECT *psObj, int iTrack, AUDIO_CALLBACK pUserCallback);
+bool                    audio_PlayObjDynamicTrack(SIMPLE_OBJECT *psObj, int iTrack, AUDIO_CALLBACK pUserCallback );
+void                    audio_StopObjTrack(SIMPLE_OBJECT *psObj, int iTrack);
 extern void		audio_PlayTrack( int iTrack );
 extern void		audio_PlayCallbackTrack( int iTrack,
 											AUDIO_CALLBACK pUserCallback );
@@ -66,14 +57,10 @@ extern void		audio_ResumeAll( void );
 extern void		audio_StopAll( void );
 
 extern SDWORD	audio_GetTrackID( const char *fileName );
-extern void audio_RemoveObj(const void* psObj);
+void                    audio_RemoveObj(SIMPLE_OBJECT const *psObj);
 extern unsigned int audio_GetSampleQueueCount(void);
 extern unsigned int audio_GetSampleListCount(void);
 extern unsigned int sound_GetActiveSamplesCount(void);
-
-#if defined(__cplusplus)
-}
-#endif
 
 extern void 		audioTest(void);
 

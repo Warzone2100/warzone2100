@@ -177,8 +177,8 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
-						ObjectFile="$(IntDir)\$(InputName)1.obj"
-						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						ObjectFile="$(IntDir)\"
+						XMLDocumentationFileName="$(IntDir)\"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -198,39 +198,39 @@
 					Name="src files"
 					>
 					<File
-						RelativePath=".\miniupnpc\igd_desc_parse.cpp"
+						RelativePath=".\miniupnpc\igd_desc_parse.c"
 						>
 					</File>
 					<File
-						RelativePath=".\miniupnpc\minisoap.cpp"
+						RelativePath=".\miniupnpc\minisoap.c"
 						>
 					</File>
 					<File
-						RelativePath=".\miniupnpc\minissdpc.cpp"
+						RelativePath=".\miniupnpc\minissdpc.c"
 						>
 					</File>
 					<File
-						RelativePath=".\miniupnpc\miniupnpc.cpp"
+						RelativePath=".\miniupnpc\miniupnpc.c"
 						>
 					</File>
 					<File
-						RelativePath=".\miniupnpc\miniwget.cpp"
+						RelativePath=".\miniupnpc\miniwget.c"
 						>
 					</File>
 					<File
-						RelativePath=".\miniupnpc\minixml.cpp"
+						RelativePath=".\miniupnpc\minixml.c"
 						>
 					</File>
 					<File
-						RelativePath=".\miniupnpc\upnpcommands.cpp"
+						RelativePath=".\miniupnpc\upnpcommands.c"
 						>
 					</File>
 					<File
-						RelativePath=".\miniupnpc\upnperrors.cpp"
+						RelativePath=".\miniupnpc\upnperrors.c"
 						>
 					</File>
 					<File
-						RelativePath=".\miniupnpc\upnpreplyparse.cpp"
+						RelativePath=".\miniupnpc\upnpreplyparse.c"
 						>
 					</File>
 				</Filter>

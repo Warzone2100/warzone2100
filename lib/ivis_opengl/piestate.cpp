@@ -35,11 +35,11 @@
 # include <GL/glu.h>
 #endif
 
-#include "lib/ivis_common/pieblitfunc.h"
-#include "lib/ivis_common/piestate.h"
-#include "lib/ivis_common/piedef.h"
-#include "lib/ivis_common/tex.h"
-#include "lib/ivis_common/piepalette.h"
+#include "lib/ivis_opengl/pieblitfunc.h"
+#include "lib/ivis_opengl/piestate.h"
+#include "lib/ivis_opengl/piedef.h"
+#include "lib/ivis_opengl/tex.h"
+#include "lib/ivis_opengl/piepalette.h"
 #include "screen.h"
 
 /*
@@ -52,14 +52,124 @@ static bool ColouredMouse = false;
 static IMAGEFILE* MouseCursors = NULL;
 static uint16_t MouseCursorIDs[CURSOR_MAX];
 static bool MouseVisible = true;
+
 static GLuint shaderProgram[SHADER_MAX];
 static GLfloat shaderStretch = 0;
 static GLint locTeam, locStretch, locTCMask, locFog;
 static SHADER_MODE currentShaderMode = SHADER_NONE;
+unsigned int pieStateCount = 0; // Used in pie_GetResetCounts
+static RENDER_STATE rendStates;
 
 /*
  *	Source
  */
+
+void pie_SetDefaultStates(void)//Sets all states
+{
+	PIELIGHT black;
+
+	//fog off
+	rendStates.fogEnabled = false;// enable fog before renderer
+	rendStates.fog = false;//to force reset to false
+	pie_SetFogStatus(false);
+	black.rgba = 0;
+	black.byte.a = 255;
+	pie_SetFogColour(black);
+
+	//depth Buffer on
+	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
+
+	rendStates.rendMode = REND_ALPHA;	// to force reset to REND_OPAQUE
+	pie_SetRendMode(REND_OPAQUE);
+
+	//chroma keying on black
+	rendStates.keyingOn = false;//to force reset to true
+	pie_SetAlphaTest(true);
+}
+
+//***************************************************************************
+//
+// pie_EnableFog(BOOL val)
+//
+// Global enable/disable fog to allow fog to be turned of ingame
+//
+//***************************************************************************
+void pie_EnableFog(BOOL val)
+{
+	if (rendStates.fogEnabled != val)
+	{
+		debug(LOG_FOG, "pie_EnableFog: Setting fog to %s", val ? "ON" : "OFF");
+		rendStates.fogEnabled = val;
+		if (val == true)
+		{
+			pie_SetFogColour(WZCOL_FOG);
+		}
+		else
+		{
+			PIELIGHT black;
+
+			black.rgba = 0;
+			black.byte.a = 255;
+			pie_SetFogColour(black); // clear background to black
+		}
+	}
+}
+
+BOOL pie_GetFogEnabled(void)
+{
+	return rendStates.fogEnabled;
+}
+
+//***************************************************************************
+//
+// pie_SetFogStatus(BOOL val)
+//
+// Toggle fog on and off for rendering objects inside or outside the 3D world
+//
+//***************************************************************************
+BOOL pie_GetFogStatus(void)
+{
+	return rendStates.fog;
+}
+
+void pie_SetFogColour(PIELIGHT colour)
+{
+	rendStates.fogColour = colour;
+}
+
+PIELIGHT pie_GetFogColour(void)
+{
+	return rendStates.fogColour;
+}
+
+void pie_SetRendMode(REND_MODE rendMode)
+{
+	if (rendMode != rendStates.rendMode)
+	{
+		rendStates.rendMode = rendMode;
+		switch (rendMode)
+		{
+			case REND_OPAQUE:
+				glDisable(GL_BLEND);
+				break;
+
+			case REND_ALPHA:
+				glEnable(GL_BLEND);
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+				break;
+
+			case REND_ADDITIVE:
+				glEnable(GL_BLEND);
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+				break;
+
+			case REND_MULTIPLICATIVE:
+				glEnable(GL_BLEND);
+				glBlendFunc(GL_ZERO, GL_SRC_COLOR);
+				break;
+		}
+	}
+}
 
 // Read shader into text buffer
 static char *readShaderBuf(const char *name)
@@ -214,25 +324,43 @@ static bool loadShaders(GLuint *program, const char *definitions,
 bool pie_LoadShaders()
 {
 	GLuint program;
+	bool result;
 
 	// Try to load some shaders
 	shaderProgram[SHADER_NONE] = 0;
 
-	// TCMask shader
+	// TCMask shader for map-placed models with advanced lighting
 	debug(LOG_3D, "Loading shader: SHADER_COMPONENT");
-	if (!loadShaders(&program, "", "shaders/tcmask.vert", "shaders/tcmask.frag"))
-	{
-		assert(false);
-		return false;
-	}
+	result = loadShaders(&program, "", "shaders/tcmask.vert", "shaders/tcmask.frag");
+	ASSERT_OR_RETURN(false, result, "Failed to load component shader");
 	shaderProgram[SHADER_COMPONENT] = program;
+
+	// TCMask shader for buttons with flat lighting
+	debug(LOG_3D, "Loading shader: SHADER_BUTTON");
+	result = loadShaders(&program, "", "shaders/button.vert", "shaders/button.frag");
+	ASSERT_OR_RETURN(false, result, "Failed to load button shader");
+	shaderProgram[SHADER_BUTTON] = program;
+
 	currentShaderMode = SHADER_NONE;
 
 	return true;
 }
 
-static inline GLuint pie_SetShader(SHADER_MODE shaderMode)
+void pie_DeactivateShader(void)
 {
+	currentShaderMode = SHADER_NONE;
+	glUseProgram(0);
+}
+
+void pie_SetShaderStretchDepth(float stretch)
+{
+	shaderStretch = stretch;
+}
+
+void pie_ActivateShader(SHADER_MODE shaderMode, PIELIGHT teamcolour, int maskpage)
+{
+	GLfloat colour4f[4];
+
 	if (shaderMode != currentShaderMode)
 	{
 		GLint locTex0, locTex1;
@@ -251,25 +379,6 @@ static inline GLuint pie_SetShader(SHADER_MODE shaderMode)
 
 		currentShaderMode  = shaderMode;
 	}
-	return shaderProgram[shaderMode];
-}
-
-void pie_DeactivateShader(void)
-{
-	currentShaderMode = SHADER_NONE;
-	glUseProgram(0);
-}
-
-void pie_SetShaderStretchDepth(float stretch)
-{
-	shaderStretch = stretch;
-}
-
-void pie_ActivateShader_TCMask(PIELIGHT teamcolour, int maskpage)
-{
-	GLfloat colour4f[4];
-
-	pie_SetShader(SHADER_COMPONENT);
 
 	pal_PIELIGHTtoRGBA4f(&colour4f[0], teamcolour);
 	glUniform4fv(locTeam, 1, &colour4f[0]);
@@ -344,7 +453,6 @@ void pie_UpdateFogDistance(float begin, float end)
 //
 // Toggle fog on and off for rendering objects inside or outside the 3D world
 //
-
 void pie_SetFogStatus(BOOL val)
 {
 	float fog_colour[4];
@@ -427,36 +535,6 @@ void pie_SetAlphaTest(BOOL keyingOn)
 			glAlphaFunc(GL_GREATER, 0.1f);
 		} else {
 			glDisable(GL_ALPHA_TEST);
-		}
-	}
-}
-
-void pie_SetTranslucencyMode(TRANSLUCENCY_MODE transMode)
-{
-	if (transMode != rendStates.transMode) {
-		rendStates.transMode = transMode;
-		switch (transMode) {
-			case TRANS_ALPHA:
-				glEnable(GL_BLEND);
-				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-				break;
-			case TRANS_ADDITIVE:
-				glEnable(GL_BLEND);
-				glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-				break;
-			case TRANS_MULTIPLICATIVE:
-				glEnable(GL_BLEND);
-				glBlendFunc(GL_ZERO, GL_SRC_COLOR);
-				break;
-			case TRANS_DECAL:
-				glDisable(GL_BLEND);
-				break;
-			case TRANS_FILTER:
-				glEnable(GL_BLEND);
-				glBlendFunc(GL_ONE, GL_ONE);
-				break;
-			default:
-				break;
 		}
 	}
 }

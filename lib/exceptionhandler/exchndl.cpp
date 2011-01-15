@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 1997-XXXX  Jos� Fonseca <j_r_fonseca@yahoo.co.uk>
+	Copyright (C) 1997-XXXX  José Fonseca <j_r_fonseca@yahoo.co.uk>
 	 * Originally based on Matt Pietrek's MSJEXHND.CPP in Microsoft Systems Journal, April 1997.
 	Copyright (C) 2008  Giel van Schijndel
 	Copyright (C) 2008-2010  Warzone 2100 Project
@@ -78,9 +78,12 @@ DWORD GetModuleBase(DWORD dwAddress)
 #ifdef HAVE_BFD
 
 #include <bfd.h>
+extern "C"
+{
 #include "include/demangle.h"
 #include "include/coff/internal.h"
 #include "include/libcoff.h"
+}
 
 // Read in the symbol table.
 static bfd_boolean
@@ -394,9 +397,9 @@ BOOL ImagehlpDemangleSymName(LPCTSTR lpName, LPTSTR lpDemangledName, DWORD nSize
 	pSymbol->SizeOfStruct = sizeof(symbolBuffer);
 	pSymbol->MaxNameLength = 512;
 
-	lstrcpyn(pSymbol->Name, lpName, pSymbol->MaxNameLength);
+	lstrcpyn((LPTSTR)pSymbol->Name, lpName, pSymbol->MaxNameLength);
 
-	if(!j_SymUnDName(pSymbol, lpDemangledName, nSize))
+	if(!j_SymUnDName(pSymbol, (PSTR)lpDemangledName, nSize))
 		return FALSE;
 
 	return TRUE;
@@ -425,7 +428,7 @@ BOOL ImagehlpGetSymFromAddr(HANDLE hProcess, DWORD dwAddress, LPTSTR lpSymName, 
 	if(!j_SymGetSymFromAddr(hProcess, dwAddress, &dwDisplacement, pSymbol))
 		return FALSE;
 
-	lstrcpyn(lpSymName, pSymbol->Name, nSize);
+	lstrcpyn(lpSymName, (LPCTSTR)pSymbol->Name, nSize);
 
 	return TRUE;
 }
@@ -467,7 +470,7 @@ BOOL ImagehlpGetLineFromAddr(HANDLE hProcess, DWORD dwAddress,  LPTSTR lpFileNam
 
 	assert(lpFileName && lpLineNumber);
 
-	lstrcpyn(lpFileName, Line.FileName, nSize);
+	lstrcpyn(lpFileName, (LPCTSTR)Line.FileName, nSize);
 	*lpLineNumber = Line.LineNumber;
 
 	return TRUE;
@@ -528,7 +531,7 @@ BOOL PEGetSymFromAddr(HANDLE hProcess, DWORD dwAddress, LPTSTR lpSymName, DWORD 
 				return FALSE;
 
 			{
-				PDWORD *AddressOfFunctions = alloca(ExportDir.NumberOfFunctions*sizeof(PDWORD));
+				PDWORD *AddressOfFunctions = (PDWORD *)alloca(ExportDir.NumberOfFunctions*sizeof(PDWORD));
 				int j;
 
 				if(!ReadProcessMemory(hProcess, (PVOID)((DWORD)hModule + (DWORD)ExportDir.AddressOfFunctions), AddressOfFunctions, ExportDir.NumberOfFunctions*sizeof(PDWORD), NULL))
@@ -563,6 +566,17 @@ BOOL PEGetSymFromAddr(HANDLE hProcess, DWORD dwAddress, LPTSTR lpSymName, DWORD 
 	return TRUE;
 }
 
+// Cross platform compatibility.
+// If you change this, make sure it doesn't break the cross compile or the native compile.
+// Don't ask why this is needed, have no idea.
+struct ItDoesntMatterIfItsADWORDOrAVoidPointer_JustCompileTheDamnThing
+{
+	ItDoesntMatterIfItsADWORDOrAVoidPointer_JustCompileTheDamnThing(void *whatever) : whatever(whatever) {}
+	operator void *() const { return whatever; }        // Oooh, look compiler1, I'm a void *, just what you wanted!
+	operator DWORD() const { return (DWORD)whatever; }  // Oooh, look compiler2, I'm a DWORD, just what you wanted!
+	void *whatever;
+};
+
 static
 BOOL WINAPI IntelStackWalk(
 	DWORD MachineType,
@@ -579,7 +593,7 @@ BOOL WINAPI IntelStackWalk(
 	assert(MachineType == IMAGE_FILE_MACHINE_I386);
 
 	if(ReadMemoryRoutine == NULL)
-		ReadMemoryRoutine = ReadProcessMemory;
+		ReadMemoryRoutine = (PREAD_PROCESS_MEMORY_ROUTINE)ReadProcessMemory;
 
 	if(!StackFrame->Reserved[0])
 	{
@@ -593,20 +607,25 @@ BOOL WINAPI IntelStackWalk(
 		StackFrame->AddrFrame.Offset = ContextRecord->Ebp;
 
 		StackFrame->AddrReturn.Mode = AddrModeFlat;
-		if(!ReadMemoryRoutine(hProcess, (LPCVOID) (StackFrame->AddrFrame.Offset + sizeof(DWORD)), &StackFrame->AddrReturn.Offset, sizeof(DWORD), NULL))
+// Error   26      error C2664: 'BOOL (HANDLE,DWORD,PVOID,DWORD,PDWORD)' :
+// cannot convert parameter 2 from 'void *' to 'DWORD'
+// c:\warzone\lib\exceptionhandler\exchndl.cpp     599
+// ../../../../lib/exceptionhandler/exchndl.cpp: In function ‘BOOL IntelStackWalk(DWORD, void*, void*, _tagSTACKFRAME*, CONTEXT*, BOOL (*)(void*, const void*, void*, DWORD, DWORD*), void* (*)(void*, DWORD), DWORD (*)(void*, DWORD), DWORD (*)(void*, void*, _tagADDRESS*))’:
+// ../../../../lib/exceptionhandler/exchndl.cpp:599: error: invalid conversion from ‘long unsigned int’ to ‘const void*’
+		if(!ReadMemoryRoutine((HANDLE)hProcess, ItDoesntMatterIfItsADWORDOrAVoidPointer_JustCompileTheDamnThing((void *) (StackFrame->AddrFrame.Offset + sizeof(DWORD))), (void *)&StackFrame->AddrReturn.Offset, sizeof(DWORD), NULL))
 			return FALSE;
 	}
 	else
 	{
 		StackFrame->AddrPC.Offset = StackFrame->AddrReturn.Offset;
 		//AddrStack = AddrFrame + 2*sizeof(DWORD);
-		if(!ReadMemoryRoutine(hProcess, (LPCVOID) StackFrame->AddrFrame.Offset, &StackFrame->AddrFrame.Offset, sizeof(DWORD), NULL))
+		if(!ReadMemoryRoutine((HANDLE)hProcess, ItDoesntMatterIfItsADWORDOrAVoidPointer_JustCompileTheDamnThing((void *) StackFrame->AddrFrame.Offset), (void *)&StackFrame->AddrFrame.Offset, sizeof(DWORD), NULL))
 			return FALSE;
-		if(!ReadMemoryRoutine(hProcess, (LPCVOID) (StackFrame->AddrFrame.Offset + sizeof(DWORD)), &StackFrame->AddrReturn.Offset, sizeof(DWORD), NULL))
+		if(!ReadMemoryRoutine((HANDLE)hProcess, ItDoesntMatterIfItsADWORDOrAVoidPointer_JustCompileTheDamnThing((void *) (StackFrame->AddrFrame.Offset + sizeof(DWORD))), (void *)&StackFrame->AddrReturn.Offset, sizeof(DWORD), NULL))
 			return FALSE;
 	}
 
-	ReadMemoryRoutine(hProcess, (LPCVOID) (StackFrame->AddrFrame.Offset + 2*sizeof(DWORD)), StackFrame->Params, sizeof(StackFrame->Params), NULL);
+	ReadMemoryRoutine((HANDLE)hProcess, ItDoesntMatterIfItsADWORDOrAVoidPointer_JustCompileTheDamnThing((void *) (StackFrame->AddrFrame.Offset + 2*sizeof(DWORD))), (void *)StackFrame->Params, sizeof(StackFrame->Params), NULL);
 
 	return TRUE;
 }
@@ -871,7 +890,7 @@ void GenerateExceptionReport(PEXCEPTION_POINTERS pExceptionInfo)
 	dbgDumpHeader(hReportFile);
 
 	// First print information about the type of fault
-	rprintf(_T("\r\n%s caused "),  GetModuleFileName(NULL, szModule, MAX_PATH) ? szModule : "Application");
+	rprintf(_T("\r\n%s caused "),  GetModuleFileName(NULL, szModule, MAX_PATH) ? szModule : _T("Application"));
 	switch(pExceptionRecord->ExceptionCode)
 	{
 		case EXCEPTION_ACCESS_VIOLATION:
@@ -1009,9 +1028,9 @@ void GenerateExceptionReport(PEXCEPTION_POINTERS pExceptionInfo)
 
 	// If the exception was an access violation, print out some additional information, to the error log and the debugger.
 	if(pExceptionRecord->ExceptionCode == EXCEPTION_ACCESS_VIOLATION && pExceptionRecord->NumberParameters >= 2)
-		rprintf(" %s location %08x", pExceptionRecord->ExceptionInformation[0] ? "Writing to" : "Reading from", pExceptionRecord->ExceptionInformation[1]);
+		rprintf(_T(" %s location %08x"), pExceptionRecord->ExceptionInformation[0] ? "Writing to" : "Reading from", pExceptionRecord->ExceptionInformation[1]);
 
-	rprintf(".\r\n\r\n");
+	rprintf(_T(".\r\n\r\n"));
 
 	dbgDumpLog(hReportFile);
 
@@ -1130,7 +1149,7 @@ LONG WINAPI TopLevelExceptionFilter(PEXCEPTION_POINTERS pExceptionInfo)
 				0, NULL );
 
 			wsprintf(szBuffer, _T("Exception handler failed with error %d: %s\n"), dw, lpMsgBuf);
-			MessageBox(MB_ICONEXCLAMATION, szBuffer, _T("Error"), MB_OK); 
+			MessageBox((HWND)MB_ICONEXCLAMATION, szBuffer, _T("Error"), MB_OK); 
 
 			LocalFree(lpMsgBuf);
 			LocalFree(lpDisplayBuf);
@@ -1153,7 +1172,7 @@ LONG WINAPI TopLevelExceptionFilter(PEXCEPTION_POINTERS pExceptionInfo)
 			CloseHandle(hReportFile);
 
 			wsprintf(szBuffer, _T("Warzone has crashed.\r\nSee %s for more details\r\n"), szLogFileName);
-			err = MessageBox(MB_ICONERROR, szBuffer, _T("Warzone Crashed!"), MB_OK | MB_ICONERROR);
+			err = MessageBox((HWND)MB_ICONERROR, szBuffer, _T("Warzone Crashed!"), MB_OK | MB_ICONERROR);
 			if (err == 0)
 			{
 				LPVOID lpMsgBuf;
@@ -1172,7 +1191,7 @@ LONG WINAPI TopLevelExceptionFilter(PEXCEPTION_POINTERS pExceptionInfo)
 					0, NULL );
 
 				wsprintf(szBuffer, _T("Exception handler failed with error %d: %s\n"), dw, lpMsgBuf);
-				MessageBox(MB_ICONEXCLAMATION, szBuffer, _T("Error"), MB_OK); 
+				MessageBox((HWND)MB_ICONEXCLAMATION, szBuffer, _T("Error"), MB_OK); 
 
 				LocalFree(lpMsgBuf);
 				LocalFree(lpDisplayBuf);
@@ -1226,7 +1245,7 @@ void ExchndlSetup()
 	atexit(ExchndlShutdown);
 #endif
 }
-void ResetRPTDirectory(char *newPath)
+void ResetRPTDirectory(TCHAR *newPath)
 {
 	debug(LOG_WZ, "New RPT directory is %s, was %s", newPath, szLogFileName);
 	_tcscpy(szLogFileName, newPath);

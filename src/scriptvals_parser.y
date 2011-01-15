@@ -238,7 +238,7 @@ var_init:		var_entry TYPE var_value
 					/* set type */
 					data.type = $2;
 
-					switch ($2)
+					switch ((unsigned)$2)  // Unsigned cast to suppress compiler warnings due to enum abuse.
 					{
 					case VAL_INT:
 						data.v.ival = $3.index;	//index = integer value of the variable, not var index

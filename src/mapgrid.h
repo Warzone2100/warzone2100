@@ -24,11 +24,6 @@
 #ifndef __INCLUDED_SRC_MAPGRID_H__
 #define __INCLUDED_SRC_MAPGRID_H__
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 extern void **gridIterator;  ///< The iterator.
 
 
@@ -63,9 +58,5 @@ static inline BASE_OBJECT *gridIterate(void)
 // Isn't, but could be used by some weird recursive calls in cluster.c.
 /// Make a copy of the list. Free with free().
 BASE_OBJECT **gridIterateDup(void);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_MAPGRID_H__

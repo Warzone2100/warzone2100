@@ -34,12 +34,12 @@
 #include "lib/gamelib/gtime.h"
 #include "console.h"
 #include "scores.h"
-#include "lib/ivis_common/pieblitfunc.h"
-#include "lib/ivis_common/piedef.h"
-#include "lib/ivis_common/piefunc.h"
-#include "lib/ivis_common/piemode.h"
-#include "lib/ivis_common/piestate.h"
-#include "lib/ivis_common/piepalette.h"
+#include "lib/ivis_opengl/pieblitfunc.h"
+#include "lib/ivis_opengl/piedef.h"
+#include "lib/ivis_opengl/piefunc.h"
+#include "lib/ivis_opengl/piemode.h"
+#include "lib/ivis_opengl/piestate.h"
+#include "lib/ivis_opengl/piepalette.h"
 #include "objects.h"
 #include "droiddef.h"
 #include "basedef.h"
@@ -523,12 +523,9 @@ void	fillUpStats( void )
 	infoBars[STAT_STR_BLOWN_UP].percent = PERCENT(length,STAT_BAR_WIDTH);
 
 	/* Finally the force information - need amount of droids as well*/
-	for(psDroid = apsDroidLists[selectedPlayer],numUnits = 0;
-		psDroid; psDroid = psDroid->psNext,numUnits++);
+	for(psDroid = apsDroidLists[selectedPlayer], numUnits = 0; psDroid; psDroid = psDroid->psNext, numUnits++) {}
 
-	for(psDroid = mission.apsDroidLists[selectedPlayer];
-		psDroid; psDroid = psDroid->psNext,numUnits++);
-
+	for(psDroid = mission.apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext, numUnits++) {}
 
 	maxi = MAX(missionData.unitsBuilt, missionData.strBuilt);
 	maxi = MAX(maxi, numUnits);

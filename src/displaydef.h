@@ -24,13 +24,8 @@
 #ifndef __INCLUDED_DISPLAYDEF_H__
 #define __INCLUDED_DISPLAYDEF_H__
 
-#include "lib/ivis_common/imd.h"
-#include "lib/ivis_common/pieclip.h"
-
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
+#include "lib/ivis_opengl/imd.h"
+#include "lib/ivis_opengl/pieclip.h"
 
 #define	BOUNDARY_X			(22)
 #define BOUNDARY_Y			(22)
@@ -44,9 +39,5 @@ typedef struct _screen_disp_data
 	UDWORD		screenX,screenY;
 	UDWORD		screenR;
 } SCREEN_DISP_DATA;
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_DISPLAYDEF_H__

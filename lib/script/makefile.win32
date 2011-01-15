@@ -6,10 +6,10 @@ include $(top_srcdir)/makerules/common.mk
 # Due to the lexer's dependencies on the parser's header we need to compile the
 # parsers first
 PARSERS= \
-	chat_parser.tab.c \
-	chat_lexer.lex.c \
-	script_parser.tab.c \
-	script_lexer.lex.c
+	chat_parser.tab.cpp \
+	chat_lexer.lex.cpp \
+	script_parser.tab.cpp \
+	script_lexer.lex.cpp
 
 SRC= \
 	$(PARSERS) \

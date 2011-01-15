@@ -30,13 +30,8 @@
 // Lua
 #include "lib/lua/warzone.h"
 
-
 // How many game ticks for one event tick
 #define SCR_TICKRATE	100
-
-
-#define BARB1		6	
-#define BARB2		7
 
 enum SCR_CALLBACK_TYPES
 {

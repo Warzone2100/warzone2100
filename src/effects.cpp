@@ -41,13 +41,13 @@
 #include "lib/framework/tagfile.h"
 #include "lib/framework/math_ext.h"
 
-#include "lib/ivis_common/ivisdef.h" //ivis matrix code
-#include "lib/ivis_common/piedef.h" //ivis matrix code
+#include "lib/ivis_opengl/ivisdef.h" //ivis matrix code
+#include "lib/ivis_opengl/piedef.h" //ivis matrix code
 #include "lib/framework/fixedpoint.h"
-#include "lib/ivis_common/piepalette.h"
-#include "lib/ivis_common/piestate.h"
+#include "lib/ivis_opengl/piepalette.h"
+#include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/piematrix.h"
-#include "lib/ivis_common/piemode.h"
+#include "lib/ivis_opengl/piemode.h"
 
 #include "lib/gamelib/gtime.h"
 #include "lib/sound/audio.h"
@@ -312,7 +312,7 @@ static EFFECT *Effect_malloc(void)
 		/* Allocate new effect chunk */
 		EffectChunk *chunk = (EffectChunk *)calloc(1, sizeof(EffectChunk));
 
-		debug(LOG_MEMORY, "%zd effects in use, allocating %d extra", activeList.num, EFFECT_CHUNK_SIZE);
+		debug(LOG_MEMORY, "%lu effects in use, allocating %d extra", (unsigned long)activeList.num, EFFECT_CHUNK_SIZE);
 
 		/* Deal with out-of-memory conditions */
 		if (chunk == NULL) {
@@ -432,11 +432,11 @@ static void positionEffect(const EFFECT *psEffect)
 	int rx, rz;
 
 	/* Establish world position */
-	Vector3i dv = {
+	Vector3i dv(
 		(psEffect->position.x - player.p.x) - terrainMidX * TILE_UNITS,
 		psEffect->position.y,
 		terrainMidY * TILE_UNITS - (psEffect->position.z - player.p.z)
-	};
+	);
 
 	/* Push the indentity matrix */
 	pie_MatBegin();
@@ -489,18 +489,16 @@ void addMultiEffect(const Vector3i *basePos, Vector3i *scatter, EFFECT_GROUP gro
 		unsigned int i;
 
 		/* Fix for jim */
-		scatter->x/=10;
-		scatter->y/=10;
-		scatter->z/=10;
+		*scatter = *scatter / 10;
 
 		/* There are multiple effects - so scatter them around according to parameter */
 		for(i=0; i<number; i++)
 		{
-			Vector3i scatPos = {
-				basePos->x + (scatter->x ? ( scatter->x	- (rand()%(2*scatter->x)) ) : 0 ),
-				basePos->y + (scatter->y ? ( scatter->y	- (rand()%(2*scatter->y)) ) : 0 ),
-				basePos->z + (scatter->z ? ( scatter->z	- (rand()%(2*scatter->z)) ) : 0 )
-			};
+			// This scatters in a cube - is there a good reason for that, or just legacy?
+			Vector3i scatPos = *basePos + *scatter - Vector3i(rand()%(scatter->x*2 + 1),
+			                                                  rand()%(scatter->y*2 + 1),
+			                                                  rand()%(scatter->z*2 + 1)
+			                                                 );
 			addEffect(&scatPos,group,type,specified,imd,lit);
 		}
 	}
@@ -848,7 +846,6 @@ static void updateSatLaser(EFFECT *psEffect)
 	UDWORD	xDif,yDif;
 	UDWORD	i;
 	UDWORD	startHeight,endHeight;
-	iIMDShape	*pie;
 	UDWORD	xPos,yPos;
 	LIGHT	light;
 
@@ -861,7 +858,6 @@ static void updateSatLaser(EFFECT *psEffect)
 	if(psEffect->baseScale)
 	{
 		psEffect->baseScale = 0;
-		pie = getImdFromIndex(MI_FLAME);
 
 		/* Add some big explosions....! */
 
@@ -1251,7 +1247,7 @@ static void updateDestruction(EFFECT *psEffect)
 	UDWORD	widthScatter = 0, breadthScatter = 0, heightScatter = 0;
 	SDWORD	iX, iY;
 	LIGHT	light;
-	UDWORD	percent;
+	int     percent;
 	UDWORD	range;
 	float	div;
 	UDWORD	height;
@@ -1623,7 +1619,7 @@ static void renderWaypointEffect(const EFFECT *psEffect)
 {
 	positionEffect(psEffect);
 
-	pie_Draw3DShape(psEffect->imd, 0, 0, WZCOL_WHITE, WZCOL_BLACK, 0, 0);
+	pie_Draw3DShape(psEffect->imd, 0, 0, WZCOL_WHITE, 0, 0);
 	pie_MatEnd();
 }
 
@@ -1641,7 +1637,7 @@ static void renderFirework(const EFFECT *psEffect)
 	pie_MatRotX(-player.r.x);
 
 	pie_MatScale(psEffect->size / 100.f);
- 	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, WZCOL_WHITE, WZCOL_BLACK, pie_ADDITIVE, EFFECT_EXPLOSION_ADDITIVE);
+ 	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, WZCOL_WHITE, pie_ADDITIVE, EFFECT_EXPLOSION_ADDITIVE);
 	pie_MatEnd();
 }
 
@@ -1654,7 +1650,7 @@ static void renderBloodEffect(const EFFECT *psEffect)
 	pie_MatRotX(-player.r.x);
 	pie_MatScale(psEffect->size / 100.f);
 
-	pie_Draw3DShape(getImdFromIndex(MI_BLOOD), psEffect->frameNumber, 0, WZCOL_WHITE, WZCOL_BLACK, pie_TRANSLUCENT, EFFECT_BLOOD_TRANSPARENCY);
+	pie_Draw3DShape(getImdFromIndex(MI_BLOOD), psEffect->frameNumber, 0, WZCOL_WHITE, pie_TRANSLUCENT, EFFECT_BLOOD_TRANSPARENCY);
 	pie_MatEnd();
 }
 
@@ -1683,7 +1679,7 @@ static void renderDestructionEffect(const EFFECT *psEffect)
 		pie_MatRotY(SKY_SHIMMY);
 		pie_MatRotZ(SKY_SHIMMY);
 	}
- 	pie_Draw3DShape(psEffect->imd, 0, 0, WZCOL_WHITE, WZCOL_BLACK, pie_RAISE, percent);
+ 	pie_Draw3DShape(psEffect->imd, 0, 0, WZCOL_WHITE, pie_RAISE, percent);
 
 	pie_MatEnd();
 }
@@ -1759,15 +1755,15 @@ static void renderExplosionEffect(const EFFECT *psEffect)
 
 	if(psEffect->type == EXPLOSION_TYPE_PLASMA)
 	{
-		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, WZCOL_BLACK, pie_ADDITIVE, EFFECT_PLASMA_ADDITIVE);
+		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_ADDITIVE, EFFECT_PLASMA_ADDITIVE);
 	}
 	else if(psEffect->type == EXPLOSION_TYPE_KICKUP)
 	{
-		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, WZCOL_BLACK, pie_TRANSLUCENT, 128);
+		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_TRANSLUCENT, 128);
 	}
 	else
 	{
-		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, WZCOL_BLACK, pie_ADDITIVE, EFFECT_EXPLOSION_ADDITIVE);
+		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_ADDITIVE, EFFECT_EXPLOSION_ADDITIVE);
 	}
 
 	pie_MatEnd();
@@ -1789,7 +1785,7 @@ static void renderGravitonEffect(const EFFECT *psEffect)
 		pie_MatScale(psEffect->size / 100.f);
 	}
 
-	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, psEffect->player, WZCOL_WHITE, WZCOL_BLACK, 0, 0);
+	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, psEffect->player, WZCOL_WHITE, 0, 0);
 
 	/* Pop the matrix */
 	pie_MatEnd();
@@ -1799,8 +1795,7 @@ static void renderGravitonEffect(const EFFECT *psEffect)
 static void renderConstructionEffect(const EFFECT *psEffect)
 {
 	Vector3i null;
-	SDWORD	percent;
-	UDWORD	translucency;
+	int percent, translucency;
 	float size;
 
 	/* No rotation about arbitrary axis */
@@ -1833,7 +1828,7 @@ static void renderConstructionEffect(const EFFECT *psEffect)
 	size = MIN(2.f * translucency / 100.f, .90f);
 	pie_MatScale(size);
 
-	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, WZCOL_WHITE, WZCOL_BLACK, pie_TRANSLUCENT, (UBYTE)(translucency));
+	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, WZCOL_WHITE, pie_TRANSLUCENT, translucency);
 
 	/* Pop the matrix */
 	pie_MatEnd();
@@ -1842,9 +1837,8 @@ static void renderConstructionEffect(const EFFECT *psEffect)
 /** Renders the standard smoke effect - it is now scaled in real-time as well */
 static void renderSmokeEffect(const EFFECT *psEffect)
 {
-	UDWORD	transparency = 0;
+	int transparency = 0;
 	const PIELIGHT brightness = WZCOL_WHITE;
-	const PIELIGHT specular = WZCOL_BLACK;
 
 	positionEffect(psEffect);
 
@@ -1855,9 +1849,6 @@ static void renderSmokeEffect(const EFFECT *psEffect)
 		pie_MatRotY(-player.r.y);
 		pie_MatRotX(-player.r.x);
 	}
-
-	/* Small smoke - used for the droids */
-//		if(psEffect->type == SMOKE_TYPE_DRIFTING_SMALL || psEffect->type == SMOKE_TYPE_TRAIL)
 
 	if(TEST_SCALED(psEffect))
 	{
@@ -1889,17 +1880,17 @@ static void renderSmokeEffect(const EFFECT *psEffect)
 	/* Make imds be transparent on 3dfx */
 	if(psEffect->type==SMOKE_TYPE_STEAM)
 	{
-		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, specular, pie_TRANSLUCENT, (UBYTE)(EFFECT_STEAM_TRANSPARENCY)/2);
+		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_TRANSLUCENT, EFFECT_STEAM_TRANSPARENCY / 2);
 	}
 	else
 	{
 		if(psEffect->type == SMOKE_TYPE_TRAIL)
 		{
-			pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, specular, pie_TRANSLUCENT, (UBYTE)((2*transparency)/3));
+			pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_TRANSLUCENT, (2 * transparency) / 3);
 		}
 		else
 		{
-			pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, specular, pie_TRANSLUCENT, (UBYTE)(transparency)/2);
+			pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_TRANSLUCENT, transparency / 2);
 		}
 	}
 
@@ -2324,11 +2315,7 @@ void initPerimeterSmoke(iIMDShape *pImd, Vector3i base)
 
 	for (i = varStart; i < varEnd; i += varStride)
 	{
-		Vector3i pos = {
-			base.x + i + shift,
-			base.y,
-			base.z + inStart + shift
-		};
+		Vector3i pos = base + Vector3i(i + shift, 0, inStart + shift);
 
 		if (rand()%6 == 1)
 		{
@@ -2339,7 +2326,7 @@ void initPerimeterSmoke(iIMDShape *pImd, Vector3i base)
 			addEffect(&pos, EFFECT_SMOKE, SMOKE_TYPE_BILLOW, false, NULL, 0);
 		}
 
-		pos = Vector3i_Init(base.x + i + shift, base.y, base.z + inEnd + shift);
+		pos = base + Vector3i(i + shift, 0, inEnd + shift);
 
 		if (rand()%6 == 1)
 		{
@@ -2360,11 +2347,7 @@ void initPerimeterSmoke(iIMDShape *pImd, Vector3i base)
 
 	for (i = varStart; i < varEnd; i += varStride)
 	{
-		Vector3i pos = {
-			base.x + inStart + shift,
-			base.y,
-			base.z + i + shift
-		};
+		Vector3i pos = base + Vector3i(inStart + shift, 0, i + shift);
 
 		if (rand()%6 == 1)
 		{
@@ -2375,7 +2358,7 @@ void initPerimeterSmoke(iIMDShape *pImd, Vector3i base)
 			addEffect(&pos, EFFECT_SMOKE, SMOKE_TYPE_BILLOW, false, NULL, 0);
 		}
 
-		pos = Vector3i_Init(base.x + inEnd + shift, base.y, base.z + i + shift);
+		pos = base + Vector3i(inEnd + shift, 0, i + shift);
 
 		if (rand()%6 == 1)
 		{
@@ -2438,17 +2421,14 @@ static void effectDroidUpdates(void)
 					if ((int)psDroid->sMove.speed != 0)
 					{
 						/* Present direction is important */
-						Vector2i behind = {
-							iSinR(psDroid->rot.direction, 50),
-							iCosR(psDroid->rot.direction, 50)
-						};
-						Vector3i pos = {
+						Vector2i behind = iSinCosR(psDroid->rot.direction, 50);
+						Vector3i pos(
 							clip(psDroid->pos.x - behind.x, 0, mapWidth),
 							clip(psDroid->pos.y - behind.y, 0, mapHeight),
 							0
-						};
+						);
 
-						pos.z = map_Height(pos.x, pos.z);
+						pos.z = map_Height(pos.x, pos.y);
 
 						// FIXME This does not do anything!!
 					}
@@ -2497,11 +2477,11 @@ static void effectStructureUpdates(void)
 						{
 							if (psStructure->sDisplay.imd->nconnectors == 1)
 							{
-								Vector3i eventPos = {
-									psStructure->pos.x + psStructure->sDisplay.imd->connectors->x,
-									psStructure->pos.z + psStructure->sDisplay.imd->connectors->z,
-									psStructure->pos.y - psStructure->sDisplay.imd->connectors->y
-								};
+								Vector3i eventPos = swapYZ(psStructure->pos) + Vector3i(
+									psStructure->sDisplay.imd->connectors->x,
+									psStructure->sDisplay.imd->connectors->z,
+									-psStructure->sDisplay.imd->connectors->y
+								);
 
 								addEffect(&eventPos, EFFECT_SMOKE, SMOKE_TYPE_STEAM, false, NULL, 0);
 
@@ -2513,17 +2493,12 @@ static void effectStructureUpdates(void)
 						}
 						else if (psStructure->pStructureType->type == REF_POWER_GEN)
 						{
-							bool active = false;
 							POWER_GEN *psPowerGen = &psStructure->pFunctionality->powerGenerator;
-							Vector3i eventPos = {
-								psStructure->pos.x,
-								psStructure->pos.z,
-								psStructure->pos.y
-							};
+							Vector3i eventPos = swapYZ(psStructure->pos);
 
 							if (psStructure->sDisplay.imd->nconnectors > 0)
 							{
-								eventPos.y = psStructure->pos.z+psStructure->sDisplay.imd->connectors->z;
+								eventPos.y += psStructure->sDisplay.imd->connectors->z;
 							}
 
 							/* Add an effect over the central spire - if
@@ -2533,7 +2508,6 @@ static void effectStructureUpdates(void)
 								if (psPowerGen->apResExtractors[i]
 								 && psPowerGen->apResExtractors[i]->pFunctionality->resourceExtractor.active)
 								{
-									active = true;
 									break;
 								}
 							}
@@ -2545,7 +2519,7 @@ static void effectStructureUpdates(void)
 
 								if (selectedPlayer == psStructure->player)
 								{
-									audio_PlayObjStaticTrack((void*)psStructure, ID_SOUND_POWER_SPARK);
+									audio_PlayObjStaticTrack(psStructure, ID_SOUND_POWER_SPARK);
 								}
 							}
 						}

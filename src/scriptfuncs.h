@@ -30,7 +30,6 @@
 // Lua
 #include "lib/lua/warzone.h"
 
-
 // AI won't build there if there are more than
 // MAX_BLOCKING_TILES on some location
 #define MAX_BLOCKING_TILES		1
@@ -42,6 +41,8 @@ struct DROID;
 extern BOOL scriptInit(void);
 extern void scriptSetStartPos(int position, int x, int	y);
 extern Vector2i getPlayerStartPosition(int player);
+extern BOOL scrSetSunPosition(void);
+extern BOOL scrSetSunIntensity(void);
 
 // not used in scripts, but used in code.
 extern  BOOL objectInRange(struct BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range);

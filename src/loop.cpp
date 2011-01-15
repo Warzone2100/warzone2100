@@ -27,9 +27,9 @@
 #include "lib/framework/input.h"
 #include "lib/framework/strres.h"
 
-#include "lib/ivis_common/pieblitfunc.h"
-#include "lib/ivis_common/piestate.h" //ivis render code
-#include "lib/ivis_common/piemode.h"
+#include "lib/ivis_opengl/pieblitfunc.h"
+#include "lib/ivis_opengl/piestate.h" //ivis render code
+#include "lib/ivis_opengl/piemode.h"
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/screen.h"
 

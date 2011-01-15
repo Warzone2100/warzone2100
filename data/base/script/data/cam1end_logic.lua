@@ -35,8 +35,6 @@ videoOver = false
 
 -- Initialisation
 function start()
-	randomiseSeed()
-	-- centre view
 	centreViewPos(centreX, centreY)
 	
 	-- set scroll limits
@@ -143,7 +141,6 @@ callbackEvent(timeUp, CALL_MISSION_TIME)
 
 if startMission == nil then startMission = function() print("stub: startMission"); return 0 end end
 if setEventTrigger == nil then setEventTrigger = function() print("stub: setEventTrigger"); return 0 end end
-if randomiseSeed == nil then randomiseSeed = function() print("stub: randomiseSeed"); return 0 end end
 if addMessage == nil then addMessage = function() print("stub: addMessage"); return 0 end end
 if addDroid == nil then addDroid = function() print("stub: addDroid"); return 0 end end
 if setRadarZoom == nil then setRadarZoom = function() print("stub: setRadarZoom"); return 0 end end

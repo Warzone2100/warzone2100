@@ -29,11 +29,6 @@
 #include "droiddef.h"
 #include "structuredef.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 extern RUN_DATA asRunData[MAX_PLAYERS]; // retreat positions for the players
 extern void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder);
 
@@ -97,7 +92,7 @@ extern BOOL orderDroidList(DROID *psDroid);
 void orderSelectedStatsLocDir(UDWORD player, DROID_ORDER order, BASE_STATS *psStats, UDWORD x, UDWORD y, uint16_t direction, BOOL add);
 
 /* add an order with a location and a stat to the droids order list*/
-void orderDroidStatsLocDirAdd(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStats, UDWORD x, UDWORD y, uint16_t direction);
+void orderDroidStatsLocDirAdd(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStats, UDWORD x, UDWORD y, uint16_t direction, bool add = true);
 
 /* order all selected droids with two a locations and a stat */
 void orderSelectedStatsTwoLocDir(UDWORD player, DROID_ORDER order, BASE_STATS *psStats, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2, uint16_t direction, BOOL add);
@@ -109,7 +104,7 @@ extern BOOL secondarySupported(DROID *psDroid, SECONDARY_ORDER sec);
 extern SECONDARY_STATE secondaryGetState(DROID *psDroid, SECONDARY_ORDER sec);
 
 // set the state of a secondary order, return false if failed.
-extern BOOL secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE State);
+extern BOOL secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE State, QUEUE_MODE mode = ModeQueue);
 
 // check the damage level of a droid against it's secondary state
 extern void secondaryCheckDamageLevel(DROID *psDroid);
@@ -121,7 +116,7 @@ extern void secondarySetAverageGroupState(UDWORD player, UDWORD group);
 extern void orderMoralCheck(UDWORD player);
 
 // do a moral check for a group
-extern void orderGroupMoralCheck(struct _droid_group *psGroup);
+extern void orderGroupMoralCheck(DROID_GROUP *psGroup);
 
 extern const char* getDroidOrderName(DROID_ORDER order);
 
@@ -151,9 +146,5 @@ extern DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x,UDWORD y, BOOL altOrd
 extern DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, BOOL altOrder);
 
 extern void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_ORDER_H__

@@ -30,7 +30,7 @@ struct W_BARGRAPH : public WIDGET
 {
 	W_BARGRAPH(W_BARINIT const *init);
 
-	UWORD		barPos;				// Orientation of the bar on the widget
+	WBAR_ORIENTATION barPos;                        // Orientation of the bar on the widget
 	UWORD		majorSize;			// Percentage of the main bar that is filled
 	UWORD		minorSize;			// Percentage of the minor bar if there is one
 	UWORD		iRange;				// Maximum range

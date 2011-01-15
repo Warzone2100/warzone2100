@@ -21,15 +21,6 @@
 #ifndef __INCLUDED_SRC_CHEAT_H__
 #define __INCLUDED_SRC_CHEAT_H__
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 BOOL attemptCheatCode(const char* cheat_name);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_CHEAT_H__

@@ -26,11 +26,6 @@
 
 #include "objectdef.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 #define NO_RESEARCH_ICON 0
 //max 'research complete' console message length
 #define MAX_RESEARCH_MSG_SIZE 200
@@ -153,9 +148,5 @@ extern void enableSelfRepair(UBYTE player);
 void CancelAllResearch(UDWORD pl);
 
 extern BOOL researchInitVars(void);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_RESEARCH_H__

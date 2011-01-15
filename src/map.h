@@ -31,11 +31,6 @@
 #include "multiplay.h"
 #include "display.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 /* The different types of terrain as far as the game is concerned */
 typedef enum _terrain_type
 {
@@ -95,11 +90,11 @@ typedef struct _ground_type
 } GROUND_TYPE;
 
 /* Information stored with each tile */
-typedef struct _maptile
+struct MAPTILE
 {
 	uint8_t			tileInfoBits;
-	uint8_t			tileExploredBits;
-	uint8_t			sensorBits;		// bit per player, who can see tile with sensor
+	PlayerMask              tileExploredBits;
+	PlayerMask              sensorBits;             ///< bit per player, who can see tile with sensor
 	uint8_t			illumination;	// How bright is this tile?
 	uint8_t			watchers[MAX_PLAYERS];		// player sees through fog of war here with this many objects
 	uint16_t		texture;		// Which graphics texture is on this tile
@@ -112,7 +107,7 @@ typedef struct _maptile
 	uint8_t			ground;			///< The ground type used for the terrain renderer
 	uint16_t                fireEndTime;            ///< The (uint16_t)(gameTime / GAME_TICKS_PER_UPDATE) that BITS_ON_FIRE should be cleared.
 	int32_t                 waterLevel;             ///< At what height is the water for this tile
-} MAPTILE;
+};
 
 /* The size and contents of the map */
 extern SDWORD	mapWidth, mapHeight;
@@ -363,6 +358,16 @@ static inline int32_t map_coord(int32_t worldCoord)
 	return worldCoord >> TILE_SHIFT;
 }
 
+static inline Vector2i world_coord(Vector2i const &mapCoord)
+{
+	return Vector2i(world_coord(mapCoord.x), world_coord(mapCoord.y));
+}
+
+static inline Vector2i map_coord(Vector2i const &worldCoord)
+{
+	return Vector2i(map_coord(worldCoord.x), map_coord(worldCoord.y));
+}
+
 /* Make sure world coordinates are inside the map */
 /** Clip world coordinates to make sure they're inside the map's boundaries
  *  \param worldX a pointer to a X coordinate inside the map
@@ -410,6 +415,8 @@ static inline WZ_DECL_PURE MAPTILE *mapTile(int32_t x, int32_t y)
 
 	return &psMapTiles[x + (y * mapWidth)];
 }
+
+static inline WZ_DECL_PURE MAPTILE *mapTile(Vector2i const &v) { return mapTile(v.x, v.y); }
 
 /** Return a pointer to the tile structure at x,y in world coordinates */
 #define worldTile(_x, _y) mapTile(map_coord(_x), map_coord(_y))
@@ -461,6 +468,11 @@ WZ_DECL_ALWAYS_INLINE static inline BOOL tileOnMap(SDWORD x, SDWORD y)
 	return (x >= 0) && (x < (SDWORD)mapWidth) && (y >= 0) && (y < (SDWORD)mapHeight);
 }
 
+WZ_DECL_ALWAYS_INLINE static inline BOOL tileOnMap(Vector2i pos)
+{
+	return tileOnMap(pos.x, pos.y);
+}
+
 /* Return true if a tile is not too near the map edge and not outside of the map */
 static inline BOOL tileInsideBuildRange(SDWORD x, SDWORD y)
 {
@@ -507,8 +519,10 @@ typedef struct _tile_coord
 /// The max height of the terrain and water at the specified world coordinates
 extern int32_t map_Height(int x, int y);
 
+static inline int32_t map_Height(Vector2i const &v) { return map_Height(v.x, v.y); }
+
 /* returns true if object is above ground */
-extern BOOL mapObjIsAboveGround( BASE_OBJECT *psObj );
+bool mapObjIsAboveGround(SIMPLE_OBJECT *psObj);
 
 /* returns the max and min height of a tile by looking at the four corners
    in tile coords */
@@ -540,9 +554,5 @@ WZ_DECL_ALWAYS_INLINE static inline bool hasSensorOnTile(MAPTILE *psTile, unsign
 
 void mapInit(void);
 void mapUpdate(void);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_MAP_H__

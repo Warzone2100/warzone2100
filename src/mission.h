@@ -30,17 +30,12 @@
 #include "missiondef.h"
 #include "group.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 /** 
  * The number of areas that can be defined to prevent buildings being placed -
  * used for Transporter Landing Zones 0-7 are for players, 8 = LIMBO_LANDING
  */
-#define		MAX_NOGO_AREAS		9
-#define		LIMBO_LANDING		8
+#define         MAX_NOGO_AREAS          (MAX_PLAYERS + 1)
+#define         LIMBO_LANDING           MAX_PLAYERS
 
 /** Set by scrFlyInTransporter. True if were currenly tracking the transporter. */
 extern BOOL		bTrackingTransporter;
@@ -222,9 +217,5 @@ extern void setMissionCheatTime(BOOL bCheating);
 #define		MISSIONRES_TITLE_Y		20
 #define		MISSIONRES_TITLE_W		600
 #define		MISSIONRES_TITLE_H		40
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_MISSION_H__

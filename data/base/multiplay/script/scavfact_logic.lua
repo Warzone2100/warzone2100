@@ -15,13 +15,56 @@ structure = nil
 attacker = nil
 lastAttack = 0
 
+-- Our player number
+enemy1 = 0
 
+
+-- We need to reguarly check back on our scavs, since they are stupid and forget their orders.
+-- (A nice way of saying we have bugs in our code.)
+function scavManagement()
+	local mydroid = nil
+	local closest = 0
+	local current = 0
+	local clfac = nil
+	
+	initEnumStruct(false, factory, enemy1, enemy1)
+	fac1 = enumStruct()
+	while fac1 ~= nil do
+		if structureIdle(fac1) then
+			buildDroid(trike, fac1, enemy1, 1)
+		end
+		fac1 = enumStruct()
+	end
+	
+	if (C.gameTime - lastAttack) > 600 then
+		lastAttack = C.gameTime
+		initIterateGroup(attackGroup)
+		mydroid = iterateGroup(attackGroup)
+		while mydroid ~= nil do
+			clfac = nil
+			closest = 9999
+			initEnumStruct(false, factory, enemy1, enemy1)
+			fac1 = enumStruct()
+			while fac1 ~= nil do
+				current = distBetweenTwoPoints(fac1.x, fac1.y, mydroid.x, mydroid.y)
+				if current < closest then
+					closest = current
+					clfac = fac1
+				end
+				fac1 = enumStruct()
+			end
+			if clfac ~= nil then
+				orderDroidLoc(mydroid, DORDER_MOVE, clfac.x, clfac.y)
+			end
+			mydroid = iterateGroup(attackGroup)
+		end
+	end
+	
+	repeatingEvent(scavManagement, 10.0)
+end
 
 function startLevel()
-	fac1 = getStructure(factory, enemy1)
-	if fac1 ~= nil then
-		buildDroid(trike, fac1, enemy1, 1)
-	end
+	delayedEvent(scavManagement, 1.0)
 end
 callbackEvent(startLevel, CALL_START_NEXT_LEVEL)
 
@@ -68,37 +111,52 @@ callbackEvent(droidbuilt, CALL_NEWDROID)
 function structureAttacked(_structure, _attacker)
 	if _structure.player ~= enemy1 then return end
 	structure, attacker = _structure, _attacker -- wz2lua: probably these can be used as function arguments directly
+	local mydroid = nil
+	
 	if (C.gameTime - lastAttack) > 300 then
 		lastAttack = C.gameTime
-		orderGroupLoc(attackGroup, DORDER_MOVE, structure.x, structure.y)
+		initIterateGroup(attackGroup)
+		mydroid = iterateGroup(attackGroup)
+		while mydroid ~= nil do
+			if distBetweenTwoPoints(attackGroup.x, attackGroup.y, attacker.x, attacker.y) < (24 * 128) then
+				orderDroidLoc(mydroid, DORDER_MOVE, attacker.x, attacker.y)
+			end
+			mydroid = iterateGroup(attackGroup)
+		end
 	end
 end
 callbackEvent(structureAttacked, CALL_STRUCT_ATTACKED)
 
 -- Startup
 function startup()
-	if not scavengersActive() or not myResponsibility(enemy1) then
+	enemy1 = scavengersActive()
+	if enemy1 < 0 or not myResponsibility(enemy1) then
 		deactivateEvent(startLevel)
 		deactivateEvent(droidbuilt)
 		deactivateEvent(structureAttacked)
+	else
+		lastAttack = 0
+		
+		groupAddArea(attackGroup, enemy1, 0, 0, (C.mapWidth * 128), (C.mapHeight * 128))
 	end
-	lastAttack = 0
-	
-	groupAddArea(attackGroup, enemy1, 0, 0, (C.mapWidth * 128), (C.mapHeight * 128))
 end
 callbackEvent(startup, CALL_GAMEINIT)
 
 
 ---------- stubs ----------
 
-if orderGroupLoc == nil then orderGroupLoc = function() print("stub: orderGroupLoc"); return 0 end end
-if setEventTrigger == nil then setEventTrigger = function() print("stub: setEventTrigger"); return 0 end end
-if getStructure == nil then getStructure = function() print("stub: getStructure"); return 0 end end
+if enumStruct == nil then enumStruct = function() print("stub: enumStruct"); return 0 end end
+if iterateGroup == nil then iterateGroup = function() print("stub: iterateGroup"); return 0 end end
+if initIterateGroup == nil then initIterateGroup = function() print("stub: initIterateGroup"); return 0 end end
 if myResponsibility == nil then myResponsibility = function() print("stub: myResponsibility"); return 0 end end
-if structureIdle == nil then structureIdle = function() print("stub: structureIdle"); return 0 end end
-if random == nil then random = function() print("stub: random"); return 0 end end
 if numDroidsInArea == nil then numDroidsInArea = function() print("stub: numDroidsInArea"); return 0 end end
-if scavengersActive == nil then scavengersActive = function() print("stub: scavengersActive"); return 0 end end
+if random == nil then random = function() print("stub: random"); return 0 end end
+if structureIdle == nil then structureIdle = function() print("stub: structureIdle"); return 0 end end
+if initEnumStruct == nil then initEnumStruct = function() print("stub: initEnumStruct"); return 0 end end
+if setEventTrigger == nil then setEventTrigger = function() print("stub: setEventTrigger"); return 0 end end
 if groupAddDroid == nil then groupAddDroid = function() print("stub: groupAddDroid"); return 0 end end
+if orderDroidLoc == nil then orderDroidLoc = function() print("stub: orderDroidLoc"); return 0 end end
+if distBetweenTwoPoints == nil then distBetweenTwoPoints = function() print("stub: distBetweenTwoPoints"); return 0 end end
 if buildDroid == nil then buildDroid = function() print("stub: buildDroid"); return 0 end end
 if groupAddArea == nil then groupAddArea = function() print("stub: groupAddArea"); return 0 end end
+if scavengersActive == nil then scavengersActive = function() print("stub: scavengersActive"); return 0 end end

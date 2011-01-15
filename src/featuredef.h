@@ -60,6 +60,9 @@ typedef enum _feature_type
 /* Stats for a feature */
 struct FEATURE_STATS : public BASE_STATS
 {
+	FEATURE_STATS() {}
+	FEATURE_STATS(LineView line);
+
 	FEATURE_TYPE    subType;                ///< type of feature
 
 	iIMDShape*      psImd;                  ///< Graphic for the feature

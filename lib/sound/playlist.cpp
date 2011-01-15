@@ -78,7 +78,7 @@ bool PlayList_Read(const char* path)
 	}
 
 	// Find the end of the songList
-	for (; *last; last = &(*last)->next);
+	for (; *last; last = &(*last)->next) {}
 
 	while (!PHYSFS_eof(fileHandle))
 	{

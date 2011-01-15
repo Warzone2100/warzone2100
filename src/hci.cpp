@@ -28,15 +28,16 @@
  */
 
 #include <string.h>
+#include <algorithm>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
 #include "lib/framework/stdio_ext.h"
 #include "lib/gamelib/gtime.h"
-#include "lib/ivis_common/bitimage.h"
-#include "lib/ivis_common/pieblitfunc.h"
-#include "lib/ivis_common/piepalette.h"
-#include "lib/ivis_common/piestate.h"
+#include "lib/ivis_opengl/bitimage.h"
+#include "lib/ivis_opengl/pieblitfunc.h"
+#include "lib/ivis_opengl/piepalette.h"
+#include "lib/ivis_opengl/piestate.h"
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/screen.h"
 #include "lib/script/script.h"
@@ -184,7 +185,6 @@ BOOL Refreshing = false;
 #define IDOPT_ZALIGN		1042		// The z-align button
 #define IDOPT_IVISFORM		1043		// iViS engine form
 #define IDOPT_IVISLABEL		1044		// iViS form label
-#define IDOPT_IVISLIGHTING	1046		// iViS lighting button
 
 /* Edit screen IDs */
 #define IDED_FORM			2000		// The edit form
@@ -260,6 +260,7 @@ static char pCloseText[] = "X";
 static const char	*apPlayerText[] =
 {
 	"0", "1", "2", "3", "4", "5", "6", "7",
+	"8", "9", "A", "B", "C", "D", "E", "F",
 };
 static const char	*apPlayerTip[] =
 {
@@ -271,16 +272,18 @@ static const char	*apPlayerTip[] =
 	"Select Player 5",
 	"Select Player 6",
 	"Select Player 7",
-
+	"Select Player 8",
+	"Select Player 9",
+	"Select Player A",
+	"Select Player B",
+	"Select Player C",
+	"Select Player D",
+	"Select Player E",
+	"Select Player F",
 };
 
 /* The widget screen */
 W_SCREEN		*psWScreen;
-
-//two colours used for drawing the footprint outline for objects in 2D
-PIELIGHT			outlineOK;
-PIELIGHT			outlineNotOK;
-BOOL				outlineTile = false;
 
 // The last widget ID from widgRunScreen
 UDWORD				intLastWidget;
@@ -372,25 +375,12 @@ COMPONENT_STATS	**apsComponentList;
 UDWORD			numExtraSys;
 COMPONENT_STATS	**apsExtraSysList;
 
-//defined in HCI.h now
 // store the objects that are being used for the object bar
-//#define			MAX_OBJECTS		15//10 we need at least 15 for the 3 different types of factory
-BASE_OBJECT		**apsObjectList;
-SDWORD			numObjects;
-//this list is used for sorting the objects - at the mo' this is just factories
-BASE_OBJECT		**apsListToOrder;
-/*max size required to store unordered factories */
-#define			ORDERED_LIST_SIZE		(NUM_FACTORY_TYPES * MAX_FACTORY)
+std::vector<BASE_OBJECT *> apsObjectList;
 
 
 /* The current design being edited on the design screen */
 extern DROID_TEMPLATE	sCurrDesign;
-
-/* The button id of the component that is in the design */
-//UDWORD			desCompID;
-
-/* The button id of the droid template that has been locked down */
-//UDWORD			droidTemplID;
 
 /* Flags to check whether the power bars are currently on the screen */
 static BOOL				powerBarUp = false;
@@ -401,7 +391,7 @@ static BASE_OBJECT		*psStatsScreenOwner = NULL;
 static BASE_OBJECT		*apsPreviousObj[IOBJ_MAX];
 
 /* The jump position for each object on the base bar */
-static Vector2i asJumpPos[IOBJ_MAX];
+static std::vector<Vector2i> asJumpPos;
 
 /***************************************************************************************/
 /*              Function Prototypes                                                    */
@@ -576,22 +566,7 @@ BOOL intInitialise(void)
 	}
 
 	// allocate the object list
-	apsObjectList = (BASE_OBJECT **)malloc(sizeof(BASE_OBJECT *) * MAX_OBJECTS);
-	if (!apsObjectList)
-	{
-		debug( LOG_FATAL, "Out of memory" );
-		abort();
-		return false;
-	}
-
-	//allocate the order list - ONLY SIZED FOR FACTORIES AT PRESENT!!
-	apsListToOrder = (BASE_OBJECT **)malloc(sizeof(BASE_OBJECT *) * ORDERED_LIST_SIZE);
-	if (!apsListToOrder)
-	{
-		debug( LOG_FATAL, "Out of memory" );
-		abort();
-		return false;
-	}
+	apsObjectList.clear();
 
 	intInitialiseGraphics();
 
@@ -630,15 +605,11 @@ BOOL intInitialise(void)
 
 	objectsChanged = false;
 
-	//set the default colours to be used for drawing outlines in 2D
-	outlineOK = WZCOL_MAP_OUTLINE_OK;
-	outlineNotOK = WZCOL_MAP_OUTLINE_BAD;
-
 	// reset the previous objects
 	intResetPreviousObj();
 
 	// reset the jump positions
-	memset(asJumpPos, 0, sizeof(asJumpPos));
+	asJumpPos.clear();
 
 	/* make demolish stat always available */
 	if(!bInTutorial)
@@ -685,8 +656,7 @@ void interfaceShutDown(void)
 	free(apsFeatureList);
 	free(apsComponentList);
 	free(apsExtraSysList);
-	free(apsObjectList);
-	free(apsListToOrder);
+	apsObjectList.clear();
 
 	apsStructStatsList = NULL;
 	ppResearchList = NULL;
@@ -696,8 +666,6 @@ void interfaceShutDown(void)
 	apsFeatureList = NULL;
 	apsComponentList = NULL;
 	apsExtraSysList = NULL;
-	apsObjectList = NULL;
-	apsListToOrder = NULL;
 
 	interfaceDeleteGraphics();
 
@@ -859,7 +827,7 @@ static void intDoScreenRefresh(void)
 			if (psFlag != NULL)
 			{
 				// need to restart the delivery point position
-				StartDeliveryPosition( (OBJECT_POSITION *)psFlag );
+				StartDeliveryPosition(psFlag);
 			}
 
 			// make sure the commander order screen is in the right state
@@ -917,10 +885,6 @@ static BOOL intAddEdit(void)
 	W_LABINIT sLabInit;
 	W_BUTINIT sButInit;
 
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
-	memset(&sLabInit, 0, sizeof(W_LABINIT));
-	memset(&sButInit, 0, sizeof(W_BUTINIT));
-
 	/* Add the edit form */
 	sFormInit.formID = 0;
 	sFormInit.id = IDED_FORM;
@@ -937,13 +901,11 @@ static BOOL intAddEdit(void)
 	/* Add the Option screen label */
 	sLabInit.formID = IDED_FORM;
 	sLabInit.id = IDED_LABEL;
-	sLabInit.style = WLAB_PLAIN;
 	sLabInit.x = ED_GAP;
 	sLabInit.y = ED_GAP;
 	sLabInit.width = ED_WIDTH;
 	sLabInit.height = ED_BUTHEIGHT;
 	sLabInit.pText = "Edit";
-	sLabInit.FontID = font_regular;
 	if (!widgAddLabel(psWScreen, &sLabInit))
 	{
 		return false;
@@ -952,12 +914,10 @@ static BOOL intAddEdit(void)
 	/* Add the close box */
 	sButInit.formID = IDED_FORM;
 	sButInit.id = IDED_CLOSE;
-	sButInit.style = WBUT_PLAIN;
 	sButInit.x = ED_WIDTH - ED_GAP - CLOSE_SIZE;
 	sButInit.y = ED_GAP;
 	sButInit.width = CLOSE_SIZE;
 	sButInit.height = CLOSE_SIZE;
-	sButInit.FontID = font_regular;
 	sButInit.pText = pCloseText;
 	sButInit.pTip = _("Close");
 	if (!widgAddButton(psWScreen, &sButInit))
@@ -1379,18 +1339,6 @@ static void intProcessOptions(UDWORD id)
 			intRemoveOptions();
 			intMode = INT_NORMAL;
 			break;
-		case IDOPT_IVISLIGHTING:
-			if (pie_GetLightingState())
-			{
-				pie_SetLightingState(false);
-				widgSetButtonState(psWScreen, IDOPT_IVISLIGHTING, 0);
-			}
-			else
-			{
-				pie_SetLightingState(true);
-				widgSetButtonState(psWScreen, IDOPT_IVISLIGHTING, WBUT_CLICKLOCK);
-			}
-			break;
 			/* Ignore these */
 		case IDOPT_FORM:
 		case IDOPT_LABEL:
@@ -1550,7 +1498,7 @@ INT_RETVAL intRunWidgets(void)
 	if (intMode == INT_OBJECT || intMode == INT_STAT || intMode == INT_CMDORDER)
 	{
 		// see if there is a dead object in the list
-		for(i=0; i<numObjects; i++)
+		for(unsigned i = 0; i < apsObjectList.size(); ++i)
 		{
 			if (apsObjectList[i] && apsObjectList[i]->died)
 			{
@@ -2478,13 +2426,14 @@ static void intProcessObject(UDWORD id)
                         {
     						// set the map position - either the object position, or the position jumped from
 	    					butIndex = id - IDOBJ_OBJSTART;
-		    				if (butIndex >= 0 && butIndex < IOBJ_MAX)
+							if (butIndex >= 0 && butIndex <= IDOBJ_OBJEND - IDOBJ_OBJSTART)
 			    			{
+								asJumpPos.resize(IDOBJ_OBJEND - IDOBJ_OBJSTART, Vector2i(0, 0));
 				    			if (((asJumpPos[butIndex].x == 0) && (asJumpPos[butIndex].y == 0)) ||
 					    			!DrawnInLastFrame((SDWORD)psObj->sDisplay.frameNumber) ||
 						    		((psObj->sDisplay.screenX > pie_GetVideoBufferWidth()) || (psObj->sDisplay.screenY > pie_GetVideoBufferHeight())))
 							    {
-								    getPlayerPos((SDWORD*)&asJumpPos[butIndex].x, (SDWORD*)&asJumpPos[butIndex].y);
+									asJumpPos[butIndex] = getPlayerPos();
 
 
     								setPlayerPos(psObj->pos.x, psObj->pos.y);
@@ -2628,16 +2577,15 @@ static void intProcessStats(UDWORD id)
 					//increase the production
 					factoryProdAdjust(psStructure, psNext, true);
 
-					if (!StructureIsManufacturingPending(psStructure))
-					{
-						structSetManufacture(psStructure, psNext, ModeQueue);
-					}
-
 					//need to check if this was the template that was mid-production
-					if (getProductionQuantity(psStructure, FactoryGetTemplate(psFactory)) == 0)
+					if (getProduction(psStructure, FactoryGetTemplate(psFactory)).numRemaining() == 0)
 					{
 						doNextProduction(psStructure, FactoryGetTemplate(psFactory), ModeQueue);
 						psNext = FactoryGetTemplate(psFactory);
+					}
+					else if (!StructureIsManufacturingPending(psStructure))
+					{
+						structSetManufacture(psStructure, psNext, ModeQueue);
 					}
 
 					if (StructureIsOnHoldPending(psStructure))
@@ -2816,7 +2764,7 @@ static void intProcessStats(UDWORD id)
 			psFlag = FindFactoryDelivery(psStruct);
 			if (psFlag)
 			{
-				StartDeliveryPosition( (OBJECT_POSITION *)psFlag );
+				StartDeliveryPosition(psFlag);
 			}
 		}
 	}
@@ -3178,101 +3126,52 @@ void intDemolishCancel(void)
 //reorder the research facilities so that first built is first in the list
 static void orderResearch(void)
 {
-	BASE_OBJECT *psTemp;
-	UDWORD i, maxLoop  = (UDWORD)(numObjects / 2);
-
-	for (i = 0; i < maxLoop; i++)
-	{
-		psTemp = apsObjectList[i];
-		apsObjectList[i] = apsObjectList[(numObjects - 1) - i];
-		apsObjectList[(numObjects - 1) - i] = psTemp;
-	}
+	std::reverse(apsObjectList.begin(), apsObjectList.end());  // Why reverse this list, instead of sorting it?
 }
 
+
+static inline bool sortObjectByIdFunction(BASE_OBJECT *a, BASE_OBJECT *b)
+{
+	return (a == NULL? 0 : a->id) < (b == NULL? 0 : b->id);
+}
 
 // reorder the commanders
 static void orderDroids(void)
 {
-	SDWORD i, j;
-	BASE_OBJECT *psTemp;
-
 	debug( LOG_NEVER, "orderUnit\n" );
 
 	// bubble sort on the ID - first built will always be first in the list
-	for (i = 0; i < MAX_OBJECTS; i++)
-	{
-		for(j = i + 1; j < MAX_OBJECTS; j++)
-		{
-			if (apsObjectList[i] != NULL && apsObjectList[j] != NULL &&
-				apsObjectList[i]->id > apsObjectList[j]->id)
-			{
-				psTemp = apsObjectList[i];
-				apsObjectList[i] = apsObjectList[j];
-				apsObjectList[j] = psTemp;
-			}
-		}
-	}
+	std::sort(apsObjectList.begin(), apsObjectList.end(), sortObjectByIdFunction);  // Why sort this list, instead of reversing it?
 }
 
+static inline bool sortFactoryByTypeFunction(BASE_OBJECT *a, BASE_OBJECT *b)
+{
+	if (a == NULL || b == NULL)
+	{
+		return (a == NULL) < (b == NULL);
+	}
+	STRUCTURE *s = castStructure(a), *t = castStructure(b);
+	ASSERT(s != NULL && StructIsFactory(s) && t != NULL && StructIsFactory(t), "object is not a factory");
+	FACTORY *x = (FACTORY *)s->pFunctionality, *y = (FACTORY *)t->pFunctionality;
+	if (x->psAssemblyPoint->factoryType != y->psAssemblyPoint->factoryType)
+	{
+		return x->psAssemblyPoint->factoryType < y->psAssemblyPoint->factoryType;
+	}
+	return x->psAssemblyPoint->factoryInc < y->psAssemblyPoint->factoryInc;
+}
 
 /*puts the selected players factories in order - Standard factories 1-5, then
 cyborg factories 1-5 and then Vtol factories 1-5*/
 static void orderFactories(void)
 {
-	STRUCTURE *psStruct, *psNext;
-	SDWORD entry = 0;
-	UDWORD inc = 0, type = FACTORY_FLAG, objectInc = 0;
-
-	ASSERT(numObjects <= NUM_FACTORY_TYPES * MAX_FACTORY, "too many factories!");
-
-	//copy the object list into the list to order
-	memcpy(apsListToOrder, apsObjectList, sizeof(BASE_OBJECT*) * ORDERED_LIST_SIZE);
-
-	//go through the list of structures and extract them in order
-	while (entry < numObjects)
-	{
-		for (psStruct = (STRUCTURE*)apsListToOrder[objectInc]; psStruct != NULL; psStruct = psNext)
-		{
-			psNext = (STRUCTURE*)apsListToOrder[++objectInc];
-			if ((SDWORD)objectInc >= numObjects)
-			{
-				psNext = NULL;
-			}
-
-			ASSERT(StructIsFactory(psStruct), "structure is not a factory");
-
-			if (((FACTORY*)psStruct->pFunctionality)->psAssemblyPoint->factoryInc == inc
-			    && ((FACTORY*)psStruct->pFunctionality)->psAssemblyPoint->factoryType == type)
-			{
-				apsObjectList[entry++] = (BASE_OBJECT*)psStruct;
-				//quick check that don't end up with more!
-				if (entry > numObjects)
-				{
-					ASSERT(false, "too many objects!");
-					return;
-				}
-				break;
-			}
-		}
-		inc++;
-		if (inc > MAX_FACTORY)
-		{
-			inc = 0;
-			type++;
-			if (type > NUM_FACTORY_TYPES)
-			{
-				type = 0;
-			}
-		}
-		objectInc = 0;
-	}
+	std::sort(apsObjectList.begin(), apsObjectList.end(), sortFactoryByTypeFunction);
 }
 
 
 /** Order the objects in the bottom bar according to their type. */
 static void orderObjectInterface(void)
 {
-	if (!apsObjectList || !apsObjectList[0])
+	if (apsObjectList.empty())
 	{
 		//no objects so nothing to order!
 		return;
@@ -3298,52 +3197,40 @@ static void orderObjectInterface(void)
 	}
 }
 
+// Rebuilds apsObjectList, and returns the index of psBuilding in apsObjectList, or returns apsObjectList.size() if not present (not sure whether that's supposed to be possible).
+static unsigned rebuildFactoryListAndFindIndex(STRUCTURE *psBuilding)
+{
+	apsObjectList.clear();
+	for (STRUCTURE *psCurr = interfaceStructList(); psCurr; psCurr = psCurr->psNext)
+	{
+		if (objSelectFunc(psCurr))
+		{
+			// The list is ordered now so we have to get all possible entries and sort it before checking if this is the one!
+			apsObjectList.push_back(psCurr);
+		}
+	}
+	// order the list
+	orderFactories();
+	// now look thru the list to see which one corresponds to the factory that has just finished
+	return std::find(apsObjectList.begin(), apsObjectList.end(), psBuilding) - apsObjectList.begin();
+}
 
 /* Tell the interface a factory has completed building ALL droids */
 void intManufactureFinished(STRUCTURE *psBuilding)
 {
-	SDWORD		    structureID;
-	STRUCTURE       *psCurr;
-
 	ASSERT(psBuilding != NULL, "Invalid structure pointer");
 
 	if ((intMode == INT_OBJECT || intMode == INT_STAT) && objMode == IOBJ_MANUFACTURE)
 	{
 		/* Find which button the structure is on and clear it's stats */
-		structureID = 0;
-		numObjects = 0;
-		memset(apsObjectList, 0, sizeof(BASE_OBJECT *) * MAX_OBJECTS);
-		for (psCurr = interfaceStructList(); psCurr; psCurr = psCurr->psNext)
+		unsigned structureIndex = rebuildFactoryListAndFindIndex(psBuilding);
+		if (structureIndex != apsObjectList.size())
 		{
-			if (objSelectFunc((BASE_OBJECT *)psCurr))
+			intSetStats(structureIndex + IDOBJ_STATSTART, NULL);
+			// clear the loop button if interface is up
+			if (widgGetFromID(psWScreen, IDSTAT_LOOP_BUTTON))
 			{
-				// The list is ordered now so we have to get all possible entries and sort it before checking if this is the one!
-				apsObjectList[numObjects] = (BASE_OBJECT *)psCurr;
-				numObjects++;
-			}
-			// make sure the list doesn't overflow
-			if (numObjects >= MAX_OBJECTS)
-			{
-				break;
-			}
-		}
-		// order the list
-		orderFactories();
-
-		// now look thru the list to see which one corresponds to the factory that has just finished
-		for (structureID = 0; structureID < numObjects; structureID++)
-		{
-			BASE_OBJECT *psObj = apsObjectList[structureID];
-
-			if ((STRUCTURE *)psObj == psBuilding)
-			{
-				intSetStats(structureID + IDOBJ_STATSTART, NULL);
-				// clear the loop button if interface is up
-				if (widgGetFromID(psWScreen,IDSTAT_LOOP_BUTTON))
-				{
-					widgSetButtonState(psWScreen, IDSTAT_LOOP_BUTTON, 0);
-				}
-				break;
+				widgSetButtonState(psWScreen, IDSTAT_LOOP_BUTTON, 0);
 			}
 		}
 	}
@@ -3351,46 +3238,15 @@ void intManufactureFinished(STRUCTURE *psBuilding)
 
 void intUpdateManufacture(STRUCTURE *psBuilding)
 {
-	SDWORD		structureID;
-	STRUCTURE       *psCurr;
-	FACTORY		*psFact;
-
 	ASSERT(psBuilding != NULL, "Invalid structure pointer");
 
 	if ((intMode == INT_OBJECT || intMode == INT_STAT) && objMode == IOBJ_MANUFACTURE)
 	{
 		/* Find which button the structure is on and update its stats */
-		structureID = 0;
-		numObjects = 0;
-		memset(apsObjectList, 0, sizeof(BASE_OBJECT *) * MAX_OBJECTS);
-		for (psCurr = interfaceStructList(); psCurr; psCurr = psCurr->psNext)
+		unsigned structureIndex = rebuildFactoryListAndFindIndex(psBuilding);
+		if (structureIndex != apsObjectList.size())
 		{
-			if (objSelectFunc((BASE_OBJECT *)psCurr))
-			{
-				// The list is ordered now so we have to get all possible entries and sort it before checking if this is the one!
-				apsObjectList[numObjects] = (BASE_OBJECT *)psCurr;
-				numObjects++;
-			}
-			// make sure the list doesn't overflow
-			if (numObjects >= MAX_OBJECTS)
-			{
-				break;
-			}
-		}
-		// order the list
-		orderFactories();
-
-		// now look thru the list to see which one corresponds to the factory that has just finished
-		for (structureID = 0; structureID < numObjects; structureID++)
-		{
-			BASE_OBJECT *psObj = apsObjectList[structureID];
-
-			if ((STRUCTURE *)psObj == psBuilding)
-			{
-				psFact = &((STRUCTURE *)psObj)->pFunctionality->factory;
-				intSetStats(structureID + IDOBJ_STATSTART, psFact->psSubject);
-				break;
-			}
+			intSetStats(structureIndex + IDOBJ_STATSTART, psBuilding->pFunctionality->factory.psSubject);
 		}
 	}
 }
@@ -3411,27 +3267,19 @@ void intResearchFinished(STRUCTURE *psBuilding)
  */
 UWORD numForms(UDWORD total, UDWORD perForm)
 {
-	/* If the buttons fit exactly, don't have to add one */
-	if (total != 0 && (total % perForm) == 0)
-	{
-		return (UWORD)(total/perForm);
-	}
-
-	/* Otherwise add one to the div */
-	return (UWORD)(total/perForm + 1);
+	return std::max((total + perForm - 1)/perForm, 1u);
 }
 
 
 /* Add the reticule widgets to the widget screen */
 BOOL intAddReticule(void)
 {
-	if(ReticuleUp == false) {
-		W_FORMINIT		sFormInit;
-		W_BUTINIT		sButInit;
+	if (!ReticuleUp)
+	{
 
 		/* Create the basic form */
 
-		memset(&sFormInit, 0, sizeof(W_FORMINIT));
+		W_FORMINIT sFormInit;
 		sFormInit.formID = 0;
 		sFormInit.id = IDRET_FORM;
 		sFormInit.style = WFORM_PLAIN;
@@ -3448,18 +3296,17 @@ BOOL intAddReticule(void)
 		/* Now add the buttons */
 
 		//set up default button data
-		memset(&sButInit, 0, sizeof(W_BUTINIT));
+		W_BUTINIT sButInit;
 		sButInit.formID = IDRET_FORM;
 		sButInit.id = IDRET_COMMAND;
 		sButInit.width = RET_BUTWIDTH;
 		sButInit.height = RET_BUTHEIGHT;
-		sButInit.FontID = font_regular;
 
 		//add buttons as required...
 
 		//options button
-		sButInit.style = WBUT_PLAIN;
 		SetReticuleButPos(RETBUT_COMMAND,&sButInit);
+		sButInit.style = WBUT_PLAIN;
 		sButInit.pTip = _("Commanders (F6)");
 		sButInit.pDisplay = intDisplayReticuleButton;
 		sButInit.UserData = IMAGE_COMMANDDROID_UP;
@@ -3470,7 +3317,7 @@ BOOL intAddReticule(void)
 		}
 
 		/* Intelligence Map button - this needs to respond to RMB as well*/
-		sButInit.style = WBUT_PLAIN | WFORM_SECONDARY;
+		sButInit.style = WBUT_SECONDARY;
 		sButInit.id = IDRET_INTEL_MAP;
 		SetReticuleButPos(RETBUT_INTELMAP,&sButInit);
 		sButInit.pTip = _("Intelligence Display (F5)");
@@ -3581,16 +3428,13 @@ void togglePowerBar(void)
 /* Add the power bars to the screen */
 BOOL intAddPower(void)
 {
-	W_BARINIT	sBarInit;
-
-	memset(&sBarInit, 0, sizeof(W_BARINIT));
+	W_BARINIT sBarInit;
 
 	/* Add the trough bar */
 	sBarInit.formID = 0;	//IDPOW_FORM;
 	sBarInit.id = IDPOW_POWERBAR_T;
 	//start the power bar off in view (default)
 	sBarInit.style = WBAR_TROUGH;
-	sBarInit.orientation = WBAR_LEFT;
 	sBarInit.x = (SWORD)POW_X;
 	sBarInit.y = (SWORD)POW_Y;
 	sBarInit.width = POW_BARWIDTH;
@@ -3628,11 +3472,6 @@ BOOL intAddOptions(void)
 	UDWORD		player;
 	char		aText[WIDG_MAXSTR];
 
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
-	memset(&sLabInit, 0, sizeof(W_LABINIT));
-	memset(&sButInit, 0, sizeof(W_BUTINIT));
-	memset(&sEdInit, 0, sizeof(W_EDBINIT));
-
 	/* Add the option form */
 
 	sFormInit.formID = 0;
@@ -3653,13 +3492,11 @@ BOOL intAddOptions(void)
 	/* Add the Option screen label */
 	sLabInit.formID = IDOPT_FORM;
 	sLabInit.id = IDOPT_LABEL;
-	sLabInit.style = WLAB_PLAIN;
 	sLabInit.x = OPT_GAP;
 	sLabInit.y = OPT_GAP;
 	sLabInit.width = OPT_BUTWIDTH;
 	sLabInit.height = OPT_BUTHEIGHT;
 	sLabInit.pText = _("Options");
-	sLabInit.FontID = font_regular;
 	if (!widgAddLabel(psWScreen, &sLabInit))
 	{
 		return false;
@@ -3668,12 +3505,10 @@ BOOL intAddOptions(void)
 	/* Add the close box */
 	sButInit.formID = IDOPT_FORM;
 	sButInit.id = IDOPT_CLOSE;
-	sButInit.style = WBUT_PLAIN;
 	sButInit.x = OPT_WIDTH - OPT_GAP - CLOSE_SIZE;
 	sButInit.y = OPT_GAP;
 	sButInit.width = CLOSE_SIZE;
 	sButInit.height = CLOSE_SIZE;
-	sButInit.FontID = font_regular;
 	sButInit.pText = pCloseText;
 	sButInit.pTip = _("Close");
 	if (!widgAddButton(psWScreen, &sButInit))
@@ -3697,11 +3532,9 @@ BOOL intAddOptions(void)
 	/* Add the map label */
 	sLabInit.formID = IDOPT_MAPFORM;
 	sLabInit.id = IDOPT_MAPLABEL;
-	sLabInit.style = WLAB_PLAIN;
 	sLabInit.x = OPT_GAP;
 	sLabInit.y = OPT_GAP;
 	sLabInit.pText = _("Map:");
-	sLabInit.FontID = font_regular;
 	if (!widgAddLabel(psWScreen, &sLabInit))
 	{
 		return false;
@@ -3743,14 +3576,12 @@ BOOL intAddOptions(void)
 	newMapHeight = mapHeight;
 	sEdInit.formID = IDOPT_MAPFORM;
 	sEdInit.id = IDOPT_MAPWIDTH;
-	sEdInit.style = WEDB_PLAIN;
 	sEdInit.x = OPT_GAP*2 + OPT_BUTWIDTH;
 	sEdInit.y = OPT_GAP*2 + OPT_BUTHEIGHT;
 	sEdInit.width = OPT_BUTWIDTH;
 	sEdInit.height = OPT_BUTHEIGHT;
 	sEdInit.pText = aText;
 	sprintf(aText, "%d", mapWidth);
-	sEdInit.FontID = font_regular;
 	if (!widgAddEditBox(psWScreen, &sEdInit))
 	{
 		return false;
@@ -3851,6 +3682,7 @@ BOOL intAddOptions(void)
 	sButInit.height = OPT_BUTHEIGHT;
 	sButInit.pText = _("Quit");
 	sButInit.pTip = _("Exit Game");
+	int quitButtonY = sButInit.y - OPT_GAP;
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
 		return false;
@@ -3863,7 +3695,8 @@ BOOL intAddOptions(void)
 	sFormInit.x = OPT_GAP;
 	sFormInit.y = OPT_PLAYERY;
 	sFormInit.width = OPT_WIDTH - OPT_GAP*2;
-	sFormInit.height = OPT_BUTHEIGHT*3 + OPT_GAP*4;
+	sFormInit.height = (OPT_BUTHEIGHT + OPT_GAP)*(1 + (MAX_PLAYERS + 3)/4) + OPT_GAP;
+	int nextFormY = sFormInit.y + sFormInit.height + OPT_GAP;
 	if (!widgAddForm(psWScreen, &sFormInit))
 	{
 		return false;
@@ -3872,11 +3705,9 @@ BOOL intAddOptions(void)
 	/* Add the player label */
 	sLabInit.formID = IDOPT_PLAYERFORM;
 	sLabInit.id = IDOPT_PLAYERLABEL;
-	sLabInit.style = WLAB_PLAIN;
 	sLabInit.x = OPT_GAP;
 	sLabInit.y = OPT_GAP;
 	sLabInit.pText = _("Current Player:");
-	sLabInit.FontID = font_regular;
 	if (!widgAddLabel(psWScreen, &sLabInit))
 	{
 		return false;
@@ -3885,14 +3716,13 @@ BOOL intAddOptions(void)
 	/* Add the player buttons */
 	sButInit.formID = IDOPT_PLAYERFORM;
 	sButInit.id = IDOPT_PLAYERSTART;
-	sButInit.style = WBUT_PLAIN;
 	sButInit.x = OPT_GAP;
 	sButInit.y = OPT_BUTHEIGHT + OPT_GAP*2;
 	sButInit.width = OPT_BUTWIDTH;
 	sButInit.height = OPT_BUTHEIGHT;
-	sButInit.FontID = font_regular;
 	for(player = 0; player < MAX_PLAYERS; player++)
 	{
+		STATIC_ASSERT(MAX_PLAYERS <= ARRAY_SIZE(apPlayerText) && MAX_PLAYERS <= ARRAY_SIZE(apPlayerTip));
 		sButInit.pText = apPlayerText[player];
 		sButInit.pTip = apPlayerTip[player];
 		if (!widgAddButton(psWScreen, &sButInit))
@@ -3915,44 +3745,12 @@ BOOL intAddOptions(void)
 	sFormInit.id = IDOPT_IVISFORM;
 	sFormInit.style = WFORM_PLAIN;
 	sFormInit.x = OPT_GAP;
-	sFormInit.y = OPT_PLAYERY + OPT_BUTHEIGHT * 3 + OPT_GAP * 5;
+	sFormInit.y = nextFormY;  //OPT_PLAYERY + OPT_BUTHEIGHT * 3 + OPT_GAP * 5;
 	sFormInit.width = OPT_WIDTH - OPT_GAP * 2;
-	sFormInit.height = OPT_BUTHEIGHT * 3 + OPT_GAP * 4;
+	sFormInit.height = quitButtonY - nextFormY;  //OPT_BUTHEIGHT * 3 + OPT_GAP * 4;
 	if (!widgAddForm(psWScreen, &sFormInit))
 	{
 		return false;
-	}
-
-	/* Add iViS label */
-	sLabInit.formID = IDOPT_IVISFORM;
-	sLabInit.id = IDOPT_IVISLABEL;
-	sLabInit.style = WLAB_PLAIN;
-	sLabInit.x = OPT_GAP;
-	sLabInit.y = OPT_GAP;
-	sLabInit.pText = "iViS:";
-	sLabInit.FontID = font_regular;
-	if (!widgAddLabel(psWScreen, &sLabInit))
-	{
-		return false;
-	}
-
-	/* Add iViS lighting button */
-	sButInit.formID = IDOPT_IVISFORM;
-	sButInit.id = IDOPT_IVISLIGHTING;
-	sButInit.x += OPT_BUTWIDTH + OPT_GAP;
-	sButInit.y = OPT_GAP;
-	sButInit.width = OPT_BUTWIDTH;
-	sButInit.height = OPT_BUTHEIGHT;
-	sButInit.FontID = font_regular;
-	sButInit.pText = "Lighting";
-	sButInit.pTip = "Toggles lighting On/Off.";
-	if (!widgAddButton(psWScreen, &sButInit))
-	{
-		return false;
-	}
-	if (pie_GetLightingState())
-	{
-		widgSetButtonState(psWScreen, IDOPT_IVISLIGHTING, WBUT_CLICKLOCK);
 	}
 
 	widgSetButtonState(psWScreen, IDOPT_PLAYERSTART + selectedPlayer, WBUT_LOCK);
@@ -3970,27 +3768,15 @@ BOOL intAddOptions(void)
  */
 static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,BOOL bForceStats)
 {
-	W_FORMINIT		sFormInit;
-	W_FORMINIT		sBFormInit,sBFormInit2;
-	W_BARINIT		sBarInit;
-	W_BARINIT		sBarInit2;
-	W_BUTINIT		sButInit;
 	UDWORD			displayForm;
-	UDWORD			i, statID=0;
-	SDWORD			objLoop;
-	BASE_OBJECT		*psObj, *psFirst;
+	UDWORD                  statID = 0;
+	BASE_OBJECT *           psFirst;
 	BASE_STATS		*psStats;
 	SDWORD			BufferID;
 	DROID			*Droid;
 	STRUCTURE		*Structure;
-	W_LABINIT		sLabInit;
-	W_LABINIT		sLabIntObjText;
-	W_LABINIT		sLabInitCmdExp;
-	W_LABINIT		sLabInitCmdFac;
-	W_LABINIT		sLabInitCmdFac2;
 	BOOL			IsFactory;
 	BOOL			Animate = true;
-	UWORD           FormX,FormY;
 	int				compIndex;
 
 	// Is the form already up?
@@ -4001,7 +3787,7 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	else
 	{
 		// reset the object position array
-		memset(asJumpPos, 0, sizeof(asJumpPos));
+		asJumpPos.clear();
 	}
 
 	Animate = false;
@@ -4009,35 +3795,18 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	ClearObjectBuffers();
 	ClearTopicBuffers();
 
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
-	memset(&sBFormInit, 0, sizeof(W_FORMINIT));
-	memset(&sBFormInit2, 0, sizeof(W_FORMINIT));
-	memset(&sBarInit, 0, sizeof(W_BARINIT));
-
 	/* See how many objects the player has */
-	numObjects = 0;
-	psFirst = NULL;
-	memset(apsObjectList, 0, sizeof(BASE_OBJECT *) * MAX_OBJECTS);
-	for(psObj=psObjects; psObj; psObj = psObj->psNext)
+	apsObjectList.clear();
+	for (BASE_OBJECT *psObj = psObjects; psObj; psObj = psObj->psNext)
 	{
 		if (objSelectFunc(psObj))
 		{
-			apsObjectList[numObjects] = psObj;
-			numObjects++;
-			if (numObjects == 1)
-			{
-				psFirst = psObj;
-			}
-
-			// make sure the list doesn't overflow
-			if (numObjects >= MAX_OBJECTS)
-			{
-				break;
-			}
+			apsObjectList.push_back(psObj);
 		}
 	}
 
-	if(numObjects == 0) {
+	if (apsObjectList.empty())
+	{
 		// No objects so close the stats window if it's up...
 		if(widgGetFromID(psWScreen,IDSTAT_FORM) != NULL) {
 			intRemoveStatsNoAnim();
@@ -4045,27 +3814,16 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 		// and return.
 		return false;
 	}
+	psFirst = apsObjectList.front();
 
     /*if psSelected != NULL then check its in the list of suitable objects for
     this instance of the interface - this could happen when a structure is upgraded*/
-	objLoop = 0;
-    if (psSelected != NULL)
-    {
-        for(objLoop = 0; objLoop < numObjects; objLoop++)
-        {
-            if (psSelected == apsObjectList[objLoop])
-            {
-                //found it so quit loop
-                break;
-            }
-        }
-    }
     //if have reached the end of the loop and not quit out, then can't have found the selected object in the list
-    if (objLoop == numObjects)
-    {
-        //initialise psSelected so gets set up with an iten in the list
-        psSelected = NULL;
-    }
+	if (std::find(apsObjectList.begin(), apsObjectList.end(), psSelected) == apsObjectList.end())
+	{
+		//initialise psSelected so gets set up with an iten in the list
+		psSelected = NULL;
+	}
 
 	//order the objects according to what they are
 	orderObjectInterface();
@@ -4134,13 +3892,12 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 
 	/* Create the basic form */
 
+	W_FORMINIT sFormInit;
 	sFormInit.formID = 0;
 	sFormInit.id = IDOBJ_FORM;
 	sFormInit.style = WFORM_PLAIN;
 	sFormInit.x = (SWORD)OBJ_BACKX;
 	sFormInit.y = (SWORD)OBJ_BACKY;
-	FormX = sFormInit.x;
-	FormY = sFormInit.y;
 	sFormInit.width = OBJ_BACKWIDTH;
 	sFormInit.height = 	OBJ_BACKHEIGHT;
 	// If the window was closed then do open animation.
@@ -4157,16 +3914,14 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	}
 
 	/* Add the close button */
-	memset(&sButInit, 0, sizeof(W_BUTINIT));
+	W_BUTINIT sButInit;
 	sButInit.formID = IDOBJ_FORM;
 	sButInit.id = IDOBJ_CLOSE;
-	sButInit.style = WBUT_PLAIN;
 	sButInit.x = OBJ_BACKWIDTH - CLOSE_WIDTH;
 	sButInit.y = 0;
 	sButInit.width = CLOSE_WIDTH;
 	sButInit.height = CLOSE_HEIGHT;
 	sButInit.pTip = _("Close");
-	sButInit.FontID = font_regular;
 	sButInit.pDisplay = intDisplayImageHilight;
 	sButInit.UserData = PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
 	if (!widgAddButton(psWScreen, &sButInit))
@@ -4176,7 +3931,7 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 
 
 	/*add the tabbed form */
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
+	sFormInit = W_FORMINIT();
 	sFormInit.formID = IDOBJ_FORM;
 	sFormInit.id = IDOBJ_TABFORM;
 	sFormInit.style = WFORM_TABBED;
@@ -4184,8 +3939,7 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	sFormInit.y = OBJ_TABY;
 	sFormInit.width = OBJ_WIDTH;
 	sFormInit.height = OBJ_HEIGHT;
-	sFormInit.numMajor = numForms((OBJ_BUTWIDTH + OBJ_GAP) * numObjects,
-								  OBJ_WIDTH - OBJ_GAP);
+	sFormInit.numMajor = numForms(apsObjectList.size(), (OBJ_WIDTH - OBJ_GAP) / (OBJ_BUTWIDTH + OBJ_GAP));
 	sFormInit.majorPos = WFORM_TABTOP;
 	sFormInit.minorPos = WFORM_TABNONE;
 	sFormInit.majorSize = OBJ_TABWIDTH;
@@ -4196,17 +3950,14 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	sFormInit.pUserData = &StandardTab;
 	sFormInit.pTabDisplay = intDisplayTab;
 
-	if (sFormInit.numMajor > MAX_TAB_STD_SHOWN)
+	if (sFormInit.numMajor*(sFormInit.majorSize + sFormInit.tabMajorGap) > sFormInit.width)
 	{
-		// We do NOT want more than this amount of tabs, 40 items should be more than enough(?)
-		sFormInit.numMajor = MAX_TAB_STD_SHOWN;
-		// If we were to change this in future then :
-		//Just switching from normal sized tabs to smaller ones to fit more in form.
-		//		sFormInit.pUserData = &SmallTab;
-		//		sFormInit.majorSize /= 2;
-		// Change MAX_TAB_STD_SHOWN to ..SMALL_SHOWN, this will give us 80 items max.
+		sFormInit.pUserData = &SmallTab;
+		sFormInit.majorSize /= 2;
 	}
-	for (i=0; i< sFormInit.numMajor; i++)
+	sFormInit.maxTabsShown = WFORM_MAXMAJOR;
+	sFormInit.numMajor = std::min<unsigned>(sFormInit.numMajor, WFORM_MAXMAJOR);
+	for (unsigned i = 0; i < sFormInit.numMajor; ++i)
 	{
 		sFormInit.aNumMinors[i] = 1;
 	}
@@ -4219,6 +3970,7 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	objNumTabs = sFormInit.numMajor;
 
 	/* Add the object and stats buttons */
+	W_FORMINIT sBFormInit;
 	sBFormInit.formID = IDOBJ_TABFORM;
 	sBFormInit.id = IDOBJ_OBJSTART;
 	sBFormInit.majorID = 0;
@@ -4228,17 +3980,17 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	sBFormInit.y = OBJ_STARTY;
 	sBFormInit.width = OBJ_BUTWIDTH;
 	sBFormInit.height = OBJ_BUTHEIGHT;
-	memcpy(&sBFormInit2,&sBFormInit,sizeof(W_FORMINIT));
+	W_FORMINIT sBFormInit2 = sBFormInit;
 	sBFormInit2.id = IDOBJ_STATSTART;
 	sBFormInit2.y = OBJ_STATSTARTY;
 	//right click on a Template will put the production on hold
 	sBFormInit2.style = WFORM_CLICKABLE | WFORM_SECONDARY;
 
 	// Action progress bar.
+	W_BARINIT sBarInit;
 	sBarInit.formID = IDOBJ_OBJSTART;
 	sBarInit.id = IDOBJ_PROGBARSTART;
 	sBarInit.style = WBAR_TROUGH | WIDG_HIDDEN;
-	sBarInit.orientation = WBAR_LEFT;
 	sBarInit.x = STAT_PROGBARX;
 	sBarInit.y = STAT_PROGBARY;
 	sBarInit.width = STAT_PROGBARWIDTH;
@@ -4249,7 +4001,7 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	sBarInit.pTip = _("Progress Bar");
 
 	// object output bar ie manuf power o/p, research power o/p
-	memcpy(&sBarInit2,&sBarInit,sizeof(W_BARINIT));
+	W_BARINIT sBarInit2 = sBarInit;
 	sBarInit2.id = IDOBJ_POWERBARSTART;
 	sBarInit2.style = WBAR_PLAIN;
 	sBarInit2.x = STAT_POWERBARX;
@@ -4258,60 +4010,55 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	// don't set the tip cos we haven't got a suitable text string at this point - 2/2/99
 	sBarInit2.pTip = NULL;
 
-	memset(&sLabInit,0,sizeof(W_LABINIT));
+	W_LABINIT sLabInit;
 	sLabInit.id = IDOBJ_COUNTSTART;
-	sLabInit.style = WLAB_PLAIN | WIDG_HIDDEN;
+	sLabInit.style = WIDG_HIDDEN;
 	sLabInit.x = OBJ_TEXTX;
 	sLabInit.y = OBJ_T1TEXTY;
 	sLabInit.width = 16;
 	sLabInit.height = 16;
 	sLabInit.pText = "BUG! (a)";
-	sLabInit.FontID = font_regular;
 
-	memset(&sLabInitCmdFac,0,sizeof(W_LABINIT));
+	W_LABINIT sLabInitCmdFac;
 	sLabInitCmdFac.id = IDOBJ_CMDFACSTART;
-	sLabInitCmdFac.style = WLAB_PLAIN | WIDG_HIDDEN;
+	sLabInitCmdFac.style = WIDG_HIDDEN;
 	sLabInitCmdFac.x = OBJ_TEXTX;
 	sLabInitCmdFac.y = OBJ_T2TEXTY;
 	sLabInitCmdFac.width = 16;
 	sLabInitCmdFac.height = 16;
 	sLabInitCmdFac.pText = "BUG! (b)";
-	sLabInitCmdFac.FontID = font_regular;
 
-	memset(&sLabInitCmdFac2,0,sizeof(W_LABINIT));
+	W_LABINIT sLabInitCmdFac2;
 	sLabInitCmdFac2.id = IDOBJ_CMDVTOLFACSTART;
-	sLabInitCmdFac2.style = WLAB_PLAIN | WIDG_HIDDEN;
+	sLabInitCmdFac2.style = WIDG_HIDDEN;
 	sLabInitCmdFac2.x = OBJ_TEXTX;
 	sLabInitCmdFac2.y = OBJ_T3TEXTY;
 	sLabInitCmdFac2.width = 16;
 	sLabInitCmdFac2.height = 16;
 	sLabInitCmdFac2.pText = "BUG! (c)";
-	sLabInitCmdFac2.FontID = font_regular;
 
-	memset(&sLabIntObjText,0,sizeof(W_LABINIT));
+	W_LABINIT sLabIntObjText;
 	sLabIntObjText.id = IDOBJ_FACTORYSTART;
-	sLabIntObjText.style = WLAB_PLAIN | WIDG_HIDDEN;
+	sLabIntObjText.style = WIDG_HIDDEN;
 	sLabIntObjText.x = OBJ_TEXTX;
 	sLabIntObjText.y = OBJ_B1TEXTY;
 	sLabIntObjText.width = 16;
 	sLabIntObjText.height = 16;
 	sLabIntObjText.pText = "xxx/xxx - overrun";
-	sLabIntObjText.FontID = font_regular;
 
-	memset(&sLabInitCmdExp,0,sizeof(W_LABINIT));
+	W_LABINIT sLabInitCmdExp;
 	sLabInitCmdExp.id = IDOBJ_CMDEXPSTART;
-	sLabInitCmdExp.style = WLAB_PLAIN | WIDG_HIDDEN;
+	sLabInitCmdExp.style = WIDG_HIDDEN;
 	sLabInitCmdExp.x = STAT_POWERBARX;
 	sLabInitCmdExp.y = STAT_POWERBARY;
 	sLabInitCmdExp.width = 16;
 	sLabInitCmdExp.height = 16;
 	sLabInitCmdExp.pText = "@@@@@ - overrun";
-	sLabInitCmdExp.FontID = font_regular;
 
 	displayForm = 0;
-	for(i=0; i<(UDWORD)numObjects; i++)
+	for (unsigned i = 0; i < apsObjectList.size(); ++i)
 	{
-		psObj = apsObjectList[i];
+		BASE_OBJECT *psObj = apsObjectList[i];
 		if(psObj->died == 0) {	// Don't add the button if the objects dead.
 			IsFactory = false;
 
@@ -4919,7 +4666,7 @@ static BASE_OBJECT *intGetObject(UDWORD id)
 	}
 
 	/* Find the object that the ID refers to */
-	ASSERT_OR_RETURN(NULL, (SDWORD)id - IDOBJ_OBJSTART >= 0 && (SDWORD)id - IDOBJ_OBJSTART < numObjects, "Invalid button ID %u", id);
+	ASSERT_OR_RETURN(NULL, id - IDOBJ_OBJSTART < apsObjectList.size(), "Invalid button ID %u", id);
 	psObj = apsObjectList[id - IDOBJ_OBJSTART];
 
 	return psObj;
@@ -4929,9 +4676,6 @@ static BASE_OBJECT *intGetObject(UDWORD id)
 /* Reset the stats button for an object */
 static void intSetStats(UDWORD id, BASE_STATS *psStats)
 {
-	W_FORMINIT	sFormInit;
-	W_BARINIT	sBarInit;
-	W_LABINIT	sLabInit;
 	UDWORD		butPerForm, butPos;
 	SDWORD BufferID;
 	BASE_OBJECT	*psObj;
@@ -4939,9 +4683,7 @@ static void intSetStats(UDWORD id, BASE_STATS *psStats)
 	/* Update the button on the object screen */
 	widgDelete(psWScreen, id);
 
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
-	memset(&sBarInit, 0, sizeof(W_BARINIT));
-
+	W_FORMINIT sFormInit;
 	sFormInit.formID = IDOBJ_TABFORM;
 	butPerForm = (OBJ_WIDTH - OBJ_GAP) / (OBJ_BUTWIDTH + OBJ_GAP);
 	sFormInit.majorID = (UWORD)((id - IDOBJ_STATSTART) / butPerForm);
@@ -4955,10 +4697,10 @@ static void intSetStats(UDWORD id, BASE_STATS *psStats)
 	sFormInit.height = OBJ_BUTHEIGHT;
 
 	// Action progress bar.
+	W_BARINIT sBarInit;
 	sBarInit.formID = id;
 	sBarInit.id = (id - IDOBJ_STATSTART) + IDOBJ_PROGBARSTART;
 	sBarInit.style = WBAR_TROUGH;
-	sBarInit.orientation = WBAR_LEFT;
 	sBarInit.x = STAT_PROGBARX;
 	sBarInit.y = STAT_PROGBARY;
 	sBarInit.width = STAT_PROGBARWIDTH;
@@ -4971,16 +4713,15 @@ static void intSetStats(UDWORD id, BASE_STATS *psStats)
 	sBarInit.pCallback = intUpdateProgressBar;
 	sBarInit.pUserData = intGetObject(id);
 
-	memset(&sLabInit,0,sizeof(W_LABINIT));
+	W_LABINIT sLabInit;
 	sLabInit.formID = id;
 	sLabInit.id = (id - IDOBJ_STATSTART) + IDOBJ_COUNTSTART;
-	sLabInit.style = WLAB_PLAIN | WIDG_HIDDEN;
+	sLabInit.style = WIDG_HIDDEN;
 	sLabInit.x = OBJ_TEXTX;
 	sLabInit.y = OBJ_T1TEXTY;
 	sLabInit.width = 16;
 	sLabInit.height = 16;
 	sLabInit.pText = "BUG! (d)";
-	sLabInit.FontID = font_regular;
 
 	if (psStats)
 	{
@@ -5047,15 +4788,10 @@ static void intSetStats(UDWORD id, BASE_STATS *psStats)
 static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 						BASE_STATS *psSelected, BASE_OBJECT *psOwner)
 {
-	W_FORMINIT			sFormInit;
-	W_BUTINIT			sButInit;
-	W_FORMINIT			sBFormInit;
-	W_BARINIT			sBarInit;
 	UDWORD				i, butPerForm, statForm;
 	SDWORD				BufferID;
 	BASE_STATS			*Stat;
 	BOOL				Animate = true;
-	W_LABINIT			sLabInit;
 	FACTORY				*psFactory;
 
 	// should this ever be called with psOwner == NULL?
@@ -5092,7 +4828,7 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 
 	/* Create the basic form */
 
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
+	W_FORMINIT sFormInit;
 	sFormInit.formID = 0;
 	sFormInit.id = IDSTAT_FORM;
 	sFormInit.style = WFORM_PLAIN;
@@ -5114,20 +4850,21 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		return false;
 	}
 
+	W_LABINIT sLabInit;
+
 	// Add the quantity slider ( if it's a factory ).
 	if(objMode == IOBJ_MANUFACTURE)
 	{
 		//add the Factory DP button
-		memset(&sButInit, 0, sizeof(W_BUTINIT));
+		W_BUTINIT sButInit;
 		sButInit.formID = IDSTAT_FORM;
 		sButInit.id = IDSTAT_DP_BUTTON;
-		sButInit.style = WBUT_PLAIN | WFORM_SECONDARY;
+		sButInit.style = WBUT_SECONDARY;
 		sButInit.x = 4;
 		sButInit.y = STAT_SLDY;
 		sButInit.width = iV_GetImageWidth(IntImages,IMAGE_FDP_DOWN);
 		sButInit.height = iV_GetImageHeight(IntImages,IMAGE_FDP_DOWN);
 		sButInit.pTip = _("Factory Delivery Point");
-		sButInit.FontID = font_regular;
 		sButInit.pDisplay = intDisplayDPButton;
 		sButInit.pUserData = psOwner;
 
@@ -5137,16 +4874,15 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		}
 
 		//add the Factory Loop button!
-		memset(&sButInit, 0, sizeof(W_BUTINIT));
+		sButInit = W_BUTINIT();
 		sButInit.formID = IDSTAT_FORM;
 		sButInit.id = IDSTAT_LOOP_BUTTON;
-		sButInit.style = WBUT_PLAIN | WFORM_SECONDARY;
+		sButInit.style = WBUT_SECONDARY;
 		sButInit.x = STAT_SLDX + STAT_SLDWIDTH + 2;
 		sButInit.y = STAT_SLDY;
 		sButInit.width = iV_GetImageWidth(IntImages,IMAGE_LOOP_DOWN);
 		sButInit.height = iV_GetImageHeight(IntImages,IMAGE_LOOP_DOWN);
 		sButInit.pTip = _("Loop Production");
-		sButInit.FontID = font_regular;
 		sButInit.pDisplay = intDisplayButtonPressed;
 		sButInit.UserData = PACKDWORD_TRI(IMAGE_LOOP_DOWN, IMAGE_LOOP_HI, IMAGE_LOOP_UP);
 
@@ -5165,15 +4901,13 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		}
 
 		// create a text label for the loop quantity.
-		memset(&sLabInit,0,sizeof(W_LABINIT));
 		sLabInit.formID = IDSTAT_FORM;
 		sLabInit.id = IDSTAT_LOOP_LABEL;
-		sLabInit.style = WLAB_PLAIN | WIDG_HIDDEN;
+		sLabInit.style = WIDG_HIDDEN;
 		sLabInit.x = (UWORD)(sButInit.x - 15);
 		sLabInit.y = sButInit.y;
 		sLabInit.width = 12;
 		sLabInit.height = 15;
-		sLabInit.FontID = font_regular;
 		sLabInit.pUserData = psOwner;
 		sLabInit.pCallback = intAddLoopQuantity;
 		if (!widgAddLabel(psWScreen, &sLabInit))
@@ -5184,31 +4918,28 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 
 		/* store the common values for the text labels for the quantity
 		to produce (on each button).*/
-		memset(&sLabInit,0,sizeof(W_LABINIT));
+		sLabInit = W_LABINIT();
 		sLabInit.id = IDSTAT_PRODSTART;
-		sLabInit.style = WLAB_PLAIN | WIDG_HIDDEN;
+		sLabInit.style = WIDG_HIDDEN | WLAB_ALIGNRIGHT;
 
-		sLabInit.x = STAT_BUTWIDTH-12;
+		sLabInit.x = STAT_BUTWIDTH-12-6;
 		sLabInit.y = 2;
 
 		sLabInit.width = 12;
 		sLabInit.height = 15;
-		sLabInit.FontID = font_regular;
 		sLabInit.pCallback = intAddProdQuantity;
 
 	}
 
 	/* Add the close button */
-	memset(&sButInit, 0, sizeof(W_BUTINIT));
+	W_BUTINIT sButInit;
 	sButInit.formID = IDSTAT_FORM;
 	sButInit.id = IDSTAT_CLOSE;
-	sButInit.style = WBUT_PLAIN;
 	sButInit.x = STAT_WIDTH - CLOSE_WIDTH;
 	sButInit.y = 0;
 	sButInit.width = CLOSE_WIDTH;
 	sButInit.height = CLOSE_HEIGHT;
 	sButInit.pTip = _("Close");
-	sButInit.FontID = font_regular;
 	sButInit.pDisplay = intDisplayImageHilight;
 	sButInit.UserData = PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
 	if (!widgAddButton(psWScreen, &sButInit))
@@ -5224,33 +4955,29 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	if (numForms(numStats, butPerForm)> MAX_TAB_SMALL_SHOWN)	//only want these buttons when tab count >8
 	{
 		// Add the left tab scroll button
-		memset(&sButInit, 0, sizeof(W_BUTINIT));
+		sButInit = W_BUTINIT();
 		sButInit.formID = IDSTAT_FORM;
 		sButInit.id = IDSTAT_TABSCRL_LEFT;
-		sButInit.style = WBUT_PLAIN;
 		sButInit.x = STAT_TABFORMX + 4;
 		sButInit.y = STAT_TABFORMY;
 		sButInit.width = TABSCRL_WIDTH;
 		sButInit.height = TABSCRL_HEIGHT;
 		sButInit.pTip = _("Tab Scroll left");
-		sButInit.FontID = font_regular;
 		sButInit.pDisplay = intDisplayImageHilight;
 		sButInit.UserData = PACKDWORD_TRI(0, IMAGE_LFTTABD, IMAGE_LFTTAB);
 		if (!widgAddButton(psWScreen, &sButInit))
 		{
-		return false;
+			return false;
 		}
 		// Add the right tab scroll button
-		memset(&sButInit, 0, sizeof(W_BUTINIT));
+		sButInit = W_BUTINIT();
 		sButInit.formID = IDSTAT_FORM;
 		sButInit.id = IDSTAT_TABSCRL_RIGHT;
-		sButInit.style = WBUT_PLAIN;
 		sButInit.x = STAT_WIDTH - 14;
 		sButInit.y = STAT_TABFORMY;
 		sButInit.width = TABSCRL_WIDTH;
 		sButInit.height = TABSCRL_HEIGHT;
 		sButInit.pTip = _("Tab Scroll right");
-		sButInit.FontID = font_regular;
 		sButInit.pDisplay = intDisplayImageHilight;
 		sButInit.UserData = PACKDWORD_TRI(0, IMAGE_RGTTABD, IMAGE_RGTTAB);
 		if (!widgAddButton(psWScreen, &sButInit))
@@ -5260,7 +4987,7 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	}
 	//==============buttons before tabbed form!==========================
 	// Add the tabbed form
-	memset(&sFormInit, 0, sizeof(W_FORMINIT));
+	sFormInit = W_FORMINIT();
 	sFormInit.formID = IDSTAT_FORM;
 	sFormInit.id = IDSTAT_TABFORM;
 	sFormInit.style = WFORM_TABBED;
@@ -5304,7 +5031,7 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	}
 
 	/* Add the stat buttons */
-	memset(&sBFormInit, 0, sizeof(W_FORMINIT));
+	W_FORMINIT sBFormInit;
 	sBFormInit.formID = IDSTAT_TABFORM;
 	sBFormInit.majorID = 0;
 	sBFormInit.minorID = 0;
@@ -5315,10 +5042,8 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	sBFormInit.width = STAT_BUTWIDTH;
 	sBFormInit.height = STAT_BUTHEIGHT;
 
-	memset(&sBarInit, 0, sizeof(W_BARINIT));
+	W_BARINIT sBarInit;
 	sBarInit.id = IDSTAT_TIMEBARSTART;
-	sBarInit.style = WBAR_PLAIN;
-	sBarInit.orientation = WBAR_LEFT;
 	sBarInit.x = STAT_TIMEBARX;
 	sBarInit.y = STAT_TIMEBARY;
 	sBarInit.width = STAT_PROGBARWIDTH;
@@ -5413,17 +5138,16 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 				Stat->ref < REF_RESEARCH_START + REF_RANGE)				// It's a Research topic.
 		{
             //new icon in for groups - AB 12/01/99
-			memset(&sLabInit,0,sizeof(W_LABINIT));
+			sLabInit = W_LABINIT();
 			sLabInit.formID = sBFormInit.id ;
 			sLabInit.id = IDSTAT_RESICONSTART+(sBFormInit.id - IDSTAT_START);
-			sLabInit.style = WLAB_PLAIN;
 
 			sLabInit.x = STAT_BUTWIDTH - 16;
 			sLabInit.y = 3;
 
 			sLabInit.width = 12;
 			sLabInit.height = 15;
-            sLabInit.pUserData = Stat;
+			sLabInit.pUserData = Stat;
 			sLabInit.pDisplay = intDisplayResSubGroup;
 			widgAddLabel(psWScreen, &sLabInit);
 
@@ -5453,10 +5177,9 @@ static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 							  )
 							{
 								// add a label.
-								memset(&sLabInit,0,sizeof(W_LABINIT));
+								sLabInit = W_LABINIT();
 								sLabInit.formID = sBFormInit.id ;
 								sLabInit.id = IDSTAT_ALLYSTART+(sBFormInit.id - IDSTAT_START);
-								sLabInit.style = WLAB_PLAIN;
 								sLabInit.x = STAT_BUTWIDTH  - 19;
 								sLabInit.y = STAT_BUTHEIGHT - 19;
 								sLabInit.width = 12;
@@ -5979,16 +5702,15 @@ static void intStatsRMBPressed(UDWORD id)
 			//decrease the production
 			factoryProdAdjust(psStructure, psNext, false);
 
-			if (!StructureIsManufacturingPending(psStructure))
-			{
-				structSetManufacture(psStructure, psNext, ModeQueue);
-			}
-
 			//need to check if this was the template that was mid-production
-			if (getProductionQuantity(psStructure, FactoryGetTemplate(psFactory)) == 0)
+			if (getProduction(psStructure, FactoryGetTemplate(psFactory)).numRemaining() == 0)
 			{
 				doNextProduction(psStructure, FactoryGetTemplate(psFactory), ModeQueue);
 				psNext = FactoryGetTemplate(psFactory);
+			}
+			else if (!StructureIsManufacturingPending(psStructure))
+			{
+				structSetManufacture(psStructure, psNext, ModeQueue);
 			}
 
 			if (StructureIsOnHoldPending(psStructure))
@@ -6008,8 +5730,7 @@ static void intObjectRMBPressed(UDWORD id)
 	BASE_OBJECT		*psObj;
 	STRUCTURE		*psStructure;
 
-	ASSERT( (SDWORD)id - IDOBJ_OBJSTART < numObjects,
-			"intObjectRMBPressed: Invalid object id" );
+	ASSERT(id - IDOBJ_OBJSTART < apsObjectList.size(), "intObjectRMBPressed: Invalid object id");
 
 	/* Find the object that the ID refers to */
 	psObj = intGetObject(id);
@@ -6038,8 +5759,7 @@ static void intObjStatRMBPressed(UDWORD id)
 	BASE_OBJECT		*psObj;
 	STRUCTURE		*psStructure;
 
-	ASSERT( (SDWORD)id - IDOBJ_STATSTART < numObjects,
-			"intObjStatRMBPressed: Invalid stat id" );
+	ASSERT(id - IDOBJ_STATSTART < apsObjectList.size(), "intObjStatRMBPressed: Invalid stat id" );
 
 	/* Find the object that the ID refers to */
 	psObj = intGetObject(id);
@@ -6214,11 +5934,10 @@ void forceHidePowerBar(void)
 /* Add the Proximity message buttons */
 BOOL intAddProximityButton(PROXIMITY_DISPLAY *psProxDisp, UDWORD inc)
 {
-	W_FORMINIT			sBFormInit;
 	PROXIMITY_DISPLAY	*psProxDisp2;
 	UDWORD				cnt;
 
-	memset(&sBFormInit, 0, sizeof(W_FORMINIT));
+	W_FORMINIT sBFormInit;
 	sBFormInit.formID = 0;
 	sBFormInit.id = IDPROX_START + inc;
 	//store the ID so we can detect which one has been clicked on
@@ -6229,9 +5948,7 @@ BOOL intAddProximityButton(PROXIMITY_DISPLAY *psProxDisp, UDWORD inc)
 	{
 		for(cnt = IDPROX_START;cnt<IDPROX_END;cnt++)
 		{							// go down the prox msgs and see if it's free.
-			for (psProxDisp2 = apsProxDisp[selectedPlayer];
-				psProxDisp2 &&(psProxDisp2->buttonID!=cnt) ;
-				psProxDisp2 = psProxDisp2->psNext);
+			for (psProxDisp2 = apsProxDisp[selectedPlayer]; psProxDisp2 && psProxDisp2->buttonID != cnt; psProxDisp2 = psProxDisp2->psNext) {}
 
 			if(psProxDisp == NULL)	// value was unused.
 			{

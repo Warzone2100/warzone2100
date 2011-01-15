@@ -21,18 +21,9 @@
 #ifndef __INCLUDED_SRC_KEYEDIT_H__
 #define __INCLUDED_SRC_KEYEDIT_H__
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 BOOL runKeyMapEditor(void);
 BOOL startKeyMapEditor(BOOL first);
 BOOL saveKeyMap(void);
 BOOL loadKeyMap(void);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_KEYEDIT_H__

@@ -35,6 +35,7 @@
 #include <SDL_thread.h>
 #include <physfs.h>
 #include <string.h>
+#include <memory>
 
 #include "netplay.h"
 #include "netlog.h"
@@ -244,7 +245,7 @@ static size_t NET_fillBuffer(Socket **pSocket, SocketSet* socket_set, uint8_t *b
 
 		if (size > bufsize)
 		{
-			debug(LOG_ERROR, "Fatal connection error: buffer size of (%d) was too small, current byte count was %zd", bufsize, size);
+			debug(LOG_ERROR, "Fatal connection error: buffer size of (%d) was too small, current byte count was %ld", bufsize, (long)size);
 			NETlogEntry("Fatal connection error: buffer size was too small!", SYNC_FLAG, selectedPlayer);
 		}
 		if (tcp_socket == socket)
@@ -252,6 +253,7 @@ static size_t NET_fillBuffer(Socket **pSocket, SocketSet* socket_set, uint8_t *b
 			debug(LOG_NET, "Host connection was lost!");
 			NETlogEntry("Host connection was lost!", SYNC_FLAG, selectedPlayer);
 			tcp_socket = NULL;
+			bsocket = NULL;  // Because tcp_socket == bsocket...
 			//Game is pretty much over --should just end everything when HOST dies.
 			NetPlay.isHostAlive = false;
 			setLobbyError(ERROR_HOSTDROPPED);
@@ -284,6 +286,15 @@ void NET_InitPlayer(int i, bool initPosition)
 	}
 	NetPlay.players[i].ready = false;
 	NetPlay.players[i].needFile = false;
+	if (NetPlay.bComms)
+	{
+		NetPlay.players[i].ai = AI_OPEN;
+	}
+	else
+	{
+		NetPlay.players[i].ai = 0;			// default AI
+	}
+	NetPlay.players[i].difficulty = 1;		// normal
 	NetPlay.players[i].wzFile.isCancelled = false;
 	NetPlay.players[i].wzFile.isSending = false;
 }
@@ -325,8 +336,9 @@ static void NETSendNPlayerInfoTo(uint32_t *index, uint32_t indexLen, unsigned to
 			NETint32_t(&NetPlay.players[index[n]].position);
 			NETint32_t(&NetPlay.players[index[n]].team);
 			NETbool(&NetPlay.players[index[n]].ready);
+			NETint8_t(&NetPlay.players[index[n]].ai);
+			NETint8_t(&NetPlay.players[index[n]].difficulty);
 		}
-		NETuint32_t(&NetPlay.hostPlayer);
 	NETend();
 }
 
@@ -337,7 +349,11 @@ static void NETSendPlayerInfoTo(uint32_t index, unsigned to)
 
 static void NETSendAllPlayerInfoTo(unsigned to)
 {
-	static uint32_t indices[MAX_PLAYERS] = {0, 1, 2, 3, 4, 5, 6, 7};
+	static uint32_t indices[MAX_PLAYERS];
+	for (int i = 0; i < MAX_PLAYERS; ++i)
+	{
+		indices[i] = i;
+	}
 	ASSERT_OR_RETURN( , NetPlay.isHost == true, "Invalid call for non-host");
 
 	NETSendNPlayerInfoTo(indices, ARRAY_SIZE(indices), to);
@@ -360,7 +376,7 @@ static signed int NET_CreatePlayer(const char* name)
 
 	for (index = 0; index < MAX_CONNECTED_PLAYERS; index++)
 	{
-		if (NetPlay.players[index].allocated == false)
+		if (NetPlay.players[index].allocated == false && NetPlay.players[index].ai == AI_OPEN)
 		{
 			char buf[250] = {'\0'};
 
@@ -1215,7 +1231,7 @@ UDWORD NETgetPacketsRecvd(void)
 
 // ////////////////////////////////////////////////////////////////////////
 // Send a message to a player, option to guarantee message
-BOOL NETsend(uint8_t player, NETMESSAGE message)
+bool NETsend(uint8_t player, NetMessage const *message)
 {
 	ssize_t result = 0;
 
@@ -1235,10 +1251,10 @@ BOOL NETsend(uint8_t player, NETMESSAGE message)
 			// We are the host, send directly to player.
 			if (connected_bsocket[player] != NULL)
 			{
-				uint8_t *rawData = NETmessageRawData(message);
-				size_t rawLen    = NETmessageRawSize(message);
+				uint8_t *rawData = message->rawDataDup();
+				ssize_t rawLen   = message->rawLen();
 				result = writeAll(connected_bsocket[player], rawData, rawLen);
-				NETmessageDestroyRawData(rawData);  // Done with the data.
+				delete[] rawData;  // Done with the data.
 
 				if (result == rawLen)
 				{
@@ -1261,10 +1277,10 @@ BOOL NETsend(uint8_t player, NETMESSAGE message)
 		// We are a client, send directly to player, who happens to be the host.
 		if (tcp_socket)
 		{
-			uint8_t *rawData = NETmessageRawData(message);
-			size_t rawLen    = NETmessageRawSize(message);
+			uint8_t *rawData = message->rawDataDup();
+			ssize_t rawLen   = message->rawLen();
 			result = writeAll(tcp_socket, rawData, rawLen);
-			NETmessageDestroyRawData(rawData);  // Done with the data.
+			delete[] rawData;  // Done with the data.
 
 			if (result == rawLen)
 			{
@@ -1280,6 +1296,7 @@ BOOL NETsend(uint8_t player, NETMESSAGE message)
 				SocketSet_DelSocket(socket_set, tcp_socket);            // mark it invalid
 				socketClose(tcp_socket);
 				tcp_socket = NULL;
+				bsocket = NULL;  // Because tcp_socket == bsocket...
 				NetPlay.players[NetPlay.hostPlayer].heartbeat = false;	// mark host as dead
 				//Game is pretty much over --should just end everything when HOST dies.
 				NetPlay.isHostAlive = false;
@@ -1295,7 +1312,7 @@ BOOL NETsend(uint8_t player, NETMESSAGE message)
 		NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_SEND_TO_PLAYER);
 			NETuint8_t(&sender);
 			NETuint8_t(&player);
-			NETNETMESSAGE(&message);
+			NETnetMessage(&message);
 		NETend();
 	}
 
@@ -1342,15 +1359,15 @@ static BOOL NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 		{
 			uint8_t sender;
 			uint8_t receiver;
-			NETMESSAGE message = NULL;
+			NetMessage const *message = NULL;
 			NETbeginDecode(playerQueue, NET_SEND_TO_PLAYER);
 				NETuint8_t(&sender);
 				NETuint8_t(&receiver);
-				NETNETMESSAGE(&message);  // Must destroy message later.
+				NETnetMessage(&message);  // Must delete message later.
+				std::auto_ptr<NetMessage const> deleteLater(message);
 			if (!NETend())
 			{
 				debug(LOG_ERROR, "Incomplete NET_SEND_TO_PLAYER.");
-				NETdestroyNETMESSAGE(message);
 				break;
 			}
 			if ((receiver == selectedPlayer || receiver == NET_ALL_PLAYERS) && playerQueue.index == NetPlay.hostPlayer)
@@ -1367,7 +1384,7 @@ static BOOL NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 				NETbeginEncode(NETnetQueue(receiver), NET_SEND_TO_PLAYER);
 					NETuint8_t(&sender);
 					NETuint8_t(&receiver);
-					NETNETMESSAGE(&message);
+					NETnetMessage(&message);
 				NETend();
 
 				if (receiver == NET_ALL_PLAYERS)
@@ -1382,14 +1399,13 @@ static BOOL NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 				debug(LOG_ERROR, "Player %d sent us a NET_SEND_TO_PLAYER addressed to %d from %d. We are %d.", playerQueue.index, receiver, sender, selectedPlayer);
 			}
 
-			NETdestroyNETMESSAGE(message);
 			break;
 		}
 		case NET_SHARE_GAME_QUEUE:
 		{
 			uint8_t player = 0;
 			uint32_t num = 0, n;
-			NETMESSAGE message = NULL;
+			NetMessage const *message = NULL;
 
 			// Encoded in NETprocessSystemMessage in nettypes.cpp.
 			NETbeginDecode(playerQueue, NET_SHARE_GAME_QUEUE);
@@ -1397,12 +1413,12 @@ static BOOL NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 				NETuint32_t(&num);
 				for (n = 0; n < num; ++n)
 				{
-					NETNETMESSAGE(&message);
+					NETnetMessage(&message);
 
 					// TODO Check that playerQueue is actually responsible for this game queue.
 					NETinsertMessageFromNet(NETgameQueue(player), message);
 
-					NETdestroyNETMESSAGE(message);
+					delete message;
 					message = NULL;
 				}
 			if (!NETend() || player > MAX_PLAYERS)
@@ -1425,7 +1441,8 @@ static BOOL NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 			int32_t colour = 0;
 			int32_t position = 0;
 			int32_t team = 0;
-			uint32_t hostPlayer = 0;
+			int8_t ai = 0;
+			int8_t difficulty = 0;
 			bool error = false;
 
 			NETbeginDecode(playerQueue, NET_PLAYER_INFO);
@@ -1449,7 +1466,6 @@ static BOOL NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 					if (index >= MAX_CONNECTED_PLAYERS || (playerQueue.index != NetPlay.hostPlayer && (playerQueue.index != index || !NetPlay.players[index].allocated)))
 					{
 						debug(LOG_ERROR, "MSG_PLAYER_INFO from %u: Player ID (%u) out of range (max %u)", playerQueue.index, index, (unsigned int)MAX_CONNECTED_PLAYERS);
-						NETend();
 						error = true;
 						break;
 					}
@@ -1466,6 +1482,8 @@ static BOOL NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 					NETint32_t(&position);
 					NETint32_t(&team);
 					NETbool(&NetPlay.players[index].ready);
+					NETint8_t(&ai);
+					NETint8_t(&difficulty);
 
 					// Don't let anyone except the host change these, otherwise it will end up inconsistent at some point, and the game gets really messed up.
 					if (playerQueue.index == NetPlay.hostPlayer)
@@ -1473,7 +1491,8 @@ static BOOL NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 						NetPlay.players[index].colour = colour;
 						NetPlay.players[index].position = position;
 						NetPlay.players[index].team = team;
-						//NetPlay.hostPlayer = hostPlayer;  // Huh?
+						NetPlay.players[index].ai = ai;
+						NetPlay.players[index].difficulty = difficulty;
 					}
 
 					debug(LOG_NET, "%s for player %u (%s)", n == 0? "Receiving MSG_PLAYER_INFO" : "                      and", (unsigned int)index, NetPlay.players[index].allocated ? "human" : "AI");
@@ -1485,7 +1504,6 @@ static BOOL NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 						printConsoleNameChange(oldName, NetPlay.players[index].name);
 					}
 				}
-				NETuint32_t(&hostPlayer);
 			NETend();
 			// If we're the game host make sure to send the updated
 			// data to all other clients as well.
@@ -1706,7 +1724,7 @@ checkMessages:
 		*queue = NETnetQueue(current);
 		while (NETisMessageReady(*queue))
 		{
-			*type = NETmessageType(NETgetMessage(*queue));
+			*type = NETgetMessage(*queue)->type;
 			if (!NETprocessSystemMessage(*queue, *type))
 			{
 				return true;  // We couldn't process the message, let the caller deal with it..
@@ -1727,7 +1745,7 @@ BOOL NETrecvGame(NETQUEUE *queue, uint8_t *type)
 		*queue = NETgameQueue(current);
 		while (!checkPlayerGameTime(current) && NETisMessageReady(*queue))  // Check for any messages that are scheduled to be read now.
 		{
-			*type = NETmessageType(NETgetMessage(*queue));
+			*type = NETgetMessage(*queue)->type;
 
 			if (*type == GAME_GAME_TIME)
 			{
@@ -2249,7 +2267,7 @@ static void NETallowJoining(void)
 
 				NETinsertRawData(NETnetTmpQueue(i), buffer, size);
 
-				if (NETisMessageReady(NETnetTmpQueue(i)) && NETmessageType(NETgetMessage(NETnetTmpQueue(i))) == NET_JOIN)
+				if (NETisMessageReady(NETnetTmpQueue(i)) && NETgetMessage(NETnetTmpQueue(i))->type == NET_JOIN)
 				{
 					uint8_t j;
 					uint8_t index;
@@ -2317,7 +2335,7 @@ static void NETallowJoining(void)
 						// Wrong password. Reject.
 						rejected = (uint8_t)ERROR_WRONGPASSWORD;
 					}
-					else if (NetPlay.playercount > gamestruct.desc.dwMaxPlayers)
+					else if ((int)NetPlay.playercount > gamestruct.desc.dwMaxPlayers)
 					{
 						// Game full. Reject.
 						rejected = (uint8_t)ERROR_FULL;
@@ -2425,7 +2443,6 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 		NETaddRedirects();
 	}
 	NET_InitPlayers();
-	NetPlay.maxPlayers = MAX_PLAYERS;
 	if(!NetPlay.bComms)
 	{
 		selectedPlayer			= 0;
@@ -2785,14 +2802,16 @@ BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
 
 	// Send a join message to the host
 	NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_JOIN);
-		// Casting constness away, because NETstring is const-incorrect
-		// when sending/encoding a packet.
-		NETstring((char*)playername, 64);
+		NETstring(playername, 64);
 		NETint32_t(&NETCODE_VERSION_MAJOR);
 		NETint32_t(&NETCODE_VERSION_MINOR);
 		NETstring(getModList(), modlist_string_size);
 		NETstring(NetPlay.gamePassword, sizeof(NetPlay.gamePassword));
 	NETend();
+	if (bsocket == NULL)
+	{
+		return false;  // Connection dropped while sending NET_JOIN.
+	}
 	socketFlush(bsocket);  // Make sure the message was completely sent.
 
 	i = SDL_GetTicks();
@@ -2983,6 +3002,10 @@ static uint32_t syncDebugCrcs[MAX_SYNC_HISTORY + 1];
 
 void _syncDebug(const char *function, const char *str, ...)
 {
+#ifdef WZ_CC_MSVC
+	char const *f = function; while (*f != '\0') if (*f++ == ':') function = f;  // Strip "Class::" from "Class::myFunction".
+#endif
+
 	va_list ap;
 	char outputBuffer[MAX_LEN_LOG_LINE];
 
@@ -3002,6 +3025,10 @@ void _syncDebug(const char *function, const char *str, ...)
 
 void _syncDebugBacktrace(const char *function)
 {
+#ifdef WZ_CC_MSVC
+	char const *f = function; while (*f != '\0') if (*f++ == ':') function = f;  // Strip "Class::" from "Class::myFunction".
+#endif
+
 	uint32_t backupCrc = syncDebugCrcs[syncDebugNext];  // Ignore CRC changes from _syncDebug(), since identical backtraces can be printed differently.
 
 #ifdef WZ_OS_LINUX

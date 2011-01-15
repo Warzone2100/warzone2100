@@ -27,11 +27,6 @@
 #include "basedef.h"
 #include "structure.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 /* Initialise the display system */
 extern BOOL dispInitialise(void);
 
@@ -92,10 +87,10 @@ extern UDWORD scroll_speed_accel;			// now user modifyable.
 
 struct	_dragBox
 {
-UDWORD	x1;
-UDWORD	y1;
-UDWORD	x2;
-UDWORD	y2;
+	int x1;
+	int y1;
+	int x2;
+	int y2;
 UDWORD	status;
 UDWORD	lastTime;
 UDWORD	pulse;
@@ -228,9 +223,5 @@ void AddDerrickBurningMessage(void);
 extern BOOL ctrlShiftDown(void);
 
 extern UDWORD getTargetType(void);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_DISPLAY_H__

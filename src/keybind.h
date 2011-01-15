@@ -24,11 +24,6 @@
 #include "console.h"
 #include "lib/framework/fixedpoint.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 // --------------- All those keyboard mappable functions */
 extern void	kf_HalveHeights( void );
 extern void	kf_DebugDroidInfo( void );
@@ -57,7 +52,9 @@ extern void	kf_LowerTile( void );
 extern void	kf_MapCheck( void );
 extern void	kf_SystemClose( void );
 extern void	kf_ZoomOut( void );
+void            kf_ZoomOutStep();
 extern void	kf_ZoomIn( void );
+void            kf_ZoomInStep();
 extern void	kf_ShrinkScreen( void );
 extern void	kf_ExpandScreen( void );
 extern void	kf_RotateLeft( void );
@@ -258,10 +255,5 @@ void    kf_ForceDesync(void);
 void	kf_PowerInfo( void );
 void	kf_BuildNextPage( void );
 void	kf_BuildPrevPage( void );
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
-
 
 #endif // __INCLUDED_SRC_KEYBIND_H__

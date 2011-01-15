@@ -31,13 +31,12 @@
 #include "lib/framework/strres.h"
 #include "lib/framework/crc.h"
 #include "lib/gamelib/parser.h"
-#include "lib/ivis_common/bitimage.h"
 
 // Lua
 #include "lib/lua/warzone.h"
 
-
-#include "lib/ivis_common/tex.h"
+#include "lib/ivis_opengl/bitimage.h"
+#include "lib/ivis_opengl/tex.h"
 #include "lib/script/script.h"
 #include "lib/sound/audio.h"
 

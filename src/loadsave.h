@@ -21,11 +21,6 @@
 #ifndef __INCLUDED_SRC_LOADSAVE_H__
 #define __INCLUDED_SRC_LOADSAVE_H__
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 /***************************************************************************/
 /*
  *	Global Definitions
@@ -76,9 +71,5 @@ BOOL saveMidMission(void);
 
 
 extern void deleteSaveGame(char* saveGameName);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_SRC_LOADSAVE_H__
