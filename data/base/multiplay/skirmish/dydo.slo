@@ -242,7 +242,7 @@ public STRUCTURESTAT HMGhardPoint,MGbunker,miniRocketTower,LancerTower, powModul
 public STRUCTURESTAT defMortar,defBombard, defPepperpot,defRippleRockets;
 public RESEARCHSTAT WhirlwindAASite,CycloneAASite,HurricaneAASite;
 public RESEARCHSTAT AASite,VTOLPadRes,lancerATweap;
-public int nStat,aStat[20][8],structsLimits[4][4],structsBuildLimits[4][4],numDefStructs,minDefDroids[4][3];
+public int nStat,aStat[20][17],structsLimits[4][4],structsBuildLimits[4][4],numDefStructs,minDefDroids[4][3];
 
 //keep even if not used
 public RESEARCHSTAT nexusDefence, powerAddOn;
@@ -289,7 +289,7 @@ private BASEOBJ baseobj;
 private INT count,count1,count2,count3,count4;
 private BOOL boolResult,boolResult2,boolResult3;
 
-private INT aPlayers[8][8];
+private INT aPlayers[17][17];
 
 public BASEOBJ lassatTarget,myBaseObject,enemyBaseObject;
 
@@ -389,7 +389,7 @@ public PROPULSION Half_Track,TrackedProp,HoverProp;
 public BODY Viper;
 
 //communication
-private int			_sender,sender, x, y, tBeaconTimeout, beaconX[8], beaconY[8], tBeacon[8];
+private int			_sender,sender, x, y, tBeaconTimeout, beaconX[17], beaconY[17], tBeacon[17];
 private int     lastHelpPlayer, _fromPlayer, _choice;
 private string	message,_message,_cstr;
 private bool    _bBlipMessage,_bToHuman;
@@ -4154,8 +4154,8 @@ event manageRepairTeam(inactive)
 // =====================================================================
 event updateBaseDetails(inactive) 
 {
-  ASSERT(player >= 0 and player < 8,      "player out of bounds: updateBaseDetails " & player, player);
-  eventCheckTime[8] = gameTime;
+  ASSERT(player >= 0 and player < 17,      "player out of bounds: updateBaseDetails " & player, player);
+  eventCheckTime[17] = gameTime;
 
   updateBaseRange();
   updateBaseCoord();
