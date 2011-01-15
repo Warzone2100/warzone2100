@@ -152,3 +152,4 @@ X-Super-MassDriver,DOOR,Level All,HARD,0,2,2,Concrete,1600,3,15,3200,10,1800,10,
 X-Super-Missile,DOOR,Level All,HARD,0,2,2,Concrete,1600,3,15,3200,10,1600,10,100,255,1,ZNULLECM,FortressSensor,1,STWPFCAN.PIE,0,0,1
 X-Super-Rocket,DOOR,Level All,HARD,0,2,2,Concrete,1600,3,15,3200,10,1250,10,100,255,1,ZNULLECM,FortressSensor,1,STWPFCAN.PIE,0,0,1
 Sys-RadarDetector01,DEFENSE,Level All,MEDIUM,0,1,1,Concrete,400,2,15,600,10,100,10,150,255,1,ZNULLECM,RadarDetector,0,BLGUARDR.pie,0,0,0
+ECM1PylonMk1,DEFENSE,Level All,MEDIUM,0,1,1,Concrete,300,3,10,300,0,60,10,150,255,0,ECM1TurretMk1,DefaultSensor1Mk1,0,blguardr.pie,0,0,0
