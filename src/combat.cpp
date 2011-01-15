@@ -262,14 +262,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	// increment the shots counter
 	psWeap->shotsFired++;
 
-	// visibility modifiers
-	//if (psTarget->visible[psAttacker->player] < VIS_ATTACK_MOD_LEVEL)
-	if (psTarget->visible[psAttacker->player] == 0)		//not sure if this can ever be > 0 here
-	{
-		resultHitChance = INVISIBLE_ACCURACY_PENALTY * resultHitChance / 100;
-	}
-
-	//Watermelon:predicted X,Y offset per sec
+	// predicted X,Y offset per sec
 	Vector3i predict = psTarget->pos;
 
 	//Watermelon:Target prediction

@@ -58,7 +58,6 @@ extern DROID_TEMPLATE			*apsStaticTemplates;			// for AIs and scripts
 
 /* Misc accuracy modifiers */
 #define	FOM_PARTIAL_ACCURACY_PENALTY	50	// penalty for not being fully able to fire while moving, in %
-#define	INVISIBLE_ACCURACY_PENALTY		50	// accuracy penalty for the unit firing at a target it can't see, in %
 
 /* Minumum number of droids a commander can control in its group */
 #define	MIN_CMD_GROUP_DROIDS	6
@@ -402,11 +401,6 @@ static inline int droidSensorRange(const DROID* psDroid)
 static inline int droidSensorPower(const DROID* psDroid)
 {
 	return objSensorPower((const BASE_OBJECT*)psDroid);
-}
-
-static inline int droidJammerRange(const DROID* psDroid)
-{
-	return objJammerRange((const BASE_OBJECT*)psDroid);
 }
 
 static inline int droidJammerPower(const DROID* psDroid)

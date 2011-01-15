@@ -101,26 +101,6 @@ void visUpdateLevel(void)
 	visLevelDecAcc -= visLevelDec;
 }
 
-// Adjust power by range
-static int adjustPowerByRange(int x1, int y1, int x2, int y2, int range, int power)
-{
-	// Original Pumpkin algorithm cleaned up and put into use
-	int	distSq = (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2);
-	int	rangeSq = range * range;
-	float	mod;
-
-	if (rangeSq > 0 && distSq > 0 && power > 0)
-	{
-		mod = distSq / rangeSq;
-	}
-	else
-	{
-		return 0;
-	}
-
-	return	power - power * mod;
-}
-
 static int visObjHeight(const BASE_OBJECT * psObject)
 {
 	switch (psObject->type)
@@ -465,40 +445,29 @@ int visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool
 		return 0;
 	}
 
-	int power = adjustPowerByRange(psViewer->pos.x, psViewer->pos.y, psTarget->pos.x, psTarget->pos.y, range, objSensorPower(psViewer));
+	// initialise the callback variables
+	VisibleObjectHelp_t help = { true, wallsBlock, psViewer->pos.z + visObjHeight(psViewer), map_coord(removeZ(psTarget->pos)), 0, 0, -UBYTE_MAX * GRAD_MUL * ELEVATION_SCALE, 0, Vector2i(0, 0)};
+	int targetGrad, top;
+
+	// Cast a ray from the viewer to the target
+	rayCast(psViewer->pos, iAtan2(diff), dist, rayLOSCallback, &help);
+
+	if (gWall != NULL && gNumWalls != NULL) // Out globals are set
 	{
-		// initialise the callback variables
-		VisibleObjectHelp_t help = { true, wallsBlock, psViewer->pos.z + visObjHeight(psViewer), map_coord(removeZ(psTarget->pos)), 0, 0, -UBYTE_MAX * GRAD_MUL * ELEVATION_SCALE, 0, Vector2i(0, 0)};
-		int targetGrad, top;
+		*gWall = help.wall;
+		*gNumWalls = help.numWalls;
+	}
 
-		// Cast a ray from the viewer to the target
-		rayCast(psViewer->pos, iAtan2(diff), dist, rayLOSCallback, &help);
+	// See if the target can be seen
+	top = psTarget->pos.z + visObjHeight(psTarget) - help.startHeight;
+	targetGrad = top * GRAD_MUL / MAX(1, help.lastDist);
 
-		if (gWall != NULL && gNumWalls != NULL) // Out globals are set
-		{
-			*gWall = help.wall;
-			*gNumWalls = help.numWalls;
-		}
-
-		// See if the target can be seen
-		top = psTarget->pos.z + visObjHeight(psTarget) - help.startHeight;
-		targetGrad = top * GRAD_MUL / MAX(1, help.lastDist);
-
-		if (targetGrad >= help.currGrad)
-		{
-			if (power > objJammerPower(psTarget))
-			{
-				return UBYTE_MAX;
-			}
-			else
-			{
-				return UBYTE_MAX / 2;
-			}
-		}
+	if (targetGrad >= help.currGrad)
+	{
+		return UBYTE_MAX;
 	}
 	return 0;
 }
-
 
 // Find the wall that is blocking LOS to a target (if any)
 STRUCTURE* visGetBlockingWall(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget)

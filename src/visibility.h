@@ -77,14 +77,9 @@ static inline int objSensorPower(const BASE_OBJECT* psObj)
 	return psObj->sensorPower;
 }
 
-static inline int objJammerPower(WZ_DECL_UNUSED const BASE_OBJECT* psObj)
+static inline int objJammerPower(const BASE_OBJECT* psObj)
 {
-	return 0;
-}
-
-static inline int objJammerRange(WZ_DECL_UNUSED const BASE_OBJECT* psObj)
-{
-	return 0;
+	return psObj->ECMMod;
 }
 
 static inline int objConcealment(const BASE_OBJECT* psObj)
