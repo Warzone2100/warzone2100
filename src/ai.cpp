@@ -548,7 +548,7 @@ SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot
 			targetInQuestion = NULL;
 
 			/* Can we see what it is doing? */
-			if(friendlyObj->visible[psDroid->player])
+			if(friendlyObj->visible[psDroid->player] == UBYTE_MAX)
 			{
 				if(friendlyObj->type == OBJ_DROID)
 				{
@@ -587,7 +587,7 @@ SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot
 		if (targetInQuestion != NULL
 		    && targetInQuestion != (BASE_OBJECT *)psDroid		// in case friendly unit had me as target
 		    && (targetInQuestion->type == OBJ_DROID || targetInQuestion->type == OBJ_STRUCTURE || targetInQuestion->type == OBJ_FEATURE)
-		    && targetInQuestion->visible[psDroid->player]
+		    && targetInQuestion->visible[psDroid->player] == UBYTE_MAX
 		    && !aiCheckAlliances(targetInQuestion->player,psDroid->player)
 		    && validTarget((BASE_OBJECT *)psDroid, targetInQuestion, weapon_slot)
 		    && aiDroidHasRange(psDroid, targetInQuestion, weapon_slot))
@@ -886,7 +886,7 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 				/* Check that it is a valid target */
 				if (psCurr->type != OBJ_FEATURE && !aiObjectIsProbablyDoomed(psCurr) && aiStructHasRange((STRUCTURE *)psObj, psCurr, weapon_slot)
 				    && !aiCheckAlliances(psCurr->player, psObj->player)
-				    && validTarget(psObj, psCurr, weapon_slot) && psCurr->visible[psObj->player])
+				    && validTarget(psObj, psCurr, weapon_slot) && psCurr->visible[psObj->player] == UBYTE_MAX)
 				{
 					// See if in sensor range and visible
 					int distSq = objPosDiffSq(psCurr->pos, psObj->pos);
@@ -1015,7 +1015,7 @@ BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 					const int ydiff = psCurr->pos.y - psObj->pos.y;
 					const unsigned int distSq = xdiff * xdiff + ydiff * ydiff;
 
-					if (distSq < radSquared && psCurr->visible[psObj->player] && distSq < tarDist)
+					if (distSq < radSquared && psCurr->visible[psObj->player] == UBYTE_MAX && distSq < tarDist)
 					{
 						psTemp = psCurr;
 						tarDist = distSq;
