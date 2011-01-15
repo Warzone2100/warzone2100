@@ -224,7 +224,14 @@ static std::vector<AIDATA> aidata;
 
 const char *getAIName(int player)
 {
-	return aidata[NetPlay.players[player].ai].name;
+	if (NetPlay.players[player].ai >= 0)
+	{
+		return aidata[NetPlay.players[player].ai].name;
+	}
+	else
+	{
+		return "";
+	}
 }
 
 int getNextAIAssignment(const char *name)
@@ -281,16 +288,11 @@ void loadMultiScripts()
 	resForceBaseDir("multiplay/skirmish/");
 	for (int i = 0; i < game.maxPlayers; i++)
 	{
-		if (bMultiPlayer && game.type == SKIRMISH && !NetPlay.players[i].allocated && NetPlay.players[i].ai >= 0)
+		// The i == selectedPlayer hack is to enable autogames
+		if (bMultiPlayer && game.type == SKIRMISH && (!NetPlay.players[i].allocated || i == selectedPlayer) && NetPlay.players[i].ai >= 0)
 		{
 			resLoadFile("SCRIPT", aidata[NetPlay.players[i].ai].slo);
 			resLoadFile("SCRIPTVAL", aidata[NetPlay.players[i].ai].vlo);
-		}
-		else if (bMultiPlayer && game.type == SKIRMISH)
-		{
-			// Load default scripts for non-AI players (useful for autogames)
-			resLoadFile("SCRIPT", "nexus.slo");
-			resLoadFile("SCRIPTVAL", "nexus.vlo");
 		}
 	}
 
@@ -496,6 +498,10 @@ int matchAIbyName(const char *name)
 	std::vector<AIDATA>::iterator it;
 	int i = 0;
 
+	if (name[0] == '\0')
+	{
+		return AI_CLOSED;
+	}
 	for (it = aidata.begin(); it < aidata.end(); it++, i++)
 	{
 		if (strncasecmp(name, (*it).name, MAX_LEN_AI_NAME) == 0)
@@ -1625,19 +1631,41 @@ static void addAiChooser(int player)
 
 	addSideText(FRONTEND_SIDETEXT2, MULTIOP_PLAYERSX - 3, MULTIOP_PLAYERSY, _("CHOOSE AI"));
 
-	int num = aidata.size();
+	W_BUTINIT sButInit;
+	sButInit.formID = MULTIOP_AI_FORM;
+	sButInit.x = 7;
+	sButInit.width = MULTIOP_PLAYERWIDTH + 1;
+	sButInit.height = MULTIOP_PLAYERHEIGHT;
+	sButInit.pDisplay = displayAi;
 
-	for (int i = 0; i < num; i++)
+	int y = 4;
+	const int step = (MULTIOP_PLAYERHEIGHT + 5);
+
+	// Open button
+	if (NetPlay.bComms)
 	{
-		W_BUTINIT sButInit;
-		sButInit.formID = MULTIOP_AI_FORM;
-		sButInit.id = MULTIOP_AI_START + i;
-		sButInit.x = 7;
-		sButInit.y = (MULTIOP_PLAYERHEIGHT + 5) * i + 4;
-		sButInit.width = MULTIOP_PLAYERWIDTH + 1;
-		sButInit.height = MULTIOP_PLAYERHEIGHT;
+		sButInit.id = MULTIOP_AI_OPEN;
+		sButInit.pTip = _("Allow human players to join in this slot");
+		sButInit.UserData = AI_OPEN;
+		sButInit.y = y;
+		y += step;
+		widgAddButton(psWScreen, &sButInit);
+	}
+
+	// Closed button
+	sButInit.pTip = _("Leave this slot unused");
+	sButInit.id = MULTIOP_AI_CLOSED;
+	sButInit.UserData = AI_CLOSED;
+	sButInit.y = y;
+	y += step + 8;
+	widgAddButton(psWScreen, &sButInit);
+
+	for (int i = 0; i < aidata.size(); i++)
+	{
+		sButInit.y = y;
+		y += step;
 		sButInit.pTip = aidata[i].tip;
-		sButInit.pDisplay = displayAi;
+		sButInit.id = MULTIOP_AI_START + i;
 		sButInit.UserData = i;
 		widgAddButton(psWScreen, &sButInit);
 	}
@@ -2214,7 +2242,7 @@ void addPlayerBox(BOOL players)
 				{
 					addTeamChooser(i);
 				}
-				else if (game.skDiff[i] && game.alliance == ALLIANCES_TEAMS)
+				else if (game.alliance == ALLIANCES_TEAMS)
 				{
 					// only if not disabled and in locked teams mode
 					widgAddButton(psWScreen, &sButInit);
@@ -2426,7 +2454,7 @@ static void stopJoining(void)
 			NETclose();										// quit running game.
 			bHosted = false;								// stop host mode.
 			widgDelete(psWScreen,FRONTEND_BACKDROP);		// refresh options screen.
-			startMultiOptions(true);
+			startMultiOptions(false);
 			ingame.localJoiningInProgress = false;
 			NETremRedirects();
 			return;
@@ -2817,8 +2845,22 @@ static void processMultiopWidgets(UDWORD id)
 	case MULTIOP_MAP_BUT:
 		loadMapPreview(true);
 		break;
+	case MULTIOP_AI_CLOSED:
+		NetPlay.players[aiChooserUp].ai = AI_CLOSED;
+		break;
+	case MULTIOP_AI_OPEN:
+		NetPlay.players[aiChooserUp].ai = AI_OPEN;
+		break;
 	default:
 		break;
+	}
+
+	if (id == MULTIOP_AI_CLOSED || id == MULTIOP_AI_OPEN)		// common code
+	{
+		game.skDiff[aiChooserUp] = 0;   // disable AI for this slot
+		NETBroadcastPlayerInfo(aiChooserUp);
+		closeAiChooser();
+		addPlayerBox(!ingame.bHostSetup || bHosted);
 	}
 
 	if (id >= MULTIOP_DIFFICULTY_CHOOSE_START && id <= MULTIOP_DIFFICULTY_CHOOSE_END)
@@ -2835,6 +2877,7 @@ static void processMultiopWidgets(UDWORD id)
 	{
 		int idx = id - MULTIOP_AI_START;
 		NetPlay.players[aiChooserUp].ai = idx;
+		game.skDiff[aiChooserUp] = difficultyValue[NetPlay.players[aiChooserUp].difficulty];    // set difficulty, in case re-enabled
 		NETBroadcastPlayerInfo(aiChooserUp);
 		closeAiChooser();
 		addPlayerBox(!ingame.bHostSetup || bHosted);
@@ -3655,7 +3698,10 @@ void displayTeamChooser(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIG
 
 	drawBlueBox(x,y,psWidget->width,psWidget->height);							// right
 
-	iV_DrawImage(FrontImages, IMAGE_TEAM0 + NetPlay.players[i].team, x + 2, y + 8);
+	if (game.skDiff[i])
+	{
+		iV_DrawImage(FrontImages, IMAGE_TEAM0 + NetPlay.players[i].team, x + 2, y + 8);
+	}
 }
 
 void displayPosition(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
@@ -3674,11 +3720,12 @@ static void displayAi(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT
 	const int x = xOffset + psWidget->x;
 	const int y = yOffset + psWidget->y;
 	const int j = psWidget->UserData;
+	const char *commsText[] = { "Open", "Closed" };
 
 	drawBlueBox(x, y, psWidget->width, psWidget->height);
 	iV_SetFont(font_regular);
 	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
-	iV_DrawText(aidata[j].name, x + 10, y + 22);
+	iV_DrawText((j >= 0) ? aidata[j].name : commsText[j + 2], x + 10, y + 22);
 }
 
 static int difficultyIcon(int difficulty)
@@ -3860,8 +3907,13 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 		}
 		iV_SetFont(font_regular);
 		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
-		ASSERT_OR_RETURN(, NetPlay.players[j].ai < aidata.size(), "Uh-oh, AI index out of bounds");
-		sstrcpy(aitext, aidata[NetPlay.players[j].ai].name);
+		ASSERT_OR_RETURN(, NetPlay.players[j].ai < (int)aidata.size(), "Uh-oh, AI index out of bounds");
+		switch (NetPlay.players[j].ai)
+		{
+		case AI_OPEN: sstrcpy(aitext, "Open"); break;
+		case AI_CLOSED: sstrcpy(aitext, "Closed"); break;
+		default: sstrcpy(aitext, aidata[NetPlay.players[j].ai].name); break;
+		}
 		iV_DrawText(aitext, x + 32, y + 22);
 	}
 }
@@ -3872,9 +3924,9 @@ void displayColour(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 	const int y = yOffset + psWidget->y;
 	const int j = psWidget->UserData;
 
+	drawBlueBox(x, y, psWidget->width, psWidget->height);
 	if (!NetPlay.players[j].wzFile.isSending && game.skDiff[j])
 	{
-		drawBlueBox(x, y, psWidget->width, psWidget->height);
 		int player = getPlayerColour(j);
 		STATIC_ASSERT(MAX_PLAYERS <= 16);
 		iV_DrawImage(FrontImages, IMAGE_PLAYER0 + player, x + 7, y + 9);

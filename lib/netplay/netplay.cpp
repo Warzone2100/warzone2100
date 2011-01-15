@@ -369,7 +369,7 @@ static signed int NET_CreatePlayer(const char* name)
 
 	for (index = 0; index < MAX_CONNECTED_PLAYERS; index++)
 	{
-		if (NetPlay.players[index].allocated == false)
+		if (NetPlay.players[index].allocated == false && NetPlay.players[index].ai == AI_OPEN)
 		{
 			char buf[250] = {'\0'};
 
