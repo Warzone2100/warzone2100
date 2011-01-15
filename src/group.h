@@ -64,14 +64,10 @@ unsigned int grpNumMembers(const DROID_GROUP* psGroup);
 // remove all droids from a group
 void grpReset(DROID_GROUP *psGroup);
 
-/* Give a group an order */
+// Give a group of droids an order
 void orderGroup(DROID_GROUP *psGroup, DROID_ORDER order);
-
-/* Give a group of droids an order */
-void orderGroupLoc(DROID_GROUP *psGroup, DROID_ORDER order, UDWORD x, UDWORD y);
-
-/* Give a group of droids an order */
-void orderGroupObj(DROID_GROUP *psGroup, DROID_ORDER order, BASE_OBJECT *psObj);
+void orderGroup(DROID_GROUP *psGroup, DROID_ORDER order, UDWORD x, UDWORD y);
+void orderGroup(DROID_GROUP *psGroup, DROID_ORDER order, BASE_OBJECT *psObj);
 
 /* set the secondary state for a group of droids */
 void grpSetSecondary(DROID_GROUP *psGroup, SECONDARY_ORDER sec, SECONDARY_STATE state);

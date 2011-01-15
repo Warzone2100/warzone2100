@@ -438,7 +438,7 @@ BOOL scrOrderGroupLoc(void)
 
 	debug(LOG_NEVER, "group %p (%u) order %d (%d,%d)",
 		psGroup, grpNumMembers(psGroup), order, x,y);
-	orderGroupLoc(psGroup, order, (UDWORD)x,(UDWORD)y);
+	orderGroup(psGroup, order, (UDWORD)x,(UDWORD)y);
 
 	return true;
 }
@@ -478,7 +478,7 @@ BOOL scrOrderGroupObj(void)
 	debug(LOG_NEVER, "group %p (%u) order %d,  obj type %d player %d id %d",
 		psGroup, grpNumMembers(psGroup), order, psObj->type, psObj->player, psObj->id);
 
-	orderGroupObj(psGroup, order, psObj);
+	orderGroup(psGroup, order, psObj);
 
 	return true;
 }

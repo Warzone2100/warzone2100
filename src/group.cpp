@@ -265,7 +265,7 @@ void grpReset(DROID_GROUP *psGroup)
 	}
 }
 
-/* Give a group an order */
+// Give a group of droids an order
 void orderGroup(DROID_GROUP *psGroup, DROID_ORDER order)
 {
 	DROID *psCurr;
@@ -280,15 +280,15 @@ void orderGroup(DROID_GROUP *psGroup, DROID_ORDER order)
 	}
 }
 
-/* Give a group of droids an order */
-void orderGroupLoc(DROID_GROUP *psGroup, DROID_ORDER order, UDWORD x, UDWORD y)
+// Give a group of droids an order (using a Location)
+void orderGroup(DROID_GROUP *psGroup, DROID_ORDER order, UDWORD x, UDWORD y)
 {
 	DROID	*psCurr;
 
 	ASSERT(grpInitialized, "Group code not initialized yet");
 	ASSERT_OR_RETURN(, psGroup != NULL,
 		"orderGroupLoc: invalid droid group" );
-	ASSERT_OR_RETURN(, validOrderForLoc(order), "orderGroupLoc: Bad order");
+	ASSERT_OR_RETURN(, validOrderForLoc(order), "orderGroup: Bad order");
 
 	for (psCurr = psGroup->psList; psCurr != NULL; psCurr = psCurr->psGrpNext)
 	{
@@ -296,14 +296,14 @@ void orderGroupLoc(DROID_GROUP *psGroup, DROID_ORDER order, UDWORD x, UDWORD y)
 	}
 }
 
-/* Give a group of droids an order */
-void orderGroupObj(DROID_GROUP *psGroup, DROID_ORDER order, BASE_OBJECT *psObj)
+// Give a group of droids an order (using an Object)
+void orderGroup(DROID_GROUP *psGroup, DROID_ORDER order, BASE_OBJECT *psObj)
 {
 	DROID	*psCurr;
 
 	ASSERT_OR_RETURN(, psGroup != NULL,
-		"orderGroupObj: invalid droid group" );
-	ASSERT_OR_RETURN(, validOrderForObj(order), "orderGroupObj: Bad order");
+		"orderGroup: invalid droid group" );
+	ASSERT_OR_RETURN(, validOrderForObj(order), "orderGroup: Bad order");
 
 	for (psCurr = psGroup->psList; psCurr != NULL; psCurr = psCurr->psGrpNext)
 	{
