@@ -1706,6 +1706,8 @@ R-Sys-RadarDetector01			_("Radar Detector")
 
 SK-Veng-Track-C6TwinAslt	"*SK-Veng-Track-C6TwinAslt*"
 SK-Veng-Track-HvyLaser		"*SK-Veng-Track-HvyLaser*"
+SK-Veng-Hover-Seraph		"*SK-Veng-Hover-Seraph*"
+Dragon-Hover-SeraphGauss	"*SK-Dragon-Hover-SeraphGauss*"
 
 AutoRepair					"Auto Repair"
 
