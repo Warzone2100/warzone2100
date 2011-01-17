@@ -671,9 +671,7 @@ bool seq_Play(const char* filename)
 	/* open video */
 	if (theora_p)
 	{
-		char *blackframe = (char *)calloc(1, texture_width * texture_height * 4);
-		if (videodata.ti.frame_width > texture_width ||
-				videodata.ti.frame_height > texture_height)
+		if (videodata.ti.frame_width > texture_width || videodata.ti.frame_height > texture_height)
 		{
 			debug(LOG_ERROR, "Video size too large, must be below %dx%d!",
 					texture_width, texture_height);
@@ -684,6 +682,7 @@ bool seq_Play(const char* filename)
 			debug(LOG_ERROR, "Video not in YUV420 format!");
 			return false;
 		}
+		char *blackframe = (char *)calloc(1, texture_width * texture_height * 4);
 		Allocate_videoFrame();
 
 		glGenTextures(1, &video_texture);

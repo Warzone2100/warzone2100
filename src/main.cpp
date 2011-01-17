@@ -270,14 +270,13 @@ void clearOverrideMods(void)
 
 void addLoadedMod(const char * modname)
 {
-	char * mod = strdup(modname);
-	int i, modlen;
 	if (num_loaded_mods >= MAX_MODS)
 	{
 		// mod list full
 		return;
 	}
-	modlen = strlen(mod);
+	char *mod = strdup(modname);
+	int modlen = strlen(mod);
 	if (modlen >= 3 && strcmp(&mod[modlen-3], ".wz")==0)
 	{
 		// remove ".wz" from end
@@ -305,7 +304,8 @@ void addLoadedMod(const char * modname)
 	// Yes, this is an online insertion sort.
 	// I swear, for the numbers of mods this is going to be dealing with
 	// (i.e. 0 to 2), it really is faster than, say, Quicksort.
-	for (i=0; i<num_loaded_mods && strcmp(loaded_mods[i], mod)>0; i++) {}
+	int i;
+	for (i = 0; i < num_loaded_mods && strcmp(loaded_mods[i], mod) > 0; i++) {}
 	if (i < num_loaded_mods)
 	{
 		if (strcmp(loaded_mods[i], mod) == 0)
