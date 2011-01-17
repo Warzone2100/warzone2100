@@ -265,8 +265,8 @@ static void proj_UpdateKills(PROJECTILE *psObj, float experienceInc)
 
 	CHECK_PROJECTILE(psObj);
 
-	if ((psObj->psSource == NULL) ||
-		((psObj->psDest != NULL) && (psObj->psDest->type == OBJ_FEATURE)))
+	if (psObj->psSource == NULL || (psObj->psDest && psObj->psDest->type == OBJ_FEATURE)
+	    || (psObj->psDest && psObj->psSource->player == psObj->psDest->player))	// no exp for friendly fire
 	{
 		return;
 	}
