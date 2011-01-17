@@ -235,7 +235,7 @@ run
 	// COMBAT TEMPLATES
 
 	//branchDefault
-	numTemplates[0]	int			47
+	numTemplates[0]	int			48
 	
 	tmpl[0][0]	TEMPLATE	"ViperMG01Wheels"		//MG
 	tmpl[0][1]	TEMPLATE	"ViperMG02Wheels"		//TMG
@@ -297,7 +297,8 @@ run
 	tmpl[0][44]	TEMPLATE	"SK-Veng-Track-PulseLsr"
 	tmpl[0][45]	TEMPLATE	"SK-Veng-Hover-Scourge"
 
-	tmpl[0][46]	TEMPLATE	"SK-Veng-Track-HvyLaser"
+	tmpl[0][46]	TEMPLATE	"SK-Veng-Hover-Seraph"
+	tmpl[0][47]	TEMPLATE	"Dragon-Hover-SeraphGauss"
 	
 	
 	//branchVTOL
