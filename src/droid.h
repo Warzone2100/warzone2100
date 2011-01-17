@@ -398,11 +398,6 @@ static inline int droidSensorRange(const DROID* psDroid)
 	return objSensorRange((const BASE_OBJECT*)psDroid);
 }
 
-static inline int droidSensorPower(const DROID* psDroid)
-{
-	return objSensorPower((const BASE_OBJECT*)psDroid);
-}
-
 static inline int droidJammerPower(const DROID* psDroid)
 {
 	return objJammerPower((const BASE_OBJECT*)psDroid);

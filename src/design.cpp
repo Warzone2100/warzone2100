@@ -1517,7 +1517,7 @@ static BOOL _intSetSystemForm(COMPONENT_STATS *psStats)
 		sBarInit.precision = 0;
 		sBarInit.id = IDDES_SENSORPOWER;
 		sBarInit.y = DES_STATBAR_Y2;	//+= DES_CLICKBARHEIGHT + DES_CLICKGAP;
-		sBarInit.iRange = (UWORD)getMaxSensorPower();//DBAR_SENSORMAXPOWER;
+		sBarInit.iRange = (UDWORD)getMaxSensorRange();	// FIXME: Remove
 		sBarInit.pTip = _("Sensor Power");
 		if (!widgAddBarGraph(psWScreen, &sBarInit))
 		{
@@ -1562,7 +1562,7 @@ static BOOL _intSetSystemForm(COMPONENT_STATS *psStats)
 	{
 		/* Add the bar graphs */
 		sBarInit.id = IDDES_ECMPOWER;
-		sBarInit.iRange = (UWORD)getMaxECMPower();//DBAR_ECMMAXPOWER;
+		sBarInit.iRange = (UWORD)getMaxECMRange();
 		sBarInit.pTip = _("ECM Power");
 		if (!widgAddBarGraph(psWScreen, &sBarInit))
 		{
@@ -2629,11 +2629,9 @@ static void intSetSensorStats(SENSOR_STATS *psStats)
 			(psStats->ref < REF_SENSOR_START + REF_RANGE), "stats ref is out of range");
 
 	/* range */
-	widgSetBarSize(psWScreen, IDDES_SENSORRANGE,
-		sensorRange(psStats, (UBYTE)selectedPlayer));
+	widgSetBarSize(psWScreen, IDDES_SENSORRANGE, sensorRange(psStats, selectedPlayer));
 	/* power */
-	widgSetBarSize(psWScreen, IDDES_SENSORPOWER,
-		sensorPower(psStats, (UBYTE)selectedPlayer));
+	widgSetBarSize(psWScreen, IDDES_SENSORPOWER, 0);	// FIXME: Remove
 	/* weight */
 	widgSetBarSize(psWScreen, IDDES_SENSORWEIGHT, psStats->weight);
 }
@@ -2652,8 +2650,7 @@ static void intSetSensorShadowStats(SENSOR_STATS *psStats)
 		widgSetMinorBarSize(psWScreen, IDDES_SENSORRANGE,
 			sensorRange(psStats, (UBYTE)selectedPlayer));
 		/* power */
-		widgSetMinorBarSize(psWScreen, IDDES_SENSORPOWER,
-			sensorPower(psStats, (UBYTE)selectedPlayer));
+		widgSetMinorBarSize(psWScreen, IDDES_SENSORPOWER, 0);	// FIXME: Remove
 		/* weight */
 		widgSetMinorBarSize(psWScreen, IDDES_SENSORWEIGHT, psStats->weight);
 	}
@@ -2674,9 +2671,8 @@ static void intSetECMStats(ECM_STATS *psStats)
 	ASSERT_OR_RETURN( , (psStats->ref >= REF_ECM_START) &&
 			(psStats->ref < REF_ECM_START + REF_RANGE), "stats ref is out of range");
 
-	/* power */
-	widgSetBarSize(psWScreen, IDDES_ECMPOWER,
-		ecmPower(psStats, (UBYTE)selectedPlayer));
+	/* range */
+	widgSetBarSize(psWScreen, IDDES_ECMPOWER, ecmRange(psStats, selectedPlayer));
 	/* weight */
 	widgSetBarSize(psWScreen, IDDES_ECMWEIGHT, psStats->weight);
 }
@@ -2692,8 +2688,7 @@ static void intSetECMShadowStats(ECM_STATS *psStats)
 	if (psStats)
 	{
 		/* power */
-		widgSetMinorBarSize(psWScreen, IDDES_ECMPOWER,
-			ecmPower(psStats, (UBYTE)selectedPlayer));
+		widgSetMinorBarSize(psWScreen, IDDES_ECMPOWER, ecmRange(psStats, (UBYTE)selectedPlayer));
 		/* weight */
 		widgSetMinorBarSize(psWScreen, IDDES_ECMWEIGHT, psStats->weight);
 	}

@@ -220,9 +220,8 @@ void printDroidInfo(const DROID* psDroid)
 
 	printBaseObjInfo((BASE_OBJECT *)psDroid);
 
-	CONPRINTF(ConsoleString,(ConsoleString,"   wt %d bSpeed %d sRng %d sPwr %d ECM %d bdy %d\n",
-		psDroid->weight, psDroid->baseSpeed, droidSensorRange(psDroid),
-		droidSensorPower(psDroid), droidConcealment(psDroid), psDroid->body));
+	CONPRINTF(ConsoleString,(ConsoleString,"   wt %d bSpeed %d sRng %d ECM %d bdy %d\n",
+		psDroid->weight, psDroid->baseSpeed, droidSensorRange(psDroid), droidConcealment(psDroid), psDroid->body));
 
 	if (psDroid->asWeaps[0].nStat > 0)
 	{
@@ -267,9 +266,9 @@ void printDroidInfo(const DROID* psDroid)
 				CONPRINTF(ConsoleString,(ConsoleString,"ECM: "));
 				psECMStats = asECMStats + psDroid->asBits[i].nStat;
 				printComponentInfo((COMPONENT_STATS *)psECMStats);
-				CONPRINTF(ConsoleString,(ConsoleString,"   pwr %d loc %d imd %p\n",
+				CONPRINTF(ConsoleString,(ConsoleString,"   range %d loc %d imd %p\n",
 					//psECMStats->power, psECMStats->location, psECMStats->pMountGraphic));
-					ecmPower(psECMStats, psDroid->player), psECMStats->location,
+					ecmRange(psECMStats, psDroid->player), psECMStats->location,
 					psECMStats->pMountGraphic));
 			}
 			else
@@ -283,9 +282,8 @@ void printDroidInfo(const DROID* psDroid)
 				CONPRINTF(ConsoleString,(ConsoleString,"Sensor: "));
 				psSensStats = asSensorStats + psDroid->asBits[i].nStat;
 				printComponentInfo((COMPONENT_STATS *)psSensStats);
-				CONPRINTF(ConsoleString,(ConsoleString,"   rng %d pwr %d loc %d imd %p\n",
+				CONPRINTF(ConsoleString,(ConsoleString,"   rng %d loc %d imd %p\n",
 					sensorRange(psSensStats,psDroid->player),
-					sensorPower(psSensStats,psDroid->player),
 					psSensStats->location, psSensStats->pMountGraphic));
 			}
 			else

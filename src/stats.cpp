@@ -81,8 +81,6 @@ static UDWORD	maxBodyArmour;
 static UDWORD	maxBodyPower;
 static UDWORD	maxBodyPoints;
 static UDWORD	maxSensorRange;
-static UDWORD	maxSensorPower;
-static UDWORD	maxECMPower;
 static UDWORD	maxECMRange;
 static UDWORD	maxConstPoints;
 static UDWORD	maxRepairPoints;
@@ -106,9 +104,7 @@ static void setMaxBodyArmour(UDWORD armour);
 static void setMaxBodyPower(UDWORD power);
 static void setMaxBodyPoints(UDWORD points);
 static void setMaxSensorRange(UDWORD range);
-static void setMaxSensorPower(UDWORD power);
 static void setMaxECMRange(UDWORD power);
-static void setMaxECMPower(UDWORD power);
 static void setMaxConstPoints(UDWORD points);
 static void setMaxRepairPoints(UDWORD repair);
 static void setMaxWeaponRange(UDWORD range);
@@ -118,7 +114,7 @@ static void setMaxPropulsionSpeed(UDWORD speed);
 
 //determine the effect this upgrade would have on the max values
 static void updateMaxWeaponStats(UWORD maxValue);
-static void updateMaxSensorStats(UWORD maxRange, UWORD maxPower);
+static void updateMaxSensorStats(UWORD maxRange);
 static void updateMaxRepairStats(UWORD maxValue);
 static void updateMaxECMStats(UWORD maxValue);
 static void updateMaxBodyStats(UWORD maxBody, UWORD maxPower, UWORD maxArmour);
@@ -404,7 +400,7 @@ void statsInitVars(void)
 
 	// init the max values
 	maxComponentWeight = maxBodyArmour = maxBodyPower =
-		maxBodyPoints = maxSensorRange = maxSensorPower = maxECMPower = maxECMRange =
+		maxBodyPoints = maxSensorRange = maxECMRange =
 		maxConstPoints = maxRepairPoints = maxWeaponRange = maxWeaponDamage =
 		maxPropulsionSpeed = 0;
 }
@@ -1452,7 +1448,6 @@ BOOL loadSensorStats(const char *pSensorData, UDWORD bufferSize)
 		if (psStats->designable)
 		{
 			setMaxSensorRange(psStats->range);
-			setMaxSensorPower(psStats->power);
 			setMaxComponentWeight(psStats->weight);
 		}
 
@@ -1493,9 +1488,6 @@ BOOL loadECMStats(const char *pECMData, UDWORD bufferSize)
 			&psStats->weight, &dummyVal, &dummyVal,
 			&psStats->body,	(char*)&GfxFile, (char*)&mountGfx, (char*)&location, &psStats->power,
 			&psStats->range, &designable);
-
-		// set a default ECM range for now
-		psStats->range = TILE_UNITS * 8;
 
 		if (!allocateStatName((BASE_STATS *)psStats, ECMName))
 		{
@@ -1558,7 +1550,6 @@ BOOL loadECMStats(const char *pECMData, UDWORD bufferSize)
 		// Set the max stat values for the design screen
 		if (psStats->designable)
 		{
-			setMaxECMPower(psStats->power);
 			setMaxECMRange(psStats->range);
 			setMaxComponentWeight(psStats->weight);
 		}
@@ -3106,23 +3097,10 @@ UDWORD	weaponRadiusHit(WEAPON_STATS *psStats, UBYTE player)
 		psStats->weaponSubClass].radiusHit)/100);
 }
 
-/*Access functions for the upgradeable stats of a sensor*/
-UDWORD	sensorPower(SENSOR_STATS *psStats, UBYTE player)
-{
-	return (UWORD)(psStats->power + (psStats->power * asSensorUpgrade[player].
-		power)/100);
-}
-
 UDWORD	sensorRange(SENSOR_STATS *psStats, UBYTE player)
 {
 	return (UWORD)(psStats->range + (psStats->range * asSensorUpgrade[player].
 		range)/100);
-}
-
-/*Access functions for the upgradeable stats of a ECM*/
-UDWORD	ecmPower(ECM_STATS *psStats, UBYTE player)
-{
-	return (UWORD)(psStats->power + (psStats->power * asECMUpgrade[player].power)/100);
 }
 
 /*Access functions for the upgradeable stats of a ECM*/
@@ -3260,45 +3238,23 @@ void setMaxSensorRange(UDWORD range)
         maxSensorRange = range;
     }
 }
+
 UDWORD getMaxSensorRange(void)
 {
-    return maxSensorRange;
+	return maxSensorRange;
 }
 
-void setMaxSensorPower(UDWORD power)
+void setMaxECMRange(UDWORD range)
 {
-    if (power > maxSensorPower)
-    {
-        maxSensorPower = power;
-    }
-}
-UDWORD getMaxSensorPower(void)
-{
-    return maxSensorPower;
+	if (range > maxECMRange)
+	{
+		maxECMRange = range;
+	}
 }
 
-void setMaxECMPower(UDWORD power)
-{
-    if (power > maxECMPower)
-    {
-        maxECMPower = power;
-    }
-}
-UDWORD getMaxECMPower(void)
-{
-    return maxECMPower;
-}
-
-void setMaxECMRange(UDWORD power)
-{
-    if (power > maxECMRange)
-    {
-        maxECMPower = power;
-    }
-}
 UDWORD getMaxECMRange(void)
 {
-    return maxECMRange;
+	return maxECMRange;
 }
 
 void setMaxConstPoints(UDWORD points)
@@ -3387,7 +3343,7 @@ void updateMaxWeaponStats(UWORD maxValue)
     //the fire pause is dealt with differently
 }
 
-void updateMaxSensorStats(UWORD maxRange, UWORD maxPower)
+void updateMaxSensorStats(UWORD maxRange)
 {
     UDWORD currentMaxValue = getMaxSensorRange();
 
@@ -3395,13 +3351,6 @@ void updateMaxSensorStats(UWORD maxRange, UWORD maxPower)
     {
         currentMaxValue += currentMaxValue * maxRange / 100;
         setMaxSensorRange(currentMaxValue);
-    }
-
-    currentMaxValue = getMaxSensorPower();
-    if (currentMaxValue < (currentMaxValue + currentMaxValue * maxPower / 100))
-    {
-        currentMaxValue += currentMaxValue * maxPower / 100;
-        setMaxSensorPower(currentMaxValue);
     }
 }
 
@@ -3418,13 +3367,13 @@ void updateMaxRepairStats(UWORD maxValue)
 
 void updateMaxECMStats(UWORD maxValue)
 {
-    UDWORD currentMaxValue = getMaxECMPower();
+	int currentMaxValue = getMaxECMRange();
 
-    if (currentMaxValue < (currentMaxValue + currentMaxValue * maxValue / 100))
-    {
-        currentMaxValue += currentMaxValue * maxValue / 100;
-        setMaxECMPower(currentMaxValue);
-    }
+	if (currentMaxValue < (currentMaxValue + currentMaxValue * maxValue / 100))
+	{
+		currentMaxValue += currentMaxValue * maxValue / 100;
+		setMaxECMRange(currentMaxValue);
+	}
 }
 
 void updateMaxBodyStats(UWORD maxBody, UWORD maxPower, UWORD maxArmour)
@@ -3467,12 +3416,11 @@ void updateMaxConstStats(UWORD maxValue)
 
 void adjustMaxDesignStats(void)
 {
-    UWORD       weaponDamage, sensorRange, sensorPower, repairPoints,
-                ecmPower, constPoints, bodyPoints, bodyPower, bodyArmour, inc;
+    UWORD       weaponDamage, sensorRange, repairPoints,
+                ecmRange, constPoints, bodyPoints, bodyPower, bodyArmour, inc;
 
-    //init all the values
-    weaponDamage = sensorRange = sensorPower = repairPoints =
-        ecmPower = constPoints = bodyPoints = bodyPower = bodyArmour = (UWORD)0;
+	// init all the values
+	weaponDamage = sensorRange = repairPoints = ecmRange = constPoints = bodyPoints = bodyPower = bodyArmour = 0;
 
     //go thru' all the functions getting the max upgrade values for the stats
     for (inc = 0; inc < numFunctions; inc++)
@@ -3486,9 +3434,9 @@ void adjustMaxDesignStats(void)
             }
             break;
         case DROIDECM_UPGRADE_TYPE:
-            if (ecmPower < ((UPGRADE_FUNCTION *)asFunctions[inc])->upgradePoints)
+            if (ecmRange < ((UPGRADE_FUNCTION *)asFunctions[inc])->upgradePoints)
             {
-                ecmPower = ((UPGRADE_FUNCTION *)asFunctions[inc])->upgradePoints;
+                ecmRange = ((UPGRADE_FUNCTION *)asFunctions[inc])->upgradePoints;
             }
             break;
         case DROIDBODY_UPGRADE_TYPE:
@@ -3514,10 +3462,6 @@ void adjustMaxDesignStats(void)
             {
                 sensorRange = ((DROIDSENSOR_UPGRADE_FUNCTION *)asFunctions[inc])->range;
             }
-            if (sensorPower < ((DROIDSENSOR_UPGRADE_FUNCTION *)asFunctions[inc])->upgradePoints)
-            {
-                sensorPower = ((DROIDSENSOR_UPGRADE_FUNCTION *)asFunctions[inc])->upgradePoints;
-            }
             break;
         case DROIDCONST_UPGRADE_TYPE:
             if (constPoints < ((UPGRADE_FUNCTION *)asFunctions[inc])->upgradePoints)
@@ -3539,9 +3483,9 @@ void adjustMaxDesignStats(void)
 
     //determine the effect on the max values for the stats
     updateMaxWeaponStats(weaponDamage);
-    updateMaxSensorStats(sensorRange, sensorPower);
+    updateMaxSensorStats(sensorRange);
     updateMaxRepairStats(repairPoints);
-    updateMaxECMStats(ecmPower);
+    updateMaxECMStats(ecmRange);
     updateMaxBodyStats(bodyPoints, bodyPower, bodyArmour);
     updateMaxConstStats(constPoints);
 }

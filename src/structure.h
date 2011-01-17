@@ -415,11 +415,6 @@ static inline int structSensorRange(const STRUCTURE* psObj)
 	return objSensorRange((const BASE_OBJECT*)psObj);
 }
 
-static inline int structSensorPower(const STRUCTURE* psObj)
-{
-	return objSensorPower((const BASE_OBJECT*)psObj);
-}
-
 static inline int structJammerPower(const STRUCTURE* psObj)
 {
 	return objJammerPower((const BASE_OBJECT*)psObj);

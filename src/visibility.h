@@ -72,11 +72,6 @@ static inline int objSensorRange(const BASE_OBJECT* psObj)
 	return psObj->sensorRange;
 }
 
-static inline int objSensorPower(const BASE_OBJECT* psObj)
-{
-	return psObj->sensorPower;
-}
-
 static inline int objJammerPower(const BASE_OBJECT* psObj)
 {
 	return psObj->ECMMod;

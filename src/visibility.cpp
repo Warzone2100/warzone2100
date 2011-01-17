@@ -780,18 +780,15 @@ void objSensorCache(BASE_OBJECT *psObj, SENSOR_STATS *psSensor)
 	if (psSensor)
 	{
 		psObj->sensorRange = sensorRange(psSensor, psObj->player);
-		psObj->sensorPower = sensorPower(psSensor, psObj->player);
 	}
 	else if (psObj->type == OBJ_DROID || psObj->type == OBJ_STRUCTURE)
 	{
 		// Give them the default sensor if not
 		psObj->sensorRange = sensorRange(asSensorStats + aDefaultSensor[psObj->player], psObj->player);
-		psObj->sensorPower = sensorPower(asSensorStats + aDefaultSensor[psObj->player], psObj->player);
 	}
 	else
 	{
 		psObj->sensorRange = 0;
-		psObj->sensorPower = 0;
 	}
 }
 
@@ -799,7 +796,7 @@ void objEcmCache(BASE_OBJECT *psObj, ECM_STATS *psEcm)
 {
 	if (psEcm)
 	{
-		psObj->ECMMod = ecmPower(psEcm, psObj->player);
+		psObj->ECMMod = ecmRange(psEcm, psObj->player);
 	}
 	else
 	{

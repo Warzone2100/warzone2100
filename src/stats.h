@@ -324,10 +324,8 @@ extern UDWORD	weaponRadDamage(WEAPON_STATS *psStats, UBYTE player);
 extern UDWORD	weaponIncenDamage(WEAPON_STATS *psStats, UBYTE player);
 extern UDWORD	weaponRadiusHit(WEAPON_STATS *psStats, UBYTE player);
 /*Access functions for the upgradeable stats of a sensor*/
-extern UDWORD	sensorPower(SENSOR_STATS *psStats, UBYTE player);
 extern UDWORD	sensorRange(SENSOR_STATS *psStats, UBYTE player);
 /*Access functions for the upgradeable stats of a ECM*/
-extern UDWORD	ecmPower(ECM_STATS *psStats, UBYTE player);
 extern UDWORD	ecmRange(ECM_STATS *psStats, UBYTE player);
 /*Access functions for the upgradeable stats of a repair*/
 extern UDWORD	repairPoints(REPAIR_STATS *psStats, UBYTE player);
@@ -349,8 +347,6 @@ extern UDWORD getMaxBodyArmour(void);
 extern UDWORD getMaxBodyPower(void);
 extern UDWORD getMaxBodyPoints(void);
 extern UDWORD getMaxSensorRange(void);
-extern UDWORD getMaxSensorPower(void);
-extern UDWORD getMaxECMPower(void);
 extern UDWORD getMaxECMRange(void);
 extern UDWORD getMaxConstPoints(void);
 extern UDWORD getMaxRepairPoints(void);
