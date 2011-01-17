@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2011-01-10 15:25+0100\n"
-"PO-Revision-Date: 2010-12-17 20:51+0200\n"
+"PO-Revision-Date: 2011-01-14 20:08+0200\n"
 "Last-Translator: Ayhan GORGULU <ayhangorgulu@gmail.com>\n"
 "Language-Team: Turkey <warzone-dev@gna.org>\n"
 "Language: \n"
@@ -2151,7 +2151,7 @@ msgstr "Alev Atıcı, Propan Oksit Jel ateşler"
 #: data/mp/messages/resmessagesall.rmsg:370
 #: data/mp/messages/strings/resstrings.txt:796
 msgid "Best Targets: Bunkers, wheeled and hover vehicles"
-msgstr "Harika Hedefler: Sığınaklar, Tekerlekli ve Civciv yuvalı araçlar"
+msgstr "Harika Hedefler: Sığınaklar, Tekerlekli ve HoverCraft araçlar"
 
 #: data/base/messages/resmessages1.rmsg:592
 #: data/mp/messages/resmessages1.rmsg:593
@@ -2227,7 +2227,7 @@ msgstr "Hızlı ateşlenebilir hafif atnti-tank roketleri"
 #: data/base/messages/resmessages1.rmsg:695
 #: data/mp/messages/resmessages1.rmsg:696
 msgid "Best Targets: Wheeled and hover vehicles"
-msgstr "Harika Hedefler:Tekerlekli ve Civciv Yuvalı Araçlar"
+msgstr "Harika Hedefler:Tekerlekli ve HoverCraft Araçlar"
 
 #: data/base/messages/resmessages1.rmsg:706
 #: data/base/messages/resmessages1.rmsg:719
@@ -9925,7 +9925,6 @@ msgid "NORTHERN SECTOR"
 msgstr "KUZEY BÖLGESİ"
 
 #: data/base/sequenceaudio/cam3/c003.txa:5
-#, fuzzy
 msgid "Congratulations your successful evacuation of Beta Base."
 msgstr "Başarılı bir şekilde Beta üssünü boşaltınız için tebrikler."
 
@@ -13985,7 +13984,7 @@ msgstr "Tüm Yarım Paletli Birimleri Seç"
 
 #: src/keymap.c:418
 msgid "Select all Hovers"
-msgstr "Tüm Civciv-yuvasi'lı Araçları Seç"
+msgstr "Tüm HoverCraft'lı Araçları Seç"
 
 #: src/keymap.c:420
 msgid "Select all Units on Screen"
@@ -14441,12 +14440,14 @@ msgid "Choose Team"
 msgstr "Takım seç"
 
 #: src/multiint.c:2073
+#, fuzzy
 msgid "Click to change player settings"
-msgstr "Oyuncu ayarları için tıkla"
+msgstr "Oyuncu pozisyonunu değiştirmek için tıkla"
 
 #: src/multiint.c:2104
+#, fuzzy
 msgid "Click to adjust AI difficulty"
-msgstr "Y.Z zorluğunu ayarlamak için tıkla"
+msgstr "Zorluğu değiştirmek için tıkla"
 
 #: src/multiint.c:2183
 msgid "CHAT"
@@ -14973,8 +14974,38 @@ msgstr "Sürüm %s%s%s%s"
 #~ msgid "Construction Progress"
 #~ msgstr "İnşaat Devam ediyor"
 
-#~ msgid "Player position"
-#~ msgstr "Oyuncu pozisyonu"
+#~ msgid "DIFFICULTY"
+#~ msgstr "ZORLUK"
+
+#~ msgid "Less aggressive and starts with less units"
+#~ msgstr "Daha agresif ve daha az birim"
+
+#~ msgid "Plays nice"
+#~ msgstr "Güzel çalış"
+
+#~ msgid "No holds barred"
+#~ msgstr "Hiçbir tutar engellenmedi"
+
+#~ msgid "Starts with advantages and gets twice as much oil from derricks"
+#~ msgstr "Avantajlar ile başlarsın ve Petrol pompalarından iki kaz daha fazla petrol alırsın"
+
+#~ msgid "CHOOSE AI"
+#~ msgstr "Y.Z SEÇ"
+
+#~ msgid "You cannot change difficulty in a challenge"
+#~ msgstr "Mücadele modunda zorluğu değiştiremezsin"
+
+#~ msgid "Click to change to this slot"
+#~ msgstr "Bu slotu değiştirmek için tıkla"
+
+#~ msgid "Click to change player colour"
+#~ msgstr "Oyuncu renklerini değiştirmek için tıkla"
+
+#~ msgid "Click to change AI"
+#~ msgstr "Yapay zekayı ayarlamak için tıkla"
+
+#~ msgid "You cannot change AI in a challenge"
+#~ msgstr "Mücadele modunda Y.Z değiştiremezsin"
 
 #~ msgid "3 players"
 #~ msgstr "2 Oyuncu"
@@ -14993,6 +15024,9 @@ msgstr "Sürüm %s%s%s%s"
 
 #~ msgid "There is not enough room in the Transport!"
 #~ msgstr "Taşıma Gemisinde yeterince yer yok!"
+
+#~ msgid "Player position"
+#~ msgstr "Oyuncu pozisyonu"
 
 #~ msgid "Plascrete MK3"
 #~ msgstr "Plas Girit Kdm3"
