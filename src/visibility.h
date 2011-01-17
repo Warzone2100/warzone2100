@@ -44,7 +44,7 @@ extern int visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarge
 /** Can shooter hit target with direct fire weapon? */
 bool lineOfFire(const SIMPLE_OBJECT* psViewer, const BASE_OBJECT* psTarget, int weapon_slot, bool wallsBlock);
 
-/** How much of target can the player hit with direct fire weapon? */ 
+/** How much of target can the player hit with direct fire weapon? */
 int areaOfFire(const SIMPLE_OBJECT* psViewer, const BASE_OBJECT* psTarget, int weapon_slot, bool wallsBlock);
 
 /** How much of target can the player hit with direct fire weapon? */

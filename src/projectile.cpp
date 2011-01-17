@@ -102,7 +102,6 @@ struct ObjectShape
 };
 
 static ObjectShape establishTargetShape(BASE_OBJECT *psTarget);
-//static UDWORD	establishTargetHeight( BASE_OBJECT *psTarget );
 static void	proj_ImpactFunc( PROJECTILE *psObj );
 static void	proj_PostImpactFunc( PROJECTILE *psObj );
 static void	proj_checkBurnDamage( BASE_OBJECT *apsList, PROJECTILE *psProj);
@@ -365,10 +364,11 @@ int32_t projCalcIndirectVelocities(const int32_t dx, const int32_t dz, int32_t v
 	}
 
 	/* CorvusCorax: Check against min_angle */
-	if (iAtan2(*vz, *vx)<min_angle) {
+	if (iAtan2(*vz, *vx) < min_angle)
+	{
 		/* set pitch to pass terrain */
 		// tan(min_angle)=mytan/65536
-		int64_t mytan=((int64_t)iSin(min_angle)*65536)/iCos(min_angle);
+		int64_t mytan = ((int64_t)iSin(min_angle)*65536)/iCos(min_angle);
 		t = MAX(1, i64Sqrt(2*((int64_t)dx*mytan - dz*65536)*(int64_t)GAME_TICKS_PER_SEC*GAME_TICKS_PER_SEC/(int64_t)(g*65536)));  // Still in ticks.
 		*vx = dx*GAME_TICKS_PER_SEC/t;
 		// mytan=65536*vz/vx
@@ -378,12 +378,12 @@ int32_t projCalcIndirectVelocities(const int32_t dx, const int32_t dz, int32_t v
 	return t;
 }
 
-bool proj_SendProjectile(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int player, Vector3i target, BASE_OBJECT *psTarget, BOOL bVisible, int weapon_slot)
+bool proj_SendProjectile(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int player, Vector3i target, BASE_OBJECT *psTarget, bool bVisible, int weapon_slot)
 {
 	return proj_SendProjectileAngled(psWeap, psAttacker, player, target, psTarget, bVisible, weapon_slot, 0);
 }
 
-bool proj_SendProjectileAngled(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int player, Vector3i target, BASE_OBJECT *psTarget, BOOL bVisible, int weapon_slot, int min_angle)
+bool proj_SendProjectileAngled(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int player, Vector3i target, BASE_OBJECT *psTarget, bool bVisible, int weapon_slot, int min_angle)
 {
 	PROJECTILE *            psProj = new PROJECTILE(ProjectileTrackerID |(gameTime2 >>4), player);
 	WEAPON_STATS *psStats = &asWeaponStats[psWeap->nStat];
@@ -460,12 +460,12 @@ bool proj_SendProjectileAngled(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int pl
 	if (psTarget)
 	{
 		int maxHeight = establishTargetHeight(psTarget);
-		int minHeight = MAX(0,MIN(maxHeight,maxHeight +  2 * LINE_OF_FIRE_MINIMUM - areaOfFire(psAttacker, psTarget, weapon_slot, true)));
+		int minHeight = std::min(std::max(maxHeight + 2 * LINE_OF_FIRE_MINIMUM - areaOfFire(psAttacker, psTarget, weapon_slot, true), 0), maxHeight);
 		scoreUpdateVar(WD_SHOTS_ON_TARGET);
 
-		psProj->dst.z = psTarget->pos.z + minHeight + (maxHeight>minHeight?gameRand(maxHeight-minHeight):0);
+		psProj->dst.z = psTarget->pos.z + minHeight + gameRand(std::max(maxHeight - minHeight, 1));
 		/* store visible part (LOCK ON this part for homing :) */
-		psProj->partVisible = (maxHeight-minHeight);
+		psProj->partVisible = maxHeight - minHeight;
 	}
 	else
 	{
@@ -727,26 +727,18 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 	if (psStats->movementModel == MM_HOMINGDIRECT && psProj->psDest)
 	{
 		/* If it's homing and it has a target (not a miss)... */
-		move.x = psProj->psDest->pos.x - psProj->src.x;
-		move.y = psProj->psDest->pos.y - psProj->src.y;
-		move.z = psProj->psDest->pos.z + establishTargetHeight(psProj->psDest)/2 - psProj->src.z;
 		/* Home at the center of the part that was visible when firing */
-		move.z = psProj->psDest->pos.z + (establishTargetHeight(psProj->psDest) - psProj->partVisible/2) - psProj->src.z;
+		move = psProj->psDest->pos - psProj->src + Vector3i(0, 0, establishTargetHeight(psProj->psDest) - psProj->partVisible/2);
 	}
 	else
 	{
-		move.x = psProj->dst.x - psProj->src.x;
-		move.y = psProj->dst.y - psProj->src.y;
+		move = psProj->dst - psProj->src;
 		// LASSAT doesn't have a z
 		if(psStats->weaponSubClass == WSC_LAS_SAT)
 		{
 			move.z = 0;
 		}
-		else if (!bIndirect)
-		{
-			move.z = psProj->dst.z - psProj->src.z;
-		}
-		else
+		else if (bIndirect)
 		{
 			move.z = (psProj->vZ - (timeSoFar * ACC_GRAVITY / (GAME_TICKS_PER_SEC * 2))) * timeSoFar / GAME_TICKS_PER_SEC; // '2' because we reach our highest point in the mid of flight, when "vZ is 0".
 		}
@@ -1800,7 +1792,7 @@ void	objectShimmy(BASE_OBJECT *psObj)
 #define BULLET_FLIGHT_HEIGHT 16
 
 
-UDWORD	establishTargetHeight(BASE_OBJECT *psTarget)
+int establishTargetHeight(BASE_OBJECT const *psTarget)
 {
 	if (psTarget == NULL)
 	{
@@ -1813,7 +1805,7 @@ UDWORD	establishTargetHeight(BASE_OBJECT *psTarget)
 	{
 		case OBJ_DROID:
 		{
-			DROID * psDroid = (DROID*)psTarget;
+			DROID const *psDroid = (DROID const *)psTarget;
 			unsigned int height = asBodyStats[psDroid->asBits[COMP_BODY].nStat].pIMD->max.y - asBodyStats[psDroid->asBits[COMP_BODY].nStat].pIMD->min.y;
 			unsigned int utilityHeight = 0, yMax = 0, yMin = 0; // Temporaries for addition of utility's height to total height
 
@@ -1878,12 +1870,12 @@ UDWORD	establishTargetHeight(BASE_OBJECT *psTarget)
 		}
 		case OBJ_STRUCTURE:
 		{
-			STRUCTURE_STATS * psStructureStats = ((STRUCTURE *)psTarget)->pStructureType;
-			return (psStructureStats->pIMD->max.y + psStructureStats->pIMD->min.y);
+			STRUCTURE_STATS * psStructureStats = ((STRUCTURE const *)psTarget)->pStructureType;
+			return psStructureStats->pIMD->max.y + psStructureStats->pIMD->min.y;
 		}
 		case OBJ_FEATURE:
 			// Just use imd ymax+ymin
-			return (psTarget->sDisplay.imd->max.y + psTarget->sDisplay.imd->min.y);
+			return psTarget->sDisplay.imd->max.y + psTarget->sDisplay.imd->min.y;
 		case OBJ_PROJECTILE:
 			return BULLET_FLIGHT_HEIGHT;
 		default:

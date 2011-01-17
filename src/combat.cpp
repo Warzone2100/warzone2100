@@ -49,7 +49,6 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	SDWORD			longRange;
 	DROID			*psDroid = NULL;
 	int				compIndex;
-	int				min_angle;
 
 	CHECK_OBJECT(psAttacker);
 	CHECK_OBJECT(psTarget);
@@ -187,23 +186,24 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	longRange = proj_GetLongRange(psStats);
 
 	/* modification by CorvusCorax - calculate shooting angle */
-	min_angle = 0;
+	int min_angle = 0;
 	// only calculate for indirect shots
-	if (!proj_Direct(psStats) && dist>0) {
-
+	if (!proj_Direct(psStats) && dist > 0)
+	{
 		min_angle = arcOfFire(psAttacker,psTarget,weapon_slot,true);
 
 		// prevent extremely steep shots
-		if (min_angle>DEG(PROJ_ULTIMATE_PITCH)) min_angle=DEG(PROJ_ULTIMATE_PITCH);
+		min_angle = std::min(min_angle, DEG(PROJ_ULTIMATE_PITCH));
 
 		// adjust maximum range of unit if forced to shoot very steep
-		if (min_angle>DEG(PROJ_MAX_PITCH)) {
+		if (min_angle > DEG(PROJ_MAX_PITCH))
+		{
 			//do not allow increase of max range though
-			if (iSin(2*min_angle) < iSin(2*DEG(PROJ_MAX_PITCH))) {
+			if (iSin(2*min_angle) < iSin(2*DEG(PROJ_MAX_PITCH)))  // If PROJ_MAX_PITCH == 45, then always iSin(2*min_angle) <= iSin(2*DEG(PROJ_MAX_PITCH)), and the test is redundant.
+			{
 				longRange = longRange * iSin(2*min_angle) / iSin(2*DEG(PROJ_MAX_PITCH));
 			}
 		}
-
 	}
 
 	int baseHitChance = 0;
@@ -220,8 +220,9 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		// get weapon chance to hit in the long range
 		baseHitChance = weaponLongHit(psStats,psAttacker->player);
 
-		// adapt for hight adjusted artillery shots
-		if (min_angle>DEG(PROJ_MAX_PITCH)) {
+		// adapt for height adjusted artillery shots
+		if (min_angle > DEG(PROJ_MAX_PITCH))
+		{
 			baseHitChance = baseHitChance * iCos(min_angle) / iCos(DEG(PROJ_MAX_PITCH));
 		}
 	}

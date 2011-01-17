@@ -77,23 +77,19 @@ PlayerMask satuplinkbits;
 // see if a structure has the range to fire on a target
 static BOOL aiStructHasRange(STRUCTURE *psStruct, BASE_OBJECT *psTarget, int weapon_slot)
 {
-	WEAPON_STATS		*psWStats;
-	SDWORD				xdiff,ydiff, longRange;
-
 	if (psStruct->numWeaps == 0 || psStruct->asWeaps[0].nStat == 0)
 	{
 		// Can't attack without a weapon
 		return false;
 	}
 
-	psWStats = psStruct->asWeaps[weapon_slot].nStat + asWeaponStats;
+	WEAPON_STATS *psWStats = psStruct->asWeaps[weapon_slot].nStat + asWeaponStats;
 
-	xdiff = (SDWORD)psStruct->pos.x - (SDWORD)psTarget->pos.x;
-	ydiff = (SDWORD)psStruct->pos.y - (SDWORD)psTarget->pos.y;
-	longRange = proj_GetLongRange(psWStats);
-	if (xdiff*xdiff + ydiff*ydiff < longRange*longRange)
+	Vector2i diff = removeZ(psStruct->pos - psTarget->pos);
+	int longRange = proj_GetLongRange(psWStats);
+	if (diff*diff < longRange*longRange)
 	{
-		return (lineOfFire((BASE_OBJECT*)psStruct, psTarget, weapon_slot, true));
+		return lineOfFire(psStruct, psTarget, weapon_slot, true);
 	}
 
 	return false;

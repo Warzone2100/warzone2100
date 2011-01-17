@@ -750,75 +750,72 @@ bool lineOfFire(const SIMPLE_OBJECT* psViewer, const BASE_OBJECT* psTarget, int 
 
 	ASSERT_OR_RETURN(false, psViewer != NULL, "Invalid shooter pointer!");
 	ASSERT_OR_RETURN(false, psTarget != NULL, "Invalid target pointer!");
-	if (!psViewer || !psTarget)
-	{
-		return false;
-	}
 
-	if (psViewer->type == OBJ_DROID) {
+	if (psViewer->type == OBJ_DROID)
+	{
 		psStats = asWeaponStats + ((DROID*)psViewer)->asWeaps[weapon_slot].nStat;
-	} else if (psViewer->type == OBJ_STRUCTURE) {
+	}
+	else if (psViewer->type == OBJ_STRUCTURE)
+	{
 		psStats = asWeaponStats + ((STRUCTURE*)psViewer)->asWeaps[weapon_slot].nStat;
 	}
-	if (proj_Direct(psStats)) {
+	if (proj_Direct(psStats))
+	{
 		/** direct shots could collide with ground **/
-		int distance = iSqrt(  (psTarget->pos.x-psViewer->pos.x)*(psTarget->pos.x-psViewer->pos.x) +
-				 (psTarget->pos.y-psViewer->pos.y)*(psTarget->pos.y-psViewer->pos.y) +
-				 (psTarget->pos.z-psViewer->pos.z)*(psTarget->pos.z-psViewer->pos.z)
-				);
+		int distance = iHypot(psTarget->pos - psViewer->pos);
 		int range = proj_GetLongRange(psStats);
-		if (range<distance) {
-			return false;
-		} else {
-			return (LINE_OF_FIRE_MINIMUM <= checkFireLine(psViewer,psTarget,weapon_slot,wallsBlock,true));
-		}
-	} else {
+		return range >= distance && LINE_OF_FIRE_MINIMUM <= checkFireLine(psViewer, psTarget, weapon_slot, wallsBlock, true);
+	}
+	else
+	{
 		/** 
 		 * indirect shots always have a line of fire, IF the forced 
 		 * minimum angle doesn't move it out of range
 		 **/
-		int min_angle = checkFireLine(psViewer,psTarget,weapon_slot,wallsBlock,false);
+		int min_angle = checkFireLine(psViewer, psTarget, weapon_slot, wallsBlock, false);
 		/** 2d distance **/
-		int distance = iSqrt(  (psTarget->pos.x-psViewer->pos.x)*(psTarget->pos.x-psViewer->pos.x) +
-							(psTarget->pos.y-psViewer->pos.y)*(psTarget->pos.y-psViewer->pos.y) +
-							MAX(0,(psTarget->pos.z-psViewer->pos.z))*MAX(0,(psTarget->pos.z-psViewer->pos.z))
-							);
+		Vector3i diff = psTarget->pos - psViewer->pos;
+		int distance = iHypot3(diff.x, diff.y, std::max(diff.z, 0));
 		int range = proj_GetLongRange(psStats);
-		if (min_angle>DEG(PROJ_MAX_PITCH)) {
-			if (iSin(2*min_angle) < iSin(2*DEG(PROJ_MAX_PITCH))) {
+		// NOTE This code seems similar to the code in combFire in combat.cpp.
+		if (min_angle > DEG(PROJ_MAX_PITCH))
+		{
+			if (iSin(2*min_angle) < iSin(2*DEG(PROJ_MAX_PITCH)))
+			{
 				range = (range * iSin(2*min_angle)) / iSin(2*DEG(PROJ_MAX_PITCH));
 			}
 		}
-		if (range<distance) {
-			return false;
-		} else {
-			return true;
-		}
+		return range >= distance;
 	}
 }
 
 /* Check how much of psTarget is hitable from psViewer's gun position */
 int areaOfFire(const SIMPLE_OBJECT* psViewer, const BASE_OBJECT* psTarget, int weapon_slot, bool wallsBlock)
 {
-	return checkFireLine(psViewer,psTarget,weapon_slot,wallsBlock,true);
+	return checkFireLine(psViewer, psTarget, weapon_slot, wallsBlock, true);
 }
 
 /* Check the minimum angle to hitpsTarget from psViewer via indirect shots */
 int arcOfFire(const SIMPLE_OBJECT* psViewer, const BASE_OBJECT* psTarget, int weapon_slot, bool wallsBlock)
 {
-	return checkFireLine(psViewer,psTarget,weapon_slot,wallsBlock,false);
+	return checkFireLine(psViewer, psTarget, weapon_slot, wallsBlock, false);
 }
 
 /* helper function for checkFireLine */
-static inline void angle_check(int64_t* angletan, int positionSq, int height, int distanceSq, int targetHeight, bool direct) {
+static inline void angle_check(int64_t* angletan, int positionSq, int height, int distanceSq, int targetHeight, bool direct)
+{
 	int64_t current;
-	if (direct) {
-		current=(65536*height)/iSqrt(positionSq);
-	} else {
+	if (direct)
+	{
+		current = (65536*height)/iSqrt(positionSq);
+	}
+	else
+	{
 		int dist = iSqrt(distanceSq);
 		int pos = iSqrt(positionSq);
 		current = (pos*targetHeight) / dist;
-		if (current<height && pos>TILE_UNITS/2 && pos<dist-TILE_UNITS/2) {
+		if (current < height && pos > TILE_UNITS/2 && pos<dist-TILE_UNITS/2)
+		{
 			// solve the following trajectory parabolic equation
 			// ( targetHeight ) = a * distance^2 + factor * distance
 			// ( height ) = a * position^2 + factor * position
@@ -826,12 +823,14 @@ static inline void angle_check(int64_t* angletan, int positionSq, int height, in
 			//  luckily we dont need it for this at all, since
 			// factor = tan(firing_angle)
 			current = ((int64_t)65536*((int64_t)distanceSq * (int64_t)height -  (int64_t)positionSq * (int64_t)targetHeight))
-					/ ((int64_t)distanceSq * (int64_t)pos - (int64_t)dist * (int64_t)positionSq);
-		} else {
+			        / ((int64_t)distanceSq * (int64_t)pos - (int64_t)dist * (int64_t)positionSq);
+		}
+		else
+		{
 			current = 0;
 		}
 	}
-	if (current> *angletan) *angletan=current;
+	*angletan = std::max(*angletan, current);
 }
 
 /**
@@ -856,11 +855,11 @@ static int checkFireLine(const SIMPLE_OBJECT* psViewer, const BASE_OBJECT* psTar
 	/* CorvusCorax: get muzzle offset (code from projectile.c)*/
 	if (psViewer->type == OBJ_DROID && weapon_slot >= 0)
 	{
-		calcDroidMuzzleBaseLocation( (DROID *) psViewer, &muzzle, weapon_slot);
+		calcDroidMuzzleBaseLocation((DROID *)psViewer, &muzzle, weapon_slot);
 	}
 	else if (psViewer->type == OBJ_STRUCTURE && weapon_slot >= 0)
 	{
-		calcStructureMuzzleBaseLocation( (STRUCTURE *) psViewer, &muzzle, weapon_slot);
+		calcStructureMuzzleBaseLocation((STRUCTURE *)psViewer, &muzzle, weapon_slot);
 	}
 	else // incase anything wants a projectile
 	{
@@ -869,7 +868,7 @@ static int checkFireLine(const SIMPLE_OBJECT* psViewer, const BASE_OBJECT* psTar
 
 	pos = muzzle;
 	dest = psTarget->pos;
-	diff.x = dest.x - pos.x; diff.y = dest.y - pos.y;
+	diff = removeZ(dest - pos);
 
 	distSq = diff*diff;
 	if (distSq == 0)
@@ -878,39 +877,49 @@ static int checkFireLine(const SIMPLE_OBJECT* psViewer, const BASE_OBJECT* psTar
 		return 1000;
 	}
 
-	current.x = pos.x;
-	current.y = pos.y;
+	current = removeZ(pos);
 	start = current;
 	angletan = -1000*65536;
 	partSq = 0;
 	// run a manual trace along the line of fire until target is reached
-	while (partSq<distSq) {
+	while (partSq < distSq)
+	{
 		BOOL hasSplitIntersection;
 
 		oldPartSq = partSq;
 		
-		if (partSq>0) angle_check(&angletan,partSq,map_Height(current.x,current.y)-pos.z,distSq,dest.z-pos.z,direct);
+		if (partSq > 0)
+		{
+			angle_check(&angletan, partSq, map_Height(current) - pos.z, distSq, dest.z - pos.z, direct);
+		}
 
 		// intersect current tile with line of fire
-		next=diff;
-		hasSplitIntersection=map_Intersect(&current.x,&current.y,&next.x,&next.y,&halfway.x,&halfway.y);
+		next = diff;
+		hasSplitIntersection = map_Intersect(&current.x, &current.y, &next.x, &next.y, &halfway.x, &halfway.y);
 		
-		if (hasSplitIntersection) {
+		if (hasSplitIntersection)
+		{
 			// check whether target was reached before tile split line:
 			part = halfway - start;
 			partSq = part*part;
 
-			if (partSq>=distSq) break;
+			if (partSq >= distSq)
+			{
+				break;
+			}
 
-			if (partSq>0) angle_check(&angletan,partSq,map_Height(halfway.x,halfway.y)-pos.z,distSq,dest.z-pos.z,direct);
+			if (partSq > 0)
+			{
+				angle_check(&angletan, partSq, map_Height(halfway) - pos.z, distSq, dest.z - pos.z, direct);
+			}
 		}
 
 		// check for walls and other structures
 		// TODO: if there is a structure on the same tile as the shooter (and the shooter is not that structure) check if LOF is blocked by it.
-		if (wallsBlock && (oldPartSq>0)) {
+		if (wallsBlock && oldPartSq > 0)
+		{
 			const MAPTILE *psTile;
-			halfway.x = (next.x-current.x)/2; halfway.y = (next.y-current.y)/2;
-			halfway = current + halfway;
+			halfway = current + (next - current)/2;
 			psTile = mapTile(map_coord(halfway.x), map_coord(halfway.y));
 			if (TileHasStructure(psTile) && psTile->psObject!=psTarget)
 			{
@@ -918,13 +927,18 @@ static int checkFireLine(const SIMPLE_OBJECT* psViewer, const BASE_OBJECT* psTar
 				part = halfway - start;
 				partSq = part*part;
 
-				if (partSq>=distSq) break;
+				if (partSq >= distSq)
+				{
+					break;
+				}
 
 				// allowed to shoot over enemy structures if they are NOT the target
-				if (partSq>0) angle_check( &angletan,oldPartSq,
-					psTile->psObject->pos.z + establishTargetHeight(psTile->psObject) - pos.z,
-					distSq, dest.z-pos.z, direct
-				);
+				if (partSq>0)
+				{
+					angle_check(&angletan, oldPartSq,
+					            psTile->psObject->pos.z + establishTargetHeight(psTile->psObject) - pos.z,
+					            distSq, dest.z - pos.z, direct);
+				}
 			}
 		}
 
@@ -932,15 +946,18 @@ static int checkFireLine(const SIMPLE_OBJECT* psViewer, const BASE_OBJECT* psTar
 		current=next;
 		part = current - start;
 		partSq = part*part;
-		ASSERT(partSq>oldPartSq,"areaOfFire(): no progress in tile-walk! From: %i,%i to %i,%i stuck in %i,%i",map_coord(pos.x),map_coord(pos.y),map_coord(dest.x),map_coord(dest.y),map_coord(current.x),map_coord(current.y));
+		ASSERT(partSq > oldPartSq, "areaOfFire(): no progress in tile-walk! From: %i,%i to %i,%i stuck in %i,%i", map_coord(pos.x), map_coord(pos.y), map_coord(dest.x), map_coord(dest.y), map_coord(current.x), map_coord(current.y));
 
 	}
-	if (direct) {
-		return (establishTargetHeight((BASE_OBJECT*)psTarget) - (pos.z + ((angletan * (int)iSqrt(distSq))/65536) - dest.z));
-	} else {
-		angletan = iAtan2(angletan,65536);
-		if (angletan>DEG(180)) angletan-=DEG(360);
-		return (DEG(1+UNDEG(angletan)));
+	if (direct)
+	{
+		return establishTargetHeight(psTarget) - (pos.z + (angletan * iSqrt(distSq))/65536 - dest.z);
+	}
+	else
+	{
+		angletan = iAtan2(angletan, 65536);
+		angletan = angleDelta(angletan);
+		return DEG(1) + angletan;
 	}
 
 }

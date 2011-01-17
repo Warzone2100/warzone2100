@@ -517,7 +517,7 @@ typedef struct _tile_coord
 } TILE_COORD;
 
 /* Intersect a line with the map and report tile intersection points */
-extern BOOL map_Intersect(int *Cx, int *Cy, int *Vx, int* Vy, int *Sx, int *Sy);
+bool map_Intersect(int *Cx, int *Cy, int *Vx, int* Vy, int *Sx, int *Sy);
 
 /// The max height of the terrain and water at the specified world coordinates
 extern int32_t map_Height(int x, int y);

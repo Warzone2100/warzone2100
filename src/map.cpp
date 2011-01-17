@@ -1114,7 +1114,7 @@ BOOL mapShutdown(void)
  * true if the intersection also crosses the tile split line
  * (which has to be taken into account)
  **/
-extern BOOL map_Intersect(int* Cx, int* Cy, int* Vx, int* Vy, int* Sx, int* Sy)
+bool map_Intersect(int* Cx, int* Cy, int* Vx, int* Vy, int* Sx, int* Sy)
 {
 	int	 x, y, ox, oy, Dx, Dy, tileX, tileY;
 	int	 ily,iry,itx,ibx;
