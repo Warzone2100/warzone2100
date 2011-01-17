@@ -2289,7 +2289,7 @@ void addPlayerBox(BOOL players)
 				{
 					sButInit.pTip = _("Click to change player position");
 				}
-				else if (!NetPlay.players[i].allocated)
+				else if (!NetPlay.players[i].allocated && NetPlay.isHost)
 				{
 					if (!challengeActive)
 					{
