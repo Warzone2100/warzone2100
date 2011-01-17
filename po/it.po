@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-01-17 22:56+0100\n"
+"POT-Creation-Date: 2011-01-18 00:54+0100\n"
 "PO-Revision-Date: 2010-12-14 22:19+0100\n"
 "Last-Translator: Cristian Odorico <generalchris@hotmail.it>\n"
 "Language-Team: Italian <warzone-dev@gna.org>\n"
@@ -5756,7 +5756,7 @@ msgstr "Camion"
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1832
 #: data/mp/messages/strings/names.txt:17
 #: data/mp/messages/strings/names.txt:176
-#: data/mp/messages/strings/names.txt:1836
+#: data/mp/messages/strings/names.txt:1838
 msgid "Machinegun Viper Wheels"
 msgstr "Mitragliatrice Viper Ruote"
 
@@ -5814,7 +5814,7 @@ msgstr "Torretta Riparatrice Viper Semicingoli"
 #: data/base/messages/strings/names.txt:174
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1833
 #: data/mp/messages/strings/names.txt:177
-#: data/mp/messages/strings/names.txt:1837
+#: data/mp/messages/strings/names.txt:1839
 msgid "Twin Machinegun Viper Wheels"
 msgstr "Doppia Mitragliatrice Viper Ruote"
 
@@ -5831,7 +5831,7 @@ msgstr "Mitragliatrice Pesante Viper Semicingoli"
 #: data/base/messages/strings/names.txt:177
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1840
 #: data/mp/messages/strings/names.txt:180
-#: data/mp/messages/strings/names.txt:1844
+#: data/mp/messages/strings/names.txt:1846
 msgid "Heavy Machinegun Viper Tracks"
 msgstr "Mitragliatrice Pesante Viper Cingoli"
 
@@ -5910,7 +5910,7 @@ msgstr "Cannone Leggero Python Cingoli"
 #: data/base/messages/strings/names.txt:194
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1923
 #: data/mp/messages/strings/names.txt:197
-#: data/mp/messages/strings/names.txt:1927
+#: data/mp/messages/strings/names.txt:1929
 msgid "Medium Cannon Python Tracks"
 msgstr "Cannone Medio Python Cingoli"
 
@@ -5919,7 +5919,7 @@ msgstr "Cannone Medio Python Cingoli"
 #: data/mp/messages/strings/names.txt:198
 #: data/mp/messages/strings/names.txt:1357
 #: data/mp/messages/strings/names.txt:1511
-#: data/mp/messages/strings/names.txt:1852
+#: data/mp/messages/strings/names.txt:1854
 msgid "Heavy Cannon Python Tracks"
 msgstr "Cannone Pesante Python Cingoli"
 
@@ -9039,7 +9039,7 @@ msgstr "Postazione per Missili Archangel"
 
 #: data/base/messages/strings/names.txt:1423
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1881
-#: data/mp/messages/strings/names.txt:1885
+#: data/mp/messages/strings/names.txt:1887
 msgid "Repair Turret Cobra Tracks"
 msgstr "Torretta Riparatrice Cobra Tracks"
 
@@ -9074,7 +9074,7 @@ msgstr "Trasporto abbattuto"
 #: data/base/messages/strings/names.txt:1458
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1922
 #: data/mp/messages/strings/names.txt:1472
-#: data/mp/messages/strings/names.txt:1926
+#: data/mp/messages/strings/names.txt:1928
 msgid "Tank Killer Python Tracks"
 msgstr "Tank Killer Python Cingoli"
 
@@ -10231,166 +10231,166 @@ msgid "Slowly, out of the ashes we will rise again..."
 msgstr "Lentamente, risorgeremo dalle ceneri..."
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1822
-#: data/mp/messages/strings/names.txt:1826
+#: data/mp/messages/strings/names.txt:1828
 msgid "Heavy Repair Turret Cobra Hover"
 msgstr "Torretta Riparatrice Pesante Cobra Hover"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1823
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1834
-#: data/mp/messages/strings/names.txt:1827
-#: data/mp/messages/strings/names.txt:1838
+#: data/mp/messages/strings/names.txt:1829
+#: data/mp/messages/strings/names.txt:1840
 msgid "Heavy Machinegun Viper Wheels"
 msgstr "Mitragliatrice Pesante Viper Ruote"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1824
-#: data/mp/messages/strings/names.txt:1828
+#: data/mp/messages/strings/names.txt:1830
 msgid "Scourge Mantis Hover"
 msgstr "Mantis Hover Scourge"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1825
-#: data/mp/messages/strings/names.txt:1829
+#: data/mp/messages/strings/names.txt:1831
 msgid "Tank Killer Mantis Hover"
 msgstr "Tank Killer Mantis Hover "
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1826
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1841
-#: data/mp/messages/strings/names.txt:1830
-#: data/mp/messages/strings/names.txt:1845
+#: data/mp/messages/strings/names.txt:1832
+#: data/mp/messages/strings/names.txt:1847
 msgid "Heavy Machinegun Cobra Tracks"
 msgstr "Mitragliatrice Pesante Cobra Cingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1827
-#: data/mp/messages/strings/names.txt:1831
+#: data/mp/messages/strings/names.txt:1833
 msgid "Heavy Cannon Cobra Hover"
 msgstr "Cannone Pesante Cobra Hover"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1835
-#: data/mp/messages/strings/names.txt:1839
+#: data/mp/messages/strings/names.txt:1841
 msgid "Heavy Machinegun Cobra Wheels"
 msgstr "Mitragliatrice Pesante Viper Ruote"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1836
-#: data/mp/messages/strings/names.txt:1840
+#: data/mp/messages/strings/names.txt:1842
 msgid "Heavy Machinegun Cobra Hover"
 msgstr "Mitragliatrice Pesante Cobra Hover"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1838
-#: data/mp/messages/strings/names.txt:1842
+#: data/mp/messages/strings/names.txt:1844
 msgid "Machinegun Viper Tracks"
 msgstr "Mitragliatrice Viper Cingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1839
-#: data/mp/messages/strings/names.txt:1843
+#: data/mp/messages/strings/names.txt:1845
 msgid "Twin Machinegun Viper Tracks"
 msgstr "Doppia Mitragliatrice Viper Cingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1843
-#: data/mp/messages/strings/names.txt:1847
+#: data/mp/messages/strings/names.txt:1849
 msgid "Medium Cannon Cobra Hover"
 msgstr "Cannone Medio Cobra Hover"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1844
-#: data/mp/messages/strings/names.txt:1848
+#: data/mp/messages/strings/names.txt:1850
 msgid "Medium Cannon Scorpion Hover"
 msgstr "Cannone Medio Scorpion Hover"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1845
-#: data/mp/messages/strings/names.txt:1849
+#: data/mp/messages/strings/names.txt:1851
 msgid "Medium Cannon Scorpion Tracks"
 msgstr "Cannone Medio Scorpion Cingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1846
-#: data/mp/messages/strings/names.txt:1850
+#: data/mp/messages/strings/names.txt:1852
 msgid "Medium Cannon Python Hover"
 msgstr "Cannone Medio Python Hover"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1847
-#: data/mp/messages/strings/names.txt:1851
+#: data/mp/messages/strings/names.txt:1853
 msgid "Heavy Cannon Python Hover"
 msgstr "Cannone Pesante Python Hover"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1849
-#: data/mp/messages/strings/names.txt:1853
+#: data/mp/messages/strings/names.txt:1855
 msgid "Rail Gun Mantis Tracks"
 msgstr "Cannone a Massa Mantis Cingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1850
-#: data/mp/messages/strings/names.txt:1854
+#: data/mp/messages/strings/names.txt:1856
 msgid "Pulse Laser Mantis Tracks"
 msgstr "Laser a Impulso Mantis Cingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1851
-#: data/mp/messages/strings/names.txt:1855
+#: data/mp/messages/strings/names.txt:1857
 msgid "Lancer Python Tracks"
 msgstr "Lancer Python Cingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1852
-#: data/mp/messages/strings/names.txt:1856
+#: data/mp/messages/strings/names.txt:1858
 msgid "Lancer Mantis Tracks"
 msgstr "Lancer Mantis Cingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1853
-#: data/mp/messages/strings/names.txt:1857
+#: data/mp/messages/strings/names.txt:1859
 msgid "Tank Killer Vengeance Tracks"
 msgstr "Tank Killer Vengeance Cingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1858
-#: data/mp/messages/strings/names.txt:1862
+#: data/mp/messages/strings/names.txt:1864
 msgid "Heavy Cannon Tiger Tracks"
 msgstr "Cannone Pesante Tiger Cingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1859
-#: data/mp/messages/strings/names.txt:1863
+#: data/mp/messages/strings/names.txt:1865
 msgid "Needle Gun Tiger Tracks"
 msgstr "Cannone ad Ago Tiger Cingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1860
-#: data/mp/messages/strings/names.txt:1864
+#: data/mp/messages/strings/names.txt:1866
 msgid "Needle Gun Retribution Tracks"
 msgstr "Cannone ad ago Retribution Cingoli "
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1861
-#: data/mp/messages/strings/names.txt:1865
+#: data/mp/messages/strings/names.txt:1867
 msgid "Needle Gun Vengeance Tracks"
 msgstr "Cannone ad Ago Vengeance Cingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1862
-#: data/mp/messages/strings/names.txt:1866
+#: data/mp/messages/strings/names.txt:1868
 msgid "Vengeance Tracks Rail Gun"
 msgstr "Vengeance Cingoli Cannone a Massa"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1863
-#: data/mp/messages/strings/names.txt:1867
+#: data/mp/messages/strings/names.txt:1869
 msgid "Vengeance Tracks Gauss Cannon"
 msgstr "Vengeance Cingoli Cannone Gauss"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1864
-#: data/mp/messages/strings/names.txt:1868
+#: data/mp/messages/strings/names.txt:1870
 msgid "Vengeance Tracks Gauss Scourge"
 msgstr "Vengeance Cingoli Scourge"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1867
-#: data/mp/messages/strings/names.txt:1871
+#: data/mp/messages/strings/names.txt:1873
 msgid "VTOL Cluster Bomb Bay Bug VTOL"
 msgstr "Bombe a grappolo Bug VTOL"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1868
-#: data/mp/messages/strings/names.txt:1872
+#: data/mp/messages/strings/names.txt:1874
 msgid "VTOL Bunker Buster Bug VTOL"
 msgstr "Bunker Buster Bug VTOL"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1869
-#: data/mp/messages/strings/names.txt:1873
+#: data/mp/messages/strings/names.txt:1875
 msgid "VTOL Cluster Bomb Bay Scorpion VTOL"
 msgstr "Bombe a Grappolo Scorpion VTOL"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1870
-#: data/mp/messages/strings/names.txt:1874
+#: data/mp/messages/strings/names.txt:1876
 msgid "VTOL Bunker Buster Scorpion VTOL"
 msgstr "Bunker Buster Scorpion VTOL"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1873
-#: data/mp/messages/strings/names.txt:1877
+#: data/mp/messages/strings/names.txt:1879
 msgid "VTOL Lancer Bug VTOL"
 msgstr "Lancer Bug VTOL"
 
@@ -10399,7 +10399,7 @@ msgid "VTOL HPV Cannon Bug VTOL"
 msgstr "Cannone HPV Bug VTOL"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1875
-#: data/mp/messages/strings/names.txt:1879
+#: data/mp/messages/strings/names.txt:1881
 msgid "VTOL Lancer Scorpion VTOL"
 msgstr "Lancer Scorpion VTOL"
 
@@ -10408,7 +10408,7 @@ msgid "VTOL HPV Cannon Scorpion VTOL"
 msgstr "Cannone ad Iper Velocità Scorpion VTOL"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1877
-#: data/mp/messages/strings/names.txt:1881
+#: data/mp/messages/strings/names.txt:1883
 msgid "VTOL Lancer Mantis VTOL"
 msgstr "Lancer Mantis VTOL"
 
@@ -10417,127 +10417,127 @@ msgid "VTOL HPV Cannon Mantis VTOL"
 msgstr "VTOL Cannone HPV Mantis VTOL"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1882
-#: data/mp/messages/strings/names.txt:1886
+#: data/mp/messages/strings/names.txt:1888
 msgid "Repair Turret Mantis Tracks"
 msgstr "Torretta riparatrice Mantis Cingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1884
-#: data/mp/messages/strings/names.txt:1888
+#: data/mp/messages/strings/names.txt:1890
 msgid "Lancer Scorpion Tracks"
 msgstr "Lancer Scorpion Cingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1885
-#: data/mp/messages/strings/names.txt:1889
+#: data/mp/messages/strings/names.txt:1891
 msgid "Heavy Cannon Scorpion Tracks"
 msgstr "Cannone Pesante Scorpion Cingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1886
-#: data/mp/messages/strings/names.txt:1890
+#: data/mp/messages/strings/names.txt:1892
 msgid "Lancer Scorpion VTOL"
 msgstr "Lancer Scorpion VTOL"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1887
-#: data/mp/messages/strings/names.txt:1891
+#: data/mp/messages/strings/names.txt:1893
 msgid "Bunker Buster Scorpion VTOL"
 msgstr "Bunker Buster Scorpion VTOL"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1889
-#: data/mp/messages/strings/names.txt:1893
+#: data/mp/messages/strings/names.txt:1895
 msgid "Command Turret Viper Tracks"
 msgstr "Torretta di Comando Viper Cingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1890
-#: data/mp/messages/strings/names.txt:1894
+#: data/mp/messages/strings/names.txt:1896
 msgid "Command Turret Cobra Tracks"
 msgstr "Torretta di Comando Cobra Cingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1891
-#: data/mp/messages/strings/names.txt:1895
+#: data/mp/messages/strings/names.txt:1897
 msgid "Command Turret Scorpion Tracks"
 msgstr "Torretta di Comando Scorpion Cingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1892
-#: data/mp/messages/strings/names.txt:1896
+#: data/mp/messages/strings/names.txt:1898
 msgid "Command Turret Mantis Tracks"
 msgstr "Torretta di Comando Mantis Cingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1894
-#: data/mp/messages/strings/names.txt:1898
+#: data/mp/messages/strings/names.txt:1900
 msgid "Lancer Cobra Tracks"
 msgstr "Lancer Cobra Cingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1895
-#: data/mp/messages/strings/names.txt:1899
+#: data/mp/messages/strings/names.txt:1901
 msgid "Heavy Cannon Mantis Tracks"
 msgstr "Mitragliatrice Pesante Cobra Cingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1896
-#: data/mp/messages/strings/names.txt:1900
+#: data/mp/messages/strings/names.txt:1902
 msgid "Tank Killer Mantis Tracks"
 msgstr "Tank Killer Mantis Cingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1897
-#: data/mp/messages/strings/names.txt:1901
+#: data/mp/messages/strings/names.txt:1903
 msgid "Scourge Mantis Tracks"
 msgstr "Scourge Mantis Cingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1898
-#: data/mp/messages/strings/names.txt:1902
+#: data/mp/messages/strings/names.txt:1904
 msgid "Heavy Machinegun Scorpion Tracks"
 msgstr "Mitragliatrice Pesante Scorpion Cingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1900
-#: data/mp/messages/strings/names.txt:1904
+#: data/mp/messages/strings/names.txt:1906
 msgid "Repair Scorpion Tracks"
 msgstr "Torretta Riparatrice Cobra Tracks"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1901
-#: data/mp/messages/strings/names.txt:1905
+#: data/mp/messages/strings/names.txt:1907
 msgid "Heavy Repair Scorpion Hover"
 msgstr "Torretta Riparatrice Pesante Scorpion Hover"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1904
-#: data/mp/messages/strings/names.txt:1908
+#: data/mp/messages/strings/names.txt:1910
 msgid "Truck Cobra Hover"
 msgstr "Camion Cobra Hover"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1905
-#: data/mp/messages/strings/names.txt:1909
+#: data/mp/messages/strings/names.txt:1911
 msgid "Truck Scorpion Hover"
 msgstr "Camion Scorpion Hover"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1906
-#: data/mp/messages/strings/names.txt:1910
+#: data/mp/messages/strings/names.txt:1912
 msgid "Truck Mantis Hover"
 msgstr "Camion Mantis Hover"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1909
-#: data/mp/messages/strings/names.txt:1913
+#: data/mp/messages/strings/names.txt:1915
 msgid "Bunker Buster Cobra Tracks"
 msgstr "Bunker Buster Cobra Cingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1910
-#: data/mp/messages/strings/names.txt:1914
+#: data/mp/messages/strings/names.txt:1916
 msgid "Bunker Buster Scorpion Tracks"
 msgstr "Bunker Buster Scorpion Cingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1911
-#: data/mp/messages/strings/names.txt:1915
+#: data/mp/messages/strings/names.txt:1917
 msgid "Bunker Buster Mantis Tracks"
 msgstr "Bunker Buster Mantis Cingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1913
-#: data/mp/messages/strings/names.txt:1917
+#: data/mp/messages/strings/names.txt:1919
 msgid "Lancer Viper Tracks"
 msgstr "Lancer Cobra Cingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1915
-#: data/mp/messages/strings/names.txt:1919
+#: data/mp/messages/strings/names.txt:1921
 msgid "Mini-Rocket Cobra Half-Tracks"
 msgstr "Minirazzi Cobra Semi-cingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1916
-#: data/mp/messages/strings/names.txt:1920
+#: data/mp/messages/strings/names.txt:1922
 msgid "Mini-Rocket Cobra Tracks"
 msgstr "Minirazzi Cobra Cingoli"
 
@@ -10546,7 +10546,7 @@ msgid "Mini-Rocket Artillery Cobra Tracks"
 msgstr "Artiglieria di Minirazzi Cobra Cingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1919
-#: data/mp/messages/strings/names.txt:1923
+#: data/mp/messages/strings/names.txt:1925
 msgid "Inferno Cobra Half-Tracks"
 msgstr "Inferno Cobra Semi-Cingoli"
 
@@ -10555,152 +10555,152 @@ msgid "HPV Cannon Python Hover"
 msgstr "Cannone ad ipervelocità Python Cingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1924
-#: data/mp/messages/strings/names.txt:1928
+#: data/mp/messages/strings/names.txt:1930
 msgid "Scourge Python Tracks"
 msgstr "Scourge Python Cingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1925
-#: data/mp/messages/strings/names.txt:1929
+#: data/mp/messages/strings/names.txt:1931
 msgid "Gauss Cannon Python Tracks"
 msgstr "Cannone Gauss Python Cingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1926
-#: data/mp/messages/strings/names.txt:1930
+#: data/mp/messages/strings/names.txt:1932
 msgid "Pulse Laser Python Tracks"
 msgstr "Laser a Impulso Tiger Cingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1927
-#: data/mp/messages/strings/names.txt:1931
+#: data/mp/messages/strings/names.txt:1933
 msgid "Pulse Laser Tiger Tracks"
 msgstr "Tiger Laser a Impulso Cingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1928
-#: data/mp/messages/strings/names.txt:1932
+#: data/mp/messages/strings/names.txt:1934
 msgid "Heavy Laser Tiger Tracks"
 msgstr "Tiger Laser Pesante Cingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1929
-#: data/mp/messages/strings/names.txt:1933
+#: data/mp/messages/strings/names.txt:1935
 msgid "Gauss Cannon Wyvern Tracks"
 msgstr "Cannone Gauss Wyvern Cingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1930
-#: data/mp/messages/strings/names.txt:1934
+#: data/mp/messages/strings/names.txt:1936
 msgid "Pulse Laser Wyvern Tracks"
 msgstr "Laser a Impulso Wyvern Cingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1931
-#: data/mp/messages/strings/names.txt:1935
+#: data/mp/messages/strings/names.txt:1937
 msgid "Heavy Laser Wyvern Tracks"
 msgstr "Laser Pesante Wyvern Cingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1933
-#: data/mp/messages/strings/names.txt:1937
+#: data/mp/messages/strings/names.txt:1939
 msgid "Machinegun Viper Half-Tracks"
 msgstr "Mitragliatrice Viper Semicingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1934
-#: data/mp/messages/strings/names.txt:1938
+#: data/mp/messages/strings/names.txt:1940
 msgid "Flamer Viper Half-Tracks"
 msgstr "Inceneritore Viper Semicingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1937
-#: data/mp/messages/strings/names.txt:1941
+#: data/mp/messages/strings/names.txt:1943
 msgid "Inferno Cobra Hover"
 msgstr "Inferno Cobra Hover"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1938
-#: data/mp/messages/strings/names.txt:1942
+#: data/mp/messages/strings/names.txt:1944
 msgid "Medium Cannon Cobra Half Track"
 msgstr "Cannone Medio Cobra Semi-cingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1939
-#: data/mp/messages/strings/names.txt:1943
+#: data/mp/messages/strings/names.txt:1945
 msgid "Inferno Python Hover"
 msgstr "Inferno Python Hover"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1940
-#: data/mp/messages/strings/names.txt:1944
+#: data/mp/messages/strings/names.txt:1946
 msgid "Assault Gun Python Hover"
 msgstr "Mitragliatrice d'assalto Python Hover"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1941
-#: data/mp/messages/strings/names.txt:1945
+#: data/mp/messages/strings/names.txt:1947
 msgid "Assault Gun Python Half Track"
 msgstr "Mitragliatrice d'assalto Python Semi-cingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1942
-#: data/mp/messages/strings/names.txt:1946
+#: data/mp/messages/strings/names.txt:1948
 msgid "Heavy Machinegun Scorpion Half Tracks"
 msgstr "Mitragliatrice Pesante Scorpion Semi-cingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1943
-#: data/mp/messages/strings/names.txt:1947
+#: data/mp/messages/strings/names.txt:1949
 msgid "Assault Cannon Mantis Hover"
 msgstr "Cannone d'Assalto Mantis Hover"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1944
-#: data/mp/messages/strings/names.txt:1948
+#: data/mp/messages/strings/names.txt:1950
 msgid "Pulse Laser Leopard Hover"
 msgstr "Laser a Impulso Leopard Hover"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1945
-#: data/mp/messages/strings/names.txt:1949
+#: data/mp/messages/strings/names.txt:1951
 msgid "Pulse Laser Panther Hover"
 msgstr "Laser a Impulso Panther Hover"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1946
-#: data/mp/messages/strings/names.txt:1950
+#: data/mp/messages/strings/names.txt:1952
 msgid "Rail Gun Tiger Hover"
 msgstr "Cannone a Massa Tiger Hover"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1947
-#: data/mp/messages/strings/names.txt:1951
+#: data/mp/messages/strings/names.txt:1953
 msgid "Pulse Laser Tiger Hover"
 msgstr "Laser a Impulso Tiger Hover"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1948
-#: data/mp/messages/strings/names.txt:1952
+#: data/mp/messages/strings/names.txt:1954
 msgid "Plasma Cannon Wyvern Tracks"
 msgstr "Cannone al Plasma Wyvern Cingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1949
-#: data/mp/messages/strings/names.txt:1953
+#: data/mp/messages/strings/names.txt:1955
 msgid "Scourge Missile Wyvern Tracks"
 msgstr "Missile Scourge Wyvern Cingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1950
-#: data/mp/messages/strings/names.txt:1954
+#: data/mp/messages/strings/names.txt:1956
 msgid "Flashlight Retribution Hover"
 msgstr "Flashlight Retribution Hover"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1951
-#: data/mp/messages/strings/names.txt:1955
+#: data/mp/messages/strings/names.txt:1957
 msgid "Mini-Rocket Viper Half Track"
 msgstr "Minirazzi Viper Semi-cingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1952
-#: data/mp/messages/strings/names.txt:1956
+#: data/mp/messages/strings/names.txt:1958
 msgid "Mini-Rocket Array Viper Half Track"
 msgstr "Batteria di Minirazzi Viper Semi-cingoli"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1953
-#: data/mp/messages/strings/names.txt:1957
+#: data/mp/messages/strings/names.txt:1959
 msgid "Phosphor Bomb Bay Mantis VTOL"
 msgstr "Bombe al Fosforo Mantis VTOL"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1954
-#: data/mp/messages/strings/names.txt:1958
+#: data/mp/messages/strings/names.txt:1960
 msgid "Heap Bomb Bay Mantis VTOL"
 msgstr "Bombe HEAP Mantis VTOL"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1955
-#: data/mp/messages/strings/names.txt:1959
+#: data/mp/messages/strings/names.txt:1961
 msgid "Heap Bomb Bay Retribution VTOL"
 msgstr "Bombe HEAP Retribution VTOL"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1956
-#: data/mp/messages/strings/names.txt:1960
+#: data/mp/messages/strings/names.txt:1962
 msgid "Scourge Retaliation VTOL"
 msgstr "Scourge Retaliation VTOL"
 
@@ -11785,226 +11785,226 @@ msgstr "Sensore ad Ampio Spettro"
 msgid "Wide Spectrum Sensor Tower"
 msgstr "Torre Sensoria ad Ampio Spettro"
 
-#: data/mp/messages/strings/names.txt:1714
-#: data/mp/messages/strings/names.txt:1715
+#: data/mp/messages/strings/names.txt:1716
+#: data/mp/messages/strings/names.txt:1717
 msgid "Plasma Cannon"
 msgstr "Cannone al Plasma"
 
-#: data/mp/messages/strings/names.txt:1716
-#: data/mp/messages/strings/names.txt:1717
+#: data/mp/messages/strings/names.txt:1718
+#: data/mp/messages/strings/names.txt:1719
 msgid "Plasma Cannon Emplacement"
 msgstr "Postazione con Cannone al Plasma"
 
-#: data/mp/messages/strings/names.txt:1719
+#: data/mp/messages/strings/names.txt:1721
 msgid "Sunburst AA Rocket Array"
 msgstr "Batteria di Razzi AA Sunburst."
 
-#: data/mp/messages/strings/names.txt:1720
+#: data/mp/messages/strings/names.txt:1722
 msgid "Sunburst AA"
 msgstr "Sunburst AA"
 
-#: data/mp/messages/strings/names.txt:1721
+#: data/mp/messages/strings/names.txt:1723
 msgid "VTOL Sunburst AA"
 msgstr "VTOL Sunburst AA"
 
-#: data/mp/messages/strings/names.txt:1722
-#: data/mp/messages/strings/names.txt:1723
+#: data/mp/messages/strings/names.txt:1724
+#: data/mp/messages/strings/names.txt:1725
 msgid "Sunburst AA Site"
 msgstr "Sito contraereo Sunburst"
 
-#: data/mp/messages/strings/names.txt:1725
-#: data/mp/messages/strings/names.txt:1726
 #: data/mp/messages/strings/names.txt:1727
 #: data/mp/messages/strings/names.txt:1728
+#: data/mp/messages/strings/names.txt:1729
+#: data/mp/messages/strings/names.txt:1730
 msgid "Super Pulse Laser Cyborg"
 msgstr "Super Cyborg con Laser a Impulso"
 
-#: data/mp/messages/strings/names.txt:1730
-#: data/mp/messages/strings/names.txt:1731
 #: data/mp/messages/strings/names.txt:1732
 #: data/mp/messages/strings/names.txt:1733
+#: data/mp/messages/strings/names.txt:1734
+#: data/mp/messages/strings/names.txt:1735
 msgid "Super Rail-Gunner"
 msgstr "Super Cyborg con Cannone a massa"
 
-#: data/mp/messages/strings/names.txt:1735
-#: data/mp/messages/strings/names.txt:1736
 #: data/mp/messages/strings/names.txt:1737
 #: data/mp/messages/strings/names.txt:1738
+#: data/mp/messages/strings/names.txt:1739
+#: data/mp/messages/strings/names.txt:1740
 msgid "Super Scourge Cyborg"
 msgstr "Super Cyborg con Scourge"
 
-#: data/mp/messages/strings/names.txt:1740
-#: data/mp/messages/strings/names.txt:1741
+#: data/mp/messages/strings/names.txt:1742
+#: data/mp/messages/strings/names.txt:1743
 msgid "Nexus Link Tower"
 msgstr "Torre di collegamento NEXUS"
 
-#: data/mp/messages/strings/names.txt:1743
-#: data/mp/messages/strings/names.txt:1746
+#: data/mp/messages/strings/names.txt:1745
+#: data/mp/messages/strings/names.txt:1748
 msgid "EMP Cannon"
 msgstr "Cannone EMP"
 
-#: data/mp/messages/strings/names.txt:1744
-#: data/mp/messages/strings/names.txt:1745
+#: data/mp/messages/strings/names.txt:1746
+#: data/mp/messages/strings/names.txt:1747
 msgid "EMP Cannon Tower"
 msgstr "Torretta con Cannone EMP"
 
-#: data/mp/messages/strings/names.txt:1750
 #: data/mp/messages/strings/names.txt:1752
+#: data/mp/messages/strings/names.txt:1754
 msgid "Mass Driver Fortress"
 msgstr "Fortezza con Mass Driver"
 
-#: data/mp/messages/strings/names.txt:1751
+#: data/mp/messages/strings/names.txt:1753
 msgid "Mass Driver"
 msgstr "Fortezza con Mass Driver"
 
-#: data/mp/messages/strings/names.txt:1754
-#: data/mp/messages/strings/names.txt:1755
 #: data/mp/messages/strings/names.txt:1756
+#: data/mp/messages/strings/names.txt:1757
+#: data/mp/messages/strings/names.txt:1758
 msgid "Cannon Fortress"
 msgstr "Fortezza con Cannone"
 
-#: data/mp/messages/strings/names.txt:1758
-#: data/mp/messages/strings/names.txt:1759
 #: data/mp/messages/strings/names.txt:1760
+#: data/mp/messages/strings/names.txt:1761
+#: data/mp/messages/strings/names.txt:1762
 msgid "Heavy Rocket Bastion"
 msgstr "Bastione con Lanciarazzi Pesanti"
 
-#: data/mp/messages/strings/names.txt:1762
-#: data/mp/messages/strings/names.txt:1763
 #: data/mp/messages/strings/names.txt:1764
+#: data/mp/messages/strings/names.txt:1765
+#: data/mp/messages/strings/names.txt:1766
 msgid "Missile Fortress"
 msgstr "Fortezza con Lanciamissili"
 
-#: data/mp/messages/strings/names.txt:1768
+#: data/mp/messages/strings/names.txt:1770
 msgid "Heavy Body - Wyvern"
 msgstr "Corpo Pesante - Wyvern"
 
-#: data/mp/messages/strings/names.txt:1769
+#: data/mp/messages/strings/names.txt:1771
 msgid "Wyvern"
 msgstr "Wyvern"
 
-#: data/mp/messages/strings/names.txt:1771
+#: data/mp/messages/strings/names.txt:1773
 msgid "Multi Turret Body - Dragon"
 msgstr "Corpo Multi Torretta - Dragon"
 
-#: data/mp/messages/strings/names.txt:1772
+#: data/mp/messages/strings/names.txt:1774
 msgid "Dragon"
 msgstr "Dragon"
 
-#: data/mp/messages/strings/names.txt:1774
+#: data/mp/messages/strings/names.txt:1776
 msgid "Superhot Plasmite gel"
 msgstr "Gel a plasmite superinfiammabile"
 
-#: data/mp/messages/strings/names.txt:1775
+#: data/mp/messages/strings/names.txt:1777
 msgid "Superhot Plasmite gel Mk2"
 msgstr "Gel a plasmite superinfiammabile Mk2"
 
-#: data/mp/messages/strings/names.txt:1776
+#: data/mp/messages/strings/names.txt:1778
 msgid "Superhot Plasmite gel Mk3"
 msgstr "Gel a plasmite superinfiammabile Mk3"
 
-#: data/mp/messages/strings/names.txt:1780
 #: data/mp/messages/strings/names.txt:1782
+#: data/mp/messages/strings/names.txt:1784
 msgid "EMP Mortar"
 msgstr "Mortaio EMP"
 
-#: data/mp/messages/strings/names.txt:1781
 #: data/mp/messages/strings/names.txt:1783
+#: data/mp/messages/strings/names.txt:1785
 msgid "EMP Mortar Pit"
 msgstr "Postazione con Mortaio EMP"
 
-#: data/mp/messages/strings/names.txt:1784
 #: data/mp/messages/strings/names.txt:1786
+#: data/mp/messages/strings/names.txt:1788
 msgid "Stormbringer AA Laser"
 msgstr "Laser AA Stormbringer"
 
-#: data/mp/messages/strings/names.txt:1785
 #: data/mp/messages/strings/names.txt:1787
+#: data/mp/messages/strings/names.txt:1789
 msgid "Stormbringer Emplacement"
 msgstr "Postazione Stormbringer"
 
-#: data/mp/messages/strings/names.txt:1788
-#: data/mp/messages/strings/names.txt:1789
+#: data/mp/messages/strings/names.txt:1790
+#: data/mp/messages/strings/names.txt:1791
 msgid "Vindicator Hardpoint"
 msgstr "Postazione corazzata con SAM Vindicator"
 
-#: data/mp/messages/strings/names.txt:1790
-#: data/mp/messages/strings/names.txt:1791
+#: data/mp/messages/strings/names.txt:1792
+#: data/mp/messages/strings/names.txt:1793
 msgid "Whirlwind Hardpoint"
 msgstr "Postazione corazzata con AA Whirlwind"
 
-#: data/mp/messages/strings/names.txt:1792
-#: data/mp/messages/strings/names.txt:1793
+#: data/mp/messages/strings/names.txt:1794
+#: data/mp/messages/strings/names.txt:1795
 msgid "AA Flak Cannon Hardpoint"
 msgstr "Postazione corazzata con Cannone antiaereo."
 
-#: data/mp/messages/strings/names.txt:1794
-#: data/mp/messages/strings/names.txt:1795
+#: data/mp/messages/strings/names.txt:1796
+#: data/mp/messages/strings/names.txt:1797
 msgid "Avenger Hardpoint"
 msgstr "Postazione corazzata con SAM Avenger"
 
-#: data/mp/messages/strings/names.txt:1799
-#: data/mp/messages/strings/names.txt:1800
+#: data/mp/messages/strings/names.txt:1801
+#: data/mp/messages/strings/names.txt:1802
 msgid "Twin Assault Gun"
 msgstr "Doppia mitragliatrice d'assalto"
 
-#: data/mp/messages/strings/names.txt:1801
-#: data/mp/messages/strings/names.txt:1802
+#: data/mp/messages/strings/names.txt:1803
+#: data/mp/messages/strings/names.txt:1804
 msgid "Twin Assault Gun Hardpoint"
 msgstr "Postazione corazzata con Mitragliatrice d'assalto doppia"
 
-#: data/mp/messages/strings/names.txt:1804
+#: data/mp/messages/strings/names.txt:1806
 msgid "VTOL Plasmite Bomb Bay"
 msgstr "Bombe alla Plasmite"
 
-#: data/mp/messages/strings/names.txt:1805
+#: data/mp/messages/strings/names.txt:1807
 msgid "Plasmite Bomb"
 msgstr "Bomba alla Plasmite"
 
-#: data/mp/messages/strings/names.txt:1806
+#: data/mp/messages/strings/names.txt:1808
 msgid "VTOL EMP Missile Launcher"
 msgstr "Lanciamissili EMP VTOL"
 
-#: data/mp/messages/strings/names.txt:1807
+#: data/mp/messages/strings/names.txt:1809
 msgid "EMP Missile Launcher"
 msgstr "Lanciamissili EMP"
 
-#: data/mp/messages/strings/names.txt:1811
-#: data/mp/messages/strings/names.txt:1812
+#: data/mp/messages/strings/names.txt:1813
+#: data/mp/messages/strings/names.txt:1814
 msgid "Command Turret II"
 msgstr "Torretta di Comando MkII"
 
-#: data/mp/messages/strings/names.txt:1813
-#: data/mp/messages/strings/names.txt:1814
+#: data/mp/messages/strings/names.txt:1815
+#: data/mp/messages/strings/names.txt:1816
 msgid "Command Turret III"
 msgstr "Torretta di Comando MkIII"
 
-#: data/mp/messages/strings/names.txt:1815
-#: data/mp/messages/strings/names.txt:1816
+#: data/mp/messages/strings/names.txt:1817
+#: data/mp/messages/strings/names.txt:1818
 msgid "Command Turret IV"
 msgstr "Torretta di Comando MkIV"
 
-#: data/mp/messages/strings/names.txt:1878
+#: data/mp/messages/strings/names.txt:1880
 msgid "VTOL Hyper Velocity Cannon Bug VTOL"
 msgstr "Cannone ad ipervelocità Bug VTOL"
 
-#: data/mp/messages/strings/names.txt:1880
+#: data/mp/messages/strings/names.txt:1882
 msgid "VTOL Hyper Velocity Cannon Scorpion VTOL"
 msgstr "Cannone ad Iper Velocità Scorpion VTOL"
 
-#: data/mp/messages/strings/names.txt:1882
+#: data/mp/messages/strings/names.txt:1884
 msgid "VTOL Hyper Velocity Cannon Mantis VTOL"
 msgstr "Cannone ad ipervelocità Mantis VTOL"
 
-#: data/mp/messages/strings/names.txt:1921
+#: data/mp/messages/strings/names.txt:1923
 msgid "Mini-Rocket Array Cobra Tracks"
 msgstr "Batteria di minirazzi Cobra Cingoli"
 
-#: data/mp/messages/strings/names.txt:1924
+#: data/mp/messages/strings/names.txt:1926
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Cannone ad ipervelocità Python Hover"
 
-#: data/mp/messages/strings/names.txt:1961
+#: data/mp/messages/strings/names.txt:1963
 msgid "Plasmite Retribution VTOL"
 msgstr "Plasmite Retribution VTOL"
 
@@ -12018,12 +12018,12 @@ msgstr "System locale"
 msgid "Enter password here"
 msgstr "Inserisci qua la password"
 
-#: lib/netplay/netplay.cpp:2039
+#: lib/netplay/netplay.cpp:2048
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Non posso decidere il nome del server master (%s)!"
 
-#: lib/netplay/netplay.cpp:2053
+#: lib/netplay/netplay.cpp:2062
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Non posso comunicare con il server della Lobby! La porta TCP %u è aperta?"
@@ -12034,7 +12034,7 @@ msgstr "Non posso comunicare con il server della Lobby! La porta TCP %u è apert
 #: src/hci.cpp:3513
 #: src/hci.cpp:3924
 #: src/hci.cpp:4942
-#: src/intelmap.cpp:534
+#: src/intelmap.cpp:531
 #: src/intorder.cpp:727
 #: src/loadsave.cpp:253
 #: src/multimenu.cpp:493
@@ -12412,49 +12412,49 @@ msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Visuale affiancata al Gruppo %u - %u Unità"
 msgstr[1] "Visuale affiancata al Gruppo %u - %u Unità"
 
-#: src/droid.cpp:3034
+#: src/droid.cpp:3080
 msgid "Rookie"
 msgstr "Coscritta"
 
-#: src/droid.cpp:3035
+#: src/droid.cpp:3081
 msgctxt "rank"
 msgid "Green"
 msgstr "Inesperta"
 
-#: src/droid.cpp:3036
+#: src/droid.cpp:3082
 msgid "Trained"
 msgstr "Addestrata"
 
-#: src/droid.cpp:3037
+#: src/droid.cpp:3083
 msgid "Regular"
 msgstr "Normale"
 
-#: src/droid.cpp:3038
+#: src/droid.cpp:3084
 msgid "Professional"
 msgstr "Professionale"
 
-#: src/droid.cpp:3039
+#: src/droid.cpp:3085
 msgid "Veteran"
 msgstr "Veterana"
 
-#: src/droid.cpp:3040
+#: src/droid.cpp:3086
 msgid "Elite"
 msgstr "Elite"
 
-#: src/droid.cpp:3041
+#: src/droid.cpp:3087
 msgid "Special"
 msgstr "Speciale"
 
-#: src/droid.cpp:3042
+#: src/droid.cpp:3088
 msgid "Hero"
 msgstr "Eroe"
 
-#: src/droid.cpp:4064
+#: src/droid.cpp:4110
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
 msgstr "%s avrebbe voluto darti un %s ma ne hai troppi!"
 
-#: src/droid.cpp:4068
+#: src/droid.cpp:4114
 #, c-format
 msgid "You wanted to give %s a %s but they have too many!"
 msgstr "Volevi dare a %s un %s ma ne hanno troppi!"
@@ -13066,24 +13066,24 @@ msgstr "Progresso della costruzione"
 msgid "Power Accrued"
 msgstr "Energia Accumulata"
 
-#: src/intelmap.cpp:245
+#: src/intelmap.cpp:242
 #: src/keybind.cpp:1375
 msgid "PAUSED"
 msgstr "IN PAUSA"
 
-#: src/intelmap.cpp:408
+#: src/intelmap.cpp:405
 msgid "Research Update"
 msgstr "Aggiornamento della Ricerca"
 
-#: src/intelmap.cpp:412
+#: src/intelmap.cpp:409
 msgid "Project Goals"
 msgstr "Obiettivi del Project"
 
-#: src/intelmap.cpp:415
+#: src/intelmap.cpp:412
 msgid "Current Objective"
 msgstr "Obiettivo Corrente"
 
-#: src/intelmap.cpp:1509
+#: src/intelmap.cpp:1506
 msgid "New Intelligence Report"
 msgstr "Nuovo rapporto dell'Intelligence."
 
@@ -14819,58 +14819,58 @@ msgstr "Impossibile localizzare alcun Comandante!"
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Limite di Controllo Raggiunto - Produzione Arrestata"
 
-#: src/structure.cpp:5771
-#: src/structure.cpp:5796
+#: src/structure.cpp:5815
+#: src/structure.cpp:5840
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Unità Assegnata"
 msgstr[1] "%s - %u Unità Assegnate"
 
-#: src/structure.cpp:5801
-#: src/structure.cpp:5869
-#: src/structure.cpp:5885
-#: src/structure.cpp:5899
+#: src/structure.cpp:5845
+#: src/structure.cpp:5913
+#: src/structure.cpp:5929
+#: src/structure.cpp:5943
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Danno %3.0f%%"
 
-#: src/structure.cpp:5851
+#: src/structure.cpp:5895
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - Collegati %u di %u"
 
-#: src/structure.cpp:6015
-#: src/structure.cpp:6060
+#: src/structure.cpp:6059
+#: src/structure.cpp:6104
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Danneggiato Elettronicamente"
 
-#: src/structure.cpp:6297
+#: src/structure.cpp:6341
 msgid "Electronic Reward - Visibility Report"
 msgstr "Premio Elettronico - Rapporto di Visibilità"
 
-#: src/structure.cpp:6337
+#: src/structure.cpp:6381
 msgid "Factory Reward - Propulsion"
 msgstr "Premio della Fabbrica - Propulsione"
 
-#: src/structure.cpp:6361
+#: src/structure.cpp:6405
 msgid "Factory Reward - Body"
 msgstr "Premio della Fabbrica - Corpo"
 
-#: src/structure.cpp:6385
+#: src/structure.cpp:6429
 msgid "Factory Reward - Weapon"
 msgstr "Premio della Fabbrica - Arma"
 
-#: src/structure.cpp:6394
+#: src/structure.cpp:6438
 msgid "Factory Reward - Nothing"
 msgstr "Premio della Fabbrica - Niente"
 
-#: src/structure.cpp:6422
+#: src/structure.cpp:6466
 msgid "Repair Facility Award - Repair"
 msgstr "Premio della Struttura di Riparazione - Ripara"
 
-#: src/structure.cpp:6429
+#: src/structure.cpp:6473
 msgid "Repair Facility Award - Nothing"
 msgstr "Premio della Struttura di Riparazione - Niente"
 

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-01-18 00:36+0100\n"
+"POT-Creation-Date: 2011-01-18 00:54+0100\n"
 "PO-Revision-Date: 2011-01-15 09:57+0300\n"
 "Last-Translator: \n"
 "Language-Team: Russian <>\n"
@@ -12017,12 +12017,12 @@ msgstr "Системная локализация"
 msgid "Enter password here"
 msgstr "Введите пароль"
 
-#: lib/netplay/netplay.cpp:2039
+#: lib/netplay/netplay.cpp:2048
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Не могу получить имя основного сервера (%s)!"
 
-#: lib/netplay/netplay.cpp:2053
+#: lib/netplay/netplay.cpp:2062
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Не удалось соединиться с лобби-сервером. проверьте, открыт-ли TCP-порт %u для исходящего траффика."
@@ -12033,7 +12033,7 @@ msgstr "Не удалось соединиться с лобби-серверо�
 #: src/hci.cpp:3513
 #: src/hci.cpp:3924
 #: src/hci.cpp:4942
-#: src/intelmap.cpp:534
+#: src/intelmap.cpp:531
 #: src/intorder.cpp:727
 #: src/loadsave.cpp:253
 #: src/multimenu.cpp:493
@@ -12416,49 +12416,49 @@ msgstr[0] "Соединить с группой %u - %u юнит"
 msgstr[1] "Соединить с группой %u - %u юнита"
 msgstr[2] "Соединить с группой %u - %u юнитов"
 
-#: src/droid.cpp:3034
+#: src/droid.cpp:3080
 msgid "Rookie"
 msgstr "Новобранец"
 
-#: src/droid.cpp:3035
+#: src/droid.cpp:3081
 msgctxt "rank"
 msgid "Green"
 msgstr "Молодой"
 
-#: src/droid.cpp:3036
+#: src/droid.cpp:3082
 msgid "Trained"
 msgstr "Тренированный"
 
-#: src/droid.cpp:3037
+#: src/droid.cpp:3083
 msgid "Regular"
 msgstr "Опытный"
 
-#: src/droid.cpp:3038
+#: src/droid.cpp:3084
 msgid "Professional"
 msgstr "Профессионал"
 
-#: src/droid.cpp:3039
+#: src/droid.cpp:3085
 msgid "Veteran"
 msgstr "Ветеран"
 
-#: src/droid.cpp:3040
+#: src/droid.cpp:3086
 msgid "Elite"
 msgstr "Элита"
 
-#: src/droid.cpp:3041
+#: src/droid.cpp:3087
 msgid "Special"
 msgstr "Специалист"
 
-#: src/droid.cpp:3042
+#: src/droid.cpp:3088
 msgid "Hero"
 msgstr "Герой"
 
-#: src/droid.cpp:4064
+#: src/droid.cpp:4110
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
 msgstr "%s хочет дать вам %s но у вас их слишком много"
 
-#: src/droid.cpp:4068
+#: src/droid.cpp:4114
 #, c-format
 msgid "You wanted to give %s a %s but they have too many!"
 msgstr "Вы хотите дать %s %s но у их их слишком много"
@@ -13071,24 +13071,24 @@ msgstr "Прогресс строительства"
 msgid "Power Accrued"
 msgstr "Накопленная энергия"
 
-#: src/intelmap.cpp:245
+#: src/intelmap.cpp:242
 #: src/keybind.cpp:1375
 msgid "PAUSED"
 msgstr "ПАУЗА"
 
-#: src/intelmap.cpp:408
+#: src/intelmap.cpp:405
 msgid "Research Update"
 msgstr "Обновить исследование"
 
-#: src/intelmap.cpp:412
+#: src/intelmap.cpp:409
 msgid "Project Goals"
 msgstr "Победы проекта"
 
-#: src/intelmap.cpp:415
+#: src/intelmap.cpp:412
 msgid "Current Objective"
 msgstr "Текущие задачи"
 
-#: src/intelmap.cpp:1509
+#: src/intelmap.cpp:1506
 msgid "New Intelligence Report"
 msgstr "Поступил доклад разведки"
 
@@ -14824,8 +14824,8 @@ msgstr "Не найдено ни одного командира!"
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Достигнут Предел - Производство Остановлено"
 
-#: src/structure.cpp:5771
-#: src/structure.cpp:5796
+#: src/structure.cpp:5815
+#: src/structure.cpp:5840
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
@@ -14833,50 +14833,50 @@ msgstr[0] "%s - %u Юнит назначен"
 msgstr[1] "%s - %u Юнитов назначено"
 msgstr[2] "%s - %u Юнита назначено"
 
-#: src/structure.cpp:5801
-#: src/structure.cpp:5869
-#: src/structure.cpp:5885
-#: src/structure.cpp:5899
+#: src/structure.cpp:5845
+#: src/structure.cpp:5913
+#: src/structure.cpp:5929
+#: src/structure.cpp:5943
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - повреждение %3.0f%%"
 
-#: src/structure.cpp:5851
+#: src/structure.cpp:5895
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - подключено %u из %u"
 
-#: src/structure.cpp:6015
-#: src/structure.cpp:6060
+#: src/structure.cpp:6059
+#: src/structure.cpp:6104
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Электронные повреждения"
 
-#: src/structure.cpp:6297
+#: src/structure.cpp:6341
 msgid "Electronic Reward - Visibility Report"
 msgstr "награда - доклад о местоположении"
 
-#: src/structure.cpp:6337
+#: src/structure.cpp:6381
 msgid "Factory Reward - Propulsion"
 msgstr "награда завода - движитель"
 
-#: src/structure.cpp:6361
+#: src/structure.cpp:6405
 msgid "Factory Reward - Body"
 msgstr "награда завода - рама"
 
-#: src/structure.cpp:6385
+#: src/structure.cpp:6429
 msgid "Factory Reward - Weapon"
 msgstr "награда завода - оружие"
 
-#: src/structure.cpp:6394
+#: src/structure.cpp:6438
 msgid "Factory Reward - Nothing"
 msgstr "награда завода - ничего"
 
-#: src/structure.cpp:6422
+#: src/structure.cpp:6466
 msgid "Repair Facility Award - Repair"
 msgstr "награда мастерской - ремонт"
 
-#: src/structure.cpp:6429
+#: src/structure.cpp:6473
 msgid "Repair Facility Award - Nothing"
 msgstr "награда мастерской - ничего"
 
