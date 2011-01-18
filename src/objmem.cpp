@@ -136,6 +136,12 @@ void objmemUpdate(void)
 	objListIntegCheck();
 #endif
 
+	// tell the script system about any destroyed objects
+	if (psDestroyedObj != NULL)
+	{
+		scrvUpdateBasePointers();
+	}
+
 	/* Go through the destroyed objects list looking for objects that
 	   were destroyed before this turn */
 
