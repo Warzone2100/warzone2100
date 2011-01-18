@@ -3708,11 +3708,14 @@ void displayPosition(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT 
 {
 	const int x = xOffset + psWidget->x;
 	const int y = yOffset + psWidget->y;
+	const int i = psWidget->UserData;
+	char text[80];
 
 	drawBlueBox(x, y, psWidget->width, psWidget->height);
 	iV_SetFont(font_regular);
 	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
-	iV_DrawText("Click here to select this slot", x + 10, y + 22);
+	ssprintf(text, "Click to take player slot %d", NetPlay.players[i].position);
+	iV_DrawText(text, x + 10, y + 22);
 }
 
 static void displayAi(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
