@@ -385,12 +385,13 @@ bool proj_SendProjectile(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int player, 
 
 bool proj_SendProjectileAngled(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int player, Vector3i target, BASE_OBJECT *psTarget, bool bVisible, int weapon_slot, int min_angle)
 {
-	PROJECTILE *            psProj = new PROJECTILE(ProjectileTrackerID |(gameTime2 >>4), player);
 	WEAPON_STATS *psStats = &asWeaponStats[psWeap->nStat];
 
 	ASSERT_OR_RETURN( false, psWeap->nStat < numWeaponStats, "Invalid range referenced for numWeaponStats, %d > %d", psWeap->nStat, numWeaponStats);
 	ASSERT_OR_RETURN( false, psStats != NULL, "Invalid weapon stats" );
 	ASSERT_OR_RETURN( false, psTarget == NULL || !psTarget->died, "Aiming at dead target!" );
+
+	PROJECTILE *psProj = new PROJECTILE(ProjectileTrackerID | (realTime >> 4), player);
 
 	/* get muzzle offset */
 	if (psAttacker == NULL)

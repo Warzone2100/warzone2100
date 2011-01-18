@@ -11662,33 +11662,7 @@ static void plotFeature(char *backDropSprite)
 	//increment to the start of the data
 	pFileData += FEATURE_HEADER_SIZE;
 
-	// Check the file version
-	if (psHeader->version <= VERSION_19)
-	{
-		if (psHeader->version < VERSION_14)
-		{
-			// most (all?) maps use revision 8
-			sizeOfSaveFeature = sizeof(SAVE_FEATURE_V2);
-			psSaveFeature = (SAVE_FEATURE_V2*) pFileData;
-		}
-		else
-		{
-			// supposedly, All versions up to 19 are compatible with SAVE_STRUCTURE_V2
-			// so this isn't needed.  Adding check just in case.
-			//sizeOfSaveFeature = sizeof(SAVE_FEATURE_V14);
-			//psSaveFeatureV14 = (SAVE_FEATURE_V14*) pFileData;
-			debug(LOG_ERROR, "Please make a new ticket and upload %s to wz2100.net.  This map (>14) is not supported at this time.", psLevel->apDataFiles[0]);
-			return;
-		}
-	}
-	else
-	{
-		// AFAIK, at this time, nothing uses this size.
-		//sizeOfSaveFeature = sizeof(SAVE_FEATURE);
-		//psSaveFeature = (SAVE_FEATURE*) pFileData;
-		debug(LOG_ERROR, "Please make a new ticket and upload %s to wz2100.net.  This map (>19) is not supported at this time.", psLevel->apDataFiles[0]);
-		return;
-	}
+	sizeOfSaveFeature = sizeof(SAVE_FEATURE_V2);
 
 	if ((sizeOfSaveFeature * psHeader->quantity + FEATURE_HEADER_SIZE) > fileSize)
 	{
@@ -11700,7 +11674,7 @@ static void plotFeature(char *backDropSprite)
 	for (count = 0; count < psHeader->quantity; count++, pFileData += sizeOfSaveFeature)
 	{
 		// All versions up to 19 are compatible with V2.
-		memcpy(psSaveFeature, pFileData, sizeof(SAVE_STRUCTURE_V2));
+		psSaveFeature = (SAVE_FEATURE_V2*) pFileData;
 
 		// we only care about oil
 		if (strncmp(psSaveFeature->name, "OilResource", 11) == 0)
@@ -11722,4 +11696,3 @@ static void plotFeature(char *backDropSprite)
 		backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx) + 2] = color.byte.b;
 	}
 }
-

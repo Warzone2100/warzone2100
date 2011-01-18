@@ -1431,8 +1431,6 @@ UDWORD		dispX,dispY,dispR;
 	return(psReturn);
 }
 
-UWORD lastangle;	// debugging only
-
 // Dummy structure stats used for positioning delivery points.
 static STRUCTURE_STATS ReposStats;
 static BOOL ReposValid = false;

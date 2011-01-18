@@ -1295,9 +1295,6 @@ intChooseSystemStats( DROID_TEMPLATE *psTemplate )
 	return psStats;
 }
 
-/* set SHOWTEMPLATENAME to 0 to show template components in edit box */
-#define SHOWTEMPLATENAME	0
-
 const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 {
 	// NOTE:	At this time, savegames can support a max of 60. We are using WIDG_MAXSTR (currently 80 )for display
@@ -1310,7 +1307,8 @@ const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 	*/
 	if(psTemplate->droidType == DROID_TRANSPORTER)
 	{
-		return _("Transport");
+		sstrcpy(aCurrName, _("Transport"));
+		return aCurrName;
 	}
 
 	/*
@@ -1336,7 +1334,7 @@ const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 	}
 
 	compIndex = psTemplate->asParts[COMP_BODY];
-	ASSERT_OR_RETURN( NULL, compIndex < numBodyStats, "Invalid range referenced for numBodyStats, %d > %d", compIndex, numBodyStats);
+	ASSERT_OR_RETURN("", compIndex < numBodyStats, "Invalid range referenced for numBodyStats, %d > %d", compIndex, numBodyStats);
 	psStats = (COMPONENT_STATS *) (asBodyStats + compIndex);
 	if ( psTemplate->asParts[COMP_BODY] != 0 )
 	{
@@ -1353,7 +1351,7 @@ const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 	}
 
 	compIndex = psTemplate->asParts[COMP_PROPULSION];
-	ASSERT_OR_RETURN( NULL, compIndex < numPropulsionStats, "Invalid range referenced for numPropulsionStats, %d > %d", compIndex, numPropulsionStats);
+	ASSERT_OR_RETURN("", compIndex < numPropulsionStats, "Invalid range referenced for numPropulsionStats, %d > %d", compIndex, numPropulsionStats);
 	psStats = (COMPONENT_STATS *) (asPropulsionStats + compIndex);
 	if ( psTemplate->asParts[COMP_PROPULSION] != 0 )
 	{
@@ -1371,13 +1369,8 @@ const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 	return aCurrName;
 }
 
-
 static void intSetEditBoxTextFromTemplate( DROID_TEMPLATE *psTemplate )
 {
-#if SHOWTEMPLATENAME
-	widgSetString(psWScreen, IDDES_NAMEBOX, getStatName(psTemplate));
-#else
-
 	sstrcpy(aCurrName, "");
 
 	/* show component names if default template else show stat name */
@@ -1387,11 +1380,10 @@ static void intSetEditBoxTextFromTemplate( DROID_TEMPLATE *psTemplate )
 	}
 	else
 	{
-		sstrcpy(aCurrName, GetDefaultTemplateName(psTemplate));
+		GetDefaultTemplateName(psTemplate);	// sets aCurrName
 	}
 
 	widgSetString(psWScreen, IDDES_NAMEBOX, aCurrName);
-#endif
 }
 
 /* Set all the design bar graphs from a design template */
