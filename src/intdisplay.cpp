@@ -531,7 +531,7 @@ void intUpdateCommandFact(WIDGET *psWidget, W_CONTEXT *psContext)
 		}
 
 		cIndex = 0;
-		for(i=0; i<MAX_FACTORY; i++)
+		for (i = 0; i < 5; ++i)  // TODO Support up to MAX_FACTORY (which won't fit in the ugly secondaryOrder bitmask hack).
 		{
 			if ( psDroid->secondaryOrder & (1 << (i + start)) )
 			{
