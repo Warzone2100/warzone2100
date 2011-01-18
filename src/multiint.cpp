@@ -3765,6 +3765,8 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 	UDWORD		j = psWidget->UserData, eval;
 	PLAYERSTATS stat;
 
+	const int nameX = 32;
+
 	//bluboxes.
 	drawBlueBox(x,y,psWidget->width,psWidget->height);							// right
 	if (NetPlay.isHost && NetPlay.players[j].wzFile.isSending)
@@ -3794,16 +3796,21 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 
 		// name
-		while (iV_GetTextWidth(NetPlay.players[j].name) > psWidget->width - 68)		// clip name.
+		std::string name = NetPlay.players[j].name;
+		if (iV_GetTextWidth(name.c_str()) > psWidget->width - nameX)
 		{
-			NetPlay.players[j].name[strlen(NetPlay.players[j].name) - 1] = '\0';
+			while (!name.empty() && iV_GetTextWidth((name + "...").c_str()) > psWidget->width - nameX)
+			{
+				name.resize(name.size() - 1);  // Clip name.
+			}
+			name += "...";
 		}
 		if (j == NET_HOST_ONLY && NetPlay.bComms)
 		{
-			iV_DrawText(NetPlay.players[j].name, x + 32, y + 18);
+			iV_DrawText(name.c_str(), x + nameX, y + 18);
 			iV_SetFont(font_small);
 			iV_SetTextColour(WZCOL_TEXT_MEDIUM);
-			iV_DrawText(_("HOST"), x + 32, y + 28);
+			iV_DrawText(_("HOST"), x + nameX, y + 28);
 			iV_SetFont(font_regular);
 			iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 		}
@@ -3812,17 +3819,17 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 			char buf[250] = {'\0'};
 
 			// show "actual" ping time
-			iV_DrawText(NetPlay.players[j].name, x + 32, y + 18);
+			iV_DrawText(name.c_str(), x + nameX, y + 18);
 			iV_SetFont(font_small);
 			iV_SetTextColour(WZCOL_TEXT_MEDIUM);
 			ssprintf(buf, "Ping: %03d", ingame.PingTimes[j]);
-			iV_DrawText(buf, x + 32, y + 28);
+			iV_DrawText(buf, x + nameX, y + 28);
 			iV_SetFont(font_regular);
 			iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 		}
 		else
 		{
-			iV_DrawText(NetPlay.players[j].name, x + 32, y + 22);
+			iV_DrawText(name.c_str(), x + nameX, y + 22);
 		}
 		
 		if(getMultiStats(j).played < 5)
@@ -3917,7 +3924,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 		case AI_CLOSED: sstrcpy(aitext, "Closed"); break;
 		default: sstrcpy(aitext, aidata[NetPlay.players[j].ai].name); break;
 		}
-		iV_DrawText(aitext, x + 32, y + 22);
+		iV_DrawText(aitext, x + nameX, y + 22);
 	}
 }
 
