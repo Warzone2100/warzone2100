@@ -260,7 +260,7 @@ static char pCloseText[] = "X";
 static const char	*apPlayerText[] =
 {
 	"0", "1", "2", "3", "4", "5", "6", "7",
-	"8", "9", "A", "B", "C", "D", "E", "F",
+	"8", "9", "10", "11", "12", "13", "14", "15",
 };
 static const char	*apPlayerTip[] =
 {
@@ -274,12 +274,12 @@ static const char	*apPlayerTip[] =
 	"Select Player 7",
 	"Select Player 8",
 	"Select Player 9",
-	"Select Player A",
-	"Select Player B",
-	"Select Player C",
-	"Select Player D",
-	"Select Player E",
-	"Select Player F",
+	"Select Player 10",
+	"Select Player 11",
+	"Select Player 12",
+	"Select Player 13",
+	"Select Player 14",
+	"Select Player 15",
 };
 
 /* The widget screen */
