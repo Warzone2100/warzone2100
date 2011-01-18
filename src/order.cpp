@@ -541,25 +541,48 @@ void orderUpdateDroid(DROID *psDroid)
 					tooFarFromPath = true;
 				}
 			}
-			if (!tooFarFromPath &&
-			    (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS) &&
-			    (aiBestNearestTarget(psDroid, &psObj, 0, NULL) >= 0))
+			if (!tooFarFromPath)
 			{
+				// true if in condition to set actionDroid to attack/observe
+				bool attack = secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS &&
+				              aiBestNearestTarget(psDroid, &psObj, 0, NULL) >= 0;
 				switch (psDroid->droidType)
 				{
-				case DROID_WEAPON:
-				case DROID_CYBORG:
-				case DROID_CYBORG_SUPER:
-				case DROID_PERSON:
-				case DROID_COMMAND:
-					actionDroid(psDroid, DACTION_ATTACK, psObj);
-					break;
-				case DROID_SENSOR:
-					actionDroid(psDroid, DACTION_OBSERVE, psObj);
-					break;
-				default:
-					actionDroid(psDroid, DACTION_NONE);
-					break;
+					case DROID_CONSTRUCT:
+					case DROID_CYBORG_CONSTRUCT:
+						psObj = checkForDamagedStruct(psDroid, NULL);
+						if (psObj)
+						{
+							actionDroid(psDroid, DACTION_REPAIR, psObj);
+						}
+						break;
+					case DROID_REPAIR:
+					case DROID_CYBORG_REPAIR:
+						psObj = checkForRepairRange(psDroid, NULL);
+						if (psObj)
+						{
+							actionDroid(psDroid, DACTION_DROIDREPAIR, psObj);
+						}
+						break;
+					case DROID_WEAPON:
+					case DROID_CYBORG:
+					case DROID_CYBORG_SUPER:
+					case DROID_PERSON:
+					case DROID_COMMAND:
+						if (attack)
+						{
+							actionDroid(psDroid, DACTION_ATTACK, psObj);
+						}
+						break;
+					case DROID_SENSOR:
+						if (attack)
+						{
+							actionDroid(psDroid, DACTION_OBSERVE, psObj);
+						}
+						break;
+					default:
+						actionDroid(psDroid, DACTION_NONE);
+						break;
 				}
 			}
 		}
