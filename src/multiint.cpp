@@ -2101,7 +2101,7 @@ static void drawReadyButton(UDWORD player)
 	{
 		int icon = difficultyIcon(NetPlay.players[player].difficulty);
 		addMultiBut(psWScreen, MULTIOP_READY_FORM_ID + player, MULTIOP_DIFFICULTY_INIT_START + player, 6, 4, MULTIOP_READY_WIDTH, MULTIOP_READY_HEIGHT,
-		            challengeActive ? _("You cannot change difficulty in a challenge") : _("Click to change difficulty"), icon, icon, icon);
+		            challengeActive ? _("You cannot change difficulty in a challenge") : NetPlay.isHost? _("Click to change difficulty") : NULL, icon, icon, icon);
 		return;
 	}
 	else if (!NetPlay.players[player].allocated)
@@ -2257,7 +2257,7 @@ void addPlayerBox(BOOL players)
 			sColInit.y = playerBoxHeight(i);
 			sColInit.width = MULTIOP_COLOUR_WIDTH;
 			sColInit.height = MULTIOP_PLAYERHEIGHT;
-			if (selectedPlayer == i || !NetPlay.players[i].allocated || NetPlay.isHost)
+			if (selectedPlayer == i || NetPlay.isHost)
 			{
 				sColInit.pTip = _("Click to change player colour");
 			}
