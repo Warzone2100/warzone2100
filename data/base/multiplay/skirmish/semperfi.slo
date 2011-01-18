@@ -103,9 +103,9 @@ public	STRUCTURESTAT	vtolTarget[10],rebuildStat[4];
 private int				baseX,baseY,minx,miny,maxx,maxy;
 public	int				numStructs,numIncendrys,numDefStructs,numWallWeaps,numBaseStruct,numLightCyborgs,numFundamental;
 private	STRUCTURESTAT	structChoice[5];
-public	STRUCTURESTAT	incendrys[8],structs[13],defStructs[26],wallWeaps[11];
+public	STRUCTURESTAT	incendrys[20],structs[13],defStructs[26],wallWeaps[11];
 public	STRUCTURESTAT	sensorTower,wall,cornerWall,resLab,powGen,playerHQ,lassat,factory,derrick,cybFactory,
-						vtolDefStruct[5],vtolPad,vtolFactory,uplink,baseStruct[8];
+						vtolDefStruct[6],vtolPad,vtolFactory,uplink,baseStruct[8];
 public	STRUCTURESTAT	powModule,facModule,resModule,vtolModule;
 public	int				extraStruct;
 
@@ -164,7 +164,7 @@ private int				sender,x,y,beaconX[MAX_PLAYERS_HACK],beaconY[MAX_PLAYERS_HACK],tB
 private string			message;
 
 private	int				defendX,defendY,defendRadius,tDefendStart,tDefendTimeout,
-						defendMoveType,baseRange,curTech,numVtolAttackGroups,numAttackVtols,
+						defendMoveType,curTech,numVtolAttackGroups,numAttackVtols,
 						numDefendVtols,rebuildStructX[MAX_REBUILD_STRUCT],rebuildStructY[MAX_REBUILD_STRUCT],countRebuildStruct;
 private	STRUCTURESTAT	rebuildStructStat[MAX_REBUILD_STRUCT];
 
@@ -328,8 +328,6 @@ event initialisedEvent(CALL_GAMEINIT)
 	tDefendTimeout = -1;
 	defendMoveType = -1;		//move or scout
 	seenAnyAA = false;
-
-	baseRange = 4 * TILE;
 
 	// set current research branch
 	setTechBranch(-1);
@@ -1074,7 +1072,7 @@ function bool aiResponsibleForPlayer(int _player)
 // keep details about the size and postion of the ai players base
 event basedetails(basedetailsTr)
 {
-	local int result;
+	local int result, baseRange;
 
 	// clear old extremities.
 	maxy = 0;
@@ -1450,7 +1448,6 @@ event incendry(inactive)
 
 		if(buildX != 0)
 		{
-
 			// choose a device
 			count = numIncendrys - 1;
 			result = 99;
@@ -1466,7 +1463,6 @@ event incendry(inactive)
 					count = count - 1;
 				}
 			}
-
 
 			// find a unit and build an incendry device.
 			if(result != 99)
@@ -3333,12 +3329,11 @@ event vtolDefend(vtolDefendTr)
 					{
 						buildX = structure.x;
 						buildY = structure.y;
-						//	if ! vtol defense already built...
 
 						//find best defense we can build.
 						count = 0;
 						count2 = -1;
-						while( count < 5)
+						while (count < 6)
 						{
 							if(isStructureAvailable(vtolDefStruct[count],me))
 							{
