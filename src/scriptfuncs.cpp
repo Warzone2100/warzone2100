@@ -10759,7 +10759,7 @@ BOOL scrAssembleWeaponTemplate(void)
 
 			if (bMultiMessages)
 			{
-				sendTemplate(pNewTemplate);
+				sendTemplate(player, pNewTemplate);
 			}
 		}
 		else

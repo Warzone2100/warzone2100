@@ -4616,7 +4616,7 @@ static BOOL saveTemplate(void)
 		psTempl->multiPlayerID = generateNewObjectId();
 		if (bMultiMessages)
 		{
-			sendTemplate(psTempl);
+			sendTemplate(selectedPlayer, psTempl);
 		}
 	}
 
