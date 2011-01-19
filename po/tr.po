@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-01-18 00:54+0100\n"
-"PO-Revision-Date: 2011-01-14 20:08+0200\n"
+"POT-Creation-Date: 2011-01-19 19:36+0100\n"
+"PO-Revision-Date: 2011-01-19 18:01+0200\n"
 "Last-Translator: Ayhan GORGULU <ayhangorgulu@gmail.com>\n"
 "Language-Team: Turkey <warzone-dev@gna.org>\n"
 "Language: \n"
@@ -5740,7 +5740,7 @@ msgid "New Design"
 msgstr "Yeni Tasarım"
 
 #: data/base/messages/strings/names.txt:15
-#: src/design.cpp:1313
+#: src/design.cpp:1310
 msgid "Transport"
 msgstr "Taşıyıcı"
 
@@ -11370,20 +11370,17 @@ msgid "Mini-Rocket Array Cobra Half-tracks"
 msgstr "Mini Roket(sıralı) Kobra Yarım Paletler"
 
 #: data/mp/messages/strings/names.txt:351
-#, fuzzy
 msgid "Jammer Tower"
-msgstr "Alev Atıcı Kule"
+msgstr "Sinyal Bozucu Kule"
 
 # Fachbegriff ist wohl Verwürfler im Deutschen, aber damit kann kaum jemand etwas anfangen -Kreuvf
 #: data/mp/messages/strings/names.txt:352
-#, fuzzy
 msgid "Jammer Turret"
 msgstr "Sinyal Bozucu Taret"
 
 #: data/mp/messages/strings/names.txt:353
-#, fuzzy
 msgid "Electronic Countermeasures"
-msgstr "Elektronik Labaratuarı"
+msgstr "Elektronik Önlemler"
 
 #: data/mp/messages/strings/names.txt:363
 #: data/mp/messages/strings/names.txt:1703
@@ -12034,16 +12031,16 @@ msgid "System locale"
 msgstr "Yerel Sistem"
 
 #: lib/netplay/netplay.cpp:203
-#: lib/netplay/netplay.cpp:1043
+#: lib/netplay/netplay.cpp:1044
 msgid "Enter password here"
 msgstr "Parolayı buraya gir"
 
-#: lib/netplay/netplay.cpp:2048
+#: lib/netplay/netplay.cpp:2052
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Konnte Lobbyserver-Namen nicht auflösen (%s)!"
 
-#: lib/netplay/netplay.cpp:2062
+#: lib/netplay/netplay.cpp:2066
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Lobi Sunucusu ile iletişim kurulamadı! TCP-Port %u u açıkmı?"
@@ -12212,7 +12209,7 @@ msgstr "Oyuncu"
 
 #: src/design.cpp:449
 #: src/design.cpp:469
-#: src/design.cpp:3501
+#: src/design.cpp:3493
 msgid "New Vehicle"
 msgstr "Yeni Araç"
 
@@ -12251,20 +12248,20 @@ msgstr "Motor Gücü"
 
 #: src/design.cpp:706
 #: src/design.cpp:759
-#: src/design.cpp:1529
-#: src/design.cpp:1553
-#: src/design.cpp:1574
-#: src/design.cpp:1590
-#: src/design.cpp:1610
-#: src/design.cpp:1627
-#: src/design.cpp:1647
-#: src/design.cpp:1664
-#: src/design.cpp:1705
-#: src/design.cpp:1737
-#: src/design.cpp:1869
-#: src/design.cpp:1885
-#: src/design.cpp:1923
-#: src/design.cpp:1956
+#: src/design.cpp:1521
+#: src/design.cpp:1545
+#: src/design.cpp:1566
+#: src/design.cpp:1582
+#: src/design.cpp:1602
+#: src/design.cpp:1619
+#: src/design.cpp:1639
+#: src/design.cpp:1656
+#: src/design.cpp:1697
+#: src/design.cpp:1729
+#: src/design.cpp:1861
+#: src/design.cpp:1877
+#: src/design.cpp:1915
+#: src/design.cpp:1948
 msgid "Weight"
 msgstr "Ağırlık"
 
@@ -12283,72 +12280,72 @@ msgstr "Toplam Beden Puanı"
 msgid "Power Usage"
 msgstr "Güç Kullanımı"
 
-#: src/design.cpp:1335
+#: src/design.cpp:1333
 msgid "Hydra "
 msgstr "Püsküllü Bela"
 
-#: src/design.cpp:1509
-#: src/design.cpp:1537
+#: src/design.cpp:1501
+#: src/design.cpp:1529
 msgid "Sensor Range"
 msgstr "Algılayıcı'nın Görüş Alanı"
 
-#: src/design.cpp:1521
-#: src/design.cpp:1545
+#: src/design.cpp:1513
+#: src/design.cpp:1537
 msgid "Sensor Power"
 msgstr "Algılayıcı Gücü"
 
-#: src/design.cpp:1566
-#: src/design.cpp:1582
+#: src/design.cpp:1558
+#: src/design.cpp:1574
 msgid "ECM Power"
 msgstr "ECM-Güç"
 
-#: src/design.cpp:1602
-#: src/design.cpp:1619
-#: src/design.cpp:1639
-#: src/design.cpp:1656
+#: src/design.cpp:1594
+#: src/design.cpp:1611
+#: src/design.cpp:1631
+#: src/design.cpp:1648
 msgid "Build Points"
 msgstr "İnşa Noktaları"
 
-#: src/design.cpp:1677
-#: src/design.cpp:1713
+#: src/design.cpp:1669
+#: src/design.cpp:1705
 msgid "Range"
 msgstr "Menzil"
 
-#: src/design.cpp:1689
-#: src/design.cpp:1721
+#: src/design.cpp:1681
+#: src/design.cpp:1713
 msgid "Damage"
 msgstr "Hasar"
 
-#: src/design.cpp:1697
-#: src/design.cpp:1729
+#: src/design.cpp:1689
+#: src/design.cpp:1721
 msgid "Rate-of-Fire"
 msgstr "Ateş Oranı"
 
-#: src/design.cpp:1857
-#: src/design.cpp:1877
+#: src/design.cpp:1849
+#: src/design.cpp:1869
 msgid "Air Speed"
 msgstr "Hava Hızı"
 
-#: src/design.cpp:1895
-#: src/design.cpp:1932
+#: src/design.cpp:1887
+#: src/design.cpp:1924
 msgid "Road Speed"
 msgstr "Yol Hızı"
 
-#: src/design.cpp:1905
-#: src/design.cpp:1940
+#: src/design.cpp:1897
+#: src/design.cpp:1932
 msgid "Off-Road Speed"
 msgstr "Yer Hızı"
 
-#: src/design.cpp:1913
-#: src/design.cpp:1948
+#: src/design.cpp:1905
+#: src/design.cpp:1940
 msgid "Water Speed"
 msgstr "Sudaki Hızı"
 
-#: src/design.cpp:2074
+#: src/design.cpp:2066
 msgid "Weapons"
 msgstr "Silahlar"
 
-#: src/design.cpp:2094
+#: src/design.cpp:2086
 msgid "Systems"
 msgstr "Sistemler"
 
@@ -12369,30 +12366,30 @@ msgstr "Diğer oyuncular bekleniyor"
 msgid "Out of sync"
 msgstr "Senkronize edilmemiş"
 
-#: src/display.cpp:1651
+#: src/display.cpp:1649
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "İnşa edilemiyor. Petrol Kaynağı Yanıyor."
 
-#: src/display.cpp:1830
-#: src/display.cpp:2423
+#: src/display.cpp:1828
+#: src/display.cpp:2421
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Hasar  %d%% - Tecrübe %d, %s"
 
-#: src/display.cpp:1846
+#: src/display.cpp:1844
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Müttefik - Hasar %d%% - Tecrübe %d, %s"
 
-#: src/display.cpp:2044
+#: src/display.cpp:2042
 msgid "Truck ordered to build Oil Derrick"
 msgstr "Kamyon'a bir Petrol Kuyusu inşatı emri verildi."
 
-#: src/display.cpp:2045
+#: src/display.cpp:2043
 msgid "2 trucks ordered to build Oil Derrick"
 msgstr "2 kamyona bir Petrol Kuyusu inşatı emri verildi."
 
-#: src/display.cpp:2046
+#: src/display.cpp:2044
 #, c-format
 msgid "%d trucks ordered to build Oil Derrick"
 msgstr "%d kamyon'lara bir Petrol Kuyusu inşatı emri verildi."
@@ -14295,11 +14292,11 @@ msgstr "Y.Z SEÇ"
 
 #: src/multiint.cpp:1648
 msgid "Allow human players to join in this slot"
-msgstr ""
+msgstr "İnsan oyuncuların bu slota girmesi için izin ver"
 
 #: src/multiint.cpp:1656
 msgid "Leave this slot unused"
-msgstr ""
+msgstr "Bu slotu kullanılmaz olarak belirle"
 
 #: src/multiint.cpp:1736
 msgid "Player colour"
@@ -14396,17 +14393,17 @@ msgstr "Kurucu oyunu başlatıyor"
 msgid "Players"
 msgstr "Oyuncular"
 
-#: src/multiint.cpp:3772
+#: src/multiint.cpp:3777
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Harita Gönderiliyor: %d%%"
 
-#: src/multiint.cpp:3780
+#: src/multiint.cpp:3785
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Harita: %d%% indirildi"
 
-#: src/multiint.cpp:3803
+#: src/multiint.cpp:3813
 msgid "HOST"
 msgstr "KURUCU"
 
@@ -14476,44 +14473,36 @@ msgid "8 players"
 msgstr "8 Oyuncu"
 
 #: src/multimenu.cpp:145
-#, fuzzy
 msgid "9 players"
-msgstr "2 Oyuncu"
+msgstr "9 Oyuncu"
 
 #: src/multimenu.cpp:145
-#, fuzzy
 msgid "10 players"
-msgstr "2 Oyuncu"
+msgstr "10 Oyuncu"
 
 #: src/multimenu.cpp:145
-#, fuzzy
 msgid "11 players"
-msgstr "2 Oyuncu"
+msgstr "11 Oyuncu"
 
 #: src/multimenu.cpp:145
-#, fuzzy
 msgid "12 players"
-msgstr "2 Oyuncu"
+msgstr "12 Oyuncu"
 
 #: src/multimenu.cpp:145
-#, fuzzy
 msgid "13 players"
-msgstr "2 Oyuncu"
+msgstr "13 Oyuncu"
 
 #: src/multimenu.cpp:145
-#, fuzzy
 msgid "14 players"
-msgstr "4 Oyuncu"
+msgstr "14 Oyuncu"
 
 #: src/multimenu.cpp:145
-#, fuzzy
 msgid "15 players"
-msgstr "2 Oyuncu"
+msgstr "15 Oyuncu"
 
 #: src/multimenu.cpp:145
-#, fuzzy
 msgid "16 players"
-msgstr "2 Oyuncu"
+msgstr "16 Oyuncu"
 
 #: src/multimenu.cpp:618
 msgid "Technology level 1"
@@ -14627,38 +14616,37 @@ msgstr "Mavi"
 
 #: src/multiplay.cpp:2065
 msgid "Yellow"
-msgstr ""
+msgstr "Sarı"
 
 #: src/multiplay.cpp:2066
 msgid "Purple"
-msgstr ""
+msgstr "Mor"
 
 #: src/multiplay.cpp:2067
 msgid "White"
-msgstr ""
+msgstr "Beyaz"
 
 #: src/multiplay.cpp:2068
-#, fuzzy
 msgid "Bright blue"
-msgstr "Sağ Tuş"
+msgstr "Açık Mavi"
 
 #: src/multiplay.cpp:2069
 msgid "Neon green"
-msgstr ""
+msgstr "Neon yeşili"
 
 #: src/multiplay.cpp:2070
 msgid "Infrared"
-msgstr ""
+msgstr "Kızılötesi"
 
 #: src/multiplay.cpp:2071
 msgid "Ultraviolet"
-msgstr ""
+msgstr "Morötesi"
 
 #: src/multiplay.cpp:2072
 msgid "Brown"
-msgstr ""
+msgstr "Kahverengi"
 
-#: src/order.cpp:841
+#: src/order.cpp:864
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr "Bunu Yapamıyoruz! Biz Cyborg Taşıma Gemisi'ni kullanmak için bir Cyborg birimine sahip olmalıyız!"
 
