@@ -637,19 +637,16 @@ static bool deserializeNetPlay(PHYSFS_file* fileHandle, NETPLAY* serializeNetPla
 	return retv;
 }
 
-#define GAME_SAVE_V7	\
-	uint32_t    gameTime;	\
-	uint32_t    GameType;		/* Type of game , one of the GTYPE_... enums. */ \
-	int32_t     ScrollMinX;		/* Scroll Limits */ \
-	int32_t     ScrollMinY; \
-	uint32_t    ScrollMaxX; \
-	uint32_t    ScrollMaxY; \
-	char	levelName[MAX_LEVEL_SIZE]	//name of the level to load up when mid game
-
-typedef struct save_game_v7
+struct SAVE_GAME_V7
 {
-	GAME_SAVE_V7;
-} SAVE_GAME_V7;
+	uint32_t    gameTime;
+	uint32_t    GameType;                   /* Type of game , one of the GTYPE_... enums. */
+	int32_t     ScrollMinX;                 /* Scroll Limits */
+	int32_t     ScrollMinY;
+	uint32_t    ScrollMaxX;
+	uint32_t    ScrollMaxY;
+	char        levelName[MAX_LEVEL_SIZE];  //name of the level to load up when mid game
+};
 
 static bool serializeSaveGameV7Data(PHYSFS_file* fileHandle, const SAVE_GAME_V7* serializeGame)
 {
@@ -673,14 +670,10 @@ static bool deserializeSaveGameV7Data(PHYSFS_file* fileHandle, SAVE_GAME_V7* ser
 	     && PHYSFS_read(fileHandle, serializeGame->levelName, MAX_LEVEL_SIZE, 1) == 1);
 }
 
-#define GAME_SAVE_V10	\
-	GAME_SAVE_V7;		\
-	SAVE_POWER	power[MAX_PLAYERS]
-
-typedef struct save_game_v10
+struct SAVE_GAME_V10 : public SAVE_GAME_V7
 {
-	GAME_SAVE_V10;
-} SAVE_GAME_V10;
+	SAVE_POWER  power[MAX_PLAYERS];
+};
 
 static bool serializeSaveGameV10Data(PHYSFS_file* fileHandle, const SAVE_GAME_V10* serializeGame)
 {
@@ -714,14 +707,10 @@ static bool deserializeSaveGameV10Data(PHYSFS_file* fileHandle, SAVE_GAME_V10* s
 	return true;
 }
 
-#define GAME_SAVE_V11	\
-	GAME_SAVE_V10;		\
-	iView currentPlayerPos
-
-typedef struct save_game_v11
+struct SAVE_GAME_V11 : public SAVE_GAME_V10
 {
-	GAME_SAVE_V11;
-} SAVE_GAME_V11;
+	iView currentPlayerPos;
+};
 
 static bool serializeSaveGameV11Data(PHYSFS_file* fileHandle, const SAVE_GAME_V11* serializeGame)
 {
@@ -735,15 +724,11 @@ static bool deserializeSaveGameV11Data(PHYSFS_file* fileHandle, SAVE_GAME_V11* s
 	     && deserializeiViewData(fileHandle, &serializeGame->currentPlayerPos));
 }
 
-#define GAME_SAVE_V12	\
-	GAME_SAVE_V11;		\
-	uint32_t    missionTime;\
-	uint32_t    saveKey
-
-typedef struct save_game_v12
+struct SAVE_GAME_V12 : public SAVE_GAME_V11
 {
-	GAME_SAVE_V12;
-} SAVE_GAME_V12;
+	uint32_t    missionTime;
+	uint32_t    saveKey;
+};
 
 static bool serializeSaveGameV12Data(PHYSFS_file* fileHandle, const SAVE_GAME_V12* serializeGame)
 {
@@ -759,26 +744,22 @@ static bool deserializeSaveGameV12Data(PHYSFS_file* fileHandle, SAVE_GAME_V12* s
 	     && PHYSFS_readUBE32(fileHandle, &serializeGame->saveKey));
 }
 
-#define GAME_SAVE_V14			\
-	GAME_SAVE_V12;				\
-	int32_t     missionOffTime;		\
-	int32_t     missionETA;			\
-	uint16_t    missionHomeLZ_X;	\
-	uint16_t    missionHomeLZ_Y;	\
-	int32_t     missionPlayerX;		\
-	int32_t     missionPlayerY;		\
-	uint16_t    iTranspEntryTileX[MAX_PLAYERS];	\
-	uint16_t    iTranspEntryTileY[MAX_PLAYERS];	\
-	uint16_t    iTranspExitTileX[MAX_PLAYERS];	\
-	uint16_t    iTranspExitTileY[MAX_PLAYERS];	\
-	uint32_t    aDefaultSensor[MAX_PLAYERS];	\
-	uint32_t    aDefaultECM[MAX_PLAYERS];		\
-	uint32_t    aDefaultRepair[MAX_PLAYERS]
-
-typedef struct save_game_v14
+struct SAVE_GAME_V14 : public SAVE_GAME_V12
 {
-	GAME_SAVE_V14;
-} SAVE_GAME_V14;
+	int32_t     missionOffTime;
+	int32_t     missionETA;
+	uint16_t    missionHomeLZ_X;
+	uint16_t    missionHomeLZ_Y;
+	int32_t     missionPlayerX;
+	int32_t     missionPlayerY;
+	uint16_t    iTranspEntryTileX[MAX_PLAYERS];
+	uint16_t    iTranspEntryTileY[MAX_PLAYERS];
+	uint16_t    iTranspExitTileX[MAX_PLAYERS];
+	uint16_t    iTranspExitTileY[MAX_PLAYERS];
+	uint32_t    aDefaultSensor[MAX_PLAYERS];
+	uint32_t    aDefaultECM[MAX_PLAYERS];
+	uint32_t    aDefaultRepair[MAX_PLAYERS];
+};
 
 static bool serializeSaveGameV14Data(PHYSFS_file* fileHandle, const SAVE_GAME_V14* serializeGame)
 {
@@ -896,19 +877,15 @@ static bool deserializeSaveGameV14Data(PHYSFS_file* fileHandle, SAVE_GAME_V14* s
 	return true;
 }
 
-#define GAME_SAVE_V15			\
-	GAME_SAVE_V14;				\
-	BOOL        offWorldKeepLists;\
-	uint8_t     aDroidExperience[MAX_PLAYERS][MAX_RECYCLED_DROIDS];\
-	uint32_t    RubbleTile;\
-	uint32_t    WaterTile;\
-	uint32_t    fogColour;\
-	uint32_t    fogState
-
-typedef struct save_game_v15
+struct SAVE_GAME_V15 : public SAVE_GAME_V14
 {
-	GAME_SAVE_V15;
-} SAVE_GAME_V15;
+	BOOL        offWorldKeepLists;
+	uint8_t     aDroidExperience[MAX_PLAYERS][MAX_RECYCLED_DROIDS];
+	uint32_t    RubbleTile;
+	uint32_t    WaterTile;
+	uint32_t    fogColour;
+	uint32_t    fogState;
+};
 
 static bool serializeSaveGameV15Data(PHYSFS_file* fileHandle, const SAVE_GAME_V15* serializeGame)
 {
@@ -959,14 +936,10 @@ static bool deserializeSaveGameV15Data(PHYSFS_file* fileHandle, SAVE_GAME_V15* s
 	     && PHYSFS_readUBE32(fileHandle, &serializeGame->fogState));
 }
 
-#define GAME_SAVE_V16			\
-	GAME_SAVE_V15;				\
-	LANDING_ZONE   sLandingZone[MAX_NOGO_AREAS]
-
-typedef struct save_game_v16
+struct SAVE_GAME_V16 : public SAVE_GAME_V15
 {
-	GAME_SAVE_V16;
-} SAVE_GAME_V16;
+	LANDING_ZONE   sLandingZone[MAX_NOGO_AREAS];
+};
 
 static bool serializeSaveGameV16Data(PHYSFS_file* fileHandle, const SAVE_GAME_V16* serializeGame)
 {
@@ -1000,14 +973,10 @@ static bool deserializeSaveGameV16Data(PHYSFS_file* fileHandle, SAVE_GAME_V16* s
 	return true;
 }
 
-#define GAME_SAVE_V17			\
-	GAME_SAVE_V16;				\
-	uint32_t    objId
-
-typedef struct save_game_v17
+struct SAVE_GAME_V17 : public SAVE_GAME_V16
 {
-	GAME_SAVE_V17;
-} SAVE_GAME_V17;
+	uint32_t    objId;
+};
 
 static bool serializeSaveGameV17Data(PHYSFS_file* fileHandle, const SAVE_GAME_V17* serializeGame)
 {
@@ -1021,16 +990,12 @@ static bool deserializeSaveGameV17Data(PHYSFS_file* fileHandle, SAVE_GAME_V17* s
 	     && PHYSFS_readUBE32(fileHandle, &serializeGame->objId));
 }
 
-#define GAME_SAVE_V18			\
-	GAME_SAVE_V17;				\
-	char        buildDate[MAX_STR_LENGTH];		\
-	uint32_t    oldestVersion;	\
-	uint32_t    validityKey
-
-typedef struct save_game_v18
+struct SAVE_GAME_V18 : public SAVE_GAME_V17
 {
-	GAME_SAVE_V18;
-} SAVE_GAME_V18;
+	char        buildDate[MAX_STR_LENGTH];
+	uint32_t    oldestVersion;
+	uint32_t    validityKey;
+};
 
 static bool serializeSaveGameV18Data(PHYSFS_file* fileHandle, const SAVE_GAME_V18* serializeGame)
 {
@@ -1048,16 +1013,12 @@ static bool deserializeSaveGameV18Data(PHYSFS_file* fileHandle, SAVE_GAME_V18* s
 	     && PHYSFS_readUBE32(fileHandle, &serializeGame->validityKey));
 }
 
-#define GAME_SAVE_V19			\
-	GAME_SAVE_V18;				\
-	uint8_t     alliances[MAX_PLAYERS][MAX_PLAYERS];\
-	uint8_t     playerColour[MAX_PLAYERS];\
-	uint8_t     radarZoom
-
-typedef struct save_game_v19
+struct SAVE_GAME_V19 : public SAVE_GAME_V18
 {
-	GAME_SAVE_V19;
-} SAVE_GAME_V19;
+	uint8_t     alliances[MAX_PLAYERS][MAX_PLAYERS];
+	uint8_t     playerColour[MAX_PLAYERS];
+	uint8_t     radarZoom;
+};
 
 static bool serializeSaveGameV19Data(PHYSFS_file* fileHandle, const SAVE_GAME_V19* serializeGame)
 {
@@ -1111,15 +1072,11 @@ static bool deserializeSaveGameV19Data(PHYSFS_file* fileHandle, SAVE_GAME_V19* s
 	return PHYSFS_readUBE8(fileHandle, &serializeGame->radarZoom);
 }
 
-#define GAME_SAVE_V20			\
-	GAME_SAVE_V19;				\
-	uint8_t     bDroidsToSafetyFlag;	\
-	Vector2i    asVTOLReturnPos[MAX_PLAYERS]
-
-typedef struct save_game_v20
+struct SAVE_GAME_V20 : public SAVE_GAME_V19
 {
-	GAME_SAVE_V20;
-} SAVE_GAME_V20;
+	uint8_t     bDroidsToSafetyFlag;
+	Vector2i    asVTOLReturnPos[MAX_PLAYERS];
+};
 
 static bool serializeSaveGameV20Data(PHYSFS_file* fileHandle, const SAVE_GAME_V20* serializeGame)
 {
@@ -1155,14 +1112,10 @@ static bool deserializeSaveGameV20Data(PHYSFS_file* fileHandle, SAVE_GAME_V20* s
 	return true;
 }
 
-#define GAME_SAVE_V22			\
-	GAME_SAVE_V20;				\
-	RUN_DATA	asRunData[MAX_PLAYERS]
-
-typedef struct save_game_v22
+struct SAVE_GAME_V22 : public SAVE_GAME_V20
 {
-	GAME_SAVE_V22;
-} SAVE_GAME_V22;
+	RUN_DATA asRunData[MAX_PLAYERS];
+};
 
 static bool serializeSaveGameV22Data(PHYSFS_file* fileHandle, const SAVE_GAME_V22* serializeGame)
 {
@@ -1196,18 +1149,14 @@ static bool deserializeSaveGameV22Data(PHYSFS_file* fileHandle, SAVE_GAME_V22* s
 	return true;
 }
 
-#define GAME_SAVE_V24			\
-	GAME_SAVE_V22;				\
-	uint32_t    reinforceTime;		\
-	uint8_t     bPlayCountDown;	\
-	uint8_t     bPlayerHasWon;	\
-	uint8_t     bPlayerHasLost;	\
-	uint8_t     dummy3
-
-typedef struct save_game_v24
+struct SAVE_GAME_V24 : public SAVE_GAME_V22
 {
-	GAME_SAVE_V24;
-} SAVE_GAME_V24;
+	uint32_t    reinforceTime;
+	uint8_t     bPlayCountDown;
+	uint8_t     bPlayerHasWon;
+	uint8_t     bPlayerHasLost;
+	uint8_t     dummy3;
+};
 
 static bool serializeSaveGameV24Data(PHYSFS_file* fileHandle, const SAVE_GAME_V24* serializeGame)
 {
@@ -1229,23 +1178,10 @@ static bool deserializeSaveGameV24Data(PHYSFS_file* fileHandle, SAVE_GAME_V24* s
 	     && PHYSFS_readUBE8(fileHandle, &serializeGame->dummy3));
 }
 
-/*
-#define GAME_SAVE_V27		\
-	GAME_SAVE_V24
-
-typedef struct save_game_v27
+struct SAVE_GAME_V27 : public SAVE_GAME_V24
 {
-	GAME_SAVE_V27;
-} SAVE_GAME_V27;
-*/
-#define GAME_SAVE_V27			\
-	GAME_SAVE_V24;				\
-	uint16_t    awDroidExperience[MAX_PLAYERS][MAX_RECYCLED_DROIDS]
-
-typedef struct save_game_v27
-{
-	GAME_SAVE_V27;
-} SAVE_GAME_V27;
+	uint16_t    awDroidExperience[MAX_PLAYERS][MAX_RECYCLED_DROIDS];
+};
 
 static bool serializeSaveGameV27Data(PHYSFS_file* fileHandle, const SAVE_GAME_V27* serializeGame)
 {
@@ -1285,17 +1221,13 @@ static bool deserializeSaveGameV27Data(PHYSFS_file* fileHandle, SAVE_GAME_V27* s
 	return true;
 }
 
-#define GAME_SAVE_V29			\
-	GAME_SAVE_V27;				\
-	uint16_t    missionScrollMinX;  \
-	uint16_t    missionScrollMinY;  \
-	uint16_t    missionScrollMaxX;  \
-	uint16_t    missionScrollMaxY
-
-typedef struct save_game_v29
+struct SAVE_GAME_V29 : public SAVE_GAME_V27
 {
-	GAME_SAVE_V29;
-} SAVE_GAME_V29;
+	uint16_t    missionScrollMinX;
+	uint16_t    missionScrollMinY;
+	uint16_t    missionScrollMaxX;
+	uint16_t    missionScrollMaxY;
+};
 
 static bool serializeSaveGameV29Data(PHYSFS_file* fileHandle, const SAVE_GAME_V29* serializeGame)
 {
@@ -1315,17 +1247,13 @@ static bool deserializeSaveGameV29Data(PHYSFS_file* fileHandle, SAVE_GAME_V29* s
 	     && PHYSFS_readUBE16(fileHandle, &serializeGame->missionScrollMaxY));
 }
 
-#define GAME_SAVE_V30			\
-	GAME_SAVE_V29;				\
-	int32_t     scrGameLevel;       \
-	uint8_t     bExtraVictoryFlag;  \
-	uint8_t     bExtraFailFlag;     \
-	uint8_t     bTrackTransporter
-
-typedef struct save_game_v30
+struct SAVE_GAME_V30 : public SAVE_GAME_V29
 {
-	GAME_SAVE_V30;
-} SAVE_GAME_V30;
+	int32_t     scrGameLevel;
+	uint8_t     bExtraVictoryFlag;
+	uint8_t     bExtraFailFlag;
+	uint8_t     bTrackTransporter;
+};
 
 static bool serializeSaveGameV30Data(PHYSFS_file* fileHandle, const SAVE_GAME_V30* serializeGame)
 {
@@ -1346,14 +1274,10 @@ static bool deserializeSaveGameV30Data(PHYSFS_file* fileHandle, SAVE_GAME_V30* s
 }
 
 //extra code for the patch - saves out whether cheated with the mission timer
-#define GAME_SAVE_V31           \
-	GAME_SAVE_V30;				\
-	int32_t     missionCheatTime
-
-typedef struct save_game_v31
+struct SAVE_GAME_V31 : public SAVE_GAME_V30
 {
-	GAME_SAVE_V31;
-} SAVE_GAME_V31;
+	int32_t     missionCheatTime;
+};
 
 
 static bool serializeSaveGameV31Data(PHYSFS_file* fileHandle, const SAVE_GAME_V31* serializeGame)
@@ -1369,19 +1293,15 @@ static bool deserializeSaveGameV31Data(PHYSFS_file* fileHandle, SAVE_GAME_V31* s
 }
 
 // alexl. skirmish saves
-#define GAME_SAVE_V33           \
-	GAME_SAVE_V31;				\
-	MULTIPLAYERGAME sGame;		\
-	NETPLAY         sNetPlay;	\
-	uint32_t        savePlayer;	\
-	char            sPName[32];	\
-	BOOL            multiPlayer;\
-	uint32_t        sPlayerIndex[MAX_PLAYERS]
-
-typedef struct save_game_v33
+struct SAVE_GAME_V33 : public SAVE_GAME_V31
 {
-	GAME_SAVE_V33;
-} SAVE_GAME_V33;
+	MULTIPLAYERGAME sGame;
+	NETPLAY         sNetPlay;
+	uint32_t        savePlayer;
+	char            sPName[32];
+	BOOL            multiPlayer;
+	uint32_t        sPlayerIndex[MAX_PLAYERS];
+};
 
 static bool serializeSaveGameV33Data(PHYSFS_file* fileHandle, const SAVE_GAME_V33* serializeGame)
 {
@@ -1428,15 +1348,11 @@ static bool deserializeSaveGameV33Data(PHYSFS_file* fileHandle, SAVE_GAME_V33* s
 	return true;
 }
 
-#define GAME_SAVE_V34           \
-	GAME_SAVE_V33;				\
-	char		sPlayerName[MAX_PLAYERS][StringSize]
-
 //Now holds AI names for multiplayer
-typedef struct save_game_v34
+struct SAVE_GAME_V34 : public SAVE_GAME_V33
 {
-	GAME_SAVE_V34;
-} SAVE_GAME_V34;
+	char sPlayerName[MAX_PLAYERS][StringSize];
+};
 
 
 static bool serializeSaveGameV34Data(PHYSFS_file* fileHandle, const SAVE_GAME_V34* serializeGame)
@@ -1470,13 +1386,9 @@ static bool deserializeSaveGameV34Data(PHYSFS_file* fileHandle, SAVE_GAME_V34* s
 }
 
 // First version to utilize (de)serialization API and first to be big-endian (instead of little-endian)
-#define GAME_SAVE_V35           \
-	GAME_SAVE_V34
-
-typedef struct save_game_v35
+struct SAVE_GAME_V35 : public SAVE_GAME_V34
 {
-	GAME_SAVE_V35;
-} SAVE_GAME_V35;
+};
 
 static bool serializeSaveGameV35Data(PHYSFS_file* fileHandle, const SAVE_GAME_V35* serializeGame)
 {
@@ -1489,14 +1401,10 @@ static bool deserializeSaveGameV35Data(PHYSFS_file* fileHandle, SAVE_GAME_V35* s
 }
 
 // Store loaded mods in savegame
-#define GAME_SAVE_V38			\
-	GAME_SAVE_V35;					\
-	char		modList[modlist_string_size]
-
-typedef struct save_game_v38
+struct SAVE_GAME_V38 : public SAVE_GAME_V35
 {
-	GAME_SAVE_V38;
-} SAVE_GAME_V38;
+	char modList[modlist_string_size];
+};
 
 static bool serializeSaveGameV38Data(PHYSFS_file* fileHandle, const SAVE_GAME_V38* serializeGame)
 {
@@ -1521,10 +1429,7 @@ static bool deserializeSaveGameV38Data(PHYSFS_file* fileHandle, SAVE_GAME_V38* s
 }
 
 // Current save game version
-typedef struct save_game
-{
-	GAME_SAVE_V38;
-} SAVE_GAME;
+typedef SAVE_GAME_V38 SAVE_GAME;
 
 static bool serializeSaveGameData(PHYSFS_file* fileHandle, const SAVE_GAME* serializeGame)
 {
