@@ -1042,114 +1042,8 @@ static void mainLoop(void)
 	}
 }
 
-static bool fptest1(void)
-{
-	bool wtf = false;
-	float a = 5.19258240356725201562535524577016477814756008082239;
-	uint8_t aexpect[] = {5, 5, 5, 5, 5, 3, 3, 2, 1, 10, 1, 4, 6, 42, 6, 3, 2, 2, 5, 2, 1, 1, 1, 1, 2, 26, 1, 3, 1, 11, 2, 2, 1, 1, 3, 2, 2, 1, 2, 9, 1, 1, 9, 25, 1, 4, 4, 2, 8, 2, 14, 139, 1, 1, 1, 19, 1, 1, 10, 2, 1, 10, 1, 1, 1, 28, 11, 4, 4, 1, 2, 12, 59, 1, 4, 4, 8, 2, 2, 37, 1, 85, 1, 1, 15, 8, 1, 100, 1, 1, 2, 9, 1, 5, 1, 17, 6, 15, 3, 1};
-	float b = 5.03937732811384756748132236757401955859521845805786;
-	uint8_t bexpect[] = {5, 5, 5, 5, 3, 1, 2, 1, 2, 3, 2, 2, 1, 1, 1, 1, 1, 1, 2, 5, 1, 1, 1, 1, 1, 1, 2, 5, 1, 3, 3, 1, 4, 1, 1, 1, 1, 1, 2, 3, 1, 1, 1, 3, 2, 1, 2, 1, 1, 3, 1, 1, 2, 1, 3, 1, 9, 1, 1, 25, 2, 1, 1, 2, 4, 1, 1, 1, 1, 3, 2, 1, 3, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 7, 2, 1, 1, 1, 1, 2, 3, 2, 1, 11, 1, 1, 1, 1, 2, 1};
-	float cr = 0, ci = 0;
-	uint8_t cexpect[] = {36, 60, 92, 240, 55, 238, 206, 114, 84, 161, 196, 230, 36, 100, 212, 188, 201, 133, 48, 29, 189, 177, 206, 108, 66, 201, 226, 174, 208, 116, 183, 211, 133, 210, 209, 147, 137, 189, 21, 129, 64, 0, 108, 133, 198, 247, 35, 238, 161, 101, 116, 26, 78, 120, 34, 30, 105, 150, 213, 9, 149, 98, 185, 38, 57, 164, 72, 90, 211, 210, 43, 244, 219, 116, 178, 36, 46, 243, 109, 112, 250, 37, 163, 40, 206, 217, 160, 109, 193, 115, 201, 143, 192, 234, 0, 114, 112, 224, 147, 48};
-	float d1 = 0.00000000000000001, d2 = 100000000000000000.0;
-	unsigned n;
-	for (n = 0; n != 100; ++n)
-	{
-		if ((unsigned)a != aexpect[n])
-		{
-			debug(LOG_ERROR, "My 32-bit floating point works differently.");
-			wtf = true;
-			break;
-		}
-		a = 1/(a - (unsigned)a);
-	}
-	for (n = 0; n != 100; ++n)
-	{
-		if ((unsigned)b != bexpect[n])
-		{
-			debug(LOG_ERROR, "My 32-bit floating point square roots work differently.");
-			wtf = true;
-			break;
-		}
-		b = 1/sqrtf(b - (unsigned)b);
-	}
-	for (n = 0; n != 100; ++n)
-	{
-		float t = cr*cr - ci*ci + 0.145750134638f;
-		ci = 2*cr*ci + 0.6112626396511f;
-		cr = t;
-		if ((uint64_t)(cr*2000000000*2000000000)%251 != cexpect[n])
-		{
-			debug(LOG_ERROR, "My 32-bit floating point mandelbrots work differently.");
-			wtf = true;
-			break;
-		}
-	}
-	if (d2 + d1 - d2 != 0.0f)
-	{
-		debug(LOG_ERROR, "My 32-bit addition works differently.");
-		wtf = true;
-	}
-
-	return !wtf;
-}
-
-static bool fptest2(void)
-{
-	bool wtf = false;
-	double a = 5.19258240356725201562535524577016477814756008082239;
-	uint16_t aexpect[] = {5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 3, 1, 55, 1, 3, 1, 2, 1, 1, 2, 2, 4, 2, 17, 1, 1, 5, 1, 28, 26, 1, 6, 4, 2, 1, 1, 2, 2, 4, 1, 11, 2, 1, 32, 5, 4, 2, 1, 1, 4, 1, 1, 1, 2, 8, 1, 4, 2, 2, 2, 2, 31, 1, 1, 90, 3, 1, 4, 1, 1, 273, 1, 4, 167, 5, 1, 1, 4, 1, 1, 1, 1, 6, 3, 1, 10, 1, 1, 4, 1, 1, 1, 1, 3, 3, 1, 2, 2, 1};
-	double b = 5.03937732811384756748132236757401955859521845805786;
-	uint8_t bexpect[] = {5, 5, 5, 5, 5, 5, 5, 5, 4, 1, 7, 1, 1, 1, 1, 7, 1, 1, 1, 2, 1, 1, 2, 2, 1, 4, 1, 3, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 2, 1, 2, 3, 2, 2, 3, 1, 1, 1, 1, 7, 1, 3, 1, 2, 1, 1, 2, 1, 1, 1, 12, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 1, 12, 18, 1, 2, 3, 2};
-	double cr = 0, ci = 0;
-	uint8_t cexpect[] = {11, 202, 42, 222, 138, 236, 31, 247, 166, 57, 129, 88, 117, 43, 4, 34, 157, 206, 52, 179, 202, 166, 199, 149, 53, 214, 38, 179, 80, 85, 207, 89, 39, 84, 153, 125, 91, 46, 219, 200, 233, 122, 11, 223, 69, 96, 153, 50, 72, 28, 236, 98, 79, 104, 69, 193, 179, 48, 4, 120, 78, 5, 217, 224, 147, 116, 114, 47, 187, 125, 150, 81, 2, 92, 36, 228, 156, 165, 231, 139, 29, 183, 230, 143, 226, 221, 108, 234, 212, 86, 124, 72, 215, 194, 63, 102, 172, 18, 97, 131};
-	float d1 = 0.00000000000000001, d2 = 100000000000000000.0;
-	unsigned n;
-	for (n = 0; n != 100; ++n)
-	{
-		if ((unsigned)a != aexpect[n])
-		{
-			debug(LOG_ERROR, "My 64-bit floating point works differently.");
-			wtf = true;
-			break;
-		}
-		a = 1/(a - (unsigned)a);
-	}
-	for (n = 0; n != 100; ++n)
-	{
-		if ((unsigned)b != bexpect[n])
-		{
-			debug(LOG_ERROR, "My 64-bit floating point square roots work differently.");
-			wtf = true;
-			break;
-		}
-		b = 1/sqrt((double)(b - (unsigned)b));
-	}
-	for (n = 0; n != 100; ++n)
-	{
-		double t = cr*cr - ci*ci + 0.145750134638;
-		ci = 2*cr*ci + 0.6112626396511;
-		cr = t;
-		if ((uint64_t)(cr*2000000000*2000000000)%251 != cexpect[n])
-		{
-			debug(LOG_ERROR, "My 64-bit floating point mandelbrots work differently.");
-			wtf = true;
-			break;
-		}
-	}
-	if (d2 + d1 - d2 != 0.0)
-	{
-		debug(LOG_ERROR, "My 64-bit addition works differently.");
-		wtf = true;
-	}
-
-	return !wtf;
-}
-
 int main(int argc, char *argv[])
 {
-	int ok;
-
 #ifdef WZ_OS_MAC
 	cocoaInit();
 #endif
@@ -1161,14 +1055,6 @@ int main(int argc, char *argv[])
 #if defined(WZ_OS_WIN) && defined(DEBUG_INSANE)
 	debug_register_callback( debug_callback_win32debug, NULL, NULL, NULL );
 #endif // WZ_OS_WIN && DEBUG_INSANE
-
-	// Sanity check that floating point math is the same on all machines. (x86 needs to be compiled at least with the "-msse -mfpmath=sse" compiler flags, in addition to "-mno-fused-madd".)
-	ok = fptest1();
-	fptest2();  // Multiplayer seems to work, even if doubles are broken. (Should avoid use of doubles, or require "-msse2".)
-	if (!ok)
-	{
-		debug(LOG_WARNING, "Your compiler and compiler flag combination breaks 32-bit floats. Hope there isn't too much floating point code left.");
-	}
 
 	/*** Initialize PhysicsFS ***/
 	initialize_PhysicsFS(argv[0]);
