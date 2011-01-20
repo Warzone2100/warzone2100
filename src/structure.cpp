@@ -2023,7 +2023,7 @@ static BOOL setFunctionality(STRUCTURE	*psBuilding, STRUCTURE_TYPE functionType)
 			else
 			{
 				// Add NULL droid to the group
-				grpJoin(psRepairFac->psGroup, NULL);
+				psRepairFac->psGroup->Add(NULL);
 			}
 
 			// Take advantage of upgrades

@@ -1131,7 +1131,7 @@ void saveCampaignData(void)
 	                    {
 		                    if (droidRemove(psSafeDroid, mission.apsDroidLists))
                             {
-    	                        grpJoin(psDroid->psGroup, psSafeDroid);
+    	                        psDroid->psGroup->Add(psSafeDroid);
                             }
                         }
                         else
@@ -1880,7 +1880,7 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, BOOL goingHome)
 			{
 				if (grpCreate(&psGroup))
 				{
-					grpJoin(psGroup, psDroid);
+					psGroup->Add(psDroid);
 				}
 				clearCommandDroidFactory(psDroid);
 			}

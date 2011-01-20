@@ -1268,7 +1268,7 @@ BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 				abort();
 				break;
 			}
-			grpJoin(tmp, NULL);
+			tmp->Add(NULL);
 			psVal->v.oval = tmp;
 		}
 
@@ -1339,7 +1339,7 @@ BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 				}
 				else
 				{
-					grpJoin((DROID_GROUP*)(psVal->v.oval), psCDroid);
+					((DROID_GROUP*)(psVal->v.oval))->Add(psCDroid);
 				}
 
 				pPos += sizeof(UDWORD);

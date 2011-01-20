@@ -28,14 +28,15 @@
 #include "lib/netplay/netplay.h"
 
 #include "multiplay.h"
+#include <list>
 
-static DROID_GROUP *firstGroup = NULL;
-static BOOL grpInitialized = false;
+static std::list<DROID_GROUP *> grpGlobalManager;
+static bool grpInitialized = false;
 
 // initialise the group system
-BOOL grpInitialise(void)
+bool grpInitialise(void)
 {
-	firstGroup = NULL;
+	grpGlobalManager.clear();
 	grpInitialized = true;
 	return true;
 }
@@ -45,20 +46,27 @@ void grpShutDown(void)
 {
 	/* Since we are not very diligent removing groups after we have
 	 * created them; we need this hack to remove them on level end. */
-	DROID_GROUP *iter = firstGroup, *psDel;
+	std::list<DROID_GROUP *>::iterator iter;
 
-	while (iter != NULL)
+	for(iter = grpGlobalManager.begin(); iter != grpGlobalManager.end(); iter++)
 	{
-		psDel = iter;
-		iter = iter->psNext;
-		free(psDel);
+		free(*iter);
 	}
-	firstGroup = NULL;
+	grpGlobalManager.clear();
 	grpInitialized = false;
 }
 
+// Initialize new group
+void DROID_GROUP::Init()
+{
+	type = GT_NORMAL;
+	refCount = 0;
+	psList = NULL;
+	psCommander = NULL;
+}
+
 // create a new group
-BOOL grpCreate(DROID_GROUP	**ppsGroup)
+bool grpCreate(DROID_GROUP	**ppsGroup)
 {
 	ASSERT(grpInitialized, "Group code not initialized yet");
 	*ppsGroup = (DROID_GROUP *)calloc(1, sizeof(DROID_GROUP));
@@ -68,79 +76,59 @@ BOOL grpCreate(DROID_GROUP	**ppsGroup)
 		return false;
 	}
 
-	// Add node to beginning of list
-	if (firstGroup != NULL)
-	{
-		(*ppsGroup)->psNext = firstGroup;
-		(*ppsGroup)->psPrev = NULL;
-		firstGroup->psPrev = *ppsGroup;
-		firstGroup = *ppsGroup;
-	}
-	else
-	{
-		firstGroup = *ppsGroup;
-		(*ppsGroup)->psPrev = NULL;
-		(*ppsGroup)->psNext = NULL;
-	}
-
-	(*ppsGroup)->type = GT_NORMAL;
-	(*ppsGroup)->refCount = 0;
-	(*ppsGroup)->psList = NULL;
-	(*ppsGroup)->psCommander = NULL;
+	grpGlobalManager.push_back(*ppsGroup);
+	(*ppsGroup)->Init();
 
 	return true;
 }
 
 // add a droid to a group
-void grpJoin(DROID_GROUP *psGroup, DROID *psDroid)
+void DROID_GROUP::Add(DROID *psDroid)
 {
 	ASSERT(grpInitialized, "Group code not initialized yet");
-
-	ASSERT_OR_RETURN(, psGroup != NULL,
-		"grpJoin: invalid group pointer" );
-
-	psGroup->refCount += 1;
+	
+	refCount += 1;
 	// if psDroid == NULL just increase the refcount don't add anything to the list
 	if (psDroid != NULL)
 	{
-		if (psGroup->psList && psDroid->player != psGroup->psList->player)
+		if (psList && psDroid->player != psList->player)
 		{
 			ASSERT( false,"grpJoin: Cannot have more than one players droids in a group" );
 			return;
 		}
-
+		
 		if (psDroid->psGroup != NULL)
 		{
 			grpLeave(psDroid->psGroup, psDroid);
 		}
-
-		psDroid->psGroup = psGroup;
-
+		
+		psDroid->psGroup = this;
+		
 		if (psDroid->droidType == DROID_TRANSPORTER)
 		{
-			ASSERT_OR_RETURN(, (psGroup->type == GT_NORMAL),
-				"grpJoin: Cannot have two transporters in a group" );
-			psGroup->type = GT_TRANSPORTER;
-			psDroid->psGrpNext = psGroup->psList;
-			psGroup->psList = psDroid;
+			ASSERT_OR_RETURN(, (type == GT_NORMAL),
+											 "grpJoin: Cannot have two transporters in a group" );
+			type = GT_TRANSPORTER;
+			psDroid->psGrpNext = psList;
+			psList = psDroid;
 		}
 		else if ((psDroid->droidType == DROID_COMMAND) &&
-				 (psGroup->type != GT_TRANSPORTER))
+						 (type != GT_TRANSPORTER))
 		{
-			ASSERT_OR_RETURN(, (psGroup->type == GT_NORMAL) && (psGroup->psCommander == NULL),
-				"grpJoin: Cannot have two command droids in a group" );
-			psGroup->type = GT_COMMAND;
-			psGroup->psCommander = psDroid;
+			ASSERT_OR_RETURN(, (type == GT_NORMAL) && (psCommander == NULL),
+											 "grpJoin: Cannot have two command droids in a group" );
+			type = GT_COMMAND;
+			psCommander = psDroid;
 		}
 		else
 		{
-			psDroid->psGrpNext = psGroup->psList;
-			psGroup->psList = psDroid;
+			psDroid->psGrpNext = psList;
+			psList = psDroid;
 		}
-
-		if (psGroup->type == GT_COMMAND)
+		
+		if (type == GT_COMMAND)
 		{
-			syncDebug("Droid %d joining command group %d", psDroid->id, psGroup->psCommander != NULL? psGroup->psCommander->id : 0);
+			syncDebug("Droid %d joining command group %d", psDroid->id, psCommander != NULL? psCommander->id : 0);
 		}
 	}
 }
@@ -215,18 +203,7 @@ void grpLeave(DROID_GROUP *psGroup, DROID *psDroid)
 	// free the group structure if necessary
 	if (psGroup->refCount <= 0)
 	{
-		if (firstGroup == psGroup)
-		{
-			firstGroup = psGroup->psNext;
-		}
-		if (psGroup->psNext)
-		{
-			psGroup->psNext->psPrev = psGroup->psPrev;
-		}
-		if (psGroup->psPrev)
-		{
-			psGroup->psPrev->psNext = psGroup->psNext;
-		}
+		grpGlobalManager.remove(psGroup);
 		free(psGroup);
 	}
 }

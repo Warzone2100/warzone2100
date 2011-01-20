@@ -395,7 +395,7 @@ void addDroid(DROID *psDroidToAdd, DROID *pList[MAX_PLAYERS])
 			grpCreate(&psGroup);
 			if (psGroup)
 			{
-				grpJoin(psGroup, psDroidToAdd);
+				psGroup->Add(psDroidToAdd);
 			}
 		}
 	}

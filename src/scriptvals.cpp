@@ -155,7 +155,7 @@ BOOL scrvNewGroup(INTERP_VAL *psVal)
 	}
 
 	// increment the refcount so the group doesn't get automatically freed when empty
-	grpJoin(psGroup, NULL);
+	psGroup->Add(NULL);
 
 	psVal->v.oval = psGroup;
 

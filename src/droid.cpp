@@ -2229,7 +2229,7 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD pl
 			delete psDroid;
 			return NULL;
 		}
-		grpJoin(psGrp, psDroid);
+		psGrp->Add(psDroid);
 	}
 
 	psDroid->lastFrustratedTime = -UINT16_MAX;	// make sure we do not start the game frustrated

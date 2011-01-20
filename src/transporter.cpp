@@ -1356,7 +1356,7 @@ void transporterRemoveDroid(UDWORD id)
 		{
 			if (grpCreate(&psGroup))
 			{
-				grpJoin(psGroup, psDroid);
+				psGroup->Add(psDroid);
 			}
 		}
 		psDroid->selected = true;
@@ -1437,7 +1437,7 @@ void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd)
 	if (bDroidRemoved)
 	{
 		// adding to transporter unit's group list
-		grpJoin(psTransporter->psGroup, psDroidToAdd);
+		psTransporter->psGroup->Add(psDroidToAdd);
 		
 		if (bMultiMessages)
 		{

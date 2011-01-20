@@ -33,8 +33,12 @@ enum GROUP_TYPE
 	GT_TRANSPORTER,		// transporter group
 };
 
-struct DROID_GROUP
+class DROID_GROUP
 {
+public:
+	void Init();
+	void Add(DROID *psDroid);
+	void Remove();
 	SWORD		type;
 	SWORD		refCount;
 	DROID		*psList;			// list of droids in the group
@@ -44,16 +48,13 @@ struct DROID_GROUP
 };
 
 // initialise the group system
-BOOL grpInitialise(void);
+bool grpInitialise(void);
 
 // shutdown the group system
 void grpShutDown(void);
 
 // create a new group
-BOOL grpCreate(DROID_GROUP	**ppsGroup);
-
-// add a droid to a group
-void grpJoin(DROID_GROUP *psGroup, DROID *psDroid);
+bool grpCreate(DROID_GROUP	**ppsGroup);
 
 // remove a droid from a group
 void grpLeave(DROID_GROUP *psGroup, DROID *psDroid);

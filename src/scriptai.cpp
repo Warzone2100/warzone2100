@@ -80,7 +80,7 @@ BOOL scrGroupAddDroid(void)
 		return false;
 	}
 
-	grpJoin(psGroup, psDroid);
+	psGroup->Add(psDroid);
 
 	return true;
 }
@@ -118,7 +118,7 @@ BOOL scrGroupAddArea(void)
 			psDroid->droidType != DROID_TRANSPORTER )
 
 		{
-			grpJoin(psGroup, psDroid);
+			psGroup->Add(psDroid);
 		}
 	}
 
@@ -156,7 +156,7 @@ BOOL scrGroupAddAreaNoGroup(void)
 			psDroid->droidType != DROID_TRANSPORTER &&
 			psDroid->psGroup   == NULL)
 		{
-			grpJoin(psGroup, psDroid);
+			psGroup->Add(psDroid);
 		}
 	}
 
@@ -183,7 +183,7 @@ BOOL scrGroupAddGroup(void)
 	for(psDroid=psFrom->psList; psDroid; psDroid=psNext)
 	{
 		psNext = psDroid->psGrpNext;
-		grpJoin(psTo, psDroid);
+		psTo->Add(psDroid);
 	}
 
 	return true;

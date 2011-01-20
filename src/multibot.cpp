@@ -250,7 +250,7 @@ BOOL recvDroidEmbark(NETQUEUE queue)
 		if (bDroidRemoved)
 		{
 			// and now we need to add it to their transporter group!
-			grpJoin(psTransporterDroid->psGroup, psDroid);
+			psTransporterDroid->psGroup->Add(psDroid);
 		}
 		else
 		{

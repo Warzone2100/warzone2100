@@ -5660,7 +5660,7 @@ BOOL loadSaveDroidV(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD v
 			psDroid->psGroup = NULL;
 			psDroid->psGrpNext = NULL;
 			ASSERT( psCurrentTransGroup != NULL,"loadSaveUnitV9; Transporter unit without group " );
-			grpJoin(psCurrentTransGroup, psDroid);
+			psCurrentTransGroup->Add(psDroid);
 		}
 		else if (psDroid->droidType == DROID_TRANSPORTER)
 		{

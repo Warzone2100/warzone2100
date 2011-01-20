@@ -89,13 +89,13 @@ void cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
 		{
 			return;
 		}
-		grpJoin(psGroup, psCommander);
+		psGroup->Add(psCommander);
 		psDroid->group = UBYTE_MAX;
 	}
 
 	if (grpNumMembers(psCommander->psGroup) < cmdDroidMaxGroup(psCommander))
 	{
-		grpJoin(psCommander->psGroup, psDroid);
+		psCommander->psGroup->Add(psDroid);
 		psDroid->group = UBYTE_MAX;
 
 		// set the secondary states for the unit
