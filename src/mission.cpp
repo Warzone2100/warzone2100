@@ -1072,7 +1072,7 @@ void saveCampaignData(void)
 				{
 					psCurrNext = psCurr->psGrpNext;
 					// Remove it from the transporter group
-					grpLeave( psDroid->psGroup, psCurr);
+					psDroid->psGroup->Remove(psCurr);
  					// Cam change add droid
 					psCurr->pos.x = INVALID_XY;
 					psCurr->pos.y = INVALID_XY;
@@ -1917,7 +1917,7 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, BOOL goingHome)
 				&& psDroid != psTransporter; psDroid = psNext)
 		{
 			psNext = psDroid->psGrpNext;
-			grpLeave( psTransporter->psGroup, psDroid );
+			psTransporter->psGroup->Remove(psDroid);
 		}
 	}
 
@@ -3258,7 +3258,7 @@ void moveDroidsToSafety(DROID *psTransporter)
 			&& psDroid != psTransporter; psDroid = psNext)
 	{
 		psNext = psDroid->psGrpNext;
-		grpLeave(psTransporter->psGroup, psDroid);
+		psTransporter->psGroup->Remove(psDroid);
 		//cam change add droid
 		psDroid->pos.x = INVALID_XY;
 		psDroid->pos.y = INVALID_XY;
@@ -3372,7 +3372,7 @@ void emptyTransporters(BOOL bOffWorld)
 		            {
 			            psNext = psDroid->psGrpNext;
                         //take it out of the Transporter group
-                        grpLeave(psTransporter->psGroup, psDroid);
+                        psTransporter->psGroup->Remove(psDroid);
 			            //add it back into current droid lists
 			            addDroid(psDroid, apsDroidLists);
                     }
@@ -3386,7 +3386,7 @@ void emptyTransporters(BOOL bOffWorld)
 		            {
 			            psNext = psDroid->psGrpNext;
                         //take it out of the Transporter group
-                        grpLeave(psTransporter->psGroup, psDroid);
+                        psTransporter->psGroup->Remove(psDroid);
 			            //add it back into current droid lists
 			            addDroid(psDroid, mission.apsDroidLists);
                     }
@@ -3408,7 +3408,7 @@ void emptyTransporters(BOOL bOffWorld)
 		    {
 			    psNext = psDroid->psGrpNext;
                 //take it out of the Transporter group
-                grpLeave(psTransporter->psGroup, psDroid);
+                psTransporter->psGroup->Remove(psDroid);
 			    //add it back into mission droid lists
 			    addDroid(psDroid, mission.apsDroidLists);
             }

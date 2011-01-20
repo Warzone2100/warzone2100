@@ -168,13 +168,13 @@ void scrvReleaseGroup(INTERP_VAL *psVal)
 	DROID_GROUP		*psGroup;
 
 	psGroup = (DROID_GROUP*)psVal->v.oval;
-	grpReset(psGroup);
+	psGroup->RemoveAll();
 
 	ASSERT( psGroup->refCount == 1,
 		"scrvReleaseGroup: ref count is wrong" );
 
-	// do a final grpLeave to free the group
-	grpLeave(psGroup, NULL);
+	// do a final Remove to free the group
+	psGroup->Remove(NULL);
 }
 
 // Get a context from the list

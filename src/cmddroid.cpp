@@ -93,7 +93,7 @@ void cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
 		psDroid->group = UBYTE_MAX;
 	}
 
-	if (grpNumMembers(psCommander->psGroup) < cmdDroidMaxGroup(psCommander))
+	if (psCommander->psGroup->GetNumMembers() < cmdDroidMaxGroup(psCommander))
 	{
 		psCommander->psGroup->Add(psDroid);
 		psDroid->group = UBYTE_MAX;

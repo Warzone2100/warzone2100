@@ -339,7 +339,7 @@ DROID::~DROID()
 	// leave the current group if any
 	if (psDroid->psGroup)
 	{
-		grpLeave(psDroid->psGroup, psDroid);
+		psDroid->psGroup->Remove(psDroid);
 	}
 
 	// remove the droid from the cluster system
@@ -384,7 +384,7 @@ void recycleDroid(DROID *psDroid)
 	// stop any group moral checks
 	if (psDroid->psGroup)
 	{
-		grpLeave(psDroid->psGroup, psDroid);
+		psDroid->psGroup->Remove(psDroid);
 	}
 
 	position.x = psDroid->pos.x;				// Add an effect
@@ -452,7 +452,7 @@ void	removeDroidBase(DROID *psDel)
 	if (psDel->psGroup && psDel->psGroup->refCount > 1)
 	{
 		psGroup = psDel->psGroup;
-		grpLeave(psDel->psGroup, psDel);
+		psDel->psGroup->Remove(psDel);
 		orderGroupMoralCheck(psGroup);
 	}
 	else
@@ -463,7 +463,7 @@ void	removeDroidBase(DROID *psDel)
 	// leave the current group if any
 	if (psDel->psGroup)
 	{
-		grpLeave(psDel->psGroup, psDel);
+		psDel->psGroup->Remove(psDel);
 		psDel->psGroup = NULL;
 	}
 
@@ -590,7 +590,7 @@ BOOL droidRemove(DROID *psDroid, DROID *pList[MAX_PLAYERS])
 	// leave the current group if any - not if its a Transporter droid
 	if (psDroid->droidType != DROID_TRANSPORTER && psDroid->psGroup)
 	{
-		grpLeave(psDroid->psGroup, psDroid);
+		psDroid->psGroup->Remove(psDroid);
 		psDroid->psGroup = NULL;
 	}
 

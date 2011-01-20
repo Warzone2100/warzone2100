@@ -1320,7 +1320,7 @@ void transporterRemoveDroid(UDWORD id)
 		}
 
 		// remove it from the transporter group
-		grpLeave(psDroid->psGroup, psDroid);
+		psDroid->psGroup->Remove(psDroid);
 
 		//add it back into apsDroidLists
 		if (onMission)

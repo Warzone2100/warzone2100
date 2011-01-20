@@ -2538,7 +2538,7 @@ static bool IsFactoryCommanderGroupFull(const FACTORY* psFactory)
 	}
 
 	// Get the number of droids in the commanders group
-	DroidsInGroup = psFactory->psCommander->psGroup ? grpNumMembers(psFactory->psCommander->psGroup) : 0;
+	DroidsInGroup = psFactory->psCommander->psGroup ? psFactory->psCommander->psGroup->GetNumMembers() : 0;
 
 	// if the number in group is less than the maximum allowed then return false (group not full)
 	if (DroidsInGroup < cmdDroidMaxGroup(psFactory->psCommander))

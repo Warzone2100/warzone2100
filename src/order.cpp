@@ -3479,7 +3479,7 @@ BOOL secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 		psDroid->psGroup != NULL &&
 		psDroid->psGroup->type == GT_COMMAND)
 	{
-		grpSetSecondary(psDroid->psGroup, sec, State);
+		psDroid->psGroup->SetSecondary(sec, State);
 	}
 
 	CurrState = psDroid->secondaryOrder;
@@ -3627,13 +3627,13 @@ BOOL secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 						for (psCurr = psDroid->psGroup->psList; psCurr; psCurr=psNext)
 						{
 							psNext = psCurr->psGrpNext;
-							grpLeave(psCurr->psGroup, psCurr);
+							psCurr->psGroup->Remove(psCurr);
 							orderDroid(psCurr, DORDER_STOP, ModeImmediate);
 						}
 					}
 					else if (psDroid->psGroup->type == GT_COMMAND)
 					{
-						grpLeave(psDroid->psGroup, psDroid);
+						psDroid->psGroup->Remove(psDroid);
 					}
 				}
 			}

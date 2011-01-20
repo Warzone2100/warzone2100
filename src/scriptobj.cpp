@@ -878,7 +878,7 @@ BOOL scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize)
 	case ST_GROUP:
 	{
 		DROID_GROUP* const psGroup = (DROID_GROUP *)psVal->v.oval;
-		const int members = psGroup ? grpNumMembers(psGroup) : UNALLOCATED_OBJECT;
+		const int members = psGroup ? psGroup->GetNumMembers() : UNALLOCATED_OBJECT;
 
 		if (pBuffer)
 		{

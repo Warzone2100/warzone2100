@@ -18,7 +18,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 /** @file
- *  Link droids together into a group for AI etc.
+ *  Responsible for Group of Droids Handling.
  */
 
 #ifndef __INCLUDED_SRC_GROUP_H__
@@ -35,16 +35,28 @@ enum GROUP_TYPE
 
 class DROID_GROUP
 {
-public:
-	void Init();
-	void Add(DROID *psDroid);
-	void Remove();
-	SWORD		type;
-	SWORD		refCount;
-	DROID		*psList;			// list of droids in the group
-	DROID		*psCommander;		// the command droid of a command group
-	RUN_DATA	sRunData;			// where the group should retreat to
-	DROID_GROUP     *psNext, *psPrev;       // keep linked to destroy all (a workaround hack)
+public: // TODO: c++ design to members become private.
+	DROID_GROUP(){};
+	~DROID_GROUP(){};
+	
+	void Init();                  // Initialize members of the new group
+	void Add(DROID *psDroid);     // Add a droid to group. Remove it from its group in case it already has group
+	void Remove(DROID *psDroid);  // Remove droid from group. Free group in case RefCount<=0
+	void RemoveAll();             // Remove all droids from the group
+	unsigned int GetNumMembers(); // Count the number of members of a group
+
+	void orderGroup(DROID_ORDER order);                     // give an order all the droids of the group
+	void orderGroup(DROID_ORDER order, UDWORD x, UDWORD y); // give an order all the droids of the group (using location)
+	void orderGroup(DROID_ORDER order, BASE_OBJECT *psObj); // give an order all the droids of the group (using object)
+	
+	void SetSecondary(SECONDARY_ORDER sec, SECONDARY_STATE state); // set the secondary state for a group of droids
+	
+	SWORD		type;           // Type from the enum GROUP_TYPE above
+	SWORD		refCount;       // Number of objects in the group. Group is deleted if refCount<=0. Counts number of droids+NULL pointers.
+	DROID		*psList;			  // List of droids in the group
+	DROID		*psCommander;		// The command droid of a command group
+	RUN_DATA	sRunData;			// Where the group should retreat to
+	DROID_GROUP     *psNext, *psPrev;       // Keep linked to destroy all (a workaround hack) TODO: use a std list or equivalent
 };
 
 // initialise the group system
@@ -55,22 +67,5 @@ void grpShutDown(void);
 
 // create a new group
 bool grpCreate(DROID_GROUP	**ppsGroup);
-
-// remove a droid from a group
-void grpLeave(DROID_GROUP *psGroup, DROID *psDroid);
-
-// count the members of a group
-unsigned int grpNumMembers(const DROID_GROUP* psGroup);
-
-// remove all droids from a group
-void grpReset(DROID_GROUP *psGroup);
-
-// Give a group of droids an order
-void orderGroup(DROID_GROUP *psGroup, DROID_ORDER order);
-void orderGroup(DROID_GROUP *psGroup, DROID_ORDER order, UDWORD x, UDWORD y);
-void orderGroup(DROID_GROUP *psGroup, DROID_ORDER order, BASE_OBJECT *psObj);
-
-/* set the secondary state for a group of droids */
-void grpSetSecondary(DROID_GROUP *psGroup, SECONDARY_ORDER sec, SECONDARY_STATE state);
 
 #endif // __INCLUDED_SRC_GROUP_H__
