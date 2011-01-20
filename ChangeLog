@@ -1,4 +1,4 @@
-2011-01-18: Version 2.3.7
+2011-01-20: Version 2.3.7
  * General:
    * Fix: Make construction, production and research independent of framerate and number of parallel tasks (commit:b4e33f24a2dca11fe5c28683f43ccea4fe95e811)
    * Fix: Changing droid settings now works, even if selecting more than 100 droids (commit:9bab7867c8d383ab7278c6fe617aa79eb721a7ad)
@@ -9,12 +9,14 @@
  * Multiplayer:
    * Change: Retire the current AI top model template with heavy laser in favour of two new ones. First is armed with seraph missiles, the second with both seraph missiles and gauss cannon on a dragon body (commit:4c0b8a68af17b1a211ac7d5557f71602d4486c4a)
    * Fix: Prevent clients from getting confused when trying to leave the game setup screen by pressing the Escape key (commit:9cacfc52a413512a4cc888ffe3089fd8429521af)
- * Balance:
-   * Mg damage to cyborgs up 10%, to tracks down 10%, and to bunkers down 5%. Cannon damage to buildings and hardpoints up 10% and to bunkers up 25%.
+ * MP Balance (commit:5b863da6955648129e6b571f0c63573a34d2aa65):
+   * Mg damage to cyborgs up 10%, to tracks down 10%, and to bunkers down 5%
+   * Cannon damage to buildings and hardpoints up 10% and to bunkers up 25%
  * UI:
    * Change: Show a savegame's timestamp tooltip in the current locale (ticket:2303, commit:ec1bbcbbafc292e37052ed919a2a50f416c2bbd1)
    * Change: Show distances and speeds in terms of tiles (commit:e192e8a75832a4db0dff8370f486828d4f79a15e)
    * Fix: Improve UI responsiveness under low framerates (commit:89d8b599d592a64b0e0472225c2bcc4deb94e172)
+   * Fix: Prevent some key presses from being ignored (commit:942c2f1fe3e05088d84f9c17d92ff16f9a69a15a)
    * Fix: Don't show health bars over empty terrain, when set to always display energy bars (ticket:912, commit:61a79c761a3872079ddc66d24793a495416b5309)
  * Translations:
    * Updated: Italian (ticket:2367, ticket:2408, commit:182f6ba3d21207e3bada248f7e2988e3aaaa2dc8, commit:90658df7e14908829ecc3c1222b6784bd8cced43)
