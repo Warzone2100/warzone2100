@@ -646,7 +646,7 @@ BOOL scrCBTransporterLanded( void )
 				psNext = psDroid->psGrpNext;
 				if ( psDroid != psTransporter )
 				{
-					psGroup->Add(psDroid);
+					psGroup->add(psDroid);
 				}
 			}
 		}
@@ -698,7 +698,7 @@ BOOL scrCBTransporterLandedB( void )
 				psNext = psDroid->psGrpNext;
 				if ( psDroid != psTransporter )
 				{
-					psGroup->Add(psDroid);
+					psGroup->add(psDroid);
 				}
 			}
 		//}

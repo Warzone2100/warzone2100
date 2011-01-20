@@ -155,7 +155,7 @@ BOOL scrvNewGroup(INTERP_VAL *psVal)
 	}
 
 	// increment the refcount so the group doesn't get automatically freed when empty
-	psGroup->Add(NULL);
+	psGroup->add(NULL);
 
 	psVal->v.oval = psGroup;
 
@@ -168,13 +168,13 @@ void scrvReleaseGroup(INTERP_VAL *psVal)
 	DROID_GROUP		*psGroup;
 
 	psGroup = (DROID_GROUP*)psVal->v.oval;
-	psGroup->RemoveAll();
+	psGroup->removeAll();
 
 	ASSERT( psGroup->refCount == 1,
 		"scrvReleaseGroup: ref count is wrong" );
 
 	// do a final Remove to free the group
-	psGroup->Remove(NULL);
+	psGroup->remove(NULL);
 }
 
 // Get a context from the list

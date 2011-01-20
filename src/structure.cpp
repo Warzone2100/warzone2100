@@ -2023,7 +2023,7 @@ static BOOL setFunctionality(STRUCTURE	*psBuilding, STRUCTURE_TYPE functionType)
 			else
 			{
 				// Add NULL droid to the group
-				psRepairFac->psGroup->Add(NULL);
+				psRepairFac->psGroup->add(NULL);
 			}
 
 			// Take advantage of upgrades
@@ -2538,7 +2538,7 @@ static bool IsFactoryCommanderGroupFull(const FACTORY* psFactory)
 	}
 
 	// Get the number of droids in the commanders group
-	DroidsInGroup = psFactory->psCommander->psGroup ? psFactory->psCommander->psGroup->GetNumMembers() : 0;
+	DroidsInGroup = psFactory->psCommander->psGroup ? psFactory->psCommander->psGroup->getNumMembers() : 0;
 
 	// if the number in group is less than the maximum allowed then return false (group not full)
 	if (DroidsInGroup < cmdDroidMaxGroup(psFactory->psCommander))

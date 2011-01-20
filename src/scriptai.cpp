@@ -80,7 +80,7 @@ BOOL scrGroupAddDroid(void)
 		return false;
 	}
 
-	psGroup->Add(psDroid);
+	psGroup->add(psDroid);
 
 	return true;
 }
@@ -118,7 +118,7 @@ BOOL scrGroupAddArea(void)
 			psDroid->droidType != DROID_TRANSPORTER )
 
 		{
-			psGroup->Add(psDroid);
+			psGroup->add(psDroid);
 		}
 	}
 
@@ -156,7 +156,7 @@ BOOL scrGroupAddAreaNoGroup(void)
 			psDroid->droidType != DROID_TRANSPORTER &&
 			psDroid->psGroup   == NULL)
 		{
-			psGroup->Add(psDroid);
+			psGroup->add(psDroid);
 		}
 	}
 
@@ -183,7 +183,7 @@ BOOL scrGroupAddGroup(void)
 	for(psDroid=psFrom->psList; psDroid; psDroid=psNext)
 	{
 		psNext = psDroid->psGrpNext;
-		psTo->Add(psDroid);
+		psTo->add(psDroid);
 	}
 
 	return true;
@@ -365,7 +365,7 @@ BOOL scrDroidLeaveGroup(void)
 
 	if (psDroid->psGroup != NULL)
 	{
-		psDroid->psGroup->Remove(psDroid);
+		psDroid->psGroup->remove(psDroid);
 	}
 
 	return true;
@@ -398,7 +398,7 @@ BOOL scrOrderGroup(void)
 		return false;
 	}
 
-	debug(LOG_NEVER, "group %p (%u) order %d", psGroup, psGroup->GetNumMembers(), order);
+	debug(LOG_NEVER, "group %p (%u) order %d", psGroup, psGroup->getNumMembers(), order);
 	psGroup->orderGroup(order);
 
 	return true;
@@ -437,7 +437,7 @@ BOOL scrOrderGroupLoc(void)
 	}
 
 	debug(LOG_NEVER, "group %p (%u) order %d (%d,%d)",
-		psGroup, psGroup->GetNumMembers(), order, x,y);
+		psGroup, psGroup->getNumMembers(), order, x,y);
 	psGroup->orderGroup(order, (UDWORD)x,(UDWORD)y);
 
 	return true;
@@ -476,7 +476,7 @@ BOOL scrOrderGroupObj(void)
 	}
 
 	debug(LOG_NEVER, "group %p (%u) order %d,  obj type %d player %d id %d",
-		psGroup, psGroup->GetNumMembers(), order, psObj->type, psObj->player, psObj->id);
+		psGroup, psGroup->getNumMembers(), order, psObj->type, psObj->player, psObj->id);
 
 	psGroup->orderGroup(order, psObj);
 
@@ -704,7 +704,7 @@ BOOL scrSetGroupSecondary(void)
 	ASSERT( psGroup != NULL,
 		"scrSetGroupSecondary: invalid group pointer" );
 
-	psGroup->SetSecondary(sec, state);
+	psGroup->setSecondary(sec, state);
 
 	return true;
 }

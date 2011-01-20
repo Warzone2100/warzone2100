@@ -1072,7 +1072,7 @@ void saveCampaignData(void)
 				{
 					psCurrNext = psCurr->psGrpNext;
 					// Remove it from the transporter group
-					psDroid->psGroup->Remove(psCurr);
+					psDroid->psGroup->remove(psCurr);
  					// Cam change add droid
 					psCurr->pos.x = INVALID_XY;
 					psCurr->pos.y = INVALID_XY;
@@ -1131,7 +1131,7 @@ void saveCampaignData(void)
 	                    {
 		                    if (droidRemove(psSafeDroid, mission.apsDroidLists))
                             {
-    	                        psDroid->psGroup->Add(psSafeDroid);
+    	                        psDroid->psGroup->add(psSafeDroid);
                             }
                         }
                         else
@@ -1880,7 +1880,7 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, BOOL goingHome)
 			{
 				if (grpCreate(&psGroup))
 				{
-					psGroup->Add(psDroid);
+					psGroup->add(psDroid);
 				}
 				clearCommandDroidFactory(psDroid);
 			}
@@ -1917,7 +1917,7 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, BOOL goingHome)
 				&& psDroid != psTransporter; psDroid = psNext)
 		{
 			psNext = psDroid->psGrpNext;
-			psTransporter->psGroup->Remove(psDroid);
+			psTransporter->psGroup->remove(psDroid);
 		}
 	}
 
@@ -3258,7 +3258,7 @@ void moveDroidsToSafety(DROID *psTransporter)
 			&& psDroid != psTransporter; psDroid = psNext)
 	{
 		psNext = psDroid->psGrpNext;
-		psTransporter->psGroup->Remove(psDroid);
+		psTransporter->psGroup->remove(psDroid);
 		//cam change add droid
 		psDroid->pos.x = INVALID_XY;
 		psDroid->pos.y = INVALID_XY;
@@ -3372,7 +3372,7 @@ void emptyTransporters(BOOL bOffWorld)
 		            {
 			            psNext = psDroid->psGrpNext;
                         //take it out of the Transporter group
-                        psTransporter->psGroup->Remove(psDroid);
+                        psTransporter->psGroup->remove(psDroid);
 			            //add it back into current droid lists
 			            addDroid(psDroid, apsDroidLists);
                     }
@@ -3386,7 +3386,7 @@ void emptyTransporters(BOOL bOffWorld)
 		            {
 			            psNext = psDroid->psGrpNext;
                         //take it out of the Transporter group
-                        psTransporter->psGroup->Remove(psDroid);
+                        psTransporter->psGroup->remove(psDroid);
 			            //add it back into current droid lists
 			            addDroid(psDroid, mission.apsDroidLists);
                     }
@@ -3408,7 +3408,7 @@ void emptyTransporters(BOOL bOffWorld)
 		    {
 			    psNext = psDroid->psGrpNext;
                 //take it out of the Transporter group
-                psTransporter->psGroup->Remove(psDroid);
+                psTransporter->psGroup->remove(psDroid);
 			    //add it back into mission droid lists
 			    addDroid(psDroid, mission.apsDroidLists);
             }

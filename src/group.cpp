@@ -51,14 +51,14 @@ void grpShutDown(void)
 
 	for(iter = grpGlobalManager.begin(); iter != grpGlobalManager.end(); iter++)
 	{
-		free(*iter);
+		delete (*iter);
 	}
 	grpGlobalManager.clear();
 	grpInitialized = false;
 }
 
-// Initialize new group
-void DROID_GROUP::Init()
+// Constructor
+DROID_GROUP::DROID_GROUP()
 {
 	type = GT_NORMAL;
 	refCount = 0;
@@ -70,7 +70,7 @@ void DROID_GROUP::Init()
 bool grpCreate(DROID_GROUP **ppsGroup)
 {
 	ASSERT(grpInitialized, "Group code not initialized yet");
-	*ppsGroup = (DROID_GROUP *)calloc(1, sizeof(DROID_GROUP));
+	*ppsGroup = new DROID_GROUP;
 	if (*ppsGroup == NULL)
 	{
 		debug(LOG_ERROR, "grpCreate: Out of memory");
@@ -78,16 +78,15 @@ bool grpCreate(DROID_GROUP **ppsGroup)
 	}
 
 	grpGlobalManager.push_back(*ppsGroup);
-	(*ppsGroup)->Init();
 
 	return true;
 }
 
 // add a droid to a group
-void DROID_GROUP::Add(DROID *psDroid)
+void DROID_GROUP::add(DROID *psDroid)
 {
 	ASSERT(grpInitialized, "Group code not initialized yet");
-	
+
 	refCount += 1;
 	// if psDroid == NULL just increase the refcount don't add anything to the list
 	if (psDroid != NULL)
@@ -100,24 +99,20 @@ void DROID_GROUP::Add(DROID *psDroid)
 		
 		if (psDroid->psGroup != NULL)
 		{
-			psDroid->psGroup->Remove(psDroid);
+			psDroid->psGroup->remove(psDroid);
 		}
-		
 		psDroid->psGroup = this;
-		
+
 		if (psDroid->droidType == DROID_TRANSPORTER)
 		{
-			ASSERT_OR_RETURN(, (type == GT_NORMAL),
-											 "grpJoin: Cannot have two transporters in a group" );
+			ASSERT_OR_RETURN(, (type == GT_NORMAL), "grpJoin: Cannot have two transporters in a group" );
 			type = GT_TRANSPORTER;
 			psDroid->psGrpNext = psList;
 			psList = psDroid;
 		}
-		else if ((psDroid->droidType == DROID_COMMAND) &&
-						 (type != GT_TRANSPORTER))
+		else if ((psDroid->droidType == DROID_COMMAND) && (type != GT_TRANSPORTER))
 		{
-			ASSERT_OR_RETURN(, (type == GT_NORMAL) && (psCommander == NULL),
-											 "grpJoin: Cannot have two command droids in a group" );
+			ASSERT_OR_RETURN(, (type == GT_NORMAL) && (psCommander == NULL), "grpJoin: Cannot have two command droids in a group" );
 			type = GT_COMMAND;
 			psCommander = psDroid;
 		}
@@ -135,7 +130,7 @@ void DROID_GROUP::Add(DROID *psDroid)
 }
 
 // remove a droid from a group
-void DROID_GROUP::Remove(DROID *psDroid)
+void DROID_GROUP::remove(DROID *psDroid)
 {
 	DROID	*psPrev, *psCurr;
 
@@ -202,12 +197,12 @@ void DROID_GROUP::Remove(DROID *psDroid)
 	if (refCount <= 0)
 	{
 		grpGlobalManager.remove(this);
-		free(this);
+		delete this;
 	}
 }
 
 // count the members of a group
-unsigned int DROID_GROUP::GetNumMembers()
+unsigned int DROID_GROUP::getNumMembers()
 {
 	const DROID* psCurr;
 	unsigned int num;
@@ -224,7 +219,7 @@ unsigned int DROID_GROUP::GetNumMembers()
 }
 
 // remove all droids from a group
-void DROID_GROUP::RemoveAll()
+void DROID_GROUP::removeAll()
 {
 	DROID	*psCurr, *psNext;
 
@@ -233,7 +228,7 @@ void DROID_GROUP::RemoveAll()
 	for(psCurr = psList; psCurr; psCurr = psNext)
 	{
 		psNext = psCurr->psGrpNext;
-		Remove(psCurr);
+		remove(psCurr);
 	}
 }
 
@@ -278,7 +273,7 @@ void DROID_GROUP::orderGroup(DROID_ORDER order, BASE_OBJECT *psObj)
 }
 
 // Set the secondary state for a group of droids
-void DROID_GROUP::SetSecondary(SECONDARY_ORDER sec, SECONDARY_STATE state)
+void DROID_GROUP::setSecondary(SECONDARY_ORDER sec, SECONDARY_STATE state)
 {
 	DROID	*psCurr;
 

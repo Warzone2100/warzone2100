@@ -339,7 +339,7 @@ DROID::~DROID()
 	// leave the current group if any
 	if (psDroid->psGroup)
 	{
-		psDroid->psGroup->Remove(psDroid);
+		psDroid->psGroup->remove(psDroid);
 	}
 
 	// remove the droid from the cluster system
@@ -384,7 +384,7 @@ void recycleDroid(DROID *psDroid)
 	// stop any group moral checks
 	if (psDroid->psGroup)
 	{
-		psDroid->psGroup->Remove(psDroid);
+		psDroid->psGroup->remove(psDroid);
 	}
 
 	position.x = psDroid->pos.x;				// Add an effect
@@ -452,7 +452,7 @@ void	removeDroidBase(DROID *psDel)
 	if (psDel->psGroup && psDel->psGroup->refCount > 1)
 	{
 		psGroup = psDel->psGroup;
-		psDel->psGroup->Remove(psDel);
+		psDel->psGroup->remove(psDel);
 		orderGroupMoralCheck(psGroup);
 	}
 	else
@@ -463,7 +463,7 @@ void	removeDroidBase(DROID *psDel)
 	// leave the current group if any
 	if (psDel->psGroup)
 	{
-		psDel->psGroup->Remove(psDel);
+		psDel->psGroup->remove(psDel);
 		psDel->psGroup = NULL;
 	}
 
@@ -590,7 +590,7 @@ BOOL droidRemove(DROID *psDroid, DROID *pList[MAX_PLAYERS])
 	// leave the current group if any - not if its a Transporter droid
 	if (psDroid->droidType != DROID_TRANSPORTER && psDroid->psGroup)
 	{
-		psDroid->psGroup->Remove(psDroid);
+		psDroid->psGroup->remove(psDroid);
 		psDroid->psGroup = NULL;
 	}
 
@@ -2229,7 +2229,7 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD pl
 			delete psDroid;
 			return NULL;
 		}
-		psGrp->Add(psDroid);
+		psGrp->add(psDroid);
 	}
 
 	psDroid->lastFrustratedTime = -UINT16_MAX;	// make sure we do not start the game frustrated

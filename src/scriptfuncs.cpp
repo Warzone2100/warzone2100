@@ -1144,7 +1144,7 @@ BOOL scrAddDroidToTransporter(void)
 	{
 		if (droidRemove(psDroid, mission.apsDroidLists))
 		{
-			psTransporter->psGroup->Add(psDroid);
+			psTransporter->psGroup->add(psDroid);
 		}
 	}
 

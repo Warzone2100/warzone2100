@@ -878,7 +878,7 @@ BOOL scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize)
 	case ST_GROUP:
 	{
 		DROID_GROUP* const psGroup = (DROID_GROUP *)psVal->v.oval;
-		const int members = psGroup ? psGroup->GetNumMembers() : UNALLOCATED_OBJECT;
+		const int members = psGroup ? psGroup->getNumMembers() : UNALLOCATED_OBJECT;
 
 		if (pBuffer)
 		{
@@ -1268,7 +1268,7 @@ BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 				abort();
 				break;
 			}
-			tmp->Add(NULL);
+			tmp->add(NULL);
 			psVal->v.oval = tmp;
 		}
 
@@ -1339,7 +1339,7 @@ BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 				}
 				else
 				{
-					((DROID_GROUP*)(psVal->v.oval))->Add(psCDroid);
+					((DROID_GROUP*)(psVal->v.oval))->add(psCDroid);
 				}
 
 				pPos += sizeof(UDWORD);
