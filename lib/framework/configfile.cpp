@@ -21,6 +21,7 @@
 #include "frame.h"
 #include "configfile.h"
 
+#include <string>
 #include <string.h>
 #include "string_ext.h"
 
@@ -129,10 +130,10 @@ static void registry_set_key(const char* key, const char* value)
 	regkey->value = strdup(value);
 }
 
-static char *configUnescape(char *begin, char *end)
+static void configUnescape(std::string &w, char *begin, char *end)
 {
-	char *ret = (char *)malloc(end - begin + 1);
-	char *w = ret;
+	w.clear();
+
 	while (begin != end)
 	{
 		uint8_t ch = *begin++;
@@ -146,33 +147,27 @@ static char *configUnescape(char *begin, char *end)
 				ch += *begin++ - '0';
 			}
 		}
-		*w++ = ch;
+		w += char(ch);
 	}
-	*w++ = '\0';
-
-	return ret;
 }
 
-static char *configEscape(char *begin, char *end)
+static void configEscape(std::string &w, char *begin, char *end)
 {
-	char *ret = (char *)malloc((end - begin)*4 + 1);
-	char *w = ret;
+	w.clear();
+
 	while (begin != end)
 	{
 		uint8_t ch = *begin++;
 		if (ch == '\\' || ch == '=' || ch < ' ')
 		{
-			*w++ = '\\';
-			*w++ = '0' + ch/64;
-			*w++ = '0' + ch/8%8;
-			*w++ = '0' + ch%8;
+			w += '\\';
+			w += char('0' + ch/64);
+			w += char('0' + ch/8%8);
+			w += char('0' + ch%8);
 			continue;
 		}
-		*w++ = ch;
+		w += char(ch);
 	}
-	*w++ = '\0';
-
-	return ret;
 }
 
 static bool registry_load(const char* filename)
@@ -196,8 +191,10 @@ static bool registry_load(const char* filename)
 	if (filesize == 0)
 	{
 		debug(LOG_WARNING, "Registry file %s is empty!", filename);
+		free(bufBegin);
 		return false;
 	}
+	std::string key, value;
 	bufEnd = bufBegin + filesize;
 	lineEnd = bufBegin;
 	while (lineEnd != bufEnd)
@@ -209,11 +206,9 @@ static bool registry_load(const char* filename)
 		{}
 		if (lineBegin != split && split != lineEnd)  // Key may not be empty, but value may be.
 		{
-			char *key = configUnescape(lineBegin, split);
-			char *value = configUnescape(split + 1, lineEnd);
-			registry_set_key(key, value);
-			free(key);
-			free(value);
+			configUnescape(key, lineBegin, split);
+			configUnescape(value, split + 1, lineEnd);
+			registry_set_key(key.c_str(), value.c_str());
 		}
 
 		if (lineEnd != bufEnd)
@@ -227,10 +222,10 @@ static bool registry_load(const char* filename)
 
 static bool registry_save(const char* filename)
 {
-	char *buffer = NULL;
-	size_t w = 0;
-	size_t bufferSize = 0;
+	std::string buffer;
 	unsigned int i;
+
+	std::string key, value;
 
 	debug(LOG_WZ, "Saving the registry to [directory: %s] %s", PHYSFS_getRealDir(filename), filename);
 	for (i = 0; i < ARRAY_SIZE(registry); ++i)
@@ -239,31 +234,17 @@ static bool registry_save(const char* filename)
 
 		for (j = registry[i]; j != NULL; j = j->next)
 		{
-			char *key   = configEscape(j->key,   j->key   + strlen(j->key));
-			char *value = configEscape(j->value, j->value + strlen(j->value));
-			unsigned keySize = strlen(key);
-			unsigned valueSize = strlen(value);
+			configEscape(key,   j->key,   j->key   + strlen(j->key));
+			configEscape(value, j->value, j->value + strlen(j->value));
 
-			if (bufferSize - w < keySize + 1 + valueSize + 1)
-			{
-				bufferSize = bufferSize*2 + 1000;
-				buffer = (char *)realloc(buffer, bufferSize);
-			}
-
-			// If buffer was a std::string: buffer += key; buffer += '='; buffer += valueSize; buffer += '\n';
-			memcpy(buffer + w, key, keySize);
-			w += keySize;
-			buffer[w++] = '=';
-			memcpy(buffer + w, value, valueSize);
-			w += valueSize;
-			buffer[w++] = '\n';
-
-			free(key);
-			free(value);
+			buffer += key;
+			buffer += '=';
+			buffer += value;
+			buffer += '\n';
 		}
 	}
 
-	return saveFile(filename, buffer, w);
+	return saveFile(filename, buffer.c_str(), buffer.size());
 }
 
 void setRegistryFilePath(const char* fileName)
