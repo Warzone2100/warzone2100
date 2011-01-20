@@ -92,7 +92,7 @@ static bool aiStructHasRange(STRUCTURE *psStruct, BASE_OBJECT *psTarget, int wea
 
 static bool aiDroidHasRange(DROID *psDroid, BASE_OBJECT *psTarget, int weapon_slot)
 {
-	int32_t xdiff, ydiff, longRange;
+	int32_t longRange;
 
 	if (psDroid->droidType == DROID_SENSOR)
 	{
@@ -805,13 +805,12 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 	else if (psObj->type == OBJ_STRUCTURE)
 	{
 		WEAPON_STATS	*psWStats = NULL;
-		int	tarDist, longRange = 0;
 		BOOL	bCommanderBlock = false;
 
 		ASSERT(((STRUCTURE *)psObj)->asWeaps[weapon_slot].nStat > 0, "no weapons on structure");
 
 		psWStats = ((STRUCTURE *)psObj)->asWeaps[weapon_slot].nStat + asWeaponStats;
-		longRange = proj_GetLongRange(psWStats);
+		int longRange = proj_GetLongRange(psWStats);
 
 		// see if there is a target from the command droids
 		psTarget = NULL;
