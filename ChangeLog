@@ -9,6 +9,8 @@
  * Multiplayer:
    * Change: Retire the current AI top model template with heavy laser in favour of two new ones. First is armed with seraph missiles, the second with both seraph missiles and gauss cannon on a dragon body (commit:4c0b8a68af17b1a211ac7d5557f71602d4486c4a)
    * Fix: Prevent clients from getting confused when trying to leave the game setup screen by pressing the Escape key (commit:9cacfc52a413512a4cc888ffe3089fd8429521af)
+ * Balance:
+   * Mg damage to cyborgs up 10%, to tracks down 10%, and to bunkers down 5%. Cannon damage to buildings and hardpoints up 10% and to bunkers up 25%.
  * UI:
    * Change: Show a savegame's timestamp tooltip in the current locale (ticket:2303, commit:ec1bbcbbafc292e37052ed919a2a50f416c2bbd1)
    * Change: Show distances and speeds in terms of tiles (commit:e192e8a75832a4db0dff8370f486828d4f79a15e)
