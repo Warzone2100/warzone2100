@@ -40,10 +40,10 @@ extern UDWORD selectedPlayer;
 DROID	*apsCmdDesignator[MAX_PLAYERS];
 
 // whether experience should be boosted due to a multi game
-static BOOL bMultiExpBoost = false;
+static bool bMultiExpBoost = false;
 
 // Initialise the command droids
-BOOL cmdDroidInit(void)
+bool cmdDroidInit(void)
 {
 	memset(apsCmdDesignator, 0, sizeof(DROID *)*MAX_PLAYERS);
 
@@ -161,7 +161,7 @@ void cmdDroidMultiExpBoost(BOOL bDoit)
 	bMultiExpBoost = bDoit;
 }
 
-BOOL cmdGetDroidMultiExpBoost()
+bool cmdGetDroidMultiExpBoost()
 {
 	return bMultiExpBoost;
 }
@@ -218,19 +218,4 @@ unsigned int cmdGetCommanderLevel(const DROID* psDroid)
 
 	// Return the experience level of this commander
 	return getDroidLevel(psCommander);
-}
-
-// Selects all droids for a given commander
-void cmdSelectSubDroids(DROID *psDroid)
-{
-	DROID *psCurr;
-
-	for (psCurr = apsDroidLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
-	{
-		if (hasCommander(psCurr)
-		 && psCurr->psGroup->psCommander == psDroid)
-		{
-			SelectDroid(psCurr);
-		}
-	}
 }
