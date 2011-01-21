@@ -1,4 +1,4 @@
-2011-01-20: Version 2.3.7
+2011-01-21: Version 2.3.7
  * General:
    * Fix: Make construction, production and research independent of framerate and number of parallel tasks (commit:b4e33f24a2dca11fe5c28683f43ccea4fe95e811)
    * Fix: Changing droid settings now works, even if selecting more than 100 droids (commit:9bab7867c8d383ab7278c6fe617aa79eb721a7ad)
