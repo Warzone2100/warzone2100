@@ -1,5 +1,5 @@
 AC_PREREQ([2.56])
-AC_INIT([Warzone 2100],[2.3_branch],[http://wz2100.net/],[warzone2100])
+AC_INIT([Warzone 2100],[2.3.7],[http://wz2100.net/],[warzone2100])
 
 AM_INIT_AUTOMAKE([1.10 tar-ustar])
 
@@ -212,7 +212,7 @@ AC_ARG_ENABLE([motif],
 # Add later for stricter checking: -Wextra -Wmissing-declarations -Wstrict-prototypes
 AC_ARG_ENABLE([debug],
 	AS_HELP_STRING([--enable-debug[=yes/relaxed/profile/debugprofile/optimised/no]],[Compile debug version [[yes]]]),
-	[ enable_debug=${enableval} ], [ enable_debug=yes ])
+	[ enable_debug=${enableval} ], [ enable_debug=no ])
 AC_MSG_CHECKING([whether to compile in debug mode])
 AC_MSG_RESULT([${enable_debug}])
 
