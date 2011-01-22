@@ -470,41 +470,6 @@ void orderUpdateDroid(DROID *psDroid)
 			actionDroid(psDroid, DACTION_MOVE, psDroid->psTarget->pos.x,psDroid->psTarget->pos.y);
 		}
 		break;
-	case DORDER_MOVE_ATTACKWALL:
-	case DORDER_SCOUT_ATTACKWALL:
-		//Watermelon:check against all weapons now
-		for(i = 0;i <psDroid->numWeaps;i++)
-		{
-			if (psDroid->psTarget == NULL)
-			{
-				if (psDroid->order == DORDER_MOVE_ATTACKWALL)
-				{
-					psDroid->order = DORDER_MOVE;
-				}
-				else
-				{
-					psDroid->order = DORDER_SCOUT;
-				}
-				actionDroid(psDroid, DACTION_MOVE, psDroid->orderX,psDroid->orderY);
-			}
-			else if ((((psDroid->action != DACTION_ATTACK) &&
-					   (psDroid->action != DACTION_MOVETOATTACK) &&
-					   (psDroid->action != DACTION_ROTATETOATTACK)) ||
-					  (psDroid->psActionTarget[0] != psDroid->psTarget)) &&
-					 actionInRange(psDroid, psDroid->psTarget, 0) )
-			{
-				actionDroid(psDroid, DACTION_ATTACK, psDroid->psTarget);
-			}
-			else if (psDroid->action == DACTION_NONE)
-			{
-				if (psDroid->order == DORDER_SCOUT_ATTACKWALL)
-				{
-					psDroid->order = DORDER_SCOUT;
-				}
-				actionDroid(psDroid, DACTION_MOVE, psDroid->psTarget->pos.x, psDroid->psTarget->pos.y);
-			}
-		}
-		break;
 	case DORDER_SCOUT:
 	case DORDER_PATROL:
 		// if there is an enemy around, attack it
@@ -4281,8 +4246,6 @@ const char* getDroidOrderName(DROID_ORDER order)
 		"DORDER_CLEARWRECK",			// 30 - constructor droid to clear up building wreckage
 		"DORDER_PATROL",				// move between two way points
 		"DORDER_REARM",				// 32 - order a vtol to rearming pad
-		"DORDER_MOVE_ATTACKWALL",		// move to a location taking out a blocking wall on the way
-		"DORDER_SCOUT_ATTACKWALL",	// 34 - scout to a location taking out a blocking wall on the way
 		"DORDER_RECOVER",				// pick up an artifact
 		"DORDER_LEAVEMAP",			// 36 - vtol flying off the map
 		"DORDER_RTR_SPECIFIED",		// return to repair at a specified repair center

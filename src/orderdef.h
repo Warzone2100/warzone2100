@@ -66,8 +66,6 @@ typedef enum _droid_order
 	DORDER_CLEARWRECK,			// 30 - constructor droid to clear up building wreckage
 	DORDER_PATROL,				// move between two way points
 	DORDER_REARM,				// 32 - order a vtol to rearming pad
-	DORDER_MOVE_ATTACKWALL,		// move to a location taking out a blocking wall on the way
-	DORDER_SCOUT_ATTACKWALL,	// 34 - scout to a location taking out a blocking wall on the way
 	DORDER_RECOVER,				// pick up an artifact
 	DORDER_LEAVEMAP,			// 36 - vtol flying off the map
 	DORDER_RTR_SPECIFIED,		// return to repair at a specified repair center
