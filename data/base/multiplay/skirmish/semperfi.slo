@@ -2413,7 +2413,31 @@ event findEnemy(attackStuffTr)
 // send attack team out to cause trouble near things scout found.
 event attackStuff(attackStuffTr)
 {
-	if( idleGroup(attackGroup) >= (attackGroup.members / 2))
+	local int i, x, y;
+	local BASEOBJ result, best;
+
+	// Attacks of opportunity
+	i = 0;
+	result = getDerrick(i);
+	best = NULLOBJECT;
+	while (result != NULLOBJECT)
+	{
+		if (result.type == OBJ_STRUCTURE and result.player != me and safeDest(me, result.x, result.y))
+		{
+			best = result;	// easy pickings
+		}
+		i++;
+		result = getDerrick(i);
+	}
+	if (best != NULLOBJECT)
+	{
+		dbgPlr("MOVEMENT OF OPPORTUNITY");
+		orderGroupLoc(attackGroup, DORDER_SCOUT, best.x, best.y);
+		exit;
+	}
+
+	// Regular attacks
+	if (idleGroup(attackGroup) >= (attackGroup.members / 2))
 	{
 		if( (attackObj != NULLOBJECT) and (not helpingAlly()) )
 		{
@@ -2445,7 +2469,9 @@ event doAllOutAttack(allOutAttackTr)
 			{
 				if (getDroidCount(me) > 40)	// plenty of units.
 				{
+					dbgPlr("ALL OUT ATTACK!");
 					orderGroupObj(attackGroup, DORDER_ATTACK, allOutAttack);
+					orderGroupObj(defendGroup, DORDER_ATTACK, allOutAttack);
 					orderGroupLoc(scoutGroup, DORDER_SCOUT, allOutAttack.x, allOutAttack.y);
 				}
 			}

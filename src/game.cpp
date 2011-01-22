@@ -6204,6 +6204,10 @@ BOOL loadSaveStructureV7(char *pFileData, UDWORD filesize, UDWORD numStructures)
 		{
 			scriptSetStartPos(psSaveStructure->player, psStructure->pos.x, psStructure->pos.y);
 		}
+		else if (psStructure->pStructureType->type == REF_RESOURCE_EXTRACTOR)
+		{
+			scriptSetDerrickPos(psStructure->pos.x, psStructure->pos.y);
+		}
 
 		//if not a save game, don't want to overwrite any of the stats so continue
 		if (gameType != GTYPE_SAVE_START)
@@ -7214,6 +7218,10 @@ BOOL loadSaveFeatureV14(char *pFileData, UDWORD filesize, UDWORD numFeatures, UD
 		{
 			debug(LOG_ERROR, "Unable to create feature %s", psSaveFeature->name);
 			continue;
+		}
+		if (pFeature->psStats->subType == FEAT_OIL_RESOURCE)
+		{
+			scriptSetDerrickPos(pFeature->pos.x, pFeature->pos.y);
 		}
 		//restore values
 		pFeature->id = psSaveFeature->id;
