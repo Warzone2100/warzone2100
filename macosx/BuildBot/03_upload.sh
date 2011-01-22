@@ -6,7 +6,7 @@
 # This script sets the name of the .dmg and dSYM bundle as it uploads them and does some link magic.
 
 # Config
-rtag="${1}"
+rtag="$(git branch --no-color | sed -e '/^[^*]/d' -e 's:* \(.*\):\1:')"
 uurl="buildbot@buildbot.pc-dummy.net"
 opth="${rtag}/mac/"
 rpth="public_html/"
@@ -18,7 +18,7 @@ tar_dS="-dSYM.tar.gz"
 
 
 # Set bran
-if [ -z ${1} ]; then
+if [ -z ${rtag} ]; then
 	echo "Must supply the branch name being built."
 	exit 1
 fi
@@ -37,4 +37,8 @@ fi
 
 
 # Link up the current .dmg and dSYM bundle
-ssh ${uurl} -C "cd ${rpth} && ln -fs ${opth}${dmg_bn}${bran}${revt}.dmg ${dmg_bn}${bran}-current.dmg && ln -fs ${opth}${dmg_bn}${bran}${revt}${tar_dS} ${dmg_bn}${bran}-current${tar_dS}"
+if ! ssh ${uurl} -C "cd ${rpth} && ln -fs ${opth}${dmg_bn}${bran}${revt}.dmg ${dmg_bn}${bran}-current.dmg && ln -fs ${opth}${dmg_bn}${bran}${revt}${tar_dS} ${dmg_bn}${bran}-current${tar_dS}"; then
+	exit ${?}
+fi
+
+exit 0
