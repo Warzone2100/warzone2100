@@ -4772,6 +4772,7 @@ BOOL removeStruct(STRUCTURE *psDel, BOOL bDestroy)
 
 	if (bDestroy)
 	{
+		debug(LOG_DEATH, "Killing off %s id %d (%p)", objInfo(psDel), psDel->id, psDel);
 		killStruct(psDel);
 	}
 
