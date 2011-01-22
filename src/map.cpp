@@ -1781,6 +1781,7 @@ static int dangerFloodFill(int player)
 	Vector2i npos;
 	uint8_t aux, block;
 	int x, y;
+	bool start = true;	// hack to disregard the blocking status of any building exactly on the starting position
 
 	// Set our danger bits
 	for (y = 0; y < mapHeight; y++)
@@ -1812,11 +1813,15 @@ static int dangerFloodFill(int player)
 			if (!(aux & AUXBITS_TEMPORARY) && !(aux & AUXBITS_THREAT) && (aux & AUXBITS_DANGER))
 			{
 				// Note that we do not consider water to be a blocker here. This may or may not be a feature...
-				if (!(block & FEATURE_BLOCKED) && !(aux & AUXBITS_ANY_BUILDING))
+				if (!(block & FEATURE_BLOCKED) && (!(aux & AUXBITS_ANY_BUILDING) || start))
 				{
 					floodbucket[bucketcounter].x = npos.x;
 					floodbucket[bucketcounter].y = npos.y;
 					bucketcounter++;
+					if (start && !(aux & AUXBITS_ANY_BUILDING))
+					{
+						start = false;
+					}
 				}
 				else
 				{
