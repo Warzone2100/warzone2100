@@ -266,6 +266,10 @@ BOOL hostCampaign(char *sGame, char *sPlayer)
 
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
+		if (NetPlay.bComms)
+		{
+			game.skDiff[i] = 0;     	// disable AI
+		}
 		setPlayerName(i, ""); //Clear custom names (use default ones instead)
 	}
 

@@ -58,7 +58,6 @@ extern DROID_TEMPLATE			*apsStaticTemplates;			// for AIs and scripts
 
 /* Misc accuracy modifiers */
 #define	FOM_PARTIAL_ACCURACY_PENALTY	50	// penalty for not being fully able to fire while moving, in %
-#define	INVISIBLE_ACCURACY_PENALTY		50	// accuracy penalty for the unit firing at a target it can't see, in %
 
 /* Minumum number of droids a commander can control in its group */
 #define	MIN_CMD_GROUP_DROIDS	6
@@ -215,6 +214,8 @@ extern UDWORD	getNumDroidsForLevel(UDWORD	level);
 extern BOOL activateGroupAndMove(UDWORD playerNumber, UDWORD groupNumber);
 /* calculate muzzle tip location in 3d world added int weapon_slot to fix the always slot 0 hack*/
 bool calcDroidMuzzleLocation(DROID *psDroid, Vector3i *muzzle, int weapon_slot);
+/* calculate muzzle base location in 3d world added int weapon_slot to fix the always slot 0 hack*/
+bool calcDroidMuzzleBaseLocation(DROID *psDroid, Vector3i *muzzle, int weapon_slot);
 
 /* gets a template from its aName (when pName is unknown) */ 
 extern DROID_TEMPLATE	*GetHumanDroidTemplate(char *aName);
@@ -397,16 +398,6 @@ void droidSetPosition(DROID *psDroid, int x, int y);
 static inline int droidSensorRange(const DROID* psDroid)
 {
 	return objSensorRange((const BASE_OBJECT*)psDroid);
-}
-
-static inline int droidSensorPower(const DROID* psDroid)
-{
-	return objSensorPower((const BASE_OBJECT*)psDroid);
-}
-
-static inline int droidJammerRange(const DROID* psDroid)
-{
-	return objJammerRange((const BASE_OBJECT*)psDroid);
 }
 
 static inline int droidJammerPower(const DROID* psDroid)

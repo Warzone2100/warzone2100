@@ -78,6 +78,7 @@ struct StringToEnumMap : public std::vector<std::pair<char const *, unsigned> >
 		static StringToEnum<Enum> const (&myMap)[N] = map;
 		static const StringToEnumMap<Enum> sortedMap(map);
 		assert(map == myMap);
+		(void)myMap;  // Squelch warning in release mode.
 		return sortedMap;
 	}
 

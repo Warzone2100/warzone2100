@@ -262,7 +262,6 @@ void orderUpdateDroid(DROID *psDroid)
 	REPAIR_FACILITY	*psRepairFac;
 	SDWORD			xdiff,ydiff;
 	BOOL			bAttack;
-	UBYTE i;
 	SDWORD			xoffset,yoffset;
 
 	// clear the target if it has died
@@ -470,41 +469,6 @@ void orderUpdateDroid(DROID *psDroid)
 			actionDroid(psDroid, DACTION_MOVE, psDroid->psTarget->pos.x,psDroid->psTarget->pos.y);
 		}
 		break;
-	case DORDER_MOVE_ATTACKWALL:
-	case DORDER_SCOUT_ATTACKWALL:
-		//Watermelon:check against all weapons now
-		for(i = 0;i <psDroid->numWeaps;i++)
-		{
-			if (psDroid->psTarget == NULL)
-			{
-				if (psDroid->order == DORDER_MOVE_ATTACKWALL)
-				{
-					psDroid->order = DORDER_MOVE;
-				}
-				else
-				{
-					psDroid->order = DORDER_SCOUT;
-				}
-				actionDroid(psDroid, DACTION_MOVE, psDroid->orderX,psDroid->orderY);
-			}
-			else if ((((psDroid->action != DACTION_ATTACK) &&
-					   (psDroid->action != DACTION_MOVETOATTACK) &&
-					   (psDroid->action != DACTION_ROTATETOATTACK)) ||
-					  (psDroid->psActionTarget[0] != psDroid->psTarget)) &&
-					 actionInRange(psDroid, psDroid->psTarget, 0) )
-			{
-				actionDroid(psDroid, DACTION_ATTACK, psDroid->psTarget);
-			}
-			else if (psDroid->action == DACTION_NONE)
-			{
-				if (psDroid->order == DORDER_SCOUT_ATTACKWALL)
-				{
-					psDroid->order = DORDER_SCOUT;
-				}
-				actionDroid(psDroid, DACTION_MOVE, psDroid->psTarget->pos.x, psDroid->psTarget->pos.y);
-			}
-		}
-		break;
 	case DORDER_SCOUT:
 	case DORDER_PATROL:
 		// if there is an enemy around, attack it
@@ -541,25 +505,48 @@ void orderUpdateDroid(DROID *psDroid)
 					tooFarFromPath = true;
 				}
 			}
-			if (!tooFarFromPath &&
-			    (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS) &&
-			    (aiBestNearestTarget(psDroid, &psObj, 0, NULL) >= 0))
+			if (!tooFarFromPath)
 			{
+				// true if in condition to set actionDroid to attack/observe
+				bool attack = secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS &&
+				              aiBestNearestTarget(psDroid, &psObj, 0, NULL) >= 0;
 				switch (psDroid->droidType)
 				{
-				case DROID_WEAPON:
-				case DROID_CYBORG:
-				case DROID_CYBORG_SUPER:
-				case DROID_PERSON:
-				case DROID_COMMAND:
-					actionDroid(psDroid, DACTION_ATTACK, psObj);
-					break;
-				case DROID_SENSOR:
-					actionDroid(psDroid, DACTION_OBSERVE, psObj);
-					break;
-				default:
-					actionDroid(psDroid, DACTION_NONE);
-					break;
+					case DROID_CONSTRUCT:
+					case DROID_CYBORG_CONSTRUCT:
+						psObj = checkForDamagedStruct(psDroid, NULL);
+						if (psObj)
+						{
+							actionDroid(psDroid, DACTION_REPAIR, psObj);
+						}
+						break;
+					case DROID_REPAIR:
+					case DROID_CYBORG_REPAIR:
+						psObj = checkForRepairRange(psDroid, NULL);
+						if (psObj)
+						{
+							actionDroid(psDroid, DACTION_DROIDREPAIR, psObj);
+						}
+						break;
+					case DROID_WEAPON:
+					case DROID_CYBORG:
+					case DROID_CYBORG_SUPER:
+					case DROID_PERSON:
+					case DROID_COMMAND:
+						if (attack)
+						{
+							actionDroid(psDroid, DACTION_ATTACK, psObj);
+						}
+						break;
+					case DROID_SENSOR:
+						if (attack)
+						{
+							actionDroid(psDroid, DACTION_OBSERVE, psObj);
+						}
+						break;
+					default:
+						actionDroid(psDroid, DACTION_NONE);
+						break;
 				}
 			}
 		}
@@ -3456,7 +3443,7 @@ BOOL secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 		psDroid->psGroup != NULL &&
 		psDroid->psGroup->type == GT_COMMAND)
 	{
-		grpSetSecondary(psDroid->psGroup, sec, State);
+		psDroid->psGroup->setSecondary(sec, State);
 	}
 
 	CurrState = psDroid->secondaryOrder;
@@ -3604,13 +3591,13 @@ BOOL secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 						for (psCurr = psDroid->psGroup->psList; psCurr; psCurr=psNext)
 						{
 							psNext = psCurr->psGrpNext;
-							grpLeave(psCurr->psGroup, psCurr);
+							psCurr->psGroup->remove(psCurr);
 							orderDroid(psCurr, DORDER_STOP, ModeImmediate);
 						}
 					}
 					else if (psDroid->psGroup->type == GT_COMMAND)
 					{
-						grpLeave(psDroid->psGroup, psDroid);
+						psDroid->psGroup->remove(psDroid);
 					}
 				}
 			}
@@ -4258,8 +4245,6 @@ const char* getDroidOrderName(DROID_ORDER order)
 		"DORDER_CLEARWRECK",			// 30 - constructor droid to clear up building wreckage
 		"DORDER_PATROL",				// move between two way points
 		"DORDER_REARM",				// 32 - order a vtol to rearming pad
-		"DORDER_MOVE_ATTACKWALL",		// move to a location taking out a blocking wall on the way
-		"DORDER_SCOUT_ATTACKWALL",	// 34 - scout to a location taking out a blocking wall on the way
 		"DORDER_RECOVER",				// pick up an artifact
 		"DORDER_LEAVEMAP",			// 36 - vtol flying off the map
 		"DORDER_RTR_SPECIFIED",		// return to repair at a specified repair center

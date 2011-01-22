@@ -28,7 +28,7 @@
 #include "droiddef.h"
 
 // Initialise the command droids
-extern BOOL cmdDroidInit(void);
+extern bool cmdDroidInit(void);
 
 // ShutDown the command droids
 extern void cmdDroidShutDown(void);
@@ -66,13 +66,10 @@ extern unsigned int cmdGetCommanderLevel(const DROID* psDroid);
 // returns true if a unit in question has is assigned to a commander
 extern bool hasCommander(const DROID* psDroid);
 
-// Select all droids assigned to the passed in command droids
-extern void	cmdSelectSubDroids(DROID *psDroid);
-
 // note that commander experience should be increased
 extern void cmdDroidMultiExpBoost(BOOL bDoit);
 
 // check whether commander experience should be increased
-extern BOOL cmdGetDroidMultiExpBoost(void);
+extern bool cmdGetDroidMultiExpBoost(void);
 
 #endif // __INCLUDED_SRC_CMDDROID_H__

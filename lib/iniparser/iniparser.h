@@ -26,7 +26,7 @@
 #include <string.h>
 
 /// Opaque handle to an inifile structure.
-typedef struct _inifile inifile;
+typedef struct Inifile inifile;
 
 /**
  * Returns a handle to a new inifile instance. This should be used when creating

@@ -70,17 +70,9 @@ BOOL scrBaseObjGet(UDWORD index)
 	}
 
 	// Check this is a valid pointer
-	if (psObj == NULL )
-	{
-		debug(LOG_ERROR, "scrBaseObjGet: was passed an invalid pointer");
-		return false;
-	}
-	// Check this is a valid pointer
-	if (psObj->type != OBJ_DROID && psObj->type != OBJ_STRUCTURE && psObj->type != OBJ_FEATURE)
-	{
-		debug(LOG_ERROR, "scrBaseObjGet: invalid object");
-		return false;
-	}
+	ASSERT_OR_RETURN(false, psObj, "Passed a NULL pointer to a base object");
+	ASSERT_OR_RETURN(false, psObj->type == OBJ_DROID || psObj->type == OBJ_STRUCTURE || psObj->type == OBJ_FEATURE,
+	                 "Invalid object %p of type %d", psObj, psObj->type);
 
 	// set the type and return value
 	switch (index)
@@ -562,31 +554,6 @@ BOOL scrGroupObjGet(UDWORD index)
 		return false;
 	}
 
-	//fix: turn off caching, since it can screw up everything if returns outdated values
-	// recalculate the values if necessary
-/*
-	if (lgGameTime != gameTime || psScrLastGroup != psGroup)
-	{
-		lgGameTime = gameTime;
-		psScrLastGroup = psGroup;
-		lgMembers = 0;
-		lgHealth = 0;
-		lgX = lgY = 0;
-		for(psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
-		{
-			lgMembers += 1;
-			lgX += (SDWORD)psCurr->pos.x;
-			lgY += (SDWORD)psCurr->pos.y;
-			lgHealth += (SDWORD)((100 * psCurr->body)/psCurr->originalBody);
-		}
-		if (lgMembers > 0)
-		{
-			lgX = lgX / lgMembers;
-			lgY = lgY / lgMembers;
-			lgHealth = lgHealth / lgMembers;
-		}
-	}
-*/
 	switch (index)
 	{
 	case GROUPID_POSX:
@@ -911,7 +878,7 @@ BOOL scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize)
 	case ST_GROUP:
 	{
 		DROID_GROUP* const psGroup = (DROID_GROUP *)psVal->v.oval;
-		const int members = psGroup ? grpNumMembers(psGroup) : UNALLOCATED_OBJECT;
+		const int members = psGroup ? psGroup->getNumMembers() : UNALLOCATED_OBJECT;
 
 		if (pBuffer)
 		{
@@ -1191,32 +1158,8 @@ BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 			}
 			else
 			{
-				/* This code is commented out, because it depends on assigning the
-				 * id-th loaded string from the string resources. And from version
-				 * 4 of this file format onward, we do not count strings anymore.
-				 *
-				 * Thus loading of these strings is practically impossible.
-				 */
-#if 0
-				const char * const str = strresGetString(psStringRes, id);
-				if (!str)
-				{
-					debug(LOG_FATAL, "Couldn't find string with id %u", id);
-					abort();
-					return false;
-				}
-
-				psVal->v.sval = strdup(str);
-				if (!psVal->v.sval)
-				{
-					debug(LOG_FATAL, "Out of memory");
-					abort();
-					return false;
-				}
-#else
 				debug(LOG_ERROR, "Incompatible savegame format version %u, should be at least version 4", (unsigned int)version);
 				return false;
-#endif
 			}
 		}
 		else
@@ -1318,14 +1261,14 @@ BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 
 		if (psVal->v.oval == NULL)
 		{
-			DROID_GROUP *tmp = (DROID_GROUP *)psVal->v.oval;
+			DROID_GROUP *tmp;
 			if (!grpCreate(&tmp))
 			{
 				debug( LOG_FATAL, "scrValDefLoad: out of memory" );
 				abort();
 				break;
 			}
-			grpJoin(tmp, NULL);
+			tmp->add(NULL);
 			psVal->v.oval = tmp;
 		}
 
@@ -1396,7 +1339,7 @@ BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 				}
 				else
 				{
-					grpJoin((DROID_GROUP*)(psVal->v.oval), psCDroid);
+					((DROID_GROUP*)(psVal->v.oval))->add(psCDroid);
 				}
 
 				pPos += sizeof(UDWORD);

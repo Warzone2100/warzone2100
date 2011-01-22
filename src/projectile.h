@@ -35,6 +35,9 @@
 
 extern	BASE_OBJECT	*g_pProjLastAttacker;	///< The last unit that did damage - used by script functions
 
+#define PROJ_MAX_PITCH  45
+#define PROJ_ULTIMATE_PITCH  80
+
 #define IN_FIRE		0x01	///< Whether an object is in a fire.
 #define BURNING		0x02	///< Whether an object has just left the fire, but is still burning.
 #define BURN_TIME	10000	///< How long an object burns for after leaving a fire.
@@ -54,10 +57,14 @@ PROJECTILE *proj_GetNext(void);		///< Get next projectile in the list.
 void	proj_FreeAllProjectiles(void);	///< Free all projectiles in the list.
 
 /// Calculate the initial velocities of an indirect projectile. Returns the flight time.
-int32_t projCalcIndirectVelocities(const int32_t dx, const int32_t dz, int32_t v, int32_t *vx, int32_t *vz);
+int32_t projCalcIndirectVelocities(const int32_t dx, const int32_t dz, int32_t v, int32_t *vx, int32_t *vz, int min_angle);
 
 /** Send a single projectile against the given target. */
-bool proj_SendProjectile(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int player, Vector3i target, BASE_OBJECT *psTarget, BOOL bVisible, int weapon_slot);
+bool proj_SendProjectile(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int player, Vector3i target, BASE_OBJECT *psTarget, bool bVisible, int weapon_slot);
+
+/** Send a single projectile against the given target
+ * with a minimum shot angle. */
+bool proj_SendProjectileAngled(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int player, Vector3i target, BASE_OBJECT *psTarget, bool bVisible, int weapon_slot, int min_angle);
 
 /** Return whether a weapon is direct or indirect. */
 bool proj_Direct(const WEAPON_STATS* psStats);
@@ -93,6 +100,8 @@ static inline void setProjectileSource(PROJECTILE *psProj, SIMPLE_OBJECT *psObj)
 		psProj->psSource = castBaseObject(psObj);
 	}
 }
+
+int establishTargetHeight(BASE_OBJECT const *psTarget);
 
 /* @} */
 

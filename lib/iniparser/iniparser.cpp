@@ -19,14 +19,16 @@
 */
 
 #include <ctype.h>
+#include <vector>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/physfs_ext.h"
 #include "lib/framework/stdio_ext.h"
 
 #include "iniparser.h"
+#include <search.h>
 
-struct _inifile_entry
+struct InifileEntry
 {
 	/// Section pointer for entry
 	char *sec;
@@ -36,32 +38,26 @@ struct _inifile_entry
 	char *value;
 };
 
-struct _inifile
+struct Inifile
 {
-	/// The number of unique sections
-	int nsec;
 	/// The names of the sections in the inifile
-	char **sec;
+	std::vector<char *> sec;
 
 	// The current section number
 	char *currsec;
 
-	/// The number of entries in the file
-	int n;
-	/// The amount of space allocated for the keys and values
-	int size;
-
 	/// Entries
-	struct _inifile_entry *entry;
+	std::vector<InifileEntry> entry;
 
 	/// Path of the inifile
 	char *path;
+    int size;
 };
 
 /**
  * This enum stores the status for each parsed line (internal use only).
  */
-typedef enum
+enum LINE_STATUS
 {
 	LINE_UNPROCESSED,
 	LINE_ERROR,
@@ -69,11 +65,10 @@ typedef enum
 	LINE_COMMENT,
 	LINE_SECTION,
 	LINE_VALUE
-} LINE_STATUS;
+};
 
 
 #define ASCIILINESZ         (1024)
-#define INIFILE_MIN_SIZE	64
 
 // Utility function prototypes
 static LINE_STATUS parse_line(const char *input_line,
@@ -88,17 +83,7 @@ inifile *inifile_new()
 {
 	inifile *inif = new inifile;
 
-	inif->nsec = 0;
-	inif->sec = NULL;
-
 	inif->currsec = NULL;
-
-	inif->n = 0;
-	inif->size = INIFILE_MIN_SIZE;
-	inif->entry = static_cast<struct _inifile_entry *>(
-					malloc(inif->size * sizeof(*inif->entry)));
-
-	ASSERT(inif->entry, "Failed to allocate inifile memory.");
 
 	inif->path = NULL;
 
@@ -215,7 +200,7 @@ inifile *inifile_load(const char *path)
 
 int inifile_get_section_count(inifile *inif)
 {
-	return inif->nsec;
+	return inif->sec.size();
 }
 
 const char *inifile_get_section(inifile *inif, int n)
@@ -230,11 +215,8 @@ const char *inifile_get_current_section(inifile *inif)
 
 void inifile_set_current_section(inifile *inif, const char *sec)
 {
-	int i;
-	void *newsec;
-
 	// See if the section exists in the file already
-	for (i = 0; i < inif->nsec; i++)
+	for (unsigned i = 0; i < inif->sec.size(); i++)
 	{
 		// Found it
 		if (strcmp(strlwc(sec), inif->sec[i]) == 0)
@@ -244,25 +226,17 @@ void inifile_set_current_section(inifile *inif, const char *sec)
 		}
 	}
 
-	// Otherwise we need to add a new section entry
-	newsec = realloc(inif->sec, sizeof(char *) * ++inif->nsec);
-
-	ASSERT(newsec, "Failed to allocate inifile memory.");
-
-	inif->sec = static_cast<char **>(newsec);
-	inif->sec[inif->nsec - 1] = strdup(sec);
+	inif->sec.push_back(strdup(sec));
 
 	// Make this new section entry current
-	inif->currsec = inif->sec[inif->nsec - 1];
+	inif->currsec = inif->sec.back();
 
 	ASSERT(inif->currsec, "Failed  to allocate inifile memory.");
 }
 
 BOOL inifile_key_exists(inifile *inif, const char *key)
 {
-	int i;
-
-	for (i = 0; i < inif->n; i++)
+	for (unsigned i = 0; i < inif->entry.size(); ++i)
 	{
 		if (strcmp(inif->entry[i].key, key) == 0)
 		{
@@ -276,10 +250,8 @@ BOOL inifile_key_exists(inifile *inif, const char *key)
 
 const char *inifile_get(inifile *inif, const char *key, const char *dflt)
 {
-	int i;
-
 	// Search for the entry
-	for (i = 0; i < inif->n; i++)
+	for (unsigned i = 0; i < inif->entry.size(); ++i)
 	{
 		if (inif->entry[i].sec == inif->currsec
 		 && strcmp(inif->entry[i].key, strlwc(key)) == 0)
@@ -294,9 +266,6 @@ const char *inifile_get(inifile *inif, const char *key, const char *dflt)
 
 void inifile_set(inifile *inif, const char *key, const char *value)
 {
-	int i;
-	int index;
-
 	// Ensure that key is valid
 	ASSERT(key, "Attempting to set a NULL key");
 
@@ -311,7 +280,7 @@ void inifile_set(inifile *inif, const char *key, const char *value)
 	// If there is an active section then key may already exist
 	else
 	{
-		for (i = 0; i < inif->size; i++)
+		for (unsigned i = 0; i < inif->entry.size(); ++i)
 		{
 			if (inif->entry[i].sec == inif->currsec
 			 && strcmp(inif->entry[i].key, key) == 0)
@@ -324,27 +293,14 @@ void inifile_set(inifile *inif, const char *key, const char *value)
 		}
 	}
 
-	// See if necessary allocate some more space
-	if (inif->n == inif->size)
-	{
-		int newsize = inif->size * 2;
-		void *newentry = realloc(inif->entry, sizeof(*inif->entry) * newsize);
-
-		ASSERT(newentry, "Failed to allocate inifile memory.");
-
-		inif->size = newsize;
-		inif->entry = static_cast<struct _inifile_entry *>(newentry);
-	}
-
 	// Insert
-	index = inif->n++;
+	InifileEntry entry;
+	entry.sec = inif->currsec;
+	entry.key = strdup(key);
+	entry.value = strdup(value);
+	inif->entry.push_back(entry);
 
-	inif->entry[index].sec = inif->currsec;
-	inif->entry[index].key = strdup(key);
-	inif->entry[index].value = strdup(value);
-
-	ASSERT(inif->entry[index].key && inif->entry[index].value,
-	       "Failed to allocate inifile memory.");
+	ASSERT(entry.key && entry.value, "Failed to allocate inifile memory.");
 }
 
 int inifile_get_as_int(inifile *inif, const char *key, int dflt)
@@ -397,11 +353,10 @@ int inifile_get_as_bool(inifile *inif, const char *key, int dflt)
 
 void inifile_unset(inifile *inif, const char *sec, const char *key)
 {
-	int i;
 	int secoffset = -1;
 
 	// First get the section offset
-	for (i = 0; i < inif->nsec; i++)
+	for (unsigned i = 0; i < inif->sec.size(); ++i)
 	{
 		if (strcmp(inif->sec[i], sec) == 0)
 		{
@@ -416,7 +371,7 @@ void inifile_unset(inifile *inif, const char *sec, const char *key)
 	}
 
 	// Look for the key in that section
-	for (i = 0; i < inif->n; i++)
+	for (unsigned i = 0; i < inif->entry.size(); ++i)
 	{
 		if (inif->entry[i].sec == inif->sec[secoffset]
 		 && strcmp(inif->entry[i].key, key) == 0)
@@ -426,10 +381,7 @@ void inifile_unset(inifile *inif, const char *sec, const char *key)
 			free(inif->entry[i].value);
 
 			// Shift all subsequent entries back a slot
-			memmove(&inif->entry[i], &inif->entry[i + 1],
-			        (inif->n - i - 1) * sizeof(*inif->entry));
-
-			inif->n--;
+			inif->entry.erase(inif->entry.begin() + i);
 
 			break;
 		}
@@ -441,10 +393,8 @@ void inifile_unset(inifile *inif, const char *sec, const char *key)
 	 */
 	if (inif->currsec != inif->sec[secoffset])
 	{
-		void *newsec;
-
 		// Look for other entries in the section
-		for (i = 0; i < inif->n; i++)
+		for (unsigned i = 0; i < inif->entry.size(); ++i)
 		{
 			if (inif->entry[i].sec == inif->sec[secoffset])
 			{
@@ -454,13 +404,7 @@ void inifile_unset(inifile *inif, const char *sec, const char *key)
 
 		// Otherwise, if there are none, get rid of the section
 		free(inif->sec[secoffset]);
-		memmove(&inif->sec[secoffset], &inif->sec[secoffset + 1],
-				(inif->nsec - secoffset - 1) * sizeof(char *));
-
-		newsec = realloc(inif->sec, --inif->nsec * sizeof(char *));
-		inif->sec = static_cast<char **>(newsec);
-
-		ASSERT(newsec, "Failed to allocate inifile memory.");
+		inif->sec.erase(inif->sec.begin() + secoffset);
 	}
 }
 
@@ -474,13 +418,9 @@ void inifile_save(inifile *inif)
 void inifile_save_as(inifile *inif, const char *path)
 {
 	PHYSFS_file *f = PHYSFS_openWrite(path);
-	int i, j;
-	int nsec;
-
-	nsec = inifile_get_section_count(inif);
 
 	// Loop over each section of the inifile
-	for (i = 0; i < nsec; i++)
+	for (unsigned i = 0; i < inif->sec.size(); ++i)
 	{
 		const char *currsec = inifile_get_section(inif, i);
 
@@ -488,14 +428,14 @@ void inifile_save_as(inifile *inif, const char *path)
 		 * Print the section title if there are either multiple sections in the
 		 * file or if the singular section has been explicitly named.
 		 */
-		if (nsec > 1 || strcmp("main", currsec) != 0)
+		if (inif->sec.size() > 1 || strcmp("main", currsec) != 0)
 		{
 			// Print out the section title
 			PHYSFS_printf(f, "[%s]\n", currsec);
 		}
 
 		// Then the key => value pairs
-		for (j = 0; j < inif->n; j++)
+		for (unsigned j = 0; j < inif->entry.size(); ++j)
 		{
 			if (inif->entry[j].sec == currsec)
 			{
@@ -512,26 +452,22 @@ void inifile_save_as(inifile *inif, const char *path)
 
 void inifile_delete(inifile *inif)
 {
-	int i;
-
 	// Free the sections
-	for (i = 0; i < inif->nsec; i++)
+	for (unsigned i = 0; i < inif->sec.size(); ++i)
 	{
 		free(inif->sec[i]);
 	}
 
 	// Then the list of sections
-	free(inif->sec);
 
 	// Free the entries
-	for (i = 0; i < inif->n; i++)
+	for (unsigned i = 0; i < inif->entry.size(); ++i)
 	{
 		free(inif->entry[i].key);
 		free(inif->entry[i].value);
 	}
 
 	// Then the list of entries
-	free(inif->entry);
 
 	// Finally the original file path (if given)
 	free(inif->path);
@@ -577,7 +513,7 @@ void inifile_test()
 
 	ASSERT(inifile_get_section_count(inif) == 2,
 	       "Automatic section removal test failed");
-	ASSERT(inif->n == 2,
+	ASSERT(inif->entry.size() == 2,
 	       "Key deletion test failed");
 	ASSERT(strcmp(inifile_get(inif, "third", ""), "a third entry") == 0,
 	       "Key deletion test failed");

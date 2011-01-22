@@ -81,8 +81,6 @@ static UDWORD	maxBodyArmour;
 static UDWORD	maxBodyPower;
 static UDWORD	maxBodyPoints;
 static UDWORD	maxSensorRange;
-static UDWORD	maxSensorPower;
-static UDWORD	maxECMPower;
 static UDWORD	maxECMRange;
 static UDWORD	maxConstPoints;
 static UDWORD	maxRepairPoints;
@@ -106,9 +104,7 @@ static void setMaxBodyArmour(UDWORD armour);
 static void setMaxBodyPower(UDWORD power);
 static void setMaxBodyPoints(UDWORD points);
 static void setMaxSensorRange(UDWORD range);
-static void setMaxSensorPower(UDWORD power);
 static void setMaxECMRange(UDWORD power);
-static void setMaxECMPower(UDWORD power);
 static void setMaxConstPoints(UDWORD points);
 static void setMaxRepairPoints(UDWORD repair);
 static void setMaxWeaponRange(UDWORD range);
@@ -118,7 +114,7 @@ static void setMaxPropulsionSpeed(UDWORD speed);
 
 //determine the effect this upgrade would have on the max values
 static void updateMaxWeaponStats(UWORD maxValue);
-static void updateMaxSensorStats(UWORD maxRange, UWORD maxPower);
+static void updateMaxSensorStats(UWORD maxRange);
 static void updateMaxRepairStats(UWORD maxValue);
 static void updateMaxECMStats(UWORD maxValue);
 static void updateMaxBodyStats(UWORD maxBody, UWORD maxPower, UWORD maxArmour);
@@ -404,7 +400,7 @@ void statsInitVars(void)
 
 	// init the max values
 	maxComponentWeight = maxBodyArmour = maxBodyPower =
-		maxBodyPoints = maxSensorRange = maxSensorPower = maxECMPower = maxECMRange =
+		maxBodyPoints = maxSensorRange = maxECMRange =
 		maxConstPoints = maxRepairPoints = maxWeaponRange = maxWeaponDamage =
 		maxPropulsionSpeed = 0;
 }
@@ -561,9 +557,9 @@ BOOL loadWeaponStats(const char *pWeaponData, UDWORD bufferSize)
 					hitGfx[MAX_STR_LENGTH], missGfx[MAX_STR_LENGTH],
 					waterGfx[MAX_STR_LENGTH], muzzleGfx[MAX_STR_LENGTH],
 					trailGfx[MAX_STR_LENGTH], dummy[MAX_STR_LENGTH];
-	char			fireOnMove[10], weaponClass[15], weaponSubClass[15],
-					weaponEffect[16], movement[15], facePlayer[5],		//weaponEffect[15] caused stack corruption. --Qamly
-					faceInFlight[5],lightWorld[5];
+	char			fireOnMove[MAX_STR_LENGTH], weaponClass[MAX_STR_LENGTH], weaponSubClass[MAX_STR_LENGTH],
+					weaponEffect[MAX_STR_LENGTH], movement[MAX_STR_LENGTH], facePlayer[MAX_STR_LENGTH],  //weaponEffect[15] caused stack corruption. --Qamly
+					faceInFlight[MAX_STR_LENGTH],lightWorld[MAX_STR_LENGTH];
 	UDWORD			longRange, effectSize, numAttackRuns, designable;
 	UDWORD			numRounds;
 
@@ -606,24 +602,24 @@ BOOL loadWeaponStats(const char *pWeaponData, UDWORD bufferSize)
 
 
 		//read the data into the storage - the data is delimeted using comma's
-		sscanf(pWeaponData,"%[^','],%[^','],%d,%d,%d,%d,%d,%d,%[^','],\
-			%[^','],%[^','],%[^','],%[^','],%[^','],%[^','],%[^','],%d,\
-			%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%[^','],\
-			%[^','],%[^','],%[^','],%[^','],%d,%d,%d,%[^','],%[^','],%d,%d,\
-			%[^','],%d,%d,%d,%d,%d",
-			(char *)&WeaponName, (char *)&dummy, &psStats->buildPower,&psStats->buildPoints,
+		sscanf(pWeaponData,"%255[^,'\r\n],%255[^,'\r\n],%d,%d,%d,%d,%d,%d,%255[^,'\r\n],\
+			%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%d,\
+			%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%255[^,'\r\n],\
+			%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%d,%d,%d,%255[^,'\r\n],%255[^,'\r\n],%d,%d,\
+			%255[^,'\r\n],%d,%d,%d,%d,%d",
+			WeaponName, dummy, &psStats->buildPower,&psStats->buildPoints,
 			&psStats->weight, &dummyVal, &dummyVal,
-			&psStats->body, (char *)&GfxFile, (char *)&mountGfx, (char *)&muzzleGfx, (char *)&flightGfx,
-			(char *)&hitGfx, (char *)&missGfx, (char *)&waterGfx, (char *)&trailGfx, &psStats->shortRange,
+			&psStats->body, GfxFile, mountGfx, muzzleGfx, flightGfx,
+			hitGfx, missGfx, waterGfx, trailGfx, &psStats->shortRange,
 			&psStats->longRange,&psStats->shortHit, &psStats->longHit,
 			&psStats->firePause, &psStats->numExplosions, &numRounds,
 			&psStats->reloadTime, &psStats->damage, &psStats->radius,
 			&psStats->radiusHit, &psStats->radiusDamage, &psStats->incenTime,
 			&psStats->incenDamage, &psStats->incenRadius, &psStats->directLife,
 			&psStats->radiusLife, &psStats->flightSpeed, &dummyVal,
-			(char *)&fireOnMove, (char *)&weaponClass, (char *)&weaponSubClass, (char *)&movement, (char *)&weaponEffect,
-			&rotate, &maxElevation, &minElevation, (char *)&facePlayer, (char *)&faceInFlight,
-			&psStats->recoilValue, &psStats->minRange,	(char *)&lightWorld,
+			fireOnMove, weaponClass, weaponSubClass, movement, weaponEffect,
+			&rotate, &maxElevation, &minElevation, facePlayer, faceInFlight,
+			&psStats->recoilValue, &psStats->minRange, lightWorld,
 			&effectSize, &surfaceToAir, &numAttackRuns, &designable, &penetrate);
 
 			psStats->numRounds = (UBYTE)numRounds;
@@ -1003,11 +999,11 @@ BOOL loadBodyStats(const char *pBodyData, UDWORD bufferSize)
 
 		//Watermelon:added 10 %d to store FRONT,REAR,LEFT,RIGHT,TOP,BOTTOM armour values
 		//read the data into the storage - the data is delimeted using comma's
-		sscanf(pBodyData,"%[^','],%[^','],%[^','],%d,%d,%d,%d,%[^','],\
+		sscanf(pBodyData,"%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%d,%d,%d,%d,%255[^,'\r\n],\
 			%d,%d,%d, \
-			%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%[^','],%d",
-			(char*)&BodyName, (char*)&dummy, (char*)&size, &psStats->buildPower,&psStats->buildPoints,
-			&psStats->weight, &psStats->body, (char*)&GfxFile, &dummyVal,
+			%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%255[^,'\r\n],%d",
+			BodyName, dummy, size, &psStats->buildPower,&psStats->buildPoints,
+			&psStats->weight, &psStats->body, GfxFile, &dummyVal,
 			&psStats->weaponSlots, &psStats->powerOutput,
 			(int*)&psStats->armourValue[HIT_SIDE_FRONT][WC_KINETIC], (int*)&psStats->armourValue[HIT_SIDE_FRONT][WC_HEAT],
 			(int*)&psStats->armourValue[HIT_SIDE_REAR][WC_KINETIC],  (int*)&psStats->armourValue[HIT_SIDE_REAR][WC_HEAT],
@@ -1015,7 +1011,7 @@ BOOL loadBodyStats(const char *pBodyData, UDWORD bufferSize)
 			(int*)&psStats->armourValue[HIT_SIDE_RIGHT][WC_KINETIC], (int*)&psStats->armourValue[HIT_SIDE_RIGHT][WC_HEAT],
 			(int*)&psStats->armourValue[HIT_SIDE_TOP][WC_KINETIC],   (int*)&psStats->armourValue[HIT_SIDE_TOP][WC_HEAT],
 			(int*)&psStats->armourValue[HIT_SIDE_BOTTOM][WC_KINETIC],(int*)&psStats->armourValue[HIT_SIDE_BOTTOM][WC_HEAT],
-			(char*)&flameIMD, &designable);//, &psStats->armourValue[WC_EXPLOSIVE],
+			flameIMD, &designable);//, &psStats->armourValue[WC_EXPLOSIVE],
 			//&psStats->armourValue[WC_MISC]);
 
 		//allocate storage for the name
@@ -1111,10 +1107,10 @@ BOOL loadBrainStats(const char *pBrainData, UDWORD bufferSize)
 		BrainName[0] = '\0';
 		weaponName[0] = '\0';
 		//read the data into the storage - the data is delimeted using comma's
-		sscanf(pBrainData,"%[^','],%[^','],%d,%d,%d,%d,%d,%[^','],%d",
-			(char*)&BrainName, (char*)&dummy, &psStats->buildPower,&psStats->buildPoints,
+		sscanf(pBrainData,"%255[^,'\r\n],%255[^,'\r\n],%d,%d,%d,%d,%d,%255[^,'\r\n],%d",
+			BrainName, dummy, &psStats->buildPower,&psStats->buildPoints,
 			&psStats->weight, &dummyVal, &dummyVal,
-			(char*)&weaponName, &psStats->progCap); //, &psStats->AICap, &psStats->AISpeed);
+			weaponName, &psStats->progCap);
 
 		if (!allocateStatName((BASE_STATS *)psStats, BrainName))
 		{
@@ -1237,11 +1233,11 @@ BOOL loadPropulsionStats(const char *pPropulsionData, UDWORD bufferSize)
 		imdName[0] = '\0';
 
 		//read the data into the storage - the data is delimeted using comma's
-		sscanf(pPropulsionData,"%[^','],%[^','],%d,%d,%d,%d,%d,%d,%[^','],\
-			%[^','],%d,%d",
-			(char*)&PropulsionName, (char*)&dummy, &psStats->buildPower,&psStats->buildPoints,
+		sscanf(pPropulsionData,"%255[^,'\r\n],%255[^,'\r\n],%d,%d,%d,%d,%d,%d,%255[^,'\r\n],\
+			%255[^,'\r\n],%d,%d",
+			PropulsionName, dummy, &psStats->buildPower,&psStats->buildPoints,
 			&psStats->weight, &dummyVal, &dummyVal,
-			&psStats->body,	(char*)&imdName, (char*)&type, &psStats->maxSpeed, &designable);
+			&psStats->body, imdName, type, &psStats->maxSpeed, &designable);
 
 		if (!allocateStatName((BASE_STATS *)psStats, PropulsionName))
 		{
@@ -1352,12 +1348,12 @@ BOOL loadSensorStats(const char *pSensorData, UDWORD bufferSize)
 		location[0] = '\0';
 		type[0] = '\0';
 		//read the data into the storage - the data is delimeted using comma's
-		sscanf(pSensorData,"%[^','],%[^','],%d,%d,%d,%d,%d,%d,%[^','],\
-			%[^','],%d,%[^','],%[^','],%d,%d,%d",
-			(char*)&SensorName, (char*)&dummy, &psStats->buildPower,&psStats->buildPoints,
+		sscanf(pSensorData,"%255[^,'\r\n],%255[^,'\r\n],%d,%d,%d,%d,%d,%d,%255[^,'\r\n],\
+			%255[^,'\r\n],%d,%255[^,'\r\n],%255[^,'\r\n],%d,%d,%d",
+			SensorName, dummy, &psStats->buildPower,&psStats->buildPoints,
 			&psStats->weight, &dummyVal, &dummyVal,
-			&psStats->body,	(char*)&GfxFile,(char*)&mountGfx,
-			&psStats->range, (char*)&location, (char*)&type, &psStats->time, &psStats->power, &designable);
+			&psStats->body, GfxFile, mountGfx,
+			&psStats->range, location, type, &psStats->time, &psStats->power, &designable);
 
 		if (!allocateStatName((BASE_STATS *)psStats, SensorName))
 		{
@@ -1452,7 +1448,6 @@ BOOL loadSensorStats(const char *pSensorData, UDWORD bufferSize)
 		if (psStats->designable)
 		{
 			setMaxSensorRange(psStats->range);
-			setMaxSensorPower(psStats->power);
 			setMaxComponentWeight(psStats->weight);
 		}
 
@@ -1487,15 +1482,12 @@ BOOL loadECMStats(const char *pECMData, UDWORD bufferSize)
 		mountGfx[0] = '\0';
 		location[0] = '\0';
 		//read the data into the storage - the data is delimeted using comma's
-		sscanf(pECMData,"%[^','],%[^','],%d,%d,%d,%d,%d,%d,%[^','],%[^','],\
-			%[^','],%d,%d,%d",
-			(char*)&ECMName, (char*)&dummy, &psStats->buildPower,&psStats->buildPoints,
+		sscanf(pECMData,"%255[^,'\r\n],%255[^,'\r\n],%d,%d,%d,%d,%d,%d,%255[^,'\r\n],%255[^,'\r\n],\
+			%255[^,'\r\n],%d,%d,%d",
+			ECMName, dummy, &psStats->buildPower,&psStats->buildPoints,
 			&psStats->weight, &dummyVal, &dummyVal,
-			&psStats->body,	(char*)&GfxFile, (char*)&mountGfx, (char*)&location, &psStats->power,
+			&psStats->body, GfxFile, mountGfx, location, &psStats->power,
 			&psStats->range, &designable);
-
-		// set a default ECM range for now
-		psStats->range = TILE_UNITS * 8;
 
 		if (!allocateStatName((BASE_STATS *)psStats, ECMName))
 		{
@@ -1558,7 +1550,6 @@ BOOL loadECMStats(const char *pECMData, UDWORD bufferSize)
 		// Set the max stat values for the design screen
 		if (psStats->designable)
 		{
-			setMaxECMPower(psStats->power);
 			setMaxECMRange(psStats->range);
 			setMaxComponentWeight(psStats->weight);
 		}
@@ -1596,11 +1587,11 @@ BOOL loadRepairStats(const char *pRepairData, UDWORD bufferSize)
 		location[0] = '\0';
 
 	//read the data into the storage - the data is delimeted using comma's
-		sscanf(pRepairData,"%[^','],%[^','],%d,%d,%d,%d,%d,%d,%[^','],\
-			%[^','],%[^','],%d,%d,%d",
-			(char*)&RepairName, (char*)&dummy, &psStats->buildPower,&psStats->buildPoints,
+		sscanf(pRepairData,"%255[^,'\r\n],%255[^,'\r\n],%d,%d,%d,%d,%d,%d,%255[^,'\r\n],\
+			%255[^,'\r\n],%255[^,'\r\n],%d,%d,%d",
+			RepairName, dummy, &psStats->buildPower,&psStats->buildPoints,
 			&psStats->weight, &dummyVal, &dummyVal,
-			&repairArmour, (char*)&location, (char*)&GfxFile, (char*)&mountGfx,
+			&repairArmour, location, GfxFile, mountGfx,
 			&psStats->repairPoints, &psStats->time,&designable);
 
 		if (!allocateStatName((BASE_STATS *)psStats, RepairName))
@@ -1714,11 +1705,11 @@ BOOL loadConstructStats(const char *pConstructData, UDWORD bufferSize)
 		GfxFile[0] = '\0';
 		mountGfx[0] = '\0';
 		//read the data into the storage - the data is delimeted using comma's
-		sscanf(pConstructData,"%[^','],%[^','],%d,%d,%d,%d,%d,%d,%[^','],\
-			%[^','],%d,%d",
-			(char*)&ConstructName, (char*)&dummy, &psStats->buildPower,&psStats->buildPoints,
+		sscanf(pConstructData,"%255[^,'\r\n],%255[^,'\r\n],%d,%d,%d,%d,%d,%d,%255[^,'\r\n],\
+			%255[^,'\r\n],%d,%d",
+			ConstructName, dummy, &psStats->buildPower,&psStats->buildPoints,
 			&psStats->weight, &dummyVal, &dummyVal,
-			&psStats->body, (char*)&GfxFile, (char*)&mountGfx,
+			&psStats->body, GfxFile, mountGfx,
 			&psStats->constructPoints,&designable);
 
 		if (!allocateStatName((BASE_STATS *)psStats, ConstructName))
@@ -1811,8 +1802,8 @@ BOOL loadPropulsionTypes(const char *pPropTypeData, UDWORD bufferSize)
 	for (i=0; i < NumTypes; i++)
 	{
 		//read the data into the storage - the data is delimeted using comma's
-		sscanf(pPropTypeData,"%[^','],%[^','],%d",
-			(char*)&PropulsionName, (char*)&flightName, &multiplier);
+		sscanf(pPropTypeData,"%255[^,'\r\n],%255[^,'\r\n],%d",
+			PropulsionName, flightName, &multiplier);
 
 		//set the pointer for this record based on the name
 		if (!getPropulsionType(PropulsionName, &type))
@@ -1950,7 +1941,7 @@ BOOL loadSpecialAbility(const char *pSAbilityData, UDWORD bufferSize)
 	for (i=0; i < NumTypes; i++)
 	{
 		//read the data into the storage - the data is delimeted using comma's
-		sscanf(pSAbilityData,"%[^','],%d",(char*)&SAbilityName, &accessID);
+		sscanf(pSAbilityData,"%255[^,'\r\n],%d", SAbilityName, &accessID);
 		//check that the data is ordered in the way it will be stored
 		if (accessID != i)
 		{
@@ -2021,8 +2012,8 @@ BOOL loadBodyPropulsionIMDs(const char *pData, UDWORD bufferSize)
 
 		/*read the data into the storage - the data is delimited using comma's
 		not interested in the last number - needed for sscanf*/
-		sscanf(pData,"%[^','],%[^','],%[^','],%[^','],%*d",(char*)&bodyName,
-            (char*)&propulsionName, (char*)&leftIMD, (char*)&rightIMD);
+		sscanf(pData,"%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%*d", bodyName,
+		       propulsionName, leftIMD, rightIMD);
 
 		//get the body stats
 		found = false;
@@ -2155,7 +2146,7 @@ BOOL loadWeaponSounds(const char *pSoundData, UDWORD bufferSize)
 		szWeaponWav[0]    = '\0';
 		szExplosionWav[0] = '\0';
 		//read the data into the storage - the data is delimeted using comma's
-		sscanf(pSoundData,"%[^','],%[^','],%[^','],%d",
+		sscanf(pSoundData,"%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%d",
 			WeaponName, szWeaponWav, szExplosionWav, &iDum);
 
 		if ( statsGetAudioIDFromString( WeaponName, szWeaponWav, &weaponSoundID ) == false )
@@ -2207,8 +2198,8 @@ BOOL loadWeaponModifiers(const char *pWeapModData, UDWORD bufferSize)
 	for (i=0; i < NumRecords; i++)
 	{
 		//read the data into the storage - the data is delimeted using comma's
-		sscanf(pWeapModData,"%[^','],%[^','],%d",
-			(char*)&weaponEffectName, (char*)&propulsionName, &modifier);
+		sscanf(pWeapModData,"%255[^,'\r\n],%255[^,'\r\n],%d",
+			weaponEffectName, propulsionName, &modifier);
 
 		//get the weapon effect inc
 		if (!getWeaponEffect(weaponEffectName, &effectInc))
@@ -2263,7 +2254,7 @@ BOOL loadPropulsionSounds(const char *pPropSoundData, UDWORD bufferSize)
 
 		propulsionName[0] = '\0';
 		//read the data into the storage - the data is delimeted using comma's
-		sscanf(pPropSoundData,"%[^','],%[^','],%[^','],%[^','],%[^','],%[^','],%[^','],%d",
+		sscanf(pPropSoundData,"%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%d",
 			propulsionName, szStart, szIdle, szMoveOff, szMove, szHiss, szShutDown, &iDum);
 
 		if ( statsGetAudioIDFromString( propulsionName, szStart, &startID ) == false )
@@ -3106,23 +3097,10 @@ UDWORD	weaponRadiusHit(WEAPON_STATS *psStats, UBYTE player)
 		psStats->weaponSubClass].radiusHit)/100);
 }
 
-/*Access functions for the upgradeable stats of a sensor*/
-UDWORD	sensorPower(SENSOR_STATS *psStats, UBYTE player)
-{
-	return (UWORD)(psStats->power + (psStats->power * asSensorUpgrade[player].
-		power)/100);
-}
-
 UDWORD	sensorRange(SENSOR_STATS *psStats, UBYTE player)
 {
 	return (UWORD)(psStats->range + (psStats->range * asSensorUpgrade[player].
 		range)/100);
-}
-
-/*Access functions for the upgradeable stats of a ECM*/
-UDWORD	ecmPower(ECM_STATS *psStats, UBYTE player)
-{
-	return (UWORD)(psStats->power + (psStats->power * asECMUpgrade[player].power)/100);
 }
 
 /*Access functions for the upgradeable stats of a ECM*/
@@ -3260,45 +3238,23 @@ void setMaxSensorRange(UDWORD range)
         maxSensorRange = range;
     }
 }
+
 UDWORD getMaxSensorRange(void)
 {
-    return maxSensorRange;
+	return maxSensorRange;
 }
 
-void setMaxSensorPower(UDWORD power)
+void setMaxECMRange(UDWORD range)
 {
-    if (power > maxSensorPower)
-    {
-        maxSensorPower = power;
-    }
-}
-UDWORD getMaxSensorPower(void)
-{
-    return maxSensorPower;
+	if (range > maxECMRange)
+	{
+		maxECMRange = range;
+	}
 }
 
-void setMaxECMPower(UDWORD power)
-{
-    if (power > maxECMPower)
-    {
-        maxECMPower = power;
-    }
-}
-UDWORD getMaxECMPower(void)
-{
-    return maxECMPower;
-}
-
-void setMaxECMRange(UDWORD power)
-{
-    if (power > maxECMRange)
-    {
-        maxECMPower = power;
-    }
-}
 UDWORD getMaxECMRange(void)
 {
-    return maxECMRange;
+	return maxECMRange;
 }
 
 void setMaxConstPoints(UDWORD points)
@@ -3387,7 +3343,7 @@ void updateMaxWeaponStats(UWORD maxValue)
     //the fire pause is dealt with differently
 }
 
-void updateMaxSensorStats(UWORD maxRange, UWORD maxPower)
+void updateMaxSensorStats(UWORD maxRange)
 {
     UDWORD currentMaxValue = getMaxSensorRange();
 
@@ -3395,13 +3351,6 @@ void updateMaxSensorStats(UWORD maxRange, UWORD maxPower)
     {
         currentMaxValue += currentMaxValue * maxRange / 100;
         setMaxSensorRange(currentMaxValue);
-    }
-
-    currentMaxValue = getMaxSensorPower();
-    if (currentMaxValue < (currentMaxValue + currentMaxValue * maxPower / 100))
-    {
-        currentMaxValue += currentMaxValue * maxPower / 100;
-        setMaxSensorPower(currentMaxValue);
     }
 }
 
@@ -3418,13 +3367,13 @@ void updateMaxRepairStats(UWORD maxValue)
 
 void updateMaxECMStats(UWORD maxValue)
 {
-    UDWORD currentMaxValue = getMaxECMPower();
+	int currentMaxValue = getMaxECMRange();
 
-    if (currentMaxValue < (currentMaxValue + currentMaxValue * maxValue / 100))
-    {
-        currentMaxValue += currentMaxValue * maxValue / 100;
-        setMaxECMPower(currentMaxValue);
-    }
+	if (currentMaxValue < (currentMaxValue + currentMaxValue * maxValue / 100))
+	{
+		currentMaxValue += currentMaxValue * maxValue / 100;
+		setMaxECMRange(currentMaxValue);
+	}
 }
 
 void updateMaxBodyStats(UWORD maxBody, UWORD maxPower, UWORD maxArmour)
@@ -3467,12 +3416,11 @@ void updateMaxConstStats(UWORD maxValue)
 
 void adjustMaxDesignStats(void)
 {
-    UWORD       weaponDamage, sensorRange, sensorPower, repairPoints,
-                ecmPower, constPoints, bodyPoints, bodyPower, bodyArmour, inc;
+    UWORD       weaponDamage, sensorRange, repairPoints,
+                ecmRange, constPoints, bodyPoints, bodyPower, bodyArmour, inc;
 
-    //init all the values
-    weaponDamage = sensorRange = sensorPower = repairPoints =
-        ecmPower = constPoints = bodyPoints = bodyPower = bodyArmour = (UWORD)0;
+	// init all the values
+	weaponDamage = sensorRange = repairPoints = ecmRange = constPoints = bodyPoints = bodyPower = bodyArmour = 0;
 
     //go thru' all the functions getting the max upgrade values for the stats
     for (inc = 0; inc < numFunctions; inc++)
@@ -3486,9 +3434,9 @@ void adjustMaxDesignStats(void)
             }
             break;
         case DROIDECM_UPGRADE_TYPE:
-            if (ecmPower < ((UPGRADE_FUNCTION *)asFunctions[inc])->upgradePoints)
+            if (ecmRange < ((UPGRADE_FUNCTION *)asFunctions[inc])->upgradePoints)
             {
-                ecmPower = ((UPGRADE_FUNCTION *)asFunctions[inc])->upgradePoints;
+                ecmRange = ((UPGRADE_FUNCTION *)asFunctions[inc])->upgradePoints;
             }
             break;
         case DROIDBODY_UPGRADE_TYPE:
@@ -3514,10 +3462,6 @@ void adjustMaxDesignStats(void)
             {
                 sensorRange = ((DROIDSENSOR_UPGRADE_FUNCTION *)asFunctions[inc])->range;
             }
-            if (sensorPower < ((DROIDSENSOR_UPGRADE_FUNCTION *)asFunctions[inc])->upgradePoints)
-            {
-                sensorPower = ((DROIDSENSOR_UPGRADE_FUNCTION *)asFunctions[inc])->upgradePoints;
-            }
             break;
         case DROIDCONST_UPGRADE_TYPE:
             if (constPoints < ((UPGRADE_FUNCTION *)asFunctions[inc])->upgradePoints)
@@ -3539,9 +3483,9 @@ void adjustMaxDesignStats(void)
 
     //determine the effect on the max values for the stats
     updateMaxWeaponStats(weaponDamage);
-    updateMaxSensorStats(sensorRange, sensorPower);
+    updateMaxSensorStats(sensorRange);
     updateMaxRepairStats(repairPoints);
-    updateMaxECMStats(ecmPower);
+    updateMaxECMStats(ecmRange);
     updateMaxBodyStats(bodyPoints, bodyPower, bodyArmour);
     updateMaxConstStats(constPoints);
 }

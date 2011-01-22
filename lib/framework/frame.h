@@ -119,11 +119,6 @@ extern UDWORD frameGetAverageRate(void);
 extern UDWORD HashString( const char *String );
 extern UDWORD HashStringIgnoreCase( const char *String );
 
-#if defined(WZ_OS_WIN)
-extern "C" int isatty(int);  // Apparently flex declares isatty with C++ linkage on Windows. Don't ask why. Declaring here instead.
-#endif
-extern "C" int isatty(int);  // Apparently flex declares isatty with C++ linkage on Windows. Don't ask why. Declaring here instead.
-
 static inline WZ_DECL_CONST const char * bool2string(bool var)
 {
 	return (var ? "true" : "false");

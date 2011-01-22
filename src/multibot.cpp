@@ -250,7 +250,7 @@ BOOL recvDroidEmbark(NETQUEUE queue)
 		if (bDroidRemoved)
 		{
 			// and now we need to add it to their transporter group!
-			grpJoin(psTransporterDroid->psGroup, psDroid);
+			psTransporterDroid->psGroup->add(psDroid);
 		}
 		else
 		{
@@ -338,7 +338,7 @@ BOOL recvDroidDisEmbark(NETQUEUE queue)
 		}
 
 		// remove it from the transporter
-		grpLeave(psFoundDroid->psGroup, psFoundDroid);
+		psFoundDroid->psGroup->remove(psFoundDroid);
 
 		// and add it back to the bloody droid list
 		addDroid(psFoundDroid, apsDroidLists);
@@ -695,7 +695,7 @@ BOOL recvDroidInfo(NETQUEUE queue)
 			*/
 			if (hasCommander(psDroid))
 			{
-				grpLeave(psDroid->psGroup, psDroid);
+				psDroid->psGroup->remove(psDroid);
 			}
 
 			if (sOrder.psObj != TargetMissing)  // Only do order if the target didn't die.

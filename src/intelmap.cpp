@@ -195,9 +195,6 @@ static BOOL intDisplaySeqTextViewPage(VIEW_REPLAY *psViewReplay,
 // The current message being displayed
 MESSAGE			*psCurrentMsg = NULL;
 
-// The display stats for the current messages' text
-TEXT_DISPLAY	currentTextDisplay;
-
 #define PAUSE_DISPLAY_CONDITION (!bMultiPlayer)
 #define PAUSEMESSAGE_YOFFSET (0)
 

@@ -84,7 +84,7 @@ extern void audp_set_extra(YY_EXTRA_TYPE user_defined);
 
 %}
 
-%option yylineno noyywrap nounput
+%option yylineno noyywrap nounput never-interactive
 %option prefix="audp_"
 
 %x COMMENT

@@ -33,6 +33,8 @@ if [ -f __BUILD_CONFIG.USER ]; then
 	. ./__BUILD_CONFIG.USER
 fi
 
+which $HOST_TRIPLET-gcc || (echo "You need to install a cross-compiler ($HOST_TRIPLET-gcc) to cross-compile."; exit 1)
+
 for arg in "$@"; do
 	case "$arg" in
 	*=*) val=`expr "X$arg" : '[^=]*=\(.*\)'` ;;

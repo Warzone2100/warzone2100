@@ -2023,7 +2023,7 @@ static BOOL setFunctionality(STRUCTURE	*psBuilding, STRUCTURE_TYPE functionType)
 			else
 			{
 				// Add NULL droid to the group
-				grpJoin(psRepairFac->psGroup, NULL);
+				psRepairFac->psGroup->add(NULL);
 			}
 
 			// Take advantage of upgrades
@@ -2538,7 +2538,7 @@ static bool IsFactoryCommanderGroupFull(const FACTORY* psFactory)
 	}
 
 	// Get the number of droids in the commanders group
-	DroidsInGroup = psFactory->psCommander->psGroup ? grpNumMembers(psFactory->psCommander->psGroup) : 0;
+	DroidsInGroup = psFactory->psCommander->psGroup ? psFactory->psCommander->psGroup->getNumMembers() : 0;
 
 	// if the number in group is less than the maximum allowed then return false (group not full)
 	if (DroidsInGroup < cmdDroidMaxGroup(psFactory->psCommander))
@@ -4772,6 +4772,7 @@ BOOL removeStruct(STRUCTURE *psDel, BOOL bDestroy)
 
 	if (bDestroy)
 	{
+		debug(LOG_DEATH, "Killing off %s id %d (%p)", objInfo(psDel), psDel->id, psDel);
 		killStruct(psDel);
 	}
 
@@ -5333,6 +5334,50 @@ BOOL getLasSatExists(UDWORD player)
 }
 
 
+/* calculate muzzle base location in 3d world */
+bool calcStructureMuzzleBaseLocation(STRUCTURE *psStructure, Vector3i *muzzle, int weapon_slot)
+{
+	iIMDShape *psShape = psStructure->pStructureType->pIMD;
+
+	CHECK_STRUCTURE(psStructure);
+
+	if(psShape && psShape->nconnectors)
+	{
+		Vector3i barrel(0, 0, 0);
+		unsigned int nWeaponStat = psStructure->asWeaps[weapon_slot].nStat;
+		iIMDShape *psWeaponImd = 0, *psMountImd = 0;
+
+		if (nWeaponStat)
+		{
+			psWeaponImd = asWeaponStats[nWeaponStat].pIMD;
+			psMountImd = asWeaponStats[nWeaponStat].pMountGraphic;
+		}
+
+		pie_MatBegin();
+
+		pie_TRANSLATE(psStructure->pos.x, -psStructure->pos.z, psStructure->pos.y);
+
+		//matrix = the center of droid
+		pie_MatRotY(psStructure->rot.direction);
+		pie_MatRotX(psStructure->rot.pitch);
+		pie_MatRotZ(-psStructure->rot.roll);
+		pie_TRANSLATE( psShape->connectors[weapon_slot].x, -psShape->connectors[weapon_slot].z,
+					-psShape->connectors[weapon_slot].y);//note y and z flipped
+
+		
+		pie_RotateTranslate3i(&barrel, muzzle);
+		muzzle->z = -muzzle->z;
+
+		pie_MatEnd();
+	}
+	else
+	{
+		*muzzle = psStructure->pos + Vector3i(0, 0, psStructure->sDisplay.imd->max.y);
+	}
+
+	return true;
+}
+
 /* calculate muzzle tip location in 3d world */
 bool calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3i *muzzle, int weapon_slot)
 {
@@ -5759,9 +5804,9 @@ void printStructureInfo(STRUCTURE *psStructure)
 #ifdef DEBUG
 		if (getDebugMappingStatus())
 		{
-			CONPRINTF(ConsoleString, (ConsoleString, "%s - %d Units assigned - ID %d - sensor range %hu power %hu - ECM %u",
+			CONPRINTF(ConsoleString, (ConsoleString, "%s - %d Units assigned - ID %d - sensor range %hu - ECM %u",
 					  getStatName(psStructure->pStructureType), countAssignedDroids(psStructure),
-					  psStructure->id, structSensorRange(psStructure), structSensorPower(psStructure), structConcealment(psStructure)));
+					  psStructure->id, structSensorRange(psStructure), structConcealment(psStructure)));
 		}
 		else
 #endif
@@ -5776,10 +5821,10 @@ void printStructureInfo(STRUCTURE *psStructure)
 #ifdef DEBUG
 		if (getDebugMappingStatus())
 		{
-			CONPRINTF(ConsoleString, (ConsoleString, "%s - %d Units assigned - ID %d - armour %d|%d - sensor range %hu power %hu - ECM %u - born %u - depth %.02f",
+			CONPRINTF(ConsoleString, (ConsoleString, "%s - %d Units assigned - ID %d - armour %d|%d - sensor range %hu - ECM %u - born %u - depth %.02f",
 				getStatName(psStructure->pStructureType), countAssignedDroids(psStructure),
 				psStructure->id, psStructure->armour[0][WC_KINETIC], psStructure->armour[0][WC_HEAT],
-					structSensorRange(psStructure), structSensorPower(psStructure), structConcealment(psStructure), psStructure->born, psStructure->foundationDepth));
+					structSensorRange(psStructure), structConcealment(psStructure), psStructure->born, psStructure->foundationDepth));
 		} else
 #endif
 		if (psStructure->pStructureType->pSensor != NULL

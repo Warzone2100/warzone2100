@@ -475,6 +475,7 @@ bool removeFeature(FEATURE *psDel)
 		}
 	}
 
+	debug(LOG_DEATH, "Killing off feature %s id %d (%p)", objInfo(psDel), psDel->id, psDel);
 	killFeature(psDel);
 
 	return true;

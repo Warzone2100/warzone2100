@@ -1431,8 +1431,6 @@ UDWORD		dispX,dispY,dispR;
 	return(psReturn);
 }
 
-UWORD lastangle;	// debugging only
-
 // Dummy structure stats used for positioning delivery points.
 static STRUCTURE_STATS ReposStats;
 static BOOL ReposValid = false;
@@ -1802,11 +1800,11 @@ static void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 		if (getDebugMappingStatus()) // cheating on, so output debug info
 		{
 			CONPRINTF(ConsoleString, (ConsoleString,
-						"%s - Damage %d%% - ID %d - experience %f, %s - order %s - action %s - sensor range %hu power %hu - ECM %u - pitch %.0f",
+						"%s - Damage %d%% - ID %d - experience %f, %s - order %s - action %s - sensor range %hu - ECM %u - pitch %.0f",
 						droidGetName(psDroid),
 						100 - clip(PERCENT(psDroid->body, psDroid->originalBody), 0, 100), psDroid->id,
 						psDroid->experience/65536.f, getDroidLevelName(psDroid), getDroidOrderName(psDroid->order), getDroidActionName(psDroid->action),
-						droidSensorRange(psDroid), droidSensorPower(psDroid), droidConcealment(psDroid), UNDEG(psDroid->rot.pitch)));
+						droidSensorRange(psDroid), droidConcealment(psDroid), UNDEG(psDroid->rot.pitch)));
 			FeedbackOrderGiven();
 		}
 		else
@@ -2395,11 +2393,11 @@ static void dealWithRMB( void )
 						if (getDebugMappingStatus()) // cheating on, so output debug info
 						{
 							CONPRINTF(ConsoleString, (ConsoleString,
-										"%s - Damage %d%% - ID %d - experience %f, %s - order %s - action %s - sensor range %hu power %hu - ECM %u",
+										"%s - Damage %d%% - ID %d - experience %f, %s - order %s - action %s - sensor range %hu - ECM %u",
 										droidGetName(psDroid),
 										100 - clip(PERCENT(psDroid->body, psDroid->originalBody), 0, 100), psDroid->id,
 										psDroid->experience/65536.f, getDroidLevelName(psDroid), getDroidOrderName(psDroid->order), getDroidActionName(psDroid->action),
-										droidSensorRange(psDroid), droidSensorPower(psDroid), droidConcealment(psDroid)));
+										droidSensorRange(psDroid), droidConcealment(psDroid)));
 							FeedbackOrderGiven();
 						}
 						else

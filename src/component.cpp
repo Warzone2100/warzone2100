@@ -1059,7 +1059,6 @@ void displayComponentObject(DROID *psDroid)
 	}
 	else
 	{
-
 		// make sure it's not over water.
 		tileX = st.pos.x/TILE_UNITS;
 		tileY = st.pos.y/TILE_UNITS;

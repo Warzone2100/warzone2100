@@ -339,7 +339,7 @@ DROID::~DROID()
 	// leave the current group if any
 	if (psDroid->psGroup)
 	{
-		grpLeave(psDroid->psGroup, psDroid);
+		psDroid->psGroup->remove(psDroid);
 	}
 
 	// remove the droid from the cluster system
@@ -384,7 +384,7 @@ void recycleDroid(DROID *psDroid)
 	// stop any group moral checks
 	if (psDroid->psGroup)
 	{
-		grpLeave(psDroid->psGroup, psDroid);
+		psDroid->psGroup->remove(psDroid);
 	}
 
 	position.x = psDroid->pos.x;				// Add an effect
@@ -452,7 +452,7 @@ void	removeDroidBase(DROID *psDel)
 	if (psDel->psGroup && psDel->psGroup->refCount > 1)
 	{
 		psGroup = psDel->psGroup;
-		grpLeave(psDel->psGroup, psDel);
+		psDel->psGroup->remove(psDel);
 		orderGroupMoralCheck(psGroup);
 	}
 	else
@@ -463,7 +463,7 @@ void	removeDroidBase(DROID *psDel)
 	// leave the current group if any
 	if (psDel->psGroup)
 	{
-		grpLeave(psDel->psGroup, psDel);
+		psDel->psGroup->remove(psDel);
 		psDel->psGroup = NULL;
 	}
 
@@ -590,7 +590,7 @@ BOOL droidRemove(DROID *psDroid, DROID *pList[MAX_PLAYERS])
 	// leave the current group if any - not if its a Transporter droid
 	if (psDroid->droidType != DROID_TRANSPORTER && psDroid->psGroup)
 	{
-		grpLeave(psDroid->psGroup, psDroid);
+		psDroid->psGroup->remove(psDroid);
 		psDroid->psGroup = NULL;
 	}
 
@@ -2229,7 +2229,7 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD pl
 			delete psDroid;
 			return NULL;
 		}
-		grpJoin(psGrp, psDroid);
+		psGrp->add(psDroid);
 	}
 
 	psDroid->lastFrustratedTime = -UINT16_MAX;	// make sure we do not start the game frustrated
@@ -2767,6 +2767,52 @@ void	setSelectedCommander(UDWORD commander)
 {
 	selectedGroup = UBYTE_MAX;
 	selectedCommander = commander;
+}
+
+/**
+ * calculate muzzle base location in 3d world
+ */
+bool calcDroidMuzzleBaseLocation(DROID *psDroid, Vector3i *muzzle, int weapon_slot)
+{
+	iIMDShape *psBodyImd = BODY_IMD(psDroid, psDroid->player);
+
+	CHECK_DROID(psDroid);
+
+	if (psBodyImd && psBodyImd->nconnectors)
+	{
+		Vector3i barrel(0, 0, 0);
+		iIMDShape *psWeaponImd = 0, *psMountImd = 0;
+
+		if (psDroid->asWeaps[weapon_slot].nStat)
+		{
+			psMountImd = WEAPON_MOUNT_IMD(psDroid, weapon_slot);
+			psWeaponImd = WEAPON_IMD(psDroid, weapon_slot);
+		}
+
+		pie_MatBegin();
+
+		pie_TRANSLATE(psDroid->pos.x, -psDroid->pos.z, psDroid->pos.y);
+
+		//matrix = the center of droid
+		pie_MatRotY(psDroid->rot.direction);
+		pie_MatRotX(psDroid->rot.pitch);
+		pie_MatRotZ(-psDroid->rot.roll);
+		pie_TRANSLATE(psBodyImd->connectors[weapon_slot].x, -psBodyImd->connectors[weapon_slot].z,
+					 -psBodyImd->connectors[weapon_slot].y);//note y and z flipped
+
+		pie_RotateTranslate3i(&barrel, muzzle);
+		muzzle->z = -muzzle->z;
+
+		pie_MatEnd();
+	}
+	else
+	{
+		*muzzle = psDroid->pos + Vector3i(0, 0, psDroid->sDisplay.imd->max.y);
+	}
+
+	CHECK_DROID(psDroid);
+
+	return true;
 }
 
 /**

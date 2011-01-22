@@ -221,6 +221,7 @@ extern BOOL getLasSatExists(UDWORD player);
 
 /* added int weapon_slot to fix the alway slot 0 hack */
 bool calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3i *muzzle, int weapon_slot);
+bool calcStructureMuzzleBaseLocation(STRUCTURE *psStructure, Vector3i *muzzle, int weapon_slot);
 
 /*this is called whenever a structure has finished building*/
 extern void buildingComplete(STRUCTURE *psBuilding);
@@ -413,16 +414,6 @@ static inline WZ_DECL_PURE unsigned getStructureStatsBreadth(const STRUCTURE_STA
 static inline int structSensorRange(const STRUCTURE* psObj)
 {
 	return objSensorRange((const BASE_OBJECT*)psObj);
-}
-
-static inline int structSensorPower(const STRUCTURE* psObj)
-{
-	return objSensorPower((const BASE_OBJECT*)psObj);
-}
-
-static inline int structJammerRange(const STRUCTURE* psObj)
-{
-	return objJammerRange((const BASE_OBJECT*)psObj);
 }
 
 static inline int structJammerPower(const STRUCTURE* psObj)

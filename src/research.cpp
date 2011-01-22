@@ -276,7 +276,7 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 
 		//read the data into the storage - the data is delimeted using comma's
 		ResearchName[0] = '\0';
-		sscanf(pResearchData,"%[^','],", ResearchName);
+		sscanf(pResearchData,"%255[^,'\r\n],", ResearchName);
 
 		//allocate storage for the name
 		pResearch->pName = allocateName(ResearchName);
@@ -290,11 +290,11 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 
 		//determine the tech level (unused, so we don't use the resulting string)
 		ResearchName[0] = '\0';
-		sscanf(pResearchData,"%[^','],", ResearchName);
+		sscanf(pResearchData,"%255[^,'\r\n],", ResearchName);
 		pResearchData += (strlen(ResearchName)+1);
 
 		ResearchName[0] = '\0';
-		sscanf(pResearchData,"%[^','],", ResearchName);
+		sscanf(pResearchData,"%255[^,'\r\n],", ResearchName);
 
 		if (strcmp(ResearchName, "0"))
 		{
@@ -324,8 +324,8 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 			UDWORD numRedArtefacts;
 			UDWORD numArteResults;
 
-			sscanf(pResearchData,"%d,%[^','],%[^','],%[^','],%[^','],%[^','], \
-			       %[^','],%[^','],%d,%d,%d,%d,%d,%d,%d,%d,%d",
+			sscanf(pResearchData,"%d,%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n], \
+			       %255[^,'\r\n],%255[^,'\r\n],%d,%d,%d,%d,%d,%d,%d,%d,%d",
 				&techCode, iconID, imdName, imdName2, msgName,
 			       structName, compName, compType,
 				&resPoints, &keyTopic, &numPRRequired,
@@ -560,7 +560,7 @@ BOOL loadResearchPR(const char *pPRData, UDWORD bufferSize)
 		//read the data into the storage - the data is delimited using commas
 		ResearchName[0] = '\0';
 		PRName[0] = '\0';
-		sscanf(pPRData,"%[^','],%[^','],%*d", ResearchName, PRName);
+		sscanf(pPRData,"%255[^,'\r\n],%255[^,'\r\n],%*d", ResearchName, PRName);
 
 		//loop through each Research to compare the name
 		for (incR=0; incR < numResearch; incR++)
@@ -664,7 +664,7 @@ BOOL loadResearchArtefacts(const char *pArteData, UDWORD bufferSize, UDWORD list
 		ResearchName[0] = '\0';
 		ArteName[0] = '\0';
 		TypeName[0] = '\0';
-		sscanf(pArteData,"%[^','],%[^','],%[^',']", ResearchName, ArteName, TypeName);
+		sscanf(pArteData,"%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n]", ResearchName, ArteName, TypeName);
 
 		//increment the data pointer
 		pArteData += (strlen(ResearchName)+1+strlen(ArteName)+1+strlen(TypeName)+1);
@@ -713,7 +713,7 @@ BOOL loadResearchArtefacts(const char *pArteData, UDWORD bufferSize, UDWORD list
 			case RES_LIST:
 				ArteName[0] = '\0';
 				TypeName[0] = '\0';
-				sscanf(pArteData, "%[^','],%[^','],%*d", ArteName, TypeName);
+				sscanf(pArteData, "%255[^,'\r\n],%255[^,'\r\n],%*d", ArteName, TypeName);
 				if (!strcmp(ArteName, "0"))
 				{
 					pResearch->pReplacedArtefacts[pResearch->storeCount] =  NULL;
@@ -812,7 +812,7 @@ BOOL loadResearchStructures(const char *pStructData, UDWORD bufferSize,UDWORD li
 		//read the data into the storage - the data is delimited using comma's
 		ResearchName[0] = '\0';
 		StructureName[0] = '\0';
-		sscanf(pStructData,"%[^','],%[^','],%*d,%*d", ResearchName, StructureName);
+		sscanf(pStructData,"%255[^,'\r\n],%255[^,'\r\n],%*d,%*d", ResearchName, StructureName);
 
 		//loop through each Research to compare the name
 		for (incR = 0; incR < numResearch; incR++)
@@ -931,7 +931,7 @@ BOOL loadResearchFunctions(const char *pFunctionData, UDWORD bufferSize)
 		//read the data into the storage - the data is delimited using comma's
 		ResearchName[0] = '\0';
 		FunctionName[0] = '\0';
-		sscanf(pFunctionData,"%[^','],%[^','],%*d", ResearchName, FunctionName);
+		sscanf(pFunctionData,"%255[^,'\r\n],%255[^,'\r\n],%*d", ResearchName, FunctionName);
 
 		//loop through each Research to compare the name
 		for (incR=0; incR < numResearch; incR++)

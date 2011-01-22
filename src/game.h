@@ -75,9 +75,9 @@
 #define VERSION_36              36              //saves beacon properly
 #define VERSION_37              37              //dpid changes; this had better be the last version
 #define VERSION_38              38              //mod list!
+#define VERSION_39		39		//lots of changes, breaking everything
 
-
-#define CURRENT_VERSION_NUM     VERSION_38
+#define CURRENT_VERSION_NUM     VERSION_39
 
 //used in the loadGame
 #define KEEPOBJECTS				true

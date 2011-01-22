@@ -460,7 +460,7 @@ void intUpdateCommandSize(WIDGET *psWidget, W_CONTEXT *psContext)
 		ASSERT( psDroid->droidType == DROID_COMMAND,
 			"intUpdateCommandSize: droid is not a command droid" );
 
-		ssprintf(Label->aText, "%u/%u", psDroid->psGroup ? grpNumMembers(psDroid->psGroup) : 0, cmdDroidMaxGroup(psDroid));
+		ssprintf(Label->aText, "%u/%u", psDroid->psGroup ? psDroid->psGroup->getNumMembers() : 0, cmdDroidMaxGroup(psDroid));
 		Label->style &= ~WIDG_HIDDEN;
 	}
 	else
@@ -531,7 +531,7 @@ void intUpdateCommandFact(WIDGET *psWidget, W_CONTEXT *psContext)
 		}
 
 		cIndex = 0;
-		for(i=0; i<MAX_FACTORY; i++)
+		for (i = 0; i < 5; ++i)  // TODO Support up to MAX_FACTORY (which won't fit in the ugly secondaryOrder bitmask hack).
 		{
 			if ( psDroid->secondaryOrder & (1 << (i + start)) )
 			{

@@ -332,8 +332,6 @@ HalfTrack02				_("Half-tracks II")
 HalfTrack03				_("Half-tracks III")
 CyborgLegs02				_("Cyborg Propulsion II")
 CyborgLegs03				_("Cyborg Propulsion III")
-//CyborgJets02				_("Cyborg Jump Pack II")
-//CyborgJets03				_("Cyborg Jump Pack III")
 Naval					_("Naval")
 
 /*BABARIAN PROPULSIONS*/
@@ -350,16 +348,9 @@ LightRepair1				_("Repair Turret")
 
 /* ECM */
 ZNULLECM				"Z NULL ECM"
-//ECM1PylonMk1				_("Jammer Tower")
-//ECM1TurretMk1				_("Jammer Turret")
-//ECM1DefaultMk1				"*TEST - ECM1 Default Mk1*"
-ECM1Default				"*TEST - Baba ECM Default*"
-//ECM2PylonMk1				_("Jammer Tower II")
-//ECM2TurretMk1				_("Jammer Turret III")
-//ECM2DefaultMk1				"*Improved ECM Default Mk1*"
-//ECM3PylonMk1				_("Jammer Tower III")
-//ECM3TurretMk1				_("Jammer Turret III")
-//ECM3DefaultMk1				"*ECM3DefaultMk1*"
+ECM1PylonMk1				_("Jammer Tower")
+ECM1TurretMk1				_("Jammer Turret")
+R-Sys-ECM-Upgrade01			_("Electronic Countermeasures")
 
 /* SENSORS */
 ZNULLSENSOR				"Z NULL SENSOR"
@@ -1715,6 +1706,8 @@ R-Sys-RadarDetector01			_("Radar Detector")
 
 SK-Veng-Track-C6TwinAslt	"*SK-Veng-Track-C6TwinAslt*"
 SK-Veng-Track-HvyLaser		"*SK-Veng-Track-HvyLaser*"
+SK-Veng-Hover-Seraph		"*SK-Veng-Hover-Seraph*"
+Dragon-Hover-SeraphGauss	"*SK-Dragon-Hover-SeraphGauss*"
 
 AutoRepair					"Auto Repair"
 

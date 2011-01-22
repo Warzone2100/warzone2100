@@ -112,12 +112,19 @@ static DROID_TEMPLATE* scrCheckTemplateExists(SDWORD player, DROID_TEMPLATE *psT
 
 /// Hold the previously assigned player
 static Vector2i positions[MAX_PLAYERS];
+std::vector<Vector2i> derricks;
 
 void scriptSetStartPos(int position, int x, int y)
 {
 	positions[position].x = x;
 	positions[position].y = y;
 	debug(LOG_SCRIPT, "Setting start position %d to (%d, %d)", position, x, y);
+}
+
+void scriptSetDerrickPos(int x, int y)
+{
+	Vector2i pos(x, y);
+	derricks.push_back(pos);
 }
 
 BOOL scriptInit()
@@ -128,6 +135,8 @@ BOOL scriptInit()
 	{
 		scriptSetStartPos(i, 0, 0);
 	}
+	derricks.clear();
+	derricks.reserve(8 * MAX_PLAYERS);
 	return true;
 }
 
@@ -170,6 +179,34 @@ BOOL scrGetPlayer()
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		ASSERT(false, "Failed to initialize player");
+		return false;
+	}
+	return true;
+}
+
+BOOL scrGetDerrick()
+{
+	int x, y, i;
+
+	if (!stackPopParams(1, VAL_INT, &i))
+	{
+		debug(LOG_ERROR, "stack failed");
+		return false;
+	}
+	scrFunctionResult.v.oval = NULL;
+	if (i < (int)derricks.size())
+	{
+		x = derricks[i].x;
+		y = derricks[i].y;
+		MAPTILE *psTile = worldTile(x, y);
+		if (psTile)
+		{
+			scrFunctionResult.v.oval = psTile->psObject;
+		}
+	}
+	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &scrFunctionResult))
+	{
+		ASSERT(false, "Failed to push result");
 		return false;
 	}
 	return true;
@@ -1144,7 +1181,7 @@ BOOL scrAddDroidToTransporter(void)
 	{
 		if (droidRemove(psDroid, mission.apsDroidLists))
 		{
-			grpJoin(psTransporter->psGroup, psDroid);
+			psTransporter->psGroup->add(psDroid);
 		}
 	}
 
@@ -10759,7 +10796,7 @@ BOOL scrAssembleWeaponTemplate(void)
 
 			if (bMultiMessages)
 			{
-				sendTemplate(pNewTemplate);
+				sendTemplate(player, pNewTemplate);
 			}
 		}
 		else

@@ -168,7 +168,7 @@ extern char		playerName[MAX_PLAYERS][MAX_STR_LENGTH];	//Array to store all playe
 extern BOOL	multiPlayerLoop		(void);							// for loop.c
 
 extern BOOL recvMessage			(void);
-extern BOOL sendTemplate		(DROID_TEMPLATE *t);
+bool sendTemplate(uint32_t player, DROID_TEMPLATE *t);
 extern BOOL SendDestroyTemplate (DROID_TEMPLATE *t);
 extern BOOL SendResearch(uint8_t player, uint32_t index, bool trigger);
 extern BOOL SendDestroyFeature  (FEATURE *pF);					// send a destruct feature message.

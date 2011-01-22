@@ -105,7 +105,7 @@ run
 	maxVTOLs[1]		int					70
 
 	// incendry emplacements.
-	numIncendrys	int					8
+	numIncendrys	int					10
 	incendrys[0]	STRUCTURESTAT		"Emplacement-MortarPit01"
 	incendrys[1]	STRUCTURESTAT		"Emplacement-MortarPit02"
 	incendrys[2]	STRUCTURESTAT		"Emplacement-MortarPit-Incenediary"
@@ -114,6 +114,8 @@ run
 	incendrys[5]	STRUCTURESTAT		"Emplacement-Howitzer150"
 	incendrys[6]	STRUCTURESTAT		"Emplacement-Howitzer-Incenediary"
 	incendrys[7]	STRUCTURESTAT		"Emplacement-RotHow"
+	incendrys[8]	STRUCTURESTAT		"Emplacement-Rocket06-IDF"
+	incendrys[9]	STRUCTURESTAT		"Emplacement-HvART-pit"
 
 	//anti a.
 	vtolDefStruct[0] STRUCTURESTAT		"AASite-QuadMg1"	//1
@@ -121,6 +123,7 @@ run
 	vtolDefStruct[2] STRUCTURESTAT		"AASite-QuadRotMg"
 	vtolDefStruct[3] STRUCTURESTAT		"P0-AASite-SAM1" 	//3
 	vtolDefStruct[4] STRUCTURESTAT		"P0-AASite-SAM2"
+	vtolDefStruct[5] STRUCTURESTAT		"P0-AASite-Laser"
 
 	// upgrade structures
 	powModule		STRUCTURESTAT		"A0PowMod1"
@@ -146,7 +149,7 @@ run
 	structs[11]		STRUCTURESTAT		"X-Super-MassDriver"
 	structs[12]		STRUCTURESTAT		"X-Super-Missile"
 
-	/* Base structures */
+	/* List what counts as base structures */
 	numBaseStruct	int					8
 	baseStruct[0]	STRUCTURESTAT		"A0PowerGenerator"
 	baseStruct[1]	STRUCTURESTAT		"A0LightFactory"
@@ -206,7 +209,7 @@ run
 	// COMBAT TEMPLATES
 
 	//branchDefault
-	numTemplates	int			47
+	numTemplates	int			48
 	
 	tmpl[0]	TEMPLATE	"ViperMG01Wheels"		//MG
 	tmpl[1]	TEMPLATE	"ViperMG02Wheels"		//TMG
@@ -263,7 +266,9 @@ run
 	tmpl[44]	TEMPLATE	"SK-Veng-Track-PulseLsr"
 	tmpl[45]	TEMPLATE	"SK-Veng-Hover-Scourge"
 
-	tmpl[46]	TEMPLATE	"SK-Veng-Track-HvyLaser"
+	tmpl[46]	TEMPLATE	"SK-Veng-Hover-Seraph"
+	tmpl[47]	TEMPLATE	"Dragon-Hover-SeraphGauss"
+
 	
 	/////////////////////////////////////////////////////////////////////
 	// SENSORS / REPAIR TEMPLATES
@@ -354,17 +359,17 @@ run
 	wyvernBody			BODY		"Body13SUP"
 	dragonBody			BODY		"Body14SUP"
 
-	// anti-tank weapons, in reverse order of priority
+	// VTOL anti-tank weapons, in reverse order of priority
 	numAtWeapons			int		3
 	atWeapon[0]			WEAPON		"Rocket-VTOL-LtA-T"	// vtol lancer
 	atWeapon[1]			WEAPON		"Rocket-VTOL-HvyA-T"	// vtol tank-killer
 	atWeapon[2]			WEAPON		"Missile-VTOL-AT"	// vtol scourge
 
-	// anti-building weapons, in order of priority
+	// VTOL anti-building weapons, in reverse order of priority
 	numAsWeapons			int		1
 	asWeapon[0]			WEAPON		"Rocket-VTOL-BB"	// vtol bunker-buster
 
-	// weapons of mass destruction
+	// VTOL weapons of mass destruction, in reverse order of priority
 	numMdWeapons			int		3
 	mdWeapon[0]			WEAPON		"Bomb3-VTOL-LtINC"	// phosphor bomb
 	mdWeapon[1]			WEAPON		"Bomb4-VTOL-HvyINC"	// thermite bomb

@@ -415,6 +415,7 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 					if (!asCreateFuncs[type](&(psCode->ppsLocalVarVal[i][j]) ))
 					{
 						debug(LOG_ERROR,"eventNewContext: asCreateFuncs failed for local var");
+						free(psContext);
 						return false;
 					}
 				}

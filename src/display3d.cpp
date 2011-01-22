@@ -1278,7 +1278,7 @@ void	renderAnimComponent( const COMPONENT_OBJECT *psObj )
 	Spacetime spacetime = interpolateObjectSpacetime(psParentObj, graphicsTime);
 	const SDWORD posX = spacetime.pos.x + psObj->position.x,
 	             posY = spacetime.pos.y + psObj->position.y;
-	SWORD rx, rz;
+	int rx, rz;
 
 	ASSERT( psParentObj != NULL, "renderAnimComponent: invalid parent object pointer" );
 

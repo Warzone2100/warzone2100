@@ -1459,6 +1459,10 @@ FUNC_SYMBOL asFuncTable[] =
 		1, { VAL_INT },
 		false, 0, NULL, 0, 0, NULL, NULL },
 
+	{ "getDerrick", scrGetDerrick, (INTERP_TYPE)ST_BASEOBJECT,
+		1, { VAL_INT },
+		false, 0, NULL, 0, 0, NULL, NULL },
+
 	/* This final entry marks the end of the function list */
 	{ "FUNCTION LIST END", NULL, VAL_VOID, 0, { VAL_VOID }, 0, 0, NULL, 0, 0, NULL, NULL }
 };
@@ -2293,6 +2297,42 @@ BOOL scrTabInitialise(void)
 	scriptSetTypeEquiv(asEquivTable);
 
 	// Set the create and release functions
+	if (!eventAddValueCreate((INTERP_TYPE)ST_BASEOBJECT, scrvAddBasePointer))
+	{
+		return false;
+	}
+	if (!eventAddValueRelease((INTERP_TYPE)ST_BASEOBJECT, scrvReleaseBasePointer))
+	{
+		return false;
+	}
+
+	if (!eventAddValueCreate((INTERP_TYPE)ST_DROID, scrvAddBasePointer))
+	{
+		return false;
+	}
+	if (!eventAddValueRelease((INTERP_TYPE)ST_DROID, scrvReleaseBasePointer))
+	{
+		return false;
+	}
+
+	if (!eventAddValueCreate((INTERP_TYPE)ST_STRUCTURE, scrvAddBasePointer))
+	{
+		return false;
+	}
+	if (!eventAddValueRelease((INTERP_TYPE)ST_STRUCTURE, scrvReleaseBasePointer))
+	{
+		return false;
+	}
+
+	if (!eventAddValueCreate((INTERP_TYPE)ST_FEATURE, scrvAddBasePointer))
+	{
+		return false;
+	}
+	if (!eventAddValueRelease((INTERP_TYPE)ST_FEATURE, scrvReleaseBasePointer))
+	{
+		return false;
+	}
+
 	if (!eventAddValueCreate((INTERP_TYPE)ST_GROUP, scrvNewGroup))
 	{
 		return false;

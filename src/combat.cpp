@@ -41,7 +41,7 @@
 
 // Watermelon:real projectile
 /* Fire a weapon at something */
-void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, int weapon_slot)
+bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, int weapon_slot)
 {
 	WEAPON_STATS	*psStats;
 	UDWORD                  damLevel;
@@ -60,19 +60,19 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		if (((DROID *)psAttacker)->sMove.iAttackRuns[weapon_slot] >= getNumAttackRuns(((DROID *)psAttacker), weapon_slot))
 		{
 			objTrace(psAttacker->id, "VTOL slot %d is empty", weapon_slot);
-			return;
+			return false;
 		}
 	}
 
 	/* Get the stats for the weapon */
 	compIndex = psWeap->nStat;
-	ASSERT_OR_RETURN( , compIndex < numWeaponStats, "Invalid range referenced for numWeaponStats, %d > %d", compIndex, numWeaponStats);
+	ASSERT_OR_RETURN( false , compIndex < numWeaponStats, "Invalid range referenced for numWeaponStats, %d > %d", compIndex, numWeaponStats);
 	psStats = asWeaponStats + compIndex;
 
 	// check valid weapon/prop combination
 	if (!validTarget(psAttacker, psTarget, weapon_slot))
 	{
-		return;
+		return false;
 	}
 
 	/*see if reload-able weapon and out of ammo*/
@@ -80,7 +80,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	{
 		if (gameTime - psWeap->lastFired < weaponReloadTime(psStats, psAttacker->player))
 		{
-			return;
+			return false;
 		}
 		//reset the ammo level
 		psWeap->ammo = psStats->numRounds;
@@ -112,7 +112,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	if (gameTime - psWeap->lastFired <= firePause)
 	{
 		/* Too soon to fire again */
-		return;
+		return false;
 	}
 
 	// add a random delay to the fire
@@ -121,26 +121,26 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	int fireChance = gameTime - (psWeap->lastFired + firePause);
 	if (gameRand(RANDOM_PAUSE) > fireChance)
 	{
-		return;
+		return false;
 	}
 
-	if (!psTarget->visible[psAttacker->player])
+	if (psTarget->visible[psAttacker->player] != UBYTE_MAX)
 	{
 		// Can't see it - can't hit it
 		objTrace(psAttacker->id, "combFire(%u[%s]->%u): Object has no indirect sight of target", psAttacker->id, psStats->pName, psTarget->id);
-		return;
+		return false;
 	}
 
 	/* Check we can see the target */
 	if (psAttacker->type == OBJ_DROID && !isVtolDroid((DROID *)psAttacker)
 	    && (proj_Direct(psStats) || actionInsideMinRange(psDroid, psTarget, psStats)))
 	{
-		if(!lineOfFire(psAttacker, psTarget, true))
+		if(!lineOfFire(psAttacker, psTarget, weapon_slot, true))
 		{
 			// Can't see the target - can't hit it with direct fire
 			objTrace(psAttacker->id, "combFire(%u[%s]->%u): Droid has no direct line of sight to target",
 			      psAttacker->id, ((DROID *)psAttacker)->aName, psTarget->id);
-			return;
+			return false;
 		}
 	}
 	else if ((psAttacker->type == OBJ_STRUCTURE) &&
@@ -148,23 +148,23 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 			 proj_Direct(psStats))
 	{
 		// a bunker can't shoot through walls
-		if (!lineOfFire(psAttacker, psTarget, true))
+		if (!lineOfFire(psAttacker, psTarget, weapon_slot, true))
 		{
 			// Can't see the target - can't hit it with direct fire
 			objTrace(psAttacker->id, "combFire(%u[%s]->%u): Structure has no direct line of sight to target",
 			      psAttacker->id, ((STRUCTURE *)psAttacker)->pStructureType->pName, psTarget->id);
-			return;
+			return false;
 		}
 	}
 	else if ( proj_Direct(psStats) )
 	{
 		// VTOL or tall building
-		if (!lineOfFire(psAttacker, psTarget, false))
+		if (!lineOfFire(psAttacker, psTarget, weapon_slot, false))
 		{
 			// Can't see the target - can't hit it with direct fire
 			objTrace(psAttacker->id, "combFire(%u[%s]->%u): Tall object has no direct line of sight to target",
 			      psAttacker->id, psStats->pName, psTarget->id);
-			return;
+			return false;
 		}
 	}
 
@@ -177,13 +177,34 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		int dirDiff = abs(angleDelta(targetDir - psAttacker->rot.direction));
 		if (dirDiff > FIXED_TURRET_DIR)
 		{
-			return;
+			return false;
 		}
 	}
 
 	/* Now see if the target is in range  - also check not too near */
 	int dist = iHypot(removeZ(deltaPos));
 	longRange = proj_GetLongRange(psStats);
+
+	/* modification by CorvusCorax - calculate shooting angle */
+	int min_angle = 0;
+	// only calculate for indirect shots
+	if (!proj_Direct(psStats) && dist > 0)
+	{
+		min_angle = arcOfFire(psAttacker,psTarget,weapon_slot,true);
+
+		// prevent extremely steep shots
+		min_angle = std::min(min_angle, DEG(PROJ_ULTIMATE_PITCH));
+
+		// adjust maximum range of unit if forced to shoot very steep
+		if (min_angle > DEG(PROJ_MAX_PITCH))
+		{
+			//do not allow increase of max range though
+			if (iSin(2*min_angle) < iSin(2*DEG(PROJ_MAX_PITCH)))  // If PROJ_MAX_PITCH == 45, then always iSin(2*min_angle) <= iSin(2*DEG(PROJ_MAX_PITCH)), and the test is redundant.
+			{
+				longRange = longRange * iSin(2*min_angle) / iSin(2*DEG(PROJ_MAX_PITCH));
+			}
+		}
+	}
 
 	int baseHitChance = 0;
 	if ((dist <= psStats->shortRange)  && (dist >= psStats->minRange))
@@ -198,12 +219,18 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	{
 		// get weapon chance to hit in the long range
 		baseHitChance = weaponLongHit(psStats,psAttacker->player);
+
+		// adapt for height adjusted artillery shots
+		if (min_angle > DEG(PROJ_MAX_PITCH))
+		{
+			baseHitChance = baseHitChance * iCos(min_angle) / iCos(DEG(PROJ_MAX_PITCH));
+		}
 	}
 	else
 	{
 		/* Out of range */
 		objTrace(psAttacker->id, "combFire(%u[%s]->%u): Out of range", psAttacker->id, psStats->pName, psTarget->id);
-		return;
+		return false;
 	}
 
 	// apply experience accuracy modifiers to the base
@@ -237,7 +264,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		{
 		case FOM_NO:
 			// Can't fire while moving
-			return;
+			return false;
 			break;
 		case FOM_PARTIAL:
 			resultHitChance = FOM_PARTIAL_ACCURACY_PENALTY * resultHitChance / 100;
@@ -262,14 +289,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	// increment the shots counter
 	psWeap->shotsFired++;
 
-	// visibility modifiers
-	//if (psTarget->visible[psAttacker->player] < VIS_ATTACK_MOD_LEVEL)
-	if (psTarget->visible[psAttacker->player] == 0)		//not sure if this can ever be > 0 here
-	{
-		resultHitChance = INVISIBLE_ACCURACY_PENALTY * resultHitChance / 100;
-	}
-
-	//Watermelon:predicted X,Y offset per sec
+	// predicted X,Y offset per sec
 	Vector3i predict = psTarget->pos;
 
 	//Watermelon:Target prediction
@@ -285,7 +305,7 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		else
 		{
 			int32_t vXY, vZ;  // Unused, we just want the flight time.
-			flightTime = projCalcIndirectVelocities(dist, deltaPos.z, psStats->flightSpeed, &vXY, &vZ);
+			flightTime = projCalcIndirectVelocities(dist, deltaPos.z, psStats->flightSpeed, &vXY, &vZ, min_angle);
 		}
 
 		if (psTarget->lastHitWeapon == WSC_EMP)
@@ -335,7 +355,8 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	CLIP(predict.x, 0, world_coord(mapWidth - 1));
 	CLIP(predict.y, 0, world_coord(mapHeight - 1));
 
-	proj_SendProjectile(psWeap, psAttacker, psAttacker->player, predict, psTarget, bVisibleAnyway, weapon_slot);
+	proj_SendProjectileAngled(psWeap, psAttacker, psAttacker->player, predict, psTarget, bVisibleAnyway, weapon_slot, min_angle);
+	return true;
 }
 
 /*checks through the target players list of structures and droids to see

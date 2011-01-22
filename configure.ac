@@ -11,6 +11,7 @@ AC_CONFIG_SRCDIR([lib/framework/frame.cpp])
 # Workaround stupid autoconf CFLAGS default
 # (Bash considers set but empty variables different from null for the ${VAR:+alt} operator)
 CFLAGS="${CFLAGS}"
+CXXFLAGS="${CXXFLAGS}"
 
 
 # Make cross compilation options available in --help

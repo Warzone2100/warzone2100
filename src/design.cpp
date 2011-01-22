@@ -1295,9 +1295,6 @@ intChooseSystemStats( DROID_TEMPLATE *psTemplate )
 	return psStats;
 }
 
-/* set SHOWTEMPLATENAME to 0 to show template components in edit box */
-#define SHOWTEMPLATENAME	0
-
 const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 {
 	// NOTE:	At this time, savegames can support a max of 60. We are using WIDG_MAXSTR (currently 80 )for display
@@ -1310,7 +1307,8 @@ const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 	*/
 	if(psTemplate->droidType == DROID_TRANSPORTER)
 	{
-		return _("Transport");
+		sstrcpy(aCurrName, _("Transport"));
+		return aCurrName;
 	}
 
 	/*
@@ -1336,7 +1334,7 @@ const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 	}
 
 	compIndex = psTemplate->asParts[COMP_BODY];
-	ASSERT_OR_RETURN( NULL, compIndex < numBodyStats, "Invalid range referenced for numBodyStats, %d > %d", compIndex, numBodyStats);
+	ASSERT_OR_RETURN("", compIndex < numBodyStats, "Invalid range referenced for numBodyStats, %d > %d", compIndex, numBodyStats);
 	psStats = (COMPONENT_STATS *) (asBodyStats + compIndex);
 	if ( psTemplate->asParts[COMP_BODY] != 0 )
 	{
@@ -1353,7 +1351,7 @@ const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 	}
 
 	compIndex = psTemplate->asParts[COMP_PROPULSION];
-	ASSERT_OR_RETURN( NULL, compIndex < numPropulsionStats, "Invalid range referenced for numPropulsionStats, %d > %d", compIndex, numPropulsionStats);
+	ASSERT_OR_RETURN("", compIndex < numPropulsionStats, "Invalid range referenced for numPropulsionStats, %d > %d", compIndex, numPropulsionStats);
 	psStats = (COMPONENT_STATS *) (asPropulsionStats + compIndex);
 	if ( psTemplate->asParts[COMP_PROPULSION] != 0 )
 	{
@@ -1371,13 +1369,8 @@ const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 	return aCurrName;
 }
 
-
 static void intSetEditBoxTextFromTemplate( DROID_TEMPLATE *psTemplate )
 {
-#if SHOWTEMPLATENAME
-	widgSetString(psWScreen, IDDES_NAMEBOX, getStatName(psTemplate));
-#else
-
 	sstrcpy(aCurrName, "");
 
 	/* show component names if default template else show stat name */
@@ -1387,11 +1380,10 @@ static void intSetEditBoxTextFromTemplate( DROID_TEMPLATE *psTemplate )
 	}
 	else
 	{
-		sstrcpy(aCurrName, GetDefaultTemplateName(psTemplate));
+		GetDefaultTemplateName(psTemplate);	// sets aCurrName
 	}
 
 	widgSetString(psWScreen, IDDES_NAMEBOX, aCurrName);
-#endif
 }
 
 /* Set all the design bar graphs from a design template */
@@ -1517,7 +1509,7 @@ static BOOL _intSetSystemForm(COMPONENT_STATS *psStats)
 		sBarInit.precision = 0;
 		sBarInit.id = IDDES_SENSORPOWER;
 		sBarInit.y = DES_STATBAR_Y2;	//+= DES_CLICKBARHEIGHT + DES_CLICKGAP;
-		sBarInit.iRange = (UWORD)getMaxSensorPower();//DBAR_SENSORMAXPOWER;
+		sBarInit.iRange = (UDWORD)getMaxSensorRange();	// FIXME: Remove
 		sBarInit.pTip = _("Sensor Power");
 		if (!widgAddBarGraph(psWScreen, &sBarInit))
 		{
@@ -1562,7 +1554,7 @@ static BOOL _intSetSystemForm(COMPONENT_STATS *psStats)
 	{
 		/* Add the bar graphs */
 		sBarInit.id = IDDES_ECMPOWER;
-		sBarInit.iRange = (UWORD)getMaxECMPower();//DBAR_ECMMAXPOWER;
+		sBarInit.iRange = (UWORD)getMaxECMRange();
 		sBarInit.pTip = _("ECM Power");
 		if (!widgAddBarGraph(psWScreen, &sBarInit))
 		{
@@ -2629,11 +2621,9 @@ static void intSetSensorStats(SENSOR_STATS *psStats)
 			(psStats->ref < REF_SENSOR_START + REF_RANGE), "stats ref is out of range");
 
 	/* range */
-	widgSetBarSize(psWScreen, IDDES_SENSORRANGE,
-		sensorRange(psStats, (UBYTE)selectedPlayer));
+	widgSetBarSize(psWScreen, IDDES_SENSORRANGE, sensorRange(psStats, selectedPlayer));
 	/* power */
-	widgSetBarSize(psWScreen, IDDES_SENSORPOWER,
-		sensorPower(psStats, (UBYTE)selectedPlayer));
+	widgSetBarSize(psWScreen, IDDES_SENSORPOWER, 0);	// FIXME: Remove
 	/* weight */
 	widgSetBarSize(psWScreen, IDDES_SENSORWEIGHT, psStats->weight);
 }
@@ -2652,8 +2642,7 @@ static void intSetSensorShadowStats(SENSOR_STATS *psStats)
 		widgSetMinorBarSize(psWScreen, IDDES_SENSORRANGE,
 			sensorRange(psStats, (UBYTE)selectedPlayer));
 		/* power */
-		widgSetMinorBarSize(psWScreen, IDDES_SENSORPOWER,
-			sensorPower(psStats, (UBYTE)selectedPlayer));
+		widgSetMinorBarSize(psWScreen, IDDES_SENSORPOWER, 0);	// FIXME: Remove
 		/* weight */
 		widgSetMinorBarSize(psWScreen, IDDES_SENSORWEIGHT, psStats->weight);
 	}
@@ -2674,9 +2663,8 @@ static void intSetECMStats(ECM_STATS *psStats)
 	ASSERT_OR_RETURN( , (psStats->ref >= REF_ECM_START) &&
 			(psStats->ref < REF_ECM_START + REF_RANGE), "stats ref is out of range");
 
-	/* power */
-	widgSetBarSize(psWScreen, IDDES_ECMPOWER,
-		ecmPower(psStats, (UBYTE)selectedPlayer));
+	/* range */
+	widgSetBarSize(psWScreen, IDDES_ECMPOWER, ecmRange(psStats, selectedPlayer));
 	/* weight */
 	widgSetBarSize(psWScreen, IDDES_ECMWEIGHT, psStats->weight);
 }
@@ -2692,8 +2680,7 @@ static void intSetECMShadowStats(ECM_STATS *psStats)
 	if (psStats)
 	{
 		/* power */
-		widgSetMinorBarSize(psWScreen, IDDES_ECMPOWER,
-			ecmPower(psStats, (UBYTE)selectedPlayer));
+		widgSetMinorBarSize(psWScreen, IDDES_ECMPOWER, ecmRange(psStats, (UBYTE)selectedPlayer));
 		/* weight */
 		widgSetMinorBarSize(psWScreen, IDDES_ECMWEIGHT, psStats->weight);
 	}
@@ -4621,7 +4608,7 @@ static BOOL saveTemplate(void)
 		psTempl->multiPlayerID = generateNewObjectId();
 		if (bMultiMessages)
 		{
-			sendTemplate(psTempl);
+			sendTemplate(selectedPlayer, psTempl);
 		}
 	}
 

@@ -172,6 +172,7 @@ BOOL anim_Create3D(char szPieFileName[], UWORD uwStates, UWORD uwFrameRate, UWOR
 	if ( ubType == ANIM_3D_TRANS && uwObj != uwFrames )
 	{
 		ASSERT(false, "Frames in pie %s != script objects %i", szPieFileName, uwObj);
+		free(psAnim3D);
 		return false;
 	}
 

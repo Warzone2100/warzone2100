@@ -224,7 +224,7 @@ BOOL mapNew(UDWORD width, UDWORD height)
 static void init_tileNames(int type)
 {
 	char	*pFileData = NULL;
-	char	name[100] = {'\0'};
+	char	name[MAX_STR_LENGTH] = {'\0'};
 	int		numlines = 0, i = 0, cnt = 0;
 	uint32_t	fileSize = 0;
 
@@ -240,7 +240,7 @@ static void init_tileNames(int type)
 				abort();
 			}
 
-			sscanf(pFileData, "%[^','],%d%n", name, &numlines, &cnt);
+			sscanf(pFileData, "%255[^,'\r\n],%d%n", name, &numlines, &cnt);
 			pFileData += cnt;
 
 			if (strcmp("arizona_enum", name))
@@ -258,7 +258,7 @@ static void init_tileNames(int type)
 				abort();
 			}
 
-			sscanf(pFileData, "%[^','],%d%n", name, &numlines, &cnt);
+			sscanf(pFileData, "%255[^,'\r\n],%d%n", name, &numlines, &cnt);
 			pFileData += cnt;
 
 			if (strcmp("urban_enum", name))
@@ -276,7 +276,7 @@ static void init_tileNames(int type)
 				abort();
 			}
 
-			sscanf(pFileData, "%[^','],%d%n", name, &numlines, &cnt);
+			sscanf(pFileData, "%255[^,'\r\n],%d%n", name, &numlines, &cnt);
 			pFileData += cnt;
 
 			if (strcmp("rockie_enum", name))
@@ -302,12 +302,12 @@ static void init_tileNames(int type)
 	//increment the pointer to the start of the next record
 	pFileData = strchr(pFileData,'\n') + 1;
 
-	Tile_names = (char *)malloc(numlines * sizeof(char[40]) );
-	memset(Tile_names, 0x0, (numlines * sizeof(char[40])));
+	Tile_names = (char *)malloc(numlines * sizeof(char[MAX_STR_LENGTH]) );
+	memset(Tile_names, 0x0, (numlines * sizeof(char[MAX_STR_LENGTH])));
 
 	for (i=0; i < numlines; i++)
 	{
-		sscanf(pFileData, "%s%n", &Tile_names[i*40], &cnt);
+		sscanf(pFileData, "%255[^,'\r\n]%n", &Tile_names[i*MAX_STR_LENGTH], &cnt);
 		pFileData += cnt;
 		//increment the pointer to the start of the next record
 		pFileData = strchr(pFileData,'\n') + 1;
@@ -320,9 +320,9 @@ static void init_tileNames(int type)
 static BOOL mapLoadGroundTypes(void)
 {
 	char	*pFileData = NULL;
-	char	tilename[255] = {'\0'};
-	char	textureName[255] = {'\0'};
-	char	textureType[255] = {'\0'};
+	char	tilename[MAX_STR_LENGTH] = {'\0'};
+	char	textureName[MAX_STR_LENGTH] = {'\0'};
+	char	textureType[MAX_STR_LENGTH] = {'\0'};
 	double	textureSize = 0.f;
 	int		numlines = 0;
 	int		cnt = 0, i = 0;
@@ -342,7 +342,7 @@ fallback:
 			abort();
 		}
 
-		sscanf(pFileData, "%[^','],%d%n", tilename, &numlines, &cnt);
+		sscanf(pFileData, "%255[^,'\r\n],%d%n", tilename, &numlines, &cnt);
 		pFileData += cnt;
 
 		if (strcmp(tilename, "tertilesc1hw"))
@@ -359,7 +359,7 @@ fallback:
 
 		for (i=0; i < numlines; i++)
 		{
-			sscanf(pFileData, "%[^','],%[^','],%lf%n", textureType, textureName, &textureSize, &cnt);
+			sscanf(pFileData, "%255[^,'\r\n],%255[^,'\r\n],%lf%n", textureType, textureName, &textureSize, &cnt);
 			pFileData += cnt;
 			//increment the pointer to the start of the next record
 			pFileData = strchr(pFileData,'\n') + 1;
@@ -384,7 +384,7 @@ fallback:
 			goto fallback;
 		}
 
-		sscanf(pFileData, "%[^','],%d%n", tilename, &numlines, &cnt);
+		sscanf(pFileData, "%255[^,'\r\n],%d%n", tilename, &numlines, &cnt);
 		pFileData += cnt;
 
 		if (strcmp(tilename, "tertilesc2hw"))
@@ -401,7 +401,7 @@ fallback:
 
 		for (i=0; i < numlines; i++)
 		{
-			sscanf(pFileData, "%[^','],%[^','],%lf%n", textureType, textureName, &textureSize, &cnt);
+			sscanf(pFileData, "%255[^,'\r\n],%255[^,'\r\n],%lf%n", textureType, textureName, &textureSize, &cnt);
 			pFileData += cnt;
 			//increment the pointer to the start of the next record
 			pFileData = strchr(pFileData,'\n') + 1;
@@ -426,7 +426,7 @@ fallback:
 			goto fallback;
 		}
 
-		sscanf(pFileData, "%[^','],%d%n", tilename, &numlines, &cnt);
+		sscanf(pFileData, "%255[^,'\r\n],%d%n", tilename, &numlines, &cnt);
 		pFileData += cnt;
 
 		if (strcmp(tilename, "tertilesc3hw"))
@@ -443,7 +443,7 @@ fallback:
 
 		for (i=0; i < numlines; i++)
 		{
-			sscanf(pFileData, "%[^','],%[^','],%lf%n", textureType, textureName, &textureSize, &cnt);
+			sscanf(pFileData, "%255[^,'\r\n],%255[^,'\r\n],%lf%n", textureType, textureName, &textureSize, &cnt);
 			pFileData += cnt;
 			//increment the pointer to the start of the next record
 			pFileData = strchr(pFileData,'\n') + 1;
@@ -473,8 +473,8 @@ fallback:
 static void SetGroundForTile(const char *filename, const char *nametype)
 {
 	char	*pFileData = NULL;
-	char	tilename[255] = {'\0'};
-	char	val1[25], val2[25], val3[25], val4[25];
+	char	tilename[MAX_STR_LENGTH] = {'\0'};
+	char	val1[MAX_STR_LENGTH], val2[MAX_STR_LENGTH], val3[MAX_STR_LENGTH], val4[MAX_STR_LENGTH];
 	int		numlines = 0;
 	int		cnt = 0, i = 0;
 	uint32_t	fileSize = 0;
@@ -486,7 +486,7 @@ static void SetGroundForTile(const char *filename, const char *nametype)
 		abort();
 	}
 
-	sscanf(pFileData, "%[^','],%d%n", tilename, &numlines, &cnt);
+	sscanf(pFileData, "%255[^,'\r\n],%d%n", tilename, &numlines, &cnt);
 	pFileData += cnt;
 
 	if (strcmp(tilename, nametype))
@@ -503,7 +503,7 @@ static void SetGroundForTile(const char *filename, const char *nametype)
 
 	for (i=0; i < numlines; i++)
 	{
-		sscanf(pFileData, "%[^','],%[^','],%[^','],%s%n", val1, val2, val3, val4, &cnt);
+		sscanf(pFileData, "%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n]%n", val1, val2, val3, val4, &cnt);
 		pFileData += cnt;
 		//increment the pointer to the start of the next record
 		pFileData = strchr(pFileData,'\n') + 1;
@@ -525,7 +525,7 @@ static int getTextureType(const char *textureType)
 	int i = 0;
 	for (i=0; i < numTile_names; i++)
 	{
-		if (!strcmp(textureType, &Tile_names[i*40]))
+		if (!strcmp(textureType, &Tile_names[i*MAX_STR_LENGTH]))
 		{
 			return i;
 		}
@@ -674,7 +674,7 @@ static int determineGroundType(int x, int y, const char *tileset)
 // reads in the decal array for the requested tileset.
 static void SetDecals(const char *filename, const char *decal_type)
 {
-	char decalname[50], *pFileData;
+	char decalname[MAX_STR_LENGTH], *pFileData;
 	int numlines, cnt, i, tiledecal;
 	uint32_t fileSize;
 
@@ -686,7 +686,7 @@ static void SetDecals(const char *filename, const char *decal_type)
 		abort();
 	}
 
-	sscanf(pFileData, "%[^','],%d%n", decalname, &numlines, &cnt);
+	sscanf(pFileData, "%255[^,'\r\n],%d%n", decalname, &numlines, &cnt);
 	pFileData += cnt;
 
 	if (strcmp(decalname, decal_type))
@@ -1105,6 +1105,147 @@ BOOL mapShutdown(void)
 	numTile_names = 0;
 	Tile_names = NULL;
 	return true;
+}
+
+/** 
+ * Intersect a tile with a line and report the points of intersection
+ * line is gives as point plus 2d directional vector
+ * returned are two coordinates at the edge
+ * true if the intersection also crosses the tile split line
+ * (which has to be taken into account)
+ **/
+bool map_Intersect(int* Cx, int* Cy, int* Vx, int* Vy, int* Sx, int* Sy)
+{
+	int	 x, y, ox, oy, Dx, Dy, tileX, tileY;
+	int	 ily,iry,itx,ibx;
+
+	// dereference pointers
+	x = *Cx;
+	y = *Cy;
+	Dx = *Vx;
+	Dy = *Vy;
+
+	/* Turn into tile coordinates */
+	tileX = map_coord(x);
+	tileY = map_coord(y);
+
+	/* Inter tile comp */
+	ox = map_round(x);
+	oy = map_round(y);
+
+	/* allow backwards tracing */
+	if (ox==0 && Dx<0) {
+		tileX--;
+		ox=TILE_UNITS;
+	}
+	if (oy==0 && Dy<0) {
+		tileY--;
+		oy=TILE_UNITS;
+	}
+
+	*Cx=-4*TILE_UNITS; // to trigger assertion
+	*Cy=-4*TILE_UNITS;
+	*Vx=-4*TILE_UNITS;
+	*Vy=-4*TILE_UNITS;
+
+	// calculate intersection point on the left and right (if any)
+	ily = y - 4 * TILE_UNITS; // make sure initial value is way outside of tile
+	iry = y - 4 * TILE_UNITS;
+	if ( Dx!=0) {
+		ily = y - ox*Dy/Dx;
+		iry = y + (TILE_UNITS-ox)*Dy/Dx;
+	}
+	// calculate intersection point on top and bottom (if any)
+	itx = x - 4 * TILE_UNITS; // make sure initial value is way outside of tile
+	ibx = x - 4 * TILE_UNITS;
+	if (Dy!=0) {
+		itx = x - oy*Dx/Dy;
+		ibx = x + (TILE_UNITS-oy)*Dx/Dy;
+	}
+
+	// line comes from the left?
+	if (Dx>=0) {
+		if (map_coord(ily)==tileY || map_coord(ily-1)==tileY) {
+			*Cx = world_coord(tileX);
+			*Cy = ily;
+		}
+		if (map_coord(iry)==tileY || map_coord(iry-1)==tileY) {
+			*Vx = world_coord(tileX+1);
+			*Vy = iry;
+		}
+	} else {
+		if (map_coord(ily)==tileY || map_coord(ily-1)==tileY) {
+			*Vx = world_coord(tileX);
+			*Vy = ily;
+		}
+		if (map_coord(iry)==tileY || map_coord(iry-1)==tileY) {
+			*Cx = world_coord(tileX+1);
+			*Cy = iry;
+		}
+	}
+	// line comes from the top?
+	if (Dy>=0) {
+		if (map_coord(itx)==tileX || map_coord(itx-1)==tileX) {
+			*Cx = itx;
+			*Cy = world_coord(tileY);
+		}
+		if (map_coord(ibx)==tileX || map_coord(ibx-1)==tileX) {
+			*Vx = ibx;
+			*Vy = world_coord(tileY+1);
+		}
+	} else {
+		if (map_coord(itx)==tileX || map_coord(itx-1)==tileX) {
+			*Vx = itx;
+			*Vy = world_coord(tileY);
+		}
+		if (map_coord(ibx)==tileX || map_coord(ibx-1)==tileX) {
+			*Cx = ibx;
+			*Cy = world_coord(tileY+1);
+		}
+	}
+	// assertions, no intersections outside of tile
+	ASSERT(*Cx>=world_coord(tileX) && *Cx<=world_coord(tileX+1),"map_Intersect(): tile Bounds %i %i, %i %i -> %i,%i,%i,%i",x,y,Dx,Dy,*Cx,*Cy,*Vx,*Vy);
+	ASSERT(*Cy>=world_coord(tileY) && *Cy<=world_coord(tileY+1),"map_Intersect(): tile Bounds %i %i, %i %i -> %i,%i,%i,%i",x,y,Dx,Dy,*Cx,*Cy,*Vx,*Vy);
+	ASSERT(*Vx>=world_coord(tileX) && *Vx<=world_coord(tileX+1),"map_Intersect(): tile Bounds %i %i, %i %i -> %i,%i,%i,%i",x,y,Dx,Dy,*Cx,*Cy,*Vx,*Vy);
+	ASSERT(*Vy>=world_coord(tileY) && *Vy<=world_coord(tileY+1),"map_Intersect(): tile Bounds %i %i, %i %i -> %i,%i,%i,%i",x,y,Dx,Dy,*Cx,*Cy,*Vx,*Vy);
+	ASSERT(tileX>=0 && tileY>=0 && tileX<mapWidth && tileY<mapHeight,"map_Intersect(): map Bounds %i %i, %i %i -> %i,%i,%i,%i",x,y,Dx,Dy,*Cx,*Cy,*Vx,*Vy);
+
+	//calculate midway line intersection points
+	if (((map_coord(itx)==tileX ) == (map_coord(ily)==tileY)) && ((map_coord(ibx)==tileX ) == (map_coord(iry)==tileY))) {
+		// line crosses diagnonal only
+		if (Dx-Dy==0) return false;
+		*Sx = world_coord(tileX) + (Dx*oy - Dy*ox)/(Dx - Dy);
+		*Sy = world_coord(tileY) + (Dx*oy - Dy*ox)/(Dx - Dy);
+		if (map_coord(*Sx)!=tileX || map_coord(*Sy)!=tileY) return false;
+		return true;
+	} else if (((map_coord(ibx)==tileX) == (map_coord(ily)==tileY)) && ((map_coord(itx)==tileX) == (map_coord(iry)==tileY))) {
+		//line crosses anti-diagonal only
+		if (Dx+Dy==0) return false;
+		*Sx = world_coord(tileX) + (Dx*(TILE_UNITS - oy) + Dy*ox)/(Dx + Dy);
+		*Sy = world_coord(tileY) + (Dy*(TILE_UNITS - ox) + Dx*oy)/(Dx + Dy);
+		if (map_coord(*Sx)!=tileX || map_coord(*Sy)!=tileY) return false;
+		return true;
+	} else {
+		//line crosses both tile diagonals
+		//TODO: trunk divides tiles into 4 parts instead of 2 in 2.3.
+		//We would need to check and return both intersections here now,
+		//but that would require an additional return parameter!
+		//Instead we check only one of them and know it might be wrong!
+		if (Dx+Dy!=0) {
+			// check anti-diagonal
+			*Sx = world_coord(tileX) + (Dx*(TILE_UNITS - oy) + Dy*ox)/(Dx + Dy);
+			*Sy = world_coord(tileY) + (Dy*(TILE_UNITS - ox) + Dx*oy)/(Dx + Dy);
+			if (map_coord(*Sx)==tileX && map_coord(*Sy)==tileY) return true;
+		}
+		if (Dx-Dy!=0) {
+			// check diagonal
+			*Sx = world_coord(tileX) + (Dx*oy - Dy*ox)/(Dx - Dy);
+			*Sy = world_coord(tileY) + (Dx*oy - Dy*ox)/(Dx - Dy);
+			if (map_coord(*Sx)==tileX && map_coord(*Sy)==tileY) return true;
+		}
+	}
+
+	return false;
 }
 
 /// The max height of the terrain and water at the specified world coordinates
@@ -1640,6 +1781,7 @@ static int dangerFloodFill(int player)
 	Vector2i npos;
 	uint8_t aux, block;
 	int x, y;
+	bool start = true;	// hack to disregard the blocking status of any building exactly on the starting position
 
 	// Set our danger bits
 	for (y = 0; y < mapHeight; y++)
@@ -1671,11 +1813,15 @@ static int dangerFloodFill(int player)
 			if (!(aux & AUXBITS_TEMPORARY) && !(aux & AUXBITS_THREAT) && (aux & AUXBITS_DANGER))
 			{
 				// Note that we do not consider water to be a blocker here. This may or may not be a feature...
-				if (!(block & FEATURE_BLOCKED) && !(aux & AUXBITS_ANY_BUILDING))
+				if (!(block & FEATURE_BLOCKED) && (!(aux & AUXBITS_ANY_BUILDING) || start))
 				{
 					floodbucket[bucketcounter].x = npos.x;
 					floodbucket[bucketcounter].y = npos.y;
 					bucketcounter++;
+					if (start && !(aux & AUXBITS_ANY_BUILDING))
+					{
+						start = false;
+					}
 				}
 				else
 				{
