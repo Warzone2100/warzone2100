@@ -262,7 +262,6 @@ void orderUpdateDroid(DROID *psDroid)
 	REPAIR_FACILITY	*psRepairFac;
 	SDWORD			xdiff,ydiff;
 	BOOL			bAttack;
-	UBYTE i;
 	SDWORD			xoffset,yoffset;
 
 	// clear the target if it has died
