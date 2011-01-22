@@ -132,10 +132,15 @@ void scrvReleaseBasePointer(INTERP_VAL *psVal)
 	basePointers.remove(psVal);
 }
 
-static bool baseObjDead(const INTERP_VAL *val)
+static bool baseObjDead(INTERP_VAL *psVal)
 {
-	BASE_OBJECT *psObj = (BASE_OBJECT *)val->v.oval;
-	return (psObj && isDead(psObj));
+	BASE_OBJECT *psObj = (BASE_OBJECT *)psVal->v.oval;
+	if (psObj && isDead(psObj))
+	{
+		psVal->v.oval = NULL;
+		return true;
+	}
+	return false;
 }
 
 // Check all the base pointers to see if they have died
