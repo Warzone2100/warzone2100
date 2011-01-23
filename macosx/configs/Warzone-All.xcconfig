@@ -10,12 +10,17 @@ INFOPLIST_PREFIX_HEADER = $(SRCROOT)/build/autorevision.h
 INFOPLIST_PREPROCESS = YES
 PRODUCT_NAME = Warzone
 WRAPPER_EXTENSION = app
-FRAMEWORK_SEARCH_PATHS = $(FRAMEWORK_SEARCH_PATHS_QUOTED_1) $(FRAMEWORK_SEARCH_PATHS_QUOTED_2) $(FRAMEWORK_SEARCH_PATHS_QUOTED_3) $(inherited)
+
+FRAMEWORK_SEARCH_PATHS = $(inherited) $(FRAMEWORK_SEARCH_PATHS_QUOTED_1) $(FRAMEWORK_SEARCH_PATHS_QUOTED_2) $(FRAMEWORK_SEARCH_PATHS_QUOTED_3)
+
 HEADER_SEARCH_PATHS = $(inherited) $(HEADER_SEARCH_PATHS_QUOTED_1) $(HEADER_SEARCH_PATHS_QUOTED_2)
+
 LIBRARY_SEARCH_PATHS = $(inherited) $(LIBRARY_SEARCH_PATHS_QUOTED_1) $(LIBRARY_SEARCH_PATHS_QUOTED_3)
+
 USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/.."
 GCC_ENABLE_SSE3_EXTENSIONS = YES // -msse3
 GCC_MODEL_TUNING = G5
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) GLEW_MX
 
 OTHER_CFLAGS = $(FlagsForCandCpp) $(WarnForC) $(inherited)
 OTHER_CFLAGS[arch=i386] = $(inherited) // intel 32 bit only
@@ -40,7 +45,7 @@ GCC_WARN_UNUSED_VALUE = YES // -Wunused-value
 GCC_WARN_UNUSED_VARIABLE = YES // -Wunused-variable
 
 // Build setting dependent warnings
-WarnForCandCpp = -Wall -Wextra -Wcast-align -Wwrite-strings -Wpointer-arith $(WarnForCandCppDep) // Wno-missing-declarations is set on GLee.c; otherwise we would have +3000 warnings
+WarnForCandCpp = -Wall -Wextra -Wcast-align -Wwrite-strings -Wpointer-arith $(WarnForCandCppDep)
 WarnForC = -Wstrict-prototypes -Wdeclaration-after-statement $(WarnForCDep)
 WarnForCpp = $(WarnForCppDep)
 
