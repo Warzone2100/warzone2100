@@ -125,6 +125,8 @@ noinst_HEADERS = \
 	power.h \
 	projectiledef.h \
 	projectile.h \
+	qtscript.h \
+	qtscriptfuncs.h \
 	radar.h \
 	random.h \
 	raycast.h \
@@ -240,6 +242,8 @@ warzone2100_SOURCES = \
 	pointtree.cpp \
 	power.cpp \
 	projectile.cpp \
+	qtscript.cpp \
+	qtscriptfuncs.cpp \
 	radar.cpp \
 	random.cpp \
 	raycast.cpp \

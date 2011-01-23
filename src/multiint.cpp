@@ -81,6 +81,7 @@
 #include "game.h"
 #include "warzoneconfig.h"
 #include "modding.h"
+#include "qtscript.h"
 
 #include "multiplay.h"
 #include "multiint.h"
@@ -217,6 +218,7 @@ struct AIDATA
 	char name[MAX_LEN_AI_NAME];
 	char slo[MAX_LEN_AI_NAME];
 	char vlo[MAX_LEN_AI_NAME];
+	char js[MAX_LEN_AI_NAME];
 	char tip[255];
 	int assigned;	///< How many AIs have we assigned of this type
 };
@@ -289,16 +291,21 @@ void loadMultiScripts()
 	for (int i = 0; i < game.maxPlayers; i++)
 	{
 		// The i == selectedPlayer hack is to enable autogames
-		if (bMultiPlayer && game.type == SKIRMISH && (!NetPlay.players[i].allocated || i == selectedPlayer) && NetPlay.players[i].ai >= 0)
+		if (bMultiPlayer && game.type == SKIRMISH && (!NetPlay.players[i].allocated || i == selectedPlayer)
+		    && NetPlay.players[i].ai >= 0 && myResponsibility(i))
 		{
 			resLoadFile("SCRIPT", aidata[NetPlay.players[i].ai].slo);
 			resLoadFile("SCRIPTVAL", aidata[NetPlay.players[i].ai].vlo);
+			if (aidata[NetPlay.players[i].ai].js[0] != '\0')
+			{
+				loadPlayerScript(aidata[NetPlay.players[i].ai].js, i, NetPlay.players[i].difficulty);
+			}
 		}
 	}
 
 	// Load scavengers
 	resForceBaseDir("multiplay/script/");
-	if (game.scavengers)
+	if (game.scavengers && myResponsibility(scavengerPlayer()))
 	{
 		resLoadFile("SCRIPT", "scavfact.slo");
 		resLoadFile("SCRIPTVAL", "scavfact.vlo");
@@ -544,6 +551,7 @@ void readAIs()
 		sstrcpy(ai.name, inifile_get(inif, "name", "error"));
 		sstrcpy(ai.slo, inifile_get(inif, "slo", "error"));
 		sstrcpy(ai.vlo, inifile_get(inif, "vlo", "error"));
+		sstrcpy(ai.js, inifile_get(inif, "js", ""));
 		sstrcpy(ai.tip, inifile_get(inif, "tip", "Click to choose this AI"));
 		if (strcmp(ai.name, "Nexus") == 0)
 		{

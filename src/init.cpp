@@ -93,6 +93,7 @@
 #include "wrappers.h"
 #include "terrain.h"
 #include "ingameop.h"
+#include "qtscript.h"
 
 static void	initMiscVars(void);
 
@@ -797,7 +798,12 @@ BOOL stageOneInitialise(void)
 		return false;
 	}
 
-	if (!scrTabInitialise())	// Initialise the script system
+	if (!scrTabInitialise())	// Initialise the old wzscript system
+	{
+		return false;
+	}
+
+	if (!initScripts())		// Initialise the new javascript system
 	{
 		return false;
 	}
@@ -870,6 +876,11 @@ BOOL stageOneShutDown(void)
 	}
 
 	if ( !animObj_Shutdown() )
+	{
+		return false;
+	}
+
+	if (!shutdownScripts())
 	{
 		return false;
 	}
@@ -1126,6 +1137,7 @@ BOOL stageThreeInitialise(void)
 	if (getLevelLoadType() != GTYPE_SAVE_MIDMISSION)
 	{
 		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_GAMEINIT);
+		triggerEvent(TRIGGER_GAME_INIT);
 	}
 
 	return true;

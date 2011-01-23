@@ -71,7 +71,7 @@ PKG_PROG_PKG_CONFIG
 AC_PROG_VERSION_CHECK([pkg-config], [0.9])
 
 # Check for Qt
-PKG_CHECK_MODULES(QT4, QtCore QtGui QtOpenGL QtNetwork,,[:])
+PKG_CHECK_MODULES(QT4, QtCore QtGui QtOpenGL QtNetwork QtScript,,[:])
 if test "$pkg_failed" = "yes" ; then
 	AC_MSG_ERROR([Qt not found - required!])
 fi
