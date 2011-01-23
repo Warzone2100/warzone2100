@@ -995,11 +995,7 @@ static bool dataScriptLoad(const char* fileName, void **ppData)
 	fileSize = PHYSFS_fileLength(fileHandle);
 
 	pBuffer = (uint8_t *)malloc(fileSize * sizeof(uint8_t));
-	if (pBuffer == NULL)
-	{
-		debug(LOG_FATAL, "Fatal memory allocation, couldn't allocate %lld buffer", fileSize);
-		abort();
-	}
+	ASSERT_OR_RETURN(false, pBuffer, "Out of memory");
 
 	PHYSFS_read(fileHandle, pBuffer, 1, fileSize);
 
@@ -1063,11 +1059,7 @@ static bool dataScriptLoadVals(const char* fileName, void **ppData)
 	fileSize = PHYSFS_fileLength(fileHandle);
 
 	pBuffer = (uint8_t *)malloc(fileSize * sizeof(uint8_t));
-	if (pBuffer == NULL)
-	{
-		debug(LOG_FATAL, "Fatal memory allocation, couldn't allocate %lld buffer", fileSize);
-		abort();
-	}
+	ASSERT_OR_RETURN(false, pBuffer, "Out of memory");
 
 	PHYSFS_read(fileHandle, pBuffer, 1, fileSize);
 
