@@ -830,8 +830,7 @@ void actionUpdateDroid(DROID *psDroid)
 	BASE_OBJECT			*psTarget;
 	PROPULSION_STATS	*psPropStats;
 	BOOL				(*actionUpdateFunc)(DROID *psDroid) = NULL;
-	signed int i;
-	unsigned int j;
+	unsigned i;
 	//this is a bit field
 	bool nonNullWeapon[DROID_MAXWEAPS] = { false };
 	BASE_OBJECT			*psTargets[DROID_MAXWEAPS];
@@ -1051,145 +1050,100 @@ void actionUpdateDroid(DROID *psDroid)
 		actionUpdateTransporter( psDroid );
 		break;
 	case DACTION_MOVEFIRE:
-		//check if vtol that its armed
+		// check if vtol is armed
 		if (vtolEmpty(psDroid))
 		{
 			moveToRearm(psDroid);
 		}
-
+		// If droid stopped, it can no longer be in DACTION_MOVEFIRE
+		if (DROID_STOPPED(psDroid))
+		{
+			psDroid->action = DACTION_NONE;
+			break;
+		}
+		// loop through weapons and look for target for each weapon
 		bHasTarget = false;
-		//loop through weapons and look for target for each weapon
 		for (i = 0; i < psDroid->numWeaps; ++i)
 		{
-			if (psDroid->psActionTarget[i] != NULL && aiObjectIsProbablyDoomed(psDroid->psActionTarget[i]))
-			{
-				setDroidActionTarget(psDroid, NULL, i);  // Target not worth shooting at anymore.
-			}
-
-			if (psDroid->psActionTarget[i] == NULL)
-			{
-				BASE_OBJECT *psTemp;
-
-				if (aiBestNearestTarget(psDroid, &psTemp, i, NULL) >= 0)
-				{
-					bHasTarget = true;
-					setDroidActionTarget(psDroid, psTemp, i);
-				}
-			}
-
-			if (psDroid->psActionTarget[i]
-			 && visibleObject(psDroid, psDroid->psActionTarget[i], false))
-			{
-				hasVisibleTarget = true;
-				targetVisibile[i] = true;
-			}
-		}
-
-		for (j = 0;j < psDroid->numWeaps;j++)
-		{
-			//vtResult uses psActionTarget[0] for now since it's the first target
-			if (psDroid->psActionTarget[j] != NULL &&
-				validTarget(psDroid, psDroid->psActionTarget[j], j))
-			{
-				// firing on something while moving
-				if (DROID_STOPPED(psDroid))
-				{
-					// Got to desitination
-					psDroid->action = DACTION_NONE;
-					break;
-				}
-				else if (psDroid->psActionTarget[j] == NULL
-				      || !validTarget(psDroid, psDroid->psActionTarget[j], j)
-				      || (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) != DSS_ALEV_ALWAYS))
-				{
-					if (j == (psDroid->numWeaps - 1) && !bHasTarget)
-					{
-						// Target lost
-						psDroid->action = DACTION_MOVE;
-					}
-					else
-					{
-						continue;
-					}
-					//if Vtol - return to rearm pad
-					/*if (isVtolDroid(psDroid))
-					{
-						moveToRearm(psDroid);
-					}*/
-				}
-				//check the target hasn't become one the same player ID - eg Electronic Warfare
-				else if	(electronicDroid(psDroid) &&
-						(psDroid->player == psDroid->psActionTarget[j]->player))
-				{
-					setDroidActionTarget(psDroid, NULL, i);
-					psDroid->action = DACTION_NONE;
-				}
-				else
-				{
-					if (!hasVisibleTarget
-					 && !bHasTarget
-					 && j == (psDroid->numWeaps - 1))
-					{
-						// lost the target
-						psDroid->action = DACTION_MOVE;
-						for (i = 0; i < psDroid->numWeaps;i++)
-						{
-							setDroidActionTarget(psDroid, NULL, i);
-						}
-					}
-
-					if (targetVisibile[j])
-					{
-						bHasTarget = true;
-						//to fix a AA-weapon attack ground unit exploit
-						if (nonNullWeapon[j])
-						{
-							BASE_OBJECT* psActionTarget = psDroid->psActionTarget[j];
-
-							if (!psActionTarget)
-							{
-								if (targetVisibile[0])
-								{
-									psActionTarget = psDroid->psActionTarget[0];
-								}
-							}
-
-							if (psActionTarget && validTarget(psDroid, psActionTarget, j)
-							 && actionTargetTurret(psDroid, psActionTarget, &psDroid->asWeaps[j]))
-							{
-								// In range - fire !!!
-								combFire(&psDroid->asWeaps[j], psDroid, psActionTarget, j);
-							}
-						}
-					}
-				}
-			}
-		}
-
-		/* Extra bit of paranoia, in case none of the weapons have a target */
-		bHasTarget = false;
-		for (i = 0; i < psDroid->numWeaps; i++)
-		{
+			// Does this weapon have a target?
 			if (psDroid->psActionTarget[i] != NULL)
 			{
-				bHasTarget = true;
-				break;
+				// Is target worth shooting yet?
+				if (aiObjectIsProbablyDoomed(psDroid->psActionTarget[i]))
+				{
+					setDroidActionTarget(psDroid, NULL, i);
+				}
+				// Is target from our team now? (Electronic Warfare)
+				else if (electronicDroid(psDroid) && psDroid->player == psDroid->psActionTarget[i]->player)
+				{
+					setDroidActionTarget(psDroid, NULL, i);  
+				}
+				// I have a target!
+				else
+				{
+					bHasTarget = true;
+				}
+			}
+			// This weapon doesn't have a target
+			else
+			{
+				// Can we find a good target for the weapon?
+				BASE_OBJECT *psTemp;
+				if (aiBestNearestTarget(psDroid, &psTemp, i, NULL) >= 0) // assuming aiBestNearestTarget checks for electronic warfare
+				{
+					bHasTarget = true;
+					setDroidActionTarget(psDroid, psTemp, i); // this updates psDroid->psActionTarget[i] to != NULL
+				}
+			}
+			// If we have a target for the weapon: is it visible?
+			if (psDroid->psActionTarget[i] != NULL
+			 && visibleObject(psDroid, psDroid->psActionTarget[i], false))
+			{
+				hasVisibleTarget = true; // droid have a visible target to shoot
+				targetVisibile[i] = true;// it is at least visible for this weapon
 			}
 		}
-		if (!bHasTarget)
+		// if there is at least one target
+		if (bHasTarget)
+		{
+			// loop through weapons
+			for (i = 0; i < psDroid->numWeaps; ++i)
+			{
+				// has weapon a target? is target valid?
+				if (psDroid->psActionTarget[i] != NULL && validTarget(psDroid, psDroid->psActionTarget[i], i))
+				{
+					// is target visible and weapon is not a Nullweapon?
+					if (targetVisibile[i] && nonNullWeapon[i]) //to fix a AA-weapon attack ground unit exploit
+					{
+						BASE_OBJECT* psActionTarget = psDroid->psActionTarget[i];
+						// is the turret aligned with the target?
+						if (actionTargetTurret(psDroid, psActionTarget, &psDroid->asWeaps[i]))
+						{
+							// In range - fire !!!
+							combFire(&psDroid->asWeaps[i], psDroid, psActionTarget, i);
+						}
+					}
+				}
+			}
+			// Droid don't have a visible target and it is not in pursue mode
+			if (!hasVisibleTarget && secondaryGetState(psDroid, DSO_ATTACK_LEVEL) != DSS_ALEV_ALWAYS)
+			{
+				// Target lost
+				psDroid->action = DACTION_MOVE;
+			}
+		}
+		// it don't have a target, change to DACTION_MOVE
+		else
 		{
 			psDroid->action = DACTION_MOVE;
 		}
-
 		//check its a VTOL unit since adding Transporter's into multiPlayer
 		/* check vtol attack runs */
 		if (isVtolDroid(psDroid))
 		{
 			actionUpdateVtolAttack( psDroid );
 		}
-
 		break;
-
 	case DACTION_ATTACK:
 		ASSERT_OR_RETURN( , psDroid->psActionTarget[0] != NULL, "target is NULL while attacking");
 
