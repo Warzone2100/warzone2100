@@ -453,7 +453,7 @@ BASE_OBJECT *IdToPointer(UDWORD id,UDWORD player)
 
 // ////////////////////////////////////////////////////////////////////////////
 // return a players name.
-const char* getPlayerName(unsigned int player)
+const char* getPlayerName(int player)
 {
 	ASSERT_OR_RETURN(NULL, player < MAX_PLAYERS , "Wrong player index: %u", player);
 
@@ -474,18 +474,18 @@ const char* getPlayerName(unsigned int player)
 	return NetPlay.players[player].name;
 }
 
-BOOL setPlayerName(UDWORD player, const char *sName)
+BOOL setPlayerName(int player, const char *sName)
 {
-	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Player index (%u) out of range", player);
+	ASSERT_OR_RETURN(false, player < MAX_PLAYERS && player >= 0, "Player index (%u) out of range", player);
 	sstrcpy(playerName[player], sName);
 	return true;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 // to determine human/computer players and responsibilities of each..
-BOOL isHumanPlayer(UDWORD player)
+BOOL isHumanPlayer(int player)
 {
-	if (player >= MAX_PLAYERS)
+	if (player >= MAX_PLAYERS || player < 0)
 	{
 		return false;	// obvious, really
 	}
@@ -493,7 +493,7 @@ BOOL isHumanPlayer(UDWORD player)
 }
 
 // returns player responsible for 'player'
-UDWORD  whosResponsible(UDWORD player)
+int whosResponsible(int player)
 {
 	if (isHumanPlayer(player))
 	{
@@ -510,13 +510,13 @@ UDWORD  whosResponsible(UDWORD player)
 }
 
 //returns true if selected player is responsible for 'player'
-BOOL myResponsibility(UDWORD player)
+BOOL myResponsibility(int player)
 {
 	return whosResponsible(player) == selectedPlayer;
 }
 
 //returns true if 'player' is responsible for 'playerinquestion'
-BOOL responsibleFor(UDWORD player, UDWORD playerinquestion)
+BOOL responsibleFor(int player, int playerinquestion)
 {
 	return whosResponsible(playerinquestion) == player;
 }
@@ -2050,7 +2050,7 @@ static BOOL recvBeacon(NETQUEUE queue)
 	return addBeaconBlip(locX, locY, receiver, sender, beaconReceiveMsg[sender]);
 }
 
-const char* getPlayerColourName(unsigned int player)
+const char* getPlayerColourName(int player)
 {
 	static const char* playerColors[] =
 	{

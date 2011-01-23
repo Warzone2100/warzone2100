@@ -289,7 +289,8 @@ void loadMultiScripts()
 	for (int i = 0; i < game.maxPlayers; i++)
 	{
 		// The i == selectedPlayer hack is to enable autogames
-		if (bMultiPlayer && game.type == SKIRMISH && (!NetPlay.players[i].allocated || i == selectedPlayer) && NetPlay.players[i].ai >= 0)
+		if (bMultiPlayer && game.type == SKIRMISH && (!NetPlay.players[i].allocated || i == selectedPlayer)
+		    && NetPlay.players[i].ai >= 0 && myResponsibility(i))
 		{
 			resLoadFile("SCRIPT", aidata[NetPlay.players[i].ai].slo);
 			resLoadFile("SCRIPTVAL", aidata[NetPlay.players[i].ai].vlo);
@@ -298,7 +299,7 @@ void loadMultiScripts()
 
 	// Load scavengers
 	resForceBaseDir("multiplay/script/");
-	if (game.scavengers)
+	if (game.scavengers && myResponsibility(scavengerPlayer()))
 	{
 		resLoadFile("SCRIPT", "scavfact.slo");
 		resLoadFile("SCRIPTVAL", "scavfact.vlo");
