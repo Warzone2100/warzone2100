@@ -15,7 +15,7 @@ int main(int argc, char **argv)
 		return -1;
 	}
 	PHYSFS_init(argv[0]);
-	strcat(datapath, getenv("srcdir"));
+	strcpy(datapath, getenv("srcdir"));
 	strcat(datapath, "/../data");
 	PHYSFS_addToSearchPath(datapath, 1);
 
