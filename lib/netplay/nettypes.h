@@ -120,6 +120,4 @@ static inline void NETauto(Rotation *vp)  { NETRotation(vp); }
 
 void NETnetMessage(NetMessage const **message);  ///< If decoding, must delete the NETMESSAGE.
 
-void NETtest(void);
-
 #endif

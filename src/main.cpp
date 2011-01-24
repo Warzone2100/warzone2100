@@ -1240,7 +1240,6 @@ int main(int argc, char *argv[])
 	/* Runtime unit testing */
 	if (selfTest)
 	{
-		NETtest();
 		tagTest();
 		parseTest();
 		levTest();
