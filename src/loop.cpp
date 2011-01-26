@@ -84,6 +84,7 @@
 #include "keybind.h"
 #include "wrappers.h"
 #include "random.h"
+#include "qtscript.h"
 
 #include "warzoneconfig.h"
 
@@ -218,6 +219,7 @@ GAMECODE gameLoop(void)
 			{
 				eventProcessTriggers(realTime/SCR_TICKRATE);
 			}
+			updateScripts();
 		}
 
 		/* Run the in game interface and see if it grabbed any mouse clicks */

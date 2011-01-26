@@ -38,7 +38,7 @@
 
 struct timerNode
 {
-	QString function;	// maybe we should save this as a QScriptValue instead? might be faster
+	QString function;
 	QScriptEngine *engine;
 	QString baseobj;
 	int frameTime;
@@ -56,9 +56,9 @@ QList<timerNode> timers;
 /// Scripting engine (what others call the scripting context, but QtScript's nomenclature is different).
 QList<QScriptEngine *> scripts;
 
-static bool callFunction(QScriptEngine *engine, QString funcName, QScriptValueList args)
+static bool callFunction(QScriptEngine *engine, QString function, QScriptValueList args)
 {
-	QScriptValue value = engine->globalObject().property(funcName);
+	QScriptValue value = engine->globalObject().property(function);
 	if (value.isValid() && value.isFunction())
 	{
 		QScriptValue result = value.call(QScriptValue(), args);
@@ -67,9 +67,14 @@ static bool callFunction(QScriptEngine *engine, QString funcName, QScriptValueLi
 			// TODO, get filename to output here somehow
 			int line = engine->uncaughtExceptionLineNumber();
 			debug(LOG_ERROR, "Uncaught exception calling event %s at line %d: %s",
-			      funcName.toAscii().constData(), line, result.toString().toAscii().constData());
+			      value.toString().toAscii().constData(), line, result.toString().toAscii().constData());
 			return false;
 		}
+	}
+	else
+	{
+		debug(LOG_ERROR, "Invalid function type for \"%s\"", function.toAscii().constData());
+		return false;
 	}
 	return true;
 }
@@ -77,8 +82,8 @@ static bool callFunction(QScriptEngine *engine, QString funcName, QScriptValueLi
 static QScriptValue js_removeTimer(QScriptContext *context, QScriptEngine *engine)
 {
 	QString function = context->argument(0).toString();
-	int i;
-	for (i = 0; i < timers.size(); ++i)
+	int i, size = timers.size();
+	for (i = 0; i < size; ++i)
 	{
 		timerNode node = timers.at(i);
 		if (node.function == function)
@@ -87,10 +92,11 @@ static QScriptValue js_removeTimer(QScriptContext *context, QScriptEngine *engin
 			break;
 		}
 	}
-	if (i == timers.size())
+	if (i == size)
 	{
 		// Friendly warning
-		debug(LOG_ERROR, "Did not find timer %s to remove", function.toAscii().constData());
+		QString warnName = function.left(15) + "...";
+		debug(LOG_ERROR, "Did not find timer %s to remove", warnName.toAscii().constData());
 	}
 	return QScriptValue();
 }
@@ -101,7 +107,8 @@ static QScriptValue js_setGlobalTimer(QScriptContext *context, QScriptEngine *en
 	QScriptValue function = context->argument(0);
 	QScriptValue ms = context->argument(1);
 	int player = engine->globalObject().property("me").toInt32();
-	timerNode node(engine, function.toString(), player, ms.toInt32() + gameTime);
+	QString funcName = function.toString();
+	timerNode node(engine, funcName, player, ms.toInt32() + gameTime);
 	timers.push_back(node);
 	return QScriptValue();
 }

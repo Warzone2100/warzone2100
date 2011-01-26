@@ -31,6 +31,49 @@
 
 // All script functions should be prefixed with "js_" then followed by same name as in script.
 
+static QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine)
+{
+	QScriptValue value = engine->newObject();
+	value.setProperty("id", psStruct->id, QScriptValue::ReadOnly);
+	return value;
+}
+
+static QScriptValue js_enumStruct(QScriptContext *context, QScriptEngine *engine)
+{
+	QScriptValue statsName = context->argument(0);
+	QScriptValue targetPlayer = context->argument(1);
+	QScriptValue lookingPlayer = context->argument(2);
+	QList<STRUCTURE *> matches;
+
+	int player = targetPlayer.toInt32();
+	int looking = -1;
+	QString stat = statsName.toString();
+	if (!lookingPlayer.isUndefined())	// third arg optional
+	{
+		looking = lookingPlayer.toInt32();
+	}
+	ASSERT_OR_RETURN(QScriptValue(), player < MAX_PLAYERS && player >= 0, "Target player index out of range: %d", player);
+	ASSERT_OR_RETURN(QScriptValue(), looking < MAX_PLAYERS && looking >= -1, "Looking player index out of range: %d", looking);
+	for (STRUCTURE *psStruct = apsStructLists[player]; psStruct; psStruct = psStruct->psNext)
+	{
+		if ((looking == -1 || psStruct->visible[looking]) && stat.compare(psStruct->pStructureType->pName) == 0)
+		{
+			matches.push_back(psStruct);
+		}
+	}
+	if (matches.size() == 0)
+	{
+		return QScriptValue();
+	}
+	QScriptValue result = engine->newArray(matches.size());
+	for (int i = 0; i < matches.size(); i++)
+	{
+		STRUCTURE *psStruct = matches.at(i);
+		result.setProperty(i, convStructure(psStruct, engine));
+	}
+	return result;
+}
+
 // is this really useful?
 static QScriptValue js_debug(QScriptContext *context, QScriptEngine *engine)
 {
@@ -104,7 +147,7 @@ static QScriptValue js_getDerrick(QScriptContext *context, QScriptEngine *engine
 			psObj = psTile->psObject;
 		}
 	}
-	return QScriptEngine::toScriptValue(psObj);
+	return convStructure(psObj, engine);
 }
 #endif
 
@@ -117,5 +160,6 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("debug", engine->newFunction(js_debug));
 	engine->globalObject().setProperty("console", engine->newFunction(js_console));
 	engine->globalObject().setProperty("scavengerPlayer", engine->newFunction(js_scavengerPlayer));
+	engine->globalObject().setProperty("enumStruct", engine->newFunction(js_enumStruct));
 	return true;
 }
