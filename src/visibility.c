@@ -286,8 +286,11 @@ void visRemoveVisibility(BASE_OBJECT *psObj)
 			const TILEPOS pos = psObj->watchedTiles[i];
 			MAPTILE *psTile = mapTile(pos.x, pos.y);
 
-			ASSERT(psTile->watchers[psObj->player] > 0, "Not watching watched tile (%d, %d)", (int)pos.x, (int)pos.y);
-			psTile->watchers[psObj->player]--;
+			//ASSERT(psTile->watchers[psObj->player] > 0, "Not watching watched tile (%d, %d)", (int)pos.x, (int)pos.y);
+			if (psTile->watchers[psObj->player] > 0)
+			{
+				psTile->watchers[psObj->player]--;
+			}
 		}
 		free(psObj->watchedTiles);
 		psObj->watchedTiles = NULL;
