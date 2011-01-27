@@ -1997,7 +1997,7 @@ static ssize_t readLobbyResponse(Socket* sock, unsigned int timeout)
 	if (lobbyStatusCode / 100 != 2) // Check whether status code is 2xx (success)
 	{
 		debug(LOG_ERROR, "Lobby error (%u): %s", (unsigned int)lobbyStatusCode, NetPlay.MOTD);
-		return SOCKET_ERROR;
+		return received;
 	}
 
 	debug(LOG_NET, "Lobby success (%u): %s", (unsigned int)lobbyStatusCode, NetPlay.MOTD);
@@ -2435,8 +2435,7 @@ static void NETallowJoining(void)
 					}
 					NETfixDuplicatePlayerNames();
 
-					// Make sure the master server gets updated by disconnecting from it
-					// NETallowJoining will reconnect, NOT NEEDED - Fastdeath
+					// Send the updated GAMESTRUCT to the masterserver
 					NETregisterServer(2);
 
 
