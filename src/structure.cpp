@@ -3177,6 +3177,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 					pPlayerRes->currentPoints += requestPrecisePowerFor(psStructure->player, powerNeeded, pointsToAdd);
 					psResFacility->timeStarted = gameTime;
 				}
+				syncDebug("Research at %u/%u.", pPlayerRes->currentPoints, pResearch->researchPoints);
 
 				//check if Research is complete
 				if (pPlayerRes->currentPoints >= pResearch->researchPoints)
@@ -3215,6 +3216,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				//cancel this Structure's research since now complete
 				psResFacility->psSubject = NULL;
 				intResearchFinished(psStructure);
+				syncDebug("Research completed elsewhere.");
 			}
 		}
 		//check for manufacture

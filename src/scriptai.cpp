@@ -1750,10 +1750,10 @@ BOOL scrSkDifficultyModifier(void)
 		return false;
 	}
 
-	/* Skip cheats if difficulty modifier slider is set to minimum.
+	/* Skip cheats if difficulty modifier slider is set to minimum or this is a true multiplayer game.
 	 * (0 - player disabled, 20 - max value, UBYTE_MAX - autogame)
 	 */
-	if (game.skDiff[player] <= 1 || game.skDiff[player] == UBYTE_MAX)
+	if (game.skDiff[player] <= 1 || game.skDiff[player] == UBYTE_MAX || NetPlay.bComms)
 	{
 		return true;
 	}
@@ -1775,6 +1775,7 @@ BOOL scrSkDifficultyModifier(void)
 
 				pPlayerRes = asPlayerResList[player] + (psResearch->ref - REF_RESEARCH_START);
 				pPlayerRes->currentPoints += (psResearch->researchPoints * 4 * game.skDiff[player]) / 100;
+				syncDebug("AI %d is cheating with research time.", player);
 			}
 		}
 
