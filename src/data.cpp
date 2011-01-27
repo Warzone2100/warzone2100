@@ -104,14 +104,14 @@ static void calcDataHash(uint8_t *pBuffer, uint32_t size, uint32_t index)
 		return;
 	}
 
-	DataHash[index] ^= PHYSFS_swapUBE32(hashBuffer(pBuffer, size));
+	DataHash[index] += hashBuffer(pBuffer, size);
 
 	if (!DataHash[index] && oldHash)
 	{
-		debug(LOG_NET, "The new hash is 0, the old hash was %u. We XOR'ed the same value!", oldHash);
+		debug(LOG_NET, "The new hash is 0, the old hash was %u. We added the negated value!", oldHash);
 	}
 
-	debug(LOG_NET, "DataHash[%2u] = %08x", index, PHYSFS_swapUBE32(DataHash[index])); 
+	debug(LOG_NET, "DataHash[%2u] = %08x", index, DataHash[index]);
 
 	return;
 }
