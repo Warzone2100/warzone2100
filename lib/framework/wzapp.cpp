@@ -28,6 +28,7 @@
 #include <QtGui/QMouseEvent>
 #include <QtGui/QDesktopWidget>
 #include <QtGui/QMessageBox>
+#include <QtGui/QIcon>
 
 // Get platform defines before checking for them.
 // Qt headers MUST come before platform specific stuff!
@@ -151,10 +152,24 @@ WzMainWindow::WzMainWindow(const QGLFormat &format, QWidget *parent) : QGLWidget
 	setAutoBufferSwap(false);
 	setMouseTracking(true);
 
+	UDWORD size = 0;
+	char *bytes = NULL;
+
+	if (!loadFile("images/warzone2100.png", &bytes, &size))
+	{
+		debug(LOG_ERROR, "Icon file not found!");
+		abort();
+	}
+	setWindowIcon(QIcon(QPixmap::fromImage(QImage::fromData((uchar *)bytes, size, "PNG"))));
+	free(bytes);
+	bytes = NULL;
+
 	// Load coloured image cursors
-	UDWORD size;
-	char *bytes;
-	loadFile("images/intfac5.png", &bytes, &size);
+	if (!loadFile("images/intfac5.png", &bytes, &size))
+	{
+		debug(LOG_ERROR, "Cursor file not found!");
+		abort();
+	}
 	QByteArray array(bytes, size);
 	if ((unsigned)array.size() != size)
 	{
