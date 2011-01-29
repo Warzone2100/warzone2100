@@ -35,6 +35,7 @@ static QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine)
 {
 	QScriptValue value = engine->newObject();
 	value.setProperty("id", psStruct->id, QScriptValue::ReadOnly);
+	value.setProperty("player", psStruct->player, QScriptValue::ReadOnly);
 	return value;
 }
 
@@ -95,11 +96,23 @@ static QScriptValue js_debug(QScriptContext *context, QScriptEngine *engine)
 	return QScriptValue();
 }
 
-static QScriptValue js_scavengerPlayer(QScriptContext *context, QScriptEngine *engine)
+static QScriptValue js_scavengerPlayer(QScriptContext *, QScriptEngine *)
 {
-	Q_UNUSED(context);
-	Q_UNUSED(engine);
 	return QScriptValue(scavengerPlayer());
+}
+
+static QScriptValue js_structureIdle(QScriptContext *context, QScriptEngine *engine)
+{
+	Q_UNUSED(engine);
+	QScriptValue structVal = context->argument(0);
+	QScriptValue idVal = structVal.property("id");
+	QScriptValue playerVal = structVal.property("player");
+	STRUCTURE *psStruct = IdToStruct(idVal.toInt32(), playerVal.toInt32());
+	if (!psStruct)
+	{
+		return QScriptValue();
+	}
+	return QScriptValue(structureIdle(psStruct));
 }
 
 // TODO, should cover scrShowConsoleText, scrAddConsoleText, scrTagConsoleText and scrConsole
@@ -160,6 +173,7 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("debug", engine->newFunction(js_debug));
 	engine->globalObject().setProperty("console", engine->newFunction(js_console));
 	engine->globalObject().setProperty("scavengerPlayer", engine->newFunction(js_scavengerPlayer));
+	engine->globalObject().setProperty("structureIdle", engine->newFunction(js_structureIdle));
 	engine->globalObject().setProperty("enumStruct", engine->newFunction(js_enumStruct));
 	return true;
 }

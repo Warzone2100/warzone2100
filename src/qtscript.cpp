@@ -25,11 +25,15 @@
 #include "qtscript.h"
 
 #include <QtCore/QTextStream>
+#include <QtCore/QHash>
 #include <QtScript/QScriptEngine>
 #include <QtScript/QScriptValue>
+#include <QtScript/QScriptValueIterator>
 #include <QtScript/QScriptSyntaxCheckResult>
 #include <QtCore/QList>
 #include <QtCore/QString>
+#include <QtCore/QStringList>
+#include <QtCore/QSettings>
 
 #include "lib/framework/file.h"
 #include "lib/gamelib/gtime.h"
@@ -55,6 +59,9 @@ QList<timerNode> timers;
 
 /// Scripting engine (what others call the scripting context, but QtScript's nomenclature is different).
 QList<QScriptEngine *> scripts;
+
+/// Remember what names are used internally in the scripting engine, we don't want to save these to the savegame
+QHash<QString, int> internalNamespace;
 
 static bool callFunction(QScriptEngine *engine, QString function, QScriptValueList args)
 {
@@ -134,6 +141,7 @@ bool initScripts()
 bool shutdownScripts()
 {
 	timers.clear();
+	internalNamespace.clear();
 	while (!scripts.isEmpty())
 	{
 		delete scripts.takeFirst();
@@ -143,6 +151,13 @@ bool shutdownScripts()
 
 bool updateScripts()
 {
+	// Update gameTime
+	for (int i = 0; i < scripts.size(); ++i)
+	{
+		QScriptEngine *engine = scripts.at(i);
+
+		engine->globalObject().setProperty("gameTime", gameTime, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	}
 	// Check for timers, and run them if applicable.
 	// TODO - load balancing
 	for (int i = 0; i < timers.size(); ++i)
@@ -163,36 +178,50 @@ bool loadPlayerScript(const char *filename, int player, int difficulty)
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Player index %d out of bounds", player);
 	QScriptEngine *engine = new QScriptEngine();
 	UDWORD size;
-	char *bytes;
+	char *bytes = NULL;
 	if (!loadFile(path.toAscii().constData(), &bytes, &size))
 	{
 		debug(LOG_ERROR, "Failed to read script file \"%s\"", path.toAscii().constData());
 		return false;
 	}
 	QString source = QString::fromAscii(bytes, size);
+	free(bytes);
 	QScriptSyntaxCheckResult syntax = QScriptEngine::checkSyntax(source);
 	if (syntax.state() != QScriptSyntaxCheckResult::Valid)
 	{
 		debug(LOG_ERROR, "Syntax error in %s line %d: %s", filename, syntax.errorLineNumber(), syntax.errorMessage().toAscii().constData());
-		free(bytes);
 		return false;
+	}
+	// Remember internal, reserved names
+	QScriptValueIterator it(engine->globalObject());
+	while (it.hasNext())
+	{
+		it.next();
+		internalNamespace.insert(it.name(), 1);
 	}
 	QScriptValue result = engine->evaluate(source, filename);
 	if (engine->hasUncaughtException())
 	{
 		int line = engine->uncaughtExceptionLineNumber();
 		debug(LOG_ERROR, "Uncaught exception at line %d, file %s: %s", line, filename, result.toString().toAscii().constData());
-		free(bytes);
 		return false;
 	}
+	// Special functions
 	engine->globalObject().setProperty("setGlobalTimer", engine->newFunction(js_setGlobalTimer));
 	engine->globalObject().setProperty("setObjectTimer", engine->newFunction(js_setObjectTimer));
 	engine->globalObject().setProperty("removeTimer", engine->newFunction(js_removeTimer));
+
+	// Special global variables
 	engine->globalObject().setProperty("me", player, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("gameTime", gameTime, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("difficulty", difficulty, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+
+	// Regular functions
 	registerFunctions(engine);
+
+	// Register script
 	scripts.push_back(engine);
-	free(bytes);
+
 	return true;
 }
 
@@ -201,22 +230,41 @@ bool loadGlobalScript(const char *filename)
 	return loadPlayerScript(filename, 0, 0);
 }
 
-bool loadScriptStates(const char *filename)
-{
-	Q_UNUSED(filename);
-	return true;
-}
-
 bool saveScriptStates(const char *filename)
 {
-	Q_UNUSED(filename);
+	QSettings ini(filename, QSettings::IniFormat);
+	for (int i = 0; i < scripts.size(); ++i)
+	{
+		ini.beginGroup(QString("globals_") + QString::number(i));
+		QScriptEngine *engine = scripts.at(i);
+		QScriptValueIterator it(engine->globalObject());
+		while (it.hasNext())
+		{
+			it.next();
+			if (!internalNamespace.contains(it.name()) && !it.value().isFunction())
+			{
+				ini.setValue(it.name(), it.value().toVariant());
+			}
+		}
+		ini.endGroup();
+	}
 	return true;
 }
 
-/// Update scripting state associated with the given object
-bool updateObject(BASE_OBJECT *psObj)
+bool loadScriptStates(const char *filename)
 {
-	Q_UNUSED(psObj);
+	QSettings ini(filename, QSettings::IniFormat);
+	for (int i = 0; i < scripts.size(); ++i)
+	{
+		ini.beginGroup(QString("globals_") + QString::number(i));
+		QStringList keys = ini.childKeys();
+		QScriptEngine *engine = scripts.at(i);
+		for (int j = 0; j < keys.size(); ++j)
+		{
+			engine->globalObject().setProperty(keys.at(i), engine->toScriptValue(ini.value(keys.at(i))));
+		}
+		ini.endGroup();
+	}
 	return true;
 }
 

@@ -46,9 +46,6 @@ bool loadPlayerScript(const char *filename, int player, int difficulty);
 bool loadScriptStates(const char *filename);
 bool saveScriptStates(const char *filename);
 
-/// Update scripting state associated with the given object
-bool updateObject(BASE_OBJECT *psObj);
-
 /// For generic, parameter-less triggers, using an enum to avoid declaring a ton of parameter-less functions
 bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger);
 
