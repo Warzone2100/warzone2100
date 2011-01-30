@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@
 #include <QtGui/QMouseEvent>
 #include <QtGui/QDesktopWidget>
 #include <QtGui/QMessageBox>
+#include <QtGui/QIcon>
 
 // Get platform defines before checking for them.
 // Qt headers MUST come before platform specific stuff!
@@ -48,7 +49,23 @@
 #include "src/configuration.h"
 #include "lib/gamelib/gtime.h"
 #include <deque>
+#include "wzfs.h"
 
+class PhysicsEngineHandler : public QAbstractFileEngineHandler
+{
+public:
+	QAbstractFileEngine *create(const QString &fileName) const;
+};
+
+inline QAbstractFileEngine *PhysicsEngineHandler::create(const QString &fileName) const
+{
+	if (fileName.toLower().startsWith("wz::"))
+	{
+		QString newPath = fileName;
+		return new PhysicsFileSystem(newPath.remove(0, 4));
+	}
+	return NULL;
+}
 
 /* The possible states for keys */
 typedef enum _key_state
@@ -126,16 +143,11 @@ void WzMainWindow::tick()
 	updateGL();  // Calls paintGL(), which may not be called directly.
 }
 
-void WzMainWindow::loadCursor(CURSOR cursor, int x, int y, QBuffer &buffer)
+void WzMainWindow::loadCursor(CURSOR cursor, int x, int y, QImageReader &buffer)
 {
-	buffer.reset();
-	QImageReader reader(&buffer, "png");
-	if (!reader.canRead())
-	{
-		debug(LOG_ERROR, "Failed to read cursor image: %s", reader.errorString().toAscii().constData());
-	}
-	reader.setClipRect(QRect(x, y, 32, 32));
-	cursors[cursor] = new QCursor(QPixmap::fromImage(reader.read()));
+	buffer.device()->reset();
+	buffer.setClipRect(QRect(x, y, 32, 32));
+	cursors[cursor] = new QCursor(QPixmap::fromImage(buffer.read()));
 }
 
 WzMainWindow::WzMainWindow(const QGLFormat &format, QWidget *parent) : QGLWidget(format, parent)
@@ -151,23 +163,13 @@ WzMainWindow::WzMainWindow(const QGLFormat &format, QWidget *parent) : QGLWidget
 	setAutoBufferSwap(false);
 	setMouseTracking(true);
 
-	// Load coloured image cursors
-	UDWORD size;
-	char *bytes;
-	loadFile("images/intfac5.png", &bytes, &size);
-	QByteArray array(bytes, size);
-	if ((unsigned)array.size() != size)
-	{
-		debug(LOG_ERROR, "Bad array"); abort();
-	}
-	QBuffer buffer(&array, this);
-	buffer.open(QIODevice::ReadOnly);
-	if (!buffer.isReadable())
-	{
-		debug(LOG_ERROR, "Bad buffer: %s", buffer.errorString().toAscii().constData());
-		abort();
-	}
+	setWindowIcon(QIcon(QPixmap::fromImage(QImage("wz::images/warzone2100.png", "PNG"))));
 
+	QImageReader buffer("wz::images/intfac5.png", "PNG");
+	if (!buffer.canRead())
+	{
+		debug(LOG_ERROR, "Failed to read cursor image: %s", buffer.errorString().toAscii().constData());
+	}
 	loadCursor(CURSOR_EMBARK, 0, 128, buffer);
 	loadCursor(CURSOR_DEST, 32, 128, buffer);
 	loadCursor(CURSOR_DEFAULT, 64, 128, buffer);
@@ -189,7 +191,6 @@ WzMainWindow::WzMainWindow(const QGLFormat &format, QWidget *parent) : QGLWidget
 	loadCursor(CURSOR_ATTACH, 0, 192, buffer);
 	loadCursor(CURSOR_BRIDGE, 32, 192, buffer);
 	loadCursor(CURSOR_BOMB, 64, 192, buffer);
-	free(bytes);
 
 	// Reused (unused) cursors
 	cursors[CURSOR_ARROW] = new QCursor(Qt::ArrowCursor);
@@ -694,6 +695,8 @@ int wzInit(int argc, char *argv[], int fsaa, bool vsync, int w, int h, bool full
 	char buf[256];
 	QGL::setPreferredPaintEngine(QPaintEngine::OpenGL); // Workaround for incorrect text rendering on nany platforms.
 	QApplication app(argc, argv);
+
+	PhysicsEngineHandler engine;	// register abstract physfs filesystem
 
 	// Setting up OpenGL
 	QGLFormat format;

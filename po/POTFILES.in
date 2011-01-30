@@ -161,7 +161,6 @@ lib/framework/debug.cpp
 lib/framework/frame.cpp
 lib/framework/frameresource.cpp
 lib/framework/i18n.cpp
-lib/framework/input.cpp
 lib/framework/lexer_input.cpp
 lib/framework/SDL_framerate.cpp
 lib/framework/stdio_ext.cpp
@@ -220,7 +219,6 @@ lib/widget/button.cpp
 lib/widget/editbox.cpp
 lib/widget/form.cpp
 lib/widget/label.cpp
-lib/widget/scrap.cpp
 lib/widget/slider.cpp
 lib/widget/tip.cpp
 lib/widget/widget.cpp
