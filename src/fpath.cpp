@@ -692,7 +692,7 @@ void fpathTest(int x, int y, int x2, int y2)
 	{
 		fpathRemoveDroidData(i);
 	}
-	assert(pathJobs.empty());
+	//assert(pathJobs.empty()); // can now be marked .deleted as well
 	assert(pathResults.empty());
 }
 

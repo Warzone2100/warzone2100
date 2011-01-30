@@ -1235,7 +1235,6 @@ int finalInitialization()
 	/* Runtime unit testing */
 	if (selfTest)
 	{
-		NETtest();
 		tagTest();
 		parseTest();
 		levTest();

@@ -235,8 +235,7 @@ static BOOL _intAddInGameOptions(void)
 	sFormInit.y			= (SWORD)INTINGAMEOP_Y;
 	sFormInit.height	= INTINGAMEOP_H;
 
-
-    if ( (!bMultiPlayer || (NetPlay.bComms==0) )  && !bInTutorial)
+	if ((!bMultiPlayer || (NetPlay.bComms == 0)) && !bInTutorial)
 	{
 	}
 	else
@@ -244,19 +243,15 @@ static BOOL _intAddInGameOptions(void)
 		sFormInit.height	= INTINGAMEOP_HS;
 	}
 
-
-
 	sFormInit.pDisplay	= intOpenPlainForm;
 	sFormInit.disableChildren= true;
 
 	widgAddForm(psWScreen, &sFormInit);
 
 	// add 'quit' text
-
-    if ( (!bMultiPlayer || (NetPlay.bComms==0) )  && !bInTutorial)
+	if ((!bMultiPlayer || (NetPlay.bComms == 0)) && !bInTutorial)
 	{
 		addIGTextButton(INTINGAMEOP_QUIT, INTINGAMEOP_5_Y, INTINGAMEOP_OP_W, _("Quit"), OPALIGN);
-
 	}
 	else
 	{
@@ -266,17 +261,18 @@ static BOOL _intAddInGameOptions(void)
 	// add 'resume'
 	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_Y, INTINGAMEOP_OP_W, _("Resume Game"), OPALIGN);
 
+#ifdef DEBUG
 	// add 'options'
 	addIGTextButton(INTINGAMEOP_OPTIONS, INTINGAMEOP_2_Y, INTINGAMEOP_OP_W, _("Audio Options"), OPALIGN);
+#endif
 
-
-	if ( (!bMultiPlayer || (NetPlay.bComms==0) )  && !bInTutorial)
-	{		// add 'load'
+	if ((!bMultiPlayer || (NetPlay.bComms == 0)) && !bInTutorial)
+	{
+		// add 'load'
 		addIGTextButton(INTINGAMEOP_LOAD, INTINGAMEOP_3_Y, INTINGAMEOP_OP_W, _("Load Game"), OPALIGN);
 		// add 'save'
 		addIGTextButton(INTINGAMEOP_SAVE, INTINGAMEOP_4_Y, INTINGAMEOP_OP_W, _("Save Game"), OPALIGN);
 	}
-
 
 	intMode		= INT_INGAMEOP;			// change interface mode.
 	InGameOpUp	= true;					// inform interface.

@@ -108,7 +108,7 @@ cd build
 	"--host=$HOST_TRIPLET" --enable-static --disable-shared ${DEBUGFLAG:+$DEBUGFLAG} \
 	${INSTALLERFLAG:+$INSTALLERFLAG} \
 	CFLAGS="$CFLAGS" \
-	CXXFLAGS="$CXXFLAGS" \
+	CXXFLAGS="$CXXFLAGS -fno-exceptions" \
 	CPPFLAGS="$CPPFLAGS" \
 	LDFLAGS="$LDFLAGS" \
 	CC_FOR_BUILD="$CC_FOR_BUILD" \

@@ -334,7 +334,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	if (isHit)
 	{
 		/* Kerrrbaaang !!!!! a hit */
-		objTrace(psAttacker->id, "combFire: [%s]->%u: resultHitChance=%d, visibility=%hhu : ", psStats->pName, psTarget->id, resultHitChance, psTarget->visible[psAttacker->player]);
+		objTrace(psAttacker->id, "combFire: [%s]->%u: resultHitChance=%d, visibility=%d", psStats->pName, psTarget->id, resultHitChance, (int)psTarget->visible[psAttacker->player]);
 		syncDebug("hit=(%d,%d,%d)", predict.x, predict.y, predict.z);
 	}
 	else /* Deal with a missed shot */

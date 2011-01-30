@@ -287,6 +287,8 @@ void loadMultiScripts()
 	}
 
 	// Load AI players
+	uint32_t oldHash1 = DataHash[DATA_SCRIPT];
+	uint32_t oldHash2 = DataHash[DATA_SCRIPTVAL];
 	resForceBaseDir("multiplay/skirmish/");
 	for (int i = 0; i < game.maxPlayers; i++)
 	{
@@ -302,6 +304,8 @@ void loadMultiScripts()
 			}
 		}
 	}
+	DataHash[DATA_SCRIPT]    = oldHash1;  // Not all players load the same AI scripts.
+	DataHash[DATA_SCRIPTVAL] = oldHash2;
 
 	// Load scavengers
 	resForceBaseDir("multiplay/script/");

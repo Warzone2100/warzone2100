@@ -588,7 +588,7 @@
 #endif
 
 // Tell Flex not to include unistd when it is not present.
-#ifndef HAVE_UNISTD_H
+#if !defined(HAVE_UNISTD_H) && !defined(YY_NO_UNISTD_H)
 # define YY_NO_UNISTD_H
 #endif
 

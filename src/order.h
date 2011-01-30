@@ -83,8 +83,8 @@ extern void orderSelectedObj(UDWORD player, BASE_OBJECT *psObj);
 extern void orderSelectedObjAdd(UDWORD player, BASE_OBJECT *psObj, BOOL add);
 
 // add an order to a droids order list
-extern void orderDroidAdd(DROID *psDroid, struct _droid_order_data *psOrder);
-void orderDroidAddPending(DROID *psDroid, struct _droid_order_data *psOrder);
+void orderDroidAdd(DROID *psDroid, DROID_ORDER_DATA *psOrder);
+void orderDroidAddPending(DROID *psDroid, DROID_ORDER_DATA *psOrder);
 // do the next order from a droids order list
 extern BOOL orderDroidList(DROID *psDroid);
 
