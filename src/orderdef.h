@@ -29,7 +29,7 @@
 #include "basedef.h"
 
 // The droid orders
-typedef enum _droid_order
+enum DROID_ORDER
 {
 	DORDER_NONE,				// no order set
 
@@ -67,14 +67,14 @@ typedef enum _droid_order
 	DORDER_PATROL,				// move between two way points
 	DORDER_REARM,				// 32 - order a vtol to rearming pad
 	DORDER_RECOVER,				// pick up an artifact
-	DORDER_LEAVEMAP,			// 36 - vtol flying off the map
+	DORDER_LEAVEMAP,                        // 34 - vtol flying off the map
 	DORDER_RTR_SPECIFIED,		// return to repair at a specified repair center
 	DORDER_CIRCLE = 40,				// circles target location and engage
 	DORDER_TEMP_HOLD,		// hold position until given next order
-} DROID_ORDER;
+};
 
 // secondary orders for droids
-typedef enum _secondary_order
+enum SECONDARY_ORDER
 {
 	DSO_ATTACK_RANGE,
 	DSO_REPAIR_LEVEL,
@@ -89,10 +89,10 @@ typedef enum _secondary_order
 	DSO_FIRE_DESIGNATOR,		// command droid controlling IDF structures
 	DSO_ASSIGN_VTOL_PRODUCTION,
 	DSO_CIRCLE,					// circling target position and engage
-} SECONDARY_ORDER;
+};
 
 // the state of secondary orders
-typedef enum _secondary_state
+enum SECONDARY_STATE
 {
 	DSS_NONE						= 0x000000,
 	DSS_ARANGE_SHORT		= 0x000001,
@@ -117,7 +117,7 @@ typedef enum _secondary_state
 	DSS_PATROL_SET			= 0x400000,
 	DSS_CIRCLE_SET			= 0x400100,
 	DSS_FIREDES_SET			= 0x800000,
-} SECONDARY_STATE;
+};
 
 // masks for the secondary order state
 #define DSS_ARANGE_MASK		0x000003
@@ -138,15 +138,15 @@ typedef enum _secondary_state
 #define DSS_CIRCLE_MASK		0x400100
 
 // data for barbarians retreating
-typedef struct _run_data
+struct RUN_DATA
 {
 	Vector2i    sPos; // position to retreat to
 	uint8_t     forceLevel; // number of units below which might run
 	uint8_t     healthLevel; // %health value below which to turn and run - FOR GROUPS ONLY
 	uint8_t     leadership; // basic chance to run
-} RUN_DATA;
+};
 
-typedef struct _droid_order_data
+struct DROID_ORDER_DATA
 {
 	DROID_ORDER             order;
 	UWORD			x,y;
@@ -154,6 +154,6 @@ typedef struct _droid_order_data
 	uint16_t                direction;
 	BASE_OBJECT		*psObj;
 	BASE_STATS		*psStats;
-} DROID_ORDER_DATA;
+};
 
 #endif // __INCLUDED_SRC_ORDERDEF_H__

@@ -416,8 +416,7 @@ static void NET_DestroyPlayer(unsigned int index)
 		{
 			// Update player count in the lobby by disconnecting
 			// and reconnecting
-			NETregisterServer(0);
-			NETregisterServer(1);
+			NETregisterServer(2);
 		}
 	}
 	NET_InitPlayer(index, false);  // reinitialize
@@ -733,6 +732,7 @@ static bool NETsendGAMESTRUCT(Socket* sock, const GAMESTRUCT* ourgamestruct)
 	*(uint32_t*)buffer = htonl(ourgamestruct->future4);
 	buffer += sizeof(uint32_t);
 
+	debug(LOG_NET, "sending GAMESTRUCT, size: %u", (unsigned int)sizeof(buf));
 
 	// Send over the GAMESTRUCT
 	result = writeAll(sock, buf, sizeof(buf));
@@ -747,8 +747,6 @@ static bool NETsendGAMESTRUCT(Socket* sock, const GAMESTRUCT* ourgamestruct)
 		setSockErr(err);
 		return false;
 	}
-
-	debug(LOG_NET, "sending GAMESTRUCT");
 
 	return true;
 }
@@ -2004,7 +2002,7 @@ static ssize_t readLobbyResponse(Socket* sock, unsigned int timeout)
 	if (lobbyStatusCode / 100 != 2) // Check whether status code is 2xx (success)
 	{
 		debug(LOG_ERROR, "Lobby error (%u): %s", (unsigned int)lobbyStatusCode, NetPlay.MOTD);
-		return SOCKET_ERROR;
+		return received;
 	}
 
 	debug(LOG_NET, "Lobby success (%u): %s", (unsigned int)lobbyStatusCode, NetPlay.MOTD);
@@ -2031,9 +2029,8 @@ error:
 
 static void NETregisterServer(int state)
 {
-	static Socket* rs_socket[2] = {NULL, NULL};
+	static Socket* rs_socket = NULL;
 	static int registered = 0;
-	unsigned int i;
 
 	if (server_not_there)
 	{
@@ -2044,9 +2041,20 @@ static void NETregisterServer(int state)
 	{
 		switch(state)
 		{
+			// Update player counts
+			case 2:
+			{
+				if (!NETsendGAMESTRUCT(rs_socket, &gamestruct))
+				{
+					socketClose(rs_socket);
+					rs_socket = NULL;
+				}
+			}
+			break;
+
+			// Register a game with the lobby
 			case 1:
 			{
-				bool succesful = false;
 				uint32_t gameId = 0;
 				SocketAddress *const hosts = resolveHost(masterserver_name, masterserver_port);
 
@@ -2060,11 +2068,19 @@ static void NETregisterServer(int state)
 					return;
 				}
 
-				socketArrayClose(rs_socket, ARRAY_SIZE(rs_socket));  // Make sure there aren't any leftover sockets.
-				socketArrayOpen(rs_socket, ARRAY_SIZE(rs_socket), hosts, 15000);
+				// Close an existing socket.
+				if (rs_socket != NULL)
+				{
+					socketClose(rs_socket);
+					rs_socket = NULL;
+				}
+
+				// try each address from resolveHost until we successfully connect.
+				rs_socket = socketOpenAny(hosts, 1500);
 				deleteSocketAddress(hosts);
 
-				if (rs_socket[0] == NULL)
+				// No address succeeded.
+				if (rs_socket == NULL)
 				{
 					debug(LOG_ERROR, "Cannot connect to masterserver \"%s:%d\": %s", masterserver_name, masterserver_port, strSockError(getSockErr()));
 					free(NetPlay.MOTD);
@@ -2075,16 +2091,17 @@ static void NETregisterServer(int state)
 				}
 
 				// Get a game ID
-				if (writeAll(rs_socket[0], "gaId", sizeof("gaId")) == SOCKET_ERROR
-				 || readAll(rs_socket[0], &gameId, sizeof(gameId), 10000) != sizeof(gameId))
+				if (writeAll(rs_socket, "gaId", sizeof("gaId")) == SOCKET_ERROR
+				 || readAll(rs_socket, &gameId, sizeof(gameId), 10000) != sizeof(gameId))
 				{
 					free(NetPlay.MOTD);
 					if (asprintf(&NetPlay.MOTD, "Failed to retrieve a game ID: %s", strSockError(getSockErr())) == -1)
 						NetPlay.MOTD = NULL;
 					debug(LOG_ERROR, "%s", NetPlay.MOTD);
 
-					// The sockets have been invalidated, so get rid of it. (using them now may cause SIGPIPE).
-					socketArrayClose(rs_socket, ARRAY_SIZE(rs_socket));
+					// The socket has been invalidated, so get rid of it. (using them now may cause SIGPIPE).
+					socketClose(rs_socket);
+					rs_socket = NULL;
 					server_not_there = true;
 					return;
 				}
@@ -2092,52 +2109,44 @@ static void NETregisterServer(int state)
 				gamestruct.gameId = ntohl(gameId);
 				debug(LOG_NET, "Using game ID: %u", (unsigned int)gamestruct.gameId);
 
-				// Register our game with the server for all available address families
-				for (i = 0; i < ARRAY_SIZE(rs_socket); ++i)
+				// Register our game with the server
+				if (writeAll(rs_socket, "addg", sizeof("addg")) == SOCKET_ERROR
+				 // and now send what the server wants
+				 || !NETsendGAMESTRUCT(rs_socket, &gamestruct))
 				{
-					if (rs_socket[i] == NULL)
-						continue;
-
-					if (writeAll(rs_socket[i], "addg", sizeof("addg")) == SOCKET_ERROR
-					    // and now send what the server wants
-					 || !NETsendGAMESTRUCT(rs_socket[i], &gamestruct))
-					{
-						debug(LOG_ERROR, "Failed to register game with server: %s", strSockError(getSockErr()));
-						socketClose(rs_socket[i]);
-						rs_socket[i] = NULL;
-					}
+					debug(LOG_ERROR, "Failed to register game with server: %s", strSockError(getSockErr()));
+					socketClose(rs_socket);
+					rs_socket = NULL;
 				}
 
-				// Get the return codes
-				for (i = 0; i < ARRAY_SIZE(rs_socket); ++i)
+				if (readLobbyResponse(rs_socket, NET_TIMEOUT_DELAY) == SOCKET_ERROR)
 				{
-					if (rs_socket[i] == NULL)
-						continue;
-
-					if (readLobbyResponse(rs_socket[i], NET_TIMEOUT_DELAY) == SOCKET_ERROR)
-					{
-						socketClose(rs_socket[i]);
-						rs_socket[i] = NULL;
-						continue;
-					}
-
-					succesful = true;
-				}
-
-				if (!succesful)
-				{
-					server_not_there = true;
+					socketClose(rs_socket);
+					rs_socket = NULL;
 					return;
 				}
+
+				// Preserves another register
+				registered=state;
 			}
 			break;
 
+			// Unregister the game (close the socket)
 			case 0:
-				// we don't need this anymore, so clean up
-				socketArrayClose(rs_socket, ARRAY_SIZE(rs_socket));
+			{
+				if (rs_socket != NULL)
+				{
+					// we don't need this anymore, so clean up
+					socketClose(rs_socket);
+					rs_socket = NULL;
+					server_not_there = true;
+				}
+
+				// Preserves another unregister
+				registered=state;
+			}
 			break;
 		}
-		registered=state;
 	}
 }
 
@@ -2431,9 +2440,10 @@ static void NETallowJoining(void)
 					}
 					NETfixDuplicatePlayerNames();
 
-					// Make sure the master server gets updated by disconnecting from it
-					// NETallowJoining will reconnect
-					NETregisterServer(0);
+					// Send the updated GAMESTRUCT to the masterserver
+					NETregisterServer(2);
+
+
 					// reset flags for new players
 					NetPlay.players[index].wzFile.isCancelled = false;
 					NetPlay.players[index].wzFile.isSending = false;

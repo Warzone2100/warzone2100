@@ -153,13 +153,13 @@ extern WZ_DECL_WARN_UNUSED_RESULT BOOL			IdToDroid(UDWORD id, UDWORD player, DRO
 extern WZ_DECL_WARN_UNUSED_RESULT FEATURE		*IdToFeature(UDWORD id,UDWORD player);
 extern WZ_DECL_WARN_UNUSED_RESULT DROID_TEMPLATE	*IdToTemplate(UDWORD tempId,UDWORD player);
 
-extern const char* getPlayerName(unsigned int player);
-extern BOOL setPlayerName		(UDWORD player, const char *sName);
-extern const char* getPlayerColourName(unsigned int player);
-extern BOOL isHumanPlayer		(UDWORD player);				//to tell if the player is a computer or not.
-extern BOOL myResponsibility	(UDWORD player);
-extern BOOL responsibleFor		(UDWORD player, UDWORD playerinquestion);
-extern UDWORD whosResponsible	(UDWORD player);
+extern const char* getPlayerName(int player);
+extern BOOL setPlayerName(int player, const char *sName);
+extern const char* getPlayerColourName(int player);
+extern BOOL isHumanPlayer(int player);				//to tell if the player is a computer or not.
+extern BOOL myResponsibility(int player);
+extern BOOL responsibleFor(int player, int playerinquestion);
+extern int whosResponsible(int player);
 int scavengerSlot();    // Returns the player number that scavengers would have if they were enabled.
 int scavengerPlayer();  // Returns the player number that the scavengers have, or -1 if disabled.
 extern Vector3i cameraToHome		(UDWORD player,BOOL scroll);

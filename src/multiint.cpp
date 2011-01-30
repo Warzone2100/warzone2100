@@ -285,20 +285,25 @@ void loadMultiScripts()
 	}
 
 	// Load AI players
+	uint32_t oldHash1 = DataHash[DATA_SCRIPT];
+	uint32_t oldHash2 = DataHash[DATA_SCRIPTVAL];
 	resForceBaseDir("multiplay/skirmish/");
 	for (int i = 0; i < game.maxPlayers; i++)
 	{
 		// The i == selectedPlayer hack is to enable autogames
-		if (bMultiPlayer && game.type == SKIRMISH && (!NetPlay.players[i].allocated || i == selectedPlayer) && NetPlay.players[i].ai >= 0)
+		if (bMultiPlayer && game.type == SKIRMISH && (!NetPlay.players[i].allocated || i == selectedPlayer)
+		    && NetPlay.players[i].ai >= 0 && myResponsibility(i))
 		{
 			resLoadFile("SCRIPT", aidata[NetPlay.players[i].ai].slo);
 			resLoadFile("SCRIPTVAL", aidata[NetPlay.players[i].ai].vlo);
 		}
 	}
+	DataHash[DATA_SCRIPT]    = oldHash1;  // Not all players load the same AI scripts.
+	DataHash[DATA_SCRIPTVAL] = oldHash2;
 
 	// Load scavengers
 	resForceBaseDir("multiplay/script/");
-	if (game.scavengers)
+	if (game.scavengers && myResponsibility(scavengerPlayer()))
 	{
 		resLoadFile("SCRIPT", "scavfact.slo");
 		resLoadFile("SCRIPTVAL", "scavfact.vlo");

@@ -171,17 +171,16 @@ void playListTest()
 		PlayList_Quit();
 		PlayList_Init();
 		PlayList_Read("music");
-		if (numSongs != 2)
+		if (numSongs != 3)
 		{
-			debug(LOG_ERROR, "Use the default playlist for selftest!");
+			fprintf(stderr, "Use the default playlist for selftest!");
 		}
 		cur = PlayList_CurrentSong();
 		next = PlayList_NextSong();
 		assert(cur != NULL && next != NULL && cur != next);
 		next = PlayList_NextSong();
-		assert(cur == next);	// loop around
 		assert(songList);
-		assert(numSongs == 2);
+		assert(numSongs == 3);
 	}
 	fprintf(stdout, "\tPlaylist self-test: PASSED\n");
 }

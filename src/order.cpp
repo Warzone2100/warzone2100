@@ -4209,52 +4209,49 @@ void orderStructureObj(UDWORD player, BASE_OBJECT *psObj)
 
 const char* getDroidOrderName(DROID_ORDER order)
 {
-	static const char* name[] =
+	switch (order)
 	{
-		"DORDER_NONE",				// no order set
-		"DORDER_STOP",				// stop the current order
-		"DORDER_MOVE",				// 2 - move to a location
-		"DORDER_ATTACK",				// attack an enemy
-		"DORDER_BUILD",				// 4 - build a structure
-		"DORDER_HELPBUILD",			// help to build a structure
-		"DORDER_LINEBUILD",			// 6 - build a number of structures in a row (walls + bridges)
-		"DORDER_DEMOLISH",			// demolish a structure
-		"DORDER_REPAIR",				// 8 - repair a structure
-		"DORDER_OBSERVE",				// keep a target in sensor view
-		"DORDER_FIRESUPPORT",			// 10 - attack whatever the linked sensor droid attacks
-		"DORDER_RETREAT",				// return to the players retreat position
-		"DORDER_DESTRUCT",			// 12 - self destruct
-		"DORDER_RTB",					// return to base
-		"DORDER_RTR",					// 14 - return to repair at any repair facility
-		"DORDER_RUN",					// run away after moral failure
-		"DORDER_EMBARK",				// 16 - board a transporter
-		"DORDER_DISEMBARK",			// get off a transporter
-		"DORDER_ATTACKTARGET",		// 18 - a suggestion to attack something
-									// i.e. the target was chosen because the droid could see it
-		"DORDER_COMMANDERSUPPORT",
-		"DORDER_BUILDMODULE",			// 20 - build a module (power, research or factory)
-		"DORDER_RECYCLE",				// return to factory to be recycled
-		"DORDER_TRANSPORTOUT",		// 22 - offworld transporter order
-		"DORDER_TRANSPORTIN",			// onworld transporter order
-		"DORDER_TRANSPORTRETURN",		// 24 - transporter return after unloading
-		"DORDER_GUARD",				// guard a structure
-		"DORDER_DROIDREPAIR",			// 26 - repair a droid
-		"DORDER_RESTORE",				// restore resistance points for a structure
-		"DORDER_SCOUT",				// 28 - same as move, but stop if an enemy is seen
-		"DORDER_RUNBURN",				// run away on fire
-		"DORDER_CLEARWRECK",			// 30 - constructor droid to clear up building wreckage
-		"DORDER_PATROL",				// move between two way points
-		"DORDER_REARM",				// 32 - order a vtol to rearming pad
-		"DORDER_RECOVER",				// pick up an artifact
-		"DORDER_LEAVEMAP",			// 36 - vtol flying off the map
-		"DORDER_RTR_SPECIFIED",		// return to repair at a specified repair center
-		"DORDER_UNDEFINED",
-		"DORDER_UNDEFINED2",
-		"DORDER_CIRCLE",				// circles target location and engage
-		"DORDER_TEMP_HOLD"				// do nothing until given next order
+		case DORDER_NONE:                     return "DORDER_NONE";
+		case DORDER_STOP:                     return "DORDER_STOP";
+		case DORDER_MOVE:                     return "DORDER_MOVE";
+		case DORDER_ATTACK:                   return "DORDER_ATTACK";
+		case DORDER_BUILD:                    return "DORDER_BUILD";
+		case DORDER_HELPBUILD:                return "DORDER_HELPBUILD";
+		case DORDER_LINEBUILD:                return "DORDER_LINEBUILD";
+		case DORDER_DEMOLISH:                 return "DORDER_DEMOLISH";
+		case DORDER_REPAIR:                   return "DORDER_REPAIR";
+		case DORDER_OBSERVE:                  return "DORDER_OBSERVE";
+		case DORDER_FIRESUPPORT:              return "DORDER_FIRESUPPORT";
+		case DORDER_RETREAT:                  return "DORDER_RETREAT";
+		case DORDER_DESTRUCT:                 return "DORDER_DESTRUCT";
+		case DORDER_RTB:                      return "DORDER_RTB";
+		case DORDER_RTR:                      return "DORDER_RTR";
+		case DORDER_RUN:                      return "DORDER_RUN";
+		case DORDER_EMBARK:                   return "DORDER_EMBARK";
+		case DORDER_DISEMBARK:                return "DORDER_DISEMBARK";
+		case DORDER_ATTACKTARGET:             return "DORDER_ATTACKTARGET";
+		case DORDER_COMMANDERSUPPORT:         return "DORDER_COMMANDERSUPPORT";
+		case DORDER_BUILDMODULE:              return "DORDER_BUILDMODULE";
+		case DORDER_RECYCLE:                  return "DORDER_RECYCLE";
+		case DORDER_TRANSPORTOUT:             return "DORDER_TRANSPORTOUT";
+		case DORDER_TRANSPORTIN:              return "DORDER_TRANSPORTIN";
+		case DORDER_TRANSPORTRETURN:          return "DORDER_TRANSPORTRETURN";
+		case DORDER_GUARD:                    return "DORDER_GUARD";
+		case DORDER_DROIDREPAIR:              return "DORDER_DROIDREPAIR";
+		case DORDER_RESTORE:                  return "DORDER_RESTORE";
+		case DORDER_SCOUT:                    return "DORDER_SCOUT";
+		case DORDER_RUNBURN:                  return "DORDER_RUNBURN";
+		case DORDER_CLEARWRECK:               return "DORDER_CLEARWRECK";
+		case DORDER_PATROL:                   return "DORDER_PATROL";
+		case DORDER_REARM:                    return "DORDER_REARM";
+		case DORDER_RECOVER:                  return "DORDER_RECOVER";
+		case DORDER_LEAVEMAP:                 return "DORDER_LEAVEMAP";
+		case DORDER_RTR_SPECIFIED:            return "DORDER_RTR_SPECIFIED";
+		case DORDER_CIRCLE:                   return "DORDER_CIRCLE";
+		case DORDER_TEMP_HOLD:                return "DORDER_TEMP_HOLD";
 	};
 
-	ASSERT(order < sizeof(name) / sizeof(name[0]), "DROID_ORDER out of range: %u", order);
+	ASSERT(false, "DROID_ORDER out of range: %u", order);
 
-	return name[order];
+	return "DORDER_#INVALID#";
 }
