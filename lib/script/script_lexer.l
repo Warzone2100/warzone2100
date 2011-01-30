@@ -458,7 +458,6 @@ static void pushInclude(const char *pIncludePath)
 %option prefix="scr_"
 %option nounput
 %option yylineno
-%option never-interactive
 
 %x COMMENT
 %x SLCOMMENT

@@ -80,7 +80,7 @@ extern void res_set_debug(int bdebug);
 
 %}
 
-%option yylineno noyywrap nounput never-interactive
+%option yylineno noyywrap nounput
 %option prefix="res_"
 
 %x COMMENT

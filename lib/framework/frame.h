@@ -123,7 +123,10 @@ extern UDWORD HashStringIgnoreCase( const char *String );
 
 struct timezone;
 extern int gettimeofday(struct timeval* tv, struct timezone* tz);
+
+extern "C" int isatty(int);  // Apparently flex declares isatty with C++ linkage on Windows. Don't ask why. Declaring here instead.
 #endif
+extern "C" int isatty(int);  // Apparently flex declares isatty with C++ linkage on Windows. Don't ask why. Declaring here instead.
 
 static inline WZ_DECL_CONST const char * bool2string(bool var)
 {
