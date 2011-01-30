@@ -40,6 +40,7 @@
 #include "physfs_ext.h"
 
 #include "cursors.h"
+#include "wz2100icon.h"
 
 static const enum CURSOR_TYPE cursor_type =
 	CURSOR_32;
@@ -229,12 +230,26 @@ bool frameInitialise(
 					bool fullScreen,		// Whether to start full screen or windowed
 					bool vsync)				// If to sync to vblank or not
 {
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+	uint32_t rmask = 0xff000000;
+	uint32_t gmask = 0x00ff0000;
+	uint32_t bmask = 0x0000ff00;
+	uint32_t amask = 0x000000ff;
+#else
+	uint32_t rmask = 0x000000ff;
+	uint32_t gmask = 0x0000ff00;
+	uint32_t bmask = 0x00ff0000;
+	uint32_t amask = 0xff000000;
+#endif
+
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0)
 	{
 		debug( LOG_ERROR, "Error: Could not initialise SDL (%s).\n", SDL_GetError() );
 		return false;
 	}
 
+	SDL_WM_SetIcon(SDL_CreateRGBSurfaceFrom((void*)wz2100icon.pixel_data, wz2100icon.width, wz2100icon.height, wz2100icon.bytes_per_pixel * 8,
+	                                        wz2100icon.width * wz2100icon.bytes_per_pixel, rmask, gmask, bmask, amask), NULL);
 	SDL_WM_SetCaption(pWindowName, NULL);
 
 	/* Initialise the trig stuff */

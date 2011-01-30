@@ -65,6 +65,7 @@ noinst_HEADERS = \
 	gettext.h \
 	macros.h \
 	SDL_framerate.h \
+	wz2100icon.h \
 	wzapp_c.h \
 	wzglobal.h
 
