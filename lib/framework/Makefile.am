@@ -63,6 +63,7 @@ noinst_HEADERS = \
 	gettext.h \
 	macros.h \
 	SDL_framerate.h \
+	wz2100icon.h \
 	wzglobal.h
 
 libframework_a_SOURCES = \
