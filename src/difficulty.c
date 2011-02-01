@@ -28,6 +28,8 @@
 	Changed to allow seperate modifiers for enemy and player damage.
 */
 
+#include <math.h>
+
 #include "lib/framework/frame.h"
 
 #include "difficulty.h"

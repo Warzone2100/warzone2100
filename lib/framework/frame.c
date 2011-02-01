@@ -27,20 +27,16 @@
  *
  */
 #include "frame.h"
-#include "file.h"
-
-#include <SDL.h>
-#include <physfs.h>
 
 #include "frameint.h"
 #include "frameresource.h"
 #include "input.h"
-#include "lib/widget/scrap.h"
-#include "SDL_framerate.h"
 #include "physfs_ext.h"
-
-#include "cursors.h"
+#include "SDL_framerate.h"
+#include "trig.h"
 #include "wz2100icon.h"
+
+#include "lib/widget/scrap.h"
 
 static const enum CURSOR_TYPE cursor_type =
 	CURSOR_32;

@@ -24,22 +24,14 @@
  *
  */
 
-#include "frame.h"
-
-#include <string.h>
-#include <stdio.h>
 #include <time.h>
-#include "frameint.h"
-#include "string_ext.h"
 
+#include "frame.h"
 #if defined(WZ_HAVE_MOTIF)
 # include "x-motif-messagebox.h"
 #endif
 
-#include "lib/gamelib/gtime.h"
 #include "src/warzoneconfig.h"	// to determine if we are in full screen mode or not for the system dialogs
-
-extern void NotifyUserOfError(char *);		// will throw up a notifier on error
 
 #define MAX_LEN_LOG_LINE 512
 

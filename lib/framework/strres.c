@@ -24,14 +24,12 @@
  *
  */
 
-#include <string.h>
 #include <stdlib.h>
 
 /* Allow frame header files to be singly included */
 #define FRAME_LIB_INCLUDE
 
 #include "types.h"
-#include "debug.h"
 #include "treap.h"
 #include "strres.h"
 #include "strresly.h"

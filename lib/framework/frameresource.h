@@ -24,8 +24,6 @@
 #ifndef _frameresource_h
 #define _frameresource_h
 
-#include "lib/framework/frame.h"
-
 #if defined(__cplusplus)
 extern "C"
 {
@@ -33,9 +31,6 @@ extern "C"
 
 /** Maximum number of characters in a resource type. */
 #define RESTYPE_MAXCHAR		20
-
-/** Maximum number of characters in a resource ID. */
-#define RESID_MAXCHAR		40
 
 /** Function pointer for a function that loads from a memory buffer. */
 typedef bool (*RES_BUFFERLOAD)(const char *pBuffer, UDWORD size, void **pData);
@@ -91,9 +86,6 @@ extern bool resInitialise(void);
 /** Shutdown the resource module. */
 extern void resShutDown(void);
 
-/** Set the base resource directory. */
-extern void resSetBaseDir(const char* pResDir);
-
 /** Parse the res file. */
 bool resLoad(const char *pResFile, SDWORD blockID);
 
@@ -116,9 +108,6 @@ extern bool	resAddFileLoad(const char *pType, RES_FILELOAD fileLoad,
 
 /** Call the load function for a file. */
 extern bool resLoadFile(const char *pType, const char *pFile);
-
-/** Add data to the resource system. */
-extern bool resAddData(char *pType, char *pID, void *pData);
 
 /** Return the resource for a type and ID */
 extern void *resGetDataFromHash(const char *pType, UDWORD HashedID);

@@ -23,7 +23,6 @@
 #include "frame.h"
 #include "debug.h"
 #include <string.h>
-#include <stddef.h>
 #include <assert.h>
 
 #ifdef __cplusplus

@@ -27,16 +27,6 @@
 /* Allow frame header files to be singly included */
 #define FRAME_LIB_INCLUDE
 
-#include "types.h"
-#include "trig.h"
-
-#include <assert.h>
-#include <stdlib.h>
-
-#include <math.h>
-
-#include "types.h"
-#include "debug.h"
 #include "trig.h"
 
 /* Number of steps between -1 and 1 for the inverse tables */

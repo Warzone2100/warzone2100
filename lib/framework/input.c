@@ -29,9 +29,9 @@
 /* Allow frame header files to be singly included */
 #define FRAME_LIB_INCLUDE
 
-#include "input.h"
-#include "frameint.h"
 #include "configfile.h"
+#include "frameint.h"
+#include "input.h"
 
 #include "lib/gamelib/gtime.h"
 

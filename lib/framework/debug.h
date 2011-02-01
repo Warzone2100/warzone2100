@@ -31,14 +31,10 @@
 # error Framework header files MUST be included from Frame.h ONLY.
 #endif
 
-#include "wzglobal.h"
-
-#include <assert.h>
 #if !defined(WZ_OS_WIN)
 #include <signal.h>
 #endif
 #include "macros.h"
-#include "types.h"
 
 #if defined(__cplusplus)
 extern "C"
@@ -286,13 +282,16 @@ void debug_MEMCHKON(void);
 void debug_MEMSTATS(void);
 #endif
 
+/** Checks if a particular debub flag was enabled */
+bool debugPartEnabled(code_part codePart);
+
+void debugDisableAssert(void);
+
+// will throw up a notifier on error
+void NotifyUserOfError(char *);
+
 #if defined(__cplusplus)
 }
 #endif
-
-/** Checks if a particular debub flag was enabled */
-extern bool debugPartEnabled(code_part codePart);
-
-void debugDisableAssert(void);
 
 #endif // __INCLUDED_LIB_FRAMEWORK_DEBUG_H__

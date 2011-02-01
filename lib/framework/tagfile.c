@@ -7,7 +7,6 @@
 
 #include "frame.h"
 
-#include "string_ext.h"
 #include "physfs_ext.h"
 
 // Tags of values 0x0 and 0xFF are reserved as instance separators and group end

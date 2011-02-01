@@ -19,9 +19,6 @@
 #include "frame.h"
 
 #include <locale.h>
-#include <physfs.h>
-
-#include "string_ext.h"
 
 #ifdef WZ_OS_MAC
 # include <CoreFoundation/CoreFoundation.h>

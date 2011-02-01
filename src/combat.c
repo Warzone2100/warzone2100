@@ -26,6 +26,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/math_ext.h"
+#include "lib/framework/trig.h"
 #include "lib/netplay/netplay.h"
 
 #include "objects.h"

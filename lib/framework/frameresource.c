@@ -23,10 +23,9 @@
  * Framework Resource file processing functions
  *
  */
-#include "frameresource.h"
 
-#include "string_ext.h"
-#include "stdio_ext.h"
+#include "frame.h"
+#include "frameresource.h"
 
 #include "file.h"
 #include "resly.h"
@@ -41,11 +40,25 @@ char aCurrResDir[PATH_MAX];
 // the current resource block ID
 static SDWORD resBlockID;
 
-// prototypes
-static void ResetResourceFile(void);
-
 // callback to resload screen.
 static RESLOAD_CALLBACK resLoadCallback=NULL;
+
+
+// Structure for each file currently in use in the resource  ... probably only going to be one ... but we will handle upto MAXLOADEDRESOURCE
+typedef struct
+{
+  	char *pBuffer;	// a pointer to the data
+	UDWORD size;	// number of bytes
+	UBYTE	type;	// what type of resource is it
+} RESOURCEFILE;
+
+#define RESFILETYPE_EMPTY (0)			// empty entry
+#define RESFILETYPE_LOADED (2)			// Loaded from a file (!)
+
+#define MAXLOADEDRESOURCES (6)
+static RESOURCEFILE LoadedResourceFiles[MAXLOADEDRESOURCES];
+
+static char LastResourceFilename[PATH_MAX];
 
 
 /* set the callback function for the res loader*/
@@ -63,6 +76,17 @@ static inline void resDoResLoadCallback(void)
 	}
 }
 
+
+// Clear out the resource list ... needs to be called during init.
+static void ResetResourceFile(void)
+{
+	UWORD i;
+
+	for (i=0;i<MAXLOADEDRESOURCES;i++)
+	{
+		LoadedResourceFiles[i].type=RESFILETYPE_EMPTY;
+	}
+}
 
 /* Initialise the resource module */
 bool resInitialise(void)
@@ -88,12 +112,6 @@ void resShutDown(void)
 	}
 }
 
-
-// set the base resource directory
-void resSetBaseDir(const char* pResDir)
-{
-	sstrcpy(aResDir, pResDir);
-}
 
 /* Parse the res file */
 bool resLoad(const char *pResFile, SDWORD blockID)
@@ -224,8 +242,6 @@ void resToLower(char *pStr)
 }
 
 
-static char LastResourceFilename[PATH_MAX];
-
 /*!
  * Returns the filename of the last resource file loaded
  * The filename is always null terminated
@@ -241,37 +257,6 @@ const char *GetLastResourceFilename(void)
 void SetLastResourceFilename(const char *pName)
 {
 	sstrcpy(LastResourceFilename, pName);
-}
-
-
-// Structure for each file currently in use in the resource  ... probably only going to be one ... but we will handle upto MAXLOADEDRESOURCE
-typedef struct
-{
-  	char *pBuffer;	// a pointer to the data
-	UDWORD size;	// number of bytes
-	UBYTE	type;	// what type of resource is it
-} RESOURCEFILE;
-
-#define RESFILETYPE_EMPTY (0)			// empty entry
-#define RESFILETYPE_PC_SBL (1)			// Johns SBL stuff
-#define RESFILETYPE_LOADED (2)			// Loaded from a file (!)
-#define RESFILETYPE_WDGPTR (3)			// A pointer from the WDG cache
-
-
-#define MAXLOADEDRESOURCES (6)
-static RESOURCEFILE LoadedResourceFiles[MAXLOADEDRESOURCES];
-
-
-
-// Clear out the resource list ... needs to be called during init.
-static void ResetResourceFile(void)
-{
-	UWORD i;
-
-	for (i=0;i<MAXLOADEDRESOURCES;i++)
-	{
-		LoadedResourceFiles[i].type=RESFILETYPE_EMPTY;
-	}
 }
 
 // Returns an empty resource entry or -1 if none exsist

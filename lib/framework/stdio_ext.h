@@ -20,8 +20,6 @@
 #ifndef STDIO_EXT_H
 #define STDIO_EXT_H
 
-#include "wzglobal.h"
-
 #include <stdarg.h>
 
 #if defined(__cplusplus)

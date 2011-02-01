@@ -28,6 +28,7 @@
 #include <SDL_thread.h>
 
 #include "lib/framework/frame.h"
+#include "lib/framework/trig.h"
 
 #include "objects.h"
 #include "map.h"

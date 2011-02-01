@@ -25,9 +25,7 @@
 #ifndef MATH_EXT_H
 #define MATH_EXT_H
 
-#include "wzglobal.h"
 #include <math.h>
-#include <stdlib.h>
 
 // Also PERCENT(int,int);	// returns a int value 0->100 of the percentage of the first param over the second
 #define PERCENT(a,b) (((a)*100)/(b))

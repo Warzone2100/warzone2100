@@ -20,11 +20,6 @@
 #include "frame.h"
 #include "stdio_ext.h"
 
-#include <stdio.h>
-#include <string.h>
-#include <assert.h>
-
-
 int vslcatprintf(char* str, size_t size, const char* format, va_list ap)
 {
 	size_t str_len;

@@ -51,16 +51,8 @@ extern bool screenInitialise(UDWORD		width,			// Display width
 														// or full screen
 							 bool		vsync);
 
-
 /* Release the DD objects */
 extern void screenShutDown(void);
-
-/* In full screen mode flip to the GDI buffer.
- * Use this if you want the user to see any GDI output.
- * This is mainly used so that ASSERTs and message boxes appear
- * even in full screen mode.
- */
-extern void screenFlipToGDI(void);
 
 /* This is called once a frame so that the system can tell
  * whether a key was pressed this turn or held down from the last frame.

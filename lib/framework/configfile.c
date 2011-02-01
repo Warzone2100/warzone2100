@@ -21,9 +21,6 @@
 #include "frame.h"
 #include "configfile.h"
 
-#include <string.h>
-#include "string_ext.h"
-
 #include "file.h"
 
 #define REGISTRY_HASH_SIZE	32
