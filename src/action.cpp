@@ -843,10 +843,15 @@ void actionUpdateDroid(DROID *psDroid)
 	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
 	ASSERT_OR_RETURN(, psPropStats != NULL, "Invalid propulsion stats pointer");
 
+	// Don't waste ammo unless given a direct attack order.
+	bool avoidOverkill = psDroid->order != DORDER_ATTACK && psDroid->order != DORDER_ATTACK &&
+	                     (psDroid->action == DACTION_ATTACK || psDroid->action == DACTION_MOVEFIRE || psDroid->action == DACTION_MOVETOATTACK ||
+	                      psDroid->action == DACTION_ROTATETOATTACK || psDroid->action == DACTION_VTOLATTACK);
+
 	// clear the target if it has died
 	for (i = 0; i < DROID_MAXWEAPS; i++)
 	{
-		if (psDroid->psActionTarget[i] && psDroid->psActionTarget[i]->died)
+		if (psDroid->psActionTarget[i] && (avoidOverkill? aiObjectIsProbablyDoomed(psDroid->psActionTarget[i]) : psDroid->psActionTarget[i]->died))
 		{
 			setDroidActionTarget(psDroid, NULL, i);
 			if (i == 0)
@@ -859,7 +864,7 @@ void actionUpdateDroid(DROID *psDroid)
 					// if VTOL - return to rearm pad if not patrolling
 					if (isVtolDroid(psDroid))
 					{
-						if (psDroid->order == DORDER_PATROL || psDroid->order == DORDER_CIRCLE)
+						if ((psDroid->order == DORDER_PATROL || psDroid->order == DORDER_CIRCLE) && !vtolEmpty(psDroid))
 						{
 							// Back to the patrol.
 							actionDroid(psDroid, DACTION_MOVE, psDroid->orderX,psDroid->orderY);
@@ -1195,10 +1200,7 @@ void actionUpdateDroid(DROID *psDroid)
 
 			if (nonNullWeapon[i]
 			 && actionVisibleTarget(psDroid, psActionTarget, i)
-			 && actionInRange(psDroid, psActionTarget, i)
-			 && (psDroid->order == DORDER_ATTACK
-			  || psDroid->order == DORDER_ATTACKTARGET
-			  || !aiObjectIsProbablyDoomed(psActionTarget)))
+			 && actionInRange(psDroid, psActionTarget, i))
 			{
 				WEAPON_STATS* const psWeapStats = &asWeaponStats[psDroid->asWeaps[i].nStat];
 				bHasTarget = true;
