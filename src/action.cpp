@@ -1150,7 +1150,18 @@ void actionUpdateDroid(DROID *psDroid)
 		}
 		break;
 	case DACTION_ATTACK:
+	case DACTION_ROTATETOATTACK:
 		ASSERT_OR_RETURN( , psDroid->psActionTarget[0] != NULL, "target is NULL while attacking");
+
+		if (psDroid->action == DACTION_ROTATETOATTACK)
+		{
+			if (psDroid->sMove.Status == MOVETURNTOTARGET)
+			{
+				moveTurnDroid(psDroid, psDroid->psActionTarget[0]->pos.x, psDroid->psActionTarget[0]->pos.y);
+				break;  // Still turning.
+			}
+			psDroid->action = DACTION_ATTACK;
+		}
 
 		//check the target hasn't become one the same player ID - Electronic Warfare
 		if ((electronicDroid(psDroid) && (psDroid->player == psDroid->psActionTarget[0]->player)))
@@ -1524,13 +1535,6 @@ void actionUpdateDroid(DROID *psDroid)
 		}
 		break;
 
-	case DACTION_ROTATETOATTACK:
-//		if (DROID_STOPPED(psDroid))
-		if (psDroid->sMove.Status != MOVETURNTOTARGET)
-		{
-			psDroid->action = DACTION_ATTACK;
-		}
-		break;
 	case DACTION_MOVETOBUILD:
 		if (!psDroid->psTarStats)
 		{

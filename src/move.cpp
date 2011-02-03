@@ -2515,18 +2515,6 @@ void moveUpdateDroid(DROID *psDroid)
 	case MOVETURNTOTARGET:
 		moveSpeed = 0;
 		moveDir = iAtan2(psDroid->sMove.target - removeZ(psDroid->pos));
-		if (psDroid->rot.direction == moveDir)
-		{
-			if ( psPropStats->propulsionType == PROPULSION_TYPE_LIFT )
-			{
-				psDroid->sMove.Status = MOVEPOINTTOPOINT;
-			}
-			else
-			{
-				psDroid->sMove.Status = MOVEINACTIVE;
-			}
-			objTrace(psDroid->id, "MOVETURNTOTARGET complete");
-		}
 		break;
 	case MOVEHOVER:
 		moveDescending(psDroid);
@@ -2597,6 +2585,19 @@ void moveUpdateDroid(DROID *psDroid)
 	if (worldOnMap(psDroid->pos.x, psDroid->pos.y) && terrainType(mapTile(map_coord(psDroid->pos.x), map_coord(psDroid->pos.y))) == TER_WATER)
 	{
 		updateDroidOrientation(psDroid);
+	}
+
+	if (psDroid->sMove.Status == MOVETURNTOTARGET && psDroid->rot.direction == moveDir)
+	{
+		if (psPropStats->propulsionType == PROPULSION_TYPE_LIFT)
+		{
+			psDroid->sMove.Status = MOVEPOINTTOPOINT;
+		}
+		else
+		{
+			psDroid->sMove.Status = MOVEINACTIVE;
+		}
+		objTrace(psDroid->id, "MOVETURNTOTARGET complete");
 	}
 
 	if( (psDroid->inFire && psDroid->droidType != DROID_PERSON) && psDroid->visible[selectedPlayer])
