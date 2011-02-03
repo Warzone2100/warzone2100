@@ -509,7 +509,7 @@ void orderUpdateDroid(DROID *psDroid)
 			{
 				// true if in condition to set actionDroid to attack/observe
 				bool attack = secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS &&
-				              aiBestNearestTarget(psDroid, &psObj, 0, NULL, SCOUT_ATTACK_DIST) >= 0;
+				              aiBestNearestTarget(psDroid, &psObj, 0, SCOUT_ATTACK_DIST) >= 0;
 				switch (psDroid->droidType)
 				{
 					case DROID_CONSTRUCT:
@@ -606,7 +606,7 @@ void orderUpdateDroid(DROID *psDroid)
 		// if there is an enemy around, attack it
 		if (psDroid->action == DACTION_MOVE &&
 		    secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS &&
-		    aiBestNearestTarget(psDroid, &psObj, 0, NULL) >= 0)
+		    aiBestNearestTarget(psDroid, &psObj, 0) >= 0)
 		{
 			switch (psDroid->droidType)
 			{

@@ -925,7 +925,7 @@ void actionUpdateDroid(DROID *psDroid)
 					WEAPON_STATS* const psWeapStats = &asWeaponStats[psDroid->asWeaps[i].nStat];
 					if (psDroid->asWeaps[i].nStat > 0
 					 && psWeapStats->rotate
-					 && aiBestNearestTarget(psDroid, &psTemp, i, NULL) >= 0)
+					 && aiBestNearestTarget(psDroid, &psTemp, i) >= 0)
 					{
 						if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS)
 						{
@@ -1025,7 +1025,7 @@ void actionUpdateDroid(DROID *psDroid)
 					 && psDroid->asWeaps[i].nStat > 0
 					 && psWeapStats->rotate
 					 && psWeapStats->fireOnMove != FOM_NO
-					 && aiBestNearestTarget(psDroid, &psTemp, i, NULL) >= 0)
+					 && aiBestNearestTarget(psDroid, &psTemp, i) >= 0)
 					{
 						if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS)
 						{
@@ -1089,7 +1089,7 @@ void actionUpdateDroid(DROID *psDroid)
 			{
 				// Can we find a good target for the weapon?
 				BASE_OBJECT *psTemp;
-				if (aiBestNearestTarget(psDroid, &psTemp, i, NULL) >= 0) // assuming aiBestNearestTarget checks for electronic warfare
+				if (aiBestNearestTarget(psDroid, &psTemp, i) >= 0) // assuming aiBestNearestTarget checks for electronic warfare
 				{
 					bHasTarget = true;
 					setDroidActionTarget(psDroid, psTemp, i); // this updates psDroid->psActionTarget[i] to != NULL
@@ -2138,7 +2138,7 @@ void actionUpdateDroid(DROID *psDroid)
 					WEAPON_STATS* const psWeapStats = &asWeaponStats[psDroid->asWeaps[i].nStat];
 					if (psDroid->asWeaps[i].nStat > 0 && psWeapStats->rotate
 					    && secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS
-					    && aiBestNearestTarget(psDroid, &psTemp, i, NULL) >= 0 && psTemp)
+					    && aiBestNearestTarget(psDroid, &psTemp, i) >= 0 && psTemp)
 					{
 						psDroid->action = DACTION_ATTACK;
 						setDroidActionTarget(psDroid, psTemp, 0);

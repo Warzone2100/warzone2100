@@ -480,7 +480,7 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 
 // Find the best nearest target for a droid
 // Returns integer representing target priority, -1 if failed
-SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, UWORD *targetOrigin, int extraRange)
+int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, int extraRange)
 {
 	SDWORD				bestMod = 0,newMod, failure = -1;
 	BASE_OBJECT			*psTarget = NULL, *friendlyObj, *bestTarget = NULL, *iter, *targetInQuestion, *tempTarget;
@@ -488,12 +488,6 @@ SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot
 	STRUCTURE			*targetStructure;
 	WEAPON_EFFECT			weaponEffect;
 	UWORD				tmpOrigin = ORIGIN_UNKNOWN;
-
-	// reset origin
-	if (targetOrigin)
-	{
-		*targetOrigin = ORIGIN_UNKNOWN;
-	}
 
 	//don't bother looking if empty vtol droid
 	if (vtolEmpty(psDroid))
@@ -660,10 +654,6 @@ SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot
 			}
 		}
 
-		if (targetOrigin)
-		{
-			*targetOrigin = tmpOrigin;
-		}
 		*ppsObj = bestTarget;
 		return bestMod;
 	}
@@ -787,7 +777,7 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 		BASE_OBJECT *psCurrTarget = ((DROID *)psObj)->psActionTarget[0];
 
 		/* find a new target */
-		int newTargetWeight = aiBestNearestTarget((DROID *)psObj, &psTarget, weapon_slot, NULL);
+		int newTargetWeight = aiBestNearestTarget((DROID *)psObj, &psTarget, weapon_slot);
 
 		/* Calculate weight of the current target if updating; but take care not to target
 		 * ourselves... */
@@ -965,7 +955,7 @@ BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 	{
 		BASE_OBJECT	*psTarget = NULL;
 
-		if (aiBestNearestTarget((DROID *)psObj, &psTarget, 0, NULL) >= 0)
+		if (aiBestNearestTarget((DROID *)psObj, &psTarget, 0) >= 0)
 		{
 			/* See if in sensor range */
 			const int xdiff = psTarget->pos.x - psObj->pos.x;
