@@ -509,7 +509,7 @@ void orderUpdateDroid(DROID *psDroid)
 			{
 				// true if in condition to set actionDroid to attack/observe
 				bool attack = secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS &&
-				              aiBestNearestTarget(psDroid, &psObj, 0, NULL) >= 0;
+				              aiBestNearestTarget(psDroid, &psObj, 0, NULL, SCOUT_ATTACK_DIST) >= 0;
 				switch (psDroid->droidType)
 				{
 					case DROID_CONSTRUCT:
@@ -595,10 +595,8 @@ void orderUpdateDroid(DROID *psDroid)
 				 (psDroid->action == DACTION_OBSERVE) ||
 				 (psDroid->action == DACTION_MOVETOOBSERVE))
 		{
-			// attacking something - see if the droid has gone too far
-			xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psDroid->actionX;
-			ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psDroid->actionY;
-			if (xdiff*xdiff + ydiff*ydiff > SCOUT_ATTACK_DIST*SCOUT_ATTACK_DIST)
+			// attacking something - see if the droid has gone too far, go up to twice the distance we want to go, so that we don't repeatedly turn back when the target is almost in range.
+			if (objPosDiffSq(psDroid->pos, Vector3i(psDroid->actionX, psDroid->actionY, 0)) > (SCOUT_ATTACK_DIST*2 * SCOUT_ATTACK_DIST*2))
 			{
 				actionDroid(psDroid, DACTION_RETURNTOPOS, psDroid->actionX,psDroid->actionY);
 			}
