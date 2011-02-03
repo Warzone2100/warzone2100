@@ -859,7 +859,7 @@ void actionUpdateDroid(DROID *psDroid)
 					// if VTOL - return to rearm pad if not patrolling
 					if (isVtolDroid(psDroid))
 					{
-						if (psDroid->order == DORDER_PATROL)
+						if (psDroid->order == DORDER_PATROL || psDroid->order == DORDER_CIRCLE)
 						{
 							// Back to the patrol.
 							actionDroid(psDroid, DACTION_MOVE, psDroid->orderX,psDroid->orderY);

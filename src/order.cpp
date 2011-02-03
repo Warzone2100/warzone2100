@@ -97,9 +97,6 @@ static void orderCheckList(DROID *psDroid);
 // Clear all the orders from the list, up to listSize (without clearing pending (not yet synchronised) orders, that is).
 static void orderClearDroidList(DROID *psDroid);
 
-//Watermelon:add a timestamp to order circle
-static UDWORD orderStarted;
-
 // whether an order effect has been displayed
 static BOOL bOrderEffectDisplayed = false;
 // what the droid's action / order is currently
@@ -558,7 +555,6 @@ void orderUpdateDroid(DROID *psDroid)
 			{
 				if (psDroid->order == DORDER_PATROL)
 				{
-					UDWORD tempCoord;
 					// see if we have anything queued up
 					if (orderDroidList(psDroid))
 					{
@@ -571,12 +567,8 @@ void orderUpdateDroid(DROID *psDroid)
 						break;
 					}
 					// head back to the other point
-					tempCoord = psDroid->orderX;
-					psDroid->orderX = psDroid->orderX2;
-					psDroid->orderX2 = tempCoord;
-					tempCoord = psDroid->orderY;
-					psDroid->orderY = psDroid->orderY2;
-					psDroid->orderY2 = tempCoord;
+					std::swap(psDroid->orderX, psDroid->orderX2);
+					std::swap(psDroid->orderY, psDroid->orderY2);
 					actionDroid(psDroid, DACTION_MOVE, psDroid->orderX,psDroid->orderY);
 				}
 				else
@@ -606,7 +598,7 @@ void orderUpdateDroid(DROID *psDroid)
 		// if there is an enemy around, attack it
 		if (psDroid->action == DACTION_MOVE &&
 		    secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS &&
-		    aiBestNearestTarget(psDroid, &psObj, 0) >= 0)
+		    aiBestNearestTarget(psDroid, &psObj, 0, SCOUT_ATTACK_DIST) >= 0)
 		{
 			switch (psDroid->droidType)
 			{
@@ -629,45 +621,27 @@ void orderUpdateDroid(DROID *psDroid)
 		{
 			if (psDroid->action == DACTION_MOVE)
 			{
-				if ( orderStarted && ((orderStarted + 500) > gameTime) )
-				{
-					break;
-				}
 				// see if we have anything queued up
 				if (orderDroidList(psDroid))
 				{
 					// started a new order, quit
 					break;
 				}
-				orderStarted = gameTime;
 			}
-			psDroid->action = DACTION_NONE;
 
-			xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psDroid->orderX;
-			ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psDroid->orderY;
-			if (xdiff*xdiff + ydiff*ydiff <= 2000 * 2000)
+			Vector2i edgeDiff = removeZ(psDroid->pos) - Vector2i(psDroid->actionX, psDroid->actionY);
+			if (psDroid->action != DACTION_MOVE || edgeDiff*edgeDiff <= TILE_UNITS*4 * TILE_UNITS*4)
 			{
-				if (psDroid->order == DORDER_CIRCLE)
+				//Watermelon:use orderX,orderY as local space origin and calculate droid direction in local space
+				Vector2i diff = removeZ(psDroid->pos) - Vector2i(psDroid->orderX, psDroid->orderY);
+				uint16_t angle = iAtan2(diff) - DEG(30);
+				do
 				{
-					//Watermelon:use orderX,orderY as local space origin and calculate droid direction in local space
-					uint16_t angle = iAtan2(xdiff, ydiff);
 					xoffset = iSinR(angle, 1500);
 					yoffset = iCosR(angle, 1500);
-					xdiff = psDroid->pos.x - (psDroid->orderX + xoffset);
-					ydiff = psDroid->pos.y - (psDroid->orderY + yoffset);
-					if (xdiff*xdiff + ydiff*ydiff < TILE_UNITS * TILE_UNITS)
-					{
-						//Watermelon:conter-clockwise 30 degree's per action
-						angle -= DEG(30);
-						xoffset = iSinR(angle, 1500);
-						yoffset = iCosR(angle, 1500);
-					}
-					actionDroid(psDroid, DACTION_MOVE, psDroid->orderX + xoffset, psDroid->orderY + yoffset);
-				}
-				else
-				{
-					psDroid->order = DORDER_NONE;
-				}
+					angle -= DEG(10);
+				} while (!worldOnMap(psDroid->orderX + xoffset, psDroid->orderY + yoffset));  // Don't try to fly off map.
+				actionDroid(psDroid, DACTION_MOVE, psDroid->orderX + xoffset, psDroid->orderY + yoffset);
 			}
 		}
 		else if ((psDroid->action == DACTION_ATTACK) ||
