@@ -19,6 +19,7 @@ execute()
 
 # Some default configuration settings
 HOST_TRIPLET=i586-mingw32msvc
+DOWNLOADS="$(pwd)/downloads"
 INSTALLER_VERSION="2.2.0.999"
 DEBUGFLAG="--disable-debug"
 CC_FOR_BUILD="gcc"
@@ -99,7 +100,7 @@ fi
 set -x
 
 # Make sure that the dependencies have been built
-make $MAKE_FLAGS -C libs "HOST_TRIPLET=$HOST_TRIPLET"
+make $MAKE_FLAGS -C libs "HOST_TRIPLET=$HOST_TRIPLET" "DOWNLOADS=$DOWNLOADS"
 
 cd build
 

@@ -12,7 +12,7 @@ TARGET:=$(TOPDIR)/builds/libs/lib/libexpat.la
 
 include $(TOPDIR)/rules.mk
 
-extract-stamp: $(TOPDIR)/downloads/$(PKG_SOURCE)
+extract-stamp: $(DOWNLOADS)/$(PKG_SOURCE)
 	tar xzf $^
 	touch extract-stamp
 
