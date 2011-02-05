@@ -666,7 +666,7 @@ static void posixExceptionHandler(int signum)
 
 	// Use 'gdb' to provide an "extended" backtrace
 #ifdef SA_SIGINFO
-	gdbExtendedBacktrace(dumpFile, sigcontext);
+	gdbExtendedBacktrace(dumpFile, (ucontext_t*)sigcontext);
 #else
 	gdbExtendedBacktrace(dumpFile);
 #endif
