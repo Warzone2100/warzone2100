@@ -178,6 +178,7 @@ static BOOL addSlideOptions(void)
 	addFESlider(INTINGAMEOP_CDVOL_S, INTINGAMEOP, INTINGAMEOP_MID, INTINGAMEOP_3_Y-5,
 				AUDIO_VOL_MAX, (int)(sound_GetMusicVolume() * 100));
 
+#ifdef DEBUG
 	// Tactical UI: Target Origin
 	if(tuiTargetOrigin)
 	{
@@ -189,6 +190,7 @@ static BOOL addSlideOptions(void)
 		addIGTextButton(INTINGAMEOP_TUI_TARGET_ORIGIN_SW, INTINGAMEOP_4_Y, INTINGAMEOP_SW_W,
 			_("Tactical UI (Target Origin Icon): Hide"), WBUT_PLAIN);
 	}
+#endif
 
 	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_5_Y, INTINGAMEOP_SW_W, _("Resume Game"), OPALIGN);
 
@@ -261,10 +263,8 @@ static BOOL _intAddInGameOptions(void)
 	// add 'resume'
 	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_Y, INTINGAMEOP_OP_W, _("Resume Game"), OPALIGN);
 
-#ifdef DEBUG
 	// add 'options'
 	addIGTextButton(INTINGAMEOP_OPTIONS, INTINGAMEOP_2_Y, INTINGAMEOP_OP_W, _("Audio Options"), OPALIGN);
-#endif
 
 	if ((!bMultiPlayer || (NetPlay.bComms == 0)) && !bInTutorial)
 	{

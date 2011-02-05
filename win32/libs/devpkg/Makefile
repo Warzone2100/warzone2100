@@ -10,7 +10,7 @@ PKG_MD5SUM:=6a3a37022ffc3c0a573ad2d6c4766b6d
 
 include $(TOPDIR)/rules.mk
 
-extract-stamp: $(TOPDIR)/downloads/$(PKG_SOURCE)
+extract-stamp: $(DOWNLOADS)/$(PKG_SOURCE)
 	@test -d $(TOPDIR)/build/libs || { \
 	    echo mkdir -p $(TOPDIR)/build/libs ; \
 	    mkdir -p $(TOPDIR)/build/libs || exit ; \

@@ -137,11 +137,14 @@ static inline bool isDead(const BASE_OBJECT* psObj)
 
 static inline int objPosDiffSq(Position pos1, Position pos2)
 {
-	const int xdiff = pos1.x - pos2.x;
-	const int ydiff = pos1.y - pos2.y;
-	return (xdiff * xdiff + ydiff * ydiff);
+	const Vector2i diff = removeZ(pos1 - pos2);
+	return diff*diff;
 }
 
+static inline int objPosDiffSq(SIMPLE_OBJECT const *pos1, SIMPLE_OBJECT const *pos2)
+{
+	return objPosDiffSq(pos1->pos, pos2->pos);
+}
 
 // True iff object is a droid, structure or feature (not a projectile). Will incorrectly return true if passed a nonsense object of type OBJ_TARGET or OBJ_NUM_TYPES.
 static inline bool isBaseObject(SIMPLE_OBJECT const *psObject)                 { return psObject->type != OBJ_PROJECTILE; }

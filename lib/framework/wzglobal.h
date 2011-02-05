@@ -587,10 +587,6 @@
 #define PATH_MAX 4096
 #endif
 
-// Tell Flex not to include unistd when it is not present.
-#if !defined(HAVE_UNISTD_H) && !defined(YY_NO_UNISTD_H)
-# define YY_NO_UNISTD_H
-#endif
 
 #if !defined(WZ_C99) && !defined(va_copy)
 /**

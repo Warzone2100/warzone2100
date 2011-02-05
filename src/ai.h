@@ -58,7 +58,8 @@ void aiUpdateDroid(DROID *psDroid);
 
 // Find the nearest best target for a droid
 // returns integer representing quality of choice, -1 if failed
-SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, UWORD *targetOrigin);
+int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, int extraRange = 0);
+int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, void const *extraRange);
 
 // Are there a lot of bullets heading towards the structure?
 BOOL aiObjectIsProbablyDoomed(BASE_OBJECT *psObject);

@@ -14,7 +14,7 @@ TARGETS:= \
 
 include $(TOPDIR)/rules.mk
 
-extract-stamp: $(TOPDIR)/downloads/$(PKG_SOURCE)
+extract-stamp: $(DOWNLOADS)/$(PKG_SOURCE)
 	tar xjf $^
 	touch extract-stamp
 

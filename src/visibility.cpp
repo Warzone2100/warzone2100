@@ -759,11 +759,12 @@ bool lineOfFire(const SIMPLE_OBJECT* psViewer, const BASE_OBJECT* psTarget, int 
 	{
 		psStats = asWeaponStats + ((STRUCTURE*)psViewer)->asWeaps[weapon_slot].nStat;
 	}
+	// 2d distance
+	int distance = iHypot(removeZ(psTarget->pos - psViewer->pos));
+	int range = proj_GetLongRange(psStats);
 	if (proj_Direct(psStats))
 	{
 		/** direct shots could collide with ground **/
-		int distance = iHypot(psTarget->pos - psViewer->pos);
-		int range = proj_GetLongRange(psStats);
 		return range >= distance && LINE_OF_FIRE_MINIMUM <= checkFireLine(psViewer, psTarget, weapon_slot, wallsBlock, true);
 	}
 	else
@@ -773,10 +774,6 @@ bool lineOfFire(const SIMPLE_OBJECT* psViewer, const BASE_OBJECT* psTarget, int 
 		 * minimum angle doesn't move it out of range
 		 **/
 		int min_angle = checkFireLine(psViewer, psTarget, weapon_slot, wallsBlock, false);
-		/** 2d distance **/
-		Vector3i diff = psTarget->pos - psViewer->pos;
-		int distance = iHypot3(diff.x, diff.y, std::max(diff.z, 0));
-		int range = proj_GetLongRange(psStats);
 		// NOTE This code seems similar to the code in combFire in combat.cpp.
 		if (min_angle > DEG(PROJ_MAX_PITCH))
 		{
