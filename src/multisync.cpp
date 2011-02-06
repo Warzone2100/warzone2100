@@ -347,7 +347,8 @@ BOOL recvDroidCheck(NETQUEUE queue)
 			NETauto(&pc);
 
 			// Find the droid in question
-			if (!IdToDroid(pc.droidID, pc.player, &pD))
+			pD = IdToDroid(pc.droidID, pc.player);
+			if (!pD)
 			{
 				NETlogEntry("Recvd Unknown droid info. val=player", SYNC_FLAG, pc.player);
 				debug(LOG_SYNC, "Received checking info for an unknown (as yet) droid. player:%d ref:%d", pc.player, pc.droidID);
