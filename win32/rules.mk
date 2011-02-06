@@ -1,10 +1,10 @@
 all: build
 
-$(TOPDIR)/downloads/$(PKG_SOURCE):
-	@if [ ! -d "$(TOPDIR)/downloads" ] ; then \
-	    echo mkdir -p $(TOPDIR)/downloads ; \
-	    mkdir -p $(TOPDIR)/downloads || exit ; \
+$(DOWNLOADS)/$(PKG_SOURCE):
+	@if [ ! -d "$(DOWNLOADS)" ] ; then \
+	    echo mkdir -p $(DOWNLOADS) ; \
+	    mkdir -p $(DOWNLOADS) || exit ; \
 	fi
-	$(TOPDIR)/download.pl $(TOPDIR)/downloads "$(PKG_SOURCE)" "$(PKG_MD5SUM)" $(PKG_SOURCE_URL)
+	$(TOPDIR)/download.pl $(DOWNLOADS) "$(PKG_SOURCE)" "$(PKG_MD5SUM)" $(PKG_SOURCE_URL)
 
 .PHONY: all build clean
