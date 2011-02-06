@@ -19,7 +19,7 @@ a0,a0,ff,ff	// text medium
 60,60,ff,ff	// text dark
 1,1,1,ff	// score box border
 0,0,58,80	// score box
-ff,ff,ff,ff	// tooltip text
+cf,cf,cf,ff	// tooltip text
 0,0,80,ff	// unit select border
 ff,ff,ff,10	// unit select box
 0,1,61,0	// radar backgroudn
@@ -58,7 +58,7 @@ A0,70,00,ff	// team2 - orange
 90,00,70,ff	// team7 - pink
 00,80,80,ff	// team8 - cyan
 7f,7f,7f,ff	// default form background
-ff,ff,ff,ff	// default form text
+bf,bf,bf,ff	// default form text
 ff,ff,ff,ff	// default form light
 00,00,00,ff	// default form dark
 40,40,40,ff	// default form hilite

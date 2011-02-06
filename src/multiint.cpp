@@ -1046,7 +1046,7 @@ static void showPasswordLabel( WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 	fy = yOffset + psWidget->y;
 
 	iV_SetFont(font_large);
-	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+	iV_SetTextColour(WZCOL_FORM_TEXT);
 
 	iV_DrawText(psLab->aText, fx, fy);
 	iV_SetTextColour(WZCOL_TEXT_MEDIUM);
@@ -3638,7 +3638,7 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 		}
 		else
 		{
-			iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+			iV_SetTextColour(WZCOL_FORM_TEXT);
 		}
 		iV_DrawText(_("Players"), x + 5, y + 18);
 		ssprintf(tmp, "%d/%d", NetPlay.games[i].desc.dwCurrentPlayers, NetPlay.games[i].desc.dwMaxPlayers);
@@ -3717,7 +3717,7 @@ void displayPosition(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT 
 
 	drawBlueBox(x, y, psWidget->width, psWidget->height);
 	iV_SetFont(font_regular);
-	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+	iV_SetTextColour(WZCOL_FORM_TEXT);
 	ssprintf(text, "Click to take player slot %d", NetPlay.players[i].position);
 	iV_DrawText(text, x + 10, y + 22);
 }
@@ -3731,7 +3731,7 @@ static void displayAi(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT
 
 	drawBlueBox(x, y, psWidget->width, psWidget->height);
 	iV_SetFont(font_regular);
-	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+	iV_SetTextColour(WZCOL_FORM_TEXT);
 	iV_DrawText((j >= 0) ? aidata[j].name : commsText[j + 2], x + 10, y + 22);
 }
 
@@ -3756,7 +3756,7 @@ static void displayDifficulty(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, 
 	ASSERT_OR_RETURN(, j < ARRAY_SIZE(difficultyList), "Bad difficulty found: %d", j);
 	drawBlueBox(x, y, psWidget->width, psWidget->height);
 	iV_SetFont(font_regular);
-	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+	iV_SetTextColour(WZCOL_FORM_TEXT);
 	iV_DrawImage(FrontImages, difficultyIcon(j), x + 5, y + 5);
 	iV_DrawText(difficultyList[j], x + 42, y + 22);
 }
@@ -3780,7 +3780,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 
 		snprintf(mapProgressString, MAX_STR_LENGTH, _("Sending Map: %d%% "), progress);
 		iV_SetFont(font_regular); // font
-		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+		iV_SetTextColour(WZCOL_FORM_TEXT);
 		iV_DrawText(mapProgressString, x + 15, y + 22);
 	}
 	else if (mapDownloadProgress != 100 && j == selectedPlayer)
@@ -3788,7 +3788,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 		static char mapProgressString[MAX_STR_LENGTH] = {'\0'};
 		snprintf(mapProgressString, MAX_STR_LENGTH, _("Map: %d%% downloaded"), mapDownloadProgress);
 		iV_SetFont(font_regular); // font
-		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+		iV_SetTextColour(WZCOL_FORM_TEXT);
 		iV_DrawText(mapProgressString, x + 5, y + 22);
 		return;
 	}
@@ -3797,7 +3797,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 		drawBlueBox(x,y,psWidget->width,psWidget->height);							// right
 
 		iV_SetFont(font_regular);											// font
-		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+		iV_SetTextColour(WZCOL_FORM_TEXT);
 
 		// name
 		std::string name = NetPlay.players[j].name;
@@ -3816,7 +3816,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 			iV_SetTextColour(WZCOL_TEXT_MEDIUM);
 			iV_DrawText(_("HOST"), x + nameX, y + 28);
 			iV_SetFont(font_regular);
-			iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+			iV_SetTextColour(WZCOL_FORM_TEXT);
 		}
 		else if (NetPlay.bComms && NetPlay.isHost)
 		{
@@ -3829,7 +3829,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 			ssprintf(buf, "Ping: %03d", ingame.PingTimes[j]);
 			iV_DrawText(buf, x + nameX, y + 28);
 			iV_SetFont(font_regular);
-			iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+			iV_SetTextColour(WZCOL_FORM_TEXT);
 		}
 		else
 		{
@@ -3920,7 +3920,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 			iV_DrawImage(FrontImages, IMAGE_PLAYER_PC, x, y + 11);
 		}
 		iV_SetFont(font_regular);
-		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+		iV_SetTextColour(WZCOL_FORM_TEXT);
 		ASSERT_OR_RETURN(, NetPlay.players[j].ai < (int)aidata.size(), "Uh-oh, AI index out of bounds");
 		switch (NetPlay.players[j].ai)
 		{

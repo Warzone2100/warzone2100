@@ -209,7 +209,7 @@ WzMainWindow::WzMainWindow(const QGLFormat &format, QWidget *parent) : QGLWidget
 	regularFont.setPixelSize(12);
 	boldFont.setFamily("DejaVu Sans");
 	boldFont.setPixelSize(21);
-	boldFont.setBold(true);
+	boldFont.setWeight(QFont::DemiBold);
 	smallFont.setFamily("DejaVu Sans");
 	smallFont.setPixelSize(9);
 
