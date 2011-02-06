@@ -218,8 +218,8 @@ bool calcDroidMuzzleLocation(DROID *psDroid, Vector3i *muzzle, int weapon_slot);
 bool calcDroidMuzzleBaseLocation(DROID *psDroid, Vector3i *muzzle, int weapon_slot);
 
 /* gets a template from its aName (when pName is unknown) */ 
-extern DROID_TEMPLATE	*GetHumanDroidTemplate(char *aName);
-extern DROID_TEMPLATE	*GetAIDroidTemplate(char *aName);
+extern DROID_TEMPLATE	*GetHumanDroidTemplate(const char *aName);
+extern DROID_TEMPLATE	*GetAIDroidTemplate(const char *aName);
 /* gets a template from its name - relies on the name being unique */
 extern DROID_TEMPLATE * getTemplateFromUniqueName(const char *pName, unsigned int player);
 /* gets a template from its name - relies on the name being unique */
@@ -240,9 +240,6 @@ extern const char *droidGetName(const DROID *psDroid);
 
 // Set a droid's name.
 extern void droidSetName(DROID *psDroid, const char *pName);
-
-// Set a templates name.
-extern void templateSetName(DROID_TEMPLATE *psTemplate,char *pName);
 
 // returns true when no droid on x,y square.
 extern BOOL	noDroid					(UDWORD x, UDWORD y);				// true if no droid at x,y
