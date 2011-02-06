@@ -290,110 +290,82 @@ BOOL multiPlayerLoop(void)
 // quikie functions.
 
 // to get droids ...
-BOOL IdToDroid(UDWORD id, UDWORD player, DROID **psDroid)
+DROID *IdToDroid(UDWORD id, UDWORD player)
 {
-	UDWORD i;
-	DROID *d;
-
-	if(player == ANYPLAYER)
+	if (player == ANYPLAYER)
 	{
-		for(i=0;i<MAX_PLAYERS;i++)			// find the droid to order form them all
+		for (int i = 0; i < MAX_PLAYERS; i++)
 		{
-			d = apsDroidLists[i];
-			while((d != NULL )&&(d->id !=id) )d=d->psNext;
-			if(d)
+			for (DROID *d = apsDroidLists[i]; d; d = d->psNext)
 			{
-				*psDroid = d;
-				return true;
+				if (d->id == id)
+				{
+					return d;
+				}
 			}
 		}
-		return false;
 	}
-	else									// find the droid, given player
+	else if (player < MAX_PLAYERS)
 	{
-		if (player >= MAX_PLAYERS)
+		for (DROID *d = apsDroidLists[player]; d; d = d->psNext)
 		{
-			debug(LOG_FEATURE, "Feature detected");
-			// feature hack, player = PLAYER_FEATURE are features
-			return false;
+			if (d->id == id)
+			{
+				return d;
+			}
 		}
-		d = apsDroidLists[player];
-		while( (d != NULL ) && (d->id !=id))d=d->psNext;
-		if(d)
-		{
-			*psDroid = d;
-			return true;
-		}
-		return false;
 	}
+	return NULL;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 // find a structure
-STRUCTURE *IdToStruct(UDWORD id,UDWORD player)
+STRUCTURE *IdToStruct(UDWORD id, UDWORD player)
 {
-	STRUCTURE	*psStr = NULL;
-	UDWORD		i;
-
-	if(player == ANYPLAYER)
+	if (player == ANYPLAYER)
 	{
-		for(i=0;i<MAX_PLAYERS;i++)
+		for (int i = 0; i < MAX_PLAYERS; i++)
 		{
-			for (psStr=apsStructLists[i];( (psStr != NULL) && (psStr->id != id)); psStr=psStr->psNext) {}
-			if(psStr)
+			for (STRUCTURE *d = apsStructLists[i]; d; d = d->psNext)
 			{
-				return psStr;
+				if (d->id == id)
+				{
+					return d;
+				}
 			}
 		}
 	}
-	else
+	else if (player < MAX_PLAYERS)
 	{
-		if (player >= MAX_PLAYERS)
+		for (STRUCTURE *d = apsStructLists[player]; d; d = d->psNext)
 		{
-			debug(LOG_FEATURE, "Feature detected");
-			// feature hack, player = PLAYER_FEATURE are features
-			return NULL;
+			if (d->id == id)
+			{
+				return d;
+			}
 		}
-		for (psStr=apsStructLists[player];((psStr != NULL )&&(psStr->id != id) );psStr=psStr->psNext) {}
 	}
-	return psStr;
+	return NULL;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 // find a feature
-FEATURE *IdToFeature(UDWORD id,UDWORD player)
+FEATURE *IdToFeature(UDWORD id, UDWORD player)
 {
-	FEATURE	*psF =NULL;
-	UDWORD	i;
-
-	STATIC_ASSERT(MAX_PLAYERS + 2 < ANYPLAYER);
-	if(player == ANYPLAYER)
+	(void)player;	// unused, all features go into player 0
+	for (FEATURE *d = apsFeatureLists[0]; d; d = d->psNext)
 	{
-		for(i=0;i<MAX_PLAYERS;i++)
+		if (d->id == id)
 		{
-			for(psF=apsFeatureLists[i];( (psF != NULL) && (psF->id != id)); psF=psF->psNext) {}
-			if(psF)
-			{
-				return psF;
-			}
+			return d;
 		}
 	}
-	else
-	{
-		if (player >= MAX_PLAYERS)
-		{
-			debug(LOG_FEATURE, "Feature detected");
-			// feature hack, player = PLAYER_FEATURE are features - but we're in a function called IdTo **Feature**...
-			return NULL;
-		}
-		for(psF=apsFeatureLists[player];((psF != NULL )&&(psF->id != id) );psF=psF->psNext) {}
-	}
-	return psF;
+	return NULL;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 
-DROID_TEMPLATE *IdToTemplate(UDWORD tempId,UDWORD player)
+DROID_TEMPLATE *IdToTemplate(UDWORD tempId, UDWORD player)
 {
 	DROID_TEMPLATE *psTempl = NULL;
 	UDWORD		i;
@@ -428,7 +400,9 @@ BASE_OBJECT *IdToPointer(UDWORD id,UDWORD player)
 	STRUCTURE	*pS;
 	FEATURE		*pF;
 	// droids.
-	if (IdToDroid(id,player,&pD))
+
+	pD = IdToDroid(id, player);
+	if (pD)
 	{
 		return (BASE_OBJECT*)pD;
 	}

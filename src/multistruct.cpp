@@ -173,12 +173,12 @@ BOOL recvDemolishFinished(NETQUEUE queue)
 	NETend();
 
 	psStruct = IdToStruct(structID, ANYPLAYER);
-	if (!IdToDroid(droidID, ANYPLAYER, &psDroid))
+	psDroid = IdToDroid(droidID, ANYPLAYER);
+	if (!psDroid)
 	{
 		debug(LOG_ERROR, "recvDemolishFinished: Packet with bad droid ID received. Discarding!");
 		return false;
 	}
-
 	if (psStruct)
 	{
 		// Demolish it

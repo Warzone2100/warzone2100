@@ -159,7 +159,8 @@ BOOL recvDroidSecondary(NETQUEUE queue)
 		NETenum(&state);
 
 		// If we can not find the droid should we not ask for it?
-		if (!IdToDroid(droid, player, &psDroid))
+		psDroid = IdToDroid(droid, player);
+		if (!psDroid)
 		{
 			NETend();
 			return false;
@@ -218,14 +219,16 @@ BOOL recvDroidEmbark(NETQUEUE queue)
 		NETuint32_t(&transporterID);
 
 		// we have to find the droid on our (local) list first.
-		if (!IdToDroid(droidID, player, &psDroid))
+		psDroid = IdToDroid(droidID, player);
+		if (!psDroid)
 		{
 			NETend();
 			// Possible it already died? (sync error?)
 			debug(LOG_WARNING, "player's %d droid %d wasn't found?", player,droidID);
 			return false;
 		}
-		if (!IdToDroid(transporterID, player, &psTransporterDroid))
+		psTransporterDroid = IdToDroid(transporterID, player);
+		if (!psTransporterDroid)
 		{
 			NETend();
 			// Possible it already died? (sync error?)
@@ -310,7 +313,8 @@ BOOL recvDroidDisEmbark(NETQUEUE queue)
 		NETend();
 
 		// find the transporter first
-		if (!IdToDroid(transporterID, player, &psTransporterDroid))
+		psTransporterDroid = IdToDroid(transporterID, player);
+		if (!psTransporterDroid)
 		{
 			// Possible it already died? (sync error?)
 			debug(LOG_WARNING, "player's %d transport droid %d wasn't found?", player, transporterID);
@@ -676,8 +680,8 @@ BOOL recvDroidInfo(NETQUEUE queue)
 			NETuint32_t(&deltaDroidId);
 			info.droidId += deltaDroidId;
 
-			DROID *psDroid = NULL;
-			if (!IdToDroid(info.droidId, ANYPLAYER, &psDroid))
+			DROID *psDroid = IdToDroid(info.droidId, ANYPLAYER);
+			if (!psDroid)
 			{
 				debug(LOG_NEVER, "Packet from %d refers to non-existent droid %u, [%s : p%d]",
 				      queue.index, info.droidId, isHumanPlayer(info.player) ? "Human" : "AI", info.player);
@@ -734,21 +738,17 @@ static BASE_OBJECT *processDroidTarget(OBJECT_TYPE desttype, uint32_t destid)
 	else
 	{
 		BASE_OBJECT *psObj = NULL;
-		DROID		*pD;
 
 		switch (desttype)
 		{
 			case OBJ_DROID:
-				if (IdToDroid(destid, ANYPLAYER, &pD))
-				{
-					psObj = (BASE_OBJECT*)pD;
-				}
+				psObj = IdToDroid(destid, ANYPLAYER);
 				break;
 			case OBJ_STRUCTURE:
-				psObj = (BASE_OBJECT*)IdToStruct(destid,ANYPLAYER);
+				psObj = IdToStruct(destid, ANYPLAYER);
 				break;
 			case OBJ_FEATURE:
-				psObj = (BASE_OBJECT*)IdToFeature(destid,ANYPLAYER);
+				psObj = IdToFeature(destid, ANYPLAYER);
 				break;
 
 			// We should not get this!
@@ -804,7 +804,8 @@ BOOL recvDestroyDroid(NETQUEUE queue)
 
 		// Retrieve the droid
 		NETuint32_t(&id);
-		if (!IdToDroid(id, ANYPLAYER, &psDroid))
+		psDroid = IdToDroid(id, ANYPLAYER);
+		if (!psDroid)
 		{
 			debug(LOG_DEATH, "droid %d on request from player %d can't be found? Must be dead already?",
 					id, queue.index );

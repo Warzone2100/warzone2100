@@ -843,10 +843,15 @@ void actionUpdateDroid(DROID *psDroid)
 	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
 	ASSERT_OR_RETURN(, psPropStats != NULL, "Invalid propulsion stats pointer");
 
+	// Don't waste ammo unless given a direct attack order.
+	bool avoidOverkill = psDroid->order != DORDER_ATTACK && psDroid->order != DORDER_ATTACK &&
+	                     (psDroid->action == DACTION_ATTACK || psDroid->action == DACTION_MOVEFIRE || psDroid->action == DACTION_MOVETOATTACK ||
+	                      psDroid->action == DACTION_ROTATETOATTACK || psDroid->action == DACTION_VTOLATTACK);
+
 	// clear the target if it has died
 	for (i = 0; i < DROID_MAXWEAPS; i++)
 	{
-		if (psDroid->psActionTarget[i] && psDroid->psActionTarget[i]->died)
+		if (psDroid->psActionTarget[i] && (avoidOverkill? aiObjectIsProbablyDoomed(psDroid->psActionTarget[i]) : psDroid->psActionTarget[i]->died))
 		{
 			setDroidActionTarget(psDroid, NULL, i);
 			if (i == 0)
@@ -859,7 +864,7 @@ void actionUpdateDroid(DROID *psDroid)
 					// if VTOL - return to rearm pad if not patrolling
 					if (isVtolDroid(psDroid))
 					{
-						if (psDroid->order == DORDER_PATROL)
+						if ((psDroid->order == DORDER_PATROL || psDroid->order == DORDER_CIRCLE) && !vtolEmpty(psDroid))
 						{
 							// Back to the patrol.
 							actionDroid(psDroid, DACTION_MOVE, psDroid->orderX,psDroid->orderY);
@@ -925,7 +930,7 @@ void actionUpdateDroid(DROID *psDroid)
 					WEAPON_STATS* const psWeapStats = &asWeaponStats[psDroid->asWeaps[i].nStat];
 					if (psDroid->asWeaps[i].nStat > 0
 					 && psWeapStats->rotate
-					 && aiBestNearestTarget(psDroid, &psTemp, i, NULL) >= 0)
+					 && aiBestNearestTarget(psDroid, &psTemp, i) >= 0)
 					{
 						if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS)
 						{
@@ -1025,7 +1030,7 @@ void actionUpdateDroid(DROID *psDroid)
 					 && psDroid->asWeaps[i].nStat > 0
 					 && psWeapStats->rotate
 					 && psWeapStats->fireOnMove != FOM_NO
-					 && aiBestNearestTarget(psDroid, &psTemp, i, NULL) >= 0)
+					 && aiBestNearestTarget(psDroid, &psTemp, i) >= 0)
 					{
 						if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS)
 						{
@@ -1089,7 +1094,7 @@ void actionUpdateDroid(DROID *psDroid)
 			{
 				// Can we find a good target for the weapon?
 				BASE_OBJECT *psTemp;
-				if (aiBestNearestTarget(psDroid, &psTemp, i, NULL) >= 0) // assuming aiBestNearestTarget checks for electronic warfare
+				if (aiBestNearestTarget(psDroid, &psTemp, i) >= 0) // assuming aiBestNearestTarget checks for electronic warfare
 				{
 					bHasTarget = true;
 					setDroidActionTarget(psDroid, psTemp, i); // this updates psDroid->psActionTarget[i] to != NULL
@@ -1145,7 +1150,18 @@ void actionUpdateDroid(DROID *psDroid)
 		}
 		break;
 	case DACTION_ATTACK:
+	case DACTION_ROTATETOATTACK:
 		ASSERT_OR_RETURN( , psDroid->psActionTarget[0] != NULL, "target is NULL while attacking");
+
+		if (psDroid->action == DACTION_ROTATETOATTACK)
+		{
+			if (psDroid->sMove.Status == MOVETURNTOTARGET)
+			{
+				moveTurnDroid(psDroid, psDroid->psActionTarget[0]->pos.x, psDroid->psActionTarget[0]->pos.y);
+				break;  // Still turning.
+			}
+			psDroid->action = DACTION_ATTACK;
+		}
 
 		//check the target hasn't become one the same player ID - Electronic Warfare
 		if ((electronicDroid(psDroid) && (psDroid->player == psDroid->psActionTarget[0]->player)))
@@ -1195,10 +1211,7 @@ void actionUpdateDroid(DROID *psDroid)
 
 			if (nonNullWeapon[i]
 			 && actionVisibleTarget(psDroid, psActionTarget, i)
-			 && actionInRange(psDroid, psActionTarget, i)
-			 && (psDroid->order == DORDER_ATTACK
-			  || psDroid->order == DORDER_ATTACKTARGET
-			  || !aiObjectIsProbablyDoomed(psActionTarget)))
+			 && actionInRange(psDroid, psActionTarget, i))
 			{
 				WEAPON_STATS* const psWeapStats = &asWeaponStats[psDroid->asWeaps[i].nStat];
 				bHasTarget = true;
@@ -1522,13 +1535,6 @@ void actionUpdateDroid(DROID *psDroid)
 		}
 		break;
 
-	case DACTION_ROTATETOATTACK:
-//		if (DROID_STOPPED(psDroid))
-		if (psDroid->sMove.Status != MOVETURNTOTARGET)
-		{
-			psDroid->action = DACTION_ATTACK;
-		}
-		break;
 	case DACTION_MOVETOBUILD:
 		if (!psDroid->psTarStats)
 		{
@@ -2138,7 +2144,7 @@ void actionUpdateDroid(DROID *psDroid)
 					WEAPON_STATS* const psWeapStats = &asWeaponStats[psDroid->asWeaps[i].nStat];
 					if (psDroid->asWeaps[i].nStat > 0 && psWeapStats->rotate
 					    && secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS
-					    && aiBestNearestTarget(psDroid, &psTemp, i, NULL) >= 0 && psTemp)
+					    && aiBestNearestTarget(psDroid, &psTemp, i) >= 0 && psTemp)
 					{
 						psDroid->action = DACTION_ATTACK;
 						setDroidActionTarget(psDroid, psTemp, 0);

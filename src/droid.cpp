@@ -2911,7 +2911,7 @@ bool calcDroidMuzzleLocation(DROID *psDroid, Vector3i *muzzle, int weapon_slot)
  * \param aName Template aName
  * 
  */
-DROID_TEMPLATE	*GetHumanDroidTemplate(char *aName)
+DROID_TEMPLATE	*GetHumanDroidTemplate(const char *aName)
 {
 	DROID_TEMPLATE	*templatelist, *found = NULL, *foundOtherPlayer = NULL;
 	int i, playerFound = 0;
@@ -2959,7 +2959,7 @@ DROID_TEMPLATE	*GetHumanDroidTemplate(char *aName)
  * \param aName Template aName
  * 
  */
-DROID_TEMPLATE *GetAIDroidTemplate(char *aName)
+DROID_TEMPLATE *GetAIDroidTemplate(const char *aName)
 {
 	DROID_TEMPLATE	*templatelist, *found = NULL;
 

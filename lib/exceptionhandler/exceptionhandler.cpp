@@ -121,6 +121,7 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <sys/wait.h>
+# include <sys/ucontext.h>
 # include <sys/utsname.h>
 #ifdef WZ_OS_LINUX
 # include <sys/prctl.h>
@@ -465,7 +466,7 @@ static pid_t execGdb(int const dumpFile, int* gdbWritePipe)
 	         strlen("execcv(\"gdb\") failed\n"));
 
 	// Terminate the child, indicating failure
-	exit(1);
+	_exit(1);
 }
 
 /**
@@ -476,8 +477,43 @@ static pid_t execGdb(int const dumpFile, int* gdbWritePipe)
  * @return false if any failure occurred, preventing a full "extended"
  *               backtrace.
  */
+#ifdef SA_SIGINFO
+static bool gdbExtendedBacktrace(int const dumpFile, const ucontext_t* sigcontext)
+#else
 static bool gdbExtendedBacktrace(int const dumpFile)
+#endif
 {
+	/*
+	 * Pointer to the stackframe of the function containing faulting
+	 * instruction (assuming
+	 * -fomit-frame-pointer has *not* been used).
+	 *
+	 * The frame pointer register (x86: %ebp, x64: %rbp) point's to the
+	 * local variables of the current function (which are preceded by the
+	 * previous frame pointer and the return address).  Hence the
+	 * additions to the frame-pointer register's content.
+	 */
+	void const * const frame =
+#if   defined(SA_SIGINFO) && __WORDSIZE == 64
+		sigcontext ? (void*)(sigcontext->uc_mcontext.gregs[REG_RBP] + sizeof(greg_t) + sizeof(void (*)(void))) : NULL;
+#elif defined(SA_SIGINFO) && __WORDSIZE == 32
+		sigcontext ? (void*)(sigcontext->uc_mcontext.gregs[REG_EBP] + sizeof(greg_t) + sizeof(void (*)(void))) : NULL;
+#else
+		NULL;
+#endif
+
+	/*
+	 * Faulting instruction.
+	 */
+	void (*instruction)(void) =
+#if   defined(SA_SIGINFO) && __WORDSIZE == 64
+		sigcontext ? (void (*)(void))sigcontext->uc_mcontext.gregs[REG_RIP] : NULL;
+#elif defined(SA_SIGINFO) && __WORDSIZE == 32
+		sigcontext ? (void (*)(void))sigcontext->uc_mcontext.gregs[REG_EIP] : NULL;
+#else
+		NULL;
+#endif
+
 	// Spawn a GDB instance and retrieve a pipe to its stdin
 	int gdbPipe;
 	int status;
@@ -489,7 +525,7 @@ static bool gdbExtendedBacktrace(int const dumpFile)
 	                                  "frame 4\n"
 
 	                                  // Show the assembly code associated with that stack frame
-	                                  "disassemble\n"
+	                                  "disassemble /m\n"
 
 	                                  // Show the content of all registers
 	                                  "info registers\n"
@@ -500,7 +536,20 @@ static bool gdbExtendedBacktrace(int const dumpFile)
 		return false;
 	}
 
-	write(gdbPipe, gdbCommands, sizeof(gdbCommands));
+	// Disassemble the faulting instruction (if we know it)
+	if (instruction)
+	{
+		dprintf(gdbPipe, "x/i %p\n", (void*)instruction);
+	}
+
+	// We have an intelligent guess for the *correct* frame, disassemble *that* one.
+	if (frame)
+	{
+		dprintf(gdbPipe, "frame %p\n"
+		                 "disassemble /m\n", frame);
+	}
+
+	write(gdbPipe, gdbCommands, strlen(gdbCommands));
 
 	/* Flush our end of the pipe to make sure that GDB has all commands
 	 * directly available to it.
@@ -558,7 +607,7 @@ static bool gdbExtendedBacktrace(int const dumpFile)
  * \param sigcontext Signal context
  */
 #ifdef SA_SIGINFO
-static void posixExceptionHandler(int signum, siginfo_t * siginfo, WZ_DECL_UNUSED void * sigcontext)
+static void posixExceptionHandler(int signum, siginfo_t * siginfo, void * sigcontext)
 #else
 static void posixExceptionHandler(int signum)
 #endif
@@ -616,7 +665,11 @@ static void posixExceptionHandler(int signum)
 	fsync(dumpFile);
 
 	// Use 'gdb' to provide an "extended" backtrace
+#ifdef SA_SIGINFO
+	gdbExtendedBacktrace(dumpFile, (ucontext_t*)sigcontext);
+#else
 	gdbExtendedBacktrace(dumpFile);
+#endif
 
 	printf("Saved dump file to '%s'\n"
 	       "If you create a bugreport regarding this crash, please include this file.\n", dumpFilename);

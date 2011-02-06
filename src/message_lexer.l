@@ -79,7 +79,7 @@ extern void message_set_debug(int bdebug);
 
 %}
 
-%option yylineno noyywrap nounput never-interactive
+%option yylineno noyywrap nounput
 %option prefix="message_"
 
 %x COMMENT

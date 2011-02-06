@@ -182,9 +182,9 @@ void giftRadar(uint8_t from, uint8_t to, BOOL send)
 // \param to    :player that should be getting the droid
 static void recvGiftDroids(uint8_t from, uint8_t to, uint32_t droidID)
 {
-	DROID		*psDroid;
+	DROID *psDroid = IdToDroid(droidID, from);
 
-	if (IdToDroid(droidID, from, &psDroid))
+	if (psDroid)
 	{
 		syncDebugDroid(psDroid, '<');
 		giftSingleDroid(psDroid, to);

@@ -243,7 +243,7 @@ BOOL MultiPlayerLeave(UDWORD playerIndex)
 	{
 		sendPlayerLeft(playerIndex);
 	}
-	game.skDiff[playerIndex] = DIFF_SLIDER_STOPS / 2;
+	game.skDiff[playerIndex] = 0;
 
 	addConsoleMessage(buf, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 

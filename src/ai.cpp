@@ -74,6 +74,27 @@ PlayerMask alliancebits[MAX_PLAYER_SLOTS];
 /// A bitfield for the satellite uplink
 PlayerMask satuplinkbits;
 
+static int aiObjRange(DROID *psDroid, int weapon_slot)
+{
+	int32_t longRange;
+	if (psDroid->droidType == DROID_SENSOR)
+	{
+		longRange = psDroid->sensorRange;
+	}
+	else if (psDroid->numWeaps == 0 || psDroid->asWeaps[0].nStat == 0)
+	{
+		// Can't attack without a weapon
+		return 0;
+	}
+	else
+	{
+		WEAPON_STATS *psWStats = psDroid->asWeaps[weapon_slot].nStat + asWeaponStats;
+		longRange = proj_GetLongRange(psWStats);
+	}
+
+	return longRange;
+}
+
 // see if a structure has the range to fire on a target
 static bool aiStructHasRange(STRUCTURE *psStruct, BASE_OBJECT *psTarget, int weapon_slot)
 {
@@ -85,32 +106,15 @@ static bool aiStructHasRange(STRUCTURE *psStruct, BASE_OBJECT *psTarget, int wea
 
 	WEAPON_STATS *psWStats = psStruct->asWeaps[weapon_slot].nStat + asWeaponStats;
 
-	Vector2i diff = removeZ(psStruct->pos - psTarget->pos);
 	int longRange = proj_GetLongRange(psWStats);
-	return diff*diff < longRange*longRange && lineOfFire(psStruct, psTarget, weapon_slot, true);
+	return objPosDiffSq(psStruct, psTarget) < longRange*longRange && lineOfFire(psStruct, psTarget, weapon_slot, true);
 }
 
 static bool aiDroidHasRange(DROID *psDroid, BASE_OBJECT *psTarget, int weapon_slot)
 {
-	int32_t longRange;
+	int32_t longRange = aiObjRange(psDroid, weapon_slot);
 
-	if (psDroid->droidType == DROID_SENSOR)
-	{
-		longRange = psDroid->sensorRange;
-	}
-	else if (psDroid->numWeaps == 0 || psDroid->asWeaps[0].nStat == 0)
-	{
-		// Can't attack without a weapon
-		return false;
-	}
-	else
-	{
-		WEAPON_STATS *psWStats = psDroid->asWeaps[weapon_slot].nStat + asWeaponStats;
-		longRange = proj_GetLongRange(psWStats);
-	}
-
-	Vector2i diff = removeZ(psDroid->pos - psTarget->pos);
-	return diff*diff < longRange*longRange;
+	return objPosDiffSq(psDroid, psTarget) < longRange*longRange;
 }
 
 static bool aiObjHasRange(BASE_OBJECT *psObj, BASE_OBJECT *psTarget, int weapon_slot)
@@ -476,7 +480,7 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 
 // Find the best nearest target for a droid
 // Returns integer representing target priority, -1 if failed
-SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, UWORD *targetOrigin)
+int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, int extraRange)
 {
 	SDWORD				bestMod = 0,newMod, failure = -1;
 	BASE_OBJECT			*psTarget = NULL, *friendlyObj, *bestTarget = NULL, *iter, *targetInQuestion, *tempTarget;
@@ -484,12 +488,6 @@ SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot
 	STRUCTURE			*targetStructure;
 	WEAPON_EFFECT			weaponEffect;
 	UWORD				tmpOrigin = ORIGIN_UNKNOWN;
-
-	// reset origin
-	if (targetOrigin)
-	{
-		*targetOrigin = ORIGIN_UNKNOWN;
-	}
 
 	//don't bother looking if empty vtol droid
 	if (vtolEmpty(psDroid))
@@ -517,7 +515,9 @@ SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot
 	electronic = electronicDroid(psDroid);
 
 	// Range was previously 9*TILE_UNITS. Increasing this doesn't seem to help much, though. Not sure why.
-	gridStartIterate(psDroid->pos.x, psDroid->pos.y, psDroid->sensorRange + 6*TILE_UNITS);
+	int droidRange = std::min(aiObjRange(psDroid, weapon_slot) + extraRange, psDroid->sensorRange + 6*TILE_UNITS);
+
+	gridStartIterate(psDroid->pos.x, psDroid->pos.y, droidRange);
 	for (iter = gridIterate(); iter != NULL; iter = gridIterate())
 	{
 		friendlyObj = NULL;
@@ -568,7 +568,7 @@ SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot
 		    && targetInQuestion->visible[psDroid->player] == UBYTE_MAX
 		    && !aiCheckAlliances(targetInQuestion->player,psDroid->player)
 		    && validTarget(psDroid, targetInQuestion, weapon_slot)
-		    && aiDroidHasRange(psDroid, targetInQuestion, weapon_slot))
+		    && objPosDiffSq(psDroid, targetInQuestion) < droidRange*droidRange)
 		{
 			if (targetInQuestion->type == OBJ_DROID)
 			{
@@ -654,10 +654,6 @@ SDWORD aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot
 			}
 		}
 
-		if (targetOrigin)
-		{
-			*targetOrigin = tmpOrigin;
-		}
 		*ppsObj = bestTarget;
 		return bestMod;
 	}
@@ -781,7 +777,7 @@ BOOL aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 		BASE_OBJECT *psCurrTarget = ((DROID *)psObj)->psActionTarget[0];
 
 		/* find a new target */
-		int newTargetWeight = aiBestNearestTarget((DROID *)psObj, &psTarget, weapon_slot, NULL);
+		int newTargetWeight = aiBestNearestTarget((DROID *)psObj, &psTarget, weapon_slot);
 
 		/* Calculate weight of the current target if updating; but take care not to target
 		 * ourselves... */
@@ -959,7 +955,7 @@ BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 	{
 		BASE_OBJECT	*psTarget = NULL;
 
-		if (aiBestNearestTarget((DROID *)psObj, &psTarget, 0, NULL) >= 0)
+		if (aiBestNearestTarget((DROID *)psObj, &psTarget, 0) >= 0)
 		{
 			/* See if in sensor range */
 			const int xdiff = psTarget->pos.x - psObj->pos.x;
