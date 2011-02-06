@@ -31,6 +31,8 @@
 #include "map.h"
 #include "scriptcb.h"
 #include "scripttabs.h"
+#include "projectile.h"
+#include "qtscript.h"
 
 // distance between units for them to be in the same cluster
 #define CLUSTER_DIST	(TILE_UNITS*8)
@@ -570,6 +572,7 @@ void clustObjectAttacked(BASE_OBJECT *psObj)
 			case OBJ_STRUCTURE:
 				psLastStructHit = (STRUCTURE *)psObj;
 				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_STRUCT_ATTACKED);
+				triggerStructureAttacked((STRUCTURE *)psObj, g_pProjLastAttacker);
 				psLastStructHit = NULL;
 				break;
 			default:

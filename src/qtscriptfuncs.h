@@ -32,4 +32,8 @@
 /// Register functions to engine context
 bool registerFunctions(QScriptEngine *engine);
 
+QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine);
+QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine);
+QScriptValue convObj(BASE_OBJECT *psObj, QScriptEngine *engine);
+
 #endif

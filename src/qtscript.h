@@ -22,11 +22,16 @@
 
 #include "lib/framework/frame.h"
 #include "basedef.h"
+#include "droiddef.h"
+#include "structuredef.h"
 
 enum SCRIPT_TRIGGER_TYPE
 {
 	TRIGGER_GAME_INIT
 };
+
+// ----------------------------------------------
+// State functions
 
 /// Initialize script system
 bool initScripts();
@@ -38,18 +43,24 @@ bool shutdownScripts();
 bool updateScripts();
 
 // Load and evaluate the given script, kept in memory
-bool loadGlobalScript(const char *filename);
-bool loadPlayerScript(const char *filename, int player, int difficulty);
+bool loadGlobalScript(QString path);
+bool loadPlayerScript(QString path, int player, int difficulty);
 
 // Set/write variables in the script's global context, run after loading script,
 // but before triggering any events.
 bool loadScriptStates(const char *filename);
 bool saveScriptStates(const char *filename);
 
+// ----------------------------------------------
+// Event functions
+
 /// For generic, parameter-less triggers, using an enum to avoid declaring a ton of parameter-less functions
 bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger);
 
 // For each trigger with function parameters, a function to trigger it here
+bool triggerEventDroidBuilt(DROID *psDroid, STRUCTURE *psFactory);
+bool triggerStructureAttacked(STRUCTURE *psVictim, BASE_OBJECT *psAttacker);
+
 // bool triggerEventReachedLocation(ORDER order, DROID *psDroid);
 // ...
 

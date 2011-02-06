@@ -300,7 +300,7 @@ void loadMultiScripts()
 			resLoadFile("SCRIPTVAL", aidata[NetPlay.players[i].ai].vlo);
 			if (aidata[NetPlay.players[i].ai].js[0] != '\0')
 			{
-				loadPlayerScript(aidata[NetPlay.players[i].ai].js, i, NetPlay.players[i].difficulty);
+				loadPlayerScript(QString("multiplay/skirmish/") + aidata[NetPlay.players[i].ai].js, i, NetPlay.players[i].difficulty);
 			}
 		}
 	}
@@ -308,11 +308,9 @@ void loadMultiScripts()
 	DataHash[DATA_SCRIPTVAL] = oldHash2;
 
 	// Load scavengers
-	resForceBaseDir("multiplay/script/");
 	if (game.scavengers && myResponsibility(scavengerPlayer()))
 	{
-		resLoadFile("SCRIPT", "scavfact.slo");
-		resLoadFile("SCRIPTVAL", "scavfact.vlo");
+		loadPlayerScript("multiplay/script/scavfact.js", scavengerPlayer(), DIFFICULTY_EASY);
 	}
 
 	// Reset resource path, otherwise things break down the line

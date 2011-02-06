@@ -79,7 +79,7 @@
 #include "scriptextern.h"
 #include "keymap.h"
 #include "game.h"
-
+#include "qtscript.h"
 #include "advvis.h"
 #include "multiplay.h"
 #include "lib/netplay/netplay.h"
@@ -7743,6 +7743,8 @@ void cbNewDroid(STRUCTURE *psFactory, DROID *psDroid)
 	eventFireCallbackTrigger((TRIGGER_TYPE)CALL_NEWDROID);
 	psScrCBNewDroid = NULL;
 	psScrCBNewDroidFact = NULL;
+
+	triggerEventDroidBuilt(psDroid, psFactory);
 }
 
 Vector2i getStructureSize(STRUCTURE const *psBuilding)

@@ -63,24 +63,22 @@ QList<QScriptEngine *> scripts;
 /// Remember what names are used internally in the scripting engine, we don't want to save these to the savegame
 QHash<QString, int> internalNamespace;
 
+// Call a function by name
 static bool callFunction(QScriptEngine *engine, QString function, QScriptValueList args)
 {
 	QScriptValue value = engine->globalObject().property(function);
-	if (value.isValid() && value.isFunction())
+	ASSERT_OR_RETURN(false, value.isValid() && value.isFunction(), "Invalid function type for \"%s\"", function.toAscii().constData());
+	QScriptValue result = value.call(QScriptValue(), args);
+	if (engine->hasUncaughtException())
 	{
-		QScriptValue result = value.call(QScriptValue(), args);
-		if (engine->hasUncaughtException())
+		int line = engine->uncaughtExceptionLineNumber();
+		QStringList bt = engine->uncaughtExceptionBacktrace();
+		for (int i = 0; i < bt.size(); i++)
 		{
-			// TODO, get filename to output here somehow
-			int line = engine->uncaughtExceptionLineNumber();
-			debug(LOG_ERROR, "Uncaught exception calling event %s at line %d: %s",
-			      value.toString().toAscii().constData(), line, result.toString().toAscii().constData());
-			return false;
+			debug(LOG_ERROR, "%d : %s", i, bt.at(i).toAscii().constData());
 		}
-	}
-	else
-	{
-		debug(LOG_ERROR, "Invalid function type for \"%s\"", function.toAscii().constData());
+		ASSERT(false, "Uncaught exception calling function \"%s\" at line %d: %s",
+		       function.toAscii().constData(), line, result.toString().toAscii().constData());
 		return false;
 	}
 	return true;
@@ -108,7 +106,8 @@ static QScriptValue js_removeTimer(QScriptContext *context, QScriptEngine *engin
 	return QScriptValue();
 }
 
-/// Special scripting function that registers a non-specific timer event
+/// Special scripting function that registers a non-specific timer event. Note: Functions must be passed
+/// quoted, otherwise they will be inlined!
 static QScriptValue js_setGlobalTimer(QScriptContext *context, QScriptEngine *engine)
 {
 	QScriptValue function = context->argument(0);
@@ -120,7 +119,8 @@ static QScriptValue js_setGlobalTimer(QScriptContext *context, QScriptEngine *en
 	return QScriptValue();
 }
 
-/// Special scripting function that registers a object-specific timer event
+/// Special scripting function that registers a object-specific timer event. Note: Functions must be passed
+/// quoted, otherwise they will be inlined!
 static QScriptValue js_setObjectTimer(QScriptContext *context, QScriptEngine *engine)
 {
 	QScriptValue function = context->argument(0);
@@ -168,13 +168,13 @@ bool updateScripts()
 			node.frameTime = node.ms + gameTime;	// update for next invokation
 			callFunction(node.engine, node.function, QScriptValueList());
 		}
+		timers.replace(i, node);
 	}
 	return true;
 }
 
-bool loadPlayerScript(const char *filename, int player, int difficulty)
+bool loadPlayerScript(QString path, int player, int difficulty)
 {
-	QString path(QString("multiplay/skirmish/") + filename);
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Player index %d out of bounds", player);
 	QScriptEngine *engine = new QScriptEngine();
 	UDWORD size;
@@ -189,7 +189,7 @@ bool loadPlayerScript(const char *filename, int player, int difficulty)
 	QScriptSyntaxCheckResult syntax = QScriptEngine::checkSyntax(source);
 	if (syntax.state() != QScriptSyntaxCheckResult::Valid)
 	{
-		debug(LOG_ERROR, "Syntax error in %s line %d: %s", filename, syntax.errorLineNumber(), syntax.errorMessage().toAscii().constData());
+		debug(LOG_ERROR, "Syntax error in %s line %d: %s", path.toAscii().constData(), syntax.errorLineNumber(), syntax.errorMessage().toAscii().constData());
 		return false;
 	}
 	// Remember internal, reserved names
@@ -199,11 +199,11 @@ bool loadPlayerScript(const char *filename, int player, int difficulty)
 		it.next();
 		internalNamespace.insert(it.name(), 1);
 	}
-	QScriptValue result = engine->evaluate(source, filename);
+	QScriptValue result = engine->evaluate(source, path);
 	if (engine->hasUncaughtException())
 	{
 		int line = engine->uncaughtExceptionLineNumber();
-		debug(LOG_ERROR, "Uncaught exception at line %d, file %s: %s", line, filename, result.toString().toAscii().constData());
+		debug(LOG_ERROR, "Uncaught exception at line %d, file %s: %s", line, path.toAscii().constData(), result.toString().toAscii().constData());
 		return false;
 	}
 	// Special functions
@@ -225,9 +225,9 @@ bool loadPlayerScript(const char *filename, int player, int difficulty)
 	return true;
 }
 
-bool loadGlobalScript(const char *filename)
+bool loadGlobalScript(QString path)
 {
-	return loadPlayerScript(filename, 0, 0);
+	return loadPlayerScript(path, 0, 0);
 }
 
 bool saveScriptStates(const char *filename)
@@ -268,6 +268,9 @@ bool loadScriptStates(const char *filename)
 	return true;
 }
 
+// ----------------------------------------------------------------------------------------
+// Events
+
 /// For generic, parameter-less triggers
 bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger)
 {
@@ -280,6 +283,40 @@ bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger)
 		case TRIGGER_GAME_INIT:
 			callFunction(engine, "eventGameInit", QScriptValueList());
 			break;
+		}
+	}
+	return true;
+}
+
+bool triggerEventDroidBuilt(DROID *psDroid, STRUCTURE *psFactory)
+{
+	for (int i = 0; i < scripts.size(); ++i)
+	{
+		QScriptEngine *engine = scripts.at(i);
+		int player = engine->globalObject().property("me").toInt32();
+		if (player == psDroid->player)
+		{
+			QScriptValueList args;
+			args += convDroid(psDroid, engine);
+			args += convStructure(psFactory, engine);
+			callFunction(engine, "eventDroidBuilt", args);
+		}
+	}
+	return true;
+}
+
+bool triggerStructureAttacked(STRUCTURE *psVictim, BASE_OBJECT *psAttacker)
+{
+	for (int i = 0; i < scripts.size(); ++i)
+	{
+		QScriptEngine *engine = scripts.at(i);
+		int player = engine->globalObject().property("me").toInt32();
+		if (player == psVictim->player)
+		{
+			QScriptValueList args;
+			args += convStructure(psVictim, engine);
+			args += convObj(psAttacker, engine);
+			callFunction(engine, "eventStructureAttacked", args);
 		}
 	}
 	return true;

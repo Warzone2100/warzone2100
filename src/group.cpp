@@ -28,10 +28,10 @@
 #include "lib/netplay/netplay.h"
 
 #include "multiplay.h"
-#include <list>
+#include <QList>
 
 // Group system variables: grpGlobalManager enables to remove all the groups to Shutdown the system
-static std::list<DROID_GROUP *> grpGlobalManager;
+static QList<DROID_GROUP *> grpGlobalManager;
 static bool grpInitialized = false;
 
 // initialise the group system
@@ -47,7 +47,7 @@ void grpShutDown(void)
 {
 	/* Since we are not very diligent removing groups after we have
 	 * created them; we need this hack to remove them on level end. */
-	std::list<DROID_GROUP *>::iterator iter;
+	QList<DROID_GROUP *>::iterator iter;
 
 	for(iter = grpGlobalManager.begin(); iter != grpGlobalManager.end(); iter++)
 	{
@@ -71,15 +71,19 @@ bool grpCreate(DROID_GROUP **ppsGroup)
 {
 	ASSERT(grpInitialized, "Group code not initialized yet");
 	*ppsGroup = new DROID_GROUP;
-	if (*ppsGroup == NULL)
-	{
-		debug(LOG_ERROR, "grpCreate: Out of memory");
-		return false;
-	}
-
+	ASSERT_OR_RETURN(false, *ppsGroup, "Out of memory");
+	(*ppsGroup)->id = grpGlobalManager.size();
 	grpGlobalManager.push_back(*ppsGroup);
-
 	return true;
+}
+
+DROID_GROUP *grpFind(int id)
+{
+	if (id >= grpGlobalManager.size())
+	{
+		return NULL;
+	}
+	return grpGlobalManager.at(id);
 }
 
 // add a droid to a group
@@ -196,7 +200,7 @@ void DROID_GROUP::remove(DROID *psDroid)
 	// free the group if necessary
 	if (refCount <= 0)
 	{
-		grpGlobalManager.remove(this);
+		grpGlobalManager.removeOne(this);
 		delete this;
 	}
 }
