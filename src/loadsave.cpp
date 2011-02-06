@@ -688,7 +688,7 @@ static void displayLoadSlot(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 		sstrcpy(butString, ((W_BUTTON *)psWidget)->pText);
 
 		iV_SetFont(font_regular);									// font
-		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+		iV_SetTextColour(WZCOL_FORM_TEXT);
 
 		while(iV_GetTextWidth(butString) > psWidget->width)
 		{
