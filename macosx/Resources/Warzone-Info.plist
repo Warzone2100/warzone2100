@@ -28,6 +28,8 @@
 	<true/>
 	<key>CFBundleVersion</key>
 	<string>SVN_REV</string>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.strategy-games</string>
 	<key>CFBundleShortVersionString</key>
 	<string>SVN_TAG [SVN_SHORT_HASH_WITHOUT_QUOTES]</string>
 	<key>NSHumanReadableCopyright</key>
