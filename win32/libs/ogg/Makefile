@@ -5,7 +5,7 @@ PKG_SOURCEBASE=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_SOURCEBASE).tar.gz
 PKG_SOURCE_URL:= \
 	http://downloads.xiph.org/releases/ogg/ \
-	http://www.il.fontys.nl/~giel/warzone/devpkg/
+	http://wzhost.wz2100.net/~buildbot/dev/
 PKG_MD5SUM:=5a9fcabc9a1b7c6f1cd75ddc78f36c56
 
 TARGETS:= \
