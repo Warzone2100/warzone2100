@@ -284,9 +284,11 @@ void loadMultiScripts()
 		resLoadFile("SCRIPTVAL", "sk3tech.vlo");
 	}
 
-	// Load AI players
+	// Backup data hashes, since AI and scavenger scripts aren't run on all clients.
 	uint32_t oldHash1 = DataHash[DATA_SCRIPT];
 	uint32_t oldHash2 = DataHash[DATA_SCRIPTVAL];
+
+	// Load AI players
 	resForceBaseDir("multiplay/skirmish/");
 	for (int i = 0; i < game.maxPlayers; i++)
 	{
@@ -298,8 +300,6 @@ void loadMultiScripts()
 			resLoadFile("SCRIPTVAL", aidata[NetPlay.players[i].ai].vlo);
 		}
 	}
-	DataHash[DATA_SCRIPT]    = oldHash1;  // Not all players load the same AI scripts.
-	DataHash[DATA_SCRIPTVAL] = oldHash2;
 
 	// Load scavengers
 	resForceBaseDir("multiplay/script/");
@@ -308,6 +308,10 @@ void loadMultiScripts()
 		resLoadFile("SCRIPT", "scavfact.slo");
 		resLoadFile("SCRIPTVAL", "scavfact.vlo");
 	}
+
+	// Restore data hashes, since AI and scavenger scripts aren't run on all clients.
+	DataHash[DATA_SCRIPT]    = oldHash1;  // Not all players load the same AI scripts.
+	DataHash[DATA_SCRIPTVAL] = oldHash2;
 
 	// Reset resource path, otherwise things break down the line
 	resForceBaseDir("");
