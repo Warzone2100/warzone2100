@@ -5,7 +5,7 @@ PKG_SOURCEBASE:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_SOURCEBASE).tar.gz
 PKG_SOURCE_URL:= \
 	@SF/libpng \
-	http://www.il.fontys.nl/~giel/warzone/devpkg/
+	http://wzhost.wz2100.net/~buildbot/dev/
 PKG_MD5SUM:=c735eab2d659a96e5a594c9e8541ad63
 
 TARGETS:=$(TOPDIR)/build/libs/lib/libz.a $(TOPDIR)/build/libs/include/zconf.h $(TOPDIR)/build/libs/include/zlib.h

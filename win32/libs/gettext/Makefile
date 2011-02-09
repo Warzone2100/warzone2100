@@ -5,7 +5,7 @@ PKG_SOURCEBASE=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_SOURCEBASE).tar.gz
 PKG_SOURCE_URL:= \
 	http://ftp.gnu.org/pub/gnu/gettext/ \
-	http://www.il.fontys.nl/~giel/warzone/devpkg/
+	http://wzhost.wz2100.net/~buildbot/dev/
 PKG_MD5SUM:=3dd55b952826d2b32f51308f2f91aa89
 
 TARGET:=$(TOPDIR)/build/libs/lib/libintl.la

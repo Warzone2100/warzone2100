@@ -5,7 +5,7 @@ PKG_SOURCEBASE=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_SOURCEBASE).tar.gz
 PKG_SOURCE_URL:= \
 	http://rpm5.org/files/popt/ \
-	http://www.il.fontys.nl/~giel/warzone/devpkg/
+	http://wzhost.wz2100.net/~buildbot/dev/
 PKG_MD5SUM:=f45290e9ac4b1cf209d0042eb6755543
 
 TARGETS:= \
