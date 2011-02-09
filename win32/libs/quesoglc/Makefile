@@ -2,7 +2,11 @@ PKG_NAME:=quesoglc
 PKG_VERSION:=0.7.3~svn913
 
 PKG_SOURCEBASE=$(PKG_NAME)-$(PKG_VERSION)
-PKG_CHECKOUT_URL=https://quesoglc.svn.sourceforge.net/svnroot/quesoglc/branches/release-0.7/quesoglc
+PKG_SOURCE:=$(PKG_SOURCEBASE).tar.gz
+PKG_SOURCE_URL:= \
+        @SF/warzone2100 \
+        http://wzhost.wz2100.net/~buildbot/dev/
+PKG_MD5SUM:=b009f87f5cc2e79106cf1bf8ca45418d
 
 TARGETS:= \
 	$(TOPDIR)/build/libs/lib/libGLC.la \
@@ -10,13 +14,13 @@ TARGETS:= \
 
 include $(TOPDIR)/rules.mk
 
-$(PKG_SOURCEBASE) fetch-stamp:
-	svn export --force -r 913 $(PKG_CHECKOUT_URL) $(PKG_SOURCEBASE)
-	touch fetch-stamp
+extract-stamp: $(DOWNLOADS)/$(PKG_SOURCE)
+	tar xzf $^
+	touch extract-stamp
 
-$(PKG_SOURCEBASE)/configure.in: fetch-stamp
+$(PKG_SOURCEBASE)/configure.in: patch-stamp
 
-patch-stamp: fetch-stamp
+patch-stamp: extract-stamp
 	@for patch in patches/*.diff; do \
 		echo sed -e "s/\$$sourcebase\b/$(PKG_SOURCEBASE)/g" -e "s/\$$host_triplet\b/$(HOST_TRIPLET)/g" "$$patch" \| patch -p0; \
 		sed -e "s/\$$sourcebase\b/$(PKG_SOURCEBASE)/g" -e "s/\$$host_triplet\b/$(HOST_TRIPLET)/g" "$$patch" | patch -p0 || exit ; \
@@ -35,7 +39,7 @@ $(PKG_SOURCEBASE)/build/libGLC.la: $(PKG_SOURCEBASE)/config.status
 $(TOPDIR)/build/libs/lib/libGLC.la: $(PKG_SOURCEBASE)/build/libGLC.la
 	$(MAKE) -C $(PKG_SOURCEBASE)/build install-libLTLIBRARIES
 
-$(PKG_SOURCEBASE)/include/GL/glc.h: fetch-stamp
+$(PKG_SOURCEBASE)/include/GL/glc.h: extract-stamp
 
 $(TOPDIR)/build/libs/include/GL/glc.h: $(PKG_SOURCEBASE)/include/GL/glc.h $(PKG_SOURCEBASE)/config.status
 	$(MAKE) -C $(PKG_SOURCEBASE)/include install-nobase_includeHEADERS
@@ -44,6 +48,6 @@ all: build
 build: $(TARGETS)
 
 clean:
-	$(RM) -r $(PKG_SOURCEBASE) fetch-stamp patch-stamp
+	$(RM) -r $(PKG_SOURCEBASE) extract-stamp patch-stamp
 
 .PHONY: all build clean
