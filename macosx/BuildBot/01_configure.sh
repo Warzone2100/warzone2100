@@ -9,8 +9,8 @@
 
 cd macosx
 
-if ! xcodebuild -project Warzone.xcodeproj -parallelizeTargets -target "Warzone" -configuration Release; then
-    if ! xcodebuild -project Warzone.xcodeproj -parallelizeTargets -target "Warzone" -configuration "Release" -PBXBuildsContinueAfterErrors=NO; then
+if ! xcodebuild -project Warzone.xcodeproj -parallelizeTargets -target "Warzone" -configuration "StaticAnalyzer"; then
+    if ! xcodebuild -project Warzone.xcodeproj -parallelizeTargets -target "Warzone" -configuration "StaticAnalyzer" -PBXBuildsContinueAfterErrors=NO; then
 	    exit ${?}
 	fi
 fi
