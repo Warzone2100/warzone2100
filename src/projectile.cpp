@@ -912,7 +912,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 	{
 		uint32_t effectTime;
 		// TODO Should probably give effectTime as an extra parameter to addEffect, or make an effectGiveAuxTime parameter, with yet another 'this is naughty' comment.
-		for (effectTime = ((psProj->prevSpacetime.time + 15) & ~15); effectTime < psProj->time; effectTime += 16)
+		for (effectTime = ((psProj->prevSpacetime.time + 31) & ~31); effectTime < psProj->time; effectTime += 32)
 		{
 			Spacetime st = interpolateObjectSpacetime(psProj, effectTime);
 			Vector3i posFlip = swapYZ(st.pos);

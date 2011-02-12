@@ -3918,6 +3918,13 @@ static void structureEffectsPlayer( UDWORD player )
 	BASE_OBJECT			*psChosenObj = NULL;
 	UWORD	bFXSize;
 
+	const int effectsPerSecond = 12;  // Effects per second. Will add effects up to once time per frame, so won't add as many effects if the framerate is low, but will be consistent, otherwise.
+	unsigned effectTime = graphicsTime / (GAME_TICKS_PER_SEC / effectsPerSecond)*(GAME_TICKS_PER_SEC / effectsPerSecond);
+	if (effectTime <= graphicsTime - deltaGraphicsTime)
+	{
+		return;  // Don't add effects this frame.
+	}
+
 	for(psStructure = apsStructLists[player]; psStructure; psStructure = psStructure->psNext)
 	{
 		if(psStructure->status == SS_BUILT)
@@ -3957,8 +3964,8 @@ static void structureEffectsPlayer( UDWORD player )
 				for(i=0 ;i<numConnected; i++)
 				{
 					radius = 32 - (i*2);	// around the spire
-					xDif = iSinSR(graphicsTime, gameDiv, radius);
-					yDif = iCosSR(graphicsTime, gameDiv, radius);
+					xDif = iSinSR(effectTime, gameDiv, radius);
+					yDif = iCosSR(effectTime, gameDiv, radius);
 
 					pos.x = psStructure->pos.x + xDif;
 					pos.z = psStructure->pos.y + yDif;
@@ -3993,8 +4000,8 @@ static void structureEffectsPlayer( UDWORD player )
 						}
 						/* Then it's repairing...? */
 						radius = psStructure->sDisplay.imd->radius;
-						xDif = iSinSR(graphicsTime, 720, radius);
-						yDif = iCosSR(graphicsTime, 720, radius);
+						xDif = iSinSR(effectTime, 720, radius);
+						yDif = iCosSR(effectTime, 720, radius);
 						pos.x = psStructure->pos.x + xDif;
 						pos.z = psStructure->pos.y + yDif;
 						pos.y = map_Height(pos.x,pos.z) + psStructure->sDisplay.imd->max.y;
