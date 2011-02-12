@@ -109,8 +109,8 @@ void sendOptions()
 	// Send the structures changed
 	for (i = 0; i < ingame.numStructureLimits; i++)
 	{
-		NETuint8_t(&ingame.pStructureLimits[i].id);
-		NETuint8_t(&ingame.pStructureLimits[i].limit);
+		NETuint32_t(&ingame.pStructureLimits[i].id);
+		NETuint32_t(&ingame.pStructureLimits[i].limit);
 	}
 	updateLimitFlags();
 	NETuint8_t(&ingame.flags);
@@ -199,8 +199,8 @@ void recvOptions(NETQUEUE queue)
 
 	for (i = 0; i < ingame.numStructureLimits; i++)
 	{
-		NETuint8_t(&ingame.pStructureLimits[i].id);
-		NETuint8_t(&ingame.pStructureLimits[i].limit);
+		NETuint32_t(&ingame.pStructureLimits[i].id);
+		NETuint32_t(&ingame.pStructureLimits[i].limit);
 	}
 	NETuint8_t(&ingame.flags);
 

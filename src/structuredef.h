@@ -285,15 +285,13 @@ struct STRUCTURE : public BASE_OBJECT
 	UDWORD			lastStateTime;
 };
 
-#define LOTS_OF	255						/*highest number the limit can be set to */
+#define LOTS_OF 0xFFFFFFFF  // highest number the limit can be set to
 struct STRUCTURE_LIMITS
 {
-	UBYTE		limit;				/* the number allowed to be built */
-	UBYTE		currentQuantity;	/* the number of the type currently
-												   built per player*/
+	uint32_t        limit;                  // the number allowed to be built
+	uint32_t        currentQuantity;        // the number of the type currently built per player
 
-	UBYTE		globalLimit;		// multiplayer only. sets the max value selectable (limits changed by player)
-
+	uint32_t        globalLimit;            // multiplayer only. sets the max value selectable (limits changed by player)
 };
 
 

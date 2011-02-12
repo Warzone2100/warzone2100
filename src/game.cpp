@@ -2038,31 +2038,12 @@ typedef struct _save_production
 	UDWORD						multiPlayerID;		//template to build
 } SAVE_PRODUCTION;
 
-#define STRUCTLIMITS_SAVE_V2 \
-	char				name[MAX_SAVE_NAME_SIZE_V19]; \
-	UBYTE				limit; \
-	UBYTE				player
-
-typedef struct _save_structLimits_v2
+struct SAVE_STRUCTLIMITS
 {
-	STRUCTLIMITS_SAVE_V2;
-} SAVE_STRUCTLIMITS_V2;
-
-#define STRUCTLIMITS_SAVE_V20 \
-	char				name[MAX_SAVE_NAME_SIZE]; \
-	UBYTE				limit; \
-	UBYTE				player
-
-typedef struct _save_structLimits_v20
-{
-	STRUCTLIMITS_SAVE_V20;
-} SAVE_STRUCTLIMITS_V20;
-
-typedef struct _save_structLimits
-{
-	STRUCTLIMITS_SAVE_V20;
-} SAVE_STRUCTLIMITS;
-
+	char            name[MAX_SAVE_NAME_SIZE];
+	UBYTE           limit;
+	UBYTE           player;
+};
 
 #define COMMAND_SAVE_V20 \
 	UDWORD				droidID
@@ -9864,7 +9845,7 @@ BOOL loadSaveStructLimitsV(char *pFileData, UDWORD filesize, UDWORD numLimits)
 
 		if (psSaveLimits->player < MAX_PLAYERS)
 		{
-			asStructLimits[psSaveLimits->player][statInc].limit = psSaveLimits->limit;
+			asStructLimits[psSaveLimits->player][statInc].limit = psSaveLimits->limit != 255? psSaveLimits->limit : LOTS_OF;
 		}
 		else
 		{
@@ -9926,7 +9907,7 @@ BOOL writeStructLimitsFile(char *pFileName)
 		for(i = 0; i < numStructureStats; i++, psStructStats++)
 		{
 			strcpy(psSaveLimit->name, psStructStats->pName);
-			psSaveLimit->limit = asStructLimits[player][i].limit;
+			psSaveLimit->limit = MIN(asStructLimits[player][i].limit, 255);
 			psSaveLimit->player = (UBYTE)player;
 			psSaveLimit = (SAVE_STRUCTLIMITS *)((char *)psSaveLimit + sizeof(SAVE_STRUCTLIMITS));
 		}
