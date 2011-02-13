@@ -378,6 +378,16 @@ BOOL addTemplate(UDWORD player, DROID_TEMPLATE *psNew)
 	return addTemplateToList(psNew, &apsDroidTemplates[player]);
 }
 
+void addTemplateBack(unsigned player, DROID_TEMPLATE *psNew)
+{
+	DROID_TEMPLATE **ppList = &apsDroidTemplates[player];
+	while (*ppList != NULL)
+	{
+		ppList = &(*ppList)->psNext;
+	}
+	addTemplateToList(psNew, ppList);
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 // setup templates
 BOOL multiTemplateSetup(void)

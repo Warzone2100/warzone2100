@@ -217,6 +217,7 @@ extern BOOL multiGameInit		(void);
 extern BOOL multiGameShutdown	(void);
 extern BOOL addTemplate			(UDWORD	player,DROID_TEMPLATE *psNew);
 extern BOOL addTemplateToList(DROID_TEMPLATE *psNew, DROID_TEMPLATE **ppList);
+void addTemplateBack(unsigned player, DROID_TEMPLATE *psNew);
 
 // syncing.
 extern BOOL sendCheck			(void);							//send/recv  check info

@@ -2631,6 +2631,11 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 				}
 			}
 		}
+		for (std::list<DROID_TEMPLATE>::iterator i = localTemplates.begin(); i != localTemplates.end(); ++i)
+		{
+			free(i->pName);
+		}
+		localTemplates.clear();
 
 		//load in the templates
 		aFileName[fileExten] = '\0';
@@ -7724,10 +7729,11 @@ BOOL loadSaveTemplateV14(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 			psTemplate->psNext = apsDroidTemplates[psSaveTemplate->player];
 			apsDroidTemplates[psSaveTemplate->player] = psTemplate;
 		}
+	}
 
-
-
-
+	for (DROID_TEMPLATE *t = apsDroidTemplates[selectedPlayer]; t != NULL; t = t->psNext)
+	{
+		localTemplates.push_front(*t);
 	}
 
 	return true;
@@ -7896,6 +7902,11 @@ BOOL loadSaveTemplateV(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 			psTemplate->psNext = apsDroidTemplates[psSaveTemplate->player];
 			apsDroidTemplates[psSaveTemplate->player] = psTemplate;
 		}
+	}
+
+	for (DROID_TEMPLATE *t = apsDroidTemplates[selectedPlayer]; t != NULL; t = t->psNext)
+	{
+		localTemplates.push_front(*t);
 	}
 
 	return true;

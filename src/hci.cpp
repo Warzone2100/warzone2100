@@ -359,8 +359,8 @@ static STRUCTURE_STATS	**apsStructStatsList;
 static RESEARCH			**ppResearchList;
 
 /* Store a list of Template pointers for Droids that can be built */
-DROID_TEMPLATE			**apsTemplateList;
-DROID_TEMPLATE			*psCurrTemplate = NULL;
+std::vector<DROID_TEMPLATE *>   apsTemplateList;
+std::list<DROID_TEMPLATE>       localTemplates;
 
 /* Store a list of Feature pointers for features to be placed on the map */
 static FEATURE_STATS	**apsFeatureList;
@@ -526,14 +526,7 @@ BOOL intInitialise(void)
 	}
 
 	/* Create storage for Templates that can be built */
-	apsTemplateList = (DROID_TEMPLATE **)malloc(sizeof(DROID_TEMPLATE*) *
-		MAXTEMPLATES);
-	if (apsTemplateList == NULL)
-	{
-		debug( LOG_FATAL, "Unable to allocate memory for template list" );
-		abort();
-		return false;
-	}
+	apsTemplateList.clear();
 
 	/* Create storage for the feature list */
 	apsFeatureList = (FEATURE_STATS **)malloc(sizeof(FEATURE_STATS *) *
@@ -652,7 +645,7 @@ void interfaceShutDown(void)
 	free(ppResearchList);
 	free(pList);
 	free(pSList);
-	free(apsTemplateList);
+	apsTemplateList.clear();
 	free(apsFeatureList);
 	free(apsComponentList);
 	free(apsExtraSysList);
@@ -662,7 +655,6 @@ void interfaceShutDown(void)
 	ppResearchList = NULL;
 	pList = NULL;
 	pSList = NULL;
-	apsTemplateList = NULL;
 	apsFeatureList = NULL;
 	apsComponentList = NULL;
 	apsExtraSysList = NULL;
@@ -1215,8 +1207,6 @@ static void intCalcStructCenter(STRUCTURE_STATS *psStats, UDWORD tilex, UDWORD t
 /* Process return codes from the Options screen */
 static void intProcessOptions(UDWORD id)
 {
-	UDWORD i;
-	DROID_TEMPLATE *psTempl;
 	char saveName[PATH_MAX];
 
 	if (id >= IDOPT_PLAYERSTART && id <= IDOPT_PLAYEREND)
@@ -1276,40 +1266,37 @@ static void intProcessOptions(UDWORD id)
 			/* The add object buttons */
 		case IDOPT_DROID:
 			intRemoveOptions();
-			i = 0;
-			psTempl = apsDroidTemplates[selectedPlayer];
-			while ((psTempl != NULL) && (i < MAXTEMPLATES))
+			apsTemplateList.clear();
+			for (std::list<DROID_TEMPLATE>::iterator i = localTemplates.begin(); i != localTemplates.end(); ++i)
 			{
-				apsTemplateList[i] = psTempl;
-				psTempl = psTempl->psNext;
-				i++;
+				apsTemplateList.push_back(&*i);
 			}
-			ppsStatsList = (BASE_STATS**)apsTemplateList;
+			ppsStatsList = (BASE_STATS**)&apsTemplateList[0];  // FIXME Ugly cast, and is undefined behaviour (strict-aliasing violation) in C/C++.
 			objMode = IOBJ_MANUFACTURE;
-			intAddStats(ppsStatsList, i, NULL, NULL);
+			intAddStats(ppsStatsList, apsTemplateList.size(), NULL, NULL);
 			intMode = INT_EDITSTAT;
 			editPosMode = IED_NOPOS;
 			break;
 		case IDOPT_STRUCT:
 			intRemoveOptions();
-			for (i = 0; i < numStructureStats && i < MAXSTRUCTURES; i++)
+			for (unsigned i = 0; i < std::min<unsigned>(numStructureStats, MAXSTRUCTURES); ++i)
 			{
 				apsStructStatsList[i] = asStructureStats + i;
 			}
 			ppsStatsList = (BASE_STATS**)apsStructStatsList;
 			objMode = IOBJ_BUILD;
-			intAddStats(ppsStatsList, i, NULL, NULL);
+			intAddStats(ppsStatsList, std::min<unsigned>(numStructureStats, MAXSTRUCTURES), NULL, NULL);
 			intMode = INT_EDITSTAT;
 			editPosMode = IED_NOPOS;
 			break;
 		case IDOPT_FEATURE:
 			intRemoveOptions();
-			for (i = 0; i < numFeatureStats && i < MAXFEATURES; i++)
+			for (unsigned i = 0; i < std::min<unsigned>(numFeatureStats, MAXFEATURES); ++i)
 			{
 				apsFeatureList[i] = asFeatureStats + i;
 			}
 			ppsStatsList = (BASE_STATS**)apsFeatureList;
-			intAddStats(ppsStatsList, i, NULL, NULL);
+			intAddStats(ppsStatsList, std::min<unsigned>(numFeatureStats, MAXFEATURES), NULL, NULL);
 			intMode = INT_EDITSTAT;
 			editPosMode = IED_NOPOS;
 			break;
@@ -2094,8 +2081,7 @@ static void intRunPower(void)
 				 psStat->ref < REF_TEMPLATE_START + REF_RANGE)
 		{
 			//get the template build points
-			quantity = calcTemplatePower((DROID_TEMPLATE *)apsTemplateList[
-				statID - IDSTAT_START]);
+			quantity = calcTemplatePower(apsTemplateList[statID - IDSTAT_START]);
 		}
 		else if (psStat->ref >= REF_RESEARCH_START &&
 				 psStat->ref < REF_RESEARCH_START + REF_RANGE)
@@ -2198,9 +2184,9 @@ static void intAddObjectStats(BASE_OBJECT *psObj, UDWORD id)
 	//have to determine the Template list once the factory has been chosen
 	if (objMode == IOBJ_MANUFACTURE)
 	{
-		numStatsListEntries = fillTemplateList(apsTemplateList,
-			(STRUCTURE *)psObj, MAXTEMPLATES);
-		ppsStatsList = (BASE_STATS **)apsTemplateList;
+		fillTemplateList(apsTemplateList, (STRUCTURE *)psObj);
+		numStatsListEntries = apsTemplateList.size();
+		ppsStatsList = (BASE_STATS **)&apsTemplateList[0];  // FIXME Ugly cast, and is undefined behaviour (strict-aliasing violation) in C/C++.
 	}
 
 	/*have to calculate the list each time the Topic button is pressed
@@ -5627,7 +5613,7 @@ static BOOL intAddBuild(DROID *psSelected)
 static BOOL intAddManufacture(STRUCTURE *psSelected)
 {
 	/* Store the correct stats list for future reference */
-	ppsStatsList = (BASE_STATS**)apsTemplateList;
+	ppsStatsList = (BASE_STATS**)&apsTemplateList[0];  // FIXME Ugly cast, and is undefined behaviour (strict-aliasing violation) in C/C++.
 
 	objSelectFunc = selectManufacture;
 	objGetStatsFunc = getManufactureStats;

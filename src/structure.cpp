@@ -3587,7 +3587,7 @@ void _syncDebugStructure(const char *function, STRUCTURE *psStruct, char ch)
 		case REF_VTOL_FACTORY:
 			if (psStruct->pFunctionality->factory.psSubject != NULL)
 			{
-				ref = psStruct->pFunctionality->factory.psSubject->ref;
+				ref = psStruct->pFunctionality->factory.psSubject->multiPlayerID;
 				refStr = ",production";
 			}
 			break;

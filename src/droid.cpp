@@ -1674,6 +1674,8 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 						addTemplateToList(&design, &apsDroidTemplates[i]);
 					}
 				}
+				localTemplates.push_front(design);
+				localTemplates.front().pName = strdup(localTemplates.front().pName);
 			}
 			// Add all templates to static template list
 			design.prefab = true;  // prefabricated templates referenced from VLOs
@@ -1819,7 +1821,7 @@ BOOL loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize)
 		DROID_TEMPLATE *pTemplate;
 		std::string templateName = line.s(0);
 
-		for (int player = 0; player < MAX_PLAYERS + 1; ++player)
+		for (int player = 0; player < MAX_PLAYERS + 2; ++player)
 		{
 			if (player < MAX_PLAYERS)  // a player
 			{
@@ -1829,10 +1831,22 @@ BOOL loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize)
 				}
 				pTemplate = getTemplateFromUniqueName(templateName.c_str(), player);
 			}
-			else			// special exception - the static list
+			else if (player == MAX_PLAYERS)  // special exception - the static list
 			{
 				// Add weapons to static list
 				pTemplate = getTemplateFromTranslatedNameNoPlayer(templateName.c_str());
+			}
+			else  // Special exception - the local UI list.
+			{
+				pTemplate = NULL;
+				for (std::list<DROID_TEMPLATE>::iterator j = localTemplates.begin(); j != localTemplates.end(); ++j)
+				{
+					if (j->pName == templateName)
+					{
+						pTemplate = &*j;
+						break;
+					}
+				}
 			}
 
 			/* if Template not found - try default design */
@@ -1903,6 +1917,12 @@ BOOL droidTemplateShutDown(void)
 	apsStaticTemplates = NULL;
 	free(sDefaultDesignTemplate.pName);
 	sDefaultDesignTemplate.pName = NULL;
+
+	for (std::list<DROID_TEMPLATE>::iterator i = localTemplates.begin(); i != localTemplates.end(); ++i)
+	{
+		free(i->pName);
+	}
+	localTemplates.clear();
 
 	return true;
 }
@@ -2502,16 +2522,17 @@ fills the list with Templates that can be manufactured
 in the Factory - based on size. There is a limit on how many can be manufactured
 at any one time. Pass back the number available.
 */
-UDWORD fillTemplateList(DROID_TEMPLATE **ppList, STRUCTURE *psFactory, UDWORD limit)
+void fillTemplateList(std::vector<DROID_TEMPLATE *> &pList, STRUCTURE *psFactory)
 {
+	pList.clear();
+
 	DROID_TEMPLATE	*psCurr;
-	UDWORD			count = 0;
 	UDWORD			iCapacity = psFactory->pFunctionality->factory.capacity;
 
 	/* Add the templates to the list*/
-	for (psCurr = apsDroidTemplates[psFactory->player]; psCurr != NULL;
-		psCurr = psCurr->psNext)
+	for (std::list<DROID_TEMPLATE>::iterator i = localTemplates.begin(); i != localTemplates.end(); ++i)
 	{
+		psCurr = &*i;
 		//must add Command Droid if currently in production
 		if (!getProduction(psFactory, psCurr).quantity)
 		{
@@ -2549,16 +2570,9 @@ UDWORD fillTemplateList(DROID_TEMPLATE **ppList, STRUCTURE *psFactory, UDWORD li
 					continue;
 				}
 			}
-			*ppList++ = psCurr;
-			count++;
-			//once reached the limit, stop adding any more to the list
-			if (count == limit)
-			{
-				return count;
-			}
+			pList.push_back(psCurr);
 		}
 	}
-	return count;
 }
 
 /* Make all the droids for a certain player a member of a specific group */
@@ -4347,7 +4361,7 @@ BOOL checkValidWeaponForProp(DROID_TEMPLATE *psTemplate)
 }
 
 /*called when a Template is deleted in the Design screen*/
-void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player, QUEUE_MODE mode)
+void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, unsigned player, QUEUE_MODE mode)
 {
 	STRUCTURE   *psStruct;
 	STRUCTURE	*psList;
@@ -4374,7 +4388,7 @@ void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player, QUEU
 				ProductionRun &productionRun = asProductionRun[psFactory->psAssemblyPoint->factoryType][psFactory->psAssemblyPoint->factoryInc];
 				for (unsigned inc = 0; inc < productionRun.size(); ++inc)
 				{
-					if (productionRun[inc].psTemplate == psTemplate)
+					if (productionRun[inc].psTemplate->multiPlayerID == psTemplate->multiPlayerID && mode == ModeQueue)
 					{
 						//just need to erase this production run entry
 						productionRun.erase(productionRun.begin() + inc);
@@ -4388,47 +4402,34 @@ void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player, QUEU
 				}
 
 				// check not being built in the factory for the template player
-				if (psTemplate->multiPlayerID == ((DROID_TEMPLATE *)psFactory->psSubject)->multiPlayerID)
+				if (psTemplate->multiPlayerID == psFactory->psSubject->multiPlayerID && mode == ModeImmediate)
 				{
-					if (mode == ModeImmediate)
+					syncDebugStructure(psStruct, '<');
+					syncDebug("Clearing production");
+
+					// Clear the factory's subject.
+					psFactory->psSubject = NULL;
+					//return any accrued power
+					if (psFactory->powerAccrued)
 					{
-						syncDebugStructure(psStruct, '<');
-						syncDebug("Clearing production");
-
-						// Clear the factory's subject.
-						psFactory->psSubject = NULL;
-						//return any accrued power
-						if (psFactory->powerAccrued)
-						{
-							addPower(psStruct->player, psFactory->powerAccrued);
-						}
-
-						if (player == productionPlayer)
-						{
-							//check to see if anything left to produce
-							DROID_TEMPLATE *psNextTemplate = factoryProdUpdate(psStruct, NULL);
-							//power is returned by factoryProdAdjust()
-							if (psNextTemplate)
-							{
-								structSetManufacture(psStruct, psNextTemplate, ModeQueue);  // ModeQueue because production lists aren't synchronised.
-							}
-						}
-
-						//tell the interface
-						intManufactureFinished(psStruct);
-
-						syncDebugStructure(psStruct, '>');
+						addPower(psStruct->player, psFactory->powerAccrued);
 					}
-					else
+
+					if (player == productionPlayer)
 					{
-						DROID_TEMPLATE *oldTemplate = new DROID_TEMPLATE(*psFactory->psSubject);
-						debug(LOG_ERROR, "TODO: Fix this memory leak when deleting templates.");
-
-						oldTemplate->pName = NULL;
-						oldTemplate->psNext = NULL;
-
-						psFactory->psSubject = oldTemplate;
+						//check to see if anything left to produce
+						DROID_TEMPLATE *psNextTemplate = factoryProdUpdate(psStruct, NULL);
+						//power is returned by factoryProdAdjust()
+						if (psNextTemplate)
+						{
+							structSetManufacture(psStruct, psNextTemplate, ModeQueue);  // ModeQueue because production lists aren't synchronised.
+						}
 					}
+
+					//tell the interface
+					intManufactureFinished(psStruct);
+
+					syncDebugStructure(psStruct, '>');
 				}
 			}
 		}

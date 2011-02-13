@@ -203,7 +203,7 @@ extern DROID_TYPE droidType(DROID *psDroid);
 extern DROID_TYPE droidTemplateType(DROID_TEMPLATE *psTemplate);
 
 //fills the list with Templates that can be manufactured in the Factory - based on size
-extern UDWORD fillTemplateList(DROID_TEMPLATE **pList, STRUCTURE *psFactory, UDWORD limit);
+void fillTemplateList(std::vector<DROID_TEMPLATE *> &pList, STRUCTURE *psFactory);
 
 extern void assignDroidsToGroup(UDWORD	playerNumber, UDWORD groupNumber);
 
@@ -361,7 +361,7 @@ extern BOOL checkValidWeaponForProp(DROID_TEMPLATE *psTemplate);
 extern const char *getDroidNameForRank(UDWORD rank);
 
 /*called when a Template is deleted in the Design screen*/
-extern void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player, QUEUE_MODE mode);
+void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, unsigned player, QUEUE_MODE mode);  // ModeQueue deletes from production queues, which are not yet synchronised. ModeImmediate deletes from current production which is synchronised.
 
 // Select a droid and do any necessary housekeeping.
 extern void SelectDroid(DROID *psDroid);
