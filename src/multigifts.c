@@ -632,13 +632,13 @@ void HandleArtifact(void)
 		NETenum(&type);
 	NETend();
 
-	debug(LOG_NET, "Player %hhu wants %hhu of type %s", NetMsg.source, quantity, feature_names[type]);
+	debug(LOG_NET, "Player %d wants %d of type %s", (int)NetMsg.source, (int)quantity, feature_names[type]);
 
 	if (type == FEAT_OIL_DRUM)
 	{
 		numDrumsNeeded++;
 		lastOilSpawn = gameTime;
-		debug(LOG_NET, "Queueing %hhu of %s, @ %u", numDrumsNeeded, feature_names[type], lastOilSpawn);
+		debug(LOG_NET, "Queueing %d of %s, @ %u", (int)numDrumsNeeded, feature_names[type], lastOilSpawn);
 		return;
 	}
 	else
@@ -721,7 +721,7 @@ FEATURE_TYPE type = FEAT_OIL_DRUM;
 		NETuint8_t(&quantity);
 		NETenum(&type);
 	NETend();
-	debug(LOG_NET, "Player %u sending request for %hhu of type %s", selectedPlayer, quantity, feature_names[type]);
+	debug(LOG_NET, "Player %u sending request for %d of type %s", selectedPlayer, (int)quantity, feature_names[type]);
 }
 
 BOOL addOilDrum(uint8_t count)
@@ -730,7 +730,7 @@ BOOL addOilDrum(uint8_t count)
 	{
 		addMultiPlayerRandomArtifacts(count, FEAT_OIL_DRUM);
 		lastOilSpawn = gameTime;
-		debug(LOG_NET, "Player %u wants %hhu of type %s", selectedPlayer, count, feature_names[FEAT_OIL_DRUM]);
+		debug(LOG_NET, "Player %u wants %d of type %s", selectedPlayer, (int)count, feature_names[FEAT_OIL_DRUM]);
 	}
 	return true;
 }
@@ -843,7 +843,7 @@ void processMultiPlayerArtifacts(void)
 		{
 			numDrumsNeeded = NetPlay.playercount * 2;		// don't go over max that we started with
 		}
-		debug(LOG_NET, "Spawn time expired, sending out %hhu of %s", numDrumsNeeded, feature_names[FEAT_OIL_DRUM]);
+		debug(LOG_NET, "Spawn time expired, sending out %d of %s", (int)numDrumsNeeded, feature_names[FEAT_OIL_DRUM]);
 		addOilDrum(numDrumsNeeded);
 		numDrumsNeeded = 0;
 	}

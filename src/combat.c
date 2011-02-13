@@ -422,8 +422,8 @@ void combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		goto missed;
 	}
 
-	objTrace(psAttacker->id, "combFire: %u[%s]->%u: resultHitChance=%d, visibility=%hhu : ",
-	      psAttacker->id, psStats->pName, psTarget->id, resultHitChance, psTarget->visible[psAttacker->player]);
+	objTrace(psAttacker->id, "combFire: %u[%s]->%u: resultHitChance=%d, visibility=%d : ",
+	      psAttacker->id, psStats->pName, psTarget->id, resultHitChance, (int)psTarget->visible[psAttacker->player]);
 
 	return;
 

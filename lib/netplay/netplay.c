@@ -639,7 +639,7 @@ static bool SocketSet_AddSocket(SocketSet* set, Socket* socket)
 		}
 	}
 
-	debug(LOG_ERROR, "Socket set full, no room left (max %zu)", set->len);
+	debug(LOG_ERROR, "Socket set full, no room left (max %lu)", (unsigned long)set->len);
 
 	return false;
 }
@@ -2999,7 +2999,7 @@ receive_message:
 					}
 					else
 					{
-						debug(LOG_NET, "Cannot reflect message type %hhu to %hhu", pMsg->type, pMsg->destination);
+						debug(LOG_NET, "Cannot reflect message type %d to %d", (int)pMsg->type, (int)pMsg->destination);
 					}
 
 					goto receive_message;
@@ -3007,7 +3007,7 @@ receive_message:
 			}
 			else if (pMsg->destination > MAX_PLAYERS)
 			{
-				ASSERT (false, "destination player (%hhu) socket is invalid!", pMsg->destination);
+				ASSERT (false, "destination player (%d) socket is invalid!", (int)pMsg->destination);
 			}
 		nStats.bytesRecvd += size;
 		nStats.packetsRecvd++;
@@ -3665,7 +3665,7 @@ static void NETallowJoining(void)
 					MultiPlayerJoin(index);
 
 					// Broadcast to everyone that a new player has joined
-					debug(LOG_NET, "sending join to everyone for %hhu ", index);
+					debug(LOG_NET, "sending join to everyone for %d ", (int)index);
 					NETbeginEncode(NET_PLAYER_JOINED, NET_ALL_PLAYERS);
 						NETuint8_t(&index);
 					NETend();

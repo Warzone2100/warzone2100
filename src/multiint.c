@@ -1678,7 +1678,7 @@ static BOOL changePosition(UBYTE player, UBYTE position)
 	debug(LOG_ERROR, "Failed to swap positions for player %d, position %d", (int)player, (int)position);
 	if (player < game.maxPlayers && position < game.maxPlayers)
 	{
-		debug(LOG_NET, "corrupted positions :player (%hhu) new position (%hhu) old position (%d)", player, position, NetPlay.players[player].position );
+		debug(LOG_NET, "corrupted positions :player (%d) new position (%d) old position (%d)", (int)player, (int)position, NetPlay.players[player].position );
 		// Positions were corrupted. Attempt to fix.
 		NetPlay.players[player].position = position;
 		NETSendAllPlayerInfoTo(NET_ALL_PLAYERS);
@@ -1711,7 +1711,7 @@ static BOOL changeColour(UBYTE player, UBYTE col)
 	if (player < game.maxPlayers && col < MAX_PLAYERS)
 	{
 		// Colours were corrupted. Attempt to fix.
-		debug(LOG_NET, "corrupted colors :player (%hhu) new position (%hhu) old color (%d)", player, col, NetPlay.players[player].colour );
+		debug(LOG_NET, "corrupted colors :player (%d) new position (%d) old color (%d)", (int)player, (int)col, NetPlay.players[player].colour);
 		setPlayerColour(player, col);
 		NetPlay.players[player].colour = col;
 		NETSendAllPlayerInfoTo(NET_ALL_PLAYERS);
