@@ -1335,8 +1335,12 @@ void drawTerrain(void)
 
 	// select the terrain texture page
 	pie_SetTexturePage(terrainPage); glError();
+
 	// use the alpha to blend
 	pie_SetRendMode(REND_ALPHA);
+	// don't blend decals with another color
+	glColor3f( 1.f, 1.f, 1.f);
+
 	// and the texture coordinates buffer
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY); glError();
 	glEnableClientState(GL_VERTEX_ARRAY); glError();
