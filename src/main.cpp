@@ -507,9 +507,6 @@ static void initialize_ConfigDir(void)
 
 	// User's home dir first so we allways see what we write
 	PHYSFS_addToSearchPath( PHYSFS_getWriteDir(), PHYSFS_PREPEND );
-#if defined(WZ_OS_MAC)
-	PHYSFS_addToSearchPath( "/Library/Application Support/Warzone 2100/", PHYSFS_APPEND );
-#endif
 
 	PHYSFS_permitSymbolicLinks(1);
 
@@ -555,6 +552,11 @@ static void scanDataDirs( void )
 {
 	char tmpstr[PATH_MAX], prefix[PATH_MAX];
 	char* separator;
+
+#if defined(WZ_OS_MAC)
+	// version-independent location for video files
+	registerSearchPath("/Library/Application Support/Warzone 2100/", 1);
+#endif
 
 	// Find out which PREFIX we are in...
 	sstrcpy(prefix, PHYSFS_getBaseDir());
