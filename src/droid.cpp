@@ -2801,13 +2801,6 @@ bool calcDroidMuzzleBaseLocation(DROID *psDroid, Vector3i *muzzle, int weapon_sl
 	if (psBodyImd && psBodyImd->nconnectors)
 	{
 		Vector3i barrel(0, 0, 0);
-		iIMDShape *psWeaponImd = 0, *psMountImd = 0;
-
-		if (psDroid->asWeaps[weapon_slot].nStat)
-		{
-			psMountImd = WEAPON_MOUNT_IMD(psDroid, weapon_slot);
-			psWeaponImd = WEAPON_IMD(psDroid, weapon_slot);
-		}
 
 		pie_MatBegin();
 

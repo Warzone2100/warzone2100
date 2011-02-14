@@ -5346,14 +5346,6 @@ bool calcStructureMuzzleBaseLocation(STRUCTURE *psStructure, Vector3i *muzzle, i
 	if(psShape && psShape->nconnectors)
 	{
 		Vector3i barrel(0, 0, 0);
-		unsigned int nWeaponStat = psStructure->asWeaps[weapon_slot].nStat;
-		iIMDShape *psWeaponImd = 0, *psMountImd = 0;
-
-		if (nWeaponStat)
-		{
-			psWeaponImd = asWeaponStats[nWeaponStat].pIMD;
-			psMountImd = asWeaponStats[nWeaponStat].pMountGraphic;
-		}
 
 		pie_MatBegin();
 
