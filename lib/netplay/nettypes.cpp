@@ -83,7 +83,7 @@ static void queue(const Q &q, uint8_t &v)
 template<class Q>
 static void queue(const Q &q, uint16_t &v)
 {
-	uint8_t b[2] = {v>>8, v};
+	uint8_t b[2] = {uint8_t(v>>8), uint8_t(v)};
 	queue(q, b[0]);
 	queue(q, b[1]);
 	if (Q::Direction == Q::Read)
@@ -124,7 +124,7 @@ static void queue(const Q &q, uint32_t &vOrig)
 template<class Q>
 static void queueLarge(const Q &q, uint32_t &v)
 {
-	uint16_t b[2] = {v>>16, v};
+	uint16_t b[2] = {uint16_t(v>>16), uint16_t(v)};
 	queue(q, b[0]);
 	queue(q, b[1]);
 	if (Q::Direction == Q::Read)
@@ -136,7 +136,7 @@ static void queueLarge(const Q &q, uint32_t &v)
 template<class Q>
 static void queue(const Q &q, uint64_t &v)
 {
-	uint32_t b[2] = {v>>32, v};
+	uint32_t b[2] = {uint32_t(v>>32), uint32_t(v)};
 	queue(q, b[0]);
 	queue(q, b[1]);
 	if (Q::Direction == Q::Read)

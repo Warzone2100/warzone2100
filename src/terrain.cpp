@@ -1077,8 +1077,8 @@ void drawTerrain(void)
 	int layer;
 	int offset, size;
 	float xPos, yPos, distance;
-	const GLfloat paramsX[4] = {1.0/world_coord(mapWidth)*((float)mapWidth/lightmapWidth), 0, 0, 0};
-	const GLfloat paramsY[4] = {0, 0, -1.0/world_coord(mapHeight)*((float)mapHeight/lightmapHeight), 0};
+	const GLfloat paramsX[4] = {1.0f/world_coord(mapWidth)*((float)mapWidth/lightmapWidth), 0, 0, 0};
+	const GLfloat paramsY[4] = {0, 0, -1.0f/world_coord(mapHeight)*((float)mapHeight/lightmapHeight), 0};
 
 	///////////////////////////////////
 	// set up the lightmap texture
@@ -1280,8 +1280,8 @@ void drawTerrain(void)
 	// draw each layer separately
 	for (layer = 0; layer < numGroundTypes; layer++)
 	{
-		const GLfloat paramsX[4] = {0, 0, -1.0/world_coord(psGroundTypes[layer].textureSize), 0};
-		const GLfloat paramsY[4] = {1.0/world_coord(psGroundTypes[layer].textureSize), 0, 0, 0};
+		const GLfloat paramsX[4] = {0, 0, -1.0f/world_coord(psGroundTypes[layer].textureSize), 0};
+		const GLfloat paramsY[4] = {1.0f/world_coord(psGroundTypes[layer].textureSize), 0, 0, 0};
 
 		// load the texture
 		texPage = iV_GetTexture(psGroundTypes[layer].textureName);
@@ -1400,10 +1400,10 @@ void drawTerrain(void)
 void drawWater(void)
 {
 	int x, y;
-	const GLfloat paramsX[4] = {0, 0, -1.0/world_coord(4), 0}; 
-	const GLfloat paramsY[4] = {1.0/world_coord(4), 0, 0, 0};
-	const GLfloat paramsX2[4] = {0, 0, -1.0/world_coord(5), 0}; 
-	const GLfloat paramsY2[4] = {1.0/world_coord(5), 0, 0, 0};
+	const GLfloat paramsX[4] = {0, 0, -1.0f/world_coord(4), 0};
+	const GLfloat paramsY[4] = {1.0f/world_coord(4), 0, 0, 0};
+	const GLfloat paramsX2[4] = {0, 0, -1.0f/world_coord(5), 0};
+	const GLfloat paramsY2[4] = {1.0f/world_coord(5), 0, 0, 0};
 	const GLfloat white[4] = {1.0f, 1.0f, 1.0f, 1.0f};
 	const GLfloat fogColour[4] = {pie_GetFogColour().byte.r/255.f,
 									pie_GetFogColour().byte.g/255.f,
