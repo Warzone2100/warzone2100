@@ -101,22 +101,26 @@ struct LoadSaveDisplayLoadSlotCache {
 };
 
 static	W_SCREEN	*psRequestScreen;					// Widget screen for requester
-static	bool		mode;
+static bool modeLoad;
+static bool modeReplay;
+static bool modeIngame;
 static	UDWORD		chosenSlotId;
 
 bool				bLoadSaveUp = false;        // true when interface is up and should be run.
 char				saveGameName[256];          //the name of the save game to load from the front end
 char				sRequestResult[PATH_MAX];   // filename returned;
-bool				bRequestLoad = false;
+bool                bRequestLoad = false;
+bool                bRequestLoadReplay = false;
 LOADSAVE_MODE		bLoadSaveMode;
 static const char *savedTitle;
 static const char *sSaveGameExtension = ".gam";
+static const char *sSaveReplayExtension = ".wzrp";
 
 // ////////////////////////////////////////////////////////////////////////////
 // return whether the specified filename looks like a saved game file, i.e. ends with .gam
-bool isASavedGamefile(const char* filename)
+static bool isASavedGamefile(const char *filename, const char *extension)
 {
-	static const size_t saveGameExtensionLength = strlen(sSaveGameExtension);
+	static const size_t saveGameExtensionLength = strlen(extension);
 
 	if (nullptr == filename)
 	{
@@ -129,9 +133,8 @@ bool isASavedGamefile(const char* filename)
 		// reject filename of insufficient length to contain "<anything>.gam"
 		return false;
 	}
-	return 0 == strcmp(filename + filenameLength - saveGameExtensionLength, sSaveGameExtension);
+	return 0 == strcmp(filename + filenameLength - saveGameExtensionLength, extension);
 }
-
 
 // ////////////////////////////////////////////////////////////////////////////
 // return whether the save screen was displayed in the mission results screen
@@ -156,7 +159,6 @@ void loadSaveScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, 
 // ////////////////////////////////////////////////////////////////////////////
 bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 {
-	bool bLoad = true;
 	char NewSaveGamePath[PATH_MAX] = {'\0'};
 	bLoadSaveMode = savemode;
 	savedTitle = title;
@@ -167,6 +169,8 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 	static char	sSlotTips[totalslots][totalslotspace];
 	char **i, **files;
 
+	bool bLoad = true;
+	bool bReplay = false;
 	switch (savemode)
 	{
 	case LOAD_FRONTEND_MISSION:
@@ -196,18 +200,26 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 		ssprintf(NewSaveGamePath, "%s%s/", SaveGamePath, "skirmish");
 		bLoad = false;
 		break;
+	case LOADREPLAY_FRONTEND_SKIRMISH:
+		ssprintf(NewSaveGamePath, "%s%s/", ReplayPath, "skirmish");
+		bReplay = true;
+		break;
 	default:
 		ASSERT("Invalid load/save mode!", "Invalid load/save mode!");
 		ssprintf(NewSaveGamePath, "%s%s/", SaveGamePath, "campaign");
 		break;
 	}
 
-	mode = bLoad;
+	bool bIngame = bLoadSaveMode == LOAD_INGAME_MISSION || bLoadSaveMode == SAVE_INGAME_MISSION
+	    || bLoadSaveMode == LOAD_INGAME_SKIRMISH || bLoadSaveMode == SAVE_INGAME_SKIRMISH
+	    || bLoadSaveMode == LOAD_INGAME_MISSION_AUTO || bLoadSaveMode == LOAD_INGAME_SKIRMISH_AUTO;
+
+	modeLoad = bLoad;
+	modeIngame = bIngame;
+	modeReplay = bReplay;
 	debug(LOG_SAVE, "called (%d, %s)", bLoad, title);
 
-	if ((bLoadSaveMode == LOAD_INGAME_MISSION) || (bLoadSaveMode == SAVE_INGAME_MISSION)
-	    || (bLoadSaveMode == LOAD_INGAME_SKIRMISH) || (bLoadSaveMode == SAVE_INGAME_SKIRMISH)
-	    || (bLoadSaveMode == LOAD_INGAME_MISSION_AUTO) || (bLoadSaveMode == LOAD_INGAME_SKIRMISH_AUTO))
+	if (bIngame)
 	{
 		if (!bMultiPlayer || (NetPlay.bComms == 0))
 		{
@@ -337,7 +349,7 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 		}
 		else
 		{
-			button->pTip = mode? _("Autosave directory") : _("Autosave directory (not allowed for saving)");
+			button->pTip = modeLoad? _("Autosave directory") : _("Autosave directory (not allowed for saving)");
 			button->pText = "[auto]";
 		}
 		slotCount++;
@@ -356,12 +368,13 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 
 	std::vector<SaveGameNamesAndTimes> saveGameNamesAndTimes;
 
+	char const *extension = bReplay? sSaveReplayExtension : sSaveGameExtension;
 	for (i = files; *i != nullptr; ++i)
 	{
 		char savefile[256];
 		time_t savetime;
 
-		if (!isASavedGamefile(*i))
+		if (!isASavedGamefile(*i, extension))
 		{
 			// If it doesn't, move on to the next filename
 			continue;
@@ -373,7 +386,7 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 		snprintf(savefile, sizeof(savefile), "%s/%s", NewSaveGamePath, *i);
 		savetime = WZ_PHYSFS_getLastModTime(savefile);
 
-		(*i)[strlen(*i) - 4] = '\0'; // remove .gam extension
+		(*i)[strlen(*i) - strlen(extension)] = '\0'; // remove .gam extension
 
 		SaveGameNamesAndTimes saveGameNameAndTime{ *i, savetime };
 		saveGameNamesAndTimes.push_back(saveGameNameAndTime);
@@ -413,9 +426,7 @@ bool closeLoadSave()
 {
 	bLoadSaveUp = false;
 
-	if ((bLoadSaveMode == LOAD_INGAME_MISSION) || (bLoadSaveMode == SAVE_INGAME_MISSION)
-	    || (bLoadSaveMode == LOAD_INGAME_SKIRMISH) || (bLoadSaveMode == SAVE_INGAME_SKIRMISH)
-	    || (bLoadSaveMode == LOAD_INGAME_MISSION_AUTO) || (bLoadSaveMode == LOAD_INGAME_SKIRMISH_AUTO))
+	if (modeIngame)
 	{
 
 		if (!bMultiPlayer || (NetPlay.bComms == 0))
@@ -500,7 +511,7 @@ static bool findLastSaveFrom(const char *path)
 		char savefile[PATH_MAX];
 		time_t savetime;
 
-		if (!isASavedGamefile(*i))
+		if (!isASavedGamefile(*i, sSaveGameExtension))
 		{
 			// If it doesn't, move on to the next filename
 			continue;
@@ -549,7 +560,6 @@ bool findLastSave()
 bool runLoadSave(bool bResetMissionWidgets)
 {
 	static char     sDelete[PATH_MAX];
-	UDWORD		i, campaign;
 	W_CONTEXT		context;
 	char NewSaveGamePath[PATH_MAX] = {'\0'};
 
@@ -585,7 +595,7 @@ bool runLoadSave(bool bResetMissionWidgets)
 			ssprintf(NewSaveGamePath, "%s%s/", SaveGamePath, "campaign");
 		}
 	}
-	if (id == LOADENTRY_START && mode) // [auto] or [..], ignore click for saves
+	if (id == LOADENTRY_START && modeLoad) // [auto] or [..], ignore click for saves
 	{
 		int iLoadSaveMode = (int)bLoadSaveMode; // for evil integer arithmetics
 		bLoadSaveMode = (enum LOADSAVE_MODE)(iLoadSaveMode ^ 16); // toggle _AUTO bit
@@ -598,7 +608,7 @@ bool runLoadSave(bool bResetMissionWidgets)
 	{
 		W_BUTTON *slotButton = (W_BUTTON *)widgGetFromID(psRequestScreen, id);
 
-		if (mode)								// Loading, return that entry.
+		if (modeLoad)								// Loading, return that entry.
 		{
 			if (!slotButton->pText.isEmpty())
 			{
@@ -609,7 +619,21 @@ bool runLoadSave(bool bResetMissionWidgets)
 				return false;				// clicked on an empty box
 			}
 
-			goto success;
+			bRequestLoadReplay = modeReplay;
+			bRequestLoad = !modeReplay;
+			if (modeReplay)
+			{
+				// Load a replay.
+				closeLoadSave();
+				return true;
+			}
+
+			// Load a savegame.
+			unsigned campaign = getCampaign(sRequestResult);
+			setCampaignNumber(campaign);
+			debug(LOG_WZ, "Set campaign for %s to %u", sRequestResult, campaign);
+			closeLoadSave();
+			return true;
 		}
 		else //  SAVING!add edit box at that position.
 		{
@@ -667,7 +691,7 @@ bool runLoadSave(bool bResetMissionWidgets)
 		// scan to see if that game exists in another slot, if so then fail.
 		sstrcpy(sTemp, widgGetString(psRequestScreen, id));
 
-		for (i = LOADENTRY_START; i < LOADENTRY_END; i++)
+		for (unsigned i = LOADENTRY_START; i < LOADENTRY_END; ++i)
 		{
 			if (i != chosenSlotId)
 			{
@@ -705,19 +729,11 @@ bool runLoadSave(bool bResetMissionWidgets)
 cleanup:
 	closeLoadSave();
 	bRequestLoad = false;
+	bRequestLoadReplay = false;
 	if (bResetMissionWidgets && widgGetFromID(psWScreen, IDMISSIONRES_FORM) == nullptr)
 	{
 		resetMissionWidgets();			//reset the mission widgets here if necessary
 	}
-	return true;
-
-// success on load.
-success:
-	campaign = getCampaign(sRequestResult);
-	setCampaignNumber(campaign);
-	debug(LOG_WZ, "Set campaign for %s to %u", sRequestResult, campaign);
-	closeLoadSave();
-	bRequestLoad = true;
 	return true;
 }
 
@@ -856,7 +872,7 @@ static void freeAutoSaveSlot(const char *path)
 	int nfiles = 0;
 	for (i = files; *i != nullptr; ++i)
 	{
-		if (!isASavedGamefile(*i))
+		if (!isASavedGamefile(*i, sSaveGameExtension))
 		{
 			// If it doesn't, move on to the next filename
 			continue;
@@ -876,7 +892,7 @@ static void freeAutoSaveSlot(const char *path)
 	{
 		char savefile[PATH_MAX];
 
-		if (!isASavedGamefile(*i))
+		if (!isASavedGamefile(*i, sSaveGameExtension))
 		{
 			// If it doesn't, move on to the next filename
 			continue;

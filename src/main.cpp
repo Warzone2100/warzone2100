@@ -54,6 +54,7 @@
 #include "lib/ivis_opengl/piemode.h"
 #include "lib/ivis_opengl/screen.h"
 #include "lib/netplay/netplay.h"
+#include "lib/netplay/netreplay.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/cdaudio.h"
 
@@ -129,6 +130,7 @@ char rulesettag[40] = "";
 //flag to indicate when initialisation is complete
 bool	gameInitialised = false;
 char	SaveGamePath[PATH_MAX];
+char    ReplayPath[PATH_MAX];
 char	ScreenDumpPath[PATH_MAX];
 char	MultiCustomMapsPath[PATH_MAX];
 char	MultiPlayersPath[PATH_MAX];
@@ -866,6 +868,8 @@ static void startGameLoop()
 	}
 	triggerEvent(TRIGGER_START_LEVEL);
 	screen_disableMapPreview();
+
+	NETreplaySaveStart();
 }
 
 
@@ -876,6 +880,9 @@ static void startGameLoop()
 static void stopGameLoop()
 {
 	clearInfoMessages(); // clear CONPRINTF messages before each new game/mission
+
+	NETreplaySaveStop();
+
 	if (gameLoopStatus != GAMECODE_NEWLEVEL)
 	{
 		clearBlueprints();
@@ -1340,6 +1347,9 @@ int realmain(int argc, char *argv[])
 	PHYSFS_mkdir("savegames/campaign/auto");	// campaign autosave games
 	PHYSFS_mkdir("savegames/skirmish");		// skirmish save games
 	PHYSFS_mkdir("savegames/skirmish/auto");	// skirmish autosave games
+
+	make_dir(SaveGamePath, "replay", nullptr);  // replays
+	PHYSFS_mkdir("replay/skirmish");
 
 	make_dir(ScreenDumpPath, "screenshots", nullptr);	// for screenshots
 
