@@ -47,6 +47,7 @@
 
 #include "netplay.h"
 #include "netlog.h"
+#include "netreplay.h"
 #include "netsocket.h"
 
 #include <miniupnpc/miniwget.h>
@@ -2176,6 +2177,7 @@ bool NETrecvGame(NETQUEUE *queue, uint8_t *type)
 				return false;  // Still waiting for messages from this player, and all players should process messages in the same order. Will have to freeze the game while waiting.
 			}
 
+			NETreplaySaveNetMessage(NETgetMessage(*queue), queue->index);
 			*type = NETgetMessage(*queue)->type;
 
 			if (*type == GAME_GAME_TIME)

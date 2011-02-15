@@ -343,6 +343,7 @@ void startSinglePlayerMenu()
 	addTextButton(FRONTEND_CHALLENGES, FRONTEND_POS4X, FRONTEND_POS4Y, _("Challenges"), WBUT_TXTCENTRE);
 	addTextButton(FRONTEND_LOADGAME_MISSION, FRONTEND_POS5X, FRONTEND_POS5Y, _("Load Campaign Game"), WBUT_TXTCENTRE);
 	addTextButton(FRONTEND_LOADGAME_SKIRMISH, FRONTEND_POS6X, FRONTEND_POS6Y, _("Load Skirmish Game"), WBUT_TXTCENTRE);
+	addTextButton(FRONTEND_REPLAY, FRONTEND_POS7X,FRONTEND_POS7Y, _("View Replay"), WBUT_TXTCENTRE);
 
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("SINGLE PLAYER"));
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
@@ -510,6 +511,11 @@ bool runSinglePlayerMenu()
 			SPinit(LEVEL_TYPE::SKIRMISH);
 			bMultiPlayer = true;
 			addLoadSave(LOAD_FRONTEND_SKIRMISH, _("Load Skirmish Saved Game"));	// change mode when loadsave returns
+			break;
+
+		case FRONTEND_REPLAY:
+			SPinit(LEVEL_TYPE::SKIRMISH);
+			addLoadSave(LOADREPLAY_FRONTEND_SKIRMISH, _("Load Replay"));  // change mode when loadsave returns
 			break;
 
 		case FRONTEND_SKIRMISH:
