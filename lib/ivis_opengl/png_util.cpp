@@ -323,6 +323,7 @@ void iV_saveImage_JPEG(const char *fileName, const iV_Image *image)
 	if (jpeg == NULL)
 	{
 		debug(LOG_ERROR, "pie_JPEGSaveFile: Couldn't allocate memory\n");
+		free(buffer);
 		return;
 	}
 
