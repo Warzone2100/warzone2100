@@ -46,7 +46,9 @@ back when building is destroyed*/
 
 #define DROID_RESISTANCE_FACTOR     30
 
-#define MAX_RECYCLED_DROIDS		32
+#define MAX_RECYCLED_DROIDS 100
+// Changing this breaks savegames!
+#define SAVE_RECYCLED_DROIDS 32
 
 //storage
 extern DROID_TEMPLATE			*apsDroidTemplates[MAX_PLAYERS];

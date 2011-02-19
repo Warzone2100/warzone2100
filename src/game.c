@@ -878,7 +878,7 @@ static bool deserializeSaveGameV14Data(PHYSFS_file* fileHandle, SAVE_GAME_V14* s
 #define GAME_SAVE_V15			\
 	GAME_SAVE_V14;				\
 	BOOL        offWorldKeepLists;\
-	uint8_t     aDroidExperience[MAX_PLAYERS][MAX_RECYCLED_DROIDS];\
+	uint8_t     aDroidExperience[MAX_PLAYERS][SAVE_RECYCLED_DROIDS];\
 	uint32_t    RubbleTile;\
 	uint32_t    WaterTile;\
 	uint32_t    fogColour;\
@@ -899,7 +899,7 @@ static bool serializeSaveGameV15Data(PHYSFS_file* fileHandle, const SAVE_GAME_V1
 
 	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
-		for (j = 0; j < MAX_RECYCLED_DROIDS; ++j)
+		for (j = 0; j < SAVE_RECYCLED_DROIDS; ++j)
 		{
 			if (!PHYSFS_writeUBE8(fileHandle, serializeGame->aDroidExperience[i][j]))
 				return false;
@@ -925,7 +925,7 @@ static bool deserializeSaveGameV15Data(PHYSFS_file* fileHandle, SAVE_GAME_V15* s
 
 	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
-		for (j = 0; j < MAX_RECYCLED_DROIDS; ++j)
+		for (j = 0; j < SAVE_RECYCLED_DROIDS; ++j)
 		{
 			if (!PHYSFS_readUBE8(fileHandle, &serializeGame->aDroidExperience[i][j]))
 				return false;
@@ -1217,7 +1217,7 @@ typedef struct save_game_v27
 */
 #define GAME_SAVE_V27			\
 	GAME_SAVE_V24;				\
-	uint16_t    awDroidExperience[MAX_PLAYERS][MAX_RECYCLED_DROIDS]
+	uint16_t    awDroidExperience[MAX_PLAYERS][SAVE_RECYCLED_DROIDS]
 
 typedef struct save_game_v27
 {
@@ -1233,7 +1233,7 @@ static bool serializeSaveGameV27Data(PHYSFS_file* fileHandle, const SAVE_GAME_V2
 
 	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
-		for (j = 0; j < MAX_RECYCLED_DROIDS; ++j)
+		for (j = 0; j < SAVE_RECYCLED_DROIDS; ++j)
 		{
 			if (!PHYSFS_writeUBE16(fileHandle, serializeGame->awDroidExperience[i][j]))
 				return false;
@@ -1252,7 +1252,7 @@ static bool deserializeSaveGameV27Data(PHYSFS_file* fileHandle, SAVE_GAME_V27* s
 
 	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
-		for (j = 0; j < MAX_RECYCLED_DROIDS; ++j)
+		for (j = 0; j < SAVE_RECYCLED_DROIDS; ++j)
 		{
 			if (!PHYSFS_readUBE16(fileHandle, &serializeGame->awDroidExperience[i][j]))
 				return false;
@@ -2586,7 +2586,7 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		{
 			for (player = 0; player < MAX_PLAYERS; player++)
 			{
-				for (inc = 0; inc < MAX_RECYCLED_DROIDS; inc++)
+				for (inc = 0; inc < SAVE_RECYCLED_DROIDS; inc++)
 				{
 					aDroidExperience[player][inc]	= saveGameData.awDroidExperience[player][inc];
 				}
@@ -2596,7 +2596,7 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 		{
 			for (player = 0; player < MAX_PLAYERS; player++)
 			{
-				for (inc = 0; inc < MAX_RECYCLED_DROIDS; inc++)
+				for (inc = 0; inc < SAVE_RECYCLED_DROIDS; inc++)
 				{
 					aDroidExperience[player][inc]	= saveGameData.aDroidExperience[player][inc];
 				}
@@ -3984,7 +3984,7 @@ static void endian_SaveGameV(SAVE_GAME* psSaveGame, UDWORD version)
 	/* GAME_SAVE_V27 includes GAME_SAVE_V24 */
 	if(version >= VERSION_27) {
 		for(i = 0; i < MAX_PLAYERS; i++)
-			for(j = 0; j < MAX_RECYCLED_DROIDS; j++)
+			for(j = 0; j < SAVE_RECYCLED_DROIDS; j++)
 				endian_uword(&psSaveGame->awDroidExperience[i][j]);
 	}
 	/* GAME_SAVE_V24 includes GAME_SAVE_V22 */
@@ -4717,7 +4717,7 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 
     for (player = 0; player < MAX_PLAYERS; player++)
 	{
-		for (i = 0; i < MAX_RECYCLED_DROIDS; ++i)
+		for (i = 0; i < SAVE_RECYCLED_DROIDS; ++i)
 		{
 			aDroidExperience[player][i]	= 0;//clear experience before
 		}
@@ -4735,7 +4735,7 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 
 		for (player = 0; player < MAX_PLAYERS; player++)
 		{
-			for (i = 0; i < MAX_RECYCLED_DROIDS; ++i)
+			for (i = 0; i < SAVE_RECYCLED_DROIDS; ++i)
 			{
 				aDroidExperience[player][i] = 0;//clear experience before building saved units
 			}
@@ -4943,7 +4943,7 @@ static bool writeGameFile(const char* fileName, SDWORD saveType)
 		saveGame.aDefaultECM[i]       = aDefaultECM[i];
 		saveGame.aDefaultRepair[i]    = aDefaultRepair[i];
 
-		for (j = 0; j < MAX_RECYCLED_DROIDS; ++j)
+		for (j = 0; j < SAVE_RECYCLED_DROIDS; ++j)
 		{
 			saveGame.awDroidExperience[i][j]	= aDroidExperience[i][j];
 		}
