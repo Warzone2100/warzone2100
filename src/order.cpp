@@ -3333,30 +3333,22 @@ static char *secondaryPrintFactories(UDWORD state)
 #define secondaryPrintFactories(x)
 #endif
 
-
-// check the damage level of a droid against it's secondary state
-void secondaryCheckDamageLevel(DROID *psDroid)
+// Couldn't think of a better name for the function. Returns true iff droid needs to repair according to repairState, and deselects the droid iff droid needs to repair and more droids are selected.
+static bool secondaryCheckDamageLevelDeselect(DROID *psDroid, SECONDARY_STATE repairState)
 {
-	SECONDARY_STATE	State;
-	unsigned int repairLevel;
-
-	State = secondaryGetState(psDroid, DSO_REPAIR_LEVEL);
-	if (State == DSS_REPLEV_LOW)
+	unsigned repairLevel;
+	switch (repairState)
 	{
-		repairLevel = REPAIRLEV_HIGH;			//repair often
-	}
-	else if(State == DSS_REPLEV_HIGH)
-	{
-		repairLevel = REPAIRLEV_LOW;	 		// don't repair often.
-	}
-	else
-	{
-		repairLevel = 0;						//never repair
+		case DSS_REPLEV_LOW:   repairLevel = REPAIRLEV_HIGH; break;  // LOW → HIGH, seems DSS_REPLEV_LOW and DSS_REPLEV_HIGH are badly named?
+		case DSS_REPLEV_HIGH:  repairLevel = REPAIRLEV_LOW;  break;
+		default:
+		case DSS_REPLEV_NEVER: repairLevel = 0;              break;
 	}
 
-	//don't bother checking if 'do or die'
-	if( repairLevel && PERCENT(psDroid->body,psDroid->originalBody) <= repairLevel)
+	// psDroid->body / psDroid->originalBody < repairLevel / 100, without integer truncation
+	if (psDroid->body * 100 <= repairLevel * psDroid->originalBody)
 	{
+		// Only deselect the droid if there is another droid selected.
 		if (psDroid->selected)
 		{
 			DROID* psTempDroid;
@@ -3369,6 +3361,16 @@ void secondaryCheckDamageLevel(DROID *psDroid)
 				}
 			}
 		}
+		return true;
+	}
+	return false;
+}
+
+// check the damage level of a droid against it's secondary state
+void secondaryCheckDamageLevel(DROID *psDroid)
+{
+	if (secondaryCheckDamageLevelDeselect(psDroid, secondaryGetState(psDroid, DSO_REPAIR_LEVEL)))
+	{
 		if (!isVtolDroid(psDroid))
 		{
 			psDroid->group = UBYTE_MAX;
@@ -3404,6 +3406,11 @@ BOOL secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 
 	if (bMultiMessages && mode == ModeQueue)
 	{
+		if (sec == DSO_REPAIR_LEVEL)
+		{
+			secondaryCheckDamageLevelDeselect(psDroid, State);  // Deselect droid immediately, if applicable, so it isn't ordered around by mistake.
+		}
+
 		sendDroidSecondary(psDroid,sec,State);
 		return true;  // Wait for our order before changing the droid.
 	}
