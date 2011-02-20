@@ -340,7 +340,7 @@ AS_IF([test "x$enable_sound" = "xyes"],[
 
 PKG_CHECK_MODULES([OPENGLC], [quesoglc >= 0.7.2])
 
-PKG_CHECK_MODULES([GLEW], [glew >= 1.5.4])
+PKG_CHECK_MODULES([GLEW], [glew >= 1.5.2])
 
 # Checks for libraries:
 
