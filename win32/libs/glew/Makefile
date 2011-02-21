@@ -17,10 +17,17 @@ extract-stamp: $(TOPDIR)/downloads/$(PKG_SOURCE)
 
 $(PKG_SOURCEBASE)/Makefile: extract-stamp
 
+patch-stamp: extract-stamp
+	@for patch in patches/*.diff; do \
+		echo sed -e "s/\$$sourcebase\b/$(PKG_SOURCEBASE)/g" -e "s/\$$host_triplet\b/$(HOST_TRIPLET)/g" "$$patch" \| patch -p0; \
+		sed -e "s/\$$sourcebase\b/$(PKG_SOURCEBASE)/g" -e "s/\$$host_triplet\b/$(HOST_TRIPLET)/g" "$$patch" | patch -p0 || exit ; \
+	done
+	touch patch-stamp
+
 $(TOPDIR)/build/libs/lib/libglew32.a: $(PKG_SOURCEBASE)/lib/libglew32.a
 	$(MAKE) -C $(PKG_SOURCEBASE) GLEW_DEST=../$(TOPDIR)/build/libs SYSTEM=linux-mingw32 install
 
-$(PKG_SOURCEBASE)/lib/libglew32.a: $(PKG_SOURCEBASE)/Makefile
+$(PKG_SOURCEBASE)/lib/libglew32.a: $(PKG_SOURCEBASE)/Makefile patch-stamp
 	$(MAKE) -C $(PKG_SOURCEBASE) GLEW_DEST=../$(TOPDIR)/build/libs SYSTEM=linux-mingw32
 
 build: $(TARGET)
