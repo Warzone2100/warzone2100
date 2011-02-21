@@ -27,7 +27,7 @@
 /*
  * glew.h includes inttypes.h under mingw and cygwin
  * inttypes.h includes stdint.h
- * We need to include wzglobal.h because we must
+ * We need to include wzglobal.h first because we must
  * define __STDC_LIMIT_MACROS before including stdint.h
  */
 #include "lib/framework/wzglobal.h"
