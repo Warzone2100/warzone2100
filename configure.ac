@@ -341,6 +341,9 @@ AS_IF([test "x$enable_sound" = "xyes"],[
 PKG_CHECK_MODULES([OPENGLC], [quesoglc >= 0.7.2])
 
 PKG_CHECK_MODULES([GLEW], [glew >= 1.5.2])
+if test "x$host_os_mingw32" = "xyes" ; then
+	AC_SUBST([GLEW_LIBS], [-lglew32])
+fi
 
 # Checks for libraries:
 
