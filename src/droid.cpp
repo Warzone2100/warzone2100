@@ -697,7 +697,7 @@ void droidBurn(DROID *psDroid)
 	orderDroid(psDroid, DORDER_RUNBURN, ModeImmediate);
 }
 
-void _syncDebugDroid(const char *function, DROID *psDroid, char ch)
+void _syncDebugDroid(const char *function, DROID const *psDroid, char ch)
 {
 	char actTar[DROID_MAXWEAPS*15];
 	unsigned actTarLen = 0;

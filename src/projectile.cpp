@@ -311,7 +311,7 @@ static void proj_UpdateKills(PROJECTILE *psObj, int32_t experienceInc)
 
 /***************************************************************************/
 
-void _syncDebugProjectile(const char *function, PROJECTILE *psProj, char ch)
+void _syncDebugProjectile(const char *function, PROJECTILE const *psProj, char ch)
 {
 	_syncDebug(function, "%c projectile = p%d;pos(%d,%d,%d),rot(%d,%d,%d),state%d,edc%d,nd%lu", ch,
 	          psProj->player,

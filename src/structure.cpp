@@ -3567,7 +3567,7 @@ static float CalcStructureSmokeInterval(float damage)
 	return (((1. - damage) + 0.1) * 10) * STRUCTURE_DAMAGE_SCALING;
 }
 
-void _syncDebugStructure(const char *function, STRUCTURE *psStruct, char ch)
+void _syncDebugStructure(const char *function, STRUCTURE const *psStruct, char ch)
 {
 	int ref = 0;
 	char const *refStr = "";

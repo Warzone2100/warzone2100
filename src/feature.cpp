@@ -370,7 +370,7 @@ FEATURE::~FEATURE()
 {
 }
 
-void _syncDebugFeature(const char *function, FEATURE *psFeature, char ch)
+void _syncDebugFeature(const char *function, FEATURE const *psFeature, char ch)
 {
 	_syncDebug(function, "%c feature%d = p%d;pos(%d,%d,%d),subtype%d,dam%d,bp%d", ch,
 	          psFeature->id,

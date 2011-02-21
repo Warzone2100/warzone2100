@@ -38,4 +38,7 @@ void checkObject(const BASE_OBJECT* psObject, const char * const location_descri
 /* assert if object is bad */
 #define CHECK_OBJECT(object) checkObject((object), AT_MACRO, __FUNCTION__, max_check_object_recursion)
 
+#define syncDebugObject(psObject, ch) _syncDebugObject(__FUNCTION__, psObject, ch)
+void _syncDebugObject(const char *function, SIMPLE_OBJECT const *psObject, char ch);
+
 #endif // __INCLUDED_BASEOBJECT_H__
