@@ -6,7 +6,7 @@
 GCC_ENABLE_FIX_AND_CONTINUE = YES
 GCC_DYNAMIC_NO_PIC = NO
 GCC_OPTIMIZATION_LEVEL = 0
-GCC_PREPROCESSOR_DEFINITIONS = DEBUG $(inherited)
+BUILD_PREPROCESSOR_DEFINITIONS = $(inherited) DEBUG
 
 // Additional build flags for both c and c++ files
 BuildDependentFlagsForCandCpp = -Werror -fstack-protector-all
