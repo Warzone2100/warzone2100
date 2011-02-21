@@ -24,6 +24,13 @@
 #ifndef __INCLUDED_LIB_FRAMEWORK_OPENGL_H__
 #define __INCLUDED_LIB_FRAMEWORK_OPENGL_H__
 
+/*
+ * glew.h includes inttypes.h under mingw and cygwin
+ * inttypes.h includes stdint.h
+ * We need to include wzglobal.h because we must
+ * define __STDC_LIMIT_MACROS before including stdint.h
+ */
+#include "lib/framework/wzglobal.h"
 #include <GL/glew.h>
 
 #endif

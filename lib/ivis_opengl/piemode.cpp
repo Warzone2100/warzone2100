@@ -26,8 +26,8 @@
  */
 /***************************************************************************/
 
-#include <GL/glew.h>
 #include "lib/framework/frame.h"
+#include "lib/framework/opengl.h" // for glew macros
 
 #include <SDL.h>
 

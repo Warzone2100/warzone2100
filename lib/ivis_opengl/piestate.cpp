@@ -21,7 +21,6 @@
  *  Renderer setup and state control routines for 3D rendering.
  */
 
-#include <GL/glew.h>
 #include "lib/framework/frame.h"
 
 #include <SDL.h>

@@ -26,13 +26,13 @@
  * The technique used it called "texture splatting".
  * Every layer only draws the spots where that terrain is, and additive blending is used to make transitions smooth.
  * Decals are a kind of hack now, as for some tiles (where decal == true) the old tile is just drawn.
- * The water is drawn using the hardcoded page-80 and page-81 textures. 
+ * The water is drawn using the hardcoded page-80 and page-81 textures.
  */
 
-#include <GL/glew.h>
 #include <string.h>
 
 #include "lib/framework/frame.h"
+#include "lib/framework/opengl.h"
 #include "lib/ivis_opengl/ivisdef.h"
 #include "lib/ivis_opengl/imd.h"
 #include "lib/ivis_opengl/piefunc.h"

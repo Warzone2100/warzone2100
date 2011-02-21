@@ -23,17 +23,16 @@
  * This is where we do texture atlas generation.
  */
 
-#include <GL/glew.h>
-#include "lib/framework/frame.h"
-
-
 #include <string.h>
+
+#include "lib/framework/frame.h"
 
 #include <physfs.h>
 
 #include "lib/framework/file.h"
 #include "lib/framework/string_ext.h"
 
+#include "lib/framework/opengl.h"
 #include "lib/ivis_opengl/pietypes.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/tex.h"
