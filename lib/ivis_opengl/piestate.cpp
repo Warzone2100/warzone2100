@@ -28,12 +28,6 @@
 #include <physfs.h>
 #include "lib/framework/opengl.h"
 
-#if defined(WZ_OS_MAC)
-# include <OpenGL/glu.h>
-#else
-# include <GL/glu.h>
-#endif
-
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/piedef.h"
