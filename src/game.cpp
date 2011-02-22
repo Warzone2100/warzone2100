@@ -6220,8 +6220,7 @@ BOOL loadSaveStructureV7(char *pFileData, UDWORD filesize, UDWORD numStructures)
 				((RESEARCH_FACILITY *)psStructure->pFunctionality)->timeStarted = (psSaveStructure->timeStarted);
 				if (psSaveStructure->subjectInc != (UDWORD)-1)
 				{
-					((RESEARCH_FACILITY *)psStructure->pFunctionality)->psSubject = (BASE_STATS *)
-						(asResearch + psSaveStructure->subjectInc);
+					((RESEARCH_FACILITY *)psStructure->pFunctionality)->psSubject = asResearch + psSaveStructure->subjectInc;
 					((RESEARCH_FACILITY*)psStructure->pFunctionality)->timeToResearch =
 						(asResearch + psSaveStructure->subjectInc)->researchPoints /
 						((RESEARCH_FACILITY *)psStructure->pFunctionality)->
@@ -6545,7 +6544,7 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 					researchId = getResearchIdFromName(psSaveStructure->researchName);
 					if (researchId != NULL_ID)
 					{
-						psResearch->psSubject = (BASE_STATS *)(asResearch + researchId);
+						psResearch->psSubject = asResearch + researchId;
 						psResearch->timeToResearch = (asResearch + researchId)->researchPoints / psResearch->researchPoints;
 						psResearch->timeStarted = psSaveStructure->timeStarted;
 						if (saveGameVersion >= VERSION_20)

@@ -2626,7 +2626,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 {
 	BASE_STATS			*pSubject = NULL;
 	UDWORD				pointsToAdd;//, iPower;
-	PLAYER_RESEARCH		*pPlayerRes = asPlayerResList[psStructure->player];
 	RESEARCH			*pResearch;
 	UDWORD				structureMode = 0;
 	DROID				*psDroid;
@@ -3152,7 +3151,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				}
 			}
 
-			pPlayerRes += (pSubject->ref - REF_RESEARCH_START);
+			PLAYER_RESEARCH *pPlayerRes = &asPlayerResList[psStructure->player][pSubject->ref - REF_RESEARCH_START];
 			//check research has not already been completed by another structure
 			if (!IsResearchCompleted(pPlayerRes))
 			{
@@ -3170,10 +3169,9 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				              (psResFacility->researchPoints * psResFacility->timeStarted) / GAME_TICKS_PER_SEC;
 				pointsToAdd = MIN(pointsToAdd, pResearch->researchPoints - pPlayerRes->currentPoints);
 
-				if (pointsToAdd > 0 &&
-				    pResearch->researchPoints > 0) // might be a "free" research
+				if (pointsToAdd > 0 && pResearch->researchPoints > 0)  // might be a "free" research
 				{
-					int64_t powerNeeded = ((int64_t)(pResearch->researchPower * pointsToAdd) >> 32) / pResearch->researchPoints;
+					int64_t powerNeeded = (int64_t(pResearch->researchPower * pointsToAdd) << 32) / pResearch->researchPoints;
 					pPlayerRes->currentPoints += requestPrecisePowerFor(psStructure->player, powerNeeded, pointsToAdd);
 					psResFacility->timeStarted = gameTime;
 				}
@@ -3184,7 +3182,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				{
 					if(bMultiMessages)
 					{
-						if (myResponsibility(psStructure->player))
+						if (myResponsibility(psStructure->player) && !isInSync())
 						{
 							// This message should have no effect if in synch.
 							SendResearch(psStructure->player, pSubject->ref - REF_RESEARCH_START, true);
@@ -3198,8 +3196,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 					}
 					else
 					{
-						if (pResearch->researchPoints >
-							((RESEARCH *)psResFacility->psBestTopic)->researchPoints)
+						if (pResearch->researchPoints > psResFacility->psBestTopic->researchPoints)
 						{
 							psResFacility->psBestTopic = psResFacility->psSubject;
 						}

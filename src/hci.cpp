@@ -5453,7 +5453,7 @@ static BASE_STATS *getResearchStats(BASE_OBJECT *psObj)
 static BOOL setResearchStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 {
 	STRUCTURE			*psBuilding;
-	RESEARCH			*pResearch;
+	RESEARCH *              pResearch = (RESEARCH *)psStats;
 	PLAYER_RESEARCH		*pPlayerRes;
 	UDWORD				count;
 	RESEARCH_FACILITY	*psResFacilty;
@@ -5466,16 +5466,16 @@ static BOOL setResearchStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 
 	if (bMultiMessages)
 	{
-		if (psStats != NULL)
+		if (pResearch != NULL)
 		{
 			// Say that we want to do reseach [sic].
-			sendResearchStatus(psBuilding, ((RESEARCH *)psStats)->ref - REF_RESEARCH_START, selectedPlayer, true);
+			sendResearchStatus(psBuilding, pResearch->ref - REF_RESEARCH_START, selectedPlayer, true);
 		}
 		else
 		{
 			cancelResearch(psBuilding, ModeQueue);
 		}
-		psResFacilty->psSubjectPending = psStats;  // Tell UI that we are going to research.
+		psResFacilty->psSubjectPending = pResearch;  // Tell UI that we are going to research.
 		//stop the button from flashing once a topic has been chosen
 		stopReticuleButtonFlash(IDRET_RESEARCH);
 		return true;
@@ -5485,16 +5485,14 @@ static BOOL setResearchStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 	psResFacilty->psSubject = NULL;
 
 	//set up the player_research
-	if (psStats != NULL)
+	if (pResearch != NULL)
 	{
-		pResearch = (RESEARCH*) psStats;
-
 		count = pResearch->ref - REF_RESEARCH_START;
 		//meant to still be in the list but greyed out
 		pPlayerRes = asPlayerResList[selectedPlayer] + count;
 
 		//set the subject up
-		psResFacilty->psSubject = psStats;
+		psResFacilty->psSubject = pResearch;
 
 		if (IsResearchCancelled(pPlayerRes))
 		{

@@ -149,16 +149,17 @@ enum STRUCT_STATES
 	SS_BLUEPRINT_PLANNED,
 };
 
+struct RESEARCH;
+
 struct RESEARCH_FACILITY
 {
-	struct BASE_STATS *     psSubject;              // The subject the structure is working on.
-	struct BASE_STATS *     psSubjectPending;       // The subject the structure is going to work on when the GAME_RESEARCHSTATUS message is received.
+	RESEARCH *      psSubject;                      // The subject the structure is working on.
+	RESEARCH *      psSubjectPending;               // The subject the structure is going to work on when the GAME_RESEARCHSTATUS message is received.
 	UDWORD		capacity;				/* Number of upgrade modules added*/
 	UDWORD		timeStarted;			/* The time the building started on the subject*/
 	UDWORD		researchPoints;			/* Research Points produced per research cycle*/
 	UDWORD		timeToResearch;			/* Time taken to research the topic*/
-	struct BASE_STATS	*psBestTopic;	/* The topic with the most research points
-										   that was last performed*/
+	RESEARCH *      psBestTopic;                    // The topic with the most research points that was last performed
 	UDWORD		powerAccrued;			/* used to keep track of power before
 										   researching a topic*/
 	UDWORD		timeStartHold;		    /* The time the research facility was put on hold*/

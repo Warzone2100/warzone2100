@@ -938,7 +938,7 @@ BOOL recvResearchStatus(NETQUEUE queue)
 
 			// Set the subject up
 			pResearch				= asResearch + index;
-			psResFacilty->psSubject = (BASE_STATS *) pResearch;
+			psResFacilty->psSubject = pResearch;
 
 			// If they have previously started but cancelled there is no need to accure power
 			if (IsResearchCancelled(pPlayerRes))
