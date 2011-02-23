@@ -109,7 +109,7 @@ BASE_OBJECT::~BASE_OBJECT()
 #endif //DEBUG
 }
 
-void checkObject(const BASE_OBJECT* psObject, const char * const location_description, const char * function, const int recurse)
+void checkObject(const SIMPLE_OBJECT *psObject, const char *const location_description, const char *function, const int recurse)
 {
 	if (recurse < 0)
 		return;
@@ -138,11 +138,6 @@ void checkObject(const BASE_OBJECT* psObject, const char * const location_descri
 			ASSERT_HELPER(!"invalid object type", location_description, function, "CHECK_OBJECT: Invalid object type (type num %u)", (unsigned int)psObject->type);
 			break;
 	}
-
-	ASSERT_HELPER(psObject->type == OBJ_FEATURE
-	    || psObject->type == OBJ_TARGET
-	    || psObject->player < MAX_PLAYERS,
-	       location_description, function, "CHECK_OBJECT: Out of bound owning player number (%u)", (unsigned int)psObject->player);
 }
 
 void _syncDebugObject(const char *function, SIMPLE_OBJECT const *psObject, char ch)

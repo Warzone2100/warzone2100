@@ -33,7 +33,7 @@ Rotation interpolateRot(Rotation v1, Rotation v2, uint32_t t1, uint32_t t2, uint
 /// Get interpolated object spacetime at time t.
 Spacetime interpolateObjectSpacetime(const SIMPLE_OBJECT *obj, uint32_t t);
 
-void checkObject(const BASE_OBJECT* psObject, const char * const location_description, const char * function, const int recurse);
+void checkObject(const SIMPLE_OBJECT *psObject, const char *const location_description, const char *function, const int recurse);
 
 /* assert if object is bad */
 #define CHECK_OBJECT(object) checkObject((object), AT_MACRO, __FUNCTION__, max_check_object_recursion)
