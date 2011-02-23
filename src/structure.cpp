@@ -2562,8 +2562,7 @@ BOOL IsPlayerStructureLimitReached(UDWORD PlayerNumber)
 
 UDWORD getMaxDroids(UDWORD PlayerNumber)
 {
-	return bMultiPlayer? 450 : PlayerNumber == 0? 100 : 999;
-
+	return bMultiPlayer? MAX_MP_DROIDS : PlayerNumber == 0? MAX_SP_DROIDS : MAX_SP_AI_DROIDS;
 }
 
 

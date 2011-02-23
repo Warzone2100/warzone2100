@@ -38,7 +38,11 @@
 
 #define DROID_RESISTANCE_FACTOR     30
 
-#define MAX_RECYCLED_DROIDS		32
+#define MAX_MP_DROIDS 450
+#define MAX_SP_DROIDS 100
+#define MAX_SP_AI_DROIDS 999
+// Changing this breaks campaign saves!
+#define MAX_RECYCLED_DROIDS 450
 
 //storage
 extern DROID_TEMPLATE			*apsDroidTemplates[MAX_PLAYERS];
