@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -113,21 +113,19 @@ static BOOL okToSend(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Droid checking info. keep position and damage in sync.
-BOOL sendCheck(void)
+void sendCheck()
 {
-	UDWORD i;
-
 	NETgetBytesSent();			// update stats.
 	NETgetBytesRecvd();
 	NETgetPacketsSent();
 	NETgetPacketsRecvd();
 
 	// dont send checks till all players are present.
-	for(i=0;i<MAX_PLAYERS;i++)
+	for (unsigned i = 0; i < MAX_PLAYERS; ++i)
 	{
 		if(isHumanPlayer(i) && ingame.JoiningInProgress[i])
 		{
-			return true;
+			return;
 		}
 	}
 
@@ -158,8 +156,6 @@ BOOL sendCheck(void)
 	{
 		sync_counter.unsentPing++;
 	}
-
-	return true;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -789,25 +785,11 @@ BOOL sendScoreCheck(void)
 
 		for (i = 0; i < game.maxPlayers; i++)
 		{
-			PLAYERSTATS		stats;
-
 			// Host controls AI's scores + his own...
 			if (myResponsibility(i))
 			{
-				// Update score
-				stats = getMultiStats(i);
-
-				// Add recently scored points
-				stats.recentKills += stats.killsToAdd;
-				stats.totalKills  += stats.killsToAdd;
-				stats.recentScore += stats.scoreToAdd;
-				stats.totalScore  += stats.scoreToAdd;
-
-				// Zero them out
-				stats.killsToAdd = stats.scoreToAdd = 0;
-
 				// Send score to everyone else
-				setMultiStats(i, stats, false);
+				setMultiStats(i, getMultiStats(i), false);
 			}
 		}
 	}

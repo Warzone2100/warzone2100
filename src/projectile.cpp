@@ -1126,7 +1126,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 			unsigned int damage = calcDamage(weaponDamage(psStats, psObj->player), psStats->weaponEffect, psObj->psDest);
 
 			// If we are in a multi-player game and the attacker is our responsibility
-			if (bMultiPlayer && psObj->psSource && myResponsibility(psObj->psSource->player))
+			if (bMultiPlayer && psObj->psSource)
 			{
 				updateMultiStatsDamage(psObj->psSource->player, psObj->psDest->player, damage);
 			}
@@ -1206,7 +1206,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 
 							if (bMultiPlayer)
 							{
-								if (psObj->psSource && myResponsibility(psObj->psSource->player))
+								if (psObj->psSource)
 								{
 									updateMultiStatsDamage(psObj->psSource->player, psCurrD->player, damage);
 								}
@@ -1249,7 +1249,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 
 								if (bMultiPlayer)
 								{
-									if (psObj->psSource && myResponsibility(psObj->psSource->player))
+									if (psObj->psSource)
 									{
 										updateMultiStatsDamage(psObj->psSource->player,	psCurrS->player,damage);
 									}
