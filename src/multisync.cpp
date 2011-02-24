@@ -84,16 +84,12 @@ static BOOL sendDroidCheck		(void);							//droids
 static BOOL sendPowerCheck(void);
 static UDWORD averagePing(void);
 
-// ////////////////////////////////////////////////////////////////////////////
-// Defined numeric values
-// NOTE / FIXME: Current MP games are locked at 45ms
-#define MP_FPS_LOCK			45			
-#define AV_PING_FREQUENCY	MP_FPS_LOCK * 1000		// how often to update average pingtimes. in approx millisecs.
-#define PING_FREQUENCY		MP_FPS_LOCK * 600		// how often to update pingtimes. in approx millisecs.
+#define AV_PING_FREQUENCY       20000                           // how often to update average pingtimes. in approx millisecs.
+#define PING_FREQUENCY          4000                            // how often to update pingtimes. in approx millisecs.
 #define STRUCT_PERIOD           4000                            // how often (ms) to send a structure check.
 #define DROID_PERIOD            315                             // how often (ms) to send droid checks
 #define POWER_PERIOD            5000                            // how often to send power levels
-#define SCORE_FREQUENCY		MP_FPS_LOCK * 2400		// how often to update global score.
+#define SCORE_FREQUENCY         108000                          // how often to update global score.
 
 static UDWORD				PingSend[MAX_PLAYERS];	//stores the time the ping was called.
 
@@ -825,30 +821,30 @@ BOOL sendPing(void)
 	static UDWORD	lastav = 0;		// Last time we updated average
 
 	// Only ping every so often
-	if (lastPing > gameTime)
+	if (lastPing > realTime)
 	{
 		lastPing = 0;
 	}
 
-	if (gameTime - lastPing < PING_FREQUENCY)
+	if (realTime - lastPing < PING_FREQUENCY)
 	{
 		return true;
 	}
 
-	lastPing = gameTime;
+	lastPing = realTime;
 
 	// If host, also update the average ping stat for joiners
 	if (NetPlay.isHost)
 	{
-		if (lastav > gameTime)
+		if (lastav > realTime)
 		{
 			lastav = 0;
 		}
 
-		if (gameTime - lastav > AV_PING_FREQUENCY)
+		if (realTime - lastav > AV_PING_FREQUENCY)
 		{
 			NETsetGameFlags(2, averagePing());
-			lastav = gameTime;
+			lastav = realTime;
 		}
 	}
 
@@ -883,7 +879,7 @@ BOOL sendPing(void)
 	// Note when we sent the ping
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		PingSend[i] = gameTime2;
+		PingSend[i] = realTime;
 	}
 
 	return true;
@@ -921,7 +917,7 @@ BOOL recvPing(NETQUEUE queue)
 	else
 	{
 		// Work out how long it took them to respond
-		ingame.PingTimes[sender] = (gameTime2 - PingSend[sender]) / 2;
+		ingame.PingTimes[sender] = (realTime - PingSend[sender]) / 2;
 
 		// Note that we have received it
 		PingSend[sender] = 0;

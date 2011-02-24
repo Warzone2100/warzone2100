@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -3814,31 +3814,27 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 			}
 			name += "...";
 		}
+		std::string subText;
 		if (j == NET_HOST_ONLY && NetPlay.bComms)
 		{
-			iV_DrawText(name.c_str(), x + nameX, y + 18);
-			iV_SetFont(font_small);
-			iV_SetTextColour(WZCOL_TEXT_MEDIUM);
-			iV_DrawText(_("HOST"), x + nameX, y + 28);
-			iV_SetFont(font_regular);
-			iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+			subText += _("HOST");
 		}
-		else if (NetPlay.bComms && NetPlay.isHost)
+		if (NetPlay.bComms && j != selectedPlayer)
 		{
 			char buf[250] = {'\0'};
 
 			// show "actual" ping time
-			iV_DrawText(name.c_str(), x + nameX, y + 18);
+			ssprintf(buf, "%s%s: %03d", subText.empty()? "" : ", ", _("Ping"), ingame.PingTimes[j]);
+			subText += buf;
+		}
+		iV_DrawText(name.c_str(), x + nameX, y + (subText.empty()? 22 : 18));
+		if (!subText.empty())
+		{
 			iV_SetFont(font_small);
 			iV_SetTextColour(WZCOL_TEXT_MEDIUM);
-			ssprintf(buf, "Ping: %03d", ingame.PingTimes[j]);
-			iV_DrawText(buf, x + nameX, y + 28);
+			iV_DrawText(subText.c_str(), x + nameX, y + 28);
 			iV_SetFont(font_regular);
 			iV_SetTextColour(WZCOL_TEXT_BRIGHT);
-		}
-		else
-		{
-			iV_DrawText(name.c_str(), x + nameX, y + 22);
 		}
 		
 		if(getMultiStats(j).played < 5)
