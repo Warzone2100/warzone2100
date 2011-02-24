@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-01-18 00:54+0100\n"
-"PO-Revision-Date: 2009-08-04 22:59+0100\n"
-"Last-Translator: Pedro Miguel Martins da Silva Caetano <pedro.m.caetano@netcabo.pt>\n"
+"POT-Creation-Date: 2011-02-25 00:09+0100\n"
+"PO-Revision-Date: 2011-02-16 12:57-0300\n"
+"Last-Translator: Artur Filipe <tucalipe@gmail.com>\n"
 "Language-Team: Portugese <warzone-dev@gna.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -5739,7 +5739,7 @@ msgid "New Design"
 msgstr "Novo Desenho"
 
 #: data/base/messages/strings/names.txt:15
-#: src/design.cpp:1313
+#: src/design.cpp:1275
 msgid "Transport"
 msgstr "Transporte"
 
@@ -9409,23 +9409,23 @@ msgstr "Transmissão da equipa exterior a chegar."
 
 #: data/base/sequenceaudio/cam1/c001end.txt:4
 msgid "Mayday! Mayday!"
-msgstr ""
+msgstr "Mayday! Mayday!"
 
 #: data/base/sequenceaudio/cam1/c001end.txt:5
 msgid "Please assist!..."
-msgstr ""
+msgstr "Favor ajudar!..."
 
 #: data/base/sequenceaudio/cam1/c001.txa:1
 msgid "CAMPAIGN ONE"
-msgstr ""
+msgstr "PRIMEIRA CAMPANHA"
 
 #: data/base/sequenceaudio/cam1/c001.txa:2
 msgid "WESTERN SECTOR"
-msgstr ""
+msgstr "SECTOR OESTE"
 
 #: data/base/sequenceaudio/cam1/c001.txa:4
 msgid "Dawn, July 4th, 2100"
-msgstr ""
+msgstr "Amanhecer, 4 de Julho de 2100"
 
 #: data/base/sequenceaudio/cam1/c001.txa:5
 #, fuzzy
@@ -9434,15 +9434,15 @@ msgstr "Metas do Projecto"
 
 #: data/base/sequenceaudio/cam1/c001.txa:6
 msgid "A New Era"
-msgstr ""
+msgstr "Uma Nova Era"
 
 #: data/base/sequenceaudio/cam1/c001.txa:8
 msgid "Morning, July 4th, 2100"
-msgstr ""
+msgstr "Manhã, 4 de Julho de 2100"
 
 #: data/base/sequenceaudio/cam1/c001.txa:9
 msgid "In-flight to Western Sector"
-msgstr ""
+msgstr "Em direção ao Sector Oeste"
 
 #: data/base/sequenceaudio/cam1/c001.txa:10
 #, fuzzy
@@ -9451,31 +9451,31 @@ msgstr "Equipa Alfa Erradicada"
 
 #: data/base/sequenceaudio/cam1/c001.txt:1
 msgid "Transport destinations follow:"
-msgstr ""
+msgstr "Destinos dos transportes:"
 
 #: data/base/sequenceaudio/cam1/c001.txt:2
 msgid "Alpha - Western Sector...."
-msgstr ""
+msgstr "Alfa - Sector Oeste...."
 
 #: data/base/sequenceaudio/cam1/c001.txt:4
 msgid "Alpha you are cleared for take-off."
-msgstr ""
+msgstr "Alfa, estás liberado para a decolagem."
 
 #: data/base/sequenceaudio/cam1/c001.txt:5
 msgid "Good luck and good hunting."
-msgstr ""
+msgstr "Boa sorte e boa caça."
 
 #: data/base/sequenceaudio/cam1/c001.txt:7
 msgid "Approaching Landing Zone. Team Alpha Briefing commences."
-msgstr ""
+msgstr "Aproximando-se da Área de Pouso. Instruções da Equipa Alfa:"
 
 #: data/base/sequenceaudio/cam1/c001.txt:9
 msgid "Commander, you lead Team Alpha, one of three expeditionary teams sent out by the Project to recover artifacts from before the Collapse."
-msgstr ""
+msgstr "Comandante, você lidera a Equipa Alfa, uma das três forças expedicionárias enviadas pelo Projecto para recuperar artefatos pré-Colapso."
 
 #: data/base/sequenceaudio/cam1/c001.txt:11
 msgid "Your destination lies in the western zone."
-msgstr ""
+msgstr "Seu destino está na zona oeste."
 
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:4
 #, fuzzy
@@ -9484,7 +9484,7 @@ msgstr "Nós descodificamos a mensagem dirigida ao Novo Paradigma..."
 
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:6
 msgid "This turret allows commanders to coordinate attacks between assigned units and to act as a delivery point for factories. Researching and using this technology has the highest priority."
-msgstr ""
+msgstr "Esta torreta permite comandantes coordenarem ataques entre unidades designadas e agir como ponto de entrega para fábricas. Pesquisar e utilizar essa tecnologia é de máxima prioridade."
 
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:8
 #, fuzzy
@@ -9494,7 +9494,7 @@ msgstr "Estamos a receber esta trasmissão."
 #: data/base/sequenceaudio/cam1/cam1cnp.txt:4
 #: data/base/sequenceaudio/cam1/sub13np2.txt:4
 msgid "Your attacks upon us will not go unpunished."
-msgstr ""
+msgstr "Teus ataques contra nós não ficarão impunes."
 
 #: data/base/sequenceaudio/cam1/cam1cnp.txt:5
 #: data/base/sequenceaudio/cam1/sub13np2.txt:5
@@ -9504,7 +9504,7 @@ msgstr "Parabéns por derrotar o Novo Paradigma"
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:4
 msgid "All attack groups commence attack on enemy."
-msgstr ""
+msgstr "Todos os grupos de ataque iniciar ataque ao inimigo."
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:5
 #, fuzzy
@@ -9528,31 +9528,31 @@ msgstr "Depois destrua o campo."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:1
 msgid "Open your systems to me."
-msgstr ""
+msgstr "Abre teus sistemas a mim."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:2
 msgid "Let me meld with your machines and cyborgs."
-msgstr ""
+msgstr "Deixa-me unir às tuas máqunas e ciborgues."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:4
 msgid "We will create the perfect nexus of man and machine."
-msgstr ""
+msgstr "Nós criaremos o nexo perfeito do homem com a máquina."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:5
 msgid "Together we can create a new world."
-msgstr ""
+msgstr "Juntos poderemos criar um novo mundo."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:7
 msgid "I can give you power beyond your wildest dreams."
-msgstr ""
+msgstr "Posso dar-te poder com o qual nunca sonharam."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:9
 msgid "Open your systems to me and you will be strong."
-msgstr ""
+msgstr "Abre teus sistemas a mim e serás forte."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:10
 msgid "I can raise you as gods upon the blasted earth."
-msgstr ""
+msgstr "Posso levantar-los como deuses sobre a terra destruída."
 
 #: data/base/sequenceaudio/cam1/cam1out3.txt:4
 msgid "When we failed to respond it became threatening."
@@ -9560,32 +9560,32 @@ msgstr "Quando não respondemos tornou-se ameaçador."
 
 #: data/base/sequenceaudio/cam1/cam1out4.txt:1
 msgid "Your interference in my plans for the New Paradigm will not go unpunished."
-msgstr ""
+msgstr "Tua interferência em meus planos para o Novo Paradigma não ficarão impunes."
 
 #: data/base/sequenceaudio/cam1/cam1out4.txt:2
 msgid "You are weak flesh-things. I am strong and have many parts."
-msgstr ""
+msgstr "Vocês são fracos pedaços de carne. Eu sou forte e tenho muitos componentes."
 
 #: data/base/sequenceaudio/cam1/cam1out4.txt:4
 msgid "You may defeat me here, but I shall rise again."
-msgstr ""
+msgstr "Podem me derrotar aqui, mas eu voltarei novamente."
 
 #: data/base/sequenceaudio/cam1/cam1out4.txt:5
 #: data/base/sequenceaudio/cam2/cam2_2n2.txt:1
 msgid "As I once cleansed the world with fire, I will destroy you and your puny Project!!"
-msgstr ""
+msgstr "Assim como eu já limpei o mundo com fogo, eu vos destruirei e vosso Projeto ínfimo!!"
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:4
 msgid "Nexus then removed itself from the system, destroying its memory banks, and removing all traces of its external connections."
-msgstr ""
+msgstr "Nexus então se removeu do sistema, destruindo seus bancos de memória, e removendo quaisquer traços de suas conexões externas."
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:6
 msgid "We are not sure what Nexus is or who or what is directing it. Initial research links the Nexus Intruder Program with the Reed Corporation, the developer of the synaptic link."
-msgstr ""
+msgstr "Estamos incertos do que Nexus é ou quem o comanda. Pesquisas iniciais ligam o Programa Intrusivo Nexus à Corporação Reed, que desenvolveu a conexão sináptica."
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:8
 msgid "We have ascertained that Nexus supplied the New Paradigm with most of its technology. Whatever Nexus is, it's more than a computer parasite."
-msgstr ""
+msgstr "Estamos certos de que Nexus supriu o Novo Paradigma com a maior parte de sua tecnologia. O que quer que Nexus seja, é mais que um vírus de computador."
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:10
 #, fuzzy
@@ -9594,31 +9594,31 @@ msgstr "Nexus tem tecnologia a armas e não é amigável."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:4
 msgid "The Synaptic Link was developed by the Reed Corporation in conjunction with the US Military."
-msgstr ""
+msgstr "A Conexão Sináptica foi desenvolvida pela Corporação Reed junto com o Exército dos EUA."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:6
 msgid "The synaptic link allows for almost instantaneous transfer of thought from human operators to vehicle control and guidance systems. The synaptic link is fitted into the base of the skull circling the spinal column."
-msgstr ""
+msgstr "A conexão sináptica permite transferência quase instantânea de pensamentos de operadores humanos a controladores de veículos e sistemas de mira. A conexão é instalada na base do crânio, ao redor da coluna."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:8
 msgid "The link has a hi-speed data transfer port that plugs into any computer system."
-msgstr ""
+msgstr "A conexão tem uma saída de transferência de dados de alta velocidade que se conecta em qualquer sistema computadorizado."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:10
 msgid "More importantly the development of the synaptic link made the creation of cyborgs possible. Early attempts at power suits for individual soldiers failed as they proved to be slow and unresponsive."
-msgstr ""
+msgstr "O mais importante é que a conexão permitiu a criação de ciborgues. Tentativas iniciais de armaduras de força para soldados individuais falharam, ao provarem ser lentas e difíceis de controlar."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:12
 msgid "The synaptic link allowed soldiers to be placed in power suits that they controlled as easily as their own bodies. Power suits allowed infantry to function effectively on the battlefields of the 21st Century."
-msgstr ""
+msgstr "A conexão permitiu soldados serem postos em armaduras que eles controlassem como seus próprios corpos. Armaduras de força permitiram a infantaria ser mais efetiva nas zonas de batalha do século 21."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:14
 msgid "Unfortunately, this technology has fallen into the hands of the New Paradigm. It is imperative that you research and develop synaptic link technologies."
-msgstr ""
+msgstr "Infelizmente, essa tecnologia caiu nas mãos do Novo Paradigma. É imprescindível que você pesquise e desenvolva a tecnologia de conexão sináptica."
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:4
 msgid "Warning!"
-msgstr ""
+msgstr "Atenção!"
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:5
 #, fuzzy
@@ -9627,19 +9627,19 @@ msgstr "estás a ser parvo."
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:7
 msgid "Return to your designated zone or be destroyed."
-msgstr ""
+msgstr "Retorna à tua zona designada ou sê destruído."
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:8
 msgid "Repeat. Return to your designated zone or be destroyed."
-msgstr ""
+msgstr "Repito. Retorna à tua zona designada ou sê destruído."
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:9
 msgid "Message Ends."
-msgstr ""
+msgstr "Fim da mensagem."
 
 #: data/base/sequenceaudio/cam1/sub13np2.txt:8
 msgid "You will be destroyed."
-msgstr ""
+msgstr "Tu serás destruído."
 
 #: data/base/sequenceaudio/cam1/sub14anp.txt:4
 #, fuzzy
@@ -9648,51 +9648,51 @@ msgstr "A tecnologia de Ligação Sináptica foi recuperada!"
 
 #: data/base/sequenceaudio/cam1/sub1_4bn.txt:4
 msgid "You have done well."
-msgstr ""
+msgstr "Fizestes bem."
 
 #: data/base/sequenceaudio/cam1/sub1_4bn.txt:5
 msgid "Once we have analyzed and authenticated the technology, your reward  will follow."
-msgstr ""
+msgstr "Assim que houvermos analizado e autenticado a tecnologia, tua recompensa virá."
 
 #: data/base/sequenceaudio/cam1/sub1_5pl.txt:4
 msgid "Information discovered at the previous enemy base indicates that the New Paradigm recovered two synaptic link artifacts."
-msgstr ""
+msgstr "Informações descobertas na base inimiga prévia indica que o Novo Paradigma recuperou dois artefatos de conexão sináptica."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:4
 msgid "This Nexus Intruder Program is a self-mutating computer parasite. This makes it difficult to eradicate from systems once it has been identified."
-msgstr ""
+msgstr "O Programa Intrusivo Nexus é um vírus de computador auto-mutante. Isso o torna difícil de ser erradicado de sistemas uma vez identificado."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:6
 msgid "We have been unable to ascertain it's ultimate goal or function. In its initial form it seeks out and isolates sections of memory from the rest of the invaded system. It then begins to mutate itself and data structures, effectively reprogramming the system from within."
-msgstr ""
+msgstr "Não pudemos identificar sua função ou objetivo principal. Na sua forma inicial, ele procura e isola seções da memória do resto do sistema invadido. Então, passa a mutar-se e mutar estruturas de dados, praticamente reprogramando o sistema de dentro pra fora."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:8
 msgid "Further analysis was prevented by the manual shutdown of the system by our technicians to prevent additional contamination by the Nexus Intruder Program."
-msgstr ""
+msgstr "Análises mais a fundo não foram possíveis devido ao desligamento manual dos sistemas pelos técnicos para impedir contaminação adicional pelo Programa Intrusivo Nexus."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:10
 msgid "However, the spread of the Nexus Intruder Program was not checked by New Paradigm. We need to capture New Paradigm's core systems to further investigate Nexus and determine its origins."
-msgstr ""
+msgstr "No entanto, a infecção do Programa Intrusivo Nexus não foi checada pelo Novo Paradigma. Precisamos capturar os sistemas centrais do Novo Paradigma para investigar o Nexus mais a fundo e determinar suas origens."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:12
 msgid "Commander, you are to curtail the New Paradigm's activities in this sector and locate their main base."
-msgstr ""
+msgstr "Comandante, você deve rastrear as atividades do Novo Paradigma nesse setor e localizar a sua base principal."
 
 #: data/base/sequenceaudio/cam2/c002.txa:1
 msgid "CAMPAIGN TWO"
-msgstr ""
+msgstr "SEGUNDA CAMPANHA"
 
 #: data/base/sequenceaudio/cam2/c002.txa:2
 msgid "EASTERN SECTOR"
-msgstr ""
+msgstr "SECTOR LESTE"
 
 #: data/base/sequenceaudio/cam2/c002.txa:4
 msgid "Morning, September 1st, 2100"
-msgstr ""
+msgstr "Manhã, 1 de Setembro de 2100"
 
 #: data/base/sequenceaudio/cam2/c002.txa:5
 msgid "In-flight to Eastern Sector"
-msgstr ""
+msgstr "Em direção ao Sector Leste"
 
 #: data/base/sequenceaudio/cam2/c002.txa:6
 #, fuzzy
@@ -9706,7 +9706,7 @@ msgstr "Deverá defendê-la e mantê-la."
 
 #: data/base/sequenceaudio/cam2/c002.txa:12
 msgid "THE COLLECTIVE"
-msgstr ""
+msgstr "A COLETIVIDADE"
 
 #: data/base/sequenceaudio/cam2/c2diif2.txt:1
 #, fuzzy
@@ -9715,7 +9715,7 @@ msgstr "comandante, nós derrotamos Nexus."
 
 #: data/base/sequenceaudio/cam2/c2diif2.txt:2
 msgid "It is likely to be targeted at your location."
-msgstr ""
+msgstr "O alvo provavelmente será tua localização."
 
 #: data/base/sequenceaudio/cam2/c2diif2.txt:4
 #, fuzzy
@@ -9724,83 +9724,83 @@ msgstr "Deverá estabelecer um abrigo seguro para evacuação da Base Beta."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:1
 msgid "NASDA is the North American Strategic Defense Agency."
-msgstr ""
+msgstr "NASDA é a North American Strategic Defense Agency - Agência de Defesa Estratégica Norte Americana."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:3
 msgid "NASDA was formed in 2076 to defend North America from conventional and nuclear attack. The construction of a satellite defense system began in 2081 and was completed in 2082."
-msgstr ""
+msgstr "A NASDA foi criada em 2076 para defender a América do Norte de ataques convencionais e nucleares. A construção de um sistema de defesa por satélites começou em 2081 e terminou em 2082."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:6
 msgid "In 2085 the NASDA satellites fired their nukes at Earth."
-msgstr ""
+msgstr "Em 2085 os satélites da NASDA lançaram suas ogivas na Terra."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:8
 msgid "There were also ground-based sites. Many of these were destroyed in the nuclear counterstrikes, but there's bound to be some out there."
-msgstr ""
+msgstr "Também haviam locais de lançamento em terra. Muitos desses foram destruídos nos contra-ataques nucleares, mas ainda deve haver algum por aí."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:10
 msgid "The NASDA satellites also contained pulse-lasers designed to shoot down missiles approaching North America."
-msgstr ""
+msgstr "Os satélites NASDA também continhar pulsos laser feitos para abater mísseis contra a América do Norte."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:12
 msgid "During the counterstrikes, these LasSats failed to fire. If brought into operation, these LasSats could inflict major damage on ground targets."
-msgstr ""
+msgstr "Durante os contra-ataques, os SatLasers falharam ao disparar. Se trazidos de volta à ativa, os SatLasers podem causar danos sérios a alvos em terra."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:14
 msgid "All nukes targeted at  North America found their targets."
-msgstr ""
+msgstr "Todas as ogivas designadas à America do Norte atingiram seus alvos."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:16
 msgid "We know that Nexus is searching for NASDA Central in the Eastern Sector. This was one of the land-based control centres for the satellites."
-msgstr ""
+msgstr "Sabemos que o Nexus está procurando pela Central da Nasta do Setor Leste. Era um dos centros de controle em terra para os satélites."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:18
 msgid "If the centre is found intact, NEXUS may gain control of the satellites."
-msgstr ""
+msgstr "Se a central for encontrada intacta, NEXUS pode obter controle dos satélites."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:20
 msgid "Nexus claimed that it had already destroyed the world."
-msgstr ""
+msgstr "Nexus já disse ter já destruído o mundo."
 
 #: data/base/sequenceaudio/cam2/cam2_2n.txt:1
 msgid "Warriors of the Collective, I seek the location of NASDA Central."
-msgstr ""
+msgstr "Guerreiros da Coletividade, eu procuro a localização da Central da NASDA."
 
 #: data/base/sequenceaudio/cam2/cam2_2n.txt:2
 msgid "It lies somewhere in your territory."
-msgstr ""
+msgstr "Ela está em algum lugar no seu território."
 
 #: data/base/sequenceaudio/cam2/cam2_2n.txt:4
 msgid "Find it for me and I shall provide you with further weapons to aid you in your war against the Project."
-msgstr ""
+msgstr "Achem-na, e eu proverei mais armas para te ajudar na tua guerra contra o Projeto."
 
 #: data/base/sequenceaudio/cam2/cam22pl2.txt:1
 msgid "NASDA Briefing follows..."
-msgstr ""
+msgstr "Instruções da NASDA seguem..."
 
 #: data/base/sequenceaudio/cam2/cam22pl3.txt:1
 msgid "We've got to make sure that it can't do it again."
-msgstr ""
+msgstr "Temos de ter certeza que ele não faça isso de novo."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:1
 msgid "Analysis indicates that these systems were part of the control system for the NASDA satellites."
-msgstr ""
+msgstr "Análises indicam que esses sistemas eram parte do sistema de controle dos satélites NASDA."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:2
 msgid "It's now certain that Nexus was responsible for The Collapse."
-msgstr ""
+msgstr "Agora é certo que o Nexus foi o responsável pelo Colapso."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:4
 msgid "During the early stages of the Collapse, NASDA technicians switched off  the infected systems in order to isolate the spread of Nexus. This seems to have prevented the LasSats from firing during the counterstrikes."
-msgstr ""
+msgstr "Durante os primeiros estágios do Colapso, os técnicos da NASDA desligaram os sistemas infectados para isolar a infecção do Nexus. Isso parece ter impedido o disparo dos SatLasers durante o contra-ataque."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:6
 msgid "The ensuing nuclear-magnetic pulses wiped clean large amounts of NASDA's memory banks, shattering its core processor, and sent shockwaves blasting through Nexus."
-msgstr ""
+msgstr "Os pulsos eletro-magnéticos nucleares limparam grande parte dos bancos de memória da NASDA, destruindo seu processador central, e enviou ondas de choque destruindo Nexus."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:8
 msgid "Nexus was fried as whole sections of its consciousness were obliterated in the counterstrikes."
-msgstr ""
+msgstr "Nexus foi fritado quando seções inteiras de sua consciência foram erradicadas durante os contra-ataques."
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:1
 #, fuzzy
@@ -9814,15 +9814,15 @@ msgstr "NEXUS conseguiu reconectar-se com os satélites da NASDA."
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:5
 msgid "This poses a major threat to the Project and to our survival."
-msgstr ""
+msgstr "Isso é uma ameaça primária ao Projeto e à nossa sobrevivência."
 
 #: data/base/sequenceaudio/cam2/cam26pl1.txt:1
 msgid "Analysis of NASDA Central leaves no doubt that The Collective has introduced the Nexus Intruder Virus to it."
-msgstr ""
+msgstr "Análises da Central da NASDA não deixa dúvidas de que a Coletividade introduziu o Vírus Nexus nela."
 
 #: data/base/sequenceaudio/cam2/cam26pl1.txt:3
 msgid "The nuclear reactor was going to be used to power a vast network of pre-Collapse computer systems."
-msgstr ""
+msgstr "O reator nuclear ia ser usado para fornecer energia a uma vasta rede de sistemas de computadores pré-Colapso."
 
 #: data/base/sequenceaudio/cam2/cam27fmv.txt:1
 #, fuzzy
@@ -9831,19 +9831,19 @@ msgstr "comandante, estão mísseis presentes nos silos."
 
 #: data/base/sequenceaudio/cam2/cam27fmv.txt:3
 msgid "Team Gamma are sending a team to investigate the launch site and to prevent any further launches."
-msgstr ""
+msgstr "A Equipa Gama está enviando um esquadrão para investigar o local de lançamento e prevenir próximos lançamentos."
 
 #: data/base/sequenceaudio/cam2/cam27fmv.txt:5
 msgid "We can only assume that Nexus has gained control of this site. We cannot determine whether the missile is nuclear-armed or where it is targeted. You are advised to begin preparations for the evacuation of your base."
-msgstr ""
+msgstr "Podemos apenas assumir que Nexus ganhou controle desse local. Não podemos determinar se o míssil é nuclear ou qual seu alvo. Sugerimos que prepare a evacuação de sua base."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:1
 msgid "Warriors of The Collective, more intruders are entering our territory."
-msgstr ""
+msgstr "Guerreiros da Coletividade, mais intrusos estão entrando em nosso território."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:2
 msgid "They are not part of the machine."
-msgstr ""
+msgstr "Eles não são parte da máquina."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:4
 #, fuzzy
@@ -9852,19 +9852,19 @@ msgstr "Destruam e matem todos os que resistem à Máquina."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:5
 msgid "Attack! Erase their presence from this area!"
-msgstr ""
+msgstr "Ataquem! Eliminem a presença deles dessa área!"
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:1
 msgid "Warriors of The Collective, we are ready to destroy the intruders who pollute our lands."
-msgstr ""
+msgstr "Guerreiros da Coletividade, estamos prontos para destruir os intrusos que poluem nossas terras."
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:3
 msgid "Those of the Project are not of the machine. They have been denied its blessing. We who have embraced the power of the machine have a destiny to sweep away such weak creatures."
-msgstr ""
+msgstr "Aqueles do Projeto não são da máquina. A sua bênção foi negada a eles. Nós que abraçamos o poder da máquina estamos destinados a expulsar tais criaturas fracas."
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:6
 msgid "They shall fall before the might of The Collective."
-msgstr ""
+msgstr "Eles irão sucumbir sob o poderio da Coletividade."
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:8
 #, fuzzy
@@ -9877,11 +9877,11 @@ msgstr "Ataquem!"
 
 #: data/base/sequenceaudio/cam2/cam2dico.txt:1
 msgid "Warriors of the Collective, Nexus has given us the power of the machine so that we can destroy all that oppose us."
-msgstr ""
+msgstr "Guerreiros da Coletividade, Nexus nos deu o poder da máquina para que possamos destruir todos que se oponham a nós."
 
 #: data/base/sequenceaudio/cam2/cam2dico.txt:3
 msgid "Nexus now asks us to crush the Project."
-msgstr ""
+msgstr "Nexus agora pede que destruamos o Projeto."
 
 #: data/base/sequenceaudio/cam2/cam2dico.txt:4
 #, fuzzy
@@ -9895,15 +9895,15 @@ msgstr "Guerreiros da Colectividade..."
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:2
 msgid "Your just reward is on its way."
-msgstr ""
+msgstr "Tua recompensa está a caminho."
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:4
 msgid "The Project is fleeing its base and stealing your technology."
-msgstr ""
+msgstr "O Projeto está fugindo de sua base e roubando sua tecnologia."
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:5
 msgid "You must stop them!"
-msgstr ""
+msgstr "Deves impedi-los!"
 
 #: data/base/sequenceaudio/cam2/cam2dipl.txt:1
 #, fuzzy
@@ -9912,11 +9912,11 @@ msgstr "A receber Transmissão..."
 
 #: data/base/sequenceaudio/cam3/c003.txa:1
 msgid "CAMPAIGN THREE"
-msgstr ""
+msgstr "TERCEIRA CAMPANHA"
 
 #: data/base/sequenceaudio/cam3/c003.txa:2
 msgid "NORTHERN SECTOR"
-msgstr ""
+msgstr "SECTOR NORTE"
 
 #: data/base/sequenceaudio/cam3/c003.txa:5
 #, fuzzy
@@ -9925,15 +9925,15 @@ msgstr "Parabéns na sua evacuação com sucesso da Base Beta"
 
 #: data/base/sequenceaudio/cam3/c003.txa:8
 msgid "Dusk, December 3rd, 2100"
-msgstr ""
+msgstr "Anoitecer, 3 de Dezembro de 2100"
 
 #: data/base/sequenceaudio/cam3/c003.txa:9
 msgid "In-flight to Northern Sector"
-msgstr ""
+msgstr "Em direção ao Sector Norte"
 
 #: data/base/sequenceaudio/cam3/c003.txa:10
 msgid "The Final Encounter"
-msgstr ""
+msgstr "O Encontro Final"
 
 #: data/base/sequenceaudio/cam3/c003.txa:12
 #, fuzzy
@@ -9942,11 +9942,11 @@ msgstr "Início do Briefing:"
 
 #: data/base/sequenceaudio/cam3/c003.txt:1
 msgid "Personnel at Gamma Base have confirmed that the nuclear missiles targeted at Alpha and Beta bases were launched from a silo in their sector."
-msgstr ""
+msgstr "O pessoal da Base Gama confirmou que os mísseis nucleares lançandos contra as bases Alfa e Beta foram lançados de um silo no setor deles."
 
 #: data/base/sequenceaudio/cam3/c003.txt:4
 msgid "Team Gamma is currently scouting the silo's location and monitoring NEXUS's activity."
-msgstr ""
+msgstr "A Equipa Gama está atualmente explorando a região do silo e monitorando a atividade do NEXUS."
 
 #: data/base/sequenceaudio/cam3/c3ad2n2.txt:1
 #, fuzzy
@@ -9960,27 +9960,27 @@ msgstr "Estamos a detectar forças inimigas nestas localizações."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:1
 msgid "Well done Commander, you've prevented my last missile from launching."
-msgstr ""
+msgstr "Muito bem Comandante, impediste meu último míssil de ser lançado."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:2
 msgid "Such a shame. Your Project HQ would have made a wonderful target."
-msgstr ""
+msgstr "Que pena. Teu QG do Projeto seria um ótimo alvo."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:4
 msgid "But it's good of you to join me here."
-msgstr ""
+msgstr "Mas gostei de teres se juntado a mim aqui."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:6
 msgid "Buried beneath this silo is a tactical nuclear warhead that is set to go off soon."
-msgstr ""
+msgstr "Enterrado sob esse silo está uma ogiva nuclear tática que está programada para explodir daqui a pouco."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:9
 msgid "As I cannot launch it, it'll just have to blow where it is."
-msgstr ""
+msgstr "Como eu não tenho como lançá-la, eu terei de explodi-la ali mesmo."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:11
 msgid "Please note that all entrances to the underground complex have been sealed. Goodbye, Commander."
-msgstr ""
+msgstr "Por favor note que todas as entradas para o complexo subterrâneo foram seladas. Até mais, Comandante."
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:1
 #, fuzzy
@@ -9989,43 +9989,43 @@ msgstr "Boa sorte, Comandante."
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:4
 msgid "Enemy strike VTOLs have got us pinned down. We've managed to hold off cyborgs and tanks, but we haven't been able to make any progress along the valley."
-msgstr ""
+msgstr "Ataques de VTOL's inimigos nos acuaram. Conseguimos repelir ciborgues e tanques, mas não conseguimos nenhum processo pelo vale."
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:7
 msgid "Can you try and reach us with anti-aircraft units?"
-msgstr ""
+msgstr "Podes tentar nos alcançar com unidades anti-aéreas?"
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:1
 msgid "This is Team Alpha. Repeat, this is Team Alpha. We require immediate assistance."
-msgstr ""
+msgstr "Aqui é a Equipa Alfa. Repito, aqui é a Equipa Alfa. Precisamos de ajuda imediatamente."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:4
 msgid "We are under heavy attack from cyborgs, laser tanks, and strike VTOLs."
-msgstr ""
+msgstr "Estamos sob ataque pesado de ciborgues, tanques laser e VTOL's de ataque."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:6
 msgid "We were trying to reach your position, but have been ambushed."
-msgstr ""
+msgstr "Estávamos tentado te alcançar, mas caímos numa armadilha."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:7
 msgid "We're holed up in  a valley at these coordinates."
-msgstr ""
+msgstr "Estamos recuados num vale nessas coordenadas."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:8
 msgid "Please assist."
-msgstr ""
+msgstr "Favor ajudar."
 
 #: data/base/sequenceaudio/cam3/cam32pl2.txt:4
 msgid "Commander, forces from Team Alpha escaped the nuclear attack on Alpha Base."
-msgstr ""
+msgstr "Comandante, forças da Equipa Alfa escaparam o ataque nuclear na Base Alfa."
 
 #: data/base/sequenceaudio/cam3/cam34mu1.txt:1
 msgid "We are experiencing some interference from NEXUS."
-msgstr ""
+msgstr "Estamos sofrendo algumas interferências vindas do NEXUS."
 
 #: data/base/sequenceaudio/cam3/cam34mu1.txt:3
 msgid "You must destroy his command centre before we lose control of key systems."
-msgstr ""
+msgstr "Deves destruir o centro de comando dele antes que percamos o contore de sistemas chave."
 
 #: data/base/sequenceaudio/cam3/cam34mu2.txt:1
 #, fuzzy
@@ -10034,47 +10034,47 @@ msgstr "comandante, nós derrotamos Nexus."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:1
 msgid "The Reed Corporation was founded by Dr Allan Reed. In 2080, Dr Reed landed a contract with the US Military to develop the synaptic link technology."
-msgstr ""
+msgstr "A Corporação Reed foi fundada pelo Dr. Allan Reed. Em 2080, Dr. Reed assinou um contrato com o Exército dos EUA para desenvolver a tecnologia da conexão sináptica."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:3
 msgid "After patenting the synaptic link five years later, Dr Reed continued his researches into cybernetics."
-msgstr ""
+msgstr "Após patentear a conexão sináptica cinco anos mais tarde, Dr. Reed continuou suas pesquisas com cibernética."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:5
 msgid "His goal this time was to allow transfer of human consciousness into data streams that could meld with computer technologies. While in Cyberspace the operator's bodies were kept in immersion tanks."
-msgstr ""
+msgstr "Seu novo objetivo era transferir a consciência humana em feixes de dados que pudessem infundir-se com tecnologias de computador. Enquanto estavam no Ciberespaço, os corpos dos operadores ficavam em tanques de imersão."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:7
 msgid "Backed again by the military, Dr Reed began work on the NEXUS Intruder Program. After three years with little progress, the military abandoned the Nexus Project and cut Dr Reed's funding."
-msgstr ""
+msgstr "Patrocinado pelos militares novamente, Dr. Reed começou a trabalhar no Programa Intrusivo NEXUS. Após três anos de pouco progresso, os militares abandonaram o Projeto Nexus e cortaram o patrocínio."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:9
 msgid "Reports from the time claim that Dr Reed was furious and vowed to have his revenge on all who got in his way."
-msgstr ""
+msgstr "Relatórios da época afirmam que Dr. Reed ficou furioso e jurou ter vingança contra todos que ficaram em seu caminho."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:11
 msgid "It appears that Dr Reed may have succeeded in his goals and completed the Nexus Intruder Program."
-msgstr ""
+msgstr "Parece que Dr. Reed pode ter conseguido alcançar seus objetivos e concluído o Programa Intrusivo Nexus."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:12
 msgid "The similarity between NEXUS and Dr Reed is striking."
-msgstr ""
+msgstr "A similaridade entre NEXUS e o Dr. Reed é impressionante."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:14
 msgid "Such an interesting history lesson. Now allow me to bring you up to date."
-msgstr ""
+msgstr "Que bela lição de história. Agora, deixa-me te pôr a par de eventos atuais."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:15
 msgid "The NEXUS Intruder Program was created in order to control fools like you."
-msgstr ""
+msgstr "O Programa Intrusivo NEXUS foi criado para controlar tolos como você."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:17
 msgid "It's very simple for me to infiltrate your systems and take them over. It's so simple, in fact, that you wouldn't even know I'm there. That is until I activate parts of myself etched into your core systems."
-msgstr ""
+msgstr "É muito simples para mim, infiltrar seus sistemas e tomá-los para mim. É tão simples, na verdade, que você nem notaria que eu estou lá. Isto é, até eu ativar as partes de mim escondidas nos seus sistemas centrais."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:19
 msgid "Let's start by activating NEXUS in your core systems and see what happens!"
-msgstr ""
+msgstr "Vamos começar ativando o NEXUS nos seus sistemas centrais e ver o que acontece!"
 
 #: data/base/sequenceaudio/cam3/cam3abpl.txt:1
 #, fuzzy
@@ -10083,104 +10083,104 @@ msgstr "Comandante, estamos a tentar voltar à base."
 
 #: data/base/sequenceaudio/cam3/cam3abpl.txt:2
 msgid "Normal service will be restored as soon as possible."
-msgstr ""
+msgstr "O serviço normal será restaurado assim que possível."
 
 #: data/base/sequenceaudio/cam3/cam3ad2n.txt:1
 msgid "Not long to go now, Commander. There's no where else for you to run to."
-msgstr ""
+msgstr "Não falta muito agora, Comandante. Não tem mais para aonde ir."
 
 #: data/base/sequenceaudio/cam3/cam3ad2n.txt:4
 msgid "However, if you vacate this facility, then I shall let you go free, as you are no longer a threat to me."
-msgstr ""
+msgstr "Mas, se deixares esse complexo, eu te deixarei ir, uma vez que não és mais uma ameaça para mim."
 
 #: data/base/sequenceaudio/cam3/cam3ad2n.txt:6
 msgid "You have five minutes to comply or else it's frying time!"
-msgstr ""
+msgstr "Tens cinco minutos para obedeçer, ou então vai ficar muito quente aqui!"
 
 #: data/base/sequenceaudio/cam3/cam3bg.txt:1
 msgid "Commander, we are under attack by NEXUS cyborgs and tanks. Please help as we...."
-msgstr ""
+msgstr "Comandante, estamos sob ataque de ciborgues e tanques NEXUS. Por favor ajude enquanto..."
 
 #: data/base/sequenceaudio/cam3/cam3bg.txt:3
 msgid "...cannot hold out much longer.  Repeat, please help, we cannot hold out much longer...."
-msgstr ""
+msgstr "...podemos aguentar maus. Repetindo, por favor ajude, não podemos aguentar por muito tempo..."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:1
 msgid "Ah, Commander, so good of you to join us here at Nexus base."
-msgstr ""
+msgstr "Ah, Comandante, que bom que você pode se juntar a nós aqui na base Nexus."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:3
 msgid "It was very useful having Gamma Team set up here in the mountains."
-msgstr ""
+msgstr "Foi bem últi ter a Equipa Gama se estabelecer aqui nas montanhas."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:4
 msgid "Their absorption was such a pleasure."
-msgstr ""
+msgstr "A absorção deles foi um prazer imenso."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:6
 msgid "Thank you for all those useful technologies you've recovered."
-msgstr ""
+msgstr "Obrigado por todas aquelas tecnologias que recuperastes."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:8
 msgid "You and not those fools in the New Paradigm and the Collective."
-msgstr ""
+msgstr "Tu, e não aqueles tolos do Novo Paradigma e da Coletividade."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:10
 msgid "I'm now activating all your synaptic links so that your forces can meld with Nexus."
-msgstr ""
+msgstr "Agora, estou ativando todas as suas conexões sinápticas para que tuas forças se unam ao Nexus."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:12
 msgid "Your forces are now mine! Welcome to Nexus."
-msgstr ""
+msgstr "Tuas forças agora são minhas! Bem vindo ao Nexus."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:1
 msgid "Commander, you're proving to be more resilient than I thought."
-msgstr ""
+msgstr "Comandante, estás provando ser mais resiliente que eu pensei."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:2
 msgid "Such a pity that you refused to join me earlier."
-msgstr ""
+msgstr "Que pena que negaste a se juntar a mim mais cedo."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:4
 msgid "But no matter, as you'll not be here much longer."
-msgstr ""
+msgstr "Mas não tem importância, já que não vais ficar por aqui por muito mais tempo."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:6
 msgid "After much searching and reprogramming, I've finally got all my systems back on-line."
-msgstr ""
+msgstr "Depois de muitas pesquisas e reprogramações, eu finalmente consegui por meus sistemas on-line novamente."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:8
 msgid "Once I destroyed the world with nuclear fire to clear the way for my cybernetic future."
-msgstr ""
+msgstr "Antes, eu destruí o mundo com fogo nuclear para liberar o caminho para meu futuro cibernético."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:9
 msgid "I now intend to further shape the world into my own image, by  surgically removing unwanted growths like yourself."
-msgstr ""
+msgstr "Agora, pretendo moldar o mundo à minha imagem, removendo cirurgicamente ervas daninhas como você."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:11
 msgid "My Laser Satellites are now powering up. I intend to test them on you first, Commander!"
-msgstr ""
+msgstr "Meus Satélites Laser estão ligando. Eu pretendo testá-los em você para começar, Comandante!"
 
 #: data/base/sequenceaudio/devastation.txa:4
 msgid "Dusk, November 3rd, 2085"
-msgstr ""
+msgstr "Anoitecer, 3 de Novembro de 2085"
 
 #: data/base/sequenceaudio/devastation.txa:5
 msgid "Earth, High Orbit"
-msgstr ""
+msgstr "Terra, Órbita Superior"
 
 #: data/base/sequenceaudio/devastation.txa:6
 msgid "The Collapse"
-msgstr ""
+msgstr "O Colapso"
 
 #: data/base/sequenceaudio/devastation.txa:8
 msgid "January 19th, 2086"
-msgstr ""
+msgstr "19 de Janeiro de 2086"
 
 #: data/base/sequenceaudio/devastation.txa:9
 #: data/base/sequenceaudio/devastation.txa:17
 msgid "North America"
-msgstr ""
+msgstr "América do Norte"
 
 #: data/base/sequenceaudio/devastation.txa:10
 #, fuzzy
@@ -10189,23 +10189,23 @@ msgstr "Reactor Nuclear"
 
 #: data/base/sequenceaudio/devastation.txa:12
 msgid "Midnight, April 10th, 2086"
-msgstr ""
+msgstr "Meia Noite, 10 de Abril de 2086"
 
 #: data/base/sequenceaudio/devastation.txa:13
 msgid "Rocky Mountains"
-msgstr ""
+msgstr "Montanhas Rochosas"
 
 #: data/base/sequenceaudio/devastation.txa:14
 msgid "Safety"
-msgstr ""
+msgstr "Segurança"
 
 #: data/base/sequenceaudio/devastation.txa:16
 msgid "Dawn, April 4th, 2100"
-msgstr ""
+msgstr "Madrugada, 4 de Abril de 2100"
 
 #: data/base/sequenceaudio/devastation.txa:18
 msgid "A New Beginning"
-msgstr ""
+msgstr "Um Novo Começo"
 
 #: data/base/sequenceaudio/devastation.txt:1
 msgid "The NASDA system was developed to protect us. It was to be the ultimate nuclear deterrent. As it turned out, it was our executioner."
@@ -11946,8 +11946,9 @@ msgid "Sunburst AA"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1723
+#, fuzzy
 msgid "VTOL Sunburst AA"
-msgstr ""
+msgstr "Posição AA Hurricane"
 
 #: data/mp/messages/strings/names.txt:1724
 #: data/mp/messages/strings/names.txt:1725
@@ -12169,27 +12170,27 @@ msgid "System locale"
 msgstr "Linguagem do sistema"
 
 #: lib/netplay/netplay.cpp:203
-#: lib/netplay/netplay.cpp:1043
+#: lib/netplay/netplay.cpp:1042
 #, fuzzy
 msgid "Enter password here"
 msgstr "Insere Primeiro a Palavra-passe"
 
-#: lib/netplay/netplay.cpp:2048
+#: lib/netplay/netplay.cpp:2060
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Não pode ser obtido o nome do masterserver (%s)!"
 
-#: lib/netplay/netplay.cpp:2062
-#, c-format
+#: lib/netplay/netplay.cpp:2082
+#, fuzzy, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Não foi possível comunicar com o servidor de lobby! A porta TCP %u está aberta para tráfego outgoing?"
 
 #: src/challenge.cpp:184
-#: src/hci.cpp:922
-#: src/hci.cpp:3390
-#: src/hci.cpp:3513
-#: src/hci.cpp:3924
-#: src/hci.cpp:4942
+#: src/hci.cpp:914
+#: src/hci.cpp:3376
+#: src/hci.cpp:3499
+#: src/hci.cpp:3910
+#: src/hci.cpp:4928
 #: src/intelmap.cpp:531
 #: src/intorder.cpp:727
 #: src/loadsave.cpp:253
@@ -12346,146 +12347,146 @@ msgstr "ir directamente para o ecrã de anfitrião"
 msgid "Player"
 msgstr "Jogador"
 
-#: src/design.cpp:449
-#: src/design.cpp:469
-#: src/design.cpp:3501
+#: src/design.cpp:443
+#: src/design.cpp:455
+#: src/design.cpp:3464
 msgid "New Vehicle"
 msgstr "Novo Veículo"
 
-#: src/design.cpp:515
+#: src/design.cpp:500
 msgid "Vehicle Body"
 msgstr "Corpo do Veículo"
 
-#: src/design.cpp:535
+#: src/design.cpp:520
 msgid "Vehicle Propulsion"
 msgstr "Propulsão do Veículo"
 
-#: src/design.cpp:556
-#: src/design.cpp:579
-#: src/design.cpp:603
+#: src/design.cpp:541
+#: src/design.cpp:564
+#: src/design.cpp:588
 msgid "Vehicle Turret"
 msgstr "Torre do Veículo"
 
-#: src/design.cpp:622
+#: src/design.cpp:607
 msgid "Delete Design"
 msgstr "Apagar Design"
 
-#: src/design.cpp:673
-#: src/design.cpp:720
+#: src/design.cpp:658
+#: src/design.cpp:705
 msgid "Kinetic Armour"
 msgstr "Armadura Cinética"
 
-#: src/design.cpp:682
-#: src/design.cpp:730
+#: src/design.cpp:667
+#: src/design.cpp:715
 msgid "Thermal Armour"
 msgstr "Armadur Térmica"
 
-#: src/design.cpp:698
-#: src/design.cpp:750
+#: src/design.cpp:683
+#: src/design.cpp:735
 msgid "Engine Output"
 msgstr "Potência do Motor"
 
-#: src/design.cpp:706
-#: src/design.cpp:759
-#: src/design.cpp:1529
-#: src/design.cpp:1553
-#: src/design.cpp:1574
-#: src/design.cpp:1590
-#: src/design.cpp:1610
-#: src/design.cpp:1627
-#: src/design.cpp:1647
-#: src/design.cpp:1664
-#: src/design.cpp:1705
-#: src/design.cpp:1737
-#: src/design.cpp:1869
-#: src/design.cpp:1885
-#: src/design.cpp:1923
-#: src/design.cpp:1956
+#: src/design.cpp:691
+#: src/design.cpp:744
+#: src/design.cpp:1486
+#: src/design.cpp:1510
+#: src/design.cpp:1531
+#: src/design.cpp:1547
+#: src/design.cpp:1567
+#: src/design.cpp:1584
+#: src/design.cpp:1604
+#: src/design.cpp:1621
+#: src/design.cpp:1662
+#: src/design.cpp:1694
+#: src/design.cpp:1826
+#: src/design.cpp:1842
+#: src/design.cpp:1880
+#: src/design.cpp:1913
 msgid "Weight"
 msgstr "Peso"
 
-#: src/design.cpp:790
-#: src/design.cpp:808
+#: src/design.cpp:775
+#: src/design.cpp:793
 msgid "Total Power Required"
 msgstr "Total de Energia Necessária"
 
-#: src/design.cpp:821
-#: src/design.cpp:840
+#: src/design.cpp:806
+#: src/design.cpp:825
 msgid "Total Body Points"
 msgstr "Total de Pontos de Resistência"
 
-#: src/design.cpp:1027
-#: src/design.cpp:1059
+#: src/design.cpp:996
+#: src/design.cpp:1025
 msgid "Power Usage"
 msgstr "Energia Usada"
 
-#: src/design.cpp:1335
+#: src/design.cpp:1298
 #, fuzzy
 msgid "Hydra "
 msgstr "Hydra"
 
-#: src/design.cpp:1509
-#: src/design.cpp:1537
+#: src/design.cpp:1466
+#: src/design.cpp:1494
 msgid "Sensor Range"
 msgstr "Alcance do sensor"
 
-#: src/design.cpp:1521
-#: src/design.cpp:1545
+#: src/design.cpp:1478
+#: src/design.cpp:1502
 msgid "Sensor Power"
 msgstr "Energia do Sensor"
 
-#: src/design.cpp:1566
-#: src/design.cpp:1582
+#: src/design.cpp:1523
+#: src/design.cpp:1539
 msgid "ECM Power"
 msgstr "Potência do ECM"
 
-#: src/design.cpp:1602
-#: src/design.cpp:1619
-#: src/design.cpp:1639
-#: src/design.cpp:1656
+#: src/design.cpp:1559
+#: src/design.cpp:1576
+#: src/design.cpp:1596
+#: src/design.cpp:1613
 msgid "Build Points"
 msgstr "Pontos de Construção"
 
-#: src/design.cpp:1677
-#: src/design.cpp:1713
+#: src/design.cpp:1634
+#: src/design.cpp:1670
 msgid "Range"
 msgstr "Alcance"
 
-#: src/design.cpp:1689
-#: src/design.cpp:1721
+#: src/design.cpp:1646
+#: src/design.cpp:1678
 msgid "Damage"
 msgstr "Danos"
 
-#: src/design.cpp:1697
-#: src/design.cpp:1729
+#: src/design.cpp:1654
+#: src/design.cpp:1686
 msgid "Rate-of-Fire"
 msgstr "Razão de Fogo"
 
-#: src/design.cpp:1857
-#: src/design.cpp:1877
+#: src/design.cpp:1814
+#: src/design.cpp:1834
 msgid "Air Speed"
 msgstr "Velocidade aérea"
 
-#: src/design.cpp:1895
-#: src/design.cpp:1932
+#: src/design.cpp:1852
+#: src/design.cpp:1889
 msgid "Road Speed"
 msgstr "Velocidade em Estrada"
 
-#: src/design.cpp:1905
-#: src/design.cpp:1940
+#: src/design.cpp:1862
+#: src/design.cpp:1897
 msgid "Off-Road Speed"
 msgstr "Velocidade em Corta-Mato"
 
-#: src/design.cpp:1913
-#: src/design.cpp:1948
+#: src/design.cpp:1870
+#: src/design.cpp:1905
 msgid "Water Speed"
 msgstr "Velocidade na água"
 
-#: src/design.cpp:2074
+#: src/design.cpp:2031
 msgid "Weapons"
 msgstr "Armas"
 
-#: src/design.cpp:2094
+#: src/design.cpp:2051
 msgid "Systems"
 msgstr "Sistemas"
 
@@ -12498,7 +12499,7 @@ msgid "Player dropped"
 msgstr "Jogador caiu"
 
 #: src/display3d.cpp:599
-#: src/multiint.cpp:2116
+#: src/multiint.cpp:2125
 msgid "Waiting for other players"
 msgstr "À espera dos outros jogadores"
 
@@ -12506,114 +12507,114 @@ msgstr "À espera dos outros jogadores"
 msgid "Out of sync"
 msgstr ""
 
-#: src/display.cpp:1651
+#: src/display.cpp:1649
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Impossível construir. Fonte de petróleo a arder."
 
-#: src/display.cpp:1830
-#: src/display.cpp:2423
+#: src/display.cpp:1828
+#: src/display.cpp:2421
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Dano %d%% - Experiência %d, %s"
 
-#: src/display.cpp:1846
+#: src/display.cpp:1844
 #, fuzzy, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Dano %d%% - Experiência %d, %s"
 
-#: src/display.cpp:2044
+#: src/display.cpp:2042
 msgid "Truck ordered to build Oil Derrick"
 msgstr "Camião ordenado a construir Extractor de Petróleo"
 
-#: src/display.cpp:2045
+#: src/display.cpp:2043
 #, fuzzy
 msgid "2 trucks ordered to build Oil Derrick"
 msgstr "Camião ordenado a construir Extractor de Petróleo"
 
-#: src/display.cpp:2046
+#: src/display.cpp:2044
 #, fuzzy, c-format
 msgid "%d trucks ordered to build Oil Derrick"
 msgstr "Camião ordenado a construir Extractor de Petróleo"
 
-#: src/droid.cpp:208
+#: src/droid.cpp:211
 msgid "Unit Lost!"
 msgstr "Unidade Destruída!"
 
-#: src/droid.cpp:1370
+#: src/droid.cpp:1376
 msgid "Structure Restored"
 msgstr "Estrutura reparada"
 
-#: src/droid.cpp:2712
+#: src/droid.cpp:2732
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Grupo %u seleccionado - %u Unidade"
 msgstr[1] "Grupo %u seleccionado - %u Unidades"
 
-#: src/droid.cpp:2725
+#: src/droid.cpp:2745
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u unidade atribuída do ao Grupo %u"
 msgstr[1] "%u unidades designadas ao Grupo %u"
 
-#: src/droid.cpp:2738
+#: src/droid.cpp:2758
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Centrado no Grupo %u - %u Unidade"
 msgstr[1] "Centrado no Grupo %u - %u Unidades"
 
-#: src/droid.cpp:2742
+#: src/droid.cpp:2762
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "A Alinhar com o Grupo %u - %u Unidade"
 msgstr[1] "A Alinhar com o Grupo %u - %u Unidades"
 
-#: src/droid.cpp:3080
+#: src/droid.cpp:3093
 msgid "Rookie"
 msgstr "Novato"
 
-#: src/droid.cpp:3081
+#: src/droid.cpp:3094
 msgctxt "rank"
 msgid "Green"
 msgstr "Inexperiente"
 
-#: src/droid.cpp:3082
+#: src/droid.cpp:3095
 msgid "Trained"
 msgstr "Treinado"
 
-#: src/droid.cpp:3083
+#: src/droid.cpp:3096
 msgid "Regular"
 msgstr "Regular"
 
-#: src/droid.cpp:3084
+#: src/droid.cpp:3097
 msgid "Professional"
 msgstr "Profissional"
 
-#: src/droid.cpp:3085
+#: src/droid.cpp:3098
 msgid "Veteran"
 msgstr "Veterano"
 
-#: src/droid.cpp:3086
+#: src/droid.cpp:3099
 msgid "Elite"
 msgstr "Elite"
 
-#: src/droid.cpp:3087
+#: src/droid.cpp:3100
 msgid "Special"
 msgstr "Especial"
 
-#: src/droid.cpp:3088
+#: src/droid.cpp:3101
 msgid "Hero"
 msgstr "Herói"
 
-#: src/droid.cpp:4110
+#: src/droid.cpp:4123
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
 msgstr ""
 
-#: src/droid.cpp:4114
+#: src/droid.cpp:4127
 #, c-format
 msgid "You wanted to give %s a %s but they have too many!"
 msgstr ""
@@ -12632,7 +12633,7 @@ msgid "Tutorial"
 msgstr "Tutorial"
 
 #: src/frontend.cpp:100
-#: src/hci.cpp:3499
+#: src/hci.cpp:3485
 msgid "Options"
 msgstr "Opções"
 
@@ -12684,7 +12685,7 @@ msgid "Challenges"
 msgstr "Saqueadores"
 
 #: src/frontend.cpp:215
-#: src/ingameop.cpp:275
+#: src/ingameop.cpp:272
 msgid "Load Game"
 msgstr "Carregar Jogo"
 
@@ -12693,7 +12694,7 @@ msgid "SINGLE PLAYER"
 msgstr "UM JOGADOR"
 
 #: src/frontend.cpp:303
-#: src/ingameop.cpp:498
+#: src/ingameop.cpp:494
 #: src/mission.cpp:2527
 #: src/mission.cpp:2630
 msgid "Load Saved Game"
@@ -12712,7 +12713,7 @@ msgid "Join Game"
 msgstr "Juntar-se a Jogo"
 
 #: src/frontend.cpp:422
-#: src/multiint.cpp:1276
+#: src/multiint.cpp:1285
 msgid "OPTIONS"
 msgstr "OPÇÕES"
 
@@ -12729,7 +12730,7 @@ msgid "Video Options"
 msgstr "Opções de Vídeo"
 
 #: src/frontend.cpp:426
-#: src/ingameop.cpp:270
+#: src/ingameop.cpp:267
 msgid "Audio Options"
 msgstr "Opções de Áudio"
 
@@ -12807,7 +12808,7 @@ msgid "Off"
 msgstr "Desligado"
 
 #: src/frontend.cpp:523
-#: src/multiint.cpp:1345
+#: src/multiint.cpp:1354
 msgid "Fog"
 msgstr "Nevoeiro"
 
@@ -12818,7 +12819,7 @@ msgstr "Nevoeiro"
 
 #: src/frontend.cpp:530
 #: src/frontend.cpp:595
-#: src/multiint.cpp:1347
+#: src/multiint.cpp:1356
 msgid "Fog Of War"
 msgstr "Nevoeiro de guerra"
 
@@ -12985,200 +12986,200 @@ msgid "GAME OPTIONS"
 msgstr "OPÇÕES DE JOGO"
 
 #: src/frontend.cpp:1340
-#: src/multiint.cpp:2389
+#: src/multiint.cpp:2398
 msgid "Mod: "
 msgstr ""
 
-#: src/hci.cpp:1245
+#: src/hci.cpp:1235
 msgid "MAP SAVED!"
 msgstr "MAPA GRAVADO!"
 
-#: src/hci.cpp:1584
+#: src/hci.cpp:1571
 #: src/loop.cpp:558
 #: src/loop.cpp:574
 msgid "GAME SAVED: "
 msgstr "JOGO GRAVADO!"
 
-#: src/hci.cpp:1971
+#: src/hci.cpp:1958
 msgid "Failed to create building"
 msgstr "Não foi possível criar o edifício"
 
-#: src/hci.cpp:1988
+#: src/hci.cpp:1975
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr "Jogador %u está a fazer batota (menu debug) para obter uma nova estrutura %s."
 
-#: src/hci.cpp:2003
+#: src/hci.cpp:1990
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr "Jogador %u está a fazer batota (menu debug) para obter uma nova característica %s."
 
-#: src/hci.cpp:2025
+#: src/hci.cpp:2012
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "Jogador %u está a fazer batota (menu debug) para obter um novo droid %s."
 
-#: src/hci.cpp:2036
+#: src/hci.cpp:2023
 #, fuzzy, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "Jogador %u está a fazer batota (menu debug) para obter um novo droid %s."
 
-#: src/hci.cpp:3310
+#: src/hci.cpp:3296
 msgid "Commanders (F6)"
 msgstr "Comandantes (F6)"
 
-#: src/hci.cpp:3323
+#: src/hci.cpp:3309
 msgid "Intelligence Display (F5)"
 msgstr "Ecrã de Informação"
 
-#: src/hci.cpp:3336
+#: src/hci.cpp:3322
 msgid "Manufacture (F1)"
 msgstr "Produção (F1)"
 
-#: src/hci.cpp:3349
+#: src/hci.cpp:3335
 msgid "Design (F4)"
 msgstr "Desenho (F4)"
 
-#: src/hci.cpp:3362
+#: src/hci.cpp:3348
 msgid "Research (F2)"
 msgstr "Investigação (F2)"
 
-#: src/hci.cpp:3375
+#: src/hci.cpp:3361
 msgid "Build (F3)"
 msgstr "Construir (F3)"
 
-#: src/hci.cpp:3446
-#: src/multiint.cpp:1392
+#: src/hci.cpp:3432
+#: src/multiint.cpp:1401
 #: src/multimenu.cpp:763
 msgid "Power"
 msgstr "Energia"
 
-#: src/hci.cpp:3537
+#: src/hci.cpp:3523
 msgid "Map:"
 msgstr ""
 
-#: src/hci.cpp:3550
+#: src/hci.cpp:3536
 #, fuzzy
 msgid "Load"
 msgstr "Carregar Jogo"
 
-#: src/hci.cpp:3551
+#: src/hci.cpp:3537
 #, fuzzy
 msgid "Load Map File"
 msgstr "Carregar Jogo"
 
-#: src/hci.cpp:3558
+#: src/hci.cpp:3544
 #, fuzzy
 msgid "Save"
 msgstr "Gravar Jogo"
 
-#: src/hci.cpp:3559
+#: src/hci.cpp:3545
 #, fuzzy
 msgid "Save Map File"
 msgstr "Gravar Jogo"
 
-#: src/hci.cpp:3567
+#: src/hci.cpp:3553
 msgid "New"
 msgstr ""
 
-#: src/hci.cpp:3568
+#: src/hci.cpp:3554
 msgid "New Blank Map"
 msgstr ""
 
-#: src/hci.cpp:3604
+#: src/hci.cpp:3590
 msgid "Tile"
 msgstr "Mosaico"
 
-#: src/hci.cpp:3605
+#: src/hci.cpp:3591
 msgid "Place tiles on map"
 msgstr "Coloca mosaicos no mapa"
 
-#: src/hci.cpp:3614
+#: src/hci.cpp:3600
 msgid "Unit"
 msgstr "Unidade"
 
-#: src/hci.cpp:3615
+#: src/hci.cpp:3601
 msgid "Place Unit on map"
 msgstr "Colocar Unidade no mapa"
 
-#: src/hci.cpp:3623
+#: src/hci.cpp:3609
 msgid "Struct"
 msgstr "Estrutura"
 
-#: src/hci.cpp:3624
+#: src/hci.cpp:3610
 msgid "Place Structures on map"
 msgstr "Colocar Estruturas no mapa"
 
-#: src/hci.cpp:3632
+#: src/hci.cpp:3618
 msgid "Feat"
 msgstr "Característica"
 
-#: src/hci.cpp:3633
+#: src/hci.cpp:3619
 #, fuzzy
 msgid "Place Features on map"
 msgstr "Colocar ?recursos/características? no mapa"
 
-#: src/hci.cpp:3643
+#: src/hci.cpp:3629
 msgid "Pause"
 msgstr ""
 
-#: src/hci.cpp:3644
+#: src/hci.cpp:3630
 msgid "Pause or unpause the game"
 msgstr "Pausa ou retira de pausa o jogo"
 
-#: src/hci.cpp:3658
+#: src/hci.cpp:3644
 msgid "Align height of all map objects"
 msgstr "Alinhar altura de todos os objectos do mapa"
 
-#: src/hci.cpp:3668
+#: src/hci.cpp:3654
 msgid "Edit"
 msgstr ""
 
-#: src/hci.cpp:3669
+#: src/hci.cpp:3655
 #, fuzzy
 msgid "Start Edit Mode"
 msgstr "Começar sem Bases"
 
-#: src/hci.cpp:3683
+#: src/hci.cpp:3669
 #: src/ingameop.cpp:112
-#: src/ingameop.cpp:258
-#: src/ingameop.cpp:263
+#: src/ingameop.cpp:256
+#: src/ingameop.cpp:260
 msgid "Quit"
 msgstr "Sair"
 
-#: src/hci.cpp:3684
+#: src/hci.cpp:3670
 msgid "Exit Game"
 msgstr "Sair do Jogo"
 
-#: src/hci.cpp:3710
+#: src/hci.cpp:3696
 #, fuzzy
 msgid "Current Player:"
 msgstr "Multijogador"
 
-#: src/hci.cpp:4001
+#: src/hci.cpp:3987
 #: src/intdisplay.cpp:276
 msgid "Progress Bar"
 msgstr "Barra de Progresso"
 
-#: src/hci.cpp:4867
+#: src/hci.cpp:4853
 msgid "Factory Delivery Point"
 msgstr "Ponto de Destino da Fábrica"
 
-#: src/hci.cpp:4885
+#: src/hci.cpp:4871
 msgid "Loop Production"
 msgstr "Produção Pontínua"
 
-#: src/hci.cpp:4965
+#: src/hci.cpp:4951
 msgid "Tab Scroll left"
 msgstr "Tab Scroll esquerda"
 
-#: src/hci.cpp:4980
+#: src/hci.cpp:4966
 msgid "Tab Scroll right"
 msgstr "Tab Scroll direita"
 
 #: src/ingameop.cpp:111
-#: src/ingameop.cpp:193
-#: src/ingameop.cpp:267
+#: src/ingameop.cpp:195
+#: src/ingameop.cpp:264
 msgid "Resume Game"
 msgstr "Retomar Jogo"
 
@@ -13186,33 +13187,33 @@ msgstr "Retomar Jogo"
 msgid "WARNING: You're the host. If you quit, the game ends for everyone!"
 msgstr ""
 
-#: src/ingameop.cpp:185
-#: src/ingameop.cpp:527
+#: src/ingameop.cpp:186
+#: src/ingameop.cpp:523
 msgid "Tactical UI (Target Origin Icon): Show"
 msgstr ""
 
-#: src/ingameop.cpp:190
-#: src/ingameop.cpp:531
+#: src/ingameop.cpp:191
+#: src/ingameop.cpp:527
 msgid "Tactical UI (Target Origin Icon): Hide"
 msgstr ""
 
-#: src/ingameop.cpp:277
-#: src/ingameop.cpp:502
+#: src/ingameop.cpp:274
+#: src/ingameop.cpp:498
 #: src/mission.cpp:2514
 #: src/mission.cpp:2633
 msgid "Save Game"
 msgstr "Gravar Jogo"
 
-#: src/ingameop.cpp:343
+#: src/ingameop.cpp:339
 #, fuzzy
 msgid "Host has quit the game!"
 msgstr "%s abandonou o Jogo"
 
-#: src/ingameop.cpp:349
+#: src/ingameop.cpp:345
 msgid "The game can't continue without the host."
 msgstr ""
 
-#: src/ingameop.cpp:355
+#: src/ingameop.cpp:351
 msgid "-->  QUIT  <--"
 msgstr ""
 
@@ -13589,54 +13590,54 @@ msgstr ""
 msgid "Screen shake when things die: On"
 msgstr ""
 
-#: src/keybind.cpp:2603
-#: src/keybind.cpp:2646
+#: src/keybind.cpp:2604
+#: src/keybind.cpp:2647
 #, fuzzy
 msgid "Sorry, but game speed cannot be changed in multiplayer."
 msgstr "Esta cheat está bloqueada nos jogos multiplayer."
 
-#: src/keybind.cpp:2624
-#: src/keybind.cpp:2667
-#: src/keybind.cpp:2689
+#: src/keybind.cpp:2625
+#: src/keybind.cpp:2668
+#: src/keybind.cpp:2690
 msgid "Game Speed Reset"
 msgstr "Velocidade de jogo reposta"
 
-#: src/keybind.cpp:2628
+#: src/keybind.cpp:2629
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "Velocidade de jogo aumentada para %3.1f"
 
-#: src/keybind.cpp:2671
+#: src/keybind.cpp:2672
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "Velocidade de jogo reduzida para %3.1f"
 
-#: src/keybind.cpp:2701
+#: src/keybind.cpp:2702
 msgid "Radar showing friend-foe colors"
 msgstr "Radar a mostrar cores de amigo/inimigo"
 
-#: src/keybind.cpp:2705
+#: src/keybind.cpp:2706
 msgid "Radar showing player colors"
 msgstr "Radar a mostrar cores de jogador"
 
-#: src/keybind.cpp:2726
+#: src/keybind.cpp:2727
 msgid "Radar showing only objects"
 msgstr "Radar a mostrar apenas objectos"
 
-#: src/keybind.cpp:2729
+#: src/keybind.cpp:2730
 msgid "Radar blending terrain and height"
 msgstr "Radar a misturar terreno e altura"
 
-#: src/keybind.cpp:2732
+#: src/keybind.cpp:2733
 msgid "Radar showing terrain"
 msgstr "Radar a mostrar terreno"
 
-#: src/keybind.cpp:2735
+#: src/keybind.cpp:2736
 #, fuzzy
 msgid "Radar showing revealed terrain"
 msgstr "Radar a mostrar terreno"
 
-#: src/keybind.cpp:2738
+#: src/keybind.cpp:2739
 msgid "Radar showing height"
 msgstr "Radar a mostrar altura"
 
@@ -13645,9 +13646,9 @@ msgid "KEY MAPPING"
 msgstr "DEFINIÇÃO DE TECLAS"
 
 #: src/keyedit.cpp:372
-#: src/multiint.cpp:662
-#: src/multiint.cpp:1072
-#: src/multiint.cpp:1478
+#: src/multiint.cpp:671
+#: src/multiint.cpp:1081
+#: src/multiint.cpp:1487
 msgid "Return To Previous Screen"
 msgstr "Voltar ao ecrâ anterior"
 
@@ -14138,9 +14139,8 @@ msgid "Complete current research"
 msgstr "Permite Investigação do torreão de Comando"
 
 #: src/keymap.cpp:456
-#, fuzzy
 msgid "Toggle watch window"
-msgstr "Activar sombras"
+msgstr ""
 
 #: src/keymap.cpp:457
 msgid "Trace a game object"
@@ -14191,7 +14191,7 @@ msgid "GAME SAVED :"
 msgstr "JOGO GRAVADO :"
 
 #: src/move.cpp:2264
-#, c-format
+#, fuzzy, c-format
 msgid "You found %u power in an oil drum."
 msgstr "Encontraste %u energia num barril de petróleo"
 
@@ -14245,350 +14245,348 @@ msgstr "%s forma uma Aliança com %s"
 msgid "You Discover Blueprints For %s"
 msgstr "Descobriste esquemas para %s"
 
-#: src/multiint.cpp:600
+#: src/multiint.cpp:609
 #: src/multilimit.cpp:190
 msgid "Accept Settings"
 msgstr "Aceitar definições"
 
-#: src/multiint.cpp:602
-#: src/multiint.cpp:1117
+#: src/multiint.cpp:611
+#: src/multiint.cpp:1126
 #, fuzzy
 msgid "Cancel"
 msgstr "Lancer"
 
-#: src/multiint.cpp:613
+#: src/multiint.cpp:622
 msgid "IP Address or Machine Name"
 msgstr "Endereço IP ou nome do Computador"
 
-#: src/multiint.cpp:659
+#: src/multiint.cpp:668
 msgid "CONNECTION"
 msgstr "Conexão"
 
-#: src/multiint.cpp:664
+#: src/multiint.cpp:673
 msgid "Lobby"
 msgstr "Lobby"
 
-#: src/multiint.cpp:665
+#: src/multiint.cpp:674
 msgid "IP"
 msgstr "IP"
 
-#: src/multiint.cpp:854
+#: src/multiint.cpp:863
 msgid "No games are available"
 msgstr "Não há jogos disponíveis"
 
-#: src/multiint.cpp:857
+#: src/multiint.cpp:866
 msgid "Game is full"
 msgstr "Jogo cheio"
 
-#: src/multiint.cpp:861
+#: src/multiint.cpp:870
 msgid "You were kicked!"
 msgstr "Foste expulso!"
 
-#: src/multiint.cpp:864
+#: src/multiint.cpp:873
 msgid "Wrong Game Version!"
 msgstr "Versão Errada do Jogo!"
 
-#: src/multiint.cpp:867
+#: src/multiint.cpp:876
 msgid "You have an incompatible mod."
 msgstr ""
 
-#: src/multiint.cpp:871
+#: src/multiint.cpp:880
 msgid "Host couldn't send file?"
 msgstr ""
 
-#: src/multiint.cpp:875
+#: src/multiint.cpp:884
 msgid "Incorrect Password!"
 msgstr "Palavra-passe incorrecta!"
 
-#: src/multiint.cpp:878
+#: src/multiint.cpp:887
 msgid "Host has dropped connection!"
 msgstr ""
 
-#: src/multiint.cpp:882
+#: src/multiint.cpp:891
 msgid "Connection Error"
 msgstr "Erro de conexão"
 
-#: src/multiint.cpp:1012
+#: src/multiint.cpp:1021
 msgid "Searching"
 msgstr "A Procurar"
 
-#: src/multiint.cpp:1069
+#: src/multiint.cpp:1078
 msgid "GAMES"
 msgstr "JOGOS"
 
-#: src/multiint.cpp:1077
+#: src/multiint.cpp:1086
 msgid "Refresh Games List"
 msgstr "Actualizar Lista de Jogos"
 
-#: src/multiint.cpp:1097
+#: src/multiint.cpp:1106
 #, fuzzy
 msgid "Enter Password:"
 msgstr "Insere Primeiro a Palavra-passe"
 
-#: src/multiint.cpp:1115
+#: src/multiint.cpp:1124
 msgid "OK"
 msgstr ""
 
-#: src/multiint.cpp:1232
+#: src/multiint.cpp:1241
 msgid "Tanks disabled!!"
 msgstr ""
 
-#: src/multiint.cpp:1233
+#: src/multiint.cpp:1242
 #, fuzzy
 msgid "Cyborgs disabled."
 msgstr "Novo Cyborg Disponível"
 
-#: src/multiint.cpp:1234
+#: src/multiint.cpp:1243
 msgid "VTOLs disabled."
 msgstr ""
 
-#: src/multiint.cpp:1281
-#: src/multiint.cpp:1288
+#: src/multiint.cpp:1290
+#: src/multiint.cpp:1297
 msgid "Select Game Name"
 msgstr "Seleccionar Nome do Jogo"
 
-#: src/multiint.cpp:1281
+#: src/multiint.cpp:1290
 #, fuzzy
 msgid "One-Player Skirmish"
 msgstr "Skirmish de Um Jogador"
 
-#: src/multiint.cpp:1291
+#: src/multiint.cpp:1300
 msgid "Select Map"
 msgstr "Seleccionar Mapa"
 
-#: src/multiint.cpp:1299
+#: src/multiint.cpp:1308
 msgid "Click to set Password"
 msgstr "Clica para definir Palavra-passe"
 
-#: src/multiint.cpp:1309
-#: src/multiint.cpp:1310
+#: src/multiint.cpp:1318
+#: src/multiint.cpp:1319
 msgid "Scavengers"
 msgstr "Saqueadores"
 
-#: src/multiint.cpp:1312
+#: src/multiint.cpp:1321
 msgid "No Scavengers"
 msgstr "Sem Saqueadores"
 
-#: src/multiint.cpp:1342
+#: src/multiint.cpp:1351
 msgid "Select Player Name"
 msgstr "Seleccionar Nome de Jogador"
 
-#: src/multiint.cpp:1348
+#: src/multiint.cpp:1357
 msgid "Distance Fog"
 msgstr "Nevoeiro de distância"
 
-#: src/multiint.cpp:1359
+#: src/multiint.cpp:1368
 #: src/multimenu.cpp:756
 msgid "Alliances"
 msgstr "Alianças"
 
-#: src/multiint.cpp:1362
+#: src/multiint.cpp:1371
 msgid "No Alliances"
 msgstr "Sem Alianças"
 
-#: src/multiint.cpp:1364
+#: src/multiint.cpp:1373
 msgid "Allow Alliances"
 msgstr "Permitir Alianças"
 
-#: src/multiint.cpp:1368
+#: src/multiint.cpp:1377
 msgid "Locked Teams"
 msgstr "Equipas Fixas"
 
-#: src/multiint.cpp:1394
+#: src/multiint.cpp:1403
 msgid "Low Power Levels"
 msgstr "Níveis de Energia Baixos"
 
-#: src/multiint.cpp:1396
+#: src/multiint.cpp:1405
 msgid "Medium Power Levels"
 msgstr "Níveis de Energia Médios"
 
-#: src/multiint.cpp:1398
+#: src/multiint.cpp:1407
 msgid "High Power Levels"
 msgstr "Níveis de Energia Altos"
 
-#: src/multiint.cpp:1430
+#: src/multiint.cpp:1439
 msgid "Base"
 msgstr "Base"
 
-#: src/multiint.cpp:1432
+#: src/multiint.cpp:1441
 msgid "Start with No Bases"
 msgstr "Começar sem Bases"
 
-#: src/multiint.cpp:1434
+#: src/multiint.cpp:1443
 msgid "Start with Bases"
 msgstr "Começar com Bases"
 
-#: src/multiint.cpp:1436
+#: src/multiint.cpp:1445
 msgid "Start with Advanced Bases"
 msgstr "Começar com Bases Avançadas"
 
-#: src/multiint.cpp:1468
+#: src/multiint.cpp:1477
 msgid "Map Preview"
 msgstr "Pré-visualizar o mapa"
 
-#: src/multiint.cpp:1470
+#: src/multiint.cpp:1479
 msgid "Click to see Map"
 msgstr "Clica para ver o mapa"
 
-#: src/multiint.cpp:1484
+#: src/multiint.cpp:1493
 msgid "Start Hosting Game"
 msgstr "Iniciar Servidor de Jogo"
 
-#: src/multiint.cpp:1492
+#: src/multiint.cpp:1501
 #, fuzzy
 msgid "Show Structure Limits"
 msgstr "Ajustar Limites de Estrutura"
 
-#: src/multiint.cpp:1492
+#: src/multiint.cpp:1501
 msgid "Set Structure Limits"
 msgstr "Ajustar Limites de Estrutura"
 
-#: src/multiint.cpp:1587
+#: src/multiint.cpp:1596
 msgid "DIFFICULTY"
 msgstr ""
 
-#: src/multiint.cpp:1601
+#: src/multiint.cpp:1610
 msgid "Less aggressive and starts with less units"
 msgstr ""
 
-#: src/multiint.cpp:1602
+#: src/multiint.cpp:1611
 #, fuzzy
 msgid "Plays nice"
 msgstr "Jogador"
 
-#: src/multiint.cpp:1603
+#: src/multiint.cpp:1612
 msgid "No holds barred"
 msgstr ""
 
-#: src/multiint.cpp:1604
+#: src/multiint.cpp:1613
 msgid "Starts with advantages and gets twice as much oil from derricks"
 msgstr ""
 
-#: src/multiint.cpp:1632
+#: src/multiint.cpp:1641
 msgid "CHOOSE AI"
 msgstr ""
 
-#: src/multiint.cpp:1648
+#: src/multiint.cpp:1657
 msgid "Allow human players to join in this slot"
 msgstr ""
 
-#: src/multiint.cpp:1656
+#: src/multiint.cpp:1665
 msgid "Leave this slot unused"
 msgstr ""
 
-#: src/multiint.cpp:1736
+#: src/multiint.cpp:1745
 #, fuzzy
 msgid "Player colour"
 msgstr "Jogador Saiu"
 
-#: src/multiint.cpp:2062
+#: src/multiint.cpp:2071
 msgid "Team"
 msgstr "Equipa"
 
-#: src/multiint.cpp:2074
+#: src/multiint.cpp:2083
 #, fuzzy
 msgid "Kick player"
 msgstr "2 jogadores"
 
-#: src/multiint.cpp:2104
+#: src/multiint.cpp:2113
 msgid "You cannot change difficulty in a challenge"
 msgstr ""
 
-#: src/multiint.cpp:2104
-#, fuzzy
+#: src/multiint.cpp:2113
 msgid "Click to change difficulty"
-msgstr "Clica para definir Palavra-passe"
+msgstr ""
 
-#: src/multiint.cpp:2121
+#: src/multiint.cpp:2130
 msgid "Click when ready"
 msgstr "Clica quando estiveres pronto"
 
-#: src/multiint.cpp:2125
+#: src/multiint.cpp:2134
 msgid "READY?"
 msgstr ""
 
-#: src/multiint.cpp:2169
+#: src/multiint.cpp:2178
 msgid "PLAYERS"
 msgstr "JOGADORES"
 
-#: src/multiint.cpp:2204
+#: src/multiint.cpp:2213
 #, fuzzy
 msgid "Click to change to this slot"
 msgstr "Clica para definir Palavra-passe"
 
-#: src/multiint.cpp:2232
+#: src/multiint.cpp:2241
 #, fuzzy
 msgid "Choose Team"
 msgstr "Equipas Fixas"
 
-#: src/multiint.cpp:2262
+#: src/multiint.cpp:2271
 #, fuzzy
 msgid "Click to change player colour"
 msgstr "Radar a mostrar cores de jogador"
 
-#: src/multiint.cpp:2290
-#, fuzzy
+#: src/multiint.cpp:2299
 msgid "Click to change player position"
-msgstr "Defender Posição"
+msgstr ""
 
-#: src/multiint.cpp:2296
+#: src/multiint.cpp:2305
 #, fuzzy
 msgid "Click to change AI"
-msgstr "Clica para definir Palavra-passe"
+msgstr "Clica para ver o mapa"
 
-#: src/multiint.cpp:2300
+#: src/multiint.cpp:2309
 msgid "You cannot change AI in a challenge"
 msgstr ""
 
-#: src/multiint.cpp:2362
+#: src/multiint.cpp:2371
 msgid "CHAT"
 msgstr "CHAT"
 
-#: src/multiint.cpp:2394
+#: src/multiint.cpp:2403
 msgid "All players need to have the same mods to join your game."
 msgstr ""
 
-#: src/multiint.cpp:2552
+#: src/multiint.cpp:2561
 #, fuzzy, c-format
 msgid "*** password [%s] is now required! ***"
 msgstr "*** É agora necessária uma Palavra-passe! ***"
 
-#: src/multiint.cpp:2560
+#: src/multiint.cpp:2569
 msgid "*** password is NOT required! ***"
 msgstr "*** NÃO é necessária Palavra-passe ***"
 
-#: src/multiint.cpp:2801
+#: src/multiint.cpp:2810
 msgid "Sorry! Failed to host the game."
 msgstr "Desculpa! Não foi possível criar o jogo."
 
-#: src/multiint.cpp:2922
+#: src/multiint.cpp:2931
 msgid "'Locked Teams' mode enabled"
 msgstr "Modo \"Equipas Fixas\" activado"
 
-#: src/multiint.cpp:3003
+#: src/multiint.cpp:3012
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "O servidor kickou %s do jogo!"
 
-#: src/multiint.cpp:3073
+#: src/multiint.cpp:3082
 msgid "Host is Starting Game"
 msgstr "O servidor está a começar o jogo"
 
-#: src/multiint.cpp:3639
+#: src/multiint.cpp:3648
 msgid "Players"
 msgstr "Jogadores"
 
-#: src/multiint.cpp:3772
+#: src/multiint.cpp:3786
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr ""
 
-#: src/multiint.cpp:3780
+#: src/multiint.cpp:3794
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr ""
 
-#: src/multiint.cpp:3803
+#: src/multiint.cpp:3822
 msgid "HOST"
 msgstr ""
 
@@ -14607,17 +14605,17 @@ msgstr "%s abandonou o Jogo"
 msgid "File transfer has been aborted for %d."
 msgstr ""
 
-#: src/multijoin.cpp:376
+#: src/multijoin.cpp:373
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr ""
 
-#: src/multijoin.cpp:415
+#: src/multijoin.cpp:412
 #, c-format
 msgid "%s is Joining the Game"
 msgstr "%s está a juntar-se ao Jogo"
 
-#: src/multijoin.cpp:425
+#: src/multijoin.cpp:422
 msgid "System message:"
 msgstr "Mensagem de Sistema:"
 
@@ -14769,84 +14767,84 @@ msgstr "Dar Energia ao Jogador"
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr ""
 
-#: src/multiplay.cpp:1146
+#: src/multiplay.cpp:1057
 #, fuzzy
 msgid "(allies"
 msgstr "Alianças"
 
-#: src/multiplay.cpp:1154
+#: src/multiplay.cpp:1065
 msgid "(private to "
 msgstr ""
 
-#: src/multiplay.cpp:1167
+#: src/multiplay.cpp:1078
 msgid "[invalid]"
 msgstr ""
 
-#: src/multiplay.cpp:2057
+#: src/multiplay.cpp:1942
 msgid "Green"
 msgstr "Verde"
 
-#: src/multiplay.cpp:2058
+#: src/multiplay.cpp:1943
 msgid "Orange"
 msgstr "Laranja"
 
-#: src/multiplay.cpp:2059
+#: src/multiplay.cpp:1944
 msgid "Grey"
 msgstr "Cinzento"
 
-#: src/multiplay.cpp:2060
+#: src/multiplay.cpp:1945
 msgid "Black"
 msgstr "Preto"
 
-#: src/multiplay.cpp:2061
+#: src/multiplay.cpp:1946
 msgid "Red"
 msgstr "Vermelho"
 
-#: src/multiplay.cpp:2062
+#: src/multiplay.cpp:1947
 msgid "Blue"
 msgstr "Azul"
 
-#: src/multiplay.cpp:2063
+#: src/multiplay.cpp:1948
 msgid "Pink"
 msgstr "Rosa"
 
-#: src/multiplay.cpp:2064
+#: src/multiplay.cpp:1949
 msgid "Cyan"
 msgstr "Ciano"
 
-#: src/multiplay.cpp:2065
+#: src/multiplay.cpp:1950
 msgid "Yellow"
 msgstr ""
 
-#: src/multiplay.cpp:2066
+#: src/multiplay.cpp:1951
 msgid "Purple"
 msgstr ""
 
-#: src/multiplay.cpp:2067
+#: src/multiplay.cpp:1952
 msgid "White"
 msgstr ""
 
-#: src/multiplay.cpp:2068
+#: src/multiplay.cpp:1953
 msgid "Bright blue"
 msgstr ""
 
-#: src/multiplay.cpp:2069
+#: src/multiplay.cpp:1954
 msgid "Neon green"
 msgstr ""
 
-#: src/multiplay.cpp:2070
+#: src/multiplay.cpp:1955
 msgid "Infrared"
 msgstr ""
 
-#: src/multiplay.cpp:2071
+#: src/multiplay.cpp:1956
 msgid "Ultraviolet"
 msgstr ""
 
-#: src/multiplay.cpp:2072
+#: src/multiplay.cpp:1957
 msgid "Brown"
 msgstr ""
 
-#: src/order.cpp:841
+#: src/order.cpp:800
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr ""
 
@@ -14981,20 +14979,20 @@ msgstr "Tempo de Jogo Total - %s"
 msgid "You cheated!"
 msgstr "Fizeste batota!"
 
-#: src/scriptfuncs.cpp:3250
+#: src/scriptfuncs.cpp:3287
 msgid "YOU ARE VICTORIOUS!"
 msgstr "FOSTE VITORIOSO!"
 
-#: src/scriptfuncs.cpp:3254
+#: src/scriptfuncs.cpp:3291
 msgid "YOU WERE DEFEATED!"
 msgstr "FOSTE DERROTADO"
 
-#: src/scriptfuncs.cpp:9500
+#: src/scriptfuncs.cpp:9537
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Sinalizador recebido de %s!"
 
-#: src/scriptfuncs.cpp:9546
+#: src/scriptfuncs.cpp:9583
 #, c-format
 msgid "Beacon %d"
 msgstr "Sinalizador %d"
@@ -15023,62 +15021,63 @@ msgstr "Incapaz de localizar qualquer unidade de Sensor"
 msgid "Unable to locate any Commanders!"
 msgstr "Incapaz de localizar qualquer Comandante!"
 
-#: src/structure.cpp:2615
+#: src/structure.cpp:2614
+#, fuzzy
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Limite de Controlo de Comando Alcançado - Produção Parada"
 
-#: src/structure.cpp:5815
-#: src/structure.cpp:5840
+#: src/structure.cpp:5806
+#: src/structure.cpp:5831
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u unidade atribuída"
 msgstr[1] "%s - %u unidades atribuídas"
 
-#: src/structure.cpp:5845
-#: src/structure.cpp:5913
-#: src/structure.cpp:5929
-#: src/structure.cpp:5943
+#: src/structure.cpp:5836
+#: src/structure.cpp:5904
+#: src/structure.cpp:5920
+#: src/structure.cpp:5934
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Dano %3.0f%%"
 
-#: src/structure.cpp:5895
+#: src/structure.cpp:5886
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - Ligado a %u de %u"
 
-#: src/structure.cpp:6059
-#: src/structure.cpp:6104
+#: src/structure.cpp:6050
+#: src/structure.cpp:6095
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Danificado Electronicamente"
 
-#: src/structure.cpp:6341
+#: src/structure.cpp:6332
 msgid "Electronic Reward - Visibility Report"
 msgstr "Recompensa Electrónica - Relatório de Visibilidade"
 
-#: src/structure.cpp:6381
+#: src/structure.cpp:6372
 msgid "Factory Reward - Propulsion"
 msgstr "Recompensa de Fábrica - Propulsão"
 
-#: src/structure.cpp:6405
+#: src/structure.cpp:6396
 msgid "Factory Reward - Body"
 msgstr "Recompensa de Fábrica - Corpo"
 
-#: src/structure.cpp:6429
+#: src/structure.cpp:6420
 msgid "Factory Reward - Weapon"
 msgstr "Recompensa de Fábrica - Arma"
 
-#: src/structure.cpp:6438
+#: src/structure.cpp:6429
 msgid "Factory Reward - Nothing"
 msgstr "Recompensa de Fábrica - Nada"
 
-#: src/structure.cpp:6466
+#: src/structure.cpp:6457
 msgid "Repair Facility Award - Repair"
 msgstr "Recompensa de Posto de Reparação - Reparações"
 
-#: src/structure.cpp:6473
+#: src/structure.cpp:6464
 msgid "Repair Facility Award - Nothing"
 msgstr "Recompensa de Posto de Reparação - Nada"
 
@@ -15123,84 +15122,6 @@ msgstr " - Construído %s"
 msgid "Version %s%s%s%s"
 msgstr "Versão %s%s%s%s"
 
-#, fuzzy
-#~ msgid "Infinite Production"
-#~ msgstr "Produção Pontínua"
-
-#~ msgid "Plascrete MK3"
-#~ msgstr "Plascrete Mk3"
-
-#, fuzzy
-#~ msgid "Player number"
-#~ msgstr "Jogador Saiu"
-
-#, fuzzy
-#~ msgid "Mini-Rocket accuracy +10%"
-#~ msgstr "Melhora precisão de Mini-Foguetes"
-
-#, fuzzy
-#~ msgid "Mini-Rocket damage +25%"
-#~ msgstr "Aumenta dano de Mini-Foguetes"
-
-#, fuzzy
-#~ msgid "Mini-Rocket reload time -15%"
-#~ msgstr "Aperfeiçoamento dos Mini-Foguetes"
-
-#~ msgid "Cyclone AA Site"
-#~ msgstr "Posição AA Cyclone"
-
-#, fuzzy
-#~ msgid "Gate"
-#~ msgstr "Jogo"
-
-#~ msgid "Automated Manufacturing Mk2"
-#~ msgstr "Produção Automatizada Mk2"
-
-#~ msgid "Automated Manufacturing Mk3"
-#~ msgstr "Produção Automatizada Mk3"
-
-#~ msgid "Robotic Manufacturing Mk2"
-#~ msgstr "Produção Robotizada Mk2"
-
-#~ msgid "Robotic Manufacturing Mk3"
-#~ msgstr "Produção Robotizada Mk3"
-
-#~ msgid "Advanced Manufacturing Mk2"
-#~ msgstr "Fabrico Avançada Mk2"
-
-#~ msgid "Automated Repair Facility Mk2"
-#~ msgstr "Instalação de Reparações Automatizadas Mk2"
-
-#~ msgid "Automated Repair Facility Mk3"
-#~ msgstr "Instalação de Reparações Automatizadas Mk3"
-
-#~ msgid "Robotic Repair Facility Mk2"
-#~ msgstr "Instalações de Reparação Robóticas Mk2"
-
-#, fuzzy
-#~ msgid "HESH Mini-Rockets"
-#~ msgstr "Mini-foguetes HE"
-
-#, fuzzy
-#~ msgid "HESH Mini-Rockets Mk2"
-#~ msgstr "Mini-foguetes HE Mk2"
-
-#, fuzzy
-#~ msgid "HESH Mini-Rockets Mk3"
-#~ msgstr "Mini-foguetes HE Mk3"
-
-#~ msgid "Thermite Flamer Cyborg"
-#~ msgstr "Cyborgue com Lança-chamas de Térmite"
-
-#~ msgid "Grenadier Cyborg"
-#~ msgstr "Cyborgue Granadeiro"
-
-#~ msgid "Cyclone Hardpoint"
-#~ msgstr "Fortificação Cyclone"
-
-#~ msgid "Fire Cannon"
-#~ msgstr "Camião dos Bombeiros Canhão"
-
 #~ msgid "Cobra Hover Heavy-Repair"
 #~ msgstr "Cobra Hovercraft Reparação pesada"
 
@@ -15237,7 +15158,8 @@ msgstr "Versão %s%s%s%s"
 #~ msgid "Scorpion Command Turret Tracks"
 #~ msgstr "Scorpion Torreão de Comando Lagartas"
 
-#~ msgid "mantis Command Turret Tracks"
+#, fuzzy
+#~ msgid "Mantis Command Turret Tracks"
 #~ msgstr "Mantis Torreão de Comando Lagartas"
 
 #~ msgid "Cobra Lancer Tracks"
@@ -15327,6 +15249,92 @@ msgstr "Versão %s%s%s%s"
 #~ msgid "Viper Flamer Half-Track"
 #~ msgstr "Viper Lança-chamas Meia-Lagarta"
 
+#, fuzzy
+#~ msgid ": Unknown cheat code."
+#~ msgstr "Correr em modo de batota"
+
+#, fuzzy
+#~ msgid "Infinite Production"
+#~ msgstr "Produção Pontínua"
+
+#, fuzzy
+#~ msgid "Player %u is cheating him/herself a new droid army of %s(s)."
+#~ msgstr "Jogador %u está a fazer batota (menu debug) para obter um novo droid %s."
+
+#, fuzzy
+#~ msgid "You found %u power in an oil drum"
+#~ msgstr "Encontraste %u energia num barril de petróleo"
+
+#, fuzzy
+#~ msgid "Player number"
+#~ msgstr "Jogador Saiu"
+
+#~ msgid "Plascrete MK3"
+#~ msgstr "Plascrete Mk3"
+
+#, fuzzy
+#~ msgid "Mini-Rocket accuracy +10%"
+#~ msgstr "Melhora precisão de Mini-Foguetes"
+
+#, fuzzy
+#~ msgid "Mini-Rocket damage +25%"
+#~ msgstr "Aumenta dano de Mini-Foguetes"
+
+#, fuzzy
+#~ msgid "Mini-Rocket reload time -15%"
+#~ msgstr "Aperfeiçoamento dos Mini-Foguetes"
+
+#~ msgid "Cyclone AA Site"
+#~ msgstr "Posição AA Cyclone"
+
+#~ msgid "Automated Manufacturing Mk2"
+#~ msgstr "Produção Automatizada Mk2"
+
+#~ msgid "Automated Manufacturing Mk3"
+#~ msgstr "Produção Automatizada Mk3"
+
+#~ msgid "Robotic Manufacturing Mk2"
+#~ msgstr "Produção Robotizada Mk2"
+
+#~ msgid "Robotic Manufacturing Mk3"
+#~ msgstr "Produção Robotizada Mk3"
+
+#~ msgid "Advanced Manufacturing Mk2"
+#~ msgstr "Fabrico Avançada Mk2"
+
+#~ msgid "Automated Repair Facility Mk2"
+#~ msgstr "Instalação de Reparações Automatizadas Mk2"
+
+#~ msgid "Automated Repair Facility Mk3"
+#~ msgstr "Instalação de Reparações Automatizadas Mk3"
+
+#~ msgid "Robotic Repair Facility Mk2"
+#~ msgstr "Instalações de Reparação Robóticas Mk2"
+
+#, fuzzy
+#~ msgid "HESH Mini-Rockets"
+#~ msgstr "Mini-foguetes HE"
+
+#, fuzzy
+#~ msgid "HESH Mini-Rockets Mk2"
+#~ msgstr "Mini-foguetes HE Mk2"
+
+#, fuzzy
+#~ msgid "HESH Mini-Rockets Mk3"
+#~ msgstr "Mini-foguetes HE Mk3"
+
+#~ msgid "Thermite Flamer Cyborg"
+#~ msgstr "Cyborgue com Lança-chamas de Térmite"
+
+#~ msgid "Grenadier Cyborg"
+#~ msgstr "Cyborgue Granadeiro"
+
+#~ msgid "Cyclone Hardpoint"
+#~ msgstr "Fortificação Cyclone"
+
+#~ msgid "Fire Cannon"
+#~ msgstr "Camião dos Bombeiros Canhão"
+
 #~ msgid "Transporter"
 #~ msgstr "Transporte"
 
@@ -15341,10 +15349,6 @@ msgstr "Versão %s%s%s%s"
 
 #~ msgid "Toggle reopening the build menu"
 #~ msgstr "Activar / desactivar reabertura do menu de construção"
-
-#, fuzzy
-#~ msgid "Player %u is cheating him/herself a new droid army of %s(s)."
-#~ msgstr "Jogador %u está a fazer batota (menu debug) para obter um novo droid %s."
 
 #~ msgid "Z NULL BRAIN"
 #~ msgstr "Z NULL BRAIN"
@@ -15456,18 +15460,6 @@ msgstr "Versão %s%s%s%s"
 #~ msgstr "Latim"
 
 #, fuzzy
-#~ msgid "Strategy Game"
-#~ msgstr "Gravar Jogo"
-
-#, fuzzy
-#~ msgid "Phosphor Bomb Bay Manits VTOL"
-#~ msgstr "Bombas de Fósforo"
-
-#, fuzzy
-#~ msgid "Heap Bomb Bay Manits VTOL"
-#~ msgstr "Bombas HEAP"
-
-#, fuzzy
 #~ msgid ", mod: "
 #~ msgstr "mod"
 
@@ -15495,10 +15487,6 @@ msgstr "Versão %s%s%s%s"
 #~ msgid "Formation speed limiting ON"
 #~ msgstr "Limite de velocidade de formação ON"
 
-#, fuzzy
-#~ msgid ": Unknown cheat code."
-#~ msgstr "Correr em modo de batota"
-
 #~ msgid "Player %u found %u power in an oil drum"
 #~ msgstr "Jogador %u encontrou %u energia num barril de petróleo"
 
@@ -15508,11 +15496,19 @@ msgstr "Versão %s%s%s%s"
 #~ msgid "Stop Multiplayer Audio"
 #~ msgstr "Parar áudio multijogador"
 
-#~ msgid "Hardware"
-#~ msgstr "Hardware"
+#~ msgid "Game"
+#~ msgstr "Jogo"
 
-#~ msgid "Software (coloured)"
-#~ msgstr "Software (cores)"
+#~ msgid "Mayhem"
+#~ msgstr "Mayhem"
+
+#, fuzzy
+#~ msgid "Skirmish"
+#~ msgstr "Irlandês"
+
+#, fuzzy
+#~ msgid "The game is full!"
+#~ msgstr "Jogo cheio"
 
 #~ msgid "English"
 #~ msgstr "Inglês"
@@ -15548,8 +15544,11 @@ msgstr "Versão %s%s%s%s"
 #~ msgid "Command turret MkIV"
 #~ msgstr "Torreão de Comando MkIV"
 
-#~ msgid "Mayhem"
-#~ msgstr "Mayhem"
+#~ msgid "Hardware"
+#~ msgstr "Hardware"
+
+#~ msgid "Software (coloured)"
+#~ msgstr "Software (cores)"
 
 #~ msgid "Energy bars display toggled"
 #~ msgstr "Display de barras de energia alterado"
