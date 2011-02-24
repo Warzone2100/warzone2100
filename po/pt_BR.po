@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2011-01-18 00:46+0100\n"
-"PO-Revision-Date: 2010-12-05 23:47-0300\n"
+"PO-Revision-Date: 2011-02-16 12:57-0300\n"
 "Last-Translator: Artur Filipe <tucalipe@gmail.com>\n"
 "Language-Team: Brazilian Portugese <warzone-dev@gna.org>\n"
 "Language: \n"
@@ -1393,7 +1393,7 @@ msgstr "Armado como Incendiário Ciborgue"
 #: data/base/messages/resmessages1.rmsg:83
 #: data/mp/messages/resmessages1.rmsg:83
 msgid "Armed with Lance Anti-Tank rocket"
-msgstr "Armado com Lançadeira de Foguetes AT"
+msgstr "Armado com Lançadeira de Foguetes Anti-Tanque"
 
 #: data/base/messages/resmessages1.rmsg:95
 #: data/base/messages/resmessages2.rmsg:56
@@ -2407,7 +2407,7 @@ msgstr "Nova Torre de Sistemas Disponível"
 #: data/base/messages/resmessages23.rmsg:70
 #: data/mp/messages/resmessages23.rmsg:70
 msgid "VTOL CB Tower detects enemy indirect fire batteries"
-msgstr "Torre de Contra-Baterias para VTOL calcula a localização das baterias de artilharia"
+msgstr "Torre de Contra-Baterias para PDV calcula a localização das baterias de artilharia"
 
 #: data/base/messages/resmessages23.rmsg:71
 #: data/base/messages/resmessages2.rmsg:435
@@ -2416,7 +2416,7 @@ msgstr "Torre de Contra-Baterias para VTOL calcula a localização das baterias 
 #: data/mp/messages/resmessages2.rmsg:435
 #: data/mp/messages/strings/resstrings.txt:509
 msgid "Orders assigned VTOLs to attack the enemy batteries"
-msgstr "Comanda VTOL's designados a atirarem nas artilharias inimigas"
+msgstr "Comanda PDV's designados a atirarem nas artilharias inimigas"
 
 #: data/base/messages/resmessages23.rmsg:72
 #: data/base/messages/resmessages2.rmsg:436
@@ -2425,7 +2425,7 @@ msgstr "Comanda VTOL's designados a atirarem nas artilharias inimigas"
 #: data/mp/messages/resmessages2.rmsg:436
 #: data/mp/messages/strings/resstrings.txt:510
 msgid "VTOLs attack until enemy battery is suppressed"
-msgstr "Os VTOL's atacam até a artilharia inimiga ser destruída"
+msgstr "Os PDV's atacam até a artilharia inimiga ser destruída"
 
 #: data/base/messages/resmessages23.rmsg:82
 #: data/base/messages/resmessages2.rmsg:446
@@ -2436,7 +2436,7 @@ msgstr "Os VTOL's atacam até a artilharia inimiga ser destruída"
 #: data/mp/messages/resmessages3.rmsg:537
 #: data/mp/messages/strings/resstrings.txt:513
 msgid "VTOL CB Improved"
-msgstr "Torre AB para VTOL Melhorada"
+msgstr "Torre AB para PDV Melhorada"
 
 #: data/base/messages/resmessages23.rmsg:84
 #: data/base/messages/resmessages2.rmsg:448
@@ -2447,7 +2447,7 @@ msgstr "Torre AB para VTOL Melhorada"
 #: data/mp/messages/resmessages3.rmsg:539
 #: data/mp/messages/strings/resstrings.txt:515
 msgid "Extends VTOL CB Range"
-msgstr "Aumenta o alcance dos sensores AB para VTOL"
+msgstr "Aumenta o alcance dos sensores AB para PDV"
 
 #: data/base/messages/resmessages23.rmsg:85
 #: data/base/messages/resmessages2.rmsg:449
@@ -2458,17 +2458,17 @@ msgstr "Aumenta o alcance dos sensores AB para VTOL"
 #: data/mp/messages/resmessages3.rmsg:540
 #: data/mp/messages/strings/resstrings.txt:516
 msgid "All VTOL CB sensors upgraded automatically"
-msgstr "Todos os sensores AB para VTOL melhorados automaticamente"
+msgstr "Todos os sensores AB para PDV melhorados automaticamente"
 
 #: data/base/messages/resmessages23.rmsg:96
 #: data/mp/messages/resmessages23.rmsg:96
 msgid "VTOL Strike Tower detects approaching enemies"
-msgstr "Torre VTOL detecta inimigos em aproximação"
+msgstr "Torre PDV detecta inimigos em aproximação"
 
 #: data/base/messages/resmessages23.rmsg:97
 #: data/mp/messages/resmessages23.rmsg:97
 msgid "Assigned VTOLs attack the enemy units"
-msgstr "VTOL's designados atacam as unidades inimigas"
+msgstr "PDV's designados atacam as unidades inimigas"
 
 #: data/base/messages/resmessages23.rmsg:98
 #: data/mp/messages/resmessages23.rmsg:98
@@ -2495,12 +2495,12 @@ msgstr "Novo Torrete de Sistemas Disponível"
 #: data/base/messages/resmessages23.rmsg:109
 #: data/mp/messages/resmessages23.rmsg:109
 msgid "VTOL Strike turret used to spot targets"
-msgstr "Torrete VTOL usado para mirante de alvos"
+msgstr "Torrete PDV usado para mirante de alvos"
 
 #: data/base/messages/resmessages23.rmsg:110
 #: data/mp/messages/resmessages23.rmsg:110
 msgid "Assigned VTOLs attack the designated targets"
-msgstr "VTOL's designados atacam os alvos designados"
+msgstr "PDV's designados atacam os alvos designados"
 
 #: data/base/messages/resmessages23.rmsg:111
 #: data/mp/messages/resmessages23.rmsg:111
@@ -2516,7 +2516,7 @@ msgstr "Selecione novos alvos para continuar os bombardeios"
 #: data/mp/messages/resmessages3.rmsg:550
 #: data/mp/messages/strings/resstrings.txt:527
 msgid "VTOL Strike Improved"
-msgstr "Torre VTOL Melhorada"
+msgstr "Torre PDV Melhorada"
 
 #: data/base/messages/resmessages23.rmsg:122
 #: data/mp/messages/resmessages23.rmsg:122
@@ -2532,7 +2532,7 @@ msgstr "Sistemas de reconhecimento de alvos melhorados"
 #: data/mp/messages/resmessages3.rmsg:552
 #: data/mp/messages/strings/resstrings.txt:529
 msgid "Extends VTOL Strike Range"
-msgstr "Aumenta o alcance dos sensores VTOL"
+msgstr "Aumenta o alcance dos sensores PDV"
 
 #: data/base/messages/resmessages23.rmsg:124
 #: data/base/messages/resmessages2.rmsg:462
@@ -2543,7 +2543,7 @@ msgstr "Aumenta o alcance dos sensores VTOL"
 #: data/mp/messages/resmessages3.rmsg:553
 #: data/mp/messages/strings/resstrings.txt:530
 msgid "All VTOL Strike sensors upgraded automatically"
-msgstr "Todos os sensores VTOL's melhorados automaticamente"
+msgstr "Todos os sensores PDV's melhorados automaticamente"
 
 #: data/base/messages/resmessages23.rmsg:134
 #: data/base/messages/resmessages2.rmsg:641
@@ -2777,7 +2777,7 @@ msgstr "Defesa AA Ciclone Explosivo"
 #: data/mp/messages/strings/resstrings.txt:139
 #: data/mp/messages/strings/resstrings.txt:151
 msgid "Automatically targets VTOLs"
-msgstr "Automaticamente mira em VTOL's"
+msgstr "Automaticamente mira em PDV's"
 
 #: data/base/messages/resmessages2.rmsg:83
 #: data/base/messages/strings/resstrings.txt:126
@@ -2791,7 +2791,7 @@ msgstr "Defesa AA Hurricane"
 #: data/mp/messages/resmessages2.rmsg:84
 #: data/mp/messages/strings/resstrings.txt:145
 msgid "Automatically targets VTOL"
-msgstr "Automaticamente mira em VTOL's"
+msgstr "Automaticamente mira em PDV's"
 
 #: data/base/messages/resmessages2.rmsg:96
 #: data/base/messages/strings/resstrings.txt:132
@@ -3001,7 +3001,7 @@ msgstr "Materiais Base de Estruturas Melhorado"
 #: data/mp/messages/resmessages2.rmsg:395
 #: data/mp/messages/strings/resstrings.txt:438
 msgid "Robotic VTOL Production"
-msgstr "Produção de VTOL Robótica"
+msgstr "Produção de PDV Robótica"
 
 #: data/base/messages/resmessages2.rmsg:396
 #: data/base/messages/resmessages3.rmsg:487
@@ -3010,7 +3010,7 @@ msgstr "Produção de VTOL Robótica"
 #: data/mp/messages/resmessages3.rmsg:487
 #: data/mp/messages/strings/resstrings.txt:439
 msgid "Increases VTOL factory output"
-msgstr "Aumenta a produção de VTOL's"
+msgstr "Aumenta a produção de PDV's"
 
 #: data/base/messages/resmessages2.rmsg:397
 #: data/base/messages/resmessages3.rmsg:488
@@ -3019,7 +3019,7 @@ msgstr "Aumenta a produção de VTOL's"
 #: data/mp/messages/resmessages3.rmsg:488
 #: data/mp/messages/strings/resstrings.txt:440
 msgid "All VTOL factories upgraded automatically"
-msgstr "Todas as fábricas VTOL melhoradas automaticamente"
+msgstr "Todas as fábricas PDV melhoradas automaticamente"
 
 #: data/base/messages/resmessages2.rmsg:407
 #: data/base/messages/resmessages3.rmsg:498
@@ -3028,7 +3028,7 @@ msgstr "Todas as fábricas VTOL melhoradas automaticamente"
 #: data/mp/messages/resmessages3.rmsg:498
 #: data/mp/messages/strings/resstrings.txt:447
 msgid "VTOL Rearming Times Reduced"
-msgstr "Tempo de Recarga de VTOL's Diminuído"
+msgstr "Tempo de Recarga de PDV's Diminuído"
 
 #: data/base/messages/resmessages2.rmsg:408
 #: data/base/messages/strings/names.txt:843
@@ -3037,7 +3037,7 @@ msgstr "Tempo de Recarga de VTOL's Diminuído"
 #: data/mp/messages/strings/names.txt:858
 #: data/mp/messages/strings/resstrings.txt:448
 msgid "Automated VTOL Rearming"
-msgstr "Rearmamento de VTOL Automatizado"
+msgstr "Rearmamento de PDV Automatizado"
 
 #: data/base/messages/resmessages2.rmsg:409
 #: data/base/messages/resmessages3.rmsg:500
@@ -3092,7 +3092,7 @@ msgstr "Pode ser designado como mirante para artilharias"
 #: data/mp/messages/resmessages2.rmsg:434
 #: data/mp/messages/strings/resstrings.txt:508
 msgid "VTOL CB turret detects enemy indirect fire batteries"
-msgstr "Torrete de Contra-Baterias para VTOL calcula a localização das baterias de artilharia"
+msgstr "Torrete de Contra-Baterias para PDV calcula a localização das baterias de artilharia"
 
 #: data/base/messages/resmessages2.rmsg:460
 #: data/base/messages/strings/resstrings.txt:500
@@ -3339,7 +3339,7 @@ msgstr "Metralhadora Quádrupla 30mm Anti-Aérea"
 #: data/mp/messages/resmessages2.rmsg:642
 #: data/mp/messages/strings/resstrings.txt:693
 msgid "Detects and locks-on to VTOL engine emissions"
-msgstr "Detecta e trava nas emissões dos motores VTOL"
+msgstr "Detecta e trava nas emissões dos motores PDV"
 
 #: data/base/messages/resmessages2.rmsg:654
 #: data/base/messages/resmessages3.rmsg:823
@@ -3862,14 +3862,14 @@ msgstr "Materiais Estruturais de Alta Densidade"
 #: data/base/messages/strings/names.txt:854
 #: data/mp/messages/resmessages3.rmsg:486
 msgid "Advanced VTOL Production"
-msgstr "Produção de VTOL Avançada"
+msgstr "Produção de PDV Avançada"
 
 #: data/base/messages/resmessages3.rmsg:499
 #: data/base/messages/strings/names.txt:846
 #: data/mp/messages/resmessages3.rmsg:499
 #: data/mp/messages/strings/names.txt:861
 msgid "Robotic VTOL Rearming"
-msgstr "Rearmamento Robótico de VTOL"
+msgstr "Rearmamento Robótico de PDV"
 
 #: data/base/messages/resmessages3.rmsg:512
 #: data/mp/messages/resmessages3.rmsg:512
@@ -4033,7 +4033,7 @@ msgstr "Pontos de vida e velocidade aumentadas"
 #: data/mp/messages/resmessages3.rmsg:787
 #: data/mp/messages/resmessages3.rmsg:800
 msgid "All VTOLs upgraded automatically"
-msgstr "Todos os VTOL's melhorados automaticamente"
+msgstr "Todos os PDV's melhorados automaticamente"
 
 #: data/base/messages/resmessages3.rmsg:811
 #: data/mp/messages/resmessages3.rmsg:811
@@ -4400,12 +4400,12 @@ msgstr "Permite muros de Durocreto"
 #: data/base/messages/resmessagesall.rmsg:18
 #: data/mp/messages/resmessagesall.rmsg:18
 msgid "VTOL factory enables VTOL production"
-msgstr "Fábrica VTOL permite a produção de VTOL's"
+msgstr "Fábrica PDv permite a produção de PDV's"
 
 #: data/base/messages/resmessagesall.rmsg:19
 #: data/mp/messages/resmessagesall.rmsg:19
 msgid "VTOL rearming pads required to keep VTOLs flying"
-msgstr "Áreas de Rearmamento são necessárias para a manutenção dos VTOL's"
+msgstr "Áreas de Rearmamento são necessárias para a manutenção dos PDV's"
 
 #: data/base/messages/resmessagesall.rmsg:20
 #: data/mp/messages/resmessagesall.rmsg:20
@@ -4415,17 +4415,17 @@ msgstr "Pode ter módulos de fábrica adicionados"
 #: data/base/messages/resmessagesall.rmsg:31
 #: data/mp/messages/resmessagesall.rmsg:31
 msgid "Refuels, rearms and repairs VTOLs"
-msgstr "Reabastece, recarrega e repara VTOL's"
+msgstr "Reabastece, recarrega e repara PDV's"
 
 #: data/base/messages/resmessagesall.rmsg:32
 #: data/mp/messages/resmessagesall.rmsg:32
 msgid "Assign a VTOL by selecting the rearming pad as its target"
-msgstr "Designe um VTOL marcando a área como seu alvo"
+msgstr "Designe um PDV marcando a área como seu alvo"
 
 #: data/base/messages/resmessagesall.rmsg:33
 #: data/mp/messages/resmessagesall.rmsg:33
 msgid "The VTOL returns to the selected pad for rearming"
-msgstr "O VTOL retorna à area para recarga"
+msgstr "O PDV retorna à area para recarga"
 
 #: data/base/messages/resmessagesall.rmsg:44
 #: data/mp/messages/resmessagesall.rmsg:44
@@ -4534,7 +4534,7 @@ msgstr "Propulsão de Pouso e Decolagem Vertical"
 #: data/base/messages/resmessagesall.rmsg:123
 #: data/mp/messages/resmessagesall.rmsg:162
 msgid "Speed: VTOL"
-msgstr "Velocidade: PDV/VTOL"
+msgstr "Velocidade: PDV"
 
 #: data/base/messages/resmessagesall.rmsg:135
 #: data/mp/messages/resmessagesall.rmsg:174
@@ -4761,7 +4761,7 @@ msgstr "ATUALIZAÇÃO DO PROJETO"
 
 #: data/base/messages/strings/cam1strings.txt:78
 msgid "TEAM BETA UPDATE"
-msgstr "TIME BETA: ATUALIZE:"
+msgstr "ATUALIZAÇÃO DO TIME BETA"
 
 #: data/base/messages/strings/cam1strings.txt:79
 msgid "We have recovered some artifacts."
@@ -4773,7 +4773,7 @@ msgstr "Há uma força superior operando na área."
 
 #: data/base/messages/strings/cam1strings.txt:83
 msgid "TEAM GAMMA UPDATE"
-msgstr "TIME GAMA: ATUALIZE:"
+msgstr "ATUALIZAÇÃO DO TIME GAMMA"
 
 #: data/base/messages/strings/cam1strings.txt:84
 msgid "Nothing to report."
@@ -4992,7 +4992,7 @@ msgstr "INFORMAÇÕES EM-VÔO"
 
 #: data/base/messages/strings/cam2strings.txt:28
 msgid "Team Beta are searching for Vertical Takeoff and Landing (VTOL) technology."
-msgstr "Time Beta está procurando por tecnologia Pouso e Decolagem Vertical (PDV/VTOL)."
+msgstr "Time Beta está procurando por tecnologia Pouso e Decolagem Vertical (PDV)."
 
 #: data/base/messages/strings/cam2strings.txt:29
 msgid "It's believed to be at a pre-Collapse airbase in this area."
@@ -5069,7 +5069,7 @@ msgstr "Você deve interceptá-lo e recuperar sua carga."
 
 #: data/base/messages/strings/cam2strings.txt:65
 msgid "Enemy VTOLs are likely to be flying close escort."
-msgstr "Há a alta probabilidade de VTOL's inimigos estarem escoltando."
+msgstr "Há a alta probabilidade de PDV's inimigos estarem escoltando."
 
 #: data/base/messages/strings/cam2strings.txt:68
 #: data/base/messages/strings/cam2strings.txt:72
@@ -5090,15 +5090,15 @@ msgstr "Então, destrua o campo."
 
 #: data/base/messages/strings/cam2strings.txt:77
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs."
-msgstr "MISSÃO-BASE BETA: Destruir Base Aérea Inimiga e Recuperar VTOL's."
+msgstr "MISSÃO-BASE BETA: Destruir Base Aérea Inimiga e Recuperar PDV's."
 
 #: data/base/messages/strings/cam2strings.txt:78
 msgid "Analysis of flight paths indicate that The Collective's VTOLs originate from here."
-msgstr "A análise das rotas de vôo indicam que os VTOL's da Coletividade vêm dessa área."
+msgstr "A análise das rotas de vôo indicam que os PDV's da Coletividade vêm dessa área."
 
 #: data/base/messages/strings/cam2strings.txt:81
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs"
-msgstr "MISSÃO-BASE BETA: Destruir Base Aérea Inimiga e Recuperar VTOL's."
+msgstr "MISSÃO-BASE BETA: Destruir Base Aérea Inimiga e Recuperar PDV's."
 
 #: data/base/messages/strings/cam2strings.txt:82
 msgid "The location of the enemy airbase is here; this is your primary objective."
@@ -6178,17 +6178,17 @@ msgstr "Hovercraft III"
 #: data/base/messages/strings/names.txt:324
 #: data/mp/messages/strings/names.txt:327
 msgid "VTOL"
-msgstr "VTOL"
+msgstr "PDV"
 
 #: data/base/messages/strings/names.txt:325
 #: data/mp/messages/strings/names.txt:328
 msgid "VTOL II"
-msgstr "VTOL II"
+msgstr "PDV II"
 
 #: data/base/messages/strings/names.txt:326
 #: data/mp/messages/strings/names.txt:329
 msgid "VTOL III"
-msgstr "VTOL III"
+msgstr "PDV III"
 
 #: data/base/messages/strings/names.txt:327
 #: data/mp/messages/strings/names.txt:330
@@ -6266,7 +6266,7 @@ msgstr "Torrete de Sensor"
 #: data/mp/messages/strings/names.txt:377
 #: data/mp/messages/strings/names.txt:378
 msgid "VTOL CB Radar Tower"
-msgstr "Torre Radar AB para VTOL"
+msgstr "Torre Radar AB para PDV"
 
 #: data/base/messages/strings/names.txt:373
 #: data/mp/messages/strings/names.txt:379
@@ -6283,12 +6283,12 @@ msgstr "Torre Radar AB"
 #: data/mp/messages/strings/names.txt:383
 #: data/mp/messages/strings/names.txt:923
 msgid "VTOL Strike Turret"
-msgstr "Torre VTOL"
+msgstr "Torre PDV"
 
 #: data/base/messages/strings/names.txt:377
 #: data/mp/messages/strings/names.txt:384
 msgid "VTOL CB Radar Turret"
-msgstr "Torre Radar AB para VTOL"
+msgstr "Torre Radar AB para PDV"
 
 #: data/base/messages/strings/names.txt:378
 msgid "NEXUS Link"
@@ -6377,7 +6377,7 @@ msgstr "Muro de Durocreto"
 #: data/mp/messages/strings/names.txt:406
 #: data/mp/messages/strings/names.txt:865
 msgid "VTOL Factory"
-msgstr "Fábrica de VTOL"
+msgstr "Fábrica de PDV"
 
 #: data/base/messages/strings/names.txt:402
 #: data/base/messages/strings/names.txt:721
@@ -6474,11 +6474,11 @@ msgstr "Torre AB"
 #: data/mp/messages/strings/names.txt:435
 #: data/mp/messages/strings/names.txt:916
 msgid "VTOL CB Tower"
-msgstr "Torre AB para VTOL"
+msgstr "Torre AB para PDV"
 
 #: data/base/messages/strings/names.txt:428
 msgid "VTOL Radar Tower"
-msgstr "Torre VTOL"
+msgstr "Torre PDV"
 
 #: data/base/messages/strings/names.txt:431
 #: data/base/messages/strings/names.txt:764
@@ -6627,7 +6627,7 @@ msgstr "Dentes de Dragão"
 #: data/mp/messages/strings/names.txt:468
 #: data/mp/messages/strings/names.txt:857
 msgid "VTOL Rearming Pad"
-msgstr "Área de Rearmamento de VTOL"
+msgstr "Área de Rearmamento de PDV"
 
 #: data/base/messages/strings/names.txt:463
 #: data/base/messages/strings/names.txt:484
@@ -6819,7 +6819,7 @@ msgstr "MTA Avenger"
 #: data/base/messages/strings/names.txt:511
 #: data/mp/messages/strings/names.txt:519
 msgid "VTOL Scourge Missile"
-msgstr "VTOL Míssil Scouge"
+msgstr "PDV Míssil Scouge"
 
 #: data/base/messages/strings/names.txt:513
 #: data/base/messages/strings/names.txt:1138
@@ -6906,22 +6906,22 @@ msgstr "Destruidor de Tanques"
 #: data/base/messages/strings/names.txt:529
 #: data/mp/messages/strings/names.txt:537
 msgid "VTOL Bunker Buster"
-msgstr "Arrasa-Defesas VTOL"
+msgstr "Arrasa-Defesas PDV"
 
 #: data/base/messages/strings/names.txt:530
 #: data/mp/messages/strings/names.txt:538
 msgid "VTOL Mini-Rocket"
-msgstr "VTOL Mini-Foguetes"
+msgstr "PDV Mini-Foguetes"
 
 #: data/base/messages/strings/names.txt:531
 #: data/mp/messages/strings/names.txt:539
 msgid "VTOL Lancer"
-msgstr "Lançadeiro VTOL"
+msgstr "Lançadeiro PDV"
 
 #: data/base/messages/strings/names.txt:532
 #: data/mp/messages/strings/names.txt:540
 msgid "VTOL Tank Killer"
-msgstr "Destruidor de Tanques VTOL"
+msgstr "Destruidor de Tanques PDV"
 
 #: data/base/messages/strings/names.txt:544
 #: data/base/messages/strings/names.txt:980
@@ -6952,52 +6952,52 @@ msgstr "Torrete AA Hurricane"
 #: data/base/messages/strings/names.txt:560
 #: data/mp/messages/strings/names.txt:569
 msgid "VTOL Cannon"
-msgstr "Canhão VTOL"
+msgstr "Canhão PDV"
 
 #: data/base/messages/strings/names.txt:561
 #: data/mp/messages/strings/names.txt:570
 msgid "VTOL Hyper Velocity Cannon"
-msgstr "Canhão de Hiper-Velocidade VTOL"
+msgstr "Canhão de Hiper-Velocidade PDV"
 
 #: data/base/messages/strings/names.txt:562
 #: data/mp/messages/strings/names.txt:571
 msgid "VTOL Assault Cannon"
-msgstr "Canhão de Assalto VTOL"
+msgstr "Canhão de Assalto PDV"
 
 #: data/base/messages/strings/names.txt:563
 #: data/mp/messages/strings/names.txt:572
 msgid "VTOL Pulse Laser"
-msgstr "Pulso Laser VTOL"
+msgstr "Pulso Laser PDV"
 
 #: data/base/messages/strings/names.txt:565
 #: data/mp/messages/strings/names.txt:574
 msgid "VTOL Machinegun"
-msgstr "Metralhadora VTOL"
+msgstr "Metralhadora PDV"
 
 #: data/base/messages/strings/names.txt:566
 #: data/mp/messages/strings/names.txt:575
 msgid "VTOL Twin Machinegun"
-msgstr "Metralhadora Dupla VTOL"
+msgstr "Metralhadora Dupla PDV"
 
 #: data/base/messages/strings/names.txt:567
 #: data/mp/messages/strings/names.txt:576
 msgid "VTOL Heavy Machinegun"
-msgstr "Metralhadora Pesada VTOL"
+msgstr "Metralhadora Pesada PDV"
 
 #: data/base/messages/strings/names.txt:568
 #: data/mp/messages/strings/names.txt:577
 msgid "VTOL Assault Gun"
-msgstr "Metralhadora de Assalto VTOL"
+msgstr "Metralhadora de Assalto PDV"
 
 #: data/base/messages/strings/names.txt:569
 #: data/mp/messages/strings/names.txt:578
 msgid "VTOL Needle Gun"
-msgstr "Perfuratriz VTOL"
+msgstr "Perfuratriz PDV"
 
 #: data/base/messages/strings/names.txt:570
 #: data/mp/messages/strings/names.txt:579
 msgid "VTOL Rail Gun"
-msgstr "Acelerador de Partículas VTOL"
+msgstr "Acelerador de Partículas PDV"
 
 #: data/base/messages/strings/names.txt:572
 #: data/mp/messages/strings/names.txt:581
@@ -7011,22 +7011,22 @@ msgstr "Torrete de Super Bomba de Proximidade"
 
 #: data/base/messages/strings/names.txt:575
 msgid "VTOL Cluster Bombs Bay"
-msgstr "Bombas Fragmentárias VTOL"
+msgstr "Bombas Fragmentárias PDV"
 
 #: data/base/messages/strings/names.txt:576
 #: data/mp/messages/strings/names.txt:585
 msgid "VTOL Heap Bomb Bay"
-msgstr "Bombas Explosivas VTOL"
+msgstr "Bombas Explosivas PDV"
 
 #: data/base/messages/strings/names.txt:577
 #: data/mp/messages/strings/names.txt:586
 msgid "VTOL Phosphor Bomb Bay"
-msgstr "Bombas de Fósforo VTOL"
+msgstr "Bombas de Fósforo PDV"
 
 #: data/base/messages/strings/names.txt:578
 #: data/mp/messages/strings/names.txt:587
 msgid "VTOL Thermite Bomb Bay"
-msgstr "Bombas de Termite VTOL"
+msgstr "Bombas de Termite PDV"
 
 #: data/base/messages/strings/names.txt:581
 #: data/mp/messages/strings/names.txt:590
@@ -7652,43 +7652,43 @@ msgstr "Pesquisa das Sinapses Neurais em Cérebros Mk3"
 #: data/base/messages/strings/names.txt:844
 #: data/mp/messages/strings/names.txt:859
 msgid "Automated VTOL Rearming Mk2"
-msgstr "Rearmamento de VTOL Automatizado Mk2"
+msgstr "Rearmamento de PDV Automatizado Mk2"
 
 #: data/base/messages/strings/names.txt:845
 #: data/mp/messages/strings/names.txt:860
 msgid "Automated VTOL Rearming Mk3"
-msgstr "Rearmamento de VTOL Automatizado Mk3"
+msgstr "Rearmamento de PDV Automatizado Mk3"
 
 #: data/base/messages/strings/names.txt:847
 #: data/mp/messages/strings/names.txt:862
 msgid "Robotic VTOL Rearming Mk2"
-msgstr "Rearmamento Robótico de VTOL Mk2"
+msgstr "Rearmamento Robótico de PDV Mk2"
 
 #: data/base/messages/strings/names.txt:848
 #: data/mp/messages/strings/names.txt:863
 msgid "Robotic VTOL Rearming Mk3"
-msgstr "Rearmamento Robótico de VTOL Mk3"
+msgstr "Rearmamento Robótico de PDV Mk3"
 
 #: data/base/messages/strings/names.txt:849
 #: data/mp/messages/strings/names.txt:864
 msgid "Robotic VTOL Rearming Mk4"
-msgstr "Rearmamento Robótico de VTOL Mk4"
+msgstr "Rearmamento Robótico de PDV Mk4"
 
 #: data/base/messages/strings/names.txt:852
 msgid "Robotic VTOL Production Mk2"
-msgstr "Produção de VTOL Robótica Mk2"
+msgstr "Produção de PDV Robótica Mk2"
 
 #: data/base/messages/strings/names.txt:853
 msgid "Robotic VTOL Production Mk3"
-msgstr "Produção de VTOL Robótica Mk3"
+msgstr "Produção de PDV Robótica Mk3"
 
 #: data/base/messages/strings/names.txt:855
 msgid "Advanced VTOL Production Mk2"
-msgstr "Produção de VTOL Avançada Mk2"
+msgstr "Produção de PDV Avançada Mk2"
 
 #: data/base/messages/strings/names.txt:856
 msgid "Advanced VTOL Production Mk3"
-msgstr "Produção de VTOL Avançada Mk3"
+msgstr "Produção de PDV Avançada Mk3"
 
 #: data/base/messages/strings/names.txt:858
 #: data/mp/messages/strings/names.txt:873
@@ -7819,43 +7819,43 @@ msgstr "Melhora do Torrete AB Mk3"
 #: data/base/messages/strings/names.txt:897
 #: data/mp/messages/strings/names.txt:914
 msgid "VTOL CB Turret"
-msgstr "Torrete AB VTOL"
+msgstr "Torrete AB PDV"
 
 #: data/base/messages/strings/names.txt:900
 #: data/mp/messages/strings/names.txt:917
 msgid "VTOL CB Upgrade"
-msgstr "Melhora do Torrete AB VTOL"
+msgstr "Melhora do Torrete AB PDV"
 
 #: data/base/messages/strings/names.txt:901
 #: data/mp/messages/strings/names.txt:918
 msgid "VTOL CB Upgrade 2"
-msgstr "Melhora do Torrete AB VTOL Mk2"
+msgstr "Melhora do Torrete AB PDV Mk2"
 
 #: data/base/messages/strings/names.txt:902
 #: data/mp/messages/strings/names.txt:919
 msgid "VTOL CB Upgrade 3"
-msgstr "Melhora do Torrete AB VTOL Mk3"
+msgstr "Melhora do Torrete AB PDV Mk3"
 
 #: data/base/messages/strings/names.txt:903
 #: data/mp/messages/strings/names.txt:920
 msgid "VTOL Strike Upgrade"
-msgstr "Melhora de Torre VTOL"
+msgstr "Melhora de Torre PDV"
 
 #: data/base/messages/strings/names.txt:904
 #: data/mp/messages/strings/names.txt:921
 msgid "VTOL Strike Upgrade Mk2"
-msgstr "Melhora de Torre VTOL Mk2"
+msgstr "Melhora de Torre PDV Mk2"
 
 #: data/base/messages/strings/names.txt:905
 #: data/mp/messages/strings/names.txt:922
 msgid "VTOL Strike Upgrade Mk3"
-msgstr "Melhora de Torre VTOL Mk3"
+msgstr "Melhora de Torre PDV Mk3"
 
 #: data/base/messages/strings/names.txt:907
 #: data/mp/messages/strings/names.txt:436
 #: data/mp/messages/strings/names.txt:924
 msgid "VTOL Strike Tower"
-msgstr "Torre VTOL"
+msgstr "Torre PDV"
 
 #: data/base/messages/strings/names.txt:910
 #: data/mp/messages/strings/names.txt:927
@@ -8086,12 +8086,12 @@ msgstr "Propulsão Tanque II"
 #: data/base/messages/strings/names.txt:973
 #: data/mp/messages/strings/names.txt:990
 msgid "VTOL Propulsion"
-msgstr "Propulsão VTOL"
+msgstr "Propulsão PDV"
 
 #: data/base/messages/strings/names.txt:974
 #: data/mp/messages/strings/names.txt:991
 msgid "VTOL Propulsion II"
-msgstr "Propulsão VTOL II"
+msgstr "Propulsão PDV II"
 
 #: data/base/messages/strings/names.txt:977
 #: data/mp/messages/strings/names.txt:994
@@ -9108,7 +9108,7 @@ msgstr "Laser Médio"
 #: data/base/messages/strings/names.txt:1468
 #: data/mp/messages/strings/names.txt:1488
 msgid "VTOL Flashlight"
-msgstr "Laser Médio VTOL"
+msgstr "Laser Médio PDV"
 
 #: data/base/messages/strings/names.txt:1471
 #: data/base/messages/strings/names.txt:1472
@@ -9493,7 +9493,7 @@ msgstr "Comandante, estamos recebendo essa transmissão."
 #: data/base/sequenceaudio/cam1/cam1cnp.txt:4
 #: data/base/sequenceaudio/cam1/sub13np2.txt:4
 msgid "Your attacks upon us will not go unpunished."
-msgstr "Teus ataques contra nós não ficarão impunes."
+msgstr "Seus ataques contra nós não ficarão impunes."
 
 #: data/base/sequenceaudio/cam1/cam1cnp.txt:5
 #: data/base/sequenceaudio/cam1/sub13np2.txt:5
@@ -9526,7 +9526,7 @@ msgstr "Abram seus sistemas para mim."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:2
 msgid "Let me meld with your machines and cyborgs."
-msgstr "Deixe-me infundir-me às suas máquinas e ciborgues."
+msgstr "Deixe-me unir às suas máquinas e ciborgues."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:4
 msgid "We will create the perfect nexus of man and machine."
@@ -9727,7 +9727,7 @@ msgstr "Também haviam locais de lançamento em terra. Muitos desses foram destr
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:10
 msgid "The NASDA satellites also contained pulse-lasers designed to shoot down missiles approaching North America."
-msgstr "Os satélites NASDA também continhar pulsos laser desenhados para abater mísseis contra a América do Norte."
+msgstr "Os satélites NASDA também continhar pulsos laser feitos para abater mísseis contra a América do Norte."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:12
 msgid "During the counterstrikes, these LasSats failed to fire. If brought into operation, these LasSats could inflict major damage on ground targets."
@@ -9847,7 +9847,7 @@ msgstr "Aqueles do Projeto não são da máquina. A sua bênção foi negada a e
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:6
 msgid "They shall fall before the might of The Collective."
-msgstr "Eles irão sucumbir sob o poderio da Coletividade."
+msgstr "Eles irão sucumbir sob o poder da Coletividade."
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:8
 msgid "Attack and destroy all who resist the machine."
@@ -9898,7 +9898,6 @@ msgid "NORTHERN SECTOR"
 msgstr "SETOR NORTE"
 
 #: data/base/sequenceaudio/cam3/c003.txa:5
-#, fuzzy
 msgid "Congratulations your successful evacuation of Beta Base."
 msgstr "Parabéns pela evacuação bem sucedida da Base Beta."
 
@@ -9956,7 +9955,7 @@ msgstr "Como eu não tenho como lançá-la, eu terei de explodi-la ali mesmo."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:11
 msgid "Please note that all entrances to the underground complex have been sealed. Goodbye, Commander."
-msgstr "Por favor note que todas as entradas para o complexo subterrâneo foram selada. Até mais, Comandante."
+msgstr "Por favor note que todas as entradas para o complexo subterrâneo foram seladas. Até mais, Comandante."
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:1
 msgid "Glad you could make it, Commander."
@@ -9964,7 +9963,7 @@ msgstr "Que bom que você conseguiu, Comandante."
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:4
 msgid "Enemy strike VTOLs have got us pinned down. We've managed to hold off cyborgs and tanks, but we haven't been able to make any progress along the valley."
-msgstr "Ataques de VTOL's inimigos nos acuaram. Conseguimos repelir ciborgues e tanques, mas não conseguimos nenhum processo pelo vale."
+msgstr "Ataques de PDV's inimigos nos acuaram. Conseguimos repelir ciborgues e tanques, mas não conseguimos nenhum processo pelo vale."
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:7
 msgid "Can you try and reach us with anti-aircraft units?"
@@ -9976,7 +9975,7 @@ msgstr "Aqui é o Time Alfa. Repito, aqui é o Time Alfa. Precisamos de ajuda im
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:4
 msgid "We are under heavy attack from cyborgs, laser tanks, and strike VTOLs."
-msgstr "Estamos sob ataque pesado de ciborgues, tanques laser e VTOL's de ataque."
+msgstr "Estamos sob ataque pesado de ciborgues, tanques laser e PDV's de ataque."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:6
 msgid "We were trying to reach your position, but have been ambushed."
@@ -10024,7 +10023,7 @@ msgstr "Patrocinado pelos militares novamente, Dr. Reed começou a trabalhar no 
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:9
 msgid "Reports from the time claim that Dr Reed was furious and vowed to have his revenge on all who got in his way."
-msgstr "Jornais da época afirmam que Dr. Reed ficou furioso e jurou ter vingança contra todos que ficaram em seu caminho."
+msgstr "Relatórios da época afirmam que Dr. Reed ficou furioso e jurou ter vingança contra todos que ficaram em seu caminho."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:11
 msgid "It appears that Dr Reed may have succeeded in his goals and completed the Nexus Intruder Program."
@@ -10275,11 +10274,11 @@ msgstr "Tanque Canhão Pesado Escorpião"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1321
 msgid "Scorpion Lancer VTOL"
-msgstr "VTOL Lançadeiro Escorpião"
+msgstr "PDV Lançadeiro Escorpião"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1322
 msgid "Scorpion BB VTOL"
-msgstr "VTOL Arrasa-Defesas Escorpião"
+msgstr "PDV Arrasa-Defesas Escorpião"
 
 #: data/mods/multiplay/ntw/messages/strings/names.txt:1323
 msgid "Viper Command Turret Tracks"
@@ -10550,49 +10549,49 @@ msgstr "Tanque Gauss-Scourge Vingança"
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1867
 #: data/mp/messages/strings/names.txt:1879
 msgid "VTOL Cluster Bomb Bay Bug VTOL"
-msgstr "Bombas Fragmentárias VTOL"
+msgstr "Bombas Fragmentárias PDV"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1868
 #: data/mp/messages/strings/names.txt:1880
 msgid "VTOL Bunker Buster Bug VTOL"
-msgstr "VTOL Arrasa-Defesas Inseto"
+msgstr "PDV Arrasa-Defesas Inseto"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1869
 #: data/mp/messages/strings/names.txt:1881
 msgid "VTOL Cluster Bomb Bay Scorpion VTOL"
-msgstr "VTOL Bombas Fragmentárias Escorpião"
+msgstr "PDV Bombas Fragmentárias Escorpião"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1870
 #: data/mp/messages/strings/names.txt:1882
 msgid "VTOL Bunker Buster Scorpion VTOL"
-msgstr "VTOL Arrasa-Defesas Escorpião"
+msgstr "PDV Arrasa-Defesas Escorpião"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1873
 #: data/mp/messages/strings/names.txt:1885
 msgid "VTOL Lancer Bug VTOL"
-msgstr "VTOL Lançadeiro Inseto"
+msgstr "PDV Lançadeiro Inseto"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1874
 msgid "VTOL HPV Cannon Bug VTOL"
-msgstr "VTOL Canhão de Hiper Velocidade Inseto"
+msgstr "PDV Canhão de Hiper Velocidade Inseto"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1875
 #: data/mp/messages/strings/names.txt:1887
 msgid "VTOL Lancer Scorpion VTOL"
-msgstr "VTOL Lançadeiro Escorpião"
+msgstr "PDV Lançadeiro Escorpião"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1876
 msgid "VTOL HPV Cannon Scorpion VTOL"
-msgstr "VTOL Canhão de Hiper Velocidade Escorpião"
+msgstr "PDV Canhão de Hiper Velocidade Escorpião"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1877
 #: data/mp/messages/strings/names.txt:1889
 msgid "VTOL Lancer Mantis VTOL"
-msgstr "VTOL Lançadeiro Mantis"
+msgstr "PDV Lançadeiro Mantis"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1878
 msgid "VTOL HPV Cannon Mantis VTOL"
-msgstr "VTOL Canhão de Hiper Velocidade Mantis"
+msgstr "PDV Canhão de Hiper Velocidade Mantis"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1882
 #: data/mp/messages/strings/names.txt:1894
@@ -10612,12 +10611,12 @@ msgstr "Tanque Canhão Pesado Escorpião"
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1886
 #: data/mp/messages/strings/names.txt:1898
 msgid "Lancer Scorpion VTOL"
-msgstr "VTOL Lancçadeiro Escorpião"
+msgstr "PDV Lancçadeiro Escorpião"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1887
 #: data/mp/messages/strings/names.txt:1899
 msgid "Bunker Buster Scorpion VTOL"
-msgstr "VTOL Arrasa-Defesas Inseto"
+msgstr "PDV Arrasa-Defesas Inseto"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1889
 #: data/mp/messages/strings/names.txt:1901
@@ -10865,22 +10864,22 @@ msgstr "Híbrido Artilharia de Mini-Foguetes Víbora"
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1953
 #: data/mp/messages/strings/names.txt:1965
 msgid "Phosphor Bomb Bay Mantis VTOL"
-msgstr "VTOL Bombas de Fósforo Mantis"
+msgstr "PDV Bombas de Fósforo Mantis"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1954
 #: data/mp/messages/strings/names.txt:1966
 msgid "Heap Bomb Bay Mantis VTOL"
-msgstr "VTOL Bombas Explosivas Mantis"
+msgstr "PDV Bombas Explosivas Mantis"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1955
 #: data/mp/messages/strings/names.txt:1967
 msgid "Heap Bomb Bay Retribution VTOL"
-msgstr "VTOL Bombas Explosivas Retribuição"
+msgstr "PDV Bombas Explosivas Retribuição"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1956
 #: data/mp/messages/strings/names.txt:1968
 msgid "Scourge Retaliation VTOL"
-msgstr "VTOL Míssil Scourge Retaliação"
+msgstr "PDV Míssil Scourge Retaliação"
 
 #: data/mp/messages/resmessages12.rmsg:58
 msgid "Construction speed +10%"
@@ -11218,7 +11217,7 @@ msgstr "Armado com Metralhadora"
 
 #: data/mp/messages/resmessagesall.rmsg:228
 msgid "Requires heavy VTOL factory to produce"
-msgstr "Precisa de uma Fábrica VTOL Lv3"
+msgstr "Precisa de uma Fábrica PDV Lv3"
 
 #: data/mp/messages/resmessagesall.rmsg:239
 msgid "Incendiary howitzer emplacement"
@@ -11475,7 +11474,7 @@ msgstr "Bombas de Plasmite de Alta Intensidade"
 
 #: data/mp/messages/resmessagesall.rmsg:914
 msgid "New VTOL Missile Launcher"
-msgstr "Novo Míssil VTOL"
+msgstr "Novo Míssil PDV"
 
 #: data/mp/messages/resmessagesall.rmsg:915
 msgid "Fires Electronic Magnetic Pulse Missiles"
@@ -11586,7 +11585,7 @@ msgstr "Canhão AA Explosivo"
 
 #: data/mp/messages/strings/names.txt:554
 msgid "VTOL Flak Cannon"
-msgstr "Canhão AA Explosivo VTOL"
+msgstr "Canhão AA Explosivo PDV"
 
 #: data/mp/messages/strings/names.txt:567
 #: data/mp/messages/strings/names.txt:1699
@@ -11596,7 +11595,7 @@ msgstr "Centro de Commando do Satélite Laser"
 
 #: data/mp/messages/strings/names.txt:584
 msgid "VTOL Cluster Bomb Bay"
-msgstr "Bombas Fragmentárias VTOL"
+msgstr "Bombas Fragmentárias PDV"
 
 #: data/mp/messages/strings/names.txt:591
 msgid "Collective Corner Wall"
@@ -11901,7 +11900,7 @@ msgstr "Laser Pesado"
 
 #: data/mp/messages/strings/names.txt:1686
 msgid "VTOL Heavy Laser"
-msgstr "VTOL Laser Pesado"
+msgstr "PDV Laser Pesado"
 
 #: data/mp/messages/strings/names.txt:1687
 #: data/mp/messages/strings/names.txt:1688
@@ -11954,7 +11953,7 @@ msgstr "AA Sunburst"
 
 #: data/mp/messages/strings/names.txt:1729
 msgid "VTOL Sunburst AA"
-msgstr "AA Sunburst VTOL"
+msgstr "AA Sunburst PDV"
 
 #: data/mp/messages/strings/names.txt:1730
 #: data/mp/messages/strings/names.txt:1731
@@ -12104,7 +12103,7 @@ msgstr "Defesa de Metralhadora de Assalto Dupla"
 
 #: data/mp/messages/strings/names.txt:1812
 msgid "VTOL Plasmite Bomb Bay"
-msgstr "Bombas de Plasmite VTOL"
+msgstr "Bombas de Plasmite PDV"
 
 #: data/mp/messages/strings/names.txt:1813
 msgid "Plasmite Bomb"
@@ -12112,7 +12111,7 @@ msgstr "Bomba de Plasmite"
 
 #: data/mp/messages/strings/names.txt:1814
 msgid "VTOL EMP Missile Launcher"
-msgstr "VTOL Lançador de Mísseis PEM"
+msgstr "PDV Lançador de Mísseis PEM"
 
 #: data/mp/messages/strings/names.txt:1815
 msgid "EMP Missile Launcher"
@@ -12135,15 +12134,15 @@ msgstr "Torrete de Comando IV"
 
 #: data/mp/messages/strings/names.txt:1886
 msgid "VTOL Hyper Velocity Cannon Bug VTOL"
-msgstr "VTOL Canhão de Hiper Velocidade Inseto"
+msgstr "PDV Canhão de Hiper Velocidade Inseto"
 
 #: data/mp/messages/strings/names.txt:1888
 msgid "VTOL Hyper Velocity Cannon Scorpion VTOL"
-msgstr "VTOL Canhão de Hiper Velocidade Escorpião"
+msgstr "PDV Canhão de Hiper Velocidade Escorpião"
 
 #: data/mp/messages/strings/names.txt:1890
 msgid "VTOL Hyper Velocity Cannon Mantis VTOL"
-msgstr "VTOL Canhão de Hiper Velocidade Mantis"
+msgstr "PDV Canhão de Hiper Velocidade Mantis"
 
 #: data/mp/messages/strings/names.txt:1929
 msgid "Mini-Rocket Array Cobra Tracks"
@@ -12155,7 +12154,7 @@ msgstr "Hovercraft Canhão de Hiper Velocidade Píton"
 
 #: data/mp/messages/strings/names.txt:1969
 msgid "Plasmite Retribution VTOL"
-msgstr "VTOL Plasmite Retribuição"
+msgstr "PDV Plasmite Retribuição"
 
 #: lib/framework/i18n.c:90
 #: lib/framework/i18n.c:149
@@ -12322,7 +12321,7 @@ msgstr "Desativa Sons"
 
 #: src/clparse.c:105
 msgid "Activate self-test"
-msgstr "Ativar o teste automático"
+msgstr "Ativar o auto-teste"
 
 #: src/clparse.c:106
 msgid "connect directly to IP/hostname"
@@ -12494,7 +12493,7 @@ msgstr "Jogador desconectou-se"
 
 #: src/display.c:1743
 msgid "Cannot Build. Oil Resource Burning."
-msgstr "Não pode construir. Recursos petrolíferos queimados."
+msgstr "Não pode construir. Poço em chamas."
 
 #: src/display.c:1923
 #: src/display.c:2538
@@ -12509,11 +12508,11 @@ msgstr "%s - Aliado - Danos %d%% - Experiência %d, %s"
 
 #: src/display.c:2132
 msgid "Truck ordered to build Oil Derrick"
-msgstr "O Caminhão ordenou a construção Oil Derrick"
+msgstr "Caminhão ordenado a construir Extrator de Petróleo"
 
 #: src/droid.c:192
 msgid "Unit Lost!"
-msgstr "Unidades Perdidas!"
+msgstr "Unidade Perdida!"
 
 #: src/droid.c:1587
 msgid "Structure Restored"
@@ -12807,7 +12806,7 @@ msgstr "Sombras"
 
 #: src/frontend.c:551
 msgid "GRAPHICS OPTIONS"
-msgstr "OPÇÕES DE GRÁFICOS"
+msgstr "OPÇÕES GRÁFICAS"
 
 #: src/frontend.c:679
 #: src/ingameop.c:179
@@ -12883,14 +12882,12 @@ msgstr "Girar a Tela"
 
 #: src/frontend.c:1006
 #: src/frontend.c:1094
-#, fuzzy
 msgctxt "middle mouse button"
 msgid "Middle Button"
 msgstr "Botão do Meio"
 
 #: src/frontend.c:1010
 #: src/frontend.c:1089
-#, fuzzy
 msgctxt "right mouse button"
 msgid "Right Button"
 msgstr "Botão Direito"
@@ -12979,17 +12976,17 @@ msgstr "Impossível criar edifício"
 #: src/hci.c:2105
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
-msgstr "Jogador %u é batota (debug menu) ele/ela mesma é uma nova estrutura: %s."
+msgstr "Jogador %u trapaceia (menu debug) a ele mesmo uma nova estrutura: %s."
 
 #: src/hci.c:2120
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
-msgstr "Jogador %u é batota (debug menu) ele/ela mesma é uma nova característica: %s."
+msgstr "Jogador %u trapaceia (menu debug) a ele mesmo um novo artefato: %s."
 
 #: src/hci.c:2141
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
-msgstr "Jogador %u é batota (debug menu) ele/ela mesma é um novo droid: %s."
+msgstr "Jogador %u trapaceia (menu debug) a ele mesmo uma nova droide: %s."
 
 #: src/hci.c:3716
 msgid "Commanders (F6)"
@@ -13133,7 +13130,7 @@ msgstr "Ponto de Entrega da Fábrica"
 
 #: src/hci.c:5556
 msgid "Loop Production"
-msgstr "Prender Produção"
+msgstr "Repetir Produção"
 
 #: src/hci.c:5647
 msgid "Tab Scroll left"
@@ -13151,7 +13148,7 @@ msgstr "Resumir Jogo"
 
 #: src/ingameop.c:142
 msgid "WARNING: You're the host. If you quit, the game ends for everyone!"
-msgstr "ATENÇÃO: Você é o hosp. Se você sair, o jogo acaba para todos!"
+msgstr "ATENÇÃO: Você é o hospedeiro Se você sair, o jogo acaba para todos!"
 
 #: src/ingameop.c:283
 #: src/ingameop.c:511
@@ -13311,7 +13308,7 @@ msgstr "Designar Suporte de Artilharia"
 
 #: src/intorder.c:182
 msgid "Assign VTOL Factory Production"
-msgstr "Designar Produção de VTOL"
+msgstr "Designar Produção de PDV"
 
 #: src/intorder.c:183
 msgid "Circle"
@@ -13327,11 +13324,11 @@ msgstr "Atenção! Essa trapaça é instável. Recomendamos contra o seu uso."
 
 #: src/keybind.c:210
 msgid "Lets us see what you see!"
-msgstr "Permite-nos ver o que você vê!"
+msgstr "Vamos ver o quê você vê!"
 
 #: src/keybind.c:212
 msgid "Fine, weapon & sensor display is off!"
-msgstr "Está bem! Você não vê mais o alcançe das armas!"
+msgstr "Está bem, alcances não serão exibidos!"
 
 #: src/keybind.c:344
 #, c-format
@@ -13357,19 +13354,19 @@ msgstr "(Jogador %u) está trapaceando: %s"
 
 #: src/keybind.c:384
 msgid "Hard as nails!!!"
-msgstr "Doer as unhas!!!"
+msgstr "Duro como pedra!!!"
 
 #: src/keybind.c:398
 msgid "Takings thing easy!"
-msgstr "Rendimento, coisas fácil !"
+msgstr "Vamos com calma!"
 
 #: src/keybind.c:414
 msgid "1000 big ones!!!"
-msgstr "1000 grandes!!!"
+msgstr "1000 grandinhas!!!"
 
 #: src/keybind.c:431
 msgid "Power overwhelming"
-msgstr "Poder esmagador"
+msgstr "Power overwhelming"
 
 #: src/keybind.c:446
 msgid "Back to normality!"
@@ -13377,7 +13374,7 @@ msgstr "Voltar a normalidade!"
 
 #: src/keybind.c:459
 msgid "Getting tricky!"
-msgstr "Obtendo complicado!"
+msgstr "Está ficando complicado!"
 
 #: src/keybind.c:475
 msgid "Twice as nice!"
@@ -13385,11 +13382,11 @@ msgstr "Duas vezes mais agradável!"
 
 #: src/keybind.c:486
 msgid "FPS display is enabled."
-msgstr "mostrar FPS é ativado."
+msgstr "FPS serão mostrados."
 
 #: src/keybind.c:490
 msgid "FPS display is disabled."
-msgstr "mostrar FPS é desativado."
+msgstr "FPS não serão mostrados"
 
 #: src/keybind.c:514
 #, c-format
@@ -13498,7 +13495,7 @@ msgstr "Branco como a neve... NEVE"
 
 #: src/keybind.c:1786
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
-msgstr "Garoa Paulista... CHUVA"
+msgstr "São as águas de Março fechando o verão... CHUVA"
 
 #: src/keybind.c:1792
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
@@ -13906,7 +13903,7 @@ msgstr "Atirar à vontade"
 
 #: src/keymap.c:388
 msgid "Return to HQ"
-msgstr "Retornar ao QH"
+msgstr "Retornar ao QG"
 
 #: src/keymap.c:396
 msgid "Send Text Message"
@@ -13970,7 +13967,7 @@ msgstr "Selecionar TODAS as unidades"
 
 #: src/keymap.c:423
 msgid "Select all VTOLs"
-msgstr "Selecionar todos os VTOLs"
+msgstr "Selecionar todos os PDV's"
 
 #: src/keymap.c:424
 msgid "Select all Wheels"
@@ -14058,11 +14055,11 @@ msgstr "Tornar todos os itens disponíveis"
 
 #: src/keymap.c:453
 msgid "Kill Selected Unit(s)"
-msgstr "Destruir unidade(s) selecionada(s)"
+msgstr "Destruir Unidade(s) Selecionada(s)"
 
 #: src/keymap.c:454
 msgid "Toggle god Mode Status"
-msgstr "Liga/Desliga God Mode"
+msgstr "Liga/Desliga Modo Deus"
 
 #: src/keymap.c:455
 msgid "Display Options Screen"
@@ -14132,12 +14129,12 @@ msgstr "Você encontrou %u de energia de um tambor de petróleo"
 #: src/multigifts.c:172
 #, c-format
 msgid "%s Gives You A Visibility Report"
-msgstr "%s Dar-lhe um relatório de visibilidade"
+msgstr "%s Te Dá Um Relatório De Visibilidade"
 
 #: src/multigifts.c:192
 #, c-format
 msgid "%s Gives you a %s"
-msgstr "%s Dar-lhe um %s"
+msgstr "%s Te dá um %s"
 
 #: src/multigifts.c:243
 #, c-format
@@ -14147,7 +14144,7 @@ msgstr "Tentativa de dar um %s não-vazio não foi permitida."
 #: src/multigifts.c:302
 #, c-format
 msgid "%s Gives You Technology Documents"
-msgstr "%s Dar-lhe documentos de tecnologia"
+msgstr "%s Te Dá Documentos de Tecnologia"
 
 #: src/multigifts.c:340
 #, c-format
@@ -14271,7 +14268,7 @@ msgstr "Ciborgues desativados."
 
 #: src/multiint.c:1131
 msgid "VTOLs disabled."
-msgstr "VTOLs desativados."
+msgstr "PDV's desativados."
 
 #: src/multiint.c:1181
 #: src/multiint.c:1188
@@ -14446,11 +14443,11 @@ msgstr "Modo 'Times Fixos' ativado"
 #: src/multimenu.c:1494
 #, c-format
 msgid "The host has kicked %s from the game!"
-msgstr "O Host chutou %s do jogo!"
+msgstr "O Hosp. chutou %s do jogo!"
 
 #: src/multiint.c:2885
 msgid "Host is Starting Game"
-msgstr "O Host iniciou o Jogo"
+msgstr "O Hosp. iniciou o Jogo"
 
 #: src/multiint.c:3482
 msgid "Players"
@@ -14767,11 +14764,11 @@ msgstr "Você trapaceou!"
 
 #: src/scriptfuncs.c:3171
 msgid "YOU ARE VICTORIOUS!"
-msgstr "VOCÊ FOI VITORIOSO"
+msgstr "VOCÊ FOI VITORIOSO!"
 
 #: src/scriptfuncs.c:3175
 msgid "YOU WERE DEFEATED!"
-msgstr "VOCÊ FOI DERROTADO"
+msgstr "VOCÊ FOI DERROTADO!"
 
 #: src/scriptfuncs.c:10082
 #, c-format
@@ -14808,7 +14805,6 @@ msgid "Unable to locate any Commanders!"
 msgstr "Impossível localizar Comandantes!"
 
 #: src/structure.c:2743
-#, fuzzy
 msgid "Control Limit Reached - Production Halted"
 msgstr "Limite de Unidade Alcançado - Produção Interrompida"
 
@@ -14839,40 +14835,40 @@ msgstr "%s - Danificado Eletronicamente"
 
 #: src/structure.c:6433
 msgid "Electronic Reward - Visibility Report"
-msgstr "Prêmio - Relatório de Visibilidade"
+msgstr "Prêmio - Eletrônico - Relatório de Visibilidade"
 
 #: src/structure.c:6473
 msgid "Factory Reward - Propulsion"
-msgstr "Prêmio - Propulsão"
+msgstr "Prêmio - Fábrica - Propulsão"
 
 #: src/structure.c:6497
 msgid "Factory Reward - Body"
-msgstr "Prêmio - Chassis"
+msgstr "Prêmio - Fábrica - Chassis"
 
 #: src/structure.c:6521
 msgid "Factory Reward - Weapon"
-msgstr "Prêmio - Arma"
+msgstr "Prêmio - Fábrica - Arma"
 
 #: src/structure.c:6530
 msgid "Factory Reward - Nothing"
-msgstr "Prêmio - Nada"
+msgstr "Prêmio - Fábrica - Nada"
 
 #: src/structure.c:6558
 msgid "Repair Facility Award - Repair"
-msgstr "Prêmio - Centro de Reparos"
+msgstr "Prêmio - Centro de Reparos - Reparo"
 
 #: src/structure.c:6565
 msgid "Repair Facility Award - Nothing"
-msgstr "Prêmio - Nada"
+msgstr "Prêmio - Centro de Reparos - Nada"
 
 #: src/transporter.c:395
 #: src/transporter.c:449
 msgid "Launch Transport"
-msgstr "Lançar Transportes"
+msgstr "Lançar Transporte"
 
 #: src/transporter.c:1751
 msgid "Reinforcements landing"
-msgstr "Reforços de aterragem"
+msgstr "Reforços pousando"
 
 #: src/version.c:143
 msgid " (modified and switched locally)"
