@@ -5717,12 +5717,12 @@ msgstr "En-route vers le Site de la Mission"
 #: data/base/messages/strings/genstrings.txt:18
 #: data/mods/multiplay/ntw/messages/strings/genstrings.txt:18
 msgid "Mission Failed"
-msgstr "Échec"
+msgstr "Mission échouée"
 
 #: data/base/messages/strings/genstrings.txt:19
 #: data/mods/multiplay/ntw/messages/strings/genstrings.txt:19
 msgid "Mission Successful"
-msgstr "Réussite"
+msgstr "Mission réussi"
 
 #: data/base/messages/strings/genstrings.txt:22
 #: data/mods/multiplay/ntw/messages/strings/genstrings.txt:22
@@ -7284,7 +7284,7 @@ msgstr "Jump zappeur d'abri"
 #: data/base/messages/strings/names.txt:684
 #: data/mp/messages/strings/names.txt:695
 msgid "Jump Heavy Gunner"
-msgstr "Jump tirreur lourd"
+msgstr "Jump tireur lourd"
 
 #: data/base/messages/strings/names.txt:685
 #: data/mp/messages/strings/names.txt:696
@@ -7294,12 +7294,12 @@ msgstr "Jump Lanceur"
 #: data/base/messages/strings/names.txt:686
 #: data/mp/messages/strings/names.txt:697
 msgid "Jump Assault Gunner"
-msgstr "Jump tirreur d'assault"
+msgstr "Jump tireur d'assault"
 
 #: data/base/messages/strings/names.txt:687
 #: data/mp/messages/strings/names.txt:698
 msgid "Jump Needle Gunner"
-msgstr "Jump tirreur d'aiguille"
+msgstr "Jump tireur d'aiguille"
 
 #: data/base/messages/strings/names.txt:688
 #: data/mp/messages/strings/names.txt:699
@@ -7309,7 +7309,7 @@ msgstr "Jump Scourge"
 #: data/base/messages/strings/names.txt:689
 #: data/mp/messages/strings/names.txt:700
 msgid "Jump Flashlight Gunner"
-msgstr "Jump tirreur à torche"
+msgstr "Jump tireur à torche"
 
 #: data/base/messages/strings/names.txt:691
 #: data/mp/messages/strings/names.txt:702
@@ -9065,7 +9065,7 @@ msgstr "Emplacement pour Missiles Angel"
 #: data/base/messages/strings/names.txt:1378
 #: data/mp/messages/strings/names.txt:1398
 msgid "Archangel Missile Emplacement"
-msgstr "Emplacement pour Missiles Archangel"
+msgstr "Emplacement pour Missiles Archange"
 
 #: data/base/messages/strings/names.txt:1423
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1881
@@ -9089,13 +9089,13 @@ msgstr "Anti-Bunker"
 #: data/mp/messages/strings/names.txt:1458
 #: data/mp/messages/strings/names.txt:1524
 msgid "Flashlight Gunner"
-msgstr "Tirreur àtorche"
+msgstr "Tireur à torche"
 
 #: data/base/messages/strings/names.txt:1439
 #: data/mp/messages/strings/names.txt:1459
 #: data/mp/messages/strings/names.txt:1612
 msgid "Needle Gunner"
-msgstr "tirreur àaiguille"
+msgstr "Tireur à aiguille"
 
 #: data/base/messages/strings/names.txt:1440
 #: data/mp/messages/strings/names.txt:1460
@@ -12064,9 +12064,8 @@ msgid "Sunburst AA"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1729
-#, fuzzy
 msgid "VTOL Sunburst AA"
-msgstr "Site de DCA Ouragan"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1730
 #: data/mp/messages/strings/names.txt:1731
@@ -12733,7 +12732,7 @@ msgstr "Tutoriel"
 #: src/frontend.c:100
 #: src/hci.c:3948
 msgid "Options"
-msgstr ""
+msgstr "Options"
 
 #: src/frontend.c:101
 msgid "View Intro"
@@ -13009,15 +13008,17 @@ msgstr "Rotation vers la Gauche"
 
 #: src/frontend.c:1006
 #: src/frontend.c:1094
+#, fuzzy
 msgctxt "middle mouse button"
 msgid "Middle Button"
-msgstr ""
+msgstr "Souris milieu"
 
 #: src/frontend.c:1010
 #: src/frontend.c:1089
+#, fuzzy
 msgctxt "right mouse button"
 msgid "Right Button"
-msgstr ""
+msgstr "Souris droite"
 
 #: src/frontend.c:1014
 #, fuzzy
@@ -13064,7 +13065,7 @@ msgstr "Couleur des Unités"
 
 #: src/frontend.c:1174
 msgid "Radar"
-msgstr ""
+msgstr "Radar"
 
 #: src/frontend.c:1175
 #: src/frontend.c:1224
@@ -13214,7 +13215,7 @@ msgstr "Placer les éléments sur la carte"
 
 #: src/hci.c:4099
 msgid "Pause"
-msgstr ""
+msgstr "Pause"
 
 #: src/hci.c:4100
 msgid "Pause or unpause the game"
@@ -13226,7 +13227,7 @@ msgstr "Align height of all map objects"
 
 #: src/hci.c:4124
 msgid "Edit"
-msgstr ""
+msgstr "Édit"
 
 #: src/hci.c:4125
 #, fuzzy
@@ -14056,7 +14057,7 @@ msgstr "Envoyer un Message Textuel"
 
 #: src/keymap.c:399
 msgid "Drop a beacon"
-msgstr ""
+msgstr "Larguer une balise"
 
 #: src/keymap.c:401
 #, fuzzy
@@ -14231,8 +14232,9 @@ msgid "Complete current research"
 msgstr "Permet de rechercher la tourelle de commandement"
 
 #: src/keymap.c:457
+#, fuzzy
 msgid "Toggle watch window"
-msgstr ""
+msgstr "Activer les Ombres"
 
 #: src/keymap.c:458
 msgid "Trace a game object"
@@ -14500,7 +14502,7 @@ msgstr "Niveau d'énergie Élevé"
 
 #: src/multiint.c:1331
 msgid "Base"
-msgstr ""
+msgstr "Base"
 
 #: src/multiint.c:1333
 msgid "Start with No Bases"
@@ -14573,12 +14575,14 @@ msgid "Choose Team"
 msgstr "Verrouiller les Équipes"
 
 #: src/multiint.c:2073
+#, fuzzy
 msgid "Click to change player settings"
-msgstr ""
+msgstr "Défendre sa position"
 
 #: src/multiint.c:2104
+#, fuzzy
 msgid "Click to adjust AI difficulty"
-msgstr ""
+msgstr "Cliquer pour choisir un mot de passe"
 
 #: src/multiint.c:2183
 msgid "CHAT"
@@ -14722,7 +14726,7 @@ msgstr "Structure"
 
 #: src/multimenu.c:1139
 msgid "Channel"
-msgstr ""
+msgstr "Canal"
 
 #: src/multimenu.c:1154
 msgid "Toggle Alliance State"
@@ -14945,7 +14949,7 @@ msgstr "Signal émis par %s !"
 #: src/scriptfuncs.c:10128
 #, c-format
 msgid "Beacon %d"
-msgstr "Signal %d"
+msgstr "Balise %d"
 
 #: src/selection.c:117
 #, c-format
@@ -14972,6 +14976,7 @@ msgid "Unable to locate any Commanders!"
 msgstr "Impossible de localiser le moindre Commandant !"
 
 #: src/structure.c:2743
+#, fuzzy
 msgid "Control Limit Reached - Production Halted"
 msgstr "Limite du Control Atteinte - Arrêt de la Production"
 
@@ -15065,12 +15070,21 @@ msgstr " - Compilation %s"
 msgid "Version %s%s%s%s"
 msgstr "Version %s%s%s%s"
 
-#~ msgid "Plascrete MK3"
-#~ msgstr "Béton Plastifié Mk3"
-
 #, fuzzy
 #~ msgid "Super Transport Available"
 #~ msgstr "Transporteur Cyborg Disponible"
+
+#, fuzzy
+#~ msgid "Jammer Tower"
+#~ msgstr "Tour lance-flammes"
+
+#, fuzzy
+#~ msgid "Jammer Turret"
+#~ msgstr "Tourelle brouilleuse"
+
+#, fuzzy
+#~ msgid "Electronic Countermeasures"
+#~ msgstr "Laboratoire d'Électronique"
 
 #, fuzzy
 #~ msgid "Super Transport"
@@ -15079,6 +15093,46 @@ msgstr "Version %s%s%s%s"
 #, fuzzy
 #~ msgid "Super Transport Body"
 #~ msgstr "Châssis de Transporteur"
+
+#, fuzzy
+#~ msgid "2 trucks ordered to build Oil Derrick"
+#~ msgstr "Construction d'un Puits de Pétrole"
+
+#, fuzzy
+#~ msgid "%d trucks ordered to build Oil Derrick"
+#~ msgstr "Construction d'un Puits de Pétrole"
+
+#, fuzzy
+#~ msgid "GAME SAVED: "
+#~ msgstr "PARTIE SAUVEGARDÉE!"
+
+#, fuzzy
+#~ msgid "Player %u is cheating (debug menu) him/herself a new droid."
+#~ msgstr "Le joueur %u Triche (Il se sert du debug menu pour se faire une nouvelle unitée: %s.)"
+
+#, fuzzy
+#~ msgid "Build Progress"
+#~ msgstr "Points de construction"
+
+#, fuzzy
+#~ msgid "Construction Progress"
+#~ msgstr "Unité de Construction"
+
+#, fuzzy
+#~ msgid "Plays nice"
+#~ msgstr "Joueur"
+
+#, fuzzy
+#~ msgid "Click to change to this slot"
+#~ msgstr "Cliquer pour choisir un mot de passe"
+
+#, fuzzy
+#~ msgid "Click to change player colour"
+#~ msgstr "Radar montrant les couleurs des joueurs"
+
+#, fuzzy
+#~ msgid "Click to change AI"
+#~ msgstr "Cliquer pour choisir un mot de passe"
 
 #, fuzzy
 #~ msgid "3 players"
@@ -15096,6 +15150,41 @@ msgstr "Version %s%s%s%s"
 #~ msgid "7 players"
 #~ msgstr "2 joueurs"
 
+#, fuzzy
+#~ msgid "9 players"
+#~ msgstr "2 joueurs"
+
+#, fuzzy
+#~ msgid "10 players"
+#~ msgstr "2 joueurs"
+
+#, fuzzy
+#~ msgid "11 players"
+#~ msgstr "2 joueurs"
+
+#, fuzzy
+#~ msgid "12 players"
+#~ msgstr "2 joueurs"
+
+#, fuzzy
+#~ msgid "13 players"
+#~ msgstr "2 joueurs"
+
+#, fuzzy
+#~ msgid "14 players"
+#~ msgstr "4 joueurs"
+
+#, fuzzy
+#~ msgid "15 players"
+#~ msgstr "2 joueurs"
+
+#, fuzzy
+#~ msgid "16 players"
+#~ msgstr "2 joueurs"
+
+#~ msgid "Plascrete MK3"
+#~ msgstr "Béton Plastifié Mk3"
+
 #~ msgid "Mini-Rocket accuracy +10%"
 #~ msgstr "précision des Mini-Roquettes +10%"
 
@@ -15107,6 +15196,10 @@ msgstr "Version %s%s%s%s"
 
 #~ msgid "Cyclone AA Site"
 #~ msgstr "Site DCA Cyclone"
+
+#, fuzzy
+#~ msgid "Gate"
+#~ msgstr "Jeu"
 
 #~ msgid "Automated Manufacturing Mk2"
 #~ msgstr "manufacture Automatisé Mk2"
@@ -15159,9 +15252,6 @@ msgstr "Version %s%s%s%s"
 
 #~ msgid "Transporter"
 #~ msgstr "Transporteur"
-
-#~ msgid "(Player %u) has detected the borg 'legs' bug! Please enter legs in your console and upload the files to us!"
-#~ msgstr "(le jouer %u) a détecté le bogue borg 'legs'  svp entrer les jambes dans votre console et envoyer nous le fichier !"
 
 #~ msgid "Unable to locate any resource extractors!"
 #~ msgstr "Impossible de localiser le moindre extracteur de ressources !"
@@ -15281,6 +15371,9 @@ msgstr "Version %s%s%s%s"
 #~ msgid "Latin"
 #~ msgstr "Latin"
 
+#~ msgid "(Player %u) has detected the borg 'legs' bug! Please enter legs in your console and upload the files to us!"
+#~ msgstr "(le jouer %u) a détecté le bogue borg 'legs'  svp entrer les jambes dans votre console et envoyer nous le fichier !"
+
 #~ msgid ", mod: "
 #~ msgstr ", mod: "
 
@@ -15328,9 +15421,6 @@ msgstr "Version %s%s%s%s"
 
 #~ msgid "Stop Multiplayer Audio"
 #~ msgstr "Arrêter le son multi-joueurs"
-
-#~ msgid "Game"
-#~ msgstr "Jeu"
 
 #~ msgid "Mayhem"
 #~ msgstr "Chaos"
