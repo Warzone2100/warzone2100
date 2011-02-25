@@ -7207,14 +7207,9 @@ BOOL structVTOLCBSensor(const STRUCTURE* psStruct)
 // check whether a rearm pad is clear
 BOOL clearRearmPad(STRUCTURE *psStruct)
 {
-	if (psStruct->pStructureType->type == REF_REARM_PAD
-	 && (psStruct->pFunctionality->rearmPad.psObj == NULL
-	 || vtolHappy((DROID*)psStruct->pFunctionality->rearmPad.psObj)))
-	{
-		return true;
-	}
-
-	return false;
+	return psStruct->pStructureType->type == REF_REARM_PAD
+	       && (psStruct->pFunctionality->rearmPad.psObj == NULL
+	       || vtolHappy((DROID*)psStruct->pFunctionality->rearmPad.psObj));
 }
 
 
@@ -7319,38 +7314,28 @@ BOOL vtolOnRearmPad(STRUCTURE *psStruct, DROID *psDroid)
 {
 	DROID	*psCurr;
 	SDWORD	tx,ty;
-	BOOL	found;
 
 	tx = map_coord(psStruct->pos.x);
 	ty = map_coord(psStruct->pos.y);
 
-	found = false;
 	for (psCurr = apsDroidLists[psStruct->player]; psCurr; psCurr=psCurr->psNext)
 	{
 		if (psCurr != psDroid
 		 && map_coord(psCurr->pos.x) == tx
 		 && map_coord(psCurr->pos.y) == ty)
 		{
-			found = true;
-			break;
+			return true;
 		}
 	}
 
-	return found;
+	return false;
 }
 
 
 /* Just returns true if the structure's present body points aren't as high as the original*/
 BOOL	structIsDamaged(STRUCTURE *psStruct)
 {
-	if(psStruct->body < structureBody(psStruct))
-	{
-		return(true);
-	}
-	else
-	{
-		return(false);
-	}
+	return psStruct->body < structureBody(psStruct);
 }
 
 // give a structure from one player to another - used in Electronic Warfare
