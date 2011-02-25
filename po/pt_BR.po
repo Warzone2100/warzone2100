@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-02-25 00:09+0100\n"
+"POT-Creation-Date: 2011-02-25 23:35+0100\n"
 "PO-Revision-Date: 2011-02-16 12:57-0300\n"
 "Last-Translator: Artur Filipe <tucalipe@gmail.com>\n"
 "Language-Team: Brazilian Portugese <warzone-dev@gna.org>\n"
@@ -12019,11 +12019,11 @@ msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing
 msgstr "Não foi possível communicar com o servidor de lobby! A porta TCP %u está aberta para tráfego saindo?"
 
 #: src/challenge.cpp:184
-#: src/hci.cpp:914
-#: src/hci.cpp:3376
-#: src/hci.cpp:3499
-#: src/hci.cpp:3910
-#: src/hci.cpp:4928
+#: src/hci.cpp:916
+#: src/hci.cpp:3378
+#: src/hci.cpp:3501
+#: src/hci.cpp:3912
+#: src/hci.cpp:4930
 #: src/intelmap.cpp:531
 #: src/intorder.cpp:727
 #: src/loadsave.cpp:253
@@ -12175,7 +12175,7 @@ msgstr "ir diretamente à tela de hospedeiro"
 
 #: src/configuration.cpp:393
 #: src/configuration.cpp:394
-#: src/multistat.cpp:130
+#: src/multistat.cpp:124
 msgid "Player"
 msgstr "Jogador"
 
@@ -12463,7 +12463,7 @@ msgid "Tutorial"
 msgstr "Aprendendo a Jogar"
 
 #: src/frontend.cpp:100
-#: src/hci.cpp:3485
+#: src/hci.cpp:3487
 msgid "Options"
 msgstr "Opções"
 
@@ -12524,8 +12524,8 @@ msgstr "UM JOGADOR"
 
 #: src/frontend.cpp:303
 #: src/ingameop.cpp:494
-#: src/mission.cpp:2527
-#: src/mission.cpp:2630
+#: src/mission.cpp:2493
+#: src/mission.cpp:2596
 msgid "Load Saved Game"
 msgstr "Carregar Jogo Salvo"
 
@@ -12814,183 +12814,183 @@ msgstr "OPÇÕES DE JOGO"
 msgid "Mod: "
 msgstr "Mod:"
 
-#: src/hci.cpp:1235
+#: src/hci.cpp:1237
 msgid "MAP SAVED!"
 msgstr "MAPA SALVO!"
 
-#: src/hci.cpp:1571
+#: src/hci.cpp:1573
 #: src/loop.cpp:558
 #: src/loop.cpp:574
 msgid "GAME SAVED: "
 msgstr "JOGO SALVO:"
 
-#: src/hci.cpp:1958
+#: src/hci.cpp:1960
 msgid "Failed to create building"
 msgstr "Impossível criar edifício"
 
-#: src/hci.cpp:1975
+#: src/hci.cpp:1977
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr "Jogador %u trapaceia (menu debug) a ele mesmo uma nova estrutura: %s."
 
-#: src/hci.cpp:1990
+#: src/hci.cpp:1992
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr "Jogador %u trapaceia (menu debug) a ele mesmo um novo artefato: %s."
 
-#: src/hci.cpp:2012
+#: src/hci.cpp:2014
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "Jogador %u trapaceia (menu debug) a ele mesmo uma nova droide: %s."
 
-#: src/hci.cpp:2023
+#: src/hci.cpp:2025
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "Jogador %u está trapaceando (debug menu)! Ele/ela ganhou um novo droide."
 
-#: src/hci.cpp:3296
+#: src/hci.cpp:3298
 msgid "Commanders (F6)"
 msgstr "Comandos (F6)"
 
-#: src/hci.cpp:3309
+#: src/hci.cpp:3311
 msgid "Intelligence Display (F5)"
 msgstr "Mostrar Inteligência (F5)"
 
-#: src/hci.cpp:3322
+#: src/hci.cpp:3324
 msgid "Manufacture (F1)"
 msgstr "Desenvolvedor (F1)"
 
-#: src/hci.cpp:3335
+#: src/hci.cpp:3337
 msgid "Design (F4)"
 msgstr "Padrão (F4)"
 
-#: src/hci.cpp:3348
+#: src/hci.cpp:3350
 msgid "Research (F2)"
 msgstr "Pesquisa (F2)"
 
-#: src/hci.cpp:3361
+#: src/hci.cpp:3363
 msgid "Build (F3)"
 msgstr "Construir (F3)"
 
-#: src/hci.cpp:3432
+#: src/hci.cpp:3434
 #: src/multiint.cpp:1401
 #: src/multimenu.cpp:763
 msgid "Power"
 msgstr "Energia"
 
-#: src/hci.cpp:3523
+#: src/hci.cpp:3525
 msgid "Map:"
 msgstr "Mapa:"
 
-#: src/hci.cpp:3536
+#: src/hci.cpp:3538
 msgid "Load"
 msgstr "Carregar"
 
-#: src/hci.cpp:3537
+#: src/hci.cpp:3539
 msgid "Load Map File"
 msgstr "Carregar Mapa"
 
-#: src/hci.cpp:3544
+#: src/hci.cpp:3546
 msgid "Save"
 msgstr "Salvar"
 
-#: src/hci.cpp:3545
+#: src/hci.cpp:3547
 msgid "Save Map File"
 msgstr "Salvar Mapa"
 
-#: src/hci.cpp:3553
+#: src/hci.cpp:3555
 msgid "New"
 msgstr "Novo"
 
-#: src/hci.cpp:3554
+#: src/hci.cpp:3556
 msgid "New Blank Map"
 msgstr "Novo Mapa Vazio"
 
-#: src/hci.cpp:3590
+#: src/hci.cpp:3592
 msgid "Tile"
 msgstr "Espaço"
 
-#: src/hci.cpp:3591
+#: src/hci.cpp:3593
 msgid "Place tiles on map"
 msgstr "Colocar Espaços no mapa"
 
-#: src/hci.cpp:3600
+#: src/hci.cpp:3602
 msgid "Unit"
 msgstr "Unidade"
 
-#: src/hci.cpp:3601
+#: src/hci.cpp:3603
 msgid "Place Unit on map"
 msgstr "Colocar Unidade no mapa"
 
-#: src/hci.cpp:3609
+#: src/hci.cpp:3611
 msgid "Struct"
 msgstr "Estrutura"
 
-#: src/hci.cpp:3610
+#: src/hci.cpp:3612
 msgid "Place Structures on map"
 msgstr "Colocar estruturas no mapa"
 
-#: src/hci.cpp:3618
+#: src/hci.cpp:3620
 msgid "Feat"
 msgstr "Feito"
 
-#: src/hci.cpp:3619
+#: src/hci.cpp:3621
 msgid "Place Features on map"
 msgstr "Colocar Artefatos no mapa"
 
-#: src/hci.cpp:3629
+#: src/hci.cpp:3631
 msgid "Pause"
 msgstr "Pausa"
 
-#: src/hci.cpp:3630
+#: src/hci.cpp:3632
 msgid "Pause or unpause the game"
 msgstr "Pausar ou resumir o jogo"
 
-#: src/hci.cpp:3644
+#: src/hci.cpp:3646
 msgid "Align height of all map objects"
 msgstr "Alinhar a altitude dos objetos e do mapa"
 
-#: src/hci.cpp:3654
+#: src/hci.cpp:3656
 msgid "Edit"
 msgstr "Editar"
 
-#: src/hci.cpp:3655
+#: src/hci.cpp:3657
 msgid "Start Edit Mode"
 msgstr "Modo Editar Início"
 
-#: src/hci.cpp:3669
+#: src/hci.cpp:3671
 #: src/ingameop.cpp:112
 #: src/ingameop.cpp:256
 #: src/ingameop.cpp:260
 msgid "Quit"
 msgstr "Sair"
 
-#: src/hci.cpp:3670
+#: src/hci.cpp:3672
 msgid "Exit Game"
 msgstr "Sair do Jogo"
 
-#: src/hci.cpp:3696
+#: src/hci.cpp:3698
 msgid "Current Player:"
 msgstr "Jogador Atual:"
 
-#: src/hci.cpp:3987
+#: src/hci.cpp:3989
 #: src/intdisplay.cpp:276
 msgid "Progress Bar"
 msgstr "Barra de Progresso"
 
-#: src/hci.cpp:4853
+#: src/hci.cpp:4855
 msgid "Factory Delivery Point"
 msgstr "Ponto de Entrega da Fábrica"
 
-#: src/hci.cpp:4871
+#: src/hci.cpp:4873
 msgid "Loop Production"
 msgstr "Repetir Produção"
 
-#: src/hci.cpp:4951
+#: src/hci.cpp:4953
 msgid "Tab Scroll left"
 msgstr "Tab mover para esquerda"
 
-#: src/hci.cpp:4966
+#: src/hci.cpp:4968
 msgid "Tab Scroll right"
 msgstr "Tab mover para direita"
 
@@ -13016,8 +13016,8 @@ msgstr "Interface de Usuário Tática (Icone de Origem do Alvo): Esconder"
 
 #: src/ingameop.cpp:274
 #: src/ingameop.cpp:498
-#: src/mission.cpp:2514
-#: src/mission.cpp:2633
+#: src/mission.cpp:2480
+#: src/mission.cpp:2599
 msgid "Save Game"
 msgstr "Salvar"
 
@@ -13951,37 +13951,37 @@ msgstr "Liga/Desliga Modo Dirigir"
 msgid "Could not save game!"
 msgstr "Impossível salvar o jogo!"
 
-#: src/mission.cpp:2075
+#: src/mission.cpp:2041
 msgid "Load Transport"
 msgstr "Carregar Transportes"
 
-#: src/mission.cpp:2462
+#: src/mission.cpp:2428
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "OBJETIVO ARQUIVADO por trapaça!"
 
-#: src/mission.cpp:2462
+#: src/mission.cpp:2428
 msgid "OBJECTIVE ACHIEVED"
 msgstr "OBJETIVO ARQUIVADO"
 
-#: src/mission.cpp:2468
+#: src/mission.cpp:2434
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "FALHA NO OBJETIVO--e você trapaçeou!"
 
-#: src/mission.cpp:2468
+#: src/mission.cpp:2434
 msgid "OBJECTIVE FAILED"
 msgstr "FALHA NO OBJETIVO"
 
-#: src/mission.cpp:2493
-#: src/mission.cpp:2533
-#: src/mission.cpp:2647
+#: src/mission.cpp:2459
+#: src/mission.cpp:2499
+#: src/mission.cpp:2613
 msgid "Quit To Main Menu"
 msgstr "Sair para o Menu Principal"
 
-#: src/mission.cpp:2501
+#: src/mission.cpp:2467
 msgid "Continue Game"
 msgstr "Continuar o Jogo"
 
-#: src/mission.cpp:2598
+#: src/mission.cpp:2564
 msgid "GAME SAVED :"
 msgstr "JOGO SALVO :"
 
@@ -14375,9 +14375,14 @@ msgstr "Enviando mapa: %d%%"
 msgid "Map: %d%% downloaded"
 msgstr "Mapa: %d%% baixado"
 
-#: src/multiint.cpp:3822
+#: src/multiint.cpp:3820
 msgid "HOST"
 msgstr "HOSPEDEIRO"
+
+#: src/multiint.cpp:3827
+#: src/multimenu.cpp:772
+msgid "Ping"
+msgstr "Ping"
 
 #: src/multijoin.cpp:100
 #: src/multijoin.cpp:101
@@ -14512,10 +14517,6 @@ msgstr "Mortes"
 #: src/multimenu.cpp:767
 msgid "Units"
 msgstr "Unidades"
-
-#: src/multimenu.cpp:772
-msgid "Ping"
-msgstr "Ping"
 
 #: src/multimenu.cpp:776
 msgid "Structs"
