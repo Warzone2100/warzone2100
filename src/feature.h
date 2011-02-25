@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -67,7 +67,7 @@ void _syncDebugFeature(const char *function, FEATURE const *psFeature, char ch);
 
 
 // True iff object is a feature.
-static inline bool isFeature(SIMPLE_OBJECT const *psObject)             { return psObject->type == OBJ_FEATURE; }
+static inline bool isFeature(SIMPLE_OBJECT const *psObject)             { return psObject != NULL && psObject->type == OBJ_FEATURE; }
 // Returns FEATURE * if feature or NULL if not.
 static inline FEATURE *castFeature(SIMPLE_OBJECT *psObject)             { return isFeature(psObject)? (FEATURE *)psObject : (FEATURE *)NULL; }
 // Returns FEATURE const * if feature or NULL if not.

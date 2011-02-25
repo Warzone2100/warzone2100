@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -556,7 +556,7 @@ void _syncDebugDroid(const char *function, DROID const *psDroid, char ch);
 
 
 // True iff object is a droid.
-static inline bool isDroid(SIMPLE_OBJECT const *psObject)           { return psObject->type == OBJ_DROID; }
+static inline bool isDroid(SIMPLE_OBJECT const *psObject)           { return psObject != NULL && psObject->type == OBJ_DROID; }
 // Returns DROID * if droid or NULL if not.
 static inline DROID *castDroid(SIMPLE_OBJECT *psObject)             { return isDroid(psObject)? (DROID *)psObject : (DROID *)NULL; }
 // Returns DROID const * if droid or NULL if not.

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -64,7 +64,7 @@ typedef std::vector<PROJECTILE *>::const_iterator ProjectileIterator;
 
 
 /// True iff object is a projectile.
-static inline bool isProjectile(SIMPLE_OBJECT const *psObject)                { return psObject->type == OBJ_PROJECTILE; }
+static inline bool isProjectile(SIMPLE_OBJECT const *psObject)                { return psObject != NULL && psObject->type == OBJ_PROJECTILE; }
 /// Returns PROJECTILE * if projectile or NULL if not.
 static inline PROJECTILE *castProjectile(SIMPLE_OBJECT *psObject)             { return isProjectile(psObject)? (PROJECTILE *)psObject : (PROJECTILE *)NULL; }
 /// Returns PROJECTILE const * if projectile or NULL if not.

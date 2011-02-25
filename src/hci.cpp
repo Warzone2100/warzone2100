@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -5347,32 +5347,17 @@ static BASE_STATS *getConstructionStats(BASE_OBJECT *psObj)
 /* Set the stats for a construction droid */
 static BOOL setConstructionStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 {
-	STRUCTURE_STATS		*psSStats;
-	DROID				*psDroid;
+	DROID *psDroid = castDroid(psObj);
+	ASSERT(psDroid != NULL, "invalid droid pointer");
 
-	ASSERT( psObj != NULL && psObj->type == OBJ_DROID,
-		"setConstructionStats: invalid droid pointer" );
 	/* psStats might be NULL if the operation is canceled in the middle */
-
 	if (psStats != NULL)
 	{
-		psSStats = (STRUCTURE_STATS *)psStats;
-		psDroid = (DROID *)psObj;
-
 		//check for demolish first
-		if (psSStats == structGetDemolishStat())
+		if (psStats == structGetDemolishStat())
 		{
 			objMode = IOBJ_DEMOLISHSEL;
 
-			// When demolish requested, need to select a construction droid, not really any
-			// choice in this as demolishing uses the droid targeting interface rather than
-			// the build positioning interface and therefore requires a construction droid
-			// to be selected.
-			clearSel();
-			SelectDroid(psDroid);
-			if(driveModeActive()) {
-				driveSelectionChanged();
-			}
 			return true;
 		}
 
@@ -5380,33 +5365,13 @@ static BOOL setConstructionStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 		psPositionStats = psStats;
 
 		/* Now start looking for a location for the structure */
-		if (psSStats)
-		{
-			{
-				objMode = IOBJ_BUILDSEL;
+		objMode = IOBJ_BUILDSEL;
 
-				intStartStructPosition(psStats);
+		intStartStructPosition(psStats);
 
-				//set the droids current program
-				/*for (i=0; i < psDroid->numProgs; i++)
-				{
-					if (psDroid->asProgs[i].psStats->order == ORDER_BUILD)
-					{
-						psDroid->activeProg = i;
-					}
-				}*/
-			}
-		}
-		else
-		{
-			orderDroid(psDroid, DORDER_STOP, ModeQueue);
-		}
+		return true;
 	}
-	else
-	{
-		psDroid = (DROID *)psObj;
-		orderDroid(psDroid, DORDER_STOP, ModeQueue);
-	}
+	orderDroid(psDroid, DORDER_STOP, ModeQueue);
 	return true;
 }
 
