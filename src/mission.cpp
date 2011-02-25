@@ -1420,63 +1420,29 @@ void processMissionLimbo(void)
 // Pay special attention on what is getting swapped!
 void swapMissionPointers(void)
 {
-	void		*pVoid;
-	UDWORD		udwTemp, inc;
-
 	debug(LOG_SAVE, "called");
 
-	// Swap psMapTiles
-	pVoid = (void*)psMapTiles;
-	psMapTiles = mission.psMapTiles;
-	mission.psMapTiles = (MAPTILE *)pVoid;
-	// Swap map sizes
-	udwTemp = mapWidth;
-	mapWidth = mission.mapWidth;
-	mission.mapWidth = udwTemp;
-	udwTemp = mapHeight;
-	mapHeight = mission.mapHeight;
-	mission.mapHeight = udwTemp;
+	std::swap(psMapTiles, mission.psMapTiles);
+	std::swap(mapWidth,   mission.mapWidth);
+	std::swap(mapHeight,  mission.mapHeight);
 	//swap gateway zones
-	pVoid = (void*)gwGetGateways();
+	GATEWAY *gateway = gwGetGateways();
 	gwSetGateways(mission.psGateways);
-	mission.psGateways = (struct _gateway *)pVoid;
-	// Swap scroll limits
-	udwTemp = scrollMinX;
-	scrollMinX = mission.scrollMinX;
-	mission.scrollMinX = udwTemp;
-	udwTemp = scrollMinY;
-	scrollMinY = mission.scrollMinY;
-	mission.scrollMinY = udwTemp;
-	udwTemp = scrollMaxX;
-	scrollMaxX = mission.scrollMaxX;
-	mission.scrollMaxX = udwTemp;
-	udwTemp = scrollMaxY;
-	scrollMaxY = mission.scrollMaxY;
-	mission.scrollMaxY = udwTemp;
-	for (inc = 0; inc < MAX_PLAYERS; inc++)
+	mission.psGateways = gateway;
+	std::swap(scrollMinX, mission.scrollMinX);
+	std::swap(scrollMinY, mission.scrollMinY);
+	std::swap(scrollMaxX, mission.scrollMaxX);
+	std::swap(scrollMaxY, mission.scrollMaxY);
+	for (unsigned inc = 0; inc < MAX_PLAYERS; inc++)
 	{
-		pVoid = (void*)apsDroidLists[inc];
-		apsDroidLists[inc] = mission.apsDroidLists[inc];
-		mission.apsDroidLists[inc] = (DROID *)pVoid;
-		pVoid = (void*)apsStructLists[inc];
-		apsStructLists[inc] = mission.apsStructLists[inc];
-		mission.apsStructLists[inc] = (STRUCTURE *)pVoid;
-		pVoid = (void*)apsFeatureLists[inc];
-		apsFeatureLists[inc] = mission.apsFeatureLists[inc];
-		mission.apsFeatureLists[inc] = (FEATURE *)pVoid;
-		pVoid = (void*)apsFlagPosLists[inc];
-		apsFlagPosLists[inc] = mission.apsFlagPosLists[inc];
-		mission.apsFlagPosLists[inc] = (FLAG_POSITION *)pVoid;
-		pVoid = (void*)apsExtractorLists[inc];
-		apsExtractorLists[inc] = mission.apsExtractorLists[inc];
-		mission.apsExtractorLists[inc] = (STRUCTURE *)pVoid;
+		std::swap(apsDroidLists[inc],     mission.apsDroidLists[inc]);
+		std::swap(apsStructLists[inc],    mission.apsStructLists[inc]);
+		std::swap(apsFeatureLists[inc],   mission.apsFeatureLists[inc]);
+		std::swap(apsFlagPosLists[inc],   mission.apsFlagPosLists[inc]);
+		std::swap(apsExtractorLists[inc], mission.apsExtractorLists[inc]);
 	}
-	pVoid = (void*)apsSensorList[0];
-	apsSensorList[0] = mission.apsSensorList[0];
-	mission.apsSensorList[0] = (BASE_OBJECT *)pVoid;
-	pVoid = (void*)apsOilList[0];
-	apsOilList[0] = mission.apsOilList[0];
-	mission.apsOilList[0] = (FEATURE *)pVoid;
+	std::swap(apsSensorList[0], mission.apsSensorList[0]);
+	std::swap(apsOilList[0],    mission.apsOilList[0]);
 }
 
 void endMission(void)
