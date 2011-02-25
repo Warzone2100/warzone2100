@@ -35,10 +35,7 @@
 
 #include "lib/framework/types.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
+extern bool bShaderlessTeamcolourHack;
 
 /* ------------------------------------------------------------------------------------------- */
 
@@ -68,9 +65,5 @@ extern void screenDoDumpToDiskIfRequired(void);
 void screen_enableMapPreview(char *name, int width, int height, Vector2i *playerpositions);
 void screen_disableMapPreview(void);
 BOOL screen_getMapPreview(void);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif

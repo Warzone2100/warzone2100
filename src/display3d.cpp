@@ -1374,7 +1374,7 @@ void	renderAnimComponent( const COMPONENT_OBJECT *psObj )
 		pie_MatRotZ(-psObj->orientation.y);
 		pie_MatRotX(-psObj->orientation.x);
 
-		pie_Draw3DShape(psObj->psShape, 0, iPlayer, brightness, pie_STATIC_SHADOW, 0);
+		pie_Draw3DShape(psObj->psShape, 0, iPlayer, brightness, pie_STATIC_SHADOW, 0, 256);
 
 		/* clear stack */
 		pie_MatEnd();
@@ -2172,7 +2172,7 @@ void	renderStructure(STRUCTURE *psStructure)
 				pieFlag = pie_TRANSLUCENT | pie_FORCE_FOG;
 				pieFlagData = 255;
 			}
-			pie_Draw3DShape(psStructure->pStructureType->pBaseIMD, 0, colour, buildingBrightness, pieFlag, pieFlagData);
+			pie_Draw3DShape(psStructure->pStructureType->pBaseIMD, 0, colour, buildingBrightness, pieFlag, pieFlagData, 64);
 		}
 
 		// override
@@ -2190,7 +2190,7 @@ void	renderStructure(STRUCTURE *psStructure)
 	//first check if partially built - ANOTHER HACK!
 	if (psStructure->status == SS_BEING_BUILT || psStructure->status == SS_BEING_DEMOLISHED)
 	{
-		pie_Draw3DShape(strImd, 0, colour, buildingBrightness, pie_HEIGHT_SCALED | pie_SHADOW, structHeightScale(psStructure) * pie_RAISE_SCALE);
+		pie_Draw3DShape(strImd, 0, colour, buildingBrightness, pie_HEIGHT_SCALED | pie_SHADOW, structHeightScale(psStructure) * pie_RAISE_SCALE, 64);
 	}
 	else
 	{
@@ -2208,7 +2208,7 @@ void	renderStructure(STRUCTURE *psStructure)
 		{
 			pie_SetShaderStretchDepth(psStructure->pos.z - psStructure->foundationDepth);
 		}
-		pie_Draw3DShape(strImd, animFrame, colour, buildingBrightness, pieFlag, pieFlagData);
+		pie_Draw3DShape(strImd, animFrame, colour, buildingBrightness, pieFlag, pieFlagData, 64);
 		pie_SetShaderStretchDepth(0);
 
 		// It might have weapons on it
@@ -2616,7 +2616,7 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 			(psStructure->status == SS_BEING_BUILT && psStructure->pStructureType->type == REF_RESOURCE_EXTRACTOR) )
 		{
 			pie_Draw3DShape(psStructure->sDisplay.imd, 0, getPlayerColour(psStructure->player),
-			                brightness, pie_HEIGHT_SCALED|pie_SHADOW, structHeightScale(psStructure) * pie_RAISE_SCALE);
+			                brightness, pie_HEIGHT_SCALED|pie_SHADOW, structHeightScale(psStructure) * pie_RAISE_SCALE, 64);
 		}
 		else
 		{
@@ -2638,7 +2638,7 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 				}
 				pieFlagData = 0;
 			}
-			pie_Draw3DShape(imd, 0, getPlayerColour(psStructure->player), brightness, pieFlag, pieFlagData);
+			pie_Draw3DShape(imd, 0, getPlayerColour(psStructure->player), brightness, pieFlag, pieFlagData, 64);
 		}
 		imd->points = temp;
 
@@ -3374,7 +3374,6 @@ static void	drawDroidSelections( void )
 		}
 	}
 
-	glColor3f( 1.f, 1.f, 1.f); // Reset colors
 	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 }
 
@@ -3918,6 +3917,13 @@ static void structureEffectsPlayer( UDWORD player )
 	BASE_OBJECT			*psChosenObj = NULL;
 	UWORD	bFXSize;
 
+	const int effectsPerSecond = 12;  // Effects per second. Will add effects up to once time per frame, so won't add as many effects if the framerate is low, but will be consistent, otherwise.
+	unsigned effectTime = graphicsTime / (GAME_TICKS_PER_SEC / effectsPerSecond)*(GAME_TICKS_PER_SEC / effectsPerSecond);
+	if (effectTime <= graphicsTime - deltaGraphicsTime)
+	{
+		return;  // Don't add effects this frame.
+	}
+
 	for(psStructure = apsStructLists[player]; psStructure; psStructure = psStructure->psNext)
 	{
 		if(psStructure->status == SS_BUILT)
@@ -3957,8 +3963,8 @@ static void structureEffectsPlayer( UDWORD player )
 				for(i=0 ;i<numConnected; i++)
 				{
 					radius = 32 - (i*2);	// around the spire
-					xDif = iSinSR(graphicsTime, gameDiv, radius);
-					yDif = iCosSR(graphicsTime, gameDiv, radius);
+					xDif = iSinSR(effectTime, gameDiv, radius);
+					yDif = iCosSR(effectTime, gameDiv, radius);
 
 					pos.x = psStructure->pos.x + xDif;
 					pos.z = psStructure->pos.y + yDif;
@@ -3993,8 +3999,8 @@ static void structureEffectsPlayer( UDWORD player )
 						}
 						/* Then it's repairing...? */
 						radius = psStructure->sDisplay.imd->radius;
-						xDif = iSinSR(graphicsTime, 720, radius);
-						yDif = iCosSR(graphicsTime, 720, radius);
+						xDif = iSinSR(effectTime, 720, radius);
+						yDif = iCosSR(effectTime, 720, radius);
 						pos.x = psStructure->pos.x + xDif;
 						pos.z = psStructure->pos.y + yDif;
 						pos.y = map_Height(pos.x,pos.z) + psStructure->sDisplay.imd->max.y;

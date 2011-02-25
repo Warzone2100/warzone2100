@@ -24,6 +24,8 @@
 #ifndef __INCLUDED_SRC_HCI_H__
 #define __INCLUDED_SRC_HCI_H__
 
+#include <list>
+
 #include "lib/ivis_opengl/pieclip.h"
 #include "lib/widget/widget.h"
 
@@ -223,7 +225,6 @@
 /* maximum array sizes */
 #define	MAXSTRUCTURES	200	//bumped up from 80.  NOTE: was used for max # in build menus.
 #define	MAXRESEARCH		200 //was 80 topic displayed   "           "
-#define	MAXTEMPLATES	80	//was 20
 #define	MAXFEATURES		80
 #define	MAXCOMPONENT	80
 #define	MAXEXTRASYS		80
@@ -265,8 +266,8 @@ extern UDWORD			intLastWidget;
 extern UDWORD			objStatID;
 
 /* The current template for the design screen to start with*/
-extern DROID_TEMPLATE	*psCurrTemplate;
-extern DROID_TEMPLATE	**apsTemplateList;
+extern std::vector<DROID_TEMPLATE *> apsTemplateList;  ///< Either a list of templates a factory can build or a list of designable templates, for UI use only.
+extern std::list<DROID_TEMPLATE> localTemplates;       ///< Unsychnronised list, for UI use only.
 
 /*Message View Buffer width and height - MAXIMUM Sizes! - only need to be
 as big as Pie View in Research Msg now*/

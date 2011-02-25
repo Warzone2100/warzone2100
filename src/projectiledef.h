@@ -64,7 +64,7 @@ typedef std::vector<PROJECTILE *>::const_iterator ProjectileIterator;
 
 
 /// True iff object is a projectile.
-static inline bool isProjectile(SIMPLE_OBJECT const *psObject)                { return psObject->type == OBJ_PROJECTILE; }
+static inline bool isProjectile(SIMPLE_OBJECT const *psObject)                { return psObject != NULL && psObject->type == OBJ_PROJECTILE; }
 /// Returns PROJECTILE * if projectile or NULL if not.
 static inline PROJECTILE *castProjectile(SIMPLE_OBJECT *psObject)             { return isProjectile(psObject)? (PROJECTILE *)psObject : (PROJECTILE *)NULL; }
 /// Returns PROJECTILE const * if projectile or NULL if not.

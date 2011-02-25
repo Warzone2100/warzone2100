@@ -311,7 +311,7 @@ static void proj_UpdateKills(PROJECTILE *psObj, int32_t experienceInc)
 
 /***************************************************************************/
 
-void _syncDebugProjectile(const char *function, PROJECTILE *psProj, char ch)
+void _syncDebugProjectile(const char *function, PROJECTILE const *psProj, char ch)
 {
 	_syncDebug(function, "%c projectile = p%d;pos(%d,%d,%d),rot(%d,%d,%d),state%d,edc%d,nd%lu", ch,
 	          psProj->player,
@@ -912,7 +912,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 	{
 		uint32_t effectTime;
 		// TODO Should probably give effectTime as an extra parameter to addEffect, or make an effectGiveAuxTime parameter, with yet another 'this is naughty' comment.
-		for (effectTime = ((psProj->prevSpacetime.time + 15) & ~15); effectTime < psProj->time; effectTime += 16)
+		for (effectTime = ((psProj->prevSpacetime.time + 31) & ~31); effectTime < psProj->time; effectTime += 32)
 		{
 			Spacetime st = interpolateObjectSpacetime(psProj, effectTime);
 			Vector3i posFlip = swapYZ(st.pos);
@@ -1126,7 +1126,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 			unsigned int damage = calcDamage(weaponDamage(psStats, psObj->player), psStats->weaponEffect, psObj->psDest);
 
 			// If we are in a multi-player game and the attacker is our responsibility
-			if (bMultiPlayer && psObj->psSource && myResponsibility(psObj->psSource->player))
+			if (bMultiPlayer && psObj->psSource)
 			{
 				updateMultiStatsDamage(psObj->psSource->player, psObj->psDest->player, damage);
 			}
@@ -1206,7 +1206,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 
 							if (bMultiPlayer)
 							{
-								if (psObj->psSource && myResponsibility(psObj->psSource->player))
+								if (psObj->psSource)
 								{
 									updateMultiStatsDamage(psObj->psSource->player, psCurrD->player, damage);
 								}
@@ -1249,7 +1249,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 
 								if (bMultiPlayer)
 								{
-									if (psObj->psSource && myResponsibility(psObj->psSource->player))
+									if (psObj->psSource)
 									{
 										updateMultiStatsDamage(psObj->psSource->player,	psCurrS->player,damage);
 									}

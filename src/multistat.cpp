@@ -48,17 +48,15 @@ PLAYERSTATS getMultiStats(UDWORD player)
 // ////////////////////////////////////////////////////////////////////////////
 // Set Player's stats
 // send stats to all players when bLocal is false
-BOOL setMultiStats(SDWORD player, PLAYERSTATS plStats, BOOL bLocal)
+bool setMultiStats(uint32_t playerIndex, PLAYERSTATS plStats, bool bLocal)
 {
-	uint32_t playerIndex = (uint32_t)player;
-
 	if (playerIndex >= MAX_PLAYERS)
 	{
 		return true;
 	}
 
 	// First copy over the data into our local array
-	memcpy(&playerStats[playerIndex], &plStats, sizeof(plStats));
+	playerStats[playerIndex] = plStats;
 
 	if (!bLocal)
 	{
@@ -75,8 +73,6 @@ BOOL setMultiStats(SDWORD player, PLAYERSTATS plStats, BOOL bLocal)
 			NETuint32_t(&playerStats[playerIndex].totalScore);
 			NETuint32_t(&playerStats[playerIndex].recentKills);
 			NETuint32_t(&playerStats[playerIndex].recentScore);
-			NETuint32_t(&playerStats[playerIndex].killsToAdd);
-			NETuint32_t(&playerStats[playerIndex].scoreToAdd);
 		NETend();
 	}
 
@@ -108,8 +104,6 @@ void recvMultiStats(NETQUEUE queue)
 			NETuint32_t(&playerStats[playerIndex].totalScore);
 			NETuint32_t(&playerStats[playerIndex].recentKills);
 			NETuint32_t(&playerStats[playerIndex].recentScore);
-			NETuint32_t(&playerStats[playerIndex].killsToAdd);
-			NETuint32_t(&playerStats[playerIndex].scoreToAdd);
 		}
 	NETend();
 }
@@ -165,8 +159,6 @@ BOOL loadMultiStats(char *sPlayerName, PLAYERSTATS *st)
 	// reset recent scores
 	st->recentKills = 0;
 	st->recentScore = 0;
-	st->killsToAdd  = 0;
-	st->scoreToAdd  = 0;
 
 	// clear any skirmish stats.
 	for(size = 0;size<MAX_PLAYERS;size++)
@@ -202,55 +194,35 @@ BOOL saveMultiStats(const char *sFileName, const char *sPlayerName, const PLAYER
 // update players damage stats.
 void updateMultiStatsDamage(UDWORD attacker, UDWORD defender, UDWORD inflicted)
 {
-	PLAYERSTATS st;
-
 	if (Cheated)
 	{
 		return;
 	}
 	// FIXME: Why in the world are we using two different structs for stats when we can use only one?
-	// Host controls self + AI, so update the scores for them as well.
 	if (attacker < MAX_PLAYERS)
 	{
-		if (myResponsibility(attacker) && NetPlay.bComms)
+		if (NetPlay.bComms)
 		{
-			st = getMultiStats(attacker);	// get stats
-			if (NetPlay.bComms)
-			{
-				st.scoreToAdd += (2 * inflicted);
-			}
-			else
-			{
-				st.recentScore += (2 * inflicted);
-			}
-			setMultiStats(attacker, st, true);
+			playerStats[attacker].totalScore  += 2 * inflicted;
+			playerStats[attacker].recentScore += 2 * inflicted;
 		}
 		else
 		{
-			ingame.skScores[attacker][0] += (2 * inflicted);	// increment skirmish players rough score.
+			ingame.skScores[attacker][0] += 2 * inflicted;  // increment skirmish players rough score.
 		}
 	}
 
 	// FIXME: Why in the world are we using two different structs for stats when we can use only one?
-	// Host controls self + AI, so update the scores for them as well.
 	if (defender < MAX_PLAYERS)
 	{
-		if (myResponsibility(defender) && NetPlay.bComms)
+		if (NetPlay.bComms)
 		{
-			st = getMultiStats(defender);	// get stats
-			if (NetPlay.bComms)
-			{
-				st.scoreToAdd  -= inflicted;
-			}
-			else
-			{
-				st.recentScore  -= inflicted;
-			}
-			setMultiStats(defender, st, true);
+			playerStats[defender].totalScore  -= inflicted;
+			playerStats[defender].recentScore -= inflicted;
 		}
 		else
 		{
-			ingame.skScores[defender][0] -= inflicted;	// increment skirmish players rough score.
+			ingame.skScores[defender][0] -= inflicted;  // increment skirmish players rough score.
 		}
 	}
 }
@@ -258,67 +230,45 @@ void updateMultiStatsDamage(UDWORD attacker, UDWORD defender, UDWORD inflicted)
 // update games played.
 void updateMultiStatsGames(void)
 {
-	PLAYERSTATS	st;
-
-	if (Cheated)
+	if (Cheated || selectedPlayer >= MAX_PLAYERS)
 	{
 		return;
 	}
-	st  = getMultiStats(selectedPlayer);
-	st.played ++;
-	setMultiStats(selectedPlayer, st, true);
+	++playerStats[selectedPlayer].played;
 }
 
 // games won
 void updateMultiStatsWins(void)
 {
-	PLAYERSTATS	st;
-	if (Cheated)
+	if (Cheated || selectedPlayer >= MAX_PLAYERS)
 	{
 		return;
 	}
-	st  = getMultiStats(selectedPlayer);
-	st.wins ++;
-	setMultiStats(selectedPlayer, st, true);
+	++playerStats[selectedPlayer].wins;
 }
 
 //games lost.
 void updateMultiStatsLoses(void)
 {
-	PLAYERSTATS	st;
-	if (Cheated)
+	if (Cheated || selectedPlayer >= MAX_PLAYERS)
 	{
 		return;
 	}
-	st  = getMultiStats(selectedPlayer);
-	++st.losses;
-	setMultiStats(selectedPlayer, st, true);
+	++playerStats[selectedPlayer].losses;
 }
 
 // update kills
 void updateMultiStatsKills(BASE_OBJECT *psKilled,UDWORD player)
 {
-	PLAYERSTATS	st;
-
-	if (Cheated)
+	if (Cheated || player > MAX_PLAYERS)
 	{
 		return;
 	}
 	// FIXME: Why in the world are we using two different structs for stats when we can use only one?
-	// Host controls self + AI, so update the scores for them as well.
-	if(myResponsibility(player) && NetPlay.bComms)
+	if (NetPlay.bComms)
 	{
-		st  = getMultiStats(player);
-
-		if(NetPlay.bComms)
-		{
-			st.killsToAdd++;		// increase kill count;
-		}
-		else
-		{
-			st.recentKills++;
-		}
-		setMultiStats(player, st, true);
+		++playerStats[player].totalKills;
+		++playerStats[player].recentKills;
 	}
 	else
 	{

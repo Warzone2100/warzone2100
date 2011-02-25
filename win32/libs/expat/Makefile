@@ -5,7 +5,7 @@ PKG_SOURCEBASE:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_SOURCEBASE).tar.gz
 PKG_SOURCE_URL:= \
 	@SF/expat \
-	http://www.il.fontys.nl/~giel/warzone/devpkg/
+	http://wzhost.wz2100.net/~buildbot/dev/
 PKG_MD5SUM:=ee8b492592568805593f81f8cdf2a04c
 
 TARGET:=$(TOPDIR)/builds/libs/lib/libexpat.la

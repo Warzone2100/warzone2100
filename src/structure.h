@@ -455,11 +455,11 @@ void checkStructure(const STRUCTURE* psStructure, const char * const location_de
 extern void     structureInitVars(void);
 
 #define syncDebugStructure(psStruct, ch) _syncDebugStructure(__FUNCTION__, psStruct, ch)
-void _syncDebugStructure(const char *function, STRUCTURE *psStruct, char ch);
+void _syncDebugStructure(const char *function, STRUCTURE const *psStruct, char ch);
 
 
 // True iff object is a structure.
-static inline bool isStructure(SIMPLE_OBJECT const *psObject)               { return psObject->type == OBJ_STRUCTURE; }
+static inline bool isStructure(SIMPLE_OBJECT const *psObject)               { return psObject != NULL && psObject->type == OBJ_STRUCTURE; }
 // Returns STRUCTURE * if structure or NULL if not.
 static inline STRUCTURE *castStructure(SIMPLE_OBJECT *psObject)             { return isStructure(psObject)? (STRUCTURE *)psObject : (STRUCTURE *)NULL; }
 // Returns STRUCTURE const * if structure or NULL if not.

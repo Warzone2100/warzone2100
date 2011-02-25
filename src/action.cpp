@@ -2227,6 +2227,10 @@ void actionUpdateDroid(DROID *psDroid)
 		if (DROID_STOPPED(psDroid))
 		{
 			psDroid->action = DACTION_NONE;
+			if (!vtolHappy(psDroid))  // Droid has cleared the rearm pad without getting rearmed. One way this can happen if a rearming pad was built under the VTOL while it was waiting for a pad.
+			{
+				moveToRearm(psDroid);  // Rearm somewhere else instead.
+			}
 		}
 		break;
 	case DACTION_WAITDURINGREARM:

@@ -2038,31 +2038,12 @@ typedef struct _save_production
 	UDWORD						multiPlayerID;		//template to build
 } SAVE_PRODUCTION;
 
-#define STRUCTLIMITS_SAVE_V2 \
-	char				name[MAX_SAVE_NAME_SIZE_V19]; \
-	UBYTE				limit; \
-	UBYTE				player
-
-typedef struct _save_structLimits_v2
+struct SAVE_STRUCTLIMITS
 {
-	STRUCTLIMITS_SAVE_V2;
-} SAVE_STRUCTLIMITS_V2;
-
-#define STRUCTLIMITS_SAVE_V20 \
-	char				name[MAX_SAVE_NAME_SIZE]; \
-	UBYTE				limit; \
-	UBYTE				player
-
-typedef struct _save_structLimits_v20
-{
-	STRUCTLIMITS_SAVE_V20;
-} SAVE_STRUCTLIMITS_V20;
-
-typedef struct _save_structLimits
-{
-	STRUCTLIMITS_SAVE_V20;
-} SAVE_STRUCTLIMITS;
-
+	char            name[MAX_SAVE_NAME_SIZE];
+	UBYTE           limit;
+	UBYTE           player;
+};
 
 #define COMMAND_SAVE_V20 \
 	UDWORD				droidID
@@ -2650,6 +2631,11 @@ BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL User
 				}
 			}
 		}
+		for (std::list<DROID_TEMPLATE>::iterator i = localTemplates.begin(); i != localTemplates.end(); ++i)
+		{
+			free(i->pName);
+		}
+		localTemplates.clear();
 
 		//load in the templates
 		aFileName[fileExten] = '\0';
@@ -6234,8 +6220,7 @@ BOOL loadSaveStructureV7(char *pFileData, UDWORD filesize, UDWORD numStructures)
 				((RESEARCH_FACILITY *)psStructure->pFunctionality)->timeStarted = (psSaveStructure->timeStarted);
 				if (psSaveStructure->subjectInc != (UDWORD)-1)
 				{
-					((RESEARCH_FACILITY *)psStructure->pFunctionality)->psSubject = (BASE_STATS *)
-						(asResearch + psSaveStructure->subjectInc);
+					((RESEARCH_FACILITY *)psStructure->pFunctionality)->psSubject = asResearch + psSaveStructure->subjectInc;
 					((RESEARCH_FACILITY*)psStructure->pFunctionality)->timeToResearch =
 						(asResearch + psSaveStructure->subjectInc)->researchPoints /
 						((RESEARCH_FACILITY *)psStructure->pFunctionality)->
@@ -6559,7 +6544,7 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 					researchId = getResearchIdFromName(psSaveStructure->researchName);
 					if (researchId != NULL_ID)
 					{
-						psResearch->psSubject = (BASE_STATS *)(asResearch + researchId);
+						psResearch->psSubject = asResearch + researchId;
 						psResearch->timeToResearch = (asResearch + researchId)->researchPoints / psResearch->researchPoints;
 						psResearch->timeStarted = psSaveStructure->timeStarted;
 						if (saveGameVersion >= VERSION_20)
@@ -7743,10 +7728,11 @@ BOOL loadSaveTemplateV14(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 			psTemplate->psNext = apsDroidTemplates[psSaveTemplate->player];
 			apsDroidTemplates[psSaveTemplate->player] = psTemplate;
 		}
+	}
 
-
-
-
+	for (DROID_TEMPLATE *t = apsDroidTemplates[selectedPlayer]; t != NULL; t = t->psNext)
+	{
+		localTemplates.push_front(*t);
 	}
 
 	return true;
@@ -7915,6 +7901,11 @@ BOOL loadSaveTemplateV(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 			psTemplate->psNext = apsDroidTemplates[psSaveTemplate->player];
 			apsDroidTemplates[psSaveTemplate->player] = psTemplate;
 		}
+	}
+
+	for (DROID_TEMPLATE *t = apsDroidTemplates[selectedPlayer]; t != NULL; t = t->psNext)
+	{
+		localTemplates.push_front(*t);
 	}
 
 	return true;
@@ -9864,7 +9855,7 @@ BOOL loadSaveStructLimitsV(char *pFileData, UDWORD filesize, UDWORD numLimits)
 
 		if (psSaveLimits->player < MAX_PLAYERS)
 		{
-			asStructLimits[psSaveLimits->player][statInc].limit = psSaveLimits->limit;
+			asStructLimits[psSaveLimits->player][statInc].limit = psSaveLimits->limit != 255? psSaveLimits->limit : LOTS_OF;
 		}
 		else
 		{
@@ -9926,7 +9917,7 @@ BOOL writeStructLimitsFile(char *pFileName)
 		for(i = 0; i < numStructureStats; i++, psStructStats++)
 		{
 			strcpy(psSaveLimit->name, psStructStats->pName);
-			psSaveLimit->limit = asStructLimits[player][i].limit;
+			psSaveLimit->limit = MIN(asStructLimits[player][i].limit, 255);
 			psSaveLimit->player = (UBYTE)player;
 			psSaveLimit = (SAVE_STRUCTLIMITS *)((char *)psSaveLimit + sizeof(SAVE_STRUCTLIMITS));
 		}

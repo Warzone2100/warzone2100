@@ -284,9 +284,11 @@ void loadMultiScripts()
 		resLoadFile("SCRIPTVAL", "sk3tech.vlo");
 	}
 
-	// Load AI players
+	// Backup data hashes, since AI and scavenger scripts aren't run on all clients.
 	uint32_t oldHash1 = DataHash[DATA_SCRIPT];
 	uint32_t oldHash2 = DataHash[DATA_SCRIPTVAL];
+
+	// Load AI players
 	resForceBaseDir("multiplay/skirmish/");
 	for (int i = 0; i < game.maxPlayers; i++)
 	{
@@ -298,8 +300,6 @@ void loadMultiScripts()
 			resLoadFile("SCRIPTVAL", aidata[NetPlay.players[i].ai].vlo);
 		}
 	}
-	DataHash[DATA_SCRIPT]    = oldHash1;  // Not all players load the same AI scripts.
-	DataHash[DATA_SCRIPTVAL] = oldHash2;
 
 	// Load scavengers
 	resForceBaseDir("multiplay/script/");
@@ -308,6 +308,10 @@ void loadMultiScripts()
 		resLoadFile("SCRIPT", "scavfact.slo");
 		resLoadFile("SCRIPTVAL", "scavfact.vlo");
 	}
+
+	// Restore data hashes, since AI and scavenger scripts aren't run on all clients.
+	DataHash[DATA_SCRIPT]    = oldHash1;  // Not all players load the same AI scripts.
+	DataHash[DATA_SCRIPTVAL] = oldHash2;
 
 	// Reset resource path, otherwise things break down the line
 	resForceBaseDir("");
@@ -3809,31 +3813,27 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 			}
 			name += "...";
 		}
+		std::string subText;
 		if (j == NET_HOST_ONLY && NetPlay.bComms)
 		{
-			iV_DrawText(name.c_str(), x + nameX, y + 18);
-			iV_SetFont(font_small);
-			iV_SetTextColour(WZCOL_TEXT_MEDIUM);
-			iV_DrawText(_("HOST"), x + nameX, y + 28);
-			iV_SetFont(font_regular);
-			iV_SetTextColour(WZCOL_FORM_TEXT);
+			subText += _("HOST");
 		}
-		else if (NetPlay.bComms && NetPlay.isHost)
+		if (NetPlay.bComms && j != selectedPlayer)
 		{
 			char buf[250] = {'\0'};
 
 			// show "actual" ping time
-			iV_DrawText(name.c_str(), x + nameX, y + 18);
+			ssprintf(buf, "%s%s: %03d", subText.empty()? "" : ", ", _("Ping"), ingame.PingTimes[j]);
+			subText += buf;
+		}
+		iV_DrawText(name.c_str(), x + nameX, y + (subText.empty()? 22 : 18));
+		if (!subText.empty())
+		{
 			iV_SetFont(font_small);
 			iV_SetTextColour(WZCOL_TEXT_MEDIUM);
-			ssprintf(buf, "Ping: %03d", ingame.PingTimes[j]);
-			iV_DrawText(buf, x + nameX, y + 28);
+			iV_DrawText(subText.c_str(), x + nameX, y + 28);
 			iV_SetFont(font_regular);
 			iV_SetTextColour(WZCOL_FORM_TEXT);
-		}
-		else
-		{
-			iV_DrawText(name.c_str(), x + nameX, y + 22);
 		}
 		
 		if(getMultiStats(j).played < 5)

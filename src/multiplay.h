@@ -31,7 +31,8 @@
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 // Game Options Structure. Enough info to completely describe the static stuff in amultiplay game.
-typedef struct {
+struct MULTIPLAYERGAME
+{
 	uint8_t		type;						// DMATCH/CAMPAIGN/SKIRMISH/TEAMPLAY etc...
 	BOOL		scavengers;					// whether scavengers are on or off
 	char		map[128];					// name of multiplayer map being used.
@@ -42,16 +43,17 @@ typedef struct {
 	uint8_t		base;						// clean/base/base&defence
 	uint8_t		alliance;					// no/yes/AIs vs Humans
 	uint8_t		skDiff[MAX_PLAYERS];		// skirmish game difficulty settings. 0x0=OFF 0xff=HUMAN
-} MULTIPLAYERGAME;
+};
 
-typedef struct
+struct MULTISTRUCTLIMITS
 {
-	UBYTE		id;
-	UBYTE		limit;
-} MULTISTRUCTLIMITS;
+	uint32_t        id;
+	uint32_t        limit;
+};
 
 // info used inside games.
-typedef struct {
+struct MULTIPLAYERINGAME
+{
 	UDWORD				PingTimes[MAX_PLAYERS];				// store for pings.
 	BOOL				localOptionsReceived;				// used to show if we have game options yet..
 	BOOL				localJoiningInProgress;				// used before we know our player number.
@@ -67,9 +69,9 @@ typedef struct {
 	uint8_t				SPcolor;	//
 	UDWORD		skScores[MAX_PLAYERS][2];			// score+kills for local skirmish players.
 	char		phrases[5][255];					// 5 favourite text messages.
-} MULTIPLAYERINGAME;
+};
 
-typedef enum
+enum STRUCTURE_INFO
 {
 	STRUCTUREINFO_MANUFACTURE,
 	STRUCTUREINFO_CANCELPRODUCTION,
@@ -77,7 +79,7 @@ typedef enum
 	STRUCTUREINFO_RELEASEPRODUCTION,
 	STRUCTUREINFO_HOLDRESEARCH,
 	STRUCTUREINFO_RELEASERESEARCH
-} STRUCTURE_INFO;
+};
 
 struct PACKAGED_CHECK
 {
@@ -215,9 +217,10 @@ extern BOOL multiGameInit		(void);
 extern BOOL multiGameShutdown	(void);
 extern BOOL addTemplate			(UDWORD	player,DROID_TEMPLATE *psNew);
 extern BOOL addTemplateToList(DROID_TEMPLATE *psNew, DROID_TEMPLATE **ppList);
+void addTemplateBack(unsigned player, DROID_TEMPLATE *psNew);
 
 // syncing.
-extern BOOL sendCheck			(void);							//send/recv  check info
+void sendCheck();  //send/recv  check info
 extern BOOL sendScoreCheck		(void);							//score check only(frontend)
 extern BOOL sendPing			(void);							// allow game to request pings.
 

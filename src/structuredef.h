@@ -149,16 +149,17 @@ enum STRUCT_STATES
 	SS_BLUEPRINT_PLANNED,
 };
 
+struct RESEARCH;
+
 struct RESEARCH_FACILITY
 {
-	struct BASE_STATS *     psSubject;              // The subject the structure is working on.
-	struct BASE_STATS *     psSubjectPending;       // The subject the structure is going to work on when the GAME_RESEARCHSTATUS message is received.
+	RESEARCH *      psSubject;                      // The subject the structure is working on.
+	RESEARCH *      psSubjectPending;               // The subject the structure is going to work on when the GAME_RESEARCHSTATUS message is received.
 	UDWORD		capacity;				/* Number of upgrade modules added*/
 	UDWORD		timeStarted;			/* The time the building started on the subject*/
 	UDWORD		researchPoints;			/* Research Points produced per research cycle*/
 	UDWORD		timeToResearch;			/* Time taken to research the topic*/
-	struct BASE_STATS	*psBestTopic;	/* The topic with the most research points
-										   that was last performed*/
+	RESEARCH *      psBestTopic;                    // The topic with the most research points that was last performed
 	UDWORD		powerAccrued;			/* used to keep track of power before
 										   researching a topic*/
 	UDWORD		timeStartHold;		    /* The time the research facility was put on hold*/
@@ -285,15 +286,13 @@ struct STRUCTURE : public BASE_OBJECT
 	UDWORD			lastStateTime;
 };
 
-#define LOTS_OF	255						/*highest number the limit can be set to */
+#define LOTS_OF 0xFFFFFFFF  // highest number the limit can be set to
 struct STRUCTURE_LIMITS
 {
-	UBYTE		limit;				/* the number allowed to be built */
-	UBYTE		currentQuantity;	/* the number of the type currently
-												   built per player*/
+	uint32_t        limit;                  // the number allowed to be built
+	uint32_t        currentQuantity;        // the number of the type currently built per player
 
-	UBYTE		globalLimit;		// multiplayer only. sets the max value selectable (limits changed by player)
-
+	uint32_t        globalLimit;            // multiplayer only. sets the max value selectable (limits changed by player)
 };
 
 

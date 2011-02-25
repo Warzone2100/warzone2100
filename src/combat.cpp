@@ -496,6 +496,7 @@ int32_t objDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD originalhp, WEAPON_C
 	actualDamage = MAX(actualDamage, MIN_WEAPON_DAMAGE);
 
 	objTrace(psObj->id, "objDamage: Penetrated %d", actualDamage);
+	syncDebug("damage%u dam%u,o%u,wc%d.%d,is%d,ar%d,lev%d,aDam%d", psObj->id, damage, originalhp, weaponClass, weaponSubClass, impactSide, armour, level, actualDamage);
 
 	// for some odd reason, we have 0 hitpoints.
 	if (!originalhp)
@@ -512,6 +513,8 @@ int32_t objDamage(BASE_OBJECT *psObj, UDWORD damage, UDWORD originalhp, WEAPON_C
 
 	// Subtract the dealt damage from the droid's remaining body points
 	psObj->body -= actualDamage;
+
+	syncDebugObject(psObj, 'D');
 
 	return (int64_t)65536 * actualDamage / originalhp;
 }

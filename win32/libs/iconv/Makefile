@@ -5,7 +5,7 @@ PKG_SOURCEBASE=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_SOURCEBASE).tar.gz
 PKG_SOURCE_URL:= \
 	http://ftp.gnu.org/pub/gnu/libiconv/ \
-	http://www.il.fontys.nl/~giel/warzone/devpkg/
+	http://wzhost.wz2100.net/~buildbot/dev/
 PKG_MD5SUM:=7ab33ebd26687c744a37264a330bbe9a
 
 TARGET:=$(TOPDIR)/build/libs/lib/libiconv.la

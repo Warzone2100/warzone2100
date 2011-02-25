@@ -2562,8 +2562,7 @@ BOOL IsPlayerStructureLimitReached(UDWORD PlayerNumber)
 
 UDWORD getMaxDroids(UDWORD PlayerNumber)
 {
-	return bMultiPlayer? 450 : PlayerNumber == 0? 100 : 999;
-
+	return bMultiPlayer? MAX_MP_DROIDS : PlayerNumber == 0? MAX_SP_DROIDS : MAX_SP_AI_DROIDS;
 }
 
 
@@ -2626,7 +2625,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 {
 	BASE_STATS			*pSubject = NULL;
 	UDWORD				pointsToAdd;//, iPower;
-	PLAYER_RESEARCH		*pPlayerRes = asPlayerResList[psStructure->player];
 	RESEARCH			*pResearch;
 	UDWORD				structureMode = 0;
 	DROID				*psDroid;
@@ -3152,7 +3150,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				}
 			}
 
-			pPlayerRes += (pSubject->ref - REF_RESEARCH_START);
+			PLAYER_RESEARCH *pPlayerRes = &asPlayerResList[psStructure->player][pSubject->ref - REF_RESEARCH_START];
 			//check research has not already been completed by another structure
 			if (!IsResearchCompleted(pPlayerRes))
 			{
@@ -3170,10 +3168,9 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				              (psResFacility->researchPoints * psResFacility->timeStarted) / GAME_TICKS_PER_SEC;
 				pointsToAdd = MIN(pointsToAdd, pResearch->researchPoints - pPlayerRes->currentPoints);
 
-				if (pointsToAdd > 0 &&
-				    pResearch->researchPoints > 0) // might be a "free" research
+				if (pointsToAdd > 0 && pResearch->researchPoints > 0)  // might be a "free" research
 				{
-					int64_t powerNeeded = ((int64_t)(pResearch->researchPower * pointsToAdd) >> 32) / pResearch->researchPoints;
+					int64_t powerNeeded = (int64_t(pResearch->researchPower * pointsToAdd) << 32) / pResearch->researchPoints;
 					pPlayerRes->currentPoints += requestPrecisePowerFor(psStructure->player, powerNeeded, pointsToAdd);
 					psResFacility->timeStarted = gameTime;
 				}
@@ -3184,7 +3181,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				{
 					if(bMultiMessages)
 					{
-						if (myResponsibility(psStructure->player))
+						if (myResponsibility(psStructure->player) && !isInSync())
 						{
 							// This message should have no effect if in synch.
 							SendResearch(psStructure->player, pSubject->ref - REF_RESEARCH_START, true);
@@ -3198,8 +3195,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 					}
 					else
 					{
-						if (pResearch->researchPoints >
-							((RESEARCH *)psResFacility->psBestTopic)->researchPoints)
+						if (pResearch->researchPoints > psResFacility->psBestTopic->researchPoints)
 						{
 							psResFacility->psBestTopic = psResFacility->psSubject;
 						}
@@ -3567,7 +3563,7 @@ static float CalcStructureSmokeInterval(float damage)
 	return (((1. - damage) + 0.1) * 10) * STRUCTURE_DAMAGE_SCALING;
 }
 
-void _syncDebugStructure(const char *function, STRUCTURE *psStruct, char ch)
+void _syncDebugStructure(const char *function, STRUCTURE const *psStruct, char ch)
 {
 	int ref = 0;
 	char const *refStr = "";
@@ -3587,7 +3583,7 @@ void _syncDebugStructure(const char *function, STRUCTURE *psStruct, char ch)
 		case REF_VTOL_FACTORY:
 			if (psStruct->pFunctionality->factory.psSubject != NULL)
 			{
-				ref = psStruct->pFunctionality->factory.psSubject->ref;
+				ref = psStruct->pFunctionality->factory.psSubject->multiPlayerID;
 				refStr = ",production";
 			}
 			break;
@@ -5346,14 +5342,6 @@ bool calcStructureMuzzleBaseLocation(STRUCTURE *psStructure, Vector3i *muzzle, i
 	if(psShape && psShape->nconnectors)
 	{
 		Vector3i barrel(0, 0, 0);
-		unsigned int nWeaponStat = psStructure->asWeaps[weapon_slot].nStat;
-		iIMDShape *psWeaponImd = 0, *psMountImd = 0;
-
-		if (nWeaponStat)
-		{
-			psWeaponImd = asWeaponStats[nWeaponStat].pIMD;
-			psMountImd = asWeaponStats[nWeaponStat].pMountGraphic;
-		}
 
 		pie_MatBegin();
 
@@ -7219,14 +7207,9 @@ BOOL structVTOLCBSensor(const STRUCTURE* psStruct)
 // check whether a rearm pad is clear
 BOOL clearRearmPad(STRUCTURE *psStruct)
 {
-	if (psStruct->pStructureType->type == REF_REARM_PAD
-	 && (psStruct->pFunctionality->rearmPad.psObj == NULL
-	 || vtolHappy((DROID*)psStruct->pFunctionality->rearmPad.psObj)))
-	{
-		return true;
-	}
-
-	return false;
+	return psStruct->pStructureType->type == REF_REARM_PAD
+	       && (psStruct->pFunctionality->rearmPad.psObj == NULL
+	       || vtolHappy((DROID*)psStruct->pFunctionality->rearmPad.psObj));
 }
 
 
@@ -7331,38 +7314,28 @@ BOOL vtolOnRearmPad(STRUCTURE *psStruct, DROID *psDroid)
 {
 	DROID	*psCurr;
 	SDWORD	tx,ty;
-	BOOL	found;
 
 	tx = map_coord(psStruct->pos.x);
 	ty = map_coord(psStruct->pos.y);
 
-	found = false;
 	for (psCurr = apsDroidLists[psStruct->player]; psCurr; psCurr=psCurr->psNext)
 	{
 		if (psCurr != psDroid
 		 && map_coord(psCurr->pos.x) == tx
 		 && map_coord(psCurr->pos.y) == ty)
 		{
-			found = true;
-			break;
+			return true;
 		}
 	}
 
-	return found;
+	return false;
 }
 
 
 /* Just returns true if the structure's present body points aren't as high as the original*/
 BOOL	structIsDamaged(STRUCTURE *psStruct)
 {
-	if(psStruct->body < structureBody(psStruct))
-	{
-		return(true);
-	}
-	else
-	{
-		return(false);
-	}
+	return psStruct->body < structureBody(psStruct);
 }
 
 // give a structure from one player to another - used in Electronic Warfare
@@ -7823,18 +7796,17 @@ BOOL structureCheckReferences(STRUCTURE *psVictimStruct)
 
 void checkStructure(const STRUCTURE* psStructure, const char * const location_description, const char * function, const int recurse)
 {
-	unsigned int i;
-
 	if (recurse < 0)
 		return;
 
 	ASSERT_HELPER(psStructure != NULL, location_description, function, "CHECK_STRUCTURE: NULL pointer");
+	ASSERT_HELPER(psStructure->id != 0, location_description, function, "CHECK_STRUCTURE: Structure with ID 0");
 	ASSERT_HELPER(psStructure->type == OBJ_STRUCTURE, location_description, function, "CHECK_STRUCTURE: No structure (type num %u)", (unsigned int)psStructure->type);
 	ASSERT_HELPER(psStructure->player < MAX_PLAYERS, location_description, function, "CHECK_STRUCTURE: Out of bound player num (%u)", (unsigned int)psStructure->player);
 	ASSERT_HELPER(psStructure->pStructureType->type < NUM_DIFF_BUILDINGS, location_description, function, "CHECK_STRUCTURE: Out of bound structure type (%u)", (unsigned int)psStructure->pStructureType->type);
 	ASSERT_HELPER(psStructure->numWeaps <= STRUCT_MAXWEAPS, location_description, function, "CHECK_STRUCTURE: Out of bound weapon count (%u)", (unsigned int)psStructure->numWeaps);
 
-	for (i = 0; i < ARRAY_SIZE(psStructure->asWeaps); ++i)
+	for (unsigned i = 0; i < ARRAY_SIZE(psStructure->asWeaps); ++i)
 	{
 		if (psStructure->psTarget[i])
 		{

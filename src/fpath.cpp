@@ -364,7 +364,6 @@ static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int sta
 		objTrace(id, "Checking if we have a path yet");
 		wzMutexLock(fpathMutex);
 
-		// psNext should be _declared_ here, after the mutex lock! Used to be a race condition, thanks to -Wdeclaration-after-statement style pseudocompiler compatibility.
 		for (std::list<PATHRESULT>::iterator psResult = pathResults.begin(); psResult != pathResults.end(); ++psResult)
 		{
 			if (psResult->droidID != id)

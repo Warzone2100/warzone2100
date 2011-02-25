@@ -507,9 +507,6 @@ static void initialize_ConfigDir(void)
 
 	// User's home dir first so we allways see what we write
 	PHYSFS_addToSearchPath( PHYSFS_getWriteDir(), PHYSFS_PREPEND );
-#if defined(WZ_OS_MAC)
-	PHYSFS_addToSearchPath( "/Library/Application Support/Warzone 2100/", PHYSFS_APPEND );
-#endif
 
 	PHYSFS_permitSymbolicLinks(1);
 
@@ -555,6 +552,11 @@ static void scanDataDirs( void )
 {
 	char tmpstr[PATH_MAX], prefix[PATH_MAX];
 	char* separator;
+
+#if defined(WZ_OS_MAC)
+	// version-independent location for video files
+	registerSearchPath("/Library/Application Support/Warzone 2100/", 1);
+#endif
 
 	// Find out which PREFIX we are in...
 	sstrcpy(prefix, PHYSFS_getBaseDir());
@@ -1073,12 +1075,11 @@ int main(int argc, char *argv[])
 	/*** Initialize directory structure ***/
 	make_dir(ScreenDumpPath, "screenshots", NULL);
 	make_dir(SaveGamePath, "savegame", NULL);
-	PHYSFS_mkdir("maps");		// MUST have this to prevent crashes when getting map
+	make_dir(MultiCustomMapsPath, "maps", NULL); // MUST have this to prevent crashes when getting map
 	PHYSFS_mkdir("music");
 	PHYSFS_mkdir("logs");		// a place to hold our netplay, mingw crash reports & WZ logs
 	make_dir(MultiPlayersPath, "multiplay", NULL);
 	make_dir(MultiPlayersPath, "multiplay", "players");
-	sstrcpy(MultiCustomMapsPath, "maps");
 
 	if (!customDebugfile)
 	{

@@ -573,69 +573,6 @@ BOOL recvMessage(void)
 			syncDebug("Processing player %d, message %s", queue.index, messageTypeToString(type));
 		}
 
-		if (queue.queueType == QUEUE_GAME && myResponsibility(queue.index))
-		{
-			switch (type)
-			{
-				// TODO Remove all these cases.
-				//case GAME_DROID:        //24 down, 18 to go.
-				//case GAME_DROIDINFO:    // 2 down, 41 to go.
-				//case GAME_DROIDDEST:    //25 down, 17 to go.
-				//case GAME_DROIDMOVE:    // 1 down, 42 to go. <--- Doesn't even exist, now. Its only effect was breaking synch...
-				//case GAME_GROUPORDER:   // 3 down, 40 to go.
-				//case GAME_CHECK_DROID:  // 4 down, 39 to go.
-				//case GAME_CHECK_STRUCT: // 5 down, 38 to go.
-				//case GAME_CHECK_POWER:  // 6 down, 37 to go.
-				//case NET_TEXTMSG:
-				//case NET_DATA_CHECK:
-				//case NET_AITEXTMSG:
-				//case NET_BEACONMSG:
-				//case GAME_BUILD:        //26 down, 16 to go.
-				//case GAME_BUILDFINISHED://27 down, 15 to go.
-				//case GAME_STRUCTDEST:   //28 down, 14 to go.
-				//case GAME_SECONDARY:    // 7 down, 36 to go.
-				//case GAME_SECONDARY_ALL://36 down,  6 to go. <--- Removed completely...
-				//case GAME_DROIDEMBARK:  //39 down,  3 to go.
-				//case GAME_DROIDDISEMBARK://40down,  2 to go.
-				//case GAME_GIFT:         //32 down, 10 to go
-				//case NET_SCORESUBMIT:
-				//case GAME_VTOL:         //37 down,  5 to go. <--- Removed completely, the VTOLs are happy without them.
-				//case GAME_LASSAT:       //38 down,  4 to go.
-
-				case GAME_TEMPLATE:
-				//case GAME_TEMPLATEDEST: //34 down,  8 to go. <--- Aaargh. This one down, but might come back as a zombie.
-				//case GAME_FEATUREDEST:  //29 down, 13 to go.
-				//case NET_PING:
-				//case GAME_DEMOLISH:     //35 down,  7 to go.
-				//case GAME_RESEARCH:     //30 down, 12 to go.
-				//case NET_OPTIONS:
-				//case NET_PLAYERRESPONDING:
-				//case NET_COLOURREQUEST:
-				//case NET_POSITIONREQUEST:
-				//case NET_TEAMREQUEST:
-				//case NET_READY_REQUEST:
-				//case GAME_ARTIFACTS:    //23 down, 19 to go.
-				//case GAME_FEATURES:     //41 down,  1 to go.
-				//case GAME_ALLIANCE:     //33 down,  9 to go.
-				//case NET_KICK:
-				//case NET_FIREUP:
-				//case GAME_RESEARCHSTATUS//31 down, 11 to go.
-				//case NET_PLAYER_STATS:
-				//case NET_...:           // 22 down, 20 to go.
-				{
-					static unsigned packets[256];
-					if (++packets[type] == 1)
-					{
-						debug(LOG_WARNING, "Ignoring our own game queue message %s, which hasn't been converted yet", messageTypeToString(type));
-					}
-					NETpop(queue);
-					continue;  // HACK-TODO Ignore our own queue.
-				}
-				default:
-					break;  // Yay, we are able to process our own messages of this time.
-			}
-		}
-
 		// messages only in game.
 		if(!ingame.localJoiningInProgress)
 		{
@@ -1001,7 +938,7 @@ BOOL recvResearchStatus(NETQUEUE queue)
 
 			// Set the subject up
 			pResearch				= asResearch + index;
-			psResFacilty->psSubject = (BASE_STATS *) pResearch;
+			psResFacilty->psSubject = pResearch;
 
 			// If they have previously started but cancelled there is no need to accure power
 			if (IsResearchCancelled(pPlayerRes))
@@ -1423,78 +1360,57 @@ BOOL recvTextMessageAI(NETQUEUE queue)
 // ////////////////////////////////////////////////////////////////////////////
 // Templates
 
+static void NETtemplate(DROID_TEMPLATE *pTempl)
+{
+	NETstring(pTempl->aName, sizeof(pTempl->aName));
+
+	for (unsigned i = 0; i < ARRAY_SIZE(pTempl->asParts); ++i)
+	{
+		// signed, but sent as a bunch of bits...
+		NETint32_t(&pTempl->asParts[i]);
+	}
+
+	NETuint32_t(&pTempl->buildPoints);
+	NETuint32_t(&pTempl->powerPoints);
+	NETuint32_t(&pTempl->storeCount);
+	NETuint32_t(&pTempl->numWeaps);
+
+	for (int i = 0; i < DROID_MAXWEAPS; ++i)
+	{
+		NETuint32_t(&pTempl->asWeaps[i]);
+	}
+
+	NETenum(&pTempl->droidType);
+	NETuint32_t(&pTempl->multiPlayerID);
+}
+
 // send a newly created template to other players
 bool sendTemplate(uint32_t player, DROID_TEMPLATE *pTempl)
 {
-	int i;
-
-	ASSERT_OR_RETURN(true /* hack */, pTempl != NULL, "Old Pumpkin bug");
-
 	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_TEMPLATE);
 		NETuint32_t(&player);
-		NETuint32_t(&pTempl->ref);
-		NETstring(pTempl->aName, sizeof(pTempl->aName));
-
-		for (i = 0; i < ARRAY_SIZE(pTempl->asParts); ++i)
-		{
-			// signed, but sent as a bunch of bits...
-			NETint32_t(&pTempl->asParts[i]);
-		}
-
-		NETuint32_t(&pTempl->buildPoints);
-		NETuint32_t(&pTempl->powerPoints);
-		NETuint32_t(&pTempl->storeCount);
-		NETuint32_t(&pTempl->numWeaps);
-
-		for (i = 0; i < DROID_MAXWEAPS; i++)
-		{
-			NETuint32_t(&pTempl->asWeaps[i]);
-		}
-
-		NETenum(&pTempl->droidType);
-		NETuint32_t(&pTempl->multiPlayerID);
-
+		NETtemplate(pTempl);
 	return NETend();
 }
 
 // receive a template created by another player
 BOOL recvTemplate(NETQUEUE queue)
 {
-	uint32_t player;
-	DROID_TEMPLATE	*psTempl;
-	DROID_TEMPLATE	t, *pT = &t;
-	int				i;
+	uint32_t        player;
+	DROID_TEMPLATE *psTempl;
+	DROID_TEMPLATE  t;
 
 	NETbeginDecode(queue, GAME_TEMPLATE);
 		NETuint32_t(&player);
 		ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "invalid player size: %d", player);
 
-		NETuint32_t(&pT->ref);
-		NETstring(pT->aName, sizeof(pT->aName));
-
-		for (i = 0; i < ARRAY_SIZE(pT->asParts); ++i)
-		{
-			// signed, but sent as a bunch of bits...
-			NETint32_t(&pT->asParts[i]);
-		}
-
-		NETuint32_t(&pT->buildPoints);
-		NETuint32_t(&pT->powerPoints);
-		NETuint32_t(&pT->storeCount);
-		NETuint32_t(&pT->numWeaps);
-
-		for (i = 0; i < DROID_MAXWEAPS; i++)
-		{
-			NETuint32_t(&pT->asWeaps[i]);
-		}
-
-		NETenum(&pT->droidType);
-		NETuint32_t(&pT->multiPlayerID);
+		NETtemplate(&t);
 	NETend();
 
 	t.prefab = false;
 	t.psNext = NULL;
 	t.pName = NULL;
+	t.ref = REF_TEMPLATE_START;
 
 	psTempl = IdToTemplate(t.multiPlayerID,player);
 
@@ -1507,8 +1423,7 @@ BOOL recvTemplate(NETQUEUE queue)
 	}
 	else
 	{
-		addTemplate(player,&t);
-		apsDroidTemplates[player]->ref = REF_TEMPLATE_START;
+		addTemplateBack(player, &t);  // Add to back of list, to avoid game state templates being in wrong order, which matters when saving games.
 		debug(LOG_SYNC, "Creating MP template %d", (int)t.multiPlayerID);
 	}
 
@@ -1576,11 +1491,7 @@ static BOOL recvDestroyTemplate(NETQUEUE queue)
 	}
 	else
 	{
-		DROID_TEMPLATE aaargh;
-		aaargh.multiPlayerID = templateID;
-		deleteTemplateFromProduction(&aaargh, player, ModeImmediate);
-		// TODO Memory leak, need to actually delete the template somehow.
-		//debug(LOG_ERROR, "TODO: Rewrite the whole interface, so it's possible to change the code without spaghetti dependencies causing problems everywhere, and without resorting to ugly hacks.");
+		debug(LOG_ERROR, "Would delete missing template %d", templateID);
 	}
 
 	return true;

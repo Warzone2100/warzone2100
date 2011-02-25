@@ -126,7 +126,7 @@ static inline void visMarkTile(int mapX, int mapY, MAPTILE *psTile, int rayPlaye
 {
 	if (psTile->watchers[rayPlayer] < UBYTE_MAX && *lastRecordTilePos < MAX_SEEN_TILES)
 	{
-		TILEPOS tilePos = {mapX, mapY};
+		TILEPOS tilePos = {uint8_t(mapX), uint8_t(mapY)};
 		psTile->watchers[rayPlayer]++;                  // we see this tile
 		psTile->sensorBits |= (1 << rayPlayer);		// mark it as being seen
 		recordTilePos[*lastRecordTilePos] = tilePos;    // record having seen it

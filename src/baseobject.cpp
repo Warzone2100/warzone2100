@@ -19,12 +19,15 @@
 */
 
 #include "lib/framework/frame.h"
+#include "lib/netplay/netplay.h"
 #include "lib/sound/audio.h"
 
 #include "baseobject.h"
 #include "droid.h"
 #include "projectile.h"
 #include "structure.h"
+#include "feature.h"
+
 
 static inline uint16_t interpolateAngle(uint16_t v1, uint16_t v2, uint32_t t1, uint32_t t2, uint32_t t)
 {
@@ -106,7 +109,7 @@ BASE_OBJECT::~BASE_OBJECT()
 #endif //DEBUG
 }
 
-void checkObject(const BASE_OBJECT* psObject, const char * const location_description, const char * function, const int recurse)
+void checkObject(const SIMPLE_OBJECT *psObject, const char *const location_description, const char *function, const int recurse)
 {
 	if (recurse < 0)
 		return;
@@ -135,9 +138,18 @@ void checkObject(const BASE_OBJECT* psObject, const char * const location_descri
 			ASSERT_HELPER(!"invalid object type", location_description, function, "CHECK_OBJECT: Invalid object type (type num %u)", (unsigned int)psObject->type);
 			break;
 	}
+}
 
-	ASSERT_HELPER(psObject->type == OBJ_FEATURE
-	    || psObject->type == OBJ_TARGET
-	    || psObject->player < MAX_PLAYERS,
-	       location_description, function, "CHECK_OBJECT: Out of bound owning player number (%u)", (unsigned int)psObject->player);
+void _syncDebugObject(const char *function, SIMPLE_OBJECT const *psObject, char ch)
+{
+	switch (psObject->type)
+	{
+		case OBJ_DROID:      _syncDebugDroid     (function, (const DROID *)     psObject, ch); break;
+		case OBJ_STRUCTURE:  _syncDebugStructure (function, (const STRUCTURE *) psObject, ch); break;
+		case OBJ_FEATURE:    _syncDebugFeature   (function, (const FEATURE *)   psObject, ch); break;
+		case OBJ_PROJECTILE: _syncDebugProjectile(function, (const PROJECTILE *)psObject, ch); break;
+		default:             _syncDebug          (function, "%c unidentified_object%d = p%d;objectType%d", ch, psObject->id, psObject->player, psObject->type);
+			ASSERT_HELPER(!"invalid object type", "_syncDebugObject", function, "syncDebug: Invalid object type (type num %u)", (unsigned int)psObject->type);
+			break;
+	}
 }

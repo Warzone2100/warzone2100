@@ -370,7 +370,7 @@ FEATURE::~FEATURE()
 {
 }
 
-void _syncDebugFeature(const char *function, FEATURE *psFeature, char ch)
+void _syncDebugFeature(const char *function, FEATURE const *psFeature, char ch)
 {
 	_syncDebug(function, "%c feature%d = p%d;pos(%d,%d,%d),subtype%d,dam%d,bp%d", ch,
 	          psFeature->id,
@@ -573,6 +573,7 @@ bool destroyFeature(FEATURE *psDel)
 					{
 						/* This remains a blocking tile */
 						psTile->psObject = NULL;
+						auxClearBlocking(mapX + width, mapY + breadth, AIR_BLOCKED);  // Shouldn't remain blocking for air units, however.
 						psTile->texture = TileNumber_texture(psTile->texture) | BLOCKING_RUBBLE_TILE;
 					}
 				}

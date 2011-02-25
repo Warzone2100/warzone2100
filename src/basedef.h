@@ -147,7 +147,7 @@ static inline int objPosDiffSq(SIMPLE_OBJECT const *pos1, SIMPLE_OBJECT const *p
 }
 
 // True iff object is a droid, structure or feature (not a projectile). Will incorrectly return true if passed a nonsense object of type OBJ_TARGET or OBJ_NUM_TYPES.
-static inline bool isBaseObject(SIMPLE_OBJECT const *psObject)                 { return psObject->type != OBJ_PROJECTILE; }
+static inline bool isBaseObject(SIMPLE_OBJECT const *psObject)                 { return psObject != NULL && psObject->type != OBJ_PROJECTILE; }
 // Returns BASE_OBJECT * if base_object or NULL if not.
 static inline BASE_OBJECT *castBaseObject(SIMPLE_OBJECT *psObject)             { return isBaseObject(psObject)? (BASE_OBJECT *)psObject : (BASE_OBJECT *)NULL; }
 // Returns BASE_OBJECT const * if base_object or NULL if not.

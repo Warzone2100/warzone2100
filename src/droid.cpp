@@ -697,7 +697,7 @@ void droidBurn(DROID *psDroid)
 	orderDroid(psDroid, DORDER_RUNBURN, ModeImmediate);
 }
 
-void _syncDebugDroid(const char *function, DROID *psDroid, char ch)
+void _syncDebugDroid(const char *function, DROID const *psDroid, char ch)
 {
 	char actTar[DROID_MAXWEAPS*15];
 	unsigned actTarLen = 0;
@@ -1674,6 +1674,8 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 						addTemplateToList(&design, &apsDroidTemplates[i]);
 					}
 				}
+				localTemplates.push_front(design);
+				localTemplates.front().pName = strdup(localTemplates.front().pName);
 			}
 			// Add all templates to static template list
 			design.prefab = true;  // prefabricated templates referenced from VLOs
@@ -1819,7 +1821,7 @@ BOOL loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize)
 		DROID_TEMPLATE *pTemplate;
 		std::string templateName = line.s(0);
 
-		for (int player = 0; player < MAX_PLAYERS + 1; ++player)
+		for (int player = 0; player < MAX_PLAYERS + 2; ++player)
 		{
 			if (player < MAX_PLAYERS)  // a player
 			{
@@ -1829,10 +1831,22 @@ BOOL loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize)
 				}
 				pTemplate = getTemplateFromUniqueName(templateName.c_str(), player);
 			}
-			else			// special exception - the static list
+			else if (player == MAX_PLAYERS)  // special exception - the static list
 			{
 				// Add weapons to static list
 				pTemplate = getTemplateFromTranslatedNameNoPlayer(templateName.c_str());
+			}
+			else  // Special exception - the local UI list.
+			{
+				pTemplate = NULL;
+				for (std::list<DROID_TEMPLATE>::iterator j = localTemplates.begin(); j != localTemplates.end(); ++j)
+				{
+					if (j->pName == templateName)
+					{
+						pTemplate = &*j;
+						break;
+					}
+				}
 			}
 
 			/* if Template not found - try default design */
@@ -1903,6 +1917,12 @@ BOOL droidTemplateShutDown(void)
 	apsStaticTemplates = NULL;
 	free(sDefaultDesignTemplate.pName);
 	sDefaultDesignTemplate.pName = NULL;
+
+	for (std::list<DROID_TEMPLATE>::iterator i = localTemplates.begin(); i != localTemplates.end(); ++i)
+	{
+		free(i->pName);
+	}
+	localTemplates.clear();
 
 	return true;
 }
@@ -2502,16 +2522,17 @@ fills the list with Templates that can be manufactured
 in the Factory - based on size. There is a limit on how many can be manufactured
 at any one time. Pass back the number available.
 */
-UDWORD fillTemplateList(DROID_TEMPLATE **ppList, STRUCTURE *psFactory, UDWORD limit)
+void fillTemplateList(std::vector<DROID_TEMPLATE *> &pList, STRUCTURE *psFactory)
 {
+	pList.clear();
+
 	DROID_TEMPLATE	*psCurr;
-	UDWORD			count = 0;
 	UDWORD			iCapacity = psFactory->pFunctionality->factory.capacity;
 
 	/* Add the templates to the list*/
-	for (psCurr = apsDroidTemplates[psFactory->player]; psCurr != NULL;
-		psCurr = psCurr->psNext)
+	for (std::list<DROID_TEMPLATE>::iterator i = localTemplates.begin(); i != localTemplates.end(); ++i)
 	{
+		psCurr = &*i;
 		//must add Command Droid if currently in production
 		if (!getProduction(psFactory, psCurr).quantity)
 		{
@@ -2549,16 +2570,9 @@ UDWORD fillTemplateList(DROID_TEMPLATE **ppList, STRUCTURE *psFactory, UDWORD li
 					continue;
 				}
 			}
-			*ppList++ = psCurr;
-			count++;
-			//once reached the limit, stop adding any more to the list
-			if (count == limit)
-			{
-				return count;
-			}
+			pList.push_back(psCurr);
 		}
 	}
-	return count;
 }
 
 /* Make all the droids for a certain player a member of a specific group */
@@ -2787,13 +2801,6 @@ bool calcDroidMuzzleBaseLocation(DROID *psDroid, Vector3i *muzzle, int weapon_sl
 	if (psBodyImd && psBodyImd->nconnectors)
 	{
 		Vector3i barrel(0, 0, 0);
-		iIMDShape *psWeaponImd = 0, *psMountImd = 0;
-
-		if (psDroid->asWeaps[weapon_slot].nStat)
-		{
-			psMountImd = WEAPON_MOUNT_IMD(psDroid, weapon_slot);
-			psWeaponImd = WEAPON_IMD(psDroid, weapon_slot);
-		}
 
 		pie_MatBegin();
 
@@ -4347,7 +4354,7 @@ BOOL checkValidWeaponForProp(DROID_TEMPLATE *psTemplate)
 }
 
 /*called when a Template is deleted in the Design screen*/
-void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player, QUEUE_MODE mode)
+void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, unsigned player, QUEUE_MODE mode)
 {
 	STRUCTURE   *psStruct;
 	STRUCTURE	*psList;
@@ -4374,7 +4381,7 @@ void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player, QUEU
 				ProductionRun &productionRun = asProductionRun[psFactory->psAssemblyPoint->factoryType][psFactory->psAssemblyPoint->factoryInc];
 				for (unsigned inc = 0; inc < productionRun.size(); ++inc)
 				{
-					if (productionRun[inc].psTemplate == psTemplate)
+					if (productionRun[inc].psTemplate->multiPlayerID == psTemplate->multiPlayerID && mode == ModeQueue)
 					{
 						//just need to erase this production run entry
 						productionRun.erase(productionRun.begin() + inc);
@@ -4388,47 +4395,34 @@ void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player, QUEU
 				}
 
 				// check not being built in the factory for the template player
-				if (psTemplate->multiPlayerID == ((DROID_TEMPLATE *)psFactory->psSubject)->multiPlayerID)
+				if (psTemplate->multiPlayerID == psFactory->psSubject->multiPlayerID && mode == ModeImmediate)
 				{
-					if (mode == ModeImmediate)
+					syncDebugStructure(psStruct, '<');
+					syncDebug("Clearing production");
+
+					// Clear the factory's subject.
+					psFactory->psSubject = NULL;
+					//return any accrued power
+					if (psFactory->powerAccrued)
 					{
-						syncDebugStructure(psStruct, '<');
-						syncDebug("Clearing production");
-
-						// Clear the factory's subject.
-						psFactory->psSubject = NULL;
-						//return any accrued power
-						if (psFactory->powerAccrued)
-						{
-							addPower(psStruct->player, psFactory->powerAccrued);
-						}
-
-						if (player == productionPlayer)
-						{
-							//check to see if anything left to produce
-							DROID_TEMPLATE *psNextTemplate = factoryProdUpdate(psStruct, NULL);
-							//power is returned by factoryProdAdjust()
-							if (psNextTemplate)
-							{
-								structSetManufacture(psStruct, psNextTemplate, ModeQueue);  // ModeQueue because production lists aren't synchronised.
-							}
-						}
-
-						//tell the interface
-						intManufactureFinished(psStruct);
-
-						syncDebugStructure(psStruct, '>');
+						addPower(psStruct->player, psFactory->powerAccrued);
 					}
-					else
+
+					if (player == productionPlayer)
 					{
-						DROID_TEMPLATE *oldTemplate = new DROID_TEMPLATE(*psFactory->psSubject);
-						debug(LOG_ERROR, "TODO: Fix this memory leak when deleting templates.");
-
-						oldTemplate->pName = NULL;
-						oldTemplate->psNext = NULL;
-
-						psFactory->psSubject = oldTemplate;
+						//check to see if anything left to produce
+						DROID_TEMPLATE *psNextTemplate = factoryProdUpdate(psStruct, NULL);
+						//power is returned by factoryProdAdjust()
+						if (psNextTemplate)
+						{
+							structSetManufacture(psStruct, psNextTemplate, ModeQueue);  // ModeQueue because production lists aren't synchronised.
+						}
 					}
+
+					//tell the interface
+					intManufactureFinished(psStruct);
+
+					syncDebugStructure(psStruct, '>');
 				}
 			}
 		}
@@ -4543,14 +4537,13 @@ void droidSetPosition(DROID *psDroid, int x, int y)
 /** Check validity of a droid. Crash hard if it fails. */
 void checkDroid(const DROID *droid, const char *const location, const char *function, const int recurse)
 {
-	int i;
-
 	if (recurse < 0)
 	{
 		return;
 	}
 
 	ASSERT_HELPER(droid != NULL, location, function, "CHECK_DROID: NULL pointer");
+	ASSERT_HELPER(droid->id != 0, location, function, "CHECK_DROID: Droid with ID 0");
 	ASSERT_HELPER(droid->type == OBJ_DROID, location, function, "CHECK_DROID: Not droid (type %d)", (int)droid->type);
 	ASSERT_HELPER(droid->numWeaps <= DROID_MAXWEAPS, location, function, "CHECK_DROID: Bad number of droid weapons %d", (int)droid->numWeaps);
 	ASSERT_HELPER((unsigned)droid->listSize <= droid->asOrderList.size() && (unsigned)droid->listPendingBegin <= droid->asOrderList.size(), location, function, "CHECK_DROID: Bad number of droid orders %d %d %d", (int)droid->listSize, (int)droid->listPendingBegin, (int)droid->asOrderList.size());
@@ -4558,7 +4551,7 @@ void checkDroid(const DROID *droid, const char *const location, const char *func
 	ASSERT_HELPER(droidOnMap(droid), location, function, "CHECK_DROID: Droid off map");
 	ASSERT_HELPER(droid->body <= droid->originalBody, location, function, "CHECK_DROID: More body points (%u) than original body points (%u).", (unsigned)droid->body, (unsigned)droid->originalBody);
 
-	for (i = 0; i < DROID_MAXWEAPS; ++i)
+	for (int i = 0; i < DROID_MAXWEAPS; ++i)
 	{
 		ASSERT_HELPER(droid->asWeaps[i].lastFired <= gameTime, location, function, "CHECK_DROID: Bad last fired time for turret %u", i);
 	}

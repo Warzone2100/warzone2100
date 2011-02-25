@@ -38,7 +38,11 @@
 
 #define DROID_RESISTANCE_FACTOR     30
 
-#define MAX_RECYCLED_DROIDS		32
+#define MAX_MP_DROIDS 450
+#define MAX_SP_DROIDS 100
+#define MAX_SP_AI_DROIDS 999
+// Changing this breaks campaign saves!
+#define MAX_RECYCLED_DROIDS 450
 
 //storage
 extern DROID_TEMPLATE			*apsDroidTemplates[MAX_PLAYERS];
@@ -203,7 +207,7 @@ extern DROID_TYPE droidType(DROID *psDroid);
 extern DROID_TYPE droidTemplateType(DROID_TEMPLATE *psTemplate);
 
 //fills the list with Templates that can be manufactured in the Factory - based on size
-extern UDWORD fillTemplateList(DROID_TEMPLATE **pList, STRUCTURE *psFactory, UDWORD limit);
+void fillTemplateList(std::vector<DROID_TEMPLATE *> &pList, STRUCTURE *psFactory);
 
 extern void assignDroidsToGroup(UDWORD	playerNumber, UDWORD groupNumber);
 
@@ -361,7 +365,7 @@ extern BOOL checkValidWeaponForProp(DROID_TEMPLATE *psTemplate);
 extern const char *getDroidNameForRank(UDWORD rank);
 
 /*called when a Template is deleted in the Design screen*/
-extern void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, UBYTE player, QUEUE_MODE mode);
+void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, unsigned player, QUEUE_MODE mode);  // ModeQueue deletes from production queues, which are not yet synchronised. ModeImmediate deletes from current production which is synchronised.
 
 // Select a droid and do any necessary housekeeping.
 extern void SelectDroid(DROID *psDroid);
@@ -548,11 +552,11 @@ void templateSetParts(const DROID *psDroid, DROID_TEMPLATE *psTemplate);
 void cancelBuild(DROID *psDroid);
 
 #define syncDebugDroid(psDroid, ch) _syncDebugDroid(__FUNCTION__, psDroid, ch)
-void _syncDebugDroid(const char *function, DROID *psDroid, char ch);
+void _syncDebugDroid(const char *function, DROID const *psDroid, char ch);
 
 
 // True iff object is a droid.
-static inline bool isDroid(SIMPLE_OBJECT const *psObject)           { return psObject->type == OBJ_DROID; }
+static inline bool isDroid(SIMPLE_OBJECT const *psObject)           { return psObject != NULL && psObject->type == OBJ_DROID; }
 // Returns DROID * if droid or NULL if not.
 static inline DROID *castDroid(SIMPLE_OBJECT *psObject)             { return isDroid(psObject)? (DROID *)psObject : (DROID *)NULL; }
 // Returns DROID const * if droid or NULL if not.

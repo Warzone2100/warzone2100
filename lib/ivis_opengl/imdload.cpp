@@ -503,7 +503,14 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
 	iIMDShape *s = NULL;
 
 	if (nlevels == 0)
+	{
 		return NULL;
+	}
+
+	// Load optional MATERIALS directive
+	pTmp = pFileData;	// remember position
+	i = sscanf(pFileData, "%255s %n", buffer, &cnt);
+	ASSERT_OR_RETURN(NULL, i == 1, "Bad directive following LEVEL");
 
 	s = (iIMDShape*)malloc(sizeof(iIMDShape));
 	if (s == NULL)
@@ -512,26 +519,18 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
 		debug(LOG_ERROR, "_imd_load_level: Memory allocation error");
 		return NULL;
 	}
-
 	s->flags = 0;
 	s->nconnectors = 0; // Default number of connectors must be 0
 	s->npoints = 0;
 	s->npolys = 0;
-
 	s->points = NULL;
 	s->polys = NULL;
 	s->connectors = NULL;
 	s->next = NULL;
-
 	s->shadowEdgeList = NULL;
 	s->nShadowEdges = 0;
 	s->texpage = iV_TEX_INVALID;
 	s->tcmaskpage = iV_TEX_INVALID;
-
-	// Load optional MATERIALS directive
-	pTmp = pFileData;	// remember position
-	i = sscanf(pFileData, "%255s %n", buffer, &cnt);
-	ASSERT_OR_RETURN(NULL, i == 1, "Bad directive following LEVEL");
 	memset(s->material, 0, sizeof(s->material));
 	s->material[LIGHT_AMBIENT][3] = 1.0f;
 	s->material[LIGHT_DIFFUSE][3] = 1.0f;

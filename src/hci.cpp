@@ -359,8 +359,8 @@ static STRUCTURE_STATS	**apsStructStatsList;
 static RESEARCH			**ppResearchList;
 
 /* Store a list of Template pointers for Droids that can be built */
-DROID_TEMPLATE			**apsTemplateList;
-DROID_TEMPLATE			*psCurrTemplate = NULL;
+std::vector<DROID_TEMPLATE *>   apsTemplateList;
+std::list<DROID_TEMPLATE>       localTemplates;
 
 /* Store a list of Feature pointers for features to be placed on the map */
 static FEATURE_STATS	**apsFeatureList;
@@ -526,14 +526,7 @@ BOOL intInitialise(void)
 	}
 
 	/* Create storage for Templates that can be built */
-	apsTemplateList = (DROID_TEMPLATE **)malloc(sizeof(DROID_TEMPLATE*) *
-		MAXTEMPLATES);
-	if (apsTemplateList == NULL)
-	{
-		debug( LOG_FATAL, "Unable to allocate memory for template list" );
-		abort();
-		return false;
-	}
+	apsTemplateList.clear();
 
 	/* Create storage for the feature list */
 	apsFeatureList = (FEATURE_STATS **)malloc(sizeof(FEATURE_STATS *) *
@@ -652,7 +645,7 @@ void interfaceShutDown(void)
 	free(ppResearchList);
 	free(pList);
 	free(pSList);
-	free(apsTemplateList);
+	apsTemplateList.clear();
 	free(apsFeatureList);
 	free(apsComponentList);
 	free(apsExtraSysList);
@@ -662,7 +655,6 @@ void interfaceShutDown(void)
 	ppResearchList = NULL;
 	pList = NULL;
 	pSList = NULL;
-	apsTemplateList = NULL;
 	apsFeatureList = NULL;
 	apsComponentList = NULL;
 	apsExtraSysList = NULL;
@@ -1215,8 +1207,6 @@ static void intCalcStructCenter(STRUCTURE_STATS *psStats, UDWORD tilex, UDWORD t
 /* Process return codes from the Options screen */
 static void intProcessOptions(UDWORD id)
 {
-	UDWORD i;
-	DROID_TEMPLATE *psTempl;
 	char saveName[PATH_MAX];
 
 	if (id >= IDOPT_PLAYERSTART && id <= IDOPT_PLAYEREND)
@@ -1276,40 +1266,37 @@ static void intProcessOptions(UDWORD id)
 			/* The add object buttons */
 		case IDOPT_DROID:
 			intRemoveOptions();
-			i = 0;
-			psTempl = apsDroidTemplates[selectedPlayer];
-			while ((psTempl != NULL) && (i < MAXTEMPLATES))
+			apsTemplateList.clear();
+			for (std::list<DROID_TEMPLATE>::iterator i = localTemplates.begin(); i != localTemplates.end(); ++i)
 			{
-				apsTemplateList[i] = psTempl;
-				psTempl = psTempl->psNext;
-				i++;
+				apsTemplateList.push_back(&*i);
 			}
-			ppsStatsList = (BASE_STATS**)apsTemplateList;
+			ppsStatsList = (BASE_STATS**)&apsTemplateList[0];  // FIXME Ugly cast, and is undefined behaviour (strict-aliasing violation) in C/C++.
 			objMode = IOBJ_MANUFACTURE;
-			intAddStats(ppsStatsList, i, NULL, NULL);
+			intAddStats(ppsStatsList, apsTemplateList.size(), NULL, NULL);
 			intMode = INT_EDITSTAT;
 			editPosMode = IED_NOPOS;
 			break;
 		case IDOPT_STRUCT:
 			intRemoveOptions();
-			for (i = 0; i < numStructureStats && i < MAXSTRUCTURES; i++)
+			for (unsigned i = 0; i < std::min<unsigned>(numStructureStats, MAXSTRUCTURES); ++i)
 			{
 				apsStructStatsList[i] = asStructureStats + i;
 			}
 			ppsStatsList = (BASE_STATS**)apsStructStatsList;
 			objMode = IOBJ_BUILD;
-			intAddStats(ppsStatsList, i, NULL, NULL);
+			intAddStats(ppsStatsList, std::min<unsigned>(numStructureStats, MAXSTRUCTURES), NULL, NULL);
 			intMode = INT_EDITSTAT;
 			editPosMode = IED_NOPOS;
 			break;
 		case IDOPT_FEATURE:
 			intRemoveOptions();
-			for (i = 0; i < numFeatureStats && i < MAXFEATURES; i++)
+			for (unsigned i = 0; i < std::min<unsigned>(numFeatureStats, MAXFEATURES); ++i)
 			{
 				apsFeatureList[i] = asFeatureStats + i;
 			}
 			ppsStatsList = (BASE_STATS**)apsFeatureList;
-			intAddStats(ppsStatsList, i, NULL, NULL);
+			intAddStats(ppsStatsList, std::min<unsigned>(numFeatureStats, MAXFEATURES), NULL, NULL);
 			intMode = INT_EDITSTAT;
 			editPosMode = IED_NOPOS;
 			break;
@@ -2094,8 +2081,7 @@ static void intRunPower(void)
 				 psStat->ref < REF_TEMPLATE_START + REF_RANGE)
 		{
 			//get the template build points
-			quantity = calcTemplatePower((DROID_TEMPLATE *)apsTemplateList[
-				statID - IDSTAT_START]);
+			quantity = calcTemplatePower(apsTemplateList[statID - IDSTAT_START]);
 		}
 		else if (psStat->ref >= REF_RESEARCH_START &&
 				 psStat->ref < REF_RESEARCH_START + REF_RANGE)
@@ -2198,9 +2184,9 @@ static void intAddObjectStats(BASE_OBJECT *psObj, UDWORD id)
 	//have to determine the Template list once the factory has been chosen
 	if (objMode == IOBJ_MANUFACTURE)
 	{
-		numStatsListEntries = fillTemplateList(apsTemplateList,
-			(STRUCTURE *)psObj, MAXTEMPLATES);
-		ppsStatsList = (BASE_STATS **)apsTemplateList;
+		fillTemplateList(apsTemplateList, (STRUCTURE *)psObj);
+		numStatsListEntries = apsTemplateList.size();
+		ppsStatsList = (BASE_STATS **)&apsTemplateList[0];  // FIXME Ugly cast, and is undefined behaviour (strict-aliasing violation) in C/C++.
 	}
 
 	/*have to calculate the list each time the Topic button is pressed
@@ -5361,32 +5347,17 @@ static BASE_STATS *getConstructionStats(BASE_OBJECT *psObj)
 /* Set the stats for a construction droid */
 static BOOL setConstructionStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 {
-	STRUCTURE_STATS		*psSStats;
-	DROID				*psDroid;
+	DROID *psDroid = castDroid(psObj);
+	ASSERT(psDroid != NULL, "invalid droid pointer");
 
-	ASSERT( psObj != NULL && psObj->type == OBJ_DROID,
-		"setConstructionStats: invalid droid pointer" );
 	/* psStats might be NULL if the operation is canceled in the middle */
-
 	if (psStats != NULL)
 	{
-		psSStats = (STRUCTURE_STATS *)psStats;
-		psDroid = (DROID *)psObj;
-
 		//check for demolish first
-		if (psSStats == structGetDemolishStat())
+		if (psStats == structGetDemolishStat())
 		{
 			objMode = IOBJ_DEMOLISHSEL;
 
-			// When demolish requested, need to select a construction droid, not really any
-			// choice in this as demolishing uses the droid targeting interface rather than
-			// the build positioning interface and therefore requires a construction droid
-			// to be selected.
-			clearSel();
-			SelectDroid(psDroid);
-			if(driveModeActive()) {
-				driveSelectionChanged();
-			}
 			return true;
 		}
 
@@ -5394,33 +5365,13 @@ static BOOL setConstructionStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 		psPositionStats = psStats;
 
 		/* Now start looking for a location for the structure */
-		if (psSStats)
-		{
-			{
-				objMode = IOBJ_BUILDSEL;
+		objMode = IOBJ_BUILDSEL;
 
-				intStartStructPosition(psStats);
+		intStartStructPosition(psStats);
 
-				//set the droids current program
-				/*for (i=0; i < psDroid->numProgs; i++)
-				{
-					if (psDroid->asProgs[i].psStats->order == ORDER_BUILD)
-					{
-						psDroid->activeProg = i;
-					}
-				}*/
-			}
-		}
-		else
-		{
-			orderDroid(psDroid, DORDER_STOP, ModeQueue);
-		}
+		return true;
 	}
-	else
-	{
-		psDroid = (DROID *)psObj;
-		orderDroid(psDroid, DORDER_STOP, ModeQueue);
-	}
+	orderDroid(psDroid, DORDER_STOP, ModeQueue);
 	return true;
 }
 
@@ -5467,7 +5418,7 @@ static BASE_STATS *getResearchStats(BASE_OBJECT *psObj)
 static BOOL setResearchStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 {
 	STRUCTURE			*psBuilding;
-	RESEARCH			*pResearch;
+	RESEARCH *              pResearch = (RESEARCH *)psStats;
 	PLAYER_RESEARCH		*pPlayerRes;
 	UDWORD				count;
 	RESEARCH_FACILITY	*psResFacilty;
@@ -5480,16 +5431,16 @@ static BOOL setResearchStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 
 	if (bMultiMessages)
 	{
-		if (psStats != NULL)
+		if (pResearch != NULL)
 		{
 			// Say that we want to do reseach [sic].
-			sendResearchStatus(psBuilding, ((RESEARCH *)psStats)->ref - REF_RESEARCH_START, selectedPlayer, true);
+			sendResearchStatus(psBuilding, pResearch->ref - REF_RESEARCH_START, selectedPlayer, true);
 		}
 		else
 		{
 			cancelResearch(psBuilding, ModeQueue);
 		}
-		psResFacilty->psSubjectPending = psStats;  // Tell UI that we are going to research.
+		psResFacilty->psSubjectPending = pResearch;  // Tell UI that we are going to research.
 		//stop the button from flashing once a topic has been chosen
 		stopReticuleButtonFlash(IDRET_RESEARCH);
 		return true;
@@ -5499,16 +5450,14 @@ static BOOL setResearchStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 	psResFacilty->psSubject = NULL;
 
 	//set up the player_research
-	if (psStats != NULL)
+	if (pResearch != NULL)
 	{
-		pResearch = (RESEARCH*) psStats;
-
 		count = pResearch->ref - REF_RESEARCH_START;
 		//meant to still be in the list but greyed out
 		pPlayerRes = asPlayerResList[selectedPlayer] + count;
 
 		//set the subject up
-		psResFacilty->psSubject = psStats;
+		psResFacilty->psSubject = pResearch;
 
 		if (IsResearchCancelled(pPlayerRes))
 		{
@@ -5627,7 +5576,7 @@ static BOOL intAddBuild(DROID *psSelected)
 static BOOL intAddManufacture(STRUCTURE *psSelected)
 {
 	/* Store the correct stats list for future reference */
-	ppsStatsList = (BASE_STATS**)apsTemplateList;
+	ppsStatsList = (BASE_STATS**)&apsTemplateList[0];  // FIXME Ugly cast, and is undefined behaviour (strict-aliasing violation) in C/C++.
 
 	objSelectFunc = selectManufacture;
 	objGetStatsFunc = getManufactureStats;

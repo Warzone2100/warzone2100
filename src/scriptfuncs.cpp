@@ -3005,9 +3005,9 @@ BOOL scrSetStructureLimits(void)
 	}
 
 	psStructLimits = asStructLimits[player];
-	psStructLimits[structInc].limit = (UBYTE)limit;
+	psStructLimits[structInc].limit = limit;
 
-	psStructLimits[structInc].globalLimit = (UBYTE)limit;
+	psStructLimits[structInc].globalLimit = limit;
 
 	return true;
 }
@@ -4848,9 +4848,9 @@ BOOL scrSetAllStructureLimits(void)
 	psStructLimits = asStructLimits[player];
 	for (i = 0; i < numStructureStats; i++)
 	{
-		psStructLimits[i].limit = (UBYTE)limit;
+		psStructLimits[i].limit = limit;
 
-		psStructLimits[i].globalLimit = (UBYTE)limit;
+		psStructLimits[i].globalLimit = limit;
 
 	}
 

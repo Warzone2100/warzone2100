@@ -1614,26 +1614,31 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		}
 		break;
 	case DORDER_BUILD:
-		// build a new structure
-		if (!(psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT))
+	case DORDER_LINEBUILD:
+		// build a new structure or line of structures
+		if (!isConstructionDroid(psDroid))
 		{
 			break;
 		}
-		ASSERT( psOrder->psStats != NULL,
-			"orderUnitBase: invalid structure stats pointer" );
-		psDroid->order = DORDER_BUILD;
+		ASSERT(psOrder->psStats != NULL, "invalid structure stats pointer");
+		psDroid->order = psOrder->order;
 		psDroid->orderX = psOrder->x;
 		psDroid->orderY = psOrder->y;
+		if (psOrder->order == DORDER_LINEBUILD)
+		{
+			psDroid->orderX2 = psOrder->x2;
+			psDroid->orderY2 = psOrder->y2;
+		}
 		psDroid->orderDirection = psOrder->direction;
 		setDroidTarget(psDroid, NULL);
 		psDroid->psTarStats = psOrder->psStats;
-		ASSERT((!psDroid->psTarStats || ((STRUCTURE_STATS *)psDroid->psTarStats)->type != REF_DEMOLISH), "Cannot build demolition");
+		ASSERT(!psDroid->psTarStats || ((STRUCTURE_STATS *)psDroid->psTarStats)->type != REF_DEMOLISH, "Cannot build demolition");
 		actionDroid(psDroid, DACTION_BUILD, psOrder->x,psOrder->y);
 		objTrace(psDroid->id, "Starting new construction effort of %s", psOrder->psStats ? psOrder->psStats->pName : "NULL POINTER");
 		break;
 	case DORDER_BUILDMODULE:
 		//build a module onto the structure
-		if (!(psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT))
+		if (!isConstructionDroid(psDroid))
 		{
 			break;
 		}
@@ -1648,26 +1653,9 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		actionDroid(psDroid, DACTION_BUILD, psOrder->psObj->pos.x,psOrder->psObj->pos.y);
 		objTrace(psDroid->id, "Starting new upgrade of %s", psOrder->psStats ? psOrder->psStats->pName : "NULL POINTER");
 		break;
-	case DORDER_LINEBUILD:
-		// build a line of structures
-		ASSERT_OR_RETURN(, psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT, "Not a constructor droid");
-		ASSERT(psOrder->psStats != NULL, "Invalid structure stats pointer");
-
-		psDroid->order = DORDER_LINEBUILD;
-		psDroid->orderX = psOrder->x;
-		psDroid->orderY = psOrder->y;
-		psDroid->orderX2 = psOrder->x2;
-		psDroid->orderY2 = psOrder->y2;
-		psDroid->orderDirection = psOrder->direction;
-		setDroidTarget(psDroid, NULL);
-		psDroid->psTarStats = psOrder->psStats;
-		ASSERT((!psDroid->psTarStats || ((STRUCTURE_STATS *)psDroid->psTarStats)->type != REF_DEMOLISH), "Cannot build demolition");
-		actionDroid(psDroid, DACTION_BUILD, psOrder->x,psOrder->y);
-		objTrace(psDroid->id, "Starting new line construction of %s", psOrder->psStats ? psOrder->psStats->pName : "NULL POINTER");
-		break;
 	case DORDER_HELPBUILD:
 		// help to build a structure that is starting to be built
-		ASSERT_OR_RETURN(, psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT, "Not a constructor droid");
+		ASSERT_OR_RETURN(, isConstructionDroid(psDroid), "Not a constructor droid");
 		ASSERT_OR_RETURN(, psOrder->psObj != NULL, "Help to build a NULL pointer?");
 		psDroid->order = DORDER_HELPBUILD;
 		psDroid->orderX = psOrder->psObj->pos.x;
@@ -3333,30 +3321,22 @@ static char *secondaryPrintFactories(UDWORD state)
 #define secondaryPrintFactories(x)
 #endif
 
-
-// check the damage level of a droid against it's secondary state
-void secondaryCheckDamageLevel(DROID *psDroid)
+// Couldn't think of a better name for the function. Returns true iff droid needs to repair according to repairState, and deselects the droid iff droid needs to repair and more droids are selected.
+static bool secondaryCheckDamageLevelDeselect(DROID *psDroid, SECONDARY_STATE repairState)
 {
-	SECONDARY_STATE	State;
-	unsigned int repairLevel;
-
-	State = secondaryGetState(psDroid, DSO_REPAIR_LEVEL);
-	if (State == DSS_REPLEV_LOW)
+	unsigned repairLevel;
+	switch (repairState)
 	{
-		repairLevel = REPAIRLEV_HIGH;			//repair often
-	}
-	else if(State == DSS_REPLEV_HIGH)
-	{
-		repairLevel = REPAIRLEV_LOW;	 		// don't repair often.
-	}
-	else
-	{
-		repairLevel = 0;						//never repair
+		case DSS_REPLEV_LOW:   repairLevel = REPAIRLEV_HIGH; break;  // LOW → HIGH, seems DSS_REPLEV_LOW and DSS_REPLEV_HIGH are badly named?
+		case DSS_REPLEV_HIGH:  repairLevel = REPAIRLEV_LOW;  break;
+		default:
+		case DSS_REPLEV_NEVER: repairLevel = 0;              break;
 	}
 
-	//don't bother checking if 'do or die'
-	if( repairLevel && PERCENT(psDroid->body,psDroid->originalBody) <= repairLevel)
+	// psDroid->body / psDroid->originalBody < repairLevel / 100, without integer truncation
+	if (psDroid->body * 100 <= repairLevel * psDroid->originalBody)
 	{
+		// Only deselect the droid if there is another droid selected.
 		if (psDroid->selected)
 		{
 			DROID* psTempDroid;
@@ -3369,6 +3349,16 @@ void secondaryCheckDamageLevel(DROID *psDroid)
 				}
 			}
 		}
+		return true;
+	}
+	return false;
+}
+
+// check the damage level of a droid against it's secondary state
+void secondaryCheckDamageLevel(DROID *psDroid)
+{
+	if (secondaryCheckDamageLevelDeselect(psDroid, secondaryGetState(psDroid, DSO_REPAIR_LEVEL)))
+	{
 		if (!isVtolDroid(psDroid))
 		{
 			psDroid->group = UBYTE_MAX;
@@ -3404,6 +3394,11 @@ BOOL secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 
 	if (bMultiMessages && mode == ModeQueue)
 	{
+		if (sec == DSO_REPAIR_LEVEL)
+		{
+			secondaryCheckDamageLevelDeselect(psDroid, State);  // Deselect droid immediately, if applicable, so it isn't ordered around by mistake.
+		}
+
 		sendDroidSecondary(psDroid,sec,State);
 		return true;  // Wait for our order before changing the droid.
 	}

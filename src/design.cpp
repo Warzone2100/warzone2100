@@ -358,7 +358,7 @@ static BOOL intCheckValidWeaponForProp(void);
 static BOOL checkTemplateIsVtol(DROID_TEMPLATE *psTemplate);
 
 /* save the current Template if valid. Return true if stored */
-static BOOL saveTemplate(void);
+static bool saveTemplate();
 
 static void desCreateDefaultTemplate( void );
 
@@ -380,9 +380,6 @@ static UDWORD			droidTemplID;
 
 /* The current design being edited on the design screen */
 DROID_TEMPLATE			sCurrDesign;
-
-/* Flag to indictate whether a 'spare' template button is required */
-static BOOL				newTemplate = false;
 
 static void intDisplayStatForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 static void intDisplayViewForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
@@ -422,9 +419,6 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 		bRender3DOnly = false;
 	}
 
-	//initialise flags
-	newTemplate = false;
-
 	/* Add the main design form */
 	sFormInit.formID = 0;
 	sFormInit.id = IDDES_FORM;
@@ -456,22 +450,13 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 	CurrentStatsTemplate = NULL;
 
 	/* Initialise the current design */
-	if (psCurrTemplate != NULL)
-	{
-		sCurrDesign = *psCurrTemplate;
-		sstrcpy(aCurrName, getStatName(psCurrTemplate));
-		sstrcpy(sCurrDesign.aName, aCurrName);
-	}
-	else
-	{
-		sCurrDesign = sDefaultDesignTemplate;
-		sCurrDesign.pName = NULL;
-		sstrcpy(aCurrName, _("New Vehicle"));
-		sstrcpy(sCurrDesign.aName, aCurrName);
-	}
+	sCurrDesign = sDefaultDesignTemplate;
+	sCurrDesign.pName = NULL;
+	sstrcpy(aCurrName, _("New Vehicle"));
+	sstrcpy(sCurrDesign.aName, aCurrName);
 
 	/* Add the design templates form */
-	if (!intAddTemplateForm(psCurrTemplate))
+	if (!intAddTemplateForm(NULL))  // Was psCurrTemplate instead of NULL, but psCurrTemplate was always NULL. Deleted psCurrTemplate, but leaving this here, in case intAddTemplateForm(NULL) does something useful.
 	{
 		return false;
 	}
@@ -867,32 +852,24 @@ static BOOL _intAddDesign( BOOL bShowCentreScreen )
 /* set up droid templates before going into design screen */
 void desSetupDesignTemplates(void)
 {
-	DROID_TEMPLATE	*psTempl;
-	UDWORD			i;
-
 	/* init template list */
-	memset( apsTemplateList, 0, sizeof(DROID_TEMPLATE*) * MAXTEMPLATES );
-	apsTemplateList[0] = &sDefaultDesignTemplate;
-	i = 1;
-	psTempl = apsDroidTemplates[selectedPlayer];
-	while ((psTempl != NULL) && (i < MAXTEMPLATES))
+	apsTemplateList.clear();
+	apsTemplateList.push_back(&sDefaultDesignTemplate);
+	for (std::list<DROID_TEMPLATE>::iterator i = localTemplates.begin(); i != localTemplates.end(); ++i)
 	{
+		DROID_TEMPLATE *psTempl = &*i;  // &* changes iterators into pointers.
 		/* add template to list if not a transporter,
 		 * cyborg, person or command droid,
 		 */
-		if ( psTempl->droidType != DROID_TRANSPORTER        &&
-			 psTempl->droidType != DROID_CYBORG             &&
-			 psTempl->droidType != DROID_CYBORG_SUPER       &&
-             psTempl->droidType != DROID_CYBORG_CONSTRUCT   &&
-             psTempl->droidType != DROID_CYBORG_REPAIR      &&
-			 psTempl->droidType != DROID_PERSON	)
+		if (psTempl->droidType != DROID_TRANSPORTER        &&
+		    psTempl->droidType != DROID_CYBORG             &&
+		    psTempl->droidType != DROID_CYBORG_SUPER       &&
+		    psTempl->droidType != DROID_CYBORG_CONSTRUCT   &&
+		    psTempl->droidType != DROID_CYBORG_REPAIR      &&
+		    psTempl->droidType != DROID_PERSON)
 		{
-			apsTemplateList[i] = psTempl;
-			i++;
+			apsTemplateList.push_back(psTempl);
 		}
-
-		/* next template */
-		psTempl = psTempl->psNext;
 	}
 }
 
@@ -904,14 +881,7 @@ static BOOL _intAddTemplateForm(DROID_TEMPLATE *psSelected)
 
 
 	/* Count the number of minor tabs needed for the template form */
-	numButtons = 0;
-	for( i=0; i<MAXTEMPLATES; i++ )
-	{
-		if ( apsTemplateList[i] != NULL )
-		{
-			numButtons++;
-		}
-	}
+	numButtons = apsTemplateList.size();
 
 	/* Calculate how many buttons will go on a single form */
 	butPerForm = ((DES_LEFTFORMWIDTH - DES_TABTHICKNESS - DES_TABBUTGAP) /
@@ -996,7 +966,6 @@ BOOL intAddTemplateButtons(UDWORD formID, UDWORD formWidth, UDWORD formHeight,
 	DROID_TEMPLATE	*psTempl = NULL;
 	char			aButText[DES_COMPBUTMAXCHAR + 1];
 	SDWORD			BufferID;
-	UDWORD			i;
 	char TempString[256];
 	int BufferPos = 0;
 
@@ -1027,14 +996,11 @@ BOOL intAddTemplateButtons(UDWORD formID, UDWORD formWidth, UDWORD formHeight,
 	sBarInit.pTip = _("Power Usage");
 
 	droidTemplID = 0;
-	for( i=0; i<MAXTEMPLATES; i++ )
+	for (unsigned i = 0; i < apsTemplateList.size(); ++i)
 	{
-		if ( apsTemplateList[i] != NULL )
-		{
 			psTempl = apsTemplateList[i];
 
 			/* Set the tip and add the button */
-
 
 			// On the playstation the tips are additionaly setup when they are displayed ... because we only have one text name buffer
 			sstrcpy(aButText, getTemplateName(psTempl));
@@ -1097,7 +1063,6 @@ BOOL intAddTemplateButtons(UDWORD formID, UDWORD formWidth, UDWORD formHeight,
 			{
 				break;
 			}
-		}
 	}
 
 	return true;
@@ -3415,8 +3380,6 @@ void intRemoveDesign(void)
 	//save the current design on exit if it is valid
 	saveTemplate();
 
-	newTemplate = false;
-
 	widgDelete(psWScreen, IDDES_POWERFORM);
 	widgDelete(psWScreen, IDDES_NAMEBOX);
 	widgDelete(psWScreen, IDDES_TEMPLFORM);
@@ -3473,14 +3436,22 @@ static BOOL desTemplateNameCustomised( DROID_TEMPLATE *psTemplate )
 	}
 }
 
+static DROID_TEMPLATE *templateFromButtonId(unsigned buttonId, bool allowBlankTemplate = false)
+{
+	unsigned minIndex = allowBlankTemplate? 0 : 1;
+	unsigned index = buttonId - IDDES_TEMPLSTART;
+
+	if (index >= minIndex && index < apsTemplateList.size())
+	{
+		return apsTemplateList[index];
+	}
+	return NULL;
+}
+
 /* Process return codes from the design screen */
 void intProcessDesign(UDWORD id)
 {
-	DROID_TEMPLATE	*psTempl = NULL, *psCurr, *psPrev;
-	//DROID_TEMPLATE	*psTempPrev;
-	UDWORD			currID;
-	UDWORD			i;
-	BOOL			bTemplateNameCustomised;
+	bool bTemplateNameCustomised;
 
 	/* check template button pressed */
 	if (id >= IDDES_TEMPLSTART && id <= IDDES_TEMPLEND)
@@ -3511,17 +3482,7 @@ void intProcessDesign(UDWORD id)
 		else
 		{
 			/* Find the template for the new button */
-			currID = IDDES_TEMPLSTART;
-			for( i=0; i<MAXTEMPLATES; i++ )
-			{
-				psTempl = apsTemplateList[i];
-
-				if (currID == id)
-				{
-					break;
-				}
-				currID ++;
-			}
+			DROID_TEMPLATE *psTempl = templateFromButtonId(id, true);
 
 			ASSERT_OR_RETURN(, psTempl != NULL, "template not found!");
 
@@ -4008,63 +3969,36 @@ void intProcessDesign(UDWORD id)
 			sstrcpy(aCurrName, sCurrDesign.aName);
 			break;
 		case IDDES_BIN:
+		{
 			/* Find the template for the current button */
-			currID = IDDES_TEMPLSTART+1;
-			//psTempPrev = NULL;
-			for( i=1; i<MAXTEMPLATES; i++ )
-			{
-				psTempl = apsTemplateList[i];
-				if (currID == droidTemplID && psTempl != &sCurrDesign)
-				{
-					break;
-				}
-				currID ++;
-				//psTempPrev = psTempl;
-			}
-
-
+			DROID_TEMPLATE *psTempl = templateFromButtonId(droidTemplID);  // Does not return the first template, which is the empty template.
 
 			/* remove template if found */
-			if ( psTempl )
+			if (psTempl != NULL)
 			{
 				SendDestroyTemplate(psTempl);
 
 				//update player template list.
+				for (std::list<DROID_TEMPLATE>::iterator i = localTemplates.begin(); i != localTemplates.end(); ++i)
 				{
-					for (psCurr = apsDroidTemplates[selectedPlayer], psPrev = NULL;
-						psCurr != NULL; psCurr = psCurr->psNext)
+					if (&*i == psTempl)
 					{
-						if (psCurr == psTempl)
-						{
-							if (psPrev)
-							{
-								psPrev->psNext = psCurr->psNext;
-							}
-							else
-							{
-								apsDroidTemplates[selectedPlayer] = psCurr->psNext;
-							}
-
-							//quit looking cos found
-							break;
-						}
-						psPrev = psCurr;
+						//before deleting the template, need to make sure not being used in production
+						deleteTemplateFromProduction(psTempl, selectedPlayer, ModeQueue);
+						// Delete the template.
+						free(i->pName);
+						localTemplates.erase(i);
+						break;
 					}
 				}
 
-				// Delete the template.
-				//before deleting the template, need to make sure not being used in production
-				deleteTemplateFromProduction(psTempl, selectedPlayer, ModeQueue);
-				delete psTempl;
-
 				/* get previous template and set as current */
-				psTempl = apsTemplateList[i-1];
+				psTempl = templateFromButtonId(droidTemplID - 1, true);  // droidTemplID - 1 always valid (might be the first template), since droidTemplID is not the first template.
 
 				/* update local list */
 				desSetupDesignTemplates();
 
 				/* Now update the droid template form */
-				newTemplate = false;
 				widgDelete(psWScreen, IDDES_TEMPLFORM);
 				widgDelete(psWScreen, IDDES_TEMPLBASE);
 				intAddTemplateForm( psTempl );
@@ -4101,6 +4035,7 @@ void intProcessDesign(UDWORD id)
 				intSetDesignMode(IDES_BODY);
 			}
 			break;
+		}
 		case IDDES_SYSTEMBUTTON:
 			// Add the correct component form
 			switch (droidTemplateType(&sCurrDesign))
@@ -4498,121 +4433,59 @@ void intDisplayDesignForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_D
 
 
 /* save the current Template if valid. Return true if stored */
-static BOOL saveTemplate(void)
+static bool saveTemplate(void)
 {
-	DROID_TEMPLATE	*psTempl = NULL, *psPlayerTempl, *psPrevTempl;
-	BOOL			stored = false, bTemplateFound = false;
-	UDWORD			i, iCurrID;
+	if (!intValidTemplate(&sCurrDesign, aCurrName))
+	{
+		return false;
+	}
 
 	/* if first (New Design) button selected find empty template
 	 * else find current button template
 	 */
-	if ( droidTemplID == IDDES_TEMPLSTART )
+	DROID_TEMPLATE *psTempl;
+	if (droidTemplID == IDDES_TEMPLSTART)
 	{
-		/* find empty template and point to that */
-		for( i=1; i<MAXTEMPLATES; i++ )
-		{
-			psTempl = apsTemplateList[i];
+		/* create empty template and point to that */
+		localTemplates.push_back(DROID_TEMPLATE());
+		psTempl = &localTemplates.back();
+		apsTemplateList.push_back(psTempl);
 
-			if ( psTempl == NULL )
-			{
-				bTemplateFound = true;
-				break;
-			}
-		}
+		psTempl->ref = REF_TEMPLATE_START;
+
+		/* set button render routines to highlight, not flash */
+		intSetButtonFlash(IDDES_SYSTEMBUTTON, false);
+		intSetButtonFlash(IDDES_BODYBUTTON,   false);
+		intSetButtonFlash(IDDES_PROPBUTTON,   false);
 	}
 	else
 	{
 		/* Find the template for the current button */
-		iCurrID = IDDES_TEMPLSTART + 1;
-		for( i=1; i<MAXTEMPLATES; i++ )
+		psTempl = templateFromButtonId(droidTemplID);
+		if (psTempl == NULL)
 		{
-			psTempl = apsTemplateList[i];
-
-			if ( iCurrID == droidTemplID )
-			{
-				bTemplateFound = true;
-				break;
-			}
-			iCurrID++;
+			return false;
 		}
+
+		// ANY change to the template affect the production - even if the template is changed and then changed back again!
+		deleteTemplateFromProduction(psTempl, selectedPlayer, ModeQueue);
+		SendDestroyTemplate(psTempl);
 	}
 
-	if ( bTemplateFound == true && intValidTemplate( &sCurrDesign, aCurrName ) )
-	{
-		/* create new template if button is NULL,
-		 * else store changes to existing template */
-		if ( psTempl == NULL )
-		{
-			/* The design needs a new template in the list */
-			psTempl = new DROID_TEMPLATE;
-			if (psTempl == NULL)
-			{
-				debug(LOG_ERROR, "saveTemplate: Out of memory");
-				return false;
-			}
+	/* Copy the template */
+	*psTempl = sCurrDesign;
+	sstrcpy(psTempl->aName, aCurrName);
 
-			psTempl->ref = REF_TEMPLATE_START;
-			newTemplate = true;
-			/* Add it to temp array */
-			apsTemplateList[i] = psTempl;
+	/* Now update the droid template form */
+	widgDelete(psWScreen, IDDES_TEMPLFORM);
+	widgDelete(psWScreen, IDDES_TEMPLBASE);
+	intAddTemplateForm(psTempl);
 
-			/* update player template list */
-			psPlayerTempl = apsDroidTemplates[selectedPlayer];
-			psPrevTempl = NULL;
-			while ( psPlayerTempl != NULL )
-			{
-				psPrevTempl = psPlayerTempl;
-				psPlayerTempl = psPlayerTempl->psNext;
-			}
-			if ( psPrevTempl == NULL )
-			{
-				apsDroidTemplates[selectedPlayer] = psTempl;
-			}
-			else
-			{
-				psPrevTempl->psNext = psTempl;
-			}
+	// Send template to in-game template list, since localTemplates/apsDroidTemplates is for UI use only.
+	psTempl->multiPlayerID = generateNewObjectId();
+	sendTemplate(selectedPlayer, psTempl);
 
-			/* set button render routines to highlight, not flash */
-			intSetButtonFlash( IDDES_SYSTEMBUTTON, false );
-			intSetButtonFlash( IDDES_BODYBUTTON,   false );
-			intSetButtonFlash( IDDES_PROPBUTTON,   false );
-		}
-		else
-		{
-			/* Get existing template */
-			psTempl = apsTemplateList[i];
-			newTemplate = false;
-			/*ANY change to the template affect the production - even if the
-			template is changed and then changed back again!*/
-			deleteTemplateFromProduction(psTempl, selectedPlayer, ModeQueue);
-			SendDestroyTemplate(psTempl);
-			sCurrDesign.multiPlayerID = generateNewObjectId();
-		}
-
-		/* Copy the template */
-		*psTempl = sCurrDesign;
-		sstrcpy(psTempl->aName, aCurrName);
-
-		/* Now update the droid template form */
-		widgDelete(psWScreen, IDDES_TEMPLFORM);
-		widgDelete(psWScreen, IDDES_TEMPLBASE);
-		intAddTemplateForm(psTempl);
-		stored = true;
-	}
-
-	if (stored)
-	{
-		ASSERT_OR_RETURN( false, psTempl != NULL, "Template is NULL in saveTemplate()!");
-		psTempl->multiPlayerID = generateNewObjectId();
-		if (bMultiMessages)
-		{
-			sendTemplate(selectedPlayer, psTempl);
-		}
-	}
-
-	return stored;
+	return true;
 }
 
 
@@ -4620,26 +4493,14 @@ static BOOL saveTemplate(void)
 the Template buttons*/
 void runTemplateShadowStats(UDWORD id)
 {
-	UDWORD			currID;
 	DROID_TEMPLATE	*psTempl = NULL;
 	COMPONENT_STATS	*psStats;
 	DROID_TYPE		templType;
-	UDWORD			i;
 	int				compIndex;
 
 	/* Find the template for the new button */
-	//currID = IDDES_TEMPLSTART;
 	//we're ignoring the Blank Design so start at the second button
-	currID = IDDES_TEMPLSTART + 1;
-	for( i=1; i<MAXTEMPLATES; i++ )
-	{
-		psTempl = apsTemplateList[i];
-		if (currID == id)
-		{
-			break;
-		}
-		currID ++;
-	}
+	psTempl = templateFromButtonId(id);
 
 	//if we're over a different template
 	if (psTempl && psTempl != &sCurrDesign)

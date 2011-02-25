@@ -63,11 +63,11 @@ int32_t featureDamage(FEATURE *psFeature, UDWORD damage, WEAPON_CLASS weaponClas
 extern void     featureInitVars(void);
 
 #define syncDebugFeature(psFeature, ch) _syncDebugFeature(__FUNCTION__, psFeature, ch)
-void _syncDebugFeature(const char *function, FEATURE *psFeature, char ch);
+void _syncDebugFeature(const char *function, FEATURE const *psFeature, char ch);
 
 
 // True iff object is a feature.
-static inline bool isFeature(SIMPLE_OBJECT const *psObject)             { return psObject->type == OBJ_FEATURE; }
+static inline bool isFeature(SIMPLE_OBJECT const *psObject)             { return psObject != NULL && psObject->type == OBJ_FEATURE; }
 // Returns FEATURE * if feature or NULL if not.
 static inline FEATURE *castFeature(SIMPLE_OBJECT *psObject)             { return isFeature(psObject)? (FEATURE *)psObject : (FEATURE *)NULL; }
 // Returns FEATURE const * if feature or NULL if not.
