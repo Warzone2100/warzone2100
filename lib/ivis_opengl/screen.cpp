@@ -48,8 +48,6 @@ UDWORD		screenWidth = 0;
 UDWORD		screenHeight = 0;
 UDWORD		screenDepth = 0;
 
-bool bShaderlessTeamcolourHack = false;
-
 /* global used to indicate preferred internal OpenGL format */
 int wz_texture_compression;
 
@@ -262,9 +260,8 @@ bool screenInitialise(
 	}
 	else
 	{
-		debug(LOG_POPUP, "OpenGL 2.0 is not supported by your system, current shaders require this.");
-		debug(LOG_POPUP, "Team colors will not function correctly on your system.");
-		bShaderlessTeamcolourHack = true;
+		debug(LOG_POPUP, "OpenGL 2.0 is not supported by your system, current shaders require this. Please upgrade your graphics drivers if possible.");
+		exit(1);
 	}
 
 	glViewport(0, 0, width, height);

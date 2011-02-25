@@ -1374,7 +1374,7 @@ void	renderAnimComponent( const COMPONENT_OBJECT *psObj )
 		pie_MatRotZ(-psObj->orientation.y);
 		pie_MatRotX(-psObj->orientation.x);
 
-		pie_Draw3DShape(psObj->psShape, 0, iPlayer, brightness, pie_STATIC_SHADOW, 0, 256);
+		pie_Draw3DShape(psObj->psShape, 0, iPlayer, brightness, pie_STATIC_SHADOW, 0);
 
 		/* clear stack */
 		pie_MatEnd();
@@ -2172,7 +2172,7 @@ void	renderStructure(STRUCTURE *psStructure)
 				pieFlag = pie_TRANSLUCENT | pie_FORCE_FOG;
 				pieFlagData = 255;
 			}
-			pie_Draw3DShape(psStructure->pStructureType->pBaseIMD, 0, colour, buildingBrightness, pieFlag, pieFlagData, 64);
+			pie_Draw3DShape(psStructure->pStructureType->pBaseIMD, 0, colour, buildingBrightness, pieFlag, pieFlagData);
 		}
 
 		// override
@@ -2190,7 +2190,7 @@ void	renderStructure(STRUCTURE *psStructure)
 	//first check if partially built - ANOTHER HACK!
 	if (psStructure->status == SS_BEING_BUILT || psStructure->status == SS_BEING_DEMOLISHED)
 	{
-		pie_Draw3DShape(strImd, 0, colour, buildingBrightness, pie_HEIGHT_SCALED | pie_SHADOW, structHeightScale(psStructure) * pie_RAISE_SCALE, 64);
+		pie_Draw3DShape(strImd, 0, colour, buildingBrightness, pie_HEIGHT_SCALED | pie_SHADOW, structHeightScale(psStructure) * pie_RAISE_SCALE);
 	}
 	else
 	{
@@ -2208,7 +2208,7 @@ void	renderStructure(STRUCTURE *psStructure)
 		{
 			pie_SetShaderStretchDepth(psStructure->pos.z - psStructure->foundationDepth);
 		}
-		pie_Draw3DShape(strImd, animFrame, colour, buildingBrightness, pieFlag, pieFlagData, 64);
+		pie_Draw3DShape(strImd, animFrame, colour, buildingBrightness, pieFlag, pieFlagData);
 		pie_SetShaderStretchDepth(0);
 
 		// It might have weapons on it
@@ -2616,7 +2616,7 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 			(psStructure->status == SS_BEING_BUILT && psStructure->pStructureType->type == REF_RESOURCE_EXTRACTOR) )
 		{
 			pie_Draw3DShape(psStructure->sDisplay.imd, 0, getPlayerColour(psStructure->player),
-			                brightness, pie_HEIGHT_SCALED|pie_SHADOW, structHeightScale(psStructure) * pie_RAISE_SCALE, 64);
+			                brightness, pie_HEIGHT_SCALED|pie_SHADOW, structHeightScale(psStructure) * pie_RAISE_SCALE);
 		}
 		else
 		{
@@ -2638,7 +2638,7 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 				}
 				pieFlagData = 0;
 			}
-			pie_Draw3DShape(imd, 0, getPlayerColour(psStructure->player), brightness, pieFlag, pieFlagData, 64);
+			pie_Draw3DShape(imd, 0, getPlayerColour(psStructure->player), brightness, pieFlag, pieFlagData);
 		}
 		imd->points = temp;
 

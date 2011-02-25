@@ -70,7 +70,7 @@ struct PIEIMAGE  ///< An area of texture.
  *	Global ProtoTypes
  */
 /***************************************************************************/
-extern void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int pieFlag, int pieFlagData, int shaderlessTeamColourHackAmount = 0);
+extern void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int pieFlag, int pieFlagData);
 extern void pie_DrawImage(const PIEIMAGE *image, const PIERECT *dest);
 
 extern void pie_GetResetCounts(unsigned int* pPieCount, unsigned int* pTileCount, unsigned int* pPolyCount, unsigned int* pStateCount);

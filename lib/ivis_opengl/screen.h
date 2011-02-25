@@ -35,8 +35,6 @@
 
 #include "lib/framework/types.h"
 
-extern bool bShaderlessTeamcolourHack;
-
 /* ------------------------------------------------------------------------------------------- */
 
 /* Legacy stuff

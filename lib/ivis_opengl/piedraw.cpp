@@ -131,19 +131,13 @@ static transluscent_shape_t* tshapes = NULL;
 static unsigned int tshapes_size = 0;
 static unsigned int nb_tshapes = 0;
 
-static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELIGHT teamcolour, int pieFlag, int pieFlagData, int shaderlessTeamColourHackAmount = 0)
+static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELIGHT teamcolour, int pieFlag, int pieFlagData)
 {
-	if (bShaderlessTeamcolourHack)
-	{
-		colour.byte.r = (colour.byte.r*(256 - shaderlessTeamColourHackAmount) + teamcolour.byte.r*shaderlessTeamColourHackAmount) / 256;  // Ugly, but better than being colourblind.
-		colour.byte.g = (colour.byte.g*(256 - shaderlessTeamColourHackAmount) + teamcolour.byte.g*shaderlessTeamColourHackAmount) / 256;
-		colour.byte.b = (colour.byte.b*(256 - shaderlessTeamColourHackAmount) + teamcolour.byte.b*shaderlessTeamColourHackAmount) / 256;
-	}
-
 	iIMDPoly *pPolys;
 	bool light = true;
 
 	pie_SetAlphaTest(true);
+
 	/* Set fog status */
 	if (!(pieFlag & pie_FORCE_FOG) && 
 		(pieFlag & pie_ADDITIVE || pieFlag & pie_TRANSLUCENT || pieFlag & pie_BUTTON))
@@ -470,7 +464,7 @@ void pie_CleanUp( void )
 	scshapes = NULL;
 }
 
-void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int pieFlag, int pieFlagData, int shaderlessTeamColourHackAmount)
+void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int pieFlag, int pieFlagData)
 {
 	PIELIGHT teamcolour;
 
@@ -487,7 +481,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int
 
 	if (drawing_interface || !shadows)
 	{
-		pie_Draw3DShape2(shape, frame, colour, teamcolour, pieFlag, pieFlagData, shaderlessTeamColourHackAmount);
+		pie_Draw3DShape2(shape, frame, colour, teamcolour, pieFlag, pieFlagData);
 	}
 	else
 	{
@@ -567,7 +561,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int
 				}
 			}
 
-			pie_Draw3DShape2(shape, frame, colour, teamcolour, pieFlag, pieFlagData, shaderlessTeamColourHackAmount);
+			pie_Draw3DShape2(shape, frame, colour, teamcolour, pieFlag, pieFlagData);
 		}
 	}
 }

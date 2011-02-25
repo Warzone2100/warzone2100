@@ -212,7 +212,7 @@ void displayStructureButton(STRUCTURE *psStructure, Vector3i *rotation, Vector3i
 	if(baseImd!=NULL) {
 		pie_Draw3DShape(baseImd, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0);
 	}
-	pie_Draw3DShape(psStructure->sDisplay.imd, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0, 64);
+	pie_Draw3DShape(psStructure->sDisplay.imd, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0);
 	//and draw the turret
 	if(psStructure->sDisplay.imd->nconnectors)
 	{
@@ -310,7 +310,7 @@ void displayStructureStatButton(STRUCTURE_STATS *Stats, Vector3i *Rotation, Vect
 	{
 		pie_Draw3DShape(baseImd, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0);
 	}
-	pie_Draw3DShape(Stats->pIMD, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0, 64);
+	pie_Draw3DShape(Stats->pIMD, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0);
 
 	//and draw the turret
 	if(Stats->pIMD->nconnectors)
@@ -565,7 +565,7 @@ static void displayCompObj(DROID *psDroid, BOOL bButton)
 	psShapeTemp = (leftFirst ? getLeftPropulsionIMD(psDroid) : getRightPropulsionIMD(psDroid));
 	if(psShapeTemp!=NULL)
 	{
-		pie_Draw3DShape(psShapeTemp, 0, colour, brightness, pieFlag, iPieData, 256);
+		pie_Draw3DShape(psShapeTemp, 0, colour, brightness, pieFlag, iPieData);
 	}
 
 	/* set default components transparent */
@@ -601,7 +601,7 @@ static void displayCompObj(DROID *psDroid, BOOL bButton)
 			/* draw body if cyborg not animating */
 			if ( psDroid->psCurAnim == NULL || psDroid->psCurAnim->bVisible == false )
 			{
-				pie_Draw3DShape(psShapeTemp, 0, colour, brightness, pieFlag, iPieData, 256);
+				pie_Draw3DShape(psShapeTemp, 0, colour, brightness, pieFlag, iPieData);
 			}
 		}
 		else
@@ -936,7 +936,7 @@ static void displayCompObj(DROID *psDroid, BOOL bButton)
 	psShape = (leftFirst ? getRightPropulsionIMD(psDroid) : getLeftPropulsionIMD(psDroid));
 	if(psShape!=NULL)
 	{
-		pie_Draw3DShape(psShape, 0, colour, brightness, pieFlag, iPieData, 256);
+		pie_Draw3DShape(psShape, 0, colour, brightness, pieFlag, iPieData);
 	}
 }
 
