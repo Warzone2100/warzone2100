@@ -99,16 +99,18 @@ enum {				  // Reticule button indecies.
 	RETBUT_COMMAND,
 };
 
-typedef struct {
+struct BUTSTATE
+{
 	UDWORD id;
 	BOOL Enabled;
 	BOOL Hidden;
-} BUTSTATE;
+};
 
-typedef struct {
+struct BUTOFFSET
+{
 	SWORD x;
 	SWORD y;
-} BUTOFFSET;
+};
 
 BUTOFFSET ReticuleOffsets[NUMRETBUTS] = {	// Reticule button form relative positions.
 	{48,47},	// RETBUT_CANCEL,

@@ -71,11 +71,11 @@ extern iIMDShape	*landingImd;
 extern iIMDShape	*shockImd;
 
 /* An imd entry */
-typedef struct	_misc_imd
+struct MISC_IMD
 {
 iIMDShape	*pImd;
 const char	*pName;
-} MISC_IMD;
+};
 
 
 enum {

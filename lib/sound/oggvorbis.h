@@ -23,7 +23,7 @@
 #include "lib/framework/frame.h"
 #include <physfs.h>
 
-typedef struct
+struct soundDataBuffer
 {
 	// the size of the data contained in *data (NOTE: this is *NOT* the size of *data itself)
 	size_t size;
@@ -37,7 +37,7 @@ typedef struct
 
 	// the raw PCM data
 	char* data;
-} soundDataBuffer;
+};
 
 // Forward declaration so we can take pointers to this type
 struct OggVorbisDecoderState;

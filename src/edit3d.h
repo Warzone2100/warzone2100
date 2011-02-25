@@ -42,11 +42,11 @@ extern void	raiseTile(int tile3dX, int tile3dY);
 extern void	lowerTile(int tile3dX, int tile3dY);
 BOOL	inHighlight				( UDWORD realX, UDWORD realY );
 
-typedef struct _highlight
+struct HIGHLIGHT
 {
 UWORD	xTL,yTL;		// Top left of box to highlight
 UWORD	xBR,yBR;		// Bottom right of box to highlight
-} HIGHLIGHT;
+};
 
 extern HIGHLIGHT	buildSite;
 
@@ -57,14 +57,14 @@ extern HIGHLIGHT	buildSite;
 #define BUILD3D_VALID		102
 
 
-typedef struct _build_details
+struct BUILDDETAILS
 {
 	BUILDCALLBACK	CallBack;
 	void 			*UserData;  //this holds the OBJECT_POSITION pointer for a Deliv Point
 	UDWORD			x,y;
 	UDWORD			width,height;
 	BASE_STATS		*psStats;
-} BUILDDETAILS;
+};
 
 extern BUILDDETAILS	sBuildDetails;
 

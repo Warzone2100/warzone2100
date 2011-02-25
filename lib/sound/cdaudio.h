@@ -21,11 +21,11 @@
 #ifndef __INCLUDED_LIB_SOUND_CDAUDIO_H__
 #define __INCLUDED_LIB_SOUND_CDAUDIO_H__
 
-typedef enum
+enum SONG_CONTEXT
 {
 	SONG_FRONTEND,
 	SONG_INGAME,
-} SONG_CONTEXT;
+};
 
 BOOL cdAudio_Open(const char* user_musicdir);
 void cdAudio_Close(void);

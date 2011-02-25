@@ -52,7 +52,7 @@ CAM_TRACK_LOCATION
 };
 
 /* Storage for old viewnagles etc */
-typedef struct _warcam
+struct WARCAM
 {
 UDWORD	status;
 UDWORD	trackClass;
@@ -69,7 +69,7 @@ Vector3f	rotAccel;
 
 UDWORD	oldDistance;
 BASE_OBJECT *target;
-}WARCAM;
+};
 
 /* Externally referenced functions */
 extern void	initWarCam			( void );

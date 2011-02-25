@@ -67,12 +67,12 @@ KEY_MAPPING	*psMapping,*psReturn;
 /* Some stuff allowing the user to add key mappings themselves */
 
 #define	NUM_QWERTY_KEYS	26
-typedef	struct	_keymap_Marker
+struct KEYMAP_MARKER
 {
 KEY_MAPPING	*psMapping;
 UDWORD	xPos,yPos;
 SDWORD	spin;
-} KEYMAP_MARKER;
+};
 static	KEYMAP_MARKER	qwertyKeyMappings[NUM_QWERTY_KEYS];
 
 

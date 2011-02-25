@@ -27,7 +27,7 @@
 #include <SDL_mouse.h>
 
 
-typedef enum
+enum CURSOR
 {
 	CURSOR_ARROW,
 	CURSOR_DEST,
@@ -59,7 +59,7 @@ typedef enum
 	CURSOR_SELECT,
 
 	CURSOR_MAX,
-} CURSOR;
+};
 
 enum CURSOR_TYPE
 {
@@ -67,7 +67,7 @@ enum CURSOR_TYPE
 	CURSOR_32,
 };
 
-extern SDL_Cursor* init_system_cursor(CURSOR cur, enum CURSOR_TYPE type);
+extern SDL_Cursor* init_system_cursor(CURSOR cur, CURSOR_TYPE type);
 extern SDL_Cursor* init_system_cursor16(CURSOR cur);
 extern SDL_Cursor* init_system_cursor32(CURSOR cur);
 

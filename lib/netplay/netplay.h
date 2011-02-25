@@ -31,7 +31,7 @@
 
 // Lobby Connection errors
 
-typedef enum
+enum LOBBY_ERROR_TYPES
 {
 	ERROR_NOERROR,
 	ERROR_CONNECTION,
@@ -43,9 +43,9 @@ typedef enum
 	ERROR_HOSTDROPPED,
 	ERROR_WRONGDATA,
 	ERROR_UNKNOWNFILEISSUE
-} LOBBY_ERROR_TYPES;
+};
 
-typedef enum
+enum CONNECTION_STATUS
 {
 	CONNECTIONSTATUS_PLAYER_DROPPED,
 	CONNECTIONSTATUS_PLAYER_LEAVING,
@@ -53,9 +53,9 @@ typedef enum
 	CONNECTIONSTATUS_WAITING_FOR_PLAYER,
 
 	CONNECTIONSTATUS_NORMAL
-} CONNECTION_STATUS;
+};
 
-typedef enum
+enum MESSAGE_TYPES
 {
 	NET_MIN_TYPE = 33,              ///< Minimum-1 valid NET_ type, *MUST* be first.
 	NET_PING,                       ///< ping players.
@@ -119,7 +119,7 @@ typedef enum
 	GAME_DROIDDISEMBARK,            ///< droid disembarked from a Transporter
 	// End of redundant messages.
 	GAME_MAX_TYPE                   ///< Maximum+1 valid GAME_ type, *MUST* be last.
-} MESSAGE_TYPES;
+};
 //#define SYNC_FLAG (NUM_GAME_PACKETS * NUM_GAME_PACKETS)	//special flag used for logging.
 #define SYNC_FLAG 0x10000000	//special flag used for logging. (Not sure what this is. Was added in trunk, NUM_GAME_PACKETS not in newnet.)
 
@@ -139,20 +139,21 @@ typedef enum
 #define MAX_CONNECTED_PLAYERS   MAX_PLAYERS
 #define MAX_TMP_SOCKETS         16
 
-typedef struct {					//Available game storage... JUST FOR REFERENCE!
+struct SESSIONDESC  //Available game storage... JUST FOR REFERENCE!
+{
 	int32_t dwSize;
 	int32_t dwFlags;
 	char host[40];	// host's ip address (can fit a full IPv4 and IPv6 address + terminating NUL)
 	int32_t dwMaxPlayers;
 	int32_t dwCurrentPlayers;
 	int32_t dwUserFlags[4];
-} SESSIONDESC;
+};
 
 /**
  * @note when changing this structure, NETsendGAMESTRUCT, NETrecvGAMESTRUCT and
  *       the lobby server should be changed accordingly.
  */
-typedef struct
+struct GAMESTRUCT
 {
 	/* Version of this structure and thus the binary lobby protocol.
 	 * @NOTE: <em>MUST</em> be the first item of this struct.
@@ -179,7 +180,7 @@ typedef struct
 	uint32_t	future2;						// for future use
 	uint32_t	future3;						// for future use
 	uint32_t	future4;						// for future use
-} GAMESTRUCT;
+};
 
 // ////////////////////////////////////////////////////////////////////////
 // Message information. ie. the packets sent between machines.
@@ -187,7 +188,8 @@ typedef struct
 #define NET_ALL_PLAYERS 255
 #define NET_HOST_ONLY 0
 // the following structure is going to be used to track if we sync or not
-typedef struct {
+struct SYNC_COUNTER
+{
 	uint64_t	sentDroidCheck;
 	uint64_t	unsentDroidCheck;
 	uint64_t	sentStructureCheck;
@@ -205,9 +207,9 @@ typedef struct {
 	uint16_t	cantjoin;
 	uint16_t	banned;
 	uint16_t	rejected;
-} SYNC_COUNTER;
+};
 
-typedef struct
+struct WZFile
 {
 	PHYSFS_file	*pFileHandle;		// handle
 	PHYSFS_sint32 fileSize_32;		// size
@@ -215,21 +217,21 @@ typedef struct
 	BOOL	isSending;				// sending to this player
 	BOOL	isCancelled;			// player cancelled
 	int32_t	filetype;				// future use (1=map 2=mod 3=...)
-}	WZFile;
+};
 
-typedef struct
+struct wzFileStatus
 {
 	int32_t player;					// the client we sent data to
 	int32_t done;					// how far done we are (100= finished)
 	int32_t byteCount;				// current byte count
-}	wzFileStatus;
+};
 
-typedef enum
+enum wzFileEnum
 {
 	WZ_FILE_OK,
 	ALREADY_HAVE_FILE,
 	STUCK_IN_FILE_LOOP
-}	wzFileEnum;
+};
 
 enum
 {
@@ -239,7 +241,7 @@ enum
 // ////////////////////////////////////////////////////////////////////////
 // Player information. Filled when players join, never re-ordered. selectedPlayer global points to 
 // currently controlled player.
-typedef struct
+struct PLAYER
 {
 	char		name[StringSize];	///< Player name
 	int32_t		position;		///< Map starting position
@@ -256,11 +258,12 @@ typedef struct
 	BOOL		needFile;			///< if We need a file sent to us
 	WZFile		wzFile;				///< for each player, we keep track of map progress
 	char		IPtextAddress[40];	///< IP of this player
-} PLAYER;
+};
 
 // ////////////////////////////////////////////////////////////////////////
 // all the luvly Netplay info....
-typedef struct {
+struct NETPLAY
+{
 	GAMESTRUCT	games[MaxGames];	///< The collection of games
 	PLAYER		players[MAX_PLAYERS];	///< The array of players.
 	uint32_t	playercount;		///< Number of players in game.
@@ -275,13 +278,13 @@ typedef struct {
 	bool ShowedMOTD;					// only want to show this once
 	char MOTDbuffer[255];				// buffer for MOTD
 	char* MOTD;
-} NETPLAY;
+};
 
-typedef struct
+struct PLAYER_IP
 {
 	char	pname[40];
 	char	IPAddress[40];
-} PLAYER_IP;
+};
 #define MAX_BANS 255
 // ////////////////////////////////////////////////////////////////////////
 // variables

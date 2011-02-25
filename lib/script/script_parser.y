@@ -42,12 +42,12 @@ extern int scr_lex(void);
 extern int scr_lex_destroy(void);
 
 /* Error return codes for code generation functions */
-typedef enum _code_error
+enum CODE_ERROR
 {
 	CE_OK,				// No error
 	CE_MEMORY,			// Out of memory
 	CE_PARSE			// A parse error occured
-} CODE_ERROR;
+};
 
 /* Turn off a couple of warnings that the yacc generated code gives */
 

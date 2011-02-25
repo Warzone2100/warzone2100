@@ -22,12 +22,13 @@
 
 /* --------- Structure variables */
 
-    typedef struct {
+struct FPSmanager
+{
 	Uint32 framecount;
 	float rateticks;
 	Uint32 lastticks;
 	Uint32 rate;
-    } FPSmanager;
+};
 
 /* Functions return 0 or value for sucess and -1 for error */
 

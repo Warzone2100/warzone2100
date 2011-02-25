@@ -77,12 +77,12 @@ extern void pie_RenderRadar(int x, int y, int width, int height);
 
 extern void pie_UploadDisplayBuffer(void);
 
-typedef enum _screenType
+enum SCREENTYPE
 {
 	SCREEN_RANDOMBDROP,
 	SCREEN_CREDITS,
 	SCREEN_MISSIONEND,
-} SCREENTYPE;
+};
 
 extern void pie_LoadBackDrop(SCREENTYPE screenType);
 

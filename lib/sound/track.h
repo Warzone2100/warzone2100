@@ -44,13 +44,13 @@
  */
 
 typedef BOOL (* AUDIO_CALLBACK)  ( void *psObj );
-typedef struct __audio_stream AUDIO_STREAM;
+struct AUDIO_STREAM;
 
 /* structs */
 
 struct SIMPLE_OBJECT;
 
-typedef struct AUDIO_SAMPLE
+struct AUDIO_SAMPLE
 {
 	SDWORD                  iTrack;         // ID number identifying a specific sound; currently (r1182) mapped in audio_id.c
 #ifndef WZ_NOSOUND
@@ -66,11 +66,11 @@ typedef struct AUDIO_SAMPLE
 	BOOL                    bFinishedPlaying;
 	AUDIO_CALLBACK          pCallback;
 	SIMPLE_OBJECT *         psObj;
-	struct AUDIO_SAMPLE     *psPrev;
-	struct AUDIO_SAMPLE     *psNext;
-} AUDIO_SAMPLE;
+	AUDIO_SAMPLE *          psPrev;
+	AUDIO_SAMPLE *          psNext;
+};
 
-typedef struct TRACK
+struct TRACK
 {
 	BOOL            bLoop;
 	SDWORD          iVol;
@@ -82,7 +82,7 @@ typedef struct TRACK
 	ALuint          iBufferName;            // OpenAL name of the buffer
 #endif
 	const char*     fileName;
-} TRACK;
+};
 
 /* functions
  */

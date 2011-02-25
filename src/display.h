@@ -98,7 +98,7 @@ UDWORD	pulse;
 
 extern struct	_dragBox dragBox3D,wallDrag;
 
-typedef enum _pointer
+enum MOUSE_POINTER
 {
 MP_ATTACH = 99,
 MP_ATTACK,
@@ -115,9 +115,9 @@ MP_SELECT,
 MP_LOCKON,
 MP_MENSELECT,
 MP_BOMB
-} MOUSE_POINTER;
+};
 
-typedef enum _selectionTypes
+enum SELECTION_TYPE
 {
 SC_DROID_CONSTRUCT,
 SC_DROID_DIRECT,
@@ -134,9 +134,9 @@ SC_DROID_DEMOLISH,
 SC_DROID_REPAIR,
 SC_INVALID,
 
-} SELECTION_TYPE;
+};
 
-typedef enum _targets
+enum MOUSE_TARGET
 {
 MT_TERRAIN,
 MT_RESOURCE,
@@ -163,7 +163,7 @@ MT_SENSORSTRUCT,
 MT_SENSORSTRUCTDAM,
 
 MT_NOTARGET		//leave as last one
-} MOUSE_TARGET;
+};
 
 extern BOOL		gameStats;
 extern BOOL		godMode;

@@ -21,11 +21,12 @@
 #ifndef __INCLUDED_SRC_MAIN_H__
 #define __INCLUDED_SRC_MAIN_H__
 
-typedef enum {
+enum GS_GAMEMODE
+{
 	GS_TITLE_SCREEN,
 	GS_NORMAL,
 	GS_SAVEGAMELOAD
-} GS_GAMEMODE;
+};
 
 //flag to indicate when initialisation is complete
 extern BOOL gameInitialised;

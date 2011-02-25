@@ -66,12 +66,12 @@ extern DROID_TEMPLATE			*apsStaticTemplates;			// for AIs and scripts
 /* Minumum number of droids a commander can control in its group */
 #define	MIN_CMD_GROUP_DROIDS	6
 
-typedef enum
+enum PICKTILE
 {
 	NO_FREE_TILE,
 	FREE_TILE,
 	HALF_FREE_TILE
-} PICKTILE;
+};
 
 // the structure that was last hit
 extern DROID	*psLastDroidHit;
@@ -90,13 +90,13 @@ extern BOOL loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize);
 /*initialise the template build and power points */
 extern void initTemplatePoints(void);
 
-typedef struct InitialDroidOrders
+struct INITIAL_DROID_ORDERS
 {
 	uint32_t secondaryOrder;
 	int32_t moveToX;
 	int32_t moveToY;
 	uint32_t factoryId;
-} INITIAL_DROID_ORDERS;
+};
 /*Builds an instance of a Structure - the x/y passed in are in world coords.*/
 /// Sends a GAME_DROID message if bMultiMessages is true, or actually creates it if false. Only uses initialOrders if sending a GAME_DROID message.
 extern DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player, BOOL onMission, const INITIAL_DROID_ORDERS *initialOrders);

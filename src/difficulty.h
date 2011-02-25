@@ -21,14 +21,14 @@
 #ifndef __INCLUDED_SRC_DIFFICULTY_H__
 #define __INCLUDED_SRC_DIFFICULTY_H__
 
-typedef enum _difficulty_level
+enum DIFFICULTY_LEVEL
 {
 	DL_EASY,
 	DL_NORMAL,
 	DL_HARD,
 	DL_TOUGH,
 	DL_KILLER
-} DIFFICULTY_LEVEL;
+};
 
 void setDifficultyLevel(DIFFICULTY_LEVEL lev);
 DIFFICULTY_LEVEL getDifficultyLevel(void);

@@ -25,13 +25,13 @@
 #define MAX_CONSOLE_STRING_LENGTH		(255)
 #define MAX_CONSOLE_TMP_STRING_LENGTH	(255)
 
-typedef enum
+enum CONSOLE_TEXT_JUSTIFICATION
 {
 	LEFT_JUSTIFY,
 	RIGHT_JUSTIFY,
 	CENTRE_JUSTIFY,
 	DEFAULT_JUSTIFY
-} CONSOLE_TEXT_JUSTIFICATION;
+};
 
 /* ID to use for addConsoleMessage() in case of a system message */
 #define	SYSTEM_MESSAGE				(-1)

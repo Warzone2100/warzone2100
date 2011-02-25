@@ -21,13 +21,13 @@
 #ifndef __INCLUDED_SRC_SELECTION_H__
 #define __INCLUDED_SRC_SELECTION_H__
 
-typedef enum _selection_class
+enum SELECTION_CLASS
 {
 DS_ALL_UNITS,
 DS_BY_TYPE
-} SELECTION_CLASS;
+};
 
-typedef enum _selectiontype
+enum SELECTIONTYPE
 {
 DST_UNUSED,
 DST_VTOL,
@@ -38,7 +38,7 @@ DST_HALF_TRACKED,
 DST_ALL_COMBAT,
 DST_ALL_DAMAGED,
 DST_ALL_SAME
-} SELECTIONTYPE;
+};
 
 // EXTERNALLY REFERENCED FUNCTIONS
 extern UDWORD	selDroidSelection( UDWORD	player, SELECTION_CLASS droidClass,

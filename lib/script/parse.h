@@ -51,40 +51,40 @@
 #define MAX_SCR_MACRO_LEN		32
 
 /* Structure to hold script define directive information */
-typedef struct _scr_define
+struct SCR_MACRO
 {
 	char scr_define_macro[MAX_SCR_MACRO_LEN];
 	char scr_define_body[MAXSTRLEN];
-}SCR_MACRO;
+};
 
 /* Definition for the chunks of code that are used within the compiler */
-typedef struct _code_block
+struct CODE_BLOCK
 {
 	UDWORD				size;				// size of the code block
 	INTERP_VAL			*pCode;		// pointer to the code data
 	UDWORD				debugEntries;
 	SCRIPT_DEBUG		*psDebug;	// Debugging info for the script.
 	INTERP_TYPE			type;			// The type of the code block
-} CODE_BLOCK;
+};
 
 /* The chunk of code returned from parsing a parameter list. */
-typedef struct _param_block
+struct PARAM_BLOCK
 {
 	UDWORD		numParams;
 	INTERP_TYPE	*aParams;	// List of parameter types
 	UDWORD		size;
 	INTERP_VAL	*pCode;		// The code that puts the parameters onto the stack
-}PARAM_BLOCK;
+};
 
 /* The types of a functions parameters, returned from parsing a parameter declaration */
-typedef struct _param_decl
+struct PARAM_DECL
 {
 	UDWORD		numParams;
 	INTERP_TYPE	*aParams;
-} PARAM_DECL;
+};
 
 /* The chunk of code used while parsing a conditional statement */
-typedef struct _cond_block
+struct COND_BLOCK
 {
 	UDWORD		numOffsets;
 	UDWORD		*aOffsets;	// Positions in the code that have to be
@@ -94,14 +94,14 @@ typedef struct _cond_block
 	INTERP_VAL		*pCode;
 	UDWORD			debugEntries;	// Number of debugging entries in psDebug.
 	SCRIPT_DEBUG	*psDebug;		// Debugging info for the script.
-} COND_BLOCK;
+};
 
 /* The possible access types for a type */
-typedef enum _access_type
+enum ACCESS_TYPE
 {
 	AT_SIMPLE,			// The type represents a simple data value
 	AT_OBJECT,			// The type represents an object
-} ACCESS_TYPE;
+};
 
 
 // function pointer for script variable saving
@@ -112,25 +112,25 @@ typedef BOOL (*SCR_VAL_SAVE)(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize);
 typedef BOOL (*SCR_VAL_LOAD)(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size);
 
 /* Type for a user type symbol */
-typedef struct _type_symbol
+struct TYPE_SYMBOL
 {
 	const char		*pIdent;	// Type identifier
 	INTERP_TYPE		typeID;		// The type id to use in the type field of values
 	SWORD			accessType;	// Whether the type is an object or a simple value
 	SCR_VAL_SAVE	saveFunc;	// load and save functions
 	SCR_VAL_LOAD	loadFunc;	//
-} TYPE_SYMBOL;
+};
 
 /* Type for a variable identifier declaration */
-typedef struct _var_ident_decl
+struct VAR_IDENT_DECL
 {
 	char			*pIdent;						// variable identifier
 	SDWORD			dimensions;						// number of dimensions of an array - 0 for normal var
 	SDWORD			elements[VAR_MAX_DIMENSIONS];	// number of elements in an array
-} VAR_IDENT_DECL;
+};
 
 /* Type for a variable symbol */
-typedef struct _var_symbol
+struct VAR_SYMBOL
 {
 	const char	*pIdent;	// variable's identifier
 	INTERP_TYPE		type;		// variable type
@@ -141,12 +141,12 @@ typedef struct _var_symbol
 	UDWORD			dimensions;						// number of dimensions of an array - 0 for normal var
 	SDWORD			elements[VAR_MAX_DIMENSIONS];	// number of elements in an array
 
-	struct _var_symbol *psNext;
-} VAR_SYMBOL;
+	VAR_SYMBOL *    psNext;
+};
 
 
 /* Type for an array access block */
-typedef struct _array_block
+struct ARRAY_BLOCK
 {
 	VAR_SYMBOL		*psArrayVar;
 	UDWORD			dimensions;
@@ -155,10 +155,10 @@ typedef struct _array_block
 	INTERP_VAL			*pCode;
 	UDWORD			debugEntries;	// Number of debugging entries in psDebug.
 	SCRIPT_DEBUG	*psDebug;		// Debugging info for the script.
-} ARRAY_BLOCK;
+};
 
 /* Type for a constant symbol */
-typedef struct _const_symbol
+struct CONST_SYMBOL
 {
 	const char		*pIdent;	// variable's identifier
 	INTERP_TYPE		type;		// variable type
@@ -172,22 +172,22 @@ typedef struct _const_symbol
 	void			*oval;
 	char			*sval;	//String values
 	float			fval;
-} CONST_SYMBOL;
+};
 
 /* The chunk of code used to reference an object variable */
-typedef struct _objvar_block
+struct OBJVAR_BLOCK
 {
 	VAR_SYMBOL		*psObjVar;	// The object variables symbol
 
 	UDWORD			size;
 	INTERP_VAL		*pCode;		// The code to get the object value on the stack
-} OBJVAR_BLOCK;
+};
 
 /* The maximum number of parameters for an instinct function */
 #define INST_MAXPARAMS		20
 
 /* Type for a function symbol */
-typedef struct _func_symbol
+struct FUNC_SYMBOL
 {
 	const char	*pIdent;	// function's identifier
 	SCRIPT_FUNC	pFunc;		// Pointer to the instinct function
@@ -203,27 +203,27 @@ typedef struct _func_symbol
 	UDWORD			debugEntries;	// Number of debugging entries in psDebug.
 	SCRIPT_DEBUG	*psDebug;		// Debugging info for the script.
 
-	struct _func_symbol *psNext;
-} FUNC_SYMBOL;
+	FUNC_SYMBOL *   psNext;
+};
 
 /* The type for a variable declaration */
-typedef struct _var_decl
+struct VAR_DECL
 {
 	INTERP_TYPE		type;
 	STORAGE_TYPE	storage;
-} VAR_DECL;
+};
 
 /* The type for a trigger sub declaration */
-typedef struct _trigger_decl
+struct TRIGGER_DECL
 {
 	TRIGGER_TYPE	type;
 	UDWORD			size;
 	INTERP_VAL		*pCode;
 	UDWORD			time;
-} TRIGGER_DECL;
+};
 
 /* Type for a trigger symbol */
-typedef struct _trigger_symbol
+struct TRIGGER_SYMBOL
 {
 	char			*pIdent;	// Trigger's identifier
 	UDWORD			index;		// The triggers index number
@@ -235,11 +235,11 @@ typedef struct _trigger_symbol
 	UDWORD			debugEntries;
 	SCRIPT_DEBUG	*psDebug;
 
-	struct _trigger_symbol *psNext;
-} TRIGGER_SYMBOL;
+	TRIGGER_SYMBOL *psNext;
+};
 
 /* The type for a callback trigger symbol */
-typedef struct _callback_symbol
+struct CALLBACK_SYMBOL
 {
 	const char		*pIdent;	// Callback identifier
 	TRIGGER_TYPE	type;		// user defined callback id >= TR_CALLBACKSTART
@@ -247,11 +247,11 @@ typedef struct _callback_symbol
 	UDWORD			numParams;	// Number of parameters to the function
 	uint32_t/*INTERP_TYPE*/ aParams[INST_MAXPARAMS];
 								// List of parameter types
-} CALLBACK_SYMBOL;
+};
 
 
 /* Type for an event symbol */
-typedef struct _event_symbol
+struct EVENT_SYMBOL
 {
 	char		*pIdent;	// Event's identifier
 	UDWORD		index;		// the events index number
@@ -271,8 +271,8 @@ typedef struct _event_symbol
 
 	INTERP_TYPE	aParams[INST_MAXPARAMS];
 
-	struct _event_symbol *psNext;
-} EVENT_SYMBOL;
+	EVENT_SYMBOL *  psNext;
+};
 
 /* The table of user types */
 extern TYPE_SYMBOL		*asScrTypeTab;

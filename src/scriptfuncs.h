@@ -472,12 +472,12 @@ extern BOOL	scrForceDamage( void );
 
 extern BOOL scrGetGameStatus(void);
 
-typedef enum gamestatus
+enum GAMESTATUS
 {
 	STATUS_ReticuleIsOpen,
 	STATUS_BattleMapViewEnabled,
 	STATUS_DeliveryReposInProgress
-} GAMESTATUS;
+};
 
 //get the colour number used by a player
 extern BOOL scrGetPlayerColour(void);

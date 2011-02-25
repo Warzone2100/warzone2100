@@ -36,7 +36,7 @@
 
 
 /* All the effect groups */
-typedef enum
+enum EFFECT_GROUP
 {
 	EFFECT_EXPLOSION,
 	EFFECT_CONSTRUCTION,
@@ -50,11 +50,11 @@ typedef enum
 	EFFECT_DUST_BALL,
 	EFFECT_FIRE,
 	EFFECT_FIREWORK
-} EFFECT_GROUP;
+};
 
 
 /* Might not even need this */
-typedef enum
+enum EFFECT_TYPE
 {
 	EXPLOSION_TYPE_SMALL,
 	EXPLOSION_TYPE_VERY_SMALL,
@@ -108,20 +108,18 @@ typedef enum
 
 	FIREWORK_TYPE_STARBURST,
 	FIREWORK_TYPE_LAUNCHER,
+};
 
-} EFFECT_TYPE;
 
-
-typedef enum
+enum LAND_LIGHT_SPEC
 {
 	LL_MIDDLE,
 	LL_INNER,
 	LL_OUTER
-} LAND_LIGHT_SPEC;
+};
 
 
-typedef struct _effect_def EFFECT;
-struct _effect_def
+struct EFFECT
 {
 	uint8_t           player;      //	when the effect in question needs a player's color
 	uint8_t           control;     // Controls the bits above - essential,flips etc

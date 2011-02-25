@@ -28,28 +28,28 @@
 #include "lib/framework/vector.h"
 #include "lib/netplay/netqueue.h"
 
-typedef enum packetDirectionEnum
+enum PACKETDIR
 {
 	PACKET_ENCODE,
 	PACKET_DECODE,
 	PACKET_INVALID
-} PACKETDIR;
+};
 
-typedef enum QueueType
+enum QueueType
 {
 	QUEUE_TMP,
 	QUEUE_NET,
 	QUEUE_GAME,
 	QUEUE_BROADCAST,
-} QUEUETYPE;
+};
 
-typedef struct _netqueue
+struct NETQUEUE
 {
 	void *queue;  ///< Is either a (NetQueuePair **) or a (NetQueue *). (Note different numbers of *.)
 	BOOL isPair;
 	uint8_t index;
 	uint8_t queueType;
-} NETQUEUE;
+};
 
 NETQUEUE NETnetTmpQueue(unsigned tmpPlayer);  ///< One of the temp queues from before a client has joined the game. (See comments on tmpQueues in nettypes.cpp.)
 NETQUEUE NETnetQueue(unsigned player);        ///< The queue pair used for sending and receiving data directly from another client. (See comments on netQueues in nettypes.cpp.)

@@ -105,22 +105,24 @@ void pie_EndLighting(void)
  * Avoids recalculating vertex projections for every poly
  ***************************************************************************/
 
-typedef struct {
+struct shadowcasting_shape_t
+{
 	float		matrix[16];
 	iIMDShape*	shape;
 	int		flag;
 	int		flag_data;
 	Vector3f	light;
-} shadowcasting_shape_t;
+};
 
-typedef struct {
+struct transluscent_shape_t
+{
 	float		matrix[16];
 	iIMDShape*	shape;
 	int		frame;
 	PIELIGHT	colour;
 	int		flag;
 	int		flag_data;
-} transluscent_shape_t;
+};
 
 static shadowcasting_shape_t* scshapes = NULL;
 static unsigned int scshapes_size = 0;

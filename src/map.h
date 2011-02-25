@@ -32,7 +32,7 @@
 #include "display.h"
 
 /* The different types of terrain as far as the game is concerned */
-typedef enum _terrain_type
+enum TYPE_OF_TERRAIN
 {
 	TER_SAND,
 	TER_SANDYBRUSH,
@@ -48,7 +48,7 @@ typedef enum _terrain_type
 	TER_SLUSH,
 
 	TER_MAX,
-} TYPE_OF_TERRAIN;
+};
 
 #define TILESET_ARIZONA 0
 #define TILESET_URBAN	1
@@ -83,11 +83,11 @@ static inline unsigned short TileNumber_texture(unsigned short tilenumber)
 #define BITS_ON_FIRE            0x20    ///< Whether tile is burning
 #define BITS_GATEWAY		0x40	///< Bit set to show a gateway on the tile
 
-typedef struct _ground_type
+struct GROUND_TYPE
 {
 	const char *textureName;
 	float textureSize;
-} GROUND_TYPE;
+};
 
 /* Information stored with each tile */
 struct MAPTILE
@@ -508,13 +508,6 @@ WZ_DECL_ALWAYS_INLINE static inline bool worldOnMap3f(Vector3f pos)
 	return worldOnMap(pos.x, pos.y);
 }
 
-
-/* Store a map coordinate and it's associated tile */
-typedef struct _tile_coord
-{
-	UDWORD	x,y;
-	MAPTILE	*psTile;
-} TILE_COORD;
 
 /* Intersect a line with the map and report tile intersection points */
 bool map_Intersect(int *Cx, int *Cy, int *Vx, int* Vy, int *Sx, int *Sy);

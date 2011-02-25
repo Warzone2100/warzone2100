@@ -34,13 +34,13 @@
 #include "debug.h"
 #include "treap.h"
 
-typedef struct TREAP_NODE
+struct TREAP_NODE
 {
 	const char*                     key;                    //< The key to sort the node on
 	unsigned int                    priority;               //< Treap priority
 	const char*                     string;                 //< The string stored in the treap
-	struct TREAP_NODE               *psLeft, *psRight;      //< The sub trees
-} TREAP_NODE;
+	TREAP_NODE                      *psLeft, *psRight;      //< The sub trees
+};
 
 /* A useful comparison function - keys are char pointers */
 static int treapStringCmp(const char *key1, const char *key2)

@@ -34,11 +34,11 @@
 
 
 // the event save file header
-typedef struct _event_save_header
+struct EVENT_SAVE_HDR  // : public GAME_SAVEHEADER
 {
 	char		aFileType[4];
 	UDWORD		version;
-} EVENT_SAVE_HDR;
+};
 
 
 // save the context information for the script system

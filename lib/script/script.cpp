@@ -175,7 +175,7 @@ BOOL scriptGetVarIndex(SCRIPT_CODE *psCode, char *pID, UDWORD *pIndex)
    these aren't currently checked for, but it's a lot clearer what's going on if they're all here */
 BOOL scriptTypeIsPointer(INTERP_TYPE type)
 {
-	ASSERT((_scr_user_types)type < ST_MAXTYPE || type >= VAL_REF, "Invalid type: %d", type);
+	ASSERT((SCR_USER_TYPES)type < ST_MAXTYPE || type >= VAL_REF, "Invalid type: %d", type);
 	// any value or'ed with VAL_REF is a pointer
 	if (type >= VAL_REF) return true;
 	switch ((unsigned)type)  // Unsigned cast to suppress compiler warnings due to enum abuse.

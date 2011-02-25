@@ -89,21 +89,21 @@
 #define VALIDITYKEY_CHEAT_MODE	0x08
 #define VALIDITYKEY_MID_GAME	0x10
 
-typedef enum
+enum GAME_TYPE
 {
 	GTYPE_SCENARIO_START,	///< Initial scenario state.
 	GTYPE_SCENARIO_EXPAND,	///< Scenario scroll area expansion.
 	GTYPE_MISSION,		///< Stand alone mission.
 	GTYPE_SAVE_START,	///< User saved game - at the start of a level.
 	GTYPE_SAVE_MIDMISSION,	///< User saved game - in the middle of a level
-} GAME_TYPE;
+};
 
 
-typedef struct _vis_save_header
+struct VIS_SAVEHEADER
 {
 	char        aFileType[4];
 	uint32_t    version;
-} VIS_SAVEHEADER;
+};
 
 
 /***************************************************************************/

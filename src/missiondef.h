@@ -46,6 +46,8 @@ struct LANDING_ZONE
 	uint8_t y2;
 };
 
+struct GATEWAY;
+
 //storage structure for values that need to be kept between missions
 struct MISSION
 {
@@ -53,7 +55,7 @@ struct MISSION
 	MAPTILE				*psMapTiles;					//the original mapTiles
 	int32_t                         mapWidth;                       //the original mapWidth
 	int32_t                         mapHeight;                      //the original mapHeight
-	struct _gateway *               psGateways;                     //the gateway list
+	GATEWAY *                       psGateways;                     //the gateway list
 	int32_t                         scrollMinX;                     //scroll coords for original map
 	int32_t                         scrollMinY;
 	int32_t                         scrollMaxX;

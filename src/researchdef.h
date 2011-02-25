@@ -25,13 +25,14 @@
 #define __INCLUDED_RESEARCHDEF_H__
 
 #include "lib/framework/frame.h"
+#include "statsdef.h"
 
 /* Research struct type definitions */
-typedef enum
+enum TECH_CODE
 {
 	TC_MAJOR,
 	TC_MINOR,
-} TECH_CODE;
+};
 
 struct RESEARCH : public BASE_STATS
 {
@@ -65,8 +66,7 @@ struct RESEARCH : public BASE_STATS
 	COMPONENT_STATS	**pReplacedArtefacts;/*List of artefacts that are replaced by the above
 										  result - not necessarily any! 1 to 1 relation with
 										  above list */
-	struct _viewdata	*pViewData;		/*data used to display a message in the
-										  Intelligence Screen*/
+	struct VIEWDATA *       pViewData;               // data used to display a message in the Intelligence Screen
 	UWORD			iconID;				/* the ID from 'Framer' for which graphic to draw in interface*/
 	BASE_STATS      *psStat;            /* A stat used to define which graphic is
 	                                       drawn instead of the two fields below*/
@@ -74,7 +74,7 @@ struct RESEARCH : public BASE_STATS
 	iIMDShape		*pIMD2;		/* the 2nd IMD for base plates/turrets*/
 };
 
-typedef struct _player_research
+struct PLAYER_RESEARCH
 {
 	UDWORD		currentPoints;			// If the research has been suspended then this value contains the number of points generated at the suspension/cancel point
 										// normally it is null
@@ -82,7 +82,7 @@ typedef struct _player_research
 	UBYTE		ResearchStatus;			// Bit flags   ...  see below
 
 	bool            possible;                       ///< is the research possible ... so can enable topics vis scripts
-} PLAYER_RESEARCH;
+};
 
 #define STARTED_RESEARCH           0x01            // research in progress
 #define CANCELLED_RESEARCH         0x02            // research has been canceled

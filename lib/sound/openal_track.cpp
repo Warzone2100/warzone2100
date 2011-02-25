@@ -55,7 +55,7 @@ ALuint current_queue_sample = -1;
 
 static BOOL openal_initialized = false;
 
-struct __audio_stream
+struct AUDIO_STREAM
 {
 #ifndef WZ_NOSOUND
 	ALuint                  source;        // OpenAL name of the sound source
@@ -71,14 +71,14 @@ struct __audio_stream
 	size_t                  bufferSize;
 
 	// Linked list pointer
-	struct __audio_stream   *next;
+	AUDIO_STREAM *          next;
 };
 
-typedef struct	SAMPLE_LIST
+struct SAMPLE_LIST
 {
-	struct AUDIO_SAMPLE *curr;
-	struct SAMPLE_LIST	*next;
-} SAMPLE_LIST;
+	AUDIO_SAMPLE *  curr;
+	SAMPLE_LIST *   next;
+};
 
 static SAMPLE_LIST *active_samples = NULL;
 

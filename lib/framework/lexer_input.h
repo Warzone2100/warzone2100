@@ -30,7 +30,7 @@ enum lexinput_type
 	LEXINPUT_BUFFER,
 };
 
-typedef struct
+struct lexerinput_t
 {
 	union
 	{
@@ -42,8 +42,8 @@ typedef struct
 			const char* end;
 		} buffer;
 	} input;
-	enum lexinput_type type;
-} lexerinput_t;
+	lexinput_type type;
+};
 
 #ifdef YY_EXTRA_TYPE
 # undef YY_EXTRA_TYPE

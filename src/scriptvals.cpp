@@ -37,14 +37,14 @@
 #include "group.h"
 
 // Keep all the loaded script contexts
-typedef struct _scrv_store
+struct SCRV_STORE
 {
 	SCRV_TYPE		type;
 	char			*pIDString;
 	SCRIPT_CONTEXT	*psContext;
 
-	struct _scrv_store *psNext;
-} SCRV_STORE;
+	SCRV_STORE *     psNext;
+};
 
 // The list of script contexts
 static SCRV_STORE	*psContextStore=NULL;

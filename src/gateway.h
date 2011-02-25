@@ -24,11 +24,11 @@
 #ifndef __INCLUDED_SRC_GATEWAY_H__
 #define __INCLUDED_SRC_GATEWAY_H__
 
-typedef struct _gateway
+struct GATEWAY
 {
 	UBYTE			x1,y1, x2,y2;
-	struct _gateway		*psNext;
-} GATEWAY;
+	GATEWAY *       psNext;
+};
 
 /// Initialise the gateway system
 BOOL gwInitialise(void);

@@ -40,16 +40,15 @@
  */
 /***************************************************************************/
 
-typedef struct	RENDER_STATE
-				{
+struct RENDER_STATE
+{
 					BOOL				fogEnabled;
 					BOOL				fog;
 					PIELIGHT			fogColour;
 					SDWORD				texPage;
 					REND_MODE			rendMode;
 					BOOL				keyingOn;
-				}
-				RENDER_STATE;
+};
 
 /***************************************************************************/
 /*

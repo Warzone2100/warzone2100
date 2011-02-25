@@ -44,23 +44,23 @@ typedef void (*RES_FREE)(void *pData);
 /** callback type for resload display callback. */
 typedef void (*RESLOAD_CALLBACK)(void);
 
-typedef struct res_data
+struct RES_DATA
 {
 	void		*pData;				// pointer to the acutal data
 	SDWORD		blockID;			// which of the blocks is it in (so we can clear some of them...)
 
 	UDWORD	HashedID;				// hashed version of the name of the id
-	struct	res_data *psNext;		// next entry - most likely to be following on!
+	RES_DATA *      psNext;                         // next entry - most likely to be following on!
 	UDWORD		usage; // Reference count
 
 	// ID of the resource - filename from the .wrf - e.g. "TRON.PIE"
 	const char* aID;
-} RES_DATA;
+};
 
 
 // New reduced resource type ... specially for PSX
 // These types  are statically defined in data.c
-typedef struct _res_type
+struct RES_TYPE
 {
 	// type is still needed on psx ... strings are defined in source - data.c (yak!)
 	char			aType[RESTYPE_MAXCHAR];		// type string (e.g. "PIE"	 - just for debug use only, only aplicable when loading from wrf (not wdg)
@@ -73,8 +73,8 @@ typedef struct _res_type
 	UDWORD	HashedType;				// hashed version of the name of the id - // a null hashedtype indicates end of list
 
 	RES_FILELOAD	fileLoad;		// This isn't really used any more ?
-	struct _res_type	*psNext;
-} RES_TYPE;
+	RES_TYPE *      psNext;
+};
 
 
 /** Set the function to call when loading files with resloadfile. */

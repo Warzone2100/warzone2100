@@ -40,24 +40,27 @@ enum {
 	FR_KEYED,	//< Bitmap drawn with colour 0 transparent.
 };
 
-typedef enum {
+enum FRAMERECTTYPE
+{
 	FR_IGNORE,	//< Fill rect is ignored.
 	FR_FRAME,	//< Fill rect drawn relative to frame.
 	FR_LEFT,	//< Fill rect drawn relative to left of frame.
 	FR_RIGHT,	//< Fill rect drawn relative to right of frame.
 	FR_TOP,		//< Fill rect drawn relative to top of frame.
 	FR_BOTTOM,	//< Fill rect drawn relative to bottom of frame.
-} FRAMERECTTYPE;
+};
 
-typedef struct {
+struct FRAMERECT
+{
 	FRAMERECTTYPE Type;		//< One of the FR_... values.
 	int TLXOffset, TLYOffset;	//< Offsets for the rect fill.
 	int BRXOffset, BRYOffset;
 	int ColourIndex;		//< Hackish index into the WZCOLOR palette
-} FRAMERECT;
+};
 
 // Frame definition structure.
-typedef struct {
+struct IMAGEFRAME
+{
 	SWORD OffsetX0,OffsetY0;	//< Offset top left of frame.
 	SWORD OffsetX1,OffsetY1;	//< Offset bottom right of frame.
 	SWORD TopLeft;			//< Image indecies for the corners ( -1 = don't draw).
@@ -69,7 +72,7 @@ typedef struct {
 	SWORD BottomEdge,BottomType;
 	SWORD LeftEdge,LeftType;
 	FRAMERECT FRect[5];		//< Fill rectangles.
-} IMAGEFRAME;
+};
 
 IMAGEFILE *IntImages;	// All the 2d graphics for the user interface.
 

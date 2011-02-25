@@ -24,7 +24,8 @@
 #include "lib/widget/widgbase.h"
 
 // determines which option screen to use. when in GS_TITLE_SCREEN mode.
-typedef enum _title_mode {
+enum tMode
+{
 	TITLE,			// 0 intro mode
 	SINGLE,			// 1 single player menu
 	MULTI,			// 2 multiplayer menu
@@ -46,7 +47,7 @@ typedef enum _title_mode {
 	AUDIO_OPTIONS,          // 18 audio options menu
 	VIDEO_OPTIONS,          // 19 video options menu
 	MOUSE_OPTIONS,          // 20 mouse options menu
-} tMode;
+};
 
 extern tMode titleMode;					// the global case
 extern tMode lastTitleMode;

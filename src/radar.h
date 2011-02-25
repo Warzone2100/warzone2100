@@ -46,7 +46,7 @@ extern uint8_t GetRadarZoom(void);			///< Get current zoom level.
 extern BOOL CoordInRadar(int x, int y);			///< Is screen coordinate inside minimap?
 
 /** Different mini-map draw modes. */
-typedef enum _radar_draw_mode
+enum RADAR_DRAW_MODE
 {
 	RADAR_MODE_TERRAIN,				///< Draw terrain map
 	RADAR_MODE_DEFAULT = RADAR_MODE_TERRAIN,	///< Default is terrain map
@@ -55,7 +55,7 @@ typedef enum _radar_draw_mode
 	RADAR_MODE_COMBINED,
 	RADAR_MODE_NO_TERRAIN,				///< Only display objects
 	NUM_RADAR_MODES
-}RADAR_DRAW_MODE;
+};
 
 extern BOOL		bEnemyAllyRadarColor;		///< Enemy/ally minimap color
 extern RADAR_DRAW_MODE	radarDrawMode;			///< Current minimap mode

@@ -43,12 +43,12 @@
 #include "warzoneconfig.h"
 #include "wrappers.h"
 
-typedef struct _star
+struct STAR
 {
 	int      xPos;
 	int      speed;
 	PIELIGHT colour;
-} STAR;
+};
 
 static BOOL		firstcall = false;
 static BOOL		bPlayerHasLost = false;

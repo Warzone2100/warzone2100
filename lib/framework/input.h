@@ -36,7 +36,7 @@
 #include "vector.h"
 
 /** Defines for all the key codes used. */
-typedef enum _key_code
+enum KEY_CODE
 {
 	KEY_ESC			=SDLK_ESCAPE,
 	KEY_1			=SDLK_1,
@@ -143,7 +143,7 @@ typedef enum _key_code
 	KEY_KPENTER		=SDLK_KP_ENTER,
 
 	KEY_IGNORE		=5190
-} KEY_CODE;
+};
 
 /** The largest possible scan code. */
 #define KEY_MAXSCAN SDLK_LAST
@@ -170,14 +170,14 @@ extern bool keyPressed(KEY_CODE code);
 /** This returns true if the key went from being down to being up this frame. */
 extern bool keyReleased(KEY_CODE code);
 
-typedef enum _mouse_key_code
+enum MOUSE_KEY_CODE
 {
 	MOUSE_LMB = SDL_BUTTON_LEFT,
 	MOUSE_MMB = SDL_BUTTON_MIDDLE,
 	MOUSE_RMB = SDL_BUTTON_RIGHT,
 	MOUSE_WUP = SDL_BUTTON_WHEELUP,
 	MOUSE_WDN = SDL_BUTTON_WHEELDOWN
-} MOUSE_KEY_CODE;
+};
 
 /** Return the current X position of the mouse. */
 extern Uint16 mouseX(void) WZ_DECL_PURE;

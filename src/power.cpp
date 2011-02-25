@@ -64,14 +64,14 @@ static int64_t updateExtractedPower(STRUCTURE *psBuilding);
 //returns the relevant list based on OffWorld or OnWorld
 static STRUCTURE* powerStructList(UBYTE player);
 
-typedef struct _player_power
+struct PLAYER_POWER
 {
 	// All fields are 32.32 fixed point.
 	int64_t currentPower;         ///< The current amount of power avaialble to the player.
 	int64_t powerProduced;        ///< Power produced
 	int64_t powerRequested;       ///< Power requested
 	int64_t economyThrottle;      ///< What fraction of the requested power is actually delivered
-} PLAYER_POWER;
+};
 
 static PLAYER_POWER asPower[MAX_PLAYERS];
 

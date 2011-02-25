@@ -47,14 +47,14 @@ extern BOOL campaignReset(void);
 // Reset the game when loading a save game
 extern BOOL saveGameReset(void);
 
-typedef struct _wzSearchPath
+struct wzSearchPath
 {
 	char path[PATH_MAX];
 	unsigned int priority;
-	struct _wzSearchPath * higherPriority, * lowerPriority;
-} wzSearchPath;
+	wzSearchPath * higherPriority, * lowerPriority;
+};
 
-typedef enum { mod_clean=0, mod_campaign=1, mod_multiplay=2, mod_override=3 } searchPathMode;
+enum searchPathMode { mod_clean, mod_campaign, mod_multiplay, mod_override };
 
 void cleanSearchPath( void );
 void registerSearchPath( const char path[], unsigned int priority );

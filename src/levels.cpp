@@ -74,7 +74,7 @@ char *pLevToken;
 SDWORD levVal;
 static SDWORD levelLoadType;
 // modes for the parser
-typedef enum
+enum LEVELPARSER_STATE
 {
 	LP_START,		// no input received
 	LP_LEVEL,		// level token received
@@ -85,7 +85,7 @@ typedef enum
 	LP_WAITDATA,	// defining level data, waiting for data token
 	LP_DATA,		// data token received
 	LP_GAME,		// game token received
-} LEVELPARSER_STATE;
+};
 
 
 // initialise the level system

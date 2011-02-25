@@ -147,7 +147,8 @@ template<> class StaticAssert<true>{};
  ***/
 
 /** Debug enums. Must match code_part_names in debug.c */
-typedef enum {
+enum code_part
+{
   LOG_ALL, /* special: sets all to on */
   LOG_MAIN,
   LOG_SOUND,
@@ -181,7 +182,7 @@ typedef enum {
   LOG_POPUP,	// special, on by default, for both debug & release builds (used for OS dependent popup code)
   LOG_CONSOLE,	// send console messages to file
   LOG_LAST /**< _must_ be last! */
-} code_part;
+};
 
 extern bool enabled_debug[LOG_LAST];
 
@@ -189,13 +190,14 @@ typedef void (*debug_callback_fn)(void**, const char*);
 typedef bool (*debug_callback_init)(void**);
 typedef void (*debug_callback_exit)(void**);
 
-typedef struct _debug_callback {
-	struct _debug_callback * next;
+struct debug_callback
+{
+	debug_callback * next;
 	debug_callback_fn callback; /// Function which does the output
 	debug_callback_init init; /// Setup function
 	debug_callback_exit exit; /// Cleaning function
 	void * data; /// Used to pass data to the above functions. Eg a filename or handle.
-} debug_callback;
+};
 
 /**
  * Call once to initialize the debug logging system.

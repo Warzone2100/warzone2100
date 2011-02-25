@@ -30,29 +30,29 @@
 #include <physfs.h>
 
 // The possible types of initialisation values
-typedef enum _init_type
+enum INIT_TYPE
 {
 	IT_BOOL,
 	IT_INDEX,
 	IT_STRING,
-} INIT_TYPE;
+};
 
 
 // All the possible values that may be used to initialise a variable
-typedef struct _var_init
+struct VAR_INIT
 {
 	INIT_TYPE	type;
 	SDWORD		index;
 	char		*pString;
-} VAR_INIT;
+};
 
 
 // store array access data
-typedef struct _array_indexes
+struct ARRAY_INDEXES
 {
 	SDWORD		dimensions;
 	SDWORD		elements[VAR_MAX_DIMENSIONS];
-} ARRAY_INDEXES;
+};
 
 /* A simple error reporting routine */
 
@@ -68,11 +68,11 @@ extern BOOL scrvLookUpVar(const char *pIdent, UDWORD *pIndex);
 extern BOOL scrvLookUpArray(const char *pIdent, UDWORD *pIndex);
 
 // Whether the script is run immediately or stored for later use
-typedef enum _scrv_type
+enum SCRV_TYPE
 {
 	SCRV_EXEC,
 	SCRV_NOEXEC,
-} SCRV_TYPE;
+};
 
 // Add a new context to the list
 extern BOOL scrvAddContext(char *pID, SCRIPT_CONTEXT *psContext, SCRV_TYPE type);

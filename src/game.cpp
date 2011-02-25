@@ -103,11 +103,11 @@ static const UDWORD NULL_ID = UDWORD_MAX;
 static UDWORD RemapPlayerNumber(UDWORD OldNumber);
 static void plotFeature(char *backDropSprite);
 
-typedef struct _game_save_header
+struct GAME_SAVEHEADER
 {
 	char        aFileType[4];
 	uint32_t    version;
-} GAME_SAVEHEADER;
+};
 
 static bool serializeSaveGameHeader(PHYSFS_file* fileHandle, const GAME_SAVEHEADER* serializeHeader)
 {
@@ -162,104 +162,77 @@ static bool deserializeSaveGameHeader(PHYSFS_file* fileHandle, GAME_SAVEHEADER* 
 	return true;
 }
 
-typedef struct _droid_save_header
+struct DROID_SAVEHEADER : public GAME_SAVEHEADER
 {
-	char		aFileType[4];
-	UDWORD		version;
 	UDWORD		quantity;
-} DROID_SAVEHEADER;
+};
 
-typedef struct _struct_save_header
+struct STRUCT_SAVEHEADER : public GAME_SAVEHEADER
 {
-	char		aFileType[4];
-	UDWORD		version;
 	UDWORD		quantity;
-} STRUCT_SAVEHEADER;
+};
 
-typedef struct _template_save_header
+struct TEMPLATE_SAVEHEADER : public GAME_SAVEHEADER
 {
-	char		aFileType[4];
-	UDWORD		version;
 	UDWORD		quantity;
-} TEMPLATE_SAVEHEADER;
+};
 
-typedef struct _feature_save_header
+struct FEATURE_SAVEHEADER : public GAME_SAVEHEADER
 {
-	char		aFileType[4];
-	UDWORD		version;
 	UDWORD		quantity;
-} FEATURE_SAVEHEADER;
+};
 
 /* Structure definitions for loading and saving map data */
-typedef struct {
-	char aFileType[4];
-	UDWORD version;
+struct TILETYPE_SAVEHEADER : public GAME_SAVEHEADER
+{
 	UDWORD quantity;
-} TILETYPE_SAVEHEADER;
+};
 
 /* Structure definitions for loading and saving map data */
-typedef struct _compList_save_header
+struct COMPLIST_SAVEHEADER : public GAME_SAVEHEADER
 {
-	char aFileType[4];
-	UDWORD version;
 	UDWORD quantity;
-} COMPLIST_SAVEHEADER;
+};
 
 /* Structure definitions for loading and saving map data */
-typedef struct _structList_save_header
+struct STRUCTLIST_SAVEHEADER : public GAME_SAVEHEADER
 {
-	char aFileType[4];
-	UDWORD version;
 	UDWORD quantity;
-} STRUCTLIST_SAVEHEADER;
+};
 
-typedef struct _research_save_header
+struct RESEARCH_SAVEHEADER : public GAME_SAVEHEADER
 {
-	char aFileType[4];
-	UDWORD version;
 	UDWORD quantity;
-} RESEARCH_SAVEHEADER;
+};
 
-typedef struct _message_save_header
+struct MESSAGE_SAVEHEADER : public GAME_SAVEHEADER
 {
-	char aFileType[4];
-	UDWORD version;
 	UDWORD quantity;
-} MESSAGE_SAVEHEADER;
+};
 
-typedef struct _proximity_save_header
+struct PROXIMITY_SAVEHEADER : public GAME_SAVEHEADER
 {
-	char aFileType[4];
-	UDWORD version;
 	UDWORD quantity;
-} PROXIMITY_SAVEHEADER;
+};
 
-typedef struct _flag_save_header
+struct FLAG_SAVEHEADER : public GAME_SAVEHEADER
 {
-	char aFileType[4];
-	UDWORD version;
 	UDWORD quantity;
-} FLAG_SAVEHEADER;
+};
 
-typedef struct _production_save_header
+struct PRODUCTION_SAVEHEADER : public GAME_SAVEHEADER
 {
-	char aFileType[4];
-	UDWORD version;
-} PRODUCTION_SAVEHEADER;
+};
 
-typedef struct _structLimits_save_header
+struct STRUCTLIMITS_SAVEHEADER : public GAME_SAVEHEADER
 {
-	char		aFileType[4];
-	UDWORD		version;
 	UDWORD		quantity;
-} STRUCTLIMITS_SAVEHEADER;
+};
 
-typedef struct _command_save_header
+struct COMMAND_SAVEHEADER : public GAME_SAVEHEADER
 {
-	char aFileType[4];
-	UDWORD version;
 	UDWORD quantity;
-} COMMAND_SAVEHEADER;
+};
 
 /* Sanity check definitions for the save struct file sizes */
 #define GAME_HEADER_SIZE			8
@@ -304,37 +277,37 @@ typedef struct _command_save_header
 	UDWORD				burnDamage
 
 
-typedef struct _save_component_v19
+struct SAVE_COMPONENT_V19
 {
 	char				name[MAX_SAVE_NAME_SIZE_V19];
-} SAVE_COMPONENT_V19;
+};
 
-typedef struct _save_component
+struct SAVE_COMPONENT
 {
 	char				name[MAX_SAVE_NAME_SIZE];
-} SAVE_COMPONENT;
+};
 
-typedef struct _save_weapon_v19
+struct SAVE_WEAPON_V19
 {
 	char				name[MAX_SAVE_NAME_SIZE_V19];
 	UDWORD				hitPoints;  // UNUSED: only here to keep struct size intact
 	UDWORD				ammo;
 	UDWORD				lastFired;
-} SAVE_WEAPON_V19;
+};
 
-typedef struct _save_weapon
+struct SAVE_WEAPON
 {
 	char				name[MAX_SAVE_NAME_SIZE];
 	UDWORD				hitPoints;  // UNUSED: only here to keep struct size intact
 	UDWORD				ammo;
 	UDWORD				lastFired;
-} SAVE_WEAPON;
+};
 
-typedef struct _savePower
+struct SAVE_POWER
 {
 	uint32_t    currentPower;
 	uint32_t    extractedPower; // UNUSED
-} SAVE_POWER;
+};
 
 static bool serializeSavePowerData(PHYSFS_file* fileHandle, const SAVE_POWER* serializePower)
 {
@@ -1445,14 +1418,14 @@ static bool deserializeSaveGameData(PHYSFS_file* fileHandle, SAVE_GAME* serializ
 #define	SAVE_COMP_PROGRAM	8
 #define SAVE_COMP_WEAPON	9
 
-typedef struct _path_point
+struct PATH_POINT
 {
        UBYTE           x,y;
-} PATH_POINT;
+};
 
 #define TRAVELSIZE	100
 
-typedef struct _save_move_control
+struct SAVE_MOVE_CONTROL
 {
 	UBYTE	Status;						// Inactive, Navigating or moving point to point status
 	UBYTE	Position;	   				// Position in asPath
@@ -1475,7 +1448,7 @@ typedef struct _save_move_control
 	SWORD	iVertSpeed;
 	UDWORD	iAttackRuns[DROID_MAXWEAPS];
 	float   fz;
-} SAVE_MOVE_CONTROL;
+};
 
 
 #define DROID_SAVE_V9		\
@@ -1488,10 +1461,10 @@ typedef struct _save_move_control
 	SAVE_WEAPON_V19	asWeaps[TEMP_DROID_MAXPROGS];	\
 	UDWORD		numKills
 
-typedef struct _save_droid_v9
+struct SAVE_DROID_V9
 {
 	DROID_SAVE_V9;
-} SAVE_DROID_V9;
+};
 
 /*save DROID SAVE 11 */
 #define DROID_SAVE_V11		\
@@ -1506,10 +1479,10 @@ typedef struct _save_droid_v9
 	UWORD	turretRotation;	\
 	UWORD	turretPitch
 
-typedef struct _save_droid_v11
+struct SAVE_DROID_V11
 {
 	DROID_SAVE_V11;
-} SAVE_DROID_V11;
+};
 
 #define DROID_SAVE_V12		\
 	DROID_SAVE_V9;			\
@@ -1528,10 +1501,10 @@ typedef struct _save_droid_v11
 	UDWORD	actionPoints;	\
 	UWORD	actionHeight
 
-typedef struct _save_droid_v12
+struct SAVE_DROID_V12
 {
 	DROID_SAVE_V12;
-} SAVE_DROID_V12;
+};
 
 #define DROID_SAVE_V14		\
 	DROID_SAVE_V12;			\
@@ -1544,10 +1517,10 @@ typedef struct _save_droid_v12
 	UDWORD	died;			\
 	UDWORD	lastEmission
 
-typedef struct _save_droid_v14
+struct SAVE_DROID_V14
 {
 	DROID_SAVE_V14;
-} SAVE_DROID_V14;
+};
 
 //DROID_SAVE_18 replaces DROID_SAVE_14
 #define DROID_SAVE_V18		\
@@ -1561,10 +1534,10 @@ typedef struct _save_droid_v14
 	UDWORD	died;			\
 	UDWORD	lastEmission
 
-typedef struct _save_droid_v18
+struct SAVE_DROID_V18
 {
 	DROID_SAVE_V18;
-} SAVE_DROID_V18;
+};
 
 //DROID_SAVE_20 replaces all previous saves uses 60 character names
 #define DROID_SAVE_V20		\
@@ -1599,19 +1572,19 @@ typedef struct _save_droid_v18
 	UDWORD	died;			\
 	UDWORD	lastEmission
 
-typedef struct _save_droid_v20
+struct SAVE_DROID_V20
 {
 	DROID_SAVE_V20;
-} SAVE_DROID_V20;
+};
 
 #define DROID_SAVE_V21		\
 	DROID_SAVE_V20;			\
 	UDWORD	commandId
 
-typedef struct _save_droid_v21
+struct SAVE_DROID_V21
 {
 	DROID_SAVE_V21;
-} SAVE_DROID_V21;
+};
 
 #define DROID_SAVE_V24		\
 	DROID_SAVE_V21;			\
@@ -1621,10 +1594,10 @@ typedef struct _save_droid_v21
 	SDWORD		formationX;	\
 	SDWORD		formationY
 
-typedef struct _save_droid_v24
+struct SAVE_DROID_V24
 {
 	DROID_SAVE_V24;
-} SAVE_DROID_V24;
+};
 
 //Watermelon: I need DROID_SAVE_V99...
 #define DROID_SAVE_V99		\
@@ -1665,29 +1638,27 @@ typedef struct _save_droid_v24
 	SDWORD	formationX;           \
 	SDWORD	formationY
 
-typedef struct _save_droid_v99
+struct SAVE_DROID_V99
 {
 	DROID_SAVE_V99;
-} SAVE_DROID_V99;
+};
 
 //Watermelon:V99 'test'
-typedef struct _save_droid
+struct SAVE_DROID
 {
 	DROID_SAVE_V99;
-} SAVE_DROID;
+};
 
 
-typedef struct _droidinit_save_header
+struct DROIDINIT_SAVEHEADER : public GAME_SAVEHEADER
 {
-	char		aFileType[4];
-	UDWORD		version;
 	UDWORD		quantity;
-} DROIDINIT_SAVEHEADER;
+};
 
-typedef struct _save_droidinit
+struct SAVE_DROIDINIT
 {
 	OBJECT_SAVE_V19;
-} SAVE_DROIDINIT;
+};
 
 /*
  *	STRUCTURE Definitions
@@ -1707,10 +1678,10 @@ typedef struct _save_droidinit
 	UDWORD				capacity; \
 	UDWORD				quantity
 
-typedef struct _save_structure_v2
+struct SAVE_STRUCTURE_V2
 {
 	STRUCTURE_SAVE_V2;
-} SAVE_STRUCTURE_V2;
+};
 
 #define STRUCTURE_SAVE_V12 \
 	STRUCTURE_SAVE_V2; \
@@ -1722,37 +1693,37 @@ typedef struct _save_structure_v2
 	UDWORD				timeToBuild;		\
 	UDWORD				timeStartHold
 
-typedef struct _save_structure_v12
+struct SAVE_STRUCTURE_V12
 {
 	STRUCTURE_SAVE_V12;
-} SAVE_STRUCTURE_V12;
+};
 
 #define STRUCTURE_SAVE_V14 \
 	STRUCTURE_SAVE_V12; \
 	UBYTE	visible[MAX_PLAYERS]
 
-typedef struct _save_structure_v14
+struct SAVE_STRUCTURE_V14
 {
 	STRUCTURE_SAVE_V14;
-} SAVE_STRUCTURE_V14;
+};
 
 #define STRUCTURE_SAVE_V15 \
 	STRUCTURE_SAVE_V14; \
 	char	researchName[MAX_SAVE_NAME_SIZE_V19]
 
-typedef struct _save_structure_v15
+struct SAVE_STRUCTURE_V15
 {
 	STRUCTURE_SAVE_V15;
-} SAVE_STRUCTURE_V15;
+};
 
 #define STRUCTURE_SAVE_V17 \
 	STRUCTURE_SAVE_V15;\
 	SWORD				currentPowerAccrued
 
-typedef struct _save_structure_v17
+struct SAVE_STRUCTURE_V17
 {
 	STRUCTURE_SAVE_V17;
-} SAVE_STRUCTURE_V17;
+};
 
 #define STRUCTURE_SAVE_V20 \
 	OBJECT_SAVE_V20; \
@@ -1778,24 +1749,24 @@ typedef struct _save_structure_v17
 	char				researchName[MAX_SAVE_NAME_SIZE]; \
 	SWORD				currentPowerAccrued
 
-typedef struct _save_structure_v20
+struct SAVE_STRUCTURE_V20
 {
 	STRUCTURE_SAVE_V20;
-} SAVE_STRUCTURE_V20;
+};
 
 #define STRUCTURE_SAVE_V21 \
 	STRUCTURE_SAVE_V20; \
 	UDWORD				commandId
 
-typedef struct _save_structure_v21
+struct SAVE_STRUCTURE_V21
 {
 	STRUCTURE_SAVE_V21;
-} SAVE_STRUCTURE_V21;
+};
 
-typedef struct _save_structure
+struct SAVE_STRUCTURE
 {
 	STRUCTURE_SAVE_V21;
-} SAVE_STRUCTURE;
+};
 
 
 //PROGRAMS NEED TO BE REMOVED FROM DROIDS - 7/8/98
@@ -1834,57 +1805,57 @@ typedef struct _save_structure
 
 
 
-typedef struct _save_template_v2
+struct SAVE_TEMPLATE_V2
 {
 	TEMPLATE_SAVE_V2;
-} SAVE_TEMPLATE_V2;
+};
 
-typedef struct _save_template_v14
+struct SAVE_TEMPLATE_V14
 {
 	TEMPLATE_SAVE_V14;
-} SAVE_TEMPLATE_V14;
+};
 
-typedef struct _save_template_v20
+struct SAVE_TEMPLATE_V20
 {
 	TEMPLATE_SAVE_V20;
-} SAVE_TEMPLATE_V20;
+};
 
-typedef struct _save_template
+struct SAVE_TEMPLATE
 {
 	TEMPLATE_SAVE_V20;
-} SAVE_TEMPLATE;
+};
 
 
 #define FEATURE_SAVE_V2 \
 	OBJECT_SAVE_V19
 
-typedef struct _save_feature_v2
+struct SAVE_FEATURE_V2
 {
 	FEATURE_SAVE_V2;
-} SAVE_FEATURE_V2;
+};
 
 #define FEATURE_SAVE_V14 \
 	FEATURE_SAVE_V2; \
 	UBYTE	visible[MAX_PLAYERS]
 
-typedef struct _save_feature_v14
+struct SAVE_FEATURE_V14
 {
 	FEATURE_SAVE_V14;
-} SAVE_FEATURE_V14;
+};
 
 #define FEATURE_SAVE_V20 \
 	OBJECT_SAVE_V20; \
 	UBYTE	visible[MAX_PLAYERS]
 
-typedef struct _save_feature_v20
+struct SAVE_FEATURE_V20
 {
 	FEATURE_SAVE_V20;
-} SAVE_FEATURE_V20;
+};
 
-typedef struct _save_feature
+struct SAVE_FEATURE
 {
 	FEATURE_SAVE_V20;
-} SAVE_FEATURE;
+};
 
 
 #define COMPLIST_SAVE_V6 \
@@ -1900,20 +1871,20 @@ typedef struct _save_feature
 	UBYTE				player
 
 
-typedef struct _save_compList_v6
+struct SAVE_COMPLIST_V6
 {
 	COMPLIST_SAVE_V6;
-} SAVE_COMPLIST_V6;
+};
 
-typedef struct _save_compList_v20
+struct SAVE_COMPLIST_V20
 {
 	COMPLIST_SAVE_V20;
-} SAVE_COMPLIST_V20;
+};
 
-typedef struct _save_compList
+struct SAVE_COMPLIST
 {
 	COMPLIST_SAVE_V20;
-} SAVE_COMPLIST;
+};
 
 
 
@@ -1929,20 +1900,20 @@ typedef struct _save_compList
 	UBYTE				state; \
 	UBYTE				player
 
-typedef struct _save_structList_v6
+struct SAVE_STRUCTLIST_V6
 {
 	STRUCTLIST_SAVE_V6;
-} SAVE_STRUCTLIST_V6;
+};
 
-typedef struct _save_structList_v20
+struct SAVE_STRUCTLIST_V20
 {
 	STRUCTLIST_SAVE_V20;
-} SAVE_STRUCTLIST_V20;
+};
 
-typedef struct _save_structList
+struct SAVE_STRUCTLIST
 {
 	STRUCTLIST_SAVE_V20;
-} SAVE_STRUCTLIST;
+};
 
 
 #define RESEARCH_SAVE_V8 \
@@ -1958,22 +1929,22 @@ typedef struct _save_structList
 	UDWORD				currentPoints[MAX_PLAYERS]
 
 
-typedef struct _save_research_v8
+struct SAVE_RESEARCH_V8
 {
 	RESEARCH_SAVE_V8;
-} SAVE_RESEARCH_V8;
+};
 
-typedef struct _save_research_v20
+struct SAVE_RESEARCH_V20
 {
 	RESEARCH_SAVE_V20;
-} SAVE_RESEARCH_V20;
+};
 
-typedef struct _save_research
+struct SAVE_RESEARCH
 {
 	RESEARCH_SAVE_V20;
-} SAVE_RESEARCH;
+};
 
-typedef struct _save_message
+struct SAVE_MESSAGE
 {
 	MESSAGE_TYPE	type;			//The type of message
 	BOOL			bObj;
@@ -1982,9 +1953,9 @@ typedef struct _save_message
 	BOOL			read;					//flag to indicate whether message has been read
 	UDWORD			player;					//which player this message belongs to
 
-} SAVE_MESSAGE;
+};
 
-typedef struct _save_message_v36
+struct SAVE_MESSAGE_36
 {
 	MESSAGE_TYPE	type;			//The type of message
 	BOOL			bObj;
@@ -1995,9 +1966,9 @@ typedef struct _save_message_v36
 	MSG_DATA_TYPE	dataType;				//actual type of pViewData
 	UDWORD			locX,locY;
 	SDWORD			sender;					//sender of the message
-} SAVE_MESSAGE_36;
+};
 
-typedef struct _save_flag_v18
+struct SAVE_FLAG_V18
 {
 	POSITION_TYPE	type;				/*the type of position obj - FlagPos or ProxDisp*/
 	UDWORD			frameNumber;		/*when the Position was last drawn*/
@@ -2011,9 +1982,9 @@ typedef struct _save_flag_v18
 	UBYTE		factoryType;					//indicates whether standard, cyborg or vtol factory
 	UBYTE		dummyNOTUSED;						//sub value. needed to order production points.
 	UBYTE		dummyNOTUSED2;
-} SAVE_FLAG_V18;
+};
 
-typedef struct _save_flag
+struct SAVE_FLAG
 {
 	POSITION_TYPE	type;				/*the type of position obj - FlagPos or ProxDisp*/
 	UDWORD			frameNumber;		/*when the Position was last drawn*/
@@ -2028,15 +1999,15 @@ typedef struct _save_flag
 	UBYTE		dummyNOTUSED;						//sub value. needed to order production points.
 	UBYTE		dummyNOTUSED2;
 	UDWORD		repairId;
-} SAVE_FLAG;
+};
 
 //PRODUCTION_RUN		asProductionRun[NUM_FACTORY_TYPES][MAX_FACTORY][MAX_PROD_RUN];
-typedef struct _save_production
+struct SAVE_PRODUCTION
 {
 	UBYTE						quantity;			//number to build
 	UBYTE						built;				//number built on current run
 	UDWORD						multiPlayerID;		//template to build
-} SAVE_PRODUCTION;
+};
 
 struct SAVE_STRUCTLIMITS
 {
@@ -2048,23 +2019,23 @@ struct SAVE_STRUCTLIMITS
 #define COMMAND_SAVE_V20 \
 	UDWORD				droidID
 
-typedef struct _save_command_v20
+struct SAVE_COMMAND_V20
 {
 	COMMAND_SAVE_V20;
-} SAVE_COMMAND_V20;
+};
 
-typedef struct _save_command
+struct SAVE_COMMAND
 {
 	COMMAND_SAVE_V20;
-} SAVE_COMMAND;
+};
 
 
 /* The different types of droid */
-typedef enum _droid_save_type
+enum DROID_SAVE_TYPE
 {
 	DROID_NORMAL,	// Weapon droid
 	DROID_ON_TRANSPORT,
-} DROID_SAVE_TYPE;
+};
 
 /***************************************************************************/
 /*

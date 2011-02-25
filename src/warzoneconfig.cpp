@@ -42,7 +42,7 @@
  */
 /***************************************************************************/
 
-typedef struct _warzoneGlobals
+struct WARZONE_GLOBALS
 {
 	FMV_MODE	FMVmode;
 	BOOL		bFog;
@@ -58,7 +58,7 @@ typedef struct _warzoneGlobals
 	bool		ColouredCursor;
 	bool		MusicEnabled;
 	int8_t		SPcolor;
-} WARZONE_GLOBALS;
+};
 
 /***************************************************************************/
 /*

@@ -26,7 +26,8 @@
 
 #include "lib/framework/frame.h"
 
-typedef enum {
+enum GAMECODE
+{
 	GAMECODE_CONTINUE,
 	GAMECODE_RESTARTGAME,
 	GAMECODE_QUITGAME,
@@ -34,10 +35,10 @@ typedef enum {
 	GAMECODE_NEWLEVEL,
 	GAMECODE_FASTEXIT,
 	GAMECODE_LOADGAME,
-} GAMECODE;
+};
 
 // the states the loop goes through before starting a new level
-typedef enum
+enum LOOP_MISSION_STATE
 {
 	LMS_NORMAL,			// normal state of the loop
 	LMS_SETUPMISSION,	// make the call to set up mission
@@ -45,7 +46,7 @@ typedef enum
 	LMS_NEWLEVEL,		// start a new level
 	LMS_LOADGAME,		// load a savegame
 	LMS_CLEAROBJECTS,	// make the call to destroy objects
-} LOOP_MISSION_STATE;
+};
 extern LOOP_MISSION_STATE		loopMissionState;
 
 // this is set by scrStartMission to say what type of new level is to be started

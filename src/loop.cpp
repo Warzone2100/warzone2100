@@ -108,15 +108,15 @@ static BOOL paused=false;
 static BOOL video=false;
 
 //holds which pause is valid at any one time
-typedef struct _pause_state
+struct PAUSE_STATE
 {
-	unsigned gameUpdatePause	: 1;
-	unsigned audioPause			: 1;
-	unsigned scriptPause		: 1;
-	unsigned scrollPause		: 1;
-	unsigned consolePause		: 1;
-	unsigned editPause		: 1;
-} PAUSE_STATE;
+	bool gameUpdatePause;
+	bool audioPause;
+	bool scriptPause;
+	bool scrollPause;
+	bool consolePause;
+	bool editPause;
+};
 
 static PAUSE_STATE	pauseState;
 static	UDWORD	numDroids[MAX_PLAYERS];

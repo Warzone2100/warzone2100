@@ -32,7 +32,7 @@
 /// max number of text strings or sequences for VIEWDATA
 static const unsigned int MAX_DATA = 4;
 
-typedef enum _message_type
+enum MESSAGE_TYPE
 {
 	MSG_RESEARCH,		// Research message
 	MSG_CAMPAIGN,		// Campaign message
@@ -40,9 +40,9 @@ typedef enum _message_type
 	MSG_PROXIMITY,		// Proximity message
 
 	MSG_TYPES,
-} MESSAGE_TYPE;
+};
 
-typedef enum _view_type
+enum VIEW_TYPE
 {
 	VIEW_RES,			// research view
 	VIEW_RPL,			// full screen view sequence - flic
@@ -50,27 +50,27 @@ typedef enum _view_type
 	VIEW_RPLX,			// full screen view sequence - flic.	extended format
 
 	VIEW_BEACON,			// Beacon message
-} VIEW_TYPE;
+};
 
-typedef enum _prox_type
+enum PROX_TYPE
 {
 	PROX_ENEMY,				//enemy proximity message
 	PROX_RESOURCE,			//resource proximity message
 	PROX_ARTEFACT,			//artefact proximity message
 
 	PROX_TYPES,
-} PROX_TYPE;
+};
 
 // info required to view an object in Intelligence screen
-typedef struct _view_research
+struct VIEW_RESEARCH
 {
 	iIMDShape	*pIMD;
 	iIMDShape	*pIMD2;				//allows base plates and turrets to be drawn as well
 	char	sequenceName[MAX_STR_LENGTH];	//which windowed flic to display
 	char	*pAudio;						/*name of audio track to play (for this seq)*/
-} VIEW_RESEARCH;
+};
 
-typedef struct _seq_display
+struct SEQ_DISPLAY
 {
 	char		sequenceName[MAX_STR_LENGTH];
 
@@ -79,17 +79,17 @@ typedef struct _seq_display
 								//this sequence
 	const char**    ppTextMsg;	//Pointer to text messages - if any
 	char		*pAudio;		/*name of audio track to play (for this seq)*/
-} SEQ_DISPLAY;
+};
 
 //info required to view a flic in Intelligence Screen
-typedef struct _view_replay
+struct VIEW_REPLAY
 {
 	UBYTE		numSeq;
 	SEQ_DISPLAY *pSeqList;
-} VIEW_REPLAY;
+};
 
 // info required to view a proximity message
-typedef struct _view_proximity
+struct VIEW_PROXIMITY
 {
 	UDWORD		x;			//world coords for position of Proximity message
 	UDWORD		y;
@@ -98,9 +98,9 @@ typedef struct _view_proximity
 	SDWORD		audioID;	/*ID of the audio track to play - if any */
 	SDWORD		sender;		//user who sent this msg
 	SDWORD		timeAdded;	//remember when was added, so can remove after certain period of time
-} VIEW_PROXIMITY;
+};
 
-typedef struct _viewdata
+struct VIEWDATA
 {
 	char		*pName;		//name ID of the message - used for loading in and identifying
 	VIEW_TYPE	type;		//the type of view
@@ -108,18 +108,18 @@ typedef struct _viewdata
 	const char**    ppTextMsg;	//Pointer to text messages - if any
 	void*		pData;		/*the data required to view - either a
 							  VIEW_RESEARCH, VIEW_PROXIMITY or VIEW_REPLAY*/
-} VIEWDATA;
+};
 
 typedef void* MSG_VIEWDATA;
 
-typedef enum _msg_data_type
+enum MSG_DATA_TYPE
 {
 	MSG_DATA_DEFAULT,		// Message's pViewData has a BASE_OBJECT stored
 	MSG_DATA_BEACON,		// Message's pViewData has beacon data stored
-} MSG_DATA_TYPE;
+};
 
 //base structure for each message
-typedef struct _message
+struct MESSAGE
 {
 	MESSAGE_TYPE	type;					//The type of message
 	UDWORD			id;						//ID number of the message
@@ -129,8 +129,8 @@ typedef struct _message
 	MSG_DATA_TYPE	dataType;				//stores actual type of data pViewData points to
 											//only relevant for messages of type MSG_PROXIMITY
 
-	struct _message *psNext;				//pointer to the next in the list
-} MESSAGE;
+	MESSAGE *       psNext;                                 //pointer to the next in the list
+};
 
 //used to display the proximity messages
 struct PROXIMITY_DISPLAY : public OBJECT_POSITION
@@ -142,11 +142,11 @@ struct PROXIMITY_DISPLAY : public OBJECT_POSITION
 	PROXIMITY_DISPLAY *     psNext;                         //pointer to the next in the list
 };
 
-typedef struct _viewData_list
+struct VIEWDATA_LIST
 {
 	VIEWDATA				*psViewData;	//array of data
 	UBYTE					numViewData;	//number in array
-	struct _viewData_list	*psNext;		//next array of data
-} VIEWDATA_LIST;
+	VIEWDATA_LIST *         psNext;                         //next array of data
+};
 
 #endif // __INCLUDED_MESSAGEDEF_H__

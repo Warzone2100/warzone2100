@@ -26,26 +26,23 @@
 #define NO_META_KEY				9999
 #define KEYFUNC_TOGGLE_RADAR	20
 
-typedef	enum
+enum KEY_ACTION
 {
 KEYMAP_DOWN,
 KEYMAP_PRESSED,
 KEYMAP_RELEASED
-}KEY_ACTION;
+};
 
-typedef enum
+enum KEY_STATUS
 {
 KEYMAP__DEBUG,
 KEYMAP_ALWAYS,
 KEYMAP_ASSIGNABLE,
 KEYMAP_ALWAYS_PROCESS,
 KEYMAP___HIDE
-}KEY_STATUS;
+};
 
-// moved to lib/framework/input.h
-//#define KEY_IGNORE	5190
-
-typedef struct _keyMapping
+struct KEY_MAPPING
 {
 void (*function)(void);
 BOOL		active;
@@ -56,8 +53,8 @@ KEY_CODE	altMetaKeyCode;
 KEY_CODE	subKeyCode;
 KEY_ACTION	action;
 char		*pName;
-struct _keyMapping	*psNext;
-} KEY_MAPPING;
+KEY_MAPPING *   psNext;
+};
 
 extern KEY_MAPPING	*keyAddMapping			( KEY_STATUS status, KEY_CODE metaCode, KEY_CODE subcode,
 									 KEY_ACTION action, void (*pKeyMapFunc)(void), const char *name );

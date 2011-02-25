@@ -31,10 +31,11 @@
 #include "display3d.h" // TILE_SIZE and clipXY()
 
 
-typedef struct {
+struct HeightCallbackHelp_t
+{
 	const int height;
 	uint16_t pitch;
-} HeightCallbackHelp_t;
+};
 
 
 void rayCast(Vector3i src, uint16_t direction, uint32_t length, RAY_CALLBACK callback, void *data)

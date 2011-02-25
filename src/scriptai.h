@@ -94,7 +94,7 @@ extern BOOL scrCmdDroidMaxGroup(void);
 extern BOOL scrDroidCanReach(void);
 
 // types for structure targets
-typedef enum _scr_struct_tar
+enum SCR_STRUCT_TAR
 {
 	// normal structure types
 	SCR_ST_HQ					= 0x00000001,
@@ -115,10 +115,10 @@ typedef enum _scr_struct_tar
 	SCR_ST_DEF_AIR				= 0x00002000,
 	SCR_ST_DEF_IDF				= 0x00004000,
 	SCR_ST_DEF_ALL				= 0x00007000,
-} SCR_STRUCT_TAR;
+};
 
 
-typedef enum _scr_droid_tar
+enum SCR_DROID_TAR
 {
 	// turret types
 	SCR_DT_COMMAND				= 0x00000001,
@@ -145,7 +145,7 @@ typedef enum _scr_droid_tar
 	SCR_DT_VTOL				= 0x00008000,
 	SCR_DT_HOVER				= 0x00010000,
 	SCR_DT_PROPELLOR			= 0x00020000,
-} SCR_DROID_TAR;
+};
 
 
 // reset the structure preferences

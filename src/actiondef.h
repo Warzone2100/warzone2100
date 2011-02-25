@@ -28,7 +28,7 @@
  * What a droid is currently doing. Not necessarily the same as its order as the micro-AI may get a droid to do
  * something else whilst carrying out an order.
  */
-typedef enum _droid_action
+enum DROID_ACTION
 {
 	DACTION_NONE,					///< 0 not doing anything
 	DACTION_MOVE,					///< 1 moving to a location
@@ -74,6 +74,6 @@ typedef enum _droid_action
 	DACTION_RETURNTOPOS,				///< 38 used by scout/patrol order when returning to route
 	DACTION_FIRESUPPORT_RETREAT,			///< 39 used by firesupport order when sensor retreats
 	DACTION_CIRCLE = 41,				///< 41 circling while engaging
-} DROID_ACTION;
+};
 
 #endif // __INCLUDED_SRC_ACTIONDEF_H__

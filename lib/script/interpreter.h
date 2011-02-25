@@ -32,7 +32,7 @@ typedef BOOL (*SCRIPT_FUNC)(void);
 typedef BOOL (*SCRIPT_VARFUNC)(UDWORD index);
 
 /* The possible value types for scripts */
-typedef enum _interp_type
+enum INTERP_TYPE
 {
 	// Basic types
 	VAL_BOOL,
@@ -55,11 +55,11 @@ typedef enum _interp_type
 
 	VAL_USERTYPESTART, //!< user defined types should start with this id
 	VAL_REF = 0x00100000 //!< flag to specify a variable reference rather than simple value
-} INTERP_TYPE;
+};
 
 
 /* A value consists of its type and value */
-typedef struct _interp_val
+struct INTERP_VAL
 {
 	INTERP_TYPE		type;					//Value type for interpreter; opcode or value type for compiler
 	union
@@ -72,22 +72,22 @@ typedef struct _interp_val
 		int						ival;				// Integer value - VAL_INT
 		BOOL					bval;			//Boolean value - VAL_BOOL
 	} v;
-} INTERP_VAL;
+};
 
 
 // maximum number of equivalent types for a type
 #define INTERP_MAXEQUIV		10
 
 // type equivalences
-typedef struct _interp_typeequiv
+struct TYPE_EQUIV
 {
 	INTERP_TYPE		base;		// the type that the others are equivalent to
 	unsigned int		numEquiv;	// number of equivalent types
 	INTERP_TYPE		aEquivTypes[INTERP_MAXEQUIV]; // the equivalent types
-} TYPE_EQUIV;
+};
 
 /* Opcodes for the script interpreter */
-typedef enum _op_code
+enum OPCODE
 {
 	OP_PUSH,		// Push value onto stack
 	OP_PUSHREF,		// Push a pointer to a variable onto the stack
@@ -146,7 +146,7 @@ typedef enum _op_code
 	OP_PUSHLOCALREF,	//variable of object type (pointer)
 	OP_TO_FLOAT,			//float cast
 	OP_TO_INT,				//int cast
-} OPCODE;
+};
 
 /* How far the opcode is shifted up a UDWORD to allow other data to be
  * stored in the same UDWORD
@@ -164,50 +164,50 @@ typedef enum _op_code
 #define ARRAY_DIMENSION_MASK	0x00f00000
 
 /* The possible storage types for a variable */
-typedef enum _storage_type
+enum enum_STORAGE_TYPE
 {
 	ST_PUBLIC,		// Public variable
 	ST_PRIVATE,		// Private variable
 	ST_OBJECT,		// A value stored in an objects data space.
 	ST_EXTERN,		// An external value accessed by function call
 	ST_LOCAL,		// A local variable
-} enum_STORAGE_TYPE;
+};
 
 typedef UBYTE STORAGE_TYPE;
 
 /* Variable debugging info for a script */
-typedef struct _var_debug
+struct VAR_DEBUG
 {
 	char			*pIdent;
 	STORAGE_TYPE	storage;
-} VAR_DEBUG;
+};
 
 /* Array info for a script */
-typedef struct _array_data
+struct ARRAY_DATA
 {
 	UDWORD			base;			// the base index of the array values
 	INTERP_TYPE		type;			// the array data type
 	UBYTE			dimensions;
 	UBYTE			elements[VAR_MAX_DIMENSIONS];
-} ARRAY_DATA;
+};
 
 /* Array debug info for a script */
-typedef struct _array_debug
+struct ARRAY_DEBUG
 {
 	char			*pIdent;
 	UBYTE			storage;
-} ARRAY_DEBUG;
+};
 
 /* Line debugging information for a script */
-typedef struct _script_debug
+struct SCRIPT_DEBUG
 {
 	UDWORD	offset;		// Offset in the compiled script that corresponds to
 	UDWORD	line;		// this line in the original script.
 	char	*pLabel;	// the trigger/event that starts at this line
-} SCRIPT_DEBUG;
+};
 
 /* Different types of triggers */
-typedef enum _trigger_type
+enum TRIGGER_TYPE
 {
 	TR_INIT,		// Trigger fires when the script is first run
 	TR_CODE,		// Trigger uses script code
@@ -216,18 +216,18 @@ typedef enum _trigger_type
 	TR_PAUSE,		// Event has paused for an interval and will restart in the middle of it's code
 
 	TR_CALLBACKSTART,	// The user defined callback triggers should start with this id
-} TRIGGER_TYPE;
+};
 
 /* Description of a trigger for the SCRIPT_CODE */
-typedef struct _trigger_data
+struct TRIGGER_DATA
 {
 	TRIGGER_TYPE		type;		// Type of trigger
 	UWORD			code;		// BOOL - is there code with this trigger
 	UDWORD			time;		// How often to check the trigger
-} TRIGGER_DATA;
+};
 
 /* A compiled script and its associated data */
-typedef struct _script_code
+struct SCRIPT_CODE
 {
 	UDWORD			size;			// The size (in bytes) of the compiled code
 	INTERP_VAL		*pCode;			// Pointer to the compiled code
@@ -258,15 +258,15 @@ typedef struct _script_code
 
 	UWORD			debugEntries;	// Number of entries in psDebug
 	SCRIPT_DEBUG	*psDebug;		// Debugging info for the script
-} SCRIPT_CODE;
+};
 
 
 /* What type of code should be run by the interpreter */
-typedef enum _interp_runtype
+enum INTERP_RUNTYPE
 {
 	IRT_TRIGGER,					// Run trigger code
 	IRT_EVENT,						// Run event code
-} INTERP_RUNTYPE;
+};
 
 
 /* The size of each opcode */

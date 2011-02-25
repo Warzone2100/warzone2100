@@ -86,11 +86,11 @@
 #  define WZ_DATADIR "data"
 #endif
 
-typedef enum _focus_state
+enum FOCUS_STATE
 {
 	FOCUS_OUT,		// Window does not have the focus
 	FOCUS_IN,		// Window has got the focus
-} FOCUS_STATE;
+};
 
 #if defined(WZ_OS_WIN)
 # define WZ_WRITEDIR "Warzone 2100 master"

@@ -26,15 +26,15 @@ enum internal_types
 };
 
 // A definition group
-typedef struct _define
+struct define_t
 {
 	unsigned int vm; //! value multiple
 	element_t element; //! tag number
 	char vr[2]; //! value representation (type)
-	struct _define *parent;	//! parent group
-	struct _define *group;	//! child group
-	struct _define *next;	//! sibling group
-	struct _define *current; //! where in the sibling list we currently are
+	define_t *parent;       //! parent group
+	define_t *group;        //! child group
+	define_t *next;         //! sibling group
+	define_t *current;      //! where in the sibling list we currently are
 	bool defaultval; //! default value
 	union {
 		uint32_t uint32_tval;
@@ -44,7 +44,7 @@ typedef struct _define
 	// debugging temp variables below
 	int countItems; // check group items against number of separators given
 	int expectedItems; // group items expected in current group
-} define_t;
+};
 
 
 static bool tag_error = false;		// are we in an error condition?

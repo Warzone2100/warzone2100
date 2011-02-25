@@ -36,7 +36,7 @@
 #include "lib/gamelib/gtime.h"
 
 /* The possible states for keys */
-typedef enum _key_state
+enum KEY_STATE
 {
 	KEY_UP,
 	KEY_PRESSED,
@@ -45,14 +45,15 @@ typedef enum _key_state
 	KEY_PRESSRELEASE,	// When a key goes up and down in a frame
 	KEY_DOUBLECLICK,	// Only used by mouse keys
 	KEY_DRAG,			// Only used by mouse keys
-} KEY_STATE;
+};
 
-typedef struct _input_state {
+struct INPUT_STATE
+{
 	KEY_STATE state; /// Last key/mouse state
 	UDWORD lastdown; /// last key/mouse button down timestamp
 	Vector2i pressPos;    ///< Location of last mouse press event.
 	Vector2i releasePos;  ///< Location of last mouse release event.
-} INPUT_STATE;
+};
 
 /// constant for the interval between 2 singleclicks for doubleclick event in ms
 #define DOUBLE_CLICK_INTERVAL 250
@@ -80,11 +81,11 @@ static INPUT_STATE aMouseState[6];
 #define INPUT_MAXSTR	512
 
 /* The input string buffer */
-typedef struct _InputKey
+struct InputKey
 {
 	UDWORD key;
 	utf_32_char unicode;
-} InputKey;
+};
 static InputKey	pInputBuffer[INPUT_MAXSTR];
 static InputKey	*pStartBuffer, *pEndBuffer;
 

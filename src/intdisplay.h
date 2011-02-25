@@ -60,22 +60,11 @@ enum {
 	IMDTYPE_STRUCTURESTAT,
 };
 
-typedef struct {
-	char *Token;
-	SWORD ID;
-} TOKENID;
-
-typedef struct {
-	char *Token;
-	SWORD ID;
-	SWORD IMD;
-} RESEARCHICON;
-
-
-typedef struct {
+struct BUTTON_SURFACE
+{
 	UBYTE *Buffer;		// Bitmap buffer.
 	iSurface *Surface;	// Ivis surface definition.
-} BUTTON_SURFACE;
+};
 
 
 #define RENDERBUTTON_INUSE(x)  ((x)->InUse=true)
@@ -87,7 +76,8 @@ typedef struct {
 #define IsBufferInitialised(x) ((x)->Initialised)
 #define IsBufferInUse(x) ((x)->InUse)
 
-typedef struct {
+struct RENDERED_BUTTON
+{
 	BOOL InUse;			// Is it in use.
 	BOOL Initialised;	// Is it initialised.
 	SDWORD ImdRotation;	// Rotation if button is an IMD.
@@ -97,7 +87,7 @@ typedef struct {
 	BUTTON_SURFACE *ButSurf;	// Surface to render the button into.
 //	uint8 *Buffer;		// Bitmap buffer.
 //	iSurface *Surface;	// Ivis surface definition.
-} RENDERED_BUTTON;
+};
 
 extern RENDERED_BUTTON TopicBuffers[NUM_TOPICBUFFERS];
 extern RENDERED_BUTTON ObjectBuffers[NUM_OBJECTBUFFERS];

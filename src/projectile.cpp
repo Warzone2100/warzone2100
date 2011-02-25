@@ -65,10 +65,10 @@
 
 #define VTOL_HITBOX_MODIFICATOR 100
 
-typedef struct _interval
+struct INTERVAL
 {
 	int begin, end;  // Time 1 = 0, time 2 = 1024. Or begin >= end if empty.
-} INTERVAL;
+};
 
 // Watermelon:they are from droid.c
 /* The range for neighbouring objects */

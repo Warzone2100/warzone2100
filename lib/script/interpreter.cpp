@@ -40,11 +40,11 @@
 
 static INTERP_VAL	*varEnvironment[MAX_FUNC_CALLS];		//environments for local variables of events/functions
 
-typedef struct
+struct ReturnAddressStack_t
 {
 	UDWORD CallerIndex;
 	INTERP_VAL *ReturnAddress;
-} ReturnAddressStack_t;
+};
 
 /**
  * Reset the return address stack

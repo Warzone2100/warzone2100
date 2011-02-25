@@ -106,7 +106,7 @@
 
 
 /* Which type of system is displayed on the design screen */
-typedef enum _des_sysmode
+enum DES_SYSMODE
 {
 	IDES_SENSOR,		// The sensor clickable is displayed
 	IDES_ECM,			// The ECM clickable is displayed
@@ -115,7 +115,7 @@ typedef enum _des_sysmode
 	IDES_WEAPON,		// The Weapon clickable is displayed
 	IDES_COMMAND,		// The command droid clickable is displayed
 	IDES_NOSYSTEM,		// No system clickable has been displayed
-} DES_SYSMODE;
+};
 static DES_SYSMODE desSysMode;
 
 /* The major component tabs on the design screen */
@@ -125,7 +125,7 @@ static DES_SYSMODE desSysMode;
 
 /* Which component type is being selected on the design screen */
 //added IDES_TURRET_A,IDES_TURRET_B,changing the name of IDES_TURRET might break exist codes
-typedef enum _des_compmode
+enum DES_COMPMODE
 {
 	IDES_SYSTEM,		// The main system for the droid (sensor, ECM, constructor)
 	IDES_TURRET,		// The weapon for the droid
@@ -134,16 +134,16 @@ typedef enum _des_compmode
 	IDES_NOCOMPONENT,	// No system has been selected
 	IDES_TURRET_A,		// The 2nd turret
 	IDES_TURRET_B,		// The 3rd turret
-} DES_COMPMODE;
+};
 static DES_COMPMODE desCompMode;
 
 /* Which type of propulsion is being selected */
-typedef enum _des_propmode
+enum DES_PROPMODE
 {
 	IDES_GROUND,		// Ground propulsion (wheeled, tracked, etc).
 	IDES_AIR,			// Air propulsion
 	IDES_NOPROPULSION,	// No propulsion has been selected
-} DES_PROPMODE;
+};
 static DES_PROPMODE desPropMode;
 
 

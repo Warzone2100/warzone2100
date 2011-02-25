@@ -43,26 +43,25 @@
 #define CON_BORDER_WIDTH				4
 #define CON_BORDER_HEIGHT				4
 
-typedef struct _console
+struct CONSOLE
 {
 	UDWORD	topX;
 	UDWORD	topY;
 	UDWORD	width;
 	UDWORD	textDepth;
 	BOOL	permanent;
-} CONSOLE;
+};
 
 /* Definition of a message */
-typedef struct	_console_message
+struct CONSOLE_MESSAGE
 {
 	char				text[MAX_CONSOLE_STRING_LENGTH];		// Text of the message
 	UDWORD				timeAdded;								// When was it added to our list?
-	//UDWORD			screenIndex;							// Info for justification
 	UDWORD				JustifyType;
 	UDWORD				id;
 	SDWORD				player;						// Player who sent this message or SYSTEM_MESSAGE
-	struct _console_message *psNext;
-} CONSOLE_MESSAGE;
+	CONSOLE_MESSAGE *               psNext;
+};
 
 /** Is the console history on or off? */
 static BOOL	bConsoleDropped = false;

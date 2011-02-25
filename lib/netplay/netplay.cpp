@@ -97,20 +97,20 @@ SYNC_COUNTER sync_counter;		// keeps track on how well we are in sync
 // ////////////////////////////////////////////////////////////////////////
 // Types
 
-typedef struct		// data regarding the last one second or so.
+struct NETSTATS  // data regarding the last one second or so.
 {
 	UDWORD		bytesRecvd;
 	UDWORD		bytesSent;	// number of bytes sent in about 1 sec.
 	UDWORD		packetsSent;
 	UDWORD		packetsRecvd;
-} NETSTATS;
+};
 
-typedef struct
+struct NET_PLAYER_DATA
 {
 	uint16_t        size;
 	void*           data;
 	size_t          buffer_size;
-} NET_PLAYER_DATA;
+};
 
 // ////////////////////////////////////////////////////////////////////////
 // Variables

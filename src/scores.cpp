@@ -68,7 +68,7 @@
 #define	RANK_BAR_WIDTH	100
 #define STAT_BAR_WIDTH	100
 
-typedef enum
+enum MR_STRING
 {
 	STR_MR_UNITS_LOST,
 	STR_MR_UNITS_KILLED,
@@ -88,7 +88,7 @@ typedef enum
 	STR_MR_LEVEL_ELITE,
 	STR_MR_LEVEL_SPECIAL,
 	STR_MR_LEVEL_ACE
-} MR_STRING;
+};
 
 
 // return translated string

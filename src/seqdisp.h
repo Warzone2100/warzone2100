@@ -38,7 +38,7 @@
 #define  SEQUENCE_KILL 3//stop
 #define  SEQUENCE_HOLD 4//play once and hold last frame
 
-typedef enum
+enum SEQ_TEXT_POSITIONING
 {
 	/**
 	 * Position text.
@@ -54,7 +54,7 @@ typedef enum
 	 * Justify if less than 520/600 length.
 	 */
 	SEQ_TEXT_JUSTIFY,
-} SEQ_TEXT_POSITIONING;
+};
 
 /***************************************************************************/
 /*

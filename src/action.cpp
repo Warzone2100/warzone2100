@@ -67,14 +67,14 @@
 #define PULL_BACK_DIST		10
 
 // data required for any action
-typedef struct _droid_action_data
+struct DROID_ACTION_DATA
 {
 	DROID_ACTION	action;
 	UDWORD			x,y;
 	//multiple action target info
 	BASE_OBJECT		*psObj;
 	BASE_STATS		*psStats;
-} DROID_ACTION_DATA;
+};
 
 // Check if a droid has stopped moving
 #define DROID_STOPPED(psDroid) \

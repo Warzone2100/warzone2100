@@ -58,52 +58,59 @@
 
 #define pie_RAISE_SCALE			256
 
-typedef enum
+enum LIGHTING_TYPE
 {
 	LIGHT_EMISSIVE,
 	LIGHT_AMBIENT,
 	LIGHT_DIFFUSE,
 	LIGHT_SPECULAR,
 	LIGHT_MAX
-} LIGHTING_TYPE;
+};
 
-typedef	enum
+enum REND_MODE
 {
 	REND_ALPHA,
 	REND_ADDITIVE,
 	REND_OPAQUE,
 	REND_MULTIPLICATIVE
-} REND_MODE;
+};
 
-typedef	enum
+enum DEPTH_MODE
 {
 	DEPTH_CMP_LEQ_WRT_ON,
 	DEPTH_CMP_ALWAYS_WRT_ON,
 	DEPTH_CMP_LEQ_WRT_OFF,
 	DEPTH_CMP_ALWAYS_WRT_OFF
-} DEPTH_MODE;
+};
 
-typedef enum
+enum TEXPAGE_TYPE
 {
 	TEXPAGE_NONE = -1,
 	TEXPAGE_EXTERN = -2
-} TEXPAGE_TYPE;
+};
 
-typedef enum	SHADER_MODE
+enum SHADER_MODE
 {
 	SHADER_NONE,
 	SHADER_COMPONENT,
 	SHADER_BUTTON,
 	SHADER_MAX
-} SHADER_MODE;
+};
 
 //*************************************************************************
 //
 // Simple derived types
 //
 //*************************************************************************
-typedef struct { Vector3i p, r; } iView;
+struct iView
+{
+	Vector3i p, r;
+};
 
-typedef struct { unsigned int width, height, depth; unsigned char *bmp; } iV_Image;
+struct iV_Image
+{
+	unsigned int width, height, depth;
+	unsigned char *bmp;
+};
 
 #endif // _pieTypes_h

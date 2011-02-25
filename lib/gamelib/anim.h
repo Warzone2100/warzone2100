@@ -17,18 +17,15 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/***************************************************************************/
 /*! \file anim.h
  * \brief Animation types and function headers
  *
  * Gareth Jones 11/7/97
  */
-/***************************************************************************/
 
 #ifndef _ANIM_H_
 #define _ANIM_H_
 
-/***************************************************************************/
 
 #include <physfs.h>
 
@@ -40,16 +37,13 @@
 #define	NO_ANIM			0xFFFD
 #define	NO_IMD			0xFFFC
 
-/***************************************************************************/
 
-typedef enum
+enum ANIM_MODE
 {
-	ANIM_2D,
-	ANIM_3D_FRAMES,
+	ANIM_3D_FRAMES = 1,
 	ANIM_3D_TRANS
-} ANIM_MODE;
+};
 
-/***************************************************************************/
 
 struct ANIM_STATE;
 struct BASEANIM;
@@ -66,36 +60,35 @@ struct BASEANIM;
 	struct ANIM_STATE	*psStates;				\
 	struct BASEANIM		*psNext;
 
-/* ensure ANIM2D/3D structs same size */
-#define ANIM_3D_ELEMENTS						\
-	ANIM_BASE_ELEMENTS							\
-	iIMDShape	*psFrames;						\
-	iIMDShape	**apFrame;
 
-/***************************************************************************/
-
-typedef struct ANIM_STATE
+struct ANIM_STATE
 {
 	UWORD				uwFrame;		/* frame to play           */
 	Vector3i			vecPos;
 	Vector3i			vecAngle;
 	Vector3i			vecScale;
-}
-ANIM_STATE;
+};
 
-typedef struct BASEANIM
+struct BASEANIM
 {
-	ANIM_BASE_ELEMENTS
-}
-BASEANIM;
+	char                    szFileName[ANIM_MAX_STR];
+	char                    animType;
+	UWORD                   uwID;
+	UWORD                   uwFrameRate;
+	UWORD                   uwStates;
+	UWORD                   uwObj;
+	UWORD                   uwAnimTime;
+	ANIM_MODE               ubType;
+	ANIM_STATE *            psStates;
+	BASEANIM *              psNext;
+};
 
-typedef struct ANIM3D
+struct ANIM3D : public BASEANIM
 {
-	ANIM_3D_ELEMENTS
-}
-ANIM3D;
+	iIMDShape *             psFrames;
+	iIMDShape **            apFrame;
+};
 
-/***************************************************************************/
 
 BOOL		anim_Init(void);
 BOOL		anim_Shutdown(void);

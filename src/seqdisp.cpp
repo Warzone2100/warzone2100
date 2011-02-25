@@ -67,7 +67,7 @@
 static int D_W2 = 0;	// Text width offset
 static int D_H2 = 0;	// Text height offset
 
-typedef struct
+struct SEQTEXT
 {
 	char pText[MAX_STR_LENGTH];
 	UDWORD x;
@@ -75,16 +75,16 @@ typedef struct
 	UDWORD startFrame;
 	UDWORD endFrame;
 	BOOL	bSubtitle;
-} SEQTEXT;
+};
 
-typedef struct
+struct SEQLIST
 {
 	const char	*pSeq;						//name of the sequence to play
 	const char	*pAudio;					//name of the wav to play
 	BOOL		bSeqLoop;					//loop this sequence
 	SDWORD		currentText;				//cuurent number of text messages for this seq
 	SEQTEXT		aText[MAX_TEXT_OVERLAYS];	//text data to display for this sequence
-} SEQLIST;
+};
 /***************************************************************************/
 /*
  *	local Variables
@@ -111,11 +111,11 @@ static BOOL g_bResumeInGame = false;
  */
 /***************************************************************************/
 
-typedef enum
+enum VIDEO_RESOLUTION
 {
 	VIDEO_PRESELECTED_RESOLUTION,
 	VIDEO_USER_CHOSEN_RESOLUTION,
-} VIDEO_RESOLUTION;
+};
 
 static bool seq_StartFullScreenVideo(const char* videoName, const char* audioName, VIDEO_RESOLUTION resolution);
 BOOL seq_SetupVideoBuffers(void);

@@ -33,11 +33,11 @@
 #include "eventsave.h"
 
 /* Whether to include debug info when compiling */
-typedef enum _scr_debugtype
+enum SCR_DEBUGTYPE
 {
 	SCR_DEBUGINFO,		// Generate debug info
 	SCR_NODEBUG,		// Do not generate debug info
-} SCR_DEBUGTYPE;
+};
 
 // If this is defined we save out the compiled scripts
 #define SCRIPTTYPE SCR_DEBUGINFO

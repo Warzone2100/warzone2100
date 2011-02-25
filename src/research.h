@@ -118,7 +118,8 @@ extern RESEARCH * getResearch(const char *pName, BOOL resName);
 extern void cancelResearch(STRUCTURE *psBuilding, QUEUE_MODE mode);
 
 /* For a given view data get the research this is related to */
-extern RESEARCH * getResearchForMsg(struct _viewdata *pViewData);
+struct VIEWDATA;
+RESEARCH *getResearchForMsg(VIEWDATA *pViewData);
 
 /* Sets the 'possible' flag for a player's research so the topic will appear in
 the research list next time the Research Facilty is selected */

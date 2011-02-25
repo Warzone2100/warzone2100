@@ -30,11 +30,11 @@
 #include "keybind.h"
 #include "keymap.h"
 
-typedef struct _cheat_entry
+struct CHEAT_ENTRY
 {
 	const char *pName;
 	void (*function)(void);	// pointer to void* function
-} CHEAT_ENTRY;
+};
 
 bool Cheated = false;
 static CHEAT_ENTRY cheatCodes[] =

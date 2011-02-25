@@ -42,13 +42,13 @@ char STRSTACK[MAXSTACKLEN][MAXSTRLEN]; //simple string 'stack'
 UDWORD CURSTACKSTR = 0;    //Points to the top of the string stack
 
 /* store for a 'chunk' of the stack */
-typedef struct _stack_chunk
+struct STACK_CHUNK
 {
 	INTERP_VAL	*aVals;
 	UDWORD		size;
 
-	struct _stack_chunk		*psNext, *psPrev;
-} STACK_CHUNK;
+	STACK_CHUNK *   psNext, *psPrev;
+};
 
 /* The first chunk of the stack */
 static STACK_CHUNK		*psStackBase=NULL;

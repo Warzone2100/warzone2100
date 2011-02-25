@@ -60,16 +60,15 @@ typedef void	(* HASHFREEFUNC)	( void *psElement );
 /* structs
  */
 
-typedef struct HASHNODE
+struct HASHNODE
 {
 	intptr_t			iKey1;
 	intptr_t			iKey2;
 	void			*psElement;
-	struct HASHNODE		*psNext;
-}
-HASHNODE;
+	HASHNODE *              psNext;
+};
 
-typedef struct HASHTABLE
+struct HASHTABLE
 {
 	HASHNODE		**ppsNode;
 	HASHNODE		*psNextNode;
@@ -80,8 +79,7 @@ typedef struct HASHTABLE
 	UDWORD			udwExtElements;
 	UDWORD			udwElementSize;
 	UDWORD			sdwCurIndex;
-}
-HASHTABLE;
+};
 
 /***************************************************************************/
 /* functions

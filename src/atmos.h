@@ -24,7 +24,7 @@
 #include "lib/framework/vector.h"
 #include "lib/ivis_opengl/ivisdef.h"
 
-typedef struct _atmosParticle
+struct ATPART
 {
 	UBYTE		status;
 	UBYTE		type;
@@ -32,14 +32,14 @@ typedef struct _atmosParticle
 	Vector3f	position;
 	Vector3f	velocity;
 	iIMDShape	*imd;
-} ATPART;
+};
 
-typedef	enum
+enum WT_CLASS
 {
 	WT_RAINING,
 	WT_SNOWING,
 	WT_NONE
-} WT_CLASS;
+};
 
 void atmosInitSystem(void);
 void atmosUpdateSystem(void);

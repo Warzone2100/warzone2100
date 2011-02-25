@@ -74,37 +74,38 @@ struct ffnode
 SDWORD		scrollMinX, scrollMaxX, scrollMinY, scrollMaxY;
 
 /* Structure definitions for loading and saving map data */
-typedef struct _map_save_header
+struct MAP_SAVEHEADER  // : public GAME_SAVEHEADER
 {
 	char		aFileType[4];
 	UDWORD		version;
 	UDWORD		width;
 	UDWORD		height;
-} MAP_SAVEHEADER;
+};
 
-typedef struct _map_save_tilev2
+struct MAP_SAVETILE
 {
 	UWORD		texture;
 	UBYTE		height;
-} MAP_SAVETILE;
+};
 
-typedef struct _gateway_save_header
+struct GATEWAY_SAVEHEADER
 {
 	UDWORD		version;
 	UDWORD		numGateways;
-} GATEWAY_SAVEHEADER;
+};
 
-typedef struct _gateway_save
+struct GATEWAY_SAVE
 {
 	UBYTE	x0,y0,x1,y1;
-} GATEWAY_SAVE;
+};
 
-typedef struct _zonemap_save_header {
+struct ZONEMAP_SAVEHEADER
+{
 	UWORD version;
 	UWORD numZones;
 	UWORD numEquivZones;
 	UWORD pad;
-} ZONEMAP_SAVEHEADER;
+};
 
 /* Sanity check definitions for the save struct file sizes */
 #define SAVE_HEADER_SIZE	16

@@ -41,10 +41,10 @@ enum OBJECT_TYPE
 	OBJ_NUM_TYPES,  ///< number of object types - MUST BE LAST
 };
 
-typedef struct _tilePos
+struct TILEPOS
 {
 	UBYTE x, y;
-} TILEPOS;
+};
 
 /*
  Coordinate system used for objects in Warzone 2100:

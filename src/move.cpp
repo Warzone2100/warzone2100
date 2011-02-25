@@ -536,11 +536,11 @@ void updateDroidOrientation(DROID *psDroid)
 }
 
 
-typedef struct
+struct BLOCKING_CALLBACK_DATA
 {
 	PROPULSION_TYPE propulsionType;
 	bool blocking;
-} BLOCKING_CALLBACK_DATA;
+};
 
 static bool moveBlockingTileCallback(Vector3i pos, int32_t dist, void *data_)
 {

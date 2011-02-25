@@ -35,7 +35,7 @@
 // types of level datasets
 
 
-typedef enum
+enum LEVEL_TYPE
 {
 	LDS_COMPLETE,		// all data required for a stand alone level
 	LDS_CAMPAIGN,		// the data set for a campaign (no map data)
@@ -50,12 +50,12 @@ typedef enum
 	LDS_NONE,			//flags when not got a mission to go back to or when
 						//already on one - ****LEAVE AS LAST ONE****
 	LDS_MULTI_TYPE_START,           ///< Start number for custom type numbers (as used by a `type` instruction)
-} LEVEL_TYPE;
+};
 
 // the WRF/WDG files needed for a particular level
 // the WRF/WDG files needed for a particular level
 
-typedef struct _level_dataset
+struct LEVEL_DATASET
 {
 	SWORD	type;					// type of map
 	SWORD	players;				// number of players for the map
@@ -64,11 +64,11 @@ typedef struct _level_dataset
 	searchPathMode	dataDir;					// title for the level
 	char	*apDataFiles[LEVEL_MAXFILES];		// the WRF/WDG files for the level
 							// in load order
-	struct _level_dataset *psBaseData;		// LEVEL_DATASET that must be loaded for this level to load
-	struct _level_dataset *psChange;		// LEVEL_DATASET used when changing to this level from another
+	LEVEL_DATASET *psBaseData;                      // LEVEL_DATASET that must be loaded for this level to load
+	LEVEL_DATASET *psChange;                        // LEVEL_DATASET used when changing to this level from another
 
-	struct _level_dataset *psNext;
-} LEVEL_DATASET;
+	LEVEL_DATASET *psNext;
+};
 
 
 // the current level descriptions

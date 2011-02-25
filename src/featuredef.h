@@ -27,7 +27,7 @@
 #include "basedef.h"
 #include "statsdef.h"
 
-typedef enum _feature_type
+enum FEATURE_TYPE
 {
 	FEAT_BUILD_WRECK,
 	FEAT_HOVER,
@@ -55,7 +55,7 @@ typedef enum _feature_type
 	//FEAT_BOULDER3,
 	//FEAT_FUTCAR,
 	//FEAT_FUTVAN,
-} FEATURE_TYPE;
+};
 
 /* Stats for a feature */
 struct FEATURE_STATS : public BASE_STATS

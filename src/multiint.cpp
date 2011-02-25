@@ -1230,12 +1230,12 @@ static void addBlueForm(UDWORD parent,UDWORD id, const char *txt,UDWORD x,UDWORD
 }
 
 
-typedef struct
+struct LimitIcon
 {
 	char const *stat;
 	char const *desc;
 	int         icon;
-} LimitIcon;
+};
 static const LimitIcon limitIcons[] =
 {
 	{"A0LightFactory",  N_("Tanks disabled!!"),  IMAGE_NO_TANK},
