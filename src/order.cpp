@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -1614,26 +1614,31 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		}
 		break;
 	case DORDER_BUILD:
-		// build a new structure
-		if (!(psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT))
+	case DORDER_LINEBUILD:
+		// build a new structure or line of structures
+		if (!isConstructionDroid(psDroid))
 		{
 			break;
 		}
-		ASSERT( psOrder->psStats != NULL,
-			"orderUnitBase: invalid structure stats pointer" );
-		psDroid->order = DORDER_BUILD;
+		ASSERT(psOrder->psStats != NULL, "invalid structure stats pointer");
+		psDroid->order = psOrder->order;
 		psDroid->orderX = psOrder->x;
 		psDroid->orderY = psOrder->y;
+		if (psOrder->order == DORDER_LINEBUILD)
+		{
+			psDroid->orderX2 = psOrder->x2;
+			psDroid->orderY2 = psOrder->y2;
+		}
 		psDroid->orderDirection = psOrder->direction;
 		setDroidTarget(psDroid, NULL);
 		psDroid->psTarStats = psOrder->psStats;
-		ASSERT((!psDroid->psTarStats || ((STRUCTURE_STATS *)psDroid->psTarStats)->type != REF_DEMOLISH), "Cannot build demolition");
+		ASSERT(!psDroid->psTarStats || ((STRUCTURE_STATS *)psDroid->psTarStats)->type != REF_DEMOLISH, "Cannot build demolition");
 		actionDroid(psDroid, DACTION_BUILD, psOrder->x,psOrder->y);
 		objTrace(psDroid->id, "Starting new construction effort of %s", psOrder->psStats ? psOrder->psStats->pName : "NULL POINTER");
 		break;
 	case DORDER_BUILDMODULE:
 		//build a module onto the structure
-		if (!(psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT))
+		if (!isConstructionDroid(psDroid))
 		{
 			break;
 		}
@@ -1648,26 +1653,9 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		actionDroid(psDroid, DACTION_BUILD, psOrder->psObj->pos.x,psOrder->psObj->pos.y);
 		objTrace(psDroid->id, "Starting new upgrade of %s", psOrder->psStats ? psOrder->psStats->pName : "NULL POINTER");
 		break;
-	case DORDER_LINEBUILD:
-		// build a line of structures
-		ASSERT_OR_RETURN(, psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT, "Not a constructor droid");
-		ASSERT(psOrder->psStats != NULL, "Invalid structure stats pointer");
-
-		psDroid->order = DORDER_LINEBUILD;
-		psDroid->orderX = psOrder->x;
-		psDroid->orderY = psOrder->y;
-		psDroid->orderX2 = psOrder->x2;
-		psDroid->orderY2 = psOrder->y2;
-		psDroid->orderDirection = psOrder->direction;
-		setDroidTarget(psDroid, NULL);
-		psDroid->psTarStats = psOrder->psStats;
-		ASSERT((!psDroid->psTarStats || ((STRUCTURE_STATS *)psDroid->psTarStats)->type != REF_DEMOLISH), "Cannot build demolition");
-		actionDroid(psDroid, DACTION_BUILD, psOrder->x,psOrder->y);
-		objTrace(psDroid->id, "Starting new line construction of %s", psOrder->psStats ? psOrder->psStats->pName : "NULL POINTER");
-		break;
 	case DORDER_HELPBUILD:
 		// help to build a structure that is starting to be built
-		ASSERT_OR_RETURN(, psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT, "Not a constructor droid");
+		ASSERT_OR_RETURN(, isConstructionDroid(psDroid), "Not a constructor droid");
 		ASSERT_OR_RETURN(, psOrder->psObj != NULL, "Help to build a NULL pointer?");
 		psDroid->order = DORDER_HELPBUILD;
 		psDroid->orderX = psOrder->psObj->pos.x;
