@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-02-25 23:35+0100\n"
+"POT-Creation-Date: 2011-02-26 20:22+0100\n"
 "PO-Revision-Date: 2010-12-11 17:00+0100\n"
 "Last-Translator: Michał D. aka Emdek <emdeck@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -12549,8 +12549,8 @@ msgstr "JEDEN GRACZ"
 
 #: src/frontend.cpp:303
 #: src/ingameop.cpp:494
-#: src/mission.cpp:2493
-#: src/mission.cpp:2596
+#: src/mission.cpp:2537
+#: src/mission.cpp:2640
 msgid "Load Saved Game"
 msgstr "Załaduj zapisany stan gry"
 
@@ -12844,8 +12844,8 @@ msgid "MAP SAVED!"
 msgstr "MAPA ZAPISANA!"
 
 #: src/hci.cpp:1573
-#: src/loop.cpp:558
-#: src/loop.cpp:574
+#: src/loop.cpp:561
+#: src/loop.cpp:577
 #, fuzzy
 msgid "GAME SAVED: "
 msgstr "GRA ZAPISANA :"
@@ -13042,8 +13042,8 @@ msgstr ""
 
 #: src/ingameop.cpp:274
 #: src/ingameop.cpp:498
-#: src/mission.cpp:2480
-#: src/mission.cpp:2599
+#: src/mission.cpp:2524
+#: src/mission.cpp:2643
 msgid "Save Game"
 msgstr "Zapisz grę"
 
@@ -13974,42 +13974,42 @@ msgstr "Śledź obiekt gry"
 msgid "Toggle Driving Mode"
 msgstr "Przełącz tryb kierowania "
 
-#: src/loop.cpp:565
-#: src/loop.cpp:581
+#: src/loop.cpp:568
+#: src/loop.cpp:584
 msgid "Could not save game!"
 msgstr "Niemożna zapisać gry!"
 
-#: src/mission.cpp:2041
+#: src/mission.cpp:2085
 msgid "Load Transport"
 msgstr "Ładuj transport"
 
-#: src/mission.cpp:2428
+#: src/mission.cpp:2472
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "CEL OSIĄGNIĘTY przez oszukiwanie!"
 
-#: src/mission.cpp:2428
+#: src/mission.cpp:2472
 msgid "OBJECTIVE ACHIEVED"
 msgstr "CEL OSIĄGNIĘTY"
 
-#: src/mission.cpp:2434
+#: src/mission.cpp:2478
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "CEL NIE OSIĄGNIĘTY--chociaż oszukiwałeś!"
 
-#: src/mission.cpp:2434
+#: src/mission.cpp:2478
 msgid "OBJECTIVE FAILED"
 msgstr "CEL NIE OSIĄGNIĘTY"
 
-#: src/mission.cpp:2459
-#: src/mission.cpp:2499
-#: src/mission.cpp:2613
+#: src/mission.cpp:2503
+#: src/mission.cpp:2543
+#: src/mission.cpp:2657
 msgid "Quit To Main Menu"
 msgstr "Wyjdź do menu głównego"
 
-#: src/mission.cpp:2467
+#: src/mission.cpp:2511
 msgid "Continue Game"
 msgstr "Kontynuuj grę"
 
-#: src/mission.cpp:2564
+#: src/mission.cpp:2608
 msgid "GAME SAVED :"
 msgstr "GRA ZAPISANA :"
 
@@ -14579,80 +14579,80 @@ msgstr "Przesyła energię graczowi"
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr "Gracz %s wyrzucony z powodu próby pominięcia sprawdzenia integralności danych!"
 
-#: src/multiplay.cpp:1057
+#: src/multiplay.cpp:1054
 msgid "(allies"
 msgstr "(sojusznicy"
 
-#: src/multiplay.cpp:1065
+#: src/multiplay.cpp:1062
 msgid "(private to "
 msgstr "(prywatny dla"
 
-#: src/multiplay.cpp:1078
+#: src/multiplay.cpp:1075
 msgid "[invalid]"
 msgstr "[nieprawidłowy]"
 
-#: src/multiplay.cpp:1942
+#: src/multiplay.cpp:1939
 msgid "Green"
 msgstr "Zielony"
 
-#: src/multiplay.cpp:1943
+#: src/multiplay.cpp:1940
 msgid "Orange"
 msgstr "Pomarańczowy"
 
-#: src/multiplay.cpp:1944
+#: src/multiplay.cpp:1941
 msgid "Grey"
 msgstr "Szary"
 
-#: src/multiplay.cpp:1945
+#: src/multiplay.cpp:1942
 msgid "Black"
 msgstr "Czarny"
 
-#: src/multiplay.cpp:1946
+#: src/multiplay.cpp:1943
 msgid "Red"
 msgstr "Czerwony"
 
-#: src/multiplay.cpp:1947
+#: src/multiplay.cpp:1944
 msgid "Blue"
 msgstr "Niebieski"
 
-#: src/multiplay.cpp:1948
+#: src/multiplay.cpp:1945
 msgid "Pink"
 msgstr "Różowy"
 
-#: src/multiplay.cpp:1949
+#: src/multiplay.cpp:1946
 msgid "Cyan"
 msgstr "Turkusowy"
 
-#: src/multiplay.cpp:1950
+#: src/multiplay.cpp:1947
 msgid "Yellow"
 msgstr ""
 
-#: src/multiplay.cpp:1951
+#: src/multiplay.cpp:1948
 msgid "Purple"
 msgstr ""
 
-#: src/multiplay.cpp:1952
+#: src/multiplay.cpp:1949
 msgid "White"
 msgstr ""
 
-#: src/multiplay.cpp:1953
+#: src/multiplay.cpp:1950
 #, fuzzy
 msgid "Bright blue"
 msgstr "Prawy przycisk"
 
-#: src/multiplay.cpp:1954
+#: src/multiplay.cpp:1951
 msgid "Neon green"
 msgstr ""
 
-#: src/multiplay.cpp:1955
+#: src/multiplay.cpp:1952
 msgid "Infrared"
 msgstr ""
 
-#: src/multiplay.cpp:1956
+#: src/multiplay.cpp:1953
 msgid "Ultraviolet"
 msgstr ""
 
-#: src/multiplay.cpp:1957
+#: src/multiplay.cpp:1954
 msgid "Brown"
 msgstr ""
 
