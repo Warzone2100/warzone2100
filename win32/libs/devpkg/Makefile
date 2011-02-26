@@ -15,7 +15,7 @@ extract-stamp: $(DOWNLOADS)/$(PKG_SOURCE)
 	    echo mkdir -p $(TOPDIR)/build/libs ; \
 	    mkdir -p $(TOPDIR)/build/libs || exit ; \
 	}
-	tar -x -j -C $(TOPDIR)/build/libs -f $^
+	tar -x --keep-newer-files -j -C $(TOPDIR)/build/libs -f $^
 	touch extract-stamp
 
 all: build
