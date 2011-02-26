@@ -158,7 +158,10 @@ GAMECODE gameLoop(void)
 
 	if (gameTicked)
 	{
-		syncDebug("map = \"%s\", humanPlayers = %d %d %d %d %d %d %d %d", game.map, isHumanPlayer(0), isHumanPlayer(1), isHumanPlayer(2), isHumanPlayer(3), isHumanPlayer(4), isHumanPlayer(5), isHumanPlayer(6), isHumanPlayer(7));
+		// Can't dump isHumanPlayer, since it causes spurious desynch dumps when players leave.
+		// TODO isHumanPlayer should probably be synchronised, since the game state seems to depend on it, so there might also be a risk of real desynchs when players leave.
+		//syncDebug("map = \"%s\", humanPlayers = %d %d %d %d %d %d %d %d", game.map, isHumanPlayer(0), isHumanPlayer(1), isHumanPlayer(2), isHumanPlayer(3), isHumanPlayer(4), isHumanPlayer(5), isHumanPlayer(6), isHumanPlayer(7));
+		syncDebug("map = \"%s\"", game.map);
 
 		// Actually send pending droid orders.
 		sendQueuedDroidInfo();
