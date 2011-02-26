@@ -55,6 +55,8 @@ struct MISSION
 	MAPTILE				*psMapTiles;					//the original mapTiles
 	int32_t                         mapWidth;                       //the original mapWidth
 	int32_t                         mapHeight;                      //the original mapHeight
+	uint8_t *                       psBlockMap[AUX_MAX];
+	uint8_t *                       psAuxMap[MAX_PLAYERS + AUX_MAX];
 	GATEWAY *                       psGateways;                     //the gateway list
 	int32_t                         scrollMinX;                     //scroll coords for original map
 	int32_t                         scrollMinY;

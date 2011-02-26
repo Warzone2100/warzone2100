@@ -905,7 +905,7 @@ BOOL mapLoad(char *filename, BOOL preview)
 	scrollMaxY = mapHeight;
 
 	/* Allocate aux maps */
-	psBlockMap[AUX_MAP] = (uint8_t *)malloc(mapWidth * mapHeight * sizeof(*psAuxMap[0]));
+	psBlockMap[AUX_MAP] = (uint8_t *)malloc(mapWidth * mapHeight * sizeof(*psBlockMap[0]));
 	psBlockMap[AUX_ASTARMAP] = (uint8_t *)malloc(mapWidth * mapHeight * sizeof(*psBlockMap[0]));
 	psBlockMap[AUX_DANGERMAP] = (uint8_t *)malloc(mapWidth * mapHeight * sizeof(*psBlockMap[0]));
 	for (x = 0; x < MAX_PLAYERS + AUX_MAX; x++)
