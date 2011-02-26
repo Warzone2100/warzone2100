@@ -322,26 +322,23 @@ DROID *IdToDroid(UDWORD id, UDWORD player)
 // find a structure
 STRUCTURE *IdToStruct(UDWORD id, UDWORD player)
 {
-	if (player == ANYPLAYER)
+	int beginPlayer = 0, endPlayer = MAX_PLAYERS;
+	if (player != ANYPLAYER)
 	{
-		for (int i = 0; i < MAX_PLAYERS; i++)
+		beginPlayer = player;
+		endPlayer = std::min<int>(player + 1, MAX_PLAYERS);
+	}
+	STRUCTURE **lists[2] = {apsStructLists, mission.apsStructLists};
+	for (int j = 0; j < 2; ++j)
+	{
+		for (int i = beginPlayer; i < endPlayer; ++i)
 		{
-			for (STRUCTURE *d = apsStructLists[i]; d; d = d->psNext)
+			for (STRUCTURE *d = lists[j][i]; d; d = d->psNext)
 			{
 				if (d->id == id)
 				{
 					return d;
 				}
-			}
-		}
-	}
-	else if (player < MAX_PLAYERS)
-	{
-		for (STRUCTURE *d = apsStructLists[player]; d; d = d->psNext)
-		{
-			if (d->id == id)
-			{
-				return d;
 			}
 		}
 	}
