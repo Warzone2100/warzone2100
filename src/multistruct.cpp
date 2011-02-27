@@ -258,7 +258,6 @@ BOOL recvLasSat(NETQUEUE queue)
 	STRUCTURE	*psStruct;
 	uint32_t	id,targetid;
 
-	// TODO Add some kind of checking, so that things don't get lasatted by bunkers.
 	NETbeginDecode(queue, GAME_LASSAT);
 		NETuint8_t(&player);
 		NETuint32_t(&id);
@@ -269,7 +268,7 @@ BOOL recvLasSat(NETQUEUE queue)
 	psStruct = IdToStruct (id, player);
 	psObj	 = IdToPointer(targetid, targetplayer);
 
-	if (psStruct && psObj)
+	if (psStruct && psObj && psStruct->pStructureType->psWeapStat[0]->weaponSubClass == WSC_LAS_SAT)
 	{
 		// Give enemy no quarter, unleash the lasat
 		proj_SendProjectile(&psStruct->asWeaps[0], NULL, player, psObj->pos, psObj, true, 0);
