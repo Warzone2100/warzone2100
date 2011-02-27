@@ -2038,10 +2038,7 @@ static void addTeamChooser(UDWORD player)
 	initChooser(player);
 
 	// add form.
-	addBlueForm(MULTIOP_PLAYERS,MULTIOP_TEAMCHOOSER_FORM,"",
-				7,
-				playerBoxHeight(player),
-				MULTIOP_ROW_WIDTH,MULTIOP_TEAMSHEIGHT);
+	addBlueForm(MULTIOP_PLAYERS, MULTIOP_TEAMCHOOSER_FORM, "", 7, playerBoxHeight(player), MULTIOP_ROW_WIDTH, MULTIOP_TEAMSHEIGHT);
 
 	// tally up the team counts
 	for (i=0; i< game.maxPlayers ; i++)
@@ -2076,11 +2073,10 @@ static void addTeamChooser(UDWORD player)
 	// add a kick button
 	if (player != selectedPlayer && NetPlay.bComms && NetPlay.isHost && NetPlay.players[player].allocated)
 	{
-		addMultiBut(psWScreen,MULTIOP_TEAMCHOOSER_FORM, MULTIOP_TEAMCHOOSER_KICK,
-					8*(teamW + 5) + 7, 8,
-					iV_GetImageWidth(FrontImages,IMAGE_NOJOIN),		  //w
-					iV_GetImageHeight(FrontImages,IMAGE_NOJOIN),		  //h
-					_("Kick player"), IMAGE_NOJOIN, IMAGE_NOJOIN, IMAGE_NOJOIN);
+		const int imgwidth = iV_GetImageWidth(FrontImages, IMAGE_NOJOIN);
+		const int imgheight = iV_GetImageHeight(FrontImages, IMAGE_NOJOIN);
+		addMultiBut(psWScreen, MULTIOP_TEAMCHOOSER_FORM, MULTIOP_TEAMCHOOSER_KICK, MULTIOP_ROW_WIDTH - imgwidth - 4, 8, imgwidth, imgheight,
+		            ("Kick player"), IMAGE_NOJOIN, IMAGE_NOJOIN, IMAGE_NOJOIN);
 	}
 
 	teamChooserUp = player;
