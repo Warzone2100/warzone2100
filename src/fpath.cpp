@@ -376,7 +376,7 @@ static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int sta
 			// Copy over select fields - preserve others
 			psMove->destination = psResult->sMove.destination;
 			psMove->numPoints = psResult->sMove.numPoints;
-			psMove->Position = 0;
+			psMove->pathIndex = 0;
 			psMove->Status = MOVENAVIGATE;
 			free(psMove->asPath);
 			psMove->asPath = psResult->sMove.asPath;

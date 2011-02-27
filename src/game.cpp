@@ -5055,7 +5055,7 @@ static void SaveDroidMoveControl(SAVE_DROID * const psSaveDroid, DROID const * c
 
 	// Copy over the endian neutral stuff (all UBYTE)
 	psSaveDroid->sMove.Status    = psDroid->sMove.Status;
-	psSaveDroid->sMove.Position  = psDroid->sMove.Position;
+	psSaveDroid->sMove.Position  = psDroid->sMove.pathIndex;
 	psSaveDroid->sMove.numPoints = MIN(psDroid->sMove.numPoints, TRAVELSIZE);
 	for (i = 0; i < MIN(psDroid->sMove.numPoints, TRAVELSIZE); i++)
 	{
@@ -5112,7 +5112,7 @@ static void LoadDroidMoveControl(DROID * const psDroid, SAVE_DROID const * const
 
 	// Copy over the endian neutral stuff (all UBYTE)
 	psDroid->sMove.Status      = (MOVE_STATUS)psSaveDroid->sMove.Status;
-	psDroid->sMove.Position    = psSaveDroid->sMove.Position;
+	psDroid->sMove.pathIndex   = psSaveDroid->sMove.Position;
 	psDroid->sMove.numPoints   = psSaveDroid->sMove.numPoints;
 	psDroid->sMove.asPath      = (Vector2i *)malloc(sizeof(*psDroid->sMove.asPath) * psDroid->sMove.numPoints);
 	for (i = 0; i < psDroid->sMove.numPoints; i++)

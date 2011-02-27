@@ -51,8 +51,8 @@ enum MOVE_STATUS
 struct MOVE_CONTROL
 {
 	MOVE_STATUS	Status;					// Inactive, Navigating or moving point to point status
-	uint16_t	Position;				// Position in asPath
-	uint16_t	numPoints;				// number of points in asPath
+	int             pathIndex;                              // Position in asPath
+	int             numPoints;                              // number of points in asPath
 	Vector2i	 *asPath;				// Pointer to list of block X,Y map coordinates.
 
 	Vector2i destination;                                   // World coordinates of movement destination

@@ -461,8 +461,8 @@ ASR_RETVAL fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 		}
 	}
 
-	// TODO FIXME once we can change numPoints to something larger than uint16_t
-	psMove->numPoints = std::min<int>(UINT16_MAX, path.size());
+	// TODO FIXME once we can change numPoints to something larger than int
+	psMove->numPoints = std::min<size_t>(INT32_MAX - 1, path.size());
 
 	// Allocate memory
 	psMove->asPath = static_cast<Vector2i *>(malloc(sizeof(*psMove->asPath) * path.size()));

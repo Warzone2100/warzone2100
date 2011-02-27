@@ -232,7 +232,7 @@ static BOOL moveDroidToBase(DROID *psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 	{
 		fpathSetDirectRoute(psDroid, x, y);
 		psDroid->sMove.Status = MOVENAVIGATE;
-		psDroid->sMove.Position=0;
+		psDroid->sMove.pathIndex = 0;
 		return true;
 	}
 	else if (isVtolDroid(psDroid) || (game.maxPlayers > 0 && psDroid->droidType == DROID_TRANSPORTER))
@@ -258,7 +258,7 @@ static BOOL moveDroidToBase(DROID *psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 		         (int)psDroid->id, psDroid->baseSpeed, psDroid->sMove.speed, x, map_coord(x), y, map_coord(y));
 
 		psDroid->sMove.Status = MOVENAVIGATE;
-		psDroid->sMove.Position=0;
+		psDroid->sMove.pathIndex = 0;
 	}
 	else if (retVal == FPR_WAIT)
 	{
@@ -307,7 +307,7 @@ void moveDroidToDirect(DROID* psDroid, UDWORD x, UDWORD y)
 
 	fpathSetDirectRoute(psDroid, x, y);
 	psDroid->sMove.Status = MOVENAVIGATE;
-	psDroid->sMove.Position=0;
+	psDroid->sMove.pathIndex = 0;
 }
 
 
@@ -439,7 +439,7 @@ static void moveShuffleDroid(DROID *psDroid, Vector2i s)
 	psDroid->sMove.target.x = tarX;
 	psDroid->sMove.target.y = tarY;
 	psDroid->sMove.numPoints = 0;
-	psDroid->sMove.Position = 0;
+	psDroid->sMove.pathIndex = 0;
 
 	CHECK_DROID(psDroid);
 }
@@ -567,7 +567,7 @@ static int32_t moveDirectPathToWaypoint(DROID *psDroid, unsigned positionIndex)
 // Returns true if still able to find the path.
 static bool moveBestTarget(DROID *psDroid)
 {
-	int positionIndex = psDroid->sMove.Position - 1;
+	int positionIndex = std::max(psDroid->sMove.pathIndex - 1, 0);
 	int32_t dist = moveDirectPathToWaypoint(psDroid, positionIndex);
 	if (dist >= 0)
 	{
@@ -600,33 +600,33 @@ static bool moveBestTarget(DROID *psDroid)
 			return false;  // Couldn't find path, and backtracking didn't help.
 		}
 	}
-	psDroid->sMove.Position = positionIndex + 1;
+	psDroid->sMove.pathIndex = positionIndex + 1;
 	psDroid->sMove.src = removeZ(psDroid->pos);
 	psDroid->sMove.target = psDroid->sMove.asPath[positionIndex];
 	return true;
 }
 
 /* Get the next target point from the route */
-static BOOL moveNextTarget(DROID *psDroid)
+static bool moveNextTarget(DROID *psDroid)
 {
 	CHECK_DROID(psDroid);
 
 	// See if there is anything left in the move list
-	if (psDroid->sMove.Position == psDroid->sMove.numPoints)
+	if (psDroid->sMove.pathIndex == psDroid->sMove.numPoints)
 	{
 		return false;
 	}
 
-	if (psDroid->sMove.Position == 0)
+	if (psDroid->sMove.pathIndex == 0)
 	{
 		psDroid->sMove.src = removeZ(psDroid->pos);
 	}
 	else
 	{
-		psDroid->sMove.src = psDroid->sMove.asPath[psDroid->sMove.Position - 1];
+		psDroid->sMove.src = psDroid->sMove.asPath[psDroid->sMove.pathIndex - 1];
 	}
-	psDroid->sMove.target = psDroid->sMove.asPath[psDroid->sMove.Position];
-	psDroid->sMove.Position++;
+	psDroid->sMove.target = psDroid->sMove.asPath[psDroid->sMove.pathIndex];
+	++psDroid->sMove.pathIndex;
 
 	CHECK_DROID(psDroid);
 	return true;
@@ -636,14 +636,14 @@ static BOOL moveNextTarget(DROID *psDroid)
 static Vector2i movePeekNextTarget(DROID *psDroid)
 {
 	// See if there is anything left in the move list
-	if (psDroid->sMove.Position == psDroid->sMove.numPoints)
+	if (psDroid->sMove.pathIndex == psDroid->sMove.numPoints)
 	{
 		// No points left - fudge one to continue the same direction
 		return psDroid->sMove.target*2 - psDroid->sMove.src;
 	}
 	else
 	{
-		return psDroid->sMove.asPath[psDroid->sMove.Position];
+		return psDroid->sMove.asPath[psDroid->sMove.pathIndex];
 	}
 }
 
@@ -791,9 +791,9 @@ static BOOL moveBlocked(DROID *psDroid)
 
 		objTrace(psDroid->id, "BLOCKED");
 		// if the unit cannot see the next way point - reroute it's got stuck
-		if ( ( bMultiPlayer || (psDroid->player == selectedPlayer) ) &&
-			(psDroid->sMove.Position != psDroid->sMove.numPoints) &&
-			!fpathTileLOS(psDroid, Vector3i(psDroid->sMove.destination, 0)))
+		if ((bMultiPlayer || psDroid->player == selectedPlayer) &&
+		     psDroid->sMove.pathIndex != psDroid->sMove.numPoints &&
+		     !fpathTileLOS(psDroid, Vector3i(psDroid->sMove.destination, 0)))
 		{
 			objTrace(psDroid->id, "Trying to reroute to (%d,%d)", psDroid->sMove.destination.x, psDroid->sMove.destination.y);
 			moveDroidTo(psDroid, psDroid->sMove.destination.x, psDroid->sMove.destination.y);
@@ -1326,11 +1326,11 @@ static uint16_t moveGetDirection(DROID *psDroid)
 }
 
 // Check if a droid has got to a way point
-static BOOL moveReachedWayPoint(DROID *psDroid)
+static bool moveReachedWayPoint(DROID *psDroid)
 {
 	// Calculate the vector to the droid
 	const Vector2i droid = removeZ(psDroid->pos) - psDroid->sMove.target;
-	const bool last = (psDroid->sMove.Position == psDroid->sMove.numPoints);
+	const bool last = psDroid->sMove.pathIndex == psDroid->sMove.numPoints;
 	const int sqprecision = last ? ((TILE_UNITS / 4) * (TILE_UNITS / 4)) : ((TILE_UNITS / 2) * (TILE_UNITS / 2));
 
 	// See if we have reached the next waypoint - occasionally happens due to bumping
@@ -1556,7 +1556,7 @@ static void moveCheckFinalWaypoint( DROID *psDroid, SDWORD *pSpeed )
 
 	if (*pSpeed > minEndSpeed &&
 		(psDroid->sMove.Status != MOVESHUFFLE) &&
-		psDroid->sMove.Position == psDroid->sMove.numPoints)
+		psDroid->sMove.pathIndex == psDroid->sMove.numPoints)
 	{
 		Vector2i diff = removeZ(psDroid->pos) - psDroid->sMove.target;
 		int distSq = diff*diff;

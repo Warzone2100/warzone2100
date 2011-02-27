@@ -409,7 +409,7 @@ static void showDroidPaths(void)
 {
 	DROID *psDroid;
 
-	if (((gameTime2 / 250) % 2) != 0)
+	if ((graphicsTime / 250 % 2) != 0)
 	{
 		return;
 	}
@@ -418,10 +418,9 @@ static void showDroidPaths(void)
 	{
 		if (psDroid->selected && psDroid->sMove.Status != MOVEINACTIVE)
 		{
-			int	i;
 			int	len = psDroid->sMove.numPoints;
 
-			i = MAX(psDroid->sMove.Position-1,0);
+			int i = std::max(psDroid->sMove.pathIndex - 1, 0);
 			for (; i < len; i++)
 			{
 				Vector3i pos;
