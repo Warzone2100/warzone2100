@@ -736,7 +736,7 @@ static bool fetchProgramPath(char * const programPath, size_t const bufSize, con
  *
  * \param programCommand Command used to launch this program. Only used for POSIX handler.
  */
-void setupExceptionHandler(int argc, char * argv[])
+void setupExceptionHandler(int argc, const char ** argv)
 {
 #if defined(WZ_OS_UNIX) && !defined(WZ_OS_MAC)
 	const char *programCommand;
