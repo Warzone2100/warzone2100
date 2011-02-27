@@ -999,22 +999,27 @@ void actionUpdateDroid(DROID *psDroid)
 		break;
 
 	case DACTION_MOVE:
+	case DACTION_RETURNTOPOS:
+	case DACTION_FIRESUPPORT_RETREAT:
 		// moving to a location
 		if (DROID_STOPPED(psDroid))
 		{
+			bool notify = psDroid->action == DACTION_MOVE;
 			// Got to destination
 			psDroid->action = DACTION_NONE;
 
-			/* notify scripts we have reached the destination
-			*  also triggers when patrolling and reached a waypoint
-			*/
-			psScrCBOrder = psDroid->order;
-			psScrCBOrderDroid = psDroid;
-			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DROID_REACH_LOCATION);
-			psScrCBOrderDroid = NULL;
-			psScrCBOrder = DORDER_NONE;
+			if (notify)
+			{
+				/* notify scripts we have reached the destination
+				*  also triggers when patrolling and reached a waypoint
+				*/
+				psScrCBOrder = psDroid->order;
+				psScrCBOrderDroid = psDroid;
+				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DROID_REACH_LOCATION);
+				psScrCBOrderDroid = NULL;
+				psScrCBOrder = DORDER_NONE;
+			}
 		}
-
 		//added multiple weapon check
 		else if (psDroid->numWeaps > 0)
 		{
@@ -1035,19 +1040,11 @@ void actionUpdateDroid(DROID *psDroid)
 						if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS)
 						{
 							psDroid->action = DACTION_MOVEFIRE;
-							setDroidActionTarget(psDroid, psTemp, 0);
+							setDroidActionTarget(psDroid, psTemp, i);
 						}
 					}
 				}
 			}
-		}
-		break;
-	case DACTION_RETURNTOPOS:
-	case DACTION_FIRESUPPORT_RETREAT:
-		if (DROID_STOPPED(psDroid))
-		{
-			// Got to destination
-			psDroid->action = DACTION_NONE;
 		}
 		break;
 	case DACTION_TRANSPORTIN:

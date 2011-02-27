@@ -469,7 +469,7 @@ void orderUpdateDroid(DROID *psDroid)
 	case DORDER_SCOUT:
 	case DORDER_PATROL:
 		// if there is an enemy around, attack it
-		if (psDroid->action == DACTION_MOVE || (psDroid->action == DACTION_NONE && isVtolDroid(psDroid)))
+		if (psDroid->action == DACTION_MOVE || psDroid->action == DACTION_MOVEFIRE || (psDroid->action == DACTION_NONE && isVtolDroid(psDroid)))
 		{
 			bool tooFarFromPath = false;
 			if (isVtolDroid(psDroid) && psDroid->order == DORDER_PATROL)
