@@ -612,9 +612,6 @@ BOOL recvMessage(void)
 			case GAME_STRUCTDEST:				// structure destroy
 				recvDestroyStructure(queue);
 				break;
-			case GAME_SECONDARY:					// set a droids secondary order level.
-				recvDroidSecondary(queue);
-				break;
 			case GAME_DROIDEMBARK:
 				recvDroidEmbark(queue);              //droid has embarked on a Transporter
 				break;

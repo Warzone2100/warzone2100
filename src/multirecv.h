@@ -39,13 +39,11 @@ extern BOOL recvDemolishFinished    (NETQUEUE queue);
 extern BOOL recvPing                (NETQUEUE queue);
 extern BOOL recvRequestDroid        (NETQUEUE queue);
 extern BOOL recvTextMessage         (NETQUEUE queue);
-extern BOOL recvDroidSecondary      (NETQUEUE queue);
 extern BOOL recvDroidEmbark         (NETQUEUE queue);
 extern BOOL recvDroidDisEmbark      (NETQUEUE queue);
 extern BOOL recvDroidCheck          (NETQUEUE queue);
 extern BOOL recvStructureCheck      (NETQUEUE queue);
 extern BOOL recvPowerCheck          (NETQUEUE queue);
-//extern BOOL recvAlliance            (NETQUEUE queue, BOOL allowAudio);  // Was declared in multigifts.h, too.
 extern BOOL recvColourRequest       (NETQUEUE queue);
 extern BOOL recvPositionRequest     (NETQUEUE queue);
 extern void recvOptions             (NETQUEUE queue);

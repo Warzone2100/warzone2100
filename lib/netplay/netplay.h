@@ -97,7 +97,6 @@ enum MESSAGE_TYPES
 	GAME_FEATUREDEST,               ///< destroy a game feature.
 	GAME_RESEARCH,                  ///< Research has been completed.
 	GAME_FEATURES,                  ///< information regarding features.
-	GAME_SECONDARY,                 ///< set a droids secondary order
 	GAME_ALLIANCE,                  ///< alliance data.
 	GAME_GIFT,                      ///< a luvly gift between players.
 	GAME_ARTIFACTS,                 ///< artifacts randomly placed.
