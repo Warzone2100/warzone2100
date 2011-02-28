@@ -918,7 +918,7 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 			intBuildFinished(psDroid);
 		}
 
-		if((bMultiMessages) && myResponsibility(psStruct->player))
+		if (!isInSync() && bMultiMessages && myResponsibility(psStruct->player))
 		{
 			SendBuildFinished(psStruct);
 		}
