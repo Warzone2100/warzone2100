@@ -1016,8 +1016,6 @@ void NETdiscoverUPnPDevices(void)
 // setup stuff
 int NETinit(BOOL bFirstCall)
 {
-	UDWORD i;
-
 	debug(LOG_NET, "NETinit");
 	NETlogEntry("NETinit!", SYNC_FLAG, selectedPlayer);
 	NET_InitPlayers();
@@ -1028,10 +1026,7 @@ int NETinit(BOOL bFirstCall)
 	{
 		debug(LOG_NET, "NETPLAY: Init called, MORNIN'");
 
-		for(i = 0; i < MAX_PLAYERS; i++)
-		{
-			memset(&NetPlay.games[i], 0, sizeof(NetPlay.games[i]));
-		}
+		memset(&NetPlay.games, 0, sizeof(NetPlay.games));
 		// NOTE NetPlay.isUPNP is already set in configuration.c!
 		NetPlay.bComms = true;
 		NetPlay.GamePassworded = false;
