@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-02-25 23:35+0100\n"
+"POT-Creation-Date: 2011-02-28 23:48+0100\n"
 "PO-Revision-Date: 2011-01-19 18:01+0200\n"
 "Last-Translator: Ayhan GORGULU <ayhangorgulu@gmail.com>\n"
 "Language-Team: Turkey <warzone-dev@gna.org>\n"
@@ -12031,26 +12031,26 @@ msgid "System locale"
 msgstr "Yerel Sistem"
 
 #: lib/netplay/netplay.cpp:203
-#: lib/netplay/netplay.cpp:1042
+#: lib/netplay/netplay.cpp:1037
 msgid "Enter password here"
 msgstr "Parolayı buraya gir"
 
-#: lib/netplay/netplay.cpp:2060
+#: lib/netplay/netplay.cpp:2055
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Konnte Lobbyserver-Namen nicht auflösen (%s)!"
 
-#: lib/netplay/netplay.cpp:2082
+#: lib/netplay/netplay.cpp:2077
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Lobi Sunucusu ile iletişim kurulamadı! TCP-Port %u u açıkmı?"
 
 #: src/challenge.cpp:184
 #: src/hci.cpp:916
-#: src/hci.cpp:3378
-#: src/hci.cpp:3501
-#: src/hci.cpp:3912
-#: src/hci.cpp:4930
+#: src/hci.cpp:3386
+#: src/hci.cpp:3509
+#: src/hci.cpp:3920
+#: src/hci.cpp:4938
 #: src/intelmap.cpp:531
 #: src/intorder.cpp:727
 #: src/loadsave.cpp:253
@@ -12349,20 +12349,20 @@ msgstr "Silahlar"
 msgid "Systems"
 msgstr "Sistemler"
 
-#: src/display3d.cpp:591
+#: src/display3d.cpp:590
 msgid "Player left"
 msgstr "Oyuncu Çıktı"
 
-#: src/display3d.cpp:595
+#: src/display3d.cpp:594
 msgid "Player dropped"
 msgstr "Oyuncu Düştü"
 
-#: src/display3d.cpp:599
-#: src/multiint.cpp:2125
+#: src/display3d.cpp:598
+#: src/multiint.cpp:2121
 msgid "Waiting for other players"
 msgstr "Diğer oyuncular bekleniyor"
 
-#: src/display3d.cpp:604
+#: src/display3d.cpp:603
 msgid "Out of sync"
 msgstr "Senkronize edilmemiş"
 
@@ -12402,77 +12402,77 @@ msgstr "Birim Kaybı!"
 msgid "Structure Restored"
 msgstr "Bina Yenilendi"
 
-#: src/droid.cpp:2732
+#: src/droid.cpp:2734
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Grup %u Seçildi - %u Birim"
 msgstr[1] "Grup %u Seçildi - %u Birimler"
 
-#: src/droid.cpp:2745
+#: src/droid.cpp:2747
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u Birim şu Gruba Atandı: %u "
 msgstr[1] "%u Birimler şu Gruba Atandı: %u "
 
-#: src/droid.cpp:2758
+#: src/droid.cpp:2760
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "%u Numaralı Grup Merkezde - %u Birim"
 msgstr[1] "%u Numaralı Grup Merkezde - %u Birimler"
 
-#: src/droid.cpp:2762
+#: src/droid.cpp:2764
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Grup %u 'e - %u Birim atandı"
 msgstr[1] "Grup %u 'e - %u Birimler Atandı"
 
-#: src/droid.cpp:3093
+#: src/droid.cpp:3095
 msgid "Rookie"
 msgstr "Er"
 
-#: src/droid.cpp:3094
+#: src/droid.cpp:3096
 msgctxt "rank"
 msgid "Green"
 msgstr "Onbaşı"
 
-#: src/droid.cpp:3095
+#: src/droid.cpp:3097
 msgid "Trained"
 msgstr "Çavuş"
 
-#: src/droid.cpp:3096
+#: src/droid.cpp:3098
 msgid "Regular"
 msgstr "Teğmen"
 
-#: src/droid.cpp:3097
+#: src/droid.cpp:3099
 msgid "Professional"
 msgstr "Üsteğmen"
 
-#: src/droid.cpp:3098
+#: src/droid.cpp:3100
 msgid "Veteran"
 msgstr "Albay"
 
-#: src/droid.cpp:3099
+#: src/droid.cpp:3101
 msgid "Elite"
 msgstr "Korgeneral"
 
-#: src/droid.cpp:3100
+#: src/droid.cpp:3102
 msgid "Special"
 msgstr "Orgeneral"
 
-#: src/droid.cpp:3101
+#: src/droid.cpp:3103
 msgid "Hero"
 msgstr "Mareşal"
 
-#: src/droid.cpp:4123
+#: src/droid.cpp:4125
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
 msgstr "%s Sana vermek istedi %s ama, Sende daha çok var!"
 
-#: src/droid.cpp:4127
+#: src/droid.cpp:4129
 #, c-format
 msgid "You wanted to give %s a %s but they have too many!"
 msgstr "Sen %s 'a %s vermek istedin ama, Onda  daha çok var!"
@@ -12491,7 +12491,7 @@ msgid "Tutorial"
 msgstr "Öğretici"
 
 #: src/frontend.cpp:100
-#: src/hci.cpp:3487
+#: src/hci.cpp:3495
 msgid "Options"
 msgstr "Ayarlar"
 
@@ -12552,8 +12552,8 @@ msgstr "TEK OYUNCU"
 
 #: src/frontend.cpp:303
 #: src/ingameop.cpp:494
-#: src/mission.cpp:2493
-#: src/mission.cpp:2596
+#: src/mission.cpp:2537
+#: src/mission.cpp:2640
 msgid "Load Saved Game"
 msgstr "Kayıtlı Oyun Yükle"
 
@@ -12836,7 +12836,7 @@ msgid "GAME OPTIONS"
 msgstr "OYUN AYARLARI"
 
 #: src/frontend.cpp:1340
-#: src/multiint.cpp:2398
+#: src/multiint.cpp:2394
 msgid "Mod: "
 msgstr "Mod: "
 
@@ -12845,8 +12845,8 @@ msgid "MAP SAVED!"
 msgstr "HARİTAN KAYDEDİLDİ!"
 
 #: src/hci.cpp:1573
-#: src/loop.cpp:558
-#: src/loop.cpp:574
+#: src/loop.cpp:561
+#: src/loop.cpp:577
 msgid "GAME SAVED: "
 msgstr "OYUN KAYDEDİLDİ :"
 
@@ -12875,150 +12875,150 @@ msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "Oyuncu %u (debug menü) Yeni birimini oluşturdu."
 
 # Commander kann als Eigenname im Deutschen allerdings mit deutschem Plural stehen bleiben -Kreuvf
-#: src/hci.cpp:3298
+#: src/hci.cpp:3306
 msgid "Commanders (F6)"
 msgstr "Komutanlar (F6)"
 
-#: src/hci.cpp:3311
+#: src/hci.cpp:3319
 msgid "Intelligence Display (F5)"
 msgstr "Görev Ekranı (F5)"
 
-#: src/hci.cpp:3324
+#: src/hci.cpp:3332
 msgid "Manufacture (F1)"
 msgstr "Üretim (F1)"
 
-#: src/hci.cpp:3337
+#: src/hci.cpp:3345
 msgid "Design (F4)"
 msgstr "Tasarım (F4)"
 
-#: src/hci.cpp:3350
+#: src/hci.cpp:3358
 msgid "Research (F2)"
 msgstr "Araştırma (F2)"
 
-#: src/hci.cpp:3363
+#: src/hci.cpp:3371
 msgid "Build (F3)"
 msgstr "İnşa (F3)"
 
-#: src/hci.cpp:3434
+#: src/hci.cpp:3442
 #: src/multiint.cpp:1401
 #: src/multimenu.cpp:763
 msgid "Power"
 msgstr "Güç"
 
-#: src/hci.cpp:3525
+#: src/hci.cpp:3533
 msgid "Map:"
 msgstr "Harita:"
 
-#: src/hci.cpp:3538
+#: src/hci.cpp:3546
 msgid "Load"
 msgstr "Yükle"
 
-#: src/hci.cpp:3539
+#: src/hci.cpp:3547
 msgid "Load Map File"
 msgstr "Harita Dosyası Yükle"
 
-#: src/hci.cpp:3546
+#: src/hci.cpp:3554
 msgid "Save"
 msgstr "Kaydet"
 
-#: src/hci.cpp:3547
+#: src/hci.cpp:3555
 msgid "Save Map File"
 msgstr "Harita dosyası kaydet"
 
-#: src/hci.cpp:3555
+#: src/hci.cpp:3563
 msgid "New"
 msgstr "Yeni"
 
-#: src/hci.cpp:3556
+#: src/hci.cpp:3564
 msgid "New Blank Map"
 msgstr "Yeni Boş Harita"
 
-#: src/hci.cpp:3592
+#: src/hci.cpp:3600
 msgid "Tile"
 msgstr "Harita Ö."
 
-#: src/hci.cpp:3593
+#: src/hci.cpp:3601
 msgid "Place tiles on map"
 msgstr "Haritaya yeni öğeler yerleştir"
 
-#: src/hci.cpp:3602
+#: src/hci.cpp:3610
 msgid "Unit"
 msgstr "Birim"
 
-#: src/hci.cpp:3603
+#: src/hci.cpp:3611
 msgid "Place Unit on map"
 msgstr "Haritaya yeni birimler yerleştir"
 
-#: src/hci.cpp:3611
+#: src/hci.cpp:3619
 msgid "Struct"
 msgstr "Bina"
 
-#: src/hci.cpp:3612
+#: src/hci.cpp:3620
 msgid "Place Structures on map"
 msgstr "Haritaya yeni binalar yerleştir"
 
 # gemäß: http://dict.leo.org/ende?search=Feat -Kreuvf
-#: src/hci.cpp:3620
+#: src/hci.cpp:3628
 msgid "Feat"
 msgstr "Özellik"
 
-#: src/hci.cpp:3621
+#: src/hci.cpp:3629
 msgid "Place Features on map"
 msgstr "Haritaya Özel Öğeler ekle"
 
-#: src/hci.cpp:3631
+#: src/hci.cpp:3639
 msgid "Pause"
 msgstr "Durdur"
 
-#: src/hci.cpp:3632
+#: src/hci.cpp:3640
 msgid "Pause or unpause the game"
 msgstr "Oyunu durdur yada başlat"
 
-#: src/hci.cpp:3646
+#: src/hci.cpp:3654
 msgid "Align height of all map objects"
 msgstr "Tüm harita yüksekliğini objelere uygun hale getir"
 
-#: src/hci.cpp:3656
+#: src/hci.cpp:3664
 msgid "Edit"
 msgstr "Düzenle"
 
-#: src/hci.cpp:3657
+#: src/hci.cpp:3665
 msgid "Start Edit Mode"
 msgstr "Düzenleme Modunu Aç"
 
-#: src/hci.cpp:3671
+#: src/hci.cpp:3679
 #: src/ingameop.cpp:112
 #: src/ingameop.cpp:256
 #: src/ingameop.cpp:260
 msgid "Quit"
 msgstr "Çıkış"
 
-#: src/hci.cpp:3672
+#: src/hci.cpp:3680
 msgid "Exit Game"
 msgstr "Oyundan Çık"
 
-#: src/hci.cpp:3698
+#: src/hci.cpp:3706
 msgid "Current Player:"
 msgstr "Geçerli Oyuncu:"
 
-#: src/hci.cpp:3989
+#: src/hci.cpp:3997
 #: src/intdisplay.cpp:276
 msgid "Progress Bar"
 msgstr "İlerleme Çubuğu"
 
-#: src/hci.cpp:4855
+#: src/hci.cpp:4863
 msgid "Factory Delivery Point"
 msgstr "Fabrika Teslim Noktası"
 
-#: src/hci.cpp:4873
+#: src/hci.cpp:4881
 msgid "Loop Production"
 msgstr "Üretimi Tekrarla"
 
-#: src/hci.cpp:4953
+#: src/hci.cpp:4961
 msgid "Tab Scroll left"
 msgstr "Tabloyu Sola Kaydır"
 
-#: src/hci.cpp:4968
+#: src/hci.cpp:4976
 msgid "Tab Scroll right"
 msgstr "Tabloyu Sağa Kaydır"
 
@@ -13044,8 +13044,8 @@ msgstr "Taktiksel UI (Hedef Kaynak Simgesi): Gizle"
 
 #: src/ingameop.cpp:274
 #: src/ingameop.cpp:498
-#: src/mission.cpp:2480
-#: src/mission.cpp:2599
+#: src/mission.cpp:2524
+#: src/mission.cpp:2643
 msgid "Save Game"
 msgstr "Oyunu Kaydet"
 
@@ -13978,46 +13978,46 @@ msgstr "Bir oyun objesini izle"
 msgid "Toggle Driving Mode"
 msgstr "Sürüş Moduna"
 
-#: src/loop.cpp:565
-#: src/loop.cpp:581
+#: src/loop.cpp:568
+#: src/loop.cpp:584
 msgid "Could not save game!"
 msgstr "Oyun Kaydedilemedi!"
 
-#: src/mission.cpp:2041
+#: src/mission.cpp:2085
 msgid "Load Transport"
 msgstr "Taşımaya Yükle"
 
-#: src/mission.cpp:2428
+#: src/mission.cpp:2472
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "GÖREV BAŞARILI--hileci seni!"
 
-#: src/mission.cpp:2428
+#: src/mission.cpp:2472
 msgid "OBJECTIVE ACHIEVED"
 msgstr "GÖREV BAŞARILI"
 
-#: src/mission.cpp:2434
+#: src/mission.cpp:2478
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "GÖREV BAŞARISIZ--ve sen hile yaptın!"
 
-#: src/mission.cpp:2434
+#: src/mission.cpp:2478
 msgid "OBJECTIVE FAILED"
 msgstr "GÖREV BAŞARISIZ"
 
-#: src/mission.cpp:2459
-#: src/mission.cpp:2499
-#: src/mission.cpp:2613
+#: src/mission.cpp:2503
+#: src/mission.cpp:2543
+#: src/mission.cpp:2657
 msgid "Quit To Main Menu"
 msgstr "Ana Menüye Dön"
 
-#: src/mission.cpp:2467
+#: src/mission.cpp:2511
 msgid "Continue Game"
 msgstr "Oyuna Devam"
 
-#: src/mission.cpp:2564
+#: src/mission.cpp:2608
 msgid "GAME SAVED :"
 msgstr "OYUN KAYDEDİLDİ :"
 
-#: src/move.cpp:2264
+#: src/move.cpp:2251
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr "Sen %u güç varili buldun."
@@ -14302,112 +14302,108 @@ msgstr "Bu slotu kullanılmaz olarak belirle"
 msgid "Player colour"
 msgstr "Oyuncu rengi"
 
-#: src/multiint.cpp:2071
+#: src/multiint.cpp:2068
 msgid "Team"
 msgstr "Takım"
 
-#: src/multiint.cpp:2083
-msgid "Kick player"
-msgstr "Oyundan at"
-
-#: src/multiint.cpp:2113
+#: src/multiint.cpp:2109
 msgid "You cannot change difficulty in a challenge"
 msgstr "Mücadele modunda zorluğu değiştiremezsin"
 
-#: src/multiint.cpp:2113
+#: src/multiint.cpp:2109
 msgid "Click to change difficulty"
 msgstr "Zorluğu değiştirmek için tıkla"
 
-#: src/multiint.cpp:2130
+#: src/multiint.cpp:2126
 msgid "Click when ready"
 msgstr "Hazırsan tıkla"
 
-#: src/multiint.cpp:2134
+#: src/multiint.cpp:2130
 msgid "READY?"
 msgstr "HAZIR?"
 
-#: src/multiint.cpp:2178
+#: src/multiint.cpp:2174
 msgid "PLAYERS"
 msgstr "OYUNCULAR"
 
-#: src/multiint.cpp:2213
+#: src/multiint.cpp:2209
 msgid "Click to change to this slot"
 msgstr "Bu slotu değiştirmek için tıkla"
 
-#: src/multiint.cpp:2241
+#: src/multiint.cpp:2237
 msgid "Choose Team"
 msgstr "Takım seç"
 
-#: src/multiint.cpp:2271
+#: src/multiint.cpp:2267
 msgid "Click to change player colour"
 msgstr "Oyuncu renklerini değiştirmek için tıkla"
 
-#: src/multiint.cpp:2299
+#: src/multiint.cpp:2295
 msgid "Click to change player position"
 msgstr "Oyuncu pozisyonunu değiştirmek için tıkla"
 
-#: src/multiint.cpp:2305
+#: src/multiint.cpp:2301
 msgid "Click to change AI"
 msgstr "Yapay zekayı ayarlamak için tıkla"
 
-#: src/multiint.cpp:2309
+#: src/multiint.cpp:2305
 msgid "You cannot change AI in a challenge"
 msgstr "Mücadele modunda Y.Z değiştiremezsin"
 
-#: src/multiint.cpp:2371
+#: src/multiint.cpp:2367
 msgid "CHAT"
 msgstr "SOHBET"
 
-#: src/multiint.cpp:2403
+#: src/multiint.cpp:2399
 msgid "All players need to have the same mods to join your game."
 msgstr "TÜm oyuncular oyununa girebilmek için aynı moda ihtiyaç duyar."
 
-#: src/multiint.cpp:2561
+#: src/multiint.cpp:2557
 #, c-format
 msgid "*** password [%s] is now required! ***"
 msgstr "*** Şifre [%s] şimdi isteniyor ! ***"
 
-#: src/multiint.cpp:2569
+#: src/multiint.cpp:2565
 msgid "*** password is NOT required! ***"
 msgstr "*** Şifreye gerek yok! ***"
 
-#: src/multiint.cpp:2810
+#: src/multiint.cpp:2806
 msgid "Sorry! Failed to host the game."
 msgstr "Üzgünüm! Oyun kurulurken bir hata oldu."
 
 # festgelegt ungleich fest -Kreuvf
-#: src/multiint.cpp:2931
+#: src/multiint.cpp:2927
 msgid "'Locked Teams' mode enabled"
 msgstr "\"Takım Kilidi\"-Modu Aktif"
 
-#: src/multiint.cpp:3012
+#: src/multiint.cpp:3008
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "Kurucu %s isimli oyuncuyu oyundan attı!"
 
-#: src/multiint.cpp:3082
+#: src/multiint.cpp:3078
 msgid "Host is Starting Game"
 msgstr "Kurucu oyunu başlatıyor"
 
-#: src/multiint.cpp:3648
+#: src/multiint.cpp:3644
 msgid "Players"
 msgstr "Oyuncular"
 
-#: src/multiint.cpp:3786
+#: src/multiint.cpp:3782
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Harita Gönderiliyor: %d%%"
 
-#: src/multiint.cpp:3794
+#: src/multiint.cpp:3790
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Harita: %d%% indirildi"
 
-#: src/multiint.cpp:3820
+#: src/multiint.cpp:3816
 msgid "HOST"
 msgstr "KURUCU"
 
-#: src/multiint.cpp:3827
+#: src/multiint.cpp:3823
 #: src/multimenu.cpp:772
 msgid "Ping"
 msgstr "Ping"
@@ -14571,79 +14567,79 @@ msgstr "Oyuncuya güç ver"
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr "Oyuncu atılıyor %s veri bütünlüğünü korumak için!"
 
-#: src/multiplay.cpp:1057
+#: src/multiplay.cpp:1056
 msgid "(allies"
 msgstr "(Müttefikler"
 
-#: src/multiplay.cpp:1065
+#: src/multiplay.cpp:1064
 msgid "(private to "
 msgstr "(bir direk"
 
-#: src/multiplay.cpp:1078
+#: src/multiplay.cpp:1077
 msgid "[invalid]"
 msgstr "[gereksiz]"
 
-#: src/multiplay.cpp:1942
+#: src/multiplay.cpp:1941
 msgid "Green"
 msgstr "Yeşil"
 
-#: src/multiplay.cpp:1943
+#: src/multiplay.cpp:1942
 msgid "Orange"
 msgstr "Portakal Sarısı"
 
-#: src/multiplay.cpp:1944
+#: src/multiplay.cpp:1943
 msgid "Grey"
 msgstr "Gri"
 
-#: src/multiplay.cpp:1945
+#: src/multiplay.cpp:1944
 msgid "Black"
 msgstr "Siyah"
 
-#: src/multiplay.cpp:1946
+#: src/multiplay.cpp:1945
 msgid "Red"
 msgstr "Kırmızı"
 
-#: src/multiplay.cpp:1947
+#: src/multiplay.cpp:1946
 msgid "Blue"
 msgstr "Koyu Mavi"
 
-#: src/multiplay.cpp:1948
+#: src/multiplay.cpp:1947
 msgid "Pink"
 msgstr "Pembe"
 
-#: src/multiplay.cpp:1949
+#: src/multiplay.cpp:1948
 msgid "Cyan"
 msgstr "Mavi"
 
-#: src/multiplay.cpp:1950
+#: src/multiplay.cpp:1949
 msgid "Yellow"
 msgstr "Sarı"
 
-#: src/multiplay.cpp:1951
+#: src/multiplay.cpp:1950
 msgid "Purple"
 msgstr "Mor"
 
-#: src/multiplay.cpp:1952
+#: src/multiplay.cpp:1951
 msgid "White"
 msgstr "Beyaz"
 
-#: src/multiplay.cpp:1953
+#: src/multiplay.cpp:1952
 msgid "Bright blue"
 msgstr "Açık Mavi"
 
-#: src/multiplay.cpp:1954
+#: src/multiplay.cpp:1953
 msgid "Neon green"
 msgstr "Neon yeşili"
 
-#: src/multiplay.cpp:1955
+#: src/multiplay.cpp:1954
 msgid "Infrared"
 msgstr "Kızılötesi"
 
-#: src/multiplay.cpp:1956
+#: src/multiplay.cpp:1955
 msgid "Ultraviolet"
 msgstr "Morötesi"
 
-#: src/multiplay.cpp:1957
+#: src/multiplay.cpp:1956
 msgid "Brown"
 msgstr "Kahverengi"
 
@@ -14651,16 +14647,16 @@ msgstr "Kahverengi"
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr "Bunu Yapamıyoruz! Biz Cyborg Taşıma Gemisi'ni kullanmak için bir Cyborg birimine sahip olmalıyız!"
 
-#: src/research.cpp:1737
+#: src/research.cpp:1739
 #, c-format
 msgid "Research completed: %s"
 msgstr "Araştırma Tamamlandı: %s"
 
-#: src/research.cpp:1742
+#: src/research.cpp:1744
 msgid "Research Completed"
 msgstr "Araştırma Tamamlandı"
 
-#: src/research.cpp:2563
+#: src/research.cpp:2565
 msgid "Research Award"
 msgstr "Araştırma Ödülü"
 
@@ -14824,64 +14820,64 @@ msgstr "Hiç Algılayıcı birimi bulunamadı!"
 msgid "Unable to locate any Commanders!"
 msgstr "Hiç Komutan birimi bulunamadı!"
 
-#: src/structure.cpp:2614
+#: src/structure.cpp:2650
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Komuta Kontrol Limitine Ulaştın - Üretim Durduruldu"
 
 # nix Gruppe! -Kreuvf
-#: src/structure.cpp:5806
-#: src/structure.cpp:5831
+#: src/structure.cpp:5888
+#: src/structure.cpp:5913
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Birim Atandı"
 msgstr[1] "%s - %u Birimler Atandı"
 
-#: src/structure.cpp:5836
-#: src/structure.cpp:5904
-#: src/structure.cpp:5920
-#: src/structure.cpp:5934
+#: src/structure.cpp:5918
+#: src/structure.cpp:5986
+#: src/structure.cpp:6002
+#: src/structure.cpp:6016
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Hasar %3.0f%%"
 
-#: src/structure.cpp:5886
+#: src/structure.cpp:5968
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - %u de %u 'e Bağlandı"
 
-#: src/structure.cpp:6050
-#: src/structure.cpp:6095
+#: src/structure.cpp:6132
+#: src/structure.cpp:6177
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektronik Hasar Aldı"
 
 # Reward ist zwar nicht Beute, aber im Krieg erbeutet man eben Dinge -Kreuvf
-#: src/structure.cpp:6332
+#: src/structure.cpp:6414
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektronik Ödül - Görünebilirlik Raporu"
 
-#: src/structure.cpp:6372
+#: src/structure.cpp:6454
 msgid "Factory Reward - Propulsion"
 msgstr "Fabrika Ödülü - Yürütücü"
 
-#: src/structure.cpp:6396
+#: src/structure.cpp:6478
 msgid "Factory Reward - Body"
 msgstr "Fabrika Ödülü - Beden"
 
-#: src/structure.cpp:6420
+#: src/structure.cpp:6502
 msgid "Factory Reward - Weapon"
 msgstr "Fabrika Ödülü - Silah"
 
-#: src/structure.cpp:6429
+#: src/structure.cpp:6511
 msgid "Factory Reward - Nothing"
 msgstr "Fabrika Ödülü - Sıfır"
 
-#: src/structure.cpp:6457
+#: src/structure.cpp:6539
 msgid "Repair Facility Award - Repair"
 msgstr "Tamir Tesisi Ödülü - Tamir"
 
-#: src/structure.cpp:6464
+#: src/structure.cpp:6546
 msgid "Repair Facility Award - Nothing"
 msgstr "Tamir Tesisi Ödülü - Sıfır"
 
@@ -14925,6 +14921,9 @@ msgstr " - %s İnşa"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Sürüm %s%s%s%s"
+
+#~ msgid "Kick player"
+#~ msgstr "Oyundan at"
 
 #~ msgid "Player position"
 #~ msgstr "Oyuncu pozisyonu"
