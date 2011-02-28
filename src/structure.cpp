@@ -3186,7 +3186,9 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				}
 			}
 
-			PLAYER_RESEARCH *pPlayerRes = &asPlayerResList[psStructure->player][pSubject->ref - REF_RESEARCH_START];
+			int researchIndex = pSubject->ref - REF_RESEARCH_START;
+
+			PLAYER_RESEARCH *pPlayerRes = &asPlayerResList[psStructure->player][researchIndex];
 			//check research has not already been completed by another structure
 			if (!IsResearchCompleted(pPlayerRes))
 			{
@@ -3220,7 +3222,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 						if (myResponsibility(psStructure->player) && !isInSync())
 						{
 							// This message should have no effect if in synch.
-							SendResearch(psStructure->player, pSubject->ref - REF_RESEARCH_START, true);
+							SendResearch(psStructure->player, researchIndex, true);
 						}
 					}
 
@@ -3238,9 +3240,25 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 					}
 					psResFacility->psSubject = NULL;
 					intResearchFinished(psStructure);
-					researchResult(pSubject->ref - REF_RESEARCH_START, psStructure->player, true, psStructure, true);
+					researchResult(researchIndex, psStructure->player, true, psStructure, true);
 					//check if this result has enabled another topic
 					intCheckResearchButton();
+
+					// Update allies research accordingly
+					if (game.type == SKIRMISH)
+					{
+						for (i = 0; i < MAX_PLAYERS; i++)
+						{
+							if (alliances[i][psStructure->player] == ALLIANCE_FORMED)
+							{
+								if (!IsResearchCompleted(&asPlayerResList[i][researchIndex]))
+								{
+									// Do the research for that player
+									researchResult(researchIndex, i, false, NULL, true);
+								}
+							}
+						}
+					}
 				}
 			}
 			else

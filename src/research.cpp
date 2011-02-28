@@ -1126,8 +1126,10 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay, STRUCTURE
 
 	ASSERT_OR_RETURN( , researchIndex < numResearch, "Invalid research index %u", researchIndex);
 
-	sendResearchStatus(NULL, researchIndex, player, false);
-	// Confused whether we should wait for our message before doing anything, and confused what this function does...
+	if (!isInSync())
+	{
+		sendResearchStatus(NULL, researchIndex, player, false);
+	}
 
 	MakeResearchCompleted(&pPlayerRes[researchIndex]);
 
