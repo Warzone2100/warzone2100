@@ -267,6 +267,7 @@ BOOL fpathBaseBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion, int m
 
 	if ((unitbits & FEATURE_BLOCKED)
 	    && ((moveType == FMT_MOVE && (aux & AUXBITS_ANY_BUILDING)) // do not wish to shoot our way through enemy buildings
+	        || (moveType == FMT_BLOCK && (aux & AUXBITS_CLOSED_GATE))  // Do not wish to tunnel through closed gates.
 	        || (aux & AUXBITS_OUR_BUILDING))) // move blocked by friendly building, assuming we do not want to shoot it up en route
 	{
 		return true;	// move blocked by building, and we cannot or do not want to shoot our way through anything
@@ -284,7 +285,7 @@ BOOL fpathDroidBlockingTile(DROID *psDroid, int x, int y, FPATH_MOVETYPE moveTyp
 // Check if the map tile at a location blocks a droid
 BOOL fpathBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion)
 {
-	return fpathBaseBlockingTile(x, y, propulsion, 0, FMT_MOVE);	// with FMT_MOVE, it is irrelevant which player is passed in
+	return fpathBaseBlockingTile(x, y, propulsion, 0, FMT_BLOCK);  // with FMT_BLOCK, it is irrelevant which player is passed in
 }
 
 

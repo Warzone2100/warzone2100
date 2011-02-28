@@ -36,6 +36,7 @@ enum FPATH_MOVETYPE
 {
 	FMT_MOVE,		///< Move around all obstacles
 	FMT_ATTACK,		///< Assume that we will destroy enemy obstacles
+	FMT_BLOCK,              ///< Don't go through obstacles, not even gates.
 };
 
 struct PathBlockingMap;

@@ -872,26 +872,13 @@ static void moveCalcBlockingSlide(DROID *psDroid, int32_t *pmx, int32_t *pmy, ui
 		psTile = mapTile(ntx, nty);
 	}
 	if (!isFlying(psDroid) && psTile && psTile->psObject && psTile->psObject->type == OBJ_STRUCTURE
-	    && aiCheckAlliances(psTile->psObject->player, psDroid->player)
-	    && ((STRUCTURE *)psTile->psObject)->status == SS_BUILT
-	    && ((STRUCTURE *)psTile->psObject)->pStructureType->type == REF_GATE)
+	    && aiCheckAlliances(psTile->psObject->player, psDroid->player))
 	{
-		STRUCTURE *psStruct = (STRUCTURE *)psTile->psObject;
-
-		if (psStruct->state == SAS_NORMAL)
-		{
-			psStruct->lastStateTime = gameTime;
-			psStruct->state = SAS_OPENING;
-			psDroid->sMove.Status = MOVEPAUSE;
-			psDroid->sMove.pauseTime = SAS_OPEN_SPEED;
-			psDroid->sMove.bumpTime = gameTime;
-			psDroid->sMove.lastBump = 0;
-			return;	// wait for it to open
-		}
+		requestOpenGate((STRUCTURE *)psTile->psObject);  // If it's a friendly gate, open it. (It would be impolite to open an enemy gate.)
 	}
 
 	// is the new tile blocking?
-	if (!fpathBaseBlockingTile(ntx, nty, propulsion, psDroid->player, FMT_MOVE))
+	if (!fpathBlockingTile(ntx, nty, propulsion))
 	{
 		// not blocking, don't change the move vector
 		return;

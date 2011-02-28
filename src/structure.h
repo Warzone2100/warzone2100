@@ -110,6 +110,8 @@ extern BOOL loadStructureStrengthModifiers(const char *pStrengthModData, UDWORD 
 
 extern BOOL	structureStatsShutDown(void);
 
+int requestOpenGate(STRUCTURE *psStructure);
+
 int32_t structureDamage(STRUCTURE *psStructure, UDWORD damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, HIT_SIDE impactSide);
 extern void structureBuild(STRUCTURE *psStructure, DROID *psDroid, int buildPoints);
 extern void structureDemolish(STRUCTURE *psStructure, DROID *psDroid, int buildPoints);

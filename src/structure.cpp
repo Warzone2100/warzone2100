@@ -211,7 +211,7 @@ static void auxStructureNonblocking(STRUCTURE *psStructure)
 	{
 		for (int j = 0; j < size.y; j++)
 		{
-			auxClearAll(map.x + i, map.y + j, AUXBITS_ANY_BUILDING | AUXBITS_OUR_BUILDING);
+			auxClearAll(map.x + i, map.y + j, AUXBITS_ANY_BUILDING | AUXBITS_OUR_BUILDING | AUXBITS_CLOSED_GATE);
 		}
 	}
 }
@@ -227,6 +227,35 @@ static void auxStructureBlocking(STRUCTURE *psStructure)
 		{
 			auxSetAllied(map.x + i, map.y + j, psStructure->player, AUXBITS_OUR_BUILDING);
 			auxSetAll(map.x + i, map.y + j, AUXBITS_ANY_BUILDING);
+		}
+	}
+}
+
+static void auxStructureOpenGate(STRUCTURE *psStructure)
+{
+	Vector2i size = getStructureSize(psStructure);
+	Vector2i map = map_coord(removeZ(psStructure->pos)) - size/2;
+
+	for (int i = 0; i < size.x; i++)
+	{
+		for (int j = 0; j < size.y; j++)
+		{
+			auxClearAll(map.x + i, map.y + j, AUXBITS_CLOSED_GATE);
+		}
+	}
+}
+
+static void auxStructureClosedGate(STRUCTURE *psStructure)
+{
+	Vector2i size = getStructureSize(psStructure);
+	Vector2i map = map_coord(removeZ(psStructure->pos)) - size/2;
+
+	for (int i = 0; i < size.x; i++)
+	{
+		for (int j = 0; j < size.y; j++)
+		{
+			auxSetEnemy(map.x + i, map.y + j, psStructure->player, AUXBITS_ANY_BUILDING);
+			auxSetAll(map.x + i, map.y + j, AUXBITS_CLOSED_GATE);
 		}
 	}
 }
@@ -1505,9 +1534,16 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 			}
 		}
 
-		if (pStructureType->type != REF_REARM_PAD && pStructureType->type != REF_GATE)
+		switch (pStructureType->type)
 		{
-			auxStructureBlocking(psBuilding);
+			case REF_REARM_PAD:
+				break;  // Not blocking.
+			case REF_GATE:
+				auxStructureClosedGate(psBuilding);  // Don't block for the sake of allied pathfinding.
+				break;
+			default:
+				auxStructureBlocking(psBuilding);
+				break;
 		}
 
 		//set up the rest of the data
@@ -3605,6 +3641,34 @@ void _syncDebugStructure(const char *function, STRUCTURE const *psStruct, char c
 	          getPrecisePower(psStruct->player));
 }
 
+int requestOpenGate(STRUCTURE *psStructure)
+{
+	if (psStructure->status != SS_BUILT || psStructure->pStructureType->type != REF_GATE)
+	{
+		return 0;  // Can't open.
+	}
+
+	switch (psStructure->state)
+	{
+		case SAS_NORMAL:
+			psStructure->lastStateTime = gameTime;
+			psStructure->state = SAS_OPENING;
+			break;
+		case SAS_OPEN:
+			psStructure->lastStateTime = gameTime;
+			return 0;  // Already open.
+		case SAS_OPENING:
+			break;
+		case SAS_CLOSING:
+			psStructure->lastStateTime = 2*gameTime - psStructure->lastStateTime - SAS_OPEN_SPEED;
+			psStructure->state = SAS_OPENING;
+		default:
+			return 0;  // Unknown state...
+	}
+
+	return psStructure->lastStateTime + SAS_OPEN_SPEED - gameTime;
+}
+
 /* The main update routine for all Structures */
 void structureUpdate(STRUCTURE *psBuilding, bool mission)
 {
@@ -3631,14 +3695,14 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 			if (!found)	// no droids on our tile, safe to close
 			{
 				psBuilding->state = SAS_CLOSING;
-				auxStructureBlocking(psBuilding); // closed
+				auxStructureClosedGate(psBuilding);     // closed
 				psBuilding->lastStateTime = gameTime;	// reset timer
 			}
 		}
 		else if (psBuilding->state == SAS_OPENING && psBuilding->lastStateTime + SAS_OPEN_SPEED < gameTime)
 		{
 			psBuilding->state = SAS_OPEN;
-			auxStructureNonblocking(psBuilding); // opened
+			auxStructureOpenGate(psBuilding);       // opened
 			psBuilding->lastStateTime = gameTime;	// reset timer
 		}
 		else if (psBuilding->state == SAS_CLOSING && psBuilding->lastStateTime + SAS_OPEN_SPEED < gameTime)

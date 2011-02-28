@@ -2571,11 +2571,11 @@ static BOOL	renderWallSection(STRUCTURE *psStructure)
 		}
 		else if (psStructure->pStructureType->type == REF_GATE && psStructure->state == SAS_OPENING)
 		{
-			dv.y -= (height * (gameTime - psStructure->lastStateTime)) / SAS_OPEN_SPEED;
+			dv.y -= (height * std::max<int>(graphicsTime + GAME_TICKS_PER_UPDATE - psStructure->lastStateTime, 0)) / SAS_OPEN_SPEED;
 		}
 		else if (psStructure->pStructureType->type == REF_GATE && psStructure->state == SAS_CLOSING)
 		{
-			dv.y -= height - (height * (gameTime - psStructure->lastStateTime)) / SAS_OPEN_SPEED;
+			dv.y -= height - (height * std::max<int>(graphicsTime - psStructure->lastStateTime, 0)) / SAS_OPEN_SPEED;
 		}
 
 		/* Push the indentity matrix */

@@ -124,7 +124,7 @@ extern char *tileset;
 #define WATER_BLOCKED		0x04	///< Units that cannot pass water are blocked by this tile
 #define LAND_BLOCKED		0x08	///< The inverse of the above -- for propeller driven crafts
 
-#define AUXBITS_UNUSED		0x01	///< Unused for now
+#define AUXBITS_CLOSED_GATE     0x01    ///< There is a gate which is not open.
 #define AUXBITS_OUR_BUILDING	0x02	///< Do we or our allies have a building at this tile
 #define AUXBITS_ANY_BUILDING	0x04	///< Is there any building that might be blocking here?
 #define AUXBITS_TEMPORARY	0x08	///< Temporary bit used in calculations
@@ -200,6 +200,20 @@ WZ_DECL_ALWAYS_INLINE static inline void auxSetAllied(int x, int y, int player, 
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
 		if (alliancebits[player] & (1 << i))
+		{
+			psAuxMap[i][x + y * mapWidth] |= state;
+		}
+	}
+}
+
+/// Set aux bits. Always set identically for all players. States not set are retained.
+WZ_DECL_ALWAYS_INLINE static inline void auxSetEnemy(int x, int y, int player, int state)
+{
+	int i;
+
+	for (i = 0; i < MAX_PLAYERS; i++)
+	{
+		if (!(alliancebits[player] & (1 << i)))
 		{
 			psAuxMap[i][x + y * mapWidth] |= state;
 		}
