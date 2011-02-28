@@ -1691,29 +1691,31 @@ BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 	return true;
 }
 
+static void initTemplatePoints(DROID_TEMPLATE *pDroidDesign)
+{
+	//calculate the total build points
+	pDroidDesign->buildPoints = calcTemplateBuild(pDroidDesign);
+	//calc the total power points
+	pDroidDesign->powerPoints = calcTemplatePower(pDroidDesign);
+}
+
 /*initialise the template build and power points */
 void initTemplatePoints(void)
 {
-	UDWORD			player;
-	DROID_TEMPLATE	*pDroidDesign;
-
-	for (player=0; player < MAX_PLAYERS; player++)
+	for (int player = 0; player < MAX_PLAYERS; ++player)
 	{
-		for(pDroidDesign = apsDroidTemplates[player]; pDroidDesign != NULL;
-			pDroidDesign = pDroidDesign->psNext)
+		for (DROID_TEMPLATE *pDroidDesign = apsDroidTemplates[player]; pDroidDesign != NULL; pDroidDesign = pDroidDesign->psNext)
 		{
-			//calculate the total build points
-			pDroidDesign->buildPoints = calcTemplateBuild(pDroidDesign);
-			//calc the total power points
-			pDroidDesign->powerPoints = calcTemplatePower(pDroidDesign);
+			initTemplatePoints(pDroidDesign);
 		}
 	}
-	for (pDroidDesign = apsStaticTemplates; pDroidDesign != NULL; pDroidDesign = pDroidDesign->psNext)
+	for (DROID_TEMPLATE *pDroidDesign = apsStaticTemplates; pDroidDesign != NULL; pDroidDesign = pDroidDesign->psNext)
 	{
-		//calculate the total build points
-		pDroidDesign->buildPoints = calcTemplateBuild(pDroidDesign);
-		//calc the total power points
-		pDroidDesign->powerPoints = calcTemplatePower(pDroidDesign);
+		initTemplatePoints(pDroidDesign);
+	}
+	for (std::list<DROID_TEMPLATE>::iterator pDroidDesign = localTemplates.begin(); pDroidDesign != localTemplates.end(); ++pDroidDesign)
+	{
+		initTemplatePoints(&*pDroidDesign);
 	}
 }
 
