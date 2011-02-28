@@ -3248,6 +3248,14 @@ void intResearchFinished(STRUCTURE *psBuilding)
 	intRefreshScreen();
 }
 
+void intAlliedResearchChanged()
+{
+	if ((intMode == INT_OBJECT || intMode == INT_STAT) && objMode == IOBJ_RESEARCH)
+	{
+		intRefreshScreen();
+	}
+}
+
 /* Do the annoying calculation for how many forms are needed
  * given the total number of buttons and the number of
  * buttons per page.

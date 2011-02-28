@@ -994,6 +994,11 @@ BOOL recvResearchStatus(NETQUEUE queue)
 		}
 	}
 
+	if (alliances[selectedPlayer][player] == ALLIANCE_FORMED)
+	{
+		intAlliedResearchChanged();
+	}
+
 	return true;
 }
 

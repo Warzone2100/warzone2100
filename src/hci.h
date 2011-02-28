@@ -334,6 +334,7 @@ extern void intBuildFinished(DROID *psDroid);
 extern void intBuildStarted(DROID *psDroid);
 /* Tell the interface a research facility has completed a topic */
 extern void intResearchFinished(STRUCTURE *psBuilding);
+void intAlliedResearchChanged();
 /* Tell the interface a factory has completed building ALL droids */
 extern void intManufactureFinished(STRUCTURE *psBuilding);
 extern void intUpdateManufacture(STRUCTURE *psBuilding);
