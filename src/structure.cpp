@@ -904,7 +904,7 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 	before = (9 * psStruct->currentBuildPts * structureBody(psStruct) ) / (10 * psStruct->pStructureType->buildPoints);
 	psStruct->currentBuildPts = newBuildPoints;
 	after =  (9 * psStruct->currentBuildPts * structureBody(psStruct) ) / (10 * psStruct->pStructureType->buildPoints);
-	psStruct->body += after - before;
+	psStruct->body = std::max<int>(psStruct->body + after - before, 1);
 
 	//check if structure is built
 	if (buildPoints > 0 && psStruct->currentBuildPts >= (SDWORD)psStruct->pStructureType->buildPoints)
