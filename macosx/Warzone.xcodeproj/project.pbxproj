@@ -399,6 +399,7 @@
 		432BE40210D9CF6F00A486AB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 432BE3FE10D9CF1300A486AB /* InfoPlist.strings */; };
 		432BE41A10D9D32000A486AB /* SDL.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 432BE34C10D9C21900A486AB /* SDL.framework */; };
 		4336D8AA111DDF0F0012E8E4 /* random.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4336D8A8111DDF0F0012E8E4 /* random.cpp */; };
+		4347DD4C131CA7B300D61392 /* physfs_casefolding.h in Headers */ = {isa = PBXBuildFile; fileRef = 4347DD4B131CA7B300D61392 /* physfs_casefolding.h */; };
 		4353C86E1282199C00CAFEDA /* tone.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C3B9C2118BEBE0000BBE59 /* tone.c */; };
 		4355E08010D5FADE00A19EE4 /* physfs_platforms.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E07F10D5FAC200A19EE4 /* physfs_platforms.h */; };
 		4355E13010D6028C00A19EE4 /* codec.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E12C10D6028C00A19EE4 /* codec.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1413,6 +1414,7 @@
 		432BE40010D9CF1300A486AB /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4336D8A8111DDF0F0012E8E4 /* random.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = random.cpp; path = ../src/random.cpp; sourceTree = SOURCE_ROOT; };
 		4336D8A9111DDF0F0012E8E4 /* random.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = random.h; path = ../src/random.h; sourceTree = SOURCE_ROOT; };
+		4347DD4B131CA7B300D61392 /* physfs_casefolding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = physfs_casefolding.h; path = external/physfs/physfs_casefolding.h; sourceTree = "<group>"; };
 		43536BD210DFEB37006B579C /* GenericFramework-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GenericFramework-Info.plist"; path = "Resources/GenericFramework-Info.plist"; sourceTree = "<group>"; };
 		4355E07F10D5FAC200A19EE4 /* physfs_platforms.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = physfs_platforms.h; path = external/physfs/physfs_platforms.h; sourceTree = "<group>"; };
 		4355E12C10D6028C00A19EE4 /* codec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = codec.h; path = external/libtheora/include/theora/codec.h; sourceTree = "<group>"; };
@@ -2481,6 +2483,7 @@
 				43F3FFCC10D33E6400707B6E /* archivers */,
 				43F3FFF610D33EB000707B6E /* platform */,
 				02DDA8BB0BD3C32D0049AB60 /* physfs.h */,
+				4347DD4B131CA7B300D61392 /* physfs_casefolding.h */,
 				4355E07F10D5FAC200A19EE4 /* physfs_platforms.h */,
 				02DDA8B90BD3C32D0049AB60 /* physfs_internal.h */,
 				02DDA8BA0BD3C32D0049AB60 /* physfs.c */,
@@ -3112,6 +3115,7 @@
 				02DDA8BD0BD3C32D0049AB60 /* physfs_internal.h in Headers */,
 				02DDA8BF0BD3C32D0049AB60 /* physfs.h in Headers */,
 				4355E08010D5FADE00A19EE4 /* physfs_platforms.h in Headers */,
+				4347DD4C131CA7B300D61392 /* physfs_casefolding.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3662,7 +3666,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"physfs-1.1.1\"\nOutDir=\"physfs\"\nFileName=\"physfs-1.1.1.tar.gz\"\nSourceDLP=\"http://icculus.org/physfs/downloads/physfs-1.1.1.tar.gz\"\nMD5Sum=\"0359b67793c1c14f00de1d1bbeb8ed6a\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
+			shellScript = "DirectorY=\"physfs-2.0.2\"\nOutDir=\"physfs\"\nFileName=\"physfs-2.0.2.tar.gz\"\nSourceDLP=\"http://icculus.org/physfs/downloads/physfs-2.0.2.tar.gz\"\nMD5Sum=\"4e8927c3d30279b03e2592106eb9184a\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
 		};
 		43025CD1111FB66E006C49B1 /* i18n */ = {
 			isa = PBXShellScriptBuildPhase;
