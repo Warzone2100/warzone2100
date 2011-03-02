@@ -124,14 +124,14 @@ extern char *tileset;
 #define WATER_BLOCKED		0x04	///< Units that cannot pass water are blocked by this tile
 #define LAND_BLOCKED		0x08	///< The inverse of the above -- for propeller driven crafts
 
-#define AUXBITS_CLOSED_GATE     0x01    ///< There is a gate which is not open.
+#define AUXBITS_NONPASSABLE     0x01    ///< Is there any building blocking here, other than a gate that would open for us?
 #define AUXBITS_OUR_BUILDING	0x02	///< Do we or our allies have a building at this tile
-#define AUXBITS_ANY_BUILDING	0x04	///< Is there any building that might be blocking here?
+#define AUXBITS_BLOCKING        0x04    ///< Is there any building currently blocking here?
 #define AUXBITS_TEMPORARY	0x08	///< Temporary bit used in calculations
 #define AUXBITS_DANGER		0x10	///< Does AI sense danger going there?
 #define AUXBITS_THREAT		0x20	///< Can hostile players shoot here?
 #define AUXBITS_AATHREAT	0x40	///< Can hostile players shoot at my VTOLs here?
-#define AUXBITS_BUILDING	0x80	///< Whether player has blocking building at tile, combine it with alliance bits and blockingBits
+#define AUXBITS_UNUSED          0x80    ///< Unused
 #define AUXBITS_ALL		0xff
 
 #define AUX_MAP		0

@@ -211,7 +211,7 @@ static void auxStructureNonblocking(STRUCTURE *psStructure)
 	{
 		for (int j = 0; j < size.y; j++)
 		{
-			auxClearAll(map.x + i, map.y + j, AUXBITS_ANY_BUILDING | AUXBITS_OUR_BUILDING | AUXBITS_CLOSED_GATE);
+			auxClearAll(map.x + i, map.y + j, AUXBITS_BLOCKING | AUXBITS_OUR_BUILDING | AUXBITS_NONPASSABLE);
 		}
 	}
 }
@@ -226,7 +226,7 @@ static void auxStructureBlocking(STRUCTURE *psStructure)
 		for (int j = 0; j < size.y; j++)
 		{
 			auxSetAllied(map.x + i, map.y + j, psStructure->player, AUXBITS_OUR_BUILDING);
-			auxSetAll(map.x + i, map.y + j, AUXBITS_ANY_BUILDING);
+			auxSetAll(map.x + i, map.y + j, AUXBITS_BLOCKING | AUXBITS_NONPASSABLE);
 		}
 	}
 }
@@ -240,7 +240,7 @@ static void auxStructureOpenGate(STRUCTURE *psStructure)
 	{
 		for (int j = 0; j < size.y; j++)
 		{
-			auxClearAll(map.x + i, map.y + j, AUXBITS_CLOSED_GATE);
+			auxClearAll(map.x + i, map.y + j, AUXBITS_BLOCKING);
 		}
 	}
 }
@@ -254,8 +254,8 @@ static void auxStructureClosedGate(STRUCTURE *psStructure)
 	{
 		for (int j = 0; j < size.y; j++)
 		{
-			auxSetEnemy(map.x + i, map.y + j, psStructure->player, AUXBITS_ANY_BUILDING);
-			auxSetAll(map.x + i, map.y + j, AUXBITS_CLOSED_GATE);
+			auxSetEnemy(map.x + i, map.y + j, psStructure->player, AUXBITS_NONPASSABLE);
+			auxSetAll(map.x + i, map.y + j, AUXBITS_BLOCKING);
 		}
 	}
 }
@@ -3590,7 +3590,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 					//clear the rearm pad
 					psDroid->action = DACTION_NONE;
 					psReArmPad->psObj = NULL;
-					auxClearAll(map_coord(psStructure->pos.x), map_coord(psStructure->pos.y), AUXBITS_ANY_BUILDING | AUXBITS_OUR_BUILDING);
+					auxStructureNonblocking(psStructure);
 				}
 			}
 		}

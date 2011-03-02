@@ -1776,12 +1776,12 @@ static int dangerFloodFill(int player)
 			if (!(aux & AUXBITS_TEMPORARY) && !(aux & AUXBITS_THREAT) && (aux & AUXBITS_DANGER))
 			{
 				// Note that we do not consider water to be a blocker here. This may or may not be a feature...
-				if (!(block & FEATURE_BLOCKED) && (!(aux & AUXBITS_ANY_BUILDING) || start))
+				if (!(block & FEATURE_BLOCKED) && (!(aux & AUXBITS_NONPASSABLE) || start))
 				{
 					floodbucket[bucketcounter].x = npos.x;
 					floodbucket[bucketcounter].y = npos.y;
 					bucketcounter++;
-					if (start && !(aux & AUXBITS_ANY_BUILDING))
+					if (start && !(aux & AUXBITS_NONPASSABLE))
 					{
 						start = false;
 					}
