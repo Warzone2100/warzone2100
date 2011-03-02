@@ -844,6 +844,26 @@ static void moveCalcSlideVector(DROID *psDroid, int32_t objX, int32_t objY, int3
 }
 
 
+static void moveOpenGates(DROID *psDroid, Vector2i tile)
+{
+	// is the new tile a gate?
+	if (!worldOnMap(tile.x, tile.y))
+	{
+		return;
+	}
+	MAPTILE *psTile = mapTile(tile);
+	if (!isFlying(psDroid) && psTile && psTile->psObject && psTile->psObject->type == OBJ_STRUCTURE && aiCheckAlliances(psTile->psObject->player, psDroid->player))
+	{
+		requestOpenGate((STRUCTURE *)psTile->psObject);  // If it's a friendly gate, open it. (It would be impolite to open an enemy gate.)
+	}
+}
+
+static void moveOpenGates(DROID *psDroid)
+{
+	Vector2i pos = removeZ(psDroid->pos) + iSinCosR(psDroid->sMove.moveDir, psDroid->sMove.speed * SAS_OPEN_SPEED / GAME_TICKS_PER_SEC);
+	moveOpenGates(psDroid, map_coord(pos));
+}
+
 // see if a droid has run into a blocking tile
 // TODO See if this function can be simplified.
 static void moveCalcBlockingSlide(DROID *psDroid, int32_t *pmx, int32_t *pmy, uint16_t tarDir, uint16_t *pSlideDir)
@@ -851,7 +871,6 @@ static void moveCalcBlockingSlide(DROID *psDroid, int32_t *pmx, int32_t *pmy, ui
 	PROPULSION_TYPE	propulsion = getPropulsionStats(psDroid)->propulsionType;
 	SDWORD	horizX,horizY, vertX,vertY;
 	uint16_t slideDir;
-	MAPTILE	*psTile = NULL;
 	// calculate the new coords and see if they are on a different tile
 	const int32_t mx = *pmx / EXTRA_PRECISION;
 	const int32_t my = *pmy / EXTRA_PRECISION;
@@ -867,15 +886,7 @@ static void moveCalcBlockingSlide(DROID *psDroid, int32_t *pmx, int32_t *pmy, ui
 	CHECK_DROID(psDroid);
 
 	// is the new tile a gate?
-	if (worldOnMap(ntx, nty))
-	{
-		psTile = mapTile(ntx, nty);
-	}
-	if (!isFlying(psDroid) && psTile && psTile->psObject && psTile->psObject->type == OBJ_STRUCTURE
-	    && aiCheckAlliances(psTile->psObject->player, psDroid->player))
-	{
-		requestOpenGate((STRUCTURE *)psTile->psObject);  // If it's a friendly gate, open it. (It would be impolite to open an enemy gate.)
-	}
+	moveOpenGates(psDroid, Vector2i(ntx, nty));
 
 	// is the new tile blocking?
 	if (!fpathBlockingTile(ntx, nty, propulsion))
@@ -1650,6 +1661,7 @@ static void moveUpdateGroundModel(DROID *psDroid, SDWORD speed, uint16_t directi
 
 	moveCombineNormalAndPerpSpeeds(psDroid, fNormalSpeed, fPerpSpeed, iDroidDir);
 	moveGetDroidPosDiffs(psDroid, &dx, &dy);
+	moveOpenGates(psDroid);
 	moveCheckSquished(psDroid, dx,dy);
 	moveCalcDroidSlide(psDroid, &dx, &dy);
 	bx = dx;
@@ -1727,6 +1739,7 @@ static void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, uint16_t directi
 
 	moveCombineNormalAndPerpSpeeds(psDroid, fNormalSpeed, fPerpSpeed, iDroidDir);
 	moveGetDroidPosDiffs( psDroid, &dx, &dy );
+	moveOpenGates(psDroid);
 	moveCalcDroidSlide(psDroid, &dx,&dy);
 	moveCalcBlockingSlide(psDroid, &dx, &dy, direction, &slideDir);
 	moveUpdateDroidPos( psDroid, dx, dy );
