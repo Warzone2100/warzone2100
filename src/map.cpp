@@ -64,12 +64,6 @@ static int bucketcounter;
 static UDWORD lastDangerUpdate = 0;
 static int lastDangerPlayer = -1;
 
-struct ffnode
-{
-	struct ffnode *next;
-	int x, y;
-};
-
 //scroll min and max values
 SDWORD		scrollMinX, scrollMaxX, scrollMinY, scrollMaxY;
 
@@ -1632,62 +1626,38 @@ static const Vector2i aDirOffset[] =
 	Vector2i( 1, 1),
 };
 
-// Flood fill a "continent". Note that we reuse x, y inside this function.
-static void mapFloodFill(int x, int y, int continent, uint8_t blockedBits)
+// Flood fill a "continent".
+static void mapFloodFill(int x, int y, int continent, uint8_t blockedBits, uint16_t MAPTILE::*varContinent)
 {
-	struct ffnode *open = NULL;
-	int i;
-	bool limitedTile = (blockedBits & WATER_BLOCKED) || (blockedBits & LAND_BLOCKED);
+	std::vector<Vector2i> open;
+	open.push_back(Vector2i(x, y));
+	mapTile(x, y)->*varContinent = continent;  // Set continent value
 
-	do
+	while (!open.empty())
 	{
-		MAPTILE *currTile = mapTile(x, y);
+		// Pop the first open node off the list for this iteration
+		Vector2i pos = open.back();
+		open.pop_back();
 
 		// Add accessible neighbouring tiles to the open list
-		for (i = 0; i < NUM_DIR; i++)
+		for (int i = 0; i < NUM_DIR; ++i)
 		{
 			// rely on the fact that all border tiles are inaccessible to avoid checking explicitly
-			Vector2i npos = Vector2i(x, y) + aDirOffset[i];
-			MAPTILE *psTile;
+			Vector2i npos = pos + aDirOffset[i];
 
-			if (!tileOnMap(npos.x, npos.y))
+			if (!tileOnMap(npos))
 			{
 				continue;
 			}
-			psTile = mapTile(npos.x, npos.y);
+			MAPTILE *psTile = mapTile(npos);
 
-			if (!(blockTile(npos.x, npos.y, AUX_MAP) & blockedBits) && ((limitedTile && psTile->limitedContinent == 0) || (!limitedTile && psTile->hoverContinent == 0)))
+			if (!(blockTile(npos.x, npos.y, AUX_MAP) & blockedBits) && psTile->*varContinent == 0)
 			{
-				struct ffnode *node = (struct ffnode *)malloc(sizeof(*node));
-
-				node->next = open;	// add to beginning of open list
-				node->x = npos.x;
-				node->y = npos.y;
-				open = node;
+				open.push_back(npos);               // add to open list
+				psTile->*varContinent = continent;  // Set continent value
 			}
 		}
-
-		// Set continent value
-		if (limitedTile)
-		{
-			currTile->limitedContinent = continent;
-		}
-		else	// we are amphibious
-		{
-			currTile->hoverContinent = continent;
-		}
-
-		// Pop the first open node off the list for the next iteration
-		if (open)
-		{
-			struct ffnode *tmp = open;
-
-			x = open->x;
-			y = open->y;
-			open = open->next;
-			free(tmp);
-		}
-	} while (open);
+	}
 }
 
 void mapFloodFillContinents()
@@ -1715,28 +1685,20 @@ void mapFloodFillContinents()
 
 			if (psTile->limitedContinent == 0 && !fpathBlockingTile(x, y, PROPULSION_TYPE_WHEELED))
 			{
-				mapFloodFill(x, y, 1 + limitedContinents++, WATER_BLOCKED | FEATURE_BLOCKED);
+				mapFloodFill(x, y, 1 + limitedContinents++, WATER_BLOCKED | FEATURE_BLOCKED, &MAPTILE::limitedContinent);
 			}
 			else if (psTile->limitedContinent == 0 && !fpathBlockingTile(x, y, PROPULSION_TYPE_PROPELLOR))
 			{
-				mapFloodFill(x, y, 1 + limitedContinents++, LAND_BLOCKED | FEATURE_BLOCKED);
+				mapFloodFill(x, y, 1 + limitedContinents++, LAND_BLOCKED | FEATURE_BLOCKED, &MAPTILE::limitedContinent);
 			}
-		}
-	}
-	debug(LOG_MAP, "Found %d limited continents", (int)limitedContinents);
-	for (y = 0; y < mapHeight; y++)
-	{
-		for (x = 0; x < mapWidth; x++)
-		{
-			MAPTILE *psTile = mapTile(x, y);
 
 			if (psTile->hoverContinent == 0 && !fpathBlockingTile(x, y, PROPULSION_TYPE_HOVER))
 			{
-				mapFloodFill(x, y, 1 + hoverContinents++, FEATURE_BLOCKED);
+				mapFloodFill(x, y, 1 + hoverContinents++, FEATURE_BLOCKED, &MAPTILE::hoverContinent);
 			}
 		}
 	}
-	debug(LOG_MAP, "Found %d hover continents", (int)hoverContinents);
+	debug(LOG_MAP, "Found %d limited and %d hover continents", limitedContinents, hoverContinents);
 }
 
 void tileSetFire(int32_t x, int32_t y, uint32_t duration)
