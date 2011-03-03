@@ -85,13 +85,10 @@ int inQuad(const Vector2i *pt, const QUAD *quad)
 
 	for (i = 0, j = 3; i < 4; j = i++)
 	{
-		if (((quad->coords[i].y <= pt->y && pt->y < quad->coords[j].y) ||
-			(quad->coords[j].y <= pt->y && pt->y < quad->coords[i].y)) &&
-			(pt->x <
-				(quad->coords[j].x - quad->coords[i].x)
-				* (pt->y - quad->coords[i].y)
-				/ (quad->coords[j].y - quad->coords[i].y)
-				+ quad->coords[i].x))
+		Vector2i edge = quad->coords[j] - quad->coords[i];
+		Vector2i pos = *pt - quad->coords[i];
+		if ((     0 <= pos.y && pos.y < edge.y && pos.x * edge.y < pos.y * edge.x) ||
+		    (edge.y <= pos.y && pos.y < 0      && pos.x * edge.y > pos.y * edge.x))
 		{
 			c = !c;
 		}
