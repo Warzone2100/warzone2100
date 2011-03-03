@@ -13,5 +13,5 @@ BuildDependentFlagsForCandCpp = -Werror // -fstack-protector // Needs 10.6 min f
 
 // Build setting dependent warnings
 WarnForCandCppDep = -Wno-error=unused-parameter -Wno-error=format-security -Wno-sign-compare // -Wno-error=sign-compare // FIXME: For some reason these will be errors anyway, so off for now
-WarnForCDep = -Wc++-compat -Wno-error=c++-compat
+WarnForCDep = 
 WarnForCppDep = // -Wno-error=enum-compare // not currently supported by compiler
