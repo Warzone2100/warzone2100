@@ -433,7 +433,8 @@ static inline WZ_DECL_PURE MAPTILE *mapTile(int32_t x, int32_t y)
 static inline WZ_DECL_PURE MAPTILE *mapTile(Vector2i const &v) { return mapTile(v.x, v.y); }
 
 /** Return a pointer to the tile structure at x,y in world coordinates */
-#define worldTile(_x, _y) mapTile(map_coord(_x), map_coord(_y))
+static inline WZ_DECL_PURE MAPTILE *worldTile(int32_t x, int32_t y) { return mapTile(map_coord(x), map_coord(y)); }
+static inline WZ_DECL_PURE MAPTILE *worldTile(Vector2i const &v) { return mapTile(map_coord(v)); }
 
 /// Return ground height of top-left corner of tile at x,y
 static inline WZ_DECL_PURE int32_t map_TileHeight(int32_t x, int32_t y)
@@ -503,21 +504,7 @@ WZ_DECL_ALWAYS_INLINE static inline BOOL worldOnMap(int x, int y)
 
 
 /* Return whether a world coordinate is on the map */
-WZ_DECL_ALWAYS_INLINE static inline bool worldOnMap2i(Vector2i pos)
-{
-	return worldOnMap(pos.x, pos.y);
-}
-
-
-/* Return whether a world coordinate is on the map */
-WZ_DECL_ALWAYS_INLINE static inline bool worldOnMap3i(Vector3i pos)
-{
-	return worldOnMap(pos.x, pos.y);
-}
-
-
-/* Return whether a world coordinate is on the map */
-WZ_DECL_ALWAYS_INLINE static inline bool worldOnMap3f(Vector3f pos)
+WZ_DECL_ALWAYS_INLINE static inline bool worldOnMap(Vector2i pos)
 {
 	return worldOnMap(pos.x, pos.y);
 }

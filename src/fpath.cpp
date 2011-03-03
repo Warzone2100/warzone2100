@@ -48,11 +48,6 @@ static volatile bool fpathQuit = false;
 /* Beware: Enabling this will cause significant slow-down. */
 #undef DEBUG_MAP
 
-/* minimum height difference for VTOL blocking tile */
-#define	LIFT_BLOCK_HEIGHT_LIGHTBODY		  30
-#define	LIFT_BLOCK_HEIGHT_MEDIUMBODY	 350
-#define	LIFT_BLOCK_HEIGHT_HEAVYBODY		 350
-
 struct PATHRESULT
 {
 	UDWORD		droidID;	///< Unique droid ID.
@@ -60,17 +55,6 @@ struct PATHRESULT
 	FPATH_RETVAL	retval;		///< Result value from path-finding.
 };
 
-
-#define NUM_BASIC	 8
-#define NUM_DIR		24
-
-// Convert a direction into an offset, spanning two tiles
-static const Vector2i aDirOffset[NUM_DIR] =
-{
-	Vector2i( 0,  1), Vector2i(-1,  1), Vector2i(-1,  0), Vector2i(-1, -1), Vector2i( 0, -1), Vector2i( 1, -1), Vector2i( 1,  0), Vector2i( 1,  1),
-	Vector2i(-2, -2), Vector2i(-1, -2), Vector2i( 0, -2), Vector2i( 1, -2), Vector2i( 2, -2), Vector2i(-2, -1), Vector2i( 2, -1), Vector2i(-2,  0),
-	Vector2i( 2,  0), Vector2i(-2,  1), Vector2i( 2,  1), Vector2i(-2,  2), Vector2i(-1,  2), Vector2i( 0,  2), Vector2i( 1,  2), Vector2i( 2,  2),
-};
 
 // threading stuff
 static WZ_THREAD        *fpathThread = NULL;
@@ -293,18 +277,36 @@ BOOL fpathBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion)
 }
 
 
-/** Calculate the distance to a tile from a point
- *
- *  @ingroup pathfinding
- */
-static inline int fpathDistToTile(int tileX, int tileY, int pointX, int pointY)
+// Returns the closest non-blocking tile to pos, or returns pos if no non-blocking tiles are present within a 2 tile distance.
+static Position findNonblockingPosition(Position pos, PROPULSION_TYPE propulsion, int player = 0, FPATH_MOVETYPE moveType = FMT_BLOCK)
 {
-	// get the difference in world coords
-	int xdiff = world_coord(tileX) - pointX;
-	int ydiff = world_coord(tileY) - pointY;
+	Vector2i centreTile = map_coord(removeZ(pos));
+	if (!fpathBaseBlockingTile(centreTile.x, centreTile.y, propulsion, player, moveType))
+	{
+		return pos;  // Fast case, pos is not on a blocking tile.
+	}
 
-	return iHypot(xdiff, ydiff);
+	Vector2i bestTile = centreTile;
+	int bestDistSq = INT32_MAX;
+	for (int y = -2; y <= 2; ++y)
+		for (int x = -2; x <= 2; ++x)
+	{
+		Vector2i tile = centreTile + Vector2i(x, y);
+		Vector2i diff = world_coord(tile) + Vector2i(TILE_UNITS/2, TILE_UNITS/2) - removeZ(pos);
+		int distSq = diff*diff;
+		if (distSq < bestDistSq && !fpathBaseBlockingTile(tile.x, tile.y, propulsion, player, moveType))
+		{
+			bestTile = tile;
+			bestDistSq = distSq;
+		}
+	}
+
+	// Return point on tile closest to the original pos.
+	Vector2i minCoord = world_coord(bestTile);
+	Vector2i maxCoord = minCoord + Vector2i(TILE_UNITS - 1, TILE_UNITS - 1);
+	return Position(std::min(std::max(pos.x, minCoord.x), maxCoord.x), std::min(std::max(pos.y, minCoord.y), maxCoord.y), pos.z);
 }
+
 
 
 static void fpathSetMove(MOVE_CONTROL *psMoveCntl, SDWORD targetX, SDWORD targetY)
@@ -459,51 +461,14 @@ FPATH_RETVAL fpathDroidRoute(DROID* psDroid, SDWORD tX, SDWORD tY, FPATH_MOVETYP
 	ASSERT_OR_RETURN(FPR_FAILED, psPropStats != NULL, "invalid propulsion stats pointer");
 	ASSERT_OR_RETURN(FPR_FAILED, psDroid->type == OBJ_DROID, "We got passed an object that isn't a DROID!");
 
-	// check whether the end point of the route
-	// is a blocking tile and find an alternative if it is
-	if (psDroid->sMove.Status != MOVEWAITROUTE && fpathDroidBlockingTile(psDroid, map_coord(tX), map_coord(tY), moveType))
+	// Check whether the start and end points of the route are blocking tiles and find an alternative if they are.
+	Position startPos = psDroid->pos;
+	Position endPos = Position(tX, tY, 0);
+	if (psDroid->sMove.Status != MOVEWAITROUTE)
 	{
-		// find the nearest non blocking tile to the DROID
-		int minDist = SDWORD_MAX;
-		int nearestDir = NUM_DIR;
-		int dir;
-
-		objTrace(psDroid->id, "BLOCKED(%d,%d) - trying workaround", map_coord(tX), map_coord(tY));
-		for (dir = 0; dir < NUM_DIR; dir++)
-		{
-			int x = map_coord(tX) + aDirOffset[dir].x;
-			int y = map_coord(tY) + aDirOffset[dir].y;
-
-			if (tileOnMap(x, y) && !fpathDroidBlockingTile(psDroid, x, y, moveType))
-			{
-				// pick the adjacent tile closest to our starting point
-				int tileDist = fpathDistToTile(x, y, psDroid->pos.x, psDroid->pos.y);
-
-				if (tileDist < minDist)
-				{
-					minDist = tileDist;
-					nearestDir = dir;
-				}
-			}
-
-			if (dir == NUM_BASIC - 1 && nearestDir != NUM_DIR)
-			{
-				break;	// found a solution without checking at greater distance
-			}
-		}
-
-		if (nearestDir == NUM_DIR)
-		{
-			// surrounded by blocking tiles, give up
-			objTrace(psDroid->id, "route to (%d, %d) failed - target blocked", map_coord(tX), map_coord(tY));
-			return FPR_FAILED;
-		}
-		else
-		{
-			tX = world_coord(map_coord(tX) + aDirOffset[nearestDir].x) + TILE_UNITS / 2;
-			tY = world_coord(map_coord(tY) + aDirOffset[nearestDir].y) + TILE_UNITS / 2;
-			objTrace(psDroid->id, "Workaround found at (%d, %d)", map_coord(tX), map_coord(tY));
-		}
+		startPos = findNonblockingPosition(startPos, getPropulsionStats(psDroid)->propulsionType, psDroid->player, moveType);
+		endPos   = findNonblockingPosition(endPos,   getPropulsionStats(psDroid)->propulsionType, psDroid->player, moveType);
+		objTrace(psDroid->id, "Want to go to (%d, %d) -> (%d, %d), going (%d, %d) -> (%d, %d)", map_coord(psDroid->pos.x), map_coord(psDroid->pos.y), map_coord(tX), map_coord(tY), map_coord(startPos.x), map_coord(startPos.y), map_coord(endPos.x), map_coord(endPos.y));
 	}
 	switch (psDroid->order)
 	{
@@ -518,7 +483,7 @@ FPATH_RETVAL fpathDroidRoute(DROID* psDroid, SDWORD tX, SDWORD tY, FPATH_MOVETYP
 		acceptNearest = true;
 		break;
 	}
-	return fpathRoute(&psDroid->sMove, psDroid->id, psDroid->pos.x, psDroid->pos.y, tX, tY, psPropStats->propulsionType, 
+	return fpathRoute(&psDroid->sMove, psDroid->id, startPos.x, startPos.y, endPos.x, endPos.y, psPropStats->propulsionType, 
 	                  psDroid->droidType, moveType, psDroid->player, acceptNearest);
 }
 
@@ -703,19 +668,16 @@ void fpathTest(int x, int y, int x2, int y2)
 
 bool fpathCheck(Position orig, Position dest, PROPULSION_TYPE propulsion)
 {
-	MAPTILE *origTile;
-	MAPTILE *destTile;
-
 	// We have to be careful with this check because it is called on
 	// load when playing campaign on droids that are on the other
 	// map during missions, and those maps are usually larger.
-	if (!worldOnMap(orig.x, orig.y) || !worldOnMap(dest.x, dest.y))
+	if (!worldOnMap(removeZ(orig)) || !worldOnMap(removeZ(dest)))
 	{
 		return false;
 	}
 
-	origTile = worldTile(orig.x, orig.y);
-	destTile = worldTile(dest.x, dest.y);
+	MAPTILE *origTile = worldTile(removeZ(findNonblockingPosition(orig, propulsion)));
+	MAPTILE *destTile = worldTile(removeZ(findNonblockingPosition(dest, propulsion)));
 
 	ASSERT(propulsion != PROPULSION_TYPE_NUM, "Bad propulsion type");
 	ASSERT(origTile != NULL && destTile != NULL, "Bad tile parameter");
