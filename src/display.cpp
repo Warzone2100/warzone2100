@@ -2153,8 +2153,7 @@ void	dealWithLMB( void )
 	{
 		// now changed to use the multiple order stuff
 		// clicked on a destination.
-		orderSelectedLoc(selectedPlayer, mouseTileX*TILE_UNITS+TILE_UNITS/2,
-		                                 mouseTileY*TILE_UNITS+TILE_UNITS/2, ctrlShiftDown());  // ctrlShiftDown() = ctrl clicked a destination, add an order
+		orderSelectedLoc(selectedPlayer, mousePos.x, mousePos.y, ctrlShiftDown());  // ctrlShiftDown() = ctrl clicked a destination, add an order
 		/* Otherwise send them all */
 		if(getNumDroidsSelected())
 		{

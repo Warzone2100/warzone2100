@@ -115,6 +115,7 @@ extern SDWORD	getCentreZ( void );
 STRUCTURE *getTileBlueprint(int mapX, int mapY);  ///< Gets the blueprint at those coordinates, if any.
 
 extern SDWORD mouseTileX, mouseTileY;
+extern Vector2i mousePos;
 
 extern BOOL bRender3DOnly;
 extern BOOL showGateways;

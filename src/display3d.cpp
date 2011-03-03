@@ -165,6 +165,7 @@ static Vector3i tileScreenInfo[VISIBLE_YTILES+1][VISIBLE_XTILES+1];
 
 /// Records the present X and Y values for the current mouse tile (in tiles)
 SDWORD mouseTileX, mouseTileY;
+Vector2i mousePos(0, 0);
 
 /// Do we want the radar to be rendered
 BOOL	radarOnScreen=false;
@@ -3617,6 +3618,8 @@ static void locateMouse(void)
 						mouseTileY = 0;
 					else if (mouseTileY > mapHeight-1)
 						mouseTileY = mapHeight - 1;
+
+					mousePos = world_coord(Vector2i(mouseTileX, mouseTileY)) + positionInQuad(pt, quad);
 
 					/* Store away z value */
 					nearestZ = tileZ;
