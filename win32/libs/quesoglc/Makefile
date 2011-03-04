@@ -41,7 +41,7 @@ $(TOPDIR)/build/libs/lib/libGLC.la: $(PKG_SOURCEBASE)/build/libGLC.la
 	$(MAKE) -C $(PKG_SOURCEBASE)/build install-libLTLIBRARIES
 
 $(PKG_SOURCEBASE)/quesoglc.pc: $(PKG_SOURCEBASE)/config.status
-	$(MAKE) -C $(PKG_SOURCEBASE) quesoglc.pc && sed -i -e "s/,\s*$$//" $(PKG_SOURCEBASE)/quesoglc.pc # Remove extraneous comma (autoconfigure artifact)
+	$(MAKE) -C $(PKG_SOURCEBASE) quesoglc.pc
 
 $(TOPDIR)/build/libs/lib/pkgconfig/quesoglc.pc: $(PKG_SOURCEBASE)/quesoglc.pc
 	$(MAKE) -C $(PKG_SOURCEBASE) install-pkgconfigDATA
