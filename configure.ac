@@ -416,9 +416,9 @@ AC_SUBST([OPENGL_LIBS], [${OPENGL_LIBS}])
 # MinGW derived exception handler.
 if test "x$host_os_mingw32" = "xyes" ; then
     AC_CHECK_HEADER(bfd.h, , AC_MSG_ERROR([BFD header not found.]))
-    AC_CHECK_LIB(bfd, bfd_openr, AC_SUBST([BFD_LIBS], [-lbfd]), AC_MSG_ERROR([BFD not found.]), [${IBERTY_LIBS}])
+    AC_CHECK_LIB(bfd, bfd_openr, AC_SUBST([BFD_LIBS], [-lbfd]), AC_MSG_ERROR([BFD not found.]), [${WIN32_LIBS}])
 
-    WIN32_LIBS="${WIN32_LIBS} ${BFD_LIBS} ${IBERTY_LIBS} -lstdc++"
+    WIN32_LIBS="${BFD_LIBS} ${WIN32_LIBS} -lstdc++"
 fi
 
 WZ_CPPFLAGS="${WZ_CPPFLAGS} -DWZ_DATADIR=\"\\\"\${datadir}/\${PACKAGE}\\\"\""
