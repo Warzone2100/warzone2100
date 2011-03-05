@@ -28,6 +28,7 @@
 
 #if defined(WZ_OS_WIN)
 #  include <shlobj.h> /* For SHGetFolderPath */
+#  include <shellapi.h> /* CommandLineToArgvW */
 #elif defined(WZ_OS_UNIX)
 #  include <errno.h>
 #endif // WZ_OS_WIN
