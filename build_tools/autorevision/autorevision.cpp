@@ -849,9 +849,7 @@ bool WriteOutput(const string& outputFile, const RevisionInformation& rev_info)
     if(do_wx)
         header << "#include <wx/string.h>\n";
 
-    header << "\n#define SVN_LOW_REV      " << (rev_info.low_revisionCount.empty() ? rev_info.revisionCount : rev_info.low_revisionCount)
-           << "\n#define SVN_LOW_REV_STR \"" << (rev_info.low_revision.empty() ? rev_info.revision : rev_info.low_revision) << "\""
-           << "\n#define SVN_REV          " << rev_info.revisionCount
+    header << "\n#define SVN_REV          " << rev_info.revisionCount
            << "\n#define SVN_REV_STR     \"" << rev_info.revision << "\""
            << "\n#define SVN_DATE        \"" << rev_info.date << "\""
            << "\n#define SVN_URI         \"" << rev_info.wc_uri << "\""
@@ -868,23 +866,18 @@ bool WriteOutput(const string& outputFile, const RevisionInformation& rev_info)
         header << "namespace autorevision\n{\n";
 
     if(do_int)
-        header << "\tSVN_AUTOREVISION_STATIC const unsigned int svn_low_revision = " << rev_info.low_revision << ";\n"
-               << "\tSVN_AUTOREVISION_STATIC const unsigned int svn_revision = " << rev_info.revision << ";\n";
+        header << "\tSVN_AUTOREVISION_STATIC const unsigned int svn_revision = " << rev_info.revision << ";\n";
 
     if(do_std)
-        header << "\tSVN_AUTOREVISION_STATIC const std::string svn_low_revision_s(\"" << rev_info.low_revision << "\");\n"
-               << "\tSVN_AUTOREVISION_STATIC const std::string svn_revision_s(\"" << rev_info.revision << "\");\n"
+        header << "\tSVN_AUTOREVISION_STATIC const std::string svn_revision_s(\"" << rev_info.revision << "\");\n"
                << "\tSVN_AUTOREVISION_STATIC const std::string svn_date_s(\"" << rev_info.date << "\");\n"
                << "\tSVN_AUTOREVISION_STATIC const std::string svn_uri_s(\"" << rev_info.wc_uri << "\");\n";
     if(do_cstr)
-        header << "\tSVN_AUTOREVISION_STATIC const char svn_low_revision_cstr[] = \"" << rev_info.low_revision << "\";\n"
-               << "\tSVN_AUTOREVISION_STATIC const char svn_revision_cstr[] = \"" << rev_info.revision << "\";\n"
+        header << "\tSVN_AUTOREVISION_STATIC const char svn_revision_cstr[] = \"" << rev_info.revision << "\";\n"
                << "\tSVN_AUTOREVISION_STATIC const char svn_date_cstr[] = \"" << rev_info.date << "\";\n"
                << "\tSVN_AUTOREVISION_STATIC const char svn_uri_cstr[] = \"" << rev_info.wc_uri << "\";\n";
     if(do_wx)
     {
-        header << "\tSVN_AUTOREVISION_STATIC const wxString svnLowRevision(";
-
         if(do_translate)
             header << "wxT";
 

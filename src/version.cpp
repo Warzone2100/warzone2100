@@ -28,16 +28,7 @@
 #define SVN_AUTOREVISION_STATIC static
 #include "src/autorevision.h"
 
-#if (SVN_LOW_REV < SVN_REV)
-# define SVN_FULL_REV_STR "r" SVN_LOW_REV_STR ":" SVN_REV_STR
-#else
-# define SVN_FULL_REV_STR "r" SVN_SHORT_HASH
-#endif
-
-unsigned int version_getLowRevision()
-{
-	return SVN_LOW_REV;
-}
+#define SVN_FULL_REV_STR "r" SVN_SHORT_HASH
 
 unsigned int version_getRevision()
 {
