@@ -69,11 +69,7 @@ const char* version_getVersionString()
 
 bool version_modified()
 {
-#if (VCS_WC_MODIFIED)
-	return true;
-#else
-	return false;
-#endif
+	return VCS_WC_MODIFIED;
 }
 
 const char* version_getBuildDate()
