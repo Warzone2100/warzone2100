@@ -71,13 +71,13 @@ extern const char* version_getBuildTime(void);
  *  \return the date when this revision was committed to the subversion
  *          repository
  */
-extern const char* version_getSvnDate(void);
+extern const char* version_getVcsDate(void);
 
 /** Retrieves the time at which the source of this build was committed.
  *  \return the time when this revision was committed to the subversion
  *          repository
  */
-extern const char* version_getSvnTime(void);
+extern const char* version_getVcsTime(void);
 
 /** Composes a nicely formatted version string.
  *
@@ -88,7 +88,7 @@ extern const char* version_getSvnTime(void);
  *  - "<working copy state>" represents the modification and switch state
  *                           of the working copy from which this build was made.
  *  - "<DATE>" the date of building as returned by version_getBuildDate() or
- *             version_getSvnDate(); the latter is only used when the working
+ *             version_getVcsDate(); the latter is only used when the working
  *             copy has no local modifications.
  *  - "<BUILD TYPE>" the type of build produced (i.e. DEBUG or not)
  */

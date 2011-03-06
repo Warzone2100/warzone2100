@@ -3034,7 +3034,7 @@ void startMultiplayerGame(void)
 		{
 			debug(LOG_NET, "limiter was NOT activated, setting defaults");
 
-			// NOTE: TRUNK <->svn/2.3 difference, we don't load limiter_tex!
+			// NOTE: master <-> 2.3 difference, we don't load limiter_tex!
 			if (!resLoad("wrf/limiter_tex.wrf", 501))
 			{
 				debug(LOG_INFO, "Unable to load limiter_tex.  Defaults not set.");

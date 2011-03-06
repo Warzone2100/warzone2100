@@ -555,7 +555,7 @@ static void initialize_PhysicsFS(const char* argv_0)
  *
  * Priority:
  * Lower loads first. Current:
- * -datadir > User's home dir > SVN data > AutoPackage > BaseDir > DEFAULT_DATADIR
+ * -datadir > User's home dir > source tree data > AutoPackage > BaseDir > DEFAULT_DATADIR
  *
  * Only -datadir and home dir are allways examined. Others only if data still not found.
  *
@@ -598,7 +598,7 @@ static void scanDataDirs( void )
 
 	if( !PHYSFS_exists("gamedesc.lev") )
 	{
-		// Data in SVN dir
+		// Data in source tree
 		sstrcpy(tmpstr, prefix);
 		sstrcat(tmpstr, "/data/");
 		registerSearchPath( tmpstr, 3 );

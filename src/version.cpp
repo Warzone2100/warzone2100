@@ -25,14 +25,12 @@
 #include "version.h"
 #include "stringdef.h"
 
-#define SVN_AUTOREVISION_STATIC static
+#define VCS_AUTOREVISION_STATIC static
 #include "src/autorevision.h"
-
-#define SVN_FULL_REV_STR "r" SVN_SHORT_HASH
 
 unsigned int version_getRevision()
 {
-	return SVN_REV;
+	return VCS_NUM;
 }
 
 const char* version_getVersionString()
@@ -41,29 +39,29 @@ const char* version_getVersionString()
 
 	if (version_string == NULL)
 	{
-		if (strncmp(svn_uri_cstr, "tags/", strlen("tags/")) == 0)
+		if (strncmp(vcs_uri_cstr, "tags/", strlen("tags/")) == 0)
 		{
-			version_string = svn_uri_cstr + strlen("tags/");
+			version_string = vcs_uri_cstr + strlen("tags/");
 		}
-		else if (strcmp(svn_uri_cstr, "trunk") == 0)
+		else if (strcmp(vcs_uri_cstr, "trunk") == 0)
 		{
-			version_string = "TRUNK " SVN_FULL_REV_STR;
+			version_string = "TRUNK " VCS_SHORT_HASH;
 		}
-		else if (strncmp(svn_uri_cstr, "branches/", strlen("branches/")) == 0)
+		else if (strncmp(vcs_uri_cstr, "branches/", strlen("branches/")) == 0)
 		{
-			version_string = (SVN_URI " branch " SVN_FULL_REV_STR) + strlen("branches/");
+			version_string = (VCS_URI " branch " VCS_SHORT_HASH) + strlen("branches/");
 		}
-		else if (strncmp(svn_uri_cstr, "refs/heads/", strlen("refs/heads/")) == 0)
+		else if (strncmp(vcs_uri_cstr, "refs/heads/", strlen("refs/heads/")) == 0)
 		{
-			version_string = (SVN_URI " branch " SVN_FULL_REV_STR) + strlen("refs/heads/");
+			version_string = (VCS_URI " branch " VCS_SHORT_HASH) + strlen("refs/heads/");
 		}
-		else if (SVN_REV != 0)
+		else if (VCS_NUM != 0)
 		{
-			version_string = SVN_URI " " SVN_FULL_REV_STR;
+			version_string = VCS_URI " " VCS_SHORT_HASH;
 		}
 		else
 		{
-			version_string = SVN_FULL_REV_STR;
+			version_string = VCS_SHORT_HASH;
 		}
 	}
 
@@ -72,7 +70,7 @@ const char* version_getVersionString()
 
 bool version_modified()
 {
-#if (SVN_WC_MODIFIED)
+#if (VCS_WC_MODIFIED)
 	return true;
 #else
 	return false;
@@ -89,28 +87,28 @@ const char* version_getBuildTime()
 	return __TIME__;
 }
 
-const char* version_getSvnDate()
+const char* version_getVcsDate()
 {
-#if (SVN_REV == 0)
+#if (VCS_NUM == 0)
 	return "";
 #else
-	static char svn_date[sizeof(svn_date_cstr) - 9] = { '\0' };
+	static char vcs_date[sizeof(vcs_date_cstr) - 9] = { '\0' };
 
-	if (svn_date[0] == '\0')
+	if (vcs_date[0] == '\0')
 	{
-		sstrcpy(svn_date, svn_date_cstr);
+		sstrcpy(vcs_date, vcs_date_cstr);
 	}
 
-	return svn_date;
+	return vcs_date;
 #endif
 }
 
-const char* version_getSvnTime()
+const char* version_getVcsTime()
 {
-#if (SVN_REV == 0)
+#if (VCS_NUM == 0)
 	return "";
 #else
-	return SVN_DATE + sizeof(SVN_DATE) - 8 - 1;
+	return VCS_DATE + sizeof(VCS_DATE) - 8 - 1;
 #endif
 }
 
@@ -121,7 +119,7 @@ const char* version_getFormattedVersionString()
 	if (versionString[0] == '\0')
 	{
 		// Compose the working copy state string
-#if (SVN_WC_MODIFIED)
+#if (VCS_WC_MODIFIED)
 		const char* wc_state = _(" (modified locally)");
 #else
 		const char* wc_state = "";
@@ -136,7 +134,7 @@ const char* version_getFormattedVersionString()
 
 		const char* build_date = NULL;
 
-		if (strncmp(svn_uri_cstr, "tags/", strlen("tags/")) != 0)
+		if (strncmp(vcs_uri_cstr, "tags/", strlen("tags/")) != 0)
 		{
 			sasprintf((char**)&build_date, _(" - Built %s"), version_getBuildDate());
 		}
