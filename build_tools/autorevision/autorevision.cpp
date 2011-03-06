@@ -815,69 +815,16 @@ bool WriteOutput(const string& outputFile, const RevisionInformation& rev_info)
               "\n"
               "\n";
 
-    if(do_std)
-        header << "#include <string>\n";
-    if(do_wx)
-        header << "#include <wx/string.h>\n";
-
     header << "\n#define VCS_NUM          " << rev_info.revisionCount
-           << "\n#define VCS_REV_STR     \"" << rev_info.revision << "\""
            << "\n#define VCS_DATE        \"" << rev_info.date << "\""
            << "\n#define VCS_URI         \"" << rev_info.wc_uri << "\""
-           << "\n#define VCS_TAG         \"" << rev_info.tag << "\"\n"
            << "\n#define VCS_SHORT_HASH  \"" << rev_info.revision.substr(0, 7) << "\""
-           << "\n#define VCS_SHORT_HASH_WITHOUT_QUOTES " << rev_info.revision.substr(0, 7)
            << "\n";
 
     header << "\n#define VCS_WC_MODIFIED " << rev_info.wc_modified << "\n\n";
 
-    // Open namespace
-    if(do_int || do_std || do_wx)
-        header << "namespace autorevision\n{\n";
-
-    if(do_int)
-        header << "\tstatic const unsigned int vcs_revision = " << rev_info.revision << ";\n";
-
-    if(do_std)
-        header << "\tstatic const std::string vcs_revision_s(\"" << rev_info.revision << "\");\n"
-               << "\tstatic const std::string vcs_date_s(\"" << rev_info.date << "\");\n"
-               << "\tstatic const std::string vcs_uri_s(\"" << rev_info.wc_uri << "\");\n";
-    if(do_cstr)
-        header << "\tstatic const char vcs_revision_cstr[] = \"" << rev_info.revision << "\";\n"
-               << "\tstatic const char vcs_date_cstr[] = \"" << rev_info.date << "\";\n"
+        header << "\tstatic const char vcs_date_cstr[] = \"" << rev_info.date << "\";\n"
                << "\tstatic const char vcs_uri_cstr[] = \"" << rev_info.wc_uri << "\";\n";
-    if(do_wx)
-    {
-        if(do_translate)
-            header << "wxT";
-
-        header << "(\"" << rev_info.low_revision << "\"));\n"
-
-               << "\tstatic const wxString svnRevision(";
-
-        if(do_translate)
-            header << "wxT";
-
-        header << "(\"" << rev_info.revision << "\"));\n"
-
-               << "\tstatic const wxString svnDate(";
-
-        if(do_translate)
-            header << "wxT";
-
-        header << "(\"" << rev_info.date << "\"));\n"
-
-               << "\tstatic const wxString svnUri(";
-
-        if(do_translate)
-            header << "wxT";
-
-        header << "(\"" << rev_info.wc_uri << "\"));\n";
-    }
-
-    // Terminate/close namespace
-    if(do_int || do_std || do_wx)
-        header << "}\n\n";
 
     header << "\n\n#endif\n";
 
