@@ -813,11 +813,6 @@ bool WriteOutput(const string& outputFile, const RevisionInformation& rev_info)
               "#ifndef AUTOREVISION_H\n"
               "#define AUTOREVISION_H\n"
               "\n"
-              "\n"
-              "#ifndef VCS_AUTOREVISION_STATIC\n"
-              "#define VCS_AUTOREVISION_STATIC\n"
-              "#endif\n"
-              "\n"
               "\n";
 
     if(do_std)
@@ -841,16 +836,16 @@ bool WriteOutput(const string& outputFile, const RevisionInformation& rev_info)
         header << "namespace autorevision\n{\n";
 
     if(do_int)
-        header << "\tVCS_AUTOREVISION_STATIC const unsigned int vcs_revision = " << rev_info.revision << ";\n";
+        header << "\tstatic const unsigned int vcs_revision = " << rev_info.revision << ";\n";
 
     if(do_std)
-        header << "\tVCS_AUTOREVISION_STATIC const std::string vcs_revision_s(\"" << rev_info.revision << "\");\n"
-               << "\tVCS_AUTOREVISION_STATIC const std::string vcs_date_s(\"" << rev_info.date << "\");\n"
-               << "\tVCS_AUTOREVISION_STATIC const std::string vcs_uri_s(\"" << rev_info.wc_uri << "\");\n";
+        header << "\tstatic const std::string vcs_revision_s(\"" << rev_info.revision << "\");\n"
+               << "\tstatic const std::string vcs_date_s(\"" << rev_info.date << "\");\n"
+               << "\tstatic const std::string vcs_uri_s(\"" << rev_info.wc_uri << "\");\n";
     if(do_cstr)
-        header << "\tVCS_AUTOREVISION_STATIC const char vcs_revision_cstr[] = \"" << rev_info.revision << "\";\n"
-               << "\tVCS_AUTOREVISION_STATIC const char vcs_date_cstr[] = \"" << rev_info.date << "\";\n"
-               << "\tVCS_AUTOREVISION_STATIC const char vcs_uri_cstr[] = \"" << rev_info.wc_uri << "\";\n";
+        header << "\tstatic const char vcs_revision_cstr[] = \"" << rev_info.revision << "\";\n"
+               << "\tstatic const char vcs_date_cstr[] = \"" << rev_info.date << "\";\n"
+               << "\tstatic const char vcs_uri_cstr[] = \"" << rev_info.wc_uri << "\";\n";
     if(do_wx)
     {
         if(do_translate)
@@ -858,21 +853,21 @@ bool WriteOutput(const string& outputFile, const RevisionInformation& rev_info)
 
         header << "(\"" << rev_info.low_revision << "\"));\n"
 
-               << "\tVCS_AUTOREVISION_STATIC const wxString svnRevision(";
+               << "\tstatic const wxString svnRevision(";
 
         if(do_translate)
             header << "wxT";
 
         header << "(\"" << rev_info.revision << "\"));\n"
 
-               << "\tVCS_AUTOREVISION_STATIC const wxString svnDate(";
+               << "\tstatic const wxString svnDate(";
 
         if(do_translate)
             header << "wxT";
 
         header << "(\"" << rev_info.date << "\"));\n"
 
-               << "\tVCS_AUTOREVISION_STATIC const wxString svnUri(";
+               << "\tstatic const wxString svnUri(";
 
         if(do_translate)
             header << "wxT";

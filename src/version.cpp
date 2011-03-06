@@ -25,7 +25,6 @@
 #include "version.h"
 #include "stringdef.h"
 
-#define VCS_AUTOREVISION_STATIC static
 #include "src/autorevision.h"
 
 unsigned int version_getRevision()
