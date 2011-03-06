@@ -100,8 +100,7 @@ struct RevisionInformation
         revision("unknown"),
         low_revisionCount("-1"),
         revisionCount("-1"),
-        wc_modified(false),
-        wc_switched(false)
+        wc_modified(false)
     {}
 
     assign_once<std::string> low_revision;
@@ -116,7 +115,6 @@ struct RevisionInformation
     assign_once<std::string> wc_uri;
 
     bool wc_modified;
-    bool wc_switched;
 };
 
 /** Abstract base class for classes that extract revision information.
@@ -398,13 +396,6 @@ bool RevSVNVersionQuery::extractRevision(RevisionInformation& rev_info)
         if (char_pos != string::npos)
         {
             rev_info.wc_modified = true;
-            line.erase(char_pos, 1);
-        }
-
-        char_pos = line.find('S');
-        if (char_pos != string::npos)
-        {
-            rev_info.wc_switched = true;
             line.erase(char_pos, 1);
         }
 
@@ -756,18 +747,6 @@ bool RevConfigFile::extractRevision(RevisionInformation& rev_info)
 
             done_stuff = true;
         }
-        else if (line.compare(0, strlen("wc_switched="), "wc_switched=") == 0)
-        {
-            std::string bool_val = line.substr(strlen("wc_switched="));
-
-            if (bool_val.find("true") != std::string::npos
-             || bool_val.find('1') != std::string::npos)
-                rev_info.wc_switched = true;
-            else
-                rev_info.wc_switched = false;
-
-            done_stuff = true;
-        }
     }
 
     if (done_stuff)
@@ -797,9 +776,6 @@ bool WriteOutput(const string& outputFile, const RevisionInformation& rev_info)
 
     if (rev_info.wc_modified)
         comment_str << "M";
-
-    if (rev_info.wc_switched)
-        comment_str << "S";
 
     comment_str << "*/";
 
@@ -858,8 +834,7 @@ bool WriteOutput(const string& outputFile, const RevisionInformation& rev_info)
            << "\n#define SVN_SHORT_HASH_WITHOUT_QUOTES " << rev_info.revision.substr(0, 7)
            << "\n";
 
-    header << "\n#define SVN_WC_MODIFIED " << rev_info.wc_modified
-           << "\n#define SVN_WC_SWITCHED " << rev_info.wc_switched << "\n\n";
+    header << "\n#define SVN_WC_MODIFIED " << rev_info.wc_modified << "\n\n";
 
     // Open namespace
     if(do_int || do_std || do_wx)

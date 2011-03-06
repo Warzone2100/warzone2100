@@ -57,13 +57,6 @@ extern const char* version_getVersionString(void);
  */
 extern bool version_modified(void);
 
-/** Determine whether this version is compiled from a working copy which has
- *  some of its files and/or directories switched to a different URL.
- *  \return when part of the working copy was switched, false when it wasn't or
- *          a switch cannot be determined.
- */
-extern bool version_switched(void);
-
 /** Retrieves the date at which this build was compiled.
  *  \return the date at which this build was made (uses __DATE__)
  */

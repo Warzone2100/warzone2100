@@ -79,15 +79,6 @@ bool version_modified()
 #endif
 }
 
-bool version_switched()
-{
-#if (SVN_WC_SWITCHED)
-	return true;
-#else
-	return false;
-#endif
-}
-
 const char* version_getBuildDate()
 {
 	return __DATE__;
@@ -130,12 +121,8 @@ const char* version_getFormattedVersionString()
 	if (versionString[0] == '\0')
 	{
 		// Compose the working copy state string
-#if (SVN_WC_MODIFIED && SVN_WC_SWITCHED)
-		const char* wc_state = _(" (modified and switched locally)");
-#elif (SVN_WC_MODIFIED)
+#if (SVN_WC_MODIFIED)
 		const char* wc_state = _(" (modified locally)");
-#elif (SVN_WC_SWITCHED)
-		const char* wc_state = _(" (switched locally)");
 #else
 		const char* wc_state = "";
 #endif
