@@ -27,8 +27,16 @@
 
 #include "src/autorevision.h"
 
-static const char vcs_date_cstr[] = VCS_DATE;
-static const char vcs_uri_cstr[] = VCS_URI;
+// Two-step process to put quotes around anything, including preprocessor definitions.
+#define EXPAND(token) #token
+#define QUOTE(token) EXPAND(token)
+
+#define VCS_SHORT_HASH_QUOTED QUOTE(VCS_SHORT_HASH)
+#define VCS_URI_QUOTED QUOTE(VCS_URI)
+#define VCS_DATE_QUOTED QUOTE(VCS_DATE)
+
+static const char vcs_date_cstr[] = QUOTE(VCS_DATE);
+static const char vcs_uri_cstr[] = QUOTE(VCS_URI);
 
 unsigned int version_getRevision()
 {
@@ -47,23 +55,23 @@ const char* version_getVersionString()
 		}
 		else if (strcmp(vcs_uri_cstr, "trunk") == 0)
 		{
-			version_string = "TRUNK " VCS_SHORT_HASH;
+			version_string = "TRUNK " VCS_SHORT_HASH_QUOTED;
 		}
 		else if (strncmp(vcs_uri_cstr, "branches/", strlen("branches/")) == 0)
 		{
-			version_string = (VCS_URI " branch " VCS_SHORT_HASH) + strlen("branches/");
+			version_string = (VCS_URI_QUOTED " branch " VCS_SHORT_HASH_QUOTED) + strlen("branches/");
 		}
 		else if (strncmp(vcs_uri_cstr, "refs/heads/", strlen("refs/heads/")) == 0)
 		{
-			version_string = (VCS_URI " branch " VCS_SHORT_HASH) + strlen("refs/heads/");
+			version_string = (VCS_URI_QUOTED " branch " VCS_SHORT_HASH_QUOTED) + strlen("refs/heads/");
 		}
 		else if (VCS_NUM != 0)
 		{
-			version_string = VCS_URI " " VCS_SHORT_HASH;
+			version_string = VCS_URI_QUOTED " " VCS_SHORT_HASH_QUOTED;
 		}
 		else
 		{
-			version_string = VCS_SHORT_HASH;
+			version_string = VCS_SHORT_HASH_QUOTED;
 		}
 	}
 
@@ -106,7 +114,7 @@ const char* version_getVcsTime()
 #if (VCS_NUM == 0)
 	return "";
 #else
-	return VCS_DATE + sizeof(VCS_DATE) - 8 - 1;
+	return VCS_DATE_QUOTED + sizeof(VCS_DATE_QUOTED) - 8 - 1;
 #endif
 }
 
