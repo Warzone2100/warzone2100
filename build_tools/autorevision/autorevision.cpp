@@ -823,9 +823,6 @@ bool WriteOutput(const string& outputFile, const RevisionInformation& rev_info)
 
     header << "\n#define VCS_WC_MODIFIED " << rev_info.wc_modified << "\n\n";
 
-        header << "\tstatic const char vcs_date_cstr[] = \"" << rev_info.date << "\";\n"
-               << "\tstatic const char vcs_uri_cstr[] = \"" << rev_info.wc_uri << "\";\n";
-
     header << "\n\n#endif\n";
 
     return true;

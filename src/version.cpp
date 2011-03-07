@@ -27,6 +27,9 @@
 
 #include "src/autorevision.h"
 
+static const char vcs_date_cstr[] = VCS_DATE;
+static const char vcs_uri_cstr[] = VCS_URI;
+
 unsigned int version_getRevision()
 {
 	return VCS_NUM;
