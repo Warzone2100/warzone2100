@@ -816,9 +816,9 @@ bool WriteOutput(const string& outputFile, const RevisionInformation& rev_info)
               "\n";
 
     header << "\n#define VCS_NUM          " << rev_info.revisionCount
-           << "\n#define VCS_DATE        \"" << rev_info.date << "\""
-           << "\n#define VCS_URI         \"" << rev_info.wc_uri << "\""
-           << "\n#define VCS_SHORT_HASH  \"" << rev_info.revision.substr(0, 7) << "\""
+           << "\n#define VCS_DATE        " << rev_info.date
+           << "\n#define VCS_URI         " << rev_info.wc_uri
+           << "\n#define VCS_SHORT_HASH  " << rev_info.revision.substr(0, 7)
            << "\n";
 
     header << "\n#define VCS_WC_MODIFIED " << rev_info.wc_modified << "\n\n";
