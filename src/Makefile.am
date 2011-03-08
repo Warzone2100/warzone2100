@@ -10,8 +10,11 @@ AM_CXXFLAGS = $(WZ_CXXFLAGS)
 AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
 
-autorevision.h: $(top_srcdir)/build_tools/autorevision.sh
-	$(top_srcdir)/build_tools/autorevision.sh $(abs_top_builddir)/src/autorevision.h
+.PHONY: autorevision.h
+
+autorevision.h:
+	$(top_srcdir)/build_tools/autorevision.sh $(abs_top_builddir)/src/autorevision.h.new
+	diff -q $(abs_top_builddir)/src/autorevision.h.new $(abs_top_builddir)/src/autorevision.h && rm $(abs_top_builddir)/src/autorevision.h.new || mv $(abs_top_builddir)/src/autorevision.h.new $(abs_top_builddir)/src/autorevision.h
 
 BUILT_SOURCES = \
 	autorevision.h \
