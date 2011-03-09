@@ -36,8 +36,10 @@ CLEANFILES = \
 
 EXTRA_DIST = \
 	autorevision.h \
-	message_lexer.l message_parser.y \
-	scriptvals_lexer.l scriptvals_parser.y \
+	message_lexer.l \
+	message_parser.y \
+	scriptvals_lexer.l \
+	scriptvals_parser.y \
 	level_lexer.l
 
 bin_PROGRAMS = warzone2100
