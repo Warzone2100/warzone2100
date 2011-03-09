@@ -10,9 +10,9 @@ AM_CXXFLAGS = $(WZ_CXXFLAGS)
 AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
 
-.PHONY: autorevision.h
+version.o: autorevision.h
 
-autorevision.h:
+autorevision.h: $(warzone2100_SOURCES) $(warzone2100_LDADD)
 	$(top_srcdir)/build_tools/autorevision.sh $(abs_top_builddir)/src/autorevision.h || true
 
 BUILT_SOURCES = \
