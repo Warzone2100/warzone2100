@@ -13,9 +13,7 @@ AM_YFLAGS = -d
 .PHONY: autorevision.h
 
 autorevision.h:
-	$(top_srcdir)/build_tools/autorevision.sh $(abs_top_builddir)/src/autorevision.h.new && \
-		(diff -q $(abs_top_builddir)/src/autorevision.h.new $(abs_top_builddir)/src/autorevision.h && rm $(abs_top_builddir)/src/autorevision.h.new || \
-		mv $(abs_top_builddir)/src/autorevision.h.new $(abs_top_builddir)/src/autorevision.h) || true
+	$(top_srcdir)/build_tools/autorevision.sh $(abs_top_builddir)/src/autorevision.h || true
 
 BUILT_SOURCES = \
 	autorevision.h \
