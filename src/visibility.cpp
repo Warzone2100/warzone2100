@@ -790,6 +790,11 @@ bool lineOfFire(const SIMPLE_OBJECT* psViewer, const BASE_OBJECT* psTarget, int 
 /* Check how much of psTarget is hitable from psViewer's gun position */
 int areaOfFire(const SIMPLE_OBJECT* psViewer, const BASE_OBJECT* psTarget, int weapon_slot, bool wallsBlock)
 {
+	if (psViewer == NULL)
+	{
+		return 0;  // Lassat special case, avoid assertion.
+	}
+
 	return checkFireLine(psViewer, psTarget, weapon_slot, wallsBlock, true);
 }
 
