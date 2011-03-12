@@ -57,13 +57,6 @@ extern const char* version_getVersionString(void);
  */
 extern bool version_modified(void);
 
-/** Determine whether this version is compiled from a working copy which has
- *  some of its files and/or directories switched to a different URL.
- *  \return when part of the working copy was switched, false when it wasn't or
- *          a switch cannot be determined.
- */
-extern bool version_switched(void);
-
 /** Retrieves the date at which this build was compiled.
  *  \return the date at which this build was made (uses __DATE__)
  */
@@ -78,13 +71,13 @@ extern const char* version_getBuildTime(void);
  *  \return the date when this revision was committed to the subversion
  *          repository
  */
-extern const char* version_getSvnDate(void);
+extern const char* version_getVcsDate(void);
 
 /** Retrieves the time at which the source of this build was committed.
  *  \return the time when this revision was committed to the subversion
  *          repository
  */
-extern const char* version_getSvnTime(void);
+extern const char* version_getVcsTime(void);
 
 /** Composes a nicely formatted version string.
  *
@@ -95,7 +88,7 @@ extern const char* version_getSvnTime(void);
  *  - "<working copy state>" represents the modification and switch state
  *                           of the working copy from which this build was made.
  *  - "<DATE>" the date of building as returned by version_getBuildDate() or
- *             version_getSvnDate(); the latter is only used when the working
+ *             version_getVcsDate(); the latter is only used when the working
  *             copy has no local modifications.
  *  - "<BUILD TYPE>" the type of build produced (i.e. DEBUG or not)
  */

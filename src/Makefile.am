@@ -10,7 +10,13 @@ AM_CXXFLAGS = $(WZ_CXXFLAGS)
 AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
 
+version.o: autorevision.h
+
+autorevision.h: $(warzone2100_SOURCES) $(warzone2100_LDADD)
+	$(top_srcdir)/build_tools/autorevision.sh $(abs_top_builddir)/src/autorevision.h || true
+
 BUILT_SOURCES = \
+	autorevision.h \
 	level_lexer.lex.cpp \
 	message_lexer.lex.cpp \
 	message_parser.tab.cpp \
@@ -30,8 +36,10 @@ CLEANFILES = \
 
 EXTRA_DIST = \
 	autorevision.h \
-	message_lexer.l message_parser.y \
-	scriptvals_lexer.l scriptvals_parser.y \
+	message_lexer.l \
+	message_parser.y \
+	scriptvals_lexer.l \
+	scriptvals_parser.y \
 	level_lexer.l
 
 bin_PROGRAMS = warzone2100

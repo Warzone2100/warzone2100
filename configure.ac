@@ -436,7 +436,6 @@ AC_CONFIG_HEADER([config.h])
 AC_CONFIG_FILES([Makefile
 		po/Makefile.in
 		doc/Makefile
-		build_tools/autorevision/Makefile
 		icons/Makefile
 		data/Makefile
 		data/mods/multiplay/Makefile
