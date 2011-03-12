@@ -43,7 +43,7 @@
 #include "modding.h"
 
 #include "game.h"
-
+#include "qtscript.h"
 #include "fpath.h"
 #include "map.h"
 #include "droid.h"
@@ -10030,6 +10030,7 @@ BOOL writeFiresupportDesignators(char *pFileName)
 static BOOL	writeScriptState(char *pFileName)
 {
 	static const int32_t current_event_version = 4;
+	char	jsFilename[PATH_MAX], *ext;
 
 	char	*pBuffer;
 	UDWORD	fileSize;
@@ -10044,6 +10045,14 @@ static BOOL	writeScriptState(char *pFileName)
 		return false;
 	}
 	free(pBuffer);
+
+	// The below belongs to the new javascript stuff
+	strcpy(jsFilename, pFileName);
+	ext = strrchr(jsFilename, '/');
+	*ext = '\0';
+	strcat(jsFilename, "/scriptstate.ini");
+	saveScriptStates(jsFilename);
+
 	return true;
 }
 
@@ -10052,15 +10061,21 @@ static BOOL	writeScriptState(char *pFileName)
 BOOL loadScriptState(char *pFileName)
 {
 	char	*pFileData;
+	char	jsFilename[PATH_MAX];
 	UDWORD	fileSize;
 
+	pFileName[strlen(pFileName) - 4] = '\0';
+
+	// The below belongs to the new javascript stuff
+	strcpy(jsFilename, pFileName);
+	strcat(jsFilename, "/scriptstate.ini");
 	if (bMultiPlayer)
 	{
 		loadMultiScripts();
 	}
+	loadScriptStates(jsFilename);
 
 	// change the file extension
-	pFileName[strlen(pFileName) - 4] = '\0';
 	strcat(pFileName, "/scriptstate.es");
 
 	pFileData = fileLoadBuffer;

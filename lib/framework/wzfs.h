@@ -132,10 +132,18 @@ public:
 		case QAbstractFileEngine::DefaultName:
 			return name;
 		case QAbstractFileEngine::CanonicalName:
-			return QString(PHYSFS_getRealDir(name.toAscii().constData()));
+		case QAbstractFileEngine::AbsoluteName:
+			if (PHYSFS_exists(name.toAscii().constData()))
+			{
+				return QString(PHYSFS_getRealDir(name.toAscii().constData())) + PHYSFS_getDirSeparator() + name;
+			}
+			else
+			{
+				return QString(PHYSFS_getWriteDir()) + PHYSFS_getDirSeparator() + name;
+			}
 		default:
-			qWarning("Unsupported path lookup type");
-			return name;
+			qWarning("Unsupported path lookup type (%d)", (int)file);
+			return QString(PHYSFS_getRealDir(name.toAscii().constData()));
 		}
 	}
 

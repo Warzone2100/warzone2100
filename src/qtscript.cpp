@@ -232,7 +232,11 @@ bool loadGlobalScript(QString path)
 
 bool saveScriptStates(const char *filename)
 {
-	QSettings ini(filename, QSettings::IniFormat);
+	QSettings ini(QString("wz::") + filename, QSettings::IniFormat);
+	if (!ini.isWritable())
+	{
+		qWarning("Savegame file not writable");
+	}
 	for (int i = 0; i < scripts.size(); ++i)
 	{
 		ini.beginGroup(QString("globals_") + QString::number(i));
@@ -253,7 +257,7 @@ bool saveScriptStates(const char *filename)
 
 bool loadScriptStates(const char *filename)
 {
-	QSettings ini(filename, QSettings::IniFormat);
+	QSettings ini(QString("wz::") + filename, QSettings::IniFormat);
 	for (int i = 0; i < scripts.size(); ++i)
 	{
 		ini.beginGroup(QString("globals_") + QString::number(i));
