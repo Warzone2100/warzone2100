@@ -1134,7 +1134,6 @@ LONG WINAPI TopLevelExceptionFilter(PEXCEPTION_POINTERS pExceptionInfo)
 			// Retrieve the system error message for the last-error code
 
 			LPVOID lpMsgBuf;
-			LPVOID lpDisplayBuf;
 			DWORD dw = GetLastError();
 			TCHAR szBuffer[4196];
 
@@ -1152,7 +1151,6 @@ LONG WINAPI TopLevelExceptionFilter(PEXCEPTION_POINTERS pExceptionInfo)
 			MessageBox((HWND)MB_ICONEXCLAMATION, szBuffer, _T("Error"), MB_OK); 
 
 			LocalFree(lpMsgBuf);
-			LocalFree(lpDisplayBuf);
 			debug(LOG_ERROR, "Exception handler failed to create file!");
 		}
 
@@ -1176,7 +1174,6 @@ LONG WINAPI TopLevelExceptionFilter(PEXCEPTION_POINTERS pExceptionInfo)
 			if (err == 0)
 			{
 				LPVOID lpMsgBuf;
-				LPVOID lpDisplayBuf;
 				DWORD dw = GetLastError();
 				TCHAR szBuffer[4196];
 
@@ -1194,7 +1191,6 @@ LONG WINAPI TopLevelExceptionFilter(PEXCEPTION_POINTERS pExceptionInfo)
 				MessageBox((HWND)MB_ICONEXCLAMATION, szBuffer, _T("Error"), MB_OK); 
 
 				LocalFree(lpMsgBuf);
-				LocalFree(lpDisplayBuf);
 				debug(LOG_ERROR, "Exception handler failed to create file!");
 			}
 			hReportFile = 0;

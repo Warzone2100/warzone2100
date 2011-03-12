@@ -782,7 +782,6 @@ bool OverrideRPTDirectory(char *newPath)
 		//conversion failed-- we won't use the user's directory.
 
 		LPVOID lpMsgBuf;
-		LPVOID lpDisplayBuf;
 		DWORD dw = GetLastError();
 		TCHAR szBuffer[4196];
 
@@ -800,7 +799,6 @@ bool OverrideRPTDirectory(char *newPath)
 		MessageBox((HWND)MB_ICONEXCLAMATION, szBuffer, _T("Error"), MB_OK); 
 
 		LocalFree(lpMsgBuf);
-		LocalFree(lpDisplayBuf);
 
 		return false;
 	}
