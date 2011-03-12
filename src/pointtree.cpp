@@ -26,7 +26,8 @@
 How this works:
 
 Points are sorted by their Morton numbers, which are interleaved x and y coordinate bits.
-See: http://en.wikipedia.org/wiki/Morton_number_(number_theory)
+See: http://en.wikipedia.org/wiki/Z-order_(curve)
+See also: http://en.wikipedia.org/wiki/Morton_number_(number_theory)
 
 When looking for points in a particular area, a search square is split up into 4 rectangles
 of varying sizes, and a quick binary search for point in those ranges is performed. The ranges
