@@ -99,7 +99,7 @@ audio_list:				audio_list audio_track |
 						audio_track
 						;
 	/*
-	 * unsigned int audio_SetTrackVals(const char* fileName, BOOL loop, unsigned int volume, unsigned int audibleRadius)
+	 * unsigned int audio_SetTrackVals(const char* fileName, bool loop, unsigned int volume, unsigned int audibleRadius)
 	 */
 
 audio_track:			AUDIO QTEXT looping INTEGER INTEGER

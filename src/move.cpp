@@ -202,7 +202,7 @@ const char *moveDescription(MOVE_STATUS status)
 
 /** Initialise the movement system
  */
-BOOL moveInitialise(void)
+bool moveInitialise(void)
 {
 	oilTimer = 0;
 	drumCount = 0;
@@ -221,7 +221,7 @@ void moveUpdateBaseSpeed(void)
  *          should not try to route here again for a while
  *  @todo Document what "should not try to route here again for a while" means.
  */
-static BOOL moveDroidToBase(DROID *psDroid, UDWORD x, UDWORD y, BOOL bFormation)
+static bool moveDroidToBase(DROID *psDroid, UDWORD x, UDWORD y, bool bFormation)
 {
 	FPATH_RETVAL		retVal = FPR_OK;
 
@@ -282,7 +282,7 @@ static BOOL moveDroidToBase(DROID *psDroid, UDWORD x, UDWORD y, BOOL bFormation)
 /** Move a droid to a location, joining a formation
  *  @see moveDroidToBase() for the parameter and return value specification
  */
-BOOL moveDroidTo(DROID* psDroid, UDWORD x, UDWORD y)
+bool moveDroidTo(DROID* psDroid, UDWORD x, UDWORD y)
 {
 	return moveDroidToBase(psDroid,x,y, true);
 }
@@ -290,7 +290,7 @@ BOOL moveDroidTo(DROID* psDroid, UDWORD x, UDWORD y)
 /** Move a droid to a location, not joining a formation
  *  @see moveDroidToBase() for the parameter and return value specification
  */
-BOOL moveDroidToNoFormation(DROID* psDroid, UDWORD x, UDWORD y)
+bool moveDroidToNoFormation(DROID* psDroid, UDWORD x, UDWORD y)
 {
 	ASSERT(x > 0 && y > 0, "Bad movement position");
 	return moveDroidToBase(psDroid,x,y, false);
@@ -330,7 +330,7 @@ static void moveShuffleDroid(DROID *psDroid, Vector2i s)
 {
 	DROID	*psCurr;
 	SDWORD  mx, my;
-	BOOL	frontClear = true, leftClear = true, rightClear = true;
+	bool	frontClear = true, leftClear = true, rightClear = true;
 	SDWORD	lvx,lvy, rvx,rvy, svx,svy;
 	SDWORD	shuffleMove;
 	SDWORD	tarX,tarY;
@@ -744,7 +744,7 @@ static void moveCheckSquished(DROID *psDroid, int32_t emx, int32_t emy)
 
 
 // See if the droid has been stopped long enough to give up on the move
-static BOOL moveBlocked(DROID *psDroid)
+static bool moveBlocked(DROID *psDroid)
 {
 	SDWORD	xdiff,ydiff, diffSq;
 	UDWORD	blockTime;
@@ -1013,7 +1013,7 @@ static void moveCalcBlockingSlide(DROID *psDroid, int32_t *pmx, int32_t *pmy, ui
 		// on a blocking tile - see if we need to jump off
 		int	intx = psDroid->pos.x & TILE_MASK;
 		int	inty = psDroid->pos.y & TILE_MASK;
-		BOOL	bJumped = false;
+		bool	bJumped = false;
 		int	jumpx = psDroid->pos.x;
 		int	jumpy = psDroid->pos.y;
 
@@ -1134,7 +1134,7 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 {
 	int32_t		droidR, rad, radSq, objR, xdiff, ydiff, distSq, spmx, spmy;
 	BASE_OBJECT     *psObj, *psObst;
-	BOOL            bLegs;
+	bool            bLegs;
 
 	CHECK_DROID(psDroid);
 
@@ -1415,7 +1415,7 @@ SDWORD moveCalcDroidSpeed(DROID *psDroid)
 /** Determine whether a droid has stopped moving.
  *  @return true if the droid doesn't move, false if it's moving.
  */
-static BOOL moveDroidStopped(DROID* psDroid, SDWORD speed)
+static bool moveDroidStopped(DROID* psDroid, SDWORD speed)
 {
 	if (psDroid->sMove.Status == MOVEINACTIVE && speed == 0 && psDroid->sMove.speed == 0)
 	{
@@ -2102,7 +2102,7 @@ static void moveDescending( DROID *psDroid )
 }
 
 
-BOOL moveCheckDroidMovingAndVisible( void *psObj )
+bool moveCheckDroidMovingAndVisible( void *psObj )
 {
 	DROID	*psDroid = (DROID*)psObj;
 
@@ -2169,7 +2169,7 @@ static void movePlayDroidMoveAudio( DROID *psDroid )
 }
 
 
-static BOOL moveDroidStartCallback( void *psObj )
+static bool moveDroidStartCallback( void *psObj )
 {
 	DROID *psDroid = (DROID*)psObj;
 
@@ -2184,12 +2184,12 @@ static BOOL moveDroidStartCallback( void *psObj )
 }
 
 
-static void movePlayAudio( DROID *psDroid, BOOL bStarted, BOOL bStoppedBefore, SDWORD iMoveSpeed )
+static void movePlayAudio( DROID *psDroid, bool bStarted, bool bStoppedBefore, SDWORD iMoveSpeed )
 {
 	UBYTE				propType;
 	PROPULSION_STATS	*psPropStats;
 	PROPULSION_TYPES	*psPropType;
-	BOOL				bStoppedNow;
+	bool				bStoppedNow;
 	SDWORD				iAudioID = NO_SOUND;
 	AUDIO_CALLBACK		pAudioCallback = NULL;
 
@@ -2347,7 +2347,7 @@ void moveUpdateDroid(DROID *psDroid)
 	uint16_t			moveDir;
 	PROPULSION_STATS	*psPropStats;
 	Vector3i 			pos;
-	BOOL				bStarted = false, bStopped;
+	bool				bStarted = false, bStopped;
 
 	CHECK_DROID(psDroid);
 

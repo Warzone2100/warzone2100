@@ -31,7 +31,7 @@ struct STR_RES;
 extern struct STR_RES *psStringRes;
 
 /* Initialise the string system */
-extern BOOL stringsInitialise(void);
+extern bool stringsInitialise(void);
 
 /* Shut down the string system */
 extern void stringsShutDown(void);

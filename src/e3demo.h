@@ -24,7 +24,7 @@
 void initDemoCamera(void);
 void processDemoCam(void);
 void toggleDemoStatus(void);
-BOOL demoGetStatus(void);
+bool demoGetStatus(void);
 void setFindNewTarget(void);
 
 #endif //__INCLUDED_SRC_E3DEMO_H__ 

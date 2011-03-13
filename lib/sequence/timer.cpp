@@ -26,7 +26,7 @@
 
 static double startTimeInMicroSec = 0;			// starting time in microseconds
 static double endTimeInMicroSec = 0;			// ending time in microseconds
-static BOOL   stopped = false;					// stop flag
+static bool   stopped = false;					// stop flag
 
 static struct timeval startCount;
 static struct timeval endCount;

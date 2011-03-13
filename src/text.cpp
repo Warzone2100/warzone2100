@@ -31,7 +31,7 @@
 struct STR_RES* psStringRes = NULL;
 
 /* Initialise the string system */
-BOOL stringsInitialise(void)
+bool stringsInitialise(void)
 {
 	psStringRes = strresCreate();
 

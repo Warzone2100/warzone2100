@@ -53,7 +53,7 @@
 
 // ////////////////////////////////////////////////////////////////////////////
 // INFORM others that a building has been completed.
-BOOL SendBuildFinished(STRUCTURE *psStruct)
+bool SendBuildFinished(STRUCTURE *psStruct)
 {
 	uint8_t player = psStruct->player;
 	ASSERT( player < MAX_PLAYERS, "invalid player %u", player);
@@ -69,7 +69,7 @@ BOOL SendBuildFinished(STRUCTURE *psStruct)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-BOOL recvBuildFinished(NETQUEUE queue)
+bool recvBuildFinished(NETQUEUE queue)
 {
 	uint32_t	structId;
 	STRUCTURE	*psStruct;
@@ -150,7 +150,7 @@ BOOL recvBuildFinished(NETQUEUE queue)
 
 // ////////////////////////////////////////////////////////////////////////////
 // demolish message.
-BOOL SendDemolishFinished(STRUCTURE *psStruct, DROID *psDroid)
+bool SendDemolishFinished(STRUCTURE *psStruct, DROID *psDroid)
 {
 	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DEMOLISH);
 
@@ -161,7 +161,7 @@ BOOL SendDemolishFinished(STRUCTURE *psStruct, DROID *psDroid)
 	return NETend();
 }
 
-BOOL recvDemolishFinished(NETQUEUE queue)
+bool recvDemolishFinished(NETQUEUE queue)
 {
 	STRUCTURE	*psStruct;
 	DROID		*psDroid;
@@ -197,7 +197,7 @@ BOOL recvDemolishFinished(NETQUEUE queue)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Inform others that a structure has been destroyed
-BOOL SendDestroyStructure(STRUCTURE *s)
+bool SendDestroyStructure(STRUCTURE *s)
 {
 	technologyGiveAway(s);
 	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_STRUCTDEST);
@@ -210,7 +210,7 @@ BOOL SendDestroyStructure(STRUCTURE *s)
 
 // ////////////////////////////////////////////////////////////////////////////
 // acknowledge the destruction of a structure, from another player.
-BOOL recvDestroyStructure(NETQUEUE queue)
+bool recvDestroyStructure(NETQUEUE queue)
 {
 	uint32_t structID;
 	STRUCTURE *psStruct;
@@ -238,7 +238,7 @@ BOOL recvDestroyStructure(NETQUEUE queue)
 // ////////////////////////////////////////////////////////////////////////////
 //lassat is firing
 
-BOOL sendLasSat(UBYTE player, STRUCTURE *psStruct, BASE_OBJECT *psObj)
+bool sendLasSat(UBYTE player, STRUCTURE *psStruct, BASE_OBJECT *psObj)
 {
 	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_LASSAT);
 
@@ -251,7 +251,7 @@ BOOL sendLasSat(UBYTE player, STRUCTURE *psStruct, BASE_OBJECT *psObj)
 }
 
 // recv lassat info on the receiving end.
-BOOL recvLasSat(NETQUEUE queue)
+bool recvLasSat(NETQUEUE queue)
 {
 	BASE_OBJECT	*psObj;
 	UBYTE		player,targetplayer;

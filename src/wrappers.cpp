@@ -50,15 +50,15 @@ struct STAR
 	PIELIGHT colour;
 };
 
-static BOOL		firstcall = false;
-static BOOL		bPlayerHasLost = false;
-static BOOL		bPlayerHasWon = false;
+static bool		firstcall = false;
+static bool		bPlayerHasLost = false;
+static bool		bPlayerHasWon = false;
 static UBYTE    scriptWinLoseVideo = PLAY_NONE;
 
 void	runCreditsScreen	( void );
 
 static	UDWORD	lastChange = 0;
-BOOL hostlaunch = false;				// used to detect if we are hosting a game via command line option.
+bool hostlaunch = false;				// used to detect if we are hosting a game via command line option.
 
 static uint32_t lastTick = 0;
 static int barLeftX, barLeftY, barRightX, barRightY, boxWidth, boxHeight, starsNum, starHeight;
@@ -108,7 +108,7 @@ static void setupLoadingScreen(void)
 // //////////////////////////////////////////////////////////////////
 // Initialise frontend globals and statics.
 //
-BOOL frontendInitVars(void)
+bool frontendInitVars(void)
 {
 	firstcall = true;
 	setupLoadingScreen();
@@ -318,7 +318,7 @@ void loadingScreenCallback(void)
 }
 
 // fill buffers with the static screen
-void initLoadingScreen( BOOL drawbdrop )
+void initLoadingScreen( bool drawbdrop )
 {
 	pie_ShowMouse(false);
 	if (!drawbdrop)	// fill buffers
@@ -388,7 +388,7 @@ void closeLoadingScreen(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Gameover screen.
 
-BOOL displayGameOver(BOOL bDidit)
+bool displayGameOver(bool bDidit)
 {
 	if(bDidit)
 	{
@@ -417,24 +417,24 @@ BOOL displayGameOver(BOOL bDidit)
 
 
 ////////////////////////////////////////////////////////////////////////////////
-BOOL testPlayerHasLost( void )
+bool testPlayerHasLost( void )
 {
 	return(bPlayerHasLost);
 }
 
-void setPlayerHasLost( BOOL val )
+void setPlayerHasLost( bool val )
 {
 	bPlayerHasLost = val;
 }
 
 
 ////////////////////////////////////////////////////////////////////////////////
-BOOL testPlayerHasWon( void )
+bool testPlayerHasWon( void )
 {
 	return(bPlayerHasWon);
 }
 
-void setPlayerHasWon( BOOL val )
+void setPlayerHasWon( bool val )
 {
 	bPlayerHasWon = val;
 }

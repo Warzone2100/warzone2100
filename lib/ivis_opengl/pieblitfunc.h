@@ -70,8 +70,8 @@ extern void iV_DrawImageRect(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int W
 extern void iV_TransBoxFill(float x0, float y0, float x1, float y1);
 extern void pie_UniTransBoxFill(float x0, float y0, float x1, float y1, PIELIGHT colour);
 
-extern BOOL pie_InitRadar(void);
-extern BOOL pie_ShutdownRadar(void);
+extern bool pie_InitRadar(void);
+extern bool pie_ShutdownRadar(void);
 extern void pie_DownLoadRadar(UDWORD *buffer, int width, int height, bool filter);
 extern void pie_RenderRadar(int x, int y, int width, int height);
 

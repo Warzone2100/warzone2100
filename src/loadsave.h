@@ -42,11 +42,11 @@ SAVE_INGAME
  */
 /***************************************************************************/
 
-extern BOOL		bLoadSaveUp;							// true when interface is up and should be run.
+extern bool		bLoadSaveUp;							// true when interface is up and should be run.
 //the name of the save game to load from the front end
 extern char saveGameName[256];
 extern char	sRequestResult[PATH_MAX];
-extern BOOL		bRequestLoad;
+extern bool		bRequestLoad;
 
 /***************************************************************************/
 /*
@@ -56,18 +56,18 @@ extern BOOL		bRequestLoad;
 
 extern void		drawBlueBox		(UDWORD x,UDWORD y, UDWORD w, UDWORD h);
 
-extern BOOL		addLoadSave(LOADSAVE_MODE mode, const char *defaultdir, const char *extension, const char *title);
-extern BOOL		closeLoadSave	(void);
-extern BOOL		runLoadSave		(BOOL bResetMissionWidgets);
-extern BOOL		displayLoadSave	(void);
+extern bool		addLoadSave(LOADSAVE_MODE mode, const char *defaultdir, const char *extension, const char *title);
+extern bool		closeLoadSave	(void);
+extern bool		runLoadSave		(bool bResetMissionWidgets);
+extern bool		displayLoadSave	(void);
 
 extern void		removeWildcards	(char *pStr);
 
 // return whether the save screen was displayed in the mission results screen
-BOOL saveInMissionRes(void);
+bool saveInMissionRes(void);
 
 // return whether the save screen was displayed in the middle of a mission
-BOOL saveMidMission(void);
+bool saveMidMission(void);
 
 
 extern void deleteSaveGame(char* saveGameName);

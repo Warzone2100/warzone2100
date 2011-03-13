@@ -117,7 +117,7 @@ FEATURE_STATS::FEATURE_STATS(LineView line)
 }
 
 /* Load the feature stats */
-BOOL loadFeatureStats(const char *pFeatureData, UDWORD bufferSize)
+bool loadFeatureStats(const char *pFeatureData, UDWORD bufferSize)
 {
 	// Skip descriptive header
 	if (strncmp(pFeatureData,"Feature ",8)==0)
@@ -194,7 +194,7 @@ int32_t featureDamage(FEATURE *psFeature, UDWORD damage, WEAPON_CLASS weaponClas
 
 
 /* Create a feature on the map */
-FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
+FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,bool FromSave)
 {
 	UDWORD		mapX, mapY;
 	UDWORD		width,breadth, foundationMin,foundationMax, height;

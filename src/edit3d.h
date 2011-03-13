@@ -31,16 +31,16 @@
 typedef void (*BUILDCALLBACK)(UDWORD xPos, UDWORD yPos,void *UserData);
 
 extern void Edit3DInitVars(void);
-extern	BOOL	found3DBuilding		( UDWORD *x, UDWORD *y );
-extern  BOOL    found3DBuildLocTwo  ( UDWORD *px1, UDWORD *py1, UDWORD *px2, UDWORD *py2);
+extern	bool	found3DBuilding		( UDWORD *x, UDWORD *y );
+extern  bool    found3DBuildLocTwo  ( UDWORD *px1, UDWORD *py1, UDWORD *px2, UDWORD *py2);
 extern void init3DBuilding(BASE_STATS *psStats,BUILDCALLBACK CallBack,void *UserData);
 extern	void	kill3DBuilding		( void );
-extern BOOL process3DBuilding(void);
+extern bool process3DBuilding(void);
 
 extern void	adjustTileHeight	( MAPTILE *psTile, SDWORD adjust );
 extern void	raiseTile(int tile3dX, int tile3dY);
 extern void	lowerTile(int tile3dX, int tile3dY);
-BOOL	inHighlight				( UDWORD realX, UDWORD realY );
+bool	inHighlight				( UDWORD realX, UDWORD realY );
 
 struct HIGHLIGHT
 {
@@ -75,6 +75,6 @@ extern bool editMode;
 extern bool quickQueueMode;
 
 /*returns true if the build state is not equal to BUILD3D_NONE*/
-extern BOOL   tryingToGetLocation(void);
+extern bool   tryingToGetLocation(void);
 
 #endif // __INCLUDED_SRC_EDIT3D_H__

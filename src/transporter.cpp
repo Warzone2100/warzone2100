@@ -141,29 +141,29 @@ extern W_SCREEN		*psWScreen;
 /* Static variables */
 static	DROID			*psCurrTransporter;
 static	DROID			*g_psCurScriptTransporter = NULL;
-static	BOOL			onMission;
+static	bool			onMission;
 static	UDWORD			g_iLaunchTime = 0;
 //used for audio message for reinforcements
-static  BOOL            bFirstTransporter;
+static  bool            bFirstTransporter;
 //the tab positions of the DroidsAvail window
 static  UWORD           objMajor = 0, objMinor = 0;
 
 /*functions */
-static BOOL intAddTransporterContents(void);
+static bool intAddTransporterContents(void);
 static void transporterRemoveDroid(UDWORD id);
 static void setCurrentTransporter(UDWORD id);
 static void intRemoveTransContentNoAnim(void);
-static BOOL intAddTransButtonForm(void);
-static BOOL intAddTransContentsForm(void);
-static BOOL intAddDroidsAvailForm(void);
+static bool intAddTransButtonForm(void);
+static bool intAddTransContentsForm(void);
+static bool intAddDroidsAvailForm(void);
 void intRemoveTransContent(void);
 static UDWORD transporterSpaceRequired(DROID *psDroid);
 static DROID* transInterfaceDroidList(void);
 static void intTransporterAddDroid(UDWORD id);
 static void intRemoveTransDroidsAvail(void);
 static void intRemoveTransDroidsAvailNoAnim(void);
-static BOOL _intRefreshTransporter(void);
-static BOOL _intAddTransporter(DROID *psSelected, BOOL offWorld);
+static bool _intRefreshTransporter(void);
+static bool _intAddTransporter(DROID *psSelected, bool offWorld);
 static void _intProcessTransporter(UDWORD id);
 
 
@@ -177,7 +177,7 @@ void initTransporters(void)
 
 // Call to refresh the transporter screen, ie when a droids boards it.
 //
-BOOL intRefreshTransporter(void)
+bool intRefreshTransporter(void)
 {
 //printf("intRefreshTransporter\n");
 
@@ -185,13 +185,13 @@ BOOL intRefreshTransporter(void)
 }
 
 
-static BOOL _intRefreshTransporter(void)
+static bool _intRefreshTransporter(void)
 {
 	// Is the transporter screen up?
 	if( (intMode == INT_TRANSPORTER) &&
 		(widgGetFromID(psWScreen,IDTRANS_FORM) != NULL))
 	{
-		BOOL Ret;
+		bool Ret;
 		// Refresh it by re-adding it.
 		Ret = intAddTransporter(psCurrTransporter,onMission);
 		intMode = INT_TRANSPORTER;
@@ -202,7 +202,7 @@ static BOOL _intRefreshTransporter(void)
 }
 
 
-BOOL intAddTransporter(DROID *psSelected, BOOL offWorld)
+bool intAddTransporter(DROID *psSelected, bool offWorld)
 {
 
 	return(_intAddTransporter(psSelected,offWorld));
@@ -210,9 +210,9 @@ BOOL intAddTransporter(DROID *psSelected, BOOL offWorld)
 
 
 /*Add the Transporter Interface*/
-static BOOL _intAddTransporter(DROID *psSelected, BOOL offWorld)
+static bool _intAddTransporter(DROID *psSelected, bool offWorld)
 {
-	BOOL			Animate = true;
+	bool			Animate = true;
 
 	onMission = offWorld;
 	psCurrTransporter = psSelected;
@@ -307,9 +307,9 @@ static BOOL _intAddTransporter(DROID *psSelected, BOOL offWorld)
 }
 
 // Add the main Transporter Contents Interface
-BOOL intAddTransporterContents(void)
+bool intAddTransporterContents(void)
 {
-	BOOL			Animate = true;
+	bool			Animate = true;
 
     // Is the form already up?
 	if(widgGetFromID(psWScreen,IDTRANS_CONTENTFORM) != NULL)
@@ -413,7 +413,7 @@ BOOL intAddTransporterContents(void)
 }
 
 /*This is used to display the transporter button and capacity when at the home base ONLY*/
-BOOL intAddTransporterLaunch(DROID *psDroid)
+bool intAddTransporterLaunch(DROID *psDroid)
 {
     UDWORD          capacity;
     DROID           *psCurr, *psNext;
@@ -498,7 +498,7 @@ void intRemoveTransporterLaunch(void)
 }
 
 /* Add the Transporter Button form */
-BOOL intAddTransButtonForm(void)
+bool intAddTransButtonForm(void)
 {
 	UDWORD			numButtons, i;
 	SDWORD			BufferID;
@@ -655,7 +655,7 @@ BOOL intAddTransButtonForm(void)
 }
 
 /* Add the Transporter Contents form */
-BOOL intAddTransContentsForm(void)
+bool intAddTransContentsForm(void)
 {
 	UDWORD			i;
 	SDWORD			BufferID;
@@ -758,12 +758,12 @@ BOOL intAddTransContentsForm(void)
 }
 
 /* Add the Droids back at home form */
-BOOL intAddDroidsAvailForm(void)
+bool intAddDroidsAvailForm(void)
 {
 	UDWORD			numButtons, i, butPerForm;
 	SDWORD			BufferID;
 	DROID			*psDroid;
-	BOOL			Animate = true;
+	bool			Animate = true;
 
 	// Is the form already up?
 	if(widgGetFromID(psWScreen,IDTRANS_DROIDS) != NULL)
@@ -1403,7 +1403,7 @@ void intTransporterAddDroid(UDWORD id)
 /*Adds a droid to the transporter, removing it from the world */
 void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd)
 {
-	BOOL    bDroidRemoved;
+	bool    bDroidRemoved;
 
 	ASSERT( psTransporter != NULL, "Was passed a NULL transporter" );
 	ASSERT( psDroidToAdd != NULL, "Was passed a NULL droid, can't add to transporter" );
@@ -1463,7 +1463,7 @@ void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd)
 }
 
 /*check to see if the droid can fit on the Transporter - return true if fits*/
-BOOL checkTransporterSpace(DROID *psTransporter, DROID *psAssigned)
+bool checkTransporterSpace(DROID *psTransporter, DROID *psAssigned)
 {
 	DROID		*psDroid, *psNext;
 	UDWORD		capacity;
@@ -1557,7 +1557,7 @@ void transporterSetLaunchTime(UDWORD time)
 
 
 /*launches the defined transporter to the offworld map*/
-BOOL launchTransporter(DROID *psTransporter)
+bool launchTransporter(DROID *psTransporter)
 {
 	UDWORD	iX, iY;
 
@@ -1607,7 +1607,7 @@ BOOL launchTransporter(DROID *psTransporter)
 
 /*checks how long the transporter has been travelling to see if it should
 have arrived - returns true when there*/
-BOOL updateTransporter(DROID *psTransporter)
+bool updateTransporter(DROID *psTransporter)
 {
 	ASSERT( psTransporter != NULL,
 		"updateTransporter: Invalid droid pointer" );
@@ -1828,7 +1828,7 @@ void resetTransporter()
 }
 
 /*checks the order of the droid to see if its currently flying*/
-BOOL transporterFlying(DROID *psTransporter)
+bool transporterFlying(DROID *psTransporter)
 {
 	ASSERT( psTransporter != NULL,
 		"transporterFlying: Invalid droid pointer" );

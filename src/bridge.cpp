@@ -52,7 +52,7 @@ one of the axes must share the same values.
 */
 bool bridgeValid(int startX, int startY, int endX, int endY)
 {
-	BOOL	xBridge, yBridge;
+	bool	xBridge, yBridge;
 	int	bridgeLength, i, minX, minY, maxX, maxY;
 
 	/* Establish axes allignment */
@@ -112,7 +112,7 @@ bool bridgeValid(int startX, int startY, int endX, int endY)
 	at a height stored in their structure - as they're above the ground
 	and wouldn't be much use if they weren't, bridge wise.
 */
-BOOL	renderBridgeSection(STRUCTURE *psStructure)
+bool	renderBridgeSection(STRUCTURE *psStructure)
 {
 	SDWORD			rx, rz;
 	Vector3i dv;

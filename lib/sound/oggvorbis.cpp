@@ -42,7 +42,7 @@ struct OggVorbisDecoderState
 	PHYSFS_file* fileHandle;
 
 	// Wether to allow seeking or not
-	BOOL         allowSeeking;
+	bool         allowSeeking;
 
 #ifndef WZ_NOSOUND
 	// Internal identifier towards libVorbisFile
@@ -100,7 +100,7 @@ static size_t wz_oggVorbis_read(void *ptr, size_t size, size_t nmemb, void *data
 static int wz_oggVorbis_seek(void *datasource, ogg_int64_t offset, int whence)
 {
 	PHYSFS_file* fileHandle;
-	BOOL allowSeeking;
+	bool allowSeeking;
 	int newPos;
 
 	ASSERT(datasource != NULL, "NULL decoder passed!");
@@ -181,7 +181,7 @@ static const ov_callbacks wz_oggVorbis_callbacks =
 };
 #endif
 
-struct OggVorbisDecoderState* sound_CreateOggVorbisDecoder(PHYSFS_file* PHYSFS_fileHandle, BOOL allowSeeking)
+struct OggVorbisDecoderState* sound_CreateOggVorbisDecoder(PHYSFS_file* PHYSFS_fileHandle, bool allowSeeking)
 {
 #ifndef WZ_NOSOUND
 	int error;

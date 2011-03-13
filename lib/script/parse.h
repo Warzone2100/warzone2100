@@ -107,9 +107,9 @@ enum ACCESS_TYPE
 // function pointer for script variable saving
 // if pBuffer is NULL the script system is just asking how much space the saved variable will require
 // otherwise pBuffer points to an array to store the value in
-typedef BOOL (*SCR_VAL_SAVE)(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize);
+typedef bool (*SCR_VAL_SAVE)(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize);
 // function pointer for script variable loading
-typedef BOOL (*SCR_VAL_LOAD)(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size);
+typedef bool (*SCR_VAL_LOAD)(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size);
 
 /* Type for a user type symbol */
 struct TYPE_SYMBOL
@@ -167,7 +167,7 @@ struct CONST_SYMBOL
 	 * Only one of these will be valid depending on type.
 	 * A union is not used as a union cannot be statically initialised
 	 */
-	BOOL			bval;
+	bool			bval;
 	SDWORD			ival;
 	void			*oval;
 	char			*sval;	//String values
@@ -195,7 +195,7 @@ struct FUNC_SYMBOL
 	UDWORD		numParams;	// Number of parameters to the function
 	uint32_t/*INTERP_TYPE*/ aParams[INST_MAXPARAMS];
 							// List of parameter types
-	BOOL		script;		// Whether the function is defined in the script
+	bool		script;		// Whether the function is defined in the script
 							// or a C instinct function
 	UDWORD		size;		// The size of script code
 	INTERP_VAL	*pCode;		// The code for a function if it is defined in the script
@@ -265,8 +265,8 @@ struct EVENT_SYMBOL
 	//functions stuff
 	UDWORD		numParams;		//Number of parameters to the function
 	UDWORD		numLocalVars;	//local variables
-	BOOL		bFunction;		//if this event is defined as a function
-	BOOL		bDeclared;		//if function was declared before
+	bool		bFunction;		//if this event is defined as a function
+	bool		bDeclared;		//if function was declared before
 	INTERP_TYPE	retType;		//return type if a function
 
 	INTERP_TYPE	aParams[INST_MAXPARAMS];
@@ -296,7 +296,7 @@ extern CALLBACK_SYMBOL	*asScrCallbackTab;
 extern void scriptSetInputFile(PHYSFS_file* fileHandle);
 
 /* Initialise the parser ready for a new script */
-extern BOOL scriptInitParser(void);
+extern bool scriptInitParser(void);
 
 /* Set off the scenario file parser */
 extern int scr_parse(void);
@@ -307,55 +307,55 @@ void scr_error(const char *pMessage, ...) WZ_DECL_FORMAT(printf, 1, 2);
 extern void scriptGetErrorData(int *pLine, char **ppText);
 
 /* Look up a type symbol */
-extern BOOL scriptLookUpType(const char *pIdent, INTERP_TYPE *pType);
+extern bool scriptLookUpType(const char *pIdent, INTERP_TYPE *pType);
 
 /* Add a new variable symbol */
-extern BOOL scriptAddVariable(VAR_DECL *psStorage, VAR_IDENT_DECL *psVarIdent);
+extern bool scriptAddVariable(VAR_DECL *psStorage, VAR_IDENT_DECL *psVarIdent);
 
 /* Add a new trigger symbol */
-extern BOOL scriptAddTrigger(const char *pIdent, TRIGGER_DECL *psDecl, UDWORD line);
+extern bool scriptAddTrigger(const char *pIdent, TRIGGER_DECL *psDecl, UDWORD line);
 
 /* Add a new event symbol */
-extern BOOL scriptDeclareEvent(const char *pIdent, EVENT_SYMBOL **ppsEvent, SDWORD numArgs);
+extern bool scriptDeclareEvent(const char *pIdent, EVENT_SYMBOL **ppsEvent, SDWORD numArgs);
 
 // Add the code to a defined event
-extern BOOL scriptDefineEvent(EVENT_SYMBOL *psEvent, CODE_BLOCK *psCode, SDWORD trigger);
+extern bool scriptDefineEvent(EVENT_SYMBOL *psEvent, CODE_BLOCK *psCode, SDWORD trigger);
 
 /* Look up a variable symbol */
-extern BOOL scriptLookUpVariable(const char *pIdent, VAR_SYMBOL **ppsSym);
+extern bool scriptLookUpVariable(const char *pIdent, VAR_SYMBOL **ppsSym);
 
 /* Look up a constant variable symbol */
-extern BOOL scriptLookUpConstant(const char *pIdent, CONST_SYMBOL **ppsSym);
+extern bool scriptLookUpConstant(const char *pIdent, CONST_SYMBOL **ppsSym);
 
 /* Lookup a trigger symbol */
-extern BOOL scriptLookUpTrigger(const char *pIdent, TRIGGER_SYMBOL **ppsTrigger);
+extern bool scriptLookUpTrigger(const char *pIdent, TRIGGER_SYMBOL **ppsTrigger);
 
 /* Lookup a callback trigger symbol */
-extern BOOL scriptLookUpCallback(const char *pIdent, CALLBACK_SYMBOL **ppsCallback);
+extern bool scriptLookUpCallback(const char *pIdent, CALLBACK_SYMBOL **ppsCallback);
 
 /* Lookup an event symbol */
-extern BOOL scriptLookUpEvent(const char *pIdent, EVENT_SYMBOL **ppsEvent);
+extern bool scriptLookUpEvent(const char *pIdent, EVENT_SYMBOL **ppsEvent);
 
 /* Add a new function symbol */
-extern BOOL scriptStartFunctionDef(const char *pIdent,	// Functions name
+extern bool scriptStartFunctionDef(const char *pIdent,	// Functions name
 						  INTERP_TYPE		type);		// return type
 
 /* Store the parameter types for the current script function definition  */
-extern BOOL scriptSetParameters(UDWORD		numParams,	// number of parameters
+extern bool scriptSetParameters(UDWORD		numParams,	// number of parameters
 							  INTERP_TYPE		*pParams);	// parameter types
 
 /* Store the code for a script function definition.
  * Clean up the local variable list for this function definition.
  */
-extern BOOL scriptSetCode(CODE_BLOCK  *psBlock);	// The code block
+extern bool scriptSetCode(CODE_BLOCK  *psBlock);	// The code block
 
 /* Look up a function symbol */
-extern BOOL scriptLookUpFunction(const char *pIdent, FUNC_SYMBOL **ppsSym);
+extern bool scriptLookUpFunction(const char *pIdent, FUNC_SYMBOL **ppsSym);
 
 /* Look up an in-script custom function symbol */
-extern BOOL scriptLookUpCustomFunction(const char *pIdent, EVENT_SYMBOL **ppsSym);
+extern bool scriptLookUpCustomFunction(const char *pIdent, EVENT_SYMBOL **ppsSym);
 
-extern BOOL popArguments(INTERP_VAL **ip_temp, SDWORD numParams);
+extern bool popArguments(INTERP_VAL **ip_temp, SDWORD numParams);
 
 extern void widgCopyString(char *pDest, const char *pSrc); // FIXME Duplicate declaration of internal widget function
 

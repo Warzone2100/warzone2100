@@ -79,7 +79,7 @@ static CHEAT_ENTRY cheatCodes[] =
 	{"desync me", kf_ForceDesync},
 };
 
-BOOL attemptCheatCode(const char* cheat_name)
+bool attemptCheatCode(const char* cheat_name)
 {
 	const CHEAT_ENTRY * curCheat;
 	static const CHEAT_ENTRY * const EndCheat = &cheatCodes[ARRAY_SIZE(cheatCodes)];

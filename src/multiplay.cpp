@@ -72,9 +72,9 @@
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
 // globals.
-BOOL						bMultiPlayer				= false;	// true when more than 1 player.
-BOOL						bMultiMessages				= false;	// == bMultiPlayer unless multimessages are disabled
-BOOL						openchannels[MAX_PLAYERS]={true};
+bool						bMultiPlayer				= false;	// true when more than 1 player.
+bool						bMultiMessages				= false;	// == bMultiPlayer unless multimessages are disabled
+bool						openchannels[MAX_PLAYERS]={true};
 UBYTE						bDisplayMultiJoiningStatus;
 
 MULTIPLAYERGAME				game;									//info to describe game.
@@ -82,7 +82,7 @@ MULTIPLAYERINGAME			ingame;
 
 char						beaconReceiveMsg[MAX_PLAYERS][MAX_CONSOLE_STRING_LENGTH];	//beacon msg for each player
 char								playerName[MAX_PLAYERS][MAX_STR_LENGTH];	//Array to store all player names (humans and AIs)
-BOOL						bPlayerReadyGUI[MAX_PLAYERS] = {false};
+bool						bPlayerReadyGUI[MAX_PLAYERS] = {false};
 
 /////////////////////////////////////
 /* multiplayer message stack stuff */
@@ -105,16 +105,16 @@ extern PLAYER_RESEARCH*		asPlayerResList[MAX_PLAYERS];
 // ////////////////////////////////////////////////////////////////////////////
 // Local Prototypes
 
-static BOOL recvBeacon(NETQUEUE queue);
-static BOOL recvDestroyTemplate(NETQUEUE queue);
-static BOOL recvResearch(NETQUEUE queue);
+static bool recvBeacon(NETQUEUE queue);
+static bool recvDestroyTemplate(NETQUEUE queue);
+static bool recvResearch(NETQUEUE queue);
 
 bool		multiplayPlayersReady		(bool bNotifyStatus);
 void		startMultiplayerGame		(void);
 
 // ////////////////////////////////////////////////////////////////////////////
 // temporarily disable multiplayer mode.
-void turnOffMultiMsg(BOOL bDoit)
+void turnOffMultiMsg(bool bDoit)
 {
 	if (!bMultiPlayer)
 	{
@@ -128,7 +128,7 @@ void turnOffMultiMsg(BOOL bDoit)
 
 // ////////////////////////////////////////////////////////////////////////////
 // throw a party when you win!
-BOOL multiplayerWinSequence(BOOL firstCall)
+bool multiplayerWinSequence(bool firstCall)
 {
 	static Position pos;
 	Position pos2;
@@ -201,7 +201,7 @@ BOOL multiplayerWinSequence(BOOL firstCall)
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
 // MultiPlayer main game loop code.
-BOOL multiPlayerLoop(void)
+bool multiPlayerLoop(void)
 {
 	UDWORD		i;
 	UBYTE		joinCount;
@@ -445,7 +445,7 @@ const char* getPlayerName(int player)
 	return NetPlay.players[player].name;
 }
 
-BOOL setPlayerName(int player, const char *sName)
+bool setPlayerName(int player, const char *sName)
 {
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS && player >= 0, "Player index (%u) out of range", player);
 	sstrcpy(playerName[player], sName);
@@ -454,7 +454,7 @@ BOOL setPlayerName(int player, const char *sName)
 
 // ////////////////////////////////////////////////////////////////////////////
 // to determine human/computer players and responsibilities of each..
-BOOL isHumanPlayer(int player)
+bool isHumanPlayer(int player)
 {
 	if (player >= MAX_PLAYERS || player < 0)
 	{
@@ -481,13 +481,13 @@ int whosResponsible(int player)
 }
 
 //returns true if selected player is responsible for 'player'
-BOOL myResponsibility(int player)
+bool myResponsibility(int player)
 {
 	return whosResponsible(player) == selectedPlayer;
 }
 
 //returns true if 'player' is responsible for 'playerinquestion'
-BOOL responsibleFor(int player, int playerinquestion)
+bool responsibleFor(int player, int playerinquestion)
 {
 	return whosResponsible(playerinquestion) == player;
 }
@@ -506,7 +506,7 @@ int scavengerPlayer()
 
 // ////////////////////////////////////////////////////////////////////////////
 // probably temporary. Places the camera on the players 1st droid or struct.
-Vector3i cameraToHome(UDWORD player,BOOL scroll)
+Vector3i cameraToHome(UDWORD player,bool scroll)
 {
 	Vector3i res;
 	UDWORD x,y;
@@ -555,7 +555,7 @@ Vector3i cameraToHome(UDWORD player,BOOL scroll)
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
 // Recv Messages. Get a message and dispatch to relevant function.
-BOOL recvMessage(void)
+bool recvMessage(void)
 {
 	NETQUEUE queue;
 	uint8_t type;
@@ -782,7 +782,7 @@ BOOL recvMessage(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Research Stuff. Nat games only send the result of research procedures.
-BOOL SendResearch(uint8_t player, uint32_t index, bool trigger)
+bool SendResearch(uint8_t player, uint32_t index, bool trigger)
 {
 	// Send the player that is researching the topic and the topic itself
 	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_RESEARCH);
@@ -794,7 +794,7 @@ BOOL SendResearch(uint8_t player, uint32_t index, bool trigger)
 }
 
 // recv a research topic that is now complete.
-static BOOL recvResearch(NETQUEUE queue)
+static bool recvResearch(NETQUEUE queue)
 {
 	uint8_t			player;
 	uint32_t		index;
@@ -854,7 +854,7 @@ static BOOL recvResearch(NETQUEUE queue)
 // ////////////////////////////////////////////////////////////////////////////
 // New research stuff, so you can see what others are up to!
 // inform others that I'm researching this.
-BOOL sendResearchStatus(STRUCTURE *psBuilding, uint32_t index, uint8_t player, BOOL bStart)
+bool sendResearchStatus(STRUCTURE *psBuilding, uint32_t index, uint8_t player, bool bStart)
 {
 	if (!myResponsibility(player) || gameTime < 5)
 	{
@@ -886,14 +886,14 @@ BOOL sendResearchStatus(STRUCTURE *psBuilding, uint32_t index, uint8_t player, B
 	return true;
 }
 
-BOOL recvResearchStatus(NETQUEUE queue)
+bool recvResearchStatus(NETQUEUE queue)
 {
 	STRUCTURE			*psBuilding;
 	PLAYER_RESEARCH		*pPlayerRes;
 	RESEARCH_FACILITY	*psResFacilty;
 	RESEARCH			*pResearch;
 	uint8_t				player;
-	BOOL				bStart;
+	bool				bStart;
 	uint32_t			index, structRef;
 
 	NETbeginDecode(queue, GAME_RESEARCHSTATUS);
@@ -1006,10 +1006,10 @@ BOOL recvResearchStatus(NETQUEUE queue)
 // ////////////////////////////////////////////////////////////////////////////
 // Text Messaging between players. proceed string with players to send to.
 // eg "123hi there" sends "hi there" to players 1,2 and 3.
-BOOL sendTextMessage(const char *pStr, BOOL all)
+bool sendTextMessage(const char *pStr, bool all)
 {
-	BOOL				normal = true;
-	BOOL				sendto[MAX_PLAYERS];
+	bool				normal = true;
+	bool				sendto[MAX_PLAYERS];
 	int					posTable[MAX_PLAYERS];
 	UDWORD				i;
 	char				display[MAX_CONSOLE_STRING_LENGTH];
@@ -1162,7 +1162,7 @@ void printConsoleNameChange(const char *oldName, const char *newName)
 
 
 //AI multiplayer message, send from a certain player index to another player index
-BOOL sendAIMessage(char *pStr, UDWORD player, UDWORD to)
+bool sendAIMessage(char *pStr, UDWORD player, UDWORD to)
 {
 	UDWORD	sendPlayer;
 
@@ -1218,7 +1218,7 @@ BOOL sendAIMessage(char *pStr, UDWORD player, UDWORD to)
 //
 // At this time, we do NOT support messages for beacons
 //
-BOOL sendBeacon(int32_t locX, int32_t locY, int32_t forPlayer, int32_t sender, const char* pStr)
+bool sendBeacon(int32_t locX, int32_t locY, int32_t forPlayer, int32_t sender, const char* pStr)
 {
 	int sendPlayer;
 	//debug(LOG_WZ, "sendBeacon: '%s'",pStr);
@@ -1264,7 +1264,7 @@ void displayAIMessage(char *pStr, SDWORD from, SDWORD to)
 }
 
 // Write a message to the console.
-BOOL recvTextMessage(NETQUEUE queue)
+bool recvTextMessage(NETQUEUE queue)
 {
 	UDWORD	playerIndex;
 	char	msg[MAX_CONSOLE_STRING_LENGTH];
@@ -1320,7 +1320,7 @@ BOOL recvTextMessage(NETQUEUE queue)
 }
 
 //AI multiplayer message - received message from AI (from scripts)
-BOOL recvTextMessageAI(NETQUEUE queue)
+bool recvTextMessageAI(NETQUEUE queue)
 {
 	UDWORD	sender, receiver;
 	char	msg[MAX_CONSOLE_STRING_LENGTH];
@@ -1393,7 +1393,7 @@ bool sendTemplate(uint32_t player, DROID_TEMPLATE *pTempl)
 }
 
 // receive a template created by another player
-BOOL recvTemplate(NETQUEUE queue)
+bool recvTemplate(NETQUEUE queue)
 {
 	uint32_t        player;
 	DROID_TEMPLATE *psTempl;
@@ -1433,7 +1433,7 @@ BOOL recvTemplate(NETQUEUE queue)
 // ////////////////////////////////////////////////////////////////////////////
 // inform others that you no longer have a template
 
-BOOL SendDestroyTemplate(DROID_TEMPLATE *t)
+bool SendDestroyTemplate(DROID_TEMPLATE *t)
 {
 	uint8_t player = selectedPlayer;
 
@@ -1446,7 +1446,7 @@ BOOL SendDestroyTemplate(DROID_TEMPLATE *t)
 }
 
 // acknowledge another player no longer has a template
-static BOOL recvDestroyTemplate(NETQUEUE queue)
+static bool recvDestroyTemplate(NETQUEUE queue)
 {
 	uint8_t			player;
 	uint32_t		templateID;
@@ -1502,7 +1502,7 @@ static BOOL recvDestroyTemplate(NETQUEUE queue)
 // Features
 
 // send a destruct feature message.
-BOOL SendDestroyFeature(FEATURE *pF)
+bool SendDestroyFeature(FEATURE *pF)
 {
 	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_FEATUREDEST);
 		NETuint32_t(&pF->id);
@@ -1510,7 +1510,7 @@ BOOL SendDestroyFeature(FEATURE *pF)
 }
 
 // process a destroy feature msg.
-BOOL recvDestroyFeature(NETQUEUE queue)
+bool recvDestroyFeature(NETQUEUE queue)
 {
 	FEATURE *pF;
 	uint32_t	id;
@@ -1537,7 +1537,7 @@ BOOL recvDestroyFeature(NETQUEUE queue)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Network File packet processor.
-BOOL recvMapFileRequested(NETQUEUE queue)
+bool recvMapFileRequested(NETQUEUE queue)
 {
 	char mapStr[256],mapName[256],fixedname[256];
 	uint32_t player;
@@ -1638,7 +1638,7 @@ void sendMap(void)
 }
 
 // Another player is broadcasting a map, recv a chunk. Returns false if not yet done.
-BOOL recvMapFileData(NETQUEUE queue)
+bool recvMapFileData(NETQUEUE queue)
 {
 	mapDownloadProgress = NETrecvFile(queue);
 	if (mapDownloadProgress == 100)
@@ -1698,13 +1698,13 @@ UDWORD msgStackPush(SDWORD CBtype, SDWORD plFrom, SDWORD plTo, const char *tStr,
 	return true;
 }
 
-BOOL isMsgStackEmpty(void)
+bool isMsgStackEmpty(void)
 {
 	if(msgStackPos <= (-1)) return true;
 	return false;
 }
 
-BOOL msgStackGetFrom(SDWORD  *psVal)
+bool msgStackGetFrom(SDWORD  *psVal)
 {
 	if(msgStackPos < 0)
 	{
@@ -1717,7 +1717,7 @@ BOOL msgStackGetFrom(SDWORD  *psVal)
 	return true;
 }
 
-BOOL msgStackGetTo(SDWORD  *psVal)
+bool msgStackGetTo(SDWORD  *psVal)
 {
 	if(msgStackPos < 0)
 	{
@@ -1730,7 +1730,7 @@ BOOL msgStackGetTo(SDWORD  *psVal)
 	return true;
 }
 
-static BOOL msgStackGetCallbackType(SDWORD  *psVal)
+static bool msgStackGetCallbackType(SDWORD  *psVal)
 {
 	if(msgStackPos < 0)
 	{
@@ -1743,7 +1743,7 @@ static BOOL msgStackGetCallbackType(SDWORD  *psVal)
 	return true;
 }
 
-static BOOL msgStackGetXY(SDWORD  *psValx, SDWORD  *psValy)
+static bool msgStackGetXY(SDWORD  *psValx, SDWORD  *psValy)
 {
 	if(msgStackPos < 0)
 	{
@@ -1758,7 +1758,7 @@ static BOOL msgStackGetXY(SDWORD  *psValx, SDWORD  *psValy)
 }
 
 
-BOOL msgStackGetMsg(char  *psVal)
+bool msgStackGetMsg(char  *psVal)
 {
 	if(msgStackPos < 0)
 	{
@@ -1772,7 +1772,7 @@ BOOL msgStackGetMsg(char  *psVal)
 	return true;
 }
 
-static BOOL msgStackSort(void)
+static bool msgStackSort(void)
 {
 	SDWORD i;
 
@@ -1804,7 +1804,7 @@ static BOOL msgStackSort(void)
 	return true;
 }
 
-BOOL msgStackPop(void)
+bool msgStackPop(void)
 {
 	debug(LOG_WZ, "msgStackPop: stack size %d", msgStackPos);
 
@@ -1817,7 +1817,7 @@ BOOL msgStackPop(void)
 	return msgStackSort();		//move all elements 1 pos lower
 }
 
-BOOL msgStackGetDroid(DROID **ppsDroid)
+bool msgStackGetDroid(DROID **ppsDroid)
 {
 	if(msgStackPos < 0)
 	{
@@ -1835,7 +1835,7 @@ SDWORD msgStackGetCount(void)
 	return msgStackPos + 1;
 }
 
-BOOL msgStackFireTop(void)
+bool msgStackFireTop(void)
 {
 	SDWORD		_callbackType;
 	char		msg[255];
@@ -1913,7 +1913,7 @@ BOOL msgStackFireTop(void)
 	return true;
 }
 
-static BOOL recvBeacon(NETQUEUE queue)
+static bool recvBeacon(NETQUEUE queue)
 {
 	int32_t sender, receiver,locX, locY;
 	char    msg[MAX_CONSOLE_STRING_LENGTH];

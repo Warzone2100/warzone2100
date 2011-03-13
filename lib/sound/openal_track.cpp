@@ -53,7 +53,7 @@
 ALuint current_queue_sample = -1;
 #endif
 
-static BOOL openal_initialized = false;
+static bool openal_initialized = false;
 
 struct AUDIO_STREAM
 {
@@ -122,7 +122,7 @@ static void sound_RemoveSample(SAMPLE_LIST* previous, SAMPLE_LIST* to_remove)
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL sound_InitLibrary( void )
+bool sound_InitLibrary( void )
 {
 #ifndef WZ_NOSOUND
 	int err;
@@ -408,7 +408,7 @@ void sound_Update()
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL sound_QueueSamplePlaying( void )
+bool sound_QueueSamplePlaying( void )
 {
 #ifndef WZ_NOSOUND
 	ALenum	state;
@@ -653,7 +653,7 @@ static bool sound_SetupChannel( AUDIO_SAMPLE *psSample )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL sound_Play2DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample, BOOL bQueued )
+bool sound_Play2DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample, bool bQueued )
 {
 #ifndef WZ_NOSOUND
 	ALfloat zero[3] = { 0.0, 0.0, 0.0 };
@@ -727,7 +727,7 @@ BOOL sound_Play2DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample, BOOL bQueued )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL sound_Play3DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample )
+bool sound_Play3DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample )
 {
 #ifndef WZ_NOSOUND
 	ALfloat zero[3] = { 0.0, 0.0, 0.0 };
@@ -961,7 +961,7 @@ AUDIO_STREAM* sound_PlayStreamWithBuf(PHYSFS_file* fileHandle, float volume, voi
  *  \post true if playing, false otherwise.
  *
  */
-BOOL sound_isStreamPlaying(AUDIO_STREAM *stream)
+bool sound_isStreamPlaying(AUDIO_STREAM *stream)
 {
 #if !defined(WZ_NOSOUND)
 	ALint state;
@@ -1423,7 +1423,7 @@ void sound_StopAll( void )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL sound_SampleIsFinished( AUDIO_SAMPLE *psSample )
+bool sound_SampleIsFinished( AUDIO_SAMPLE *psSample )
 {
 #ifndef WZ_NOSOUND
 	//~~~~~~~~~~

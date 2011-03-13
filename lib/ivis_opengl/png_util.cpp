@@ -70,7 +70,7 @@ static inline void PNGWriteCleanup(png_infop *info_ptr, png_structp *png_ptr, PH
 		PHYSFS_close(fileHandle);
 }
 
-BOOL iV_loadImage_PNG(const char *fileName, iV_Image *image)
+bool iV_loadImage_PNG(const char *fileName, iV_Image *image)
 {
 	unsigned char PNGheader[PNG_BYTES_TO_CHECK];
 	PHYSFS_sint64 readSize;

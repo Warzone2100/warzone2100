@@ -29,26 +29,26 @@
 
 // requester
 extern void		addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD id,UBYTE mapCam, UBYTE numPlayers);
-extern BOOL		multiRequestUp;
+extern bool		multiRequestUp;
 extern W_SCREEN *psRScreen;			// requester stuff.
-extern BOOL		runMultiRequester(UDWORD id,UDWORD *contextmode, char *chosen,UDWORD *chosenValue);
+extern bool		runMultiRequester(UDWORD id,UDWORD *contextmode, char *chosen,UDWORD *chosenValue);
 extern void		displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
 // multimenu
 extern void		intProcessMultiMenu		(UDWORD id);
-extern BOOL		intRunMultiMenu			(void);
-extern BOOL		intCloseMultiMenu		(void);
+extern bool		intRunMultiMenu			(void);
+extern bool		intCloseMultiMenu		(void);
 extern void		intCloseMultiMenuNoAnim	(void);
-extern BOOL		intAddMultiMenu			(void);
+extern bool		intAddMultiMenu			(void);
 
-extern BOOL		addDebugMenu			(BOOL bAdd);
+extern bool		addDebugMenu			(bool bAdd);
 extern void		intCloseDebugMenuNoAnim	(void);
 extern void		setDebugMenuEntry(char *entry, SDWORD index);
 
-extern BOOL		MultiMenuUp;
-extern BOOL		ClosingMultiMenu;
+extern bool		MultiMenuUp;
+extern bool		ClosingMultiMenu;
 
-extern BOOL		DebugMenuUp;
+extern bool		DebugMenuUp;
 
 extern UDWORD		current_numplayers;
 extern UDWORD		current_tech;

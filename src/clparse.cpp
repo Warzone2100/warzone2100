@@ -39,7 +39,7 @@
 #include "wrappers.h"
 
 //! Let the end user into debug mode....
-BOOL	bAllowDebugMode = false;
+bool	bAllowDebugMode = false;
 
 //////
 // Our fine replacement for the popt abomination follows

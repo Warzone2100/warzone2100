@@ -462,11 +462,11 @@ static STRUCTURE *psSelectedFactory = NULL;
 static std::vector<AVORDER> AvailableOrders;
 
 
-BOOL OrderUp = false;
+bool OrderUp = false;
 
 // update the order interface only if it is already open.
-// NOTE: Unused! BOOL intUpdateOrder(DROID *psDroid)
-BOOL intUpdateOrder(DROID *psDroid)
+// NOTE: Unused! bool intUpdateOrder(DROID *psDroid)
+bool intUpdateOrder(DROID *psDroid)
 {
 	if(widgGetFromID(psWScreen,IDORDER_FORM) != NULL && OrderUp)
 	{
@@ -482,7 +482,7 @@ BOOL intUpdateOrder(DROID *psDroid)
 // Build a list of currently selected droids.
 // Returns true if droids were selected.
 //
-static BOOL BuildSelectedDroidList(void)
+static bool BuildSelectedDroidList(void)
 {
 	DROID *psDroid;
 
@@ -543,7 +543,7 @@ static std::vector<AVORDER> buildStructureOrderList(STRUCTURE *psStructure)
 static SECONDARY_STATE GetSecondaryStates(SECONDARY_ORDER sec)
 {
 	SECONDARY_STATE state, currState;
-	BOOL	bFirst;
+	bool	bFirst;
 
 	state = (SECONDARY_STATE)0;
 	bFirst = true;
@@ -590,16 +590,16 @@ static UDWORD GetImageHeight(IMAGEFILE *ImageFile,UDWORD ImageID)
 // Returns true if the form was displayed ok.
 //
 //changed to a BASE_OBJECT to accomodate the factories - AB 21/04/99
-BOOL intAddOrder(BASE_OBJECT *psObj)
+bool intAddOrder(BASE_OBJECT *psObj)
 {
-	BOOL Animate = true;
+	bool Animate = true;
 	SECONDARY_STATE State;
 	UWORD OrdIndex;
 	W_FORM *Form;
 	UWORD Height, NumDisplayedOrders;
 	UWORD NumButs;
 	UWORD NumJustifyButs, NumCombineButs, NumCombineBefore;
-	BOOL  bLastCombine, bHidden;
+	bool  bLastCombine, bHidden;
 	DROID *Droid;
 	STRUCTURE *psStructure;
 
@@ -993,7 +993,7 @@ void intRunOrder(void)
 // Set the secondary order state for all currently selected droids. And Factory (if one selected)
 // Returns true if successful.
 //
-static BOOL SetSecondaryState(SECONDARY_ORDER sec, unsigned State)
+static bool SetSecondaryState(SECONDARY_ORDER sec, unsigned State)
 {
 	for (unsigned i = 0; i < SelectedDroids.size(); ++i)
 	{
@@ -1140,7 +1140,7 @@ void intProcessOrder(UDWORD id)
 
 
 // check whether the order list has changed
-static BOOL CheckObjectOrderList(void)
+static bool CheckObjectOrderList(void)
 {
 	std::vector<AVORDER> NewAvailableOrders;
 
@@ -1157,7 +1157,7 @@ static BOOL CheckObjectOrderList(void)
 	return NewAvailableOrders == AvailableOrders;
 }
 
-static BOOL intRefreshOrderButtons(void)
+static bool intRefreshOrderButtons(void)
 {
 	SECONDARY_STATE State;
 	UWORD OrdIndex;
@@ -1234,13 +1234,13 @@ static BOOL intRefreshOrderButtons(void)
 
 // Call to refresh the Order screen, ie when a droids boards it.
 //
-BOOL intRefreshOrder(void)
+bool intRefreshOrder(void)
 {
 	// Is the Order screen up?
 	if ((intMode == INT_ORDER) &&
 		(widgGetFromID(psWScreen,IDORDER_FORM) != NULL))
 	{
-		BOOL Ret;
+		bool Ret;
 
 		SelectedDroids.clear();
 

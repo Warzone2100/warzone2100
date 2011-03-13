@@ -113,7 +113,7 @@ extern VAR_SYMBOL asObjTable[];
 extern CONST_SYMBOL asConstantTable[];
 
 // Initialise the script system
-extern BOOL scrTabInitialise(void);
+extern bool scrTabInitialise(void);
 
 // Shut down the script system
 extern void scrShutDown(void);

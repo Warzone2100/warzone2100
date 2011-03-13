@@ -42,7 +42,7 @@ struct soundDataBuffer
 // Forward declaration so we can take pointers to this type
 struct OggVorbisDecoderState;
 
-struct OggVorbisDecoderState* sound_CreateOggVorbisDecoder(PHYSFS_file* PHYSFS_fileHandle, BOOL allowSeeking);
+struct OggVorbisDecoderState* sound_CreateOggVorbisDecoder(PHYSFS_file* PHYSFS_fileHandle, bool allowSeeking);
 void sound_DestroyOggVorbisDecoder(struct OggVorbisDecoderState* decoder);
 
 soundDataBuffer* sound_DecodeOggVorbis(struct OggVorbisDecoderState* decoder, size_t bufferSize);

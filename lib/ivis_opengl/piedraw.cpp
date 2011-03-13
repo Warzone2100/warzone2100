@@ -45,7 +45,7 @@
 #define TRIANGLES_PER_TILE 2
 #define VERTICES_PER_TILE (TRIANGLES_PER_TILE * VERTICES_PER_TRIANGLE)
 
-extern BOOL drawing_interface;
+extern bool drawing_interface;
 
 /*
  *	Local Variables
@@ -270,7 +270,7 @@ static void addToEdgeList(int a, int b, EDGE *edgelist, unsigned int* edge_count
 {
 	EDGE newEdge = {a, b};
 	unsigned int i;
-	BOOL foundMatching = false;
+	bool foundMatching = false;
 
 	for(i = 0; i < *edge_count; i++)
 	{

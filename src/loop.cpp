@@ -104,8 +104,8 @@ unsigned int loopStateChanges;
 /*
  * local variables
  */
-static BOOL paused=false;
-static BOOL video=false;
+static bool paused=false;
+static bool video=false;
 
 //holds which pause is valid at any one time
 struct PAUSE_STATE
@@ -142,7 +142,7 @@ GAMECODE gameLoop(void)
 	STRUCTURE	*psCBuilding, *psNBuilding;
 	FEATURE		*psCFeat, *psNFeat;
 	UDWORD		i,widgval;
-	BOOL		quitting=false;
+	bool		quitting=false;
 	INT_RETVAL	intRetVal;
 	int	        clearMode = 0;
 	bool            gameTicked;                     // true iff we are doing a logical update.
@@ -802,12 +802,12 @@ SDWORD loop_GetVideoMode(void)
 	return videoMode;
 }
 
-BOOL loop_GetVideoStatus(void)
+bool loop_GetVideoStatus(void)
 {
 	return video;
 }
 
-BOOL editPaused(void)
+bool editPaused(void)
 {
 	return pauseState.editPause;
 }
@@ -817,60 +817,60 @@ void setEditPause(bool state)
 	pauseState.editPause = state;
 }
 
-BOOL gamePaused( void )
+bool gamePaused( void )
 {
 	return paused;
 }
 
-void setGamePauseStatus( BOOL val )
+void setGamePauseStatus( bool val )
 {
 	paused = val;
 }
 
-BOOL gameUpdatePaused(void)
+bool gameUpdatePaused(void)
 {
 	return pauseState.gameUpdatePause;
 }
-BOOL audioPaused(void)
+bool audioPaused(void)
 {
 	return pauseState.audioPause;
 }
-BOOL scriptPaused(void)
+bool scriptPaused(void)
 {
 	return pauseState.scriptPause;
 }
-BOOL scrollPaused(void)
+bool scrollPaused(void)
 {
 	return pauseState.scrollPause;
 }
-BOOL consolePaused(void)
+bool consolePaused(void)
 {
 	return pauseState.consolePause;
 }
 
-void setGameUpdatePause(BOOL state)
+void setGameUpdatePause(bool state)
 {
 	pauseState.gameUpdatePause = state;
 }
-void setAudioPause(BOOL state)
+void setAudioPause(bool state)
 {
 	pauseState.audioPause = state;
 }
-void setScriptPause(BOOL state)
+void setScriptPause(bool state)
 {
 	pauseState.scriptPause = state;
 }
-void setScrollPause(BOOL state)
+void setScrollPause(bool state)
 {
 	pauseState.scrollPause = state;
 }
-void setConsolePause(BOOL state)
+void setConsolePause(bool state)
 {
 	pauseState.consolePause = state;
 }
 
 //set all the pause states to the state value
-void setAllPauseStates(BOOL state)
+void setAllPauseStates(bool state)
 {
 	setGameUpdatePause(state);
 	setAudioPause(state);
@@ -922,7 +922,7 @@ void incNumConstructorDroids(UDWORD player)
 /* Fire waiting beacon messages which we couldn't run before */
 static void fireWaitingCallbacks(void)
 {
-	BOOL bOK = true;
+	bool bOK = true;
 
 	while(!isMsgStackEmpty() && bOK)
 	{

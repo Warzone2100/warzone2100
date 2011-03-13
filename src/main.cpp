@@ -124,7 +124,7 @@ int num_loaded_mods = 0;
 // Warzone 2100 . Pumpkin Studios
 
 //flag to indicate when initialisation is complete
-BOOL	gameInitialised = false;
+bool	gameInitialised = false;
 char	SaveGamePath[PATH_MAX];
 char	ScreenDumpPath[PATH_MAX];
 char	MultiForcesPath[PATH_MAX];
@@ -141,7 +141,7 @@ static FOCUS_STATE focusState = FOCUS_IN;
 extern void debug_callback_stderr( void**, const char * );
 extern void debug_callback_win32debug( void**, const char * );
 
-static BOOL inList( char * list[], const char * item )
+static bool inList( char * list[], const char * item )
 {
 	int i = 0;
 #ifdef DEBUG

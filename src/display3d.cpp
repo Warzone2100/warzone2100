@@ -101,7 +101,7 @@ static void	drawDroidGroupNumber(DROID *psDroid);
 static void	trackHeight(float desiredHeight);
 static void	renderSurroundings(void);
 static void	locateMouse(void);
-static BOOL	renderWallSection(STRUCTURE *psStructure);
+static bool	renderWallSection(STRUCTURE *psStructure);
 static void	drawDragBox(void);
 static void	calcFlagPosScreenCoords(SDWORD *pX, SDWORD *pY, SDWORD *pR);
 static void	displayTerrain(void);
@@ -110,11 +110,11 @@ static void	drawTiles(iView *player);
 static void	display3DProjectiles(void);
 static void	drawDroidSelections(void);
 static void	drawStructureSelections(void);
-static void	displayAnimation(ANIM_OBJECT * psAnimObj, BOOL bHoldOnFirstFrame);
+static void	displayAnimation(ANIM_OBJECT * psAnimObj, bool bHoldOnFirstFrame);
 static void displayBlueprints(void);
 static void	processSensorTarget(void);
 static void	processDestinationTarget(void);
-static BOOL	eitherSelected(DROID *psDroid);
+static bool	eitherSelected(DROID *psDroid);
 static void	structureEffects(void);
 static void	showDroidSensorRanges(void);
 static void	showSensorRange2(BASE_OBJECT *psObj);
@@ -125,7 +125,7 @@ static void	drawDroidCmndNo(DROID *psDroid);
 static void	drawDroidRank(DROID *psDroid);
 static void	drawDroidSensorLock(DROID *psDroid);
 static void	calcAverageTerrainHeight(iView *player);
-BOOL	doWeDrawProximitys(void);
+bool	doWeDrawProximitys(void);
 static PIELIGHT getBlueprintColour(STRUCT_STATES state);
 
 static void NetworkDisplayPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours);
@@ -134,13 +134,13 @@ void NotifyUserOfError(char *msg);
 /********************  Variables  ********************/
 // Should be cleaned up properly and be put in structures.
 
-BOOL	bRender3DOnly;
-static BOOL	bRangeDisplay = false;
+bool	bRender3DOnly;
+static bool	bRangeDisplay = false;
 static SDWORD	rangeCenterX,rangeCenterY,rangeRadius;
-static BOOL	bDrawProximitys = true;
-BOOL	godMode;
-BOOL	showGateways = false;
-BOOL	showPath = false;
+static bool	bDrawProximitys = true;
+bool	godMode;
+bool	showGateways = false;
+bool	showPath = false;
 
 /// The name of the texture page used to draw the skybox
 static char skyboxPageName[PATH_MAX] = "page-25";
@@ -149,7 +149,7 @@ static char skyboxPageName[PATH_MAX] = "page-25";
 UWORD barMode;
 
 /// Have we made a selection by clicking the mouse? - used for dragging etc
-BOOL	selectAttempt = false;
+bool	selectAttempt = false;
 
 /// Vectors that hold the player and camera directions and positions
 iView	player;
@@ -168,7 +168,7 @@ SDWORD mouseTileX, mouseTileY;
 Vector2i mousePos(0, 0);
 
 /// Do we want the radar to be rendered
-BOOL	radarOnScreen=false;
+bool	radarOnScreen=false;
 
 /// Show unit/building gun/sensor range
 bool rangeOnScreen = false;  // For now, most likely will change later!  -Q 5-10-05   A very nice effect - Per
@@ -180,7 +180,7 @@ bool tuiTargetOrigin = false;
 static int playerXTile, playerZTile;
 
 /// Have we located the mouse?
-static BOOL	mouseLocated = true;
+static bool	mouseLocated = true;
 
 /// The cached value of frameGetFrameNumber()
 static UDWORD currentGameFrame;
@@ -253,8 +253,8 @@ static UDWORD	lastTargetAssignation = 0;
  * Used to draw a visual effect.
  */
 static UDWORD	lastDestAssignation = 0;
-static BOOL	bSensorTargetting = false;
-static BOOL	bDestTargetting = false;
+static bool	bSensorTargetting = false;
+static bool	bDestTargetting = false;
 static BASE_OBJECT *psSensorObj = NULL;
 static UDWORD	destTargetX,destTargetY;
 static UDWORD	destTileX=0,destTileY=0;
@@ -621,7 +621,7 @@ static void setupConnectionStatusForm(void)
 /// Render the 3D world
 void draw3DScene( void )
 {
-	BOOL bPlayerHasHQ = false;
+	bool bPlayerHasHQ = false;
 
 	// the world centre - used for decaying lighting etc
 	gridCentreX = player.p.x + world_coord(visibleTiles.x / 2);
@@ -835,12 +835,12 @@ static void displayTerrain(void)
 }
 
 /***************************************************************************/
-BOOL	doWeDrawProximitys( void )
+bool	doWeDrawProximitys( void )
 {
 	return(bDrawProximitys);
 }
 /***************************************************************************/
-void	setProximityDraw(BOOL val)
+void	setProximityDraw(bool val)
 {
 	bDrawProximitys = val;
 }
@@ -1033,7 +1033,7 @@ static void drawTiles(iView *player)
 }
 
 /// Initialise the fog, skybox and some other stuff
-BOOL init3DView(void)
+bool init3DView(void)
 {
 	/* Arbitrary choice - from direct read! */
 	Vector3f theSun(225.0f, -600.0f, 450.0f);
@@ -1110,7 +1110,7 @@ void disp3d_getView(iView *newView)
 }
 
 /// Are the current tile coordinates visible on screen?
-BOOL clipXY(SDWORD x, SDWORD y)
+bool clipXY(SDWORD x, SDWORD y)
 {
 	if (x > (SDWORD)player.p.x &&  x < (SDWORD)(player.p.x+(visibleTiles.x * TILE_UNITS)) &&
 		y > (SDWORD)player.p.z && y < (SDWORD)(player.p.z+(visibleTiles.y*TILE_UNITS)))
@@ -1711,7 +1711,7 @@ void displayProximityMsgs( void )
 }
 
 /// Display an animation
-static void displayAnimation( ANIM_OBJECT * psAnimObj, BOOL bHoldOnFirstFrame )
+static void displayAnimation( ANIM_OBJECT * psAnimObj, bool bHoldOnFirstFrame )
 {
 	UWORD i, uwFrame;
 	Vector3i vecPos, vecRot, vecScale;
@@ -1801,7 +1801,7 @@ void displayDynamicObjects( void )
 } // end Fn
 
 /// Sets the player's position and view angle - defaults player rotations as well
-void setViewPos( UDWORD x, UDWORD y, WZ_DECL_UNUSED BOOL Pan )
+void setViewPos( UDWORD x, UDWORD y, WZ_DECL_UNUSED bool Pan )
 {
 	SDWORD midX,midY;
 
@@ -1870,7 +1870,7 @@ void	renderFeature(FEATURE *psFeature)
 	SDWORD		rotation, rx, rz;
 	PIELIGHT	brightness;
 	Vector3i dv;
-	BOOL bForceDraw = ( !getRevealStatus() && psFeature->psStats->visibleAtStart);
+	bool bForceDraw = ( !getRevealStatus() && psFeature->psStats->visibleAtStart);
 	int shadowFlags = 0;
 
 	if (!psFeature->visible[selectedPlayer] && !demoGetStatus() && !bForceDraw)
@@ -2083,8 +2083,8 @@ void	renderStructure(STRUCTURE *psStructure)
 	int			i, structX, structY, rx, rz, colour, rotation, frame, animFrame, pieFlag, pieFlagData;
 	PIELIGHT		buildingBrightness;
 	Vector3i		dv;
-	BOOL			bHitByElectronic = false;
-	BOOL			defensive = false;
+	bool			bHitByElectronic = false;
+	bool			defensive = false;
 	iIMDShape		*strImd = psStructure->sDisplay.imd;
 
 	if (psStructure->pStructureType->type == REF_WALL || psStructure->pStructureType->type == REF_WALLCORNER
@@ -2448,7 +2448,7 @@ void	renderStructure(STRUCTURE *psStructure)
 }
 
 /// draw the delivery points
-void	renderDeliveryPoint(FLAG_POSITION *psPosition, BOOL blueprint)
+void	renderDeliveryPoint(FLAG_POSITION *psPosition, bool blueprint)
 {
 	Vector3i dv;
 	SDWORD			x, y, r, rx, rz;
@@ -2516,7 +2516,7 @@ void	renderDeliveryPoint(FLAG_POSITION *psPosition, BOOL blueprint)
 }
 
 /// Draw a piece of wall
-static BOOL	renderWallSection(STRUCTURE *psStructure)
+static bool	renderWallSection(STRUCTURE *psStructure)
 {
 	SDWORD			structX, structY, rx, rz, height;
 	PIELIGHT		brightness;
@@ -2741,7 +2741,7 @@ static void	drawDragBox( void )
 static void drawWeaponReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_slot)
 {
 	WEAPON_STATS		*psStats;
-	BOOL			bSalvo;
+	bool			bSalvo;
 	UDWORD			firingStage, interval, damLevel;
 	SDWORD			scrX,scrY, scrR, scale;
 	STRUCTURE		*psStruct;
@@ -2995,8 +2995,8 @@ static void	drawStructureSelections( void )
 	SDWORD		scrX,scrY;
 	UDWORD		i;
 	BASE_OBJECT	*psClickedOn;
-	BOOL		bMouseOverStructure = false;
-	BOOL		bMouseOverOwnStructure = false;
+	bool		bMouseOverStructure = false;
+	bool		bMouseOverOwnStructure = false;
 
 	psClickedOn = mouseTarget();
 	if(psClickedOn!=NULL && psClickedOn->type == OBJ_STRUCTURE)
@@ -3103,9 +3103,9 @@ UDWORD	index;
 }
 
 /// Is the droid, its commander or its sensor tower selected?
-BOOL	eitherSelected(DROID *psDroid)
+bool	eitherSelected(DROID *psDroid)
 {
-BOOL			retVal;
+bool			retVal;
 BASE_OBJECT		*psObj;
 
 	retVal = false;
@@ -3144,8 +3144,8 @@ static void	drawDroidSelections( void )
 	PIELIGHT		powerCol = WZCOL_BLACK, powerColShadow = WZCOL_BLACK;
 	PIELIGHT		boxCol;
 	BASE_OBJECT		*psClickedOn;
-	BOOL			bMouseOverDroid = false;
-	BOOL			bMouseOverOwnDroid = false;
+	bool			bMouseOverDroid = false;
+	bool			bMouseOverOwnDroid = false;
 	UDWORD			i,index;
 	FEATURE			*psFeature;
 	float			mulH;
@@ -3387,7 +3387,7 @@ static void	drawDroidGroupNumber(DROID *psDroid)
 {
 UWORD	id;
 UDWORD	id2;
-BOOL	bDraw;
+bool	bDraw;
 SDWORD	xShift,yShift;
 
 	bDraw = true;
@@ -3458,7 +3458,7 @@ static void	drawDroidCmndNo(DROID *psDroid)
 {
 UWORD	id;
 UDWORD	id2;
-BOOL	bDraw;
+bool	bDraw;
 SDWORD	xShift,yShift, index;
 
 	bDraw = true;

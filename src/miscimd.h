@@ -25,7 +25,7 @@
 #include "structuredef.h"
 #include "messagedef.h"
 
-extern BOOL initMiscImds( void );
+extern bool initMiscImds( void );
 extern iIMDShape	*getImdFromIndex(UDWORD	index);
 extern iIMDShape	*getRandomWreckageImd( void );
 extern iIMDShape	*getRandomDebrisImd( void );

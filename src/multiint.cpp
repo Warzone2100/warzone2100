@@ -133,33 +133,33 @@ static const unsigned gnImage[] = {IMAGE_GN_0, IMAGE_GN_1, IMAGE_GN_2, IMAGE_GN_
 extern char	MultiCustomMapsPath[PATH_MAX];
 extern char	MultiPlayersPath[PATH_MAX];
 extern char VersionString[80];		// from netplay.c
-extern BOOL bSendingMap;			// used to indicate we are sending a map
+extern bool bSendingMap;			// used to indicate we are sending a map
 
-BOOL						bHosted			= false;				//we have set up a game
+bool						bHosted			= false;				//we have set up a game
 char						sPlayer[128];							// player name (to be used)
 static int					colourChooserUp = -1;
 static int					teamChooserUp = -1;
 static int					aiChooserUp = -1;
 static int					difficultyChooserUp = -1;
 static int					positionChooserUp = -1;
-static BOOL				SettingsUp		= false;
+static bool				SettingsUp		= false;
 static UBYTE				InitialProto	= 0;
 static W_SCREEN				*psConScreen;
 static SDWORD				dwSelectedGame	=0;						//player[] and games[] indexes
 static UDWORD				gameNumber;								// index to games icons
-static BOOL					safeSearch		= false;				// allow auto game finding.
+static bool					safeSearch		= false;				// allow auto game finding.
 static bool disableLobbyRefresh = false;	// if we allow lobby to be refreshed or not.
 static UDWORD hideTime=0;
 static bool EnablePasswordPrompt = false;	// if we need the password prompt
 LOBBY_ERROR_TYPES LobbyError = ERROR_NOERROR;
-static BOOL allowChangePosition = true;
+static bool allowChangePosition = true;
 static char tooltipbuffer[256] ={'\0'};
 /// end of globals.
 // ////////////////////////////////////////////////////////////////////////////
 // Function protos
 
 // widget functions
-static BOOL addMultiEditBox(UDWORD formid, UDWORD id, UDWORD x, UDWORD y, char const *tip, char const *tipres, UDWORD icon, UDWORD iconhi, UDWORD iconid);
+static bool addMultiEditBox(UDWORD formid, UDWORD id, UDWORD x, UDWORD y, char const *tip, char const *tipres, UDWORD icon, UDWORD iconhi, UDWORD iconid);
 static void addBlueForm					(UDWORD parent,UDWORD id, const char *txt,UDWORD x,UDWORD y,UDWORD w,UDWORD h);
 static void drawReadyButton(UDWORD player);
 static void displayPasswordEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours);
@@ -200,10 +200,10 @@ static void		closeTeamChooser	(void);
 static void		closePositionChooser	(void);
 static void		closeAiChooser		(void);
 static void		closeDifficultyChooser	(void);
-static BOOL		SendColourRequest	(UBYTE player, UBYTE col);
-static BOOL		SendPositionRequest	(UBYTE player, UBYTE chosenPlayer);
-static BOOL		safeToUseColour		(UDWORD player,UDWORD col);
-static BOOL		changeReadyStatus	(UBYTE player, BOOL bReady);
+static bool		SendColourRequest	(UBYTE player, UBYTE col);
+static bool		SendPositionRequest	(UBYTE player, UBYTE chosenPlayer);
+static bool		safeToUseColour		(UDWORD player,UDWORD col);
+static bool		changeReadyStatus	(UBYTE player, bool bReady);
 static	void stopJoining(void);
 static int difficultyIcon(int difficulty);
 // ////////////////////////////////////////////////////////////////////////////
@@ -589,7 +589,7 @@ static void decideWRF(void)
 // ////////////////////////////////////////////////////////////////////////////
 // Connection Options Screen.
 
-static BOOL OptionsInet(void)			//internet options
+static bool OptionsInet(void)			//internet options
 {
 	psConScreen = widgCreateScreen();
 	widgSetTipFont(psConScreen,font_regular);
@@ -652,7 +652,7 @@ static BOOL OptionsInet(void)			//internet options
 
 // ////////////////////////////////////////////////////////////////////////////
 // Draw the connections screen.
-BOOL startConnectionScreen(void)
+bool startConnectionScreen(void)
 {
 	addBackdrop();										//background
 	addTopForm();										// logo
@@ -1531,7 +1531,7 @@ static void addGameOptions()
 // ////////////////////////////////////////////////////////////////////////////
 // Colour functions
 
-static BOOL safeToUseColour(UDWORD player,UDWORD col)
+static bool safeToUseColour(UDWORD player,UDWORD col)
 {
 	UDWORD i;
 
@@ -1767,7 +1767,7 @@ static void changeTeam(UBYTE player, UBYTE team)
 	netPlayersUpdated = true;
 }
 
-static BOOL SendTeamRequest(UBYTE player, UBYTE chosenTeam)
+static bool SendTeamRequest(UBYTE player, UBYTE chosenTeam)
 {
 	if(NetPlay.isHost)			// do or request the change.
 	{
@@ -1786,7 +1786,7 @@ static BOOL SendTeamRequest(UBYTE player, UBYTE chosenTeam)
 	return true;
 }
 
-BOOL recvTeamRequest(NETQUEUE queue)
+bool recvTeamRequest(NETQUEUE queue)
 {
 	UBYTE	player, team;
 
@@ -1816,7 +1816,7 @@ BOOL recvTeamRequest(NETQUEUE queue)
 	return true;
 }
 
-static BOOL SendReadyRequest(UBYTE player, BOOL bReady)
+static bool SendReadyRequest(UBYTE player, bool bReady)
 {
 	if(NetPlay.isHost)			// do or request the change.
 	{
@@ -1832,10 +1832,10 @@ static BOOL SendReadyRequest(UBYTE player, BOOL bReady)
 	return true;
 }
 
-BOOL recvReadyRequest(NETQUEUE queue)
+bool recvReadyRequest(NETQUEUE queue)
 {
 	UBYTE	player;
-	BOOL	bReady;
+	bool	bReady;
 
 	if (!NetPlay.isHost || !bHosted)  // Only host should act, and only if the game hasn't started yet.
 	{
@@ -1864,7 +1864,7 @@ BOOL recvReadyRequest(NETQUEUE queue)
 	return changeReadyStatus((UBYTE)player, bReady);
 }
 
-static BOOL changeReadyStatus(UBYTE player, BOOL bReady)
+static bool changeReadyStatus(UBYTE player, bool bReady)
 {
 	drawReadyButton(player);
 	NetPlay.players[player].ready = bReady;
@@ -1874,7 +1874,7 @@ static BOOL changeReadyStatus(UBYTE player, BOOL bReady)
 	return true;
 }
 
-static BOOL changePosition(UBYTE player, UBYTE position)
+static bool changePosition(UBYTE player, UBYTE position)
 {
 	int i;
 
@@ -1903,7 +1903,7 @@ static BOOL changePosition(UBYTE player, UBYTE position)
 	return false;
 }
 
-BOOL changeColour(UBYTE player, UBYTE col)
+bool changeColour(UBYTE player, UBYTE col)
 {
 	int i;
 
@@ -1935,7 +1935,7 @@ BOOL changeColour(UBYTE player, UBYTE col)
 	return false;
 }
 
-static BOOL SendColourRequest(UBYTE player, UBYTE col)
+static bool SendColourRequest(UBYTE player, UBYTE col)
 {
 	if(NetPlay.isHost)			// do or request the change
 	{
@@ -1952,7 +1952,7 @@ static BOOL SendColourRequest(UBYTE player, UBYTE col)
 	return true;
 }
 
-static BOOL SendPositionRequest(UBYTE player, UBYTE position)
+static bool SendPositionRequest(UBYTE player, UBYTE position)
 {
 	if(NetPlay.isHost)			// do or request the change
 	{
@@ -1970,7 +1970,7 @@ static BOOL SendPositionRequest(UBYTE player, UBYTE position)
 	return true;
 }
 
-BOOL recvColourRequest(NETQUEUE queue)
+bool recvColourRequest(NETQUEUE queue)
 {
 	UBYTE	player, col;
 
@@ -1996,7 +1996,7 @@ BOOL recvColourRequest(NETQUEUE queue)
 	return changeColour(player, col);
 }
 
-BOOL recvPositionRequest(NETQUEUE queue)
+bool recvPositionRequest(NETQUEUE queue)
 {
 	UBYTE	player, position;
 
@@ -2138,7 +2138,7 @@ static bool canChooseTeamFor(int i)
 // ////////////////////////////////////////////////////////////////////////////
 // box for players.
 
-void addPlayerBox(BOOL players)
+void addPlayerBox(bool players)
 {
 	// if background isn't there, then return since were not ready to draw the box yet!
 	if(widgGetFromID(psWScreen,FRONTEND_BACKDROP) == NULL)
@@ -3451,7 +3451,7 @@ void runMultiOptions(void)
 	}
 }
 
-BOOL startMultiOptions(BOOL bReenter)
+bool startMultiOptions(bool bReenter)
 {
 	PLAYERSTATS		nullStats;
 	UBYTE i;
@@ -3983,7 +3983,7 @@ void displayMultiBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT 
 {
 	UDWORD	x = xOffset+psWidget->x;
 	UDWORD	y = yOffset+psWidget->y;
-	BOOL	Hilight = false;
+	bool	Hilight = false;
 	UDWORD	Down = 0;
 	UDWORD	Grey = 0;
 	UWORD	im_norm = UNPACKDWORD_TRI_A((UDWORD)psWidget->UserData);
@@ -4092,7 +4092,7 @@ void displayMultiBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT 
 /////////////////////////////////////////////////////////////////////////////////////////
 // common widgets
 
-static BOOL addMultiEditBox(UDWORD formid, UDWORD id, UDWORD x, UDWORD y, char const *tip, char const *tipres, UDWORD icon, UDWORD iconhi, UDWORD iconid)
+static bool addMultiEditBox(UDWORD formid, UDWORD id, UDWORD x, UDWORD y, char const *tip, char const *tipres, UDWORD icon, UDWORD iconhi, UDWORD iconid)
 {
 	W_EDBINIT sEdInit;                           // editbox
 	sEdInit.formID = formid;
@@ -4114,7 +4114,7 @@ static BOOL addMultiEditBox(UDWORD formid, UDWORD id, UDWORD x, UDWORD y, char c
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
-BOOL addMultiBut(W_SCREEN *screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char* tipres, UDWORD norm, UDWORD down, UDWORD hi)
+bool addMultiBut(W_SCREEN *screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char* tipres, UDWORD norm, UDWORD down, UDWORD hi)
 {
 	W_BUTINIT sButInit;
 	sButInit.formID = formid;

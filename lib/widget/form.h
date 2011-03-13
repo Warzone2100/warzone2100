@@ -37,7 +37,7 @@ struct W_FORM : public WIDGET
 
 	void clicked(W_CONTEXT *, WIDGET_KEY key) { formClicked(this, key); }
 
-	BOOL            disableChildren;        ///< Disable all child widgets if true
+	bool            disableChildren;        ///< Disable all child widgets if true
 	UWORD           Ax0,Ay0,Ax1,Ay1;        ///< Working coords for animations.
 	UDWORD          animCount;              ///< Animation counter.
 	UDWORD          startTime;              ///< Animation start time
@@ -127,7 +127,7 @@ extern W_FORM* formCreate(const W_FORMINIT* psInit);
 extern void formFree(W_FORM *psWidget);
 
 /* Add a widget to a form */
-extern BOOL formAddWidget(W_FORM *psForm, WIDGET *psWidget, W_INIT *psInit);
+extern bool formAddWidget(W_FORM *psForm, WIDGET *psWidget, W_INIT *psInit);
 
 /* Return the widgets currently displayed by a form */
 extern WIDGET *formGetWidgets(W_FORM *psWidget);

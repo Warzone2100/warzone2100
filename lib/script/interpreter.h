@@ -26,10 +26,10 @@
 #define _interp_h
 
 /* The type of function called by an OP_CALL */
-typedef BOOL (*SCRIPT_FUNC)(void);
+typedef bool (*SCRIPT_FUNC)(void);
 
 /* The type of function called to access an object or in-game variable */
-typedef BOOL (*SCRIPT_VARFUNC)(UDWORD index);
+typedef bool (*SCRIPT_VARFUNC)(UDWORD index);
 
 /* The possible value types for scripts */
 enum INTERP_TYPE
@@ -70,7 +70,7 @@ struct INTERP_VAL
 		void					*oval;			//Object value - any in-game object
 		float					fval;				//Float value - VAL_FLOAT
 		int						ival;				// Integer value - VAL_INT
-		BOOL					bval;			//Boolean value - VAL_BOOL
+		bool					bval;			//Boolean value - VAL_BOOL
 	} v;
 };
 
@@ -222,7 +222,7 @@ enum TRIGGER_TYPE
 struct TRIGGER_DATA
 {
 	TRIGGER_TYPE		type;		// Type of trigger
-	UWORD			code;		// BOOL - is there code with this trigger
+	UWORD			code;		// bool - is there code with this trigger
 	UDWORD			time;		// How often to check the trigger
 };
 
@@ -273,13 +273,13 @@ enum INTERP_RUNTYPE
 extern SDWORD aOpSize[];
 
 /* Check if two types are equivalent */
-extern BOOL interpCheckEquiv(INTERP_TYPE to, INTERP_TYPE from) WZ_DECL_PURE;
+extern bool interpCheckEquiv(INTERP_TYPE to, INTERP_TYPE from) WZ_DECL_PURE;
 
 // Initialise the interpreter
-extern BOOL interpInitialise(void);
+extern bool interpInitialise(void);
 
 // true if the interpreter is currently running
-extern BOOL interpProcessorActive(void);
+extern bool interpProcessorActive(void);
 
 /* Output script call stack trace */
 extern void scrOutputCallTrace(code_part part);

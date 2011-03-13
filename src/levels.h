@@ -75,24 +75,24 @@ struct LEVEL_DATASET
 extern LEVEL_DATASET	*psLevels;
 
 // parse a level description data file
-extern BOOL levParse(const char* buffer, size_t size, searchPathMode datadir, bool ignoreWrf);
+extern bool levParse(const char* buffer, size_t size, searchPathMode datadir, bool ignoreWrf);
 
 // shutdown the level system
 extern void levShutDown(void);
 
-extern BOOL levInitialise(void);
+extern bool levInitialise(void);
 
 // load up the data for a level
-extern BOOL levLoadData(const char* name, char *pSaveName, GAME_TYPE saveType);
+extern bool levLoadData(const char* name, char *pSaveName, GAME_TYPE saveType);
 
 // find the level dataset
 extern LEVEL_DATASET* levFindDataSet(const char* name);
 
 // free the currently loaded dataset
-extern BOOL levReleaseAll(void);
+extern bool levReleaseAll(void);
 
 // free the data for the current mission
-extern BOOL levReleaseMissionData(void);
+extern bool levReleaseMissionData(void);
 
 //get the type of level currently being loaded of GTYPE type
 extern SDWORD getLevelLoadType(void);

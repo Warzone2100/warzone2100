@@ -28,7 +28,7 @@ extern void **gridIterator;  ///< The iterator.
 
 
 // initialise the grid system
-extern BOOL gridInitialise(void);
+extern bool gridInitialise(void);
 
 // shutdown the grid system
 extern void gridShutDown(void);

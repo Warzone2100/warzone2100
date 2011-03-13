@@ -94,7 +94,7 @@ struct HASHTABLE
  * \param	udwExtElements	number of elements when extending the heap
  * \param	udwElementSize	size of elements to be stored in the hashtable
  */
-BOOL	hashTable_Create( HASHTABLE **ppsTable, UDWORD udwTableSize,
+bool	hashTable_Create( HASHTABLE **ppsTable, UDWORD udwTableSize,
 							UDWORD udwInitElements, UDWORD udwExtElements,
 							UDWORD udwElementSize );
 
@@ -139,7 +139,7 @@ void hashTable_InsertElement(HASHTABLE *psTable, void *psElement, intptr_t iKey1
  * \param	iKey2		second key
  * \return	true, if the element was contained in the hashtable
  */
-BOOL hashTable_RemoveElement(HASHTABLE *psTable, void *psElement, intptr_t iKey1, intptr_t iKey2);
+bool hashTable_RemoveElement(HASHTABLE *psTable, void *psElement, intptr_t iKey1, intptr_t iKey2);
 
 /**
  * Calculates hash index from keys and returns element in hash table

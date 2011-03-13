@@ -103,7 +103,7 @@ char fileLoadBuffer[FILE_LOAD_BUFFER_SIZE];
 
 IMAGEFILE *FrontImages;
 
-BOOL DirectControl = false;
+bool DirectControl = false;
 
 static wzSearchPath * searchPathRegistry = NULL;
 
@@ -112,7 +112,7 @@ static wzSearchPath * searchPathRegistry = NULL;
 // any globals and statics to there default values each time the game
 // or frontend restarts.
 //
-static BOOL InitialiseGlobals(void)
+static bool InitialiseGlobals(void)
 {
 	frontendInitVars();	// Initialise frontend globals and statics.
 	statsInitVars();
@@ -135,7 +135,7 @@ static BOOL InitialiseGlobals(void)
 }
 
 
-static BOOL loadLevFile(const char* filename, searchPathMode datadir, bool ignoreWrf)
+static bool loadLevFile(const char* filename, searchPathMode datadir, bool ignoreWrf)
 {
 	char *pBuffer;
 	UDWORD size;
@@ -228,7 +228,7 @@ void registerSearchPath( const char path[], unsigned int priority )
  * Priority:
  * maps > mods > base > base.wz
  */
-BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
+bool rebuildSearchPath( searchPathMode mode, bool force )
 {
 	static searchPathMode current_mode = mod_clean;
 	wzSearchPath * curSearchPath = searchPathRegistry;
@@ -411,7 +411,7 @@ BOOL rebuildSearchPath( searchPathMode mode, BOOL force )
 }
 
 
-BOOL buildMapList(void)
+bool buildMapList(void)
 {
 	char ** filelist, ** file;
 	size_t len;
@@ -446,7 +446,7 @@ BOOL buildMapList(void)
 // ////////////////////////////////////////////////////////////////////////////
 // Called once on program startup.
 //
-BOOL systemInitialise(void)
+bool systemInitialise(void)
 {
 	if (!widgInitialise())
 	{
@@ -554,7 +554,7 @@ void systemShutdown(void)
 
 /***************************************************************************/
 
-static BOOL
+static bool
 init_ObjectDead( void * psObj )
 {
 	BASE_OBJECT	*psBaseObj = (BASE_OBJECT *) psObj;
@@ -590,7 +590,7 @@ init_ObjectDead( void * psObj )
 // ////////////////////////////////////////////////////////////////////////////
 // Called At Frontend Startup.
 
-BOOL frontendInitialise(const char *ResourceFile)
+bool frontendInitialise(const char *ResourceFile)
 {
 	debug(LOG_MAIN, "Initialising frontend : %s", ResourceFile);
 
@@ -673,7 +673,7 @@ BOOL frontendInitialise(const char *ResourceFile)
 }
 
 
-BOOL frontendShutdown(void)
+bool frontendShutdown(void)
 {
 	debug(LOG_WZ, "== Shuting down frontend ==");
 
@@ -722,7 +722,7 @@ BOOL frontendShutdown(void)
 
 
 
-BOOL stageOneInitialise(void)
+bool stageOneInitialise(void)
 {
 	debug(LOG_WZ, "== stageOneInitalise ==");
 
@@ -823,7 +823,7 @@ BOOL stageOneInitialise(void)
 /******************************************************************************/
 /*                       Shutdown after data is released                      */
 
-BOOL stageOneShutDown(void)
+bool stageOneShutDown(void)
 {
 	debug(LOG_WZ, "== stageOneShutDown ==");
 
@@ -888,7 +888,7 @@ BOOL stageOneShutDown(void)
 // ////////////////////////////////////////////////////////////////////////////
 // Initialise after the base data is loaded but before final level data is loaded
 
-BOOL stageTwoInitialise(void)
+bool stageTwoInitialise(void)
 {
 	int i;
 
@@ -982,7 +982,7 @@ BOOL stageTwoInitialise(void)
 // ////////////////////////////////////////////////////////////////////////////
 // Free up after level specific data has been released but before base data is released
 //
-BOOL stageTwoShutDown(void)
+bool stageTwoShutDown(void)
 {
 	debug(LOG_WZ, "== stageTwoShutDown ==");
 
@@ -1023,7 +1023,7 @@ BOOL stageTwoShutDown(void)
 	return true;
 }
 
-BOOL stageThreeInitialise(void)
+bool stageThreeInitialise(void)
 {
 	STRUCTURE *psStr;
 	UDWORD i;
@@ -1137,7 +1137,7 @@ BOOL stageThreeInitialise(void)
 /*****************************************************************************/
 /*      Shutdown before any data is released                                 */
 
-BOOL stageThreeShutDown(void)
+bool stageThreeShutDown(void)
 {
 	debug(LOG_WZ, "== stageThreeShutDown ==");
 
@@ -1185,7 +1185,7 @@ BOOL stageThreeShutDown(void)
 }
 
 // Reset the game between campaigns
-BOOL campaignReset(void)
+bool campaignReset(void)
 {
 	debug(LOG_MAIN, "campaignReset");
 	gwShutDown();
@@ -1199,7 +1199,7 @@ BOOL campaignReset(void)
 }
 
 // Reset the game when loading a save game
-BOOL saveGameReset(void)
+bool saveGameReset(void)
 {
 	debug(LOG_MAIN, "saveGameReset");
 

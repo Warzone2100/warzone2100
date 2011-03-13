@@ -33,7 +33,7 @@
 
 
 /* Initialise the button module */
-BOOL buttonStartUp(void)
+bool buttonStartUp(void)
 {
 	return true;
 }

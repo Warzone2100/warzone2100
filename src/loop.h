@@ -61,27 +61,27 @@ extern GAMECODE gameLoop(void);
 extern void videoLoop(void);
 extern void loop_SetVideoPlaybackMode(void);
 extern void loop_ClearVideoPlaybackMode(void);
-extern BOOL loop_GetVideoStatus(void);
+extern bool loop_GetVideoStatus(void);
 extern SDWORD loop_GetVideoMode(void);
-extern BOOL	gamePaused( void );
-extern void	setGamePauseStatus( BOOL val );
+extern bool	gamePaused( void );
+extern void	setGamePauseStatus( bool val );
 extern void loopFastExit(void);
 
-extern BOOL gameUpdatePaused(void);
-extern BOOL audioPaused(void);
-extern BOOL scriptPaused(void);
-extern BOOL scrollPaused(void);
-extern BOOL consolePaused(void);
-extern BOOL editPaused(void);
+extern bool gameUpdatePaused(void);
+extern bool audioPaused(void);
+extern bool scriptPaused(void);
+extern bool scrollPaused(void);
+extern bool consolePaused(void);
+extern bool editPaused(void);
 
-extern void setGameUpdatePause(BOOL state);
+extern void setGameUpdatePause(bool state);
 extern void setEditPause(bool state);
-extern void setAudioPause(BOOL state);
-extern void setScriptPause(BOOL state);
-extern void setScrollPause(BOOL state);
-extern void setConsolePause(BOOL state);
+extern void setAudioPause(bool state);
+extern void setScriptPause(bool state);
+extern void setScrollPause(bool state);
+extern void setConsolePause(bool state);
 //set all the pause states to the state value
-extern void setAllPauseStates(BOOL state);
+extern void setAllPauseStates(bool state);
 
 // Number of units in the current list.
 extern UDWORD	getNumDroids(UDWORD	player);

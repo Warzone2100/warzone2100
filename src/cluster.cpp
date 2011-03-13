@@ -315,7 +315,7 @@ static SDWORD clustFindUnused(void)
 void clustUpdateObject(BASE_OBJECT * psObj)
 {
 	SDWORD	newCluster, oldCluster, i;
-	BOOL	found;
+	bool	found;
 	SDWORD	player;
 
 	newCluster = clustFindUnused();

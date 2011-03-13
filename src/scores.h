@@ -61,8 +61,8 @@ UDWORD	width,height;	// Height down screen and width _unfilled_
 UDWORD	percent;		// What percentage full is it?
 UDWORD	stringID;		// String resource name to stick next to it.
 UDWORD	queTime;		// How many game ticks before it's active?
-BOOL	bQueued;		// Already fired off?
-BOOL	bActive;		// Is this one active?
+bool	bQueued;		// Already fired off?
+bool	bActive;		// Is this one active?
 UDWORD	number;			// %d string for the associated text string.
 };
 
@@ -89,7 +89,7 @@ STAT_ACE
 
 
 
-extern BOOL	scoreInitSystem			( void );
+extern bool	scoreInitSystem			( void );
 extern void	scoreUpdateVar			( DATA_INDEX var );
 extern void	scoreDataToConsole		( void );
 extern void	scoreDataToScreen		( void );

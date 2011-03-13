@@ -52,14 +52,14 @@ UDWORD		screenDepth = 0;
 int wz_texture_compression;
 
 static SDL_Surface	*screen = NULL;
-static BOOL		bBackDrop = false;
+static bool		bBackDrop = false;
 static char		screendump_filename[PATH_MAX];
-static BOOL		screendump_required = false;
+static bool		screendump_required = false;
 static GLuint		backDropTexture = ~0;
 
 static int preview_width = 0, preview_height = 0;
 static Vector2i player_pos[MAX_PLAYERS];
-static BOOL mappreview = false;
+static bool mappreview = false;
 static char mapname[256];
 
 /* Initialise the double buffered display */
@@ -349,7 +349,7 @@ void screen_RestartBackDrop(void)
 	bBackDrop = true;
 }
 
-BOOL screen_GetBackDrop(void)
+bool screen_GetBackDrop(void)
 {
 	return bBackDrop;
 }
@@ -357,7 +357,7 @@ BOOL screen_GetBackDrop(void)
 //******************************************************************
 //slight hack to display maps (or whatever) in background.
 //bitmap MUST be (BACKDROP_HACK_WIDTH * BACKDROP_HACK_HEIGHT) for now.
-void screen_Upload(const char *newBackDropBmp, BOOL preview)
+void screen_Upload(const char *newBackDropBmp, bool preview)
 {
 	static bool processed = false;
 	int x1 = 0, x2 = screenWidth, y1 = 0, y2 = screenHeight, i, scale = 0, w = 0, h = 0;
@@ -490,7 +490,7 @@ void screen_disableMapPreview(void)
 	sstrcpy(mapname, "none");
 }
 
-BOOL screen_getMapPreview(void)
+bool screen_getMapPreview(void)
 {
 	return mappreview;
 }

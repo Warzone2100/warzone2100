@@ -70,7 +70,7 @@ static void		animObj_HashFreeElementFunc( void * psElement );
  */
 /***************************************************************************/
 
-BOOL
+bool
 animObj_Init( ANIMOBJDIEDTESTFUNC pDiedFunc )
 {
 	SDWORD	iSize = sizeof(ANIM_OBJECT);
@@ -91,7 +91,7 @@ animObj_Init( ANIMOBJDIEDTESTFUNC pDiedFunc )
 
 /***************************************************************************/
 
-BOOL
+bool
 animObj_Shutdown( void )
 {
 	/* destroy hash table */
@@ -144,7 +144,7 @@ animObj_Update( void )
 {
 	ANIM_OBJECT	*psObj;
 	SDWORD		dwTime;
-	BOOL		bRemove;
+	bool		bRemove;
 
 	psObj = (ANIM_OBJECT*)hashTable_GetFirst( g_pAnimObjTable );
 

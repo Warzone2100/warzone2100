@@ -90,16 +90,16 @@ struct ANIM3D : public BASEANIM
 };
 
 
-BOOL		anim_Init(void);
-BOOL		anim_Shutdown(void);
+bool		anim_Init(void);
+bool		anim_Shutdown(void);
 BASEANIM *	anim_LoadFromBuffer(char *pBuffer, UDWORD size);
 BASEANIM *	anim_LoadFromFile(PHYSFS_file* fileHandle);
 void		anim_ReleaseAnim(BASEANIM *psAnim);
-BOOL		anim_Create3D(char szPieFileName[], UWORD uwFrames, UWORD uwFrameRate, UWORD uwObj,
+bool		anim_Create3D(char szPieFileName[], UWORD uwFrames, UWORD uwFrameRate, UWORD uwObj,
 		              ANIM_MODE ubType, UWORD uwID);
 void		anim_BeginScript(void);
-BOOL		anim_EndScript(void);
-BOOL		anim_AddFrameToAnim(int iFrame, Vector3i vecPos, Vector3i vecRot, Vector3i vecScale);
+bool		anim_EndScript(void);
+bool		anim_AddFrameToAnim(int iFrame, Vector3i vecPos, Vector3i vecRot, Vector3i vecScale);
 BASEANIM *	anim_GetAnim(UWORD uwAnimID);
 UWORD		anim_GetAnimID(char *szName);
 iIMDShape *	anim_GetShapeFromID(UWORD uwID);

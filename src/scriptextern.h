@@ -27,11 +27,11 @@
 // current game level
 extern SDWORD	scrGameLevel;
 // whether the tutorial is active
-extern BOOL		bInTutorial;
+extern bool		bInTutorial;
 // whether any additional special case victory/failure conditions have been met
-extern BOOL		bExtraVictoryFlag;
-extern BOOL		bExtraFailFlag;
-extern BOOL		bTrackTransporter;
+extern bool		bExtraVictoryFlag;
+extern bool		bExtraFailFlag;
+extern bool		bTrackTransporter;
 
 
 // ID numbers for external variables
@@ -60,9 +60,9 @@ enum _externids
 extern void scrExternReset(void);
 
 // General function to get some basic game values
-extern BOOL scrGenExternGet(UDWORD index);
+extern bool scrGenExternGet(UDWORD index);
 
 // General function to set some basic game values
-extern BOOL scrGenExternSet(UDWORD index);
+extern bool scrGenExternSet(UDWORD index);
 
 #endif // __INCLUDED_SRC_SCRIPTEXTERN_H__

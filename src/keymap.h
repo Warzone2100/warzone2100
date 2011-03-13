@@ -45,7 +45,7 @@ KEYMAP___HIDE
 struct KEY_MAPPING
 {
 void (*function)(void);
-BOOL		active;
+bool		active;
 KEY_STATUS	status;
 UDWORD		lastCalled;
 KEY_CODE	metaKeyCode;
@@ -58,27 +58,27 @@ KEY_MAPPING *   psNext;
 
 extern KEY_MAPPING	*keyAddMapping			( KEY_STATUS status, KEY_CODE metaCode, KEY_CODE subcode,
 									 KEY_ACTION action, void (*pKeyMapFunc)(void), const char *name );
-extern BOOL	keyRemoveMapping		( KEY_CODE metaCode, KEY_CODE subCode );
+extern bool	keyRemoveMapping		( KEY_CODE metaCode, KEY_CODE subCode );
 extern	KEY_MAPPING	*keyGetMappingFromFunction(void	*function);
-extern BOOL	keyRemoveMappingPt		( KEY_MAPPING *psToRemove );
+extern bool	keyRemoveMappingPt		( KEY_MAPPING *psToRemove );
 extern KEY_MAPPING *keyFindMapping	( KEY_CODE metaCode, KEY_CODE subCode );
 extern void	keyClearMappings		( void );
-extern void	keyProcessMappings		( BOOL bExclude );
-extern void	keyInitMappings			( BOOL bForceDefaults );
+extern void	keyProcessMappings		( bool bExclude );
+extern void	keyInitMappings			( bool bForceDefaults );
 extern UDWORD	getNumMappings		( void );
 extern KEY_CODE	getLastSubKey		( void );
 extern KEY_CODE	getLastMetaKey		( void );
 extern KEY_MAPPING	*getLastMapping	( void );
-extern void	keyEnableProcessing		( BOOL val );
+extern void	keyEnableProcessing		( bool val );
 extern void keyStatusAllInactive	( void );
 extern void keyAllMappingsInactive(void);
 extern void	keyAllMappingsActive	( void );
-extern void	keySetMappingStatus		( KEY_MAPPING *psMapping, BOOL state );
-extern void	processDebugMappings	( BOOL val );
-extern BOOL	getDebugMappingStatus	( void );
-extern	BOOL	keyReAssignMappingName(char *pName, KEY_CODE newMetaCode, KEY_CODE newSubCode);
+extern void	keySetMappingStatus		( KEY_MAPPING *psMapping, bool state );
+extern void	processDebugMappings	( bool val );
+extern bool	getDebugMappingStatus	( void );
+extern	bool	keyReAssignMappingName(char *pName, KEY_CODE newMetaCode, KEY_CODE newSubCode);
 
-extern	BOOL	keyReAssignMapping( KEY_CODE origMetaCode, KEY_CODE origSubCode,
+extern	bool	keyReAssignMapping( KEY_CODE origMetaCode, KEY_CODE origSubCode,
 							KEY_CODE newMetaCode, KEY_CODE newSubCode );
 extern	KEY_MAPPING	*getKeyMapFromName(char *pName);
 

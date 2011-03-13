@@ -34,13 +34,13 @@ extern UDWORD			numFeatureStats;
 extern FEATURE_STATS* oilResFeature;
 
 /* Load the feature stats */
-extern BOOL loadFeatureStats(const char *pFeatureData, UDWORD bufferSize);
+extern bool loadFeatureStats(const char *pFeatureData, UDWORD bufferSize);
 
 /* Release the feature stats memory */
 extern void featureStatsShutDown(void);
 
 /* Create a feature on the map */
-extern FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave);
+extern FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,bool FromSave);
 
 /* Update routine for features */
 extern void featureUpdate(FEATURE *psFeat);

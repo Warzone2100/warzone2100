@@ -70,24 +70,24 @@ enum SEQ_TEXT_POSITIONING
 //buffer render
 extern bool seq_RenderVideoToBuffer(const char* sequenceName, int seqCommand);
 
-extern BOOL seq_UpdateFullScreenVideo(int *bClear);
+extern bool seq_UpdateFullScreenVideo(int *bClear);
 
-extern BOOL seq_StopFullScreenVideo(void);
+extern bool seq_StopFullScreenVideo(void);
 //control
-extern BOOL seq_GetVideoSize(SDWORD* pWidth, SDWORD* pHeight);
+extern bool seq_GetVideoSize(SDWORD* pWidth, SDWORD* pHeight);
 //text
-extern BOOL seq_AddTextForVideo(const char* pText, SDWORD xOffset, SDWORD yOffset, SDWORD startTime, SDWORD endTime, SEQ_TEXT_POSITIONING textJustification);
-extern BOOL seq_ClearTextForVideo(void);
+extern bool seq_AddTextForVideo(const char* pText, SDWORD xOffset, SDWORD yOffset, SDWORD startTime, SDWORD endTime, SEQ_TEXT_POSITIONING textJustification);
+extern bool seq_ClearTextForVideo(void);
 //clear the sequence list
 extern void seq_ClearSeqList(void);
 //add a sequence to the list to be played
-extern void seq_AddSeqToList(const char *pSeqName, const char *pAudioName, const char *pTextName, BOOL bLoop);
+extern void seq_AddSeqToList(const char *pSeqName, const char *pAudioName, const char *pTextName, bool bLoop);
 /*checks to see if there are any sequences left in the list to play*/
-extern BOOL seq_AnySeqLeft(void);
+extern bool seq_AnySeqLeft(void);
 
 //set and check subtitle mode, true subtitles on
-extern void seq_SetSubtitles(BOOL bNewState);
-extern BOOL seq_GetSubtitles(void);
+extern void seq_SetSubtitles(bool bNewState);
+extern bool seq_GetSubtitles(void);
 
 /*returns the next sequence in the list to play*/
 extern void seq_StartNextFullScreenVideo(void);

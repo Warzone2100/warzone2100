@@ -49,7 +49,7 @@
 
 iSurface rendSurface;
 
-BOOL pie_Initialise(void)
+bool pie_Initialise(void)
 {
 	pie_TexInit();
 

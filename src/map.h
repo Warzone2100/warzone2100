@@ -402,16 +402,16 @@ static inline void clip_world_offmap(int* worldX, int* worldY)
 #define map_round(coord) ((coord) & (TILE_UNITS - 1))
 
 /* Shutdown the map module */
-extern BOOL mapShutdown(void);
+extern bool mapShutdown(void);
 
 /* Create a new map of a specified size */
-extern BOOL mapNew(UDWORD width, UDWORD height);
+extern bool mapNew(UDWORD width, UDWORD height);
 
 /* Load the map data */
-extern BOOL mapLoad(char *filename, BOOL preview);
+extern bool mapLoad(char *filename, bool preview);
 
 /* Save the map data */
-extern BOOL mapSave(char **ppFileData, UDWORD *pFileSize);
+extern bool mapSave(char **ppFileData, UDWORD *pFileSize);
 
 /** Return a pointer to the tile structure at x,y in map coordinates */
 static inline WZ_DECL_PURE MAPTILE *mapTile(int32_t x, int32_t y)
@@ -478,25 +478,25 @@ static inline void setTileHeight(int32_t x, int32_t y, int32_t height)
 }
 
 /* Return whether a tile coordinate is on the map */
-WZ_DECL_ALWAYS_INLINE static inline BOOL tileOnMap(SDWORD x, SDWORD y)
+WZ_DECL_ALWAYS_INLINE static inline bool tileOnMap(SDWORD x, SDWORD y)
 {
 	return (x >= 0) && (x < (SDWORD)mapWidth) && (y >= 0) && (y < (SDWORD)mapHeight);
 }
 
-WZ_DECL_ALWAYS_INLINE static inline BOOL tileOnMap(Vector2i pos)
+WZ_DECL_ALWAYS_INLINE static inline bool tileOnMap(Vector2i pos)
 {
 	return tileOnMap(pos.x, pos.y);
 }
 
 /* Return true if a tile is not too near the map edge and not outside of the map */
-static inline BOOL tileInsideBuildRange(SDWORD x, SDWORD y)
+static inline bool tileInsideBuildRange(SDWORD x, SDWORD y)
 {
 	return (x >= TOO_NEAR_EDGE) && (x < ((SDWORD)mapWidth - TOO_NEAR_EDGE)) &&
 		(y >= TOO_NEAR_EDGE) && (y < ((SDWORD)mapHeight - TOO_NEAR_EDGE));
 }
 
 /* Return whether a world coordinate is on the map */
-WZ_DECL_ALWAYS_INLINE static inline BOOL worldOnMap(int x, int y)
+WZ_DECL_ALWAYS_INLINE static inline bool worldOnMap(int x, int y)
 {
 	return (x >= 0) && (x < ((SDWORD)mapWidth << TILE_SHIFT)) &&
 		   (y >= 0) && (y < ((SDWORD)mapHeight << TILE_SHIFT));

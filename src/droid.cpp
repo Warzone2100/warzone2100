@@ -140,7 +140,7 @@ void cancelBuild(DROID *psDroid)
 }
 
 // initialise droid module
-BOOL droidInit(void)
+bool droidInit(void)
 {
 	memset(aDroidExperience, 0, sizeof(UWORD) * MAX_PLAYERS * MAX_RECYCLED_DROIDS);
 	psLastDroidHit = NULL;
@@ -253,7 +253,7 @@ int32_t droidDamage(DROID *psDroid, uint32_t damage, WEAPON_CLASS weaponClass, W
 #else
 #define DROIDREF(func, line) "Illegal reference to droid"
 #endif
-BOOL droidCheckReferences(DROID *psVictimDroid)
+bool droidCheckReferences(DROID *psVictimDroid)
 {
 	int plr;
 
@@ -581,7 +581,7 @@ void	vanishDroid(DROID *psDel)
 /* Remove a droid from the List so doesn't update or get drawn etc
 TAKE CARE with removeDroid() - usually want droidRemove since it deal with cluster and grid code*/
 //returns false if the droid wasn't removed - because it died!
-BOOL droidRemove(DROID *psDroid, DROID *pList[MAX_PLAYERS])
+bool droidRemove(DROID *psDroid, DROID *pList[MAX_PLAYERS])
 {
 	CHECK_DROID(psDroid);
 
@@ -900,7 +900,7 @@ void droidUpdate(DROID *psDroid)
 }
 
 /* See if a droid is next to a structure */
-static BOOL droidNextToStruct(DROID *psDroid, BASE_OBJECT *psStruct)
+static bool droidNextToStruct(DROID *psDroid, BASE_OBJECT *psStruct)
 {
 	SDWORD	minX, maxX, maxY, x,y;
 
@@ -942,7 +942,7 @@ static BOOL droidNextToStruct(DROID *psDroid, BASE_OBJECT *psStruct)
 	return false;
 }
 
-static BOOL
+static bool
 droidCheckBuildStillInProgress( void *psObj )
 {
 	DROID	*psDroid;
@@ -965,7 +965,7 @@ droidCheckBuildStillInProgress( void *psObj )
 	}
 }
 
-static BOOL
+static bool
 droidBuildStartAudioCallback( void *psObj )
 {
 	DROID	*psDroid;
@@ -987,7 +987,7 @@ droidBuildStartAudioCallback( void *psObj )
 
 
 /* Set up a droid to build a structure - returns true if successful */
-BOOL droidStartBuild(DROID *psDroid)
+bool droidStartBuild(DROID *psDroid)
 {
 	STRUCTURE *psStruct;
 
@@ -1089,7 +1089,7 @@ static void addConstructorEffect(STRUCTURE *psStruct)
 
 /* Update a construction droid while it is building
    returns true while building continues */
-BOOL droidUpdateBuild(DROID *psDroid)
+bool droidUpdateBuild(DROID *psDroid)
 {
 	UDWORD		pointsToAdd, constructPoints;
 	STRUCTURE	*psStruct;
@@ -1146,14 +1146,14 @@ BOOL droidUpdateBuild(DROID *psDroid)
 	return true;
 }
 
-BOOL droidStartDemolishing( DROID *psDroid )
+bool droidStartDemolishing( DROID *psDroid )
 {
 	psDroid->actionStarted = gameTime;
 	psDroid->actionPoints = 0;
 	return true;
 }
 
-BOOL droidUpdateDemolishing( DROID *psDroid )
+bool droidUpdateDemolishing( DROID *psDroid )
 {
 	STRUCTURE	*psStruct;
 	UDWORD		pointsToAdd, constructPoints;
@@ -1185,7 +1185,7 @@ BOOL droidUpdateDemolishing( DROID *psDroid )
 }
 
 /* Set up a droid to clear a wrecked building feature - returns true if successful */
-BOOL droidStartClearing( DROID *psDroid )
+bool droidStartClearing( DROID *psDroid )
 {
 	FEATURE			*psFeature;
 
@@ -1206,7 +1206,7 @@ BOOL droidStartClearing( DROID *psDroid )
 
 /* Update a construction droid while it is clearing
    returns true while continues */
-BOOL droidUpdateClearing( DROID *psDroid )
+bool droidUpdateClearing( DROID *psDroid )
 {
 	FEATURE		*psFeature;
 	UDWORD		pointsToAdd, constructPoints;
@@ -1251,7 +1251,7 @@ BOOL droidUpdateClearing( DROID *psDroid )
 	return true;
 }
 
-BOOL droidStartRepair( DROID *psDroid )
+bool droidStartRepair( DROID *psDroid )
 {
 	STRUCTURE	*psStruct;
 
@@ -1270,7 +1270,7 @@ BOOL droidStartRepair( DROID *psDroid )
 
 
 /*Start a Repair Droid working on a damaged droid*/
-BOOL droidStartDroidRepair( DROID *psDroid )
+bool droidStartDroidRepair( DROID *psDroid )
 {
 	DROID	*psDroidToRepair;
 
@@ -1311,7 +1311,7 @@ void droidSelfRepair(DROID *psDroid)
 
 
 /*Start a EW weapon droid working on a low resistance structure*/
-BOOL droidStartRestore( DROID *psDroid )
+bool droidStartRestore( DROID *psDroid )
 {
 	STRUCTURE	*psStruct;
 
@@ -1330,7 +1330,7 @@ BOOL droidStartRestore( DROID *psDroid )
 }
 
 /*continue restoring a structure*/
-BOOL droidUpdateRestore( DROID *psDroid )
+bool droidUpdateRestore( DROID *psDroid )
 {
 	STRUCTURE		*psStruct;
 	UDWORD			pointsToAdd, restorePoints;
@@ -1452,7 +1452,7 @@ void	droidUpdateRecoil( DROID *psDroid )
 }
 
 
-BOOL droidUpdateRepair( DROID *psDroid )
+bool droidUpdateRepair( DROID *psDroid )
 {
 	STRUCTURE	*psStruct;
 	UDWORD		iPointsToAdd, iRepairPoints;
@@ -1490,7 +1490,7 @@ BOOL droidUpdateRepair( DROID *psDroid )
 }
 
 /*Updates a Repair Droid working on a damaged droid*/
-BOOL droidUpdateDroidRepair(DROID *psRepairDroid)
+bool droidUpdateDroidRepair(DROID *psRepairDroid)
 {
 	DROID		*psDroidToRepair;
 	UDWORD		iPointsToAdd, iRepairPoints;
@@ -1613,9 +1613,9 @@ DROID_TEMPLATE::DROID_TEMPLATE(LineView line)
 }
 
 /* load the Droid stats for the components from the Access database */
-BOOL loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
+bool loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 {
-	BOOL bDefaultTemplateFound = false;
+	bool bDefaultTemplateFound = false;
 
 	TableView table(pDroidData, bufferSize);
 
@@ -1721,7 +1721,7 @@ void initTemplatePoints(void)
 
 
 // return whether a droid is IDF
-BOOL idfDroid(DROID *psDroid)
+bool idfDroid(DROID *psDroid)
 {
 	//add Cyborgs
 	//if (psDroid->droidType != DROID_WEAPON)
@@ -1740,7 +1740,7 @@ BOOL idfDroid(DROID *psDroid)
 }
 
 // return whether a template is for an IDF droid
-BOOL templateIsIDF(DROID_TEMPLATE *psTemplate)
+bool templateIsIDF(DROID_TEMPLATE *psTemplate)
 {
 	//add Cyborgs
 	if (!(psTemplate->droidType == DROID_WEAPON || psTemplate->droidType == DROID_CYBORG ||
@@ -1812,7 +1812,7 @@ DROID_TYPE droidTemplateType(DROID_TEMPLATE *psTemplate)
 }
 
 //Load the weapons assigned to Droids in the Access database
-BOOL loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize)
+bool loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize)
 {
 	TableView table(pWeaponData, bufferSize);
 
@@ -1887,7 +1887,7 @@ BOOL loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize)
 }
 
 //free the storage for the droid templates
-BOOL droidTemplateShutDown(void)
+bool droidTemplateShutDown(void)
 {
 	unsigned int player;
 	DROID_TEMPLATE *pTemplate, *pNext;
@@ -2208,7 +2208,7 @@ UDWORD calcDroidPoints(DROID *psDroid)
 }
 
 //Builds an instance of a Droid - the x/y passed in are in world coords.
-DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player, BOOL onMission)
+DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player, bool onMission)
 {
 	DROID			*psDroid;
 	DROID_GROUP		*psGrp;
@@ -2394,7 +2394,7 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD pl
 	return psDroid;
 }
 
-DROID *buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player, BOOL onMission, const INITIAL_DROID_ORDERS *initialOrders)
+DROID *buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player, bool onMission, const INITIAL_DROID_ORDERS *initialOrders)
 {
 	// ajl. droid will be created, so inform others
 	if (bMultiMessages)
@@ -2581,7 +2581,7 @@ void fillTemplateList(std::vector<DROID_TEMPLATE *> &pList, STRUCTURE *psFactory
 void assignDroidsToGroup(UDWORD	playerNumber, UDWORD groupNumber)
 {
 DROID	*psDroid;
-BOOL	bAtLeastOne = false;
+bool	bAtLeastOne = false;
 FLAG_POSITION	*psFlagPos;
 
 	if(groupNumber<UBYTE_MAX)
@@ -2619,10 +2619,10 @@ FLAG_POSITION	*psFlagPos;
 }
 
 
-BOOL activateGroupAndMove(UDWORD playerNumber, UDWORD groupNumber)
+bool activateGroupAndMove(UDWORD playerNumber, UDWORD groupNumber)
 {
 	DROID	*psDroid,*psCentreDroid = NULL;
-	BOOL selected = false;
+	bool selected = false;
 	FLAG_POSITION	*psFlagPos;
 
 	if (groupNumber < UBYTE_MAX)
@@ -2683,10 +2683,10 @@ BOOL activateGroupAndMove(UDWORD playerNumber, UDWORD groupNumber)
 	return selected;
 }
 
-BOOL activateGroup(UDWORD playerNumber, UDWORD groupNumber)
+bool activateGroup(UDWORD playerNumber, UDWORD groupNumber)
 {
 	DROID	*psDroid;
-	BOOL selected = false;
+	bool selected = false;
 	FLAG_POSITION	*psFlagPos;
 
 	if (groupNumber < UBYTE_MAX)
@@ -3060,7 +3060,7 @@ DROID_TEMPLATE* getTemplateFromMultiPlayerID(UDWORD multiPlayerID)
 }
 
 // finds a droid for the player and sets it to be the current selected droid
-BOOL selectDroidByID(UDWORD id, UDWORD player)
+bool selectDroidByID(UDWORD id, UDWORD player)
 {
 	DROID	*psCurr;
 
@@ -3196,7 +3196,7 @@ void droidSetName(DROID *psDroid,const char *pName)
 
 // ////////////////////////////////////////////////////////////////////////////
 // returns true when no droid on x,y square.
-BOOL noDroid(UDWORD x, UDWORD y)
+bool noDroid(UDWORD x, UDWORD y)
 {
 	unsigned int i;
 
@@ -3218,10 +3218,10 @@ BOOL noDroid(UDWORD x, UDWORD y)
 
 // ////////////////////////////////////////////////////////////////////////////
 // returns true when at most one droid on x,y square.
-static BOOL oneDroidMax(UDWORD x, UDWORD y)
+static bool oneDroidMax(UDWORD x, UDWORD y)
 {
 	UDWORD i;
-	BOOL bFound = false;
+	bool bFound = false;
 	DROID *pD;
 	// check each droid list
 	for(i=0;i<MAX_PLAYERS;i++)
@@ -3245,7 +3245,7 @@ static BOOL oneDroidMax(UDWORD x, UDWORD y)
 
 // ////////////////////////////////////////////////////////////////////////////
 // returns true if it's a sensible place to put that droid.
-static BOOL sensiblePlace(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion)
+static bool sensiblePlace(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion)
 {
 	UDWORD count=0;
 
@@ -3293,26 +3293,26 @@ static BOOL sensiblePlace(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion)
 
 // ------------------------------------------------------------------------------------
 // Should stop things being placed in inaccessible areas? Assume wheeled propulsion.
-BOOL	zonedPAT(UDWORD x, UDWORD y)
+bool	zonedPAT(UDWORD x, UDWORD y)
 {
 	return sensiblePlace(x, y, PROPULSION_TYPE_WHEELED) && noDroid(x,y);
 }
 
-static BOOL canFitDroid(UDWORD x, UDWORD y)
+static bool canFitDroid(UDWORD x, UDWORD y)
 {
 	return sensiblePlace(x, y, PROPULSION_TYPE_WHEELED) && oneDroidMax(x, y);
 }
 
 /// find a tile for which the function will return true
-BOOL	pickATileGen(UDWORD *x, UDWORD *y, UBYTE numIterations,
-					 BOOL (*function)(UDWORD x, UDWORD y))
+bool	pickATileGen(UDWORD *x, UDWORD *y, UBYTE numIterations,
+					 bool (*function)(UDWORD x, UDWORD y))
 {
 	return pickATileGenThreat(x, y, numIterations, -1, -1, function);
 }
 
 /// find a tile for which the passed function will return true without any threat in the specified range 
-BOOL	pickATileGenThreat(UDWORD *x, UDWORD *y, UBYTE numIterations, SDWORD threatRange,
-					 SDWORD player, BOOL (*function)(UDWORD x, UDWORD y))
+bool	pickATileGenThreat(UDWORD *x, UDWORD *y, UBYTE numIterations, SDWORD threatRange,
+					 SDWORD player, bool (*function)(UDWORD x, UDWORD y))
 {
 	SDWORD		i, j;
 	SDWORD		startX, endX, startY, endY;
@@ -3364,7 +3364,7 @@ BOOL	pickATileGenThreat(UDWORD *x, UDWORD *y, UBYTE numIterations, SDWORD threat
 }
 
 /// find an empty tile accessible to a wheeled droid 
-BOOL	pickATile(UDWORD *x, UDWORD *y, UBYTE numIterations)
+bool	pickATile(UDWORD *x, UDWORD *y, UBYTE numIterations)
 {
 	return pickATileGen(x, y, numIterations, zonedPAT);
 }
@@ -3377,7 +3377,7 @@ PICKTILE pickHalfATile(UDWORD *x, UDWORD *y, UBYTE numIterations)
 
 /* Looks through the players list of droids to see if any of them are
 building the specified structure - returns true if finds one*/
-BOOL checkDroidsBuilding(STRUCTURE *psStructure)
+bool checkDroidsBuilding(STRUCTURE *psStructure)
 {
 	DROID				*psDroid;
 
@@ -3396,7 +3396,7 @@ BOOL checkDroidsBuilding(STRUCTURE *psStructure)
 
 /* Looks through the players list of droids to see if any of them are
 demolishing the specified structure - returns true if finds one*/
-BOOL checkDroidsDemolishing(STRUCTURE *psStructure)
+bool checkDroidsDemolishing(STRUCTURE *psStructure)
 {
 	DROID				*psDroid;
 
@@ -3416,9 +3416,9 @@ BOOL checkDroidsDemolishing(STRUCTURE *psStructure)
 
 /* checks the structure for type and capacity and **NOT orders the droid*** to build
 a module if it can - returns true if order is set */
-BOOL buildModule(STRUCTURE *psStruct)
+bool buildModule(STRUCTURE *psStruct)
 {
-	BOOL	order = false;
+	bool	order = false;
 	UDWORD	i = 0;
 
 	ASSERT(psStruct != NULL && psStruct->pStructureType != NULL, "Invalid structure pointer");
@@ -3538,7 +3538,7 @@ const char* getTemplateName(const DROID_TEMPLATE *psTemplate)
 }
 
 /* Just returns true if the droid's present body points aren't as high as the original*/
-BOOL	droidIsDamaged(DROID *psDroid)
+bool	droidIsDamaged(DROID *psDroid)
 {
 	if(psDroid->body < psDroid->originalBody)
 	{
@@ -3568,7 +3568,7 @@ char const *getDroidResourceName(char const *pName)
 
 
 /*checks to see if an electronic warfare weapon is attached to the droid*/
-BOOL electronicDroid(DROID *psDroid)
+bool electronicDroid(DROID *psDroid)
 {
 	DROID	*psCurr;
 
@@ -3598,7 +3598,7 @@ BOOL electronicDroid(DROID *psDroid)
 }
 
 /*checks to see if the droid is currently being repaired by another*/
-BOOL droidUnderRepair(DROID *psDroid)
+bool droidUnderRepair(DROID *psDroid)
 {
 	DROID		*psCurr;
 
@@ -3639,21 +3639,21 @@ UBYTE checkCommandExist(UBYTE player)
 }
 
 //access functions for vtols
-BOOL isVtolDroid(const DROID* psDroid)
+bool isVtolDroid(const DROID* psDroid)
 {
 	return asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].propulsionType == PROPULSION_TYPE_LIFT
 	    && psDroid->droidType != DROID_TRANSPORTER;
 }
 
 /* returns true if the droid has lift propulsion and is moving */ 
-BOOL isFlying(const DROID* psDroid)
+bool isFlying(const DROID* psDroid)
 {
 	return (asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat)->propulsionType == PROPULSION_TYPE_LIFT  
 			&& ( psDroid->sMove.Status != MOVEINACTIVE || psDroid->droidType == DROID_TRANSPORTER ); 
 }
 
 /* returns true if it's a VTOL weapon droid which has completed all runs */
-BOOL vtolEmpty(DROID *psDroid)
+bool vtolEmpty(DROID *psDroid)
 {
 	UBYTE	i;
 
@@ -3681,7 +3681,7 @@ BOOL vtolEmpty(DROID *psDroid)
 }
 
 /* returns true if it's a VTOL weapon droid which still has full ammo */
-BOOL vtolFull(DROID *psDroid)
+bool vtolFull(DROID *psDroid)
 {
 	UBYTE	i;
 
@@ -3709,7 +3709,7 @@ BOOL vtolFull(DROID *psDroid)
 }
 
 // true if a vtol is waiting to be rearmed by a particular rearm pad
-BOOL vtolReadyToRearm(DROID *psDroid, STRUCTURE *psStruct)
+bool vtolReadyToRearm(DROID *psDroid, STRUCTURE *psStruct)
 {
 	BASE_OBJECT *psRearmPad;
 
@@ -3750,7 +3750,7 @@ BOOL vtolReadyToRearm(DROID *psDroid, STRUCTURE *psStruct)
 }
 
 // true if a vtol droid currently returning to be rearmed
-BOOL vtolRearming(DROID *psDroid)
+bool vtolRearming(DROID *psDroid)
 {
 	CHECK_DROID(psDroid);
 
@@ -3775,7 +3775,7 @@ BOOL vtolRearming(DROID *psDroid)
 }
 
 // true if a droid is currently attacking
-BOOL droidAttacking(DROID *psDroid)
+bool droidAttacking(DROID *psDroid)
 {
 	CHECK_DROID(psDroid);
 
@@ -3800,10 +3800,10 @@ BOOL droidAttacking(DROID *psDroid)
 
 // see if there are any other vtols attacking the same target
 // but still rearming
-BOOL allVtolsRearmed(DROID *psDroid)
+bool allVtolsRearmed(DROID *psDroid)
 {
 	DROID	*psCurr;
-	BOOL	stillRearming;
+	bool	stillRearming;
 
 	CHECK_DROID(psDroid);
 
@@ -3854,7 +3854,7 @@ UWORD   getNumAttackRuns(DROID *psDroid, int weapon_slot)
 
 /*Checks a vtol for being fully armed and fully repaired to see if ready to
 leave reArm pad */
-BOOL vtolHappy(const DROID* psDroid)
+bool vtolHappy(const DROID* psDroid)
 {
 	unsigned int i;
 
@@ -3951,7 +3951,7 @@ void assignVTOLPad(DROID *psNewDroid, STRUCTURE *psReArmPad)
 
 /*compares the droid sensor type with the droid weapon type to see if the
 FIRE_SUPPORT order can be assigned*/
-BOOL droidSensorDroidWeapon(BASE_OBJECT *psObj, DROID *psDroid)
+bool droidSensorDroidWeapon(BASE_OBJECT *psObj, DROID *psDroid)
 {
 	SENSOR_STATS	*psStats = NULL;
 	int compIndex;
@@ -4037,7 +4037,7 @@ BOOL droidSensorDroidWeapon(BASE_OBJECT *psObj, DROID *psDroid)
 }
 
 // return whether a droid has a CB sensor on it
-BOOL cbSensorDroid(DROID *psDroid)
+bool cbSensorDroid(DROID *psDroid)
 {
 	if (psDroid->droidType != DROID_SENSOR)
 	{
@@ -4059,7 +4059,7 @@ BOOL cbSensorDroid(DROID *psDroid)
 }
 
 // return whether a droid has a standard sensor on it (standard, VTOL strike, or wide spectrum)
-BOOL standardSensorDroid(DROID *psDroid)
+bool standardSensorDroid(DROID *psDroid)
 {
 	if (psDroid->droidType != DROID_SENSOR)
 	{
@@ -4311,7 +4311,7 @@ true if valid weapon*/
 /* this will be buggy if the droid being checked has both AA weapon and non-AA weapon
 Cannot think of a solution without adding additional return value atm.
 */
-BOOL checkValidWeaponForProp(DROID_TEMPLATE *psTemplate)
+bool checkValidWeaponForProp(DROID_TEMPLATE *psTemplate)
 {
 	PROPULSION_STATS	*psPropStats;
 
@@ -4474,7 +4474,7 @@ UWORD repairPowerPoint(DROID *psDroid)
  *  Sets the droid's current track id to NO_SOUND
  *  \return true on success, false on failure
  */
-BOOL droidAudioTrackStopped( void *psObj )
+bool droidAudioTrackStopped( void *psObj )
 {
 	DROID	*psDroid;
 
@@ -4496,7 +4496,7 @@ BOOL droidAudioTrackStopped( void *psObj )
 
 
 /*returns true if droid type is one of the Cyborg types*/
-BOOL cyborgDroid(const DROID* psDroid)
+bool cyborgDroid(const DROID* psDroid)
 {
 	return (psDroid->droidType == DROID_CYBORG
 		 || psDroid->droidType == DROID_CYBORG_CONSTRUCT
@@ -4514,7 +4514,7 @@ bool isConstructionDroid(BASE_OBJECT const *psObject)
 	return isDroid(psObject) && isConstructionDroid(castDroid(psObject));
 }
 
-BOOL droidOnMap(const DROID *psDroid)
+bool droidOnMap(const DROID *psDroid)
 {
 	if (psDroid->died == NOT_CURRENT_LIST || psDroid->droidType == DROID_TRANSPORTER
 		|| psDroid->pos.x == INVALID_XY || psDroid->pos.y == INVALID_XY || missionIsOffworld()

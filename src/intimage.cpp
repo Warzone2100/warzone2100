@@ -171,7 +171,7 @@ TABDEF	SmallTab = {
 
 // Read bitmaps used by the interface.
 //
-BOOL imageInitBitmaps(void)
+bool imageInitBitmaps(void)
 {
 	IntImages = (IMAGEFILE*)resGetData("IMG", "intfac.img");
 	pie_InitColourMouse(IntImages, MousePointerImageIDs);
@@ -181,7 +181,7 @@ BOOL imageInitBitmaps(void)
 
 // Render a window frame.
 //
-static void RenderWindow(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD Height, BOOL Opaque)
+static void RenderWindow(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD Height, bool Opaque)
 {
 	SWORD WTopRight = 0;
 	SWORD WTopLeft = 0;
@@ -193,7 +193,7 @@ static void RenderWindow(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWO
 	SWORD HBottomLeft = 0;
 	UWORD RectI;
 	FRAMERECT *Rect;
-	BOOL Masked = false;
+	bool Masked = false;
 	IMAGEFRAME *Frame;
 
 	if (frame == 0)

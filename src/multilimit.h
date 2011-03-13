@@ -24,7 +24,7 @@
 #ifndef __INCLUDED_MULTILIMIT_H__
 #define __INCLUDED_MULTILIMIT_H__
 
-extern BOOL startLimitScreen	(void);
+extern bool startLimitScreen	(void);
 extern void runLimitScreen		(void);
 extern void applyLimitSet		(void);
 extern void createLimitSet		(void);

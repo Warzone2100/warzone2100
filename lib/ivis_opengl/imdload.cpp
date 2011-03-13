@@ -34,7 +34,7 @@
 #include "imd.h" // for imd structures
 #include "tex.h" // texture page loading
 
-static BOOL AtEndOfFile(const char *CurPos, const char *EndOfFile)
+static bool AtEndOfFile(const char *CurPos, const char *EndOfFile)
 {
 	while ( *CurPos == 0x00 || *CurPos == 0x09 || *CurPos == 0x0a || *CurPos == 0x0d || *CurPos == 0x20 )
 	{
@@ -199,7 +199,7 @@ static bool _imd_load_polys( const char **ppFileData, iIMDShape *s, int pieVersi
 }
 
 
-static BOOL ReadPoints( const char **ppFileData, iIMDShape *s )
+static bool ReadPoints( const char **ppFileData, iIMDShape *s )
 {
 	const char *pFileData = *ppFileData;
 	unsigned int i;
@@ -221,7 +221,7 @@ static BOOL ReadPoints( const char **ppFileData, iIMDShape *s )
 }
 
 
-static BOOL _imd_load_points( const char **ppFileData, iIMDShape *s )
+static bool _imd_load_points( const char **ppFileData, iIMDShape *s )
 {
 	Vector3f *p = NULL;
 	int32_t tempXMax, tempXMin, tempZMax, tempZMin;
@@ -455,7 +455,7 @@ static BOOL _imd_load_points( const char **ppFileData, iIMDShape *s )
  * \pre s->nconnectors set
  * \post s->connectors allocated
  */
-static BOOL _imd_load_connectors(const char **ppFileData, iIMDShape *s)
+static bool _imd_load_connectors(const char **ppFileData, iIMDShape *s)
 {
 	const char *pFileData = *ppFileData;
 	int cnt;
@@ -639,7 +639,7 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 	UDWORD level;
 	int32_t imd_version;
 	uint32_t imd_flags;
-	BOOL bTextured = false;
+	bool bTextured = false;
 
 	if (sscanf(pFileData, "%255s %d%n", buffer, &imd_version, &cnt) != 2)
 	{

@@ -156,7 +156,7 @@ SDWORD cmdDroidGetIndex(DROID *psCommander)
 
 
 // note that commander experience should be increased
-void cmdDroidMultiExpBoost(BOOL bDoit)
+void cmdDroidMultiExpBoost(bool bDoit)
 {
 	bMultiExpBoost = bDoit;
 }

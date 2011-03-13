@@ -46,7 +46,7 @@ enum QueueType
 struct NETQUEUE
 {
 	void *queue;  ///< Is either a (NetQueuePair **) or a (NetQueue *). (Note different numbers of *.)
-	BOOL isPair;
+	bool isPair;
 	uint8_t index;
 	uint8_t queueType;
 };
@@ -58,7 +58,7 @@ NETQUEUE NETbroadcastQueue(void);             ///< The queue for sending data di
 
 void NETinsertRawData(NETQUEUE queue, uint8_t *data, size_t dataLen);  ///< Dump raw data from sockets and raw data sent via host here.
 void NETinsertMessageFromNet(NETQUEUE queue, NetMessage const *message);     ///< Dump whole NetMessages into the queue.
-BOOL NETisMessageReady(NETQUEUE queue);       ///< Returns true if there is a complete message ready to deserialise in this queue.
+bool NETisMessageReady(NETQUEUE queue);       ///< Returns true if there is a complete message ready to deserialise in this queue.
 NetMessage const *NETgetMessage(NETQUEUE queue);///< Returns the current message in the queue which is ready to be deserialised. Do not delete the message.
 
 void NETinitQueue(NETQUEUE queue);             ///< Allocates the queue. Deletes the old queue, if there was one. Avoids a crash on NULL pointer deference when trying to use the queue.
@@ -67,7 +67,7 @@ void NETmoveQueue(NETQUEUE src, NETQUEUE dst); ///< Used for moving the tmpQueue
 
 void NETbeginEncode(NETQUEUE queue, uint8_t type);
 void NETbeginDecode(NETQUEUE queue, uint8_t type);
-BOOL NETend(void);
+bool NETend(void);
 void NETflushGameQueues(void);
 void NETpop(NETQUEUE queue);
 
@@ -80,7 +80,7 @@ void NETuint32_t(uint32_t *ip);       ///< Encodes small values (< 1 672 576) in
 void NETuint32_tLarge(uint32_t *ip);  ///< Encodes all values in exactly 4 bytes.
 void NETint64_t(int64_t *ip);
 void NETuint64_t(uint64_t *ip);
-void NETbool(BOOL *bp);
+void NETbool(bool *bp);
 void NETbool(bool *bp);
 void NETstring(char *str, uint16_t maxlen);
 void NETstring(char const *str, uint16_t maxlen);  ///< Encode-only version of NETstring.

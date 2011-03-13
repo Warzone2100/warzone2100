@@ -24,9 +24,9 @@
 
 #include "netplay.h"
 
-BOOL NETstartLogging(void);
-BOOL NETstopLogging(void);
-BOOL NETlogEntry( const char *str, UDWORD a, UDWORD b );
-void NETlogPacket(uint8_t type, uint32_t size, BOOL received);
+bool NETstartLogging(void);
+bool NETstopLogging(void);
+bool NETlogEntry( const char *str, UDWORD a, UDWORD b );
+void NETlogPacket(uint8_t type, uint32_t size, bool received);
 
 #endif // _netlog_h

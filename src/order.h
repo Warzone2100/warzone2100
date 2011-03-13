@@ -42,19 +42,19 @@ extern void orderUpdateDroid(DROID *psDroid);
 extern void orderDroid(DROID *psDroid, DROID_ORDER order, QUEUE_MODE mode);
 
 /* Check the order state of a droid */
-extern BOOL orderState(DROID *psDroid, DROID_ORDER order);
+extern bool orderState(DROID *psDroid, DROID_ORDER order);
 
 /** Check if an order is valid for a location. */
-BOOL validOrderForLoc(DROID_ORDER order);
+bool validOrderForLoc(DROID_ORDER order);
 
 /** Check if an order is valid for an object. */
-BOOL validOrderForObj(DROID_ORDER order);
+bool validOrderForObj(DROID_ORDER order);
 
 /* Give a droid an order with a location target */
 void orderDroidLoc(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD y, QUEUE_MODE mode);
 
 /* Get the state of a droid order with a location */
-extern BOOL orderStateLoc(DROID *psDroid, DROID_ORDER order, UDWORD *pX, UDWORD *pY);
+extern bool orderStateLoc(DROID *psDroid, DROID_ORDER order, UDWORD *pX, UDWORD *pY);
 
 /* Give a droid an order with an object target */
 void orderDroidObj(DROID *psDroid, DROID_ORDER order, BASE_OBJECT *psObj, QUEUE_MODE mode);
@@ -66,7 +66,7 @@ extern BASE_OBJECT* orderStateObj(DROID *psDroid, DROID_ORDER order);
 void orderDroidStatsLocDir(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStats, UDWORD x, UDWORD y, uint16_t direction, QUEUE_MODE mode);
 
 /* Get the state of a droid order with a location and a stat */
-extern BOOL orderStateStatsLoc(DROID *psDroid, DROID_ORDER order,
+extern bool orderStateStatsLoc(DROID *psDroid, DROID_ORDER order,
 						BASE_STATS **ppsStats, UDWORD *pX, UDWORD *pY);
 
 /* Give a droid an order with a location and a stat */
@@ -80,31 +80,31 @@ extern void orderSelectedLoc(uint32_t player, uint32_t x, uint32_t y, bool add);
 
 /* Give selected droids an order with an object target */
 extern void orderSelectedObj(UDWORD player, BASE_OBJECT *psObj);
-extern void orderSelectedObjAdd(UDWORD player, BASE_OBJECT *psObj, BOOL add);
+extern void orderSelectedObjAdd(UDWORD player, BASE_OBJECT *psObj, bool add);
 
 // add an order to a droids order list
 void orderDroidAdd(DROID *psDroid, DROID_ORDER_DATA *psOrder);
 void orderDroidAddPending(DROID *psDroid, DROID_ORDER_DATA *psOrder);
 // do the next order from a droids order list
-extern BOOL orderDroidList(DROID *psDroid);
+extern bool orderDroidList(DROID *psDroid);
 
 /* order all selected droids with a location and a stat */
-void orderSelectedStatsLocDir(UDWORD player, DROID_ORDER order, BASE_STATS *psStats, UDWORD x, UDWORD y, uint16_t direction, BOOL add);
+void orderSelectedStatsLocDir(UDWORD player, DROID_ORDER order, BASE_STATS *psStats, UDWORD x, UDWORD y, uint16_t direction, bool add);
 
 /* add an order with a location and a stat to the droids order list*/
 void orderDroidStatsLocDirAdd(DROID *psDroid, DROID_ORDER order, BASE_STATS *psStats, UDWORD x, UDWORD y, uint16_t direction, bool add = true);
 
 /* order all selected droids with two a locations and a stat */
-void orderSelectedStatsTwoLocDir(UDWORD player, DROID_ORDER order, BASE_STATS *psStats, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2, uint16_t direction, BOOL add);
+void orderSelectedStatsTwoLocDir(UDWORD player, DROID_ORDER order, BASE_STATS *psStats, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2, uint16_t direction, bool add);
 
 // see if a droid supports a secondary order
-extern BOOL secondarySupported(DROID *psDroid, SECONDARY_ORDER sec);
+extern bool secondarySupported(DROID *psDroid, SECONDARY_ORDER sec);
 
 // get the state of a secondary order, return false if unsupported
 extern SECONDARY_STATE secondaryGetState(DROID *psDroid, SECONDARY_ORDER sec);
 
 // set the state of a secondary order, return false if failed.
-extern BOOL secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE State, QUEUE_MODE mode = ModeQueue);
+extern bool secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE State, QUEUE_MODE mode = ModeQueue);
 
 // check the damage level of a droid against it's secondary state
 extern void secondaryCheckDamageLevel(DROID *psDroid);
@@ -131,9 +131,9 @@ extern BASE_OBJECT * checkForDamagedStruct(DROID *psDroid, STRUCTURE *psTarget);
 extern void orderHealthCheck(DROID *psDroid);
 
 // set the state of a secondary order for a Factory, return false if failed.
-extern BOOL setFactoryState(STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_STATE State);
+extern bool setFactoryState(STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_STATE State);
 // get the state of a secondary order for a Factory, return false if unsupported
-extern BOOL getFactoryState(STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_STATE *pState);
+extern bool getFactoryState(STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_STATE *pState);
 
 //lasSat structure can select a target
 extern void orderStructureObj(UDWORD player, BASE_OBJECT *psObj);
@@ -142,8 +142,8 @@ extern void orderStructureObj(UDWORD player, BASE_OBJECT *psObj);
 void orderDroidListEraseRange(DROID *psDroid, unsigned indexBegin, unsigned indexEnd);  ///< Pops the order at position index off the beginning of the list. (Even if the order is still pending.)
 void orderClearTargetFromDroidList(DROID *psDroid, BASE_OBJECT *psTarget);              ///< Clear all orders for the given target (including pending orders) from the list
 
-extern DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x,UDWORD y, BOOL altOrder);
-extern DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, BOOL altOrder);
+extern DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x,UDWORD y, bool altOrder);
+extern DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, bool altOrder);
 
 extern void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder);
 

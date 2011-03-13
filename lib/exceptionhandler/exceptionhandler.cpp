@@ -159,7 +159,7 @@ static struct sigaction oldAction[NSIG];
 
 
 static struct utsname sysInfo;
-static BOOL gdbIsAvailable = false, programIsAvailable = false, sysInfoValid = false;
+static bool gdbIsAvailable = false, programIsAvailable = false, sysInfoValid = false;
 static char
 	executionDate[MAX_DATE_STRING] = {'\0'},
 	programPID[MAX_PID_STRING] = {'\0'},

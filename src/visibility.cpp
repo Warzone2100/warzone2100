@@ -82,7 +82,7 @@ static Vector2i *gWall = NULL;
 
 
 // initialise the visibility stuff
-BOOL visInitialise(void)
+bool visInitialise(void)
 {
 	visLevelIncAcc = 0;
 	visLevelDecAcc = 0;
@@ -887,7 +887,7 @@ static int checkFireLine(const SIMPLE_OBJECT* psViewer, const BASE_OBJECT* psTar
 	// run a manual trace along the line of fire until target is reached
 	while (partSq < distSq)
 	{
-		BOOL hasSplitIntersection;
+		bool hasSplitIntersection;
 
 		oldPartSq = partSq;
 		

@@ -121,7 +121,7 @@ uint8_t *psAuxMap[MAX_PLAYERS + AUX_MAX];        // yes, we waste one element...
 
 static void SetGroundForTile(const char *filename, const char *nametype);
 static int getTextureType(const char *textureType);
-static BOOL hasDecals(int i, int j);
+static bool hasDecals(int i, int j);
 static void SetDecals(const char *filename, const char *decal_type);
 static void init_tileNames(int type);
 
@@ -145,7 +145,7 @@ static int *mapDecals;		// array that tells us what tile is a decal
 UBYTE terrainTypes[MAX_TILE_TEXTURES];
 
 /* Create a new map of a specified size */
-BOOL mapNew(UDWORD width, UDWORD height)
+bool mapNew(UDWORD width, UDWORD height)
 {
 	MAPTILE *psTile;
 	UDWORD	i;
@@ -312,7 +312,7 @@ static void init_tileNames(int type)
 // This is the main loading routine to get all the map's parameters set.
 // Once it figures out what tileset we need, we then parse the files for that tileset.
 // Currently, we only support 3 tilesets.  Arizona, Urban, and Rockie
-static BOOL mapLoadGroundTypes(void)
+static bool mapLoadGroundTypes(void)
 {
 	char	*pFileData = NULL;
 	char	tilename[MAX_STR_LENGTH] = {'\0'};
@@ -570,7 +570,7 @@ static int determineGroundType(int x, int y, const char *tileset)
 	int votes[2][2];
 	int i,j, tile;
 	int a,b, best;
-	BOOL arizona, rockies, urban;
+	bool arizona, rockies, urban;
 	arizona = rockies = urban = false;
 	if (strcmp(tileset, "texpages/tertilesc1hw") == 0)
 	{
@@ -712,7 +712,7 @@ static void SetDecals(const char *filename, const char *decal_type)
 }
 // hasDecals()
 // Checks to see if the requested tile has a decal on it or not.
-static BOOL hasDecals(int i, int j)
+static bool hasDecals(int i, int j)
 {
 	int index = 0;
 	index = TileNumber_tile(mapTile(i, j)->texture);
@@ -725,7 +725,7 @@ static BOOL hasDecals(int i, int j)
 }
 // mapSetGroundTypes()
 // Sets the ground type to be a decal or not
-static BOOL mapSetGroundTypes(void)
+static bool mapSetGroundTypes(void)
 {
 	int i,j;
 
@@ -751,7 +751,7 @@ static BOOL mapSetGroundTypes(void)
 }
 
 /* Initialise the map structure */
-BOOL mapLoad(char *filename, BOOL preview)
+bool mapLoad(char *filename, bool preview)
 {
 	UDWORD		numGw, width, height;
 	char		aFileType[4];
@@ -949,7 +949,7 @@ failure:
 }
 
 /* Save the map data */
-BOOL mapSave(char **ppFileData, UDWORD *pFileSize)
+bool mapSave(char **ppFileData, UDWORD *pFileSize)
 {
 	UDWORD	i;
 	MAP_SAVEHEADER	*psHeader = NULL;
@@ -1058,7 +1058,7 @@ BOOL mapSave(char **ppFileData, UDWORD *pFileSize)
 }
 
 /* Shutdown the map module */
-BOOL mapShutdown(void)
+bool mapShutdown(void)
 {
 	int x;
 

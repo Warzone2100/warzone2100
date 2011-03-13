@@ -53,7 +53,7 @@ static SCRV_STORE	*psContextStore=NULL;
 static std::list<INTERP_VAL *>basePointers;
 
 // Initialise the script value module
-BOOL scrvInitialise(void)
+bool scrvInitialise(void)
 {
 	psContextStore = NULL;
 	return true;
@@ -91,7 +91,7 @@ void scrvReset(void)
 }
 
 // Add a new context to the list
-BOOL scrvAddContext(char *pID, SCRIPT_CONTEXT *psContext, SCRV_TYPE type)
+bool scrvAddContext(char *pID, SCRIPT_CONTEXT *psContext, SCRV_TYPE type)
 {
 	SCRV_STORE		*psNew;
 
@@ -120,7 +120,7 @@ BOOL scrvAddContext(char *pID, SCRIPT_CONTEXT *psContext, SCRV_TYPE type)
 }
 
 // Add a new base pointer variable
-BOOL scrvAddBasePointer(INTERP_VAL *psVal)
+bool scrvAddBasePointer(INTERP_VAL *psVal)
 {
 	basePointers.push_back(psVal);
 	return true;
@@ -150,7 +150,7 @@ void scrvUpdateBasePointers(void)
 }
 
 // create a group structure for a ST_GROUP variable
-BOOL scrvNewGroup(INTERP_VAL *psVal)
+bool scrvNewGroup(INTERP_VAL *psVal)
 {
 	DROID_GROUP		*psGroup;
 
@@ -183,7 +183,7 @@ void scrvReleaseGroup(INTERP_VAL *psVal)
 }
 
 // Get a context from the list
-BOOL scrvGetContext(char *pID, SCRIPT_CONTEXT **ppsContext)
+bool scrvGetContext(char *pID, SCRIPT_CONTEXT **ppsContext)
 {
 	SCRV_STORE	*psCurr;
 

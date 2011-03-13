@@ -159,20 +159,20 @@
 extern W_SCREEN		*psWScreen;
 
 static UDWORD			messageID;
-static BOOL				immediateMessage = false;
+static bool				immediateMessage = false;
 
 //flags whether to open the Intel Screen with a message
-static BOOL				playCurrent;
+static bool				playCurrent;
 
 /* functions declarations ****************/
-static BOOL intAddMessageForm(BOOL playCurrent);
+static bool intAddMessageForm(bool playCurrent);
 /*Displays the buttons used on the intelligence map */
 static void intDisplayMessageButton(WIDGET *psWidget, UDWORD xOffset,
 							  UDWORD yOffset, PIELIGHT *pColours);
 
 /*deal with the actual button press - proxMsg is set to true if a proximity
   button has been pressed*/
-static void intIntelButtonPressed(BOOL proxMsg, UDWORD id);
+static void intIntelButtonPressed(bool proxMsg, UDWORD id);
 
 static void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 #ifndef NO_VIDEO
@@ -184,10 +184,10 @@ static void addVideoText(SEQ_DISPLAY *psSeqDisplay, UDWORD sequence);
 static void intDisplaySeqTextView(WIDGET *psWidget,
 				  UDWORD xOffset, UDWORD yOffset,
 				  PIELIGHT *pColours);
-static BOOL intDisplaySeqTextViewPage(VIEW_REPLAY *psViewReplay,
+static bool intDisplaySeqTextViewPage(VIEW_REPLAY *psViewReplay,
 				      UDWORD x0, UDWORD y0,
 				      UDWORD width, UDWORD height,
-				      BOOL render,
+				      bool render,
 				      size_t *major, size_t *minor);
 
 
@@ -200,9 +200,9 @@ MESSAGE			*psCurrentMsg = NULL;
 
 
 /* Add the Intelligence Map widgets to the widget screen */
-BOOL intAddIntelMap(void)
+bool intAddIntelMap(void)
 {
-	BOOL			Animate = true;
+	bool			Animate = true;
 
 	//check playCurrent with psCurrentMsg
 	if (psCurrentMsg == NULL)
@@ -294,7 +294,7 @@ BOOL intAddIntelMap(void)
 }
 
 /* Add the Message sub form */
-static BOOL intAddMessageForm(BOOL playCurrent)
+static bool intAddMessageForm(bool playCurrent)
 {
 	UDWORD			numButtons, i;
 	MESSAGE			*psMessage;
@@ -476,9 +476,9 @@ static BOOL intAddMessageForm(BOOL playCurrent)
 }
 
 /*Add the 3D world view for the particular message (only research nmessages now) */
-BOOL intAddMessageView(MESSAGE * psMessage)
+bool intAddMessageView(MESSAGE * psMessage)
 {
-	BOOL			Animate = true;
+	bool			Animate = true;
 	RESEARCH		*psResearch;
 
 	// Is the form already up?
@@ -715,10 +715,10 @@ void intProcessIntelMap(UDWORD id)
 /**
  * Draws the text for the intelligence display window.
  */
-static BOOL intDisplaySeqTextViewPage(VIEW_REPLAY *psViewReplay,
+static bool intDisplaySeqTextViewPage(VIEW_REPLAY *psViewReplay,
 				      UDWORD x0, UDWORD y0,
 				      UDWORD width, UDWORD height,
-				      BOOL render,
+				      bool render,
 				      size_t *cur_seq, size_t *cur_seqpage)
 {
 	UDWORD i, cur_y;
@@ -803,9 +803,9 @@ static void intDisplaySeqTextView(WIDGET *psWidget,
 
 
 // Add all the Video Sequences for a message
-static void StartMessageSequences(MESSAGE *psMessage, BOOL Start)
+static void StartMessageSequences(MESSAGE *psMessage, bool Start)
 {
-	BOOL bLoop = false;
+	bool bLoop = false;
 
 	debug(LOG_GUI, "StartMessageSequences: start message sequence");
 
@@ -876,7 +876,7 @@ static void StartMessageSequences(MESSAGE *psMessage, BOOL Start)
 deal with the actual button press - proxMsg is set to true if a proximity
 button has been pressed
 */
-void intIntelButtonPressed(BOOL proxMsg, UDWORD id)
+void intIntelButtonPressed(bool proxMsg, UDWORD id)
 {
 	MESSAGE			*psMessage;
 	UDWORD			currID;//, i;
@@ -1095,7 +1095,7 @@ void intRemoveIntelMapNoAnim(void)
 }
 
 /* Remove the Message View from the Intelligence screen */
-void intRemoveMessageView(BOOL animated)
+void intRemoveMessageView(bool animated)
 {
 	W_TABFORM		*Form;
 	VIEW_RESEARCH	*psViewResearch;
@@ -1138,12 +1138,12 @@ void intDisplayMessageButton(WIDGET *psWidget, UDWORD xOffset,
 	W_CLICKFORM		*psButton = (W_CLICKFORM*)psWidget;
 	RENDERED_BUTTON *psBuffer = (RENDERED_BUTTON*)psButton->pUserData;
 	MESSAGE			*psMsg;
-	BOOL			Hilight = false;
+	bool			Hilight = false;
 	UDWORD			Down = 0, IMDType = 0, compID;
 	SDWORD			image = -1;
 	RESEARCH		*pResearch = NULL;
     BASE_STATS      *psResGraphic = NULL;
-	BOOL MovieButton = false;
+	bool MovieButton = false;
 
 	OpenButtonRender((UWORD)(xOffset+psButton->x), (UWORD)(yOffset+psButton->y),
 		psButton->width, psButton->height);
@@ -1508,13 +1508,13 @@ void displayImmediateMessage(MESSAGE *psMessage)
 
 
 // return whether a message is immediate
-BOOL messageIsImmediate(void)
+bool messageIsImmediate(void)
 {
 	return immediateMessage;
 }
 
 /*sets the flag*/
-void setMessageImmediate(BOOL state)
+void setMessageImmediate(bool state)
 {
 	immediateMessage = state;
 }

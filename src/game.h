@@ -112,27 +112,27 @@ struct VIS_SAVEHEADER
  */
 /***************************************************************************/
 
-extern BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSaveGame);	// UserSaveGame is true when the save game is not a new level (User Save Game)
+extern bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool UserSaveGame);	// UserSaveGame is true when the save game is not a new level (User Save Game)
 
 /*This just loads up the .gam file to determine which level data to set up - split up
 so can be called in levLoadData when starting a game from a load save game*/
 extern bool loadGameInit(const char* fileName);
 
-extern BOOL loadMissionExtras(const char *pGameToLoad, SWORD levelType);
+extern bool loadMissionExtras(const char *pGameToLoad, SWORD levelType);
 
 // load the script state given a .gam name
-extern BOOL loadScriptState(char *pFileName);
+extern bool loadScriptState(char *pFileName);
 
 /// Load the terrain types
-extern BOOL loadTerrainTypeMap(const char *pFileData, UDWORD filesize);
+extern bool loadTerrainTypeMap(const char *pFileData, UDWORD filesize);
 
-extern BOOL saveGame(char *aFileName, GAME_TYPE saveType);
+extern bool saveGame(char *aFileName, GAME_TYPE saveType);
 
 // Get the campaign number for loadGameInit game
 extern UDWORD getCampaign(const char* fileName);
 
 /*calls windows find file tree*/
-extern BOOL getSaveGameName(char *pName);
+extern bool getSaveGameName(char *pName);
 
 /*set validty keys for save game debugging*/
 extern void game_SetValidityKey(UDWORD keys);
@@ -140,7 +140,7 @@ extern void game_SetValidityKey(UDWORD keys);
 /*returns the current type of save game being loaded*/
 extern UDWORD getSaveGameType(void);
 
-BOOL plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[]);
+bool plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[]);
 extern bool foundScavengerPlayerInMap;
 
 #endif // __INCLUDED_SRC_GAME_H__

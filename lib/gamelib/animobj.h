@@ -35,7 +35,7 @@
 
 
 typedef void (* ANIMOBJDONEFUNC) ( struct ANIM_OBJECT *psObj );
-typedef BOOL (* ANIMOBJDIEDTESTFUNC) ( void *psParent );
+typedef bool (* ANIMOBJDIEDTESTFUNC) ( void *psParent );
 
 struct COMPONENT_OBJECT
 {
@@ -55,16 +55,16 @@ struct ANIM_OBJECT
 	UDWORD                  udwStartTime;
 	UDWORD                  udwStartDelay;
 	UWORD                   uwCycles;
-	BOOL                    bVisible;
+	bool                    bVisible;
 	ANIMOBJDONEFUNC         pDoneFunc;
 	/* this must be the last entry in this structure */
 	COMPONENT_OBJECT        apComponents[ANIM_MAX_COMPONENTS];
 };
 
 
-BOOL			animObj_Init( ANIMOBJDIEDTESTFUNC pDiedFunc );
+bool			animObj_Init( ANIMOBJDIEDTESTFUNC pDiedFunc );
 void			animObj_Update( void );
-BOOL			animObj_Shutdown( void );
+bool			animObj_Shutdown( void );
 void			animObj_SetDoneFunc( ANIM_OBJECT *psObj,
 										ANIMOBJDONEFUNC pDoneFunc );
 

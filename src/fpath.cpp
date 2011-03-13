@@ -122,7 +122,7 @@ static int fpathThreadFunc(void *)
 
 
 // initialise the findpath module
-BOOL fpathInitialise(void)
+bool fpathInitialise(void)
 {
 	// The path system is up
 	fpathQuit = false;
@@ -231,7 +231,7 @@ static uint8_t prop2bits(PROPULSION_TYPE propulsion)
 }
 
 // Check if the map tile at a location blocks a droid
-BOOL fpathBaseBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion, int mapIndex, FPATH_MOVETYPE moveType)
+bool fpathBaseBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion, int mapIndex, FPATH_MOVETYPE moveType)
 {
 	/* All tiles outside of the map and on map border are blocking. */
 	if (x < 1 || y < 1 || x > mapWidth - 1 || y > mapHeight - 1)
@@ -265,13 +265,13 @@ BOOL fpathBaseBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion, int m
 	return (blockTile(x, y, MAX(0, mapIndex - MAX_PLAYERS)) & unitbits) != 0;  // finally check if move is blocked by propulsion related factors
 }
 
-BOOL fpathDroidBlockingTile(DROID *psDroid, int x, int y, FPATH_MOVETYPE moveType)
+bool fpathDroidBlockingTile(DROID *psDroid, int x, int y, FPATH_MOVETYPE moveType)
 {
 	return fpathBaseBlockingTile(x, y, getPropulsionStats(psDroid)->propulsionType, psDroid->player, moveType);
 }
 
 // Check if the map tile at a location blocks a droid
-BOOL fpathBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion)
+bool fpathBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion)
 {
 	return fpathBaseBlockingTile(x, y, propulsion, 0, FMT_BLOCK);  // with FMT_BLOCK, it is irrelevant which player is passed in
 }
@@ -530,7 +530,7 @@ static void fpathExecute(PATHJOB *psJob, PATHRESULT *psResult)
 }
 
 // Variables for the callback
-static BOOL		obstruction;
+static bool		obstruction;
 
 /** The visibility ray callback
  */
@@ -548,7 +548,7 @@ static bool fpathVisCallback(Vector3i pos, int32_t dist, void *data)
 	return true;
 }
 
-BOOL fpathTileLOS(DROID *psDroid, Vector3i dest)
+bool fpathTileLOS(DROID *psDroid, Vector3i dest)
 {
 	Vector2i dir = removeZ(dest - psDroid->pos);
 

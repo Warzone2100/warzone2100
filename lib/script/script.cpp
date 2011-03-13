@@ -39,7 +39,7 @@
 
 
 // Initialise the script library
-BOOL scriptInitialise()
+bool scriptInitialise()
 {
 	if (!stackInitialise())
 	{
@@ -148,7 +148,7 @@ void scriptFreeCode(SCRIPT_CODE *psCode)
 
 
 /* Lookup a script variable */
-BOOL scriptGetVarIndex(SCRIPT_CODE *psCode, char *pID, UDWORD *pIndex)
+bool scriptGetVarIndex(SCRIPT_CODE *psCode, char *pID, UDWORD *pIndex)
 {
 	UDWORD	index;
 
@@ -173,7 +173,7 @@ BOOL scriptGetVarIndex(SCRIPT_CODE *psCode, char *pID, UDWORD *pIndex)
    all types are listed explicitly, with asserts/warnings for invalid/unrecognised types, as
    getting this wrong will cause segfaults if sizeof(void*) != sizeof(SDWORD) (eg. amd64). a lot of
    these aren't currently checked for, but it's a lot clearer what's going on if they're all here */
-BOOL scriptTypeIsPointer(INTERP_TYPE type)
+bool scriptTypeIsPointer(INTERP_TYPE type)
 {
 	ASSERT((SCR_USER_TYPES)type < ST_MAXTYPE || type >= VAL_REF, "Invalid type: %d", type);
 	// any value or'ed with VAL_REF is a pointer

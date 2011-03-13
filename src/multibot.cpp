@@ -141,7 +141,7 @@ static BASE_OBJECT *const TargetMissing = &TargetMissing_;  // Error return valu
 // Secondary Orders.
 
 // Send
-BOOL sendDroidSecondary(const DROID* psDroid, SECONDARY_ORDER sec, SECONDARY_STATE state)
+bool sendDroidSecondary(const DROID* psDroid, SECONDARY_ORDER sec, SECONDARY_STATE state)
 {
 	if (!bMultiMessages)
 		return true;
@@ -165,7 +165,7 @@ BOOL sendDroidSecondary(const DROID* psDroid, SECONDARY_ORDER sec, SECONDARY_STA
  *
  *  \sa recvDroidEmbark(),sendDroidDisEmbark(),recvDroidDisEmbark()
  */
-BOOL sendDroidEmbark(const DROID* psDroid, const DROID* psTransporter)
+bool sendDroidEmbark(const DROID* psDroid, const DROID* psTransporter)
 {
 	if (!bMultiMessages)
 		return true;
@@ -187,11 +187,11 @@ BOOL sendDroidEmbark(const DROID* psDroid, const DROID* psTransporter)
  *
  *  \sa sendDroidEmbark(),sendDroidDisEmbark(),recvDroidDisEmbark()
  */
-BOOL recvDroidEmbark(NETQUEUE queue)
+bool recvDroidEmbark(NETQUEUE queue)
 {
 	DROID* psDroid;
 	DROID* psTransporterDroid;
-	BOOL bDroidRemoved;
+	bool bDroidRemoved;
 
 	NETbeginDecode(queue, GAME_DROIDEMBARK);
 	{
@@ -254,7 +254,7 @@ BOOL recvDroidEmbark(NETQUEUE queue)
  *
  *  \sa sendDroidEmbark(),recvDroidEmbark(),recvDroidDisEmbark()
  */
-BOOL sendDroidDisEmbark(const DROID* psDroid, const DROID* psTransporter)
+bool sendDroidDisEmbark(const DROID* psDroid, const DROID* psTransporter)
 {
 	if (!bMultiMessages)
 		return true;
@@ -278,7 +278,7 @@ BOOL sendDroidDisEmbark(const DROID* psDroid, const DROID* psTransporter)
  *
  *  \sa sendDroidEmbark(),recvDroidEmbark(),sendDroidDisEmbark()
  */
-BOOL recvDroidDisEmbark(NETQUEUE queue)
+bool recvDroidDisEmbark(NETQUEUE queue)
 {
 	DROID *psFoundDroid = NULL, *psTransporterDroid = NULL;
 	DROID *psCheckDroid = NULL;
@@ -356,7 +356,7 @@ BOOL recvDroidDisEmbark(NETQUEUE queue)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Send a new Droid to the other players
-BOOL SendDroid(const DROID_TEMPLATE* pTemplate, uint32_t x, uint32_t y, uint8_t player, uint32_t id, const INITIAL_DROID_ORDERS *initialOrdersP)
+bool SendDroid(const DROID_TEMPLATE* pTemplate, uint32_t x, uint32_t y, uint8_t player, uint32_t id, const INITIAL_DROID_ORDERS *initialOrdersP)
 {
 	if (!bMultiMessages)
 		return true;
@@ -382,7 +382,7 @@ BOOL SendDroid(const DROID_TEMPLATE* pTemplate, uint32_t x, uint32_t y, uint8_t 
 	{
 		Position pos(x, y, 0);
 		uint32_t templateID = pTemplate->multiPlayerID;
-		BOOL haveInitialOrders = initialOrdersP != NULL;
+		bool haveInitialOrders = initialOrdersP != NULL;
 
 		NETuint8_t(&player);
 		NETuint32_t(&id);
@@ -404,7 +404,7 @@ BOOL SendDroid(const DROID_TEMPLATE* pTemplate, uint32_t x, uint32_t y, uint8_t 
 
 // ////////////////////////////////////////////////////////////////////////////
 // receive droid creation information from other players
-BOOL recvDroid(NETQUEUE queue)
+bool recvDroid(NETQUEUE queue)
 {
 	DROID_TEMPLATE* pT;
 	DROID* psDroid;
@@ -412,7 +412,7 @@ BOOL recvDroid(NETQUEUE queue)
 	uint32_t id;
 	Position pos;
 	uint32_t templateID;
-	BOOL haveInitialOrders;
+	bool haveInitialOrders;
 	INITIAL_DROID_ORDERS initialOrders;
 
 	NETbeginDecode(queue, GAME_DROID);
@@ -632,7 +632,7 @@ bool sendDroidInfo(DROID *psDroid, DROID_ORDER order, uint32_t x, uint32_t y, co
 
 // ////////////////////////////////////////////////////////////////////////////
 // receive droid information form other players.
-BOOL recvDroidInfo(NETQUEUE queue)
+bool recvDroidInfo(NETQUEUE queue)
 {
 	NETbeginDecode(queue, GAME_DROIDINFO);
 	{
@@ -779,7 +779,7 @@ static BASE_OBJECT *processDroidTarget(OBJECT_TYPE desttype, uint32_t destid)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Inform other players that a droid has been destroyed
-BOOL SendDestroyDroid(const DROID* psDroid)
+bool SendDestroyDroid(const DROID* psDroid)
 {
 	if (!bMultiMessages)
 	{
@@ -799,7 +799,7 @@ BOOL SendDestroyDroid(const DROID* psDroid)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Accept a droid which was destroyed on another machine
-BOOL recvDestroyDroid(NETQUEUE queue)
+bool recvDestroyDroid(NETQUEUE queue)
 {
 	DROID* psDroid;
 

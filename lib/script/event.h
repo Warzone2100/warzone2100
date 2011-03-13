@@ -83,7 +83,7 @@ struct ACTIVE_TRIGGER
 	SWORD				trigger;
 	UWORD				event;
 	UWORD				offset;
-	BOOL				deactivated;	// Whether the trigger is marked for deletion
+	bool				deactivated;	// Whether the trigger is marked for deletion
 	ACTIVE_TRIGGER *        psNext;
 };
 
@@ -138,17 +138,17 @@ extern SCRIPT_CONTEXT	*psContList;
 
 
 /* Initialise the event system */
-extern BOOL eventInitialise(void);
+extern bool eventInitialise(void);
 
 // Shutdown the event system
 extern void eventShutDown(void);
 
 // add a TR_PAUSE trigger to the event system.
-extern BOOL eventAddPauseTrigger(SCRIPT_CONTEXT *psContext, UDWORD event, UDWORD offset,
+extern bool eventAddPauseTrigger(SCRIPT_CONTEXT *psContext, UDWORD event, UDWORD offset,
 						  UDWORD time);
 
 // Load a trigger into the system from a save game
-extern BOOL eventLoadTrigger(UDWORD time, SCRIPT_CONTEXT *psContext,
+extern bool eventLoadTrigger(UDWORD time, SCRIPT_CONTEXT *psContext,
 					  SDWORD type, SDWORD trigger, UDWORD event, UDWORD offset);
 
 //resets the event timer - updateTime

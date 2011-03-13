@@ -32,7 +32,7 @@
 #define FADE_IN_TIME	(GAME_TICKS_PER_SEC/10)
 #define	START_DIVIDE	(8)
 
-static BOOL bRevealActive = false;
+static bool bRevealActive = false;
 
 
 // ------------------------------------------------------------------------------------
@@ -86,13 +86,13 @@ UDWORD	avGetObjLightLevel(BASE_OBJECT *psObj,UDWORD origLevel)
 }
 
 // ------------------------------------------------------------------------------------
-BOOL	getRevealStatus( void )
+bool	getRevealStatus( void )
 {
 	return(bRevealActive);
 }
 
 // ------------------------------------------------------------------------------------
-void	setRevealStatus( BOOL val )
+void	setRevealStatus( bool val )
 {
 	debug(LOG_FOG, "avSetRevealStatus: Setting reveal to %s", val ? "ON" : "OFF");
 	bRevealActive = val;

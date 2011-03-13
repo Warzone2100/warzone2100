@@ -262,7 +262,7 @@ struct COMMAND_SAVEHEADER : public GAME_SAVEHEADER
 	UDWORD				x,y,z; \
 	UDWORD				direction; \
 	UDWORD				player; \
-	BOOL				inFire; \
+	bool				inFire; \
 	UDWORD				burnStart; \
 	UDWORD				burnDamage
 
@@ -272,7 +272,7 @@ struct COMMAND_SAVEHEADER : public GAME_SAVEHEADER
 	UDWORD				x,y,z; \
 	UDWORD				direction; \
 	UDWORD				player; \
-	BOOL				inFire; \
+	bool				inFire; \
 	UDWORD				burnStart; \
 	UDWORD				burnDamage
 
@@ -852,7 +852,7 @@ static bool deserializeSaveGameV14Data(PHYSFS_file* fileHandle, SAVE_GAME_V14* s
 
 struct SAVE_GAME_V15 : public SAVE_GAME_V14
 {
-	BOOL        offWorldKeepLists;
+	bool        offWorldKeepLists;
 	uint8_t     aDroidExperience[MAX_PLAYERS][MAX_RECYCLED_DROIDS];
 	uint32_t    RubbleTile;
 	uint32_t    WaterTile;
@@ -1272,7 +1272,7 @@ struct SAVE_GAME_V33 : public SAVE_GAME_V31
 	NETPLAY         sNetPlay;
 	uint32_t        savePlayer;
 	char            sPName[32];
-	BOOL            multiPlayer;
+	bool            multiPlayer;
 	uint32_t        sPlayerIndex[MAX_PLAYERS];
 };
 
@@ -1444,7 +1444,7 @@ struct SAVE_MOVE_CONTROL
 	UWORD	pauseTime;					// when MOVEPAUSE started - relative to bumpTime
 	UWORD	bumpX,bumpY;				// position of last bump
 	UDWORD	shuffleStart;				// when a shuffle started
-	BOOL	isInFormation;                          // Indicates wether this droid is a member of a formation
+	bool	isInFormation;                          // Indicates wether this droid is a member of a formation
 	SWORD	iVertSpeed;
 	UDWORD	iAttackRuns[DROID_MAXWEAPS];
 	float   fz;
@@ -1947,10 +1947,10 @@ struct SAVE_RESEARCH
 struct SAVE_MESSAGE
 {
 	MESSAGE_TYPE	type;			//The type of message
-	BOOL			bObj;
+	bool			bObj;
 	char			name[MAX_GAME_STR_SIZE];
 	UDWORD			objId;					//Id for Proximity messages!
-	BOOL			read;					//flag to indicate whether message has been read
+	bool			read;					//flag to indicate whether message has been read
 	UDWORD			player;					//which player this message belongs to
 
 };
@@ -1958,10 +1958,10 @@ struct SAVE_MESSAGE
 struct SAVE_MESSAGE_36
 {
 	MESSAGE_TYPE	type;			//The type of message
-	BOOL			bObj;
+	bool			bObj;
 	char			name[MAX_GAME_STR_SIZE];
 	UDWORD			objId;					//Id for Proximity messages!
-	BOOL			read;					//flag to indicate whether message has been read
+	bool			read;					//flag to indicate whether message has been read
 	UDWORD			player;					//which player this message belongs to
 	MSG_DATA_TYPE	dataType;				//actual type of pViewData
 	UDWORD			locX,locY;
@@ -1976,7 +1976,7 @@ struct SAVE_FLAG_V18
 	UDWORD			screenY;
 	UDWORD			screenR;
 	UDWORD			player;				/*which player the Position belongs to*/
-	BOOL			selected;			/*flag to indicate whether the Position */
+	bool			selected;			/*flag to indicate whether the Position */
 	Vector3i		coords;							//the world coords of the Position
 	UBYTE		factoryInc;						//indicates whether the first, second etc factory
 	UBYTE		factoryType;					//indicates whether standard, cyborg or vtol factory
@@ -1992,7 +1992,7 @@ struct SAVE_FLAG
 	UDWORD			screenY;
 	UDWORD			screenR;
 	UDWORD			player;				/*which player the Position belongs to*/
-	BOOL			selected;			/*flag to indicate whether the Position */
+	bool			selected;			/*flag to indicate whether the Position */
 	Vector3i		coords;							//the world coords of the Position
 	UBYTE		factoryInc;						//indicates whether the first, second etc factory
 	UBYTE		factoryType;					//indicates whether standard, cyborg or vtol factory
@@ -2046,7 +2046,7 @@ extern uint32_t unsynchObjID;  // unique ID creation thing..
 extern uint32_t synchObjID;    // unique ID creation thing..
 
 static UDWORD			saveGameVersion = 0;
-static BOOL				saveGameOnMission = false;
+static bool				saveGameOnMission = false;
 static SAVE_GAME		saveGameData;
 static UDWORD			oldestSaveGameVersion = CURRENT_VERSION_NUM;
 static UDWORD			validityKey = 0;
@@ -2061,7 +2061,7 @@ static UDWORD	savedObjId;
 static SDWORD	startX, startY;
 static UDWORD   width, height;
 static UDWORD	gameType;
-static BOOL IsScenario;
+static bool IsScenario;
 /***************************************************************************/
 /*
  *	Local ProtoTypes
@@ -2072,74 +2072,74 @@ static bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version);
 static bool writeGameFile(const char* fileName, SDWORD saveType);
 static bool writeMapFile(const char* fileName);
 
-static BOOL loadSaveDroidInitV2(char *pFileData, UDWORD filesize,UDWORD quantity);
+static bool loadSaveDroidInitV2(char *pFileData, UDWORD filesize,UDWORD quantity);
 
-static BOOL loadSaveDroidInit(char *pFileData, UDWORD filesize);
+static bool loadSaveDroidInit(char *pFileData, UDWORD filesize);
 
-static BOOL loadSaveDroid(char *pFileData, UDWORD filesize, DROID **ppsCurrentDroidLists);
-static BOOL loadSaveDroidV(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD version, DROID **ppsCurrentDroidLists);
-static BOOL loadDroidSetPointers(void);
-static BOOL writeDroidFile(char *pFileName, DROID **ppsCurrentDroidLists);
+static bool loadSaveDroid(char *pFileData, UDWORD filesize, DROID **ppsCurrentDroidLists);
+static bool loadSaveDroidV(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD version, DROID **ppsCurrentDroidLists);
+static bool loadDroidSetPointers(void);
+static bool writeDroidFile(char *pFileName, DROID **ppsCurrentDroidLists);
 
-static BOOL loadSaveStructure(char *pFileData, UDWORD filesize);
-static BOOL loadSaveStructureV7(char *pFileData, UDWORD filesize, UDWORD numStructures);
-static BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, UDWORD version);
-static BOOL loadStructSetPointers(void);
-static BOOL writeStructFile(char *pFileName);
+static bool loadSaveStructure(char *pFileData, UDWORD filesize);
+static bool loadSaveStructureV7(char *pFileData, UDWORD filesize, UDWORD numStructures);
+static bool loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, UDWORD version);
+static bool loadStructSetPointers(void);
+static bool writeStructFile(char *pFileName);
 
-static BOOL loadSaveTemplate(char *pFileData, UDWORD filesize);
-static BOOL loadSaveTemplateV7(char *pFileData, UDWORD filesize, UDWORD numTemplates);
-static BOOL loadSaveTemplateV14(char *pFileData, UDWORD filesize, UDWORD numTemplates);
-static BOOL loadSaveTemplateV(char *pFileData, UDWORD filesize, UDWORD numTemplates);
-static BOOL writeTemplateFile(char *pFileName);
+static bool loadSaveTemplate(char *pFileData, UDWORD filesize);
+static bool loadSaveTemplateV7(char *pFileData, UDWORD filesize, UDWORD numTemplates);
+static bool loadSaveTemplateV14(char *pFileData, UDWORD filesize, UDWORD numTemplates);
+static bool loadSaveTemplateV(char *pFileData, UDWORD filesize, UDWORD numTemplates);
+static bool writeTemplateFile(char *pFileName);
 
-static BOOL loadSaveFeature(char *pFileData, UDWORD filesize);
-static BOOL loadSaveFeatureV14(char *pFileData, UDWORD filesize, UDWORD numFeatures, UDWORD version);
-static BOOL loadSaveFeatureV(char *pFileData, UDWORD filesize, UDWORD numFeatures, UDWORD version);
-static BOOL writeFeatureFile(char *pFileName);
+static bool loadSaveFeature(char *pFileData, UDWORD filesize);
+static bool loadSaveFeatureV14(char *pFileData, UDWORD filesize, UDWORD numFeatures, UDWORD version);
+static bool loadSaveFeatureV(char *pFileData, UDWORD filesize, UDWORD numFeatures, UDWORD version);
+static bool writeFeatureFile(char *pFileName);
 
-static BOOL writeTerrainTypeMapFile(char *pFileName);
+static bool writeTerrainTypeMapFile(char *pFileName);
 
-static BOOL loadSaveCompList(char *pFileData, UDWORD filesize);
-static BOOL loadSaveCompListV9(char *pFileData, UDWORD filesize, UDWORD numRecords, UDWORD version);
-static BOOL loadSaveCompListV(char *pFileData, UDWORD filesize, UDWORD numRecords, UDWORD version);
-static BOOL writeCompListFile(char *pFileName);
+static bool loadSaveCompList(char *pFileData, UDWORD filesize);
+static bool loadSaveCompListV9(char *pFileData, UDWORD filesize, UDWORD numRecords, UDWORD version);
+static bool loadSaveCompListV(char *pFileData, UDWORD filesize, UDWORD numRecords, UDWORD version);
+static bool writeCompListFile(char *pFileName);
 
-static BOOL loadSaveStructTypeList(char *pFileData, UDWORD filesize);
-static BOOL loadSaveStructTypeListV7(char *pFileData, UDWORD filesize, UDWORD numRecords);
-static BOOL loadSaveStructTypeListV(char *pFileData, UDWORD filesize, UDWORD numRecords);
-static BOOL writeStructTypeListFile(char *pFileName);
+static bool loadSaveStructTypeList(char *pFileData, UDWORD filesize);
+static bool loadSaveStructTypeListV7(char *pFileData, UDWORD filesize, UDWORD numRecords);
+static bool loadSaveStructTypeListV(char *pFileData, UDWORD filesize, UDWORD numRecords);
+static bool writeStructTypeListFile(char *pFileName);
 
-static BOOL loadSaveResearch(char *pFileData, UDWORD filesize);
-static BOOL loadSaveResearchV8(char *pFileData, UDWORD filesize, UDWORD numRecords);
-static BOOL loadSaveResearchV(char *pFileData, UDWORD filesize, UDWORD numRecords);
-static BOOL writeResearchFile(char *pFileName);
+static bool loadSaveResearch(char *pFileData, UDWORD filesize);
+static bool loadSaveResearchV8(char *pFileData, UDWORD filesize, UDWORD numRecords);
+static bool loadSaveResearchV(char *pFileData, UDWORD filesize, UDWORD numRecords);
+static bool writeResearchFile(char *pFileName);
 
-static BOOL loadSaveMessage(char *pFileData, UDWORD filesize, SWORD levelType);
-static BOOL loadSaveMessage36(char *pFileData, UDWORD filesize, UDWORD numMessages, UDWORD version, SWORD levelType);
-static BOOL writeMessageFile(char *pFileName);
+static bool loadSaveMessage(char *pFileData, UDWORD filesize, SWORD levelType);
+static bool loadSaveMessage36(char *pFileData, UDWORD filesize, UDWORD numMessages, UDWORD version, SWORD levelType);
+static bool writeMessageFile(char *pFileName);
 
-static BOOL loadSaveFlag(char *pFileData, UDWORD filesize);
-static BOOL loadSaveFlagV(char *pFileData, UDWORD filesize, UDWORD numFlags, UDWORD version);
-static BOOL writeFlagFile(char *pFileName);
+static bool loadSaveFlag(char *pFileData, UDWORD filesize);
+static bool loadSaveFlagV(char *pFileData, UDWORD filesize, UDWORD numFlags, UDWORD version);
+static bool writeFlagFile(char *pFileName);
 
-static BOOL loadSaveProduction(char *pFileData, UDWORD filesize);
-static BOOL loadSaveProductionV(char *pFileData, UDWORD filesize, UDWORD version);
-static BOOL writeProductionFile(char *pFileName);
+static bool loadSaveProduction(char *pFileData, UDWORD filesize);
+static bool loadSaveProductionV(char *pFileData, UDWORD filesize, UDWORD version);
+static bool writeProductionFile(char *pFileName);
 
-static BOOL loadSaveStructLimits(char *pFileData, UDWORD filesize);
-static BOOL loadSaveStructLimitsV(char *pFileData, UDWORD filesize, UDWORD numLimits);
-static BOOL writeStructLimitsFile(char *pFileName);
+static bool loadSaveStructLimits(char *pFileData, UDWORD filesize);
+static bool loadSaveStructLimitsV(char *pFileData, UDWORD filesize, UDWORD numLimits);
+static bool writeStructLimitsFile(char *pFileName);
 
-static BOOL readFiresupportDesignators(char *pFileName);
-static BOOL writeFiresupportDesignators(char *pFileName);
+static bool readFiresupportDesignators(char *pFileName);
+static bool writeFiresupportDesignators(char *pFileName);
 
-static BOOL writeScriptState(char *pFileName);
+static bool writeScriptState(char *pFileName);
 
-static BOOL getNameFromComp(UDWORD compType, char *pDest, UDWORD compIndex);
+static bool getNameFromComp(UDWORD compType, char *pDest, UDWORD compIndex);
 
 //adjust the name depending on type of save game and whether resourceNames are used
-static BOOL getSaveObjectName(char *pName);
+static bool getSaveObjectName(char *pName);
 static bool gameLoad(const char* fileName);
 
 /* set the global scroll values to use for the save game */
@@ -2183,7 +2183,7 @@ bool loadGameInit(const char* fileName)
 //
 // if it is a level loaded up from CD then UserSaveGame will by false
 // UserSaveGame ... Extra stuff to load after scripts
-BOOL loadMissionExtras(const char *pGameToLoad, SWORD levelType)
+bool loadMissionExtras(const char *pGameToLoad, SWORD levelType)
 {
 	char			aFileName[256];
 	UDWORD			fileExten, fileSize;
@@ -2227,7 +2227,7 @@ BOOL loadMissionExtras(const char *pGameToLoad, SWORD levelType)
 
 // -----------------------------------------------------------------------------------------
 // UserSaveGame ... this is true when you are loading a players save game
-BOOL loadGame(const char *pGameToLoad, BOOL keepObjects, BOOL freeMem, BOOL UserSaveGame)
+bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool UserSaveGame)
 {
 	char			aFileName[256];
 	UDWORD			fileExten, fileSize, pl;
@@ -3363,7 +3363,7 @@ error:
 // -----------------------------------------------------------------------------------------
 
 // Modified by AlexL , now takes a filename, with no popup....
-BOOL saveGame(char *aFileName, GAME_TYPE saveType)
+bool saveGame(char *aFileName, GAME_TYPE saveType)
 {
 	UDWORD			fileExtension;
 	DROID			*psDroid, *psNext;
@@ -4859,7 +4859,7 @@ static bool writeGameFile(const char* fileName, SDWORD saveType)
 // Process the droid initialisation file (dinit.bjo). Creates droids for
 // the scenario being loaded. This is *NEVER* called for a user save game
 //
-BOOL loadSaveDroidInit(char *pFileData, UDWORD filesize)
+bool loadSaveDroidInit(char *pFileData, UDWORD filesize)
 {
 	DROIDINIT_SAVEHEADER		*psHeader;
 
@@ -4906,7 +4906,7 @@ BOOL loadSaveDroidInit(char *pFileData, UDWORD filesize)
 }
 
 // -----------------------------------------------------------------------------------------
-BOOL loadSaveDroidInitV2(char *pFileData, UDWORD filesize,UDWORD quantity)
+bool loadSaveDroidInitV2(char *pFileData, UDWORD filesize,UDWORD quantity)
 {
 	SAVE_DROIDINIT *pDroidInit;
 	DROID_TEMPLATE *psTemplate;
@@ -5000,7 +5000,7 @@ static UDWORD RemapPlayerNumber(UDWORD OldNumber)
 
 // -----------------------------------------------------------------------------------------
 /*This is *ALWAYS* called by a User Save Game */
-BOOL loadSaveDroid(char *pFileData, UDWORD filesize, DROID **ppsCurrentDroidLists)
+bool loadSaveDroid(char *pFileData, UDWORD filesize, DROID **ppsCurrentDroidLists)
 {
 	DROID_SAVEHEADER		*psHeader;
 
@@ -5168,7 +5168,7 @@ static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 {
 	DROID_TEMPLATE			*psTemplate, sTemplate;
 	DROID					*psDroid;
-	BOOL					found;
+	bool					found;
 	UDWORD					i, id;
 	SDWORD					compInc;
 	UDWORD					burnTime;
@@ -5377,7 +5377,7 @@ static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 
 
 // -----------------------------------------------------------------------------------------
-static BOOL loadDroidSetPointers(void)
+static bool loadDroidSetPointers(void)
 {
 	UDWORD		player,list;
 	DROID		*psDroid, *psCommander;
@@ -5502,7 +5502,7 @@ static BOOL loadDroidSetPointers(void)
 
 // -----------------------------------------------------------------------------------------
 /* code for all versions after save name change v19*/
-BOOL loadSaveDroidV(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD version, DROID **ppsCurrentDroidLists)
+bool loadSaveDroidV(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD version, DROID **ppsCurrentDroidLists)
 {
 	SAVE_DROID				sSaveDroid, *psSaveDroid = &sSaveDroid;
 	DROID					*psDroid;
@@ -5643,7 +5643,7 @@ BOOL loadSaveDroidV(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD v
 }
 
 // -----------------------------------------------------------------------------------------
-static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROID_SAVE_TYPE saveType)
+static bool buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROID_SAVE_TYPE saveType)
 {
 	UDWORD				i;
 
@@ -5847,7 +5847,7 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 /*
 Writes the linked list of droids for each player to a file
 */
-BOOL writeDroidFile(char *pFileName, DROID **ppsCurrentDroidLists)
+bool writeDroidFile(char *pFileName, DROID **ppsCurrentDroidLists)
 {
 	char *pFileData = NULL;
 	UDWORD				fileSize, player, totalDroids=0;
@@ -5855,7 +5855,7 @@ BOOL writeDroidFile(char *pFileName, DROID **ppsCurrentDroidLists)
 	DROID				*psTrans;
 	DROID_SAVEHEADER	*psHeader;
 	SAVE_DROID			*psSaveDroid;
-	BOOL status = true;
+	bool status = true;
 
 	//total all the droids in the world
 	for (player = 0; player < MAX_PLAYERS; player++)
@@ -5963,7 +5963,7 @@ BOOL writeDroidFile(char *pFileName, DROID **ppsCurrentDroidLists)
 
 
 // -----------------------------------------------------------------------------------------
-BOOL loadSaveStructure(char *pFileData, UDWORD filesize)
+bool loadSaveStructure(char *pFileData, UDWORD filesize)
 {
 	STRUCT_SAVEHEADER		*psHeader;
 
@@ -6019,14 +6019,14 @@ BOOL loadSaveStructure(char *pFileData, UDWORD filesize)
 
 // -----------------------------------------------------------------------------------------
 /* code specific to version 7 of a save structure */
-BOOL loadSaveStructureV7(char *pFileData, UDWORD filesize, UDWORD numStructures)
+bool loadSaveStructureV7(char *pFileData, UDWORD filesize, UDWORD numStructures)
 {
 	SAVE_STRUCTURE_V2		*psSaveStructure, sSaveStructure;
 	STRUCTURE				*psStructure;
 	REPAIR_FACILITY			*psRepair;
 	STRUCTURE_STATS			*psStats = NULL;
 	UDWORD					count, statInc;
-	BOOL					found;
+	bool					found;
 	UDWORD					NumberOfSkippedStructures=0;
 	UDWORD					burnTime;
 
@@ -6249,7 +6249,7 @@ static UDWORD getResearchIdFromName(char *pName)
 
 // -----------------------------------------------------------------------------------------
 /* code for versions after version 20 of a save structure */
-BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, UDWORD version)
+bool loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, UDWORD version)
 {
 	SAVE_STRUCTURE			*psSaveStructure, sSaveStructure;
 	STRUCTURE				*psStructure;
@@ -6261,7 +6261,7 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 	STRUCTURE_STATS			*psModule;
 	UDWORD					capacity;
 	UDWORD					count, statInc;
-	BOOL					found;
+	bool					found;
 	UDWORD					NumberOfSkippedStructures=0;
 	UDWORD					burnTime;
 	UDWORD					i;
@@ -6648,7 +6648,7 @@ BOOL loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 /*
 Writes the linked list of structure for each player to a file
 */
-BOOL writeStructFile(char *pFileName)
+bool writeStructFile(char *pFileName)
 {
 	char *pFileData = NULL;
 	UDWORD				fileSize, player, i, totalStructs=0;
@@ -6661,7 +6661,7 @@ BOOL writeStructFile(char *pFileName)
 	SAVE_STRUCTURE		*psSaveStruct;
 	FLAG_POSITION		*psFlag;
 	UDWORD				researchId;
-	BOOL status = true;
+	bool status = true;
 
 	//total all the structures in the world
 	for (player = 0; player < MAX_PLAYERS; player++)
@@ -6922,7 +6922,7 @@ BOOL writeStructFile(char *pFileName)
 }
 
 // -----------------------------------------------------------------------------------------
-BOOL loadStructSetPointers(void)
+bool loadStructSetPointers(void)
 {
 	UDWORD		player,list;
 	FACTORY		*psFactory;
@@ -7038,7 +7038,7 @@ BOOL loadStructSetPointers(void)
 }
 
 // -----------------------------------------------------------------------------------------
-BOOL loadSaveFeature(char *pFileData, UDWORD filesize)
+bool loadSaveFeature(char *pFileData, UDWORD filesize)
 {
 	FEATURE_SAVEHEADER		*psHeader;
 
@@ -7094,13 +7094,13 @@ BOOL loadSaveFeature(char *pFileData, UDWORD filesize)
 
 // -----------------------------------------------------------------------------------------
 /* code for all version 8 - 14 save features */
-BOOL loadSaveFeatureV14(char *pFileData, UDWORD filesize, UDWORD numFeatures, UDWORD version)
+bool loadSaveFeatureV14(char *pFileData, UDWORD filesize, UDWORD numFeatures, UDWORD version)
 {
 	SAVE_FEATURE_V14			*psSaveFeature;
 	FEATURE					*pFeature;
 	UDWORD					count, i, statInc;
 	FEATURE_STATS			*psStats = NULL;
-	BOOL					found;
+	bool					found;
 	UDWORD					sizeOfSaveFeature;
 
 	if (version < VERSION_14)
@@ -7199,13 +7199,13 @@ BOOL loadSaveFeatureV14(char *pFileData, UDWORD filesize, UDWORD numFeatures, UD
 
 // -----------------------------------------------------------------------------------------
 /* code for all post version 7 save features */
-BOOL loadSaveFeatureV(char *pFileData, UDWORD filesize, UDWORD numFeatures, UDWORD version)
+bool loadSaveFeatureV(char *pFileData, UDWORD filesize, UDWORD numFeatures, UDWORD version)
 {
 	SAVE_FEATURE			*psSaveFeature;
 	FEATURE					*pFeature;
 	UDWORD					count, i, statInc;
 	FEATURE_STATS			*psStats = NULL;
-	BOOL					found;
+	bool					found;
 	UDWORD					sizeOfSaveFeature;
 
 	sizeOfSaveFeature = sizeof(SAVE_FEATURE);
@@ -7288,14 +7288,14 @@ BOOL loadSaveFeatureV(char *pFileData, UDWORD filesize, UDWORD numFeatures, UDWO
 /*
 Writes the linked list of features to a file
 */
-BOOL writeFeatureFile(char *pFileName)
+bool writeFeatureFile(char *pFileName)
 {
 	char *pFileData = NULL;
 	UDWORD				fileSize, i, totalFeatures=0;
 	FEATURE				*psCurr;
 	FEATURE_SAVEHEADER	*psHeader;
 	SAVE_FEATURE		*psSaveFeature;
-	BOOL status = true;
+	bool status = true;
 
 	//total all the features in the world
 	for (psCurr = apsFeatureLists[0]; psCurr != NULL; psCurr = psCurr->psNext)
@@ -7374,7 +7374,7 @@ BOOL writeFeatureFile(char *pFileName)
 
 
 // -----------------------------------------------------------------------------------------
-BOOL loadSaveTemplate(char *pFileData, UDWORD filesize)
+bool loadSaveTemplate(char *pFileData, UDWORD filesize)
 {
 	TEMPLATE_SAVEHEADER		*psHeader;
 
@@ -7435,13 +7435,13 @@ BOOL loadSaveTemplate(char *pFileData, UDWORD filesize)
 
 // -----------------------------------------------------------------------------------------
 /* code specific to version 7 of a save template */
-BOOL loadSaveTemplateV7(char *pFileData, UDWORD filesize, UDWORD numTemplates)
+bool loadSaveTemplateV7(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 {
 	SAVE_TEMPLATE_V2		*psSaveTemplate, sSaveTemplate;
 	DROID_TEMPLATE			*psTemplate;
 	UDWORD					count, i;
 	SDWORD					compInc;
-	BOOL					found;
+	bool					found;
 
 	psSaveTemplate = &sSaveTemplate;
 
@@ -7561,13 +7561,13 @@ error:
 
 // -----------------------------------------------------------------------------------------
 /* none specific version of a save template */
-BOOL loadSaveTemplateV14(char *pFileData, UDWORD filesize, UDWORD numTemplates)
+bool loadSaveTemplateV14(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 {
 	SAVE_TEMPLATE_V14			*psSaveTemplate, sSaveTemplate;
 	DROID_TEMPLATE			*psTemplate, *psDestTemplate;
 	UDWORD					count, i;
 	SDWORD					compInc;
-	BOOL					found;
+	bool					found;
 
 	psSaveTemplate = &sSaveTemplate;
 
@@ -7715,13 +7715,13 @@ error:
 
 // -----------------------------------------------------------------------------------------
 /* none specific version of a save template */
-BOOL loadSaveTemplateV(char *pFileData, UDWORD filesize, UDWORD numTemplates)
+bool loadSaveTemplateV(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 {
 	SAVE_TEMPLATE			*psSaveTemplate, sSaveTemplate;
 	DROID_TEMPLATE			*psTemplate, *psDestTemplate;
 	UDWORD					count, i;
 	SDWORD					compInc;
-	BOOL					found;
+	bool					found;
 
 	psSaveTemplate = &sSaveTemplate;
 
@@ -7890,7 +7890,7 @@ error:
 /*
 Writes the linked list of templates for each player to a file
 */
-BOOL writeTemplateFile(char *pFileName)
+bool writeTemplateFile(char *pFileName)
 {
 	char *pFileData = NULL;
 	UDWORD				fileSize, player, totalTemplates=0;
@@ -7898,7 +7898,7 @@ BOOL writeTemplateFile(char *pFileName)
 	TEMPLATE_SAVEHEADER	*psHeader;
 	SAVE_TEMPLATE		*psSaveTemplate;
 	UDWORD				i;
-	BOOL status = true;
+	bool status = true;
 
 	//total all the droids in the world
 	for (player = 0; player < MAX_PLAYERS; player++)
@@ -7993,7 +7993,7 @@ BOOL writeTemplateFile(char *pFileName)
 
 // -----------------------------------------------------------------------------------------
 // load up a terrain tile type map file
-BOOL loadTerrainTypeMap(const char *pFileData, UDWORD filesize)
+bool loadTerrainTypeMap(const char *pFileData, UDWORD filesize)
 {
 	TILETYPE_SAVEHEADER	*psHeader;
 	UDWORD				i;
@@ -8049,7 +8049,7 @@ BOOL loadTerrainTypeMap(const char *pFileData, UDWORD filesize)
 
 // -----------------------------------------------------------------------------------------
 // Write out the terrain type map
-static BOOL writeTerrainTypeMapFile(char *pFileName)
+static bool writeTerrainTypeMapFile(char *pFileName)
 {
 	TILETYPE_SAVEHEADER		*psHeader;
 	char *pFileData;
@@ -8098,7 +8098,7 @@ static BOOL writeTerrainTypeMapFile(char *pFileName)
 
 // -----------------------------------------------------------------------------------------
 // load up component list file
-BOOL loadSaveCompList(char *pFileData, UDWORD filesize)
+bool loadSaveCompList(char *pFileData, UDWORD filesize)
 {
 	COMPLIST_SAVEHEADER		*psHeader;
 
@@ -8152,7 +8152,7 @@ BOOL loadSaveCompList(char *pFileData, UDWORD filesize)
 }
 
 // -----------------------------------------------------------------------------------------
-BOOL loadSaveCompListV9(char *pFileData, UDWORD filesize, UDWORD numRecords, UDWORD version)
+bool loadSaveCompListV9(char *pFileData, UDWORD filesize, UDWORD numRecords, UDWORD version)
 {
 	SAVE_COMPLIST_V6		*psSaveCompList;
 	UDWORD				i;
@@ -8219,7 +8219,7 @@ BOOL loadSaveCompListV9(char *pFileData, UDWORD filesize, UDWORD numRecords, UDW
 }
 
 // -----------------------------------------------------------------------------------------
-BOOL loadSaveCompListV(char *pFileData, UDWORD filesize, UDWORD numRecords, UDWORD version)
+bool loadSaveCompListV(char *pFileData, UDWORD filesize, UDWORD numRecords, UDWORD version)
 {
 	SAVE_COMPLIST		*psSaveCompList;
 	UDWORD				i;
@@ -8272,7 +8272,7 @@ BOOL loadSaveCompListV(char *pFileData, UDWORD filesize, UDWORD numRecords, UDWO
 
 // -----------------------------------------------------------------------------------------
 // Write out the current state of the Comp lists per player
-static BOOL writeCompListFile(char *pFileName)
+static bool writeCompListFile(char *pFileName)
 {
 	COMPLIST_SAVEHEADER		*psHeader;
 	char *pFileData;
@@ -8412,7 +8412,7 @@ static BOOL writeCompListFile(char *pFileName)
 
 // -----------------------------------------------------------------------------------------
 // load up structure type list file
-BOOL loadSaveStructTypeList(char *pFileData, UDWORD filesize)
+bool loadSaveStructTypeList(char *pFileData, UDWORD filesize)
 {
 	STRUCTLIST_SAVEHEADER		*psHeader;
 
@@ -8466,12 +8466,12 @@ BOOL loadSaveStructTypeList(char *pFileData, UDWORD filesize)
 }
 
 // -----------------------------------------------------------------------------------------
-BOOL loadSaveStructTypeListV7(char *pFileData, UDWORD filesize, UDWORD numRecords)
+bool loadSaveStructTypeListV7(char *pFileData, UDWORD filesize, UDWORD numRecords)
 {
 	SAVE_STRUCTLIST_V6		*psSaveStructList;
 	UDWORD				i, statInc;
 	STRUCTURE_STATS		*psStats;
-	BOOL				found;
+	bool				found;
 
 	if ((sizeof(SAVE_STRUCTLIST_V6) * numRecords + STRUCTLIST_HEADER_SIZE) >
 		filesize)
@@ -8525,12 +8525,12 @@ BOOL loadSaveStructTypeListV7(char *pFileData, UDWORD filesize, UDWORD numRecord
 }
 
 // -----------------------------------------------------------------------------------------
-BOOL loadSaveStructTypeListV(char *pFileData, UDWORD filesize, UDWORD numRecords)
+bool loadSaveStructTypeListV(char *pFileData, UDWORD filesize, UDWORD numRecords)
 {
 	SAVE_STRUCTLIST		*psSaveStructList;
 	UDWORD				i, statInc;
 	STRUCTURE_STATS		*psStats;
-	BOOL				found;
+	bool				found;
 
 	if ((sizeof(SAVE_STRUCTLIST) * numRecords + STRUCTLIST_HEADER_SIZE) >
 		filesize)
@@ -8585,7 +8585,7 @@ BOOL loadSaveStructTypeListV(char *pFileData, UDWORD filesize, UDWORD numRecords
 
 // -----------------------------------------------------------------------------------------
 // Write out the current state of the Struct Type List per player
-static BOOL writeStructTypeListFile(char *pFileName)
+static bool writeStructTypeListFile(char *pFileName)
 {
 	STRUCTLIST_SAVEHEADER	*psHeader;
 	SAVE_STRUCTLIST			*psSaveStructList;
@@ -8647,7 +8647,7 @@ static BOOL writeStructTypeListFile(char *pFileName)
 
 // -----------------------------------------------------------------------------------------
 // load up saved research file
-BOOL loadSaveResearch(char *pFileData, UDWORD filesize)
+bool loadSaveResearch(char *pFileData, UDWORD filesize)
 {
 	RESEARCH_SAVEHEADER		*psHeader;
 
@@ -8701,12 +8701,12 @@ BOOL loadSaveResearch(char *pFileData, UDWORD filesize)
 }
 
 // -----------------------------------------------------------------------------------------
-BOOL loadSaveResearchV8(char *pFileData, UDWORD filesize, UDWORD numRecords)
+bool loadSaveResearchV8(char *pFileData, UDWORD filesize, UDWORD numRecords)
 {
 	SAVE_RESEARCH_V8		*psSaveResearch;
 	UDWORD				i, statInc;
 	RESEARCH			*psStats;
-	BOOL				found;
+	bool				found;
 	UBYTE				playerInc;
 
 	if ((sizeof(SAVE_RESEARCH_V8) * numRecords + RESEARCH_HEADER_SIZE) >
@@ -8774,12 +8774,12 @@ BOOL loadSaveResearchV8(char *pFileData, UDWORD filesize, UDWORD numRecords)
 }
 
 // -----------------------------------------------------------------------------------------
-BOOL loadSaveResearchV(char *pFileData, UDWORD filesize, UDWORD numRecords)
+bool loadSaveResearchV(char *pFileData, UDWORD filesize, UDWORD numRecords)
 {
 	SAVE_RESEARCH		*psSaveResearch;
 	UDWORD				i, statInc;
 	RESEARCH			*psStats;
-	BOOL				found;
+	bool				found;
 	UBYTE				playerInc;
 
 	if ((sizeof(SAVE_RESEARCH) * numRecords + RESEARCH_HEADER_SIZE) >
@@ -8852,7 +8852,7 @@ BOOL loadSaveResearchV(char *pFileData, UDWORD filesize, UDWORD numRecords)
 
 // -----------------------------------------------------------------------------------------
 // Write out the current state of the Research per player
-static BOOL writeResearchFile(char *pFileName)
+static bool writeResearchFile(char *pFileName)
 {
 	RESEARCH_SAVEHEADER		*psHeader;
 	SAVE_RESEARCH			*psSaveResearch;
@@ -8919,7 +8919,7 @@ static BOOL writeResearchFile(char *pFileName)
 
 // -----------------------------------------------------------------------------------------
 // load up saved message file
-BOOL loadSaveMessage(char *pFileData, UDWORD filesize, SWORD levelType)
+bool loadSaveMessage(char *pFileData, UDWORD filesize, SWORD levelType)
 {
 	MESSAGE_SAVEHEADER		*psHeader;
 
@@ -8956,7 +8956,7 @@ BOOL loadSaveMessage(char *pFileData, UDWORD filesize, SWORD levelType)
 	return true;
 }
 
-BOOL loadSaveMessage36(char *pFileData, UDWORD filesize, UDWORD numMessages, UDWORD version, SWORD levelType)
+bool loadSaveMessage36(char *pFileData, UDWORD filesize, UDWORD numMessages, UDWORD version, SWORD levelType)
 {
 	SAVE_MESSAGE_36	*psSaveMessage;
 	MESSAGE			*psMessage;
@@ -9109,7 +9109,7 @@ BOOL loadSaveMessage36(char *pFileData, UDWORD filesize, UDWORD numMessages, UDW
 
 // -----------------------------------------------------------------------------------------
 // Write out the current messages per player
-static BOOL writeMessageFile(char *pFileName)
+static bool writeMessageFile(char *pFileName)
 {
 	MESSAGE_SAVEHEADER		*psHeader;
 	SAVE_MESSAGE_36			*psSaveMessage;
@@ -9239,7 +9239,7 @@ static BOOL writeMessageFile(char *pFileName)
 
 // -----------------------------------------------------------------------------------------
 // load up saved flag file
-BOOL loadSaveFlag(char *pFileData, UDWORD filesize)
+bool loadSaveFlag(char *pFileData, UDWORD filesize)
 {
 	FLAG_SAVEHEADER		*psHeader;
 
@@ -9269,7 +9269,7 @@ BOOL loadSaveFlag(char *pFileData, UDWORD filesize)
 }
 
 // -----------------------------------------------------------------------------------------
-BOOL loadSaveFlagV(char *pFileData, UDWORD filesize, UDWORD numflags, UDWORD version)
+bool loadSaveFlagV(char *pFileData, UDWORD filesize, UDWORD numflags, UDWORD version)
 {
 	SAVE_FLAG		*psSaveflag;
 	FLAG_POSITION	*psflag;
@@ -9410,7 +9410,7 @@ BOOL loadSaveFlagV(char *pFileData, UDWORD filesize, UDWORD numflags, UDWORD ver
 
 // -----------------------------------------------------------------------------------------
 // Write out the current flags per player
-static BOOL writeFlagFile(char *pFileName)
+static bool writeFlagFile(char *pFileName)
 {
 	FLAG_SAVEHEADER		*psHeader;
 	SAVE_FLAG			*psSaveflag;
@@ -9595,7 +9595,7 @@ static BOOL writeFlagFile(char *pFileName)
 }
 
 // -----------------------------------------------------------------------------------------
-BOOL loadSaveProduction(char *pFileData, UDWORD filesize)
+bool loadSaveProduction(char *pFileData, UDWORD filesize)
 {
 	PRODUCTION_SAVEHEADER		*psHeader;
 
@@ -9624,7 +9624,7 @@ BOOL loadSaveProduction(char *pFileData, UDWORD filesize)
 }
 
 // -----------------------------------------------------------------------------------------
-BOOL loadSaveProductionV(char *pFileData, UDWORD filesize, UDWORD version)
+bool loadSaveProductionV(char *pFileData, UDWORD filesize, UDWORD version)
 {
 	SAVE_PRODUCTION	*psSaveProduction;
 	UDWORD			factoryType,factoryNum,runNum;
@@ -9672,7 +9672,7 @@ BOOL loadSaveProductionV(char *pFileData, UDWORD filesize, UDWORD version)
 
 // -----------------------------------------------------------------------------------------
 // Write out the current production figures for factories
-static BOOL writeProductionFile(char *pFileName)
+static bool writeProductionFile(char *pFileName)
 {
 	PRODUCTION_SAVEHEADER	*psHeader;
 	SAVE_PRODUCTION			*psSaveProduction;
@@ -9734,7 +9734,7 @@ static BOOL writeProductionFile(char *pFileName)
 }
 
 // -----------------------------------------------------------------------------------------
-BOOL loadSaveStructLimits(char *pFileData, UDWORD filesize)
+bool loadSaveStructLimits(char *pFileData, UDWORD filesize)
 {
 	STRUCTLIMITS_SAVEHEADER		*psHeader;
 
@@ -9774,11 +9774,11 @@ BOOL loadSaveStructLimits(char *pFileData, UDWORD filesize)
 }
 
 // -----------------------------------------------------------------------------------------
-BOOL loadSaveStructLimitsV(char *pFileData, UDWORD filesize, UDWORD numLimits)
+bool loadSaveStructLimitsV(char *pFileData, UDWORD filesize, UDWORD numLimits)
 {
 	SAVE_STRUCTLIMITS		*psSaveLimits;
 	UDWORD					count, statInc;
-	BOOL					found;
+	bool					found;
 	STRUCTURE_STATS			*psStats;
 	int SkippedRecords=0;
 
@@ -9849,14 +9849,14 @@ BOOL loadSaveStructLimitsV(char *pFileData, UDWORD filesize, UDWORD numLimits)
 /*
 Writes the list of structure limits to a file
 */
-BOOL writeStructLimitsFile(char *pFileName)
+bool writeStructLimitsFile(char *pFileName)
 {
 	char *pFileData = NULL;
 	UDWORD						fileSize, totalLimits=0, i, player;
 	STRUCTLIMITS_SAVEHEADER		*psHeader;
 	SAVE_STRUCTLIMITS			*psSaveLimit;
 	STRUCTURE_STATS				*psStructStats;
-	BOOL status = true;
+	bool status = true;
 
 	totalLimits = numStructureStats * MAX_PLAYERS;
 
@@ -9913,7 +9913,7 @@ static const char FireSupport_file_identifier[] = "FIRESUPPORT";
 /*!
  * Load the current fire-support designated commanders (the one who has fire-support enabled)
  */
-BOOL readFiresupportDesignators(char *pFileName)
+bool readFiresupportDesignators(char *pFileName)
 {
 	unsigned int numPlayers, player;
 	char formatIdentifier[12] = "";
@@ -9953,7 +9953,7 @@ BOOL readFiresupportDesignators(char *pFileName)
 /*!
  * Save the current fire-support designated commanders (the one who has fire-support enabled)
  */
-BOOL writeFiresupportDesignators(char *pFileName)
+bool writeFiresupportDesignators(char *pFileName)
 {
 	unsigned int player;
 
@@ -9989,7 +9989,7 @@ BOOL writeFiresupportDesignators(char *pFileName)
 
 // -----------------------------------------------------------------------------------------
 // write the event state to a file on disk
-static BOOL	writeScriptState(char *pFileName)
+static bool	writeScriptState(char *pFileName)
 {
 	static const int32_t current_event_version = 4;
 
@@ -10011,7 +10011,7 @@ static BOOL	writeScriptState(char *pFileName)
 
 // -----------------------------------------------------------------------------------------
 // load the script state given a .gam name
-BOOL loadScriptState(char *pFileName)
+bool loadScriptState(char *pFileName)
 {
 	char	*pFileData;
 	UDWORD	fileSize;
@@ -10074,7 +10074,7 @@ static void setMapScroll(void)
 
 
 // -----------------------------------------------------------------------------------------
-BOOL getSaveObjectName(char *pName)
+bool getSaveObjectName(char *pName)
 {
 	return true;
 }
@@ -10089,7 +10089,7 @@ UDWORD getSaveGameType(void)
 
 // -----------------------------------------------------------------------------------------
 //copies a Stat name into a destination string for a given stat type and index
-static BOOL getNameFromComp(UDWORD compType, char *pDest, UDWORD compIndex)
+static bool getNameFromComp(UDWORD compType, char *pDest, UDWORD compIndex)
 {
 	BASE_STATS	*psStats;
 
@@ -10153,7 +10153,7 @@ static BOOL getNameFromComp(UDWORD compType, char *pDest, UDWORD compIndex)
  * present. Additionally we load the player's HQ location into playeridpos so
  * we know the player's starting location.
  */
-BOOL plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[])
+bool plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[])
 {
 	foundScavengerPlayerInMap = false;
 

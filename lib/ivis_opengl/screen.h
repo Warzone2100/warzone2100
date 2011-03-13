@@ -47,8 +47,8 @@ extern void screenSetTextColour(UBYTE red, UBYTE green, UBYTE blue);
 extern void screen_SetBackDropFromFile(const char* filename);
 extern void screen_StopBackDrop(void);
 extern void screen_RestartBackDrop(void);
-extern BOOL screen_GetBackDrop(void);
-extern void screen_Upload(const char *newBackDropBmp, BOOL preview);
+extern bool screen_GetBackDrop(void);
+extern void screen_Upload(const char *newBackDropBmp, bool preview);
 
 /* screendump */
 extern void screenDumpToDisk(const char* path);
@@ -62,6 +62,6 @@ extern void screenDoDumpToDiskIfRequired(void);
 
 void screen_enableMapPreview(char *name, int width, int height, Vector2i *playerpositions);
 void screen_disableMapPreview(void);
-BOOL screen_getMapPreview(void);
+bool screen_getMapPreview(void);
 
 #endif

@@ -51,7 +51,7 @@ bool mechanicsShutdown(void)
 
 
 // Allocate the list for a component
-BOOL allocComponentList(COMPONENT_TYPE	type, SDWORD number)
+bool allocComponentList(COMPONENT_TYPE	type, SDWORD number)
 {
 	SDWORD	inc, comp;
 
@@ -133,7 +133,7 @@ void freeComponentLists(void)
 }
 
 //allocate the space for the Players' structure lists
-BOOL allocStructLists(void)
+bool allocStructLists(void)
 {
 	SDWORD	inc, stat;
 

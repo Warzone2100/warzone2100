@@ -105,8 +105,8 @@
 
 extern char	ScreenDumpPath[];
 
-BOOL	bMovePause = false;
-BOOL		bAllowOtherKeyPresses = true;
+bool	bMovePause = false;
+bool		bAllowOtherKeyPresses = true;
 char	sTextToSend[MAX_CONSOLE_STRING_LENGTH];
 char	beaconMsg[MAX_PLAYERS][MAX_CONSOLE_STRING_LENGTH];		//beacon msg for each player
 
@@ -683,7 +683,7 @@ void	kf_TileInfo(void)
 // --------------------------------------------------------------------------
 void	kf_ToggleBackgroundFog( void )
 {
-	static BOOL bEnabled  = true;//start in nicks mode
+	static bool bEnabled  = true;//start in nicks mode
 
 	if (bEnabled)//true, so go to false
 	{
@@ -708,7 +708,7 @@ void	kf_ToggleBackgroundFog( void )
 
 extern void	kf_ToggleDistanceFog( void )
 {
-	static BOOL bEnabled  = true;//start in nicks mode
+	static bool bEnabled  = true;//start in nicks mode
 
 	if (bEnabled)//true, so go to false
 	{
@@ -733,7 +733,7 @@ extern void	kf_ToggleDistanceFog( void )
 /* Toggles fog on/off */
 void	kf_ToggleFog( void )
 {
-	static BOOL fogEnabled = false;
+	static bool fogEnabled = false;
 	const char* cmsg;
 
 #ifndef DEBUG
@@ -1048,9 +1048,9 @@ void	kf_SelectPlayer( void )
 /* Selects the player's groups 1..9 */
 void	kf_SelectGrouping( UDWORD	groupNumber)
 {
-	BOOL	bAlreadySelected;
+	bool	bAlreadySelected;
 	DROID	*psDroid;
-	BOOL	Selected;
+	bool	Selected;
 
 	bAlreadySelected = false;
 	for(psDroid = apsDroidLists[selectedPlayer]; psDroid!=NULL; psDroid = psDroid->psNext)
@@ -2416,7 +2416,7 @@ static void kfsf_SetSelectedDroidsState( SECONDARY_ORDER sec, SECONDARY_STATE st
 void	kf_TriggerRayCast( void )
 {
 DROID	*psDroid;
-BOOL	found;
+bool	found;
 
 	found = false;
 	for(psDroid = apsDroidLists[selectedPlayer]; psDroid && !found;
@@ -2448,7 +2448,7 @@ void	kf_ScatterDroids( void )
 void	kf_CentreOnBase( void )
 {
 STRUCTURE	*psStruct;
-BOOL		bGotHQ;
+bool		bGotHQ;
 UDWORD		xJump = 0, yJump = 0;
 
 	/* Got through our buildings */
@@ -2494,7 +2494,7 @@ void kf_ToggleFormationSpeedLimiting( void )
 void	kf_RightOrderMenu( void )
 {
 DROID	*psDroid,*psGotOne = NULL;
-BOOL	bFound;
+bool	bFound;
 
 	// if menu open, then close it!
 	if (widgGetFromID(psWScreen,IDORDER_FORM) != NULL)
@@ -2751,7 +2751,7 @@ void	kf_AddHelpBlip( void )
 	UDWORD	i;
 	char	tempStr[255];
 	SDWORD	x,y;
-	BOOL	mOverR=false;
+	bool	mOverR=false;
 
 	/* not needed in campaign */
 	if(!bMultiPlayer)

@@ -154,7 +154,7 @@ const char* getDroidActionName(DROID_ACTION action)
 }
 
 /* Check if a target is at correct range to attack */
-static BOOL actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
+static bool actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
 {
 	SDWORD			dx, dy, radSq, rangeSq, longRange;
 	WEAPON_STATS	*psStats;
@@ -228,7 +228,7 @@ static BOOL actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_s
 
 
 // check if a target is within weapon range
-BOOL actionInRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
+bool actionInRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
 {
 	SDWORD			dx, dy, radSq, rangeSq, longRange;
 	WEAPON_STATS	*psStats;
@@ -269,7 +269,7 @@ BOOL actionInRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
 
 
 // check if a target is inside minimum weapon range
-BOOL actionInsideMinRange(DROID *psDroid, BASE_OBJECT *psObj, WEAPON_STATS *psStats)
+bool actionInsideMinRange(DROID *psDroid, BASE_OBJECT *psObj, WEAPON_STATS *psStats)
 {
 	SDWORD	dx, dy, radSq, rangeSq, minRange;
 
@@ -359,7 +359,7 @@ void actionAlignTurret(BASE_OBJECT *psObj, int weapon_slot)
 }
 
 /* returns true if on target */
-BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *psWeapon)
+bool actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *psWeapon)
 {
 	WEAPON_STATS *psWeapStats = asWeaponStats + psWeapon->nStat;
 	uint16_t tRotation, tPitch;
@@ -483,7 +483,7 @@ BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *
 
 
 // return whether a droid can see a target to fire on it
-BOOL actionVisibleTarget(DROID *psDroid, BASE_OBJECT *psTarget, int weapon_slot)
+bool actionVisibleTarget(DROID *psDroid, BASE_OBJECT *psTarget, int weapon_slot)
 {
 	WEAPON_STATS	*psStats;
 	int compIndex;
@@ -714,7 +714,7 @@ static void actionCalcPullBackPoint(BASE_OBJECT *psObj, BASE_OBJECT *psTarget, S
 
 
 // check whether a droid is in the neighboring tile to a build position
-BOOL actionReachedBuildPos(DROID *psDroid, SDWORD x, SDWORD y, BASE_STATS *psStats)
+bool actionReachedBuildPos(DROID *psDroid, SDWORD x, SDWORD y, BASE_STATS *psStats)
 {
 	SDWORD		width, breadth, tx,ty, dx,dy;
 
@@ -767,7 +767,7 @@ BOOL actionReachedBuildPos(DROID *psDroid, SDWORD x, SDWORD y, BASE_STATS *psSta
 
 
 // check if a droid is on the foundations of a new building
-static BOOL actionDroidOnBuildPos(DROID *psDroid, SDWORD x, SDWORD y, BASE_STATS *psStats)
+static bool actionDroidOnBuildPos(DROID *psDroid, SDWORD x, SDWORD y, BASE_STATS *psStats)
 {
 	SDWORD	width, breadth, tx,ty, dx,dy;
 
@@ -829,7 +829,7 @@ void actionUpdateDroid(DROID *psDroid)
 {
 	BASE_OBJECT			*psTarget;
 	PROPULSION_STATS	*psPropStats;
-	BOOL				(*actionUpdateFunc)(DROID *psDroid) = NULL;
+	bool				(*actionUpdateFunc)(DROID *psDroid) = NULL;
 	unsigned i;
 	//this is a bit field
 	bool nonNullWeapon[DROID_MAXWEAPS] = { false };
@@ -2766,7 +2766,7 @@ void moveToRearm(DROID *psDroid)
 
 
 // whether a tile is suitable for a vtol to land on
-static BOOL vtolLandingTile(SDWORD x, SDWORD y)
+static bool vtolLandingTile(SDWORD x, SDWORD y)
 {
 	MAPTILE		*psTile;
 

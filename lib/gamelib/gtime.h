@@ -78,7 +78,7 @@ void gameTimeUpdateEnd(void);
 void realTimeUpdate(void);
 
 /* Returns true if gameTime is stopped. */
-extern BOOL gameTimeIsStopped(void);
+extern bool gameTimeIsStopped(void);
 
 /** Call this to stop the game timer. */
 extern void gameTimeStop(void);

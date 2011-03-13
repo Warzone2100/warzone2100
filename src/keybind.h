@@ -164,7 +164,7 @@ extern void	kf_MoveToLastMessagePos( void );
 extern void	kf_SelectAllDamaged( void );
 extern void	kf_RightOrderMenu( void );
 
-extern BOOL	bAllowOtherKeyPresses;
+extern bool	bAllowOtherKeyPresses;
 
 extern void	kf_TriggerRayCast( void );
 extern void	kf_ToggleFormationSpeedLimiting( void );

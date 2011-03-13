@@ -236,7 +236,7 @@ static inline void releaseAllMessages(MESSAGE *list[])
 	}
 }
 
-BOOL messageInitVars(void)
+bool messageInitVars(void)
 {
 	int i;
 
@@ -254,13 +254,13 @@ BOOL messageInitVars(void)
 }
 
 //allocates the viewdata heap
-BOOL initViewData(void)
+bool initViewData(void)
 {
 	return true;
 }
 
 /* Adds a beacon message. A wrapper for addMessage() */
-MESSAGE * addBeaconMessage(MESSAGE_TYPE msgType, BOOL proxPos, UDWORD player)
+MESSAGE * addBeaconMessage(MESSAGE_TYPE msgType, bool proxPos, UDWORD player)
 {
 	MESSAGE* psBeaconMsgToAdd = addMessage(msgType, proxPos, player);
 
@@ -274,7 +274,7 @@ MESSAGE * addBeaconMessage(MESSAGE_TYPE msgType, BOOL proxPos, UDWORD player)
 
 /* adds a proximity display - holds variables that enable the message to be
  displayed in the Intelligence Screen*/
-static void addProximityDisplay(MESSAGE *psMessage, BOOL proxPos, UDWORD player)
+static void addProximityDisplay(MESSAGE *psMessage, bool proxPos, UDWORD player)
 {
 	PROXIMITY_DISPLAY *psToAdd;
 
@@ -324,7 +324,7 @@ static void addProximityDisplay(MESSAGE *psMessage, BOOL proxPos, UDWORD player)
 }
 
 /*Add a message to the list */
-MESSAGE * addMessage(MESSAGE_TYPE msgType, BOOL proxPos, UDWORD player)
+MESSAGE * addMessage(MESSAGE_TYPE msgType, bool proxPos, UDWORD player)
 {
 	//first create a message of the required type
 	MESSAGE* psMsgToAdd = createMessage(msgType, player);
@@ -431,7 +431,7 @@ void releaseAllProxDisp(void)
 }
 
 /* Initialise the message heaps */
-BOOL initMessage(void)
+bool initMessage(void)
 {
 	//set up the imd used for proximity messages
 	pProximityMsgIMD = (iIMDShape *)resGetData("IMD", "arrow.pie");
@@ -862,7 +862,7 @@ VIEWDATA * getViewData(const char *pName)
 }
 
 /* Release the message heaps */
-BOOL messageShutdown(void)
+bool messageShutdown(void)
 {
 	freeMessages();
 

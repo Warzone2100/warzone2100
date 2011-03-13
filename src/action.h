@@ -72,22 +72,22 @@ void actionDroid(DROID *psDroid, DROID_ACTION action,
 					   BASE_OBJECT *psObj, UDWORD x, UDWORD y);
 
 /** Rotate turret toward  target return True if locked on (Droid and Structure). */
-BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *psWeapon);
+bool actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *psWeapon);
 
 /** Realign turret. */
 void actionAlignTurret(BASE_OBJECT *psObj, int weapon_slot);
 
 /** Check if a target is within weapon range. */
-BOOL actionInRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot);
+bool actionInRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot);
 
 /** Check if a target is inside minimum weapon range. */
-BOOL actionInsideMinRange(DROID *psDroid, BASE_OBJECT *psObj, WEAPON_STATS *psWeapStats);
+bool actionInsideMinRange(DROID *psDroid, BASE_OBJECT *psObj, WEAPON_STATS *psWeapStats);
 
 /** Return whether a droid can see a target to fire on it. */
-BOOL actionVisibleTarget(DROID *psDroid, BASE_OBJECT *psTarget, int weapon_slot);
+bool actionVisibleTarget(DROID *psDroid, BASE_OBJECT *psTarget, int weapon_slot);
 
 /** Check whether a droid is in the neighboring tile to a build position. */
-BOOL actionReachedBuildPos(DROID *psDroid, SDWORD x, SDWORD y, BASE_STATS *psStats);
+bool actionReachedBuildPos(DROID *psDroid, SDWORD x, SDWORD y, BASE_STATS *psStats);
 
 /** Send the vtol droid back to the nearest rearming pad - if there is one, otherwise return to base. */
 void moveToRearm(DROID *psDroid);

@@ -53,7 +53,7 @@
 #define GAMESERVERPORT		2100
 
 // ////////////////////////////////////////////////////////////////////////////
-BOOL loadConfig(void)
+bool loadConfig(void)
 {
 	int val;
 	char	sBuf[255];
@@ -488,7 +488,7 @@ BOOL loadConfig(void)
 	// enemy/allies radar view
 	if(getWarzoneKeyNumeric("radarObjectMode", &val))
 	{
-		bEnemyAllyRadarColor =(BOOL)val;
+		bEnemyAllyRadarColor =(bool)val;
 	} else {
 		bEnemyAllyRadarColor = false;
 		setWarzoneKeyNumeric("radarObjectMode", (SDWORD)bEnemyAllyRadarColor);
@@ -625,7 +625,7 @@ BOOL loadConfig(void)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-BOOL saveConfig(void)
+bool saveConfig(void)
 {
 	debug( LOG_WZ, "Writing prefs to registry\n" );
 
@@ -712,7 +712,7 @@ BOOL saveConfig(void)
 
 // Saves and loads the relevant part of the config files for MP games
 // Ensures that others' games don't change our own configuration settings
-BOOL reloadMPConfig(void)
+bool reloadMPConfig(void)
 {
 	int val;
 	char	sBuf[255];

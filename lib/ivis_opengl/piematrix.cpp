@@ -54,7 +54,7 @@ struct SDMATRIX
 static SDMATRIX	aMatrixStack[MATRIX_MAX];
 static SDMATRIX *psMatrix = &aMatrixStack[0];
 
-BOOL drawing_interface = true;
+bool drawing_interface = true;
 
 //*************************************************************************
 

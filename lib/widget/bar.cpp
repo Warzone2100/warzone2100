@@ -343,7 +343,7 @@ void barGraphDisplayTrough(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIE
 {
 	SDWORD		x0 = 0, y0 = 0, x1 = 0, y1 = 0;		// Position of the bar
 	SDWORD		tx0 = 0, ty0 = 0, tx1 = 0, ty1 = 0;	// Position of the trough
-	BOOL		showBar=true, showTrough=true;
+	bool		showBar=true, showTrough=true;
 	W_BARGRAPH	*psBGraph = (W_BARGRAPH *)psWidget;
 
 	/* figure out which way the bar graph fills */

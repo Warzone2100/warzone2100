@@ -89,12 +89,12 @@ void pie_SetDefaultStates(void)//Sets all states
 
 //***************************************************************************
 //
-// pie_EnableFog(BOOL val)
+// pie_EnableFog(bool val)
 //
 // Global enable/disable fog to allow fog to be turned of ingame
 //
 //***************************************************************************
-void pie_EnableFog(BOOL val)
+void pie_EnableFog(bool val)
 {
 	if (rendStates.fogEnabled != val)
 	{
@@ -115,19 +115,19 @@ void pie_EnableFog(BOOL val)
 	}
 }
 
-BOOL pie_GetFogEnabled(void)
+bool pie_GetFogEnabled(void)
 {
 	return rendStates.fogEnabled;
 }
 
 //***************************************************************************
 //
-// pie_SetFogStatus(BOOL val)
+// pie_SetFogStatus(bool val)
 //
 // Toggle fog on and off for rendering objects inside or outside the 3D world
 //
 //***************************************************************************
-BOOL pie_GetFogStatus(void)
+bool pie_GetFogStatus(void)
 {
 	return rendStates.fog;
 }
@@ -449,11 +449,11 @@ void pie_UpdateFogDistance(float begin, float end)
 }
 
 //
-// pie_SetFogStatus(BOOL val)
+// pie_SetFogStatus(bool val)
 //
 // Toggle fog on and off for rendering objects inside or outside the 3D world
 //
-void pie_SetFogStatus(BOOL val)
+void pie_SetFogStatus(bool val)
 {
 	float fog_colour[4];
 
@@ -523,7 +523,7 @@ void pie_SetTexturePage(SDWORD num)
 	}
 }
 
-void pie_SetAlphaTest(BOOL keyingOn)
+void pie_SetAlphaTest(bool keyingOn)
 {
 	if (keyingOn != rendStates.keyingOn)
 	{

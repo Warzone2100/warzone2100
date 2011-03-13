@@ -28,7 +28,7 @@
 #include "structure.h"
 
 /* Initialise the display system */
-extern BOOL dispInitialise(void);
+extern bool dispInitialise(void);
 
 extern void shakeStart(void);
 extern void shakeStop(void);
@@ -43,29 +43,29 @@ extern void	scroll(void);
 extern void resetScroll(void);
 extern void setMouseScroll(bool);
 
-extern BOOL DrawnInLastFrame(SDWORD Frame);
+extern bool DrawnInLastFrame(SDWORD Frame);
 
 // Clear all selections.
 extern void clearSel(void);
 // Clear all selections and stop driver mode.
 extern void clearSelection(void);
 // deal with selecting a droid
-extern void dealWithDroidSelect(DROID *psDroid, BOOL bDragBox);
+extern void dealWithDroidSelect(DROID *psDroid, bool bDragBox);
 
-extern	void	setInvertMouseStatus( BOOL val );
-extern BOOL	getInvertMouseStatus( void );
+extern	void	setInvertMouseStatus( bool val );
+extern bool	getInvertMouseStatus( void );
 
-extern	void	setRightClickOrders( BOOL val );
-extern BOOL	getRightClickOrders( void );
+extern	void	setRightClickOrders( bool val );
+extern bool	getRightClickOrders( void );
 
-extern	void	setMiddleClickRotate( BOOL val );
-extern BOOL	getMiddleClickRotate( void );
+extern	void	setMiddleClickRotate( bool val );
+extern bool	getMiddleClickRotate( void );
 
-extern	void	setDrawShadows( BOOL val );
-extern BOOL	getDrawShadows( void );
+extern	void	setDrawShadows( bool val );
+extern bool	getDrawShadows( void );
 
-extern	BOOL	getRadarJumpStatus( void );
-extern	void	setRadarJump(BOOL	val);
+extern	bool	getRadarJumpStatus( void );
+extern	void	setRadarJump(bool	val);
 
 
 /* Do the 3D display */
@@ -165,31 +165,31 @@ MT_SENSORSTRUCTDAM,
 MT_NOTARGET		//leave as last one
 };
 
-extern BOOL		gameStats;
-extern BOOL		godMode;
+extern bool		gameStats;
+extern bool		godMode;
 
 // reset the input state
 void resetInput(void);
 
-BOOL CheckInScrollLimits(SDWORD *xPos,SDWORD *zPos);
-extern BOOL CheckScrollLimits(void);
-extern BOOL	rotActive;
+bool CheckInScrollLimits(SDWORD *xPos,SDWORD *zPos);
+extern bool CheckScrollLimits(void);
+extern bool	rotActive;
 
 BASE_OBJECT	*mouseTarget( void );
 
-BOOL StartObjectOrbit(BASE_OBJECT *psObj);
+bool StartObjectOrbit(BASE_OBJECT *psObj);
 void CancelObjectOrbit(void);
 
 extern void FinishDeliveryPosition(UDWORD xPos,UDWORD yPos,void *UserData);
 extern void CancelDeliveryRepos(void);
 extern void StartDeliveryPosition( OBJECT_POSITION *psLocation );
-extern BOOL DeliveryReposValid(void);
+extern bool DeliveryReposValid(void);
 extern FLAG_POSITION *deliveryPointToMove;
 
-extern void StartTacticalScrollObj(BOOL driveActive,BASE_OBJECT *psObj);
+extern void StartTacticalScrollObj(bool driveActive,BASE_OBJECT *psObj);
 extern void CancelTacticalScroll(void);
 extern void MoveTacticalScroll(SDWORD xVel,SDWORD yVel);
-extern BOOL	getRotActive( void );
+extern bool	getRotActive( void );
 extern SDWORD	getDesiredPitch( void );
 extern void	setDesiredPitch(SDWORD pitch);
 
@@ -212,15 +212,15 @@ extern void	setDesiredPitch(SDWORD pitch);
 
 //access function for bSensorAssigned variable
 extern void setSensorAssigned(void);
-extern void	setShakeStatus( BOOL val );
-extern BOOL	getShakeStatus( void );
+extern void	setShakeStatus( bool val );
+extern bool	getShakeStatus( void );
 
 extern void	displayInitVars(void);
 
 void AddDerrickBurningMessage(void);
 
 // check whether the queue order keys are pressed
-extern BOOL ctrlShiftDown(void);
+extern bool ctrlShiftDown(void);
 
 extern UDWORD getTargetType(void);
 

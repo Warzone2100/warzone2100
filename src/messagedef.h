@@ -124,7 +124,7 @@ struct MESSAGE
 	MESSAGE_TYPE	type;					//The type of message
 	UDWORD			id;						//ID number of the message
 	MSG_VIEWDATA	*pViewData;				//Pointer to view data - if any - should be some!
-	BOOL			read;					//flag to indicate whether message has been read
+	bool			read;					//flag to indicate whether message has been read
 	UDWORD			player;					//which player this message belongs to
 	MSG_DATA_TYPE	dataType;				//stores actual type of data pViewData points to
 											//only relevant for messages of type MSG_PROXIMITY

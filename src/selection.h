@@ -42,7 +42,7 @@ DST_ALL_SAME
 
 // EXTERNALLY REFERENCED FUNCTIONS
 extern UDWORD	selDroidSelection( UDWORD	player, SELECTION_CLASS droidClass,
-						  SELECTIONTYPE droidType, BOOL bOnScreen );
+						  SELECTIONTYPE droidType, bool bOnScreen );
 extern UDWORD	selDroidDeselect		( UDWORD player );
 extern UDWORD	selNumSelected			( UDWORD player );
 extern void	selNextRepairUnit			( void );

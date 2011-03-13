@@ -30,7 +30,7 @@
  * \param image Sprite to read into
  * \return true on success, false otherwise
  */
-BOOL iV_loadImage_PNG(const char *fileName, iV_Image *image);
+bool iV_loadImage_PNG(const char *fileName, iV_Image *image);
 
 /*!
  * Save a PNG from image into file

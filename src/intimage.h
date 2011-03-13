@@ -52,7 +52,7 @@ extern IMAGEFILE *IntImages;	//< All the 2d graphics for the user interface.
 extern TABDEF StandardTab;
 extern TABDEF SmallTab;
 
-BOOL imageInitBitmaps(void);
+bool imageInitBitmaps(void);
 
 /** Draws a transparent window. */
 void RenderWindowFrame(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD Height);

@@ -35,16 +35,16 @@
 #define POWER_FACTOR        100
 
 /** Allocate the space for the playerPower. */
-extern BOOL allocPlayerPower(void);
+extern bool allocPlayerPower(void);
 
 /** Clear the playerPower. */
 extern void clearPlayerPower(void);
 
 /** Reset the power levels when a power_gen or resource_extractor is destroyed. */
-extern BOOL resetPlayerPower(UDWORD player, STRUCTURE *psStruct);
+extern bool resetPlayerPower(UDWORD player, STRUCTURE *psStruct);
 
 /** Check the available power. */
-BOOL checkPower(int player, uint32_t quantity);
+bool checkPower(int player, uint32_t quantity);
 
 extern int requestPowerFor(int player, int32_t amount, int points);
 extern int requestPrecisePowerFor(int player, int64_t amount, int points);
@@ -65,19 +65,19 @@ int32_t getPower(unsigned player);
 int64_t getPrecisePower(unsigned player);
 
 /** Resets the power levels for all players when power is turned back on. */
-void powerCalc(BOOL on);
+void powerCalc(bool on);
 
 /** Temp function to give all players some power when a new game has been loaded. */
 void newGameInitPower(void);
 
 /** Defines which structure types draw power - returns true if use power. */
-extern BOOL structUsesPower(STRUCTURE *psStruct);
+extern bool structUsesPower(STRUCTURE *psStruct);
 
 /** Defines which droid types draw power - returns true if use power. */
-extern BOOL droidUsesPower(DROID *psDroid);
+extern bool droidUsesPower(DROID *psDroid);
 
 /** Flag used to check for power calculations to be done or not. */
-extern	BOOL			powerCalculated;
+extern	bool			powerCalculated;
 
 extern void throttleEconomy(void);
 

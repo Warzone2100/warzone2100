@@ -30,7 +30,7 @@
 
 
 /* Initialise the object system */
-BOOL objInitialise(void)
+bool objInitialise(void)
 {
 	if (!objmemInitialise())
 	{
@@ -42,7 +42,7 @@ BOOL objInitialise(void)
 
 
 /* Shutdown the object system */
-BOOL objShutdown(void)
+bool objShutdown(void)
 {
 	objmemShutdown();
 

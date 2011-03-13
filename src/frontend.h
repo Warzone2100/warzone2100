@@ -56,20 +56,20 @@ extern tMode lastTitleMode;
 
 extern char	aLevelName[MAX_LEVEL_NAME_SIZE+1];	//256];			// vital! the wrf file to use.
 
-extern BOOL	bLimiterLoaded;
+extern bool	bLimiterLoaded;
 
 
 void changeTitleMode(tMode mode);
-BOOL runTitleMenu(void);
-BOOL runSinglePlayerMenu(void);
-BOOL runMultiPlayerMenu(void);
-BOOL runGameOptionsMenu(void);
-BOOL runOptionsMenu(void);
-BOOL runGraphicsOptionsMenu(void);
-BOOL runAudioOptionsMenu(void);
-BOOL runVideoOptionsMenu(void);
-BOOL runMouseOptionsMenu(void);
-BOOL runTutorialMenu(void);
+bool runTitleMenu(void);
+bool runSinglePlayerMenu(void);
+bool runMultiPlayerMenu(void);
+bool runGameOptionsMenu(void);
+bool runOptionsMenu(void);
+bool runGraphicsOptionsMenu(void);
+bool runAudioOptionsMenu(void);
+bool runVideoOptionsMenu(void);
+bool runMouseOptionsMenu(void);
+bool runTutorialMenu(void);
 
 void addTopForm(void);
 void addBottomForm(void);
@@ -83,7 +83,7 @@ void addFEAISlider(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, U
 
 void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
-BOOL CancelPressed(void);
+bool CancelPressed(void);
 
 
 // ////////////////////////////////////////////////////////////////////////////

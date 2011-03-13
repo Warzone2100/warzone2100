@@ -117,7 +117,7 @@ struct NET_PLAYER_DATA
 
 NETPLAY	NetPlay;
 PLAYER_IP	*IPlist = NULL;
-static BOOL		allow_joining = false;
+static bool		allow_joining = false;
 static	bool server_not_there = false;
 static GAMESTRUCT	gamestruct;
 
@@ -507,7 +507,7 @@ void NETplayerKicked(UDWORD index)
 
 // ////////////////////////////////////////////////////////////////////////
 // rename the local player
-BOOL NETchangePlayerName(UDWORD index, char *newName)
+bool NETchangePlayerName(UDWORD index, char *newName)
 {
 	if(!NetPlay.bComms)
 	{
@@ -595,7 +595,7 @@ static void NETsendGameFlags(void)
 
 // ////////////////////////////////////////////////////////////////////////
 // Set a game flag
-BOOL NETsetGameFlags(UDWORD flag, SDWORD value)
+bool NETsetGameFlags(UDWORD flag, SDWORD value)
 {
 	if(!NetPlay.bComms)
 	{
@@ -1014,7 +1014,7 @@ void NETdiscoverUPnPDevices(void)
 
 // ////////////////////////////////////////////////////////////////////////
 // setup stuff
-int NETinit(BOOL bFirstCall)
+int NETinit(bool bFirstCall)
 {
 	debug(LOG_NET, "NETinit");
 	NETlogEntry("NETinit!", SYNC_FLAG, selectedPlayer);
@@ -1345,7 +1345,7 @@ void NETflush()
 
 ///////////////////////////////////////////////////////////////////////////
 // Check if a message is a system message
-static BOOL NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
+static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 {
 	switch (type)
 	{
@@ -1556,7 +1556,7 @@ static BOOL NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 				debug(LOG_NET, "Broadcast leaving message to everyone else");
 				NETbeginEncode(NETbroadcastQueue(), NET_PLAYER_LEAVING);
 				{
-					BOOL host = NetPlay.isHost;
+					bool host = NetPlay.isHost;
 					uint32_t id = index;
 
 					NETuint32_t(&id);
@@ -1657,7 +1657,7 @@ static void NETcheckPlayers(void)
 // Receive a message over the current connection. We return true if there
 // is a message for the higher level code to process, and false otherwise.
 // We should not block here.
-BOOL NETrecvNet(NETQUEUE *queue, uint8_t *type)
+bool NETrecvNet(NETQUEUE *queue, uint8_t *type)
 {
 	uint32_t current;
 
@@ -1734,7 +1734,7 @@ checkMessages:
 	return false;
 }
 
-BOOL NETrecvGame(NETQUEUE *queue, uint8_t *type)
+bool NETrecvGame(NETQUEUE *queue, uint8_t *type)
 {
 	uint32_t current;
 	for (current = 0; current < MAX_PLAYERS; ++current)
@@ -1774,7 +1774,7 @@ BOOL NETrecvGame(NETQUEUE *queue, uint8_t *type)
 // ////////////////////////////////////////////////////////////////////////
 // Protocol functions
 
-BOOL NETsetupTCPIP(const char *machine)
+bool NETsetupTCPIP(const char *machine)
 {
 	debug(LOG_NET, "NETsetupTCPIP(%s)", machine ? machine : "NULL");
 
@@ -1880,7 +1880,7 @@ UBYTE NETrecvFile(NETQUEUE queue)
 				debug(LOG_NET, "We are leaving 'nicely' after a fatal error");
 				NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_PLAYER_LEAVING);
 				{
-					BOOL host = NetPlay.isHost;
+					bool host = NetPlay.isHost;
 					uint32_t id = selectedPlayer;
 
 					NETuint32_t(&id);
@@ -2444,7 +2444,7 @@ static void NETallowJoining(void)
 	}
 }
 
-BOOL NEThostGame(const char* SessionName, const char* PlayerName,
+bool NEThostGame(const char* SessionName, const char* PlayerName,
 		 SDWORD one, SDWORD two, SDWORD three, SDWORD four,
 		 UDWORD plyrs)	// # of players.
 {
@@ -2562,7 +2562,7 @@ BOOL NEThostGame(const char* SessionName, const char* PlayerName,
 
 // ////////////////////////////////////////////////////////////////////////
 // Stop the dplay interface from accepting more players.
-BOOL NEThaltJoining(void)
+bool NEThaltJoining(void)
 {
 	debug(LOG_NET, "temporarily locking game to prevent more players");
 
@@ -2574,7 +2574,7 @@ BOOL NEThaltJoining(void)
 
 // ////////////////////////////////////////////////////////////////////////
 // find games on open connection
-BOOL NETfindGame(void)
+bool NETfindGame(void)
 {
 	SocketAddress* hosts;
 	unsigned int gamecount = 0;
@@ -2717,7 +2717,7 @@ BOOL NETfindGame(void)
 // ////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////
 // Functions used to setup and join games.
-BOOL NETjoinGame(UDWORD gameNumber, const char* playername)
+bool NETjoinGame(UDWORD gameNumber, const char* playername)
 {
 	SocketAddress *hosts = NULL;
 	unsigned int i;
