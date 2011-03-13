@@ -123,15 +123,8 @@ static uint16_t mouseXPos = 0, mouseYPos = 0;
 static CURSOR lastCursor = CURSOR_ARROW;
 static bool crashing = false;
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
 unsigned int screenWidth = 0;
 unsigned int screenHeight = 0;
-#ifdef __cplusplus
-}
-#endif
 static void inputAddBuffer(UDWORD key, utf_32_char unicode);
 static int WZkeyToQtKey(int code);
 /*!

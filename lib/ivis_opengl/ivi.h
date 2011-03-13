@@ -25,16 +25,7 @@
 
 #include "piedef.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 extern void iV_Reset(void);
 extern void iV_ShutDown(void);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif

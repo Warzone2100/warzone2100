@@ -34,17 +34,6 @@
 #include "lib/framework/frame.h"
 #include "piedef.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
-/***************************************************************************/
-/*
- *	Global Definitions
- */
-/***************************************************************************/
-
 typedef struct
 {
 	Vector3i pos;
@@ -64,9 +53,5 @@ extern BOOL pie_SetVideoBufferHeight(UDWORD height);
 extern int pie_GetVideoBufferDepth( void ) WZ_DECL_PURE;
 extern int pie_GetVideoBufferWidth( void ) WZ_DECL_PURE;
 extern int pie_GetVideoBufferHeight( void ) WZ_DECL_PURE;
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // _pieclip_h

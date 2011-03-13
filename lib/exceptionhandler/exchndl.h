@@ -21,18 +21,9 @@
 #ifndef __INCLUDED_LIB_EXCEPTIONHANDLER_EXCHNDL_H__
 #define __INCLUDED_LIB_EXCEPTIONHANDLER_EXCHNDL_H__
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 extern void ExchndlSetup(void);
 extern void ExchndlShutdown(void);
 
 void ResetRPTDirectory(char *newPath);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_LIB_EXCEPTIONHANDLER_EXCHNDL_H__

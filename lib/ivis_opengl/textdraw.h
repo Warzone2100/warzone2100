@@ -24,11 +24,6 @@
 #include "ivisdef.h"
 #include "piepalette.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 enum iV_fonts
 {
     font_regular,
@@ -67,9 +62,5 @@ static inline void iV_DrawText(const char* string, float x, float y)
 {
 	iV_DrawTextRotated(string, x, y, 0.f);
 }
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // _INCLUDED_TEXTDRAW_
