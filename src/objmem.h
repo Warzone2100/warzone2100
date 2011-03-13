@@ -39,7 +39,7 @@ extern FEATURE			*apsOilList[1];
 extern BASE_OBJECT	*psDestroyedObj;
 
 /* Initialise the object heaps */
-extern BOOL objmemInitialise(void);
+extern bool objmemInitialise(void);
 
 /* Release the object heaps */
 extern void objmemShutdown(void);
@@ -93,7 +93,7 @@ void killFeature(FEATURE *psDel);
 extern void freeAllFeatures(void);
 
 /* Create a new Flag Position */
-extern BOOL createFlagPosition(FLAG_POSITION **ppsNew, UDWORD player);
+extern bool createFlagPosition(FLAG_POSITION **ppsNew, UDWORD player);
 /* add the Flag Position to the Flag Position Lists */
 extern void addFlagPosition(FLAG_POSITION *psFlagPosToAdd);
 /* Remove a Flag Position from the Lists */
@@ -104,7 +104,7 @@ extern void freeAllAssemblyPoints(void);
 
 // Find a base object from it's id
 extern BASE_OBJECT *getBaseObjFromId(UDWORD id);
-extern BOOL checkValidId(UDWORD id);
+extern bool checkValidId(UDWORD id);
 
 extern UDWORD getRepairIdFromFlag(FLAG_POSITION *psFlag);
 

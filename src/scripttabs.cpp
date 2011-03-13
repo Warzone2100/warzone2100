@@ -2258,7 +2258,7 @@ TYPE_EQUIV asEquivTable[] =
 
 
 // Initialise the script system
-BOOL scrTabInitialise(void)
+bool scrTabInitialise(void)
 {
 	unsigned int i;
 

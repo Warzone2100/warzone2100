@@ -60,7 +60,7 @@ static SCRIPT_CONTEXT	*psCurrContext;
 static ARRAY_INDEXES	sCurrArrayIndexes;
 
 // check that an array index is valid
-static BOOL scrvCheckArrayIndex(SDWORD base, ARRAY_INDEXES *psIndexes, UDWORD *pIndex)
+static bool scrvCheckArrayIndex(SDWORD base, ARRAY_INDEXES *psIndexes, UDWORD *pIndex)
 {
 	SDWORD	i, size;
 
@@ -111,7 +111,7 @@ static BOOL scrvCheckArrayIndex(SDWORD base, ARRAY_INDEXES *psIndexes, UDWORD *p
 %error-verbose
 
 %union {
-	BOOL			bval;
+	bool			bval;
 	INTERP_TYPE		tval;
 	char			*sval;
 	UDWORD			vindex;
@@ -781,7 +781,7 @@ var_value:		BOOLEAN_T
 %%
 
 // Lookup a type
-BOOL scrvLookUpType(const char *pIdent, INTERP_TYPE *pType)
+bool scrvLookUpType(const char *pIdent, INTERP_TYPE *pType)
 {
 	TYPE_SYMBOL		*psCurr;
 
@@ -799,7 +799,7 @@ BOOL scrvLookUpType(const char *pIdent, INTERP_TYPE *pType)
 
 
 // Lookup a variable identifier
-BOOL scrvLookUpVar(const char *pIdent, UDWORD *pIndex)
+bool scrvLookUpVar(const char *pIdent, UDWORD *pIndex)
 {
 	UDWORD	i;
 
@@ -823,7 +823,7 @@ BOOL scrvLookUpVar(const char *pIdent, UDWORD *pIndex)
 
 
 // Lookup an array identifier
-BOOL scrvLookUpArray(const char *pIdent, UDWORD *pIndex)
+bool scrvLookUpArray(const char *pIdent, UDWORD *pIndex)
 {
 	UDWORD	i;
 
@@ -847,7 +847,7 @@ BOOL scrvLookUpArray(const char *pIdent, UDWORD *pIndex)
 
 
 // Load a script value file
-BOOL scrvLoad(PHYSFS_file* fileHandle)
+bool scrvLoad(PHYSFS_file* fileHandle)
 {
 	bool retval;
 	lexerinput_t input;

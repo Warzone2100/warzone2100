@@ -48,17 +48,17 @@
 #define	TYPE_WATER				75
 #define TYPE_LAND				76
 
-typedef enum
+enum AP_TYPE
 {
 AP_RAIN,
 AP_SNOW
-} AP_TYPE;
+};
 
-typedef enum
+enum AP_STATUS
 {
 APS_ACTIVE,
 APS_INACTIVE,
-} AP_STATUS;
+};
 
 static ATPART	asAtmosParts[MAX_ATMOS_PARTICLES];
 static	UDWORD	freeParticle;

@@ -36,10 +36,10 @@
 #include "stats.h"
 
 /* Initialise the object system */
-extern BOOL objInitialise(void);
+extern bool objInitialise(void);
 
 /* Shutdown the object system */
-extern BOOL objShutdown(void);
+extern bool objShutdown(void);
 
 /*goes thru' the list passed in reversing the order so the first entry becomes
 the last and the last entry becomes the first!*/

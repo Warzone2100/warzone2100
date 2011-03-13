@@ -39,7 +39,7 @@ PointTree::Filter *gridFiltersUnseen;
 PointTree::Filter *gridFiltersDroidsByPlayer;
 
 // initialise the grid system
-BOOL gridInitialise(void)
+bool gridInitialise(void)
 {
 	ASSERT(gridPointTree == NULL, "gridInitialise already called, without calling gridShutDown.");
 	gridPointTree = new PointTree;

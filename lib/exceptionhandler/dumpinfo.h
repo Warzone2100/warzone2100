@@ -38,7 +38,7 @@ extern void dbgDumpHeader(DumpFileHandle file);
  */
 extern void dbgDumpLog(DumpFileHandle file);
 
-extern void dbgDumpInit(int argc, char* argv[]);
+extern void dbgDumpInit(int argc, const char** argv);
 
 extern void addDumpInfo(const char *inbuffer);
 

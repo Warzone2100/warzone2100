@@ -65,10 +65,10 @@
 
 #define VTOL_HITBOX_MODIFICATOR 100
 
-typedef struct _interval
+struct INTERVAL
 {
 	int begin, end;  // Time 1 = 0, time 2 = 1024. Or begin >= end if empty.
-} INTERVAL;
+};
 
 // Watermelon:they are from droid.c
 /* The range for neighbouring objects */
@@ -119,7 +119,7 @@ static inline void setProjectileDestination(PROJECTILE *psProj, BASE_OBJECT *psO
 
 
 /***************************************************************************/
-BOOL gfxVisible(PROJECTILE *psObj)
+bool gfxVisible(PROJECTILE *psObj)
 {
 	// Already know it is visible
 	if (psObj->bVisible)
@@ -177,7 +177,7 @@ BOOL gfxVisible(PROJECTILE *psObj)
 
 /***************************************************************************/
 
-BOOL
+bool
 proj_InitSystem( void )
 {
 	psProjectileList.clear();
@@ -199,7 +199,7 @@ proj_FreeAllProjectiles( void )
 
 /***************************************************************************/
 
-BOOL
+bool
 proj_Shutdown( void )
 {
 	proj_FreeAllProjectiles();
@@ -1718,7 +1718,7 @@ static HIT_SIDE getHitSide(PROJECTILE *psObj, BASE_OBJECT *psTarget)
 }
 
 /* Returns true if an object has just been hit by an electronic warfare weapon*/
-static BOOL	justBeenHitByEW(BASE_OBJECT *psObj)
+static bool	justBeenHitByEW(BASE_OBJECT *psObj)
 {
 DROID		*psDroid;
 FEATURE		*psFeature;

@@ -70,7 +70,7 @@ tMode lastTitleMode; // Since skirmish and multiplayer setup use the same functi
 
 char			aLevelName[MAX_LEVEL_NAME_SIZE+1];	//256];			// vital! the wrf file to use.
 
-BOOL			bLimiterLoaded = false;
+bool			bLimiterLoaded = false;
 
 #define DEFAULT_LEVEL "CAM_1A"
 #define TUTORIAL_LEVEL "TUTORIAL3"
@@ -78,7 +78,7 @@ BOOL			bLimiterLoaded = false;
 
 // Returns true if escape key pressed.
 //
-BOOL CancelPressed(void)
+bool CancelPressed(void)
 {
 	return keyPressed(KEY_ESC);
 }
@@ -86,7 +86,7 @@ BOOL CancelPressed(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Title Screen
-static BOOL startTitleMenu(void)
+static bool startTitleMenu(void)
 {
 	intRemoveReticule();
 
@@ -107,7 +107,7 @@ static BOOL startTitleMenu(void)
 	return true;
 }
 
-BOOL runTitleMenu(void)
+bool runTitleMenu(void)
 {
 	UDWORD id;
 
@@ -145,7 +145,7 @@ BOOL runTitleMenu(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Tutorial Menu
-static BOOL startTutorialMenu(void)
+static bool startTutorialMenu(void)
 {
 	addBackdrop();
 	addTopForm();
@@ -161,7 +161,7 @@ static BOOL startTutorialMenu(void)
 	return true;
 }
 
-BOOL runTutorialMenu(void)
+bool runTutorialMenu(void)
 {
 	UDWORD id;
 
@@ -259,7 +259,7 @@ static void SPinit(void)
 	setPlayerColour(0, playercolor);
 }
 
-BOOL runSinglePlayerMenu(void)
+bool runSinglePlayerMenu(void)
 {
 	UDWORD id;
 
@@ -348,7 +348,7 @@ BOOL runSinglePlayerMenu(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Multi Player Menu
-static BOOL startMultiPlayerMenu(void)
+static bool startMultiPlayerMenu(void)
 {
 	addBackdrop();
 	addTopForm();
@@ -364,7 +364,7 @@ static BOOL startMultiPlayerMenu(void)
 	return true;
 }
 
-BOOL runMultiPlayerMenu(void)
+bool runMultiPlayerMenu(void)
 {
 	UDWORD id;
 
@@ -411,7 +411,7 @@ BOOL runMultiPlayerMenu(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Options Menu
-static BOOL startOptionsMenu(void)
+static bool startOptionsMenu(void)
 {
 	sliderEnableDrag(true);
 
@@ -431,7 +431,7 @@ static BOOL startOptionsMenu(void)
 	return true;
 }
 
-BOOL runOptionsMenu(void)
+bool runOptionsMenu(void)
 {
 	UDWORD id;
 
@@ -478,7 +478,7 @@ BOOL runOptionsMenu(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Graphics Options
-static BOOL startGraphicsOptionsMenu(void)
+static bool startGraphicsOptionsMenu(void)
 {
 	addBackdrop();
 	addTopForm();
@@ -564,7 +564,7 @@ static BOOL startGraphicsOptionsMenu(void)
 	return true;
 }
 
-BOOL runGraphicsOptionsMenu(void)
+bool runGraphicsOptionsMenu(void)
 {
 	UDWORD id;
 	int mode = 0;
@@ -676,7 +676,7 @@ BOOL runGraphicsOptionsMenu(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Audio Options Menu
-static BOOL startAudioOptionsMenu(void)
+static bool startAudioOptionsMenu(void)
 {
 	addBackdrop();
 	addTopForm();
@@ -704,7 +704,7 @@ static BOOL startAudioOptionsMenu(void)
 	return true;
 }
 
-BOOL runAudioOptionsMenu(void)
+bool runAudioOptionsMenu(void)
 {
 	UDWORD id;
 
@@ -750,7 +750,7 @@ BOOL runAudioOptionsMenu(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Video Options
-static BOOL startVideoOptionsMenu(void)
+static bool startVideoOptionsMenu(void)
 {
 	// Generate the resolution string
 	snprintf(resolution, WIDG_MAXSTR, "%d x %d",
@@ -807,9 +807,9 @@ static BOOL startVideoOptionsMenu(void)
 	return true;
 }
 
-typedef struct { int w, h; } HACK;  // HACK Make it compile. Previous behaviour was to crash, anyway.
+struct HACK { int w, h; };  // HACK Make it compile. Previous behaviour was to crash, anyway.
 
-BOOL runVideoOptionsMenu(void)
+bool runVideoOptionsMenu(void)
 {
 	//SDL_Rect **modes = SDL_ListModes(NULL, SDL_FULLSCREEN | SDL_HWSURFACE);
 	HACK fakeMode = {42, 42};
@@ -953,7 +953,7 @@ BOOL runVideoOptionsMenu(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Mouse Options
-static BOOL startMouseOptionsMenu(void)
+static bool startMouseOptionsMenu(void)
 {
 	addBackdrop();
 	addTopForm();
@@ -1030,7 +1030,7 @@ static BOOL startMouseOptionsMenu(void)
 	return true;
 }
 
-BOOL runMouseOptionsMenu(void)
+bool runMouseOptionsMenu(void)
 {
 	UDWORD id = widgRunScreen(psWScreen);
 
@@ -1127,7 +1127,7 @@ BOOL runMouseOptionsMenu(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Game Options Menu
-static BOOL startGameOptionsMenu(void)
+static bool startGameOptionsMenu(void)
 {
 	UDWORD	w, h;
 	int playercolor;
@@ -1194,7 +1194,7 @@ static BOOL startGameOptionsMenu(void)
 	return true;
 }
 
-BOOL runGameOptionsMenu(void)
+bool runGameOptionsMenu(void)
 {
 	UDWORD id;
 
@@ -1446,8 +1446,8 @@ void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL
 {
 	SDWORD			fx,fy, fw;
 	W_BUTTON		*psBut;
-	BOOL			hilight = false;
-	BOOL			greyOut = psWidget->UserData; // if option is unavailable.
+	bool			hilight = false;
+	bool			greyOut = psWidget->UserData; // if option is unavailable.
 
 	psBut = (W_BUTTON *)psWidget;
 	iV_SetFont(psBut->FontID);

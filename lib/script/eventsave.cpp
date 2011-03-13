@@ -34,15 +34,15 @@
 
 
 // the event save file header
-typedef struct _event_save_header
+struct EVENT_SAVE_HDR  // : public GAME_SAVEHEADER
 {
 	char		aFileType[4];
 	UDWORD		version;
-} EVENT_SAVE_HDR;
+};
 
 
 // save the context information for the script system
-static BOOL eventSaveContext(char *pBuffer, UDWORD *pSize)
+static bool eventSaveContext(char *pBuffer, UDWORD *pSize)
 {
 	UDWORD				size, valSize;
 	SDWORD				numVars, i, numContext;
@@ -213,7 +213,7 @@ static BOOL eventSaveContext(char *pBuffer, UDWORD *pSize)
 }
 
 // load the context information for the script system
-static BOOL eventLoadContext(const SDWORD version, char *pBuffer, UDWORD *pSize)
+static bool eventLoadContext(const SDWORD version, char *pBuffer, UDWORD *pSize)
 {
 	UDWORD				size, valSize,stringLen;
 	SDWORD				numVars, i, numContext, context;
@@ -287,9 +287,9 @@ static BOOL eventLoadContext(const SDWORD version, char *pBuffer, UDWORD *pSize)
 
 				switch (type) {
 				case VAL_BOOL:
-					data.v.bval = *((BOOL*)pPos);
-					pPos += sizeof(BOOL);
-					size += sizeof(BOOL);
+					data.v.bval = *((bool*)pPos);
+					pPos += sizeof(bool);
+					size += sizeof(bool);
 					break;
 				case VAL_FLOAT:
 					data.v.fval = *((float*)pPos);
@@ -389,7 +389,7 @@ static BOOL eventLoadContext(const SDWORD version, char *pBuffer, UDWORD *pSize)
 }
 
 // return the index of a context
-static BOOL eventGetContextIndex(SCRIPT_CONTEXT *psContext, SDWORD *pIndex)
+static bool eventGetContextIndex(SCRIPT_CONTEXT *psContext, SDWORD *pIndex)
 {
 	SCRIPT_CONTEXT	*psCurr;
 	SDWORD			index;
@@ -409,7 +409,7 @@ static BOOL eventGetContextIndex(SCRIPT_CONTEXT *psContext, SDWORD *pIndex)
 }
 
 // find a context from it's id number
-static BOOL eventFindContext(SDWORD id, SCRIPT_CONTEXT **ppsContext)
+static bool eventFindContext(SDWORD id, SCRIPT_CONTEXT **ppsContext)
 {
 	SCRIPT_CONTEXT	*psCurr;
 
@@ -426,7 +426,7 @@ static BOOL eventFindContext(SDWORD id, SCRIPT_CONTEXT **ppsContext)
 }
 
 // save a list of triggers
-static BOOL eventSaveTriggerList(ACTIVE_TRIGGER *psList, char *pBuffer, UDWORD *pSize)
+static bool eventSaveTriggerList(ACTIVE_TRIGGER *psList, char *pBuffer, UDWORD *pSize)
 {
 	ACTIVE_TRIGGER		*psCurr;
 	UDWORD				size;
@@ -491,7 +491,7 @@ static BOOL eventSaveTriggerList(ACTIVE_TRIGGER *psList, char *pBuffer, UDWORD *
 
 
 // load a list of triggers
-static BOOL eventLoadTriggerList(WZ_DECL_UNUSED const SDWORD version, char *pBuffer, UDWORD *pSize)
+static bool eventLoadTriggerList(WZ_DECL_UNUSED const SDWORD version, char *pBuffer, UDWORD *pSize)
 {
 	UDWORD				size, event, offset, time;
 	char				*pPos;
@@ -554,7 +554,7 @@ static BOOL eventLoadTriggerList(WZ_DECL_UNUSED const SDWORD version, char *pBuf
 
 
 // Save the state of the event system
-BOOL eventSaveState(SDWORD version, char **ppBuffer, UDWORD *pFileSize)
+bool eventSaveState(SDWORD version, char **ppBuffer, UDWORD *pFileSize)
 {
 	UDWORD			size, totalSize;
 	char			*pBuffer, *pPos;
@@ -633,7 +633,7 @@ BOOL eventSaveState(SDWORD version, char **ppBuffer, UDWORD *pFileSize)
 
 
 // Load the state of the event system
-BOOL eventLoadState(char *pBuffer, UDWORD fileSize)
+bool eventLoadState(char *pBuffer, UDWORD fileSize)
 {
 	UDWORD			size, totalSize, version;
 	char			*pPos;

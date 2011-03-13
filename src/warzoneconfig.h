@@ -31,14 +31,13 @@
  *	Global Definitions
  */
 /***************************************************************************/
-typedef	enum	FMV_MODE
-				{
+enum FMV_MODE
+{
 					FMV_FULLSCREEN,
 					FMV_1X,
 					FMV_2X,
 					FMV_MAX
-				}
-				FMV_MODE;
+};
 
 /***************************************************************************/
 /*
@@ -46,18 +45,18 @@ typedef	enum	FMV_MODE
  */
 /***************************************************************************/
 extern void	war_SetDefaultStates(void);
-extern void war_SetFog(BOOL val);
-extern BOOL war_GetFog(void);
+extern void war_SetFog(bool val);
+extern bool war_GetFog(void);
 extern void war_SetFMVmode(FMV_MODE mode);
 extern FMV_MODE war_GetFMVmode(void);
-extern void war_SetAllowSubtitles(BOOL);
-extern BOOL war_GetAllowSubtitles(void);
-extern void war_setFullscreen(BOOL);
-extern BOOL war_getFullscreen(void);
+extern void war_SetAllowSubtitles(bool);
+extern bool war_GetAllowSubtitles(void);
+extern void war_setFullscreen(bool);
+extern bool war_getFullscreen(void);
 extern void war_setFSAA(unsigned int);
 extern unsigned int war_getFSAA(void);
-extern void war_SetTrapCursor(BOOL b);
-extern BOOL war_GetTrapCursor(void);
+extern void war_SetTrapCursor(bool b);
+extern bool war_GetTrapCursor(void);
 extern void war_SetVsync(bool b);
 extern bool war_GetVsync(void);
 extern void war_SetWidth(UDWORD width);
@@ -78,13 +77,13 @@ extern void war_SetSPcolor(int color);
  *
  * \param	soundEnabled	enable sound (or not)
  */
-void war_setSoundEnabled( BOOL soundEnabled );
+void war_setSoundEnabled( bool soundEnabled );
 
 /**
  * Whether we should initialize sound or not
  *
  * \return	Enable sound (or not)
  */
-BOOL war_getSoundEnabled( void );
+bool war_getSoundEnabled( void );
 
 #endif // __INCLUDED_SRC_WARZONECONFIG_H__

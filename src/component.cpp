@@ -49,11 +49,11 @@
 //VTOL weapon connector start
 #define VTOL_CONNECTOR_START 5
 
-static BOOL		leftFirst;
+static bool		leftFirst;
 
 // Colour Lookups
 // use col = MAX_PLAYERS for anycolour (see multiint.c)
-BOOL setPlayerColour(UDWORD player, UDWORD col)
+bool setPlayerColour(UDWORD player, UDWORD col)
 {
 	ASSERT(player < MAX_PLAYERS && col < MAX_PLAYERS, "Bad colour setting");
 	NetPlay.players[player].colour = col;
@@ -66,7 +66,7 @@ UBYTE getPlayerColour(UDWORD pl)
 }
 
 
-static void setMatrix(Vector3i *Position, Vector3i *Rotation, BOOL RotXYZ)
+static void setMatrix(Vector3i *Position, Vector3i *Rotation, bool RotXYZ)
 {
 	pie_PerspectiveBegin();
 	pie_MatBegin();
@@ -175,7 +175,7 @@ UDWORD getStructureStatHeight(STRUCTURE_STATS *psStat)
 }
 
 
-void displayIMDButton(iIMDShape *IMDShape, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale)
+void displayIMDButton(iIMDShape *IMDShape, Vector3i *Rotation, Vector3i *Position, bool RotXYZ, SDWORD scale)
 {
 	setMatrix(Position, Rotation, RotXYZ);
 	pie_MatScale(scale / 100.f);
@@ -187,7 +187,7 @@ void displayIMDButton(iIMDShape *IMDShape, Vector3i *Rotation, Vector3i *Positio
 
 
 //changed it to loop thru and draw all weapons
-void displayStructureButton(STRUCTURE *psStructure, Vector3i *rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale)
+void displayStructureButton(STRUCTURE *psStructure, Vector3i *rotation, Vector3i *Position, bool RotXYZ, SDWORD scale)
 {
 	iIMDShape *baseImd,*strImd;//*mountImd,*weaponImd;
 	iIMDShape *mountImd[STRUCT_MAXWEAPS];
@@ -212,7 +212,7 @@ void displayStructureButton(STRUCTURE *psStructure, Vector3i *rotation, Vector3i
 	if(baseImd!=NULL) {
 		pie_Draw3DShape(baseImd, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0);
 	}
-	pie_Draw3DShape(psStructure->sDisplay.imd, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0, 64);
+	pie_Draw3DShape(psStructure->sDisplay.imd, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0);
 	//and draw the turret
 	if(psStructure->sDisplay.imd->nconnectors)
 	{
@@ -284,7 +284,7 @@ void displayStructureButton(STRUCTURE *psStructure, Vector3i *rotation, Vector3i
 	unsetMatrix();
 }
 
-void displayStructureStatButton(STRUCTURE_STATS *Stats, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale)
+void displayStructureStatButton(STRUCTURE_STATS *Stats, Vector3i *Rotation, Vector3i *Position, bool RotXYZ, SDWORD scale)
 {
 	iIMDShape		*baseImd,*strImd;//*mountImd,*weaponImd;
 	iIMDShape *mountImd[STRUCT_MAXWEAPS];
@@ -310,7 +310,7 @@ void displayStructureStatButton(STRUCTURE_STATS *Stats, Vector3i *Rotation, Vect
 	{
 		pie_Draw3DShape(baseImd, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0);
 	}
-	pie_Draw3DShape(Stats->pIMD, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0, 64);
+	pie_Draw3DShape(Stats->pIMD, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0);
 
 	//and draw the turret
 	if(Stats->pIMD->nconnectors)
@@ -392,7 +392,7 @@ void displayStructureStatButton(STRUCTURE_STATS *Stats, Vector3i *Rotation, Vect
 // Render a component given a BASE_STATS structure.
 //
 void displayComponentButton(BASE_STATS *Stat, Vector3i *Rotation, Vector3i *Position,
-                            BOOL RotXYZ, SDWORD scale)
+                            bool RotXYZ, SDWORD scale)
 {
 	iIMDShape *ComponentIMD = NULL;
 	iIMDShape *MountIMD = NULL;
@@ -440,7 +440,7 @@ void displayComponentButton(BASE_STATS *Stat, Vector3i *Rotation, Vector3i *Posi
 
 // Render a research item given a BASE_STATS structure.
 //
-void displayResearchButton(BASE_STATS *Stat, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale)
+void displayResearchButton(BASE_STATS *Stat, Vector3i *Rotation, Vector3i *Position, bool RotXYZ, SDWORD scale)
 {
 	iIMDShape *ResearchIMD = ((RESEARCH *)Stat)->pIMD;
 	iIMDShape *MountIMD = ((RESEARCH *)Stat)->pIMD2;
@@ -498,7 +498,7 @@ static iIMDShape *getRightPropulsionIMD(DROID *psDroid)
 /* Assumes matrix context is already set */
 // this is able to handle multiple weapon graphics now
 // removed mountRotation,they get such stuff from psObj directly now
-static void displayCompObj(DROID *psDroid, BOOL bButton)
+static void displayCompObj(DROID *psDroid, bool bButton)
 {
 	iIMDShape               *psShape, *psJet, *psShapeTemp = NULL, *psMountShape;
 	Vector3i                zero(0, 0, 0);
@@ -565,7 +565,7 @@ static void displayCompObj(DROID *psDroid, BOOL bButton)
 	psShapeTemp = (leftFirst ? getLeftPropulsionIMD(psDroid) : getRightPropulsionIMD(psDroid));
 	if(psShapeTemp!=NULL)
 	{
-		pie_Draw3DShape(psShapeTemp, 0, colour, brightness, pieFlag, iPieData, 256);
+		pie_Draw3DShape(psShapeTemp, 0, colour, brightness, pieFlag, iPieData);
 	}
 
 	/* set default components transparent */
@@ -601,7 +601,7 @@ static void displayCompObj(DROID *psDroid, BOOL bButton)
 			/* draw body if cyborg not animating */
 			if ( psDroid->psCurAnim == NULL || psDroid->psCurAnim->bVisible == false )
 			{
-				pie_Draw3DShape(psShapeTemp, 0, colour, brightness, pieFlag, iPieData, 256);
+				pie_Draw3DShape(psShapeTemp, 0, colour, brightness, pieFlag, iPieData);
 			}
 		}
 		else
@@ -936,14 +936,14 @@ static void displayCompObj(DROID *psDroid, BOOL bButton)
 	psShape = (leftFirst ? getRightPropulsionIMD(psDroid) : getLeftPropulsionIMD(psDroid));
 	if(psShape!=NULL)
 	{
-		pie_Draw3DShape(psShape, 0, colour, brightness, pieFlag, iPieData, 256);
+		pie_Draw3DShape(psShape, 0, colour, brightness, pieFlag, iPieData);
 	}
 }
 
 
 // Render a composite droid given a DROID_TEMPLATE structure.
 //
-void displayComponentButtonTemplate(DROID_TEMPLATE *psTemplate, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale)
+void displayComponentButtonTemplate(DROID_TEMPLATE *psTemplate, Vector3i *Rotation, Vector3i *Position, bool RotXYZ, SDWORD scale)
 {
 	setMatrix(Position, Rotation, RotXYZ);
 	pie_MatScale(scale / 100.f);
@@ -966,7 +966,7 @@ void displayComponentButtonTemplate(DROID_TEMPLATE *psTemplate, Vector3i *Rotati
 
 // Render a composite droid given a DROID structure.
 //
-void displayComponentButtonObject(DROID *psDroid, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale)
+void displayComponentButtonObject(DROID *psDroid, Vector3i *Rotation, Vector3i *Position, bool RotXYZ, SDWORD scale)
 {
 	SDWORD		difference;
 

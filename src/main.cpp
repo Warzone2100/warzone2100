@@ -26,6 +26,7 @@
 
 #if defined(WZ_OS_WIN)
 #  include <shlobj.h> /* For SHGetFolderPath */
+#  include <shellapi.h> /* CommandLineToArgvW */
 #elif defined(WZ_OS_UNIX)
 #  include <errno.h>
 #endif // WZ_OS_WIN
@@ -85,11 +86,11 @@
 #  define WZ_DATADIR "data"
 #endif
 
-typedef enum _focus_state
+enum FOCUS_STATE
 {
 	FOCUS_OUT,		// Window does not have the focus
 	FOCUS_IN,		// Window has got the focus
-} FOCUS_STATE;
+};
 
 #if defined(WZ_OS_WIN)
 # define WZ_WRITEDIR "Warzone 2100 master"
@@ -123,7 +124,7 @@ int num_loaded_mods = 0;
 // Warzone 2100 . Pumpkin Studios
 
 //flag to indicate when initialisation is complete
-BOOL	gameInitialised = false;
+bool	gameInitialised = false;
 char	SaveGamePath[PATH_MAX];
 char	ScreenDumpPath[PATH_MAX];
 char	MultiForcesPath[PATH_MAX];
@@ -139,7 +140,7 @@ static FOCUS_STATE focusState = FOCUS_IN;
 extern void debug_callback_stderr( void**, const char * );
 extern void debug_callback_win32debug( void**, const char * );
 
-static BOOL inList( char * list[], const char * item )
+static bool inList( char * list[], const char * item )
 {
 	int i = 0;
 #ifdef DEBUG
@@ -378,7 +379,8 @@ static bool getCurrentDir(char * const dest, size_t const size)
 		return false;
 	}
 #elif defined(WZ_OS_WIN)
-	const int len = GetCurrentDirectoryA(size, dest);
+	wchar_t tmpWStr[PATH_MAX];
+	const int len = GetCurrentDirectoryW(PATH_MAX, tmpWStr);
 
 	if (len == 0)
 	{
@@ -390,7 +392,7 @@ static bool getCurrentDir(char * const dest, size_t const size)
 		FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, err, 0, (char*)&err_string, 0, NULL);
 
 		// Print an error message with the above description
-		debug(LOG_ERROR, "getPlatformUserDir: GetCurrentDirectoryA failed (error code: %d): %s", err, err_string);
+		debug(LOG_ERROR, "getPlatformUserDir: GetCurrentDirectory failed (error code: %d): %s", err, err_string);
 
 		// Free our chunk of memory FormatMessageA gave us
 		LocalFree(err_string);
@@ -401,6 +403,12 @@ static bool getCurrentDir(char * const dest, size_t const size)
 	{
 		debug(LOG_ERROR, "getPlatformUserDir: The buffer to contain our current directory is too small (%u bytes and %d needed)", (unsigned int)size, len);
 
+		return false;
+	}
+	if (WideCharToMultiByte(CP_UTF8, 0, tmpWStr, -1, dest, size, NULL, NULL) == 0)
+	{
+		dest[0] = '\0';
+		debug(LOG_ERROR, "Encoding conversion error.");
 		return false;
 	}
 #else
@@ -415,9 +423,16 @@ static bool getCurrentDir(char * const dest, size_t const size)
 static void getPlatformUserDir(char * const tmpstr, size_t const size)
 {
 #if defined(WZ_OS_WIN)
-	ASSERT(size >= MAX_PATH, "size (%u) is smaller than the required minimum of MAX_PATH (%u)", size, (size_t)MAX_PATH);
-	if ( SUCCEEDED( SHGetFolderPathA( NULL, CSIDL_PERSONAL|CSIDL_FLAG_CREATE, NULL, SHGFP_TYPE_CURRENT, tmpstr ) ) )
+	wchar_t tmpWStr[MAX_PATH];
+	if ( SUCCEEDED( SHGetFolderPathW( NULL, CSIDL_PERSONAL|CSIDL_FLAG_CREATE, NULL, SHGFP_TYPE_CURRENT, tmpWStr ) ) )
+	{
+		if (WideCharToMultiByte(CP_UTF8, 0, tmpWStr, -1, tmpstr, size, NULL, NULL) == 0)
+		{
+			debug(LOG_ERROR, "Encoding conversion error.");
+			exit(1);
+		}
 		strlcat(tmpstr, PHYSFS_getDirSeparator(), size);
+	}
 	else
 #elif defined(WZ_OS_MAC)
 	FSRef fsref;
@@ -540,7 +555,7 @@ static void initialize_PhysicsFS(const char* argv_0)
  *
  * Priority:
  * Lower loads first. Current:
- * -datadir > User's home dir > SVN data > AutoPackage > BaseDir > DEFAULT_DATADIR
+ * -datadir > User's home dir > source tree data > AutoPackage > BaseDir > DEFAULT_DATADIR
  *
  * Only -datadir and home dir are allways examined. Others only if data still not found.
  *
@@ -583,7 +598,7 @@ static void scanDataDirs( void )
 
 	if( !PHYSFS_exists("gamedesc.lev") )
 	{
-		// Data in SVN dir
+		// Data in source tree
 		sstrcpy(tmpstr, prefix);
 		sstrcat(tmpstr, "/data/");
 		registerSearchPath( tmpstr, 3 );
@@ -1033,13 +1048,60 @@ void mainLoop(void)
 	}
 }
 
+bool getUTF8CmdLine(int* const utfargc, const char*** const utfargv) // explicitely pass by reference
+{
+#ifdef WZ_OS_WIN
+	int wargc;
+	wchar_t** wargv = CommandLineToArgvW(GetCommandLineW(), &wargc);
+
+	if (wargv == NULL)
+	{
+		const int err = GetLastError();
+		char* err_string;
+
+		// Retrieve a (locally encoded) string describing the error (uses LocalAlloc() to allocate memory)
+		FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, err, 0, (char*)&err_string, 0, NULL);
+
+		debug(LOG_FATAL, "CommandLineToArgvW failed: %s (code:%d)", err_string, err);
+
+		LocalFree(err_string); // Free the chunk of memory FormatMessageA gave us
+		LocalFree(wargv);
+		return false;
+	}
+	// the following malloc and UTF16toUTF8 will create leaks.
+	*utfargv = (const char**)malloc(sizeof(const char*) * wargc);
+	if (!*utfargv)
+	{
+		debug(LOG_FATAL, "Out of memory!");
+		abort();
+		return false;
+	}
+	for (int i = 0; i < wargc; ++i)
+	{
+		STATIC_ASSERT(sizeof(wchar_t) == sizeof(utf_16_char)); // Should be true on windows
+		(*utfargv)[i] = UTF16toUTF8((const utf_16_char*)wargv[i], NULL); // only returns null when memory runs out
+		if ((*utfargv)[i] == NULL)
+		{
+			*utfargc = i;
+			LocalFree(wargv);
+			abort();
+			return false;
+		}
+	}
+	*utfargc = wargc;
+	LocalFree(wargv);
+#endif
+	return true;
+}
+
 int main(int argc, char *argv[])
 {
+	int utfargc = argc;
+	const char** utfargv = (const char**)argv;
+
 #ifdef WZ_OS_MAC
 	cocoaInit();
 #endif
-
-	setupExceptionHandler(argc, argv);
 
 	debug_init();
 	debug_register_callback( debug_callback_stderr, NULL, NULL, NULL );
@@ -1047,14 +1109,21 @@ int main(int argc, char *argv[])
 	debug_register_callback( debug_callback_win32debug, NULL, NULL, NULL );
 #endif // WZ_OS_WIN && DEBUG_INSANE
 
+	if (!getUTF8CmdLine(&utfargc, &utfargv))
+	{
+		return -1;
+	}
+
+	setupExceptionHandler(utfargc, utfargv);
+
 	/*** Initialize PhysicsFS ***/
-	initialize_PhysicsFS(argv[0]);
+	initialize_PhysicsFS(utfargv[0]);
 
 	/*** Initialize translations ***/
 	initI18n();
 
 	// find early boot info
-	if ( !ParseCommandLineEarly(argc, (const char**)argv) ) {
+	if ( !ParseCommandLineEarly(utfargc, utfargv) ) {
 		return -1;
 	}
 
@@ -1111,7 +1180,7 @@ int main(int argc, char *argv[])
 	NETinit(true);
 
 	// parse the command line
-	if (!ParseCommandLine(argc, (const char**)argv)) {
+	if (!ParseCommandLine(utfargc, utfargv)) {
 		return -1;
 	}
 

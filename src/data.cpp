@@ -1083,12 +1083,12 @@ static bool dataScriptLoadVals(const char* fileName, void **ppData)
 // These are statically defined in data.c
 // this is also defined in frameresource.c - needs moving to a .h file
 // This basically matches the argument list of resAddBufferLoad in frameresource.c
-typedef struct
+struct RES_TYPE_MIN_BUF
 {
 	const char *aType;                      ///< points to the string defining the type (e.g. SCRIPT) - NULL indicates end of list
 	RES_BUFFERLOAD buffLoad;                ///< routine to process the data for this type
 	RES_FREE release;                       ///< routine to release the data (NULL indicates none)
-} RES_TYPE_MIN_BUF;
+};
 
 static const RES_TYPE_MIN_BUF BufferResourceTypes[] =
 {
@@ -1127,12 +1127,12 @@ static const RES_TYPE_MIN_BUF BufferResourceTypes[] =
 	{"IMD", dataIMDBufferLoad, (RES_FREE)iV_IMDRelease},
 };
 
-typedef struct
+struct RES_TYPE_MIN_FILE
 {
 	const char *aType;                      ///< points to the string defining the type (e.g. SCRIPT) - NULL indicates end of list
 	RES_FILELOAD fileLoad;                  ///< routine to process the data for this type
 	RES_FREE release;                       ///< routine to release the data (NULL indicates none)
-} RES_TYPE_MIN_FILE;
+};
 
 static const RES_TYPE_MIN_FILE FileResourceTypes[] =
 {

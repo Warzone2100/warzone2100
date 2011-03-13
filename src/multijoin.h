@@ -26,13 +26,13 @@
 
 #include "droiddef.h"
 
-extern BOOL intDisplayMultiJoiningStatus(UBYTE joinCount);
+extern bool intDisplayMultiJoiningStatus(UBYTE joinCount);
 void recvPlayerLeft(NETQUEUE queue);
-extern BOOL MultiPlayerLeave			(UDWORD playerIndex);						// A player has left the game.
-extern BOOL MultiPlayerJoin				(UDWORD playerIndex);						// A Player has joined the game.
+extern bool MultiPlayerLeave			(UDWORD playerIndex);						// A player has left the game.
+extern bool MultiPlayerJoin				(UDWORD playerIndex);						// A Player has joined the game.
 extern void setupNewPlayer				(UDWORD player);		// stuff to do when player joins.
-extern void clearPlayer					(UDWORD player, BOOL quietly);// wipe a player off the face of the earth.
-//extern BOOL ProcessDroidOrders			(void);
+extern void clearPlayer					(UDWORD player, bool quietly);// wipe a player off the face of the earth.
+//extern bool ProcessDroidOrders			(void);
 //extern UDWORD							arenaPlayersReceived;
 
 extern void ShowMOTD(void);

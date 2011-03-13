@@ -30,11 +30,11 @@
 #include "keybind.h"
 #include "keymap.h"
 
-typedef struct _cheat_entry
+struct CHEAT_ENTRY
 {
 	const char *pName;
 	void (*function)(void);	// pointer to void* function
-} CHEAT_ENTRY;
+};
 
 bool Cheated = false;
 static CHEAT_ENTRY cheatCodes[] =
@@ -79,7 +79,7 @@ static CHEAT_ENTRY cheatCodes[] =
 	{"desync me", kf_ForceDesync},
 };
 
-BOOL attemptCheatCode(const char* cheat_name)
+bool attemptCheatCode(const char* cheat_name)
 {
 	const CHEAT_ENTRY * curCheat;
 	static const CHEAT_ENTRY * const EndCheat = &cheatCodes[ARRAY_SIZE(cheatCodes)];

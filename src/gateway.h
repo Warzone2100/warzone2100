@@ -24,20 +24,20 @@
 #ifndef __INCLUDED_SRC_GATEWAY_H__
 #define __INCLUDED_SRC_GATEWAY_H__
 
-typedef struct _gateway
+struct GATEWAY
 {
 	UBYTE			x1,y1, x2,y2;
-	struct _gateway		*psNext;
-} GATEWAY;
+	GATEWAY *       psNext;
+};
 
 /// Initialise the gateway system
-BOOL gwInitialise(void);
+bool gwInitialise(void);
 
 /// Shutdown the gateway system
 void gwShutDown(void);
 
 /// Add a gateway to the system
-BOOL gwNewGateway(SDWORD x1, SDWORD y1, SDWORD x2, SDWORD y2);
+bool gwNewGateway(SDWORD x1, SDWORD y1, SDWORD x2, SDWORD y2);
 
 /// Release a gateway
 void gwFreeGateway(GATEWAY *psDel);

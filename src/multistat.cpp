@@ -110,7 +110,7 @@ void recvMultiStats(NETQUEUE queue)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Load Player Stats
-BOOL loadMultiStats(char *sPlayerName, PLAYERSTATS *st)
+bool loadMultiStats(char *sPlayerName, PLAYERSTATS *st)
 {
 	char				fileName[255];
 	UDWORD				size;
@@ -173,7 +173,7 @@ BOOL loadMultiStats(char *sPlayerName, PLAYERSTATS *st)
 // ////////////////////////////////////////////////////////////////////////////
 // Save Player Stats
 #define MAX_STA_SIZE 500
-BOOL saveMultiStats(const char *sFileName, const char *sPlayerName, const PLAYERSTATS *st)
+bool saveMultiStats(const char *sFileName, const char *sPlayerName, const PLAYERSTATS *st)
 {
 	char buffer[MAX_STA_SIZE];
 	char fileName[255] = "";

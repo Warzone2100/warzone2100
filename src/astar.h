@@ -27,12 +27,12 @@
  *
  *  @ingroup pathfinding
  */
-typedef enum
+enum ASR_RETVAL
 {
 	ASR_OK,         ///< found a route
 	ASR_FAILED,     ///< no route could be found
 	ASR_NEAREST,    ///< found a partial route to a nearby position
-} ASR_RETVAL;
+};
 
 /** Use the A* algorithm to find a path
  *

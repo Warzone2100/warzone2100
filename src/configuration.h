@@ -24,9 +24,9 @@
 #ifndef __INCLUDED_SRC_CONFIGURATION_H__
 #define __INCLUDED_SRC_CONFIGURATION_H__
 
-BOOL loadConfig(void);
-BOOL saveConfig(void);
-BOOL reloadMPConfig(void);
+bool loadConfig(void);
+bool saveConfig(void);
+bool reloadMPConfig(void);
 void closeConfig( void );
 
 /// Default map for Skirmish

@@ -61,7 +61,7 @@ static char aText[TEXT_BUFFERS][YYLMAX];
 static UDWORD currText=0;
 
 // Note if we are in a comment
-static BOOL inComment = false;
+static bool inComment = false;
 
 /* FLEX include buffer stack */
 static YY_BUFFER_STATE include_stack[MAX_SCR_INCLUDE_DEPTH];
@@ -106,7 +106,7 @@ static YYSTYPE dummy;
 /* Get the token type for a variable symbol */
 static SDWORD scriptGetVarToken(VAR_SYMBOL *psVar)
 {
-	BOOL	object;
+	bool	object;
 
 	// See if this is an object pointer
 	if (!asScrTypeTab || psVar->type < VAL_USERTYPESTART)
@@ -220,7 +220,7 @@ static SDWORD scriptGetVarToken(VAR_SYMBOL *psVar)
 /* Get the token type for a constant symbol */
 static SDWORD scriptGetConstToken(CONST_SYMBOL *psConst)
 {
-	BOOL	object;
+	bool	object;
 
 	// See if this is an object constant
 	if (!asScrTypeTab || psConst->type < VAL_USERTYPESTART)
@@ -261,7 +261,7 @@ static SDWORD scriptGetConstToken(CONST_SYMBOL *psConst)
 /* Get the token type for a function symbol */
 static SDWORD scriptGetFuncToken(FUNC_SYMBOL *psFunc)
 {
-	BOOL	object;
+	bool	object;
 
 	// See if this is an object pointer
 	if(psFunc->type >= VAL_USERTYPESTART)
@@ -299,7 +299,7 @@ static SDWORD scriptGetFuncToken(FUNC_SYMBOL *psFunc)
 /* Get the token type for a custom function symbol */
 static SDWORD scriptGetCustomFuncToken(EVENT_SYMBOL *psFunc)
 {
-	BOOL	object;
+	bool	object;
 
 	// See if this is an object pointer
 	if (!asScrTypeTab || psFunc->retType < VAL_USERTYPESTART)
@@ -348,7 +348,7 @@ static SDWORD scriptGetCustomFuncToken(EVENT_SYMBOL *psFunc)
 }
 
 /* Look up defined macro and return new define buffer */
-static BOOL scriptLoopUpMacro(const char *pMacro, char **ppMacroBody)
+static bool scriptLoopUpMacro(const char *pMacro, char **ppMacroBody)
 {
 	unsigned int i;
 
@@ -498,7 +498,7 @@ pause					return PAUSE;
 	/* Match type keywords */
 void|VOID				{ scr_lval.tval = VAL_VOID; return _VOID; }
 string|STRING				{ scr_lval.tval = VAL_STRING; return TYPE; }
-bool|BOOL				{ scr_lval.tval = VAL_BOOL; return TYPE; }
+bool|bool				{ scr_lval.tval = VAL_BOOL; return TYPE; }
 int|INT					{ scr_lval.tval = VAL_INT; return TYPE; }
 float|FLOAT				{ scr_lval.tval = VAL_FLOAT; return TYPE; }
 

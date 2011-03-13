@@ -61,11 +61,11 @@ typedef uint16_t PlayerMask;
 #error Warzone 2100 is not a MMO.
 #endif
 
-typedef enum
+enum QUEUE_MODE
 {
 	ModeQueue,      ///< Sends a message on the game queue, which will get synchronised, by sending a GAME_ message.
 	ModeImmediate   ///< Performs the action immediately. Must already have been synchronised, for example by sending a GAME_ message.
-} QUEUE_MODE;
+};
 
 
 /** Initialise the framework library

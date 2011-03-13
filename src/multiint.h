@@ -42,7 +42,7 @@ extern LOBBY_ERROR_TYPES getLobbyError(void);
 extern void setLobbyError(LOBBY_ERROR_TYPES error_type);
 
 extern	void	runConnectionScreen		(void);
-extern	BOOL	startConnectionScreen	(void);
+extern	bool	startConnectionScreen	(void);
 extern	void	intProcessConnection	(UDWORD id);
 
 extern	void	runGameFind				(void);
@@ -51,15 +51,15 @@ extern	void	startGameFind			(void);
 void updateLimitFlags(void);
 
 extern	void	runMultiOptions			(void);
-extern	BOOL	startMultiOptions		(BOOL bReenter);
+extern	bool	startMultiOptions		(bool bReenter);
 extern	void	frontendMultiMessages	(void);
 
-extern BOOL addMultiBut(W_SCREEN *screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char* tipres, UDWORD norm, UDWORD down, UDWORD hi);
-extern BOOL changeColour(UBYTE player, UBYTE col);
+extern bool addMultiBut(W_SCREEN *screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char* tipres, UDWORD norm, UDWORD down, UDWORD hi);
+extern bool changeColour(UBYTE player, UBYTE col);
 extern	char	sPlayer[128];
 
 void	kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type);
-void	addPlayerBox(BOOL);			// players (mid) box
+void	addPlayerBox(bool);			// players (mid) box
 void loadMapPreview(bool hideInterface);
 
 

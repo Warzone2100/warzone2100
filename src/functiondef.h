@@ -206,7 +206,7 @@ struct DROIDSENSOR_UPGRADE_FUNCTION : public UPGRADE_FUNCTION
 typedef struct _function_upgrade
 {
 	UDWORD		functionInc;			/*The index of the function in asFunctions */
-	BOOL		available;				/*Flag to indicate whether this Upgrade is available*/
+	bool		available;				/*Flag to indicate whether this Upgrade is available*/
 } FUNCTION_UPGRADE;
 #endif
 /*function used by HQ to input power values*/

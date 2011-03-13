@@ -50,7 +50,7 @@ extern iSurface rendSurface;
  *	Global ProtoTypes
  */
 /***************************************************************************/
-extern BOOL pie_Initialise(void);
+extern bool pie_Initialise(void);
 extern void pie_ShutDown(void);
 extern void pie_ScreenFlip(int ClearMode);
 extern UDWORD	pie_GetResScalingFactor( void );

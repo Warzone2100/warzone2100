@@ -21,7 +21,7 @@
 #ifndef __INCLUDED_SRC_BUCKET3D_H__
 #define __INCLUDED_SRC_BUCKET3D_H__
 
-typedef enum _render_type
+enum RENDER_TYPE
 {
 	RENDER_DROID,
 	RENDER_STRUCTURE,
@@ -33,7 +33,7 @@ typedef enum _render_type
 	RENDER_EFFECT,
 	RENDER_DELIVPOINT,
 	RENDER_PARTICLE
-} RENDER_TYPE;
+};
 
 //function prototypes
 

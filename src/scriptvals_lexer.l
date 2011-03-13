@@ -106,7 +106,7 @@ extern void scrv_set_extra(YY_EXTRA_TYPE user_defined);
 int							{ yylval->tval = VAL_INT; return TYPE; }
 INT							{ yylval->tval = VAL_INT; return TYPE; }
 bool						{ yylval->tval = VAL_BOOL; return TYPE; }
-BOOL						{ yylval->tval = VAL_BOOL; return TYPE; }
+bool						{ yylval->tval = VAL_BOOL; return TYPE; }
 script						return SCRIPT;
 store						return STORE;
 run							return RUN;

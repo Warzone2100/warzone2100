@@ -266,7 +266,7 @@ void pie_UploadDisplayBuffer()
 	screen_Upload(NULL, false);
 }
 
-BOOL pie_InitRadar(void)
+bool pie_InitRadar(void)
 {
 	radarTexture = _TEX_INDEX;
 	glGenTextures(1, &_TEX_PAGE[_TEX_INDEX].id);
@@ -274,7 +274,7 @@ BOOL pie_InitRadar(void)
 	return true;
 }
 
-BOOL pie_ShutdownRadar(void)
+bool pie_ShutdownRadar(void)
 {
 	glDeleteTextures(1, &_TEX_PAGE[radarTexture].id);
 	return true;

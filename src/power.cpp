@@ -54,7 +54,7 @@
 #define FP_ONE ((int64_t)1 << 32)
 
 //flag used to check for power calculations to be done or not
-BOOL	powerCalculated;
+bool	powerCalculated;
 static UDWORD nextPowerSystemUpdate;
 
 /* Updates the current power based on the extracted power and a Power Generator*/
@@ -64,19 +64,19 @@ static int64_t updateExtractedPower(STRUCTURE *psBuilding);
 //returns the relevant list based on OffWorld or OnWorld
 static STRUCTURE* powerStructList(UBYTE player);
 
-typedef struct _player_power
+struct PLAYER_POWER
 {
 	// All fields are 32.32 fixed point.
 	int64_t currentPower;         ///< The current amount of power avaialble to the player.
 	int64_t powerProduced;        ///< Power produced
 	int64_t powerRequested;       ///< Power requested
 	int64_t economyThrottle;      ///< What fraction of the requested power is actually delivered
-} PLAYER_POWER;
+};
 
 static PLAYER_POWER asPower[MAX_PLAYERS];
 
 /*allocate the space for the playerPower*/
-BOOL allocPlayerPower(void)
+bool allocPlayerPower(void)
 {
 	clearPlayerPower();
 	powerCalculated = true;
@@ -147,7 +147,7 @@ void throttleEconomy(void)
 }
 
 /*check the current power - if enough return true, else return false */
-BOOL checkPower(int player, uint32_t quantity)
+bool checkPower(int player, uint32_t quantity)
 {
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Bad player (%d)", player);
 
@@ -176,7 +176,7 @@ void addPower(int player, int32_t quantity)
 }
 
 /*resets the power calc flag for all players*/
-void powerCalc(BOOL on)
+void powerCalc(bool on)
 {
 	powerCalculated = on;
 }
@@ -328,9 +328,9 @@ void newGameInitPower(void)
 }
 
 /*defines which structure types draw power - returns true if use power*/
-BOOL structUsesPower(STRUCTURE *psStruct)
+bool structUsesPower(STRUCTURE *psStruct)
 {
-    BOOL    bUsesPower = false;
+    bool    bUsesPower = false;
 
 	ASSERT( psStruct != NULL,
 		"structUsesPower: Invalid Structure pointer" );
@@ -353,9 +353,9 @@ BOOL structUsesPower(STRUCTURE *psStruct)
 }
 
 /*defines which droid types draw power - returns true if use power*/
-BOOL droidUsesPower(DROID *psDroid)
+bool droidUsesPower(DROID *psDroid)
 {
-    BOOL    bUsesPower = false;
+    bool    bUsesPower = false;
 
 	ASSERT(psDroid != NULL,	"droidUsesPower: Invalid unit pointer" );
 

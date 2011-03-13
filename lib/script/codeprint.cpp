@@ -155,7 +155,7 @@ void cpPrintProgram(SCRIPT_CODE *psProg)
 	OPCODE			opcode;
 	UDWORD			data, i, dim;
 	SCRIPT_DEBUG	*psCurrDebug=NULL;
-	BOOL			debugInfo, triggerCode;
+	bool			debugInfo, triggerCode;
 	UDWORD			jumpOffset;
 	VAR_DEBUG		*psCurrVar;
 	ARRAY_DATA		*psCurrArray;

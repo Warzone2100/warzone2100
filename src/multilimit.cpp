@@ -81,7 +81,7 @@ static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 
 // ////////////////////////////////////////////////////////////////////////////
 
-static BOOL useStruct(UDWORD count,UDWORD i)
+static bool useStruct(UDWORD count,UDWORD i)
 {
 	ASSERT(i < numStructureStats, "Bad structure for structure limit: %d", (int)i);
 
@@ -112,7 +112,7 @@ static inline void freeLimitSet(void)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-BOOL startLimitScreen(void)
+bool startLimitScreen(void)
 {
 	UDWORD			numButtons = 0;
 	UDWORD			i;

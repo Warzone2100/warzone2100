@@ -377,7 +377,7 @@ void NETinsertMessageFromNet(NETQUEUE queue, NetMessage const *message)
 	receiveQueue(queue)->pushMessage(*message);
 }
 
-BOOL NETisMessageReady(NETQUEUE queue)
+bool NETisMessageReady(NETQUEUE queue)
 {
 	return receiveQueue(queue)->haveMessage();
 }
@@ -447,7 +447,7 @@ void NETbeginDecode(NETQUEUE queue, uint8_t type)
 	assert(type == message.type);
 }
 
-BOOL NETend()
+bool NETend()
 {
 	// If we are encoding just return true
 	if (NETgetPacketDir() == PACKET_ENCODE)
@@ -571,13 +571,6 @@ void NETint64_t(int64_t *ip)
 void NETuint64_t(uint64_t *ip)
 {
 	queueAuto(*ip);
-}
-
-void NETbool(BOOL *bp)
-{
-	uint8_t i = !!*bp;
-	queueAuto(i);
-	*bp = !!i;
 }
 
 void NETbool(bool *bp)

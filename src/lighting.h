@@ -31,22 +31,22 @@
 
 extern UDWORD fogStatus;
 
-typedef enum _lightcols
+enum LIGHT_COLOUR
 {
 LIGHT_RED,
 LIGHT_GREEN,
 LIGHT_BLUE,
 LIGHT_YELLOW,
 LIGHT_WHITE
-}LIGHT_COLOUR;
+};
 
-typedef struct _light
+struct LIGHT
 {
 Vector3i	position;
 UBYTE	type;
 UDWORD	range;
 LIGHT_COLOUR	colour;
-} LIGHT;
+};
 
 extern void setTheSun(Vector3f newSun);
 extern Vector3f getTheSun(void);

@@ -57,7 +57,7 @@ struct W_BUTTON : public WIDGET
 };
 
 /* Initialise the button module */
-extern BOOL buttonStartUp(void);
+extern bool buttonStartUp(void);
 
 /* Create a button widget data structure */
 extern W_BUTTON* buttonCreate(const W_BUTINIT* psInit);

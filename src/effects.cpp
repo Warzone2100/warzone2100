@@ -168,9 +168,8 @@
 
 
 /*! A memory chunk of effects */
-typedef struct _EffectChunk EffectChunk;
-
-struct _EffectChunk {
+struct EffectChunk
+{
 	EFFECT effects[EFFECT_CHUNK_SIZE]; //!< Chunk of effects
 	EffectChunk *next; //!< Next element in list
 };

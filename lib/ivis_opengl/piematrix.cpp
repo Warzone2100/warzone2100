@@ -44,11 +44,17 @@
  * [ c f i l ]
  * [ 0 0 0 1 ]
  */
-typedef struct { SDWORD a, b, c,  d, e, f,  g, h, i,  j, k, l; } SDMATRIX;
+struct SDMATRIX
+{
+	SDWORD a, b, c,
+	       d, e, f,
+	       g, h, i,
+	       j, k, l;
+};
 static SDMATRIX	aMatrixStack[MATRIX_MAX];
 static SDMATRIX *psMatrix = &aMatrixStack[0];
 
-BOOL drawing_interface = true;
+bool drawing_interface = true;
 
 //*************************************************************************
 

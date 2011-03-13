@@ -88,7 +88,7 @@ static void eventPrintTriggerInfo(ACTIVE_TRIGGER *psTrigger)
 #endif
 
 // Initialise a trigger
-static BOOL eventInitTrigger(ACTIVE_TRIGGER **ppsTrigger, SCRIPT_CONTEXT *psContext,
+static bool eventInitTrigger(ACTIVE_TRIGGER **ppsTrigger, SCRIPT_CONTEXT *psContext,
 							 UDWORD event, SDWORD trigger, UDWORD currTime);
 
 // Add a trigger to the list in order
@@ -113,7 +113,7 @@ void eventTimeReset(UDWORD initTime)
 }
 
 /* Initialise the event system */
-BOOL eventInitialise()
+bool eventInitialise()
 {
 	psTrigList = NULL;
 	psCallbackList = NULL;
@@ -293,7 +293,7 @@ const char *eventGetEventID(SCRIPT_CODE *psCode, SDWORD event)
 }
 
 // Initialise the create/release function array - specify the maximum value type
-BOOL eventInitValueFuncs(SDWORD maxType)
+bool eventInitValueFuncs(SDWORD maxType)
 {
 	ASSERT(asReleaseFuncs == NULL, "eventInitValueFuncs: array already initialised");
 
@@ -316,7 +316,7 @@ BOOL eventInitValueFuncs(SDWORD maxType)
 }
 
 // Add a new value create function
-BOOL eventAddValueCreate(INTERP_TYPE type, VAL_CREATE_FUNC create)
+bool eventAddValueCreate(INTERP_TYPE type, VAL_CREATE_FUNC create)
 {
 	if (type >= numFuncs)
 	{
@@ -330,7 +330,7 @@ BOOL eventAddValueCreate(INTERP_TYPE type, VAL_CREATE_FUNC create)
 }
 
 // Add a new value release function
-BOOL eventAddValueRelease(INTERP_TYPE type, VAL_RELEASE_FUNC release)
+bool eventAddValueRelease(INTERP_TYPE type, VAL_RELEASE_FUNC release)
 {
 	if (type >= numFuncs)
 	{
@@ -344,7 +344,7 @@ BOOL eventAddValueRelease(INTERP_TYPE type, VAL_RELEASE_FUNC release)
 }
 
 // Create a new context for a script
-BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
+bool eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 					 SCRIPT_CONTEXT **ppsContext)
 {
 	SCRIPT_CONTEXT	*psContext;
@@ -519,7 +519,7 @@ BOOL eventNewContext(SCRIPT_CODE *psCode, CONTEXT_RELEASE release,
 
 
 // Copy a context, including variable values
-BOOL eventCopyContext(SCRIPT_CONTEXT *psContext, SCRIPT_CONTEXT **ppsNew)
+bool eventCopyContext(SCRIPT_CONTEXT *psContext, SCRIPT_CONTEXT **ppsNew)
 {
 	SCRIPT_CONTEXT	*psNew;
 	SDWORD			val;
@@ -555,7 +555,7 @@ BOOL eventCopyContext(SCRIPT_CONTEXT *psContext, SCRIPT_CONTEXT **ppsNew)
 
 // Add a new object to the trigger system
 // Time is the application time at which all the triggers are to be started
-BOOL eventRunContext(SCRIPT_CONTEXT *psContext, UDWORD time)
+bool eventRunContext(SCRIPT_CONTEXT *psContext, UDWORD time)
 {
 	SDWORD			event;
 	ACTIVE_TRIGGER	*psTrigger;
@@ -724,7 +724,7 @@ void eventRemoveContext(SCRIPT_CONTEXT *psContext)
 }
 
 // Get the value pointer for a variable index
-BOOL eventGetContextVal(SCRIPT_CONTEXT *psContext, UDWORD index, INTERP_VAL **ppsVal)
+bool eventGetContextVal(SCRIPT_CONTEXT *psContext, UDWORD index, INTERP_VAL **ppsVal)
 {
 	VAL_CHUNK	*psChunk;
 
@@ -747,7 +747,7 @@ BOOL eventGetContextVal(SCRIPT_CONTEXT *psContext, UDWORD index, INTERP_VAL **pp
 }
 
 // Set a global variable value for a context
-BOOL eventSetContextVar(SCRIPT_CONTEXT *psContext, UDWORD index, INTERP_VAL *data)
+bool eventSetContextVar(SCRIPT_CONTEXT *psContext, UDWORD index, INTERP_VAL *data)
 {
 	INTERP_VAL *psVal;
 
@@ -836,7 +836,7 @@ static void eventAddTrigger(ACTIVE_TRIGGER *psTrigger)
 
 
 // Initialise a trigger
-static BOOL eventInitTrigger(ACTIVE_TRIGGER **ppsTrigger, SCRIPT_CONTEXT *psContext,
+static bool eventInitTrigger(ACTIVE_TRIGGER **ppsTrigger, SCRIPT_CONTEXT *psContext,
 							 UDWORD event, SDWORD trigger, UDWORD currTime)
 {
 	ACTIVE_TRIGGER	*psNewTrig;
@@ -876,7 +876,7 @@ static BOOL eventInitTrigger(ACTIVE_TRIGGER **ppsTrigger, SCRIPT_CONTEXT *psCont
 }
 
 // Load a trigger into the system from a save game
-BOOL eventLoadTrigger(UDWORD time, SCRIPT_CONTEXT *psContext,
+bool eventLoadTrigger(UDWORD time, SCRIPT_CONTEXT *psContext,
 					  SDWORD type, SDWORD trigger, UDWORD event, UDWORD offset)
 {
 	ACTIVE_TRIGGER	*psNewTrig;
@@ -911,7 +911,7 @@ BOOL eventLoadTrigger(UDWORD time, SCRIPT_CONTEXT *psContext,
 }
 
 // add a TR_PAUSE trigger to the event system.
-BOOL eventAddPauseTrigger(SCRIPT_CONTEXT *psContext, UDWORD event, UDWORD offset,
+bool eventAddPauseTrigger(SCRIPT_CONTEXT *psContext, UDWORD event, UDWORD offset,
 						  UDWORD time)
 {
 	ACTIVE_TRIGGER	*psNewTrig;
@@ -984,7 +984,7 @@ void eventFireCallbackTrigger(TRIGGER_TYPE callback)
 {
 	ACTIVE_TRIGGER	*psPrev = NULL, *psCurr, *psNext;
 	TRIGGER_DATA	*psTrigDat;
-	BOOL		fired;
+	bool		fired;
 
 	if (interpProcessorActive())
 	{
@@ -1093,9 +1093,9 @@ void eventFireCallbackTrigger(TRIGGER_TYPE callback)
 
 
 // Run a trigger
-static BOOL eventFireTrigger(ACTIVE_TRIGGER *psTrigger)
+static bool eventFireTrigger(ACTIVE_TRIGGER *psTrigger)
 {
-	BOOL			fired;
+	bool			fired;
 	INTERP_VAL		sResult;
 
 	fired = false;
@@ -1267,7 +1267,7 @@ static void eventMarkTriggerInList(ACTIVE_TRIGGER **ppsList,
 
 
 // Change the trigger assigned to an event - to be called from script functions
-BOOL eventSetTrigger(void)
+bool eventSetTrigger(void)
 {
 	ACTIVE_TRIGGER	*psTrigger;
 	UDWORD			event;
@@ -1316,7 +1316,7 @@ BOOL eventSetTrigger(void)
 
 
 // set the event tracing level - to be called from script functions
-BOOL eventSetTraceLevel(void)
+bool eventSetTraceLevel(void)
 {
 	SDWORD	level;
 

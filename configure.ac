@@ -246,7 +246,7 @@ else
 fi
 
 WZ_WARNINGS_GCC="-Wall -Wextra ${WZ_Wno_}unused-parameter ${WZ_Wno_}sign-compare -Wcast-align -Wwrite-strings -Wpointer-arith ${WZ_Wno_}format-security"
-WZ_WARNINGS_GCC_C="${WZ_WARNINGS_GCC} -Wstrict-prototypes -Wdeclaration-after-statement -Wc++-compat ${WZ_Wno_}c++-compat ${CFLAGS_IGNORE_WARNINGS}"
+WZ_WARNINGS_GCC_C="${WZ_WARNINGS_GCC} -Wstrict-prototypes -Wdeclaration-after-statement ${CFLAGS_IGNORE_WARNINGS}"
 WZ_WARNINGS_GCC_CXX="${WZ_Wno_}enum-compare ${WZ_WARNINGS_GCC}"
 if test "x$enable_debug" = "xyes" ; then
 	if test "x$cc_icc" = "xyes" ; then
@@ -410,9 +410,9 @@ AC_SUBST([OPENGL_LIBS], [${OPENGL_LIBS}])
 # MinGW derived exception handler.
 if test "x$host_os_mingw32" = "xyes" ; then
     AC_CHECK_HEADER(bfd.h, , AC_MSG_ERROR([BFD header not found.]))
-    AC_CHECK_LIB(bfd, bfd_openr, AC_SUBST([BFD_LIBS], [-lbfd]), AC_MSG_ERROR([BFD not found.]), [${IBERTY_LIBS}])
+    AC_CHECK_LIB(bfd, bfd_openr, AC_SUBST([BFD_LIBS], [-lbfd]), AC_MSG_ERROR([BFD not found.]), [${WIN32_LIBS}])
 
-    WIN32_LIBS="${WIN32_LIBS} ${BFD_LIBS} ${IBERTY_LIBS} -lstdc++"
+    WIN32_LIBS="${BFD_LIBS} ${WIN32_LIBS} -lstdc++"
 fi
 
 WZ_CPPFLAGS="${WZ_CPPFLAGS} -DWZ_DATADIR=\"\\\"\${datadir}/\${PACKAGE}\\\"\""
@@ -430,7 +430,6 @@ AC_CONFIG_HEADER([config.h])
 AC_CONFIG_FILES([Makefile
 		po/Makefile.in
 		doc/Makefile
-		build_tools/autorevision/Makefile
 		icons/Makefile
 		data/Makefile
 		data/mods/multiplay/Makefile

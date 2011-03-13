@@ -76,7 +76,7 @@ static char keymapVersion[8] = "KM_0002";
 // ////////////////////////////////////////////////////////////////////////////
 // funcs
 
-static BOOL pushedKeyMap(UDWORD key)
+static bool pushedKeyMap(UDWORD key)
 {
 //	UDWORD count =0;
 //	id-KM_START
@@ -108,7 +108,7 @@ static BOOL pushedKeyMap(UDWORD key)
 
 
 // ////////////////////////////////////////////////////////////////////////////
-static BOOL pushedKeyCombo(KEY_CODE subkey)
+static bool pushedKeyCombo(KEY_CODE subkey)
 {
 	KEY_CODE	metakey=KEY_IGNORE;
 	KEY_MAPPING	*pExist;
@@ -233,7 +233,7 @@ static KEY_CODE scanKeyBoardForBinding(void)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-BOOL runKeyMapEditor(void)
+bool runKeyMapEditor(void)
 {
 	UDWORD id;
 
@@ -277,9 +277,9 @@ BOOL runKeyMapEditor(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // returns key to press given a mapping.
-static BOOL keyMapToString(char *pStr, KEY_MAPPING *psMapping)
+static bool keyMapToString(char *pStr, KEY_MAPPING *psMapping)
 {
-	BOOL	onlySub = true;
+	bool	onlySub = true;
 	char	asciiSub[20],asciiMeta[20];
 
 	if(psMapping->metaKeyCode!=KEY_IGNORE)
@@ -343,12 +343,12 @@ static void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_D
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-BOOL startKeyMapEditor(BOOL first)
+bool startKeyMapEditor(bool first)
 {
 	KEY_MAPPING	*psMapping;
 	UDWORD		i,mapcount =0;
 	UDWORD		bubbleCount;
-	BOOL		bAtEnd,bGotOne;
+	bool		bAtEnd,bGotOne;
 	KEY_MAPPING	*psPresent = NULL, *psNext;
 	char		test[255];
 	addBackdrop();
@@ -504,7 +504,7 @@ BOOL startKeyMapEditor(BOOL first)
 // ////////////////////////////////////////////////////////////////////////////
 // save current keymaps to registry
 // FIXME: Use the endian-safe physfs functions.
-BOOL saveKeyMap(void)
+bool saveKeyMap(void)
 {
 	KEY_MAPPING	*psMapping;
 	SDWORD		count;
@@ -572,7 +572,7 @@ BOOL saveKeyMap(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // load keymaps from registry.
-BOOL loadKeyMap(void)
+bool loadKeyMap(void)
 {
 	KEY_STATUS	status;
 	KEY_CODE	metaCode;

@@ -23,8 +23,8 @@
 
 #include "lib/framework/types.h"
 
-typedef struct Socket Socket;
-typedef struct SocketSet SocketSet;
+struct Socket;
+struct SocketSet;
 typedef struct addrinfo SocketAddress;
 
 #ifndef WZ_OS_WIN

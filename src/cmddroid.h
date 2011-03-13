@@ -67,7 +67,7 @@ extern unsigned int cmdGetCommanderLevel(const DROID* psDroid);
 extern bool hasCommander(const DROID* psDroid);
 
 // note that commander experience should be increased
-extern void cmdDroidMultiExpBoost(BOOL bDoit);
+extern void cmdDroidMultiExpBoost(bool bDoit);
 
 // check whether commander experience should be increased
 extern bool cmdGetDroidMultiExpBoost(void);

@@ -251,12 +251,12 @@ void SetLastResourceFilename(const char *pName)
 
 
 // Structure for each file currently in use in the resource  ... probably only going to be one ... but we will handle upto MAXLOADEDRESOURCE
-typedef struct
+struct RESOURCEFILE
 {
   	char *pBuffer;	// a pointer to the data
 	UDWORD size;	// number of bytes
 	UBYTE	type;	// what type of resource is it
-} RESOURCEFILE;
+};
 
 #define RESFILETYPE_EMPTY (0)			// empty entry
 #define RESFILETYPE_PC_SBL (1)			// Johns SBL stuff

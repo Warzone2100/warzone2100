@@ -32,7 +32,7 @@
 #include "display.h"
 
 /* The different types of terrain as far as the game is concerned */
-typedef enum _terrain_type
+enum TYPE_OF_TERRAIN
 {
 	TER_SAND,
 	TER_SANDYBRUSH,
@@ -48,7 +48,7 @@ typedef enum _terrain_type
 	TER_SLUSH,
 
 	TER_MAX,
-} TYPE_OF_TERRAIN;
+};
 
 #define TILESET_ARIZONA 0
 #define TILESET_URBAN	1
@@ -83,11 +83,11 @@ static inline unsigned short TileNumber_texture(unsigned short tilenumber)
 #define BITS_ON_FIRE            0x20    ///< Whether tile is burning
 #define BITS_GATEWAY		0x40	///< Bit set to show a gateway on the tile
 
-typedef struct _ground_type
+struct GROUND_TYPE
 {
 	const char *textureName;
 	float textureSize;
-} GROUND_TYPE;
+};
 
 /* Information stored with each tile */
 struct MAPTILE
@@ -124,14 +124,14 @@ extern char *tileset;
 #define WATER_BLOCKED		0x04	///< Units that cannot pass water are blocked by this tile
 #define LAND_BLOCKED		0x08	///< The inverse of the above -- for propeller driven crafts
 
-#define AUXBITS_UNUSED		0x01	///< Unused for now
+#define AUXBITS_NONPASSABLE     0x01    ///< Is there any building blocking here, other than a gate that would open for us?
 #define AUXBITS_OUR_BUILDING	0x02	///< Do we or our allies have a building at this tile
-#define AUXBITS_ANY_BUILDING	0x04	///< Is there any building that might be blocking here?
+#define AUXBITS_BLOCKING        0x04    ///< Is there any building currently blocking here?
 #define AUXBITS_TEMPORARY	0x08	///< Temporary bit used in calculations
 #define AUXBITS_DANGER		0x10	///< Does AI sense danger going there?
 #define AUXBITS_THREAT		0x20	///< Can hostile players shoot here?
 #define AUXBITS_AATHREAT	0x40	///< Can hostile players shoot at my VTOLs here?
-#define AUXBITS_BUILDING	0x80	///< Whether player has blocking building at tile, combine it with alliance bits and blockingBits
+#define AUXBITS_UNUSED          0x80    ///< Unused
 #define AUXBITS_ALL		0xff
 
 #define AUX_MAP		0
@@ -200,6 +200,20 @@ WZ_DECL_ALWAYS_INLINE static inline void auxSetAllied(int x, int y, int player, 
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
 		if (alliancebits[player] & (1 << i))
+		{
+			psAuxMap[i][x + y * mapWidth] |= state;
+		}
+	}
+}
+
+/// Set aux bits. Always set identically for all players. States not set are retained.
+WZ_DECL_ALWAYS_INLINE static inline void auxSetEnemy(int x, int y, int player, int state)
+{
+	int i;
+
+	for (i = 0; i < MAX_PLAYERS; i++)
+	{
+		if (!(alliancebits[player] & (1 << i)))
 		{
 			psAuxMap[i][x + y * mapWidth] |= state;
 		}
@@ -388,16 +402,16 @@ static inline void clip_world_offmap(int* worldX, int* worldY)
 #define map_round(coord) ((coord) & (TILE_UNITS - 1))
 
 /* Shutdown the map module */
-extern BOOL mapShutdown(void);
+extern bool mapShutdown(void);
 
 /* Create a new map of a specified size */
-extern BOOL mapNew(UDWORD width, UDWORD height);
+extern bool mapNew(UDWORD width, UDWORD height);
 
 /* Load the map data */
-extern BOOL mapLoad(char *filename, BOOL preview);
+extern bool mapLoad(char *filename, bool preview);
 
 /* Save the map data */
-extern BOOL mapSave(char **ppFileData, UDWORD *pFileSize);
+extern bool mapSave(char **ppFileData, UDWORD *pFileSize);
 
 /** Return a pointer to the tile structure at x,y in map coordinates */
 static inline WZ_DECL_PURE MAPTILE *mapTile(int32_t x, int32_t y)
@@ -419,7 +433,8 @@ static inline WZ_DECL_PURE MAPTILE *mapTile(int32_t x, int32_t y)
 static inline WZ_DECL_PURE MAPTILE *mapTile(Vector2i const &v) { return mapTile(v.x, v.y); }
 
 /** Return a pointer to the tile structure at x,y in world coordinates */
-#define worldTile(_x, _y) mapTile(map_coord(_x), map_coord(_y))
+static inline WZ_DECL_PURE MAPTILE *worldTile(int32_t x, int32_t y) { return mapTile(map_coord(x), map_coord(y)); }
+static inline WZ_DECL_PURE MAPTILE *worldTile(Vector2i const &v) { return mapTile(map_coord(v)); }
 
 /// Return ground height of top-left corner of tile at x,y
 static inline WZ_DECL_PURE int32_t map_TileHeight(int32_t x, int32_t y)
@@ -463,25 +478,25 @@ static inline void setTileHeight(int32_t x, int32_t y, int32_t height)
 }
 
 /* Return whether a tile coordinate is on the map */
-WZ_DECL_ALWAYS_INLINE static inline BOOL tileOnMap(SDWORD x, SDWORD y)
+WZ_DECL_ALWAYS_INLINE static inline bool tileOnMap(SDWORD x, SDWORD y)
 {
 	return (x >= 0) && (x < (SDWORD)mapWidth) && (y >= 0) && (y < (SDWORD)mapHeight);
 }
 
-WZ_DECL_ALWAYS_INLINE static inline BOOL tileOnMap(Vector2i pos)
+WZ_DECL_ALWAYS_INLINE static inline bool tileOnMap(Vector2i pos)
 {
 	return tileOnMap(pos.x, pos.y);
 }
 
 /* Return true if a tile is not too near the map edge and not outside of the map */
-static inline BOOL tileInsideBuildRange(SDWORD x, SDWORD y)
+static inline bool tileInsideBuildRange(SDWORD x, SDWORD y)
 {
 	return (x >= TOO_NEAR_EDGE) && (x < ((SDWORD)mapWidth - TOO_NEAR_EDGE)) &&
 		(y >= TOO_NEAR_EDGE) && (y < ((SDWORD)mapHeight - TOO_NEAR_EDGE));
 }
 
 /* Return whether a world coordinate is on the map */
-WZ_DECL_ALWAYS_INLINE static inline BOOL worldOnMap(int x, int y)
+WZ_DECL_ALWAYS_INLINE static inline bool worldOnMap(int x, int y)
 {
 	return (x >= 0) && (x < ((SDWORD)mapWidth << TILE_SHIFT)) &&
 		   (y >= 0) && (y < ((SDWORD)mapHeight << TILE_SHIFT));
@@ -489,32 +504,11 @@ WZ_DECL_ALWAYS_INLINE static inline BOOL worldOnMap(int x, int y)
 
 
 /* Return whether a world coordinate is on the map */
-WZ_DECL_ALWAYS_INLINE static inline bool worldOnMap2i(Vector2i pos)
+WZ_DECL_ALWAYS_INLINE static inline bool worldOnMap(Vector2i pos)
 {
 	return worldOnMap(pos.x, pos.y);
 }
 
-
-/* Return whether a world coordinate is on the map */
-WZ_DECL_ALWAYS_INLINE static inline bool worldOnMap3i(Vector3i pos)
-{
-	return worldOnMap(pos.x, pos.y);
-}
-
-
-/* Return whether a world coordinate is on the map */
-WZ_DECL_ALWAYS_INLINE static inline bool worldOnMap3f(Vector3f pos)
-{
-	return worldOnMap(pos.x, pos.y);
-}
-
-
-/* Store a map coordinate and it's associated tile */
-typedef struct _tile_coord
-{
-	UDWORD	x,y;
-	MAPTILE	*psTile;
-} TILE_COORD;
 
 /* Intersect a line with the map and report tile intersection points */
 bool map_Intersect(int *Cx, int *Cy, int *Vx, int* Vy, int *Sx, int *Sy);

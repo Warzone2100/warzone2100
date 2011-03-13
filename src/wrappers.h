@@ -21,35 +21,36 @@
 #ifndef __INCLUDED_SRC_WRAPPERS_H__
 #define __INCLUDED_SRC_WRAPPERS_H__
 
-typedef enum {
+enum TITLECODE
+{
 	TITLECODE_CONTINUE,
 	TITLECODE_STARTGAME,
 	TITLECODE_QUITGAME,
 	TITLECODE_SHOWINTRO,
 	TITLECODE_SAVEGAMELOAD,
-} TITLECODE;
+};
 
 //used to set the scriptWinLoseVideo variable
 #define PLAY_NONE   0
 #define PLAY_WIN    1
 #define PLAY_LOSE   2
 
-extern BOOL hostlaunch;
+extern bool hostlaunch;
 
-BOOL frontendInitVars(void);
+bool frontendInitVars(void);
 TITLECODE titleLoop(void);
 
-void initLoadingScreen(BOOL drawbdrop);
+void initLoadingScreen(bool drawbdrop);
 void closeLoadingScreen(void);
 void loadingScreenCallback(void);
 
 void startCreditsScreen(void);
 
-BOOL displayGameOver(BOOL success);
-void setPlayerHasLost(BOOL val);
-BOOL testPlayerHasLost(void);
-BOOL testPlayerHasWon(void);
-void setPlayerHasWon(BOOL val);
+bool displayGameOver(bool success);
+void setPlayerHasLost(bool val);
+bool testPlayerHasLost(void);
+bool testPlayerHasWon(void);
+void setPlayerHasWon(bool val);
 void setScriptWinLoseVideo(UBYTE val);
 UBYTE getScriptWinLoseVideo(void);
 

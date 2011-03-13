@@ -159,7 +159,7 @@ static struct sigaction oldAction[NSIG];
 
 
 static struct utsname sysInfo;
-static BOOL gdbIsAvailable = false, programIsAvailable = false, sysInfoValid = false;
+static bool gdbIsAvailable = false, programIsAvailable = false, sysInfoValid = false;
 static char
 	executionDate[MAX_DATE_STRING] = {'\0'},
 	programPID[MAX_PID_STRING] = {'\0'},
@@ -736,7 +736,7 @@ static bool fetchProgramPath(char * const programPath, size_t const bufSize, con
  *
  * \param programCommand Command used to launch this program. Only used for POSIX handler.
  */
-void setupExceptionHandler(int argc, char * argv[])
+void setupExceptionHandler(int argc, const char ** argv)
 {
 #if defined(WZ_OS_UNIX) && !defined(WZ_OS_MAC)
 	const char *programCommand;
@@ -782,7 +782,6 @@ bool OverrideRPTDirectory(char *newPath)
 		//conversion failed-- we won't use the user's directory.
 
 		LPVOID lpMsgBuf;
-		LPVOID lpDisplayBuf;
 		DWORD dw = GetLastError();
 		TCHAR szBuffer[4196];
 
@@ -800,7 +799,6 @@ bool OverrideRPTDirectory(char *newPath)
 		MessageBox((HWND)MB_ICONEXCLAMATION, szBuffer, _T("Error"), MB_OK); 
 
 		LocalFree(lpMsgBuf);
-		LocalFree(lpDisplayBuf);
 
 		return false;
 	}

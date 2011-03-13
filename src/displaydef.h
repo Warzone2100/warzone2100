@@ -32,12 +32,12 @@
 //#define BOUNDARY_X		(DISP_WIDTH/20)	   // proportional to resolution - Alex M
 //#define	BOUNDARY_Y		(DISP_WIDTH/16)
 
-typedef struct _screen_disp_data
+struct SCREEN_DISP_DATA
 {
 	iIMDShape	*imd;
 	UDWORD		frameNumber;		// last frame it was drawn
 	UDWORD		screenX,screenY;
 	UDWORD		screenR;
-} SCREEN_DISP_DATA;
+};
 
 #endif // __INCLUDED_DISPLAYDEF_H__

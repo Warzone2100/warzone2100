@@ -99,16 +99,18 @@ enum {				  // Reticule button indecies.
 	RETBUT_COMMAND,
 };
 
-typedef struct {
+struct BUTSTATE
+{
 	UDWORD id;
-	BOOL Enabled;
-	BOOL Hidden;
-} BUTSTATE;
+	bool Enabled;
+	bool Hidden;
+};
 
-typedef struct {
+struct BUTOFFSET
+{
 	SWORD x;
 	SWORD y;
-} BUTOFFSET;
+};
 
 BUTOFFSET ReticuleOffsets[NUMRETBUTS] = {	// Reticule button form relative positions.
 	{48,47},	// RETBUT_CANCEL,
@@ -142,17 +144,17 @@ static void SetReticuleButPos(UWORD ButId, W_BUTINIT *sButInit)
 }
 
 
-static BOOL ClosingObject = false;
-static BOOL ClosingStats = false;
+static bool ClosingObject = false;
+static bool ClosingStats = false;
 static UDWORD	keyButtonMapping = 0;
-BOOL ClosingMessageView = false;
-BOOL ClosingIntelMap = false;
-BOOL ClosingOrder = false;
-BOOL ClosingTrans = false;
-BOOL ClosingTransCont = false;
-BOOL ClosingTransDroids = false;
-BOOL ReticuleUp = false;
-BOOL Refreshing = false;
+bool ClosingMessageView = false;
+bool ClosingIntelMap = false;
+bool ClosingOrder = false;
+bool ClosingTrans = false;
+bool ClosingTransCont = false;
+bool ClosingTransDroids = false;
+bool ReticuleUp = false;
+bool Refreshing = false;
 
 
 /***************************************************************************************/
@@ -312,11 +314,11 @@ enum _obj_mode
 } objMode;
 
 /* Function type for selecting a base object while building the object screen */
-typedef BOOL (* OBJ_SELECT)(BASE_OBJECT *psObj);
+typedef bool (* OBJ_SELECT)(BASE_OBJECT *psObj);
 /* Function type for getting the appropriate stats for an object */
 typedef BASE_STATS *(* OBJ_GETSTATS)(BASE_OBJECT *psObj);
 /* Function type for setting the appropriate stats for an object */
-typedef BOOL (* OBJ_SETSTATS)(BASE_OBJECT *psObj, BASE_STATS *psStats);
+typedef bool (* OBJ_SETSTATS)(BASE_OBJECT *psObj, BASE_STATS *psStats);
 
 /* The current object list being used by the object screen */
 static BASE_OBJECT		*psObjList;
@@ -327,7 +329,7 @@ OBJ_GETSTATS		objGetStatsFunc;
 static OBJ_SETSTATS		objSetStatsFunc;
 
 /* Whether the objects that are on the object screen have changed this frame */
-static BOOL				objectsChanged;
+static bool				objectsChanged;
 
 /* The current stats list being used by the stats screen */
 static BASE_STATS		**ppsStatsList;
@@ -383,8 +385,8 @@ std::vector<BASE_OBJECT *> apsObjectList;
 extern DROID_TEMPLATE	sCurrDesign;
 
 /* Flags to check whether the power bars are currently on the screen */
-static BOOL				powerBarUp = false;
-static BOOL				StatsUp = false;
+static bool				powerBarUp = false;
+static bool				StatsUp = false;
 static BASE_OBJECT		*psStatsScreenOwner = NULL;
 
 /* The previous object for each object bar */
@@ -395,7 +397,7 @@ static std::vector<Vector2i> asJumpPos;
 
 /***************************************************************************************/
 /*              Function Prototypes                                                    */
-static BOOL intUpdateObject(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,BOOL bForceStats);
+static bool intUpdateObject(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,bool bForceStats);
 /* Remove the object widgets from the widget screen */
 void intRemoveObject(void);
 static void intRemoveObjectNoAnim(void);
@@ -410,7 +412,7 @@ static void intSetStats(UDWORD id, BASE_STATS *psStats);
 
 /* Add the stats widgets to the widget screen */
 /* If psSelected != NULL it specifies which stat should be hilited */
-static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
+static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 						BASE_STATS *psSelected, BASE_OBJECT *psOwner);
 /* Process return codes from the stats screen */
 static void intProcessStats(UDWORD id);
@@ -419,16 +421,16 @@ static void intObjectDied(UDWORD objID);
 
 /* Add the build widgets to the widget screen */
 /* If psSelected != NULL it specifies which droid should be hilited */
-static BOOL intAddBuild(DROID *psSelected);
+static bool intAddBuild(DROID *psSelected);
 /* Add the manufacture widgets to the widget screen */
 /* If psSelected != NULL it specifies which factory should be hilited */
-static BOOL intAddManufacture(STRUCTURE *psSelected);
+static bool intAddManufacture(STRUCTURE *psSelected);
 /* Add the research widgets to the widget screen */
 /* If psSelected != NULL it specifies which droid should be hilited */
-static BOOL intAddResearch(STRUCTURE *psSelected);
+static bool intAddResearch(STRUCTURE *psSelected);
 /* Add the command droid widgets to the widget screen */
 /* If psSelected != NULL it specifies which droid should be hilited */
-static BOOL intAddCommand(DROID *psSelected);
+static bool intAddCommand(DROID *psSelected);
 
 
 /* Start looking for a structure location */
@@ -443,7 +445,7 @@ static SWORD CurrentDroidType = 0;
 
 /******************Power Bar Stuff!**************/
 /* Add the power bars */
-static BOOL intAddPower(void);
+static bool intAddPower(void);
 
 /* Set the shadow for the PowerBar */
 static void intRunPower(void);
@@ -474,7 +476,7 @@ static SDWORD intNumSelectedDroids(UDWORD droidType);
 
 /***************************GAME CODE ****************************/
 /* Initialise the in game interface */
-BOOL intInitialise(void)
+bool intInitialise(void)
 {
 	UDWORD			comp, inc;
 
@@ -665,7 +667,7 @@ void interfaceShutDown(void)
 	ReticuleUp = false;
 }
 
-static BOOL IntRefreshPending = false;
+static bool IntRefreshPending = false;
 
 // Set widget refresh pending flag.
 //
@@ -675,7 +677,7 @@ void intRefreshScreen(void)
 }
 
 
-BOOL intIsRefreshing(void)
+bool intIsRefreshing(void)
 {
 	return Refreshing;
 }
@@ -716,8 +718,8 @@ static void intDoScreenRefresh(void)
 			(widgGetFromID(psWScreen,IDOBJ_FORM) != NULL) &&
 			!(widgGetFromID(psWScreen,IDOBJ_FORM)->style & WIDG_HIDDEN) )
 		{
-			BOOL StatsWasUp = false;
-			BOOL OrderWasUp = false;
+			bool StatsWasUp = false;
+			bool OrderWasUp = false;
 
 			// If the stats form is up then remove it, but remember that it was up.
 			if ((intMode == INT_STAT) && widgGetFromID(psWScreen,IDSTAT_FORM) != NULL)
@@ -871,7 +873,7 @@ static void intRemoveOptions(void)
 
 #ifdef EDIT_OPTIONS
 /* Add the edit widgets to the widget screen */
-static BOOL intAddEdit(void)
+static bool intAddEdit(void)
 {
 	W_FORMINIT sFormInit;
 	W_LABINIT sLabInit;
@@ -934,7 +936,7 @@ static void intGetMapSize(void)
 	SDWORD editWidth, editHeight;
 	char aText[WIDG_MAXSTR];
 	UDWORD i, tmp, bitCount;
-	BOOL widthChanged = false, heightChanged = false;
+	bool widthChanged = false, heightChanged = false;
 	const char *pStr = widgGetString(psWScreen, IDOPT_MAPWIDTH);
 
 	if (isdigit(*pStr))
@@ -1032,7 +1034,7 @@ static void intGetMapSize(void)
 
 
 /* Reset the widget screen to just the reticule */
-void intResetScreen(BOOL NoAnim)
+void intResetScreen(bool NoAnim)
 {
 //	// Ensure driver mode is turned off.
 	StopDriverMode();
@@ -1471,7 +1473,7 @@ INT_RETVAL intRunWidgets(void)
 	UDWORD			retID;
 
 	INT_RETVAL		retCode;
-	BOOL			quitting = false;
+	bool			quitting = false;
 	UDWORD			structX,structY, structX2,structY2;
 	UWORD			objMajor, objMinor;
 	STRUCTURE		*psStructure;
@@ -1869,7 +1871,7 @@ INT_RETVAL intRunWidgets(void)
 				if ((psObjSelected == NULL) ||
 					!psObjSelected->died)
 				{
-					BOOL CanBuild = true;
+					bool CanBuild = true;
 
 					// Send the droid off to build the structure assuming the droid
 					// can get to the location chosen
@@ -2321,7 +2323,7 @@ static void intProcessObject(UDWORD id)
 {
 	BASE_OBJECT		*psObj;
 	STRUCTURE		*psStruct;
-	BOOL IsDeliveryRepos = false;
+	bool IsDeliveryRepos = false;
 	SDWORD			butIndex;
 	UDWORD			statButID;
 
@@ -2927,7 +2929,7 @@ static void intStopStructPosition(void)
 /* Display the widgets for the in game interface */
 void intDisplayWidgets(void)
 {
-	BOOL bPlayerHasHQ;
+	bool bPlayerHasHQ;
 
 	// God only knows...
 	if (ReticuleUp && !bInTutorial)
@@ -3082,19 +3084,19 @@ void intBuildStarted(DROID *psDroid)
 }
 
 /* Are we in build select mode*/
-BOOL intBuildSelectMode(void)
+bool intBuildSelectMode(void)
 {
 	return (objMode == IOBJ_BUILDSEL);
 }
 
 /* Are we in demolish select mode*/
-BOOL intDemolishSelectMode(void)
+bool intDemolishSelectMode(void)
 {
 	return (objMode == IOBJ_DEMOLISHSEL);
 }
 
 //is the build interface up?
-BOOL intBuildMode(void)
+bool intBuildMode(void)
 {
 	return (objMode == IOBJ_BUILD);
 }
@@ -3246,6 +3248,14 @@ void intResearchFinished(STRUCTURE *psBuilding)
 	intRefreshScreen();
 }
 
+void intAlliedResearchChanged()
+{
+	if ((intMode == INT_OBJECT || intMode == INT_STAT) && objMode == IOBJ_RESEARCH)
+	{
+		intRefreshScreen();
+	}
+}
+
 /* Do the annoying calculation for how many forms are needed
  * given the total number of buttons and the number of
  * buttons per page.
@@ -3258,7 +3268,7 @@ UWORD numForms(UDWORD total, UDWORD perForm)
 
 
 /* Add the reticule widgets to the widget screen */
-BOOL intAddReticule(void)
+bool intAddReticule(void)
 {
 	if (!ReticuleUp)
 	{
@@ -3412,7 +3422,7 @@ void togglePowerBar(void)
 }
 
 /* Add the power bars to the screen */
-BOOL intAddPower(void)
+bool intAddPower(void)
 {
 	W_BARINIT sBarInit;
 
@@ -3449,7 +3459,7 @@ void intSetShadowPower(UDWORD quantity)
 
 
 /* Add the options widgets to the widget screen */
-BOOL intAddOptions(void)
+bool intAddOptions(void)
 {
 	W_FORMINIT	sFormInit;
 	W_EDBINIT	sEdInit;
@@ -3752,7 +3762,7 @@ BOOL intAddOptions(void)
  * for the object.
  * If psSelected != NULL it specifies which object should be hilited.
  */
-static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,BOOL bForceStats)
+static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,bool bForceStats)
 {
 	UDWORD			displayForm;
 	UDWORD                  statID = 0;
@@ -3761,8 +3771,8 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 	SDWORD			BufferID;
 	DROID			*Droid;
 	STRUCTURE		*Structure;
-	BOOL			IsFactory;
-	BOOL			Animate = true;
+	bool			IsFactory;
+	bool			Animate = true;
 	int				compIndex;
 
 	// Is the form already up?
@@ -4399,7 +4409,7 @@ static BOOL intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,B
 }
 
 
-static BOOL intUpdateObject(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,BOOL bForceStats)
+static bool intUpdateObject(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected,bool bForceStats)
 {
 	intAddObjectWindow(psObjects,psSelected,bForceStats);
 
@@ -4771,13 +4781,13 @@ static void intSetStats(UDWORD id, BASE_STATS *psStats)
 /* Add the stats widgets to the widget screen */
 /* If psSelected != NULL it specifies which stat should be hilited
    psOwner specifies which object is hilighted on the object bar for this stat*/
-static BOOL intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
+static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 						BASE_STATS *psSelected, BASE_OBJECT *psOwner)
 {
 	UDWORD				i, butPerForm, statForm;
 	SDWORD				BufferID;
 	BASE_STATS			*Stat;
-	BOOL				Animate = true;
+	bool				Animate = true;
 	FACTORY				*psFactory;
 
 	// should this ever be called with psOwner == NULL?
@@ -5250,7 +5260,7 @@ donelab:
 
 
 /* Select a command droid */
-static BOOL selectCommand(BASE_OBJECT *psObj)
+static bool selectCommand(BASE_OBJECT *psObj)
 {
 	DROID	*psDroid;
 
@@ -5281,13 +5291,13 @@ static BASE_STATS *getCommandStats(WZ_DECL_UNUSED BASE_OBJECT *psObj)
 }
 
 /* Set the stats for a command droid */
-static BOOL setCommandStats(WZ_DECL_UNUSED BASE_OBJECT *psObj, WZ_DECL_UNUSED BASE_STATS *psStats)
+static bool setCommandStats(WZ_DECL_UNUSED BASE_OBJECT *psObj, WZ_DECL_UNUSED BASE_STATS *psStats)
 {
 	return true;
 }
 
 /* Select a construction droid */
-static BOOL selectConstruction(BASE_OBJECT *psObj)
+static bool selectConstruction(BASE_OBJECT *psObj)
 {
 	DROID	*psDroid;
 
@@ -5345,7 +5355,7 @@ static BASE_STATS *getConstructionStats(BASE_OBJECT *psObj)
 }
 
 /* Set the stats for a construction droid */
-static BOOL setConstructionStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
+static bool setConstructionStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 {
 	DROID *psDroid = castDroid(psObj);
 	ASSERT(psDroid != NULL, "invalid droid pointer");
@@ -5376,7 +5386,7 @@ static BOOL setConstructionStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 }
 
 /* Select a research facility */
-static BOOL selectResearch(BASE_OBJECT *psObj)
+static bool selectResearch(BASE_OBJECT *psObj)
 {
 	STRUCTURE	*psResFacility;
 
@@ -5415,7 +5425,7 @@ static BASE_STATS *getResearchStats(BASE_OBJECT *psObj)
 }
 
 /* Set the stats for a research facility */
-static BOOL setResearchStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
+static bool setResearchStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 {
 	STRUCTURE			*psBuilding;
 	RESEARCH *              pResearch = (RESEARCH *)psStats;
@@ -5488,7 +5498,7 @@ static BOOL setResearchStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 }
 
 /* Select a Factory */
-static BOOL selectManufacture(BASE_OBJECT *psObj)
+static bool selectManufacture(BASE_OBJECT *psObj)
 {
 	STRUCTURE		*psBuilding;
 
@@ -5523,7 +5533,7 @@ static BASE_STATS *getManufactureStats(BASE_OBJECT *psObj)
 
 
 /* Set the stats for a Factory */
-static BOOL setManufactureStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
+static bool setManufactureStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 {
 	STRUCTURE		*Structure;
 
@@ -5552,7 +5562,7 @@ static BOOL setManufactureStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 
 /* Add the build widgets to the widget screen */
 /* If psSelected != NULL it specifies which droid should be hilited */
-static BOOL intAddBuild(DROID *psSelected)
+static bool intAddBuild(DROID *psSelected)
 {
 	/* Store the correct stats list for future reference */
 	ppsStatsList = (BASE_STATS **)apsStructStatsList;
@@ -5573,7 +5583,7 @@ static BOOL intAddBuild(DROID *psSelected)
 
 /* Add the manufacture widgets to the widget screen */
 /* If psSelected != NULL it specifies which factory should be hilited */
-static BOOL intAddManufacture(STRUCTURE *psSelected)
+static bool intAddManufacture(STRUCTURE *psSelected)
 {
 	/* Store the correct stats list for future reference */
 	ppsStatsList = (BASE_STATS**)&apsTemplateList[0];  // FIXME Ugly cast, and is undefined behaviour (strict-aliasing violation) in C/C++.
@@ -5593,7 +5603,7 @@ static BOOL intAddManufacture(STRUCTURE *psSelected)
 
 /* Add the research widgets to the widget screen */
 /* If psSelected != NULL it specifies which droid should be hilited */
-static BOOL intAddResearch(STRUCTURE *psSelected)
+static bool intAddResearch(STRUCTURE *psSelected)
 {
 	ppsStatsList = (BASE_STATS **)ppResearchList;
 
@@ -5612,7 +5622,7 @@ static BOOL intAddResearch(STRUCTURE *psSelected)
 
 /* Add the command droid widgets to the widget screen */
 /* If psSelected != NULL it specifies which droid should be hilited */
-static BOOL intAddCommand(DROID *psSelected)
+static bool intAddCommand(DROID *psSelected)
 {
 	ppsStatsList = NULL;//(BASE_STATS **)ppResearchList;
 
@@ -5764,7 +5774,7 @@ static void intObjStatRMBPressed(UDWORD id)
 //sets up the Intelligence Screen as far as the interface is concerned
 void addIntelScreen(void)
 {
-	BOOL	radOnScreen;
+	bool	radOnScreen;
 
 	if(driveModeActive() && !driveInterfaceEnabled()) {
 		driveDisableControl();
@@ -5803,7 +5813,7 @@ void addIntelScreen(void)
 }
 
 //sets up the Transporter Screen as far as the interface is concerned
-void addTransporterInterface(DROID *psSelected, BOOL onMission)
+void addTransporterInterface(DROID *psSelected, bool onMission)
 {
 	// if psSelected = NULL add interface but if psSelected != NULL make sure its not flying
 	if (!psSelected || (psSelected && !transporterFlying(psSelected)))
@@ -5881,7 +5891,7 @@ void forceHidePowerBar(void)
 
 
 /* Add the Proximity message buttons */
-BOOL intAddProximityButton(PROXIMITY_DISPLAY *psProxDisp, UDWORD inc)
+bool intAddProximityButton(PROXIMITY_DISPLAY *psProxDisp, UDWORD inc)
 {
 	PROXIMITY_DISPLAY	*psProxDisp2;
 	UDWORD				cnt;
@@ -6156,7 +6166,7 @@ void intCheckResearchButton(void)
 {
 	UWORD index, count;
 	STRUCTURE	*psStruct;
-	BOOL		resFree = false;
+	bool		resFree = false;
 
 	for (psStruct = interfaceStructList(); psStruct != NULL; psStruct =
 		psStruct->psNext)
@@ -6187,7 +6197,7 @@ void intCheckResearchButton(void)
 
 
 // see if a reticule button is enabled
-BOOL intCheckReticuleButEnabled(UDWORD id)
+bool intCheckReticuleButEnabled(UDWORD id)
 {
 	SDWORD	i;
 
@@ -6225,10 +6235,10 @@ STRUCTURE *intFindAStructure(void)
 
 // Look through the players structures and find the next one of type structType.
 //
-STRUCTURE* intGotoNextStructureType(UDWORD structType,BOOL JumpTo,BOOL CancelDrive)
+STRUCTURE* intGotoNextStructureType(UDWORD structType,bool JumpTo,bool CancelDrive)
 {
 	STRUCTURE	*psStruct;
-	BOOL Found = false;
+	bool Found = false;
 
 	if((SWORD)structType != CurrentStructType) {
 		CurrentStruct = NULL;
@@ -6293,10 +6303,10 @@ STRUCTURE* intGotoNextStructureType(UDWORD structType,BOOL JumpTo,BOOL CancelDri
 // Look through the players droids and find the next one of type droidType.
 // If Current=NULL then start at the beginning overwise start at Current.
 //
-DROID *intGotoNextDroidType(DROID *CurrDroid,UDWORD droidType,BOOL AllowGroup)
+DROID *intGotoNextDroidType(DROID *CurrDroid,UDWORD droidType,bool AllowGroup)
 {
 	DROID *psDroid;
-	BOOL Found = false;
+	bool Found = false;
 
 	if(CurrDroid != NULL) {
 		CurrentDroid = CurrDroid;
@@ -6372,7 +6382,7 @@ BASE_OBJECT * getCurrentSelected(void)
 }
 
 // Checks if a coordinate is over the build menu
-BOOL CoordInBuild(int x, int y)
+bool CoordInBuild(int x, int y)
 {
 	// This measurement is valid for the menu, so the buildmenu_height
 	// value is used to "nudge" it all upwards from the command menu.

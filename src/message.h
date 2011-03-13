@@ -39,19 +39,19 @@ extern iIMDShape	*pProximityMsgIMD;
 extern PROXIMITY_DISPLAY *apsProxDisp[MAX_PLAYERS];
 
 /** Allocates the viewdata heap. */
-BOOL initViewData(void);
+bool initViewData(void);
 
 /** Initialise the message heaps. */
-BOOL initMessage(void);
+bool initMessage(void);
 
 /** Release the message heaps. */
-BOOL messageShutdown(void);
+bool messageShutdown(void);
 
 /** Add a message to the list. */
-MESSAGE * addMessage(MESSAGE_TYPE msgType, BOOL proxPos, UDWORD player);
+MESSAGE * addMessage(MESSAGE_TYPE msgType, bool proxPos, UDWORD player);
 
 /** Add a beacon message to the list. */
-MESSAGE * addBeaconMessage(MESSAGE_TYPE msgType, BOOL proxPos, UDWORD player);
+MESSAGE * addBeaconMessage(MESSAGE_TYPE msgType, bool proxPos, UDWORD player);
 
 /** Remove a message. */
 void removeMessage(MESSAGE *psDel, UDWORD player);
@@ -85,6 +85,6 @@ MESSAGE* findMessage(MSG_VIEWDATA *pViewdata, MESSAGE_TYPE type, UDWORD player);
 /** 'Displays' a proximity display. */
 void displayProximityMessage(PROXIMITY_DISPLAY *psProxDisp);
 
-BOOL messageInitVars(void);
+bool messageInitVars(void);
 
 #endif // __INCLUDED_SRC_MESSAGE_H__

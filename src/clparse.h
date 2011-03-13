@@ -28,6 +28,6 @@
 bool ParseCommandLine(int argc, const char** argv);
 bool ParseCommandLineEarly(int argc, const char** argv);
 
-extern BOOL bAllowDebugMode;
+extern bool bAllowDebugMode;
 
 #endif // __INCLUDED_SRC_CLPARSE_H__

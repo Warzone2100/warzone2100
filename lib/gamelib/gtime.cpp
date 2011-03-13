@@ -295,7 +295,7 @@ void gameTimeGetMod(float *pMod)
 	*pMod = modifier;
 }
 
-BOOL gameTimeIsStopped(void)
+bool gameTimeIsStopped(void)
 {
 	return (stopCount != 0);
 }

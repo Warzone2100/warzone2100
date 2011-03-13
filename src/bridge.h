@@ -23,20 +23,20 @@
 
 #include "structuredef.h"
 
-typedef struct _bridge_info
+struct BRIDGE_INFO
 {
 	int	startX, startY, endX, endY;			// Copy of coordinates of bridge.
 	int	heightChange;					// How much to raise lowest end by.
 	int	bridgeHeight;					// How high are the sections?
 	int	bridgeLength;					// How many tiles long?
 	bool	bConstantX, startHighest;			// Which axis is it on and which end is highest?
-} BRIDGE_INFO;
+};
 
 /* Establishes whether a bridge could be built along the coordinates given */
 bool bridgeValid(int startX, int startY, int endX, int endY);
 
 /* Draws a wall section - got to be in world matrix context though! */
-BOOL renderBridgeSection(STRUCTURE *psStructure);
+bool renderBridgeSection(STRUCTURE *psStructure);
 
 /* Will provide you with everything you ever wanted to know about your bridge but were afraid to ask */
 void getBridgeInfo(int startX, int startY, int endX, int endY, BRIDGE_INFO *info);

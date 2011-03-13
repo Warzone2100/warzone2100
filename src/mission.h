@@ -38,10 +38,10 @@
 #define         LIMBO_LANDING           MAX_PLAYERS
 
 /** Set by scrFlyInTransporter. True if were currenly tracking the transporter. */
-extern BOOL		bTrackingTransporter;
+extern bool		bTrackingTransporter;
 
 extern MISSION		mission;
-extern BOOL			offWorldKeepLists;
+extern bool			offWorldKeepLists;
 extern DROID       *apsLimboDroids[MAX_PLAYERS];
 
 /** Return positions for vtols. */
@@ -49,7 +49,7 @@ extern Vector2i asVTOLReturnPos[MAX_PLAYERS];
 
 extern bool Cheated;
 extern void initMission(void);
-extern BOOL missionShutDown(void);
+extern bool missionShutDown(void);
 extern void missionDestroyObjects(void);
 
 /** This is called everytime the game is quit. */
@@ -58,14 +58,14 @@ extern void releaseMission(void);
 /** On the PC - sets the countdown played flag. */
 extern void setMissionCountDown(void);
 
-extern BOOL startMission(LEVEL_TYPE missionType, char *pGame);
+extern bool startMission(LEVEL_TYPE missionType, char *pGame);
 extern void endMission(void);
 
 /** Initialise the mission stuff for a save game. */
-extern BOOL startMissionSave(SDWORD missionType);
+extern bool startMissionSave(SDWORD missionType);
 
 /** Sets up the game to start a new mission. */
-extern BOOL setUpMission(UDWORD type);
+extern bool setUpMission(UDWORD type);
 
 /** This causes the new mission data to be loaded up. */
 extern void launchMission(void);
@@ -73,12 +73,12 @@ extern void launchMission(void);
 /** The update routine for all droids left back at home base. Only interested in Transporters at present. */
 extern void missionDroidUpdate(DROID *psDroid);
 
-extern BOOL missionIsOffworld(void);
-extern BOOL missionCanReEnforce(void);
-extern BOOL missionForReInforcements(void);
+extern bool missionIsOffworld(void);
+extern bool missionCanReEnforce(void);
+extern bool missionForReInforcements(void);
 
 /** Returns true if the mission is a Limbo Expand mission. */
-extern BOOL missionLimboExpand(void);
+extern bool missionLimboExpand(void);
 
 /** This is called mid Limbo mission via the script. */
 extern void resetLimboMission(void);
@@ -100,8 +100,8 @@ extern void swapMissionPointers(void);
 #define		TIMER_Y					22
 
 // status of the mission result screens.
-extern BOOL MissionResUp;
-extern BOOL ClosingMissionRes;
+extern bool MissionResUp;
+extern bool ClosingMissionRes;
 
 extern void intRemoveMissionResult			(void);
 extern void intRemoveMissionResultNoAnim	(void);
@@ -109,7 +109,7 @@ extern void intProcessMissionResult			(UDWORD id);
 extern void intRunMissionResult				(void);
 
 extern void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y,
-							  BOOL goingHome);
+							  bool goingHome);
 /** Sets the appropriate pause states for when the interface is up but the game needs to be paused. */
 extern void setMissionPauseState(void);
 
@@ -137,10 +137,10 @@ extern void intRemoveMissionTimer(void);
 
 //access functions for bPlayCountDown flag
 extern void setPlayCountDown(UBYTE set);
-extern BOOL getPlayCountDown(void);
+extern bool getPlayCountDown(void);
 
 /** Checks the x,y passed in are not within the boundary of the Landing Zone x and y in tile coords. */
-extern BOOL withinLandingZone(UDWORD x, UDWORD y);
+extern bool withinLandingZone(UDWORD x, UDWORD y);
 
 //sets the coords for the Transporter to land
 extern void setLandingZone(UBYTE x1, UBYTE y1, UBYTE x2, UBYTE y2);
@@ -153,7 +153,7 @@ extern void initNoGoAreas(void);
 extern void setNoGoArea(UBYTE x1, UBYTE y1, UBYTE x2, UBYTE y2, UBYTE area);
 
 /** Fly in transporters at start of level. */
-extern void missionFlyTransportersIn( SDWORD iPlayer, BOOL bTrackTransporter );
+extern void missionFlyTransportersIn( SDWORD iPlayer, bool bTrackTransporter );
 
 /** Move transporter offworld. */
 extern void missionMoveTransporterOffWorld( DROID *psTransporter );
@@ -176,11 +176,11 @@ extern void missionGetTransporterEntry( SDWORD iPlayer, UWORD *iX, UWORD *iY );
 extern void missionGetTransporterExit( SDWORD iPlayer, UDWORD *iX, UDWORD *iY );
 
 //access functions for droidsToSafety flag
-extern void setDroidsToSafetyFlag(BOOL set);
-extern BOOL getDroidsToSafetyFlag(void);
+extern void setDroidsToSafetyFlag(bool set);
+extern bool getDroidsToSafetyFlag(void);
 
 /** Checks to see if the player has any droids (except Transporters left). */
-extern BOOL missionDroidsRemaining(UDWORD player);
+extern bool missionDroidsRemaining(UDWORD player);
 
 /** 
  * Called when a Transporter gets to the edge of the world and the droids are being flown to safety. 
@@ -196,7 +196,7 @@ extern void resetMissionWidgets(void);
 
 extern UDWORD	getCampaignNumber( void );
 extern void	setCampaignNumber( UDWORD number );
-extern BOOL intAddMissionResult(BOOL result, BOOL bPlaySuccess);
+extern bool intAddMissionResult(bool result, bool bPlaySuccess);
 
 /** Reset the vtol landing pos. */
 void resetVTOLLandingPos(void);
@@ -205,7 +205,7 @@ void resetVTOLLandingPos(void);
 extern void placeLimboDroids(void);
 
 /** bCheating = true == start of cheat, bCheating = false == end of cheat. */
-extern void setMissionCheatTime(BOOL bCheating);
+extern void setMissionCheatTime(bool bCheating);
 
 
  #define		MISSIONRES_X			20	// pos & size of box.

@@ -25,13 +25,13 @@
 #define MAX_CONSOLE_STRING_LENGTH		(255)
 #define MAX_CONSOLE_TMP_STRING_LENGTH	(255)
 
-typedef enum
+enum CONSOLE_TEXT_JUSTIFICATION
 {
 	LEFT_JUSTIFY,
 	RIGHT_JUSTIFY,
 	CENTRE_JUSTIFY,
 	DEFAULT_JUSTIFY
-} CONSOLE_TEXT_JUSTIFICATION;
+};
 
 /* ID to use for addConsoleMessage() in case of a system message */
 #define	SYSTEM_MESSAGE				(-1)
@@ -40,22 +40,22 @@ typedef enum
 extern char ConsoleString[MAX_CONSOLE_TMP_STRING_LENGTH];
 
 void consoleInit(void);
-BOOL addConsoleMessage(const char *messageText, CONSOLE_TEXT_JUSTIFICATION jusType, SDWORD player);
+bool addConsoleMessage(const char *messageText, CONSOLE_TEXT_JUSTIFICATION jusType, SDWORD player);
 void updateConsoleMessages(void);
 void initConsoleMessages(void);
 void removeTopConsoleMessage(void);
 void displayConsoleMessages(void);
 void flushConsoleMessages(void);
-void setConsoleBackdropStatus(BOOL state);
-void enableConsoleDisplay(BOOL state);
-BOOL getConsoleDisplayStatus(void);
+void setConsoleBackdropStatus(bool state);
+void enableConsoleDisplay(bool state);
+bool getConsoleDisplayStatus(void);
 void setConsoleSizePos(UDWORD x, UDWORD y, UDWORD width);
-void setConsolePermanence(BOOL state, BOOL bClearOld);
-BOOL mouseOverConsoleBox(void);
+void setConsolePermanence(bool state, bool bClearOld);
+bool mouseOverConsoleBox(void);
 UDWORD getNumberConsoleMessages(void);
 void setConsoleLineInfo(UDWORD vis);
 UDWORD getConsoleLineInfo(void);
-void permitNewConsoleMessages(BOOL allow);
+void permitNewConsoleMessages(bool allow);
 void toggleConsoleDrop(void);
 
 #if defined(DEBUG)

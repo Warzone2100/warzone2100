@@ -48,28 +48,28 @@
 #define CON_BORDER_WIDTH				4
 #define CON_BORDER_HEIGHT				4
 
-typedef struct _console
+struct CONSOLE
 {
 	UDWORD	topX;
 	UDWORD	topY;
 	UDWORD	width;
 	UDWORD	textDepth;
-	BOOL	permanent;
-} CONSOLE;
+	bool	permanent;
+};
 
 /* Definition of a message */
-typedef struct	_console_message
+struct CONSOLE_MESSAGE
 {
 	QPixmap				*cache;						// Text of the message
 	QString				text;						// Text of the message
 	UDWORD				timeAdded;								// When was it added to our list?
 	int				id;
 	int				player;						// Player who sent this message or SYSTEM_MESSAGE
-	struct _console_message *psNext;
-} CONSOLE_MESSAGE;
+	CONSOLE_MESSAGE *               psNext;
+};
 
 /** Is the console history on or off? */
-static BOOL	bConsoleDropped = false;
+static bool	bConsoleDropped = false;
 
 /** Stores the console dimensions and states */
 static CONSOLE mainConsole;
@@ -110,10 +110,10 @@ static UDWORD	messageDuration;
 static UDWORD	lastDropChange = 0;
 
 /** Is there a box under the console text? */
-static BOOL		bTextBoxActive;
+static bool		bTextBoxActive;
 
 /** Is the console being displayed? */
-static BOOL		bConsoleDisplayEnabled;
+static bool		bConsoleDisplayEnabled;
 
 /** How many lines are displayed? */
 static UDWORD	consoleVisibleLines;
@@ -228,7 +228,7 @@ void	toggleConsoleDrop( void )
 }
 
 /** Add a string to the console. */
-BOOL addConsoleMessage(const char *messageText, CONSOLE_TEXT_JUSTIFICATION jusType,
+bool addConsoleMessage(const char *messageText, CONSOLE_TEXT_JUSTIFICATION jusType,
 							   SDWORD player)
 {
 	CONSOLE_MESSAGE	*psMessage;
@@ -455,8 +455,8 @@ static PIELIGHT getConsoleTextColor(SDWORD player)
 static int displayOldMessages(void)
 {
 	int i;
-	BOOL bGotIt;
-	BOOL bQuit;
+	bool bGotIt;
+	bool bQuit;
 	int marker = 0;
 	int linePitch;
 	int MesY;
@@ -623,7 +623,7 @@ void	displayConsoleMessages( void )
 }
 
 /** Allows toggling of the box under the console text */
-void	setConsoleBackdropStatus(BOOL state)
+void	setConsoleBackdropStatus(bool state)
 {
 	bTextBoxActive = state;
 }
@@ -634,7 +634,7 @@ void	setConsoleBackdropStatus(BOOL state)
 	to make sure that when it's turned back on again, there
 	are no messages, the call flushConsoleMessages first.
 */
-void	enableConsoleDisplay(BOOL state)
+void	enableConsoleDisplay(bool state)
 {
 	bConsoleDisplayEnabled = state;
 }
@@ -652,7 +652,7 @@ void	setConsoleSizePos(UDWORD x, UDWORD y, UDWORD width)
 }
 
 /**	Establishes whether the console messages stay there */
-void	setConsolePermanence(BOOL state, BOOL bClearOld)
+void	setConsolePermanence(bool state, bool bClearOld)
 {
  	if(mainConsole.permanent == true && state == false)
 	{
@@ -673,7 +673,7 @@ void	setConsolePermanence(BOOL state, BOOL bClearOld)
 }
 
 /** true or false as to whether the mouse is presently over the console window */
-BOOL	mouseOverConsoleBox( void )
+bool	mouseOverConsoleBox( void )
 {
 	if	(
 		((UDWORD)mouseX() > mainConsole.topX)	// condition 1
@@ -704,13 +704,13 @@ UDWORD getConsoleLineInfo(void)
 }
 
 /// Set if new messages may be added to the console
-void	permitNewConsoleMessages(BOOL allow)
+void	permitNewConsoleMessages(bool allow)
 {
 	allowNewMessages = allow;
 }
 
 /// \return the visibility of the console
-BOOL	getConsoleDisplayStatus( void )
+bool	getConsoleDisplayStatus( void )
 {
 	return(bConsoleDisplayEnabled);
 }

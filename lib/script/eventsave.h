@@ -28,9 +28,9 @@
 #define _evntsave_h
 
 // Save the state of the event system
-extern BOOL eventSaveState(SDWORD version, char **ppBuffer, UDWORD *pFileSize);
+extern bool eventSaveState(SDWORD version, char **ppBuffer, UDWORD *pFileSize);
 
 // Load the state of the event system
-extern BOOL eventLoadState(char *pBuffer, UDWORD fileSize);
+extern bool eventLoadState(char *pBuffer, UDWORD fileSize);
 
 #endif

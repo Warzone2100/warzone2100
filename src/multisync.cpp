@@ -77,11 +77,11 @@ static void NETauto(PACKAGED_CHECK *v)
 // ////////////////////////////////////////////////////////////////////////////
 // function definitions
 
-static BOOL sendStructureCheck	(void);							//Structure
+static bool sendStructureCheck	(void);							//Structure
 static PACKAGED_CHECK packageCheck(const DROID *pD);
-static BOOL sendDroidCheck		(void);							//droids
+static bool sendDroidCheck		(void);							//droids
 
-static BOOL sendPowerCheck(void);
+static bool sendPowerCheck(void);
 static UDWORD averagePing(void);
 
 #define AV_PING_FREQUENCY       20000                           // how often to update average pingtimes. in approx millisecs.
@@ -95,7 +95,7 @@ static UDWORD				PingSend[MAX_PLAYERS];	//stores the time the ping was called.
 
 // ////////////////////////////////////////////////////////////////////////////
 // test traffic level.
-static BOOL okToSend(void)
+static bool okToSend(void)
 {
 	// Update checks and go no further if any exceeded.
 	// removing the received check again ... add NETgetRecentBytesRecvd() to left hand side of equation if this works badly
@@ -195,7 +195,7 @@ static DROID* pickADroid(void)
  *
  *  Call this when you need to update the given droid right now.
  */
-BOOL ForceDroidSync(const DROID* droidToSend)
+bool ForceDroidSync(const DROID* droidToSend)
 {
 	uint8_t count = 1;		// *always* one
 	PACKAGED_CHECK pc = packageCheck(droidToSend);
@@ -213,7 +213,7 @@ BOOL ForceDroidSync(const DROID* droidToSend)
 
 // ///////////////////////////////////////////////////////////////////////////
 // send a droid info packet.
-static BOOL sendDroidCheck(void)
+static bool sendDroidCheck(void)
 {
 	DROID			*pD, **ppD;
 	uint8_t			i, count;
@@ -318,7 +318,7 @@ static PACKAGED_CHECK packageCheck(const DROID *pD)
 
 // ////////////////////////////////////////////////////////////////////////////
 // receive a check and update the local world state accordingly
-BOOL recvDroidCheck(NETQUEUE queue)
+bool recvDroidCheck(NETQUEUE queue)
 {
 	uint8_t		count;
 	int		i;
@@ -482,7 +482,7 @@ static uint32_t structureCheckLastType[MAX_PLAYERS];
 
 // ////////////////////////////////////////////////////////////////////////
 // Send structure information.
-static BOOL sendStructureCheck(void)
+static bool sendStructureCheck(void)
 {
 	uint8_t         player;
 
@@ -555,11 +555,11 @@ static BOOL sendStructureCheck(void)
 }
 
 // receive checking info about a structure and update local world state
-BOOL recvStructureCheck(NETQUEUE queue)
+bool recvStructureCheck(NETQUEUE queue)
 {
 	uint32_t                synchTime;
 	STRUCTURE		*pS;
-	BOOL			hasCapacity = true;
+	bool			hasCapacity = true;
 	int                     j;
 	Rotation                rot;
 	uint8_t			player, ourCapacity;
@@ -683,7 +683,7 @@ static int64_t powerCheckLastPower[MAX_PLAYERS];
 // ////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////
 // Power Checking. Send a power level check every now and again.
-static BOOL sendPowerCheck()
+static bool sendPowerCheck()
 {
 	uint8_t         player;
 
@@ -717,7 +717,7 @@ static BOOL sendPowerCheck()
 	return true;
 }
 
-BOOL recvPowerCheck(NETQUEUE queue)
+bool recvPowerCheck(NETQUEUE queue)
 {
 	uint8_t		player;
 	uint32_t        synchTime;
@@ -758,7 +758,7 @@ BOOL recvPowerCheck(NETQUEUE queue)
 // ////////////////////////////////////////////////////////////////////////
 // Score
 // We use setMultiStats() to broadcast the score when needed.
-BOOL sendScoreCheck(void)
+bool sendScoreCheck(void)
 {
 	static UDWORD	lastsent = 0;
 
@@ -812,9 +812,9 @@ static UDWORD averagePing(void)
 	return total / MAX(count, 1);
 }
 
-BOOL sendPing(void)
+bool sendPing(void)
 {
-	BOOL			isNew = true;
+	bool			isNew = true;
 	uint8_t			player = selectedPlayer;
 	int				i;
 	static UDWORD	lastPing = 0;	// Last time we sent a ping
@@ -886,9 +886,9 @@ BOOL sendPing(void)
 }
 
 // accept and process incoming ping messages.
-BOOL recvPing(NETQUEUE queue)
+bool recvPing(NETQUEUE queue)
 {
-	BOOL	isNew;
+	bool	isNew;
 	uint8_t	sender, us = selectedPlayer;
 
 	NETbeginDecode(queue, NET_PING);

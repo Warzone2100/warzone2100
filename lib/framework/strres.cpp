@@ -37,10 +37,10 @@
 #include "strresly.h"
 
 /* A String Resource */
-typedef struct STR_RES
+struct STR_RES
 {
 	struct TREAP_NODE**     psIDTreap;              ///< The treap to store string identifiers
-} STR_RES;
+};
 
 /* Initialise the string system */
 STR_RES* strresCreate()

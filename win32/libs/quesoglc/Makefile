@@ -10,7 +10,8 @@ PKG_MD5SUM:=b009f87f5cc2e79106cf1bf8ca45418d
 
 TARGETS:= \
 	$(TOPDIR)/build/libs/lib/libGLC.la \
-	$(TOPDIR)/build/libs/include/GL/glc.h
+	$(TOPDIR)/build/libs/include/GL/glc.h \
+	$(TOPDIR)/build/libs/lib/pkgconfig/quesoglc.pc
 
 include $(TOPDIR)/rules.mk
 
@@ -38,6 +39,12 @@ $(PKG_SOURCEBASE)/build/libGLC.la: $(PKG_SOURCEBASE)/config.status
 
 $(TOPDIR)/build/libs/lib/libGLC.la: $(PKG_SOURCEBASE)/build/libGLC.la
 	$(MAKE) -C $(PKG_SOURCEBASE)/build install-libLTLIBRARIES
+
+$(PKG_SOURCEBASE)/quesoglc.pc: $(PKG_SOURCEBASE)/config.status
+	$(MAKE) -C $(PKG_SOURCEBASE) quesoglc.pc
+
+$(TOPDIR)/build/libs/lib/pkgconfig/quesoglc.pc: $(PKG_SOURCEBASE)/quesoglc.pc
+	$(MAKE) -C $(PKG_SOURCEBASE) install-pkgconfigDATA
 
 $(PKG_SOURCEBASE)/include/GL/glc.h: extract-stamp
 

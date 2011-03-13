@@ -27,17 +27,17 @@
 #include "objectdef.h"
 
 /* Initialise the movement system */
-extern BOOL moveInitialise(void);
+extern bool moveInitialise(void);
 
 /* Update the base speed for all movement */
 extern void moveUpdateBaseSpeed(void);
 
-/* Set a target location for a droid to move to  - returns a BOOL based on if there is a path to the destination (true if there is a path)*/
-extern BOOL moveDroidTo(DROID *psDroid, UDWORD x, UDWORD y);
+/* Set a target location for a droid to move to  - returns a bool based on if there is a path to the destination (true if there is a path)*/
+extern bool moveDroidTo(DROID *psDroid, UDWORD x, UDWORD y);
 
-/* Set a target location for a droid to move to  - returns a BOOL based on if there is a path to the destination (true if there is a path)*/
+/* Set a target location for a droid to move to  - returns a bool based on if there is a path to the destination (true if there is a path)*/
 // the droid will not join a formation when it gets to the location
-extern BOOL moveDroidToNoFormation(DROID *psDroid, UDWORD x, UDWORD y);
+extern bool moveDroidToNoFormation(DROID *psDroid, UDWORD x, UDWORD y);
 
 // move a droid directly to a location (used by vtols only)
 extern void moveDroidToDirect(DROID *psDroid, UDWORD x, UDWORD y);
@@ -63,7 +63,7 @@ extern void moveUpdateTracked(DROID *psDroid);
 extern void updateDroidOrientation(DROID *psDroid);
 
 /* audio callback used to kill movement sounds */
-extern BOOL moveCheckDroidMovingAndVisible( void *psObj );
+extern bool moveCheckDroidMovingAndVisible( void *psObj );
 
 // set a vtol to be hovering in the air
 void moveMakeVtolHover( DROID *psDroid );

@@ -37,11 +37,11 @@ void yyerror(const char* msg)
 	debug(LOG_ERROR, "SMSG file parse error:\n%s at line %d\nText: '%s'", msg, message_get_lineno(), message_get_text());
 }
 
-typedef struct TEXT_MESSAGE
+struct TEXT_MESSAGE
 {
 	char * str;
-	struct TEXT_MESSAGE* psNext;
-} TEXT_MESSAGE;
+	TEXT_MESSAGE *psNext;
+};
 
 static void freeTextMessageList(TEXT_MESSAGE* list)
 {
@@ -54,11 +54,11 @@ static void freeTextMessageList(TEXT_MESSAGE* list)
 	}
 }
 
-typedef struct VIEWDATAMESSAGE
+struct VIEWDATAMESSAGE
 {
 	VIEWDATA view;
 	struct VIEWDATAMESSAGE* psNext;
-} VIEWDATAMESSAGE;
+};
 
 static void freeViewDataMessageList(VIEWDATAMESSAGE* list)
 {

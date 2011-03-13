@@ -70,8 +70,8 @@
 
 // ////////////////////////////////////////////////////////////////////////////
 // External Variables
-extern BOOL		bHosted;
-extern BOOL		multiRequestUp;
+extern bool		bHosted;
+extern bool		multiRequestUp;
 // ////////////////////////////////////////////////////////////////////////////
 //external functions
 
@@ -83,7 +83,7 @@ static void resetMultiVisibility(UDWORD player);
 // ////////////////////////////////////////////////////////////////////////////
 // Wait For Players
 
-BOOL intDisplayMultiJoiningStatus(UBYTE joinCount)
+bool intDisplayMultiJoiningStatus(UBYTE joinCount)
 {
 	UDWORD			x,y,w,h;
 	char			sTmp[6];
@@ -117,7 +117,7 @@ BOOL intDisplayMultiJoiningStatus(UBYTE joinCount)
 ** @param player -- the one we need to clear
 ** @param quietly -- true means without any visible effects
 */
-void clearPlayer(UDWORD player,BOOL quietly)
+void clearPlayer(UDWORD player,bool quietly)
 {
 	UDWORD			i;
 	STRUCTURE		*psStruct,*psNext;
@@ -220,7 +220,7 @@ void recvPlayerLeft(NETQUEUE queue)
 
 // ////////////////////////////////////////////////////////////////////////////
 // A remote player has left the game
-BOOL MultiPlayerLeave(UDWORD playerIndex)
+bool MultiPlayerLeave(UDWORD playerIndex)
 {
 	char	buf[255];
 
@@ -274,7 +274,7 @@ BOOL MultiPlayerLeave(UDWORD playerIndex)
 
 // ////////////////////////////////////////////////////////////////////////////
 // A Remote Player has joined the game.
-BOOL MultiPlayerJoin(UDWORD playerIndex)
+bool MultiPlayerJoin(UDWORD playerIndex)
 {
 	if(widgGetFromID(psWScreen,IDRET_FORM))	// if ingame.
 	{

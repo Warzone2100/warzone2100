@@ -102,9 +102,9 @@ void	adjustTileHeight(MAPTILE *psTile, SDWORD adjust)
 	}
 }
 
-BOOL	inHighlight(UDWORD realX, UDWORD realY)
+bool	inHighlight(UDWORD realX, UDWORD realY)
 {
-	BOOL	retVal = false;
+	bool	retVal = false;
 
 	if (realX>=buildSite.xTL && realX<=buildSite.xBR)
 	{
@@ -167,7 +167,7 @@ void	kill3DBuilding		( void )
 
 // Call once per frame to handle structure positioning and callbacks.
 //
-BOOL process3DBuilding(void)
+bool process3DBuilding(void)
 {
 	UDWORD	bX,bY;
 
@@ -267,7 +267,7 @@ BOOL process3DBuilding(void)
 
 
 /* See if a structure location has been found */
-BOOL found3DBuilding(UDWORD *x, UDWORD *y)
+bool found3DBuilding(UDWORD *x, UDWORD *y)
 {
 	if (buildState != BUILD3D_FINISHED || x == NULL || y == NULL)
 	{
@@ -291,7 +291,7 @@ BOOL found3DBuilding(UDWORD *x, UDWORD *y)
 }
 
 /* See if a second position for a build has been found */
-BOOL found3DBuildLocTwo(UDWORD *px1, UDWORD *py1, UDWORD *px2, UDWORD *py2)
+bool found3DBuildLocTwo(UDWORD *px1, UDWORD *py1, UDWORD *px2, UDWORD *py2)
 {
 	if ( (((STRUCTURE_STATS *)sBuildDetails.psStats)->type != REF_WALL &&
 		  ((STRUCTURE_STATS *)sBuildDetails.psStats)->type != REF_GATE &&
@@ -324,7 +324,7 @@ BOOL found3DBuildLocTwo(UDWORD *px1, UDWORD *py1, UDWORD *px2, UDWORD *py2)
 }
 
 /*returns true if the build state is not equal to BUILD3D_NONE*/
-BOOL tryingToGetLocation(void)
+bool tryingToGetLocation(void)
 {
     if (buildState == BUILD3D_NONE)
     {

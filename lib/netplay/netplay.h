@@ -31,7 +31,7 @@
 
 // Lobby Connection errors
 
-typedef enum
+enum LOBBY_ERROR_TYPES
 {
 	ERROR_NOERROR,
 	ERROR_CONNECTION,
@@ -43,9 +43,9 @@ typedef enum
 	ERROR_HOSTDROPPED,
 	ERROR_WRONGDATA,
 	ERROR_UNKNOWNFILEISSUE
-} LOBBY_ERROR_TYPES;
+};
 
-typedef enum
+enum CONNECTION_STATUS
 {
 	CONNECTIONSTATUS_PLAYER_DROPPED,
 	CONNECTIONSTATUS_PLAYER_LEAVING,
@@ -53,9 +53,9 @@ typedef enum
 	CONNECTIONSTATUS_WAITING_FOR_PLAYER,
 
 	CONNECTIONSTATUS_NORMAL
-} CONNECTION_STATUS;
+};
 
-typedef enum
+enum MESSAGE_TYPES
 {
 	NET_MIN_TYPE = 33,              ///< Minimum-1 valid NET_ type, *MUST* be first.
 	NET_PING,                       ///< ping players.
@@ -97,7 +97,6 @@ typedef enum
 	GAME_FEATUREDEST,               ///< destroy a game feature.
 	GAME_RESEARCH,                  ///< Research has been completed.
 	GAME_FEATURES,                  ///< information regarding features.
-	GAME_SECONDARY,                 ///< set a droids secondary order
 	GAME_ALLIANCE,                  ///< alliance data.
 	GAME_GIFT,                      ///< a luvly gift between players.
 	GAME_ARTIFACTS,                 ///< artifacts randomly placed.
@@ -119,7 +118,7 @@ typedef enum
 	GAME_DROIDDISEMBARK,            ///< droid disembarked from a Transporter
 	// End of redundant messages.
 	GAME_MAX_TYPE                   ///< Maximum+1 valid GAME_ type, *MUST* be last.
-} MESSAGE_TYPES;
+};
 //#define SYNC_FLAG (NUM_GAME_PACKETS * NUM_GAME_PACKETS)	//special flag used for logging.
 #define SYNC_FLAG 0x10000000	//special flag used for logging. (Not sure what this is. Was added in trunk, NUM_GAME_PACKETS not in newnet.)
 
@@ -139,20 +138,21 @@ typedef enum
 #define MAX_CONNECTED_PLAYERS   MAX_PLAYERS
 #define MAX_TMP_SOCKETS         16
 
-typedef struct {					//Available game storage... JUST FOR REFERENCE!
+struct SESSIONDESC  //Available game storage... JUST FOR REFERENCE!
+{
 	int32_t dwSize;
 	int32_t dwFlags;
 	char host[40];	// host's ip address (can fit a full IPv4 and IPv6 address + terminating NUL)
 	int32_t dwMaxPlayers;
 	int32_t dwCurrentPlayers;
 	int32_t dwUserFlags[4];
-} SESSIONDESC;
+};
 
 /**
  * @note when changing this structure, NETsendGAMESTRUCT, NETrecvGAMESTRUCT and
  *       the lobby server should be changed accordingly.
  */
-typedef struct
+struct GAMESTRUCT
 {
 	/* Version of this structure and thus the binary lobby protocol.
 	 * @NOTE: <em>MUST</em> be the first item of this struct.
@@ -179,7 +179,7 @@ typedef struct
 	uint32_t	future2;						// for future use
 	uint32_t	future3;						// for future use
 	uint32_t	future4;						// for future use
-} GAMESTRUCT;
+};
 
 // ////////////////////////////////////////////////////////////////////////
 // Message information. ie. the packets sent between machines.
@@ -187,7 +187,8 @@ typedef struct
 #define NET_ALL_PLAYERS 255
 #define NET_HOST_ONLY 0
 // the following structure is going to be used to track if we sync or not
-typedef struct {
+struct SYNC_COUNTER
+{
 	uint64_t	sentDroidCheck;
 	uint64_t	unsentDroidCheck;
 	uint64_t	sentStructureCheck;
@@ -205,31 +206,31 @@ typedef struct {
 	uint16_t	cantjoin;
 	uint16_t	banned;
 	uint16_t	rejected;
-} SYNC_COUNTER;
+};
 
-typedef struct
+struct WZFile
 {
 	PHYSFS_file	*pFileHandle;		// handle
 	PHYSFS_sint32 fileSize_32;		// size
 	int32_t		currPos;			// current position
-	BOOL	isSending;				// sending to this player
-	BOOL	isCancelled;			// player cancelled
+	bool	isSending;				// sending to this player
+	bool	isCancelled;			// player cancelled
 	int32_t	filetype;				// future use (1=map 2=mod 3=...)
-}	WZFile;
+};
 
-typedef struct
+struct wzFileStatus
 {
 	int32_t player;					// the client we sent data to
 	int32_t done;					// how far done we are (100= finished)
 	int32_t byteCount;				// current byte count
-}	wzFileStatus;
+};
 
-typedef enum
+enum wzFileEnum
 {
 	WZ_FILE_OK,
 	ALREADY_HAVE_FILE,
 	STUCK_IN_FILE_LOOP
-}	wzFileEnum;
+};
 
 enum
 {
@@ -239,49 +240,50 @@ enum
 // ////////////////////////////////////////////////////////////////////////
 // Player information. Filled when players join, never re-ordered. selectedPlayer global points to 
 // currently controlled player.
-typedef struct
+struct PLAYER
 {
 	char		name[StringSize];	///< Player name
 	int32_t		position;		///< Map starting position
 	int32_t		colour;			///< Which colour slot this player is using
-	BOOL		allocated;		///< Allocated as a human player
+	bool		allocated;		///< Allocated as a human player
 	uint32_t	heartattacktime;	///< Time cardiac arrest started
-	BOOL		heartbeat;		///< If we are still alive or not
-	BOOL		kick;			///< If we should kick them
+	bool		heartbeat;		///< If we are still alive or not
+	bool		kick;			///< If we should kick them
 	int32_t		connection;		///< Index into connection list
 	int32_t		team;			///< Which team we are on
-	BOOL		ready;			///< player ready to start?
+	bool		ready;			///< player ready to start?
 	int8_t		ai;			///< index into sorted list of AIs, zero is always default AI
 	int8_t		difficulty;		///< difficulty level of AI
-	BOOL		needFile;			///< if We need a file sent to us
+	bool		needFile;			///< if We need a file sent to us
 	WZFile		wzFile;				///< for each player, we keep track of map progress
 	char		IPtextAddress[40];	///< IP of this player
-} PLAYER;
+};
 
 // ////////////////////////////////////////////////////////////////////////
 // all the luvly Netplay info....
-typedef struct {
+struct NETPLAY
+{
 	GAMESTRUCT	games[MaxGames];	///< The collection of games
 	PLAYER		players[MAX_PLAYERS];	///< The array of players.
 	uint32_t	playercount;		///< Number of players in game.
 	uint32_t	hostPlayer;		///< Index of host in player array
 	uint32_t	bComms;			///< Actually do the comms?
-	BOOL		isHost;			///< True if we are hosting the game
-	BOOL		isUPNP;					// if we want the UPnP detection routines to run
-	BOOL		isHostAlive;	/// if the host is still alive
+	bool		isHost;			///< True if we are hosting the game
+	bool		isUPNP;					// if we want the UPnP detection routines to run
+	bool		isHostAlive;	/// if the host is still alive
 	PHYSFS_file	*pMapFileHandle;
 	char gamePassword[password_string_size];		//
 	bool GamePassworded;				// if we have a password or not.
 	bool ShowedMOTD;					// only want to show this once
 	char MOTDbuffer[255];				// buffer for MOTD
 	char* MOTD;
-} NETPLAY;
+};
 
-typedef struct
+struct PLAYER_IP
 {
 	char	pname[40];
 	char	IPAddress[40];
-} PLAYER_IP;
+};
 #define MAX_BANS 255
 // ////////////////////////////////////////////////////////////////////////
 // variables
@@ -296,10 +298,10 @@ extern char iptoconnect[PATH_MAX]; // holds IP/hostname from command line
 
 // ////////////////////////////////////////////////////////////////////////
 // functions available to you.
-extern int   NETinit(BOOL bFirstCall);				// init
+extern int   NETinit(bool bFirstCall);				// init
 bool NETsend(uint8_t player, NetMessage const *message);                 ///< send to player, or broadcast if player == NET_ALL_PLAYERS.
-extern BOOL NETrecvNet(NETQUEUE *queue, uint8_t *type);                  ///< recv a message from the net queues if possible.
-extern BOOL NETrecvGame(NETQUEUE *queue, uint8_t *type);                 ///< recv a message from the game queues which is sceduled to execute by time, if possible.
+extern bool NETrecvNet(NETQUEUE *queue, uint8_t *type);                  ///< recv a message from the net queues if possible.
+extern bool NETrecvGame(NETQUEUE *queue, uint8_t *type);                 ///< recv a message from the game queues which is sceduled to execute by time, if possible.
 void NETflush(void);                                                     ///< Flushes any data stuck in compression buffers.
 
 extern UBYTE   NETsendFile(char *fileName, UDWORD player);	// send file chunk.
@@ -325,13 +327,13 @@ extern void NETplayerKicked(UDWORD index);			// Cleanup after player has been ki
 // from netjoin.c
 extern SDWORD	NETgetGameFlags(UDWORD flag);			// return one of the four flags(dword) about the game.
 extern int32_t	NETgetGameFlagsUnjoined(unsigned int gameid, unsigned int flag);	// return one of the four flags(dword) about the game.
-extern BOOL	NETsetGameFlags(UDWORD flag, SDWORD value);	// set game flag(1-4) to value.
-extern BOOL	NEThaltJoining(void);				// stop new players joining this game
-extern BOOL	NETfindGame(void);		// find games being played(uses GAME_GUID);
-extern BOOL	NETjoinGame(UDWORD gameNumber, const char* playername);			// join game given with playername
-extern BOOL	NEThostGame(const char* SessionName, const char* PlayerName,// host a game
+extern bool	NETsetGameFlags(UDWORD flag, SDWORD value);	// set game flag(1-4) to value.
+extern bool	NEThaltJoining(void);				// stop new players joining this game
+extern bool	NETfindGame(void);		// find games being played(uses GAME_GUID);
+extern bool	NETjoinGame(UDWORD gameNumber, const char* playername);			// join game given with playername
+extern bool	NEThostGame(const char* SessionName, const char* PlayerName,// host a game
 			    SDWORD one, SDWORD two, SDWORD three, SDWORD four, UDWORD plyrs);
-extern BOOL	NETchangePlayerName(UDWORD player, char *newName);// change a players name.
+extern bool	NETchangePlayerName(UDWORD player, char *newName);// change a players name.
 void            NETfixDuplicatePlayerNames(void);  // Change a player's name automatically, if there are duplicates.
 
 #include "netlog.h"
@@ -343,7 +345,7 @@ extern unsigned int NETgetMasterserverPort(void);
 extern void NETsetGameserverPort(unsigned int port);
 extern unsigned int NETgetGameserverPort(void);
 
-extern BOOL NETsetupTCPIP(const char *machine);
+extern bool NETsetupTCPIP(const char *machine);
 extern void NETsetGamePassword(const char *password);
 extern void NETBroadcastPlayerInfo(uint32_t index);
 void NETBroadcastTwoPlayerInfo(uint32_t index1, uint32_t index2);

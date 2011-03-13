@@ -90,19 +90,19 @@
 #define SAVEENTRY_EDIT			ID_LOADSAVE + totalslots + totalslots		// save edit box. must be highest value possible I guess. -Q
 
 // ////////////////////////////////////////////////////////////////////////////
-static BOOL _addLoadSave		(BOOL bLoad, const char *sSearchPath, const char *sExtension, const char *title);
+static bool _addLoadSave		(bool bLoad, const char *sSearchPath, const char *sExtension, const char *title);
 static void displayLoadBanner	(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 static void displayLoadSlot		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 static void displayLoadSaveEdit	(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
 static	W_SCREEN	*psRequestScreen;					// Widget screen for requester
-static	BOOL		mode;
+static	bool		mode;
 static	UDWORD		chosenSlotId;
 
-BOOL				bLoadSaveUp = false;        // true when interface is up and should be run.
+bool				bLoadSaveUp = false;        // true when interface is up and should be run.
 char				saveGameName[256];          //the name of the save game to load from the front end
 char				sRequestResult[PATH_MAX];   // filename returned;
-BOOL				bRequestLoad = false;
+bool				bRequestLoad = false;
 LOADSAVE_MODE		bLoadSaveMode;
 
 static char			sPath[255];
@@ -110,22 +110,22 @@ static char			sExt[4];
 
 // ////////////////////////////////////////////////////////////////////////////
 // return whether the save screen was displayed in the mission results screen
-BOOL saveInMissionRes(void)
+bool saveInMissionRes(void)
 {
 	return bLoadSaveMode == SAVE_MISSIONEND;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 // return whether the save screen was displayed in the middle of a mission
-BOOL saveMidMission(void)
+bool saveMidMission(void)
 {
 	return bLoadSaveMode == SAVE_INGAME;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-BOOL addLoadSave(LOADSAVE_MODE mode, const char *sSearchPath, const char *sExtension, const char *title)
+bool addLoadSave(LOADSAVE_MODE mode, const char *sSearchPath, const char *sExtension, const char *title)
 {
-BOOL bLoad;
+bool bLoad;
 
 	bLoadSaveMode = mode;
 
@@ -149,7 +149,7 @@ BOOL bLoad;
 //****************************************************************************************
 // Load menu/save menu?
 //*****************************************************************************************
-static BOOL _addLoadSave(BOOL bLoad, const char *sSearchPath, const char *sExtension, const char *title)
+static bool _addLoadSave(bool bLoad, const char *sSearchPath, const char *sExtension, const char *title)
 {
 	UDWORD			slotCount;
 // removed hardcoded values!  change with the defines above! -Q
@@ -168,7 +168,7 @@ static BOOL _addLoadSave(BOOL bLoad, const char *sSearchPath, const char *sExten
 			gameTimeStop();
 			if(GetGameMode() == GS_NORMAL)
 			{
-				BOOL radOnScreen = radarOnScreen;				// Only do this in main game.
+				bool radOnScreen = radarOnScreen;				// Only do this in main game.
 
 				bRender3DOnly = true;
 				radarOnScreen = false;
@@ -344,7 +344,7 @@ static BOOL _addLoadSave(BOOL bLoad, const char *sSearchPath, const char *sExten
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-BOOL closeLoadSave(void)
+bool closeLoadSave(void)
 {
 	widgDelete(psRequestScreen,LOADSAVE_FORM);
 	bLoadSaveUp = false;
@@ -423,7 +423,7 @@ void deleteSaveGame(char* saveGameName)
 // Returns true if cancel pressed or a valid game slot was selected.
 // if when returning true strlen(sRequestResult) != 0 then a valid game slot was selected
 // otherwise cancel was selected..
-BOOL runLoadSave(BOOL bResetMissionWidgets)
+bool runLoadSave(bool bResetMissionWidgets)
 {
 	UDWORD		id=0;
 	static char     sDelete[PATH_MAX];
@@ -579,7 +579,7 @@ success:
 
 // ////////////////////////////////////////////////////////////////////////////
 // should be done when drawing the other widgets.
-BOOL displayLoadSave(void)
+bool displayLoadSave(void)
 {
 	widgDisplayScreen(psRequestScreen);	// display widgets.
 	return true;

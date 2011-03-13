@@ -79,7 +79,7 @@
 # endif
 
 // stick this in sequence.h perhaps?
-typedef struct
+struct AudioData
 {
 	ALuint buffer1;			// buffer 1
 	ALuint buffer2;			// buffer 2
@@ -87,11 +87,11 @@ typedef struct
 	int totbufstarted;		// number of buffers started
 	int audiofd_fragsize;	// audio fragment size, used to calculate how big audiobuf is
 	int audiobuf_fill;		// how full our audio buffer is
-} AudioData;
+};
 
 #endif
 
-typedef struct
+struct VideoData
 {
 	ogg_sync_state oy;		// ogg sync state
 	ogg_page og;			// ogg page
@@ -106,7 +106,7 @@ typedef struct
 	vorbis_block vb;		// vorbis block
 	vorbis_comment vc;		// vorbis comment
 #endif
-} VideoData;
+};
 // stick that in sequence.h perhaps?
 
 #if !defined(WZ_NOSOUND)

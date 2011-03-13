@@ -33,17 +33,17 @@
 #include "eventsave.h"
 
 /* Whether to include debug info when compiling */
-typedef enum _scr_debugtype
+enum SCR_DEBUGTYPE
 {
 	SCR_DEBUGINFO,		// Generate debug info
 	SCR_NODEBUG,		// Do not generate debug info
-} SCR_DEBUGTYPE;
+};
 
 // If this is defined we save out the compiled scripts
 #define SCRIPTTYPE SCR_DEBUGINFO
 
 // Initialise the script library
-extern BOOL scriptInitialise(void);
+extern bool scriptInitialise(void);
 
 // Shutdown the script library
 extern void scriptShutDown(void);
@@ -108,17 +108,17 @@ extern SCRIPT_CODE* scriptCompile(PHYSFS_file* fileHandle, SCR_DEBUGTYPE debugTy
 extern void scriptFreeCode(SCRIPT_CODE *psCode);
 
 /* Lookup a script variable */
-extern BOOL scriptGetVarIndex(SCRIPT_CODE *psCode, char *pID, UDWORD *pIndex);
+extern bool scriptGetVarIndex(SCRIPT_CODE *psCode, char *pID, UDWORD *pIndex);
 
 /* returns true if passed INTERP_TYPE is used as a pointer in INTERP_VAL, false otherwise */
-extern BOOL scriptTypeIsPointer(INTERP_TYPE type);
+extern bool scriptTypeIsPointer(INTERP_TYPE type);
 
 extern const char *scriptTypeToString(INTERP_TYPE type) WZ_DECL_PURE;
 extern const char *scriptOpcodeToString(OPCODE opcode) WZ_DECL_PURE;
 extern const char *scriptFunctionToString(SCRIPT_FUNC function) WZ_DECL_PURE;
 
 /* Run a compiled script */
-extern BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType,
+extern bool interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType,
 							UDWORD index, UDWORD offset);
 
 
@@ -131,40 +131,40 @@ extern BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType,
 extern void eventReset(void);
 
 // Initialise the create/release function array - specify the maximum value type
-extern BOOL eventInitValueFuncs(SDWORD maxType);
+extern bool eventInitValueFuncs(SDWORD maxType);
 
 // a create function for data stored in an INTERP_VAL
-typedef BOOL (*VAL_CREATE_FUNC)(INTERP_VAL *psVal);
+typedef bool (*VAL_CREATE_FUNC)(INTERP_VAL *psVal);
 
 // a release function for data stored in an INTERP_VAL
 typedef void (*VAL_RELEASE_FUNC)(INTERP_VAL *psVal);
 
 // Add a new value create function
-extern BOOL eventAddValueCreate(INTERP_TYPE type, VAL_CREATE_FUNC create);
+extern bool eventAddValueCreate(INTERP_TYPE type, VAL_CREATE_FUNC create);
 
 // Add a new value release function
-extern BOOL eventAddValueRelease(INTERP_TYPE type, VAL_RELEASE_FUNC release);
+extern bool eventAddValueRelease(INTERP_TYPE type, VAL_RELEASE_FUNC release);
 
 // Create a new context for a script
-extern BOOL eventNewContext(SCRIPT_CODE *psCode,
+extern bool eventNewContext(SCRIPT_CODE *psCode,
 							CONTEXT_RELEASE release, SCRIPT_CONTEXT **ppsContext);
 
 // Copy a context, including variable values
-extern BOOL eventCopyContext(SCRIPT_CONTEXT *psContext, SCRIPT_CONTEXT **ppsNew);
+extern bool eventCopyContext(SCRIPT_CONTEXT *psContext, SCRIPT_CONTEXT **ppsNew);
 
 // Add a new object to the trigger system
 // Time is the application time at which all the triggers are to be started
-extern BOOL eventRunContext(SCRIPT_CONTEXT *psContext, UDWORD time);
+extern bool eventRunContext(SCRIPT_CONTEXT *psContext, UDWORD time);
 
 // Remove a context from the event system
 extern void eventRemoveContext(SCRIPT_CONTEXT *psContext);
 
 // Set a global variable value for a context
-extern BOOL eventSetContextVar(SCRIPT_CONTEXT *psContext, UDWORD index,
+extern bool eventSetContextVar(SCRIPT_CONTEXT *psContext, UDWORD index,
 							   INTERP_VAL *data);
 
 // Get the value pointer for a variable index
-extern BOOL eventGetContextVal(SCRIPT_CONTEXT *psContext, UDWORD index,
+extern bool eventGetContextVal(SCRIPT_CONTEXT *psContext, UDWORD index,
 							   INTERP_VAL **ppsVal);
 
 // Process all the currently active triggers
@@ -184,10 +184,10 @@ extern void eventFireCallbackTrigger(TRIGGER_TYPE callback);
  * The varargs part is a set of INTERP_TYPE, UDWORD * pairs.
  * The value of the parameter is stored in the DWORD pointed to by the UDWORD *
  */
-extern BOOL stackPopParams(unsigned int numParams, ...);
+extern bool stackPopParams(unsigned int numParams, ...);
 
 /* Push a value onto the stack without using a value structure */
-extern BOOL stackPushResult(INTERP_TYPE type, INTERP_VAL *result);
+extern bool stackPushResult(INTERP_TYPE type, INTERP_VAL *result);
 
 /***********************************************************************************
  *
@@ -207,20 +207,20 @@ extern BOOL stackPushResult(INTERP_TYPE type, INTERP_VAL *result);
  */
 
 /* Instinct function to turn on tracing */
-extern BOOL interpTraceOn(void);
+extern bool interpTraceOn(void);
 
 /* Instinct function to turn off tracing */
-extern BOOL interpTraceOff(void);
+extern bool interpTraceOff(void);
 
 // Change the trigger assigned to an event
 // This is an instinct function that takes a VAL_EVENT and VAL_TRIGGER as parameters
-extern BOOL eventSetTrigger(void);
+extern bool eventSetTrigger(void);
 
 // set the event tracing level
 //   0 - no tracing
 //   1 - only fired triggers
 //   2 - added and fired triggers
 //   3 - as 2 but show tested but not fired triggers as well
-extern BOOL eventSetTraceLevel(void);
+extern bool eventSetTraceLevel(void);
 
 #endif

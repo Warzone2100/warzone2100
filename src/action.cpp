@@ -67,14 +67,14 @@
 #define PULL_BACK_DIST		10
 
 // data required for any action
-typedef struct _droid_action_data
+struct DROID_ACTION_DATA
 {
 	DROID_ACTION	action;
 	UDWORD			x,y;
 	//multiple action target info
 	BASE_OBJECT		*psObj;
 	BASE_STATS		*psStats;
-} DROID_ACTION_DATA;
+};
 
 // Check if a droid has stopped moving
 #define DROID_STOPPED(psDroid) \
@@ -154,7 +154,7 @@ const char* getDroidActionName(DROID_ACTION action)
 }
 
 /* Check if a target is at correct range to attack */
-static BOOL actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
+static bool actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
 {
 	SDWORD			dx, dy, radSq, rangeSq, longRange;
 	WEAPON_STATS	*psStats;
@@ -228,7 +228,7 @@ static BOOL actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_s
 
 
 // check if a target is within weapon range
-BOOL actionInRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
+bool actionInRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
 {
 	SDWORD			dx, dy, radSq, rangeSq, longRange;
 	WEAPON_STATS	*psStats;
@@ -269,7 +269,7 @@ BOOL actionInRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
 
 
 // check if a target is inside minimum weapon range
-BOOL actionInsideMinRange(DROID *psDroid, BASE_OBJECT *psObj, WEAPON_STATS *psStats)
+bool actionInsideMinRange(DROID *psDroid, BASE_OBJECT *psObj, WEAPON_STATS *psStats)
 {
 	SDWORD	dx, dy, radSq, rangeSq, minRange;
 
@@ -359,7 +359,7 @@ void actionAlignTurret(BASE_OBJECT *psObj, int weapon_slot)
 }
 
 /* returns true if on target */
-BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *psWeapon)
+bool actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *psWeapon)
 {
 	WEAPON_STATS *psWeapStats = asWeaponStats + psWeapon->nStat;
 	uint16_t tRotation, tPitch;
@@ -483,7 +483,7 @@ BOOL actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *
 
 
 // return whether a droid can see a target to fire on it
-BOOL actionVisibleTarget(DROID *psDroid, BASE_OBJECT *psTarget, int weapon_slot)
+bool actionVisibleTarget(DROID *psDroid, BASE_OBJECT *psTarget, int weapon_slot)
 {
 	WEAPON_STATS	*psStats;
 	int compIndex;
@@ -714,7 +714,7 @@ static void actionCalcPullBackPoint(BASE_OBJECT *psObj, BASE_OBJECT *psTarget, S
 
 
 // check whether a droid is in the neighboring tile to a build position
-BOOL actionReachedBuildPos(DROID *psDroid, SDWORD x, SDWORD y, BASE_STATS *psStats)
+bool actionReachedBuildPos(DROID *psDroid, SDWORD x, SDWORD y, BASE_STATS *psStats)
 {
 	SDWORD		width, breadth, tx,ty, dx,dy;
 
@@ -767,7 +767,7 @@ BOOL actionReachedBuildPos(DROID *psDroid, SDWORD x, SDWORD y, BASE_STATS *psSta
 
 
 // check if a droid is on the foundations of a new building
-static BOOL actionDroidOnBuildPos(DROID *psDroid, SDWORD x, SDWORD y, BASE_STATS *psStats)
+static bool actionDroidOnBuildPos(DROID *psDroid, SDWORD x, SDWORD y, BASE_STATS *psStats)
 {
 	SDWORD	width, breadth, tx,ty, dx,dy;
 
@@ -829,7 +829,7 @@ void actionUpdateDroid(DROID *psDroid)
 {
 	BASE_OBJECT			*psTarget;
 	PROPULSION_STATS	*psPropStats;
-	BOOL				(*actionUpdateFunc)(DROID *psDroid) = NULL;
+	bool				(*actionUpdateFunc)(DROID *psDroid) = NULL;
 	unsigned i;
 	//this is a bit field
 	bool nonNullWeapon[DROID_MAXWEAPS] = { false };
@@ -999,22 +999,27 @@ void actionUpdateDroid(DROID *psDroid)
 		break;
 
 	case DACTION_MOVE:
+	case DACTION_RETURNTOPOS:
+	case DACTION_FIRESUPPORT_RETREAT:
 		// moving to a location
 		if (DROID_STOPPED(psDroid))
 		{
+			bool notify = psDroid->action == DACTION_MOVE;
 			// Got to destination
 			psDroid->action = DACTION_NONE;
 
-			/* notify scripts we have reached the destination
-			*  also triggers when patrolling and reached a waypoint
-			*/
-			psScrCBOrder = psDroid->order;
-			psScrCBOrderDroid = psDroid;
-			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DROID_REACH_LOCATION);
-			psScrCBOrderDroid = NULL;
-			psScrCBOrder = DORDER_NONE;
+			if (notify)
+			{
+				/* notify scripts we have reached the destination
+				*  also triggers when patrolling and reached a waypoint
+				*/
+				psScrCBOrder = psDroid->order;
+				psScrCBOrderDroid = psDroid;
+				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DROID_REACH_LOCATION);
+				psScrCBOrderDroid = NULL;
+				psScrCBOrder = DORDER_NONE;
+			}
 		}
-
 		//added multiple weapon check
 		else if (psDroid->numWeaps > 0)
 		{
@@ -1035,19 +1040,11 @@ void actionUpdateDroid(DROID *psDroid)
 						if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS)
 						{
 							psDroid->action = DACTION_MOVEFIRE;
-							setDroidActionTarget(psDroid, psTemp, 0);
+							setDroidActionTarget(psDroid, psTemp, i);
 						}
 					}
 				}
 			}
-		}
-		break;
-	case DACTION_RETURNTOPOS:
-	case DACTION_FIRESUPPORT_RETREAT:
-		if (DROID_STOPPED(psDroid))
-		{
-			// Got to destination
-			psDroid->action = DACTION_NONE;
 		}
 		break;
 	case DACTION_TRANSPORTIN:
@@ -2769,7 +2766,7 @@ void moveToRearm(DROID *psDroid)
 
 
 // whether a tile is suitable for a vtol to land on
-static BOOL vtolLandingTile(SDWORD x, SDWORD y)
+static bool vtolLandingTile(SDWORD x, SDWORD y)
 {
 	MAPTILE		*psTile;
 

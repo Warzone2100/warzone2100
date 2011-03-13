@@ -60,22 +60,11 @@ enum {
 	IMDTYPE_STRUCTURESTAT,
 };
 
-typedef struct {
-	char *Token;
-	SWORD ID;
-} TOKENID;
-
-typedef struct {
-	char *Token;
-	SWORD ID;
-	SWORD IMD;
-} RESEARCHICON;
-
-
-typedef struct {
+struct BUTTON_SURFACE
+{
 	UBYTE *Buffer;		// Bitmap buffer.
 	iSurface *Surface;	// Ivis surface definition.
-} BUTTON_SURFACE;
+};
 
 
 #define RENDERBUTTON_INUSE(x)  ((x)->InUse=true)
@@ -87,9 +76,10 @@ typedef struct {
 #define IsBufferInitialised(x) ((x)->Initialised)
 #define IsBufferInUse(x) ((x)->InUse)
 
-typedef struct {
-	BOOL InUse;			// Is it in use.
-	BOOL Initialised;	// Is it initialised.
+struct RENDERED_BUTTON
+{
+	bool InUse;			// Is it in use.
+	bool Initialised;	// Is it initialised.
 	SDWORD ImdRotation;	// Rotation if button is an IMD.
 	UDWORD State;		// Copy of widget's state so we know if state has changed.
 	void *Data;			// Any data we want to attach.
@@ -97,7 +87,7 @@ typedef struct {
 	BUTTON_SURFACE *ButSurf;	// Surface to render the button into.
 //	uint8 *Buffer;		// Bitmap buffer.
 //	iSurface *Surface;	// Ivis surface definition.
-} RENDERED_BUTTON;
+};
 
 extern RENDERED_BUTTON TopicBuffers[NUM_TOPICBUFFERS];
 extern RENDERED_BUTTON ObjectBuffers[NUM_OBJECTBUFFERS];
@@ -204,7 +194,7 @@ void intDisplayButtonPressed(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, P
 void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
 void intDisplayTab(WIDGET *psWidget,UDWORD TabType, UDWORD Position,
-					UDWORD Number,BOOL Selected,BOOL Hilight,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height);
+					UDWORD Number,bool Selected,bool Hilight,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height);
 void intDisplaySlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
 void intDisplayNumber(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
@@ -215,31 +205,31 @@ void intDisplayEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 void OpenButtonRender(UWORD XPos,UWORD YPos,UWORD Width,UWORD Height);
 void CloseButtonRender(void);
 
-void ClearButton(BOOL Down,UDWORD Size, UDWORD buttonType);
+void ClearButton(bool Down,UDWORD Size, UDWORD buttonType);
 
 void RenderToButton(IMAGEFILE *ImageFile,UWORD ImageID,void *Object,UDWORD Player,RENDERED_BUTTON *Buffer,
-					BOOL Down,UDWORD IMDType, UDWORD buttonType);
+					bool Down,UDWORD IMDType, UDWORD buttonType);
 
 void CreateIMDButton(IMAGEFILE *ImageFile,UWORD ImageID,void *Object,UDWORD Player,RENDERED_BUTTON *Buffer,
-					BOOL Down,UDWORD IMDType,UDWORD buttonType);
+					bool Down,UDWORD IMDType,UDWORD buttonType);
 
-void CreateImageButton(IMAGEFILE *ImageFile,UWORD ImageID,RENDERED_BUTTON *Buffer,BOOL Down, UDWORD buttonType);
+void CreateImageButton(IMAGEFILE *ImageFile,UWORD ImageID,RENDERED_BUTTON *Buffer,bool Down, UDWORD buttonType);
 
-void CreateBlankButton(RENDERED_BUTTON *Buffer,BOOL Down, UDWORD buttonType);
+void CreateBlankButton(RENDERED_BUTTON *Buffer,bool Down, UDWORD buttonType);
 
-void RenderImageToButton(IMAGEFILE *ImageFile,UWORD ImageID,RENDERED_BUTTON *Buffer,BOOL Down, UDWORD buttonType);
-void RenderBlankToButton(RENDERED_BUTTON *Buffer,BOOL Down, UDWORD buttonType);
+void RenderImageToButton(IMAGEFILE *ImageFile,UWORD ImageID,RENDERED_BUTTON *Buffer,bool Down, UDWORD buttonType);
+void RenderBlankToButton(RENDERED_BUTTON *Buffer,bool Down, UDWORD buttonType);
 
 
-extern BOOL DroidIsRepairing(DROID *Droid);
+extern bool DroidIsRepairing(DROID *Droid);
 
-BOOL DroidIsBuilding(DROID *Droid);
+bool DroidIsBuilding(DROID *Droid);
 STRUCTURE *DroidGetBuildStructure(DROID *Droid);
-BOOL DroidGoingToBuild(DROID *Droid);
+bool DroidGoingToBuild(DROID *Droid);
 BASE_STATS *DroidGetBuildStats(DROID *Droid);
 iIMDShape *DroidGetIMD(DROID *Droid);
 UDWORD DroidGetIMDIndex(DROID *Droid);
-BOOL DroidIsDemolishing(DROID *Droid);
+bool DroidIsDemolishing(DROID *Droid);
 
 bool StructureIsManufacturingPending(STRUCTURE *structure);   ///< Returns true iff the structure is either manufacturing or on hold (even if not yet synchronised).
 bool StructureIsOnHoldPending(STRUCTURE *structure);          ///< Returns true iff the structure is on hold (even if not yet synchronised).
@@ -254,18 +244,18 @@ iIMDShape *StructureGetIMD(STRUCTURE *Structure);
 
 //SDWORD ResearchGetImage(RESEARCH_FACILITY *Research);
 
-BOOL StatIsStructure(BASE_STATS *Stat);
+bool StatIsStructure(BASE_STATS *Stat);
 iIMDShape *StatGetStructureIMD(BASE_STATS *Stat,UDWORD Player);
-BOOL StatIsTemplate(BASE_STATS *Stat);
-BOOL StatIsFeature(BASE_STATS *Stat);
+bool StatIsTemplate(BASE_STATS *Stat);
+bool StatIsFeature(BASE_STATS *Stat);
 
 SDWORD StatIsComponent(BASE_STATS *Stat);
-BOOL StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID,iIMDShape **CompIMD,iIMDShape **MountIMD);
+bool StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID,iIMDShape **CompIMD,iIMDShape **MountIMD);
 
-BOOL StatIsResearch(BASE_STATS *Stat);
-//void StatGetResearchImage(BASE_STATS *Stat,SDWORD *Image,iIMDShape **Shape, BOOL drawTechIcon);
+bool StatIsResearch(BASE_STATS *Stat);
+//void StatGetResearchImage(BASE_STATS *Stat,SDWORD *Image,iIMDShape **Shape, bool drawTechIcon);
 void StatGetResearchImage(BASE_STATS *psStat, SDWORD *Image, iIMDShape **Shape,
-                          BASE_STATS **ppGraphicData, BOOL drawTechIcon);
+                          BASE_STATS **ppGraphicData, bool drawTechIcon);
 
 /* Draws a stats bar for the design screen */
 extern void intDisplayStatsBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,

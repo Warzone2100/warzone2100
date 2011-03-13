@@ -66,7 +66,7 @@ static void gwClearGatewayFlag(SDWORD x, SDWORD y)
 /*                   Gateway functions                                                                */
 
 // Initialise the gateway system
-BOOL gwInitialise(void)
+bool gwInitialise(void)
 {
 	ASSERT( psGateways == NULL, "gwInitialise: gateway list has not been reset" );
 
@@ -91,7 +91,7 @@ void gwShutDown(void)
 
 
 // Add a gateway to the system
-BOOL gwNewGateway(SDWORD x1, SDWORD y1, SDWORD x2, SDWORD y2)
+bool gwNewGateway(SDWORD x1, SDWORD y1, SDWORD x2, SDWORD y2)
 {
 	GATEWAY		*psNew;
 	SDWORD		pos, temp;

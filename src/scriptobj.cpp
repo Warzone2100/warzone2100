@@ -55,7 +55,7 @@ static const int UNALLOCATED_OBJECT = -1;
 static INTERP_VAL	scrFunctionResult;	//function return value to be pushed to stack
 
 // Get values from a base object
-BOOL scrBaseObjGet(UDWORD index)
+bool scrBaseObjGet(UDWORD index)
 {
 	INTERP_TYPE		type = VAL_VOID;
 	BASE_OBJECT		*psObj;
@@ -377,7 +377,7 @@ BOOL scrBaseObjGet(UDWORD index)
 
 
 // convert a base object to a droid if it is the right type
-BOOL scrObjToDroid(void)
+bool scrObjToDroid(void)
 {
 	BASE_OBJECT		*psObj;
 
@@ -404,7 +404,7 @@ BOOL scrObjToDroid(void)
 
 
 // convert a base object to a structure if it is the right type
-BOOL scrObjToStructure(void)
+bool scrObjToStructure(void)
 {
 	BASE_OBJECT		*psObj;
 
@@ -430,7 +430,7 @@ BOOL scrObjToStructure(void)
 
 
 // convert a base object to a feature if it is the right type
-BOOL scrObjToFeature(void)
+bool scrObjToFeature(void)
 {
 	BASE_OBJECT		*psObj;
 
@@ -460,7 +460,7 @@ BOOL scrObjToFeature(void)
 static SDWORD		lgX,lgY, lgMembers, lgHealth;
 
 // Get values from a weapon
-BOOL scrWeaponObjGet(UDWORD index)
+bool scrWeaponObjGet(UDWORD index)
 {
 	INTERP_TYPE		type;
 	SDWORD			weapIndex;
@@ -543,7 +543,7 @@ BOOL scrWeaponObjGet(UDWORD index)
 }
 
 // Get values from a group
-BOOL scrGroupObjGet(UDWORD index)
+bool scrGroupObjGet(UDWORD index)
 {
 	INTERP_TYPE		type;
 	DROID_GROUP		*psGroup;
@@ -725,7 +725,7 @@ static char *scrGetStatName(INTERP_TYPE type, UDWORD data)
 
 // default value save routine
 //TODO: use union
-BOOL scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize)
+bool scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize)
 {
 	VIEWDATA	*psIntMessage;
 	const char	*pName;
@@ -970,7 +970,7 @@ BOOL scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize)
 }
 
 /// default value load routine
-BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size)
+bool scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size)
 {
 	char			*pPos;
 	DROID			*psCDroid;
@@ -979,7 +979,7 @@ BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 	LEVEL_DATASET	*psLevel;
 	DROID_GROUP		*psGroup = NULL;
 	const char              *pName;
-	BOOL			bObjectDefined;
+	bool			bObjectDefined;
 
 	switch ((unsigned)psVal->type)  // Unsigned cast to suppress compiler warnings due to enum abuse.
 	{

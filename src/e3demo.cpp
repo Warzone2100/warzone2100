@@ -76,9 +76,9 @@ static void findSomethingInteresting(void)
 UDWORD	player,otherPlayer;
 DROID	*psDroid;
 UDWORD	numWith;
-BOOL	bSeekOnlyLocations;
+bool	bSeekOnlyLocations;
 UDWORD	i;
-BOOL	bHaveHuman = false;
+bool	bHaveHuman = false;
 PROPULSION_STATS	*psPropStats;
 
 //---
@@ -209,7 +209,7 @@ void	processDemoCam( void )
 {
 UDWORD	firstPlayer,otherPlayer;
 DROID	*psDroid;
-BOOL	bSkipOrder = false;
+bool	bSkipOrder = false;
 UDWORD	i,numWith;
 
 	/* Is the demo camera actually active? */
@@ -312,7 +312,7 @@ void	toggleDemoStatus( void )
 
 // -------------------------------------------------------------------------
 /* Returns status */
-BOOL	demoGetStatus( void )
+bool	demoGetStatus( void )
 {
 	if(presentStatus == DC_ISACTIVE)
 	{

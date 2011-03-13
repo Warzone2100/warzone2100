@@ -24,7 +24,7 @@
 #ifndef __INCLUDED_WEAPONDEF_H__
 #define __INCLUDED_WEAPONDEF_H__
 
-typedef struct _weapon
+struct WEAPON
 {
 	unsigned int    nStat;		///< Index into the asWeaponStats global array
 	uint32_t        ammo;
@@ -33,6 +33,6 @@ typedef struct _weapon
 	uint32_t        recoilValue;
 	Rotation	rot;
 	Rotation	prevRot;
-} WEAPON;
+};
 
 #endif // __INCLUDED_WEAPONDEF_H__

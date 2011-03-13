@@ -60,12 +60,12 @@
 
 static void		recvGiftDroids					(uint8_t from, uint8_t to, uint32_t droidID);
 static void		sendGiftDroids					(uint8_t from, uint8_t to);
-static void		giftResearch					(uint8_t from, uint8_t to, BOOL send);
+static void		giftResearch					(uint8_t from, uint8_t to, bool send);
 
 ///////////////////////////////////////////////////////////////////////////////
 // gifts..
 
-BOOL recvGift(NETQUEUE queue)
+bool recvGift(NETQUEUE queue)
 {
 	uint8_t	type, from, to;
 	int		audioTrack;
@@ -111,7 +111,7 @@ BOOL recvGift(NETQUEUE queue)
 	return true;
 }
 
-BOOL sendGift(uint8_t type, uint8_t to)
+bool sendGift(uint8_t type, uint8_t to)
 {
 	int audioTrack;
 
@@ -148,7 +148,7 @@ BOOL sendGift(uint8_t type, uint8_t to)
 
 // ////////////////////////////////////////////////////////////////////////////
 // give radar information
-void giftRadar(uint8_t from, uint8_t to, BOOL send)
+void giftRadar(uint8_t from, uint8_t to, bool send)
 {
 	uint32_t dummy = 0;
 
@@ -261,7 +261,7 @@ static void sendGiftDroids(uint8_t from, uint8_t to)
 
 // ////////////////////////////////////////////////////////////////////////////
 // give technologies.
-static void giftResearch(uint8_t from, uint8_t to, BOOL send)
+static void giftResearch(uint8_t from, uint8_t to, bool send)
 {
 	PLAYER_RESEARCH	*pR, *pRto;
 	int		i;
@@ -304,7 +304,7 @@ static void giftResearch(uint8_t from, uint8_t to, BOOL send)
 
 // ////////////////////////////////////////////////////////////////////////////
 // give Power
-void giftPower(uint8_t from, uint8_t to, uint32_t amount, BOOL send)
+void giftPower(uint8_t from, uint8_t to, uint32_t amount, bool send)
 {
 	if (send)
 	{
@@ -345,7 +345,7 @@ void giftPower(uint8_t from, uint8_t to, uint32_t amount, BOOL send)
 // ////////////////////////////////////////////////////////////////////////////
 // alliance code......
 
-void requestAlliance(uint8_t from, uint8_t to, BOOL prop, BOOL allowAudio)
+void requestAlliance(uint8_t from, uint8_t to, bool prop, bool allowAudio)
 {
 	if (prop && bMultiMessages)
 	{
@@ -380,7 +380,7 @@ void requestAlliance(uint8_t from, uint8_t to, BOOL prop, BOOL allowAudio)
 	}
 }
 
-void breakAlliance(uint8_t p1, uint8_t p2, BOOL prop, BOOL allowAudio)
+void breakAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio)
 {
 	char	tm1[128];
 
@@ -407,7 +407,7 @@ void breakAlliance(uint8_t p1, uint8_t p2, BOOL prop, BOOL allowAudio)
 	alliancebits[p2] &= ~(1 << p1);
 }
 
-void formAlliance(uint8_t p1, uint8_t p2, BOOL prop, BOOL allowAudio, BOOL allowNotification)
+void formAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio, bool allowNotification)
 {
 	DROID	*psDroid;
 	char	tm1[128];
@@ -478,7 +478,7 @@ void sendAlliance(uint8_t from, uint8_t to, uint8_t state, int32_t value)
 	NETend();
 }
 
-BOOL recvAlliance(NETQUEUE queue, BOOL allowAudio)
+bool recvAlliance(NETQUEUE queue, bool allowAudio)
 {
 	uint8_t to, from, state;
 	int32_t value;
@@ -668,7 +668,7 @@ void  addMultiPlayerRandomArtifacts(uint8_t quantity, FEATURE_TYPE type)
 }
 
 // ///////////////////////////////////////////////////////////////
-BOOL addOilDrum(uint8_t count)
+bool addOilDrum(uint8_t count)
 {
 	addMultiPlayerRandomArtifacts(count, FEAT_OIL_DRUM);
 	return true;

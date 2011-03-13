@@ -34,12 +34,12 @@
 #include "lib/framework/frame.h"
 #include "piedef.h"
 
-typedef struct
+struct CLIP_VERTEX
 {
 	Vector3i pos;
 	unsigned int u, v;
 	PIELIGHT light;
-} CLIP_VERTEX;
+};
 
 /***************************************************************************/
 /*
@@ -47,9 +47,9 @@ typedef struct
  */
 /***************************************************************************/
 
-extern BOOL pie_SetVideoBufferDepth(UDWORD depth);
-extern BOOL pie_SetVideoBufferWidth(UDWORD width);
-extern BOOL pie_SetVideoBufferHeight(UDWORD height);
+extern bool pie_SetVideoBufferDepth(UDWORD depth);
+extern bool pie_SetVideoBufferWidth(UDWORD width);
+extern bool pie_SetVideoBufferHeight(UDWORD height);
 extern int pie_GetVideoBufferDepth( void ) WZ_DECL_PURE;
 extern int pie_GetVideoBufferWidth( void ) WZ_DECL_PURE;
 extern int pie_GetVideoBufferHeight( void ) WZ_DECL_PURE;

@@ -24,7 +24,7 @@
 #ifndef __INCLUDED_LIB_FRAMEWORK_CURSORS_H__
 #define __INCLUDED_LIB_FRAMEWORK_CURSORS_H__
 
-typedef enum
+enum CURSOR
 {
 	CURSOR_ARROW,
 	CURSOR_DEST,
@@ -56,7 +56,7 @@ typedef enum
 	CURSOR_SELECT,
 
 	CURSOR_MAX,
-} CURSOR;
+};
 
 enum CURSOR_TYPE
 {
@@ -64,7 +64,7 @@ enum CURSOR_TYPE
 	CURSOR_32,
 };
 
-void init_system_cursor(CURSOR cur, enum CURSOR_TYPE type);
+void init_system_cursor(CURSOR cur, CURSOR_TYPE type);
 void init_system_cursor32(CURSOR cur);
 void init_system_cursor16(CURSOR cur);
 

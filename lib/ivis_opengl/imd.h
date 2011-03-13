@@ -43,7 +43,7 @@
 
 extern iIMDShape *iV_ProcessIMD(const char **ppFileData, const char *FileDataEnd );
 
-extern BOOL iV_IMDSave(char *filename, iIMDShape *s, BOOL PieIMD);
+extern bool iV_IMDSave(char *filename, iIMDShape *s, bool PieIMD);
 extern void iV_IMDRelease(iIMDShape *s);
 
 // How high up do we want to stop looking

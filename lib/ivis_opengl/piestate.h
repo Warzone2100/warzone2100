@@ -40,16 +40,15 @@
  */
 /***************************************************************************/
 
-typedef struct	RENDER_STATE
-				{
-					BOOL				fogEnabled;
-					BOOL				fog;
+struct RENDER_STATE
+{
+					bool				fogEnabled;
+					bool				fog;
 					PIELIGHT			fogColour;
 					SDWORD				texPage;
 					REND_MODE			rendMode;
-					BOOL				keyingOn;
-				}
-				RENDER_STATE;
+					bool				keyingOn;
+};
 
 void rendStatesRendModeHack();  // Sets rendStates.rendMode = REND_ALPHA; (Added during merge, since the renderStates is now static.)
 
@@ -70,17 +69,17 @@ extern void pie_SetDefaultStates(void);//Sets all states
 extern void pie_SetDepthBufferStatus(DEPTH_MODE depthMode);
 extern void pie_SetDepthOffset(float offset);
 //fog available
-extern void pie_EnableFog(BOOL val);
-extern BOOL pie_GetFogEnabled(void);
+extern void pie_EnableFog(bool val);
+extern bool pie_GetFogEnabled(void);
 //fog currently on
-extern void pie_SetFogStatus(BOOL val);
-extern BOOL pie_GetFogStatus(void);
+extern void pie_SetFogStatus(bool val);
+extern bool pie_GetFogStatus(void);
 extern void pie_SetFogColour(PIELIGHT colour);
 extern PIELIGHT pie_GetFogColour(void) WZ_DECL_PURE;
 extern void pie_UpdateFogDistance(float begin, float end);
 //render states
 extern void pie_SetTexturePage(SDWORD num);
-extern void pie_SetAlphaTest(BOOL keyingOn);
+extern void pie_SetAlphaTest(bool keyingOn);
 extern void pie_SetRendMode(REND_MODE rendMode);
 
 extern void pie_InitColourMouse(IMAGEFILE* img, const uint16_t cursorIDs[CURSOR_MAX]);

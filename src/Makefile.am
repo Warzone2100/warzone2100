@@ -10,7 +10,13 @@ AM_CXXFLAGS = $(WZ_CXXFLAGS) $(QT4_CFLAGS)
 AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
 
+version.o: autorevision.h
+
+autorevision.h: $(warzone2100_SOURCES) $(warzone2100_LIBS)
+	$(top_srcdir)/build_tools/autorevision.sh $(abs_top_builddir)/src/autorevision.h || true
+
 BUILT_SOURCES = \
+	autorevision.h \
 	level_lexer.lex.cpp \
 	message_lexer.lex.cpp \
 	message_parser.tab.cpp \
@@ -23,8 +29,10 @@ CLEANFILES = $(BUILT_SOURCES)
 
 EXTRA_DIST = \
 	autorevision.h \
-	message_lexer.l message_parser.y \
-	scriptvals_lexer.l scriptvals_parser.y \
+	message_lexer.l \
+	message_parser.y \
+	scriptvals_lexer.l \
+	scriptvals_parser.y \
 	level_lexer.l
 
 bin_PROGRAMS = warzone2100
@@ -269,7 +277,7 @@ warzone2100_SOURCES = \
 	wavecast.cpp \
 	wrappers.cpp
 
-warzone2100_LDADD = \
+warzone2100_LIBS = \
 	$(top_builddir)/lib/widget/libwidget.a \
 	$(top_builddir)/lib/sequence/libsequence.a \
 	$(top_builddir)/lib/sound/libsound.a \
@@ -282,7 +290,7 @@ warzone2100_LDADD = \
 	$(top_builddir)/lib/iniparser/libiniparser.a \
 	$(top_builddir)/lib/exceptionhandler/libexceptionhandler.a
 
-warzone2100_LDADD += $(LTLIBINTL) $(PHYSFS_LIBS) $(PNG_LIBS) $(OGGVORBIS_LIBS) $(THEORA_LIBS) $(OPENAL_LIBS) $(OPENGLC_LIBS) $(OPENGL_LIBS) $(QT4_LIBS) $(GLee_LIBS)
+warzone2100_LDADD = $(warzone2100_LIBS) $(LTLIBINTL) $(PHYSFS_LIBS) $(PNG_LIBS) $(OGGVORBIS_LIBS) $(THEORA_LIBS) $(OPENAL_LIBS) $(OPENGLC_LIBS) $(OPENGL_LIBS) $(QT4_LIBS) $(GLee_LIBS)
 
 if MINGW32
 warzone2100_LDADD += $(top_builddir)/win32/warzone2100.o $(WIN32_LIBS)

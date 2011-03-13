@@ -67,9 +67,9 @@ W_SCREEN  *psRScreen;			// requester stuff.
 extern char	MultiCustomMapsPath[PATH_MAX];
 extern void	displayMultiBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
-BOOL	MultiMenuUp			= false;
-BOOL	ClosingMultiMenu	= false;
-BOOL	DebugMenuUp		= false;
+bool	MultiMenuUp			= false;
+bool	ClosingMultiMenu	= false;
+bool	DebugMenuUp		= false;
 static UDWORD	context = 0;
 UDWORD	current_tech = 1;
 UDWORD	current_numplayers = 4;
@@ -155,8 +155,8 @@ static char const * M_REQUEST_NP_TIPS[] = {   N_("2 players"), N_("3 players"), 
 #define	R_BUT_W			105//112
 #define R_BUT_H			30
 
-BOOL			multiRequestUp = false;				//multimenu is up.
-static BOOL		giftsUp[MAX_PLAYERS] = {true};		//gift buttons for player are up.
+bool			multiRequestUp = false;				//multimenu is up.
+static bool		giftsUp[MAX_PLAYERS] = {true};		//gift buttons for player are up.
 
 char		debugMenuEntry[DEBUGMENU_MAX_ENTRIES][MAX_STR_LENGTH];
 
@@ -661,7 +661,7 @@ static void closeMultiRequester(void)
 	return;
 }
 
-BOOL runMultiRequester(UDWORD id,UDWORD *mode, char *chosen,UDWORD *chosenValue)
+bool runMultiRequester(UDWORD id,UDWORD *mode, char *chosen,UDWORD *chosenValue)
 {
 	if( id==M_REQUEST_CLOSE)							// close
 	{
@@ -1196,7 +1196,7 @@ static void addMultiPlayer(UDWORD player,UDWORD pos)
 /* Output some text to the debug menu */
 void setDebugMenuEntry(char *entry, SDWORD index)
 {
-	BOOL		bAddingNew = false;
+	bool		bAddingNew = false;
 
 	/* New one? */
 	if(!strcmp(debugMenuEntry[index],""))
@@ -1226,7 +1226,7 @@ void intCloseDebugMenuNoAnim(void)
 /* Opens/closes a 'watch' window (Default key combo: Alt+Space),
  * only available in debug mode
  */
-BOOL addDebugMenu(BOOL bAdd)
+bool addDebugMenu(bool bAdd)
 {
 	UDWORD			i,pos = 0,formHeight=0;
 
@@ -1310,7 +1310,7 @@ BOOL addDebugMenu(BOOL bAdd)
 	return true;
 }
 
-BOOL intAddMultiMenu(void)
+bool intAddMultiMenu(void)
 {
 	UDWORD			i;
 
@@ -1396,7 +1396,7 @@ void intCloseMultiMenuNoAnim(void)
 
 
 // ////////////////////////////////////////////////////////////////////////////
-BOOL intCloseMultiMenu(void)
+bool intCloseMultiMenu(void)
 {
 	W_TABFORM *Form;
 
@@ -1426,7 +1426,7 @@ BOOL intCloseMultiMenu(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // In Game Options house keeping stuff.
-BOOL intRunMultiMenu(void)
+bool intRunMultiMenu(void)
 {
 	return true;
 }

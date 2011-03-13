@@ -52,7 +52,7 @@ CAM_TRACK_LOCATION
 };
 
 /* Storage for old viewnagles etc */
-typedef struct _warcam
+struct WARCAM
 {
 UDWORD	status;
 UDWORD	trackClass;
@@ -69,17 +69,17 @@ Vector3f	rotAccel;
 
 UDWORD	oldDistance;
 BASE_OBJECT *target;
-}WARCAM;
+};
 
 /* Externally referenced functions */
 extern void	initWarCam			( void );
-extern void	setWarCamActive		( BOOL status );
-extern BOOL	getWarCamStatus		( void );
+extern void	setWarCamActive		( bool status );
+extern bool	getWarCamStatus		( void );
 extern void camToggleStatus		( void );
-extern BOOL processWarCam		( void );
+extern bool processWarCam		( void );
 extern void	camToggleInfo		( void );
 extern void	requestRadarTrack	( SDWORD x, SDWORD y );
-extern BOOL	getRadarTrackingStatus( void );
+extern bool	getRadarTrackingStatus( void );
 extern void	toggleRadarAllignment( void );
 extern void	camInformOfRotation ( Vector3i *rotation );
 extern BASE_OBJECT *camFindDroidTarget(void);

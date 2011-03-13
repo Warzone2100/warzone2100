@@ -64,7 +64,8 @@ static SDWORD			visLevelInc, visLevelDec;
 // horrible hack because this code is full of them and I ain't rewriting it all - Per
 #define MAX_SEEN_TILES (29*29 * 355/113)  // Increased hack to support 28 tile sensor radius. - Cyp
 
-typedef struct {
+struct VisibleObjectHelp_t
+{
 	bool rayStart; // Whether this is the first point on the ray
 	const bool wallsBlock; // Whether walls block line of sight
 	const int startHeight; // The height at the view point
@@ -73,7 +74,7 @@ typedef struct {
 	int currGrad; // The current obscuring gradient
 	int numWalls; // Whether the LOS has hit a wall
 	Vector2i wall; // The position of a wall if it is on the LOS
-} VisibleObjectHelp_t;
+};
 
 
 static int *gNumWalls = NULL;
@@ -81,7 +82,7 @@ static Vector2i *gWall = NULL;
 
 
 // initialise the visibility stuff
-BOOL visInitialise(void)
+bool visInitialise(void)
 {
 	visLevelIncAcc = 0;
 	visLevelDecAcc = 0;
@@ -139,7 +140,7 @@ static void doWaveTerrain(int sx, int sy, int sz, unsigned radius, int rayPlayer
 {
 	size_t i;
 	size_t size;
-	const WAVECAST_TILE *tiles = getWavecastTable(radius, &size);
+	const WavecastTile *tiles = getWavecastTable(radius, &size);
 	int tileHeight, perspectiveHeight;
 #define MAX_WAVECAST_LIST_SIZE 1360  // Trivial upper bound to what a fully upgraded WSS can use (its number of angles). Should probably be some factor times the maximum possible radius. Is probably a lot more than needed. Tested to need at least 180.
 	int heights[2][MAX_WAVECAST_LIST_SIZE];
@@ -789,6 +790,11 @@ bool lineOfFire(const SIMPLE_OBJECT* psViewer, const BASE_OBJECT* psTarget, int 
 /* Check how much of psTarget is hitable from psViewer's gun position */
 int areaOfFire(const SIMPLE_OBJECT* psViewer, const BASE_OBJECT* psTarget, int weapon_slot, bool wallsBlock)
 {
+	if (psViewer == NULL)
+	{
+		return 0;  // Lassat special case, avoid assertion.
+	}
+
 	return checkFireLine(psViewer, psTarget, weapon_slot, wallsBlock, true);
 }
 
@@ -881,7 +887,7 @@ static int checkFireLine(const SIMPLE_OBJECT* psViewer, const BASE_OBJECT* psTar
 	// run a manual trace along the line of fire until target is reached
 	while (partSq < distSq)
 	{
-		BOOL hasSplitIntersection;
+		bool hasSplitIntersection;
 
 		oldPartSq = partSq;
 		

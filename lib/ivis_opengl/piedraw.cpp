@@ -45,7 +45,7 @@
 #define TRIANGLES_PER_TILE 2
 #define VERTICES_PER_TILE (TRIANGLES_PER_TILE * VERTICES_PER_TRIANGLE)
 
-extern BOOL drawing_interface;
+extern bool drawing_interface;
 
 /*
  *	Local Variables
@@ -105,22 +105,24 @@ void pie_EndLighting(void)
  * Avoids recalculating vertex projections for every poly
  ***************************************************************************/
 
-typedef struct {
+struct shadowcasting_shape_t
+{
 	float		matrix[16];
 	iIMDShape*	shape;
 	int		flag;
 	int		flag_data;
 	Vector3f	light;
-} shadowcasting_shape_t;
+};
 
-typedef struct {
+struct transluscent_shape_t
+{
 	float		matrix[16];
 	iIMDShape*	shape;
 	int		frame;
 	PIELIGHT	colour;
 	int		flag;
 	int		flag_data;
-} transluscent_shape_t;
+};
 
 static shadowcasting_shape_t* scshapes = NULL;
 static unsigned int scshapes_size = 0;
@@ -129,19 +131,13 @@ static transluscent_shape_t* tshapes = NULL;
 static unsigned int tshapes_size = 0;
 static unsigned int nb_tshapes = 0;
 
-static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELIGHT teamcolour, int pieFlag, int pieFlagData, int shaderlessTeamColourHackAmount = 0)
+static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELIGHT teamcolour, int pieFlag, int pieFlagData)
 {
-	if (bShaderlessTeamcolourHack)
-	{
-		colour.byte.r = (colour.byte.r*(256 - shaderlessTeamColourHackAmount) + teamcolour.byte.r*shaderlessTeamColourHackAmount) / 256;  // Ugly, but better than being colourblind.
-		colour.byte.g = (colour.byte.g*(256 - shaderlessTeamColourHackAmount) + teamcolour.byte.g*shaderlessTeamColourHackAmount) / 256;
-		colour.byte.b = (colour.byte.b*(256 - shaderlessTeamColourHackAmount) + teamcolour.byte.b*shaderlessTeamColourHackAmount) / 256;
-	}
-
 	iIMDPoly *pPolys;
 	bool light = true;
 
 	pie_SetAlphaTest(true);
+
 	/* Set fog status */
 	if (!(pieFlag & pie_FORCE_FOG) && 
 		(pieFlag & pie_ADDITIVE || pieFlag & pie_TRANSLUCENT || pieFlag & pie_BUTTON))
@@ -274,7 +270,7 @@ static void addToEdgeList(int a, int b, EDGE *edgelist, unsigned int* edge_count
 {
 	EDGE newEdge = {a, b};
 	unsigned int i;
-	BOOL foundMatching = false;
+	bool foundMatching = false;
 
 	for(i = 0; i < *edge_count; i++)
 	{
@@ -468,7 +464,7 @@ void pie_CleanUp( void )
 	scshapes = NULL;
 }
 
-void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int pieFlag, int pieFlagData, int shaderlessTeamColourHackAmount)
+void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int pieFlag, int pieFlagData)
 {
 	PIELIGHT teamcolour;
 
@@ -485,7 +481,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int
 
 	if (drawing_interface || !shadows)
 	{
-		pie_Draw3DShape2(shape, frame, colour, teamcolour, pieFlag, pieFlagData, shaderlessTeamColourHackAmount);
+		pie_Draw3DShape2(shape, frame, colour, teamcolour, pieFlag, pieFlagData);
 	}
 	else
 	{
@@ -565,7 +561,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int
 				}
 			}
 
-			pie_Draw3DShape2(shape, frame, colour, teamcolour, pieFlag, pieFlagData, shaderlessTeamColourHackAmount);
+			pie_Draw3DShape2(shape, frame, colour, teamcolour, pieFlag, pieFlagData);
 		}
 	}
 }

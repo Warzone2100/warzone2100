@@ -27,9 +27,9 @@
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/pieblitfunc.h"
 
-static BOOL DragEnabled = true;
+static bool DragEnabled = true;
 
-void sliderEnableDrag(BOOL Enable)
+void sliderEnableDrag(bool Enable)
 {
 	DragEnabled = Enable;
 }

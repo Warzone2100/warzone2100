@@ -38,26 +38,30 @@
 //this is used to compare the value passed in from the scripts with which is multiplied by 100
 #define LZ_COMPROMISED_TIME         99999900
 
-typedef struct _landing_zone
+struct LANDING_ZONE
 {
 	uint8_t x1;
 	uint8_t y1;
 	uint8_t x2;
 	uint8_t y2;
-} LANDING_ZONE;
+};
+
+struct GATEWAY;
 
 //storage structure for values that need to be kept between missions
-typedef struct _mission
+struct MISSION
 {
 	UDWORD				type;							//defines which start and end functions to use - see levels_type in levels.h
 	MAPTILE				*psMapTiles;					//the original mapTiles
-	UDWORD				mapWidth;						//the original mapWidth
-	UDWORD				mapHeight;						//the original mapHeight
-	struct _gateway		*psGateways;					//the gateway list
-	UDWORD				scrollMinX;						//scroll coords for original map
-	UDWORD				scrollMinY;
-	UDWORD				scrollMaxX;
-	UDWORD				scrollMaxY;
+	int32_t                         mapWidth;                       //the original mapWidth
+	int32_t                         mapHeight;                      //the original mapHeight
+	uint8_t *                       psBlockMap[AUX_MAX];
+	uint8_t *                       psAuxMap[MAX_PLAYERS + AUX_MAX];
+	GATEWAY *                       psGateways;                     //the gateway list
+	int32_t                         scrollMinX;                     //scroll coords for original map
+	int32_t                         scrollMinY;
+	int32_t                         scrollMaxX;
+	int32_t                         scrollMaxY;
 	STRUCTURE			*apsStructLists[MAX_PLAYERS], *apsExtractorLists[MAX_PLAYERS];	//original object lists
 	DROID						*apsDroidLists[MAX_PLAYERS];
 	FEATURE						*apsFeatureLists[MAX_PLAYERS];
@@ -86,6 +90,6 @@ typedef struct _mission
 	UWORD				iTranspExitTileX[MAX_PLAYERS];
 	UWORD				iTranspExitTileY[MAX_PLAYERS];
 
-} MISSION;
+};
 
 #endif // __INCLUDED_MISSIONDEF_H__

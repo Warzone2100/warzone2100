@@ -357,7 +357,7 @@ void formFree(W_FORM *psWidget)
 
 
 /* Add a widget to a form */
-BOOL formAddWidget(W_FORM *psForm, WIDGET *psWidget, W_INIT *psInit)
+bool formAddWidget(W_FORM *psForm, WIDGET *psWidget, W_INIT *psInit)
 {
 	W_TABFORM	*psTabForm;
 	WIDGET		**ppsList;
@@ -688,7 +688,7 @@ void formGetOrigin(W_FORM *psWidget, SDWORD *pXOrigin, SDWORD *pYOrigin)
 // So ONLY this routine was modified.  Will have to modify the vert. tab
 // routine if we ever use it.
 // Choose a horizontal tab from a coordinate 
-static BOOL formPickHTab(TAB_POS *psTabPos,
+static bool formPickHTab(TAB_POS *psTabPos,
 						 SDWORD x0, SDWORD y0,
 						 UDWORD width, UDWORD height, UDWORD gap,
 						 UDWORD number, SDWORD fx, SDWORD fy, unsigned maxTabsShown)
@@ -758,7 +758,7 @@ static BOOL formPickHTab(TAB_POS *psTabPos,
 
 // NOTE: This routine is NOT modified to use the tab scroll buttons.
 // Choose a vertical tab from a coordinate 
-static BOOL formPickVTab(TAB_POS *psTabPos,
+static bool formPickVTab(TAB_POS *psTabPos,
 						 SDWORD x0, SDWORD y0,
 						 UDWORD width, UDWORD height, UDWORD gap,
 						 UDWORD number, SDWORD fx, SDWORD fy)
@@ -800,7 +800,7 @@ static BOOL formPickVTab(TAB_POS *psTabPos,
 
 
 /* Find which tab is under a form coordinate */
-static BOOL formPickTab(W_TABFORM *psForm, UDWORD fx, UDWORD fy,
+static bool formPickTab(W_TABFORM *psForm, UDWORD fx, UDWORD fy,
 						TAB_POS *psTabPos)
 {
 	SDWORD		x0,y0, x1,y1;

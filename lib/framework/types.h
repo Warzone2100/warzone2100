@@ -87,8 +87,4 @@ typedef int32_t  SDWORD;
 #define SDWORD_MIN	INT32_MIN
 #define SDWORD_MAX	INT32_MAX
 
-#if !defined(WZ_OS_WIN)
-typedef int BOOL;
-#endif // WZ_OS_WIN
-
 #endif // __INCLUDED_LIB_FRAMEWORK_TYPES_H__

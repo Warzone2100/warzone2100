@@ -100,8 +100,7 @@ struct RevisionInformation
         revision("unknown"),
         low_revisionCount("-1"),
         revisionCount("-1"),
-        wc_modified(false),
-        wc_switched(false)
+        wc_modified(false)
     {}
 
     assign_once<std::string> low_revision;
@@ -116,7 +115,6 @@ struct RevisionInformation
     assign_once<std::string> wc_uri;
 
     bool wc_modified;
-    bool wc_switched;
 };
 
 /** Abstract base class for classes that extract revision information.
@@ -398,13 +396,6 @@ bool RevSVNVersionQuery::extractRevision(RevisionInformation& rev_info)
         if (char_pos != string::npos)
         {
             rev_info.wc_modified = true;
-            line.erase(char_pos, 1);
-        }
-
-        char_pos = line.find('S');
-        if (char_pos != string::npos)
-        {
-            rev_info.wc_switched = true;
             line.erase(char_pos, 1);
         }
 
@@ -756,18 +747,6 @@ bool RevConfigFile::extractRevision(RevisionInformation& rev_info)
 
             done_stuff = true;
         }
-        else if (line.compare(0, strlen("wc_switched="), "wc_switched=") == 0)
-        {
-            std::string bool_val = line.substr(strlen("wc_switched="));
-
-            if (bool_val.find("true") != std::string::npos
-             || bool_val.find('1') != std::string::npos)
-                rev_info.wc_switched = true;
-            else
-                rev_info.wc_switched = false;
-
-            done_stuff = true;
-        }
     }
 
     if (done_stuff)
@@ -797,9 +776,6 @@ bool WriteOutput(const string& outputFile, const RevisionInformation& rev_info)
 
     if (rev_info.wc_modified)
         comment_str << "M";
-
-    if (rev_info.wc_switched)
-        comment_str << "S";
 
     comment_str << "*/";
 
@@ -837,84 +813,15 @@ bool WriteOutput(const string& outputFile, const RevisionInformation& rev_info)
               "#ifndef AUTOREVISION_H\n"
               "#define AUTOREVISION_H\n"
               "\n"
-              "\n"
-              "#ifndef SVN_AUTOREVISION_STATIC\n"
-              "#define SVN_AUTOREVISION_STATIC\n"
-              "#endif\n"
-              "\n"
               "\n";
 
-    if(do_std)
-        header << "#include <string>\n";
-    if(do_wx)
-        header << "#include <wx/string.h>\n";
-
-    header << "\n#define SVN_LOW_REV      " << (rev_info.low_revisionCount.empty() ? rev_info.revisionCount : rev_info.low_revisionCount)
-           << "\n#define SVN_LOW_REV_STR \"" << (rev_info.low_revision.empty() ? rev_info.revision : rev_info.low_revision) << "\""
-           << "\n#define SVN_REV          " << rev_info.revisionCount
-           << "\n#define SVN_REV_STR     \"" << rev_info.revision << "\""
-           << "\n#define SVN_DATE        \"" << rev_info.date << "\""
-           << "\n#define SVN_URI         \"" << rev_info.wc_uri << "\""
-           << "\n#define SVN_TAG         \"" << rev_info.tag << "\"\n"
-           << "\n#define SVN_SHORT_HASH  \"" << rev_info.revision.substr(0, 7) << "\""
-           << "\n#define SVN_SHORT_HASH_WITHOUT_QUOTES " << rev_info.revision.substr(0, 7)
+    header << "\n#define VCS_NUM          " << rev_info.revisionCount
+           << "\n#define VCS_DATE        " << rev_info.date
+           << "\n#define VCS_URI         " << rev_info.wc_uri
+           << "\n#define VCS_SHORT_HASH  " << rev_info.revision.substr(0, 7)
            << "\n";
 
-    header << "\n#define SVN_WC_MODIFIED " << rev_info.wc_modified
-           << "\n#define SVN_WC_SWITCHED " << rev_info.wc_switched << "\n\n";
-
-    // Open namespace
-    if(do_int || do_std || do_wx)
-        header << "namespace autorevision\n{\n";
-
-    if(do_int)
-        header << "\tSVN_AUTOREVISION_STATIC const unsigned int svn_low_revision = " << rev_info.low_revision << ";\n"
-               << "\tSVN_AUTOREVISION_STATIC const unsigned int svn_revision = " << rev_info.revision << ";\n";
-
-    if(do_std)
-        header << "\tSVN_AUTOREVISION_STATIC const std::string svn_low_revision_s(\"" << rev_info.low_revision << "\");\n"
-               << "\tSVN_AUTOREVISION_STATIC const std::string svn_revision_s(\"" << rev_info.revision << "\");\n"
-               << "\tSVN_AUTOREVISION_STATIC const std::string svn_date_s(\"" << rev_info.date << "\");\n"
-               << "\tSVN_AUTOREVISION_STATIC const std::string svn_uri_s(\"" << rev_info.wc_uri << "\");\n";
-    if(do_cstr)
-        header << "\tSVN_AUTOREVISION_STATIC const char svn_low_revision_cstr[] = \"" << rev_info.low_revision << "\";\n"
-               << "\tSVN_AUTOREVISION_STATIC const char svn_revision_cstr[] = \"" << rev_info.revision << "\";\n"
-               << "\tSVN_AUTOREVISION_STATIC const char svn_date_cstr[] = \"" << rev_info.date << "\";\n"
-               << "\tSVN_AUTOREVISION_STATIC const char svn_uri_cstr[] = \"" << rev_info.wc_uri << "\";\n";
-    if(do_wx)
-    {
-        header << "\tSVN_AUTOREVISION_STATIC const wxString svnLowRevision(";
-
-        if(do_translate)
-            header << "wxT";
-
-        header << "(\"" << rev_info.low_revision << "\"));\n"
-
-               << "\tSVN_AUTOREVISION_STATIC const wxString svnRevision(";
-
-        if(do_translate)
-            header << "wxT";
-
-        header << "(\"" << rev_info.revision << "\"));\n"
-
-               << "\tSVN_AUTOREVISION_STATIC const wxString svnDate(";
-
-        if(do_translate)
-            header << "wxT";
-
-        header << "(\"" << rev_info.date << "\"));\n"
-
-               << "\tSVN_AUTOREVISION_STATIC const wxString svnUri(";
-
-        if(do_translate)
-            header << "wxT";
-
-        header << "(\"" << rev_info.wc_uri << "\"));\n";
-    }
-
-    // Terminate/close namespace
-    if(do_int || do_std || do_wx)
-        header << "}\n\n";
+    header << "\n#define VCS_WC_MODIFIED " << rev_info.wc_modified << "\n\n";
 
     header << "\n\n#endif\n";
 

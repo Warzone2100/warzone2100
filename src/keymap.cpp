@@ -67,16 +67,16 @@ KEY_MAPPING	*psMapping,*psReturn;
 /* Some stuff allowing the user to add key mappings themselves */
 
 #define	NUM_QWERTY_KEYS	26
-typedef	struct	_keymap_Marker
+struct KEYMAP_MARKER
 {
 KEY_MAPPING	*psMapping;
 UDWORD	xPos,yPos;
 SDWORD	spin;
-} KEYMAP_MARKER;
+};
 static	KEYMAP_MARKER	qwertyKeyMappings[NUM_QWERTY_KEYS];
 
 
-static	BOOL			bDoingDebugMappings = false;
+static	bool			bDoingDebugMappings = false;
 // ----------------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------------
@@ -88,7 +88,7 @@ UDWORD	numActiveMappings;
 
 /* Last meta and sub key that were recorded */
 static KEY_CODE	lastMetaKey,lastSubKey;
-static BOOL	bKeyProcessing = true;
+static bool	bKeyProcessing = true;
 
 static void kf_NOOP(void) {}
 
@@ -264,7 +264,7 @@ _keymapsave keyMapSaveTable[] =
 	these will be read in from a .cfg file customisable by the player from
 	an in-game menu
 */
-void	keyInitMappings( BOOL bForceDefaults )
+void	keyInitMappings( bool bForceDefaults )
 {
 	UDWORD	i;
 	keyMappings = NULL;
@@ -492,7 +492,7 @@ void	keyInitMappings( BOOL bForceDefaults )
 
 // ----------------------------------------------------------------------------------
 /* Adds a new mapping to the list */
-//BOOL	keyAddMapping(KEY_CODE metaCode, KEY_CODE subCode, KEY_ACTION action,void *function, char *name)
+//bool	keyAddMapping(KEY_CODE metaCode, KEY_CODE subCode, KEY_ACTION action,void *function, char *name)
 KEY_MAPPING *keyAddMapping(KEY_STATUS status,KEY_CODE metaCode, KEY_CODE subCode, KEY_ACTION action,
 					  void (*pKeyMapFunc)(void), const char *name)
 {
@@ -550,7 +550,7 @@ KEY_MAPPING	*newMapping;
 
 // ----------------------------------------------------------------------------------
 /* Removes a mapping from the list specified by the key codes */
-BOOL	keyRemoveMapping( KEY_CODE metaCode, KEY_CODE subCode )
+bool	keyRemoveMapping( KEY_CODE metaCode, KEY_CODE subCode )
 {
 KEY_MAPPING	*mapping;
 
@@ -588,7 +588,7 @@ void	keyClearMappings( void )
 
 // ----------------------------------------------------------------------------------
 /* Removes a mapping specified by a pointer */
-BOOL	keyRemoveMappingPt(KEY_MAPPING *psToRemove)
+bool	keyRemoveMappingPt(KEY_MAPPING *psToRemove)
 {
 KEY_MAPPING	*psPrev,*psCurr;
 
@@ -648,11 +648,11 @@ UDWORD	getNumMappings( void )
 
 // ----------------------------------------------------------------------------------
 /* Allows _new_ mappings to be made at runtime */
-static BOOL checkQwertyKeys( void )
+static bool checkQwertyKeys( void )
 {
 	KEY_CODE qKey;
 	UDWORD tableEntry;
-	BOOL aquired = false;
+	bool aquired = false;
 
 	/* Are we trying to make a new map marker? */
 	if (keyDown(KEY_LALT))
@@ -686,10 +686,10 @@ static BOOL checkQwertyKeys( void )
 
 // ----------------------------------------------------------------------------------
 /* Manages update of all the active function mappings */
-void	keyProcessMappings( BOOL bExclude )
+void	keyProcessMappings( bool bExclude )
 {
 KEY_MAPPING	*keyToProcess;
-BOOL		bMetaKeyDown;
+bool		bMetaKeyDown;
 SDWORD		i;
 
 	/* Bomb out if there are none */
@@ -856,7 +856,7 @@ SDWORD		i;
 static void keyShowMapping(KEY_MAPPING *psMapping)
 {
 char	asciiSub[20],asciiMeta[20];
-BOOL	onlySub;
+bool	onlySub;
 
 	onlySub = true;
 	if(psMapping->metaKeyCode!=KEY_IGNORE)
@@ -905,7 +905,7 @@ KEY_CODE	getLastMetaKey( void )
 
 // ----------------------------------------------------------------------------------
 /* Allows us to enable/disable the whole mapping system */
-void	keyEnableProcessing( BOOL val )
+void	keyEnableProcessing( bool val )
 {
 	bKeyProcessing = val;
 }
@@ -935,7 +935,7 @@ KEY_MAPPING	*psMapping;
 
 // ----------------------------------------------------------------------------------
 /* Allows us to make active/inactive specific mappings */
-void	keySetMappingStatus(KEY_MAPPING *psMapping, BOOL state)
+void	keySetMappingStatus(KEY_MAPPING *psMapping, bool state)
 {
 	psMapping->active = state;
 }
@@ -1019,23 +1019,23 @@ UDWORD	entry;
 
 // ----------------------------------------------------------------------------------
 /* Defines whether we process debug key mapping stuff */
-void	processDebugMappings( BOOL val )
+void	processDebugMappings( bool val )
 {
 	bDoingDebugMappings = val;
 }
 
 // ----------------------------------------------------------------------------------
 /* Returns present status of debug mapping processing */
-BOOL	getDebugMappingStatus( void )
+bool	getDebugMappingStatus( void )
 {
 	return(bDoingDebugMappings);
 }
 // ----------------------------------------------------------------------------------
-BOOL	keyReAssignMapping( KEY_CODE origMetaCode, KEY_CODE origSubCode,
+bool	keyReAssignMapping( KEY_CODE origMetaCode, KEY_CODE origSubCode,
 							KEY_CODE newMetaCode, KEY_CODE newSubCode )
 {
 KEY_MAPPING	*psMapping;
-BOOL		bFound;
+bool		bFound;
 
 	for(psMapping = keyMappings,bFound = false; psMapping && !bFound;
 		psMapping = psMapping->psNext)
@@ -1071,7 +1071,7 @@ KEY_MAPPING	*psMapping;
 }
 
 // ----------------------------------------------------------------------------------
-BOOL	keyReAssignMappingName(char *pName,KEY_CODE newMetaCode, KEY_CODE newSubCode)
+bool	keyReAssignMappingName(char *pName,KEY_CODE newMetaCode, KEY_CODE newSubCode)
 {
 KEY_MAPPING	*psMapping;
 

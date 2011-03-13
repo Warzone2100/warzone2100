@@ -104,19 +104,19 @@ unsigned int loopStateChanges;
 /*
  * local variables
  */
-static BOOL paused=false;
-static BOOL video=false;
+static bool paused=false;
+static bool video=false;
 
 //holds which pause is valid at any one time
-typedef struct _pause_state
+struct PAUSE_STATE
 {
-	unsigned gameUpdatePause	: 1;
-	unsigned audioPause			: 1;
-	unsigned scriptPause		: 1;
-	unsigned scrollPause		: 1;
-	unsigned consolePause		: 1;
-	unsigned editPause		: 1;
-} PAUSE_STATE;
+	bool gameUpdatePause;
+	bool audioPause;
+	bool scriptPause;
+	bool scrollPause;
+	bool consolePause;
+	bool editPause;
+};
 
 static PAUSE_STATE	pauseState;
 static	UDWORD	numDroids[MAX_PLAYERS];
@@ -142,7 +142,7 @@ GAMECODE gameLoop(void)
 	STRUCTURE	*psCBuilding, *psNBuilding;
 	FEATURE		*psCFeat, *psNFeat;
 	UDWORD		i,widgval;
-	BOOL		quitting=false;
+	bool		quitting=false;
 	INT_RETVAL	intRetVal;
 	int	        clearMode = 0;
 	bool            gameTicked;                     // true iff we are doing a logical update.
@@ -158,7 +158,10 @@ GAMECODE gameLoop(void)
 
 	if (gameTicked)
 	{
-		syncDebug("map = \"%s\", humanPlayers = %d %d %d %d %d %d %d %d", game.map, isHumanPlayer(0), isHumanPlayer(1), isHumanPlayer(2), isHumanPlayer(3), isHumanPlayer(4), isHumanPlayer(5), isHumanPlayer(6), isHumanPlayer(7));
+		// Can't dump isHumanPlayer, since it causes spurious desynch dumps when players leave.
+		// TODO isHumanPlayer should probably be synchronised, since the game state seems to depend on it, so there might also be a risk of real desynchs when players leave.
+		//syncDebug("map = \"%s\", humanPlayers = %d %d %d %d %d %d %d %d", game.map, isHumanPlayer(0), isHumanPlayer(1), isHumanPlayer(2), isHumanPlayer(3), isHumanPlayer(4), isHumanPlayer(5), isHumanPlayer(6), isHumanPlayer(7));
+		syncDebug("map = \"%s\"", game.map);
 
 		// Actually send pending droid orders.
 		sendQueuedDroidInfo();
@@ -797,12 +800,12 @@ SDWORD loop_GetVideoMode(void)
 	return videoMode;
 }
 
-BOOL loop_GetVideoStatus(void)
+bool loop_GetVideoStatus(void)
 {
 	return video;
 }
 
-BOOL editPaused(void)
+bool editPaused(void)
 {
 	return pauseState.editPause;
 }
@@ -812,60 +815,60 @@ void setEditPause(bool state)
 	pauseState.editPause = state;
 }
 
-BOOL gamePaused( void )
+bool gamePaused( void )
 {
 	return paused;
 }
 
-void setGamePauseStatus( BOOL val )
+void setGamePauseStatus( bool val )
 {
 	paused = val;
 }
 
-BOOL gameUpdatePaused(void)
+bool gameUpdatePaused(void)
 {
 	return pauseState.gameUpdatePause;
 }
-BOOL audioPaused(void)
+bool audioPaused(void)
 {
 	return pauseState.audioPause;
 }
-BOOL scriptPaused(void)
+bool scriptPaused(void)
 {
 	return pauseState.scriptPause;
 }
-BOOL scrollPaused(void)
+bool scrollPaused(void)
 {
 	return pauseState.scrollPause;
 }
-BOOL consolePaused(void)
+bool consolePaused(void)
 {
 	return pauseState.consolePause;
 }
 
-void setGameUpdatePause(BOOL state)
+void setGameUpdatePause(bool state)
 {
 	pauseState.gameUpdatePause = state;
 }
-void setAudioPause(BOOL state)
+void setAudioPause(bool state)
 {
 	pauseState.audioPause = state;
 }
-void setScriptPause(BOOL state)
+void setScriptPause(bool state)
 {
 	pauseState.scriptPause = state;
 }
-void setScrollPause(BOOL state)
+void setScrollPause(bool state)
 {
 	pauseState.scrollPause = state;
 }
-void setConsolePause(BOOL state)
+void setConsolePause(bool state)
 {
 	pauseState.consolePause = state;
 }
 
 //set all the pause states to the state value
-void setAllPauseStates(BOOL state)
+void setAllPauseStates(bool state)
 {
 	setGameUpdatePause(state);
 	setAudioPause(state);
@@ -917,7 +920,7 @@ void incNumConstructorDroids(UDWORD player)
 /* Fire waiting beacon messages which we couldn't run before */
 static void fireWaitingCallbacks(void)
 {
-	BOOL bOK = true;
+	bool bOK = true;
 
 	while(!isMsgStackEmpty() && bOK)
 	{

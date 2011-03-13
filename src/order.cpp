@@ -89,7 +89,7 @@
 RUN_DATA	asRunData[MAX_PLAYERS];
 
 // deal with a droid receiving a primary order
-static BOOL secondaryGotPrimaryOrder(DROID *psDroid, DROID_ORDER order);
+static bool secondaryGotPrimaryOrder(DROID *psDroid, DROID_ORDER order);
 
 // check all the orders in the list for died objects
 static void orderCheckList(DROID *psDroid);
@@ -98,7 +98,7 @@ static void orderCheckList(DROID *psDroid);
 static void orderClearDroidList(DROID *psDroid);
 
 // whether an order effect has been displayed
-static BOOL bOrderEffectDisplayed = false;
+static bool bOrderEffectDisplayed = false;
 // what the droid's action / order is currently
 extern char DROIDDOING[512];
 //////////////////////////////////////////////////////////////////
@@ -258,7 +258,7 @@ void orderUpdateDroid(DROID *psDroid)
 	STRUCTURE		*psStruct, *psWall;
 	REPAIR_FACILITY	*psRepairFac;
 	SDWORD			xdiff,ydiff;
-	BOOL			bAttack;
+	bool			bAttack;
 	SDWORD			xoffset,yoffset;
 
 	// clear the target if it has died
@@ -469,7 +469,7 @@ void orderUpdateDroid(DROID *psDroid)
 	case DORDER_SCOUT:
 	case DORDER_PATROL:
 		// if there is an enemy around, attack it
-		if (psDroid->action == DACTION_MOVE || (psDroid->action == DACTION_NONE && isVtolDroid(psDroid)))
+		if (psDroid->action == DACTION_MOVE || psDroid->action == DACTION_MOVEFIRE || (psDroid->action == DACTION_NONE && isVtolDroid(psDroid)))
 		{
 			bool tooFarFromPath = false;
 			if (isVtolDroid(psDroid) && psDroid->order == DORDER_PATROL)
@@ -1295,7 +1295,7 @@ WZ_DECL_UNUSED static void orderCheckFireSupportPos(DROID *psSensor, DROID_ORDER
 	SDWORD		xdiff,ydiff;
 	DROID		*psCurr;
 	BASE_OBJECT	*psTarget;
-	BOOL		bRetreat;
+	bool		bRetreat;
 
 	// find the middle of and droids doing firesupport
 	fsx = fsy = fsnum = 0;
@@ -2066,7 +2066,7 @@ void orderDroid(DROID *psDroid, DROID_ORDER order, QUEUE_MODE mode)
 }
 
 /* Check the order state of a droid */
-BOOL orderState(DROID *psDroid, DROID_ORDER order)
+bool orderState(DROID *psDroid, DROID_ORDER order)
 {
 	if (order == DORDER_RTR)
 	{
@@ -2076,7 +2076,7 @@ BOOL orderState(DROID *psDroid, DROID_ORDER order)
 	return psDroid->order == order;
 }
 
-BOOL validOrderForLoc(DROID_ORDER order)
+bool validOrderForLoc(DROID_ORDER order)
 {
 	return (order == DORDER_NONE ||	order == DORDER_MOVE ||	order == DORDER_GUARD ||
 		order == DORDER_SCOUT || order == DORDER_RUN || order == DORDER_PATROL ||
@@ -2110,7 +2110,7 @@ void orderDroidLoc(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD y, QUEUE_
 
 
 /* Get the state of a droid order with it's location */
-BOOL orderStateLoc(DROID *psDroid, DROID_ORDER order, UDWORD *pX, UDWORD *pY)
+bool orderStateLoc(DROID *psDroid, DROID_ORDER order, UDWORD *pX, UDWORD *pY)
 {
 	if (order != psDroid->order)
 	{
@@ -2134,7 +2134,7 @@ BOOL orderStateLoc(DROID *psDroid, DROID_ORDER order, UDWORD *pX, UDWORD *pY)
 	return false;
 }
 
-BOOL validOrderForObj(DROID_ORDER order)
+bool validOrderForObj(DROID_ORDER order)
 {
 	return (order == DORDER_NONE || order == DORDER_HELPBUILD || order == DORDER_DEMOLISH ||
 		order == DORDER_REPAIR || order == DORDER_ATTACK || order == DORDER_FIRESUPPORT || order == DORDER_COMMANDERSUPPORT ||
@@ -2171,7 +2171,7 @@ void orderDroidObj(DROID *psDroid, DROID_ORDER order, BASE_OBJECT *psObj, QUEUE_
 /* Get the state of a droid order with an object */
 BASE_OBJECT* orderStateObj(DROID *psDroid, DROID_ORDER order)
 {
-	BOOL	match = false;
+	bool	match = false;
 
 	switch (order)
 	{
@@ -2333,9 +2333,9 @@ void orderDroidStatsTwoLocDirAdd(DROID *psDroid, DROID_ORDER order, BASE_STATS *
 
 
 /* Get the state of a droid order with a location and a stat */
-BOOL orderStateStatsLoc(DROID *psDroid, DROID_ORDER order, BASE_STATS **ppsStats, UDWORD *pX, UDWORD *pY)
+bool orderStateStatsLoc(DROID *psDroid, DROID_ORDER order, BASE_STATS **ppsStats, UDWORD *pX, UDWORD *pY)
 {
-	BOOL	match = false;
+	bool	match = false;
 
 	switch (order)
 	{
@@ -2445,7 +2445,7 @@ void orderDroidAdd(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 
 
 // do the next order from a droids order list
-BOOL orderDroidList(DROID *psDroid)
+bool orderDroidList(DROID *psDroid)
 {
 	DROID_ORDER_DATA	sOrder;
 
@@ -2582,7 +2582,7 @@ static bool orderDroidLocAdd(DROID *psDroid, DROID_ORDER order, UDWORD x, UDWORD
 
 
 // add an object order to a droids order list
-static BOOL orderDroidObjAdd(DROID *psDroid, DROID_ORDER order, BASE_OBJECT *psObj[DROID_MAXWEAPS])
+static bool orderDroidObjAdd(DROID *psDroid, DROID_ORDER order, BASE_OBJECT *psObj[DROID_MAXWEAPS])
 {
 	ASSERT(!isBlueprint(psObj[0]), "Target is a blueprint");
 
@@ -2606,7 +2606,7 @@ static BOOL orderDroidObjAdd(DROID *psDroid, DROID_ORDER order, BASE_OBJECT *psO
 }
 
 /* Choose an order for a droid from a location */
-DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x,UDWORD y, BOOL altOrder)
+DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x,UDWORD y, bool altOrder)
 {
 	DROID_ORDER		order = DORDER_NONE;
 	PROPULSION_TYPE		propulsion = getPropulsionStats(psDroid)->propulsionType;
@@ -2708,7 +2708,7 @@ void orderSelectedLoc(uint32_t player, uint32_t x, uint32_t y, bool add)
 
 
 /* Choose an order for a droid from an object */
-DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, BOOL altOrder)
+DROID_ORDER chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, bool altOrder)
 {
 	DROID_ORDER		order;
 	STRUCTURE		*psStruct;
@@ -3000,7 +3000,7 @@ static void orderPlayOrderObjAudio( UDWORD player, BASE_OBJECT *psObj )
 /* Give selected droids an order from an object target
  * If add is true the order is queued with the droid
  */
-void orderSelectedObjAdd(UDWORD player, BASE_OBJECT *psObj, BOOL add)
+void orderSelectedObjAdd(UDWORD player, BASE_OBJECT *psObj, bool add)
 {
 	DROID		*psCurr;
 	DROID_ORDER	order;
@@ -3047,7 +3047,7 @@ void orderSelectedObj(UDWORD player, BASE_OBJECT *psObj)
 
 
 /* order all selected droids with a location and a stat */
-void orderSelectedStatsLocDir(UDWORD player, DROID_ORDER order, BASE_STATS *psStats, UDWORD x, UDWORD y, uint16_t direction, BOOL add)
+void orderSelectedStatsLocDir(UDWORD player, DROID_ORDER order, BASE_STATS *psStats, UDWORD x, UDWORD y, uint16_t direction, bool add)
 {
 	DROID		*psCurr;
 
@@ -3074,7 +3074,7 @@ void orderSelectedStatsLocDir(UDWORD player, DROID_ORDER order, BASE_STATS *psSt
 
 
 /* order all selected droids with two a locations and a stat */
-void orderSelectedStatsTwoLocDir(UDWORD player, DROID_ORDER order, BASE_STATS *psStats, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2, uint16_t direction, BOOL add)
+void orderSelectedStatsTwoLocDir(UDWORD player, DROID_ORDER order, BASE_STATS *psStats, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2, uint16_t direction, bool add)
 {
 	DROID		*psCurr;
 
@@ -3156,9 +3156,9 @@ static STRUCTURE *FindARepairFacility(unsigned player)
 
 
 // see if a droid supports a secondary order
-BOOL secondarySupported(DROID *psDroid, SECONDARY_ORDER sec)
+bool secondarySupported(DROID *psDroid, SECONDARY_ORDER sec)
 {
-	BOOL supported;
+	bool supported;
 
 	supported = true;	// Default to supported.
 
@@ -3383,12 +3383,12 @@ void secondaryCheckDamageLevel(DROID *psDroid)
 
 
 // set the state of a secondary order, return false if failed.
-BOOL secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE State, QUEUE_MODE mode)
+bool secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE State, QUEUE_MODE mode)
 {
 	UDWORD		CurrState, factType, prodType;
 	STRUCTURE	*psStruct;
 	SDWORD		factoryInc;
-	BOOL		retVal;
+	bool		retVal;
 	DROID		*psTransport, *psCurr, *psNext;
 	DROID_ORDER     order;
 
@@ -3713,7 +3713,7 @@ BOOL secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 
 
 // deal with a droid receiving a primary order
-BOOL secondaryGotPrimaryOrder(DROID *psDroid, DROID_ORDER order)
+bool secondaryGotPrimaryOrder(DROID *psDroid, DROID_ORDER order)
 {
 	UDWORD	oldState;
 
@@ -4027,10 +4027,10 @@ void orderHealthCheck(DROID *psDroid)
 }
 
 // set the state of a secondary order for a Factory, return false if failed.
-BOOL setFactoryState(STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_STATE State)
+bool setFactoryState(STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_STATE State)
 {
 	UDWORD		CurrState;
-	BOOL		retVal;
+	bool		retVal;
 	FACTORY     *psFactory;
 
 
@@ -4095,7 +4095,7 @@ BOOL setFactoryState(STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_STATE S
 }
 
 // get the state of a secondary order for a Factory, return false if unsupported
-BOOL getFactoryState(STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_STATE *pState)
+bool getFactoryState(STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_STATE *pState)
 {
 	UDWORD	state;
 

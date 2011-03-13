@@ -27,7 +27,7 @@
 #include "basedef.h"
 #include "statsdef.h"
 
-typedef enum _feature_type
+enum FEATURE_TYPE
 {
 	FEAT_BUILD_WRECK,
 	FEAT_HOVER,
@@ -55,7 +55,7 @@ typedef enum _feature_type
 	//FEAT_BOULDER3,
 	//FEAT_FUTCAR,
 	//FEAT_FUTVAN,
-} FEATURE_TYPE;
+};
 
 /* Stats for a feature */
 struct FEATURE_STATS : public BASE_STATS
@@ -69,10 +69,10 @@ struct FEATURE_STATS : public BASE_STATS
 	UWORD           baseWidth;              ///< The width of the base in tiles
 	UWORD           baseBreadth;            ///< The breadth of the base in tiles
 
-	BOOL            tileDraw;               ///< Whether the tile needs to be drawn
-	BOOL            allowLOS;               ///< Whether the feature allows the LOS. true = can see through the feature
-	BOOL            visibleAtStart;         ///< Whether the feature is visible at the start of the mission
-	BOOL            damageable;             ///< Whether the feature can be destroyed
+	bool            tileDraw;               ///< Whether the tile needs to be drawn
+	bool            allowLOS;               ///< Whether the feature allows the LOS. true = can see through the feature
+	bool            visibleAtStart;         ///< Whether the feature is visible at the start of the mission
+	bool            damageable;             ///< Whether the feature can be destroyed
 	UDWORD		body;			///< Number of body points
 	UDWORD          armourValue;            ///< Feature armour
 };

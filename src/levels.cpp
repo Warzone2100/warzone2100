@@ -74,7 +74,7 @@ char *pLevToken;
 SDWORD levVal;
 static SDWORD levelLoadType;
 // modes for the parser
-typedef enum
+enum LEVELPARSER_STATE
 {
 	LP_START,		// no input received
 	LP_LEVEL,		// level token received
@@ -85,11 +85,11 @@ typedef enum
 	LP_WAITDATA,	// defining level data, waiting for data token
 	LP_DATA,		// data token received
 	LP_GAME,		// game token received
-} LEVELPARSER_STATE;
+};
 
 
 // initialise the level system
-BOOL levInitialise(void)
+bool levInitialise(void)
 {
 	psLevels = NULL;
 	psBaseData = NULL;
@@ -158,7 +158,7 @@ LEVEL_DATASET* levFindDataSet(const char* name)
 // parse a level description data file
 // the ignoreWrf hack is for compatibility with old maps that try to link in various
 // data files that we have removed
-BOOL levParse(const char* buffer, size_t size, searchPathMode datadir, bool ignoreWrf)
+bool levParse(const char* buffer, size_t size, searchPathMode datadir, bool ignoreWrf)
 {
 	lexerinput_t input;
 	LEVELPARSER_STATE state;
@@ -455,7 +455,7 @@ BOOL levParse(const char* buffer, size_t size, searchPathMode datadir, bool igno
 
 
 // free the data for the current mission
-BOOL levReleaseMissionData(void)
+bool levReleaseMissionData(void)
 {
 	SDWORD i;
 
@@ -492,7 +492,7 @@ BOOL levReleaseMissionData(void)
 
 
 // free the currently loaded dataset
-BOOL levReleaseAll(void)
+bool levReleaseAll(void)
 {
 	SDWORD i;
 
@@ -542,7 +542,7 @@ BOOL levReleaseAll(void)
 }
 
 // load up a single wrf file
-static BOOL levLoadSingleWRF(const char* name)
+static bool levLoadSingleWRF(const char* name)
 {
 	// free the old data
 	if (!levReleaseAll())
@@ -590,11 +590,11 @@ char *getLevelName( void )
 
 
 // load up the data for a level
-BOOL levLoadData(const char* name, char *pSaveName, GAME_TYPE saveType)
+bool levLoadData(const char* name, char *pSaveName, GAME_TYPE saveType)
 {
 	LEVEL_DATASET	*psNewLevel, *psBaseData, *psChangeLevel;
 	SDWORD			i;
-	BOOL            bCamChangeSaveGame;
+	bool            bCamChangeSaveGame;
 
 	debug(LOG_WZ, "Loading level %s (%s, type %d)", name, pSaveName, (int)saveType);
 	if (saveType == GTYPE_SAVE_START || saveType == GTYPE_SAVE_MIDMISSION)

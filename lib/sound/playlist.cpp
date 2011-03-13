@@ -27,11 +27,11 @@
 
 #define BUFFER_SIZE 2048
 
-typedef struct _wzTrack
+struct WZ_TRACK
 {
 	char		path[PATH_MAX];
-	struct _wzTrack	*next;
-} WZ_TRACK;
+	WZ_TRACK *      next;
+};
 
 static WZ_TRACK *currentSong = NULL;
 static int numSongs = 0;

@@ -145,7 +145,7 @@ static void find_address_in_section (bfd *abfd, asection *section, PTR data)
 }
 
 static
-BOOL BfdDemangleSymName(LPCTSTR lpName, LPTSTR lpDemangledName, DWORD nSize)
+bool BfdDemangleSymName(LPCTSTR lpName, LPTSTR lpDemangledName, DWORD nSize)
 {
 	char *res;
 
@@ -165,7 +165,7 @@ BOOL BfdDemangleSymName(LPCTSTR lpName, LPTSTR lpDemangledName, DWORD nSize)
 }
 
 static
-BOOL BfdGetSymFromAddr(bfd *abfd, asymbol **syms, long symcount, DWORD dwAddress, LPTSTR lpSymName, DWORD nSize)
+bool BfdGetSymFromAddr(bfd *abfd, asymbol **syms, long symcount, DWORD dwAddress, LPTSTR lpSymName, DWORD nSize)
 {
 	HMODULE hModule;
 	struct find_handle info;
@@ -195,7 +195,7 @@ BOOL BfdGetSymFromAddr(bfd *abfd, asymbol **syms, long symcount, DWORD dwAddress
 }
 
 static
-BOOL BfdGetLineFromAddr(bfd *abfd, asymbol **syms, long symcount, DWORD dwAddress,  LPTSTR lpFileName, DWORD nSize, LPDWORD lpLineNumber)
+bool BfdGetLineFromAddr(bfd *abfd, asymbol **syms, long symcount, DWORD dwAddress,  LPTSTR lpFileName, DWORD nSize, LPDWORD lpLineNumber)
 {
 	HMODULE hModule;
 	struct find_handle info;
@@ -227,15 +227,15 @@ BOOL BfdGetLineFromAddr(bfd *abfd, asymbol **syms, long symcount, DWORD dwAddres
 
 #include <imagehlp.h>
 
-static BOOL bSymInitialized = FALSE;
+static bool bSymInitialized = FALSE;
 
 static HMODULE hModule_Imagehlp = NULL;
 
-typedef BOOL (WINAPI *PFNSYMINITIALIZE)(HANDLE, LPSTR, BOOL);
+typedef bool (WINAPI *PFNSYMINITIALIZE)(HANDLE, LPSTR, bool);
 static PFNSYMINITIALIZE pfnSymInitialize = NULL;
 
 static
-BOOL WINAPI j_SymInitialize(HANDLE hProcess, PSTR UserSearchPath, BOOL fInvadeProcess)
+bool WINAPI j_SymInitialize(HANDLE hProcess, PSTR UserSearchPath, bool fInvadeProcess)
 {
 	if(
 		(hModule_Imagehlp || (hModule_Imagehlp = LoadLibrary(_T("IMAGEHLP.DLL")))) &&
@@ -246,11 +246,11 @@ BOOL WINAPI j_SymInitialize(HANDLE hProcess, PSTR UserSearchPath, BOOL fInvadePr
 		return FALSE;
 }
 
-typedef BOOL (WINAPI *PFNSYMCLEANUP)(HANDLE);
+typedef bool (WINAPI *PFNSYMCLEANUP)(HANDLE);
 static PFNSYMCLEANUP pfnSymCleanup = NULL;
 
 static
-BOOL WINAPI j_SymCleanup(HANDLE hProcess)
+bool WINAPI j_SymCleanup(HANDLE hProcess)
 {
 	if(
 		(hModule_Imagehlp || (hModule_Imagehlp = LoadLibrary(_T("IMAGEHLP.DLL")))) &&
@@ -276,11 +276,11 @@ DWORD WINAPI j_SymSetOptions(DWORD SymOptions)
 		return FALSE;
 }
 
-typedef BOOL (WINAPI *PFNSYMUNDNAME)(PIMAGEHLP_SYMBOL, PSTR, DWORD);
+typedef bool (WINAPI *PFNSYMUNDNAME)(PIMAGEHLP_SYMBOL, PSTR, DWORD);
 static PFNSYMUNDNAME pfnSymUnDName = NULL;
 
 static
-BOOL WINAPI j_SymUnDName(PIMAGEHLP_SYMBOL Symbol, PSTR UnDecName, DWORD UnDecNameLength)
+bool WINAPI j_SymUnDName(PIMAGEHLP_SYMBOL Symbol, PSTR UnDecName, DWORD UnDecNameLength)
 {
 	if(
 		(hModule_Imagehlp || (hModule_Imagehlp = LoadLibrary(_T("IMAGEHLP.DLL")))) &&
@@ -321,11 +321,11 @@ DWORD WINAPI j_SymGetModuleBase(HANDLE hProcess, DWORD dwAddr)
 		return 0;
 }
 
-typedef BOOL (WINAPI *PFNSTACKWALK)(DWORD, HANDLE, HANDLE, LPSTACKFRAME, LPVOID, PREAD_PROCESS_MEMORY_ROUTINE, PFUNCTION_TABLE_ACCESS_ROUTINE, PGET_MODULE_BASE_ROUTINE, PTRANSLATE_ADDRESS_ROUTINE);
+typedef bool (WINAPI *PFNSTACKWALK)(DWORD, HANDLE, HANDLE, LPSTACKFRAME, LPVOID, PREAD_PROCESS_MEMORY_ROUTINE, PFUNCTION_TABLE_ACCESS_ROUTINE, PGET_MODULE_BASE_ROUTINE, PTRANSLATE_ADDRESS_ROUTINE);
 static PFNSTACKWALK pfnStackWalk = NULL;
 
 static
-BOOL WINAPI j_StackWalk(
+bool WINAPI j_StackWalk(
 	DWORD MachineType,
 	HANDLE hProcess,
 	HANDLE hThread,
@@ -356,11 +356,11 @@ BOOL WINAPI j_StackWalk(
 		return FALSE;
 }
 
-typedef BOOL (WINAPI *PFNSYMGETSYMFROMADDR)(HANDLE, DWORD, LPDWORD, PIMAGEHLP_SYMBOL);
+typedef bool (WINAPI *PFNSYMGETSYMFROMADDR)(HANDLE, DWORD, LPDWORD, PIMAGEHLP_SYMBOL);
 static PFNSYMGETSYMFROMADDR pfnSymGetSymFromAddr = NULL;
 
 static
-BOOL WINAPI j_SymGetSymFromAddr(HANDLE hProcess, DWORD Address, PDWORD Displacement, PIMAGEHLP_SYMBOL Symbol)
+bool WINAPI j_SymGetSymFromAddr(HANDLE hProcess, DWORD Address, PDWORD Displacement, PIMAGEHLP_SYMBOL Symbol)
 {
 	if(
 		(hModule_Imagehlp || (hModule_Imagehlp = LoadLibrary(_T("IMAGEHLP.DLL")))) &&
@@ -371,11 +371,11 @@ BOOL WINAPI j_SymGetSymFromAddr(HANDLE hProcess, DWORD Address, PDWORD Displacem
 		return FALSE;
 }
 
-typedef BOOL (WINAPI *PFNSYMGETLINEFROMADDR)(HANDLE, DWORD, LPDWORD, PIMAGEHLP_LINE);
+typedef bool (WINAPI *PFNSYMGETLINEFROMADDR)(HANDLE, DWORD, LPDWORD, PIMAGEHLP_LINE);
 static PFNSYMGETLINEFROMADDR pfnSymGetLineFromAddr = NULL;
 
 static
-BOOL WINAPI j_SymGetLineFromAddr(HANDLE hProcess, DWORD dwAddr, PDWORD pdwDisplacement, PIMAGEHLP_LINE Line)
+bool WINAPI j_SymGetLineFromAddr(HANDLE hProcess, DWORD dwAddr, PDWORD pdwDisplacement, PIMAGEHLP_LINE Line)
 {
 	if(
 		(hModule_Imagehlp || (hModule_Imagehlp = LoadLibrary(_T("IMAGEHLP.DLL")))) &&
@@ -387,7 +387,7 @@ BOOL WINAPI j_SymGetLineFromAddr(HANDLE hProcess, DWORD dwAddr, PDWORD pdwDispla
 }
 
 static
-BOOL ImagehlpDemangleSymName(LPCTSTR lpName, LPTSTR lpDemangledName, DWORD nSize)
+bool ImagehlpDemangleSymName(LPCTSTR lpName, LPTSTR lpDemangledName, DWORD nSize)
 {
 	BYTE symbolBuffer[sizeof(IMAGEHLP_SYMBOL) + 512];
 	PIMAGEHLP_SYMBOL pSymbol = (PIMAGEHLP_SYMBOL) symbolBuffer;
@@ -406,7 +406,7 @@ BOOL ImagehlpDemangleSymName(LPCTSTR lpName, LPTSTR lpDemangledName, DWORD nSize
 }
 
 static
-BOOL ImagehlpGetSymFromAddr(HANDLE hProcess, DWORD dwAddress, LPTSTR lpSymName, DWORD nSize)
+bool ImagehlpGetSymFromAddr(HANDLE hProcess, DWORD dwAddress, LPTSTR lpSymName, DWORD nSize)
 {
 	// IMAGEHLP is wacky, and requires you to pass in a pointer to a
 	// IMAGEHLP_SYMBOL structure.  The problem is that this structure is
@@ -434,7 +434,7 @@ BOOL ImagehlpGetSymFromAddr(HANDLE hProcess, DWORD dwAddress, LPTSTR lpSymName, 
 }
 
 static
-BOOL ImagehlpGetLineFromAddr(HANDLE hProcess, DWORD dwAddress,  LPTSTR lpFileName, DWORD nSize, LPDWORD lpLineNumber)
+bool ImagehlpGetLineFromAddr(HANDLE hProcess, DWORD dwAddress,  LPTSTR lpFileName, DWORD nSize, LPDWORD lpLineNumber)
 {
 	IMAGEHLP_LINE Line;
 	DWORD dwDisplacement = 0;  // Displacement of the input address, relative to the start of the symbol
@@ -477,7 +477,7 @@ BOOL ImagehlpGetLineFromAddr(HANDLE hProcess, DWORD dwAddress,  LPTSTR lpFileNam
 }
 
 static
-BOOL PEGetSymFromAddr(HANDLE hProcess, DWORD dwAddress, LPTSTR lpSymName, DWORD nSize)
+bool PEGetSymFromAddr(HANDLE hProcess, DWORD dwAddress, LPTSTR lpSymName, DWORD nSize)
 {
 	HMODULE hModule;
 	PIMAGE_NT_HEADERS pNtHdr;
@@ -578,7 +578,7 @@ struct ItDoesntMatterIfItsADWORDOrAVoidPointer_JustCompileTheDamnThing
 };
 
 static
-BOOL WINAPI IntelStackWalk(
+bool WINAPI IntelStackWalk(
 	DWORD MachineType,
 	HANDLE hProcess,
 	WZ_DECL_UNUSED HANDLE hThread,
@@ -607,10 +607,10 @@ BOOL WINAPI IntelStackWalk(
 		StackFrame->AddrFrame.Offset = ContextRecord->Ebp;
 
 		StackFrame->AddrReturn.Mode = AddrModeFlat;
-// Error   26      error C2664: 'BOOL (HANDLE,DWORD,PVOID,DWORD,PDWORD)' :
+// Error   26      error C2664: 'bool (HANDLE,DWORD,PVOID,DWORD,PDWORD)' :
 // cannot convert parameter 2 from 'void *' to 'DWORD'
 // c:\warzone\lib\exceptionhandler\exchndl.cpp     599
-// ../../../../lib/exceptionhandler/exchndl.cpp: In function ‘BOOL IntelStackWalk(DWORD, void*, void*, _tagSTACKFRAME*, CONTEXT*, BOOL (*)(void*, const void*, void*, DWORD, DWORD*), void* (*)(void*, DWORD), DWORD (*)(void*, DWORD), DWORD (*)(void*, void*, _tagADDRESS*))’:
+// ../../../../lib/exceptionhandler/exchndl.cpp: In function ‘bool IntelStackWalk(DWORD, void*, void*, _tagSTACKFRAME*, CONTEXT*, bool (*)(void*, const void*, void*, DWORD, DWORD*), void* (*)(void*, DWORD), DWORD (*)(void*, DWORD), DWORD (*)(void*, void*, _tagADDRESS*))’:
 // ../../../../lib/exceptionhandler/exchndl.cpp:599: error: invalid conversion from ‘long unsigned int’ to ‘const void*’
 		if(!ReadMemoryRoutine((HANDLE)hProcess, ItDoesntMatterIfItsADWORDOrAVoidPointer_JustCompileTheDamnThing((void *) (StackFrame->AddrFrame.Offset + sizeof(DWORD))), (void *)&StackFrame->AddrReturn.Offset, sizeof(DWORD), NULL))
 			return FALSE;
@@ -631,7 +631,7 @@ BOOL WINAPI IntelStackWalk(
 }
 
 static
-BOOL StackBackTrace(HANDLE hProcess, HANDLE hThread, PCONTEXT pContext)
+bool StackBackTrace(HANDLE hProcess, HANDLE hThread, PCONTEXT pContext)
 {
 	STACKFRAME StackFrame;
 
@@ -668,7 +668,7 @@ BOOL StackBackTrace(HANDLE hProcess, HANDLE hThread, PCONTEXT pContext)
 
 	while ( 1 )
 	{
-		BOOL bSuccess = FALSE;
+		bool bSuccess = FALSE;
 #ifdef HAVE_BFD
 		const HMODULE hPrevModule = hModule;
 #endif /* HAVE_BFD */
@@ -1110,7 +1110,7 @@ void GenerateExceptionReport(PEXCEPTION_POINTERS pExceptionInfo)
 static
 LONG WINAPI TopLevelExceptionFilter(PEXCEPTION_POINTERS pExceptionInfo)
 {
-	static BOOL bBeenHere = FALSE;
+	static bool bBeenHere = FALSE;
 
 	if(!bBeenHere)
 	{
@@ -1134,7 +1134,6 @@ LONG WINAPI TopLevelExceptionFilter(PEXCEPTION_POINTERS pExceptionInfo)
 			// Retrieve the system error message for the last-error code
 
 			LPVOID lpMsgBuf;
-			LPVOID lpDisplayBuf;
 			DWORD dw = GetLastError();
 			TCHAR szBuffer[4196];
 
@@ -1152,7 +1151,6 @@ LONG WINAPI TopLevelExceptionFilter(PEXCEPTION_POINTERS pExceptionInfo)
 			MessageBox((HWND)MB_ICONEXCLAMATION, szBuffer, _T("Error"), MB_OK); 
 
 			LocalFree(lpMsgBuf);
-			LocalFree(lpDisplayBuf);
 			debug(LOG_ERROR, "Exception handler failed to create file!");
 		}
 
@@ -1176,7 +1174,6 @@ LONG WINAPI TopLevelExceptionFilter(PEXCEPTION_POINTERS pExceptionInfo)
 			if (err == 0)
 			{
 				LPVOID lpMsgBuf;
-				LPVOID lpDisplayBuf;
 				DWORD dw = GetLastError();
 				TCHAR szBuffer[4196];
 
@@ -1194,7 +1191,6 @@ LONG WINAPI TopLevelExceptionFilter(PEXCEPTION_POINTERS pExceptionInfo)
 				MessageBox((HWND)MB_ICONEXCLAMATION, szBuffer, _T("Error"), MB_OK); 
 
 				LocalFree(lpMsgBuf);
-				LocalFree(lpDisplayBuf);
 				debug(LOG_ERROR, "Exception handler failed to create file!");
 			}
 			hReportFile = 0;

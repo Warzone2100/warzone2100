@@ -56,7 +56,7 @@
  * The actual geometry and texture data is not stored in here but in large VBO's.
  * The sector only stores the index and length of the pieces it's going to use.
  */
-typedef struct
+struct Sector
 {
 	int geometryOffset;      ///< The point in the geometry VBO where our geometry starts
 	int geometrySize;        ///< The size of our geometry
@@ -74,20 +74,20 @@ typedef struct
 	int decalSize;           ///< Size of the part of the decal VBO we are going to use
 	bool draw;               ///< Do we draw this sector this frame?
 	bool dirty;              ///< Do we need to update the geometry for this sector?
-} Sector;
+};
 
 /// A vertex with just a position
-typedef struct
+struct RenderVertex
 {
 	GLfloat x, y, z;        // Vertex
-} RenderVertex;
+};
 
 /// A vertex with a position and texture coordinates
-typedef struct
+struct DecalVertex
 {
 	GLfloat x, y, z;
 	GLfloat u, v;          // uv
-} DecalVertex;
+};
 
 /// The lightmap texture
 static GLuint lightmap_tex_num;

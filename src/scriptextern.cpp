@@ -45,17 +45,17 @@
 SDWORD		scrGameLevel = 0;
 
 // whether the tutorial is active
-BOOL		bInTutorial = false;
+bool		bInTutorial = false;
 
 // whether any additional special case victory/failure conditions have been met
-BOOL		bExtraVictoryFlag = false;
-BOOL		bExtraFailFlag = false;
+bool		bExtraVictoryFlag = false;
+bool		bExtraFailFlag = false;
 
 
 
 // whether or not to track the player's transporter as it comes
 // into an offworld mission.
-BOOL		bTrackTransporter = false;
+bool		bTrackTransporter = false;
 
 
 // reset the script externals for a new level
@@ -69,7 +69,7 @@ void scrExternReset(void)
 
 
 // General function to get some basic game values
-BOOL scrGenExternGet(UDWORD index)
+bool scrGenExternGet(UDWORD index)
 {
 	INTERP_TYPE		type;
 	INTERP_VAL	scrFunctionResult;	//function return value to be pushed to stack
@@ -163,7 +163,7 @@ BOOL scrGenExternGet(UDWORD index)
 
 
 // General function to set some basic game values
-BOOL scrGenExternSet(UDWORD index)
+bool scrGenExternSet(UDWORD index)
 {
 	INTERP_VAL		sVal;
 	INTERP_TYPE		type;

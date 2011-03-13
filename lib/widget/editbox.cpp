@@ -546,7 +546,7 @@ void editBoxDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *
 	enum iV_fonts CurrFontID;
 
 #if CURSOR_BLINK
-	BOOL		blink;
+	bool		blink;
 #endif
 
 	psEdBox = (W_EDITBOX *)psWidget;

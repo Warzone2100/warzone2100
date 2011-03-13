@@ -552,7 +552,7 @@
 #    pragma warning (disable : 4244) // Shut up: conversion from 'float' to 'int', possible loss of data
 #    pragma warning (disable : 4267) // Shut up: conversion from 'size_t' to 'type', possible loss of data
 #    pragma warning (disable : 4389) // Shut up: '==' : signed/unsigned mismatch
-#    pragma warning (disable : 4800) // Shut up: 'BOOL' : forcing value to bool 'true' or 'false' (performance warning)
+#    pragma warning (disable : 4800) // Shut up: 'bool' : forcing value to bool 'true' or 'false' (performance warning)
 #    pragma warning (disable : 4512) // Shut up: 'class' : assignment operator could not be generated
 
 #    define strcasecmp _stricmp

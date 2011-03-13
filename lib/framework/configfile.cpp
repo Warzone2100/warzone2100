@@ -29,12 +29,12 @@
 
 #define REGISTRY_HASH_SIZE	32
 
-typedef struct	regkey_t
+struct regkey_t
 {
 	char			*key;
 	char			*value;
-	struct regkey_t *next;
-} regkey_t;
+	regkey_t *              next;
+};
 static regkey_t* registry[REGISTRY_HASH_SIZE] = { NULL };
 static char      RegFilePath[PATH_MAX];
 
