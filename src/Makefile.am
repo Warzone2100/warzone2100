@@ -12,7 +12,7 @@ AM_YFLAGS = -d
 
 version.o: autorevision.h
 
-autorevision.h: $(warzone2100_SOURCES) $(warzone2100_LDADD)
+autorevision.h: $(warzone2100_SOURCES) $(warzone2100_LIBS)
 	$(top_srcdir)/build_tools/autorevision.sh $(abs_top_builddir)/src/autorevision.h || true
 
 BUILT_SOURCES = \
@@ -284,7 +284,7 @@ warzone2100_SOURCES = \
 	wavecast.cpp \
 	wrappers.cpp
 
-warzone2100_LDADD = \
+warzone2100_LIBS = \
 	$(top_builddir)/lib/widget/libwidget.a \
 	$(top_builddir)/lib/sequence/libsequence.a \
 	$(top_builddir)/lib/sound/libsound.a \
@@ -297,7 +297,7 @@ warzone2100_LDADD = \
 	$(top_builddir)/lib/iniparser/libiniparser.a \
 	$(top_builddir)/lib/exceptionhandler/libexceptionhandler.a
 
-warzone2100_LDADD += $(LTLIBINTL) $(SDL_LIBS) $(PHYSFS_LIBS) $(PNG_LIBS) $(OGGVORBIS_LIBS) $(THEORA_LIBS) $(OPENAL_LIBS) $(OPENGLC_LIBS) $(OPENGL_LIBS) $(X11_LIBS) $(GLee_LIBS)
+warzone2100_LDADD = $(warzone2100_LIBS) $(LTLIBINTL) $(SDL_LIBS) $(PHYSFS_LIBS) $(PNG_LIBS) $(OGGVORBIS_LIBS) $(THEORA_LIBS) $(OPENAL_LIBS) $(OPENGLC_LIBS) $(OPENGL_LIBS) $(X11_LIBS) $(GLee_LIBS)
 
 if MINGW32
 warzone2100_LDADD += $(top_builddir)/win32/warzone2100.o $(WIN32_LIBS)
