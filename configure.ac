@@ -400,7 +400,7 @@ AS_IF([test "$enable_motif" != "no"],[
 	AC_CHECK_HEADER(Xm/Xm.h, , AS_IF([test "$enable_motif" = "yes"],
 		[AC_MSG_ERROR([Motif headers not found])]))
 	AC_CHECK_LIB(Xm, XmCreateErrorDialog, [
-		AC_SUBST([MOTIF_LIBS], [-lXm])
+		AC_SUBST([MOTIF_LIBS], ["-lXt -lXm"])
 		AC_DEFINE([WZ_HAVE_MOTIF], 1, [Enable use of Motif when available])
 		AM_CONDITIONAL([MOTIF_AVAILABLE], true)
 		], AS_IF([test "$enable_motif" = "yes"],
