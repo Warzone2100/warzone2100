@@ -498,7 +498,7 @@ pause					return PAUSE;
 	/* Match type keywords */
 void|VOID				{ scr_lval.tval = VAL_VOID; return _VOID; }
 string|STRING				{ scr_lval.tval = VAL_STRING; return TYPE; }
-bool|bool				{ scr_lval.tval = VAL_BOOL; return TYPE; }
+bool|BOOL				{ scr_lval.tval = VAL_BOOL; return TYPE; }
 int|INT					{ scr_lval.tval = VAL_INT; return TYPE; }
 float|FLOAT				{ scr_lval.tval = VAL_FLOAT; return TYPE; }
 
