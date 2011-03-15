@@ -2129,8 +2129,6 @@ static void dealWithLMBFeature(FEATURE* psFeature)
 							(BASE_STATS*) &asStructureStats[i],
 							psFeature->pos.x, psFeature->pos.y);
 					}
-					addConsoleMessage(_("Truck ordered to build Oil Derrick"),DEFAULT_JUSTIFY,SYSTEM_MESSAGE);
-		//				"Construction vehicle ordered to build a Derrick.",DEFAULT_JUSTIFY);
 					FeedbackOrderGiven();
 				}
 			}
