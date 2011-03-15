@@ -590,7 +590,7 @@ FPATH_RETVAL fpathDroidRoute(DROID* psDroid, SDWORD tX, SDWORD tY)
 // Run only from path thread
 static void fpathExecute(PATHJOB *psJob, PATHRESULT *psResult)
 {
-	FPATH_RETVAL retval = fpathAStarRoute(&psResult->sMove, psJob);
+	ASR_RETVAL retval = fpathAStarRoute(&psResult->sMove, psJob);
 
 	ASSERT(retval != ASR_OK || psResult->sMove.asPath, "Ok result but no path in result");
 	switch (retval)

@@ -369,12 +369,12 @@ BOOL fpathTileLOS(SDWORD x1,SDWORD y1, SDWORD x2,SDWORD y2)
 	return !obstruction;
 }
 
-SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
+ASR_RETVAL fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 {
 	FP_NODE		*psFound, *psCurr, *psNew, *psParent, *psNext;
 	FP_NODE		*psNearest, *psRoute;
 	SDWORD		dir, x,y, currDist;
-	SDWORD		retval = ASR_OK;
+	ASR_RETVAL		retval = ASR_OK;
 	const int       tileSX = map_coord(psJob->origX);
 	const int       tileSY = map_coord(psJob->origY);
 	const int       tileFX = map_coord(psJob->destX);

@@ -35,18 +35,18 @@ extern void astarResetCounters(void);
  *
  *  @ingroup pathfinding
  */
-enum
+typedef enum
 {
 	ASR_OK,         ///< found a route
 	ASR_FAILED,     ///< no route could be found
 	ASR_NEAREST,    ///< found a partial route to a nearby position
-};
+} ASR_RETVAL;
 
 /** Use the A* algorithm to find a path
  *
  *  @ingroup pathfinding
  */
-SDWORD fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob);
+ASR_RETVAL fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob);
 
 /** Check LOS (Line Of Sight) between two tiles
  */
