@@ -1070,27 +1070,19 @@ static void displayAllianceState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffse
 	psWidget->UserData = player;
 }
 
-
 static void displayChannelState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
-	UDWORD a, b, c, player = psWidget->UserData;
-	switch(openchannels[player])
-	{
-	case 1:
-		a = 0;
-		b = IMAGE_MULTI_CHAN;
-		c = IMAGE_MULTI_CHAN;
-		break;
-	case 0:
-	default:
-		a = 0;
-		b = IMAGE_MULTI_NOCHAN;
-		c = IMAGE_MULTI_NOCHAN;
-		break;
-	}
+	UDWORD player = psWidget->UserData;
 
-	psWidget->UserData = PACKDWORD_TRI(a,b,c);
-	intDisplayImageHilight(psWidget,  xOffset,  yOffset, pColours);
+	if (openchannels[player])
+	{
+		psWidget->UserData = PACKDWORD_TRI(0, IMAGE_MULTI_CHAN, IMAGE_MULTI_CHAN);
+	}
+	else
+	{
+		psWidget->UserData = PACKDWORD_TRI(0, IMAGE_MULTI_NOCHAN, IMAGE_MULTI_NOCHAN);
+	}
+	intDisplayImageHilight(psWidget, xOffset, yOffset, pColours);
 	psWidget->UserData = player;
 }
 
@@ -1472,15 +1464,8 @@ void intProcessMultiMenu(UDWORD id)
 	//channel opens.
 	if(id >=MULTIMENU_CHANNEL &&  id<MULTIMENU_CHANNEL+MAX_PLAYERS)
 	{
-		i =(UBYTE)( id - MULTIMENU_CHANNEL);
-		if(openchannels[i])
-		{
-			openchannels[i] = false;// close channel
-		}
-		else
-		{
-			openchannels[i] = true;// open channel
-		}
+		i = id - MULTIMENU_CHANNEL;
+		openchannels[i] = !openchannels[i];
 	}
 
 	//radar gifts
