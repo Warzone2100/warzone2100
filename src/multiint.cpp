@@ -1655,7 +1655,7 @@ static void addAiChooser(int player)
 	{
 		sButInit.id = MULTIOP_AI_OPEN;
 		sButInit.pTip = _("Allow human players to join in this slot");
-		sButInit.UserData = AI_OPEN;
+		sButInit.UserData = (UDWORD)AI_OPEN;
 		sButInit.y = y;
 		y += step;
 		widgAddButton(psWScreen, &sButInit);
@@ -1664,7 +1664,7 @@ static void addAiChooser(int player)
 	// Closed button
 	sButInit.pTip = _("Leave this slot unused");
 	sButInit.id = MULTIOP_AI_CLOSED;
-	sButInit.UserData = AI_CLOSED;
+	sButInit.UserData = (UDWORD)AI_CLOSED;
 	sButInit.y = y;
 	y += step + 8;
 	widgAddButton(psWScreen, &sButInit);
