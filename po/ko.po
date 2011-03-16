@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100 2.3_branch\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-01-18 00:46+0100\n"
+"POT-Creation-Date: 2011-03-16 19:05+0100\n"
 "PO-Revision-Date: 2010-11-23 21:01+0900\n"
 "Last-Translator: Joshua Shin <urgood2@gmail.com>\n"
 "Language-Team: Korean Translation Team <urgood2@gmail.com>\n"
@@ -10940,6 +10940,11 @@ msgstr "HEAP 폭탄 투하실 레트리뷰션 VTOL"
 msgid "Scourge Retaliation VTOL"
 msgstr "스커지 리탤리에이션 VTOL"
 
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1957
+#: data/mp/messages/strings/names.txt:1969
+msgid "Plasmite Retribution VTOL"
+msgstr "플라즈마이트 폭탄 투하실 레트리뷰션 VTOL"
+
 #: data/mp/messages/resmessages12.rmsg:58
 msgid "Construction speed +10%"
 msgstr "건축 속도 +10%"
@@ -12213,10 +12218,6 @@ msgstr "미니로켓 배열 코브라 무한궤도"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "초고속도 캐논 파이썬 호버추진"
 
-#: data/mp/messages/strings/names.txt:1969
-msgid "Plasmite Retribution VTOL"
-msgstr "플라즈마이트 폭탄 투하실 레트리뷰션 VTOL"
-
 #: lib/framework/i18n.c:90
 #: lib/framework/i18n.c:149
 msgid "System locale"
@@ -12563,7 +12564,7 @@ msgid "Cannot Build. Oil Resource Burning."
 msgstr "건설이 불가능합니다. 석유 자원이 타고 있습니다"
 
 #: src/display.c:1923
-#: src/display.c:2538
+#: src/display.c:2536
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - 데미지 %d%% - 경험치 %d, %s"
@@ -12572,10 +12573,6 @@ msgstr "%s - 데미지 %d%% - 경험치 %d, %s"
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - 동맹군 - 데미지 %d%% - 경험치 %d, %s"
-
-#: src/display.c:2132
-msgid "Truck ordered to build Oil Derrick"
-msgstr "트럭이 유정탑을 건설하라는 명령을 받았습니다"
 
 #: src/droid.c:192
 msgid "Unit Lost!"
@@ -14966,6 +14963,9 @@ msgstr " - 빌드 날짜 %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "버젼 %s%s%s%s"
+
+#~ msgid "Truck ordered to build Oil Derrick"
+#~ msgstr "트럭이 유정탑을 건설하라는 명령을 받았습니다"
 
 #~ msgid "Plascrete MK3"
 #~ msgstr "플라스크리트 Mk 3"

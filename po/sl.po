@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-01-18 00:46+0100\n"
+"POT-Creation-Date: 2011-03-16 19:05+0100\n"
 "PO-Revision-Date: 2009-06-10 14:43+0100\n"
 "Last-Translator: Tomaž Povšin <tomaz.povsin@gmail.com>\n"
 "Language-Team: Slovenian <sl@li.org>\n"
@@ -10943,6 +10943,12 @@ msgstr "Srednje težko telo - kazen"
 msgid "Scourge Retaliation VTOL"
 msgstr "Povračilo"
 
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1957
+#: data/mp/messages/strings/names.txt:1969
+#, fuzzy
+msgid "Plasmite Retribution VTOL"
+msgstr "Srednje težko telo - kazen"
+
 #: data/mp/messages/resmessages12.rmsg:58
 #, fuzzy
 msgid "Construction speed +10%"
@@ -12303,11 +12309,6 @@ msgstr "Mini-raketno topništvo Naočarka Gosenice"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Težki top Piton Zračna blazina"
 
-#: data/mp/messages/strings/names.txt:1969
-#, fuzzy
-msgid "Plasmite Retribution VTOL"
-msgstr "Srednje težko telo - kazen"
-
 #: lib/framework/i18n.c:90
 #: lib/framework/i18n.c:149
 msgid "System locale"
@@ -12650,7 +12651,7 @@ msgid "Cannot Build. Oil Resource Burning."
 msgstr "Gradnja ni možna. Vir nafte gori."
 
 #: src/display.c:1923
-#: src/display.c:2538
+#: src/display.c:2536
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Poškodbe %d%% - Izkušenj %d %s"
@@ -12659,10 +12660,6 @@ msgstr "%s - Poškodbe %d%% - Izkušenj %d %s"
 #, fuzzy, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Poškodbe %d%% - Izkušenj %d %s"
-
-#: src/display.c:2132
-msgid "Truck ordered to build Oil Derrick"
-msgstr "Tovornjaku ukazana gradnja naftne vrtine"
 
 #: src/droid.c:192
 msgid "Unit Lost!"
@@ -15113,6 +15110,9 @@ msgstr "- Zgrajen %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Verzija %s%s%s%s"
+
+#~ msgid "Truck ordered to build Oil Derrick"
+#~ msgstr "Tovornjaku ukazana gradnja naftne vrtine"
 
 #~ msgid "Plascrete MK3"
 #~ msgstr "Plasbeton tip 3"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-01-18 00:46+0100\n"
+"POT-Creation-Date: 2011-03-16 19:05+0100\n"
 "PO-Revision-Date: 2011-01-10 15:11+0100\n"
 "Last-Translator: Daniel Vijande <nsa_server@hotmail.com>\n"
 "Language-Team: Spanish <warzone-dev@gna.org>\n"
@@ -10888,6 +10888,11 @@ msgstr "Bahía de Bombas Múltiples Merecido ADV"
 msgid "Scourge Retaliation VTOL"
 msgstr "Azote Represalia ADV"
 
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1957
+#: data/mp/messages/strings/names.txt:1969
+msgid "Plasmite Retribution VTOL"
+msgstr "Plasmita Merecido ADV"
+
 #: data/mp/messages/resmessages12.rmsg:58
 msgid "Construction speed +10%"
 msgstr "Incrementa la velocidad de construcción en un 10%"
@@ -12159,10 +12164,6 @@ msgstr "Artillería Mini-Cohetes Cobra Oruga"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Cañón HPV Pitón Oruga"
 
-#: data/mp/messages/strings/names.txt:1969
-msgid "Plasmite Retribution VTOL"
-msgstr "Plasmita Merecido ADV"
-
 #: lib/framework/i18n.c:90
 #: lib/framework/i18n.c:149
 msgid "System locale"
@@ -12503,7 +12504,7 @@ msgid "Cannot Build. Oil Resource Burning."
 msgstr "No se puede construir. Yacimiento de petróleo ardiendo."
 
 #: src/display.c:1923
-#: src/display.c:2538
+#: src/display.c:2536
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Daño %d%% - Experiencia %d, %s"
@@ -12512,10 +12513,6 @@ msgstr "%s - Daño %d%% - Experiencia %d, %s"
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s Aliado - Daño %d%% - Experiencia %d, %s"
-
-#: src/display.c:2132
-msgid "Truck ordered to build Oil Derrick"
-msgstr "Camión enviado a construir Torre Petrolífera"
 
 #: src/droid.c:192
 msgid "Unit Lost!"
@@ -14908,6 +14905,9 @@ msgstr " - Construido %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Versión: %s%s%s%s"
+
+#~ msgid "Truck ordered to build Oil Derrick"
+#~ msgstr "Camión enviado a construir Torre Petrolífera"
 
 #~ msgid "Super Transport Available"
 #~ msgstr "Super Transporte Disponible"

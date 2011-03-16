@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-01-18 00:46+0100\n"
+"POT-Creation-Date: 2011-03-16 19:05+0100\n"
 "PO-Revision-Date: 2009-05-11 00:21+0800\n"
 "Last-Translator: \n"
 "Language-Team: zh_TW\n"
@@ -10965,6 +10965,12 @@ msgstr "中量級車身：懲罰者"
 msgid "Scourge Retaliation VTOL"
 msgstr "報復者"
 
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1957
+#: data/mp/messages/strings/names.txt:1969
+#, fuzzy
+msgid "Plasmite Retribution VTOL"
+msgstr "中量級車身：懲罰者"
+
 #: data/mp/messages/resmessages12.rmsg:58
 #, fuzzy
 msgid "Construction speed +10%"
@@ -12348,11 +12354,6 @@ msgstr "半履帶式眼鏡蛇坦克（迷你火箭炮）"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "蟒蛇氣墊船（重型加農砲）"
 
-#: data/mp/messages/strings/names.txt:1969
-#, fuzzy
-msgid "Plasmite Retribution VTOL"
-msgstr "中量級車身：懲罰者"
-
 #: lib/framework/i18n.c:90
 #: lib/framework/i18n.c:149
 msgid "System locale"
@@ -12696,7 +12697,7 @@ msgid "Cannot Build. Oil Resource Burning."
 msgstr "油田燃燒中，無法建築鑽油井"
 
 #: src/display.c:1923
-#: src/display.c:2538
+#: src/display.c:2536
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - 損傷 %d%% - 經驗值 %d, %s"
@@ -12705,10 +12706,6 @@ msgstr "%s - 損傷 %d%% - 經驗值 %d, %s"
 #, fuzzy, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - 損傷 %d%% - 經驗值 %d, %s"
-
-#: src/display.c:2132
-msgid "Truck ordered to build Oil Derrick"
-msgstr "命令工程車建造鑽油井"
 
 #: src/droid.c:192
 msgid "Unit Lost!"
@@ -15153,6 +15150,9 @@ msgstr " - Built %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "版本 %s%s%s%s"
+
+#~ msgid "Truck ordered to build Oil Derrick"
+#~ msgstr "命令工程車建造鑽油井"
 
 #~ msgid "Plascrete MK3"
 #~ msgstr "超合金鋼筋牆三型"

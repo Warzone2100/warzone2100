@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WZ2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-01-18 00:46+0100\n"
+"POT-Creation-Date: 2011-03-16 19:05+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: metalwarrior95 <metalwarrioroften@gmail.com>\n"
 "Language-Team: \n"
@@ -10900,6 +10900,12 @@ msgstr "AI unit"
 msgid "Scourge Retaliation VTOL"
 msgstr "Plačenik"
 
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1957
+#: data/mp/messages/strings/names.txt:1969
+#, fuzzy
+msgid "Plasmite Retribution VTOL"
+msgstr "AI unit"
+
 #: data/mp/messages/resmessages12.rmsg:58
 msgid "Construction speed +10%"
 msgstr "Brzina gradnje +10%"
@@ -12183,11 +12189,6 @@ msgstr "AI unit"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "AI unit"
 
-#: data/mp/messages/strings/names.txt:1969
-#, fuzzy
-msgid "Plasmite Retribution VTOL"
-msgstr "AI unit"
-
 #: lib/framework/i18n.c:90
 #: lib/framework/i18n.c:149
 msgid "System locale"
@@ -12528,7 +12529,7 @@ msgid "Cannot Build. Oil Resource Burning."
 msgstr "Nedopušteno Građenje. Izvor Nafte Gori!"
 
 #: src/display.c:1923
-#: src/display.c:2538
+#: src/display.c:2536
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr ""
@@ -12537,10 +12538,6 @@ msgstr ""
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr ""
-
-#: src/display.c:2132
-msgid "Truck ordered to build Oil Derrick"
-msgstr "Kamionu naređeno da sagradi pumpu za naftu"
 
 #: src/droid.c:192
 msgid "Unit Lost!"
@@ -14954,6 +14951,9 @@ msgstr " - Kompajlirano %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Verzija %s%s%s%s"
+
+#~ msgid "Truck ordered to build Oil Derrick"
+#~ msgstr "Kamionu naređeno da sagradi pumpu za naftu"
 
 #, fuzzy
 #~ msgid "Super Transport Available"

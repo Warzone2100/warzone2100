@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-01-18 00:46+0100\n"
+"POT-Creation-Date: 2011-03-16 19:05+0100\n"
 "PO-Revision-Date: 2011-02-16 12:57-0300\n"
 "Last-Translator: Artur Filipe <tucalipe@gmail.com>\n"
 "Language-Team: Portugese <warzone-dev@gna.org>\n"
@@ -10954,6 +10954,12 @@ msgstr "Chassis Médio - Retribution"
 msgid "Scourge Retaliation VTOL"
 msgstr "Retaliation"
 
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1957
+#: data/mp/messages/strings/names.txt:1969
+#, fuzzy
+msgid "Plasmite Retribution VTOL"
+msgstr "Chassis Médio - Retribution"
+
 #: data/mp/messages/resmessages12.rmsg:58
 #, fuzzy
 msgid "Construction speed +10%"
@@ -12315,11 +12321,6 @@ msgstr "Artilharia de Mini Rockets Cobra Lagartas"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Canhão Pesado Python Hovercraft"
 
-#: data/mp/messages/strings/names.txt:1969
-#, fuzzy
-msgid "Plasmite Retribution VTOL"
-msgstr "Chassis Médio - Retribution"
-
 #: lib/framework/i18n.c:90
 #: lib/framework/i18n.c:149
 msgid "System locale"
@@ -12664,7 +12665,7 @@ msgid "Cannot Build. Oil Resource Burning."
 msgstr "Impossível construir. Fonte de petróleo a arder."
 
 #: src/display.c:1923
-#: src/display.c:2538
+#: src/display.c:2536
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Dano %d%% - Experiência %d, %s"
@@ -12673,10 +12674,6 @@ msgstr "%s - Dano %d%% - Experiência %d, %s"
 #, fuzzy, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Dano %d%% - Experiência %d, %s"
-
-#: src/display.c:2132
-msgid "Truck ordered to build Oil Derrick"
-msgstr "Camião ordenado a construir Extractor de Petróleo"
 
 #: src/droid.c:192
 msgid "Unit Lost!"
@@ -15116,6 +15113,9 @@ msgstr " - Construído %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Versão %s%s%s%s"
+
+#~ msgid "Truck ordered to build Oil Derrick"
+#~ msgstr "Camião ordenado a construir Extractor de Petróleo"
 
 #~ msgid "Plascrete MK3"
 #~ msgstr "Plascrete Mk3"

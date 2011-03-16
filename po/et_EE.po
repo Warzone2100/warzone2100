@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-01-18 00:46+0100\n"
+"POT-Creation-Date: 2011-03-16 19:05+0100\n"
 "PO-Revision-Date: 2010-05-10 16:59+0200\n"
 "Last-Translator: erlando <erlando112@hotmail.com>\n"
 "Language-Team: Estonian <ee@li.org>\n"
@@ -10887,6 +10887,12 @@ msgstr "VTOL Retribution Täispommitus"
 msgid "Scourge Retaliation VTOL"
 msgstr "VTOL Retaliation Scourge Rakett"
 
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1957
+#: data/mp/messages/strings/names.txt:1969
+#, fuzzy
+msgid "Plasmite Retribution VTOL"
+msgstr "VTOL Retribution Täispommitus"
+
 #: data/mp/messages/resmessages12.rmsg:58
 msgid "Construction speed +10%"
 msgstr "Ehitamis kiirus +10%"
@@ -12173,11 +12179,6 @@ msgstr "Roomikutega Cobra MRA"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Hõljukiga Python Hüperkiire Kahur"
 
-#: data/mp/messages/strings/names.txt:1969
-#, fuzzy
-msgid "Plasmite Retribution VTOL"
-msgstr "VTOL Retribution Täispommitus"
-
 #: lib/framework/i18n.c:90
 #: lib/framework/i18n.c:149
 msgid "System locale"
@@ -12518,7 +12519,7 @@ msgid "Cannot Build. Oil Resource Burning."
 msgstr "EI Saa Ehitada. Naftaresurss Põleb."
 
 #: src/display.c:1923
-#: src/display.c:2538
+#: src/display.c:2536
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Kahju %d%% - Kogemus %d, %s"
@@ -12527,10 +12528,6 @@ msgstr "%s - Kahju %d%% - Kogemus %d, %s"
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s -Liitlane - Kahju %d%% - Kogemus %d, %s"
-
-#: src/display.c:2132
-msgid "Truck ordered to build Oil Derrick"
-msgstr "Veoautol kästi Naftapuurtorn ehitada"
 
 #: src/droid.c:192
 msgid "Unit Lost!"
@@ -14945,6 +14942,9 @@ msgstr " - Built %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Versioon %s%s%s%s"
+
+#~ msgid "Truck ordered to build Oil Derrick"
+#~ msgstr "Veoautol kästi Naftapuurtorn ehitada"
 
 #~ msgid "Plascrete MK3"
 #~ msgstr "Raskebetoon MK3"

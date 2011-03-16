@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-01-18 00:46+0100\n"
+"POT-Creation-Date: 2011-03-16 19:05+0100\n"
 "PO-Revision-Date: 2011-02-16 12:57-0300\n"
 "Last-Translator: Artur Filipe <tucalipe@gmail.com>\n"
 "Language-Team: Brazilian Portugese <warzone-dev@gna.org>\n"
@@ -10881,6 +10881,11 @@ msgstr "PDV Bombas Explosivas Retribuição"
 msgid "Scourge Retaliation VTOL"
 msgstr "PDV Míssil Scourge Retaliação"
 
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1957
+#: data/mp/messages/strings/names.txt:1969
+msgid "Plasmite Retribution VTOL"
+msgstr "PDV Plasmite Retribuição"
+
 #: data/mp/messages/resmessages12.rmsg:58
 msgid "Construction speed +10%"
 msgstr "Velocidade de construção +10%"
@@ -12152,10 +12157,6 @@ msgstr "Tanque Artilharia de Mini-Foguetes Cobra"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Hovercraft Canhão de Hiper Velocidade Píton"
 
-#: data/mp/messages/strings/names.txt:1969
-msgid "Plasmite Retribution VTOL"
-msgstr "PDV Plasmite Retribuição"
-
 #: lib/framework/i18n.c:90
 #: lib/framework/i18n.c:149
 msgid "System locale"
@@ -12496,7 +12497,7 @@ msgid "Cannot Build. Oil Resource Burning."
 msgstr "Não pode construir. Poço em chamas."
 
 #: src/display.c:1923
-#: src/display.c:2538
+#: src/display.c:2536
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Danos %d%% - Experiência %d, %s"
@@ -12505,10 +12506,6 @@ msgstr "%s - Danos %d%% - Experiência %d, %s"
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Aliado - Danos %d%% - Experiência %d, %s"
-
-#: src/display.c:2132
-msgid "Truck ordered to build Oil Derrick"
-msgstr "Caminhão ordenado a construir Extrator de Petróleo"
 
 #: src/droid.c:192
 msgid "Unit Lost!"
@@ -14897,6 +14894,9 @@ msgstr " - Finalizado em %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Versão %s%s%s%s"
+
+#~ msgid "Truck ordered to build Oil Derrick"
+#~ msgstr "Caminhão ordenado a construir Extrator de Petróleo"
 
 #~ msgid "Plascrete MK3"
 #~ msgstr "Plascreto Mk3"

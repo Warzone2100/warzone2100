@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-01-18 00:46+0100\n"
+"POT-Creation-Date: 2011-03-16 19:05+0100\n"
 "PO-Revision-Date: 2008-04-21 08:59+0000\n"
 "Last-Translator: Wander Nauta <wnauta@gmail.com>\n"
 "Language-Team: Frisian <fy@li.org>\n"
@@ -10885,6 +10885,11 @@ msgstr ""
 msgid "Scourge Retaliation VTOL"
 msgstr ""
 
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1957
+#: data/mp/messages/strings/names.txt:1969
+msgid "Plasmite Retribution VTOL"
+msgstr ""
+
 #: data/mp/messages/resmessages12.rmsg:58
 msgid "Construction speed +10%"
 msgstr ""
@@ -12160,10 +12165,6 @@ msgstr ""
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1969
-msgid "Plasmite Retribution VTOL"
-msgstr ""
-
 #: lib/framework/i18n.c:90
 #: lib/framework/i18n.c:149
 msgid "System locale"
@@ -12506,7 +12507,7 @@ msgid "Cannot Build. Oil Resource Burning."
 msgstr "Kin net bouwe. Oaljebron is oan it brânen."
 
 #: src/display.c:1923
-#: src/display.c:2538
+#: src/display.c:2536
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Skea %d%% - Erfaring %d, %s"
@@ -12515,10 +12516,6 @@ msgstr "%s - Skea %d%% - Erfaring %d, %s"
 #, fuzzy, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Skea %d%% - Erfaring %d, %s"
-
-#: src/display.c:2132
-msgid "Truck ordered to build Oil Derrick"
-msgstr "Frachtauto kommandeare omt in Oaljepunt te bouwen"
 
 #: src/droid.c:192
 msgid "Unit Lost!"
@@ -14945,6 +14942,9 @@ msgstr ""
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr ""
+
+#~ msgid "Truck ordered to build Oil Derrick"
+#~ msgstr "Frachtauto kommandeare omt in Oaljepunt te bouwen"
 
 #, fuzzy
 #~ msgid "Super Transport"

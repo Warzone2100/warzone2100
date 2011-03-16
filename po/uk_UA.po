@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100 version 2.2.3\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-01-18 00:46+0100\n"
+"POT-Creation-Date: 2011-03-16 19:05+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Меденцій Олександр <olexandr1986@i.ua>\n"
 "Language-Team: \n"
@@ -10906,6 +10906,12 @@ msgstr "ВЗІП Кара з Бронебійними Бомбами"
 msgid "Scourge Retaliation VTOL"
 msgstr "ВЗІП Відплата з ПУ 'Батіг'"
 
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1957
+#: data/mp/messages/strings/names.txt:1969
+#, fuzzy
+msgid "Plasmite Retribution VTOL"
+msgstr "ВЗІП Кара з Бронебійними Бомбами"
+
 #: data/mp/messages/resmessages12.rmsg:58
 msgid "Construction speed +10%"
 msgstr "Швидкість будівництва +10%"
@@ -12192,11 +12198,6 @@ msgstr "Гусенична Кобра з Міні-Ракетною Артиле�
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Гусеничний Пітон з ГШ Гарматою"
 
-#: data/mp/messages/strings/names.txt:1969
-#, fuzzy
-msgid "Plasmite Retribution VTOL"
-msgstr "ВЗІП Кара з Бронебійними Бомбами"
-
 #: lib/framework/i18n.c:90
 #: lib/framework/i18n.c:149
 msgid "System locale"
@@ -12537,7 +12538,7 @@ msgid "Cannot Build. Oil Resource Burning."
 msgstr "Будівництво Неможливе. Через пожежу на Нафтовому Родовищі"
 
 #: src/display.c:1923
-#: src/display.c:2538
+#: src/display.c:2536
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Пошкоджень %d%% - Вбито %d, %s"
@@ -12546,10 +12547,6 @@ msgstr "%s - Пошкоджень %d%% - Вбито %d, %s"
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Союзник - Пошкоджень %d%% - Вбито %d, %s"
-
-#: src/display.c:2132
-msgid "Truck ordered to build Oil Derrick"
-msgstr "Інженеру наказано побудувати Бурову Вежу"
 
 #: src/droid.c:192
 msgid "Unit Lost!"
@@ -14967,6 +14964,9 @@ msgstr " - Збудовано %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Версія %s%s%s%s"
+
+#~ msgid "Truck ordered to build Oil Derrick"
+#~ msgstr "Інженеру наказано побудувати Бурову Вежу"
 
 #~ msgid "Plascrete MK3"
 #~ msgstr "Пластичний Залізобетон Мк3"
