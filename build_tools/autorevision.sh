@@ -17,6 +17,10 @@ function gitRepo {
 	
 	# Enumeration of changesets
 	VCS_NUM="$(git rev-list --count HEAD)"
+	if [ -z "${VCS_NUM}" ]; then
+		echo "warning: Your version of git is outdated and cause errors when compiling, please upgrade."
+		VCS_NUM="$(git rev-list HEAD | wc -l)"
+	fi
 	
 	# The full revision hash
 	VCS_FULL_HASH="$(git rev-parse HEAD)"
