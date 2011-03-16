@@ -18,7 +18,7 @@ function gitRepo {
 	# Enumeration of changesets
 	VCS_NUM="$(git rev-list --count HEAD)"
 	if [ -z "${VCS_NUM}" ]; then
-		echo "warning: Your version of git is outdated and cause errors when compiling, please upgrade."
+		echo "warning: Counting the number of revisions may be slower due to an outdated git version less than 1.7.2.3. If something breaks, please update it."
 		VCS_NUM="$(git rev-list HEAD | wc -l)"
 	fi
 	
