@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-03-08 15:43+0100\n"
+"POT-Creation-Date: 2011-03-16 17:13+0100\n"
 "PO-Revision-Date: 2011-02-16 12:57-0300\n"
 "Last-Translator: Artur Filipe <tucalipe@gmail.com>\n"
 "Language-Team: Portugese <warzone-dev@gna.org>\n"
@@ -10766,6 +10766,12 @@ msgstr "Chassis Médio - Retribution"
 msgid "Scourge Retaliation VTOL"
 msgstr "Retaliation"
 
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1957
+#: data/mp/messages/strings/names.txt:1963
+#, fuzzy
+msgid "Plasmite Retribution VTOL"
+msgstr "Chassis Médio - Retribution"
+
 #: data/mp/messages/resmessages12.rmsg:58
 #, fuzzy
 msgid "Construction speed +10%"
@@ -12159,11 +12165,6 @@ msgstr "Artilharia de Mini Rockets Cobra Lagartas"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Canhão Pesado Python Hovercraft"
 
-#: data/mp/messages/strings/names.txt:1963
-#, fuzzy
-msgid "Plasmite Retribution VTOL"
-msgstr "Chassis Médio - Retribution"
-
 #: lib/framework/i18n.cpp:90
 #: lib/framework/i18n.cpp:149
 msgid "System locale"
@@ -12195,7 +12196,7 @@ msgstr "Não foi possível comunicar com o servidor de lobby! A porta TCP %u est
 #: src/intorder.cpp:727
 #: src/loadsave.cpp:253
 #: src/multimenu.cpp:493
-#: src/multimenu.cpp:1363
+#: src/multimenu.cpp:1355
 #: src/transporter.cpp:277
 #: src/transporter.cpp:358
 #: src/transporter.cpp:817
@@ -12512,7 +12513,7 @@ msgid "Cannot Build. Oil Resource Burning."
 msgstr "Impossível construir. Fonte de petróleo a arder."
 
 #: src/display.cpp:1828
-#: src/display.cpp:2420
+#: src/display.cpp:2403
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Dano %d%% - Experiência %d, %s"
@@ -12521,20 +12522,6 @@ msgstr "%s - Dano %d%% - Experiência %d, %s"
 #, fuzzy, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Dano %d%% - Experiência %d, %s"
-
-#: src/display.cpp:2042
-msgid "Truck ordered to build Oil Derrick"
-msgstr "Camião ordenado a construir Extractor de Petróleo"
-
-#: src/display.cpp:2043
-#, fuzzy
-msgid "2 trucks ordered to build Oil Derrick"
-msgstr "Camião ordenado a construir Extractor de Petróleo"
-
-#: src/display.cpp:2044
-#, fuzzy, c-format
-msgid "%d trucks ordered to build Oil Derrick"
-msgstr "Camião ordenado a construir Extractor de Petróleo"
 
 #: src/droid.cpp:211
 msgid "Unit Lost!"
@@ -14190,7 +14177,7 @@ msgstr "Continuar Jogo"
 msgid "GAME SAVED :"
 msgstr "JOGO GRAVADO :"
 
-#: src/move.cpp:2264
+#: src/move.cpp:2262
 #, fuzzy, c-format
 msgid "You found %u power in an oil drum."
 msgstr "Encontraste %u energia num barril de petróleo"
@@ -14734,27 +14721,27 @@ msgstr "Unidades"
 msgid "Structs"
 msgstr "Estrutura"
 
-#: src/multimenu.cpp:1136
+#: src/multimenu.cpp:1128
 msgid "Channel"
 msgstr ""
 
-#: src/multimenu.cpp:1150
+#: src/multimenu.cpp:1142
 msgid "Toggle Alliance State"
 msgstr "Mudar Estado de Aliança"
 
-#: src/multimenu.cpp:1169
+#: src/multimenu.cpp:1161
 msgid "Give Visibility Report"
 msgstr "Dar Relatório de visibilidade"
 
-#: src/multimenu.cpp:1175
+#: src/multimenu.cpp:1167
 msgid "Leak Technology Documents"
 msgstr "Dar Documentos de Tecnonlogia"
 
-#: src/multimenu.cpp:1182
+#: src/multimenu.cpp:1174
 msgid "Hand Over Selected Units"
 msgstr "Passar Controlo das Unidades Seleccionadas"
 
-#: src/multimenu.cpp:1188
+#: src/multimenu.cpp:1180
 msgid "Give Power To Player"
 msgstr "Dar Energia ao Jogador"
 
@@ -15109,6 +15096,17 @@ msgstr " - Construído %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Versão %s%s%s%s"
+
+#~ msgid "Truck ordered to build Oil Derrick"
+#~ msgstr "Camião ordenado a construir Extractor de Petróleo"
+
+#, fuzzy
+#~ msgid "2 trucks ordered to build Oil Derrick"
+#~ msgstr "Camião ordenado a construir Extractor de Petróleo"
+
+#, fuzzy
+#~ msgid "%d trucks ordered to build Oil Derrick"
+#~ msgstr "Camião ordenado a construir Extractor de Petróleo"
 
 #, fuzzy
 #~ msgid "Kick player"

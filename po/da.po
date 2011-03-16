@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-03-08 15:43+0100\n"
+"POT-Creation-Date: 2011-03-16 17:13+0100\n"
 "PO-Revision-Date: 2008-05-09 16:08+0000\n"
 "Last-Translator: carson <Unknown>\n"
 "Language-Team: Dansk <da@li.org>\n"
@@ -10937,6 +10937,12 @@ msgstr "Score"
 msgid "Scourge Retaliation VTOL"
 msgstr "Score"
 
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1957
+#: data/mp/messages/strings/names.txt:1963
+#, fuzzy
+msgid "Plasmite Retribution VTOL"
+msgstr "Score"
+
 #: data/mp/messages/resmessages12.rmsg:58
 msgid "Construction speed +10%"
 msgstr ""
@@ -12303,11 +12309,6 @@ msgstr "Vælg alle halv-bælter"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Kommandører"
 
-#: data/mp/messages/strings/names.txt:1963
-#, fuzzy
-msgid "Plasmite Retribution VTOL"
-msgstr "Score"
-
 #: lib/framework/i18n.cpp:90
 #: lib/framework/i18n.cpp:149
 #, fuzzy
@@ -12339,7 +12340,7 @@ msgstr ""
 #: src/intorder.cpp:727
 #: src/loadsave.cpp:253
 #: src/multimenu.cpp:493
-#: src/multimenu.cpp:1363
+#: src/multimenu.cpp:1355
 #: src/transporter.cpp:277
 #: src/transporter.cpp:358
 #: src/transporter.cpp:817
@@ -12658,7 +12659,7 @@ msgid "Cannot Build. Oil Resource Burning."
 msgstr "Kan ikke bygge på brændende oilebrøn."
 
 #: src/display.cpp:1828
-#: src/display.cpp:2420
+#: src/display.cpp:2403
 #, fuzzy, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Skade %d%% - Drab %d, %s"
@@ -12667,20 +12668,6 @@ msgstr "%s - Skade %d%% - Drab %d, %s"
 #, fuzzy, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Skade %d%% - Drab %d, %s"
-
-#: src/display.cpp:2042
-msgid "Truck ordered to build Oil Derrick"
-msgstr "Truck beordret til at bygge oliebrøn."
-
-#: src/display.cpp:2043
-#, fuzzy
-msgid "2 trucks ordered to build Oil Derrick"
-msgstr "Truck beordret til at bygge oliebrøn."
-
-#: src/display.cpp:2044
-#, fuzzy, c-format
-msgid "%d trucks ordered to build Oil Derrick"
-msgstr "Truck beordret til at bygge oliebrøn."
 
 #: src/droid.cpp:211
 msgid "Unit Lost!"
@@ -14363,7 +14350,7 @@ msgstr "Fortsæt spil"
 msgid "GAME SAVED :"
 msgstr "SPIL GEMT!"
 
-#: src/move.cpp:2264
+#: src/move.cpp:2262
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr ""
@@ -14915,27 +14902,27 @@ msgstr "Enhed"
 msgid "Structs"
 msgstr "Tabte bygninger"
 
-#: src/multimenu.cpp:1136
+#: src/multimenu.cpp:1128
 msgid "Channel"
 msgstr ""
 
-#: src/multimenu.cpp:1150
+#: src/multimenu.cpp:1142
 msgid "Toggle Alliance State"
 msgstr "Slå aliance status til/fra"
 
-#: src/multimenu.cpp:1169
+#: src/multimenu.cpp:1161
 msgid "Give Visibility Report"
 msgstr "Send rekonniseringsrapport"
 
-#: src/multimenu.cpp:1175
+#: src/multimenu.cpp:1167
 msgid "Leak Technology Documents"
 msgstr "Send forskningsresultater"
 
-#: src/multimenu.cpp:1182
+#: src/multimenu.cpp:1174
 msgid "Hand Over Selected Units"
 msgstr "Forær enheder"
 
-#: src/multimenu.cpp:1188
+#: src/multimenu.cpp:1180
 msgid "Give Power To Player"
 msgstr "Forær energi"
 
@@ -15289,6 +15276,17 @@ msgstr ""
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr ""
+
+#~ msgid "Truck ordered to build Oil Derrick"
+#~ msgstr "Truck beordret til at bygge oliebrøn."
+
+#, fuzzy
+#~ msgid "2 trucks ordered to build Oil Derrick"
+#~ msgstr "Truck beordret til at bygge oliebrøn."
+
+#, fuzzy
+#~ msgid "%d trucks ordered to build Oil Derrick"
+#~ msgstr "Truck beordret til at bygge oliebrøn."
 
 #, fuzzy
 #~ msgid "Kick player"

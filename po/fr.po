@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-03-08 15:43+0100\n"
+"POT-Creation-Date: 2011-03-16 17:13+0100\n"
 "PO-Revision-Date: 2010-04-21 08:32-0500\n"
 "Last-Translator: Gilles J. Séguin <segg2@videotron.ca>\n"
 "Language-Team: French <warzone-dev@gna.org>\n"
@@ -10766,6 +10766,12 @@ msgstr "Châssis Moyen - Châtiment"
 msgid "Scourge Retaliation VTOL"
 msgstr "Revanche Scourge VTOL"
 
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1957
+#: data/mp/messages/strings/names.txt:1963
+#, fuzzy
+msgid "Plasmite Retribution VTOL"
+msgstr "Châssis Moyen - Châtiment"
+
 #: data/mp/messages/resmessages12.rmsg:58
 msgid "Construction speed +10%"
 msgstr "vitesse de construction +10%"
@@ -12117,11 +12123,6 @@ msgstr "Lanceur de Mini-Roquettes Cobra chenillé"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Canon lourd Python aéro-glisseur"
 
-#: data/mp/messages/strings/names.txt:1963
-#, fuzzy
-msgid "Plasmite Retribution VTOL"
-msgstr "Châssis Moyen - Châtiment"
-
 #: lib/framework/i18n.cpp:90
 #: lib/framework/i18n.cpp:149
 msgid "System locale"
@@ -12153,7 +12154,7 @@ msgstr "Impossible de communiquer avec le serveur maître ! Le port TCP %u est-
 #: src/intorder.cpp:727
 #: src/loadsave.cpp:253
 #: src/multimenu.cpp:493
-#: src/multimenu.cpp:1363
+#: src/multimenu.cpp:1355
 #: src/transporter.cpp:277
 #: src/transporter.cpp:358
 #: src/transporter.cpp:817
@@ -12468,7 +12469,7 @@ msgid "Cannot Build. Oil Resource Burning."
 msgstr "Construction Impossible. Le Gisement de Pétrole est en Feu."
 
 #: src/display.cpp:1828
-#: src/display.cpp:2420
+#: src/display.cpp:2403
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Endommagé à %d%% - Expérience %d, %s"
@@ -12477,20 +12478,6 @@ msgstr "%s - Endommagé à %d%% - Expérience %d, %s"
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Allié - Endommagé à %d%% - Expérience %d, %s"
-
-#: src/display.cpp:2042
-msgid "Truck ordered to build Oil Derrick"
-msgstr "Construction d'un Puits de Pétrole"
-
-#: src/display.cpp:2043
-#, fuzzy
-msgid "2 trucks ordered to build Oil Derrick"
-msgstr "Construction d'un Puits de Pétrole"
-
-#: src/display.cpp:2044
-#, fuzzy, c-format
-msgid "%d trucks ordered to build Oil Derrick"
-msgstr "Construction d'un Puits de Pétrole"
 
 #: src/droid.cpp:211
 msgid "Unit Lost!"
@@ -14150,7 +14137,7 @@ msgstr "Continuer"
 msgid "GAME SAVED :"
 msgstr "PARTIE SAUVEGARDÉE!"
 
-#: src/move.cpp:2264
+#: src/move.cpp:2262
 #, fuzzy, c-format
 msgid "You found %u power in an oil drum."
 msgstr "Vous avez trouvé %u unités d'énergie dans un baril de pétrole"
@@ -14692,27 +14679,27 @@ msgstr "Unités"
 msgid "Structs"
 msgstr "Structure"
 
-#: src/multimenu.cpp:1136
+#: src/multimenu.cpp:1128
 msgid "Channel"
 msgstr "Canal"
 
-#: src/multimenu.cpp:1150
+#: src/multimenu.cpp:1142
 msgid "Toggle Alliance State"
 msgstr "Activer/Désactiver l'état des Alliances"
 
-#: src/multimenu.cpp:1169
+#: src/multimenu.cpp:1161
 msgid "Give Visibility Report"
 msgstr "Envoyer un Rapport de Visibilité"
 
-#: src/multimenu.cpp:1175
+#: src/multimenu.cpp:1167
 msgid "Leak Technology Documents"
 msgstr "Transmettre des technologies"
 
-#: src/multimenu.cpp:1182
+#: src/multimenu.cpp:1174
 msgid "Hand Over Selected Units"
 msgstr "Céder les Unités Sélectionnées"
 
-#: src/multimenu.cpp:1188
+#: src/multimenu.cpp:1180
 msgid "Give Power To Player"
 msgstr "Donner de l'énergie au Joueur"
 
@@ -15066,6 +15053,17 @@ msgstr " - Compilation %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Version %s%s%s%s"
+
+#~ msgid "Truck ordered to build Oil Derrick"
+#~ msgstr "Construction d'un Puits de Pétrole"
+
+#, fuzzy
+#~ msgid "2 trucks ordered to build Oil Derrick"
+#~ msgstr "Construction d'un Puits de Pétrole"
+
+#, fuzzy
+#~ msgid "%d trucks ordered to build Oil Derrick"
+#~ msgstr "Construction d'un Puits de Pétrole"
 
 #~ msgid "Kick player"
 #~ msgstr "chasser le joueur"

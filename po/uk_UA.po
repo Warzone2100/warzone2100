@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100 version 2.2.3\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-03-08 15:43+0100\n"
+"POT-Creation-Date: 2011-03-16 17:13+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Меденцій Олександр <olexandr1986@i.ua>\n"
 "Language-Team: \n"
@@ -10718,6 +10718,12 @@ msgstr "ВЗІП Кара з Бронебійними Бомбами"
 msgid "Scourge Retaliation VTOL"
 msgstr "ВЗІП Відплата з ПУ 'Батіг'"
 
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1957
+#: data/mp/messages/strings/names.txt:1963
+#, fuzzy
+msgid "Plasmite Retribution VTOL"
+msgstr "ВЗІП Кара з Бронебійними Бомбами"
+
 #: data/mp/messages/resmessages12.rmsg:58
 msgid "Construction speed +10%"
 msgstr "Швидкість будівництва +10%"
@@ -12035,11 +12041,6 @@ msgstr "Гусенична Кобра з Міні-Ракетною Артиле�
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Гусеничний Пітон з ГШ Гарматою"
 
-#: data/mp/messages/strings/names.txt:1963
-#, fuzzy
-msgid "Plasmite Retribution VTOL"
-msgstr "ВЗІП Кара з Бронебійними Бомбами"
-
 #: lib/framework/i18n.cpp:90
 #: lib/framework/i18n.cpp:149
 msgid "System locale"
@@ -12070,7 +12071,7 @@ msgstr "Неможливо зв'язатись з сервером лоббі! �
 #: src/intorder.cpp:727
 #: src/loadsave.cpp:253
 #: src/multimenu.cpp:493
-#: src/multimenu.cpp:1363
+#: src/multimenu.cpp:1355
 #: src/transporter.cpp:277
 #: src/transporter.cpp:358
 #: src/transporter.cpp:817
@@ -12385,7 +12386,7 @@ msgid "Cannot Build. Oil Resource Burning."
 msgstr "Будівництво Неможливе. Через пожежу на Нафтовому Родовищі"
 
 #: src/display.cpp:1828
-#: src/display.cpp:2420
+#: src/display.cpp:2403
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Пошкоджень %d%% - Вбито %d, %s"
@@ -12394,20 +12395,6 @@ msgstr "%s - Пошкоджень %d%% - Вбито %d, %s"
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Союзник - Пошкоджень %d%% - Вбито %d, %s"
-
-#: src/display.cpp:2042
-msgid "Truck ordered to build Oil Derrick"
-msgstr "Інженеру наказано побудувати Бурову Вежу"
-
-#: src/display.cpp:2043
-#, fuzzy
-msgid "2 trucks ordered to build Oil Derrick"
-msgstr "Інженеру наказано побудувати Бурову Вежу"
-
-#: src/display.cpp:2044
-#, fuzzy, c-format
-msgid "%d trucks ordered to build Oil Derrick"
-msgstr "Інженеру наказано побудувати Бурову Вежу"
 
 #: src/droid.cpp:211
 msgid "Unit Lost!"
@@ -14057,7 +14044,7 @@ msgstr "Продовжити Гру"
 msgid "GAME SAVED :"
 msgstr "ГРУ ЗБЕРЕЖЕНО:"
 
-#: src/move.cpp:2264
+#: src/move.cpp:2262
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr "Ви знайшли %u енергії в бочці нафти."
@@ -14596,27 +14583,27 @@ msgstr "Підрозділи"
 msgid "Structs"
 msgstr "Будівлі"
 
-#: src/multimenu.cpp:1136
+#: src/multimenu.cpp:1128
 msgid "Channel"
 msgstr ""
 
-#: src/multimenu.cpp:1150
+#: src/multimenu.cpp:1142
 msgid "Toggle Alliance State"
 msgstr "Змінити Статус Союзу"
 
-#: src/multimenu.cpp:1169
+#: src/multimenu.cpp:1161
 msgid "Give Visibility Report"
 msgstr "Надати Інформацію про Зону Видимості"
 
-#: src/multimenu.cpp:1175
+#: src/multimenu.cpp:1167
 msgid "Leak Technology Documents"
 msgstr "Надати Технологічну Документацію"
 
-#: src/multimenu.cpp:1182
+#: src/multimenu.cpp:1174
 msgid "Hand Over Selected Units"
 msgstr "Передати Вибрані Одиниці"
 
-#: src/multimenu.cpp:1188
+#: src/multimenu.cpp:1180
 msgid "Give Power To Player"
 msgstr "Надати Енергію Гравцю"
 
@@ -14970,6 +14957,17 @@ msgstr " - Збудовано %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Версія %s%s%s%s"
+
+#~ msgid "Truck ordered to build Oil Derrick"
+#~ msgstr "Інженеру наказано побудувати Бурову Вежу"
+
+#, fuzzy
+#~ msgid "2 trucks ordered to build Oil Derrick"
+#~ msgstr "Інженеру наказано побудувати Бурову Вежу"
+
+#, fuzzy
+#~ msgid "%d trucks ordered to build Oil Derrick"
+#~ msgstr "Інженеру наказано побудувати Бурову Вежу"
 
 #~ msgid "Kick player"
 #~ msgstr "Викинути гравця"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-03-08 15:43+0100\n"
+"POT-Creation-Date: 2011-03-16 17:13+0100\n"
 "PO-Revision-Date: 2011-01-19 18:01+0200\n"
 "Last-Translator: Ayhan GORGULU <ayhangorgulu@gmail.com>\n"
 "Language-Team: Turkey <warzone-dev@gna.org>\n"
@@ -10723,6 +10723,11 @@ msgstr "Y.P.Z.D Bomba Demeti Cezalandırma VTOL"
 msgid "Scourge Retaliation VTOL"
 msgstr "Felaket F. İsyan VTOL"
 
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1957
+#: data/mp/messages/strings/names.txt:1963
+msgid "Plasmite Retribution VTOL"
+msgstr "Plasmit Aleci Atıcı Cezalandırıcı VTOL"
+
 #: data/mp/messages/resmessages12.rmsg:58
 msgid "Construction speed +10%"
 msgstr "İnşa Hızı +10%"
@@ -12021,10 +12026,6 @@ msgstr "Mini Roketler Kobra Paletler"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Yüksek Hız Topu Piton Hovercraft"
 
-#: data/mp/messages/strings/names.txt:1963
-msgid "Plasmite Retribution VTOL"
-msgstr "Plasmit Aleci Atıcı Cezalandırıcı VTOL"
-
 #: lib/framework/i18n.cpp:90
 #: lib/framework/i18n.cpp:149
 msgid "System locale"
@@ -12055,7 +12056,7 @@ msgstr "Lobi Sunucusu ile iletişim kurulamadı! TCP-Port %u u açıkmı?"
 #: src/intorder.cpp:727
 #: src/loadsave.cpp:253
 #: src/multimenu.cpp:493
-#: src/multimenu.cpp:1363
+#: src/multimenu.cpp:1355
 #: src/transporter.cpp:277
 #: src/transporter.cpp:358
 #: src/transporter.cpp:817
@@ -12371,7 +12372,7 @@ msgid "Cannot Build. Oil Resource Burning."
 msgstr "İnşa edilemiyor. Petrol Kaynağı Yanıyor."
 
 #: src/display.cpp:1828
-#: src/display.cpp:2420
+#: src/display.cpp:2403
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Hasar  %d%% - Tecrübe %d, %s"
@@ -12380,19 +12381,6 @@ msgstr "%s - Hasar  %d%% - Tecrübe %d, %s"
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Müttefik - Hasar %d%% - Tecrübe %d, %s"
-
-#: src/display.cpp:2042
-msgid "Truck ordered to build Oil Derrick"
-msgstr "Kamyon'a bir Petrol Kuyusu inşatı emri verildi."
-
-#: src/display.cpp:2043
-msgid "2 trucks ordered to build Oil Derrick"
-msgstr "2 kamyona bir Petrol Kuyusu inşatı emri verildi."
-
-#: src/display.cpp:2044
-#, c-format
-msgid "%d trucks ordered to build Oil Derrick"
-msgstr "%d kamyon'lara bir Petrol Kuyusu inşatı emri verildi."
 
 #: src/droid.cpp:211
 msgid "Unit Lost!"
@@ -14017,7 +14005,7 @@ msgstr "Oyuna Devam"
 msgid "GAME SAVED :"
 msgstr "OYUN KAYDEDİLDİ :"
 
-#: src/move.cpp:2264
+#: src/move.cpp:2262
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr "Sen %u güç varili buldun."
@@ -14538,27 +14526,27 @@ msgstr "Birimler"
 msgid "Structs"
 msgstr "Binalar"
 
-#: src/multimenu.cpp:1136
+#: src/multimenu.cpp:1128
 msgid "Channel"
 msgstr "Kanal"
 
-#: src/multimenu.cpp:1150
+#: src/multimenu.cpp:1142
 msgid "Toggle Alliance State"
 msgstr "İlişki durumunu görebilirsiniz"
 
-#: src/multimenu.cpp:1169
+#: src/multimenu.cpp:1161
 msgid "Give Visibility Report"
 msgstr "Görünürlük raporu ver"
 
-#: src/multimenu.cpp:1175
+#: src/multimenu.cpp:1167
 msgid "Leak Technology Documents"
 msgstr "Teknoloji dökümanı bırak"
 
-#: src/multimenu.cpp:1182
+#: src/multimenu.cpp:1174
 msgid "Hand Over Selected Units"
 msgstr "Seçili birimleri bağışla"
 
-#: src/multimenu.cpp:1188
+#: src/multimenu.cpp:1180
 msgid "Give Power To Player"
 msgstr "Oyuncuya güç ver"
 
@@ -14913,6 +14901,15 @@ msgstr " - %s İnşa"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Sürüm %s%s%s%s"
+
+#~ msgid "Truck ordered to build Oil Derrick"
+#~ msgstr "Kamyon'a bir Petrol Kuyusu inşatı emri verildi."
+
+#~ msgid "2 trucks ordered to build Oil Derrick"
+#~ msgstr "2 kamyona bir Petrol Kuyusu inşatı emri verildi."
+
+#~ msgid "%d trucks ordered to build Oil Derrick"
+#~ msgstr "%d kamyon'lara bir Petrol Kuyusu inşatı emri verildi."
 
 #~ msgid "Kick player"
 #~ msgstr "Oyundan at"
