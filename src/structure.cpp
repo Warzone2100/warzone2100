@@ -4193,20 +4193,6 @@ bool validLocation(BASE_STATS *psStats, unsigned x, unsigned y, uint16_t directi
 		site.yBR = (UWORD)y;
 	}
 
-	// Check to make sure we are not on/close to water...
-	for (j=0; j < 2; j++)
-	{
-		for (i=0; i < 2; i++)
-		{
-			if (map_TileHeight(x+i, y+j) < 0)
-			{
-				valid = false;
-				goto failed;
-			}
-		}
-	}
-
-
 	for (i = site.xTL; i <= site.xBR && valid; i++)
 	{
 		for (j = site.yTL; j <= site.yBR && valid; j++)
