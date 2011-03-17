@@ -1527,7 +1527,7 @@ event AIbrain (inactive)
     }
   } 
 
-  ASSERT(player >= 0 and player < 8,      "player out of bounds: AIbrain " & player, player);
+  ASSERT(player >= 0 and player < MAX_PLAYERS,      "player out of bounds: AIbrain " & player, player);
 
   //reset alert
   if (gameTime - alertTime > TIME_TO_RESET_ALERT){
@@ -1952,7 +1952,7 @@ event AIbrain (inactive)
 ========================================================================*/
 event vtolEnabler(inactive)
 {
-  ASSERT(player >= 0 and player < 8,      "player out of bounds: vtolEnabler " & player, player);
+  ASSERT(player >= 0 and player < MAX_PLAYERS,      "player out of bounds: vtolEnabler " & player, player);
   dbg("vtolEnabler: __________ ("& skVtolEnableCheck(0) &") 1("& skVtolEnableCheck(1) &") 7("& skVtolEnableCheck(7) &")__________",player);
 
   if( skVtolEnableCheck(player) )					// check to see if we have vtol technologies.
@@ -2230,7 +2230,7 @@ event vtolStructs(inactive)
 	local	int		_totalVTOLS;
 	local	int		_numVtolFacs,_numRearmPads;
 
-  ASSERT(player >= 0 and player < 8,      "player out of bounds: vtolStructs " & player, player);
+  ASSERT(player >= 0 and player < MAX_PLAYERS,      "player out of bounds: vtolStructs " & player, player);
   //displayMsg("vtolStructs: vtolStructs event called");
 
 	if( !isStructureAvailable(vtolFactory,player) ){
@@ -2283,7 +2283,7 @@ event buildVtols(inactive)
 	
   local int _totalVTOLS; 
   
-    ASSERT(player >= 0 and player < 8,      "player out of bounds: buildVtols " & player, player);
+    ASSERT(player >= 0 and player < MAX_PLAYERS,      "player out of bounds: buildVtols " & player, player);
 
     //displayMsg("buildVtols: buildVtols event called - 1 nProdSelect("& nProdSelect &") lStopVTOLProduction("& lStopVTOLProduction &") lMinBaseStructBuilt("& lMinBaseStructBuilt &")");
 
@@ -2324,7 +2324,7 @@ event manageDefVTOL(inactive)
   local int _dist,_nVTOLSRequired;
   local string _dbgString;
       
-  ASSERT(player >= 0 and player < 8,      "player out of bounds: manageDefVTOL " & player, player);
+  ASSERT(player >= 0 and player < MAX_PLAYERS,      "player out of bounds: manageDefVTOL " & player, player);
   
   if ( attTargetVTOL != NULLOBJECT ){          
     _dist = distBetweenTwoPoints( attTargetVTOL.x, attTargetVTOL.y, baseX, baseY);
@@ -2577,7 +2577,7 @@ event buildBase(inactive) //event 8
 {
   local int _f,_r,_c,_v,_h,_l;
   
-  ASSERT(player >= 0 and player < 8,      "player out of bounds: buildBase " & player, player);
+  ASSERT(player >= 0 and player < MAX_PLAYERS,      "player out of bounds: buildBase " & player, player);
   eventCheckTime[2] = gameTime;
   
   if ( lStopBuildingStructures ){ 
@@ -3189,7 +3189,7 @@ event TankAttack(inactive)
 	
   local int _distFromObj;
   
-   ASSERT(player >= 0 and player < 8,      "player out of bounds: TankAttack " & player, player);
+   ASSERT(player >= 0 and player < MAX_PLAYERS,      "player out of bounds: TankAttack " & player, player);
    //if ( gameTime - lastDisplayAI >= 10 ){
      //dbg("dbg->TankAttack : tank ("& tankGroup.members &") bTankAlreadyGathered("& bTankAlreadyGathered &") targ("& targetPlayerTank &") x-Y("& tankAttackX &")("& tankAttackY &") ",player);
    //}
@@ -3342,7 +3342,7 @@ event CyborgAttack(inactive)//Original event ID: xx (of 106)
 {
   local int _distFromObj;
   
-  ASSERT(player >= 0 and player < 8,      "player out of bounds: CyborgAttack " & player, player);
+  ASSERT(player >= 0 and player < MAX_PLAYERS,      "player out of bounds: CyborgAttack " & player, player);
   //dbg("dbg->CyborgAttack: '"& getPlayerName(player) &"' cyborgs ("& cyborgAttGroup.members &") CALLED bCybAlreadyGathered("& bCybAlreadyGathered &") targ("& targetPlayerCyb &") x-Y("& cybAttackX &")("& cybAttackY &")",player);
 
   //do a preliminary check
@@ -3527,7 +3527,7 @@ event AIattacked(AIattackedTr)    //event 20
 	else
 	{
 	*/
-    ASSERT(player >= 0 and player < 8,      "player out of bounds: myDroidAttacked " & player, player);
+    ASSERT(player >= 0 and player < MAX_PLAYERS,      "player out of bounds: myDroidAttacked " & player, player);
     
     bProceed = true;
     
@@ -3679,7 +3679,7 @@ event manageDefTank( inactive )
 
 	local int _x,_y,_x1,_y1, _nDist;
 
-  ASSERT(player >= 0 and player < 8,      "player out of bounds: manageDefTank " & player, player);
+  ASSERT(player >= 0 and player < MAX_PLAYERS,      "player out of bounds: manageDefTank " & player, player);
   eventCheckTime[6] = gameTime;
 
   //if ( gameTime - lastDisplayAI >= 80 ){
@@ -3782,7 +3782,7 @@ event manageDefCyborgs (inactive)//event 18!!!!
 	local int _x,_y,_x1,_y1,_nDist;
 	
    
-  ASSERT(player >= 0 and player < 8,      "player out of bounds: manageDefCyborgs " & player, player);
+  ASSERT(player >= 0 and player < MAX_PLAYERS,      "player out of bounds: manageDefCyborgs " & player, player);
   eventCheckTime[5] = gameTime;
   //if ( gameTime - lastDisplayAI >= 90 ){
      //displayMsg("manageDefCyborgs: cyborgs ("& cyborgDefGroup.members &") CALLED ("& alertIsOn &") ("& alertX &"-"& alertY &") ");
@@ -3884,7 +3884,7 @@ event manageDefCyborgs (inactive)//event 18!!!!
 event manageIdleTrucks(inactive)
 {
  
-   ASSERT(player >= 0 and player < 8,      "player out of bounds: manageIdleTrucks " & player, player);
+   ASSERT(player >= 0 and player < MAX_PLAYERS,      "player out of bounds: manageIdleTrucks " & player, player);
    eventCheckTime[7] = gameTime;
    //dbg("manageIdleTrucks: ________________ START 1__________________",player);
    if ( gameTime < 300 ) { exit; }
@@ -3990,7 +3990,7 @@ event manageIdleTrucks(inactive)
 event manageRepairTeam(inactive)
 {
     
-  ASSERT(player >= 0 and player < 8,      "player out of bounds: manageRepairTeam " & player, player);
+  ASSERT(player >= 0 and player < MAX_PLAYERS,      "player out of bounds: manageRepairTeam " & player, player);
     
   //if ( gameTime - lastDisplayAI >= 80 ){
     //displayMsg("manageRepairTeam: _____________ START 1("& toBeRepairedCyborgGroup.members &")("& toBeRepairedTankGroup.members &")("& repairGroup.members &") _______________");
@@ -4244,7 +4244,7 @@ event updateBaseDetails(inactive)
 // ============================ Debug messages====================
 event showPlayerInfo (inactive)
 {
-  ASSERT(player >= 0 and player < 8,      "player out of bounds: showPlayerInfo " & player, player);
+  ASSERT(player >= 0 and player < MAX_PLAYERS,      "player out of bounds: showPlayerInfo " & player, player);
   boolResult = true;
 }
 
@@ -4253,7 +4253,7 @@ event buildRepFirst(inactive)
 {
 
   local int _nMaxRepFac;
-	ASSERT(player >= 0 and player < 8,      "player out of bounds:.5 " & player, player);
+	ASSERT(player >= 0 and player < MAX_PLAYERS,      "player out of bounds:.5 " & player, player);
   eventCheckTime[9] = gameTime;
 	
   //displayMsg("lStopBuildRepFacility ("& lStopBuildRepFacility &") nPower("& nPower &")");
@@ -4302,7 +4302,7 @@ event buildRepFirst(inactive)
 //====================================ADVANCED HARVESTER SCRIPT==========================
 event harvesterOperate(inactive)
 {
-  ASSERT(player >= 0 and player < 8,      "player out of bounds: harvesterOperate " & player, player);
+  ASSERT(player >= 0 and player < MAX_PLAYERS,      "player out of bounds: harvesterOperate " & player, player);
   eventCheckTime[10] = gameTime;
   
   //displayMsg("harvestOperate: called ("& bOilResLeft &") ("& harvesterGroup.members &")");
@@ -4367,7 +4367,7 @@ event harvesterOperate(inactive)
 event truckGroupSlider(inactive)
 {
     
-  ASSERT(player >= 0 and player < 8,      "player out of bounds: truckGroupSlider " & player, player);
+  ASSERT(player >= 0 and player < MAX_PLAYERS,      "player out of bounds: truckGroupSlider " & player, player);
   eventCheckTime[11] = gameTime;
   //displayMsg("truckGroupSlider 1: b("& buildGroup.members &") d("& buildDefGroup.members  &") h("& harvesterGroup.members  &") "); 
   //at this time the harvesting phase should be finished
@@ -4499,7 +4499,7 @@ event defendDerrick(inactive)
 {
   local STRUCTURESTAT _defStruct;
 
-  ASSERT(player >= 0 and player < 8,      "player out of bounds: defendDerrick " & player, player);
+  ASSERT(player >= 0 and player < MAX_PLAYERS,      "player out of bounds: defendDerrick " & player, player);
   eventCheckTime[12] = gameTime;
   
   if (lStopBuildDefDerricks){exit;}
@@ -4540,7 +4540,7 @@ event defendDerrick(inactive)
 event buildPowerGenerators(inactive)
 {
 
-	ASSERT(player >= 0 and player < 8,      "player out of bounds:.13 " & player, player);
+	ASSERT(player >= 0 and player < MAX_PLAYERS,      "player out of bounds:.13 " & player, player);
   eventCheckTime[13] = gameTime;
 
 	//search for incompleted structure fist
@@ -4584,7 +4584,7 @@ event buildPowerGenerators(inactive)
 //-------------------------------------
 event defendGatewaysPoint(inactive)
 {
-  ASSERT(player >= 0 and player < 8,      "player out of bounds: defendGatewaysPoint " & player, player);
+  ASSERT(player >= 0 and player < MAX_PLAYERS,      "player out of bounds: defendGatewaysPoint " & player, player);
   eventCheckTime[14] = gameTime;
   _idleTruck     = NULLOBJECT;
   _notIdleTruck  = NULLOBJECT;
@@ -4628,7 +4628,7 @@ event defendBase(inactive)
 {
   local STRUCTURESTAT _defStruct;
 	  
-  ASSERT(player >= 0 and player < 8,      "player out of bounds: defendBase " & player, player);
+  ASSERT(player >= 0 and player < MAX_PLAYERS,      "player out of bounds: defendBase " & player, player);
   eventCheckTime[15] = gameTime;
   
   //dbg("dbg->defendBase: lStopBuildDef ("& lStopBuildDef &")  time("& gameTime - tLastbuildBaseDef &") > ("& TIME_TOFORCE_BUILDDEF &")",player);
@@ -4698,7 +4698,7 @@ event defendBase(inactive)
 // ==========================================================================
 event upgradeStructures(inactive)
 {
-  ASSERT(player >= 0 and player < 8,      "player out of bounds:.17 " & player, player);
+  ASSERT(player >= 0 and player < MAX_PLAYERS,      "player out of bounds:.17 " & player, player);
   eventCheckTime[16] = gameTime;
 
   
@@ -4806,7 +4806,7 @@ event droidBuilt(droidBuiltTr) //  (CALL_NEWDROID,player, ref droid,ref structur
 	{
 	*/
 
-     ASSERT(player >= 0 and player < 8,      "player out of bounds: droidBuilt " & player, player);
+     ASSERT(player >= 0 and player < MAX_PLAYERS,      "player out of bounds: droidBuilt " & player, player);
      
      boolResult = true;
      //dbg("dbg->droidBuilt : droid ("& droid.id &") hitPoints ("& droid.hitPoints &") ",player);
@@ -4951,7 +4951,7 @@ event reSortUnits(inactive)
 	*/
 		
     
-    ASSERT(player >= 0 and player < 8,      "player out of bounds: reSortUnits " & player, player);
+    ASSERT(player >= 0 and player < MAX_PLAYERS,      "player out of bounds: reSortUnits " & player, player);
 
     groupAddAreaNoGroup(xGroup, player, 0, 0, (mapWidth*128), (mapHeight*128));
     //dbg("reSortUnits: xGroup.members bofore re-sort ("& xGroup.members &") _________________",player);
@@ -4980,7 +4980,7 @@ event SelectTankTemplate(inactive)
 	local int _nRnd, _nRnd2,_nBestHvyBody,_nBestMedBody,_nBestLghBody;
 
   eventCheckTime[17] = gameTime;
-  ASSERT(player >= 0 and player < 8,      "player out of bounds:.27 " & player, player);
+  ASSERT(player >= 0 and player < MAX_PLAYERS,      "player out of bounds:.27 " & player, player);
 
   //displayMsg("SelectTankTemplate 1: nWorkingFact("& nWorkingFact &") nFactories("& nFactories &") boolResult ("& boolResult &") nProdSelect("& nProdSelect &") stopProdTank("& lStopTankProduction &")_______________");
 
@@ -5147,7 +5147,7 @@ event SelectCyborgTemplate(inactive)
   local int _nRnd, _pos;
   local bool _bBuildAR_cyborg, _bBuildAT_cyborg, _bBuildAP_cyborg, _bBuildKK_cyborg;
   
-  ASSERT(player >= 0 and player < 8,      "player out of bounds:.29 " & player, player);
+  ASSERT(player >= 0 and player < MAX_PLAYERS,      "player out of bounds:.29 " & player, player);
   eventCheckTime[18] = gameTime;
   //displayMsg("*** SelectCyborgTemplate: ___________ CALLED lStopCybProduction("& lStopCybProduction &") droids tot("& getDroidCount(player) &"/"& MAX_DROIDS &")___________");
   
@@ -5291,7 +5291,7 @@ event buildRepFacSuppAttack(inactive)
 // do research
 event doResearch(inactive)//doResearchTr
 {
-	ASSERT(player >= 0 and player < 8,      "player out of bounds:.44 " & player, player);
+	ASSERT(player >= 0 and player < MAX_PLAYERS,      "player out of bounds:.44 " & player, player);
   eventCheckTime[20] = gameTime;
   //displayMsg("doResearch:___________("& lStopResearch &")prod["& nProdSelect &"]work("& getNumStructNotIdle(resLab) &")______________");
 
@@ -5474,7 +5474,7 @@ event manageHelpTeam(inactive)
 	
   local int _dist;
    
-  ASSERT(player >= 0 and player < 8,      "player out of bounds: manageHelpTeam " & player, player);
+  ASSERT(player >= 0 and player < MAX_PLAYERS,      "player out of bounds: manageHelpTeam " & player, player);
 
   
   if ( gameTime - tProd4 >= 80 ){
@@ -6928,7 +6928,7 @@ function void debugCentreView(DROID _droid)
   local int _player;
   _player = 0;
   if( debugCenterView == true ){  
-  	while(_player < 8)
+  	while(_player < MAX_PLAYERS)
   	{
       if( isHumanPlayer(_player) and allianceExistsBetween(_player,player) ) { //OK 
         centreView(_droid);        
@@ -10780,7 +10780,7 @@ function void displayStats(int _choice)
   local int _cG, _totHarv, _enWeap, _myWeap, _myWeapSTR, _enemyCost, _friendCost;
   local int _count,_count2;
 	
-  ASSERT(player >= 0 and player < 8,      "player out of bounds: showPlayerInfo " & player, player);
+  ASSERT(player >= 0 and player < MAX_PLAYERS,      "player out of bounds: showPlayerInfo " & player, player);
 
   _count=0;
   while ( _count < 11 )
