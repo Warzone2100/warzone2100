@@ -521,7 +521,7 @@ static void removeDroidFX(DROID *psDel)
 		return;
 	}
 
-	if ((psDel->droidType == DROID_PERSON || cyborgDroid(psDel)) && psDel->order != DORDER_RUNBURN)
+	if (psDel->droidType == DROID_PERSON && psDel->order != DORDER_RUNBURN)
 	{
 		/* blow person up into blood and guts */
 		compPersonToBits(psDel);
