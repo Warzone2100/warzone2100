@@ -29,6 +29,7 @@
 #include <cmath>
 #include <complex>
 #include <cstdlib>
+#include <math.h>
 
 // Also PERCENT(int,int);	// returns a int value 0->100 of the percentage of the first param over the second
 #define PERCENT(a,b) (((a)*100)/(b))
@@ -81,12 +82,13 @@ static inline double nearbyint(double x)
 		return floor(x + 0.5);
 	}
 }
-
-
+// this is already included for MSVC 2010
+#if _MSC_VER < 1600
 static inline WZ_DECL_CONST float hypotf(float x, float y)
 {
 	return sqrtf(x * x + y * y);
 }
+#endif
 #endif
 
 
