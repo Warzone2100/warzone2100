@@ -33,6 +33,7 @@
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/piedef.h"
 #include "lib/ivis_opengl/piepalette.h"
+#include "lib/ivis_opengl/bitimage.h"
 #include "lib/gamelib/gtime.h"
 #include "lib/ivis_opengl/piematrix.h"
 #include "levels.h"
@@ -983,7 +984,12 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 	}
 
 	// a droid of theirs.
-	if(apsDroidLists[player])
+	DROID *displayDroid = apsDroidLists[player];
+	while (displayDroid != NULL && !displayDroid->visible[selectedPlayer])
+	{
+		displayDroid = displayDroid->psNext;
+	}
+	if (displayDroid)
 	{
 		pie_SetGeometricOffset( MULTIMENU_FORM_X+MULTIMENU_C1 ,y+MULTIMENU_PLAYER_H);
 		rotation.x = -15;
@@ -993,7 +999,12 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 		position.y = 0;
 		position.z = 2000;		//scale them!
 
-		displayComponentButtonObject(apsDroidLists[player],&rotation,&position,false, 100);
+		displayComponentButtonObject(displayDroid, &rotation, &position, false, 100);
+	}
+	else if(apsDroidLists[player])
+	{
+		// Show that they have droids, but not which droids, since we can't see them.
+		iV_DrawImage(IntImages, IMAGE_RES_DROIDTECH, MULTIMENU_FORM_X + MULTIMENU_C1 - iV_GetImageWidth(IntImages, IMAGE_RES_DROIDTECH)/2, y + MULTIMENU_PLAYER_H - iV_GetImageHeight(IntImages, IMAGE_RES_DROIDTECH));
 	}
 
 	// clean up widgets if player leaves while menu is up.
