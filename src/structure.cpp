@@ -4091,7 +4091,8 @@ x and y in tile-coords*/
 bool validLocation(BASE_STATS *psStats, unsigned x, unsigned y, uint16_t direction, unsigned player, bool bCheckBuildQueue)
 {
 	STRUCTURE			*psStruct;
-	STRUCTURE_STATS		*psBuilding;
+	STRUCTURE_STATS *       psBuilding = NULL;
+	DROID_TEMPLATE *        psTemplate = NULL;
 	bool				valid = true;
 	SDWORD				i, j;
 	UDWORD				min, max;
@@ -4104,14 +4105,20 @@ bool validLocation(BASE_STATS *psStats, unsigned x, unsigned y, uint16_t directi
 		return false;
 	}
 
-	psBuilding = (STRUCTURE_STATS *)psStats;
+	if (psStats->ref >= REF_STRUCTURE_START && psStats->ref < REF_STRUCTURE_START + REF_RANGE)
+	{
+		psBuilding = (STRUCTURE_STATS *)psStats;  // Is a structure.
+	}
+	if (psStats->ref >= REF_TEMPLATE_START && psStats->ref < REF_TEMPLATE_START + REF_RANGE)
+	{
+		psTemplate = (DROID_TEMPLATE *)psStats;  // Is a template.
+	}
 
 	// initialise the buildsite structure
 	// gets rid of the nasty bug when the GLOBAL buildSite was
 	// used in here
 	// Now now...we can quite easily hack this a bit more...
-	if (psStats->ref >= REF_STRUCTURE_START &&
-		psStats->ref < (REF_STRUCTURE_START + REF_RANGE))
+	if (psBuilding != NULL)
 	{
 		unsigned sWidth   = getStructureStatsWidth(psBuilding, direction);
 		unsigned sBreadth = getStructureStatsBreadth(psBuilding, direction);
@@ -4219,8 +4226,7 @@ bool validLocation(BASE_STATS *psStats, unsigned x, unsigned y, uint16_t directi
 				goto failed;
 			}
 			//don't check tile is visible for placement of a delivery point
-			if (psStats->ref >= REF_STRUCTURE_START &&
-				psStats->ref < (REF_STRUCTURE_START + REF_RANGE))
+			if (psBuilding != NULL)
 			{
 				//allow us to do so in debug mode!
 				if (!getDebugMappingStatus() && !bMultiPlayer)
@@ -4253,8 +4259,7 @@ bool validLocation(BASE_STATS *psStats, unsigned x, unsigned y, uint16_t directi
 		}
 	}
 
-	if (psStats->ref >= REF_STRUCTURE_START &&
-		psStats->ref < (REF_STRUCTURE_START + REF_RANGE))
+	if (psBuilding != NULL)
 	{
 		MAPTILE	*psTile;
 
@@ -4509,10 +4514,8 @@ bool validLocation(BASE_STATS *psStats, unsigned x, unsigned y, uint16_t directi
 			}
 		}
 	}
-	else if (psStats->ref >= REF_TEMPLATE_START
-			 && psStats->ref < REF_TEMPLATE_START + REF_RANGE)
+	else if (psTemplate != NULL)
 	{
-		DROID_TEMPLATE	*psTemplate = (DROID_TEMPLATE *)psStats;
 		PROPULSION_STATS *psPropStats = asPropulsionStats + psTemplate->asParts[COMP_PROPULSION];
 
 		valid = !fpathBlockingTile(x, y, psPropStats->propulsionType);
