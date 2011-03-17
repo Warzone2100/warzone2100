@@ -1732,8 +1732,8 @@ static void addColourChooser(UDWORD player)
 				MULTIOP_ROW_WIDTH,MULTIOP_PLAYERHEIGHT);
 
 	// add the flags
-	int flagW = iV_GetImageWidth(FrontImages, IMAGE_PLAYER0);
-	int flagH = iV_GetImageHeight(FrontImages, IMAGE_PLAYER0);
+	int flagW = iV_GetImageWidth(FrontImages, IMAGE_PLAYERN);
+	int flagH = iV_GetImageHeight(FrontImages, IMAGE_PLAYERN);
 	int space = MULTIOP_ROW_WIDTH - 7 - flagW*MAX_PLAYERS_IN_GUI;
 	int spaceDiv = MAX_PLAYERS_IN_GUI;
 	space = std::min(space, 5*spaceDiv);
@@ -1742,7 +1742,7 @@ static void addColourChooser(UDWORD player)
 		addMultiBut(psWScreen,MULTIOP_COLCHOOSER_FORM, MULTIOP_COLCHOOSER+i,
 			i*(flagW*spaceDiv + space)/spaceDiv + 7,  4,  // x, y
 			flagW, flagH,  // w, h
-			_("Player colour"), IMAGE_PLAYER0 + i, IMAGE_PLAYER0_HI + i, IMAGE_PLAYER0_HI + i);
+			getPlayerColourName(i), IMAGE_PLAYERN, IMAGE_PLAYERN_HI, IMAGE_PLAYERN_HI, i);
 
 			if( !safeToUseColour(selectedPlayer,i))
 			{
@@ -3940,7 +3940,7 @@ void displayColour(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 	{
 		int player = getPlayerColour(j);
 		STATIC_ASSERT(MAX_PLAYERS <= 16);
-		iV_DrawImage(FrontImages, IMAGE_PLAYER0 + player, x + 7, y + 9);
+		iV_DrawImageTc(FrontImages, IMAGE_PLAYERN, IMAGE_PLAYERN_TC, x + 7, y + 9, pal_GetTeamColour(player));
 	}
 }
 
@@ -3986,9 +3986,10 @@ void displayMultiBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT 
 	bool	Hilight = false;
 	UDWORD	Down = 0;
 	UDWORD	Grey = 0;
-	UWORD	im_norm = UNPACKDWORD_TRI_A((UDWORD)psWidget->UserData);
-	UWORD	im_down = UNPACKDWORD_TRI_B((UDWORD)psWidget->UserData);
-	UWORD	im_hili = UNPACKDWORD_TRI_C((UDWORD)psWidget->UserData);
+	UWORD	im_norm = UNPACKDWORD_QUAD_A((UDWORD)psWidget->UserData);
+	UWORD	im_down = UNPACKDWORD_QUAD_B((UDWORD)psWidget->UserData);
+	UWORD	im_hili = UNPACKDWORD_QUAD_C((UDWORD)psWidget->UserData);
+	unsigned tc     = UNPACKDWORD_QUAD_D(psWidget->UserData);
 	UWORD	hiToUse = im_hili;
 
 	// FIXME: This seems to be a way to conserve space, so you can use a
@@ -4056,29 +4057,33 @@ void displayMultiBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT 
 		Grey = 1;
 	}
 
+	int toDraw[3];
+	int numToDraw = 0;
 
 	// now display
-	iV_DrawImage(FrontImages, im_norm, x, y);
+	toDraw[numToDraw++] = im_norm;
 
 	// hilights etc..
-	if(Hilight && !Grey)
+	if (Down)
 	{
-		if (Down)
-		{
-			iV_DrawImage(FrontImages, im_down, x, y);
-		}
-
-		if (hiToUse)
-		{
-			iV_DrawImage(FrontImages, hiToUse, x, y);
-		}
-
+		toDraw[numToDraw++] = im_down;
 	}
-	else if (Down)
+	if(Hilight && !Grey && hiToUse)
 	{
-		iV_DrawImage(FrontImages, im_down, x, y);
+		toDraw[numToDraw++] = hiToUse;
 	}
 
+	for (int n = 0; n < numToDraw; ++n)
+	{
+		if (tc == MAX_PLAYERS)
+		{
+			iV_DrawImage(FrontImages, toDraw[n], x, y);
+		}
+		else
+		{
+			iV_DrawImageTc(FrontImages, toDraw[n], toDraw[n] + 1, x, y, pal_GetTeamColour(tc));
+		}
+	}
 
 	if (Grey)
 	{
@@ -4114,7 +4119,7 @@ static bool addMultiEditBox(UDWORD formid, UDWORD id, UDWORD x, UDWORD y, char c
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
-bool addMultiBut(W_SCREEN *screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char* tipres, UDWORD norm, UDWORD down, UDWORD hi)
+bool addMultiBut(W_SCREEN *screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char* tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc)
 {
 	W_BUTINIT sButInit;
 	sButInit.formID = formid;
@@ -4125,7 +4130,7 @@ bool addMultiBut(W_SCREEN *screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y,
 	sButInit.height= (unsigned short) height;
 	sButInit.pTip = tipres;
 	sButInit.pDisplay = displayMultiBut;
-	sButInit.UserData = PACKDWORD_TRI(norm, down, hi);
+	sButInit.UserData = PACKDWORD_QUAD(norm, down, hi, tc);
 
 	return widgAddButton(screen, &sButInit);
 }
