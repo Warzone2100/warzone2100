@@ -5176,10 +5176,10 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 								sLabInit = W_LABINIT();
 								sLabInit.formID = sBFormInit.id ;
 								sLabInit.id = IDSTAT_ALLYSTART+(sBFormInit.id - IDSTAT_START);
-								sLabInit.x = STAT_BUTWIDTH  - 19;
-								sLabInit.y = STAT_BUTHEIGHT - 19;
-								sLabInit.width = 12;
-								sLabInit.height = 15;
+								sLabInit.width = iV_GetImageWidth(IntImages, IMAGE_ALLY_RESEARCH);
+								sLabInit.height = iV_GetImageHeight(IntImages, IMAGE_ALLY_RESEARCH);
+								sLabInit.x = STAT_BUTWIDTH  - sLabInit.width - 2;
+								sLabInit.y = STAT_BUTHEIGHT - sLabInit.height - 3;
 								sLabInit.UserData = ii;
 								sLabInit.pTip = getPlayerName(ii);
 								sLabInit.pDisplay = intDisplayAllyIcon;

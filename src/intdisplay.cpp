@@ -3320,5 +3320,5 @@ void intDisplayAllyIcon(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 	UDWORD		x = Label->x + xOffset;
 	UDWORD		y = Label->y + yOffset;
 
-	iV_DrawImage(IntImages, IMAGE_DES_BODYPOINTS, x, y);
+	iV_DrawImageTc(IntImages, IMAGE_ALLY_RESEARCH, IMAGE_ALLY_RESEARCH_TC, x, y, pal_GetTeamColour(getPlayerColour(psWidget->UserData)));
 }

@@ -1004,7 +1004,7 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 	else if(apsDroidLists[player])
 	{
 		// Show that they have droids, but not which droids, since we can't see them.
-		iV_DrawImage(IntImages, IMAGE_RES_DROIDTECH, MULTIMENU_FORM_X + MULTIMENU_C1 - iV_GetImageWidth(IntImages, IMAGE_RES_DROIDTECH)/2, y + MULTIMENU_PLAYER_H - iV_GetImageHeight(IntImages, IMAGE_RES_DROIDTECH));
+		iV_DrawImageTc(IntImages, IMAGE_GENERIC_TANK, IMAGE_GENERIC_TANK_TC, MULTIMENU_FORM_X + MULTIMENU_C1 - iV_GetImageWidth(IntImages, IMAGE_GENERIC_TANK)/2, y + MULTIMENU_PLAYER_H - iV_GetImageHeight(IntImages, IMAGE_GENERIC_TANK), pal_GetTeamColour(getPlayerColour(player)));
 	}
 
 	// clean up widgets if player leaves while menu is up.
