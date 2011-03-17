@@ -87,7 +87,7 @@ extern void lev_set_extra(YY_EXTRA_TYPE user_defined);
 
 %}
 
-%option yylineno noyywrap nounput
+%option yylineno noyywrap nounput never-interactive
 %option prefix="lev_"
 
 %x COMMENT

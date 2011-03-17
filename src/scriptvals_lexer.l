@@ -92,7 +92,7 @@ extern void scrv_set_extra(YY_EXTRA_TYPE user_defined);
 
 %}
 
-%option yylineno noyywrap nounput
+%option yylineno noyywrap nounput never-interactive
 %option warn nodefault
 %option prefix="scrv_"
 

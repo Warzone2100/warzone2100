@@ -80,6 +80,7 @@ static SDWORD playerIndex;
 %option prefix="chat_"
 %option nounput
 %option case-insensitive
+%option never-interactive
 
 %%
 
