@@ -5043,7 +5043,6 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	W_BARINIT sBarInit;
 	sBarInit.id = IDSTAT_TIMEBARSTART;
 	sBarInit.x = STAT_TIMEBARX;
-	sBarInit.y = STAT_TIMEBARY;
 	sBarInit.width = STAT_PROGBARWIDTH;
 	sBarInit.height = STAT_PROGBARHEIGHT;
 	sBarInit.size = 50;
@@ -5055,6 +5054,8 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	statForm = 0;
 	for (i=0; i<numStats; i++)
 	{
+		sBarInit.y = STAT_TIMEBARY;
+
 		if (sBFormInit.id > IDSTAT_END)
 		{
 			//can't fit any more on the screen!
@@ -5179,7 +5180,7 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 								sLabInit.width = iV_GetImageWidth(IntImages, IMAGE_ALLY_RESEARCH);
 								sLabInit.height = iV_GetImageHeight(IntImages, IMAGE_ALLY_RESEARCH);
 								sLabInit.x = STAT_BUTWIDTH  - (sLabInit.width + 2)*labsDone - sLabInit.width - 2;
-								sLabInit.y = STAT_BUTHEIGHT - sLabInit.height - 3;
+								sLabInit.y = STAT_BUTHEIGHT - sLabInit.height - 3 - STAT_PROGBARHEIGHT;
 								sLabInit.UserData = ii;
 								sLabInit.pTip = getPlayerName(ii);
 								sLabInit.pDisplay = intDisplayAllyIcon;
@@ -5192,6 +5193,24 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 						}
 
 					}
+				}
+				if (labsDone > 0)
+				{
+					W_BARINIT progress;
+					progress.formID = sBFormInit.id;
+					progress.id = IDSTAT_ALLYSTART + allyResearchIconCount;
+					progress.width = STAT_PROGBARWIDTH;
+					progress.height = STAT_PROGBARHEIGHT;
+					progress.x = STAT_TIMEBARX;
+					progress.y = STAT_TIMEBARY;
+					progress.UserData = Stat->ref - REF_RESEARCH_START;
+					progress.pTip = _("Ally progress");
+					progress.pDisplay = intDisplayAllyBar;
+					widgAddBarGraph(psWScreen, &progress);
+
+					++allyResearchIconCount;
+
+					sBarInit.y -= STAT_PROGBARHEIGHT + 2;  // Move cost bar up, to avoid overlap.
 				}
 			}
 
