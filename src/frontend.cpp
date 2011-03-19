@@ -807,13 +807,12 @@ static bool startVideoOptionsMenu(void)
 	return true;
 }
 
-struct HACK { int w, h; };  // HACK Make it compile. Previous behaviour was to crash, anyway.
+struct HACK { int w, h; operator bool() { return w != 0; } HACK *operator ->() { return this; }};  // HACK Make it compile. Previous behaviour was to crash, anyway.
 
 bool runVideoOptionsMenu(void)
 {
 	//SDL_Rect **modes = SDL_ListModes(NULL, SDL_FULLSCREEN | SDL_HWSURFACE);
-	HACK fakeMode = {42, 42};
-	HACK *modes[2] = {&fakeMode, NULL};
+	HACK modes[] = {{1920, 1200}, {1920, 1080}, {1680, 1050}, {1600, 1200}, {1440, 900}, {1280, 1024}, {1280, 960}, {1280, 800}, {1280, 720}, {1024, 768}, {800, 600}, {720, 576}, {720, 480}, {640, 480}, {0, 0}};
 	UDWORD id = widgRunScreen(psWScreen);
 
 	switch (id)
