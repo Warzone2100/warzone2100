@@ -54,7 +54,7 @@ extern	void	runMultiOptions			(void);
 extern	bool	startMultiOptions		(bool bReenter);
 extern	void	frontendMultiMessages	(void);
 
-extern bool addMultiBut(W_SCREEN *screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char* tipres, UDWORD norm, UDWORD down, UDWORD hi);
+bool addMultiBut(W_SCREEN *screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char* tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc = MAX_PLAYERS);
 extern bool changeColour(UBYTE player, UBYTE col);
 extern	char	sPlayer[128];
 

@@ -713,8 +713,11 @@ void pie_RemainingPasses(void)
  ***************************************************************************/
 void pie_DrawImage(const PIEIMAGE *image, const PIERECT *dest)
 {
-	PIELIGHT colour = WZCOL_WHITE;
+	pie_DrawImage(image, dest, WZCOL_WHITE);
+}
 
+void pie_DrawImage(const PIEIMAGE *image, const PIERECT *dest, PIELIGHT colour)
+{
 	/* Set transparent color to be 0 red, 0 green, 0 blue, 0 alpha */
 	polyCount++;
 

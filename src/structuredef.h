@@ -212,7 +212,7 @@ struct POWER_GEN
 	struct STRUCTURE *      apResExtractors[NUM_POWER_MODULES];     ///< Pointers to associated oil derricks
 };
 
-struct DROID_GROUP;
+class DROID_GROUP;
 
 struct REPAIR_FACILITY
 {

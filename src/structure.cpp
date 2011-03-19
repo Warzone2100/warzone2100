@@ -4091,7 +4091,8 @@ x and y in tile-coords*/
 bool validLocation(BASE_STATS *psStats, unsigned x, unsigned y, uint16_t direction, unsigned player, bool bCheckBuildQueue)
 {
 	STRUCTURE			*psStruct;
-	STRUCTURE_STATS		*psBuilding;
+	STRUCTURE_STATS *       psBuilding = NULL;
+	DROID_TEMPLATE *        psTemplate = NULL;
 	bool				valid = true;
 	SDWORD				i, j;
 	UDWORD				min, max;
@@ -4104,14 +4105,20 @@ bool validLocation(BASE_STATS *psStats, unsigned x, unsigned y, uint16_t directi
 		return false;
 	}
 
-	psBuilding = (STRUCTURE_STATS *)psStats;
+	if (psStats->ref >= REF_STRUCTURE_START && psStats->ref < REF_STRUCTURE_START + REF_RANGE)
+	{
+		psBuilding = (STRUCTURE_STATS *)psStats;  // Is a structure.
+	}
+	if (psStats->ref >= REF_TEMPLATE_START && psStats->ref < REF_TEMPLATE_START + REF_RANGE)
+	{
+		psTemplate = (DROID_TEMPLATE *)psStats;  // Is a template.
+	}
 
 	// initialise the buildsite structure
 	// gets rid of the nasty bug when the GLOBAL buildSite was
 	// used in here
 	// Now now...we can quite easily hack this a bit more...
-	if (psStats->ref >= REF_STRUCTURE_START &&
-		psStats->ref < (REF_STRUCTURE_START + REF_RANGE))
+	if (psBuilding != NULL)
 	{
 		unsigned sWidth   = getStructureStatsWidth(psBuilding, direction);
 		unsigned sBreadth = getStructureStatsBreadth(psBuilding, direction);
@@ -4125,56 +4132,25 @@ bool validLocation(BASE_STATS *psStats, unsigned x, unsigned y, uint16_t directi
 			&& (psBuilding->type == REF_WALL || psBuilding->type == REF_DEFENSE || psBuilding->type == REF_REARM_PAD ||  psBuilding->type == REF_GATE)
 			&& !isLasSat(psBuilding))
 		{
-				UWORD    dx,dy;
+			wallDrag.x2 = mouseTileX;  // Why must this be done here? If not doing it here, dragging works almost normally, except it suddenly stops working if the drag becomes invalid.
+			wallDrag.y2 = mouseTileY;
 
-				wallDrag.x2 = mouseTileX;
-				wallDrag.y2 = mouseTileY;
-
-				dx = (UWORD)(abs(mouseTileX - wallDrag.x1));
-				dy = (UWORD)(abs(mouseTileY - wallDrag.y1));
-
-				if(dx >= dy)
-				{
-					//build in x direction
-					site.xTL = (UWORD)wallDrag.x1;
-					site.xBR = (UWORD)wallDrag.x2;
-					site.yTL = (UWORD)wallDrag.y1;
-					if (dy > 0)
-					{
-						site.yBR = (UWORD)(site.yTL+1);
-					}
-					else
-					{
-						site.yBR = (UWORD)(site.yTL);
-					}
-					if (site.xTL > site.xBR)
-					{
-						dx = site.xBR;
-						site.xBR = site.xTL;
-						site.xTL = dx;
-					}
-				}
-				else if(dx < dy)
-				{
-					//build in y direction
-					site.yTL = (UWORD)wallDrag.y1;
-					site.yBR = (UWORD)wallDrag.y2;
-					site.xTL = (UWORD)wallDrag.x1;
-					if (dx > 0)
-					{
-						site.xBR = (UWORD)(site.xTL+1);
-					}
-					else
-					{
-						site.xBR = (UWORD)(site.xTL);
-					}
-					if (site.yTL > site.yBR)
-					{
-						dy = site.yBR;
-						site.yBR = site.yTL;
-						site.yTL = dy;
-					}
-				}
+			int dx = abs(wallDrag.x2 - wallDrag.x1);
+			int dy = abs(wallDrag.y2 - wallDrag.y1);
+			if (dx >= dy)
+			{
+				//build in x direction
+				wallDrag.y2 = wallDrag.y1;
+			}
+			else
+			{
+				//build in y direction
+				wallDrag.x2 = wallDrag.x1;
+			}
+			site.xTL = std::min(wallDrag.x1, wallDrag.x2);
+			site.xBR = std::max(wallDrag.x1, wallDrag.x2);
+			site.yTL = std::min(wallDrag.y1, wallDrag.y2);
+			site.yBR = std::max(wallDrag.y1, wallDrag.y2);
 		}
 	}
 	else
@@ -4185,20 +4161,6 @@ bool validLocation(BASE_STATS *psStats, unsigned x, unsigned y, uint16_t directi
 		site.xBR = (UWORD)x;
 		site.yBR = (UWORD)y;
 	}
-
-	// Check to make sure we are not on/close to water...
-	for (j=0; j < 2; j++)
-	{
-		for (i=0; i < 2; i++)
-		{
-			if (map_TileHeight(x+i, y+j) < 0)
-			{
-				valid = false;
-				goto failed;
-			}
-		}
-	}
-
 
 	for (i = site.xTL; i <= site.xBR && valid; i++)
 	{
@@ -4219,8 +4181,7 @@ bool validLocation(BASE_STATS *psStats, unsigned x, unsigned y, uint16_t directi
 				goto failed;
 			}
 			//don't check tile is visible for placement of a delivery point
-			if (psStats->ref >= REF_STRUCTURE_START &&
-				psStats->ref < (REF_STRUCTURE_START + REF_RANGE))
+			if (psBuilding != NULL)
 			{
 				//allow us to do so in debug mode!
 				if (!getDebugMappingStatus() && !bMultiPlayer)
@@ -4253,8 +4214,7 @@ bool validLocation(BASE_STATS *psStats, unsigned x, unsigned y, uint16_t directi
 		}
 	}
 
-	if (psStats->ref >= REF_STRUCTURE_START &&
-		psStats->ref < (REF_STRUCTURE_START + REF_RANGE))
+	if (psBuilding != NULL)
 	{
 		MAPTILE	*psTile;
 
@@ -4509,10 +4469,8 @@ bool validLocation(BASE_STATS *psStats, unsigned x, unsigned y, uint16_t directi
 			}
 		}
 	}
-	else if (psStats->ref >= REF_TEMPLATE_START
-			 && psStats->ref < REF_TEMPLATE_START + REF_RANGE)
+	else if (psTemplate != NULL)
 	{
-		DROID_TEMPLATE	*psTemplate = (DROID_TEMPLATE *)psStats;
 		PROPULSION_STATS *psPropStats = asPropulsionStats + psTemplate->asParts[COMP_PROPULSION];
 
 		valid = !fpathBlockingTile(x, y, psPropStats->propulsionType);

@@ -1080,19 +1080,15 @@ void displayComponentObject(DROID *psDroid)
 
 void destroyFXDroid(DROID	*psDroid)
 {
-	UDWORD	i;
-	iIMDShape	*psImd = NULL;
-	SDWORD	widthScatter, breadthScatter, heightScatter;
-	Vector3i pos;
-
-	widthScatter = TILE_UNITS/4;
-	breadthScatter = TILE_UNITS/4;
-	heightScatter = TILE_UNITS/5;
-	for(i=0; i<5; i++)
+	for (int i = 0; i < 5; ++i)
 	{
-		pos.x = psDroid->pos.x + widthScatter - rand()%(2*widthScatter);
-		pos.z = psDroid->pos.y + breadthScatter - rand()%(2*breadthScatter);
-		pos.y = psDroid->pos.z + 16 +heightScatter;
+		iIMDShape *psImd = NULL;
+
+		int maxHorizontalScatter = TILE_UNITS/4;
+		int heightScatter = TILE_UNITS/5;
+		Vector2i horizontalScatter = iSinCosR(rand(), rand()%maxHorizontalScatter);
+
+		Vector3i pos = swapYZ(psDroid->pos + Vector3i(horizontalScatter, 16 + heightScatter));
 		switch(i)
 		{
 		case 0:
@@ -1109,18 +1105,11 @@ void destroyFXDroid(DROID	*psDroid)
 				{
 					if(psDroid->asWeaps[0].nStat > 0)
 					{
-						// Tell the effect system that it needs to use this player's color for the next effect
-						SetEffectForPlayer(psDroid->player);
 						psImd = WEAPON_MOUNT_IMD(psDroid, 0);
 					}
 				}
-				else
-				{
-					psImd = getRandomDebrisImd();
-				}
 				break;
 			default:
-				psImd = getRandomDebrisImd();
 				break;
 			}
 			break;
@@ -1139,30 +1128,19 @@ void destroyFXDroid(DROID	*psDroid)
 					// get main weapon
 					psImd = WEAPON_IMD(psDroid, 0);
 				}
-				else
-				{
-					psImd = getRandomDebrisImd();
-				}
 				break;
 			default:
-				psImd = getRandomDebrisImd();
 				break;
 			}
 			break;
-		case 2:
-		case 3:
-		case 4:
+		}
+		if (psImd == NULL)
+		{
 			psImd = getRandomDebrisImd();
-			break;
 		}
-		if(psImd)
-		{
-			addEffect(&pos,EFFECT_GRAVITON,GRAVITON_TYPE_EMITTING_DR,true,psImd,getPlayerColour(psDroid->player));
-		}
-		else
-		{
-			addEffect(&pos,EFFECT_GRAVITON,GRAVITON_TYPE_EMITTING_DR,true,getRandomDebrisImd(),0);
-		}
+		// Tell the effect system that it needs to use this player's color for the next effect
+		SetEffectForPlayer(psDroid->player);
+		addEffect(&pos, EFFECT_GRAVITON, GRAVITON_TYPE_EMITTING_DR, true, psImd, getPlayerColour(psDroid->player));
 	}
 }
 
@@ -1181,6 +1159,7 @@ void	compPersonToBits(DROID *psDroid)
 	/* get bits pointers according to whether baba or cyborg*/
 	if (cyborgDroid(psDroid))
 	{
+		// This is probably unused now, since there's a more appropriate effect for cyborgs.
 		headImd = getImdFromIndex(MI_CYBORG_HEAD);
 		legsImd = getImdFromIndex(MI_CYBORG_LEGS);
 		armImd  = getImdFromIndex(MI_CYBORG_ARM);
