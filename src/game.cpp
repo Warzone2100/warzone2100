@@ -262,7 +262,7 @@ struct COMMAND_SAVEHEADER : public GAME_SAVEHEADER
 	UDWORD				x,y,z; \
 	UDWORD				direction; \
 	UDWORD				player; \
-	bool				inFire; \
+	int32_t				inFire; \
 	UDWORD				burnStart; \
 	UDWORD				burnDamage
 
@@ -272,7 +272,7 @@ struct COMMAND_SAVEHEADER : public GAME_SAVEHEADER
 	UDWORD				x,y,z; \
 	UDWORD				direction; \
 	UDWORD				player; \
-	bool				inFire; \
+	int32_t		inFire; \
 	UDWORD				burnStart; \
 	UDWORD				burnDamage
 
@@ -852,7 +852,7 @@ static bool deserializeSaveGameV14Data(PHYSFS_file* fileHandle, SAVE_GAME_V14* s
 
 struct SAVE_GAME_V15 : public SAVE_GAME_V14
 {
-	bool        offWorldKeepLists;
+	int32_t    offWorldKeepLists;	// was BOOL (which was a int)
 	uint8_t     aDroidExperience[MAX_PLAYERS][MAX_RECYCLED_DROIDS];
 	uint32_t    RubbleTile;
 	uint32_t    WaterTile;
@@ -1272,7 +1272,7 @@ struct SAVE_GAME_V33 : public SAVE_GAME_V31
 	NETPLAY         sNetPlay;
 	uint32_t        savePlayer;
 	char            sPName[32];
-	bool            multiPlayer;
+	int32_t         multiPlayer;	// was BOOL which a int
 	uint32_t        sPlayerIndex[MAX_PLAYERS];
 };
 
@@ -1444,7 +1444,7 @@ struct SAVE_MOVE_CONTROL
 	UWORD	pauseTime;					// when MOVEPAUSE started - relative to bumpTime
 	UWORD	bumpX,bumpY;				// position of last bump
 	UDWORD	shuffleStart;				// when a shuffle started
-	bool	isInFormation;                          // Indicates wether this droid is a member of a formation
+	int32_t	isInFormation;              // Indicates wether this droid is a member of a formation (was BOOL which is of size int)
 	SWORD	iVertSpeed;
 	UDWORD	iAttackRuns[DROID_MAXWEAPS];
 	float   fz;
@@ -1947,21 +1947,21 @@ struct SAVE_RESEARCH
 struct SAVE_MESSAGE
 {
 	MESSAGE_TYPE	type;			//The type of message
-	bool			bObj;
+	int32_t			bObj;			// was BOOL which was a int
 	char			name[MAX_GAME_STR_SIZE];
-	UDWORD			objId;					//Id for Proximity messages!
-	bool			read;					//flag to indicate whether message has been read
-	UDWORD			player;					//which player this message belongs to
+	UDWORD			objId;				//Id for Proximity messages!
+	int32_t			read;				//flag to indicate whether message has been read (was BOOL which was a int)
+	UDWORD			player;				//which player this message belongs to
 
 };
 
 struct SAVE_MESSAGE_36
 {
 	MESSAGE_TYPE	type;			//The type of message
-	bool			bObj;
+	int32_t			bObj;			// (was BOOL which was a int)
 	char			name[MAX_GAME_STR_SIZE];
 	UDWORD			objId;					//Id for Proximity messages!
-	bool			read;					//flag to indicate whether message has been read
+	int32_t			read;					//flag to indicate whether message has been read (was BOOL which was a int)
 	UDWORD			player;					//which player this message belongs to
 	MSG_DATA_TYPE	dataType;				//actual type of pViewData
 	UDWORD			locX,locY;
@@ -1976,7 +1976,7 @@ struct SAVE_FLAG_V18
 	UDWORD			screenY;
 	UDWORD			screenR;
 	UDWORD			player;				/*which player the Position belongs to*/
-	bool			selected;			/*flag to indicate whether the Position */
+	int32_t			selected;			/*flag to indicate whether the Position (was BOOL which was a int)*/
 	Vector3i		coords;							//the world coords of the Position
 	UBYTE		factoryInc;						//indicates whether the first, second etc factory
 	UBYTE		factoryType;					//indicates whether standard, cyborg or vtol factory
@@ -1992,7 +1992,7 @@ struct SAVE_FLAG
 	UDWORD			screenY;
 	UDWORD			screenR;
 	UDWORD			player;				/*which player the Position belongs to*/
-	bool			selected;			/*flag to indicate whether the Position */
+	int32_t			selected;			/*flag to indicate whether the Position (was BOOL which was a int) */
 	Vector3i		coords;							//the world coords of the Position
 	UBYTE		factoryInc;						//indicates whether the first, second etc factory
 	UBYTE		factoryType;					//indicates whether standard, cyborg or vtol factory
@@ -6026,7 +6026,7 @@ bool loadSaveStructureV7(char *pFileData, UDWORD filesize, UDWORD numStructures)
 	REPAIR_FACILITY			*psRepair;
 	STRUCTURE_STATS			*psStats = NULL;
 	UDWORD					count, statInc;
-	bool					found;
+	int32_t					found; //(was BOOL which was a int)
 	UDWORD					NumberOfSkippedStructures=0;
 	UDWORD					burnTime;
 
@@ -6261,7 +6261,7 @@ bool loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 	STRUCTURE_STATS			*psModule;
 	UDWORD					capacity;
 	UDWORD					count, statInc;
-	bool					found;
+	int32_t					found;	//(was BOOL which was a int)
 	UDWORD					NumberOfSkippedStructures=0;
 	UDWORD					burnTime;
 	UDWORD					i;

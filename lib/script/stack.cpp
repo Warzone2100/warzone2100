@@ -342,7 +342,7 @@ bool stackPopParams(unsigned int numParams, ...)
 		switch (type)
 		{
 			case VAL_BOOL:
-				*(bool*)pData = psVal->v.bval;
+				*(int32_t*)pData = psVal->v.bval;
 				break;
 			case VAL_INT:
 				*(int*)pData = psVal->v.ival;

@@ -588,7 +588,8 @@ bool scrStructInArea(void)
 // -----------------------------------------------------------------------------------------
 bool scrSeenStructInArea(void)
 {
-	bool		walls=false,found = false;
+	int32_t	walls=false;
+	bool	found = false;
 	SDWORD		player,enemy,x1,y1, x2,y2;
 	STRUCTURE	*psCurr;
 	SDWORD		ox,oy;
@@ -1482,7 +1483,7 @@ bool scrAddMessage(void)
 	MESSAGE			*psMessage;
 	MESSAGE_TYPE		msgType;
 	SDWORD			player;
-	bool			playImmediate;
+	int32_t			playImmediate;
 	VIEWDATA		*psViewData;
 	UDWORD			height;
 
@@ -3851,7 +3852,7 @@ bool scrSetRain(void)
 //set Background Fog (replace fade out with fog)
 bool scrSetBackgroundFog(void)
 {
-	bool bState;
+	int32_t bState;
 
 	if (!stackPopParams(1, VAL_BOOL, &bState))
 	{
@@ -3886,7 +3887,7 @@ bool scrSetBackgroundFog(void)
 //set Depth Fog (gradual fog from mid range to edge of world)
 bool scrSetDepthFog(void)
 {
-	bool bState;
+	int32_t bState;
 
 	if (!stackPopParams(1, VAL_BOOL, &bState))
 	{
