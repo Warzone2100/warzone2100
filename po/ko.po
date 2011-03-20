@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100 2.3_branch\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-03-20 21:16+0100\n"
+"POT-Creation-Date: 2011-03-20 21:51+0100\n"
 "PO-Revision-Date: 2010-11-23 21:01+0900\n"
 "Last-Translator: Joshua Shin <urgood2@gmail.com>\n"
 "Language-Team: Korean Translation Team <urgood2@gmail.com>\n"
@@ -12058,17 +12058,17 @@ msgstr "초고속도 캐논 파이썬 호버추진"
 msgid "System locale"
 msgstr "사용자 시스템 언어"
 
-#: lib/netplay/netplay.cpp:203
-#: lib/netplay/netplay.cpp:1037
+#: lib/netplay/netplay.cpp:208
+#: lib/netplay/netplay.cpp:1042
 msgid "Enter password here"
 msgstr "여기에 비밀번호를 입력하십시오"
 
-#: lib/netplay/netplay.cpp:2055
+#: lib/netplay/netplay.cpp:2060
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "마스터서버 이름을 확인할 수 없습니다 (%s)!"
 
-#: lib/netplay/netplay.cpp:2077
+#: lib/netplay/netplay.cpp:2082
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "로비 서버와 통신할 수 없습니다! TCP 포트 %u 가 보내는 트래픽에 대해 열려 있습니까?"
@@ -12090,141 +12090,141 @@ msgstr "로비 서버와 통신할 수 없습니다! TCP 포트 %u 가 보내는
 msgid "Close"
 msgstr "닫기"
 
-#: src/clparse.cpp:232
+#: src/clparse.cpp:242
 msgid "Run in cheat mode"
 msgstr "치트 모드(cheat mode)로 실행하기"
 
-#: src/clparse.cpp:233
+#: src/clparse.cpp:243
 msgid "Set configuration directory"
 msgstr "환경 설정 디렉토리로 설정"
 
-#: src/clparse.cpp:233
+#: src/clparse.cpp:243
 msgid "configuration directory"
 msgstr "환경 설정 디렉토리"
 
-#: src/clparse.cpp:234
+#: src/clparse.cpp:244
 msgid "Set default data directory"
 msgstr "기본 자료 디렉토리로 설정"
 
-#: src/clparse.cpp:234
+#: src/clparse.cpp:244
 msgid "data directory"
 msgstr "자료 디렉토리"
 
-#: src/clparse.cpp:235
+#: src/clparse.cpp:245
 msgid "Show debug for given level"
 msgstr "특정 레벨의 디버깅 표시"
 
-#: src/clparse.cpp:235
+#: src/clparse.cpp:245
 msgid "debug level"
 msgstr "레벨 디버그하기"
 
-#: src/clparse.cpp:236
+#: src/clparse.cpp:246
 msgid "Log debug output to file"
 msgstr "파일로 디버깅 출력을 로그하기"
 
-#: src/clparse.cpp:236
+#: src/clparse.cpp:246
 msgid "file"
 msgstr "파일"
 
-#: src/clparse.cpp:237
+#: src/clparse.cpp:247
 msgid "Flush all debug output written to stderr"
 msgstr "모든 디버깅 출력을 stderr로 보내기(flush)"
 
-#: src/clparse.cpp:238
+#: src/clparse.cpp:248
 msgid "Play in fullscreen mode"
 msgstr "전체 화면 모드로 실행"
 
-#: src/clparse.cpp:239
+#: src/clparse.cpp:249
 msgid "Load a specific game"
 msgstr "특정 게임을 로드하기"
 
-#: src/clparse.cpp:239
+#: src/clparse.cpp:249
 msgid "game-name"
 msgstr "게임 네임(이름)"
 
-#: src/clparse.cpp:240
+#: src/clparse.cpp:250
 msgid "Show this help message and exit"
 msgstr "이 도움말 메시지를 보인 다음 종료하기"
 
-#: src/clparse.cpp:241
+#: src/clparse.cpp:251
 msgid "Enable a global mod"
 msgstr "글로벌 mod를 활성화하기"
 
-#: src/clparse.cpp:241
-#: src/clparse.cpp:242
-#: src/clparse.cpp:243
+#: src/clparse.cpp:251
+#: src/clparse.cpp:252
+#: src/clparse.cpp:253
 msgid "mod"
 msgstr "mod"
 
-#: src/clparse.cpp:242
+#: src/clparse.cpp:252
 msgid "Enable a campaign only mod"
 msgstr "캠페인용 mod를 활성화하기"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:253
 msgid "Enable a multiplay only mod"
 msgstr "멀티플레이어용 mod를 활성화하기"
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:254
 msgid "Disable asserts"
 msgstr "assert 비활성화하기"
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:255
 msgid "Causes a crash to test the crash handler"
 msgstr "(컴퓨터) 크래시 핸들러를 시험하기 위해 크래시를 일으킵니다"
 
-#: src/clparse.cpp:246
+#: src/clparse.cpp:256
 msgid "Load a saved game"
 msgstr "저장된 게임 로드"
 
-#: src/clparse.cpp:246
+#: src/clparse.cpp:256
 msgid "savegame"
 msgstr "세이브게임"
 
-#: src/clparse.cpp:247
+#: src/clparse.cpp:257
 msgid "Play in windowed mode"
 msgstr "창(windowed) 모드로 실행"
 
-#: src/clparse.cpp:248
+#: src/clparse.cpp:258
 msgid "Show version information and exit"
 msgstr "버젼 정보를 보인 다음 종료하기"
 
-#: src/clparse.cpp:249
+#: src/clparse.cpp:259
 msgid "Set the resolution to use"
 msgstr "사용할 화면 해상도를 설정하십시오"
 
-#: src/clparse.cpp:249
+#: src/clparse.cpp:259
 msgid "WIDTHxHEIGHT"
 msgstr "너비x높이"
 
-#: src/clparse.cpp:250
+#: src/clparse.cpp:260
 msgid "Enable shadows"
 msgstr "그림자 사용"
 
-#: src/clparse.cpp:251
+#: src/clparse.cpp:261
 msgid "Disable shadows"
 msgstr "그림자 사용 안함"
 
-#: src/clparse.cpp:252
+#: src/clparse.cpp:262
 msgid "Enable sound"
 msgstr "소리 켜짐"
 
-#: src/clparse.cpp:253
+#: src/clparse.cpp:263
 msgid "Disable sound"
 msgstr "소리 꺼짐"
 
-#: src/clparse.cpp:254
+#: src/clparse.cpp:264
 msgid "Activate self-test"
 msgstr "셀프 테스트(self-test) 활성화하기"
 
-#: src/clparse.cpp:255
+#: src/clparse.cpp:265
 msgid "connect directly to IP/hostname"
 msgstr "바로 IP 또는 호스트네임으로 연결"
 
-#: src/clparse.cpp:255
+#: src/clparse.cpp:265
 msgid "host"
 msgstr "호스트"
 
-#: src/clparse.cpp:256
+#: src/clparse.cpp:266
 msgid "go directly to host screen"
 msgstr "호스트 화면으로 바로 가기"
 
@@ -12543,8 +12543,8 @@ msgstr "튜토리얼"
 #: src/frontend.cpp:562
 #: src/frontend.cpp:698
 #: src/frontend.cpp:805
-#: src/frontend.cpp:1024
-#: src/frontend.cpp:1185
+#: src/frontend.cpp:1027
+#: src/frontend.cpp:1188
 msgctxt "menu"
 msgid "Return"
 msgstr "뒤로"
@@ -12573,7 +12573,7 @@ msgstr "싱글 플레이어"
 #: src/frontend.cpp:303
 #: src/ingameop.cpp:494
 #: src/mission.cpp:2537
-#: src/mission.cpp:2640
+#: src/mission.cpp:2638
 msgid "Load Saved Game"
 msgstr "저장된 게임 로드하기"
 
@@ -12636,7 +12636,7 @@ msgstr "2X"
 #: src/frontend.cpp:501
 #: src/frontend.cpp:647
 #: src/frontend.cpp:773
-#: src/frontend.cpp:827
+#: src/frontend.cpp:830
 msgid "Fullscreen"
 msgstr "전체 화면"
 
@@ -12651,16 +12651,16 @@ msgstr "화면 떨림(Shake)"
 #: src/frontend.cpp:619
 #: src/frontend.cpp:628
 #: src/frontend.cpp:794
-#: src/frontend.cpp:888
-#: src/frontend.cpp:926
-#: src/frontend.cpp:965
-#: src/frontend.cpp:977
-#: src/frontend.cpp:989
-#: src/frontend.cpp:1001
-#: src/frontend.cpp:1046
-#: src/frontend.cpp:1059
-#: src/frontend.cpp:1073
-#: src/frontend.cpp:1087
+#: src/frontend.cpp:891
+#: src/frontend.cpp:929
+#: src/frontend.cpp:968
+#: src/frontend.cpp:980
+#: src/frontend.cpp:992
+#: src/frontend.cpp:1004
+#: src/frontend.cpp:1049
+#: src/frontend.cpp:1062
+#: src/frontend.cpp:1076
+#: src/frontend.cpp:1090
 msgid "On"
 msgstr "켜짐"
 
@@ -12671,16 +12671,16 @@ msgstr "켜짐"
 #: src/frontend.cpp:614
 #: src/frontend.cpp:632
 #: src/frontend.cpp:798
-#: src/frontend.cpp:883
-#: src/frontend.cpp:921
-#: src/frontend.cpp:969
-#: src/frontend.cpp:981
-#: src/frontend.cpp:993
-#: src/frontend.cpp:1005
-#: src/frontend.cpp:1041
-#: src/frontend.cpp:1054
-#: src/frontend.cpp:1068
-#: src/frontend.cpp:1082
+#: src/frontend.cpp:886
+#: src/frontend.cpp:924
+#: src/frontend.cpp:972
+#: src/frontend.cpp:984
+#: src/frontend.cpp:996
+#: src/frontend.cpp:1008
+#: src/frontend.cpp:1044
+#: src/frontend.cpp:1057
+#: src/frontend.cpp:1071
+#: src/frontend.cpp:1085
 msgid "Off"
 msgstr "꺼짐"
 
@@ -12740,7 +12740,7 @@ msgid "Graphics Mode*"
 msgstr "그래픽 모드*"
 
 #: src/frontend.cpp:777
-#: src/frontend.cpp:822
+#: src/frontend.cpp:825
 msgid "Windowed"
 msgstr "윈도우(창) 모드"
 
@@ -12760,106 +12760,106 @@ msgstr "수직동기화(V sync)*"
 msgid "VIDEO OPTIONS"
 msgstr "비디오 옵션"
 
-#: src/frontend.cpp:958
+#: src/frontend.cpp:961
 msgid "* May negatively affect performance"
 msgstr "*게임의 성능을 떨어뜨릴 수 도 있습니다"
 
 # 3D rotation direction w/ mouse
-#: src/frontend.cpp:962
+#: src/frontend.cpp:965
 msgid "Reverse Rotation"
 msgstr "3D 회전방향 반전"
 
-#: src/frontend.cpp:973
+#: src/frontend.cpp:976
 msgid "Trap Cursor"
 msgstr "마우스 커서 가두기"
 
-#: src/frontend.cpp:985
+#: src/frontend.cpp:988
 msgid "Colored Cursors*"
 msgstr "컬러 커서 *"
 
-#: src/frontend.cpp:998
+#: src/frontend.cpp:1001
 msgid "Switch Mouse Buttons"
 msgstr "마우스 버튼 좌우 전환"
 
-#: src/frontend.cpp:1010
+#: src/frontend.cpp:1013
 msgid "Rotate Screen"
 msgstr "화면 회전"
 
-#: src/frontend.cpp:1013
-#: src/frontend.cpp:1101
+#: src/frontend.cpp:1016
+#: src/frontend.cpp:1104
 #, fuzzy
 msgid "Middle Mouse"
 msgstr "마우스 중앙 버튼"
 
-#: src/frontend.cpp:1017
-#: src/frontend.cpp:1096
+#: src/frontend.cpp:1020
+#: src/frontend.cpp:1099
 #, fuzzy
 msgid "Right Mouse"
 msgstr "마우스 오른쪽 버튼"
 
-#: src/frontend.cpp:1021
+#: src/frontend.cpp:1024
 msgid "MOUSE OPTIONS"
 msgstr "마우스 옵션"
 
-#: src/frontend.cpp:1136
-#: src/frontend.cpp:1206
+#: src/frontend.cpp:1139
+#: src/frontend.cpp:1209
 msgid "Difficulty"
 msgstr "난이도"
 
-#: src/frontend.cpp:1140
-#: src/frontend.cpp:1214
-#: src/frontend.cpp:1251
+#: src/frontend.cpp:1143
+#: src/frontend.cpp:1217
+#: src/frontend.cpp:1254
 msgid "Easy"
 msgstr "낮음"
 
-#: src/frontend.cpp:1143
-#: src/frontend.cpp:1217
-#: src/frontend.cpp:1243
+#: src/frontend.cpp:1146
+#: src/frontend.cpp:1220
+#: src/frontend.cpp:1246
 msgid "Normal"
 msgstr "보통"
 
-#: src/frontend.cpp:1147
-#: src/frontend.cpp:1220
-#: src/frontend.cpp:1247
+#: src/frontend.cpp:1150
+#: src/frontend.cpp:1223
+#: src/frontend.cpp:1250
 msgid "Hard"
 msgstr "높음"
 
-#: src/frontend.cpp:1152
-#: src/frontend.cpp:1207
+#: src/frontend.cpp:1155
+#: src/frontend.cpp:1210
 msgid "Scroll Speed"
 msgstr "스크롤 속도"
 
-#: src/frontend.cpp:1166
-#: src/frontend.cpp:1204
+#: src/frontend.cpp:1169
+#: src/frontend.cpp:1207
 msgid "Language"
 msgstr "언어"
 
-#: src/frontend.cpp:1178
-#: src/frontend.cpp:1205
+#: src/frontend.cpp:1181
+#: src/frontend.cpp:1208
 msgid "Unit Colour"
 msgstr "유닛 색"
 
-#: src/frontend.cpp:1181
+#: src/frontend.cpp:1184
 msgid "Radar"
 msgstr "레이더"
 
-#: src/frontend.cpp:1182
-#: src/frontend.cpp:1231
+#: src/frontend.cpp:1185
+#: src/frontend.cpp:1234
 msgid "Rotating"
 msgstr "회전식"
 
-#: src/frontend.cpp:1182
-#: src/frontend.cpp:1231
+#: src/frontend.cpp:1185
+#: src/frontend.cpp:1234
 msgid "Fixed"
 msgstr "고정식"
 
-#: src/frontend.cpp:1188
-#: src/frontend.cpp:1208
+#: src/frontend.cpp:1191
+#: src/frontend.cpp:1211
 msgid "GAME OPTIONS"
 msgstr "게임 옵션"
 
-#: src/frontend.cpp:1340
-#: src/multiint.cpp:2394
+#: src/frontend.cpp:1343
+#: src/multiint.cpp:2393
 msgid "Mod: "
 msgstr "Mod (Modification):"
 
@@ -13075,7 +13075,7 @@ msgstr ""
 #: src/ingameop.cpp:274
 #: src/ingameop.cpp:498
 #: src/mission.cpp:2524
-#: src/mission.cpp:2643
+#: src/mission.cpp:2641
 msgid "Save Game"
 msgstr "게임 저장"
 
@@ -13247,31 +13247,31 @@ msgstr "VTOL 공장 생산 할당하기"
 msgid "Circle"
 msgstr "빙빙 돌아라 "
 
-#: src/keybind.cpp:135
+#: src/keybind.cpp:136
 msgid "Sorry, that cheat is disabled in multiplayer games."
 msgstr "죄송합니다. 이 치트는 멀티플레이어 게임에서는 사용 금지입니다."
 
-#: src/keybind.cpp:141
+#: src/keybind.cpp:142
 msgid "Warning! This cheat is buggy.  We recommend to NOT use it."
 msgstr "경고: 이 치트는 불안정합니다. 이것을 사용하지 않는게 좋습니다."
 
-#: src/keybind.cpp:240
+#: src/keybind.cpp:241
 msgid "Lets us see what you see!"
 msgstr "네가 보는 걸 우리에게도 보여줘!"
 
-#: src/keybind.cpp:242
+#: src/keybind.cpp:243
 msgid "Fine, weapon & sensor display is off!"
 msgstr "흠, 그래! 무기 & 센서 보기가 꺼졌습니다"
 
-#: src/keybind.cpp:415
-#: src/keybind.cpp:445
-#: src/keybind.cpp:462
-#: src/keybind.cpp:506
-#: src/keybind.cpp:614
-#: src/keybind.cpp:654
-#: src/keybind.cpp:760
-#: src/keybind.cpp:1265
-#: src/keybind.cpp:1322
+#: src/keybind.cpp:416
+#: src/keybind.cpp:446
+#: src/keybind.cpp:463
+#: src/keybind.cpp:507
+#: src/keybind.cpp:615
+#: src/keybind.cpp:655
+#: src/keybind.cpp:761
+#: src/keybind.cpp:1266
+#: src/keybind.cpp:1323
 #: src/keybind.cpp:1432
 #: src/keybind.cpp:1561
 #: src/keybind.cpp:1918
@@ -13280,98 +13280,98 @@ msgstr "흠, 그래! 무기 & 센서 보기가 꺼졌습니다"
 msgid "(Player %u) is using cheat :%s"
 msgstr "(플레이어 %u) 가 치트를 사용하고 있습니다 :%s"
 
-#: src/keybind.cpp:416
+#: src/keybind.cpp:417
 msgid "Hard as nails!!!"
 msgstr "피도 눈물도 없다!!!"
 
-#: src/keybind.cpp:430
+#: src/keybind.cpp:431
 msgid "Takings thing easy!"
 msgstr "쉽게 하자!"
 
-#: src/keybind.cpp:446
+#: src/keybind.cpp:447
 msgid "1000 big ones!!!"
 msgstr "큰 거 1000개!!!"
 
-#: src/keybind.cpp:463
+#: src/keybind.cpp:464
 msgid "Power overwhelming"
 msgstr "엄청나 압도적인 전력"
 
-#: src/keybind.cpp:478
+#: src/keybind.cpp:479
 msgid "Back to normality!"
 msgstr "노멀리티(정상 상태)로 돌아가기!"
 
-#: src/keybind.cpp:491
+#: src/keybind.cpp:492
 msgid "Getting tricky!"
 msgstr "까다로워진다!"
 
-#: src/keybind.cpp:507
+#: src/keybind.cpp:508
 msgid "Twice as nice!"
 msgstr "두 배로 좋다!"
 
-#: src/keybind.cpp:518
+#: src/keybind.cpp:519
 msgid "FPS display is enabled."
 msgstr "초당 프레임 수를 보입니다."
 
-#: src/keybind.cpp:522
+#: src/keybind.cpp:523
 msgid "FPS display is disabled."
 msgstr "초당 프레임 수를 보이지 않습니다."
 
-#: src/keybind.cpp:546
+#: src/keybind.cpp:547
 #, c-format
 msgid "FPS %d; FPS-Limit: %d; PIEs %d; polys %d; Terr. polys %d; States %d"
 msgstr "FPS %d; FPS-Limit: %d; PIEs %d; polys %d; Terr. polys %d; States %d"
 
-#: src/keybind.cpp:578
+#: src/keybind.cpp:579
 #, c-format
 msgid "(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"
 msgstr "(플레이어 %u) 가 치트를 사용하고 있습니다 :병사 수: %d  구조물 수: %d  물체 수: %d"
 
-#: src/keybind.cpp:615
+#: src/keybind.cpp:616
 msgid "Infinite power disabled"
 msgstr "무한 전력이 해제되었습니다"
 
-#: src/keybind.cpp:615
+#: src/keybind.cpp:616
 msgid "Infinite power enabled"
 msgstr "무한 전력이 활성화되었습니다"
 
-#: src/keybind.cpp:655
+#: src/keybind.cpp:656
 msgid "All items made available"
 msgstr "모든 항목이 사용할 수 있게 되었습니다"
 
-#: src/keybind.cpp:761
+#: src/keybind.cpp:762
 msgid "Fog on"
 msgstr "안개 켜짐"
 
-#: src/keybind.cpp:761
+#: src/keybind.cpp:762
 msgid "Fog off"
 msgstr "안개 꺼짐"
 
-#: src/keybind.cpp:1171
+#: src/keybind.cpp:1172
 #, c-format
 msgid "Warning!  This cheat can cause dire problems later on! [%s]"
 msgstr "경고! 이 치트를 사용하면 나중에 무서운 문재가 발생할 수 있습니다! [%s]"
 
-#: src/keybind.cpp:1171
+#: src/keybind.cpp:1172
 msgid "Ending Mission."
 msgstr "임무를 종료하고 있습니다."
 
-#: src/keybind.cpp:1266
+#: src/keybind.cpp:1267
 msgid "CHEATS ARE NOW ENABLED!"
 msgstr "이제 치트(CHEAT)키가 사용 가능합니다!"
 
-#: src/keybind.cpp:1266
+#: src/keybind.cpp:1267
 msgid "CHEATS ARE NOW DISABLED!"
 msgstr "이제 치트(CHEAT)키를 사용할 수 없습니다!"
 
-#: src/keybind.cpp:1323
+#: src/keybind.cpp:1324
 msgid "God Mode ON"
 msgstr "신(God) 모드 켜짐"
 
-#: src/keybind.cpp:1323
+#: src/keybind.cpp:1324
 msgid "God Mode OFF"
 msgstr "신(God) 모드 꺼짐"
 
-#: src/keybind.cpp:1335
+#: src/keybind.cpp:1336
 msgid "View Aligned to North"
 msgstr "카메라 보기(view)가 북쪽으로 정렬되었습니다"
 
@@ -13519,18 +13519,18 @@ msgstr "드러난 지형이 레이더에 나옵니다"
 msgid "Radar showing height"
 msgstr "레이더에 고도가 나옵니다"
 
-#: src/keyedit.cpp:350
+#: src/keyedit.cpp:355
 msgid "KEY MAPPING"
 msgstr "키보드 매핑"
 
-#: src/keyedit.cpp:372
+#: src/keyedit.cpp:377
 #: src/multiint.cpp:671
 #: src/multiint.cpp:1081
 #: src/multiint.cpp:1487
 msgid "Return To Previous Screen"
 msgstr "이전 화면으로 돌아가기"
 
-#: src/keyedit.cpp:377
+#: src/keyedit.cpp:382
 msgid "Select Default"
 msgstr "기본으로 선택하기"
 
@@ -14039,7 +14039,7 @@ msgstr "목표 달성 실패"
 
 #: src/mission.cpp:2503
 #: src/mission.cpp:2543
-#: src/mission.cpp:2657
+#: src/mission.cpp:2655
 msgid "Quit To Main Menu"
 msgstr "메인 메뉴로 종료하기"
 
@@ -14047,7 +14047,7 @@ msgstr "메인 메뉴로 종료하기"
 msgid "Continue Game"
 msgstr "게임 계속하기"
 
-#: src/mission.cpp:2608
+#: src/mission.cpp:2606
 msgid "GAME SAVED :"
 msgstr "게임이 저장되었습니다 : "
 
@@ -14389,55 +14389,55 @@ msgstr ""
 msgid "CHAT"
 msgstr "채팅"
 
-#: src/multiint.cpp:2399
+#: src/multiint.cpp:2398
 msgid "All players need to have the same mods to join your game."
 msgstr "모든 플레이어는 당신과 같은 mod를 사용해야만 게임에 참여할 수 있습니다"
 
-#: src/multiint.cpp:2557
+#: src/multiint.cpp:2556
 #, c-format
 msgid "*** password [%s] is now required! ***"
 msgstr "*** 이제 비밀번호 [%s] 가 요구됩니다! ***"
 
-#: src/multiint.cpp:2565
+#: src/multiint.cpp:2564
 msgid "*** password is NOT required! ***"
 msgstr "*** 비밀번호가 요구되지 않습니다! ***"
 
-#: src/multiint.cpp:2806
+#: src/multiint.cpp:2805
 msgid "Sorry! Failed to host the game."
 msgstr "죄송합니다! 게임 호스팅이 실패하였습니다"
 
-#: src/multiint.cpp:2927
+#: src/multiint.cpp:2926
 msgid "'Locked Teams' mode enabled"
 msgstr "'팀 잠금' 모드가 켜졌습니다"
 
-#: src/multiint.cpp:3008
+#: src/multiint.cpp:3007
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "호스트가 %s를 게임에서 퇴장시켰습니다!"
 
-#: src/multiint.cpp:3078
+#: src/multiint.cpp:3077
 msgid "Host is Starting Game"
 msgstr "호스트가 게임을 시작하고 있습니다"
 
-#: src/multiint.cpp:3644
+#: src/multiint.cpp:3643
 msgid "Players"
 msgstr "플레이어"
 
-#: src/multiint.cpp:3782
+#: src/multiint.cpp:3781
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "맵을 보내는 중: %d%% "
 
-#: src/multiint.cpp:3790
+#: src/multiint.cpp:3789
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "맵: %d%% 다운로드 완료"
 
-#: src/multiint.cpp:3816
+#: src/multiint.cpp:3815
 msgid "HOST"
 msgstr "호스트"
 
-#: src/multiint.cpp:3823
+#: src/multiint.cpp:3822
 #: src/multimenu.cpp:773
 msgid "Ping"
 msgstr "핑(Ping)"
