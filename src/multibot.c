@@ -1149,7 +1149,7 @@ BOOL recvDestroyDroid()
 	if(!psDroid->died)
 	{
 		turnOffMultiMsg(true);
-		debug(LOG_DEATH, "Killing droid %d on request from player %d", psDroid->id, NETgetSource());
+		debug(LOG_DEATH, "Killing droid %d on request from player %d \"%s\"", psDroid->id, NETgetSource(), getPlayerName(NETgetSource()));
 		destroyDroid(psDroid);
 		turnOffMultiMsg(false);
 	}
