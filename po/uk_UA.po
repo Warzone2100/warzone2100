@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100 version 2.2.3\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-03-16 17:13+0100\n"
+"POT-Creation-Date: 2011-03-20 21:16+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Меденцій Олександр <olexandr1986@i.ua>\n"
 "Language-Team: \n"
@@ -12066,12 +12066,12 @@ msgstr "Неможливо зв'язатись з сервером лоббі! �
 #: src/hci.cpp:3386
 #: src/hci.cpp:3509
 #: src/hci.cpp:3920
-#: src/hci.cpp:4938
+#: src/hci.cpp:4940
 #: src/intelmap.cpp:531
 #: src/intorder.cpp:727
 #: src/loadsave.cpp:253
-#: src/multimenu.cpp:493
-#: src/multimenu.cpp:1355
+#: src/multimenu.cpp:494
+#: src/multimenu.cpp:1366
 #: src/transporter.cpp:277
 #: src/transporter.cpp:358
 #: src/transporter.cpp:817
@@ -12904,7 +12904,7 @@ msgstr "Будівництво (F3)"
 
 #: src/hci.cpp:3442
 #: src/multiint.cpp:1401
-#: src/multimenu.cpp:763
+#: src/multimenu.cpp:764
 msgid "Power"
 msgstr "Енергія"
 
@@ -13014,21 +13014,26 @@ msgstr "Кілька Гравців"
 msgid "Progress Bar"
 msgstr "Індикатор Прогресу"
 
-#: src/hci.cpp:4863
+#: src/hci.cpp:4865
 msgid "Factory Delivery Point"
 msgstr "Точка Доставки Фабрики"
 
-#: src/hci.cpp:4881
+#: src/hci.cpp:4883
 msgid "Loop Production"
 msgstr "Зациклити Виробництво"
 
-#: src/hci.cpp:4961
+#: src/hci.cpp:4963
 msgid "Tab Scroll left"
 msgstr "Прогорнути Вкладку ліворуч"
 
-#: src/hci.cpp:4976
+#: src/hci.cpp:4978
 msgid "Tab Scroll right"
 msgstr "Прогорнути Вкладку праворуч"
+
+#: src/hci.cpp:5207
+#, fuzzy
+msgid "Ally progress"
+msgstr "Ефективність Інженерного Обладнання"
 
 #: src/ingameop.cpp:111
 #: src/ingameop.cpp:195
@@ -14229,7 +14234,7 @@ msgid "Distance Fog"
 msgstr "Дальній Туман"
 
 #: src/multiint.cpp:1368
-#: src/multimenu.cpp:756
+#: src/multimenu.cpp:757
 msgid "Alliances"
 msgstr "Союзи"
 
@@ -14325,10 +14330,6 @@ msgstr ""
 #: src/multiint.cpp:1665
 msgid "Leave this slot unused"
 msgstr ""
-
-#: src/multiint.cpp:1745
-msgid "Player colour"
-msgstr "Колір гравця"
 
 #: src/multiint.cpp:2068
 msgid "Team"
@@ -14437,7 +14438,7 @@ msgid "HOST"
 msgstr "ХОСТ"
 
 #: src/multiint.cpp:3823
-#: src/multimenu.cpp:772
+#: src/multimenu.cpp:773
 msgid "Ping"
 msgstr "Пінг"
 
@@ -14478,132 +14479,132 @@ msgstr "Прийняти Значення за Замовченням та По�
 msgid "Limits reset to default values"
 msgstr "Обмеження повертаються до початкових значень"
 
-#: src/multimenu.cpp:145
+#: src/multimenu.cpp:146
 msgid "2 players"
 msgstr "2 гравці"
 
-#: src/multimenu.cpp:145
+#: src/multimenu.cpp:146
 #, fuzzy
 msgid "3 players"
 msgstr "2 гравці"
 
-#: src/multimenu.cpp:145
+#: src/multimenu.cpp:146
 msgid "4 players"
 msgstr "4 гравці"
 
-#: src/multimenu.cpp:145
+#: src/multimenu.cpp:146
 #, fuzzy
 msgid "5 players"
 msgstr "2 гравці"
 
-#: src/multimenu.cpp:145
+#: src/multimenu.cpp:146
 #, fuzzy
 msgid "6 players"
 msgstr "2 гравці"
 
-#: src/multimenu.cpp:145
+#: src/multimenu.cpp:146
 #, fuzzy
 msgid "7 players"
 msgstr "2 гравці"
 
-#: src/multimenu.cpp:145
+#: src/multimenu.cpp:146
 msgid "8 players"
 msgstr "8 гравців"
 
-#: src/multimenu.cpp:145
+#: src/multimenu.cpp:146
 #, fuzzy
 msgid "9 players"
 msgstr "2 гравці"
 
-#: src/multimenu.cpp:145
+#: src/multimenu.cpp:146
 #, fuzzy
 msgid "10 players"
 msgstr "2 гравці"
 
-#: src/multimenu.cpp:145
+#: src/multimenu.cpp:146
 #, fuzzy
 msgid "11 players"
 msgstr "2 гравці"
 
-#: src/multimenu.cpp:145
+#: src/multimenu.cpp:146
 #, fuzzy
 msgid "12 players"
 msgstr "2 гравці"
 
-#: src/multimenu.cpp:145
+#: src/multimenu.cpp:146
 #, fuzzy
 msgid "13 players"
 msgstr "2 гравці"
 
-#: src/multimenu.cpp:145
+#: src/multimenu.cpp:146
 #, fuzzy
 msgid "14 players"
 msgstr "4 гравці"
 
-#: src/multimenu.cpp:145
+#: src/multimenu.cpp:146
 #, fuzzy
 msgid "15 players"
 msgstr "2 гравці"
 
-#: src/multimenu.cpp:145
+#: src/multimenu.cpp:146
 #, fuzzy
 msgid "16 players"
 msgstr "2 гравці"
 
-#: src/multimenu.cpp:618
+#: src/multimenu.cpp:619
 msgid "Technology level 1"
 msgstr "Рівень технологій 1"
 
-#: src/multimenu.cpp:626
+#: src/multimenu.cpp:627
 msgid "Technology level 2"
 msgstr "Рівень технологій 2"
 
-#: src/multimenu.cpp:632
+#: src/multimenu.cpp:633
 msgid "Technology level 3"
 msgstr "Рівень технологій 3"
 
-#: src/multimenu.cpp:638
+#: src/multimenu.cpp:639
 msgid "Any number of players"
 msgstr "Будь-яка кількість гравців"
 
-#: src/multimenu.cpp:757
+#: src/multimenu.cpp:758
 msgid "Score"
 msgstr "Очки"
 
-#: src/multimenu.cpp:758
+#: src/multimenu.cpp:759
 msgid "Kills"
 msgstr "Вбивства"
 
-#: src/multimenu.cpp:762
-#: src/multimenu.cpp:767
+#: src/multimenu.cpp:763
+#: src/multimenu.cpp:768
 msgid "Units"
 msgstr "Підрозділи"
 
-#: src/multimenu.cpp:776
+#: src/multimenu.cpp:777
 msgid "Structs"
 msgstr "Будівлі"
 
-#: src/multimenu.cpp:1128
+#: src/multimenu.cpp:1139
 msgid "Channel"
 msgstr ""
 
-#: src/multimenu.cpp:1142
+#: src/multimenu.cpp:1153
 msgid "Toggle Alliance State"
 msgstr "Змінити Статус Союзу"
 
-#: src/multimenu.cpp:1161
+#: src/multimenu.cpp:1172
 msgid "Give Visibility Report"
 msgstr "Надати Інформацію про Зону Видимості"
 
-#: src/multimenu.cpp:1167
+#: src/multimenu.cpp:1178
 msgid "Leak Technology Documents"
 msgstr "Надати Технологічну Документацію"
 
-#: src/multimenu.cpp:1174
+#: src/multimenu.cpp:1185
 msgid "Hand Over Selected Units"
 msgstr "Передати Вибрані Одиниці"
 
-#: src/multimenu.cpp:1180
+#: src/multimenu.cpp:1191
 msgid "Give Power To Player"
 msgstr "Надати Енергію Гравцю"
 
@@ -14823,20 +14824,20 @@ msgstr "Повний Час Гри - %s"
 msgid "You cheated!"
 msgstr "Ви застосували шахрайство!"
 
-#: src/scriptfuncs.cpp:3287
+#: src/scriptfuncs.cpp:3288
 msgid "YOU ARE VICTORIOUS!"
 msgstr "ВИ ПЕРЕМОГЛИ!"
 
-#: src/scriptfuncs.cpp:3291
+#: src/scriptfuncs.cpp:3292
 msgid "YOU WERE DEFEATED!"
 msgstr "ВИ ЗАЗНАЛИ ПОРАЗКИ!"
 
-#: src/scriptfuncs.cpp:9537
+#: src/scriptfuncs.cpp:9524
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Отримано Сигнал від %s!"
 
-#: src/scriptfuncs.cpp:9583
+#: src/scriptfuncs.cpp:9570
 #, c-format
 msgid "Beacon %d"
 msgstr "Сигнал %d"
@@ -14870,58 +14871,58 @@ msgstr "Не можу знайти  жодного Командира!"
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Досягнуто Межі Контролю - Виробництво Призупинене"
 
-#: src/structure.cpp:5888
-#: src/structure.cpp:5913
+#: src/structure.cpp:5846
+#: src/structure.cpp:5871
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Підрозділ закріплено"
 msgstr[1] "%s - %u Підрозділи закріплено"
 
-#: src/structure.cpp:5918
-#: src/structure.cpp:5986
-#: src/structure.cpp:6002
-#: src/structure.cpp:6016
+#: src/structure.cpp:5876
+#: src/structure.cpp:5944
+#: src/structure.cpp:5960
+#: src/structure.cpp:5974
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Пошкоджено %3.0f%%"
 
-#: src/structure.cpp:5968
+#: src/structure.cpp:5926
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - Під'єднано %u з %u"
 
-#: src/structure.cpp:6132
-#: src/structure.cpp:6177
+#: src/structure.cpp:6090
+#: src/structure.cpp:6135
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Електронних Ушкоджень"
 
-#: src/structure.cpp:6414
+#: src/structure.cpp:6372
 msgid "Electronic Reward - Visibility Report"
 msgstr "Електронна Винагорода - Звіт про Зону Видимості"
 
-#: src/structure.cpp:6454
+#: src/structure.cpp:6412
 msgid "Factory Reward - Propulsion"
 msgstr "Винагорода Фабрики - Ходова"
 
-#: src/structure.cpp:6478
+#: src/structure.cpp:6436
 msgid "Factory Reward - Body"
 msgstr "Винагорода Фабрики - Корпус"
 
-#: src/structure.cpp:6502
+#: src/structure.cpp:6460
 msgid "Factory Reward - Weapon"
 msgstr "Винагорода Фабрики - Озброєння"
 
-#: src/structure.cpp:6511
+#: src/structure.cpp:6469
 msgid "Factory Reward - Nothing"
 msgstr "Винагорода Фабрики - Нічого"
 
-#: src/structure.cpp:6539
+#: src/structure.cpp:6497
 msgid "Repair Facility Award - Repair"
 msgstr "Винагорода Ремонтної Майстерні - Ремонт"
 
-#: src/structure.cpp:6546
+#: src/structure.cpp:6504
 msgid "Repair Facility Award - Nothing"
 msgstr "Винагорода Ремонтної Майстерні - Нічого"
 
@@ -14957,6 +14958,9 @@ msgstr " - Збудовано %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Версія %s%s%s%s"
+
+#~ msgid "Player colour"
+#~ msgstr "Колір гравця"
 
 #~ msgid "Truck ordered to build Oil Derrick"
 #~ msgstr "Інженеру наказано побудувати Бурову Вежу"

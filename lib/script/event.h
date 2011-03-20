@@ -83,7 +83,7 @@ struct ACTIVE_TRIGGER
 	SWORD				trigger;
 	UWORD				event;
 	UWORD				offset;
-	bool				deactivated;	// Whether the trigger is marked for deletion
+	int32_t				deactivated;	// Whether the trigger is marked for deletion
 	ACTIVE_TRIGGER *        psNext;
 };
 

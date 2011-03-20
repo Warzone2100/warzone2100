@@ -287,9 +287,9 @@ static bool eventLoadContext(const SDWORD version, char *pBuffer, UDWORD *pSize)
 
 				switch (type) {
 				case VAL_BOOL:
-					data.v.bval = *((bool*)pPos);
-					pPos += sizeof(bool);
-					size += sizeof(bool);
+					data.v.bval = *((int32_t*)pPos);
+					pPos += sizeof(int32_t);
+					size += sizeof(int32_t);
 					break;
 				case VAL_FLOAT:
 					data.v.fval = *((float*)pPos);

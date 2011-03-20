@@ -44,7 +44,7 @@
 struct CHAT_CMD_DATA
 {
 	const char	*pCmdDescription;				/* String representing a certain command */
-	bool		bPlayerAddressed[MAX_PLAYERS];	/* Flag to indicate whether a command was addressed to a certain player */
+	int32_t		bPlayerAddressed[MAX_PLAYERS];	/* Flag to indicate whether a command was addressed to a certain player */
 	SDWORD		numCmdParams;					/* Number of extracted parameters associated with each command */
 	INTERP_VAL	parameter[MAX_CHAT_CMD_PARAMS];	/* Parameters extracted from text - to be used with scripts */
 };

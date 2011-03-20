@@ -3144,9 +3144,10 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV)
 			// Draw animated
 			if (realTime - psProxDisp->timeLastDrawn > delay)
 			{
-				psProxDisp->strobe = (psProxDisp->strobe + 1) % animationLength;
+				++psProxDisp->strobe;
 				psProxDisp->timeLastDrawn = realTime;
 			}
+			psProxDisp->strobe %= animationLength;
 			imageID = images[1 + psProxDisp->strobe];
 		}
 

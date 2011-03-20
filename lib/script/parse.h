@@ -167,7 +167,7 @@ struct CONST_SYMBOL
 	 * Only one of these will be valid depending on type.
 	 * A union is not used as a union cannot be statically initialised
 	 */
-	bool			bval;
+	int32_t			bval;
 	SDWORD			ival;
 	void			*oval;
 	char			*sval;	//String values
@@ -195,7 +195,7 @@ struct FUNC_SYMBOL
 	UDWORD		numParams;	// Number of parameters to the function
 	uint32_t/*INTERP_TYPE*/ aParams[INST_MAXPARAMS];
 							// List of parameter types
-	bool		script;		// Whether the function is defined in the script
+	int32_t		script;		// Whether the function is defined in the script
 							// or a C instinct function
 	UDWORD		size;		// The size of script code
 	INTERP_VAL	*pCode;		// The code for a function if it is defined in the script
@@ -265,8 +265,8 @@ struct EVENT_SYMBOL
 	//functions stuff
 	UDWORD		numParams;		//Number of parameters to the function
 	UDWORD		numLocalVars;	//local variables
-	bool		bFunction;		//if this event is defined as a function
-	bool		bDeclared;		//if function was declared before
+	int32_t		bFunction;		//if this event is defined as a function
+	int32_t		bDeclared;		//if function was declared before
 	INTERP_TYPE	retType;		//return type if a function
 
 	INTERP_TYPE	aParams[INST_MAXPARAMS];

@@ -175,7 +175,7 @@ static void yyerror(const char* msg);
 %name-prefix="chat_"
 
 %union {
-	bool				bval;
+	int32_t				bval;
 	SDWORD			ival;
 }
 
