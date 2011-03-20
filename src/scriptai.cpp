@@ -1569,14 +1569,14 @@ bool skTopicAvail(UWORD inc, UDWORD player)
 	//if the topic is possible and has not already been researched - add to list
 	if ((IsResearchPossible(&pPlayerRes[inc])))
 	{
-		if ((IsResearchCompleted(&pPlayerRes[inc])==false) && (IsResearchStarted(&pPlayerRes[inc])==false))
+		if (!IsResearchCompleted(&pPlayerRes[inc]) && !IsResearchStartedPending(&pPlayerRes[inc]))
 		{
 		return true;
 		}
 	}
 
 	// make sure that the research is not completed  or started by another researchfac
-	if ((IsResearchCompleted(&pPlayerRes[inc])==false) && (IsResearchStarted(&pPlayerRes[inc])==false))
+	if (!IsResearchCompleted(&pPlayerRes[inc]) && !IsResearchStartedPending(&pPlayerRes[inc]))
 	{
 		// Research is not completed  ... also  it has not been started by another researchfac
 

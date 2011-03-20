@@ -7525,32 +7525,17 @@ bool scrNumResearchLeft(void)
 //check if any of the ally is researching this topic
 bool beingResearchedByAlly(SDWORD resIndex, SDWORD player)
 {
-	STRUCTURE *psOtherStruct;
 	SDWORD	i;
-	BASE_STATS *Stat;
-
-	Stat = (BASE_STATS*)(asResearch + resIndex);
 
 	for(i=0;i<MAX_PLAYERS;i++)
 	{
 		if(i != player && aiCheckAlliances(player,i))
 		{
 			//check each research facility to see if they are doing this topic.
-			for(psOtherStruct=apsStructLists[i];psOtherStruct;psOtherStruct=psOtherStruct->psNext)
+			if (IsResearchStartedPending(&asPlayerResList[i][resIndex]))
 			{
-				if(   psOtherStruct->pStructureType->type == REF_RESEARCH
-						&& psOtherStruct->status == SS_BUILT
-						&& ((RESEARCH_FACILITY *)psOtherStruct->pFunctionality)->psSubject
-						 )
-				{
-
-					if(((RESEARCH_FACILITY *)psOtherStruct->pFunctionality)->psSubject->ref == Stat->ref)
-					{
-						return true;
-					}
-				}
+				return true;
 			}
-
 		}
 	}
 
@@ -7635,7 +7620,7 @@ bool scrResearchStarted(void)
 		return false;
 	}
 
-	if(IsResearchStarted(&pPlayerRes[index]))
+	if (IsResearchStartedPending(&pPlayerRes[index]))
 	{
 		scrFunctionResult.v.bval = true;
 		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
@@ -9949,7 +9934,7 @@ bool scrPursueResearch(void)
 		found = false;
 		//DbgMsg("Research already completed: %d", index);
 	}
-	else if (IsResearchStarted(&pPlayerRes[index]))
+	else if (IsResearchStartedPending(&pPlayerRes[index]))
 	{
 		found = false;
 		//DbgMsg("Research already in progress, %d", index);
@@ -10003,7 +9988,7 @@ bool scrPursueResearch(void)
 					foundIndex = tempIndex;		//done
 					break;
 				}
-				else if ((IsResearchCompleted(&pPlayerRes[tempIndex]) == false) && (IsResearchStarted(&pPlayerRes[tempIndex]) == false))		//not avail and not busy with it, can check this PR's PR
+				else if (!IsResearchCompleted(&pPlayerRes[tempIndex]) && !IsResearchStartedPending(&pPlayerRes[tempIndex]))  //not avail and not busy with it, can check this PR's PR
 				{
 					//DbgMsg("node not complete, not started: %d, (cur=%d), %s", tempIndex,cur, asResearch[tempIndex].pName);
 					if (asResearch[tempIndex].numPRRequired > 0)	//node has any nodes itself
