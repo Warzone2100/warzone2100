@@ -984,7 +984,7 @@ void eventFireCallbackTrigger(TRIGGER_TYPE callback)
 {
 	ACTIVE_TRIGGER	*psPrev = NULL, *psCurr, *psNext;
 	TRIGGER_DATA	*psTrigDat;
-	bool		fired;
+	int32_t		fired;		// was BOOL (int) ** see warning about conversion
 
 	if (interpProcessorActive())
 	{

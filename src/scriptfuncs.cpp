@@ -588,7 +588,7 @@ bool scrStructInArea(void)
 // -----------------------------------------------------------------------------------------
 bool scrSeenStructInArea(void)
 {
-	int32_t	walls=false;
+	int32_t	walls=false;	// was BOOL (int) ** see warning about conversion
 	bool	found = false;
 	SDWORD		player,enemy,x1,y1, x2,y2;
 	STRUCTURE	*psCurr;
@@ -1422,7 +1422,7 @@ bool scrAddReticuleButton(void)
 bool scrRemoveReticuleButton(void)
 {
 	SDWORD	val;
-	bool	bReset;
+	int32_t	bReset;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(2, VAL_INT, &val,VAL_BOOL, &bReset))
 	{
@@ -1483,7 +1483,7 @@ bool scrAddMessage(void)
 	MESSAGE			*psMessage;
 	MESSAGE_TYPE		msgType;
 	SDWORD			player;
-	int32_t			playImmediate;
+	int32_t			playImmediate; // was BOOL (int) ** see warning about conversion
 	VIEWDATA		*psViewData;
 	UDWORD			height;
 
@@ -2038,13 +2038,13 @@ static	SDWORD			playerVisibleStruct;		//player whose structures must be visible
 static	STRUCTURE_STATS	*psStructStatToFindB[MAX_PLAYERS];
 static	UDWORD			playerToEnumStructB[MAX_PLAYERS];
 static	UDWORD			enumStructCountB[MAX_PLAYERS];
-static	bool			structfindanyB[MAX_PLAYERS];
+static	int32_t			structfindanyB[MAX_PLAYERS];			// was BOOL (int) ** see warning about conversion
 static	SDWORD			playerVisibleStructB[MAX_PLAYERS];		//player whose structures must be visible
 // init enum visible structures.
 bool scrInitEnumStruct(void)
 {
 	SDWORD		lookingPlayer,iStat,targetPlayer;
-	bool		any;
+	int32_t		any; // was BOOL (int) ** see warning about conversion
 
 	if ( !stackPopParams(4,VAL_BOOL,&any, ST_STRUCTURESTAT, &iStat,  VAL_INT, &targetPlayer, VAL_INT, &lookingPlayer) )
 	{
@@ -2122,7 +2122,7 @@ bool scrEnumStruct(void)
 bool scrInitEnumStructB(void)
 {
 	SDWORD		lookingPlayer,iStat,targetPlayer,bucket;
-	bool		any;
+	int32_t		any; // was BOOL (int) ** see warning about conversion
 
 	if ( !stackPopParams(5,VAL_BOOL,&any, ST_STRUCTURESTAT, &iStat,
 		VAL_INT, &targetPlayer, VAL_INT, &lookingPlayer, VAL_INT, &bucket) )
@@ -3263,7 +3263,7 @@ bool scrAnyDroidsLeft(void)
 //
 bool scrGameOverMessage(void)
 {
-	bool			gameWon;
+	int32_t			gameWon;	// was BOOL (int) ** see warning about conversion
 	MESSAGE			*psMessage;
 	MESSAGE_TYPE		msgType;
 	SDWORD			player;
@@ -3367,7 +3367,7 @@ bool scrGameOverMessage(void)
 //function to call when the game is over
 bool scrGameOver(void)
 {
-	bool	gameOver;
+	int32_t	gameOver;	// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(1, VAL_BOOL, &gameOver))
 	{
@@ -3804,7 +3804,7 @@ bool scrStartMission(void)
 //set Snow (enable disable snow)
 bool scrSetSnow(void)
 {
-	bool bState;
+	int32_t bState;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(1, VAL_BOOL, &bState))
 	{
@@ -3828,7 +3828,7 @@ bool scrSetSnow(void)
 //set Rain (enable disable Rain)
 bool scrSetRain(void)
 {
-	bool bState;
+	int32_t bState;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(1, VAL_BOOL, &bState))
 	{
@@ -3852,7 +3852,7 @@ bool scrSetRain(void)
 //set Background Fog (replace fade out with fog)
 bool scrSetBackgroundFog(void)
 {
-	int32_t bState;
+	int32_t bState;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(1, VAL_BOOL, &bState))
 	{
@@ -3887,7 +3887,7 @@ bool scrSetBackgroundFog(void)
 //set Depth Fog (gradual fog from mid range to edge of world)
 bool scrSetDepthFog(void)
 {
-	int32_t bState;
+	int32_t bState;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(1, VAL_BOOL, &bState))
 	{
@@ -4895,7 +4895,7 @@ bool scrDistanceTwoPts( void )
 bool	scrLOSTwoBaseObjects( void )
 {
 BASE_OBJECT	*psSource,*psDest;
-bool		bWallsBlock;
+int32_t		bWallsBlock;		// was BOOL (int) ** see warning about conversion
 bool		retVal;
 
 	if(!stackPopParams(3,ST_BASEOBJECT,&psSource,ST_BASEOBJECT,&psDest,VAL_BOOL,&bWallsBlock))
@@ -4924,7 +4924,7 @@ UDWORD		typeRef;
 UDWORD		player;
 STRUCTURE	*psStructure,*psNextS;
 FEATURE		*psFeature,*psNextF;
-bool		bVisible,bTakeFeatures;
+int32_t		bVisible,bTakeFeatures;		// was BOOL (int) ** see warning about conversion
 SDWORD		sX,sY;
 
 	if(!stackPopParams(8, VAL_INT, &player, VAL_INT, &typeRef, VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2,
@@ -5004,7 +5004,7 @@ UDWORD	playerLooking,playerTarget;
 SDWORD	totalThreat;
 DROID	*psDroid;
 SDWORD	dX,dY;
-bool	bVisible;
+int32_t	bVisible;		// was BOOL (int) ** see warning about conversion
 
 	if(!stackPopParams(10,VAL_INT,&playerLooking,VAL_INT,&playerTarget,VAL_INT,&x1,VAL_INT,&y1,VAL_INT,&x2,VAL_INT,&y2,
 		VAL_INT,&ldThreat,VAL_INT,&mdThreat,VAL_INT,&hdThreat, VAL_BOOL, &bVisible))
@@ -5702,7 +5702,7 @@ bool scrSetTransporterExit(void)
 bool scrFlyTransporterIn(void)
 {
 	SDWORD	iPlayer, iEntryTileX, iEntryTileY;
-	bool	bTrackTransporter;
+	int32_t	bTrackTransporter;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(4, VAL_INT, &iPlayer, VAL_INT, &iEntryTileX, VAL_INT, &iEntryTileY,
 							VAL_BOOL, &bTrackTransporter))
@@ -6208,7 +6208,7 @@ bool scrTakeOverStructsInArea(void)
 //set Flag for defining what happens to the droids in a Transporter
 bool scrSetDroidsToSafetyFlag(void)
 {
-	bool bState;
+	int32_t bState;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(1, VAL_BOOL, &bState))
 	{
@@ -6223,7 +6223,7 @@ bool scrSetDroidsToSafetyFlag(void)
 //set Flag for defining whether the coded countDown is called
 bool scrSetPlayCountDown(void)
 {
-	bool bState;
+	int32_t bState;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(1, VAL_BOOL, &bState))
 	{
@@ -6557,12 +6557,12 @@ bool scrConsole(void)
 	return true;
 }
 
-bool scrDebug[MAX_PLAYERS];
+int32_t scrDebug[MAX_PLAYERS];		// was BOOL (int) ** see warning about conversion
 
 //turn on debug messages
 bool scrDbgMsgOn(void)
 {
-	bool	bOn;
+	int32_t	bOn;		// was BOOL (int) ** see warning about conversion
 	SDWORD	player;
 
 	if (!stackPopParams(2, VAL_INT, &player, VAL_BOOL, &bOn))
@@ -7658,8 +7658,8 @@ bool scrResearchStarted(void)
 //returns true if location is dangerous
 bool scrThreatInRange(void)
 {
-	SDWORD				player,range,rangeX,rangeY;
-	bool					bVTOLs;
+	SDWORD		player, range, rangeX, rangeY;
+	int32_t		bVTOLs;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(5, VAL_INT, &player, VAL_INT, &rangeX,
 		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs))
@@ -7680,9 +7680,9 @@ bool scrThreatInRange(void)
 
 bool scrNumEnemyWeapObjInRange(void)
 {
-	SDWORD				lookingPlayer,range,rangeX,rangeY,i;
-	UDWORD				numEnemies = 0;
-	bool				bVTOLs,bFinished;
+	SDWORD		lookingPlayer, range, rangeX, rangeY, i;
+	UDWORD		numEnemies = 0;
+	int32_t		bVTOLs, bFinished;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(6, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
 		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs, VAL_BOOL, &bFinished))
@@ -7716,9 +7716,9 @@ bool scrNumEnemyWeapObjInRange(void)
 /* Calculates the total cost of enemy weapon objects in a certain area */
 bool scrEnemyWeapObjCostInRange(void)
 {
-	SDWORD				lookingPlayer,range,rangeX,rangeY,i;
-	UDWORD				enemyCost = 0;
-	bool				bVTOLs,bFinished;
+	SDWORD		lookingPlayer, range, rangeX, rangeY, i;
+	UDWORD		enemyCost = 0;
+	int32_t		bVTOLs, bFinished; // was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(6, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
 		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs, VAL_BOOL, &bFinished))
@@ -7753,9 +7753,9 @@ bool scrEnemyWeapObjCostInRange(void)
  */
 bool scrFriendlyWeapObjCostInRange(void)
 {
-	SDWORD				player,range,rangeX,rangeY,i;
-	UDWORD				friendlyCost = 0;
-	bool				bVTOLs,bFinished;
+	SDWORD		player, range, rangeX, rangeY, i;
+	UDWORD		friendlyCost = 0;
+	int32_t		bVTOLs, bFinished;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(6, VAL_INT, &player, VAL_INT, &rangeX,
 		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs, VAL_BOOL, &bFinished))
@@ -7903,7 +7903,7 @@ bool scrNumEnemyWeapDroidsInRange(void)
 {
 	SDWORD				lookingPlayer,range,rangeX,rangeY,i;
 	UDWORD				numEnemies = 0;
-	bool				bVTOLs;
+	int32_t				bVTOLs;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(5, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
 		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs))
@@ -7936,9 +7936,9 @@ bool scrNumEnemyWeapDroidsInRange(void)
 
 bool scrNumEnemyWeapStructsInRange(void)
 {
-	SDWORD				lookingPlayer,range,rangeX,rangeY,i;
-	UDWORD				numEnemies = 0;
-	bool				bFinished;
+	SDWORD			lookingPlayer, range, rangeX, rangeY, i;
+	UDWORD			numEnemies = 0;
+	int32_t			bFinished;	// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(5, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
 		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bFinished))
@@ -7969,9 +7969,9 @@ bool scrNumEnemyWeapStructsInRange(void)
 
 bool scrNumFriendlyWeapObjInRange(void)
 {
-	SDWORD				player,range,rangeX,rangeY,i;
+	SDWORD				player, range, rangeX, rangeY, i;
 	UDWORD				numFriends = 0;
-	bool				bVTOLs,bFinished;
+	int32_t				bVTOLs, bFinished;	// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(6, VAL_INT, &player, VAL_INT, &rangeX,
 		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs, VAL_BOOL, &bFinished))
@@ -8000,9 +8000,9 @@ bool scrNumFriendlyWeapObjInRange(void)
 
 bool scrNumFriendlyWeapDroidsInRange(void)
 {
-	SDWORD				lookingPlayer,range,rangeX,rangeY,i;
-	UDWORD				numEnemies = 0;
-	bool				bVTOLs;
+	SDWORD		lookingPlayer, range, rangeX, rangeY, i;
+	UDWORD		numEnemies = 0;
+	int32_t		bVTOLs;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(5, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
 		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs))
@@ -8034,9 +8034,9 @@ bool scrNumFriendlyWeapDroidsInRange(void)
 
 bool scrNumFriendlyWeapStructsInRange(void)
 {
-	SDWORD				lookingPlayer,range,rangeX,rangeY,i;
+	SDWORD				lookingPlayer, range, rangeX, rangeY, i;
 	UDWORD				numEnemies = 0;
-	bool				bFinished;
+	int32_t				bFinished;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(5, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
 		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bFinished))
@@ -8065,8 +8065,8 @@ bool scrNumFriendlyWeapStructsInRange(void)
 
 bool scrNumPlayerWeapDroidsInRange(void)
 {
-	SDWORD		targetPlayer,lookingPlayer,range,rangeX,rangeY;
-	bool		bVTOLs;
+	SDWORD		targetPlayer, lookingPlayer, range, rangeX, rangeY;
+	int32_t		bVTOLs;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(6, VAL_INT, &targetPlayer, VAL_INT, &lookingPlayer,
 		VAL_INT, &rangeX, VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs))
@@ -8088,8 +8088,8 @@ bool scrNumPlayerWeapDroidsInRange(void)
 
 bool scrNumPlayerWeapStructsInRange(void)
 {
-	SDWORD		targetPlayer,lookingPlayer,range,rangeX,rangeY;
-	bool		bFinished;
+	SDWORD		targetPlayer, lookingPlayer, range, rangeX, rangeY;
+	int32_t		bFinished;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(6, VAL_INT, &targetPlayer, VAL_INT, &lookingPlayer,
 		VAL_INT, &rangeX, VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bFinished))
@@ -8111,9 +8111,9 @@ bool scrNumPlayerWeapStructsInRange(void)
 
 bool scrNumPlayerWeapObjInRange(void)
 {
-	SDWORD				targetPlayer,lookingPlayer,range,rangeX,rangeY;
+	SDWORD				targetPlayer, lookingPlayer, range, rangeX, rangeY;
 	UDWORD				numEnemies = 0;
-	bool				bVTOLs,bFinished;
+	int32_t				bVTOLs, bFinished;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(7, VAL_INT, &targetPlayer, VAL_INT, &lookingPlayer,
 						VAL_INT, &rangeX, VAL_INT, &rangeY, VAL_INT, &range,
@@ -8138,8 +8138,8 @@ bool scrNumPlayerWeapObjInRange(void)
 
 bool scrNumEnemyObjInRange(void)
 {
-	SDWORD				lookingPlayer,range,rangeX,rangeY;
-	bool				bVTOLs,bFinished;
+	SDWORD				lookingPlayer, range, rangeX, rangeY;
+	int32_t				bVTOLs, bFinished;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(6, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
 		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs, VAL_BOOL, &bFinished))
@@ -8670,9 +8670,10 @@ bool scrChooseValidLoc(void)
 //returns closest enemy object
 bool scrGetClosestEnemy(void)
 {
-	SDWORD				x,y,tx,ty, player, range,i;
+	SDWORD				x, y, tx, ty, player, range, i;
 	UDWORD				dist, bestDist;
-	bool				weaponOnly, bVTOLs, bFound = false;	//only military objects?
+	int32_t				weaponOnly, bVTOLs;		// was BOOL (int) ** see warning about conversion
+	bool				bFound = false;			//only military objects?
 	BASE_OBJECT			*psObj = NULL;
 	STRUCTURE			*psStruct = NULL;
 	DROID				*psDroid = NULL;
@@ -9056,7 +9057,7 @@ bool scrGetClosestEnemyDroidByType(void)
 	SDWORD				x,y,tx,ty, player, range,i,type;
 	UDWORD				dist,bestDist;
 	bool				bFound = false;	//only military objects?
-	bool				bVTOLs;
+	int32_t				bVTOLs;			// was BOOL (int) ** see warning about conversion
 	DROID				*psDroid = NULL, *foundDroid = NULL;
 
 	if (!stackPopParams(6, VAL_INT, &x, VAL_INT, &y,
@@ -9270,7 +9271,7 @@ bool scrCirclePerimPoint(void)
 bool scrGiftRadar(void)
 {
 	SDWORD	playerFrom, playerTo;
-	bool	playMsg;
+	int32_t	playMsg;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(3, VAL_INT, &playerFrom, VAL_INT, &playerTo, VAL_BOOL, &playMsg))
 	{
@@ -9385,7 +9386,7 @@ bool scrNumAAinRange(void)
 //select droid
 bool scrSelectDroid(void)
 {
-	bool	bSelect;
+	int32_t	bSelect;	// was BOOL (int) ** see warning about conversion
 	DROID	*psDroid;
 
 	if (!stackPopParams(2, ST_DROID, &psDroid, VAL_BOOL, &bSelect))
@@ -9408,7 +9409,7 @@ bool scrSelectDroid(void)
 //select droid group
 bool scrSelectGroup(void)
 {
-	bool		bSelect;
+	int32_t		bSelect;	// was BOOL (int) ** see warning about conversion
 	DROID_GROUP	*psGroup;
 	DROID		*psCurr;
 
@@ -10199,7 +10200,7 @@ bool scrGetBit(void)
 bool scrSetBit(void)
 {
 	SDWORD				base,position;
-	bool				bSet;
+	int32_t				bSet;	// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(3, VAL_INT, &base,
 		VAL_INT, &position, VAL_BOOL, &bSet))
@@ -10248,7 +10249,7 @@ bool scrAlliancesLocked(void)
 
 bool scrASSERT(void)
 {
-	bool				bExpression;
+	int32_t			bExpression;	// was BOOL (int) ** see warning about conversion
 	SDWORD			player;
 	char			sTmp[255];
 
@@ -10373,7 +10374,7 @@ bool scrLog(void)
 /* Show/Hide multiplayer debug menu */
 bool scrDebugMenu(void)
 {
-	SDWORD		menuUp;
+	int32_t		menuUp;		// was SDWORD which happens to be int32_t, but is being used as a VAL_BOOL, so : ** see warning about conversion
 
 	if (!stackPopParams(1, VAL_BOOL, &menuUp))
 	{

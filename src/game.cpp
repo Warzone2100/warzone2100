@@ -1272,7 +1272,7 @@ struct SAVE_GAME_V33 : public SAVE_GAME_V31
 	NETPLAY         sNetPlay;
 	uint32_t        savePlayer;
 	char            sPName[32];
-	int32_t         multiPlayer;	// was BOOL which a int
+	int32_t         multiPlayer;	// was BOOL (int) ** see warning about conversion
 	uint32_t        sPlayerIndex[MAX_PLAYERS];
 };
 
