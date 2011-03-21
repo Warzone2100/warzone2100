@@ -512,8 +512,11 @@ void WzMainWindow::realHandleKeyEvent(QKeyEvent *event, bool pressed)
 			case Qt::Key_Alt                :	lastKey = setKey(KEY_LALT, pressed); break;
 			case Qt::Key_AltGr              :	lastKey = setKey(KEY_RALT, pressed); break;
 
+			case Qt::Key_Meta               :	lastKey = setKey(KEY_LMETA, pressed); break;
+
 			case Qt::Key_Escape             :	lastKey = setKey(KEY_ESC, pressed); break;
 			case Qt::Key_Backspace          :	lastKey = setKey(KEY_BACKSPACE, pressed); break;
+			case Qt::Key_QuoteLeft          :	lastKey = setKey(KEY_BACKQUOTE, pressed); break;
 			case Qt::Key_1                  :	lastKey = setKey(KEY_1, pressed); break;
 			case Qt::Key_2                  :	lastKey = setKey(KEY_2, pressed); break;
 			case Qt::Key_3                  :	lastKey = setKey(KEY_3, pressed); break;
@@ -526,6 +529,7 @@ void WzMainWindow::realHandleKeyEvent(QKeyEvent *event, bool pressed)
 			case Qt::Key_0                  :	lastKey = setKey(KEY_0, pressed); break;
 			case Qt::Key_Minus              :	lastKey = setKey(KEY_MINUS, pressed); break;
 			case Qt::Key_Equal              :	lastKey = setKey(KEY_EQUALS, pressed); break;
+			case Qt::Key_Backtab:
 			case Qt::Key_Tab                :	lastKey = setKey(KEY_TAB, pressed); break;
 			case Qt::Key_Q                  :	lastKey = setKey(KEY_Q, pressed); break;
 			case Qt::Key_W                  :	lastKey = setKey(KEY_W, pressed); break;
