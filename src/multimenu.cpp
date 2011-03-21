@@ -33,6 +33,7 @@
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/piedef.h"
 #include "lib/ivis_opengl/piepalette.h"
+#include "lib/ivis_opengl/bitimage.h"
 #include "lib/gamelib/gtime.h"
 #include "lib/ivis_opengl/piematrix.h"
 #include "levels.h"
@@ -983,7 +984,12 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 	}
 
 	// a droid of theirs.
-	if(apsDroidLists[player])
+	DROID *displayDroid = apsDroidLists[player];
+	while (displayDroid != NULL && !displayDroid->visible[selectedPlayer])
+	{
+		displayDroid = displayDroid->psNext;
+	}
+	if (displayDroid)
 	{
 		pie_SetGeometricOffset( MULTIMENU_FORM_X+MULTIMENU_C1 ,y+MULTIMENU_PLAYER_H);
 		rotation.x = -15;
@@ -993,7 +999,12 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 		position.y = 0;
 		position.z = 2000;		//scale them!
 
-		displayComponentButtonObject(apsDroidLists[player],&rotation,&position,false, 100);
+		displayComponentButtonObject(displayDroid, &rotation, &position, false, 100);
+	}
+	else if(apsDroidLists[player])
+	{
+		// Show that they have droids, but not which droids, since we can't see them.
+		iV_DrawImageTc(IntImages, IMAGE_GENERIC_TANK, IMAGE_GENERIC_TANK_TC, MULTIMENU_FORM_X + MULTIMENU_C1 - iV_GetImageWidth(IntImages, IMAGE_GENERIC_TANK)/2, y + MULTIMENU_PLAYER_H - iV_GetImageHeight(IntImages, IMAGE_GENERIC_TANK), pal_GetTeamColour(getPlayerColour(player)));
 	}
 
 	// clean up widgets if player leaves while menu is up.
@@ -1070,27 +1081,19 @@ static void displayAllianceState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffse
 	psWidget->UserData = player;
 }
 
-
 static void displayChannelState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
-	UDWORD a, b, c, player = psWidget->UserData;
-	switch(openchannels[player])
-	{
-	case 1:
-		a = 0;
-		b = IMAGE_MULTI_CHAN;
-		c = IMAGE_MULTI_CHAN;
-		break;
-	case 0:
-	default:
-		a = 0;
-		b = IMAGE_MULTI_NOCHAN;
-		c = IMAGE_MULTI_NOCHAN;
-		break;
-	}
+	UDWORD player = psWidget->UserData;
 
-	psWidget->UserData = PACKDWORD_TRI(a,b,c);
-	intDisplayImageHilight(psWidget,  xOffset,  yOffset, pColours);
+	if (openchannels[player])
+	{
+		psWidget->UserData = PACKDWORD_TRI(0, IMAGE_MULTI_CHAN, IMAGE_MULTI_CHAN);
+	}
+	else
+	{
+		psWidget->UserData = PACKDWORD_TRI(0, IMAGE_MULTI_NOCHAN, IMAGE_MULTI_NOCHAN);
+	}
+	intDisplayImageHilight(psWidget, xOffset, yOffset, pColours);
 	psWidget->UserData = player;
 }
 
@@ -1472,15 +1475,8 @@ void intProcessMultiMenu(UDWORD id)
 	//channel opens.
 	if(id >=MULTIMENU_CHANNEL &&  id<MULTIMENU_CHANNEL+MAX_PLAYERS)
 	{
-		i =(UBYTE)( id - MULTIMENU_CHANNEL);
-		if(openchannels[i])
-		{
-			openchannels[i] = false;// close channel
-		}
-		else
-		{
-			openchannels[i] = true;// open channel
-		}
+		i = id - MULTIMENU_CHANNEL;
+		openchannels[i] = !openchannels[i];
 	}
 
 	//radar gifts

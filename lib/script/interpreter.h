@@ -64,13 +64,13 @@ struct INTERP_VAL
 	INTERP_TYPE		type;					//Value type for interpreter; opcode or value type for compiler
 	union
 	{
-		char					*sval;			//String value - VAL_STRING
+		char					*sval;		//String value - VAL_STRING
 		SCRIPT_VARFUNC		pObjGetSet;		//Set/Get method for objects - VAL_OBJ_GETSET
-		SCRIPT_FUNC			pFuncExtern;		//External (C) function - VAL_FUNC_EXTERN
-		void					*oval;			//Object value - any in-game object
-		float					fval;				//Float value - VAL_FLOAT
-		int						ival;				// Integer value - VAL_INT
-		bool					bval;			//Boolean value - VAL_BOOL
+		SCRIPT_FUNC			pFuncExtern;	//External (C) function - VAL_FUNC_EXTERN
+		void					*oval;		//Object value - any in-game object
+		float					fval;		//Float value - VAL_FLOAT
+		int						ival;		// Integer value - VAL_INT
+		int32_t					bval;		//Boolean value - VAL_BOOL [NOTE: Even though this is a bool, we must make it this size to prevent issues]
 	} v;
 };
 

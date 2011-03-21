@@ -531,7 +531,7 @@ static void freeVARIDENTDECL(VAR_IDENT_DECL* psDcl)
 /* Macros to store a value in a code block */
 #define PUT_DATA_BOOL(ip, value) \
 	(ip)->type = VAL_BOOL; \
-	(ip)->v.bval = (bool)(value); \
+	(ip)->v.bval = (int32_t)(value); \
 	(ip)++
 
 #define PUT_DATA_INT(ip, value) \
@@ -714,7 +714,7 @@ void script_debug(const char *pFormat, ...)
  */
 static CODE_ERROR scriptCodeFunction(FUNC_SYMBOL	*psFSymbol,		// The function being called
 							PARAM_BLOCK		*psPBlock,		// The functions parameters
-							bool			expContext,		// Whether the function is being
+							int32_t			expContext,		// Whether the function is being
 															// called in an expression context
 							CODE_BLOCK		**ppsCBlock)	// The generated code block
 {
@@ -1557,7 +1557,7 @@ static CODE_ERROR scriptCodeVarRef(VAR_SYMBOL		*psVariable,	// The object variab
 
 %union {
 	/* Types returned by the lexer */
-	bool			bval;
+	int32_t			bval;
 	float			fval;
 	SDWORD			ival;
 	char			*sval;

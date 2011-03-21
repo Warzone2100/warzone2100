@@ -3144,9 +3144,10 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV)
 			// Draw animated
 			if (realTime - psProxDisp->timeLastDrawn > delay)
 			{
-				psProxDisp->strobe = (psProxDisp->strobe + 1) % animationLength;
+				++psProxDisp->strobe;
 				psProxDisp->timeLastDrawn = realTime;
 			}
+			psProxDisp->strobe %= animationLength;
 			imageID = images[1 + psProxDisp->strobe];
 		}
 
@@ -3320,5 +3321,35 @@ void intDisplayAllyIcon(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 	UDWORD		x = Label->x + xOffset;
 	UDWORD		y = Label->y + yOffset;
 
-	iV_DrawImage(IntImages, IMAGE_DES_BODYPOINTS, x, y);
+	iV_DrawImageTc(IntImages, IMAGE_ALLY_RESEARCH, IMAGE_ALLY_RESEARCH_TC, x, y, pal_GetTeamColour(getPlayerColour(psWidget->UserData)));
+}
+
+void intDisplayAllyBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+{
+	W_BARGRAPH *psBar = (W_BARGRAPH *)psWidget;
+	unsigned bestCompletion = 0;
+	for (int player = 0; player < MAX_PLAYERS; ++player)
+	{
+		if (player != selectedPlayer && aiCheckAlliances(selectedPlayer, player))
+		{
+			// Check each research facility to see if they are doing this topic. (As opposed to having started the topic, but stopped researching it.)
+			for (STRUCTURE *psOtherStruct = apsStructLists[player]; psOtherStruct; psOtherStruct = psOtherStruct->psNext)
+			{
+				if (psOtherStruct->pStructureType->type == REF_RESEARCH && psOtherStruct->status == SS_BUILT &&
+				    ((RESEARCH_FACILITY *)psOtherStruct->pFunctionality)->psSubject && ((RESEARCH_FACILITY *)psOtherStruct->pFunctionality)->psSubject->ref == asResearch[psWidget->UserData].ref)
+				{
+					unsigned completion = asPlayerResList[player][psWidget->UserData].currentPoints;
+					if (bestCompletion < completion)
+					{
+						bestCompletion = completion;
+						psBar->majorCol = pal_GetTeamColour(getPlayerColour(player));
+					}
+					break;
+				}
+			}
+		}
+	}
+
+	((W_BARGRAPH *)psWidget)->majorSize = PERCENT(bestCompletion, asResearch[psWidget->UserData].researchPoints);
+	barGraphDisplayTrough(psWidget, xOffset, yOffset, pColours);
 }

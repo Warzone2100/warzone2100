@@ -156,29 +156,64 @@ void pie_UniTransBoxFill(float x0, float y0, float x1, float y1, PIELIGHT light)
 
 /***************************************************************************/
 
+bool assertValidImage(IMAGEFILE *imageFile, unsigned id)
+{
+	ASSERT_OR_RETURN(false, id < (unsigned)imageFile->NumImages, "Out of range 1: %u/%d", id, imageFile->NumImages);
+	ASSERT_OR_RETURN(false, imageFile->ImageDefs[id].TPageID < MAX_NUM_TPAGEIDS, "Out of range 2: %u", imageFile->ImageDefs[id].TPageID);
+	return true;
+}
+
+static PIEIMAGE makePieImage(IMAGEFILE *imageFile, unsigned id, PIERECT *dest = NULL, int x = 0, int y = 0)
+{
+	IMAGEDEF const &image = imageFile->ImageDefs[id];
+	PIEIMAGE pieImage;
+	pieImage.texPage = imageFile->TPageIDs[image.TPageID];
+	pieImage.tu = image.Tu;
+	pieImage.tv = image.Tv;
+	pieImage.tw = image.Width;
+	pieImage.th = image.Height;
+	if (dest != NULL)
+	{
+		dest->x = x + image.XOffset;
+		dest->y = y + image.YOffset;
+		dest->w = image.Width;
+		dest->h = image.Height;
+	}
+	return pieImage;
+}
+
 void iV_DrawImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y)
 {
-	IMAGEDEF *Image;
-	PIEIMAGE pieImage;
+	if (!assertValidImage(ImageFile, ID))
+	{
+		return;
+	}
+
 	PIERECT dest;
+	PIEIMAGE pieImage = makePieImage(ImageFile, ID, &dest, x, y);
 
-	ASSERT_OR_RETURN(, ID < ImageFile->NumImages, "Out of range 1: %d", (int)ID);
-	Image = &ImageFile->ImageDefs[ID];
-
-	ASSERT_OR_RETURN(, Image->TPageID < MAX_NUM_TPAGEIDS, "Out of range 2: %d", (int)Image->TPageID);
 	pie_SetRendMode(REND_ALPHA);
 	pie_SetAlphaTest(true);
 
-	pieImage.texPage = ImageFile->TPageIDs[Image->TPageID];
-	pieImage.tu = Image->Tu;
-	pieImage.tv = Image->Tv;
-	pieImage.tw = Image->Width;
-	pieImage.th = Image->Height;
-	dest.x = x + Image->XOffset;
-	dest.y = y + Image->YOffset;
-	dest.w = Image->Width;
-	dest.h = Image->Height;
 	pie_DrawImage(&pieImage, &dest);
+}
+
+void iV_DrawImageTc(IMAGEFILE *imageFile, unsigned id, unsigned idTc, int x, int y, PIELIGHT colour)
+{
+	if (!assertValidImage(imageFile, id) || !assertValidImage(imageFile, idTc))
+	{
+		return;
+	}
+
+	PIERECT dest;
+	PIEIMAGE pieImage   = makePieImage(imageFile, id, &dest, x, y);
+	PIEIMAGE pieImageTc = makePieImage(imageFile, idTc);
+
+	pie_SetRendMode(REND_ALPHA);
+	pie_SetAlphaTest(true);
+
+	pie_DrawImage(&pieImage, &dest);
+	pie_DrawImage(&pieImageTc, &dest, colour);
 }
 
 void iV_DrawImageRect(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width, int Height)

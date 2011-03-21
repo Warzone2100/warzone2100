@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-03-08 15:43+0100\n"
+"POT-Creation-Date: 2011-03-20 21:16+0100\n"
 "PO-Revision-Date: 2010-06-05 07:09+0100\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
@@ -10727,6 +10727,11 @@ msgstr "VTOL-Bombenabwurfschacht für hochexplosive, panzerbrechende Bomben Retr
 msgid "Scourge Retaliation VTOL"
 msgstr "Scourge-Lenkrakete Retaliation VTOL"
 
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1957
+#: data/mp/messages/strings/names.txt:1963
+msgid "Plasmite Retribution VTOL"
+msgstr "VTOL-Plasmitbomben-Abwurfschacht"
+
 #: data/mp/messages/resmessages12.rmsg:58
 msgid "Construction speed +10%"
 msgstr "Konstruktionsgeschwindigkeit +10%"
@@ -12046,10 +12051,6 @@ msgstr "Miniraketen-Anordnung Cobra Ketten"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Hochgeschwindigkeitsgeschütz Python Hover"
 
-#: data/mp/messages/strings/names.txt:1963
-msgid "Plasmite Retribution VTOL"
-msgstr "VTOL-Plasmitbomben-Abwurfschacht"
-
 #: lib/framework/i18n.cpp:90
 #: lib/framework/i18n.cpp:149
 msgid "System locale"
@@ -12075,12 +12076,12 @@ msgstr "Konnte nicht mit Lobbyserver kommunizieren! Ist der TCP-Port %u für aus
 #: src/hci.cpp:3386
 #: src/hci.cpp:3509
 #: src/hci.cpp:3920
-#: src/hci.cpp:4938
+#: src/hci.cpp:4940
 #: src/intelmap.cpp:531
 #: src/intorder.cpp:727
 #: src/loadsave.cpp:253
-#: src/multimenu.cpp:493
-#: src/multimenu.cpp:1363
+#: src/multimenu.cpp:494
+#: src/multimenu.cpp:1366
 #: src/transporter.cpp:277
 #: src/transporter.cpp:358
 #: src/transporter.cpp:817
@@ -12396,7 +12397,7 @@ msgid "Cannot Build. Oil Resource Burning."
 msgstr "Bau nicht möglich. Ölquelle brennt."
 
 #: src/display.cpp:1828
-#: src/display.cpp:2420
+#: src/display.cpp:2403
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Schaden %d%% - Erfahrung %d, %s"
@@ -12405,19 +12406,6 @@ msgstr "%s - Schaden %d%% - Erfahrung %d, %s"
 #, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Verbündet - Schaden %d%% - Erfahrung %d, %s"
-
-#: src/display.cpp:2042
-msgid "Truck ordered to build Oil Derrick"
-msgstr "LKW wurde beauftragt, einen Ölbohrturm zu bauen"
-
-#: src/display.cpp:2043
-msgid "2 trucks ordered to build Oil Derrick"
-msgstr "LKW wurde beauftragt, einen Ölbohrturm zu bauen"
-
-#: src/display.cpp:2044
-#, fuzzy, c-format
-msgid "%d trucks ordered to build Oil Derrick"
-msgstr "LKW wurde beauftragt, einen Ölbohrturm zu bauen"
 
 #: src/droid.cpp:211
 msgid "Unit Lost!"
@@ -12928,7 +12916,7 @@ msgstr "Konstruktionsmenü"
 
 #: src/hci.cpp:3442
 #: src/multiint.cpp:1401
-#: src/multimenu.cpp:763
+#: src/multimenu.cpp:764
 msgid "Power"
 msgstr "Energie"
 
@@ -13039,21 +13027,26 @@ msgstr "Mehrspieler"
 msgid "Progress Bar"
 msgstr "Fortschrittsbalken"
 
-#: src/hci.cpp:4863
+#: src/hci.cpp:4865
 msgid "Factory Delivery Point"
 msgstr "Fabrik-Auslieferungspunkt"
 
-#: src/hci.cpp:4881
+#: src/hci.cpp:4883
 msgid "Loop Production"
 msgstr "Produktion wiederholen"
 
-#: src/hci.cpp:4961
+#: src/hci.cpp:4963
 msgid "Tab Scroll left"
 msgstr "Reiter nach links durchschalten"
 
-#: src/hci.cpp:4976
+#: src/hci.cpp:4978
 msgid "Tab Scroll right"
 msgstr "Reiter nach rechts durchschalten"
+
+#: src/hci.cpp:5207
+#, fuzzy
+msgid "Ally progress"
+msgstr "Fortschrittsbalken"
 
 #: src/ingameop.cpp:111
 #: src/ingameop.cpp:195
@@ -14069,7 +14062,7 @@ msgstr "Spiel fortsetzen"
 msgid "GAME SAVED :"
 msgstr "SPIEL GESPEICHERT :"
 
-#: src/move.cpp:2264
+#: src/move.cpp:2262
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr "Sie haben %u Energie in einem Ölfass gefunden."
@@ -14254,7 +14247,7 @@ msgid "Distance Fog"
 msgstr "Entfernungsnebel"
 
 #: src/multiint.cpp:1368
-#: src/multimenu.cpp:756
+#: src/multimenu.cpp:757
 msgid "Alliances"
 msgstr "Bündnisse"
 
@@ -14351,10 +14344,6 @@ msgstr ""
 #: src/multiint.cpp:1665
 msgid "Leave this slot unused"
 msgstr ""
-
-#: src/multiint.cpp:1745
-msgid "Player colour"
-msgstr "Spielerfarbe"
 
 #: src/multiint.cpp:2068
 msgid "Team"
@@ -14465,7 +14454,7 @@ msgid "HOST"
 msgstr "SPIELLEITER"
 
 #: src/multiint.cpp:3823
-#: src/multimenu.cpp:772
+#: src/multimenu.cpp:773
 msgid "Ping"
 msgstr "Ping"
 
@@ -14506,132 +14495,132 @@ msgstr "Standardwerte nehmen und zum vorherigen Bildschirm zurückkehren"
 msgid "Limits reset to default values"
 msgstr "Begrenzungen auf Standardwerte zurückgesetzt"
 
-#: src/multimenu.cpp:145
+#: src/multimenu.cpp:146
 msgid "2 players"
 msgstr "2 Spieler"
 
-#: src/multimenu.cpp:145
+#: src/multimenu.cpp:146
 #, fuzzy
 msgid "3 players"
 msgstr "2 Spieler"
 
-#: src/multimenu.cpp:145
+#: src/multimenu.cpp:146
 msgid "4 players"
 msgstr "4 Spieler"
 
-#: src/multimenu.cpp:145
+#: src/multimenu.cpp:146
 #, fuzzy
 msgid "5 players"
 msgstr "2 Spieler"
 
-#: src/multimenu.cpp:145
+#: src/multimenu.cpp:146
 #, fuzzy
 msgid "6 players"
 msgstr "2 Spieler"
 
-#: src/multimenu.cpp:145
+#: src/multimenu.cpp:146
 #, fuzzy
 msgid "7 players"
 msgstr "2 Spieler"
 
-#: src/multimenu.cpp:145
+#: src/multimenu.cpp:146
 msgid "8 players"
 msgstr "8 Spieler"
 
-#: src/multimenu.cpp:145
+#: src/multimenu.cpp:146
 #, fuzzy
 msgid "9 players"
 msgstr "2 Spieler"
 
-#: src/multimenu.cpp:145
+#: src/multimenu.cpp:146
 #, fuzzy
 msgid "10 players"
 msgstr "2 Spieler"
 
-#: src/multimenu.cpp:145
+#: src/multimenu.cpp:146
 #, fuzzy
 msgid "11 players"
 msgstr "2 Spieler"
 
-#: src/multimenu.cpp:145
+#: src/multimenu.cpp:146
 #, fuzzy
 msgid "12 players"
 msgstr "2 Spieler"
 
-#: src/multimenu.cpp:145
+#: src/multimenu.cpp:146
 #, fuzzy
 msgid "13 players"
 msgstr "2 Spieler"
 
-#: src/multimenu.cpp:145
+#: src/multimenu.cpp:146
 #, fuzzy
 msgid "14 players"
 msgstr "4 Spieler"
 
-#: src/multimenu.cpp:145
+#: src/multimenu.cpp:146
 #, fuzzy
 msgid "15 players"
 msgstr "2 Spieler"
 
-#: src/multimenu.cpp:145
+#: src/multimenu.cpp:146
 #, fuzzy
 msgid "16 players"
 msgstr "2 Spieler"
 
-#: src/multimenu.cpp:618
+#: src/multimenu.cpp:619
 msgid "Technology level 1"
 msgstr "Technologiestufe 1"
 
-#: src/multimenu.cpp:626
+#: src/multimenu.cpp:627
 msgid "Technology level 2"
 msgstr "Technologiestufe 2"
 
-#: src/multimenu.cpp:632
+#: src/multimenu.cpp:633
 msgid "Technology level 3"
 msgstr "Technologiestufe 3"
 
-#: src/multimenu.cpp:638
+#: src/multimenu.cpp:639
 msgid "Any number of players"
 msgstr "Beliebige Spielerzahl"
 
-#: src/multimenu.cpp:757
+#: src/multimenu.cpp:758
 msgid "Score"
 msgstr "Punktestand"
 
-#: src/multimenu.cpp:758
+#: src/multimenu.cpp:759
 msgid "Kills"
 msgstr "Abschüsse"
 
-#: src/multimenu.cpp:762
-#: src/multimenu.cpp:767
+#: src/multimenu.cpp:763
+#: src/multimenu.cpp:768
 msgid "Units"
 msgstr "Einheiten"
 
-#: src/multimenu.cpp:776
+#: src/multimenu.cpp:777
 msgid "Structs"
 msgstr "Gebäude"
 
-#: src/multimenu.cpp:1136
+#: src/multimenu.cpp:1139
 msgid "Channel"
 msgstr ""
 
-#: src/multimenu.cpp:1150
+#: src/multimenu.cpp:1153
 msgid "Toggle Alliance State"
 msgstr "Bündnisstatus umschalten"
 
-#: src/multimenu.cpp:1169
+#: src/multimenu.cpp:1172
 msgid "Give Visibility Report"
 msgstr "Sensordaten übertragen"
 
-#: src/multimenu.cpp:1175
+#: src/multimenu.cpp:1178
 msgid "Leak Technology Documents"
 msgstr "Technologie übertragen"
 
-#: src/multimenu.cpp:1182
+#: src/multimenu.cpp:1185
 msgid "Hand Over Selected Units"
 msgstr "Übergebe ausgewählte Einheiten"
 
-#: src/multimenu.cpp:1188
+#: src/multimenu.cpp:1191
 msgid "Give Power To Player"
 msgstr "Energie übertragen"
 
@@ -14851,20 +14840,20 @@ msgstr "Gesamte Spielzeit - %s"
 msgid "You cheated!"
 msgstr "Sie haben geschummelt!"
 
-#: src/scriptfuncs.cpp:3287
+#: src/scriptfuncs.cpp:3288
 msgid "YOU ARE VICTORIOUS!"
 msgstr "SIE HABEN GEWONNEN!"
 
-#: src/scriptfuncs.cpp:3291
+#: src/scriptfuncs.cpp:3292
 msgid "YOU WERE DEFEATED!"
 msgstr "SIE WURDEN BESIEGT!"
 
-#: src/scriptfuncs.cpp:9537
+#: src/scriptfuncs.cpp:9524
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Signal von %s erhalten!"
 
-#: src/scriptfuncs.cpp:9583
+#: src/scriptfuncs.cpp:9570
 #, c-format
 msgid "Beacon %d"
 msgstr "Signal %d"
@@ -14898,59 +14887,59 @@ msgid "Command Control Limit Reached - Production Halted"
 msgstr "Commandereinheit hat Kontrollgrenze erreicht - Produktion angehalten"
 
 # nix Gruppe! -Kreuvf
-#: src/structure.cpp:5888
-#: src/structure.cpp:5913
+#: src/structure.cpp:5846
+#: src/structure.cpp:5871
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u Einheit hinzugefügt"
 msgstr[1] "%s - %u Einheiten hinzugefügt"
 
-#: src/structure.cpp:5918
-#: src/structure.cpp:5986
-#: src/structure.cpp:6002
-#: src/structure.cpp:6016
+#: src/structure.cpp:5876
+#: src/structure.cpp:5944
+#: src/structure.cpp:5960
+#: src/structure.cpp:5974
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Schaden %3.0f%%"
 
-#: src/structure.cpp:5968
+#: src/structure.cpp:5926
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr "%s - %u von %u verbunden"
 
-#: src/structure.cpp:6132
-#: src/structure.cpp:6177
+#: src/structure.cpp:6090
+#: src/structure.cpp:6135
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektronisch beschädigt"
 
 # Reward ist zwar nicht Beute, aber im Krieg erbeutet man eben Dinge -Kreuvf
-#: src/structure.cpp:6414
+#: src/structure.cpp:6372
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektronische Beute - Sichtbarkeitsbericht"
 
-#: src/structure.cpp:6454
+#: src/structure.cpp:6412
 msgid "Factory Reward - Propulsion"
 msgstr "Fabrikbeute - Antrieb"
 
-#: src/structure.cpp:6478
+#: src/structure.cpp:6436
 msgid "Factory Reward - Body"
 msgstr "Fabrikbeute - Rumpf"
 
-#: src/structure.cpp:6502
+#: src/structure.cpp:6460
 msgid "Factory Reward - Weapon"
 msgstr "Fabrikbeute - Waffe"
 
-#: src/structure.cpp:6511
+#: src/structure.cpp:6469
 msgid "Factory Reward - Nothing"
 msgstr "Fabrikbeute - Nichts"
 
-#: src/structure.cpp:6539
+#: src/structure.cpp:6497
 msgid "Repair Facility Award - Repair"
 msgstr "Beute aus Reparatureinrichtung - Reparatur"
 
-#: src/structure.cpp:6546
+#: src/structure.cpp:6504
 msgid "Repair Facility Award - Nothing"
 msgstr "Beute aus Reparatureinrichtung - Nichts"
 
@@ -14986,6 +14975,19 @@ msgstr " - %s gebaut"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Version %s%s%s%s"
+
+#~ msgid "Player colour"
+#~ msgstr "Spielerfarbe"
+
+#~ msgid "Truck ordered to build Oil Derrick"
+#~ msgstr "LKW wurde beauftragt, einen Ölbohrturm zu bauen"
+
+#~ msgid "2 trucks ordered to build Oil Derrick"
+#~ msgstr "LKW wurde beauftragt, einen Ölbohrturm zu bauen"
+
+#, fuzzy
+#~ msgid "%d trucks ordered to build Oil Derrick"
+#~ msgstr "LKW wurde beauftragt, einen Ölbohrturm zu bauen"
 
 #~ msgid "Kick player"
 #~ msgstr "Spieler rauswerfen"

@@ -1954,3 +1954,8 @@ SK-Mantis-VTOL-PBB		_("Phosphor Bomb Bay Mantis VTOL")
 SK-Mantis-VTOL-HBB		_("Heap Bomb Bay Mantis VTOL")
 SK-Retre-VTOL-HBB		_("Heap Bomb Bay Retribution VTOL")
 SK-Retal-VTOL-Scourge		_("Scourge Retaliation VTOL")
+SK-Retre-VTOL-Plasmite	_("Plasmite Retribution VTOL")
+
+//Added for mp.wz (templates.txt)
+SK-Veng-Hover-Seraph           "*SK-Veng-Hover-Seraph*"
+Dragon-Hover-SeraphGauss       "*SK-Dragon-Hover-SeraphGauss*"

@@ -107,7 +107,7 @@
 #define IDSTAT_MANULIMITS		4700
 
 #define IDSTAT_ALLYSTART		4800
-#define IDSTAT_ALLYEND			4900
+#define IDSTAT_ALLYEND			5100
 
 // Reticule position.
 #define RET_X				24

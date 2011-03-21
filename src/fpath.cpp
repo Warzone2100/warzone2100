@@ -146,7 +146,6 @@ void fpathShutdown()
 	fpathQuit = true;
 	wzSemaphorePost(fpathSemaphore);  // Wake up thread.
 
-	fpathHardTableReset();
 	if (fpathThread)
 	{
 		wzThreadJoin(fpathThread);
@@ -158,6 +157,7 @@ void fpathShutdown()
 		wzSemaphoreDestroy(waitingForResultSemaphore);
 		waitingForResultSemaphore = NULL;
 	}
+	fpathHardTableReset();
 }
 
 

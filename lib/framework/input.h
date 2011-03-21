@@ -239,4 +239,9 @@ extern void inputClearBuffer(void);
  */
 extern void inputNewFrame(void);
 
+static inline bool specialOrderKeyDown()
+{
+	return keyDown(KEY_LALT) || keyDown(KEY_RALT) || keyDown(KEY_LMETA) || keyDown(KEY_RMETA);
+}
+
 #endif

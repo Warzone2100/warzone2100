@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-03-08 15:43+0100\n"
+"POT-Creation-Date: 2011-03-20 21:16+0100\n"
 "PO-Revision-Date: 2008-05-08 17:14+0000\n"
 "Last-Translator: Seanan <Unknown>\n"
 "Language-Team: Irish <ga@li.org>\n"
@@ -10697,6 +10697,11 @@ msgstr ""
 msgid "Scourge Retaliation VTOL"
 msgstr ""
 
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1957
+#: data/mp/messages/strings/names.txt:1963
+msgid "Plasmite Retribution VTOL"
+msgstr ""
+
 #: data/mp/messages/resmessages12.rmsg:58
 msgid "Construction speed +10%"
 msgstr ""
@@ -11999,10 +12004,6 @@ msgstr ""
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:1963
-msgid "Plasmite Retribution VTOL"
-msgstr ""
-
 #: lib/framework/i18n.cpp:90
 #: lib/framework/i18n.cpp:149
 msgid "System locale"
@@ -12028,12 +12029,12 @@ msgstr ""
 #: src/hci.cpp:3386
 #: src/hci.cpp:3509
 #: src/hci.cpp:3920
-#: src/hci.cpp:4938
+#: src/hci.cpp:4940
 #: src/intelmap.cpp:531
 #: src/intorder.cpp:727
 #: src/loadsave.cpp:253
-#: src/multimenu.cpp:493
-#: src/multimenu.cpp:1363
+#: src/multimenu.cpp:494
+#: src/multimenu.cpp:1366
 #: src/transporter.cpp:277
 #: src/transporter.cpp:358
 #: src/transporter.cpp:817
@@ -12350,7 +12351,7 @@ msgid "Cannot Build. Oil Resource Burning."
 msgstr ""
 
 #: src/display.cpp:1828
-#: src/display.cpp:2420
+#: src/display.cpp:2403
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Dochar %d%% - Taithí %d, %s"
@@ -12359,19 +12360,6 @@ msgstr "%s - Dochar %d%% - Taithí %d, %s"
 #, fuzzy, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Dochar %d%% - Taithí %d, %s"
-
-#: src/display.cpp:2042
-msgid "Truck ordered to build Oil Derrick"
-msgstr ""
-
-#: src/display.cpp:2043
-msgid "2 trucks ordered to build Oil Derrick"
-msgstr ""
-
-#: src/display.cpp:2044
-#, c-format
-msgid "%d trucks ordered to build Oil Derrick"
-msgstr ""
 
 #: src/droid.cpp:211
 msgid "Unit Lost!"
@@ -12887,7 +12875,7 @@ msgstr "Tógáil (F3)"
 
 #: src/hci.cpp:3442
 #: src/multiint.cpp:1401
-#: src/multimenu.cpp:763
+#: src/multimenu.cpp:764
 msgid "Power"
 msgstr "Cumhacht"
 
@@ -12994,21 +12982,26 @@ msgstr "Imreoir"
 msgid "Progress Bar"
 msgstr "Barra Dul Chun Cinn"
 
-#: src/hci.cpp:4863
+#: src/hci.cpp:4865
 msgid "Factory Delivery Point"
 msgstr ""
 
-#: src/hci.cpp:4881
+#: src/hci.cpp:4883
 msgid "Loop Production"
 msgstr ""
 
-#: src/hci.cpp:4961
+#: src/hci.cpp:4963
 msgid "Tab Scroll left"
 msgstr ""
 
-#: src/hci.cpp:4976
+#: src/hci.cpp:4978
 msgid "Tab Scroll right"
 msgstr ""
+
+#: src/hci.cpp:5207
+#, fuzzy
+msgid "Ally progress"
+msgstr "Barra Dul Chun Cinn"
 
 #: src/ingameop.cpp:111
 #: src/ingameop.cpp:195
@@ -14002,7 +13995,7 @@ msgstr "Lean Leis an Cluiche"
 msgid "GAME SAVED :"
 msgstr ""
 
-#: src/move.cpp:2264
+#: src/move.cpp:2262
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr ""
@@ -14187,7 +14180,7 @@ msgid "Distance Fog"
 msgstr ""
 
 #: src/multiint.cpp:1368
-#: src/multimenu.cpp:756
+#: src/multimenu.cpp:757
 msgid "Alliances"
 msgstr "Comhbhánna"
 
@@ -14283,11 +14276,6 @@ msgstr ""
 #: src/multiint.cpp:1665
 msgid "Leave this slot unused"
 msgstr ""
-
-#: src/multiint.cpp:1745
-#, fuzzy
-msgid "Player colour"
-msgstr "Imreoir"
 
 #: src/multiint.cpp:2068
 msgid "Team"
@@ -14393,7 +14381,7 @@ msgid "HOST"
 msgstr ""
 
 #: src/multiint.cpp:3823
-#: src/multimenu.cpp:772
+#: src/multimenu.cpp:773
 msgid "Ping"
 msgstr ""
 
@@ -14435,133 +14423,133 @@ msgstr "Fill Chuig An Scáileán Roimhe"
 msgid "Limits reset to default values"
 msgstr ""
 
-#: src/multimenu.cpp:145
+#: src/multimenu.cpp:146
 msgid "2 players"
 msgstr ""
 
-#: src/multimenu.cpp:145
+#: src/multimenu.cpp:146
 #, fuzzy
 msgid "3 players"
 msgstr "Imreoirí"
 
-#: src/multimenu.cpp:145
+#: src/multimenu.cpp:146
 msgid "4 players"
 msgstr ""
 
-#: src/multimenu.cpp:145
+#: src/multimenu.cpp:146
 #, fuzzy
 msgid "5 players"
 msgstr "Imreoirí"
 
-#: src/multimenu.cpp:145
+#: src/multimenu.cpp:146
 #, fuzzy
 msgid "6 players"
 msgstr "Imreoirí"
 
-#: src/multimenu.cpp:145
+#: src/multimenu.cpp:146
 #, fuzzy
 msgid "7 players"
 msgstr "Imreoirí"
 
-#: src/multimenu.cpp:145
+#: src/multimenu.cpp:146
 msgid "8 players"
 msgstr ""
 
-#: src/multimenu.cpp:145
+#: src/multimenu.cpp:146
 #, fuzzy
 msgid "9 players"
 msgstr "Imreoirí"
 
-#: src/multimenu.cpp:145
+#: src/multimenu.cpp:146
 #, fuzzy
 msgid "10 players"
 msgstr "Imreoirí"
 
-#: src/multimenu.cpp:145
+#: src/multimenu.cpp:146
 #, fuzzy
 msgid "11 players"
 msgstr "Imreoirí"
 
-#: src/multimenu.cpp:145
+#: src/multimenu.cpp:146
 #, fuzzy
 msgid "12 players"
 msgstr "Imreoirí"
 
-#: src/multimenu.cpp:145
+#: src/multimenu.cpp:146
 #, fuzzy
 msgid "13 players"
 msgstr "Imreoirí"
 
-#: src/multimenu.cpp:145
+#: src/multimenu.cpp:146
 #, fuzzy
 msgid "14 players"
 msgstr "Imreoirí"
 
-#: src/multimenu.cpp:145
+#: src/multimenu.cpp:146
 #, fuzzy
 msgid "15 players"
 msgstr "Imreoirí"
 
-#: src/multimenu.cpp:145
+#: src/multimenu.cpp:146
 #, fuzzy
 msgid "16 players"
 msgstr "Imreoirí"
 
-#: src/multimenu.cpp:618
+#: src/multimenu.cpp:619
 msgid "Technology level 1"
 msgstr ""
 
-#: src/multimenu.cpp:626
+#: src/multimenu.cpp:627
 msgid "Technology level 2"
 msgstr ""
 
-#: src/multimenu.cpp:632
+#: src/multimenu.cpp:633
 msgid "Technology level 3"
 msgstr ""
 
-#: src/multimenu.cpp:638
+#: src/multimenu.cpp:639
 msgid "Any number of players"
 msgstr ""
 
-#: src/multimenu.cpp:757
+#: src/multimenu.cpp:758
 msgid "Score"
 msgstr ""
 
-#: src/multimenu.cpp:758
+#: src/multimenu.cpp:759
 msgid "Kills"
 msgstr ""
 
-#: src/multimenu.cpp:762
-#: src/multimenu.cpp:767
+#: src/multimenu.cpp:763
+#: src/multimenu.cpp:768
 #, fuzzy
 msgid "Units"
 msgstr "Aonad"
 
-#: src/multimenu.cpp:776
+#: src/multimenu.cpp:777
 msgid "Structs"
 msgstr ""
 
-#: src/multimenu.cpp:1136
+#: src/multimenu.cpp:1139
 msgid "Channel"
 msgstr ""
 
-#: src/multimenu.cpp:1150
+#: src/multimenu.cpp:1153
 msgid "Toggle Alliance State"
 msgstr ""
 
-#: src/multimenu.cpp:1169
+#: src/multimenu.cpp:1172
 msgid "Give Visibility Report"
 msgstr ""
 
-#: src/multimenu.cpp:1175
+#: src/multimenu.cpp:1178
 msgid "Leak Technology Documents"
 msgstr ""
 
-#: src/multimenu.cpp:1182
+#: src/multimenu.cpp:1185
 msgid "Hand Over Selected Units"
 msgstr ""
 
-#: src/multimenu.cpp:1188
+#: src/multimenu.cpp:1191
 msgid "Give Power To Player"
 msgstr ""
 
@@ -14782,20 +14770,20 @@ msgstr ""
 msgid "You cheated!"
 msgstr ""
 
-#: src/scriptfuncs.cpp:3287
+#: src/scriptfuncs.cpp:3288
 msgid "YOU ARE VICTORIOUS!"
 msgstr ""
 
-#: src/scriptfuncs.cpp:3291
+#: src/scriptfuncs.cpp:3292
 msgid "YOU WERE DEFEATED!"
 msgstr ""
 
-#: src/scriptfuncs.cpp:9537
+#: src/scriptfuncs.cpp:9524
 #, c-format
 msgid "Beacon received from %s!"
 msgstr ""
 
-#: src/scriptfuncs.cpp:9583
+#: src/scriptfuncs.cpp:9570
 #, c-format
 msgid "Beacon %d"
 msgstr ""
@@ -14828,58 +14816,58 @@ msgstr ""
 msgid "Command Control Limit Reached - Production Halted"
 msgstr ""
 
-#: src/structure.cpp:5888
-#: src/structure.cpp:5913
+#: src/structure.cpp:5846
+#: src/structure.cpp:5871
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/structure.cpp:5918
-#: src/structure.cpp:5986
-#: src/structure.cpp:6002
-#: src/structure.cpp:6016
+#: src/structure.cpp:5876
+#: src/structure.cpp:5944
+#: src/structure.cpp:5960
+#: src/structure.cpp:5974
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr ""
 
-#: src/structure.cpp:5968
+#: src/structure.cpp:5926
 #, c-format
 msgid "%s - Connected %u of %u"
 msgstr ""
 
-#: src/structure.cpp:6132
-#: src/structure.cpp:6177
+#: src/structure.cpp:6090
+#: src/structure.cpp:6135
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr ""
 
-#: src/structure.cpp:6414
+#: src/structure.cpp:6372
 msgid "Electronic Reward - Visibility Report"
 msgstr ""
 
-#: src/structure.cpp:6454
+#: src/structure.cpp:6412
 msgid "Factory Reward - Propulsion"
 msgstr ""
 
-#: src/structure.cpp:6478
+#: src/structure.cpp:6436
 msgid "Factory Reward - Body"
 msgstr ""
 
-#: src/structure.cpp:6502
+#: src/structure.cpp:6460
 msgid "Factory Reward - Weapon"
 msgstr ""
 
-#: src/structure.cpp:6511
+#: src/structure.cpp:6469
 msgid "Factory Reward - Nothing"
 msgstr ""
 
-#: src/structure.cpp:6539
+#: src/structure.cpp:6497
 msgid "Repair Facility Award - Repair"
 msgstr ""
 
-#: src/structure.cpp:6546
+#: src/structure.cpp:6504
 msgid "Repair Facility Award - Nothing"
 msgstr ""
 
@@ -14915,6 +14903,10 @@ msgstr ""
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Player colour"
+#~ msgstr "Imreoir"
 
 #, fuzzy
 #~ msgid "Kick player"

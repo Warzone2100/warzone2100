@@ -4790,6 +4790,8 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	bool				Animate = true;
 	FACTORY				*psFactory;
 
+	int                             allyResearchIconCount = 0;
+
 	// should this ever be called with psOwner == NULL?
 
 	// Is the form already up?
@@ -5041,7 +5043,6 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	W_BARINIT sBarInit;
 	sBarInit.id = IDSTAT_TIMEBARSTART;
 	sBarInit.x = STAT_TIMEBARX;
-	sBarInit.y = STAT_TIMEBARY;
 	sBarInit.width = STAT_PROGBARWIDTH;
 	sBarInit.height = STAT_PROGBARHEIGHT;
 	sBarInit.size = 50;
@@ -5053,6 +5054,8 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	statForm = 0;
 	for (i=0; i<numStats; i++)
 	{
+		sBarInit.y = STAT_TIMEBARY;
+
 		if (sBFormInit.id > IDSTAT_END)
 		{
 			//can't fit any more on the screen!
@@ -5153,18 +5156,16 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 			//sBarInit.pTip = _("Power Usage");
 			if(sBarInit.size > 100) sBarInit.size = 100;
 
-
 			// if multiplayer, if research topic is being done by another ally then mark as such..
 			if(bMultiPlayer)
 			{
-				STRUCTURE *psOtherStruct;
-				UBYTE	ii;
-				for(ii=0;ii<MAX_PLAYERS;ii++)
+				int labsDone = 0;
+				for (unsigned ii = 0; ii < MAX_PLAYERS && labsDone < 4; ++ii)
 				{
 					if(ii != selectedPlayer && aiCheckAlliances(selectedPlayer,ii))
 					{
 						//check each research facility to see if they are doing this topic.
-						for(psOtherStruct=apsStructLists[ii];psOtherStruct;psOtherStruct=psOtherStruct->psNext)
+						for (STRUCTURE *psOtherStruct = apsStructLists[ii]; psOtherStruct; psOtherStruct = psOtherStruct->psNext)
 						{
 							if(   psOtherStruct->pStructureType->type == REF_RESEARCH
 								 && psOtherStruct->status == SS_BUILT
@@ -5175,24 +5176,44 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 								// add a label.
 								sLabInit = W_LABINIT();
 								sLabInit.formID = sBFormInit.id ;
-								sLabInit.id = IDSTAT_ALLYSTART+(sBFormInit.id - IDSTAT_START);
-								sLabInit.x = STAT_BUTWIDTH  - 19;
-								sLabInit.y = STAT_BUTHEIGHT - 19;
-								sLabInit.width = 12;
-								sLabInit.height = 15;
+								sLabInit.id = IDSTAT_ALLYSTART + allyResearchIconCount;
+								sLabInit.width = iV_GetImageWidth(IntImages, IMAGE_ALLY_RESEARCH);
+								sLabInit.height = iV_GetImageHeight(IntImages, IMAGE_ALLY_RESEARCH);
+								sLabInit.x = STAT_BUTWIDTH  - (sLabInit.width + 2)*labsDone - sLabInit.width - 2;
+								sLabInit.y = STAT_BUTHEIGHT - sLabInit.height - 3 - STAT_PROGBARHEIGHT;
 								sLabInit.UserData = ii;
 								sLabInit.pTip = getPlayerName(ii);
 								sLabInit.pDisplay = intDisplayAllyIcon;
 								widgAddLabel(psWScreen, &sLabInit);
 
-								goto donelab;
+								++labsDone;
+								++allyResearchIconCount;
+								ASSERT(allyResearchIconCount < IDSTAT_ALLYEND - IDSTAT_ALLYSTART, " ");
 							}
 						}
 
 					}
 				}
+				if (labsDone > 0)
+				{
+					W_BARINIT progress;
+					progress.formID = sBFormInit.id;
+					progress.id = IDSTAT_ALLYSTART + allyResearchIconCount;
+					progress.width = STAT_PROGBARWIDTH;
+					progress.height = STAT_PROGBARHEIGHT;
+					progress.x = STAT_TIMEBARX;
+					progress.y = STAT_TIMEBARY;
+					progress.UserData = Stat->ref - REF_RESEARCH_START;
+					progress.pTip = _("Ally progress");
+					progress.pDisplay = intDisplayAllyBar;
+					widgAddBarGraph(psWScreen, &progress);
+
+					++allyResearchIconCount;
+
+					sBarInit.y -= STAT_PROGBARHEIGHT + 2;  // Move cost bar up, to avoid overlap.
+				}
 			}
-donelab:
+
 			sBarInit.formID = sBFormInit.id;
 			if (!widgAddBarGraph(psWScreen, &sBarInit))
 			{

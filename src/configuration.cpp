@@ -620,6 +620,10 @@ bool loadConfig(void)
 	{
 		setFramerateLimit(val);
 	}
+	else
+	{
+		setFramerateLimit(60);
+	}
 
 	return closeWarzoneKey();
 }

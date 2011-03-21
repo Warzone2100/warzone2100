@@ -565,6 +565,20 @@
 #    define isfinite _finite
 
 #    define PATH_MAX MAX_PATH
+
+// These are useless for MSVC builds, since we don't populate them / use them at this time.
+#ifndef PACKAGE_DISTRIBUTOR
+# define PACKAGE_DISTRIBUTOR "UNKNOWN"
+#endif
+#ifndef PACKAGE_VERSION
+# define PACKAGE_VERSION "UNKNOWN"
+#endif
+#ifndef PACKAGE
+# define PACKAGE "Warzone"
+#endif
+// Apparently flex declares isatty with C++ linkage on Windows. Don't ask why. Declaring here instead.
+//extern "C" int isatty(int);
+
 #  endif /* WZ_CC_MSVC */
 
 /* Make sure that PATH_MAX is large enough to use as the size for return

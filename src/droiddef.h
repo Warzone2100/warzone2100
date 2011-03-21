@@ -128,7 +128,7 @@ struct DROID_TEMPLATE : public BASE_STATS
 };
 
 struct PACKAGED_CHECK;
-struct DROID_GROUP;
+class DROID_GROUP;
 struct STRUCTURE;
 
 struct DROID : public BASE_OBJECT

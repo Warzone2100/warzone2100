@@ -1890,7 +1890,7 @@ static void moveUpdateVtolModel(DROID *psDroid, SDWORD speed, uint16_t direction
 	moveAdjustVtolHeight(psDroid, iMapZ);
 }
 
-#define CYBORG_VERTICAL_SPEED	(psDroid->baseSpeed/2)
+#define CYBORG_VERTICAL_SPEED	((int)psDroid->baseSpeed / 2)
 
 static void
 moveCyborgLaunchAnimDone( ANIM_OBJECT *psObj )
@@ -1902,7 +1902,7 @@ moveCyborgLaunchAnimDone( ANIM_OBJECT *psObj )
 
 	/* raise cyborg a little bit so flying - terrible hack - GJ */
 	psDroid->pos.z++;
-	psDroid->sMove.iVertSpeed = (SWORD)CYBORG_VERTICAL_SPEED;
+	psDroid->sMove.iVertSpeed = CYBORG_VERTICAL_SPEED;
 
 	psDroid->psCurAnim = NULL;
 }
@@ -1970,12 +1970,12 @@ static void moveUpdateCyborgModel(DROID *psDroid, SDWORD moveSpeed, uint16_t mov
 			"moveUpdateCyborgModel: invalid propulsion stats pointer" );
 
 	/* do vertical movement */
-	if ( psPropStats->propulsionType == PROPULSION_TYPE_JUMP )
+	if (psPropStats->propulsionType == PROPULSION_TYPE_JUMP)
 	{
-		int32_t iDz = gameTimeAdjustedIncrement(psDroid->sMove.iVertSpeed);
-		int32_t iDroidZ = (SDWORD) psDroid->pos.z;
+		int iDz = gameTimeAdjustedIncrement(psDroid->sMove.iVertSpeed);
+		int iDroidZ = psDroid->pos.z;
 
-		if ( iDroidZ+iDz < iMapZ )
+		if (iDroidZ + iDz < iMapZ)
 		{
 			psDroid->sMove.iVertSpeed = 0;
 			psDroid->pos.z = iMapZ;
@@ -1984,11 +1984,9 @@ static void moveUpdateCyborgModel(DROID *psDroid, SDWORD moveSpeed, uint16_t mov
 		{
 			psDroid->pos.z = psDroid->pos.z + iDz;
 		}
-
-		if ( (psDroid->pos.z >= (iMapZ+CYBORG_MAX_JUMP_HEIGHT)) &&
-			 (psDroid->sMove.iVertSpeed > 0)                        )
+		if (psDroid->pos.z >= iMapZ + CYBORG_MAX_JUMP_HEIGHT && psDroid->sMove.iVertSpeed > 0)
 		{
-			psDroid->sMove.iVertSpeed = (SWORD)-CYBORG_VERTICAL_SPEED;
+			psDroid->sMove.iVertSpeed = -CYBORG_VERTICAL_SPEED;
 		}
 	}
 

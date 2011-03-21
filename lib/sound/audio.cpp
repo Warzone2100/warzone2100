@@ -1199,7 +1199,7 @@ void audioTest()
 	for (i = 0; i < 10; i++)
 	{
 		// On non-debug builds prevent warnings about defining but not using dummyCB
-		(void)dummyCB;
+		dummyCB(NULL);
 
 		assert(audio_Shutdown());
 		assert(audio_Init(dummyCB));
