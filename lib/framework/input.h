@@ -238,4 +238,9 @@ extern UDWORD inputGetKey(utf_32_char *unicode);
 /** Clear the input buffer. */
 extern void inputClearBuffer(void);
 
+static inline bool specialOrderKeyDown()
+{
+	return keyDown(KEY_LALT) || keyDown(KEY_RALT) || keyDown(KEY_LMETA) || keyDown(KEY_RMETA);
+}
+
 #endif

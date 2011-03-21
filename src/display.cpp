@@ -907,7 +907,7 @@ void processMouseClickInput(void)
 			{
 				item = MT_OWNDROID;
 			}
-			else if ((keyDown(KEY_LALT) || keyDown(KEY_RALT)) &&
+			else if (specialOrderKeyDown() &&
 				(ObjUnderMouse != NULL) &&
 			    ObjUnderMouse->player == selectedPlayer)
 			{
@@ -1025,13 +1025,13 @@ void processMouseClickInput(void)
 				item = MT_BLOCKING;
 			}
 
-			if ((keyDown(KEY_LALT) || keyDown(KEY_RALT)) && selection == SC_DROID_TRANSPORTER &&
+			if (specialOrderKeyDown() && selection == SC_DROID_TRANSPORTER &&
 				arnMPointers[item][selection] == CURSOR_MOVE && bMultiPlayer)
 			{
 				// Alt+move = disembark transporter
 				pie_SetMouse(CURSOR_DISEMBARK, war_GetColouredCursor());
 			}
-			else if ((keyDown(KEY_LALT) || keyDown(KEY_RALT)) && selection == SC_DROID_DIRECT &&
+			else if (specialOrderKeyDown() && selection == SC_DROID_DIRECT &&
 				arnMPointers[item][selection] == CURSOR_MOVE)
 			{
 				// Alt+move = scout
@@ -1606,7 +1606,7 @@ void dealWithDroidSelect(DROID *psDroid, bool bDragBox)
 				bGotGroup = true;
 			}
 		}
-		if (keyDown(KEY_LALT) || keyDown(KEY_RALT))
+		if (specialOrderKeyDown())
 		{
 			/* We only want to select weapon units if ALT is down on a drag */
 			if (psDroid->asWeaps[0].nStat > 0)
@@ -1681,7 +1681,7 @@ static void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 		// select/deselect etc. the droid
 		dealWithDroidSelect(psDroid, false);
 	}
-	else if ((keyDown(KEY_LALT) || keyDown(KEY_RALT)) && ownDroid)
+	else if (specialOrderKeyDown() && ownDroid)
 	{
 		// try to attack your own unit
 		orderSelectedObjAdd(selectedPlayer, (BASE_OBJECT*)psDroid, ctrlShiftDown());
@@ -1878,7 +1878,7 @@ static void dealWithLMBStructure(STRUCTURE* psStructure, SELECTION_TYPE selectio
 	if (!bRightClickOrders) printStructureInfo(psStructure);
 
 	/* Got to be built. Also, you can't 'select' derricks */
-	if (!keyDown(KEY_LALT) && !keyDown(KEY_RALT) && (psStructure->status == SS_BUILT) &&
+	if (!specialOrderKeyDown() && (psStructure->status == SS_BUILT) &&
 		(psStructure->pStructureType->type != REF_RESOURCE_EXTRACTOR) && ownStruct)
 	{
 		if (bRightClickOrders)

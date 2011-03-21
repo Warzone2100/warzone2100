@@ -2695,7 +2695,7 @@ void orderSelectedLoc(uint32_t player, uint32_t x, uint32_t y, bool add)
 				continue;
 			}
 
-			order = chooseOrderLoc(psCurr, x, y, (keyDown(KEY_LALT) || keyDown(KEY_RALT)));
+			order = chooseOrderLoc(psCurr, x, y, specialOrderKeyDown());
 			// see if the order can be added to the list
 			if (order != DORDER_NONE && !(add && orderDroidLocAdd(psCurr, order, x, y)))
 			{
@@ -3027,7 +3027,7 @@ void orderSelectedObjAdd(UDWORD player, BASE_OBJECT *psObj, bool add)
 				continue;
 			}
 
-			order = chooseOrderObj(psCurr, psObj, (keyDown(KEY_LALT) || keyDown(KEY_RALT)));
+			order = chooseOrderObj(psCurr, psObj, specialOrderKeyDown());
 			// see if the order can be added to the list
 			if (!(add && orderDroidObjAdd(psCurr, order, &psObj)))
 			{
