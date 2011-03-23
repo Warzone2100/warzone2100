@@ -7,7 +7,7 @@
 
 # Config
 rtag="$(git branch --no-color | sed -e '/^[^*]/d' -e 's:* \(.*\):\1:')"
-uurl="buildbot@buildbot.pc-dummy.net"
+uurl="buildbot@buildbot.wz2100.net"
 opth="${rtag}/mac/"
 rpth="public_html/"
 lpth="macosx/build/dmgout/out/"
