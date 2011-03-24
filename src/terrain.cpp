@@ -1088,8 +1088,8 @@ void drawTerrain(void)
 	const GLfloat paramsY[4] = {0, 0, -1.0f/world_coord(mapHeight)*((float)mapHeight/lightmapHeight), 0};
 
 	///////////////////////////////////
+	glError();	// clear error codes
 	// set up the lightmap texture
-
 	glActiveTexture(GL_TEXTURE1);
 	// bind the texture
 	glBindTexture(GL_TEXTURE_2D, lightmap_tex_num);
