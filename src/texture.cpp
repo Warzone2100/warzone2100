@@ -57,7 +57,7 @@ TILE_TEX_INFO tileTexInfo[MAX_TILES];
 static int firstPage; // the last used page before we start adding terrain textures
 int terrainPage; // texture ID of the terrain page
 static int mipmap_max, mipmap_levels;
-static int maxTextureSize = 256; ///< the maximum size texture we will create
+static int maxTextureSize = 2048; ///< the maximum size texture we will create
 
 void setTextureSize(int texSize)
 {
