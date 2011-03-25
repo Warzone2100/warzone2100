@@ -869,12 +869,7 @@ void SetMousePos(uint16_t x, uint16_t y)
 /* This returns true if the mouse key is currently depressed */
 bool mouseDown(MOUSE_KEY_CODE code)
 {
-	return	((aMouseState[code].state != KEY_UP)
-			||
-			// holding down LMB and RMB counts as holding down MMB
-			(code == MOUSE_MMB)
-			||
-			(aMouseState[MOUSE_LMB].state != KEY_UP && aMouseState[MOUSE_RMB].state != KEY_UP));
+	return (aMouseState[code].state != KEY_UP);
 }
 
 /* This returns true if the mouse key was double clicked */
@@ -902,13 +897,7 @@ bool mouseReleased(MOUSE_KEY_CODE code)
 /* Check for a mouse drag, return the drag start coords if dragging */
 bool mouseDrag(MOUSE_KEY_CODE code, UDWORD *px, UDWORD *py)
 {
-
-	if ((aMouseState[code].state == KEY_DRAG)
-		||
-		(code == MOUSE_MMB )
-		||
-		// dragging LMB and RMB counts as dragging MMB
-		(aMouseState[MOUSE_LMB].state != KEY_UP && aMouseState[MOUSE_RMB].state == KEY_DRAG))
+	if (aMouseState[code].state == KEY_DRAG)
 	{
 		*px = dragX;
 		*py = dragY;
