@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
-    <ProjectConfiguration Include="debug-stlport|Win32">
-      <Configuration>debug-stlport</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
@@ -37,10 +33,6 @@
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debug-stlport|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
-    <CharacterSet>Unicode</CharacterSet>
-  </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
     <Import Project="..\..\devpkg\FlexBison.props" />
@@ -54,24 +46,18 @@
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='STLport-Debug|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='debug-stlport|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='STLport-Debug|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='debug-stlport|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Configuration)\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='STLport-Debug|Win32'">$(Configuration)\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='debug-stlport|Win32'">$(Configuration)\</IntDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\</IntDir>
-    <ExecutablePath Condition="'$(Configuration)|$(Platform)'=='debug-stlport|Win32'">D:\gnu\bison\bin;$(ExecutablePath)</ExecutablePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\devpkg\include;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='STLport-Debug|Win32'">..\devpkg\stlport5.2.1\stlport;..\devpkg\include;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='debug-stlport|Win32'">N:\STLport-5.2.1\stlport;Z:\svn_vorbis-ogg-theora\WZx86IncludeVS2010;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\devpkg\include;$(Qtdir)\include;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='STLport-Debug|Win32'">..\devpkg\stlport5.2.1\stlport;..\devpkg\include;$(Qtdir)\include;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\devpkg\include;$(Qtdir)\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <FlexGenerator>
@@ -95,6 +81,12 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
+    <PreBuildEvent>
+      <Command>$(QTDIR)\bin\moc.exe wzapp.h. -o wzapp.moc.h</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>Running MOC on wzapp.h</Message>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='STLport-Debug|Win32'">
     <FlexGenerator>
@@ -117,28 +109,6 @@
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-    </ClCompile>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='debug-stlport|Win32'">
-    <FlexGenerator>
-      <OutputFile>%(Filename).lex.cpp</OutputFile>
-    </FlexGenerator>
-    <BisonParser>
-      <Defines>true</Defines>
-      <OutputFile>%(Filename).tab.cpp</OutputFile>
-    </BisonParser>
-    <ClCompile>
-      <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)\..;$(SolutionDir)\..\devpkg\include;$(SolutionDir)\..\devpkg\include\SDL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_HAS_ITERATOR_DEBUGGING=0;_SECURE_SCL=0;YY_STATIC;LOCALEDIR="";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
-      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -165,15 +135,12 @@
     <ClCompile Include="frame.cpp" />
     <ClCompile Include="frameresource.cpp" />
     <ClCompile Include="i18n.cpp" />
-    <ClCompile Include="input.cpp" />
     <ClCompile Include="lexer_input.cpp" />
     <ClCompile Include="resource_lexer.lex.cpp">
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='STLport-Debug|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='debug-stlport|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
       <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
       <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='STLport-Debug|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
-      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='debug-stlport|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
       <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
     </ClCompile>
@@ -187,6 +154,21 @@
     <ClCompile Include="treap.cpp" />
     <ClCompile Include="trig.cpp" />
     <ClCompile Include="utf.cpp" />
+    <ClCompile Include="wzapp.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <FlexGenerator Include="resource_lexer.l" />
+    <FlexGenerator Include="strres_lexer.l" />
+  </ItemGroup>
+  <ItemGroup>
+    <BisonParser Include="resource_parser.y" />
+    <BisonParser Include="strres_parser.y" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\exceptionhandler\exceptionhandler.vcxproj">
+      <Project>{9dc871e4-d58d-4af6-85a6-7df7a39b8c18}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="configfile.h" />
@@ -206,6 +188,7 @@
     <ClInclude Include="listmacs.h" />
     <ClInclude Include="macros.h" />
     <ClInclude Include="math_ext.h" />
+    <ClInclude Include="opengl.h" />
     <ClInclude Include="physfs_ext.h" />
     <ClInclude Include="resly.h" />
     <ClInclude Include="resource_parser.tab.hpp" />
@@ -213,29 +196,20 @@
     <ClInclude Include="stdio_ext.h" />
     <ClInclude Include="string_ext.h" />
     <ClInclude Include="strres.h" />
-    <ClInclude Include="strres_parser.tab.hpp" />
     <ClInclude Include="strresly.h" />
+    <ClInclude Include="strres_parser.tab.hpp" />
     <ClInclude Include="tagfile.h" />
     <ClInclude Include="treap.h" />
     <ClInclude Include="trig.h" />
     <ClInclude Include="types.h" />
     <ClInclude Include="utf.h" />
     <ClInclude Include="vector.h" />
+    <ClInclude Include="wz2100icon.h" />
+    <ClInclude Include="wzapp.h" />
+    <ClInclude Include="wzapp.moc.h" />
+    <ClInclude Include="wzapp_c.h" />
+    <ClInclude Include="wzfs.h" />
     <ClInclude Include="wzglobal.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <FlexGenerator Include="resource_lexer.l" />
-    <FlexGenerator Include="strres_lexer.l" />
-  </ItemGroup>
-  <ItemGroup>
-    <BisonParser Include="resource_parser.y" />
-    <BisonParser Include="strres_parser.y" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\exceptionhandler\exceptionhandler.vcxproj">
-      <Project>{9dc871e4-d58d-4af6-85a6-7df7a39b8c18}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

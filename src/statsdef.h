@@ -28,7 +28,6 @@
 
 #include <vector>
 #include <algorithm>
-#include "lib/framework/utf.h"  // For QString.
 
 static inline bool stringToEnumSortFunction(std::pair<char const *, unsigned> const &a, std::pair<char const *, unsigned> const &b) { return strcmp(a.first, b.first) < 0; }
 template <typename STATS>

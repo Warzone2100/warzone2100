@@ -41,9 +41,6 @@
     <ClCompile Include="i18n.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="input.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="lexer_input.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -80,6 +77,25 @@
     <ClCompile Include="utf.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="wzapp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FlexGenerator Include="resource_lexer.l">
+      <Filter>FlexBison</Filter>
+    </FlexGenerator>
+    <FlexGenerator Include="strres_lexer.l">
+      <Filter>FlexBison</Filter>
+    </FlexGenerator>
+  </ItemGroup>
+  <ItemGroup>
+    <BisonParser Include="resource_parser.y">
+      <Filter>FlexBison</Filter>
+    </BisonParser>
+    <BisonParser Include="strres_parser.y">
+      <Filter>FlexBison</Filter>
+    </BisonParser>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="configfile.h">
@@ -133,6 +149,9 @@
     <ClInclude Include="math_ext.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="opengl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="physfs_ext.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -178,24 +197,23 @@
     <ClInclude Include="vector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="wz2100icon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="wzapp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="wzapp.moc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="wzapp_c.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="wzfs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="wzglobal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <FlexGenerator Include="resource_lexer.l">
-      <Filter>FlexBison</Filter>
-    </FlexGenerator>
-    <FlexGenerator Include="strres_lexer.l">
-      <Filter>FlexBison</Filter>
-    </FlexGenerator>
-  </ItemGroup>
-  <ItemGroup>
-    <BisonParser Include="resource_parser.y">
-      <Filter>FlexBison</Filter>
-    </BisonParser>
-    <BisonParser Include="strres_parser.y">
-      <Filter>FlexBison</Filter>
-    </BisonParser>
   </ItemGroup>
 </Project>

@@ -26,9 +26,6 @@
     <ClCompile Include="label.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="scrap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="slider.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -53,9 +50,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="label.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="scrap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="slider.h">

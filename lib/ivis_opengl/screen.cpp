@@ -24,8 +24,11 @@
  *
  */
 
-#include <GLee.h>
+
 #include "lib/framework/frame.h"
+
+#include <GLee.h>
+// NOTE: Header order is very important, don't change the above!
 #include "lib/exceptionhandler/dumpinfo.h"
 #include <physfs.h>
 #include <png.h>

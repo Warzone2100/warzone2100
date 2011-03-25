@@ -20,14 +20,16 @@
 /** \file
  *  Renderer setup and state control routines for 3D rendering.
  */
+#include "lib/framework/frame.h"
 
 #include <GLee.h>
+// NOTE: Header order is very important, don't change the above!
 #if defined(__MACOSX__)
 #include <OpenGL/glu.h>
 #else
 #include <GL/glu.h>
 #endif
-#include "lib/framework/frame.h"
+
 
 #include <physfs.h>
 #include "lib/framework/opengl.h"

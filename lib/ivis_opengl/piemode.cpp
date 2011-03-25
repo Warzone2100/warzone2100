@@ -26,10 +26,12 @@
  */
 /***************************************************************************/
 
-#include <GLee.h>
+
 #include "lib/framework/frame.h"
 #include "lib/framework/wzapp_c.h"
 
+#include <GLee.h>
+// NOTE: Header order is very important, don't change the above!
 #include "lib/ivis_opengl/piedef.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/piemode.h"

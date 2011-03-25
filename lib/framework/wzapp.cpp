@@ -905,7 +905,7 @@ bool mouseDrag(MOUSE_KEY_CODE code, UDWORD *px, UDWORD *py)
 
 	if ((aMouseState[code].state == KEY_DRAG)
 		||
-		code == MOUSE_MMB )
+		(code == MOUSE_MMB )
 		||
 		// dragging LMB and RMB counts as dragging MMB
 		(aMouseState[MOUSE_LMB].state != KEY_UP && aMouseState[MOUSE_RMB].state == KEY_DRAG))

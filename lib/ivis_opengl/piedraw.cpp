@@ -20,11 +20,10 @@
 /** \file
  *  Render routines for 3D coloured and shaded transparency rendering.
  */
-
-#include <GLee.h>
-#include <string.h>
-
 #include "lib/framework/frame.h"
+#include <GLee.h>
+// NOTE: Header order is very important, don't change the above!
+
 #include "lib/ivis_opengl/ivisdef.h"
 #include "lib/ivis_opengl/imd.h"
 #include "lib/ivis_opengl/piefunc.h"
@@ -35,6 +34,9 @@
 #include "lib/ivis_opengl/pieclip.h"
 #include "piematrix.h"
 #include "screen.h"
+
+
+#include <string.h>
 
 #define SHADOW_END_DISTANCE (8000*8000) // Keep in sync with lighting.c:FOG_END
 

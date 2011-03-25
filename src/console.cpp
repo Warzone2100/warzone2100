@@ -25,10 +25,11 @@
 #include <QtCore/QString>
 #include <QtGui/QPixmap>
 #include <QtGui/QPainter>
+#include "lib/framework/wzapp.h"
+// **NOTE: Qt headers must be before platform specific headers!
 
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
-#include "lib/framework/wzapp.h"
 #include "lib/gamelib/gtime.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/piestate.h"

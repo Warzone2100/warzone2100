@@ -32,7 +32,6 @@
 
 #include <string>
 #include <cstdlib>
-#include <QtCore/QString>
 
 /** Used to store a UTF-32 character in
  */
