@@ -84,10 +84,6 @@ static QScriptValue js_enumGroup(QScriptContext *context, QScriptEngine *engine)
 	{
 		matches.push_back(psCurr);
 	}
-	if (matches.size() == 0)
-	{
-		return QScriptValue();
-	}
 	QScriptValue result = engine->newArray(matches.size());
 	for (int i = 0; i < matches.size(); i++)
 	{
@@ -133,10 +129,6 @@ static QScriptValue js_enumStruct(QScriptContext *context, QScriptEngine *engine
 		{
 			matches.push_back(psStruct);
 		}
-	}
-	if (matches.size() == 0)
-	{
-		return QScriptValue();
 	}
 	QScriptValue result = engine->newArray(matches.size());
 	for (int i = 0; i < matches.size(); i++)

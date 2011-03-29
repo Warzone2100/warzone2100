@@ -48,6 +48,7 @@ struct timerNode
 	int frameTime;
 	int ms;
 	int player;
+	timerNode() {}
 	timerNode(QScriptEngine *caller, QString val, int plr, int frame) : function(val) { player = plr; ms = frame; frameTime = frame + gameTime; engine = caller; }
 	// implement operator less TODO
 };
@@ -235,13 +236,14 @@ bool saveScriptStates(const char *filename)
 	QSettings ini(QString("wz::") + filename, QSettings::IniFormat);
 	if (!ini.isWritable())
 	{
-		qWarning("Savegame file not writable");
+		debug(LOG_ERROR, "Savegame file not writable");
+		return false;
 	}
 	for (int i = 0; i < scripts.size(); ++i)
 	{
-		ini.beginGroup(QString("globals_") + QString::number(i));
 		QScriptEngine *engine = scripts.at(i);
 		QScriptValueIterator it(engine->globalObject());
+		ini.beginGroup(QString("globals_") + QString::number(i));
 		while (it.hasNext())
 		{
 			it.next();
@@ -252,22 +254,72 @@ bool saveScriptStates(const char *filename)
 		}
 		ini.endGroup();
 	}
+	for (int i = 0; i < timers.size(); ++i)
+	{
+		timerNode node = timers.at(i);
+		ini.beginGroup(QString("triggers_") + QString::number(i));
+		ini.setValue("player", node.player);
+		ini.setValue("function", node.function.toUtf8().constData());
+		if (!node.baseobj.isEmpty())
+		{
+			ini.setValue("object", node.baseobj.toUtf8().constData());
+		}
+		ini.setValue("frame", node.frameTime);
+		ini.setValue("ms", node.ms);
+		ini.endGroup();
+	}
 	return true;
+}
+
+static QScriptEngine *findEngineForPlayer(int match)
+{
+	for (int i = 0; i < scripts.size(); ++i)
+	{
+		QScriptEngine *engine = scripts.at(i);
+		int player = engine->globalObject().property("me").toInt32();
+		if (match == player)
+		{
+			return engine;
+		}
+	}
+	ASSERT(false, "Script context for player %d not found", match);
+	return NULL;
 }
 
 bool loadScriptStates(const char *filename)
 {
 	QSettings ini(QString("wz::") + filename, QSettings::IniFormat);
-	for (int i = 0; i < scripts.size(); ++i)
+	QStringList list = ini.childGroups();
+	debug(LOG_SAVE, "Loading script states for %d script contexts", scripts.size());
+	for (int i = 0; i < list.size(); ++i)
 	{
-		ini.beginGroup(QString("globals_") + QString::number(i));
-		QStringList keys = ini.childKeys();
-		QScriptEngine *engine = scripts.at(i);
-		for (int j = 0; j < keys.size(); ++j)
+		if (list[i].startsWith("triggers_"))
 		{
-			engine->globalObject().setProperty(keys.at(i), engine->toScriptValue(ini.value(keys.at(i))));
+			ini.beginGroup(list[i]);
+			timerNode node;
+			node.player = ini.value("player").toInt();
+			node.ms = ini.value("ms").toInt();
+			node.frameTime = ini.value("frame").toInt();
+			debug(LOG_SAVE, "Registering trigger %d for player %d", i, node.player);
+			node.engine = findEngineForPlayer(node.player);
+			node.function = ini.value("function").toString();
+			node.baseobj = ini.value("baseobj", QString()).toString();
+			timers.push_back(node);
+			ini.endGroup();
 		}
-		ini.endGroup();
+		else if (list[i].startsWith("globals_"))
+		{
+			ini.beginGroup(list[i]);
+			int player = ini.value("me").toInt();
+			QScriptEngine *engine = findEngineForPlayer(player);
+			QStringList keys = ini.childKeys();
+			debug(LOG_SAVE, "Loading script globals for player %d -- found %d values", player, keys.size());
+			for (int j = 0; j < keys.size(); ++j)
+			{
+				engine->globalObject().setProperty(keys.at(j), engine->toScriptValue(ini.value(keys.at(j))));
+			}
+			ini.endGroup();
+		}
 	}
 	return true;
 }
