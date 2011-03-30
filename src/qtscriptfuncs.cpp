@@ -95,16 +95,8 @@ static QScriptValue js_enumGroup(QScriptContext *context, QScriptEngine *engine)
 
 static QScriptValue js_newGroup(QScriptContext *, QScriptEngine *)
 {
-	DROID_GROUP *newGrp = NULL;
-	if (grpCreate(&newGrp))
-	{
-		return QScriptValue(newGrp->id);
-	}
-	else
-	{
-		debug(LOG_ERROR, "Failed to create group");
-		return QScriptValue();
-	}
+	DROID_GROUP *newGrp = grpCreate();
+	return QScriptValue(newGrp->id);
 }
 
 static QScriptValue js_enumStruct(QScriptContext *context, QScriptEngine *engine)

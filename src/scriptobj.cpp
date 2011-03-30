@@ -1261,13 +1261,7 @@ bool scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 
 		if (psVal->v.oval == NULL)
 		{
-			DROID_GROUP *tmp;
-			if (!grpCreate(&tmp))
-			{
-				debug( LOG_FATAL, "scrValDefLoad: out of memory" );
-				abort();
-				break;
-			}
+			DROID_GROUP *tmp = grpCreate();
 			tmp->add(NULL);
 			psVal->v.oval = tmp;
 		}

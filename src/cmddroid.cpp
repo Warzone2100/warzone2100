@@ -85,10 +85,7 @@ void cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
 
 	if (psCommander->psGroup == NULL)
 	{
-		if (!grpCreate(&psGroup))
-		{
-			return;
-		}
+		psGroup = grpCreate();
 		psGroup->add(psCommander);
 		psDroid->group = UBYTE_MAX;
 	}

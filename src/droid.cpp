@@ -2247,16 +2247,9 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD pl
 		psDroid->pos.z = map_Height(psDroid->pos.x, psDroid->pos.y);
 	}
 
-	if ( (psDroid->droidType == DROID_TRANSPORTER) ||
-		 (psDroid->droidType == DROID_COMMAND) )
+	if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_COMMAND)
 	{
-		if (!grpCreate(&psGrp))
-		{
-			debug(LOG_NEVER, "unit build: unable to create group");
-			ASSERT(!"unable to create group", "Can't create unit because can't create group");
-			delete psDroid;
-			return NULL;
-		}
+		psGrp = grpCreate();
 		psGrp->add(psDroid);
 	}
 

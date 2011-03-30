@@ -2052,15 +2052,10 @@ static bool setFunctionality(STRUCTURE	*psBuilding, STRUCTURE_TYPE functionType)
 			psRepairFac->psObj = NULL;
 			psRepairFac->droidQueue = 0;
 
-			if (!grpCreate(&((REPAIR_FACILITY*)psBuilding->pFunctionality)->psGroup))
-			{
-				debug(LOG_NEVER, "couldn't create repair facility group");
-			}
-			else
-			{
-				// Add NULL droid to the group
-				psRepairFac->psGroup->add(NULL);
-			}
+			psRepairFac->psGroup = grpCreate();
+
+			// Add NULL droid to the group
+			psRepairFac->psGroup->add(NULL);
 
 			// Take advantage of upgrades
 			structureRepairUpgrade(psBuilding);
