@@ -509,6 +509,8 @@
 		43E189A711441134000870EB /* tsearch.c in Sources */ = {isa = PBXBuildFile; fileRef = 43E188F311440CC9000870EB /* tsearch.c */; };
 		43E189A811441135000870EB /* vasnprintf.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F930BD55B50002E64E3 /* vasnprintf.c */; };
 		43E189A911441136000870EB /* version.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F670BD55AE3002E64E3 /* version.c */; };
+		43F1D9801343F1C5001478EC /* QtScript.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43F1D96B1343F196001478EC /* QtScript.framework */; };
+		43F1D99A1343F1DE001478EC /* QtScript.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 43F1D96B1343F196001478EC /* QtScript.framework */; };
 		43F3001410D3410C00707B6E /* macosx.c in Sources */ = {isa = PBXBuildFile; fileRef = 43F3FFFE10D33F4D00707B6E /* macosx.c */; };
 		43F3003310D341F000707B6E /* hog.c in Sources */ = {isa = PBXBuildFile; fileRef = 02DDA8C20BD3C3450049AB60 /* hog.c */; };
 		43F3003410D341F100707B6E /* mvl.c in Sources */ = {isa = PBXBuildFile; fileRef = 02DDA8C30BD3C3450049AB60 /* mvl.c */; };
@@ -735,6 +737,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				4333661B11A07FFF00380F5E /* QtCore.framework in Copy frameworks */,
+				43F1D99A1343F1DE001478EC /* QtScript.framework in Copy frameworks */,
 				4333661C11A07FFF00380F5E /* QtGui.framework in Copy frameworks */,
 				4333661D11A07FFF00380F5E /* QtOpenGL.framework in Copy frameworks */,
 				02581C880BD5AD1100957CBC /* Zlib.framework in Copy frameworks */,
@@ -1503,6 +1506,7 @@
 		43E188F411440CC9000870EB /* tsearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tsearch.h; path = "external/gettext/gettext-runtime/intl/tsearch.h"; sourceTree = "<group>"; };
 		43E1897311441009000870EB /* os2compat.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = os2compat.c; path = "external/gettext/gettext-runtime/intl/os2compat.c"; sourceTree = "<group>"; };
 		43E189781144104B000870EB /* intl-exports.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "intl-exports.c"; path = "external/gettext/gettext-runtime/intl/intl-exports.c"; sourceTree = "<group>"; };
+		43F1D96B1343F196001478EC /* QtScript.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = QtScript.framework; sourceTree = "<group>"; };
 		43F3005510D344AF00707B6E /* analyze.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = analyze.c; path = external/libtheora/lib/analyze.c; sourceTree = "<group>"; };
 		43F3005610D344AF00707B6E /* apiwrapper.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = apiwrapper.c; path = external/libtheora/lib/apiwrapper.c; sourceTree = "<group>"; };
 		43F3005710D344AF00707B6E /* apiwrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = apiwrapper.h; path = external/libtheora/lib/apiwrapper.h; sourceTree = "<group>"; };
@@ -1613,6 +1617,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4333612211A07FB900380F5E /* QtCore.framework in Frameworks */,
+				43F1D9801343F1C5001478EC /* QtScript.framework in Frameworks */,
 				4333612311A07FB900380F5E /* QtGui.framework in Frameworks */,
 				4333612511A07FBA00380F5E /* QtOpenGL.framework in Frameworks */,
 				43B8FC9A127CB06C006F5A13 /* Zlib.framework in Frameworks */,
@@ -2559,6 +2564,7 @@
 		4333611D11A07FB900380F5E /* QT */ = {
 			isa = PBXGroup;
 			children = (
+				43F1D96B1343F196001478EC /* QtScript.framework */,
 				4333611E11A07FB900380F5E /* QtCore.framework */,
 				4333611F11A07FB900380F5E /* QtGui.framework */,
 				4333612011A07FB900380F5E /* QtNetwork.framework */,
