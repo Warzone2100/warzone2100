@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -48,17 +48,17 @@
 #define	TYPE_WATER				75
 #define TYPE_LAND				76
 
-typedef enum
+enum AP_TYPE
 {
 AP_RAIN,
 AP_SNOW
-} AP_TYPE;
+};
 
-typedef enum
+enum AP_STATUS
 {
 APS_ACTIVE,
 APS_INACTIVE,
-} AP_STATUS;
+};
 
 static ATPART	asAtmosParts[MAX_ATMOS_PARTICLES];
 static	UDWORD	freeParticle;

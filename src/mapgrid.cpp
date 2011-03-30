@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ PointTree::Filter *gridFiltersUnseen;
 PointTree::Filter *gridFiltersDroidsByPlayer;
 
 // initialise the grid system
-BOOL gridInitialise(void)
+bool gridInitialise(void)
 {
 	ASSERT(gridPointTree == NULL, "gridInitialise already called, without calling gridShutDown.");
 	gridPointTree = new PointTree;

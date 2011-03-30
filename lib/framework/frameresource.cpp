@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -251,12 +251,12 @@ void SetLastResourceFilename(const char *pName)
 
 
 // Structure for each file currently in use in the resource  ... probably only going to be one ... but we will handle upto MAXLOADEDRESOURCE
-typedef struct
+struct RESOURCEFILE
 {
   	char *pBuffer;	// a pointer to the data
 	UDWORD size;	// number of bytes
 	UBYTE	type;	// what type of resource is it
-} RESOURCEFILE;
+};
 
 #define RESFILETYPE_EMPTY (0)			// empty entry
 #define RESFILETYPE_PC_SBL (1)			// Johns SBL stuff

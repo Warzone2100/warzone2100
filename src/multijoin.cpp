@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -70,8 +70,8 @@
 
 // ////////////////////////////////////////////////////////////////////////////
 // External Variables
-extern BOOL		bHosted;
-extern BOOL		multiRequestUp;
+extern bool		bHosted;
+extern bool		multiRequestUp;
 // ////////////////////////////////////////////////////////////////////////////
 //external functions
 
@@ -83,7 +83,7 @@ static void resetMultiVisibility(UDWORD player);
 // ////////////////////////////////////////////////////////////////////////////
 // Wait For Players
 
-BOOL intDisplayMultiJoiningStatus(UBYTE joinCount)
+bool intDisplayMultiJoiningStatus(UBYTE joinCount)
 {
 	UDWORD			x,y,w,h;
 	char			sTmp[6];
@@ -117,7 +117,7 @@ BOOL intDisplayMultiJoiningStatus(UBYTE joinCount)
 ** @param player -- the one we need to clear
 ** @param quietly -- true means without any visible effects
 */
-void clearPlayer(UDWORD player,BOOL quietly)
+void clearPlayer(UDWORD player,bool quietly)
 {
 	UDWORD			i;
 	STRUCTURE		*psStruct,*psNext;
@@ -220,7 +220,7 @@ void recvPlayerLeft(NETQUEUE queue)
 
 // ////////////////////////////////////////////////////////////////////////////
 // A remote player has left the game
-BOOL MultiPlayerLeave(UDWORD playerIndex)
+bool MultiPlayerLeave(UDWORD playerIndex)
 {
 	char	buf[255];
 
@@ -274,7 +274,7 @@ BOOL MultiPlayerLeave(UDWORD playerIndex)
 
 // ////////////////////////////////////////////////////////////////////////////
 // A Remote Player has joined the game.
-BOOL MultiPlayerJoin(UDWORD playerIndex)
+bool MultiPlayerJoin(UDWORD playerIndex)
 {
 	if(widgGetFromID(psWScreen,IDRET_FORM))	// if ingame.
 	{

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -40,11 +40,11 @@
 
 static INTERP_VAL	*varEnvironment[MAX_FUNC_CALLS];		//environments for local variables of events/functions
 
-typedef struct
+struct ReturnAddressStack_t
 {
 	UDWORD CallerIndex;
 	INTERP_VAL *ReturnAddress;
-} ReturnAddressStack_t;
+};
 
 /**
  * Reset the return address stack
@@ -56,14 +56,14 @@ static inline void retStackReset(void);
  *
  * \return True when empty, false otherwise
  */
-static inline BOOL retStackIsEmpty(void);
+static inline bool retStackIsEmpty(void);
 
 /**
  * Check whether the return address stack is full
  *
  * \return True when full, false otherwise
  */
-static inline BOOL retStackIsFull(void);
+static inline bool retStackIsFull(void);
 
 /**
  * Push a new address/event pair on the return address stack
@@ -72,7 +72,7 @@ static inline BOOL retStackIsFull(void);
  * \param ReturnAddress Address to return to
  * \return False on failure (stack full)
  */
-static BOOL retStackPush(UDWORD CallerIndex, INTERP_VAL *ReturnAddress);
+static bool retStackPush(UDWORD CallerIndex, INTERP_VAL *ReturnAddress);
 
 /**
  * Pop an address/event pair from the return address stack
@@ -81,7 +81,7 @@ static BOOL retStackPush(UDWORD CallerIndex, INTERP_VAL *ReturnAddress);
  * \param ReturnAddress Address to return to
  * \return False on failure (stack empty)
  */
-static BOOL retStackPop(UDWORD *CallerIndex, INTERP_VAL **ReturnAddress);
+static bool retStackPop(UDWORD *CallerIndex, INTERP_VAL **ReturnAddress);
 
 /* Creates a new local var environment for a new function call */
 static inline void createVarEnvironment(SCRIPT_CONTEXT *psContext, UDWORD eventIndex);
@@ -151,13 +151,13 @@ SDWORD aOpSize[] =
 static TYPE_EQUIV *asInterpTypeEquiv = NULL;
 
 // whether the interpreter is running
-static BOOL		bInterpRunning = false;
+static bool		bInterpRunning = false;
 
 /* Whether to output trace information */
-static BOOL	interpTrace = false;
+static bool	interpTrace = false;
 
 static SCRIPT_CODE *psCurProg = NULL;
-static BOOL bCurCallerIsEvent = false;
+static bool bCurCallerIsEvent = false;
 
 /* Print out trace info if tracing is turned on */
 #define TRCPRINTF(...) do { if (interpTrace) { fprintf( stderr, __VA_ARGS__ ); } } while (false)
@@ -184,7 +184,7 @@ static BOOL bCurCallerIsEvent = false;
 
 
 // true if the interpreter is currently running
-BOOL interpProcessorActive(void)
+bool interpProcessorActive(void)
 {
 	return bInterpRunning;
 }
@@ -205,7 +205,7 @@ static inline INTERP_VAL *interpGetVarData(VAL_CHUNK *psGlobals, UDWORD index)
 }
 
 // get the array data for an array operation
-static BOOL interpGetArrayVarData(INTERP_VAL **pip, VAL_CHUNK *psGlobals, SCRIPT_CODE *psProg, INTERP_VAL **ppsVal)
+static bool interpGetArrayVarData(INTERP_VAL **pip, VAL_CHUNK *psGlobals, SCRIPT_CODE *psProg, INTERP_VAL **ppsVal)
 {
 	SDWORD		i, dimensions, vals[VAR_MAX_DIMENSIONS];
 	UBYTE		*elements;
@@ -271,7 +271,7 @@ static BOOL interpGetArrayVarData(INTERP_VAL **pip, VAL_CHUNK *psGlobals, SCRIPT
 
 
 // Initialise the interpreter
-BOOL interpInitialise(void)
+bool interpInitialise(void)
 {
 	asInterpTypeEquiv = NULL;
 
@@ -279,7 +279,7 @@ BOOL interpInitialise(void)
 }
 
 /* Run a compiled script */
-BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD index, UDWORD offset)
+bool interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD index, UDWORD offset)
 {
 	UDWORD			data;
 	OPCODE			opcode;
@@ -293,9 +293,9 @@ BOOL interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType, UDWORD i
 	SDWORD			instructionCount = 0;
 
 	UDWORD			CurEvent = 0;
-	BOOL			bStop = false, bEvent = false;
+	bool			bStop = false, bEvent = false;
 	UDWORD			callDepth = 0;
-	BOOL			bTraceOn=false;		//enable to debug function/event calls
+	bool			bTraceOn=false;		//enable to debug function/event calls
 
 	ASSERT( psContext != NULL,
 		"interpRunScript: invalid context pointer" );
@@ -955,9 +955,9 @@ void scriptSetTypeEquiv(TYPE_EQUIV *psTypeTab)
  * Means: Their data can be copied without conversion.
  * I.e. strings are NOT equivalent to anything but strings, even though they can be converted
  */
-BOOL interpCheckEquiv(INTERP_TYPE to, INTERP_TYPE from)
+bool interpCheckEquiv(INTERP_TYPE to, INTERP_TYPE from)
 {
-	BOOL toRef = false, fromRef = false;
+	bool toRef = false, fromRef = false;
 
 	// check for the VAL_REF flag
 	if (to & VAL_REF)
@@ -1010,7 +1010,7 @@ BOOL interpCheckEquiv(INTERP_TYPE to, INTERP_TYPE from)
 
 
 /* Instinct function to turn on tracing */
-BOOL interpTraceOn(void)
+bool interpTraceOn(void)
 {
 	interpTrace = true;
 
@@ -1018,7 +1018,7 @@ BOOL interpTraceOn(void)
 }
 
 /* Instinct function to turn off tracing */
-BOOL interpTraceOff(void)
+bool interpTraceOff(void)
 {
 	interpTrace = false;
 
@@ -1046,21 +1046,21 @@ static inline void retStackReset(void)
 }
 
 
-static inline BOOL retStackIsEmpty(void)
+static inline bool retStackIsEmpty(void)
 {
 	if(retStackPos < 0) return true;
 	return false;
 }
 
 
-static inline BOOL retStackIsFull(void)
+static inline bool retStackIsFull(void)
 {
 	if(retStackPos >= MAX_FUNC_CALLS) return true;
 	return false;
 }
 
 
-static BOOL retStackPush(UDWORD CallerIndex, INTERP_VAL *ReturnAddress)
+static bool retStackPush(UDWORD CallerIndex, INTERP_VAL *ReturnAddress)
 {
 	if (retStackIsFull())
 	{
@@ -1078,7 +1078,7 @@ static BOOL retStackPush(UDWORD CallerIndex, INTERP_VAL *ReturnAddress)
 }
 
 
-static BOOL retStackPop(UDWORD *CallerIndex, INTERP_VAL **ReturnAddress)
+static bool retStackPop(UDWORD *CallerIndex, INTERP_VAL **ReturnAddress)
 {
 	if (retStackIsEmpty())
 	{

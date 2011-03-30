@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -75,30 +75,30 @@ enum _groupids
 };
 
 // Get values from a base object
-extern BOOL scrBaseObjGet(UDWORD index);
+extern bool scrBaseObjGet(UDWORD index);
 
 // Set values from a base object
-extern BOOL scrBaseObjSet(UDWORD index);
+extern bool scrBaseObjSet(UDWORD index);
 
 // convert a base object to a droid if it is the right type
-extern BOOL scrObjToDroid(void);
+extern bool scrObjToDroid(void);
 
 // convert a base object to a structure if it is the right type
-extern BOOL scrObjToStructure(void);
+extern bool scrObjToStructure(void);
 
 // convert a base object to a feature if it is the right type
-extern BOOL scrObjToFeature(void);
+extern bool scrObjToFeature(void);
 
 // Get values from a group
-extern BOOL scrGroupObjGet(UDWORD index);
+extern bool scrGroupObjGet(UDWORD index);
 
 // Get values from a weapon
-extern BOOL scrWeaponObjGet(UDWORD index);
+extern bool scrWeaponObjGet(UDWORD index);
 
 // default value save routine
-extern BOOL scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize);
+extern bool scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize);
 
 // default value load routine
-extern BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size);
+extern bool scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size);
 
 #endif // __INCLUDED_SRC_SCRIPTOBJ_H__

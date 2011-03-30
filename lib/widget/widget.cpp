@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@
 #include "slider.h"
 #include "tip.h"
 
-static	BOOL	bWidgetsActive = true;
+static	bool	bWidgetsActive = true;
 
 /* The widget the mouse is over this update */
 static WIDGET	*psMouseOverWidget = NULL;
@@ -217,7 +217,7 @@ static void widgRelease(WIDGET *psWidget)
 }
 
 /* Check whether an ID has been used on a form */
-static BOOL widgCheckIDForm(W_FORM *psForm, UDWORD id)
+static bool widgCheckIDForm(W_FORM *psForm, UDWORD id)
 {
 	WIDGET			*psCurr;
 	W_FORMGETALL	sGetAll;
@@ -262,7 +262,7 @@ void widgSetTipFont(W_SCREEN *psScreen, enum iV_fonts FontID)
 }
 
 /* Add a form to the widget screen */
-BOOL widgAddForm(W_SCREEN *psScreen, const W_FORMINIT* psInit)
+bool widgAddForm(W_SCREEN *psScreen, const W_FORMINIT* psInit)
 {
 	W_FORM	*psParent, *psForm;
 
@@ -306,7 +306,7 @@ BOOL widgAddForm(W_SCREEN *psScreen, const W_FORMINIT* psInit)
 
 
 /* Add a label to the widget screen */
-BOOL widgAddLabel(W_SCREEN *psScreen, const W_LABINIT* psInit)
+bool widgAddLabel(W_SCREEN *psScreen, const W_LABINIT* psInit)
 {
 	W_LABEL		*psLabel;
 	W_FORM		*psForm;
@@ -350,7 +350,7 @@ BOOL widgAddLabel(W_SCREEN *psScreen, const W_LABINIT* psInit)
 
 
 /* Add a button to the widget screen */
-BOOL widgAddButton(W_SCREEN *psScreen, const W_BUTINIT* psInit)
+bool widgAddButton(W_SCREEN *psScreen, const W_BUTINIT* psInit)
 {
 	W_BUTTON	*psButton;
 	W_FORM		*psForm;
@@ -394,7 +394,7 @@ BOOL widgAddButton(W_SCREEN *psScreen, const W_BUTINIT* psInit)
 
 
 /* Add an edit box to the widget screen */
-BOOL widgAddEditBox(W_SCREEN *psScreen, const W_EDBINIT* psInit)
+bool widgAddEditBox(W_SCREEN *psScreen, const W_EDBINIT* psInit)
 {
 	W_EDITBOX	*psEdBox;
 	W_FORM		*psForm;
@@ -438,7 +438,7 @@ BOOL widgAddEditBox(W_SCREEN *psScreen, const W_EDBINIT* psInit)
 
 
 /* Add a bar graph to the widget screen */
-BOOL widgAddBarGraph(W_SCREEN *psScreen, const W_BARINIT* psInit)
+bool widgAddBarGraph(W_SCREEN *psScreen, const W_BARINIT* psInit)
 {
 	W_BARGRAPH	*psBarGraph;
 	W_FORM		*psForm;
@@ -482,7 +482,7 @@ BOOL widgAddBarGraph(W_SCREEN *psScreen, const W_BARINIT* psInit)
 
 
 /* Add a slider to a form */
-BOOL widgAddSlider(W_SCREEN *psScreen, const W_SLDINIT* psInit)
+bool widgAddSlider(W_SCREEN *psScreen, const W_SLDINIT* psInit)
 {
 	W_SLIDER	*psSlider;
 	W_FORM		*psForm;
@@ -526,7 +526,7 @@ BOOL widgAddSlider(W_SCREEN *psScreen, const W_SLDINIT* psInit)
 
 
 /* Delete a widget from a form */
-static BOOL widgDeleteFromForm(W_FORM *psForm, UDWORD id, W_CONTEXT *psContext)
+static bool widgDeleteFromForm(W_FORM *psForm, UDWORD id, W_CONTEXT *psContext)
 {
 	WIDGET		*psPrev = NULL, *psCurr, *psNext;
 	W_TABFORM	*psTabForm;
@@ -1737,12 +1737,12 @@ SWORD WidgGetClickedAudioID(void)
 }
 
 
-void	setWidgetsStatus(BOOL var)
+void	setWidgetsStatus(bool var)
 {
 	bWidgetsActive = var;
 }
 
-BOOL	getWidgetsStatus( void )
+bool	getWidgetsStatus( void )
 {
 	return(bWidgetsActive);
 }

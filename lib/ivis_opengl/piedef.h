@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -42,13 +42,28 @@
  */
 /***************************************************************************/
 
-typedef struct { UBYTE r, g, b, a; } PIELIGHTBYTES;
+struct PIELIGHTBYTES
+{
+	uint8_t r, g, b, a;
+};
 
 /** Our basic colour type. Use whenever you want to define a colour.
  *  Set bytes separetely, and do not assume a byte order between the components. */
-typedef union  { PIELIGHTBYTES byte; UDWORD rgba; UBYTE vector[4]; } PIELIGHT;
-typedef struct {SWORD x, y, w, h;} PIERECT;				/**< Screen rectangle. */
-typedef struct {SDWORD texPage; SWORD tu, tv, tw, th;} PIEIMAGE;	/**< An area of texture. */
+union PIELIGHT
+{
+	PIELIGHTBYTES byte;
+	UDWORD rgba;
+	UBYTE vector[4];
+};
+struct PIERECT  ///< Screen rectangle.
+{
+	SWORD x, y, w, h;
+};
+struct PIEIMAGE  ///< An area of texture.
+{
+	SDWORD texPage;
+	SWORD tu, tv, tw, th;
+};
 
 /***************************************************************************/
 /*
@@ -57,6 +72,7 @@ typedef struct {SDWORD texPage; SWORD tu, tv, tw, th;} PIEIMAGE;	/**< An area of
 /***************************************************************************/
 extern void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int pieFlag, int pieFlagData);
 extern void pie_DrawImage(const PIEIMAGE *image, const PIERECT *dest);
+void pie_DrawImage(const PIEIMAGE *image, const PIERECT *dest, PIELIGHT colour);
 
 extern void pie_GetResetCounts(unsigned int* pPieCount, unsigned int* pTileCount, unsigned int* pPolyCount, unsigned int* pStateCount);
 

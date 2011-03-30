@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -31,22 +31,22 @@
 typedef void (*BUILDCALLBACK)(UDWORD xPos, UDWORD yPos,void *UserData);
 
 extern void Edit3DInitVars(void);
-extern	BOOL	found3DBuilding		( UDWORD *x, UDWORD *y );
-extern  BOOL    found3DBuildLocTwo  ( UDWORD *px1, UDWORD *py1, UDWORD *px2, UDWORD *py2);
+extern	bool	found3DBuilding		( UDWORD *x, UDWORD *y );
+extern  bool    found3DBuildLocTwo  ( UDWORD *px1, UDWORD *py1, UDWORD *px2, UDWORD *py2);
 extern void init3DBuilding(BASE_STATS *psStats,BUILDCALLBACK CallBack,void *UserData);
 extern	void	kill3DBuilding		( void );
-extern BOOL process3DBuilding(void);
+extern bool process3DBuilding(void);
 
 extern void	adjustTileHeight	( MAPTILE *psTile, SDWORD adjust );
 extern void	raiseTile(int tile3dX, int tile3dY);
 extern void	lowerTile(int tile3dX, int tile3dY);
-BOOL	inHighlight				( UDWORD realX, UDWORD realY );
+bool	inHighlight				( UDWORD realX, UDWORD realY );
 
-typedef struct _highlight
+struct HIGHLIGHT
 {
 UWORD	xTL,yTL;		// Top left of box to highlight
 UWORD	xBR,yBR;		// Bottom right of box to highlight
-} HIGHLIGHT;
+};
 
 extern HIGHLIGHT	buildSite;
 
@@ -57,14 +57,14 @@ extern HIGHLIGHT	buildSite;
 #define BUILD3D_VALID		102
 
 
-typedef struct _build_details
+struct BUILDDETAILS
 {
 	BUILDCALLBACK	CallBack;
 	void 			*UserData;  //this holds the OBJECT_POSITION pointer for a Deliv Point
 	UDWORD			x,y;
 	UDWORD			width,height;
 	BASE_STATS		*psStats;
-} BUILDDETAILS;
+};
 
 extern BUILDDETAILS	sBuildDetails;
 
@@ -75,6 +75,6 @@ extern bool editMode;
 extern bool quickQueueMode;
 
 /*returns true if the build state is not equal to BUILD3D_NONE*/
-extern BOOL   tryingToGetLocation(void);
+extern bool   tryingToGetLocation(void);
 
 #endif // __INCLUDED_SRC_EDIT3D_H__

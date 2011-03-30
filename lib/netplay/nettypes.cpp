@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2007-2010  Warzone 2100 Project
+	Copyright (C) 2007-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@
 #ifndef WZ_OS_WIN
 #include <arpa/inet.h>
 #else
-#include <Winsock2.h>
+#include <winsock2.h>
 #endif
 
 #include "../framework/frame.h"
@@ -87,7 +87,7 @@ static void queue(const Q &q, uint8_t &v)
 template<class Q>
 static void queue(const Q &q, uint16_t &v)
 {
-	uint8_t b[2] = {v>>8, v};
+	uint8_t b[2] = {uint8_t(v>>8), uint8_t(v)};
 	queue(q, b[0]);
 	queue(q, b[1]);
 	if (Q::Direction == Q::Read)
@@ -128,7 +128,7 @@ static void queue(const Q &q, uint32_t &vOrig)
 template<class Q>
 static void queueLarge(const Q &q, uint32_t &v)
 {
-	uint16_t b[2] = {v>>16, v};
+	uint16_t b[2] = {uint16_t(v>>16), uint16_t(v)};
 	queue(q, b[0]);
 	queue(q, b[1]);
 	if (Q::Direction == Q::Read)
@@ -140,7 +140,7 @@ static void queueLarge(const Q &q, uint32_t &v)
 template<class Q>
 static void queue(const Q &q, uint64_t &v)
 {
-	uint32_t b[2] = {v>>32, v};
+	uint32_t b[2] = {uint32_t(v>>32), uint32_t(v)};
 	queue(q, b[0]);
 	queue(q, b[1]);
 	if (Q::Direction == Q::Read)
@@ -377,7 +377,7 @@ void NETinsertMessageFromNet(NETQUEUE queue, NetMessage const *message)
 	receiveQueue(queue)->pushMessage(*message);
 }
 
-BOOL NETisMessageReady(NETQUEUE queue)
+bool NETisMessageReady(NETQUEUE queue)
 {
 	return receiveQueue(queue)->haveMessage();
 }
@@ -447,7 +447,7 @@ void NETbeginDecode(NETQUEUE queue, uint8_t type)
 	assert(type == message.type);
 }
 
-BOOL NETend()
+bool NETend()
 {
 	// If we are encoding just return true
 	if (NETgetPacketDir() == PACKET_ENCODE)
@@ -571,13 +571,6 @@ void NETint64_t(int64_t *ip)
 void NETuint64_t(uint64_t *ip)
 {
 	queueAuto(*ip);
-}
-
-void NETbool(BOOL *bp)
-{
-	uint8_t i = !!*bp;
-	queueAuto(i);
-	*bp = !!i;
 }
 
 void NETbool(bool *bp)

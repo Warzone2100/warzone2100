@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -61,7 +61,7 @@ static char aText[TEXT_BUFFERS][YYLMAX];
 static UDWORD currText=0;
 
 // Note if we are in a comment
-static BOOL inComment = false;
+static bool inComment = false;
 
 /* FLEX include buffer stack */
 static YY_BUFFER_STATE include_stack[MAX_SCR_INCLUDE_DEPTH];
@@ -106,7 +106,7 @@ static YYSTYPE dummy;
 /* Get the token type for a variable symbol */
 static SDWORD scriptGetVarToken(VAR_SYMBOL *psVar)
 {
-	BOOL	object;
+	bool	object;
 
 	// See if this is an object pointer
 	if (!asScrTypeTab || psVar->type < VAL_USERTYPESTART)
@@ -220,7 +220,7 @@ static SDWORD scriptGetVarToken(VAR_SYMBOL *psVar)
 /* Get the token type for a constant symbol */
 static SDWORD scriptGetConstToken(CONST_SYMBOL *psConst)
 {
-	BOOL	object;
+	bool	object;
 
 	// See if this is an object constant
 	if (!asScrTypeTab || psConst->type < VAL_USERTYPESTART)
@@ -261,7 +261,7 @@ static SDWORD scriptGetConstToken(CONST_SYMBOL *psConst)
 /* Get the token type for a function symbol */
 static SDWORD scriptGetFuncToken(FUNC_SYMBOL *psFunc)
 {
-	BOOL	object;
+	bool	object;
 
 	// See if this is an object pointer
 	if(psFunc->type >= VAL_USERTYPESTART)
@@ -299,7 +299,7 @@ static SDWORD scriptGetFuncToken(FUNC_SYMBOL *psFunc)
 /* Get the token type for a custom function symbol */
 static SDWORD scriptGetCustomFuncToken(EVENT_SYMBOL *psFunc)
 {
-	BOOL	object;
+	bool	object;
 
 	// See if this is an object pointer
 	if (!asScrTypeTab || psFunc->retType < VAL_USERTYPESTART)
@@ -348,7 +348,7 @@ static SDWORD scriptGetCustomFuncToken(EVENT_SYMBOL *psFunc)
 }
 
 /* Look up defined macro and return new define buffer */
-static BOOL scriptLoopUpMacro(const char *pMacro, char **ppMacroBody)
+static bool scriptLoopUpMacro(const char *pMacro, char **ppMacroBody)
 {
 	unsigned int i;
 
@@ -458,6 +458,7 @@ static void pushInclude(const char *pIncludePath)
 %option prefix="scr_"
 %option nounput
 %option yylineno
+%option never-interactive
 
 %x COMMENT
 %x SLCOMMENT

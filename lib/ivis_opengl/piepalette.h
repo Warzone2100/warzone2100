@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -21,11 +21,6 @@
 #define _piePalette_
 
 #include "lib/ivis_opengl/piedef.h"
-
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
 
 #define WZCOL_BLACK					psPalette[0]
 #define WZCOL_WHITE					psPalette[1]
@@ -168,9 +163,5 @@ static inline void pal_PIELIGHTtoRGBA4f(float *rgba4f, PIELIGHT rgba)
 	rgba4f[2] = rgba.byte.b / 255.0;
 	rgba4f[3] = rgba.byte.a / 255.0;
 }
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif

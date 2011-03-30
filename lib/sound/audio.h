@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -23,15 +23,15 @@
 
 #include "track.h"
 
-extern BOOL		audio_Init( AUDIO_CALLBACK pStopTrackCallback );
+extern bool		audio_Init( AUDIO_CALLBACK pStopTrackCallback );
 extern void		audio_Update(void);
-extern BOOL		audio_Shutdown(void);
-extern BOOL		audio_Disabled( void );
+extern bool		audio_Shutdown(void);
+extern bool		audio_Disabled( void );
 
-extern BOOL		audio_LoadTrackFromFile( char szFileName[] );
-extern unsigned int audio_SetTrackVals(const char* fileName, BOOL loop, unsigned int volume, unsigned int audibleRadius);
+extern bool		audio_LoadTrackFromFile( char szFileName[] );
+extern unsigned int audio_SetTrackVals(const char* fileName, bool loop, unsigned int volume, unsigned int audibleRadius);
 
-extern BOOL		audio_PlayStaticTrack( SDWORD iX, SDWORD iY, int iTrack );
+extern bool		audio_PlayStaticTrack( SDWORD iX, SDWORD iY, int iTrack );
 bool                    audio_PlayObjStaticTrack(SIMPLE_OBJECT *psObj, int iTrack);
 bool                    audio_PlayObjStaticTrackCallback(SIMPLE_OBJECT *psObj, int iTrack, AUDIO_CALLBACK pUserCallback);
 bool                    audio_PlayObjDynamicTrack(SIMPLE_OBJECT *psObj, int iTrack, AUDIO_CALLBACK pUserCallback );
@@ -49,9 +49,9 @@ extern void		audio_QueueTrackPos( SDWORD iTrack, SDWORD iX, SDWORD iY,
 										SDWORD iZ );
 extern void		audio_QueueTrackGroupPos( SDWORD iTrack, SDWORD iGroup,
 										SDWORD iX, SDWORD iY, SDWORD iZ );
-extern BOOL		audio_GetPreviousQueueTrackPos( SDWORD *iX, SDWORD *iY,
+extern bool		audio_GetPreviousQueueTrackPos( SDWORD *iX, SDWORD *iY,
 											SDWORD *iZ );
-extern BOOL		audio_GetPreviousQueueTrackRadarBlipPos( SDWORD *iX, SDWORD *iY);
+extern bool		audio_GetPreviousQueueTrackRadarBlipPos( SDWORD *iX, SDWORD *iY);
 extern void		audio_PauseAll( void );
 extern void		audio_ResumeAll( void );
 extern void		audio_StopAll( void );

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -206,7 +206,7 @@ struct DROIDSENSOR_UPGRADE_FUNCTION : public UPGRADE_FUNCTION
 typedef struct _function_upgrade
 {
 	UDWORD		functionInc;			/*The index of the function in asFunctions */
-	BOOL		available;				/*Flag to indicate whether this Upgrade is available*/
+	bool		available;				/*Flag to indicate whether this Upgrade is available*/
 } FUNCTION_UPGRADE;
 #endif
 /*function used by HQ to input power values*/

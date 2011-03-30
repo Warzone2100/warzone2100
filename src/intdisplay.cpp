@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -673,15 +673,15 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 	BASE_OBJECT         *psObj;
 	STRUCTURE           *Structure;
 	DROID               *Droid;
-	BOOL                Down;
+	bool                Down;
 	SDWORD              Image;
-	BOOL                Hilight = false;
+	bool                Hilight = false;
 	BASE_STATS          *Stats, *psResGraphic;
 	RENDERED_BUTTON     *Buffer = (RENDERED_BUTTON*)Form->pUserData;
 	UDWORD              IMDType = 0, compID;
 	UDWORD              Player = selectedPlayer;			// changed by AJL for multiplayer.
 	void                *Object;
-	BOOL	            bOnHold = false;
+	bool	            bOnHold = false;
 
 	OpenButtonRender((UWORD)(xOffset+Form->x), (UWORD)(yOffset+Form->y),(UWORD)Form->width,(UWORD)Form->height);
 
@@ -880,8 +880,8 @@ void intDisplayObjectButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 {
 	W_CLICKFORM *Form = (W_CLICKFORM*)psWidget;
 	BASE_OBJECT *psObj;
-	BOOL Down;
-	BOOL Hilight = false;
+	bool Down;
+	bool Hilight = false;
 	RENDERED_BUTTON *Buffer = (RENDERED_BUTTON*)Form->pUserData;
 	UDWORD IMDType = 0;
 	void *Object;
@@ -959,9 +959,9 @@ void intDisplayStatsButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_
 {
 	W_CLICKFORM     *Form = (W_CLICKFORM*)psWidget;
 	BASE_STATS      *Stat, *psResGraphic;
-	BOOL            Down;
+	bool            Down;
 	SDWORD          Image, compID;
-	BOOL            Hilight = false;
+	bool            Hilight = false;
 	RENDERED_BUTTON *Buffer = (RENDERED_BUTTON*)Form->pUserData;
 	UDWORD          IMDType = 0;
 	UDWORD          Player = selectedPlayer;		// ajl, changed for multiplayer (from 0)
@@ -1119,17 +1119,17 @@ void intDisplayStatsButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_
 
 
 void RenderToButton(IMAGEFILE *ImageFile,UWORD ImageID,void *Object,UDWORD Player,
-					RENDERED_BUTTON *Buffer,BOOL Down, UDWORD IMDType, UDWORD buttonType)
+					RENDERED_BUTTON *Buffer,bool Down, UDWORD IMDType, UDWORD buttonType)
 {
 	CreateIMDButton(ImageFile,ImageID,Object,Player,Buffer,Down,IMDType,buttonType);
 }
 
-void RenderImageToButton(IMAGEFILE *ImageFile,UWORD ImageID,RENDERED_BUTTON *Buffer,BOOL Down, UDWORD buttonType)
+void RenderImageToButton(IMAGEFILE *ImageFile,UWORD ImageID,RENDERED_BUTTON *Buffer,bool Down, UDWORD buttonType)
 {
 	CreateImageButton(ImageFile,ImageID,Buffer,Down,buttonType);
 }
 
-void RenderBlankToButton(RENDERED_BUTTON *Buffer,BOOL Down, UDWORD buttonType)
+void RenderBlankToButton(RENDERED_BUTTON *Buffer,bool Down, UDWORD buttonType)
 {
 	CreateBlankButton(Buffer,Down,buttonType);
 }
@@ -1353,7 +1353,7 @@ void intDisplayImageHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 	UDWORD x = xOffset+psWidget->x;
 	UDWORD y = yOffset+psWidget->y, flash;
 	UWORD ImageID;
-	BOOL Hilight = false;
+	bool Hilight = false;
 
 	switch(psWidget->type) {
 		case WIDG_FORM:
@@ -1413,7 +1413,7 @@ void intDisplayImageHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 }
 
 
-static void GetButtonState(WIDGET *psWidget,BOOL *Hilight,UDWORD *Down,BOOL *Grey)
+static void GetButtonState(WIDGET *psWidget,bool *Hilight,UDWORD *Down,bool *Grey)
 {
 	switch(psWidget->type) {
 		case WIDG_FORM:
@@ -1469,8 +1469,8 @@ void intDisplayButtonHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, W
 {
 	UDWORD x = xOffset+psWidget->x;
 	UDWORD y = yOffset+psWidget->y;
-	BOOL Hilight = false;
-	BOOL Grey = false;
+	bool Hilight = false;
+	bool Grey = false;
 	UDWORD Down = 0;
 	UWORD ImageID;
 
@@ -1496,7 +1496,7 @@ void intDisplayButtonFlash(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_
 {
 	UDWORD x = xOffset+psWidget->x;
 	UDWORD y = yOffset+psWidget->y;
-	//BOOL Hilight = false;
+	//bool Hilight = false;
 	//UDWORD Down = 0;
 	UWORD ImageID;
 
@@ -1528,8 +1528,8 @@ void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, 
 {
 	UDWORD	x = xOffset+psWidget->x;
 	UDWORD	y = yOffset+psWidget->y;
-	BOOL	Hilight = false;
-	BOOL	Down = false;
+	bool	Hilight = false;
+	bool	Down = false;
 	UBYTE	DownTime = UNPACKDWORD_QUAD_C(psWidget->UserData);
 	UBYTE	Index = UNPACKDWORD_QUAD_D(psWidget->UserData);
 	UBYTE	flashing = UNPACKDWORD_QUAD_A(psWidget->UserData);
@@ -1603,7 +1603,7 @@ void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, 
 
 
 void intDisplayTab(WIDGET *psWidget,UDWORD TabType, UDWORD Position,
-				   UDWORD Number,BOOL Selected,BOOL Hilight,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height)
+				   UDWORD Number,bool Selected,bool Hilight,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height)
 {
 	TABDEF *Tab = (TABDEF*)psWidget->pUserData;
 
@@ -2105,7 +2105,7 @@ void CloseButtonRender(void)
 
 // Clear a button bitmap. ( copy the button background ).
 //
-void ClearButton(BOOL Down,UDWORD Size, UDWORD buttonType)
+void ClearButton(bool Down,UDWORD Size, UDWORD buttonType)
 {
 	if(Down)
 	{
@@ -2119,7 +2119,7 @@ void ClearButton(BOOL Down,UDWORD Size, UDWORD buttonType)
 
 // Create a button by rendering an IMD object into it.
 //
-void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD Player, RENDERED_BUTTON *Buffer, BOOL Down, UDWORD IMDType, UDWORD buttonType)
+void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD Player, RENDERED_BUTTON *Buffer, bool Down, UDWORD IMDType, UDWORD buttonType)
 {
 	UDWORD Size;
 	Vector3i Rotation, Position, NullVector;
@@ -2421,7 +2421,7 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 
 // Create a button by rendering an image into it.
 //
-void CreateImageButton(IMAGEFILE *ImageFile,UWORD ImageID,RENDERED_BUTTON *Buffer,BOOL Down, UDWORD buttonType)
+void CreateImageButton(IMAGEFILE *ImageFile,UWORD ImageID,RENDERED_BUTTON *Buffer,bool Down, UDWORD buttonType)
 {
 	UDWORD ox,oy;
 
@@ -2440,7 +2440,7 @@ void CreateImageButton(IMAGEFILE *ImageFile,UWORD ImageID,RENDERED_BUTTON *Buffe
 
 // Create a blank button.
 //
-void CreateBlankButton(RENDERED_BUTTON *Buffer,BOOL Down, UDWORD buttonType)
+void CreateBlankButton(RENDERED_BUTTON *Buffer,bool Down, UDWORD buttonType)
 {
 	UDWORD ox,oy;
 
@@ -2458,7 +2458,7 @@ void CreateBlankButton(RENDERED_BUTTON *Buffer,BOOL Down, UDWORD buttonType)
 
 // Returns true if the droid is currently demolishing something or moving to demolish something.
 //
-BOOL DroidIsDemolishing(DROID *Droid)
+bool DroidIsDemolishing(DROID *Droid)
 {
 	BASE_STATS	*Stats;
 	UDWORD x,y;
@@ -2483,7 +2483,7 @@ BOOL DroidIsDemolishing(DROID *Droid)
 }
 
 // Returns true if the droid is currently repairing another droid.
-BOOL DroidIsRepairing(DROID *Droid)
+bool DroidIsRepairing(DROID *Droid)
 {
 	//if(droidType(Droid) != DROID_REPAIR)
 	if (!(droidType(Droid) == DROID_REPAIR
@@ -2502,7 +2502,7 @@ BOOL DroidIsRepairing(DROID *Droid)
 
 // Returns true if the droid is currently building something.
 //
-BOOL DroidIsBuilding(DROID *Droid)
+bool DroidIsBuilding(DROID *Droid)
 {
 	BASE_STATS	*Stats;
 	UDWORD x,y;
@@ -2531,7 +2531,7 @@ BOOL DroidIsBuilding(DROID *Droid)
 
 // Returns true if the droid has been ordered build something ( but has'nt started yet )
 //
-BOOL DroidGoingToBuild(DROID *Droid)
+bool DroidGoingToBuild(DROID *Droid)
 {
 	BASE_STATS	*Stats;
 	UDWORD x,y;
@@ -2716,13 +2716,13 @@ DROID_TEMPLATE *FactoryGetTemplate(FACTORY *Factory)
 	return (DROID_TEMPLATE *)Factory->psSubject;
 }
 
-BOOL StatIsStructure(BASE_STATS *Stat)
+bool StatIsStructure(BASE_STATS *Stat)
 {
 	return (Stat->ref >= REF_STRUCTURE_START && Stat->ref <
 				REF_STRUCTURE_START + REF_RANGE);
 }
 
-BOOL StatIsFeature(BASE_STATS *Stat)
+bool StatIsFeature(BASE_STATS *Stat)
 {
 	return (Stat->ref >= REF_FEATURE_START && Stat->ref <
 				REF_FEATURE_START + REF_RANGE);
@@ -2735,7 +2735,7 @@ iIMDShape *StatGetStructureIMD(BASE_STATS *Stat,UDWORD Player)
 	return ((STRUCTURE_STATS*)Stat)->pIMD;
 }
 
-BOOL StatIsTemplate(BASE_STATS *Stat)
+bool StatIsTemplate(BASE_STATS *Stat)
 {
 	return (Stat->ref >= REF_TEMPLATE_START &&
 				 Stat->ref < REF_TEMPLATE_START + REF_RANGE);
@@ -2795,7 +2795,7 @@ SDWORD StatIsComponent(BASE_STATS *Stat)
 	return COMP_UNKNOWN;
 }
 
-BOOL StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID,iIMDShape **CompIMD,iIMDShape **MountIMD)
+bool StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID,iIMDShape **CompIMD,iIMDShape **MountIMD)
 {
 	WEAPON_STATS		*psWStat;
 
@@ -2858,15 +2858,15 @@ BOOL StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID,iIMDShape **CompIMD,iIM
 }
 
 
-BOOL StatIsResearch(BASE_STATS *Stat)
+bool StatIsResearch(BASE_STATS *Stat)
 {
 	return (Stat->ref >= REF_RESEARCH_START && Stat->ref <
 				REF_RESEARCH_START + REF_RANGE);
 }
 
-//void StatGetResearchImage(BASE_STATS *psStat, SDWORD *Image,iIMDShape **Shape, BOOL drawTechIcon)
+//void StatGetResearchImage(BASE_STATS *psStat, SDWORD *Image,iIMDShape **Shape, bool drawTechIcon)
 void StatGetResearchImage(BASE_STATS *psStat, SDWORD *Image, iIMDShape **Shape,
-                          BASE_STATS **ppGraphicData, BOOL drawTechIcon)
+                          BASE_STATS **ppGraphicData, bool drawTechIcon)
 {
 	*Image = -1;
 	if (drawTechIcon)
@@ -2988,8 +2988,8 @@ void intDisplayTransportButton(WIDGET *psWidget, UDWORD xOffset,
 						  UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	W_CLICKFORM		*Form = (W_CLICKFORM*)psWidget;
-	BOOL			Down;
-	BOOL			Hilight = false;
+	bool			Down;
+	bool			Hilight = false;
 	RENDERED_BUTTON		*Buffer = (RENDERED_BUTTON*)Form->pUserData;
 	DROID			*psDroid = NULL;
 	UDWORD			gfxId;
@@ -3144,9 +3144,10 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV)
 			// Draw animated
 			if (realTime - psProxDisp->timeLastDrawn > delay)
 			{
-				psProxDisp->strobe = (psProxDisp->strobe + 1) % animationLength;
+				++psProxDisp->strobe;
 				psProxDisp->timeLastDrawn = realTime;
 			}
+			psProxDisp->strobe %= animationLength;
 			imageID = images[1 + psProxDisp->strobe];
 		}
 
@@ -3320,5 +3321,35 @@ void intDisplayAllyIcon(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 	UDWORD		x = Label->x + xOffset;
 	UDWORD		y = Label->y + yOffset;
 
-	iV_DrawImage(IntImages, IMAGE_DES_BODYPOINTS, x, y);
+	iV_DrawImageTc(IntImages, IMAGE_ALLY_RESEARCH, IMAGE_ALLY_RESEARCH_TC, x, y, pal_GetTeamColour(getPlayerColour(psWidget->UserData)));
+}
+
+void intDisplayAllyBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+{
+	W_BARGRAPH *psBar = (W_BARGRAPH *)psWidget;
+	unsigned bestCompletion = 0;
+	for (int player = 0; player < MAX_PLAYERS; ++player)
+	{
+		if (player != selectedPlayer && aiCheckAlliances(selectedPlayer, player))
+		{
+			// Check each research facility to see if they are doing this topic. (As opposed to having started the topic, but stopped researching it.)
+			for (STRUCTURE *psOtherStruct = apsStructLists[player]; psOtherStruct; psOtherStruct = psOtherStruct->psNext)
+			{
+				if (psOtherStruct->pStructureType->type == REF_RESEARCH && psOtherStruct->status == SS_BUILT &&
+				    ((RESEARCH_FACILITY *)psOtherStruct->pFunctionality)->psSubject && ((RESEARCH_FACILITY *)psOtherStruct->pFunctionality)->psSubject->ref == asResearch[psWidget->UserData].ref)
+				{
+					unsigned completion = asPlayerResList[player][psWidget->UserData].currentPoints;
+					if (bestCompletion < completion)
+					{
+						bestCompletion = completion;
+						psBar->majorCol = pal_GetTeamColour(getPlayerColour(player));
+					}
+					break;
+				}
+			}
+		}
+	}
+
+	((W_BARGRAPH *)psWidget)->majorSize = PERCENT(bestCompletion, asResearch[psWidget->UserData].researchPoints);
+	barGraphDisplayTrough(psWidget, xOffset, yOffset, pColours);
 }

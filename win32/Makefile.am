@@ -6,6 +6,7 @@ dist_noinst_DATA = warzone2100.rc
 EXTRA_DIST = __BUILD_SCRIPT \
 	     download.pl \
 	     rules.mk \
+	     Toolchain-mingw32.cmake \
 	     libs/Makefile \
 	     libs/dejavu/Makefile \
 	     libs/devpkg/Makefile \
@@ -16,6 +17,7 @@ EXTRA_DIST = __BUILD_SCRIPT \
 	     libs/iconv/Makefile \
 	     libs/ogg/Makefile \
 	     libs/png/Makefile \
+	     libs/physfs/Makefile \
 	     libs/quesoglc/Makefile \
 	     libs/quesoglc/patches \
 	     libs/sdl/Makefile \

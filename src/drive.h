@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -23,10 +23,10 @@
 
 #include "droid.h"
 
-extern BOOL DirectControl;
+extern bool DirectControl;
 extern DROID *psDrivenDroid;
 
-static inline BOOL driveHasDriven(void)
+static inline bool driveHasDriven(void)
 {
 	return (DirectControl) && (psDrivenDroid != NULL) ? true : false;
 }
@@ -34,7 +34,7 @@ static inline BOOL driveHasDriven(void)
 
 // Returns true if drive mode is active.
 //
-static inline BOOL driveModeActive(void)
+static inline bool driveModeActive(void)
 {
 	return DirectControl;
 }
@@ -42,13 +42,13 @@ static inline BOOL driveModeActive(void)
 
 // Return true if the specified droid is the driven droid.
 //
-static inline BOOL driveIsDriven(DROID *psDroid)
+static inline bool driveIsDriven(DROID *psDroid)
 {
 	return (DirectControl) && (psDrivenDroid != NULL) && (psDroid == psDrivenDroid) ? true : false;
 }
 
 
-static inline BOOL driveIsFollower(DROID *psDroid)
+static inline bool driveIsFollower(DROID *psDroid)
 {
 	return (DirectControl) && (psDrivenDroid != NULL) && (psDroid != psDrivenDroid) && psDroid->selected ? true : false;
 }
@@ -60,38 +60,38 @@ static inline DROID *driveGetDriven(void)
 }
 
 
-void driveInitVars(BOOL Restart);
-BOOL StartDriverMode(DROID *psOldDroid);
+void driveInitVars(bool Restart);
+bool StartDriverMode(DROID *psOldDroid);
 void StopDriverMode(void);
-BOOL driveDroidKilled(DROID *psDroid);
+bool driveDroidKilled(DROID *psDroid);
 void driveSelectionChanged(void);
 void driveUpdate(void);
 void driveSetDroidMove(DROID *psDroid);
-void setDrivingStatus( BOOL val );
-BOOL getDrivingStatus( void );
+void setDrivingStatus( bool val );
+bool getDrivingStatus( void );
 void driveDisableControl(void);
 void driveEnableControl(void);
-void driveEnableInterface(BOOL AddReticule);
+void driveEnableInterface(bool AddReticule);
 void driveDisableInterface(void);
-BOOL driveInterfaceEnabled(void);
-BOOL driveControlEnabled(void);
+bool driveInterfaceEnabled(void);
+bool driveControlEnabled(void);
 void driveProcessInterfaceButtons(void);
 void driveAutoToggle(void);
 void driveProcessAquireButton(void);
 void driveProcessAquireTarget(void);
 void driveMarkTarget(void);
 void driveStartBuild(void);
-BOOL driveAllowControl(void);
+bool driveAllowControl(void);
 void driveDisableTactical(void);
-BOOL driveTacticalActive(void);
+bool driveTacticalActive(void);
 void driveTacticalSelectionChanged(void);
 void driveProcessRadarInput(int x,int y);
-BOOL driveWasDriving(void);
+bool driveWasDriving(void);
 void driveDisableDriving(void);
 void driveRestoreDriving(void);
 SDWORD driveGetMoveSpeed(void);
 SDWORD driveGetMoveDir(void);
-BOOL driveSetDirectControl(BOOL Control);
-BOOL driveSetWasDriving(BOOL Driving);
+bool driveSetDirectControl(bool Control);
+bool driveSetWasDriving(bool Driving);
 
 #endif // __INCLUDED_SRC_DRIVE_H__

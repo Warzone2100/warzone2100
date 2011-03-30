@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -24,9 +24,9 @@
 #ifndef __INCLUDED_SRC_CONFIGURATION_H__
 #define __INCLUDED_SRC_CONFIGURATION_H__
 
-BOOL loadConfig(void);
-BOOL saveConfig(void);
-BOOL reloadMPConfig(void);
+bool loadConfig(void);
+bool saveConfig(void);
+bool reloadMPConfig(void);
 void closeConfig( void );
 
 /// Default map for Skirmish

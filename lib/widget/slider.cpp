@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -27,9 +27,9 @@
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/pieblitfunc.h"
 
-static BOOL DragEnabled = true;
+static bool DragEnabled = true;
 
-void sliderEnableDrag(BOOL Enable)
+void sliderEnableDrag(bool Enable)
 {
 	DragEnabled = Enable;
 }

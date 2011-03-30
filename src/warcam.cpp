@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -73,7 +73,7 @@ static	SDWORD	warCamLogoRotation;
 static BASE_OBJECT radarTarget(OBJ_TARGET, 0, 0);
 
 /* Do we trun to face when doing a radar jump? */
-static	BOOL	bRadarAllign;
+static	bool	bRadarAllign;
 
 static SDWORD	presAvAngle = 0;;
 
@@ -88,10 +88,10 @@ static SDWORD	presAvAngle = 0;;
 
 
 /* How much info do you want when tracking a droid - this toggles full stat info */
-static	BOOL bFullInfo = false;
+static	bool bFullInfo = false;
 
 /* Are we requesting a new track to start that is a radar (location) track? */
-static	BOOL bRadarTrackingRequested = false;
+static	bool bRadarTrackingRequested = false;
 
 /* World coordinates for a radar track/jump */
 static  float	 radarX,radarY;
@@ -99,7 +99,7 @@ static  float	 radarX,radarY;
 /*	Where we were up to (pos and rot) last update - allows us to see whether
 	we are sufficently near our target to disable further tracking */
 static	Vector3i	oldPosition, oldRotation;
-static BOOL OldViewValid;
+static bool OldViewValid;
 
 //-----------------------------------------------------------------------------------
 /* Sets the camera to inactive to begin with */
@@ -143,7 +143,7 @@ static void processLeaderSelection( void )
 	DROID *psPresent;
 	DROID *psNew = NULL;
 	UDWORD leaderClass;
-	BOOL bSuccess;
+	bool bSuccess;
 	UDWORD dif;
 	UDWORD bestSoFar;
 
@@ -327,13 +327,13 @@ static BASE_OBJECT *camFindTarget(void)
 }
 
 
-BOOL camTrackCamera(void);
+bool camTrackCamera(void);
 
 /* Updates the camera position/angle along with the object movement */
-BOOL	processWarCam( void )
+bool	processWarCam( void )
 {
 BASE_OBJECT	*foundTarget;
-BOOL Status = true;
+bool Status = true;
 
 	/* Get out if the camera isn't active */
 	if(trackingCamera.status == CAM_INACTIVE)
@@ -422,7 +422,7 @@ BOOL Status = true;
 //-----------------------------------------------------------------------------------
 
 /* Flips states for camera active */
-void	setWarCamActive(BOOL status)
+void	setWarCamActive(bool status)
 {
 	debug( LOG_NEVER, "setWarCamActive(%d)\n", status );
 
@@ -551,7 +551,7 @@ static uint16_t getAverageTrackAngle(unsigned groupNumber, bool bCheckOnScreen)
 
 
 //-----------------------------------------------------------------------------------
-static void getTrackingConcerns(SDWORD *x, SDWORD *y, SDWORD *z, UDWORD groupNumber, BOOL bOnScreen)
+static void getTrackingConcerns(SDWORD *x, SDWORD *y, SDWORD *z, UDWORD groupNumber, bool bOnScreen)
 {
 	SDWORD xTotals = 0, yTotals = 0, zTotals = 0;
 	DROID *psDroid;
@@ -624,7 +624,7 @@ static void updateCameraAcceleration(UBYTE update)
 {
 	Vector3i concern = swapYZ(trackingCamera.target->pos);
 	Vector2i behind(0, 0); /* Irrelevant for normal radar tracking */
-	BOOL bFlying = false;
+	bool bFlying = false;
 
 	/*
 		This is where we check what it is we're tracking.
@@ -749,9 +749,9 @@ static void updateCameraRotationAcceleration( UBYTE update )
 	SDWORD	worldAngle;
 	float	separation;
 	SDWORD	xConcern, yConcern, zConcern;
-	BOOL	bTooLow;
+	bool	bTooLow;
 	PROPULSION_STATS *psPropStats;
-	BOOL	bGotFlying = false;
+	bool	bGotFlying = false;
 	SDWORD	xPos = 0, yPos = 0, zPos = 0;
 
 	bTooLow = false;
@@ -938,11 +938,11 @@ static UDWORD getRotationMagnitude( void )
 
 /* Returns how far away we are from our goal in rotation */
 /* Updates the viewpoint according to the object being tracked */
-BOOL	camTrackCamera( void )
+bool	camTrackCamera( void )
 {
 PROPULSION_STATS	*psPropStats;
 DROID	*psDroid;
-BOOL	bFlying;
+bool	bFlying;
 
 	bFlying = false;
 
@@ -1113,7 +1113,7 @@ UDWORD	getNumDroidsSelected( void )
 //-----------------------------------------------------------------------------------
 
 /* Returns whether or not the tracking camera is active */
-BOOL	getWarCamStatus( void )
+bool	getWarCamStatus( void )
 {
 	/* Is it switched off? */
 	if(trackingCamera.status == CAM_INACTIVE)
@@ -1169,9 +1169,9 @@ void	requestRadarTrack(SDWORD x, SDWORD y)
 }
 
 /* Returns whether we're presently tracking to a new _location_ */
-BOOL	getRadarTrackingStatus( void )
+bool	getRadarTrackingStatus( void )
 {
-BOOL	retVal;
+bool	retVal;
 
 	if(trackingCamera.status == CAM_INACTIVE)
 	{

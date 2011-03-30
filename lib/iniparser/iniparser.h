@@ -89,7 +89,7 @@ void inifile_set_current_section(inifile *inif, const char *sec);
  * @param key The key to check the existence of.
  * @return True if the key exists, false otherwise.
  */
-BOOL inifile_key_exists(inifile *inif, const char *key);
+bool inifile_key_exists(inifile *inif, const char *key);
 
 /**
  * Fetches the value of the key specified by key in the inifile inif. If the key

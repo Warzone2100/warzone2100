@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -36,6 +36,7 @@ enum FPATH_MOVETYPE
 {
 	FMT_MOVE,		///< Move around all obstacles
 	FMT_ATTACK,		///< Assume that we will destroy enemy obstacles
+	FMT_BLOCK,              ///< Don't go through obstacles, not even gates.
 };
 
 struct PathBlockingMap;
@@ -63,7 +64,7 @@ enum FPATH_RETVAL
 
 /** Initialise the path-finding module.
  */
-extern BOOL fpathInitialise(void);
+extern bool fpathInitialise(void);
 
 /** Shutdown the path-finding module.
  */
@@ -91,9 +92,9 @@ bool fpathIsEquivalentBlocking(PROPULSION_TYPE propulsion1, int player1, FPATH_M
  *
  *  @return true if the given tile is blocking for this droid
  */
-BOOL fpathBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion);
-BOOL fpathDroidBlockingTile(DROID *psDroid, int x, int y, FPATH_MOVETYPE moveType);
-BOOL fpathBaseBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion, int player, FPATH_MOVETYPE moveType);
+bool fpathBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion);
+bool fpathDroidBlockingTile(DROID *psDroid, int x, int y, FPATH_MOVETYPE moveType);
+bool fpathBaseBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion, int player, FPATH_MOVETYPE moveType);
 
 /** Set a direct path to position.
  *
@@ -109,7 +110,7 @@ extern void fpathRemoveDroidData(int id);
 
 /** Check LOS (Line Of Sight) between two world positions.
  */
-extern BOOL fpathTileLOS(DROID *psDroid, Vector3i dest);
+extern bool fpathTileLOS(DROID *psDroid, Vector3i dest);
 
 /** Quick O(1) test of whether it is theoretically possible to go from origin to destination
  *  using the given propulsion type. orig and dest are in world coordinates. */

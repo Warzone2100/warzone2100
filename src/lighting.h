@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -31,22 +31,22 @@
 
 extern UDWORD fogStatus;
 
-typedef enum _lightcols
+enum LIGHT_COLOUR
 {
 LIGHT_RED,
 LIGHT_GREEN,
 LIGHT_BLUE,
 LIGHT_YELLOW,
 LIGHT_WHITE
-}LIGHT_COLOUR;
+};
 
-typedef struct _light
+struct LIGHT
 {
 Vector3i	position;
 UBYTE	type;
 UDWORD	range;
 LIGHT_COLOUR	colour;
-} LIGHT;
+};
 
 extern void setTheSun(Vector3f newSun);
 extern Vector3f getTheSun(void);

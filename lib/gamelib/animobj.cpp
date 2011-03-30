@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -70,7 +70,7 @@ static void		animObj_HashFreeElementFunc( void * psElement );
  */
 /***************************************************************************/
 
-BOOL
+bool
 animObj_Init( ANIMOBJDIEDTESTFUNC pDiedFunc )
 {
 	SDWORD	iSize = sizeof(ANIM_OBJECT);
@@ -91,7 +91,7 @@ animObj_Init( ANIMOBJDIEDTESTFUNC pDiedFunc )
 
 /***************************************************************************/
 
-BOOL
+bool
 animObj_Shutdown( void )
 {
 	/* destroy hash table */
@@ -144,7 +144,7 @@ animObj_Update( void )
 {
 	ANIM_OBJECT	*psObj;
 	SDWORD		dwTime;
-	BOOL		bRemove;
+	bool		bRemove;
 
 	psObj = (ANIM_OBJECT*)hashTable_GetFirst( g_pAnimObjTable );
 

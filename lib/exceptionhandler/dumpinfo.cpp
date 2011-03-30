@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 2008  Giel van Schijndel
-	Copyright (C) 2008-2010  Warzone 2100 Project
+	Copyright (C) 2008-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -277,7 +277,7 @@ std::basic_ostream<CharT, Traits>& operator<<(std::basic_ostream<CharT, Traits>&
 	   << "." << static_cast<unsigned int>(ver.patch);
 }
 
-static void createHeader(int const argc, char* argv[])
+static void createHeader(int const argc, const char** argv)
 {
 	std::ostringstream os;
 
@@ -353,7 +353,7 @@ void addDumpInfo(const char *inbuffer)
 	miscData.insert(miscData.end(), msg.begin(), msg.end());
 }
 
-void dbgDumpInit(int argc, char* argv[])
+void dbgDumpInit(int argc, const char** argv)
 {
 	debug_register_callback(&debug_exceptionhandler_data, NULL, NULL, NULL );
 	createHeader(argc, argv);

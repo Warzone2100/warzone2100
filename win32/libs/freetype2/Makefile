@@ -5,7 +5,7 @@ PKG_SOURCEBASE:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_SOURCEBASE).tar.bz2
 PKG_SOURCE_URL:= \
 	@SF/freetype \
-	http://www.il.fontys.nl/~giel/warzone/devpkg/
+	http://wzhost.wz2100.net/~buildbot/dev/
 PKG_MD5SUM:=b3e2b6e2f1c3e0dffa1fd2a0f848b671
 
 TARGET:=$(TOPDIR)/build/libs/lib/libfreetype.la

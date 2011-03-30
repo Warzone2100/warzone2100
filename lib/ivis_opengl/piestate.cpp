@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -20,14 +20,16 @@
 /** \file
  *  Renderer setup and state control routines for 3D rendering.
  */
+#include "lib/framework/frame.h"
 
 #include <GLee.h>
+// NOTE: Header order is very important, don't change the above!
 #if defined(__MACOSX__)
 #include <OpenGL/glu.h>
 #else
 #include <GL/glu.h>
 #endif
-#include "lib/framework/frame.h"
+
 
 #include <physfs.h>
 #include "lib/framework/opengl.h"
@@ -94,12 +96,12 @@ void pie_SetDefaultStates(void)//Sets all states
 
 //***************************************************************************
 //
-// pie_EnableFog(BOOL val)
+// pie_EnableFog(bool val)
 //
 // Global enable/disable fog to allow fog to be turned of ingame
 //
 //***************************************************************************
-void pie_EnableFog(BOOL val)
+void pie_EnableFog(bool val)
 {
 	if (rendStates.fogEnabled != val)
 	{
@@ -120,19 +122,19 @@ void pie_EnableFog(BOOL val)
 	}
 }
 
-BOOL pie_GetFogEnabled(void)
+bool pie_GetFogEnabled(void)
 {
 	return rendStates.fogEnabled;
 }
 
 //***************************************************************************
 //
-// pie_SetFogStatus(BOOL val)
+// pie_SetFogStatus(bool val)
 //
 // Toggle fog on and off for rendering objects inside or outside the 3D world
 //
 //***************************************************************************
-BOOL pie_GetFogStatus(void)
+bool pie_GetFogStatus(void)
 {
 	return rendStates.fog;
 }
@@ -425,11 +427,11 @@ void pie_UpdateFogDistance(float begin, float end)
 }
 
 //
-// pie_SetFogStatus(BOOL val)
+// pie_SetFogStatus(bool val)
 //
 // Toggle fog on and off for rendering objects inside or outside the 3D world
 //
-void pie_SetFogStatus(BOOL val)
+void pie_SetFogStatus(bool val)
 {
 	float fog_colour[4];
 
@@ -499,7 +501,7 @@ void pie_SetTexturePage(SDWORD num)
 	}
 }
 
-void pie_SetAlphaTest(BOOL keyingOn)
+void pie_SetAlphaTest(bool keyingOn)
 {
 	if (keyingOn != rendStates.keyingOn)
 	{

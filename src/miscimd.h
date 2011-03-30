@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@
 #include "structuredef.h"
 #include "messagedef.h"
 
-extern BOOL initMiscImds( void );
+extern bool initMiscImds( void );
 extern iIMDShape	*getImdFromIndex(UDWORD	index);
 extern iIMDShape	*getRandomWreckageImd( void );
 extern iIMDShape	*getRandomDebrisImd( void );
@@ -71,11 +71,11 @@ extern iIMDShape	*landingImd;
 extern iIMDShape	*shockImd;
 
 /* An imd entry */
-typedef struct	_misc_imd
+struct MISC_IMD
 {
 iIMDShape	*pImd;
 const char	*pName;
-} MISC_IMD;
+};
 
 
 enum {

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -45,13 +45,13 @@
 
 // ---------------------------------------------------------------------
 // STATIC SUPPORT FUNCTIONS
-UDWORD	selSelectAllUnits		( UDWORD player, BOOL bOnScreen );
+UDWORD	selSelectAllUnits		( UDWORD player, bool bOnScreen );
 UDWORD	selSelectAllSameProp	( UDWORD player, PROPULSION_TYPE propType,
-									BOOL bOnScreen );
-UDWORD	selSelectAllCombat		( UDWORD player, BOOL bOnScreen);
-UDWORD	selSelectAllDamaged		( UDWORD player, BOOL bOnScreen);
-UDWORD	selSelectAllSame		( UDWORD player, BOOL bOnScreen);
-UDWORD	selNameSelect			( char *droidName, UDWORD player, BOOL bOnScreen );
+									bool bOnScreen );
+UDWORD	selSelectAllCombat		( UDWORD player, bool bOnScreen);
+UDWORD	selSelectAllDamaged		( UDWORD player, bool bOnScreen);
+UDWORD	selSelectAllSame		( UDWORD player, bool bOnScreen);
+UDWORD	selNameSelect			( char *droidName, UDWORD player, bool bOnScreen );
 // ---------------------------------------------------------------------
 /*
 	Selects the units of a given player according to given criteria.
@@ -62,7 +62,7 @@ static DROID	*psOldRD = NULL;	// pointer to last selected repair unit
 static DROID	*psOldNS = NULL;
 
 UDWORD	selDroidSelection( UDWORD	player, SELECTION_CLASS droidClass,
-						  SELECTIONTYPE droidType, BOOL bOnScreen )
+						  SELECTIONTYPE droidType, bool bOnScreen )
 {
 UDWORD	retVal;
 char	selInfo[255];
@@ -120,7 +120,7 @@ char	selInfo[255];
 
 // ---------------------------------------------------------------------
 // Selects all units owned by the player - onscreen toggle.
-UDWORD	selSelectAllUnits( UDWORD player, BOOL bOnScreen )
+UDWORD	selSelectAllUnits( UDWORD player, bool bOnScreen )
 {
 DROID	*psDroid;
 UDWORD	count;
@@ -149,7 +149,7 @@ UDWORD	count;
 // Selects all units owned by the player of a certain propulsion type.
 // On Screen toggle.
 UDWORD	selSelectAllSameProp( UDWORD player, PROPULSION_TYPE propType,
-						   BOOL bOnScreen )
+						   bool bOnScreen )
 {
 PROPULSION_STATS	*psPropStats;
 DROID	*psDroid;
@@ -181,7 +181,7 @@ UDWORD	count;
 // ---------------------------------------------------------------------
 // Selects all units owned by the player that have a weapon. On screen
 // toggle.
-UDWORD	selSelectAllCombat( UDWORD player, BOOL bOnScreen)
+UDWORD	selSelectAllCombat( UDWORD player, bool bOnScreen)
 {
 DROID	*psDroid;
 UDWORD	count;
@@ -210,7 +210,7 @@ UDWORD	count;
 }
 // ---------------------------------------------------------------------
 // Selects all damaged units - on screen toggle.
-UDWORD	selSelectAllDamaged( UDWORD player, BOOL bOnScreen)
+UDWORD	selSelectAllDamaged( UDWORD player, bool bOnScreen)
 {
 DROID	*psDroid;
 UDWORD	damage;
@@ -280,7 +280,7 @@ DROID	*psDroid;
 
 // ---------------------------------------------------------------------
 // Selects all units the same as the one(s) selected
-UDWORD	selSelectAllSame( UDWORD player, BOOL bOnScreen)
+UDWORD	selSelectAllSame( UDWORD player, bool bOnScreen)
 {
 
 
@@ -302,7 +302,7 @@ UDWORD	count;
 }
 // ---------------------------------------------------------------------
 // sub-function - selects all units with same name as one passed in
-UDWORD	selNameSelect( char *droidName, UDWORD player, BOOL bOnScreen )
+UDWORD	selNameSelect( char *droidName, UDWORD player, bool bOnScreen )
 {
 
 DROID	*psDroid;
@@ -338,7 +338,7 @@ void	selNextSpecifiedUnit(UDWORD unitType)
 DROID	*psCurr;
 DROID	*psResult;
 DROID	*psFirst;
-BOOL	bLaterInList, bMatch;
+bool	bLaterInList, bMatch;
 
 	for(psCurr = apsDroidLists[selectedPlayer],psFirst = NULL,psResult = NULL,bLaterInList = false;
 		psCurr && !psResult; psCurr = psCurr->psNext)
@@ -450,7 +450,7 @@ void	selNextUnassignedUnit( void )
 DROID	*psCurr;
 DROID	*psResult;
 DROID	*psFirst;
-BOOL	bLaterInList;
+bool	bLaterInList;
 
 	for(psCurr = apsDroidLists[selectedPlayer],psFirst = NULL,psResult = NULL,bLaterInList = false;
 		psCurr && !psResult; psCurr = psCurr->psNext)
@@ -527,7 +527,7 @@ STRUCTURE	*psCurr;
 STRUCTURE	*psResult;
 STRUCTURE	*psOldStruct;
 STRUCTURE	*psFirst;
-BOOL		bLaterInList;
+bool		bLaterInList;
 
 	/* Firstly, start coughing if the type is invalid */
 	ASSERT(structType <= NUM_DIFF_BUILDINGS, "Invalid structure type %u in selNextSpecifiedBuilding", structType);
@@ -587,7 +587,7 @@ BOOL		bLaterInList;
 // ---------------------------------------------------------------------
 
 // see if a commander is the n'th command droid
-static BOOL droidIsCommanderNum(DROID *psDroid, SDWORD n)
+static bool droidIsCommanderNum(DROID *psDroid, SDWORD n)
 {
 	DROID	*psCurr;
 	SDWORD	numLess;

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -47,9 +47,9 @@ extern	BASE_OBJECT	*g_pProjLastAttacker;	///< The last unit that did damage - us
 /** How long to display a single electronic warfare shimmmer. */
 #define ELEC_DAMAGE_DURATION    (GAME_TICKS_PER_SEC/5)
 
-BOOL	proj_InitSystem(void);	///< Initialize projectiles subsystem.
+bool	proj_InitSystem(void);	///< Initialize projectiles subsystem.
 void	proj_UpdateAll(void);	///< Frame update for projectiles.
-BOOL	proj_Shutdown(void);	///< Shut down projectile subsystem.
+bool	proj_Shutdown(void);	///< Shut down projectile subsystem.
 
 PROJECTILE *proj_GetFirst(void);	///< Get first projectile in the list.
 PROJECTILE *proj_GetNext(void);		///< Get next projectile in the list.
@@ -73,7 +73,7 @@ bool proj_Direct(const WEAPON_STATS* psStats);
 SDWORD	proj_GetLongRange(const WEAPON_STATS* psStats);
 
 extern UDWORD calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect, BASE_OBJECT *psTarget);
-extern BOOL gfxVisible(PROJECTILE *psObj);
+extern bool gfxVisible(PROJECTILE *psObj);
 
 /***************************************************************************/
 
@@ -111,6 +111,6 @@ void checkProjectile(const PROJECTILE* psProjectile, const char * const location
 #define CHECK_PROJECTILE(object) checkProjectile((object), AT_MACRO, __FUNCTION__, max_check_object_recursion)
 
 #define syncDebugProjectile(psProj, ch) _syncDebugProjectile(__FUNCTION__, psProj, ch)
-void _syncDebugProjectile(const char *function, PROJECTILE *psProj, char ch);
+void _syncDebugProjectile(const char *function, PROJECTILE const *psProj, char ch);
 
 #endif // __INCLUDED_SRC_PROJECTILE_H__

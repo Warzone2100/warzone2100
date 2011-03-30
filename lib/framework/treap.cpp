@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -34,13 +34,13 @@
 #include "debug.h"
 #include "treap.h"
 
-typedef struct TREAP_NODE
+struct TREAP_NODE
 {
 	const char*                     key;                    //< The key to sort the node on
 	unsigned int                    priority;               //< Treap priority
 	const char*                     string;                 //< The string stored in the treap
-	struct TREAP_NODE               *psLeft, *psRight;      //< The sub trees
-} TREAP_NODE;
+	TREAP_NODE                      *psLeft, *psRight;      //< The sub trees
+};
 
 /* A useful comparison function - keys are char pointers */
 static int treapStringCmp(const char *key1, const char *key2)

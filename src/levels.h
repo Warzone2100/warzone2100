@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@
 // types of level datasets
 
 
-typedef enum
+enum LEVEL_TYPE
 {
 	LDS_COMPLETE,		// all data required for a stand alone level
 	LDS_CAMPAIGN,		// the data set for a campaign (no map data)
@@ -50,12 +50,12 @@ typedef enum
 	LDS_NONE,			//flags when not got a mission to go back to or when
 						//already on one - ****LEAVE AS LAST ONE****
 	LDS_MULTI_TYPE_START,           ///< Start number for custom type numbers (as used by a `type` instruction)
-} LEVEL_TYPE;
+};
 
 // the WRF/WDG files needed for a particular level
 // the WRF/WDG files needed for a particular level
 
-typedef struct _level_dataset
+struct LEVEL_DATASET
 {
 	SWORD	type;					// type of map
 	SWORD	players;				// number of players for the map
@@ -64,35 +64,35 @@ typedef struct _level_dataset
 	searchPathMode	dataDir;					// title for the level
 	char	*apDataFiles[LEVEL_MAXFILES];		// the WRF/WDG files for the level
 							// in load order
-	struct _level_dataset *psBaseData;		// LEVEL_DATASET that must be loaded for this level to load
-	struct _level_dataset *psChange;		// LEVEL_DATASET used when changing to this level from another
+	LEVEL_DATASET *psBaseData;                      // LEVEL_DATASET that must be loaded for this level to load
+	LEVEL_DATASET *psChange;                        // LEVEL_DATASET used when changing to this level from another
 
-	struct _level_dataset *psNext;
-} LEVEL_DATASET;
+	LEVEL_DATASET *psNext;
+};
 
 
 // the current level descriptions
 extern LEVEL_DATASET	*psLevels;
 
 // parse a level description data file
-extern BOOL levParse(const char* buffer, size_t size, searchPathMode datadir, bool ignoreWrf);
+extern bool levParse(const char* buffer, size_t size, searchPathMode datadir, bool ignoreWrf);
 
 // shutdown the level system
 extern void levShutDown(void);
 
-extern BOOL levInitialise(void);
+extern bool levInitialise(void);
 
 // load up the data for a level
-extern BOOL levLoadData(const char* name, char *pSaveName, GAME_TYPE saveType);
+extern bool levLoadData(const char* name, char *pSaveName, GAME_TYPE saveType);
 
 // find the level dataset
 extern LEVEL_DATASET* levFindDataSet(const char* name);
 
 // free the currently loaded dataset
-extern BOOL levReleaseAll(void);
+extern bool levReleaseAll(void);
 
 // free the data for the current mission
-extern BOOL levReleaseMissionData(void);
+extern bool levReleaseMissionData(void);
 
 //get the type of level currently being loaded of GTYPE type
 extern SDWORD getLevelLoadType(void);

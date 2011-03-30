@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -70,7 +70,7 @@ static inline void PNGWriteCleanup(png_infop *info_ptr, png_structp *png_ptr, PH
 		PHYSFS_close(fileHandle);
 }
 
-BOOL iV_loadImage_PNG(const char *fileName, iV_Image *image)
+bool iV_loadImage_PNG(const char *fileName, iV_Image *image)
 {
 	unsigned char PNGheader[PNG_BYTES_TO_CHECK];
 	PHYSFS_sint64 readSize;
@@ -323,6 +323,7 @@ void iV_saveImage_JPEG(const char *fileName, const iV_Image *image)
 	if (jpeg == NULL)
 	{
 		debug(LOG_ERROR, "pie_JPEGSaveFile: Couldn't allocate memory\n");
+		free(buffer);
 		return;
 	}
 

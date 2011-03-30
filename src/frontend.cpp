@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -70,7 +70,7 @@ tMode lastTitleMode; // Since skirmish and multiplayer setup use the same functi
 
 char			aLevelName[MAX_LEVEL_NAME_SIZE+1];	//256];			// vital! the wrf file to use.
 
-BOOL			bLimiterLoaded = false;
+bool			bLimiterLoaded = false;
 
 #define DEFAULT_LEVEL "CAM_1A"
 #define TUTORIAL_LEVEL "TUTORIAL3"
@@ -78,7 +78,7 @@ BOOL			bLimiterLoaded = false;
 
 // Returns true if escape key pressed.
 //
-BOOL CancelPressed(void)
+bool CancelPressed(void)
 {
 	return keyPressed(KEY_ESC);
 }
@@ -86,7 +86,7 @@ BOOL CancelPressed(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Title Screen
-static BOOL startTitleMenu(void)
+static bool startTitleMenu(void)
 {
 	intRemoveReticule();
 
@@ -107,7 +107,7 @@ static BOOL startTitleMenu(void)
 	return true;
 }
 
-BOOL runTitleMenu(void)
+bool runTitleMenu(void)
 {
 	UDWORD id;
 
@@ -145,7 +145,7 @@ BOOL runTitleMenu(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Tutorial Menu
-static BOOL startTutorialMenu(void)
+static bool startTutorialMenu(void)
 {
 	addBackdrop();
 	addTopForm();
@@ -161,7 +161,7 @@ static BOOL startTutorialMenu(void)
 	return true;
 }
 
-BOOL runTutorialMenu(void)
+bool runTutorialMenu(void)
 {
 	UDWORD id;
 
@@ -259,7 +259,7 @@ static void SPinit(void)
 	setPlayerColour(0, playercolor);
 }
 
-BOOL runSinglePlayerMenu(void)
+bool runSinglePlayerMenu(void)
 {
 	UDWORD id;
 
@@ -348,7 +348,7 @@ BOOL runSinglePlayerMenu(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Multi Player Menu
-static BOOL startMultiPlayerMenu(void)
+static bool startMultiPlayerMenu(void)
 {
 	addBackdrop();
 	addTopForm();
@@ -364,7 +364,7 @@ static BOOL startMultiPlayerMenu(void)
 	return true;
 }
 
-BOOL runMultiPlayerMenu(void)
+bool runMultiPlayerMenu(void)
 {
 	UDWORD id;
 
@@ -411,7 +411,7 @@ BOOL runMultiPlayerMenu(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Options Menu
-static BOOL startOptionsMenu(void)
+static bool startOptionsMenu(void)
 {
 	sliderEnableDrag(true);
 
@@ -431,7 +431,7 @@ static BOOL startOptionsMenu(void)
 	return true;
 }
 
-BOOL runOptionsMenu(void)
+bool runOptionsMenu(void)
 {
 	UDWORD id;
 
@@ -478,7 +478,7 @@ BOOL runOptionsMenu(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Graphics Options
-static BOOL startGraphicsOptionsMenu(void)
+static bool startGraphicsOptionsMenu(void)
 {
 	addBackdrop();
 	addTopForm();
@@ -564,7 +564,7 @@ static BOOL startGraphicsOptionsMenu(void)
 	return true;
 }
 
-BOOL runGraphicsOptionsMenu(void)
+bool runGraphicsOptionsMenu(void)
 {
 	UDWORD id;
 	int mode = 0;
@@ -676,7 +676,7 @@ BOOL runGraphicsOptionsMenu(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Audio Options Menu
-static BOOL startAudioOptionsMenu(void)
+static bool startAudioOptionsMenu(void)
 {
 	addBackdrop();
 	addTopForm();
@@ -704,7 +704,7 @@ static BOOL startAudioOptionsMenu(void)
 	return true;
 }
 
-BOOL runAudioOptionsMenu(void)
+bool runAudioOptionsMenu(void)
 {
 	UDWORD id;
 
@@ -750,7 +750,7 @@ BOOL runAudioOptionsMenu(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Video Options
-static BOOL startVideoOptionsMenu(void)
+static bool startVideoOptionsMenu(void)
 {
 	// Generate the resolution string
 	snprintf(resolution, WIDG_MAXSTR, "%d x %d",
@@ -807,13 +807,12 @@ static BOOL startVideoOptionsMenu(void)
 	return true;
 }
 
-typedef struct { int w, h; } HACK;  // HACK Make it compile. Previous behaviour was to crash, anyway.
+struct HACK { int w, h; operator bool() { return w != 0; } HACK *operator ->() { return this; }};  // HACK Make it compile. Previous behaviour was to crash, anyway.
 
-BOOL runVideoOptionsMenu(void)
+bool runVideoOptionsMenu(void)
 {
 	//SDL_Rect **modes = SDL_ListModes(NULL, SDL_FULLSCREEN | SDL_HWSURFACE);
-	HACK fakeMode = {42, 42};
-	HACK *modes[2] = {&fakeMode, NULL};
+	HACK modes[] = {{1920, 1200}, {1920, 1080}, {1680, 1050}, {1600, 1200}, {1440, 900}, {1280, 1024}, {1280, 960}, {1280, 800}, {1280, 720}, {1024, 768}, {800, 600}, {720, 576}, {720, 480}, {640, 480}, {0, 0}};
 	UDWORD id = widgRunScreen(psWScreen);
 
 	switch (id)
@@ -953,7 +952,7 @@ BOOL runVideoOptionsMenu(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Mouse Options
-static BOOL startMouseOptionsMenu(void)
+static bool startMouseOptionsMenu(void)
 {
 	addBackdrop();
 	addTopForm();
@@ -1030,7 +1029,7 @@ static BOOL startMouseOptionsMenu(void)
 	return true;
 }
 
-BOOL runMouseOptionsMenu(void)
+bool runMouseOptionsMenu(void)
 {
 	UDWORD id = widgRunScreen(psWScreen);
 
@@ -1127,7 +1126,7 @@ BOOL runMouseOptionsMenu(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Game Options Menu
-static BOOL startGameOptionsMenu(void)
+static bool startGameOptionsMenu(void)
 {
 	UDWORD	w, h;
 	int playercolor;
@@ -1157,14 +1156,14 @@ static BOOL startGameOptionsMenu(void)
 	addFESlider(FRONTEND_SCROLLSPEED_SL, FRONTEND_BOTFORM, FRONTEND_POS3M, FRONTEND_POS3Y+5, 16, scroll_speed_accel / 100);
 
 	// Colour stuff
-	w = iV_GetImageWidth(FrontImages, IMAGE_PLAYER0);
-	h = iV_GetImageHeight(FrontImages, IMAGE_PLAYER0);
+	w = iV_GetImageWidth(FrontImages, IMAGE_PLAYERN);
+	h = iV_GetImageHeight(FrontImages, IMAGE_PLAYERN);
 
-	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P0, FRONTEND_POS4M+(0*(w+6)), FRONTEND_POS4Y, w, h, NULL, IMAGE_PLAYER0, IMAGE_PLAYERX, true);
-	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P4, FRONTEND_POS4M+(1*(w+6)), FRONTEND_POS4Y, w, h, NULL, IMAGE_PLAYER4, IMAGE_PLAYERX, true);
-	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P5, FRONTEND_POS4M+(2*(w+6)), FRONTEND_POS4Y, w, h, NULL, IMAGE_PLAYER5, IMAGE_PLAYERX, true);
-	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P6, FRONTEND_POS4M+(3*(w+6)), FRONTEND_POS4Y, w, h, NULL, IMAGE_PLAYER6, IMAGE_PLAYERX, true);
-	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P7, FRONTEND_POS4M+(4*(w+6)), FRONTEND_POS4Y, w, h, NULL, IMAGE_PLAYER7, IMAGE_PLAYERX, true);
+	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P0, FRONTEND_POS4M+(0*(w+6)), FRONTEND_POS4Y, w, h, NULL, IMAGE_PLAYERN, IMAGE_PLAYERX, true, 0);
+	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P4, FRONTEND_POS4M+(1*(w+6)), FRONTEND_POS4Y, w, h, NULL, IMAGE_PLAYERN, IMAGE_PLAYERX, true, 4);
+	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P5, FRONTEND_POS4M+(2*(w+6)), FRONTEND_POS4Y, w, h, NULL, IMAGE_PLAYERN, IMAGE_PLAYERX, true, 5);
+	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P6, FRONTEND_POS4M+(3*(w+6)), FRONTEND_POS4Y, w, h, NULL, IMAGE_PLAYERN, IMAGE_PLAYERX, true, 6);
+	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P7, FRONTEND_POS4M+(4*(w+6)), FRONTEND_POS4Y, w, h, NULL, IMAGE_PLAYERN, IMAGE_PLAYERX, true, 7);
 
 	// language
 	addTextButton(FRONTEND_LANGUAGE,  FRONTEND_POS2X - 25, FRONTEND_POS5Y, _("Language"), 0);
@@ -1194,7 +1193,7 @@ static BOOL startGameOptionsMenu(void)
 	return true;
 }
 
-BOOL runGameOptionsMenu(void)
+bool runGameOptionsMenu(void)
 {
 	UDWORD id;
 
@@ -1446,8 +1445,8 @@ void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL
 {
 	SDWORD			fx,fy, fw;
 	W_BUTTON		*psBut;
-	BOOL			hilight = false;
-	BOOL			greyOut = psWidget->UserData; // if option is unavailable.
+	bool			hilight = false;
+	bool			greyOut = psWidget->UserData; // if option is unavailable.
 
 	psBut = (W_BUTTON *)psWidget;
 	iV_SetFont(psBut->FontID);

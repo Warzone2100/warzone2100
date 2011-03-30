@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -76,9 +76,9 @@ static void findSomethingInteresting(void)
 UDWORD	player,otherPlayer;
 DROID	*psDroid;
 UDWORD	numWith;
-BOOL	bSeekOnlyLocations;
+bool	bSeekOnlyLocations;
 UDWORD	i;
-BOOL	bHaveHuman = false;
+bool	bHaveHuman = false;
 PROPULSION_STATS	*psPropStats;
 
 //---
@@ -209,7 +209,7 @@ void	processDemoCam( void )
 {
 UDWORD	firstPlayer,otherPlayer;
 DROID	*psDroid;
-BOOL	bSkipOrder = false;
+bool	bSkipOrder = false;
 UDWORD	i,numWith;
 
 	/* Is the demo camera actually active? */
@@ -312,7 +312,7 @@ void	toggleDemoStatus( void )
 
 // -------------------------------------------------------------------------
 /* Returns status */
-BOOL	demoGetStatus( void )
+bool	demoGetStatus( void )
 {
 	if(presentStatus == DC_ISACTIVE)
 	{

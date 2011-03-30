@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2007-2010  Warzone 2100 Project
+	Copyright (C) 2007-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -28,28 +28,28 @@
 #include "lib/framework/vector.h"
 #include "lib/netplay/netqueue.h"
 
-typedef enum packetDirectionEnum
+enum PACKETDIR
 {
 	PACKET_ENCODE,
 	PACKET_DECODE,
 	PACKET_INVALID
-} PACKETDIR;
+};
 
-typedef enum QueueType
+enum QueueType
 {
 	QUEUE_TMP,
 	QUEUE_NET,
 	QUEUE_GAME,
 	QUEUE_BROADCAST,
-} QUEUETYPE;
+};
 
-typedef struct _netqueue
+struct NETQUEUE
 {
 	void *queue;  ///< Is either a (NetQueuePair **) or a (NetQueue *). (Note different numbers of *.)
-	BOOL isPair;
+	bool isPair;
 	uint8_t index;
 	uint8_t queueType;
-} NETQUEUE;
+};
 
 NETQUEUE NETnetTmpQueue(unsigned tmpPlayer);  ///< One of the temp queues from before a client has joined the game. (See comments on tmpQueues in nettypes.cpp.)
 NETQUEUE NETnetQueue(unsigned player);        ///< The queue pair used for sending and receiving data directly from another client. (See comments on netQueues in nettypes.cpp.)
@@ -58,7 +58,7 @@ NETQUEUE NETbroadcastQueue(void);             ///< The queue for sending data di
 
 void NETinsertRawData(NETQUEUE queue, uint8_t *data, size_t dataLen);  ///< Dump raw data from sockets and raw data sent via host here.
 void NETinsertMessageFromNet(NETQUEUE queue, NetMessage const *message);     ///< Dump whole NetMessages into the queue.
-BOOL NETisMessageReady(NETQUEUE queue);       ///< Returns true if there is a complete message ready to deserialise in this queue.
+bool NETisMessageReady(NETQUEUE queue);       ///< Returns true if there is a complete message ready to deserialise in this queue.
 NetMessage const *NETgetMessage(NETQUEUE queue);///< Returns the current message in the queue which is ready to be deserialised. Do not delete the message.
 
 void NETinitQueue(NETQUEUE queue);             ///< Allocates the queue. Deletes the old queue, if there was one. Avoids a crash on NULL pointer deference when trying to use the queue.
@@ -67,7 +67,7 @@ void NETmoveQueue(NETQUEUE src, NETQUEUE dst); ///< Used for moving the tmpQueue
 
 void NETbeginEncode(NETQUEUE queue, uint8_t type);
 void NETbeginDecode(NETQUEUE queue, uint8_t type);
-BOOL NETend(void);
+bool NETend(void);
 void NETflushGameQueues(void);
 void NETpop(NETQUEUE queue);
 
@@ -80,7 +80,7 @@ void NETuint32_t(uint32_t *ip);       ///< Encodes small values (< 1 672 576) in
 void NETuint32_tLarge(uint32_t *ip);  ///< Encodes all values in exactly 4 bytes.
 void NETint64_t(int64_t *ip);
 void NETuint64_t(uint64_t *ip);
-void NETbool(BOOL *bp);
+void NETbool(bool *bp);
 void NETbool(bool *bp);
 void NETstring(char *str, uint16_t maxlen);
 void NETstring(char const *str, uint16_t maxlen);  ///< Encode-only version of NETstring.

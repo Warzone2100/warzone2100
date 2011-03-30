@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -43,15 +43,33 @@ typedef signed   long long int64_t;
 //END   Hope this is right.
 
 #ifndef WZ_CC_MINGW
+#ifndef INT8_MIN
 # define INT8_MIN               (-128)
+#endif
+#ifndef INT16_MIN
 # define INT16_MIN              (-32767-1)
+#endif
+#ifndef INT32_MIN
 # define INT32_MIN              (-2147483647-1)
+#endif
+#ifndef INT8_MAX
 # define INT8_MAX               (127)
+#endif
+#ifndef INT16_MAX
 # define INT16_MAX              (32767)
+#endif
+#ifndef INT32_MAX
 # define INT32_MAX              (2147483647)
+#endif
+#ifndef UINT8_MAX
 # define UINT8_MAX              (255)
+#endif
+#ifndef UINT16_MAX
 # define UINT16_MAX             (65535)
+#endif
+#ifndef UINT32_MAX
 # define UINT32_MAX             (4294967295U)
+#endif
 #endif
 #ifdef WZ_CC_MSVC
 # define PRIu32					"u"
@@ -86,9 +104,5 @@ typedef int32_t  SDWORD;
 #define UDWORD_MAX	UINT32_MAX
 #define SDWORD_MIN	INT32_MIN
 #define SDWORD_MAX	INT32_MAX
-
-#if !defined(WZ_OS_WIN)
-typedef int BOOL;
-#endif // WZ_OS_WIN
 
 #endif // __INCLUDED_LIB_FRAMEWORK_TYPES_H__

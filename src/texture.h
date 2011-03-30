@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -25,12 +25,12 @@
 
 bool texLoad(const char *fileName);
 
-typedef struct _tileTexInfo
+struct TILE_TEX_INFO
 {
 	float uOffset; // Offset into texture page to left hand edge
 	float vOffset; // Offset into texture page to top hand edge
 	unsigned int texPage; // Which textpage is the tile in? TileNumber/16 basically;
-} TILE_TEX_INFO;
+};
 
 // these constants are adapted for fitting 256 textures of size 128x128 into a 2048x2048
 // texture page; if such large texture pages are not available, just scaled everything down

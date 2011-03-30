@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@
 #include "vector.h"
 
 /** Defines for all the key codes used. */
-typedef enum _key_code
+enum KEY_CODE
 {
 	KEY_ESC         = 27,
 	KEY_1           = '1',
@@ -144,7 +144,7 @@ typedef enum _key_code
 	KEY_MAXSCAN     = 323,  ///< The largest possible scan code.
 
 	KEY_IGNORE      = 5190
-} KEY_CODE;
+};
 
 /** Tell the input system that we have lost the focus. */
 extern void inputLoseFocus(void);
@@ -165,7 +165,7 @@ extern bool keyPressed(KEY_CODE code);
 /** This returns true if the key went from being down to being up this frame. */
 extern bool keyReleased(KEY_CODE code);
 
-typedef enum _mouse_key_code
+enum MOUSE_KEY_CODE
 {
 	MOUSE_LMB = 1,
 	MOUSE_MMB,
@@ -173,7 +173,7 @@ typedef enum _mouse_key_code
 	MOUSE_WUP,
 	MOUSE_WDN,
 	MOUSE_BAD
-} MOUSE_KEY_CODE;
+};
 
 /** Return the current X position of the mouse. */
 extern uint16_t mouseX(void) WZ_DECL_PURE;
@@ -238,5 +238,10 @@ extern void inputClearBuffer(void);
  * whether a key was pressed this turn or held down from the last frame.
  */
 extern void inputNewFrame(void);
+
+static inline bool specialOrderKeyDown()
+{
+	return keyDown(KEY_LALT) || keyDown(KEY_RALT) || keyDown(KEY_LMETA) || keyDown(KEY_RMETA);
+}
 
 #endif

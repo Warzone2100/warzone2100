@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ FUNCTION **asFunctions;
 UDWORD numFunctions;
 
 
-typedef BOOL (*LoadFunction)(const char *pData);
+typedef bool (*LoadFunction)(const char *pData);
 
 
 /*Returns the Function type based on the string - used for reading in data */
@@ -134,7 +134,7 @@ static UDWORD functionType(const char* pType)
 }
 
 // Allocate storage for the name
-static BOOL storeName(FUNCTION* pFunction, const char* pNameToStore)
+static bool storeName(FUNCTION* pFunction, const char* pNameToStore)
 {
 	pFunction->pName = strdup(pNameToStore);
 	if (pFunction->pName == NULL)
@@ -148,7 +148,7 @@ static BOOL storeName(FUNCTION* pFunction, const char* pNameToStore)
 }
 
 
-static BOOL loadProduction(const char *pData)
+static bool loadProduction(const char *pData)
 {
 	PRODUCTION_FUNCTION*	psFunction;
 	char					functionName[MAX_STR_LENGTH], bodySize[MAX_STR_LENGTH];
@@ -204,7 +204,7 @@ static BOOL loadProduction(const char *pData)
 	return true;
 }
 
-static BOOL loadProductionUpgradeFunction(const char *pData)
+static bool loadProductionUpgradeFunction(const char *pData)
 {
 	PRODUCTION_UPGRADE_FUNCTION*	psFunction;
 	char							functionName[MAX_STR_LENGTH];
@@ -272,7 +272,7 @@ static BOOL loadProductionUpgradeFunction(const char *pData)
 	return true;
 }
 
-static BOOL loadResearchFunction(const char *pData)
+static bool loadResearchFunction(const char *pData)
 {
 	RESEARCH_FUNCTION*			psFunction;
 	char						functionName[MAX_STR_LENGTH];
@@ -306,7 +306,7 @@ static BOOL loadResearchFunction(const char *pData)
 	return true;
 }
 
-static BOOL loadReArmFunction(const char *pData)
+static bool loadReArmFunction(const char *pData)
 {
 	REARM_FUNCTION*				psFunction;
 	char						functionName[MAX_STR_LENGTH];
@@ -342,7 +342,7 @@ static BOOL loadReArmFunction(const char *pData)
 
 
 //generic load function for upgrade type
-static BOOL loadUpgradeFunction(const char *pData, UBYTE type)
+static bool loadUpgradeFunction(const char *pData, UBYTE type)
 {
 	char						functionName[MAX_STR_LENGTH];
 	UDWORD						modifier;
@@ -388,43 +388,43 @@ static BOOL loadUpgradeFunction(const char *pData, UBYTE type)
 
 
 
-static BOOL loadResearchUpgradeFunction(const char *pData)
+static bool loadResearchUpgradeFunction(const char *pData)
 {
 	return loadUpgradeFunction(pData, RESEARCH_UPGRADE_TYPE);
 }
 
-static BOOL loadPowerUpgradeFunction(const char *pData)
+static bool loadPowerUpgradeFunction(const char *pData)
 {
 	return loadUpgradeFunction(pData, POWER_UPGRADE_TYPE);
 }
 
-static BOOL loadRepairUpgradeFunction(const char *pData)
+static bool loadRepairUpgradeFunction(const char *pData)
 {
 	return loadUpgradeFunction(pData, REPAIR_UPGRADE_TYPE);
 }
 
-static BOOL loadDroidRepairUpgradeFunction(const char *pData)
+static bool loadDroidRepairUpgradeFunction(const char *pData)
 {
 	return loadUpgradeFunction(pData, DROIDREPAIR_UPGRADE_TYPE);
 }
 
-static BOOL loadDroidECMUpgradeFunction(const char *pData)
+static bool loadDroidECMUpgradeFunction(const char *pData)
 {
 	return loadUpgradeFunction(pData, DROIDECM_UPGRADE_TYPE);
 }
 
-static BOOL loadDroidConstUpgradeFunction(const char *pData)
+static bool loadDroidConstUpgradeFunction(const char *pData)
 {
 	return loadUpgradeFunction(pData, DROIDCONST_UPGRADE_TYPE);
 }
 
-static BOOL loadReArmUpgradeFunction(const char *pData)
+static bool loadReArmUpgradeFunction(const char *pData)
 {
 	return loadUpgradeFunction(pData, REARM_UPGRADE_TYPE);
 }
 
 
-static BOOL loadDroidBodyUpgradeFunction(const char *pData)
+static bool loadDroidBodyUpgradeFunction(const char *pData)
 {
 	DROIDBODY_UPGRADE_FUNCTION		*psFunction;
 	char							functionName[MAX_STR_LENGTH];
@@ -492,7 +492,7 @@ static BOOL loadDroidBodyUpgradeFunction(const char *pData)
 	return true;
 }
 
-static BOOL loadDroidSensorUpgradeFunction(const char *pData)
+static bool loadDroidSensorUpgradeFunction(const char *pData)
 {
 	DROIDSENSOR_UPGRADE_FUNCTION	*psFunction;
 	char							functionName[MAX_STR_LENGTH];
@@ -539,7 +539,7 @@ static BOOL loadDroidSensorUpgradeFunction(const char *pData)
     return true;
 }
 
-static BOOL loadWeaponUpgradeFunction(const char *pData)
+static bool loadWeaponUpgradeFunction(const char *pData)
 {
 	WEAPON_UPGRADE_FUNCTION*	psFunction;
 	char						functionName[MAX_STR_LENGTH],
@@ -611,7 +611,7 @@ static BOOL loadWeaponUpgradeFunction(const char *pData)
     return true;
 }
 
-static BOOL loadStructureUpgradeFunction(const char *pData)
+static bool loadStructureUpgradeFunction(const char *pData)
 {
 	STRUCTURE_UPGRADE_FUNCTION  *psFunction;
 	char						functionName[MAX_STR_LENGTH];
@@ -662,7 +662,7 @@ static BOOL loadStructureUpgradeFunction(const char *pData)
 	return true;
 }
 
-static BOOL loadWallDefenceUpgradeFunction(const char *pData)
+static bool loadWallDefenceUpgradeFunction(const char *pData)
 {
 	WALLDEFENCE_UPGRADE_FUNCTION  *psFunction;
 	char						functionName[MAX_STR_LENGTH];
@@ -712,7 +712,7 @@ static BOOL loadWallDefenceUpgradeFunction(const char *pData)
 }
 
 
-static BOOL loadPowerGenFunction(const char *pData)
+static bool loadPowerGenFunction(const char *pData)
 {
 	POWER_GEN_FUNCTION*			psFunction;
 	char						functionName[MAX_STR_LENGTH];
@@ -774,7 +774,7 @@ static BOOL loadPowerGenFunction(const char *pData)
 	return true;
 }
 
-static BOOL loadResourceFunction(const char *pData)
+static bool loadResourceFunction(const char *pData)
 {
 	RESOURCE_FUNCTION			*psFunction;
 	char						functionName[MAX_STR_LENGTH];
@@ -810,7 +810,7 @@ static BOOL loadResourceFunction(const char *pData)
 }
 
 
-static BOOL loadRepairDroidFunction(const char *pData)
+static bool loadRepairDroidFunction(const char *pData)
 {
 	REPAIR_DROID_FUNCTION*		psFunction;
 	char						functionName[MAX_STR_LENGTH];
@@ -848,7 +848,7 @@ static BOOL loadRepairDroidFunction(const char *pData)
 
 
 /*loads the corner stat to use for a particular wall stat */
-static BOOL loadWallFunction(const char *pData)
+static bool loadWallFunction(const char *pData)
 {
 	WALL_FUNCTION			*psFunction;
 //	UDWORD					i;
@@ -1472,7 +1472,7 @@ void upgradeTransporterDroids(DROID *psTransporter,
     }
 }
 
-BOOL FunctionShutDown(void)
+bool FunctionShutDown(void)
 {
 	UDWORD		inc;//, player;
 	FUNCTION	*pFunction, **pStartList = asFunctions;
@@ -1489,7 +1489,7 @@ BOOL FunctionShutDown(void)
 	return true;
 }
 
-BOOL loadFunctionStats(const char *pFunctionData, UDWORD bufferSize)
+bool loadFunctionStats(const char *pFunctionData, UDWORD bufferSize)
 {
 	//array of functions pointers for each load function
 	static const LoadFunction pLoadFunction[NUMFUNCTIONS] =

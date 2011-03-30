@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -27,39 +27,37 @@
 #ifndef __INCLUDED_SRC_MULTIRECV_H__
 #define __INCLUDED_SRC_MULTIRECV_H__
 
-extern BOOL recvDroid               (NETQUEUE queue);
-extern BOOL recvDroidInfo           (NETQUEUE queue);
-extern BOOL recvDestroyDroid        (NETQUEUE queue);
-extern BOOL recvDroidMove           (NETQUEUE queue);
-extern BOOL recvDestroyStructure    (NETQUEUE queue);
-extern BOOL recvBuildFinished       (NETQUEUE queue);
-extern BOOL recvTemplate            (NETQUEUE queue);
-extern BOOL recvDestroyFeature      (NETQUEUE queue);
-extern BOOL recvDemolishFinished    (NETQUEUE queue);
-extern BOOL recvPing                (NETQUEUE queue);
-extern BOOL recvRequestDroid        (NETQUEUE queue);
-extern BOOL recvTextMessage         (NETQUEUE queue);
-extern BOOL recvDroidSecondary      (NETQUEUE queue);
-extern BOOL recvDroidEmbark         (NETQUEUE queue);
-extern BOOL recvDroidDisEmbark      (NETQUEUE queue);
-extern BOOL recvDroidCheck          (NETQUEUE queue);
-extern BOOL recvStructureCheck      (NETQUEUE queue);
-extern BOOL recvPowerCheck          (NETQUEUE queue);
-//extern BOOL recvAlliance            (NETQUEUE queue, BOOL allowAudio);  // Was declared in multigifts.h, too.
-extern BOOL recvColourRequest       (NETQUEUE queue);
-extern BOOL recvPositionRequest     (NETQUEUE queue);
+extern bool recvDroid               (NETQUEUE queue);
+extern bool recvDroidInfo           (NETQUEUE queue);
+extern bool recvDestroyDroid        (NETQUEUE queue);
+extern bool recvDroidMove           (NETQUEUE queue);
+extern bool recvDestroyStructure    (NETQUEUE queue);
+extern bool recvBuildFinished       (NETQUEUE queue);
+extern bool recvTemplate            (NETQUEUE queue);
+extern bool recvDestroyFeature      (NETQUEUE queue);
+extern bool recvDemolishFinished    (NETQUEUE queue);
+extern bool recvPing                (NETQUEUE queue);
+extern bool recvRequestDroid        (NETQUEUE queue);
+extern bool recvTextMessage         (NETQUEUE queue);
+extern bool recvDroidEmbark         (NETQUEUE queue);
+extern bool recvDroidDisEmbark      (NETQUEUE queue);
+extern bool recvDroidCheck          (NETQUEUE queue);
+extern bool recvStructureCheck      (NETQUEUE queue);
+extern bool recvPowerCheck          (NETQUEUE queue);
+extern bool recvColourRequest       (NETQUEUE queue);
+extern bool recvPositionRequest     (NETQUEUE queue);
 extern void recvOptions             (NETQUEUE queue);
 extern void sendOptions             (void);
 
-extern BOOL recvResearchStatus      (NETQUEUE queue);
-extern BOOL recvLasSat              (NETQUEUE queue);
+extern bool recvResearchStatus      (NETQUEUE queue);
+extern bool recvLasSat              (NETQUEUE queue);
 extern void recvStructureInfo       (NETQUEUE queue);
-extern BOOL recvMapFileData         (NETQUEUE queue);
-extern BOOL recvMapFileRequested    (NETQUEUE queue);
+extern bool recvMapFileData         (NETQUEUE queue);
+extern bool recvMapFileRequested    (NETQUEUE queue);
 
 
-extern BOOL recvTextMessageAI       (NETQUEUE queue);  //AI multiplayer message
-extern BOOL recvTeamRequest         (NETQUEUE queue);
-extern BOOL recvReadyRequest        (NETQUEUE queue);
+extern bool recvTextMessageAI       (NETQUEUE queue);  //AI multiplayer message
+extern bool recvTeamRequest         (NETQUEUE queue);
+extern bool recvReadyRequest        (NETQUEUE queue);
 
 #endif // __INCLUDED_SRC_MULTIRECV_H__

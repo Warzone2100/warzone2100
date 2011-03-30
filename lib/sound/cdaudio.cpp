@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@ static bool		stopping = true;
 static AUDIO_STREAM* cdStream = NULL;
 #endif
 
-BOOL cdAudio_Open(const char* user_musicdir)
+bool cdAudio_Open(const char* user_musicdir)
 {
 	PlayList_Init();
 
@@ -133,7 +133,7 @@ static void cdAudio_TrackFinished(void* user_data)
 }
 #endif
 
-BOOL cdAudio_PlayTrack(SONG_CONTEXT context)
+bool cdAudio_PlayTrack(SONG_CONTEXT context)
 {
 	debug(LOG_SOUND, "called(%d)", (int)context);
 

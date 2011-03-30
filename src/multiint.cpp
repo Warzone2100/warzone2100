@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -134,33 +134,33 @@ static const unsigned gnImage[] = {IMAGE_GN_0, IMAGE_GN_1, IMAGE_GN_2, IMAGE_GN_
 extern char	MultiCustomMapsPath[PATH_MAX];
 extern char	MultiPlayersPath[PATH_MAX];
 extern char VersionString[80];		// from netplay.c
-extern BOOL bSendingMap;			// used to indicate we are sending a map
+extern bool bSendingMap;			// used to indicate we are sending a map
 
-BOOL						bHosted			= false;				//we have set up a game
+bool						bHosted			= false;				//we have set up a game
 char						sPlayer[128];							// player name (to be used)
 static int					colourChooserUp = -1;
 static int					teamChooserUp = -1;
 static int					aiChooserUp = -1;
 static int					difficultyChooserUp = -1;
 static int					positionChooserUp = -1;
-static BOOL				SettingsUp		= false;
+static bool				SettingsUp		= false;
 static UBYTE				InitialProto	= 0;
 static W_SCREEN				*psConScreen;
 static SDWORD				dwSelectedGame	=0;						//player[] and games[] indexes
 static UDWORD				gameNumber;								// index to games icons
-static BOOL					safeSearch		= false;				// allow auto game finding.
+static bool					safeSearch		= false;				// allow auto game finding.
 static bool disableLobbyRefresh = false;	// if we allow lobby to be refreshed or not.
 static UDWORD hideTime=0;
 static bool EnablePasswordPrompt = false;	// if we need the password prompt
 LOBBY_ERROR_TYPES LobbyError = ERROR_NOERROR;
-static BOOL allowChangePosition = true;
+static bool allowChangePosition = true;
 static char tooltipbuffer[256] ={'\0'};
 /// end of globals.
 // ////////////////////////////////////////////////////////////////////////////
 // Function protos
 
 // widget functions
-static BOOL addMultiEditBox(UDWORD formid, UDWORD id, UDWORD x, UDWORD y, char const *tip, char const *tipres, UDWORD icon, UDWORD iconhi, UDWORD iconid);
+static bool addMultiEditBox(UDWORD formid, UDWORD id, UDWORD x, UDWORD y, char const *tip, char const *tipres, UDWORD icon, UDWORD iconhi, UDWORD iconid);
 static void addBlueForm					(UDWORD parent,UDWORD id, const char *txt,UDWORD x,UDWORD y,UDWORD w,UDWORD h);
 static void drawReadyButton(UDWORD player);
 static void displayPasswordEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours);
@@ -201,10 +201,10 @@ static void		closeTeamChooser	(void);
 static void		closePositionChooser	(void);
 static void		closeAiChooser		(void);
 static void		closeDifficultyChooser	(void);
-static BOOL		SendColourRequest	(UBYTE player, UBYTE col);
-static BOOL		SendPositionRequest	(UBYTE player, UBYTE chosenPlayer);
-static BOOL		safeToUseColour		(UDWORD player,UDWORD col);
-static BOOL		changeReadyStatus	(UBYTE player, BOOL bReady);
+static bool		SendColourRequest	(UBYTE player, UBYTE col);
+static bool		SendPositionRequest	(UBYTE player, UBYTE chosenPlayer);
+static bool		safeToUseColour		(UDWORD player,UDWORD col);
+static bool		changeReadyStatus	(UBYTE player, bool bReady);
 static	void stopJoining(void);
 static int difficultyIcon(int difficulty);
 // ////////////////////////////////////////////////////////////////////////////
@@ -286,9 +286,11 @@ void loadMultiScripts()
 		resLoadFile("SCRIPTVAL", "sk3tech.vlo");
 	}
 
-	// Load AI players
+	// Backup data hashes, since AI and scavenger scripts aren't run on all clients.
 	uint32_t oldHash1 = DataHash[DATA_SCRIPT];
 	uint32_t oldHash2 = DataHash[DATA_SCRIPTVAL];
+
+	// Load AI players
 	resForceBaseDir("multiplay/skirmish/");
 	for (int i = 0; i < game.maxPlayers; i++)
 	{
@@ -304,14 +306,16 @@ void loadMultiScripts()
 			}
 		}
 	}
-	DataHash[DATA_SCRIPT]    = oldHash1;  // Not all players load the same AI scripts.
-	DataHash[DATA_SCRIPTVAL] = oldHash2;
 
 	// Load scavengers
 	if (game.scavengers && myResponsibility(scavengerPlayer()))
 	{
 		loadPlayerScript("multiplay/script/scavfact.js", scavengerPlayer(), DIFFICULTY_EASY);
 	}
+
+	// Restore data hashes, since AI and scavenger scripts aren't run on all clients.
+	DataHash[DATA_SCRIPT]    = oldHash1;  // Not all players load the same AI scripts.
+	DataHash[DATA_SCRIPTVAL] = oldHash2;
 
 	// Reset resource path, otherwise things break down the line
 	resForceBaseDir("");
@@ -590,7 +594,7 @@ static void decideWRF(void)
 // ////////////////////////////////////////////////////////////////////////////
 // Connection Options Screen.
 
-static BOOL OptionsInet(void)			//internet options
+static bool OptionsInet(void)			//internet options
 {
 	psConScreen = widgCreateScreen();
 	widgSetTipFont(psConScreen,font_regular);
@@ -653,7 +657,7 @@ static BOOL OptionsInet(void)			//internet options
 
 // ////////////////////////////////////////////////////////////////////////////
 // Draw the connections screen.
-BOOL startConnectionScreen(void)
+bool startConnectionScreen(void)
 {
 	addBackdrop();										//background
 	addTopForm();										// logo
@@ -1051,7 +1055,7 @@ static void showPasswordLabel( WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 	fy = yOffset + psWidget->y;
 
 	iV_SetFont(font_large);
-	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+	iV_SetTextColour(WZCOL_FORM_TEXT);
 
 	iV_DrawText(psLab->aText, fx, fy);
 	iV_SetTextColour(WZCOL_TEXT_MEDIUM);
@@ -1231,12 +1235,12 @@ static void addBlueForm(UDWORD parent,UDWORD id, const char *txt,UDWORD x,UDWORD
 }
 
 
-typedef struct
+struct LimitIcon
 {
 	char const *stat;
 	char const *desc;
 	int         icon;
-} LimitIcon;
+};
 static const LimitIcon limitIcons[] =
 {
 	{"A0LightFactory",  N_("Tanks disabled!!"),  IMAGE_NO_TANK},
@@ -1532,7 +1536,7 @@ static void addGameOptions()
 // ////////////////////////////////////////////////////////////////////////////
 // Colour functions
 
-static BOOL safeToUseColour(UDWORD player,UDWORD col)
+static bool safeToUseColour(UDWORD player,UDWORD col)
 {
 	UDWORD i;
 
@@ -1656,7 +1660,7 @@ static void addAiChooser(int player)
 	{
 		sButInit.id = MULTIOP_AI_OPEN;
 		sButInit.pTip = _("Allow human players to join in this slot");
-		sButInit.UserData = AI_OPEN;
+		sButInit.UserData = (UDWORD)AI_OPEN;
 		sButInit.y = y;
 		y += step;
 		widgAddButton(psWScreen, &sButInit);
@@ -1665,7 +1669,7 @@ static void addAiChooser(int player)
 	// Closed button
 	sButInit.pTip = _("Leave this slot unused");
 	sButInit.id = MULTIOP_AI_CLOSED;
-	sButInit.UserData = AI_CLOSED;
+	sButInit.UserData = (UDWORD)AI_CLOSED;
 	sButInit.y = y;
 	y += step + 8;
 	widgAddButton(psWScreen, &sButInit);
@@ -1733,8 +1737,8 @@ static void addColourChooser(UDWORD player)
 				MULTIOP_ROW_WIDTH,MULTIOP_PLAYERHEIGHT);
 
 	// add the flags
-	int flagW = iV_GetImageWidth(FrontImages, IMAGE_PLAYER0);
-	int flagH = iV_GetImageHeight(FrontImages, IMAGE_PLAYER0);
+	int flagW = iV_GetImageWidth(FrontImages, IMAGE_PLAYERN);
+	int flagH = iV_GetImageHeight(FrontImages, IMAGE_PLAYERN);
 	int space = MULTIOP_ROW_WIDTH - 7 - flagW*MAX_PLAYERS_IN_GUI;
 	int spaceDiv = MAX_PLAYERS_IN_GUI;
 	space = std::min(space, 5*spaceDiv);
@@ -1743,7 +1747,7 @@ static void addColourChooser(UDWORD player)
 		addMultiBut(psWScreen,MULTIOP_COLCHOOSER_FORM, MULTIOP_COLCHOOSER+i,
 			i*(flagW*spaceDiv + space)/spaceDiv + 7,  4,  // x, y
 			flagW, flagH,  // w, h
-			_("Player colour"), IMAGE_PLAYER0 + i, IMAGE_PLAYER0_HI + i, IMAGE_PLAYER0_HI + i);
+			getPlayerColourName(i), IMAGE_PLAYERN, IMAGE_PLAYERN_HI, IMAGE_PLAYERN_HI, i);
 
 			if( !safeToUseColour(selectedPlayer,i))
 			{
@@ -1768,7 +1772,7 @@ static void changeTeam(UBYTE player, UBYTE team)
 	netPlayersUpdated = true;
 }
 
-static BOOL SendTeamRequest(UBYTE player, UBYTE chosenTeam)
+static bool SendTeamRequest(UBYTE player, UBYTE chosenTeam)
 {
 	if(NetPlay.isHost)			// do or request the change.
 	{
@@ -1787,7 +1791,7 @@ static BOOL SendTeamRequest(UBYTE player, UBYTE chosenTeam)
 	return true;
 }
 
-BOOL recvTeamRequest(NETQUEUE queue)
+bool recvTeamRequest(NETQUEUE queue)
 {
 	UBYTE	player, team;
 
@@ -1817,7 +1821,7 @@ BOOL recvTeamRequest(NETQUEUE queue)
 	return true;
 }
 
-static BOOL SendReadyRequest(UBYTE player, BOOL bReady)
+static bool SendReadyRequest(UBYTE player, bool bReady)
 {
 	if(NetPlay.isHost)			// do or request the change.
 	{
@@ -1833,10 +1837,10 @@ static BOOL SendReadyRequest(UBYTE player, BOOL bReady)
 	return true;
 }
 
-BOOL recvReadyRequest(NETQUEUE queue)
+bool recvReadyRequest(NETQUEUE queue)
 {
 	UBYTE	player;
-	BOOL	bReady;
+	bool	bReady;
 
 	if (!NetPlay.isHost || !bHosted)  // Only host should act, and only if the game hasn't started yet.
 	{
@@ -1865,7 +1869,7 @@ BOOL recvReadyRequest(NETQUEUE queue)
 	return changeReadyStatus((UBYTE)player, bReady);
 }
 
-static BOOL changeReadyStatus(UBYTE player, BOOL bReady)
+static bool changeReadyStatus(UBYTE player, bool bReady)
 {
 	drawReadyButton(player);
 	NetPlay.players[player].ready = bReady;
@@ -1875,7 +1879,7 @@ static BOOL changeReadyStatus(UBYTE player, BOOL bReady)
 	return true;
 }
 
-static BOOL changePosition(UBYTE player, UBYTE position)
+static bool changePosition(UBYTE player, UBYTE position)
 {
 	int i;
 
@@ -1904,7 +1908,7 @@ static BOOL changePosition(UBYTE player, UBYTE position)
 	return false;
 }
 
-BOOL changeColour(UBYTE player, UBYTE col)
+bool changeColour(UBYTE player, UBYTE col)
 {
 	int i;
 
@@ -1936,7 +1940,7 @@ BOOL changeColour(UBYTE player, UBYTE col)
 	return false;
 }
 
-static BOOL SendColourRequest(UBYTE player, UBYTE col)
+static bool SendColourRequest(UBYTE player, UBYTE col)
 {
 	if(NetPlay.isHost)			// do or request the change
 	{
@@ -1953,7 +1957,7 @@ static BOOL SendColourRequest(UBYTE player, UBYTE col)
 	return true;
 }
 
-static BOOL SendPositionRequest(UBYTE player, UBYTE position)
+static bool SendPositionRequest(UBYTE player, UBYTE position)
 {
 	if(NetPlay.isHost)			// do or request the change
 	{
@@ -1971,7 +1975,7 @@ static BOOL SendPositionRequest(UBYTE player, UBYTE position)
 	return true;
 }
 
-BOOL recvColourRequest(NETQUEUE queue)
+bool recvColourRequest(NETQUEUE queue)
 {
 	UBYTE	player, col;
 
@@ -1997,7 +2001,7 @@ BOOL recvColourRequest(NETQUEUE queue)
 	return changeColour(player, col);
 }
 
-BOOL recvPositionRequest(NETQUEUE queue)
+bool recvPositionRequest(NETQUEUE queue)
 {
 	UBYTE	player, position;
 
@@ -2039,10 +2043,7 @@ static void addTeamChooser(UDWORD player)
 	initChooser(player);
 
 	// add form.
-	addBlueForm(MULTIOP_PLAYERS,MULTIOP_TEAMCHOOSER_FORM,"",
-				7,
-				playerBoxHeight(player),
-				MULTIOP_ROW_WIDTH,MULTIOP_TEAMSHEIGHT);
+	addBlueForm(MULTIOP_PLAYERS, MULTIOP_TEAMCHOOSER_FORM, "", 7, playerBoxHeight(player), MULTIOP_ROW_WIDTH, MULTIOP_TEAMSHEIGHT);
 
 	// tally up the team counts
 	for (i=0; i< game.maxPlayers ; i++)
@@ -2077,11 +2078,10 @@ static void addTeamChooser(UDWORD player)
 	// add a kick button
 	if (player != selectedPlayer && NetPlay.bComms && NetPlay.isHost && NetPlay.players[player].allocated)
 	{
-		addMultiBut(psWScreen,MULTIOP_TEAMCHOOSER_FORM, MULTIOP_TEAMCHOOSER_KICK,
-					8*(teamW + 5) + 7, 8,
-					iV_GetImageWidth(FrontImages,IMAGE_NOJOIN),		  //w
-					iV_GetImageHeight(FrontImages,IMAGE_NOJOIN),		  //h
-					_("Kick player"), IMAGE_NOJOIN, IMAGE_NOJOIN, IMAGE_NOJOIN);
+		const int imgwidth = iV_GetImageWidth(FrontImages, IMAGE_NOJOIN);
+		const int imgheight = iV_GetImageHeight(FrontImages, IMAGE_NOJOIN);
+		addMultiBut(psWScreen, MULTIOP_TEAMCHOOSER_FORM, MULTIOP_TEAMCHOOSER_KICK, MULTIOP_ROW_WIDTH - imgwidth - 4, 8, imgwidth, imgheight,
+		            ("Kick player"), IMAGE_NOJOIN, IMAGE_NOJOIN, IMAGE_NOJOIN);
 	}
 
 	teamChooserUp = player;
@@ -2143,7 +2143,7 @@ static bool canChooseTeamFor(int i)
 // ////////////////////////////////////////////////////////////////////////////
 // box for players.
 
-void addPlayerBox(BOOL players)
+void addPlayerBox(bool players)
 {
 	// if background isn't there, then return since were not ready to draw the box yet!
 	if(widgGetFromID(psWScreen,FRONTEND_BACKDROP) == NULL)
@@ -3038,7 +3038,7 @@ void startMultiplayerGame(void)
 		{
 			debug(LOG_NET, "limiter was NOT activated, setting defaults");
 
-			// NOTE: TRUNK <->svn/2.3 difference, we don't load limiter_tex!
+			// NOTE: master <-> 2.3 difference, we don't load limiter_tex!
 			if (!resLoad("wrf/limiter_tex.wrf", 501))
 			{
 				debug(LOG_INFO, "Unable to load limiter_tex.  Defaults not set.");
@@ -3455,7 +3455,7 @@ void runMultiOptions(void)
 	}
 }
 
-BOOL startMultiOptions(BOOL bReenter)
+bool startMultiOptions(bool bReenter)
 {
 	PLAYERSTATS		nullStats;
 	UBYTE i;
@@ -3643,7 +3643,7 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 		}
 		else
 		{
-			iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+			iV_SetTextColour(WZCOL_FORM_TEXT);
 		}
 		iV_DrawText(_("Players"), x + 5, y + 18);
 		ssprintf(tmp, "%d/%d", NetPlay.games[i].desc.dwCurrentPlayers, NetPlay.games[i].desc.dwMaxPlayers);
@@ -3722,7 +3722,7 @@ void displayPosition(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT 
 
 	drawBlueBox(x, y, psWidget->width, psWidget->height);
 	iV_SetFont(font_regular);
-	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+	iV_SetTextColour(WZCOL_FORM_TEXT);
 	ssprintf(text, "Click to take player slot %d", NetPlay.players[i].position);
 	iV_DrawText(text, x + 10, y + 22);
 }
@@ -3736,7 +3736,7 @@ static void displayAi(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT
 
 	drawBlueBox(x, y, psWidget->width, psWidget->height);
 	iV_SetFont(font_regular);
-	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+	iV_SetTextColour(WZCOL_FORM_TEXT);
 	iV_DrawText((j >= 0) ? aidata[j].name : commsText[j + 2], x + 10, y + 22);
 }
 
@@ -3761,7 +3761,7 @@ static void displayDifficulty(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, 
 	ASSERT_OR_RETURN(, j < ARRAY_SIZE(difficultyList), "Bad difficulty found: %d", j);
 	drawBlueBox(x, y, psWidget->width, psWidget->height);
 	iV_SetFont(font_regular);
-	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+	iV_SetTextColour(WZCOL_FORM_TEXT);
 	iV_DrawImage(FrontImages, difficultyIcon(j), x + 5, y + 5);
 	iV_DrawText(difficultyList[j], x + 42, y + 22);
 }
@@ -3785,7 +3785,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 
 		snprintf(mapProgressString, MAX_STR_LENGTH, _("Sending Map: %d%% "), progress);
 		iV_SetFont(font_regular); // font
-		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+		iV_SetTextColour(WZCOL_FORM_TEXT);
 		iV_DrawText(mapProgressString, x + 15, y + 22);
 	}
 	else if (mapDownloadProgress != 100 && j == selectedPlayer)
@@ -3793,7 +3793,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 		static char mapProgressString[MAX_STR_LENGTH] = {'\0'};
 		snprintf(mapProgressString, MAX_STR_LENGTH, _("Map: %d%% downloaded"), mapDownloadProgress);
 		iV_SetFont(font_regular); // font
-		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+		iV_SetTextColour(WZCOL_FORM_TEXT);
 		iV_DrawText(mapProgressString, x + 5, y + 22);
 		return;
 	}
@@ -3802,7 +3802,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 		drawBlueBox(x,y,psWidget->width,psWidget->height);							// right
 
 		iV_SetFont(font_regular);											// font
-		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+		iV_SetTextColour(WZCOL_FORM_TEXT);
 
 		// name
 		std::string name = NetPlay.players[j].name;
@@ -3814,31 +3814,27 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 			}
 			name += "...";
 		}
+		std::string subText;
 		if (j == NET_HOST_ONLY && NetPlay.bComms)
 		{
-			iV_DrawText(name.c_str(), x + nameX, y + 18);
-			iV_SetFont(font_small);
-			iV_SetTextColour(WZCOL_TEXT_MEDIUM);
-			iV_DrawText(_("HOST"), x + nameX, y + 28);
-			iV_SetFont(font_regular);
-			iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+			subText += _("HOST");
 		}
-		else if (NetPlay.bComms && NetPlay.isHost)
+		if (NetPlay.bComms && j != selectedPlayer)
 		{
 			char buf[250] = {'\0'};
 
 			// show "actual" ping time
-			iV_DrawText(name.c_str(), x + nameX, y + 18);
+			ssprintf(buf, "%s%s: %03d", subText.empty()? "" : ", ", _("Ping"), ingame.PingTimes[j]);
+			subText += buf;
+		}
+		iV_DrawText(name.c_str(), x + nameX, y + (subText.empty()? 22 : 18));
+		if (!subText.empty())
+		{
 			iV_SetFont(font_small);
 			iV_SetTextColour(WZCOL_TEXT_MEDIUM);
-			ssprintf(buf, "Ping: %03d", ingame.PingTimes[j]);
-			iV_DrawText(buf, x + nameX, y + 28);
+			iV_DrawText(subText.c_str(), x + nameX, y + 28);
 			iV_SetFont(font_regular);
-			iV_SetTextColour(WZCOL_TEXT_BRIGHT);
-		}
-		else
-		{
-			iV_DrawText(name.c_str(), x + nameX, y + 22);
+			iV_SetTextColour(WZCOL_FORM_TEXT);
 		}
 		
 		if(getMultiStats(j).played < 5)
@@ -3925,7 +3921,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 			iV_DrawImage(FrontImages, IMAGE_PLAYER_PC, x, y + 11);
 		}
 		iV_SetFont(font_regular);
-		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+		iV_SetTextColour(WZCOL_FORM_TEXT);
 		ASSERT_OR_RETURN(, NetPlay.players[j].ai < (int)aidata.size(), "Uh-oh, AI index out of bounds");
 		switch (NetPlay.players[j].ai)
 		{
@@ -3948,7 +3944,7 @@ void displayColour(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 	{
 		int player = getPlayerColour(j);
 		STATIC_ASSERT(MAX_PLAYERS <= 16);
-		iV_DrawImage(FrontImages, IMAGE_PLAYER0 + player, x + 7, y + 9);
+		iV_DrawImageTc(FrontImages, IMAGE_PLAYERN, IMAGE_PLAYERN_TC, x + 7, y + 9, pal_GetTeamColour(player));
 	}
 }
 
@@ -3991,12 +3987,13 @@ void displayMultiBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT 
 {
 	UDWORD	x = xOffset+psWidget->x;
 	UDWORD	y = yOffset+psWidget->y;
-	BOOL	Hilight = false;
+	bool	Hilight = false;
 	UDWORD	Down = 0;
 	UDWORD	Grey = 0;
-	UWORD	im_norm = UNPACKDWORD_TRI_A((UDWORD)psWidget->UserData);
-	UWORD	im_down = UNPACKDWORD_TRI_B((UDWORD)psWidget->UserData);
-	UWORD	im_hili = UNPACKDWORD_TRI_C((UDWORD)psWidget->UserData);
+	UWORD	im_norm = UNPACKDWORD_QUAD_A((UDWORD)psWidget->UserData);
+	UWORD	im_down = UNPACKDWORD_QUAD_B((UDWORD)psWidget->UserData);
+	UWORD	im_hili = UNPACKDWORD_QUAD_C((UDWORD)psWidget->UserData);
+	unsigned tc     = UNPACKDWORD_QUAD_D(psWidget->UserData);
 	UWORD	hiToUse = im_hili;
 
 	// FIXME: This seems to be a way to conserve space, so you can use a
@@ -4064,29 +4061,33 @@ void displayMultiBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT 
 		Grey = 1;
 	}
 
+	int toDraw[3];
+	int numToDraw = 0;
 
 	// now display
-	iV_DrawImage(FrontImages, im_norm, x, y);
+	toDraw[numToDraw++] = im_norm;
 
 	// hilights etc..
-	if(Hilight && !Grey)
+	if (Down)
 	{
-		if (Down)
-		{
-			iV_DrawImage(FrontImages, im_down, x, y);
-		}
-
-		if (hiToUse)
-		{
-			iV_DrawImage(FrontImages, hiToUse, x, y);
-		}
-
+		toDraw[numToDraw++] = im_down;
 	}
-	else if (Down)
+	if(Hilight && !Grey && hiToUse)
 	{
-		iV_DrawImage(FrontImages, im_down, x, y);
+		toDraw[numToDraw++] = hiToUse;
 	}
 
+	for (int n = 0; n < numToDraw; ++n)
+	{
+		if (tc == MAX_PLAYERS)
+		{
+			iV_DrawImage(FrontImages, toDraw[n], x, y);
+		}
+		else
+		{
+			iV_DrawImageTc(FrontImages, toDraw[n], toDraw[n] + 1, x, y, pal_GetTeamColour(tc));
+		}
+	}
 
 	if (Grey)
 	{
@@ -4100,7 +4101,7 @@ void displayMultiBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT 
 /////////////////////////////////////////////////////////////////////////////////////////
 // common widgets
 
-static BOOL addMultiEditBox(UDWORD formid, UDWORD id, UDWORD x, UDWORD y, char const *tip, char const *tipres, UDWORD icon, UDWORD iconhi, UDWORD iconid)
+static bool addMultiEditBox(UDWORD formid, UDWORD id, UDWORD x, UDWORD y, char const *tip, char const *tipres, UDWORD icon, UDWORD iconhi, UDWORD iconid)
 {
 	W_EDBINIT sEdInit;                           // editbox
 	sEdInit.formID = formid;
@@ -4122,7 +4123,7 @@ static BOOL addMultiEditBox(UDWORD formid, UDWORD id, UDWORD x, UDWORD y, char c
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
-BOOL addMultiBut(W_SCREEN *screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char* tipres, UDWORD norm, UDWORD down, UDWORD hi)
+bool addMultiBut(W_SCREEN *screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char* tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc)
 {
 	W_BUTINIT sButInit;
 	sButInit.formID = formid;
@@ -4133,7 +4134,7 @@ BOOL addMultiBut(W_SCREEN *screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y,
 	sButInit.height= (unsigned short) height;
 	sButInit.pTip = tipres;
 	sButInit.pDisplay = displayMultiBut;
-	sButInit.UserData = PACKDWORD_TRI(norm, down, hi);
+	sButInit.UserData = PACKDWORD_QUAD(norm, down, hi, tc);
 
 	return widgAddButton(screen, &sButInit);
 }

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -67,34 +67,34 @@
 static int D_W2 = 0;	// Text width offset
 static int D_H2 = 0;	// Text height offset
 
-typedef struct
+struct SEQTEXT
 {
 	char pText[MAX_STR_LENGTH];
 	UDWORD x;
 	UDWORD y;
 	UDWORD startFrame;
 	UDWORD endFrame;
-	BOOL	bSubtitle;
-} SEQTEXT;
+	bool	bSubtitle;
+};
 
-typedef struct
+struct SEQLIST
 {
 	const char	*pSeq;						//name of the sequence to play
 	const char	*pAudio;					//name of the wav to play
-	BOOL		bSeqLoop;					//loop this sequence
+	bool		bSeqLoop;					//loop this sequence
 	SDWORD		currentText;				//cuurent number of text messages for this seq
 	SEQTEXT		aText[MAX_TEXT_OVERLAYS];	//text data to display for this sequence
-} SEQLIST;
+};
 /***************************************************************************/
 /*
  *	local Variables
  */
 /***************************************************************************/
 
-static BOOL bAudioPlaying = false;
-static BOOL bHoldSeqForAudio = false;
-static BOOL bSeqSubtitles = true;
-static BOOL bSeqPlaying = false;
+static bool bAudioPlaying = false;
+static bool bHoldSeqForAudio = false;
+static bool bSeqSubtitles = true;
+static bool bSeqPlaying = false;
 static const char aHardPath[] = "sequences/";
 static char aVideoName[MAX_STR_LENGTH];
 static char* pVideoBuffer = NULL;
@@ -103,7 +103,7 @@ static SDWORD frameSkip = 1;
 static SEQLIST aSeqList[MAX_SEQ_LIST];
 static SDWORD currentSeq = -1;
 static SDWORD currentPlaySeq = -1;
-static BOOL g_bResumeInGame = false;
+static bool g_bResumeInGame = false;
 
 /***************************************************************************/
 /*
@@ -111,15 +111,15 @@ static BOOL g_bResumeInGame = false;
  */
 /***************************************************************************/
 
-typedef enum
+enum VIDEO_RESOLUTION
 {
 	VIDEO_PRESELECTED_RESOLUTION,
 	VIDEO_USER_CHOSEN_RESOLUTION,
-} VIDEO_RESOLUTION;
+};
 
 static bool seq_StartFullScreenVideo(const char* videoName, const char* audioName, VIDEO_RESOLUTION resolution);
-BOOL seq_SetupVideoBuffers(void);
-BOOL seq_ReleaseVideoBuffers(void);
+bool seq_SetupVideoBuffers(void);
+bool seq_ReleaseVideoBuffers(void);
 
 /***************************************************************************/
 /*
@@ -184,7 +184,7 @@ bool seq_RenderVideoToBuffer(const char* sequenceName, int seqCommand)
 	return true;
 }
 
-BOOL seq_ReleaseVideoBuffers(void)
+bool seq_ReleaseVideoBuffers(void)
 {
 	free(pVideoBuffer);
 	free(pVideoPalette);
@@ -193,7 +193,7 @@ BOOL seq_ReleaseVideoBuffers(void)
 	return true;
 }
 
-BOOL seq_SetupVideoBuffers(void)
+bool seq_SetupVideoBuffers(void)
 {
 	return true;
 }
@@ -290,10 +290,10 @@ static bool seq_StartFullScreenVideo(const char* videoName, const char* audioNam
 	return true;
 }
 
-BOOL seq_UpdateFullScreenVideo(int *pbClear)
+bool seq_UpdateFullScreenVideo(int *pbClear)
 {
 	int i;
-	BOOL bMoreThanOneSequenceLine = false;
+	bool bMoreThanOneSequenceLine = false;
 	bool stillPlaying;
 
 	unsigned int subMin = SUBTITLE_BOX_MAX + D_H2;
@@ -432,7 +432,7 @@ BOOL seq_UpdateFullScreenVideo(int *pbClear)
 	return true;
 }
 
-BOOL seq_StopFullScreenVideo(void)
+bool seq_StopFullScreenVideo(void)
 {
 	StopDriverMode();
 	if (!seq_AnySeqLeft())
@@ -456,7 +456,7 @@ BOOL seq_StopFullScreenVideo(void)
 }
 
 // add a string at x,y or add string below last line if x and y are 0
-BOOL seq_AddTextForVideo(const char* pText, SDWORD xOffset, SDWORD yOffset, SDWORD startFrame, SDWORD endFrame, SEQ_TEXT_POSITIONING textJustification)
+bool seq_AddTextForVideo(const char* pText, SDWORD xOffset, SDWORD yOffset, SDWORD startFrame, SDWORD endFrame, SEQ_TEXT_POSITIONING textJustification)
 {
 	SDWORD sourceLength, currentLength;
 	char* currentText;
@@ -559,7 +559,7 @@ BOOL seq_AddTextForVideo(const char* pText, SDWORD xOffset, SDWORD yOffset, SDWO
 	return true;
 }
 
-BOOL seq_ClearTextForVideo(void)
+bool seq_ClearTextForVideo(void)
 {
 	SDWORD i, j;
 
@@ -579,7 +579,7 @@ BOOL seq_ClearTextForVideo(void)
 	return true;
 }
 
-static BOOL seq_AddTextFromFile(const char *pTextName, SEQ_TEXT_POSITIONING textJustification)
+static bool seq_AddTextFromFile(const char *pTextName, SEQ_TEXT_POSITIONING textJustification)
 {
 	char aTextName[MAX_STR_LENGTH];
 	char *pTextBuffer, *pCurrentLine, *pText;
@@ -649,7 +649,7 @@ void seq_ClearSeqList(void)
 }
 
 //add a sequence to the list to be played
-void seq_AddSeqToList(const char *pSeqName, const char *pAudioName, const char *pTextName, BOOL bLoop)
+void seq_AddSeqToList(const char *pSeqName, const char *pAudioName, const char *pTextName, bool bLoop)
 {
 	currentSeq++;
 
@@ -690,7 +690,7 @@ void seq_AddSeqToList(const char *pSeqName, const char *pAudioName, const char *
 }
 
 /*checks to see if there are any sequences left in the list to play*/
-BOOL seq_AnySeqLeft(void)
+bool seq_AnySeqLeft(void)
 {
 	UBYTE		nextSeq;
 
@@ -713,7 +713,7 @@ BOOL seq_AnySeqLeft(void)
 
 static void seqDispCDOK( void )
 {
-	BOOL	bPlayedOK;
+	bool	bPlayedOK;
 
 	currentPlaySeq++;
 	if (currentPlaySeq >= MAX_SEQ_LIST)
@@ -750,12 +750,12 @@ void seq_StartNextFullScreenVideo(void)
 		return;
 }
 
-void seq_SetSubtitles(BOOL bNewState)
+void seq_SetSubtitles(bool bNewState)
 {
 	bSeqSubtitles = bNewState;
 }
 
-BOOL seq_GetSubtitles(void)
+bool seq_GetSubtitles(void)
 {
 	return bSeqSubtitles;
 }

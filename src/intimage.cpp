@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -40,24 +40,27 @@ enum {
 	FR_KEYED,	//< Bitmap drawn with colour 0 transparent.
 };
 
-typedef enum {
+enum FRAMERECTTYPE
+{
 	FR_IGNORE,	//< Fill rect is ignored.
 	FR_FRAME,	//< Fill rect drawn relative to frame.
 	FR_LEFT,	//< Fill rect drawn relative to left of frame.
 	FR_RIGHT,	//< Fill rect drawn relative to right of frame.
 	FR_TOP,		//< Fill rect drawn relative to top of frame.
 	FR_BOTTOM,	//< Fill rect drawn relative to bottom of frame.
-} FRAMERECTTYPE;
+};
 
-typedef struct {
+struct FRAMERECT
+{
 	FRAMERECTTYPE Type;		//< One of the FR_... values.
 	int TLXOffset, TLYOffset;	//< Offsets for the rect fill.
 	int BRXOffset, BRYOffset;
 	int ColourIndex;		//< Hackish index into the WZCOLOR palette
-} FRAMERECT;
+};
 
 // Frame definition structure.
-typedef struct {
+struct IMAGEFRAME
+{
 	SWORD OffsetX0,OffsetY0;	//< Offset top left of frame.
 	SWORD OffsetX1,OffsetY1;	//< Offset bottom right of frame.
 	SWORD TopLeft;			//< Image indecies for the corners ( -1 = don't draw).
@@ -69,7 +72,7 @@ typedef struct {
 	SWORD BottomEdge,BottomType;
 	SWORD LeftEdge,LeftType;
 	FRAMERECT FRect[5];		//< Fill rectangles.
-} IMAGEFRAME;
+};
 
 IMAGEFILE *IntImages;	// All the 2d graphics for the user interface.
 
@@ -168,7 +171,7 @@ TABDEF	SmallTab = {
 
 // Read bitmaps used by the interface.
 //
-BOOL imageInitBitmaps(void)
+bool imageInitBitmaps(void)
 {
 	IntImages = (IMAGEFILE*)resGetData("IMG", "intfac.img");
 	pie_InitColourMouse(IntImages, MousePointerImageIDs);
@@ -178,7 +181,7 @@ BOOL imageInitBitmaps(void)
 
 // Render a window frame.
 //
-static void RenderWindow(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD Height, BOOL Opaque)
+static void RenderWindow(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD Height, bool Opaque)
 {
 	SWORD WTopRight = 0;
 	SWORD WTopLeft = 0;
@@ -190,7 +193,7 @@ static void RenderWindow(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWO
 	SWORD HBottomLeft = 0;
 	UWORD RectI;
 	FRAMERECT *Rect;
-	BOOL Masked = false;
+	bool Masked = false;
 	IMAGEFRAME *Frame;
 
 	if (frame == 0)

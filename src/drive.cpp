@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -69,7 +69,7 @@
 static	SWORD DrivingAudioTrack=-1;		// Which hardware channel are we using for the car driving noise
 
 extern UDWORD selectedPlayer;
-extern BOOL DirectControl;
+extern bool DirectControl;
 
 // Driving characteristics.
 #define DRIVE_TURNSPEED	(4)
@@ -81,18 +81,18 @@ extern BOOL DirectControl;
 #define MAX_IDLE	(GAME_TICKS_PER_SEC*60)	// Start to orbit if idle for 60 seconds.
 
 DROID *psDrivenDroid = NULL;		// The droid that's being driven.
-static BOOL bDriveMode = false;
+static bool bDriveMode = false;
 static SDWORD driveDir;					// Driven droid's direction.
 static SDWORD driveSpeed;				// Driven droid's speed.
 static UDWORD driveBumpTime;				// Time that followers get a kick up the ass.
-static BOOL	DoFollowRangeCheck = true;
-static BOOL AllInRange = true;
-static BOOL	ClearFollowRangeCheck = false;
-static BOOL DriveControlEnabled = false;
-static BOOL DriveInterfaceEnabled = false;
+static bool	DoFollowRangeCheck = true;
+static bool AllInRange = true;
+static bool	ClearFollowRangeCheck = false;
+static bool DriveControlEnabled = false;
+static bool DriveInterfaceEnabled = false;
 static UDWORD IdleTime;
-static BOOL TacticalActive = false;
-static BOOL WasDriving = false;
+static bool TacticalActive = false;
+static bool WasDriving = false;
 
 enum {
 	CONTROLMODE_POINTNCLICK,
@@ -100,12 +100,12 @@ enum {
 };
 
 static UWORD ControlMode = CONTROLMODE_DRIVE;
-static BOOL TargetFeatures = false;
+static bool TargetFeatures = false;
 
 // Intialise drive statics, call with true if coming from frontend, false if
 // coming from a mission.
 //
-void driveInitVars(BOOL Restart)
+void driveInitVars(bool Restart)
 {
 	if(WasDriving && !Restart)
 	{
@@ -141,12 +141,12 @@ void driveInitVars(BOOL Restart)
 }
 
 
-void	setDrivingStatus( BOOL val )
+void	setDrivingStatus( bool val )
 {
 	bDriveMode = val;
 }
 
-BOOL	getDrivingStatus( void )
+bool	getDrivingStatus( void )
 {
 	return(bDriveMode);
 }
@@ -154,7 +154,7 @@ BOOL	getDrivingStatus( void )
 
 // Start droid driving mode.
 //
-BOOL StartDriverMode(DROID *psOldDroid)
+bool StartDriverMode(DROID *psOldDroid)
 {
 	DROID *psDroid;
 	DROID *psLastDriven;
@@ -295,7 +295,7 @@ void StopDriverMode(void)
 // returns true if ok, returns false if resulted in driving mode being stopped, ie could'nt find
 // a selected droid to drive.
 //
-BOOL driveDroidKilled(DROID *psDroid)
+bool driveDroidKilled(DROID *psDroid)
 {
 	if(driveModeActive()) {
 		if(psDroid == psDrivenDroid) {
@@ -369,9 +369,9 @@ static void driveNextDriver(void)
 }
 
 
-static BOOL driveControl(DROID *psDroid)
+static bool driveControl(DROID *psDroid)
 {
-	BOOL Input = false;
+	bool Input = false;
 	SDWORD MaxSpeed = moveCalcDroidSpeed(psDroid);
 
 	if(!DriveControlEnabled) {
@@ -439,7 +439,7 @@ static BOOL driveControl(DROID *psDroid)
 }
 
 
-static BOOL driveInDriverRange(DROID *psDroid)
+static bool driveInDriverRange(DROID *psDroid)
 {
 	if( (abs(psDroid->pos.x-psDrivenDroid->pos.x) < FOLLOW_STOP_RANGE) &&
 		(abs(psDroid->pos.y-psDrivenDroid->pos.y) < FOLLOW_STOP_RANGE) ) {
@@ -617,7 +617,7 @@ void driveEnableControl(void)
 
 // Return true if drive control is enabled.
 //
-BOOL driveControlEnabled(void)
+bool driveControlEnabled(void)
 {
 	return DriveControlEnabled;
 }
@@ -625,7 +625,7 @@ BOOL driveControlEnabled(void)
 
 // Bring up the reticule.
 //
-void driveEnableInterface(BOOL AddReticule)
+void driveEnableInterface(bool AddReticule)
 {
 	if(AddReticule) {
 		intAddReticule();
@@ -648,7 +648,7 @@ void driveDisableInterface(void)
 
 // Return true if the reticule is up.
 //
-BOOL driveInterfaceEnabled(void)
+bool driveInterfaceEnabled(void)
 {
 	return DriveInterfaceEnabled;
 }
@@ -682,7 +682,7 @@ void driveStartBuild(void)
 
 // Return true if all the conditions for allowing user control of the droid are met.
 //
-BOOL driveAllowControl(void)
+bool driveAllowControl(void)
 {
 	if (TacticalActive || DriveInterfaceEnabled || !DriveControlEnabled)
 	{
@@ -707,7 +707,7 @@ void driveDisableTactical(void)
 
 // Return true if Tactical order mode is active.
 //
-BOOL driveTacticalActive(void)
+bool driveTacticalActive(void)
 {
 	return TacticalActive;
 }

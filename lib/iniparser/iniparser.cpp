@@ -234,7 +234,7 @@ void inifile_set_current_section(inifile *inif, const char *sec)
 	ASSERT(inif->currsec, "Failed  to allocate inifile memory.");
 }
 
-BOOL inifile_key_exists(inifile *inif, const char *key)
+bool inifile_key_exists(inifile *inif, const char *key)
 {
 	for (unsigned i = 0; i < inif->entry.size(); ++i)
 	{

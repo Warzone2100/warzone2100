@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@
 #include "lib/framework/frame.h"
 #include <physfs.h>
 
-typedef struct
+struct soundDataBuffer
 {
 	// the size of the data contained in *data (NOTE: this is *NOT* the size of *data itself)
 	size_t size;
@@ -37,12 +37,12 @@ typedef struct
 
 	// the raw PCM data
 	char* data;
-} soundDataBuffer;
+};
 
 // Forward declaration so we can take pointers to this type
 struct OggVorbisDecoderState;
 
-struct OggVorbisDecoderState* sound_CreateOggVorbisDecoder(PHYSFS_file* PHYSFS_fileHandle, BOOL allowSeeking);
+struct OggVorbisDecoderState* sound_CreateOggVorbisDecoder(PHYSFS_file* PHYSFS_fileHandle, bool allowSeeking);
 void sound_DestroyOggVorbisDecoder(struct OggVorbisDecoderState* decoder);
 
 soundDataBuffer* sound_DecodeOggVorbis(struct OggVorbisDecoderState* decoder, size_t bufferSize);

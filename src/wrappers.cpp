@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -44,22 +44,22 @@
 #include "warzoneconfig.h"
 #include "wrappers.h"
 
-typedef struct _star
+struct STAR
 {
 	int      xPos;
 	int      speed;
 	PIELIGHT colour;
-} STAR;
+};
 
-static BOOL		firstcall = false;
-static BOOL		bPlayerHasLost = false;
-static BOOL		bPlayerHasWon = false;
+static bool		firstcall = false;
+static bool		bPlayerHasLost = false;
+static bool		bPlayerHasWon = false;
 static UBYTE    scriptWinLoseVideo = PLAY_NONE;
 
 void	runCreditsScreen	( void );
 
 static	UDWORD	lastChange = 0;
-BOOL hostlaunch = false;				// used to detect if we are hosting a game via command line option.
+bool hostlaunch = false;				// used to detect if we are hosting a game via command line option.
 
 static uint32_t lastTick = 0;
 static int barLeftX, barLeftY, barRightX, barRightY, boxWidth, boxHeight, starsNum, starHeight;
@@ -109,7 +109,7 @@ static void setupLoadingScreen(void)
 // //////////////////////////////////////////////////////////////////
 // Initialise frontend globals and statics.
 //
-BOOL frontendInitVars(void)
+bool frontendInitVars(void)
 {
 	firstcall = true;
 	setupLoadingScreen();
@@ -317,7 +317,7 @@ void loadingScreenCallback(void)
 }
 
 // fill buffers with the static screen
-void initLoadingScreen( BOOL drawbdrop )
+void initLoadingScreen( bool drawbdrop )
 {
 	pie_ShowMouse(false);
 	if (!drawbdrop)	// fill buffers
@@ -387,7 +387,7 @@ void closeLoadingScreen(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Gameover screen.
 
-BOOL displayGameOver(BOOL bDidit)
+bool displayGameOver(bool bDidit)
 {
 	if(bDidit)
 	{
@@ -416,24 +416,24 @@ BOOL displayGameOver(BOOL bDidit)
 
 
 ////////////////////////////////////////////////////////////////////////////////
-BOOL testPlayerHasLost( void )
+bool testPlayerHasLost( void )
 {
 	return(bPlayerHasLost);
 }
 
-void setPlayerHasLost( BOOL val )
+void setPlayerHasLost( bool val )
 {
 	bPlayerHasLost = val;
 }
 
 
 ////////////////////////////////////////////////////////////////////////////////
-BOOL testPlayerHasWon( void )
+bool testPlayerHasWon( void )
 {
 	return(bPlayerHasWon);
 }
 
-void setPlayerHasWon( BOOL val )
+void setPlayerHasWon( bool val )
 {
 	bPlayerHasWon = val;
 }

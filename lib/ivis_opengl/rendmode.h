@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -23,16 +23,7 @@
 
 #include "ivisdef.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 extern void iV_SurfaceDestroy(iSurface *s);
 extern iSurface *iV_SurfaceCreate(int width, int height);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -77,29 +77,25 @@ static void NETauto(PACKAGED_CHECK *v)
 // ////////////////////////////////////////////////////////////////////////////
 // function definitions
 
-static BOOL sendStructureCheck	(void);							//Structure
+static bool sendStructureCheck	(void);							//Structure
 static PACKAGED_CHECK packageCheck(const DROID *pD);
-static BOOL sendDroidCheck		(void);							//droids
+static bool sendDroidCheck		(void);							//droids
 
-static BOOL sendPowerCheck(void);
+static bool sendPowerCheck(void);
 static UDWORD averagePing(void);
 
-// ////////////////////////////////////////////////////////////////////////////
-// Defined numeric values
-// NOTE / FIXME: Current MP games are locked at 45ms
-#define MP_FPS_LOCK			45			
-#define AV_PING_FREQUENCY	MP_FPS_LOCK * 1000		// how often to update average pingtimes. in approx millisecs.
-#define PING_FREQUENCY		MP_FPS_LOCK * 600		// how often to update pingtimes. in approx millisecs.
+#define AV_PING_FREQUENCY       20000                           // how often to update average pingtimes. in approx millisecs.
+#define PING_FREQUENCY          4000                            // how often to update pingtimes. in approx millisecs.
 #define STRUCT_PERIOD           4000                            // how often (ms) to send a structure check.
 #define DROID_PERIOD            315                             // how often (ms) to send droid checks
 #define POWER_PERIOD            5000                            // how often to send power levels
-#define SCORE_FREQUENCY		MP_FPS_LOCK * 2400		// how often to update global score.
+#define SCORE_FREQUENCY         108000                          // how often to update global score.
 
 static UDWORD				PingSend[MAX_PLAYERS];	//stores the time the ping was called.
 
 // ////////////////////////////////////////////////////////////////////////////
 // test traffic level.
-static BOOL okToSend(void)
+static bool okToSend(void)
 {
 	// Update checks and go no further if any exceeded.
 	// removing the received check again ... add NETgetRecentBytesRecvd() to left hand side of equation if this works badly
@@ -113,21 +109,19 @@ static BOOL okToSend(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Droid checking info. keep position and damage in sync.
-BOOL sendCheck(void)
+void sendCheck()
 {
-	UDWORD i;
-
 	NETgetBytesSent();			// update stats.
 	NETgetBytesRecvd();
 	NETgetPacketsSent();
 	NETgetPacketsRecvd();
 
 	// dont send checks till all players are present.
-	for(i=0;i<MAX_PLAYERS;i++)
+	for (unsigned i = 0; i < MAX_PLAYERS; ++i)
 	{
 		if(isHumanPlayer(i) && ingame.JoiningInProgress[i])
 		{
-			return true;
+			return;
 		}
 	}
 
@@ -158,8 +152,6 @@ BOOL sendCheck(void)
 	{
 		sync_counter.unsentPing++;
 	}
-
-	return true;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -203,7 +195,7 @@ static DROID* pickADroid(void)
  *
  *  Call this when you need to update the given droid right now.
  */
-BOOL ForceDroidSync(const DROID* droidToSend)
+bool ForceDroidSync(const DROID* droidToSend)
 {
 	uint8_t count = 1;		// *always* one
 	PACKAGED_CHECK pc = packageCheck(droidToSend);
@@ -221,7 +213,7 @@ BOOL ForceDroidSync(const DROID* droidToSend)
 
 // ///////////////////////////////////////////////////////////////////////////
 // send a droid info packet.
-static BOOL sendDroidCheck(void)
+static bool sendDroidCheck(void)
 {
 	DROID			*pD, **ppD;
 	uint8_t			i, count;
@@ -326,7 +318,7 @@ static PACKAGED_CHECK packageCheck(const DROID *pD)
 
 // ////////////////////////////////////////////////////////////////////////////
 // receive a check and update the local world state accordingly
-BOOL recvDroidCheck(NETQUEUE queue)
+bool recvDroidCheck(NETQUEUE queue)
 {
 	uint8_t		count;
 	int		i;
@@ -490,7 +482,7 @@ static uint32_t structureCheckLastType[MAX_PLAYERS];
 
 // ////////////////////////////////////////////////////////////////////////
 // Send structure information.
-static BOOL sendStructureCheck(void)
+static bool sendStructureCheck(void)
 {
 	uint8_t         player;
 
@@ -563,11 +555,11 @@ static BOOL sendStructureCheck(void)
 }
 
 // receive checking info about a structure and update local world state
-BOOL recvStructureCheck(NETQUEUE queue)
+bool recvStructureCheck(NETQUEUE queue)
 {
 	uint32_t                synchTime;
 	STRUCTURE		*pS;
-	BOOL			hasCapacity = true;
+	bool			hasCapacity = true;
 	int                     j;
 	Rotation                rot;
 	uint8_t			player, ourCapacity;
@@ -691,7 +683,7 @@ static int64_t powerCheckLastPower[MAX_PLAYERS];
 // ////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////
 // Power Checking. Send a power level check every now and again.
-static BOOL sendPowerCheck()
+static bool sendPowerCheck()
 {
 	uint8_t         player;
 
@@ -725,7 +717,7 @@ static BOOL sendPowerCheck()
 	return true;
 }
 
-BOOL recvPowerCheck(NETQUEUE queue)
+bool recvPowerCheck(NETQUEUE queue)
 {
 	uint8_t		player;
 	uint32_t        synchTime;
@@ -766,7 +758,7 @@ BOOL recvPowerCheck(NETQUEUE queue)
 // ////////////////////////////////////////////////////////////////////////
 // Score
 // We use setMultiStats() to broadcast the score when needed.
-BOOL sendScoreCheck(void)
+bool sendScoreCheck(void)
 {
 	static UDWORD	lastsent = 0;
 
@@ -789,25 +781,11 @@ BOOL sendScoreCheck(void)
 
 		for (i = 0; i < game.maxPlayers; i++)
 		{
-			PLAYERSTATS		stats;
-
 			// Host controls AI's scores + his own...
 			if (myResponsibility(i))
 			{
-				// Update score
-				stats = getMultiStats(i);
-
-				// Add recently scored points
-				stats.recentKills += stats.killsToAdd;
-				stats.totalKills  += stats.killsToAdd;
-				stats.recentScore += stats.scoreToAdd;
-				stats.totalScore  += stats.scoreToAdd;
-
-				// Zero them out
-				stats.killsToAdd = stats.scoreToAdd = 0;
-
 				// Send score to everyone else
-				setMultiStats(i, stats, false);
+				setMultiStats(i, getMultiStats(i), false);
 			}
 		}
 	}
@@ -834,39 +812,39 @@ static UDWORD averagePing(void)
 	return total / MAX(count, 1);
 }
 
-BOOL sendPing(void)
+bool sendPing(void)
 {
-	BOOL			isNew = true;
+	bool			isNew = true;
 	uint8_t			player = selectedPlayer;
 	int				i;
 	static UDWORD	lastPing = 0;	// Last time we sent a ping
 	static UDWORD	lastav = 0;		// Last time we updated average
 
 	// Only ping every so often
-	if (lastPing > gameTime)
+	if (lastPing > realTime)
 	{
 		lastPing = 0;
 	}
 
-	if (gameTime - lastPing < PING_FREQUENCY)
+	if (realTime - lastPing < PING_FREQUENCY)
 	{
 		return true;
 	}
 
-	lastPing = gameTime;
+	lastPing = realTime;
 
 	// If host, also update the average ping stat for joiners
 	if (NetPlay.isHost)
 	{
-		if (lastav > gameTime)
+		if (lastav > realTime)
 		{
 			lastav = 0;
 		}
 
-		if (gameTime - lastav > AV_PING_FREQUENCY)
+		if (realTime - lastav > AV_PING_FREQUENCY)
 		{
 			NETsetGameFlags(2, averagePing());
-			lastav = gameTime;
+			lastav = realTime;
 		}
 	}
 
@@ -901,16 +879,16 @@ BOOL sendPing(void)
 	// Note when we sent the ping
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		PingSend[i] = gameTime2;
+		PingSend[i] = realTime;
 	}
 
 	return true;
 }
 
 // accept and process incoming ping messages.
-BOOL recvPing(NETQUEUE queue)
+bool recvPing(NETQUEUE queue)
 {
-	BOOL	isNew;
+	bool	isNew;
 	uint8_t	sender, us = selectedPlayer;
 
 	NETbeginDecode(queue, NET_PING);
@@ -939,7 +917,7 @@ BOOL recvPing(NETQUEUE queue)
 	else
 	{
 		// Work out how long it took them to respond
-		ingame.PingTimes[sender] = (gameTime2 - PingSend[sender]) / 2;
+		ingame.PingTimes[sender] = (realTime - PingSend[sender]) / 2;
 
 		// Note that we have received it
 		PingSend[sender] = 0;

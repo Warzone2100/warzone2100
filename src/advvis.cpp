@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@
 #define FADE_IN_TIME	(GAME_TICKS_PER_SEC/10)
 #define	START_DIVIDE	(8)
 
-static BOOL bRevealActive = false;
+static bool bRevealActive = false;
 
 
 // ------------------------------------------------------------------------------------
@@ -86,13 +86,13 @@ UDWORD	avGetObjLightLevel(BASE_OBJECT *psObj,UDWORD origLevel)
 }
 
 // ------------------------------------------------------------------------------------
-BOOL	getRevealStatus( void )
+bool	getRevealStatus( void )
 {
 	return(bRevealActive);
 }
 
 // ------------------------------------------------------------------------------------
-void	setRevealStatus( BOOL val )
+void	setRevealStatus( bool val )
 {
 	debug(LOG_FOG, "avSetRevealStatus: Setting reveal to %s", val ? "ON" : "OFF");
 	bRevealActive = val;

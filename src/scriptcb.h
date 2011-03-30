@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -54,46 +54,46 @@ extern SDWORD		cbPressedMetaKey;
 extern SDWORD		cbPressedKey;
 
 // deal with unit takover(2)
-extern BOOL scrCBDroidTaken(void);
+extern bool scrCBDroidTaken(void);
 
 // Deal with a CALL_NEWDROID
-extern BOOL scrCBNewDroid(void);
+extern bool scrCBNewDroid(void);
 
 // the attacker and target for a CALL_ATTACKED
 extern BASE_OBJECT	*psScrCBAttacker, *psScrCBTarget;
 
 // Deal with a CALL_STRUCT_ATTACKED
-extern BOOL scrCBStructAttacked(void);
+extern bool scrCBStructAttacked(void);
 
 // Deal with a CALL_DROID_ATTACKED
-extern BOOL scrCBDroidAttacked(void);
+extern bool scrCBDroidAttacked(void);
 
 // Deal with a CALL_ATTACKED
-extern BOOL scrCBAttacked(void);
+extern bool scrCBAttacked(void);
 
 // deal with CALL_BUTTON_PRESSED
-extern BOOL scrCBButtonPressed(void);
+extern bool scrCBButtonPressed(void);
 
 // the Droid that was selected for a CALL_DROID_SELECTED
 extern DROID	*psCBSelectedDroid;
 
 // deal with CALL_DROID_SELECTED
-extern BOOL scrCBDroidSelected(void);
+extern bool scrCBDroidSelected(void);
 
 // the object that was last killed for a CALL_OBJ_DESTROYED
 extern BASE_OBJECT *psCBObjDestroyed;
 
 // deal with a CALL_OBJ_DESTROYED
-extern BOOL scrCBObjDestroyed(void);
+extern bool scrCBObjDestroyed(void);
 
 // deal with a CALL_STRUCT_DESTROYED
-extern BOOL scrCBStructDestroyed(void);
+extern bool scrCBStructDestroyed(void);
 
 // deal with a CALL_DROID_DESTROYED
-extern BOOL scrCBDroidDestroyed(void);
+extern bool scrCBDroidDestroyed(void);
 
 // deal with a CALL_FEATURE_DESTROYED
-extern BOOL scrCBFeatureDestroyed(void);
+extern bool scrCBFeatureDestroyed(void);
 
 // the last object to be seen for a CALL_OBJ_SEEN
 extern BASE_OBJECT		*psScrCBObjSeen;
@@ -102,57 +102,57 @@ extern BASE_OBJECT		*psScrCBObjSeen;
 extern BASE_OBJECT		*psScrCBObjViewer;
 
 // deal with a CALL_OBJ_SEEN
-extern BOOL scrCBObjSeen(void);
+extern bool scrCBObjSeen(void);
 
 // deal with a CALL_DROID_SEEN
-extern BOOL scrCBDroidSeen(void);
+extern bool scrCBDroidSeen(void);
 
 // deal with a CALL_STRUCT_SEEN
-extern BOOL scrCBStructSeen(void);
+extern bool scrCBStructSeen(void);
 
 // deal with a CALL_FEATURE_SEEN
-extern BOOL scrCBFeatureSeen(void);
+extern bool scrCBFeatureSeen(void);
 
 // deal with a CALL_TRANSPORTER_OFFMAP
-extern BOOL scrCBTransporterOffMap(void);
+extern bool scrCBTransporterOffMap(void);
 
 // deal with a CALL_TRANSPORTER_LANDED
-extern BOOL scrCBTransporterLanded(void);
+extern bool scrCBTransporterLanded(void);
 
 // tell the scripts when a cluster is no longer valid
 extern SDWORD	scrCBEmptyClusterID;
-extern BOOL scrCBClusterEmpty( void );
+extern bool scrCBClusterEmpty( void );
 
 // note when a vtol has finished returning to base - used to vanish
 // vtols when they are attacking from off map
 extern DROID *psScrCBVtolOffMap;
-extern BOOL scrCBVtolOffMap(void);
+extern bool scrCBVtolOffMap(void);
 
 /*called when selectedPlayer completes some research*/
-extern BOOL scrCBResCompleted(void);
+extern bool scrCBResCompleted(void);
 
 /* when a player leaves the game*/
-extern BOOL scrCBPlayerLeft(void);
+extern bool scrCBPlayerLeft(void);
 
 /* when a VTOL runs out of things to do while mid-air */
-extern BOOL scrCBVTOLRetarget(void);
+extern bool scrCBVTOLRetarget(void);
 
 // alliance offered.
-extern BOOL scrCBAllianceOffer(void);
+extern bool scrCBAllianceOffer(void);
 extern UDWORD	CBallFrom,CBallTo;
 
 // player number that left the game
 extern UDWORD	CBPlayerLeft;
 
 //Console callback
-extern BOOL scrCallConsole(void);
-extern BOOL scrCBStructBuilt(void);
-extern BOOL scrCallMultiMsg(void);
-extern BOOL scrCallBeacon(void);
-extern BOOL scrCBTransporterLandedB(void);
+extern bool scrCallConsole(void);
+extern bool scrCBStructBuilt(void);
+extern bool scrCallMultiMsg(void);
+extern bool scrCallBeacon(void);
+extern bool scrCBTransporterLandedB(void);
 
-extern BOOL scrCBDorderStop(void);
-extern BOOL scrCBDorderReachedLocation(void);
-extern BOOL scrCBProcessKeyPress(void);
+extern bool scrCBDorderStop(void);
+extern bool scrCBDorderReachedLocation(void);
+extern bool scrCBProcessKeyPress(void);
 
 #endif // __INCLUDED_SRC_SCRIPTCB_H__

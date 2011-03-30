@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -87,10 +87,10 @@ static MISC_IMD	miscImds[] =
 
 // -------------------------------------------------------------------------------
 // Load up all the imds into an array
-static BOOL multiLoadMiscImds( void )
+static bool multiLoadMiscImds( void )
 {
 UDWORD	i=0;
-BOOL	bMoreToProcess=true;
+bool	bMoreToProcess=true;
 char	name[15];	// hopefully!
 
 	/* Go thru' the list */
@@ -172,7 +172,7 @@ static bool initMiscImd(unsigned i, unsigned n, const char *nameFormat, unsigned
 	return true;
 }
 
-BOOL	initMiscImds( void )
+bool	initMiscImds( void )
 {
 	unsigned        i;
 

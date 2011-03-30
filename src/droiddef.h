@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -128,7 +128,7 @@ struct DROID_TEMPLATE : public BASE_STATS
 };
 
 struct PACKAGED_CHECK;
-struct DROID_GROUP;
+class DROID_GROUP;
 struct STRUCTURE;
 
 struct DROID : public BASE_OBJECT

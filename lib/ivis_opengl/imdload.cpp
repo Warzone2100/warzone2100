@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@
 #include "imd.h" // for imd structures
 #include "tex.h" // texture page loading
 
-static BOOL AtEndOfFile(const char *CurPos, const char *EndOfFile)
+static bool AtEndOfFile(const char *CurPos, const char *EndOfFile)
 {
 	while ( *CurPos == 0x00 || *CurPos == 0x09 || *CurPos == 0x0a || *CurPos == 0x0d || *CurPos == 0x20 )
 	{
@@ -199,7 +199,7 @@ static bool _imd_load_polys( const char **ppFileData, iIMDShape *s, int pieVersi
 }
 
 
-static BOOL ReadPoints( const char **ppFileData, iIMDShape *s )
+static bool ReadPoints( const char **ppFileData, iIMDShape *s )
 {
 	const char *pFileData = *ppFileData;
 	unsigned int i;
@@ -221,7 +221,7 @@ static BOOL ReadPoints( const char **ppFileData, iIMDShape *s )
 }
 
 
-static BOOL _imd_load_points( const char **ppFileData, iIMDShape *s )
+static bool _imd_load_points( const char **ppFileData, iIMDShape *s )
 {
 	Vector3f *p = NULL;
 	int32_t tempXMax, tempXMin, tempZMax, tempZMin;
@@ -455,7 +455,7 @@ static BOOL _imd_load_points( const char **ppFileData, iIMDShape *s )
  * \pre s->nconnectors set
  * \post s->connectors allocated
  */
-static BOOL _imd_load_connectors(const char **ppFileData, iIMDShape *s)
+static bool _imd_load_connectors(const char **ppFileData, iIMDShape *s)
 {
 	const char *pFileData = *ppFileData;
 	int cnt;
@@ -503,7 +503,14 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
 	iIMDShape *s = NULL;
 
 	if (nlevels == 0)
+	{
 		return NULL;
+	}
+
+	// Load optional MATERIALS directive
+	pTmp = pFileData;	// remember position
+	i = sscanf(pFileData, "%255s %n", buffer, &cnt);
+	ASSERT_OR_RETURN(NULL, i == 1, "Bad directive following LEVEL");
 
 	s = (iIMDShape*)malloc(sizeof(iIMDShape));
 	if (s == NULL)
@@ -512,26 +519,18 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
 		debug(LOG_ERROR, "_imd_load_level: Memory allocation error");
 		return NULL;
 	}
-
 	s->flags = 0;
 	s->nconnectors = 0; // Default number of connectors must be 0
 	s->npoints = 0;
 	s->npolys = 0;
-
 	s->points = NULL;
 	s->polys = NULL;
 	s->connectors = NULL;
 	s->next = NULL;
-
 	s->shadowEdgeList = NULL;
 	s->nShadowEdges = 0;
 	s->texpage = iV_TEX_INVALID;
 	s->tcmaskpage = iV_TEX_INVALID;
-
-	// Load optional MATERIALS directive
-	pTmp = pFileData;	// remember position
-	i = sscanf(pFileData, "%255s %n", buffer, &cnt);
-	ASSERT_OR_RETURN(NULL, i == 1, "Bad directive following LEVEL");
 	memset(s->material, 0, sizeof(s->material));
 	s->material[LIGHT_AMBIENT][3] = 1.0f;
 	s->material[LIGHT_DIFFUSE][3] = 1.0f;
@@ -640,7 +639,7 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 	UDWORD level;
 	int32_t imd_version;
 	uint32_t imd_flags;
-	BOOL bTextured = false;
+	bool bTextured = false;
 
 	if (sscanf(pFileData, "%255s %d%n", buffer, &imd_version, &cnt) != 2)
 	{

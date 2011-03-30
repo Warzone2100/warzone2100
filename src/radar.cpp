@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -49,9 +49,9 @@
 #define HIT_NOTIFICATION	(GAME_TICKS_PER_SEC * 2)
 #define RADAR_FRAME_SKIP	10
 
-BOOL bEnemyAllyRadarColor = false;     			/**< Enemy/ally radar color. */
+bool bEnemyAllyRadarColor = false;     			/**< Enemy/ally radar color. */
 RADAR_DRAW_MODE	radarDrawMode = RADAR_MODE_DEFAULT;	/**< Current mini-map mode. */
-BOOL rotateRadar; ///< Rotate the radar?
+bool rotateRadar; ///< Rotate the radar?
 
 static PIELIGHT		colRadarAlly, colRadarMe, colRadarEnemy;
 static PIELIGHT		tileColours[MAX_TILES];
@@ -143,7 +143,7 @@ void resetRadarRedraw()
 	resizeRadar();
 }
 
-BOOL InitRadar(void)
+bool InitRadar(void)
 {
 	// Ally/enemy/me colors
 	colRadarAlly = WZCOL_YELLOW;
@@ -155,7 +155,7 @@ BOOL InitRadar(void)
 	return true;
 }
 
-BOOL resizeRadar(void)
+bool resizeRadar(void)
 {
 	if (radarBuffer)
 	{
@@ -186,7 +186,7 @@ BOOL resizeRadar(void)
 	return true;
 }
 
-BOOL ShutdownRadar(void)
+bool ShutdownRadar(void)
 {
 	pie_ShutdownRadar();
 
@@ -666,7 +666,7 @@ static void DrawRadarExtras(float radarX, float radarY, float pixSizeH, float pi
 }
 
 /** Does a screen coordinate lie within the radar area? */
-BOOL CoordInRadar(int x,int y)
+bool CoordInRadar(int x,int y)
 {
 	Vector2f pos;
 	pos.x = x - radarCenterX;

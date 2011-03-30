@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -34,23 +34,12 @@
 #include "lib/framework/frame.h"
 #include "piedef.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
-/***************************************************************************/
-/*
- *	Global Definitions
- */
-/***************************************************************************/
-
-typedef struct
+struct CLIP_VERTEX
 {
 	Vector3i pos;
 	unsigned int u, v;
 	PIELIGHT light;
-} CLIP_VERTEX;
+};
 
 /***************************************************************************/
 /*
@@ -58,15 +47,11 @@ typedef struct
  */
 /***************************************************************************/
 
-extern BOOL pie_SetVideoBufferDepth(UDWORD depth);
-extern BOOL pie_SetVideoBufferWidth(UDWORD width);
-extern BOOL pie_SetVideoBufferHeight(UDWORD height);
+extern bool pie_SetVideoBufferDepth(UDWORD depth);
+extern bool pie_SetVideoBufferWidth(UDWORD width);
+extern bool pie_SetVideoBufferHeight(UDWORD height);
 extern int pie_GetVideoBufferDepth( void ) WZ_DECL_PURE;
 extern int pie_GetVideoBufferWidth( void ) WZ_DECL_PURE;
 extern int pie_GetVideoBufferHeight( void ) WZ_DECL_PURE;
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // _pieclip_h

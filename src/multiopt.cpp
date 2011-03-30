@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -110,8 +110,8 @@ void sendOptions()
 	// Send the structures changed
 	for (i = 0; i < ingame.numStructureLimits; i++)
 	{
-		NETuint8_t(&ingame.pStructureLimits[i].id);
-		NETuint8_t(&ingame.pStructureLimits[i].limit);
+		NETuint32_t(&ingame.pStructureLimits[i].id);
+		NETuint32_t(&ingame.pStructureLimits[i].limit);
 	}
 	updateLimitFlags();
 	NETuint8_t(&ingame.flags);
@@ -123,7 +123,7 @@ void sendOptions()
 /*!
  * check the wdg files that are being used.
  */
-static BOOL checkGameWdg(const char *nm)
+static bool checkGameWdg(const char *nm)
 {
 	LEVEL_DATASET *lev;
 
@@ -200,8 +200,8 @@ void recvOptions(NETQUEUE queue)
 
 	for (i = 0; i < ingame.numStructureLimits; i++)
 	{
-		NETuint8_t(&ingame.pStructureLimits[i].id);
-		NETuint8_t(&ingame.pStructureLimits[i].limit);
+		NETuint32_t(&ingame.pStructureLimits[i].id);
+		NETuint32_t(&ingame.pStructureLimits[i].limit);
 	}
 	NETuint8_t(&ingame.flags);
 
@@ -243,7 +243,7 @@ void recvOptions(NETQUEUE queue)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Host Campaign.
-BOOL hostCampaign(char *sGame, char *sPlayer)
+bool hostCampaign(char *sGame, char *sPlayer)
 {
 	PLAYERSTATS playerStats;
 	UDWORD		i;
@@ -295,7 +295,7 @@ BOOL hostCampaign(char *sGame, char *sPlayer)
 // ////////////////////////////////////////////////////////////////////////////
 // Join Campaign
 
-BOOL joinCampaign(UDWORD gameNumber, char *sPlayer)
+bool joinCampaign(UDWORD gameNumber, char *sPlayer)
 {
 	PLAYERSTATS	playerStats;
 
@@ -319,12 +319,12 @@ BOOL joinCampaign(UDWORD gameNumber, char *sPlayer)
 // ////////////////////////////////////////////////////////////////////////////
 // Tell the host we are leaving the game 'nicely', (we wanted to) and not
 // because we have some kind of error. (dropped or disconnected)
-BOOL sendLeavingMsg(void)
+bool sendLeavingMsg(void)
 {
 	debug(LOG_NET, "We are leaving 'nicely'");
 	NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_PLAYER_LEAVING);
 	{
-		BOOL host = NetPlay.isHost;
+		bool host = NetPlay.isHost;
 		uint32_t id = selectedPlayer;
 
 		NETuint32_t(&id);
@@ -337,7 +337,7 @@ BOOL sendLeavingMsg(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // called in Init.c to shutdown the whole netgame gubbins.
-BOOL multiShutdown(void)
+bool multiShutdown(void)
 {
 	// shut down netplay lib.
 	debug(LOG_MAIN, "shutting down networking");
@@ -356,7 +356,7 @@ BOOL multiShutdown(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // copy templates from one player to another.
-BOOL addTemplateToList(DROID_TEMPLATE *psNew, DROID_TEMPLATE **ppList)
+bool addTemplateToList(DROID_TEMPLATE *psNew, DROID_TEMPLATE **ppList)
 {
 	DROID_TEMPLATE *psTempl = new DROID_TEMPLATE(*psNew);
 	psTempl->pName = NULL;
@@ -374,14 +374,24 @@ BOOL addTemplateToList(DROID_TEMPLATE *psNew, DROID_TEMPLATE **ppList)
 
 // ////////////////////////////////////////////////////////////////////////////
 // copy templates from one player to another.
-BOOL addTemplate(UDWORD player, DROID_TEMPLATE *psNew)
+bool addTemplate(UDWORD player, DROID_TEMPLATE *psNew)
 {
 	return addTemplateToList(psNew, &apsDroidTemplates[player]);
 }
 
+void addTemplateBack(unsigned player, DROID_TEMPLATE *psNew)
+{
+	DROID_TEMPLATE **ppList = &apsDroidTemplates[player];
+	while (*ppList != NULL)
+	{
+		ppList = &(*ppList)->psNext;
+	}
+	addTemplateToList(psNew, ppList);
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 // setup templates
-BOOL multiTemplateSetup(void)
+bool multiTemplateSetup(void)
 {
 	// do nothing now
 	return true;
@@ -389,11 +399,11 @@ BOOL multiTemplateSetup(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // remove structures from map before campaign play.
-static BOOL cleanMap(UDWORD player)
+static bool cleanMap(UDWORD player)
 {
 	DROID		*psD,*psD2;
 	STRUCTURE	*psStruct;
-	BOOL		firstFact,firstRes;
+	bool		firstFact,firstRes;
 
 	bMultiPlayer = false;
 	bMultiMessages = false;
@@ -528,7 +538,7 @@ static BOOL cleanMap(UDWORD player)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-static BOOL gameInit(void)
+static bool gameInit(void)
 {
 	UDWORD			player;
 
@@ -594,7 +604,7 @@ void playerResponding(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 //called when the game finally gets fired up.
-BOOL multiGameInit(void)
+bool multiGameInit(void)
 {
 	UDWORD player;
 
@@ -611,7 +621,7 @@ BOOL multiGameInit(void)
 
 ////////////////////////////////
 // at the end of every game.
-BOOL multiGameShutdown(void)
+bool multiGameShutdown(void)
 {
 	PLAYERSTATS	st;
 	uint32_t        time;

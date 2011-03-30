@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -25,76 +25,76 @@
 #define __INCLUDED_SRC_SCRIPTAI_H__
 
 // Add a droid to a group
-extern BOOL scrGroupAddDroid(void);
+extern bool scrGroupAddDroid(void);
 
 // Add droids in an area to a group
-extern BOOL scrGroupAddArea(void);
+extern bool scrGroupAddArea(void);
 
 // Add groupless droids in an area to a group
-extern BOOL scrGroupAddAreaNoGroup(void);
+extern bool scrGroupAddAreaNoGroup(void);
 
 // Move the droids from one group to another
-extern BOOL scrGroupAddGroup(void);
+extern bool scrGroupAddGroup(void);
 
 // check if a droid is a member of a group
-extern BOOL scrGroupMember(void);
+extern bool scrGroupMember(void);
 
 // return number of idle droids in group.
-extern BOOL scrIdleGroup(void);
+extern bool scrIdleGroup(void);
 
 // initialise iterating a groups members
-extern BOOL scrInitIterateGroup(void);
+extern bool scrInitIterateGroup(void);
 
 // iterate through a groups members
-extern BOOL scrIterateGroup(void);
+extern bool scrIterateGroup(void);
 
 // remove a droid from a group
-extern BOOL scrDroidLeaveGroup(void);
+extern bool scrDroidLeaveGroup(void);
 
 // Give a group an order
-extern BOOL scrOrderGroup(void);
+extern bool scrOrderGroup(void);
 
 // Give a group an order to a location
-extern BOOL scrOrderGroupLoc(void);
+extern bool scrOrderGroupLoc(void);
 
 // Give a group an order to an object
-extern BOOL scrOrderGroupObj(void);
+extern bool scrOrderGroupObj(void);
 
 // Give a Droid an order
-extern BOOL scrOrderDroid(void);
+extern bool scrOrderDroid(void);
 
 // Give a Droid an order to a location
-extern BOOL scrOrderDroidLoc(void);
+extern bool scrOrderDroidLoc(void);
 
 // Give a Droid an order to an object
-extern BOOL scrOrderDroidObj(void);
+extern bool scrOrderDroidObj(void);
 
 // Give a Droid an order with a stat
-extern BOOL scrOrderDroidStatsLoc(void);
+extern bool scrOrderDroidStatsLoc(void);
 
 // set the secondary state for a droid
-extern BOOL scrSetDroidSecondary(void);
+extern bool scrSetDroidSecondary(void);
 
 // set the secondary state for a droid
-extern BOOL scrSetGroupSecondary(void);
+extern bool scrSetGroupSecondary(void);
 
 // initialise iterating a cluster
-extern BOOL scrInitIterateCluster(void);
+extern bool scrInitIterateCluster(void);
 
 // iterate a cluster
-extern BOOL scrIterateCluster(void);
+extern bool scrIterateCluster(void);
 
 // add a droid to a commander
-extern BOOL scrCmdDroidAddDroid(void);
+extern bool scrCmdDroidAddDroid(void);
 
 // returns max number of droids in a commander group
-extern BOOL scrCmdDroidMaxGroup(void);
+extern bool scrCmdDroidMaxGroup(void);
 
 // return whether a droid can reach given destination
-extern BOOL scrDroidCanReach(void);
+extern bool scrDroidCanReach(void);
 
 // types for structure targets
-typedef enum _scr_struct_tar
+enum SCR_STRUCT_TAR
 {
 	// normal structure types
 	SCR_ST_HQ					= 0x00000001,
@@ -115,10 +115,10 @@ typedef enum _scr_struct_tar
 	SCR_ST_DEF_AIR				= 0x00002000,
 	SCR_ST_DEF_IDF				= 0x00004000,
 	SCR_ST_DEF_ALL				= 0x00007000,
-} SCR_STRUCT_TAR;
+};
 
 
-typedef enum _scr_droid_tar
+enum SCR_DROID_TAR
 {
 	// turret types
 	SCR_DT_COMMAND				= 0x00000001,
@@ -145,56 +145,56 @@ typedef enum _scr_droid_tar
 	SCR_DT_VTOL				= 0x00008000,
 	SCR_DT_HOVER				= 0x00010000,
 	SCR_DT_PROPELLOR			= 0x00020000,
-} SCR_DROID_TAR;
+};
 
 
 // reset the structure preferences
-BOOL scrResetStructTargets(void);
+bool scrResetStructTargets(void);
 // reset the droid preferences
-BOOL scrResetDroidTargets(void);
+bool scrResetDroidTargets(void);
 // set prefered structure target types
-BOOL scrSetStructTarPref(void);
+bool scrSetStructTarPref(void);
 // set structure target ignore types
-BOOL scrSetStructTarIgnore(void);
+bool scrSetStructTarIgnore(void);
 // set prefered droid target types
-BOOL scrSetDroidTarPref(void);
+bool scrSetDroidTarPref(void);
 // set droid target ignore types
-BOOL scrSetDroidTarIgnore(void);
+bool scrSetDroidTarIgnore(void);
 // get a structure target in an area using the preferences
-BOOL scrStructTargetInArea(void);
+bool scrStructTargetInArea(void);
 // get a structure target on the map using the preferences
-BOOL scrStructTargetOnMap(void);
+bool scrStructTargetOnMap(void);
 // get a droid target in an area using the preferences
-BOOL scrDroidTargetInArea(void);
+bool scrDroidTargetInArea(void);
 // get a droid target on the map using the preferences
-BOOL scrDroidTargetOnMap(void);
+bool scrDroidTargetOnMap(void);
 // get a target from a cluster using the preferences
-BOOL scrTargetInCluster(void);
+bool scrTargetInCluster(void);
 
 // Skirmish funcs may99
 
 // choose and do research
-BOOL scrSkDoResearch(void);
+bool scrSkDoResearch(void);
 
 // find the human players
-BOOL scrSkLocateEnemy(void);
+bool scrSkLocateEnemy(void);
 
 // check a template
-BOOL scrSkCanBuildTemplate(void);
+bool scrSkCanBuildTemplate(void);
 
 // check for vtol availability
-BOOL scrSkVtolEnableCheck(void);
+bool scrSkVtolEnableCheck(void);
 
 // check capacity
-BOOL scrSkGetFactoryCapacity(void);
+bool scrSkGetFactoryCapacity(void);
 
 // help/hinder player.
-BOOL scrSkDifficultyModifier(void);
+bool scrSkDifficultyModifier(void);
 
 // pick good spots.
-BOOL scrSkDefenseLocation(void);
+bool scrSkDefenseLocation(void);
 
 // line build.
-//BOOL scrSkOrderDroidLineBuild(void);
+//bool scrSkOrderDroidLineBuild(void);
 
 #endif // __INCLUDED_SRC_SCRIPTAI_H__

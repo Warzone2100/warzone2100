@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -103,7 +103,7 @@ static UWORD setIconID(char *pIconName, char *pName);
 static COMPONENT_STATS * getComponentDetails(char *pName, char *pCompName);
 static void replaceComponent(COMPONENT_STATS *pNewComponent, COMPONENT_STATS *pOldComponent,
 					  UBYTE player);
-static BOOL checkResearchName(RESEARCH *psRes, UDWORD numStats);
+static bool checkResearchName(RESEARCH *psRes, UDWORD numStats);
 
 static const char *getResearchName(RESEARCH *pResearch)
 {
@@ -122,7 +122,7 @@ static void replaceTransDroidComponents(DROID *psTransporter, UDWORD oldType,
                                  UDWORD oldCompInc, UDWORD newCompInc);
 
 
-BOOL researchInitVars(void)
+bool researchInitVars(void)
 {
 	int i;
 
@@ -239,7 +239,7 @@ BOOL researchInitVars(void)
 
 
 /*Load the research stats from the file exported from Access*/
-BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
+bool loadResearch(const char *pResearchData, UDWORD bufferSize)
 {
 	unsigned int researchCount = numCR(pResearchData, bufferSize);
 	RESEARCH *pResearch;
@@ -540,14 +540,14 @@ BOOL loadResearch(const char *pResearchData, UDWORD bufferSize)
 
 
 //Load the pre-requisites for a research list
-BOOL loadResearchPR(const char *pPRData, UDWORD bufferSize)
+bool loadResearchPR(const char *pPRData, UDWORD bufferSize)
 {
 	const unsigned int NumToAlloc = numCR(pPRData, bufferSize);
 	unsigned int i = 0;
 	char				ResearchName[MAX_STR_LENGTH], PRName[MAX_STR_LENGTH];
 	UWORD				incR, incPR;
 	RESEARCH			*pResearch = asResearch, *pPRResearch = asResearch;
-	BOOL				recFound;
+	bool				recFound;
 
 	// Check not going to go over max
 	ASSERT( NumToAlloc <= MAX_RESEARCH_PR, "loadResearchPR: too many!" );
@@ -624,7 +624,7 @@ BOOL loadResearchPR(const char *pPRData, UDWORD bufferSize)
 }
 
 //Load the artefacts for a research list
-BOOL loadResearchArtefacts(const char *pArteData, UDWORD bufferSize, UDWORD listNumber)
+bool loadResearchArtefacts(const char *pArteData, UDWORD bufferSize, UDWORD listNumber)
 {
 	const unsigned int NumToAlloc = numCR(pArteData, bufferSize);
 	unsigned int i = 0;
@@ -767,7 +767,7 @@ BOOL loadResearchArtefacts(const char *pArteData, UDWORD bufferSize, UDWORD list
 }
 
 //Load the Structures for a research list
-BOOL loadResearchStructures(const char *pStructData, UDWORD bufferSize,UDWORD listNumber)
+bool loadResearchStructures(const char *pStructData, UDWORD bufferSize,UDWORD listNumber)
 {
 	const unsigned int NumToAlloc = numCR(pStructData, bufferSize);
 	unsigned int i = 0;
@@ -775,7 +775,7 @@ BOOL loadResearchStructures(const char *pStructData, UDWORD bufferSize,UDWORD li
 	UWORD				incR, incS;
 	RESEARCH			*pResearch = asResearch;
 	STRUCTURE_STATS		*pStructure = asStructureStats;
-	BOOL				recFound;
+	bool				recFound;
 	UDWORD				numToFind;
 
 	//initialise the storage flags
@@ -904,7 +904,7 @@ BOOL loadResearchStructures(const char *pStructData, UDWORD bufferSize,UDWORD li
 }
 
 //Load the pre-requisites for a research list
-BOOL loadResearchFunctions(const char *pFunctionData, UDWORD bufferSize)
+bool loadResearchFunctions(const char *pFunctionData, UDWORD bufferSize)
 {
 	const unsigned int NumToAlloc = numCR(pFunctionData, bufferSize);
 	unsigned int i = 0;
@@ -912,7 +912,7 @@ BOOL loadResearchFunctions(const char *pFunctionData, UDWORD bufferSize)
 	UDWORD				incR, incF;
 	RESEARCH			*pResearch = asResearch;
 	FUNCTION			**pFunction = asFunctions;
-	BOOL				recFound;
+	bool				recFound;
 
 	//initialise the storage flags
 	for (incR = 0; incR < numResearch; incR++)
@@ -1017,7 +1017,7 @@ UWORD fillResearchList(UWORD *plist, UDWORD playerID, UWORD topic, UWORD limit)
 	UWORD				inc, count=0;
 	UDWORD				incPR, incS;
 	PLAYER_RESEARCH		*pPlayerRes = asPlayerResList[playerID];
-	BOOL				bPRFound, bStructFound;
+	bool				bPRFound, bStructFound;
 
 	ASSERT( numResearch < UWORD_MAX,
 		"fillResearchList: only using a UWORD for storage - need more!" );
@@ -1111,7 +1111,7 @@ add_research: //if passed all the tests - add it to the list
 }
 
 /* process the results of a completed research topic */
-void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay, STRUCTURE *psResearchFacility, BOOL bTrigger)
+void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE *psResearchFacility, bool bTrigger)
 {
 	RESEARCH					*pResearch = asResearch + researchIndex;
 	UDWORD						type, inc;//, upgrade;
@@ -1126,8 +1126,10 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay, STRUCTURE
 
 	ASSERT_OR_RETURN( , researchIndex < numResearch, "Invalid research index %u", researchIndex);
 
-	sendResearchStatus(NULL, researchIndex, player, false);
-	// Confused whether we should wait for our message before doing anything, and confused what this function does...
+	if (!isInSync())
+	{
+		sendResearchStatus(NULL, researchIndex, player, false);
+	}
 
 	MakeResearchCompleted(&pPlayerRes[researchIndex]);
 
@@ -1801,7 +1803,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, BOOL bDisplay, STRUCTURE
 }
 
 /*This function is called when the research files are reloaded*/
-BOOL ResearchShutDown(void)
+bool ResearchShutDown(void)
 {
 	UBYTE   i;
 
@@ -2369,7 +2371,7 @@ COMPONENT_STATS * getComponentDetails(char *pName, char *pCompName)
 }
 
 //return a pointer to a research topic based on the name
-RESEARCH * getResearch(const char *pName, BOOL resName)
+RESEARCH * getResearch(const char *pName, bool resName)
 {
 	unsigned int inc = 0;
 
@@ -2456,7 +2458,7 @@ static void replaceComponent(COMPONENT_STATS *pNewComponent, COMPONENT_STATS *pO
 
 /*Looks through all the currently allocated stats to check the name is not
 a duplicate*/
-static BOOL checkResearchName(RESEARCH *psResearch, UDWORD numStats)
+static bool checkResearchName(RESEARCH *psResearch, UDWORD numStats)
 {
 	UDWORD inc;
 
@@ -2478,12 +2480,12 @@ static BOOL checkResearchName(RESEARCH *psResearch, UDWORD numStats)
 
 /* Sets the 'possible' flag for a player's research so the topic will appear in
 the research list next time the Research Facilty is selected */
-BOOL enableResearch(RESEARCH *psResearch, UDWORD player)
+bool enableResearch(RESEARCH *psResearch, UDWORD player)
 {
 	UDWORD				inc;
 	PLAYER_RESEARCH		*pPlayerRes = asPlayerResList[player];
 	STRUCTURE			*psStruct;
-	BOOL				resFree = false;
+	bool				resFree = false;
 
 
 	inc = psResearch - asResearch;
@@ -2569,7 +2571,7 @@ void researchReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 
 /*checks that the research has loaded up as expected - must be done after
 all research parts have been loaded*/
-BOOL checkResearchStats(void)
+bool checkResearchStats(void)
 {
 	UDWORD resInc, inc;
 	for (resInc = 0; resInc < numResearch; resInc++)
@@ -2739,7 +2741,7 @@ void enableSelfRepair(UBYTE player)
 }
 
 /*check to see if any research has been completed that enables self repair*/
-BOOL selfRepairEnabled(UBYTE player)
+bool selfRepairEnabled(UBYTE player)
 {
 	if (bSelfRepair[player])
 	{
@@ -2752,7 +2754,7 @@ BOOL selfRepairEnabled(UBYTE player)
 }
 
 /*checks the stat to see if its of type wall or defence*/
-BOOL wallDefenceStruct(STRUCTURE_STATS *psStats)
+bool wallDefenceStruct(STRUCTURE_STATS *psStats)
 {
 	if (psStats->type == REF_DEFENSE || psStats->type == REF_WALL || psStats->type == REF_GATE
 	    || psStats->type == REF_WALLCORNER || psStats->type == REF_BLASTDOOR)

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -461,8 +461,8 @@ ASR_RETVAL fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 		}
 	}
 
-	// TODO FIXME once we can change numPoints to something larger than uint16_t
-	psMove->numPoints = std::min<int>(UINT16_MAX, path.size());
+	// TODO FIXME once we can change numPoints to something larger than int
+	psMove->numPoints = std::min<size_t>(INT32_MAX - 1, path.size());
 
 	// Allocate memory
 	psMove->asPath = static_cast<Vector2i *>(malloc(sizeof(*psMove->asPath) * path.size()));

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -27,15 +27,15 @@
 #define IDORDER_FORM	8000
 #define IDORDER_CLOSE	8001
 
-extern BOOL OrderUp;
+extern bool OrderUp;
 
-BOOL intUpdateOrder(DROID *psDroid);	// update already open order form
-BOOL intAddOrder(BASE_OBJECT *psObj);			// create and open order form
+bool intUpdateOrder(DROID *psDroid);	// update already open order form
+bool intAddOrder(BASE_OBJECT *psObj);			// create and open order form
 void intRunOrder(void);					
 void intProcessOrder(UDWORD id);
 void intRemoveOrder(void);
 void intRemoveOrderNoAnim(void);
-BOOL intRefreshOrder(void);
+bool intRefreshOrder(void);
 
 //new function added to bring up the RMB order form for Factories as well as droids
 void intAddFactoryOrder(STRUCTURE *psStructure);

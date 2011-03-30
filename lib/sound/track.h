@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -43,14 +43,14 @@
 /* typedefs
  */
 
-typedef BOOL (* AUDIO_CALLBACK)  ( void *psObj );
-typedef struct __audio_stream AUDIO_STREAM;
+typedef bool (* AUDIO_CALLBACK)  ( void *psObj );
+struct AUDIO_STREAM;
 
 /* structs */
 
 struct SIMPLE_OBJECT;
 
-typedef struct AUDIO_SAMPLE
+struct AUDIO_SAMPLE
 {
 	SDWORD                  iTrack;         // ID number identifying a specific sound; currently (r1182) mapped in audio_id.c
 #ifndef WZ_NOSOUND
@@ -63,16 +63,16 @@ typedef struct AUDIO_SAMPLE
 #endif
 	SDWORD                  x, y, z;
 	float                   fVol;           // computed volume of sample
-	BOOL                    bFinishedPlaying;
+	bool                    bFinishedPlaying;
 	AUDIO_CALLBACK          pCallback;
 	SIMPLE_OBJECT *         psObj;
-	struct AUDIO_SAMPLE     *psPrev;
-	struct AUDIO_SAMPLE     *psNext;
-} AUDIO_SAMPLE;
+	AUDIO_SAMPLE *          psPrev;
+	AUDIO_SAMPLE *          psNext;
+};
 
-typedef struct TRACK
+struct TRACK
 {
-	BOOL            bLoop;
+	bool            bLoop;
 	SDWORD          iVol;
 	SDWORD          iAudibleRadius;
 	SDWORD          iTime;                  // duration in milliseconds
@@ -82,16 +82,16 @@ typedef struct TRACK
 	ALuint          iBufferName;            // OpenAL name of the buffer
 #endif
 	const char*     fileName;
-} TRACK;
+};
 
 /* functions
  */
 
-BOOL	sound_Init(void);
-BOOL	sound_Shutdown(void);
+bool	sound_Init(void);
+bool	sound_Shutdown(void);
 
 TRACK *	sound_LoadTrackFromFile(const char *fileName);
-unsigned int sound_SetTrackVals(const char* fileName, BOOL loop, unsigned int volume, unsigned int audibleRadius);
+unsigned int sound_SetTrackVals(const char* fileName, bool loop, unsigned int volume, unsigned int audibleRadius);
 void	sound_ReleaseTrack( TRACK * psTrack );
 
 void	sound_StopTrack( AUDIO_SAMPLE *psSample );
@@ -99,22 +99,22 @@ void	sound_PauseTrack( AUDIO_SAMPLE *psSample );
 void	sound_UpdateSample( AUDIO_SAMPLE *psSample );
 void	sound_CheckAllUnloaded( void );
 void sound_RemoveActiveSample( AUDIO_SAMPLE *psSample );
-BOOL	sound_CheckTrack( SDWORD iTrack );
+bool	sound_CheckTrack( SDWORD iTrack );
 
 SDWORD	sound_GetTrackTime( SDWORD iTrack );
 SDWORD	sound_GetTrackAudibleRadius( SDWORD iTrack );
 SDWORD	sound_GetTrackVolume( SDWORD iTrack );
 const char *	sound_GetTrackName( SDWORD iTrack );
 
-BOOL	sound_TrackLooped( SDWORD iTrack );
+bool	sound_TrackLooped( SDWORD iTrack );
 void	sound_SetCallbackFunction( void * fn );
 
-BOOL	sound_Play2DTrack( AUDIO_SAMPLE *psSample, BOOL bQueued );
-BOOL	sound_Play3DTrack( AUDIO_SAMPLE *psSample );
+bool	sound_Play2DTrack( AUDIO_SAMPLE *psSample, bool bQueued );
+bool	sound_Play3DTrack( AUDIO_SAMPLE *psSample );
 void	sound_PlayWithCallback( AUDIO_SAMPLE *psSample, SDWORD iCurTime, AUDIO_CALLBACK pDoneFunc );
 void	sound_FinishedCallback( AUDIO_SAMPLE *psSample );
 
-BOOL	sound_GetSystemActive( void );
+bool	sound_GetSystemActive( void );
 SDWORD	sound_GetTrackID( TRACK *psTrack );
 SDWORD	sound_GetAvailableID( void );
 SDWORD	sound_GetNumPlaying( SDWORD iTrack );
@@ -127,7 +127,7 @@ void	sound_SetStoppedCallback( AUDIO_CALLBACK pStopTrackCallback );
 UDWORD	sound_GetTrackTimeLastFinished( SDWORD iTrack );
 void	sound_SetTrackTimeLastFinished( SDWORD iTrack, UDWORD iTime );
 
-extern BOOL sound_isStreamPlaying(AUDIO_STREAM *stream);
+extern bool sound_isStreamPlaying(AUDIO_STREAM *stream);
 extern void sound_StopStream(AUDIO_STREAM* stream);
 extern void sound_PauseStream(AUDIO_STREAM* stream);
 extern void sound_ResumeStream(AUDIO_STREAM* stream);

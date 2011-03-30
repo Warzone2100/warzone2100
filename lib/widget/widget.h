@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -143,7 +143,7 @@ struct W_INIT
 #define TAB_MINOR 0	// Tab types passed into tab display callbacks.
 #define TAB_MAJOR 1
 
-typedef void (*TAB_DISPLAY)(WIDGET *psWidget, UDWORD TabType, UDWORD Position, UDWORD Number, BOOL Selected, BOOL Hilight, UDWORD x, UDWORD y, UDWORD Width, UDWORD Height);
+typedef void (*TAB_DISPLAY)(WIDGET *psWidget, UDWORD TabType, UDWORD Position, UDWORD Number, bool Selected, bool Hilight, UDWORD x, UDWORD y, UDWORD Width, UDWORD Height);
 typedef void (*FONT_DISPLAY)(UDWORD x, UDWORD y, char *String);
 
 /** Form initialisation structure */
@@ -280,22 +280,22 @@ extern void widgReleaseScreen(W_SCREEN *psScreen);
 extern void widgSetTipFont(W_SCREEN *psScreen, enum iV_fonts FontID);
 
 /** Add a form to the widget screen */
-extern BOOL widgAddForm(W_SCREEN *psScreen, const W_FORMINIT* psInit);
+extern bool widgAddForm(W_SCREEN *psScreen, const W_FORMINIT* psInit);
 
 /** Add a label to the widget screen */
-extern BOOL widgAddLabel(W_SCREEN *psScreen, const W_LABINIT* psInit);
+extern bool widgAddLabel(W_SCREEN *psScreen, const W_LABINIT* psInit);
 
 /** Add a button to a form */
-extern BOOL widgAddButton(W_SCREEN *psScreen, const W_BUTINIT* psInit);
+extern bool widgAddButton(W_SCREEN *psScreen, const W_BUTINIT* psInit);
 
 /** Add an edit box to a form */
-extern BOOL widgAddEditBox(W_SCREEN *psScreen, const W_EDBINIT* psInit);
+extern bool widgAddEditBox(W_SCREEN *psScreen, const W_EDBINIT* psInit);
 
 /** Add a bar graph to a form */
-extern BOOL widgAddBarGraph(W_SCREEN *psScreen, const W_BARINIT* psInit);
+extern bool widgAddBarGraph(W_SCREEN *psScreen, const W_BARINIT* psInit);
 
 /** Add a slider to a form */
-extern BOOL widgAddSlider(W_SCREEN *psScreen, const W_SLDINIT* psInit);
+extern bool widgAddSlider(W_SCREEN *psScreen, const W_SLDINIT* psInit);
 
 /** Delete a widget from the screen */
 extern void widgDelete(W_SCREEN *psScreen, UDWORD id);
@@ -444,10 +444,10 @@ extern SWORD WidgGetHilightAudioID(void);
 extern SWORD WidgGetClickedAudioID(void);
 
 /** Enable or disable all sliders. */
-extern void sliderEnableDrag(BOOL Enable);
+extern void sliderEnableDrag(bool Enable);
 
-extern void setWidgetsStatus( BOOL var );
-extern BOOL getWidgetsStatus( void );
+extern void setWidgetsStatus( bool var );
+extern bool getWidgetsStatus( void );
 
 extern void CheckpsMouseOverWidget( void *psWidget );
 /** @} */

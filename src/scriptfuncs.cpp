@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -106,7 +106,7 @@ static INTERP_VAL	scrFunctionResult;	//function return value to be pushed to sta
 static SDWORD	bitMask[] = {0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80};
 static char		strParam1[MAXSTRLEN], strParam2[MAXSTRLEN];		//these should be used as string parameters for stackPopParams()
 
-static BOOL	structHasModule(STRUCTURE *psStruct);
+static bool	structHasModule(STRUCTURE *psStruct);
 
 static DROID_TEMPLATE* scrCheckTemplateExists(SDWORD player, DROID_TEMPLATE *psTempl);
 
@@ -127,7 +127,7 @@ void scriptSetDerrickPos(int x, int y)
 	derricks.push_back(pos);
 }
 
-BOOL scriptInit()
+bool scriptInit()
 {
 	int i;
 
@@ -140,7 +140,7 @@ BOOL scriptInit()
 	return true;
 }
 
-BOOL scrScavengersActive()
+bool scrScavengersActive()
 {
 	scrFunctionResult.v.ival = scavengerPlayer();
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
@@ -150,7 +150,7 @@ BOOL scrScavengersActive()
 	return true;
 }
 
-BOOL scrGetDifficulty()
+bool scrGetDifficulty()
 {
 	int player;
 	if (!stackPopParams(1, VAL_INT, &player))
@@ -167,7 +167,7 @@ BOOL scrGetDifficulty()
 	return true;
 }
 
-BOOL scrGetPlayer()
+bool scrGetPlayer()
 {
 	if (!stackPopParams(1, VAL_STRING, &strParam1))
 	{
@@ -184,7 +184,7 @@ BOOL scrGetPlayer()
 	return true;
 }
 
-BOOL scrGetDerrick()
+bool scrGetDerrick()
 {
 	int x, y, i;
 
@@ -217,7 +217,7 @@ Vector2i getPlayerStartPosition(int player)
 	return positions[player];
 }
 
-BOOL scrSetSunPosition(void)
+bool scrSetSunPosition(void)
 {
 	float x, y, z;
 
@@ -229,7 +229,7 @@ BOOL scrSetSunPosition(void)
 	return true;
 }
 
-BOOL scrSetSunIntensity(void)
+bool scrSetSunIntensity(void)
 {
 	float ambient[4], diffuse[4], specular[4];
 
@@ -251,7 +251,7 @@ BOOL scrSetSunIntensity(void)
 	return true;
 }
 
-BOOL scrSafeDest(void)
+bool scrSafeDest(void)
 {
 	SDWORD	x, y, player;
 
@@ -269,7 +269,7 @@ BOOL scrSafeDest(void)
 	return true;
 }
 
-BOOL scrThreatAt(void)
+bool scrThreatAt(void)
 {
 	SDWORD	x, y, player;
 
@@ -287,7 +287,7 @@ BOOL scrThreatAt(void)
 	return true;
 }
 
-BOOL scrGetPlayerStartPosition(void)
+bool scrGetPlayerStartPosition(void)
 {
 	SDWORD	*x, *y, player;
 
@@ -320,7 +320,7 @@ BOOL scrGetPlayerStartPosition(void)
 
 
 // check for a base object being in range of a point
-BOOL objectInRange(BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range)
+bool objectInRange(BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range)
 {
 	BASE_OBJECT		*psCurr;
 	SDWORD			xdiff, ydiff, rangeSq;
@@ -357,10 +357,10 @@ BOOL objectInRange(BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range)
 
 // -----------------------------------------------------------------------------------------
 // Check for any player object being within a certain range of a position
-BOOL scrObjectInRange(void)
+bool scrObjectInRange(void)
 {
 	SDWORD		range, player, x,y;
-	BOOL		found;
+	bool		found;
 
 	if (!stackPopParams(4, VAL_INT, &player, VAL_INT, &x, VAL_INT, &y, VAL_INT, &range))
 	{
@@ -387,10 +387,10 @@ BOOL scrObjectInRange(void)
 
 // -----------------------------------------------------------------------------------------
 // Check for a droid being within a certain range of a position
-BOOL scrDroidInRange(void)
+bool scrDroidInRange(void)
 {
 	SDWORD		range, player, x,y;
-	BOOL		found;
+	bool		found;
 
 	if (!stackPopParams(4, VAL_INT, &player, VAL_INT, &x, VAL_INT, &y, VAL_INT, &range))
 	{
@@ -416,10 +416,10 @@ BOOL scrDroidInRange(void)
 
 // -----------------------------------------------------------------------------------------
 // Check for a struct being within a certain range of a position
-BOOL scrStructInRange(void)
+bool scrStructInRange(void)
 {
 	SDWORD		range, player, x,y;
-	BOOL		found;
+	bool		found;
 
 	if (!stackPopParams(4, VAL_INT, &player, VAL_INT, &x, VAL_INT, &y, VAL_INT, &range))
 	{
@@ -444,7 +444,7 @@ BOOL scrStructInRange(void)
 }
 
 // -----------------------------------------------------------------------------------------
-BOOL scrPlayerPower(void)
+bool scrPlayerPower(void)
 {
 	SDWORD player;
 
@@ -469,7 +469,7 @@ BOOL scrPlayerPower(void)
 
 // -----------------------------------------------------------------------------------------
 // check for a base object being in an area
-static BOOL objectInArea(BASE_OBJECT *psList, SDWORD x1, SDWORD y1, SDWORD x2, SDWORD y2)
+static bool objectInArea(BASE_OBJECT *psList, SDWORD x1, SDWORD y1, SDWORD x2, SDWORD y2)
 {
 	BASE_OBJECT		*psCurr;
 	SDWORD			ox,oy;
@@ -498,10 +498,10 @@ static BOOL objectInArea(BASE_OBJECT *psList, SDWORD x1, SDWORD y1, SDWORD x2, S
 
 // -----------------------------------------------------------------------------------------
 // Check for any player object being within a certain area
-BOOL scrObjectInArea(void)
+bool scrObjectInArea(void)
 {
 	SDWORD		player, x1,y1, x2,y2;
-	BOOL		found;
+	bool		found;
 
 	if (!stackPopParams(5, VAL_INT, &player, VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2))
 	{
@@ -528,10 +528,10 @@ BOOL scrObjectInArea(void)
 
 // -----------------------------------------------------------------------------------------
 // Check for a droid being within a certain area
-BOOL scrDroidInArea(void)
+bool scrDroidInArea(void)
 {
 	SDWORD		player, x1,y1, x2,y2;
-	BOOL		found;
+	bool		found;
 
 	if (!stackPopParams(5, VAL_INT, &player, VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2))
 	{
@@ -557,10 +557,10 @@ BOOL scrDroidInArea(void)
 
 // -----------------------------------------------------------------------------------------
 // Check for a struct being within a certain Area of a position
-BOOL scrStructInArea(void)
+bool scrStructInArea(void)
 {
 	SDWORD		player, x1,y1, x2,y2;
-	BOOL		found;
+	bool		found;
 
 	if (!stackPopParams(5, VAL_INT, &player, VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2))
 	{
@@ -586,9 +586,10 @@ BOOL scrStructInArea(void)
 
 
 // -----------------------------------------------------------------------------------------
-BOOL scrSeenStructInArea(void)
+bool scrSeenStructInArea(void)
 {
-	BOOL		walls=false,found = false;
+	int32_t	walls=false;	// was BOOL (int) ** see warning about conversion
+	bool	found = false;
 	SDWORD		player,enemy,x1,y1, x2,y2;
 	STRUCTURE	*psCurr;
 	SDWORD		ox,oy;
@@ -643,7 +644,7 @@ BOOL scrSeenStructInArea(void)
 
 // -----------------------------------------------------------------------------------------
 // Check for a players structures but no walls being within a certain area
-BOOL scrStructButNoWallsInArea(void)
+bool scrStructButNoWallsInArea(void)
 {
 	SDWORD		player, x1,y1, x2,y2;
 	SDWORD		ox,oy;
@@ -721,7 +722,7 @@ static SDWORD numObjectsInArea(BASE_OBJECT *psList, SDWORD x1, SDWORD y1, SDWORD
 
 // -----------------------------------------------------------------------------------------
 // Count the number of player objects within a certain area
-BOOL scrNumObjectsInArea(void)
+bool scrNumObjectsInArea(void)
 {
 	SDWORD		player, x1,y1, x2,y2;
 	SDWORD		count;
@@ -752,7 +753,7 @@ BOOL scrNumObjectsInArea(void)
 
 // -----------------------------------------------------------------------------------------
 // Count the number of player droids within a certain area
-BOOL scrNumDroidsInArea(void)
+bool scrNumDroidsInArea(void)
 {
 	SDWORD		player, x1,y1, x2,y2;
 	SDWORD		count;
@@ -782,7 +783,7 @@ BOOL scrNumDroidsInArea(void)
 
 // -----------------------------------------------------------------------------------------
 // Count the number of player structures within a certain area
-BOOL scrNumStructsInArea(void)
+bool scrNumStructsInArea(void)
 {
 	SDWORD		player, x1,y1, x2,y2;
 	SDWORD		count;
@@ -812,7 +813,7 @@ BOOL scrNumStructsInArea(void)
 
 // -----------------------------------------------------------------------------------------
 // Count the number of player structures but not walls within a certain area
-BOOL scrNumStructsButNotWallsInArea(void)
+bool scrNumStructsButNotWallsInArea(void)
 {
 	SDWORD		player, x1,y1, x2,y2;
 	SDWORD		count, ox,oy;
@@ -858,7 +859,7 @@ BOOL scrNumStructsButNotWallsInArea(void)
 
 // -----------------------------------------------------------------------------------------
 // Count the number of structures in an area of a certain type
-BOOL scrNumStructsByTypeInArea(void)
+bool scrNumStructsByTypeInArea(void)
 {
 	SDWORD		player, type, x1,y1, x2,y2;
 	SDWORD		count, ox,oy;
@@ -904,11 +905,11 @@ BOOL scrNumStructsByTypeInArea(void)
 
 // -----------------------------------------------------------------------------------------
 // Check for a droid having seen a certain object
-BOOL scrDroidHasSeen(void)
+bool scrDroidHasSeen(void)
 {
 	SDWORD		player;
 	BASE_OBJECT	*psObj;
-	BOOL		seen;
+	bool		seen;
 
 	if (!stackPopParams(2, ST_BASEOBJECT, &psObj, VAL_INT, &player))
 	{
@@ -945,7 +946,7 @@ BOOL scrDroidHasSeen(void)
 
 // -----------------------------------------------------------------------------------------
 // Enable a component to be researched
-BOOL scrEnableComponent(void)
+bool scrEnableComponent(void)
 {
 	SDWORD		player;
 	INTERP_VAL	sVal;
@@ -1002,7 +1003,7 @@ BOOL scrEnableComponent(void)
 
 // -----------------------------------------------------------------------------------------
 // Make a component available
-BOOL scrMakeComponentAvailable(void)
+bool scrMakeComponentAvailable(void)
 {
 	SDWORD		player;
 	INTERP_VAL	sVal;
@@ -1059,7 +1060,7 @@ BOOL scrMakeComponentAvailable(void)
 
 // -----------------------------------------------------------------------------------------
 // Add a droid
-BOOL scrAddDroidToMissionList(void)
+bool scrAddDroidToMissionList(void)
 {
 	SDWORD			player;
 	DROID_TEMPLATE	*psTemplate;
@@ -1101,7 +1102,7 @@ BOOL scrAddDroidToMissionList(void)
 
 // -----------------------------------------------------------------------------------------
 // Add a droid
-BOOL scrAddDroid(void)
+bool scrAddDroid(void)
 {
 	SDWORD			x, y, player;
 	DROID_TEMPLATE	*psTemplate;
@@ -1157,7 +1158,7 @@ BOOL scrAddDroid(void)
 // -----------------------------------------------------------------------------------------
 // Add droid to transporter
 
-BOOL scrAddDroidToTransporter(void)
+bool scrAddDroidToTransporter(void)
 {
 	DROID	*psTransporter, *psDroid;
 
@@ -1190,11 +1191,11 @@ BOOL scrAddDroidToTransporter(void)
 
 // -----------------------------------------------------------------------------------------
 //check for a building to have been destroyed
-BOOL scrBuildingDestroyed(void)
+bool scrBuildingDestroyed(void)
 {
 	SDWORD		player;
 	UDWORD		structureID;
-	BOOL		destroyed;
+	bool		destroyed;
 	STRUCTURE	*psCurr;
 
 	if (!stackPopParams(2, ST_STRUCTUREID, &structureID, VAL_INT, &player))
@@ -1228,7 +1229,7 @@ BOOL scrBuildingDestroyed(void)
 
 // -----------------------------------------------------------------------------------------
 // Enable a structure to be built
-BOOL scrEnableStructure(void)
+bool scrEnableStructure(void)
 {
 	SDWORD		player, index;
 
@@ -1259,10 +1260,10 @@ BOOL scrEnableStructure(void)
 // -----------------------------------------------------------------------------------------
 // Check if a structure can be built.
 // currently PC skirmish only.
-BOOL scrIsStructureAvailable(void)
+bool scrIsStructureAvailable(void)
 {
 	SDWORD		player, index;
-	BOOL		bResult;
+	bool		bResult;
 
 	if (!stackPopParams(2, ST_STRUCTURESTAT, &index, VAL_INT, &player))
 	{
@@ -1289,10 +1290,10 @@ BOOL scrIsStructureAvailable(void)
 
 // -----------------------------------------------------------------------------------------
 //make the droid with the matching id the currently selected droid
-BOOL scrSelectDroidByID(void)
+bool scrSelectDroidByID(void)
 {
 	SDWORD			player, droidID;
-	BOOL			selected;
+	bool			selected;
 
 	if (!stackPopParams(2, ST_DROIDID, &droidID, VAL_INT, &player))
 	{
@@ -1322,7 +1323,7 @@ BOOL scrSelectDroidByID(void)
 
 // -----------------------------------------------------------------------------------------
 // Pop up a message box with a number value in it
-BOOL scrNumMB(void)
+bool scrNumMB(void)
 {
 	SDWORD	val;
 
@@ -1339,7 +1340,7 @@ BOOL scrNumMB(void)
 
 // -----------------------------------------------------------------------------------------
 // Do an approximation to a square root
-BOOL scrApproxRoot(void)
+bool scrApproxRoot(void)
 {
 	SDWORD	val1, val2;
 
@@ -1366,7 +1367,7 @@ BOOL scrApproxRoot(void)
 
 // -----------------------------------------------------------------------------------------
 // Add a reticule button to the interface
-BOOL scrAddReticuleButton(void)
+bool scrAddReticuleButton(void)
 {
 	SDWORD	val;
 
@@ -1418,10 +1419,10 @@ BOOL scrAddReticuleButton(void)
 
 // -----------------------------------------------------------------------------------------
 //Remove a reticule button from the interface
-BOOL scrRemoveReticuleButton(void)
+bool scrRemoveReticuleButton(void)
 {
 	SDWORD	val;
-	BOOL	bReset;
+	int32_t	bReset;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(2, VAL_INT, &val,VAL_BOOL, &bReset))
 	{
@@ -1477,12 +1478,12 @@ BOOL scrRemoveReticuleButton(void)
 
 // -----------------------------------------------------------------------------------------
 // add a message to the Intelligence Display
-BOOL scrAddMessage(void)
+bool scrAddMessage(void)
 {
 	MESSAGE			*psMessage;
 	MESSAGE_TYPE		msgType;
 	SDWORD			player;
-	BOOL			playImmediate;
+	int32_t			playImmediate; // was BOOL (int) ** see warning about conversion
 	VIEWDATA		*psViewData;
 	UDWORD			height;
 
@@ -1529,7 +1530,7 @@ BOOL scrAddMessage(void)
 
 // -----------------------------------------------------------------------------------------
 // remove a message from the Intelligence Display
-BOOL scrRemoveMessage(void)
+bool scrRemoveMessage(void)
 {
 	MESSAGE			*psMessage;
 	MESSAGE_TYPE		msgType;
@@ -1565,7 +1566,7 @@ BOOL scrRemoveMessage(void)
 
 // -----------------------------------------------------------------------------------------
 /*builds a droid in the specified factory*/
-BOOL scrBuildDroid(void)
+bool scrBuildDroid(void)
 {
 	SDWORD			player, productionRun;
 	STRUCTURE		*psFactory;
@@ -1598,7 +1599,7 @@ BOOL scrBuildDroid(void)
 
 // -----------------------------------------------------------------------------------------
 // for a specified structure, set the assembly point droids go to when built
-BOOL	scrSetAssemblyPoint(void)
+bool	scrSetAssemblyPoint(void)
 {
 	SDWORD		x, y;
 	STRUCTURE	*psBuilding;
@@ -1630,10 +1631,10 @@ BOOL	scrSetAssemblyPoint(void)
 
 // -----------------------------------------------------------------------------------------
 // test for structure is idle or not
-BOOL	scrStructureIdle(void)
+bool	scrStructureIdle(void)
 {
 	STRUCTURE	*psBuilding;
-	BOOL		idle;
+	bool		idle;
 
 	if (!stackPopParams(1, ST_STRUCTURE, &psBuilding))
 	{
@@ -1657,7 +1658,7 @@ BOOL	scrStructureIdle(void)
 
 // -----------------------------------------------------------------------------------------
 // sends a players droids to a location to attack
-BOOL	scrAttackLocation(void)
+bool	scrAttackLocation(void)
 {
 	SDWORD		player, x, y;
 
@@ -1679,7 +1680,7 @@ BOOL	scrAttackLocation(void)
 
 // -----------------------------------------------------------------------------------------
 //Destroy a feature
-BOOL scrDestroyFeature(void)
+bool scrDestroyFeature(void)
 {
 	FEATURE		*psFeature;
 //	INTERP_VAL	sVal;
@@ -1709,7 +1710,7 @@ static	FEATURE			*psCurrEnumFeature[MAX_PLAYERS];
 
 // -----------------------------------------------------------------------------------------
 // Init enum visible features. May use player==-1 to ignore visibility check.
-BOOL scrInitGetFeature(void)
+bool scrInitGetFeature(void)
 {
 	SDWORD			player,iFeat,bucket;
 
@@ -1734,7 +1735,7 @@ BOOL scrInitGetFeature(void)
 //			between calls, Use an index into list instead.
 //			Doesn't return Features sharing a tile with a structure.
 //			Skirmish Only, dunno if kev uses this?
-BOOL scrGetFeature(void)
+bool scrGetFeature(void)
 {
 	SDWORD	bucket,count;
 	FEATURE	*psFeat;
@@ -1813,7 +1814,7 @@ BOOL scrGetFeature(void)
 }
 
 /* Faster implementation of scrGetFeature -  assumes no features are deleted between calls */
-BOOL scrGetFeatureB(void)
+bool scrGetFeatureB(void)
 {
 	SDWORD	bucket;
 
@@ -1873,7 +1874,7 @@ BOOL scrGetFeatureB(void)
 
 // -----------------------------------------------------------------------------------------
 //Add a feature
-BOOL scrAddFeature(void)
+bool scrAddFeature(void)
 {
 	FEATURE_STATS	*psStat;
 	FEATURE			*psFeat = NULL;
@@ -1931,7 +1932,7 @@ BOOL scrAddFeature(void)
 
 // -----------------------------------------------------------------------------------------
 //Add a structure
-BOOL scrAddStructure(void)
+bool scrAddStructure(void)
 {
 	STRUCTURE_STATS		*psStat;
 	STRUCTURE			*psStruct = NULL;
@@ -2002,7 +2003,7 @@ BOOL scrAddStructure(void)
 
 // -----------------------------------------------------------------------------------------
 //Destroy a structure
-BOOL scrDestroyStructure(void)
+bool scrDestroyStructure(void)
 {
 	STRUCTURE	*psStruct;
 
@@ -2030,20 +2031,20 @@ BOOL scrDestroyStructure(void)
 static	STRUCTURE_STATS	*psStructStatToFind;
 static	UDWORD			playerToEnumStruct;
 static	UDWORD			enumStructCount;
-static	BOOL			structfindany;
+static	bool			structfindany;
 static	SDWORD			playerVisibleStruct;		//player whose structures must be visible
 
 //for the bucket version
 static	STRUCTURE_STATS	*psStructStatToFindB[MAX_PLAYERS];
 static	UDWORD			playerToEnumStructB[MAX_PLAYERS];
 static	UDWORD			enumStructCountB[MAX_PLAYERS];
-static	BOOL			structfindanyB[MAX_PLAYERS];
+static	int32_t			structfindanyB[MAX_PLAYERS];			// was BOOL (int) ** see warning about conversion
 static	SDWORD			playerVisibleStructB[MAX_PLAYERS];		//player whose structures must be visible
 // init enum visible structures.
-BOOL scrInitEnumStruct(void)
+bool scrInitEnumStruct(void)
 {
 	SDWORD		lookingPlayer,iStat,targetPlayer;
-	BOOL		any;
+	int32_t		any; // was BOOL (int) ** see warning about conversion
 
 	if ( !stackPopParams(4,VAL_BOOL,&any, ST_STRUCTURESTAT, &iStat,  VAL_INT, &targetPlayer, VAL_INT, &lookingPlayer) )
 	{
@@ -2066,7 +2067,7 @@ BOOL scrInitEnumStruct(void)
 }
 
 // -----------------------------------------------------------------------------------------
-BOOL scrEnumStruct(void)
+bool scrEnumStruct(void)
 {
 	UDWORD		count;
 	STRUCTURE	*psStruct;
@@ -2118,10 +2119,10 @@ BOOL scrEnumStruct(void)
 }
 
 // init enum visible structures - takes bucket as additional parameter
-BOOL scrInitEnumStructB(void)
+bool scrInitEnumStructB(void)
 {
 	SDWORD		lookingPlayer,iStat,targetPlayer,bucket;
-	BOOL		any;
+	int32_t		any; // was BOOL (int) ** see warning about conversion
 
 	if ( !stackPopParams(5,VAL_BOOL,&any, ST_STRUCTURESTAT, &iStat,
 		VAL_INT, &targetPlayer, VAL_INT, &lookingPlayer, VAL_INT, &bucket) )
@@ -2150,7 +2151,7 @@ BOOL scrInitEnumStructB(void)
 }
 
 // Similar to scrEnumStruct, but uses bucket
-BOOL scrEnumStructB(void)
+bool scrEnumStructB(void)
 {
 	SDWORD		bucket;
 	UDWORD		count;
@@ -2211,13 +2212,13 @@ BOOL scrEnumStructB(void)
 
 // -----------------------------------------------------------------------------------------
 /*looks to see if a structure (specified by type) exists and is being built*/
-BOOL scrStructureBeingBuilt(void)
+bool scrStructureBeingBuilt(void)
 {
 //	INTERP_VAL			sVal;
 	UDWORD				structInc;
 	STRUCTURE_STATS		*psStats;
 	SDWORD				player;
-	BOOL				beingBuilt;
+	bool				beingBuilt;
 
 	if (!stackPopParams(2, ST_STRUCTURESTAT, &structInc, VAL_INT, &player))
 	{
@@ -2264,10 +2265,10 @@ BOOL scrStructureBeingBuilt(void)
 // -----------------------------------------------------------------------------------------
 // multiplayer skirmish only for now.
 // returns true if a specific struct is complete. I know it's like the previous func,
-BOOL scrStructureComplete(void)
+bool scrStructureComplete(void)
 {
 	STRUCTURE	*psStruct;
-	BOOL		bResult;
+	bool		bResult;
 
 	if (!stackPopParams(1, ST_STRUCTURE, &psStruct))
 	{
@@ -2295,13 +2296,13 @@ BOOL scrStructureComplete(void)
 
 // -----------------------------------------------------------------------------------------
 /*looks to see if a structure (specified by type) exists and built*/
-BOOL scrStructureBuilt(void)
+bool scrStructureBuilt(void)
 {
 //	INTERP_VAL			sVal;
 	UDWORD				structInc;
 	STRUCTURE_STATS		*psStats;
 	SDWORD				player;
-	BOOL				built;
+	bool				built;
 
 	if (!stackPopParams(2, ST_STRUCTURESTAT, &structInc, VAL_INT, &player))
 	{
@@ -2345,7 +2346,7 @@ BOOL scrStructureBuilt(void)
 
 // -----------------------------------------------------------------------------------------
 /*centre the view on an object - can be droid/structure or feature */
-BOOL scrCentreView(void)
+bool scrCentreView(void)
 {
 	BASE_OBJECT	*psObj;
 //	INTERP_VAL	sVal;
@@ -2369,7 +2370,7 @@ BOOL scrCentreView(void)
 
 // -----------------------------------------------------------------------------------------
 /*centre the view on a position */
-BOOL scrCentreViewPos(void)
+bool scrCentreViewPos(void)
 {
 	SDWORD		x,y;
 
@@ -2394,7 +2395,7 @@ BOOL scrCentreViewPos(void)
 static STRUCTURE *unbuiltIter = NULL;
 static int unbuiltPlayer = -1;
 
-BOOL scrEnumUnbuilt(void)
+bool scrEnumUnbuilt(void)
 {
 	if (!stackPopParams(1, VAL_INT, &unbuiltPlayer))
 	{
@@ -2405,7 +2406,7 @@ BOOL scrEnumUnbuilt(void)
 	return true;
 }
 
-BOOL scrIterateUnbuilt(void)
+bool scrIterateUnbuilt(void)
 {
 	for (; unbuiltIter && unbuiltIter->status != SS_BEING_BUILT; unbuiltIter = unbuiltIter->psNext) ;
 	scrFunctionResult.v.oval = unbuiltIter;
@@ -2422,12 +2423,12 @@ BOOL scrIterateUnbuilt(void)
 
 // -----------------------------------------------------------------------------------------
 // Get a pointer to a structure based on a stat - returns NULL if cannot find one
-BOOL scrGetStructure(void)
+bool scrGetStructure(void)
 {
 	SDWORD				player, index;
 	STRUCTURE			*psStruct;
 	UDWORD				structType;
-	BOOL				found;
+	bool				found;
 
 	if (!stackPopParams(2, ST_STRUCTURESTAT, &index, VAL_INT, &player))
 	{
@@ -2471,11 +2472,11 @@ BOOL scrGetStructure(void)
 
 // -----------------------------------------------------------------------------------------
 // Get a pointer to a template based on a component stat - returns NULL if cannot find one
-BOOL scrGetTemplate(void)
+bool scrGetTemplate(void)
 {
 	SDWORD				player;
 	DROID_TEMPLATE		*psTemplate;
-	BOOL				found;
+	bool				found;
 	INTERP_VAL			sVal;
 	UDWORD				i;
 
@@ -2576,11 +2577,11 @@ BOOL scrGetTemplate(void)
 
 // -----------------------------------------------------------------------------------------
 // Get a pointer to a droid based on a component stat - returns NULL if cannot find one
-BOOL scrGetDroid(void)
+bool scrGetDroid(void)
 {
 	SDWORD				player;
 	DROID				*psDroid;
-	BOOL				found;
+	bool				found;
 	INTERP_VAL			sVal;
 	UDWORD				i;
 
@@ -2681,7 +2682,7 @@ BOOL scrGetDroid(void)
 
 // -----------------------------------------------------------------------------------------
 // Sets all the scroll params for the map
-BOOL scrSetScrollParams(void)
+bool scrSetScrollParams(void)
 {
 	SDWORD		minX, minY, maxX, maxY, prevMinX, prevMinY, prevMaxX, prevMaxY;
 
@@ -2720,7 +2721,7 @@ BOOL scrSetScrollParams(void)
 
 // -----------------------------------------------------------------------------------------
 // Sets the scroll minX separately for the map
-BOOL scrSetScrollMinX(void)
+bool scrSetScrollMinX(void)
 {
 	SDWORD				minX, prevMinX;
 
@@ -2752,7 +2753,7 @@ BOOL scrSetScrollMinX(void)
 
 // -----------------------------------------------------------------------------------------
 // Sets the scroll minY separately for the map
-BOOL scrSetScrollMinY(void)
+bool scrSetScrollMinY(void)
 {
 	SDWORD				minY, prevMinY;
 
@@ -2785,7 +2786,7 @@ BOOL scrSetScrollMinY(void)
 
 // -----------------------------------------------------------------------------------------
 // Sets the scroll maxX separately for the map
-BOOL scrSetScrollMaxX(void)
+bool scrSetScrollMaxX(void)
 {
 	SDWORD				maxX, prevMaxX;
 
@@ -2818,7 +2819,7 @@ BOOL scrSetScrollMaxX(void)
 
 // -----------------------------------------------------------------------------------------
 // Sets the scroll maxY separately for the map
-BOOL scrSetScrollMaxY(void)
+bool scrSetScrollMaxY(void)
 {
 	SDWORD				maxY, prevMaxY;
 
@@ -2850,7 +2851,7 @@ BOOL scrSetScrollMaxY(void)
 
 // -----------------------------------------------------------------------------------------
 // Sets which sensor will be used as the default for a player
-BOOL scrSetDefaultSensor(void)
+bool scrSetDefaultSensor(void)
 {
 	SDWORD				player;
 	UDWORD				sensorInc;
@@ -2890,7 +2891,7 @@ BOOL scrSetDefaultSensor(void)
 
 // -----------------------------------------------------------------------------------------
 // Sets which ECM will be used as the default for a player
-BOOL scrSetDefaultECM(void)
+bool scrSetDefaultECM(void)
 {
 	SDWORD				player;
 	UDWORD				ecmInc;
@@ -2929,7 +2930,7 @@ BOOL scrSetDefaultECM(void)
 
 // -----------------------------------------------------------------------------------------
 // Sets which RepairUnit will be used as the default for a player
-BOOL scrSetDefaultRepair(void)
+bool scrSetDefaultRepair(void)
 {
 	SDWORD				player;
 	UDWORD				repairInc;
@@ -2968,7 +2969,7 @@ BOOL scrSetDefaultRepair(void)
 
 // -----------------------------------------------------------------------------------------
 // Sets the structure limits for a player
-BOOL scrSetStructureLimits(void)
+bool scrSetStructureLimits(void)
 {
 	SDWORD				player, limit;
 	UDWORD				structInc;
@@ -3005,9 +3006,9 @@ BOOL scrSetStructureLimits(void)
 	}
 
 	psStructLimits = asStructLimits[player];
-	psStructLimits[structInc].limit = (UBYTE)limit;
+	psStructLimits[structInc].limit = limit;
 
-	psStructLimits[structInc].globalLimit = (UBYTE)limit;
+	psStructLimits[structInc].globalLimit = limit;
 
 	return true;
 }
@@ -3016,7 +3017,7 @@ BOOL scrSetStructureLimits(void)
 
 // -----------------------------------------------------------------------------------------
 // multiplayer limit handler.
-BOOL scrApplyLimitSet(void)
+bool scrApplyLimitSet(void)
 {
 	applyLimitSet();
 	return true;
@@ -3027,7 +3028,7 @@ BOOL scrApplyLimitSet(void)
 // -----------------------------------------------------------------------------------------
 // plays a sound for the specified player - only plays the sound if the
 // specified player = selectedPlayer
-BOOL scrPlaySound(void)
+bool scrPlaySound(void)
 {
 	SDWORD	player, soundID;
 
@@ -3056,7 +3057,7 @@ BOOL scrPlaySound(void)
 // -----------------------------------------------------------------------------------------
 // plays a sound for the specified player - only plays the sound if the
 // specified player = selectedPlayer - saves position
-BOOL scrPlaySoundPos(void)
+bool scrPlaySoundPos(void)
 {
 	SDWORD	player, soundID, iX, iY, iZ;
 
@@ -3082,7 +3083,7 @@ BOOL scrPlaySoundPos(void)
 // -----------------------------------------------------------------------------------------
 
 /* add a text message to the top of the screen for the selected player*/
-BOOL scrShowConsoleText(void)
+bool scrShowConsoleText(void)
 {
 	char				*pText;
 	SDWORD				player;
@@ -3109,7 +3110,7 @@ BOOL scrShowConsoleText(void)
 
 // -----------------------------------------------------------------------------------------
 /* add a text message to the top of the screen for the selected player*/
-BOOL scrAddConsoleText(void)
+bool scrAddConsoleText(void)
 {
 	char				*pText;
 	SDWORD				player;
@@ -3140,7 +3141,7 @@ BOOL scrAddConsoleText(void)
 
 // -----------------------------------------------------------------------------------------
 /* add a text message to the top of the screen for the selected player - without clearing whats there*/
-BOOL scrTagConsoleText(void)
+bool scrTagConsoleText(void)
 {
 	char				*pText;
 	SDWORD				player;
@@ -3170,7 +3171,7 @@ BOOL scrTagConsoleText(void)
 
 // -----------------------------------------------------------------------------------------
 
-BOOL	scrClearConsole(void)
+bool	scrClearConsole(void)
 {
 	flushConsoleMessages();
 	return(true);
@@ -3178,7 +3179,7 @@ BOOL	scrClearConsole(void)
 
 // -----------------------------------------------------------------------------------------
 //demo functions for turning the power on
-BOOL scrTurnPowerOff(void)
+bool scrTurnPowerOff(void)
 {
 	//powerCalculated = false;
 	powerCalc(false);
@@ -3188,7 +3189,7 @@ BOOL scrTurnPowerOff(void)
 
 // -----------------------------------------------------------------------------------------
 //demo functions for turning the power off
-BOOL scrTurnPowerOn(void)
+bool scrTurnPowerOn(void)
 {
 
 	//powerCalculated = true;
@@ -3199,7 +3200,7 @@ BOOL scrTurnPowerOn(void)
 
 // -----------------------------------------------------------------------------------------
 //flags when the tutorial is over so that console messages can be turned on again
-BOOL scrTutorialEnd(void)
+bool scrTutorialEnd(void)
 {
 	initConsoleMessages();
 	return true;
@@ -3207,7 +3208,7 @@ BOOL scrTutorialEnd(void)
 
 // -----------------------------------------------------------------------------------------
 //function to play a full-screen video in the middle of the game for the selected player
-BOOL scrPlayVideo(void)
+bool scrPlayVideo(void)
 {
 	char				*pVideo, *pText;
 
@@ -3225,10 +3226,10 @@ BOOL scrPlayVideo(void)
 
 // -----------------------------------------------------------------------------------------
 //checks to see if there are any droids for the specified player
-BOOL scrAnyDroidsLeft(void)
+bool scrAnyDroidsLeft(void)
 {
 	SDWORD		player;
-	BOOL		droidsLeft;
+	bool		droidsLeft;
 
 	if (!stackPopParams(1, VAL_INT, &player))
 	{
@@ -3260,9 +3261,9 @@ BOOL scrAnyDroidsLeft(void)
 // -----------------------------------------------------------------------------------------
 //function to call when the game is over, plays a message then does game over stuff.
 //
-BOOL scrGameOverMessage(void)
+bool scrGameOverMessage(void)
 {
-	BOOL			gameWon;
+	int32_t			gameWon;	// was BOOL (int) ** see warning about conversion
 	MESSAGE			*psMessage;
 	MESSAGE_TYPE		msgType;
 	SDWORD			player;
@@ -3364,9 +3365,9 @@ BOOL scrGameOverMessage(void)
 
 // -----------------------------------------------------------------------------------------
 //function to call when the game is over
-BOOL scrGameOver(void)
+bool scrGameOver(void)
 {
-	BOOL	gameOver;
+	int32_t	gameOver;	// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(1, VAL_BOOL, &gameOver))
 	{
@@ -3397,10 +3398,10 @@ BOOL scrGameOver(void)
 }
 
 // -----------------------------------------------------------------------------------------
-BOOL scrAnyFactoriesLeft(void)
+bool scrAnyFactoriesLeft(void)
 {
 	SDWORD		player;
-	BOOL		bResult;
+	bool		bResult;
 	STRUCTURE	*psCurr;
 
 	if (!stackPopParams(1, VAL_INT, &player))
@@ -3443,10 +3444,10 @@ BOOL scrAnyFactoriesLeft(void)
 
 // -----------------------------------------------------------------------------------------
 //checks to see if there are any structures (except walls) for the specified player
-BOOL scrAnyStructButWallsLeft(void)
+bool scrAnyStructButWallsLeft(void)
 {
 	SDWORD		player;
-	BOOL		structuresLeft;
+	bool		structuresLeft;
 	STRUCTURE	*psCurr;
 
 	if (!stackPopParams(1, VAL_INT, &player))
@@ -3491,7 +3492,7 @@ BOOL scrAnyStructButWallsLeft(void)
 
 // -----------------------------------------------------------------------------------------
 //defines the background audio to play
-BOOL scrPlayBackgroundAudio(void)
+bool scrPlayBackgroundAudio(void)
 {
 	char	*pText;
 	SDWORD	iVol;
@@ -3509,7 +3510,7 @@ BOOL scrPlayBackgroundAudio(void)
 
 }
 
-BOOL scrPlayIngameCDAudio(void)
+bool scrPlayIngameCDAudio(void)
 {
 	debug(LOG_SOUND, "Script wanted music to start");
 	cdAudio_PlayTrack(SONG_INGAME);
@@ -3518,7 +3519,7 @@ BOOL scrPlayIngameCDAudio(void)
 }
 
 // -----------------------------------------------------------------------------------------
-BOOL scrStopCDAudio(void)
+bool scrStopCDAudio(void)
 {
 	debug(LOG_SOUND, "Script wanted music to stop");
 	cdAudio_Stop();
@@ -3526,14 +3527,14 @@ BOOL scrStopCDAudio(void)
 }
 
 // -----------------------------------------------------------------------------------------
-BOOL scrPauseCDAudio(void)
+bool scrPauseCDAudio(void)
 {
 	cdAudio_Pause();
 	return true;
 }
 
 // -----------------------------------------------------------------------------------------
-BOOL scrResumeCDAudio(void)
+bool scrResumeCDAudio(void)
 {
 	cdAudio_Resume();
 	return true;
@@ -3541,7 +3542,7 @@ BOOL scrResumeCDAudio(void)
 
 // -----------------------------------------------------------------------------------------
 // set the retreat point for a player
-BOOL scrSetRetreatPoint(void)
+bool scrSetRetreatPoint(void)
 {
 	SDWORD	player, x,y;
 
@@ -3570,7 +3571,7 @@ BOOL scrSetRetreatPoint(void)
 
 // -----------------------------------------------------------------------------------------
 // set the retreat force level
-BOOL scrSetRetreatForce(void)
+bool scrSetRetreatForce(void)
 {
 	SDWORD	player, level, numDroids;
 	DROID	*psCurr;
@@ -3606,7 +3607,7 @@ BOOL scrSetRetreatForce(void)
 
 // -----------------------------------------------------------------------------------------
 // set the retreat leadership
-BOOL scrSetRetreatLeadership(void)
+bool scrSetRetreatLeadership(void)
 {
 	SDWORD	player, level;
 
@@ -3634,7 +3635,7 @@ BOOL scrSetRetreatLeadership(void)
 
 // -----------------------------------------------------------------------------------------
 // set the retreat point for a group
-BOOL scrSetGroupRetreatPoint(void)
+bool scrSetGroupRetreatPoint(void)
 {
 	SDWORD		x,y;
 	DROID_GROUP	*psGroup;
@@ -3658,7 +3659,7 @@ BOOL scrSetGroupRetreatPoint(void)
 }
 
 // -----------------------------------------------------------------------------------------
-BOOL scrSetGroupRetreatForce(void)
+bool scrSetGroupRetreatForce(void)
 {
 	SDWORD		level, numDroids;
 	DROID_GROUP	*psGroup;
@@ -3689,7 +3690,7 @@ BOOL scrSetGroupRetreatForce(void)
 
 // -----------------------------------------------------------------------------------------
 // set the retreat health level
-BOOL scrSetRetreatHealth(void)
+bool scrSetRetreatHealth(void)
 {
 	SDWORD	player, health;
 
@@ -3716,7 +3717,7 @@ BOOL scrSetRetreatHealth(void)
 }
 
 // -----------------------------------------------------------------------------------------
-BOOL scrSetGroupRetreatHealth(void)
+bool scrSetGroupRetreatHealth(void)
 {
 	SDWORD		health;
 	DROID_GROUP	*psGroup;
@@ -3739,7 +3740,7 @@ BOOL scrSetGroupRetreatHealth(void)
 
 // -----------------------------------------------------------------------------------------
 // set the retreat leadership
-BOOL scrSetGroupRetreatLeadership(void)
+bool scrSetGroupRetreatLeadership(void)
 {
 	SDWORD		level;
 	DROID_GROUP	*psGroup;
@@ -3762,7 +3763,7 @@ BOOL scrSetGroupRetreatLeadership(void)
 
 // -----------------------------------------------------------------------------------------
 //start a Mission - the missionType is ignored now - gets it from the level data ***********
-BOOL scrStartMission(void)
+bool scrStartMission(void)
 {
 	char				*pGame;
 	SDWORD				missionType;
@@ -3801,9 +3802,9 @@ BOOL scrStartMission(void)
 
 // -----------------------------------------------------------------------------------------
 //set Snow (enable disable snow)
-BOOL scrSetSnow(void)
+bool scrSetSnow(void)
 {
-	BOOL bState;
+	int32_t bState;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(1, VAL_BOOL, &bState))
 	{
@@ -3825,9 +3826,9 @@ BOOL scrSetSnow(void)
 
 // -----------------------------------------------------------------------------------------
 //set Rain (enable disable Rain)
-BOOL scrSetRain(void)
+bool scrSetRain(void)
 {
-	BOOL bState;
+	int32_t bState;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(1, VAL_BOOL, &bState))
 	{
@@ -3849,9 +3850,9 @@ BOOL scrSetRain(void)
 
 // -----------------------------------------------------------------------------------------
 //set Background Fog (replace fade out with fog)
-BOOL scrSetBackgroundFog(void)
+bool scrSetBackgroundFog(void)
 {
-	BOOL bState;
+	int32_t bState;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(1, VAL_BOOL, &bState))
 	{
@@ -3884,9 +3885,9 @@ BOOL scrSetBackgroundFog(void)
 
 // -----------------------------------------------------------------------------------------
 //set Depth Fog (gradual fog from mid range to edge of world)
-BOOL scrSetDepthFog(void)
+bool scrSetDepthFog(void)
 {
-	BOOL bState;
+	int32_t bState;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(1, VAL_BOOL, &bState))
 	{
@@ -3917,7 +3918,7 @@ BOOL scrSetDepthFog(void)
 
 // -----------------------------------------------------------------------------------------
 //set Mission Fog colour, may be modified by weather effects
-BOOL scrSetFogColour(void)
+bool scrSetFogColour(void)
 {
 	SDWORD	red,green,blue;
 	PIELIGHT scrFogColour;
@@ -3942,7 +3943,7 @@ BOOL scrSetFogColour(void)
 
 // -----------------------------------------------------------------------------------------
 // test function to test variable references
-BOOL scrRefTest(void)
+bool scrRefTest(void)
 {
 	SDWORD		Num = 0;
 
@@ -3958,7 +3959,7 @@ BOOL scrRefTest(void)
 
 // -----------------------------------------------------------------------------------------
 // is player a human or computer player? (multiplayer only)
-BOOL scrIsHumanPlayer(void)
+bool scrIsHumanPlayer(void)
 {
 	SDWORD	player;
 
@@ -3978,7 +3979,7 @@ BOOL scrIsHumanPlayer(void)
 
 // -----------------------------------------------------------------------------------------
 // Set an alliance between two players
-BOOL scrCreateAlliance(void)
+bool scrCreateAlliance(void)
 {
 	SDWORD	player1,player2;
 
@@ -4010,7 +4011,7 @@ BOOL scrCreateAlliance(void)
 
 // -----------------------------------------------------------------------------------------
 // offer an alliance
-BOOL scrOfferAlliance(void)
+bool scrOfferAlliance(void)
 {
 	SDWORD	player1,player2;
 	if (!stackPopParams(2, VAL_INT, &player1, VAL_INT, &player2))
@@ -4032,7 +4033,7 @@ BOOL scrOfferAlliance(void)
 
 // -----------------------------------------------------------------------------------------
 // Break an alliance between two players
-BOOL scrBreakAlliance(void)
+bool scrBreakAlliance(void)
 {
 	SDWORD	player1,player2;
 
@@ -4067,7 +4068,7 @@ BOOL scrBreakAlliance(void)
 // -----------------------------------------------------------------------------------------
 // Multiplayer relevant scriptfuncs
 // returns true if 2 or more players are in alliance.
-BOOL scrAllianceExists(void)
+bool scrAllianceExists(void)
 {
 
 	UDWORD i,j;
@@ -4096,7 +4097,7 @@ BOOL scrAllianceExists(void)
 	return true;
 }
 
-BOOL scrAllianceExistsBetween(void)
+bool scrAllianceExistsBetween(void)
 {
 	UDWORD i,j;
 
@@ -4126,7 +4127,7 @@ BOOL scrAllianceExistsBetween(void)
 }
 
 // -----------------------------------------------------------------------------------------
-BOOL scrPlayerInAlliance(void)
+bool scrPlayerInAlliance(void)
 {
 	UDWORD player,j;
 
@@ -4158,7 +4159,7 @@ BOOL scrPlayerInAlliance(void)
 
 // -----------------------------------------------------------------------------------------
 // returns true if a single alliance is dominant.
-BOOL scrDominatingAlliance(void)
+bool scrDominatingAlliance(void)
 {
 	UDWORD i,j;
 
@@ -4192,7 +4193,7 @@ BOOL scrDominatingAlliance(void)
 }
 
 
-BOOL scrMyResponsibility(void)
+bool scrMyResponsibility(void)
 {
 	SDWORD player;
 
@@ -4227,7 +4228,7 @@ BOOL scrMyResponsibility(void)
  * Checks to see if a structure of the type specified exists within the specified range of an XY location.
  * Use player -1 to find structures owned by any player. In this case, ignore if they are completed.
  */
-BOOL scrStructureBuiltInRange(void)
+bool scrStructureBuiltInRange(void)
 {
 	SDWORD		player, index, x, y, range;
 	BASE_OBJECT	*psCurr;
@@ -4276,7 +4277,7 @@ BOOL scrStructureBuiltInRange(void)
 
 // -----------------------------------------------------------------------------------------
 // generate a random number
-BOOL scrRandom(void)
+bool scrRandom(void)
 {
 	SDWORD		range, iResult;
 
@@ -4305,7 +4306,7 @@ BOOL scrRandom(void)
 
 // -----------------------------------------------------------------------------------------
 // randomise the random number seed
-BOOL scrRandomiseSeed(void)
+bool scrRandomiseSeed(void)
 {
 	// Why? What's the point? What on earth were they thinking, exactly? If the numbers don't have enough randominess, just set the random seed again and again until the numbers are double-plus super-duper full of randonomium?
 	debug(LOG_ERROR, "A script is trying to set the random seed with srand(). That just doesn't make sense.");
@@ -4317,7 +4318,7 @@ BOOL scrRandomiseSeed(void)
 
 // -----------------------------------------------------------------------------------------
 //explicitly enables a research topic
-BOOL scrEnableResearch(void)
+bool scrEnableResearch(void)
 {
 	SDWORD		player;
 	RESEARCH	*psResearch;
@@ -4342,7 +4343,7 @@ BOOL scrEnableResearch(void)
 
 // -----------------------------------------------------------------------------------------
 //acts as if the research topic was completed - used to jump into the tree
-BOOL scrCompleteResearch(void)
+bool scrCompleteResearch(void)
 {
 	SDWORD		player;
 	RESEARCH	*psResearch;
@@ -4390,7 +4391,7 @@ BOOL scrCompleteResearch(void)
 // -----------------------------------------------------------------------------------------
 // This routine used to start just a reticule button flashing
 //   .. now it starts any button flashing (awaiting implmentation from widget library)
-BOOL scrFlashOn(void)
+bool scrFlashOn(void)
 {
 	SDWORD		button;
 
@@ -4417,7 +4418,7 @@ BOOL scrFlashOn(void)
 
 // -----------------------------------------------------------------------------------------
 // stop a generic button flashing
-BOOL scrFlashOff(void)
+bool scrFlashOff(void)
 {
 	SDWORD		button;
 
@@ -4442,7 +4443,7 @@ BOOL scrFlashOff(void)
 
 // -----------------------------------------------------------------------------------------
 //set the initial power level settings for a player
-BOOL scrSetPowerLevel(void)
+bool scrSetPowerLevel(void)
 {
 	SDWORD		player, power;
 
@@ -4464,7 +4465,7 @@ BOOL scrSetPowerLevel(void)
 
 // -----------------------------------------------------------------------------------------
 //add some power for a player
-BOOL scrAddPower(void)
+bool scrAddPower(void)
 {
 	SDWORD		player, power;
 
@@ -4487,7 +4488,7 @@ BOOL scrAddPower(void)
 // -----------------------------------------------------------------------------------------
 /*set the landing Zone position for the map - this is for player 0. Can be
 scrapped and replaced by setNoGoAreas, left in for compatibility*/
-BOOL scrSetLandingZone(void)
+bool scrSetLandingZone(void)
 {
 	SDWORD		x1, x2, y1, y2;
 
@@ -4535,7 +4536,7 @@ BOOL scrSetLandingZone(void)
 
 /*set the landing Zone position for the Limbo droids and adds the Limbo droids
 to the world at the location*/
-BOOL scrSetLimboLanding(void)
+bool scrSetLimboLanding(void)
 {
 	SDWORD		x1, x2, y1, y2;
 
@@ -4586,7 +4587,7 @@ BOOL scrSetLimboLanding(void)
 
 // -----------------------------------------------------------------------------------------
 //initialises all the no go areas
-BOOL scrInitAllNoGoAreas(void)
+bool scrInitAllNoGoAreas(void)
 {
 	initNoGoAreas();
 
@@ -4595,7 +4596,7 @@ BOOL scrInitAllNoGoAreas(void)
 
 // -----------------------------------------------------------------------------------------
 //set a no go area for the map - landing zones for the enemy, or player 0
-BOOL scrSetNoGoArea(void)
+bool scrSetNoGoArea(void)
 {
 	SDWORD		x1, x2, y1, y2, area;
 
@@ -4658,7 +4659,7 @@ BOOL scrSetNoGoArea(void)
 // -----------------------------------------------------------------------------------------
 // set the zoom level for the radar
 // What is the script doing setting radar zoom? Commenting out for now. - Per
-BOOL scrSetRadarZoom(void)
+bool scrSetRadarZoom(void)
 {
 	SDWORD	level;
 
@@ -4680,7 +4681,7 @@ BOOL scrSetRadarZoom(void)
 
 // -----------------------------------------------------------------------------------------
 //set how long an offworld mission can last -1 = no limit
-BOOL scrSetMissionTime(void)
+bool scrSetMissionTime(void)
 {
 	SDWORD		time;
 
@@ -4724,7 +4725,7 @@ BOOL scrSetMissionTime(void)
 }
 
 // this returns how long is left for the current mission time is 1/100th sec - same units as passed in
-BOOL scrMissionTimeRemaining(void)
+bool scrMissionTimeRemaining(void)
 {
     SDWORD      timeRemaining;
 
@@ -4749,7 +4750,7 @@ BOOL scrMissionTimeRemaining(void)
 
 // -----------------------------------------------------------------------------------------
 //set the time delay for reinforcements for an offworld mission
-BOOL scrSetReinforcementTime(void)
+bool scrSetReinforcementTime(void)
 {
 	SDWORD		time;
     DROID       *psDroid;
@@ -4814,7 +4815,7 @@ BOOL scrSetReinforcementTime(void)
 
 // -----------------------------------------------------------------------------------------
 // Sets all structure limits for a player to a specified value
-BOOL scrSetAllStructureLimits(void)
+bool scrSetAllStructureLimits(void)
 {
 	SDWORD				player, limit;
 	STRUCTURE_LIMITS	*psStructLimits;
@@ -4848,9 +4849,9 @@ BOOL scrSetAllStructureLimits(void)
 	psStructLimits = asStructLimits[player];
 	for (i = 0; i < numStructureStats; i++)
 	{
-		psStructLimits[i].limit = (UBYTE)limit;
+		psStructLimits[i].limit = limit;
 
-		psStructLimits[i].globalLimit = (UBYTE)limit;
+		psStructLimits[i].globalLimit = limit;
 
 	}
 
@@ -4860,7 +4861,7 @@ BOOL scrSetAllStructureLimits(void)
 
 // -----------------------------------------------------------------------------------------
 // clear all the console messages
-BOOL scrFlushConsoleMessages(void)
+bool scrFlushConsoleMessages(void)
 {
 	flushConsoleMessages();
 
@@ -4869,7 +4870,7 @@ BOOL scrFlushConsoleMessages(void)
 
 // -----------------------------------------------------------------------------------------
 // Establishes the distance between two points - uses an approximation
-BOOL scrDistanceTwoPts( void )
+bool scrDistanceTwoPts( void )
 {
 	SDWORD	x1,y1,x2,y2;
 
@@ -4891,11 +4892,11 @@ BOOL scrDistanceTwoPts( void )
 
 // -----------------------------------------------------------------------------------------
 // Returns whether two objects can see each other
-BOOL	scrLOSTwoBaseObjects( void )
+bool	scrLOSTwoBaseObjects( void )
 {
 BASE_OBJECT	*psSource,*psDest;
-BOOL		bWallsBlock;
-BOOL		retVal;
+int32_t		bWallsBlock;		// was BOOL (int) ** see warning about conversion
+bool		retVal;
 
 	if(!stackPopParams(3,ST_BASEOBJECT,&psSource,ST_BASEOBJECT,&psDest,VAL_BOOL,&bWallsBlock))
 	{
@@ -4916,14 +4917,14 @@ BOOL		retVal;
 
 // -----------------------------------------------------------------------------------------
 // Destroys all structures within a certain bounding area.
-BOOL	scrDestroyStructuresInArea( void )
+bool	scrDestroyStructuresInArea( void )
 {
 SDWORD		x1,y1,x2,y2;
 UDWORD		typeRef;
 UDWORD		player;
 STRUCTURE	*psStructure,*psNextS;
 FEATURE		*psFeature,*psNextF;
-BOOL		bVisible,bTakeFeatures;
+int32_t		bVisible,bTakeFeatures;		// was BOOL (int) ** see warning about conversion
 SDWORD		sX,sY;
 
 	if(!stackPopParams(8, VAL_INT, &player, VAL_INT, &typeRef, VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2,
@@ -4995,7 +4996,7 @@ SDWORD		sX,sY;
 }
 // -----------------------------------------------------------------------------------------
 // Returns a value representing the threat from droids in a given area
-BOOL	scrThreatInArea( void )
+bool	scrThreatInArea( void )
 {
 SDWORD	x1,y1,x2,y2;
 SDWORD	ldThreat,mdThreat,hdThreat;
@@ -5003,7 +5004,7 @@ UDWORD	playerLooking,playerTarget;
 SDWORD	totalThreat;
 DROID	*psDroid;
 SDWORD	dX,dY;
-BOOL	bVisible;
+int32_t	bVisible;		// was BOOL (int) ** see warning about conversion
 
 	if(!stackPopParams(10,VAL_INT,&playerLooking,VAL_INT,&playerTarget,VAL_INT,&x1,VAL_INT,&y1,VAL_INT,&x2,VAL_INT,&y2,
 		VAL_INT,&ldThreat,VAL_INT,&mdThreat,VAL_INT,&hdThreat, VAL_BOOL, &bVisible))
@@ -5065,7 +5066,7 @@ BOOL	bVisible;
 }
 // -----------------------------------------------------------------------------------------
 // returns the nearest gateway bottleneck to a specified point
-BOOL scrGetNearestGateway( void )
+bool scrGetNearestGateway( void )
 {
 	SDWORD	x,y;
 	UDWORD	nearestSoFar;
@@ -5073,7 +5074,7 @@ BOOL scrGetNearestGateway( void )
 	GATEWAY	*psGateway;
 	SDWORD	retX,retY;
 	SDWORD	*rX,*rY;
-	BOOL	success;
+	bool	success;
 
 	if(!stackPopParams(4, VAL_INT, &x, VAL_INT, &y, VAL_REF|VAL_INT, &rX, VAL_REF|VAL_INT, &rY))
 	{
@@ -5124,7 +5125,7 @@ BOOL scrGetNearestGateway( void )
 	return(true);
 }
 // -----------------------------------------------------------------------------------------
-BOOL	scrSetWaterTile(void)
+bool	scrSetWaterTile(void)
 {
 UDWORD	tileNum;
 
@@ -5146,7 +5147,7 @@ UDWORD	tileNum;
 	return(true);
 }
 // -----------------------------------------------------------------------------------------
-BOOL	scrSetRubbleTile(void)
+bool	scrSetRubbleTile(void)
 {
 UDWORD	tileNum;
 
@@ -5168,7 +5169,7 @@ UDWORD	tileNum;
 	return(true);
 }
 // -----------------------------------------------------------------------------------------
-BOOL	scrSetCampaignNumber(void)
+bool	scrSetCampaignNumber(void)
 {
 UDWORD	campaignNumber;
 
@@ -5187,11 +5188,11 @@ UDWORD	campaignNumber;
 // -----------------------------------------------------------------------------------------
 // Tests whether a structure has a certain module for a player. Tests whether any structure
 // has this module if structure is null
-BOOL	scrTestStructureModule(void)
+bool	scrTestStructureModule(void)
 {
 SDWORD	player,refId;
 STRUCTURE	*psStructure,*psStruct;
-BOOL	bFound;
+bool	bFound;
 
 	if(!stackPopParams(3,VAL_INT,&player,ST_STRUCTURE,&psStructure,VAL_INT,&refId))
 	{
@@ -5244,7 +5245,7 @@ BOOL	bFound;
 
 
 // -----------------------------------------------------------------------------------------
-BOOL	scrForceDamage( void )
+bool	scrForceDamage( void )
 {
 DROID		*psDroid;
 STRUCTURE	*psStructure;
@@ -5305,7 +5306,7 @@ UDWORD		newVal;
 }
 // Kills of a droid without spawning any explosion effects.
 // -----------------------------------------------------------------------------------------
-BOOL	scrDestroyUnitsInArea( void )
+bool	scrDestroyUnitsInArea( void )
 {
 DROID	*psDroid,*psNext;
 SDWORD	x1,y1,x2,y2;
@@ -5344,7 +5345,7 @@ UDWORD	count=0;
 	return(true);
 }
 // -----------------------------------------------------------------------------------------
-BOOL	scrRemoveDroid( void )
+bool	scrRemoveDroid( void )
 {
 DROID	*psDroid;
 
@@ -5361,10 +5362,10 @@ DROID	*psDroid;
 	return(true);
 }
 // -----------------------------------------------------------------------------------------
-static BOOL	structHasModule(STRUCTURE *psStruct)
+static bool	structHasModule(STRUCTURE *psStruct)
 {
 STRUCTURE_STATS	*psStats;
-BOOL			bFound;
+bool			bFound;
 
 	/* Fail if the structure isn't built yet */
 	if(psStruct->status != SS_BUILT)
@@ -5428,7 +5429,7 @@ BOOL			bFound;
 
 // -----------------------------------------------------------------------------------------
 // give player a template belonging to another.
-BOOL scrAddTemplate(void)
+bool scrAddTemplate(void)
 {
 	DROID_TEMPLATE *psTemplate;
 	UDWORD			player;
@@ -5471,7 +5472,7 @@ BOOL scrAddTemplate(void)
 // -----------------------------------------------------------------------------------------
 
 // additional structure check
-static BOOL structDoubleCheck(BASE_STATS *psStat,UDWORD xx,UDWORD yy, SDWORD maxBlockingTiles)
+static bool structDoubleCheck(BASE_STATS *psStat,UDWORD xx,UDWORD yy, SDWORD maxBlockingTiles)
 {
 	UDWORD		x, y, xTL, yTL, xBR, yBR;
 	UBYTE		count = 0;
@@ -5547,11 +5548,11 @@ static BOOL structDoubleCheck(BASE_STATS *psStat,UDWORD xx,UDWORD yy, SDWORD max
 	return false;
 }
 
-static BOOL pickStructLocation(DROID *psDroid, int index, int *pX, int *pY, int player, int maxBlockingTiles)
+static bool pickStructLocation(DROID *psDroid, int index, int *pX, int *pY, int player, int maxBlockingTiles)
 {
 	STRUCTURE_STATS	*psStat;
 	UDWORD			numIterations = 30;
-	BOOL			found = false;
+	bool			found = false;
 	int startX, startY, incX, incY, x, y;
 
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS && player >= 0, "Invalid player number %d", player);
@@ -5636,7 +5637,7 @@ endstructloc:
 }
 
 // pick a structure location(only used in skirmish game at 27Aug) ajl.
-BOOL scrPickStructLocation(void)
+bool scrPickStructLocation(void)
 {
 	SDWORD			*pX,*pY;
 	SDWORD			index;
@@ -5651,7 +5652,7 @@ BOOL scrPickStructLocation(void)
 }
 
 // pick a structure location and check that we can build there (duh!)
-BOOL scrPickStructLocationC(void)
+bool scrPickStructLocationC(void)
 {
 	int			*pX, *pY, index, player, maxBlockingTiles;
 	DROID			*psDroid;
@@ -5665,7 +5666,7 @@ BOOL scrPickStructLocationC(void)
 
 // pick a structure location(only used in skirmish game at 27Aug) ajl.
 // Max number of blocking tiles is passed as parameter for this one
-BOOL scrPickStructLocationB(void)
+bool scrPickStructLocationB(void)
 {
 	SDWORD			*pX,*pY;
 	SDWORD			index;
@@ -5682,7 +5683,7 @@ BOOL scrPickStructLocationB(void)
 
 // -----------------------------------------------------------------------------------------
 // Sets the transporter entry and exit points for the map
-BOOL scrSetTransporterExit(void)
+bool scrSetTransporterExit(void)
 {
 	SDWORD	iPlayer, iExitTileX, iExitTileY;
 
@@ -5698,10 +5699,10 @@ BOOL scrSetTransporterExit(void)
 
 // -----------------------------------------------------------------------------------------
 // Fly transporters in at start of map
-BOOL scrFlyTransporterIn(void)
+bool scrFlyTransporterIn(void)
 {
 	SDWORD	iPlayer, iEntryTileX, iEntryTileY;
-	BOOL	bTrackTransporter;
+	int32_t	bTrackTransporter;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(4, VAL_INT, &iPlayer, VAL_INT, &iEntryTileX, VAL_INT, &iEntryTileY,
 							VAL_BOOL, &bTrackTransporter))
@@ -5724,17 +5725,17 @@ BOOL scrFlyTransporterIn(void)
  *
  *  PARAMETERS: The parameter passed must be one of the STATUS_ variable
  *
- *  DESCRIPTION: Returns various BOOL options in the game	e.g. If the reticule is open
+ *  DESCRIPTION: Returns various bool options in the game	e.g. If the reticule is open
  *      - You should use the externed variable intMode for other game mode options
  *        e.g. in the intelligence screen or desgin screen)
  *
  *  RETURNS:
  *
  */
-BOOL scrGetGameStatus(void)
+bool scrGetGameStatus(void)
 {
 	SDWORD GameChoice;
-	BOOL bResult;
+	bool bResult;
 
 	if (!stackPopParams(1, VAL_INT, &GameChoice))
 	{
@@ -5785,7 +5786,7 @@ BOOL scrGetGameStatus(void)
 }
 
 //get the colour number used by a player
-BOOL scrGetPlayerColour(void)
+bool scrGetPlayerColour(void)
 {
 	SDWORD		player;
 
@@ -5810,7 +5811,7 @@ BOOL scrGetPlayerColour(void)
 }
 
 //get the colour name of the player ("green", "black" etc)
-BOOL scrGetPlayerColourName(void)
+bool scrGetPlayerColourName(void)
 {
 	SDWORD		player;
 
@@ -5839,7 +5840,7 @@ BOOL scrGetPlayerColourName(void)
 }
 
 //set the colour number to use for a player
-BOOL scrSetPlayerColour(void)
+bool scrSetPlayerColour(void)
 {
 	SDWORD		player, colour;
 
@@ -5867,7 +5868,7 @@ BOOL scrSetPlayerColour(void)
 }
 
 //set all droids in an area to belong to a different player - returns the number of droids changed
-BOOL scrTakeOverDroidsInArea(void)
+bool scrTakeOverDroidsInArea(void)
 {
 	SDWORD		fromPlayer, toPlayer, x1, x2, y1, y2, numChanged;
     DROID       *psDroid, *psNext;
@@ -5934,7 +5935,7 @@ BOOL scrTakeOverDroidsInArea(void)
 }
 
 /*this takes over a single droid and passes a pointer back to the new one*/
-BOOL scrTakeOverSingleDroid(void)
+bool scrTakeOverSingleDroid(void)
 {
 	SDWORD			playerToGain;
     DROID           *psDroidToTake, *psNewDroid;
@@ -5971,7 +5972,7 @@ BOOL scrTakeOverSingleDroid(void)
 
 // set all droids in an area of a certain experience level or less to belong to
 // a different player - returns the number of droids changed
-BOOL scrTakeOverDroidsInAreaExp(void)
+bool scrTakeOverDroidsInAreaExp(void)
 {
 	SDWORD		fromPlayer, toPlayer, x1, x2, y1, y2, numChanged, level, maxUnits;
     DROID       *psDroid, *psNext;
@@ -6049,7 +6050,7 @@ BOOL scrTakeOverDroidsInAreaExp(void)
 }
 
 /*this takes over a single structure and passes a pointer back to the new one*/
-BOOL scrTakeOverSingleStructure(void)
+bool scrTakeOverSingleStructure(void)
 {
 	SDWORD			playerToGain;
     STRUCTURE       *psStructToTake, *psNewStruct;
@@ -6112,7 +6113,7 @@ BOOL scrTakeOverSingleStructure(void)
 
 //set all structures in an area to belong to a different player - returns the number of droids changed
 //will not work on factories for the selectedPlayer
-BOOL scrTakeOverStructsInArea(void)
+bool scrTakeOverStructsInArea(void)
 {
 	SDWORD		fromPlayer, toPlayer, x1, x2, y1, y2, numChanged;
     STRUCTURE   *psStruct, *psNext, *psNewStruct;
@@ -6205,9 +6206,9 @@ BOOL scrTakeOverStructsInArea(void)
 }
 
 //set Flag for defining what happens to the droids in a Transporter
-BOOL scrSetDroidsToSafetyFlag(void)
+bool scrSetDroidsToSafetyFlag(void)
 {
-	BOOL bState;
+	int32_t bState;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(1, VAL_BOOL, &bState))
 	{
@@ -6220,9 +6221,9 @@ BOOL scrSetDroidsToSafetyFlag(void)
 }
 
 //set Flag for defining whether the coded countDown is called
-BOOL scrSetPlayCountDown(void)
+bool scrSetPlayCountDown(void)
 {
-	BOOL bState;
+	int32_t bState;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(1, VAL_BOOL, &bState))
 	{
@@ -6237,7 +6238,7 @@ BOOL scrSetPlayCountDown(void)
 }
 
 //get the number of droids currently onthe map for a player
-BOOL scrGetDroidCount(void)
+bool scrGetDroidCount(void)
 {
 	SDWORD		player;
 
@@ -6263,7 +6264,7 @@ BOOL scrGetDroidCount(void)
 
 
 // fire a weapon stat at an object
-BOOL scrFireWeaponAtObj(void)
+bool scrFireWeaponAtObj(void)
 {
 	Vector3i target;
 	BASE_OBJECT *psTarget;
@@ -6290,7 +6291,7 @@ BOOL scrFireWeaponAtObj(void)
 }
 
 // fire a weapon stat at a location
-BOOL scrFireWeaponAtLoc(void)
+bool scrFireWeaponAtLoc(void)
 {
 	Vector3i target;
 	WEAPON sWeapon;
@@ -6310,7 +6311,7 @@ BOOL scrFireWeaponAtLoc(void)
 }
 
 // set the number of kills for a droid
-BOOL scrSetDroidKills(void)
+bool scrSetDroidKills(void)
 {
 	DROID	*psDroid;
 	SDWORD	kills;
@@ -6333,7 +6334,7 @@ BOOL scrSetDroidKills(void)
 }
 
 // get the number of kills for a droid
-BOOL scrGetDroidKills(void)
+bool scrGetDroidKills(void)
 {
 	DROID	*psDroid;
 
@@ -6359,7 +6360,7 @@ BOOL scrGetDroidKills(void)
 }
 
 // reset the visibility for a player
-BOOL scrResetPlayerVisibility(void)
+bool scrResetPlayerVisibility(void)
 {
 	SDWORD			player, i;
 	BASE_OBJECT		*psObj;
@@ -6405,7 +6406,7 @@ BOOL scrResetPlayerVisibility(void)
 
 
 // set the vtol return pos for a player
-BOOL scrSetVTOLReturnPos(void)
+bool scrSetVTOLReturnPos(void)
 {
 	SDWORD		player, tx,ty;
 
@@ -6427,7 +6428,7 @@ BOOL scrSetVTOLReturnPos(void)
 }
 
 //called via the script in a Limbo Expand level to set the level to plain ol' expand
-BOOL scrResetLimboMission(void)
+bool scrResetLimboMission(void)
 {
     //check currently on a Limbo expand mission
     if (!missionLimboExpand())
@@ -6445,7 +6446,7 @@ BOOL scrResetLimboMission(void)
 
 
 // skirmish only.
-BOOL scrIsVtol(void)
+bool scrIsVtol(void)
 {
 	DROID *psDroid;
 
@@ -6472,7 +6473,7 @@ BOOL scrIsVtol(void)
 
 // do the setting up of the template list for the tutorial.
 // This function looks like it searches for a template called "ViperLtMGWheels", and deletes it. Why?
-BOOL scrTutorialTemplates(void)
+bool scrTutorialTemplates(void)
 {
 	DROID_TEMPLATE	*psCurr, *psPrev;
 
@@ -6524,7 +6525,7 @@ BOOL scrTutorialTemplates(void)
 //-----------------------------------------
 
 //compare two strings (0 means they are different)
-BOOL scrStrcmp(void)
+bool scrStrcmp(void)
 {
 	if (!stackPopParams(2, VAL_STRING, &strParam1, VAL_STRING, &strParam2))
 	{
@@ -6543,7 +6544,7 @@ BOOL scrStrcmp(void)
 }
 
 /* Output a string to console */
-BOOL scrConsole(void)
+bool scrConsole(void)
 {
 	if (!stackPopParams(1, VAL_STRING, &strParam1))
 	{
@@ -6556,12 +6557,12 @@ BOOL scrConsole(void)
 	return true;
 }
 
-BOOL scrDebug[MAX_PLAYERS];
+int32_t scrDebug[MAX_PLAYERS];		// was BOOL (int) ** see warning about conversion
 
 //turn on debug messages
-BOOL scrDbgMsgOn(void)
+bool scrDbgMsgOn(void)
 {
-	BOOL	bOn;
+	int32_t	bOn;		// was BOOL (int) ** see warning about conversion
 	SDWORD	player;
 
 	if (!stackPopParams(2, VAL_INT, &player, VAL_BOOL, &bOn))
@@ -6581,7 +6582,7 @@ BOOL scrDbgMsgOn(void)
 	return true;
 }
 
-BOOL scrMsg(void)
+bool scrMsg(void)
 {
 	SDWORD	playerTo,playerFrom;
 	char tmp[255];
@@ -6617,7 +6618,7 @@ BOOL scrMsg(void)
 	return true;
 }
 
-BOOL scrDbg(void)
+bool scrDbg(void)
 {
 	SDWORD	player;
 
@@ -6637,7 +6638,7 @@ BOOL scrDbg(void)
 	return true;
 }
 
-BOOL scrDebugFile(void)
+bool scrDebugFile(void)
 {
 	if (!stackPopParams(1, VAL_STRING, &strParam1))
 	{
@@ -6655,7 +6656,7 @@ static	UDWORD			playerVisibleDroid;
 static	UDWORD			enumDroidCount;
 
 /* Prepare the droid iteration */
-BOOL scrInitEnumDroids(void)
+bool scrInitEnumDroids(void)
 {
 	SDWORD	targetplayer,playerVisible;
 
@@ -6672,7 +6673,7 @@ BOOL scrInitEnumDroids(void)
 }
 
 /* Get next droid */
-BOOL scrEnumDroid(void)
+bool scrEnumDroid(void)
 {
 	UDWORD			count;
 	DROID		 *psDroid;
@@ -6714,7 +6715,7 @@ BOOL scrEnumDroid(void)
 }
 
 //Return the template factory is currently building
-BOOL scrFactoryGetTemplate(void)
+bool scrFactoryGetTemplate(void)
 {
 	STRUCTURE		*psStructure = NULL;
 	DROID_TEMPLATE	*psTemplate = NULL;
@@ -6760,7 +6761,7 @@ BOOL scrFactoryGetTemplate(void)
 	return true;
 }
 
-BOOL scrNumTemplatesInProduction(void)
+bool scrNumTemplatesInProduction(void)
 {
 	SDWORD			player,numTemplates = 0;
 	DROID_TEMPLATE	*psTemplate;
@@ -6813,7 +6814,7 @@ BOOL scrNumTemplatesInProduction(void)
 }
 
 // Returns number of units based on a component a certain player has
-BOOL scrNumDroidsByComponent(void)
+bool scrNumDroidsByComponent(void)
 {
 	SDWORD				player,lookingPlayer,comp;
 	UDWORD				numFound;
@@ -6917,7 +6918,7 @@ BOOL scrNumDroidsByComponent(void)
 	return true;
 }
 
-BOOL scrGetStructureLimit(void)
+bool scrGetStructureLimit(void)
 {
 	SDWORD				player,limit;
 	UDWORD				structInc;
@@ -6955,10 +6956,10 @@ BOOL scrGetStructureLimit(void)
 }
 
 // Returns true if limit for the passed structurestat is reached, otherwise returns false
-BOOL scrStructureLimitReached(void)
+bool scrStructureLimitReached(void)
 {
 	SDWORD				player;
-	BOOL				bLimit = false;
+	bool				bLimit = false;
 	UDWORD				structInc;
 	STRUCTURE_LIMITS	*psStructLimits;
 
@@ -6996,7 +6997,7 @@ BOOL scrStructureLimitReached(void)
 }
 
 // How many structures of a given type a player has
-BOOL scrGetNumStructures(void)
+bool scrGetNumStructures(void)
 {
 	SDWORD				player,numStructures;
 	UDWORD				structInc;
@@ -7030,7 +7031,7 @@ BOOL scrGetNumStructures(void)
 }
 
 // Return player's unit limit
-BOOL scrGetUnitLimit(void)
+bool scrGetUnitLimit(void)
 {
 	SDWORD				player;
 
@@ -7054,7 +7055,7 @@ BOOL scrGetUnitLimit(void)
 }
 
 // Return minimum of 2 vals
-BOOL scrMin(void)
+bool scrMin(void)
 {
 	SDWORD				val1,val2;
 
@@ -7073,7 +7074,7 @@ BOOL scrMin(void)
 }
 
 // Return maximum of 2 vals
-BOOL scrMax(void)
+bool scrMax(void)
 {
 	SDWORD				val1,val2;
 
@@ -7091,7 +7092,7 @@ BOOL scrMax(void)
 	return true;
 }
 
-BOOL scrFMin(void)
+bool scrFMin(void)
 {
 	float				fval1,fval2;
 
@@ -7110,7 +7111,7 @@ BOOL scrFMin(void)
 }
 
 // Return maximum of 2 floats
-BOOL scrFMax(void)
+bool scrFMax(void)
 {
 	float				fval1,fval2;
 
@@ -7128,7 +7129,7 @@ BOOL scrFMax(void)
 	return true;
 }
 
-BOOL ThreatInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD rangeY, BOOL bVTOLs)
+bool ThreatInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD rangeY, bool bVTOLs)
 {
 	UDWORD				i,structType;
 	STRUCTURE			*psStruct;
@@ -7202,13 +7203,13 @@ BOOL ThreatInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD rangeY, BO
 }
 
 //find unrevealed tile closest to pwLooker within the range of wRange
-BOOL scrFogTileInRange(void)
+bool scrFogTileInRange(void)
 {
 	SDWORD		pwLookerX,pwLookerY,tBestX,tBestY,threadRange;
 	SDWORD		wRangeX,wRangeY,tRangeX,tRangeY,wRange,player;
 	UDWORD		tx,ty,i,j,wDist,wBestDist;
 	MAPTILE		*psTile;
-	BOOL		ok = false;
+	bool		ok = false;
 	SDWORD		*wTileX,*wTileY;
 
 	if (!stackPopParams(9, VAL_REF|VAL_INT, &wTileX, VAL_REF|VAL_INT, &wTileY,
@@ -7302,7 +7303,7 @@ BOOL scrFogTileInRange(void)
 	return true;
 }
 
-BOOL scrMapRevealedInRange(void)
+bool scrMapRevealedInRange(void)
 {
 	SDWORD		wRangeX,wRangeY,tRangeX,tRangeY,wRange,tRange,player;
 	int             i, j;
@@ -7363,7 +7364,7 @@ BOOL scrMapRevealedInRange(void)
 }
 
 /* Returns true if a certain map tile was revealed, ie fog of war was removed */
-BOOL scrMapTileVisible(void)
+bool scrMapTileVisible(void)
 {
 	SDWORD		tileX,tileY,player;
 
@@ -7407,7 +7408,7 @@ BOOL scrMapTileVisible(void)
 
 //return number of reserach topics that are left to be researched
 //for a certain technology to become available
-BOOL scrNumResearchLeft(void)
+bool scrNumResearchLeft(void)
 {
 	RESEARCH			*psResearch;
 	SDWORD				player,iResult;
@@ -7522,34 +7523,19 @@ BOOL scrNumResearchLeft(void)
 }
 
 //check if any of the ally is researching this topic
-BOOL beingResearchedByAlly(SDWORD resIndex, SDWORD player)
+bool beingResearchedByAlly(SDWORD resIndex, SDWORD player)
 {
-	STRUCTURE *psOtherStruct;
 	SDWORD	i;
-	BASE_STATS *Stat;
-
-	Stat = (BASE_STATS*)(asResearch + resIndex);
 
 	for(i=0;i<MAX_PLAYERS;i++)
 	{
 		if(i != player && aiCheckAlliances(player,i))
 		{
 			//check each research facility to see if they are doing this topic.
-			for(psOtherStruct=apsStructLists[i];psOtherStruct;psOtherStruct=psOtherStruct->psNext)
+			if (IsResearchStartedPending(&asPlayerResList[i][resIndex]))
 			{
-				if(   psOtherStruct->pStructureType->type == REF_RESEARCH
-						&& psOtherStruct->status == SS_BUILT
-						&& ((RESEARCH_FACILITY *)psOtherStruct->pFunctionality)->psSubject
-						 )
-				{
-
-					if(((RESEARCH_FACILITY *)psOtherStruct->pFunctionality)->psSubject->ref == Stat->ref)
-					{
-						return true;
-					}
-				}
+				return true;
 			}
-
 		}
 	}
 
@@ -7557,7 +7543,7 @@ BOOL beingResearchedByAlly(SDWORD resIndex, SDWORD player)
 }
 
 // true if player has completed this research
-BOOL scrResearchCompleted(void)
+bool scrResearchCompleted(void)
 {
 	RESEARCH			*psResearch;
 	SDWORD				player;
@@ -7606,7 +7592,7 @@ BOOL scrResearchCompleted(void)
 }
 
 // true if player has already started researching it
-BOOL scrResearchStarted(void)
+bool scrResearchStarted(void)
 {
 	RESEARCH			*psResearch;
 	SDWORD				player;
@@ -7634,7 +7620,7 @@ BOOL scrResearchStarted(void)
 		return false;
 	}
 
-	if(IsResearchStarted(&pPlayerRes[index]))
+	if (IsResearchStartedPending(&pPlayerRes[index]))
 	{
 		scrFunctionResult.v.bval = true;
 		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
@@ -7655,10 +7641,10 @@ BOOL scrResearchStarted(void)
 }
 
 //returns true if location is dangerous
-BOOL scrThreatInRange(void)
+bool scrThreatInRange(void)
 {
-	SDWORD				player,range,rangeX,rangeY;
-	BOOL					bVTOLs;
+	SDWORD		player, range, rangeX, rangeY;
+	int32_t		bVTOLs;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(5, VAL_INT, &player, VAL_INT, &rangeX,
 		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs))
@@ -7677,11 +7663,11 @@ BOOL scrThreatInRange(void)
 }
 
 
-BOOL scrNumEnemyWeapObjInRange(void)
+bool scrNumEnemyWeapObjInRange(void)
 {
-	SDWORD				lookingPlayer,range,rangeX,rangeY,i;
-	UDWORD				numEnemies = 0;
-	BOOL				bVTOLs,bFinished;
+	SDWORD		lookingPlayer, range, rangeX, rangeY, i;
+	UDWORD		numEnemies = 0;
+	int32_t		bVTOLs, bFinished;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(6, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
 		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs, VAL_BOOL, &bFinished))
@@ -7713,11 +7699,11 @@ BOOL scrNumEnemyWeapObjInRange(void)
 }
 
 /* Calculates the total cost of enemy weapon objects in a certain area */
-BOOL scrEnemyWeapObjCostInRange(void)
+bool scrEnemyWeapObjCostInRange(void)
 {
-	SDWORD				lookingPlayer,range,rangeX,rangeY,i;
-	UDWORD				enemyCost = 0;
-	BOOL				bVTOLs,bFinished;
+	SDWORD		lookingPlayer, range, rangeX, rangeY, i;
+	UDWORD		enemyCost = 0;
+	int32_t		bVTOLs, bFinished; // was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(6, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
 		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs, VAL_BOOL, &bFinished))
@@ -7750,11 +7736,11 @@ BOOL scrEnemyWeapObjCostInRange(void)
 /* Calculates the total cost of ally (+ looking player)
  * weapon objects in a certain area
  */
-BOOL scrFriendlyWeapObjCostInRange(void)
+bool scrFriendlyWeapObjCostInRange(void)
 {
-	SDWORD				player,range,rangeX,rangeY,i;
-	UDWORD				friendlyCost = 0;
-	BOOL				bVTOLs,bFinished;
+	SDWORD		player, range, rangeX, rangeY, i;
+	UDWORD		friendlyCost = 0;
+	int32_t		bVTOLs, bFinished;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(6, VAL_INT, &player, VAL_INT, &rangeX,
 		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs, VAL_BOOL, &bFinished))
@@ -7786,7 +7772,7 @@ BOOL scrFriendlyWeapObjCostInRange(void)
  * Will either count the number of droids or calculate the total costs.
  */
 static UDWORD costOrAmountInRange(SDWORD player, SDWORD lookingPlayer, SDWORD range,
-								   SDWORD rangeX, SDWORD rangeY, BOOL bVTOLs, BOOL justCount)
+								   SDWORD rangeX, SDWORD rangeY, bool bVTOLs, bool justCount)
 {
 	UDWORD				droidCost;
 	DROID				*psDroid;
@@ -7827,13 +7813,13 @@ static UDWORD costOrAmountInRange(SDWORD player, SDWORD lookingPlayer, SDWORD ra
 	return droidCost;
 }
 
-UDWORD numPlayerWeapDroidsInRange(SDWORD player, SDWORD lookingPlayer, SDWORD range, SDWORD rangeX, SDWORD rangeY, BOOL bVTOLs)
+UDWORD numPlayerWeapDroidsInRange(SDWORD player, SDWORD lookingPlayer, SDWORD range, SDWORD rangeX, SDWORD rangeY, bool bVTOLs)
 {
 	return costOrAmountInRange(player, lookingPlayer, range, rangeX, rangeY, bVTOLs, true /*only count*/);
 }
 
 UDWORD playerWeapDroidsCostInRange(SDWORD player, SDWORD lookingPlayer, SDWORD range,
-								   SDWORD rangeX, SDWORD rangeY, BOOL bVTOLs)
+								   SDWORD rangeX, SDWORD rangeY, bool bVTOLs)
 {
 	return costOrAmountInRange(player, lookingPlayer, range, rangeX, rangeY, bVTOLs, false /*total cost*/);
 }
@@ -7841,7 +7827,7 @@ UDWORD playerWeapDroidsCostInRange(SDWORD player, SDWORD lookingPlayer, SDWORD r
 
 
 UDWORD numPlayerWeapStructsInRange(SDWORD player, SDWORD lookingPlayer, SDWORD range,
-								   SDWORD rangeX, SDWORD rangeY, BOOL bFinished)
+								   SDWORD rangeX, SDWORD rangeY, bool bFinished)
 {
 	const STRUCTURE* psStruct;
 
@@ -7871,7 +7857,7 @@ UDWORD numPlayerWeapStructsInRange(SDWORD player, SDWORD lookingPlayer, SDWORD r
 }
 
 UDWORD playerWeapStructsCostInRange(SDWORD player, SDWORD lookingPlayer, SDWORD range,
-								   SDWORD rangeX, SDWORD rangeY, BOOL bFinished)
+								   SDWORD rangeX, SDWORD rangeY, bool bFinished)
 {
 	const STRUCTURE* psStruct;
 
@@ -7898,11 +7884,11 @@ UDWORD playerWeapStructsCostInRange(SDWORD player, SDWORD lookingPlayer, SDWORD 
 	return structsCost;
 }
 
-BOOL scrNumEnemyWeapDroidsInRange(void)
+bool scrNumEnemyWeapDroidsInRange(void)
 {
 	SDWORD				lookingPlayer,range,rangeX,rangeY,i;
 	UDWORD				numEnemies = 0;
-	BOOL				bVTOLs;
+	int32_t				bVTOLs;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(5, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
 		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs))
@@ -7933,11 +7919,11 @@ BOOL scrNumEnemyWeapDroidsInRange(void)
 
 
 
-BOOL scrNumEnemyWeapStructsInRange(void)
+bool scrNumEnemyWeapStructsInRange(void)
 {
-	SDWORD				lookingPlayer,range,rangeX,rangeY,i;
-	UDWORD				numEnemies = 0;
-	BOOL				bFinished;
+	SDWORD			lookingPlayer, range, rangeX, rangeY, i;
+	UDWORD			numEnemies = 0;
+	int32_t			bFinished;	// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(5, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
 		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bFinished))
@@ -7966,11 +7952,11 @@ BOOL scrNumEnemyWeapStructsInRange(void)
 	return true;
 }
 
-BOOL scrNumFriendlyWeapObjInRange(void)
+bool scrNumFriendlyWeapObjInRange(void)
 {
-	SDWORD				player,range,rangeX,rangeY,i;
+	SDWORD				player, range, rangeX, rangeY, i;
 	UDWORD				numFriends = 0;
-	BOOL				bVTOLs,bFinished;
+	int32_t				bVTOLs, bFinished;	// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(6, VAL_INT, &player, VAL_INT, &rangeX,
 		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs, VAL_BOOL, &bFinished))
@@ -7997,11 +7983,11 @@ BOOL scrNumFriendlyWeapObjInRange(void)
 	return true;
 }
 
-BOOL scrNumFriendlyWeapDroidsInRange(void)
+bool scrNumFriendlyWeapDroidsInRange(void)
 {
-	SDWORD				lookingPlayer,range,rangeX,rangeY,i;
-	UDWORD				numEnemies = 0;
-	BOOL				bVTOLs;
+	SDWORD		lookingPlayer, range, rangeX, rangeY, i;
+	UDWORD		numEnemies = 0;
+	int32_t		bVTOLs;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(5, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
 		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs))
@@ -8031,11 +8017,11 @@ BOOL scrNumFriendlyWeapDroidsInRange(void)
 
 
 
-BOOL scrNumFriendlyWeapStructsInRange(void)
+bool scrNumFriendlyWeapStructsInRange(void)
 {
-	SDWORD				lookingPlayer,range,rangeX,rangeY,i;
+	SDWORD				lookingPlayer, range, rangeX, rangeY, i;
 	UDWORD				numEnemies = 0;
-	BOOL				bFinished;
+	int32_t				bFinished;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(5, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
 		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bFinished))
@@ -8062,10 +8048,10 @@ BOOL scrNumFriendlyWeapStructsInRange(void)
 	return true;
 }
 
-BOOL scrNumPlayerWeapDroidsInRange(void)
+bool scrNumPlayerWeapDroidsInRange(void)
 {
-	SDWORD		targetPlayer,lookingPlayer,range,rangeX,rangeY;
-	BOOL		bVTOLs;
+	SDWORD		targetPlayer, lookingPlayer, range, rangeX, rangeY;
+	int32_t		bVTOLs;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(6, VAL_INT, &targetPlayer, VAL_INT, &lookingPlayer,
 		VAL_INT, &rangeX, VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs))
@@ -8085,10 +8071,10 @@ BOOL scrNumPlayerWeapDroidsInRange(void)
 	return true;
 }
 
-BOOL scrNumPlayerWeapStructsInRange(void)
+bool scrNumPlayerWeapStructsInRange(void)
 {
-	SDWORD		targetPlayer,lookingPlayer,range,rangeX,rangeY;
-	BOOL		bFinished;
+	SDWORD		targetPlayer, lookingPlayer, range, rangeX, rangeY;
+	int32_t		bFinished;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(6, VAL_INT, &targetPlayer, VAL_INT, &lookingPlayer,
 		VAL_INT, &rangeX, VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bFinished))
@@ -8108,11 +8094,11 @@ BOOL scrNumPlayerWeapStructsInRange(void)
 	return true;
 }
 
-BOOL scrNumPlayerWeapObjInRange(void)
+bool scrNumPlayerWeapObjInRange(void)
 {
-	SDWORD				targetPlayer,lookingPlayer,range,rangeX,rangeY;
+	SDWORD				targetPlayer, lookingPlayer, range, rangeX, rangeY;
 	UDWORD				numEnemies = 0;
-	BOOL				bVTOLs,bFinished;
+	int32_t				bVTOLs, bFinished;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(7, VAL_INT, &targetPlayer, VAL_INT, &lookingPlayer,
 						VAL_INT, &rangeX, VAL_INT, &rangeY, VAL_INT, &range,
@@ -8135,10 +8121,10 @@ BOOL scrNumPlayerWeapObjInRange(void)
 	return true;
 }
 
-BOOL scrNumEnemyObjInRange(void)
+bool scrNumEnemyObjInRange(void)
 {
-	SDWORD				lookingPlayer,range,rangeX,rangeY;
-	BOOL				bVTOLs,bFinished;
+	SDWORD				lookingPlayer, range, rangeX, rangeY;
+	int32_t				bVTOLs, bFinished;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(6, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
 		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs, VAL_BOOL, &bFinished))
@@ -8158,7 +8144,7 @@ BOOL scrNumEnemyObjInRange(void)
 }
 
 UDWORD numEnemyObjInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD rangeY,
-						  BOOL bVTOLs, BOOL bFinished)
+						  bool bVTOLs, bool bFinished)
 {
 	unsigned int i;
 	const STRUCTURE* psStruct;
@@ -8220,7 +8206,7 @@ UDWORD numEnemyObjInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD ran
 }
 
 /* Similar to structureBuiltInRange(), but also returns true if structure is not finished */
-BOOL scrNumStructsByStatInRange(void)
+bool scrNumStructsByStatInRange(void)
 {
 	SDWORD		player, lookingPlayer, index, x, y, range;
 	SDWORD		rangeSquared,NumStruct;
@@ -8295,7 +8281,7 @@ BOOL scrNumStructsByStatInRange(void)
 	return true;
 }
 
-BOOL scrNumStructsByStatInArea(void)
+bool scrNumStructsByStatInArea(void)
 {
 	SDWORD		player, lookingPlayer, index, x1, y1, x2, y2;
 	SDWORD		NumStruct;
@@ -8357,7 +8343,7 @@ BOOL scrNumStructsByStatInArea(void)
 	return true;
 }
 
-BOOL scrNumStructsByTypeInRange(void)
+bool scrNumStructsByTypeInRange(void)
 {
 	SDWORD		targetPlayer, lookingPlayer, type, x, y, range;
 	SDWORD		rangeSquared,NumStruct;
@@ -8427,7 +8413,7 @@ BOOL scrNumStructsByTypeInRange(void)
 	return true;
 }
 
-BOOL scrNumFeatByTypeInRange(void)
+bool scrNumFeatByTypeInRange(void)
 {
 	SDWORD		lookingPlayer, type, x, y, range;
 	SDWORD		rangeSquared,NumFeat;
@@ -8498,7 +8484,7 @@ BOOL scrNumFeatByTypeInRange(void)
 }
 
 //returns num of visible structures of a certain player in range (only visible ones)
-BOOL scrNumStructsButNotWallsInRangeVis(void)
+bool scrNumStructsButNotWallsInRangeVis(void)
 {
 	SDWORD		player, lookingPlayer, x, y, range;
 	SDWORD		rangeSquared,NumStruct;
@@ -8567,12 +8553,12 @@ BOOL scrNumStructsButNotWallsInRangeVis(void)
 }
 
 // Only returns structure if it is visible
-BOOL scrGetStructureVis(void)
+bool scrGetStructureVis(void)
 {
 	SDWORD				player, lookingPlayer, index;
 	STRUCTURE			*psStruct;
 	UDWORD				structType;
-	BOOL				found;
+	bool				found;
 
 	if (!stackPopParams(3, ST_STRUCTURESTAT, &index, VAL_INT, &player, VAL_INT, &lookingPlayer))
 	{
@@ -8619,7 +8605,7 @@ BOOL scrGetStructureVis(void)
 }
 
 //returns num of visible structures of a certain player in range
-BOOL scrChooseValidLoc(void)
+bool scrChooseValidLoc(void)
 {
 	SDWORD sendY, sendX, *x, *y, player, threatRange;
 	UDWORD tx,ty;
@@ -8667,11 +8653,12 @@ BOOL scrChooseValidLoc(void)
 }
 
 //returns closest enemy object
-BOOL scrGetClosestEnemy(void)
+bool scrGetClosestEnemy(void)
 {
-	SDWORD				x,y,tx,ty, player, range,i;
+	SDWORD				x, y, tx, ty, player, range, i;
 	UDWORD				dist, bestDist;
-	BOOL				weaponOnly, bVTOLs, bFound = false;	//only military objects?
+	int32_t				weaponOnly, bVTOLs;		// was BOOL (int) ** see warning about conversion
+	bool				bFound = false;			//only military objects?
 	BASE_OBJECT			*psObj = NULL;
 	STRUCTURE			*psStruct = NULL;
 	DROID				*psDroid = NULL;
@@ -8784,7 +8771,7 @@ BOOL scrGetClosestEnemy(void)
 }
 
 //How many droids can it still fit?
-BOOL scrTransporterCapacity(void)
+bool scrTransporterCapacity(void)
 {
 	DROID			*psDroid;
 
@@ -8817,7 +8804,7 @@ BOOL scrTransporterCapacity(void)
 }
 
 //is it?
-BOOL scrTransporterFlying(void)
+bool scrTransporterFlying(void)
 {
 	DROID			*psDroid;
 
@@ -8849,7 +8836,7 @@ BOOL scrTransporterFlying(void)
 	return true;
 }
 
-BOOL scrUnloadTransporter(void)
+bool scrUnloadTransporter(void)
 {
 	DROID			*psDroid;
 	SDWORD			x,y;
@@ -8878,10 +8865,10 @@ BOOL scrUnloadTransporter(void)
 }
 
 //return true if droid is a member of any group
-BOOL scrHasGroup(void)
+bool scrHasGroup(void)
 {
 	DROID			*psDroid;
-	BOOL			retval;
+	bool			retval;
 
 	if (!stackPopParams(1, ST_DROID, &psDroid))
 	{
@@ -8914,7 +8901,7 @@ BOOL scrHasGroup(void)
 }
 
 /* Range is in world units! */
-BOOL scrObjWeaponMaxRange(void)
+bool scrObjWeaponMaxRange(void)
 {
 	BASE_OBJECT			*psObj;
 	WEAPON_STATS		*psStats;
@@ -8971,7 +8958,7 @@ BOOL scrObjWeaponMaxRange(void)
 	return true;
 }
 
-BOOL scrObjHasWeapon(void)
+bool scrObjHasWeapon(void)
 {
 	BASE_OBJECT			*psObj;
 
@@ -9003,10 +8990,10 @@ BOOL scrObjHasWeapon(void)
 	return true;
 }
 
-BOOL scrObjectHasIndirectWeapon(void)
+bool scrObjectHasIndirectWeapon(void)
 {
 	WEAPON_STATS	*psWeapStats;
-	BOOL			bIndirect;
+	bool			bIndirect;
 	BASE_OBJECT		*psObj;
 
 	if (!stackPopParams(1, ST_BASEOBJECT, &psObj))
@@ -9050,12 +9037,12 @@ BOOL scrObjectHasIndirectWeapon(void)
 }
 
 //returns closest droid by type
-BOOL scrGetClosestEnemyDroidByType(void)
+bool scrGetClosestEnemyDroidByType(void)
 {
 	SDWORD				x,y,tx,ty, player, range,i,type;
 	UDWORD				dist,bestDist;
-	BOOL				bFound = false;	//only military objects?
-	BOOL				bVTOLs;
+	bool				bFound = false;	//only military objects?
+	int32_t				bVTOLs;			// was BOOL (int) ** see warning about conversion
 	DROID				*psDroid = NULL, *foundDroid = NULL;
 
 	if (!stackPopParams(6, VAL_INT, &x, VAL_INT, &y,
@@ -9139,11 +9126,11 @@ BOOL scrGetClosestEnemyDroidByType(void)
 }
 
 //returns closest structure by type
-BOOL scrGetClosestEnemyStructByType(void)
+bool scrGetClosestEnemyStructByType(void)
 {
 	SDWORD				x,y,tx,ty, player, range,i,type,dist;
 	UDWORD				bestDist;
-	BOOL				bFound = false;	//only military objects?
+	bool				bFound = false;	//only military objects?
 	STRUCTURE			*psStruct = NULL, *foundStruct = NULL;
 
 	if (!stackPopParams(5, VAL_INT, &x, VAL_INT, &y,
@@ -9224,7 +9211,7 @@ BOOL scrGetClosestEnemyStructByType(void)
 
 
 //Approx point of intersection of a circle and a line with start loc being circle's center point
-BOOL scrCirclePerimPoint(void)
+bool scrCirclePerimPoint(void)
 {
 	SDWORD				basex,basey,*grx,*gry,radius;
 	float factor, deltaX, deltaY;
@@ -9266,10 +9253,10 @@ BOOL scrCirclePerimPoint(void)
 }
 
 //send my vision to AI
-BOOL scrGiftRadar(void)
+bool scrGiftRadar(void)
 {
 	SDWORD	playerFrom, playerTo;
-	BOOL	playMsg;
+	int32_t	playMsg;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(3, VAL_INT, &playerFrom, VAL_INT, &playerTo, VAL_BOOL, &playMsg))
 	{
@@ -9291,7 +9278,7 @@ BOOL scrGiftRadar(void)
 	return true;
 }
 
-BOOL scrNumAllies(void)
+bool scrNumAllies(void)
 {
 	SDWORD			player,numAllies,i;
 
@@ -9336,7 +9323,7 @@ BOOL scrNumAllies(void)
 
 
 //num aa defenses in range
-BOOL scrNumAAinRange(void)
+bool scrNumAAinRange(void)
 {
 	SDWORD				targetPlayer,lookingPlayer,range,rangeX,rangeY;
 	SDWORD				tx,ty;
@@ -9382,9 +9369,9 @@ BOOL scrNumAAinRange(void)
 }
 
 //select droid
-BOOL scrSelectDroid(void)
+bool scrSelectDroid(void)
 {
-	BOOL	bSelect;
+	int32_t	bSelect;	// was BOOL (int) ** see warning about conversion
 	DROID	*psDroid;
 
 	if (!stackPopParams(2, ST_DROID, &psDroid, VAL_BOOL, &bSelect))
@@ -9405,9 +9392,9 @@ BOOL scrSelectDroid(void)
 }
 
 //select droid group
-BOOL scrSelectGroup(void)
+bool scrSelectGroup(void)
 {
-	BOOL		bSelect;
+	int32_t		bSelect;	// was BOOL (int) ** see warning about conversion
 	DROID_GROUP	*psGroup;
 	DROID		*psCurr;
 
@@ -9425,7 +9412,7 @@ BOOL scrSelectGroup(void)
 	return true;
 }
 
-BOOL scrModulo(void)
+bool scrModulo(void)
 {
 	SDWORD				num1,num2;
 
@@ -9445,10 +9432,10 @@ BOOL scrModulo(void)
 	return true;
 }
 
-BOOL scrPlayerLoaded(void)
+bool scrPlayerLoaded(void)
 {
 	SDWORD			player;
-	BOOL			bPlayerHasFactories=false;
+	bool			bPlayerHasFactories=false;
 	STRUCTURE		*psCurr;
 
 	if (!stackPopParams(1, VAL_INT, &player))
@@ -9483,7 +9470,7 @@ BOOL scrPlayerLoaded(void)
 }
 
 /* Add a beacon (blip) */
-BOOL addBeaconBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, char * textMsg)
+bool addBeaconBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, char * textMsg)
 {
 	MESSAGE			*psMessage;
 	VIEWDATA		*pTempData;
@@ -9545,7 +9532,7 @@ BOOL addBeaconBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, ch
 	return true;
 }
 
-BOOL sendBeaconToPlayer(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, char * beaconMsg)
+bool sendBeaconToPlayer(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, char * beaconMsg)
 {
 	if(sender == forPlayer || myResponsibility(forPlayer))	//if destination player is on this machine
 	{
@@ -9653,7 +9640,7 @@ MESSAGE * findBeaconMsg(UDWORD player, SDWORD sender)
 }
 
 /* Add beacon (radar blip) */
-BOOL scrDropBeacon(void)
+bool scrDropBeacon(void)
 {
 	SDWORD			forPlayer,sender;
 	char					ssval2[255];
@@ -9672,7 +9659,7 @@ BOOL scrDropBeacon(void)
 }
 
 /* Remove beacon from the map */
-BOOL scrRemoveBeacon(void)
+bool scrRemoveBeacon(void)
 {
 	MESSAGE			*psMessage;
 	SDWORD			player, sender;
@@ -9706,7 +9693,7 @@ BOOL scrRemoveBeacon(void)
 	return true;
 }
 
-BOOL scrClosestDamagedGroupDroid(void)
+bool scrClosestDamagedGroupDroid(void)
 {
 	DROID_GROUP	*psGroup;
 	DROID		*psDroid,*psClosestDroid;
@@ -9771,7 +9758,7 @@ SDWORD getNumRepairedBy(DROID *psDroidToCheck, SDWORD player)
 }
 
 /* Uses debug_console() for console debug output right now */
-BOOL scrMsgBox(void)
+bool scrMsgBox(void)
 {
 	if (!stackPopParams(1, VAL_STRING, &strParam1))
 	{
@@ -9786,10 +9773,10 @@ BOOL scrMsgBox(void)
 
 
 // Check for a struct being within a certain range of a position (must be visible)
-BOOL scrStructInRangeVis(void)
+bool scrStructInRangeVis(void)
 {
 	SDWORD		range, player,lookingPlayer, x,y;
-	BOOL		found;
+	bool		found;
 
 	if (!stackPopParams(5, VAL_INT, &lookingPlayer, VAL_INT, &player , VAL_INT, &x, VAL_INT, &y, VAL_INT, &range))
 	{
@@ -9815,10 +9802,10 @@ BOOL scrStructInRangeVis(void)
 }
 
 // Check for a droid being within a certain range of a position (must be visible)
-BOOL scrDroidInRangeVis(void)
+bool scrDroidInRangeVis(void)
 {
 	SDWORD		range, player,lookingPlayer, x,y;
-	BOOL		found;
+	bool		found;
 
 	if (!stackPopParams(5, VAL_INT, &lookingPlayer, VAL_INT, &player , VAL_INT, &x, VAL_INT, &y, VAL_INT, &range))
 	{
@@ -9844,7 +9831,7 @@ BOOL scrDroidInRangeVis(void)
 }
 
 // check for a base object being in range of a point
-BOOL objectInRangeVis(BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range, SDWORD lookingPlayer)
+bool objectInRangeVis(BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range, SDWORD lookingPlayer)
 {
 	BASE_OBJECT		*psCurr;
 	SDWORD			xdiff, ydiff, rangeSq;
@@ -9892,13 +9879,13 @@ BOOL objectInRangeVis(BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range, SDW
 }
 
 /* Go after a certain research */
-BOOL scrPursueResearch(void)
+bool scrPursueResearch(void)
 {
 	RESEARCH			*psResearch;
 	SDWORD				foundIndex = 0, player, cur, tempIndex, Stack[400];
 	UDWORD				index;
 	SWORD				top;
-	BOOL				found;
+	bool				found;
 	PLAYER_RESEARCH		*pPlayerRes;
 	STRUCTURE			*psBuilding;
 	RESEARCH_FACILITY	*psResFacilty;
@@ -9947,7 +9934,7 @@ BOOL scrPursueResearch(void)
 		found = false;
 		//DbgMsg("Research already completed: %d", index);
 	}
-	else if (IsResearchStarted(&pPlayerRes[index]))
+	else if (IsResearchStartedPending(&pPlayerRes[index]))
 	{
 		found = false;
 		//DbgMsg("Research already in progress, %d", index);
@@ -10001,7 +9988,7 @@ BOOL scrPursueResearch(void)
 					foundIndex = tempIndex;		//done
 					break;
 				}
-				else if ((IsResearchCompleted(&pPlayerRes[tempIndex]) == false) && (IsResearchStarted(&pPlayerRes[tempIndex]) == false))		//not avail and not busy with it, can check this PR's PR
+				else if (!IsResearchCompleted(&pPlayerRes[tempIndex]) && !IsResearchStartedPending(&pPlayerRes[tempIndex]))  //not avail and not busy with it, can check this PR's PR
 				{
 					//DbgMsg("node not complete, not started: %d, (cur=%d), %s", tempIndex,cur, asResearch[tempIndex].pName);
 					if (asResearch[tempIndex].numPRRequired > 0)	//node has any nodes itself
@@ -10058,7 +10045,7 @@ BOOL scrPursueResearch(void)
 	return true;
 }
 
-BOOL scrGetStructureType(void)
+bool scrGetStructureType(void)
 {
 	STRUCTURE			*psStruct;
 
@@ -10079,7 +10066,7 @@ BOOL scrGetStructureType(void)
 }
 
 /* Get player name from index */
-BOOL scrGetPlayerName(void)
+bool scrGetPlayerName(void)
 {
 	SDWORD	player;
 
@@ -10109,7 +10096,7 @@ BOOL scrGetPlayerName(void)
 }
 
 /* Set player name */
-BOOL scrSetPlayerName(void)
+bool scrSetPlayerName(void)
 {
 	SDWORD	player;
 
@@ -10173,7 +10160,7 @@ SDWORD getPlayerFromString(char *playerName)
 }
 
 /* Checks if a particular bit is set in an integer */
-BOOL scrGetBit(void)
+bool scrGetBit(void)
 {
 	SDWORD				val1,val2;
 
@@ -10195,10 +10182,10 @@ BOOL scrGetBit(void)
 }
 
 /* Sets a particular bit in an integer */
-BOOL scrSetBit(void)
+bool scrSetBit(void)
 {
 	SDWORD				base,position;
-	BOOL				bSet;
+	int32_t				bSet;	// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(3, VAL_INT, &base,
 		VAL_INT, &position, VAL_BOOL, &bSet))
@@ -10228,9 +10215,9 @@ BOOL scrSetBit(void)
 }
 
 /* Can we create and break alliances? */
-BOOL scrAlliancesLocked(void)
+bool scrAlliancesLocked(void)
 {
-	BOOL		bResult = true;
+	bool		bResult = true;
 
 	if(bMultiPlayer && (game.alliance == ALLIANCES))
 		bResult = false;
@@ -10245,9 +10232,9 @@ BOOL scrAlliancesLocked(void)
 	return true;
 }
 
-BOOL scrASSERT(void)
+bool scrASSERT(void)
 {
-	BOOL				bExpression;
+	int32_t			bExpression;	// was BOOL (int) ** see warning about conversion
 	SDWORD			player;
 	char			sTmp[255];
 
@@ -10276,7 +10263,7 @@ BOOL scrASSERT(void)
 }
 
 /* Visualize radius at position */
-BOOL scrShowRangeAtPos(void)
+bool scrShowRangeAtPos(void)
 {
 	SDWORD		x,y,radius;
 
@@ -10292,7 +10279,7 @@ BOOL scrShowRangeAtPos(void)
 	return true;
 }
 
-BOOL scrToPow(void)
+bool scrToPow(void)
 {
 	float		x,y;
 
@@ -10313,7 +10300,7 @@ BOOL scrToPow(void)
 }
 
 /* Exponential function */
-BOOL scrExp(void)
+bool scrExp(void)
 {
 	float		fArg;
 
@@ -10332,7 +10319,7 @@ BOOL scrExp(void)
 }
 
 /* Square root */
-BOOL scrSqrt(void)
+bool scrSqrt(void)
 {
 	float		fArg;
 
@@ -10351,7 +10338,7 @@ BOOL scrSqrt(void)
 }
 
 /* Natural logarithm */
-BOOL scrLog(void)
+bool scrLog(void)
 {
 	float		fArg;
 
@@ -10370,9 +10357,9 @@ BOOL scrLog(void)
 }
 
 /* Show/Hide multiplayer debug menu */
-BOOL scrDebugMenu(void)
+bool scrDebugMenu(void)
 {
-	SDWORD		menuUp;
+	int32_t		menuUp;		// was SDWORD which happens to be int32_t, but is being used as a VAL_BOOL, so : ** see warning about conversion
 
 	if (!stackPopParams(1, VAL_BOOL, &menuUp))
 	{
@@ -10386,7 +10373,7 @@ BOOL scrDebugMenu(void)
 }
 
 /* Set debug menu output string */
-BOOL scrSetDebugMenuEntry(void)
+bool scrSetDebugMenuEntry(void)
 {
 	SDWORD		index;
 
@@ -10402,7 +10389,7 @@ BOOL scrSetDebugMenuEntry(void)
 }
 
 /* Parse chat message and return number of commands that could be extracted */
-BOOL scrProcessChatMsg(void)
+bool scrProcessChatMsg(void)
 {
 	if (!stackPopParams(1, VAL_STRING, &strParam1))
 	{
@@ -10431,7 +10418,7 @@ BOOL scrProcessChatMsg(void)
 /* Returns number of command arguments for a certain
  * chat command that could be extracted
  */
-BOOL scrGetNumArgsInCmd(void)
+bool scrGetNumArgsInCmd(void)
 {
 	SDWORD		cmdIndex;
 
@@ -10463,7 +10450,7 @@ BOOL scrGetNumArgsInCmd(void)
 /* Returns a string representing a certain chat command,
  * based on the command index provided
  */
-BOOL scrGetChatCmdDescription(void)
+bool scrGetChatCmdDescription(void)
 {
 	SDWORD			cmdIndex;
 	char			*pChatCommand=NULL;
@@ -10512,12 +10499,12 @@ BOOL scrGetChatCmdDescription(void)
 /* Returns a certain parameter of a certain chat command
  * Returns false if failed
  */
-BOOL scrGetChatCmdParam(void)
+bool scrGetChatCmdParam(void)
 {
 	SDWORD			cmdIndex, argIndex;
 	void			*pArgument=NULL;
 	INTERP_TYPE		argType=VAL_VOID;
-	BOOL			bSuccess=true;		//failure on type mismatch
+	bool			bSuccess=true;		//failure on type mismatch
 
 	//if (!stackPopParams(3, VAL_INT, &cmdIndex, VAL_INT, &argIndex, VAL_REF | VAL_VOID, &pArgument))
 	//{
@@ -10575,7 +10562,7 @@ BOOL scrGetChatCmdParam(void)
 }
 
 /* Returns true if a certain command was addressed to a certain player */
-BOOL scrChatCmdIsPlayerAddressed(void)
+bool scrChatCmdIsPlayerAddressed(void)
 {
 	SDWORD		cmdIndex,playerInQuestion;
 
@@ -10611,7 +10598,7 @@ BOOL scrChatCmdIsPlayerAddressed(void)
 }
 
 /* Modifies height of a tile */
-BOOL scrSetTileHeight(void)
+bool scrSetTileHeight(void)
 {
 	UDWORD		tileX,tileY,newHeight;
 	MAPTILE		*psTile;
@@ -10634,7 +10621,7 @@ BOOL scrSetTileHeight(void)
 /* Returns structure which placed on provided coordinates.
  * Returns NULL (NULLOBJECT) if there's no structure.
  */
-BOOL scrGetTileStructure(void)
+bool scrGetTileStructure(void)
 {
 	SDWORD		structureX,structureY;
 
@@ -10656,7 +10643,7 @@ BOOL scrGetTileStructure(void)
 
 /* Outputs script call stack
  */
-BOOL scrPrintCallStack(void)
+bool scrPrintCallStack(void)
 {
 	scrOutputCallTrace(LOG_SCRIPT);
 
@@ -10666,7 +10653,7 @@ BOOL scrPrintCallStack(void)
 /*
  * Returns true if game debug mode is on
  */
-BOOL scrDebugModeEnabled(void)
+bool scrDebugModeEnabled(void)
 {
 
 	scrFunctionResult.v.bval = getDebugMappingStatus();
@@ -10682,7 +10669,7 @@ BOOL scrDebugModeEnabled(void)
 /*
  * Returns the cost of a droid
  */
-BOOL scrCalcDroidPower(void)
+bool scrCalcDroidPower(void)
 {
 	DROID	*psDroid;
 
@@ -10707,7 +10694,7 @@ BOOL scrCalcDroidPower(void)
 /*
  * Returns experience level of a droid
  */
-BOOL scrGetDroidLevel(void)
+bool scrGetDroidLevel(void)
 {
 	DROID	*psDroid;
 
@@ -10730,7 +10717,7 @@ BOOL scrGetDroidLevel(void)
 }
 
 /* Assembles a template from components and returns it */
-BOOL scrAssembleWeaponTemplate(void)
+bool scrAssembleWeaponTemplate(void)
 {
 	SDWORD					player,bodyIndex,weapIndex,propIndex;
 	DROID_TEMPLATE			*pNewTemplate = NULL;
@@ -10824,7 +10811,7 @@ BOOL scrAssembleWeaponTemplate(void)
 static DROID_TEMPLATE* scrCheckTemplateExists(SDWORD player, DROID_TEMPLATE *psTempl)
 {
 	DROID_TEMPLATE* psCurrent;
-	BOOL equal;
+	bool equal;
 
 	for (psCurrent = apsDroidTemplates[player]; psCurrent != NULL; psCurrent = psCurrent->psNext)
 	{
@@ -10868,7 +10855,7 @@ static DROID_TEMPLATE* scrCheckTemplateExists(SDWORD player, DROID_TEMPLATE *psT
 	return NULL;
 }
 
-BOOL scrWeaponShortHitUpgrade(void)
+bool scrWeaponShortHitUpgrade(void)
 {
 	SDWORD					player,weapIndex;
 	const WEAPON_STATS		*psWeapStats;
@@ -10889,7 +10876,7 @@ BOOL scrWeaponShortHitUpgrade(void)
 	return true;
 }
 
-BOOL scrWeaponLongHitUpgrade(void)
+bool scrWeaponLongHitUpgrade(void)
 {
 	SDWORD					player,weapIndex;
 	const WEAPON_STATS		*psWeapStats;
@@ -10911,7 +10898,7 @@ BOOL scrWeaponLongHitUpgrade(void)
 }
 
 
-BOOL scrWeaponDamageUpgrade(void)
+bool scrWeaponDamageUpgrade(void)
 {
 	SDWORD					player,weapIndex;
 	const WEAPON_STATS		*psWeapStats;
@@ -10932,7 +10919,7 @@ BOOL scrWeaponDamageUpgrade(void)
 	return true;
 }
 
-BOOL scrWeaponFirePauseUpgrade(void)
+bool scrWeaponFirePauseUpgrade(void)
 {
 	SDWORD					player,weapIndex;
 	const WEAPON_STATS		*psWeapStats;
@@ -10954,10 +10941,10 @@ BOOL scrWeaponFirePauseUpgrade(void)
 }
 
 
-BOOL scrIsComponentAvailable(void)
+bool scrIsComponentAvailable(void)
 {
 	SDWORD					player;
-	BOOL					bAvailable = false;
+	bool					bAvailable = false;
 	INTERP_VAL				sVal;
 
 	if (!stackPop(&sVal))
@@ -11016,7 +11003,7 @@ BOOL scrIsComponentAvailable(void)
 	return true;
 }
 
-BOOL scrGetBodySize(void)
+bool scrGetBodySize(void)
 {
 	SDWORD		bodyIndex;
 
@@ -11033,7 +11020,7 @@ BOOL scrGetBodySize(void)
 	return true;
 }
 
-BOOL scrGettext()
+bool scrGettext()
 {
 	if (!stackPopParams(1, VAL_STRING, &strParam1))
 	{
@@ -11045,7 +11032,7 @@ BOOL scrGettext()
 	return stackPushResult((INTERP_TYPE)ST_TEXTSTRING, &scrFunctionResult);
 }
 
-BOOL scrGettext_noop()
+bool scrGettext_noop()
 {
 	if (!stackPopParams(1, VAL_STRING, &strParam1))
 	{
@@ -11057,7 +11044,7 @@ BOOL scrGettext_noop()
 	return stackPushResult(VAL_STRING, &scrFunctionResult);
 }
 
-BOOL scrPgettext()
+bool scrPgettext()
 {
 	char* msg_ctxt_id;
 	char* translation;
@@ -11097,7 +11084,7 @@ BOOL scrPgettext()
 	return stackPushResult((INTERP_TYPE)ST_TEXTSTRING, &scrFunctionResult);
 }
 
-BOOL scrPgettext_expr()
+bool scrPgettext_expr()
 {
 	if (!stackPopParams(2, VAL_STRING, &strParam1, VAL_STRING, &strParam2))
 	{
@@ -11109,7 +11096,7 @@ BOOL scrPgettext_expr()
 	return stackPushResult((INTERP_TYPE)ST_TEXTSTRING, &scrFunctionResult);
 }
 
-BOOL scrPgettext_noop()
+bool scrPgettext_noop()
 {
 	if (!stackPopParams(2, VAL_STRING, &strParam1, VAL_STRING, &strParam2))
 	{

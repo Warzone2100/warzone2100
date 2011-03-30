@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -32,12 +32,12 @@
 //#define BOUNDARY_X		(DISP_WIDTH/20)	   // proportional to resolution - Alex M
 //#define	BOUNDARY_Y		(DISP_WIDTH/16)
 
-typedef struct _screen_disp_data
+struct SCREEN_DISP_DATA
 {
 	iIMDShape	*imd;
 	UDWORD		frameNumber;		// last frame it was drawn
 	UDWORD		screenX,screenY;
 	UDWORD		screenR;
-} SCREEN_DISP_DATA;
+};
 
 #endif // __INCLUDED_DISPLAYDEF_H__

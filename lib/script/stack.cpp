@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -42,13 +42,13 @@ char STRSTACK[MAXSTACKLEN][MAXSTRLEN]; //simple string 'stack'
 UDWORD CURSTACKSTR = 0;    //Points to the top of the string stack
 
 /* store for a 'chunk' of the stack */
-typedef struct _stack_chunk
+struct STACK_CHUNK
 {
 	INTERP_VAL	*aVals;
 	UDWORD		size;
 
-	struct _stack_chunk		*psNext, *psPrev;
-} STACK_CHUNK;
+	STACK_CHUNK *   psNext, *psPrev;
+};
 
 /* The first chunk of the stack */
 static STACK_CHUNK		*psStackBase=NULL;
@@ -60,18 +60,18 @@ static STACK_CHUNK		*psCurrChunk=NULL;
 static UDWORD			currEntry=0;
 
 /* Get rid of the top value without returning it */
-static inline BOOL stackRemoveTop(void);
+static inline bool stackRemoveTop(void);
 
 
 /* Check if the stack is empty */
-BOOL stackEmpty(void)
+bool stackEmpty(void)
 {
 	return (psCurrChunk->psPrev == NULL && currEntry == 0);
 }
 
 
 /* Allocate a new chunk for the stack */
-static BOOL stackNewChunk(UDWORD size)
+static bool stackNewChunk(UDWORD size)
 {
 	/* see if a chunk has already been allocated */
 	if (psCurrChunk->psNext != NULL)
@@ -107,7 +107,7 @@ static BOOL stackNewChunk(UDWORD size)
 
 
 /* Push a value onto the stack */
-BOOL stackPush(INTERP_VAL  *psVal)
+bool stackPush(INTERP_VAL  *psVal)
 {
 	/* Store the value in the stack - psCurrChunk/currEntry always point to
 	valid space */
@@ -156,7 +156,7 @@ BOOL stackPush(INTERP_VAL  *psVal)
 
 
 /* Pop a value off the stack */
-BOOL stackPop(INTERP_VAL  *psVal)
+bool stackPop(INTERP_VAL  *psVal)
 {
 	if (stackEmpty())
 	{
@@ -184,7 +184,7 @@ BOOL stackPop(INTERP_VAL  *psVal)
 }
 
 /* Return pointer to the top value without poping it */
-BOOL stackPeekTop(INTERP_VAL  **ppsVal)
+bool stackPeekTop(INTERP_VAL  **ppsVal)
 {
 	if ((psCurrChunk->psPrev == NULL) && (currEntry == 0))
 	{
@@ -214,7 +214,7 @@ BOOL stackPeekTop(INTERP_VAL  **ppsVal)
 
 
 /* Pop a value off the stack, checking that the type matches what is passed in */
-BOOL stackPopType(INTERP_VAL  *psVal)
+bool stackPopType(INTERP_VAL  *psVal)
 {
 	INTERP_VAL	*psTop;
 
@@ -287,7 +287,7 @@ BOOL stackPopType(INTERP_VAL  *psVal)
 /* Pop a number of values off the stack checking their types
  * This is used by instinct functions to get their parameters
  */
-BOOL stackPopParams(unsigned int numParams, ...)
+bool stackPopParams(unsigned int numParams, ...)
 {
 	va_list args;
 	unsigned int i, index;
@@ -342,7 +342,7 @@ BOOL stackPopParams(unsigned int numParams, ...)
 		switch (type)
 		{
 			case VAL_BOOL:
-				*(BOOL*)pData = psVal->v.bval;
+				*(int32_t*)pData = psVal->v.bval;
 				break;
 			case VAL_INT:
 				*(int*)pData = psVal->v.ival;
@@ -414,7 +414,7 @@ BOOL stackPopParams(unsigned int numParams, ...)
 /* Push a value onto the stack without using a value structure
 	NOTE: result->type is _not_ set yet - use 'type' instead
 */
-BOOL stackPushResult(INTERP_TYPE type, INTERP_VAL *result)
+bool stackPushResult(INTERP_TYPE type, INTERP_VAL *result)
 {
 	/* assign type, wasn't done before */
 	result->type = type;
@@ -464,7 +464,7 @@ BOOL stackPushResult(INTERP_TYPE type, INTERP_VAL *result)
  * index is how far down the stack to look.
  * Index 0 is the top entry on the stack.
  */
-BOOL stackPeek(INTERP_VAL *psVal, UDWORD index)
+bool stackPeek(INTERP_VAL *psVal, UDWORD index)
 {
 	STACK_CHUNK		*psCurr;
 
@@ -518,7 +518,7 @@ void stackPrintTop(void)
 /* Do binary operations on the top of the stack
  * This effectively pops two values and pushes the result
  */
-BOOL stackBinaryOp(OPCODE opcode)
+bool stackBinaryOp(OPCODE opcode)
 {
 	STACK_CHUNK		*psChunk;
 	INTERP_VAL		*psV1, *psV2;
@@ -773,7 +773,7 @@ BOOL stackBinaryOp(OPCODE opcode)
 /* Perform a unary operation on the top of the stack
  * This effectively pops a value and pushes the result
  */
-BOOL stackUnaryOp(OPCODE opcode)
+bool stackUnaryOp(OPCODE opcode)
 {
 	STACK_CHUNK		*psChunk;
 	INTERP_VAL		*psVal;
@@ -885,7 +885,7 @@ BOOL stackUnaryOp(OPCODE opcode)
 	return true;
 }
 
-BOOL stackCastTop(INTERP_TYPE neededType)
+bool stackCastTop(INTERP_TYPE neededType)
 {
 	INTERP_VAL *pTop;
 
@@ -947,7 +947,7 @@ BOOL stackCastTop(INTERP_TYPE neededType)
 
 
 /* Initialise the stack */
-BOOL stackInitialise(void)
+bool stackInitialise(void)
 {
 	psStackBase = (STACK_CHUNK *)calloc(1, sizeof(*psStackBase));
 	if (psStackBase == NULL)
@@ -1017,7 +1017,7 @@ void stackShutDown(void)
 }
 
 /* Get rid of the top value without returning it */
-static inline BOOL stackRemoveTop(void)
+static inline bool stackRemoveTop(void)
 {
 	if ((psCurrChunk->psPrev == NULL) && (currEntry == 0))
 	{

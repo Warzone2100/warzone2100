@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -35,11 +35,6 @@
 
 #include "lib/framework/types.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 /* ------------------------------------------------------------------------------------------- */
 
 /* Legacy stuff
@@ -52,8 +47,8 @@ extern void screenSetTextColour(UBYTE red, UBYTE green, UBYTE blue);
 extern void screen_SetBackDropFromFile(const char* filename);
 extern void screen_StopBackDrop(void);
 extern void screen_RestartBackDrop(void);
-extern BOOL screen_GetBackDrop(void);
-extern void screen_Upload(const char *newBackDropBmp, BOOL preview);
+extern bool screen_GetBackDrop(void);
+extern void screen_Upload(const char *newBackDropBmp, bool preview);
 
 /* screendump */
 extern void screenDumpToDisk(const char* path);
@@ -67,10 +62,6 @@ extern void screenDoDumpToDiskIfRequired(void);
 
 void screen_enableMapPreview(char *name, int width, int height, Vector2i *playerpositions);
 void screen_disableMapPreview(void);
-BOOL screen_getMapPreview(void);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
+bool screen_getMapPreview(void);
 
 #endif

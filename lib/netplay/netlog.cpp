@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ static PHYSFS_file	*pFileHandle = NULL;
 static uint32_t		packetcount[2][NUM_GAME_PACKETS];
 static uint32_t		packetsize[2][NUM_GAME_PACKETS];
 
-BOOL NETstartLogging(void)
+bool NETstartLogging(void)
 {
 	time_t aclock;
 	struct tm *newtime;
@@ -56,7 +56,7 @@ BOOL NETstartLogging(void)
 	time( &aclock );                 /* Get time in seconds */
 	newtime = localtime( &aclock );  /* Convert time to struct */
 
-	snprintf(filename, sizeof(filename), "logs/netplay-%02d%02d_%02d%02d%02d.log", newtime->tm_mon, newtime->tm_mday, newtime->tm_hour, newtime->tm_min, newtime->tm_sec );
+	snprintf(filename, sizeof(filename), "logs/netplay-%04d%02d%02d_%02d%02d%02d.log", newtime->tm_year + 1900, newtime->tm_mon + 1, newtime->tm_mday, newtime->tm_hour, newtime->tm_min, newtime->tm_sec);
 	pFileHandle = PHYSFS_openWrite( filename ); // open the file
 	if (!pFileHandle)
 	{
@@ -69,7 +69,7 @@ BOOL NETstartLogging(void)
 	return true;
 }
 
-BOOL NETstopLogging(void)
+bool NETstopLogging(void)
 {
 	static const char dash_line[] = "-----------------------------------------------------------\n";
 	char buf[256];
@@ -143,16 +143,16 @@ BOOL NETstopLogging(void)
 /** log packet
  *  \param type, uint8_t, the packet's type.
  *  \param size, uint32_t, the packet's size
- *  \param received, BOOL, true if we are receiving a packet, false if we are sending a packet.
+ *  \param received, bool, true if we are receiving a packet, false if we are sending a packet.
 */
-void NETlogPacket(uint8_t type, uint32_t size, BOOL received)
+void NETlogPacket(uint8_t type, uint32_t size, bool received)
 {
 	STATIC_ASSERT((1<<(8*sizeof(type))) == NUM_GAME_PACKETS);  // NUM_GAME_PACKETS must be larger than maximum possible type.
 	packetcount[received][type]++;
 	packetsize[received][type] += size;
 }
 
-BOOL NETlogEntry(const char *str,UDWORD a,UDWORD b)
+bool NETlogEntry(const char *str,UDWORD a,UDWORD b)
 {
 	static const char star_line[] = "************************************************************\n";
 	static UDWORD lastframe = 0;

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -26,29 +26,26 @@
 #define NO_META_KEY				9999
 #define KEYFUNC_TOGGLE_RADAR	20
 
-typedef	enum
+enum KEY_ACTION
 {
 KEYMAP_DOWN,
 KEYMAP_PRESSED,
 KEYMAP_RELEASED
-}KEY_ACTION;
+};
 
-typedef enum
+enum KEY_STATUS
 {
 KEYMAP__DEBUG,
 KEYMAP_ALWAYS,
 KEYMAP_ASSIGNABLE,
 KEYMAP_ALWAYS_PROCESS,
 KEYMAP___HIDE
-}KEY_STATUS;
+};
 
-// moved to lib/framework/input.h
-//#define KEY_IGNORE	5190
-
-typedef struct _keyMapping
+struct KEY_MAPPING
 {
 void (*function)(void);
-BOOL		active;
+bool		active;
 KEY_STATUS	status;
 UDWORD		lastCalled;
 KEY_CODE	metaKeyCode;
@@ -56,32 +53,32 @@ KEY_CODE	altMetaKeyCode;
 KEY_CODE	subKeyCode;
 KEY_ACTION	action;
 char		*pName;
-struct _keyMapping	*psNext;
-} KEY_MAPPING;
+KEY_MAPPING *   psNext;
+};
 
 extern KEY_MAPPING	*keyAddMapping			( KEY_STATUS status, KEY_CODE metaCode, KEY_CODE subcode,
 									 KEY_ACTION action, void (*pKeyMapFunc)(void), const char *name );
-extern BOOL	keyRemoveMapping		( KEY_CODE metaCode, KEY_CODE subCode );
+extern bool	keyRemoveMapping		( KEY_CODE metaCode, KEY_CODE subCode );
 extern	KEY_MAPPING	*keyGetMappingFromFunction(void	*function);
-extern BOOL	keyRemoveMappingPt		( KEY_MAPPING *psToRemove );
+extern bool	keyRemoveMappingPt		( KEY_MAPPING *psToRemove );
 extern KEY_MAPPING *keyFindMapping	( KEY_CODE metaCode, KEY_CODE subCode );
 extern void	keyClearMappings		( void );
-extern void	keyProcessMappings		( BOOL bExclude );
-extern void	keyInitMappings			( BOOL bForceDefaults );
+extern void	keyProcessMappings		( bool bExclude );
+extern void	keyInitMappings			( bool bForceDefaults );
 extern UDWORD	getNumMappings		( void );
 extern KEY_CODE	getLastSubKey		( void );
 extern KEY_CODE	getLastMetaKey		( void );
 extern KEY_MAPPING	*getLastMapping	( void );
-extern void	keyEnableProcessing		( BOOL val );
+extern void	keyEnableProcessing		( bool val );
 extern void keyStatusAllInactive	( void );
 extern void keyAllMappingsInactive(void);
 extern void	keyAllMappingsActive	( void );
-extern void	keySetMappingStatus		( KEY_MAPPING *psMapping, BOOL state );
-extern void	processDebugMappings	( BOOL val );
-extern BOOL	getDebugMappingStatus	( void );
-extern	BOOL	keyReAssignMappingName(char *pName, KEY_CODE newMetaCode, KEY_CODE newSubCode);
+extern void	keySetMappingStatus		( KEY_MAPPING *psMapping, bool state );
+extern void	processDebugMappings	( bool val );
+extern bool	getDebugMappingStatus	( void );
+extern	bool	keyReAssignMappingName(char *pName, KEY_CODE newMetaCode, KEY_CODE newSubCode);
 
-extern	BOOL	keyReAssignMapping( KEY_CODE origMetaCode, KEY_CODE origSubCode,
+extern	bool	keyReAssignMapping( KEY_CODE origMetaCode, KEY_CODE origSubCode,
 							KEY_CODE newMetaCode, KEY_CODE newSubCode );
 extern	KEY_MAPPING	*getKeyMapFromName(char *pName);
 

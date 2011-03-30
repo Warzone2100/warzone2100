@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1992-2007  Trolltech ASA.
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -515,6 +515,12 @@
 #endif
 
 /* ---- Platform specific setup ---- */
+#if defined __cplusplus
+// This check is required for the embed .c files (miniupnp) so we don't get conflicts.
+#include <QtCore/QString>
+// **NOTE: Qt headers _must_ be before platform specific headers so we don't get conflicts.
+#endif
+
 
 #if defined(WZ_OS_WIN)
 #  if defined(WZ_CC_MINGW)
@@ -552,7 +558,7 @@
 #    pragma warning (disable : 4244) // Shut up: conversion from 'float' to 'int', possible loss of data
 #    pragma warning (disable : 4267) // Shut up: conversion from 'size_t' to 'type', possible loss of data
 #    pragma warning (disable : 4389) // Shut up: '==' : signed/unsigned mismatch
-#    pragma warning (disable : 4800) // Shut up: 'BOOL' : forcing value to bool 'true' or 'false' (performance warning)
+#    pragma warning (disable : 4800) // Shut up: 'bool' : forcing value to bool 'true' or 'false' (performance warning)
 #    pragma warning (disable : 4512) // Shut up: 'class' : assignment operator could not be generated
 
 #    define strcasecmp _stricmp
@@ -565,6 +571,20 @@
 #    define isfinite _finite
 
 #    define PATH_MAX MAX_PATH
+
+// These are useless for MSVC builds, since we don't populate them / use them at this time.
+#ifndef PACKAGE_DISTRIBUTOR
+# define PACKAGE_DISTRIBUTOR "UNKNOWN"
+#endif
+#ifndef PACKAGE_VERSION
+# define PACKAGE_VERSION "UNKNOWN"
+#endif
+#ifndef PACKAGE
+# define PACKAGE "Warzone"
+#endif
+// Apparently flex declares isatty with C++ linkage on Windows. Don't ask why. Declaring here instead.
+//extern "C" int isatty(int);
+
 #  endif /* WZ_CC_MSVC */
 
 /* Make sure that PATH_MAX is large enough to use as the size for return

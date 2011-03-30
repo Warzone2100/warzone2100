@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -27,12 +27,12 @@
  *
  *  @ingroup pathfinding
  */
-typedef enum
+enum ASR_RETVAL
 {
 	ASR_OK,         ///< found a route
 	ASR_FAILED,     ///< no route could be found
 	ASR_NEAREST,    ///< found a partial route to a nearby position
-} ASR_RETVAL;
+};
 
 /** Use the A* algorithm to find a path
  *

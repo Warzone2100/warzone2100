@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -132,9 +132,9 @@
 #define IDDES_WPABUTTON			5903		// WeaponA button
 #define IDDES_WPBBUTTON			5904		// WeaponB button
 
-extern BOOL intAddDesign( BOOL bShowCentreScreen );
+extern bool intAddDesign( bool bShowCentreScreen );
 /* Add the droid template buttons to a form */
-BOOL intAddTemplateButtons(UDWORD formID, UDWORD formWidth, UDWORD formHeight, UDWORD butWidth,
+bool intAddTemplateButtons(UDWORD formID, UDWORD formWidth, UDWORD formHeight, UDWORD butWidth,
                            UDWORD butHeight, UDWORD gap, DROID_TEMPLATE *psSelected);
 void intDisplayTemplateButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
@@ -156,6 +156,6 @@ extern void reverseTemplateList(DROID_TEMPLATE **ppsList);
 
 extern const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate);
 
-extern BOOL intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName);
+extern bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName);
 
 #endif // __INCLUDED_SRC_DESIGN_H__

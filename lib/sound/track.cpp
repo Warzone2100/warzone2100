@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -39,14 +39,14 @@ static TRACK			*g_apTrack[MAX_TRACKS];
 static SDWORD			g_iCurTracks = 0;
 
 // flag set when system is active (for callbacks etc)
-static BOOL				g_bSystemActive = false;
+static bool				g_bSystemActive = false;
 static AUDIO_CALLBACK	g_pStopTrackCallback = NULL;
 
 //*
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL sound_Init()
+bool sound_Init()
 {
 	g_iCurTracks = 0;
 	if (!sound_InitLibrary())
@@ -67,7 +67,7 @@ BOOL sound_Init()
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL sound_Shutdown( void )
+bool sound_Shutdown( void )
 {
 	// set inactive flag to prevent callbacks coming after shutdown
 	g_bSystemActive = false;
@@ -79,7 +79,7 @@ BOOL sound_Shutdown( void )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL sound_GetSystemActive( void )
+bool sound_GetSystemActive( void )
 {
 	return g_bSystemActive;
 }
@@ -91,7 +91,7 @@ BOOL sound_GetSystemActive( void )
  *  \param audibleRadius the radius from the source of sound where it can be heard
  *  \return a non-zero value representing the track id number when successful, zero when the file is not found or no more tracks can be loaded (i.e. the limit is reached)
  */
-unsigned int sound_SetTrackVals(const char* fileName, BOOL loop, unsigned int volume, unsigned int audibleRadius)
+unsigned int sound_SetTrackVals(const char* fileName, bool loop, unsigned int volume, unsigned int audibleRadius)
 {
 	unsigned int trackID;
 	TRACK* psTrack;
@@ -187,7 +187,7 @@ void sound_CheckAllUnloaded( void )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL sound_TrackLooped( SDWORD iTrack )
+bool sound_TrackLooped( SDWORD iTrack )
 {
 	sound_CheckTrack( iTrack );
 	return g_apTrack[iTrack]->bLoop;
@@ -207,7 +207,7 @@ SDWORD sound_GetNumPlaying( SDWORD iTrack )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL sound_CheckTrack( SDWORD iTrack )
+bool sound_CheckTrack( SDWORD iTrack )
 {
 	if ( iTrack < 0 || iTrack > g_iCurTracks - 1 )
 	{
@@ -278,7 +278,7 @@ const char *sound_GetTrackName( SDWORD iTrack )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL sound_Play2DTrack( AUDIO_SAMPLE *psSample, BOOL bQueued )
+bool sound_Play2DTrack( AUDIO_SAMPLE *psSample, bool bQueued )
 {
 	TRACK	*psTrack;
 
@@ -296,7 +296,7 @@ BOOL sound_Play2DTrack( AUDIO_SAMPLE *psSample, BOOL bQueued )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL sound_Play3DTrack( AUDIO_SAMPLE *psSample )
+bool sound_Play3DTrack( AUDIO_SAMPLE *psSample )
 {
 	TRACK	*psTrack;
 

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -31,36 +31,36 @@
 #define FILE_LOAD_BUFFER_SIZE (1024*1024*4)
 extern char fileLoadBuffer[];
 
-extern BOOL systemInitialise(void);
+extern bool systemInitialise(void);
 extern void systemShutdown(void);
-extern BOOL frontendInitialise(const char *ResourceFile);
-extern BOOL frontendShutdown(void);
-extern BOOL stageOneInitialise(void);
-extern BOOL stageOneShutDown(void);
-extern BOOL stageTwoInitialise(void);
-extern BOOL stageTwoShutDown(void);
-extern BOOL stageThreeInitialise(void);
-extern BOOL stageThreeShutDown(void);
+extern bool frontendInitialise(const char *ResourceFile);
+extern bool frontendShutdown(void);
+extern bool stageOneInitialise(void);
+extern bool stageOneShutDown(void);
+extern bool stageTwoInitialise(void);
+extern bool stageTwoShutDown(void);
+extern bool stageThreeInitialise(void);
+extern bool stageThreeShutDown(void);
 
 // Reset the game between campaigns
-extern BOOL campaignReset(void);
+extern bool campaignReset(void);
 // Reset the game when loading a save game
-extern BOOL saveGameReset(void);
+extern bool saveGameReset(void);
 
-typedef struct _wzSearchPath
+struct wzSearchPath
 {
 	char path[PATH_MAX];
 	unsigned int priority;
-	struct _wzSearchPath * higherPriority, * lowerPriority;
-} wzSearchPath;
+	wzSearchPath * higherPriority, * lowerPriority;
+};
 
-typedef enum { mod_clean=0, mod_campaign=1, mod_multiplay=2, mod_override=3 } searchPathMode;
+enum searchPathMode { mod_clean, mod_campaign, mod_multiplay, mod_override };
 
 void cleanSearchPath( void );
 void registerSearchPath( const char path[], unsigned int priority );
-BOOL rebuildSearchPath( searchPathMode mode, BOOL force );
+bool rebuildSearchPath( searchPathMode mode, bool force );
 
-BOOL buildMapList(void);
+bool buildMapList(void);
 
 extern IMAGEFILE	*FrontImages;
 

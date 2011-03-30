@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@
 #define LINE_OF_FIRE_MINIMUM 5
 
 // initialise the visibility stuff
-extern BOOL visInitialise(void);
+extern bool visInitialise(void);
 
 /* Check which tiles can be seen by an object */
 extern void visTilesUpdate(BASE_OBJECT *psObj);
@@ -68,7 +68,7 @@ void visRemoveVisibilityOffWorld(BASE_OBJECT *psObj);
 void visRemoveVisibility(BASE_OBJECT *psObj);
 
 // fast test for whether obj2 is in range of obj1
-static inline BOOL visObjInRange(BASE_OBJECT *psObj1, BASE_OBJECT *psObj2, SDWORD range)
+static inline bool visObjInRange(BASE_OBJECT *psObj1, BASE_OBJECT *psObj2, SDWORD range)
 {
 	int32_t xdiff = psObj1->pos.x - psObj2->pos.x, ydiff = psObj1->pos.y - psObj2->pos.y;
 

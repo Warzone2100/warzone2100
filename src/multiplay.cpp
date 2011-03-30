@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -72,9 +72,9 @@
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
 // globals.
-BOOL						bMultiPlayer				= false;	// true when more than 1 player.
-BOOL						bMultiMessages				= false;	// == bMultiPlayer unless multimessages are disabled
-BOOL						openchannels[MAX_PLAYERS]={true};
+bool						bMultiPlayer				= false;	// true when more than 1 player.
+bool						bMultiMessages				= false;	// == bMultiPlayer unless multimessages are disabled
+bool						openchannels[MAX_PLAYERS]={true};
 UBYTE						bDisplayMultiJoiningStatus;
 
 MULTIPLAYERGAME				game;									//info to describe game.
@@ -82,7 +82,7 @@ MULTIPLAYERINGAME			ingame;
 
 char						beaconReceiveMsg[MAX_PLAYERS][MAX_CONSOLE_STRING_LENGTH];	//beacon msg for each player
 char								playerName[MAX_PLAYERS][MAX_STR_LENGTH];	//Array to store all player names (humans and AIs)
-BOOL						bPlayerReadyGUI[MAX_PLAYERS] = {false};
+bool						bPlayerReadyGUI[MAX_PLAYERS] = {false};
 
 /////////////////////////////////////
 /* multiplayer message stack stuff */
@@ -105,16 +105,16 @@ extern PLAYER_RESEARCH*		asPlayerResList[MAX_PLAYERS];
 // ////////////////////////////////////////////////////////////////////////////
 // Local Prototypes
 
-static BOOL recvBeacon(NETQUEUE queue);
-static BOOL recvDestroyTemplate(NETQUEUE queue);
-static BOOL recvResearch(NETQUEUE queue);
+static bool recvBeacon(NETQUEUE queue);
+static bool recvDestroyTemplate(NETQUEUE queue);
+static bool recvResearch(NETQUEUE queue);
 
 bool		multiplayPlayersReady		(bool bNotifyStatus);
 void		startMultiplayerGame		(void);
 
 // ////////////////////////////////////////////////////////////////////////////
 // temporarily disable multiplayer mode.
-void turnOffMultiMsg(BOOL bDoit)
+void turnOffMultiMsg(bool bDoit)
 {
 	if (!bMultiPlayer)
 	{
@@ -128,7 +128,7 @@ void turnOffMultiMsg(BOOL bDoit)
 
 // ////////////////////////////////////////////////////////////////////////////
 // throw a party when you win!
-BOOL multiplayerWinSequence(BOOL firstCall)
+bool multiplayerWinSequence(bool firstCall)
 {
 	static Position pos;
 	Position pos2;
@@ -201,7 +201,7 @@ BOOL multiplayerWinSequence(BOOL firstCall)
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
 // MultiPlayer main game loop code.
-BOOL multiPlayerLoop(void)
+bool multiPlayerLoop(void)
 {
 	UDWORD		i;
 	UBYTE		joinCount;
@@ -322,26 +322,23 @@ DROID *IdToDroid(UDWORD id, UDWORD player)
 // find a structure
 STRUCTURE *IdToStruct(UDWORD id, UDWORD player)
 {
-	if (player == ANYPLAYER)
+	int beginPlayer = 0, endPlayer = MAX_PLAYERS;
+	if (player != ANYPLAYER)
 	{
-		for (int i = 0; i < MAX_PLAYERS; i++)
+		beginPlayer = player;
+		endPlayer = std::min<int>(player + 1, MAX_PLAYERS);
+	}
+	STRUCTURE **lists[2] = {apsStructLists, mission.apsStructLists};
+	for (int j = 0; j < 2; ++j)
+	{
+		for (int i = beginPlayer; i < endPlayer; ++i)
 		{
-			for (STRUCTURE *d = apsStructLists[i]; d; d = d->psNext)
+			for (STRUCTURE *d = lists[j][i]; d; d = d->psNext)
 			{
 				if (d->id == id)
 				{
 					return d;
 				}
-			}
-		}
-	}
-	else if (player < MAX_PLAYERS)
-	{
-		for (STRUCTURE *d = apsStructLists[player]; d; d = d->psNext)
-		{
-			if (d->id == id)
-			{
-				return d;
 			}
 		}
 	}
@@ -448,7 +445,7 @@ const char* getPlayerName(int player)
 	return NetPlay.players[player].name;
 }
 
-BOOL setPlayerName(int player, const char *sName)
+bool setPlayerName(int player, const char *sName)
 {
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS && player >= 0, "Player index (%u) out of range", player);
 	sstrcpy(playerName[player], sName);
@@ -457,7 +454,7 @@ BOOL setPlayerName(int player, const char *sName)
 
 // ////////////////////////////////////////////////////////////////////////////
 // to determine human/computer players and responsibilities of each..
-BOOL isHumanPlayer(int player)
+bool isHumanPlayer(int player)
 {
 	if (player >= MAX_PLAYERS || player < 0)
 	{
@@ -484,13 +481,13 @@ int whosResponsible(int player)
 }
 
 //returns true if selected player is responsible for 'player'
-BOOL myResponsibility(int player)
+bool myResponsibility(int player)
 {
 	return whosResponsible(player) == selectedPlayer;
 }
 
 //returns true if 'player' is responsible for 'playerinquestion'
-BOOL responsibleFor(int player, int playerinquestion)
+bool responsibleFor(int player, int playerinquestion)
 {
 	return whosResponsible(playerinquestion) == player;
 }
@@ -509,7 +506,7 @@ int scavengerPlayer()
 
 // ////////////////////////////////////////////////////////////////////////////
 // probably temporary. Places the camera on the players 1st droid or struct.
-Vector3i cameraToHome(UDWORD player,BOOL scroll)
+Vector3i cameraToHome(UDWORD player,bool scroll)
 {
 	Vector3i res;
 	UDWORD x,y;
@@ -558,7 +555,7 @@ Vector3i cameraToHome(UDWORD player,BOOL scroll)
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
 // Recv Messages. Get a message and dispatch to relevant function.
-BOOL recvMessage(void)
+bool recvMessage(void)
 {
 	NETQUEUE queue;
 	uint8_t type;
@@ -571,69 +568,6 @@ BOOL recvMessage(void)
 		if (queue.queueType == QUEUE_GAME)
 		{
 			syncDebug("Processing player %d, message %s", queue.index, messageTypeToString(type));
-		}
-
-		if (queue.queueType == QUEUE_GAME && myResponsibility(queue.index))
-		{
-			switch (type)
-			{
-				// TODO Remove all these cases.
-				//case GAME_DROID:        //24 down, 18 to go.
-				//case GAME_DROIDINFO:    // 2 down, 41 to go.
-				//case GAME_DROIDDEST:    //25 down, 17 to go.
-				//case GAME_DROIDMOVE:    // 1 down, 42 to go. <--- Doesn't even exist, now. Its only effect was breaking synch...
-				//case GAME_GROUPORDER:   // 3 down, 40 to go.
-				//case GAME_CHECK_DROID:  // 4 down, 39 to go.
-				//case GAME_CHECK_STRUCT: // 5 down, 38 to go.
-				//case GAME_CHECK_POWER:  // 6 down, 37 to go.
-				//case NET_TEXTMSG:
-				//case NET_DATA_CHECK:
-				//case NET_AITEXTMSG:
-				//case NET_BEACONMSG:
-				//case GAME_BUILD:        //26 down, 16 to go.
-				//case GAME_BUILDFINISHED://27 down, 15 to go.
-				//case GAME_STRUCTDEST:   //28 down, 14 to go.
-				//case GAME_SECONDARY:    // 7 down, 36 to go.
-				//case GAME_SECONDARY_ALL://36 down,  6 to go. <--- Removed completely...
-				//case GAME_DROIDEMBARK:  //39 down,  3 to go.
-				//case GAME_DROIDDISEMBARK://40down,  2 to go.
-				//case GAME_GIFT:         //32 down, 10 to go
-				//case NET_SCORESUBMIT:
-				//case GAME_VTOL:         //37 down,  5 to go. <--- Removed completely, the VTOLs are happy without them.
-				//case GAME_LASSAT:       //38 down,  4 to go.
-
-				case GAME_TEMPLATE:
-				//case GAME_TEMPLATEDEST: //34 down,  8 to go. <--- Aaargh. This one down, but might come back as a zombie.
-				//case GAME_FEATUREDEST:  //29 down, 13 to go.
-				//case NET_PING:
-				//case GAME_DEMOLISH:     //35 down,  7 to go.
-				//case GAME_RESEARCH:     //30 down, 12 to go.
-				//case NET_OPTIONS:
-				//case NET_PLAYERRESPONDING:
-				//case NET_COLOURREQUEST:
-				//case NET_POSITIONREQUEST:
-				//case NET_TEAMREQUEST:
-				//case NET_READY_REQUEST:
-				//case GAME_ARTIFACTS:    //23 down, 19 to go.
-				//case GAME_FEATURES:     //41 down,  1 to go.
-				//case GAME_ALLIANCE:     //33 down,  9 to go.
-				//case NET_KICK:
-				//case NET_FIREUP:
-				//case GAME_RESEARCHSTATUS//31 down, 11 to go.
-				//case NET_PLAYER_STATS:
-				//case NET_...:           // 22 down, 20 to go.
-				{
-					static unsigned packets[256];
-					if (++packets[type] == 1)
-					{
-						debug(LOG_WARNING, "Ignoring our own game queue message %s, which hasn't been converted yet", messageTypeToString(type));
-					}
-					NETpop(queue);
-					continue;  // HACK-TODO Ignore our own queue.
-				}
-				default:
-					break;  // Yay, we are able to process our own messages of this time.
-			}
 		}
 
 		// messages only in game.
@@ -677,9 +611,6 @@ BOOL recvMessage(void)
 				break;
 			case GAME_STRUCTDEST:				// structure destroy
 				recvDestroyStructure(queue);
-				break;
-			case GAME_SECONDARY:					// set a droids secondary order level.
-				recvDroidSecondary(queue);
 				break;
 			case GAME_DROIDEMBARK:
 				recvDroidEmbark(queue);              //droid has embarked on a Transporter
@@ -851,7 +782,7 @@ BOOL recvMessage(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Research Stuff. Nat games only send the result of research procedures.
-BOOL SendResearch(uint8_t player, uint32_t index, bool trigger)
+bool SendResearch(uint8_t player, uint32_t index, bool trigger)
 {
 	// Send the player that is researching the topic and the topic itself
 	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_RESEARCH);
@@ -863,7 +794,7 @@ BOOL SendResearch(uint8_t player, uint32_t index, bool trigger)
 }
 
 // recv a research topic that is now complete.
-static BOOL recvResearch(NETQUEUE queue)
+static bool recvResearch(NETQUEUE queue)
 {
 	uint8_t			player;
 	uint32_t		index;
@@ -923,7 +854,7 @@ static BOOL recvResearch(NETQUEUE queue)
 // ////////////////////////////////////////////////////////////////////////////
 // New research stuff, so you can see what others are up to!
 // inform others that I'm researching this.
-BOOL sendResearchStatus(STRUCTURE *psBuilding, uint32_t index, uint8_t player, BOOL bStart)
+bool sendResearchStatus(STRUCTURE *psBuilding, uint32_t index, uint8_t player, bool bStart)
 {
 	if (!myResponsibility(player) || gameTime < 5)
 	{
@@ -955,14 +886,14 @@ BOOL sendResearchStatus(STRUCTURE *psBuilding, uint32_t index, uint8_t player, B
 	return true;
 }
 
-BOOL recvResearchStatus(NETQUEUE queue)
+bool recvResearchStatus(NETQUEUE queue)
 {
 	STRUCTURE			*psBuilding;
 	PLAYER_RESEARCH		*pPlayerRes;
 	RESEARCH_FACILITY	*psResFacilty;
 	RESEARCH			*pResearch;
 	uint8_t				player;
-	BOOL				bStart;
+	bool				bStart;
 	uint32_t			index, structRef;
 
 	NETbeginDecode(queue, GAME_RESEARCHSTATUS);
@@ -1001,7 +932,7 @@ BOOL recvResearchStatus(NETQUEUE queue)
 
 			// Set the subject up
 			pResearch				= asResearch + index;
-			psResFacilty->psSubject = (BASE_STATS *) pResearch;
+			psResFacilty->psSubject = pResearch;
 
 			// If they have previously started but cancelled there is no need to accure power
 			if (IsResearchCancelled(pPlayerRes))
@@ -1063,6 +994,11 @@ BOOL recvResearchStatus(NETQUEUE queue)
 		}
 	}
 
+	if (alliances[selectedPlayer][player] == ALLIANCE_FORMED)
+	{
+		intAlliedResearchChanged();
+	}
+
 	return true;
 }
 
@@ -1070,10 +1006,10 @@ BOOL recvResearchStatus(NETQUEUE queue)
 // ////////////////////////////////////////////////////////////////////////////
 // Text Messaging between players. proceed string with players to send to.
 // eg "123hi there" sends "hi there" to players 1,2 and 3.
-BOOL sendTextMessage(const char *pStr, BOOL all)
+bool sendTextMessage(const char *pStr, bool all)
 {
-	BOOL				normal = true;
-	BOOL				sendto[MAX_PLAYERS];
+	bool				normal = true;
+	bool				sendto[MAX_PLAYERS];
 	int					posTable[MAX_PLAYERS];
 	UDWORD				i;
 	char				display[MAX_CONSOLE_STRING_LENGTH];
@@ -1226,7 +1162,7 @@ void printConsoleNameChange(const char *oldName, const char *newName)
 
 
 //AI multiplayer message, send from a certain player index to another player index
-BOOL sendAIMessage(char *pStr, UDWORD player, UDWORD to)
+bool sendAIMessage(char *pStr, UDWORD player, UDWORD to)
 {
 	UDWORD	sendPlayer;
 
@@ -1282,7 +1218,7 @@ BOOL sendAIMessage(char *pStr, UDWORD player, UDWORD to)
 //
 // At this time, we do NOT support messages for beacons
 //
-BOOL sendBeacon(int32_t locX, int32_t locY, int32_t forPlayer, int32_t sender, const char* pStr)
+bool sendBeacon(int32_t locX, int32_t locY, int32_t forPlayer, int32_t sender, const char* pStr)
 {
 	int sendPlayer;
 	//debug(LOG_WZ, "sendBeacon: '%s'",pStr);
@@ -1328,7 +1264,7 @@ void displayAIMessage(char *pStr, SDWORD from, SDWORD to)
 }
 
 // Write a message to the console.
-BOOL recvTextMessage(NETQUEUE queue)
+bool recvTextMessage(NETQUEUE queue)
 {
 	UDWORD	playerIndex;
 	char	msg[MAX_CONSOLE_STRING_LENGTH];
@@ -1384,7 +1320,7 @@ BOOL recvTextMessage(NETQUEUE queue)
 }
 
 //AI multiplayer message - received message from AI (from scripts)
-BOOL recvTextMessageAI(NETQUEUE queue)
+bool recvTextMessageAI(NETQUEUE queue)
 {
 	UDWORD	sender, receiver;
 	char	msg[MAX_CONSOLE_STRING_LENGTH];
@@ -1423,78 +1359,57 @@ BOOL recvTextMessageAI(NETQUEUE queue)
 // ////////////////////////////////////////////////////////////////////////////
 // Templates
 
+static void NETtemplate(DROID_TEMPLATE *pTempl)
+{
+	NETstring(pTempl->aName, sizeof(pTempl->aName));
+
+	for (unsigned i = 0; i < ARRAY_SIZE(pTempl->asParts); ++i)
+	{
+		// signed, but sent as a bunch of bits...
+		NETint32_t(&pTempl->asParts[i]);
+	}
+
+	NETuint32_t(&pTempl->buildPoints);
+	NETuint32_t(&pTempl->powerPoints);
+	NETuint32_t(&pTempl->storeCount);
+	NETuint32_t(&pTempl->numWeaps);
+
+	for (int i = 0; i < DROID_MAXWEAPS; ++i)
+	{
+		NETuint32_t(&pTempl->asWeaps[i]);
+	}
+
+	NETenum(&pTempl->droidType);
+	NETuint32_t(&pTempl->multiPlayerID);
+}
+
 // send a newly created template to other players
 bool sendTemplate(uint32_t player, DROID_TEMPLATE *pTempl)
 {
-	int i;
-
-	ASSERT_OR_RETURN(true /* hack */, pTempl != NULL, "Old Pumpkin bug");
-
 	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_TEMPLATE);
 		NETuint32_t(&player);
-		NETuint32_t(&pTempl->ref);
-		NETstring(pTempl->aName, sizeof(pTempl->aName));
-
-		for (i = 0; i < ARRAY_SIZE(pTempl->asParts); ++i)
-		{
-			// signed, but sent as a bunch of bits...
-			NETint32_t(&pTempl->asParts[i]);
-		}
-
-		NETuint32_t(&pTempl->buildPoints);
-		NETuint32_t(&pTempl->powerPoints);
-		NETuint32_t(&pTempl->storeCount);
-		NETuint32_t(&pTempl->numWeaps);
-
-		for (i = 0; i < DROID_MAXWEAPS; i++)
-		{
-			NETuint32_t(&pTempl->asWeaps[i]);
-		}
-
-		NETenum(&pTempl->droidType);
-		NETuint32_t(&pTempl->multiPlayerID);
-
+		NETtemplate(pTempl);
 	return NETend();
 }
 
 // receive a template created by another player
-BOOL recvTemplate(NETQUEUE queue)
+bool recvTemplate(NETQUEUE queue)
 {
-	uint32_t player;
-	DROID_TEMPLATE	*psTempl;
-	DROID_TEMPLATE	t, *pT = &t;
-	int				i;
+	uint32_t        player;
+	DROID_TEMPLATE *psTempl;
+	DROID_TEMPLATE  t;
 
 	NETbeginDecode(queue, GAME_TEMPLATE);
 		NETuint32_t(&player);
 		ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "invalid player size: %d", player);
 
-		NETuint32_t(&pT->ref);
-		NETstring(pT->aName, sizeof(pT->aName));
-
-		for (i = 0; i < ARRAY_SIZE(pT->asParts); ++i)
-		{
-			// signed, but sent as a bunch of bits...
-			NETint32_t(&pT->asParts[i]);
-		}
-
-		NETuint32_t(&pT->buildPoints);
-		NETuint32_t(&pT->powerPoints);
-		NETuint32_t(&pT->storeCount);
-		NETuint32_t(&pT->numWeaps);
-
-		for (i = 0; i < DROID_MAXWEAPS; i++)
-		{
-			NETuint32_t(&pT->asWeaps[i]);
-		}
-
-		NETenum(&pT->droidType);
-		NETuint32_t(&pT->multiPlayerID);
+		NETtemplate(&t);
 	NETend();
 
 	t.prefab = false;
 	t.psNext = NULL;
 	t.pName = NULL;
+	t.ref = REF_TEMPLATE_START;
 
 	psTempl = IdToTemplate(t.multiPlayerID,player);
 
@@ -1507,8 +1422,7 @@ BOOL recvTemplate(NETQUEUE queue)
 	}
 	else
 	{
-		addTemplate(player,&t);
-		apsDroidTemplates[player]->ref = REF_TEMPLATE_START;
+		addTemplateBack(player, &t);  // Add to back of list, to avoid game state templates being in wrong order, which matters when saving games.
 		debug(LOG_SYNC, "Creating MP template %d", (int)t.multiPlayerID);
 	}
 
@@ -1519,7 +1433,7 @@ BOOL recvTemplate(NETQUEUE queue)
 // ////////////////////////////////////////////////////////////////////////////
 // inform others that you no longer have a template
 
-BOOL SendDestroyTemplate(DROID_TEMPLATE *t)
+bool SendDestroyTemplate(DROID_TEMPLATE *t)
 {
 	uint8_t player = selectedPlayer;
 
@@ -1532,7 +1446,7 @@ BOOL SendDestroyTemplate(DROID_TEMPLATE *t)
 }
 
 // acknowledge another player no longer has a template
-static BOOL recvDestroyTemplate(NETQUEUE queue)
+static bool recvDestroyTemplate(NETQUEUE queue)
 {
 	uint8_t			player;
 	uint32_t		templateID;
@@ -1576,11 +1490,7 @@ static BOOL recvDestroyTemplate(NETQUEUE queue)
 	}
 	else
 	{
-		DROID_TEMPLATE aaargh;
-		aaargh.multiPlayerID = templateID;
-		deleteTemplateFromProduction(&aaargh, player, ModeImmediate);
-		// TODO Memory leak, need to actually delete the template somehow.
-		//debug(LOG_ERROR, "TODO: Rewrite the whole interface, so it's possible to change the code without spaghetti dependencies causing problems everywhere, and without resorting to ugly hacks.");
+		debug(LOG_ERROR, "Would delete missing template %d", templateID);
 	}
 
 	return true;
@@ -1592,7 +1502,7 @@ static BOOL recvDestroyTemplate(NETQUEUE queue)
 // Features
 
 // send a destruct feature message.
-BOOL SendDestroyFeature(FEATURE *pF)
+bool SendDestroyFeature(FEATURE *pF)
 {
 	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_FEATUREDEST);
 		NETuint32_t(&pF->id);
@@ -1600,7 +1510,7 @@ BOOL SendDestroyFeature(FEATURE *pF)
 }
 
 // process a destroy feature msg.
-BOOL recvDestroyFeature(NETQUEUE queue)
+bool recvDestroyFeature(NETQUEUE queue)
 {
 	FEATURE *pF;
 	uint32_t	id;
@@ -1627,7 +1537,7 @@ BOOL recvDestroyFeature(NETQUEUE queue)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Network File packet processor.
-BOOL recvMapFileRequested(NETQUEUE queue)
+bool recvMapFileRequested(NETQUEUE queue)
 {
 	char mapStr[256],mapName[256],fixedname[256];
 	uint32_t player;
@@ -1728,7 +1638,7 @@ void sendMap(void)
 }
 
 // Another player is broadcasting a map, recv a chunk. Returns false if not yet done.
-BOOL recvMapFileData(NETQUEUE queue)
+bool recvMapFileData(NETQUEUE queue)
 {
 	mapDownloadProgress = NETrecvFile(queue);
 	if (mapDownloadProgress == 100)
@@ -1788,13 +1698,13 @@ UDWORD msgStackPush(SDWORD CBtype, SDWORD plFrom, SDWORD plTo, const char *tStr,
 	return true;
 }
 
-BOOL isMsgStackEmpty(void)
+bool isMsgStackEmpty(void)
 {
 	if(msgStackPos <= (-1)) return true;
 	return false;
 }
 
-BOOL msgStackGetFrom(SDWORD  *psVal)
+bool msgStackGetFrom(SDWORD  *psVal)
 {
 	if(msgStackPos < 0)
 	{
@@ -1807,7 +1717,7 @@ BOOL msgStackGetFrom(SDWORD  *psVal)
 	return true;
 }
 
-BOOL msgStackGetTo(SDWORD  *psVal)
+bool msgStackGetTo(SDWORD  *psVal)
 {
 	if(msgStackPos < 0)
 	{
@@ -1820,7 +1730,7 @@ BOOL msgStackGetTo(SDWORD  *psVal)
 	return true;
 }
 
-static BOOL msgStackGetCallbackType(SDWORD  *psVal)
+static bool msgStackGetCallbackType(SDWORD  *psVal)
 {
 	if(msgStackPos < 0)
 	{
@@ -1833,7 +1743,7 @@ static BOOL msgStackGetCallbackType(SDWORD  *psVal)
 	return true;
 }
 
-static BOOL msgStackGetXY(SDWORD  *psValx, SDWORD  *psValy)
+static bool msgStackGetXY(SDWORD  *psValx, SDWORD  *psValy)
 {
 	if(msgStackPos < 0)
 	{
@@ -1848,7 +1758,7 @@ static BOOL msgStackGetXY(SDWORD  *psValx, SDWORD  *psValy)
 }
 
 
-BOOL msgStackGetMsg(char  *psVal)
+bool msgStackGetMsg(char  *psVal)
 {
 	if(msgStackPos < 0)
 	{
@@ -1862,7 +1772,7 @@ BOOL msgStackGetMsg(char  *psVal)
 	return true;
 }
 
-static BOOL msgStackSort(void)
+static bool msgStackSort(void)
 {
 	SDWORD i;
 
@@ -1894,7 +1804,7 @@ static BOOL msgStackSort(void)
 	return true;
 }
 
-BOOL msgStackPop(void)
+bool msgStackPop(void)
 {
 	debug(LOG_WZ, "msgStackPop: stack size %d", msgStackPos);
 
@@ -1907,7 +1817,7 @@ BOOL msgStackPop(void)
 	return msgStackSort();		//move all elements 1 pos lower
 }
 
-BOOL msgStackGetDroid(DROID **ppsDroid)
+bool msgStackGetDroid(DROID **ppsDroid)
 {
 	if(msgStackPos < 0)
 	{
@@ -1925,7 +1835,7 @@ SDWORD msgStackGetCount(void)
 	return msgStackPos + 1;
 }
 
-BOOL msgStackFireTop(void)
+bool msgStackFireTop(void)
 {
 	SDWORD		_callbackType;
 	char		msg[255];
@@ -2003,7 +1913,7 @@ BOOL msgStackFireTop(void)
 	return true;
 }
 
-static BOOL recvBeacon(NETQUEUE queue)
+static bool recvBeacon(NETQUEUE queue)
 {
 	int32_t sender, receiver,locX, locY;
 	char    msg[MAX_CONSOLE_STRING_LENGTH];

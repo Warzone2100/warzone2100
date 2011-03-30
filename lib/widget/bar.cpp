@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -343,7 +343,7 @@ void barGraphDisplayTrough(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIE
 {
 	SDWORD		x0 = 0, y0 = 0, x1 = 0, y1 = 0;		// Position of the bar
 	SDWORD		tx0 = 0, ty0 = 0, tx1 = 0, ty1 = 0;	// Position of the trough
-	BOOL		showBar=true, showTrough=true;
+	bool		showBar=true, showTrough=true;
 	W_BARGRAPH	*psBGraph = (W_BARGRAPH *)psWidget;
 
 	/* figure out which way the bar graph fills */

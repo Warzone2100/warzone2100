@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -24,8 +24,11 @@
  *
  */
 
-#include <GLee.h>
+
 #include "lib/framework/frame.h"
+
+#include <GLee.h>
+// NOTE: Header order is very important, don't change the above!
 #include "lib/exceptionhandler/dumpinfo.h"
 #include <physfs.h>
 #include <png.h>
@@ -45,14 +48,14 @@
 /* global used to indicate preferred internal OpenGL format */
 int wz_texture_compression;
 
-static BOOL		bBackDrop = false;
+static bool		bBackDrop = false;
 static char		screendump_filename[PATH_MAX];
-static BOOL		screendump_required = false;
+static bool		screendump_required = false;
 static GLuint		backDropTexture = ~0;
 
 static int preview_width = 0, preview_height = 0;
 static Vector2i player_pos[MAX_PLAYERS];
-static BOOL mappreview = false;
+static bool mappreview = false;
 static char mapname[256];
 
 /* Initialise the double buffered display */
@@ -164,8 +167,8 @@ bool screenInitialise()
 	}
 	else
 	{
-		debug(LOG_POPUP, "OpenGL 2.0 is not supported by your system, current shaders require this.");
-		debug(LOG_POPUP, "Team colors will not function correctly on your system.");
+		debug(LOG_POPUP, "OpenGL 2.0 is not supported by your system, current shaders require this. Please upgrade your graphics drivers if possible.");
+		exit(1);
 	}
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -236,7 +239,7 @@ void screen_RestartBackDrop(void)
 	bBackDrop = true;
 }
 
-BOOL screen_GetBackDrop(void)
+bool screen_GetBackDrop(void)
 {
 	return bBackDrop;
 }
@@ -244,7 +247,7 @@ BOOL screen_GetBackDrop(void)
 //******************************************************************
 //slight hack to display maps (or whatever) in background.
 //bitmap MUST be (BACKDROP_HACK_WIDTH * BACKDROP_HACK_HEIGHT) for now.
-void screen_Upload(const char *newBackDropBmp, BOOL preview)
+void screen_Upload(const char *newBackDropBmp, bool preview)
 {
 	static bool processed = false;
 	int x1 = 0, x2 = screenWidth, y1 = 0, y2 = screenHeight, i, scale = 0, w = 0, h = 0;
@@ -377,7 +380,7 @@ void screen_disableMapPreview(void)
 	sstrcpy(mapname, "none");
 }
 
-BOOL screen_getMapPreview(void)
+bool screen_getMapPreview(void)
 {
 	return mappreview;
 }

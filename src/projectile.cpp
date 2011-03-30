@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -65,10 +65,10 @@
 
 #define VTOL_HITBOX_MODIFICATOR 100
 
-typedef struct _interval
+struct INTERVAL
 {
 	int begin, end;  // Time 1 = 0, time 2 = 1024. Or begin >= end if empty.
-} INTERVAL;
+};
 
 // Watermelon:they are from droid.c
 /* The range for neighbouring objects */
@@ -119,7 +119,7 @@ static inline void setProjectileDestination(PROJECTILE *psProj, BASE_OBJECT *psO
 
 
 /***************************************************************************/
-BOOL gfxVisible(PROJECTILE *psObj)
+bool gfxVisible(PROJECTILE *psObj)
 {
 	// Already know it is visible
 	if (psObj->bVisible)
@@ -177,7 +177,7 @@ BOOL gfxVisible(PROJECTILE *psObj)
 
 /***************************************************************************/
 
-BOOL
+bool
 proj_InitSystem( void )
 {
 	psProjectileList.clear();
@@ -199,7 +199,7 @@ proj_FreeAllProjectiles( void )
 
 /***************************************************************************/
 
-BOOL
+bool
 proj_Shutdown( void )
 {
 	proj_FreeAllProjectiles();
@@ -311,7 +311,7 @@ static void proj_UpdateKills(PROJECTILE *psObj, int32_t experienceInc)
 
 /***************************************************************************/
 
-void _syncDebugProjectile(const char *function, PROJECTILE *psProj, char ch)
+void _syncDebugProjectile(const char *function, PROJECTILE const *psProj, char ch)
 {
 	_syncDebug(function, "%c projectile = p%d;pos(%d,%d,%d),rot(%d,%d,%d),state%d,edc%d,nd%lu", ch,
 	          psProj->player,
@@ -912,7 +912,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj, bool bIndirect)
 	{
 		uint32_t effectTime;
 		// TODO Should probably give effectTime as an extra parameter to addEffect, or make an effectGiveAuxTime parameter, with yet another 'this is naughty' comment.
-		for (effectTime = ((psProj->prevSpacetime.time + 15) & ~15); effectTime < psProj->time; effectTime += 16)
+		for (effectTime = ((psProj->prevSpacetime.time + 31) & ~31); effectTime < psProj->time; effectTime += 32)
 		{
 			Spacetime st = interpolateObjectSpacetime(psProj, effectTime);
 			Vector3i posFlip = swapYZ(st.pos);
@@ -1126,7 +1126,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 			unsigned int damage = calcDamage(weaponDamage(psStats, psObj->player), psStats->weaponEffect, psObj->psDest);
 
 			// If we are in a multi-player game and the attacker is our responsibility
-			if (bMultiPlayer && psObj->psSource && myResponsibility(psObj->psSource->player))
+			if (bMultiPlayer && psObj->psSource)
 			{
 				updateMultiStatsDamage(psObj->psSource->player, psObj->psDest->player, damage);
 			}
@@ -1206,7 +1206,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 
 							if (bMultiPlayer)
 							{
-								if (psObj->psSource && myResponsibility(psObj->psSource->player))
+								if (psObj->psSource)
 								{
 									updateMultiStatsDamage(psObj->psSource->player, psCurrD->player, damage);
 								}
@@ -1249,7 +1249,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 
 								if (bMultiPlayer)
 								{
-									if (psObj->psSource && myResponsibility(psObj->psSource->player))
+									if (psObj->psSource)
 									{
 										updateMultiStatsDamage(psObj->psSource->player,	psCurrS->player,damage);
 									}
@@ -1718,7 +1718,7 @@ static HIT_SIDE getHitSide(PROJECTILE *psObj, BASE_OBJECT *psTarget)
 }
 
 /* Returns true if an object has just been hit by an electronic warfare weapon*/
-static BOOL	justBeenHitByEW(BASE_OBJECT *psObj)
+static bool	justBeenHitByEW(BASE_OBJECT *psObj)
 {
 DROID		*psDroid;
 FEATURE		*psFeature;

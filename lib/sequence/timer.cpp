@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2008-2010  Warzone 2100 Project
+	Copyright (C) 2008-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@
 
 static double startTimeInMicroSec = 0;			// starting time in microseconds
 static double endTimeInMicroSec = 0;			// ending time in microseconds
-static BOOL   stopped = false;					// stop flag
+static bool   stopped = false;					// stop flag
 
 static struct timeval startCount;
 static struct timeval endCount;

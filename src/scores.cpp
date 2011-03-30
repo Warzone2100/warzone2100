@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -68,7 +68,7 @@
 #define	RANK_BAR_WIDTH	100
 #define STAT_BAR_WIDTH	100
 
-typedef enum
+enum MR_STRING
 {
 	STR_MR_UNITS_LOST,
 	STR_MR_UNITS_KILLED,
@@ -88,7 +88,7 @@ typedef enum
 	STR_MR_LEVEL_ELITE,
 	STR_MR_LEVEL_SPECIAL,
 	STR_MR_LEVEL_ACE
-} MR_STRING;
+};
 
 
 // return translated string
@@ -184,14 +184,14 @@ static void dispAdditionalInfo( void );
 /* The present mission data */
 static	MISSION_DATA	missionData;
 static	UDWORD	dispST;
-static	BOOL	bDispStarted = false;
+static	bool	bDispStarted = false;
 static	char	text[255];
 static	char	text2[255];
 extern bool Cheated;
 
 // --------------------------------------------------------------------
 /* Initialise the mission data info - done before each mission */
-BOOL	scoreInitSystem( void )
+bool	scoreInitSystem( void )
 {
 	missionData.unitsBuilt		= 0;
 	missionData.unitsKilled		= 0;
@@ -331,7 +331,7 @@ UDWORD	hours,minutes,seconds;
 static void drawStatBars(void)
 {
 UDWORD	index;
-BOOL	bMoreBars;
+bool	bMoreBars;
 UDWORD	x,y;
 UDWORD	width,height;
 

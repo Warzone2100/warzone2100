@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ static UDWORD HashTest(intptr_t iKey1, intptr_t iKey2)
 
 /***************************************************************************/
 
-BOOL
+bool
 hashTable_Create( HASHTABLE **ppsTable, UDWORD udwTableSize,
 	UDWORD udwInitElements, UDWORD udwExtElements, UDWORD udwElementSize )
 {
@@ -259,7 +259,7 @@ void *hashTable_FindElement(HASHTABLE *psTable, intptr_t iKey1, intptr_t iKey2)
 /***************************************************************************/
 
 static void
-hashTable_SetNextNode( HASHTABLE *psTable, BOOL bMoveToNextNode )
+hashTable_SetNextNode( HASHTABLE *psTable, bool bMoveToNextNode )
 {
 	if ( (bMoveToNextNode == true) && (psTable->psNextNode != NULL) )
 	{
@@ -293,7 +293,7 @@ hashTable_SetNextNode( HASHTABLE *psTable, BOOL bMoveToNextNode )
 
 /***************************************************************************/
 
-BOOL
+bool
 hashTable_RemoveElement(HASHTABLE *psTable, void *psElement, intptr_t iKey1, intptr_t iKey2)
 {
 	UDWORD		udwHashIndex;

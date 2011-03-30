@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -61,11 +61,11 @@ typedef uint16_t PlayerMask;
 #error Warzone 2100 is not a MMO.
 #endif
 
-typedef enum
+enum QUEUE_MODE
 {
 	ModeQueue,      ///< Sends a message on the game queue, which will get synchronised, by sending a GAME_ message.
 	ModeImmediate   ///< Performs the action immediately. Must already have been synchronised, for example by sending a GAME_ message.
-} QUEUE_MODE;
+};
 
 
 /** Initialise the framework library

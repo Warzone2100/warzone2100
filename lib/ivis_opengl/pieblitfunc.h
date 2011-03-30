@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -35,11 +35,6 @@
 #include "lib/framework/string_ext.h"
 #include "piedef.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
 /***************************************************************************/
 /*
  *	Global Definitions
@@ -70,29 +65,26 @@ extern void iV_Line(int x0, int y0, int x1, int y1, PIELIGHT colour);
 extern void iV_Box(int x0,int y0, int x1, int y1, PIELIGHT colour);
 extern void pie_BoxFill(int x0,int y0, int x1, int y1, PIELIGHT colour);
 extern void iV_DrawImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y);
+void iV_DrawImageTc(IMAGEFILE *imageFile, unsigned id, unsigned idTc, int x, int y, PIELIGHT colour);
 extern void iV_DrawImageRect(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width, int Height);
 
 extern void iV_TransBoxFill(float x0, float y0, float x1, float y1);
 extern void pie_UniTransBoxFill(float x0, float y0, float x1, float y1, PIELIGHT colour);
 
-extern BOOL pie_InitRadar(void);
-extern BOOL pie_ShutdownRadar(void);
+extern bool pie_InitRadar(void);
+extern bool pie_ShutdownRadar(void);
 extern void pie_DownLoadRadar(UDWORD *buffer, int width, int height, bool filter);
 extern void pie_RenderRadar(int x, int y, int width, int height);
 
 extern void pie_UploadDisplayBuffer(void);
 
-typedef enum _screenType
+enum SCREENTYPE
 {
 	SCREEN_RANDOMBDROP,
 	SCREEN_CREDITS,
 	SCREEN_MISSIONEND,
-} SCREENTYPE;
+};
 
 extern void pie_LoadBackDrop(SCREENTYPE screenType);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif //

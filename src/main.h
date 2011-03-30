@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -21,15 +21,16 @@
 #ifndef __INCLUDED_SRC_MAIN_H__
 #define __INCLUDED_SRC_MAIN_H__
 
-typedef enum {
+enum GS_GAMEMODE
+{
 	GS_TITLE_SCREEN,
 	GS_NORMAL,
 	GS_SAVEGAMELOAD
-} GS_GAMEMODE;
+};
 
 //flag to indicate when initialisation is complete
-extern BOOL gameInitialised;
-extern BOOL bDisableLobby;
+extern bool gameInitialised;
+extern bool bDisableLobby;
 extern bool customDebugfile;
 extern GS_GAMEMODE GetGameMode(void) WZ_DECL_PURE;
 extern void SetGameMode(GS_GAMEMODE status);

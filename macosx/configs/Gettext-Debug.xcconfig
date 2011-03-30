@@ -1,6 +1,6 @@
 // Gettext settings for Debug configuration
 
-#include "gettext-all.xcconfig"
+#include "Gettext-All.xcconfig"
 
 
 GCC_ENABLE_FIX_AND_CONTINUE = YES

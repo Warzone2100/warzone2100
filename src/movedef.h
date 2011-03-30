@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -51,8 +51,8 @@ enum MOVE_STATUS
 struct MOVE_CONTROL
 {
 	MOVE_STATUS	Status;					// Inactive, Navigating or moving point to point status
-	uint16_t	Position;				// Position in asPath
-	uint16_t	numPoints;				// number of points in asPath
+	int             pathIndex;                              // Position in asPath
+	int             numPoints;                              // number of points in asPath
 	Vector2i	 *asPath;				// Pointer to list of block X,Y map coordinates.
 
 	Vector2i destination;                                   // World coordinates of movement destination

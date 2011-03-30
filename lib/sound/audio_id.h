@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -21,9 +21,7 @@
 #ifndef __INCLUDED_LIB_SOUND_AUDIO_ID_H__
 #define __INCLUDED_LIB_SOUND_AUDIO_ID_H__
 
-/* INGAME AUDIO */
-
-typedef enum
+enum INGAME_AUDIO
 {
 	NO_SOUND = -1,
 
@@ -494,8 +492,7 @@ typedef enum
 	/* Last ID */
 	ID_SOUND_NEXT,  // Thanks to this dummy we don't have to redefine ID_MAX_SOUND every time in terms of the preceding enum value
 	ID_MAX_SOUND = ID_SOUND_NEXT - 1,
-}
-INGAME_AUDIO;
+};
 
 INGAME_AUDIO audio_GetIDFromStr(const char *pWavStr);
 

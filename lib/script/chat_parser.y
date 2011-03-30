@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 2006-2008  Roman
-	Copyright (C) 2006-2010  Warzone 2100 Project
+	Copyright (C) 2006-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ extern int chat_lex(void);
 static void chat_store_command(const char *command);
 
 /* Return value of the chat parsing - to be used in scripts */
-static BOOL chat_store_parameter(INTERP_VAL *parameter);
+static bool chat_store_parameter(INTERP_VAL *parameter);
 
 // Store players that were addressed in a command
 static void chat_store_player(SDWORD cmdIndex, SDWORD playerIndex);
@@ -57,7 +57,7 @@ static void chat_reset_command(SDWORD cmdIndex);
 //static INTERP_VAL		msgParams[MAX_CHAT_ARGUMENTS];
 
 /* Store command parameter extracted from the message */
-static BOOL chat_store_parameter(INTERP_VAL *cmdParam)
+static bool chat_store_parameter(INTERP_VAL *cmdParam)
 {
 	SDWORD	numCmdParams, numCommands;
 
@@ -175,7 +175,7 @@ static void yyerror(const char* msg);
 %name-prefix="chat_"
 
 %union {
-	BOOL				bval;
+	int32_t				bval;
 	SDWORD			ival;
 }
 
@@ -720,7 +720,7 @@ R_WAIT_FOR_ME:								_T_WAIT R_EOD				/* wait */
 %%
 
 /* Initialize Bison and start chat processing */
-BOOL chatLoad(char *pData, UDWORD size)
+bool chatLoad(char *pData, UDWORD size)
 {
 	SDWORD	cmdIndex,parseResult;
 

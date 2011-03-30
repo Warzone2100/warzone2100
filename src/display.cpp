@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -170,24 +170,24 @@ static const CURSOR arnMPointers[POSSIBLE_TARGETS][POSSIBLE_SELECTIONS] =
 /// acceleration on scrolling. Game Option.
 UDWORD	scroll_speed_accel;
 
-static BOOL	buildingDamaged(STRUCTURE *psStructure);
-static BOOL	repairDroidSelected(UDWORD player);
+static bool	buildingDamaged(STRUCTURE *psStructure);
+static bool	repairDroidSelected(UDWORD player);
 static DROID *constructorDroidSelected(UDWORD player);
-static BOOL vtolDroidSelected(UDWORD player);
-static BOOL	anyDroidSelected(UDWORD player);
-static BOOL cyborgDroidSelected(UDWORD player);
-static BOOL bInvertMouse = true;
-static BOOL bRightClickOrders = false;
-static BOOL bMiddleClickRotate = false;
-static BOOL bDrawShadows = true;
+static bool vtolDroidSelected(UDWORD player);
+static bool	anyDroidSelected(UDWORD player);
+static bool cyborgDroidSelected(UDWORD player);
+static bool bInvertMouse = true;
+static bool bRightClickOrders = false;
+static bool bMiddleClickRotate = false;
+static bool bDrawShadows = true;
 static SELECTION_TYPE	establishSelection(UDWORD selectedPlayer);
 static void	dealWithLMB( void );
 static void	dealWithLMBDClick( void );
 static void	dealWithRMB( void );
-static BOOL	mouseInBox(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1);
+static bool	mouseInBox(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1);
 static OBJECT_POSITION *checkMouseLoc(void);
 
-static BOOL	bInstantRadarJump = false;
+static bool	bInstantRadarJump = false;
 static SDWORD	desiredPitch = 340;
 static UDWORD	currentFrame;
 static UDWORD StartOfLastFrame;
@@ -197,23 +197,23 @@ static UDWORD	rotInitial;
 static UDWORD	rotInitialUp;
 static UDWORD	xMoved, yMoved;
 static STRUCTURE	*psBuilding;
-static BOOL	edgeOfMap = false;
+static bool	edgeOfMap = false;
 static uint32_t scrollRefTime;
 static float	scrollSpeedLeftRight; //use two directions and add them because its simple
 static float	scrollStepLeftRight;
 static float	scrollSpeedUpDown;
 static float	scrollStepUpDown;
-static BOOL	mouseOverRadar = false;
-static BOOL	mouseOverConsole = false;
-static BOOL	ignoreOrder = false;
-static BOOL	ignoreRMBC	= true;
+static bool	mouseOverRadar = false;
+static bool	mouseOverConsole = false;
+static bool	ignoreOrder = false;
+static bool	ignoreRMBC	= true;
 static DROID	*psSelectedVtol;
 static DROID	*psDominantSelected;
-static BOOL bRadarDragging = false;
+static bool bRadarDragging = false;
 static bool mouseScroll = true;
 
-BOOL	rotActive = false;
-BOOL	gameStats = false;
+bool	rotActive = false;
+bool	gameStats = false;
 
 /* Hackety hack hack hack */
 SDWORD	screenShakeTable[100] =
@@ -230,43 +230,43 @@ SDWORD	screenShakeTable[100] =
 1,0,-1,-1,-2,-1,1,0,1,0
 };
 
-static BOOL	bScreenShakeActive = false;
+static bool	bScreenShakeActive = false;
 static UDWORD screenShakeStarted;
 static UDWORD screenShakeLength;
 //used to determine is a weapon droid is assigned to a sensor tower or sensor droid
-static BOOL bSensorAssigned;
+static bool bSensorAssigned;
 //used to determine if the player has selected a Las Sat structure
-static BOOL bLasSatStruct;
+static bool bLasSatStruct;
 // Local prototypes
 static MOUSE_TARGET	itemUnderMouse(BASE_OBJECT **ppObjUnderCursor);
-static BOOL	bShakingPermitted = true;
+static bool	bShakingPermitted = true;
 
 void setMouseScroll(bool scroll)
 {
 	mouseScroll = scroll;
 }
 
-void	setRadarJump(BOOL	val)
+void	setRadarJump(bool	val)
 {
 	bInstantRadarJump = val;
 }
 
-BOOL	getRadarJumpStatus( void )
+bool	getRadarJumpStatus( void )
 {
 	return(bInstantRadarJump);
 }
 
-BOOL	getShakeStatus( void )
+bool	getShakeStatus( void )
 {
 	return(bShakingPermitted);
 }
 
-BOOL	getInvertMouseStatus( void )
+bool	getInvertMouseStatus( void )
 {
 	return(bInvertMouse);
 }
 
-void	setInvertMouseStatus( BOOL val )
+void	setInvertMouseStatus( bool val )
 {
 	bInvertMouse = val;
 }
@@ -276,40 +276,40 @@ void	setInvertMouseStatus( BOOL val )
 #define MOUSE_SELECT (bRightClickOrders?MOUSE_LMB:MOUSE_RMB)
 #define MOUSE_ROTATE (bMiddleClickRotate?MOUSE_MMB:MOUSE_RMB)
 
-BOOL	getRightClickOrders( void )
+bool	getRightClickOrders( void )
 {
 	return bRightClickOrders;
 }
 
-void	setRightClickOrders( BOOL val )
+void	setRightClickOrders( bool val )
 {
 	bRightClickOrders = val;
 }
 
 
-BOOL	getMiddleClickRotate( void )
+bool	getMiddleClickRotate( void )
 {
 	return bMiddleClickRotate;
 }
 
-void	setMiddleClickRotate( BOOL val )
+void	setMiddleClickRotate( bool val )
 {
 	bMiddleClickRotate = val;
 }
 
 
-BOOL	getDrawShadows( void )
+bool	getDrawShadows( void )
 {
 	return(bDrawShadows);
 }
 
-void	setDrawShadows( BOOL val )
+void	setDrawShadows( bool val )
 {
 	bDrawShadows = val;
 }
 
 
-void	setShakeStatus( BOOL val )
+void	setShakeStatus( bool val )
 {
 	bShakingPermitted = val;
 }
@@ -368,7 +368,7 @@ static void shakeUpdate(void)
 
 
 /* Initialise the display system */
-BOOL dispInitialise(void)
+bool dispInitialise(void)
 {
 	return true;
 }
@@ -473,8 +473,8 @@ void resetInput(void)
 /* Process the user input. This just processes the key input and jumping around the radar*/
 void processInput(void)
 {
-	BOOL mOverRadar = false;
-	BOOL mOverConstruction = false;
+	bool mOverRadar = false;
+	bool mOverConstruction = false;
 
 	if (InGameOpUp || isInGamePopupUp)
 	{
@@ -569,9 +569,9 @@ void processInput(void)
 }
 
 
-static BOOL OverRadarAndNotDragging(void)
+static bool OverRadarAndNotDragging(void)
 {
-	BOOL OverRadar = mouseOverRadar;
+	bool OverRadar = mouseOverRadar;
 
 	if(getHQExists(selectedPlayer)==false)
 	{
@@ -670,9 +670,9 @@ static void CheckStartWallDrag(void)
 }
 
 //this function is called when a location has been chosen to place a structure or a DP
-static BOOL CheckFinishedFindPosition(void)
+static bool CheckFinishedFindPosition(void)
 {
-	BOOL OverRadar = OverRadarAndNotDragging();
+	bool OverRadar = OverRadarAndNotDragging();
 
 	/* Do not let the player position buildings 'under' the radar */
 	if(mouseReleased(MOUSE_LMB) && !OverRadar)
@@ -770,7 +770,7 @@ void processMouseClickInput(void)
 	UDWORD	i;
 	SELECTION_TYPE	selection;
 	MOUSE_TARGET	item=MT_NOTARGET;
-	BOOL OverRadar = OverRadarAndNotDragging();
+	bool OverRadar = OverRadarAndNotDragging();
 
 	// These four functions were embedded in this function but I moved them out for readability. In the
 	// absense of any comments I had a guess as to there use and named them accordingly PD 28/05/98.
@@ -907,7 +907,7 @@ void processMouseClickInput(void)
 			{
 				item = MT_OWNDROID;
 			}
-			else if ((keyDown(KEY_LALT) || keyDown(KEY_RALT)) &&
+			else if (specialOrderKeyDown() &&
 				(ObjUnderMouse != NULL) &&
 			    ObjUnderMouse->player == selectedPlayer)
 			{
@@ -1025,13 +1025,13 @@ void processMouseClickInput(void)
 				item = MT_BLOCKING;
 			}
 
-			if ((keyDown(KEY_LALT) || keyDown(KEY_RALT)) && selection == SC_DROID_TRANSPORTER &&
+			if (specialOrderKeyDown() && selection == SC_DROID_TRANSPORTER &&
 				arnMPointers[item][selection] == CURSOR_MOVE && bMultiPlayer)
 			{
 				// Alt+move = disembark transporter
 				pie_SetMouse(CURSOR_DISEMBARK, war_GetColouredCursor());
 			}
-			else if ((keyDown(KEY_LALT) || keyDown(KEY_RALT)) && selection == SC_DROID_DIRECT &&
+			else if (specialOrderKeyDown() && selection == SC_DROID_DIRECT &&
 				arnMPointers[item][selection] == CURSOR_MOVE)
 			{
 				// Alt+move = scout
@@ -1200,9 +1200,9 @@ void resetScroll(void)
 // Check a coordinate is within the scroll limits, SDWORD version.
 // Returns true if edge hit.
 //
-BOOL CheckInScrollLimits(SDWORD *xPos,SDWORD *zPos)
+bool CheckInScrollLimits(SDWORD *xPos,SDWORD *zPos)
 {
-	BOOL EdgeHit = false;
+	bool EdgeHit = false;
 	SDWORD	minX,minY,maxX,maxY;
 
 	//always view that little bit more than the scroll limits...
@@ -1268,11 +1268,11 @@ BOOL CheckInScrollLimits(SDWORD *xPos,SDWORD *zPos)
 // Check the view is within the scroll limits,
 // Returns true if edge hit.
 //
-BOOL CheckScrollLimits(void)
+bool CheckScrollLimits(void)
 {
 	SDWORD xp = player.p.x;
 	SDWORD zp = player.p.z;
-	BOOL ret = CheckInScrollLimits(&xp,&zp);
+	bool ret = CheckInScrollLimits(&xp,&zp);
 
 	player.p.x = xp;
 	player.p.z = zp;
@@ -1353,12 +1353,12 @@ void displayWorld(void)
 	draw3DScene();
 }
 
-static BOOL mouseInBox(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1)
+static bool mouseInBox(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1)
 {
 	return mouseX() > x0 && mouseX() < x1 && mouseY() > y0 && mouseY() < y1;
 }
 
-BOOL DrawnInLastFrame(int32_t frame)
+bool DrawnInLastFrame(int32_t frame)
 {
 	return frame >= (int32_t)StartOfLastFrame;
 }
@@ -1433,12 +1433,12 @@ UDWORD		dispX,dispY,dispR;
 
 // Dummy structure stats used for positioning delivery points.
 static STRUCTURE_STATS ReposStats;
-static BOOL ReposValid = false;
-static BOOL BVReposValid = false;
+static bool ReposValid = false;
+static bool BVReposValid = false;
 static FLAG_POSITION *ReposFlag;
 FLAG_POSITION *deliveryPointToMove = NULL;
 
-void StartTacticalScrollObj(WZ_DECL_UNUSED BOOL driveActive, WZ_DECL_UNUSED BASE_OBJECT* psObj)
+void StartTacticalScrollObj(WZ_DECL_UNUSED bool driveActive, WZ_DECL_UNUSED BASE_OBJECT* psObj)
 {
 }
 
@@ -1515,7 +1515,7 @@ void FinishDeliveryPosition(UDWORD xPos,UDWORD yPos,void *UserData)
 
 // Is there a valid delivery point repositioning going on.
 //
-BOOL DeliveryReposValid(void)
+bool DeliveryReposValid(void)
 {
 	if(driveModeActive()) {
 		return ReposValid && (ReposFlag !=NULL);
@@ -1550,7 +1550,7 @@ void CancelDeliveryRepos(void)
 
 
 // check whether a clicked on droid is in a command group or assigned to a sensor
-static BOOL droidHasLeader(DROID *psDroid)
+static bool droidHasLeader(DROID *psDroid)
 {
 	BASE_OBJECT		*psLeader;
 
@@ -1586,10 +1586,10 @@ static BOOL droidHasLeader(DROID *psDroid)
 
 
 // deal with selecting a droid
-void dealWithDroidSelect(DROID *psDroid, BOOL bDragBox)
+void dealWithDroidSelect(DROID *psDroid, bool bDragBox)
 {
 	DROID	*psD;
-	BOOL	bGotGroup;
+	bool	bGotGroup;
 
 	/*	Toggle selection on and off - allows you drag around a big
 		area of droids and then exclude certain individuals */
@@ -1606,7 +1606,7 @@ void dealWithDroidSelect(DROID *psDroid, BOOL bDragBox)
 				bGotGroup = true;
 			}
 		}
-		if (keyDown(KEY_LALT) || keyDown(KEY_RALT))
+		if (specialOrderKeyDown())
 		{
 			/* We only want to select weapon units if ALT is down on a drag */
 			if (psDroid->asWeaps[0].nStat > 0)
@@ -1638,7 +1638,7 @@ static void FeedbackOrderGiven(void)
 }
 
 // check whether the queue order keys are pressed
-BOOL ctrlShiftDown(void)
+bool ctrlShiftDown(void)
 {
 	return keyDown(KEY_LCTRL) || keyDown(KEY_RCTRL) || keyDown(KEY_LSHIFT) || keyDown(KEY_RSHIFT);
 }
@@ -1681,7 +1681,7 @@ static void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 		// select/deselect etc. the droid
 		dealWithDroidSelect(psDroid, false);
 	}
-	else if ((keyDown(KEY_LALT) || keyDown(KEY_RALT)) && ownDroid)
+	else if (specialOrderKeyDown() && ownDroid)
 	{
 		// try to attack your own unit
 		orderSelectedObjAdd(selectedPlayer, (BASE_OBJECT*)psDroid, ctrlShiftDown());
@@ -1878,7 +1878,7 @@ static void dealWithLMBStructure(STRUCTURE* psStructure, SELECTION_TYPE selectio
 	if (!bRightClickOrders) printStructureInfo(psStructure);
 
 	/* Got to be built. Also, you can't 'select' derricks */
-	if (!keyDown(KEY_LALT) && !keyDown(KEY_RALT) && (psStructure->status == SS_BUILT) &&
+	if (!specialOrderKeyDown() && (psStructure->status == SS_BUILT) &&
 		(psStructure->pStructureType->type != REF_RESOURCE_EXTRACTOR) && ownStruct)
 	{
 		if (bRightClickOrders)
@@ -2006,12 +2006,10 @@ static void dealWithLMBFeature(FEATURE* psFeature)
 			(apStructTypeLists[selectedPlayer][i] == AVAILABLE) )	// dont go any further if no derrick stat found.
 		{
 			DROID* psCurr;
-			int numTrucks = 0;
 
 			// for each droid
 			for(psCurr = apsDroidLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
 			{
-				//if((droidType(psDroid) == DROID_CONSTRUCT) && (psDroid->selected))
 				if ((droidType(psCurr) == DROID_CONSTRUCT ||
 					droidType(psCurr) == DROID_CYBORG_CONSTRUCT) && (psCurr->selected))
 				{
@@ -2030,26 +2028,11 @@ static void dealWithLMBFeature(FEATURE* psFeature)
 					{
 						orderDroidStatsLocDir(psCurr, DORDER_BUILD, (BASE_STATS*) &asStructureStats[i], psFeature->pos.x, psFeature->pos.y, player.r.y, ModeQueue);
 					}
-					++numTrucks;
 				}
-			}
-
-			if (numTrucks != 0)
-			{
-				char msg[100];
-				switch (numTrucks)
-				{
-					case 1:  ssprintf(msg, _("Truck ordered to build Oil Derrick")); break;
-					case 2:  ssprintf(msg, _("2 trucks ordered to build Oil Derrick")); break;
-					default: ssprintf(msg, _("%d trucks ordered to build Oil Derrick"), numTrucks); break;
-				}
-				addConsoleMessage(msg, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
-				FeedbackOrderGiven();
 			}
 		}
 
 	}
-
 	else
 	{
 		switch(psFeature->psStats->subType)
@@ -2153,8 +2136,7 @@ void	dealWithLMB( void )
 	{
 		// now changed to use the multiple order stuff
 		// clicked on a destination.
-		orderSelectedLoc(selectedPlayer, mouseTileX*TILE_UNITS+TILE_UNITS/2,
-		                                 mouseTileY*TILE_UNITS+TILE_UNITS/2, ctrlShiftDown());  // ctrlShiftDown() = ctrl clicked a destination, add an order
+		orderSelectedLoc(selectedPlayer, mousePos.x, mousePos.y, ctrlShiftDown());  // ctrlShiftDown() = ctrl clicked a destination, add an order
 		/* Otherwise send them all */
 		if(getNumDroidsSelected())
 		{
@@ -2231,7 +2213,7 @@ void	dealWithLMB( void )
 }
 
 
-BOOL	getRotActive( void )
+bool	getRotActive( void )
 {
 	return(rotActive);
 }
@@ -2890,9 +2872,9 @@ static SELECTION_TYPE	establishSelection(UDWORD selectedPlayer)
 {
 DROID			*psDroid,*psDominant=NULL;
 	UBYTE	CurrWeight;
-//BOOL			gotWeapon = false;
+//bool			gotWeapon = false;
 //DROID			*psWeapDroid = NULL;
-BOOL			atLeastOne;
+bool			atLeastOne;
 SELECTION_TYPE	selectionClass;
 
 	atLeastOne = false;
@@ -3008,13 +2990,13 @@ SELECTION_TYPE	selectionClass;
 }
 
 /* Just returns true if the building's present body points aren't 100 percent */
-static BOOL	buildingDamaged(STRUCTURE *psStructure)
+static bool	buildingDamaged(STRUCTURE *psStructure)
 {
 	return psStructure->body < structureBody(psStructure);
 }
 
 /*Looks through the list of selected players droids to see if one is a repair droid*/
-BOOL	repairDroidSelected(UDWORD player)
+bool	repairDroidSelected(UDWORD player)
 {
 	DROID	*psCurr;
 
@@ -3056,7 +3038,7 @@ static DROID *constructorDroidSelected(UDWORD player)
 }
 
 /*Looks through the list of selected players droids to see if one is a VTOL droid*/
-BOOL	vtolDroidSelected(UDWORD player)
+bool	vtolDroidSelected(UDWORD player)
 {
 	DROID	*psCurr;
 
@@ -3076,7 +3058,7 @@ BOOL	vtolDroidSelected(UDWORD player)
 }
 
 /*Looks through the list of selected players droids to see if any is selected*/
-BOOL	anyDroidSelected(UDWORD player)
+bool	anyDroidSelected(UDWORD player)
 {
 	DROID	*psCurr;
 
@@ -3094,7 +3076,7 @@ BOOL	anyDroidSelected(UDWORD player)
 }
 
 /*Looks through the list of selected players droids to see if one is a cyborg droid*/
-BOOL cyborgDroidSelected(UDWORD player)
+bool cyborgDroidSelected(UDWORD player)
 {
 	DROID	*psCurr;
 

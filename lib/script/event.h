@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -32,34 +32,34 @@
 #define CONTEXT_VALS 20
 
 /* One chunk of variables for a script context */
-typedef struct _val_chunk
+struct VAL_CHUNK
 {
 	INTERP_VAL		asVals[CONTEXT_VALS];
 
-	struct _val_chunk *psNext;
-} VAL_CHUNK;
+	VAL_CHUNK *             psNext;
+};
 
 
 /* The number of links in a context event link chunk */
 #define CONTEXT_LINKS	10
 /* One chunk of event links for a script context */
-typedef struct _link_chunk
+struct LINK_CHUNK
 {
 	SWORD			aLinks[CONTEXT_LINKS];
 
-	struct _link_chunk *psNext;
-} LINK_CHUNK;
+	LINK_CHUNK *            psNext;
+};
 
 // Whether a context is released when there are no active triggers for it
-typedef enum _context_release
+enum CONTEXT_RELEASE
 {
 	CR_RELEASE,		// release the context
 	CR_NORELEASE,	// do not release the context
-} CONTEXT_RELEASE;
+};
 
 
 /* The data needed within an object to run a script */
-typedef struct _script_context
+struct SCRIPT_CONTEXT
 {
 	SCRIPT_CODE		*psCode;		// The actual script to run
 	VAL_CHUNK		*psGlobals;		// The objects copy of the global variables
@@ -67,15 +67,15 @@ typedef struct _script_context
 	CONTEXT_RELEASE		release;		// Whether to release the context when there are no triggers
 	SWORD			id;
 
-	struct _script_context *psNext;
-} SCRIPT_CONTEXT;
+	SCRIPT_CONTEXT *        psNext;
+};
 
 /*
  * A currently active trigger.
  * If the type of the triggger == TR_PAUSE, the trigger number stored is the
  * index of the trigger to replace this one when the event restarts
  */
-typedef struct _active_trigger
+struct ACTIVE_TRIGGER
 {
 	UDWORD				testTime;
 	SCRIPT_CONTEXT		*psContext;
@@ -83,12 +83,12 @@ typedef struct _active_trigger
 	SWORD				trigger;
 	UWORD				event;
 	UWORD				offset;
-	BOOL				deactivated;	// Whether the trigger is marked for deletion
-	struct _active_trigger *psNext;
-} ACTIVE_TRIGGER;
+	int32_t				deactivated;	// Whether the trigger is marked for deletion
+	ACTIVE_TRIGGER *        psNext;
+};
 
 // ID numbers for each user type
-typedef enum _scr_user_types
+enum SCR_USER_TYPES
 {
 	ST_INTMESSAGE = VAL_USERTYPESTART,		// Intelligence message ?? (6) - (pointer)
 	ST_BASEOBJECT,							// Base object (pointer)
@@ -124,7 +124,7 @@ typedef enum _scr_user_types
 	ST_POINTER_STRUCTSTAT,						//for NULLSTRUCTURESTAT
 
 	ST_MAXTYPE,									// maximum possible type - should always be last
-} SCR_USER_TYPES;
+};
 
 
 // The list of currently active triggers
@@ -138,17 +138,17 @@ extern SCRIPT_CONTEXT	*psContList;
 
 
 /* Initialise the event system */
-extern BOOL eventInitialise(void);
+extern bool eventInitialise(void);
 
 // Shutdown the event system
 extern void eventShutDown(void);
 
 // add a TR_PAUSE trigger to the event system.
-extern BOOL eventAddPauseTrigger(SCRIPT_CONTEXT *psContext, UDWORD event, UDWORD offset,
+extern bool eventAddPauseTrigger(SCRIPT_CONTEXT *psContext, UDWORD event, UDWORD offset,
 						  UDWORD time);
 
 // Load a trigger into the system from a save game
-extern BOOL eventLoadTrigger(UDWORD time, SCRIPT_CONTEXT *psContext,
+extern bool eventLoadTrigger(UDWORD time, SCRIPT_CONTEXT *psContext,
 					  SDWORD type, SDWORD trigger, UDWORD event, UDWORD offset);
 
 //resets the event timer - updateTime

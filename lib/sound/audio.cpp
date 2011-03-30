@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -35,8 +35,8 @@
 // global variables
 static AUDIO_SAMPLE *g_psSampleList = NULL;
 static AUDIO_SAMPLE *g_psSampleQueue = NULL;
-static BOOL			g_bAudioEnabled = false;
-static BOOL			g_bAudioPaused = false;
+static bool			g_bAudioEnabled = false;
+static bool			g_bAudioPaused = false;
 static AUDIO_SAMPLE g_sPreviousSample;
 static int			g_iPreviousSampleTime;
 
@@ -85,7 +85,7 @@ unsigned int audio_GetSampleListCount()
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL audio_Disabled( void )
+bool audio_Disabled( void )
 {
 	return !g_bAudioEnabled;
 }
@@ -94,7 +94,7 @@ BOOL audio_Disabled( void )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL audio_Init( AUDIO_CALLBACK pStopTrackCallback )
+bool audio_Init( AUDIO_CALLBACK pStopTrackCallback )
 {
 	// init audio system
 	g_sPreviousSample.iTrack = NO_SAMPLE;
@@ -113,11 +113,11 @@ BOOL audio_Init( AUDIO_CALLBACK pStopTrackCallback )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL audio_Shutdown( void )
+bool audio_Shutdown( void )
 {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	AUDIO_SAMPLE	*psSample = NULL, *psSampleTemp = NULL;
-	BOOL			bOK;
+	bool			bOK;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	// if audio not enabled return true to carry on game without audio
@@ -158,7 +158,7 @@ BOOL audio_Shutdown( void )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL audio_GetPreviousQueueTrackPos( SDWORD *iX, SDWORD *iY, SDWORD *iZ )
+bool audio_GetPreviousQueueTrackPos( SDWORD *iX, SDWORD *iY, SDWORD *iZ )
 {
 	if (g_sPreviousSample.x == SAMPLE_COORD_INVALID
 	 || g_sPreviousSample.y == SAMPLE_COORD_INVALID
@@ -174,7 +174,7 @@ BOOL audio_GetPreviousQueueTrackPos( SDWORD *iX, SDWORD *iY, SDWORD *iZ )
 	return true;
 }
 
-BOOL audio_GetPreviousQueueTrackRadarBlipPos( SDWORD *iX, SDWORD *iY )
+bool audio_GetPreviousQueueTrackRadarBlipPos( SDWORD *iX, SDWORD *iY )
 {
 	if (g_sPreviousSample.x == SAMPLE_COORD_INVALID
 		|| g_sPreviousSample.y == SAMPLE_COORD_INVALID)
@@ -281,12 +281,12 @@ static void audio_RemoveSample( AUDIO_SAMPLE **ppsSampleList, AUDIO_SAMPLE *psSa
 // =======================================================================================================================
 // =======================================================================================================================
 //
-static BOOL audio_CheckSameQueueTracksPlaying( SDWORD iTrack )
+static bool audio_CheckSameQueueTracksPlaying( SDWORD iTrack )
 {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	SDWORD			iCount;
 	AUDIO_SAMPLE	*psSample = NULL;
-	BOOL			bOK = true;
+	bool			bOK = true;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	// return if audio not enabled
@@ -618,7 +618,7 @@ void audio_Update()
  *  \param audibleRadius the radius from the source of sound where it can be heard
  *  \return a non-zero value when successful or audio is disabled, zero when the file is not found or no more tracks can be loaded (i.e. the limit is reached)
  */
-unsigned int audio_SetTrackVals(const char* fileName, BOOL loop, unsigned int volume, unsigned int audibleRadius)
+unsigned int audio_SetTrackVals(const char* fileName, bool loop, unsigned int volume, unsigned int audibleRadius)
 {
 	// if audio not enabled return a random non-zero value to carry on game without audio
 	if ( g_bAudioEnabled == false )
@@ -640,12 +640,12 @@ unsigned int audio_SetTrackVals(const char* fileName, BOOL loop, unsigned int vo
 // =======================================================================================================================
 // =======================================================================================================================
 //
-static BOOL audio_CheckSame3DTracksPlaying( SDWORD iTrack, SDWORD iX, SDWORD iY, SDWORD iZ )
+static bool audio_CheckSame3DTracksPlaying( SDWORD iTrack, SDWORD iX, SDWORD iY, SDWORD iZ )
 {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	SDWORD			iCount, iDx, iDy, iDz, iDistSq, iMaxDistSq, iRad;
 	AUDIO_SAMPLE	*psSample = NULL;
-	BOOL			bOK = true;
+	bool			bOK = true;
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	// return if audio not enabled
@@ -690,7 +690,7 @@ static BOOL audio_CheckSame3DTracksPlaying( SDWORD iTrack, SDWORD iX, SDWORD iY,
 // =======================================================================================================================
 // =======================================================================================================================
 //
-static BOOL audio_Play3DTrack( SDWORD iX, SDWORD iY, SDWORD iZ, int iTrack, SIMPLE_OBJECT *psObj, AUDIO_CALLBACK pUserCallback )
+static bool audio_Play3DTrack( SDWORD iX, SDWORD iY, SDWORD iZ, int iTrack, SIMPLE_OBJECT *psObj, AUDIO_CALLBACK pUserCallback )
 {
 	//~~~~~~~~~~~~~~~~~~~~~~
 	AUDIO_SAMPLE	*psSample;
@@ -778,7 +778,7 @@ static BOOL audio_Play3DTrack( SDWORD iX, SDWORD iY, SDWORD iZ, int iTrack, SIMP
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL audio_PlayStaticTrack( SDWORD iMapX, SDWORD iMapY, int iTrack )
+bool audio_PlayStaticTrack( SDWORD iMapX, SDWORD iMapY, int iTrack )
 {
 	//~~~~~~~~~~~~~~~
 	SDWORD	iX, iY, iZ;
@@ -1187,7 +1187,7 @@ void audio_RemoveObj(SIMPLE_OBJECT const *psObj)
 		debug(LOG_MEMORY, "audio_RemoveObj: ***Warning! psOBJ %p was found %u times in the list of playing audio samples", psObj, count);
 }
 
-static BOOL dummyCB(WZ_DECL_UNUSED void* dummy)
+static bool dummyCB(WZ_DECL_UNUSED void* dummy)
 {
 	return true;
 }
@@ -1199,7 +1199,7 @@ void audioTest()
 	for (i = 0; i < 10; i++)
 	{
 		// On non-debug builds prevent warnings about defining but not using dummyCB
-		(void)dummyCB;
+		dummyCB(NULL);
 
 		assert(audio_Shutdown());
 		assert(audio_Init(dummyCB));

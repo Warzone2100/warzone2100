@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -24,8 +24,7 @@
 #ifndef _gtime_h
 #define _gtime_h
 
-//#include "lib/netplay/nettypes.h"
-typedef struct _netqueue NETQUEUE_;
+struct NETQUEUE;
 
 /// The number of time units per second of the game clock.
 #define GAME_TICKS_PER_SEC 1000
@@ -79,7 +78,7 @@ void gameTimeUpdateEnd(void);
 void realTimeUpdate(void);
 
 /* Returns true if gameTime is stopped. */
-extern BOOL gameTimeIsStopped(void);
+extern bool gameTimeIsStopped(void);
 
 /** Call this to stop the game timer. */
 extern void gameTimeStop(void);
@@ -157,7 +156,7 @@ static inline float realTimeAdjustedIncrement(float value)
 }
 
 void sendPlayerGameTime(void);                            ///< Sends a GAME_GAME_TIME message with gameTime plus latency to our game queues.
-void recvPlayerGameTime(NETQUEUE_ queue);                 ///< Processes a GAME_GAME_TIME message.
+void recvPlayerGameTime(NETQUEUE queue);                  ///< Processes a GAME_GAME_TIME message.
 bool checkPlayerGameTime(unsigned player);                ///< Checks that we are not waiting for a GAME_GAME_TIME message from this player. (player can be NET_ALL_PLAYERS.)
 void setPlayerGameTime(unsigned player, uint32_t time);   ///< Sets the player's time.
 

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -66,7 +66,7 @@ g_animGlobals;
 /**
  *	Initialise animation subsystem.
  */
-BOOL anim_Init()
+bool anim_Init()
 {
 	/* init globals */
 	g_animGlobals.psAnimList    = NULL;
@@ -105,7 +105,7 @@ void anim_ReleaseAnim(BASEANIM *psAnim)
 /**
  *	Shut down animation subsystem.
  */
-BOOL anim_Shutdown()
+bool anim_Shutdown()
 {
 	BASEANIM	*psAnim, *psAnimTmp;
 
@@ -143,7 +143,7 @@ static void anim_InitBaseMembers(BASEANIM * psAnim, UWORD uwStates, UWORD uwFram
 /**
  *	Create animation for a model. Called from animation script.
  */
-BOOL anim_Create3D(char szPieFileName[], UWORD uwStates, UWORD uwFrameRate, UWORD uwObj, 
+bool anim_Create3D(char szPieFileName[], UWORD uwStates, UWORD uwFrameRate, UWORD uwObj, 
                    ANIM_MODE ubType, UWORD uwID)
 {
 	ANIM3D		*psAnim3D;
@@ -210,7 +210,7 @@ void anim_BeginScript()
 
 /***************************************************************************/
 
-BOOL anim_EndScript()
+bool anim_EndScript()
 {
 	BASEANIM	*psAnim;
 
@@ -231,7 +231,7 @@ BOOL anim_EndScript()
 
 /***************************************************************************/
 
-BOOL anim_AddFrameToAnim(int iFrame, Vector3i vecPos, Vector3i vecRot, Vector3i vecScale)
+bool anim_AddFrameToAnim(int iFrame, Vector3i vecPos, Vector3i vecRot, Vector3i vecScale)
 {
 	ANIM_STATE	*psState;
 	BASEANIM	*psAnim;

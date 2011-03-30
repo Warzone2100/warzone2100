@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
 #ifndef __INCLUDED_SRC_SCORES_H__
 #define __INCLUDED_SRC_SCORES_H__
 
-typedef enum data_index
+enum DATA_INDEX
 {
 WD_UNITS_BUILT,
 WD_UNITS_KILLED,
@@ -34,11 +34,11 @@ WD_MISSION_STARTED,
 WD_SHOTS_ON_TARGET,
 WD_SHOTS_OFF_TARGET,
 WD_BARBARIANS_MOWED_DOWN
-} DATA_INDEX;
+};
 
 // --------------------------------------------------------------------
 /* The mission results data */
-typedef	struct mission_data
+struct MISSION_DATA
 {
 	uint32_t    unitsBuilt;		// How many units were built
 	uint32_t    unitsKilled;	// How many enemy units you blew up
@@ -51,20 +51,20 @@ typedef	struct mission_data
 	uint32_t    shotsOnTarget;	// How many hits
 	uint32_t    shotsOffTarget;	// How many misses
 	uint32_t    babasMowedDown; // How many barbarians did we mow down?
-} MISSION_DATA;
+};
 
 // Could use widgets, but hey.....
-typedef	struct	_stat_bar
+struct STAT_BAR
 {
 UDWORD	topX,topY;		// Obvious
 UDWORD	width,height;	// Height down screen and width _unfilled_
 UDWORD	percent;		// What percentage full is it?
 UDWORD	stringID;		// String resource name to stick next to it.
 UDWORD	queTime;		// How many game ticks before it's active?
-BOOL	bQueued;		// Already fired off?
-BOOL	bActive;		// Is this one active?
+bool	bQueued;		// Already fired off?
+bool	bActive;		// Is this one active?
 UDWORD	number;			// %d string for the associated text string.
-}STAT_BAR;
+};
 
 enum
 {
@@ -89,7 +89,7 @@ STAT_ACE
 
 
 
-extern BOOL	scoreInitSystem			( void );
+extern bool	scoreInitSystem			( void );
 extern void	scoreUpdateVar			( DATA_INDEX var );
 extern void	scoreDataToConsole		( void );
 extern void	scoreDataToScreen		( void );

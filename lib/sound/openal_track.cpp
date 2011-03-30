@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -53,9 +53,9 @@
 ALuint current_queue_sample = -1;
 #endif
 
-static BOOL openal_initialized = false;
+static bool openal_initialized = false;
 
-struct __audio_stream
+struct AUDIO_STREAM
 {
 #ifndef WZ_NOSOUND
 	ALuint                  source;        // OpenAL name of the sound source
@@ -71,14 +71,14 @@ struct __audio_stream
 	size_t                  bufferSize;
 
 	// Linked list pointer
-	struct __audio_stream   *next;
+	AUDIO_STREAM *          next;
 };
 
-typedef struct	SAMPLE_LIST
+struct SAMPLE_LIST
 {
-	struct AUDIO_SAMPLE *curr;
-	struct SAMPLE_LIST	*next;
-} SAMPLE_LIST;
+	AUDIO_SAMPLE *  curr;
+	SAMPLE_LIST *   next;
+};
 
 static SAMPLE_LIST *active_samples = NULL;
 
@@ -122,7 +122,7 @@ static void sound_RemoveSample(SAMPLE_LIST* previous, SAMPLE_LIST* to_remove)
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL sound_InitLibrary( void )
+bool sound_InitLibrary( void )
 {
 #ifndef WZ_NOSOUND
 	int err;
@@ -408,7 +408,7 @@ void sound_Update()
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL sound_QueueSamplePlaying( void )
+bool sound_QueueSamplePlaying( void )
 {
 #ifndef WZ_NOSOUND
 	ALenum	state;
@@ -653,7 +653,7 @@ static bool sound_SetupChannel( AUDIO_SAMPLE *psSample )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL sound_Play2DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample, BOOL bQueued )
+bool sound_Play2DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample, bool bQueued )
 {
 #ifndef WZ_NOSOUND
 	ALfloat zero[3] = { 0.0, 0.0, 0.0 };
@@ -727,7 +727,7 @@ BOOL sound_Play2DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample, BOOL bQueued )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL sound_Play3DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample )
+bool sound_Play3DSample( TRACK *psTrack, AUDIO_SAMPLE *psSample )
 {
 #ifndef WZ_NOSOUND
 	ALfloat zero[3] = { 0.0, 0.0, 0.0 };
@@ -961,7 +961,7 @@ AUDIO_STREAM* sound_PlayStreamWithBuf(PHYSFS_file* fileHandle, float volume, voi
  *  \post true if playing, false otherwise.
  *
  */
-BOOL sound_isStreamPlaying(AUDIO_STREAM *stream)
+bool sound_isStreamPlaying(AUDIO_STREAM *stream)
 {
 #if !defined(WZ_NOSOUND)
 	ALint state;
@@ -1423,7 +1423,7 @@ void sound_StopAll( void )
 // =======================================================================================================================
 // =======================================================================================================================
 //
-BOOL sound_SampleIsFinished( AUDIO_SAMPLE *psSample )
+bool sound_SampleIsFinished( AUDIO_SAMPLE *psSample )
 {
 #ifndef WZ_NOSOUND
 	//~~~~~~~~~~

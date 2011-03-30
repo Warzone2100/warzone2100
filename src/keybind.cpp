@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -106,8 +106,8 @@
 
 extern char	ScreenDumpPath[];
 
-BOOL	bMovePause = false;
-BOOL		bAllowOtherKeyPresses = true;
+bool	bMovePause = false;
+bool		bAllowOtherKeyPresses = true;
 char	sTextToSend[MAX_CONSOLE_STRING_LENGTH];
 char	beaconMsg[MAX_PLAYERS][MAX_CONSOLE_STRING_LENGTH];		//beacon msg for each player
 
@@ -675,7 +675,7 @@ void	kf_TileInfo(void)
 {
 	MAPTILE	*psTile = mapTile(mouseTileX, mouseTileY);
 
-	debug(LOG_ERROR, "Tile position=(%d, %d) Terrain=%d Texture=%u Height=%d Illumination=%hhu",
+	debug(LOG_ERROR, "Tile position=(%d, %d) Terrain=%d Texture=%u Height=%d Illumination=%u",
 	      mouseTileX, mouseTileY, (int)terrainType(psTile), TileNumber_tile(psTile->texture), psTile->height,
 	      psTile->illumination);
 	addConsoleMessage("Tile info dumped into log", DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
@@ -684,7 +684,7 @@ void	kf_TileInfo(void)
 // --------------------------------------------------------------------------
 void	kf_ToggleBackgroundFog( void )
 {
-	static BOOL bEnabled  = true;//start in nicks mode
+	static bool bEnabled  = true;//start in nicks mode
 
 	if (bEnabled)//true, so go to false
 	{
@@ -709,7 +709,7 @@ void	kf_ToggleBackgroundFog( void )
 
 extern void	kf_ToggleDistanceFog( void )
 {
-	static BOOL bEnabled  = true;//start in nicks mode
+	static bool bEnabled  = true;//start in nicks mode
 
 	if (bEnabled)//true, so go to false
 	{
@@ -734,7 +734,7 @@ extern void	kf_ToggleDistanceFog( void )
 /* Toggles fog on/off */
 void	kf_ToggleFog( void )
 {
-	static BOOL fogEnabled = false;
+	static bool fogEnabled = false;
 	const char* cmsg;
 
 #ifndef DEBUG
@@ -1049,9 +1049,9 @@ void	kf_SelectPlayer( void )
 /* Selects the player's groups 1..9 */
 void	kf_SelectGrouping( UDWORD	groupNumber)
 {
-	BOOL	bAlreadySelected;
+	bool	bAlreadySelected;
 	DROID	*psDroid;
-	BOOL	Selected;
+	bool	Selected;
 
 	bAlreadySelected = false;
 	for(psDroid = apsDroidLists[selectedPlayer]; psDroid!=NULL; psDroid = psDroid->psNext)
@@ -1341,6 +1341,7 @@ void kf_toggleTrapCursor(void)
 	const char *msg;
 	bool trap = !war_GetTrapCursor();
 	war_SetTrapCursor(trap);
+	(trap? wzGrabMouse : wzReleaseMouse)();
 	sasprintf((char**)&msg, _("Trap cursor %s"), trap ? "ON" : "OFF");
 	addConsoleMessage(msg, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 }
@@ -2416,7 +2417,7 @@ static void kfsf_SetSelectedDroidsState( SECONDARY_ORDER sec, SECONDARY_STATE st
 void	kf_TriggerRayCast( void )
 {
 DROID	*psDroid;
-BOOL	found;
+bool	found;
 
 	found = false;
 	for(psDroid = apsDroidLists[selectedPlayer]; psDroid && !found;
@@ -2448,7 +2449,7 @@ void	kf_ScatterDroids( void )
 void	kf_CentreOnBase( void )
 {
 STRUCTURE	*psStruct;
-BOOL		bGotHQ;
+bool		bGotHQ;
 UDWORD		xJump = 0, yJump = 0;
 
 	/* Got through our buildings */
@@ -2494,7 +2495,7 @@ void kf_ToggleFormationSpeedLimiting( void )
 void	kf_RightOrderMenu( void )
 {
 DROID	*psDroid,*psGotOne = NULL;
-BOOL	bFound;
+bool	bFound;
 
 	// if menu open, then close it!
 	if (widgGetFromID(psWScreen,IDORDER_FORM) != NULL)
@@ -2575,6 +2576,7 @@ void	kf_ToggleShadows( void )
 float available_speed[] = {
 // p = pumpkin allowed, n = new entries allowed in debug mode only.
 // Since some of these values can ruin a SP game, we disallow them in normal mode.
+	0.f,            // n
 	1.f / 8.f,	// n
 	1.f / 5.f,	// n
 	1.f / 3.f,	// p
@@ -2750,7 +2752,7 @@ void	kf_AddHelpBlip( void )
 	UDWORD	i;
 	char	tempStr[255];
 	SDWORD	x,y;
-	BOOL	mOverR=false;
+	bool	mOverR=false;
 
 	/* not needed in campaign */
 	if(!bMultiPlayer)

@@ -123,15 +123,8 @@ static uint16_t mouseXPos = 0, mouseYPos = 0;
 static CURSOR lastCursor = CURSOR_ARROW;
 static bool crashing = false;
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
 unsigned int screenWidth = 0;
 unsigned int screenHeight = 0;
-#ifdef __cplusplus
-}
-#endif
 static void inputAddBuffer(UDWORD key, utf_32_char unicode);
 static int WZkeyToQtKey(int code);
 /*!
@@ -209,7 +202,7 @@ WzMainWindow::WzMainWindow(const QGLFormat &format, QWidget *parent) : QGLWidget
 	regularFont.setPixelSize(12);
 	boldFont.setFamily("DejaVu Sans");
 	boldFont.setPixelSize(21);
-	boldFont.setBold(true);
+	boldFont.setWeight(QFont::DemiBold);
 	smallFont.setFamily("DejaVu Sans");
 	smallFont.setPixelSize(9);
 
@@ -353,13 +346,31 @@ MOUSE_KEY_CODE WzMainWindow::buttonToIdx(Qt::MouseButton button)
 
 	switch (button)
 	{
-		case Qt::LeftButton : idx = MOUSE_LMB; break;
-		case Qt::RightButton : idx = MOUSE_RMB;	break;
-		case Qt::MidButton : idx = MOUSE_MMB; break;
-		case Qt::XButton1 : idx = MOUSE_MMB; break;
-		case Qt::XButton2 : idx = MOUSE_MMB; break;
+		case Qt::LeftButton:
+			idx = MOUSE_LMB;
+			debug(LOG_INPUT, "MOUSE_LMB clicked");
+			break;
+		case Qt::RightButton:
+			idx = MOUSE_RMB;
+			debug(LOG_INPUT, "MOUSE_RMB clicked");
+			break;
+		case Qt::MidButton:
+			idx = MOUSE_MMB;
+			debug(LOG_INPUT, "MOUSE_MMB clicked");
+			break;
+		case Qt::XButton1:
+			idx = MOUSE_MMB;
+			debug(LOG_INPUT, "MOUSE_MMB (Xbutton1) clicked");
+			break;
+		case Qt::XButton2:
+			idx = MOUSE_MMB;
+			debug(LOG_INPUT, "MOUSE_MMB (Xbutton2) clicked");
+			break;
 		default:
-		case Qt::NoButton :	idx = MOUSE_BAD; break;	// strange case
+		case Qt::NoButton:
+			idx = MOUSE_BAD;
+			debug(LOG_INPUT, "NoButton (strange case ?");
+			break;	// strange case
 	}
 
 	return idx;
@@ -519,8 +530,11 @@ void WzMainWindow::realHandleKeyEvent(QKeyEvent *event, bool pressed)
 			case Qt::Key_Alt                :	lastKey = setKey(KEY_LALT, pressed); break;
 			case Qt::Key_AltGr              :	lastKey = setKey(KEY_RALT, pressed); break;
 
+			case Qt::Key_Meta               :	lastKey = setKey(KEY_LMETA, pressed); break;
+
 			case Qt::Key_Escape             :	lastKey = setKey(KEY_ESC, pressed); break;
 			case Qt::Key_Backspace          :	lastKey = setKey(KEY_BACKSPACE, pressed); break;
+			case Qt::Key_QuoteLeft          :	lastKey = setKey(KEY_BACKQUOTE, pressed); break;
 			case Qt::Key_1                  :	lastKey = setKey(KEY_1, pressed); break;
 			case Qt::Key_2                  :	lastKey = setKey(KEY_2, pressed); break;
 			case Qt::Key_3                  :	lastKey = setKey(KEY_3, pressed); break;
@@ -533,6 +547,7 @@ void WzMainWindow::realHandleKeyEvent(QKeyEvent *event, bool pressed)
 			case Qt::Key_0                  :	lastKey = setKey(KEY_0, pressed); break;
 			case Qt::Key_Minus              :	lastKey = setKey(KEY_MINUS, pressed); break;
 			case Qt::Key_Equal              :	lastKey = setKey(KEY_EQUALS, pressed); break;
+			case Qt::Key_Backtab:
 			case Qt::Key_Tab                :	lastKey = setKey(KEY_TAB, pressed); break;
 			case Qt::Key_Q                  :	lastKey = setKey(KEY_Q, pressed); break;
 			case Qt::Key_W                  :	lastKey = setKey(KEY_W, pressed); break;

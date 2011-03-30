@@ -9,5 +9,5 @@
 
 cd macosx
 
-xcodebuild -project Warzone.xcodeproj -parallelizeTargets -target "Make DMGs for Release" -configuration "Release" -PBXBuildsContinueAfterErrors=NO
+xcodebuild -project Warzone.xcodeproj -parallelizeTargets -target "Make DMGs for Release" -configuration "StaticAnalyzer" -PBXBuildsContinueAfterErrors=NO
 exit ${?}

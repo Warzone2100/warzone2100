@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -42,14 +42,14 @@
  */
 /***************************************************************************/
 
-typedef struct _warzoneGlobals
+struct WARZONE_GLOBALS
 {
 	FMV_MODE	FMVmode;
-	BOOL		bFog;
+	bool		bFog;
 	SWORD		effectsLevel;
-	BOOL		Fullscreen;
-	BOOL		soundEnabled;
-	BOOL		trapCursor;
+	bool		Fullscreen;
+	bool		soundEnabled;
+	bool		trapCursor;
 	UDWORD		width;
 	UDWORD		height;
 	unsigned int fsaa;
@@ -58,7 +58,7 @@ typedef struct _warzoneGlobals
 	bool		ColouredCursor;
 	bool		MusicEnabled;
 	int8_t		SPcolor;
-} WARZONE_GLOBALS;
+};
 
 /***************************************************************************/
 /*
@@ -112,12 +112,12 @@ int8_t war_GetSPcolor(void)
 	return warGlobs.SPcolor;
 }
 
-void war_setFullscreen(BOOL b)
+void war_setFullscreen(bool b)
 {
 	warGlobs.Fullscreen = b;
 }
 
-BOOL war_getFullscreen(void)
+bool war_getFullscreen(void)
 {
 	return warGlobs.Fullscreen;
 }
@@ -132,12 +132,12 @@ unsigned int war_getFSAA()
 	return warGlobs.fsaa;
 }
 
-void war_SetTrapCursor(BOOL b)
+void war_SetTrapCursor(bool b)
 {
 	warGlobs.trapCursor = b;
 }
 
-BOOL war_GetTrapCursor(void)
+bool war_GetTrapCursor(void)
 {
 	return warGlobs.trapCursor;
 }
@@ -174,7 +174,7 @@ UDWORD war_GetHeight(void)
 
 /***************************************************************************/
 /***************************************************************************/
-void war_SetFog(BOOL val)
+void war_SetFog(bool val)
 {
 	debug(LOG_FOG, "Visual fog turned %s", val ? "ON" : "OFF");
 
@@ -197,7 +197,7 @@ void war_SetFog(BOOL val)
 	}
 }
 
-BOOL war_GetFog(void)
+bool war_GetFog(void)
 {
 	return  warGlobs.bFog;
 }
@@ -234,12 +234,12 @@ bool war_GetColouredCursor(void)
 	return warGlobs.ColouredCursor;
 }
 
-void war_setSoundEnabled( BOOL soundEnabled )
+void war_setSoundEnabled( bool soundEnabled )
 {
 	warGlobs.soundEnabled = soundEnabled;
 }
 
-BOOL war_getSoundEnabled( void )
+bool war_getSoundEnabled( void )
 {
 	return warGlobs.soundEnabled;
 }

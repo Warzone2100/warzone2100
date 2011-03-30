@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -75,10 +75,10 @@ SDWORD MultiMsgPlayerFrom = -2;
 char ConsoleMsg[MAXSTRLEN]="ERROR!!!\0";	//Last console message
 char MultiplayMsg[MAXSTRLEN];	//Last multiplayer message
 
-BOOL scrCBDroidTaken(void)
+bool scrCBDroidTaken(void)
 {
 	DROID		**ppsDroid;
-	BOOL	triggered = false;
+	bool	triggered = false;
 
 	if (!stackPopParams(1, VAL_REF|ST_DROID, &ppsDroid))
 	{
@@ -106,12 +106,12 @@ BOOL scrCBDroidTaken(void)
 }
 
 // Deal with a CALL_NEWDROID
-BOOL scrCBNewDroid(void)
+bool scrCBNewDroid(void)
 {
 	SDWORD		player;
 	DROID		**ppsDroid;
 	STRUCTURE	**ppsStructure;
-	BOOL	triggered = false;
+	bool	triggered = false;
 
 	if (!stackPopParams(3, VAL_INT, &player, VAL_REF|ST_DROID, &ppsDroid, VAL_REF|ST_STRUCTURE, &ppsStructure))
 	{
@@ -143,12 +143,12 @@ BOOL scrCBNewDroid(void)
 }
 
 // Deal with a CALL_STRUCT_ATTACKED
-BOOL scrCBStructAttacked(void)
+bool scrCBStructAttacked(void)
 {
 	SDWORD			player;
 	STRUCTURE		**ppsTarget;
 	BASE_OBJECT		**ppsAttacker;//, **ppsTarget;
-	BOOL			triggered = false;
+	bool			triggered = false;
 
 	if (!stackPopParams(3, VAL_INT, &player,
 						VAL_REF|ST_STRUCTURE, &ppsTarget,
@@ -186,7 +186,7 @@ BOOL scrCBStructAttacked(void)
 	return true;
 }
 
-BOOL scrCBVTOLRetarget(void)
+bool scrCBVTOLRetarget(void)
 {
 	SDWORD			player;
 	DROID			**ppsDroid;
@@ -216,12 +216,12 @@ BOOL scrCBVTOLRetarget(void)
 }
 
 // Deal with a CALL_DROID_ATTACKED
-BOOL scrCBDroidAttacked(void)
+bool scrCBDroidAttacked(void)
 {
 	SDWORD			player;
 	DROID			**ppsTarget;
 	BASE_OBJECT		**ppsAttacker;//, **ppsTarget;
-	BOOL			triggered = false;
+	bool			triggered = false;
 
 	if (!stackPopParams(3, VAL_INT, &player,
 						VAL_REF|ST_DROID, &ppsTarget,
@@ -260,12 +260,12 @@ BOOL scrCBDroidAttacked(void)
 }
 
 // Deal with a CALL_ATTACKED
-BOOL scrCBAttacked(void)
+bool scrCBAttacked(void)
 {
 	SDWORD			player;
 	BASE_OBJECT		**ppsTarget;
 	BASE_OBJECT		**ppsAttacker;//, **ppsTarget;
-	BOOL			triggered = false;
+	bool			triggered = false;
 
 	if (!stackPopParams(3, VAL_INT, &player,
 						VAL_REF|ST_BASEOBJECT, &ppsTarget,
@@ -306,10 +306,10 @@ BOOL scrCBAttacked(void)
 // The button id
 
 // deal with CALL_BUTTON_PRESSED
-BOOL scrCBButtonPressed(void)
+bool scrCBButtonPressed(void)
 {
 	UDWORD	button;
-	BOOL	triggered = false;
+	bool	triggered = false;
 
 	if (!stackPopParams(1, VAL_INT, &button))
 	{
@@ -334,7 +334,7 @@ BOOL scrCBButtonPressed(void)
 DROID	*psCBSelectedDroid;
 
 // deal with CALL_DROID_SELECTED
-BOOL scrCBDroidSelected(void)
+bool scrCBDroidSelected(void)
 {
 	DROID	**ppsDroid;
 
@@ -362,11 +362,11 @@ BOOL scrCBDroidSelected(void)
 BASE_OBJECT *psCBObjDestroyed;
 
 // deal with a CALL_OBJ_DESTROYED
-BOOL scrCBObjDestroyed(void)
+bool scrCBObjDestroyed(void)
 {
 	SDWORD			player;
 	BASE_OBJECT		**ppsObj;
-	BOOL			retval;
+	bool			retval;
 
 	if (!stackPopParams(2, VAL_INT, &player, VAL_REF|ST_BASEOBJECT, &ppsObj))
 	{
@@ -397,11 +397,11 @@ BOOL scrCBObjDestroyed(void)
 
 
 // deal with a CALL_STRUCT_DESTROYED
-BOOL scrCBStructDestroyed(void)
+bool scrCBStructDestroyed(void)
 {
 	SDWORD			player;
 	BASE_OBJECT		**ppsObj;
-	BOOL			retval;
+	bool			retval;
 
 	if (!stackPopParams(2, VAL_INT, &player, VAL_REF|ST_STRUCTURE, &ppsObj))
 	{
@@ -432,11 +432,11 @@ BOOL scrCBStructDestroyed(void)
 
 
 // deal with a CALL_DROID_DESTROYED
-BOOL scrCBDroidDestroyed(void)
+bool scrCBDroidDestroyed(void)
 {
 	SDWORD			player;
 	BASE_OBJECT		**ppsObj;
-	BOOL			retval;
+	bool			retval;
 
 	if (!stackPopParams(2, VAL_INT, &player, VAL_REF|ST_DROID, &ppsObj))
 	{
@@ -467,10 +467,10 @@ BOOL scrCBDroidDestroyed(void)
 
 
 // deal with a CALL_FEATURE_DESTROYED
-BOOL scrCBFeatureDestroyed(void)
+bool scrCBFeatureDestroyed(void)
 {
 	BASE_OBJECT		**ppsObj;
-	BOOL			retval;
+	bool			retval;
 
 	if (!stackPopParams(1, VAL_REF|ST_FEATURE, &ppsObj))
 	{
@@ -504,12 +504,12 @@ BASE_OBJECT		*psScrCBObjSeen;
 BASE_OBJECT		*psScrCBObjViewer;
 
 // deal with all the object seen functions
-static BOOL scrCBObjectSeen(SDWORD callback)
+static bool scrCBObjectSeen(SDWORD callback)
 {
 	BASE_OBJECT		**ppsObj;
 	BASE_OBJECT		**ppsViewer;
 	SDWORD			player;
-	BOOL			retval;
+	bool			retval;
 
 	if (!stackPopParams(3, VAL_INT, &player, VAL_REF|ST_BASEOBJECT, &ppsObj, VAL_REF|ST_BASEOBJECT, &ppsViewer))
 	{
@@ -561,33 +561,33 @@ static BOOL scrCBObjectSeen(SDWORD callback)
 }
 
 // deal with a CALL_OBJ_SEEN
-BOOL scrCBObjSeen(void)
+bool scrCBObjSeen(void)
 {
 	return scrCBObjectSeen(CALL_OBJ_SEEN);
 }
 
 // deal with a CALL_DROID_SEEN
-BOOL scrCBDroidSeen(void)
+bool scrCBDroidSeen(void)
 {
 	return scrCBObjectSeen(CALL_DROID_SEEN);
 }
 
 // deal with a CALL_STRUCT_SEEN
-BOOL scrCBStructSeen(void)
+bool scrCBStructSeen(void)
 {
 	return scrCBObjectSeen(CALL_STRUCT_SEEN);
 }
 
 // deal with a CALL_FEATURE_SEEN
-BOOL scrCBFeatureSeen(void)
+bool scrCBFeatureSeen(void)
 {
 	return scrCBObjectSeen(CALL_FEATURE_SEEN);
 }
 
-BOOL scrCBTransporterOffMap( void )
+bool scrCBTransporterOffMap( void )
 {
 	SDWORD	player;
-	BOOL	retval;
+	bool	retval;
 	DROID	*psTransporter;
 
 	if (!stackPopParams(1, VAL_INT, &player) )
@@ -616,12 +616,12 @@ BOOL scrCBTransporterOffMap( void )
 	return true;
 }
 
-BOOL scrCBTransporterLanded( void )
+bool scrCBTransporterLanded( void )
 {
 	SDWORD			player;
 	DROID_GROUP		*psGroup;
 	DROID			*psTransporter, *psDroid, *psNext;
-	BOOL			retval;
+	bool			retval;
 
 	if (!stackPopParams(2, ST_GROUP, &psGroup, VAL_INT, &player))
 	{
@@ -663,12 +663,12 @@ BOOL scrCBTransporterLanded( void )
 	return true;
 }
 
-BOOL scrCBTransporterLandedB( void )
+bool scrCBTransporterLandedB( void )
 {
 	SDWORD			player;
 	DROID_GROUP		*psGroup;
 	DROID			*psTransporter, *psDroid, *psNext;
-	BOOL			retval;
+	bool			retval;
 	DROID			**ppsTransp;
 
 	if (!stackPopParams(3, ST_GROUP, &psGroup, VAL_INT, &player,
@@ -719,7 +719,7 @@ BOOL scrCBTransporterLandedB( void )
 
 // tell the scripts when a cluster is no longer valid
 SDWORD	scrCBEmptyClusterID;
-BOOL scrCBClusterEmpty( void )
+bool scrCBClusterEmpty( void )
 {
 	SDWORD		*pClusterID;
 
@@ -742,11 +742,11 @@ BOOL scrCBClusterEmpty( void )
 // note when a vtol has finished returning to base - used to vanish
 // vtols when they are attacking from off map
 DROID *psScrCBVtolOffMap;
-BOOL scrCBVtolOffMap(void)
+bool scrCBVtolOffMap(void)
 {
 	SDWORD	player;
 	DROID	**ppsVtol;
-	BOOL	retval;
+	bool	retval;
 
 	if (!stackPopParams(2, VAL_INT, &player, VAL_REF|ST_DROID, &ppsVtol))
 	{
@@ -777,11 +777,11 @@ BOOL scrCBVtolOffMap(void)
 }
 
 /*called when selectedPlayer completes some research*/
-BOOL scrCBResCompleted(void)
+bool scrCBResCompleted(void)
 {
 	RESEARCH	**ppsResearch;
 	STRUCTURE	**ppsResFac;
-	BOOL	    retVal;
+	bool	    retVal;
 	SDWORD		resFacOwner;
 
 	if (!stackPopParams(3, VAL_REF|ST_RESEARCH, &ppsResearch,
@@ -819,7 +819,7 @@ BOOL scrCBResCompleted(void)
 
 
 /* when a humna player leaves a game*/
-BOOL scrCBPlayerLeft(void)
+bool scrCBPlayerLeft(void)
 {
 	SDWORD	*player;
 	if (!stackPopParams(1, VAL_REF | VAL_INT, &player) )
@@ -840,7 +840,7 @@ BOOL scrCBPlayerLeft(void)
 
 
 // alliance has been offered.
-BOOL scrCBAllianceOffer(void)
+bool scrCBAllianceOffer(void)
 {
 	SDWORD	*from,*to;
 
@@ -867,7 +867,7 @@ BOOL scrCBAllianceOffer(void)
 
 //console callback
 //---------------------------
-BOOL scrCallConsole(void)
+bool scrCallConsole(void)
 {
 	SDWORD	*player;
 	char	**ConsoleText = NULL;
@@ -900,7 +900,7 @@ BOOL scrCallConsole(void)
 
 //multiplayer beacon
 //---------------------------
-BOOL scrCallBeacon(void)
+bool scrCallBeacon(void)
 {
 	SDWORD	*playerFrom, playerTo;
 	char	**BeaconText = NULL;
@@ -968,7 +968,7 @@ BOOL scrCallBeacon(void)
 
 //multiplayer message callback
 //----------------------------
-BOOL scrCallMultiMsg(void)
+bool scrCallMultiMsg(void)
 {
 	SDWORD	*player, playerTo;
 	char	**ConsoleText = NULL;
@@ -1030,11 +1030,11 @@ STRUCTURE	*psScrCBNewStruct = NULL;	//for scrCBStructBuilt callback
 DROID		*psScrCBNewStructTruck = NULL;
 //structure built callback
 //------------------------------
-BOOL scrCBStructBuilt(void)
+bool scrCBStructBuilt(void)
 {
 	SDWORD		player;
 	STRUCTURE	**ppsStructure;
-	BOOL		triggered = false;
+	bool		triggered = false;
 	DROID		**ppsDroid;
 
 	if (!stackPopParams(3, VAL_INT, &player, VAL_REF|ST_DROID, &ppsDroid, VAL_REF|ST_STRUCTURE, &ppsStructure) )
@@ -1077,11 +1077,11 @@ BOOL scrCBStructBuilt(void)
 }
 
 /* Droid received stop order */
-BOOL scrCBDorderStop(void)
+bool scrCBDorderStop(void)
 {
 	SDWORD		player;
 	DROID		**ppsDroid;
-	BOOL	triggered = false;
+	bool	triggered = false;
 
 	if (!stackPopParams(2, VAL_INT, &player, VAL_REF|ST_DROID, &ppsDroid))
 	{
@@ -1111,12 +1111,12 @@ BOOL scrCBDorderStop(void)
 }
 
 /* Droid reached destination point and stopped on its own */
-BOOL scrCBDorderReachedLocation(void)
+bool scrCBDorderReachedLocation(void)
 {
 	SDWORD		player;
 	SDWORD		*Order = NULL;
 	DROID		**ppsDroid;
-	BOOL	triggered = false;
+	bool	triggered = false;
 
 	if (!stackPopParams(3, VAL_INT, &player, VAL_REF|ST_DROID, &ppsDroid
 		,VAL_REF | VAL_INT, &Order))
@@ -1148,7 +1148,7 @@ BOOL scrCBDorderReachedLocation(void)
 }
 
 /* Process key-combo */
-BOOL scrCBProcessKeyPress(void)
+bool scrCBProcessKeyPress(void)
 {
 	SDWORD		*key = NULL, *metaKey = NULL;
 

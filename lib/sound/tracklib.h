@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -28,14 +28,14 @@
 #include "track.h"
 #include "lib/framework/vector.h"
 
-BOOL	sound_InitLibrary( void );
+bool	sound_InitLibrary( void );
 void	sound_ShutdownLibrary( void );
 
 void	sound_FreeTrack( TRACK * psTrack );
 
-BOOL	sound_Play2DSample( TRACK * psTrack, AUDIO_SAMPLE * psSample,
-							BOOL bQueued );
-BOOL	sound_Play3DSample( TRACK * psTrack, AUDIO_SAMPLE * psSample );
+bool	sound_Play2DSample( TRACK * psTrack, AUDIO_SAMPLE * psSample,
+							bool bQueued );
+bool	sound_Play3DSample( TRACK * psTrack, AUDIO_SAMPLE * psSample );
 void	sound_StopSample(AUDIO_SAMPLE* psSample);
 void	sound_PauseSample( AUDIO_SAMPLE * psSample );
 void	sound_ResumeSample( AUDIO_SAMPLE * psSample );
@@ -44,11 +44,11 @@ AUDIO_STREAM* sound_PlayStream(PHYSFS_file* PHYSFS_fileHandle, float volume, voi
 
 void	sound_SetSampleFreq( AUDIO_SAMPLE * psSample, SDWORD iFreq );
 void	sound_SetSampleVol( AUDIO_SAMPLE * psSample, SDWORD iVol,
-							BOOL bScale3D );
+							bool bScale3D );
 
 int		sound_GetNumSamples( void );
-BOOL	sound_SampleIsFinished( AUDIO_SAMPLE * psSample );
-BOOL	sound_QueueSamplePlaying( void );
+bool	sound_SampleIsFinished( AUDIO_SAMPLE * psSample );
+bool	sound_QueueSamplePlaying( void );
 
 void	sound_SetPlayerPos(Vector3f pos);
 void sound_SetPlayerOrientationVector(Vector3f forward, Vector3f up);

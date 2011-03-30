@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 2008  Giel van Schijndel
-	Copyright (C) 2008-2010  Warzone 2100 Project
+	Copyright (C) 2008-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ extern void dbgDumpHeader(DumpFileHandle file);
  */
 extern void dbgDumpLog(DumpFileHandle file);
 
-extern void dbgDumpInit(int argc, char* argv[]);
+extern void dbgDumpInit(int argc, const char** argv);
 
 extern void addDumpInfo(const char *inbuffer);
 

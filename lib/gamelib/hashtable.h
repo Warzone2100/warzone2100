@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -60,16 +60,15 @@ typedef void	(* HASHFREEFUNC)	( void *psElement );
 /* structs
  */
 
-typedef struct HASHNODE
+struct HASHNODE
 {
 	intptr_t			iKey1;
 	intptr_t			iKey2;
 	void			*psElement;
-	struct HASHNODE		*psNext;
-}
-HASHNODE;
+	HASHNODE *              psNext;
+};
 
-typedef struct HASHTABLE
+struct HASHTABLE
 {
 	HASHNODE		**ppsNode;
 	HASHNODE		*psNextNode;
@@ -80,8 +79,7 @@ typedef struct HASHTABLE
 	UDWORD			udwExtElements;
 	UDWORD			udwElementSize;
 	UDWORD			sdwCurIndex;
-}
-HASHTABLE;
+};
 
 /***************************************************************************/
 /* functions
@@ -96,7 +94,7 @@ HASHTABLE;
  * \param	udwExtElements	number of elements when extending the heap
  * \param	udwElementSize	size of elements to be stored in the hashtable
  */
-BOOL	hashTable_Create( HASHTABLE **ppsTable, UDWORD udwTableSize,
+bool	hashTable_Create( HASHTABLE **ppsTable, UDWORD udwTableSize,
 							UDWORD udwInitElements, UDWORD udwExtElements,
 							UDWORD udwElementSize );
 
@@ -141,7 +139,7 @@ void hashTable_InsertElement(HASHTABLE *psTable, void *psElement, intptr_t iKey1
  * \param	iKey2		second key
  * \return	true, if the element was contained in the hashtable
  */
-BOOL hashTable_RemoveElement(HASHTABLE *psTable, void *psElement, intptr_t iKey1, intptr_t iKey2);
+bool hashTable_RemoveElement(HASHTABLE *psTable, void *psElement, intptr_t iKey1, intptr_t iKey2);
 
 /**
  * Calculates hash index from keys and returns element in hash table

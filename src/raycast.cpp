@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -31,10 +31,11 @@
 #include "display3d.h" // TILE_SIZE and clipXY()
 
 
-typedef struct {
+struct HeightCallbackHelp_t
+{
 	const int height;
 	uint16_t pitch;
-} HeightCallbackHelp_t;
+};
 
 
 void rayCast(Vector3i src, uint16_t direction, uint32_t length, RAY_CALLBACK callback, void *data)
@@ -123,7 +124,7 @@ static bool getTileHeightCallback(Vector3i pos, int32_t dist, void *data)
 
 void getBestPitchToEdgeOfGrid(UDWORD x, UDWORD y, uint16_t direction, uint16_t *pitch)
 {
-	HeightCallbackHelp_t help = { map_Height(x,y), 0.0f };
+	HeightCallbackHelp_t help = {map_Height(x,y), 0};
 
 	rayCast(Vector3i(x, y, 0), direction, 5430, getTileHeightCallback, &help); // FIXME Magic value
 

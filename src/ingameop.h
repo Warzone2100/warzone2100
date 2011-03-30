@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -25,16 +25,16 @@
 #define __INCLUDED_SRC_INGAMEOP_H__
 
 // functions
-extern BOOL intAddInGameOptions			(void);
-extern BOOL intCloseInGameOptions		(BOOL bPutUpLoadSave, BOOL bResetMissionWidgets);
-extern void intCloseInGameOptionsNoAnim	(BOOL bResetMissionWidgets);
-extern BOOL intRunInGameOptions			(void);
+extern bool intAddInGameOptions			(void);
+extern bool intCloseInGameOptions		(bool bPutUpLoadSave, bool bResetMissionWidgets);
+extern void intCloseInGameOptionsNoAnim	(bool bResetMissionWidgets);
+extern bool intRunInGameOptions			(void);
 extern void intProcessInGameOptions		(UDWORD);
 extern void intAddInGamePopup(void);
 
 // status bools.
-extern BOOL	ClosingInGameOp;
-extern BOOL	InGameOpUp;
+extern bool	ClosingInGameOp;
+extern bool	InGameOpUp;
 extern bool isInGamePopupUp;
 // ////////////////////////////////////////////////////////////////////////////
 // defines

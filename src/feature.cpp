@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -117,7 +117,7 @@ FEATURE_STATS::FEATURE_STATS(LineView line)
 }
 
 /* Load the feature stats */
-BOOL loadFeatureStats(const char *pFeatureData, UDWORD bufferSize)
+bool loadFeatureStats(const char *pFeatureData, UDWORD bufferSize)
 {
 	// Skip descriptive header
 	if (strncmp(pFeatureData,"Feature ",8)==0)
@@ -194,7 +194,7 @@ int32_t featureDamage(FEATURE *psFeature, UDWORD damage, WEAPON_CLASS weaponClas
 
 
 /* Create a feature on the map */
-FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave)
+FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,bool FromSave)
 {
 	UDWORD		mapX, mapY;
 	UDWORD		width,breadth, foundationMin,foundationMax, height;
@@ -370,7 +370,7 @@ FEATURE::~FEATURE()
 {
 }
 
-void _syncDebugFeature(const char *function, FEATURE *psFeature, char ch)
+void _syncDebugFeature(const char *function, FEATURE const *psFeature, char ch)
 {
 	_syncDebug(function, "%c feature%d = p%d;pos(%d,%d,%d),subtype%d,dam%d,bp%d", ch,
 	          psFeature->id,
@@ -573,6 +573,7 @@ bool destroyFeature(FEATURE *psDel)
 					{
 						/* This remains a blocking tile */
 						psTile->psObject = NULL;
+						auxClearBlocking(mapX + width, mapY + breadth, AIR_BLOCKED);  // Shouldn't remain blocking for air units, however.
 						psTile->texture = TileNumber_texture(psTile->texture) | BLOCKING_RUBBLE_TILE;
 					}
 				}

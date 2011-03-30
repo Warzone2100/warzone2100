@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -34,13 +34,13 @@ extern UDWORD			numFeatureStats;
 extern FEATURE_STATS* oilResFeature;
 
 /* Load the feature stats */
-extern BOOL loadFeatureStats(const char *pFeatureData, UDWORD bufferSize);
+extern bool loadFeatureStats(const char *pFeatureData, UDWORD bufferSize);
 
 /* Release the feature stats memory */
 extern void featureStatsShutDown(void);
 
 /* Create a feature on the map */
-extern FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,BOOL FromSave);
+extern FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,bool FromSave);
 
 /* Update routine for features */
 extern void featureUpdate(FEATURE *psFeat);
@@ -63,11 +63,11 @@ int32_t featureDamage(FEATURE *psFeature, UDWORD damage, WEAPON_CLASS weaponClas
 extern void     featureInitVars(void);
 
 #define syncDebugFeature(psFeature, ch) _syncDebugFeature(__FUNCTION__, psFeature, ch)
-void _syncDebugFeature(const char *function, FEATURE *psFeature, char ch);
+void _syncDebugFeature(const char *function, FEATURE const *psFeature, char ch);
 
 
 // True iff object is a feature.
-static inline bool isFeature(SIMPLE_OBJECT const *psObject)             { return psObject->type == OBJ_FEATURE; }
+static inline bool isFeature(SIMPLE_OBJECT const *psObject)             { return psObject != NULL && psObject->type == OBJ_FEATURE; }
 // Returns FEATURE * if feature or NULL if not.
 static inline FEATURE *castFeature(SIMPLE_OBJECT *psObject)             { return isFeature(psObject)? (FEATURE *)psObject : (FEATURE *)NULL; }
 // Returns FEATURE const * if feature or NULL if not.

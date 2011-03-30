@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@
 
 extern iIMDShape *iV_ProcessIMD(const char **ppFileData, const char *FileDataEnd );
 
-extern BOOL iV_IMDSave(char *filename, iIMDShape *s, BOOL PieIMD);
+extern bool iV_IMDSave(char *filename, iIMDShape *s, bool PieIMD);
 extern void iV_IMDRelease(iIMDShape *s);
 
 // How high up do we want to stop looking

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -20,15 +20,15 @@
 #ifndef _WAVE_CAST_H_
 #define _WAVE_CAST_H_
 
-typedef struct WavecastTile
+struct WavecastTile
 {
 	int16_t dx, dy;            ///< Tile coordinates.
 	int32_t invRadius;         ///< Arbitrary constant divided by radius.
 	int16_t angBegin, angEnd;  ///< Start and finish angles for obstruction of view. Non-linear units, for comparison purposes only.
-} WAVECAST_TILE;
+};
 
 
 // Not thread safe if someone calls with a new radius. Thread safe, otherwise.
-const WAVECAST_TILE *getWavecastTable(unsigned radius, size_t *size);
+const WavecastTile *getWavecastTable(unsigned radius, size_t *size);
 
 #endif //_WAVE_CAST_H_

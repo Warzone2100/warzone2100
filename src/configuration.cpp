@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -53,7 +53,7 @@
 #define GAMESERVERPORT		2100
 
 // ////////////////////////////////////////////////////////////////////////////
-BOOL loadConfig(void)
+bool loadConfig(void)
 {
 	int val;
 	char	sBuf[255];
@@ -488,7 +488,7 @@ BOOL loadConfig(void)
 	// enemy/allies radar view
 	if(getWarzoneKeyNumeric("radarObjectMode", &val))
 	{
-		bEnemyAllyRadarColor =(BOOL)val;
+		bEnemyAllyRadarColor =(bool)val;
 	} else {
 		bEnemyAllyRadarColor = false;
 		setWarzoneKeyNumeric("radarObjectMode", (SDWORD)bEnemyAllyRadarColor);
@@ -620,12 +620,16 @@ BOOL loadConfig(void)
 	{
 		setFramerateLimit(val);
 	}
+	else
+	{
+		setFramerateLimit(60);
+	}
 
 	return closeWarzoneKey();
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-BOOL saveConfig(void)
+bool saveConfig(void)
 {
 	debug( LOG_WZ, "Writing prefs to registry\n" );
 
@@ -712,7 +716,7 @@ BOOL saveConfig(void)
 
 // Saves and loads the relevant part of the config files for MP games
 // Ensures that others' games don't change our own configuration settings
-BOOL reloadMPConfig(void)
+bool reloadMPConfig(void)
 {
 	int val;
 	char	sBuf[255];

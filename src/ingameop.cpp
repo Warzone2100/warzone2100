@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -52,15 +52,15 @@
 #include "warzoneconfig.h"
 
 //status bools.(for hci.h)
-BOOL	ClosingInGameOp	= false;
-BOOL	InGameOpUp		= false;
+bool	ClosingInGameOp	= false;
+bool	InGameOpUp		= false;
 bool 	isInGamePopupUp = false;
 // ////////////////////////////////////////////////////////////////////////////
 // functions
 
 // ////////////////////////////////////////////////////////////////////////////
 
-static BOOL addIGTextButton(UDWORD id, UWORD y, UWORD width, const char *string, UDWORD Style)
+static bool addIGTextButton(UDWORD id, UWORD y, UWORD width, const char *string, UDWORD Style)
 {
 	W_BUTINIT sButInit;
 
@@ -82,7 +82,7 @@ static BOOL addIGTextButton(UDWORD id, UWORD y, UWORD width, const char *string,
 	return true;
 }
 
-static BOOL addQuitOptions(void)
+static bool addQuitOptions(void)
 {
 	if (widgGetFromID(psWScreen,INTINGAMEOP))
 	{
@@ -140,7 +140,7 @@ static BOOL addQuitOptions(void)
 }
 
 
-static BOOL addSlideOptions(void)
+static bool addSlideOptions(void)
 {
 	if (widgGetFromID(psWScreen,INTINGAMEOP))
 	{
@@ -200,7 +200,7 @@ static BOOL addSlideOptions(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 
-static BOOL _intAddInGameOptions(void)
+static bool _intAddInGameOptions(void)
 {
 	audio_StopAll();
 
@@ -284,7 +284,7 @@ static BOOL _intAddInGameOptions(void)
 }
 
 
-BOOL intAddInGameOptions(void)
+bool intAddInGameOptions(void)
 {
 	sliderEnableDrag(true);
 	return _intAddInGameOptions();
@@ -373,7 +373,7 @@ static void ProcessOptionFinished(void)
 
 }
 
-void intCloseInGameOptionsNoAnim(BOOL bResetMissionWidgets)
+void intCloseInGameOptionsNoAnim(bool bResetMissionWidgets)
 {
 	if (NetPlay.isHost)
 	{
@@ -394,7 +394,7 @@ void intCloseInGameOptionsNoAnim(BOOL bResetMissionWidgets)
 
 
 // ////////////////////////////////////////////////////////////////////////////
-BOOL intCloseInGameOptions(BOOL bPutUpLoadSave, BOOL bResetMissionWidgets)
+bool intCloseInGameOptions(bool bPutUpLoadSave, bool bResetMissionWidgets)
 {
 
 	W_TABFORM	*Form;

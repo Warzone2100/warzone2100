@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -47,7 +47,7 @@ uint16_t calcDirection(int32_t x0, int32_t y0, int32_t x1, int32_t y1)
   NB*****THIS WON'T PICK A VTOL DROID*****
 */
 
-DROID	*getNearestDroid(UDWORD x, UDWORD y, BOOL bSelected)
+DROID	*getNearestDroid(UDWORD x, UDWORD y, bool bSelected)
 {
 DROID	*psDroid,*psBestUnit;
 UDWORD	bestSoFar;
@@ -79,19 +79,16 @@ UDWORD	bestSoFar;
 
 /* Returns non-zero if a point is in a 4 sided polygon */
 /* See header file for definition of QUAD */
-int inQuad(const Vector2i *pt, const QUAD *quad)
+bool inQuad(const Vector2i *pt, const QUAD *quad)
 {
-	int i, j, c = 0;
+	bool c = false;
 
-	for (i = 0, j = 3; i < 4; j = i++)
+	for (int i = 0, j = 3; i < 4; j = i++)
 	{
-		if (((quad->coords[i].y <= pt->y && pt->y < quad->coords[j].y) ||
-			(quad->coords[j].y <= pt->y && pt->y < quad->coords[i].y)) &&
-			(pt->x <
-				(quad->coords[j].x - quad->coords[i].x)
-				* (pt->y - quad->coords[i].y)
-				/ (quad->coords[j].y - quad->coords[i].y)
-				+ quad->coords[i].x))
+		Vector2i edge = quad->coords[j] - quad->coords[i];
+		Vector2i pos = *pt - quad->coords[i];
+		if ((     0 <= pos.y && pos.y < edge.y && pos.x * edge.y < pos.y * edge.x) ||
+		    (edge.y <= pos.y && pos.y < 0      && pos.x * edge.y > pos.y * edge.x))
 		{
 			c = !c;
 		}
@@ -100,8 +97,30 @@ int inQuad(const Vector2i *pt, const QUAD *quad)
 	return c;
 }
 
+Vector2i positionInQuad(Vector2i const &pt, QUAD const &quad)
+{
+	int lenSq[4];
+	int ptDot[4];
+	for (int i = 0, j = 3; i < 4; j = i++)
+	{
+		Vector2i edge = quad.coords[j] - quad.coords[i];
+		Vector2i pos  = quad.coords[j] - pt;
+		Vector2i posRot(pos.y, -pos.x);
+		lenSq[i] = edge*edge;
+		ptDot[i] = posRot*edge;
+	}
+	int ret[2];
+	for (int i = 0; i < 2; ++i)
+	{
+		int d1 = ptDot[i]*lenSq[i + 2];
+		int d2 = ptDot[i + 2]*lenSq[i];
+		ret[i] = d1 + d2 != 0? (int64_t)TILE_UNITS*d1 / (d1 + d2) : TILE_UNITS/2;
+	}
+	return Vector2i(ret[0], ret[1]);
+}
+
 //-----------------------------------------------------------------------------------
-BOOL	droidOnScreen( DROID *psDroid, SDWORD tolerance )
+bool	droidOnScreen( DROID *psDroid, SDWORD tolerance )
 {
 SDWORD	dX,dY;
 

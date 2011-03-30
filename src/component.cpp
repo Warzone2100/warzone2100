@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -49,11 +49,11 @@
 //VTOL weapon connector start
 #define VTOL_CONNECTOR_START 5
 
-static BOOL		leftFirst;
+static bool		leftFirst;
 
 // Colour Lookups
 // use col = MAX_PLAYERS for anycolour (see multiint.c)
-BOOL setPlayerColour(UDWORD player, UDWORD col)
+bool setPlayerColour(UDWORD player, UDWORD col)
 {
 	ASSERT(player < MAX_PLAYERS && col < MAX_PLAYERS, "Bad colour setting");
 	NetPlay.players[player].colour = col;
@@ -66,7 +66,7 @@ UBYTE getPlayerColour(UDWORD pl)
 }
 
 
-static void setMatrix(Vector3i *Position, Vector3i *Rotation, BOOL RotXYZ)
+static void setMatrix(Vector3i *Position, Vector3i *Rotation, bool RotXYZ)
 {
 	pie_PerspectiveBegin();
 	pie_MatBegin();
@@ -175,7 +175,7 @@ UDWORD getStructureStatHeight(STRUCTURE_STATS *psStat)
 }
 
 
-void displayIMDButton(iIMDShape *IMDShape, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale)
+void displayIMDButton(iIMDShape *IMDShape, Vector3i *Rotation, Vector3i *Position, bool RotXYZ, SDWORD scale)
 {
 	setMatrix(Position, Rotation, RotXYZ);
 	pie_MatScale(scale / 100.f);
@@ -187,7 +187,7 @@ void displayIMDButton(iIMDShape *IMDShape, Vector3i *Rotation, Vector3i *Positio
 
 
 //changed it to loop thru and draw all weapons
-void displayStructureButton(STRUCTURE *psStructure, Vector3i *rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale)
+void displayStructureButton(STRUCTURE *psStructure, Vector3i *rotation, Vector3i *Position, bool RotXYZ, SDWORD scale)
 {
 	iIMDShape *baseImd,*strImd;//*mountImd,*weaponImd;
 	iIMDShape *mountImd[STRUCT_MAXWEAPS];
@@ -284,7 +284,7 @@ void displayStructureButton(STRUCTURE *psStructure, Vector3i *rotation, Vector3i
 	unsetMatrix();
 }
 
-void displayStructureStatButton(STRUCTURE_STATS *Stats, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale)
+void displayStructureStatButton(STRUCTURE_STATS *Stats, Vector3i *Rotation, Vector3i *Position, bool RotXYZ, SDWORD scale)
 {
 	iIMDShape		*baseImd,*strImd;//*mountImd,*weaponImd;
 	iIMDShape *mountImd[STRUCT_MAXWEAPS];
@@ -392,7 +392,7 @@ void displayStructureStatButton(STRUCTURE_STATS *Stats, Vector3i *Rotation, Vect
 // Render a component given a BASE_STATS structure.
 //
 void displayComponentButton(BASE_STATS *Stat, Vector3i *Rotation, Vector3i *Position,
-                            BOOL RotXYZ, SDWORD scale)
+                            bool RotXYZ, SDWORD scale)
 {
 	iIMDShape *ComponentIMD = NULL;
 	iIMDShape *MountIMD = NULL;
@@ -440,7 +440,7 @@ void displayComponentButton(BASE_STATS *Stat, Vector3i *Rotation, Vector3i *Posi
 
 // Render a research item given a BASE_STATS structure.
 //
-void displayResearchButton(BASE_STATS *Stat, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale)
+void displayResearchButton(BASE_STATS *Stat, Vector3i *Rotation, Vector3i *Position, bool RotXYZ, SDWORD scale)
 {
 	iIMDShape *ResearchIMD = ((RESEARCH *)Stat)->pIMD;
 	iIMDShape *MountIMD = ((RESEARCH *)Stat)->pIMD2;
@@ -498,7 +498,7 @@ static iIMDShape *getRightPropulsionIMD(DROID *psDroid)
 /* Assumes matrix context is already set */
 // this is able to handle multiple weapon graphics now
 // removed mountRotation,they get such stuff from psObj directly now
-static void displayCompObj(DROID *psDroid, BOOL bButton)
+static void displayCompObj(DROID *psDroid, bool bButton)
 {
 	iIMDShape               *psShape, *psJet, *psShapeTemp = NULL, *psMountShape;
 	Vector3i                zero(0, 0, 0);
@@ -943,7 +943,7 @@ static void displayCompObj(DROID *psDroid, BOOL bButton)
 
 // Render a composite droid given a DROID_TEMPLATE structure.
 //
-void displayComponentButtonTemplate(DROID_TEMPLATE *psTemplate, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale)
+void displayComponentButtonTemplate(DROID_TEMPLATE *psTemplate, Vector3i *Rotation, Vector3i *Position, bool RotXYZ, SDWORD scale)
 {
 	setMatrix(Position, Rotation, RotXYZ);
 	pie_MatScale(scale / 100.f);
@@ -966,7 +966,7 @@ void displayComponentButtonTemplate(DROID_TEMPLATE *psTemplate, Vector3i *Rotati
 
 // Render a composite droid given a DROID structure.
 //
-void displayComponentButtonObject(DROID *psDroid, Vector3i *Rotation, Vector3i *Position, BOOL RotXYZ, SDWORD scale)
+void displayComponentButtonObject(DROID *psDroid, Vector3i *Rotation, Vector3i *Position, bool RotXYZ, SDWORD scale)
 {
 	SDWORD		difference;
 
@@ -1080,19 +1080,15 @@ void displayComponentObject(DROID *psDroid)
 
 void destroyFXDroid(DROID	*psDroid)
 {
-	UDWORD	i;
-	iIMDShape	*psImd = NULL;
-	SDWORD	widthScatter, breadthScatter, heightScatter;
-	Vector3i pos;
-
-	widthScatter = TILE_UNITS/4;
-	breadthScatter = TILE_UNITS/4;
-	heightScatter = TILE_UNITS/5;
-	for(i=0; i<5; i++)
+	for (int i = 0; i < 5; ++i)
 	{
-		pos.x = psDroid->pos.x + widthScatter - rand()%(2*widthScatter);
-		pos.z = psDroid->pos.y + breadthScatter - rand()%(2*breadthScatter);
-		pos.y = psDroid->pos.z + 16 +heightScatter;
+		iIMDShape *psImd = NULL;
+
+		int maxHorizontalScatter = TILE_UNITS/4;
+		int heightScatter = TILE_UNITS/5;
+		Vector2i horizontalScatter = iSinCosR(rand(), rand()%maxHorizontalScatter);
+
+		Vector3i pos = swapYZ(psDroid->pos + Vector3i(horizontalScatter, 16 + heightScatter));
 		switch(i)
 		{
 		case 0:
@@ -1109,18 +1105,11 @@ void destroyFXDroid(DROID	*psDroid)
 				{
 					if(psDroid->asWeaps[0].nStat > 0)
 					{
-						// Tell the effect system that it needs to use this player's color for the next effect
-						SetEffectForPlayer(psDroid->player);
 						psImd = WEAPON_MOUNT_IMD(psDroid, 0);
 					}
 				}
-				else
-				{
-					psImd = getRandomDebrisImd();
-				}
 				break;
 			default:
-				psImd = getRandomDebrisImd();
 				break;
 			}
 			break;
@@ -1139,30 +1128,19 @@ void destroyFXDroid(DROID	*psDroid)
 					// get main weapon
 					psImd = WEAPON_IMD(psDroid, 0);
 				}
-				else
-				{
-					psImd = getRandomDebrisImd();
-				}
 				break;
 			default:
-				psImd = getRandomDebrisImd();
 				break;
 			}
 			break;
-		case 2:
-		case 3:
-		case 4:
+		}
+		if (psImd == NULL)
+		{
 			psImd = getRandomDebrisImd();
-			break;
 		}
-		if(psImd)
-		{
-			addEffect(&pos,EFFECT_GRAVITON,GRAVITON_TYPE_EMITTING_DR,true,psImd,getPlayerColour(psDroid->player));
-		}
-		else
-		{
-			addEffect(&pos,EFFECT_GRAVITON,GRAVITON_TYPE_EMITTING_DR,true,getRandomDebrisImd(),0);
-		}
+		// Tell the effect system that it needs to use this player's color for the next effect
+		SetEffectForPlayer(psDroid->player);
+		addEffect(&pos, EFFECT_GRAVITON, GRAVITON_TYPE_EMITTING_DR, true, psImd, getPlayerColour(psDroid->player));
 	}
 }
 
@@ -1181,6 +1159,7 @@ void	compPersonToBits(DROID *psDroid)
 	/* get bits pointers according to whether baba or cyborg*/
 	if (cyborgDroid(psDroid))
 	{
+		// This is probably unused now, since there's a more appropriate effect for cyborgs.
 		headImd = getImdFromIndex(MI_CYBORG_HEAD);
 		legsImd = getImdFromIndex(MI_CYBORG_LEGS);
 		armImd  = getImdFromIndex(MI_CYBORG_ARM);

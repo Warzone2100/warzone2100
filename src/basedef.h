@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -41,10 +41,10 @@ enum OBJECT_TYPE
 	OBJ_NUM_TYPES,  ///< number of object types - MUST BE LAST
 };
 
-typedef struct _tilePos
+struct TILEPOS
 {
 	UBYTE x, y;
-} TILEPOS;
+};
 
 /*
  Coordinate system used for objects in Warzone 2100:
@@ -147,7 +147,7 @@ static inline int objPosDiffSq(SIMPLE_OBJECT const *pos1, SIMPLE_OBJECT const *p
 }
 
 // True iff object is a droid, structure or feature (not a projectile). Will incorrectly return true if passed a nonsense object of type OBJ_TARGET or OBJ_NUM_TYPES.
-static inline bool isBaseObject(SIMPLE_OBJECT const *psObject)                 { return psObject->type != OBJ_PROJECTILE; }
+static inline bool isBaseObject(SIMPLE_OBJECT const *psObject)                 { return psObject != NULL && psObject->type != OBJ_PROJECTILE; }
 // Returns BASE_OBJECT * if base_object or NULL if not.
 static inline BASE_OBJECT *castBaseObject(SIMPLE_OBJECT *psObject)             { return isBaseObject(psObject)? (BASE_OBJECT *)psObject : (BASE_OBJECT *)NULL; }
 // Returns BASE_OBJECT const * if base_object or NULL if not.

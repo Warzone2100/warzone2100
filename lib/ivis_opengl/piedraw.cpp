@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -20,11 +20,10 @@
 /** \file
  *  Render routines for 3D coloured and shaded transparency rendering.
  */
-
-#include <GLee.h>
-#include <string.h>
-
 #include "lib/framework/frame.h"
+#include <GLee.h>
+// NOTE: Header order is very important, don't change the above!
+
 #include "lib/ivis_opengl/ivisdef.h"
 #include "lib/ivis_opengl/imd.h"
 #include "lib/ivis_opengl/piefunc.h"
@@ -36,6 +35,9 @@
 #include "piematrix.h"
 #include "screen.h"
 
+
+#include <string.h>
+
 #define SHADOW_END_DISTANCE (8000*8000) // Keep in sync with lighting.c:FOG_END
 
 #define VERTICES_PER_TRIANGLE 3
@@ -45,7 +47,7 @@
 #define TRIANGLES_PER_TILE 2
 #define VERTICES_PER_TILE (TRIANGLES_PER_TILE * VERTICES_PER_TRIANGLE)
 
-extern BOOL drawing_interface;
+extern bool drawing_interface;
 
 /*
  *	Local Variables
@@ -105,22 +107,24 @@ void pie_EndLighting(void)
  * Avoids recalculating vertex projections for every poly
  ***************************************************************************/
 
-typedef struct {
+struct shadowcasting_shape_t
+{
 	float		matrix[16];
 	iIMDShape*	shape;
 	int		flag;
 	int		flag_data;
 	Vector3f	light;
-} shadowcasting_shape_t;
+};
 
-typedef struct {
+struct transluscent_shape_t
+{
 	float		matrix[16];
 	iIMDShape*	shape;
 	int		frame;
 	PIELIGHT	colour;
 	int		flag;
 	int		flag_data;
-} transluscent_shape_t;
+};
 
 static shadowcasting_shape_t* scshapes = NULL;
 static unsigned int scshapes_size = 0;
@@ -268,7 +272,7 @@ static void addToEdgeList(int a, int b, EDGE *edgelist, unsigned int* edge_count
 {
 	EDGE newEdge = {a, b};
 	unsigned int i;
-	BOOL foundMatching = false;
+	bool foundMatching = false;
 
 	for(i = 0; i < *edge_count; i++)
 	{
@@ -711,8 +715,11 @@ void pie_RemainingPasses(void)
  ***************************************************************************/
 void pie_DrawImage(const PIEIMAGE *image, const PIERECT *dest)
 {
-	PIELIGHT colour = WZCOL_WHITE;
+	pie_DrawImage(image, dest, WZCOL_WHITE);
+}
 
+void pie_DrawImage(const PIEIMAGE *image, const PIERECT *dest, PIELIGHT colour)
+{
 	/* Set transparent color to be 0 red, 0 green, 0 blue, 0 alpha */
 	polyCount++;
 

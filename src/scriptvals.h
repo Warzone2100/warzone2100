@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -30,58 +30,58 @@
 #include <physfs.h>
 
 // The possible types of initialisation values
-typedef enum _init_type
+enum INIT_TYPE
 {
 	IT_BOOL,
 	IT_INDEX,
 	IT_STRING,
-} INIT_TYPE;
+};
 
 
 // All the possible values that may be used to initialise a variable
-typedef struct _var_init
+struct VAR_INIT
 {
 	INIT_TYPE	type;
 	SDWORD		index;
 	char		*pString;
-} VAR_INIT;
+};
 
 
 // store array access data
-typedef struct _array_indexes
+struct ARRAY_INDEXES
 {
 	SDWORD		dimensions;
 	SDWORD		elements[VAR_MAX_DIMENSIONS];
-} ARRAY_INDEXES;
+};
 
 /* A simple error reporting routine */
 
 extern void scrv_error(const char* fmt, ...) WZ_DECL_FORMAT(printf, 1, 2);
 
 // Lookup a type
-extern BOOL scrvLookUpType(const char *pIdent, INTERP_TYPE *pType);
+extern bool scrvLookUpType(const char *pIdent, INTERP_TYPE *pType);
 
 // Lookup a variable identifier
-extern BOOL scrvLookUpVar(const char *pIdent, UDWORD *pIndex);
+extern bool scrvLookUpVar(const char *pIdent, UDWORD *pIndex);
 
 // Lookup an array identifier
-extern BOOL scrvLookUpArray(const char *pIdent, UDWORD *pIndex);
+extern bool scrvLookUpArray(const char *pIdent, UDWORD *pIndex);
 
 // Whether the script is run immediately or stored for later use
-typedef enum _scrv_type
+enum SCRV_TYPE
 {
 	SCRV_EXEC,
 	SCRV_NOEXEC,
-} SCRV_TYPE;
+};
 
 // Add a new context to the list
-extern BOOL scrvAddContext(char *pID, SCRIPT_CONTEXT *psContext, SCRV_TYPE type);
+extern bool scrvAddContext(char *pID, SCRIPT_CONTEXT *psContext, SCRV_TYPE type);
 
 // Get a context from the list
-extern BOOL scrvGetContext(char *pID, SCRIPT_CONTEXT **ppsContext);
+extern bool scrvGetContext(char *pID, SCRIPT_CONTEXT **ppsContext);
 
 // Add a new base pointer variable
-extern BOOL scrvAddBasePointer(INTERP_VAL *psVal);
+extern bool scrvAddBasePointer(INTERP_VAL *psVal);
 
 // Check all the base pointers to see if they have died
 extern void scrvUpdateBasePointers(void);
@@ -90,13 +90,13 @@ extern void scrvUpdateBasePointers(void);
 extern void scrvReleaseBasePointer(INTERP_VAL *psVal);
 
 // create a group structure for a ST_GROUP variable
-extern BOOL scrvNewGroup(INTERP_VAL *psVal);
+extern bool scrvNewGroup(INTERP_VAL *psVal);
 
 // release a ST_GROUP variable
 extern void scrvReleaseGroup(INTERP_VAL *psVal);
 
 // Initialise the script value module
-extern BOOL scrvInitialise(void);
+extern bool scrvInitialise(void);
 
 // Shut down the script value module
 extern void scrvShutDown(void);
@@ -105,9 +105,9 @@ extern void scrvShutDown(void);
 extern void scrvReset(void);
 
 // Load a script value file
-extern BOOL scrvLoad(PHYSFS_file* fileHandle);
+extern bool scrvLoad(PHYSFS_file* fileHandle);
 
 // Link any object types to the actual pointer values
-//extern BOOL scrvLinkValues(void);
+//extern bool scrvLinkValues(void);
 
 #endif // __INCLUDED_SRC_SCRIPTVALS_H__

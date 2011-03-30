@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -45,17 +45,17 @@
 SDWORD		scrGameLevel = 0;
 
 // whether the tutorial is active
-BOOL		bInTutorial = false;
+bool		bInTutorial = false;
 
 // whether any additional special case victory/failure conditions have been met
-BOOL		bExtraVictoryFlag = false;
-BOOL		bExtraFailFlag = false;
+bool		bExtraVictoryFlag = false;
+bool		bExtraFailFlag = false;
 
 
 
 // whether or not to track the player's transporter as it comes
 // into an offworld mission.
-BOOL		bTrackTransporter = false;
+bool		bTrackTransporter = false;
 
 
 // reset the script externals for a new level
@@ -69,7 +69,7 @@ void scrExternReset(void)
 
 
 // General function to get some basic game values
-BOOL scrGenExternGet(UDWORD index)
+bool scrGenExternGet(UDWORD index)
 {
 	INTERP_TYPE		type;
 	INTERP_VAL	scrFunctionResult;	//function return value to be pushed to stack
@@ -163,7 +163,7 @@ BOOL scrGenExternGet(UDWORD index)
 
 
 // General function to set some basic game values
-BOOL scrGenExternSet(UDWORD index)
+bool scrGenExternSet(UDWORD index)
 {
 	INTERP_VAL		sVal;
 	INTERP_TYPE		type;

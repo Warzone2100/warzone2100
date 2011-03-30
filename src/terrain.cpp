@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -56,7 +56,7 @@
  * The actual geometry and texture data is not stored in here but in large VBO's.
  * The sector only stores the index and length of the pieces it's going to use.
  */
-typedef struct
+struct Sector
 {
 	int geometryOffset;      ///< The point in the geometry VBO where our geometry starts
 	int geometrySize;        ///< The size of our geometry
@@ -74,20 +74,20 @@ typedef struct
 	int decalSize;           ///< Size of the part of the decal VBO we are going to use
 	bool draw;               ///< Do we draw this sector this frame?
 	bool dirty;              ///< Do we need to update the geometry for this sector?
-} Sector;
+};
 
 /// A vertex with just a position
-typedef struct
+struct RenderVertex
 {
 	GLfloat x, y, z;        // Vertex
-} RenderVertex;
+};
 
 /// A vertex with a position and texture coordinates
-typedef struct
+struct DecalVertex
 {
 	GLfloat x, y, z;
 	GLfloat u, v;          // uv
-} DecalVertex;
+};
 
 /// The lightmap texture
 static GLuint lightmap_tex_num;
@@ -1084,12 +1084,12 @@ void drawTerrain(void)
 	int layer;
 	int offset, size;
 	float xPos, yPos, distance;
-	const GLfloat paramsX[4] = {1.0/world_coord(mapWidth)*((float)mapWidth/lightmapWidth), 0, 0, 0};
-	const GLfloat paramsY[4] = {0, 0, -1.0/world_coord(mapHeight)*((float)mapHeight/lightmapHeight), 0};
+	const GLfloat paramsX[4] = {1.0f/world_coord(mapWidth)*((float)mapWidth/lightmapWidth), 0, 0, 0};
+	const GLfloat paramsY[4] = {0, 0, -1.0f/world_coord(mapHeight)*((float)mapHeight/lightmapHeight), 0};
 
 	///////////////////////////////////
+	glError();	// clear error codes
 	// set up the lightmap texture
-
 	glActiveTexture(GL_TEXTURE1);
 	// bind the texture
 	glBindTexture(GL_TEXTURE_2D, lightmap_tex_num);
@@ -1287,8 +1287,8 @@ void drawTerrain(void)
 	// draw each layer separately
 	for (layer = 0; layer < numGroundTypes; layer++)
 	{
-		const GLfloat paramsX[4] = {0, 0, -1.0/world_coord(psGroundTypes[layer].textureSize), 0};
-		const GLfloat paramsY[4] = {1.0/world_coord(psGroundTypes[layer].textureSize), 0, 0, 0};
+		const GLfloat paramsX[4] = {0, 0, -1.0f/world_coord(psGroundTypes[layer].textureSize), 0};
+		const GLfloat paramsY[4] = {1.0f/world_coord(psGroundTypes[layer].textureSize), 0, 0, 0};
 
 		// load the texture
 		texPage = iV_GetTexture(psGroundTypes[layer].textureName);
@@ -1342,8 +1342,12 @@ void drawTerrain(void)
 
 	// select the terrain texture page
 	pie_SetTexturePage(terrainPage); glError();
+
 	// use the alpha to blend
 	pie_SetRendMode(REND_ALPHA);
+	// don't blend decals with another color
+	glColor3f( 1.f, 1.f, 1.f);
+
 	// and the texture coordinates buffer
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY); glError();
 	glEnableClientState(GL_VERTEX_ARRAY); glError();
@@ -1405,10 +1409,10 @@ void drawTerrain(void)
 void drawWater(void)
 {
 	int x, y;
-	const GLfloat paramsX[4] = {0, 0, -1.0/world_coord(4), 0}; 
-	const GLfloat paramsY[4] = {1.0/world_coord(4), 0, 0, 0};
-	const GLfloat paramsX2[4] = {0, 0, -1.0/world_coord(5), 0}; 
-	const GLfloat paramsY2[4] = {1.0/world_coord(5), 0, 0, 0};
+	const GLfloat paramsX[4] = {0, 0, -1.0f/world_coord(4), 0};
+	const GLfloat paramsY[4] = {1.0f/world_coord(4), 0, 0, 0};
+	const GLfloat paramsX2[4] = {0, 0, -1.0f/world_coord(5), 0};
+	const GLfloat paramsY2[4] = {1.0f/world_coord(5), 0, 0, 0};
 	const GLfloat white[4] = {1.0f, 1.0f, 1.0f, 1.0f};
 	const GLfloat fogColour[4] = {pie_GetFogColour().byte.r/255.f,
 									pie_GetFogColour().byte.g/255.f,

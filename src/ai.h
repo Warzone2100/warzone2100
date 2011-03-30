@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -45,13 +45,13 @@ extern PlayerMask satuplinkbits;
 #define aiCheckAlliances(_s1, _s2) (alliances[_s1][_s2] == ALLIANCE_FORMED)
 
 /* Initialise the AI system */
-BOOL aiInitialise(void);
+bool aiInitialise(void);
 
 /* Shutdown the AI system */
-BOOL aiShutdown(void);
+bool aiShutdown(void);
 
 /* Initialise a droid structure for AI */
-//extern BOOL aiInitDroid(DROID *psDroid);
+//extern bool aiInitDroid(DROID *psDroid);
 
 /* Do the AI for a droid */
 void aiUpdateDroid(DROID *psDroid);
@@ -62,20 +62,20 @@ int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, i
 int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, void const *extraRange);
 
 // Are there a lot of bullets heading towards the structure?
-BOOL aiObjectIsProbablyDoomed(BASE_OBJECT *psObject);
+bool aiObjectIsProbablyDoomed(BASE_OBJECT *psObject);
 
 // Update the expected damage of the object.
 void aiObjectAddExpectedDamage(BASE_OBJECT *psObject, SDWORD damage);
 
 /* See if there is a target in range added int weapon_slot*/
-BOOL aiChooseTarget(BASE_OBJECT *psObj,
-						   BASE_OBJECT **ppsTarget, int weapon_slot, BOOL bUpdateTarget, UWORD *targetOrigin);
+bool aiChooseTarget(BASE_OBJECT *psObj,
+						   BASE_OBJECT **ppsTarget, int weapon_slot, bool bUpdateTarget, UWORD *targetOrigin);
 
 /** See if there is a target in range for Sensor objects. */
-BOOL aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget);
+bool aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget);
 
 /*set of rules which determine whether the weapon associated with the object
 can fire on the propulsion type of the target*/
-BOOL validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget, int weapon_slot);
+bool validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget, int weapon_slot);
 
 #endif // __INCLUDED_SRC_AI_H__

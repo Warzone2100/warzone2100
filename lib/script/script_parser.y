@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -42,12 +42,12 @@ extern int scr_lex(void);
 extern int scr_lex_destroy(void);
 
 /* Error return codes for code generation functions */
-typedef enum _code_error
+enum CODE_ERROR
 {
 	CE_OK,				// No error
 	CE_MEMORY,			// Out of memory
 	CE_PARSE			// A parse error occured
-} CODE_ERROR;
+};
 
 /* Turn off a couple of warnings that the yacc generated code gives */
 
@@ -67,7 +67,7 @@ static OBJVAR_BLOCK	*psObjVarBlock=NULL;
 static PARAM_BLOCK	*psCurrPBlock=NULL;
 
 /* Any errors occured? */
-static BOOL bError=false;
+static bool bError=false;
 
 //String support
 //-----------------------------
@@ -111,7 +111,7 @@ EVENT_SYMBOL		*psCurEvent = NULL;		/* stores current event: for local var declar
 static INTERP_TYPE	objVarContext = (INTERP_TYPE)0;
 
 /* Control whether debug info is generated */
-static BOOL			genDebugInfo = true;
+static bool			genDebugInfo = true;
 
 /* Currently defined triggers */
 static TRIGGER_SYMBOL	*psTriggers;
@@ -124,7 +124,7 @@ static UDWORD			numEvents;
 /* This is true when local variables are being defined.
  * (So local variables can have the same name as global ones)
  */
-static BOOL localVariableDef=false;
+static bool localVariableDef=false;
 
 /* The identifier for the current script function being defined */
 //static char *pCurrFuncIdent=NULL;
@@ -531,7 +531,7 @@ static void freeVARIDENTDECL(VAR_IDENT_DECL* psDcl)
 /* Macros to store a value in a code block */
 #define PUT_DATA_BOOL(ip, value) \
 	(ip)->type = VAL_BOOL; \
-	(ip)->v.bval = (BOOL)(value); \
+	(ip)->v.bval = (int32_t)(value); \
 	(ip)++
 
 #define PUT_DATA_INT(ip, value) \
@@ -714,13 +714,13 @@ void script_debug(const char *pFormat, ...)
  */
 static CODE_ERROR scriptCodeFunction(FUNC_SYMBOL	*psFSymbol,		// The function being called
 							PARAM_BLOCK		*psPBlock,		// The functions parameters
-							BOOL			expContext,		// Whether the function is being
+							int32_t			expContext,		// Whether the function is being
 															// called in an expression context
 							CODE_BLOCK		**ppsCBlock)	// The generated code block
 {
 	UDWORD		size, i;
 	INTERP_VAL	*ip;
-	BOOL		typeError = false;
+	bool		typeError = false;
 	char		aErrorString[255];
 	INTERP_TYPE	type1,type2;
 
@@ -853,7 +853,7 @@ static CODE_ERROR scriptCodeCallbackParams(
 {
 	UDWORD		size, i;
 	INTERP_VAL	*ip;
-	BOOL		typeError = false;
+	bool		typeError = false;
 	char		aErrorString[255];
 
 	ASSERT( psPBlock != NULL,
@@ -1256,7 +1256,7 @@ static CODE_ERROR scriptCodeBinaryOperator(CODE_BLOCK	*psFirst,	// Code for firs
 
 /* check if the arguments in the function definition body match the argument types
 and names from function declaration (if there was any) */
-static BOOL checkFuncParamType(UDWORD argIndex, UDWORD argType)
+static bool checkFuncParamType(UDWORD argIndex, UDWORD argType)
 {
 	VAR_SYMBOL		*psCurr;
 	SDWORD			i,j;
@@ -1557,7 +1557,7 @@ static CODE_ERROR scriptCodeVarRef(VAR_SYMBOL		*psVariable,	// The object variab
 
 %union {
 	/* Types returned by the lexer */
-	BOOL			bval;
+	int32_t			bval;
 	float			fval;
 	SDWORD			ival;
 	char			*sval;
@@ -5706,7 +5706,7 @@ void scr_error(const char *pMessage, ...)
 
 
 /* Look up a type symbol */
-BOOL scriptLookUpType(const char *pIdent, INTERP_TYPE *pType)
+bool scriptLookUpType(const char *pIdent, INTERP_TYPE *pType)
 {
 	UDWORD	i;
 
@@ -5730,7 +5730,7 @@ BOOL scriptLookUpType(const char *pIdent, INTERP_TYPE *pType)
 }
 
 /* pop passed arguments (if any) */
-BOOL popArguments(INTERP_VAL **ip_temp, SDWORD numParams)
+bool popArguments(INTERP_VAL **ip_temp, SDWORD numParams)
 {
 	SDWORD			i;
 
@@ -5748,7 +5748,7 @@ BOOL popArguments(INTERP_VAL **ip_temp, SDWORD numParams)
  * If localVariableDef is true a local variable symbol is defined,
  * otherwise a global variable symbol is defined.
  */
-BOOL scriptAddVariable(VAR_DECL *psStorage, VAR_IDENT_DECL *psVarIdent)
+bool scriptAddVariable(VAR_DECL *psStorage, VAR_IDENT_DECL *psVarIdent)
 {
 	VAR_SYMBOL		*psNew;
 	unsigned int i;
@@ -5838,7 +5838,7 @@ BOOL scriptAddVariable(VAR_DECL *psStorage, VAR_IDENT_DECL *psVarIdent)
 }
 
 /* Look up a variable symbol */
-BOOL scriptLookUpVariable(const char *pIdent, VAR_SYMBOL **ppsSym)
+bool scriptLookUpVariable(const char *pIdent, VAR_SYMBOL **ppsSym)
 {
 	VAR_SYMBOL		*psCurr;
 	UDWORD			i;
@@ -5945,7 +5945,7 @@ BOOL scriptLookUpVariable(const char *pIdent, VAR_SYMBOL **ppsSym)
 
 
 /* Add a new trigger symbol */
-BOOL scriptAddTrigger(const char *pIdent, TRIGGER_DECL *psDecl, UDWORD line)
+bool scriptAddTrigger(const char *pIdent, TRIGGER_DECL *psDecl, UDWORD line)
 {
 	TRIGGER_SYMBOL		*psTrigger, *psCurr, *psPrev;
 
@@ -6018,7 +6018,7 @@ BOOL scriptAddTrigger(const char *pIdent, TRIGGER_DECL *psDecl, UDWORD line)
 
 
 /* Lookup a trigger symbol */
-BOOL scriptLookUpTrigger(const char *pIdent, TRIGGER_SYMBOL **ppsTrigger)
+bool scriptLookUpTrigger(const char *pIdent, TRIGGER_SYMBOL **ppsTrigger)
 {
 	TRIGGER_SYMBOL	*psCurr;
 
@@ -6041,7 +6041,7 @@ BOOL scriptLookUpTrigger(const char *pIdent, TRIGGER_SYMBOL **ppsTrigger)
 
 
 /* Lookup a callback trigger symbol */
-BOOL scriptLookUpCallback(const char *pIdent, CALLBACK_SYMBOL **ppsCallback)
+bool scriptLookUpCallback(const char *pIdent, CALLBACK_SYMBOL **ppsCallback)
 {
 	CALLBACK_SYMBOL		*psCurr;
 
@@ -6067,7 +6067,7 @@ BOOL scriptLookUpCallback(const char *pIdent, CALLBACK_SYMBOL **ppsCallback)
 }
 
 /* Add a new event symbol */
-BOOL scriptDeclareEvent(const char *pIdent, EVENT_SYMBOL **ppsEvent, SDWORD numArgs)
+bool scriptDeclareEvent(const char *pIdent, EVENT_SYMBOL **ppsEvent, SDWORD numArgs)
 {
 	EVENT_SYMBOL		*psEvent, *psCurr, *psPrev;
 
@@ -6119,7 +6119,7 @@ BOOL scriptDeclareEvent(const char *pIdent, EVENT_SYMBOL **ppsEvent, SDWORD numA
 }
 
 // Add the code to a defined event
-BOOL scriptDefineEvent(EVENT_SYMBOL *psEvent, CODE_BLOCK *psCode, SDWORD trigger)
+bool scriptDefineEvent(EVENT_SYMBOL *psEvent, CODE_BLOCK *psCode, SDWORD trigger)
 {
 	ASSERT(psCode != NULL, "scriptDefineEvent: psCode == NULL");
 	ASSERT(psCode->size > 0,
@@ -6172,7 +6172,7 @@ BOOL scriptDefineEvent(EVENT_SYMBOL *psEvent, CODE_BLOCK *psCode, SDWORD trigger
 }
 
 /* Lookup an event symbol */
-BOOL scriptLookUpEvent(const char *pIdent, EVENT_SYMBOL **ppsEvent)
+bool scriptLookUpEvent(const char *pIdent, EVENT_SYMBOL **ppsEvent)
 {
 	EVENT_SYMBOL	*psCurr;
 	//debug(LOG_SCRIPT, "scriptLookUpEvent");
@@ -6192,7 +6192,7 @@ BOOL scriptLookUpEvent(const char *pIdent, EVENT_SYMBOL **ppsEvent)
 
 
 /* Look up a constant variable symbol */
-BOOL scriptLookUpConstant(const char *pIdent, CONST_SYMBOL **ppsSym)
+bool scriptLookUpConstant(const char *pIdent, CONST_SYMBOL **ppsSym)
 {
 	CONST_SYMBOL	*psCurr;
 
@@ -6218,7 +6218,7 @@ BOOL scriptLookUpConstant(const char *pIdent, CONST_SYMBOL **ppsSym)
 
 
 /* Look up a function symbol */
-BOOL scriptLookUpFunction(const char *pIdent, FUNC_SYMBOL **ppsSym)
+bool scriptLookUpFunction(const char *pIdent, FUNC_SYMBOL **ppsSym)
 {
 	UDWORD i;
 
@@ -6245,7 +6245,7 @@ BOOL scriptLookUpFunction(const char *pIdent, FUNC_SYMBOL **ppsSym)
 }
 
 /* Look up a function symbol defined in script */
-BOOL scriptLookUpCustomFunction(const char *pIdent, EVENT_SYMBOL **ppsSym)
+bool scriptLookUpCustomFunction(const char *pIdent, EVENT_SYMBOL **ppsSym)
 {
 	EVENT_SYMBOL	*psCurr;
 

@@ -16,16 +16,17 @@
 
 #define FPS_UPPER_LIMIT		500
 #define FPS_LOWER_LIMIT		1
-#define FPS_DEFAULT		30
+#define FPS_DEFAULT		60
 
 /* --------- Structure variables */
 
-    typedef struct {
+struct FPSmanager
+{
 	uint32_t framecount;
 	float rateticks;
 	uint32_t lastticks;
 	uint32_t rate;
-    } FPSmanager;
+};
 
 /* Functions return 0 or value for sucess and -1 for error */
 

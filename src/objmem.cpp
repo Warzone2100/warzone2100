@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -79,7 +79,7 @@ static void objListIntegCheck(void);
 
 
 /* Initialise the object heaps */
-BOOL objmemInitialise(void)
+bool objmemInitialise(void)
 {
 	// reset the object ID number
 	unsynchObjID = OBJ_ID_INIT/2;  // /2 so that object IDs start around OBJ_ID_INIT*8, in case that's important when loading maps.
@@ -618,7 +618,7 @@ void freeAllFeatures(void)
 /**************************  FLAG_POSITION ********************************/
 
 /* Create a new Flag Position */
-BOOL createFlagPosition(FLAG_POSITION **ppsNew, UDWORD player)
+bool createFlagPosition(FLAG_POSITION **ppsNew, UDWORD player)
 {
 	ASSERT( player<MAX_PLAYERS, "createFlagPosition: invalid player number" );
 
@@ -876,7 +876,7 @@ UDWORD getRepairIdFromFlag(FLAG_POSITION *psFlag)
 
 
 // check a base object exists for an ID
-BOOL checkValidId(UDWORD id)
+bool checkValidId(UDWORD id)
 {
 	return getBaseObjFromId(id) != NULL;
 }

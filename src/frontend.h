@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -24,7 +24,8 @@
 #include "lib/widget/widgbase.h"
 
 // determines which option screen to use. when in GS_TITLE_SCREEN mode.
-typedef enum _title_mode {
+enum tMode
+{
 	TITLE,			// 0 intro mode
 	SINGLE,			// 1 single player menu
 	MULTI,			// 2 multiplayer menu
@@ -46,7 +47,7 @@ typedef enum _title_mode {
 	AUDIO_OPTIONS,          // 18 audio options menu
 	VIDEO_OPTIONS,          // 19 video options menu
 	MOUSE_OPTIONS,          // 20 mouse options menu
-} tMode;
+};
 
 extern tMode titleMode;					// the global case
 extern tMode lastTitleMode;
@@ -55,20 +56,20 @@ extern tMode lastTitleMode;
 
 extern char	aLevelName[MAX_LEVEL_NAME_SIZE+1];	//256];			// vital! the wrf file to use.
 
-extern BOOL	bLimiterLoaded;
+extern bool	bLimiterLoaded;
 
 
 void changeTitleMode(tMode mode);
-BOOL runTitleMenu(void);
-BOOL runSinglePlayerMenu(void);
-BOOL runMultiPlayerMenu(void);
-BOOL runGameOptionsMenu(void);
-BOOL runOptionsMenu(void);
-BOOL runGraphicsOptionsMenu(void);
-BOOL runAudioOptionsMenu(void);
-BOOL runVideoOptionsMenu(void);
-BOOL runMouseOptionsMenu(void);
-BOOL runTutorialMenu(void);
+bool runTitleMenu(void);
+bool runSinglePlayerMenu(void);
+bool runMultiPlayerMenu(void);
+bool runGameOptionsMenu(void);
+bool runOptionsMenu(void);
+bool runGraphicsOptionsMenu(void);
+bool runAudioOptionsMenu(void);
+bool runVideoOptionsMenu(void);
+bool runMouseOptionsMenu(void);
+bool runTutorialMenu(void);
 
 void addTopForm(void);
 void addBottomForm(void);
@@ -82,7 +83,7 @@ void addFEAISlider(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, U
 
 void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
-BOOL CancelPressed(void);
+bool CancelPressed(void);
 
 
 // ////////////////////////////////////////////////////////////////////////////

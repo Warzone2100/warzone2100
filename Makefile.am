@@ -1,5 +1,4 @@
 SUBDIRS = \
-	  build_tools/autorevision \
 	  win32 \
 	  lib/framework \
 	  lib/exceptionhandler \
@@ -33,6 +32,7 @@ macosx/prebuilt:
 	$(MKDIR_P) macosx/prebuilt
 
 EXTRA_DIST= \
+	build_tools/autorevision.sh \
 	autogen.sh \
 	autorevision.conf \
 	config.rpath \

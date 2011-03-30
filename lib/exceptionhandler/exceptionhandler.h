@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2007-2010  Warzone 2100 Project
+	Copyright (C) 2007-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -20,17 +20,8 @@
 #ifndef __INCLUDED_LIB_EXCEPTIONHANDLER_EXCEPTIONHANDLER_H__
 #define __INCLUDED_LIB_EXCEPTIONHANDLER_EXCEPTIONHANDLER_H__
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif //__cplusplus
-
-extern void setupExceptionHandler(int argc, char * argv[]);
+extern void setupExceptionHandler(int argc, const char ** argv);
 
 extern bool OverrideRPTDirectory(char *newPath);
-
-#ifdef __cplusplus
-}
-#endif //__cplusplus
 
 #endif // __INCLUDED_LIB_EXCEPTIONHANDLER_EXCEPTIONHANDLER_H__

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2010  Warzone 2100 Project
+	Copyright (C) 2005-2011  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -51,7 +51,7 @@ bool mechanicsShutdown(void)
 
 
 // Allocate the list for a component
-BOOL allocComponentList(COMPONENT_TYPE	type, SDWORD number)
+bool allocComponentList(COMPONENT_TYPE	type, SDWORD number)
 {
 	SDWORD	inc, comp;
 
@@ -133,7 +133,7 @@ void freeComponentLists(void)
 }
 
 //allocate the space for the Players' structure lists
-BOOL allocStructLists(void)
+bool allocStructLists(void)
 {
 	SDWORD	inc, stat;
 
