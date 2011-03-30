@@ -511,6 +511,8 @@
 		43E189A911441136000870EB /* version.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F670BD55AE3002E64E3 /* version.c */; };
 		43F1D9801343F1C5001478EC /* QtScript.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43F1D96B1343F196001478EC /* QtScript.framework */; };
 		43F1D99A1343F1DE001478EC /* QtScript.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 43F1D96B1343F196001478EC /* QtScript.framework */; };
+		43F1D9D21343F542001478EC /* qtscript.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43F1D9CE1343F542001478EC /* qtscript.cpp */; };
+		43F1D9D31343F542001478EC /* qtscriptfuncs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43F1D9D01343F542001478EC /* qtscriptfuncs.cpp */; };
 		43F3001410D3410C00707B6E /* macosx.c in Sources */ = {isa = PBXBuildFile; fileRef = 43F3FFFE10D33F4D00707B6E /* macosx.c */; };
 		43F3003310D341F000707B6E /* hog.c in Sources */ = {isa = PBXBuildFile; fileRef = 02DDA8C20BD3C3450049AB60 /* hog.c */; };
 		43F3003410D341F100707B6E /* mvl.c in Sources */ = {isa = PBXBuildFile; fileRef = 02DDA8C30BD3C3450049AB60 /* mvl.c */; };
@@ -1507,6 +1509,10 @@
 		43E1897311441009000870EB /* os2compat.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = os2compat.c; path = "external/gettext/gettext-runtime/intl/os2compat.c"; sourceTree = "<group>"; };
 		43E189781144104B000870EB /* intl-exports.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "intl-exports.c"; path = "external/gettext/gettext-runtime/intl/intl-exports.c"; sourceTree = "<group>"; };
 		43F1D96B1343F196001478EC /* QtScript.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = QtScript.framework; sourceTree = "<group>"; };
+		43F1D9CE1343F542001478EC /* qtscript.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = qtscript.cpp; path = ../src/qtscript.cpp; sourceTree = SOURCE_ROOT; };
+		43F1D9CF1343F542001478EC /* qtscript.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = qtscript.h; path = ../src/qtscript.h; sourceTree = SOURCE_ROOT; };
+		43F1D9D01343F542001478EC /* qtscriptfuncs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = qtscriptfuncs.cpp; path = ../src/qtscriptfuncs.cpp; sourceTree = SOURCE_ROOT; };
+		43F1D9D11343F542001478EC /* qtscriptfuncs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = qtscriptfuncs.h; path = ../src/qtscriptfuncs.h; sourceTree = SOURCE_ROOT; };
 		43F3005510D344AF00707B6E /* analyze.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = analyze.c; path = external/libtheora/lib/analyze.c; sourceTree = "<group>"; };
 		43F3005610D344AF00707B6E /* apiwrapper.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = apiwrapper.c; path = external/libtheora/lib/apiwrapper.c; sourceTree = "<group>"; };
 		43F3005710D344AF00707B6E /* apiwrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = apiwrapper.h; path = external/libtheora/lib/apiwrapper.h; sourceTree = "<group>"; };
@@ -2096,6 +2102,10 @@
 		0246A1970BD3CCC3004D1C70 /* Warzone */ = {
 			isa = PBXGroup;
 			children = (
+				43F1D9CE1343F542001478EC /* qtscript.cpp */,
+				43F1D9CF1343F542001478EC /* qtscript.h */,
+				43F1D9D01343F542001478EC /* qtscriptfuncs.cpp */,
+				43F1D9D11343F542001478EC /* qtscriptfuncs.h */,
 				43DF5AE812BEED8200DD5A37 /* actiondef.h */,
 				4336D8A8111DDF0F0012E8E4 /* random.cpp */,
 				4336D8A9111DDF0F0012E8E4 /* random.h */,
@@ -3938,6 +3948,8 @@
 				43B8F285127C8F9D006F5A13 /* crc.cpp in Sources */,
 				43B8F288127C8FDD006F5A13 /* netqueue.cpp in Sources */,
 				43DF5A8A12BEE01B00DD5A37 /* cocoa_wrapper.mm in Sources */,
+				43F1D9D21343F542001478EC /* qtscript.cpp in Sources */,
+				43F1D9D31343F542001478EC /* qtscriptfuncs.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
