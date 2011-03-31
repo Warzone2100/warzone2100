@@ -24,7 +24,7 @@ function activateProduction(fac)
 	}
 }
 
-// Reguarly check back on our scavs
+// Regularly check back on our scavs
 function scavtick()
 {
 	// enum functions now return a list of results
