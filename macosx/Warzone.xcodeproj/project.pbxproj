@@ -509,6 +509,10 @@
 		43E189A711441134000870EB /* tsearch.c in Sources */ = {isa = PBXBuildFile; fileRef = 43E188F311440CC9000870EB /* tsearch.c */; };
 		43E189A811441135000870EB /* vasnprintf.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F930BD55B50002E64E3 /* vasnprintf.c */; };
 		43E189A911441136000870EB /* version.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F670BD55AE3002E64E3 /* version.c */; };
+		43F1D9801343F1C5001478EC /* QtScript.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43F1D96B1343F196001478EC /* QtScript.framework */; };
+		43F1D99A1343F1DE001478EC /* QtScript.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 43F1D96B1343F196001478EC /* QtScript.framework */; };
+		43F1D9D21343F542001478EC /* qtscript.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43F1D9CE1343F542001478EC /* qtscript.cpp */; };
+		43F1D9D31343F542001478EC /* qtscriptfuncs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43F1D9D01343F542001478EC /* qtscriptfuncs.cpp */; };
 		43F3001410D3410C00707B6E /* macosx.c in Sources */ = {isa = PBXBuildFile; fileRef = 43F3FFFE10D33F4D00707B6E /* macosx.c */; };
 		43F3003310D341F000707B6E /* hog.c in Sources */ = {isa = PBXBuildFile; fileRef = 02DDA8C20BD3C3450049AB60 /* hog.c */; };
 		43F3003410D341F100707B6E /* mvl.c in Sources */ = {isa = PBXBuildFile; fileRef = 02DDA8C30BD3C3450049AB60 /* mvl.c */; };
@@ -735,6 +739,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				4333661B11A07FFF00380F5E /* QtCore.framework in Copy frameworks */,
+				43F1D99A1343F1DE001478EC /* QtScript.framework in Copy frameworks */,
 				4333661C11A07FFF00380F5E /* QtGui.framework in Copy frameworks */,
 				4333661D11A07FFF00380F5E /* QtOpenGL.framework in Copy frameworks */,
 				02581C880BD5AD1100957CBC /* Zlib.framework in Copy frameworks */,
@@ -1503,6 +1508,11 @@
 		43E188F411440CC9000870EB /* tsearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tsearch.h; path = "external/gettext/gettext-runtime/intl/tsearch.h"; sourceTree = "<group>"; };
 		43E1897311441009000870EB /* os2compat.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = os2compat.c; path = "external/gettext/gettext-runtime/intl/os2compat.c"; sourceTree = "<group>"; };
 		43E189781144104B000870EB /* intl-exports.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "intl-exports.c"; path = "external/gettext/gettext-runtime/intl/intl-exports.c"; sourceTree = "<group>"; };
+		43F1D96B1343F196001478EC /* QtScript.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = QtScript.framework; sourceTree = "<group>"; };
+		43F1D9CE1343F542001478EC /* qtscript.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = qtscript.cpp; path = ../src/qtscript.cpp; sourceTree = SOURCE_ROOT; };
+		43F1D9CF1343F542001478EC /* qtscript.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = qtscript.h; path = ../src/qtscript.h; sourceTree = SOURCE_ROOT; };
+		43F1D9D01343F542001478EC /* qtscriptfuncs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = qtscriptfuncs.cpp; path = ../src/qtscriptfuncs.cpp; sourceTree = SOURCE_ROOT; };
+		43F1D9D11343F542001478EC /* qtscriptfuncs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = qtscriptfuncs.h; path = ../src/qtscriptfuncs.h; sourceTree = SOURCE_ROOT; };
 		43F3005510D344AF00707B6E /* analyze.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = analyze.c; path = external/libtheora/lib/analyze.c; sourceTree = "<group>"; };
 		43F3005610D344AF00707B6E /* apiwrapper.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = apiwrapper.c; path = external/libtheora/lib/apiwrapper.c; sourceTree = "<group>"; };
 		43F3005710D344AF00707B6E /* apiwrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = apiwrapper.h; path = external/libtheora/lib/apiwrapper.h; sourceTree = "<group>"; };
@@ -1613,6 +1623,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4333612211A07FB900380F5E /* QtCore.framework in Frameworks */,
+				43F1D9801343F1C5001478EC /* QtScript.framework in Frameworks */,
 				4333612311A07FB900380F5E /* QtGui.framework in Frameworks */,
 				4333612511A07FBA00380F5E /* QtOpenGL.framework in Frameworks */,
 				43B8FC9A127CB06C006F5A13 /* Zlib.framework in Frameworks */,
@@ -2091,6 +2102,10 @@
 		0246A1970BD3CCC3004D1C70 /* Warzone */ = {
 			isa = PBXGroup;
 			children = (
+				43F1D9CE1343F542001478EC /* qtscript.cpp */,
+				43F1D9CF1343F542001478EC /* qtscript.h */,
+				43F1D9D01343F542001478EC /* qtscriptfuncs.cpp */,
+				43F1D9D11343F542001478EC /* qtscriptfuncs.h */,
 				43DF5AE812BEED8200DD5A37 /* actiondef.h */,
 				4336D8A8111DDF0F0012E8E4 /* random.cpp */,
 				4336D8A9111DDF0F0012E8E4 /* random.h */,
@@ -2559,6 +2574,7 @@
 		4333611D11A07FB900380F5E /* QT */ = {
 			isa = PBXGroup;
 			children = (
+				43F1D96B1343F196001478EC /* QtScript.framework */,
 				4333611E11A07FB900380F5E /* QtCore.framework */,
 				4333611F11A07FB900380F5E /* QtGui.framework */,
 				4333612011A07FB900380F5E /* QtNetwork.framework */,
@@ -3564,7 +3580,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"QT_\"\nOutDir=\"QT\"\nFileName=\"QT.tar.gz\"\nBuiltDLP=\"http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/QT.tar.gz\"\nMD5Sum=\"4155cc5219bcc0dd9f13cb9d9bf4c843\"\n\nconfigs/FetchPrebuilt.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${BuiltDLP}\" \"${MD5Sum}\"\nexit ${?}\n\n# tar -czf QT.tar.gz --exclude '.DS_Store' QT_";
+			shellScript = "DirectorY=\"QT_\"\nOutDir=\"QT\"\nFileName=\"QT.tar.gz\"\nBuiltDLP=\"http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/QT.tar.gz\"\nMD5Sum=\"8bd5dd347b391ab4a29105f144c64b4d\"\n\nconfigs/FetchPrebuilt.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${BuiltDLP}\" \"${MD5Sum}\"\nexit ${?}\n\n# tar -czf QT.tar.gz --exclude '.DS_Store' QT_";
 		};
 		433360B311A079F700380F5E /* Moc */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3932,6 +3948,8 @@
 				43B8F285127C8F9D006F5A13 /* crc.cpp in Sources */,
 				43B8F288127C8FDD006F5A13 /* netqueue.cpp in Sources */,
 				43DF5A8A12BEE01B00DD5A37 /* cocoa_wrapper.mm in Sources */,
+				43F1D9D21343F542001478EC /* qtscript.cpp in Sources */,
+				43F1D9D31343F542001478EC /* qtscriptfuncs.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4267,10 +4285,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025E001120A4CA006C49B1 /* Warzone-Debug.xcconfig */;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/external/QT\"",
-				);
 			};
 			name = Debug;
 		};
@@ -4278,10 +4292,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025E011120A4CA006C49B1 /* Warzone-Release.xcconfig */;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/external/QT\"",
-				);
 			};
 			name = Release;
 		};
@@ -4366,21 +4376,13 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025E021120A4CA006C49B1 /* Warzone-StaticAnalyzer.xcconfig */;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/external/QT\"",
-				);
 			};
 			name = StaticAnalyzer;
 		};
 		4389DBD8111B0A0700B98DEF /* StaticAnalyzer */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				PRODUCT_NAME = "Setup Prebuilt Components";
-				ZERO_LINK = NO;
 			};
 			name = StaticAnalyzer;
 		};
@@ -4443,11 +4445,7 @@
 		4389DBE5111B0A0700B98DEF /* StaticAnalyzer */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				PRODUCT_NAME = "Make DMGs for Release";
-				ZERO_LINK = NO;
 			};
 			name = StaticAnalyzer;
 		};
@@ -4475,9 +4473,6 @@
 		43F77C8110F0125F00E04615 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
 				PRODUCT_NAME = "Make DMGs for Release";
 			};
 			name = Debug;
@@ -4485,20 +4480,13 @@
 		43F77C8210F0125F00E04615 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				PRODUCT_NAME = "Make DMGs for Release";
-				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
 		43FA570D10FF8E9D0074E914 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
 				PRODUCT_NAME = "Setup Prebuilt Components";
 			};
 			name = Debug;
@@ -4506,11 +4494,7 @@
 		43FA570E10FF8E9D0074E914 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				PRODUCT_NAME = "Setup Prebuilt Components";
-				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
