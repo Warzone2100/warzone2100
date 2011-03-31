@@ -5,7 +5,6 @@
  *
  */
 
-
 // enemy1 variables
 private		GROUP		enemy1Build, enemy1Attack, enemy1Start, enemy1Fin;
 private		GROUP		enemy2Build, enemy2Attack, enemy2Start, enemy2Fin;
@@ -83,10 +82,9 @@ trigger enm2Fact2Trig(every,130);
 // event prototypes
 event enemy1AttackBase;
 
-
 event startup(CALL_GAMEINIT)
 {
-//set assembly points (can't do later in case the factories are dead!!!
+	// set assembly points (can't do later in case the factories are dead!!!
 	setAssemblyPoint (enm1, enm1Ass1X, enm1Ass1Y);
 	setAssemblyPoint (enm2, enm2Ass1X, enm2Ass1Y);
 	setAssemblyPoint (enm22, enm2Ass2X, enm2Ass2Y);
@@ -96,55 +94,36 @@ event startup(CALL_GAMEINIT)
 	createAlliance(enemy1, enemy2);
 	// whether the oil well has been cleared
 	oilWellClear = FALSE;
-//set starting power
+	// set starting power
 	setPowerLevel(pow1, enemy1);
 	setPowerLevel(pow2, enemy2);
 	ld=75;						//enemy2 leadership (change to higher when fixed!)
-//make all droids left part of build group
 
-//temporarily commented out to get morale effects back!
 	groupAddArea(enemy1Start, enemy1, 128, 128, 7744, 7744);
 	groupAddGroup(enemy1Build, enemy1Start);
 	groupAddArea(enemy2Start, enemy2, 128, 128, 7744, 7744);
 	groupAddGroup(enemy2Build, enemy2Start);
-//set retreat point
+	// set retreat point
 	setGroupRetreatPoint(enemy1Build, enm1Ret1X, enm1Ret1Y);	//retreat to newbase //road block
 	setGroupRetreatForce(enemy1Build, 99);		//95			//set morale to 5%
 	setGroupRetreatLeadership(enemy1Build, 50);	//50		//set leadership chance (small=more likely?)
-//set retreat point enemy2
+	// set retreat point enemy2
 	setGroupRetreatPoint(enemy2Build, enm2Ret2X, enm2Ret2Y);	//retreat to base2
 	setGroupRetreatForce(enemy2Build, 90);			//set morale to 25%
 	setGroupRetreatLeadership(enemy2Build, ld);		//set leadership chance (small=more likely?)
-//make 4 barbs attack base
-/* Now done after a delay in cam1a.slo
-	addDroid(bloke,4544,6592,enemy1);		//fake attack
-	addDroid(bloke,4672,6592,enemy1);
-	addDroid(bloke,4544,6720,enemy1);
-	addDroid(bloke,4672,6720,enemy1);
-	groupAddArea(enemy1Start, enemy1, 4544, 6592, 4672, 6720);
-	orderGroupLoc(enemy1Start, DORDER_SCOUT, playerX,playerY);
-*/
-	//orderGroupLoc(enemy1Start, DORDER_SCOUT, playerX,playerY);
 
 	groupAddArea(raidGroup, enemy2, 3392,576, 3904,1088);
 }
 
-
-
 // deal with a droid being built by enemy1
 event enemy1build(CALL_NEWDROID, enemy1, ref newDroid,ref newDroidFactory)
 {
-
-
 	// see if there are any enemy droids near the base
 	if (droidInRange(player, enm1Ass1X, enm1Ass1Y, 9 * 128))
 	{
-
 		groupAddDroid(enemy1Attack, newDroid);
 		//set Morale to stubborn
 		setGroupRetreatPoint(enemy1Attack, enm1Ret2X, enm1Ret2Y);	//retreat to base
-		//setGroupRetreatForce(enemy1Attack, 90);			//set morale to 50%
-		//setGroupRetreatLeadership(enemy1Attack, 50);		//set leadership chance (small=more likely?)
 
 		// get all the droids back to base
 		orderGroupLoc(enemy1Attack, DORDER_SCOUT, enm1Ass1X, enm1Ass1Y);
@@ -155,38 +134,13 @@ event enemy1build(CALL_NEWDROID, enemy1, ref newDroid,ref newDroidFactory)
 
 		if (enemy1Build.members >= 4)
 		{
-
-
 			groupAddGroup(enemy1Attack, enemy1Build);
-
-//			if (droidInRange(player, rBlkX,rBlkY, 8 * 128))
-//			{
-				// in the canyon go get em
-				moveX = rBlkX; moveY = rBlkY;
-//			}
-/* don't make base 1 attack player's derek or base!
-			else
-			{
-				if (oilWellClear)
-				{
-					// go attack the base
-					moveX = playerX;
-					moveY = playerY;
-				}
-				else
-				{
-					// go and have a look at the derek
-					moveX = oilPatchX; moveY = oilPatchY;
-
-					//setEventTrigger(enemy1AttackBase, enemy1AttackPause);
-				}
-			}
-*/
+			// in the canyon go get em
+			moveX = rBlkX; moveY = rBlkY;
 			orderGroupLoc(enemy1Attack, DORDER_SCOUT, moveX,moveY);
 		}
 	}
 }
-
 
 // send the droids to the player base if there is nothing at
 // the oil derek
@@ -194,8 +148,6 @@ event enemy1AttackBase( inactive )
 {
 	if (not objectInRange(player, oilPatchX, oilPatchY, 8*128))
 	{
-		//orderGroupLoc(enemy1Attack, DORDER_SCOUT, playerX,playerY);
-//changed so only does enemy2!!!!
 		orderGroupLoc(enemy2Attack, DORDER_SCOUT, playerX,playerY);
 		oilWellClear = TRUE;
 	}
@@ -208,17 +160,12 @@ event enemy1AttackBase( inactive )
 // deal with a droid being built by enemy2
 event enemy2build(CALL_NEWDROID, enemy2, ref newDroid,ref newDroidFactory)
 {
-
-
 	// see if there are any player droids near enemy2 base1
 	if (droidInRange(player, enm2Ass1X, enm2Ass1Y, 9 * 128))
 	{
 		groupAddDroid(enemy2Attack, newDroid);
 		//Set Morale to stubborn
 		setGroupRetreatPoint(enemy2Attack, enm2Ret2X, enm2Ret2Y);	//retreat to base2
-		//setGroupRetreatForce(enemy2Attack, 90);			//set morale to 50%
-		//setGroupRetreatLeadership(enemy2Attack, ld);		//set leadership chance (small=more likely?)
-
 		// get all the droids back to base
 		orderGroupLoc(enemy2Attack, DORDER_SCOUT, enm2Ass1X, enm2Ass1Y);
 	}
@@ -228,9 +175,6 @@ event enemy2build(CALL_NEWDROID, enemy2, ref newDroid,ref newDroidFactory)
 		groupAddDroid(enemy2Attack, newDroid);
 		//Set Morale
 		setGroupRetreatPoint(enemy2Attack, enm2Ret1X, enm2Ret1Y);	//retreat to base1
-		//setGroupRetreatForce(enemy2Attack, 90);			//set morale to 50%
-		//setGroupRetreatLeadership(enemy2Attack, ld);		//set leadership chance (small=more likely?)
-
 		// get all the droids back to base
 		orderGroupLoc(enemy2Attack, DORDER_SCOUT, enm2Ass2X, enm2Ass2Y);
 	}
@@ -243,41 +187,16 @@ event enemy2build(CALL_NEWDROID, enemy2, ref newDroid,ref newDroidFactory)
 			groupAddGroup(enemy2Attack, enemy2Build);
 			//set Morale low
 			setGroupRetreatPoint(enemy2Attack, enm2Ret2X, enm2Ret2Y);	//retreat to base2
-			//setGroupRetreatForce(enemy2Attack, 75);			//set morale to 25%
-			//setGroupRetreatLeadership(enemy2Attack, ld);		//set leadership chance (small=more likely?)
 
 			if (droidInRange(player, enm1Ass1X, enm1Ass1Y, 4 * 128))
 			{
 				// if near base1 go get em
 				moveX = enm1Ass1X; moveY = enm1Ass1Y;
 			}
-/* stop enemy2 from attacking player's stuff (save for 1B?)
-			else
-			{
-				if (oilWellClear)
-				{
-					// go attack the base
-					//moveX = playerX;
-					//moveY = playerY;
-					//go look at base 1 instead!
-					moveX = enm1Ass1X;
-					moveY = enm1Ass1Y;
-				}
-				else
-				{
-					// go and have a look at the derek
-					moveX = oilPatchX; moveY = oilPatchY;
-
-					setEventTrigger(enemy1AttackBase, enemy1AttackPause);
-				}
-			}
-*/
 			orderGroupLoc(enemy2Attack, DORDER_SCOUT, moveX,moveY);
 		}
 	}
 }
-
-
 
 /* events for build lists start here */
 /* Enemy 1 */
@@ -306,12 +225,8 @@ event enm1Fact1Evnt(inactive)
 
 event enm1Start1Evnt(enm1Start1Trig)
 {
-
 	//set Morale to low
 	setGroupRetreatPoint(enemy1Build, enm1Ret2X, enm1Ret2Y);	//retreat to base (guys at x-roads should flee!)
-	//setGroupRetreatForce(enemy1Build, 99);			//set morale to 1%
-	//setGroupRetreatLeadership(enemy1Build, 50);		//set leadership chance (small=more likely)
-
 	buildDroid (bloke, enm1, enemy1, 3);		//build first ones so AI triggered
 	setEventTrigger(enm1Fact1Evnt, enm1Fact1Trig);
 	setEventTrigger(enm1Start1Evnt, inactive);
@@ -389,31 +304,27 @@ event enm2Start1Evnt(enm2Start1Trig)
 
 event lastAttack1(every, 50)
 {
-//make enemy easier to find if all his buildings destroyed
+	// make enemy easier to find if all his buildings destroyed
 	if (not anyStructButWallsLeft(enemy1))
 	{
 		groupAddArea(enemy1Fin, enemy1, 0, 0, 8191, 8191);
 		orderGroupLoc(enemy1Fin, DORDER_SCOUT, enm1Ass1X, enm1Ass1Y);
-		//setEventTrigger(lastAttack1, inactive);
 	}
 }
 
 event lastAttack2(every, 50)
 {
-//make enemy easier to find if all his buildings destroyed
+	// make enemy easier to find if all his buildings destroyed
 	if (not anyStructButWallsLeft(enemy2))
 	{
 		groupAddArea(enemy2Fin, enemy2, 0, 0, 8191, 8191);
 		orderGroupLoc(enemy2Fin, DORDER_SCOUT, enm2Ass1X, enm2Ass1Y);
-		//setEventTrigger(lastAttack2, inactive);
 	}
 }
-
 
 event raiderAttack(structureBeingBuilt(derek, player) and 
 				   droidInArea(player, 4416,1600, 5824,3008), 10)
 {
 	orderGroupLoc(raidGroup, DORDER_SCOUT, 5056,2496);
-
 	setEventTrigger(raiderAttack, inactive);
 }
