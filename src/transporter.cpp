@@ -1354,10 +1354,8 @@ void transporterRemoveDroid(UDWORD id)
 		// check if it is a commander
 		if (psDroid->droidType == DROID_COMMAND)
 		{
-			if (grpCreate(&psGroup))
-			{
-				psGroup->add(psDroid);
-			}
+			psGroup = grpCreate();
+			psGroup->add(psDroid);
 		}
 		psDroid->selected = true;
 

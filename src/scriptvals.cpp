@@ -154,10 +154,7 @@ bool scrvNewGroup(INTERP_VAL *psVal)
 {
 	DROID_GROUP		*psGroup;
 
-	if (!grpCreate(&psGroup))
-	{
-		return false;
-	}
+	psGroup = grpCreate();
 
 	// increment the refcount so the group doesn't get automatically freed when empty
 	psGroup->add(NULL);

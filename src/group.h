@@ -54,6 +54,7 @@ public: // TODO: c++ design to members become private.
 	DROID		*psList;      // List of droids in the group
 	DROID		*psCommander; // The command droid of a command group
 	RUN_DATA	sRunData;   // Where the group should retreat to
+	int		id;	// unique group id
 };
 
 // initialise the group system
@@ -62,7 +63,10 @@ bool grpInitialise(void);
 // shutdown the group system
 void grpShutDown(void);
 
-// create a new group
-bool grpCreate(DROID_GROUP	**ppsGroup);
+/// create a new group, use -1 to generate a new ID. never use id != -1 unless loading from a savegame.
+DROID_GROUP *grpCreate(int id = -1);
+
+/// lookup group by its unique id, or create it if not found
+DROID_GROUP *grpFind(int id);
 
 #endif // __INCLUDED_SRC_GROUP_H__

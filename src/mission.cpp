@@ -1888,10 +1888,8 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, bool goingHome)
 			// a commander needs to get it's group back
 			if (psDroid->droidType == DROID_COMMAND)
 			{
-				if (grpCreate(&psGroup))
-				{
-					psGroup->add(psDroid);
-				}
+				psGroup = grpCreate();
+				psGroup->add(psDroid);
 				clearCommandDroidFactory(psDroid);
 			}
 

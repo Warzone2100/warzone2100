@@ -43,7 +43,7 @@
 #include "modding.h"
 
 #include "game.h"
-
+#include "qtscript.h"
 #include "fpath.h"
 #include "map.h"
 #include "droid.h"
@@ -1636,7 +1636,7 @@ struct SAVE_DROID_V24
 	SAVE_MOVE_CONTROL	sMove; \
 	SWORD	formationDir;         \
 	SDWORD	formationX;           \
-	SDWORD	formationY
+	SDWORD	aigroupidx
 
 struct SAVE_DROID_V99
 {
@@ -2486,8 +2486,10 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		if (saveGameVersion >= VERSION_33)
 		{
 			PLAYERSTATS		playerStats;
+			bool scav = game.scavengers;
 
 			game			= saveGameData.sGame;
+			game.scavengers = scav;	// ok, so this is butt ugly. but i'm just getting inspiration from the rest of the code around here. ok? - per
 			productionPlayer= selectedPlayer;
 			bMultiPlayer	= saveGameData.multiPlayer;
 			bMultiMessages	= bMultiPlayer;
@@ -5103,7 +5105,6 @@ static void SaveDroidMoveControl(SAVE_DROID * const psSaveDroid, DROID const * c
 	psSaveDroid->sMove.isInFormation = false;
 	psSaveDroid->formationDir = 0;
 	psSaveDroid->formationX   = 0;
-	psSaveDroid->formationY   = 0;
 }
 
 static void LoadDroidMoveControl(DROID * const psDroid, SAVE_DROID const * const psSaveDroid)
@@ -5332,6 +5333,14 @@ static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
 	//rebuild the object pointer from the ID
 	FIXME_CAST_ASSIGN(UDWORD, psDroid->psBaseStruct, psSaveDroid->baseStructID);
 	psDroid->group = psSaveDroid->group;
+	if (psSaveDroid->aigroupidx >= 0)
+	{
+		psDroid->psGroup = grpFind(psSaveDroid->aigroupidx);
+	}
+	else
+	{
+		psDroid->psGroup = NULL;
+	}
 	psDroid->selected = psSaveDroid->selected;
 	psDroid->died = psSaveDroid->died;
 	psDroid->lastEmission =	psSaveDroid->lastEmission;
@@ -5496,7 +5505,6 @@ static bool loadDroidSetPointers(void)
 		}
 	}
 
-
 	return true;
 }
 
@@ -5533,7 +5541,6 @@ bool loadSaveDroidV(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD v
 		endian_sdword(&psSaveDroid->resistance);
 		endian_sword(&psSaveDroid->formationDir);
 		endian_sdword(&psSaveDroid->formationX);
-		endian_sdword(&psSaveDroid->formationY);
 		/* DROID_SAVE_V21 includes DROID_SAVE_V20 */
 		endian_udword(&psSaveDroid->commandId);
 		/* DROID_SAVE_V20 includes OBJECT_SAVE_V20, SAVE_WEAPON */
@@ -5750,6 +5757,7 @@ static bool buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 			}
 
 			psSaveDroid->group = psCurr->group;
+			psSaveDroid->aigroupidx = psCurr->psGroup ? psCurr->psGroup->id : -1;
 			psSaveDroid->selected = psCurr->selected;
 			psSaveDroid->died = psCurr->died;
 			psSaveDroid->lastEmission = psCurr->lastEmission;
@@ -5791,9 +5799,6 @@ static bool buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 			/* SAVE_DROID is DROID_SAVE_V24 */
 			/* DROID_SAVE_V24 includes DROID_SAVE_V21 */
 			endian_sdword(&psSaveDroid->resistance);
-
-			// psSaveDroid->formationDir, psSaveDroid->formationX and psSaveDroid->formationY are set by SaveDroidMoveControl
-			// already, which also performs endian swapping, so we can (and should!) safely ignore those here.
 
 			/* DROID_SAVE_V21 includes DROID_SAVE_V20 */
 			endian_udword(&psSaveDroid->commandId);
@@ -9992,6 +9997,7 @@ bool writeFiresupportDesignators(char *pFileName)
 static bool	writeScriptState(char *pFileName)
 {
 	static const int32_t current_event_version = 4;
+	char	jsFilename[PATH_MAX], *ext;
 
 	char	*pBuffer;
 	UDWORD	fileSize;
@@ -10006,6 +10012,14 @@ static bool	writeScriptState(char *pFileName)
 		return false;
 	}
 	free(pBuffer);
+
+	// The below belongs to the new javascript stuff
+	strcpy(jsFilename, pFileName);
+	ext = strrchr(jsFilename, '/');
+	*ext = '\0';
+	strcat(jsFilename, "/scriptstate.ini");
+	saveScriptStates(jsFilename);
+
 	return true;
 }
 
@@ -10014,15 +10028,21 @@ static bool	writeScriptState(char *pFileName)
 bool loadScriptState(char *pFileName)
 {
 	char	*pFileData;
+	char	jsFilename[PATH_MAX];
 	UDWORD	fileSize;
 
+	pFileName[strlen(pFileName) - 4] = '\0';
+
+	// The below belongs to the new javascript stuff
+	strcpy(jsFilename, pFileName);
+	strcat(jsFilename, "/scriptstate.ini");
 	if (bMultiPlayer)
 	{
 		loadMultiScripts();
 	}
+	loadScriptStates(jsFilename);
 
 	// change the file extension
-	pFileName[strlen(pFileName) - 4] = '\0';
 	strcat(pFileName, "/scriptstate.es");
 
 	pFileData = fileLoadBuffer;

@@ -392,11 +392,8 @@ void addDroid(DROID *psDroidToAdd, DROID *pList[MAX_PLAYERS])
 		// commanders have to get their group back
 		if (psDroidToAdd->droidType == DROID_COMMAND)
 		{
-			grpCreate(&psGroup);
-			if (psGroup)
-			{
-				psGroup->add(psDroidToAdd);
-			}
+			psGroup = grpCreate();
+			psGroup->add(psDroidToAdd);
 		}
 	}
 	else if (pList[psDroidToAdd->player] == mission.apsDroidLists[psDroidToAdd->player])

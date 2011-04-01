@@ -28,10 +28,10 @@
 #include "lib/netplay/netplay.h"
 
 #include "multiplay.h"
-#include <list>
+#include <QtCore/QMap>
 
 // Group system variables: grpGlobalManager enables to remove all the groups to Shutdown the system
-static std::list<DROID_GROUP *> grpGlobalManager;
+static QMap<int, DROID_GROUP *> grpGlobalManager;
 static bool grpInitialized = false;
 
 // initialise the group system
@@ -47,7 +47,7 @@ void grpShutDown(void)
 {
 	/* Since we are not very diligent removing groups after we have
 	 * created them; we need this hack to remove them on level end. */
-	std::list<DROID_GROUP *>::iterator iter;
+	QMap<int, DROID_GROUP *>::iterator iter;
 
 	for(iter = grpGlobalManager.begin(); iter != grpGlobalManager.end(); iter++)
 	{
@@ -67,19 +67,33 @@ DROID_GROUP::DROID_GROUP()
 }
 
 // create a new group
-bool grpCreate(DROID_GROUP **ppsGroup)
+DROID_GROUP *grpCreate(int id)
 {
 	ASSERT(grpInitialized, "Group code not initialized yet");
-	*ppsGroup = new DROID_GROUP;
-	if (*ppsGroup == NULL)
+	DROID_GROUP *psGroup = new DROID_GROUP;
+	if (id == -1)
 	{
-		debug(LOG_ERROR, "grpCreate: Out of memory");
-		return false;
+		int i;
+		for (i = 0; grpGlobalManager.contains(i); i++) {}	// surly hack
+		psGroup->id = i;
 	}
+	else
+	{
+		ASSERT(!grpGlobalManager.contains(id), "Group %d is already created!", id);
+		psGroup->id = id;
+	}
+	grpGlobalManager.insert(psGroup->id, psGroup);
+	return psGroup;
+}
 
-	grpGlobalManager.push_back(*ppsGroup);
-
-	return true;
+DROID_GROUP *grpFind(int id)
+{
+	DROID_GROUP *psGroup = grpGlobalManager.value(id, NULL);
+	if (!psGroup)
+	{
+		psGroup = grpCreate(id);
+	}
+	return psGroup;
 }
 
 // add a droid to a group
@@ -196,7 +210,7 @@ void DROID_GROUP::remove(DROID *psDroid)
 	// free the group if necessary
 	if (refCount <= 0)
 	{
-		grpGlobalManager.remove(this);
+		grpGlobalManager.remove(id);
 		delete this;
 	}
 }
