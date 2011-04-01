@@ -1279,7 +1279,6 @@
 		02C8AEF70BE68A5600E9D8A7 /* png_util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = png_util.h; path = ../lib/ivis_opengl/png_util.h; sourceTree = SOURCE_ROOT; };
 		02C8AEFA0BE68A6800E9D8A7 /* oggvorbis.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = oggvorbis.cpp; path = ../lib/sound/oggvorbis.cpp; sourceTree = SOURCE_ROOT; };
 		02C8AEFB0BE68A6800E9D8A7 /* oggvorbis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = oggvorbis.h; path = ../lib/sound/oggvorbis.h; sourceTree = SOURCE_ROOT; };
-		02CDDCF80D159BE000722688 /* autorevision.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = autorevision.cpp; path = ../build_tools/autorevision/autorevision.cpp; sourceTree = SOURCE_ROOT; };
 		02CDDD080D159D5900722688 /* autorevision.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = autorevision.h; path = ../src/autorevision.h; sourceTree = SOURCE_ROOT; };
 		02CDDD1A0D159E2F00722688 /* openal_error.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = openal_error.cpp; path = ../lib/sound/openal_error.cpp; sourceTree = SOURCE_ROOT; };
 		02CDDD1B0D159E2F00722688 /* openal_error.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = openal_error.h; path = ../lib/sound/openal_error.h; sourceTree = SOURCE_ROOT; };
@@ -1373,12 +1372,6 @@
 		43025E001120A4CA006C49B1 /* Warzone-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Warzone-Debug.xcconfig"; path = "configs/Warzone-Debug.xcconfig"; sourceTree = "<group>"; };
 		43025E011120A4CA006C49B1 /* Warzone-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Warzone-Release.xcconfig"; path = "configs/Warzone-Release.xcconfig"; sourceTree = "<group>"; };
 		43025E021120A4CA006C49B1 /* Warzone-StaticAnalyzer.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Warzone-StaticAnalyzer.xcconfig"; path = "configs/Warzone-StaticAnalyzer.xcconfig"; sourceTree = "<group>"; };
-		43025EB31120AD17006C49B1 /* Bison-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Bison-All.xcconfig"; path = "configs/Bison-All.xcconfig"; sourceTree = "<group>"; };
-		43025EB41120AD17006C49B1 /* Bison-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Bison-Debug.xcconfig"; path = "configs/Bison-Debug.xcconfig"; sourceTree = "<group>"; };
-		43025EB51120AD17006C49B1 /* Bison-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Bison-Release.xcconfig"; path = "configs/Bison-Release.xcconfig"; sourceTree = "<group>"; };
-		43025EB61120CD41006C49B1 /* Autorevision-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Autorevision-All.xcconfig"; path = "configs/Autorevision-All.xcconfig"; sourceTree = "<group>"; };
-		43025EB71120CD41006C49B1 /* Autorevision-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Autorevision-Debug.xcconfig"; path = "configs/Autorevision-Debug.xcconfig"; sourceTree = "<group>"; };
-		43025EB81120CD41006C49B1 /* Autorevision-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Autorevision-Release.xcconfig"; path = "configs/Autorevision-Release.xcconfig"; sourceTree = "<group>"; };
 		43025EB91120D338006C49B1 /* SDLmain-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "SDLmain-All.xcconfig"; path = "configs/SDLmain-All.xcconfig"; sourceTree = "<group>"; };
 		43025EBA1120D338006C49B1 /* SDLmain-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "SDLmain-Debug.xcconfig"; path = "configs/SDLmain-Debug.xcconfig"; sourceTree = "<group>"; };
 		43025EBB1120D338006C49B1 /* SDLmain-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "SDLmain-Release.xcconfig"; path = "configs/SDLmain-Release.xcconfig"; sourceTree = "<group>"; };
@@ -1400,9 +1393,6 @@
 		43025F2F1121FEC7006C49B1 /* PhysFS-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "PhysFS-All.xcconfig"; path = "configs/PhysFS-All.xcconfig"; sourceTree = "<group>"; };
 		43025F301121FEC7006C49B1 /* PhysFS-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "PhysFS-Debug.xcconfig"; path = "configs/PhysFS-Debug.xcconfig"; sourceTree = "<group>"; };
 		43025F311121FEC7006C49B1 /* PhysFS-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "PhysFS-Release.xcconfig"; path = "configs/PhysFS-Release.xcconfig"; sourceTree = "<group>"; };
-		43025F321122072F006C49B1 /* Popt-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Popt-All.xcconfig"; path = "configs/Popt-All.xcconfig"; sourceTree = "<group>"; };
-		43025F331122072F006C49B1 /* Popt-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Popt-Debug.xcconfig"; path = "configs/Popt-Debug.xcconfig"; sourceTree = "<group>"; };
-		43025F341122072F006C49B1 /* Popt-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Popt-Release.xcconfig"; path = "configs/Popt-Release.xcconfig"; sourceTree = "<group>"; };
 		43025F3511220C46006C49B1 /* QuesoGLC-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "QuesoGLC-All.xcconfig"; path = "configs/QuesoGLC-All.xcconfig"; sourceTree = "<group>"; };
 		43025F3611220C46006C49B1 /* QuesoGLC-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "QuesoGLC-Debug.xcconfig"; path = "configs/QuesoGLC-Debug.xcconfig"; sourceTree = "<group>"; };
 		43025F3711220C46006C49B1 /* QuesoGLC-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "QuesoGLC-Release.xcconfig"; path = "configs/QuesoGLC-Release.xcconfig"; sourceTree = "<group>"; };
@@ -2391,14 +2381,6 @@
 			name = "Exception Handler";
 			sourceTree = "<group>";
 		};
-		02CDDCFD0D159BE700722688 /* Autorevision sources */ = {
-			isa = PBXGroup;
-			children = (
-				02CDDCF80D159BE000722688 /* autorevision.cpp */,
-			);
-			name = "Autorevision sources";
-			sourceTree = "<group>";
-		};
 		02DDA85F0BD3C1A60049AB60 /* Zlib sources */ = {
 			isa = PBXGroup;
 			children = (
@@ -2530,9 +2512,6 @@
 				43025F3511220C46006C49B1 /* QuesoGLC-All.xcconfig */,
 				43025F3611220C46006C49B1 /* QuesoGLC-Debug.xcconfig */,
 				43025F3711220C46006C49B1 /* QuesoGLC-Release.xcconfig */,
-				43025F321122072F006C49B1 /* Popt-All.xcconfig */,
-				43025F331122072F006C49B1 /* Popt-Debug.xcconfig */,
-				43025F341122072F006C49B1 /* Popt-Release.xcconfig */,
 				43025F2F1121FEC7006C49B1 /* PhysFS-All.xcconfig */,
 				43025F301121FEC7006C49B1 /* PhysFS-Debug.xcconfig */,
 				43025F311121FEC7006C49B1 /* PhysFS-Release.xcconfig */,
@@ -2554,12 +2533,6 @@
 				43025EB91120D338006C49B1 /* SDLmain-All.xcconfig */,
 				43025EBA1120D338006C49B1 /* SDLmain-Debug.xcconfig */,
 				43025EBB1120D338006C49B1 /* SDLmain-Release.xcconfig */,
-				43025EB61120CD41006C49B1 /* Autorevision-All.xcconfig */,
-				43025EB71120CD41006C49B1 /* Autorevision-Debug.xcconfig */,
-				43025EB81120CD41006C49B1 /* Autorevision-Release.xcconfig */,
-				43025EB31120AD17006C49B1 /* Bison-All.xcconfig */,
-				43025EB41120AD17006C49B1 /* Bison-Debug.xcconfig */,
-				43025EB51120AD17006C49B1 /* Bison-Release.xcconfig */,
 				43025DFE1120A4CA006C49B1 /* Project-All.xcconfig */,
 				43025DFF1120A4CA006C49B1 /* Warzone-All.xcconfig */,
 				43025E001120A4CA006C49B1 /* Warzone-Debug.xcconfig */,
@@ -2572,7 +2545,6 @@
 		430B59F010D45990008EA88A /* Third Party */ = {
 			isa = PBXGroup;
 			children = (
-				02CDDCFD0D159BE700722688 /* Autorevision sources */,
 				022B2F460BD55940002E64E3 /* Gettext sources */,
 				02DDA85F0BD3C1A60049AB60 /* Zlib sources */,
 				02DDA8610BD3C1B50049AB60 /* Ogg sources */,
