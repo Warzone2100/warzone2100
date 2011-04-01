@@ -1262,7 +1262,6 @@
 		02C8AEF70BE68A5600E9D8A7 /* png_util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = png_util.h; path = ../lib/ivis_opengl/png_util.h; sourceTree = SOURCE_ROOT; };
 		02C8AEFA0BE68A6800E9D8A7 /* oggvorbis.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = oggvorbis.cpp; path = ../lib/sound/oggvorbis.cpp; sourceTree = SOURCE_ROOT; };
 		02C8AEFB0BE68A6800E9D8A7 /* oggvorbis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = oggvorbis.h; path = ../lib/sound/oggvorbis.h; sourceTree = SOURCE_ROOT; };
-		02CDDCF80D159BE000722688 /* autorevision.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = autorevision.cpp; path = ../build_tools/autorevision/autorevision.cpp; sourceTree = SOURCE_ROOT; };
 		02CDDD080D159D5900722688 /* autorevision.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = autorevision.h; path = ../src/autorevision.h; sourceTree = SOURCE_ROOT; };
 		02CDDD1A0D159E2F00722688 /* openal_error.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = openal_error.cpp; path = ../lib/sound/openal_error.cpp; sourceTree = SOURCE_ROOT; };
 		02CDDD1B0D159E2F00722688 /* openal_error.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = openal_error.h; path = ../lib/sound/openal_error.h; sourceTree = SOURCE_ROOT; };
@@ -2355,14 +2354,6 @@
 			name = "Exception Handler";
 			sourceTree = "<group>";
 		};
-		02CDDCFD0D159BE700722688 /* Autorevision sources */ = {
-			isa = PBXGroup;
-			children = (
-				02CDDCF80D159BE000722688 /* autorevision.cpp */,
-			);
-			name = "Autorevision sources";
-			sourceTree = "<group>";
-		};
 		02DDA85F0BD3C1A60049AB60 /* Zlib sources */ = {
 			isa = PBXGroup;
 			children = (
@@ -2520,7 +2511,6 @@
 		430B59F010D45990008EA88A /* Third Party */ = {
 			isa = PBXGroup;
 			children = (
-				02CDDCFD0D159BE700722688 /* Autorevision sources */,
 				022B2F460BD55940002E64E3 /* Gettext sources */,
 				02DDA85F0BD3C1A60049AB60 /* Zlib sources */,
 				02DDA8610BD3C1B50049AB60 /* Ogg sources */,
