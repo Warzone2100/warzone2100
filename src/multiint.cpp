@@ -25,7 +25,7 @@
  * along with connection and game options.
  */
 
-#include "lib/framework/frame.h"
+#include "lib/framework/wzapp.h"
 
 #include <time.h>
 
@@ -53,8 +53,6 @@
 #include "lib/widget/widget.h"
 #include "lib/widget/widgint.h"
 #include "lib/widget/label.h"
-
-#include "lib/iniparser/iniparser.h"
 
 #include "challenge.h"
 #include "main.h"
@@ -546,19 +544,20 @@ void readAIs()
 
 		sstrcpy(path, basepath);
 		sstrcat(path, *i);
-		inifile *inif = inifile_load(path);
-		if (!inif)
+		WzConfig aiconf(path);
+		if (aiconf.status() != QSettings::NoError)
 		{
 			debug(LOG_ERROR, "Failed to open AI %s", path);
 			continue;
 		}
+
 		AIDATA ai;
-		inifile_set_current_section(inif, "AI");
-		sstrcpy(ai.name, inifile_get(inif, "name", "error"));
-		sstrcpy(ai.slo, inifile_get(inif, "slo", "error"));
-		sstrcpy(ai.vlo, inifile_get(inif, "vlo", "error"));
-		sstrcpy(ai.js, inifile_get(inif, "js", ""));
-		sstrcpy(ai.tip, inifile_get(inif, "tip", "Click to choose this AI"));
+		aiconf.beginGroup("AI");
+		sstrcpy(ai.name, aiconf.value("name", "error").toString().toAscii().constData());
+		sstrcpy(ai.slo, aiconf.value("slo", "error").toString().toAscii().constData());
+		sstrcpy(ai.vlo, aiconf.value("vlo", "error").toString().toAscii().constData());
+		sstrcpy(ai.js, aiconf.value("js", "").toString().toAscii().constData());
+		sstrcpy(ai.tip, aiconf.value("tip", "Click to choose this AI").toString().toAscii().constData());
 		if (strcmp(ai.name, "Nexus") == 0)
 		{
 			std::vector<AIDATA>::iterator it;
@@ -569,7 +568,6 @@ void readAIs()
 		{
 			aidata.push_back(ai);
 		}
-		inifile_delete(inif);
 	}
 	PHYSFS_freeList(files);
 }
@@ -3510,8 +3508,7 @@ bool startMultiOptions(bool bReenter)
 
 		if (challengeActive)
 		{
-			inifile	*inif = inifile_load(sRequestResult);
-			inifile_set_current_section(inif, "challenge");
+			WzConfig challenge(sRequestResult);
 
 			resetReadyStatus(false);
 			removeWildcards((char*)sPlayer);
@@ -3523,43 +3520,38 @@ bool startMultiOptions(bool bReenter)
 			}
 			bHosted = true;
 
-			sstrcpy(game.map, inifile_get(inif, "Map", game.map));
-			game.maxPlayers = inifile_get_as_int(inif, "MaxPlayers", game.maxPlayers);	// TODO, read from map itself, not here!!
-			game.scavengers = inifile_get_as_bool(inif, "Scavengers", game.scavengers);
+			challenge.beginGroup("challenge");
+			sstrcpy(game.map, challenge.value("Map", game.map).toString().toAscii().constData());
+			game.maxPlayers = challenge.value("MaxPlayers", game.maxPlayers).toInt();	// TODO, read from map itself, not here!!
+			game.scavengers = challenge.value("Scavengers", game.scavengers).toInt();
 			game.alliance = ALLIANCES_TEAMS;
 			netPlayersUpdated = true;
 			mapDownloadProgress = 100;
-			game.power = inifile_get_as_int(inif, "challenge:Power", game.power);
-			game.base = inifile_get_as_int(inif, "challenge:Bases", game.base + 1) - 1;		// count from 1 like the humans do
-			allowChangePosition = inifile_get_as_bool(inif, "challenge:AllowPositionChange", false);
+			game.power = challenge.value("Power", game.power).toInt();
+			game.base = challenge.value("Bases", game.base + 1).toInt() - 1;		// count from 1 like the humans do
+			allowChangePosition = challenge.value("AllowPositionChange", false).toBool();
+			challenge.endGroup();
 
 			for (int i = 0; i < MAX_PLAYERS; i++)
 			{
-				char key[64];
-				const char *value;
-
-				ssprintf(key, "player_%d:team", i + 1);
-				NetPlay.players[i].team = inifile_get_as_int(inif, key, NetPlay.players[i].team + 1) - 1;
-				ssprintf(key, "player_%d:position", i + 1);
-				if (inifile_key_exists(inif, key))
+				challenge.beginGroup("player_" + QString::number(i + 1));
+				NetPlay.players[i].team = challenge.value("team", NetPlay.players[i].team + 1).toInt() - 1;
+				if (challenge.contains("position"))
 				{
-					changePosition(i, inifile_get_as_int(inif, key, NetPlay.players[i].position));
+					changePosition(i, challenge.value("position", NetPlay.players[i].position).toInt());
 				}
 				if (i != 0)	// player index zero is always the challenger
 				{
-					ssprintf(key, "player_%d:difficulty", i + 1);
-					value = inifile_get(inif, key, "Medium");
+					QString value = challenge.value("difficulty", "Medium").toString();
 					for (int j = 0; j < ARRAY_SIZE(difficultyList); j++)
 					{
-						if (strcasecmp(difficultyList[j], value) == 0)
+						if (strcasecmp(difficultyList[j], value.toAscii().constData()) == 0)
 						{
 							game.skDiff[i] = difficultyValue[j];
 						}
 					}
 				}
 			}
-
-			inifile_delete(inif);
 
 			ingame.localOptionsReceived = true;
 			addGameOptions();									// update game options box.

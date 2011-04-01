@@ -24,7 +24,7 @@
  *
  */
 
-#include "lib/framework/frame.h"
+#include "lib/framework/wzapp.h"
 #include "lib/framework/strres.h"
 #include "lib/framework/stdio_ext.h"
 #include "lib/widget/widget.h"
@@ -36,7 +36,6 @@
 #include "lib/script/script.h"
 #include "scripttabs.h"
 #include "lib/gamelib/gtime.h"
-#include "lib/iniparser/iniparser.h"
 #include "objects.h"
 #include "hci.h"
 #include "loadsave.h"
@@ -3315,10 +3314,10 @@ bool scrGameOverMessage(void)
 
 	if (challengeActive)
 	{
-		char sPath[64], timestr[32], *fStr;
+		char sPath[64], *fStr;
 		int seconds = 0, newtime = (gameTime - mission.startTime) / GAME_TICKS_PER_SEC;
 		bool victory = false;
-		inifile *inif = inifile_load(CHALLENGE_SCORES);
+		WzConfig scores(CHALLENGE_SCORES);
 
 		fStr = strrchr(sRequestResult, '/');
 		fStr++;	// skip slash
@@ -3329,16 +3328,9 @@ bool scrGameOverMessage(void)
 		}
 		sstrcpy(sPath, fStr);
 		sPath[strlen(sPath) - 4] = '\0';	// remove .ini
-		if (inif)
-		{
-			inifile_set_current_section(inif, sPath);
-			victory = inifile_get_as_bool(inif, "Victory", false);
-			seconds = inifile_get_as_int(inif, "seconds", 0);
-		}
-		else
-		{
-			inif = inifile_new();
-		}
+		scores.beginGroup(sPath);
+		victory = scores.value("Victory", false).toBool();
+		seconds = scores.value("Seconds", 0).toInt();
 
 		// Update score if we have a victory and best recorded was a loss,
 		// or both were losses but time is higher, or both were victories
@@ -3347,14 +3339,11 @@ bool scrGameOverMessage(void)
 		    || (!gameWon && !victory && newtime > seconds)
 		    || (gameWon && victory && newtime < seconds))
 		{
-			inifile_set_current_section(inif, sPath);
-			ssprintf(timestr, "%d", newtime);
-			inifile_set(inif, "Seconds", timestr);
-			inifile_set(inif, "Player", NetPlay.players[selectedPlayer].name);
-			inifile_set(inif, "Victory", gameWon ? "true": "false");
+			scores.setValue("Seconds", newtime);
+			scores.setValue("Victory", gameWon);
+			scores.setValue("Player", NetPlay.players[selectedPlayer].name);
 		}
-		inifile_save_as(inif, CHALLENGE_SCORES);
-		inifile_delete(inif);
+		scores.endGroup();
 	}
 
 	return true;

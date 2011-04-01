@@ -29,6 +29,7 @@
 #include <QtCore/QThread>
 #include <QtCore/QMutex>
 #include <QtCore/QSemaphore>
+#include <QtCore/QSettings>
 
 // Get platform defines before checking for them.
 // Qt headers MUST come before platform specific stuff!
@@ -36,6 +37,12 @@
 #include "lib/framework/cursors.h"
 #include "lib/ivis_opengl/textdraw.h"
 #include "input.h"
+
+class WzConfig : public QSettings
+{
+public:
+	WzConfig(const QString &name, QObject *parent = 0) : QSettings(QString("wz::") + name, QSettings::IniFormat, parent) {}
+};
 
 class WzMainWindow : public QGLWidget
 {

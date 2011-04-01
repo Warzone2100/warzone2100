@@ -135,11 +135,11 @@ public:
 		case QAbstractFileEngine::AbsoluteName:
 			if (PHYSFS_exists(name.toAscii().constData()))
 			{
-				return QString(PHYSFS_getRealDir(name.toAscii().constData())) + PHYSFS_getDirSeparator() + name;
+				return "wz::" + name;
 			}
 			else
 			{
-				return QString(PHYSFS_getWriteDir()) + PHYSFS_getDirSeparator() + name;
+				return QString(PHYSFS_getWriteDir()) + name;
 			}
 		default:
 			qWarning("Unsupported path lookup type (%d)", (int)file);
