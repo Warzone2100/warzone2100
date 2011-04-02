@@ -232,6 +232,8 @@ void WzMainWindow::drawPixmap(int XPos, int YPos, QPixmap *pix)
 {
 	QPainter painter(context()->device());
 	painter.drawPixmap(XPos, YPos, *pix);
+	painter.end();
+	glEnable(GL_CULL_FACE);
 	rendStatesRendModeHack();  // rendStates.rendMode = REND_ALPHA;
 	pie_SetRendMode(REND_OPAQUE);		// beat state machinery into submission
 }
@@ -1222,6 +1224,7 @@ void iV_DrawTextRotated(const char* string, float XPos, float YPos, float rotati
 	{
 		painter.drawText(XPos, YPos, QString::fromUtf8(string));
 	}
+	painter.end();
 	glEnable(GL_CULL_FACE);
 	rendStatesRendModeHack();  // rendStates.rendMode = REND_ALPHA;
 	pie_SetRendMode(REND_OPAQUE);		// beat state machinery into submission
