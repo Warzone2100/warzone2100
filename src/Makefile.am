@@ -291,7 +291,6 @@ warzone2100_LIBS = \
 	$(top_builddir)/lib/ivis_opengl/libivis_opengl.a \
 	$(top_builddir)/lib/gamelib/libgamelib.a \
 	$(top_builddir)/lib/framework/libframework.a \
-	$(top_builddir)/lib/iniparser/libiniparser.a \
 	$(top_builddir)/lib/exceptionhandler/libexceptionhandler.a
 
 warzone2100_LDADD = $(warzone2100_LIBS) $(LTLIBINTL) $(PHYSFS_LIBS) $(PNG_LIBS) $(OGGVORBIS_LIBS) $(THEORA_LIBS) $(OPENAL_LIBS) $(OPENGLC_LIBS) $(OPENGL_LIBS) $(QT4_LIBS) $(GLee_LIBS)
