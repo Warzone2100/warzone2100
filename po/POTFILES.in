@@ -169,11 +169,11 @@ lib/framework/tagfile.cpp
 lib/framework/treap.cpp
 lib/framework/trig.cpp
 lib/framework/utf.cpp
+lib/framework/wzapp.cpp
 lib/gamelib/anim.cpp
 lib/gamelib/animobj.cpp
 lib/gamelib/gtime.cpp
 lib/gamelib/hashtable.cpp
-lib/iniparser/iniparser.cpp
 lib/ivis_opengl/bitimage.cpp
 lib/ivis_opengl/imd.cpp
 lib/ivis_opengl/imdload.cpp
@@ -300,6 +300,8 @@ src/parsetest.cpp
 src/pointtree.cpp
 src/power.cpp
 src/projectile.cpp
+src/qtscript.cpp
+src/qtscriptfuncs.cpp
 src/radar.cpp
 src/random.cpp
 src/raycast.cpp
