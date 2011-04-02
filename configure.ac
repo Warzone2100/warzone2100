@@ -352,7 +352,7 @@ AS_IF([test "x$enable_sound" = "xyes"],[
 	PKG_CHECK_MODULES([OGGVORBIS], [vorbisfile >= 1.1])
 ])
 
-PKG_CHECK_MODULES([GLEW], [glew >= 1.5.4])
+PKG_CHECK_MODULES([GLEW], [glew >= 1.5.2])
 
 # Checks for libraries:
 
