@@ -261,25 +261,26 @@ void setOverrideMods(char * modlist)
 }
 void setOverrideMap(char* map, int maxPlayers)
 {
-    override_map[0] = (char*)malloc(strlen(map)+1+6);
-    override_map[0][0] = '0' + maxPlayers;
-    override_map[0][1] = '\0';
-    strcat(override_map[0],"c-");
-    if (strncmp(map, "Sk-", 3) == 0)
-    {
-        strcat(override_map[0],map+3);
-    }
-    else
-    {
-        strcat(override_map[0],map);
-    }
-    if (strncmp(override_map[0]+strlen(override_map[0])-3,"-T",2) == 0)
-    {
-        override_map[0][strlen(override_map[0])-3] = '\0';
-    }
-    strcat(override_map[0],".wz");
-    override_map[1] = NULL;
-    use_override_map = true;
+	// Transform "Sk-Rush-T2" into "4c-Rush.wz" so it can be matched by the map loader
+	override_map[0] = (char*)malloc(strlen(map)+1+6);
+	override_map[0][0] = '0' + maxPlayers;
+	override_map[0][1] = '\0';
+	strcat(override_map[0],"c-");
+	if (strncmp(map, "Sk-", 3) == 0)
+	{
+		strcat(override_map[0],map+3);
+	}
+	else
+	{
+		strcat(override_map[0],map);
+	}
+	if (strncmp(override_map[0]+strlen(override_map[0])-3,"-T",2) == 0)
+	{
+		override_map[0][strlen(override_map[0])-3] = '\0';
+	}
+	strcat(override_map[0],".wz");
+	override_map[1] = NULL;
+	use_override_map = true;
 }
 void clearOverrides(void)
 {
@@ -292,12 +293,12 @@ void clearOverrides(void)
 	override_mods[0] = NULL;
 	override_mod_list = NULL;
 
-    if (override_map[0])
-    {
-        free(override_map[0]);
-        override_map[0] = NULL;
-    }
-    use_override_map = false;
+	if (override_map[0])
+	{
+		free(override_map[0]);
+		override_map[0] = NULL;
+	}
+	use_override_map = false;
 }
 
 void addLoadedMod(const char * modname)
@@ -762,7 +763,7 @@ static void startGameLoop(void)
 {
 	SetGameMode(GS_NORMAL);
 
-    if (!levLoadData(aLevelName, NULL, GTYPE_SCENARIO_START))
+	if (!levLoadData(aLevelName, NULL, GTYPE_SCENARIO_START))
 	{
 		debug( LOG_FATAL, "Shutting down after failure" );
 		exit(EXIT_FAILURE);
