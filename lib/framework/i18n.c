@@ -38,27 +38,29 @@
 #endif
 
 // Language names (http://en.wikipedia.org/wiki/List_of_ISO_639-2_codes)
+#define LANG_NAME_BASQUE "euskara"
+#define LANG_NAME_CHINESE_SIMPLIFIED "汉语"
+#define LANG_NAME_CHINESE_TRADITIONAL "漢語"
+#define LANG_NAME_CROATIAN "Hrvatski"
 #define LANG_NAME_CZECH "česky"
 #define LANG_NAME_DANISH "Dansk"
-#define LANG_NAME_GERMAN "Deutsch"
+#define LANG_NAME_DUTCH "Nederlands"
 #define LANG_NAME_ENGLISH "English"
 #define LANG_NAME_ENGLISH_UK "English (United Kingdom)"
-#define LANG_NAME_SPANISH "Español"
 #define LANG_NAME_ESTONIAN "Eesti Keel"
-#define LANG_NAME_BASQUE "euskara"
 #define LANG_NAME_FINNISH "tanska"
 #define LANG_NAME_FRENCH "Français"
 #define LANG_NAME_FRISIAN_NETHERLANDS "frysk"
+#define LANG_NAME_GERMAN "Deutsch"
+#define LANG_NAME_HUNGARIAN "magyar"
 #define LANG_NAME_IRISH "Imruagadh"
-#define LANG_NAME_CROATIAN "Hrvatski"
 #define LANG_NAME_ITALIAN "Italiano"
 #define LANG_NAME_KOREAN "한국어"
-#define LANG_NAME_LITHUANIAN "lietuvių kalba"
 #define LANG_NAME_LATIN "latine"
 #define LANG_NAME_LATVIAN "latviešu valoda"
+#define LANG_NAME_LITHUANIAN "lietuvių kalba"
 #define LANG_NAME_NORWEGIAN "Norsk"
 #define LANG_NAME_NORWEGIAN_NYNORSK "nynorsk"
-#define LANG_NAME_DUTCH "Nederlands"
 #define LANG_NAME_POLISH "Polski"
 #define LANG_NAME_PORTUGUESE_BRAZILIAN "Português Brasileiro"
 #define LANG_NAME_PORTUGUESE "Português"
@@ -66,13 +68,12 @@
 #define LANG_NAME_RUSSIAN "Русский"
 #define LANG_NAME_SLOVAK "Slovensky"
 #define LANG_NAME_SLOVENIAN "Slovenski"
-#define LANG_NAME_SWEDISH_SWEDEN "svenska (Sverige)"
+#define LANG_NAME_SPANISH "Español"
 #define LANG_NAME_SWEDISH "svenska"
+#define LANG_NAME_SWEDISH_SWEDEN "svenska (Sverige)"
 #define LANG_NAME_TURKISH "Türkçe"
-#define LANG_NAME_UZBEK_CYRILLIC "Ўзбек"
 #define LANG_NAME_UKRAINIAN "Українська"
-#define LANG_NAME_CHINESE_SIMPLIFIED "汉语"
-#define LANG_NAME_CHINESE_TRADITIONAL "漢語"
+#define LANG_NAME_UZBEK_CYRILLIC "Ўзбек"
 
 #if defined(WZ_OS_WIN)
 /*
@@ -109,6 +110,7 @@ static const struct
 //	{ "fy", LANG_NAME_FRISIAN_NETHERLANDS, LANG_FRISIAN, SUBLANG_FRISIAN_NETHERLANDS },
 //	{ "ga", LANG_NAME_IRISH, LANG_IRISH, SUBLANG_IRISH_IRELAND },
 	{ "hr", LANG_NAME_CROATIAN, LANG_CROATIAN, SUBLANG_DEFAULT },
+	{ "hu", LANG_NAME_HUNGARIAN, LANG_HUNGARIAN, SUBLANG_DEFAULT },
 	{ "it", LANG_NAME_ITALIAN, LANG_ITALIAN, SUBLANG_ITALIAN },
 	{ "ko_KR", LANG_NAME_KOREAN, LANG_KOREAN, SUBLANG_DEFAULT },
 //	{ "la", LANG_NAME_LATIN, LANG_LATIN, SUBLANG_DEFAULT },
@@ -168,6 +170,7 @@ static const struct
 //	{ "fy", LANG_NAME_FRISIAN_NETHERLANDS, "fy.UTF-8", "fy" },
 //	{ "ga", LANG_NAME_IRISH, "ga.UTF-8", "ga" },
 	{ "hr", LANG_NAME_CROATIAN, "hr_HR.UTF-8", "hr_HR" },
+	{ "hu", LANG_NAME_HUNGARIAN, "hu_HU.UTF-8", "hu_HU" },
 	{ "it", LANG_NAME_ITALIAN, "it_IT.UTF-8", "it_IT" },
 	{ "ko_KR", LANG_NAME_KOREAN, "ko_KR.UTF-8", "ko_KR" },
 //	{ "la", LANG_NAME_LATIN, "la.UTF-8", "la" },
