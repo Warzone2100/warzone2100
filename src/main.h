@@ -50,5 +50,7 @@ extern char * multiplay_mods[MAX_MODS];
 extern char * override_mods[MAX_MODS];
 extern char * override_mod_list;
 extern bool use_override_mods;
+extern char * override_map[2];
+extern bool use_override_map;
 
 #endif // __INCLUDED_SRC_MAIN_H__
