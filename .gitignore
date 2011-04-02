@@ -182,10 +182,14 @@ tools/qwzm/ui_qwzm.h
 .DS_Store
 *.pbxuser
 *.perspectivev3
+macosx/Warzone.xcodeproj/xcuserdata/*
+macosx/Warzone.xcodeproj/project.xcworkspace/xcuserdata/*
+macosx/Warzone.xcworkspace/xcuserdata/*
 macosx/configs/codeident
 
 # build folders
 /macosx/build/
+/macosx/Build/
 /macosx/external/
 /macosx/prebuilt/
 /build

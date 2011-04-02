@@ -4366,6 +4366,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025DFE1120A4CA006C49B1 /* Project-All.xcconfig */;
 			buildSettings = {
+				SDKROOT = macosx10.6;
 			};
 			name = Debug;
 		};
@@ -4373,6 +4374,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025DFE1120A4CA006C49B1 /* Project-All.xcconfig */;
 			buildSettings = {
+				SDKROOT = macosx10.6;
 			};
 			name = Release;
 		};
@@ -4499,6 +4501,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025DFE1120A4CA006C49B1 /* Project-All.xcconfig */;
 			buildSettings = {
+				SDKROOT = macosx10.6;
 			};
 			name = StaticAnalyzer;
 		};
