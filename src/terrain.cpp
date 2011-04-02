@@ -29,13 +29,13 @@
  * The water is drawn using the hardcoded page-80 and page-81 textures. 
  */
 
-#include <GLee.h>
 #ifdef CursorShape
 #undef CursorShape  // Random #defines are bad.
 #endif
 #include <string.h>
 
 #include "lib/framework/frame.h"
+#include "lib/framework/opengl.h"
 #include "lib/ivis_opengl/ivisdef.h"
 #include "lib/ivis_opengl/imd.h"
 #include "lib/ivis_opengl/piefunc.h"

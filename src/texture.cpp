@@ -23,15 +23,13 @@
  * This is where we do texture atlas generation.
  */
 
-#include <GLee.h>
 #ifdef CursorShape
 #undef CursorShape  // Random #defines are bad.
 #endif
 #include "lib/framework/frame.h"
-
+#include "lib/framework/opengl.h"
 
 #include <string.h>
-
 #include <physfs.h>
 
 #include "lib/framework/file.h"
@@ -114,7 +112,7 @@ static int newPage(const char *name, int level, int width, int height, int count
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 	// Use anisotropic filtering, if available, but only max 4.0 to reduce processor burden
-	if (GLEE_EXT_texture_filter_anisotropic)
+	if (GL_EXT_texture_filter_anisotropic)
 	{
 		GLfloat max;
 

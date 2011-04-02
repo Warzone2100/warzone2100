@@ -28,10 +28,9 @@
 
 
 #include "lib/framework/frame.h"
+#include "lib/framework/opengl.h"
 #include "lib/framework/wzapp_c.h"
 
-#include <GLee.h>
-// NOTE: Header order is very important, don't change the above!
 #include "lib/ivis_opengl/piedef.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/piemode.h"
@@ -55,7 +54,7 @@ bool pie_Initialise(void)
 	pie_TexInit();
 
 	/* Find texture compression extension */
-	if (GLEE_ARB_texture_compression)
+	if (GL_ARB_texture_compression)
 	{
 		debug(LOG_TEXTURE, "Texture compression: Yes");
 		wz_texture_compression = GL_COMPRESSED_RGBA_ARB;
