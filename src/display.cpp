@@ -1828,7 +1828,7 @@ static void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 					_("%s - Damage %d%% - Experience %d, %s"),
 					droidGetName(psDroid),
 					100 - clip(PERCENT(psDroid->body,psDroid->originalBody), 0, 100),
-					psDroid->experience/65536, getDroidLevelName(psDroid)));
+					psDroid->experience/65536, _(getDroidLevelName(psDroid))));
 
 				FeedbackOrderGiven();
 			}
@@ -2403,7 +2403,7 @@ static void dealWithRMB( void )
 									_("%s - Damage %d%% - Experience %d, %s"),
 									droidGetName(psDroid),
 									100 - clip(PERCENT(psDroid->body,psDroid->originalBody), 0, 100),
-									psDroid->experience/65536, getDroidLevelName(psDroid)));
+									psDroid->experience/65536, _(getDroidLevelName(psDroid))));
 
 								FeedbackOrderGiven();
 							}
