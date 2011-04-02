@@ -384,7 +384,6 @@
 		02DDA8D00BD3C3600049AB60 /* posix.c in Sources */ = {isa = PBXBuildFile; fileRef = 02DDA8CE0BD3C3600049AB60 /* posix.c */; };
 		02DDA8D10BD3C3600049AB60 /* unix.c in Sources */ = {isa = PBXBuildFile; fileRef = 02DDA8CF0BD3C3600049AB60 /* unix.c */; };
 		02DDA8D40BD3C3820049AB60 /* Zlib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02356D830BD3BB4100E9A019 /* Zlib.framework */; };
-		02DE76060DC3B84900D48F58 /* GLee.c in Sources */ = {isa = PBXBuildFile; fileRef = 02DE76040DC3B84800D48F58 /* GLee.c */; settings = {COMPILER_FLAGS = "-Wno-missing-declarations -Wno-strict-aliasing"; }; };
 		2244463C0E3EB7CB004D0F1F /* message_lexer.l in Sources */ = {isa = PBXBuildFile; fileRef = 224446390E3EB7CB004D0F1F /* message_lexer.l */; };
 		2244463D0E3EB7CB004D0F1F /* message_parser.y in Sources */ = {isa = PBXBuildFile; fileRef = 2244463A0E3EB7CB004D0F1F /* message_parser.y */; };
 		22E244D70E65361800EC2B3E /* baseobject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22E244D40E65361800EC2B3E /* baseobject.cpp */; };
@@ -403,6 +402,12 @@
 		4333661C11A07FFF00380F5E /* QtGui.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 4333611F11A07FB900380F5E /* QtGui.framework */; };
 		4333661D11A07FFF00380F5E /* QtOpenGL.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 4333612111A07FB900380F5E /* QtOpenGL.framework */; };
 		4336D8AA111DDF0F0012E8E4 /* random.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4336D8A8111DDF0F0012E8E4 /* random.cpp */; };
+		43502D6D1347648300A02A1F /* GLExtensionWrangler.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43502D521347640700A02A1F /* GLExtensionWrangler.framework */; };
+		43502D77134764B000A02A1F /* GLExtensionWrangler.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 43502D521347640700A02A1F /* GLExtensionWrangler.framework */; };
+		43502DC51347675300A02A1F /* glew.c in Sources */ = {isa = PBXBuildFile; fileRef = 43502DC21347675300A02A1F /* glew.c */; };
+		43502DC81347676600A02A1F /* glew.h in Headers */ = {isa = PBXBuildFile; fileRef = 43502DBD1347670800A02A1F /* glew.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		43502DCC1347681D00A02A1F /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43502DCB1347681D00A02A1F /* AGL.framework */; };
+		43502DCD1347681D00A02A1F /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43B8FD34127CB13F006F5A13 /* OpenGL.framework */; };
 		4355E08010D5FADE00A19EE4 /* physfs_platforms.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E07F10D5FAC200A19EE4 /* physfs_platforms.h */; };
 		4355E13010D6028C00A19EE4 /* codec.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E12C10D6028C00A19EE4 /* codec.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4355E13110D6028C00A19EE4 /* theora.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E12D10D6028C00A19EE4 /* theora.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -686,6 +691,13 @@
 			remoteGlobalIDString = 02356D820BD3BB4100E9A019;
 			remoteInfo = Zlib;
 		};
+		43502D82134764BF00A02A1F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43502D511347640700A02A1F /* GLExtensionWrangler */;
+			remoteInfo = GLExtensionWrangler;
+		};
 		43AE78FC10F0F4F500FED5D3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
@@ -741,6 +753,7 @@
 				43F1D99A1343F1DE001478EC /* QtScript.framework in Copy frameworks */,
 				4333661C11A07FFF00380F5E /* QtGui.framework in Copy frameworks */,
 				4333661D11A07FFF00380F5E /* QtOpenGL.framework in Copy frameworks */,
+				43502D77134764B000A02A1F /* GLExtensionWrangler.framework in Copy frameworks */,
 				02581C880BD5AD1100957CBC /* Zlib.framework in Copy frameworks */,
 				023ECC500E9318D600D9E7C3 /* Theora.framework in Copy frameworks */,
 				02581C810BD5AD1100957CBC /* Gettext.framework in Copy frameworks */,
@@ -1340,8 +1353,6 @@
 		02DDA8C60BD3C3450049AB60 /* zip.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = zip.c; path = external/physfs/archivers/zip.c; sourceTree = "<group>"; };
 		02DDA8CE0BD3C3600049AB60 /* posix.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = posix.c; path = external/physfs/platform/posix.c; sourceTree = "<group>"; };
 		02DDA8CF0BD3C3600049AB60 /* unix.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = unix.c; path = external/physfs/platform/unix.c; sourceTree = "<group>"; };
-		02DE76040DC3B84800D48F58 /* GLee.c */ = {isa = PBXFileReference; comments = "FIXME: -Wno-missing-declarations is there because there are 1606 that pop; at some pont this should be fixed."; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = GLee.c; path = ../lib/ivis_opengl/GLee.c; sourceTree = SOURCE_ROOT; };
-		02DE76050DC3B84800D48F58 /* GLee.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLee.h; path = ../lib/ivis_opengl/GLee.h; sourceTree = SOURCE_ROOT; };
 		02F5CC560D1490620000A2D0 /* database.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = database.c; path = external/quesoglc/src/database.c; sourceTree = "<group>"; };
 		2234C29F0E2BE18200E7704C /* positiondef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = positiondef.h; path = ../src/positiondef.h; sourceTree = SOURCE_ROOT; };
 		224446390E3EB7CB004D0F1F /* message_lexer.l */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.lex; name = message_lexer.l; path = ../src/message_lexer.l; sourceTree = SOURCE_ROOT; };
@@ -1397,6 +1408,17 @@
 		4333612111A07FB900380F5E /* QtOpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = QtOpenGL.framework; sourceTree = "<group>"; };
 		4336D8A8111DDF0F0012E8E4 /* random.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = random.cpp; path = ../src/random.cpp; sourceTree = SOURCE_ROOT; };
 		4336D8A9111DDF0F0012E8E4 /* random.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = random.h; path = ../src/random.h; sourceTree = SOURCE_ROOT; };
+		43502D30134763D700A02A1F /* Glew-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Glew-All.xcconfig"; path = "configs/Glew-All.xcconfig"; sourceTree = "<group>"; };
+		43502D31134763D700A02A1F /* Glew-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Glew-Debug.xcconfig"; path = "configs/Glew-Debug.xcconfig"; sourceTree = "<group>"; };
+		43502D32134763D700A02A1F /* Glew-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Glew-Release.xcconfig"; path = "configs/Glew-Release.xcconfig"; sourceTree = "<group>"; };
+		43502D521347640700A02A1F /* GLExtensionWrangler.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = GLExtensionWrangler.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		43502DBD1347670800A02A1F /* glew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glew.h; path = external/glew/include/GL/glew.h; sourceTree = "<group>"; };
+		43502DBE1347670800A02A1F /* glxew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glxew.h; path = external/glew/include/GL/glxew.h; sourceTree = "<group>"; };
+		43502DBF1347670800A02A1F /* wglew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wglew.h; path = external/glew/include/GL/wglew.h; sourceTree = "<group>"; };
+		43502DC21347675300A02A1F /* glew.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = glew.c; path = external/glew/src/glew.c; sourceTree = "<group>"; };
+		43502DC31347675300A02A1F /* glewinfo.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = glewinfo.c; path = external/glew/src/glewinfo.c; sourceTree = "<group>"; };
+		43502DC41347675300A02A1F /* visualinfo.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = visualinfo.c; path = external/glew/src/visualinfo.c; sourceTree = "<group>"; };
+		43502DCB1347681D00A02A1F /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = System/Library/Frameworks/AGL.framework; sourceTree = SDKROOT; };
 		43536BD210DFEB37006B579C /* GenericFramework-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GenericFramework-Info.plist"; path = "Resources/GenericFramework-Info.plist"; sourceTree = "<group>"; };
 		4355E07F10D5FAC200A19EE4 /* physfs_platforms.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = physfs_platforms.h; path = external/physfs/physfs_platforms.h; sourceTree = "<group>"; };
 		4355E12C10D6028C00A19EE4 /* codec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = codec.h; path = external/libtheora/include/theora/codec.h; sourceTree = "<group>"; };
@@ -1628,6 +1650,7 @@
 				43B8FCB9127CB086006F5A13 /* Ogg.framework in Frameworks */,
 				43B8FCD6127CB09A006F5A13 /* Vorbis.framework in Frameworks */,
 				43B8FCF3127CB0B7006F5A13 /* Theora.framework in Frameworks */,
+				43502D6D1347648300A02A1F /* GLExtensionWrangler.framework in Frameworks */,
 				43B8FD10127CB0BE006F5A13 /* Gettext.framework in Frameworks */,
 				43B8FD2E127CB13F006F5A13 /* Carbon.framework in Frameworks */,
 				43B8FD2F127CB13F006F5A13 /* Cocoa.framework in Frameworks */,
@@ -1674,6 +1697,15 @@
 				02DDA8D40BD3C3820049AB60 /* Zlib.framework in Frameworks */,
 				43B8FE9B127CB327006F5A13 /* Carbon.framework in Frameworks */,
 				43B8FE9D127CB327006F5A13 /* IOKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43502D501347640700A02A1F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43502DCC1347681D00A02A1F /* AGL.framework in Frameworks */,
+				43502DCD1347681D00A02A1F /* OpenGL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1829,6 +1861,7 @@
 				022B2F220BD55814002E64E3 /* Gettext.framework */,
 				0223BBD10CFE3D5C0056EF85 /* QuesoGLC.framework */,
 				97AEAB330E8C1B5200A10721 /* Theora.framework */,
+				43502D521347640700A02A1F /* GLExtensionWrangler.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1970,8 +2003,6 @@
 				0246A1000BD3CC29004D1C70 /* rendmode.h */,
 				0246A1010BD3CC29004D1C70 /* tex.h */,
 				0246A1020BD3CC29004D1C70 /* textdraw.h */,
-				02DE76040DC3B84800D48F58 /* GLee.c */,
-				02DE76050DC3B84800D48F58 /* GLee.h */,
 				0246A10B0BD3CC43004D1C70 /* ivi.cpp */,
 				0246A10C0BD3CC43004D1C70 /* pieblitfunc.cpp */,
 				0246A10D0BD3CC43004D1C70 /* piedraw.cpp */,
@@ -2449,6 +2480,7 @@
 		02DDA8DF0BD3C3A80049AB60 /* System frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				43502DCB1347681D00A02A1F /* AGL.framework */,
 				43B8FD2D127CB13F006F5A13 /* Carbon.framework */,
 				97F013D10EDEAE5C004947E5 /* Cocoa.framework */,
 				43B8FE83127CB29D006F5A13 /* CoreFoundation.framework */,
@@ -2472,6 +2504,9 @@
 		43025DEC1120A4B6006C49B1 /* Configurations */ = {
 			isa = PBXGroup;
 			children = (
+				43502D30134763D700A02A1F /* Glew-All.xcconfig */,
+				43502D31134763D700A02A1F /* Glew-Debug.xcconfig */,
+				43502D32134763D700A02A1F /* Glew-Release.xcconfig */,
 				43025F3C11221017006C49B1 /* Theora-All.xcconfig */,
 				43025F3D11221018006C49B1 /* Theora-Debug.xcconfig */,
 				43025F3E11221018006C49B1 /* Theora-Release.xcconfig */,
@@ -2509,6 +2544,7 @@
 			isa = PBXGroup;
 			children = (
 				022B2F460BD55940002E64E3 /* Gettext sources */,
+				43502DAB1347650100A02A1F /* GLExtensionWrangler sources */,
 				02DDA85F0BD3C1A60049AB60 /* Zlib sources */,
 				02DDA8610BD3C1B50049AB60 /* Ogg sources */,
 				02DDA8600BD3C1AF0049AB60 /* Png sources */,
@@ -2569,6 +2605,35 @@
 			);
 			name = QT;
 			path = external/QT;
+			sourceTree = "<group>";
+		};
+		43502DAB1347650100A02A1F /* GLExtensionWrangler sources */ = {
+			isa = PBXGroup;
+			children = (
+				43502DAF1347656A00A02A1F /* include */,
+				43502DAE1347656400A02A1F /* lib */,
+			);
+			name = "GLExtensionWrangler sources";
+			sourceTree = "<group>";
+		};
+		43502DAE1347656400A02A1F /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				43502DC21347675300A02A1F /* glew.c */,
+				43502DC31347675300A02A1F /* glewinfo.c */,
+				43502DC41347675300A02A1F /* visualinfo.c */,
+			);
+			name = lib;
+			sourceTree = "<group>";
+		};
+		43502DAF1347656A00A02A1F /* include */ = {
+			isa = PBXGroup;
+			children = (
+				43502DBD1347670800A02A1F /* glew.h */,
+				43502DBE1347670800A02A1F /* glxew.h */,
+				43502DBF1347670800A02A1F /* wglew.h */,
+			);
+			name = include;
 			sourceTree = "<group>";
 		};
 		4355E12710D6024700A19EE4 /* Public Headers */ = {
@@ -3031,6 +3096,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		43502D4D1347640700A02A1F /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43502DC81347676600A02A1F /* glew.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		97AEAAEE0E8C1B5200A10721 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -3124,6 +3197,7 @@
 			dependencies = (
 				43D1808B1336B74E001906EB /* PBXTargetDependency */,
 				022B313F0BD56915002E64E3 /* PBXTargetDependency */,
+				43502D83134764BF00A02A1F /* PBXTargetDependency */,
 				0246A2FF0BD3CCF0004D1C70 /* PBXTargetDependency */,
 				0246A3010BD3CCF2004D1C70 /* PBXTargetDependency */,
 				0246A3030BD3CCF3004D1C70 /* PBXTargetDependency */,
@@ -3235,6 +3309,25 @@
 			productReference = 02DDA8B10BD3C2F20049AB60 /* PhysFS.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		43502D511347640700A02A1F /* GLExtensionWrangler */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 43502D571347640800A02A1F /* Build configuration list for PBXNativeTarget "GLExtensionWrangler" */;
+			buildPhases = (
+				43502DB31347658E00A02A1F /* Fetch source */,
+				43502D4D1347640700A02A1F /* Headers */,
+				43502D4E1347640700A02A1F /* Resources */,
+				43502D4F1347640700A02A1F /* Sources */,
+				43502D501347640700A02A1F /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GLExtensionWrangler;
+			productName = GLExtensionWrangler;
+			productReference = 43502D521347640700A02A1F /* GLExtensionWrangler.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 		97AEAAEA0E8C1B5200A10721 /* Theora */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 97AEAB300E8C1B5200A10721 /* Build configuration list for PBXNativeTarget "Theora" */;
@@ -3310,6 +3403,7 @@
 				43D180771336B6BF001906EB /* Autorevision */,
 				43FA570C10FF8E9B0074E914 /* Setup Prebuilt Components */,
 				022B2F210BD55814002E64E3 /* Gettext */,
+				43502D511347640700A02A1F /* GLExtensionWrangler */,
 				02356D820BD3BB4100E9A019 /* Zlib */,
 				02356DC10BD3BBFC00E9A019 /* Png */,
 				02356E080BD3BCFE00E9A019 /* Ogg */,
@@ -3370,6 +3464,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		02DDA8AD0BD3C2F20049AB60 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43502D4E1347640700A02A1F /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -3586,6 +3687,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "DirectorY=\"gettext-0.17.mpkg_\"\nOutDir=\"gettext-0.17.mpkg\"\nFileName=\"gettext-0.17.mpkg.tar.gz\"\nBuiltDLP=\"http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/gettext-0.17.mpkg.tar.gz\"\nMD5Sum=\"ba7984918fe0b36e2e7c786693e005f2\"\n\n# Checks\nexport PATH=$PATH:/sw/bin:/opt/local/bin\nif type -aP msgfmt; then\n    echo \"msgfmt exists, skipping\"\n    exit 0\nelif [ -x \"/opt/local/bin/port\" ]; then\n  echo \"warning: Please run the following command in the terminal: 'sudo port install gettext'.\" >&2\n  open -b com.apple.Terminal\n  exit 1\nelif [ -d \"${SRCROOT}/external/${OutDir}\" ]; then\n    touch build/notrans.dis\n    echo \"warning: Gettext support has been disabled because we could not find a binary.\" >&2\n    exit 0\nelif [ ! `sw_vers -productVersion | sed -e 's:^...\\(.\\)..$:\\1:'` -ge \"6\" ]; then\n    touch build/notrans.dis\n    echo \"warning: Gettext support has been disabled because we could not find a binary.\" >&2\n    exit 0\nfi\n\nconfigs/FetchPrebuilt.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${BuiltDLP}\" \"${MD5Sum}\"\nFetchExitStatus=$?\n\n# Install\nif [ ! \"${FetchExitStatus}\" = \"0\" ]; then\n    exit \"${FetchExitStatus}\"\nelif [ -d \"${SRCROOT}/external/${OutDir}\" ]; then\n    echo \" Please install the gettext package before continuing.\" >&2\n    open \"${SRCROOT}/external/${OutDir}\"\n    exit 1\nfi";
+		};
+		43502DB31347658E00A02A1F /* Fetch source */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Fetch source";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "DirectorY=\"glew-1.5.7\"\nOutDir=\"glew\"\nFileName=\"glew-1.5.7.tgz\"\nSourceDLP=\"http://downloads.sourceforge.net/project/glew/glew/1.5.7/glew-1.5.7.tgz\"\nMD5Sum=\"f913ce9dbde4cd250b932731b3534ded\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
 		};
 		43B8FF2D127CD57D006F5A13 /* Fonts */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3887,7 +4002,6 @@
 				02B2132D0DA8755F0059E864 /* cursors.cpp in Sources */,
 				02B2132E0DA8755F0059E864 /* cursors16.cpp in Sources */,
 				02B2132F0DA8755F0059E864 /* cursors32.cpp in Sources */,
-				02DE76060DC3B84900D48F58 /* GLee.c in Sources */,
 				9742E5730DF9975E000A5D41 /* lexer_input.cpp in Sources */,
 				9742E5770DF9979C000A5D41 /* parsetest.cpp in Sources */,
 				2244463D0E3EB7CB004D0F1F /* message_parser.y in Sources */,
@@ -4032,6 +4146,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		43502D4F1347640700A02A1F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43502DC51347675300A02A1F /* glew.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		97AEAB170E8C1B5200A10721 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -4120,6 +4242,11 @@
 			isa = PBXTargetDependency;
 			target = 02356D820BD3BB4100E9A019 /* Zlib */;
 			targetProxy = 02DDA8D20BD3C3780049AB60 /* PBXContainerItemProxy */;
+		};
+		43502D83134764BF00A02A1F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43502D511347640700A02A1F /* GLExtensionWrangler */;
+			targetProxy = 43502D82134764BF00A02A1F /* PBXContainerItemProxy */;
 		};
 		43AE78FD10F0F4F500FED5D3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -4337,6 +4464,27 @@
 		02DDA8B50BD3C2F20049AB60 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025F311121FEC7006C49B1 /* PhysFS-Release.xcconfig */;
+			buildSettings = {
+			};
+			name = Release;
+		};
+		43502D541347640800A02A1F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43502D31134763D700A02A1F /* Glew-Debug.xcconfig */;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		43502D551347640800A02A1F /* StaticAnalyzer */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43025ECA1120E0C0006C49B1 /* Gettext-Debug.xcconfig */;
+			buildSettings = {
+			};
+			name = StaticAnalyzer;
+		};
+		43502D561347640800A02A1F /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43502D32134763D700A02A1F /* Glew-Release.xcconfig */;
 			buildSettings = {
 			};
 			name = Release;
@@ -4577,6 +4725,16 @@
 				02DDA8B40BD3C2F20049AB60 /* Debug */,
 				4389DBDF111B0A0700B98DEF /* StaticAnalyzer */,
 				02DDA8B50BD3C2F20049AB60 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		43502D571347640800A02A1F /* Build configuration list for PBXNativeTarget "GLExtensionWrangler" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				43502D541347640800A02A1F /* Debug */,
+				43502D551347640800A02A1F /* StaticAnalyzer */,
+				43502D561347640800A02A1F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

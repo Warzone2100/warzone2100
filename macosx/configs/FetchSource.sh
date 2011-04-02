@@ -72,7 +72,7 @@ fi
 
 # Unpack
 ExtensioN=`echo ${FileName} | sed -e 's:^.*\.\([^.]*\):\1:'`
-if [ "${ExtensioN}" = "gz" ]; then
+if [[ "${ExtensioN}" = "gz" ]] || [[ "${ExtensioN}" = "tgz" ]]; then
     if ! tar -zxf "${FileName}"; then
         echo "error: Unpacking ${FileName} failed" >&2
         exit 1
