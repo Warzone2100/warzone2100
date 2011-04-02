@@ -2,12 +2,12 @@
 script "cam1a.slo"
 run
 {
+
 /* General Values */
 player		int		0
 enemy1		int		7	//barbarians (base1)
 enemy2		int		6	//barbarians (base2)
 startPower	int		1300	//initial power level
-//commandCentre	STRUCTURE	926
 
 /* Starting Tech */
 viperBody		BODY			"Body1REC"
@@ -20,16 +20,12 @@ numTech		int		3
 tech[0]		RESEARCHSTAT	"R-Vehicle-Body01"
 tech[1]		RESEARCHSTAT	"R-Sys-Spade1Mk1"
 tech[2]		RESEARCHSTAT	"R-Vehicle-Prop-Wheels"
-//tech[3]		RESEARCHSTAT	"CAM1RESEARCH" //"R-Wpn-MG1Mk1"
-
-
 
 /* Set Structure Limits */
 powerGen		STRUCTURESTAT		"A0PowerGenerator"
 oilDerrick		STRUCTURESTAT		"A0ResourceExtractor"
 research		STRUCTURESTAT		"A0ResearchFacility"
 factory			STRUCTURESTAT		"A0LightFactory"
-//powerModuleHack		STRUCTURESTAT		"A0PowMod1"
 command			STRUCTURESTAT		"A0CommandCentre"
 numPow			INT			5		//Limit on number of Power Generator Buildings
 numExt			INT			200		//Limit on number of resource Extractors
@@ -45,7 +41,6 @@ MissionBrief2	INTMESSAGE	"MB1A_MSG"
 obj1Msg		INTMESSAGE	"C1A_OBJ1"
 incomingSnd	SOUND		"pcv456.ogg"
 endMsg			INTMESSAGE	"END"
-//winMsg		INTMESSAGE	"WIN"
 
 /* Proximity: Artifacts */
 crate		FEATURESTAT	"Crate"
@@ -54,28 +49,23 @@ art1X		int		5184
 art1Y		int		2112
 art1Get		STRUCTURE	8		//get this from base1 factory
 art1Snd2	SOUND		"pcv352.ogg"
-//art1Msg		INTMESSAGE	"C1A_ART1"
 art1Comp	RESEARCHSTAT	"R-Wpn-Flamer01Mk1"
 
 art2X		int		2496
 art2Y		int		4032
 art2Get		STRUCTURE	1256		//get this from base2 southern factory
 art2Snd2	SOUND		"pcv352.ogg"
-//art2Msg		INTMESSAGE	"C1A_ART2"
 art2Comp	RESEARCHSTAT	"R-Sys-Engineering01"
 
 art3X		int		1856
 art3Y		int		1600
 art3Get		STRUCTURE	20		//get this from base2 factory
 art3Snd2	SOUND		"pcv352.ogg"
-//art3Msg		INTMESSAGE	"C1A_ART3"
 art3Comp	RESEARCHSTAT	"R-Defense-Tower01"	//guntowerMG now
 
 art4X		int		3776	//4416
 art4Y		int		4544	//5312
-//art4Get		STRUCTURE	3414		//not req'd, placed in script
 art4Snd2	SOUND		"pcv352.ogg"
-//art4Msg		INTMESSAGE	"C1A_ART4"
 art4Comp	RESEARCHSTAT	"R-Wpn-MG-Damage01"
 
 //Player Bonus Research Topics given on completion of mission
@@ -107,7 +97,6 @@ enm22		STRUCTURE	1256	//base2=factory2
 enm22ID		STRUCTUREID	1256
 enm22Msg	INTMESSAGE	"C1A_BASE3"
 enm22Snd1	SOUND		"pcv374.ogg"
-//enm22Snd2	SOUND		"pcv391.ogg"
 
 /* Win or lose */
 lostSnd		SOUND		"pcv470.ogg"			//mission failed
@@ -120,6 +109,5 @@ trike		TEMPLATE	"BarbarianTrike"
 buggy		TEMPLATE	"BarbarianBuggy"
 bloke		TEMPLATE	"BaBaPeople"
 jeep		TEMPLATE	"BabaJeep"
-
 
 }

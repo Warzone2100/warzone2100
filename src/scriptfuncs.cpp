@@ -4758,18 +4758,10 @@ bool scrSetReinforcementTime(void)
 		time = -1;
 	}
 
-    //not interseted in this check any more -  AB 28/01/99
-    //quick check of the value - don't check if time has not been set
-	/*if (mission.time > 0 && time != LZ_COMPROMISED_TIME && time > mission.time)
-	{
-		DBMB(("scrSetReinforcementTime: reinforcement time greater than mission time!"));
-	}*/
 	//store the value
 	mission.ETA = time;
 
 	//if offworld or campaign change mission, then add the timer
-	//if (mission.type == LDS_MKEEP || mission.type == LDS_MCLEAR ||
-    //    mission.type == LDS_CAMCHANGE)
     if (missionCanReEnforce())
 	{
 		addTransporterTimerInterface();

@@ -29,7 +29,9 @@
 
 #include "console.h"
 #include "map.h"
+#include "mission.h"
 #include "group.h"
+#include "transporter.h"
 
 // ----------------------------------------------------------------------------------------
 // Utility functions -- not called directly from scripts
@@ -306,6 +308,82 @@ static QScriptValue js_orderDroidLoc(QScriptContext *context, QScriptEngine *)
 	return QScriptValue();
 }
 
+static QScriptValue js_setMissionTime(QScriptContext *context, QScriptEngine *)
+{
+	int value = context->argument(0).toInt32() * 100;
+	mission.time = value;
+	setMissionCountDown();
+	if (mission.time >= 0)
+	{
+		mission.startTime = gameTime;
+		addMissionTimerInterface();
+	}
+	else
+	{
+		intRemoveMissionTimer();
+		mission.cheatTime = 0;
+	}
+	return QScriptValue();
+}
+
+static QScriptValue js_setReinforcementTime(QScriptContext *context, QScriptEngine *)
+{
+	int value = context->argument(0).toInt32() * 100;
+	ASSERT_OR_RETURN(QScriptValue(), value == LZ_COMPROMISED_TIME || value < 60 * 60 * GAME_TICKS_PER_SEC,
+	                 "The transport timer cannot be set to more than 1 hour!");
+	mission.ETA = value;
+	if (missionCanReEnforce())
+	{
+		addTransporterTimerInterface();
+	}
+	if (value < 0)
+	{
+		DROID *psDroid;
+
+		intRemoveTransporterTimer();
+		/* Only remove the launch if haven't got a transporter droid since the scripts set the 
+		 * time to -1 at the between stage if there are not going to be reinforcements on the submap  */
+		for (psDroid = apsDroidLists[selectedPlayer]; psDroid != NULL; psDroid = psDroid->psNext)
+		{
+			if (psDroid->droidType == DROID_TRANSPORTER)
+			{
+				break;
+			}
+		}
+		// if not found a transporter, can remove the launch button
+		if (psDroid ==  NULL)
+		{
+			intRemoveTransporterLaunch();
+		}
+	}
+	return QScriptValue();
+}
+
+static QScriptValue js_setStructureLimits(QScriptContext *context, QScriptEngine *engine)
+{
+	QString building = context->argument(0).toString();
+	int limit = context->argument(1).toInt32();
+	int player;
+	int structInc = getStructStatFromName(building.toUtf8().constData());
+	if (context->argumentCount() > 2)
+	{
+		player = context->argument(2).toInt32();
+	}
+	else
+	{
+		player = engine->globalObject().property("me").toInt32();
+	}
+	ASSERT_OR_RETURN(QScriptValue(), player < MAX_PLAYERS && player >= 0, "Invalid player number");
+	ASSERT_OR_RETURN(QScriptValue(), limit < LOTS_OF && limit >= 0, "Invalid limit");
+	ASSERT_OR_RETURN(QScriptValue(), structInc < numStructureStats && structInc >= 0, "Invalid structure");
+
+	STRUCTURE_LIMITS *psStructLimits = asStructLimits[player];
+	psStructLimits[structInc].limit = limit;
+	psStructLimits[structInc].globalLimit = limit;
+
+	return QScriptValue();
+}
+
 // ----------------------------------------------------------------------------------------
 // Register functions with scripting system
 
@@ -326,6 +404,9 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("groupAddDroid", engine->newFunction(js_groupAddDroid));
 	engine->globalObject().setProperty("groupSize", engine->newFunction(js_groupSize));
 	engine->globalObject().setProperty("orderDroidLoc", engine->newFunction(js_orderDroidLoc));
+	engine->globalObject().setProperty("setMissionTime", engine->newFunction(js_setMissionTime));
+	engine->globalObject().setProperty("setReinforcementTime", engine->newFunction(js_setReinforcementTime));
+	engine->globalObject().setProperty("setStructureLimits", engine->newFunction(js_setStructureLimits));
 
 	// Set some useful constants
 	engine->globalObject().setProperty("DORDER_ATTACK", DORDER_ATTACK, QScriptValue::ReadOnly | QScriptValue::Undeletable);

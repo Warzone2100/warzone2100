@@ -151,7 +151,6 @@ event startEvnt(CALL_GAMEINIT)
 	// take over the selectedPlayer's units to avoid id number clashes on later levels
 	takeOverDroidsInArea(0,0, 0,0, mapWidth * 128, mapHeight * 128);
 
-	//centreView(commandCentre);
 	centreViewPos(1728, 6720);			//centre near transport
 	// set zoom Level 64x64
 	setRadarZoom(1);
@@ -388,7 +387,6 @@ event lostYetEvnt(winLoseTrig)
 			setEventTrigger(lostYetEvnt, inactive);
 			setEventTrigger(timeUp, inactive);
 		}
-
 	}
 }
 
