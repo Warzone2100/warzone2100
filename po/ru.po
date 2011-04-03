@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-03-20 21:16+0100\n"
+"POT-Creation-Date: 2011-04-03 21:46+0200\n"
 "PO-Revision-Date: 2011-01-15 09:57+0300\n"
 "Last-Translator: \n"
 "Language-Team: Russian <>\n"
@@ -5268,6 +5268,7 @@ msgid "TRANSPORT MISSION: Northern Sector"
 msgstr "МИССИЯ НА ВЫЛЕТЕ: Северные сектор"
 
 #: data/base/messages/strings/cam3strings.txt:5
+#: data/base/sequenceaudio/cam3/c003.txa:5
 msgid "Congratulations on your successful evacuation of Beta Base."
 msgstr "Поздравляем, Вы успешно эвакуировали базу Бета."
 
@@ -9887,11 +9888,6 @@ msgstr "Кампания 3"
 msgid "NORTHERN SECTOR"
 msgstr "Северный сектор"
 
-#: data/base/sequenceaudio/cam3/c003.txa:5
-#, fuzzy
-msgid "Congratulations your successful evacuation of Beta Base."
-msgstr "Поздравляем, вы успешно эвакуировали базу Бета."
-
 #: data/base/sequenceaudio/cam3/c003.txa:8
 msgid "Dusk, December 3rd, 2100"
 msgstr "Сумерки, 3 декабря 2100"
@@ -10708,6 +10704,16 @@ msgstr "Бич Возмездие ВВС"
 msgid "Plasmite Retribution VTOL"
 msgstr "Авиационный плазмит возмездия"
 
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1962
+#: data/mp/messages/strings/names.txt:675
+msgid "Super Transport"
+msgstr "Супер-Транспорт."
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1963
+#: data/mp/messages/strings/names.txt:676
+msgid "Super Transport Body"
+msgstr "Корпус Супер-транспорта"
+
 #: data/mp/messages/resmessages12.rmsg:58
 msgid "Construction speed +10%"
 msgstr "Скорость строительства +10%"
@@ -11457,14 +11463,6 @@ msgstr "Стена НЕКСУС"
 msgid "Nexus Corner Wall"
 msgstr "Угловая стена НЕКСУС"
 
-#: data/mp/messages/strings/names.txt:675
-msgid "Super Transport"
-msgstr "Супер-Транспорт."
-
-#: data/mp/messages/strings/names.txt:676
-msgid "Super Transport Body"
-msgstr "Корпус Супер-транспорта"
-
 #: data/mp/messages/strings/names.txt:715
 msgid "Plasteel"
 msgstr "Пласталь"
@@ -12008,8 +12006,8 @@ msgstr "Блок миниракет Кобра Гусеницы"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "ГС пушка питон ховер"
 
-#: lib/framework/i18n.cpp:90
-#: lib/framework/i18n.cpp:149
+#: lib/framework/i18n.cpp:92
+#: lib/framework/i18n.cpp:153
 msgid "System locale"
 msgstr "Системная локализация"
 
@@ -14897,6 +14895,10 @@ msgstr " - сборка %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Версия %s%s%s%s"
+
+#, fuzzy
+#~ msgid "Congratulations your successful evacuation of Beta Base."
+#~ msgstr "Поздравляем, вы успешно эвакуировали базу Бета."
 
 #~ msgid "Player colour"
 #~ msgstr "Цвет игрока"

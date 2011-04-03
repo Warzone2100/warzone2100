@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-04-03 01:52+0200\n"
+"POT-Creation-Date: 2011-04-03 21:46+0200\n"
 "PO-Revision-Date: 2011-03-28 19:41+0100\n"
 "Last-Translator: Mészáros Tamás <meszaros.tomi@hotmail.com>\n"
 "Language-Team: Magyar (Hungary) <meszaros.tomi@hotmail.com>\n"
@@ -5262,6 +5262,7 @@ msgid "TRANSPORT MISSION: Northern Sector"
 msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:5
+#: data/base/sequenceaudio/cam3/c003.txa:5
 msgid "Congratulations on your successful evacuation of Beta Base."
 msgstr ""
 
@@ -9951,11 +9952,6 @@ msgstr "HARMADIK KÜLDETÉS"
 msgid "NORTHERN SECTOR"
 msgstr "ÉSZAKI SZEKTOR"
 
-#: data/base/sequenceaudio/cam3/c003.txa:5
-#, fuzzy
-msgid "Congratulations your successful evacuation of Beta Base."
-msgstr "Congratulations on your successful evacuation of Beta Base."
-
 #: data/base/sequenceaudio/cam3/c003.txa:8
 msgid "Dusk, December 3rd, 2100"
 msgstr ""
@@ -10870,6 +10866,16 @@ msgstr "Retaliation"
 msgid "Plasmite Retribution VTOL"
 msgstr "Retribution"
 
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1962
+#: data/mp/messages/strings/names.txt:675
+msgid "Super Transport"
+msgstr ""
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1963
+#: data/mp/messages/strings/names.txt:676
+msgid "Super Transport Body"
+msgstr ""
+
 #: data/mp/messages/resmessages12.rmsg:58
 #, fuzzy
 msgid "Construction speed +10%"
@@ -11695,14 +11701,6 @@ msgstr "NEXUS Wall"
 msgid "Nexus Corner Wall"
 msgstr "Hardcrete Corner Wall"
 
-#: data/mp/messages/strings/names.txt:675
-msgid "Super Transport"
-msgstr ""
-
-#: data/mp/messages/strings/names.txt:676
-msgid "Super Transport Body"
-msgstr ""
-
 #: data/mp/messages/strings/names.txt:715
 msgid "Plasteel"
 msgstr ""
@@ -12308,8 +12306,8 @@ msgstr "Repair Cobra Tracks"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Hyper Velocity Cannon"
 
-#: lib/framework/i18n.cpp:91
-#: lib/framework/i18n.cpp:151
+#: lib/framework/i18n.cpp:92
+#: lib/framework/i18n.cpp:153
 msgid "System locale"
 msgstr ""
 
@@ -15248,6 +15246,10 @@ msgstr ""
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Verzió %s%s%s%s"
+
+#, fuzzy
+#~ msgid "Congratulations your successful evacuation of Beta Base."
+#~ msgstr "Congratulations on your successful evacuation of Beta Base."
 
 #~ msgid "Mantis Command Turret Tracks"
 #~ msgstr "Cobra Command Turret Tracks"

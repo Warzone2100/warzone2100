@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100-master_20110320qt\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-03-21 10:16+0100\n"
+"POT-Creation-Date: 2011-04-03 21:46+0200\n"
 "PO-Revision-Date: 2011-04-03 19:45+0200\n"
 "Last-Translator: Àngel Mompó <mecatxis@gmail.com>\n"
 "Language-Team:   <ca@dodds.net>\n"
@@ -132,7 +132,8 @@ msgstr "S'ha completat la recerca de l'arma"
 #: data/mp/messages/resmessages1.rmsg:212
 #: data/mp/messages/resmessages1.rmsg:225
 #: data/mp/messages/resmessages23.rmsg:17
-#: data/mp/messages/resmessages2.rmsg:69 data/mp/messages/resmessages2.rmsg:82
+#: data/mp/messages/resmessages2.rmsg:69
+#: data/mp/messages/resmessages2.rmsg:82
 #: data/mp/messages/resmessages2.rmsg:95
 #: data/mp/messages/resmessages2.rmsg:108
 #: data/mp/messages/resmessages2.rmsg:121
@@ -299,7 +300,8 @@ msgstr "S'assigna automàticament a la torre de sensor o AB més propera"
 #: data/mp/messages/resmessages1.rmsg:124
 #: data/mp/messages/resmessages1.rmsg:150
 #: data/mp/messages/resmessages1.rmsg:228
-#: data/mp/messages/resmessages2.rmsg:72 data/mp/messages/resmessages2.rmsg:85
+#: data/mp/messages/resmessages2.rmsg:72
+#: data/mp/messages/resmessages2.rmsg:85
 #: data/mp/messages/resmessages2.rmsg:98
 #: data/mp/messages/resmessages2.rmsg:111
 #: data/mp/messages/resmessages2.rmsg:124
@@ -532,7 +534,8 @@ msgstr "S'han actualitzat automàticament tots els camions"
 
 #: data/base/messages/resmessages12.rmsg:69
 #: data/base/messages/resmessages1.rmsg:4
-#: data/mp/messages/resmessages12.rmsg:69 data/mp/messages/resmessages1.rmsg:4
+#: data/mp/messages/resmessages12.rmsg:69
+#: data/mp/messages/resmessages1.rmsg:4
 msgid "New Systems Turret Available for Design"
 msgstr "Està disponible una nova torreta de sistemes per dissenyar"
 
@@ -553,8 +556,7 @@ msgstr "Ordena a les unitats assignades que disparin a les bateries enemigues"
 #: data/mp/messages/resmessages12.rmsg:72
 #: data/mp/messages/resmessagesall.rmsg:124
 msgid "Counter-battery fire continues until enemy battery is suppressed"
-msgstr ""
-"Les contrabateries no s'aturen fins que la bateria enemiga és eliminada"
+msgstr "Les contrabateries no s'aturen fins que la bateria enemiga és eliminada"
 
 #: data/base/messages/resmessages12.rmsg:82
 #: data/base/messages/resmessages23.rmsg:56
@@ -769,12 +771,15 @@ msgstr "Millors objectius: Infanteria, estructures de base, vehicles amb rodes"
 #: data/base/messages/strings/resstrings.txt:688
 #: data/base/messages/strings/resstrings.txt:694
 #: data/mp/messages/resmessages12.rmsg:124
-#: data/mp/messages/resmessages1.rmsg:45 data/mp/messages/resmessages1.rmsg:58
-#: data/mp/messages/resmessages1.rmsg:71 data/mp/messages/resmessages1.rmsg:84
+#: data/mp/messages/resmessages1.rmsg:45
+#: data/mp/messages/resmessages1.rmsg:58
+#: data/mp/messages/resmessages1.rmsg:71
+#: data/mp/messages/resmessages1.rmsg:84
 #: data/mp/messages/resmessages1.rmsg:489
 #: data/mp/messages/resmessages1.rmsg:541
 #: data/mp/messages/resmessages1.rmsg:554
-#: data/mp/messages/resmessages2.rmsg:32 data/mp/messages/resmessages2.rmsg:45
+#: data/mp/messages/resmessages2.rmsg:32
+#: data/mp/messages/resmessages2.rmsg:45
 #: data/mp/messages/resmessages2.rmsg:592
 #: data/mp/messages/resmessages2.rmsg:605
 #: data/mp/messages/resmessages2.rmsg:618
@@ -992,9 +997,7 @@ msgstr "Millora del morter"
 #: data/base/messages/resmessages12.rmsg:161
 #: data/mp/messages/resmessages12.rmsg:161
 msgid "Targeting systems compensate for distance and weather conditions"
-msgstr ""
-"Sistemes d'apuntament que compensen la distància i les condicions "
-"atmosfèriques"
+msgstr "Sistemes d'apuntament que compensen la distància i les condicions atmosfèriques"
 
 #: data/base/messages/resmessages12.rmsg:162
 #: data/base/messages/resmessages23.rmsg:188
@@ -1178,11 +1181,13 @@ msgstr "Dispara salves de mini-míssils"
 msgid "Best Targets: Base structures"
 msgstr "Millors objectius: Estructures de base"
 
-#: data/base/messages/resmessages1.rmsg:5 data/mp/messages/resmessages1.rmsg:5
+#: data/base/messages/resmessages1.rmsg:5
+#: data/mp/messages/resmessages1.rmsg:5
 msgid "New battlefield computer system"
 msgstr "Nou sistema d'ordinadors de camp de batalla"
 
-#: data/base/messages/resmessages1.rmsg:6 data/mp/messages/resmessages1.rmsg:6
+#: data/base/messages/resmessages1.rmsg:6
+#: data/mp/messages/resmessages1.rmsg:6
 #: data/mp/messages/resmessagesall.rmsg:944
 #: data/mp/messages/resmessagesall.rmsg:957
 #: data/mp/messages/resmessagesall.rmsg:970
@@ -1195,7 +1200,8 @@ msgstr "El comandant pot liderar grups i fer de lliurament d'una fàbrica"
 #: data/base/messages/resmessages2.rmsg:761
 #: data/base/messages/resmessages3.rmsg:1229
 #: data/base/messages/strings/resstrings.txt:738
-#: data/mp/messages/resmessages1.rmsg:7 data/mp/messages/resmessages1.rmsg:515
+#: data/mp/messages/resmessages1.rmsg:7
+#: data/mp/messages/resmessages1.rmsg:515
 #: data/mp/messages/resmessages1.rmsg:567
 #: data/mp/messages/resmessages2.rmsg:761
 #: data/mp/messages/resmessages3.rmsg:1229
@@ -1210,7 +1216,8 @@ msgstr "Punts del cos: elevats"
 #: data/base/messages/resmessages1.rmsg:17
 #: data/base/messages/resmessages3.rmsg:17
 #: data/base/messages/resmessages3.rmsg:30
-#: data/mp/messages/resmessages1.rmsg:17 data/mp/messages/resmessages3.rmsg:17
+#: data/mp/messages/resmessages1.rmsg:17
+#: data/mp/messages/resmessages3.rmsg:17
 #: data/mp/messages/resmessages3.rmsg:30
 msgid "Computer Technology Breakthrough"
 msgstr "Un pas endavant en la tecnologia de computadors"
@@ -1235,8 +1242,10 @@ msgstr "Nova opció de recerca disponible"
 #: data/base/messages/resmessages3.rmsg:69
 #: data/base/messages/resmessages3.rmsg:82
 #: data/base/messages/strings/resstrings.txt:31
-#: data/mp/messages/resmessages1.rmsg:30 data/mp/messages/resmessages2.rmsg:17
-#: data/mp/messages/resmessages3.rmsg:69 data/mp/messages/resmessages3.rmsg:82
+#: data/mp/messages/resmessages1.rmsg:30
+#: data/mp/messages/resmessages2.rmsg:17
+#: data/mp/messages/resmessages3.rmsg:69
+#: data/mp/messages/resmessages3.rmsg:82
 #: data/mp/messages/strings/resstrings.txt:35
 msgid "Cyborg Materials Improved"
 msgstr "Els materials pels ciborgs s'han millorat"
@@ -1267,10 +1276,14 @@ msgstr "Incrementa l'armadura i els punts del cos"
 #: data/base/messages/resmessages3.rmsg:85
 #: data/base/messages/strings/resstrings.txt:34
 #: data/base/messages/strings/resstrings.txt:44
-#: data/mp/messages/resmessages1.rmsg:33 data/mp/messages/resmessages23.rmsg:7
-#: data/mp/messages/resmessages2.rmsg:7 data/mp/messages/resmessages2.rmsg:20
-#: data/mp/messages/resmessages3.rmsg:7 data/mp/messages/resmessages3.rmsg:59
-#: data/mp/messages/resmessages3.rmsg:72 data/mp/messages/resmessages3.rmsg:85
+#: data/mp/messages/resmessages1.rmsg:33
+#: data/mp/messages/resmessages23.rmsg:7
+#: data/mp/messages/resmessages2.rmsg:7
+#: data/mp/messages/resmessages2.rmsg:20
+#: data/mp/messages/resmessages3.rmsg:7
+#: data/mp/messages/resmessages3.rmsg:59
+#: data/mp/messages/resmessages3.rmsg:72
+#: data/mp/messages/resmessages3.rmsg:85
 #: data/mp/messages/strings/resstrings.txt:38
 #: data/mp/messages/strings/resstrings.txt:48
 msgid "All Cyborgs upgraded automatically"
@@ -1288,9 +1301,12 @@ msgstr "S'han actualitzat automàticament tots els ciborgs"
 #: data/base/messages/resmessages3.rmsg:134
 #: data/base/messages/strings/resstrings.txt:49
 #: data/base/messages/strings/resstrings.txt:65
-#: data/mp/messages/resmessages1.rmsg:43 data/mp/messages/resmessages1.rmsg:56
-#: data/mp/messages/resmessages1.rmsg:69 data/mp/messages/resmessages1.rmsg:82
-#: data/mp/messages/resmessages2.rmsg:30 data/mp/messages/resmessages2.rmsg:43
+#: data/mp/messages/resmessages1.rmsg:43
+#: data/mp/messages/resmessages1.rmsg:56
+#: data/mp/messages/resmessages1.rmsg:69
+#: data/mp/messages/resmessages1.rmsg:82
+#: data/mp/messages/resmessages2.rmsg:30
+#: data/mp/messages/resmessages2.rmsg:43
 #: data/mp/messages/resmessages3.rmsg:95
 #: data/mp/messages/resmessages3.rmsg:108
 #: data/mp/messages/resmessages3.rmsg:121
@@ -1334,9 +1350,12 @@ msgstr "Armat amb una metralladora ciborg"
 #: data/base/messages/strings/resstrings.txt:68
 #: data/base/messages/strings/resstrings.txt:80
 #: data/base/messages/strings/resstrings.txt:86
-#: data/mp/messages/resmessages1.rmsg:46 data/mp/messages/resmessages1.rmsg:59
-#: data/mp/messages/resmessages1.rmsg:72 data/mp/messages/resmessages1.rmsg:85
-#: data/mp/messages/resmessages2.rmsg:33 data/mp/messages/resmessages2.rmsg:46
+#: data/mp/messages/resmessages1.rmsg:46
+#: data/mp/messages/resmessages1.rmsg:59
+#: data/mp/messages/resmessages1.rmsg:72
+#: data/mp/messages/resmessages1.rmsg:85
+#: data/mp/messages/resmessages2.rmsg:33
+#: data/mp/messages/resmessages2.rmsg:46
 #: data/mp/messages/resmessages3.rmsg:98
 #: data/mp/messages/resmessages3.rmsg:111
 #: data/mp/messages/resmessages3.rmsg:124
@@ -1383,7 +1402,8 @@ msgstr "Armat amb un llançador de míssils anti-tanc"
 #: data/base/messages/resmessages3.rmsg:212
 #: data/base/messages/resmessages3.rmsg:225
 #: data/base/messages/strings/resstrings.txt:103
-#: data/mp/messages/resmessages1.rmsg:95 data/mp/messages/resmessages2.rmsg:56
+#: data/mp/messages/resmessages1.rmsg:95
+#: data/mp/messages/resmessages2.rmsg:56
 #: data/mp/messages/resmessages3.rmsg:212
 #: data/mp/messages/resmessages3.rmsg:225
 #: data/mp/messages/strings/resstrings.txt:123
@@ -1404,7 +1424,8 @@ msgstr "Incrementa l'armadura i els punts del cos"
 #: data/base/messages/resmessages3.rmsg:215
 #: data/base/messages/resmessages3.rmsg:228
 #: data/base/messages/strings/resstrings.txt:106
-#: data/mp/messages/resmessages1.rmsg:98 data/mp/messages/resmessages2.rmsg:59
+#: data/mp/messages/resmessages1.rmsg:98
+#: data/mp/messages/resmessages2.rmsg:59
 #: data/mp/messages/resmessages3.rmsg:215
 #: data/mp/messages/resmessages3.rmsg:228
 #: data/mp/messages/strings/resstrings.txt:126
@@ -2275,7 +2296,8 @@ msgstr "Incrementa el dany que fan els míssils"
 
 #: data/base/messages/resmessages23.rmsg:4
 #: data/base/messages/resmessages3.rmsg:56
-#: data/mp/messages/resmessages23.rmsg:4 data/mp/messages/resmessages3.rmsg:56
+#: data/mp/messages/resmessages23.rmsg:4
+#: data/mp/messages/resmessages3.rmsg:56
 msgid "Cyborg Propulsion Improved"
 msgstr "Millora la propulsió del ciborg"
 
@@ -2475,8 +2497,7 @@ msgstr "Està disponible una nova torreta de sistemes"
 #: data/base/messages/resmessages23.rmsg:109
 #: data/mp/messages/resmessages23.rmsg:109
 msgid "VTOL Strike turret used to spot targets"
-msgstr ""
-"Torreta sensor d'atac de convertiplans emprada per localitzar objectius"
+msgstr "Torreta sensor d'atac de convertiplans emprada per localitzar objectius"
 
 #: data/base/messages/resmessages23.rmsg:110
 #: data/mp/messages/resmessages23.rmsg:110
@@ -2661,8 +2682,7 @@ msgstr "El Howitzer multi-tub de 105mm es pot assignar a un sensor"
 #: data/mp/messages/strings/resstrings.txt:814
 #: data/mp/messages/strings/resstrings.txt:822
 msgid "Best Targets: Base Structures, infantry, wheeled vehicles"
-msgstr ""
-"Millors objectius: Estructures de base, infanteria i vehicles amb rodes"
+msgstr "Millors objectius: Estructures de base, infanteria i vehicles amb rodes"
 
 #: data/base/messages/resmessages23.rmsg:213
 #: data/mp/messages/resmessages23.rmsg:213
@@ -2679,7 +2699,8 @@ msgstr "Reemplaça totes les metralladores"
 #: data/base/messages/resmessages2.rmsg:4
 #: data/base/messages/resmessages3.rmsg:4
 #: data/base/messages/strings/resstrings.txt:41
-#: data/mp/messages/resmessages2.rmsg:4 data/mp/messages/resmessages3.rmsg:4
+#: data/mp/messages/resmessages2.rmsg:4
+#: data/mp/messages/resmessages3.rmsg:4
 #: data/mp/messages/strings/resstrings.txt:45
 msgid "Cyborg Thermal Armor Improved"
 msgstr "S'ha millorat l'armadura tèrmica dels ciborgs"
@@ -2687,7 +2708,8 @@ msgstr "S'ha millorat l'armadura tèrmica dels ciborgs"
 #: data/base/messages/resmessages2.rmsg:5
 #: data/base/messages/resmessages3.rmsg:5
 #: data/base/messages/strings/resstrings.txt:42
-#: data/mp/messages/resmessages2.rmsg:5 data/mp/messages/resmessages3.rmsg:5
+#: data/mp/messages/resmessages2.rmsg:5
+#: data/mp/messages/resmessages3.rmsg:5
 #: data/mp/messages/strings/resstrings.txt:46
 msgid "Heat resistant armored layers"
 msgstr "Capes de blindatge resistents al foc"
@@ -2748,7 +2770,8 @@ msgstr "Torreta de foc AA tipus Cicló"
 #: data/base/messages/strings/resstrings.txt:115
 #: data/base/messages/strings/resstrings.txt:121
 #: data/base/messages/strings/resstrings.txt:133
-#: data/mp/messages/resmessages2.rmsg:71 data/mp/messages/resmessages2.rmsg:97
+#: data/mp/messages/resmessages2.rmsg:71
+#: data/mp/messages/resmessages2.rmsg:97
 #: data/mp/messages/resmessages2.rmsg:110
 #: data/mp/messages/resmessages3.rmsg:240
 #: data/mp/messages/resmessages3.rmsg:253
@@ -3318,8 +3341,7 @@ msgstr "Metralladora antiaèria de 4 canons de 30mm"
 #: data/mp/messages/resmessages2.rmsg:642
 #: data/mp/messages/strings/resstrings.txt:695
 msgid "Detects and locks-on to VTOL engine emissions"
-msgstr ""
-"El coet detecta i es fixa en les emissions dels motors dels convertiplans"
+msgstr "El coet detecta i es fixa en les emissions dels motors dels convertiplans"
 
 #: data/base/messages/resmessages2.rmsg:654
 #: data/base/messages/resmessages3.rmsg:823
@@ -3492,8 +3514,7 @@ msgstr "El Howitzer de 155mm es pot assignar a un sensor"
 #: data/mp/messages/resmessages2.rmsg:824
 #: data/mp/messages/strings/resstrings.txt:829
 msgid "105m Howitzer firing incendiaries, may be assigned to a sensor"
-msgstr ""
-"Howitzer de 105mm de projectils incendiaris, pot assignar-se a un sensor"
+msgstr "Howitzer de 105mm de projectils incendiaris, pot assignar-se a un sensor"
 
 #: data/base/messages/resmessages2.rmsg:825
 #: data/base/messages/strings/resstrings.txt:789
@@ -3619,7 +3640,8 @@ msgstr "S'ha aïllat el paràsit intrús"
 
 #: data/base/messages/resmessages3.rmsg:20
 #: data/base/messages/resmessages3.rmsg:33
-#: data/mp/messages/resmessages3.rmsg:20 data/mp/messages/resmessages3.rmsg:33
+#: data/mp/messages/resmessages3.rmsg:20
+#: data/mp/messages/resmessages3.rmsg:33
 msgid "Reduced chance of NEXUS take-over"
 msgstr "Disminueix la possibilitat que NEXUS prengui el control"
 
@@ -3665,8 +3687,7 @@ msgstr "Aliatge de compòsit superdens i fibres absorbents d'energia"
 #: data/mp/messages/resmessages3.rmsg:83
 #: data/mp/messages/resmessages3.rmsg:707
 msgid "Laminated alloys bonded with energy-deflecting optic bundles"
-msgstr ""
-"Compost laminat enganxat amb feixos òptics deflectors d'energia adherits"
+msgstr "Compost laminat enganxat amb feixos òptics deflectors d'energia adherits"
 
 #: data/base/messages/resmessages3.rmsg:96
 #: data/base/messages/strings/resstrings.txt:78
@@ -4029,8 +4050,7 @@ msgstr "Foc altament explosiu perforador d'armadura"
 #: data/base/messages/resmessages3.rmsg:837
 #: data/mp/messages/resmessages3.rmsg:837
 msgid "Chainfeed loader eradicates jams and improves performance"
-msgstr ""
-"El carregador de cadena elimina els encallaments i millora el rendiment"
+msgstr "El carregador de cadena elimina els encallaments i millora el rendiment"
 
 #: data/base/messages/resmessages3.rmsg:850
 #: data/mp/messages/resmessages3.rmsg:850
@@ -4550,8 +4570,7 @@ msgstr "Establiu una base, després busqueu estructures del Pre-Col·lapse."
 
 #: data/base/messages/strings/cam1strings.txt:5
 #: data/base/sequenceaudio/cam1/c001.txa:14
-msgid ""
-"This structure contains technology vital for the success of the Project."
+msgid "This structure contains technology vital for the success of the Project."
 msgstr "Aquesta estructura conté tecnologia vital per l'èxit del Projecte."
 
 #: data/base/messages/strings/cam1strings.txt:7
@@ -4589,9 +4608,7 @@ msgstr "El Nou Paradigma controla armes de tecnologia superior."
 
 #: data/base/messages/strings/cam1strings.txt:17
 msgid "They may have the synaptic link technology, it's vital we retrieve it."
-msgstr ""
-"Podria se que tinguessin la tecnologia de l'enllaç sinàptic. És vital que la "
-"recuperem."
+msgstr "Podria se que tinguessin la tecnologia de l'enllaç sinàptic. És vital que la recuperem."
 
 #: data/base/messages/strings/cam1strings.txt:19
 msgid "TRANSPORT MISSION: Locate and Recover Artifacts"
@@ -4647,11 +4664,8 @@ msgid "TRANSPORT MISSION: Synaptic Link Location"
 msgstr "MISSIÓ DE TRANSPORT: Localització de l'enllaç sinàptic"
 
 #: data/base/messages/strings/cam1strings.txt:36
-msgid ""
-"The New Paradigm are analyzing synaptic link technology at this location."
-msgstr ""
-"El Nou Paradigma està analitzant la tecnologia de l'enllaç sinàptic en "
-"aquesta localització."
+msgid "The New Paradigm are analyzing synaptic link technology at this location."
+msgstr "El Nou Paradigma està analitzant la tecnologia de l'enllaç sinàptic en aquesta localització."
 
 #: data/base/messages/strings/cam1strings.txt:37
 msgid "Assemble an attack team and recover the synaptic link technology."
@@ -4675,9 +4689,7 @@ msgstr "MISSIÓ DE TRANSPORT: Base enemiga en construcció"
 
 #: data/base/messages/strings/cam1strings.txt:44
 msgid "Enemy forces are establishing a forward base at this location."
-msgstr ""
-"Les forces enemigues estan establint una base avançada en aquesta "
-"localització."
+msgstr "Les forces enemigues estan establint una base avançada en aquesta localització."
 
 #: data/base/messages/strings/cam1strings.txt:45
 msgid "Eradicate the base and secure the area."
@@ -4717,8 +4729,7 @@ msgstr "Estem detectant forces enemigues en aquestes localitzacions."
 
 #: data/base/messages/strings/cam1strings.txt:58
 msgid "This is our chance to defeat the New Paradigm and destroy their base."
-msgstr ""
-"És la nostra oportunitat d'eliminar el Nou Paradigma i destruir la seva base."
+msgstr "És la nostra oportunitat d'eliminar el Nou Paradigma i destruir la seva base."
 
 #: data/base/messages/strings/cam1strings.txt:62
 #: data/base/messages/strings/cam1strings.txt:72
@@ -4823,11 +4834,8 @@ msgid "The synaptic link technology was at this location but was removed."
 msgstr "La tecnologia d'enllaç sinàptic era aquí, però ha estat retirada"
 
 #: data/base/messages/strings/cam1strings.txt:111
-msgid ""
-"Establish a forward base then continue the search for the synaptic link."
-msgstr ""
-"Establiu una base avançada i després continueu la recerca de l'enllaç "
-"sinàptic."
+msgid "Establish a forward base then continue the search for the synaptic link."
+msgstr "Establiu una base avançada i després continueu la recerca de l'enllaç sinàptic."
 
 #: data/base/messages/strings/cam1strings.txt:114
 msgid "INCOMING TRANSMISSION"
@@ -4891,8 +4899,7 @@ msgstr "Investigueu l'artefacte del mòdul del generador"
 
 #: data/base/messages/strings/cam1strings.txt:142
 msgid "Then use a truck to upgrade your power generator with the module."
-msgstr ""
-"Després feu servir un camió per millorar el vostre generador amb el mòdul"
+msgstr "Després feu servir un camió per millorar el vostre generador amb el mòdul"
 
 #: data/base/messages/strings/cam1strings.txt:145
 msgid "SCAVENGER BASE DETECTED"
@@ -4903,11 +4910,8 @@ msgid "Defeat the scavengers and retrieve any artifacts."
 msgstr "Elimina els carronyaires i recupera qualsevol artefacte."
 
 #: data/base/messages/strings/cam1strings.txt:150
-msgid ""
-"Congratulations on defeating the New Paradigm, this sector is now secure."
-msgstr ""
-"Se us felicita per haver eliminat el Nou Paradigma. Ara aquest sector és "
-"segur."
+msgid "Congratulations on defeating the New Paradigm, this sector is now secure."
+msgstr "Se us felicita per haver eliminat el Nou Paradigma. Ara aquest sector és segur."
 
 #: data/base/messages/strings/cam1strings.txt:151
 msgid "The Nexus Intruder Program was in the New Paradigm system."
@@ -4950,8 +4954,7 @@ msgstr "MISSIÓ DE LA BASE BETA: Defenseu i fortifiqueu"
 #: data/base/messages/strings/cam2strings.txt:33
 #: data/base/sequenceaudio/cam2/c002.txa:17
 msgid "Be sure to fortify the perimeter and establish anti-aircraft defenses."
-msgstr ""
-"Assegureu-vos de fortificar el perímetre i establir defenses antiaèries."
+msgstr "Assegureu-vos de fortificar el perímetre i establir defenses antiaèries."
 
 #: data/base/messages/strings/cam2strings.txt:11
 #: data/base/messages/strings/cam2strings.txt:34
@@ -4975,9 +4978,7 @@ msgstr "MISSIÓ DE TRANSPORT: Transport abatut"
 
 #: data/base/messages/strings/cam2strings.txt:19
 msgid "Our transport carrying units from team Alpha Base has been shot down."
-msgstr ""
-"El nostre transport que duia unitats de la base de l'Equip Alfa ha estat "
-"abatut"
+msgstr "El nostre transport que duia unitats de la base de l'Equip Alfa ha estat abatut"
 
 #: data/base/messages/strings/cam2strings.txt:23
 msgid "It is under attack from The Collective at this location."
@@ -4985,23 +4986,19 @@ msgstr "Està sent atacat per La Col·lectivitat en aquesta localització"
 
 #: data/base/messages/strings/cam2strings.txt:24
 msgid "Assemble a rescue team to recover the transport and its cargo."
-msgstr ""
-"Prepara un equip de rescat per recuperar el transport i la seva càrrega."
+msgstr "Prepara un equip de rescat per recuperar el transport i la seva càrrega."
 
 #: data/base/messages/strings/cam2strings.txt:27
 msgid "IN-FLIGHT BRIEFING"
 msgstr "REUNIÓ EN VOL"
 
 #: data/base/messages/strings/cam2strings.txt:28
-msgid ""
-"Team Beta are searching for Vertical Takeoff and Landing (VTOL) technology."
+msgid "Team Beta are searching for Vertical Takeoff and Landing (VTOL) technology."
 msgstr "L'equip Beta està buscant la tecnologia del convertiplà."
 
 #: data/base/messages/strings/cam2strings.txt:29
 msgid "It's believed to be at a pre-Collapse airbase in this area."
-msgstr ""
-"Creiem que es troba en una base aèria del pre-col·lapse que hi ha en aquesta "
-"àrea"
+msgstr "Creiem que es troba en una base aèria del pre-col·lapse que hi ha en aquesta àrea"
 
 #: data/base/messages/strings/cam2strings.txt:32
 msgid "Team Beta under heavy attack"
@@ -5024,41 +5021,28 @@ msgid "We are detecting ground and aerial forces from the north."
 msgstr "Detectem forces aèries i terrestres provinents del nord"
 
 #: data/base/messages/strings/cam2strings.txt:44
-msgid ""
-"Hold your position and repulse these attacks, then eradicate the enemy's "
-"northern base."
-msgstr ""
-"Mantingueu la vostra posició i repel·liu els atacs, després elimineu la base "
-"enemiga del nord."
+msgid "Hold your position and repulse these attacks, then eradicate the enemy's northern base."
+msgstr "Mantingueu la vostra posició i repel·liu els atacs, després elimineu la base enemiga del nord."
 
 #: data/base/messages/strings/cam2strings.txt:47
 msgid "TRANSPORT MISSION: Intercept convoy."
 msgstr "MISSIÓ DE TRANSPORT: Intercepteu el comboi."
 
 #: data/base/messages/strings/cam2strings.txt:48
-msgid ""
-"Data from the Collective's base indicates the presence of the NEXUS intruder "
-"program."
-msgstr ""
-"Els dades de la base de La Col·lectivitat indica la presencia del programa "
-"intrús de NEXUS."
+msgid "Data from the Collective's base indicates the presence of the NEXUS intruder program."
+msgstr "Els dades de la base de La Col·lectivitat indica la presencia del programa intrús de NEXUS."
 
 #: data/base/messages/strings/cam2strings.txt:49
 msgid "Before NEXUS switched itself off-line we accessed the following."
-msgstr ""
-"Abans que el Nexus s'apagués hem pogut accedir a la següent informació."
+msgstr "Abans que el Nexus s'apagués hem pogut accedir a la següent informació."
 
 #: data/base/messages/strings/cam2strings.txt:51
-msgid ""
-"An enemy commander is collecting a shipment from NEXUS at this location."
-msgstr ""
-"Un comandant enemic està recollint enviament de NEXUS en aquesta "
-"localització."
+msgid "An enemy commander is collecting a shipment from NEXUS at this location."
+msgstr "Un comandant enemic està recollint enviament de NEXUS en aquesta localització."
 
 #: data/base/messages/strings/cam2strings.txt:52
 msgid "Once at the LZ, eradicate the enemy commander and recover the shipment."
-msgstr ""
-"Quan sigueu a la ZA, elimineu el comandant enemic i recupereu la càrrega."
+msgstr "Quan sigueu a la ZA, elimineu el comandant enemic i recupereu la càrrega."
 
 #: data/base/messages/strings/cam2strings.txt:53
 msgid "Then return to the LZ."
@@ -5096,8 +5080,7 @@ msgstr "MISSIÓ DE TRANSPORT: Rescateu civils del camp de concentració"
 
 #: data/base/messages/strings/cam2strings.txt:69
 msgid "The Collective are processing and exterminating civilians at this base."
-msgstr ""
-"La Col·lectivitat està processant i exterminant civils en aquesta base."
+msgstr "La Col·lectivitat està processant i exterminant civils en aquesta base."
 
 #: data/base/messages/strings/cam2strings.txt:73
 msgid "You are to rescue the civilians."
@@ -5109,30 +5092,19 @@ msgstr "Després destruïu el camp."
 
 #: data/base/messages/strings/cam2strings.txt:77
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs."
-msgstr ""
-"MISSIÓ DE LA BASE BETA: Destrueix la base aèria enemiga i recupera els "
-"convertiplans."
+msgstr "MISSIÓ DE LA BASE BETA: Destrueix la base aèria enemiga i recupera els convertiplans."
 
 #: data/base/messages/strings/cam2strings.txt:78
-msgid ""
-"Analysis of flight paths indicate that The Collective's VTOLs originate from "
-"here."
-msgstr ""
-"L'anàlisi de les rutes de vol indica que els convertiplans de La "
-"Colectivitat provenen d'aquí."
+msgid "Analysis of flight paths indicate that The Collective's VTOLs originate from here."
+msgstr "L'anàlisi de les rutes de vol indica que els convertiplans de La Colectivitat provenen d'aquí."
 
 #: data/base/messages/strings/cam2strings.txt:81
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs"
-msgstr ""
-"MISSIÓ DE LA BASE BETA: Destrueix la base aèria enemiga i recupera els "
-"convertiplans."
+msgstr "MISSIÓ DE LA BASE BETA: Destrueix la base aèria enemiga i recupera els convertiplans."
 
 #: data/base/messages/strings/cam2strings.txt:82
-msgid ""
-"The location of the enemy airbase is here; this is your primary objective."
-msgstr ""
-"Aquesta és la localització de la base aèria enemiga; és el vostre objectiu "
-"primari."
+msgid "The location of the enemy airbase is here; this is your primary objective."
+msgstr "Aquesta és la localització de la base aèria enemiga; és el vostre objectiu primari."
 
 #: data/base/messages/strings/cam2strings.txt:83
 msgid "Eradicate all Collective forces and recover all artifacts."
@@ -5186,9 +5158,7 @@ msgstr "MISSIÓ DE LA BASE BETA: Captura la central de NASDA"
 
 #: data/base/messages/strings/cam2strings.txt:107
 msgid "Capture NASDA central before NEXUS and the Collective can use it."
-msgstr ""
-"Captura la central de NASDA abans que NEXUS i La Col·lectivitat la puguin "
-"fer servir"
+msgstr "Captura la central de NASDA abans que NEXUS i La Col·lectivitat la puguin fer servir"
 
 #: data/base/messages/strings/cam2strings.txt:111
 #: data/base/messages/strings/cam2strings.txt:116
@@ -5202,15 +5172,11 @@ msgstr "Nexus busca bancs de memòria que encara funcionin."
 
 #: data/base/messages/strings/cam2strings.txt:113
 msgid "Part of its consciousness has moved to a remote NASDA control-site."
-msgstr ""
-"Part de la seva consciència s'ha mogut a un punt de control remot de NASDA."
+msgstr "Part de la seva consciència s'ha mogut a un punt de control remot de NASDA."
 
 #: data/base/messages/strings/cam2strings.txt:117
-msgid ""
-"We are detecting transmissions from this site that are reaching high orbit."
-msgstr ""
-"Estem detectant transmissions des d'aquest punt que abasten una orbita "
-"elevada."
+msgid "We are detecting transmissions from this site that are reaching high orbit."
+msgstr "Estem detectant transmissions des d'aquest punt que abasten una orbita elevada."
 
 #: data/base/messages/strings/cam2strings.txt:118
 msgid "NEXUS has now reconnected itself with the NASDA satellites."
@@ -5229,12 +5195,8 @@ msgid "TRANSPORT MISSION: Destroy Enemy SAM Sites"
 msgstr "MISSIÓ DE TRANSPORT: Destruïu els punts de llançament MTA"
 
 #: data/base/messages/strings/cam2strings.txt:127
-msgid ""
-"If you are to escape, eradicate the surface-to-air missile sites around your "
-"base."
-msgstr ""
-"Si heu d'escapar, elimina els punts de llançament de míssils terra-aire "
-"propers a la vostra base."
+msgid "If you are to escape, eradicate the surface-to-air missile sites around your base."
+msgstr "Si heu d'escapar, elimina els punts de llançament de míssils terra-aire propers a la vostra base."
 
 #: data/base/messages/strings/cam2strings.txt:128
 msgid "Fly to the LZ, then head overland to destroy the SAM sites."
@@ -5276,12 +5238,8 @@ msgid "Alpha base has been destroyed by nuclear missile attack."
 msgstr "La base Alfa ha estat destruïda per un atac amb míssils nuclears."
 
 #: data/base/messages/strings/cam2strings.txt:147
-msgid ""
-"The Collective are unaware of the nuclear attack and have air units heading "
-"for your base."
-msgstr ""
-"La Col·lectivitat no està al corrent de l'atac nuclear i envia unitats "
-"aèries cap a la vostra base."
+msgid "The Collective are unaware of the nuclear attack and have air units heading for your base."
+msgstr "La Col·lectivitat no està al corrent de l'atac nuclear i envia unitats aèries cap a la vostra base."
 
 #: data/base/messages/strings/cam2strings.txt:148
 msgid "This message was intercepted a few moments ago..."
@@ -5303,17 +5261,14 @@ msgid "TRANSPORT MISSION: Northern Sector"
 msgstr "MISSIÓ DE TRANSPORT: Sector nord"
 
 #: data/base/messages/strings/cam3strings.txt:5
+#: data/base/sequenceaudio/cam3/c003.txa:5
 msgid "Congratulations on your successful evacuation of Beta Base."
 msgstr "Us felicitem per l'èxit de l'evacuació de la base Beta."
 
 #: data/base/messages/strings/cam3strings.txt:6
 #: data/base/sequenceaudio/cam3/c003.txa:6
-msgid ""
-"NEXUS has gained access to nuclear weapons and is determined to destroy the "
-"Project."
-msgstr ""
-"NEXUS ha aconseguit accedir a armes nuclears i està determinat a destruir el "
-"Projecte."
+msgid "NEXUS has gained access to nuclear weapons and is determined to destroy the Project."
+msgstr "NEXUS ha aconseguit accedir a armes nuclears i està determinat a destruir el Projecte."
 
 #: data/base/messages/strings/cam3strings.txt:9
 msgid "Take your forces to the Northern Sector"
@@ -5322,9 +5277,7 @@ msgstr "Envieu les vostres forces al Sector Nord"
 #: data/base/messages/strings/cam3strings.txt:10
 #: data/base/sequenceaudio/cam3/c003.txa:15
 msgid "Once at the mountains secure an LZ. Then establish a forward base."
-msgstr ""
-"Un cop arribeu a les muntanyes, assegureu la ZA. Després establiun una base "
-"avançada."
+msgstr "Un cop arribeu a les muntanyes, assegureu la ZA. Després establiun una base avançada."
 
 #: data/base/messages/strings/cam3strings.txt:11
 #: data/base/sequenceaudio/cam3/c003.txa:16
@@ -5369,8 +5322,7 @@ msgstr "Descàrrega de les coordenades completada."
 
 #: data/base/messages/strings/cam3strings.txt:29
 msgid "Secure your LZ, then head overland to destroy the missile silo."
-msgstr ""
-"Assegureu la ZA, després avanceu per terra per destruir la sitja de míssils."
+msgstr "Assegureu la ZA, després avanceu per terra per destruir la sitja de míssils."
 
 #: data/base/messages/strings/cam3strings.txt:33
 #: data/base/messages/strings/cam3strings.txt:38
@@ -5398,11 +5350,8 @@ msgid "AWAY TEAM UPDATE"
 msgstr "ACTUALITZACIÓ DE L'EQUIP EXTERN"
 
 #: data/base/messages/strings/cam3strings.txt:44
-msgid ""
-"All communication with the away team was lost after the nuclear explosions."
-msgstr ""
-"Totes les comunicacions amb l'equip exterior s'han perdut després de les "
-"explosions nuclears."
+msgid "All communication with the away team was lost after the nuclear explosions."
+msgstr "Totes les comunicacions amb l'equip exterior s'han perdut després de les explosions nuclears."
 
 #: data/base/messages/strings/cam3strings.txt:45
 msgid "Their last transmission indicated they were heading back to base."
@@ -5417,10 +5366,8 @@ msgid "You are to assist Team Gamma."
 msgstr "Heu d'ajudar a l'Equip Gamma"
 
 #: data/base/messages/strings/cam3strings.txt:50
-msgid ""
-"On reaching Gamma Base, help secure the area from further NEXUS attacks."
-msgstr ""
-"Quan arribeu a la base Gamma, ajudeu a assegurar l'àrea dels atacs de NEXUS."
+msgid "On reaching Gamma Base, help secure the area from further NEXUS attacks."
+msgstr "Quan arribeu a la base Gamma, ajudeu a assegurar l'àrea dels atacs de NEXUS."
 
 #: data/base/messages/strings/cam3strings.txt:53
 msgid "NEXUS DEFEATED"
@@ -5431,12 +5378,8 @@ msgid "Commander, we have defeated NEXUS."
 msgstr "Comandant, hem eliminat NEXUS"
 
 #: data/base/messages/strings/cam3strings.txt:55
-msgid ""
-"Unfortunately, our systems' performance has been affected by NEXUS. We are "
-"trying to rectify this."
-msgstr ""
-"Malauradament, el rendiment dels nostres sistemes ha quedat afectat per "
-"NEXUS. Estem intentat corregir-ho."
+msgid "Unfortunately, our systems' performance has been affected by NEXUS. We are trying to rectify this."
+msgstr "Malauradament, el rendiment dels nostres sistemes ha quedat afectat per NEXUS. Estem intentat corregir-ho."
 
 #: data/base/messages/strings/cam3strings.txt:58
 msgid "We are currently receiving this transmission."
@@ -5451,18 +5394,12 @@ msgid "Take a scout force to these coordinates and evaluate the situation."
 msgstr "Envieu una força d'exploració i avalueu la situació."
 
 #: data/base/messages/strings/cam3strings.txt:66
-msgid ""
-"Determine whether they are Team Alpha. If so, rescue and escort them back to "
-"the LZ."
-msgstr ""
-"Determineu on és l'Equip Alfa. Si el trobeu, rescateu-lo i escorteu-lo fins "
-"a la ZA."
+msgid "Determine whether they are Team Alpha. If so, rescue and escort them back to the LZ."
+msgstr "Determineu on és l'Equip Alfa. Si el trobeu, rescateu-lo i escorteu-lo fins a la ZA."
 
 #: data/base/messages/strings/cam3strings.txt:68
-msgid ""
-"This group are part of Team Alpha, Rescue them and escort them to the LZ."
-msgstr ""
-"Aquest grup és part de l'Equip Alfa. Rescateu-lo i escorteu-lo fins a la ZA."
+msgid "This group are part of Team Alpha, Rescue them and escort them to the LZ."
+msgstr "Aquest grup és part de l'Equip Alfa. Rescateu-lo i escorteu-lo fins a la ZA."
 
 #: data/base/messages/strings/cam3strings.txt:71
 msgid "NORTHERN SECTOR MISSION: Team Alpha Debrief"
@@ -5473,11 +5410,8 @@ msgid "Team Alpha power transfer in progress."
 msgstr "Transferència de l'energia de l'equip Alfa en progrés."
 
 #: data/base/messages/strings/cam3strings.txt:75
-msgid ""
-"Commander, after you left the Western Sector we recovered this artifact."
-msgstr ""
-"Comandant, després que deixéssiu el Sector Oest vam recuperar aquest "
-"artefacte."
+msgid "Commander, after you left the Western Sector we recovered this artifact."
+msgstr "Comandant, després que deixéssiu el Sector Oest vam recuperar aquest artefacte."
 
 #: data/base/messages/strings/cam3strings.txt:76
 msgid "The benefits from researching it could be vast."
@@ -5501,16 +5435,11 @@ msgstr "MISSIÓ DE TRANSPORT: Embosca les forces de NEXUS"
 
 #: data/base/messages/strings/cam3strings.txt:85
 msgid "Commander, your decisive actions halted the spread of NEXUS."
-msgstr ""
-"Comandant, les vostres accions han estat decisives per aturar l'expansió de "
-"NEXUS."
+msgstr "Comandant, les vostres accions han estat decisives per aturar l'expansió de NEXUS."
 
 #: data/base/messages/strings/cam3strings.txt:86
-msgid ""
-"Before NEXUS was expelled, we intercepted this message - Decoding completed."
-msgstr ""
-"Abans que NEXUS fos rebutjat, vam interceptar aquest missatge - S'ha "
-"completat la descodificació."
+msgid "Before NEXUS was expelled, we intercepted this message - Decoding completed."
+msgstr "Abans que NEXUS fos rebutjat, vam interceptar aquest missatge - S'ha completat la descodificació."
 
 #: data/base/messages/strings/cam3strings.txt:89
 msgid "A NEXUS task force is heading for these coordinates."
@@ -5521,10 +5450,8 @@ msgid "You have an opportunity to destroy NEXUS before they get there."
 msgstr "Teniu la oportunitat de destruir NEXUS abans que hi arribin."
 
 #: data/base/messages/strings/cam3strings.txt:91
-msgid ""
-"Take an attack force and ambush NEXUS task force at ....... the  ......."
-msgstr ""
-"Agafeu una força d'atac i embosqueu les forces de NEXUS a ..... la  ......."
+msgid "Take an attack force and ambush NEXUS task force at ....... the  ......."
+msgstr "Agafeu una força d'atac i embosqueu les forces de NEXUS a ..... la  ......."
 
 #: data/base/messages/strings/cam3strings.txt:94
 msgid "TRANSPORT MISSION: Away Team"
@@ -5571,11 +5498,8 @@ msgid "Elements of Team Gamma have contacted us."
 msgstr "Elements de l'Equip Gamma han contactat amb nosaltres."
 
 #: data/base/messages/strings/cam3strings.txt:117
-msgid ""
-"They claim to be free of NEXUS, and offer their base as a site of operations."
-msgstr ""
-"Asseguren estar lliures de NEXUS i ofereixen la seva base com a punt "
-"d'operacions."
+msgid "They claim to be free of NEXUS, and offer their base as a site of operations."
+msgstr "Asseguren estar lliures de NEXUS i ofereixen la seva base com a punt d'operacions."
 
 #: data/base/messages/strings/cam3strings.txt:118
 msgid "Base coordinates download in progress."
@@ -5599,14 +5523,11 @@ msgstr "La base del segon Equip Gamma és a aquesta localització."
 
 #: data/base/messages/strings/cam3strings.txt:127
 msgid "We have limited time to evacuate this base and move to Gamma Base."
-msgstr ""
-"Teniu temps limitat per evacuar aquesta base i desplaçar-vos fins la Base "
-"Gamma."
+msgstr "Teniu temps limitat per evacuar aquesta base i desplaçar-vos fins la Base Gamma."
 
 #: data/base/messages/strings/cam3strings.txt:130
 msgid "The laser satellites are not functioning properly, they are misfiring."
-msgstr ""
-"Els satèl·lits làser no funcionen correctament, estant fallant els objectius."
+msgstr "Els satèl·lits làser no funcionen correctament, estant fallant els objectius."
 
 #: data/base/messages/strings/cam3strings.txt:131
 msgid "They are directing their fire towards this position."
@@ -5621,10 +5542,8 @@ msgid "Team Gamma reports a missile silo at this location."
 msgstr "L'Equip Gamma informa d'una sitja de míssils en aquesta localització."
 
 #: data/base/messages/strings/cam3strings.txt:136
-msgid ""
-"They believe that the silo contains missiles capable of reaching high orbit."
-msgstr ""
-"Creuen que aquesta sitja conté míssils capaços d'arribar a l'orbita alta."
+msgid "They believe that the silo contains missiles capable of reaching high orbit."
+msgstr "Creuen que aquesta sitja conté míssils capaços d'arribar a l'orbita alta."
 
 #: data/base/messages/strings/cam3strings.txt:137
 msgid "Capture this silo at all costs."
@@ -5672,11 +5591,8 @@ msgid "We are attempting to access the missile control codes."
 msgstr "Estem intentant accedir als codis de control dels míssils."
 
 #: data/base/messages/strings/cam3strings.txt:162
-msgid ""
-"A research facility is required to crack the code. Allocate one immediately."
-msgstr ""
-"Es requereix un centre de recerca per piratejar el codi. Assigneu-la "
-"immediatament."
+msgid "A research facility is required to crack the code. Allocate one immediately."
+msgstr "Es requereix un centre de recerca per piratejar el codi. Assigneu-la immediatament."
 
 #: data/base/messages/strings/cam3strings.txt:163
 msgid "Protect the missile silos from NEXUS attacks."
@@ -5704,9 +5620,7 @@ msgstr "Programació dels objectius dels míssils en progres."
 
 #: data/base/messages/strings/cam3strings.txt:173
 msgid "Once level 3 codes are cracked we initiate launch procedures."
-msgstr ""
-"Quan hagem descobert els codis del nivell 3 començarem el procediment de "
-"llançament."
+msgstr "Quan hagem descobert els codis del nivell 3 començarem el procediment de llançament."
 
 #: data/base/messages/strings/cam3strings.txt:176
 msgid "PROJECT UPDATE: 3rd Level Missile Code Cracked."
@@ -5814,7 +5728,8 @@ msgstr "Reactor nuclear"
 msgid "New Design"
 msgstr "Disseny nou"
 
-#: data/base/messages/strings/names.txt:15 src/design.cpp:1275
+#: data/base/messages/strings/names.txt:15
+#: src/design.cpp:1275
 msgid "Transport"
 msgstr "Transport"
 
@@ -9281,23 +9196,28 @@ msgstr "Incrementa l'índex de foc dels mini-míssils"
 
 # LZ means Landing Zone
 #: data/base/script/fastplay/s-demo.slo:366
-#: data/base/script/text/cam1-1.slo:258 data/base/script/text/cam1-2.slo:382
-#: data/base/script/text/cam1-4a.slo:590 data/base/script/text/cam1-7.slo:506
+#: data/base/script/text/cam1-1.slo:258
+#: data/base/script/text/cam1-2.slo:382
+#: data/base/script/text/cam1-4a.slo:590
+#: data/base/script/text/cam1-7.slo:506
 #: data/base/script/text/genexp.slo:997
 msgid "Return to LZ"
 msgstr "Torneu a la ZA"
 
-#: data/base/script/text/cam1-7.slo:913 data/base/script/text/cam2cx.slo:270
+#: data/base/script/text/cam1-7.slo:913
+#: data/base/script/text/cam2cx.slo:270
 #: data/base/script/text/genexp.slo:852
 msgid "Enemy Escaping"
 msgstr "L'enemic s'escapa"
 
-#: data/base/script/text/cam2dx.slo:40 data/base/script/text/cam3a-d1x.slo:99
+#: data/base/script/text/cam2dx.slo:40
+#: data/base/script/text/cam3a-d1x.slo:99
 #: data/base/script/text/cam3a-d2x.slo:109
 msgid "Objective Destroyed"
 msgstr "Objectiu destruit"
 
-#: data/base/script/text/cam2dx.slo:63 data/base/script/text/cam3a-d1x.slo:129
+#: data/base/script/text/cam2dx.slo:63
+#: data/base/script/text/cam3a-d1x.slo:129
 msgid "Objective Captured"
 msgstr "Objectiu capturat"
 
@@ -9307,8 +9227,7 @@ msgstr "Teniu reforços disponibles"
 
 #: data/base/script/text/tutorial3.slo:289
 msgid "In this training session you'll learn how to build an effective base"
-msgstr ""
-"En aquesta sessió d'entrenament aprendreu com construir una base eficient"
+msgstr "En aquesta sessió d'entrenament aprendreu com construir una base eficient"
 
 #: data/base/script/text/tutorial3.slo:304
 msgid "Oil resources are key to your success"
@@ -9319,20 +9238,12 @@ msgid "To build an oil derrick, select one of your trucks"
 msgstr "Per construir un pou de petroli, seleccioneu un dels vostres camions"
 
 #: data/base/script/text/tutorial3.slo:333
-msgid ""
-"Left click the oil pool indicated by the radar pulse to order your truck to "
-"build"
-msgstr ""
-"Feu clic esquerra a la taca de petroli indicada pel radar d'impulsos per "
-"ordenar al vostre camió que construeixi"
+msgid "Left click the oil pool indicated by the radar pulse to order your truck to build"
+msgstr "Feu clic esquerra a la taca de petroli indicada pel radar d'impulsos per ordenar al vostre camió que construeixi"
 
 #: data/base/script/text/tutorial3.slo:353
-msgid ""
-"The oil derrick is currently dormant. Build a power generator to convert the "
-"oil into power"
-msgstr ""
-"El pou de petroli és ara mateix aturat. Construeix un generador per proveir "
-"el pou d'energia"
+msgid "The oil derrick is currently dormant. Build a power generator to convert the oil into power"
+msgstr "El pou de petroli és ara mateix aturat. Construeix un generador per proveir el pou d'energia"
 
 #: data/base/script/text/tutorial3.slo:370
 #: data/base/script/text/tutorial3.slo:580
@@ -9342,20 +9253,15 @@ msgstr "Feu clic esquerre a la icona CONSTRUCCIÓ que fa pampallugues"
 
 #: data/base/script/text/tutorial3.slo:397
 msgid "Now left click the power generator in the build menu on the left"
-msgstr ""
-"Ara feu clic esquerre al generador al menú de construcció de l'esquerra"
+msgstr "Ara feu clic esquerre al generador al menú de construcció de l'esquerra"
 
 #: data/base/script/text/tutorial3.slo:407
-msgid ""
-"Position the square at your base and left click to start the build process"
-msgstr ""
-"Posicioneu el quadrat a la vostra base i feu clic esquerra per començar-ne "
-"la construcció"
+msgid "Position the square at your base and left click to start the build process"
+msgstr "Posicioneu el quadrat a la vostra base i feu clic esquerra per començar-ne la construcció"
 
 #: data/base/script/text/tutorial3.slo:422
 msgid "To increase your build rate, select your second truck"
-msgstr ""
-"Per incrementar la velocitat de construcció, seleccioneu el segon camió"
+msgstr "Per incrementar la velocitat de construcció, seleccioneu el segon camió"
 
 #: data/base/script/text/tutorial3.slo:457
 msgid "Now left click the power generator site"
@@ -9366,23 +9272,16 @@ msgid "The other truck will now help to build the power generator"
 msgstr "Ara l'altre camió ajudarà a construir el generador"
 
 #: data/base/script/text/tutorial3.slo:510
-msgid ""
-"During missions you need to locate and recover technologies from before the "
-"Collapse"
-msgstr ""
-"Durant les missions heu de localitzar i recuperar tecnologies prèvies al "
-"Col·lapse"
+msgid "During missions you need to locate and recover technologies from before the Collapse"
+msgstr "Durant les missions heu de localitzar i recuperar tecnologies prèvies al Col·lapse"
 
 #: data/base/script/text/tutorial3.slo:519
 msgid "Use a truck to search for the artifact indicated by the radar pulse"
-msgstr ""
-"Feu servir un camió per buscar l'artefacte indicat per radar d'impulsos"
+msgstr "Feu servir un camió per buscar l'artefacte indicat per radar d'impulsos"
 
 #: data/base/script/text/tutorial3.slo:523
 msgid "Move the pointer over the artifact and left click to recover it"
-msgstr ""
-"Desplaceu el punter fins a l'artefacte i feu-hi clic esquerra per recuperar-"
-"lo"
+msgstr "Desplaceu el punter fins a l'artefacte i feu-hi clic esquerra per recuperar-lo"
 
 #: data/base/script/text/tutorial3.slo:566
 msgid "A research facility is required to research artifacts"
@@ -9390,19 +9289,15 @@ msgstr "Cal un centre de recerca per investigar els artefactes"
 
 #: data/base/script/text/tutorial3.slo:608
 msgid "Now left click the research facility and position it at your base"
-msgstr ""
-"Ara feu clic esquerra al centre de recerca i posicioneu-lo a la vostra base"
+msgstr "Ara feu clic esquerra al centre de recerca i posicioneu-lo a la vostra base"
 
 #: data/base/script/text/tutorial3.slo:631
 msgid "Use your other truck to help build the research facility"
-msgstr ""
-"Feu servir l'altre camió per ajudar en la construcció del centre de recerca"
+msgstr "Feu servir l'altre camió per ajudar en la construcció del centre de recerca"
 
 #: data/base/script/text/tutorial3.slo:657
 msgid "To research the artifact, left click on the flashing RESEARCH icon"
-msgstr ""
-"Per investigar l'artefacte, feu clic esquerra a la icona RECERCA que fa "
-"pampallugues"
+msgstr "Per investigar l'artefacte, feu clic esquerra a la icona RECERCA que fa pampallugues"
 
 #: data/base/script/text/tutorial3.slo:679
 msgid "Now left click the machinegun artifact"
@@ -9414,9 +9309,7 @@ msgstr "Ara l'artefacte està sent investigat pel centre de recerca"
 
 #: data/base/script/text/tutorial3.slo:713
 msgid "The researched machinegun can now be used to design a new vehicle"
-msgstr ""
-"La metralladora investigada es pot fer servir ara per dissenyar un vehicle "
-"nou"
+msgstr "La metralladora investigada es pot fer servir ara per dissenyar un vehicle nou"
 
 #: data/base/script/text/tutorial3.slo:730
 msgid "Left click the flashing DESIGN icon"
@@ -9452,9 +9345,7 @@ msgstr "Ara necessiteu una fàbrica per produir el vostre vehicle nou"
 
 #: data/base/script/text/tutorial3.slo:894
 msgid "Now left click the factory icon and position it at your base"
-msgstr ""
-"Ara feu clic esquerra a la icona de la fàbrica i posicioneu-la a la vostra "
-"base"
+msgstr "Ara feu clic esquerra a la icona de la fàbrica i posicioneu-la a la vostra base"
 
 #: data/base/script/text/tutorial3.slo:914
 msgid "Select a location for your factory"
@@ -9466,9 +9357,7 @@ msgstr "El punt de lliurament està indicat pel número 1"
 
 #: data/base/script/text/tutorial3.slo:936
 msgid "All new units will drive to this location once built"
-msgstr ""
-"Totes les vostres unitats noves es desplaçaran fins aquest punt quan "
-"s'acabin de fabricar"
+msgstr "Totes les vostres unitats noves es desplaçaran fins aquest punt quan s'acabin de fabricar"
 
 #: data/base/script/text/tutorial3.slo:938
 msgid "You can move the delivery point at any time by left clicking it"
@@ -9476,8 +9365,7 @@ msgstr "Podeu moure el punt de lliurament quan vulgueu fent-hi clic esquerra"
 
 #: data/base/script/text/tutorial3.slo:952
 msgid "Now click where you want to position the delivery point"
-msgstr ""
-"Ara feu clic esquerra al lloc que voleu que sigui el punt de lliurament"
+msgstr "Ara feu clic esquerra al lloc que voleu que sigui el punt de lliurament"
 
 #: data/base/script/text/tutorial3.slo:969
 msgid "The factory can now be ordered to build a new unit"
@@ -9489,9 +9377,7 @@ msgstr "Feu clic esquerra a la icona FABRICACIÓ que fa pampallugues"
 
 #: data/base/script/text/tutorial3.slo:1013
 msgid "Now left click the units you want to build from the menu at the left"
-msgstr ""
-"Ara feu clic esquerra a les unitats del menú de l'esquerra que voleu "
-"fabricar "
+msgstr "Ara feu clic esquerra a les unitats del menú de l'esquerra que voleu fabricar "
 
 #: data/base/script/text/tutorial3.slo:1027
 msgid "Please wait whilst the factory manufactures the new unit(s)"
@@ -9570,12 +9456,8 @@ msgid "Approaching Landing Zone. Team Alpha Briefing commences."
 msgstr "Ens apropem a la zona d'aterratge. Comença la reunió de l'Equip Alfa"
 
 #: data/base/sequenceaudio/cam1/c001.txt:9
-msgid ""
-"Commander, you lead Team Alpha, one of three expeditionary teams sent out by "
-"the Project to recover artifacts from before the Collapse."
-msgstr ""
-"Comandant, lidereu l'Equip Alfa, una de les tres expedicions enviades pel "
-"Projecte per recuperar artefactes anterior al Col·lapse"
+msgid "Commander, you lead Team Alpha, one of three expeditionary teams sent out by the Project to recover artifacts from before the Collapse."
+msgstr "Comandant, lidereu l'Equip Alfa, una de les tres expedicions enviades pel Projecte per recuperar artefactes anterior al Col·lapse"
 
 #: data/base/sequenceaudio/cam1/c001.txt:11
 msgid "Your destination lies in the western zone."
@@ -9586,14 +9468,8 @@ msgid "Commander, we have recovered a command turret from the New Paradigm."
 msgstr "Comandant, hem recuperat una torreta de comandament del Nou Paradigma"
 
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:6
-msgid ""
-"This turret allows commanders to coordinate attacks between assigned units "
-"and to act as a delivery point for factories. Researching and using this "
-"technology has the highest priority."
-msgstr ""
-"Aquesta torreta permet els comandants coordinar les unitats assignades "
-"durant els atacs i actuar com a punt de lliurament per les fàbriques. "
-"Investigar i utilitzar aquesta tecnologia té la màxima prioritat."
+msgid "This turret allows commanders to coordinate attacks between assigned units and to act as a delivery point for factories. Researching and using this technology has the highest priority."
+msgstr "Aquesta torreta permet els comandants coordinar les unitats assignades durant els atacs i actuar com a punt de lliurament per les fàbriques. Investigar i utilitzar aquesta tecnologia té la màxima prioritat."
 
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:8
 msgid "Commander, we are receiving this transmission."
@@ -9662,11 +9538,8 @@ msgid "When we failed to respond it became threatening."
 msgstr "En no rebre cap resposta per part nostra, s'ha tornat amenaçador."
 
 #: data/base/sequenceaudio/cam1/cam1out4.txt:1
-msgid ""
-"Your interference in my plans for the New Paradigm will not go unpunished."
-msgstr ""
-"La vostra interferència en els meus plans pel Nou Paradigma no quedarà sense "
-"càstig."
+msgid "Your interference in my plans for the New Paradigm will not go unpunished."
+msgstr "La vostra interferència en els meus plans pel Nou Paradigma no quedarà sense càstig."
 
 #: data/base/sequenceaudio/cam1/cam1out4.txt:2
 msgid "You are weak flesh-things. I am strong and have many parts."
@@ -9678,101 +9551,48 @@ msgstr "Em podeu vèncer aquí, però tornaré a créixer."
 
 #: data/base/sequenceaudio/cam1/cam1out4.txt:5
 #: data/base/sequenceaudio/cam2/cam2_2n2.txt:1
-msgid ""
-"As I once cleansed the world with fire, I will destroy you and your puny "
-"Project!!"
-msgstr ""
-"Un cop hagi netejat el món amb foc, us destruiré, a vosaltres i al vostre "
-"ridícul Projecte!"
+msgid "As I once cleansed the world with fire, I will destroy you and your puny Project!!"
+msgstr "Un cop hagi netejat el món amb foc, us destruiré, a vosaltres i al vostre ridícul Projecte!"
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:4
-msgid ""
-"Nexus then removed itself from the system, destroying its memory banks, and "
-"removing all traces of its external connections."
-msgstr ""
-"Nexus s'ha retirat tot sol del sistema, destruint els seus bancs de memòria, "
-"i eliminant qualsevol traça de connexió externa."
+msgid "Nexus then removed itself from the system, destroying its memory banks, and removing all traces of its external connections."
+msgstr "Nexus s'ha retirat tot sol del sistema, destruint els seus bancs de memòria, i eliminant qualsevol traça de connexió externa."
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:6
-msgid ""
-"We are not sure what Nexus is or who or what is directing it. Initial "
-"research links the Nexus Intruder Program with the Reed Corporation, the "
-"developer of the synaptic link."
-msgstr ""
-"No podem assegurar que és Nexus o qui ho controla. Les investigacions "
-"inicials connecten el programa intrús de Nexus amb la Corporació Reed, els "
-"desenvolupadors de l'enllaç sinàptic."
+msgid "We are not sure what Nexus is or who or what is directing it. Initial research links the Nexus Intruder Program with the Reed Corporation, the developer of the synaptic link."
+msgstr "No podem assegurar que és Nexus o qui ho controla. Les investigacions inicials connecten el programa intrús de Nexus amb la Corporació Reed, els desenvolupadors de l'enllaç sinàptic."
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:8
-msgid ""
-"We have ascertained that Nexus supplied the New Paradigm with most of its "
-"technology. Whatever Nexus is, it's more than a computer parasite."
-msgstr ""
-"Hem sabut que Nexus proveïa al Nou Paradigma de la majoria de la seva "
-"tecnologia. El que sigui que és Nexus, és alguna cosa més que un virus "
-"informàtic."
+msgid "We have ascertained that Nexus supplied the New Paradigm with most of its technology. Whatever Nexus is, it's more than a computer parasite."
+msgstr "Hem sabut que Nexus proveïa al Nou Paradigma de la majoria de la seva tecnologia. El que sigui que és Nexus, és alguna cosa més que un virus informàtic."
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:10
-msgid ""
-"It has technology and weapons. It knows about us, and it's not friendly."
+msgid "It has technology and weapons. It knows about us, and it's not friendly."
 msgstr "Disposa de tecnologia i armes. Ens coneix, i no és amistós."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:4
-msgid ""
-"The Synaptic Link was developed by the Reed Corporation in conjunction with "
-"the US Military."
-msgstr ""
-"L'enllaç sinàptic va ser desenvolupat per Reed Corporation juntament amb "
-"l'exèrcit dels EUA"
+msgid "The Synaptic Link was developed by the Reed Corporation in conjunction with the US Military."
+msgstr "L'enllaç sinàptic va ser desenvolupat per Reed Corporation juntament amb l'exèrcit dels EUA"
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:6
-msgid ""
-"The synaptic link allows for almost instantaneous transfer of thought from "
-"human operators to vehicle control and guidance systems. The synaptic link "
-"is fitted into the base of the skull circling the spinal column."
-msgstr ""
-"L'enllaç sinàptic permet una transferència pràcticament instantània dels "
-"pensaments humans dels operadors als sistemes de control del vehicle. "
-"L'enllaç sinàptic s'instal·la a la base del crani, al voltant de la columna "
-"vertebral."
+msgid "The synaptic link allows for almost instantaneous transfer of thought from human operators to vehicle control and guidance systems. The synaptic link is fitted into the base of the skull circling the spinal column."
+msgstr "L'enllaç sinàptic permet una transferència pràcticament instantània dels pensaments humans dels operadors als sistemes de control del vehicle. L'enllaç sinàptic s'instal·la a la base del crani, al voltant de la columna vertebral."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:8
-msgid ""
-"The link has a hi-speed data transfer port that plugs into any computer "
-"system."
-msgstr ""
-"L'enllaç disposa d'un port de transferència de dades d'alta velocitat per "
-"qualsevol sistema de computació."
+msgid "The link has a hi-speed data transfer port that plugs into any computer system."
+msgstr "L'enllaç disposa d'un port de transferència de dades d'alta velocitat per qualsevol sistema de computació."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:10
-msgid ""
-"More importantly the development of the synaptic link made the creation of "
-"cyborgs possible. Early attempts at power suits for individual soldiers "
-"failed as they proved to be slow and unresponsive."
-msgstr ""
-"El més important és que el desenvolupament de l'enllaç sinàptic fa possible "
-"la creació de ciborgs. Els intents anteriors de vestits individuals per "
-"soldats van fallar per ser massa lents i difícils de controlar."
+msgid "More importantly the development of the synaptic link made the creation of cyborgs possible. Early attempts at power suits for individual soldiers failed as they proved to be slow and unresponsive."
+msgstr "El més important és que el desenvolupament de l'enllaç sinàptic fa possible la creació de ciborgs. Els intents anteriors de vestits individuals per soldats van fallar per ser massa lents i difícils de controlar."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:12
-msgid ""
-"The synaptic link allowed soldiers to be placed in power suits that they "
-"controlled as easily as their own bodies. Power suits allowed infantry to "
-"function effectively on the battlefields of the 21st Century."
-msgstr ""
-"L'enllaç sinàptic permet col·locar els soldats en vestits que controlen com "
-"si fossin els seus propis cossos. Els vestits permeten a la infanteria "
-"participar de manera efectiva als camps de batalla del segle XXI."
+msgid "The synaptic link allowed soldiers to be placed in power suits that they controlled as easily as their own bodies. Power suits allowed infantry to function effectively on the battlefields of the 21st Century."
+msgstr "L'enllaç sinàptic permet col·locar els soldats en vestits que controlen com si fossin els seus propis cossos. Els vestits permeten a la infanteria participar de manera efectiva als camps de batalla del segle XXI."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:14
-msgid ""
-"Unfortunately, this technology has fallen into the hands of the New "
-"Paradigm. It is imperative that you research and develop synaptic link "
-"technologies."
-msgstr ""
-"Malauradament, aquesta tecnologia va caure en mans del Nou Paradigma. És "
-"imperatiu que investigueu i desenvolupeu les tecnologies de l'enllaç "
-"simbòlic."
+msgid "Unfortunately, this technology has fallen into the hands of the New Paradigm. It is imperative that you research and develop synaptic link technologies."
+msgstr "Malauradament, aquesta tecnologia va caure en mans del Nou Paradigma. És imperatiu que investigueu i desenvolupeu les tecnologies de l'enllaç simbòlic."
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:4
 msgid "Warning!"
@@ -9799,80 +9619,40 @@ msgid "You will be destroyed."
 msgstr "Sereu destruït."
 
 #: data/base/sequenceaudio/cam1/sub14anp.txt:4
-msgid ""
-"NEXUS, the synaptic technology you required has been recovered and sent for "
-"collection."
-msgstr ""
-"Nexus, la tecnologia de l'enllaç sinàptic que requeríeu ha  estat recuperada "
-"i enviada."
+msgid "NEXUS, the synaptic technology you required has been recovered and sent for collection."
+msgstr "Nexus, la tecnologia de l'enllaç sinàptic que requeríeu ha  estat recuperada i enviada."
 
 #: data/base/sequenceaudio/cam1/sub1_4bn.txt:4
 msgid "You have done well."
 msgstr "Ben fet."
 
 #: data/base/sequenceaudio/cam1/sub1_4bn.txt:5
-msgid ""
-"Once we have analyzed and authenticated the technology, your reward  will "
-"follow."
-msgstr ""
-"Un cop hagem analitzat i autenticat la tecnologia, obtindreu la recompensa."
+msgid "Once we have analyzed and authenticated the technology, your reward  will follow."
+msgstr "Un cop hagem analitzat i autenticat la tecnologia, obtindreu la recompensa."
 
 #: data/base/sequenceaudio/cam1/sub1_5pl.txt:4
-msgid ""
-"Information discovered at the previous enemy base indicates that the New "
-"Paradigm recovered two synaptic link artifacts."
-msgstr ""
-"La informació descoberta a la base enemiga anterior indica que el Nou "
-"Paradigma ha recuperat dos artefactes d'enllaç sinàptic."
+msgid "Information discovered at the previous enemy base indicates that the New Paradigm recovered two synaptic link artifacts."
+msgstr "La informació descoberta a la base enemiga anterior indica que el Nou Paradigma ha recuperat dos artefactes d'enllaç sinàptic."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:4
-msgid ""
-"This Nexus Intruder Program is a self-mutating computer parasite. This makes "
-"it difficult to eradicate from systems once it has been identified."
-msgstr ""
-"Aquest programa intrús de Nexus és un paràsit per ordinadors auto-mutant. "
-"Això fa que sigui difícil de eradicar dels sistemes un cop ha estat "
-"identificat."
+msgid "This Nexus Intruder Program is a self-mutating computer parasite. This makes it difficult to eradicate from systems once it has been identified."
+msgstr "Aquest programa intrús de Nexus és un paràsit per ordinadors auto-mutant. Això fa que sigui difícil de eradicar dels sistemes un cop ha estat identificat."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:6
-msgid ""
-"We have been unable to ascertain it's ultimate goal or function. In its "
-"initial form it seeks out and isolates sections of memory from the rest of "
-"the invaded system. It then begins to mutate itself and data structures, "
-"effectively reprogramming the system from within."
-msgstr ""
-"No hem pogut esbrinar la seva funció o el seu objectiu principal. En la seva "
-"forma inicial busca aïlla seccions de memòria de la resta del sistema "
-"envaït. Llavors comença a mutar ell mateix i les estructures de dades, "
-"reprogramant el sistema des de dins."
+msgid "We have been unable to ascertain it's ultimate goal or function. In its initial form it seeks out and isolates sections of memory from the rest of the invaded system. It then begins to mutate itself and data structures, effectively reprogramming the system from within."
+msgstr "No hem pogut esbrinar la seva funció o el seu objectiu principal. En la seva forma inicial busca aïlla seccions de memòria de la resta del sistema envaït. Llavors comença a mutar ell mateix i les estructures de dades, reprogramant el sistema des de dins."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:8
-msgid ""
-"Further analysis was prevented by the manual shutdown of the system by our "
-"technicians to prevent additional contamination by the Nexus Intruder "
-"Program."
-msgstr ""
-"No hem pogut seguir analitzant degut a que els nostres tècnics han hagut "
-"d'apagar el sistema per tal de prevenir més contaminació del programa intrús "
-"de Nexus."
+msgid "Further analysis was prevented by the manual shutdown of the system by our technicians to prevent additional contamination by the Nexus Intruder Program."
+msgstr "No hem pogut seguir analitzant degut a que els nostres tècnics han hagut d'apagar el sistema per tal de prevenir més contaminació del programa intrús de Nexus."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:10
-msgid ""
-"However, the spread of the Nexus Intruder Program was not checked by New "
-"Paradigm. We need to capture New Paradigm's core systems to further "
-"investigate Nexus and determine its origins."
-msgstr ""
-"De tota manera, el desplegament del programa intrús de Nexus no ha estat "
-"comprovat pel Nou Paradigma. Necessitem capturar nuclis de sistemes del Nou "
-"paradigma per seguir investigant Nexus i determinar el seu origen."
+msgid "However, the spread of the Nexus Intruder Program was not checked by New Paradigm. We need to capture New Paradigm's core systems to further investigate Nexus and determine its origins."
+msgstr "De tota manera, el desplegament del programa intrús de Nexus no ha estat comprovat pel Nou Paradigma. Necessitem capturar nuclis de sistemes del Nou paradigma per seguir investigant Nexus i determinar el seu origen."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:12
-msgid ""
-"Commander, you are to curtail the New Paradigm's activities in this sector "
-"and locate their main base."
-msgstr ""
-"Comandant, heu de tallar l'activitat del Nou Paradigma en aquest sector i "
-"localitzar la seva base principal."
+msgid "Commander, you are to curtail the New Paradigm's activities in this sector and locate their main base."
+msgstr "Comandant, heu de tallar l'activitat del Nou Paradigma en aquest sector i localitzar la seva base principal."
 
 #: data/base/sequenceaudio/cam2/c002.txa:1
 msgid "CAMPAIGN TWO"
@@ -9911,8 +9691,7 @@ msgid "It is likely to be targeted at your location."
 msgstr "Sembla que es dirigeix a la vostra localització."
 
 #: data/base/sequenceaudio/cam2/c2diif2.txt:4
-msgid ""
-"You are to start the immediate evacuation of Beta Base to the safe haven."
+msgid "You are to start the immediate evacuation of Beta Base to the safe haven."
 msgstr "Heu de començar immediatament l'evacuació de la base al cel segur."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:1
@@ -9920,61 +9699,35 @@ msgid "NASDA is the North American Strategic Defense Agency."
 msgstr "NASDA és l'agencia de defensa estratègica d'Amèrica del nord."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:3
-msgid ""
-"NASDA was formed in 2076 to defend North America from conventional and "
-"nuclear attack. The construction of a satellite defense system began in 2081 "
-"and was completed in 2082."
-msgstr ""
-"NASDA va ser creada l'any 2076 per defensar Amèrica del nord d'un atac "
-"nuclear o convencional. La construcció d'un sistema de defensa per satèl·lit "
-"va començar l'any 2081 i es va acabar el 2082."
+msgid "NASDA was formed in 2076 to defend North America from conventional and nuclear attack. The construction of a satellite defense system began in 2081 and was completed in 2082."
+msgstr "NASDA va ser creada l'any 2076 per defensar Amèrica del nord d'un atac nuclear o convencional. La construcció d'un sistema de defensa per satèl·lit va començar l'any 2081 i es va acabar el 2082."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:6
 msgid "In 2085 the NASDA satellites fired their nukes at Earth."
-msgstr ""
-"El 2085 els satèl·lits de NASDA van llançar els seus caps nuclears cap a la "
-"terra."
+msgstr "El 2085 els satèl·lits de NASDA van llançar els seus caps nuclears cap a la terra."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:8
-msgid ""
-"There were also ground-based sites. Many of these were destroyed in the "
-"nuclear counterstrikes, but there's bound to be some out there."
-msgstr ""
-"També hi havia bases terrestres. Moltes van ser destruïdes en el contraatac "
-"nuclear, però de ben segur que en queden algunes."
+msgid "There were also ground-based sites. Many of these were destroyed in the nuclear counterstrikes, but there's bound to be some out there."
+msgstr "També hi havia bases terrestres. Moltes van ser destruïdes en el contraatac nuclear, però de ben segur que en queden algunes."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:10
-msgid ""
-"The NASDA satellites also contained pulse-lasers designed to shoot down "
-"missiles approaching North America."
-msgstr ""
-"Els satèl·lits NASDA també contenien làsers d'impulsos dissenyats per "
-"eliminar els míssils que s'acostin a Amèrica del nord."
+msgid "The NASDA satellites also contained pulse-lasers designed to shoot down missiles approaching North America."
+msgstr "Els satèl·lits NASDA també contenien làsers d'impulsos dissenyats per eliminar els míssils que s'acostin a Amèrica del nord."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:12
-msgid ""
-"During the counterstrikes, these LasSats failed to fire. If brought into "
-"operation, these LasSats could inflict major damage on ground targets."
-msgstr ""
-"Durant el contraatac, aquests làsers no van funcionar. Si es posen en marxa, "
-"els làsers poden infligir molts danys a les unitats de terra."
+msgid "During the counterstrikes, these LasSats failed to fire. If brought into operation, these LasSats could inflict major damage on ground targets."
+msgstr "Durant el contraatac, aquests làsers no van funcionar. Si es posen en marxa, els làsers poden infligir molts danys a les unitats de terra."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:14
 msgid "All nukes targeted at  North America found their targets."
-msgstr ""
-"Tots els caps que apuntaven a Amèrica del nord van trobar els seus objectius"
+msgstr "Tots els caps que apuntaven a Amèrica del nord van trobar els seus objectius"
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:16
-msgid ""
-"We know that Nexus is searching for NASDA Central in the Eastern Sector. "
-"This was one of the land-based control centres for the satellites."
-msgstr ""
-"Sabem que és el que Nexus busca a la central de NASDA del sector Est. Era un "
-"dels centres de control de terra dels satèl·lits."
+msgid "We know that Nexus is searching for NASDA Central in the Eastern Sector. This was one of the land-based control centres for the satellites."
+msgstr "Sabem que és el que Nexus busca a la central de NASDA del sector Est. Era un dels centres de control de terra dels satèl·lits."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:18
-msgid ""
-"If the centre is found intact, NEXUS may gain control of the satellites."
+msgid "If the centre is found intact, NEXUS may gain control of the satellites."
 msgstr "Si troben el centre intacte, NEXUS podria controlar els satèl·lits."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:20
@@ -9983,20 +9736,15 @@ msgstr "El que busca NEXUS ja va destruir el món una vegada."
 
 #: data/base/sequenceaudio/cam2/cam2_2n.txt:1
 msgid "Warriors of the Collective, I seek the location of NASDA Central."
-msgstr ""
-"Guerrers de La Col·lectivitat, busco la localització de la central de NASDA."
+msgstr "Guerrers de La Col·lectivitat, busco la localització de la central de NASDA."
 
 #: data/base/sequenceaudio/cam2/cam2_2n.txt:2
 msgid "It lies somewhere in your territory."
 msgstr "Ha de ser en algun lloc del vostre territori"
 
 #: data/base/sequenceaudio/cam2/cam2_2n.txt:4
-msgid ""
-"Find it for me and I shall provide you with further weapons to aid you in "
-"your war against the Project."
-msgstr ""
-"Trobeu-la i us proporcionaré més armes per ajudar-vos en la vostra lluita "
-"contra El Projecte."
+msgid "Find it for me and I shall provide you with further weapons to aid you in your war against the Project."
+msgstr "Trobeu-la i us proporcionaré més armes per ajudar-vos en la vostra lluita contra El Projecte."
 
 #: data/base/sequenceaudio/cam2/cam22pl2.txt:1
 msgid "NASDA Briefing follows..."
@@ -10007,52 +9755,28 @@ msgid "We've got to make sure that it can't do it again."
 msgstr "Hem d'assegurar-nos que no ho pugui fer un altre cop."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:1
-msgid ""
-"Analysis indicates that these systems were part of the control system for "
-"the NASDA satellites."
-msgstr ""
-"Els anàlisis indiquen que aquests sistemes eren part del sistema de control "
-"dels satèl·lits de NASDA."
+msgid "Analysis indicates that these systems were part of the control system for the NASDA satellites."
+msgstr "Els anàlisis indiquen que aquests sistemes eren part del sistema de control dels satèl·lits de NASDA."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:2
 msgid "It's now certain that Nexus was responsible for The Collapse."
 msgstr "Ara estem segurs que Nexus va ser el responsable del Col·lapse."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:4
-msgid ""
-"During the early stages of the Collapse, NASDA technicians switched off  the "
-"infected systems in order to isolate the spread of Nexus. This seems to have "
-"prevented the LasSats from firing during the counterstrikes."
-msgstr ""
-"Durant les primeres etapes del Col·lapse, els tècnics de NASDA van apagar "
-"els sistemes infectats per tal d'aïllar el virus de Nexus. Sembla que això "
-"va evitar que els LasSats es disparessin durant el contraatac."
+msgid "During the early stages of the Collapse, NASDA technicians switched off  the infected systems in order to isolate the spread of Nexus. This seems to have prevented the LasSats from firing during the counterstrikes."
+msgstr "Durant les primeres etapes del Col·lapse, els tècnics de NASDA van apagar els sistemes infectats per tal d'aïllar el virus de Nexus. Sembla que això va evitar que els LasSats es disparessin durant el contraatac."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:6
-msgid ""
-"The ensuing nuclear-magnetic pulses wiped clean large amounts of NASDA's "
-"memory banks, shattering its core processor, and sent shockwaves blasting "
-"through Nexus."
-msgstr ""
-"Els polsos magnètics nuclears van esborrar una gran part dels bancs de "
-"memòria de NASDA, van destruir el processador central, i l'ona expansiva va "
-"arribar fins a Nexus."
+msgid "The ensuing nuclear-magnetic pulses wiped clean large amounts of NASDA's memory banks, shattering its core processor, and sent shockwaves blasting through Nexus."
+msgstr "Els polsos magnètics nuclears van esborrar una gran part dels bancs de memòria de NASDA, van destruir el processador central, i l'ona expansiva va arribar fins a Nexus."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:8
-msgid ""
-"Nexus was fried as whole sections of its consciousness were obliterated in "
-"the counterstrikes."
-msgstr ""
-"Nexus va quedar inutilitzat degut a que seccions completes de la seva "
-"consciència van quedar destruïdes en el contraatac."
+msgid "Nexus was fried as whole sections of its consciousness were obliterated in the counterstrikes."
+msgstr "Nexus va quedar inutilitzat degut a que seccions completes de la seva consciència van quedar destruïdes en el contraatac."
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:1
-msgid ""
-"Commander we are detecting transmissions from this site that are reaching "
-"high orbit."
-msgstr ""
-"Comandant, hem detectat transmissions des d'aquest punt que arriben a una "
-"orbita elevada."
+msgid "Commander we are detecting transmissions from this site that are reaching high orbit."
+msgstr "Comandant, hem detectat transmissions des d'aquest punt que arriben a una orbita elevada."
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:3
 msgid "Nexus has now reconnected itself with the NASDA satellites."
@@ -10060,87 +9784,51 @@ msgstr "Nexus s'ha tornat a connectar als satèl·lits de NASDA."
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:5
 msgid "This poses a major threat to the Project and to our survival."
-msgstr ""
-"Això suposa una gran amenaça pel Projecte i per la nostra supervivència."
+msgstr "Això suposa una gran amenaça pel Projecte i per la nostra supervivència."
 
 #: data/base/sequenceaudio/cam2/cam26pl1.txt:1
-msgid ""
-"Analysis of NASDA Central leaves no doubt that The Collective has introduced "
-"the Nexus Intruder Virus to it."
-msgstr ""
-"L'anàlisi de la Central de NADA no deixa cap dubte que La Col·lectivitat hi "
-"ha intruduït el virus intrús de Nexus."
+msgid "Analysis of NASDA Central leaves no doubt that The Collective has introduced the Nexus Intruder Virus to it."
+msgstr "L'anàlisi de la Central de NADA no deixa cap dubte que La Col·lectivitat hi ha intruduït el virus intrús de Nexus."
 
 #: data/base/sequenceaudio/cam2/cam26pl1.txt:3
-msgid ""
-"The nuclear reactor was going to be used to power a vast network of pre-"
-"Collapse computer systems."
-msgstr ""
-"El reactor nuclear havia de servir per alimentar una gran xarxa de sistemes "
-"informàtics d'abans del Col·lapse."
+msgid "The nuclear reactor was going to be used to power a vast network of pre-Collapse computer systems."
+msgstr "El reactor nuclear havia de servir per alimentar una gran xarxa de sistemes informàtics d'abans del Col·lapse."
 
 #: data/base/sequenceaudio/cam2/cam27fmv.txt:1
 msgid "Commander, we have just detected a missile launch at these coordinates."
-msgstr ""
-"Comandant, acabem de detectar un llançament de míssils des d'aquestes "
-"coordenades."
+msgstr "Comandant, acabem de detectar un llançament de míssils des d'aquestes coordenades."
 
 #: data/base/sequenceaudio/cam2/cam27fmv.txt:3
-msgid ""
-"Team Gamma are sending a team to investigate the launch site and to prevent "
-"any further launches."
-msgstr ""
-"L'Equip Gamma està enviant un equip a investigar el punt de llançament i "
-"pervenir-ne de futurs."
+msgid "Team Gamma are sending a team to investigate the launch site and to prevent any further launches."
+msgstr "L'Equip Gamma està enviant un equip a investigar el punt de llançament i pervenir-ne de futurs."
 
 #: data/base/sequenceaudio/cam2/cam27fmv.txt:5
-msgid ""
-"We can only assume that Nexus has gained control of this site. We cannot "
-"determine whether the missile is nuclear-armed or where it is targeted. You "
-"are advised to begin preparations for the evacuation of your base."
-msgstr ""
-"Hem d'assumir que Nexus ha aconseguit controlar aquest punt. No podem "
-"determinat si els míssils porten càrrega nuclear o quin és el seu objectiu. "
-"Estigueu preparat per evacuar la vostra base."
+msgid "We can only assume that Nexus has gained control of this site. We cannot determine whether the missile is nuclear-armed or where it is targeted. You are advised to begin preparations for the evacuation of your base."
+msgstr "Hem d'assumir que Nexus ha aconseguit controlar aquest punt. No podem determinat si els míssils porten càrrega nuclear o quin és el seu objectiu. Estigueu preparat per evacuar la vostra base."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:1
 msgid "Warriors of The Collective, more intruders are entering our territory."
-msgstr ""
-"Guerrers de La Col·lectivitat, esta entrant més intrusos al nostre territori."
+msgstr "Guerrers de La Col·lectivitat, esta entrant més intrusos al nostre territori."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:2
 msgid "They are not part of the machine."
 msgstr "No són part de la màquina."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:4
-msgid ""
-"Warriors of The Collective, attack and destroy kill all who resist the "
-"machine."
-msgstr ""
-"Guerrers de La Col·lectivitat, ataqueu, destruïu i mateu als que es "
-"resisteixen a la màquina."
+msgid "Warriors of The Collective, attack and destroy kill all who resist the machine."
+msgstr "Guerrers de La Col·lectivitat, ataqueu, destruïu i mateu als que es resisteixen a la màquina."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:5
 msgid "Attack! Erase their presence from this area!"
 msgstr "Ataqueu! Esborreu la seva presència d'aquesta àrea!"
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:1
-msgid ""
-"Warriors of The Collective, we are ready to destroy the intruders who "
-"pollute our lands."
-msgstr ""
-"Guerrers de La Col·lectivitat, estem preparats per destruir les intrusos que "
-"embruten la nostra terra."
+msgid "Warriors of The Collective, we are ready to destroy the intruders who pollute our lands."
+msgstr "Guerrers de La Col·lectivitat, estem preparats per destruir les intrusos que embruten la nostra terra."
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:3
-msgid ""
-"Those of the Project are not of the machine. They have been denied its "
-"blessing. We who have embraced the power of the machine have a destiny to "
-"sweep away such weak creatures."
-msgstr ""
-"Els del Projecte no són de la màquina. Han rebutjat la seva benedicció. "
-"Nosaltres, que hem abraçat la força de la maquina, és en el nostre destí "
-"expulsar aquestes dèbils criatures."
+msgid "Those of the Project are not of the machine. They have been denied its blessing. We who have embraced the power of the machine have a destiny to sweep away such weak creatures."
+msgstr "Els del Projecte no són de la màquina. Han rebutjat la seva benedicció. Nosaltres, que hem abraçat la força de la maquina, és en el nostre destí expulsar aquestes dèbils criatures."
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:6
 msgid "They shall fall before the might of The Collective."
@@ -10155,12 +9843,8 @@ msgid "Attack!"
 msgstr "Ataqueu!"
 
 #: data/base/sequenceaudio/cam2/cam2dico.txt:1
-msgid ""
-"Warriors of the Collective, Nexus has given us the power of the machine so "
-"that we can destroy all that oppose us."
-msgstr ""
-"Guerrers de La Col·lectivitat, Nexus ens ha donat el poder de la màquina per "
-"tal que puguem destruir qualsevol oposició."
+msgid "Warriors of the Collective, Nexus has given us the power of the machine so that we can destroy all that oppose us."
+msgstr "Guerrers de La Col·lectivitat, Nexus ens ha donat el poder de la màquina per tal que puguem destruir qualsevol oposició."
 
 #: data/base/sequenceaudio/cam2/cam2dico.txt:3
 msgid "Nexus now asks us to crush the Project."
@@ -10180,8 +9864,7 @@ msgstr "La vostra recompensa està en camí."
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:4
 msgid "The Project is fleeing its base and stealing your technology."
-msgstr ""
-"El Projecte està abandonant la seva base i s'endú la vostra tecnologia."
+msgstr "El Projecte està abandonant la seva base i s'endú la vostra tecnologia."
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:5
 msgid "You must stop them!"
@@ -10198,10 +9881,6 @@ msgstr "CAMPANYA TRES"
 #: data/base/sequenceaudio/cam3/c003.txa:2
 msgid "NORTHERN SECTOR"
 msgstr "SECTOR NORD"
-
-#: data/base/sequenceaudio/cam3/c003.txa:5
-msgid "Congratulations your successful evacuation of Beta Base."
-msgstr "Us felicitem per l'èxit de l'evacuació de la base Beta."
 
 #: data/base/sequenceaudio/cam3/c003.txa:8
 msgid "Dusk, December 3rd, 2100"
@@ -10220,20 +9899,12 @@ msgid "Briefing Commences"
 msgstr "Comença la sessió informativa"
 
 #: data/base/sequenceaudio/cam3/c003.txt:1
-msgid ""
-"Personnel at Gamma Base have confirmed that the nuclear missiles targeted at "
-"Alpha and Beta bases were launched from a silo in their sector."
-msgstr ""
-"El personal de la base Gamma ha confirmat que els míssils nuclears que han "
-"impactat a les bases Alfa i Beta han estat llançat des del seu sector"
+msgid "Personnel at Gamma Base have confirmed that the nuclear missiles targeted at Alpha and Beta bases were launched from a silo in their sector."
+msgstr "El personal de la base Gamma ha confirmat que els míssils nuclears que han impactat a les bases Alfa i Beta han estat llançat des del seu sector"
 
 #: data/base/sequenceaudio/cam3/c003.txt:4
-msgid ""
-"Team Gamma is currently scouting the silo's location and monitoring NEXUS's "
-"activity."
-msgstr ""
-"L'Equip Gamma està buscant la llançadora i fent un seguiment de l'activitat "
-"de NEXUS"
+msgid "Team Gamma is currently scouting the silo's location and monitoring NEXUS's activity."
+msgstr "L'Equip Gamma està buscant la llançadora i fent un seguiment de l'activitat de NEXUS"
 
 #: data/base/sequenceaudio/cam3/c3ad2n2.txt:1
 msgid "Time's up commander!!"
@@ -10256,48 +9927,32 @@ msgid "But it's good of you to join me here."
 msgstr "Però està bé que ens hagem trobat aquí."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:6
-msgid ""
-"Buried beneath this silo is a tactical nuclear warhead that is set to go off "
-"soon."
-msgstr ""
-"Enterrat sota la sitja hi ha un cap nuclear tàctic que s'havia d'enlairar "
-"aviat."
+msgid "Buried beneath this silo is a tactical nuclear warhead that is set to go off soon."
+msgstr "Enterrat sota la sitja hi ha un cap nuclear tàctic que s'havia d'enlairar aviat."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:9
 msgid "As I cannot launch it, it'll just have to blow where it is."
 msgstr "Com que no el puc llançar, l'hauré de fer esclatar al lloc on és."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:11
-msgid ""
-"Please note that all entrances to the underground complex have been sealed. "
-"Goodbye, Commander."
-msgstr ""
-"Suposo que us haureu adonat que totes les entrades al complexe subterrani "
-"han estat segellades. Adéu, Comandant."
+msgid "Please note that all entrances to the underground complex have been sealed. Goodbye, Commander."
+msgstr "Suposo que us haureu adonat que totes les entrades al complexe subterrani han estat segellades. Adéu, Comandant."
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:1
 msgid "Glad you could make it, Commander."
 msgstr "Encantats de veure'l, Comandant."
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:4
-msgid ""
-"Enemy strike VTOLs have got us pinned down. We've managed to hold off "
-"cyborgs and tanks, but we haven't been able to make any progress along the "
-"valley."
-msgstr ""
-"Els atacts dels convertiplans ens té bloquejats. Hem aconseguit aguantar els "
-"ciborgs i els tancs, però no podem avançar per la vall"
+msgid "Enemy strike VTOLs have got us pinned down. We've managed to hold off cyborgs and tanks, but we haven't been able to make any progress along the valley."
+msgstr "Els atacts dels convertiplans ens té bloquejats. Hem aconseguit aguantar els ciborgs i els tancs, però no podem avançar per la vall"
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:7
 msgid "Can you try and reach us with anti-aircraft units?"
 msgstr "Podeu arribar fins nosaltres amb unitats antiaèries?"
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:1
-msgid ""
-"This is Team Alpha. Repeat, this is Team Alpha. We require immediate "
-"assistance."
-msgstr ""
-"Aquí l'Equip Alfa. Repetim, Aquí l'Equip Alfa. Necessitem ajuda immediata."
+msgid "This is Team Alpha. Repeat, this is Team Alpha. We require immediate assistance."
+msgstr "Aquí l'Equip Alfa. Repetim, Aquí l'Equip Alfa. Necessitem ajuda immediata."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:4
 msgid "We are under heavy attack from cyborgs, laser tanks, and strike VTOLs."
@@ -10316,77 +9971,43 @@ msgid "Please assist."
 msgstr "Si us plau, ajudeu-nos."
 
 #: data/base/sequenceaudio/cam3/cam32pl2.txt:4
-msgid ""
-"Commander, forces from Team Alpha escaped the nuclear attack on Alpha Base."
-msgstr ""
-"Comandant, forces de l'Equip Alfa han escapat de l'atac nuclear a la Base "
-"Alfa"
+msgid "Commander, forces from Team Alpha escaped the nuclear attack on Alpha Base."
+msgstr "Comandant, forces de l'Equip Alfa han escapat de l'atac nuclear a la Base Alfa"
 
 #: data/base/sequenceaudio/cam3/cam34mu1.txt:1
 msgid "We are experiencing some interference from NEXUS."
 msgstr "Estem patint algunes interferències de NEXUS."
 
 #: data/base/sequenceaudio/cam3/cam34mu1.txt:3
-msgid ""
-"You must destroy his command centre before we lose control of key systems."
-msgstr ""
-"Heu de destruir el seu centre de comandament abans que perdem el control "
-"dels sistemes clau."
+msgid "You must destroy his command centre before we lose control of key systems."
+msgstr "Heu de destruir el seu centre de comandament abans que perdem el control dels sistemes clau."
 
 #: data/base/sequenceaudio/cam3/cam34mu2.txt:1
 msgid "Commander, welcome to NEXUS!"
 msgstr "Comandant, benvingut a NEXUS!"
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:1
-msgid ""
-"The Reed Corporation was founded by Dr Allan Reed. In 2080, Dr Reed landed a "
-"contract with the US Military to develop the synaptic link technology."
-msgstr ""
-"La Corporació Reed va ser fundada pel Doctor Allan Reed l'any 2080. El Dr "
-"Reed va signar un contracte amb l'exercit americà per desenvolupar la "
-"tecnologia d'enllaç sinàptic"
+msgid "The Reed Corporation was founded by Dr Allan Reed. In 2080, Dr Reed landed a contract with the US Military to develop the synaptic link technology."
+msgstr "La Corporació Reed va ser fundada pel Doctor Allan Reed l'any 2080. El Dr Reed va signar un contracte amb l'exercit americà per desenvolupar la tecnologia d'enllaç sinàptic"
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:3
-msgid ""
-"After patenting the synaptic link five years later, Dr Reed continued his "
-"researches into cybernetics."
-msgstr ""
-"Després de pantentar l'enllaç sinàptic cinc anys més tard, el Dr Reed va "
-"continuar les seves investigacions en cibernètica."
+msgid "After patenting the synaptic link five years later, Dr Reed continued his researches into cybernetics."
+msgstr "Després de pantentar l'enllaç sinàptic cinc anys més tard, el Dr Reed va continuar les seves investigacions en cibernètica."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:5
-msgid ""
-"His goal this time was to allow transfer of human consciousness into data "
-"streams that could meld with computer technologies. While in Cyberspace the "
-"operator's bodies were kept in immersion tanks."
-msgstr ""
-"El seu objectiu era convertir la consciència humana en trens de dades que "
-"poguessin ser interpretades per tecnologies informàtiques, mentre al "
-"ciberespai els cossos dels operadors eren mantinguts en tancs d'immersió."
+msgid "His goal this time was to allow transfer of human consciousness into data streams that could meld with computer technologies. While in Cyberspace the operator's bodies were kept in immersion tanks."
+msgstr "El seu objectiu era convertir la consciència humana en trens de dades que poguessin ser interpretades per tecnologies informàtiques, mentre al ciberespai els cossos dels operadors eren mantinguts en tancs d'immersió."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:7
-msgid ""
-"Backed again by the military, Dr Reed began work on the NEXUS Intruder "
-"Program. After three years with little progress, the military abandoned the "
-"Nexus Project and cut Dr Reed's funding."
-msgstr ""
-"Quan va ser cridat de nou per l'exercit, el Dr Reed va començar a treballar "
-"en el programa intrús NEXUS. Transcorreguts tres anys d'escàs progrés, "
-"l'exercit va abandonar el projecte Nexus i va deixar de subvencionar el Dr "
-"Reed."
+msgid "Backed again by the military, Dr Reed began work on the NEXUS Intruder Program. After three years with little progress, the military abandoned the Nexus Project and cut Dr Reed's funding."
+msgstr "Quan va ser cridat de nou per l'exercit, el Dr Reed va començar a treballar en el programa intrús NEXUS. Transcorreguts tres anys d'escàs progrés, l'exercit va abandonar el projecte Nexus i va deixar de subvencionar el Dr Reed."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:9
-msgid ""
-"Reports from the time claim that Dr Reed was furious and vowed to have his "
-"revenge on all who got in his way."
-msgstr ""
-"Els informes d'aquella època adverteixen que el Dr. Reed estava furiós i "
-"prometia venjar-se d'aquell que s'interposes en el seu camí."
+msgid "Reports from the time claim that Dr Reed was furious and vowed to have his revenge on all who got in his way."
+msgstr "Els informes d'aquella època adverteixen que el Dr. Reed estava furiós i prometia venjar-se d'aquell que s'interposes en el seu camí."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:11
-msgid ""
-"It appears that Dr Reed may have succeeded in his goals and completed the "
-"Nexus Intruder Program."
+msgid "It appears that Dr Reed may have succeeded in his goals and completed the Nexus Intruder Program."
 msgstr "Sembla que el Dr Reed va aconseguir acabar el programa intrús Nexus."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:12
@@ -10394,31 +10015,20 @@ msgid "The similarity between NEXUS and Dr Reed is striking."
 msgstr "La semblança entre NEXUS i el Dr Reed sorprenent."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:14
-msgid ""
-"Such an interesting history lesson. Now allow me to bring you up to date."
+msgid "Such an interesting history lesson. Now allow me to bring you up to date."
 msgstr "Una lliçó d'història molt interessant. Permeteu-me que la posi al dia."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:15
-msgid ""
-"The NEXUS Intruder Program was created in order to control fools like you."
-msgstr ""
-"El programa intrús NEXUS va ser creat per controlar ximples com vosaltres."
+msgid "The NEXUS Intruder Program was created in order to control fools like you."
+msgstr "El programa intrús NEXUS va ser creat per controlar ximples com vosaltres."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:17
-msgid ""
-"It's very simple for me to infiltrate your systems and take them over. It's "
-"so simple, in fact, that you wouldn't even know I'm there. That is until I "
-"activate parts of myself etched into your core systems."
-msgstr ""
-"És molt senzill per mi infiltrar-me en els vostres sistemes i controlar-los. "
-"És tant fàcil, de fet, que ni us n'heu adonat que era aquí fins que no he "
-"activat parts de mi mateix connectades al nucli del vostre sistema."
+msgid "It's very simple for me to infiltrate your systems and take them over. It's so simple, in fact, that you wouldn't even know I'm there. That is until I activate parts of myself etched into your core systems."
+msgstr "És molt senzill per mi infiltrar-me en els vostres sistemes i controlar-los. És tant fàcil, de fet, que ni us n'heu adonat que era aquí fins que no he activat parts de mi mateix connectades al nucli del vostre sistema."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:19
-msgid ""
-"Let's start by activating NEXUS in your core systems and see what happens!"
-msgstr ""
-"Comencem a activar NEXUS al nucli del vostre sistema i vegem que passa!"
+msgid "Let's start by activating NEXUS in your core systems and see what happens!"
+msgstr "Comencem a activar NEXUS al nucli del vostre sistema i vegem que passa!"
 
 #: data/base/sequenceaudio/cam3/cam3abpl.txt:1
 msgid "Commander, we are experiencing interference with our equipment."
@@ -10430,33 +10040,22 @@ msgstr "El servei es normalitzarà tant aviat com sigui possible."
 
 #: data/base/sequenceaudio/cam3/cam3ad2n.txt:1
 msgid "Not long to go now, Commander. There's no where else for you to run to."
-msgstr ""
-"No podeu anar gaire lluny, Comandant. No hi ha cap lloc on pugueu fugir."
+msgstr "No podeu anar gaire lluny, Comandant. No hi ha cap lloc on pugueu fugir."
 
 #: data/base/sequenceaudio/cam3/cam3ad2n.txt:4
-msgid ""
-"However, if you vacate this facility, then I shall let you go free, as you "
-"are no longer a threat to me."
-msgstr ""
-"De tota manera, si voleu abandonar aquestes instal·lacions, us deixaré "
-"marxar, perquè ja no representeu un perill per mi."
+msgid "However, if you vacate this facility, then I shall let you go free, as you are no longer a threat to me."
+msgstr "De tota manera, si voleu abandonar aquestes instal·lacions, us deixaré marxar, perquè ja no representeu un perill per mi."
 
 #: data/base/sequenceaudio/cam3/cam3ad2n.txt:6
 msgid "You have five minutes to comply or else it's frying time!"
 msgstr "Teniu cinc minute per acatar o si no és l'hora fregir-se!"
 
 #: data/base/sequenceaudio/cam3/cam3bg.txt:1
-msgid ""
-"Commander, we are under attack by NEXUS cyborgs and tanks. Please help as "
-"we...."
-msgstr ""
-"Comandant, estem sent atacats per ciborgs i tancs de NEXUS. Necessitem "
-"ajuda..."
+msgid "Commander, we are under attack by NEXUS cyborgs and tanks. Please help as we...."
+msgstr "Comandant, estem sent atacats per ciborgs i tancs de NEXUS. Necessitem ajuda..."
 
 #: data/base/sequenceaudio/cam3/cam3bg.txt:3
-msgid ""
-"...cannot hold out much longer.  Repeat, please help, we cannot hold out "
-"much longer...."
+msgid "...cannot hold out much longer.  Repeat, please help, we cannot hold out much longer...."
 msgstr "...no aguantarem gaire més. Repetim, ajuda, no aguantarem gaire més..."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:1
@@ -10473,20 +10072,15 @@ msgstr "La seva absorció ha estat un plaer."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:6
 msgid "Thank you for all those useful technologies you've recovered."
-msgstr ""
-"Moltes gràcies per tota aquesta tecnologia tant útil que heu descobert."
+msgstr "Moltes gràcies per tota aquesta tecnologia tant útil que heu descobert."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:8
 msgid "You and not those fools in the New Paradigm and the Collective."
 msgstr "Vostè i no aquella patuleia del Nou Paradigma i La Col·lectivitat."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:10
-msgid ""
-"I'm now activating all your synaptic links so that your forces can meld with "
-"Nexus."
-msgstr ""
-"Estic activant tots els vostres enllaços sinàptics per tal que les vostres "
-"forces s'uneixin a Nexus."
+msgid "I'm now activating all your synaptic links so that your forces can meld with Nexus."
+msgstr "Estic activant tots els vostres enllaços sinàptics per tal que les vostres forces s'uneixin a Nexus."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:12
 msgid "Your forces are now mine! Welcome to Nexus."
@@ -10505,36 +10099,20 @@ msgid "But no matter, as you'll not be here much longer."
 msgstr "Però no importa, per que aviat no sereu aquí."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:6
-msgid ""
-"After much searching and reprogramming, I've finally got all my systems back "
-"on-line."
-msgstr ""
-"Després de molta recerca i reprogramació, finalment torno a tenir tots els "
-"meus sistemes en línia."
+msgid "After much searching and reprogramming, I've finally got all my systems back on-line."
+msgstr "Després de molta recerca i reprogramació, finalment torno a tenir tots els meus sistemes en línia."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:8
-msgid ""
-"Once I destroyed the world with nuclear fire to clear the way for my "
-"cybernetic future."
-msgstr ""
-"Vaig destruir el món amb un atac nuclear per facilitar el camí del futur "
-"cibernètic."
+msgid "Once I destroyed the world with nuclear fire to clear the way for my cybernetic future."
+msgstr "Vaig destruir el món amb un atac nuclear per facilitar el camí del futur cibernètic."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:9
-msgid ""
-"I now intend to further shape the world into my own image, by  surgically "
-"removing unwanted growths like yourself."
-msgstr ""
-"Ara provo de que encaixi millor amb la meva visió del món, extirpant "
-"quirúrgicament indesitjables com vostè."
+msgid "I now intend to further shape the world into my own image, by  surgically removing unwanted growths like yourself."
+msgstr "Ara provo de que encaixi millor amb la meva visió del món, extirpant quirúrgicament indesitjables com vostè."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:11
-msgid ""
-"My Laser Satellites are now powering up. I intend to test them on you first, "
-"Commander!"
-msgstr ""
-"Els meus satèl·lits làser s'estan carregant. La meva intenció és que la "
-"primera prova sigui sobre vostè, Comandant!"
+msgid "My Laser Satellites are now powering up. I intend to test them on you first, Commander!"
+msgstr "Els meus satèl·lits làser s'estan carregant. La meva intenció és que la primera prova sigui sobre vostè, Comandant!"
 
 #: data/base/sequenceaudio/devastation.txa:4
 msgid "Dusk, November 3rd, 2085"
@@ -10582,74 +10160,40 @@ msgid "A New Beginning"
 msgstr "Un nou començament"
 
 #: data/base/sequenceaudio/devastation.txt:1
-msgid ""
-"The NASDA system was developed to protect us. It was to be the ultimate "
-"nuclear deterrent. As it turned out, it was our executioner."
-msgstr ""
-"Els sistema Nasda va ser desenvolupat per protegir-nos. Era l'arma nuclear "
-"dissuasiva final. Però va convertir-se en el nostre executor."
+msgid "The NASDA system was developed to protect us. It was to be the ultimate nuclear deterrent. As it turned out, it was our executioner."
+msgstr "Els sistema Nasda va ser desenvolupat per protegir-nos. Era l'arma nuclear dissuasiva final. Però va convertir-se en el nostre executor."
 
 #: data/base/sequenceaudio/devastation.txt:3
-msgid ""
-"Reports said that NASDA developed a fault during a routine systems check. "
-"Don't believe it. Someone wanted it to take us out."
-msgstr ""
-"Els informes van dir que NASDA va fallar durant una comprovació rutinària "
-"del sistema. No us ho cregueu. Algú va provar d'eliminar-nos."
+msgid "Reports said that NASDA developed a fault during a routine systems check. Don't believe it. Someone wanted it to take us out."
+msgstr "Els informes van dir que NASDA va fallar durant una comprovació rutinària del sistema. No us ho cregueu. Algú va provar d'eliminar-nos."
 
 #: data/base/sequenceaudio/devastation.txt:5
-msgid ""
-"Those nukes were targeted on every major city around the world. NASDA was "
-"programmed to start the Collapse. When the counterstrikes launched, its "
-"laser defenses and anti-missile ground sites failed."
-msgstr ""
-"Aquells caps nuclears apuntaven a cadascuna de les principals ciutats del "
-"món. NASDA va ser programat per crear un col·lapse.  Quan es va llançar el "
-"contraatac, les defenses làser i els antimíssils de terra van fallar."
+msgid "Those nukes were targeted on every major city around the world. NASDA was programmed to start the Collapse. When the counterstrikes launched, its laser defenses and anti-missile ground sites failed."
+msgstr "Aquells caps nuclears apuntaven a cadascuna de les principals ciutats del món. NASDA va ser programat per crear un col·lapse.  Quan es va llançar el contraatac, les defenses làser i els antimíssils de terra van fallar."
 
 #: data/base/sequenceaudio/devastation.txt:7
 msgid "The world as we knew it ended..."
 msgstr "El món, tal i com el coneixíem, es va acabar..."
 
 #: data/base/sequenceaudio/devastation.txt:9
-msgid ""
-"The Nuclear Winter hit hard. Disease and famine claimed most of us who had "
-"survived the nuclear strikes. Wars over cans of dog food took even more."
-msgstr ""
-"L'hivern nuclear va ser molt dur. Les malalties i la fam van reclamar a "
-"aquells que vam sobreviure a l'atac nuclear. La gent es barallava per les "
-"llaunes de menjar de gos."
+msgid "The Nuclear Winter hit hard. Disease and famine claimed most of us who had survived the nuclear strikes. Wars over cans of dog food took even more."
+msgstr "L'hivern nuclear va ser molt dur. Les malalties i la fam van reclamar a aquells que vam sobreviure a l'atac nuclear. La gent es barallava per les llaunes de menjar de gos."
 
 #: data/base/sequenceaudio/devastation.txt:11
-msgid ""
-"We'd fled Seattle early in '86. We'd heard that the Rocky Mountains were "
-"relatively rad-free."
-msgstr ""
-"Vam sortir de Seattle a començaments del 86. Havíem sentit que les Muntanyes "
-"Rocalloses eren relativament lliures de radioactivitat."
+msgid "We'd fled Seattle early in '86. We'd heard that the Rocky Mountains were relatively rad-free."
+msgstr "Vam sortir de Seattle a començaments del 86. Havíem sentit que les Muntanyes Rocalloses eren relativament lliures de radioactivitat."
 
 #: data/base/sequenceaudio/devastation.txt:13
-msgid ""
-"After fighting off bands of marauders we came across the base. Its personnel "
-"were dead. Killed by any one of a number of virulent diseases."
-msgstr ""
-"Després de lluitar contra bandes de perdiguers vam arribar a la base. El "
-"personal era mort. Havien caigut en mans d'alguna de les múltiples "
-"virulentes malalties."
+msgid "After fighting off bands of marauders we came across the base. Its personnel were dead. Killed by any one of a number of virulent diseases."
+msgstr "Després de lluitar contra bandes de perdiguers vam arribar a la base. El personal era mort. Havien caigut en mans d'alguna de les múltiples virulentes malalties."
 
 #: data/base/sequenceaudio/devastation.txt:15
 msgid "We cracked the doors, and cleared out the bodies inside."
 msgstr "Vam ensorrar les portes i vam netejar els cosos de dintre."
 
 #: data/base/sequenceaudio/devastation.txt:17
-msgid ""
-"We knew that things would never be the same again, but we were determined to "
-"build a new world out of the ruins. We rebuilt the landing pads and brought "
-"the old systems back on-line."
-msgstr ""
-"Sabíem que les coses no tornarien a se igual, però estàvem determinats a "
-"construir un món nou des de les ruïnes. Vam reconstruir les pistes "
-"d'aterratge i vam tornar a engegar els antics sistemes."
+msgid "We knew that things would never be the same again, but we were determined to build a new world out of the ruins. We rebuilt the landing pads and brought the old systems back on-line."
+msgstr "Sabíem que les coses no tornarien a se igual, però estàvem determinats a construir un món nou des de les ruïnes. Vam reconstruir les pistes d'aterratge i vam tornar a engegar els antics sistemes."
 
 #: data/base/sequenceaudio/devastation.txt:19
 msgid "We were finally ready to begin the Project."
@@ -11154,6 +10698,16 @@ msgstr "Flagel, Venjança i convertiplà"
 msgid "Plasmite Retribution VTOL"
 msgstr "Plasmit, Retribució i convertiplà"
 
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1962
+#: data/mp/messages/strings/names.txt:675
+msgid "Super Transport"
+msgstr "Super Transport"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1963
+#: data/mp/messages/strings/names.txt:676
+msgid "Super Transport Body"
+msgstr "Cos Super Transport"
+
 #: data/mp/messages/resmessages12.rmsg:58
 msgid "Construction speed +10%"
 msgstr "+10% de velocitat de construcció"
@@ -11207,7 +10761,8 @@ msgstr "+25% de danys produïts pels canons"
 msgid "Rocket accuracy +10%"
 msgstr "+10% de precisió dels llançacoets"
 
-#: data/mp/messages/resmessages1.rmsg:32 data/mp/messages/resmessages3.rmsg:71
+#: data/mp/messages/resmessages1.rmsg:32
+#: data/mp/messages/resmessages3.rmsg:71
 #: data/mp/messages/resmessages3.rmsg:84
 msgid "Kinetic Armor +35%, Body Points +35%"
 msgstr "armadura +35%, punts del cos +35%"
@@ -11899,14 +11454,6 @@ msgstr "Mur de Nexus"
 msgid "Nexus Corner Wall"
 msgstr "Mur de cantonada de Nexus"
 
-#: data/mp/messages/strings/names.txt:675
-msgid "Super Transport"
-msgstr "Super Transport"
-
-#: data/mp/messages/strings/names.txt:676
-msgid "Super Transport Body"
-msgstr "Cos Super Transport"
-
 #: data/mp/messages/strings/names.txt:715
 msgid "Plasteel"
 msgstr "Acer plàstic"
@@ -12450,175 +11997,190 @@ msgstr "Bateria de mini-míssils, Cobra i eruga"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Canó d'hiper-velocitat, Pitó i planador"
 
-#: lib/framework/i18n.cpp:90 lib/framework/i18n.cpp:149
+#: lib/framework/i18n.cpp:92
+#: lib/framework/i18n.cpp:153
 msgid "System locale"
 msgstr "Del sistema"
 
-#: lib/netplay/netplay.cpp:208 lib/netplay/netplay.cpp:1042
+#: lib/netplay/netplay.cpp:203
+#: lib/netplay/netplay.cpp:1037
 msgid "Enter password here"
 msgstr "Fiqueu la contrasenya aquí"
 
-#: lib/netplay/netplay.cpp:2060
+#: lib/netplay/netplay.cpp:2055
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "No s'ha pogut resoldre el nom del servidor mestre (%s)!"
 
-#: lib/netplay/netplay.cpp:2082
+#: lib/netplay/netplay.cpp:2077
 #, c-format
-msgid ""
-"Could not communicate with lobby server! Is TCP port %u open for outgoing "
-"traffic?"
-msgstr ""
-"No s'ha pogut comunicar amb el servidor de sales! el port TCP %u està obert?"
+msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
+msgstr "No s'ha pogut comunicar amb el servidor de sales! el port TCP %u està obert?"
 
-#: src/challenge.cpp:184 src/hci.cpp:916 src/hci.cpp:3386 src/hci.cpp:3509
-#: src/hci.cpp:3920 src/hci.cpp:4940 src/intelmap.cpp:531 src/intorder.cpp:727
-#: src/loadsave.cpp:253 src/multimenu.cpp:494 src/multimenu.cpp:1366
-#: src/transporter.cpp:277 src/transporter.cpp:358 src/transporter.cpp:817
+#: src/challenge.cpp:184
+#: src/hci.cpp:916
+#: src/hci.cpp:3386
+#: src/hci.cpp:3509
+#: src/hci.cpp:3920
+#: src/hci.cpp:4940
+#: src/intelmap.cpp:531
+#: src/intorder.cpp:727
+#: src/loadsave.cpp:253
+#: src/multimenu.cpp:494
+#: src/multimenu.cpp:1366
+#: src/transporter.cpp:277
+#: src/transporter.cpp:358
+#: src/transporter.cpp:817
 msgid "Close"
 msgstr "Tanca"
 
-#: src/clparse.cpp:242
+#: src/clparse.cpp:232
 msgid "Run in cheat mode"
 msgstr "Funciona en mode trampós"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:233
 msgid "Set configuration directory"
 msgstr "Estableix la carpeta de configuració"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:233
 msgid "configuration directory"
 msgstr "carpeta-configuració"
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:234
 msgid "Set default data directory"
 msgstr "Estableix la carpeta de dades per defecte"
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:234
 msgid "data directory"
 msgstr "carpeta-dades"
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:235
 msgid "Show debug for given level"
 msgstr "Mostra la depuració al nivell indicat"
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:235
 msgid "debug level"
 msgstr "nivell de depuració"
 
-#: src/clparse.cpp:246
+#: src/clparse.cpp:236
 msgid "Log debug output to file"
 msgstr "Desa la sortida de depuració en un fitxer"
 
-#: src/clparse.cpp:246
+#: src/clparse.cpp:236
 msgid "file"
 msgstr "fitxer"
 
-#: src/clparse.cpp:247
+#: src/clparse.cpp:237
 msgid "Flush all debug output written to stderr"
 msgstr "Buida tota la sortida de depuració a stderr"
 
-#: src/clparse.cpp:248
+#: src/clparse.cpp:238
 msgid "Play in fullscreen mode"
 msgstr "Juga en mode de pantalla completa"
 
-#: src/clparse.cpp:249
+#: src/clparse.cpp:239
 msgid "Load a specific game"
 msgstr "Carrega una partida especifica"
 
-#: src/clparse.cpp:249
+#: src/clparse.cpp:239
 msgid "game-name"
 msgstr "nom-partida"
 
-#: src/clparse.cpp:250
+#: src/clparse.cpp:240
 msgid "Show this help message and exit"
 msgstr "Mostra aquesta ajuda i surt"
 
-#: src/clparse.cpp:251
+#: src/clparse.cpp:241
 msgid "Enable a global mod"
 msgstr "Habilita un mod global"
 
-#: src/clparse.cpp:251 src/clparse.cpp:252 src/clparse.cpp:253
+#: src/clparse.cpp:241
+#: src/clparse.cpp:242
+#: src/clparse.cpp:243
 msgid "mod"
 msgstr "mod"
 
-#: src/clparse.cpp:252
+#: src/clparse.cpp:242
 msgid "Enable a campaign only mod"
 msgstr "Habilita un mod només per la campanya"
 
-#: src/clparse.cpp:253
+#: src/clparse.cpp:243
 msgid "Enable a multiplay only mod"
 msgstr "Habilita un mod només pel mode multijug."
 
-#: src/clparse.cpp:254
+#: src/clparse.cpp:244
 msgid "Disable asserts"
 msgstr "Deshabilita les assercions"
 
-#: src/clparse.cpp:255
+#: src/clparse.cpp:245
 msgid "Causes a crash to test the crash handler"
 msgstr "Provoca una fallada per provar-ne el gestor"
 
-#: src/clparse.cpp:256
+#: src/clparse.cpp:246
 msgid "Load a saved game"
 msgstr "Carrega una partida desada"
 
-#: src/clparse.cpp:256
+#: src/clparse.cpp:246
 msgid "savegame"
 msgstr "partida-desada"
 
-#: src/clparse.cpp:257
+#: src/clparse.cpp:247
 msgid "Play in windowed mode"
 msgstr "Juga en mode finestra"
 
-#: src/clparse.cpp:258
+#: src/clparse.cpp:248
 msgid "Show version information and exit"
 msgstr "Mostra informació de la versió i surt"
 
-#: src/clparse.cpp:259
+#: src/clparse.cpp:249
 msgid "Set the resolution to use"
 msgstr "Estableix la resolució que es farà servir"
 
-#: src/clparse.cpp:259
+#: src/clparse.cpp:249
 msgid "WIDTHxHEIGHT"
 msgstr "AMPLADAxALÇADA"
 
-#: src/clparse.cpp:260
+#: src/clparse.cpp:250
 msgid "Enable shadows"
 msgstr "Habilita les ombres"
 
-#: src/clparse.cpp:261
+#: src/clparse.cpp:251
 msgid "Disable shadows"
 msgstr "Deshabilita les ombres"
 
-#: src/clparse.cpp:262
+#: src/clparse.cpp:252
 msgid "Enable sound"
 msgstr "Habilita el so"
 
-#: src/clparse.cpp:263
+#: src/clparse.cpp:253
 msgid "Disable sound"
 msgstr "Deshabilita el so"
 
-#: src/clparse.cpp:264
+#: src/clparse.cpp:254
 msgid "Activate self-test"
 msgstr "Activa l'auto-comprovació"
 
-#: src/clparse.cpp:265
+#: src/clparse.cpp:255
 msgid "connect directly to IP/hostname"
 msgstr "Connecta directament a la IP/nom de l'amfitrió"
 
-#: src/clparse.cpp:265
+#: src/clparse.cpp:255
 msgid "host"
 msgstr "amfitrió"
 
-#: src/clparse.cpp:266
+#: src/clparse.cpp:256
 msgid "go directly to host screen"
 msgstr "Va directament a la pantalla d'amfitrió"
 
-#: src/configuration.cpp:393 src/configuration.cpp:394 src/multistat.cpp:124
+#: src/configuration.cpp:393
+#: src/configuration.cpp:394
+#: src/multistat.cpp:124
 msgid "Player"
 msgstr "Jugador"
 
-#: src/design.cpp:443 src/design.cpp:455 src/design.cpp:3464
+#: src/design.cpp:443
+#: src/design.cpp:455
+#: src/design.cpp:3464
 msgid "New Vehicle"
 msgstr "Vehicle nou"
 
@@ -12630,7 +12192,9 @@ msgstr "Cos del vehicle"
 msgid "Vehicle Propulsion"
 msgstr "Propulsió del vehicle"
 
-#: src/design.cpp:541 src/design.cpp:564 src/design.cpp:588
+#: src/design.cpp:541
+#: src/design.cpp:564
+#: src/design.cpp:588
 msgid "Vehicle Turret"
 msgstr "Torreta del vehicle"
 
@@ -12638,36 +12202,52 @@ msgstr "Torreta del vehicle"
 msgid "Delete Design"
 msgstr "Esborra disseny"
 
-#: src/design.cpp:658 src/design.cpp:705
+#: src/design.cpp:658
+#: src/design.cpp:705
 msgid "Kinetic Armour"
 msgstr "Armadura"
 
-#: src/design.cpp:667 src/design.cpp:715
+#: src/design.cpp:667
+#: src/design.cpp:715
 msgid "Thermal Armour"
 msgstr "Protecció tèrmica"
 
-#: src/design.cpp:683 src/design.cpp:735
+#: src/design.cpp:683
+#: src/design.cpp:735
 msgid "Engine Output"
 msgstr "Motor"
 
-#: src/design.cpp:691 src/design.cpp:744 src/design.cpp:1486
-#: src/design.cpp:1510 src/design.cpp:1531 src/design.cpp:1547
-#: src/design.cpp:1567 src/design.cpp:1584 src/design.cpp:1604
-#: src/design.cpp:1621 src/design.cpp:1662 src/design.cpp:1694
-#: src/design.cpp:1826 src/design.cpp:1842 src/design.cpp:1880
+#: src/design.cpp:691
+#: src/design.cpp:744
+#: src/design.cpp:1486
+#: src/design.cpp:1510
+#: src/design.cpp:1531
+#: src/design.cpp:1547
+#: src/design.cpp:1567
+#: src/design.cpp:1584
+#: src/design.cpp:1604
+#: src/design.cpp:1621
+#: src/design.cpp:1662
+#: src/design.cpp:1694
+#: src/design.cpp:1826
+#: src/design.cpp:1842
+#: src/design.cpp:1880
 #: src/design.cpp:1913
 msgid "Weight"
 msgstr "Pes"
 
-#: src/design.cpp:775 src/design.cpp:793
+#: src/design.cpp:775
+#: src/design.cpp:793
 msgid "Total Power Required"
 msgstr "Energia total requerida"
 
-#: src/design.cpp:806 src/design.cpp:825
+#: src/design.cpp:806
+#: src/design.cpp:825
 msgid "Total Body Points"
 msgstr "Punts totals del cos"
 
-#: src/design.cpp:996 src/design.cpp:1025
+#: src/design.cpp:996
+#: src/design.cpp:1025
 msgid "Power Usage"
 msgstr "Us d'energia"
 
@@ -12675,48 +12255,60 @@ msgstr "Us d'energia"
 msgid "Hydra "
 msgstr "Hidra"
 
-#: src/design.cpp:1466 src/design.cpp:1494
+#: src/design.cpp:1466
+#: src/design.cpp:1494
 msgid "Sensor Range"
 msgstr "Abast del sensor"
 
-#: src/design.cpp:1478 src/design.cpp:1502
+#: src/design.cpp:1478
+#: src/design.cpp:1502
 msgid "Sensor Power"
 msgstr "Consum del sensor"
 
-#: src/design.cpp:1523 src/design.cpp:1539
+#: src/design.cpp:1523
+#: src/design.cpp:1539
 msgid "ECM Power"
 msgstr "Consum dels ECM"
 
-#: src/design.cpp:1559 src/design.cpp:1576 src/design.cpp:1596
+#: src/design.cpp:1559
+#: src/design.cpp:1576
+#: src/design.cpp:1596
 #: src/design.cpp:1613
 msgid "Build Points"
 msgstr "Punts de construcció"
 
-#: src/design.cpp:1634 src/design.cpp:1670
+#: src/design.cpp:1634
+#: src/design.cpp:1670
 msgid "Range"
 msgstr "Abast"
 
-#: src/design.cpp:1646 src/design.cpp:1678
+#: src/design.cpp:1646
+#: src/design.cpp:1678
 msgid "Damage"
 msgstr "Desperfece"
 
-#: src/design.cpp:1654 src/design.cpp:1686
+#: src/design.cpp:1654
+#: src/design.cpp:1686
 msgid "Rate-of-Fire"
 msgstr "Velocitat de foc"
 
-#: src/design.cpp:1814 src/design.cpp:1834
+#: src/design.cpp:1814
+#: src/design.cpp:1834
 msgid "Air Speed"
 msgstr "Velocitat a l'aire"
 
-#: src/design.cpp:1852 src/design.cpp:1889
+#: src/design.cpp:1852
+#: src/design.cpp:1889
 msgid "Road Speed"
 msgstr "Velocitat en carretera"
 
-#: src/design.cpp:1862 src/design.cpp:1897
+#: src/design.cpp:1862
+#: src/design.cpp:1897
 msgid "Off-Road Speed"
 msgstr "Velocitat fora de carretera"
 
-#: src/design.cpp:1870 src/design.cpp:1905
+#: src/design.cpp:1870
+#: src/design.cpp:1905
 msgid "Water Speed"
 msgstr "Velocitat a l'aigua"
 
@@ -12736,7 +12328,8 @@ msgstr "Ha marxat un jugador"
 msgid "Player dropped"
 msgstr "Ha caigut un jugador"
 
-#: src/display3d.cpp:599 src/multiint.cpp:2121
+#: src/display3d.cpp:599
+#: src/multiint.cpp:2121
 msgid "Waiting for other players"
 msgstr "S'està esperant els altres jugadors"
 
@@ -12748,7 +12341,8 @@ msgstr "S'ha perdut el sincronisme"
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "No es pot construir. El pou de petroli està incendiat."
 
-#: src/display.cpp:1828 src/display.cpp:2403
+#: src/display.cpp:1828
+#: src/display.cpp:2403
 #, c-format
 msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr "%s - Desperfectes %d%% - Experiència %d, %s"
@@ -12849,11 +12443,13 @@ msgstr "Un jugador"
 msgid "Multi Player"
 msgstr "Partida en xarxa"
 
-#: src/frontend.cpp:99 src/frontend.cpp:155
+#: src/frontend.cpp:99
+#: src/frontend.cpp:155
 msgid "Tutorial"
 msgstr "Aprenentatge"
 
-#: src/frontend.cpp:100 src/hci.cpp:3495
+#: src/frontend.cpp:100
+#: src/hci.cpp:3495
 msgid "Options"
 msgstr "Opcions"
 
@@ -12878,9 +12474,15 @@ msgid "TUTORIALS"
 msgstr "APRENENTATGE"
 
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
-#: src/frontend.cpp:159 src/frontend.cpp:218 src/frontend.cpp:362
-#: src/frontend.cpp:429 src/frontend.cpp:562 src/frontend.cpp:698
-#: src/frontend.cpp:805 src/frontend.cpp:1027 src/frontend.cpp:1188
+#: src/frontend.cpp:159
+#: src/frontend.cpp:218
+#: src/frontend.cpp:362
+#: src/frontend.cpp:429
+#: src/frontend.cpp:562
+#: src/frontend.cpp:698
+#: src/frontend.cpp:805
+#: src/frontend.cpp:1024
+#: src/frontend.cpp:1185
 msgctxt "menu"
 msgid "Return"
 msgstr "Torna"
@@ -12897,7 +12499,8 @@ msgstr "﻿Escaramussa"
 msgid "Challenges"
 msgstr "Desafiaments"
 
-#: src/frontend.cpp:215 src/ingameop.cpp:272
+#: src/frontend.cpp:215
+#: src/ingameop.cpp:272
 msgid "Load Game"
 msgstr "Carrega una part."
 
@@ -12905,8 +12508,10 @@ msgstr "Carrega una part."
 msgid "SINGLE PLAYER"
 msgstr "UN JUGADOR"
 
-#: src/frontend.cpp:303 src/ingameop.cpp:494 src/mission.cpp:2537
-#: src/mission.cpp:2638
+#: src/frontend.cpp:303
+#: src/ingameop.cpp:494
+#: src/mission.cpp:2537
+#: src/mission.cpp:2640
 msgid "Load Saved Game"
 msgstr "Carrega una partida desada"
 
@@ -12922,7 +12527,8 @@ msgstr "Crea una partida"
 msgid "Join Game"
 msgstr "Uneix-te a una partida"
 
-#: src/frontend.cpp:422 src/multiint.cpp:1285
+#: src/frontend.cpp:422
+#: src/multiint.cpp:1285
 msgid "OPTIONS"
 msgstr "OPCIONS"
 
@@ -12938,7 +12544,8 @@ msgstr "Opcions dels gràfics"
 msgid "Video Options"
 msgstr "Opcions dels vídeos"
 
-#: src/frontend.cpp:426 src/ingameop.cpp:267
+#: src/frontend.cpp:426
+#: src/ingameop.cpp:267
 msgid "Audio Options"
 msgstr "Opcions de l'àudio"
 
@@ -12954,16 +12561,20 @@ msgstr "Mapatge de tecles"
 msgid "Video Playback"
 msgstr "Reprod. dels vídeos"
 
-#: src/frontend.cpp:493 src/frontend.cpp:652
+#: src/frontend.cpp:493
+#: src/frontend.cpp:652
 msgid "1X"
 msgstr "1X"
 
-#: src/frontend.cpp:497 src/frontend.cpp:642
+#: src/frontend.cpp:497
+#: src/frontend.cpp:642
 msgid "2X"
 msgstr "2X"
 
-#: src/frontend.cpp:501 src/frontend.cpp:647 src/frontend.cpp:773
-#: src/frontend.cpp:830
+#: src/frontend.cpp:501
+#: src/frontend.cpp:647
+#: src/frontend.cpp:773
+#: src/frontend.cpp:827
 msgid "Fullscreen"
 msgstr "Pant. completa"
 
@@ -12971,33 +12582,59 @@ msgstr "Pant. completa"
 msgid "Screen Shake"
 msgstr "Tremolor de pant."
 
-#: src/frontend.cpp:514 src/frontend.cpp:542 src/frontend.cpp:550
-#: src/frontend.cpp:585 src/frontend.cpp:619 src/frontend.cpp:628
-#: src/frontend.cpp:794 src/frontend.cpp:891 src/frontend.cpp:929
-#: src/frontend.cpp:968 src/frontend.cpp:980 src/frontend.cpp:992
-#: src/frontend.cpp:1004 src/frontend.cpp:1049 src/frontend.cpp:1062
-#: src/frontend.cpp:1076 src/frontend.cpp:1090
+#: src/frontend.cpp:514
+#: src/frontend.cpp:542
+#: src/frontend.cpp:550
+#: src/frontend.cpp:585
+#: src/frontend.cpp:619
+#: src/frontend.cpp:628
+#: src/frontend.cpp:794
+#: src/frontend.cpp:888
+#: src/frontend.cpp:926
+#: src/frontend.cpp:965
+#: src/frontend.cpp:977
+#: src/frontend.cpp:989
+#: src/frontend.cpp:1001
+#: src/frontend.cpp:1046
+#: src/frontend.cpp:1059
+#: src/frontend.cpp:1073
+#: src/frontend.cpp:1087
 msgid "On"
 msgstr "Actiu"
 
-#: src/frontend.cpp:518 src/frontend.cpp:538 src/frontend.cpp:554
-#: src/frontend.cpp:580 src/frontend.cpp:614 src/frontend.cpp:632
-#: src/frontend.cpp:798 src/frontend.cpp:886 src/frontend.cpp:924
-#: src/frontend.cpp:972 src/frontend.cpp:984 src/frontend.cpp:996
-#: src/frontend.cpp:1008 src/frontend.cpp:1044 src/frontend.cpp:1057
-#: src/frontend.cpp:1071 src/frontend.cpp:1085
+#: src/frontend.cpp:518
+#: src/frontend.cpp:538
+#: src/frontend.cpp:554
+#: src/frontend.cpp:580
+#: src/frontend.cpp:614
+#: src/frontend.cpp:632
+#: src/frontend.cpp:798
+#: src/frontend.cpp:883
+#: src/frontend.cpp:921
+#: src/frontend.cpp:969
+#: src/frontend.cpp:981
+#: src/frontend.cpp:993
+#: src/frontend.cpp:1005
+#: src/frontend.cpp:1041
+#: src/frontend.cpp:1054
+#: src/frontend.cpp:1068
+#: src/frontend.cpp:1082
 msgid "Off"
 msgstr "Inactiu"
 
-#: src/frontend.cpp:523 src/multiint.cpp:1354
+#: src/frontend.cpp:523
+#: src/multiint.cpp:1354
 msgid "Fog"
 msgstr "Boira"
 
-#: src/frontend.cpp:526 src/frontend.cpp:601
+#: src/frontend.cpp:526
+#: src/frontend.cpp:601
 msgid "Mist"
 msgstr "Boirina"
 
-#: src/frontend.cpp:530 src/frontend.cpp:595 src/multiint.cpp:1356
+#: src/frontend.cpp:530
+#: src/frontend.cpp:595
+#: src/multiint.cpp:1356
 msgid "Fog Of War"
 msgstr "Fum de guerra"
 
@@ -13013,15 +12650,18 @@ msgstr "Ombres"
 msgid "GRAPHICS OPTIONS"
 msgstr "OPCIONS DELS GRÀFICS"
 
-#: src/frontend.cpp:686 src/ingameop.cpp:167
+#: src/frontend.cpp:686
+#: src/ingameop.cpp:167
 msgid "Voice Volume"
 msgstr "Volum veu"
 
-#: src/frontend.cpp:690 src/ingameop.cpp:172
+#: src/frontend.cpp:690
+#: src/ingameop.cpp:172
 msgid "FX Volume"
 msgstr "Volum efectes"
 
-#: src/frontend.cpp:694 src/ingameop.cpp:177
+#: src/frontend.cpp:694
+#: src/ingameop.cpp:177
 msgid "Music Volume"
 msgstr "Volum música"
 
@@ -13037,7 +12677,8 @@ msgstr "* Té efecte quan reinicieu"
 msgid "Graphics Mode*"
 msgstr "Mode gràfic*"
 
-#: src/frontend.cpp:777 src/frontend.cpp:825
+#: src/frontend.cpp:777
+#: src/frontend.cpp:822
 msgid "Windowed"
 msgstr "Finestra"
 
@@ -13057,87 +12698,103 @@ msgstr "Sincro. vertical*"
 msgid "VIDEO OPTIONS"
 msgstr "OPCIONS DE VIDEO"
 
-#: src/frontend.cpp:961
+#: src/frontend.cpp:958
 msgid "* May negatively affect performance"
 msgstr "* Pot afectar negativament al rendiment"
 
-#: src/frontend.cpp:965
+#: src/frontend.cpp:962
 msgid "Reverse Rotation"
 msgstr "Rotació inversa"
 
-#: src/frontend.cpp:976
+#: src/frontend.cpp:973
 msgid "Trap Cursor"
 msgstr "Captura el cursor"
 
-#: src/frontend.cpp:988
+#: src/frontend.cpp:985
 msgid "Colored Cursors*"
 msgstr "Cursors de colors*"
 
-#: src/frontend.cpp:1001
+#: src/frontend.cpp:998
 msgid "Switch Mouse Buttons"
 msgstr "Intercanvia els botons"
 
-#: src/frontend.cpp:1013
+#: src/frontend.cpp:1010
 msgid "Rotate Screen"
 msgstr "Rota la pantalla"
 
-#: src/frontend.cpp:1016 src/frontend.cpp:1104
+#: src/frontend.cpp:1013
+#: src/frontend.cpp:1101
 msgid "Middle Mouse"
 msgstr "Botó del mig"
 
-#: src/frontend.cpp:1020 src/frontend.cpp:1099
+#: src/frontend.cpp:1017
+#: src/frontend.cpp:1096
 msgid "Right Mouse"
 msgstr "Botó dret"
 
-#: src/frontend.cpp:1024
+#: src/frontend.cpp:1021
 msgid "MOUSE OPTIONS"
 msgstr "OPCIONS DEL RATOLÍ"
 
-#: src/frontend.cpp:1139 src/frontend.cpp:1209
+#: src/frontend.cpp:1136
+#: src/frontend.cpp:1206
 msgid "Difficulty"
 msgstr "Dificultat"
 
-#: src/frontend.cpp:1143 src/frontend.cpp:1217 src/frontend.cpp:1254
+#: src/frontend.cpp:1140
+#: src/frontend.cpp:1214
+#: src/frontend.cpp:1251
 msgid "Easy"
 msgstr "Fàcil"
 
-#: src/frontend.cpp:1146 src/frontend.cpp:1220 src/frontend.cpp:1246
+#: src/frontend.cpp:1143
+#: src/frontend.cpp:1217
+#: src/frontend.cpp:1243
 msgid "Normal"
 msgstr "Normal"
 
-#: src/frontend.cpp:1150 src/frontend.cpp:1223 src/frontend.cpp:1250
+#: src/frontend.cpp:1147
+#: src/frontend.cpp:1220
+#: src/frontend.cpp:1247
 msgid "Hard"
 msgstr "Difícil"
 
-#: src/frontend.cpp:1155 src/frontend.cpp:1210
+#: src/frontend.cpp:1152
+#: src/frontend.cpp:1207
 msgid "Scroll Speed"
 msgstr "Veloc. desplaçament"
 
-#: src/frontend.cpp:1169 src/frontend.cpp:1207
+#: src/frontend.cpp:1166
+#: src/frontend.cpp:1204
 msgid "Language"
 msgstr "Idioma"
 
-#: src/frontend.cpp:1181 src/frontend.cpp:1208
+#: src/frontend.cpp:1178
+#: src/frontend.cpp:1205
 msgid "Unit Colour"
 msgstr "Color de les unitats"
 
-#: src/frontend.cpp:1184
+#: src/frontend.cpp:1181
 msgid "Radar"
 msgstr "Radar"
 
-#: src/frontend.cpp:1185 src/frontend.cpp:1234
+#: src/frontend.cpp:1182
+#: src/frontend.cpp:1231
 msgid "Rotating"
 msgstr "Giratori"
 
-#: src/frontend.cpp:1185 src/frontend.cpp:1234
+#: src/frontend.cpp:1182
+#: src/frontend.cpp:1231
 msgid "Fixed"
 msgstr "Fixe"
 
-#: src/frontend.cpp:1191 src/frontend.cpp:1211
+#: src/frontend.cpp:1188
+#: src/frontend.cpp:1208
 msgid "GAME OPTIONS"
 msgstr "OPCIONS DE JOC"
 
-#: src/frontend.cpp:1343 src/multiint.cpp:2393
+#: src/frontend.cpp:1340
+#: src/multiint.cpp:2394
 msgid "Mod: "
 msgstr "Mod:"
 
@@ -13145,7 +12802,9 @@ msgstr "Mod:"
 msgid "MAP SAVED!"
 msgstr "S'HA DESAT EL MAPA!"
 
-#: src/hci.cpp:1573 src/loop.cpp:561 src/loop.cpp:577
+#: src/hci.cpp:1573
+#: src/loop.cpp:561
+#: src/loop.cpp:577
 msgid "GAME SAVED: "
 msgstr "S'HA DESAT LA PARTIDA: "
 
@@ -13156,14 +12815,12 @@ msgstr "No s'ha pogut crear l'edifici"
 #: src/hci.cpp:1977
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
-msgstr ""
-"El jugador %u està fent trampes (mode depuració) amb una nova estructura: %s"
+msgstr "El jugador %u està fent trampes (mode depuració) amb una nova estructura: %s"
 
 #: src/hci.cpp:1992
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
-msgstr ""
-"El jugador %u està fent trampes (mode depuració) amb una nova funció: %s"
+msgstr "El jugador %u està fent trampes (mode depuració) amb una nova funció: %s"
 
 #: src/hci.cpp:2014
 #, c-format
@@ -13199,7 +12856,9 @@ msgstr "Recerca (F2)"
 msgid "Build (F3)"
 msgstr "Construcció (F3)"
 
-#: src/hci.cpp:3442 src/multiint.cpp:1401 src/multimenu.cpp:764
+#: src/hci.cpp:3442
+#: src/multiint.cpp:1401
+#: src/multimenu.cpp:764
 msgid "Power"
 msgstr "Energia"
 
@@ -13283,7 +12942,9 @@ msgstr "Edita"
 msgid "Start Edit Mode"
 msgstr "Inicia el mode d'edició"
 
-#: src/hci.cpp:3679 src/ingameop.cpp:112 src/ingameop.cpp:256
+#: src/hci.cpp:3679
+#: src/ingameop.cpp:112
+#: src/ingameop.cpp:256
 #: src/ingameop.cpp:260
 msgid "Quit"
 msgstr "Surt"
@@ -13296,7 +12957,8 @@ msgstr "Surt de la partida"
 msgid "Current Player:"
 msgstr "Jugador actual:"
 
-#: src/hci.cpp:3997 src/intdisplay.cpp:276
+#: src/hci.cpp:3997
+#: src/intdisplay.cpp:276
 msgid "Progress Bar"
 msgstr "Barra de progrés"
 
@@ -13320,7 +12982,9 @@ msgstr "Desplaça la pestanya a la dreta"
 msgid "Ally progress"
 msgstr "Progrés aliat"
 
-#: src/ingameop.cpp:111 src/ingameop.cpp:195 src/ingameop.cpp:264
+#: src/ingameop.cpp:111
+#: src/ingameop.cpp:195
+#: src/ingameop.cpp:264
 msgid "Resume Game"
 msgstr "Continua la partida"
 
@@ -13328,16 +12992,20 @@ msgstr "Continua la partida"
 msgid "WARNING: You're the host. If you quit, the game ends for everyone!"
 msgstr "Avís: Sou l'amfitrió. Si sortiu, la partida s'acabarà per tothom!"
 
-#: src/ingameop.cpp:186 src/ingameop.cpp:523
+#: src/ingameop.cpp:186
+#: src/ingameop.cpp:523
 msgid "Tactical UI (Target Origin Icon): Show"
 msgstr "UI tàctic (Icona d'origen tactic): Mostra"
 
-#: src/ingameop.cpp:191 src/ingameop.cpp:527
+#: src/ingameop.cpp:191
+#: src/ingameop.cpp:527
 msgid "Tactical UI (Target Origin Icon): Hide"
 msgstr "UI tàctic (Icona d'origen tàctic): Amaga"
 
-#: src/ingameop.cpp:274 src/ingameop.cpp:498 src/mission.cpp:2524
-#: src/mission.cpp:2641
+#: src/ingameop.cpp:274
+#: src/ingameop.cpp:498
+#: src/mission.cpp:2524
+#: src/mission.cpp:2643
 msgid "Save Game"
 msgstr "Desa la partida"
 
@@ -13376,7 +13044,8 @@ msgstr "Progres de la construcció"
 msgid "Power Accrued"
 msgstr "Energia acumulada"
 
-#: src/intelmap.cpp:242 src/keybind.cpp:1375
+#: src/intelmap.cpp:242
+#: src/keybind.cpp:1375
 msgid "PAUSED"
 msgstr "EN PAUSA"
 
@@ -13396,27 +13065,33 @@ msgstr "Objectiu actual"
 msgid "New Intelligence Report"
 msgstr "Nou informe d'inteligència"
 
-#: src/intorder.cpp:166 src/keymap.cpp:390
+#: src/intorder.cpp:166
+#: src/keymap.cpp:390
 msgid "Short Range"
 msgstr "Curt abast"
 
-#: src/intorder.cpp:167 src/keymap.cpp:397
+#: src/intorder.cpp:167
+#: src/keymap.cpp:397
 msgid "Long Range"
 msgstr "Llarg abast"
 
-#: src/intorder.cpp:168 src/keymap.cpp:389
+#: src/intorder.cpp:168
+#: src/keymap.cpp:389
 msgid "Optimum Range"
 msgstr "Abast òptim"
 
-#: src/intorder.cpp:169 src/keymap.cpp:409
+#: src/intorder.cpp:169
+#: src/keymap.cpp:409
 msgid "Retreat at Medium Damage"
 msgstr "Retira amb desperfectes mitjans"
 
-#: src/intorder.cpp:170 src/keymap.cpp:410
+#: src/intorder.cpp:170
+#: src/keymap.cpp:410
 msgid "Retreat at Heavy Damage"
 msgstr "Retira amb desperfectes elevats"
 
-#: src/intorder.cpp:171 src/keymap.cpp:411
+#: src/intorder.cpp:171
+#: src/keymap.cpp:411
 msgid "Do or Die!"
 msgstr "Fes-ho o mor!"
 
@@ -13424,31 +13099,38 @@ msgstr "Fes-ho o mor!"
 msgid "Fire-At-Will"
 msgstr "Dispara quan vulgui"
 
-#: src/intorder.cpp:173 src/keymap.cpp:385
+#: src/intorder.cpp:173
+#: src/keymap.cpp:385
 msgid "Return Fire"
 msgstr "Torna el foc"
 
-#: src/intorder.cpp:174 src/keymap.cpp:383
+#: src/intorder.cpp:174
+#: src/keymap.cpp:383
 msgid "Hold Fire"
 msgstr "No disparis"
 
-#: src/intorder.cpp:175 src/keymap.cpp:392
+#: src/intorder.cpp:175
+#: src/keymap.cpp:392
 msgid "Patrol"
 msgstr "Patrulla"
 
-#: src/intorder.cpp:176 src/keymap.cpp:391
+#: src/intorder.cpp:176
+#: src/keymap.cpp:391
 msgid "Pursue"
 msgstr "Persegueix"
 
-#: src/intorder.cpp:177 src/keymap.cpp:387
+#: src/intorder.cpp:177
+#: src/keymap.cpp:387
 msgid "Guard Position"
 msgstr "Vigila la posició"
 
-#: src/intorder.cpp:178 src/keymap.cpp:394
+#: src/intorder.cpp:178
+#: src/keymap.cpp:394
 msgid "Hold Position"
 msgstr "Manté la posició"
 
-#: src/intorder.cpp:179 src/keymap.cpp:393
+#: src/intorder.cpp:179
+#: src/keymap.cpp:393
 msgid "Return For Repair"
 msgstr "Torna per ser reparat"
 
@@ -13456,11 +13138,13 @@ msgstr "Torna per ser reparat"
 msgid "Return To HQ"
 msgstr "Torna al QG"
 
-#: src/intorder.cpp:181 src/keymap.cpp:395
+#: src/intorder.cpp:181
+#: src/keymap.cpp:395
 msgid "Go to Transport"
 msgstr "Ves al transport"
 
-#: src/intorder.cpp:182 src/keymap.cpp:419
+#: src/intorder.cpp:182
+#: src/keymap.cpp:419
 msgid "Return for Recycling"
 msgstr "Torna per ser reciclat"
 
@@ -13488,130 +13172,131 @@ msgstr "Assigna la producció de la fàbrica de convertiplans"
 msgid "Circle"
 msgstr "Cercle"
 
-#: src/keybind.cpp:136
+#: src/keybind.cpp:135
 msgid "Sorry, that cheat is disabled in multiplayer games."
-msgstr ""
-"Ho lamento, aquesta trampa està deshabilitada a les partides multijugador."
+msgstr "Ho lamento, aquesta trampa està deshabilitada a les partides multijugador."
 
-#: src/keybind.cpp:142
+#: src/keybind.cpp:141
 msgid "Warning! This cheat is buggy.  We recommend to NOT use it."
-msgstr ""
-"Alerta! Aquesta trampa pot contenir errades. Us recomanem que NO la feu "
-"servir."
+msgstr "Alerta! Aquesta trampa pot contenir errades. Us recomanem que NO la feu servir."
 
-#: src/keybind.cpp:241
+#: src/keybind.cpp:240
 msgid "Lets us see what you see!"
 msgstr "Deixeu-me veure el que veieu!"
 
-#: src/keybind.cpp:243
+#: src/keybind.cpp:242
 msgid "Fine, weapon & sensor display is off!"
 msgstr "Molt bé, la pantalla de les armes i els sensors està apagada!"
 
-#: src/keybind.cpp:416 src/keybind.cpp:446 src/keybind.cpp:463
-#: src/keybind.cpp:507 src/keybind.cpp:615 src/keybind.cpp:655
-#: src/keybind.cpp:761 src/keybind.cpp:1266 src/keybind.cpp:1323
-#: src/keybind.cpp:1432 src/keybind.cpp:1561 src/keybind.cpp:1918
+#: src/keybind.cpp:415
+#: src/keybind.cpp:445
+#: src/keybind.cpp:462
+#: src/keybind.cpp:506
+#: src/keybind.cpp:614
+#: src/keybind.cpp:654
+#: src/keybind.cpp:760
+#: src/keybind.cpp:1265
+#: src/keybind.cpp:1322
+#: src/keybind.cpp:1432
+#: src/keybind.cpp:1561
+#: src/keybind.cpp:1918
 #: src/keybind.cpp:1959
 #, c-format
 msgid "(Player %u) is using cheat :%s"
 msgstr "(El jugador %u) fa servir trampes :%s"
 
-#: src/keybind.cpp:417
+#: src/keybind.cpp:416
 msgid "Hard as nails!!!"
 msgstr "Dur com les ungles!!!"
 
-#: src/keybind.cpp:431
+#: src/keybind.cpp:430
 msgid "Takings thing easy!"
 msgstr "Agafant-se les coses amb calma!"
 
-#: src/keybind.cpp:447
+#: src/keybind.cpp:446
 msgid "1000 big ones!!!"
 msgstr "1000 dels grossos!!!"
 
-#: src/keybind.cpp:464
+#: src/keybind.cpp:463
 msgid "Power overwhelming"
 msgstr "Energia desbordant"
 
-#: src/keybind.cpp:479
+#: src/keybind.cpp:478
 msgid "Back to normality!"
 msgstr "Tornada a la normalitat"
 
-#: src/keybind.cpp:492
+#: src/keybind.cpp:491
 msgid "Getting tricky!"
 msgstr "Us esteu tornant trampós!"
 
-#: src/keybind.cpp:508
+#: src/keybind.cpp:507
 msgid "Twice as nice!"
 msgstr "El doble de bonic!"
 
-#: src/keybind.cpp:519
+#: src/keybind.cpp:518
 msgid "FPS display is enabled."
 msgstr "S'ha habilitat el visor de FPS"
 
-#: src/keybind.cpp:523
+#: src/keybind.cpp:522
 msgid "FPS display is disabled."
 msgstr "S'ha deshabilitat el visor de FPS"
 
-#: src/keybind.cpp:547
+#: src/keybind.cpp:546
 #, c-format
 msgid "FPS %d; FPS-Limit: %d; PIEs %d; polys %d; Terr. polys %d; States %d"
 msgstr "FPS: %d; Límit-FPS: %d; PIEs %d; polis %d; Polis terr. %d; Estats %d"
 
-#: src/keybind.cpp:579
+#: src/keybind.cpp:578
 #, c-format
-msgid ""
-"(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num "
-"Features: %d"
-msgstr ""
-"(Jugador %u) fa servir una trampa: Nº ciborgs: %d  Nº estructures: %d  Nº "
-"Funcions: %d"
+msgid "(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"
+msgstr "(Jugador %u) fa servir una trampa: Nº ciborgs: %d  Nº estructures: %d  Nº Funcions: %d"
 
-#: src/keybind.cpp:616
+#: src/keybind.cpp:615
 msgid "Infinite power disabled"
 msgstr "Energia infinita deshabilitada"
 
-#: src/keybind.cpp:616
+#: src/keybind.cpp:615
 msgid "Infinite power enabled"
 msgstr "Energia infinita habilitada"
 
-#: src/keybind.cpp:656
+#: src/keybind.cpp:655
 msgid "All items made available"
 msgstr "Estan disponibles tots els objectes"
 
-#: src/keybind.cpp:762
+#: src/keybind.cpp:761
 msgid "Fog on"
 msgstr "Boira activada"
 
-#: src/keybind.cpp:762
+#: src/keybind.cpp:761
 msgid "Fog off"
 msgstr "Boira desactivada"
 
-#: src/keybind.cpp:1172
+#: src/keybind.cpp:1171
 #, c-format
 msgid "Warning!  This cheat can cause dire problems later on! [%s]"
 msgstr "Alerta!  Aquesta trampa pot portar problemes tard o d'hora! [%s]"
 
-#: src/keybind.cpp:1172
+#: src/keybind.cpp:1171
 msgid "Ending Mission."
 msgstr "Es finalitza la missió."
 
-#: src/keybind.cpp:1267
+#: src/keybind.cpp:1266
 msgid "CHEATS ARE NOW ENABLED!"
 msgstr "LES TRAMPES ESTAN HABILITADES!"
 
-#: src/keybind.cpp:1267
+#: src/keybind.cpp:1266
 msgid "CHEATS ARE NOW DISABLED!"
 msgstr "LES TRAMPES ESTAN DESHABILITADES"
 
-#: src/keybind.cpp:1324
+#: src/keybind.cpp:1323
 msgid "God Mode ON"
 msgstr "Mode Déu activat"
 
-#: src/keybind.cpp:1324
+#: src/keybind.cpp:1323
 msgid "God Mode OFF"
 msgstr "Mode Déu desactivat"
 
-#: src/keybind.cpp:1336
+#: src/keybind.cpp:1335
 msgid "View Aligned to North"
 msgstr "Vista alineada al nord"
 
@@ -13670,11 +13355,8 @@ msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr "El temps: Cels clars arreu... SENSE TEMPS"
 
 #: src/keybind.cpp:1917
-msgid ""
-"Warning! This can have drastic consequences if used incorrectly in missions."
-msgstr ""
-"Alerta! Això pot tenir conseqüències dràstiques si es fa servir malament a "
-"les missions."
+msgid "Warning! This can have drastic consequences if used incorrectly in missions."
+msgstr "Alerta! Això pot tenir conseqüències dràstiques si es fa servir malament a les missions."
 
 #: src/keybind.cpp:1919
 msgid "All enemies destroyed by cheating!"
@@ -13694,9 +13376,7 @@ msgstr "No es pot localitzar el QG"
 
 #: src/keybind.cpp:2490
 msgid "Formation speed limiting has been removed from the game due to bugs."
-msgstr ""
-"El límit de velocitat de les formacions ha estat retirat del joc per que té "
-"errades."
+msgstr "El límit de velocitat de les formacions ha estat retirat del joc per que té errades."
 
 #: src/keybind.cpp:2539
 msgid "Vertical rotation direction: Normal"
@@ -13714,13 +13394,14 @@ msgstr "Tremolor de pantalla quan les coses es moren: Apagat"
 msgid "Screen shake when things die: On"
 msgstr "Tremolor de pantalla quan les coses es moren: Encés"
 
-#: src/keybind.cpp:2604 src/keybind.cpp:2647
+#: src/keybind.cpp:2604
+#: src/keybind.cpp:2647
 msgid "Sorry, but game speed cannot be changed in multiplayer."
-msgstr ""
-"Lamentablement la velocitat del joc no es pot canviar en una partida en "
-"xarxa."
+msgstr "Lamentablement la velocitat del joc no es pot canviar en una partida en xarxa."
 
-#: src/keybind.cpp:2625 src/keybind.cpp:2668 src/keybind.cpp:2690
+#: src/keybind.cpp:2625
+#: src/keybind.cpp:2668
+#: src/keybind.cpp:2690
 msgid "Game Speed Reset"
 msgstr "Es restaura la velocitat de la partida"
 
@@ -13762,16 +13443,18 @@ msgstr "El radar mostra el terreny conegut"
 msgid "Radar showing height"
 msgstr "El radar mostra l'alçada"
 
-#: src/keyedit.cpp:355
+#: src/keyedit.cpp:350
 msgid "KEY MAPPING"
 msgstr "MAPATGE DE TECLES"
 
-#: src/keyedit.cpp:377 src/multiint.cpp:671 src/multiint.cpp:1081
+#: src/keyedit.cpp:372
+#: src/multiint.cpp:671
+#: src/multiint.cpp:1081
 #: src/multiint.cpp:1487
 msgid "Return To Previous Screen"
 msgstr "Torna a la pantalla anterior"
 
-#: src/keyedit.cpp:382
+#: src/keyedit.cpp:377
 msgid "Select Default"
 msgstr "Selecció per defecte"
 
@@ -14251,7 +13934,8 @@ msgstr "Traça un objecte de la partida"
 msgid "Toggle Driving Mode"
 msgstr "Commuta el mode de conducció"
 
-#: src/loop.cpp:568 src/loop.cpp:584
+#: src/loop.cpp:568
+#: src/loop.cpp:584
 msgid "Could not save game!"
 msgstr "No s'ha pogut desar el joc!"
 
@@ -14275,7 +13959,9 @@ msgstr "HEU FRACASSAT -- i heu fet trampes!"
 msgid "OBJECTIVE FAILED"
 msgstr "HEU FRACASSAT"
 
-#: src/mission.cpp:2503 src/mission.cpp:2543 src/mission.cpp:2655
+#: src/mission.cpp:2503
+#: src/mission.cpp:2543
+#: src/mission.cpp:2657
 msgid "Quit To Main Menu"
 msgstr "Torna al menú principal"
 
@@ -14283,7 +13969,7 @@ msgstr "Torna al menú principal"
 msgid "Continue Game"
 msgstr "Continua jugant"
 
-#: src/mission.cpp:2606
+#: src/mission.cpp:2608
 msgid "GAME SAVED :"
 msgstr "S'HA DESAT LA PARTIDA:"
 
@@ -14342,11 +14028,13 @@ msgstr "%s S'ha aliat amb %s"
 msgid "You Discover Blueprints For %s"
 msgstr "Heu descobert traces de %s"
 
-#: src/multiint.cpp:609 src/multilimit.cpp:190
+#: src/multiint.cpp:609
+#: src/multilimit.cpp:190
 msgid "Accept Settings"
 msgstr "Accepta la configuració"
 
-#: src/multiint.cpp:611 src/multiint.cpp:1126
+#: src/multiint.cpp:611
+#: src/multiint.cpp:1126
 msgid "Cancel"
 msgstr "Cancela"
 
@@ -14434,7 +14122,8 @@ msgstr "Ciborgs deshabilitats"
 msgid "VTOLs disabled."
 msgstr "Convertiplans deshabilitats."
 
-#: src/multiint.cpp:1290 src/multiint.cpp:1297
+#: src/multiint.cpp:1290
+#: src/multiint.cpp:1297
 msgid "Select Game Name"
 msgstr "Selecciona el nom de la partida"
 
@@ -14450,7 +14139,8 @@ msgstr "Selecciona el mapa"
 msgid "Click to set Password"
 msgstr "Clica per posar una contrasenya"
 
-#: src/multiint.cpp:1318 src/multiint.cpp:1319
+#: src/multiint.cpp:1318
+#: src/multiint.cpp:1319
 msgid "Scavengers"
 msgstr "Carronyaires"
 
@@ -14466,7 +14156,8 @@ msgstr "Selecciona el nom del jugador"
 msgid "Distance Fog"
 msgstr "Boira de distància"
 
-#: src/multiint.cpp:1368 src/multimenu.cpp:757
+#: src/multiint.cpp:1368
+#: src/multimenu.cpp:757
 msgid "Alliances"
 msgstr "Aliances"
 
@@ -14614,61 +14305,61 @@ msgstr "No podeu canviar la IA en un desafiament"
 msgid "CHAT"
 msgstr "XAT"
 
-#: src/multiint.cpp:2398
+#: src/multiint.cpp:2399
 msgid "All players need to have the same mods to join your game."
-msgstr ""
-"Tots els jugadors han de tenir els mateixos modificadors per unir-se a la "
-"partida."
+msgstr "Tots els jugadors han de tenir els mateixos modificadors per unir-se a la partida."
 
-#: src/multiint.cpp:2556
+#: src/multiint.cpp:2557
 #, c-format
 msgid "*** password [%s] is now required! ***"
 msgstr "*** ara cal la contrassenya [%s] ***"
 
-#: src/multiint.cpp:2564
+#: src/multiint.cpp:2565
 msgid "*** password is NOT required! ***"
 msgstr "*** ara NO cal contrassenya! ***"
 
-#: src/multiint.cpp:2805
+#: src/multiint.cpp:2806
 msgid "Sorry! Failed to host the game."
 msgstr "Ho lamento! No s'ha pogut crear la partida."
 
-#: src/multiint.cpp:2926
+#: src/multiint.cpp:2927
 msgid "'Locked Teams' mode enabled"
 msgstr "S'ha habilitat el mode «equips tancats»"
 
-#: src/multiint.cpp:3007
+#: src/multiint.cpp:3008
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "L'amfitrió ha fet fora %s de la partida!"
 
-#: src/multiint.cpp:3077
+#: src/multiint.cpp:3078
 msgid "Host is Starting Game"
 msgstr "L'amfitrió està iniciant la partida"
 
-#: src/multiint.cpp:3643
+#: src/multiint.cpp:3644
 msgid "Players"
 msgstr "Jugadors"
 
-#: src/multiint.cpp:3781
+#: src/multiint.cpp:3782
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "S'està enviant el mapa: %d%%"
 
-#: src/multiint.cpp:3789
+#: src/multiint.cpp:3790
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Mapa: %d%% descarregat"
 
-#: src/multiint.cpp:3815
+#: src/multiint.cpp:3816
 msgid "HOST"
 msgstr "AMFITRIÓ"
 
-#: src/multiint.cpp:3822 src/multimenu.cpp:773
+#: src/multiint.cpp:3823
+#: src/multimenu.cpp:773
 msgid "Ping"
 msgstr "Ping"
 
-#: src/multijoin.cpp:100 src/multijoin.cpp:101
+#: src/multijoin.cpp:100
+#: src/multijoin.cpp:101
 msgid "Players Still Joining"
 msgstr "Els jugadors encara s'estan unint"
 
@@ -14788,7 +14479,8 @@ msgstr "Puntuació"
 msgid "Kills"
 msgstr "Morts"
 
-#: src/multimenu.cpp:763 src/multimenu.cpp:768
+#: src/multimenu.cpp:763
+#: src/multimenu.cpp:768
 msgid "Units"
 msgstr "Unitats"
 
@@ -14823,9 +14515,7 @@ msgstr "Dona energia al jugador"
 #: src/multiplay.cpp:264
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
-msgstr ""
-"S'expulsa al jugador %s per que s'ha saltat la comprovació de la integritat "
-"de dades!"
+msgstr "S'expulsa al jugador %s per que s'ha saltat la comprovació de la integritat de dades!"
 
 #: src/multiplay.cpp:1056
 msgid "(allies"
@@ -14905,9 +14595,7 @@ msgstr "Marró"
 
 #: src/order.cpp:800
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
-msgstr ""
-"No ho podem fer! Hem de ser una unitat ciborg per utilitzar un transport "
-"ciborg!"
+msgstr "No ho podem fer! Hem de ser una unitat ciborg per utilitzar un transport ciborg!"
 
 #: src/research.cpp:1739
 #, c-format
@@ -15065,7 +14753,8 @@ msgid_plural "%u units selected"
 msgstr[0] "%u unitat seleccionada"
 msgstr[1] "%u unitats seleccionades"
 
-#: src/selection.cpp:433 src/selection.cpp:520
+#: src/selection.cpp:433
+#: src/selection.cpp:520
 msgid "Unable to locate any repair units!"
 msgstr "No es pot trobar cap unitat de reparació!"
 
@@ -15083,17 +14772,19 @@ msgstr "No es pot trobar cap comandant!"
 
 #: src/structure.cpp:2650
 msgid "Command Control Limit Reached - Production Halted"
-msgstr ""
-"S'ha arribat al límit de control del comandament - S'atura la producció"
+msgstr "S'ha arribat al límit de control del comandament - S'atura la producció"
 
-#: src/structure.cpp:5846 src/structure.cpp:5871
+#: src/structure.cpp:5846
+#: src/structure.cpp:5871
 #, c-format
 msgid "%s - %u Unit assigned"
 msgid_plural "%s - %u Units assigned"
 msgstr[0] "%s - %u unitats assignada"
 msgstr[1] "%s - %u unitats assignades"
 
-#: src/structure.cpp:5876 src/structure.cpp:5944 src/structure.cpp:5960
+#: src/structure.cpp:5876
+#: src/structure.cpp:5944
+#: src/structure.cpp:5960
 #: src/structure.cpp:5974
 #, c-format
 msgid "%s - Damage %3.0f%%"
@@ -15104,7 +14795,8 @@ msgstr "%s - Desperfectes %3.0f%%"
 msgid "%s - Connected %u of %u"
 msgstr "%s - connectat a %u de %u"
 
-#: src/structure.cpp:6090 src/structure.cpp:6135
+#: src/structure.cpp:6090
+#: src/structure.cpp:6135
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Danyat electrònicament"
@@ -15137,7 +14829,8 @@ msgstr "Recompensa de reparació - Reparació"
 msgid "Repair Facility Award - Nothing"
 msgstr "Recompensa de reparació - Res"
 
-#: src/transporter.cpp:395 src/transporter.cpp:444
+#: src/transporter.cpp:395
+#: src/transporter.cpp:444
 msgid "Launch Transport"
 msgstr "Inicia el transport"
 
@@ -15168,6 +14861,9 @@ msgstr " - Construcció %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Versió %s%s%s%s"
+
+#~ msgid "Congratulations your successful evacuation of Beta Base."
+#~ msgstr "Us felicitem per l'èxit de l'evacuació de la base Beta."
 
 #~ msgid "Truck ordered to build Oil Derrick"
 #~ msgstr "Heu ordenat un camió que construeixi un pou de petroli"
@@ -15263,6 +14959,4 @@ msgstr "Versió %s%s%s%s"
 #~ msgstr "Posició del jugador"
 
 #~ msgid "kicked %s : %s from the game, and added them to the banned list!"
-#~ msgstr ""
-#~ "S'han expulsat %s : %s de la partida, i s'han afegit a la llista de "
-#~ "indesitjables!"
+#~ msgstr "S'han expulsat %s : %s de la partida, i s'han afegit a la llista de indesitjables!"

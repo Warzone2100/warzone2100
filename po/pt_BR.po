@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-03-20 21:16+0100\n"
+"POT-Creation-Date: 2011-04-03 21:46+0200\n"
 "PO-Revision-Date: 2011-02-16 12:57-0300\n"
 "Last-Translator: Artur Filipe <tucalipe@gmail.com>\n"
 "Language-Team: Brazilian Portugese <warzone-dev@gna.org>\n"
@@ -5260,6 +5260,7 @@ msgid "TRANSPORT MISSION: Northern Sector"
 msgstr "MISSÃO-TRANSPORTE: Setor Norte"
 
 #: data/base/messages/strings/cam3strings.txt:5
+#: data/base/sequenceaudio/cam3/c003.txa:5
 msgid "Congratulations on your successful evacuation of Beta Base."
 msgstr "Congratulações na evacuação bem sucedida da Base Beta."
 
@@ -9879,10 +9880,6 @@ msgstr "TERCEIRA CAMPANHA"
 msgid "NORTHERN SECTOR"
 msgstr "SETOR NORTE"
 
-#: data/base/sequenceaudio/cam3/c003.txa:5
-msgid "Congratulations your successful evacuation of Beta Base."
-msgstr "Parabéns pela evacuação bem sucedida da Base Beta."
-
 #: data/base/sequenceaudio/cam3/c003.txa:8
 msgid "Dusk, December 3rd, 2100"
 msgstr "Anoitecer, 3 de Dezembro de 2100"
@@ -10699,6 +10696,16 @@ msgstr "PDV Míssil Scourge Retaliação"
 msgid "Plasmite Retribution VTOL"
 msgstr "PDV Plasmite Retribuição"
 
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1962
+#: data/mp/messages/strings/names.txt:675
+msgid "Super Transport"
+msgstr "Super Transporte"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1963
+#: data/mp/messages/strings/names.txt:676
+msgid "Super Transport Body"
+msgstr "Corpo de Super Transporte"
+
 #: data/mp/messages/resmessages12.rmsg:58
 msgid "Construction speed +10%"
 msgstr "Velocidade de construção +10%"
@@ -11448,14 +11455,6 @@ msgstr "Muro de NEXUS"
 msgid "Nexus Corner Wall"
 msgstr "Cantode Muro Nexus"
 
-#: data/mp/messages/strings/names.txt:675
-msgid "Super Transport"
-msgstr "Super Transporte"
-
-#: data/mp/messages/strings/names.txt:676
-msgid "Super Transport Body"
-msgstr "Corpo de Super Transporte"
-
 #: data/mp/messages/strings/names.txt:715
 msgid "Plasteel"
 msgstr "Plastaço"
@@ -11999,8 +11998,8 @@ msgstr "Tanque Artilharia de Mini-Foguetes Cobra"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Hovercraft Canhão de Hiper Velocidade Píton"
 
-#: lib/framework/i18n.cpp:90
-#: lib/framework/i18n.cpp:149
+#: lib/framework/i18n.cpp:92
+#: lib/framework/i18n.cpp:153
 msgid "System locale"
 msgstr "Localização do Sistema"
 
@@ -14881,6 +14880,9 @@ msgstr " - Finalizado em %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Versão %s%s%s%s"
+
+#~ msgid "Congratulations your successful evacuation of Beta Base."
+#~ msgstr "Parabéns pela evacuação bem sucedida da Base Beta."
 
 #~ msgid "Player colour"
 #~ msgstr "Cor do jogador"

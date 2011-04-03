@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-03-20 21:16+0100\n"
+"POT-Creation-Date: 2011-04-03 21:46+0200\n"
 "PO-Revision-Date: 2010-10-24 13:31+0200\n"
 "Last-Translator: Adrian Mos <adimosh@live.com>\n"
 "Language-Team: Romanian <ro@li.org>\n"
@@ -5263,6 +5263,7 @@ msgid "TRANSPORT MISSION: Northern Sector"
 msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:5
+#: data/base/sequenceaudio/cam3/c003.txa:5
 msgid "Congratulations on your successful evacuation of Beta Base."
 msgstr ""
 
@@ -9882,11 +9883,6 @@ msgstr "CAMPANIA A TREIA"
 msgid "NORTHERN SECTOR"
 msgstr "SECTORUL DE NORD"
 
-#: data/base/sequenceaudio/cam3/c003.txa:5
-#, fuzzy
-msgid "Congratulations your successful evacuation of Beta Base."
-msgstr "Felicitări pentru evacuarea cu succes a bazei Beta."
-
 #: data/base/sequenceaudio/cam3/c003.txa:8
 msgid "Dusk, December 3rd, 2100"
 msgstr "Amurg, 3 Decembrie 2100"
@@ -10703,6 +10699,18 @@ msgstr ""
 msgid "Plasmite Retribution VTOL"
 msgstr ""
 
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1962
+#: data/mp/messages/strings/names.txt:675
+#, fuzzy
+msgid "Super Transport"
+msgstr "Transportor"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1963
+#: data/mp/messages/strings/names.txt:676
+#, fuzzy
+msgid "Super Transport Body"
+msgstr "Șasiu de transportor"
+
 #: data/mp/messages/resmessages12.rmsg:58
 msgid "Construction speed +10%"
 msgstr ""
@@ -11453,16 +11461,6 @@ msgstr "Zid Nexus"
 msgid "Nexus Corner Wall"
 msgstr "Colț de zid Nexus"
 
-#: data/mp/messages/strings/names.txt:675
-#, fuzzy
-msgid "Super Transport"
-msgstr "Transportor"
-
-#: data/mp/messages/strings/names.txt:676
-#, fuzzy
-msgid "Super Transport Body"
-msgstr "Șasiu de transportor"
-
 #: data/mp/messages/strings/names.txt:715
 msgid "Plasteel"
 msgstr "Plasoțel"
@@ -12006,8 +12004,8 @@ msgstr ""
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr ""
 
-#: lib/framework/i18n.cpp:90
-#: lib/framework/i18n.cpp:149
+#: lib/framework/i18n.cpp:92
+#: lib/framework/i18n.cpp:153
 msgid "System locale"
 msgstr "Limba sistemului"
 
@@ -14897,6 +14895,10 @@ msgstr " - Compilare %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Versiunea %s%s%s%s"
+
+#, fuzzy
+#~ msgid "Congratulations your successful evacuation of Beta Base."
+#~ msgstr "Felicitări pentru evacuarea cu succes a bazei Beta."
 
 #~ msgid "Player colour"
 #~ msgstr "Culoarea jucătorului"

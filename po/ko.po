@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100 2.3_branch\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-03-20 21:16+0100\n"
+"POT-Creation-Date: 2011-04-03 21:46+0200\n"
 "PO-Revision-Date: 2010-11-23 21:01+0900\n"
 "Last-Translator: Joshua Shin <urgood2@gmail.com>\n"
 "Language-Team: Korean Translation Team <urgood2@gmail.com>\n"
@@ -5282,6 +5282,7 @@ msgid "TRANSPORT MISSION: Northern Sector"
 msgstr "수송 중요임무: 북부 섹터"
 
 #: data/base/messages/strings/cam3strings.txt:5
+#: data/base/sequenceaudio/cam3/c003.txa:5
 msgid "Congratulations on your successful evacuation of Beta Base."
 msgstr "베타 기지의 성공적인 대피 작업을 축하합니다."
 
@@ -9927,11 +9928,6 @@ msgstr "세번째 캠페인"
 msgid "NORTHERN SECTOR"
 msgstr "북쪽 섹터"
 
-#: data/base/sequenceaudio/cam3/c003.txa:5
-#, fuzzy
-msgid "Congratulations your successful evacuation of Beta Base."
-msgstr "당신의 베타 기지의 성공적인 철수를 축하드립니다."
-
 #: data/base/sequenceaudio/cam3/c003.txa:8
 msgid "Dusk, December 3rd, 2100"
 msgstr "황혼녘, 2100년 12월 3일"
@@ -10748,6 +10744,18 @@ msgstr "스커지 리탤리에이션 VTOL"
 msgid "Plasmite Retribution VTOL"
 msgstr "플라즈마이트 폭탄 투하실 레트리뷰션 VTOL"
 
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1962
+#: data/mp/messages/strings/names.txt:675
+#, fuzzy
+msgid "Super Transport"
+msgstr "수송선"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1963
+#: data/mp/messages/strings/names.txt:676
+#, fuzzy
+msgid "Super Transport Body"
+msgstr "수송 차체"
+
 #: data/mp/messages/resmessages12.rmsg:58
 msgid "Construction speed +10%"
 msgstr "건축 속도 +10%"
@@ -11499,16 +11507,6 @@ msgstr "넥서스 벽"
 msgid "Nexus Corner Wall"
 msgstr "넥서스 모서리 벽"
 
-#: data/mp/messages/strings/names.txt:675
-#, fuzzy
-msgid "Super Transport"
-msgstr "수송선"
-
-#: data/mp/messages/strings/names.txt:676
-#, fuzzy
-msgid "Super Transport Body"
-msgstr "수송 차체"
-
 #: data/mp/messages/strings/names.txt:715
 msgid "Plasteel"
 msgstr "플라스틸(Plasteel)"
@@ -12053,8 +12051,8 @@ msgstr "미니로켓 배열 코브라 무한궤도"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "초고속도 캐논 파이썬 호버추진"
 
-#: lib/framework/i18n.cpp:90
-#: lib/framework/i18n.cpp:149
+#: lib/framework/i18n.cpp:92
+#: lib/framework/i18n.cpp:153
 msgid "System locale"
 msgstr "사용자 시스템 언어"
 
@@ -14957,6 +14955,10 @@ msgstr " - 빌드 날짜 %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "버젼 %s%s%s%s"
+
+#, fuzzy
+#~ msgid "Congratulations your successful evacuation of Beta Base."
+#~ msgstr "당신의 베타 기지의 성공적인 철수를 축하드립니다."
 
 #~ msgid "Player colour"
 #~ msgstr "플레이어 색"

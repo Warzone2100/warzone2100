@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-03-20 21:16+0100\n"
+"POT-Creation-Date: 2011-04-03 21:46+0200\n"
 "PO-Revision-Date: 2010-12-11 17:00+0100\n"
 "Last-Translator: Michał D. aka Emdek <emdeck@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -5265,6 +5265,7 @@ msgid "TRANSPORT MISSION: Northern Sector"
 msgstr "MISJA TRANSPORTOWA: Sektor Północny"
 
 #: data/base/messages/strings/cam3strings.txt:5
+#: data/base/sequenceaudio/cam3/c003.txa:5
 msgid "Congratulations on your successful evacuation of Beta Base."
 msgstr "Gratulujemy udanej ewakuacji Bazy Beta."
 
@@ -9894,11 +9895,6 @@ msgstr "KAMPANIA TRZECIA"
 msgid "NORTHERN SECTOR"
 msgstr "SEKTOR PÓŁNOCNY"
 
-#: data/base/sequenceaudio/cam3/c003.txa:5
-#, fuzzy
-msgid "Congratulations your successful evacuation of Beta Base."
-msgstr "Gratulujemy udanej ewakuacji Bazy Beta."
-
 #: data/base/sequenceaudio/cam3/c003.txa:8
 msgid "Dusk, December 3rd, 2100"
 msgstr "Zmierzch, 3. grudnia, 2100"
@@ -10715,6 +10711,16 @@ msgstr "Odpłata z rakietami Scourge VTOL"
 msgid "Plasmite Retribution VTOL"
 msgstr "Odwet luk bomb plazmowych VTOL"
 
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1962
+#: data/mp/messages/strings/names.txt:675
+msgid "Super Transport"
+msgstr "Super Transportowiec"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1963
+#: data/mp/messages/strings/names.txt:676
+msgid "Super Transport Body"
+msgstr "Kadłub Super Transportowca"
+
 #: data/mp/messages/resmessages12.rmsg:58
 msgid "Construction speed +10%"
 msgstr "Prędkość budowania +10%"
@@ -11464,14 +11470,6 @@ msgstr "Mur NEXUS"
 msgid "Nexus Corner Wall"
 msgstr "Narożnik muru NEXUS"
 
-#: data/mp/messages/strings/names.txt:675
-msgid "Super Transport"
-msgstr "Super Transportowiec"
-
-#: data/mp/messages/strings/names.txt:676
-msgid "Super Transport Body"
-msgstr "Kadłub Super Transportowca"
-
 #: data/mp/messages/strings/names.txt:715
 msgid "Plasteel"
 msgstr "Utwardzona stal"
@@ -12018,8 +12016,8 @@ msgstr "Kobra artyleria minirakiet na gąsienicach"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Pyton poduszkowiec z działem HPV"
 
-#: lib/framework/i18n.cpp:90
-#: lib/framework/i18n.cpp:149
+#: lib/framework/i18n.cpp:92
+#: lib/framework/i18n.cpp:153
 msgid "System locale"
 msgstr "Język systemu"
 
@@ -14912,6 +14910,10 @@ msgstr " - Zbudowana %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Wersja %s%s%s%s"
+
+#, fuzzy
+#~ msgid "Congratulations your successful evacuation of Beta Base."
+#~ msgstr "Gratulujemy udanej ewakuacji Bazy Beta."
 
 #~ msgid "Player colour"
 #~ msgstr "Kolor gracza"
