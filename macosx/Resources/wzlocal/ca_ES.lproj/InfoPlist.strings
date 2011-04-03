@@ -1,0 +1,29 @@
+﻿/* Localized versions of Info.plist keys */
+
+/* Only change the strings after the '='; '\n' gives you a new line, do not use it in the CFBundleName or CFBundleDisplayName strings */
+
+
+/* Warzone */ /* Name in the menubar */
+CFBundleName = "Warzone";
+
+/* Warzone 2100 */ /* Name of the app bundle */
+CFBundleDisplayName = "Warzone 2100";
+
+/* Copyright © 1999-2004 Eidos Interactive.\nCopyright © 2005-2010 The Warzone 2100 Project */ /* Copyright string */
+NSHumanReadableCopyright = "Copyright © 1999-2004 Eidos Interactive.\nCopyright © 2005-2010 El projecte Warzone 2100";
+
+
+/* Warzone 2100 Map / Mod File */ /* Description of .wz files */
+"Warzone 2100 Map / Mod File" = "Mapa per Warzone 2100 / Fitxer Mod";
+
+/* Warzone 2100 Multiplayer Mod File */ /* Description of .mod.wz files */
+"Warzone 2100 Multiplayer Mod File" = "Fitxer Mod per a multijugador de Warzone 2100";
+
+/* Warzone 2100 Campaign Mod File */ /* Description of .cam.wz files */
+"Warzone 2100 Campaign Mod File" = "Fitxer Mod per a campanya de Warzone 2100";
+
+/* Warzone 2100 Global Mod File */ /* Description of .gmod.wz files */
+"Warzone 2100 Global Mod File" = "Fitxer Mod global per a Warzone 2100 Global";
+
+/* Warzone 2100 Music Mod File */ /* Description of .music.wz files */
+"Warzone 2100 Music Mod File" = "Fitxer Mod de música per a Warzone 2100";
