@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-03-16 19:05+0100\n"
+"POT-Creation-Date: 2011-04-03 21:38+0200\n"
 "PO-Revision-Date: 2011-02-16 12:57-0300\n"
 "Last-Translator: Artur Filipe <tucalipe@gmail.com>\n"
 "Language-Team: Portugese <warzone-dev@gna.org>\n"
@@ -5271,6 +5271,7 @@ msgid "TRANSPORT MISSION: Northern Sector"
 msgstr "MISSÃO DE TRANSPORTE: Sector Norte"
 
 #: data/base/messages/strings/cam3strings.txt:5
+#: data/base/sequenceaudio/cam3/c003.txa:5
 msgid "Congratulations on your successful evacuation of Beta Base."
 msgstr "Parabéns na sua evacuação com sucesso da Base Beta"
 
@@ -9936,11 +9937,6 @@ msgstr "TERCEIRA CAMPANHA"
 msgid "NORTHERN SECTOR"
 msgstr "SECTOR NORTE"
 
-#: data/base/sequenceaudio/cam3/c003.txa:5
-#, fuzzy
-msgid "Congratulations your successful evacuation of Beta Base."
-msgstr "Parabéns na sua evacuação com sucesso da Base Beta"
-
 #: data/base/sequenceaudio/cam3/c003.txa:8
 msgid "Dusk, December 3rd, 2100"
 msgstr "Anoitecer, 3 de Dezembro de 2100"
@@ -12321,8 +12317,8 @@ msgstr "Artilharia de Mini Rockets Cobra Lagartas"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Canhão Pesado Python Hovercraft"
 
-#: lib/framework/i18n.c:90
-#: lib/framework/i18n.c:149
+#: lib/framework/i18n.c:92
+#: lib/framework/i18n.c:153
 msgid "System locale"
 msgstr "Linguagem do sistema"
 
@@ -12683,77 +12679,77 @@ msgstr "Unidade Destruída!"
 msgid "Structure Restored"
 msgstr "Estrutura reparada"
 
-#: src/droid.c:3295
+#: src/droid.c:3534
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Grupo %u seleccionado - %u Unidade"
 msgstr[1] "Grupo %u seleccionado - %u Unidades"
 
-#: src/droid.c:3308
+#: src/droid.c:3547
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u unidade atribuída do ao Grupo %u"
 msgstr[1] "%u unidades designadas ao Grupo %u"
 
-#: src/droid.c:3321
+#: src/droid.c:3560
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Centrado no Grupo %u - %u Unidade"
 msgstr[1] "Centrado no Grupo %u - %u Unidades"
 
-#: src/droid.c:3325
+#: src/droid.c:3564
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "A Alinhar com o Grupo %u - %u Unidade"
 msgstr[1] "A Alinhar com o Grupo %u - %u Unidades"
 
-#: src/droid.c:3588
+#: src/droid.c:3827
 msgid "Rookie"
 msgstr "Novato"
 
-#: src/droid.c:3589
+#: src/droid.c:3828
 msgctxt "rank"
 msgid "Green"
 msgstr "Inexperiente"
 
-#: src/droid.c:3590
+#: src/droid.c:3829
 msgid "Trained"
 msgstr "Treinado"
 
-#: src/droid.c:3591
+#: src/droid.c:3830
 msgid "Regular"
 msgstr "Regular"
 
-#: src/droid.c:3592
+#: src/droid.c:3831
 msgid "Professional"
 msgstr "Profissional"
 
-#: src/droid.c:3593
+#: src/droid.c:3832
 msgid "Veteran"
 msgstr "Veterano"
 
-#: src/droid.c:3594
+#: src/droid.c:3833
 msgid "Elite"
 msgstr "Elite"
 
-#: src/droid.c:3595
+#: src/droid.c:3834
 msgid "Special"
 msgstr "Especial"
 
-#: src/droid.c:3596
+#: src/droid.c:3835
 msgid "Hero"
 msgstr "Herói"
 
-#: src/droid.c:4623
+#: src/droid.c:4862
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
 msgstr ""
 
-#: src/droid.c:4627
+#: src/droid.c:4866
 #, c-format
 msgid "You wanted to give %s a %s but they have too many!"
 msgstr ""
@@ -15113,6 +15109,10 @@ msgstr " - Construído %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Versão %s%s%s%s"
+
+#, fuzzy
+#~ msgid "Congratulations your successful evacuation of Beta Base."
+#~ msgstr "Parabéns na sua evacuação com sucesso da Base Beta"
 
 #~ msgid "Truck ordered to build Oil Derrick"
 #~ msgstr "Camião ordenado a construir Extractor de Petróleo"

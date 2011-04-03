@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-03-16 19:05+0100\n"
+"POT-Creation-Date: 2011-04-03 21:38+0200\n"
 "PO-Revision-Date: 2010-05-10 16:59+0200\n"
 "Last-Translator: erlando <erlando112@hotmail.com>\n"
 "Language-Team: Estonian <ee@li.org>\n"
@@ -5262,6 +5262,7 @@ msgid "TRANSPORT MISSION: Northern Sector"
 msgstr "TRANSPORDI MISSION: Põhja Sector"
 
 #: data/base/messages/strings/cam3strings.txt:5
+#: data/base/sequenceaudio/cam3/c003.txa:5
 msgid "Congratulations on your successful evacuation of Beta Base."
 msgstr "Õnnitlused eduka Beeta Baasi evakueerimise puhul."
 
@@ -9901,11 +9902,6 @@ msgstr "KAMPAANIA KOLM"
 msgid "NORTHERN SECTOR"
 msgstr "PÕHJA SEKTOR"
 
-#: data/base/sequenceaudio/cam3/c003.txa:5
-#, fuzzy
-msgid "Congratulations your successful evacuation of Beta Base."
-msgstr "Õnnitlused eduka Beeta Baasi evakueerimise puhul."
-
 #: data/base/sequenceaudio/cam3/c003.txa:8
 msgid "Dusk, December 3rd, 2100"
 msgstr "Videvik, 3. Detsember, 2100"
@@ -12179,8 +12175,8 @@ msgstr "Roomikutega Cobra MRA"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Hõljukiga Python Hüperkiire Kahur"
 
-#: lib/framework/i18n.c:90
-#: lib/framework/i18n.c:149
+#: lib/framework/i18n.c:92
+#: lib/framework/i18n.c:153
 msgid "System locale"
 msgstr "Süsteemi Asukoht"
 
@@ -12537,77 +12533,77 @@ msgstr "Üksus Kaotatud!"
 msgid "Structure Restored"
 msgstr "Ehitis taastatud"
 
-#: src/droid.c:3295
+#: src/droid.c:3534
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Grupp %u valitud - %u Üksus"
 msgstr[1] "Grupp %u valitud - %u Üksust"
 
-#: src/droid.c:3308
+#: src/droid.c:3547
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u üksus määratud gruppi %u"
 msgstr[1] "%u Üksust määratud Gruppi %u"
 
-#: src/droid.c:3321
+#: src/droid.c:3560
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Grupi %u Vaade - %u Üksus"
 msgstr[1] "Grupi %u Vaade - %u Üksust"
 
-#: src/droid.c:3325
+#: src/droid.c:3564
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Aligning with Group %u - %u Unit"
 msgstr[1] "Aligning with Group %u - %u Units"
 
-#: src/droid.c:3588
+#: src/droid.c:3827
 msgid "Rookie"
 msgstr "Uustulnuk"
 
-#: src/droid.c:3589
+#: src/droid.c:3828
 msgctxt "rank"
 msgid "Green"
 msgstr "Algaja"
 
-#: src/droid.c:3590
+#: src/droid.c:3829
 msgid "Trained"
 msgstr "Treenitud"
 
-#: src/droid.c:3591
+#: src/droid.c:3830
 msgid "Regular"
 msgstr "Regulaar"
 
-#: src/droid.c:3592
+#: src/droid.c:3831
 msgid "Professional"
 msgstr "Professionaal"
 
-#: src/droid.c:3593
+#: src/droid.c:3832
 msgid "Veteran"
 msgstr "Veteran"
 
-#: src/droid.c:3594
+#: src/droid.c:3833
 msgid "Elite"
 msgstr "Eliit"
 
-#: src/droid.c:3595
+#: src/droid.c:3834
 msgid "Special"
 msgstr "Eriline"
 
-#: src/droid.c:3596
+#: src/droid.c:3835
 msgid "Hero"
 msgstr "Kangelane"
 
-#: src/droid.c:4623
+#: src/droid.c:4862
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
 msgstr ""
 
-#: src/droid.c:4627
+#: src/droid.c:4866
 #, c-format
 msgid "You wanted to give %s a %s but they have too many!"
 msgstr ""
@@ -14942,6 +14938,10 @@ msgstr " - Built %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Versioon %s%s%s%s"
+
+#, fuzzy
+#~ msgid "Congratulations your successful evacuation of Beta Base."
+#~ msgstr "Õnnitlused eduka Beeta Baasi evakueerimise puhul."
 
 #~ msgid "Truck ordered to build Oil Derrick"
 #~ msgstr "Veoautol kästi Naftapuurtorn ehitada"

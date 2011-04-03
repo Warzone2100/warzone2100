@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100 2.3.2\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-03-16 19:05+0100\n"
+"POT-Creation-Date: 2011-04-03 21:38+0200\n"
 "PO-Revision-Date: 2010-07-30 08:44+0100\n"
 "Last-Translator: Marian Zsemlye <koapa@inmail.sk>\n"
 "Language-Team: Koapa - Marian Zsemlye <koapa@inmail.sk>\n"
@@ -5265,6 +5265,7 @@ msgid "TRANSPORT MISSION: Northern Sector"
 msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:5
+#: data/base/sequenceaudio/cam3/c003.txa:5
 msgid "Congratulations on your successful evacuation of Beta Base."
 msgstr ""
 
@@ -9903,10 +9904,6 @@ msgstr ""
 msgid "NORTHERN SECTOR"
 msgstr ""
 
-#: data/base/sequenceaudio/cam3/c003.txa:5
-msgid "Congratulations your successful evacuation of Beta Base."
-msgstr ""
-
 #: data/base/sequenceaudio/cam3/c003.txa:8
 msgid "Dusk, December 3rd, 2100"
 msgstr ""
@@ -12168,8 +12165,8 @@ msgstr ""
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr ""
 
-#: lib/framework/i18n.c:90
-#: lib/framework/i18n.c:149
+#: lib/framework/i18n.c:92
+#: lib/framework/i18n.c:153
 msgid "System locale"
 msgstr "Systémové údaje"
 
@@ -12526,7 +12523,7 @@ msgstr "Jednotka stratená!"
 msgid "Structure Restored"
 msgstr "Budova obnovená"
 
-#: src/droid.c:3295
+#: src/droid.c:3534
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
@@ -12534,7 +12531,7 @@ msgstr[0] "Skupina %u vybraná - %u jednotka"
 msgstr[1] "Skupina %u vybraná - %u jednotky"
 msgstr[2] "Skupina %u vybraná - %u jednotiek"
 
-#: src/droid.c:3308
+#: src/droid.c:3547
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
@@ -12542,7 +12539,7 @@ msgstr[0] "%u jednotka pripojená ku skupine %u"
 msgstr[1] "%u jednotky pripojené ku skupine %u"
 msgstr[2] "%u jednotiek pripojených ku skupine %u"
 
-#: src/droid.c:3321
+#: src/droid.c:3560
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
@@ -12550,7 +12547,7 @@ msgstr[0] "Zamerané na skupinu %u - %u jednotka"
 msgstr[1] "Zamerané na skupinu %u - %u jednotky"
 msgstr[2] "Zamerané na skupinu %u - %u jednotiek"
 
-#: src/droid.c:3325
+#: src/droid.c:3564
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
@@ -12558,49 +12555,49 @@ msgstr[0] "Vyrovananý so skupinou %u - %u jednotka"
 msgstr[1] "Vyrovnané so skupinou %u - %u jednotky"
 msgstr[2] "Vyrovnaných so skupinou %u - %u jednotiek"
 
-#: src/droid.c:3588
+#: src/droid.c:3827
 msgid "Rookie"
 msgstr "Nováčik"
 
-#: src/droid.c:3589
+#: src/droid.c:3828
 msgctxt "rank"
 msgid "Green"
 msgstr "Zelenáč"
 
-#: src/droid.c:3590
+#: src/droid.c:3829
 msgid "Trained"
 msgstr "Trénovaný"
 
-#: src/droid.c:3591
+#: src/droid.c:3830
 msgid "Regular"
 msgstr "Bežný"
 
-#: src/droid.c:3592
+#: src/droid.c:3831
 msgid "Professional"
 msgstr "Profesionál"
 
-#: src/droid.c:3593
+#: src/droid.c:3832
 msgid "Veteran"
 msgstr "Veterán"
 
-#: src/droid.c:3594
+#: src/droid.c:3833
 msgid "Elite"
 msgstr "Elita"
 
-#: src/droid.c:3595
+#: src/droid.c:3834
 msgid "Special"
 msgstr "Špecialista"
 
-#: src/droid.c:3596
+#: src/droid.c:3835
 msgid "Hero"
 msgstr "Hrdina"
 
-#: src/droid.c:4623
+#: src/droid.c:4862
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
 msgstr ""
 
-#: src/droid.c:4627
+#: src/droid.c:4866
 #, c-format
 msgid "You wanted to give %s a %s but they have too many!"
 msgstr ""

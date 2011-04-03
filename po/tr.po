@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-03-16 19:05+0100\n"
+"POT-Creation-Date: 2011-04-03 21:38+0200\n"
 "PO-Revision-Date: 2011-01-14 20:08+0200\n"
 "Last-Translator: Ayhan GORGULU <ayhangorgulu@gmail.com>\n"
 "Language-Team: Turkey <warzone-dev@gna.org>\n"
@@ -5272,6 +5272,7 @@ msgid "TRANSPORT MISSION: Northern Sector"
 msgstr "TAŞIMA GÖREVİ: Kuzey bölgesi"
 
 #: data/base/messages/strings/cam3strings.txt:5
+#: data/base/sequenceaudio/cam3/c003.txa:5
 msgid "Congratulations on your successful evacuation of Beta Base."
 msgstr "Başarılı bir şekilde Beta Üssünü boşalttığğınızdan dolayı sizi tebrik ederim komutan."
 
@@ -9924,10 +9925,6 @@ msgstr "BÖLÜM ÜÇ"
 msgid "NORTHERN SECTOR"
 msgstr "KUZEY BÖLGESİ"
 
-#: data/base/sequenceaudio/cam3/c003.txa:5
-msgid "Congratulations your successful evacuation of Beta Base."
-msgstr "Başarılı bir şekilde Beta üssünü boşaltınız için tebrikler."
-
 #: data/base/sequenceaudio/cam3/c003.txa:8
 msgid "Dusk, December 3rd, 2100"
 msgstr "Alacakaranlık, 3 Aralık, 2100"
@@ -12186,8 +12183,8 @@ msgstr "Mini Roketler Kobra Paletler"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Yüksek Hız Topu Piton Hovercraft"
 
-#: lib/framework/i18n.c:90
-#: lib/framework/i18n.c:149
+#: lib/framework/i18n.c:92
+#: lib/framework/i18n.c:153
 msgid "System locale"
 msgstr "Yerel Sistem"
 
@@ -12545,77 +12542,77 @@ msgstr "Birim Kaybı!"
 msgid "Structure Restored"
 msgstr "Bina Yenilendi"
 
-#: src/droid.c:3295
+#: src/droid.c:3534
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Grup %u Seçildi - %u Birim"
 msgstr[1] "Grup %u Seçildi - %u Birimler"
 
-#: src/droid.c:3308
+#: src/droid.c:3547
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u Birim şu Gruba Atandı: %u "
 msgstr[1] "%u Birimler şu Gruba Atandı: %u "
 
-#: src/droid.c:3321
+#: src/droid.c:3560
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "%u Numaralı Grup Merkezde - %u Birim"
 msgstr[1] "%u Numaralı Grup Merkezde - %u Birimler"
 
-#: src/droid.c:3325
+#: src/droid.c:3564
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Grup %u 'e - %u Birim atandı"
 msgstr[1] "Grup %u 'e - %u Birimler Atandı"
 
-#: src/droid.c:3588
+#: src/droid.c:3827
 msgid "Rookie"
 msgstr "Er"
 
-#: src/droid.c:3589
+#: src/droid.c:3828
 msgctxt "rank"
 msgid "Green"
 msgstr "Onbaşı"
 
-#: src/droid.c:3590
+#: src/droid.c:3829
 msgid "Trained"
 msgstr "Çavuş"
 
-#: src/droid.c:3591
+#: src/droid.c:3830
 msgid "Regular"
 msgstr "Teğmen"
 
-#: src/droid.c:3592
+#: src/droid.c:3831
 msgid "Professional"
 msgstr "Üsteğmen"
 
-#: src/droid.c:3593
+#: src/droid.c:3832
 msgid "Veteran"
 msgstr "Albay"
 
-#: src/droid.c:3594
+#: src/droid.c:3833
 msgid "Elite"
 msgstr "Korgeneral"
 
-#: src/droid.c:3595
+#: src/droid.c:3834
 msgid "Special"
 msgstr "Orgeneral"
 
-#: src/droid.c:3596
+#: src/droid.c:3835
 msgid "Hero"
 msgstr "Mareşal"
 
-#: src/droid.c:4623
+#: src/droid.c:4862
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
 msgstr "%s Sana vermek istedi %s ama, Sende daha çok var!"
 
-#: src/droid.c:4627
+#: src/droid.c:4866
 #, c-format
 msgid "You wanted to give %s a %s but they have too many!"
 msgstr "Sen %s 'a %s vermek istedin ama, Onda  daha çok var!"
@@ -14939,6 +14936,9 @@ msgstr " - %s İnşa"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Sürüm %s%s%s%s"
+
+#~ msgid "Congratulations your successful evacuation of Beta Base."
+#~ msgstr "Başarılı bir şekilde Beta üssünü boşaltınız için tebrikler."
 
 #~ msgid "Truck ordered to build Oil Derrick"
 #~ msgstr "Kamyon'a bir Petrol Kuyusu inşatı emri verildi."

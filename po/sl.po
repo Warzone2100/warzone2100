@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-03-16 19:05+0100\n"
+"POT-Creation-Date: 2011-04-03 21:38+0200\n"
 "PO-Revision-Date: 2009-06-10 14:43+0100\n"
 "Last-Translator: Tomaž Povšin <tomaz.povsin@gmail.com>\n"
 "Language-Team: Slovenian <sl@li.org>\n"
@@ -5261,6 +5261,7 @@ msgid "TRANSPORT MISSION: Northern Sector"
 msgstr "PREVOZNA MISIJA: Severni sektor"
 
 #: data/base/messages/strings/cam3strings.txt:5
+#: data/base/sequenceaudio/cam3/c003.txa:5
 msgid "Congratulations on your successful evacuation of Beta Base."
 msgstr "Čestitke za vašo uspešno evakuacijo baze beta."
 
@@ -9926,11 +9927,6 @@ msgstr ""
 msgid "NORTHERN SECTOR"
 msgstr ""
 
-#: data/base/sequenceaudio/cam3/c003.txa:5
-#, fuzzy
-msgid "Congratulations your successful evacuation of Beta Base."
-msgstr "Čestitke za vašo uspešno evakuacijo baze beta."
-
 #: data/base/sequenceaudio/cam3/c003.txa:8
 msgid "Dusk, December 3rd, 2100"
 msgstr ""
@@ -12309,8 +12305,8 @@ msgstr "Mini-raketno topništvo Naočarka Gosenice"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Težki top Piton Zračna blazina"
 
-#: lib/framework/i18n.c:90
-#: lib/framework/i18n.c:149
+#: lib/framework/i18n.c:92
+#: lib/framework/i18n.c:153
 msgid "System locale"
 msgstr "Lokalni sistem"
 
@@ -12669,7 +12665,7 @@ msgstr "Enota izgubljena!"
 msgid "Structure Restored"
 msgstr "Zgradba obnovljena"
 
-#: src/droid.c:3295
+#: src/droid.c:3534
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
@@ -12678,7 +12674,7 @@ msgstr[1] "Skupina %u izbrana - %u enota"
 msgstr[2] "Skupina %u izbrana - %u enoti"
 msgstr[3] "Skupina %u izbrana - %u enote"
 
-#: src/droid.c:3308
+#: src/droid.c:3547
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
@@ -12687,7 +12683,7 @@ msgstr[1] "%u enota dodeljena skupini %u"
 msgstr[2] "%u enoti dodeljeni skupini %u"
 msgstr[3] "%u enote dodeljene skupini %u"
 
-#: src/droid.c:3321
+#: src/droid.c:3560
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
@@ -12696,7 +12692,7 @@ msgstr[1] "Centriran na skupino %u - %u enota"
 msgstr[2] "Centriran na skupino %u - %u enoti"
 msgstr[3] "Centriran na skupino %u - %u enote"
 
-#: src/droid.c:3325
+#: src/droid.c:3564
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
@@ -12705,49 +12701,49 @@ msgstr[1] "Poravnava s skupino %u - %u enota"
 msgstr[2] "Poravnava s skupino %u - %u enoti"
 msgstr[3] "Poravnava s skupino %u - %u enote"
 
-#: src/droid.c:3588
+#: src/droid.c:3827
 msgid "Rookie"
 msgstr "Novinec"
 
-#: src/droid.c:3589
+#: src/droid.c:3828
 msgctxt "rank"
 msgid "Green"
 msgstr "Zelen"
 
-#: src/droid.c:3590
+#: src/droid.c:3829
 msgid "Trained"
 msgstr "Izurjen"
 
-#: src/droid.c:3591
+#: src/droid.c:3830
 msgid "Regular"
 msgstr "Navaden"
 
-#: src/droid.c:3592
+#: src/droid.c:3831
 msgid "Professional"
 msgstr "Poklicni"
 
-#: src/droid.c:3593
+#: src/droid.c:3832
 msgid "Veteran"
 msgstr "Veteran"
 
-#: src/droid.c:3594
+#: src/droid.c:3833
 msgid "Elite"
 msgstr "Elita"
 
-#: src/droid.c:3595
+#: src/droid.c:3834
 msgid "Special"
 msgstr "Poseben"
 
-#: src/droid.c:3596
+#: src/droid.c:3835
 msgid "Hero"
 msgstr "Junak"
 
-#: src/droid.c:4623
+#: src/droid.c:4862
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
 msgstr ""
 
-#: src/droid.c:4627
+#: src/droid.c:4866
 #, c-format
 msgid "You wanted to give %s a %s but they have too many!"
 msgstr ""
@@ -15110,6 +15106,10 @@ msgstr "- Zgrajen %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Verzija %s%s%s%s"
+
+#, fuzzy
+#~ msgid "Congratulations your successful evacuation of Beta Base."
+#~ msgstr "Čestitke za vašo uspešno evakuacijo baze beta."
 
 #~ msgid "Truck ordered to build Oil Derrick"
 #~ msgstr "Tovornjaku ukazana gradnja naftne vrtine"

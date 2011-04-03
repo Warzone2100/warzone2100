@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100 2.3_branch\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-03-16 19:05+0100\n"
+"POT-Creation-Date: 2011-04-03 21:38+0200\n"
 "PO-Revision-Date: 2010-11-23 21:01+0900\n"
 "Last-Translator: Joshua Shin <urgood2@gmail.com>\n"
 "Language-Team: Korean Translation Team <urgood2@gmail.com>\n"
@@ -5281,6 +5281,7 @@ msgid "TRANSPORT MISSION: Northern Sector"
 msgstr "수송 중요임무: 북부 섹터"
 
 #: data/base/messages/strings/cam3strings.txt:5
+#: data/base/sequenceaudio/cam3/c003.txa:5
 msgid "Congratulations on your successful evacuation of Beta Base."
 msgstr "베타 기지의 성공적인 대피 작업을 축하합니다."
 
@@ -9945,11 +9946,6 @@ msgstr "세번째 캠페인"
 msgid "NORTHERN SECTOR"
 msgstr "북쪽 섹터"
 
-#: data/base/sequenceaudio/cam3/c003.txa:5
-#, fuzzy
-msgid "Congratulations your successful evacuation of Beta Base."
-msgstr "당신의 베타 기지의 성공적인 철수를 축하드립니다."
-
 #: data/base/sequenceaudio/cam3/c003.txa:8
 msgid "Dusk, December 3rd, 2100"
 msgstr "황혼녘, 2100년 12월 3일"
@@ -12218,8 +12214,8 @@ msgstr "미니로켓 배열 코브라 무한궤도"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "초고속도 캐논 파이썬 호버추진"
 
-#: lib/framework/i18n.c:90
-#: lib/framework/i18n.c:149
+#: lib/framework/i18n.c:92
+#: lib/framework/i18n.c:153
 msgid "System locale"
 msgstr "사용자 시스템 언어"
 
@@ -12583,76 +12579,76 @@ msgid "Structure Restored"
 msgstr "구조물이 복구되었습니다"
 
 # ask about form 0, 1, 2, etc
-#: src/droid.c:3295
+#: src/droid.c:3534
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "부대 %u가(이) 선택되었습니다 - 유닛 %u개"
 
-#: src/droid.c:3308
+#: src/droid.c:3547
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "유닛 %u개가 부대 %u에 할당되었습니다"
 
-#: src/droid.c:3321
+#: src/droid.c:3560
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "부대 %u를(을) 중심으로 - 유닛 %u개"
 
-#: src/droid.c:3325
+#: src/droid.c:3564
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "부대 %u와(과) 정렬하였습니다 - 유닛 %u개"
 
-#: src/droid.c:3588
+#: src/droid.c:3827
 msgid "Rookie"
 msgstr "루키"
 
-#: src/droid.c:3589
+#: src/droid.c:3828
 msgctxt "rank"
 msgid "Green"
 msgstr "그린"
 
 # finished training,
 # is now intern
-#: src/droid.c:3590
+#: src/droid.c:3829
 msgid "Trained"
 msgstr "견습병"
 
 # 정규 사병 = regular soldier
-#: src/droid.c:3591
+#: src/droid.c:3830
 msgid "Regular"
 msgstr "정규병"
 
-#: src/droid.c:3592
+#: src/droid.c:3831
 msgid "Professional"
 msgstr "프로페셔널"
 
-#: src/droid.c:3593
+#: src/droid.c:3832
 msgid "Veteran"
 msgstr "베테랑"
 
-#: src/droid.c:3594
+#: src/droid.c:3833
 msgid "Elite"
 msgstr "엘리트"
 
-#: src/droid.c:3595
+#: src/droid.c:3834
 msgid "Special"
 msgstr "스페셜"
 
-#: src/droid.c:3596
+#: src/droid.c:3835
 msgid "Hero"
 msgstr "히어로"
 
-#: src/droid.c:4623
+#: src/droid.c:4862
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
 msgstr "%s가 당신에게 %s를(을) 주고 싶어하지만 이미 수가 너무 많습니다!"
 
-#: src/droid.c:4627
+#: src/droid.c:4866
 #, fuzzy, c-format
 msgid "You wanted to give %s a %s but they have too many!"
 msgstr "%s가 당신에게 %s를(을) 주고 싶어하지만 이미 수가 너무 많습니다!"
@@ -14963,6 +14959,10 @@ msgstr " - 빌드 날짜 %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "버젼 %s%s%s%s"
+
+#, fuzzy
+#~ msgid "Congratulations your successful evacuation of Beta Base."
+#~ msgstr "당신의 베타 기지의 성공적인 철수를 축하드립니다."
 
 #~ msgid "Truck ordered to build Oil Derrick"
 #~ msgstr "트럭이 유정탑을 건설하라는 명령을 받았습니다"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-03-16 19:05+0100\n"
+"POT-Creation-Date: 2011-04-03 21:38+0200\n"
 "PO-Revision-Date: 2009-05-13 16:12+0800\n"
 "Last-Translator: Terra <wz2100cn@gmail.com>\n"
 "Language-Team: Simplified Chinese <zh_CN@li.org>\n"
@@ -5265,6 +5265,7 @@ msgid "TRANSPORT MISSION: Northern Sector"
 msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:5
+#: data/base/sequenceaudio/cam3/c003.txa:5
 msgid "Congratulations on your successful evacuation of Beta Base."
 msgstr ""
 
@@ -9938,10 +9939,6 @@ msgstr ""
 msgid "NORTHERN SECTOR"
 msgstr ""
 
-#: data/base/sequenceaudio/cam3/c003.txa:5
-msgid "Congratulations your successful evacuation of Beta Base."
-msgstr ""
-
 #: data/base/sequenceaudio/cam3/c003.txa:8
 msgid "Dusk, December 3rd, 2100"
 msgstr ""
@@ -12302,8 +12299,8 @@ msgstr "机枪防御塔"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "重型加农炮"
 
-#: lib/framework/i18n.c:90
-#: lib/framework/i18n.c:149
+#: lib/framework/i18n.c:92
+#: lib/framework/i18n.c:153
 msgid "System locale"
 msgstr "系统语言"
 
@@ -12664,78 +12661,78 @@ msgstr "单位被摧毁! "
 msgid "Structure Restored"
 msgstr "重建建筑物"
 
-#: src/droid.c:3295
+#: src/droid.c:3534
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "已选择 %u 号编队 - %u 单位"
 
-#: src/droid.c:3308
+#: src/droid.c:3547
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u 单位已指派为 %u 号编队"
 
-#: src/droid.c:3321
+#: src/droid.c:3560
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "移动视野中心到 %u 号编队 - %u 单位"
 
-#: src/droid.c:3325
+#: src/droid.c:3564
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.c:3588
+#: src/droid.c:3827
 #, fuzzy
 msgid "Rookie"
 msgstr "新兵部队: %u"
 
-#: src/droid.c:3589
+#: src/droid.c:3828
 #, fuzzy
 msgctxt "rank"
 msgid "Green"
 msgstr "绿色"
 
-#: src/droid.c:3590
+#: src/droid.c:3829
 #, fuzzy
 msgid "Trained"
 msgstr "作训部队: %u"
 
-#: src/droid.c:3591
+#: src/droid.c:3830
 #, fuzzy
 msgid "Regular"
 msgstr "标准部队: %u"
 
-#: src/droid.c:3592
+#: src/droid.c:3831
 msgid "Professional"
 msgstr "专业部队"
 
-#: src/droid.c:3593
+#: src/droid.c:3832
 msgid "Veteran"
 msgstr "老兵部队"
 
-#: src/droid.c:3594
+#: src/droid.c:3833
 msgid "Elite"
 msgstr "精锐部队"
 
-#: src/droid.c:3595
+#: src/droid.c:3834
 msgid "Special"
 msgstr "特种部队"
 
-#: src/droid.c:3596
+#: src/droid.c:3835
 msgid "Hero"
 msgstr "英雄部队"
 
-#: src/droid.c:4623
+#: src/droid.c:4862
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
 msgstr ""
 
-#: src/droid.c:4627
+#: src/droid.c:4866
 #, c-format
 msgid "You wanted to give %s a %s but they have too many!"
 msgstr ""
