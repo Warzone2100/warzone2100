@@ -298,6 +298,9 @@ SectionGroupEnd
 SectionGroup $(TEXT_SecNLS) SecNLS
 
 Section "-NLS files" SecNLS_files
+  SetOutPath "$INSTDIR\locale\ca\LC_MESSAGES"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\ca_ES.gmo"
+
   SetOutPath "$INSTDIR\locale\cs\LC_MESSAGES"
   File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\cs.gmo"
 
@@ -685,6 +688,10 @@ Section "Uninstall"
   RMDir "$INSTDIR\mods"
 
 ; remove all the locales
+
+  Delete "$INSTDIR\locale\ca\LC_MESSAGES\${PACKAGE}.mo"
+  RMDir "$INSTDIR\locale\ca\LC_MESSAGES"
+  RMDir "$INSTDIR\locale\ca"
 
   Delete "$INSTDIR\locale\cs\LC_MESSAGES\${PACKAGE}.mo"
   RMDir "$INSTDIR\locale\cs\LC_MESSAGES"
