@@ -5,19 +5,14 @@
 
 /* Directory for Proximity messages and mission briefs */
 directory	"messages"
-
 file		SMSG		"brief2-1.txt"
 file		SMSG		"prox2-1.txt"
 
 /* Directory for uncompiled script files */
 directory       "script/text"
-
 file		SCRIPT		"cam2-1x.slo"
 file		SCRIPT		"genexp.slo"
 file		SCRIPT		"cam2daynight.slo"
-
-/* Directory for compiled script files*/
-directory       "script/binary"
 
 /* Directory for script value files*/
 directory       "script/data"

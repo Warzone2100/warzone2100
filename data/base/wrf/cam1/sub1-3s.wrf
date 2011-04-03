@@ -15,9 +15,6 @@ file		SCRIPT		"cam1-3s.slo"
 file		SCRIPT		"cam1daynight.slo"
 
 
-/* Directory for compiled script files*/
-directory       "script/binary"
-
 /* Directory for script value files*/
 directory       "script/data"
 

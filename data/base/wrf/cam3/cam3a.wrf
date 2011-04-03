@@ -5,14 +5,11 @@
 
 /* Directory for Proximity messages and mission briefs */
 directory	"messages"
-
 file		SMSG		"brief3-a.txt"
-//file		SMSG		"brief3intro.txt" //will be hard coded
 file		SMSG		"prox3a.txt"
 
 /* Directory for uncompiled script files */
 directory       "script/text"
-
 file			SCRIPT		"setdisk.slo"
 file			SCRIPT		"genexp.slo"
 file			SCRIPT		"cam3daynight.slo"
@@ -20,9 +17,6 @@ file			SCRIPT		"cam3ax.slo"
 file       		SCRIPT		"vtols.slo"
 file			SCRIPT		"reinforcement.slo"	
 file			SCRIPT		"tech.slo"
-
-/* Directory for compiled script files*/
-directory       "script/binary"
 
 /* Directory for script value files*/
 directory       "script/data"

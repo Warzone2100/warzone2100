@@ -21,9 +21,7 @@ file		WAV		"1min.ogg"
 file		WAV		"flseq.ogg"
 file		WAV		"10to1.ogg"
 file		WAV		"mlaunch.ogg"
-
 file		WAV		"labort.ogg"
-
 file		WAV		"wactivat.ogg"
 file		WAV		"det60min.ogg"
 file		WAV		"det50min.ogg"
@@ -40,23 +38,18 @@ file		WAV		"fdetseq.ogg"
 
 /* Directory for Proximity messages and mission briefs */
 directory	"messages"
-
 file		SMSG		"brief3-1a.txt"
 file		SMSG		"brief3-1b.txt"
 file		SMSG		"prox3-1.txt"
 
 /* Directory for uncompiled script files */
 directory       "script/text"
-
 file		SCRIPT		"setdisk.slo"
 file		SCRIPT		"genexp.slo"
 file		SCRIPT		"cam3-1x.slo"
 file		SCRIPT		"vtols.slo"
 file		SCRIPT		"cam3daynight.slo"
 file		SCRIPT		"countdown.slo"
-
-/* Directory for compiled script files*/
-directory       "script/binary"
 
 /* Directory for script value files*/
 directory       "script/data"

@@ -1,4 +1,3 @@
-  
 /* Tutorial files - Alex McLean */
 // New and improved audio
 
@@ -28,8 +27,6 @@ file		WAV			"tut22.ogg"
 file		WAV			"tut23.ogg"
 file		WAV			"tut24.ogg"
 file		WAV			"tut25.ogg"
-//file		WAV			"tut26.ogg"
-//file		WAV			"tut27.ogg"
 file		WAV			"tut28.ogg"
 file		WAV			"tut29.ogg"
 file		WAV			"tut30.ogg"
@@ -78,11 +75,7 @@ file		WAV			"tut72.ogg"
 file		WAV			"tut73.ogg"
 file		WAV			"tut74.ogg"
 file		WAV			"tut75.ogg"
-//file		WAV			"tut76.ogg"
-//file		WAV			"tut77.ogg"
 file		WAV			"tut78.ogg"
-//file		WAV			"tut79.ogg"
-//file		WAV			"tut80.ogg"
 file		WAV			"tut81.ogg"
 file		WAV			"tut82.ogg"
 file		WAV			"tut83.ogg"

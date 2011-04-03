@@ -20,9 +20,6 @@ file            SCRIPT		"vtols.slo"
 file            SCRIPT		"reinforcement.slo"	
 file            SCRIPT		"tech.slo"
 
-/* Directory for compiled script files*/
-directory       "script/binary"
-
 /* Directory for script value files*/
 directory       "script/data"
 file            SCRIPTVAL       "cam2a.vlo"

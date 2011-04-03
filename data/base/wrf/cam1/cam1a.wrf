@@ -16,9 +16,6 @@ file		SCRIPT		"cam1a.slo"
 file		SCRIPT		"cam1a-ai.slo"
 file		SCRIPT		"cam1daynight.slo"
 
-/* Directory for compiled script files*/
-directory       "script/binary"
-
 /* Directory for script value files*/
 directory       "script/data"
 file            SCRIPTVAL       "cam1a.vlo"

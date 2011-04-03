@@ -17,9 +17,6 @@ file		SCRIPT		"cam2bx.slo"
 file            SCRIPT		"vtols.slo"
 file		SCRIPT		"cam2daynight.slo"
 
-/* Directory for compiled script files*/
-directory       "script/binary"
-
 /* Directory for script value files*/
 directory       "script/data"
 file            SCRIPTVAL       "cam2b.vlo"

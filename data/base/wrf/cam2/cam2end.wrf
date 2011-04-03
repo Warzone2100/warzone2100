@@ -5,25 +5,17 @@
 
 /* Directory for Proximity messages and mission briefs */
 directory	"messages"
-
 file		SMSG		"brief2-dii.txt"
-//file		SMSG		"prox1d.txt"
 
 /* Directory for uncompiled script files */
 directory       "script/text"
-
 //no need to use genbet.slo for this one, since cam2endX.slo includes
 //the necessary parts
 //file		SCRIPT		"genbet.slo"
 file		SCRIPT		"cam2endx.slo"
 file		SCRIPT		"cam2daynight.slo"
 
-
-/* Directory for compiled script files*/
-directory       "script/binary"
-
 /* Directory for script value files*/
 directory       "script/data"
-//file            SCRIPTVAL       "cam2end.vlo"
 file            SCRIPTVAL       "cam2endx.vlo"
 file            SCRIPTVAL       "cam2day.vlo"

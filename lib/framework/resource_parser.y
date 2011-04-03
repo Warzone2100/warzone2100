@@ -98,6 +98,7 @@ dir_line:			DIRECTORY QTEXT_T
 					}
 					if (strlen($2) > 0)
 					{
+						ASSERT(PHYSFS_isDirectory(aCurrResDir), "%s is not a directory!", aCurrResDir);
 						// Add a trailing '/'
 						len = strlen(aCurrResDir);
 						aCurrResDir[len] = '/';
