@@ -39,6 +39,7 @@
 
 // Language names (http://en.wikipedia.org/wiki/List_of_ISO_639-2_codes)
 #define LANG_NAME_BASQUE "euskara"
+#define LANG_NAME_CATALAN "català"
 #define LANG_NAME_CHINESE_SIMPLIFIED "汉语"
 #define LANG_NAME_CHINESE_TRADITIONAL "漢語"
 #define LANG_NAME_CROATIAN "Hrvatski"
@@ -90,6 +91,7 @@ static const struct
 } map[] = {
 	{ "", N_("System locale"), LANG_NEUTRAL, SUBLANG_DEFAULT },
 #  if defined(ENABLE_NLS)
+	{ "ca", LANG_NAME_CATALAN, LANG_CATALAN, SUBLANG_DEFAULT },
 //	{ "cs", LANG_NAME_CZECH, LANG_CZECH, SUBLANG_DEFAULT },
 //	{ "da", LANG_NAME_DANISH, LANG_DANISH, SUBLANG_DEFAULT },
 	{ "de", LANG_NAME_GERMAN, LANG_GERMAN, SUBLANG_GERMAN },
@@ -150,6 +152,7 @@ static const struct
 } map[] = {
 	{ "",   N_("System locale"), "", "" },
 #  if defined(ENABLE_NLS)
+	{ "ca_ES", LANG_NAME_CATALAN, "ca_ES.UTF-8", "ca_ES" },
 //	{ "cs", LANG_NAME_CZECH, "cs.UTF-8", "cs" },
 //	{ "da", LANG_NAME_DANISH, "da_DK.UTF-8", "da_DK" },
 	{ "de", LANG_NAME_GERMAN, "de_DE.UTF-8", "de_DE" },
