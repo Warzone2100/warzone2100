@@ -23,5 +23,5 @@
 
 extern void ExchndlSetup(void);
 extern void ExchndlShutdown(void);
-void ResetRPTDirectory(char *newPath);
+void ResetRPTDirectory(wchar_t *newPath);
 #endif // __INCLUDED_LIB_EXCEPTIONHANDLER_EXCHNDL_H__

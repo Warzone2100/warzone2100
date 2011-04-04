@@ -43,7 +43,7 @@
 #endif
 
 // Declare the static variables
-static TCHAR szLogFileName[MAX_PATH] = _T("");
+static wchar_t szLogFileName[MAX_PATH] = L"";
 static LPTOP_LEVEL_EXCEPTION_FILTER prevExceptionFilter = NULL;
 static HANDLE hReportFile;
 static char* formattedVersionString = NULL;
@@ -1102,7 +1102,7 @@ LONG WINAPI TopLevelExceptionFilter(PEXCEPTION_POINTERS pExceptionInfo)
 
 		fuOldErrorMode = SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOGPFAULTERRORBOX | SEM_NOOPENFILEERRORBOX);
 
-		hReportFile = CreateFile(
+		hReportFile = CreateFileW(
 			szLogFileName,
 			GENERIC_WRITE,
 			0,
@@ -1142,7 +1142,7 @@ LONG WINAPI TopLevelExceptionFilter(PEXCEPTION_POINTERS pExceptionInfo)
 
 		if (hReportFile)
 		{
-			TCHAR szBuffer[4196];
+			wchar_t szBuffer[4196];
 			int err;
 
 			SetFilePointer(hReportFile, 0, 0, FILE_END);
@@ -1151,26 +1151,26 @@ LONG WINAPI TopLevelExceptionFilter(PEXCEPTION_POINTERS pExceptionInfo)
 			GenerateExceptionReport(pExceptionInfo);
 			CloseHandle(hReportFile);
 
-			wsprintf(szBuffer, _T("Warzone has crashed.\r\nSee %s for more details\r\n"), szLogFileName);
-			err = MessageBox((HWND)MB_ICONERROR, szBuffer, _T("Warzone Crashed!"), MB_OK | MB_ICONERROR);
+			wsprintfW(szBuffer, L"Warzone has crashed.\r\nSee %s for more details\r\n", szLogFileName);
+			err = MessageBoxW((HWND)MB_ICONERROR, szBuffer, L"Warzone Crashed!", MB_OK | MB_ICONERROR);
 			if (err == 0)
 			{
 				LPVOID lpMsgBuf;
 				DWORD dw = GetLastError();
-				TCHAR szBuffer[4196];
+				wchar_t szBuffer[4196];
 
-				FormatMessage(
+				FormatMessageW(
 					FORMAT_MESSAGE_ALLOCATE_BUFFER | 
 					FORMAT_MESSAGE_FROM_SYSTEM |
 					FORMAT_MESSAGE_IGNORE_INSERTS,
 					NULL,
 					dw,
 					MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-					(LPTSTR) &lpMsgBuf,
+					(LPWSTR) &lpMsgBuf,
 					0, NULL );
 
-				wsprintf(szBuffer, _T("Exception handler failed with error %d: %s\n"), dw, lpMsgBuf);
-				MessageBox((HWND)MB_ICONEXCLAMATION, szBuffer, _T("Error"), MB_OK); 
+				wsprintfW(szBuffer, L"Exception handler failed with error %d: %s\n", dw, lpMsgBuf);
+				MessageBoxW((HWND)MB_ICONEXCLAMATION, szBuffer, L"Error", MB_OK);
 
 				LocalFree(lpMsgBuf);
 				debug(LOG_ERROR, "Exception handler failed to create file!");
@@ -1189,7 +1189,7 @@ LONG WINAPI TopLevelExceptionFilter(PEXCEPTION_POINTERS pExceptionInfo)
 void ExchndlSetup()
 {
 # if defined(WZ_CC_MINGW)
-	TCHAR miniDumpPath[PATH_MAX] = {'\0'};
+	wchar_t miniDumpPath[PATH_MAX] = {'\0'};
 
 #ifdef HAVE_BFD
 	bfd_init();
@@ -1203,35 +1203,34 @@ void ExchndlSetup()
 
 	// Because of UAC on vista / win7 we use this to write our dumps to (unless we override it via OverrideRPTDirectory())
 	// NOTE: CSIDL_PERSONAL =  C:\Users\user name\Documents
-	if ( SUCCEEDED( SHGetFolderPathA( NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, miniDumpPath ) ))
+	if ( SUCCEEDED( SHGetFolderPathW( NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, miniDumpPath ) ))
 	{
-		PathAppend( miniDumpPath, TEXT( "Warzone 2100 master\\logs" ) );
+		PathAppendW( miniDumpPath, L"Warzone 2100 master\\logs" );
 
-		if( !PathFileExists( miniDumpPath ) )
+		if( !PathFileExistsW( miniDumpPath ) )
 		{
-			if( ERROR_SUCCESS != SHCreateDirectoryEx( NULL, miniDumpPath, NULL ) )
+			if( ERROR_SUCCESS != SHCreateDirectoryExW( NULL, miniDumpPath, NULL ) )
 			{
-				_tcscpy(miniDumpPath, _T("c:\\temp"));
+				wcscpy(miniDumpPath, L"c:\\temp");
 			}
 		}
 	}
 	else
 	{	// should never fail, but if it does, we fall back to this
-		_tcscpy(miniDumpPath, _T("c:\\temp"));
+		wcscpy(miniDumpPath, L"c:\\temp");
 	}
 
-	_tcscat(szLogFileName, _T("Warzone2100.RPT"));
-	_tcscat(miniDumpPath, _T("\\"));
-	_tcscat(miniDumpPath,szLogFileName);
-	_tcscpy(szLogFileName, miniDumpPath);
+	wcscat(szLogFileName, L"Warzone2100.RPT");
+	wcscat(miniDumpPath, L"\\");
+	wcscat(miniDumpPath,szLogFileName);
+	wcscpy(szLogFileName, miniDumpPath);
 
 	atexit(ExchndlShutdown);
 #endif
 }
-void ResetRPTDirectory(TCHAR *newPath)
+void ResetRPTDirectory(wchar_t *newPath)
 {
-	debug(LOG_WZ, "New RPT directory is %s, was %s", newPath, szLogFileName);
-	_tcscpy(szLogFileName, newPath);
+	wcscpy(szLogFileName, newPath);
 }
 void ExchndlShutdown(void)
 {
