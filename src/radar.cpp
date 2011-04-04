@@ -136,20 +136,16 @@ void radarInitVars(void)
 	radarSize(RadarZoom);
 }
 
-//called for when a new mission is started
-void resetRadarRedraw()
-{
-	// make sure Radar buffer is correct
-	resizeRadar();
-}
-
 bool InitRadar(void)
 {
 	// Ally/enemy/me colors
 	colRadarAlly = WZCOL_YELLOW;
 	colRadarEnemy = WZCOL_RED;
 	colRadarMe = WZCOL_WHITE;
-
+	if (mapWidth < 150)	// too small!
+	{
+		RadarZoom = DEFAULT_RADARZOOM * 2;
+	}
 	pie_InitRadar();
 
 	return true;

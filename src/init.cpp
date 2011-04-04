@@ -914,11 +914,6 @@ bool stageTwoInitialise(void)
 		return false;
 	}
 
-	if(!InitRadar()) 	// After resLoad cause it needs the game palette initialised.
-	{
-		return false;
-	}
-
 	if(!initMiscImds())			/* Set up the explosions */
 	{
 		iV_ShutDown();
@@ -1034,6 +1029,11 @@ bool stageThreeInitialise(void)
 
 	loopMissionState = LMS_NORMAL;
 
+	if(!InitRadar()) 	// After resLoad cause it needs the game palette initialised.
+	{
+		return false;
+	}
+
 	// reset the clock to normal speed
 	gameTimeResetMod();
 
@@ -1129,10 +1129,6 @@ bool stageThreeInitialise(void)
 
 	return true;
 }
-
-
-
-
 
 /*****************************************************************************/
 /*      Shutdown before any data is released                                 */
@@ -1234,8 +1230,6 @@ static void	initMiscVars(void)
 	selectedPlayer = 0;
 	realSelectedPlayer = 0;
 	godMode = false;
-
-	// ffs am
 
 	radarOnScreen = true;
 	enableConsoleDisplay(true);
