@@ -6,7 +6,7 @@
 GCC_OPTIMIZATION_LEVEL = 2
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited)
 
-BuildDependentFlagsForCandCpp = // -fstack-protector // Needs 10.6 min for build before being used
+BuildDependentFlagsForCandCpp = -fstack-protector
 
 // Build setting dependent warnings
 WarnForCandCppDep = -Wno-unused-parameter -Wno-format-security -Wno-sign-compare
