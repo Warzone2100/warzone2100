@@ -735,27 +735,9 @@ BOOL StackBackTrace(HANDLE hProcess, HANDLE hThread, PCONTEXT pContext)
 
 				if((abfd = bfd_openr (szModule, NULL)))
 					if(bfd_check_format(abfd, bfd_object))
-					{
-						bfd_vma adjust_section_vma = 0;
-
-						/* If we are adjusting section VMA's, change them all now.  Changing
-						the BFD information is a hack.  However, we must do it, or
-						bfd_find_nearest_line will not do the right thing.  */
-						if ((adjust_section_vma = (bfd_vma) hModule - pe_data(abfd)->pe_opthdr.ImageBase))
-						{
-							asection *s;
-
-							for (s = abfd->sections; s != NULL; s = s->next)
-							{
-								s->vma += adjust_section_vma;
-								s->lma += adjust_section_vma;
-							}
-						}
-
 						if(bfd_get_file_flags(abfd) & HAS_SYMS)
 							/* Read in the symbol table.  */
 							slurp_symtab(abfd, &syms, &symcount);
-					}
 			}
 
 			if(!bSuccess && abfd && syms && symcount)
@@ -1193,6 +1175,11 @@ void ExchndlSetup()
 {
 # if defined(WZ_CC_MINGW)
 	TCHAR miniDumpPath[PATH_MAX] = {'\0'};
+
+#ifdef HAVE_BFD
+	bfd_init();
+#endif /* HAVE_BFD */
+
 	// Install the unhandled exception filter function
 	prevExceptionFilter = SetUnhandledExceptionFilter(TopLevelExceptionFilter);
 
