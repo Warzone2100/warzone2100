@@ -46,11 +46,11 @@
 
 /* Begin PBXBuildFile section */
 		020A7E670D246D2B009C29F5 /* sequence.c in Sources */ = {isa = PBXBuildFile; fileRef = 020A7E660D246D2B009C29F5 /* sequence.c */; };
-		0223BBAF0CFE3C380056EF85 /* main.h in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 0223BBAC0CFE3C380056EF85 /* main.h */; };
+		0223BBAF0CFE3C380056EF85 /* main.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 0223BBAC0CFE3C380056EF85 /* main.h */; };
 		0223BBB00CFE3C380056EF85 /* version.c in Sources */ = {isa = PBXBuildFile; fileRef = 0223BBAD0CFE3C380056EF85 /* version.c */; };
-		0223BBB10CFE3C380056EF85 /* version.h in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 0223BBAE0CFE3C380056EF85 /* version.h */; };
+		0223BBB10CFE3C380056EF85 /* version.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 0223BBAE0CFE3C380056EF85 /* version.h */; };
 		0223BBC00CFE3CD60056EF85 /* tagfile.c in Sources */ = {isa = PBXBuildFile; fileRef = 0223BBB90CFE3CD60056EF85 /* tagfile.c */; };
-		0223BBC10CFE3CD60056EF85 /* tagfile.h in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 0223BBBA0CFE3CD60056EF85 /* tagfile.h */; };
+		0223BBC10CFE3CD60056EF85 /* tagfile.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 0223BBBA0CFE3CD60056EF85 /* tagfile.h */; };
 		0223BC040CFE3FFA0056EF85 /* context.c in Sources */ = {isa = PBXBuildFile; fileRef = 0223BBE60CFE3FFA0056EF85 /* context.c */; };
 		0223BC060CFE3FFA0056EF85 /* except.c in Sources */ = {isa = PBXBuildFile; fileRef = 0223BBE80CFE3FFA0056EF85 /* except.c */; };
 		0223BC070CFE3FFA0056EF85 /* except.h in Headers */ = {isa = PBXBuildFile; fileRef = 0223BBE90CFE3FFA0056EF85 /* except.h */; };
@@ -189,9 +189,9 @@
 		02356E130BD3BD7E00E9A019 /* framing.c in Sources */ = {isa = PBXBuildFile; fileRef = 02356E110BD3BD7E00E9A019 /* framing.c */; };
 		02356E190BD3BD9700E9A019 /* ogg.h in Headers */ = {isa = PBXBuildFile; fileRef = 02356E170BD3BD9700E9A019 /* ogg.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02356E1A0BD3BD9700E9A019 /* os_types.h in Headers */ = {isa = PBXBuildFile; fileRef = 02356E180BD3BD9700E9A019 /* os_types.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		023ECC500E9318D600D9E7C3 /* Theora.framework in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 97AEAB330E8C1B5200A10721 /* Theora.framework */; };
+		023ECC500E9318D600D9E7C3 /* Theora.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 97AEAB330E8C1B5200A10721 /* Theora.framework */; };
 		024480240C5E4BEE00E1A641 /* utf.c in Sources */ = {isa = PBXBuildFile; fileRef = 024480220C5E4BEE00E1A641 /* utf.c */; };
-		024480250C5E4BEE00E1A641 /* utf.h in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 024480230C5E4BEE00E1A641 /* utf.h */; };
+		024480250C5E4BEE00E1A641 /* utf.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 024480230C5E4BEE00E1A641 /* utf.h */; };
 		0246A05D0BD3C975004D1C70 /* Warzone.icns in Resources */ = {isa = PBXBuildFile; fileRef = 0246A05C0BD3C975004D1C70 /* Warzone.icns */; };
 		0246A0C10BD3CBD5004D1C70 /* configfile.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A09A0BD3CBD5004D1C70 /* configfile.c */; };
 		0246A0C20BD3CBD5004D1C70 /* debug.c in Sources */ = {isa = PBXBuildFile; fileRef = 0246A09F0BD3CBD5004D1C70 /* debug.c */; };
@@ -370,38 +370,38 @@
 		0246A8060BD3D79D004D1C70 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0246A5F60BD3D5E5004D1C70 /* CoreAudio.framework */; };
 		0246A8070BD3D79D004D1C70 /* QuickTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0246A5F70BD3D5E5004D1C70 /* QuickTime.framework */; };
 		0246AA1B0BD3DFFC004D1C70 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0246AA160BD3DFEE004D1C70 /* CoreFoundation.framework */; };
-		02548E070D159F4000B4B3B9 /* Popt.framework in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 02F5CC6D0D1494AA0000A2D0 /* Popt.framework */; };
-		02548E0A0D159F4400B4B3B9 /* QuesoGLC.framework in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 0223BBD10CFE3D5C0056EF85 /* QuesoGLC.framework */; };
+		02548E070D159F4000B4B3B9 /* Popt.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02F5CC6D0D1494AA0000A2D0 /* Popt.framework */; };
+		02548E0A0D159F4400B4B3B9 /* QuesoGLC.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 0223BBD10CFE3D5C0056EF85 /* QuesoGLC.framework */; };
 		02581B6F0BD5A30900957CBC /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0246AA160BD3DFEE004D1C70 /* CoreFoundation.framework */; };
 		02581C640BD5A98900957CBC /* libSDLmain.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02581C5D0BD5A94A00957CBC /* libSDLmain.a */; };
 		02581C740BD5ABF700957CBC /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0246A93A0BD3DD3E004D1C70 /* Carbon.framework */; };
-		02581C810BD5AD1100957CBC /* Gettext.framework in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 022B2F220BD55814002E64E3 /* Gettext.framework */; };
-		02581C820BD5AD1100957CBC /* Ogg.framework in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 02356E090BD3BCFE00E9A019 /* Ogg.framework */; };
-		02581C830BD5AD1100957CBC /* PhysFS.framework in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 02DDA8B10BD3C2F20049AB60 /* PhysFS.framework */; };
-		02581C840BD5AD1100957CBC /* Png.framework in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 02356DC20BD3BBFC00E9A019 /* Png.framework */; };
-		02581C870BD5AD1100957CBC /* Vorbis.framework in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 02DDA7EE0BD3C03F0049AB60 /* Vorbis.framework */; };
-		02581C880BD5AD1100957CBC /* Zlib.framework in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 02356D830BD3BB4100E9A019 /* Zlib.framework */; };
+		02581C810BD5AD1100957CBC /* Gettext.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 022B2F220BD55814002E64E3 /* Gettext.framework */; };
+		02581C820BD5AD1100957CBC /* Ogg.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02356E090BD3BCFE00E9A019 /* Ogg.framework */; };
+		02581C830BD5AD1100957CBC /* PhysFS.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02DDA8B10BD3C2F20049AB60 /* PhysFS.framework */; };
+		02581C840BD5AD1100957CBC /* Png.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02356DC20BD3BBFC00E9A019 /* Png.framework */; };
+		02581C870BD5AD1100957CBC /* Vorbis.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02DDA7EE0BD3C03F0049AB60 /* Vorbis.framework */; };
+		02581C880BD5AD1100957CBC /* Zlib.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02356D830BD3BB4100E9A019 /* Zlib.framework */; };
 		027F9E360D0322CE00FA2030 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0246A3BC0BD3CD2B004D1C70 /* OpenGL.framework */; };
 		027F9E370D0322D300FA2030 /* libfreetype.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 027F9E1F0D03229500FA2030 /* libfreetype.dylib */; };
 		027F9E380D0322D400FA2030 /* libfontconfig.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 02EA22450CFE494000EA65A0 /* libfontconfig.dylib */; };
-		02AAD1430D9ED28C00248B0F /* file.h in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 02AAD13F0D9ED28C00248B0F /* file.h */; };
+		02AAD1430D9ED28C00248B0F /* file.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02AAD13F0D9ED28C00248B0F /* file.h */; };
 		02AAD1440D9ED28C00248B0F /* i18n.c in Sources */ = {isa = PBXBuildFile; fileRef = 02AAD1400D9ED28C00248B0F /* i18n.c */; };
-		02AAD1450D9ED28C00248B0F /* i18n.h in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 02AAD1410D9ED28C00248B0F /* i18n.h */; };
-		02AAD1460D9ED28C00248B0F /* physfs_ext.h in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 02AAD1420D9ED28C00248B0F /* physfs_ext.h */; };
+		02AAD1450D9ED28C00248B0F /* i18n.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02AAD1410D9ED28C00248B0F /* i18n.h */; };
+		02AAD1460D9ED28C00248B0F /* physfs_ext.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02AAD1420D9ED28C00248B0F /* physfs_ext.h */; };
 		02B2132D0DA8755F0059E864 /* cursors.c in Sources */ = {isa = PBXBuildFile; fileRef = 02B2132A0DA8755F0059E864 /* cursors.c */; };
 		02B2132E0DA8755F0059E864 /* cursors16.c in Sources */ = {isa = PBXBuildFile; fileRef = 02B2132B0DA8755F0059E864 /* cursors16.c */; };
 		02B2132F0DA8755F0059E864 /* cursors32.c in Sources */ = {isa = PBXBuildFile; fileRef = 02B2132C0DA8755F0059E864 /* cursors32.c */; };
 		02BBB2090DA874F6002D438B /* exceptionhandler.c in Sources */ = {isa = PBXBuildFile; fileRef = 02BBB2070DA874F6002D438B /* exceptionhandler.c */; };
-		02BBB20A0DA874F6002D438B /* exceptionhandler.h in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 02BBB2080DA874F6002D438B /* exceptionhandler.h */; };
+		02BBB20A0DA874F6002D438B /* exceptionhandler.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02BBB2080DA874F6002D438B /* exceptionhandler.h */; };
 		02C8AEF80BE68A5600E9D8A7 /* png_util.c in Sources */ = {isa = PBXBuildFile; fileRef = 02C8AEF60BE68A5600E9D8A7 /* png_util.c */; };
 		02C8AEFC0BE68A6800E9D8A7 /* oggvorbis.c in Sources */ = {isa = PBXBuildFile; fileRef = 02C8AEFA0BE68A6800E9D8A7 /* oggvorbis.c */; };
 		02CBED8C0C5B8BEB00316CE2 /* nettypes.c in Sources */ = {isa = PBXBuildFile; fileRef = 02CBED8A0C5B8BEB00316CE2 /* nettypes.c */; };
-		02CBED8D0C5B8BEB00316CE2 /* nettypes.h in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 02CBED8B0C5B8BEB00316CE2 /* nettypes.h */; };
+		02CBED8D0C5B8BEB00316CE2 /* nettypes.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02CBED8B0C5B8BEB00316CE2 /* nettypes.h */; };
 		02CDDCF90D159BE000722688 /* autorevision.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02CDDCF80D159BE000722688 /* autorevision.cpp */; };
-		02CDDD090D159D5900722688 /* autorevision.h in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 02CDDD080D159D5900722688 /* autorevision.h */; };
+		02CDDD090D159D5900722688 /* autorevision.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02CDDD080D159D5900722688 /* autorevision.h */; };
 		02CDDD130D159DF600722688 /* QuesoGLC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0223BBD10CFE3D5C0056EF85 /* QuesoGLC.framework */; };
 		02CDDD1C0D159E2F00722688 /* openal_error.c in Sources */ = {isa = PBXBuildFile; fileRef = 02CDDD1A0D159E2F00722688 /* openal_error.c */; };
-		02CDDD1D0D159E2F00722688 /* openal_error.h in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 02CDDD1B0D159E2F00722688 /* openal_error.h */; };
+		02CDDD1D0D159E2F00722688 /* openal_error.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02CDDD1B0D159E2F00722688 /* openal_error.h */; };
 		02DDA81C0BD3C1420049AB60 /* analysis.c in Sources */ = {isa = PBXBuildFile; fileRef = 02DDA7F50BD3C1420049AB60 /* analysis.c */; };
 		02DDA81D0BD3C1420049AB60 /* backends.h in Headers */ = {isa = PBXBuildFile; fileRef = 02DDA7F60BD3C1420049AB60 /* backends.h */; };
 		02DDA81E0BD3C1420049AB60 /* bitrate.c in Sources */ = {isa = PBXBuildFile; fileRef = 02DDA7F70BD3C1420049AB60 /* bitrate.c */; };
@@ -477,7 +477,7 @@
 		02DDA8D40BD3C3820049AB60 /* Zlib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02356D830BD3BB4100E9A019 /* Zlib.framework */; };
 		02DDA8E10BD3C3CC0049AB60 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02DDA8E00BD3C3CC0049AB60 /* IOKit.framework */; };
 		02DE76060DC3B84900D48F58 /* GLee.c in Sources */ = {isa = PBXBuildFile; fileRef = 02DE76040DC3B84800D48F58 /* GLee.c */; };
-		02DE76070DC3B84900D48F58 /* GLee.h in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 02DE76050DC3B84800D48F58 /* GLee.h */; };
+		02DE76070DC3B84900D48F58 /* GLee.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02DE76050DC3B84800D48F58 /* GLee.h */; };
 		02F5CC570D1490620000A2D0 /* database.c in Sources */ = {isa = PBXBuildFile; fileRef = 02F5CC560D1490620000A2D0 /* database.c */; };
 		02F5CC8B0D1496580000A2D0 /* popt.c in Sources */ = {isa = PBXBuildFile; fileRef = 02F5CC820D1496580000A2D0 /* popt.c */; };
 		02F5CC8C0D1496580000A2D0 /* popt.h in Headers */ = {isa = PBXBuildFile; fileRef = 02F5CC830D1496580000A2D0 /* popt.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -486,12 +486,12 @@
 		02F5CC900D1496580000A2D0 /* poptparse.c in Sources */ = {isa = PBXBuildFile; fileRef = 02F5CC870D1496580000A2D0 /* poptparse.c */; };
 		02F5CC910D1496580000A2D0 /* system.h in Headers */ = {isa = PBXBuildFile; fileRef = 02F5CC880D1496580000A2D0 /* system.h */; };
 		02F5CCC00D1498A30000A2D0 /* Popt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02F5CC6D0D1494AA0000A2D0 /* Popt.framework */; };
-		2234C2A00E2BE18200E7704C /* positiondef.h in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 2234C29F0E2BE18200E7704C /* positiondef.h */; };
+		2234C2A00E2BE18200E7704C /* positiondef.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 2234C29F0E2BE18200E7704C /* positiondef.h */; };
 		2244463C0E3EB7CB004D0F1F /* message_lexer.l in Sources */ = {isa = PBXBuildFile; fileRef = 224446390E3EB7CB004D0F1F /* message_lexer.l */; };
 		2244463D0E3EB7CB004D0F1F /* message_parser.y in Sources */ = {isa = PBXBuildFile; fileRef = 2244463A0E3EB7CB004D0F1F /* message_parser.y */; };
-		2244463E0E3EB7CB004D0F1F /* messagely.h in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 2244463B0E3EB7CB004D0F1F /* messagely.h */; };
+		2244463E0E3EB7CB004D0F1F /* messagely.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 2244463B0E3EB7CB004D0F1F /* messagely.h */; };
 		22E244D70E65361800EC2B3E /* baseobject.c in Sources */ = {isa = PBXBuildFile; fileRef = 22E244D40E65361800EC2B3E /* baseobject.c */; };
-		22E244D80E65361800EC2B3E /* baseobject.h in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 22E244D50E65361800EC2B3E /* baseobject.h */; };
+		22E244D80E65361800EC2B3E /* baseobject.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 22E244D50E65361800EC2B3E /* baseobject.h */; };
 		43228BEF11BABEE900C26C1C /* export.h in Headers */ = {isa = PBXBuildFile; fileRef = 43228BEC11BABEE900C26C1C /* export.h */; };
 		43228BF011BABEE900C26C1C /* setlocale.c in Sources */ = {isa = PBXBuildFile; fileRef = 43228BED11BABEE900C26C1C /* setlocale.c */; };
 		43228BF111BABEE900C26C1C /* threadlib.c in Sources */ = {isa = PBXBuildFile; fileRef = 43228BEE11BABEE900C26C1C /* threadlib.c */; };
@@ -502,7 +502,7 @@
 		432BE3D810D9C90B00A486AB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 432BE3C110D9C79400A486AB /* InfoPlist.strings */; };
 		432BE3F810D9CD4000A486AB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 432BE3EE10D9CB4D00A486AB /* InfoPlist.strings */; };
 		432BE40210D9CF6F00A486AB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 432BE3FE10D9CF1300A486AB /* InfoPlist.strings */; };
-		432BE41A10D9D32000A486AB /* SDL.framework in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 432BE34C10D9C21900A486AB /* SDL.framework */; };
+		432BE41A10D9D32000A486AB /* SDL.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 432BE34C10D9C21900A486AB /* SDL.framework */; };
 		43488CD110D61548001660EB /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = 971177E70F87A926000C8A96 /* config.h */; };
 		43488CFD10D61654001660EB /* pixman-access-accessors.c in Sources */ = {isa = PBXBuildFile; fileRef = 43488CD410D61653001660EB /* pixman-access-accessors.c */; };
 		43488CFE10D61654001660EB /* pixman-access.c in Sources */ = {isa = PBXBuildFile; fileRef = 43488CD510D61653001660EB /* pixman-access.c */; };
@@ -626,9 +626,9 @@
 		647D9C571039289A006D37CF /* challenge.c in Sources */ = {isa = PBXBuildFile; fileRef = 647D9C551039289A006D37CF /* challenge.c */; };
 		9711775E0F87A677000C8A96 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0246AA160BD3DFEE004D1C70 /* CoreFoundation.framework */; };
 		9742E5730DF9975E000A5D41 /* lexer_input.c in Sources */ = {isa = PBXBuildFile; fileRef = 9742E5710DF9975E000A5D41 /* lexer_input.c */; };
-		9742E5740DF9975E000A5D41 /* lexer_input.h in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 9742E5720DF9975E000A5D41 /* lexer_input.h */; };
+		9742E5740DF9975E000A5D41 /* lexer_input.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 9742E5720DF9975E000A5D41 /* lexer_input.h */; };
 		9742E5770DF9979C000A5D41 /* parsetest.c in Sources */ = {isa = PBXBuildFile; fileRef = 9742E5750DF9979C000A5D41 /* parsetest.c */; };
-		9742E5780DF9979C000A5D41 /* parsetest.h in Copy frameworks (36) */ = {isa = PBXBuildFile; fileRef = 9742E5760DF9979C000A5D41 /* parsetest.h */; };
+		9742E5780DF9979C000A5D41 /* parsetest.h in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 9742E5760DF9979C000A5D41 /* parsetest.h */; };
 		974964240F5ABBBB00A38899 /* hashtable.c in Sources */ = {isa = PBXBuildFile; fileRef = 974964220F5ABBBB00A38899 /* hashtable.c */; };
 		9749642C0F5ABBE100A38899 /* stdio_ext.c in Sources */ = {isa = PBXBuildFile; fileRef = 974964280F5ABBE100A38899 /* stdio_ext.c */; };
 		974964330F5ABC3F00A38899 /* eventsave.c in Sources */ = {isa = PBXBuildFile; fileRef = 9749642F0F5ABC3F00A38899 /* eventsave.c */; };
@@ -818,41 +818,41 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		02581C7D0BD5ACEE00957CBC /* Copy frameworks (36) */ = {
+		02581C7D0BD5ACEE00957CBC /* Copy frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				432BE41A10D9D32000A486AB /* SDL.framework in Copy frameworks (36) */,
-				023ECC500E9318D600D9E7C3 /* Theora.framework in Copy frameworks (36) */,
-				02548E0A0D159F4400B4B3B9 /* QuesoGLC.framework in Copy frameworks (36) */,
-				02548E070D159F4000B4B3B9 /* Popt.framework in Copy frameworks (36) */,
-				02581C810BD5AD1100957CBC /* Gettext.framework in Copy frameworks (36) */,
-				02581C820BD5AD1100957CBC /* Ogg.framework in Copy frameworks (36) */,
-				02581C830BD5AD1100957CBC /* PhysFS.framework in Copy frameworks (36) */,
-				02581C840BD5AD1100957CBC /* Png.framework in Copy frameworks (36) */,
-				02581C870BD5AD1100957CBC /* Vorbis.framework in Copy frameworks (36) */,
-				02581C880BD5AD1100957CBC /* Zlib.framework in Copy frameworks (36) */,
-				02CBED8D0C5B8BEB00316CE2 /* nettypes.h in Copy frameworks (36) */,
-				0223BBAF0CFE3C380056EF85 /* main.h in Copy frameworks (36) */,
-				0223BBB10CFE3C380056EF85 /* version.h in Copy frameworks (36) */,
-				0223BBC10CFE3CD60056EF85 /* tagfile.h in Copy frameworks (36) */,
-				02CDDD090D159D5900722688 /* autorevision.h in Copy frameworks (36) */,
-				02CDDD1D0D159E2F00722688 /* openal_error.h in Copy frameworks (36) */,
-				02AAD1430D9ED28C00248B0F /* file.h in Copy frameworks (36) */,
-				02AAD1450D9ED28C00248B0F /* i18n.h in Copy frameworks (36) */,
-				02AAD1460D9ED28C00248B0F /* physfs_ext.h in Copy frameworks (36) */,
-				02BBB20A0DA874F6002D438B /* exceptionhandler.h in Copy frameworks (36) */,
-				02DE76070DC3B84900D48F58 /* GLee.h in Copy frameworks (36) */,
-				9742E5740DF9975E000A5D41 /* lexer_input.h in Copy frameworks (36) */,
-				9742E5780DF9979C000A5D41 /* parsetest.h in Copy frameworks (36) */,
-				2234C2A00E2BE18200E7704C /* positiondef.h in Copy frameworks (36) */,
-				2244463E0E3EB7CB004D0F1F /* messagely.h in Copy frameworks (36) */,
-				22E244D80E65361800EC2B3E /* baseobject.h in Copy frameworks (36) */,
-				024480250C5E4BEE00E1A641 /* utf.h in Copy frameworks (36) */,
+				432BE41A10D9D32000A486AB /* SDL.framework in Copy frameworks */,
+				023ECC500E9318D600D9E7C3 /* Theora.framework in Copy frameworks */,
+				02548E0A0D159F4400B4B3B9 /* QuesoGLC.framework in Copy frameworks */,
+				02548E070D159F4000B4B3B9 /* Popt.framework in Copy frameworks */,
+				02581C810BD5AD1100957CBC /* Gettext.framework in Copy frameworks */,
+				02581C820BD5AD1100957CBC /* Ogg.framework in Copy frameworks */,
+				02581C830BD5AD1100957CBC /* PhysFS.framework in Copy frameworks */,
+				02581C840BD5AD1100957CBC /* Png.framework in Copy frameworks */,
+				02581C870BD5AD1100957CBC /* Vorbis.framework in Copy frameworks */,
+				02581C880BD5AD1100957CBC /* Zlib.framework in Copy frameworks */,
+				02CBED8D0C5B8BEB00316CE2 /* nettypes.h in Copy frameworks */,
+				0223BBAF0CFE3C380056EF85 /* main.h in Copy frameworks */,
+				0223BBB10CFE3C380056EF85 /* version.h in Copy frameworks */,
+				0223BBC10CFE3CD60056EF85 /* tagfile.h in Copy frameworks */,
+				02CDDD090D159D5900722688 /* autorevision.h in Copy frameworks */,
+				02CDDD1D0D159E2F00722688 /* openal_error.h in Copy frameworks */,
+				02AAD1430D9ED28C00248B0F /* file.h in Copy frameworks */,
+				02AAD1450D9ED28C00248B0F /* i18n.h in Copy frameworks */,
+				02AAD1460D9ED28C00248B0F /* physfs_ext.h in Copy frameworks */,
+				02BBB20A0DA874F6002D438B /* exceptionhandler.h in Copy frameworks */,
+				02DE76070DC3B84900D48F58 /* GLee.h in Copy frameworks */,
+				9742E5740DF9975E000A5D41 /* lexer_input.h in Copy frameworks */,
+				9742E5780DF9979C000A5D41 /* parsetest.h in Copy frameworks */,
+				2234C2A00E2BE18200E7704C /* positiondef.h in Copy frameworks */,
+				2244463E0E3EB7CB004D0F1F /* messagely.h in Copy frameworks */,
+				22E244D80E65361800EC2B3E /* baseobject.h in Copy frameworks */,
+				024480250C5E4BEE00E1A641 /* utf.h in Copy frameworks */,
 			);
-			name = "Copy frameworks (36)";
+			name = "Copy frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -1558,6 +1558,8 @@
 		436E3E811257C9640064FFC5 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = English; path = English.lproj/COPYING.txt; sourceTree = "<group>"; };
 		4371B5F611D93EA0005A67AB /* new_push_process_row.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = new_push_process_row.c; path = external/libpng/new_push_process_row.c; sourceTree = "<group>"; };
 		4371B5F711D93EA0005A67AB /* pngpriv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pngpriv.h; path = external/libpng/pngpriv.h; sourceTree = "<group>"; };
+		43841AA7134973B800FA748D /* ca_ES */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca_ES; path = ca_ES.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		43841AA8134973B800FA748D /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		439A289D114F2E14004F1266 /* cs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		439A289E114F2E14004F1266 /* da */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		439A289F114F2E14004F1266 /* de */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -3247,7 +3249,7 @@
 				439A2897114F2DB6004F1266 /* i18n */,
 				02356D720BD3BB3400E9A019 /* Sources */,
 				02356D730BD3BB3400E9A019 /* Frameworks */,
-				02581C7D0BD5ACEE00957CBC /* Copy frameworks (36) */,
+				02581C7D0BD5ACEE00957CBC /* Copy frameworks */,
 				02581CC40BD5AD5300957CBC /* Copy game data */,
 			);
 			buildRules = (
@@ -3526,6 +3528,8 @@
 				ko,
 				sk,
 				tr,
+				ca_ES,
+				hu,
 			);
 			mainGroup = 02356D640BD3BB2600E9A019;
 			productRefGroup = 02356D760BD3BB3400E9A019 /* Products */;
@@ -4601,6 +4605,8 @@
 				43D6166E12048CDE004B9630 /* ko */,
 				4305A8B412A2C7FA00B7B555 /* sk */,
 				4305A8B512A2C7FA00B7B555 /* tr */,
+				43841AA7134973B800FA748D /* ca_ES */,
+				43841AA8134973B800FA748D /* hu */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
