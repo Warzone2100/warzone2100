@@ -2929,8 +2929,6 @@ static void intStopStructPosition(void)
 /* Display the widgets for the in game interface */
 void intDisplayWidgets(void)
 {
-	bool bPlayerHasHQ;
-
 	// God only knows...
 	if (ReticuleUp && !bInTutorial)
 	{
@@ -2944,14 +2942,6 @@ void intDisplayWidgets(void)
 		if (!bMultiPlayer)
 		{
 			screen_RestartBackDrop();
-
-			/*Add the radar to the design screen - only if player has HQ*/
-			bPlayerHasHQ = getHQExists(selectedPlayer);
-
-			if (bPlayerHasHQ)	//NOTE: This flickers badly, so turn it off for now.
-			{
-				// drawRadar();
-			}
 
 			// We need to add the console messages to the intelmap for the tutorial so that it can display messages
 			if ((intMode == INT_DESIGN)||(bInTutorial && intMode==INT_INTELMAP))
