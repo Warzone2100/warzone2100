@@ -844,7 +844,7 @@ static void saveMissionData(void)
 	//clear all the effects from the map
 	initEffectsSystem();
 
-	resetRadarRedraw();
+	resizeRadar();
 }
 
 /*
@@ -927,19 +927,12 @@ void restoreMissionData(void)
 	//reset the current structure lists
 	setCurrentStructQuantity(false);
 
-	//initPlayerPower();
-
 	initFactoryNumFlag();
 	resetFactoryNumFlag();
 
-	//terrain types? - hopefully not! otherwise we have to load in the terrain texture pages.
-
-	//reset the game time
-	//gameTimeReset(mission.startTime);
-
 	offWorldKeepLists = false;
 
-	resetRadarRedraw();
+	resizeRadar();
 
 	// reset the environ map back to the homebase settings
 	environReset();

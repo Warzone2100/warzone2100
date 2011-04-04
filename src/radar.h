@@ -35,7 +35,6 @@ void radarColour(UDWORD tileNumber, uint8_t r, uint8_t g, uint8_t b);	///< Set r
 #define DEFAULT_RADARZOOM	(16)        // 1.00x
 #define RADARZOOM_STEP		(16 * 1/4)  // 0.25x
 
-extern void resetRadarRedraw(void);
 extern BOOL InitRadar(void);				///< Initialize minimap subsystem.
 extern BOOL ShutdownRadar(void);			///< Shutdown minimap subsystem.
 extern BOOL resizeRadar(void);				///< Recalculate minimap size. For initialization code only.
