@@ -262,9 +262,8 @@ void setOverrideMods(char * modlist)
 void setOverrideMap(char* map, int maxPlayers)
 {
 	// Transform "Sk-Rush-T2" into "4c-Rush.wz" so it can be matched by the map loader
-	override_map[0] = (char*)malloc(strlen(map)+1+6);
-	override_map[0][0] = '0' + maxPlayers;
-	override_map[0][1] = '\0';
+	override_map[0] = (char*)malloc(strlen(map)+1+7);
+	snprintf(override_map[0], 3, "%d", maxPlayers);
 	strcat(override_map[0],"c-");
 	if (strncmp(map, "Sk-", 3) == 0)
 	{
