@@ -1519,6 +1519,8 @@
 		43D4861511EE6F6F00997E08 /* DejaVuSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "DejaVuSans-Bold.ttf"; path = "external/fonts/DejaVuSans-Bold.ttf"; sourceTree = "<group>"; };
 		43D4861611EE6F6F00997E08 /* DejaVuSans.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = DejaVuSans.ttf; path = external/fonts/DejaVuSans.ttf; sourceTree = "<group>"; };
 		43D615DC120488E3004B9630 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		43DF3EC81349750D00EC8C87 /* ca_ES */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca_ES; path = ca_ES.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		43DF3EC91349750D00EC8C87 /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		43E188F311440CC9000870EB /* tsearch.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = tsearch.c; path = "external/gettext/gettext-runtime/intl/tsearch.c"; sourceTree = "<group>"; };
 		43E188F411440CC9000870EB /* tsearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tsearch.h; path = "external/gettext/gettext-runtime/intl/tsearch.h"; sourceTree = "<group>"; };
 		43E1897311441009000870EB /* os2compat.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = os2compat.c; path = "external/gettext/gettext-runtime/intl/os2compat.c"; sourceTree = "<group>"; };
@@ -3383,6 +3385,8 @@
 				ko,
 				sk,
 				tr,
+				ca_ES,
+				hu,
 			);
 			mainGroup = 02356D640BD3BB2600E9A019;
 			productRefGroup = 02356D760BD3BB3400E9A019 /* Products */;
@@ -4327,6 +4331,8 @@
 				43D615DC120488E3004B9630 /* ko */,
 				43FA79911290771400DA51E7 /* sk */,
 				43FA79921290771400DA51E7 /* tr */,
+				43DF3EC81349750D00EC8C87 /* ca_ES */,
+				43DF3EC91349750D00EC8C87 /* hu */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
