@@ -1914,24 +1914,11 @@ struct SAVE_STRUCTLIST
 	STRUCTLIST_SAVE_V20;
 };
 
-
-#define RESEARCH_SAVE_V8 \
-	char				name[MAX_SAVE_NAME_SIZE_V19]; \
-	UBYTE				possible[MAX_PLAYERS]; \
-	UBYTE				researched[MAX_PLAYERS]; \
-	UDWORD				currentPoints[MAX_PLAYERS]
-
 #define RESEARCH_SAVE_V20 \
 	char				name[MAX_SAVE_NAME_SIZE]; \
 	UBYTE				possible[MAX_PLAYERS]; \
 	UBYTE				researched[MAX_PLAYERS]; \
 	UDWORD				currentPoints[MAX_PLAYERS]
-
-
-struct SAVE_RESEARCH_V8
-{
-	RESEARCH_SAVE_V8;
-};
 
 struct SAVE_RESEARCH_V20
 {
@@ -2110,7 +2097,6 @@ static bool loadSaveStructTypeListV(char *pFileData, UDWORD filesize, UDWORD num
 static bool writeStructTypeListFile(char *pFileName);
 
 static bool loadSaveResearch(char *pFileData, UDWORD filesize);
-static bool loadSaveResearchV8(char *pFileData, UDWORD filesize, UDWORD numRecords);
 static bool loadSaveResearchV(char *pFileData, UDWORD filesize, UDWORD numRecords);
 static bool writeResearchFile(char *pFileName);
 
@@ -8675,18 +8661,11 @@ bool loadSaveResearch(char *pFileData, UDWORD filesize)
 	pFileData += RESEARCH_HEADER_SIZE;
 
 	/* Check the file version */
-	if (psHeader->version < VERSION_8)
+	if (psHeader->version < VERSION_19)
 	{
 		debug( LOG_ERROR, "ResearchLoad: unsupported save format version %d", psHeader->version );
 
 		return false;
-	}
-	else if (psHeader->version <= VERSION_19)
-	{
-		if (!loadSaveResearchV8(pFileData, filesize, psHeader->quantity))
-		{
-			return false;
-		}
 	}
 	else if (psHeader->version <= CURRENT_VERSION_NUM)
 	{
@@ -8699,79 +8678,6 @@ bool loadSaveResearch(char *pFileData, UDWORD filesize)
 	{
 		debug( LOG_ERROR, "Unsupported research save format version %u", psHeader->version);
 		return false;
-	}
-
-	return true;
-}
-
-// -----------------------------------------------------------------------------------------
-bool loadSaveResearchV8(char *pFileData, UDWORD filesize, UDWORD numRecords)
-{
-	SAVE_RESEARCH_V8		*psSaveResearch;
-	UDWORD				i, statInc;
-	RESEARCH			*psStats;
-	bool				found;
-	UBYTE				playerInc;
-
-	if ((sizeof(SAVE_RESEARCH_V8) * numRecords + RESEARCH_HEADER_SIZE) >
-		filesize)
-	{
-		debug( LOG_ERROR, "loadSaveResearch: unexpected end of file" );
-
-		return false;
-	}
-
-	// Load the data
-	for (i = 0; i < numRecords; i++, pFileData += sizeof(SAVE_RESEARCH_V8))
-	{
-		psSaveResearch = (SAVE_RESEARCH_V8 *) pFileData;
-
-		/* SAVE_RESEARCH_V8 is RESEARCH_SAVE_V8 */
-		/* RESEARCH_SAVE_V8 */
-		for(playerInc = 0; playerInc < MAX_PLAYERS; playerInc++)
-			endian_udword(&psSaveResearch->currentPoints[playerInc]);
-
-		found = false;
-
-		for (statInc = 0; statInc < numResearch; statInc++)
-		{
-			psStats = asResearch + statInc;
-			//loop until find the same name
-
-			if (!strcmp(psStats->pName, psSaveResearch->name))
-
-			{
-				found = true;
-				break;
-			}
-		}
-		if (!found)
-		{
-			//ignore this record
-			continue;
-		}
-
-
-		for (playerInc = 0; playerInc < MAX_PLAYERS; playerInc++)
-		{
-			PLAYER_RESEARCH *psPlRes;
-
-			psPlRes=&asPlayerResList[playerInc][statInc];
-
-			// Copy the research status
-			psPlRes->ResearchStatus=	(UBYTE)(psSaveResearch->researched[playerInc] & RESBITS);
-
-			if (psSaveResearch->possible[playerInc]!=0)
-				MakeResearchPossible(psPlRes);
-
-			psPlRes->currentPoints = psSaveResearch->currentPoints[playerInc];
-
-			//for any research that has been completed - perform so that upgrade values are set up
-			if (psSaveResearch->researched[playerInc] == RESEARCHED)
-			{
-				researchResult(statInc, playerInc, false, NULL, false);
-			}
-		}
 	}
 
 	return true;
