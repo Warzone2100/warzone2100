@@ -1914,22 +1914,6 @@ struct SAVE_STRUCTLIST
 	STRUCTLIST_SAVE_V20;
 };
 
-#define RESEARCH_SAVE_V20 \
-	char				name[MAX_SAVE_NAME_SIZE]; \
-	UBYTE				possible[MAX_PLAYERS]; \
-	UBYTE				researched[MAX_PLAYERS]; \
-	UDWORD				currentPoints[MAX_PLAYERS]
-
-struct SAVE_RESEARCH_V20
-{
-	RESEARCH_SAVE_V20;
-};
-
-struct SAVE_RESEARCH
-{
-	RESEARCH_SAVE_V20;
-};
-
 struct SAVE_MESSAGE
 {
 	MESSAGE_TYPE	type;			//The type of message
@@ -2039,11 +2023,6 @@ static UDWORD			validityKey = 0;
 
 static UDWORD	savedGameTime;
 static UDWORD	savedObjId;
-
-//static UDWORD			HashedName;
-//static STRUCTURE *psStructList;
-//static FEATURE *psFeatureList;
-//static FLAG_POSITION **ppsCurrentFlagPosLists;
 static SDWORD	startX, startY;
 static UDWORD   width, height;
 static UDWORD	gameType;
@@ -2822,20 +2801,19 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	initTemplatePoints();
 
 	//if user save game then load up the research BEFORE any droids or structures are loaded
-	if ((gameType == GTYPE_SAVE_START) ||
-		(gameType == GTYPE_SAVE_MIDMISSION))
+	if (gameType == GTYPE_SAVE_START || gameType == GTYPE_SAVE_MIDMISSION)
 	{
 		//load in the research list file
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "resstate.ini");
 		if (!loadSaveResearch(aFileName))
 		{
-			debug( LOG_NEVER, "loadgame: Fail33\n" );
+			debug(LOG_ERROR, "Failed to load research data from %s", aFileName);
 			goto error;
 		}
 	}
 
-	if(IsScenario==true)
+	if (IsScenario)
 	{
 		//load in the droid initialisation file
 		aFileName[fileExten] = '\0';
@@ -2858,14 +2836,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	{
 		//load in the droids
 		aFileName[fileExten] = '\0';
-		if (saveGameVersion < VERSION_27)//V27
-		{
-			strcat(aFileName, "droid.bjo");
-		}
-		else
-		{
-			strcat(aFileName, "unit.bjo");
-		}
+		strcat(aFileName, "unit.bjo");
 		/* Load in the chosen file data */
 		pFileData = fileLoadBuffer;
 		if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
@@ -2890,7 +2861,6 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			for (psCurr = apsDroidLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
 			{
 				if (psCurr->droidType != DROID_PERSON
-				// && psCurr->droidType != DROID_CYBORG
 				 && !cyborgDroid(psCurr)
 				 && psCurr->droidType != DROID_TRANSPORTER
 				 && psCurr->pos.x != INVALID_XY)
@@ -2899,32 +2869,21 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 				}
 			}
 		}
-
-		if (saveGameVersion >= 12)
+		if (!saveGameOnMission)
 		{
-			if (!saveGameOnMission)
+			//load in the mission droids
+			aFileName[fileExten] = '\0';
+			strcat(aFileName, "munit.bjo");
+			/* Load in the chosen file data */
+			pFileData = fileLoadBuffer;
+			if (loadFileToBufferNoError(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 			{
-				//load in the mission droids
-				aFileName[fileExten] = '\0';
-				if (saveGameVersion < VERSION_27)//V27
+				//load the data into mission.apsDroidLists
+				if (!loadSaveDroid(pFileData, fileSize, mission.apsDroidLists))
 				{
-					strcat(aFileName, "mdroid.bjo");
+					debug( LOG_NEVER, "loadgame: Fail12\n" );
+					goto error;
 				}
-				else
-				{
-					strcat(aFileName, "munit.bjo");
-				}
-				/* Load in the chosen file data */
-				pFileData = fileLoadBuffer;
-				if (loadFileToBufferNoError(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize)) {
-					//load the data into mission.apsDroidLists
-					if (!loadSaveDroid(pFileData, fileSize, mission.apsDroidLists))
-					{
-						debug( LOG_NEVER, "loadgame: Fail12\n" );
-						goto error;
-					}
-				}
-
 			}
 		}
 	}
