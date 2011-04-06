@@ -2096,8 +2096,7 @@ static bool loadSaveStructTypeListV7(char *pFileData, UDWORD filesize, UDWORD nu
 static bool loadSaveStructTypeListV(char *pFileData, UDWORD filesize, UDWORD numRecords);
 static bool writeStructTypeListFile(char *pFileName);
 
-static bool loadSaveResearch(char *pFileData, UDWORD filesize);
-static bool loadSaveResearchV(char *pFileData, UDWORD filesize, UDWORD numRecords);
+static bool loadSaveResearch(const char *pFileName);
 static bool writeResearchFile(char *pFileName);
 
 static bool loadSaveMessage(char *pFileData, UDWORD filesize, SWORD levelType);
@@ -2828,23 +2827,11 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	{
 		//load in the research list file
 		aFileName[fileExten] = '\0';
-		strcat(aFileName, "resstate.bjo");
-		// Load in the chosen file data
-		pFileData = fileLoadBuffer;
-		if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
+		strcat(aFileName, "resstate.ini");
+		if (!loadSaveResearch(aFileName))
 		{
-			debug( LOG_NEVER, "loadgame: Fail32\n" );
+			debug( LOG_NEVER, "loadgame: Fail33\n" );
 			goto error;
-		}
-
-		//load the research status data
-		if (pFileData)
-		{
-			if (!loadSaveResearch(pFileData, fileSize))
-			{
-				debug( LOG_NEVER, "loadgame: Fail33\n" );
-				goto error;
-			}
 		}
 	}
 
@@ -3466,7 +3453,7 @@ bool saveGame(char *aFileName, GAME_TYPE saveType)
 
 	//create the research filename
 	CurrentFileName[fileExtension] = '\0';
-	strcat(CurrentFileName, "resstate.bjo");
+	strcat(CurrentFileName, "resstate.ini");
 	/*Write the data to the file*/
 	if (!writeResearchFile(CurrentFileName))
 	{
@@ -8637,87 +8624,28 @@ static bool writeStructTypeListFile(char *pFileName)
 
 // -----------------------------------------------------------------------------------------
 // load up saved research file
-bool loadSaveResearch(char *pFileData, UDWORD filesize)
+bool loadSaveResearch(const char *pFileName)
 {
-	RESEARCH_SAVEHEADER		*psHeader;
-
-	/* Check the file type */
-	psHeader = (RESEARCH_SAVEHEADER*)pFileData;
-	if (psHeader->aFileType[0] != 'r' || psHeader->aFileType[1] != 'e' ||
-		psHeader->aFileType[2] != 's' || psHeader->aFileType[3] != 'h')
+	WzConfig ini(pFileName);
+	if (ini.status() != QSettings::NoError)
 	{
-		debug( LOG_ERROR, "loadSaveResearch: Incorrect file type" );
-
+		debug(LOG_ERROR, "Could not open %s", pFileName);
 		return false;
 	}
-
-	/* RESEARCH_SAVEHEADER */
-	endian_udword(&psHeader->version);
-	endian_udword(&psHeader->quantity);
-
-	debug(LOG_SAVE, "file version is %u ", psHeader->version);
-
-	//increment to the start of the data
-	pFileData += RESEARCH_HEADER_SIZE;
-
-	/* Check the file version */
-	if (psHeader->version < VERSION_19)
+	const int players = game.maxPlayers;
+	QStringList list = ini.childGroups();
+	for (int i = 0; i < list.size(); ++i)
 	{
-		debug( LOG_ERROR, "ResearchLoad: unsupported save format version %d", psHeader->version );
-
-		return false;
-	}
-	else if (psHeader->version <= CURRENT_VERSION_NUM)
-	{
-		if (!loadSaveResearchV(pFileData, filesize, psHeader->quantity))
-		{
-			return false;
-		}
-	}
-	else
-	{
-		debug( LOG_ERROR, "Unsupported research save format version %u", psHeader->version);
-		return false;
-	}
-
-	return true;
-}
-
-// -----------------------------------------------------------------------------------------
-bool loadSaveResearchV(char *pFileData, UDWORD filesize, UDWORD numRecords)
-{
-	SAVE_RESEARCH		*psSaveResearch;
-	UDWORD				i, statInc;
-	RESEARCH			*psStats;
-	bool				found;
-	UBYTE				playerInc;
-
-	if ((sizeof(SAVE_RESEARCH) * numRecords + RESEARCH_HEADER_SIZE) >
-		filesize)
-	{
-		debug( LOG_ERROR, "loadSaveResearch: unexpected end of file" );
-
-		return false;
-	}
-
-	// Load the data
-	for (i = 0; i < numRecords; i++, pFileData += sizeof(SAVE_RESEARCH))
-	{
-		psSaveResearch = (SAVE_RESEARCH *) pFileData;
-
-		/* SAVE_RESEARCH is RESEARCH_SAVE_V20 */
-		/* RESEARCH_SAVE_V20 */
-		for(playerInc = 0; playerInc < MAX_PLAYERS; playerInc++)
-			endian_udword(&psSaveResearch->currentPoints[playerInc]);
-
-		found = false;
-
+		ini.beginGroup(list[i]);
+		bool found = false;
+		char name[MAX_SAVE_NAME_SIZE];
+		sstrcpy(name, ini.value("name").toString().toUtf8().constData());
+		int statInc;
 		for (statInc = 0; statInc < numResearch; statInc++)
 		{
-			psStats = asResearch + statInc;
+			RESEARCH *psStats = asResearch + statInc;
 			//loop until find the same name
-
-			if (!strcmp(psStats->pName, psSaveResearch->name))
+			if (!strcmp(psStats->pName, name))
 
 			{
 				found = true;
@@ -8729,34 +8657,35 @@ bool loadSaveResearchV(char *pFileData, UDWORD filesize, UDWORD numRecords)
 			//ignore this record
 			continue;
 		}
-
-
-		for (playerInc = 0; playerInc < MAX_PLAYERS; playerInc++)
+		QStringList researchedList = ini.value("researched").toStringList();
+		QStringList possiblesList = ini.value("possible").toStringList();
+		QStringList pointsList = ini.value("currentPoints").toStringList();
+		ASSERT(researchedList.size() == players, "Bad researched list for %s", name);
+		ASSERT(possiblesList.size() == players, "Bad possible list for %s", name);
+		ASSERT(pointsList.size() == players, "Bad points list for %s", name);
+		for (int plr = 0; plr < players; plr++)
 		{
-
-
 			PLAYER_RESEARCH *psPlRes;
+			int researched = researchedList.at(plr).toInt();
+			int possible = possiblesList.at(plr).toInt();
+			int points = pointsList.at(plr).toInt();
 
-			psPlRes=&asPlayerResList[playerInc][statInc];
-
+			psPlRes = &asPlayerResList[plr][statInc];
 			// Copy the research status
-			psPlRes->ResearchStatus=	(UBYTE)(psSaveResearch->researched[playerInc] & RESBITS);
-
-			if (psSaveResearch->possible[playerInc]!=0)
-				MakeResearchPossible(psPlRes);
-
-
-
-			psPlRes->currentPoints = psSaveResearch->currentPoints[playerInc];
-
-			//for any research that has been completed - perform so that upgrade values are set up
-			if (psSaveResearch->researched[playerInc] == RESEARCHED)
+			psPlRes->ResearchStatus = (researched & RESBITS);
+			if (possible != 0)
 			{
-				researchResult(statInc, playerInc, false, NULL, false);
+				MakeResearchPossible(psPlRes);
+			}
+			psPlRes->currentPoints = points;
+			//for any research that has been completed - perform so that upgrade values are set up
+			if (researched == RESEARCHED)
+			{
+				researchResult(statInc, plr, false, NULL, false);
 			}
 		}
+		ini.endGroup();
 	}
-
 	return true;
 }
 
@@ -8764,65 +8693,37 @@ bool loadSaveResearchV(char *pFileData, UDWORD filesize, UDWORD numRecords)
 // Write out the current state of the Research per player
 static bool writeResearchFile(char *pFileName)
 {
-	RESEARCH_SAVEHEADER		*psHeader;
-	SAVE_RESEARCH			*psSaveResearch;
-	char *pFileData;
-	UDWORD					fileSize, player, i;
-	RESEARCH				*psStats;
-
-	// Calculate the file size
-	fileSize = RESEARCH_HEADER_SIZE + (sizeof(SAVE_RESEARCH) *
-		numResearch);
-
-	//allocate the buffer space
-	pFileData = (char*)malloc(fileSize);
-	if (!pFileData)
+	WzConfig ini(pFileName);
+	if (ini.status() != QSettings::NoError)
 	{
-		debug( LOG_FATAL, "writeResearchFile: Out of memory" );
-		abort();
+		debug(LOG_ERROR, "Could not open %s", pFileName);
 		return false;
 	}
-
-	// Put the file header on the file
-	psHeader = (RESEARCH_SAVEHEADER *)pFileData;
-	psHeader->aFileType[0] = 'r';
-	psHeader->aFileType[1] = 'e';
-	psHeader->aFileType[2] = 's';
-	psHeader->aFileType[3] = 'h';
-	psHeader->version = CURRENT_VERSION_NUM;
-	psHeader->quantity = numResearch;
-
-	endian_udword(&psHeader->version);
-	endian_udword(&psHeader->quantity);
-
-	psSaveResearch = (SAVE_RESEARCH *) (pFileData + RESEARCH_HEADER_SIZE);
-	//save each type of reesearch
-	psStats = asResearch;
-	for(i = 0; i < numResearch; i++, psStats++)
+	RESEARCH *psStats = asResearch;
+	for (int i = 0; i < numResearch; i++, psStats++)
 	{
-
-		strcpy(psSaveResearch->name, psStats->pName);
-
-		for (player = 0; player < MAX_PLAYERS; player++)
+		bool valid = false;
+		QStringList possibles, researched, points;
+		for (int player = 0; player < game.maxPlayers; player++)
 		{
-			psSaveResearch->possible[player] = IsResearchPossible(&asPlayerResList[player][i]);
-			psSaveResearch->researched[player] = (UBYTE)(asPlayerResList[player][i].ResearchStatus&RESBITS);
-			psSaveResearch->currentPoints[player] = asPlayerResList[player][i].currentPoints;
+			possibles.push_back(QString::number(IsResearchPossible(&asPlayerResList[player][i])));
+			researched.push_back(QString::number(asPlayerResList[player][i].ResearchStatus & RESBITS));
+			points.push_back(QString::number(asPlayerResList[player][i].currentPoints));
+			if (IsResearchPossible(&asPlayerResList[player][i]) || (asPlayerResList[player][i].ResearchStatus & RESBITS) || asPlayerResList[player][i].currentPoints)
+			{
+				valid = true;	// write this entry
+			}
 		}
-
-		for(player = 0; player < MAX_PLAYERS; player++)
-			endian_udword(&psSaveResearch->currentPoints[player]);
-
-		psSaveResearch = (SAVE_RESEARCH *)((char *)psSaveResearch +
-			sizeof(SAVE_RESEARCH));
+		if (valid)
+		{
+			ini.beginGroup("research_" + QString::number(i));
+			ini.setValue("name", psStats->pName);
+			ini.setValue("possible", possibles);
+			ini.setValue("researched", researched);
+			ini.setValue("currentPoints", points);
+			ini.endGroup();
+		}
 	}
-
-	if (!saveFile(pFileName, pFileData, fileSize))
-	{
-		return false;
-	}
-	free(pFileData);
-
 	return true;
 }
 
