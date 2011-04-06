@@ -35,10 +35,9 @@
 	* STILL NEED TO REMOVE SOME MAGIC NUMBERS INTO #DEFINES!!! *
 	************************************************************
 */
-#include "lib/framework/frame.h"
+#include "lib/framework/wzapp.h"
 #include "lib/framework/frameresource.h"
 #include "lib/framework/input.h"
-#include "lib/framework/tagfile.h"
 #include "lib/framework/math_ext.h"
 
 #include "lib/ivis_opengl/ivisdef.h" //ivis matrix code
@@ -2537,134 +2536,98 @@ void effectResetUpdates(void)
 }
 
 
-static const char FXData_tag_definition[] = "tagdefinitions/savegame/effects.def";
-static const char FXData_file_identifier[] = "FXData";
-
 /** This will save out the effects data */
-bool writeFXData(const char* fileName)
+bool writeFXData(const char *fileName)
 {
 	EFFECT *it;
+	int i = 0;
 
-	if (!tagOpenWrite(FXData_tag_definition, fileName))
+	WzConfig ini(fileName);
+	if (ini.status() != QSettings::NoError)
 	{
-		ASSERT(false, "writeFXData: error while opening file (%s)", fileName);
+		debug(LOG_ERROR, "Could not open %s", fileName);
 		return false;
 	}
-
-	tagWriteString(0x01, FXData_file_identifier);
-
-	// Enter effects group and dump all active EFFECTs
-	tagWriteEnter(0x02, activeList.num);
-
-	for (it = activeList.first; it != NULL; it = it->next)
+	for (it = activeList.first; it != NULL; it = it->next, i++)
 	{
-		tagWrite(0x01, it->control);
-		tagWrite(0x02, it->group);
-		tagWrite(0x03, it->type);
-		tagWrite(0x04, it->frameNumber);
-		tagWrite(0x05, it->size);
-		tagWrite(0x06, it->baseScale);
-		tagWrite(0x07, it->specific);
+		ini.beginGroup("effect_" + QString::number(i));
+		ini.setValue("control", it->control);
+		ini.setValue("group", it->group);
+		ini.setValue("type", it->type);
+		ini.setValue("frameNumber", it->frameNumber);
+		ini.setValue("size", it->size);
+		ini.setValue("baseScale", it->baseScale);
+		ini.setValue("specific", it->specific);
+		ini.setVector3f("position", it->position);
+		ini.setVector3f("velocity", it->velocity);
+		ini.setVector3i("rotation", it->rotation);
+		ini.setVector3i("spin", it->spin);
+		ini.setValue("birthTime", it->birthTime);
+		ini.setValue("lastFrame", it->lastFrame);
+		ini.setValue("frameDelay", it->frameDelay);
+		ini.setValue("lifeSpan", it->lifeSpan);
+		ini.setValue("radius", it->radius);
 
-		tagWritefv   (0x08, 3, &it->position.x);
-		tagWritefv   (0x09, 3, &it->velocity.x);
-		tagWrites32v (0x0A, 3, &it->rotation.x);
-		tagWrites32v (0x0B, 3, &it->spin.x);
+		const char *imd_name = resGetNamefromData("IMD", it->imd);
+		if (imd_name)
+		{
+			ini.setValue("imd_name", imd_name);
+		}
 
-		tagWrite(0x0C, it->birthTime);
-		tagWrite(0x0D, it->lastFrame);
-		tagWrite(0x0E, it->frameDelay);
-		tagWrite(0x0F, it->lifeSpan);
-		tagWrite(0x10, it->radius);
-
-		tagWriteString(0x11, resGetNamefromData("IMD", it->imd));
-
-		// Move on to reading the next effect group
-		tagWriteNext();
+		// Move on to reading the next effect
+		ini.endGroup();
 	}
-	// Leave the effects group again...
-	tagWriteLeave(0x02);
-
-	// Close the file
-	tagClose();
 
 	// Everything is just fine!
 	return true;
 }
 
 /** This will read in the effects data */
-bool readFXData(const char* fileName)
+bool readFXData(const char *fileName)
 {
-	unsigned int count, i;
-	char strbuffer[25];
-
-	if (!tagOpenRead(FXData_tag_definition, fileName))
-	{
-		debug(LOG_ERROR, "readFXData: error while opening file (%s)", fileName);
-		return false;
-	}
-
-	// Read & verify the format header identifier
-	tagReadString(0x01, sizeof(strbuffer), strbuffer);
-	if (strncmp(strbuffer, FXData_file_identifier, sizeof(strbuffer)) != 0)
-	{
-		debug(LOG_ERROR, "readFXData: Weird file type found (in file %s)? Has header string: %s", fileName, strbuffer);
-		return false;
-	}
-
 	// Clear out anything that's there already!
 	initEffectsSystem();
 
-	// Enter effects group and load all EFFECTs
-	count = tagReadEnter(0x02);
-	for(i = 0; i < count; ++i)
+	WzConfig ini(fileName);
+	if (ini.status() != QSettings::NoError)
 	{
-		char imd_name[PATH_MAX];
+		debug(LOG_ERROR, "Could not open %s", fileName);
+		return false;
+	}
+	QStringList list = ini.childGroups();
+	for (int i = 0; i < list.size(); ++i)
+	{
+		ini.beginGroup(list[i]);
 		EFFECT *curEffect = Effect_malloc();
 
-		/* Deal with out-of-memory conditions */
-		if (curEffect == NULL) {
-			debug(LOG_ERROR, "Out of memory");
-			return false;
-		}
-
-		curEffect->control      = tagRead(0x01);
-		curEffect->group        = (EFFECT_GROUP)tagRead(0x02);
-		curEffect->type         = (EFFECT_TYPE)tagRead(0x03);
-		curEffect->frameNumber  = tagRead(0x04);
-		curEffect->size         = tagRead(0x05);
-		curEffect->baseScale    = tagRead(0x06);
-		curEffect->specific     = tagRead(0x07);
-
-		tagReadfv   (0x08, 3, &curEffect->position.x);
-		tagReadfv   (0x09, 3, &curEffect->velocity.x);
-		tagReads32v (0x0A, 3, &curEffect->rotation.x);
-		tagReads32v (0x0B, 3, &curEffect->spin.x);
-
-		curEffect->birthTime    = tagRead(0x0C);
-		curEffect->lastFrame    = tagRead(0x0D);
-		curEffect->frameDelay   = tagRead(0x0E);
-		curEffect->lifeSpan     = tagRead(0x0F);
-		curEffect->radius       = tagRead(0x10);
-		tagReadString(0x11, sizeof(imd_name), imd_name);
-
-		if (imd_name[0] != '\0')
+		curEffect->control      = ini.value("control").toInt();
+		curEffect->group        = (EFFECT_GROUP)ini.value("group").toInt();
+		curEffect->type         = (EFFECT_TYPE)ini.value("type").toInt();
+		curEffect->frameNumber  = ini.value("control").toInt();
+		curEffect->size         = ini.value("control").toInt();
+		curEffect->baseScale    = ini.value("control").toInt();
+		curEffect->specific     = ini.value("control").toInt();
+		curEffect->position     = ini.vector3f("position");
+		curEffect->velocity     = ini.vector3f("velocity");
+		curEffect->rotation     = ini.vector3i("rotation");
+		curEffect->spin         = ini.vector3i("spin");
+		curEffect->birthTime    = ini.value("control").toInt();
+		curEffect->lastFrame    = ini.value("control").toInt();
+		curEffect->frameDelay   = ini.value("control").toInt();
+		curEffect->lifeSpan     = ini.value("control").toInt();
+		curEffect->radius       = ini.value("control").toInt();
+		if (ini.contains("imd_name"))
 		{
-			curEffect->imd = (iIMDShape*)resGetData("IMD", imd_name);
+			curEffect->imd = (iIMDShape*)resGetData("IMD", ini.value("imd_name").toString().toUtf8().constData());
 		}
 		else
 		{
 			curEffect->imd = NULL;
 		}
 
-		// Move on to reading the next effect group
-		tagReadNext();
+		// Move on to reading the next effect
+		ini.endGroup();
 	}
-	// Leave the effects group again...
-	tagReadLeave(0x02);
-
-	// Close the file
-	tagClose();
 
 	/* Hopefully everything's just fine by now */
 	return true;

@@ -65,7 +65,6 @@ noinst_HEADERS = \
 	string_ext.h \
 	strres.h \
 	strresly.h \
-	tagfile.h \
 	treap.h \
 	trig.h \
 	types.h \
@@ -100,7 +99,6 @@ libframework_a_SOURCES = \
 	SDL_framerate.cpp \
 	stdio_ext.cpp \
 	strres.cpp \
-	tagfile.cpp \
 	treap.cpp \
 	trig.cpp \
 	utf.cpp

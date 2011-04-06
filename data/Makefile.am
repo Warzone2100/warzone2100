@@ -26,7 +26,6 @@ BASELIST = \
 	shaders\
 	stats \
 	structs \
-	tagdefinitions \
 	texpages \
 	tileset \
 	wrf

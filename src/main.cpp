@@ -34,7 +34,6 @@
 #include "lib/framework/configfile.h"
 #include "lib/framework/input.h"
 #include "lib/framework/physfs_ext.h"
-#include "lib/framework/tagfile.h"
 #include "lib/framework/wzapp_c.h"
 #include "lib/exceptionhandler/exceptionhandler.h"
 #include "lib/exceptionhandler/dumpinfo.h"
@@ -1305,7 +1304,6 @@ int finalInitialization()
 	/* Runtime unit testing */
 	if (selfTest)
 	{
-		tagTest();
 		parseTest();
 		levTest();
 		mapTest();

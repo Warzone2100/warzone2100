@@ -8,7 +8,7 @@ const buggy = "BarbarianBuggy";
 const bloke = "BaBaPeople";
 const jeep = "BabaJeep";
 const firetruck	= "BabaFireTruck";
-const cannonbus = "BabaBusCan"
+const cannonbus = "BabaBusCan";
 const firebus = "BabaFireCan";
 
 // scav group

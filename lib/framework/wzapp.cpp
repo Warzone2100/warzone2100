@@ -1317,3 +1317,45 @@ static int WZkeyToQtKey(int code)
 
 	return 0;	// nothing found (should never happen)
 }
+
+void WzConfig::setVector3f(const QString &name, const Vector3f &v)
+{
+	QStringList l;
+	l.push_back(QString::number(v.x));
+	l.push_back(QString::number(v.y));
+	l.push_back(QString::number(v.z));
+	setValue(name, l);
+}
+
+Vector3f WzConfig::vector3f(const QString &name)
+{
+	Vector3f r;
+	ASSERT_OR_RETURN(r, contains(name), "Missing %s", name.toUtf8().constData());
+	QList<QVariant> v = value(name).toList();
+	ASSERT(v.size() == 3, "Bad list of %s", name.toUtf8().constData());
+	r.x = v[0].toDouble();
+	r.y = v[1].toDouble();
+	r.z = v[2].toDouble();
+	return r;
+}
+
+void WzConfig::setVector3i(const QString &name, const Vector3i &v)
+{
+	QStringList l;
+	l.push_back(QString::number(v.x));
+	l.push_back(QString::number(v.y));
+	l.push_back(QString::number(v.z));
+	setValue(name, l);
+}
+
+Vector3i WzConfig::vector3i(const QString &name)
+{
+	Vector3i r;
+	ASSERT_OR_RETURN(r, contains(name), "Missing %s", name.toUtf8().constData());
+	QList<QVariant> v = value(name).toList();
+	ASSERT(v.size() == 3, "Bad list of %s", name.toUtf8().constData());
+	r.x = v[0].toInt();
+	r.y = v[1].toInt();
+	r.z = v[2].toInt();
+	return r;
+}

@@ -17,7 +17,7 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#include "lib/framework/frame.h"
+#include "lib/framework/wzapp.h"
 
 /* Standard library headers */
 #include <physfs.h>
@@ -29,7 +29,6 @@
 #include "lib/framework/frameint.h"
 #include "lib/framework/physfs_ext.h"
 #include "lib/framework/strres.h"
-#include "lib/framework/tagfile.h"
 
 #include "lib/gamelib/gtime.h"
 #include "lib/ivis_opengl/ivisdef.h"
@@ -2131,8 +2130,8 @@ static bool loadSaveStructLimits(char *pFileData, UDWORD filesize);
 static bool loadSaveStructLimitsV(char *pFileData, UDWORD filesize, UDWORD numLimits);
 static bool writeStructLimitsFile(char *pFileName);
 
-static bool readFiresupportDesignators(char *pFileName);
-static bool writeFiresupportDesignators(char *pFileName);
+static bool readFiresupportDesignators(const char *pFileName);
+static bool writeFiresupportDesignators(const char *pFileName);
 
 static bool writeScriptState(char *pFileName);
 
@@ -2809,7 +2808,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		{
 			//load in the message list file
 			aFileName[fileExten] = '\0';
-			strcat(aFileName, "fxstate.tag");
+			strcat(aFileName, "fxstate.ini");
 
 			// load the fx data from the file
 			if (!readFXData(aFileName))
@@ -3126,7 +3125,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		{
 			//load in the message list file
 			aFileName[fileExten] = '\0';
-			strcat(aFileName, "score.tag");
+			strcat(aFileName, "score.ini");
 
 			// Load the fx data from the chosen file
 			if (!readScoreData(aFileName))
@@ -3175,7 +3174,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		{
 			//load in the command list file
 			aFileName[fileExten] = '\0';
-			strcat(aFileName, "firesupport.tag");
+			strcat(aFileName, "firesupport.ini");
 
 			if (!readFiresupportDesignators(aFileName))
 			{
@@ -3532,7 +3531,7 @@ bool saveGame(char *aFileName, GAME_TYPE saveType)
 
 	//create the message filename
 	CurrentFileName[fileExtension] = '\0';
-	strcat(CurrentFileName, "fxstate.tag");
+	strcat(CurrentFileName, "fxstate.ini");
 	/*Write the data to the file*/
 	if (!writeFXData(CurrentFileName))
 	{
@@ -3543,7 +3542,7 @@ bool saveGame(char *aFileName, GAME_TYPE saveType)
 	//added at V15 save
 	//create the message filename
 	CurrentFileName[fileExtension] = '\0';
-	strcat(CurrentFileName, "score.tag");
+	strcat(CurrentFileName, "score.ini");
 	/*Write the data to the file*/
 	if (!writeScoreData(CurrentFileName))
 	{
@@ -3563,7 +3562,7 @@ bool saveGame(char *aFileName, GAME_TYPE saveType)
 
 	//create the message filename
 	CurrentFileName[fileExtension] = '\0';
-	strcat(CurrentFileName, "firesupport.tag");
+	strcat(CurrentFileName, "firesupport.ini");
 	/*Write the data to the file*/
 	if (!writeFiresupportDesignators(CurrentFileName))
 	{
@@ -9912,82 +9911,50 @@ bool writeStructLimitsFile(char *pFileName)
 	return false;
 }
 
-static const char FireSupport_tag_definition[] = "tagdefinitions/savegame/firesupport.def";
-static const char FireSupport_file_identifier[] = "FIRESUPPORT";
-
 /*!
  * Load the current fire-support designated commanders (the one who has fire-support enabled)
  */
-bool readFiresupportDesignators(char *pFileName)
+bool readFiresupportDesignators(const char *pFileName)
 {
-	unsigned int numPlayers, player;
-	char formatIdentifier[12] = "";
-
-	if (!tagOpenRead(FireSupport_tag_definition, pFileName))
+	WzConfig ini(pFileName);
+	if (ini.status() != QSettings::NoError)
 	{
-		debug(LOG_ERROR, "readFiresupportDesignators: Failed to open savegame %s", pFileName);
+		debug(LOG_ERROR, "Could not open %s", pFileName);
 		return false;
 	}
-	debug(LOG_MAP, "Reading tagged savegame %s with definition %s:", pFileName, FireSupport_tag_definition);
-
-	tagReadString(0x01, 12, formatIdentifier);
-	if (strcmp(formatIdentifier, FireSupport_file_identifier) != 0)
+	QStringList list = ini.childGroups();
+	for (int i = 0; i < list.size(); ++i)
 	{
-		debug(LOG_ERROR, "readFiresupportDesignators: Incompatble %s, 'FIRESUPPORT' expected", pFileName);
-		return false;
-	}
-
-	numPlayers = tagReadEnter(0x02);
-	for (player = 0; player < numPlayers; player++)
-	{
-		uint32_t id = tagRead(0x01);
+		uint32_t id = ini.value("Player_" + QString::number(i) + "/id", NULL_ID).toInt();
 		if (id != NULL_ID)
 		{
 			cmdDroidSetDesignator((DROID*)getBaseObjFromId(id));
 		}
-		tagReadNext();
 	}
-	tagReadLeave(0x02);
-
-	tagClose();
-
 	return true;
 }
-
 
 /*!
  * Save the current fire-support designated commanders (the one who has fire-support enabled)
  */
-bool writeFiresupportDesignators(char *pFileName)
+bool writeFiresupportDesignators(const char *pFileName)
 {
-	unsigned int player;
+	int player;
 
-	if (!tagOpenWrite(FireSupport_tag_definition, pFileName))
+	WzConfig ini(pFileName);
+	if (ini.status() != QSettings::NoError)
 	{
-		debug(LOG_ERROR, "writeFiresupportDesignators: Failed to create savegame %s", pFileName);
+		debug(LOG_ERROR, "Could not open %s", pFileName);
 		return false;
 	}
-	debug(LOG_MAP, "Creating tagged savegame %s with definition %s:", pFileName, FireSupport_tag_definition);
-
-	tagWriteString(0x01, FireSupport_file_identifier);
-	tagWriteEnter(0x02, MAX_PLAYERS);
 	for (player = 0; player < MAX_PLAYERS; player++)
 	{
-		DROID * psDroid = cmdDroidGetDesignator(player);
+		DROID *psDroid = cmdDroidGetDesignator(player);
 		if (psDroid != NULL)
 		{
-			tagWrite(0x01, psDroid->id);
+			ini.setValue("Player_" + QString::number(player) + "/id", psDroid->id);
 		}
-		else
-		{
-			tagWrite(0x01, NULL_ID);
-		}
-		tagWriteNext();
 	}
-	tagWriteLeave(0x02);
-
-	tagClose();
-
 	return true;
 }
 

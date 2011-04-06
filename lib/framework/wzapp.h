@@ -42,6 +42,10 @@ class WzConfig : public QSettings
 {
 public:
 	WzConfig(const QString &name, QObject *parent = 0) : QSettings(QString("wz::") + name, QSettings::IniFormat, parent) {}
+	Vector3f vector3f(const QString &name);
+	void setVector3f(const QString &name, const Vector3f &v);
+	Vector3i vector3i(const QString &name);
+	void setVector3i(const QString &name, const Vector3i &v);
 };
 
 class WzMainWindow : public QGLWidget
