@@ -1,10 +1,9 @@
-#
 msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-04-03 21:46+0200\n"
-"PO-Revision-Date: 2011-03-28 19:41+0100\n"
+"POT-Creation-Date: 2011-04-07 23:00+0200\n"
+"PO-Revision-Date: 2011-04-07 15:53+0100\n"
 "Last-Translator: Mészáros Tamás <meszaros.tomi@hotmail.com>\n"
 "Language-Team: Magyar (Hungary) <meszaros.tomi@hotmail.com>\n"
 "Language: \n"
@@ -210,7 +209,7 @@ msgstr ""
 #: data/base/messages/resmessages12.rmsg:5
 #: data/mp/messages/resmessages12.rmsg:5
 msgid "Armored Mortar battery pit"
-msgstr "Armoured Mortar battery pit"
+msgstr "Páncélozott Mozsár üteg vető"
 
 #: data/base/messages/resmessages12.rmsg:6
 #: data/base/messages/resmessages12.rmsg:19
@@ -425,7 +424,7 @@ msgstr "Pánzélozott bunker Nehéz Gépfegyverrel"
 #: data/mp/messages/strings/resstrings.txt:331
 #: data/mp/messages/strings/resstrings.txt:337
 msgid "Automatically targets enemies within sensor range"
-msgstr ""
+msgstr "Automatikusan az érzékelőtartományon belül célozza meg az ellenséget"
 
 #: data/base/messages/resmessages12.rmsg:33
 #: data/base/messages/resmessages12.rmsg:46
@@ -494,12 +493,12 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:338
 #: data/mp/messages/strings/resstrings.txt:354
 msgid "Defensive Strength: High"
-msgstr ""
+msgstr "Védekező Erő: Magas"
 
 #: data/base/messages/resmessages12.rmsg:44
 #: data/mp/messages/resmessages12.rmsg:44
 msgid "Armored hardpoint with Lancer AT missile"
-msgstr "Armoured hardpoint with Lancer AT missile"
+msgstr "Páncélozott bunker Lancer AT rakétával"
 
 #: data/base/messages/resmessages12.rmsg:56
 #: data/base/messages/resmessages23.rmsg:43
@@ -537,7 +536,7 @@ msgstr ""
 #: data/mp/messages/resmessages12.rmsg:69
 #: data/mp/messages/resmessages1.rmsg:4
 msgid "New Systems Turret Available for Design"
-msgstr ""
+msgstr "Új rendszerlövegtorony, ami rendelkezésre áll tervhez"
 
 #: data/base/messages/resmessages12.rmsg:70
 #: data/mp/messages/resmessages12.rmsg:70
@@ -592,7 +591,7 @@ msgstr ""
 #: data/mp/messages/resmessages23.rmsg:59
 #: data/mp/messages/resmessages3.rmsg:527
 msgid "All CB sensors upgraded automatically"
-msgstr ""
+msgstr "Minden CB érzékelő automatikusan frissítve"
 
 #: data/base/messages/resmessages12.rmsg:95
 #: data/base/messages/resmessages12.rmsg:212
@@ -711,12 +710,13 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:770
 #: data/mp/messages/strings/resstrings.txt:796
 msgid "New Weapon Turret Available"
-msgstr ""
+msgstr "Új Fegyver Lövegtorony rendelkezésre áll"
 
+# Amerikai szleng : malac
 #: data/base/messages/resmessages12.rmsg:122
 #: data/mp/messages/resmessages12.rmsg:122
 msgid ".50-calibre heavy machinegun"
-msgstr ""
+msgstr "50-es kaliberű nehéz gépfegyver"
 
 #: data/base/messages/resmessages12.rmsg:123
 #: data/base/messages/resmessages1.rmsg:617
@@ -1078,7 +1078,7 @@ msgstr ""
 #: data/mp/messages/resmessagesall.rmsg:173
 #: data/mp/messages/strings/resstrings.txt:1010
 msgid "Rocket Upgrade"
-msgstr ""
+msgstr "Rakéta Fejlesztés"
 
 #: data/base/messages/resmessages12.rmsg:200
 #: data/mp/messages/resmessages12.rmsg:200
@@ -1118,7 +1118,7 @@ msgstr ""
 #: data/base/messages/resmessages12.rmsg:226
 #: data/mp/messages/resmessages12.rmsg:226
 msgid "Armor-Piercing Fin-Stabilized Discarding Sabot"
-msgstr "Armour-Piercing Fin-Stabilised Discarding Sabot"
+msgstr ""
 
 #: data/base/messages/resmessages12.rmsg:227
 #: data/base/messages/resmessages1.rmsg:578
@@ -1264,7 +1264,7 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:33
 #: data/mp/messages/strings/resstrings.txt:37
 msgid "Increases Kinetic Armor and Body Points"
-msgstr "Increases Kinetic Armour and Body Points"
+msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:33
 #: data/base/messages/resmessages23.rmsg:7
@@ -1325,7 +1325,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:53
 #: data/mp/messages/strings/resstrings.txt:85
 msgid "New Cyborg Available"
-msgstr ""
+msgstr "Új Cyborg Elérhető"
 
 #: data/base/messages/resmessages1.rmsg:44
 #: data/mp/messages/resmessages1.rmsg:44
@@ -1444,41 +1444,41 @@ msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:122
 msgid "Armored guard tower with Mini-Pod Rocket"
-msgstr "Armoured guard tower with Mini-Pod Rocket"
+msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:135
 #: data/mp/messages/resmessages1.rmsg:135
 msgid "Armored bunker with Machinegun"
-msgstr "Armoured bunker with Machinegun"
+msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:148
 msgid "Armored bunker with Lancer AT rocket"
-msgstr "Armoured bunker with Lancer AT rocket"
+msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:161
 #: data/mp/messages/resmessages1.rmsg:161
 msgid "Armored bunker with Flamer"
-msgstr "Armoured bunker with Flamer"
+msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:174
 #: data/mp/messages/resmessages1.rmsg:174
 msgid "Armored bunker with Light Cannon"
-msgstr "Armoured bunker with Light Cannon"
+msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:187
 #: data/mp/messages/resmessages1.rmsg:187
 msgid "Armored hardpoint with Light Cannon"
-msgstr "Armoured hardpoint with Light Cannon"
+msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:200
 #: data/mp/messages/resmessages1.rmsg:200
 msgid "Armored hardpoint with Medium Cannon"
-msgstr "Armoured hardpoint with Medium Cannon"
+msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:213
 #: data/mp/messages/resmessages1.rmsg:213
 msgid "Armored hardpoint with Heavy Cannon"
-msgstr "Armoured hardpoint with Heavy Cannon"
+msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:226
 #: data/base/messages/strings/resstrings.txt:324
@@ -1796,7 +1796,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:125
 #: data/mp/messages/strings/resstrings.txt:429
 msgid "Increases Armor and Body Points"
-msgstr "Increases Armour and Body Points"
+msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:371
 #: data/base/messages/resmessages2.rmsg:384
@@ -1839,7 +1839,7 @@ msgstr ""
 #: data/base/messages/resmessages1.rmsg:395
 #: data/mp/messages/resmessages1.rmsg:396
 msgid "Inferior armor and body points to Viper"
-msgstr "Inferior armour and body points to Viper"
+msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:396
 #: data/base/messages/resmessages3.rmsg:630
@@ -1861,7 +1861,7 @@ msgstr ""
 #: data/base/messages/resmessages1.rmsg:408
 #: data/mp/messages/resmessages1.rmsg:409
 msgid "Medium body increases armor and body points"
-msgstr "Medium body increases armour and body points"
+msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:409
 #: data/mp/messages/resmessages1.rmsg:410
@@ -1881,7 +1881,7 @@ msgstr ""
 #: data/base/messages/resmessages1.rmsg:421
 #: data/mp/messages/resmessages1.rmsg:422
 msgid "Inferior armor and body points to Cobra"
-msgstr "Inferior armour and body points to Cobra"
+msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:422
 #: data/base/messages/resmessages3.rmsg:643
@@ -1903,7 +1903,7 @@ msgstr ""
 #: data/base/messages/resmessages1.rmsg:434
 #: data/mp/messages/resmessages1.rmsg:435
 msgid "Heavy body increases armor and body points"
-msgstr "Heavy body increases armour and body points"
+msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:435
 #: data/mp/messages/resmessages1.rmsg:436
@@ -1923,7 +1923,7 @@ msgstr ""
 #: data/base/messages/resmessages1.rmsg:447
 #: data/mp/messages/resmessages1.rmsg:448
 msgid "Less armor and body points than Python"
-msgstr "Less armour and body points than Python"
+msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:448
 #: data/base/messages/resmessages3.rmsg:656
@@ -2016,7 +2016,7 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:573
 #: data/mp/messages/strings/resstrings.txt:608
 msgid "Increases kinetic armor and body points"
-msgstr "Increases kinetic armour and body points"
+msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:485
 #: data/base/messages/resmessages1.rmsg:498
@@ -2032,7 +2032,7 @@ msgstr ""
 #: data/base/messages/resmessages1.rmsg:486
 #: data/mp/messages/resmessages1.rmsg:487
 msgid "Armored Half-tracks"
-msgstr "Armoured Half-tracks"
+msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:487
 #: data/mp/messages/resmessages1.rmsg:488
@@ -2100,7 +2100,7 @@ msgstr ""
 #: data/base/messages/resmessages1.rmsg:512
 #: data/mp/messages/resmessages1.rmsg:513
 msgid "Armored Tracks"
-msgstr "Armoured Tracks"
+msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:513
 #: data/mp/messages/resmessages1.rmsg:514
@@ -2127,7 +2127,7 @@ msgstr ""
 #: data/base/messages/resmessages1.rmsg:564
 #: data/mp/messages/resmessages1.rmsg:565
 msgid "Heavy Cannon firing 120 mm rounds"
-msgstr "Heavy Cannon firing 120mm rounds"
+msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:577
 #: data/mp/messages/resmessages1.rmsg:578
@@ -2195,7 +2195,7 @@ msgstr ""
 #: data/base/messages/resmessages1.rmsg:655
 #: data/mp/messages/resmessages1.rmsg:656
 msgid "Armor-Piercing Discard Sabot Bullets"
-msgstr "Armour-Piercing Discard Sabot Bullets"
+msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:668
 #: data/mp/messages/resmessages1.rmsg:669
@@ -2239,7 +2239,7 @@ msgstr ""
 #: data/base/messages/resmessages1.rmsg:707
 #: data/mp/messages/resmessages1.rmsg:708
 msgid "Fin-stabilization improves flight trajectory"
-msgstr "Fin-stabilisation improves flight trajectory"
+msgstr ""
 
 #: data/base/messages/resmessages1.rmsg:708
 msgid "Increases Mini-Rocket accuracy"
@@ -2330,7 +2330,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:647
 #: data/mp/messages/strings/resstrings.txt:657
 msgid "New armored construction"
-msgstr "New armoured construction"
+msgstr ""
 
 #: data/base/messages/resmessages23.rmsg:6
 #: data/base/messages/resmessages2.rmsg:539
@@ -2366,7 +2366,7 @@ msgstr ""
 #: data/base/messages/resmessages23.rmsg:18
 #: data/mp/messages/resmessages23.rmsg:18
 msgid "Armored hardpoint with Hyper-Velocity Cannon"
-msgstr "Armoured hardpoint with Hyper-Velocity Cannon"
+msgstr ""
 
 #: data/base/messages/resmessages23.rmsg:31
 #: data/base/messages/resmessages3.rmsg:434
@@ -2703,7 +2703,7 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:4
 #: data/mp/messages/strings/resstrings.txt:45
 msgid "Cyborg Thermal Armor Improved"
-msgstr "Cyborg Thermal Armour Improved"
+msgstr ""
 
 #: data/base/messages/resmessages2.rmsg:5
 #: data/base/messages/resmessages3.rmsg:5
@@ -2712,14 +2712,14 @@ msgstr "Cyborg Thermal Armour Improved"
 #: data/mp/messages/resmessages3.rmsg:5
 #: data/mp/messages/strings/resstrings.txt:46
 msgid "Heat resistant armored layers"
-msgstr "Heat resistant armoured layers"
+msgstr ""
 
 #: data/base/messages/resmessages2.rmsg:6
 #: data/base/messages/resmessages3.rmsg:6
 #: data/base/messages/strings/resstrings.txt:43
 #: data/mp/messages/strings/resstrings.txt:47
 msgid "Thermal Armor increased"
-msgstr "Thermal Armour increased"
+msgstr ""
 
 #: data/base/messages/resmessages2.rmsg:18
 #: data/base/messages/resmessages2.rmsg:512
@@ -2821,28 +2821,28 @@ msgstr ""
 #: data/mp/messages/resmessages2.rmsg:135
 #: data/mp/messages/strings/resstrings.txt:176
 msgid "Armored Bombard battery pit"
-msgstr "Armoured Bombard battery pit"
+msgstr ""
 
 #: data/base/messages/resmessages2.rmsg:148
 #: data/base/messages/strings/resstrings.txt:168
 #: data/mp/messages/resmessages2.rmsg:148
 #: data/mp/messages/strings/resstrings.txt:190
 msgid "Armored howitzer emplacement"
-msgstr "Armoured howitzer emplacement"
+msgstr ""
 
 #: data/base/messages/resmessages2.rmsg:161
 #: data/base/messages/strings/resstrings.txt:174
 #: data/mp/messages/resmessages2.rmsg:161
 #: data/mp/messages/strings/resstrings.txt:196
 msgid "Armored Ground Shaker howitzer emplacement"
-msgstr "Armoured Ground Shaker howitzer emplacement"
+msgstr ""
 
 #: data/base/messages/resmessages2.rmsg:174
 #: data/base/messages/strings/resstrings.txt:160
 #: data/mp/messages/resmessages2.rmsg:174
 #: data/mp/messages/strings/resstrings.txt:182
 msgid "Armored Pepperpot mortar battery pit"
-msgstr "Armoured Pepperpot mortar battery pit"
+msgstr ""
 
 #: data/base/messages/resmessages2.rmsg:187
 #: data/base/messages/resmessages2.rmsg:200
@@ -2853,14 +2853,14 @@ msgstr "Armoured Pepperpot mortar battery pit"
 #: data/mp/messages/strings/resstrings.txt:204
 #: data/mp/messages/strings/resstrings.txt:210
 msgid "Armored Hellstorm howitzer emplacement"
-msgstr "Armoured Hellstorm howitzer emplacement"
+msgstr ""
 
 #: data/base/messages/resmessages2.rmsg:213
 #: data/base/messages/strings/resstrings.txt:192
 #: data/mp/messages/resmessages2.rmsg:213
 #: data/mp/messages/strings/resstrings.txt:216
 msgid "Armored strongpoint with Tank Killer rocket"
-msgstr "Armoured strongpoint with Tank Killer rocket"
+msgstr ""
 
 #: data/base/messages/resmessages2.rmsg:214
 #: data/base/messages/resmessages2.rmsg:227
@@ -2900,21 +2900,21 @@ msgstr ""
 #: data/mp/messages/resmessages2.rmsg:226
 #: data/mp/messages/strings/resstrings.txt:222
 msgid "Armored strongpoint with Hyper-Velocity Cannon"
-msgstr "Armoured strongpoint with Hyper-Velocity Cannon"
+msgstr ""
 
 #: data/base/messages/resmessages2.rmsg:239
 #: data/base/messages/strings/resstrings.txt:204
 #: data/mp/messages/resmessages2.rmsg:239
 #: data/mp/messages/strings/resstrings.txt:228
 msgid "Armored strongpoint with Inferno Flamer"
-msgstr "Armoured strongpoint with Inferno Flamer"
+msgstr ""
 
 #: data/base/messages/resmessages2.rmsg:252
 #: data/base/messages/strings/resstrings.txt:218
 #: data/mp/messages/resmessages2.rmsg:252
 #: data/mp/messages/strings/resstrings.txt:246
 msgid "Armored strongpoint with Assault Cannon"
-msgstr "Armoured strongpoint with Assault Cannon"
+msgstr ""
 
 #: data/base/messages/resmessages2.rmsg:265
 #: data/base/messages/strings/resstrings.txt:224
@@ -2928,28 +2928,28 @@ msgstr ""
 #: data/mp/messages/resmessages2.rmsg:278
 #: data/mp/messages/strings/resstrings.txt:316
 msgid "Armored hardpoint with Assault Gun"
-msgstr "Armoured hardpoint with Assault Gun"
+msgstr ""
 
 #: data/base/messages/resmessages2.rmsg:291
 #: data/base/messages/strings/resstrings.txt:294
 #: data/mp/messages/resmessages2.rmsg:291
 #: data/mp/messages/strings/resstrings.txt:322
 msgid "Armored hardpoint with Assault Cannon"
-msgstr "Armoured hardpoint with Assault Cannon"
+msgstr ""
 
 #: data/base/messages/resmessages2.rmsg:304
 #: data/base/messages/strings/resstrings.txt:302
 #: data/mp/messages/resmessages2.rmsg:304
 #: data/mp/messages/strings/resstrings.txt:330
 msgid "Armored hardpoint with Inferno flamer"
-msgstr "Armoured hardpoint with Inferno flamer"
+msgstr ""
 
 #: data/base/messages/resmessages2.rmsg:317
 #: data/base/messages/strings/resstrings.txt:308
 #: data/mp/messages/resmessages2.rmsg:317
 #: data/mp/messages/strings/resstrings.txt:336
 msgid "Armored hardpoint with Tank Killer AT missile"
-msgstr "Armoured hardpoint with Tank Killer AT missile"
+msgstr ""
 
 #: data/base/messages/resmessages2.rmsg:330
 #: data/base/messages/strings/resstrings.txt:334
@@ -3117,7 +3117,7 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:629
 #: data/mp/messages/strings/resstrings.txt:563
 msgid "Superior armor and body points to Viper"
-msgstr "Superior armour and body points to Viper"
+msgstr ""
 
 #: data/base/messages/resmessages2.rmsg:474
 #: data/base/messages/strings/resstrings.txt:529
@@ -3147,7 +3147,7 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:642
 #: data/mp/messages/strings/resstrings.txt:575
 msgid "Superior armor and body points to Cobra"
-msgstr "Superior armour and body points to Cobra"
+msgstr ""
 
 #: data/base/messages/resmessages2.rmsg:487
 #: data/base/messages/strings/resstrings.txt:541
@@ -3180,7 +3180,7 @@ msgstr ""
 #: data/mp/messages/resmessagesall.rmsg:851
 #: data/mp/messages/strings/resstrings.txt:616
 msgid "Vehicle Thermal Armor Improved"
-msgstr "Vehicle Thermal Armour Improved"
+msgstr ""
 
 #: data/base/messages/resmessages2.rmsg:525
 #: data/base/messages/resmessages3.rmsg:720
@@ -3190,14 +3190,14 @@ msgstr "Vehicle Thermal Armour Improved"
 #: data/mp/messages/resmessagesall.rmsg:852
 #: data/mp/messages/strings/resstrings.txt:617
 msgid "Heat-resistant armored layers"
-msgstr "Heat-resistant armoured layers"
+msgstr ""
 
 #: data/base/messages/resmessages2.rmsg:526
 #: data/base/messages/resmessages3.rmsg:721
 #: data/base/messages/strings/resstrings.txt:583
 #: data/mp/messages/strings/resstrings.txt:618
 msgid "Increases Thermal Armor"
-msgstr "Increases Thermal Armour"
+msgstr ""
 
 #: data/base/messages/resmessages2.rmsg:537
 #: data/base/messages/resmessages2.rmsg:550
@@ -3444,7 +3444,7 @@ msgstr ""
 #: data/mp/messages/resmessages2.rmsg:720
 #: data/mp/messages/strings/resstrings.txt:739
 msgid "Drops High Explosive Armor Piercing bombs"
-msgstr "Drops High Explosive Armour Piercing bombs"
+msgstr ""
 
 #: data/base/messages/resmessages2.rmsg:721
 #: data/base/messages/strings/resstrings.txt:705
@@ -3599,7 +3599,7 @@ msgstr ""
 #: data/mp/messages/resmessages2.rmsg:876
 #: data/mp/messages/strings/resstrings.txt:889
 msgid "Tungsten-tipped armor-piercing bullets"
-msgstr "Tungsten-tipped armour-piercing bullets"
+msgstr ""
 
 #: data/base/messages/resmessages2.rmsg:889
 #: data/base/messages/strings/resstrings.txt:858
@@ -3613,13 +3613,13 @@ msgstr ""
 #: data/mp/messages/resmessages2.rmsg:915
 #: data/mp/messages/strings/resstrings.txt:951
 msgid "High Explosive Armor-Piercing Shells"
-msgstr "High Explosive Armour-Piercing Shells"
+msgstr ""
 
 #: data/base/messages/resmessages2.rmsg:928
 #: data/base/messages/strings/resstrings.txt:944
 #: data/mp/messages/strings/resstrings.txt:989
 msgid "High Explosive Armor-Piercing warheads"
-msgstr "High Explosive Armour-Piercing warheads"
+msgstr ""
 
 #: data/base/messages/resmessages2.rmsg:941
 #: data/base/messages/strings/resstrings.txt:966
@@ -3631,7 +3631,7 @@ msgstr ""
 #: data/base/messages/resmessages3.rmsg:18
 #: data/mp/messages/resmessages3.rmsg:18
 msgid "NEXUS Intruder Program analyzed"
-msgstr "NEXUS Intruder Program analysed"
+msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:19
 #: data/mp/messages/resmessages3.rmsg:19
@@ -3785,51 +3785,51 @@ msgstr ""
 #: data/base/messages/resmessages3.rmsg:291
 #: data/mp/messages/resmessages3.rmsg:291
 msgid "Armored strongpoint with Flashlight laser"
-msgstr "Armoured strongpoint with Flashlight laser"
+msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:304
 msgid "Armored strongpoint with Pulse Laser"
-msgstr "Armoured strongpoint with Pulse Laser"
+msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:317
 #: data/mp/messages/resmessages3.rmsg:317
 msgid "Armored strongpoint with Rail Gun"
-msgstr "Armoured strongpoint with Rail Gun"
+msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:330
 #: data/mp/messages/resmessages3.rmsg:330
 msgid "Armored strongpoint with Gauss Cannon"
-msgstr "Armoured strongpoint with Gauss Cannon"
+msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:343
 #: data/mp/messages/resmessages3.rmsg:343
 msgid "Armored guard tower with Scourge Missile"
-msgstr "Armoured guard tower with Scourge Missile"
+msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:356
 #: data/mp/messages/resmessages3.rmsg:356
 msgid "Armored guard tower with Needle Gun"
-msgstr "Armoured guard tower with Needle Gun"
+msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:369
 #: data/mp/messages/resmessages3.rmsg:369
 msgid "Armored hardpoint with Scourge AT Missile"
-msgstr "Armoured hardpoint with Scourge AT Missile"
+msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:382
 #: data/mp/messages/resmessages3.rmsg:382
 msgid "Armored hardpoint with Flashlight laser"
-msgstr "Armoured hardpoint with Flashlight laser"
+msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:395
 #: data/mp/messages/resmessages3.rmsg:395
 msgid "Armored hardpoint with Rail Gun"
-msgstr "Armoured hardpoint with Rail Gun"
+msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:408
 #: data/mp/messages/resmessages3.rmsg:408
 msgid "Armored hardpoint with Gauss Cannon"
-msgstr "Armoured hardpoint with Gauss Cannon"
+msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:421
 #: data/mp/messages/resmessages3.rmsg:421
@@ -3839,7 +3839,7 @@ msgstr ""
 #: data/base/messages/resmessages3.rmsg:435
 #: data/mp/messages/resmessages3.rmsg:434
 msgid "Vapor Turbine boosts power output"
-msgstr "Vapour Turbine boosts power output"
+msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:447
 #: data/base/messages/strings/names.txt:838
@@ -3995,7 +3995,7 @@ msgstr ""
 #: data/mp/messages/resmessages3.rmsg:655
 #: data/mp/messages/resmessagesall.rmsg:148
 msgid "More armor and body points than Python"
-msgstr "More armour and body points than Python"
+msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:657
 #: data/mp/messages/resmessages3.rmsg:657
@@ -4014,7 +4014,7 @@ msgstr ""
 #: data/base/messages/resmessages3.rmsg:681
 #: data/mp/messages/resmessages3.rmsg:681
 msgid "Ionizing Turbine Engine"
-msgstr "Ionising Turbine Engine"
+msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:785
 #: data/base/messages/resmessages3.rmsg:798
@@ -4045,7 +4045,7 @@ msgstr ""
 #: data/base/messages/resmessages3.rmsg:824
 #: data/mp/messages/resmessages3.rmsg:824
 msgid "High Explosive Armor Piercing Flak"
-msgstr "High Explosive Armour Piercing Flak"
+msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:837
 #: data/mp/messages/resmessages3.rmsg:837
@@ -4074,7 +4074,7 @@ msgstr ""
 #: data/base/messages/resmessages3.rmsg:876
 #: data/mp/messages/resmessages3.rmsg:876
 msgid "High-Velocity Armor-Piercing Fin-Stabilised Discarding Sabot"
-msgstr "High-Velocity Armour-Piercing Fin-Stabilised Discarding Sabot"
+msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:889
 #: data/base/messages/resmessages3.rmsg:928
@@ -4093,7 +4093,7 @@ msgstr ""
 #: data/base/messages/resmessages3.rmsg:915
 #: data/mp/messages/resmessages3.rmsg:915
 msgid "High Explosive Armor Piercing Shells"
-msgstr "High Explosive Armour Piercing Shells"
+msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:940
 #: data/base/messages/resmessages3.rmsg:953
@@ -4149,9 +4149,8 @@ msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:980
 #: data/mp/messages/resmessages3.rmsg:980
-#, fuzzy
 msgid "Improvement in laser emission density"
-msgstr "Improvement in laser optics reduces light dispersal"
+msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:981
 msgid "Increases Laser damage"
@@ -4160,7 +4159,7 @@ msgstr ""
 #: data/base/messages/resmessages3.rmsg:993
 #: data/mp/messages/resmessages3.rmsg:993
 msgid "Improved Energizer reduces laser recharge time"
-msgstr "Improved Energiser reduces laser recharge time"
+msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:994
 msgid "Increases Laser ROF"
@@ -4333,7 +4332,7 @@ msgstr ""
 #: data/base/messages/resmessages3.rmsg:1214
 #: data/mp/messages/resmessages3.rmsg:1214
 msgid "Rail gun firing armor-piercing darts"
-msgstr "Rail gun firing armour-piercing darts"
+msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:1227
 #: data/mp/messages/resmessages3.rmsg:1227
@@ -4370,7 +4369,7 @@ msgstr ""
 #: data/base/messages/resmessages3.rmsg:1253
 #: data/mp/messages/resmessages3.rmsg:1253
 msgid "Improved armor-piercing dart"
-msgstr "Improved armour-piercing dart"
+msgstr ""
 
 #: data/base/messages/resmessages3.rmsg:1254
 msgid "Increases Rail Gun damage"
@@ -4625,7 +4624,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:23
 msgid "TRANSPORT MISSION: Investigate Research Center"
-msgstr "TRANSPORT MISSION: Investigate Research Centre"
+msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:24
 msgid "Investigate the area and recover any artifacts present."
@@ -4666,7 +4665,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:36
 msgid "The New Paradigm are analyzing synaptic link technology at this location."
-msgstr "The New Paradigm are analysing synaptic link technology at this location."
+msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:37
 msgid "Assemble an attack team and recover the synaptic link technology."
@@ -5068,7 +5067,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam2strings.txt:64
 msgid "You are to intercept the convoy and recover its cargo."
-msgstr "You are to intercept the convoy and recover it's cargo."
+msgstr ""
 
 #: data/base/messages/strings/cam2strings.txt:65
 msgid "Enemy VTOLs are likely to be flying close escort."
@@ -5253,7 +5252,7 @@ msgstr ""
 #: data/base/messages/strings/cam2strings.txt:153
 #: data/base/messages/strings/cam3strings.txt:30
 msgid "Good luck, Commander."
-msgstr ""
+msgstr "Sok szerencsét, Parancsnok."
 
 #: data/base/messages/strings/cam3strings.txt:4
 #: data/base/sequenceaudio/cam3/c003.txa:4
@@ -5451,9 +5450,8 @@ msgid "You have an opportunity to destroy NEXUS before they get there."
 msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:91
-#, fuzzy
 msgid "Take an attack force and ambush NEXUS task force at ....... the  ......."
-msgstr "Take an attack force and ambush NEXUS task force at ....... the ......."
+msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:94
 msgid "TRANSPORT MISSION: Away Team"
@@ -5489,11 +5487,11 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:110
 msgid "Entering new zone."
-msgstr ""
+msgstr "Belépés új zónába."
 
 #: data/base/messages/strings/cam3strings.txt:113
 msgid "Incoming Transmission..."
-msgstr ""
+msgstr "Bejövő Üzenet..."
 
 #: data/base/messages/strings/cam3strings.txt:116
 msgid "Elements of Team Gamma have contacted us."
@@ -5646,7 +5644,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:185
 msgid "We are certain that NEXUS's core systems are located here."
-msgstr "We are certain that NEXUS' core systems are located here."
+msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:188
 msgid "Establish an LZ."
@@ -5691,7 +5689,7 @@ msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:15
 msgid "Pre-Collapse Research Center"
-msgstr "Pre-Collapse Research Centre"
+msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:17
 msgid "En-route To Mission Site"
@@ -5757,127 +5755,107 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:143
 #: data/mp/messages/strings/names.txt:143
-#, fuzzy
 msgid "Light Cannon Viper Wheels"
-msgstr "Light Cannon Bunker"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:144
 #: data/mp/messages/strings/names.txt:145
-#, fuzzy
 msgid "Flamer Viper Wheels"
-msgstr "Machinegun Viper Wheels"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:145
 #: data/mp/messages/strings/names.txt:146
-#, fuzzy
 msgid "Sensor Turret Viper Wheels"
-msgstr "Sensor Turret"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:146
 #: data/mp/messages/strings/names.txt:147
-#, fuzzy
 msgid "Light Cannon Viper Tracks"
-msgstr "Light Cannon Bunker"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:148
 #: data/base/messages/strings/names.txt:1421
 #: data/mp/messages/strings/names.txt:149
 #: data/mp/messages/strings/names.txt:1435
-#, fuzzy
 msgid "Heavy Machinegun Cobra Half-tracks"
-msgstr "Lancer Cobra Half-tracks"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:149
 #: data/mp/messages/strings/names.txt:150
-#, fuzzy
 msgid "Mortar Cobra Half-tracks"
-msgstr "Lancer Cobra Half-tracks"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:150
 #: data/mp/messages/strings/names.txt:151
-#, fuzzy
 msgid "Light Cannon Cobra Tracks"
-msgstr "HPV Cannon Python Tracks"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:170
 #: data/mp/messages/strings/names.txt:173
-#, fuzzy
 msgid "Medium Cannon Viper Tracks"
-msgstr "Cobra Medium Cannon Tracks"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:171
 #: data/mp/messages/strings/names.txt:174
-#, fuzzy
 msgid "Repair Turret Viper Wheels"
-msgstr "Machinegun Viper Wheels"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:172
-#, fuzzy
 msgid "Repair Turret Viper Half-tracks"
-msgstr "Select all Half-tracks"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:174
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1833
 #: data/mp/messages/strings/names.txt:177
 #: data/mp/messages/strings/names.txt:1839
-#, fuzzy
 msgid "Twin Machinegun Viper Wheels"
-msgstr "Machinegun Viper Wheels"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:175
 #: data/mp/messages/strings/names.txt:178
-#, fuzzy
 msgid "Twin Machinegun Viper Half-tracks"
-msgstr "Machinegun Viper Wheels"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:176
 #: data/mp/messages/strings/names.txt:179
-#, fuzzy
 msgid "Heavy Machinegun Viper Half-tracks"
-msgstr "Scorpion Heavy Machinegun Tracks"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:177
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1840
 #: data/mp/messages/strings/names.txt:180
 #: data/mp/messages/strings/names.txt:1846
-#, fuzzy
 msgid "Heavy Machinegun Viper Tracks"
-msgstr "Scorpion Heavy Machinegun Tracks"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:178
 #: data/mp/messages/strings/names.txt:181
-#, fuzzy
 msgid "Lancer Viper Wheels"
-msgstr "Machinegun Viper Wheels"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:179
 #: data/mp/messages/strings/names.txt:182
-#, fuzzy
 msgid "Mini-Rocket Viper Wheels"
-msgstr "Machinegun Viper Wheels"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:180
-#, fuzzy
 msgid "Mini-Rocket Artillery Viper Wheels"
-msgstr "Mini-Rocket Artillery"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:181
-#, fuzzy
 msgid "Bunker Buster Viper Wheels"
-msgstr "Bunker Buster"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:183
 #: data/mp/messages/strings/names.txt:186
 #: data/mp/messages/strings/names.txt:1360
-#, fuzzy
 msgid "Medium Cannon Cobra Tracks"
-msgstr "Cobra Medium Cannon Tracks"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:184
 #: data/mp/messages/strings/names.txt:187
-#, fuzzy
 msgid "Heavy Cannon Cobra Tracks"
-msgstr "Mantis Heavy Cannon Tracks"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:185
 #: data/base/messages/strings/names.txt:1344
@@ -5887,28 +5865,24 @@ msgid "Cobra Truck"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:186
-#, fuzzy
 msgid "Sensor Cobra Half-tracks"
-msgstr "Lancer Cobra Half-tracks"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:187
 #: data/mp/messages/strings/names.txt:190
 #: data/mp/messages/strings/names.txt:1359
-#, fuzzy
 msgid "Flamer Cobra Tracks"
-msgstr "Repair Cobra Tracks"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:188
 #: data/mp/messages/strings/names.txt:191
-#, fuzzy
 msgid "Bombard Cobra Half-tracks"
-msgstr "Lancer Cobra Half-tracks"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:189
 #: data/mp/messages/strings/names.txt:192
-#, fuzzy
 msgid "Command Turret Cobra Half-tracks"
-msgstr "Lancer Cobra Half-tracks"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:190
 #: data/base/messages/strings/names.txt:1420
@@ -5918,23 +5892,20 @@ msgid "Lancer Cobra Half-tracks"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:191
-#, fuzzy
 msgid "Mini-Rocket Artillery Cobra Half-tracks"
-msgstr "Mini-Rocket Artillery"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:193
 #: data/mp/messages/strings/names.txt:196
-#, fuzzy
 msgid "Light Cannon Python Tracks"
-msgstr "HPV Cannon Python Tracks"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:194
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1923
 #: data/mp/messages/strings/names.txt:197
 #: data/mp/messages/strings/names.txt:1929
-#, fuzzy
 msgid "Medium Cannon Python Tracks"
-msgstr "HPV Cannon Python Tracks"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:195
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1848
@@ -5942,17 +5913,15 @@ msgstr "HPV Cannon Python Tracks"
 #: data/mp/messages/strings/names.txt:1357
 #: data/mp/messages/strings/names.txt:1511
 #: data/mp/messages/strings/names.txt:1854
-#, fuzzy
 msgid "Heavy Cannon Python Tracks"
-msgstr "HPV Cannon Python Tracks"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:196
 #: data/base/messages/strings/names.txt:1422
 #: data/mp/messages/strings/names.txt:199
 #: data/mp/messages/strings/names.txt:1436
-#, fuzzy
 msgid "Command Turret Python Tracks"
-msgstr "Cobra Command Turret Tracks"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:199
 #: data/mp/messages/strings/names.txt:202
@@ -5996,9 +5965,8 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:207
 #: data/mp/messages/strings/names.txt:210
-#, fuzzy
 msgid "Cannon Fire Truck"
-msgstr "Fire Truck"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:208
 #: data/mp/messages/strings/names.txt:211
@@ -6250,9 +6218,8 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:346
 #: data/mp/messages/strings/names.txt:347
-#, fuzzy
 msgid "Repair Turret"
-msgstr "Heavy Repair Turret"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:367
 #: data/base/messages/strings/names.txt:423
@@ -6325,7 +6292,7 @@ msgstr ""
 #: data/base/messages/strings/names.txt:384
 #: data/mp/messages/strings/names.txt:382
 msgid "Command Center"
-msgstr "Command Centre"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:385
 #: data/mp/messages/strings/names.txt:383
@@ -6373,12 +6340,12 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:391
 #: data/mp/messages/strings/names.txt:1462
 msgid "Repair Center"
-msgstr "Repair Centre"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:394
 #: data/mp/messages/strings/names.txt:392
 msgid "Command Relay Center"
-msgstr "Command Relay Centre"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:395
 #: data/mp/messages/strings/names.txt:393
@@ -6555,9 +6522,8 @@ msgstr ""
 #: data/base/messages/strings/names.txt:440
 #: data/mp/messages/strings/names.txt:439
 #: data/mp/messages/strings/names.txt:765
-#, fuzzy
 msgid "Heavy Machinegun Tower"
-msgstr "Heavy Machinegun Guard Tower"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:441
 #: data/base/messages/strings/names.txt:757
@@ -6569,16 +6535,14 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:441
 #: data/mp/messages/strings/names.txt:746
 #: data/mp/messages/strings/names.txt:767
-#, fuzzy
 msgid "Lancer Tower"
-msgstr "Lancer Guard Tower"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:443
 #: data/mp/messages/strings/names.txt:442
 #: data/mp/messages/strings/names.txt:768
-#, fuzzy
 msgid "Mini-Rocket Tower"
-msgstr "Mini-Rocket Battery"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:446
 #: data/base/messages/strings/names.txt:496
@@ -6909,9 +6873,8 @@ msgstr ""
 #: data/base/messages/strings/names.txt:1183
 #: data/mp/messages/strings/names.txt:525
 #: data/mp/messages/strings/names.txt:1197
-#, fuzzy
 msgid "Mini-Rocket Pod"
-msgstr "Mini-Rocket Upgrade"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:527
 #: data/base/messages/strings/names.txt:1184
@@ -6932,9 +6895,8 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:530
 #: data/mp/messages/strings/names.txt:529
-#, fuzzy
 msgid "VTOL Mini-Rocket"
-msgstr "HE Mini-Rockets"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:531
 #: data/mp/messages/strings/names.txt:530
@@ -7166,32 +7128,32 @@ msgstr ""
 #: data/base/messages/strings/names.txt:655
 #: data/mp/messages/strings/names.txt:655
 msgid "Cyborg Thermal Armor"
-msgstr "Cyborg Thermal Armour"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:656
 #: data/mp/messages/strings/names.txt:656
 msgid "Cyborg Thermal Armor Mk2"
-msgstr "Cyborg Thermal Armour Mk2"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:657
 #: data/mp/messages/strings/names.txt:657
 msgid "Cyborg Thermal Armor Mk3"
-msgstr "Cyborg Thermal Armour Mk3"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:658
 #: data/mp/messages/strings/names.txt:658
 msgid "Cyborg High Intensity Thermal Armor"
-msgstr "Cyborg High Intensity Thermal Armour"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:659
 #: data/mp/messages/strings/names.txt:659
 msgid "Cyborg High Intensity Thermal Armor Mk2"
-msgstr "Cyborg High Intensity Thermal Armour Mk2"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:660
 #: data/mp/messages/strings/names.txt:660
 msgid "Cyborg High Intensity Thermal Armor Mk3"
-msgstr "Cyborg High Intensity Thermal Armour Mk3"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:662
 #: data/mp/messages/strings/names.txt:662
@@ -7240,52 +7202,43 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:673
 #: data/mp/messages/strings/names.txt:678
-#, fuzzy
 msgid "Bunker Blaster Cyborg"
-msgstr "Bunker Romboló"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:674
 #: data/mp/messages/strings/names.txt:679
-#, fuzzy
 msgid "Heavy Gunner Cyborg"
-msgstr "Heavy Gunner"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:675
 #: data/mp/messages/strings/names.txt:680
-#, fuzzy
 msgid "Flamer Cyborg"
-msgstr "Flamer"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:676
 #: data/mp/messages/strings/names.txt:681
-#, fuzzy
 msgid "Machinegunner Cyborg"
-msgstr "Machinegunner"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:677
-#, fuzzy
 msgid "Lancer Cyborg"
-msgstr "Lancer"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:678
-#, fuzzy
 msgid "Assault Gunner Cyborg"
-msgstr "Assault Gunner"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:679
-#, fuzzy
 msgid "Needle Gunner Cyborg"
-msgstr "Needle Gunner"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:680
-#, fuzzy
 msgid "Scourge Cyborg"
-msgstr "Super Scourge Cyborg"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:681
-#, fuzzy
 msgid "Flashlight Gunner Cyborg"
-msgstr "Flashlight Gunner"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:683
 #: data/mp/messages/strings/names.txt:688
@@ -7379,9 +7332,8 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:709
 #: data/mp/messages/strings/names.txt:714
-#, fuzzy
 msgid "Plascrete Mk3"
-msgstr "Plascrete Mk2"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:717
 #: data/base/messages/strings/names.txt:1373
@@ -7467,9 +7419,8 @@ msgid "Lancer Guard Tower"
 msgstr ""
 
 #: data/base/messages/strings/names.txt:759
-#, fuzzy
 msgid "Mini-Rocket Guard Tower"
-msgstr "Lancer Guard Tower"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:772
 #: data/base/messages/strings/names.txt:1382
@@ -7602,7 +7553,7 @@ msgstr ""
 #: data/base/messages/strings/names.txt:818
 #: data/mp/messages/strings/names.txt:827
 msgid "Vapor Turbine Generator"
-msgstr "Vapour Turbine Generator"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:820
 #: data/base/messages/strings/names.txt:1449
@@ -7925,32 +7876,32 @@ msgstr ""
 #: data/base/messages/strings/names.txt:922
 #: data/mp/messages/strings/names.txt:933
 msgid "Thermal Armor"
-msgstr "Thermal Armour"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:923
 #: data/mp/messages/strings/names.txt:934
 msgid "Thermal Armor Mk2"
-msgstr "Thermal Armour Mk2"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:924
 #: data/mp/messages/strings/names.txt:935
 msgid "Thermal Armor Mk3"
-msgstr "Thermal Armour Mk3"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:925
 #: data/mp/messages/strings/names.txt:936
 msgid "High Intensity Thermal Armor"
-msgstr "High Intensity Thermal Armour"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:926
 #: data/mp/messages/strings/names.txt:937
 msgid "High Intensity Thermal Armor Mk2"
-msgstr "High Intensity Thermal Armour Mk2"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:927
 #: data/mp/messages/strings/names.txt:938
 msgid "High Intensity Thermal Armor Mk3"
-msgstr "High Intensity Thermal Armour Mk3"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:929
 #: data/mp/messages/strings/names.txt:940
@@ -8356,17 +8307,17 @@ msgstr ""
 #: data/base/messages/strings/names.txt:1045
 #: data/mp/messages/strings/names.txt:1056
 msgid "Thermopole Energizer"
-msgstr "Thermopole Energiser"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:1046
 #: data/mp/messages/strings/names.txt:1057
 msgid "Thermopole Energizer Mk2"
-msgstr "Thermopole Energiser Mk2"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:1047
 #: data/mp/messages/strings/names.txt:1058
 msgid "Thermopole Energizer Mk3"
-msgstr "Thermopole Energiser Mk3"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:1049
 #: data/mp/messages/strings/names.txt:1060
@@ -8727,11 +8678,11 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:1153
 msgid "Stabilized Mini-Rockets"
-msgstr "Stabilised Mini-Rockets"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:1154
 msgid "Stabilized Mini-Rockets Mk2"
-msgstr "Stabilised Mini-Rockets Mk2"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:1155
 msgid "HE Mini-Rockets"
@@ -8861,19 +8812,18 @@ msgstr ""
 
 #: data/base/messages/strings/names.txt:1187
 #: data/mp/messages/strings/names.txt:1201
-#, fuzzy
 msgid "Machinegun Artifact"
-msgstr "Gépfegyver Fejlesztés"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:1190
 #: data/mp/messages/strings/names.txt:1204
 msgid "New Paradigm Command Center"
-msgstr "New Paradigm Command Centre"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:1191
 #: data/mp/messages/strings/names.txt:1205
 msgid "Collective Command Center"
-msgstr "Collective Command Centre"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:1201
 #: data/mp/messages/strings/names.txt:1215
@@ -8948,7 +8898,7 @@ msgstr ""
 #: data/base/messages/strings/names.txt:1262
 #: data/mp/messages/strings/names.txt:1276
 msgid "Bridge"
-msgstr ""
+msgstr "Híd"
 
 #: data/base/messages/strings/names.txt:1265
 #: data/mp/messages/strings/names.txt:1279
@@ -8968,7 +8918,7 @@ msgstr ""
 #: data/base/messages/strings/names.txt:1275
 #: data/mp/messages/strings/names.txt:1289
 msgid "Oil Drum"
-msgstr ""
+msgstr "Olajtartály"
 
 #: data/base/messages/strings/names.txt:1293
 #: data/mp/messages/strings/names.txt:1307
@@ -9083,9 +9033,8 @@ msgstr ""
 #: data/base/messages/strings/names.txt:1423
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1881
 #: data/mp/messages/strings/names.txt:1887
-#, fuzzy
 msgid "Repair Turret Cobra Tracks"
-msgstr "Repair Cobra Tracks"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:1436
 #: data/mp/messages/strings/names.txt:1450
@@ -9162,27 +9111,27 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:234
 #: data/mp/messages/strings/resstrings.txt:262
 msgid "Armored guard tower with Heavy Machinegun"
-msgstr "Armoured guard tower with Heavy Machinegun"
+msgstr ""
 
 #: data/base/messages/strings/resstrings.txt:240
 #: data/mp/messages/strings/resstrings.txt:268
 msgid "Armored guard tower with Flamer"
-msgstr "Armoured guard tower with Flamer"
+msgstr ""
 
 #: data/base/messages/strings/resstrings.txt:246
 #: data/mp/messages/strings/resstrings.txt:274
 msgid "Armored guard tower with Lancer AT Rocket"
-msgstr "Armoured guard tower with Lancer AT Rocket"
+msgstr ""
 
 #: data/base/messages/strings/resstrings.txt:260
 #: data/mp/messages/strings/resstrings.txt:288
 msgid "Armored bunker with Heavy Machinegun"
-msgstr "Armoured bunker with Heavy Machinegun"
+msgstr ""
 
 #: data/base/messages/strings/resstrings.txt:280
 #: data/mp/messages/strings/resstrings.txt:308
 msgid "Armored hardpoint with Flamer"
-msgstr "Armoured hardpoint with Flamer"
+msgstr ""
 
 #: data/base/messages/strings/resstrings.txt:356
 #: data/mp/messages/strings/resstrings.txt:384
@@ -9252,7 +9201,7 @@ msgstr ""
 #: data/base/script/text/cam1-7.slo:506
 #: data/base/script/text/genexp.slo:997
 msgid "Return to LZ"
-msgstr ""
+msgstr "Vissza az LZ-be"
 
 #: data/base/script/text/cam1-7.slo:913
 #: data/base/script/text/cam2cx.slo:270
@@ -9387,7 +9336,7 @@ msgstr ""
 
 #: data/base/script/text/tutorial3.slo:832
 msgid "To finalize your design, left click the CLOSE icon"
-msgstr "To finalise your design, left click the CLOSE icon"
+msgstr ""
 
 #: data/base/script/text/tutorial3.slo:859
 msgid "A factory is now required to manufacture your new vehicle"
@@ -9435,17 +9384,15 @@ msgstr ""
 
 #: data/base/script/text/tutorial3.slo:1052
 msgid "Congratulations commander - you are ready for your first mission"
-msgstr ""
+msgstr "Gratulálok parancsnok - kész vagy az első küldetéssel"
 
 #: data/base/sequenceaudio/cam1/c001end.txt:1
-#, fuzzy
 msgid "Incoming Transmission"
-msgstr "Incoming transmission"
+msgstr ""
 
 #: data/base/sequenceaudio/cam1/c001end.txt:3
-#, fuzzy
 msgid "Transmission from Beta Base"
-msgstr "Incoming transmission from away team."
+msgstr ""
 
 #: data/base/sequenceaudio/cam1/c001end.txt:4
 msgid "Mayday! Mayday!"
@@ -9468,9 +9415,8 @@ msgid "Dawn, July 4th, 2100"
 msgstr "2100 július 4, Dawn"
 
 #: data/base/sequenceaudio/cam1/c001.txa:5
-#, fuzzy
 msgid "Project HQ"
-msgstr "Project Goals"
+msgstr ""
 
 #: data/base/sequenceaudio/cam1/c001.txa:6
 msgid "A New Era"
@@ -9490,7 +9436,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/c001.txt:1
 msgid "Transport destinations follow:"
-msgstr ""
+msgstr "Szállítási célok a következők:"
 
 #: data/base/sequenceaudio/cam1/c001.txt:2
 msgid "Alpha - Western Sector...."
@@ -9498,7 +9444,7 @@ msgstr "Alfa - Nyugati Szektor..."
 
 #: data/base/sequenceaudio/cam1/c001.txt:4
 msgid "Alpha you are cleared for take-off."
-msgstr ""
+msgstr "Alfa a felszállásnál minden rendben."
 
 #: data/base/sequenceaudio/cam1/c001.txt:5
 msgid "Good luck and good hunting."
@@ -9506,34 +9452,33 @@ msgstr "Sok szerencsét és jó vadászatot"
 
 #: data/base/sequenceaudio/cam1/c001.txt:7
 msgid "Approaching Landing Zone. Team Alpha Briefing commences."
-msgstr ""
+msgstr "Leszálló Zóna közeledik. Alfa Csapat Eligazítása kezdetét veszi."
 
 #: data/base/sequenceaudio/cam1/c001.txt:9
 msgid "Commander, you lead Team Alpha, one of three expeditionary teams sent out by the Project to recover artifacts from before the Collapse."
-msgstr ""
+msgstr "Parancsnok, vezeted az Alfa Csapatot, három expediciós csapat közül az egyik a Projekt által kiküldött hogy nyersanyagot  nyerjen vissza az összeomlás előtt."
 
 #: data/base/sequenceaudio/cam1/c001.txt:11
 msgid "Your destination lies in the western zone."
-msgstr ""
+msgstr "A célod a nyugati zónában fekszik."
 
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:4
-#, fuzzy
 msgid "Commander, we have recovered a command turret from the New Paradigm."
-msgstr "We have decoded the incoming message to the New Paradigm..."
-
-#: data/base/sequenceaudio/cam1/cam1ccom.txt:6
-msgid "This turret allows commanders to coordinate attacks between assigned units and to act as a delivery point for factories. Researching and using this technology has the highest priority."
 msgstr ""
 
+# átnézni jó e.
+#: data/base/sequenceaudio/cam1/cam1ccom.txt:6
+msgid "This turret allows commanders to coordinate attacks between assigned units and to act as a delivery point for factories. Researching and using this technology has the highest priority."
+msgstr "A lövegtorony megengedi a parancsnokoknak kordinálni a támadást miközben a kijelölt egységek között és cselekedni az átadó pontoknál a gyáraknál. Kutatni és használni ezt a technológiát a magasabb prioritásként."
+
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:8
-#, fuzzy
 msgid "Commander, we are receiving this transmission."
-msgstr "We are currently receiving this transmission."
+msgstr ""
 
 #: data/base/sequenceaudio/cam1/cam1cnp.txt:4
 #: data/base/sequenceaudio/cam1/sub13np2.txt:4
 msgid "Your attacks upon us will not go unpunished."
-msgstr ""
+msgstr "Támadásaid nem maradnak büntetlenül."
 
 #: data/base/sequenceaudio/cam1/cam1cnp.txt:5
 #: data/base/sequenceaudio/cam1/sub13np2.txt:5
@@ -9542,55 +9487,51 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:4
 msgid "All attack groups commence attack on enemy."
-msgstr ""
+msgstr "Minden támadó csoport segítségével kezdetét veszi a támadás az ellenség ellen."
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:5
-#, fuzzy
 msgid "They are in contravention of the New Paradigm."
-msgstr "We have decoded the incoming message to the New Paradigm..."
+msgstr ""
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:7
-#, fuzzy
 msgid "They must be eradicated."
-msgstr "They must be stopped."
+msgstr ""
 
 #: data/base/sequenceaudio/cam1/cam1dp2.txt:4
-#, fuzzy
 msgid "Secure the LZ and establish a forward base."
-msgstr "Secure an LZ, then establish a forward base."
+msgstr ""
 
 #: data/base/sequenceaudio/cam1/cam1dp2.txt:5
-#, fuzzy
 msgid "Then destroy the New Paradigm's base."
-msgstr "Then destroy the camp."
+msgstr ""
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:1
 msgid "Open your systems to me."
-msgstr ""
+msgstr "Nyisd ki a rendszeredet nekem"
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:2
 msgid "Let me meld with your machines and cyborgs."
-msgstr ""
+msgstr "Engedd meg nekem, hogy a gépeiddel és kiborgjaiddal egyesüljenek."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:4
 msgid "We will create the perfect nexus of man and machine."
-msgstr ""
+msgstr "Létre fogjuk hozni az ember és gép tökéletes összeköttetését."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:5
 msgid "Together we can create a new world."
-msgstr ""
+msgstr "Együtt mi tudunk készíteni egy új világot."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:7
 msgid "I can give you power beyond your wildest dreams."
-msgstr ""
+msgstr "Hatalmat tudok adni neked a legvadabb álmaidon túl."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:9
 msgid "Open your systems to me and you will be strong."
-msgstr ""
+msgstr "Kinyitod a rendszereidet és te erős leszel nekem."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:10
 msgid "I can raise you as gods upon the blasted earth."
-msgstr ""
+msgstr "Istenekként tudlak felemelni téged az átkozott földön."
 
 #: data/base/sequenceaudio/cam1/cam1out3.txt:4
 msgid "When we failed to respond it became threatening."
@@ -9598,24 +9539,24 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/cam1out4.txt:1
 msgid "Your interference in my plans for the New Paradigm will not go unpunished."
-msgstr ""
+msgstr "A beavatkozásod az ide vonatkozó terveimbe egy Új Paradigma és nem fog büntetlen maradnii."
 
 #: data/base/sequenceaudio/cam1/cam1out4.txt:2
 msgid "You are weak flesh-things. I am strong and have many parts."
-msgstr ""
+msgstr "Te gyenge préda vagy. Én erős vagyok és sok részem van."
 
 #: data/base/sequenceaudio/cam1/cam1out4.txt:4
 msgid "You may defeat me here, but I shall rise again."
-msgstr ""
+msgstr "Itt engem legyőzhetsz, de ismét felemelkedem."
 
 #: data/base/sequenceaudio/cam1/cam1out4.txt:5
 #: data/base/sequenceaudio/cam2/cam2_2n2.txt:1
 msgid "As I once cleansed the world with fire, I will destroy you and your puny Project!!"
-msgstr ""
+msgstr "Ahogy egyszer már tűzzel tisztítottam meg a világot, meg foglak semmisíteni,  és az apró Projektedet!!"
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:4
 msgid "Nexus then removed itself from the system, destroying its memory banks, and removing all traces of its external connections."
-msgstr ""
+msgstr "Az összeköttetés akkor eltávolította magát a rendszerből miközben megsemmisítette a memóriablokkjait, és eltávolította a külső kapcsolatai minden nyomát."
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:6
 msgid "We are not sure what Nexus is or who or what is directing it. Initial research links the Nexus Intruder Program with the Reed Corporation, the developer of the synaptic link."
@@ -9663,11 +9604,11 @@ msgstr "Beléptél egy lezárt övezetbe."
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:7
 msgid "Return to your designated zone or be destroyed."
-msgstr ""
+msgstr "Térj vissza a kijelölt zónádhoz vagy megsemmisítelek."
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:8
 msgid "Repeat. Return to your designated zone or be destroyed."
-msgstr ""
+msgstr "Ismétlem. Térj vissza a kijelölt zónádhoz vagy megsemmisítelek."
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:9
 msgid "Message Ends."
@@ -9678,13 +9619,12 @@ msgid "You will be destroyed."
 msgstr "Megsemmisítünk téged."
 
 #: data/base/sequenceaudio/cam1/sub14anp.txt:4
-#, fuzzy
 msgid "NEXUS, the synaptic technology you required has been recovered and sent for collection."
-msgstr "The synaptic link technology has been recovered!"
+msgstr ""
 
 #: data/base/sequenceaudio/cam1/sub1_4bn.txt:4
 msgid "You have done well."
-msgstr ""
+msgstr "Jól szerepeltél."
 
 #: data/base/sequenceaudio/cam1/sub1_4bn.txt:5
 msgid "Once we have analyzed and authenticated the technology, your reward  will follow."
@@ -9735,27 +9675,24 @@ msgid "Team Alpha approaches Beta Base"
 msgstr ""
 
 #: data/base/sequenceaudio/cam2/c002.txa:10
-#, fuzzy
 msgid "You must defend and hold it at all costs."
-msgstr "You must defend it and hold it."
+msgstr ""
 
 #: data/base/sequenceaudio/cam2/c002.txa:12
 msgid "THE COLLECTIVE"
-msgstr ""
+msgstr "A KÖZÖSSÉG"
 
 #: data/base/sequenceaudio/cam2/c2diif2.txt:1
-#, fuzzy
 msgid "Commander, a new launch has been detected."
-msgstr "Commander, we have defeated NEXUS."
+msgstr ""
 
 #: data/base/sequenceaudio/cam2/c2diif2.txt:2
 msgid "It is likely to be targeted at your location."
-msgstr ""
+msgstr "Kedvelt célpont lesz a te poziciód."
 
 #: data/base/sequenceaudio/cam2/c2diif2.txt:4
-#, fuzzy
 msgid "You are to start the immediate evacuation of Beta Base to the safe haven."
-msgstr "You are to establish a safe haven for evacuation of Beta Base."
+msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:1
 msgid "NASDA is the North American Strategic Defense Agency."
@@ -9763,11 +9700,11 @@ msgstr "NASDA az Észak Amerikai Stratégiai Védelmi Ügynökség"
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:3
 msgid "NASDA was formed in 2076 to defend North America from conventional and nuclear attack. The construction of a satellite defense system began in 2081 and was completed in 2082."
-msgstr ""
+msgstr "NASDát 2076-ban alakították hogy védje Észak-Amerikát hagyományos és nukleáris támadástól. Egy műholdas védelmi rendszer szerkezete 2081-ben kezdődött és 2082-ben befejezték."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:6
 msgid "In 2085 the NASDA satellites fired their nukes at Earth."
-msgstr ""
+msgstr "2085-ben a NASDA műholdak megtámadták az atomfegyverekkel Földet."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:8
 msgid "There were also ground-based sites. Many of these were destroyed in the nuclear counterstrikes, but there's bound to be some out there."
@@ -9795,7 +9732,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:20
 msgid "Nexus claimed that it had already destroyed the world."
-msgstr ""
+msgstr "A NEXUS azt állította, hogy ez már megsemmisítette a világot."
 
 #: data/base/sequenceaudio/cam2/cam2_2n.txt:1
 msgid "Warriors of the Collective, I seek the location of NASDA Central."
@@ -9803,7 +9740,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam2_2n.txt:2
 msgid "It lies somewhere in your territory."
-msgstr ""
+msgstr "Ez valahol a területeden fekszik."
 
 #: data/base/sequenceaudio/cam2/cam2_2n.txt:4
 msgid "Find it for me and I shall provide you with further weapons to aid you in your war against the Project."
@@ -9811,7 +9748,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam22pl2.txt:1
 msgid "NASDA Briefing follows..."
-msgstr ""
+msgstr "NASDA Eligazítás a következő..."
 
 #: data/base/sequenceaudio/cam2/cam22pl3.txt:1
 msgid "We've got to make sure that it can't do it again."
@@ -9838,14 +9775,12 @@ msgid "Nexus was fried as whole sections of its consciousness were obliterated i
 msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:1
-#, fuzzy
 msgid "Commander we are detecting transmissions from this site that are reaching high orbit."
-msgstr "We are detecting transmissions from this site that are reaching high orbit."
+msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:3
-#, fuzzy
 msgid "Nexus has now reconnected itself with the NASDA satellites."
-msgstr "NEXUS has now reconnected itself with the NASDA satellites."
+msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:5
 msgid "This poses a major threat to the Project and to our survival."
@@ -9860,9 +9795,8 @@ msgid "The nuclear reactor was going to be used to power a vast network of pre-C
 msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam27fmv.txt:1
-#, fuzzy
 msgid "Commander, we have just detected a missile launch at these coordinates."
-msgstr "Commander, there are missiles present at the silos."
+msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam27fmv.txt:3
 msgid "Team Gamma are sending a team to investigate the launch site and to prevent any further launches."
@@ -9873,18 +9807,16 @@ msgid "We can only assume that Nexus has gained control of this site. We cannot 
 msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:1
-#, fuzzy
 msgid "Warriors of The Collective, more intruders are entering our territory."
-msgstr "A Közösség Harcosai, készen állunk arra, hogy megsemmisítsük azokat a betolakodókat, akik szennyezik a földjeinket."
+msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:2
 msgid "They are not part of the machine."
 msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:4
-#, fuzzy
 msgid "Warriors of The Collective, attack and destroy kill all who resist the machine."
-msgstr "A Közösség Harcosai, készen állunk arra, hogy megsemmisítsük azokat a betolakodókat, akik szennyezik a földjeinket."
+msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:5
 msgid "Attack! Erase their presence from this area!"
@@ -9919,9 +9851,8 @@ msgid "Nexus now asks us to crush the Project."
 msgstr "Az összeköttetés most válaszolt, hogy semmisítsük meg a Projektet."
 
 #: data/base/sequenceaudio/cam2/cam2dico.txt:4
-#, fuzzy
 msgid "Cleanse and destroy!!"
-msgstr "Keres és pusztít .... "
+msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:1
 msgid "Warriors of the Collective. You have performed well."
@@ -9940,9 +9871,8 @@ msgid "You must stop them!"
 msgstr "Le kell állítanod őket!"
 
 #: data/base/sequenceaudio/cam2/cam2dipl.txt:1
-#, fuzzy
 msgid "Decoding Transmission..."
-msgstr "Incoming Transmission..."
+msgstr ""
 
 #: data/base/sequenceaudio/cam3/c003.txa:1
 msgid "CAMPAIGN THREE"
@@ -9965,9 +9895,8 @@ msgid "The Final Encounter"
 msgstr "A Végső Találkozás"
 
 #: data/base/sequenceaudio/cam3/c003.txa:12
-#, fuzzy
 msgid "Briefing Commences"
-msgstr "Briefing Commences:"
+msgstr "Eligazítás Kezdődik:"
 
 #: data/base/sequenceaudio/cam3/c003.txt:1
 msgid "Personnel at Gamma Base have confirmed that the nuclear missiles targeted at Alpha and Beta bases were launched from a silo in their sector."
@@ -9978,14 +9907,12 @@ msgid "Team Gamma is currently scouting the silo's location and monitoring NEXUS
 msgstr ""
 
 #: data/base/sequenceaudio/cam3/c3ad2n2.txt:1
-#, fuzzy
 msgid "Time's up commander!!"
-msgstr "View next Commander"
+msgstr ""
 
 #: data/base/sequenceaudio/cam3/c3ad2pl3.txt:1
-#, fuzzy
 msgid "Commander, we are detecting NEXUS forces from these coordinates..."
-msgstr "We are detecting enemy forces at these locations."
+msgstr ""
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:1
 msgid "Well done Commander, you've prevented my last missile from launching."
@@ -10056,9 +9983,8 @@ msgid "You must destroy his command centre before we lose control of key systems
 msgstr ""
 
 #: data/base/sequenceaudio/cam3/cam34mu2.txt:1
-#, fuzzy
 msgid "Commander, welcome to NEXUS!"
-msgstr "Commander, we have defeated NEXUS."
+msgstr ""
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:1
 msgid "The Reed Corporation was founded by Dr Allan Reed. In 2080, Dr Reed landed a contract with the US Military to develop the synaptic link technology."
@@ -10105,9 +10031,8 @@ msgid "Let's start by activating NEXUS in your core systems and see what happens
 msgstr ""
 
 #: data/base/sequenceaudio/cam3/cam3abpl.txt:1
-#, fuzzy
 msgid "Commander, we are experiencing interference with our equipment."
-msgstr "Commander, we are attempting to return to base."
+msgstr ""
 
 #: data/base/sequenceaudio/cam3/cam3abpl.txt:2
 msgid "Normal service will be restored as soon as possible."
@@ -10199,7 +10124,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/devastation.txa:6
 msgid "The Collapse"
-msgstr ""
+msgstr "Az Összeomlás"
 
 #: data/base/sequenceaudio/devastation.txa:8
 msgid "January 19th, 2086"
@@ -10227,9 +10152,8 @@ msgid "Safety"
 msgstr "Biztonságos"
 
 #: data/base/sequenceaudio/devastation.txa:16
-#, fuzzy
 msgid "Dawn, April 4th, 2100"
-msgstr "2100 július 4, Dawn"
+msgstr ""
 
 #: data/base/sequenceaudio/devastation.txa:18
 msgid "A New Beginning"
@@ -10297,17 +10221,15 @@ msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1822
 #: data/mp/messages/strings/names.txt:1828
-#, fuzzy
 msgid "Heavy Repair Turret Cobra Hover"
-msgstr "Heavy Repair Turret"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1823
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1834
 #: data/mp/messages/strings/names.txt:1829
 #: data/mp/messages/strings/names.txt:1840
-#, fuzzy
 msgid "Heavy Machinegun Viper Wheels"
-msgstr "Machinegun Viper Wheels"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1824
 #: data/mp/messages/strings/names.txt:1830
@@ -10316,119 +10238,100 @@ msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1825
 #: data/mp/messages/strings/names.txt:1831
-#, fuzzy
 msgid "Tank Killer Mantis Hover"
-msgstr "TK Mantis Hover"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1826
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1841
 #: data/mp/messages/strings/names.txt:1832
 #: data/mp/messages/strings/names.txt:1847
-#, fuzzy
 msgid "Heavy Machinegun Cobra Tracks"
-msgstr "Scorpion Heavy Machinegun Tracks"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1827
 #: data/mp/messages/strings/names.txt:1833
-#, fuzzy
 msgid "Heavy Cannon Cobra Hover"
-msgstr "Heavy Cannon"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1835
 #: data/mp/messages/strings/names.txt:1841
-#, fuzzy
 msgid "Heavy Machinegun Cobra Wheels"
-msgstr "Machinegun Viper Wheels"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1836
 #: data/mp/messages/strings/names.txt:1842
-#, fuzzy
 msgid "Heavy Machinegun Cobra Hover"
-msgstr "Heavy Machinegun Guard Tower"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1838
 #: data/mp/messages/strings/names.txt:1844
-#, fuzzy
 msgid "Machinegun Viper Tracks"
-msgstr "Machinegun Viper Wheels"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1839
 #: data/mp/messages/strings/names.txt:1845
-#, fuzzy
 msgid "Twin Machinegun Viper Tracks"
-msgstr "Twin Machinegun Guard Tower"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1843
 #: data/mp/messages/strings/names.txt:1849
-#, fuzzy
 msgid "Medium Cannon Cobra Hover"
-msgstr "Medium Cannon"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1844
 #: data/mp/messages/strings/names.txt:1850
-#, fuzzy
 msgid "Medium Cannon Scorpion Hover"
-msgstr "Medium Cannon Hardpoint"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1845
 #: data/mp/messages/strings/names.txt:1851
-#, fuzzy
 msgid "Medium Cannon Scorpion Tracks"
-msgstr "Cobra Medium Cannon Tracks"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1846
 #: data/mp/messages/strings/names.txt:1852
-#, fuzzy
 msgid "Medium Cannon Python Hover"
-msgstr "Medium Cannon"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1847
 #: data/mp/messages/strings/names.txt:1853
-#, fuzzy
 msgid "Heavy Cannon Python Hover"
-msgstr "HPV Cannon Python Tracks"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1849
 #: data/mp/messages/strings/names.txt:1855
-#, fuzzy
 msgid "Rail Gun Mantis Tracks"
-msgstr "Assault Gun Python Tracks"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1850
 #: data/mp/messages/strings/names.txt:1856
-#, fuzzy
 msgid "Pulse Laser Mantis Tracks"
-msgstr "Tiger Pulse Laser Tracks"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1851
 #: data/mp/messages/strings/names.txt:1857
-#, fuzzy
 msgid "Lancer Python Tracks"
-msgstr "Tank Killer Python Tracks"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1852
 #: data/mp/messages/strings/names.txt:1858
-#, fuzzy
 msgid "Lancer Mantis Tracks"
-msgstr "Cobra Lancer Tracks"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1853
 #: data/mp/messages/strings/names.txt:1859
-#, fuzzy
 msgid "Tank Killer Vengeance Tracks"
-msgstr "Tank Killer Python Tracks"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1858
 #: data/mp/messages/strings/names.txt:1864
-#, fuzzy
 msgid "Heavy Cannon Tiger Tracks"
-msgstr "Mantis Heavy Cannon Tracks"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1859
 #: data/mp/messages/strings/names.txt:1865
-#, fuzzy
 msgid "Needle Gun Tiger Tracks"
-msgstr "Needle Gun Tower"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1860
 #: data/mp/messages/strings/names.txt:1866
@@ -10437,9 +10340,8 @@ msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1861
 #: data/mp/messages/strings/names.txt:1867
-#, fuzzy
 msgid "Needle Gun Vengeance Tracks"
-msgstr "Needle Gunner"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1862
 #: data/mp/messages/strings/names.txt:1868
@@ -10448,67 +10350,56 @@ msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1863
 #: data/mp/messages/strings/names.txt:1869
-#, fuzzy
 msgid "Vengeance Tracks Gauss Cannon"
-msgstr "Vengeance Tracks Rail Gun"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1864
 #: data/mp/messages/strings/names.txt:1870
-#, fuzzy
 msgid "Vengeance Tracks Gauss Scourge"
-msgstr "Vengeance Tracks Rail Gun"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1867
 #: data/mp/messages/strings/names.txt:1873
-#, fuzzy
 msgid "VTOL Cluster Bomb Bay Bug VTOL"
-msgstr "VTOL Cluster Bombs Bay"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1868
 #: data/mp/messages/strings/names.txt:1874
-#, fuzzy
 msgid "VTOL Bunker Buster Bug VTOL"
-msgstr "VTOL Bunker Buster"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1869
 #: data/mp/messages/strings/names.txt:1875
-#, fuzzy
 msgid "VTOL Cluster Bomb Bay Scorpion VTOL"
-msgstr "VTOL Cluster Bombs Bay"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1870
 #: data/mp/messages/strings/names.txt:1876
-#, fuzzy
 msgid "VTOL Bunker Buster Scorpion VTOL"
-msgstr "VTOL Bunker Buster"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1873
 #: data/mp/messages/strings/names.txt:1879
-#, fuzzy
 msgid "VTOL Lancer Bug VTOL"
-msgstr "VTOL Lancer"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1874
-#, fuzzy
 msgid "VTOL HPV Cannon Bug VTOL"
-msgstr "VTOL Cannon"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1875
 #: data/mp/messages/strings/names.txt:1881
-#, fuzzy
 msgid "VTOL Lancer Scorpion VTOL"
-msgstr "Scorpion BB VTOL"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1876
-#, fuzzy
 msgid "VTOL HPV Cannon Scorpion VTOL"
-msgstr "HPV Cannon Hardpoint"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1877
 #: data/mp/messages/strings/names.txt:1883
-#, fuzzy
 msgid "VTOL Lancer Mantis VTOL"
-msgstr "VTOL Lancer"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1878
 msgid "VTOL HPV Cannon Mantis VTOL"
@@ -10516,355 +10407,296 @@ msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1882
 #: data/mp/messages/strings/names.txt:1888
-#, fuzzy
 msgid "Repair Turret Mantis Tracks"
-msgstr "Repair Cobra Tracks"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1884
 #: data/mp/messages/strings/names.txt:1890
-#, fuzzy
 msgid "Lancer Scorpion Tracks"
-msgstr "Scorpion Lancer Tracks"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1885
 #: data/mp/messages/strings/names.txt:1891
-#, fuzzy
 msgid "Heavy Cannon Scorpion Tracks"
-msgstr "Mantis Heavy Cannon Tracks"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1886
 #: data/mp/messages/strings/names.txt:1892
-#, fuzzy
 msgid "Lancer Scorpion VTOL"
-msgstr "Scorpion BB VTOL"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1887
 #: data/mp/messages/strings/names.txt:1893
-#, fuzzy
 msgid "Bunker Buster Scorpion VTOL"
-msgstr "Bunker Buster"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1889
 #: data/mp/messages/strings/names.txt:1895
-#, fuzzy
 msgid "Command Turret Viper Tracks"
-msgstr "Viper Command Turret Tracks"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1890
 #: data/mp/messages/strings/names.txt:1896
-#, fuzzy
 msgid "Command Turret Cobra Tracks"
-msgstr "Cobra Command Turret Tracks"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1891
 #: data/mp/messages/strings/names.txt:1897
-#, fuzzy
 msgid "Command Turret Scorpion Tracks"
-msgstr "Cobra Command Turret Tracks"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1892
 #: data/mp/messages/strings/names.txt:1898
-#, fuzzy
 msgid "Command Turret Mantis Tracks"
-msgstr "Cobra Command Turret Tracks"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1894
 #: data/mp/messages/strings/names.txt:1900
-#, fuzzy
 msgid "Lancer Cobra Tracks"
-msgstr "Lancer Cobra Half-tracks"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1895
 #: data/mp/messages/strings/names.txt:1901
-#, fuzzy
 msgid "Heavy Cannon Mantis Tracks"
-msgstr "Mantis Heavy Cannon Tracks"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1896
 #: data/mp/messages/strings/names.txt:1902
-#, fuzzy
 msgid "Tank Killer Mantis Tracks"
-msgstr "Tank Killer Python Tracks"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1897
 #: data/mp/messages/strings/names.txt:1903
-#, fuzzy
 msgid "Scourge Mantis Tracks"
-msgstr "Scourge Mantis Hover"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1898
 #: data/mp/messages/strings/names.txt:1904
-#, fuzzy
 msgid "Heavy Machinegun Scorpion Tracks"
-msgstr "Heavy Machinegun Hardpoint"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1900
 #: data/mp/messages/strings/names.txt:1906
-#, fuzzy
 msgid "Repair Scorpion Tracks"
-msgstr "Repair Cobra Tracks"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1901
 #: data/mp/messages/strings/names.txt:1907
-#, fuzzy
 msgid "Heavy Repair Scorpion Hover"
-msgstr "Scorpion Heavy Repair Hover"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1904
 #: data/mp/messages/strings/names.txt:1910
-#, fuzzy
 msgid "Truck Cobra Hover"
-msgstr "Cobra Hover HC"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1905
 #: data/mp/messages/strings/names.txt:1911
-#, fuzzy
 msgid "Truck Scorpion Hover"
-msgstr "Scorpion Hover Truck"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1906
 #: data/mp/messages/strings/names.txt:1912
-#, fuzzy
 msgid "Truck Mantis Hover"
-msgstr "TK Mantis Hover"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1909
 #: data/mp/messages/strings/names.txt:1915
-#, fuzzy
 msgid "Bunker Buster Cobra Tracks"
-msgstr "Cobra Bunker Buster Tracks"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1910
 #: data/mp/messages/strings/names.txt:1916
-#, fuzzy
 msgid "Bunker Buster Scorpion Tracks"
-msgstr "Cobra Bunker Buster Tracks"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1911
 #: data/mp/messages/strings/names.txt:1917
-#, fuzzy
 msgid "Bunker Buster Mantis Tracks"
-msgstr "Cobra Bunker Buster Tracks"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1913
 #: data/mp/messages/strings/names.txt:1919
-#, fuzzy
 msgid "Lancer Viper Tracks"
-msgstr "Cobra Lancer Tracks"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1915
 #: data/mp/messages/strings/names.txt:1921
-#, fuzzy
 msgid "Mini-Rocket Cobra Half-Tracks"
-msgstr "Lancer Cobra Half-tracks"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1916
 #: data/mp/messages/strings/names.txt:1922
-#, fuzzy
 msgid "Mini-Rocket Cobra Tracks"
-msgstr "Repair Cobra Tracks"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1917
-#, fuzzy
 msgid "Mini-Rocket Artillery Cobra Tracks"
-msgstr "Mini-Rocket Artillery"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1919
 #: data/mp/messages/strings/names.txt:1925
-#, fuzzy
 msgid "Inferno Cobra Half-Tracks"
-msgstr "Lancer Cobra Half-tracks"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1920
-#, fuzzy
 msgid "HPV Cannon Python Hover"
-msgstr "HPV Cannon Python Tracks"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1924
 #: data/mp/messages/strings/names.txt:1930
-#, fuzzy
 msgid "Scourge Python Tracks"
-msgstr "Python Scourge Tracks"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1925
 #: data/mp/messages/strings/names.txt:1931
-#, fuzzy
 msgid "Gauss Cannon Python Tracks"
-msgstr "HPV Cannon Python Tracks"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1926
 #: data/mp/messages/strings/names.txt:1932
-#, fuzzy
 msgid "Pulse Laser Python Tracks"
-msgstr "Tiger Pulse Laser Tracks"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1927
 #: data/mp/messages/strings/names.txt:1933
-#, fuzzy
 msgid "Pulse Laser Tiger Tracks"
-msgstr "Tiger Pulse Laser Tracks"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1928
 #: data/mp/messages/strings/names.txt:1934
-#, fuzzy
 msgid "Heavy Laser Tiger Tracks"
-msgstr "Tiger Heavy Laser Tracks"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1929
 #: data/mp/messages/strings/names.txt:1935
-#, fuzzy
 msgid "Gauss Cannon Wyvern Tracks"
-msgstr "Wyvern Gauss Cannon Tracks"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1930
 #: data/mp/messages/strings/names.txt:1936
-#, fuzzy
 msgid "Pulse Laser Wyvern Tracks"
-msgstr "Tiger Pulse Laser Tracks"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1931
 #: data/mp/messages/strings/names.txt:1937
-#, fuzzy
 msgid "Heavy Laser Wyvern Tracks"
-msgstr "Tiger Heavy Laser Tracks"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1933
 #: data/mp/messages/strings/names.txt:1939
-#, fuzzy
 msgid "Machinegun Viper Half-Tracks"
-msgstr "Machinegun Viper Wheels"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1934
 #: data/mp/messages/strings/names.txt:1940
-#, fuzzy
 msgid "Flamer Viper Half-Tracks"
-msgstr "Lancer Cobra Half-tracks"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1937
 #: data/mp/messages/strings/names.txt:1943
-#, fuzzy
 msgid "Inferno Cobra Hover"
-msgstr "Cobra Hover HC"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1938
 #: data/mp/messages/strings/names.txt:1944
-#, fuzzy
 msgid "Medium Cannon Cobra Half Track"
-msgstr "Cobra Medium Cannon Tracks"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1939
 #: data/mp/messages/strings/names.txt:1945
-#, fuzzy
 msgid "Inferno Python Hover"
-msgstr "Python HVC Hover"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1940
 #: data/mp/messages/strings/names.txt:1946
-#, fuzzy
 msgid "Assault Gun Python Hover"
-msgstr "Assault Gun Python Tracks"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1941
 #: data/mp/messages/strings/names.txt:1947
-#, fuzzy
 msgid "Assault Gun Python Half Track"
-msgstr "Assault Gun Python Tracks"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1942
 #: data/mp/messages/strings/names.txt:1948
-#, fuzzy
 msgid "Heavy Machinegun Scorpion Half Tracks"
-msgstr "Scorpion Heavy Machinegun Tracks"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1943
 #: data/mp/messages/strings/names.txt:1949
-#, fuzzy
 msgid "Assault Cannon Mantis Hover"
-msgstr "Assault Cannon Guard Tower"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1944
 #: data/mp/messages/strings/names.txt:1950
-#, fuzzy
 msgid "Pulse Laser Leopard Hover"
-msgstr "Pulse Laser Emplacement"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1945
 #: data/mp/messages/strings/names.txt:1951
-#, fuzzy
 msgid "Pulse Laser Panther Hover"
-msgstr "Pulse Laser Emplacement"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1946
 #: data/mp/messages/strings/names.txt:1952
-#, fuzzy
 msgid "Rail Gun Tiger Hover"
-msgstr "Rail Gun Upgrade"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1947
 #: data/mp/messages/strings/names.txt:1953
-#, fuzzy
 msgid "Pulse Laser Tiger Hover"
-msgstr "Pulse Laser"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1948
 #: data/mp/messages/strings/names.txt:1954
-#, fuzzy
 msgid "Plasma Cannon Wyvern Tracks"
-msgstr "HPV Cannon Python Tracks"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1949
 #: data/mp/messages/strings/names.txt:1955
-#, fuzzy
 msgid "Scourge Missile Wyvern Tracks"
-msgstr "Scourge Missile Tower"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1950
 #: data/mp/messages/strings/names.txt:1956
-#, fuzzy
 msgid "Flashlight Retribution Hover"
-msgstr "Flashlight Gunner"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1951
 #: data/mp/messages/strings/names.txt:1957
-#, fuzzy
 msgid "Mini-Rocket Viper Half Track"
-msgstr "Mini-Rocket Upgrade"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1952
 #: data/mp/messages/strings/names.txt:1958
-#, fuzzy
 msgid "Mini-Rocket Array Viper Half Track"
-msgstr "Mini-Rocket Artillery"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1953
 #: data/mp/messages/strings/names.txt:1959
-#, fuzzy
 msgid "Phosphor Bomb Bay Mantis VTOL"
-msgstr "Phosphor Bomb Bay"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1954
 #: data/mp/messages/strings/names.txt:1960
-#, fuzzy
 msgid "Heap Bomb Bay Mantis VTOL"
-msgstr "Heavy Body - Mantis"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1955
 #: data/mp/messages/strings/names.txt:1961
-#, fuzzy
 msgid "Heap Bomb Bay Retribution VTOL"
-msgstr "Medium Body - Retribution"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1956
 #: data/mp/messages/strings/names.txt:1962
-#, fuzzy
 msgid "Scourge Retaliation VTOL"
-msgstr "Retaliation"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1957
 #: data/mp/messages/strings/names.txt:1963
-#, fuzzy
 msgid "Plasmite Retribution VTOL"
-msgstr "Retribution"
+msgstr ""
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1962
 #: data/mp/messages/strings/names.txt:675
@@ -10877,96 +10709,81 @@ msgid "Super Transport Body"
 msgstr ""
 
 #: data/mp/messages/resmessages12.rmsg:58
-#, fuzzy
 msgid "Construction speed +10%"
-msgstr "Increases construction speed"
+msgstr ""
 
 #: data/mp/messages/resmessages12.rmsg:97
 #: data/mp/messages/resmessagesall.rmsg:214
-#, fuzzy
 msgid "Cannon accuracy +10%"
-msgstr "Increases Cannon accuracy"
+msgstr ""
 
 #: data/mp/messages/resmessages12.rmsg:110
-#, fuzzy
 msgid "Flamer reload time -15%"
-msgstr "Flamer Autoloader"
+msgstr ""
 
 #: data/mp/messages/resmessages12.rmsg:136
 #: data/mp/messages/resmessages23.rmsg:175
 #: data/mp/messages/resmessages2.rmsg:890
-#, fuzzy
 msgid "Machinegun reload time -15%"
-msgstr "Gépfegyver Fejlesztés"
+msgstr ""
 
 #: data/mp/messages/resmessages12.rmsg:162
 #: data/mp/messages/resmessages23.rmsg:188
 #: data/mp/messages/resmessages3.rmsg:1176
-#, fuzzy
 msgid "Mortar accuracy +10%"
-msgstr "Increases Mortar accuracy"
+msgstr ""
 
 #: data/mp/messages/resmessages12.rmsg:175
 #: data/mp/messages/resmessages3.rmsg:1189
-#, fuzzy
 msgid "Mortar reload time -10%"
-msgstr "Mortar Autoloader"
+msgstr ""
 
 #: data/mp/messages/resmessages12.rmsg:201
 #: data/mp/messages/resmessages1.rmsg:735
-#, fuzzy
 msgid "Rocket reload time -15%"
-msgstr "Rocket Autoloader"
+msgstr ""
 
 #: data/mp/messages/resmessages12.rmsg:214
 #: data/mp/messages/resmessages3.rmsg:890
-#, fuzzy
 msgid "Cannon reload time -10%"
-msgstr "Cannon Autoloader"
+msgstr ""
 
 #: data/mp/messages/resmessages12.rmsg:227
 #: data/mp/messages/resmessages1.rmsg:579
 #: data/mp/messages/resmessages3.rmsg:877
-#, fuzzy
 msgid "Cannon damage +25%"
-msgstr "Increases Cannon damage"
+msgstr ""
 
 #: data/mp/messages/resmessages12.rmsg:240
 #: data/mp/messages/resmessages1.rmsg:709
 #: data/mp/messages/resmessages1.rmsg:748
 #: data/mp/messages/resmessagesall.rmsg:175
-#, fuzzy
 msgid "Rocket accuracy +10%"
-msgstr "Increases Rocket accuracy"
+msgstr ""
 
 #: data/mp/messages/resmessages1.rmsg:32
 #: data/mp/messages/resmessages3.rmsg:71
 #: data/mp/messages/resmessages3.rmsg:84
-#, fuzzy
 msgid "Kinetic Armor +35%, Body Points +35%"
-msgstr "Increases Kinetic Armour and Body Points"
+msgstr ""
 
 #: data/mp/messages/resmessages1.rmsg:97
-#, fuzzy
 msgid "Armour +35%, Body Points +30%"
-msgstr "Increases Armour and Body Points"
+msgstr ""
 
 #: data/mp/messages/resmessages1.rmsg:122
-#, fuzzy
 msgid "Armored guard tower with Mini-Rocket Pod"
-msgstr "Armoured guard tower with Mini-Pod Rocket"
+msgstr ""
 
 #: data/mp/messages/resmessages1.rmsg:148
-#, fuzzy
 msgid "Armored guard tower with Lancer AT rocket"
-msgstr "Armoured guard tower with Lancer AT Rocket"
+msgstr ""
 
 #: data/mp/messages/resmessages1.rmsg:253
 #: data/mp/messages/resmessages2.rmsg:331
 #: data/mp/messages/resmessages3.rmsg:422
-#, fuzzy
 msgid "Repair Speed +100%"
-msgstr "Increases Repair Speed"
+msgstr ""
 
 #: data/mp/messages/resmessages1.rmsg:306
 #, no-c-format
@@ -10979,16 +10796,14 @@ msgid "Factory output speed +60%"
 msgstr ""
 
 #: data/mp/messages/resmessages1.rmsg:345
-#, fuzzy
 msgid "Research speed +85%"
-msgstr "Kutatás befejezett: %s"
+msgstr ""
 
 #: data/mp/messages/resmessages1.rmsg:358
 #: data/mp/messages/resmessages2.rmsg:370
 #: data/mp/messages/resmessages3.rmsg:448
-#, fuzzy
 msgid "Research speed +30%"
-msgstr "Kutatás befejezett: %s"
+msgstr ""
 
 #: data/mp/messages/resmessages1.rmsg:371
 #: data/mp/messages/resmessages2.rmsg:58
@@ -10997,62 +10812,54 @@ msgstr "Kutatás befejezett: %s"
 #: data/mp/messages/resmessages3.rmsg:227
 #: data/mp/messages/resmessages3.rmsg:461
 #: data/mp/messages/resmessages3.rmsg:474
-#, fuzzy
 msgid "Armor +35%, Body Points +30%"
-msgstr "Increases Armour and Body Points"
+msgstr ""
 
 #: data/mp/messages/resmessages1.rmsg:462
 #: data/mp/messages/resmessages2.rmsg:500
 #: data/mp/messages/resmessages3.rmsg:669
 #: data/mp/messages/resmessages3.rmsg:682
-#, fuzzy
 msgid "Vehicle speed +5%"
-msgstr "Vehicle Body"
+msgstr ""
 
 #: data/mp/messages/resmessages1.rmsg:475
 #: data/mp/messages/resmessages2.rmsg:513
 #: data/mp/messages/resmessages3.rmsg:695
 #: data/mp/messages/resmessages3.rmsg:708
-#, fuzzy
 msgid "Kinetic armor +30%, body points +30%"
-msgstr "Increases kinetic armour and body points"
+msgstr ""
 
 #: data/mp/messages/resmessages1.rmsg:553
 #: data/mp/messages/resmessages1.rmsg:566
 #: data/mp/messages/resmessages2.rmsg:747
-#, fuzzy
 msgid "Best Targets: Vehicles, Hardpoints"
-msgstr "Best Targets: Vehicles and Emplacements"
+msgstr ""
 
 #: data/mp/messages/resmessages1.rmsg:605
 #: data/mp/messages/resmessages2.rmsg:786
 #: data/mp/messages/resmessagesall.rmsg:788
-#, fuzzy
 msgid "Flamer damage +25%"
-msgstr "Increases Flamer damage"
+msgstr ""
 
 #: data/mp/messages/resmessages1.rmsg:644
 #: data/mp/messages/resmessages1.rmsg:657
 #: data/mp/messages/resmessages2.rmsg:877
 #: data/mp/messages/resmessages3.rmsg:1007
 #: data/mp/messages/resmessages3.rmsg:1020
-#, fuzzy
 msgid "Machinegun damage +25%"
-msgstr "Increases Machinegun damage"
+msgstr ""
 
 #: data/mp/messages/resmessages1.rmsg:683
 #: data/mp/messages/resmessages2.rmsg:916
-#, fuzzy
 msgid "Mortar damage +25%"
-msgstr "Increases Mortar damage"
+msgstr ""
 
 #: data/mp/messages/resmessages1.rmsg:722
 #: data/mp/messages/resmessages1.rmsg:761
 #: data/mp/messages/resmessages2.rmsg:929
 #: data/mp/messages/resmessages2.rmsg:942
-#, fuzzy
 msgid "Rocket damage +25%"
-msgstr "Increases Rocket damage"
+msgstr ""
 
 #: data/mp/messages/resmessages23.rmsg:32
 msgid "Power output +25%"
@@ -11060,9 +10867,8 @@ msgstr ""
 
 #: data/mp/messages/resmessages23.rmsg:45
 #: data/mp/messages/resmessages3.rmsg:513
-#, fuzzy
 msgid "Construction speed +20%"
-msgstr "Increases construction speed"
+msgstr ""
 
 #: data/mp/messages/resmessages23.rmsg:136
 #: data/mp/messages/resmessages2.rmsg:643
@@ -11073,14 +10879,12 @@ msgstr ""
 #: data/mp/messages/resmessages23.rmsg:160
 #: data/mp/messages/resmessages2.rmsg:732
 #: data/mp/messages/resmessages3.rmsg:862
-#, fuzzy
 msgid "Bomb Upgrade"
-msgstr "Bombsight Upgrade"
+msgstr ""
 
 #: data/mp/messages/resmessages23.rmsg:161
-#, fuzzy
 msgid "Improved trinitramine explosive formula"
-msgstr "Improved high explosive shells"
+msgstr ""
 
 #: data/mp/messages/resmessages23.rmsg:162
 #: data/mp/messages/resmessages2.rmsg:734
@@ -11089,25 +10893,21 @@ msgid "Bomb damage +25%"
 msgstr ""
 
 #: data/mp/messages/resmessages2.rmsg:6
-#, fuzzy
 msgid "Thermal Armor +45%"
-msgstr "Thermal Armour"
+msgstr ""
 
 #: data/mp/messages/resmessages2.rmsg:19
-#, fuzzy
 msgid "Kinetic Armor +35%, and Body Points +35%"
-msgstr "Increases Kinetic Armour and Body Points"
+msgstr ""
 
 #: data/mp/messages/resmessages2.rmsg:357
-#, fuzzy
 msgid "Factory production rate +60%"
-msgstr "Increases factory production rate"
+msgstr ""
 
 #: data/mp/messages/resmessages2.rmsg:358
 #: data/mp/messages/resmessagesall.rmsg:802
-#, fuzzy
 msgid "All factories upgraded automatically"
-msgstr "All VTOL factories upgraded automatically"
+msgstr ""
 
 #: data/mp/messages/resmessages2.rmsg:409
 #: data/mp/messages/resmessages3.rmsg:500
@@ -11115,15 +10915,13 @@ msgid "Rearming speed +30%"
 msgstr ""
 
 #: data/mp/messages/resmessages2.rmsg:526
-#, fuzzy
 msgid "Thermal armor +40%"
-msgstr "Thermal Armour"
+msgstr ""
 
 #: data/mp/messages/resmessages2.rmsg:656
 #: data/mp/messages/resmessages3.rmsg:825
-#, fuzzy
 msgid "AA Flak damage +25%"
-msgstr "Increases AA Flak damage"
+msgstr ""
 
 #: data/mp/messages/resmessages2.rmsg:669
 #: data/mp/messages/resmessages3.rmsg:838
@@ -11132,36 +10930,30 @@ msgstr ""
 
 #: data/mp/messages/resmessages2.rmsg:838
 #: data/mp/messages/resmessages3.rmsg:903
-#, fuzzy
 msgid "Howitzer accuracy +10%"
-msgstr "Increases Howitzer accuracy"
+msgstr ""
 
 #: data/mp/messages/resmessages2.rmsg:851
 #: data/mp/messages/resmessages3.rmsg:916
-#, fuzzy
 msgid "Howitzer damage +25%"
-msgstr "Increases Howitzer damage"
+msgstr ""
 
 #: data/mp/messages/resmessages2.rmsg:864
 #: data/mp/messages/resmessages3.rmsg:929
-#, fuzzy
 msgid "Howitzer reload time -10%"
-msgstr "Howitzer Autoloader"
+msgstr ""
 
 #: data/mp/messages/resmessages2.rmsg:928
-#, fuzzy
 msgid "High Explosive Anti-Tank warheads"
-msgstr "High Explosive Anti-Tank warhead"
+msgstr ""
 
 #: data/mp/messages/resmessages3.rmsg:6
-#, fuzzy
 msgid "Thermal Armor +35%"
-msgstr "Thermal Armour Mk3"
+msgstr ""
 
 #: data/mp/messages/resmessages3.rmsg:304
-#, fuzzy
 msgid "Armored guard tower with Pulse Laser"
-msgstr "Armoured guard tower with Flamer"
+msgstr ""
 
 #: data/mp/messages/resmessages3.rmsg:435
 msgid "Power output +30%"
@@ -11169,19 +10961,16 @@ msgstr ""
 
 #: data/mp/messages/resmessages3.rmsg:721
 #: data/mp/messages/resmessagesall.rmsg:853
-#, fuzzy
 msgid "Thermal Armor +40%"
-msgstr "Thermal Armour"
+msgstr ""
 
 #: data/mp/messages/resmessages3.rmsg:968
-#, fuzzy
 msgid "Laser accuracy +10%"
-msgstr "Increases Laser accuracy"
+msgstr ""
 
 #: data/mp/messages/resmessages3.rmsg:981
-#, fuzzy
 msgid "Laser damage +25%"
-msgstr "Increases Laser damage"
+msgstr ""
 
 #: data/mp/messages/resmessages3.rmsg:994
 msgid "Laser reload time -15%"
@@ -11189,74 +10978,61 @@ msgstr ""
 
 #: data/mp/messages/resmessages3.rmsg:1059
 #: data/mp/messages/resmessages3.rmsg:1072
-#, fuzzy
 msgid "Missile accuracy +10%"
-msgstr "Increases Missile accuracy"
+msgstr ""
 
 #: data/mp/messages/resmessages3.rmsg:1085
-#, fuzzy
 msgid "Missile damage +25%"
-msgstr "Increases Missile damage"
+msgstr ""
 
 #: data/mp/messages/resmessages3.rmsg:1150
 #: data/mp/messages/resmessages3.rmsg:1163
-#, fuzzy
 msgid "Missile reload time -15%"
-msgstr "Mission Time - %s"
+msgstr ""
 
 #: data/mp/messages/resmessages3.rmsg:1241
-#, fuzzy
 msgid "Rail Gun accuracy +10%"
-msgstr "Increases Rail Gun accuracy"
+msgstr ""
 
 #: data/mp/messages/resmessages3.rmsg:1254
-#, fuzzy
 msgid "Rail Gun damage +25%"
-msgstr "Increases Rail Gun damage"
+msgstr ""
 
 #: data/mp/messages/resmessages3.rmsg:1267
-#, fuzzy
 msgid "Rail Gun reload time -15%"
-msgstr "Rail Gun Upgrade"
+msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:84
-#, fuzzy
 msgid "Sensor Range +25%"
-msgstr "Sensor Range"
+msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:96
-#, fuzzy
 msgid "Improved Thermal Emissions detection"
-msgstr "New Thermal Emissions detection"
+msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:97
-#, fuzzy
 msgid "Sensor Range +15%"
-msgstr "Sensor Range"
+msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:109
-#, fuzzy
 msgid "Advanced Thermal Emissions detection"
-msgstr "New Thermal Emissions detection"
+msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:110
-#, fuzzy
 msgid "Sensor Range +10%"
-msgstr "Sensor Range"
+msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:135
 msgid "Radar detector tower detects enemy sensors"
 msgstr "A radardetektortorony ellenséges érzékelőket észlel"
 
 #: data/mp/messages/resmessagesall.rmsg:136
-#, fuzzy
 msgid "Orders assigned indirect fire units to fire at the enemy sensors"
-msgstr "Orders assigned indirect fire units to fire at the enemy batteries"
+msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:137
-#, fuzzy
 msgid "Counter-battery fire continues until enemy sensor is suppressed"
-msgstr "Counter-battery fire continues until enemy battery is suppressed"
+msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:225
 msgid "Cyborg Transport Available"
@@ -11282,11 +11058,11 @@ msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:267
 msgid "Armored Incendiary Mortar battery pit"
-msgstr "Armoured Incendiary Mortar battery pit"
+msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:280
 msgid "Armored strongpoint with Plasmite Flamer"
-msgstr "Armoured strongpoint with Plasmite Flamer"
+msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:293
 msgid "Armed with Cyborg Thermite Flamer"
@@ -11393,7 +11169,7 @@ msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:553
 msgid "Armored guard tower with Nexus Link"
-msgstr "Armoured guard tower with Nexus Link"
+msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:566
 #: data/mp/messages/resmessagesall.rmsg:579
@@ -11407,15 +11183,15 @@ msgstr ""
 #: data/mp/messages/resmessagesall.rmsg:697
 #: data/mp/messages/resmessagesall.rmsg:710
 msgid "Best Targets : Vehicles"
-msgstr ""
+msgstr "Legjobb Célpontok: Járművek"
 
 #: data/mp/messages/resmessagesall.rmsg:592
 msgid "Armored strongpoint with Heavy Laser"
-msgstr "Armoured strongpoint with Heavy Laser"
+msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:605
 msgid "Armored guard tower with EMP Cannon"
-msgstr "Armoured guard tower with EMP Cannon"
+msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:618
 msgid "Armed with Cyborg Pulse Laser"
@@ -11458,20 +11234,19 @@ msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:721
 msgid "New System Available"
-msgstr ""
+msgstr "Új Rendszer Elérhető"
 
 #: data/mp/messages/resmessagesall.rmsg:734
 msgid "Medium Super Heavy Body"
 msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:735
-#, fuzzy
 msgid "More armor and body points than Vengeance"
-msgstr "More armour and body points than Python"
+msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:736
 msgid "Slow moving Body"
-msgstr ""
+msgstr "Lassan mozgó Test"
 
 #: data/mp/messages/resmessagesall.rmsg:747
 msgid "Large Super Heavy Body"
@@ -11479,11 +11254,11 @@ msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:748
 msgid "Maximum armor and body points"
-msgstr "Maximum armour and body points"
+msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:749
 msgid "Very slow moving Body"
-msgstr ""
+msgstr "Nagyon lassan mozgó Test"
 
 #: data/mp/messages/resmessagesall.rmsg:760
 msgid "Hardpoint Vindicator SAM Site Available"
@@ -11495,7 +11270,7 @@ msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:826
 msgid "Armored EMP Mortar battery pit"
-msgstr "Armoured EMP Mortar battery pit"
+msgstr ""
 
 #: data/mp/messages/resmessagesall.rmsg:838
 msgid "Laser AA Gun Available"
@@ -11556,43 +11331,36 @@ msgid "Cyborg Transport"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:144
-#, fuzzy
 msgid "Light Cannon Viper Half-tracks"
-msgstr "Lancer Cobra Half-tracks"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:175
 msgid "Repair Turret Viper Half-track"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:183
-#, fuzzy
 msgid "Mini-Rocket Array Viper Wheels"
-msgstr "Mini-Rocket Artillery"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:184
-#, fuzzy
 msgid "Bunker Buster Rockets Viper Wheels"
-msgstr "Bunker Buster Rocket"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:189
-#, fuzzy
 msgid "Sensor Turret Cobra Half-tracks"
-msgstr "Lancer Cobra Half-tracks"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:194
-#, fuzzy
 msgid "Mini-Rocket Array Cobra Half-tracks"
-msgstr "Lancer Cobra Half-tracks"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:351
-#, fuzzy
 msgid "Jammer Tower"
-msgstr "Flamer Guard Tower"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:352
-#, fuzzy
 msgid "Jammer Turret"
-msgstr "Heavy Repair Turret"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:353
 msgid "Electronic Countermeasures"
@@ -11601,17 +11369,15 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:363
 #: data/mp/messages/strings/names.txt:1703
 msgid "Radar Detector"
-msgstr "Radardetektor"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:371
-#, fuzzy
 msgid "Radar Detector Tower"
-msgstr "Radardetektor"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:376
-#, fuzzy
 msgid "Nexus Link"
-msgstr "Nexus Link Turret"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:378
 #: data/mp/messages/strings/names.txt:920
@@ -11620,15 +11386,13 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:395
 #: data/mp/messages/strings/names.txt:719
-#, fuzzy
 msgid "Hardcrete Gate"
-msgstr "Hardcrete Wall"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:401
 #: data/mp/messages/strings/names.txt:730
-#, fuzzy
 msgid "Inferno Bunker"
-msgstr "Lancer Bunker"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:408
 msgid "Tornado AA Site"
@@ -11636,44 +11400,37 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:409
 #: data/mp/messages/strings/names.txt:721
-#, fuzzy
 msgid "AA Flak Cannon Emplacement"
-msgstr "Plasma Cannon Emplacement"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:465
 #: data/mp/messages/strings/names.txt:785
-#, fuzzy
 msgid "Pulse Laser Hardpoint"
-msgstr "Flamer Hardpoint"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:467
 #: data/mp/messages/strings/names.txt:747
-#, fuzzy
 msgid "Pulse Laser Tower"
-msgstr "Pulse Laser"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:504
 #: data/mp/messages/strings/names.txt:1132
-#, fuzzy
 msgid "Seraph Missile Array"
-msgstr "Increases Missile accuracy"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:522
 #: data/mp/messages/strings/names.txt:1195
-#, fuzzy
 msgid "Mini-Rocket Array"
-msgstr "Mini-Rocket Artillery"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:544
 #: data/mp/messages/strings/names.txt:992
-#, fuzzy
 msgid "AA Flak Cannon"
-msgstr "Plasma Cannon"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:545
-#, fuzzy
 msgid "VTOL Flak Cannon"
-msgstr "VTOL Cannon"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:558
 #: data/mp/messages/strings/names.txt:1693
@@ -11682,24 +11439,20 @@ msgid "Laser Satellite Command Post"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:575
-#, fuzzy
 msgid "VTOL Cluster Bomb Bay"
-msgstr "VTOL Cluster Bombs Bay"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:582
-#, fuzzy
 msgid "Collective Corner Wall"
-msgstr "Collective CWall"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:604
-#, fuzzy
 msgid "Nexus Wall"
-msgstr "NEXUS Wall"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:605
-#, fuzzy
 msgid "Nexus Corner Wall"
-msgstr "Hardcrete Corner Wall"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:715
 msgid "Plasteel"
@@ -11715,76 +11468,62 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:726
 #: data/mp/messages/strings/names.txt:1387
-#, fuzzy
 msgid "Hyper Velocity Cannon Emplacement"
-msgstr "Hyper Velocity Cannon"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:737
 #: data/mp/messages/strings/names.txt:1390
-#, fuzzy
 msgid "Seraph Missile Battery"
-msgstr "Angel Missile Battery"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:766
-#, fuzzy
 msgid "Flamer Tower"
-msgstr "Flamer Guard Tower"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:784
 #: data/mp/messages/strings/names.txt:1395
-#, fuzzy
 msgid "Hyper Velocity Cannon Hardpoint"
-msgstr "Hyper Velocity Cannon"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:803
-#, fuzzy
 msgid "Automated Manufacturing"
-msgstr "Automated VTOL Rearming"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:806
-#, fuzzy
 msgid "Robotic Manufacturing"
-msgstr "Manufaktúra"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:809
-#, fuzzy
 msgid "Advanced Manufacturing"
-msgstr "Advanced Warfare"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:811
-#, fuzzy
 msgid "Self-Replicating Manufacturing"
-msgstr "Self-Replicating Factory Production"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:812
-#, fuzzy
 msgid "Advanced Manufacturing Mk3"
-msgstr "Advanced Factory Production Mk3"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:833
-#, fuzzy
 msgid "Robotic Repair Facility"
-msgstr "Robotic Repair Facility Upgrade"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:835
-#, fuzzy
 msgid "Advanced Repair Facility"
-msgstr "Advanced Repair Facility Upgrade"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:836
-#, fuzzy
 msgid "Robotic Repair Facility Mk3"
-msgstr "Robotic Repair Facility Upgrade Mk3"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:837
-#, fuzzy
 msgid "Advanced Repair Facility Mk2"
-msgstr "Advanced Repair Facility Upgrade Mk2"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:838
-#, fuzzy
 msgid "Advanced Repair Facility Mk3"
-msgstr "Advanced Repair Facility Upgrade Mk3"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:883
 msgid "Auto-Repair"
@@ -11797,133 +11536,109 @@ msgid "Heavy Repair Turret"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:924
-#, fuzzy
 msgid "Nexus Intruder Program"
-msgstr "NEXUS Intruder Program"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:925
 #: data/mp/messages/strings/names.txt:1686
-#, fuzzy
 msgid "Nexus Resistance Circuits"
-msgstr "NEXUS Resistance Circuits"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:926
-#, fuzzy
 msgid "Nexus Resistance Circuits Mk2"
-msgstr "NEXUS Resistance Circuits Mk2"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:927
-#, fuzzy
 msgid "Nexus Resistance Circuits Mk3"
-msgstr "NEXUS Resistance Circuits Mk3"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1014
-#, fuzzy
 msgid "Cluster Bomb Bay"
-msgstr "Cluster Bombs Bay"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1019
-#, fuzzy
 msgid "HE Bomb Shells"
-msgstr "HE Mortar Shells"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1020
-#, fuzzy
 msgid "Improved Bomb Warhead"
-msgstr "Improved shaped charge warhead"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1021
-#, fuzzy
 msgid "Advanced Bomb Warhead"
-msgstr "Advanced Missile Warhead"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1091
-#, fuzzy
 msgid "Howitzer Fast Loader"
-msgstr "Mortar Fast Loader"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1107
 msgid "Rapid Fire Chaingun"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1156
-#, fuzzy
 msgid "Rail Target Prediction Computer"
-msgstr "Target Prediction Computer"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1164
-#, fuzzy
 msgid "Stabilized Rockets"
-msgstr "Stabilised Mini-Rockets"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1168
-#, fuzzy
 msgid "HE Rockets"
-msgstr "HE Mini-Rockets"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1169
-#, fuzzy
 msgid "HE Rockets Mk2"
-msgstr "HE Mini-Rockets Mk2"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1170
-#, fuzzy
 msgid "HE Rockets Mk3"
-msgstr "HE Mini-Rockets Mk3"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1383
-#, fuzzy
 msgid "Assault Gun Tower"
-msgstr "Assault Gun Guard Tower"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1437
 msgid "Repair Cobra Tracks"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1473
-#, fuzzy
 msgid "Hyper Velocity Cannon Python Tracks"
-msgstr "HPV Cannon Python Tracks"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1474
-#, fuzzy
 msgid "AA Flak Cannon Python Half-tracks"
-msgstr "Cyclone AA Python Half-tracks"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1512
-#, fuzzy
 msgid "Bunker Buster Cobra Hover"
-msgstr "Bunker Buster Rocket"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1514
-#, fuzzy
 msgid "Sensor Upgrade Mk2"
-msgstr "Sensor Upgrade"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1515
-#, fuzzy
 msgid "Sensor Upgrade Mk3"
-msgstr "Sensor Upgrade"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1516
-#, fuzzy
 msgid "Vapor Turbine Generator Mk2"
-msgstr "Vapour Turbine Generator"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1520
-#, fuzzy
 msgid "Gas Turbine Generator Mk2"
-msgstr "Gas Turbine Generator"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1521
-#, fuzzy
 msgid "Gas Turbine Generator Mk3"
-msgstr "Gas Turbine Generator"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1524
-#, fuzzy
 msgid "Vapor Turbine Generator Mk3"
-msgstr "Vapour Turbine Generator"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1612
 msgid "Thermite Flamer"
@@ -11943,15 +11658,13 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:1633
 #: data/mp/messages/strings/names.txt:1634
-#, fuzzy
 msgid "Incendiary Howitzer"
-msgstr "Incendiary howitzer emplacement"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1635
 #: data/mp/messages/strings/names.txt:1636
-#, fuzzy
 msgid "Incendiary Howitzer Emplacement"
-msgstr "Incendiary howitzer emplacement"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1637
 #: data/mp/messages/strings/names.txt:1638
@@ -11960,45 +11673,42 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:1639
 #: data/mp/messages/strings/names.txt:1640
-#, fuzzy
 msgid "Plasmite Flamer Bunker"
-msgstr "Plasmite Flamer"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1641
 #: data/mp/messages/strings/names.txt:1642
-#, fuzzy
 msgid "Incendiary Mortar"
-msgstr "Increases Mortar ROF"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1643
 #: data/mp/messages/strings/names.txt:1644
-#, fuzzy
 msgid "Incendiary Mortar Pit"
-msgstr "Armoured Incendiary Mortar battery pit"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1648
 msgid "Cyborg Superdense Thermal Armor"
-msgstr "Cyborg Superdense Thermal Armour"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1649
 msgid "Cyborg Superdense Thermal Armor Mk2"
-msgstr "Cyborg Superdense Thermal Armour Mk2"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1650
 msgid "Cyborg Superdense Thermal Armor Mk3"
-msgstr "Cyborg Superdense Thermal Armour Mk3"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1652
 msgid "Vehicle Superdense Thermal Armor"
-msgstr "Vehicle Superdense Thermal Armour"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1653
 msgid "Vehicle Superdense Thermal Armor Mk2"
-msgstr "Vehicle Superdense Thermal Armour Mk2"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1654
 msgid "Vehicle Superdense Thermal Armor Mk3"
-msgstr "Vehicle Superdense Thermal Armour Mk3"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1658
 #: data/mp/messages/strings/names.txt:1659
@@ -12031,12 +11741,11 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:1678
 #: data/mp/messages/strings/names.txt:1679
 msgid "Heavy Laser"
-msgstr ""
+msgstr "Nehéz Lézer"
 
 #: data/mp/messages/strings/names.txt:1680
-#, fuzzy
 msgid "VTOL Heavy Laser"
-msgstr "Heavy Laser"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1681
 #: data/mp/messages/strings/names.txt:1682
@@ -12057,7 +11766,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:1699
 #: data/mp/messages/strings/names.txt:1701
 msgid "Satellite Uplink Center"
-msgstr "Satellite Uplink Centre"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1695
 #: data/mp/messages/strings/names.txt:1697
@@ -12093,9 +11802,8 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:1724
 #: data/mp/messages/strings/names.txt:1725
-#, fuzzy
 msgid "Sunburst AA Site"
-msgstr "Hurricane AA Site"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1727
 #: data/mp/messages/strings/names.txt:1728
@@ -12120,9 +11828,8 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:1742
 #: data/mp/messages/strings/names.txt:1743
-#, fuzzy
 msgid "Nexus Link Tower"
-msgstr "Nexus Link Turret"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1745
 #: data/mp/messages/strings/names.txt:1748
@@ -12140,9 +11847,8 @@ msgid "Mass Driver Fortress"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1753
-#, fuzzy
 msgid "Mass Driver"
-msgstr "Mass Driver Fortress"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1756
 #: data/mp/messages/strings/names.txt:1757
@@ -12163,9 +11869,8 @@ msgid "Missile Fortress"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1770
-#, fuzzy
 msgid "Heavy Body - Wyvern"
-msgstr "Nehéz Test - Tigris"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1771
 msgid "Wyvern"
@@ -12177,7 +11882,7 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:1774
 msgid "Dragon"
-msgstr ""
+msgstr "Sárkány"
 
 #: data/mp/messages/strings/names.txt:1776
 msgid "Superhot Plasmite gel"
@@ -12198,9 +11903,8 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:1783
 #: data/mp/messages/strings/names.txt:1785
-#, fuzzy
 msgid "EMP Mortar Pit"
-msgstr "EMP Mortar"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1786
 #: data/mp/messages/strings/names.txt:1788
@@ -12209,9 +11913,8 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:1787
 #: data/mp/messages/strings/names.txt:1789
-#, fuzzy
 msgid "Stormbringer Emplacement"
-msgstr "Bombard Emplacement"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1790
 #: data/mp/messages/strings/names.txt:1791
@@ -12225,9 +11928,8 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:1794
 #: data/mp/messages/strings/names.txt:1795
-#, fuzzy
 msgid "AA Flak Cannon Hardpoint"
-msgstr "Assault Cannon Hardpoint"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1796
 #: data/mp/messages/strings/names.txt:1797
@@ -12241,23 +11943,20 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:1803
 #: data/mp/messages/strings/names.txt:1804
-#, fuzzy
 msgid "Twin Assault Gun Hardpoint"
-msgstr "Assault Gun Hardpoint"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1806
-#, fuzzy
 msgid "VTOL Plasmite Bomb Bay"
-msgstr "VTOL Thermite Bomb Bay"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1807
 msgid "Plasmite Bomb"
 msgstr ""
 
 #: data/mp/messages/strings/names.txt:1808
-#, fuzzy
 msgid "VTOL EMP Missile Launcher"
-msgstr "EMP Missile Launcher"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1809
 msgid "EMP Missile Launcher"
@@ -12265,46 +11964,38 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:1813
 #: data/mp/messages/strings/names.txt:1814
-#, fuzzy
 msgid "Command Turret II"
-msgstr "Command Turret"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1815
 #: data/mp/messages/strings/names.txt:1816
-#, fuzzy
 msgid "Command Turret III"
-msgstr "Command Turret"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1817
 #: data/mp/messages/strings/names.txt:1818
-#, fuzzy
 msgid "Command Turret IV"
-msgstr "Command Turret"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1880
-#, fuzzy
 msgid "VTOL Hyper Velocity Cannon Bug VTOL"
-msgstr "VTOL Hyper Velocity Cannon"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1882
-#, fuzzy
 msgid "VTOL Hyper Velocity Cannon Scorpion VTOL"
-msgstr "VTOL Hyper Velocity Cannon"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1884
-#, fuzzy
 msgid "VTOL Hyper Velocity Cannon Mantis VTOL"
-msgstr "VTOL Hyper Velocity Cannon"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1923
-#, fuzzy
 msgid "Mini-Rocket Array Cobra Tracks"
-msgstr "Repair Cobra Tracks"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:1926
-#, fuzzy
 msgid "Hyper Velocity Cannon Python Hover"
-msgstr "Hyper Velocity Cannon"
+msgstr ""
 
 #: lib/framework/i18n.cpp:92
 #: lib/framework/i18n.cpp:153
@@ -12328,10 +12019,10 @@ msgstr ""
 
 #: src/challenge.cpp:184
 #: src/hci.cpp:916
-#: src/hci.cpp:3386
-#: src/hci.cpp:3509
-#: src/hci.cpp:3920
-#: src/hci.cpp:4940
+#: src/hci.cpp:3376
+#: src/hci.cpp:3499
+#: src/hci.cpp:3910
+#: src/hci.cpp:4930
 #: src/intelmap.cpp:531
 #: src/intorder.cpp:727
 #: src/loadsave.cpp:253
@@ -12418,9 +12109,8 @@ msgid "Enable a multiplay only mod"
 msgstr ""
 
 #: src/clparse.cpp:244
-#, fuzzy
 msgid "Disable asserts"
-msgstr "Árnyékok kikapcsolása"
+msgstr ""
 
 #: src/clparse.cpp:245
 msgid "Causes a crash to test the crash handler"
@@ -12428,7 +12118,7 @@ msgstr ""
 
 #: src/clparse.cpp:246
 msgid "Load a saved game"
-msgstr ""
+msgstr "Mentett játékot beolvas"
 
 #: src/clparse.cpp:246
 msgid "savegame"
@@ -12440,15 +12130,15 @@ msgstr "Lejátszás ablakos módba"
 
 #: src/clparse.cpp:248
 msgid "Show version information and exit"
-msgstr ""
+msgstr "Mutatja a verzió információt és kilép"
 
 #: src/clparse.cpp:249
 msgid "Set the resolution to use"
-msgstr ""
+msgstr "Beállítja a felbontást a felhasználónak"
 
 #: src/clparse.cpp:249
 msgid "WIDTHxHEIGHT"
-msgstr ""
+msgstr "MAGASSÁG×SZÉLESSÉG"
 
 #: src/clparse.cpp:250
 msgid "Enable shadows"
@@ -12492,40 +12182,40 @@ msgstr "Játékos"
 #: src/design.cpp:455
 #: src/design.cpp:3464
 msgid "New Vehicle"
-msgstr ""
+msgstr "Új Jármű"
 
 #: src/design.cpp:500
 msgid "Vehicle Body"
-msgstr ""
+msgstr "Jármű Test"
 
 #: src/design.cpp:520
 msgid "Vehicle Propulsion"
-msgstr ""
+msgstr "Vehicle PropulsionJárműmeghajtás"
 
 #: src/design.cpp:541
 #: src/design.cpp:564
 #: src/design.cpp:588
 msgid "Vehicle Turret"
-msgstr ""
+msgstr "Járműlövegtorony"
 
 #: src/design.cpp:607
 msgid "Delete Design"
-msgstr ""
+msgstr "Tervezés Törlés"
 
 #: src/design.cpp:658
 #: src/design.cpp:705
 msgid "Kinetic Armour"
-msgstr ""
+msgstr "Kinetikus fegyverzet"
 
 #: src/design.cpp:667
 #: src/design.cpp:715
 msgid "Thermal Armour"
-msgstr ""
+msgstr "Hő Fegyverzet"
 
 #: src/design.cpp:683
 #: src/design.cpp:735
 msgid "Engine Output"
-msgstr ""
+msgstr "Gép Kimenet"
 
 #: src/design.cpp:691
 #: src/design.cpp:744
@@ -12544,12 +12234,12 @@ msgstr ""
 #: src/design.cpp:1880
 #: src/design.cpp:1913
 msgid "Weight"
-msgstr ""
+msgstr "Súly"
 
 #: src/design.cpp:775
 #: src/design.cpp:793
 msgid "Total Power Required"
-msgstr ""
+msgstr "Teljes Erő Szükséges"
 
 #: src/design.cpp:806
 #: src/design.cpp:825
@@ -12590,12 +12280,12 @@ msgstr ""
 #: src/design.cpp:1634
 #: src/design.cpp:1670
 msgid "Range"
-msgstr ""
+msgstr "Hatótávolság"
 
 #: src/design.cpp:1646
 #: src/design.cpp:1678
 msgid "Damage"
-msgstr ""
+msgstr "Kár"
 
 #: src/design.cpp:1654
 #: src/design.cpp:1686
@@ -12631,19 +12321,17 @@ msgid "Systems"
 msgstr "Rendszerek"
 
 #: src/display3d.cpp:591
-#, fuzzy
 msgid "Player left"
-msgstr "Játékos"
+msgstr ""
 
 #: src/display3d.cpp:595
-#, fuzzy
 msgid "Player dropped"
-msgstr "Játékos"
+msgstr ""
 
 #: src/display3d.cpp:599
 #: src/multiint.cpp:2121
 msgid "Waiting for other players"
-msgstr ""
+msgstr "Várakozás egy másik játékosra"
 
 #: src/display3d.cpp:604
 msgid "Out of sync"
@@ -12660,9 +12348,9 @@ msgid "%s - Damage %d%% - Experience %d, %s"
 msgstr ""
 
 #: src/display.cpp:1844
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
-msgstr "%s - Damage %d%% - Experience %d, %s"
+msgstr ""
 
 #: src/droid.cpp:211
 msgid "Unit Lost!"
@@ -12670,14 +12358,14 @@ msgstr "Egység Elveszett!"
 
 #: src/droid.cpp:1376
 msgid "Structure Restored"
-msgstr ""
+msgstr "Szerkezet Helyrállítva"
 
 #: src/droid.cpp:2734
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
-msgstr[0] "Group %u selected - %u Unit"
-msgstr[1] "Group %u selected - %u Units"
+msgstr[0] "Csoport %u kiválasztott - %u Egység"
+msgstr[1] "Csoport %u kiválasztott - %u Egységek"
 
 #: src/droid.cpp:2747
 #, c-format
@@ -12727,7 +12415,7 @@ msgstr "Veterán"
 
 #: src/droid.cpp:3101
 msgid "Elite"
-msgstr "Elit"
+msgstr ""
 
 #: src/droid.cpp:3102
 msgid "Special"
@@ -12748,14 +12436,12 @@ msgid "You wanted to give %s a %s but they have too many!"
 msgstr ""
 
 #: src/frontend.cpp:97
-#, fuzzy
 msgid "Single Player"
-msgstr "Játékos Nevének Kiválasztása"
+msgstr ""
 
 #: src/frontend.cpp:98
-#, fuzzy
 msgid "Multi Player"
-msgstr "Játékos"
+msgstr ""
 
 #: src/frontend.cpp:99
 #: src/frontend.cpp:155
@@ -12763,14 +12449,13 @@ msgid "Tutorial"
 msgstr ""
 
 #: src/frontend.cpp:100
-#: src/hci.cpp:3495
+#: src/hci.cpp:3485
 msgid "Options"
 msgstr "Beállítások"
 
 #: src/frontend.cpp:101
-#, fuzzy
 msgid "View Intro"
-msgstr "View next Truck"
+msgstr ""
 
 #: src/frontend.cpp:103
 msgid "Quit Game"
@@ -12807,9 +12492,8 @@ msgid "New Campaign"
 msgstr "Új Küldetés"
 
 #: src/frontend.cpp:213
-#, fuzzy
 msgid "Start Skirmish Game"
-msgstr "Távoli Játék Indítása"
+msgstr ""
 
 #: src/frontend.cpp:214
 msgid "Challenges"
@@ -12826,14 +12510,14 @@ msgstr "EGYSZERŰ JÁTÉK"
 
 #: src/frontend.cpp:303
 #: src/ingameop.cpp:494
-#: src/mission.cpp:2537
-#: src/mission.cpp:2640
+#: src/mission.cpp:2528
+#: src/mission.cpp:2631
 msgid "Load Saved Game"
 msgstr ""
 
 #: src/frontend.cpp:357
 msgid "MULTI PLAYER"
-msgstr "MULTIPLAYER"
+msgstr ""
 
 #: src/frontend.cpp:359
 msgid "Host Game"
@@ -12857,9 +12541,8 @@ msgid "Graphics Options"
 msgstr "Grafikai Beállítások"
 
 #: src/frontend.cpp:425
-#, fuzzy
 msgid "Video Options"
-msgstr "Hang beállítás"
+msgstr ""
 
 #: src/frontend.cpp:426
 #: src/ingameop.cpp:267
@@ -12867,9 +12550,8 @@ msgid "Audio Options"
 msgstr "Hang beállítás"
 
 #: src/frontend.cpp:427
-#, fuzzy
 msgid "Mouse Options"
-msgstr "Játék Beállítások"
+msgstr ""
 
 #: src/frontend.cpp:428
 msgid "Key Mappings"
@@ -12943,7 +12625,7 @@ msgstr "Ki"
 #: src/frontend.cpp:523
 #: src/multiint.cpp:1354
 msgid "Fog"
-msgstr ""
+msgstr "Köd"
 
 #: src/frontend.cpp:526
 #: src/frontend.cpp:601
@@ -12965,9 +12647,8 @@ msgid "Shadows"
 msgstr "Árnyékok"
 
 #: src/frontend.cpp:558
-#, fuzzy
 msgid "GRAPHICS OPTIONS"
-msgstr "GAME OPTIONS"
+msgstr ""
 
 #: src/frontend.cpp:686
 #: src/ingameop.cpp:167
@@ -12985,9 +12666,8 @@ msgid "Music Volume"
 msgstr "Zenei Hang"
 
 #: src/frontend.cpp:701
-#, fuzzy
 msgid "AUDIO OPTIONS"
-msgstr "GAME OPTIONS"
+msgstr ""
 
 #: src/frontend.cpp:766
 msgid "* Takes effect on game restart"
@@ -12995,12 +12675,12 @@ msgstr ""
 
 #: src/frontend.cpp:769
 msgid "Graphics Mode*"
-msgstr ""
+msgstr "Grafikus Mód*"
 
 #: src/frontend.cpp:777
 #: src/frontend.cpp:822
 msgid "Windowed"
-msgstr ""
+msgstr "Ablakos"
 
 #: src/frontend.cpp:781
 msgid "Resolution*"
@@ -13015,18 +12695,16 @@ msgid "Vertical sync*"
 msgstr ""
 
 #: src/frontend.cpp:802
-#, fuzzy
 msgid "VIDEO OPTIONS"
-msgstr "GAME OPTIONS"
+msgstr ""
 
 #: src/frontend.cpp:958
 msgid "* May negatively affect performance"
 msgstr ""
 
 #: src/frontend.cpp:962
-#, fuzzy
 msgid "Reverse Rotation"
-msgstr "Heavy Rocket Bastion"
+msgstr ""
 
 #: src/frontend.cpp:973
 msgid "Trap Cursor"
@@ -13041,26 +12719,22 @@ msgid "Switch Mouse Buttons"
 msgstr ""
 
 #: src/frontend.cpp:1010
-#, fuzzy
 msgid "Rotate Screen"
-msgstr "Balra Forgatás"
+msgstr "Balra forgatás"
 
 #: src/frontend.cpp:1013
 #: src/frontend.cpp:1101
-#, fuzzy
 msgid "Middle Mouse"
-msgstr "Középső Gomb"
+msgstr ""
 
 #: src/frontend.cpp:1017
 #: src/frontend.cpp:1096
-#, fuzzy
 msgid "Right Mouse"
-msgstr "Jobb Gomb"
+msgstr ""
 
 #: src/frontend.cpp:1021
-#, fuzzy
 msgid "MOUSE OPTIONS"
-msgstr "GAME OPTIONS"
+msgstr ""
 
 #: src/frontend.cpp:1136
 #: src/frontend.cpp:1206
@@ -13106,9 +12780,8 @@ msgstr ""
 
 #: src/frontend.cpp:1182
 #: src/frontend.cpp:1231
-#, fuzzy
 msgid "Rotating"
-msgstr "Jobbra Forgatás"
+msgstr "Jobbra forgatás"
 
 #: src/frontend.cpp:1182
 #: src/frontend.cpp:1231
@@ -13118,7 +12791,7 @@ msgstr "Rögzített"
 #: src/frontend.cpp:1188
 #: src/frontend.cpp:1208
 msgid "GAME OPTIONS"
-msgstr ""
+msgstr "JÁTÉK OPCIÓK"
 
 #: src/frontend.cpp:1340
 #: src/multiint.cpp:2394
@@ -13155,163 +12828,157 @@ msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr ""
 
 #: src/hci.cpp:2025
-#, fuzzy, c-format
+#, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
-msgstr "Player %u is cheating (debug menu) him/herself a new droid: %s."
+msgstr ""
 
-#: src/hci.cpp:3306
+#: src/hci.cpp:3296
 msgid "Commanders (F6)"
-msgstr ""
+msgstr "Parancsnokok (F6)"
 
-#: src/hci.cpp:3319
+#: src/hci.cpp:3309
 msgid "Intelligence Display (F5)"
-msgstr ""
+msgstr "Inteligens Kijelző (F5)"
 
-#: src/hci.cpp:3332
+#: src/hci.cpp:3322
 msgid "Manufacture (F1)"
 msgstr ""
 
-#: src/hci.cpp:3345
+#: src/hci.cpp:3335
 msgid "Design (F4)"
 msgstr ""
 
-#: src/hci.cpp:3358
+#: src/hci.cpp:3348
 msgid "Research (F2)"
 msgstr ""
 
-#: src/hci.cpp:3371
+#: src/hci.cpp:3361
 msgid "Build (F3)"
 msgstr ""
 
-#: src/hci.cpp:3442
+#: src/hci.cpp:3432
 #: src/multiint.cpp:1401
 #: src/multimenu.cpp:764
 msgid "Power"
-msgstr ""
+msgstr "Erő"
 
-#: src/hci.cpp:3533
+#: src/hci.cpp:3523
 msgid "Map:"
 msgstr "Térkép:"
 
-#: src/hci.cpp:3546
-#, fuzzy
+#: src/hci.cpp:3536
 msgid "Load"
-msgstr "Játék Belolvasás"
+msgstr ""
 
-#: src/hci.cpp:3547
-#, fuzzy
+#: src/hci.cpp:3537
 msgid "Load Map File"
-msgstr "Játék Belolvasás"
+msgstr ""
 
-#: src/hci.cpp:3554
-#, fuzzy
+#: src/hci.cpp:3544
 msgid "Save"
-msgstr "Save Game"
+msgstr "Játék Mentés"
 
-#: src/hci.cpp:3555
-#, fuzzy
+#: src/hci.cpp:3545
 msgid "Save Map File"
-msgstr "Save Game"
+msgstr "Játék Mentés"
 
-#: src/hci.cpp:3563
+#: src/hci.cpp:3553
 msgid "New"
 msgstr "Új"
 
-#: src/hci.cpp:3564
+#: src/hci.cpp:3554
 msgid "New Blank Map"
 msgstr "Új Üres Térkép"
 
-#: src/hci.cpp:3600
+#: src/hci.cpp:3590
 msgid "Tile"
-msgstr ""
+msgstr "fájl"
 
-#: src/hci.cpp:3601
+#: src/hci.cpp:3591
 msgid "Place tiles on map"
 msgstr ""
 
-#: src/hci.cpp:3610
+#: src/hci.cpp:3600
 msgid "Unit"
 msgstr "Egység"
 
-#: src/hci.cpp:3611
+#: src/hci.cpp:3601
 msgid "Place Unit on map"
 msgstr ""
 
-#: src/hci.cpp:3619
+#: src/hci.cpp:3609
 msgid "Struct"
 msgstr "Szerkezet"
 
-#: src/hci.cpp:3620
-#, fuzzy
+#: src/hci.cpp:3610
 msgid "Place Structures on map"
-msgstr "Ellenséges Épületek: %u"
+msgstr ""
 
-#: src/hci.cpp:3628
+#: src/hci.cpp:3618
 msgid "Feat"
 msgstr ""
 
-#: src/hci.cpp:3629
+#: src/hci.cpp:3619
 msgid "Place Features on map"
 msgstr ""
 
-#: src/hci.cpp:3639
+#: src/hci.cpp:3629
 msgid "Pause"
 msgstr "Szünet"
 
-#: src/hci.cpp:3640
+#: src/hci.cpp:3630
 msgid "Pause or unpause the game"
 msgstr ""
 
-#: src/hci.cpp:3654
+#: src/hci.cpp:3644
 msgid "Align height of all map objects"
 msgstr ""
 
-#: src/hci.cpp:3664
+#: src/hci.cpp:3654
 msgid "Edit"
 msgstr "Szerkesztés"
 
-#: src/hci.cpp:3665
-#, fuzzy
+#: src/hci.cpp:3655
 msgid "Start Edit Mode"
-msgstr "Start with No Bases"
+msgstr ""
 
-#: src/hci.cpp:3679
+#: src/hci.cpp:3669
 #: src/ingameop.cpp:112
 #: src/ingameop.cpp:256
 #: src/ingameop.cpp:260
 msgid "Quit"
-msgstr ""
+msgstr "Kilépés"
 
-#: src/hci.cpp:3680
+#: src/hci.cpp:3670
 msgid "Exit Game"
-msgstr ""
+msgstr "Játékból Kilépés"
 
-#: src/hci.cpp:3706
+#: src/hci.cpp:3696
 msgid "Current Player:"
 msgstr ""
 
-#: src/hci.cpp:3997
+#: src/hci.cpp:3987
 #: src/intdisplay.cpp:276
 msgid "Progress Bar"
 msgstr ""
 
-#: src/hci.cpp:4865
+#: src/hci.cpp:4855
 msgid "Factory Delivery Point"
 msgstr ""
 
-#: src/hci.cpp:4883
+#: src/hci.cpp:4873
 msgid "Loop Production"
 msgstr ""
 
-#: src/hci.cpp:4963
+#: src/hci.cpp:4953
 msgid "Tab Scroll left"
 msgstr ""
 
-#: src/hci.cpp:4978
+#: src/hci.cpp:4968
 msgid "Tab Scroll right"
 msgstr ""
 
-#: src/hci.cpp:5207
+#: src/hci.cpp:5197
 msgid "Ally progress"
 msgstr ""
 
@@ -13337,24 +13004,22 @@ msgstr ""
 
 #: src/ingameop.cpp:274
 #: src/ingameop.cpp:498
-#: src/mission.cpp:2524
-#: src/mission.cpp:2643
+#: src/mission.cpp:2515
+#: src/mission.cpp:2634
 msgid "Save Game"
-msgstr ""
+msgstr "Játék Mentés"
 
 #: src/ingameop.cpp:339
-#, fuzzy
 msgid "Host has quit the game!"
-msgstr "%s Balra van a Játék"
+msgstr ""
 
 #: src/ingameop.cpp:345
 msgid "The game can't continue without the host."
 msgstr ""
 
 #: src/ingameop.cpp:351
-#, fuzzy
 msgid "-->  QUIT  <--"
-msgstr "--> KILÉPÉS <--"
+msgstr ""
 
 #: src/init.cpp:391
 #, c-format
@@ -13369,9 +13034,8 @@ msgid "Build Progress"
 msgstr ""
 
 #: src/intdisplay.cpp:234
-#, fuzzy
 msgid "Construction Progress"
-msgstr "Kapcsolódási Hiba!"
+msgstr ""
 
 #: src/intdisplay.cpp:269
 msgid "Power Accrued"
@@ -13380,7 +13044,7 @@ msgstr ""
 #: src/intelmap.cpp:242
 #: src/keybind.cpp:1375
 msgid "PAUSED"
-msgstr ""
+msgstr "SZÜNET"
 
 #: src/intelmap.cpp:405
 msgid "Research Update"
@@ -13395,9 +13059,8 @@ msgid "Current Objective"
 msgstr ""
 
 #: src/intelmap.cpp:1506
-#, fuzzy
 msgid "New Intelligence Report"
-msgstr "Incoming intelligence report."
+msgstr ""
 
 #: src/intorder.cpp:166
 #: src/keymap.cpp:390
@@ -13427,7 +13090,7 @@ msgstr ""
 #: src/intorder.cpp:171
 #: src/keymap.cpp:411
 msgid "Do or Die!"
-msgstr ""
+msgstr "Csináld vagy meghalsz!"
 
 #: src/intorder.cpp:172
 msgid "Fire-At-Will"
@@ -13461,7 +13124,7 @@ msgstr ""
 #: src/intorder.cpp:178
 #: src/keymap.cpp:394
 msgid "Hold Position"
-msgstr ""
+msgstr "Pozició Tartás"
 
 #: src/intorder.cpp:179
 #: src/keymap.cpp:393
@@ -13470,17 +13133,17 @@ msgstr ""
 
 #: src/intorder.cpp:180
 msgid "Return To HQ"
-msgstr ""
+msgstr "Vissza a HQ-ba"
 
 #: src/intorder.cpp:181
 #: src/keymap.cpp:395
 msgid "Go to Transport"
-msgstr ""
+msgstr "Szállításra Megy"
 
 #: src/intorder.cpp:182
 #: src/keymap.cpp:419
 msgid "Return for Recycling"
-msgstr ""
+msgstr "Vissza a Lomtárba"
 
 #: src/intorder.cpp:183
 msgid "Recycle"
@@ -13516,7 +13179,7 @@ msgstr ""
 
 #: src/keybind.cpp:240
 msgid "Lets us see what you see!"
-msgstr ""
+msgstr "Amit látsz azt kapod!"
 
 #: src/keybind.cpp:242
 msgid "Fine, weapon & sensor display is off!"
@@ -13541,39 +13204,39 @@ msgstr ""
 
 #: src/keybind.cpp:416
 msgid "Hard as nails!!!"
-msgstr ""
+msgstr "Kemény mint a köröm!!!"
 
 #: src/keybind.cpp:430
 msgid "Takings thing easy!"
-msgstr ""
+msgstr "Vedd a dolgot könnyedén!"
 
 #: src/keybind.cpp:446
 msgid "1000 big ones!!!"
-msgstr ""
+msgstr "1000 nagy egybe!!!"
 
 #: src/keybind.cpp:463
 msgid "Power overwhelming"
-msgstr ""
+msgstr "Elsöprő erő"
 
 #: src/keybind.cpp:478
 msgid "Back to normality!"
-msgstr ""
+msgstr "Hátrálj vissza a szabályossághoz!"
 
 #: src/keybind.cpp:491
 msgid "Getting tricky!"
-msgstr ""
+msgstr "Trükkös dolog!"
 
 #: src/keybind.cpp:507
 msgid "Twice as nice!"
-msgstr ""
+msgstr "Kétszer ahogy jó!"
 
 #: src/keybind.cpp:518
 msgid "FPS display is enabled."
-msgstr ""
+msgstr "FPS kijelzó bekapcsolva"
 
 #: src/keybind.cpp:522
 msgid "FPS display is disabled."
-msgstr ""
+msgstr "FPS kijelző kikapcsolva"
 
 #: src/keybind.cpp:546
 #, c-format
@@ -13595,15 +13258,15 @@ msgstr ""
 
 #: src/keybind.cpp:655
 msgid "All items made available"
-msgstr ""
+msgstr "Minden készített tétel elérhető"
 
 #: src/keybind.cpp:761
 msgid "Fog on"
-msgstr ""
+msgstr "Köd be"
 
 #: src/keybind.cpp:761
 msgid "Fog off"
-msgstr ""
+msgstr "Köd ki"
 
 #: src/keybind.cpp:1171
 #, c-format
@@ -13611,9 +13274,8 @@ msgid "Warning!  This cheat can cause dire problems later on! [%s]"
 msgstr ""
 
 #: src/keybind.cpp:1171
-#, fuzzy
 msgid "Ending Mission."
-msgstr "Incoming Transmission..."
+msgstr ""
 
 #: src/keybind.cpp:1266
 msgid "CHEATS ARE NOW ENABLED!"
@@ -13633,16 +13295,16 @@ msgstr "Isten Mód KI"
 
 #: src/keybind.cpp:1335
 msgid "View Aligned to North"
-msgstr ""
+msgstr "Északra állított nézet"
 
 #: src/keybind.cpp:1344
-#, fuzzy, c-format
+#, c-format
 msgid "Trap cursor %s"
-msgstr "Trap Cursor"
+msgstr ""
 
 #: src/keybind.cpp:1433
 msgid "Researched EVERYTHING for you!"
-msgstr ""
+msgstr "Mindent vizsgált!"
 
 #: src/keybind.cpp:1497
 #, c-format
@@ -13650,9 +13312,8 @@ msgid "(Player %u) is using cheat :%s %s"
 msgstr ""
 
 #: src/keybind.cpp:1498
-#, fuzzy
 msgid "Researched"
-msgstr "Research"
+msgstr ""
 
 #: src/keybind.cpp:1519
 msgid "Only displaying energy bars when selected"
@@ -13668,28 +13329,27 @@ msgstr ""
 
 #: src/keybind.cpp:1547
 msgid "Demo mode off - Returning to normal game mode"
-msgstr ""
+msgstr "Bemutató mód kikapcsolva - Visszatérjés a normál játék módra"
 
 #: src/keybind.cpp:1562
 msgid "Debug menu is Open"
 msgstr ""
 
 #: src/keybind.cpp:1599
-#, fuzzy
 msgid "Unable to locate any oil derricks!"
-msgstr "Unable to locate any Trucks!"
+msgstr ""
 
 #: src/keybind.cpp:1820
 msgid "Oh, the weather outside is frightful... SNOW"
-msgstr ""
+msgstr "Oh, az időjárás kint rémisztő... HÓ"
 
 #: src/keybind.cpp:1826
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
-msgstr ""
+msgstr "Énekelek az esőben, Én énekelek az esőben... ESŐ"
 
 #: src/keybind.cpp:1832
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
-msgstr ""
+msgstr "Előrejelzés: Tiszta idő minden területen... NINCS IDŐJÁRÁS"
 
 #: src/keybind.cpp:1917
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
@@ -13705,11 +13365,11 @@ msgstr ""
 
 #: src/keybind.cpp:2471
 msgid "Centered on player HQ, direction NORTH"
-msgstr "Centred on player HQ, direction NORTH"
+msgstr " HQ játékos középen, ÉSZAK-ra irányult"
 
 #: src/keybind.cpp:2483
 msgid "Unable to locate HQ!"
-msgstr ""
+msgstr "Képtelen, hogy lokalizálja HQ-t!"
 
 #: src/keybind.cpp:2490
 msgid "Formation speed limiting has been removed from the game due to bugs."
@@ -13733,65 +13393,63 @@ msgstr ""
 
 #: src/keybind.cpp:2604
 #: src/keybind.cpp:2647
-#, fuzzy
 msgid "Sorry, but game speed cannot be changed in multiplayer."
-msgstr "Elnézést, a többjátékos játéknál a csevegés kikapcsolva."
+msgstr ""
 
 #: src/keybind.cpp:2625
 #: src/keybind.cpp:2668
 #: src/keybind.cpp:2690
 msgid "Game Speed Reset"
-msgstr ""
+msgstr "Játék Sebesség Újraindítás"
 
 #: src/keybind.cpp:2629
 #, c-format
 msgid "Game Speed Increased to %3.1f"
-msgstr ""
+msgstr "Játék Sebesség Növekvő %3.1f nek"
 
 #: src/keybind.cpp:2672
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
-msgstr ""
+msgstr "Játék sebesség Csökkenő %3.1f nek"
 
 #: src/keybind.cpp:2702
 msgid "Radar showing friend-foe colors"
-msgstr "Radar showing friend-foe colours"
+msgstr "A radar, ami barátot vagy ellenséget mutat, elszíneződik"
 
 #: src/keybind.cpp:2706
 msgid "Radar showing player colors"
-msgstr "Radar showing player colours"
+msgstr "Radar mutatja a színezett játékost"
 
-#: src/keybind.cpp:2727
+#: src/keybind.cpp:2726
 msgid "Radar showing only objects"
-msgstr ""
+msgstr "Radar mutatja csak az objektumot "
 
-#: src/keybind.cpp:2730
+#: src/keybind.cpp:2729
 msgid "Radar blending terrain and height"
-msgstr ""
+msgstr "Radar keverés terep és magasság"
 
-#: src/keybind.cpp:2733
+#: src/keybind.cpp:2732
 msgid "Radar showing terrain"
-msgstr ""
+msgstr "Radar mutatja a terepet"
 
-#: src/keybind.cpp:2736
-#, fuzzy
+#: src/keybind.cpp:2735
 msgid "Radar showing revealed terrain"
-msgstr "Radar showing terrain"
-
-#: src/keybind.cpp:2739
-msgid "Radar showing height"
 msgstr ""
+
+#: src/keybind.cpp:2738
+msgid "Radar showing height"
+msgstr "Radar mutatja a magasságot"
 
 #: src/keyedit.cpp:350
 msgid "KEY MAPPING"
-msgstr ""
+msgstr "Kulcsfontosságú Megfeleltetés"
 
 #: src/keyedit.cpp:372
 #: src/multiint.cpp:671
 #: src/multiint.cpp:1081
 #: src/multiint.cpp:1487
 msgid "Return To Previous Screen"
-msgstr ""
+msgstr "Vissza az Előző Képernyőre"
 
 #: src/keyedit.cpp:377
 msgid "Select Default"
@@ -13803,11 +13461,11 @@ msgstr "Manufaktúra"
 
 #: src/keymap.cpp:296
 msgid "Research"
-msgstr ""
+msgstr "Kutat"
 
 #: src/keymap.cpp:297
 msgid "Build"
-msgstr ""
+msgstr "Épít"
 
 #: src/keymap.cpp:298
 msgid "Design"
@@ -13823,7 +13481,7 @@ msgstr "Parancsnokok"
 
 #: src/keymap.cpp:301
 msgid "Toggle Radar"
-msgstr ""
+msgstr "Radar váltogatás"
 
 #: src/keymap.cpp:302
 msgid "Toggle Console Display"
@@ -13846,129 +13504,128 @@ msgid "View Location of Previous Message"
 msgstr ""
 
 #: src/keymap.cpp:307
-#, fuzzy
 msgid "Toggle Sensor display"
-msgstr "Toggle Console Display"
+msgstr ""
 
 #: src/keymap.cpp:311
 msgid "Assign Group 0"
-msgstr ""
+msgstr "Kijelölt Csoport 0"
 
 #: src/keymap.cpp:312
 msgid "Assign Group 1"
-msgstr ""
+msgstr "Kijelölt Csoport 1"
 
 #: src/keymap.cpp:313
 msgid "Assign Group 2"
-msgstr ""
+msgstr "Kijelölt Csoport 2"
 
 #: src/keymap.cpp:314
 msgid "Assign Group 3"
-msgstr ""
+msgstr "Kijelölt Csoport 3"
 
 #: src/keymap.cpp:315
 msgid "Assign Group 4"
-msgstr ""
+msgstr "Kijelölt Csoport 4"
 
 #: src/keymap.cpp:316
 msgid "Assign Group 5"
-msgstr ""
+msgstr "Kijelölt Csoport 5"
 
 #: src/keymap.cpp:317
 msgid "Assign Group 6"
-msgstr ""
+msgstr "Kijelölt Csoport 6"
 
 #: src/keymap.cpp:318
 msgid "Assign Group 7"
-msgstr ""
+msgstr "Kijelölt Csoport 7"
 
 #: src/keymap.cpp:319
 msgid "Assign Group 8"
-msgstr ""
+msgstr "Kijelölt Csoport 8"
 
 #: src/keymap.cpp:320
 msgid "Assign Group 9"
-msgstr ""
+msgstr "Kijelölt Csoport 9"
 
 #: src/keymap.cpp:324
 msgid "Select Group 0"
-msgstr ""
+msgstr "Csoport  Választás 0"
 
 #: src/keymap.cpp:325
 msgid "Select Group 1"
-msgstr ""
+msgstr "Csoport  Választás 1"
 
 #: src/keymap.cpp:326
 msgid "Select Group 2"
-msgstr ""
+msgstr "Csoport  Választás 2"
 
 #: src/keymap.cpp:327
 msgid "Select Group 3"
-msgstr ""
+msgstr "Csoport Választás 3"
 
 #: src/keymap.cpp:328
 msgid "Select Group 4"
-msgstr ""
+msgstr "Csoport Választás 4"
 
 #: src/keymap.cpp:329
 msgid "Select Group 5"
-msgstr ""
+msgstr "Csoport Választás 5"
 
 #: src/keymap.cpp:330
 msgid "Select Group 6"
-msgstr ""
+msgstr "Csoport Választás 6"
 
 #: src/keymap.cpp:331
 msgid "Select Group 7"
-msgstr ""
+msgstr "Csoport Választás 7"
 
 #: src/keymap.cpp:332
 msgid "Select Group 8"
-msgstr ""
+msgstr "Csoport Választás 8"
 
 #: src/keymap.cpp:333
 msgid "Select Group 9"
-msgstr ""
+msgstr "Csoport Választás 9"
 
 #: src/keymap.cpp:337
 msgid "Select Commander 0"
-msgstr ""
+msgstr "Parancsnok Választás 0"
 
 #: src/keymap.cpp:338
 msgid "Select Commander 1"
-msgstr ""
+msgstr "Parancsnok Választás 1"
 
 #: src/keymap.cpp:339
 msgid "Select Commander 2"
-msgstr ""
+msgstr "Parancsnok Választás 2"
 
 #: src/keymap.cpp:340
 msgid "Select Commander 3"
-msgstr ""
+msgstr "Parancsnok Választás 3"
 
 #: src/keymap.cpp:341
 msgid "Select Commander 4"
-msgstr ""
+msgstr "Parancsnok Választás 4"
 
 #: src/keymap.cpp:342
 msgid "Select Commander 5"
-msgstr ""
+msgstr "Parancsnok Választás 5"
 
 #: src/keymap.cpp:343
 msgid "Select Commander 6"
-msgstr ""
+msgstr "Parancsnok Választás 6"
 
 #: src/keymap.cpp:344
 msgid "Select Commander 7"
-msgstr ""
+msgstr "Parancsnok Választás 7"
 
 #: src/keymap.cpp:345
 msgid "Select Commander 8"
-msgstr ""
+msgstr "Parancsnok Választás 8"
 
 #: src/keymap.cpp:346
 msgid "Select Commander 9"
-msgstr ""
+msgstr "Parancsnok Választás 9"
 
 #: src/keymap.cpp:350
 msgid "Multiplayer Options / Alliance dialog"
@@ -13976,19 +13633,19 @@ msgstr ""
 
 #: src/keymap.cpp:353
 msgid "Snap View to North"
-msgstr ""
+msgstr "Északi nézet"
 
 #: src/keymap.cpp:354
 msgid "Toggle Tracking Camera"
-msgstr ""
+msgstr "Következő Kamera váltás"
 
 #: src/keymap.cpp:355
 msgid "Display In-Game Options"
-msgstr ""
+msgstr "Játék opciók kijelzése"
 
 #: src/keymap.cpp:356
 msgid "Zoom Radar Out"
-msgstr ""
+msgstr "Radar Nézet Ki"
 
 #: src/keymap.cpp:357
 msgid "Zoom Radar In"
@@ -14004,7 +13661,7 @@ msgstr "Kicsinyítés"
 
 #: src/keymap.cpp:360
 msgid "Pitch Forward"
-msgstr ""
+msgstr "Előre hajt"
 
 #: src/keymap.cpp:361
 msgid "Rotate Left"
@@ -14012,7 +13669,7 @@ msgstr "Balra Forgatás"
 
 #: src/keymap.cpp:362
 msgid "Reset Pitch"
-msgstr ""
+msgstr "Alaphelyzetbe helyez"
 
 #: src/keymap.cpp:363
 msgid "Rotate Right"
@@ -14020,11 +13677,11 @@ msgstr "Jobbra Forgatás"
 
 #: src/keymap.cpp:364
 msgid "Pitch Back"
-msgstr ""
+msgstr "Hátra hajt"
 
 #: src/keymap.cpp:365
 msgid "Orders Menu"
-msgstr ""
+msgstr "Menühöz rendel"
 
 #: src/keymap.cpp:366
 msgid "Decrease Game Speed"
@@ -14032,11 +13689,11 @@ msgstr ""
 
 #: src/keymap.cpp:367
 msgid "Increase Game Speed"
-msgstr ""
+msgstr "Játéksebességet növel"
 
 #: src/keymap.cpp:368
 msgid "Reset Game Speed"
-msgstr ""
+msgstr "Játék Sebesség Újraindítása"
 
 #: src/keymap.cpp:369
 msgid "View North"
@@ -14076,27 +13733,27 @@ msgstr ""
 
 #: src/keymap.cpp:378
 msgid "Toggle Overlays"
-msgstr ""
+msgstr "Borítás változtatás"
 
 #: src/keymap.cpp:379
 msgid "Console On/Off"
-msgstr ""
+msgstr "Konzol Be/Ki"
 
 #: src/keymap.cpp:382
 msgid "Center View on HQ"
-msgstr "Centre View on HQ"
+msgstr ""
 
 #: src/keymap.cpp:384
 msgid "View Unassigned Units"
-msgstr ""
+msgstr "Nem kijelölt Egységek Nézete"
 
 #: src/keymap.cpp:386
 msgid "Fire at Will"
-msgstr ""
+msgstr "Tetszés szerint tüzel"
 
 #: src/keymap.cpp:388
 msgid "Return to HQ"
-msgstr ""
+msgstr "Vissza a HQ-ba"
 
 #: src/keymap.cpp:396
 msgid "Send Text Message"
@@ -14107,28 +13764,24 @@ msgid "Drop a beacon"
 msgstr ""
 
 #: src/keymap.cpp:401
-#, fuzzy
 msgid "Sensor display On"
-msgstr "Sensor Range"
+msgstr ""
 
 #: src/keymap.cpp:402
 msgid "Sensor display Off"
 msgstr ""
 
 #: src/keymap.cpp:403
-#, fuzzy
 msgid "Toggles shadows"
-msgstr "Árnyékok bekapcsolása"
+msgstr ""
 
 #: src/keymap.cpp:404
-#, fuzzy
 msgid "Trap cursor"
-msgstr "Trap Cursor"
+msgstr ""
 
 #: src/keymap.cpp:405
-#, fuzzy
 msgid "Toggle radar terrain"
-msgstr "Toggle Radar"
+msgstr ""
 
 #: src/keymap.cpp:406
 msgid "Toggle ally-enemy radar view"
@@ -14144,27 +13797,27 @@ msgstr "Kiválaszt minden Erősen Sérült Egységet"
 
 #: src/keymap.cpp:417
 msgid "Select all Half-tracks"
-msgstr ""
+msgstr "Kiválaszt minden fél-hernyótalpas járművet"
 
 #: src/keymap.cpp:418
 msgid "Select all Hovers"
-msgstr ""
+msgstr "Kiválaszt minden légpárnást"
 
 #: src/keymap.cpp:420
 msgid "Select all Units on Screen"
-msgstr ""
+msgstr "Kiválaszt minen Egységet a Képernyőn"
 
 #: src/keymap.cpp:421
 msgid "Select all Tracks"
-msgstr ""
+msgstr "Kiválaszt minden hernyótalpas járművet"
 
 #: src/keymap.cpp:422
 msgid "Select EVERY unit"
-msgstr ""
+msgstr "Kiválaszt MINDEN egységet"
 
 #: src/keymap.cpp:423
 msgid "Select all VTOLs"
-msgstr ""
+msgstr "Kiválaszt minden VTOL járművet"
 
 #: src/keymap.cpp:424
 msgid "Select all Wheels"
@@ -14175,9 +13828,8 @@ msgid "Show frame rate"
 msgstr ""
 
 #: src/keymap.cpp:426
-#, fuzzy
 msgid "Select all Similar Units"
-msgstr "Kiválaszt minden Harcoló Egységet"
+msgstr ""
 
 #: src/keymap.cpp:430
 msgid "Select next Factory"
@@ -14196,9 +13848,8 @@ msgid "Select next Cyborg Factory"
 msgstr ""
 
 #: src/keymap.cpp:436
-#, fuzzy
 msgid "Toggle Debug Mappings"
-msgstr "Key Mappings"
+msgstr ""
 
 #: src/keymap.cpp:437
 msgid "Toggle display of droid path"
@@ -14213,14 +13864,12 @@ msgid "Show all keyboard mappings - use pause!"
 msgstr ""
 
 #: src/keymap.cpp:440
-#, fuzzy
 msgid "Toggle visibility"
-msgstr "Toggle Overlays"
+msgstr ""
 
 #: src/keymap.cpp:441
-#, fuzzy
 msgid "Raise tile height"
-msgstr "Jobbra Forgatás"
+msgstr ""
 
 #: src/keymap.cpp:442
 msgid "Lower tile height"
@@ -14235,9 +13884,8 @@ msgid "End Mission"
 msgstr ""
 
 #: src/keymap.cpp:445
-#, fuzzy
 msgid "Toggles All fog"
-msgstr "Szövetséges Állam Váltás"
+msgstr ""
 
 #: src/keymap.cpp:446
 msgid "Trigger some weather"
@@ -14252,29 +13900,24 @@ msgid "Realign height of all objects on the map"
 msgstr ""
 
 #: src/keymap.cpp:451
-#, fuzzy
 msgid "Make all items available"
-msgstr "All items made available"
+msgstr ""
 
 #: src/keymap.cpp:452
-#, fuzzy
 msgid "Kill Selected Unit(s)"
-msgstr "Kézi irányítás befejezve a Kiválasztott Egységeknél"
+msgstr ""
 
 #: src/keymap.cpp:453
-#, fuzzy
 msgid "Toggle god Mode Status"
-msgstr "Szövetséges Állam Váltás"
+msgstr ""
 
 #: src/keymap.cpp:454
-#, fuzzy
 msgid "Display Options Screen"
-msgstr "Display In-Game Options"
+msgstr ""
 
 #: src/keymap.cpp:455
-#, fuzzy
 msgid "Complete current research"
-msgstr "Enables command turret research"
+msgstr ""
 
 #: src/keymap.cpp:456
 msgid "Toggle watch window"
@@ -14285,49 +13928,45 @@ msgid "Trace a game object"
 msgstr ""
 
 #: src/keymap.cpp:458
-#, fuzzy
 msgid "Toggle Driving Mode"
-msgstr "Toggle Tracking Camera"
+msgstr ""
 
 #: src/loop.cpp:568
 #: src/loop.cpp:584
-#, fuzzy
 msgid "Could not save game!"
-msgstr "Load a saved game"
-
-#: src/mission.cpp:2085
-msgid "Load Transport"
 msgstr ""
 
-#: src/mission.cpp:2472
-#, fuzzy
-msgid "OBJECTIVE ACHIEVED by cheating!"
-msgstr "OBJECTIVE ACHIEVED"
+#: src/mission.cpp:2076
+msgid "Load Transport"
+msgstr "Szállítás Betöltése"
 
-#: src/mission.cpp:2472
+#: src/mission.cpp:2463
+msgid "OBJECTIVE ACHIEVED by cheating!"
+msgstr ""
+
+#: src/mission.cpp:2463
 msgid "OBJECTIVE ACHIEVED"
 msgstr ""
 
-#: src/mission.cpp:2478
-#, fuzzy
+#: src/mission.cpp:2469
 msgid "OBJECTIVE FAILED--and you cheated!"
-msgstr "OBJECTIVE FAILED"
-
-#: src/mission.cpp:2478
-msgid "OBJECTIVE FAILED"
 msgstr ""
 
-#: src/mission.cpp:2503
-#: src/mission.cpp:2543
-#: src/mission.cpp:2657
+#: src/mission.cpp:2469
+msgid "OBJECTIVE FAILED"
+msgstr "LÁTHATÓ SIKERTELENSÉG"
+
+#: src/mission.cpp:2494
+#: src/mission.cpp:2534
+#: src/mission.cpp:2648
 msgid "Quit To Main Menu"
 msgstr "Kilépés a Saját Menübe"
 
-#: src/mission.cpp:2511
+#: src/mission.cpp:2502
 msgid "Continue Game"
 msgstr "Játék Folytatás"
 
-#: src/mission.cpp:2608
+#: src/mission.cpp:2599
 msgid "GAME SAVED :"
 msgstr ""
 
@@ -14357,9 +13996,9 @@ msgid "%s Gives You Technology Documents"
 msgstr ""
 
 #: src/multigifts.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid "%s Gives You %u Power"
-msgstr "%s Gives you a %s"
+msgstr ""
 
 #: src/multigifts.cpp:366
 #, c-format
@@ -14406,16 +14045,15 @@ msgstr "KAPCSOLAT"
 
 #: src/multiint.cpp:673
 msgid "Lobby"
-msgstr "Lobbi"
+msgstr ""
 
 #: src/multiint.cpp:674
 msgid "IP"
 msgstr ""
 
 #: src/multiint.cpp:863
-#, fuzzy
 msgid "No games are available"
-msgstr "New technologies are available."
+msgstr ""
 
 #: src/multiint.cpp:866
 msgid "Game is full"
@@ -14471,12 +14109,11 @@ msgstr ""
 
 #: src/multiint.cpp:1241
 msgid "Tanks disabled!!"
-msgstr ""
+msgstr "Sérült Tankok!!"
 
 #: src/multiint.cpp:1242
-#, fuzzy
 msgid "Cyborgs disabled."
-msgstr "New Cyborg Available"
+msgstr ""
 
 #: src/multiint.cpp:1243
 msgid "VTOLs disabled."
@@ -14496,20 +14133,17 @@ msgid "Select Map"
 msgstr "Térkép kiválasztása"
 
 #: src/multiint.cpp:1308
-#, fuzzy
 msgid "Click to set Password"
-msgstr "Helytelen Jelszó!"
+msgstr ""
 
 #: src/multiint.cpp:1318
 #: src/multiint.cpp:1319
-#, fuzzy
 msgid "Scavengers"
-msgstr "Scavenger"
+msgstr ""
 
 #: src/multiint.cpp:1321
-#, fuzzy
 msgid "No Scavengers"
-msgstr "Scavenger"
+msgstr ""
 
 #: src/multiint.cpp:1351
 msgid "Select Player Name"
@@ -14530,7 +14164,7 @@ msgstr "Nincsenek Szövetségek"
 
 #: src/multiint.cpp:1373
 msgid "Allow Alliances"
-msgstr ""
+msgstr "Szövetségeket megenged"
 
 #: src/multiint.cpp:1377
 msgid "Locked Teams"
@@ -14570,16 +14204,15 @@ msgstr "Térkép Előnézet"
 
 #: src/multiint.cpp:1479
 msgid "Click to see Map"
-msgstr ""
+msgstr "Kattints ide a Térkép megtekintéséhez"
 
 #: src/multiint.cpp:1493
 msgid "Start Hosting Game"
 msgstr "Távoli Játék Indítása"
 
 #: src/multiint.cpp:1501
-#, fuzzy
 msgid "Show Structure Limits"
-msgstr "Szerkezeti határok beállítása"
+msgstr ""
 
 #: src/multiint.cpp:1501
 msgid "Set Structure Limits"
@@ -14594,9 +14227,8 @@ msgid "Less aggressive and starts with less units"
 msgstr ""
 
 #: src/multiint.cpp:1611
-#, fuzzy
 msgid "Plays nice"
-msgstr "Játékos"
+msgstr ""
 
 #: src/multiint.cpp:1612
 msgid "No holds barred"
@@ -14643,19 +14275,16 @@ msgid "PLAYERS"
 msgstr "JÁTÉKOSOK"
 
 #: src/multiint.cpp:2209
-#, fuzzy
 msgid "Click to change to this slot"
-msgstr "Helytelen Jelszó!"
+msgstr ""
 
 #: src/multiint.cpp:2237
-#, fuzzy
 msgid "Choose Team"
-msgstr "Zárolt Csapatok"
+msgstr ""
 
 #: src/multiint.cpp:2267
-#, fuzzy
 msgid "Click to change player colour"
-msgstr "Radar showing player colours"
+msgstr ""
 
 #: src/multiint.cpp:2295
 msgid "Click to change player position"
@@ -14691,9 +14320,8 @@ msgid "Sorry! Failed to host the game."
 msgstr "Elnézést! Téves távoli játék."
 
 #: src/multiint.cpp:2927
-#, fuzzy
 msgid "'Locked Teams' mode enabled"
-msgstr "Zárolt Csapatok"
+msgstr ""
 
 #: src/multiint.cpp:3008
 #, c-format
@@ -14716,7 +14344,7 @@ msgstr ""
 #: src/multiint.cpp:3790
 #, c-format
 msgid "Map: %d%% downloaded"
-msgstr ""
+msgstr "Térkép: %d%% letöltött"
 
 #: src/multiint.cpp:3816
 msgid "HOST"
@@ -14753,14 +14381,12 @@ msgid "%s is Joining the Game"
 msgstr ""
 
 #: src/multijoin.cpp:422
-#, fuzzy
 msgid "System message:"
-msgstr "System locale"
+msgstr ""
 
 #: src/multilimit.cpp:183
-#, fuzzy
 msgid "Apply Defaults and Return To Previous Screen"
-msgstr "Return To Previous Screen"
+msgstr ""
 
 #: src/multilimit.cpp:314
 msgid "Limits reset to default values"
@@ -14771,72 +14397,60 @@ msgid "2 players"
 msgstr "2 játékos"
 
 #: src/multimenu.cpp:146
-#, fuzzy
 msgid "3 players"
-msgstr "2 játékos"
+msgstr ""
 
 #: src/multimenu.cpp:146
 msgid "4 players"
 msgstr "4 játékos"
 
 #: src/multimenu.cpp:146
-#, fuzzy
 msgid "5 players"
-msgstr "2 játékos"
+msgstr ""
 
 #: src/multimenu.cpp:146
-#, fuzzy
 msgid "6 players"
-msgstr "2 játékos"
+msgstr ""
 
 #: src/multimenu.cpp:146
-#, fuzzy
 msgid "7 players"
-msgstr "2 játékos"
+msgstr ""
 
 #: src/multimenu.cpp:146
 msgid "8 players"
 msgstr "8 játékos"
 
 #: src/multimenu.cpp:146
-#, fuzzy
 msgid "9 players"
-msgstr "2 játékos"
+msgstr ""
 
 #: src/multimenu.cpp:146
-#, fuzzy
 msgid "10 players"
-msgstr "2 játékos"
+msgstr ""
 
 #: src/multimenu.cpp:146
-#, fuzzy
 msgid "11 players"
-msgstr "2 játékos"
+msgstr ""
 
 #: src/multimenu.cpp:146
-#, fuzzy
 msgid "12 players"
-msgstr "2 játékos"
+msgstr ""
 
 #: src/multimenu.cpp:146
-#, fuzzy
 msgid "13 players"
-msgstr "2 játékos"
+msgstr ""
 
 #: src/multimenu.cpp:146
-#, fuzzy
 msgid "14 players"
-msgstr "4 játékos"
+msgstr ""
 
 #: src/multimenu.cpp:146
-#, fuzzy
 msgid "15 players"
-msgstr "2 játékos"
+msgstr ""
 
 #: src/multimenu.cpp:146
-#, fuzzy
 msgid "16 players"
-msgstr "2 játékos"
+msgstr ""
 
 #: src/multimenu.cpp:619
 msgid "Technology level 1"
@@ -14868,9 +14482,8 @@ msgid "Units"
 msgstr "Egységek"
 
 #: src/multimenu.cpp:777
-#, fuzzy
 msgid "Structs"
-msgstr "Szerkezet"
+msgstr "Szerkezetek"
 
 #: src/multimenu.cpp:1139
 msgid "Channel"
@@ -14903,7 +14516,7 @@ msgstr ""
 
 #: src/multiplay.cpp:1056
 msgid "(allies"
-msgstr ""
+msgstr "Szövetség"
 
 #: src/multiplay.cpp:1064
 msgid "(private to "
@@ -15040,10 +14653,10 @@ msgid "Rookie: %u"
 msgstr "Zöldfülű: %u"
 
 #: src/scores.cpp:109
-#, fuzzy, c-format
+#, c-format
 msgctxt "rank"
 msgid "Green: %u"
-msgstr "Zöld"
+msgstr "Zöld: %u"
 
 #: src/scores.cpp:110
 #, c-format
@@ -15058,12 +14671,12 @@ msgstr "Hivatásos: %u"
 #: src/scores.cpp:112
 #, c-format
 msgid "Professional: %u"
-msgstr ""
+msgstr "Professzionális: %u"
 
 #: src/scores.cpp:113
 #, c-format
 msgid "Veteran: %u"
-msgstr ""
+msgstr "Veterán: %u"
 
 #: src/scores.cpp:114
 #, c-format
@@ -15073,24 +14686,24 @@ msgstr ""
 #: src/scores.cpp:115
 #, c-format
 msgid "Special: %u"
-msgstr ""
+msgstr "Speciális: %u"
 
 #: src/scores.cpp:116
 #, c-format
 msgid "Hero: %u"
-msgstr ""
+msgstr "Hős: %u"
 
 #: src/scores.cpp:350
 msgid "Unit Losses"
-msgstr ""
+msgstr "Egység veszteségek"
 
 #: src/scores.cpp:351
 msgid "Structure Losses"
-msgstr ""
+msgstr "Szerkezeti veszteségek"
 
 #: src/scores.cpp:352
 msgid "Force Information"
-msgstr ""
+msgstr "Haderő információ"
 
 #: src/scores.cpp:432
 #, c-format
@@ -15117,9 +14730,8 @@ msgid "YOU ARE VICTORIOUS!"
 msgstr "GYŐZTÉL!"
 
 #: src/scriptfuncs.cpp:3292
-#, fuzzy
 msgid "YOU WERE DEFEATED!"
-msgstr "NEXUS DEFEATED"
+msgstr ""
 
 #: src/scriptfuncs.cpp:9524
 #, c-format
@@ -15135,8 +14747,8 @@ msgstr ""
 #, c-format
 msgid "%u unit selected"
 msgid_plural "%u units selected"
-msgstr[0] "%u unit selected"
-msgstr[1] "%u units selected"
+msgstr[0] "%u egység kiválasztása"
+msgstr[1] "%u egységek kiválasztása"
 
 #: src/selection.cpp:433
 #: src/selection.cpp:520
@@ -15153,7 +14765,7 @@ msgstr ""
 
 #: src/selection.cpp:442
 msgid "Unable to locate any Commanders!"
-msgstr ""
+msgstr "Képtelen lokalizálni bármely Parancsnokot!"
 
 #: src/structure.cpp:2650
 msgid "Command Control Limit Reached - Production Halted"
@@ -15173,12 +14785,12 @@ msgstr[1] "%s - %u Units assigned"
 #: src/structure.cpp:5974
 #, c-format
 msgid "%s - Damage %3.0f%%"
-msgstr ""
+msgstr "%s - Kár %3.0f%%"
 
 #: src/structure.cpp:5926
 #, c-format
 msgid "%s - Connected %u of %u"
-msgstr ""
+msgstr "%s - Kapcsolódott %u of %u"
 
 #: src/structure.cpp:6090
 #: src/structure.cpp:6135
@@ -15188,36 +14800,36 @@ msgstr ""
 
 #: src/structure.cpp:6372
 msgid "Electronic Reward - Visibility Report"
-msgstr ""
+msgstr "Elektronikus Jutalom - Láthatóság Jelentés"
 
 #: src/structure.cpp:6412
 msgid "Factory Reward - Propulsion"
-msgstr ""
+msgstr "Gyári Jutalom - meghajtás"
 
 #: src/structure.cpp:6436
 msgid "Factory Reward - Body"
-msgstr ""
+msgstr "Gyári Jutalom - Test"
 
 #: src/structure.cpp:6460
 msgid "Factory Reward - Weapon"
-msgstr ""
+msgstr "Gyári Jutalom - Fegyver"
 
 #: src/structure.cpp:6469
 msgid "Factory Reward - Nothing"
-msgstr ""
+msgstr "Gyári Jutalom - Jelentéktelen"
 
 #: src/structure.cpp:6497
 msgid "Repair Facility Award - Repair"
-msgstr ""
+msgstr "Javítási Létesítménydíj - Javítás"
 
 #: src/structure.cpp:6504
 msgid "Repair Facility Award - Nothing"
-msgstr ""
+msgstr "Javítási Létesítménydíj - Jelentéktelen"
 
 #: src/transporter.cpp:395
 #: src/transporter.cpp:444
 msgid "Launch Transport"
-msgstr ""
+msgstr "Szállítást indít el"
 
 #: src/transporter.cpp:1422
 msgid "There is not enough room in the Transport!"
@@ -15225,16 +14837,18 @@ msgstr "Nincs elegendő férőhely a szállításhoz!"
 
 #: src/transporter.cpp:1681
 msgid "Reinforcements landing"
-msgstr ""
+msgstr "Megerősített leszállás"
 
 #: src/version.cpp:129
 msgid " (modified locally)"
 msgstr ""
 
+# It's same... (ugyanaz) IT Word
 #: src/version.cpp:136
 msgid " - DEBUG"
 msgstr ""
 
+# It's same... (ugyanaz) IT Word
 #: src/version.cpp:145
 #, c-format
 msgid " - Built %s"
@@ -15247,30 +14861,110 @@ msgstr ""
 msgid "Version %s%s%s%s"
 msgstr "Verzió %s%s%s%s"
 
-#, fuzzy
-#~ msgid "Congratulations your successful evacuation of Beta Base."
-#~ msgstr "Congratulations on your successful evacuation of Beta Base."
-
-#~ msgid "Mantis Command Turret Tracks"
-#~ msgstr "Cobra Command Turret Tracks"
-
-#~ msgid "Viper Machinegun Half-Track"
-#~ msgstr "Scorpion Heavy Machinegun Tracks"
-
-#~ msgid "Viper Flamer Half-Track"
-#~ msgstr "Cobra Flamer Tracks"
-
 #~ msgid ": Unknown cheat code."
-#~ msgstr "Futtatás csevegés módba"
+#~ msgstr "Run in cheat mode"
 
 #~ msgid "Infinite Production"
 #~ msgstr "Loop Production"
 
+#~ msgid "Player %u is cheating him/herself a new droid army of %s(s)."
+#~ msgstr "Player %u is cheating (debug menu) him/herself a new droid: %s."
+
 #~ msgid "Player colour"
-#~ msgstr "Játékos"
+#~ msgstr "Player"
 
 #~ msgid "Kick player"
-#~ msgstr "2 játékos"
+#~ msgstr "2 players"
 
 #~ msgid "Player number"
-#~ msgstr "Játékos"
+#~ msgstr "Player"
+
+#~ msgid "Mini-Rocket accuracy +10%"
+#~ msgstr "Increases Mini-Rocket accuracy"
+
+#~ msgid "Mini-Rocket damage +25%"
+#~ msgstr "Increases Mini-Rocket damage"
+
+#~ msgid "Mini-Rocket reload time -15%"
+#~ msgstr "Mini-Rocket Upgrade"
+
+#~ msgid "Automated Manufacturing Mk2"
+#~ msgstr "Automated VTOL Rearming Mk2"
+
+#~ msgid "Automated Manufacturing Mk3"
+#~ msgstr "Automated VTOL Rearming Mk3"
+
+#~ msgid "Robotic Manufacturing Mk2"
+#~ msgstr "Robotic VTOL Rearming Mk2"
+
+#~ msgid "Robotic Manufacturing Mk3"
+#~ msgstr "Robotic VTOL Rearming Mk3"
+
+#~ msgid "Advanced Manufacturing Mk2"
+#~ msgstr "Advanced Factory Production Mk2"
+
+#~ msgid "Thermite Flamer Cyborg"
+#~ msgstr "Thermite Flamer"
+
+#~ msgid "Grenadier Cyborg"
+#~ msgstr "Grenadier"
+
+#~ msgid "Finnish"
+#~ msgstr "Danish"
+
+#~ msgid "Irish"
+#~ msgstr "Skirmish"
+
+#~ msgid "Croatian"
+#~ msgstr "Latin"
+
+#~ msgid "Polish"
+#~ msgstr "Demolish"
+
+#~ msgid "Brazilian Portuguese"
+#~ msgstr "Portugese"
+
+#~ msgid ", mod: "
+#~ msgstr "mod"
+
+#~ msgid "Basque"
+#~ msgstr "Base"
+
+#~ msgid "Norwegian (Nynorsk)"
+#~ msgstr "Norwegian"
+
+#~ msgid "Swedish (Sweden)"
+#~ msgstr "Swedish"
+
+#~ msgid "Turkish"
+#~ msgstr "Tracks"
+
+#~ msgid "Heavy Machinegun Cobra Half-trackS"
+#~ msgstr "Cobra Heavy Machinegun Half-track"
+
+#~ msgid "Cursor Mode"
+#~ msgstr "Power Module"
+
+#~ msgid "Hardware"
+#~ msgstr "Hardcrete"
+
+#~ msgid "Mini-Pod Battery"
+#~ msgstr "Mini-Rocket Battery"
+
+#~ msgid "Stabilized Mini-Pods"
+#~ msgstr "Stabilised Mini-Rockets"
+
+#~ msgid "HE Mini-Pods"
+#~ msgstr "Mini-Pod"
+
+#~ msgid "HE Mini-Pods Mk2"
+#~ msgstr "HE Mini-Rockets Mk2"
+
+#~ msgid "HE Mini-Pods Mk3"
+#~ msgstr "HE Mini-Rockets Mk3"
+
+#~ msgid "HEAP Mini-Pods"
+#~ msgstr "HEAP Mini-Rockets"
+
+#~ msgid "Cluster Bombs Bug VTOL"
+#~ msgstr "Bug Cluster Bomb VTOL"
