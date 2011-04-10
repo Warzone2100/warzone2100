@@ -179,16 +179,30 @@ bool screenInitialise(
 		debug(LOG_FATAL, "Error: %s", glewGetErrorString(err));
 		exit(1);
 	}
-	info("Status: Using GLEW %s", glewGetString(GLEW_VERSION));
 
+	// Copy this info to be used by the crash handler for the dump file
+	ssprintf(buf, "OpenGL Vendor: %s", glGetString(GL_VENDOR));
+	addDumpInfo(buf);
+	ssprintf(buf, "OpenGL Renderer: %s", glGetString(GL_RENDERER));
+	addDumpInfo(buf);
+	ssprintf(buf, "OpenGL Version: %s", glGetString(GL_VERSION));
+	addDumpInfo(buf);
+	if (GL_VERSION_2_0)
+	{
+		ssprintf(buf, "OpenGL GLSL Version : %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
+		addDumpInfo(buf);
+	}
 	/* Dump general information about OpenGL implementation to the console and the dump file */
-	ssprintf(buf, "OpenGL Vendor : %s", glGetString(GL_VENDOR));
+	ssprintf(buf, "OpenGL Vendor: %s", glGetString(GL_VENDOR));
 	addDumpInfo(buf);
 	debug(LOG_3D, "%s", buf);
-	ssprintf(buf, "OpenGL Renderer : %s", glGetString(GL_RENDERER));
+	ssprintf(buf, "OpenGL Renderer: %s", glGetString(GL_RENDERER));
 	addDumpInfo(buf);
 	debug(LOG_3D, "%s", buf);
-	ssprintf(buf, "OpenGL Version : %s", glGetString(GL_VERSION));
+	ssprintf(buf, "OpenGL Version: %s", glGetString(GL_VERSION));
+	addDumpInfo(buf);
+	debug(LOG_3D, "%s", buf);
+	ssprintf(buf, "GLEW Version: %s", glewGetString(GLEW_VERSION));
 	addDumpInfo(buf);
 	debug(LOG_3D, "%s", buf);
 	ssprintf(buf, "Video Mode %d x %d (%d bpp) (%s)", width, height, bpp, fullScreen ? "fullscreen" : "window");
