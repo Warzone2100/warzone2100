@@ -2052,11 +2052,8 @@ static bool loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStruc
 static bool loadStructSetPointers(void);
 static bool writeStructFile(char *pFileName);
 
-static bool loadSaveTemplate(char *pFileData, UDWORD filesize);
-static bool loadSaveTemplateV7(char *pFileData, UDWORD filesize, UDWORD numTemplates);
-static bool loadSaveTemplateV14(char *pFileData, UDWORD filesize, UDWORD numTemplates);
-static bool loadSaveTemplateV(char *pFileData, UDWORD filesize, UDWORD numTemplates);
-static bool writeTemplateFile(char *pFileName);
+static bool loadSaveTemplate(const char *pFileName);
+static bool writeTemplateFile(const char *pFileName);
 
 static bool loadSaveFeature(char *pFileData, UDWORD filesize);
 static bool loadSaveFeatureV14(char *pFileData, UDWORD filesize, UDWORD numFeatures, UDWORD version);
@@ -2575,21 +2572,13 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 
 		//load in the templates
 		aFileName[fileExten] = '\0';
-		strcat(aFileName, "templ.bjo");
-		/* Load in the chosen file data */
-		pFileData = fileLoadBuffer;
-		if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
-		{
-			debug( LOG_NEVER, "loadgame: Fail20\n" );
-			goto error;
-		}
+		strcat(aFileName, "templates.ini");
 		//load the data into apsTemplates
-		if (!loadSaveTemplate(pFileData, fileSize))
+		if (!loadSaveTemplate(aFileName))
 		{
-			debug( LOG_NEVER, "loadgame: Fail22\n" );
+			debug(LOG_NEVER, "Failed to load templates from %s", aFileName);
 			goto error;
 		}
-		//JPS 25 feb (reverse templates moved from here)
 	}
 
 	if (saveGameOnMission && UserSaveGame)
@@ -2924,8 +2913,6 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		debug( LOG_NEVER, "loadgame: Fail16\n" );
 		goto error;
 	}
-
-	//load droid templates moved from here to BEFORE any structures loaded in
 
 	//load in the structures
 	initStructLimits();
@@ -3282,10 +3269,6 @@ error:
 	freeAllStructs();
 	freeAllFeatures();
 	droidTemplateShutDown();
-	if (psMapTiles)
-	{
-//		free(psMapTiles);
-	}
 	psMapTiles = NULL;
 
 	/* Start the game clock */
@@ -3353,7 +3336,7 @@ bool saveGame(char *aFileName, GAME_TYPE saveType)
 
 	//create the templates filename
 	CurrentFileName[fileExtension] = '\0';
-	strcat(CurrentFileName, "templ.bjo");
+	strcat(CurrentFileName, "templates.ini");
 	/*Write the data to the file*/
 	if (!writeTemplateFile(CurrentFileName))
 	{
@@ -7310,300 +7293,37 @@ bool writeFeatureFile(char *pFileName)
 
 
 // -----------------------------------------------------------------------------------------
-bool loadSaveTemplate(char *pFileData, UDWORD filesize)
+bool loadSaveTemplate(const char *pFileName)
 {
-	TEMPLATE_SAVEHEADER		*psHeader;
-
-	/* Check the file type */
-	psHeader = (TEMPLATE_SAVEHEADER *)pFileData;
-	if (psHeader->aFileType[0] != 't' || psHeader->aFileType[1] != 'e' ||
-		psHeader->aFileType[2] != 'm' || psHeader->aFileType[3] != 'p')
+	WzConfig ini(pFileName);
+	if (ini.status() != QSettings::NoError)
 	{
-		debug( LOG_ERROR, "loadSaveTemplate: Incorrect file type" );
-
+		debug(LOG_ERROR, "Could not open %s", pFileName);
 		return false;
 	}
-
-	/* TEMPLATE_SAVEHEADER */
-	endian_udword(&psHeader->version);
-	endian_udword(&psHeader->quantity);
-
-	debug(LOG_SAVE, "fileversion is %u ", psHeader->version);
-
-	//increment to the start of the data
-	pFileData += TEMPLATE_HEADER_SIZE;
-
-	/* Check the file version */
-	if (psHeader->version < VERSION_7)
+	QStringList list = ini.childGroups();
+	for (int i = 0; i < list.size(); ++i)
 	{
-		debug( LOG_ERROR, "TemplateLoad: unsupported save format version %d", psHeader->version );
-
-		return false;
-	}
-	else if (psHeader->version < VERSION_14)
-	{
-		if (!loadSaveTemplateV7(pFileData, filesize, psHeader->quantity))
-		{
-			return false;
-		}
-	}
-	else if (psHeader->version <= VERSION_19)
-	{
-		if (!loadSaveTemplateV14(pFileData, filesize, psHeader->quantity))
-		{
-			return false;
-		}
-	}
-	else if (psHeader->version <= CURRENT_VERSION_NUM)
-	{
-		if (!loadSaveTemplateV(pFileData, filesize, psHeader->quantity))
-		{
-			return false;
-		}
-	}
-	else
-	{
-		debug(LOG_ERROR, "Unsupported template save format version %u", psHeader->version);
-		return false;
-	}
-	return true;
-}
-
-// -----------------------------------------------------------------------------------------
-/* code specific to version 7 of a save template */
-bool loadSaveTemplateV7(char *pFileData, UDWORD filesize, UDWORD numTemplates)
-{
-	SAVE_TEMPLATE_V2		*psSaveTemplate, sSaveTemplate;
-	DROID_TEMPLATE			*psTemplate;
-	UDWORD					count, i;
-	SDWORD					compInc;
-	bool					found;
-
-	psSaveTemplate = &sSaveTemplate;
-
-	if ((sizeof(SAVE_TEMPLATE_V2) * numTemplates + TEMPLATE_HEADER_SIZE) > filesize)
-	{
-		debug( LOG_ERROR, "templateLoad: unexpected end of file" );
-
-		return false;
-	}
-
-	/* Load in the template data */
-	for (count = 0; count < numTemplates; count ++, pFileData += sizeof(SAVE_TEMPLATE_V2))
-	{
-		memcpy(psSaveTemplate, pFileData, sizeof(SAVE_TEMPLATE_V2));
-
-		/* SAVE_TEMPLATE_V2 is TEMPLATE_SAVE_V2 */
-		/* TEMPLATE_SAVE_V2 */
-		endian_udword(&psSaveTemplate->ref);
-		endian_udword(&psSaveTemplate->player);
-		endian_udword(&psSaveTemplate->numWeaps);
-		endian_udword(&psSaveTemplate->numProgs);
-
-		if (psSaveTemplate->player != 0)
-		{
-			// only load player 0 templates - the rest come from stats
-			continue;
-		}
-
-		//create the Template
-		psTemplate = new DROID_TEMPLATE;
-		if (psTemplate == NULL)
-		{
-			debug(LOG_FATAL, "loadSaveTemplateV7: Out of memory");
-			abort();
-			goto error;
-		}
-		//copy the values across
-
+		ini.beginGroup(list[i]);
+		int player = ini.value("player").toInt();
+		DROID_TEMPLATE *psTemplate = new DROID_TEMPLATE;
 		psTemplate->pName = NULL;
-		sstrcpy(psTemplate->aName, psSaveTemplate->name);
+		sstrcpy(psTemplate->aName, ini.value("name").toString().toUtf8().constData());
+		psTemplate->ref = ini.value("ref").toInt();
+		psTemplate->droidType = (DROID_TYPE)ini.value("droidType").toInt();
+		psTemplate->multiPlayerID = ini.value("multiPlayerID").toInt();
+		psTemplate->asParts[COMP_BODY] = getCompFromName(COMP_BODY, ini.value("body", QString("ZNULLBODY")).toString().toUtf8().constData());
+		psTemplate->asParts[COMP_BRAIN] = getCompFromName(COMP_BRAIN, ini.value("brain", QString("ZNULLBRAIN")).toString().toUtf8().constData());
+		psTemplate->asParts[COMP_PROPULSION] = getCompFromName(COMP_PROPULSION, ini.value("propulsion", QString("ZNULLPROP")).toString().toUtf8().constData());
+		psTemplate->asParts[COMP_REPAIRUNIT] = getCompFromName(COMP_REPAIRUNIT, ini.value("repair", QString("ZNULLREPAIR")).toString().toUtf8().constData());
+		psTemplate->asParts[COMP_ECM] = getCompFromName(COMP_ECM, ini.value("ecm", QString("ZNULLECM")).toString().toUtf8().constData());
+		psTemplate->asParts[COMP_SENSOR] = getCompFromName(COMP_SENSOR, ini.value("sensor", QString("ZNULLSENSOR")).toString().toUtf8().constData());
+		psTemplate->asParts[COMP_CONSTRUCT] = getCompFromName(COMP_CONSTRUCT, ini.value("construct", QString("ZNULLCONSTRUCT")).toString().toUtf8().constData());
+		psTemplate->asWeaps[0] = getCompFromName(COMP_WEAPON, ini.value("weapon/1", QString("ZNULLWEAPON")).toString().toUtf8().constData());
+		psTemplate->asWeaps[1] = getCompFromName(COMP_WEAPON, ini.value("weapon/2", QString("ZNULLWEAPON")).toString().toUtf8().constData());
+		psTemplate->asWeaps[2] = getCompFromName(COMP_WEAPON, ini.value("weapon/3", QString("ZNULLWEAPON")).toString().toUtf8().constData());
+		psTemplate->numWeaps = ini.value("weapons").toInt();
 
-		psTemplate->ref = psSaveTemplate->ref;
-		psTemplate->droidType = (DROID_TYPE)psSaveTemplate->droidType;
-		found = true;
-		//for (i=0; i < DROID_MAXCOMP; i++) - not intestested in the first comp - COMP_UNKNOWN
-		for (i=1; i < DROID_MAXCOMP; i++)
-		{
-			//DROID_MAXCOMP has changed to remove COMP_PROGRAM so hack here to load old save games!
-			if (i == SAVE_COMP_PROGRAM)
-			{
-				break;
-			}
-
-			compInc = getCompFromName(i, psSaveTemplate->asParts[i]);
-
-			if (compInc < 0)
-			{
-
-				debug( LOG_ERROR, "This component no longer exists - %s, the template will be deleted", psSaveTemplate->asParts[i] );
-
-				found = false;
-				//continue;
-				break;
-			}
-			psTemplate->asParts[i] = (UDWORD)compInc;
-		}
-		if (!found)
-		{
-			//ignore this record
-			delete psTemplate;
-			continue;
-		}
-		psTemplate->numWeaps = psSaveTemplate->numWeaps;
-		found = true;
-		for (i=0; i < psTemplate->numWeaps; i++)
-		{
-
-			compInc = getCompFromName(COMP_WEAPON, psSaveTemplate->asWeaps[i]);
-
-			if (compInc < 0)
-			{
-
-				debug( LOG_ERROR, "This weapon no longer exists - %s, the template will be deleted", psSaveTemplate->asWeaps[i] );
-
-				found = false;
-				//continue;
-				break;
-			}
-			psTemplate->asWeaps[i] = (UDWORD)compInc;
-		}
-		if (!found)
-		{
-			//ignore this record
-			delete psTemplate;
-			continue;
-		}
-
-		// ignore brains and programs for now
-		psTemplate->asParts[COMP_BRAIN] = 0;
-		psTemplate->prefab = false;		// not AI template
-
-		//calculate the total build points
-		psTemplate->buildPoints = calcTemplateBuild(psTemplate);
-		psTemplate->powerPoints = calcTemplatePower(psTemplate);
-
-		//store it in the apropriate player' list
-		psTemplate->psNext = apsDroidTemplates[psSaveTemplate->player];
-		apsDroidTemplates[psSaveTemplate->player] = psTemplate;
-	}
-
-	return true;
-
-error:
-	droidTemplateShutDown();
-	return false;
-}
-
-// -----------------------------------------------------------------------------------------
-/* none specific version of a save template */
-bool loadSaveTemplateV14(char *pFileData, UDWORD filesize, UDWORD numTemplates)
-{
-	SAVE_TEMPLATE_V14			*psSaveTemplate, sSaveTemplate;
-	DROID_TEMPLATE			*psTemplate, *psDestTemplate;
-	UDWORD					count, i;
-	SDWORD					compInc;
-	bool					found;
-
-	psSaveTemplate = &sSaveTemplate;
-
-	if ((sizeof(SAVE_TEMPLATE_V14) * numTemplates + TEMPLATE_HEADER_SIZE) > filesize)
-	{
-		debug( LOG_ERROR, "templateLoad: unexpected end of file" );
-
-		return false;
-	}
-
-	/* Load in the template data */
-	for (count = 0; count < numTemplates; count ++, pFileData += sizeof(SAVE_TEMPLATE_V14))
-	{
-		memcpy(psSaveTemplate, pFileData, sizeof(SAVE_TEMPLATE_V14));
-
-		/* SAVE_TEMPLATE_V14 is TEMPLATE_SAVE_V14 */
-		endian_udword(&psSaveTemplate->ref);
-		endian_udword(&psSaveTemplate->player);
-		endian_udword(&psSaveTemplate->numWeaps);
-		endian_udword(&psSaveTemplate->multiPlayerID);
-
-		//AT SOME POINT CHECK THE multiPlayerID TO SEE IF ALREADY EXISTS - IGNORE IF IT DOES
-
-		if (psSaveTemplate->player != 0)
-		{
-			// only load player 0 templates - the rest come from stats
-			continue;
-		}
-
-		//create the Template
-		psTemplate = new DROID_TEMPLATE;
-		if (psTemplate == NULL)
-		{
-			debug(LOG_ERROR, "loadSaveTemplateV14: Out of memory");
-
-			goto error;
-		}
-		//copy the values across
-
-		psTemplate->pName = NULL;
-		sstrcpy(psTemplate->aName, psSaveTemplate->name);
-
-		psTemplate->ref = psSaveTemplate->ref;
-		psTemplate->droidType = (DROID_TYPE)psSaveTemplate->droidType;
-		psTemplate->multiPlayerID = psSaveTemplate->multiPlayerID;
-		found = true;
-		//for (i=0; i < DROID_MAXCOMP; i++) - not intestested in the first comp - COMP_UNKNOWN
-		for (i=1; i < DROID_MAXCOMP; i++)
-		{
-			//DROID_MAXCOMP has changed to remove COMP_PROGRAM so hack here to load old save games!
-			if (i == SAVE_COMP_PROGRAM)
-			{
-				break;
-			}
-
-			compInc = getCompFromName(i, psSaveTemplate->asParts[i]);
-
-			if (compInc < 0)
-			{
-
-				debug( LOG_ERROR, "This component no longer exists - %s, the template will be deleted", psSaveTemplate->asParts[i] );
-
-				found = false;
-				//continue;
-				break;
-			}
-			psTemplate->asParts[i] = (UDWORD)compInc;
-		}
-		if (!found)
-		{
-			//ignore this record
-			delete psTemplate;
-			continue;
-		}
-		psTemplate->numWeaps = psSaveTemplate->numWeaps;
-		found = true;
-		for (i=0; i < psTemplate->numWeaps; i++)
-		{
-
-			compInc = getCompFromName(COMP_WEAPON, psSaveTemplate->asWeaps[i]);
-
-			if (compInc < 0)
-			{
-				debug( LOG_ERROR, "This weapon no longer exists - %s, the template will be deleted", psSaveTemplate->asWeaps[i] );
-
-				found = false;
-				//continue;
-				break;
-			}
-			psTemplate->asWeaps[i] = (UDWORD)compInc;
-		}
-		if (!found)
-		{
-			//ignore this record
-			delete psTemplate;
-			continue;
-		}
-
-		// ignore brains and programs for now
-		psTemplate->asParts[COMP_BRAIN] = 0;
 		psTemplate->prefab = false;		// not AI template
 
 		//calculate the total build points
@@ -7613,7 +7333,7 @@ bool loadSaveTemplateV14(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 		//store it in the apropriate player' list
 		//if a template with the same multiplayerID exists overwrite it
 		//else add this template to the top of the list
-		psDestTemplate = apsDroidTemplates[psSaveTemplate->player];
+		DROID_TEMPLATE *psDestTemplate = apsDroidTemplates[player];
 		while (psDestTemplate != NULL)
 		{
 			if (psTemplate->multiPlayerID == psDestTemplate->multiPlayerID)
@@ -7632,9 +7352,10 @@ bool loadSaveTemplateV14(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 		else
 		{
 			//add it to the top of the list
-			psTemplate->psNext = apsDroidTemplates[psSaveTemplate->player];
-			apsDroidTemplates[psSaveTemplate->player] = psTemplate;
+			psTemplate->psNext = apsDroidTemplates[player];
+			apsDroidTemplates[player] = psTemplate;
 		}
+		ini.endGroup();
 	}
 
 	for (DROID_TEMPLATE *t = apsDroidTemplates[selectedPlayer]; t != NULL; t = t->psNext)
@@ -7643,288 +7364,42 @@ bool loadSaveTemplateV14(char *pFileData, UDWORD filesize, UDWORD numTemplates)
 	}
 
 	return true;
-
-error:
-	droidTemplateShutDown();
-	return false;
 }
 
-// -----------------------------------------------------------------------------------------
-/* none specific version of a save template */
-bool loadSaveTemplateV(char *pFileData, UDWORD filesize, UDWORD numTemplates)
+bool writeTemplateFile(const char *pFileName)
 {
-	SAVE_TEMPLATE			*psSaveTemplate, sSaveTemplate;
-	DROID_TEMPLATE			*psTemplate, *psDestTemplate;
-	UDWORD					count, i;
-	SDWORD					compInc;
-	bool					found;
-
-	psSaveTemplate = &sSaveTemplate;
-
-	if ((sizeof(SAVE_TEMPLATE) * numTemplates + TEMPLATE_HEADER_SIZE) > filesize)
+	WzConfig ini(pFileName);
+	if (ini.status() != QSettings::NoError)
 	{
-		debug( LOG_ERROR, "templateLoad: unexpected end of file" );
-
+		debug(LOG_ERROR, "Could not open %s", pFileName);
 		return false;
 	}
-
-	/* Load in the template data */
-	for (count = 0; count < numTemplates; count ++, pFileData += sizeof(SAVE_TEMPLATE))
+	for (int player = 0; player < game.maxPlayers; player++)
 	{
-		memcpy(psSaveTemplate, pFileData, sizeof(SAVE_TEMPLATE));
-
-		/* SAVE_TEMPLATE is TEMPLATE_SAVE_V20 */
-		/* TEMPLATE_SAVE_V20 */
-		endian_udword(&psSaveTemplate->ref);
-		endian_udword(&psSaveTemplate->player);
-		endian_udword(&psSaveTemplate->numWeaps);
-		endian_udword(&psSaveTemplate->multiPlayerID);
-
-		//AT SOME POINT CHECK THE multiPlayerID TO SEE IF ALREADY EXISTS - IGNORE IF IT DOES
-
-		if (psSaveTemplate->player != 0 && !bMultiPlayer)
+		for (DROID_TEMPLATE *psCurr = apsDroidTemplates[player]; psCurr != NULL; psCurr = psCurr->psNext)
 		{
-			// only load player 0 templates - the rest come from stats
-			continue;
-		}
-
-		//create the Template
-		psTemplate = new DROID_TEMPLATE;
-		if (psTemplate == NULL)
-		{
-			debug(LOG_FATAL, "loadSaveTemplateV: Out of memory");
-			abort();
-			goto error;
-		}
-		//copy the values across
-
-		psTemplate->pName = NULL;
-		sstrcpy(psTemplate->aName, psSaveTemplate->name);
-
-		psTemplate->ref = psSaveTemplate->ref;
-		psTemplate->droidType = (DROID_TYPE)psSaveTemplate->droidType;
-		psTemplate->multiPlayerID = psSaveTemplate->multiPlayerID;
-		found = true;
-		//for (i=0; i < DROID_MAXCOMP; i++) - not intestested in the first comp - COMP_UNKNOWN
-		for (i=1; i < DROID_MAXCOMP; i++)
-		{
-			//DROID_MAXCOMP has changed to remove COMP_PROGRAM so hack here to load old save games!
-			if (i == SAVE_COMP_PROGRAM)
+			ini.beginGroup("template_" + QString::number(psCurr->multiPlayerID));
+			ini.setValue("name", psCurr->aName);
+			ini.setValue("ref", psCurr->ref);
+			ini.setValue("droidType", psCurr->droidType);
+			ini.setValue("multiPlayerID", psCurr->multiPlayerID);
+			ini.setValue("player", player);
+			ini.setValue("body", (asBodyStats + psCurr->asParts[COMP_BODY])->pName);
+			ini.setValue("propulsion", (asPropulsionStats + psCurr->asParts[COMP_PROPULSION])->pName);
+			ini.setValue("brain", (asBrainStats + psCurr->asParts[COMP_BRAIN])->pName);
+			ini.setValue("repair", (asRepairStats + psCurr->asParts[COMP_REPAIRUNIT])->pName);
+			ini.setValue("ecm", (asECMStats + psCurr->asParts[COMP_ECM])->pName);
+			ini.setValue("sensor", (asSensorStats + psCurr->asParts[COMP_SENSOR])->pName);
+			ini.setValue("construct", (asConstructStats + psCurr->asParts[COMP_CONSTRUCT])->pName);
+			ini.setValue("weapons", psCurr->numWeaps);
+			for (int j = 0; j < psCurr->numWeaps; j++)
 			{
-				break;
+				ini.setValue("weapon/" + QString::number(j + 1), (asWeaponStats + psCurr->asWeaps[j])->pName);
 			}
-
-			compInc = getCompFromName(i, psSaveTemplate->asParts[i]);
-
-            //HACK to get the game to load when ECMs, Sensors or RepairUnits have been deleted
-            if (compInc < 0 && (i == COMP_ECM || i == COMP_SENSOR || i == COMP_REPAIRUNIT))
-            {
-                //set the ECM to be the defaultECM ...
-                if (i == COMP_ECM)
-                {
-                    compInc = aDefaultECM[psSaveTemplate->player];
-                }
-                else if (i == COMP_SENSOR)
-                {
-                    compInc = aDefaultSensor[psSaveTemplate->player];
-                }
-                else if (i == COMP_REPAIRUNIT)
-                {
-                    compInc = aDefaultRepair[psSaveTemplate->player];
-                }
-            }
-			else if (compInc < 0)
-			{
-
-				debug( LOG_ERROR, "This component no longer exists - %s, the template will be deleted", psSaveTemplate->asParts[i] );
-
-				found = false;
-				//continue;
-				break;
-			}
-			psTemplate->asParts[i] = (UDWORD)compInc;
-		}
-		if (!found)
-		{
-			//ignore this record
-			delete psTemplate;
-			continue;
-		}
-		psTemplate->numWeaps = psSaveTemplate->numWeaps;
-		found = true;
-		for (i=0; i < psTemplate->numWeaps; i++)
-		{
-
-			compInc = getCompFromName(COMP_WEAPON, psSaveTemplate->asWeaps[i]);
-
-			if (compInc < 0)
-			{
-
-				debug( LOG_ERROR, "This weapon no longer exists - %s, the template will be deleted", psSaveTemplate->asWeaps[i] );
-
-				found = false;
-				//continue;
-				break;
-			}
-			psTemplate->asWeaps[i] = (UDWORD)compInc;
-		}
-		if (!found)
-		{
-			//ignore this record
-			delete psTemplate;
-			continue;
-		}
-
-		//no! put brains back in 10Feb //ignore brains and programs for now
-		//psTemplate->asParts[COMP_BRAIN] = 0;
-		psTemplate->prefab = false;		// not AI template
-
-		//calculate the total build points
-		psTemplate->buildPoints = calcTemplateBuild(psTemplate);
-		psTemplate->powerPoints = calcTemplatePower(psTemplate);
-
-		//store it in the apropriate player' list
-		//if a template with the same multiplayerID exists overwrite it
-		//else add this template to the top of the list
-		psDestTemplate = apsDroidTemplates[psSaveTemplate->player];
-		while (psDestTemplate != NULL)
-		{
-			if (psTemplate->multiPlayerID == psDestTemplate->multiPlayerID)
-			{
-				//whooh get rid of this one
-				break;
-			}
-			psDestTemplate = psDestTemplate->psNext;
-		}
-
-		if (psDestTemplate != NULL)
-		{
-			psTemplate->psNext = psDestTemplate->psNext;//preserve the list
-			*psDestTemplate = *psTemplate;
-		}
-		else
-		{
-			//add it to the top of the list
-			psTemplate->psNext = apsDroidTemplates[psSaveTemplate->player];
-			apsDroidTemplates[psSaveTemplate->player] = psTemplate;
+			ini.endGroup();
 		}
 	}
-
-	for (DROID_TEMPLATE *t = apsDroidTemplates[selectedPlayer]; t != NULL; t = t->psNext)
-	{
-		localTemplates.push_front(*t);
-	}
-
 	return true;
-
-error:
-	droidTemplateShutDown();
-	return false;
-}
-
-// -----------------------------------------------------------------------------------------
-/*
-Writes the linked list of templates for each player to a file
-*/
-bool writeTemplateFile(char *pFileName)
-{
-	char *pFileData = NULL;
-	UDWORD				fileSize, player, totalTemplates=0;
-	DROID_TEMPLATE		*psCurr;
-	TEMPLATE_SAVEHEADER	*psHeader;
-	SAVE_TEMPLATE		*psSaveTemplate;
-	UDWORD				i;
-	bool status = true;
-
-	//total all the droids in the world
-	for (player = 0; player < MAX_PLAYERS; player++)
-	{
-		for (psCurr = apsDroidTemplates[player]; psCurr != NULL; psCurr = psCurr->psNext)
-		{
-			totalTemplates++;
-		}
-	}
-
-	/* Allocate the data buffer */
-	fileSize = TEMPLATE_HEADER_SIZE + totalTemplates*sizeof(SAVE_TEMPLATE);
-	pFileData = (char*)malloc(fileSize);
-	if (pFileData == NULL)
-	{
-		debug( LOG_FATAL, "Out of memory" );
-		abort();
-		return false;
-	}
-
-	/* Put the file header on the file */
-	psHeader = (TEMPLATE_SAVEHEADER *)pFileData;
-	psHeader->aFileType[0] = 't';
-	psHeader->aFileType[1] = 'e';
-	psHeader->aFileType[2] = 'm';
-	psHeader->aFileType[3] = 'p';
-	psHeader->version = CURRENT_VERSION_NUM;
-	psHeader->quantity = totalTemplates;
-
-	psSaveTemplate = (SAVE_TEMPLATE*)(pFileData + TEMPLATE_HEADER_SIZE);
-
-	/* Put the template data into the buffer */
-	for (player = 0; player < MAX_PLAYERS; player++)
-	{
-		for(psCurr = apsDroidTemplates[player]; psCurr != NULL; psCurr = psCurr->psNext)
-		{
-			sstrcpy(psSaveTemplate->name, psCurr->aName);
-
-			psSaveTemplate->ref = psCurr->ref;
-			psSaveTemplate->player = player;
-			psSaveTemplate->droidType = (UBYTE)psCurr->droidType;
-			psSaveTemplate->multiPlayerID = psCurr->multiPlayerID;
-
-			// not interested in first comp - COMP_UNKNOWN
-			for (i=1; i < DROID_MAXCOMP; i++)
-			{
-
-				if (!getNameFromComp(i, psSaveTemplate->asParts[i], psCurr->asParts[i]))
-
-				{
-					//ignore this record
-					break;
-					//continue;
-				}
-			}
-			psSaveTemplate->numWeaps = psCurr->numWeaps;
-			for (i=0; i < psCurr->numWeaps; i++)
-			{
-
-				if (!getNameFromComp(COMP_WEAPON, psSaveTemplate->asWeaps[i], psCurr->asWeaps[i]))
-
-				{
-					//ignore this record
-					//continue;
-					break;
-				}
-			}
-
-			/* SAVE_TEMPLATE is TEMPLATE_SAVE_V20 */
-			/* TEMPLATE_SAVE_V20 */
-			endian_udword(&psSaveTemplate->ref);
-			endian_udword(&psSaveTemplate->player);
-			endian_udword(&psSaveTemplate->numWeaps);
-			endian_udword(&psSaveTemplate->multiPlayerID);
-
-			psSaveTemplate = (SAVE_TEMPLATE *)((char *)psSaveTemplate + sizeof(SAVE_TEMPLATE));
-		}
-	}
-
-	/* TEMPLATE_SAVEHEADER */
-	endian_udword(&psHeader->version);
-	endian_udword(&psHeader->quantity);
-
-	/* Write the data to the file */
-	if (pFileData != NULL) {
-		status = saveFile(pFileName, pFileData, fileSize);
-		free(pFileData);
-		return status;
-	}
-	return false;
 }
 
 // -----------------------------------------------------------------------------------------
