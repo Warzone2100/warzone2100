@@ -4545,8 +4545,6 @@ void checkDroid(const DROID *droid, const char *const location, const char *func
 	}
 
 	ASSERT_HELPER(droid != NULL, location, function, "CHECK_DROID: NULL pointer");
-	ASSERT_HELPER(droid->id != 0, location, function, "CHECK_DROID: Droid with ID 0");
-	if (droid->id == 0) const_cast<uint32_t &>(droid->id) = 0xFEDBCA98;  // HACK Don't spam assertions in maps with a droid with droid ID 0.
 	ASSERT_HELPER(droid->type == OBJ_DROID, location, function, "CHECK_DROID: Not droid (type %d)", (int)droid->type);
 	ASSERT_HELPER(droid->numWeaps <= DROID_MAXWEAPS, location, function, "CHECK_DROID: Bad number of droid weapons %d", (int)droid->numWeaps);
 	ASSERT_HELPER((unsigned)droid->listSize <= droid->asOrderList.size() && (unsigned)droid->listPendingBegin <= droid->asOrderList.size(), location, function, "CHECK_DROID: Bad number of droid orders %d %d %d", (int)droid->listSize, (int)droid->listPendingBegin, (int)droid->asOrderList.size());
