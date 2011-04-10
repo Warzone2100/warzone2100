@@ -159,7 +159,6 @@ lib/framework/lexer_input.cpp
 lib/framework/SDL_framerate.cpp
 lib/framework/stdio_ext.cpp
 lib/framework/strres.cpp
-lib/framework/tagfile.cpp
 lib/framework/treap.cpp
 lib/framework/trig.cpp
 lib/framework/utf.cpp
