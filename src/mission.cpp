@@ -2633,10 +2633,10 @@ void intProcessMissionResult(UDWORD id)
 	{
 	case IDMISSIONRES_LOAD:
 		// throw up some filerequester
-		addLoadSave(LOAD_MISSIONEND,SaveGamePath,"gam",_("Load Saved Game")/*"Load Game"*/);
+		addLoadSave(LOAD_MISSIONEND, _("Load Saved Game"));
 		break;
 	case IDMISSIONRES_SAVE:
-		addLoadSave(SAVE_MISSIONEND,SaveGamePath,"gam",_("Save Game")/*"Save Game"*/);
+		addLoadSave(SAVE_MISSIONEND, _("Save Game"));
 
 		if (widgGetFromID(psWScreen, IDMISSIONRES_QUIT) == NULL)
 		{

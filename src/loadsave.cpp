@@ -90,7 +90,6 @@
 #define SAVEENTRY_EDIT			ID_LOADSAVE + totalslots + totalslots		// save edit box. must be highest value possible I guess. -Q
 
 // ////////////////////////////////////////////////////////////////////////////
-static bool _addLoadSave		(bool bLoad, const char *sSearchPath, const char *sExtension, const char *title);
 static void displayLoadBanner	(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 static void displayLoadSlot		(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 static void displayLoadSaveEdit	(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
@@ -105,8 +104,7 @@ char				sRequestResult[PATH_MAX];   // filename returned;
 bool				bRequestLoad = false;
 LOADSAVE_MODE		bLoadSaveMode;
 
-static char			sPath[255];
-static char			sExt[4];
+static const char *sExt = ".gam";
 
 // ////////////////////////////////////////////////////////////////////////////
 // return whether the save screen was displayed in the mission results screen
@@ -123,13 +121,18 @@ bool saveMidMission(void)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-bool addLoadSave(LOADSAVE_MODE mode, const char *sSearchPath, const char *sExtension, const char *title)
+bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 {
-bool bLoad;
+	bool bLoad;
 
-	bLoadSaveMode = mode;
+	bLoadSaveMode = savemode;
+	UDWORD			slotCount;
+// removed hardcoded values!  change with the defines above! -Q
+	static char	sSlotCaps[totalslots][totalslotspace];
+	static char	sSlotTips[totalslots][totalslotspace];
+	char **i, **files;
 
-	switch(mode)
+	switch(savemode)
 	{
 	case LOAD_FRONTEND:
 	case LOAD_MISSIONEND:
@@ -143,23 +146,8 @@ bool bLoad;
 		break;
 	}
 
-	return _addLoadSave(bLoad,sSearchPath,sExtension,title);
-}
-
-//****************************************************************************************
-// Load menu/save menu?
-//*****************************************************************************************
-static bool _addLoadSave(bool bLoad, const char *sSearchPath, const char *sExtension, const char *title)
-{
-	UDWORD			slotCount;
-// removed hardcoded values!  change with the defines above! -Q
-	static char	sSlotCaps[totalslots][totalslotspace];
-	static char	sSlotTips[totalslots][totalslotspace];
-	char **i, **files;
-	const char* checkExtension;
-
 	mode = bLoad;
-	debug(LOG_SAVE, "called (%d, %s, %s, %s)", bLoad, sSearchPath, sExtension, title);
+	debug(LOG_SAVE, "called (%d, %s)", bLoad, title);
 
 	if ((bLoadSaveMode == LOAD_INGAME) || (bLoadSaveMode == SAVE_INGAME))
 	{
@@ -193,7 +181,7 @@ static bool _addLoadSave(bool bLoad, const char *sSearchPath, const char *sExten
 		intRemoveReticule();
 	}
 
-	(void) PHYSFS_mkdir(sSearchPath); // just in case
+	(void) PHYSFS_mkdir(SaveGamePath); // just in case
 
 	psRequestScreen = widgCreateScreen(); // init the screen
 	widgSetTipFont(psRequestScreen,font_regular);
@@ -225,7 +213,6 @@ static bool _addLoadSave(bool bLoad, const char *sSearchPath, const char *sExten
 	sFormInit.UserData = bLoad;
 	widgAddForm(psRequestScreen, &sFormInit);
 
-
 	// Add Banner Label
 	W_LABINIT sLabInit;
 	sLabInit.formID = LOADSAVE_BANNER;
@@ -237,7 +224,6 @@ static bool _addLoadSave(bool bLoad, const char *sSearchPath, const char *sExten
 	sLabInit.height = LOADSAVE_BANNER_DEPTH;		//This looks right -Q
 	sLabInit.pText	= title;
 	widgAddLabel(psRequestScreen, &sLabInit);
-
 
 	// add cancel.
 	W_BUTINIT sButInit;
@@ -290,16 +276,10 @@ static bool _addLoadSave(bool bLoad, const char *sSearchPath, const char *sExten
 	// fill slots.
 	slotCount = 0;
 
-	sstrcpy(sPath, sSearchPath);  // setup locals.
-	sstrcpy(sExt, sExtension);
-
-	debug(LOG_SAVE, "Searching \"%s\" for savegames", sSearchPath);
-
-	// Check for an extension like ".ext", not "ext"
-	sasprintf((char**)&checkExtension, ".%s", sExtension);
+	debug(LOG_SAVE, "Searching \"%s\" for savegames", SaveGamePath);
 
 	// add savegame filenames minus extensions to buttons
-	files = PHYSFS_enumerateFiles(sSearchPath);
+	files = PHYSFS_enumerateFiles(SaveGamePath);
 	for (i = files; *i != NULL; ++i)
 	{
 		W_BUTTON *button;
@@ -308,7 +288,7 @@ static bool _addLoadSave(bool bLoad, const char *sSearchPath, const char *sExten
 		struct tm *timeinfo;
 
 		// See if this filename contains the extension we're looking for
-		if (!strstr(*i, checkExtension))
+		if (!strstr(*i, sExt))
 		{
 			// If it doesn't, move on to the next filename
 			continue;
@@ -319,7 +299,7 @@ static bool _addLoadSave(bool bLoad, const char *sSearchPath, const char *sExten
 		debug(LOG_SAVE, "We found [%s]", *i);
 
 		/* Figure save-time */
-		snprintf(savefile, sizeof(savefile), "%s/%s", sSearchPath, *i);
+		snprintf(savefile, sizeof(savefile), "%s/%s", SaveGamePath, *i);
 		savetime = PHYSFS_getLastModTime(savefile);
 		timeinfo = localtime(&savetime);
 		strftime(sSlotTips[slotCount], sizeof(sSlotTips[slotCount]), "%x %X", timeinfo);
@@ -448,7 +428,7 @@ bool runLoadSave(bool bResetMissionWidgets)
 		{
 			if( ((W_BUTTON *)widgGetFromID(psRequestScreen,id))->pText )
 			{
-				sprintf(sRequestResult,"%s%s.%s",sPath,	((W_BUTTON *)widgGetFromID(psRequestScreen,id))->pText ,sExt);
+				sprintf(sRequestResult, "%s%s%s", SaveGamePath, ((W_BUTTON *)widgGetFromID(psRequestScreen,id))->pText, sExt);
 			}
 			else
 			{
@@ -476,10 +456,8 @@ bool runLoadSave(bool bResetMissionWidgets)
 
 				if (((W_BUTTON *)widgGetFromID(psRequestScreen,id))->pText != NULL)
 				{
-					snprintf(sDelete, sizeof(sDelete), "%s%s.%s",
-					         sPath,
-					         ((W_BUTTON *)widgGetFromID(psRequestScreen,id))->pText ,
-					         sExt);
+					snprintf(sDelete, sizeof(sDelete), "%s%s%s", SaveGamePath,
+					         ((W_BUTTON *)widgGetFromID(psRequestScreen,id))->pText, sExt);
 				}
 				else
 				{
@@ -545,7 +523,7 @@ bool runLoadSave(bool bResetMissionWidgets)
 		{
 			sstrcpy(sTemp, widgGetString(psRequestScreen, id));
 			removeWildcards(sTemp);
-			snprintf(sRequestResult, sizeof(sRequestResult), "%s%s.%s", sPath, sTemp, sExt);
+			snprintf(sRequestResult, sizeof(sRequestResult), "%s%s%s", SaveGamePath, sTemp, sExt);
 			if (strlen(sDelete) != 0)
 			{
 				deleteSaveGame(sDelete);	//only delete game if a new game fills the slot
@@ -610,7 +588,7 @@ void removeWildcards(char *pStr)
 		    && pStr[i] != '@'
 		    && (pStr[i]<35 || pStr[i]>41) // # $ % & ' ( )
 		    && pStr[i] != '[' && pStr[i] != ']'
-		    && (pStr[i]&0x80) != 0x80  // á é í ó ú α β γ δ ε
+		    && (pStr[i]&0x80) != 0x80  // á é í ó ú α β γ δ ε
 			)
 		{
 			pStr[i] = '_';

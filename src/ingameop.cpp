@@ -491,13 +491,12 @@ void intProcessInGameOptions(UDWORD id)
 //		break;
 	case INTINGAMEOP_LOAD:
 		intCloseInGameOptions(true, false);
-		addLoadSave(LOAD_INGAME,SaveGamePath,"gam",_("Load Saved Game"));	// change mode when loadsave returns//		if(runLoadSave())// check for file name.
+		addLoadSave(LOAD_INGAME, _("Load Saved Game"));	// change mode when loadsave returns
 		break;
 	case INTINGAMEOP_SAVE:
 		intCloseInGameOptions(true, false);
-		addLoadSave(SAVE_INGAME,SaveGamePath,"gam", _("Save Game") );
+		addLoadSave(SAVE_INGAME, _("Save Game"));
 		break;
-
 
 	// GAME OPTIONS KEYS
 	case INTINGAMEOP_FXVOL:

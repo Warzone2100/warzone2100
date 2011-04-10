@@ -56,7 +56,7 @@ extern bool		bRequestLoad;
 
 extern void		drawBlueBox		(UDWORD x,UDWORD y, UDWORD w, UDWORD h);
 
-extern bool		addLoadSave(LOADSAVE_MODE mode, const char *defaultdir, const char *extension, const char *title);
+extern bool		addLoadSave(LOADSAVE_MODE mode, const char *title);
 extern bool		closeLoadSave	(void);
 extern bool		runLoadSave		(bool bResetMissionWidgets);
 extern bool		displayLoadSave	(void);

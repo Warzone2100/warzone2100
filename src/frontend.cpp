@@ -300,7 +300,7 @@ bool runSinglePlayerMenu(void)
 				break;
 			case FRONTEND_LOADGAME:
 				SPinit();
-				addLoadSave(LOAD_FRONTEND,SaveGamePath,"gam",_("Load Saved Game"));	// change mode when loadsave returns
+				addLoadSave(LOAD_FRONTEND, _("Load Saved Game"));	// change mode when loadsave returns
 				break;
 
 			case FRONTEND_SKIRMISH:
