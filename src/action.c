@@ -1365,7 +1365,7 @@ void actionUpdateDroid(DROID *psDroid)
 		break;
 
 	case DACTION_ATTACK:
-		ASSERT_OR_RETURN( , psDroid->psActionTarget[0] != NULL, "target is NULL while attacking");
+		ASSERT_OR_RETURN(, psDroid->psActionTarget[0] != NULL, "target is NULL while attacking (droid %d, player %d)", psDroid->id, psDroid->player);
 
 		// don't wan't formations for this one
 		if (psDroid->sMove.psFormation)
