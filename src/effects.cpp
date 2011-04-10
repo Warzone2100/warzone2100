@@ -2569,7 +2569,7 @@ bool writeFXData(const char *fileName)
 		ini.setValue("radius", it->radius);
 
 		const char *imd_name = resGetNamefromData("IMD", it->imd);
-		if (imd_name)
+		if (imd_name && *imd_name)
 		{
 			ini.setValue("imd_name", imd_name);
 		}
@@ -2618,7 +2618,11 @@ bool readFXData(const char *fileName)
 		curEffect->radius       = ini.value("control").toInt();
 		if (ini.contains("imd_name"))
 		{
-			curEffect->imd = (iIMDShape*)resGetData("IMD", ini.value("imd_name").toString().toUtf8().constData());
+			QString imd_name = ini.value("imd_name").toString();
+			if (!imd_name.isEmpty())
+			{
+				curEffect->imd = (iIMDShape*)resGetData("IMD", imd_name.toUtf8().constData());
+			}
 		}
 		else
 		{
