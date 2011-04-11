@@ -1883,11 +1883,13 @@ static void moveUpdateVtolModel(DROID *psDroid, SDWORD speed, uint16_t direction
 	targetRoll = clip(4 * angleDelta(psDroid->sMove.moveDir - psDroid->rot.direction), -DEG(60), DEG(60));
 	psDroid->rot.roll = psDroid->rot.roll + (uint16_t)gameTimeAdjustedIncrement(3 * angleDelta(targetRoll - psDroid->rot.roll));
 
-	/* do vertical movement */
-	iMapZ = map_Height(psDroid->pos.x, psDroid->pos.y);
-	psDroid->pos.z = MAX(iMapZ, psDroid->pos.z + gameTimeAdjustedIncrement(psDroid->sMove.iVertSpeed));
-
-	moveAdjustVtolHeight(psDroid, iMapZ);
+	/* do vertical movement - only if on the map */
+	if (worldOnMap(psDroid->pos.x, psDroid->pos.y))
+	{
+		iMapZ = map_Height(psDroid->pos.x, psDroid->pos.y);
+		psDroid->pos.z = MAX(iMapZ, psDroid->pos.z + gameTimeAdjustedIncrement(psDroid->sMove.iVertSpeed));
+		moveAdjustVtolHeight(psDroid, iMapZ);
+	}
 }
 
 #define CYBORG_VERTICAL_SPEED	((int)psDroid->baseSpeed / 2)
