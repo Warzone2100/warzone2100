@@ -387,6 +387,10 @@
 		2244463C0E3EB7CB004D0F1F /* message_lexer.l in Sources */ = {isa = PBXBuildFile; fileRef = 224446390E3EB7CB004D0F1F /* message_lexer.l */; };
 		2244463D0E3EB7CB004D0F1F /* message_parser.y in Sources */ = {isa = PBXBuildFile; fileRef = 2244463A0E3EB7CB004D0F1F /* message_parser.y */; };
 		22E244D70E65361800EC2B3E /* baseobject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22E244D40E65361800EC2B3E /* baseobject.cpp */; };
+		43119DC51353AFE7004C54BB /* pnginfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 43119DC21353AFD7004C54BB /* pnginfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		43119DC61353B002004C54BB /* pngdebug.h in Headers */ = {isa = PBXBuildFile; fileRef = 43119DC11353AFD7004C54BB /* pngdebug.h */; };
+		43119DC71353B005004C54BB /* pnglibconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 43119DC31353AFD7004C54BB /* pnglibconf.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		43119DC81353B007004C54BB /* pngstruct.h in Headers */ = {isa = PBXBuildFile; fileRef = 43119DC41353AFD7004C54BB /* pngstruct.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43228C2611BAC02100C26C1C /* export.h in Headers */ = {isa = PBXBuildFile; fileRef = 43228C2311BAC02100C26C1C /* export.h */; };
 		43228C2711BAC02100C26C1C /* setlocale.c in Sources */ = {isa = PBXBuildFile; fileRef = 43228C2411BAC02100C26C1C /* setlocale.c */; };
 		43228C2811BAC02100C26C1C /* threadlib.c in Sources */ = {isa = PBXBuildFile; fileRef = 43228C2511BAC02100C26C1C /* threadlib.c */; };
@@ -695,7 +699,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 43502D511347640700A02A1F /* GLExtensionWrangler */;
+			remoteGlobalIDString = 43502D511347640700A02A1F;
 			remoteInfo = GLExtensionWrangler;
 		};
 		43AE78FC10F0F4F500FED5D3 /* PBXContainerItemProxy */ = {
@@ -1389,6 +1393,10 @@
 		43025F3C11221017006C49B1 /* Theora-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Theora-All.xcconfig"; path = "configs/Theora-All.xcconfig"; sourceTree = "<group>"; };
 		43025F3D11221018006C49B1 /* Theora-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Theora-Debug.xcconfig"; path = "configs/Theora-Debug.xcconfig"; sourceTree = "<group>"; };
 		43025F3E11221018006C49B1 /* Theora-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Theora-Release.xcconfig"; path = "configs/Theora-Release.xcconfig"; sourceTree = "<group>"; };
+		43119DC11353AFD7004C54BB /* pngdebug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pngdebug.h; path = external/libpng/pngdebug.h; sourceTree = "<group>"; };
+		43119DC21353AFD7004C54BB /* pnginfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pnginfo.h; path = external/libpng/pnginfo.h; sourceTree = "<group>"; };
+		43119DC31353AFD7004C54BB /* pnglibconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pnglibconf.h; path = external/libpng/pnglibconf.h; sourceTree = "<group>"; };
+		43119DC41353AFD7004C54BB /* pngstruct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pngstruct.h; path = external/libpng/pngstruct.h; sourceTree = "<group>"; };
 		43228C2311BAC02100C26C1C /* export.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = export.h; path = "external/gettext/gettext-runtime/intl/export.h"; sourceTree = "<group>"; };
 		43228C2411BAC02100C26C1C /* setlocale.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = setlocale.c; path = "external/gettext/gettext-runtime/intl/setlocale.c"; sourceTree = "<group>"; };
 		43228C2511BAC02100C26C1C /* threadlib.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = threadlib.c; path = "external/gettext/gettext-runtime/intl/threadlib.c"; sourceTree = "<group>"; };
@@ -1425,7 +1433,6 @@
 		4355E12D10D6028C00A19EE4 /* theora.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = theora.h; path = external/libtheora/include/theora/theora.h; sourceTree = "<group>"; };
 		4355E12E10D6028C00A19EE4 /* theoradec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = theoradec.h; path = external/libtheora/include/theora/theoradec.h; sourceTree = "<group>"; };
 		4355E12F10D6028C00A19EE4 /* theoraenc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = theoraenc.h; path = external/libtheora/include/theora/theoraenc.h; sourceTree = "<group>"; };
-		4371B60C11D93FD0005A67AB /* new_push_process_row.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = new_push_process_row.c; path = external/libpng/new_push_process_row.c; sourceTree = "<group>"; };
 		4371B60D11D93FD0005A67AB /* pngpriv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pngpriv.h; path = external/libpng/pngpriv.h; sourceTree = "<group>"; };
 		438BDDD81129DC9A00998660 /* cs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		438BDDD91129DC9A00998660 /* da */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -2418,7 +2425,10 @@
 		02DDA8600BD3C1AF0049AB60 /* Png sources */ = {
 			isa = PBXGroup;
 			children = (
-				4371B60C11D93FD0005A67AB /* new_push_process_row.c */,
+				43119DC11353AFD7004C54BB /* pngdebug.h */,
+				43119DC21353AFD7004C54BB /* pnginfo.h */,
+				43119DC31353AFD7004C54BB /* pnglibconf.h */,
+				43119DC41353AFD7004C54BB /* pngstruct.h */,
 				4371B60D11D93FD0005A67AB /* pngpriv.h */,
 				02356DC90BD3BC9900E9A019 /* png.c */,
 				02356DCA0BD3BC9900E9A019 /* png.h */,
@@ -3021,6 +3031,10 @@
 				02356DDC0BD3BC9900E9A019 /* png.h in Headers */,
 				02356DDD0BD3BC9900E9A019 /* pngconf.h in Headers */,
 				4371B60F11D93FD1005A67AB /* pngpriv.h in Headers */,
+				43119DC51353AFE7004C54BB /* pnginfo.h in Headers */,
+				43119DC61353B002004C54BB /* pngdebug.h in Headers */,
+				43119DC71353B005004C54BB /* pnglibconf.h in Headers */,
+				43119DC81353B007004C54BB /* pngstruct.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3239,6 +3253,7 @@
 				02356DBE0BD3BBFC00E9A019 /* Resources */,
 				02356DBF0BD3BBFC00E9A019 /* Sources */,
 				02356DC00BD3BBFC00E9A019 /* Frameworks */,
+				43119DCC1353B08F004C54BB /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -3588,7 +3603,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"libpng-1.4.5\"\nOutDir=\"libpng\"\nFileName=\"libpng-1.4.5.tar.gz\"\nSourceDLP=\"http://downloads.sourceforge.net/project/libpng/libpng14/1.4.5/libpng-1.4.5.tar.gz\"\nMD5Sum=\"dd4175393720ae041c67ace87cf6d212\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
+			shellScript = "DirectorY=\"libpng-1.5.2\"\nOutDir=\"libpng\"\nFileName=\"libpng-1.5.2.tar.gz\"\nSourceDLP=\"http://downloads.sourceforge.net/project/libpng/libpng15/1.5.2/libpng-1.5.2.tar.gz\"\nMD5Sum=\"31d448eb93a1646359a23f1b23434ab3\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
 		};
 		02FD38340BD4012A00776FD3 /* Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3645,6 +3660,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Config\nexport PATH=$PATH:/sw/bin:/opt/local/bin\npodir=\"../po\"\ndisfile=\"configs/LangDis\"\naresdir=\"build/${CONFIGURATION}/Warzone.app/Contents/Resources/\"\nbresdir=\"locale/\"\nmessdir=\"LC_MESSAGES/\"\nmonme=\"warzone2100.mo\"\npolist=`ls -1 ${podir} | sed -n 's:\\.po$:&:p' | sed -e 's:\\.po::'`\ndislist=`cat ${disfile} | sed -n 's:^<::p'`\n\n# 1st san check\necho \"Checking for msgfmt...\"\nif [ -f build/notrans.dis ]; then\n    rm build/notrans.dis\n    echo \"warning: Gettext support has been disabled for this build because we could not find a binary.\" >&2\n    exit 0\nelif ! type -aP msgfmt; then\n    echo \"error: Fatal inability to properly translate messages.\" >&2\n    exit 1\nfi\n\n# Get the path\nmsgfmtpth=`type -P msgfmt`\n\n# 2nd san check\necho \"Checking for sanity...\"\nif ! $msgfmtpth --version; then\n    echo \"error: Fatal failure of san check.\" >&2\n    exit 1\nfi\n\n# Disable selected langs\nfor dislang in ${dislist}; do\n    echo \"Cleaning up for ${dislang} ...\"\n    rm -rfv \"${aresdir}${dislang}.lproj\"\ndone\n\n# Make .mo\nfor lang in ${polist}; do\n    if [ -d \"${aresdir}${lang}.lproj\" ]; then\n        echo \"Setting up for ${lang} ...\"\n        mkdir -p \"${aresdir}${bresdir}${lang}/${messdir}\"\n        $msgfmtpth -v -o \"${aresdir}${bresdir}${lang}/${messdir}${monme}\" \"${podir}/${lang}.po\"\n    fi\ndone\n\nexit 0";
+		};
+		43119DCC1353B08F004C54BB /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/external/libpng/scripts/pnglibconf.h.prebuilt",
+			);
+			outputPaths = (
+				"$(SRCROOT)/external/libpng/pnglibconf.h",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cp ${SRCROOT}/external/libpng/scripts/pnglibconf.h.prebuilt ${SRCROOT}/external/libpng/pnglibconf.h";
 		};
 		433360A711A0796D00380F5E /* Qt */ = {
 			isa = PBXShellScriptBuildPhase;
