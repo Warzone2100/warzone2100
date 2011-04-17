@@ -149,7 +149,7 @@ int pie_AddTexPage(iV_Image *s, const char* filename, int slot, int maxTextureSi
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	// Use anisotropic filtering, if available, but only max 4.0 to reduce processor burden
-	if (GL_EXT_texture_filter_anisotropic)
+	if (GLEW_EXT_texture_filter_anisotropic)
 	{
 		GLfloat max;
 

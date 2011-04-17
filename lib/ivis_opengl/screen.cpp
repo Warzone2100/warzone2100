@@ -76,7 +76,7 @@ bool screenInitialise()
 	addDumpInfo(buf);
 	ssprintf(buf, "OpenGL Version: %s", glGetString(GL_VERSION));
 	addDumpInfo(buf);
-	if (GL_VERSION_2_0)
+	if (GLEW_VERSION_2_0)
 	{
 		ssprintf(buf, "OpenGL GLSL Version : %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
 		addDumpInfo(buf);
@@ -98,23 +98,25 @@ bool screenInitialise()
 	/* Dump extended information about OpenGL implementation to the console */
 	debug(LOG_3D, "OpenGL Extensions : %s", glGetString(GL_EXTENSIONS)); // FIXME This is too much for MAX_LEN_LOG_LINE
 	debug(LOG_3D, "Supported OpenGL extensions:");
-	debug(LOG_3D, "  * OpenGL 1.2 %s supported!", GL_VERSION_1_2 ? "is" : "is NOT");
-	debug(LOG_3D, "  * OpenGL 1.3 %s supported!", GL_VERSION_1_3 ? "is" : "is NOT");
-	debug(LOG_3D, "  * OpenGL 1.4 %s supported!", GL_VERSION_1_4 ? "is" : "is NOT");
-	debug(LOG_3D, "  * OpenGL 1.5 %s supported!", GL_VERSION_1_5 ? "is" : "is NOT");
-	debug(LOG_3D, "  * OpenGL 2.0 %s supported!", GL_VERSION_2_0 ? "is" : "is NOT");
-	debug(LOG_3D, "  * OpenGL 2.1 %s supported!", GL_VERSION_2_1 ? "is" : "is NOT");
-	debug(LOG_3D, "  * OpenGL 3.0 %s supported!", GL_VERSION_3_0 ? "is" : "is NOT");
-	debug(LOG_3D, "  * Texture compression %s supported.", GL_ARB_texture_compression ? "is" : "is NOT");
-	debug(LOG_3D, "  * Two side stencil %s supported.", GL_EXT_stencil_two_side ? "is" : "is NOT");
-	debug(LOG_3D, "  * ATI separate stencil is%s supported.", GL_ATI_separate_stencil ? "" : " NOT");
-	debug(LOG_3D, "  * Stencil wrap %s supported.", GL_EXT_stencil_wrap ? "is" : "is NOT");
-	debug(LOG_3D, "  * Anisotropic filtering %s supported.", GL_EXT_texture_filter_anisotropic ? "is" : "is NOT");
-	debug(LOG_3D, "  * Rectangular texture %s supported.", GL_ARB_texture_rectangle ? "is" : "is NOT");
-	debug(LOG_3D, "  * FrameBuffer Object (FBO) %s supported.", GL_EXT_framebuffer_object ? "is" : "is NOT");
-	debug(LOG_3D, "  * Vertex Buffer Object (VBO) %s supported.", GL_ARB_vertex_buffer_object ? "is" : "is NOT");
-	debug(LOG_3D, "  * NPOT %s supported.", GL_ARB_texture_non_power_of_two ? "is" : "is NOT");
-	debug(LOG_3D, "  * texture cube_map %s supported.", GL_ARB_texture_cube_map ? "is" : "is NOT");
+	debug(LOG_3D, "  * OpenGL 1.2 %s supported!", GLEW_VERSION_1_2 ? "is" : "is NOT");
+	debug(LOG_3D, "  * OpenGL 1.3 %s supported!", GLEW_VERSION_1_3 ? "is" : "is NOT");
+	debug(LOG_3D, "  * OpenGL 1.4 %s supported!", GLEW_VERSION_1_4 ? "is" : "is NOT");
+	debug(LOG_3D, "  * OpenGL 1.5 %s supported!", GLEW_VERSION_1_5 ? "is" : "is NOT");
+	debug(LOG_3D, "  * OpenGL 2.0 %s supported!", GLEW_VERSION_2_0 ? "is" : "is NOT");
+	debug(LOG_3D, "  * OpenGL 2.1 %s supported!", GLEW_VERSION_2_1 ? "is" : "is NOT");
+	debug(LOG_3D, "  * OpenGL 3.0 %s supported!", GLEW_VERSION_3_0 ? "is" : "is NOT");
+	debug(LOG_3D, "  * OpenGL 4.0 %s supported!", GLEW_VERSION_4_0 ? "is" : "is NOT");
+	debug(LOG_3D, "  * OpenGL 4.1 %s supported!", GLEW_VERSION_4_1 ? "is" : "is NOT");
+	debug(LOG_3D, "  * Texture compression %s supported.", GLEW_ARB_texture_compression ? "is" : "is NOT");
+	debug(LOG_3D, "  * Two side stencil %s supported.", GLEW_EXT_stencil_two_side ? "is" : "is NOT");
+	debug(LOG_3D, "  * ATI separate stencil is%s supported.", GLEW_ATI_separate_stencil ? "" : " NOT");
+	debug(LOG_3D, "  * Stencil wrap %s supported.", GLEW_EXT_stencil_wrap ? "is" : "is NOT");
+	debug(LOG_3D, "  * Anisotropic filtering %s supported.", GLEW_EXT_texture_filter_anisotropic ? "is" : "is NOT");
+	debug(LOG_3D, "  * Rectangular texture %s supported.", GLEW_ARB_texture_rectangle ? "is" : "is NOT");
+	debug(LOG_3D, "  * FrameBuffer Object (FBO) %s supported.", GLEW_EXT_framebuffer_object ? "is" : "is NOT");
+	debug(LOG_3D, "  * Vertex Buffer Object (VBO) %s supported.", GLEW_ARB_vertex_buffer_object ? "is" : "is NOT");
+	debug(LOG_3D, "  * NPOT %s supported.", GLEW_ARB_texture_non_power_of_two ? "is" : "is NOT");
+	debug(LOG_3D, "  * texture cube_map %s supported.", GLEW_ARB_texture_cube_map ? "is" : "is NOT");
 	glGetIntegerv(GL_MAX_TEXTURE_UNITS, &glMaxTUs);
 	debug(LOG_3D, "  * Total number of Texture Units (TUs) supported is %d.", (int) glMaxTUs);
 
@@ -122,9 +124,9 @@ bool screenInitialise()
 	screenHeight = MAX(screenHeight, 480);
 
 	/* Dump information about OpenGL 2.0+ implementation to the console and the dump file */
-	if (GL_VERSION_2_0)
+	if (GLEW_VERSION_2_0)
 	{
-		GLint glMaxTIUs;
+		GLint glMaxTIUs, glMaxTCs, glMaxTIUAs;
 
 		debug(LOG_3D, "  * OpenGL GLSL Version : %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
 		ssprintf(buf, "OpenGL GLSL Version : %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
@@ -132,6 +134,10 @@ bool screenInitialise()
 
 		glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &glMaxTIUs);
 		debug(LOG_3D, "  * Total number of Texture Image Units (TIUs) supported is %d.", (int) glMaxTIUs);
+		glGetIntegerv(GL_MAX_TEXTURE_COORDS, &glMaxTCs);
+		debug(LOG_3D, "  * Total number of Texture Coords (TCs) supported is %d.", (int) glMaxTCs);
+		glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS_ARB,&glMaxTIUAs);
+		debug(LOG_3D, "  * Total number of Texture Image Units ARB(TIUAs) supported is %d.", (int) glMaxTIUAs);
 
 		pie_LoadShaders();
 	}
