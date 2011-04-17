@@ -67,9 +67,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GLee.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="piematrix.h">
       <Filter>Header Files</Filter>
     </ClInclude>

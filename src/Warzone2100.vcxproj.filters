@@ -345,6 +345,12 @@
     <ClCompile Include="wrappers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="qtscript.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="qtscriptfuncs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="action.h">
@@ -723,6 +729,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="wrappers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="qtscript.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="qtscriptfuncs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

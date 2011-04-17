@@ -2,7 +2,7 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual C++ Express 2010
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Warzone2100", "..\src\Warzone2100.vcxproj", "{BDDCCB7B-F4F7-4768-A1C3-AE20E9F5FDFC}"
 	ProjectSection(ProjectDependencies) = postProject
-		{5CB20CC1-8E23-499D-A584-05CEBABF85FC} = {5CB20CC1-8E23-499D-A584-05CEBABF85FC}
+		{EAE17819-8C98-4AAE-9569-BD04160D9711} = {EAE17819-8C98-4AAE-9569-BD04160D9711}
 		{9DC871E4-D58D-4AF6-85A6-7DF7A39B8C18} = {9DC871E4-D58D-4AF6-85A6-7DF7A39B8C18}
 	EndProjectSection
 EndProject
@@ -18,7 +18,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "netplay", "..\lib\netplay\n
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ivis_opengl", "..\lib\ivis_opengl\ivis_opengl.vcxproj", "{4D637147-73F9-4A51-944B-34BF78E6C6DC}"
 	ProjectSection(ProjectDependencies) = postProject
-		{5CB20CC1-8E23-499D-A584-05CEBABF85FC} = {5CB20CC1-8E23-499D-A584-05CEBABF85FC}
+		{EAE17819-8C98-4AAE-9569-BD04160D9711} = {EAE17819-8C98-4AAE-9569-BD04160D9711}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gamelib", "..\lib\gamelib\gamelib.vcxproj", "{EFE011B6-4C0B-40AA-9F18-5AD599E70D28}"
@@ -27,9 +27,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "framework", "..\lib\framewo
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "exceptionhandler", "..\lib\exceptionhandler\exceptionhandler.vcxproj", "{9DC871E4-D58D-4AF6-85A6-7DF7A39B8C18}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iniparser", "..\lib\iniparser\iniparser.vcxproj", "{0A5A8B49-7072-4196-AA26-DD767760C6B5}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "glee", "..\lib\ivis_opengl\glee\glee.vcxproj", "{5CB20CC1-8E23-499D-A584-05CEBABF85FC}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "glew", "..\lib\ivis_opengl\glew\glew.vcxproj", "{EAE17819-8C98-4AAE-9569-BD04160D9711}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -98,18 +96,12 @@ Global
 		{9DC871E4-D58D-4AF6-85A6-7DF7A39B8C18}.Debug|Win32.Build.0 = Debug|Win32
 		{9DC871E4-D58D-4AF6-85A6-7DF7A39B8C18}.Release|Win32.ActiveCfg = Release|Win32
 		{9DC871E4-D58D-4AF6-85A6-7DF7A39B8C18}.Release|Win32.Build.0 = Release|Win32
-		{0A5A8B49-7072-4196-AA26-DD767760C6B5}.(STLport)-Debug|Win32.ActiveCfg = STLport-Debug|Win32
-		{0A5A8B49-7072-4196-AA26-DD767760C6B5}.(STLport)-Debug|Win32.Build.0 = STLport-Debug|Win32
-		{0A5A8B49-7072-4196-AA26-DD767760C6B5}.Debug|Win32.ActiveCfg = Debug|Win32
-		{0A5A8B49-7072-4196-AA26-DD767760C6B5}.Debug|Win32.Build.0 = Debug|Win32
-		{0A5A8B49-7072-4196-AA26-DD767760C6B5}.Release|Win32.ActiveCfg = Release|Win32
-		{0A5A8B49-7072-4196-AA26-DD767760C6B5}.Release|Win32.Build.0 = Release|Win32
-		{5CB20CC1-8E23-499D-A584-05CEBABF85FC}.(STLport)-Debug|Win32.ActiveCfg = STLport-Debug|Win32
-		{5CB20CC1-8E23-499D-A584-05CEBABF85FC}.(STLport)-Debug|Win32.Build.0 = STLport-Debug|Win32
-		{5CB20CC1-8E23-499D-A584-05CEBABF85FC}.Debug|Win32.ActiveCfg = Debug|Win32
-		{5CB20CC1-8E23-499D-A584-05CEBABF85FC}.Debug|Win32.Build.0 = Debug|Win32
-		{5CB20CC1-8E23-499D-A584-05CEBABF85FC}.Release|Win32.ActiveCfg = Release|Win32
-		{5CB20CC1-8E23-499D-A584-05CEBABF85FC}.Release|Win32.Build.0 = Release|Win32
+		{EAE17819-8C98-4AAE-9569-BD04160D9711}.(STLport)-Debug|Win32.ActiveCfg = Debug|Win32
+		{EAE17819-8C98-4AAE-9569-BD04160D9711}.(STLport)-Debug|Win32.Build.0 = Debug|Win32
+		{EAE17819-8C98-4AAE-9569-BD04160D9711}.Debug|Win32.ActiveCfg = Debug|Win32
+		{EAE17819-8C98-4AAE-9569-BD04160D9711}.Debug|Win32.Build.0 = Debug|Win32
+		{EAE17819-8C98-4AAE-9569-BD04160D9711}.Release|Win32.ActiveCfg = Release|Win32
+		{EAE17819-8C98-4AAE-9569-BD04160D9711}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

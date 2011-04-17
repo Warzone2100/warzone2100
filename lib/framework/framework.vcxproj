@@ -70,7 +70,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(SolutionDir)\..;$(SolutionDir)\..\devpkg\include;$(SolutionDir)\..\devpkg\include\SDL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_HAS_ITERATOR_DEBUGGING=0;_SECURE_SCL=0;YY_STATIC;LOCALEDIR="";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_HAS_ITERATOR_DEBUGGING=0;_SECURE_SCL=0;YY_STATIC;LOCALEDIR="";GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -150,7 +150,6 @@
     <ClCompile Include="strres.cpp" />
     <ClCompile Include="strres_lexer.lex.cpp" />
     <ClCompile Include="strres_parser.tab.cpp" />
-    <ClCompile Include="tagfile.cpp" />
     <ClCompile Include="treap.cpp" />
     <ClCompile Include="trig.cpp" />
     <ClCompile Include="utf.cpp" />
@@ -198,7 +197,6 @@
     <ClInclude Include="strres.h" />
     <ClInclude Include="strresly.h" />
     <ClInclude Include="strres_parser.tab.hpp" />
-    <ClInclude Include="tagfile.h" />
     <ClInclude Include="treap.h" />
     <ClInclude Include="trig.h" />
     <ClInclude Include="types.h" />
