@@ -236,7 +236,7 @@ bool rebuildSearchPath( searchPathMode mode, bool force )
 	char tmpstr[PATH_MAX] = "\0";
 
 	if (mode != current_mode || force ||
-	    (use_override_mods && strcmp(override_mod_list, getModList())))
+	    (use_override_mods && strcmp(override_mod_list, getModList())) || use_override_map)
 	{
 		if (mode != mod_clean)
 		{
@@ -346,7 +346,7 @@ bool rebuildSearchPath( searchPathMode mode, bool force )
 #endif // DEBUG
 					// Add maps and global and multiplay mods
 					PHYSFS_addToSearchPath( curSearchPath->path, PHYSFS_APPEND );
-					addSubdirs( curSearchPath->path, "maps", PHYSFS_APPEND, NULL, false );
+					addSubdirs( curSearchPath->path, "maps", PHYSFS_APPEND, use_override_map?override_map:NULL, false );
 					addSubdirs( curSearchPath->path, "mods/music", PHYSFS_APPEND, NULL, false );
 					addSubdirs( curSearchPath->path, "mods/global", PHYSFS_APPEND, use_override_mods?override_mods:global_mods, true );
 					addSubdirs( curSearchPath->path, "mods", PHYSFS_APPEND, use_override_mods?override_mods:global_mods, true );
@@ -385,13 +385,13 @@ bool rebuildSearchPath( searchPathMode mode, bool force )
 				debug(LOG_ERROR, "Can't switch to unknown mods %i", mode);
 				return false;
 		}
-		if (use_override_mods && mode != mod_clean)
+		if ((use_override_mods || use_override_map) && mode != mod_clean)
 		{
-			if (strcmp(getModList(),override_mod_list))
+			if (use_override_mods && strcmp(getModList(),override_mod_list))
 			{
 				debug(LOG_POPUP, _("The required mod could not be loaded: %s\n\nWarzone will try to load the game without it."), override_mod_list);
 			}
-			clearOverrideMods();
+			clearOverrides();
 			current_mode = mod_override;
 		}
 
@@ -406,7 +406,7 @@ bool rebuildSearchPath( searchPathMode mode, bool force )
 	else if (use_override_mods)
 	{
 		// override mods are already the same as current mods, so no need to do anything
-		clearOverrideMods();
+		clearOverrides();
 	}
 	return true;
 }
@@ -926,11 +926,6 @@ bool stageTwoInitialise(void)
 		return false;
 	}
 
-	if(!InitRadar()) 	// After resLoad cause it needs the game palette initialised.
-	{
-		return false;
-	}
-
 	if(!initMiscImds())			/* Set up the explosions */
 	{
 		iV_ShutDown();
@@ -1046,6 +1041,11 @@ bool stageThreeInitialise(void)
 
 	loopMissionState = LMS_NORMAL;
 
+	if(!InitRadar()) 	// After resLoad cause it needs the game palette initialised.
+	{
+		return false;
+	}
+
 	// reset the clock to normal speed
 	gameTimeResetMod();
 
@@ -1142,10 +1142,6 @@ bool stageThreeInitialise(void)
 
 	return true;
 }
-
-
-
-
 
 /*****************************************************************************/
 /*      Shutdown before any data is released                                 */
@@ -1247,8 +1243,6 @@ static void	initMiscVars(void)
 	selectedPlayer = 0;
 	realSelectedPlayer = 0;
 	godMode = false;
-
-	// ffs am
 
 	radarOnScreen = true;
 	enableConsoleDisplay(true);

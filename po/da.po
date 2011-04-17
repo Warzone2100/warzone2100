@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-03-20 21:16+0100\n"
+"POT-Creation-Date: 2011-04-03 21:46+0200\n"
 "PO-Revision-Date: 2008-05-09 16:08+0000\n"
 "Last-Translator: carson <Unknown>\n"
 "Language-Team: Dansk <da@li.org>\n"
@@ -5312,6 +5312,7 @@ msgid "TRANSPORT MISSION: Northern Sector"
 msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:5
+#: data/base/sequenceaudio/cam3/c003.txa:5
 msgid "Congratulations on your successful evacuation of Beta Base."
 msgstr ""
 
@@ -10047,10 +10048,6 @@ msgstr ""
 msgid "NORTHERN SECTOR"
 msgstr ""
 
-#: data/base/sequenceaudio/cam3/c003.txa:5
-msgid "Congratulations your successful evacuation of Beta Base."
-msgstr ""
-
 #: data/base/sequenceaudio/cam3/c003.txa:8
 msgid "Dusk, December 3rd, 2100"
 msgstr ""
@@ -10943,6 +10940,18 @@ msgstr "Score"
 msgid "Plasmite Retribution VTOL"
 msgstr "Score"
 
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1962
+#: data/mp/messages/strings/names.txt:675
+#, fuzzy
+msgid "Super Transport"
+msgstr "Transport"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1963
+#: data/mp/messages/strings/names.txt:676
+#, fuzzy
+msgid "Super Transport Body"
+msgstr "Transportskib"
+
 #: data/mp/messages/resmessages12.rmsg:58
 msgid "Construction speed +10%"
 msgstr ""
@@ -11724,16 +11733,6 @@ msgstr ""
 msgid "Nexus Corner Wall"
 msgstr ""
 
-#: data/mp/messages/strings/names.txt:675
-#, fuzzy
-msgid "Super Transport"
-msgstr "Transport"
-
-#: data/mp/messages/strings/names.txt:676
-#, fuzzy
-msgid "Super Transport Body"
-msgstr "Transportskib"
-
 #: data/mp/messages/strings/names.txt:715
 msgid "Plasteel"
 msgstr ""
@@ -12309,8 +12308,8 @@ msgstr "Vælg alle halv-bælter"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Kommandører"
 
-#: lib/framework/i18n.cpp:90
-#: lib/framework/i18n.cpp:149
+#: lib/framework/i18n.cpp:92
+#: lib/framework/i18n.cpp:153
 #, fuzzy
 msgid "System locale"
 msgstr "Elektronik"

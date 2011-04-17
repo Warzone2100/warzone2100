@@ -2706,8 +2706,7 @@ void kf_ToggleRadarAllyEnemy(void)
 	{
 		CONPRINTF(ConsoleString, (ConsoleString, _("Radar showing player colors")));
 	}
-
-	resetRadarRedraw();
+	resizeRadar();
 }
 
 void kf_ToggleRadarTerrain(void)

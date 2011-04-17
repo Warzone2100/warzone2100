@@ -7,7 +7,7 @@
 
 # Config
 rtag="$(git branch --no-color | sed -e '/^[^*]/d' -e 's:* \(.*\):\1:')"
-uurl="buildbot@buildbot.pc-dummy.net"
+uurl="buildbot@buildbot.wz2100.net"
 opth="${rtag}/mac/"
 rpth="public_html/"
 lpth="macosx/build/dmgout/out/"
@@ -26,19 +26,27 @@ bran="-${rtag}"
 
 
 # Upload the dSYM bundle
-if ! scp -pql 320 ${lpth}${dmg_bn}${tar_dS} ${uurl}:${rpth}${opth}${dmg_bn}${bran}${revt}${tar_dS}; then
-	exit ${?}
+echo "Starting to upload the dSYM bundle."
+if ! scp -pqCl 320 ${lpth}${dmg_bn}${tar_dS} ${uurl}:${rpth}${opth}${dmg_bn}${bran}${revt}${tar_dS}; then
+	exstat="${?}"
+	echo "error: Upload did not complete!"
+	exit ${exstat}
 fi
 
 # Upload the .dmg
-if ! scp -pql 320 ${lpth}${dmg_bn}${dmg_nv} ${uurl}:${rpth}${opth}${dmg_bn}${bran}${revt}.dmg; then
-	exit ${?}
+echo "Starting to upload the dmg image."
+if ! scp -pqCl 320 ${lpth}${dmg_bn}${dmg_nv} ${uurl}:${rpth}${opth}${dmg_bn}${bran}${revt}.dmg; then
+	exstat="${?}"
+	echo "error: Upload did not complete!"
+	exit ${exstat}
 fi
 
 
 # Link up the current .dmg and dSYM bundle
 if ! ssh ${uurl} -C "cd ${rpth} && ln -fs ${opth}${dmg_bn}${bran}${revt}.dmg ${dmg_bn}${bran}-current.dmg && ln -fs ${opth}${dmg_bn}${bran}${revt}${tar_dS} ${dmg_bn}${bran}-current${tar_dS}"; then
-	exit ${?}
+	exstat="${?}"
+	echo "error: Failed to link!"
+	exit ${exstat}
 fi
 
 exit 0

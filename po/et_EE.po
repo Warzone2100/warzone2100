@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-03-20 21:16+0100\n"
+"POT-Creation-Date: 2011-04-03 21:46+0200\n"
 "PO-Revision-Date: 2010-05-10 16:59+0200\n"
 "Last-Translator: erlando <erlando112@hotmail.com>\n"
 "Language-Team: Estonian <ee@li.org>\n"
@@ -5263,6 +5263,7 @@ msgid "TRANSPORT MISSION: Northern Sector"
 msgstr "TRANSPORDI MISSION: Põhja Sector"
 
 #: data/base/messages/strings/cam3strings.txt:5
+#: data/base/sequenceaudio/cam3/c003.txa:5
 msgid "Congratulations on your successful evacuation of Beta Base."
 msgstr "Õnnitlused eduka Beeta Baasi evakueerimise puhul."
 
@@ -9883,11 +9884,6 @@ msgstr "KAMPAANIA KOLM"
 msgid "NORTHERN SECTOR"
 msgstr "PÕHJA SEKTOR"
 
-#: data/base/sequenceaudio/cam3/c003.txa:5
-#, fuzzy
-msgid "Congratulations your successful evacuation of Beta Base."
-msgstr "Õnnitlused eduka Beeta Baasi evakueerimise puhul."
-
 #: data/base/sequenceaudio/cam3/c003.txa:8
 msgid "Dusk, December 3rd, 2100"
 msgstr "Videvik, 3. Detsember, 2100"
@@ -10705,6 +10701,18 @@ msgstr "VTOL Retaliation Scourge Rakett"
 msgid "Plasmite Retribution VTOL"
 msgstr "VTOL Retribution Täispommitus"
 
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1962
+#: data/mp/messages/strings/names.txt:675
+#, fuzzy
+msgid "Super Transport"
+msgstr "Transport"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1963
+#: data/mp/messages/strings/names.txt:676
+#, fuzzy
+msgid "Super Transport Body"
+msgstr "Transpordi Kere"
+
 #: data/mp/messages/resmessages12.rmsg:58
 msgid "Construction speed +10%"
 msgstr "Ehitamis kiirus +10%"
@@ -11461,16 +11469,6 @@ msgstr "NEXUSe Müür"
 msgid "Nexus Corner Wall"
 msgstr "Nexuse NurgaMüür"
 
-#: data/mp/messages/strings/names.txt:675
-#, fuzzy
-msgid "Super Transport"
-msgstr "Transport"
-
-#: data/mp/messages/strings/names.txt:676
-#, fuzzy
-msgid "Super Transport Body"
-msgstr "Transpordi Kere"
-
 #: data/mp/messages/strings/names.txt:715
 msgid "Plasteel"
 msgstr "Terasbetoon"
@@ -12022,8 +12020,8 @@ msgstr "Roomikutega Cobra MRA"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Hõljukiga Python Hüperkiire Kahur"
 
-#: lib/framework/i18n.cpp:90
-#: lib/framework/i18n.cpp:149
+#: lib/framework/i18n.cpp:92
+#: lib/framework/i18n.cpp:153
 msgid "System locale"
 msgstr "Süsteemi Asukoht"
 
@@ -14935,6 +14933,10 @@ msgstr " - Built %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Versioon %s%s%s%s"
+
+#, fuzzy
+#~ msgid "Congratulations your successful evacuation of Beta Base."
+#~ msgstr "Õnnitlused eduka Beeta Baasi evakueerimise puhul."
 
 #~ msgid "Player colour"
 #~ msgstr "Mängija värv"

@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-03-20 21:16+0100\n"
+"POT-Creation-Date: 2011-04-03 21:46+0200\n"
 "PO-Revision-Date: 2010-04-21 08:32-0500\n"
 "Last-Translator: Gilles J. Séguin <segg2@videotron.ca>\n"
 "Language-Team: French <warzone-dev@gna.org>\n"
@@ -5272,6 +5272,7 @@ msgid "TRANSPORT MISSION: Northern Sector"
 msgstr "MISSION LONGUE DISTANCE: Le Secteur Nord"
 
 #: data/base/messages/strings/cam3strings.txt:5
+#: data/base/sequenceaudio/cam3/c003.txa:5
 msgid "Congratulations on your successful evacuation of Beta Base."
 msgstr "Félicitation pour votre réussite de l'évacuation de la Base Beta."
 
@@ -9927,11 +9928,6 @@ msgstr ""
 msgid "NORTHERN SECTOR"
 msgstr ""
 
-#: data/base/sequenceaudio/cam3/c003.txa:5
-#, fuzzy
-msgid "Congratulations your successful evacuation of Beta Base."
-msgstr "Félicitation pour votre réussite de l'évacuation de la Base Beta."
-
 #: data/base/sequenceaudio/cam3/c003.txa:8
 msgid "Dusk, December 3rd, 2100"
 msgstr ""
@@ -10772,6 +10768,18 @@ msgstr "Revanche Scourge VTOL"
 msgid "Plasmite Retribution VTOL"
 msgstr "Châssis Moyen - Châtiment"
 
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1962
+#: data/mp/messages/strings/names.txt:675
+#, fuzzy
+msgid "Super Transport"
+msgstr "Transporteur"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1963
+#: data/mp/messages/strings/names.txt:676
+#, fuzzy
+msgid "Super Transport Body"
+msgstr "Châssis de Transporteur"
+
 #: data/mp/messages/resmessages12.rmsg:58
 msgid "Construction speed +10%"
 msgstr "vitesse de construction +10%"
@@ -11542,16 +11550,6 @@ msgstr "Mur Nexus"
 msgid "Nexus Corner Wall"
 msgstr "Angle en Béton Renforcé"
 
-#: data/mp/messages/strings/names.txt:675
-#, fuzzy
-msgid "Super Transport"
-msgstr "Transporteur"
-
-#: data/mp/messages/strings/names.txt:676
-#, fuzzy
-msgid "Super Transport Body"
-msgstr "Châssis de Transporteur"
-
 #: data/mp/messages/strings/names.txt:715
 msgid "Plasteel"
 msgstr "Béton Plastique-Acier"
@@ -12123,8 +12121,8 @@ msgstr "Lanceur de Mini-Roquettes Cobra chenillé"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Canon lourd Python aéro-glisseur"
 
-#: lib/framework/i18n.cpp:90
-#: lib/framework/i18n.cpp:149
+#: lib/framework/i18n.cpp:92
+#: lib/framework/i18n.cpp:153
 msgid "System locale"
 msgstr "Langage du système"
 
@@ -15054,6 +15052,10 @@ msgstr " - Compilation %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Version %s%s%s%s"
+
+#, fuzzy
+#~ msgid "Congratulations your successful evacuation of Beta Base."
+#~ msgstr "Félicitation pour votre réussite de l'évacuation de la Base Beta."
 
 #~ msgid "Player colour"
 #~ msgstr "Couleur du Joueur"

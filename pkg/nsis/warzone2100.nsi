@@ -70,7 +70,10 @@ VIAddVersionKey "ProductVersion"	"${PACKAGE_VERSION}"
   !define MUI_HEADERIMAGE
   !define MUI_HEADERIMAGE_BITMAP "${TOP_SRCDIR}\icons\wz2100header.bmp"
   !define MUI_HEADERIMAGE_RIGHT
-  
+
+  !define MUI_WELCOMEPAGE_TITLE "Welcome to Warzone 2100 v. ${PACKAGE_VERSION}" 
+  !define MUI_WELCOMEPAGE_TEXT   "$(WZWelcomeText)"
+
   !define MUI_WELCOMEFINISHPAGE_BITMAP "${TOP_SRCDIR}\icons\wz2100welcome.bmp"
   !define MUI_UNWELCOMEFINISHPAGE_BITMAP "${TOP_SRCDIR}\icons\wz2100welcome.bmp"
 
@@ -87,11 +90,18 @@ VIAddVersionKey "ProductVersion"	"${PACKAGE_VERSION}"
   ; These indented statements modify settings for MUI_PAGE_FINISH
   !define MUI_FINISHPAGE_NOAUTOCLOSE
   !define MUI_UNFINISHPAGE_NOAUTOCLOSE
-
+  
+  !define MUI_LICENSEPAGE_RADIOBUTTONS
+  !define MUI_LICENSEPAGE_RADIOBUTTONS_TEXT_ACCEPT "$(WZ_GPL_ACCEPT)"
+  !define MUI_LICENSEPAGE_RADIOBUTTONS_TEXT_DECLINE "$(WZ_GPL_DECLINE)"
+  
 ;--------------------------------
 ;Pages
 
+  !define MUI_PAGE_CUSTOMFUNCTION_PRE WelcomePageSetupLinkPre
+  !define MUI_PAGE_CUSTOMFUNCTION_SHOW WelcomePageSetupLinkShow
   !insertmacro MUI_PAGE_WELCOME
+  !insertmacro MUI_PAGE_LICENSE "${TOP_SRCDIR}\COPYING"
   !insertmacro MUI_PAGE_COMPONENTS
   !insertmacro MUI_PAGE_DIRECTORY
   !insertmacro MUI_PAGE_STARTMENU "Application" $STARTMENU_FOLDER
@@ -119,7 +129,30 @@ VIAddVersionKey "ProductVersion"	"${PACKAGE_VERSION}"
   ;Only for solid compression (by default, solid compression is enabled for BZIP2 and LZMA)
 
   !insertmacro MUI_RESERVEFILE_LANGDLL
+;--------------------------------
+Function WelcomePageSetupLinkPre
+  !insertmacro MUI_INSTALLOPTIONS_WRITE "ioSpecial.ini" "Field 3" "Bottom" "142" ; limit size of the upper label
+  !insertmacro MUI_INSTALLOPTIONS_WRITE "ioSpecial.ini" "Settings" "Numfields" "4" ; increase counter
+  !insertmacro MUI_INSTALLOPTIONS_WRITE "ioSpecial.ini" "Field 4" "Type" "Link"
+  !insertmacro MUI_INSTALLOPTIONS_WRITE "ioSpecial.ini" "Field 4" "Text" "Visit our Official Homepage http://wz2100.net"
+  !insertmacro MUI_INSTALLOPTIONS_WRITE "ioSpecial.ini" "Field 4" "State" "http://wz2100.net/"
+  !insertmacro MUI_INSTALLOPTIONS_WRITE "ioSpecial.ini" "Field 4" "Left" "120"
+  !insertmacro MUI_INSTALLOPTIONS_WRITE "ioSpecial.ini" "Field 4" "Right" "300"
+  !insertmacro MUI_INSTALLOPTIONS_WRITE "ioSpecial.ini" "Field 4" "Top" "160"
+  !insertmacro MUI_INSTALLOPTIONS_WRITE "ioSpecial.ini" "Field 4" "Bottom" "172"
 
+FunctionEnd
+ 
+Function WelcomePageSetupLinkShow
+  Push $0
+  GetDlgItem $0 $MUI_HWND 1203
+  SetCtlColors $0 "0000FF" "FFFFFF"
+  ; underline font
+  CreateFont $1 "$(^Font)" "$(^FontSize)" "400" /UNDERLINE 
+  SendMessage $0 ${WM_SETFONT} $1 1 
+  Pop $0
+ 
+FunctionEnd
 ;--------------------------------
 ;Installer Sections
 
@@ -298,6 +331,9 @@ SectionGroupEnd
 SectionGroup $(TEXT_SecNLS) SecNLS
 
 Section "-NLS files" SecNLS_files
+  SetOutPath "$INSTDIR\locale\ca\LC_MESSAGES"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\ca_ES.gmo"
+
   SetOutPath "$INSTDIR\locale\cs\LC_MESSAGES"
   File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\cs.gmo"
 
@@ -330,6 +366,9 @@ Section "-NLS files" SecNLS_files
 
   SetOutPath "$INSTDIR\locale\hr\LC_MESSAGES"
   File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\hr.gmo"
+
+  SetOutPath "$INSTDIR\locale\hu\LC_MESSAGES"
+  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\hu.gmo"
 
   SetOutPath "$INSTDIR\locale\it\LC_MESSAGES"
   File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\it.gmo"
@@ -478,6 +517,10 @@ FunctionEnd
 ;Descriptions
 
   ;English
+  LangString WZWelcomeText ${LANG_ENGLISH} "This wizard will guide you through the installation of Warzone 2100.\r\n\r\nIt is recommended that you close all other applications before starting Setup. This will make it possible to update relevant system files without having to reboot your computer.\r\n\r\nWarzone 2100 is 100% free, if you paid for it, let us know!\r\n\r\nClick Next to continue."
+  LangString WZ_GPL_ACCEPT ${LANG_ENGLISH} "I agree"
+  LangString WZ_GPL_DECLINE ${LANG_ENGLISH} "I don't agree"
+  
   LangString TEXT_SecBase ${LANG_ENGLISH} "Core files"
   LangString DESC_SecBase ${LANG_ENGLISH} "The core files required to run Warzone 2100."
 
@@ -509,6 +552,10 @@ FunctionEnd
   LangString DESC_SecOriginalMod ${LANG_ENGLISH} "Play the game as it was back in the 1.10 days."
 
   ;Dutch
+  LangString WZWelcomeText ${LANG_DUTCH} "This wizard will guide you through the installation of Warzone 2100.\r\n\r\nIt is recommended that you close all other applications before starting Setup. This will make it possible to update relevant system files without having to reboot your computer.\r\n\r\nWarzone 2100 is 100% free, if you paid for it, let us know!\r\n\r\nClick Next to continue." 
+  LangString WZ_GPL_ACCEPT ${LANG_DUTCH} "I agree"
+  LangString WZ_GPL_DECLINE ${LANG_DUTCH} "I don't agree"
+
   LangString TEXT_SecBase ${LANG_DUTCH} "Core files"
   LangString DESC_SecBase ${LANG_DUTCH} "The core files required to run Warzone 2100."
 
@@ -540,6 +587,10 @@ FunctionEnd
   LangString DESC_SecOriginalMod ${LANG_DUTCH} "Speel het spel met de originele 1.10 versie balans stats."
 
   ;German
+  LangString WZWelcomeText ${LANG_GERMAN} "Dieser Wizard wird Sie durch die Warzone-2100-Installation führen.\r\n\r\nEs wird empfohlen sämtliche anderen Anwendungen zu schließen, bevor Sie das Setup starten. Dies ermöglicht es relevante Systemdateien zu aktualisieren, ohne neustarten zu müssen.\r\n\r\nWarzone 2100 ist zu 100% kostenlos, falls Sie dafür gezahlt haben, lassen Sie es uns wissen!\r\n\r\nKlicken Sie auf Weiter, um fortzufahren."
+  LangString WZ_GPL_ACCEPT ${LANG_GERMAN} "Ich stimme zu"
+  LangString WZ_GPL_DECLINE ${LANG_GERMAN} "Ich stimme nicht zu"
+  
   LangString TEXT_SecBase ${LANG_GERMAN} "Core files"
   LangString DESC_SecBase ${LANG_GERMAN} "Die Kerndateien, die für Warzone 2100 benötigt werden."
 
@@ -571,6 +622,10 @@ FunctionEnd
   LangString DESC_SecOriginalMod ${LANG_GERMAN} "Spielen Sie das Spiel mit dem Balancing aus der Originalversion 1.10."
 
   ;Russian
+  LangString WZWelcomeText ${LANG_RUSSIAN} "This wizard will guide you through the installation of Warzone 2100.\r\n\r\nIt is recommended that you close all other applications before starting Setup. This will make it possible to update relevant system files without having to reboot your computer.\r\n\r\nWarzone 2100 is 100% free, if you paid for it, let us know!\r\n\r\nClick Next to continue."  
+  LangString WZ_GPL_ACCEPT ${LANG_RUSSIAN} "I agree"
+  LangString WZ_GPL_DECLINE ${LANG_RUSSIAN} "I don't agree"
+  
   LangString TEXT_SecBase ${LANG_RUSSIAN} "Áàçîâûå ôàéëû"
   LangString DESC_SecBase ${LANG_RUSSIAN} "Ôàéëû òðåáóåìûå äëÿ çàïóñêà Warzone 2100."
 
@@ -683,6 +738,10 @@ Section "Uninstall"
 
 ; remove all the locales
 
+  Delete "$INSTDIR\locale\ca\LC_MESSAGES\${PACKAGE}.mo"
+  RMDir "$INSTDIR\locale\ca\LC_MESSAGES"
+  RMDir "$INSTDIR\locale\ca"
+
   Delete "$INSTDIR\locale\cs\LC_MESSAGES\${PACKAGE}.mo"
   RMDir "$INSTDIR\locale\cs\LC_MESSAGES"
   RMDir "$INSTDIR\locale\cs"
@@ -726,6 +785,10 @@ Section "Uninstall"
   Delete "$INSTDIR\locale\hr\LC_MESSAGES\${PACKAGE}.mo"
   RMDir "$INSTDIR\locale\hr\LC_MESSAGES"
   RMDir "$INSTDIR\locale\hr"
+
+  Delete "$INSTDIR\locale\hu\LC_MESSAGES\${PACKAGE}.mo"
+  RMDir "$INSTDIR\locale\hu\LC_MESSAGES"
+  RMDir "$INSTDIR\locale\hu"
 
   Delete "$INSTDIR\locale\it\LC_MESSAGES\${PACKAGE}.mo"
   RMDir "$INSTDIR\locale\it\LC_MESSAGES"

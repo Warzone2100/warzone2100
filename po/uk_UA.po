@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100 version 2.2.3\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-03-20 21:16+0100\n"
+"POT-Creation-Date: 2011-04-03 21:46+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Меденцій Олександр <olexandr1986@i.ua>\n"
 "Language-Team: \n"
@@ -5257,6 +5257,7 @@ msgid "TRANSPORT MISSION: Northern Sector"
 msgstr "ТРАНСПОРТНА МІСІЯ: Північний Сектор"
 
 #: data/base/messages/strings/cam3strings.txt:5
+#: data/base/sequenceaudio/cam3/c003.txa:5
 msgid "Congratulations on your successful evacuation of Beta Base."
 msgstr "Поздоровляємо з успішною евакуацією Бази Бета"
 
@@ -9895,11 +9896,6 @@ msgstr ""
 msgid "NORTHERN SECTOR"
 msgstr ""
 
-#: data/base/sequenceaudio/cam3/c003.txa:5
-#, fuzzy
-msgid "Congratulations your successful evacuation of Beta Base."
-msgstr "Поздоровляємо з успішною евакуацією Бази Бета"
-
 #: data/base/sequenceaudio/cam3/c003.txa:8
 msgid "Dusk, December 3rd, 2100"
 msgstr ""
@@ -10724,6 +10720,18 @@ msgstr "ВЗІП Відплата з ПУ 'Батіг'"
 msgid "Plasmite Retribution VTOL"
 msgstr "ВЗІП Кара з Бронебійними Бомбами"
 
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1962
+#: data/mp/messages/strings/names.txt:675
+#, fuzzy
+msgid "Super Transport"
+msgstr "Транспорт"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1963
+#: data/mp/messages/strings/names.txt:676
+#, fuzzy
+msgid "Super Transport Body"
+msgstr "Корпус Транспорта"
+
 #: data/mp/messages/resmessages12.rmsg:58
 msgid "Construction speed +10%"
 msgstr "Швидкість будівництва +10%"
@@ -11480,16 +11488,6 @@ msgstr "Стіна НЕКСУСу"
 msgid "Nexus Corner Wall"
 msgstr "Кутова Стіна НЕКСУСу"
 
-#: data/mp/messages/strings/names.txt:675
-#, fuzzy
-msgid "Super Transport"
-msgstr "Транспорт"
-
-#: data/mp/messages/strings/names.txt:676
-#, fuzzy
-msgid "Super Transport Body"
-msgstr "Корпус Транспорта"
-
 #: data/mp/messages/strings/names.txt:715
 msgid "Plasteel"
 msgstr "Пластичний Бетон Армований Сталлю"
@@ -12041,8 +12039,8 @@ msgstr "Гусенична Кобра з Міні-Ракетною Артиле�
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Гусеничний Пітон з ГШ Гарматою"
 
-#: lib/framework/i18n.cpp:90
-#: lib/framework/i18n.cpp:149
+#: lib/framework/i18n.cpp:92
+#: lib/framework/i18n.cpp:153
 msgid "System locale"
 msgstr "Мова локалізації системи"
 
@@ -14958,6 +14956,10 @@ msgstr " - Збудовано %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Версія %s%s%s%s"
+
+#, fuzzy
+#~ msgid "Congratulations your successful evacuation of Beta Base."
+#~ msgstr "Поздоровляємо з успішною евакуацією Бази Бета"
 
 #~ msgid "Player colour"
 #~ msgstr "Колір гравця"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-03-20 21:16+0100\n"
+"POT-Creation-Date: 2011-04-03 21:46+0200\n"
 "PO-Revision-Date: 2009-06-10 14:43+0100\n"
 "Last-Translator: Tomaž Povšin <tomaz.povsin@gmail.com>\n"
 "Language-Team: Slovenian <sl@li.org>\n"
@@ -5262,6 +5262,7 @@ msgid "TRANSPORT MISSION: Northern Sector"
 msgstr "PREVOZNA MISIJA: Severni sektor"
 
 #: data/base/messages/strings/cam3strings.txt:5
+#: data/base/sequenceaudio/cam3/c003.txa:5
 msgid "Congratulations on your successful evacuation of Beta Base."
 msgstr "Čestitke za vašo uspešno evakuacijo baze beta."
 
@@ -9908,11 +9909,6 @@ msgstr ""
 msgid "NORTHERN SECTOR"
 msgstr ""
 
-#: data/base/sequenceaudio/cam3/c003.txa:5
-#, fuzzy
-msgid "Congratulations your successful evacuation of Beta Base."
-msgstr "Čestitke za vašo uspešno evakuacijo baze beta."
-
 #: data/base/sequenceaudio/cam3/c003.txa:8
 msgid "Dusk, December 3rd, 2100"
 msgstr ""
@@ -10761,6 +10757,18 @@ msgstr "Povračilo"
 msgid "Plasmite Retribution VTOL"
 msgstr "Srednje težko telo - kazen"
 
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1962
+#: data/mp/messages/strings/names.txt:675
+#, fuzzy
+msgid "Super Transport"
+msgstr "Prevoz"
+
+#: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1963
+#: data/mp/messages/strings/names.txt:676
+#, fuzzy
+msgid "Super Transport Body"
+msgstr "Prevozno telo"
+
 #: data/mp/messages/resmessages12.rmsg:58
 #, fuzzy
 msgid "Construction speed +10%"
@@ -11577,16 +11585,6 @@ msgstr "Nexus-ov zid"
 msgid "Nexus Corner Wall"
 msgstr "Nexus-ov kotni zid"
 
-#: data/mp/messages/strings/names.txt:675
-#, fuzzy
-msgid "Super Transport"
-msgstr "Prevoz"
-
-#: data/mp/messages/strings/names.txt:676
-#, fuzzy
-msgid "Super Transport Body"
-msgstr "Prevozno telo"
-
 #: data/mp/messages/strings/names.txt:715
 msgid "Plasteel"
 msgstr "Plasjeklo"
@@ -12152,8 +12150,8 @@ msgstr "Mini-raketno topništvo Naočarka Gosenice"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Težki top Piton Zračna blazina"
 
-#: lib/framework/i18n.cpp:90
-#: lib/framework/i18n.cpp:149
+#: lib/framework/i18n.cpp:92
+#: lib/framework/i18n.cpp:153
 msgid "System locale"
 msgstr "Lokalni sistem"
 
@@ -15095,6 +15093,10 @@ msgstr "- Zgrajen %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Verzija %s%s%s%s"
+
+#, fuzzy
+#~ msgid "Congratulations your successful evacuation of Beta Base."
+#~ msgstr "Čestitke za vašo uspešno evakuacijo baze beta."
 
 #, fuzzy
 #~ msgid "Player colour"

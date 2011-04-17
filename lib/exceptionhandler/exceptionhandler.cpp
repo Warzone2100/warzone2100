@@ -775,9 +775,9 @@ void setupExceptionHandler(int argc, const char ** argv)
 bool OverrideRPTDirectory(char *newPath)
 {
 # if defined(WZ_CC_MINGW)
-	TCHAR buf[MAX_PATH];
+	wchar_t buf[MAX_PATH];
 
-	if (!MultiByteToWideChar(CP_UTF8, 0, newPath, strlen(newPath), (WCHAR *)buf, 0))
+	if (!MultiByteToWideChar(CP_UTF8, 0, newPath, -1, buf, MAX_PATH))
 	{
 		//conversion failed-- we won't use the user's directory.
 
@@ -802,10 +802,9 @@ bool OverrideRPTDirectory(char *newPath)
 
 		return false;
 	}
-	_tcscpy(buf, newPath);
-	PathRemoveFileSpec(buf);
-	_tcscat(buf, _T("\\logs\\")); // stuff it in the logs directory
-	_tcscat(buf, _T("Warzone2100.RPT"));
+	PathRemoveFileSpecW(buf);
+	wcscat(buf, L"\\logs\\"); // stuff it in the logs directory
+	wcscat(buf, L"Warzone2100.RPT");
 	ResetRPTDirectory(buf);
 #endif
 	return true;
