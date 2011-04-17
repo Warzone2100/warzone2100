@@ -31,6 +31,9 @@
  * define __STDC_LIMIT_MACROS before including stdint.h
  */
 #include "lib/framework/wzglobal.h"
+#if defined(WZ_CC_MSVC)
+#define GLEW_STATIC
+#endif
 #include <GL/glew.h>
 
 #endif
