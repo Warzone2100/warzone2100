@@ -28,6 +28,7 @@
 #include "frame.h"
 #include "math_ext.h"
 
+struct Rotation;
 struct Vector2i
 {
 	Vector2i() {}
@@ -48,7 +49,7 @@ struct Vector3i
 	Vector3i() {}
 	Vector3i(int x, int y, int z) : x(x), y(y), z(z) {}
 	Vector3i(Vector2i const &xy, int z) : x(xy.x), y(xy.y), z(z) {}
-
+	Vector3i(Rotation const &r);
 	int x, y, z;
 };
 struct Vector3f
@@ -65,10 +66,12 @@ struct Rotation
 {
 	Rotation() {}
 	Rotation(int direction, int pitch, int roll) : direction(direction), pitch(pitch), roll(roll) {}
-
+	Rotation(Vector3i xyz) : direction(xyz.x), pitch(xyz.y), roll(xyz.z) {}
 	uint16_t direction, pitch, roll;  ///< Object rotation in 0..64k range
 };
 typedef Vector3i Position;  ///< Map position in world coordinates
+
+inline Vector3i::Vector3i(Rotation const &r) : x(r.direction), y(r.pitch), z(r.roll) {}
 
 // removeZ(3d_vector) -> 2d_vector
 static inline WZ_DECL_PURE Vector2i removeZ(Vector3i const &a) { return Vector2i(a.x, a.y); }

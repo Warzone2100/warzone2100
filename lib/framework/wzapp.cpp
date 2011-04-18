@@ -1359,3 +1359,23 @@ Vector3i WzConfig::vector3i(const QString &name)
 	r.z = v[2].toInt();
 	return r;
 }
+
+void WzConfig::setVector2i(const QString &name, const Vector2i &v)
+{
+	QStringList l;
+	l.push_back(QString::number(v.x));
+	l.push_back(QString::number(v.y));
+	setValue(name, l);
+}
+
+Vector2i WzConfig::vector2i(const QString &name)
+{
+	Vector2i r;
+	ASSERT_OR_RETURN(r, contains(name), "Missing %s", name.toUtf8().constData());
+	QList<QVariant> v = value(name).toList();
+	ASSERT(v.size() == 2, "Bad list of %s", name.toUtf8().constData());
+	r.x = v[0].toInt();
+	r.y = v[1].toInt();
+	return r;
+}
+

@@ -46,6 +46,8 @@ public:
 	void setVector3f(const QString &name, const Vector3f &v);
 	Vector3i vector3i(const QString &name);
 	void setVector3i(const QString &name, const Vector3i &v);
+	Vector2i vector2i(const QString &name);
+	void setVector2i(const QString &name, const Vector2i &v);
 };
 
 class WzMainWindow : public QGLWidget
