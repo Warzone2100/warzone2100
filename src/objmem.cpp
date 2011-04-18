@@ -737,6 +737,68 @@ void checkFactoryFlags(void)
 /**************************  OBJECT ACCESS FUNCTIONALITY ********************************/
 
 // Find a base object from it's id
+BASE_OBJECT *getBaseObjFromData(unsigned id, unsigned player, OBJECT_TYPE type)
+{
+	BASE_OBJECT		*psObj;
+	DROID			*psTrans;
+
+	for (int i = 0; i < 3; ++i)
+	{
+		psObj = NULL;
+		switch (i)
+		{
+		case 0:
+			switch (type)
+			{
+			case OBJ_DROID: psObj = apsDroidLists[player]; break;
+			case OBJ_STRUCTURE: psObj = apsStructLists[player]; break;
+			case OBJ_FEATURE: psObj= apsFeatureLists[0];
+			default: break;
+			}
+			break;
+		case 1:
+			switch (type)
+			{
+			case OBJ_DROID: psObj = mission.apsDroidLists[player]; break;
+			case OBJ_STRUCTURE: psObj = mission.apsStructLists[player]; break;
+			case OBJ_FEATURE: psObj = mission.apsFeatureLists[0]; break;
+			default: break;
+			}
+			break;
+		case 2:
+			if (player == 0 && type == OBJ_DROID)
+			{
+				psObj = apsLimboDroids[0];
+			}
+			break;
+		}
+
+		while (psObj)
+		{
+			if (psObj->id == id)
+			{
+				return psObj;
+			}
+			// if transporter check any droids in the grp
+			if ((psObj->type == OBJ_DROID) && (((DROID*)psObj)->droidType == DROID_TRANSPORTER))
+			{
+				for(psTrans = ((DROID*)psObj)->psGroup->psList; psTrans != NULL; psTrans = psTrans->psGrpNext)
+				{
+					if (psTrans->id == id)
+					{
+						return (BASE_OBJECT*)psTrans;
+					}
+				}
+			}
+			psObj = psObj->psNext;
+		}
+	}
+	ASSERT(false, "failed to find id %d for player %d", id, player);
+
+	return NULL;
+}
+
+// Find a base object from it's id
 BASE_OBJECT *getBaseObjFromId(UDWORD id)
 {
 	unsigned int i;

@@ -4695,10 +4695,10 @@ static bool loadSaveDroidPointers(const QString &pFileName, DROID **ppsCurrentDr
 				if (ini.contains("actionTarget/" + QString::number(j) + "/id"))
 				{
 					int tid = ini.value("actionTarget/" + QString::number(j) + "/id", -1).toInt();
-					//int tplayer = ini.value("actionTarget/" + QString::number(j) + "/player", 0).toInt();
-					//int ttype = ini.value("actionTarget/" + QString::number(j) + "/type", 0).toInt();
-					ASSERT(tid >= 0, "Bad ID");
-					setSaveDroidActionTarget(psDroid, getBaseObjFromId(tid), j);	 // TODO optimise using tplayer and ttype
+					int tplayer = ini.value("actionTarget/" + QString::number(j) + "/player", -1).toInt();
+					OBJECT_TYPE ttype = (OBJECT_TYPE)ini.value("actionTarget/" + QString::number(j) + "/type", 0).toInt();
+					ASSERT(tid >= 0 && tplayer >= 0, "Bad ID");
+					setSaveDroidActionTarget(psDroid, getBaseObjFromData(tid, tplayer, ttype), j);	 // TODO optimise using tplayer and ttype
 					ASSERT(psDroid->psActionTarget[j], "Failed to find action target");
 				}
 			}
@@ -4706,19 +4706,19 @@ static bool loadSaveDroidPointers(const QString &pFileName, DROID **ppsCurrentDr
 		if (ini.contains("target/id"))
 		{
 			int tid = ini.value("target/id", -1).toInt();
-			//int tplayer = ini.value("target/player", 0).toInt();
-			//int ttype = ini.value("target/type", 0).toInt();
-			ASSERT(tid >= 0, "Bad ID");
-			setSaveDroidTarget(psDroid, getBaseObjFromId(tid));	// TODO optimise using tplayer and ttype
+			int tplayer = ini.value("target/player", -1).toInt();
+			OBJECT_TYPE ttype = (OBJECT_TYPE)ini.value("target/type", 0).toInt();
+			ASSERT(tid >= 0 && tplayer >= 0, "Bad ID");
+			setSaveDroidTarget(psDroid, getBaseObjFromData(tid, tplayer, ttype));	// TODO optimise using tplayer and ttype
 			ASSERT(psDroid->psTarget, "Failed to find target");
 		}
 		if (ini.contains("baseStruct/id"))
 		{
 			int tid = ini.value("baseStruct/id", -1).toInt();
-			//int tplayer = ini.value("baseStruct/player", 0).toInt();
-			//int ttype = ini.value("baseStruct/type", 0).toInt();
-			ASSERT(tid >= 0, "Bad ID");
-			BASE_OBJECT *psObj = getBaseObjFromId(tid);	// TODO optimise using tplayer and ttype
+			int tplayer = ini.value("baseStruct/player", -1).toInt();
+			OBJECT_TYPE ttype = (OBJECT_TYPE)ini.value("baseStruct/type", 0).toInt();
+			ASSERT(tid >= 0 && tplayer >= 0, "Bad ID");
+			BASE_OBJECT *psObj = getBaseObjFromData(tid, tplayer, ttype);	// TODO optimise using tplayer and ttype
 			ASSERT(psObj, "Failed to find droid base structure");
 			ASSERT(psObj->type == OBJ_STRUCTURE, "Droid base structure not a structure");
 			setSaveDroidBase(psDroid, (STRUCTURE *)psObj);

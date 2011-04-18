@@ -103,6 +103,7 @@ extern void freeAllFlagPositions(void);
 extern void freeAllAssemblyPoints(void);
 
 // Find a base object from it's id
+extern BASE_OBJECT *getBaseObjFromData(unsigned id, unsigned player, OBJECT_TYPE type);
 extern BASE_OBJECT *getBaseObjFromId(UDWORD id);
 extern bool checkValidId(UDWORD id);
 
