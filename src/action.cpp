@@ -824,6 +824,45 @@ static void actionHomeBasePos(SDWORD player, SDWORD *px, SDWORD *py)
 	*py = getLandingY(player);
 }
 
+void actionSanity(DROID *psDroid)
+{
+	// Don't waste ammo unless given a direct attack order.
+	bool avoidOverkill = psDroid->order != DORDER_ATTACK && psDroid->order != DORDER_ATTACK &&
+	                     (psDroid->action == DACTION_ATTACK || psDroid->action == DACTION_MOVEFIRE || psDroid->action == DACTION_MOVETOATTACK ||
+	                      psDroid->action == DACTION_ROTATETOATTACK || psDroid->action == DACTION_VTOLATTACK);
+
+	// clear the target if it has died
+	for (int i = 0; i < DROID_MAXWEAPS; i++)
+	{
+		if (psDroid->psActionTarget[i] && (avoidOverkill? aiObjectIsProbablyDoomed(psDroid->psActionTarget[i]) : psDroid->psActionTarget[i]->died))
+		{
+			setDroidActionTarget(psDroid, NULL, i);
+			if (i == 0)
+			{
+				if (psDroid->action != DACTION_MOVEFIRE &&
+				    psDroid->action != DACTION_TRANSPORTIN &&
+				    psDroid->action != DACTION_TRANSPORTOUT)
+				{
+					psDroid->action = DACTION_NONE;
+					// if VTOL - return to rearm pad if not patrolling
+					if (isVtolDroid(psDroid))
+					{
+						if ((psDroid->order == DORDER_PATROL || psDroid->order == DORDER_CIRCLE) && !vtolEmpty(psDroid))
+						{
+							// Back to the patrol.
+							actionDroid(psDroid, DACTION_MOVE, psDroid->orderX, psDroid->orderY);
+						}
+						else
+						{
+							moveToRearm(psDroid);
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
 // Update the action state for a droid
 void actionUpdateDroid(DROID *psDroid)
 {
@@ -843,41 +882,7 @@ void actionUpdateDroid(DROID *psDroid)
 	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
 	ASSERT_OR_RETURN(, psPropStats != NULL, "Invalid propulsion stats pointer");
 
-	// Don't waste ammo unless given a direct attack order.
-	bool avoidOverkill = psDroid->order != DORDER_ATTACK && psDroid->order != DORDER_ATTACK &&
-	                     (psDroid->action == DACTION_ATTACK || psDroid->action == DACTION_MOVEFIRE || psDroid->action == DACTION_MOVETOATTACK ||
-	                      psDroid->action == DACTION_ROTATETOATTACK || psDroid->action == DACTION_VTOLATTACK);
-
-	// clear the target if it has died
-	for (i = 0; i < DROID_MAXWEAPS; i++)
-	{
-		if (psDroid->psActionTarget[i] && (avoidOverkill? aiObjectIsProbablyDoomed(psDroid->psActionTarget[i]) : psDroid->psActionTarget[i]->died))
-		{
-			setDroidActionTarget(psDroid, NULL, i);
-			if (i == 0)
-			{
-				if (psDroid->action != DACTION_MOVEFIRE &&
-				    psDroid->action != DACTION_TRANSPORTIN &&
-				    psDroid->action != DACTION_TRANSPORTOUT)
-				{
-					psDroid->action = DACTION_NONE;
-					// if VTOL - return to rearm pad if not patrolling
-					if (isVtolDroid(psDroid))
-					{
-						if ((psDroid->order == DORDER_PATROL || psDroid->order == DORDER_CIRCLE) && !vtolEmpty(psDroid))
-						{
-							// Back to the patrol.
-							actionDroid(psDroid, DACTION_MOVE, psDroid->orderX,psDroid->orderY);
-						}
-						else
-						{
-							moveToRearm(psDroid);
-						}
-					}
-				}
-			}
-		}
-	}
+	actionSanity(psDroid);
 
 	//if the droid has been attacked by an EMP weapon, it is temporarily disabled
 	if (psDroid->lastHitWeapon == WSC_EMP)

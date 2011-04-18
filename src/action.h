@@ -58,6 +58,9 @@ const char* getDroidActionName(DROID_ACTION action);
  */
 void actionUpdateDroid(DROID *psDroid);
 
+/** Do sanity update only. Called from actionUpdateDroid() normally. */
+void actionSanity(DROID *psDroid);
+
 /** Give a droid an action. */
 void actionDroid(DROID *psDroid, DROID_ACTION action);
 

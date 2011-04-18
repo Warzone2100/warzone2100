@@ -18,6 +18,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 #include "lib/framework/wzapp.h"
+#include <QtCore/QMap>
 
 /* Standard library headers */
 #include <physfs.h>
@@ -161,11 +162,6 @@ static bool deserializeSaveGameHeader(PHYSFS_file* fileHandle, GAME_SAVEHEADER* 
 	return true;
 }
 
-struct DROID_SAVEHEADER : public GAME_SAVEHEADER
-{
-	UDWORD		quantity;
-};
-
 struct STRUCT_SAVEHEADER : public GAME_SAVEHEADER
 {
 	UDWORD		quantity;
@@ -235,7 +231,6 @@ struct COMMAND_SAVEHEADER : public GAME_SAVEHEADER
 
 /* Sanity check definitions for the save struct file sizes */
 #define GAME_HEADER_SIZE			8
-#define DROID_HEADER_SIZE			12
 #define DROIDINIT_HEADER_SIZE		12
 #define STRUCT_HEADER_SIZE			12
 #define TEMPLATE_HEADER_SIZE		12
@@ -1417,238 +1412,6 @@ static bool deserializeSaveGameData(PHYSFS_file* fileHandle, SAVE_GAME* serializ
 #define	SAVE_COMP_PROGRAM	8
 #define SAVE_COMP_WEAPON	9
 
-struct PATH_POINT
-{
-       UBYTE           x,y;
-};
-
-#define TRAVELSIZE	100
-
-struct SAVE_MOVE_CONTROL
-{
-	UBYTE	Status;						// Inactive, Navigating or moving point to point status
-	UBYTE	Position;	   				// Position in asPath
-	UBYTE	numPoints;					// number of points in asPath
-	PATH_POINT	asPath[TRAVELSIZE];		// Pointer to list of block X,Y coordinates.
-	SDWORD	DestinationX;				// DestinationX,Y should match objects current X,Y
-	SDWORD	DestinationY;				//		location for this movement to be complete.
-	SDWORD	srcX,srcY,targetX,targetY;
-	float	fx,fy;						// droid location as a fract
-	float	speed;						// Speed of motion
-	SWORD	boundX,boundY;				// Vector for the end of path boundary
-	SWORD	moveDir;						// direction of motion (not the direction the droid is facing)
-	SWORD	bumpDir;					// direction at last bump
-	UDWORD	bumpTime;					// time of first bump with something
-	UWORD	lastBump;					// time of last bump with a droid - relative to bumpTime
-	UWORD	pauseTime;					// when MOVEPAUSE started - relative to bumpTime
-	UWORD	bumpX,bumpY;				// position of last bump
-	UDWORD	shuffleStart;				// when a shuffle started
-	int32_t	isInFormation;              // Indicates wether this droid is a member of a formation (was BOOL which is of size int)
-	SWORD	iVertSpeed;
-	UDWORD	iAttackRuns[DROID_MAXWEAPS];
-	float   fz;
-};
-
-
-#define DROID_SAVE_V9		\
-	OBJECT_SAVE_V19;			\
-	SAVE_COMPONENT_V19	asBits[DROID_MAXCOMP]; \
-	UDWORD		body;		\
-	UBYTE		droidType;	\
-	UDWORD		saveType;	\
-	UDWORD		numWeaps;	\
-	SAVE_WEAPON_V19	asWeaps[TEMP_DROID_MAXPROGS];	\
-	UDWORD		numKills
-
-struct SAVE_DROID_V9
-{
-	DROID_SAVE_V9;
-};
-
-/*save DROID SAVE 11 */
-#define DROID_SAVE_V11		\
-	OBJECT_SAVE_V19;			\
-	SAVE_COMPONENT_V19	asBits[DROID_MAXCOMP]; \
-	UDWORD		body;		\
-	UBYTE		droidType;	\
-	UBYTE		saveType;	\
-	UDWORD		numWeaps;	\
-	SAVE_WEAPON_V19	asWeaps[TEMP_DROID_MAXPROGS];	\
-	UDWORD		numKills;	\
-	UWORD	turretRotation;	\
-	UWORD	turretPitch
-
-struct SAVE_DROID_V11
-{
-	DROID_SAVE_V11;
-};
-
-#define DROID_SAVE_V12		\
-	DROID_SAVE_V9;			\
-	UWORD	turretRotation;	\
-	UWORD	turretPitch;	\
-	SDWORD	order;			\
-	UWORD	orderX,orderY;	\
-	UWORD	orderX2,orderY2;\
-	UDWORD	timeLastHit;	\
-	UDWORD	targetID;		\
-	UDWORD	secondaryOrder;	\
-	SDWORD	action;			\
-	UDWORD	actionX,actionY;\
-	UDWORD	actionTargetID;	\
-	UDWORD	actionStarted;	\
-	UDWORD	actionPoints;	\
-	UWORD	actionHeight
-
-struct SAVE_DROID_V12
-{
-	DROID_SAVE_V12;
-};
-
-#define DROID_SAVE_V14		\
-	DROID_SAVE_V12;			\
-	char	tarStatName[MAX_GAME_STR_SIZE];\
-    UDWORD	baseStructID;	\
-	UBYTE	group;			\
-	UBYTE	selected;		\
-	UBYTE	cluster_unused;		\
-	UBYTE	visible[MAX_PLAYERS];\
-	UDWORD	died;			\
-	UDWORD	lastEmission
-
-struct SAVE_DROID_V14
-{
-	DROID_SAVE_V14;
-};
-
-//DROID_SAVE_18 replaces DROID_SAVE_14
-#define DROID_SAVE_V18		\
-	DROID_SAVE_V12;			\
-	char	tarStatName[MAX_SAVE_NAME_SIZE_V19];\
-    UDWORD	baseStructID;	\
-	UBYTE	group;			\
-	UBYTE	selected;		\
-	UBYTE	cluster_unused;		\
-	UBYTE	visible[MAX_PLAYERS];\
-	UDWORD	died;			\
-	UDWORD	lastEmission
-
-struct SAVE_DROID_V18
-{
-	DROID_SAVE_V18;
-};
-
-//DROID_SAVE_20 replaces all previous saves uses 60 character names
-#define DROID_SAVE_V20		\
-	OBJECT_SAVE_V20;			\
-	SAVE_COMPONENT	asBits[DROID_MAXCOMP]; \
-	UDWORD		body;		\
-	UBYTE		droidType;	\
-	UDWORD		saveType;	\
-	UDWORD		numWeaps;	\
-	SAVE_WEAPON	asWeaps[TEMP_DROID_MAXPROGS];	\
-	UDWORD		numKills;	\
-	UWORD	turretRotation;	\
-	UWORD	turretPitch;	\
-	SDWORD	order;			\
-	UWORD	orderX,orderY;	\
-	UWORD	orderX2,orderY2;\
-	UDWORD	timeLastHit;	\
-	UDWORD	targetID;		\
-	UDWORD	secondaryOrder;	\
-	SDWORD	action;			\
-	UDWORD	actionX,actionY;\
-	UDWORD	actionTargetID;	\
-	UDWORD	actionStarted;	\
-	UDWORD	actionPoints;	\
-	UWORD	actionHeight;	\
-	char	tarStatName[MAX_SAVE_NAME_SIZE];\
-    UDWORD	baseStructID;	\
-	UBYTE	group;			\
-	UBYTE	selected;		\
-	UBYTE	cluster_unused;		\
-	UBYTE	visible[MAX_PLAYERS];\
-	UDWORD	died;			\
-	UDWORD	lastEmission
-
-struct SAVE_DROID_V20
-{
-	DROID_SAVE_V20;
-};
-
-#define DROID_SAVE_V21		\
-	DROID_SAVE_V20;			\
-	UDWORD	commandId
-
-struct SAVE_DROID_V21
-{
-	DROID_SAVE_V21;
-};
-
-#define DROID_SAVE_V24		\
-	DROID_SAVE_V21;			\
-	SDWORD	resistance;		\
-	SAVE_MOVE_CONTROL	sMove;	\
-	SWORD		formationDir;	\
-	SDWORD		formationX;	\
-	SDWORD		formationY
-
-struct SAVE_DROID_V24
-{
-	DROID_SAVE_V24;
-};
-
-//Watermelon: I need DROID_SAVE_V99...
-#define DROID_SAVE_V99		\
-	OBJECT_SAVE_V20;			\
-	SAVE_COMPONENT	asBits[DROID_MAXCOMP]; \
-	UDWORD		body;		\
-	UBYTE		droidType;	\
-	UDWORD		saveType;	\
-	UDWORD		numWeaps;	\
-	SAVE_WEAPON	asWeaps[TEMP_DROID_MAXPROGS];	\
-	UDWORD		numKills;	\
-	UWORD	turretRotation[DROID_MAXWEAPS];	\
-	UWORD	turretPitch[DROID_MAXWEAPS];	\
-	SDWORD	order;			\
-	UWORD	orderX,orderY;	\
-	UWORD	orderX2,orderY2;\
-	UDWORD	timeLastHit;	\
-	UDWORD	targetID;		\
-	UDWORD	secondaryOrder;	\
-	SDWORD	action;			\
-	UDWORD	actionX,actionY;\
-	UDWORD	actionTargetID;	\
-	UDWORD	actionStarted;	\
-	UDWORD	actionPoints;	\
-	UWORD	actionHeight;	\
-	char	tarStatName[MAX_SAVE_NAME_SIZE];\
-	UDWORD	baseStructID;	\
-	UBYTE	group;			\
-	UBYTE	selected;		\
-	UBYTE	cluster_unused;		\
-	UBYTE	visible[MAX_PLAYERS];\
-	UDWORD	died;			\
-	UDWORD	lastEmission;         \
-	UDWORD	commandId;            \
-	SDWORD	resistance;           \
-	SAVE_MOVE_CONTROL	sMove; \
-	SWORD	formationDir;         \
-	SDWORD	formationX;           \
-	SDWORD	aigroupidx
-
-struct SAVE_DROID_V99
-{
-	DROID_SAVE_V99;
-};
-
-//Watermelon:V99 'test'
-struct SAVE_DROID
-{
-	DROID_SAVE_V99;
-};
-
-
 struct DROIDINIT_SAVEHEADER : public GAME_SAVEHEADER
 {
 	UDWORD		quantity;
@@ -2038,13 +1801,11 @@ static bool writeGameFile(const char* fileName, SDWORD saveType);
 static bool writeMapFile(const char* fileName);
 
 static bool loadSaveDroidInitV2(char *pFileData, UDWORD filesize,UDWORD quantity);
-
 static bool loadSaveDroidInit(char *pFileData, UDWORD filesize);
 
-static bool loadSaveDroid(char *pFileData, UDWORD filesize, DROID **ppsCurrentDroidLists);
-static bool loadSaveDroidV(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD version, DROID **ppsCurrentDroidLists);
-static bool loadDroidSetPointers(void);
-static bool writeDroidFile(char *pFileName, DROID **ppsCurrentDroidLists);
+static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists);
+static bool loadSaveDroidPointers(const QString &pFileName, DROID **ppsCurrentDroidLists);
+static bool writeDroidFile(const char *pFileName, DROID **ppsCurrentDroidLists);
 
 static bool loadSaveStructure(char *pFileData, UDWORD filesize);
 static bool loadSaveStructureV7(char *pFileData, UDWORD filesize, UDWORD numStructures);
@@ -2095,8 +1856,6 @@ static bool readFiresupportDesignators(const char *pFileName);
 static bool writeFiresupportDesignators(const char *pFileName);
 
 static bool writeScriptState(char *pFileName);
-
-static bool getNameFromComp(UDWORD compType, char *pDest, UDWORD compIndex);
 
 //adjust the name depending on type of save game and whether resourceNames are used
 static bool getSaveObjectName(char *pName);
@@ -2184,11 +1943,23 @@ bool loadMissionExtras(const char *pGameToLoad, SWORD levelType)
 	return true;
 }
 
+static void sanityUpdate()
+{
+	for (int player = 0; player < game.maxPlayers; player++)
+	{
+		for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
+		{
+			orderCheckList(psDroid);
+			actionSanity(psDroid);
+		}
+	}
+}
 
 // -----------------------------------------------------------------------------------------
 // UserSaveGame ... this is true when you are loading a players save game
 bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool UserSaveGame)
 {
+	QMap<QString, DROID **> droidMap;
 	char			aFileName[256];
 	UDWORD			fileExten, fileSize, pl;
 	char			*pFileData = NULL;
@@ -2664,26 +2435,13 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 
 		//load in the mission droids
 		aFileName[fileExten] = '\0';
-
-		if (saveGameVersion < VERSION_27)//V27
+		strcat(aFileName, "munit.ini");
+		if (!loadSaveDroid(aFileName, apsDroidLists))
 		{
-			strcat(aFileName, "mdroid.bjo");
+			debug(LOG_ERROR, "failed to load %s", aFileName);
+			goto error;
 		}
-		else
-		{
-			strcat(aFileName, "munit.bjo");
-		}
-		/* Load in the chosen file data */
-		pFileData = fileLoadBuffer;
-		if (loadFileToBufferNoError(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
-		{
-			//load the data into mission.apsDroidLists
-			if (!loadSaveDroid(pFileData, fileSize, apsDroidLists))
-			{
-				debug( LOG_NEVER, "loadgame: Fail12\n" );
-				goto error;
-			}
-		}
+		droidMap.insert(aFileName, apsDroidLists);
 
 		/* after we've loaded in the units we need to redo the orientation because
 		 * the direction may have been saved - we need to do it outside of the loop
@@ -2825,21 +2583,15 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	{
 		//load in the droids
 		aFileName[fileExten] = '\0';
-		strcat(aFileName, "unit.bjo");
-		/* Load in the chosen file data */
-		pFileData = fileLoadBuffer;
-		if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
-		{
-			debug( LOG_NEVER, "loadgame: Fail11\n" );
-			goto error;
-		}
+		strcat(aFileName, "unit.ini");
 
 		//load the data into apsDroidLists
-		if (!loadSaveDroid(pFileData, fileSize, apsDroidLists))
+		if (!loadSaveDroid(aFileName, apsDroidLists))
 		{
-			debug( LOG_NEVER, "loadgame: Fail12\n" );
+			debug(LOG_ERROR, "failed to load %s", aFileName);
 			goto error;
 		}
+		droidMap.insert(aFileName, apsDroidLists);
 
 		/* after we've loaded in the units we need to redo the orientation because
 		 * the direction may have been saved - we need to do it outside of the loop
@@ -2862,18 +2614,15 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		{
 			//load in the mission droids
 			aFileName[fileExten] = '\0';
-			strcat(aFileName, "munit.bjo");
-			/* Load in the chosen file data */
-			pFileData = fileLoadBuffer;
-			if (loadFileToBufferNoError(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
+			strcat(aFileName, "munit.ini");
+
+			//load the data into mission.apsDroidLists
+			if (!loadSaveDroid(aFileName, mission.apsDroidLists))
 			{
-				//load the data into mission.apsDroidLists
-				if (!loadSaveDroid(pFileData, fileSize, mission.apsDroidLists))
-				{
-					debug( LOG_NEVER, "loadgame: Fail12\n" );
-					goto error;
-				}
+				debug(LOG_ERROR, "failed to load %s", aFileName);
+				goto error;
 			}
+			droidMap.insert(aFileName, mission.apsDroidLists);
 		}
 	}
 
@@ -2881,19 +2630,13 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	{
 		//load in the limbo droids
 		aFileName[fileExten] = '\0';
-		strcat(aFileName, "limbo.bjo");
-		/* Load in the chosen file data */
-		pFileData = fileLoadBuffer;
-		if (loadFileToBufferNoError(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
+		strcat(aFileName, "limbo.ini");
+		if (!loadSaveDroid(aFileName, apsLimboDroids))
 		{
-			//load the data into apsDroidLists
-			if (!loadSaveDroid(pFileData, fileSize, apsLimboDroids))
-			{
-				debug( LOG_NEVER, "loadgame: Fail12\n" );
-				goto error;
-			}
+			debug(LOG_ERROR, "failed to load %s", aFileName);
+			goto error;
 		}
-
+		droidMap.insert(aFileName, apsLimboDroids);
 	}
 
 	//load in the features -do before the structures
@@ -3184,12 +2927,15 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	//turn power on for rest of game
 	powerCalculated = true;
 
-	if (saveGameVersion > VERSION_12)
+	if (!keepObjects)//only reset the pointers if they were set
 	{
-		if (!keepObjects)//only reset the pointers if they were set
+		// Reset the object pointers in the droid target lists
+		QStringList keys = droidMap.keys();
+		for (int i = 0; i < keys.size(); i++)
 		{
-			//reset the object pointers in the droid target lists
-			loadDroidSetPointers();
+			QString key = keys.at(i);
+			DROID **pList = droidMap.value(key);
+			loadSaveDroidPointers(key, pList);
 		}
 	}
 
@@ -3291,6 +3037,7 @@ bool saveGame(char *aFileName, GAME_TYPE saveType)
 
 	fileExtension = strlen(CurrentFileName) - 3;
 	gameTimeStop();
+	sanityUpdate();
 
 	/* Write the data to the file */
 	if (!writeGameFile(CurrentFileName, saveType))
@@ -3316,11 +3063,11 @@ bool saveGame(char *aFileName, GAME_TYPE saveType)
 
 	//create the droids filename
 	CurrentFileName[fileExtension] = '\0';
-	strcat(CurrentFileName, "unit.bjo");
+	strcat(CurrentFileName, "unit.ini");
 	/*Write the current droid lists to the file*/
-	if (!writeDroidFile(CurrentFileName,apsDroidLists))
+	if (!writeDroidFile(CurrentFileName, apsDroidLists))
 	{
-		debug(LOG_ERROR, "saveGame: writeDroidFile(\"%s\") failed", CurrentFileName);
+		debug(LOG_ERROR, "writeDroidFile(\"%s\") failed", CurrentFileName);
 		goto error;
 	}
 
@@ -3500,11 +3247,11 @@ bool saveGame(char *aFileName, GAME_TYPE saveType)
 
 	//create the droids filename
 	CurrentFileName[fileExtension] = '\0';
-	strcat(CurrentFileName, "munit.bjo");
+	strcat(CurrentFileName, "munit.ini");
 	/*Write the swapped droid lists to the file*/
 	if (!writeDroidFile(CurrentFileName, mission.apsDroidLists))
 	{
-		debug(LOG_ERROR, "saveGame: writeDroidFile(\"%s\") failed", CurrentFileName);
+		debug(LOG_ERROR, "writeDroidFile(\"%s\") failed", CurrentFileName);
 		goto error;
 	}
 
@@ -4869,7 +4616,7 @@ bool loadSaveDroidInitV2(char *pFileData, UDWORD filesize,UDWORD quantity)
 			{
 				Vector2i startpos = getPlayerStartPosition(psDroid->player);
 
-				psDroid->id = pDroidInit->id;
+				psDroid->id = pDroidInit->id > 0 ? pDroidInit->id : 0xFEDBCA98;	// hack to remove droid id zero
 				psDroid->rot.direction = DEG(pDroidInit->direction);
 				addDroid(psDroid, apsDroidLists);
 				if (psDroid->droidType == DROID_CONSTRUCT && startpos.x == 0 && startpos.y == 0)
@@ -4920,968 +4667,400 @@ static UDWORD RemapPlayerNumber(UDWORD OldNumber)
 
 // -----------------------------------------------------------------------------------------
 /*This is *ALWAYS* called by a User Save Game */
-bool loadSaveDroid(char *pFileData, UDWORD filesize, DROID **ppsCurrentDroidLists)
+
+static bool loadSaveDroidPointers(const QString &pFileName, DROID **ppsCurrentDroidLists)
 {
-	DROID_SAVEHEADER		*psHeader;
-
-	/* Check the file type */
-	psHeader = (DROID_SAVEHEADER *)pFileData;
-	if (psHeader->aFileType[0] != 'd' || psHeader->aFileType[1] != 'r' ||
-		psHeader->aFileType[2] != 'o' || psHeader->aFileType[3] != 'd')
+	WzConfig ini(pFileName);
+	if (ini.status() != QSettings::NoError)
 	{
-		debug( LOG_ERROR, "loadSaveUnit: Incorrect file type" );
-
+		debug(LOG_ERROR, "Could not open %s", pFileName.toUtf8().constData());
 		return false;
 	}
-
-	/* DROID_SAVEHEADER */
-	endian_udword(&psHeader->version);
-	endian_udword(&psHeader->quantity);
-
-	//increment to the start of the data
-	pFileData += DROID_HEADER_SIZE;
-
-	debug(LOG_SAVE, "fileversion is %u ", psHeader->version);
-
-	/* Check the file version */
-	if (psHeader->version < VERSION_39)
+	QStringList list = ini.childGroups();
+	for (int i = 0; i < list.size(); ++i)
 	{
-		debug( LOG_ERROR, "UnitLoad; unsupported save format version %d", psHeader->version );
+		ini.beginGroup(list[i]);
+		DROID *psDroid;
+		int player = ini.value("player").toInt();
+		int id = ini.value("id").toInt();
 
-		return false;
-	}
-	else if (psHeader->version <= CURRENT_VERSION_NUM)
-	{
-		if (!loadSaveDroidV(pFileData, filesize, psHeader->quantity, psHeader->version, ppsCurrentDroidLists))
+		for (psDroid = ppsCurrentDroidLists[player]; psDroid && psDroid->id != id; psDroid = psDroid->psNext) {}
+		ASSERT_OR_RETURN(false, psDroid, "Droid %d not found", id);
+
+		for (int j = 0; j < psDroid->numWeaps; j++)
 		{
-			return false;
+			objTrace(psDroid->id, "weapon %d, nStat %d", j, psDroid->asWeaps[j].nStat);
+			if (psDroid->asWeaps[j].nStat > 0)
+			{
+				if (ini.contains("actionTarget/" + QString::number(j) + "/id"))
+				{
+					int tid = ini.value("actionTarget/" + QString::number(j) + "/id", -1).toInt();
+					//int tplayer = ini.value("actionTarget/" + QString::number(j) + "/player", 0).toInt();
+					//int ttype = ini.value("actionTarget/" + QString::number(j) + "/type", 0).toInt();
+					ASSERT(tid >= 0, "Bad ID");
+					setSaveDroidActionTarget(psDroid, getBaseObjFromId(tid), j);	 // TODO optimise using tplayer and ttype
+					ASSERT(psDroid->psActionTarget[j], "Failed to find action target");
+				}
+			}
 		}
+		if (ini.contains("target/id"))
+		{
+			int tid = ini.value("target/id", -1).toInt();
+			//int tplayer = ini.value("target/player", 0).toInt();
+			//int ttype = ini.value("target/type", 0).toInt();
+			ASSERT(tid >= 0, "Bad ID");
+			setSaveDroidTarget(psDroid, getBaseObjFromId(tid));	// TODO optimise using tplayer and ttype
+			ASSERT(psDroid->psTarget, "Failed to find target");
+		}
+		if (ini.contains("baseStruct/id"))
+		{
+			int tid = ini.value("baseStruct/id", -1).toInt();
+			//int tplayer = ini.value("baseStruct/player", 0).toInt();
+			//int ttype = ini.value("baseStruct/type", 0).toInt();
+			ASSERT(tid >= 0, "Bad ID");
+			BASE_OBJECT *psObj = getBaseObjFromId(tid);	// TODO optimise using tplayer and ttype
+			ASSERT(psObj, "Failed to find droid base structure");
+			ASSERT(psObj->type == OBJ_STRUCTURE, "Droid base structure not a structure");
+			setSaveDroidBase(psDroid, (STRUCTURE *)psObj);
+		}
+		ini.endGroup();
 	}
-	else
-	{
-		debug(LOG_ERROR, "Unsupported droid save format version %u", psHeader->version);
-		return false;
-	}
-
 	return true;
 }
 
-static void SaveDroidMoveControl(SAVE_DROID * const psSaveDroid, DROID const * const psDroid)
+static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 {
-	unsigned int i;
-
-	// Had to disable this one -- cannot figure out where it gets set wrong! - Per
-	// ASSERT(droidOnMap(psDroid), "saved droid standing or moving off the map");
-
-	// Copy over the endian neutral stuff (all UBYTE)
-	psSaveDroid->sMove.Status    = psDroid->sMove.Status;
-	psSaveDroid->sMove.Position  = psDroid->sMove.pathIndex;
-	psSaveDroid->sMove.numPoints = MIN(psDroid->sMove.numPoints, TRAVELSIZE);
-	for (i = 0; i < MIN(psDroid->sMove.numPoints, TRAVELSIZE); i++)
+	WzConfig ini(pFileName);
+	if (ini.status() != QSettings::NoError)
 	{
-		psSaveDroid->sMove.asPath[i].x = map_coord(psDroid->sMove.asPath[i].x);
-		psSaveDroid->sMove.asPath[i].y = map_coord(psDroid->sMove.asPath[i].y);
-	}
-
-	// Little endian SDWORDs
-	psSaveDroid->sMove.DestinationX = PHYSFS_swapSLE32(psDroid->sMove.destination.x);
-	psSaveDroid->sMove.DestinationY = PHYSFS_swapSLE32(psDroid->sMove.destination.y);
-	psSaveDroid->sMove.srcX         = PHYSFS_swapSLE32(psDroid->sMove.src.x);
-	psSaveDroid->sMove.srcY         = PHYSFS_swapSLE32(psDroid->sMove.src.y);
-	psSaveDroid->sMove.targetX      = PHYSFS_swapSLE32(psDroid->sMove.target.x);
-	psSaveDroid->sMove.targetY      = PHYSFS_swapSLE32(psDroid->sMove.target.y);
-
-	// Little endian floats
-	psSaveDroid->sMove.fx           = 0;
-	psSaveDroid->sMove.fy           = 0;
-	psSaveDroid->sMove.speed        = PHYSFS_swapSLE32(psDroid->sMove.speed);
-	psSaveDroid->sMove.moveDir      = PHYSFS_swapSLE32(UNDEG(psDroid->sMove.moveDir));
-	psSaveDroid->sMove.fz           = 0;
-
-	// Little endian SWORDs
-	psSaveDroid->sMove.boundX       = 0;
-	psSaveDroid->sMove.boundY       = 0;
-	psSaveDroid->sMove.bumpDir      = PHYSFS_swapSLE16(UNDEG(psDroid->sMove.bumpDir));
-	psSaveDroid->sMove.iVertSpeed   = PHYSFS_swapSLE16(psDroid->sMove.iVertSpeed);
-
-	// Little endian UDWORDs
-	psSaveDroid->sMove.bumpTime     = PHYSFS_swapULE32(psDroid->sMove.bumpTime);
-	psSaveDroid->sMove.shuffleStart = PHYSFS_swapULE32(psDroid->sMove.shuffleStart);
-
-	// Array of little endian UDWORDS
-	for (i = 0; i < sizeof(psDroid->sMove.iAttackRuns) / sizeof(psDroid->sMove.iAttackRuns[0]); ++i)
-	{
-		psSaveDroid->sMove.iAttackRuns[i] = PHYSFS_swapULE32(psDroid->sMove.iAttackRuns[i]);
-	}
-
-	// Little endian UWORDs
-	psSaveDroid->sMove.lastBump     = PHYSFS_swapULE16(psDroid->sMove.lastBump);
-	psSaveDroid->sMove.pauseTime    = PHYSFS_swapULE16(psDroid->sMove.pauseTime);
-	psSaveDroid->sMove.bumpX        = PHYSFS_swapULE16(psDroid->sMove.bumpX);
-	psSaveDroid->sMove.bumpY        = PHYSFS_swapULE16(psDroid->sMove.bumpY);
-
-	psSaveDroid->sMove.isInFormation = false;
-	psSaveDroid->formationDir = 0;
-	psSaveDroid->formationX   = 0;
-}
-
-static void LoadDroidMoveControl(DROID * const psDroid, SAVE_DROID const * const psSaveDroid)
-{
-	unsigned int i;
-
-	// Copy over the endian neutral stuff (all UBYTE)
-	psDroid->sMove.Status      = (MOVE_STATUS)psSaveDroid->sMove.Status;
-	psDroid->sMove.pathIndex   = psSaveDroid->sMove.Position;
-	psDroid->sMove.numPoints   = psSaveDroid->sMove.numPoints;
-	psDroid->sMove.asPath      = (Vector2i *)malloc(sizeof(*psDroid->sMove.asPath) * psDroid->sMove.numPoints);
-	for (i = 0; i < psDroid->sMove.numPoints; i++)
-	{
-		psDroid->sMove.asPath[i].x = world_coord(psSaveDroid->sMove.asPath[i].x) + TILE_UNITS / 2;
-		psDroid->sMove.asPath[i].y = world_coord(psSaveDroid->sMove.asPath[i].y) + TILE_UNITS / 2;
-	}
-
-	// Little endian SDWORDs
-	psDroid->sMove.destination.x = PHYSFS_swapSLE32(psSaveDroid->sMove.DestinationX);
-	psDroid->sMove.destination.y = PHYSFS_swapSLE32(psSaveDroid->sMove.DestinationY);
-	psDroid->sMove.src.x         = PHYSFS_swapSLE32(psSaveDroid->sMove.srcX);
-	psDroid->sMove.src.y         = PHYSFS_swapSLE32(psSaveDroid->sMove.srcY);
-	psDroid->sMove.target.x      = PHYSFS_swapSLE32(psSaveDroid->sMove.targetX);
-	psDroid->sMove.target.y      = PHYSFS_swapSLE32(psSaveDroid->sMove.targetY);
-
-	// Little endian floats
-	psDroid->sMove.speed        = PHYSFS_swapSLE32(psSaveDroid->sMove.speed);
-	psDroid->sMove.moveDir      = DEG(PHYSFS_swapSLE32(psSaveDroid->sMove.moveDir));
-
-	// Little endian SWORDs
-	psDroid->sMove.bumpDir      = DEG(PHYSFS_swapSLE16(psSaveDroid->sMove.bumpDir));
-	psDroid->sMove.iVertSpeed   = PHYSFS_swapSLE16(psSaveDroid->sMove.iVertSpeed);
-
-	// Little endian UDWORDs
-	psDroid->sMove.bumpTime     = PHYSFS_swapULE32(psSaveDroid->sMove.bumpTime);
-	psDroid->sMove.shuffleStart = PHYSFS_swapULE32(psSaveDroid->sMove.shuffleStart);
-
-	// Array of little endian UDWORDS
-	for (i = 0; i < sizeof(psSaveDroid->sMove.iAttackRuns) / sizeof(psSaveDroid->sMove.iAttackRuns[0]); ++i)
-	{
-		psDroid->sMove.iAttackRuns[i] = PHYSFS_swapULE32(psSaveDroid->sMove.iAttackRuns[i]);
-	}
-
-	// Little endian UWORDs
-	psDroid->sMove.lastBump     = PHYSFS_swapULE16(psSaveDroid->sMove.lastBump);
-	psDroid->sMove.pauseTime    = PHYSFS_swapULE16(psSaveDroid->sMove.pauseTime);
-	psDroid->sMove.bumpX        = PHYSFS_swapULE16(psSaveDroid->sMove.bumpX);
-	psDroid->sMove.bumpY        = PHYSFS_swapULE16(psSaveDroid->sMove.bumpY);
-
-	// Recreate path-finding jobs
-	if (psDroid->sMove.Status == MOVEWAITROUTE)
-	{
-		psDroid->sMove.Status = MOVEINACTIVE;
-		fpathDroidRoute(psDroid, psDroid->sMove.destination.x, psDroid->sMove.destination.y, FMT_MOVE);
-		psDroid->sMove.Status = MOVEWAITROUTE;
-	}
-}
-
-// -----------------------------------------------------------------------------------------
-//version 20 + after names change
-static DROID* buildDroidFromSaveDroid(SAVE_DROID* psSaveDroid, UDWORD version)
-{
-	DROID_TEMPLATE			*psTemplate, sTemplate;
-	DROID					*psDroid;
-	bool					found;
-	UDWORD					i, id;
-	SDWORD					compInc;
-	UDWORD					burnTime;
-	Vector2i				startpos = getPlayerStartPosition(psSaveDroid->player);
-
-	psTemplate = &sTemplate;
-
-	psTemplate->pName = NULL;
-
-	//set up the template
-	//copy the values across
-
-	sstrcpy(psTemplate->aName, psSaveDroid->name);
-	//ignore the first comp - COMP_UNKNOWN
-	found = true;
-	for (i=1; i < DROID_MAXCOMP; i++)
-	{
-		compInc = getCompFromName(i, psSaveDroid->asBits[i].name);
-
-        //HACK to get the game to load when ECMs, Sensors or RepairUnits have been deleted
-        if (compInc < 0 && (i == COMP_ECM || i == COMP_SENSOR || i == COMP_REPAIRUNIT))
-        {
-            //set the ECM to be the defaultECM ...
-            if (i == COMP_ECM)
-            {
-                compInc = aDefaultECM[psSaveDroid->player];
-            }
-            else if (i == COMP_SENSOR)
-            {
-                compInc = aDefaultSensor[psSaveDroid->player];
-            }
-            else if (i == COMP_REPAIRUNIT)
-            {
-                compInc = aDefaultRepair[psSaveDroid->player];
-            }
-        }
-		else if (compInc < 0)
-		{
-			ASSERT(compInc >= 0, "This component no longer exists - %s, the droid will be deleted", psSaveDroid->asBits[i].name);
-			found = false;
-			break;//continue;
-		}
-		psTemplate->asParts[i] = (UDWORD)compInc;
-	}
-	ASSERT_OR_RETURN(NULL, found, "Failed to find weapon");
-	psTemplate->numWeaps = psSaveDroid->numWeaps;
-	if (psSaveDroid->numWeaps > 0)
-	{
-		for(i = 0;i < psTemplate->numWeaps;i++)
-		{
-			int weapon = getCompFromName(COMP_WEAPON, psSaveDroid->asWeaps[i].name);
-			ASSERT_OR_RETURN(NULL, weapon >= 0, "This component does not exist : %s", psSaveDroid->asWeaps[i].name);
-			psTemplate->asWeaps[i] = weapon;
-		}
-	}
-
-	psTemplate->buildPoints = calcTemplateBuild(psTemplate);
-	psTemplate->powerPoints = calcTemplatePower(psTemplate);
-	psTemplate->droidType = (DROID_TYPE)psSaveDroid->droidType;
-
-	/*create the Droid */
-
-	turnOffMultiMsg(true);
-
-	if(psSaveDroid->x == INVALID_XY)
-	{
-		psDroid = reallyBuildDroid(psTemplate, psSaveDroid->x, psSaveDroid->y, psSaveDroid->player, true);
-	}
-	else if(psSaveDroid->saveType == DROID_ON_TRANSPORT)
-	{
-		psDroid = reallyBuildDroid(psTemplate, 0, 0, psSaveDroid->player, true);
-	}
-	else
-	{
-		psDroid = reallyBuildDroid(psTemplate, psSaveDroid->x, psSaveDroid->y, psSaveDroid->player, false);
-	}
-
-	ASSERT_OR_RETURN(NULL, psDroid != NULL, "Failed to build unit");
-
-	turnOffMultiMsg(false);
-
-	//copy the droid's weapon stats
-	for (i=0; i < psDroid->numWeaps; i++)
-	{
-		if (psDroid->asWeaps[i].nStat > 0)
-		{
-			psDroid->asWeaps[i].ammo = psSaveDroid->asWeaps[i].ammo;
-			psDroid->asWeaps[i].lastFired = psSaveDroid->asWeaps[i].lastFired;
-		}
-	}
-	//copy the values across
-	psDroid->id = psSaveDroid->id;
-	psDroid->rot.direction = DEG(psSaveDroid->direction);
-	psDroid->body = psSaveDroid->body;
-	if (psDroid->body > psDroid->originalBody)
-	{
-		psDroid->body = psDroid->originalBody;
-	}
-
-	psDroid->inFire = psSaveDroid->inFire;
-	psDroid->burnDamage = psSaveDroid->burnDamage;
-	burnTime = psSaveDroid->burnStart;
-	psDroid->burnStart = burnTime;
-
-	psDroid->experience = psSaveDroid->numKills*65536;
-	//version 14
-	psDroid->resistance = droidResistance(psDroid);
-
-	//version 11
-	//Watermelon:make it back-compatible with older versions of save
-	for (i=0; i < psDroid->numWeaps; i++)
-	{
-		if (version >= VERSION_24)
-		{
-			psDroid->asWeaps[i].rot.direction = DEG(psSaveDroid->turretRotation[i]);
-			psDroid->asWeaps[i].rot.pitch = DEG(psSaveDroid->turretPitch[i]);
-		}
-		else
-		{
-			psDroid->asWeaps[i].rot.direction = DEG(psSaveDroid->turretRotation[0]);
-			psDroid->asWeaps[i].rot.pitch = DEG(psSaveDroid->turretPitch[0]);
-		}
-	}
-	//version 12
-	psDroid->order                          = (DROID_ORDER)psSaveDroid->order;
-	psDroid->orderX				= psSaveDroid->orderX;
-	psDroid->orderY				= psSaveDroid->orderY;
-	psDroid->orderX2				= psSaveDroid->orderX2;
-	psDroid->orderY2				= psSaveDroid->orderY2;
-	psDroid->timeLastHit			= psSaveDroid->timeLastHit;
-	//rebuild the object pointer from the ID
-	FIXME_CAST_ASSIGN(UDWORD, psDroid->psTarget, psSaveDroid->targetID);
-	psDroid->secondaryOrder		= psSaveDroid->secondaryOrder;
-	psDroid->action                         = (DROID_ACTION)psSaveDroid->action;
-	psDroid->actionX				= psSaveDroid->actionX;
-	psDroid->actionY				= psSaveDroid->actionY;
-	//rebuild the object pointer from the ID
-	FIXME_CAST_ASSIGN(UDWORD, psDroid->psActionTarget[0], psSaveDroid->actionTargetID);
-	psDroid->actionStarted		= psSaveDroid->actionStarted;
-	psDroid->actionPoints		= psSaveDroid->actionPoints;
-	//added for V14
-
-	//version 18
-	if (psSaveDroid->tarStatName[0] == 0)
-	{
-		psDroid->psTarStats = NULL;
-	}
-	else
-	{
-		id = getStructStatFromName(psSaveDroid->tarStatName);
-		if (id != (UDWORD)-1)
-		{
-			psDroid->psTarStats = (BASE_STATS*)&asStructureStats[id];
-		}
-		else
-		{
-			ASSERT( false,"loadUnit TargetStat not found" );
-			psDroid->psTarStats = NULL;
-		}
-	}
-	//rebuild the object pointer from the ID
-	FIXME_CAST_ASSIGN(UDWORD, psDroid->psBaseStruct, psSaveDroid->baseStructID);
-	psDroid->group = psSaveDroid->group;
-	if (psSaveDroid->aigroupidx >= 0)
-	{
-		psDroid->psGroup = grpFind(psSaveDroid->aigroupidx);
-	}
-	else
-	{
-		psDroid->psGroup = NULL;
-	}
-	psDroid->selected = psSaveDroid->selected;
-	psDroid->died = psSaveDroid->died;
-	psDroid->lastEmission =	psSaveDroid->lastEmission;
-	for (i=0; i < MAX_PLAYERS; i++)
-	{
-		psDroid->visible[i]	= psSaveDroid->visible[i];
-	}
-
-	if (version >= VERSION_21)//version 21
-	{
-		if ( (psDroid->droidType != DROID_TRANSPORTER) &&
-						 (psDroid->droidType != DROID_COMMAND) )
-		{
-			//rebuild group from command id in loadDroidSetPointers
-			FIXME_CAST_ASSIGN(UDWORD, psDroid->psGroup, psSaveDroid->commandId);
-			FIXME_CAST_ASSIGN(UDWORD, psDroid->psGrpNext, NULL_ID);
-		}
-	}
-	else
-	{
-		if ( (psDroid->droidType != DROID_TRANSPORTER) &&
-						 (psDroid->droidType != DROID_COMMAND) )
-		{
-			//dont rebuild group from command id in loadDroidSetPointers
-			psDroid->psGroup = NULL;
-			psDroid->psGrpNext = NULL;
-		}
-	}
-
-	if (version >= VERSION_24)//version 24
-	{
-		psDroid->resistance = (SWORD)psSaveDroid->resistance;
-		LoadDroidMoveControl(psDroid, psSaveDroid);
-	}
-
-	if (psDroid->droidType == DROID_CONSTRUCT && startpos.x == 0 && startpos.y == 0)
-	{
-		scriptSetStartPos(psDroid->player, psDroid->pos.x, psDroid->pos.y);
-	}
-
-	return psDroid;
-}
-
-
-// -----------------------------------------------------------------------------------------
-static bool loadDroidSetPointers(void)
-{
-	UDWORD		player,list;
-	DROID		*psDroid, *psCommander;
-	DROID		**ppsDroidLists[3], *psNext;
-
-	ppsDroidLists[0] = apsDroidLists;
-	ppsDroidLists[1] = mission.apsDroidLists;
-	ppsDroidLists[2] = apsLimboDroids;
-
-	for(list = 0; list<3; list++)
-	{
-		debug( LOG_NEVER, "List %d\n", list );
-		for(player = 0; player<MAX_PLAYERS; player++)
-		{
-			psDroid=(DROID *)ppsDroidLists[list][player];
-			while (psDroid)
-			{
-				UDWORD id;
-				//Target rebuild the object pointer from the ID
-				FIXME_CAST_ASSIGN(UDWORD, id, psDroid->psTarget);
-				if (id != NULL_ID)
-				{
-					setSaveDroidTarget(psDroid, getBaseObjFromId(id));
-					ASSERT(psDroid->psTarget != NULL, "Saved Droid psTarget getBaseObjFromId() failed");
-					if (psDroid->psTarget == NULL)
-					{
-						psDroid->order = DORDER_NONE;
-					}
-				}
-				else
-				{
-					setSaveDroidTarget(psDroid, NULL);
-				}
-				//ActionTarget rebuild the object pointer from the ID
-				FIXME_CAST_ASSIGN(UDWORD, id, psDroid->psActionTarget[0]);
-				if (id != NULL_ID)
-				{
-					setSaveDroidActionTarget(psDroid, getBaseObjFromId(id), 0);
-					ASSERT( psDroid->psActionTarget[0] != NULL,"Saved Droid psActionTarget getBaseObjFromId() failed" );
-					if (psDroid->psActionTarget[0] == NULL)
-					{
-						psDroid->action = DACTION_NONE;
-					}
-				}
-				else
-				{
-					setSaveDroidActionTarget(psDroid, NULL, 0);
-				}
-				//BaseStruct rebuild the object pointer from the ID
-				FIXME_CAST_ASSIGN(UDWORD, id, psDroid->psBaseStruct);
-				if (id != NULL_ID)
-				{
-					setSaveDroidBase(psDroid, (STRUCTURE*)getBaseObjFromId(id));
-					ASSERT( psDroid->psBaseStruct != NULL,"Saved Droid psBaseStruct getBaseObjFromId() failed" );
-					if (psDroid->psBaseStruct == NULL)
-					{
-						psDroid->action = DACTION_NONE;
-					}
-				}
-				else
-				{
-					setSaveDroidBase(psDroid, NULL);//psSaveDroid->targetID
-				}
-				if (saveGameVersion > VERSION_20)
-				{
-					UDWORD _tmpid;
-					//rebuild group for droids in command group from the commander ID
-					FIXME_CAST_ASSIGN(UDWORD, id, psDroid->psGrpNext);
-					if (id == NULL_ID)
-					{
-						FIXME_CAST_ASSIGN(UDWORD, _tmpid, psDroid->psGroup);
-						psDroid->psGroup = NULL;
-						psDroid->psGrpNext = NULL;
-						if (_tmpid != NULL_ID)
-						{
-							psCommander = (DROID*)getBaseObjFromId(_tmpid);
-							ASSERT( psCommander != NULL,"Saved Droid psCommander getBaseObjFromId() failed" );
-							if (psCommander != NULL)
-							{
-								cmdDroidAddDroid(psCommander,psDroid);
-							}
-						}
-					}
-				}
-				psDroid = psDroid->psNext;
-			}
-		}
-	}
-
-	/* HACK: Make sure all cargo units are properly initialized! I am not sure why we need
-	 * to do this, but the code in this file is too horrible to debug. - Per */
-	for(list = 0; list<3; list++)
-	{
-		for(player = 0; player<MAX_PLAYERS; player++)
-		{
-			for (psNext = (DROID *)ppsDroidLists[list][player]; psNext; psNext = psNext->psNext)
-			{
-				if (psNext->droidType == DROID_TRANSPORTER)
-				{
-					DROID *psCargo, *psTemp;
-
-					for (psCargo = psNext->psGroup->psList; psCargo; psCargo = psTemp)
-					{
-						UDWORD i;
-
-						psTemp = psCargo->psGrpNext;
-						setSaveDroidTarget(psCargo, NULL);
-						for (i = 0; i < DROID_MAXWEAPS; i++)
-						{
-							setSaveDroidActionTarget(psCargo, NULL, i);
-						}
-						setSaveDroidBase(psCargo, NULL);
-					}
-				}
-			}
-		}
-	}
-
-	return true;
-}
-
-// -----------------------------------------------------------------------------------------
-/* code for all versions after save name change v19*/
-bool loadSaveDroidV(char *pFileData, UDWORD filesize, UDWORD numDroids, UDWORD version, DROID **ppsCurrentDroidLists)
-{
-	SAVE_DROID				sSaveDroid, *psSaveDroid = &sSaveDroid;
-	DROID					*psDroid;
-	DROID_GROUP				*psCurrentTransGroup = NULL;
-	UDWORD					count;
-	UDWORD					NumberOfSkippedDroids=0;
-	UDWORD					sizeOfSaveDroid = 0;
-	UBYTE	i;
-
-	debug(LOG_SAVE, "fileversion is %u ", version);
-
-	sizeOfSaveDroid = sizeof(SAVE_DROID);
-
-	if ((sizeOfSaveDroid * numDroids + DROID_HEADER_SIZE) >	filesize)
-	{
-		debug( LOG_ERROR, "unitLoad: unexpected end of file" );
-
+		debug(LOG_ERROR, "Could not open %s", pFileName);
 		return false;
 	}
-
-	/* Load in the droid data */
-	for (count = 0; count < numDroids; count ++, pFileData += sizeOfSaveDroid)
+	QStringList list = ini.childGroups();
+	for (int i = 0; i < list.size(); ++i)
 	{
-		memcpy(psSaveDroid, pFileData, sizeOfSaveDroid);
+		ini.beginGroup(list[i]);
+		DROID *psDroid;
+		int player = ini.value("player").toInt();
+		int id = ini.value("id").toInt();
+		Position pos = ini.vector3i("position");
+		Vector2i tmp;
+		bool onMission = ini.value("onMission", false).toBool();
 
-		/* DROID_SAVE_V24 includes DROID_SAVE_V21,
-		 * SAVE_MOVE_CONTROL */
-		endian_sdword(&psSaveDroid->resistance);
-		endian_sword(&psSaveDroid->formationDir);
-		endian_sdword(&psSaveDroid->formationX);
-		/* DROID_SAVE_V21 includes DROID_SAVE_V20 */
-		endian_udword(&psSaveDroid->commandId);
-		/* DROID_SAVE_V20 includes OBJECT_SAVE_V20, SAVE_WEAPON */
-		endian_udword(&psSaveDroid->body);
-		endian_udword(&psSaveDroid->saveType);
-		endian_udword(&psSaveDroid->numWeaps);
-		endian_udword(&psSaveDroid->numKills);
-		//Watermelon:'hack' to make it read turretRotation,Pitch table properly
-		if( version == CURRENT_VERSION_NUM )
+		// Create fake template (FIXME - use a real one instead!)
+		DROID_TEMPLATE templ, *psTemplate = &templ;
+		psTemplate->pName = NULL;
+		sstrcpy(templ.aName, ini.value("name", "UNKNOWN").toString().toUtf8().constData());
+		psTemplate->droidType = (DROID_TYPE)ini.value("droidType").toInt();
+		psTemplate->numWeaps = ini.value("weapons", 0).toInt();
+		ini.beginGroup("parts");	// the following is copy-pasted from loadSaveTemplate() -- fixme somehow
+		psTemplate->asParts[COMP_BODY] = getCompFromName(COMP_BODY, ini.value("body", QString("ZNULLBODY")).toString().toUtf8().constData());
+		psTemplate->asParts[COMP_BRAIN] = getCompFromName(COMP_BRAIN, ini.value("brain", QString("ZNULLBRAIN")).toString().toUtf8().constData());
+		psTemplate->asParts[COMP_PROPULSION] = getCompFromName(COMP_PROPULSION, ini.value("propulsion", QString("ZNULLPROP")).toString().toUtf8().constData());
+		psTemplate->asParts[COMP_REPAIRUNIT] = getCompFromName(COMP_REPAIRUNIT, ini.value("repair", QString("ZNULLREPAIR")).toString().toUtf8().constData());
+		psTemplate->asParts[COMP_ECM] = getCompFromName(COMP_ECM, ini.value("ecm", QString("ZNULLECM")).toString().toUtf8().constData());
+		psTemplate->asParts[COMP_SENSOR] = getCompFromName(COMP_SENSOR, ini.value("sensor", QString("ZNULLSENSOR")).toString().toUtf8().constData());
+		psTemplate->asParts[COMP_CONSTRUCT] = getCompFromName(COMP_CONSTRUCT, ini.value("construct", QString("ZNULLCONSTRUCT")).toString().toUtf8().constData());
+		psTemplate->asWeaps[0] = getCompFromName(COMP_WEAPON, ini.value("weapon/1", QString("ZNULLWEAPON")).toString().toUtf8().constData());
+		psTemplate->asWeaps[1] = getCompFromName(COMP_WEAPON, ini.value("weapon/2", QString("ZNULLWEAPON")).toString().toUtf8().constData());
+		psTemplate->asWeaps[2] = getCompFromName(COMP_WEAPON, ini.value("weapon/3", QString("ZNULLWEAPON")).toString().toUtf8().constData());
+		ini.endGroup();
+		psTemplate->buildPoints = calcTemplateBuild(psTemplate);
+		psTemplate->powerPoints = calcTemplatePower(psTemplate);
+
+		/* Create the Droid */
+		turnOffMultiMsg(true);
+		psDroid = reallyBuildDroid(psTemplate, pos.x, pos.y, player, onMission);
+		ASSERT_OR_RETURN(NULL, psDroid != NULL, "Failed to build unit %d", id);
+		turnOffMultiMsg(false);
+
+		// Copy the values across
+		psDroid->id = id;	// force correct ID
+		ASSERT(id != 0, "Droid ID should never be zero here");
+		psDroid->body = ini.value("health", psDroid->originalBody).toInt();
+		if (psDroid->body > psDroid->originalBody)
 		{
-			for(i = 0;i < psSaveDroid->numWeaps;i++)
+			psDroid->body = psDroid->originalBody;
+		}
+		psDroid->inFire = ini.value("inFire", 0).toInt();
+		psDroid->burnDamage = ini.value("burnDamage", 0).toInt();
+		psDroid->burnStart = ini.value("burnStart", 0).toInt();
+		psDroid->experience = ini.value("experience", 0).toInt();
+		psDroid->order = (DROID_ORDER)ini.value("order/type", DORDER_NONE).toInt();
+		tmp = ini.vector2i("order/pos");
+		psDroid->orderX = tmp.x;
+		psDroid->orderY = tmp.y;
+		tmp = ini.vector2i("order/pos2");
+		psDroid->orderX2 = tmp.x;
+		psDroid->orderY2 = tmp.y;
+		psDroid->timeLastHit = ini.value("timeLastHit", 0).toInt();
+		psDroid->secondaryOrder = ini.value("secondaryOrder", DSS_NONE).toInt();
+		psDroid->action = (DROID_ACTION)ini.value("action", DACTION_NONE).toInt();
+		tmp = ini.vector2i("action/pos");
+		psDroid->actionX = tmp.x;
+		psDroid->actionY = tmp.y;
+		psDroid->actionStarted = ini.value("actionStarted", 0).toInt();
+		psDroid->actionPoints = ini.value("actionPoints", 0).toInt();
+		psDroid->resistance = ini.value("resistance", droidResistance(psDroid)).toInt();
+
+		// copy the droid's weapon stats
+		for (int j = 0; j < psDroid->numWeaps; j++)
+		{
+			if (psDroid->asWeaps[j].nStat > 0)
 			{
-				endian_uword(&psSaveDroid->turretRotation[i]);
-				endian_uword(&psSaveDroid->turretPitch[i]);
+				psDroid->asWeaps[j].ammo = ini.value("ammo/" + QString::number(j)).toInt();
+				psDroid->asWeaps[j].lastFired = ini.value("lastFired/" + QString::number(j)).toInt();
+				psDroid->asWeaps[j].recoilValue = ini.value("recoilValue/" + QString::number(j)).toInt();
+				psDroid->asWeaps[j].shotsFired = ini.value("shotsFired/" + QString::number(j)).toInt();
+				psDroid->asWeaps[j].rot = ini.vector3i("rotation/" + QString::number(j));
 			}
+		}
+		if (ini.contains("targetStats"))
+		{
+			QString targetStat = ini.value("targetStats").toString();
+			int tid = getStructStatFromName(targetStat.toUtf8().constData());
+			psDroid->psTarStats = (BASE_STATS*)&asStructureStats[tid];
+			ASSERT(psDroid->psTarStats, "Target stats not found %s", targetStat.toUtf8().constData());
+		}
+
+		psDroid->group = ini.value("group", UBYTE_MAX).toInt();
+		int aigroup = ini.value("aigroup", -1).toInt();
+		if (aigroup >= 0)
+		{
+			DROID_GROUP *psGroup = grpFind(aigroup);
+			psGroup->add(psDroid);
+			psGroup->type = ini.value("aigroup/type", GT_NORMAL).toInt();
 		}
 		else
 		{
-			endian_uword(&psSaveDroid->turretRotation[0]);
-			endian_uword(&psSaveDroid->turretPitch[0]);
-		}
-		endian_sdword(&psSaveDroid->order);
-		endian_uword(&psSaveDroid->orderX);
-		endian_uword(&psSaveDroid->orderY);
-		endian_uword(&psSaveDroid->orderX2);
-		endian_uword(&psSaveDroid->orderY2);
-		endian_udword(&psSaveDroid->timeLastHit);
-		endian_udword(&psSaveDroid->targetID);
-		endian_udword(&psSaveDroid->secondaryOrder);
-		endian_sdword(&psSaveDroid->action);
-		endian_udword(&psSaveDroid->actionX);
-		endian_udword(&psSaveDroid->actionY);
-		endian_udword(&psSaveDroid->actionTargetID);
-		endian_udword(&psSaveDroid->actionStarted);
-		endian_udword(&psSaveDroid->actionPoints);
-		endian_uword(&psSaveDroid->actionHeight);
-		endian_udword(&psSaveDroid->baseStructID);
-		endian_udword(&psSaveDroid->died);
-		endian_udword(&psSaveDroid->lastEmission);
-		/* OBJECT_SAVE_V20 */
-		endian_udword(&psSaveDroid->id);
-		endian_udword(&psSaveDroid->x);
-		endian_udword(&psSaveDroid->y);
-		endian_udword(&psSaveDroid->z);
-		endian_udword(&psSaveDroid->direction);
-		endian_udword(&psSaveDroid->player);
-		endian_udword(&psSaveDroid->burnStart);
-		endian_udword(&psSaveDroid->burnDamage);
-		for(i = 0; i < TEMP_DROID_MAXPROGS; i++) {
-			/* SAVE_WEAPON */
-			endian_udword(&psSaveDroid->asWeaps[i].ammo);
-			endian_udword(&psSaveDroid->asWeaps[i].lastFired);
-		}
-
-		// Here's a check that will allow us to load up save games on the playstation from the PC
-		//  - It will skip data from any players after MAX_PLAYERS
-		if (psSaveDroid->player >= MAX_PLAYERS)
-		{
-			NumberOfSkippedDroids++;
-			psSaveDroid->player=MAX_PLAYERS-1;	// now don't lose any droids ... force them to be the last player
-		}
-
-		psDroid = buildDroidFromSaveDroid(psSaveDroid, version);
-
-		if (psDroid == NULL)
-		{
-			ASSERT( psDroid != NULL,"unitLoad: Failed to build new unit\n" );
-		}
-		else if (psSaveDroid->saveType == DROID_ON_TRANSPORT)
-		{
-  			//add the droid to the list
-			psDroid->order = DORDER_NONE;
-			psDroid->action = DACTION_NONE;
-			setSaveDroidTarget(psDroid, NULL);
-			for (i = 0; i < DROID_MAXWEAPS; i++)
-			{
-				setSaveDroidActionTarget(psDroid, NULL, i);
-			}
-			setSaveDroidBase(psDroid, NULL);
-			//add the droid to the list
 			psDroid->psGroup = NULL;
-			psDroid->psGrpNext = NULL;
-			ASSERT( psCurrentTransGroup != NULL,"loadSaveUnitV9; Transporter unit without group " );
-			psCurrentTransGroup->add(psDroid);
 		}
-		else if (psDroid->droidType == DROID_TRANSPORTER)
+		psDroid->selected = ini.value("selected", false).toBool();
+		psDroid->died = ini.value("died", 0).toInt();
+		psDroid->lastEmission =	ini.value("lastEmission", 0).toInt();
+		memset(psDroid->visible, 0, sizeof(psDroid->visible));
+		for (int j = 0; j < game.maxPlayers; j++)
 		{
-				//set current TransPorter group
-			psCurrentTransGroup = psDroid->psGroup;
+			psDroid->visible[j] = ini.value("visible/" + QString::number(j), 0).toInt();
+		}
+
+		psDroid->sMove.Status = (MOVE_STATUS)ini.value("moveStatus", 0).toInt();
+		psDroid->sMove.pathIndex = ini.value("pathIndex", 0).toInt();
+		psDroid->sMove.numPoints = ini.value("pathLength", 0).toInt();
+		psDroid->sMove.asPath = (Vector2i *)malloc(sizeof(*psDroid->sMove.asPath) * psDroid->sMove.numPoints);
+		for (int j = 0; j < psDroid->sMove.numPoints; j++)
+		{
+			psDroid->sMove.asPath[j] = ini.vector2i("pathNode/" + QString::number(j));
+		}
+		psDroid->sMove.destination = ini.vector2i("moveDestination");
+		psDroid->sMove.src = ini.vector2i("moveSource");
+		psDroid->sMove.target = ini.vector2i("moveTarget");
+		psDroid->sMove.speed = ini.value("moveSpeed").toInt();
+		psDroid->sMove.moveDir = ini.value("moveDirection").toInt();
+		psDroid->sMove.bumpDir = ini.value("bumpDir").toInt();
+		psDroid->sMove.iVertSpeed = ini.value("vertSpeed").toInt();
+		psDroid->sMove.bumpTime = ini.value("bumpTime").toInt();
+		psDroid->sMove.shuffleStart = ini.value("shuffleStart").toInt();
+		for (int j = 0; j < sizeof(psDroid->sMove.iAttackRuns) / sizeof(psDroid->sMove.iAttackRuns[0]); ++j)
+		{
+			psDroid->sMove.iAttackRuns[j] = ini.value("attackRun/" + QString::number(j)).toInt();
+		}
+		psDroid->sMove.lastBump = ini.value("lastBump").toInt();
+		psDroid->sMove.pauseTime = ini.value("pauseTime").toInt();
+		tmp = ini.vector2i("bumpPosition");
+		psDroid->sMove.bumpX = tmp.x;
+		psDroid->sMove.bumpY = tmp.y;
+
+		// Recreate path-finding jobs
+		if (psDroid->sMove.Status == MOVEWAITROUTE)
+		{
+			psDroid->sMove.Status = MOVEINACTIVE;
+			fpathDroidRoute(psDroid, psDroid->sMove.destination.x, psDroid->sMove.destination.y, FMT_MOVE);
+			psDroid->sMove.Status = MOVEWAITROUTE;
+		}
+
+		// HACK!!
+		Vector2i startpos = getPlayerStartPosition(player);
+		if (psDroid->droidType == DROID_CONSTRUCT && startpos.x == 0 && startpos.y == 0)
+		{
+			scriptSetStartPos(psDroid->player, psDroid->pos.x, psDroid->pos.y);	// set map start position, FIXME - save properly elsewhere!
+		}
+
+		if (psDroid->pos.x >= 0)	// do not add to list if on a transport, then the group list is used instead
+		{
 			addDroid(psDroid, ppsCurrentDroidLists);
 		}
-		else
-		{
-			//add the droid to the list
-			addDroid(psDroid, ppsCurrentDroidLists);
-		}
+		ini.endGroup();
 	}
-	if (NumberOfSkippedDroids>0)
-	{
-		debug( LOG_ERROR, "unitLoad: Bad Player number in %d unit(s)... assigned to the last player!\n", NumberOfSkippedDroids );
-		return false;
-	}
-
-	ppsCurrentDroidLists = NULL;//ensure it always gets set
-
 	return true;
-}
-
-// -----------------------------------------------------------------------------------------
-static bool buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROID_SAVE_TYPE saveType)
-{
-	UDWORD				i;
-
-			/*want to store the resource ID string for compatibilty with
-			different versions of save game - NOT HAPPENING - the name saved is
-			the translated name - old versions of save games should load because
-			templates are loaded from Access AND the save game so they should all
-			still exist*/
-
-			sstrcpy(psSaveDroid->name, psCurr->aName);
-
-			// not interested in first comp - COMP_UNKNOWN
-			for (i=1; i < DROID_MAXCOMP; i++)
-			{
-
-				if (!getNameFromComp(i, psSaveDroid->asBits[i].name, psCurr->asBits[i].nStat))
-
-				{
-					//ignore this record
-					break;
-				}
-			}
-			psSaveDroid->body = psCurr->body;
-			//Watermelon:loop thru all weapons
-			psSaveDroid->numWeaps = psCurr->numWeaps;
-			for(i = 0;i < psCurr->numWeaps;i++)
-			{
-				if (psCurr->asWeaps[i].nStat > 0)
-				{
-					//there is only one weapon now
-
-					if (getNameFromComp(COMP_WEAPON, psSaveDroid->asWeaps[i].name, psCurr->asWeaps[i].nStat))
-
-					{
-	    				psSaveDroid->asWeaps[i].ammo = psCurr->asWeaps[i].ammo;
-		    			psSaveDroid->asWeaps[i].lastFired = psCurr->asWeaps[i].lastFired;
-					}
-				}
-				else
-				{
-
-					psSaveDroid->asWeaps[i].name[i] = '\0';
-				}
-			}
-
-			//save out experience level
-			psSaveDroid->numKills = psCurr->experience/65536;
-			//version 11
-			//Watermelon:endian_udword for new save format
-			for(i = 0;i < psCurr->numWeaps;i++)
-			{
-				psSaveDroid->turretRotation[i] = UNDEG(psCurr->asWeaps[i].rot.direction);
-				psSaveDroid->turretPitch[i]	= UNDEG(psCurr->asWeaps[i].rot.pitch);
-			}
-			//version 12
-			psSaveDroid->order			= psCurr->order;
-			psSaveDroid->orderX			= psCurr->orderX;
-			psSaveDroid->orderY			= psCurr->orderY;
-			psSaveDroid->orderX2		= psCurr->orderX2;
-			psSaveDroid->orderY2		= psCurr->orderY2;
-			psSaveDroid->timeLastHit	= psCurr->timeLastHit;
-
-			psSaveDroid->targetID = NULL_ID;
-			if (psCurr->psTarget != NULL && psCurr->psTarget->died <= 1 && checkValidId(psCurr->psTarget->id))
-			{
-				psSaveDroid->targetID = psCurr->psTarget->id;
-			}
-
-			psSaveDroid->secondaryOrder = psCurr->secondaryOrder;
-			psSaveDroid->action			= psCurr->action;
-			psSaveDroid->actionX		= psCurr->actionX;
-			psSaveDroid->actionY		= psCurr->actionY;
-
-			psSaveDroid->actionTargetID = NULL_ID;
-			if (psCurr->psActionTarget[0] != NULL && psCurr->psActionTarget[0]->died <= 1 && checkValidId( psCurr->psActionTarget[0]->id))
-			{
-				psSaveDroid->actionTargetID = psCurr->psActionTarget[0]->id;
-			}
-
-			psSaveDroid->actionStarted	= psCurr->actionStarted;
-			psSaveDroid->actionPoints	= psCurr->actionPoints;
-			psSaveDroid->actionHeight	= 0; // UNUSED
-
-			//version 14
-			if (psCurr->psTarStats != NULL)
-			{
-				ASSERT(strlen(psCurr->psTarStats->pName) < sizeof(psSaveDroid->tarStatName), "writeUnitFile; psTarStat pName Error");
-				sstrcpy(psSaveDroid->tarStatName, psCurr->psTarStats->pName);
-			}
-			else
-			{
-				strcpy(psSaveDroid->tarStatName,"");
-			}
-
-			psSaveDroid->baseStructID = NULL_ID;
-			if ((psCurr->psBaseStruct != NULL))
-			{
-				UDWORD _tmpid;
-				FIXME_CAST_ASSIGN(UDWORD, _tmpid, psCurr->psBaseStruct);
-				if (_tmpid != NULL_ID && psCurr->psBaseStruct->died <= 1 && checkValidId(psCurr->psBaseStruct->id))
-				{
-					psSaveDroid->baseStructID = psCurr->psBaseStruct->id;
-				}
-			}
-
-			psSaveDroid->group = psCurr->group;
-			psSaveDroid->aigroupidx = psCurr->psGroup ? psCurr->psGroup->id : -1;
-			psSaveDroid->selected = psCurr->selected;
-			psSaveDroid->died = psCurr->died;
-			psSaveDroid->lastEmission = psCurr->lastEmission;
-			for (i=0; i < MAX_PLAYERS; i++)
-			{
-				psSaveDroid->visible[i] = psCurr->visible[i];
-			}
-
-			//version 21
-			psSaveDroid->commandId = NULL_ID;
-			if (hasCommander(psCurr))
-			{
-				if (((DROID*)psCurr->psGroup->psCommander)->died <= 1)
-				{
-					psSaveDroid->commandId = ((DROID*)psCurr->psGroup->psCommander)->id;
-				}
-				ASSERT( ((DROID*)psCurr->psGroup->psCommander)->died <= 1, "SaveUnit pcCommander died" );
-				ASSERT( checkValidId(((DROID*)psCurr->psGroup->psCommander)->id), "SaveUnit pcCommander not found" );
-			}
-
-			//version 24
-			psSaveDroid->resistance = psCurr->resistance;
-
-			// Save the move control
-			SaveDroidMoveControl(psSaveDroid, psCurr);
-
-			psSaveDroid->id = psCurr->id;
-			psSaveDroid->x = psCurr->pos.x;
-			psSaveDroid->y = psCurr->pos.y;
-			psSaveDroid->z = psCurr->pos.z;
-			psSaveDroid->direction = UNDEG(psCurr->rot.direction);
-			psSaveDroid->player = psCurr->player;
-			psSaveDroid->inFire = psCurr->inFire;
-			psSaveDroid->burnStart = psCurr->burnStart;
-			psSaveDroid->burnDamage = psCurr->burnDamage;
-			psSaveDroid->droidType = (UBYTE)psCurr->droidType;
-			psSaveDroid->saveType = (UBYTE)saveType;//identifies special load cases
-
-			/* SAVE_DROID is DROID_SAVE_V24 */
-			/* DROID_SAVE_V24 includes DROID_SAVE_V21 */
-			endian_sdword(&psSaveDroid->resistance);
-
-			/* DROID_SAVE_V21 includes DROID_SAVE_V20 */
-			endian_udword(&psSaveDroid->commandId);
-			/* DROID_SAVE_V20 includes OBJECT_SAVE_V20 */
-			endian_udword(&psSaveDroid->body);
-			endian_udword(&psSaveDroid->saveType);
-			for(i = 0; i < TEMP_DROID_MAXPROGS; i++) {
-				endian_udword(&psSaveDroid->asWeaps[i].ammo);
-				endian_udword(&psSaveDroid->asWeaps[i].lastFired);
-			}
-			endian_udword(&psSaveDroid->numKills);
-			//Watermelon:endian_udword for new save format
-			for(i = 0;i < psSaveDroid->numWeaps;i++)
-			{
-				endian_uword(&psSaveDroid->turretRotation[i]);
-				endian_uword(&psSaveDroid->turretPitch[i]);
-			}
-			endian_udword(&psSaveDroid->numWeaps);
-			endian_sdword(&psSaveDroid->order);
-			endian_uword(&psSaveDroid->orderX);
-			endian_uword(&psSaveDroid->orderY);
-			endian_uword(&psSaveDroid->orderX2);
-			endian_uword(&psSaveDroid->orderY2);
-			endian_udword(&psSaveDroid->timeLastHit);
-			endian_udword(&psSaveDroid->targetID);
-			endian_udword(&psSaveDroid->secondaryOrder);
-			endian_sdword(&psSaveDroid->action);
-			endian_udword(&psSaveDroid->actionX);
-			endian_udword(&psSaveDroid->actionY);
-			endian_udword(&psSaveDroid->actionTargetID);
-			endian_udword(&psSaveDroid->actionStarted);
-			endian_udword(&psSaveDroid->actionPoints);
-			endian_uword(&psSaveDroid->actionHeight);
-			endian_udword(&psSaveDroid->baseStructID);
-			endian_udword(&psSaveDroid->died);
-			endian_udword(&psSaveDroid->lastEmission);
-			/* OBJECT_SAVE_V20 */
-			endian_udword(&psSaveDroid->id);
-			endian_udword(&psSaveDroid->x);
-			endian_udword(&psSaveDroid->y);
-			endian_udword(&psSaveDroid->z);
-			endian_udword(&psSaveDroid->direction);
-			endian_udword(&psSaveDroid->player);
-			endian_udword(&psSaveDroid->burnStart);
-			endian_udword(&psSaveDroid->burnDamage);
-
-			return true;
 }
 
 // -----------------------------------------------------------------------------------------
 /*
 Writes the linked list of droids for each player to a file
 */
-bool writeDroidFile(char *pFileName, DROID **ppsCurrentDroidLists)
+static bool writeDroid(WzConfig &ini, DROID *psCurr, bool onMission)
 {
-	char *pFileData = NULL;
-	UDWORD				fileSize, player, totalDroids=0;
-	DROID				*psCurr;
-	DROID				*psTrans;
-	DROID_SAVEHEADER	*psHeader;
-	SAVE_DROID			*psSaveDroid;
-	bool status = true;
-
-	//total all the droids in the world
-	for (player = 0; player < MAX_PLAYERS; player++)
+	ini.beginGroup("droid_" + QString::number(psCurr->id));
+	ini.setValue("id", psCurr->id);
+	ini.setValue("player", psCurr->player);
+	ini.setValue("name", psCurr->aName);
+	ini.setVector3i("position", psCurr->pos);
+	ini.setVector3i("rotation", psCurr->rot);
+	ini.setValue("health", psCurr->body);
+	for (int i = 0; i < psCurr->numWeaps; i++)
 	{
-		for (psCurr = ppsCurrentDroidLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+		if (psCurr->asWeaps[i].nStat > 0)
 		{
-			totalDroids++;
-			// if transporter save any droids in the grp
-			if (psCurr->droidType == DROID_TRANSPORTER)
-			{
-				psTrans = psCurr->psGroup->psList;
-// Some MSVC specific debug code to check for dangling pointers
-#if defined(WZ_CC_MSVC)
-				{
-					void* dangling_ptr;
-
-					// Fill the memory with 0xcd, which MSVC initialises freshly
-					// allocated memory with.
-					memset(&dangling_ptr, 0xcd, sizeof(dangling_ptr));
-
-					if (psTrans->psGrpNext == dangling_ptr)
-					{
-						debug( LOG_ERROR, "transporter ->psGrpNext not reset" );
-						return false;
-					}
-				}
-#endif
-
-				for (psTrans = psTrans->psGrpNext; psTrans != NULL; psTrans = psTrans->psGrpNext)
-				{
-					totalDroids++;
-				}
-			}
+			ini.setValue("ammo/" + QString::number(i), psCurr->asWeaps[i].ammo);
+			ini.setValue("lastFired/" + QString::number(i), psCurr->asWeaps[i].lastFired);
+			ini.setValue("recoilValue/" + QString::number(i), psCurr->asWeaps[i].recoilValue);
+			ini.setValue("shotsFired/" + QString::number(i), psCurr->asWeaps[i].shotsFired);
+			ini.setVector3i("rotation/" + QString::number(i), psCurr->asWeaps[i].rot);
 		}
 	}
-
-	/* Allocate the data buffer */
-	fileSize = DROID_HEADER_SIZE + totalDroids*sizeof(SAVE_DROID);
-	pFileData = (char*)malloc(fileSize);
-	if (pFileData == NULL)
+	for (int i = 0; i < DROID_MAXWEAPS; i++)
 	{
-		debug( LOG_FATAL, "Out of memory" );
-		abort();
+		if (psCurr->psActionTarget[i] != NULL && psCurr->psActionTarget[i]->died <= 1)
+		{
+			ini.setValue("actionTarget/" + QString::number(i) + "/id", psCurr->psActionTarget[i]->id);
+			ini.setValue("actionTarget/" + QString::number(i) + "/player", psCurr->psActionTarget[i]->player);
+			ini.setValue("actionTarget/" + QString::number(i) + "/type", psCurr->psActionTarget[i]->type);
+#ifdef DEBUG
+			ini.setValue("actionTarget/" + QString::number(i) + "/debugfunc", psCurr->actionTargetFunc[i]);
+			ini.setValue("actionTarget/" + QString::number(i) + "/debugline", psCurr->actionTargetLine[i]);
+#endif
+		}
+	}
+	ini.setValue("born", psCurr->born);
+	if (psCurr->lastFrustratedTime > 0) ini.setValue("lastFrustratedTime", psCurr->lastFrustratedTime);
+	if (psCurr->experience > 0) ini.setValue("experience", psCurr->experience);
+	ini.setValue("order/type", psCurr->order);
+	ini.setVector2i("order/pos", Vector2i(psCurr->orderX, psCurr->orderY));
+	ini.setVector2i("order/pos2", Vector2i(psCurr->orderX2, psCurr->orderY2));
+	ini.setValue("timeLastHit", psCurr->timeLastHit);
+	if (psCurr->psTarget != NULL)
+	{
+		ini.setValue("target/id", psCurr->psTarget->id);
+		ini.setValue("target/player", psCurr->psTarget->player);
+		ini.setValue("target/type", psCurr->psTarget->type);
+#ifdef DEBUG
+		ini.setValue("target/debugfunc", QString::fromUtf8(psCurr->targetFunc));
+		ini.setValue("target/debugline", psCurr->targetLine);
+#endif
+	}
+	ini.setValue("secondaryOrder", psCurr->secondaryOrder);
+	ini.setValue("action", psCurr->action);
+	ini.setVector2i("action/pos", Vector2i(psCurr->actionX, psCurr->actionX));
+	ini.setValue("actionStarted", psCurr->actionStarted);
+	ini.setValue("actionPoints", psCurr->actionPoints);
+	if (psCurr->psTarStats != NULL)
+	{
+		ini.setValue("targetStats", psCurr->psTarStats->pName);
+	}
+	if (psCurr->psBaseStruct != NULL)
+	{
+		ini.setValue("baseStruct/id", psCurr->psBaseStruct->id);
+		ini.setValue("baseStruct/player", psCurr->psBaseStruct->player);	// always ours, but for completeness
+		ini.setValue("baseStruct/type", psCurr->psBaseStruct->type);		// always a building, but for completeness
+	}
+	if (psCurr->psGroup)
+	{
+		ini.setValue("aigroup", psCurr->psGroup->id);	// AI and commander/transport group
+		ini.setValue("aigroup/type", psCurr->psGroup->type);
+	}
+	ini.setValue("group", psCurr->group);	// different kind of group. of course.
+	ini.setValue("selected", psCurr->selected);	// third kinf of group
+	if (psCurr->lastEmission)
+	{
+		ini.setValue("lastEmission", psCurr->lastEmission);
+	}
+	for (int i = 0; i < game.maxPlayers; i++)
+	{
+		ini.setValue("visible/" + QString::number(i), psCurr->visible[i]);
+	}
+	if (hasCommander(psCurr) && psCurr->psGroup->psCommander->died <= 1)
+	{
+		ini.setValue("commander", psCurr->psGroup->psCommander->id);
+	}
+	if (psCurr->died > 0) ini.setValue("died", psCurr->died);
+	if (psCurr->resistance) ini.setValue("resistance", psCurr->resistance);
+	if (psCurr->inFire > 0) ini.setValue("inFire", psCurr->inFire);
+	if (psCurr->burnStart > 0) ini.setValue("burnStart", psCurr->burnStart);
+	if (psCurr->burnDamage > 0) ini.setValue("burnDamage", psCurr->burnDamage);
+	ini.setValue("droidType", psCurr->droidType);
+	ini.setValue("weapons", psCurr->numWeaps);
+	ini.setValue("parts/body", (asBodyStats + psCurr->asBits[COMP_BODY].nStat)->pName);
+	ini.setValue("parts/propulsion", (asPropulsionStats + psCurr->asBits[COMP_PROPULSION].nStat)->pName);
+	ini.setValue("parts/brain", (asBrainStats + psCurr->asBits[COMP_BRAIN].nStat)->pName);
+	ini.setValue("parts/repair", (asRepairStats + psCurr->asBits[COMP_REPAIRUNIT].nStat)->pName);
+	ini.setValue("parts/ecm", (asECMStats + psCurr->asBits[COMP_ECM].nStat)->pName);
+	ini.setValue("parts/sensor", (asSensorStats + psCurr->asBits[COMP_SENSOR].nStat)->pName);
+	ini.setValue("parts/construct", (asConstructStats + psCurr->asBits[COMP_CONSTRUCT].nStat)->pName);
+	for (int j = 0; j < psCurr->numWeaps; j++)
+	{
+		ini.setValue("parts/weapon/" + QString::number(j + 1), (asWeaponStats + psCurr->asWeaps[j].nStat)->pName);
+	}
+	ini.setValue("moveStatus", psCurr->sMove.Status);
+	ini.setValue("pathIndex", psCurr->sMove.pathIndex);
+	ini.setValue("pathLength", psCurr->sMove.numPoints);
+	for (int i = 0; i < psCurr->sMove.numPoints; i++)
+	{
+		ini.setVector2i("pathNode/" + QString::number(i), psCurr->sMove.asPath[i]);
+	}
+	ini.setVector2i("moveDestination", psCurr->sMove.destination);
+	ini.setVector2i("moveSource", psCurr->sMove.src);
+	ini.setVector2i("moveTarget", psCurr->sMove.target);
+	ini.setValue("moveSpeed", psCurr->sMove.speed);
+	ini.setValue("moveDirection", psCurr->sMove.moveDir);
+	ini.setValue("bumpDir", psCurr->sMove.bumpDir);
+	ini.setValue("vertSpeed", psCurr->sMove.iVertSpeed);
+	ini.setValue("bumpTime", psCurr->sMove.bumpTime);
+	ini.setValue("shuffleStart", psCurr->sMove.shuffleStart);
+	for (int i = 0; i < sizeof(psCurr->sMove.iAttackRuns) / sizeof(psCurr->sMove.iAttackRuns[0]); ++i)
+	{
+		ini.setValue("attackRun/" + QString::number(i), psCurr->sMove.iAttackRuns[i]);
+	}
+	ini.setValue("lastBump", psCurr->sMove.lastBump);
+	ini.setValue("pauseTime", psCurr->sMove.pauseTime);
+	ini.setVector2i("bumpPosition", Vector2i(psCurr->sMove.bumpX, psCurr->sMove.bumpY));
+	ini.setValue("onMission", onMission);
+	ini.endGroup();
+	return true;
+}
+
+static bool writeDroidFile(const char *pFileName, DROID **ppsCurrentDroidLists)
+{
+	WzConfig ini(pFileName);
+	if (ini.status() != QSettings::NoError)
+	{
+		debug(LOG_ERROR, "Could not open %s", pFileName);
 		return false;
 	}
-
-	/* Put the file header on the file */
-	psHeader = (DROID_SAVEHEADER *)pFileData;
-	psHeader->aFileType[0] = 'd';
-	psHeader->aFileType[1] = 'r';
-	psHeader->aFileType[2] = 'o';
-	psHeader->aFileType[3] = 'd';
-	psHeader->version = CURRENT_VERSION_NUM;
-	psHeader->quantity = totalDroids;
-
-	endian_udword(&psHeader->version);
-	endian_udword(&psHeader->quantity);
-
-	debug(LOG_SAVE, "file version is %u for (%s) ", psHeader->version, pFileName);
-
-	psSaveDroid = (SAVE_DROID*)(pFileData + DROID_HEADER_SIZE);
-
-	/* Put the droid data into the buffer */
-	for (player = 0; player < MAX_PLAYERS; player++)
+	bool onMission = (ppsCurrentDroidLists[0] == mission.apsDroidLists[0]);
+	for (int player = 0; player < game.maxPlayers; player++)
 	{
-		for(psCurr = ppsCurrentDroidLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+		for (DROID *psCurr = ppsCurrentDroidLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
 		{
-            //always save transporter droids that are in the mission list with an INVALID_XY
-            if (psCurr->droidType == DROID_TRANSPORTER &&
-                ppsCurrentDroidLists[player] == mission.apsDroidLists[player])
-            {
-                psCurr->pos.x = INVALID_XY;
-                psCurr->pos.y = INVALID_XY;
-            }
-
-			buildSaveDroidFromDroid(psSaveDroid, psCurr, DROID_NORMAL);
-
-			psSaveDroid = (SAVE_DROID *)((char *)psSaveDroid + sizeof(SAVE_DROID));
-			// if transporter save any droids in the grp
-			if (psCurr->droidType == DROID_TRANSPORTER)
+			writeDroid(ini, psCurr, onMission);
+			if (psCurr->droidType == DROID_TRANSPORTER)	// if transporter save any droids in the grp
 			{
-				psTrans = psCurr->psGroup->psList;
-				for(psTrans = psCurr->psGroup->psList; psTrans != NULL; psTrans = psTrans->psGrpNext)
+				for (DROID *psTrans = psCurr->psGroup->psList; psTrans != NULL; psTrans = psTrans->psGrpNext)
 				{
-					if (psTrans->droidType != DROID_TRANSPORTER)
+					if (psTrans != psCurr)
 					{
-						buildSaveDroidFromDroid(psSaveDroid, psTrans, DROID_ON_TRANSPORT);
-						psSaveDroid = (SAVE_DROID *)((char *)psSaveDroid + sizeof(SAVE_DROID));
+						writeDroid(ini, psTrans, onMission);
 					}
+				}
+				//always save transporter droids that are in the mission list with an invalid value
+				if (ppsCurrentDroidLists[player] == mission.apsDroidLists[player])
+				{
+					ini.setVector3i("position", Vector3i(-1, -1, -1)); // was INVALID_XY
 				}
 			}
 		}
 	}
-
-	ppsCurrentDroidLists = NULL;//ensure it always gets set
-
-	/* Write the data to the file */
-	if (pFileData != NULL) {
-		status = saveFile(pFileName, pFileData, fileSize);
-		free(pFileData);
-		return status;
-	}
-	return false;
+	return true;
 }
 
 
@@ -9318,63 +8497,6 @@ UDWORD getSaveGameType(void)
 	return gameType;
 }
 
-
-// -----------------------------------------------------------------------------------------
-//copies a Stat name into a destination string for a given stat type and index
-static bool getNameFromComp(UDWORD compType, char *pDest, UDWORD compIndex)
-{
-	BASE_STATS	*psStats;
-
-	//allocate the stats pointer
-	switch (compType)
-	{
-	case COMP_BODY:
-		ASSERT_OR_RETURN( false, compIndex < numBodyStats, "Invalid range referenced for numBodyStats, %d > %d", compIndex, numBodyStats);
-		psStats = (BASE_STATS *)(asBodyStats + compIndex);
-		break;
-	case COMP_BRAIN:
-		ASSERT_OR_RETURN( false, compIndex < numBrainStats, "Invalid range referenced for numBrainStats, %d > %d", compIndex, numBrainStats);
-		psStats = (BASE_STATS *)(asBrainStats + compIndex);
-		break;
-	case COMP_PROPULSION:
-		ASSERT_OR_RETURN( false, compIndex < numPropulsionStats, "Invalid range referenced for numPropulsionStats, %d > %d", compIndex, numPropulsionStats);
-		psStats = (BASE_STATS *)(asPropulsionStats + compIndex);
-		break;
-	case COMP_REPAIRUNIT:
-		ASSERT_OR_RETURN( false, compIndex < numRepairStats, "Invalid range referenced for numRepairStats, %d > %d", compIndex, numRepairStats);
-		psStats = (BASE_STATS*)(asRepairStats  + compIndex);
-		break;
-	case COMP_ECM:
-		ASSERT_OR_RETURN( false, compIndex < numECMStats, "Invalid range referenced for numECMStats, %d > %d", compIndex, numECMStats);
-		psStats = (BASE_STATS*)(asECMStats + compIndex);
-		break;
-	case COMP_SENSOR:
-		ASSERT_OR_RETURN( false, compIndex < numSensorStats, "Invalid range referenced for numSensorStats, %d > %d", compIndex, numSensorStats);
-		psStats = (BASE_STATS*)(asSensorStats + compIndex);
-		break;
-	case COMP_CONSTRUCT:
-		ASSERT_OR_RETURN( false, compIndex < numConstructStats, "Invalid range referenced for numConstructStats, %d > %d", compIndex, numConstructStats);
-		psStats = (BASE_STATS*)(asConstructStats + compIndex);
-		break;
-	/*case COMP_PROGRAM:
-		psStats = (BASE_STATS*)(asProgramStats + compIndex);
-		break;*/
-	case COMP_WEAPON:
-		ASSERT_OR_RETURN( false, compIndex < numWeaponStats, "Invalid range referenced for numWeaponStats, %d > %d", compIndex, numWeaponStats);
-		psStats = (BASE_STATS*)(asWeaponStats + compIndex);
-		break;
-	default:
-		debug( LOG_ERROR, "Invalid component type - game.c" );
-
-		return false;
-	}
-
-	//copy the name into the destination string
-	strcpy(pDest, psStats->pName);
-	return true;
-}
-// -----------------------------------------------------------------------------------------
-// END
 
 /**
  * \param[out] backDropSprite The premade map texture.

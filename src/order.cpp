@@ -91,9 +91,6 @@ RUN_DATA	asRunData[MAX_PLAYERS];
 // deal with a droid receiving a primary order
 static bool secondaryGotPrimaryOrder(DROID *psDroid, DROID_ORDER order);
 
-// check all the orders in the list for died objects
-static void orderCheckList(DROID *psDroid);
-
 // Clear all the orders from the list, up to listSize (without clearing pending (not yet synchronised) orders, that is).
 static void orderClearDroidList(DROID *psDroid);
 
