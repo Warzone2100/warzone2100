@@ -5,7 +5,6 @@
 script "multiplay.slo"
 run
 {
-
 endMsg			INTMESSAGE	"END"
 winMsg			INTMESSAGE	"WIN"
 
@@ -25,8 +24,6 @@ vtolfac			STRUCTURESTAT		"A0VTolFactory1"
 // Starting Technologies.												
 // MAX of 64 starting Techs. See alexl for more.
 
-// JIM/KEITH KEEP YOUR FILTHY MITS OFF THESE..
-
 // CLEAN MAP
 numCleanTech	int				4
 
@@ -34,13 +31,6 @@ cleanTech[0]	RESEARCHSTAT	"R-Vehicle-Prop-Wheels"
 cleanTech[1]	RESEARCHSTAT	"R-Sys-Spade1Mk1"
 cleanTech[2]	RESEARCHSTAT	"R-Vehicle-Body01"
 cleanTech[3]	RESEARCHSTAT	"R-Comp-SynapticLink"
-//cleanTech[0]	RESEARCHSTAT	"R-Wpn-MG1Mk1"
-//cleanTech[1]	RESEARCHSTAT	"R-Defense-HardcreteWall"
-//cleanTech[4]	RESEARCHSTAT	"R-Struc-Factory-Cyborg"
-//cleanTech[5]	RESEARCHSTAT	"R-Cyborg-Wpn-MG"
-//cleanTech[6]	RESEARCHSTAT	"R-Defense-Pillbox01"
-//cleanTech[7]	RESEARCHSTAT	"R-Defense-Tower01"
-//cleanTech[9]	RESEARCHSTAT	"R-Sys-Engineering01"
 
 // BASE MAP
 numBaseTech	int				19
@@ -115,19 +105,6 @@ defTech[40]		RESEARCHSTAT	"R-Wpn-Rocket-Damage01"
 defTech[41]		RESEARCHSTAT	"R-Defense-WallTower01"
 
 
-// player specific.  eg.
-//numtecP0	int		1							//Player0
-//tecP0[0]	RESEARCHSTAT	"R-Vehicle-Body01"
-numtecP0	int		0							//Player0
-numtecP1	int		0							//Player1
-numtecP2	int		0							//Player2
-numtecP3	int		0							//Player3	
-numtecP4	int		0							//Player4	
-numtecP5	int		0							//Player5	
-numtecP6	int		0							//Player6	
-numtecP7	int		0							//Player7
-
-
 /////////////////////////////////////////////////////////////////////////
 // Available Research Topics.
 // Maximum of TEN topics, see alexl for more.
@@ -136,9 +113,7 @@ numtecP7	int		0							//Player7
 numCleanRes	int				3	
 cleanRes[0]	RESEARCHSTAT	"R-Sys-Sensor-Turret01"
 cleanRes[1]	RESEARCHSTAT	"R-Wpn-MG1Mk1"
-//cleanRes[2]	RESEARCHSTAT	"R-Struc-Factory-Cyborg"
 cleanRes[2]	RESEARCHSTAT	"R-Sys-Engineering01"
-//cleanRes[1]	RESEARCHSTAT	"R-Struc-CommandRelay"
 
 // BASE MAP
 numBaseRes	int				0
@@ -148,20 +123,6 @@ numBaseRes	int				0
 // DEFENSE MAP
 numDefRes	int				0
 //defRes[0]	RESEARCHSTAT	"R-Sys-Engineering01"
-
-
-
-// Player Specific. eg.
-//  numResP0	int		1		//number of topics to enable
-//  resP0[0]	RESEARCHSTAT	"R-Lab-Electronics"
-numResP0	int		0
-numResP1	int		0
-numResP2	int		0
-numResP3	int		0
-numResP4	int		0
-numResP5	int		0
-numResP6	int		0
-numResP7	int		0
 
 /////////////////////////////////////////////////////////////////////////
 // Other Guff.

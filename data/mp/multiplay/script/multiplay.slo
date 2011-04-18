@@ -13,16 +13,8 @@ public	STRUCTURESTAT	commandrelay;
 public 	STRUCTURESTAT	cybfac;
 public 	STRUCTURESTAT	vtolfac;
 
-// starting technologies.
-public	int				numtecP0, numtecP1, numtecP2, numtecP3,numtecP4, numtecP5, numtecP6, numtecP7;
-public	RESEARCHSTAT	tecP0[5], tecP1[5], tecP2[5], tecP3[5], tecP4[5], tecP5[5], tecP6[5], tecP7[5];
-
 public	int				numCleanTech,	numBaseTech,	numDefTech;
 public	RESEARCHSTAT	cleanTech[32],	baseTech[32],	defTech[64];
-
-// research topics
-public	int				numResP0, numResP1, numResP2, numResP3, numResP4, numResP5, numResP6, numResP7;
-public	RESEARCHSTAT	resP0[5], resP1[5], resP2[5], resP3[5],	resP4[5], resP5[5], resP6[5], resP7[5];
 
 public	int				numCleanRes,	numBaseRes,		numDefRes;
 public	RESEARCHSTAT	cleanRes[10],	baseRes[10],	defRes[10];		
@@ -110,7 +102,6 @@ event initialisedEvent(CALL_GAMEINIT)
 
 event initialisedEvent2(CALL_GAMEINIT)
 {
-
 	//set up the reticule buttons
 	addReticuleButton(OPTIONS);
 	addReticuleButton(CANCEL);
@@ -125,8 +116,6 @@ event initialisedEvent2(CALL_GAMEINIT)
 	{
 		enableStructure(command	,	playnum);		//make structures available to build
 		enableStructure(factory,	playnum);
-		//enableStructure(wall,		playnum);
-		//enableStructure(cornerWall,	playnum);
 		enableStructure(oilDerrick,	playnum);
 		enableStructure(powerGen,	playnum);
 		enableStructure(research,	playnum);
@@ -142,128 +131,18 @@ event initialisedEvent2(CALL_GAMEINIT)
 		playnum = playnum+1;
 	}
 	applyLimitSet();	// set limit options
-
-	// player specific technology startups
-	count = 0;
-	while (count < numtecP0)
-	{
-		completeResearch(tecP0[count], 0);
-		count = count +1;
-	}
-	count = 0;
-	while (count < numtecP1)
-	{
-		completeResearch(tecP1[count], 1);
-		count = count +1;
-	}
-	count = 0;
-	while (count < numtecP2)
-	{
-		completeResearch(tecP2[count], 2);
-		count = count +1;
-	}
-	count = 0;
-	while (count < numtecP3)
-	{
-		completeResearch(tecP3[count], 3);
-		count = count +1;
-	}
-	count = 0;
-	while (count < numtecP4)
-	{
-		completeResearch(tecP4[count], 4);
-		count = count +1;
-	}
-	count = 0;
-	while (count < numtecP5)
-	{
-		completeResearch(tecP5[count], 5);
-		count = count +1;
-	}
-	count = 0;
-	while (count < numtecP6)
-	{
-		completeResearch(tecP6[count], 6);
-		count = count +1;
-	}
-	count = 0;
-	while (count < numtecP7)
-	{
-		completeResearch(tecP7[count], 7);
-		count = count +1;
-	}
-
-
-	// player specific research startups
-	count = 0;
-	while (count < numResP0)
-	{
-		enableResearch(resP0[count], 0);
-		count = count +1;
-	}
-	count = 0;
-	while (count < numResP1)
-	{
-		enableResearch(resP1[count], 1);
-		count = count +1;
-	}
-	count = 0;
-	while (count < numResP2)
-	{
-		enableResearch(resP2[count], 2);
-		count = count +1;
-	}
-	count = 0;
-	while (count < numResP3)
-	{
-		enableResearch(resP3[count], 3);
-		count = count +1;
-	}
-	count = 0;
-	while (count < numResP4)
-	{
-		enableResearch(resP4[count], 4);
-		count = count +1;
-	}
-	count = 0;
-	while (count < numResP5)
-	{
-		enableResearch(resP5[count], 5);
-		count = count +1;
-	}
-	count = 0;
-	while (count < numResP6)
-	{
-		enableResearch(resP6[count], 6);
-		count = count +1;
-	}
-	count = 0;
-	while (count < numResP7)
-	{
-		enableResearch(resP7[count], 7);
-		count = count +1;
-	}
 }
-
 
 
 // /////////////////////////////////////////////////////////////////
 event checkEndConditions (endConditions)
 {
 	// Losing Conditions
-//	if(	   ( not (multiPlayerGameType == DMATCH))
-	  if(  ( not anyDroidsLeft(selectedPlayer))
-  	  and  ( not anyFactoriesLeft(selectedPlayer))	
-//	  and  ( not playerInAlliance(selectedPlayer)) 
-	  )
+	if ((not anyDroidsLeft(selectedPlayer)) and (not anyFactoriesLeft(selectedPlayer)))
 	{
-//		addMessage(endMsg, MISS_MSG, 0, true);
-//		pause(10);
-//		gameOver(FALSE);
 		gameOverMessage(endMsg, MISS_MSG, 0, FALSE);
 		setEventTrigger(checkEndConditions, inactive);
 	}
-	
 	
 	// Winning Conditions
 	playnum=0;
@@ -302,9 +181,6 @@ event checkEndConditions (endConditions)
 	
 	if(gamenotwon == FALSE)
 	{
-//		addMessage(winMsg, MISS_MSG, 0, true);
-//		pause(10);
-//		gameOver(TRUE);
 		gameOverMessage(winMsg, MISS_MSG, 0, TRUE);
 		setEventTrigger(checkEndConditions, inactive);
 	}	
@@ -342,4 +218,3 @@ event seeBaseHit(CALL_MISSION_END)
 		t=0;							//flag known about!
 	}
 }
-
