@@ -265,12 +265,14 @@ void orderUpdateDroid(DROID *psDroid)
 	if (psDroid->psTarget && psDroid->psTarget->died)
 	{
 		setDroidTarget(psDroid, NULL);
+		objTrace(psDroid->id, "Target dead");
 	}
 
 	//clear its base struct if its died
 	if (psDroid->psBaseStruct && psDroid->psBaseStruct->died)
 	{
 		setDroidBase(psDroid, NULL);
+		objTrace(psDroid->id, "Base struct dead");
 	}
 
 	// check for died objects in the list
@@ -777,10 +779,12 @@ void orderUpdateDroid(DROID *psDroid)
 		{
 			psDroid->order = DORDER_NONE;
 			actionDroid(psDroid, DACTION_NONE);
+			objTrace(psDroid->id, "Clearing build order since build target is gone");
 		}
 		else if (psDroid->action == DACTION_NONE)
 		{
 			psDroid->order = DORDER_NONE;
+			objTrace(psDroid->id, "Clearing build order since build action is reset");
 		}
 		break;
 	case DORDER_EMBARK:
@@ -1616,11 +1620,8 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 	case DORDER_BUILD:
 	case DORDER_LINEBUILD:
 		// build a new structure or line of structures
-		if (!isConstructionDroid(psDroid))
-		{
-			break;
-		}
-		ASSERT(psOrder->psStats != NULL, "invalid structure stats pointer");
+		ASSERT_OR_RETURN(, isConstructionDroid(psDroid), "%s cannot construct things!", objInfo(psDroid));
+		ASSERT_OR_RETURN(, psOrder->psStats != NULL, "invalid structure stats pointer");
 		psDroid->order = psOrder->order;
 		psDroid->orderX = psOrder->x;
 		psDroid->orderY = psOrder->y;

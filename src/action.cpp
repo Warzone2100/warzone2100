@@ -1722,6 +1722,7 @@ void actionUpdateDroid(DROID *psDroid)
 	case DACTION_BUILD:
 		if (!psDroid->psTarStats)
 		{
+			objTrace(psDroid->id, "No target stats for build order - resetting");
 			psDroid->action = DACTION_NONE;
 			break;
 		}
