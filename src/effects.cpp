@@ -2603,19 +2603,19 @@ bool readFXData(const char *fileName)
 		curEffect->control      = ini.value("control").toInt();
 		curEffect->group        = (EFFECT_GROUP)ini.value("group").toInt();
 		curEffect->type         = (EFFECT_TYPE)ini.value("type").toInt();
-		curEffect->frameNumber  = ini.value("control").toInt();
-		curEffect->size         = ini.value("control").toInt();
-		curEffect->baseScale    = ini.value("control").toInt();
-		curEffect->specific     = ini.value("control").toInt();
+		curEffect->frameNumber  = ini.value("frameNumber").toInt();
+		curEffect->size         = ini.value("size").toInt();
+		curEffect->baseScale    = ini.value("baseScale").toInt();
+		curEffect->specific     = ini.value("specific").toInt();
 		curEffect->position     = ini.vector3f("position");
 		curEffect->velocity     = ini.vector3f("velocity");
 		curEffect->rotation     = ini.vector3i("rotation");
 		curEffect->spin         = ini.vector3i("spin");
-		curEffect->birthTime    = ini.value("control").toInt();
-		curEffect->lastFrame    = ini.value("control").toInt();
-		curEffect->frameDelay   = ini.value("control").toInt();
-		curEffect->lifeSpan     = ini.value("control").toInt();
-		curEffect->radius       = ini.value("control").toInt();
+		curEffect->birthTime    = ini.value("birthTime").toInt();
+		curEffect->lastFrame    = ini.value("lastFrame").toInt();
+		curEffect->frameDelay   = ini.value("frameDelay").toInt();
+		curEffect->lifeSpan     = ini.value("lifeSpan").toInt();
+		curEffect->radius       = ini.value("radius").toInt();
 		if (ini.contains("imd_name"))
 		{
 			QString imd_name = ini.value("imd_name").toString();
