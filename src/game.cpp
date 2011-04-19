@@ -5134,11 +5134,9 @@ bool loadSaveStructureV7(char *pFileData, UDWORD filesize, UDWORD numStructures)
 
 	psSaveStructure = &sSaveStructure;
 
-	if ((sizeof(SAVE_STRUCTURE_V2) * numStructures + STRUCT_HEADER_SIZE) >
-		filesize)
+	if ((sizeof(SAVE_STRUCTURE_V2) * numStructures + STRUCT_HEADER_SIZE) > filesize)
 	{
 		debug( LOG_ERROR, "structureLoad: unexpected end of file" );
-
 		return false;
 	}
 
@@ -5170,7 +5168,6 @@ bool loadSaveStructureV7(char *pFileData, UDWORD filesize, UDWORD numStructures)
 
 		psSaveStructure->player=RemapPlayerNumber(psSaveStructure->player);
 
-
 		if (psSaveStructure->player >= MAX_PLAYERS)
 		{
 			psSaveStructure->player=MAX_PLAYERS-1;
@@ -5178,7 +5175,6 @@ bool loadSaveStructureV7(char *pFileData, UDWORD filesize, UDWORD numStructures)
 		}
 		//get the stats for this structure
 		found = false;
-
 
 		if (!getSaveObjectName(psSaveStructure->name))
 		{
@@ -5207,8 +5203,7 @@ bool loadSaveStructureV7(char *pFileData, UDWORD filesize, UDWORD numStructures)
 		//for modules - need to check the base structure exists
 		if (IsStatExpansionModule(psStats))
 		{
-			psStructure = getTileStructure(map_coord(psSaveStructure->x),
-				map_coord(psSaveStructure->y));
+			psStructure = getTileStructure(map_coord(psSaveStructure->x), map_coord(psSaveStructure->y));
 			if (psStructure == NULL)
 			{
 				debug( LOG_ERROR, "No owning structure for module - %s for player - %d", getSaveStructNameV19((SAVE_STRUCTURE_V17*)psSaveStructure), psSaveStructure->player );
@@ -5333,10 +5328,8 @@ static UDWORD getResearchIdFromName(char *pName)
 {
 	UDWORD inc;
 
-
 	for (inc=0; inc < numResearch; inc++)
 	{
-
 		if (!strcmp(asResearch[inc].pName, pName))
 		{
 			return inc;
@@ -5383,11 +5376,9 @@ bool loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 
 	psSaveStructure = &sSaveStructure;
 
-	if ((sizeOfSaveStructure * numStructures + STRUCT_HEADER_SIZE) >
-		filesize)
+	if ((sizeOfSaveStructure * numStructures + STRUCT_HEADER_SIZE) > filesize)
 	{
 		debug( LOG_ERROR, "structureLoad: unexpected end of file" );
-
 		return false;
 	}
 
@@ -5431,11 +5422,9 @@ bool loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 		{
 			psSaveStructure->player=MAX_PLAYERS-1;
 			NumberOfSkippedStructures++;
-
 		}
 		//get the stats for this structure
 		found = false;
-
 
 		if (!getSaveObjectName(psSaveStructure->name))
 		{
@@ -5464,8 +5453,7 @@ bool loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 		//for modules - need to check the base structure exists
 		if (IsStatExpansionModule(psStats))
 		{
-			psStructure = getTileStructure(map_coord(psSaveStructure->x),
-			                               map_coord(psSaveStructure->y));
+			psStructure = getTileStructure(map_coord(psSaveStructure->x), map_coord(psSaveStructure->y));
 			if (psStructure == NULL)
 			{
 				debug( LOG_ERROR, "No owning structure for module - %s for player - %d", getSaveStructNameV(psSaveStructure), psSaveStructure->player );
@@ -5805,11 +5793,9 @@ bool writeStructFile(char *pFileName)
 	{
 		for(psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
 		{
-
 			strcpy(psSaveStruct->name, psCurr->pStructureType->pName);
 
 			psSaveStruct->id = psCurr->id;
-
 
 			psSaveStruct->x = psCurr->pos.x;
 			psSaveStruct->y = psCurr->pos.y;
@@ -5870,7 +5856,7 @@ bool writeStructFile(char *pFileName)
 					psSaveStruct->timeToBuild		= psFactory->timeToBuild;
 					psSaveStruct->timeStartHold		= psFactory->timeStartHold;
 
-    				if (psFactory->psSubject != NULL)
+					if (psFactory->psSubject != NULL)
 					{
 						psSubjectTemplate = (DROID_TEMPLATE *)psFactory->psSubject;
 						psSaveStruct->subjectInc = psSubjectTemplate->multiPlayerID;
@@ -6214,18 +6200,15 @@ bool loadSaveFeatureV14(char *pFileData, UDWORD filesize, UDWORD numFeatures, UD
 		sizeOfSaveFeature = sizeof(SAVE_FEATURE_V14);
 	}
 
-
 	if ((sizeOfSaveFeature * numFeatures + FEATURE_HEADER_SIZE) >
 		filesize)
 	{
 		debug( LOG_ERROR, "featureLoad: unexpected end of file" );
-
 		return false;
 	}
 
 	/* Load in the feature data */
-	for (count = 0; count < numFeatures; count ++,
-									pFileData += sizeOfSaveFeature)
+	for (count = 0; count < numFeatures; count ++, pFileData += sizeOfSaveFeature)
 	{
 		psSaveFeature = (SAVE_FEATURE_V14*) pFileData;
 
@@ -6243,7 +6226,6 @@ bool loadSaveFeatureV14(char *pFileData, UDWORD filesize, UDWORD numFeatures, UD
 
 		//get the stats for this feature
 		found = false;
-
 
 		if (!getSaveObjectName(psSaveFeature->name))
 		{
@@ -6293,7 +6275,6 @@ bool loadSaveFeatureV14(char *pFileData, UDWORD filesize, UDWORD numFeatures, UD
 				pFeature->visible[i] = psSaveFeature->visible[i];
 			}
 		}
-
 	}
 
 	return true;
@@ -6312,8 +6293,7 @@ bool loadSaveFeatureV(char *pFileData, UDWORD filesize, UDWORD numFeatures, UDWO
 
 	sizeOfSaveFeature = sizeof(SAVE_FEATURE);
 
-	if ((sizeOfSaveFeature * numFeatures + FEATURE_HEADER_SIZE) >
-		filesize)
+	if ((sizeOfSaveFeature * numFeatures + FEATURE_HEADER_SIZE) > filesize)
 	{
 		debug( LOG_ERROR, "featureLoad: unexpected end of file" );
 
@@ -6321,8 +6301,7 @@ bool loadSaveFeatureV(char *pFileData, UDWORD filesize, UDWORD numFeatures, UDWO
 	}
 
 	/* Load in the feature data */
-	for (count = 0; count < numFeatures; count ++,
-									pFileData += sizeOfSaveFeature)
+	for (count = 0; count < numFeatures; count ++, pFileData += sizeOfSaveFeature)
 	{
 		psSaveFeature = (SAVE_FEATURE*) pFileData;
 
@@ -6340,7 +6319,6 @@ bool loadSaveFeatureV(char *pFileData, UDWORD filesize, UDWORD numFeatures, UDWO
 
 		//get the stats for this feature
 		found = false;
-
 
 		if (!getSaveObjectName(psSaveFeature->name))
 		{
@@ -6361,7 +6339,6 @@ bool loadSaveFeatureV(char *pFileData, UDWORD filesize, UDWORD numFeatures, UDWO
 		//if haven't found the feature - ignore this record!
 		if (!found)
 		{
-
 			debug( LOG_ERROR, "This feature no longer exists - %s", psSaveFeature->name );
 			//ignore this
 			continue;
@@ -6380,7 +6357,7 @@ bool loadSaveFeatureV(char *pFileData, UDWORD filesize, UDWORD numFeatures, UDWO
 		pFeature->burnDamage = psSaveFeature->burnDamage;
 		for (i=0; i < MAX_PLAYERS; i++)
 		{
-			pFeature->visible[i] = psSaveFeature->visible[i]	;
+			pFeature->visible[i] = psSaveFeature->visible[i];
 		}
 	}
 	return true;
@@ -7012,11 +6989,9 @@ bool loadSaveStructTypeList(char *pFileData, UDWORD filesize)
 
 	/* Check the file type */
 	psHeader = (STRUCTLIST_SAVEHEADER*)pFileData;
-	if (psHeader->aFileType[0] != 's' || psHeader->aFileType[1] != 't' ||
-		psHeader->aFileType[2] != 'r' || psHeader->aFileType[3] != 'l')
+	if (psHeader->aFileType[0] != 's' || psHeader->aFileType[1] != 't' || psHeader->aFileType[2] != 'r' || psHeader->aFileType[3] != 'l')
 	{
 		debug( LOG_ERROR, "loadSaveStructTypeList: Incorrect file type" );
-
 		return false;
 	}
 
@@ -7033,7 +7008,6 @@ bool loadSaveStructTypeList(char *pFileData, UDWORD filesize)
 	if (psHeader->version < VERSION_7)
 	{
 		debug( LOG_ERROR, "StructTypeLoad: unsupported save format version %d", psHeader->version );
-
 		return false;
 	}
 	else if (psHeader->version <= VERSION_19)
@@ -7067,11 +7041,9 @@ bool loadSaveStructTypeListV7(char *pFileData, UDWORD filesize, UDWORD numRecord
 	STRUCTURE_STATS		*psStats;
 	bool				found;
 
-	if ((sizeof(SAVE_STRUCTLIST_V6) * numRecords + STRUCTLIST_HEADER_SIZE) >
-		filesize)
+	if ((sizeof(SAVE_STRUCTLIST_V6) * numRecords + STRUCTLIST_HEADER_SIZE) > filesize)
 	{
 		debug( LOG_ERROR, "StructListLoad: unexpected end of file" );
-
 		return false;
 	}
 
@@ -7088,7 +7060,6 @@ bool loadSaveStructTypeListV7(char *pFileData, UDWORD filesize, UDWORD numRecord
 			//loop until find the same name
 
 			if (!strcmp(psStats->pName, psSaveStructList->name))
-
 			{
 				found = true;
 				break;
@@ -7111,8 +7082,7 @@ bool loadSaveStructTypeListV7(char *pFileData, UDWORD filesize, UDWORD numRecord
 			continue;
 		}
 		//date is valid so set the state
-		apStructTypeLists[psSaveStructList->player][statInc] =
-			psSaveStructList->state;
+		apStructTypeLists[psSaveStructList->player][statInc] = psSaveStructList->state;
 	}
 
 	return true;
@@ -7126,11 +7096,9 @@ bool loadSaveStructTypeListV(char *pFileData, UDWORD filesize, UDWORD numRecords
 	STRUCTURE_STATS		*psStats;
 	bool				found;
 
-	if ((sizeof(SAVE_STRUCTLIST) * numRecords + STRUCTLIST_HEADER_SIZE) >
-		filesize)
+	if ((sizeof(SAVE_STRUCTLIST) * numRecords + STRUCTLIST_HEADER_SIZE) > filesize)
 	{
 		debug( LOG_ERROR, "StructListLoad: unexpected end of file" );
-
 		return false;
 	}
 
@@ -7147,7 +7115,6 @@ bool loadSaveStructTypeListV(char *pFileData, UDWORD filesize, UDWORD numRecords
 			//loop until find the same name
 
 			if (!strcmp(psStats->pName, psSaveStructList->name))
-
 			{
 				found = true;
 				break;
@@ -7170,8 +7137,7 @@ bool loadSaveStructTypeListV(char *pFileData, UDWORD filesize, UDWORD numRecords
 			continue;
 		}
 		//date is valid so set the state
-		apStructTypeLists[psSaveStructList->player][statInc] =
-			psSaveStructList->state;
+		apStructTypeLists[psSaveStructList->player][statInc] = psSaveStructList->state;
 	}
 
 	return true;
@@ -7188,8 +7154,7 @@ static bool writeStructTypeListFile(char *pFileName)
 	STRUCTURE_STATS			*psStats;
 
 	// Calculate the file size
-	fileSize = STRUCTLIST_HEADER_SIZE + (sizeof(SAVE_STRUCTLIST) *
-		numStructureStats * MAX_PLAYERS);
+	fileSize = STRUCTLIST_HEADER_SIZE + (sizeof(SAVE_STRUCTLIST) * numStructureStats * MAX_PLAYERS);
 
 	//allocate the buffer space
 	pFileData = (char*)malloc(fileSize);
@@ -7216,7 +7181,6 @@ static bool writeStructTypeListFile(char *pFileName)
 		psStats = asStructureStats;
 		for(i = 0; i < numStructureStats; i++, psStats++)
 		{
-
 			strcpy(psSaveStructList->name, psStats->pName);
 			psSaveStructList->state = apStructTypeLists[player][i];
 			psSaveStructList->player = (UBYTE)player;
