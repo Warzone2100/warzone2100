@@ -237,7 +237,6 @@ struct COMMAND_SAVEHEADER : public GAME_SAVEHEADER
 #define FEATURE_HEADER_SIZE			12
 #define TILETYPE_HEADER_SIZE		12
 #define COMPLIST_HEADER_SIZE		12
-#define STRUCTLIST_HEADER_SIZE		12
 #define RESEARCH_HEADER_SIZE		12
 #define MESSAGE_HEADER_SIZE			12
 #define PROXIMITY_HEADER_SIZE		12
@@ -1632,7 +1631,6 @@ struct SAVE_FEATURE
 	UBYTE				state; \
 	UBYTE				player
 
-
 struct SAVE_COMPLIST_V6
 {
 	COMPLIST_SAVE_V6;
@@ -1646,35 +1644,6 @@ struct SAVE_COMPLIST_V20
 struct SAVE_COMPLIST
 {
 	COMPLIST_SAVE_V20;
-};
-
-
-
-
-
-#define STRUCTLIST_SAVE_V6 \
-	char				name[MAX_SAVE_NAME_SIZE_V19]; \
-	UBYTE				state; \
-	UBYTE				player
-
-#define STRUCTLIST_SAVE_V20 \
-	char				name[MAX_SAVE_NAME_SIZE]; \
-	UBYTE				state; \
-	UBYTE				player
-
-struct SAVE_STRUCTLIST_V6
-{
-	STRUCTLIST_SAVE_V6;
-};
-
-struct SAVE_STRUCTLIST_V20
-{
-	STRUCTLIST_SAVE_V20;
-};
-
-struct SAVE_STRUCTLIST
-{
-	STRUCTLIST_SAVE_V20;
 };
 
 struct SAVE_MESSAGE
@@ -1828,10 +1797,8 @@ static bool loadSaveCompListV9(char *pFileData, UDWORD filesize, UDWORD numRecor
 static bool loadSaveCompListV(char *pFileData, UDWORD filesize, UDWORD numRecords, UDWORD version);
 static bool writeCompListFile(char *pFileName);
 
-static bool loadSaveStructTypeList(char *pFileData, UDWORD filesize);
-static bool loadSaveStructTypeListV7(char *pFileData, UDWORD filesize, UDWORD numRecords);
-static bool loadSaveStructTypeListV(char *pFileData, UDWORD filesize, UDWORD numRecords);
-static bool writeStructTypeListFile(char *pFileName);
+static bool loadSaveStructTypeList(const char *pFileName);
+static bool writeStructTypeListFile(const char *pFileName);
 
 static bool loadSaveResearch(const char *pFileName);
 static bool writeResearchFile(char *pFileName);
@@ -2686,8 +2653,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	}
 
 	//if user save game then load up the current level for structs and components
-	if ((gameType == GTYPE_SAVE_START) ||
-		(gameType == GTYPE_SAVE_MIDMISSION))
+	if (gameType == GTYPE_SAVE_START || gameType == GTYPE_SAVE_MIDMISSION)
 	{
 		//load in the component list file
 		aFileName[fileExten] = '\0';
@@ -2700,7 +2666,6 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			goto error;
 		}
 
-
 		//load the component list data
 		if (pFileData)
 		{
@@ -2712,24 +2677,12 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		}
 		//load in the structure type list file
 		aFileName[fileExten] = '\0';
-		strcat(aFileName, "strtype.bjo");
-		/* Load in the chosen file data */
-		pFileData = fileLoadBuffer;
-		if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
+		strcat(aFileName, "strtype.ini");
+
+		if (!loadSaveStructTypeList(aFileName))
 		{
-			debug( LOG_NEVER, "loadgame: Fail29\n" );
+			debug(LOG_ERROR, "failed to load %s", aFileName);
 			goto error;
-		}
-
-
-		//load the structure type list data
-		if (pFileData)
-		{
-			if (!loadSaveStructTypeList(pFileData, fileSize))
-			{
-				debug( LOG_NEVER, "loadgame: Fail31\n" );
-				goto error;
-			}
 		}
 	}
 
@@ -3132,7 +3085,7 @@ bool saveGame(char *aFileName, GAME_TYPE saveType)
 	}
 	//create the structure type lists filename
 	CurrentFileName[fileExtension] = '\0';
-	strcat(CurrentFileName, "strtype.bjo");
+	strcat(CurrentFileName, "strtype.ini");
 	/*Write the data to the file*/
 	if (!writeStructTypeListFile(CurrentFileName))
 	{
@@ -6983,225 +6936,67 @@ static bool writeCompListFile(char *pFileName)
 
 // -----------------------------------------------------------------------------------------
 // load up structure type list file
-bool loadSaveStructTypeList(char *pFileData, UDWORD filesize)
+static bool loadSaveStructTypeList(const char *pFileName)
 {
-	STRUCTLIST_SAVEHEADER		*psHeader;
-
-	/* Check the file type */
-	psHeader = (STRUCTLIST_SAVEHEADER*)pFileData;
-	if (psHeader->aFileType[0] != 's' || psHeader->aFileType[1] != 't' || psHeader->aFileType[2] != 'r' || psHeader->aFileType[3] != 'l')
+	WzConfig ini(pFileName);
+	if (ini.status() != QSettings::NoError)
 	{
-		debug( LOG_ERROR, "loadSaveStructTypeList: Incorrect file type" );
+		debug(LOG_ERROR, "Could not open %s", pFileName);
 		return false;
 	}
-
-	/* STRUCTLIST_SAVEHEADER */
-	endian_udword(&psHeader->version);
-	endian_udword(&psHeader->quantity);
-
-	debug(LOG_SAVE, "file version is %u ", psHeader->version);
-
-	//increment to the start of the data
-	pFileData += STRUCTLIST_HEADER_SIZE;
-
-	/* Check the file version */
-	if (psHeader->version < VERSION_7)
+	for (int player = 0; player < game.maxPlayers; player++)
 	{
-		debug( LOG_ERROR, "StructTypeLoad: unsupported save format version %d", psHeader->version );
-		return false;
-	}
-	else if (psHeader->version <= VERSION_19)
-	{
-		if (!loadSaveStructTypeListV7(pFileData, filesize, psHeader->quantity))
+		ini.beginGroup("player_" + QString::number(player));
+		QStringList list = ini.childKeys();
+		for (int i = 0; i < list.size(); ++i)
 		{
-			return false;
-		}
-	}
-	else if (psHeader->version <= CURRENT_VERSION_NUM)
-	{
-		if (!loadSaveStructTypeListV(pFileData, filesize, psHeader->quantity))
-		{
-			return false;
-		}
-	}
-	else
-	{
-		debug(LOG_ERROR, "Unsupported struct type save format version %u", psHeader->version);
-		return false;
-	}
+			QString name = list[i];
+			int state = ini.value(name).toInt();
+			int statInc;
 
-	return true;
-}
-
-// -----------------------------------------------------------------------------------------
-bool loadSaveStructTypeListV7(char *pFileData, UDWORD filesize, UDWORD numRecords)
-{
-	SAVE_STRUCTLIST_V6		*psSaveStructList;
-	UDWORD				i, statInc;
-	STRUCTURE_STATS		*psStats;
-	bool				found;
-
-	if ((sizeof(SAVE_STRUCTLIST_V6) * numRecords + STRUCTLIST_HEADER_SIZE) > filesize)
-	{
-		debug( LOG_ERROR, "StructListLoad: unexpected end of file" );
-		return false;
-	}
-
-	// Load the data
-	for (i = 0; i < numRecords; i++, pFileData += sizeof(SAVE_STRUCTLIST_V6))
-	{
-		psSaveStructList = (SAVE_STRUCTLIST_V6 *) pFileData;
-
-		found = false;
-
-		for (statInc = 0; statInc < numStructureStats; statInc++)
-		{
-			psStats = asStructureStats + statInc;
-			//loop until find the same name
-
-			if (!strcmp(psStats->pName, psSaveStructList->name))
+			ASSERT_OR_RETURN(false, state == UNAVAILABLE || state == AVAILABLE || state == FOUND || state == REDUNDANT,
+					 "Bad state %d for %s", state, name.toUtf8().constData());
+			for (statInc = 0; statInc < numStructureStats; statInc++) // loop until find the same name
 			{
-				found = true;
-				break;
+				STRUCTURE_STATS *psStats = asStructureStats + statInc;
+
+				if (name.compare(psStats->pName) == 0)
+				{
+					apStructTypeLists[player][statInc] = state;
+					break;
+				}
 			}
+			ASSERT_OR_RETURN(false, statInc != numStructureStats, "Did not find structure %s", name.toUtf8().constData());
 		}
-		if (!found)
-		{
-			//ignore this record
-			continue;
-		}
-		if (psSaveStructList->state != UNAVAILABLE && psSaveStructList->state !=
-			AVAILABLE && psSaveStructList->state != FOUND && psSaveStructList->state != REDUNDANT)
-		{
-			//ignore this record
-			continue;
-		}
-		if (psSaveStructList->player > MAX_PLAYERS)
-		{
-			//ignore this record
-			continue;
-		}
-		//date is valid so set the state
-		apStructTypeLists[psSaveStructList->player][statInc] = psSaveStructList->state;
+		ini.endGroup();
 	}
-
-	return true;
-}
-
-// -----------------------------------------------------------------------------------------
-bool loadSaveStructTypeListV(char *pFileData, UDWORD filesize, UDWORD numRecords)
-{
-	SAVE_STRUCTLIST		*psSaveStructList;
-	UDWORD				i, statInc;
-	STRUCTURE_STATS		*psStats;
-	bool				found;
-
-	if ((sizeof(SAVE_STRUCTLIST) * numRecords + STRUCTLIST_HEADER_SIZE) > filesize)
-	{
-		debug( LOG_ERROR, "StructListLoad: unexpected end of file" );
-		return false;
-	}
-
-	// Load the data
-	for (i = 0; i < numRecords; i++, pFileData += sizeof(SAVE_STRUCTLIST))
-	{
-		psSaveStructList = (SAVE_STRUCTLIST *) pFileData;
-
-		found = false;
-
-		for (statInc = 0; statInc < numStructureStats; statInc++)
-		{
-			psStats = asStructureStats + statInc;
-			//loop until find the same name
-
-			if (!strcmp(psStats->pName, psSaveStructList->name))
-			{
-				found = true;
-				break;
-			}
-		}
-		if (!found)
-		{
-			//ignore this record
-			continue;
-		}
-		if (psSaveStructList->state != UNAVAILABLE && psSaveStructList->state !=
-			AVAILABLE && psSaveStructList->state != FOUND && psSaveStructList->state != REDUNDANT)
-		{
-			//ignore this record
-			continue;
-		}
-		if (psSaveStructList->player > MAX_PLAYERS)
-		{
-			//ignore this record
-			continue;
-		}
-		//date is valid so set the state
-		apStructTypeLists[psSaveStructList->player][statInc] = psSaveStructList->state;
-	}
-
 	return true;
 }
 
 // -----------------------------------------------------------------------------------------
 // Write out the current state of the Struct Type List per player
-static bool writeStructTypeListFile(char *pFileName)
+static bool writeStructTypeListFile(const char *pFileName)
 {
-	STRUCTLIST_SAVEHEADER	*psHeader;
-	SAVE_STRUCTLIST			*psSaveStructList;
-	char *pFileData;
-	UDWORD					fileSize, player, i;
-	STRUCTURE_STATS			*psStats;
-
-	// Calculate the file size
-	fileSize = STRUCTLIST_HEADER_SIZE + (sizeof(SAVE_STRUCTLIST) * numStructureStats * MAX_PLAYERS);
-
-	//allocate the buffer space
-	pFileData = (char*)malloc(fileSize);
-	if (!pFileData)
+	WzConfig ini(pFileName);
+	if (ini.status() != QSettings::NoError)
 	{
-		debug( LOG_FATAL, "writeStructTypeListFile: Out of memory" );
-		abort();
+		debug(LOG_ERROR, "Could not open %s", pFileName);
 		return false;
 	}
 
-	// Put the file header on the file
-	psHeader = (STRUCTLIST_SAVEHEADER *)pFileData;
-	psHeader->aFileType[0] = 's';
-	psHeader->aFileType[1] = 't';
-	psHeader->aFileType[2] = 'r';
-	psHeader->aFileType[3] = 'l';
-	psHeader->version = CURRENT_VERSION_NUM;
-	psHeader->quantity = numStructureStats * MAX_PLAYERS;
-
-	psSaveStructList = (SAVE_STRUCTLIST *) (pFileData + STRUCTLIST_HEADER_SIZE);
-	//save each type of struct type
-	for (player = 0; player < MAX_PLAYERS; player++)
+	// Save each type of struct type
+	for (int player = 0; player < game.maxPlayers; player++)
 	{
-		psStats = asStructureStats;
-		for(i = 0; i < numStructureStats; i++, psStats++)
+		ini.beginGroup("player_" + QString::number(player));
+		STRUCTURE_STATS *psStats = asStructureStats;
+		for (int i = 0; i < numStructureStats; i++, psStats++)
 		{
-			strcpy(psSaveStructList->name, psStats->pName);
-			psSaveStructList->state = apStructTypeLists[player][i];
-			psSaveStructList->player = (UBYTE)player;
-			psSaveStructList = (SAVE_STRUCTLIST *)((char *)psSaveStructList +
-				sizeof(SAVE_STRUCTLIST));
+			ini.setValue(psStats->pName, apStructTypeLists[player][i]);
 		}
+		ini.endGroup();
 	}
-
-	/* STRUCT_SAVEHEADER */
-	endian_udword(&psHeader->version);
-	endian_udword(&psHeader->quantity);
-
-	if (!saveFile(pFileName, pFileData, fileSize))
-	{
-		return false;
-	}
-	free(pFileData);
-
 	return true;
 }
-
 
 // -----------------------------------------------------------------------------------------
 // load up saved research file
