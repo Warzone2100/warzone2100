@@ -53,7 +53,6 @@
 		0223BC060CFE3FFA0056EF85 /* except.c in Sources */ = {isa = PBXBuildFile; fileRef = 0223BBE80CFE3FFA0056EF85 /* except.c */; };
 		0223BC070CFE3FFA0056EF85 /* except.h in Headers */ = {isa = PBXBuildFile; fileRef = 0223BBE90CFE3FFA0056EF85 /* except.h */; };
 		0223BC080CFE3FFA0056EF85 /* font.c in Sources */ = {isa = PBXBuildFile; fileRef = 0223BBEA0CFE3FFA0056EF85 /* font.c */; };
-		0223BC090CFE3FFA0056EF85 /* glew.c in Sources */ = {isa = PBXBuildFile; fileRef = 0223BBEB0CFE3FFA0056EF85 /* glew.c */; };
 		0223BC0A0CFE3FFA0056EF85 /* global.c in Sources */ = {isa = PBXBuildFile; fileRef = 0223BBEC0CFE3FFA0056EF85 /* global.c */; };
 		0223BC0B0CFE3FFA0056EF85 /* master.c in Sources */ = {isa = PBXBuildFile; fileRef = 0223BBED0CFE3FFA0056EF85 /* master.c */; };
 		0223BC0C0CFE3FFA0056EF85 /* measure.c in Sources */ = {isa = PBXBuildFile; fileRef = 0223BBEE0CFE3FFA0056EF85 /* measure.c */; };
@@ -90,9 +89,6 @@
 		0223BC350CFE40210056EF85 /* fribidi.h in Headers */ = {isa = PBXBuildFile; fileRef = 0223BC2B0CFE40210056EF85 /* fribidi.h */; };
 		0223BC370CFE40570056EF85 /* internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 0223BC360CFE40570056EF85 /* internal.h */; };
 		0223BC3C0CFE40680056EF85 /* glc.h in Headers */ = {isa = PBXBuildFile; fileRef = 0223BC380CFE40680056EF85 /* glc.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		0223BC3D0CFE40680056EF85 /* glew.h in Headers */ = {isa = PBXBuildFile; fileRef = 0223BC390CFE40680056EF85 /* glew.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		0223BC3E0CFE40680056EF85 /* glxew.h in Headers */ = {isa = PBXBuildFile; fileRef = 0223BC3A0CFE40680056EF85 /* glxew.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		0223BC3F0CFE40680056EF85 /* wglew.h in Headers */ = {isa = PBXBuildFile; fileRef = 0223BC3B0CFE40680056EF85 /* wglew.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		022B2FE20BD55E45002E64E3 /* libgnuintl.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2FE00BD55E45002E64E3 /* libgnuintl.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		022B2FE30BD55E45002E64E3 /* libintl.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2FE10BD55E45002E64E3 /* libintl.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		022B30AB0BD564FC002E64E3 /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B30AA0BD564FC002E64E3 /* config.h */; };
@@ -152,18 +148,12 @@
 		0246A0CA0BD3CBD5004D1C70 /* SDL_framerate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0B30BD3CBD5004D1C70 /* SDL_framerate.cpp */; };
 		0246A0CB0BD3CBD5004D1C70 /* strres_lexer.l in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0B50BD3CBD5004D1C70 /* strres_lexer.l */; };
 		0246A0CC0BD3CBD5004D1C70 /* strres_parser.y in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0B60BD3CBD5004D1C70 /* strres_parser.y */; };
-		0246A0CD0BD3CBD5004D1C70 /* stdio_ext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0B70BD3CBD5004D1C70 /* stdio_ext.cpp */; };
 		0246A0CE0BD3CBD5004D1C70 /* treap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0BA0BD3CBD5004D1C70 /* treap.cpp */; };
 		0246A0E30BD3CC0B004D1C70 /* anim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0D70BD3CC0B004D1C70 /* anim.cpp */; };
 		0246A0E40BD3CC0B004D1C70 /* animobj.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0D90BD3CC0B004D1C70 /* animobj.cpp */; };
 		0246A0E50BD3CC0B004D1C70 /* audp_lexer.l in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0DB0BD3CC0B004D1C70 /* audp_lexer.l */; };
 		0246A0E60BD3CC0B004D1C70 /* audp_parser.y in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0DC0BD3CC0B004D1C70 /* audp_parser.y */; };
 		0246A0E70BD3CC0B004D1C70 /* gtime.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0DD0BD3CC0B004D1C70 /* gtime.cpp */; };
-		0246A1030BD3CC29004D1C70 /* bitimage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0EA0BD3CC29004D1C70 /* bitimage.cpp */; };
-		0246A1040BD3CC29004D1C70 /* imd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0EE0BD3CC29004D1C70 /* imd.cpp */; };
-		0246A1050BD3CC29004D1C70 /* imdload.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0F00BD3CC29004D1C70 /* imdload.cpp */; };
-		0246A1070BD3CC29004D1C70 /* pieclip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0F60BD3CC29004D1C70 /* pieclip.cpp */; };
-		0246A1080BD3CC29004D1C70 /* piestate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0FC0BD3CC29004D1C70 /* piestate.cpp */; };
 		0246A11D0BD3CC43004D1C70 /* ivi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A10B0BD3CC43004D1C70 /* ivi.cpp */; };
 		0246A11E0BD3CC43004D1C70 /* pieblitfunc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A10C0BD3CC43004D1C70 /* pieblitfunc.cpp */; };
 		0246A11F0BD3CC43004D1C70 /* piedraw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A10D0BD3CC43004D1C70 /* piedraw.cpp */; };
@@ -315,7 +305,6 @@
 		02B2132E0DA8755F0059E864 /* cursors16.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02B2132B0DA8755F0059E864 /* cursors16.cpp */; };
 		02B2132F0DA8755F0059E864 /* cursors32.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02B2132C0DA8755F0059E864 /* cursors32.cpp */; };
 		02BBB2090DA874F6002D438B /* exceptionhandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02BBB2070DA874F6002D438B /* exceptionhandler.cpp */; };
-		02C8AEF80BE68A5600E9D8A7 /* png_util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02C8AEF60BE68A5600E9D8A7 /* png_util.cpp */; };
 		02C8AEFC0BE68A6800E9D8A7 /* oggvorbis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02C8AEFA0BE68A6800E9D8A7 /* oggvorbis.cpp */; };
 		02CDDD130D159DF600722688 /* QuesoGLC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0223BBD10CFE3D5C0056EF85 /* QuesoGLC.framework */; };
 		02CDDD1C0D159E2F00722688 /* openal_error.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02CDDD1A0D159E2F00722688 /* openal_error.cpp */; };
@@ -392,7 +381,6 @@
 		02DDA8D00BD3C3600049AB60 /* posix.c in Sources */ = {isa = PBXBuildFile; fileRef = 02DDA8CE0BD3C3600049AB60 /* posix.c */; };
 		02DDA8D10BD3C3600049AB60 /* unix.c in Sources */ = {isa = PBXBuildFile; fileRef = 02DDA8CF0BD3C3600049AB60 /* unix.c */; };
 		02DDA8D40BD3C3820049AB60 /* Zlib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02356D830BD3BB4100E9A019 /* Zlib.framework */; };
-		02DE76060DC3B84900D48F58 /* GLee.c in Sources */ = {isa = PBXBuildFile; fileRef = 02DE76040DC3B84800D48F58 /* GLee.c */; settings = {COMPILER_FLAGS = "-Wno-missing-declarations -Wno-strict-aliasing"; }; };
 		02F5CC570D1490620000A2D0 /* database.c in Sources */ = {isa = PBXBuildFile; fileRef = 02F5CC560D1490620000A2D0 /* database.c */; };
 		2244463C0E3EB7CB004D0F1F /* message_lexer.l in Sources */ = {isa = PBXBuildFile; fileRef = 224446390E3EB7CB004D0F1F /* message_lexer.l */; };
 		2244463D0E3EB7CB004D0F1F /* message_parser.y in Sources */ = {isa = PBXBuildFile; fileRef = 2244463A0E3EB7CB004D0F1F /* message_parser.y */; };
@@ -410,6 +398,13 @@
 		432BE41A10D9D32000A486AB /* SDL.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 432BE34C10D9C21900A486AB /* SDL.framework */; };
 		4336D8AA111DDF0F0012E8E4 /* random.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4336D8A8111DDF0F0012E8E4 /* random.cpp */; };
 		4347DD4C131CA7B300D61392 /* physfs_casefolding.h in Headers */ = {isa = PBXBuildFile; fileRef = 4347DD4B131CA7B300D61392 /* physfs_casefolding.h */; };
+		434D40CA12ECC54400E15A39 /* bitimage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 434D40B312ECC54300E15A39 /* bitimage.cpp */; };
+		434D40CB12ECC54400E15A39 /* imd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 434D40B512ECC54400E15A39 /* imd.cpp */; };
+		434D40CC12ECC54400E15A39 /* imdload.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 434D40B712ECC54400E15A39 /* imdload.cpp */; };
+		434D40CD12ECC54400E15A39 /* jpeg_encoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 434D40BA12ECC54400E15A39 /* jpeg_encoder.cpp */; };
+		434D40CE12ECC54400E15A39 /* pieclip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 434D40BD12ECC54400E15A39 /* pieclip.cpp */; };
+		434D40CF12ECC54400E15A39 /* png_util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 434D40C512ECC54400E15A39 /* png_util.cpp */; };
+		434D40DD12ECC98900E15A39 /* piestate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1130BD3CC43004D1C70 /* piestate.cpp */; };
 		4353C86E1282199C00CAFEDA /* tone.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C3B9C2118BEBE0000BBE59 /* tone.c */; };
 		4355E08010D5FADE00A19EE4 /* physfs_platforms.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E07F10D5FAC200A19EE4 /* physfs_platforms.h */; };
 		4355E13010D6028C00A19EE4 /* codec.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E12C10D6028C00A19EE4 /* codec.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -431,6 +426,18 @@
 		439F3772126688DF00D5EE2A /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 439F36EE1266877900D5EE2A /* OpenAL.framework */; };
 		439F3773126688DF00D5EE2A /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 439F36F01266877900D5EE2A /* OpenAL.framework */; };
 		439F3774126688DF00D5EE2A /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 439F36F21266877900D5EE2A /* OpenGL.framework */; };
+		439FBAA912C9C33C00CF4DFC /* glew.h in Headers */ = {isa = PBXBuildFile; fileRef = 439FBAA612C9C33C00CF4DFC /* glew.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		439FBAAA12C9C33C00CF4DFC /* glxew.h in Headers */ = {isa = PBXBuildFile; fileRef = 439FBAA712C9C33C00CF4DFC /* glxew.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		439FBAAB12C9C33C00CF4DFC /* wglew.h in Headers */ = {isa = PBXBuildFile; fileRef = 439FBAA812C9C33C00CF4DFC /* wglew.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		439FBAAF12C9C36600CF4DFC /* glew.c in Sources */ = {isa = PBXBuildFile; fileRef = 439FBAAC12C9C36600CF4DFC /* glew.c */; };
+		439FBAB512C9C4B500CF4DFC /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 439FBAB412C9C4B500CF4DFC /* AGL.framework */; };
+		439FBAB612C9C4B500CF4DFC /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 439F36F21266877900D5EE2A /* OpenGL.framework */; };
+		439FBACF12C9C53500CF4DFC /* GLExtensionWrangler.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 439FBA8712C9C1A800CF4DFC /* GLExtensionWrangler.framework */; };
+		439FBAF112C9C57D00CF4DFC /* GLExtensionWrangler.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 439FBA8712C9C1A800CF4DFC /* GLExtensionWrangler.framework */; };
+		439FBB1C12C9C85200CF4DFC /* glew.c in Sources */ = {isa = PBXBuildFile; fileRef = 0223BBEB0CFE3FFA0056EF85 /* glew.c */; };
+		439FBB1D12C9C85400CF4DFC /* glew.h in Headers */ = {isa = PBXBuildFile; fileRef = 0223BC390CFE40680056EF85 /* glew.h */; };
+		439FBB1E12C9C85B00CF4DFC /* glxew.h in Headers */ = {isa = PBXBuildFile; fileRef = 0223BC3A0CFE40680056EF85 /* glxew.h */; };
+		439FBB1F12C9C86600CF4DFC /* wglew.h in Headers */ = {isa = PBXBuildFile; fileRef = 0223BC3B0CFE40680056EF85 /* wglew.h */; };
 		43A0C82B12176C8A006C3B89 /* netqueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A0C82912176C8A006C3B89 /* netqueue.cpp */; };
 		43A8417811028EDD00733CCB /* pointtree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A8417611028EDD00733CCB /* pointtree.cpp */; };
 		43BE75EA11124BB5007DF934 /* wavecast.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43BE75E811124BB4007DF934 /* wavecast.cpp */; };
@@ -448,7 +455,6 @@
 		43C18FD1114FF38B0028741B /* netplay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43C18FAA114FF38B0028741B /* netplay.cpp */; };
 		43C18FD2114FF38B0028741B /* netsocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43C18FAC114FF38B0028741B /* netsocket.cpp */; };
 		43C18FD3114FF38B0028741B /* nettypes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43C18FAE114FF38B0028741B /* nettypes.cpp */; };
-		43C270E911DD2EBA009BC740 /* jpeg_encoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43C270E711DD2EBA009BC740 /* jpeg_encoder.cpp */; };
 		43C3B91F118BBFCB000BBE59 /* gzwrite.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C3B913118BB545000BBE59 /* gzwrite.c */; };
 		43C3B920118BBFCD000BBE59 /* gzread.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C3B912118BB545000BBE59 /* gzread.c */; };
 		43C3B921118BBFCF000BBE59 /* gzlib.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C3B911118BB545000BBE59 /* gzlib.c */; };
@@ -692,6 +698,13 @@
 			remoteGlobalIDString = 43071471132465D500FB6EBF;
 			remoteInfo = Autorevision;
 		};
+		439FBACD12C9C52C00CF4DFC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 439FBA8612C9C1A800CF4DFC;
+			remoteInfo = GLExtensionWrangler;
+		};
 		43AE78FC10F0F4F500FED5D3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
@@ -759,6 +772,7 @@
 				02581C840BD5AD1100957CBC /* Png.framework in Copy frameworks */,
 				02581C870BD5AD1100957CBC /* Vorbis.framework in Copy frameworks */,
 				02581C880BD5AD1100957CBC /* Zlib.framework in Copy frameworks */,
+				439FBAF112C9C57D00CF4DFC /* GLExtensionWrangler.framework in Copy frameworks */,
 			);
 			name = "Copy frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -970,26 +984,6 @@
 		0246A0DD0BD3CC0B004D1C70 /* gtime.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = gtime.cpp; path = ../lib/gamelib/gtime.cpp; sourceTree = SOURCE_ROOT; };
 		0246A0DE0BD3CC0B004D1C70 /* gtime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = gtime.h; path = ../lib/gamelib/gtime.h; sourceTree = SOURCE_ROOT; };
 		0246A0E20BD3CC0B004D1C70 /* parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = parser.h; path = ../lib/gamelib/parser.h; sourceTree = SOURCE_ROOT; };
-		0246A0EA0BD3CC29004D1C70 /* bitimage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = bitimage.cpp; path = ../lib/ivis_opengl/bitimage.cpp; sourceTree = SOURCE_ROOT; };
-		0246A0EB0BD3CC29004D1C70 /* bitimage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = bitimage.h; path = ../lib/ivis_opengl/bitimage.h; sourceTree = SOURCE_ROOT; };
-		0246A0EE0BD3CC29004D1C70 /* imd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = imd.cpp; path = ../lib/ivis_opengl/imd.cpp; sourceTree = SOURCE_ROOT; };
-		0246A0EF0BD3CC29004D1C70 /* imd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = imd.h; path = ../lib/ivis_opengl/imd.h; sourceTree = SOURCE_ROOT; };
-		0246A0F00BD3CC29004D1C70 /* imdload.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = imdload.cpp; path = ../lib/ivis_opengl/imdload.cpp; sourceTree = SOURCE_ROOT; };
-		0246A0F10BD3CC29004D1C70 /* ivi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = ivi.h; path = ../lib/ivis_opengl/ivi.h; sourceTree = SOURCE_ROOT; };
-		0246A0F20BD3CC29004D1C70 /* ivisdef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = ivisdef.h; path = ../lib/ivis_opengl/ivisdef.h; sourceTree = SOURCE_ROOT; };
-		0246A0F50BD3CC29004D1C70 /* pieblitfunc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = pieblitfunc.h; path = ../lib/ivis_opengl/pieblitfunc.h; sourceTree = SOURCE_ROOT; };
-		0246A0F60BD3CC29004D1C70 /* pieclip.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = pieclip.cpp; path = ../lib/ivis_opengl/pieclip.cpp; sourceTree = SOURCE_ROOT; };
-		0246A0F70BD3CC29004D1C70 /* pieclip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = pieclip.h; path = ../lib/ivis_opengl/pieclip.h; sourceTree = SOURCE_ROOT; };
-		0246A0F80BD3CC29004D1C70 /* piedef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = piedef.h; path = ../lib/ivis_opengl/piedef.h; sourceTree = SOURCE_ROOT; };
-		0246A0F90BD3CC29004D1C70 /* piefunc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = piefunc.h; path = ../lib/ivis_opengl/piefunc.h; sourceTree = SOURCE_ROOT; };
-		0246A0FA0BD3CC29004D1C70 /* piemode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = piemode.h; path = ../lib/ivis_opengl/piemode.h; sourceTree = SOURCE_ROOT; };
-		0246A0FB0BD3CC29004D1C70 /* piepalette.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = piepalette.h; path = ../lib/ivis_opengl/piepalette.h; sourceTree = SOURCE_ROOT; };
-		0246A0FC0BD3CC29004D1C70 /* piestate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = piestate.cpp; path = ../lib/ivis_opengl/piestate.cpp; sourceTree = SOURCE_ROOT; };
-		0246A0FD0BD3CC29004D1C70 /* piestate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = piestate.h; path = ../lib/ivis_opengl/piestate.h; sourceTree = SOURCE_ROOT; };
-		0246A0FE0BD3CC29004D1C70 /* pietypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = pietypes.h; path = ../lib/ivis_opengl/pietypes.h; sourceTree = SOURCE_ROOT; };
-		0246A1000BD3CC29004D1C70 /* rendmode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = rendmode.h; path = ../lib/ivis_opengl/rendmode.h; sourceTree = SOURCE_ROOT; };
-		0246A1010BD3CC29004D1C70 /* tex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = tex.h; path = ../lib/ivis_opengl/tex.h; sourceTree = SOURCE_ROOT; };
-		0246A1020BD3CC29004D1C70 /* textdraw.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = textdraw.h; path = ../lib/ivis_opengl/textdraw.h; sourceTree = SOURCE_ROOT; };
 		0246A10B0BD3CC43004D1C70 /* ivi.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = ivi.cpp; path = ../lib/ivis_opengl/ivi.cpp; sourceTree = SOURCE_ROOT; };
 		0246A10C0BD3CC43004D1C70 /* pieblitfunc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = pieblitfunc.cpp; path = ../lib/ivis_opengl/pieblitfunc.cpp; sourceTree = SOURCE_ROOT; };
 		0246A10D0BD3CC43004D1C70 /* piedraw.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = piedraw.cpp; path = ../lib/ivis_opengl/piedraw.cpp; sourceTree = SOURCE_ROOT; };
@@ -1275,8 +1269,6 @@
 		02B2132C0DA8755F0059E864 /* cursors32.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = cursors32.cpp; path = ../lib/framework/cursors32.cpp; sourceTree = SOURCE_ROOT; };
 		02BBB2070DA874F6002D438B /* exceptionhandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = exceptionhandler.cpp; path = ../lib/exceptionhandler/exceptionhandler.cpp; sourceTree = SOURCE_ROOT; };
 		02BBB2080DA874F6002D438B /* exceptionhandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = exceptionhandler.h; path = ../lib/exceptionhandler/exceptionhandler.h; sourceTree = SOURCE_ROOT; };
-		02C8AEF60BE68A5600E9D8A7 /* png_util.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = png_util.cpp; path = ../lib/ivis_opengl/png_util.cpp; sourceTree = SOURCE_ROOT; };
-		02C8AEF70BE68A5600E9D8A7 /* png_util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = png_util.h; path = ../lib/ivis_opengl/png_util.h; sourceTree = SOURCE_ROOT; };
 		02C8AEFA0BE68A6800E9D8A7 /* oggvorbis.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = oggvorbis.cpp; path = ../lib/sound/oggvorbis.cpp; sourceTree = SOURCE_ROOT; };
 		02C8AEFB0BE68A6800E9D8A7 /* oggvorbis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = oggvorbis.h; path = ../lib/sound/oggvorbis.h; sourceTree = SOURCE_ROOT; };
 		02CDDD080D159D5900722688 /* autorevision.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = autorevision.h; path = ../src/autorevision.h; sourceTree = SOURCE_ROOT; };
@@ -1358,8 +1350,6 @@
 		02DDA8C60BD3C3450049AB60 /* zip.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = zip.c; path = external/physfs/archivers/zip.c; sourceTree = "<group>"; };
 		02DDA8CE0BD3C3600049AB60 /* posix.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = posix.c; path = external/physfs/platform/posix.c; sourceTree = "<group>"; };
 		02DDA8CF0BD3C3600049AB60 /* unix.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = unix.c; path = external/physfs/platform/unix.c; sourceTree = "<group>"; };
-		02DE76040DC3B84800D48F58 /* GLee.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; lineEnding = 0; name = GLee.c; path = ../lib/ivis_opengl/GLee.c; sourceTree = SOURCE_ROOT; };
-		02DE76050DC3B84800D48F58 /* GLee.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = GLee.h; path = ../lib/ivis_opengl/GLee.h; sourceTree = SOURCE_ROOT; };
 		02F5CC560D1490620000A2D0 /* database.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = database.c; path = external/quesoglc/src/database.c; sourceTree = "<group>"; };
 		2234C29F0E2BE18200E7704C /* positiondef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = positiondef.h; path = ../src/positiondef.h; sourceTree = SOURCE_ROOT; };
 		224446390E3EB7CB004D0F1F /* message_lexer.l */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.lex; lineEnding = 0; name = message_lexer.l; path = ../src/message_lexer.l; sourceTree = SOURCE_ROOT; };
@@ -1414,6 +1404,29 @@
 		4336D8A8111DDF0F0012E8E4 /* random.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = random.cpp; path = ../src/random.cpp; sourceTree = SOURCE_ROOT; };
 		4336D8A9111DDF0F0012E8E4 /* random.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = random.h; path = ../src/random.h; sourceTree = SOURCE_ROOT; };
 		4347DD4B131CA7B300D61392 /* physfs_casefolding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = physfs_casefolding.h; path = external/physfs/physfs_casefolding.h; sourceTree = "<group>"; };
+		434D40B312ECC54300E15A39 /* bitimage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = bitimage.cpp; path = ../lib/ivis_opengl/bitimage.cpp; sourceTree = SOURCE_ROOT; };
+		434D40B412ECC54400E15A39 /* bitimage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = bitimage.h; path = ../lib/ivis_opengl/bitimage.h; sourceTree = SOURCE_ROOT; };
+		434D40B512ECC54400E15A39 /* imd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = imd.cpp; path = ../lib/ivis_opengl/imd.cpp; sourceTree = SOURCE_ROOT; };
+		434D40B612ECC54400E15A39 /* imd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = imd.h; path = ../lib/ivis_opengl/imd.h; sourceTree = SOURCE_ROOT; };
+		434D40B712ECC54400E15A39 /* imdload.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = imdload.cpp; path = ../lib/ivis_opengl/imdload.cpp; sourceTree = SOURCE_ROOT; };
+		434D40B812ECC54400E15A39 /* ivi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = ivi.h; path = ../lib/ivis_opengl/ivi.h; sourceTree = SOURCE_ROOT; };
+		434D40B912ECC54400E15A39 /* ivisdef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = ivisdef.h; path = ../lib/ivis_opengl/ivisdef.h; sourceTree = SOURCE_ROOT; };
+		434D40BA12ECC54400E15A39 /* jpeg_encoder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = jpeg_encoder.cpp; path = ../lib/ivis_opengl/jpeg_encoder.cpp; sourceTree = SOURCE_ROOT; };
+		434D40BB12ECC54400E15A39 /* jpeg_encoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = jpeg_encoder.h; path = ../lib/ivis_opengl/jpeg_encoder.h; sourceTree = SOURCE_ROOT; };
+		434D40BC12ECC54400E15A39 /* pieblitfunc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = pieblitfunc.h; path = ../lib/ivis_opengl/pieblitfunc.h; sourceTree = SOURCE_ROOT; };
+		434D40BD12ECC54400E15A39 /* pieclip.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = pieclip.cpp; path = ../lib/ivis_opengl/pieclip.cpp; sourceTree = SOURCE_ROOT; };
+		434D40BE12ECC54400E15A39 /* pieclip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = pieclip.h; path = ../lib/ivis_opengl/pieclip.h; sourceTree = SOURCE_ROOT; };
+		434D40BF12ECC54400E15A39 /* piedef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = piedef.h; path = ../lib/ivis_opengl/piedef.h; sourceTree = SOURCE_ROOT; };
+		434D40C012ECC54400E15A39 /* piefunc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = piefunc.h; path = ../lib/ivis_opengl/piefunc.h; sourceTree = SOURCE_ROOT; };
+		434D40C112ECC54400E15A39 /* piemode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = piemode.h; path = ../lib/ivis_opengl/piemode.h; sourceTree = SOURCE_ROOT; };
+		434D40C212ECC54400E15A39 /* piepalette.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = piepalette.h; path = ../lib/ivis_opengl/piepalette.h; sourceTree = SOURCE_ROOT; };
+		434D40C312ECC54400E15A39 /* piestate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = piestate.h; path = ../lib/ivis_opengl/piestate.h; sourceTree = SOURCE_ROOT; };
+		434D40C412ECC54400E15A39 /* pietypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = pietypes.h; path = ../lib/ivis_opengl/pietypes.h; sourceTree = SOURCE_ROOT; };
+		434D40C512ECC54400E15A39 /* png_util.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = png_util.cpp; path = ../lib/ivis_opengl/png_util.cpp; sourceTree = SOURCE_ROOT; };
+		434D40C612ECC54400E15A39 /* png_util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = png_util.h; path = ../lib/ivis_opengl/png_util.h; sourceTree = SOURCE_ROOT; };
+		434D40C712ECC54400E15A39 /* rendmode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = rendmode.h; path = ../lib/ivis_opengl/rendmode.h; sourceTree = SOURCE_ROOT; };
+		434D40C812ECC54400E15A39 /* tex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = tex.h; path = ../lib/ivis_opengl/tex.h; sourceTree = SOURCE_ROOT; };
+		434D40C912ECC54400E15A39 /* textdraw.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = textdraw.h; path = ../lib/ivis_opengl/textdraw.h; sourceTree = SOURCE_ROOT; };
 		43536BD210DFEB37006B579C /* GenericFramework-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GenericFramework-Info.plist"; path = "Resources/GenericFramework-Info.plist"; sourceTree = "<group>"; };
 		4355E07F10D5FAC200A19EE4 /* physfs_platforms.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = physfs_platforms.h; path = external/physfs/physfs_platforms.h; sourceTree = "<group>"; };
 		4355E12C10D6028C00A19EE4 /* codec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = codec.h; path = external/libtheora/include/theora/codec.h; sourceTree = "<group>"; };
@@ -1461,6 +1474,17 @@
 		439F36F21266877900D5EE2A /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		439F36F4126687A900D5EE2A /* libfreetype.6.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfreetype.6.dylib; path = usr/local/lib/libfreetype.6.dylib; sourceTree = SDKROOT; };
 		439F36F6126687E500D5EE2A /* libfontconfig.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfontconfig.1.dylib; path = usr/X11/lib/libfontconfig.1.dylib; sourceTree = SDKROOT; };
+		439FBA3812C9BF9900CF4DFC /* Glew-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Glew-All.xcconfig"; path = "configs/Glew-All.xcconfig"; sourceTree = "<group>"; };
+		439FBA3912C9BF9900CF4DFC /* Glew-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Glew-Debug.xcconfig"; path = "configs/Glew-Debug.xcconfig"; sourceTree = "<group>"; };
+		439FBA3A12C9BF9900CF4DFC /* Glew-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Glew-Release.xcconfig"; path = "configs/Glew-Release.xcconfig"; sourceTree = "<group>"; };
+		439FBA8712C9C1A800CF4DFC /* GLExtensionWrangler.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = GLExtensionWrangler.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		439FBAA612C9C33C00CF4DFC /* glew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glew.h; path = external/glew/include/GL/glew.h; sourceTree = "<group>"; };
+		439FBAA712C9C33C00CF4DFC /* glxew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glxew.h; path = external/glew/include/GL/glxew.h; sourceTree = "<group>"; };
+		439FBAA812C9C33C00CF4DFC /* wglew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wglew.h; path = external/glew/include/GL/wglew.h; sourceTree = "<group>"; };
+		439FBAAC12C9C36600CF4DFC /* glew.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = glew.c; path = external/glew/src/glew.c; sourceTree = "<group>"; };
+		439FBAAD12C9C36600CF4DFC /* glewinfo.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = glewinfo.c; path = external/glew/src/glewinfo.c; sourceTree = "<group>"; };
+		439FBAAE12C9C36600CF4DFC /* visualinfo.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = visualinfo.c; path = external/glew/src/visualinfo.c; sourceTree = "<group>"; };
+		439FBAB412C9C4B500CF4DFC /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = System/Library/Frameworks/AGL.framework; sourceTree = SDKROOT; };
 		43A0C82912176C8A006C3B89 /* netqueue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = netqueue.cpp; path = ../lib/netplay/netqueue.cpp; sourceTree = SOURCE_ROOT; };
 		43A0C82A12176C8A006C3B89 /* netqueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = netqueue.h; path = ../lib/netplay/netqueue.h; sourceTree = SOURCE_ROOT; };
 		43A8417611028EDD00733CCB /* pointtree.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = pointtree.cpp; path = ../src/pointtree.cpp; sourceTree = SOURCE_ROOT; };
@@ -1498,8 +1522,6 @@
 		43C18FAD114FF38B0028741B /* netsocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = netsocket.h; path = ../lib/netplay/netsocket.h; sourceTree = SOURCE_ROOT; };
 		43C18FAE114FF38B0028741B /* nettypes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = nettypes.cpp; path = ../lib/netplay/nettypes.cpp; sourceTree = SOURCE_ROOT; };
 		43C18FAF114FF38B0028741B /* nettypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = nettypes.h; path = ../lib/netplay/nettypes.h; sourceTree = SOURCE_ROOT; };
-		43C270E711DD2EBA009BC740 /* jpeg_encoder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = jpeg_encoder.cpp; path = ../lib/ivis_opengl/jpeg_encoder.cpp; sourceTree = SOURCE_ROOT; };
-		43C270E811DD2EBA009BC740 /* jpeg_encoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = jpeg_encoder.h; path = ../lib/ivis_opengl/jpeg_encoder.h; sourceTree = SOURCE_ROOT; };
 		43C3B90F118BB545000BBE59 /* gzclose.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = gzclose.c; path = external/zlib/gzclose.c; sourceTree = "<group>"; };
 		43C3B910118BB545000BBE59 /* gzguts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gzguts.h; path = external/zlib/gzguts.h; sourceTree = "<group>"; };
 		43C3B911118BB545000BBE59 /* gzlib.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = gzlib.c; path = external/zlib/gzlib.c; sourceTree = "<group>"; };
@@ -1646,6 +1668,7 @@
 				02581C640BD5A98900957CBC /* libSDLmain.a in Frameworks */,
 				432BE39410D9C3E400A486AB /* SDL.framework in Frameworks */,
 				0246A3B30BD3CD0B004D1C70 /* Zlib.framework in Frameworks */,
+				439FBACF12C9C53500CF4DFC /* GLExtensionWrangler.framework in Frameworks */,
 				0246A3B70BD3CD0B004D1C70 /* PhysFS.framework in Frameworks */,
 				0246A3B40BD3CD0B004D1C70 /* Png.framework in Frameworks */,
 				0246A3B50BD3CD0B004D1C70 /* Ogg.framework in Frameworks */,
@@ -1706,6 +1729,15 @@
 				02DDA8D40BD3C3820049AB60 /* Zlib.framework in Frameworks */,
 				439F36E91266872100D5EE2A /* Carbon.framework in Frameworks */,
 				439F36EB1266872100D5EE2A /* IOKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		439FBA8512C9C1A800CF4DFC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				439FBAB512C9C4B500CF4DFC /* AGL.framework in Frameworks */,
+				439FBAB612C9C4B500CF4DFC /* OpenGL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1862,6 +1894,7 @@
 				02581C5D0BD5A94A00957CBC /* libSDLmain.a */,
 				0223BBD10CFE3D5C0056EF85 /* QuesoGLC.framework */,
 				97AEAB330E8C1B5200A10721 /* Theora.framework */,
+				439FBA8712C9C1A800CF4DFC /* GLExtensionWrangler.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1980,32 +2013,29 @@
 		0246A1090BD3CC2D004D1C70 /* Ivis OpenGL */ = {
 			isa = PBXGroup;
 			children = (
-				43C270E711DD2EBA009BC740 /* jpeg_encoder.cpp */,
-				43C270E811DD2EBA009BC740 /* jpeg_encoder.h */,
-				02C8AEF60BE68A5600E9D8A7 /* png_util.cpp */,
-				02C8AEF70BE68A5600E9D8A7 /* png_util.h */,
-				0246A0EA0BD3CC29004D1C70 /* bitimage.cpp */,
-				0246A0EB0BD3CC29004D1C70 /* bitimage.h */,
-				0246A0EE0BD3CC29004D1C70 /* imd.cpp */,
-				0246A0EF0BD3CC29004D1C70 /* imd.h */,
-				0246A0F00BD3CC29004D1C70 /* imdload.cpp */,
-				0246A0F10BD3CC29004D1C70 /* ivi.h */,
-				0246A0F20BD3CC29004D1C70 /* ivisdef.h */,
-				0246A0F50BD3CC29004D1C70 /* pieblitfunc.h */,
-				0246A0F60BD3CC29004D1C70 /* pieclip.cpp */,
-				0246A0F70BD3CC29004D1C70 /* pieclip.h */,
-				0246A0F80BD3CC29004D1C70 /* piedef.h */,
-				0246A0F90BD3CC29004D1C70 /* piefunc.h */,
-				0246A0FA0BD3CC29004D1C70 /* piemode.h */,
-				0246A0FB0BD3CC29004D1C70 /* piepalette.h */,
-				0246A0FC0BD3CC29004D1C70 /* piestate.cpp */,
-				0246A0FD0BD3CC29004D1C70 /* piestate.h */,
-				0246A0FE0BD3CC29004D1C70 /* pietypes.h */,
-				0246A1000BD3CC29004D1C70 /* rendmode.h */,
-				0246A1010BD3CC29004D1C70 /* tex.h */,
-				0246A1020BD3CC29004D1C70 /* textdraw.h */,
-				02DE76040DC3B84800D48F58 /* GLee.c */,
-				02DE76050DC3B84800D48F58 /* GLee.h */,
+				434D40B312ECC54300E15A39 /* bitimage.cpp */,
+				434D40B412ECC54400E15A39 /* bitimage.h */,
+				434D40B512ECC54400E15A39 /* imd.cpp */,
+				434D40B612ECC54400E15A39 /* imd.h */,
+				434D40B712ECC54400E15A39 /* imdload.cpp */,
+				434D40B812ECC54400E15A39 /* ivi.h */,
+				434D40B912ECC54400E15A39 /* ivisdef.h */,
+				434D40BA12ECC54400E15A39 /* jpeg_encoder.cpp */,
+				434D40BB12ECC54400E15A39 /* jpeg_encoder.h */,
+				434D40BC12ECC54400E15A39 /* pieblitfunc.h */,
+				434D40BD12ECC54400E15A39 /* pieclip.cpp */,
+				434D40BE12ECC54400E15A39 /* pieclip.h */,
+				434D40BF12ECC54400E15A39 /* piedef.h */,
+				434D40C012ECC54400E15A39 /* piefunc.h */,
+				434D40C112ECC54400E15A39 /* piemode.h */,
+				434D40C212ECC54400E15A39 /* piepalette.h */,
+				434D40C312ECC54400E15A39 /* piestate.h */,
+				434D40C412ECC54400E15A39 /* pietypes.h */,
+				434D40C512ECC54400E15A39 /* png_util.cpp */,
+				434D40C612ECC54400E15A39 /* png_util.h */,
+				434D40C712ECC54400E15A39 /* rendmode.h */,
+				434D40C812ECC54400E15A39 /* tex.h */,
+				434D40C912ECC54400E15A39 /* textdraw.h */,
 				0246A10B0BD3CC43004D1C70 /* ivi.cpp */,
 				0246A10C0BD3CC43004D1C70 /* pieblitfunc.cpp */,
 				0246A10D0BD3CC43004D1C70 /* piedraw.cpp */,
@@ -2487,6 +2517,7 @@
 				439F36EA1266872100D5EE2A /* IOKit.framework */,
 				439F36EE1266877900D5EE2A /* OpenAL.framework */,
 				439F36F01266877900D5EE2A /* OpenAL.framework */,
+				439FBAB412C9C4B500CF4DFC /* AGL.framework */,
 				439F36F21266877900D5EE2A /* OpenGL.framework */,
 				439F36F4126687A900D5EE2A /* libfreetype.6.dylib */,
 				439F36F6126687E500D5EE2A /* libfontconfig.1.dylib */,
@@ -2508,6 +2539,10 @@
 		43025DEC1120A4B6006C49B1 /* Configurations */ = {
 			isa = PBXGroup;
 			children = (
+				439FBA3812C9BF9900CF4DFC /* Glew-All.xcconfig */,
+				439FBA3912C9BF9900CF4DFC /* Glew-Debug.xcconfig */,
+				439FBA3A12C9BF9900CF4DFC /* Glew-Release.xcconfig */,
+				43025DFE1120A4CA006C49B1 /* Project-All.xcconfig */,
 				43025F3C11221017006C49B1 /* Theora-All.xcconfig */,
 				43025F3D11221018006C49B1 /* Theora-Debug.xcconfig */,
 				43025F3E11221018006C49B1 /* Theora-Release.xcconfig */,
@@ -2535,7 +2570,6 @@
 				43025EB91120D338006C49B1 /* SDLmain-All.xcconfig */,
 				43025EBA1120D338006C49B1 /* SDLmain-Debug.xcconfig */,
 				43025EBB1120D338006C49B1 /* SDLmain-Release.xcconfig */,
-				43025DFE1120A4CA006C49B1 /* Project-All.xcconfig */,
 				43025DFF1120A4CA006C49B1 /* Warzone-All.xcconfig */,
 				43025E001120A4CA006C49B1 /* Warzone-Debug.xcconfig */,
 				43025E011120A4CA006C49B1 /* Warzone-Release.xcconfig */,
@@ -2548,6 +2582,7 @@
 			isa = PBXGroup;
 			children = (
 				022B2F460BD55940002E64E3 /* Gettext sources */,
+				43274EDE12AB027700C20A98 /* GLExtensionWrangler */,
 				02DDA85F0BD3C1A60049AB60 /* Zlib sources */,
 				02DDA8610BD3C1B50049AB60 /* Ogg sources */,
 				02DDA8600BD3C1AF0049AB60 /* Png sources */,
@@ -2557,6 +2592,35 @@
 				9730E8000E8CEB3B009C9481 /* Theora sources */,
 			);
 			name = "Third Party";
+			sourceTree = "<group>";
+		};
+		43274EDE12AB027700C20A98 /* GLExtensionWrangler */ = {
+			isa = PBXGroup;
+			children = (
+				43274EE012AB02A900C20A98 /* include */,
+				43274EDF12AB029900C20A98 /* lib */,
+			);
+			name = GLExtensionWrangler;
+			sourceTree = "<group>";
+		};
+		43274EDF12AB029900C20A98 /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				439FBAAC12C9C36600CF4DFC /* glew.c */,
+				439FBAAD12C9C36600CF4DFC /* glewinfo.c */,
+				439FBAAE12C9C36600CF4DFC /* visualinfo.c */,
+			);
+			name = lib;
+			sourceTree = "<group>";
+		};
+		43274EE012AB02A900C20A98 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				439FBAA612C9C33C00CF4DFC /* glew.h */,
+				439FBAA712C9C33C00CF4DFC /* glxew.h */,
+				439FBAA812C9C33C00CF4DFC /* wglew.h */,
+			);
+			name = include;
 			sourceTree = "<group>";
 		};
 		432BE34210D9C0C500A486AB /* External frameworks */ = {
@@ -2952,9 +3016,9 @@
 				0223BC350CFE40210056EF85 /* fribidi.h in Headers */,
 				0223BC370CFE40570056EF85 /* internal.h in Headers */,
 				0223BC3C0CFE40680056EF85 /* glc.h in Headers */,
-				0223BC3D0CFE40680056EF85 /* glew.h in Headers */,
-				0223BC3E0CFE40680056EF85 /* glxew.h in Headers */,
-				0223BC3F0CFE40680056EF85 /* wglew.h in Headers */,
+				439FBB1D12C9C85400CF4DFC /* glew.h in Headers */,
+				439FBB1E12C9C85B00CF4DFC /* glxew.h in Headers */,
+				439FBB1F12C9C86600CF4DFC /* wglew.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3094,6 +3158,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		439FBA8212C9C1A800CF4DFC /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				439FBAA912C9C33C00CF4DFC /* glew.h in Headers */,
+				439FBAAA12C9C33C00CF4DFC /* glxew.h in Headers */,
+				439FBAAB12C9C33C00CF4DFC /* wglew.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		97AEAAEE0E8C1B5200A10721 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -3196,6 +3270,7 @@
 				97B1D6680D1541C000737638 /* PBXTargetDependency */,
 				97AEAC550E8C261600A10721 /* PBXTargetDependency */,
 				43FA571310FF8EE90074E914 /* PBXTargetDependency */,
+				439FBACE12C9C52C00CF4DFC /* PBXTargetDependency */,
 			);
 			name = Warzone;
 			productName = Warzone;
@@ -3318,6 +3393,25 @@
 			productReference = 02DDA8B10BD3C2F20049AB60 /* PhysFS.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		439FBA8612C9C1A800CF4DFC /* GLExtensionWrangler */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 439FBA8C12C9C1A900CF4DFC /* Build configuration list for PBXNativeTarget "GLExtensionWrangler" */;
+			buildPhases = (
+				439FBAA212C9C2D000CF4DFC /* Fetch source */,
+				439FBA8212C9C1A800CF4DFC /* Headers */,
+				439FBA8312C9C1A800CF4DFC /* Resources */,
+				439FBA8412C9C1A800CF4DFC /* Sources */,
+				439FBA8512C9C1A800CF4DFC /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GLExtensionWrangler;
+			productName = GLExtensionWrangler;
+			productReference = 439FBA8712C9C1A800CF4DFC /* GLExtensionWrangler.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 		97AEAAEA0E8C1B5200A10721 /* Theora */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 97AEAB300E8C1B5200A10721 /* Build configuration list for PBXNativeTarget "Theora" */;
@@ -3398,6 +3492,7 @@
 				43FA570C10FF8E9B0074E914 /* Setup Prebuilt Components */,
 				02581C5C0BD5A94A00957CBC /* SDLmain */,
 				022B2F210BD55814002E64E3 /* Gettext */,
+				439FBA8612C9C1A800CF4DFC /* GLExtensionWrangler */,
 				02356D820BD3BB4100E9A019 /* Zlib */,
 				02356E080BD3BCFE00E9A019 /* Ogg */,
 				02356DC10BD3BBFC00E9A019 /* Png */,
@@ -3467,6 +3562,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		02DDA8AD0BD3C2F20049AB60 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		439FBA8312C9C1A800CF4DFC /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -3670,6 +3772,20 @@
 			shellPath = /bin/sh;
 			shellScript = "DirectorY=\"gettext-0.17.mpkg_\"\nOutDir=\"gettext-0.17.mpkg\"\nFileName=\"gettext-0.17.mpkg.tar.gz\"\nBuiltDLP=\"http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/gettext-0.17.mpkg.tar.gz\"\nMD5Sum=\"ba7984918fe0b36e2e7c786693e005f2\"\n\n# Checks\nexport PATH=$PATH:/sw/bin:/opt/local/bin\nif type -aP msgfmt; then\n    echo \"msgfmt exists, skipping\"\n    exit 0\nelif [ -x \"/opt/local/bin/port\" ]; then\n  echo \"warning: Please run the following command in the terminal: 'sudo port install gettext'.\" >&2\n  open -b com.apple.Terminal\n  exit 1\nelif [ -d \"${SRCROOT}/external/${OutDir}\" ]; then\n    touch build/notrans.dis\n    echo \"warning: Gettext support has been disabled because we could not find a binary.\" >&2\n    exit 0\nelif [ ! `sw_vers -productVersion | sed -e 's:^...\\(.\\)..$:\\1:'` -ge \"6\" ]; then\n    touch build/notrans.dis\n    echo \"warning: Gettext support has been disabled because we could not find a binary.\" >&2\n    exit 0\nfi\n\nconfigs/FetchPrebuilt.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${BuiltDLP}\" \"${MD5Sum}\"\nFetchExitStatus=$?\n\n# Install\nif [ ! \"${FetchExitStatus}\" = \"0\" ]; then\n    exit \"${FetchExitStatus}\"\nelif [ -d \"${SRCROOT}/external/${OutDir}\" ]; then\n    echo \" Please install the gettext package before continuing.\" >&2\n    open \"${SRCROOT}/external/${OutDir}\"\n    exit 1\nfi";
 		};
+		439FBAA212C9C2D000CF4DFC /* Fetch source */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Fetch source";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "DirectorY=\"glew-1.5.7\"\nOutDir=\"glew\"\nFileName=\"glew-1.5.7.tgz\"\nSourceDLP=\"http://downloads.sourceforge.net/project/glew/glew/1.5.7/glew-1.5.7.tgz\"\nMD5Sum=\"f913ce9dbde4cd250b932731b3534ded\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
+		};
 		43D4865411EE98F300997E08 /* Fonts */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -3735,7 +3851,6 @@
 				0223BC040CFE3FFA0056EF85 /* context.c in Sources */,
 				0223BC060CFE3FFA0056EF85 /* except.c in Sources */,
 				0223BC080CFE3FFA0056EF85 /* font.c in Sources */,
-				0223BC090CFE3FFA0056EF85 /* glew.c in Sources */,
 				0223BC0A0CFE3FFA0056EF85 /* global.c in Sources */,
 				0223BC0B0CFE3FFA0056EF85 /* master.c in Sources */,
 				0223BC0C0CFE3FFA0056EF85 /* measure.c in Sources */,
@@ -3757,6 +3872,7 @@
 				0223BC300CFE40210056EF85 /* fribidi_types.c in Sources */,
 				0223BC340CFE40210056EF85 /* fribidi.c in Sources */,
 				02F5CC570D1490620000A2D0 /* database.c in Sources */,
+				439FBB1C12C9C85200CF4DFC /* glew.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3814,18 +3930,12 @@
 				0246A0CA0BD3CBD5004D1C70 /* SDL_framerate.cpp in Sources */,
 				0246A0CC0BD3CBD5004D1C70 /* strres_parser.y in Sources */,
 				0246A0CB0BD3CBD5004D1C70 /* strres_lexer.l in Sources */,
-				0246A0CD0BD3CBD5004D1C70 /* stdio_ext.cpp in Sources */,
 				0246A0CE0BD3CBD5004D1C70 /* treap.cpp in Sources */,
 				0246A0E30BD3CC0B004D1C70 /* anim.cpp in Sources */,
 				0246A0E40BD3CC0B004D1C70 /* animobj.cpp in Sources */,
 				0246A0E60BD3CC0B004D1C70 /* audp_parser.y in Sources */,
 				0246A0E50BD3CC0B004D1C70 /* audp_lexer.l in Sources */,
 				0246A0E70BD3CC0B004D1C70 /* gtime.cpp in Sources */,
-				0246A1030BD3CC29004D1C70 /* bitimage.cpp in Sources */,
-				0246A1040BD3CC29004D1C70 /* imd.cpp in Sources */,
-				0246A1050BD3CC29004D1C70 /* imdload.cpp in Sources */,
-				0246A1070BD3CC29004D1C70 /* pieclip.cpp in Sources */,
-				0246A1080BD3CC29004D1C70 /* piestate.cpp in Sources */,
 				0246A11D0BD3CC43004D1C70 /* ivi.cpp in Sources */,
 				0246A11E0BD3CC43004D1C70 /* pieblitfunc.cpp in Sources */,
 				0246A11F0BD3CC43004D1C70 /* piedraw.cpp in Sources */,
@@ -3959,7 +4069,6 @@
 				0246A2FB0BD3CCDC004D1C70 /* warcam.cpp in Sources */,
 				0246A2FC0BD3CCDC004D1C70 /* warzoneconfig.cpp in Sources */,
 				0246A2FD0BD3CCDC004D1C70 /* wrappers.cpp in Sources */,
-				02C8AEF80BE68A5600E9D8A7 /* png_util.cpp in Sources */,
 				02C8AEFC0BE68A6800E9D8A7 /* oggvorbis.cpp in Sources */,
 				0223BBB00CFE3C380056EF85 /* version.cpp in Sources */,
 				0223BBC00CFE3CD60056EF85 /* tagfile.cpp in Sources */,
@@ -3970,7 +4079,6 @@
 				02B2132D0DA8755F0059E864 /* cursors.cpp in Sources */,
 				02B2132E0DA8755F0059E864 /* cursors16.cpp in Sources */,
 				02B2132F0DA8755F0059E864 /* cursors32.cpp in Sources */,
-				02DE76060DC3B84900D48F58 /* GLee.c in Sources */,
 				9742E5730DF9975E000A5D41 /* lexer_input.cpp in Sources */,
 				9742E5770DF9979C000A5D41 /* parsetest.cpp in Sources */,
 				2244463D0E3EB7CB004D0F1F /* message_parser.y in Sources */,
@@ -4003,11 +4111,17 @@
 				43C18FD2114FF38B0028741B /* netsocket.cpp in Sources */,
 				43C18FD3114FF38B0028741B /* nettypes.cpp in Sources */,
 				43F3405B11CAA83D00D1E6C8 /* crc.cpp in Sources */,
-				43C270E911DD2EBA009BC740 /* jpeg_encoder.cpp in Sources */,
 				43A0C82B12176C8A006C3B89 /* netqueue.cpp in Sources */,
 				BF4A227A12B3138300CE8688 /* cocoa_wrapper.mm in Sources */,
 				43C90EA312BAF81A005784B2 /* strres.cpp in Sources */,
 				43C90EA412BAF81A005784B2 /* trig.cpp in Sources */,
+				434D40CA12ECC54400E15A39 /* bitimage.cpp in Sources */,
+				434D40CB12ECC54400E15A39 /* imd.cpp in Sources */,
+				434D40CC12ECC54400E15A39 /* imdload.cpp in Sources */,
+				434D40CD12ECC54400E15A39 /* jpeg_encoder.cpp in Sources */,
+				434D40CE12ECC54400E15A39 /* pieclip.cpp in Sources */,
+				434D40CF12ECC54400E15A39 /* png_util.cpp in Sources */,
+				434D40DD12ECC98900E15A39 /* piestate.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4122,6 +4236,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		439FBA8412C9C1A800CF4DFC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				439FBAAF12C9C36600CF4DFC /* glew.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		97AEAB170E8C1B5200A10721 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -4220,6 +4342,11 @@
 			isa = PBXTargetDependency;
 			target = 43071471132465D500FB6EBF /* Autorevision */;
 			targetProxy = 430714801324663A00FB6EBF /* PBXContainerItemProxy */;
+		};
+		439FBACE12C9C52C00CF4DFC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 439FBA8612C9C1A800CF4DFC /* GLExtensionWrangler */;
+			targetProxy = 439FBACD12C9C52C00CF4DFC /* PBXContainerItemProxy */;
 		};
 		43AE78FD10F0F4F500FED5D3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -4600,6 +4727,27 @@
 			};
 			name = StaticAnalyzer;
 		};
+		439FBA8912C9C1A900CF4DFC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 439FBA3912C9BF9900CF4DFC /* Glew-Debug.xcconfig */;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		439FBA8A12C9C1A900CF4DFC /* StaticAnalyzer */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 439FBA3912C9BF9900CF4DFC /* Glew-Debug.xcconfig */;
+			buildSettings = {
+			};
+			name = StaticAnalyzer;
+		};
+		439FBA8B12C9C1A900CF4DFC /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 439FBA3A12C9BF9900CF4DFC /* Glew-Release.xcconfig */;
+			buildSettings = {
+			};
+			name = Release;
+		};
 		43F77C8110F0125F00E04615 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -4765,6 +4913,16 @@
 				4307147A132465D600FB6EBF /* Debug */,
 				4307147B132465D600FB6EBF /* StaticAnalyzer */,
 				4307147C132465D600FB6EBF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		439FBA8C12C9C1A900CF4DFC /* Build configuration list for PBXNativeTarget "GLExtensionWrangler" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				439FBA8912C9C1A900CF4DFC /* Debug */,
+				439FBA8A12C9C1A900CF4DFC /* StaticAnalyzer */,
+				439FBA8B12C9C1A900CF4DFC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
