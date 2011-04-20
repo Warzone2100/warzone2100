@@ -180,18 +180,6 @@ bool screenInitialise(
 		exit(1);
 	}
 
-	// Copy this info to be used by the crash handler for the dump file
-	ssprintf(buf, "OpenGL Vendor: %s", glGetString(GL_VENDOR));
-	addDumpInfo(buf);
-	ssprintf(buf, "OpenGL Renderer: %s", glGetString(GL_RENDERER));
-	addDumpInfo(buf);
-	ssprintf(buf, "OpenGL Version: %s", glGetString(GL_VERSION));
-	addDumpInfo(buf);
-	if (GLEW_VERSION_2_0)
-	{
-		ssprintf(buf, "OpenGL GLSL Version : %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
-		addDumpInfo(buf);
-	}
 	/* Dump general information about OpenGL implementation to the console and the dump file */
 	ssprintf(buf, "OpenGL Vendor: %s", glGetString(GL_VENDOR));
 	addDumpInfo(buf);
