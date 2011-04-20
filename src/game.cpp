@@ -219,11 +219,6 @@ struct PRODUCTION_SAVEHEADER : public GAME_SAVEHEADER
 {
 };
 
-struct STRUCTLIMITS_SAVEHEADER : public GAME_SAVEHEADER
-{
-	UDWORD		quantity;
-};
-
 struct COMMAND_SAVEHEADER : public GAME_SAVEHEADER
 {
 	UDWORD quantity;
@@ -242,7 +237,6 @@ struct COMMAND_SAVEHEADER : public GAME_SAVEHEADER
 #define PROXIMITY_HEADER_SIZE		12
 #define FLAG_HEADER_SIZE			12
 #define PRODUCTION_HEADER_SIZE		8
-#define STRUCTLIMITS_HEADER_SIZE	12
 #define COMMAND_HEADER_SIZE			12
 
 
@@ -1711,13 +1705,6 @@ struct SAVE_PRODUCTION
 	UDWORD						multiPlayerID;		//template to build
 };
 
-struct SAVE_STRUCTLIMITS
-{
-	char            name[MAX_SAVE_NAME_SIZE];
-	UBYTE           limit;
-	UBYTE           player;
-};
-
 #define COMMAND_SAVE_V20 \
 	UDWORD				droidID
 
@@ -1729,14 +1716,6 @@ struct SAVE_COMMAND_V20
 struct SAVE_COMMAND
 {
 	COMMAND_SAVE_V20;
-};
-
-
-/* The different types of droid */
-enum DROID_SAVE_TYPE
-{
-	DROID_NORMAL,	// Weapon droid
-	DROID_ON_TRANSPORT,
 };
 
 /***************************************************************************/
@@ -1815,9 +1794,8 @@ static bool loadSaveProduction(char *pFileData, UDWORD filesize);
 static bool loadSaveProductionV(char *pFileData, UDWORD filesize, UDWORD version);
 static bool writeProductionFile(char *pFileName);
 
-static bool loadSaveStructLimits(char *pFileData, UDWORD filesize);
-static bool loadSaveStructLimitsV(char *pFileData, UDWORD filesize, UDWORD numLimits);
-static bool writeStructLimitsFile(char *pFileName);
+static bool loadSaveStructLimits(const char *pFileName);
+static bool writeStructLimitsFile(const char *pFileName);
 
 static bool readFiresupportDesignators(const char *pFileName);
 static bool writeFiresupportDesignators(const char *pFileName);
@@ -2803,19 +2781,12 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	{
 		//load in the mission structures
 		aFileName[fileExten] = '\0';
-		strcat(aFileName, "limits.bjo");
-		/* Load in the chosen file data */
-		pFileData = fileLoadBuffer;
-		if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
-		{
-			debug( LOG_NEVER, "loadgame: Fail17\n" );
-			goto error;
-		}
+		strcat(aFileName, "limits.ini");
 
 		//load the data into apsStructLists
-		if (!loadSaveStructLimits(pFileData, fileSize))
+		if (!loadSaveStructLimits(aFileName))
 		{
-			debug( LOG_NEVER, "loadgame: Fail19\n" );
+			debug(LOG_ERROR, "failed to load %s", aFileName);
 			goto error;
 		}
 
@@ -3066,7 +3037,7 @@ bool saveGame(char *aFileName, GAME_TYPE saveType)
 
 	//create the strucutLimits filename
 	CurrentFileName[fileExtension] = '\0';
-	strcat(CurrentFileName, "limits.bjo");
+	strcat(CurrentFileName, "limits.ini");
 	/*Write the data to the file*/
 	if (!writeStructLimitsFile(CurrentFileName))
 	{
@@ -6951,7 +6922,7 @@ static bool loadSaveStructTypeList(const char *pFileName)
 		for (int i = 0; i < list.size(); ++i)
 		{
 			QString name = list[i];
-			int state = ini.value(name).toInt();
+			int state = ini.value(name, UNAVAILABLE).toInt();
 			int statInc;
 
 			ASSERT_OR_RETURN(false, state == UNAVAILABLE || state == AVAILABLE || state == FOUND || state == REDUNDANT,
@@ -6991,7 +6962,7 @@ static bool writeStructTypeListFile(const char *pFileName)
 		STRUCTURE_STATS *psStats = asStructureStats;
 		for (int i = 0; i < numStructureStats; i++, psStats++)
 		{
-			ini.setValue(psStats->pName, apStructTypeLists[player][i]);
+			if (apStructTypeLists[player][i] != UNAVAILABLE) ini.setValue(psStats->pName, apStructTypeLists[player][i]);
 		}
 		ini.endGroup();
 	}
@@ -7921,114 +7892,37 @@ static bool writeProductionFile(char *pFileName)
 }
 
 // -----------------------------------------------------------------------------------------
-bool loadSaveStructLimits(char *pFileData, UDWORD filesize)
+bool loadSaveStructLimits(const char *pFileName)
 {
-	STRUCTLIMITS_SAVEHEADER		*psHeader;
-
-	// Check the file type
-	psHeader = (STRUCTLIMITS_SAVEHEADER *)pFileData;
-	if (psHeader->aFileType[0] != 'l' || psHeader->aFileType[1] != 'm' ||
-		psHeader->aFileType[2] != 't' || psHeader->aFileType[3] != 's')
+	WzConfig ini(pFileName);
+	if (ini.status() != QSettings::NoError)
 	{
-		debug( LOG_ERROR, "loadSaveStructLimits: Incorrect file type" );
-
+		debug(LOG_ERROR, "Could not open %s", pFileName);
 		return false;
 	}
-
-	//increment to the start of the data
-	pFileData += STRUCTLIMITS_HEADER_SIZE;
-
-	/* STRUCTLIMITS_SAVEHEADER */
-	endian_udword(&psHeader->version);
-	endian_udword(&psHeader->quantity);
-
-	debug(LOG_SAVE, "fileversion is %u ", psHeader->version);
-
-	// Check the file version
-	if (psHeader->version <= CURRENT_VERSION_NUM)
+	for (int player = 0; player < game.maxPlayers; player++)
 	{
-		if (!loadSaveStructLimitsV(pFileData, filesize, psHeader->quantity))
+		ini.beginGroup("player_" + QString::number(player));
+		QStringList list = ini.childKeys();
+		for (int i = 0; i < list.size(); ++i)
 		{
-			return false;
-		}
-	}
-	else
-	{
-		debug(LOG_ERROR, "Unsupported limits file format version %u", psHeader->version);
-		return false;
-	}
-	return true;
-}
+			QString name = list[i];
+			int limit = ini.value(name, 0).toInt();
+			int statInc;
 
-// -----------------------------------------------------------------------------------------
-bool loadSaveStructLimitsV(char *pFileData, UDWORD filesize, UDWORD numLimits)
-{
-	SAVE_STRUCTLIMITS		*psSaveLimits;
-	UDWORD					count, statInc;
-	bool					found;
-	STRUCTURE_STATS			*psStats;
-	int SkippedRecords=0;
-
-	psSaveLimits = (SAVE_STRUCTLIMITS*) malloc(sizeof(SAVE_STRUCTLIMITS));
-	if (!psSaveLimits)
-	{
-		debug( LOG_FATAL, "Out of memory" );
-		abort();
-		return false;
-	}
-
-	if ((sizeof(SAVE_STRUCTLIMITS) * numLimits + STRUCTLIMITS_HEADER_SIZE) >
-		filesize)
-	{
-		debug( LOG_ERROR, "loadSaveStructLimits: unexpected end of file" );
-
-		return false;
-	}
-
-	// Load in the data
-	for (count = 0; count < numLimits; count ++,
-									pFileData += sizeof(SAVE_STRUCTLIMITS))
-	{
-		memcpy(psSaveLimits, pFileData, sizeof(SAVE_STRUCTLIMITS));
-
-		//get the stats for this structure
-		found = false;
-		for (statInc = 0; statInc < numStructureStats; statInc++)
-		{
-			psStats = asStructureStats + statInc;
-			//loop until find the same name
-			if (!strcmp(psStats->pName, psSaveLimits->name))
+			for (statInc = 0; statInc < numStructureStats; statInc++)
 			{
-				found = true;
-				break;
+				STRUCTURE_STATS *psStats = asStructureStats + statInc;
+				if (name.compare(psStats->pName) == 0)
+				{
+					asStructLimits[player][statInc].limit = limit != 255? limit : LOTS_OF;
+					break;
+				}
 			}
+			ASSERT_OR_RETURN(false, statInc != numStructureStats, "Did not find structure %s", name.toUtf8().constData());
 		}
-		//if haven't found the structure - ignore this record!
-		if (!found)
-		{
-			debug( LOG_ERROR, "The structure no longer exists. The limits have not been set! - %s", psSaveLimits->name );
-
-			continue;
-		}
-
-		if (psSaveLimits->player < MAX_PLAYERS)
-		{
-			asStructLimits[psSaveLimits->player][statInc].limit = psSaveLimits->limit != 255? psSaveLimits->limit : LOTS_OF;
-		}
-		else
-		{
-			SkippedRecords++;
-		}
-
+		ini.endGroup();
 	}
-
-	if (SkippedRecords>0)
-	{
-		debug( LOG_ERROR, "Skipped %d records in structure limits due to bad player number\n", SkippedRecords );
-		free(psSaveLimits);
-		return false;
-	}
-	free(psSaveLimits);
 	return true;
 }
 
@@ -8036,62 +7930,28 @@ bool loadSaveStructLimitsV(char *pFileData, UDWORD filesize, UDWORD numLimits)
 /*
 Writes the list of structure limits to a file
 */
-bool writeStructLimitsFile(char *pFileName)
+bool writeStructLimitsFile(const char *pFileName)
 {
-	char *pFileData = NULL;
-	UDWORD						fileSize, totalLimits=0, i, player;
-	STRUCTLIMITS_SAVEHEADER		*psHeader;
-	SAVE_STRUCTLIMITS			*psSaveLimit;
-	STRUCTURE_STATS				*psStructStats;
-	bool status = true;
-
-	totalLimits = numStructureStats * MAX_PLAYERS;
-
-	// Allocate the data buffer
-	fileSize = STRUCTLIMITS_HEADER_SIZE + (totalLimits * (sizeof(SAVE_STRUCTLIMITS)));
-	pFileData = (char*)malloc(fileSize);
-	if (pFileData == NULL)
+	WzConfig ini(pFileName);
+	if (ini.status() != QSettings::NoError)
 	{
-		debug( LOG_FATAL, "Out of memory" );
-		abort();
+		debug(LOG_ERROR, "Could not open %s", pFileName);
 		return false;
 	}
 
-	// Put the file header on the file
-	psHeader = (STRUCTLIMITS_SAVEHEADER *)pFileData;
-	psHeader->aFileType[0] = 'l';
-	psHeader->aFileType[1] = 'm';
-	psHeader->aFileType[2] = 't';
-	psHeader->aFileType[3] = 's';
-	psHeader->version = CURRENT_VERSION_NUM;
-	psHeader->quantity = totalLimits;
-
-	psSaveLimit = (SAVE_STRUCTLIMITS*)(pFileData + STRUCTLIMITS_HEADER_SIZE);
-
-	// Put the data into the buffer
-	for (player = 0; player < MAX_PLAYERS ; player++)
+	// Save each type of struct type
+	for (int player = 0; player < game.maxPlayers; player++)
 	{
-		psStructStats = asStructureStats;
-		for(i = 0; i < numStructureStats; i++, psStructStats++)
+		ini.beginGroup("player_" + QString::number(player));
+		STRUCTURE_STATS *psStats = asStructureStats;
+		for (int i = 0; i < numStructureStats; i++, psStats++)
 		{
-			strcpy(psSaveLimit->name, psStructStats->pName);
-			psSaveLimit->limit = MIN(asStructLimits[player][i].limit, 255);
-			psSaveLimit->player = (UBYTE)player;
-			psSaveLimit = (SAVE_STRUCTLIMITS *)((char *)psSaveLimit + sizeof(SAVE_STRUCTLIMITS));
+			const int limit = MIN(asStructLimits[player][i].limit, 255);
+			if (limit != 255) ini.setValue(psStats->pName, limit);
 		}
+		ini.endGroup();
 	}
-
-	/* STRUCTLIMITS_SAVEHEADER */
-	endian_udword(&psHeader->version);
-	endian_udword(&psHeader->quantity);
-
-	// Write the data to the file
-	if (pFileData != NULL) {
-		status = saveFile(pFileName, pFileData, fileSize);
-		free(pFileData);
-		return status;
-	}
-	return false;
+	return true;
 }
 
 /*!
