@@ -231,7 +231,6 @@ struct COMMAND_SAVEHEADER : public GAME_SAVEHEADER
 #define TEMPLATE_HEADER_SIZE		12
 #define FEATURE_HEADER_SIZE			12
 #define TILETYPE_HEADER_SIZE		12
-#define COMPLIST_HEADER_SIZE		12
 #define RESEARCH_HEADER_SIZE		12
 #define MESSAGE_HEADER_SIZE			12
 #define PROXIMITY_HEADER_SIZE		12
@@ -1612,34 +1611,6 @@ struct SAVE_FEATURE
 	FEATURE_SAVE_V20;
 };
 
-
-#define COMPLIST_SAVE_V6 \
-	char				name[MAX_SAVE_NAME_SIZE_V19]; \
-	UBYTE				type; \
-	UBYTE				state; \
-	UBYTE				player
-
-#define COMPLIST_SAVE_V20 \
-	char				name[MAX_SAVE_NAME_SIZE]; \
-	UBYTE				type; \
-	UBYTE				state; \
-	UBYTE				player
-
-struct SAVE_COMPLIST_V6
-{
-	COMPLIST_SAVE_V6;
-};
-
-struct SAVE_COMPLIST_V20
-{
-	COMPLIST_SAVE_V20;
-};
-
-struct SAVE_COMPLIST
-{
-	COMPLIST_SAVE_V20;
-};
-
 struct SAVE_MESSAGE
 {
 	MESSAGE_TYPE	type;			//The type of message
@@ -1771,10 +1742,8 @@ static bool writeFeatureFile(char *pFileName);
 
 static bool writeTerrainTypeMapFile(char *pFileName);
 
-static bool loadSaveCompList(char *pFileData, UDWORD filesize);
-static bool loadSaveCompListV9(char *pFileData, UDWORD filesize, UDWORD numRecords, UDWORD version);
-static bool loadSaveCompListV(char *pFileData, UDWORD filesize, UDWORD numRecords, UDWORD version);
-static bool writeCompListFile(char *pFileName);
+static bool loadSaveCompList(const char *pFileName);
+static bool writeCompListFile(const char *pFileName);
 
 static bool loadSaveStructTypeList(const char *pFileName);
 static bool writeStructTypeListFile(const char *pFileName);
@@ -2635,28 +2604,15 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	{
 		//load in the component list file
 		aFileName[fileExten] = '\0';
-		strcat(aFileName, "compl.bjo");
-		/* Load in the chosen file data */
-		pFileData = fileLoadBuffer;
-		if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
+		strcat(aFileName, "complist.ini");
+		if (!loadSaveCompList(aFileName))
 		{
-			debug( LOG_NEVER, "loadgame: Fail26\n" );
+			debug(LOG_ERROR, "failed to load %s", aFileName);
 			goto error;
-		}
-
-		//load the component list data
-		if (pFileData)
-		{
-			if (!loadSaveCompList(pFileData, fileSize))
-			{
-				debug( LOG_NEVER, "loadgame: Fail28\n" );
-				goto error;
-			}
 		}
 		//load in the structure type list file
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "strtype.ini");
-
 		if (!loadSaveStructTypeList(aFileName))
 		{
 			debug(LOG_ERROR, "failed to load %s", aFileName);
@@ -3047,7 +3003,7 @@ bool saveGame(char *aFileName, GAME_TYPE saveType)
 
 	//create the component lists filename
 	CurrentFileName[fileExtension] = '\0';
-	strcat(CurrentFileName, "compl.bjo");
+	strcat(CurrentFileName, "complist.ini");
 	/*Write the data to the file*/
 	if (!writeCompListFile(CurrentFileName))
 	{
@@ -6592,316 +6548,107 @@ static bool writeTerrainTypeMapFile(char *pFileName)
 }
 
 // -----------------------------------------------------------------------------------------
-// load up component list file
-bool loadSaveCompList(char *pFileData, UDWORD filesize)
+bool loadSaveCompList(const char *pFileName)
 {
-	COMPLIST_SAVEHEADER		*psHeader;
-
-	/* Check the file type */
-	psHeader = (COMPLIST_SAVEHEADER *)pFileData;
-	if (psHeader->aFileType[0] != 'c' || psHeader->aFileType[1] != 'm' ||
-		psHeader->aFileType[2] != 'p' || psHeader->aFileType[3] != 'l')
+	WzConfig ini(pFileName);
+	if (ini.status() != QSettings::NoError)
 	{
-		debug( LOG_ERROR, "loadSaveCompList: Incorrect file type" );
-
+		debug(LOG_ERROR, "Could not open %s", pFileName);
 		return false;
 	}
-
-	/* COMPLIST_SAVEHEADER */
-	endian_udword(&psHeader->version);
-	endian_udword(&psHeader->quantity);
-
-	debug(LOG_SAVE, "file version is %u ", psHeader->version);
-
-	//increment to the start of the data
-	pFileData += COMPLIST_HEADER_SIZE;
-
-	/* Check the file version */
-	if (psHeader->version < VERSION_7)
+	for (int player = 0; player < game.maxPlayers; player++)
 	{
-		debug( LOG_ERROR, "CompLoad: unsupported save format version %d", psHeader->version );
-
-		return false;
-	}
-	else if (psHeader->version <= VERSION_19)
-	{
-		if (!loadSaveCompListV9(pFileData, filesize, psHeader->quantity, psHeader->version))
+		ini.beginGroup("player_" + QString::number(player));
+		QStringList list = ini.childKeys();
+		for (int i = 0; i < list.size(); ++i)
 		{
-			return false;
-		}
-	}
-	else if (psHeader->version <= CURRENT_VERSION_NUM)
-	{
-		if (!loadSaveCompListV(pFileData, filesize, psHeader->quantity, psHeader->version))
-		{
-			return false;
-		}
-	}
-	else
-	{
-		debug( LOG_ERROR, "Unsupported component save format version %u", psHeader->version);
-		return false;
-	}
-
-	return true;
-}
-
-// -----------------------------------------------------------------------------------------
-bool loadSaveCompListV9(char *pFileData, UDWORD filesize, UDWORD numRecords, UDWORD version)
-{
-	SAVE_COMPLIST_V6		*psSaveCompList;
-	UDWORD				i;
-	SDWORD				compInc;
-
-	if ((sizeof(SAVE_COMPLIST_V6) * numRecords + COMPLIST_HEADER_SIZE) >
-		filesize)
-	{
-		debug( LOG_ERROR, "CompListLoad: unexpected end of file" );
-
-		return false;
-	}
-
-	// Load the data
-	for (i = 0; i < numRecords; i++, pFileData += sizeof(SAVE_COMPLIST_V6))
-	{
-		psSaveCompList = (SAVE_COMPLIST_V6 *) pFileData;
-
-		if (version < VERSION_9)
-		{
-			//DROID_MAXCOMP has changed to remove COMP_PROGRAM so hack here to load old save games!
-			if (psSaveCompList->type == SAVE_COMP_PROGRAM)
+			QString name = list[i];
+			int state = ini.value(name, UNAVAILABLE).toInt();
+			int type = -1;
+			int compInc = -1;
+			for (int j = COMP_BODY; j < COMP_NUMCOMPONENTS && compInc == -1; j++)
 			{
-				//ignore this record
-				continue;
+				// this is very inefficient, but I am so not giving in to the deranged nature of the components code
+				// and convoluting the new savegame format for its sake
+				compInc = getCompFromName(j, name.toUtf8().constData());
+				type = j;
 			}
-			if (psSaveCompList->type == SAVE_COMP_WEAPON)
-			{
-				//this typeNum has to be reset for lack of COMP_PROGRAM
-				psSaveCompList->type = COMP_WEAPON;
-			}
+			ASSERT(compInc >= 0, "Bad component %d", compInc);
+			ASSERT(type >= 0 && type != COMP_NUMCOMPONENTS, "Bad type %d", type);
+			ASSERT_OR_RETURN(false, state == UNAVAILABLE || state == AVAILABLE || state == FOUND || state == REDUNDANT,
+					 "Bad state %d for %s", state, name.toUtf8().constData());
+			apCompLists[player][type][compInc] = state;
 		}
-
-		if (psSaveCompList->type > COMP_NUMCOMPONENTS)
-		{
-			//ignore this record
-			continue;
-		}
-
-		compInc = getCompFromName(psSaveCompList->type, psSaveCompList->name);
-
-		if (compInc < 0)
-		{
-			//ignore this record
-			continue;
-		}
-		if (psSaveCompList->state != UNAVAILABLE && psSaveCompList->state !=
-			AVAILABLE && psSaveCompList->state != FOUND && psSaveCompList->state != REDUNDANT)
-		{
-			//ignore this record
-			continue;
-		}
-		if (psSaveCompList->player > MAX_PLAYERS)
-		{
-			//ignore this record
-			continue;
-		}
-		//date is valid so set the state
-		apCompLists[psSaveCompList->player][psSaveCompList->type][compInc] =
-			psSaveCompList->state;
+		ini.endGroup();
 	}
-
-	return true;
-}
-
-// -----------------------------------------------------------------------------------------
-bool loadSaveCompListV(char *pFileData, UDWORD filesize, UDWORD numRecords, UDWORD version)
-{
-	SAVE_COMPLIST		*psSaveCompList;
-	UDWORD				i;
-	SDWORD				compInc;
-
-	if ((sizeof(SAVE_COMPLIST) * numRecords + COMPLIST_HEADER_SIZE) >
-		filesize)
-	{
-		debug( LOG_ERROR, "CompListLoad: unexpected end of file" );
-
-		return false;
-	}
-
-	// Load the data
-	for (i = 0; i < numRecords; i++, pFileData += sizeof(SAVE_COMPLIST))
-	{
-		psSaveCompList = (SAVE_COMPLIST *) pFileData;
-
-		if (psSaveCompList->type > COMP_NUMCOMPONENTS)
-		{
-			//ignore this record
-			continue;
-		}
-
-		compInc = getCompFromName(psSaveCompList->type, psSaveCompList->name);
-
-		if (compInc < 0)
-		{
-			//ignore this record
-			continue;
-		}
-		if (psSaveCompList->state != UNAVAILABLE && psSaveCompList->state !=
-			AVAILABLE && psSaveCompList->state != FOUND && psSaveCompList->state != REDUNDANT)
-		{
-			//ignore this record
-			continue;
-		}
-		if (psSaveCompList->player > MAX_PLAYERS)
-		{
-			//ignore this record
-			continue;
-		}
-		//date is valid so set the state
-		apCompLists[psSaveCompList->player][psSaveCompList->type][compInc] =
-			psSaveCompList->state;
-	}
-
 	return true;
 }
 
 // -----------------------------------------------------------------------------------------
 // Write out the current state of the Comp lists per player
-static bool writeCompListFile(char *pFileName)
+static bool writeCompListFile(const char *pFileName)
 {
-	COMPLIST_SAVEHEADER		*psHeader;
-	char *pFileData;
-	SAVE_COMPLIST			*psSaveCompList;
-	UDWORD					fileSize, totalComp, player, i;
-	COMPONENT_STATS			*psStats;
-
-	// Calculate the file size
-	totalComp = (numBodyStats + numWeaponStats + numConstructStats + numECMStats +
-		numPropulsionStats + numSensorStats + numRepairStats + numBrainStats) * MAX_PLAYERS;
-	fileSize = COMPLIST_HEADER_SIZE + (sizeof(SAVE_COMPLIST) * totalComp);
-	//allocate the buffer space
-	pFileData = (char*)malloc(fileSize);
-	if (!pFileData)
+	WzConfig ini(pFileName);
+	if (ini.status() != QSettings::NoError)
 	{
-		debug( LOG_FATAL, "writeCompListFile: Out of memory" );
-		abort();
+		debug(LOG_ERROR, "Could not open %s", pFileName);
 		return false;
 	}
 
-	// Put the file header on the file
-	psHeader = (COMPLIST_SAVEHEADER *)pFileData;
-	psHeader->aFileType[0] = 'c';
-	psHeader->aFileType[1] = 'm';
-	psHeader->aFileType[2] = 'p';
-	psHeader->aFileType[3] = 'l';
-	psHeader->version = CURRENT_VERSION_NUM;
-	psHeader->quantity = totalComp;
-
-	psSaveCompList = (SAVE_COMPLIST *) (pFileData + COMPLIST_HEADER_SIZE);
-
-	//save each type of comp
-	for (player = 0; player < MAX_PLAYERS; player++)
+	// Save each type of struct type
+	for (int player = 0; player < game.maxPlayers; player++)
 	{
-		for(i = 0; i < numBodyStats; i++)
+		ini.beginGroup("player_" + QString::number(player));
+		for (int i = 0; i < numBodyStats; i++)
 		{
-			psStats = (COMPONENT_STATS *)(asBodyStats + i);
-
-			strcpy(psSaveCompList->name, psStats->pName);
-
-			psSaveCompList->type = COMP_BODY;
-			psSaveCompList->player = (UBYTE)player;
-			psSaveCompList->state = apCompLists[player][COMP_BODY][i];
-			psSaveCompList = (SAVE_COMPLIST *)((char *)psSaveCompList + sizeof(SAVE_COMPLIST));
+			COMPONENT_STATS *psStats = (COMPONENT_STATS *)(asBodyStats + i);
+			const int state = apCompLists[player][COMP_BODY][i];
+			if (state != UNAVAILABLE) ini.setValue(psStats->pName, state);
 		}
-		for(i = 0; i < numWeaponStats; i++)
+		for (int i = 0; i < numWeaponStats; i++)
 		{
-			psStats = (COMPONENT_STATS *)(asWeaponStats + i);
-
-			strcpy(psSaveCompList->name, psStats->pName);
-
-			psSaveCompList->type = COMP_WEAPON;
-			psSaveCompList->player = (UBYTE)player;
-			psSaveCompList->state = apCompLists[player][COMP_WEAPON][i];
-			psSaveCompList = (SAVE_COMPLIST *)((char *)psSaveCompList + sizeof(SAVE_COMPLIST));
+			COMPONENT_STATS *psStats = (COMPONENT_STATS *)(asWeaponStats + i);
+			const int state = apCompLists[player][COMP_WEAPON][i];
+			if (state != UNAVAILABLE) ini.setValue(psStats->pName, state);
 		}
-		for(i = 0; i < numConstructStats; i++)
+		for (int i = 0; i < numConstructStats; i++)
 		{
-			psStats = (COMPONENT_STATS *)(asConstructStats + i);
-
-			strcpy(psSaveCompList->name, psStats->pName);
-
-			psSaveCompList->type = COMP_CONSTRUCT;
-			psSaveCompList->player = (UBYTE)player;
-			psSaveCompList->state = apCompLists[player][COMP_CONSTRUCT][i];
-			psSaveCompList = (SAVE_COMPLIST *)((char *)psSaveCompList + sizeof(SAVE_COMPLIST));
+			COMPONENT_STATS *psStats = (COMPONENT_STATS *)(asConstructStats + i);
+			const int state = apCompLists[player][COMP_CONSTRUCT][i];
+			if (state != UNAVAILABLE) ini.setValue(psStats->pName, state);
 		}
-		for(i = 0; i < numECMStats; i++)
+		for (int i = 0; i < numECMStats; i++)
 		{
-			psStats = (COMPONENT_STATS *)(asECMStats + i);
-
-			strcpy(psSaveCompList->name, psStats->pName);
-
-			psSaveCompList->type = COMP_ECM;
-			psSaveCompList->player = (UBYTE)player;
-			psSaveCompList->state = apCompLists[player][COMP_ECM][i];
-			psSaveCompList = (SAVE_COMPLIST *)((char *)psSaveCompList + sizeof(SAVE_COMPLIST));
+			COMPONENT_STATS *psStats = (COMPONENT_STATS *)(asECMStats + i);
+			const int state = apCompLists[player][COMP_ECM][i];
+			if (state != UNAVAILABLE) ini.setValue(psStats->pName, state);
 		}
-		for(i = 0; i < numPropulsionStats; i++)
+		for (int i = 0; i < numPropulsionStats; i++)
 		{
-			psStats = (COMPONENT_STATS *)(asPropulsionStats + i);
-
-			strcpy(psSaveCompList->name, psStats->pName);
-
-			psSaveCompList->type = COMP_PROPULSION;
-			psSaveCompList->player = (UBYTE)player;
-			psSaveCompList->state = apCompLists[player][COMP_PROPULSION][i];
-			psSaveCompList = (SAVE_COMPLIST *)((char *)psSaveCompList + sizeof(SAVE_COMPLIST));
+			COMPONENT_STATS *psStats = (COMPONENT_STATS *)(asPropulsionStats + i);
+			const int state = apCompLists[player][COMP_PROPULSION][i];
+			if (state != UNAVAILABLE) ini.setValue(psStats->pName, state);
 		}
-		for(i = 0; i < numSensorStats; i++)
+		for (int i = 0; i < numSensorStats; i++)
 		{
-			psStats = (COMPONENT_STATS *)(asSensorStats + i);
-
-			strcpy(psSaveCompList->name, psStats->pName);
-
-			psSaveCompList->type = COMP_SENSOR;
-			psSaveCompList->player = (UBYTE)player;
-			psSaveCompList->state = apCompLists[player][COMP_SENSOR][i];
-			psSaveCompList = (SAVE_COMPLIST *)((char *)psSaveCompList + sizeof(SAVE_COMPLIST));
+			COMPONENT_STATS *psStats = (COMPONENT_STATS *)(asSensorStats + i);
+			const int state = apCompLists[player][COMP_SENSOR][i];
+			if (state != UNAVAILABLE) ini.setValue(psStats->pName, state);
 		}
-		for(i = 0; i < numRepairStats; i++)
+		for (int i = 0; i < numRepairStats; i++)
 		{
-			psStats = (COMPONENT_STATS *)(asRepairStats + i);
-
-			strcpy(psSaveCompList->name, psStats->pName);
-
-			psSaveCompList->type = COMP_REPAIRUNIT;
-			psSaveCompList->player = (UBYTE)player;
-			psSaveCompList->state = apCompLists[player][COMP_REPAIRUNIT][i];
-			psSaveCompList = (SAVE_COMPLIST *)((char *)psSaveCompList + sizeof(SAVE_COMPLIST));
+			COMPONENT_STATS *psStats = (COMPONENT_STATS *)(asRepairStats + i);
+			const int state = apCompLists[player][COMP_REPAIRUNIT][i];
+			if (state != UNAVAILABLE) ini.setValue(psStats->pName, state);
 		}
-		for(i = 0; i < numBrainStats; i++)
+		for (int i = 0; i < numBrainStats; i++)
 		{
-			psStats = (COMPONENT_STATS *)(asBrainStats + i);
-
-			strcpy(psSaveCompList->name, psStats->pName);
-
-			psSaveCompList->type = COMP_BRAIN;
-			psSaveCompList->player = (UBYTE)player;
-			psSaveCompList->state = apCompLists[player][COMP_BRAIN][i];
-			psSaveCompList = (SAVE_COMPLIST *)((char *)psSaveCompList + sizeof(SAVE_COMPLIST));
+			COMPONENT_STATS *psStats = (COMPONENT_STATS *)(asBrainStats + i);
+			const int state = apCompLists[player][COMP_BRAIN][i];
+			if (state != UNAVAILABLE) ini.setValue(psStats->pName, state);
 		}
+		ini.endGroup();
 	}
-
-	/* COMPLIST_SAVEHEADER */
-	endian_udword(&psHeader->version);
-	endian_udword(&psHeader->quantity);
-
-	if (!saveFile(pFileName, pFileData, fileSize))
-	{
-		return false;
-	}
-	free(pFileData);
-
 	return true;
 }
 
