@@ -38,9 +38,6 @@
 #include "warzoneconfig.h"
 #include "wrappers.h"
 
-//! Let the end user into debug mode....
-bool	bAllowDebugMode = false;
-
 //////
 // Our fine replacement for the popt abomination follows
 
@@ -208,8 +205,7 @@ static poptContext poptGetContext(WZ_DECL_UNUSED void *unused, int argc, const c
 typedef enum
 {
 	// We don't want to use zero, so start at one (1)
-	CLI_CHEAT = 1,
-	CLI_CONFIGDIR,
+	CLI_CONFIGDIR = 1,
 	CLI_DATADIR,
 	CLI_DEBUG,
 	CLI_DEBUGFILE,
@@ -239,7 +235,6 @@ static const struct poptOption* getOptionsTable(void)
 {
 	static const struct poptOption optionsTable[] =
 	{
-		{ "cheat",      '\0', POPT_ARG_NONE,   NULL, CLI_CHEAT,      N_("Run in cheat mode"),                 NULL },
 		{ "configdir",  '\0', POPT_ARG_STRING, NULL, CLI_CONFIGDIR,  N_("Set configuration directory"),       N_("configuration directory") },
 		{ "datadir",    '\0', POPT_ARG_STRING, NULL, CLI_DATADIR,    N_("Set default data directory"),        N_("data directory") },
 		{ "debug",      '\0', POPT_ARG_STRING, NULL, CLI_DEBUG,      N_("Show debug for given level"),        N_("debug level") },
@@ -421,11 +416,6 @@ bool ParseCommandLine(int argc, const char** argv)
 				NetPlay.bComms = false;
 				sstrcpy(aLevelName, "CAM_3A");
 				SetGameMode(GS_NORMAL);
-				break;
-
-			case CLI_CHEAT:
-				//printf("  ** DEBUG MODE UNLOCKED! **\n");
-				bAllowDebugMode = true;
 				break;
 
 			case CLI_DATADIR:

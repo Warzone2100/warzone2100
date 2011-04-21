@@ -31,8 +31,6 @@
 
 #include "advvis.h"
 #include "ai.h"
-// HACK bAllowDebugMode shouldn't be in clparse
-#include "clparse.h"
 #include "component.h"
 #include "configuration.h"
 #include "difficulty.h"
@@ -86,20 +84,6 @@ bool loadConfig(void)
 	if(getWarzoneKeyNumeric("cdvol", &val))
 	{
 		sound_SetMusicVolume((float)val / 100.0);
-	}
-
-	if (getWarzoneKeyNumeric("debugmode", &val))
-	{
-		bAllowDebugMode = val;
-	}
-	else
-	{
-#ifdef DEBUG
-		bAllowDebugMode = true;
-#else
-		bAllowDebugMode = false;
-#endif
-		setWarzoneKeyNumeric("debugmode", bAllowDebugMode);
 	}
 
 	if (getWarzoneKeyNumeric("music_enabled", &val))
@@ -657,7 +641,6 @@ bool saveConfig(void)
 	{
 		setDifficultyLevel(DL_NORMAL);
 	}
-	setWarzoneKeyNumeric("debugmode", bAllowDebugMode);
 	setWarzoneKeyNumeric("framerate", (SDWORD)getFramerateLimit());
 	setWarzoneKeyNumeric("showFPS", (SDWORD)showFPS);
 	setWarzoneKeyNumeric("scroll",(SDWORD)scroll_speed_accel);		// scroll
