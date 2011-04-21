@@ -246,7 +246,7 @@ GAMECODE gameLoop(void)
 						 && getHQExists(selectedPlayer) ) ) )
 			{
 				// Using software cursors (when on) for these menus due to a bug in SDL's SDL_ShowCursor()
-				pie_SetMouse(CURSOR_DEFAULT, war_GetColouredCursor());
+				pie_SetMouse(CURSOR_DEFAULT);
 
 				intRetVal = INT_INTERCEPT;
 			}
@@ -520,7 +520,7 @@ GAMECODE gameLoop(void)
 	else // paused
 	{
 		// Using software cursors (when on) for these menus due to a bug in SDL's SDL_ShowCursor()
-		pie_SetMouse(CURSOR_DEFAULT, war_GetColouredCursor());
+		pie_SetMouse(CURSOR_DEFAULT);
 
 		intRetVal = INT_NONE;
 

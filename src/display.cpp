@@ -868,17 +868,17 @@ void processMouseClickInput(void)
 
 	if (gamePaused())
 	{
-		pie_SetMouse(CURSOR_DEFAULT, war_GetColouredCursor());
+		pie_SetMouse(CURSOR_DEFAULT);
 	}
 	if (buildState == BUILD3D_VALID)
 	{
 		// special casing for building
-		pie_SetMouse(CURSOR_BUILD, war_GetColouredCursor());
+		pie_SetMouse(CURSOR_BUILD);
 	}
 	else if (buildState == BUILD3D_POS)
 	{
 		// special casing for building - can't build here
-		pie_SetMouse(CURSOR_NOTPOSSIBLE, war_GetColouredCursor());
+		pie_SetMouse(CURSOR_NOTPOSSIBLE);
 	}
 	else if (selection != SC_INVALID)
 	{
@@ -1029,29 +1029,29 @@ void processMouseClickInput(void)
 				arnMPointers[item][selection] == CURSOR_MOVE && bMultiPlayer)
 			{
 				// Alt+move = disembark transporter
-				pie_SetMouse(CURSOR_DISEMBARK, war_GetColouredCursor());
+				pie_SetMouse(CURSOR_DISEMBARK);
 			}
 			else if (specialOrderKeyDown() && selection == SC_DROID_DIRECT &&
 				arnMPointers[item][selection] == CURSOR_MOVE)
 			{
 				// Alt+move = scout
-				pie_SetMouse(CURSOR_SCOUT, war_GetColouredCursor());
+				pie_SetMouse(CURSOR_SCOUT);
 			}
 			else if (arnMPointers[item][selection] == CURSOR_NOTPOSSIBLE &&
 			         ObjUnderMouse && (ObjUnderMouse->player == selectedPlayer) &&
 			         ObjUnderMouse->type == OBJ_STRUCTURE && ((STRUCTURE *)ObjUnderMouse)->asWeaps[0].nStat &&
 			         (asWeaponStats[((STRUCTURE *)ObjUnderMouse)->asWeaps[0].nStat].weaponSubClass == WSC_LAS_SAT))
 			{
-				pie_SetMouse(CURSOR_SELECT, war_GetColouredCursor()); // Special casing for LasSat
+				pie_SetMouse(CURSOR_SELECT); // Special casing for LasSat
 			}
 			else
 			{
-				pie_SetMouse(arnMPointers[item][selection], war_GetColouredCursor());
+				pie_SetMouse(arnMPointers[item][selection]);
 			}
 		}
 		else
 		{
-			pie_SetMouse(CURSOR_DEFAULT, war_GetColouredCursor());
+			pie_SetMouse(CURSOR_DEFAULT);
 		}
 	}
 	else
@@ -1066,22 +1066,22 @@ void processMouseClickInput(void)
 			if (item == MT_ENEMYDROID || item == MT_ENEMYSTR || item == MT_DAMFEATURE)
 			{
 				//display attack cursor
-				pie_SetMouse(CURSOR_ATTACK, war_GetColouredCursor());
+				pie_SetMouse(CURSOR_ATTACK);
 			}
 			else if (ObjUnderMouse && ObjUnderMouse->player == selectedPlayer && (ObjUnderMouse->type == OBJ_DROID ||
 			         (ObjUnderMouse->type == OBJ_STRUCTURE && lasSatStructSelected((STRUCTURE *)ObjUnderMouse))))
 			{
 				// Special casing for selectables
-				pie_SetMouse(CURSOR_SELECT, war_GetColouredCursor());
+				pie_SetMouse(CURSOR_SELECT);
 			}
 			else if (ObjUnderMouse && ObjUnderMouse->player == selectedPlayer && ObjUnderMouse->type == OBJ_STRUCTURE)
 			{
-				pie_SetMouse(CURSOR_DEFAULT, war_GetColouredCursor());
+				pie_SetMouse(CURSOR_DEFAULT);
 			}
 			else
 			{
 				//display block cursor
-				pie_SetMouse(CURSOR_NOTPOSSIBLE, war_GetColouredCursor());
+				pie_SetMouse(CURSOR_NOTPOSSIBLE);
 			}
 		}
 		else if (ObjUnderMouse && (ObjUnderMouse->player == selectedPlayer) &&
@@ -1089,11 +1089,11 @@ void processMouseClickInput(void)
 			&& (asWeaponStats[((STRUCTURE *)ObjUnderMouse)->asWeaps[0].nStat].weaponSubClass == WSC_LAS_SAT))
 		    || ObjUnderMouse->type == OBJ_DROID))
 		{
-			pie_SetMouse(CURSOR_SELECT, war_GetColouredCursor()); // Special casing for LasSat or own unit
+			pie_SetMouse(CURSOR_SELECT); // Special casing for LasSat or own unit
 		}
 		else
 		{
-			pie_SetMouse(CURSOR_DEFAULT, war_GetColouredCursor());
+			pie_SetMouse(CURSOR_DEFAULT);
 		}
 	}
 

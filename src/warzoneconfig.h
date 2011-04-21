@@ -65,8 +65,6 @@ extern void war_SetHeight(UDWORD height);
 extern UDWORD war_GetHeight(void);
 extern void war_SetPauseOnFocusLoss(bool enabled);
 extern bool war_GetPauseOnFocusLoss(void);
-extern bool war_GetColouredCursor(void);
-extern void war_SetColouredCursor(bool enabled);
 extern bool war_GetMusicEnabled(void);
 extern void war_SetMusicEnabled(bool enabled);
 extern int8_t war_GetSPcolor(void);

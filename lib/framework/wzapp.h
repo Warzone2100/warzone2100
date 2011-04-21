@@ -30,6 +30,7 @@
 #include <QtCore/QMutex>
 #include <QtCore/QSemaphore>
 #include <QtCore/QSettings>
+#include <physfs.h>
 
 // Get platform defines before checking for them.
 // Qt headers MUST come before platform specific stuff!
@@ -41,7 +42,9 @@
 class WzConfig : public QSettings
 {
 public:
-	WzConfig(const QString &name, QObject *parent = 0) : QSettings(QString("wz::") + name, QSettings::IniFormat, parent) {}
+	/// Set writedir to true to force reading and writing from the physfs write directory. This MUST be used if the
+	/// file already exists!
+	WzConfig(const QString &name, bool writedir = false, QObject *parent = 0) : QSettings(writedir ? PHYSFS_getWriteDir() + name : QString("wz::") + name, QSettings::IniFormat, parent) {}
 	Vector3f vector3f(const QString &name);
 	void setVector3f(const QString &name, const Vector3f &v);
 	Vector3i vector3i(const QString &name);

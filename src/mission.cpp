@@ -2577,7 +2577,7 @@ void intRemoveMissionResultNoAnim(void)
 
 void intRunMissionResult(void)
 {
-	pie_SetMouse(CURSOR_DEFAULT, war_GetColouredCursor());
+	pie_SetMouse(CURSOR_DEFAULT);
 
 	if(bLoadSaveUp)
 	{

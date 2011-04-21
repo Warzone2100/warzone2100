@@ -984,18 +984,6 @@ static bool startMouseOptionsMenu(void)
 		addTextButton(FRONTEND_TRAP_R, FRONTEND_POS3M-25, FRONTEND_POS3Y, _("Off"), 0);
 	}
 	
-	// Hardware / software cursor toggle
-	addTextButton(FRONTEND_CURSORMODE, FRONTEND_POS4X-35, FRONTEND_POS4Y, _("Colored Cursors*"), 0);
-
-	if (war_GetColouredCursor())
-	{
-		addTextButton(FRONTEND_CURSORMODE_R, FRONTEND_POS4M-25, FRONTEND_POS4Y, _("On"), 0);
-	}
-	else
-	{
-		addTextButton(FRONTEND_CURSORMODE_R, FRONTEND_POS4M-25, FRONTEND_POS4Y, _("Off"), 0);
-	}
-
 	////////////
 	// left-click orders
 	addTextButton(FRONTEND_MBUTTONS,	 FRONTEND_POS2X-35,   FRONTEND_POS5Y, _("Switch Mouse Buttons"), 0);
@@ -1060,20 +1048,6 @@ bool runMouseOptionsMenu(void)
 			{
 				war_SetTrapCursor(true);
 				widgSetString(psWScreen, FRONTEND_TRAP_R, _("On"));
-			}
-			break;
-
-		case FRONTEND_CURSORMODE:
-		case FRONTEND_CURSORMODE_R:
-			if (war_GetColouredCursor())
-			{
-				war_SetColouredCursor(false);
-				widgSetString(psWScreen, FRONTEND_CURSORMODE_R, _("Off"));
-			}
-			else
-			{
-				war_SetColouredCursor(true);
-				widgSetString(psWScreen, FRONTEND_CURSORMODE_R, _("On"));
 			}
 			break;
 

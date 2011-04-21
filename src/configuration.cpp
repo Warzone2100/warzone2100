@@ -18,13 +18,13 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 /**
- * @file configuration.c
- * Saves your favourite options to the Registry.
+ * @file configuration.cpp
+ * Saves your favourite options.
  *
  */
 
-#include "lib/framework/frame.h"
-#include "lib/framework/configfile.h"
+#include "lib/framework/wzapp.h"
+#include "lib/framework/input.h"
 #include "lib/netplay/netplay.h"
 #include "lib/sound/mixer.h"
 #include "lib/ivis_opengl/screen.h"
@@ -46,764 +46,237 @@
 // ////////////////////////////////////////////////////////////////////////////
 
 #define DEFAULTSCROLL	1000
-
 #define MASTERSERVERPORT	9990
 #define GAMESERVERPORT		2100
 
-// ////////////////////////////////////////////////////////////////////////////
-bool loadConfig(void)
-{
-	int val;
-	char	sBuf[255];
-	bool bad_resolution = false;
+static const char *fileName = "config";
 
-	if (!openWarzoneKey())
+// ////////////////////////////////////////////////////////////////////////////
+bool loadConfig()
+{
+	WzConfig ini(fileName, true);
+	if (ini.status() != QSettings::NoError)
 	{
+		debug(LOG_ERROR, "Could not open configuration file \"%s\"", fileName);
 		return false;
 	}
+	debug(LOG_ERROR, "Reading configuration from %s", ini.fileName().toUtf8().constData());
+	if (ini.contains("voicevol")) sound_SetUIVolume(ini.value("voicevol").toDouble() / 100.0);
+	if (ini.contains("fxvol")) sound_SetEffectsVolume(ini.value("fxvol").toDouble() / 100.0);
+	if (ini.contains("cdvol")) sound_SetMusicVolume(ini.value("cdvol").toDouble() / 100.0);
+	if (ini.contains("music_enabled")) war_SetMusicEnabled(ini.value("music_enabled").toBool());
+	if (ini.contains("language")) setLanguage(ini.value("language").toString().toUtf8().constData());
+	if (ini.contains("nomousewarp")) setMouseWarp(ini.value("nomousewarp").toBool());
+	showFPS = ini.value("showFPS", false).toBool();
+	scroll_speed_accel = ini.value("scroll", DEFAULTSCROLL).toInt();
+	setShakeStatus(ini.value("shake", false).toBool());
+	setDrawShadows(ini.value("shadows", true).toBool());
+	war_setSoundEnabled(ini.value("sound", true).toBool());
+	setInvertMouseStatus(ini.value("mouseflip", true).toBool());
+	setRightClickOrders(ini.value("RightClickOrders", false).toBool());
+	setMiddleClickRotate(ini.value("MiddleClickRotate", false).toBool());
+	rotateRadar = ini.value("rotateRadar", true).toBool();
+	war_SetPauseOnFocusLoss(ini.value("PauseOnFocusLoss", false).toBool());
+	NETsetMasterserverName(ini.value("masterserver_name", "lobby.wz2100.net").toString().toUtf8().constData());
+	iV_font(ini.value("fontname", "DejaVu Sans").toString().toUtf8().constData(),
+		ini.value("fontface", "Book").toString().toUtf8().constData(),
+		ini.value("fontfacebold", "Bold").toString().toUtf8().constData());
+	NETsetMasterserverPort(ini.value("masterserver_port", MASTERSERVERPORT).toInt());
+	NETsetGameserverPort(ini.value("gameserver_port", GAMESERVERPORT).toInt());
+	war_SetFMVmode((FMV_MODE)ini.value("FMVmode", FMV_FULLSCREEN).toInt());
+	seq_SetSubtitles(ini.value("subtitles", true).toBool());
+	setDifficultyLevel((DIFFICULTY_LEVEL)ini.value("difficulty", DL_NORMAL).toInt());
+	war_SetFog(ini.value("visfog", true).toBool());
+	war_SetSPcolor(ini.value("colour", 0).toInt());	// default is green (0)
+	sstrcpy(game.name, ini.value("gameName", _("My Game")).toString().toUtf8().constData());
+	sstrcpy(sPlayer, ini.value("playerName", _("Player")).toString().toUtf8().constData());
+	if (ini.contains("mapName") && ini.contains("maxPlayers"))
+	{
+		sstrcpy(game.map, ini.value("mapName").toString().toUtf8().constData());
+		game.maxPlayers = ini.value("maxPlayers").toInt();	// FIXME: horrible kluge, MUST match map above
+	}
+	game.power = ini.value("power", LEV_MED).toInt();
+	game.fog = ini.value("fog").toBool();
+	game.base = ini.value("base", CAMP_BASE).toInt();
+	game.alliance = ini.value("alliance", NO_ALLIANCES).toInt();
+	memset(&ingame.phrases, 0, sizeof(ingame.phrases));
+	for (int i = 1; i < 5; i++)
+	{
+		QString key("phrase" + QString::number(i));
+		if (ini.contains(key)) sstrcpy(ingame.phrases[i], ini.value(key).toString().toUtf8().constData());
+	}
+	bEnemyAllyRadarColor = ini.value("radarObjectMode").toBool();
+	radarDrawMode = (RADAR_DRAW_MODE)ini.value("radarTerrainMode", RADAR_MODE_DEFAULT).toInt();
+	if (ini.contains("textureSize")) setTextureSize(ini.value("textureSize").toInt());
+	NetPlay.isUPNP = ini.value("UPnP", true).toBool();
+	if (ini.contains("FSAA")) war_setFSAA(ini.value("FSAA").toInt());
+	war_setFullscreen(ini.value("fullscreen", true).toBool());
+	war_SetTrapCursor(ini.value("trapCursor", false).toBool());
+	war_SetVsync(ini.value("vsync", true).toBool());
 
-	//  options screens.
-	// //////////////////////////
+	int width = ini.value("width", 0).toInt();
+	int height = ini.value("height", 0).toInt();
+	if (width < 640 || height < 480)	// sanity check
+	{
+		height = width = 0;
+	}
+	pie_SetVideoBufferWidth(width);
+	pie_SetVideoBufferHeight(height);
+	war_SetWidth(width);
+	war_SetHeight(height);
 
-	// //////////////////////////
-	// voice vol
-	if(getWarzoneKeyNumeric("voicevol", &val))
-	{
-		sound_SetUIVolume((float)val / 100.0);//was val
-	}
-
-	// //////////////////////////
-	// fx vol
-	if(getWarzoneKeyNumeric("fxvol", &val))
-	{
-		sound_SetEffectsVolume((float)val / 100.0);//was val
-	}
-
-	// //////////////////////////
-	// cdvol
-	if(getWarzoneKeyNumeric("cdvol", &val))
-	{
-		sound_SetMusicVolume((float)val / 100.0);
-	}
-
-	if (getWarzoneKeyNumeric("music_enabled", &val))
-	{
-		war_SetMusicEnabled(val);
-	}
-
-	if (getWarzoneKeyString("language", sBuf))
-	{
-		setLanguage(sBuf);
-	}
-
-	if (getWarzoneKeyNumeric("showFPS", &val))
-	{
-		showFPS = val;
-	}
-	else
-	{
-		showFPS = false;
-		setWarzoneKeyNumeric("showFPS", false);
-	}
-
-	// //////////////////////////
-	// scroll
-	if(getWarzoneKeyNumeric("scroll", &val))
-	{
-		scroll_speed_accel = val;
-	}
-	else
-	{
-		scroll_speed_accel = DEFAULTSCROLL;
-		setWarzoneKeyNumeric("scroll", DEFAULTSCROLL);
-	}
-
-	// //////////////////////////
-	// screen shake
-	if(getWarzoneKeyNumeric("shake", &val))
-	{
-		setShakeStatus(val);
-	}
-	else
-	{
-		setShakeStatus(false);
-		setWarzoneKeyNumeric("shake", false);
-	}
-
-	// //////////////////////////
-	// draw shadows
-	if(getWarzoneKeyNumeric("shadows", &val))
-	{
-		setDrawShadows(val);
-	}
-	else
-	{
-		setDrawShadows(true);
-		setWarzoneKeyNumeric("shadows", true);
-	}
-
-	// //////////////////////////
-	// enable sound
-	if(getWarzoneKeyNumeric("sound", &val))
-	{
-		war_setSoundEnabled( val );
-	}
-	else
-	{
-		war_setSoundEnabled( true );
-		setWarzoneKeyNumeric( "sound", true );
-	}
-
-	// //////////////////////////
-	// invert mouse
-	if(getWarzoneKeyNumeric("mouseflip", &val))
-	{
-		setInvertMouseStatus(val);
-	}
-	else
-	{
-		setInvertMouseStatus(true);
-		setWarzoneKeyNumeric("mouseflip", true);
-	}
-
-	// //////////////////////////
-	// mouse buttons
-	if (getWarzoneKeyNumeric("RightClickOrders", &val))
-	{
-		setRightClickOrders(val);
-	}
-	else
-	{
-		setRightClickOrders(false);
-		setWarzoneKeyNumeric("RightClickOrders", false);
-	}
-	if (getWarzoneKeyNumeric("MiddleClickRotate", &val))
-	{
-		setMiddleClickRotate(val);
-	}
-	else
-	{
-		setMiddleClickRotate(false);
-		setWarzoneKeyNumeric("MiddleClickRotate", false);
-	}
-	
-	// //////////////////////////
-	// rotate radar
-	if(getWarzoneKeyNumeric("rotateRadar", &val))
-	{
-		rotateRadar = val;
-	}
-	else
-	{
-		rotateRadar = true;
-		setWarzoneKeyNumeric("rotateRadar", rotateRadar);
-	}
-
-	if (getWarzoneKeyNumeric("PauseOnFocusLoss", &val))
-	{
-		war_SetPauseOnFocusLoss(val);
-	}
-	else
-	{
-		war_SetPauseOnFocusLoss(false);
-		setWarzoneKeyNumeric("PauseOnFocusLoss", false);
-	}
-
-	if (getWarzoneKeyString("masterserver_name", sBuf))
-	{
-		NETsetMasterserverName(sBuf);
-		if (strcasecmp(sBuf, "lobby.wz2100.net") != 0)
-		{
-			debug(LOG_ERROR, "We are not using lobby.wz2100.net, for the master server name, we are using %s instead?", sBuf);
-		}
-	}
-	else
-	{
-		NETsetMasterserverName("lobby.wz2100.net");
-		setWarzoneKeyString("masterserver_name", NETgetMasterserverName());
-	}
-
-	if (getWarzoneKeyString("fontname", sBuf) && strcmp(sBuf,"Lucida Grande"))
-	{
-		iV_font(sBuf, NULL, NULL);
-	}
-	else
-	{
-		iV_font("DejaVu Sans", NULL, NULL);
-		setWarzoneKeyString("fontname", "DejaVu Sans");
-	}
-
-	if (getWarzoneKeyString("fontface", sBuf) && strcmp(sBuf,"Normal"))
-	{
-		iV_font(NULL, sBuf, NULL);
-	}
-	else
-	{
-		iV_font(NULL, "Book", NULL);
-		setWarzoneKeyString("fontface", "Book");
-	}
-
-	if (getWarzoneKeyString("fontfacebold", sBuf))
-	{
-		iV_font(NULL, NULL, sBuf);
-	}
-	else
-	{
-		iV_font(NULL, NULL, "Bold");
-		setWarzoneKeyString("fontfacebold", "Bold");
-	}
-
-	if (getWarzoneKeyNumeric("masterserver_port", &val))
-	{
-		NETsetMasterserverPort(val);
-		if (val != MASTERSERVERPORT)
-		{
-			debug(LOG_ERROR, "We are not using port %d (which is the default Master server port), we are using %d?", MASTERSERVERPORT, val);
-		}
-	}
-	else
-	{
-		NETsetMasterserverPort(MASTERSERVERPORT);
-		setWarzoneKeyNumeric("masterserver_port", NETgetMasterserverPort());
-	}
-
-	if (getWarzoneKeyNumeric("gameserver_port", &val))
-	{
-		NETsetGameserverPort(val);
-		if (val != GAMESERVERPORT)
-		{
-			debug(LOG_ERROR, "We are not using port %d (which is the default Game server port), we are using %d?", GAMESERVERPORT, val);
-		}
-	}
-	else
-	{
-		NETsetGameserverPort(GAMESERVERPORT);
-		setWarzoneKeyNumeric("gameserver_port", NETgetGameserverPort());
-	}
-
-	// //////////////////////////
-	// sequences
-	if (getWarzoneKeyNumeric("FMVmode", &val))
-	{
-		war_SetFMVmode((FMV_MODE)val);
-	}
-	else
-	{
-		war_SetFMVmode(FMV_FULLSCREEN);
-	}
-
-	// //////////////////////////
-	// subtitles
-	if(getWarzoneKeyNumeric("subtitles", &val))
-	{
-		seq_SetSubtitles(val);
-	}
-	else
-	{
-		seq_SetSubtitles(true);
-	}
-
-	// //////////////////////////
-	// difficulty
-
-	if(getWarzoneKeyNumeric("difficulty", &val))
-	{
-		setDifficultyLevel((DIFFICULTY_LEVEL)val);
-	}
-	else
-	{
-		setDifficultyLevel(DL_NORMAL);
-		setWarzoneKeyNumeric("difficulty", DL_NORMAL);
-	}
-
-	// //////////////////////////
-	// use vis fog
-	if(getWarzoneKeyNumeric("visfog", &val))
-	{
-		if(val)
-		{
-			war_SetFog(false);
-		}
-		else
-		{
-			war_SetFog(true);
-		}
-	}
-	else
-	{
-		war_SetFog(true);
-		setWarzoneKeyNumeric("visfog", 0);
-	}
-
-	// //////////////////////////
-	// favourite colour
-	if(!bMultiPlayer)
-	{
-		if(getWarzoneKeyNumeric("colour", &val))
-		{
-			war_SetSPcolor(val);
-		}
-		else
-		{
-			war_SetSPcolor(0);	//default is green (0)
-			setWarzoneKeyNumeric("colour", 0);
-		}
-	}
-
-
-	// /////////////////////////
-	//  multiplayer stuff.
-	// /////////////////////////
-
-	// game name
-	if (getWarzoneKeyString("gameName", sBuf))
-	{
-		sstrcpy(game.name, sBuf);
-	}
-	else
-	{
-		setWarzoneKeyString("gameName", "My Game");
-	}
-
-	// player name
-	// must _not_ be an empty string
-	if (getWarzoneKeyString("playerName", sBuf)
-	 && *sBuf != '\0')
-	{
-		sstrcpy(sPlayer, sBuf);
-	}
-	else
-	{
-		setWarzoneKeyString("playerName", _("Player"));
-		sstrcpy(sPlayer, _("Player"));
-	}
-
-	// map name
-	if(getWarzoneKeyString("mapName", sBuf))
-	{
-		/* FIXME: Get rid of storing the max-player count in the config
-		 *        file. Instead we should parse the map *before*
-		 *        showing the skirmish/multiplayer setup screen.
-		 */
-		if (getWarzoneKeyNumeric("maxPlayers", &val))
-		{
-			sstrcpy(game.map, sBuf);
-			game.maxPlayers = val;
-		}
-		else
-		{
-			debug(LOG_WARNING, "Invalid or not found maxPlayers parameter for map %s", game.map);
-			debug(LOG_WARNING, "Reseting map to default parameters.");
-			// we don't have maxPlayers set, so fall back to defaults.
-			game.maxPlayers = 4;	//4 is for the DEFAULTSKIRMISHMAP map (rush)
-			sstrcpy(game.map, DEFAULTSKIRMISHMAP);
-			setWarzoneKeyString("mapName", game.map);
-			setWarzoneKeyNumeric("maxPlayers",game.maxPlayers);
-		}
-	}
-	else
-	{
-		sstrcpy(game.map, DEFAULTSKIRMISHMAP);
-		setWarzoneKeyString("mapName", game.map);
-	}
-
-	// power
-	if(getWarzoneKeyNumeric("power", &val))
-	{
-		game.power = val;
-	}
-	else
-	{
-		game.power = LEV_MED;
-		setWarzoneKeyNumeric("power", game.power);
-	}
-
-	// fog
-	if(getWarzoneKeyNumeric("fog", &val))
-	{
-		game.fog= val;
-	}
-	else
-	{
-		game.fog= true;
-		setWarzoneKeyNumeric("fog", game.fog);
-	}
-
-	//base
-	if(getWarzoneKeyNumeric("base", &val))
-	{
-		game.base =(UBYTE)val;
-	}
-	else
-	{
-		game.base = CAMP_BASE;
-		setWarzoneKeyNumeric("base", game.base);
-	}
-
-	//alliance
-	if(getWarzoneKeyNumeric("alliance", &val))
-	{
-		game.alliance =(UBYTE)val;
-	}
-	else
-	{
-		game.alliance = NO_ALLIANCES;
-		setWarzoneKeyNumeric("alliance", game.alliance);
-	}
-
-	// favourite phrases
-	if(getWarzoneKeyString("phrase0", ingame.phrases[0]))
-	{
-		getWarzoneKeyString("phrase1", ingame.phrases[1]);
-		getWarzoneKeyString("phrase2", ingame.phrases[2]);
-		getWarzoneKeyString("phrase3", ingame.phrases[3]);
-		getWarzoneKeyString("phrase4", ingame.phrases[4]);
-	}
-	else
-	{
-		memset(&ingame.phrases, 0, sizeof(ingame.phrases));
-		setWarzoneKeyString("phrase0", ingame.phrases[0]);
-		setWarzoneKeyString("phrase1", ingame.phrases[1]);
-		setWarzoneKeyString("phrase2", ingame.phrases[2]);
-		setWarzoneKeyString("phrase3", ingame.phrases[3]);
-		setWarzoneKeyString("phrase4", ingame.phrases[4]);
-	}
-
-	// enemy/allies radar view
-	if(getWarzoneKeyNumeric("radarObjectMode", &val))
-	{
-		bEnemyAllyRadarColor =(bool)val;
-	} else {
-		bEnemyAllyRadarColor = false;
-		setWarzoneKeyNumeric("radarObjectMode", (SDWORD)bEnemyAllyRadarColor);
-	}
-
-	// mini-map terrain mode
-	if(getWarzoneKeyNumeric("radarTerrainMode", &val))
-	{
-		radarDrawMode = (RADAR_DRAW_MODE)val;
-
-		if(radarDrawMode >= NUM_RADAR_MODES)
-		{
-			ASSERT(!"wrong mini-map mode", "loadConfig: wrong mini-map mode: %d", radarDrawMode);
-			radarDrawMode = RADAR_MODE_DEFAULT;
-		}
-	} else {
-		radarDrawMode = RADAR_MODE_DEFAULT;
-		setWarzoneKeyNumeric("radarTerrainMode", radarDrawMode);
-	}
-
-	// texture size
-	if (getWarzoneKeyNumeric("textureSize", &val))
-	{
-		setTextureSize(val);
-	} else {
-		setWarzoneKeyNumeric("textureSize", getTextureSize());
-	}
-
-	// UPnP detection
-	if (getWarzoneKeyNumeric("UPnP", &val))
-	{
-		NetPlay.isUPNP = val;
-	}
-	else
-	{
-		setWarzoneKeyNumeric("UPnP", 1);
-		NetPlay.isUPNP = 1;
-	}
-
-	if (getWarzoneKeyNumeric("FSAA", &val))
-	{
-		war_setFSAA(val);
-	}
-	else
-	{
-		setWarzoneKeyNumeric("FSAA", war_getFSAA());
-	}
-
-	if( getWarzoneKeyNumeric("fullscreen", &val) ) {
-		war_setFullscreen(val);
-	} else {
-		// If no setting is found go to fullscreen by default
-		setWarzoneKeyNumeric("fullscreen", true);
-		war_setFullscreen(true);
-	}
-
-	if (getWarzoneKeyNumeric("ColouredCursor", &val))
-	{
-		war_SetColouredCursor(val);
-	}
-	else
-	{
-#ifdef WZ_OS_MAC
-		// Mac OS X doesn't support normal cursors
-		war_SetColouredCursor(true);
-		setWarzoneKeyNumeric("ColouredCursor", true);
-#else
-		war_SetColouredCursor(false);
-		setWarzoneKeyNumeric("ColouredCursor", false);
-#endif
-	}
-
-	if (getWarzoneKeyNumeric("trapCursor", &val))
-	{
-		war_SetTrapCursor(val);
-	}
-	else
-	{
-		war_SetTrapCursor(false);
-	}
-
-	if (getWarzoneKeyNumeric("vsync", &val))
-	{
-		war_SetVsync(val);
-	}
-	else
-	{
-		war_SetVsync(true);
-	}
-
-	// now load the desired res..
-	// note that we only do this if we havent changed renderer..
-	if (getWarzoneKeyNumeric("width", &val)
-	 && val >= 640)
-	{
-		pie_SetVideoBufferWidth(val);
-		war_SetWidth(val);
-	}
-	else
-	{
-		bad_resolution = true;
-	}
-
-	if (getWarzoneKeyNumeric("height", &val)
-	 && val >= 400)
-	{
-		pie_SetVideoBufferHeight(val);
-		war_SetHeight(val);
-	}
-	else
-	{
-		bad_resolution = true;
-	}
-
-	if (bad_resolution)
-	{
-		// If we have an invalid or incomplete resolution specified
-		// fall back to the defaults.
-		war_SetWidth(0);
-		war_SetHeight(0);
-	}
-
-	if (getWarzoneKeyNumeric("bpp", &val))
-	{
-		pie_SetVideoBufferDepth(val);
-	}
-
-	if (getWarzoneKeyNumeric("framerate", &val))
-	{
-		setFramerateLimit(val);
-	}
-	else
-	{
-		setFramerateLimit(60);
-	}
-
-	return closeWarzoneKey();
+	if (ini.contains("bpp")) pie_SetVideoBufferDepth(ini.value("bpp").toInt());
+	setFramerateLimit(ini.value("framerate", 60).toInt());
+	return true;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-bool saveConfig(void)
+bool saveConfig()
 {
-	debug( LOG_WZ, "Writing prefs to registry\n" );
-
-	if(!openWarzoneKey())
+	WzConfig ini(fileName, true);
+	if (ini.status() != QSettings::NoError)
 	{
+		debug(LOG_ERROR, "Could not open configuration file \"%s\"", fileName);
 		return false;
 	}
+	debug(LOG_ERROR, "Writing prefs to registry \"%s\"", ini.fileName().toUtf8().constData());
 
 	// //////////////////////////
 	// voicevol, fxvol and cdvol
-	setWarzoneKeyNumeric("voicevol", (int)(sound_GetUIVolume() * 100.0));
-	setWarzoneKeyNumeric("fxvol", (int)(sound_GetEffectsVolume() * 100.0));
-	setWarzoneKeyNumeric("cdvol", (int)(sound_GetMusicVolume() * 100.0));
-	setWarzoneKeyNumeric("music_enabled", war_GetMusicEnabled());
-
-	setWarzoneKeyNumeric("width", war_GetWidth());
-	setWarzoneKeyNumeric("height", war_GetHeight());
-	setWarzoneKeyNumeric("bpp", pie_GetVideoBufferDepth());
-	setWarzoneKeyNumeric("fullscreen", war_getFullscreen());
-
-	setWarzoneKeyString("language", getLanguage());
-
+	ini.setValue("voicevol", (int)(sound_GetUIVolume() * 100.0));
+	debug(LOG_ERROR, "voicevol is saved %d (was %f)", ini.value("voicevol").toInt(), sound_GetUIVolume());
+	ini.setValue("fxvol", (int)(sound_GetEffectsVolume() * 100.0));
+	ini.setValue("cdvol", (int)(sound_GetMusicVolume() * 100.0));
+	ini.setValue("music_enabled", war_GetMusicEnabled());
+	ini.setValue("width", war_GetWidth());
+	ini.setValue("height", war_GetHeight());
+	ini.setValue("bpp", pie_GetVideoBufferDepth());
+	ini.setValue("fullscreen", war_getFullscreen());
+	ini.setValue("language", getLanguage());
 	// dont save out the cheat mode.
-	if(getDifficultyLevel()==DL_KILLER || getDifficultyLevel()== DL_TOUGH)
+	if (getDifficultyLevel() != DL_KILLER && getDifficultyLevel() != DL_TOUGH)
 	{
-		setDifficultyLevel(DL_NORMAL);
+		ini.setValue("difficulty", getDifficultyLevel());		// level
 	}
-	setWarzoneKeyNumeric("framerate", (SDWORD)getFramerateLimit());
-	setWarzoneKeyNumeric("showFPS", (SDWORD)showFPS);
-	setWarzoneKeyNumeric("scroll",(SDWORD)scroll_speed_accel);		// scroll
-	setWarzoneKeyNumeric("difficulty", getDifficultyLevel());		// level
-	setWarzoneKeyNumeric("visfog",(SDWORD)(!war_GetFog()));			// fogtype
-	setWarzoneKeyNumeric("shake",(SDWORD)(getShakeStatus()));		// screenshake
-	setWarzoneKeyNumeric("mouseflip",(SDWORD)(getInvertMouseStatus()));	// flipmouse
-	setWarzoneKeyNumeric("RightClickOrders",(SDWORD)(getRightClickOrders()));
-	setWarzoneKeyNumeric("MiddleClickRotate",(SDWORD)(getMiddleClickRotate()));
-	setWarzoneKeyNumeric("shadows",(SDWORD)(getDrawShadows()));	// shadows
-	setWarzoneKeyNumeric("sound", (SDWORD)war_getSoundEnabled());
-	setWarzoneKeyNumeric("FMVmode",(SDWORD)(war_GetFMVmode()));		// sequences
-	setWarzoneKeyNumeric("subtitles",(SDWORD)(seq_GetSubtitles()));		// subtitles
-	setWarzoneKeyNumeric("radarObjectMode",(SDWORD)bEnemyAllyRadarColor);    // enemy/allies radar view
-	setWarzoneKeyNumeric("radarTerrainMode",(SDWORD)radarDrawMode);
-	setWarzoneKeyNumeric("trapCursor", war_GetTrapCursor());
-	setWarzoneKeyNumeric("vsync", war_GetVsync());
-	setWarzoneKeyNumeric("textureSize", getTextureSize());
-	setWarzoneKeyNumeric("rotateRadar", rotateRadar);
-	setWarzoneKeyNumeric("PauseOnFocusLoss", war_GetPauseOnFocusLoss());
-	setWarzoneKeyNumeric("ColouredCursor", war_GetColouredCursor());
-	setWarzoneKeyString("masterserver_name", NETgetMasterserverName());
-	setWarzoneKeyNumeric("masterserver_port", NETgetMasterserverPort());
-	setWarzoneKeyNumeric("gameserver_port", NETgetGameserverPort());
-
-	if(!bMultiPlayer)
+	ini.setValue("framerate", (SDWORD)getFramerateLimit());
+	ini.setValue("showFPS", (SDWORD)showFPS);
+	ini.setValue("scroll",(SDWORD)scroll_speed_accel);		// scroll
+	ini.setValue("visfog",(SDWORD)(!war_GetFog()));			// fogtype
+	ini.setValue("shake",(SDWORD)(getShakeStatus()));		// screenshake
+	ini.setValue("mouseflip",(SDWORD)(getInvertMouseStatus()));	// flipmouse
+	ini.setValue("RightClickOrders",(SDWORD)(getRightClickOrders()));
+	ini.setValue("MiddleClickRotate",(SDWORD)(getMiddleClickRotate()));
+	ini.setValue("shadows",(SDWORD)(getDrawShadows()));	// shadows
+	ini.setValue("sound", (SDWORD)war_getSoundEnabled());
+	ini.setValue("FMVmode",(SDWORD)(war_GetFMVmode()));		// sequences
+	ini.setValue("subtitles",(SDWORD)(seq_GetSubtitles()));		// subtitles
+	ini.setValue("radarObjectMode",(SDWORD)bEnemyAllyRadarColor);    // enemy/allies radar view
+	ini.setValue("radarTerrainMode",(SDWORD)radarDrawMode);
+	ini.setValue("trapCursor", war_GetTrapCursor());
+	ini.setValue("vsync", war_GetVsync());
+	ini.setValue("textureSize", getTextureSize());
+	ini.setValue("rotateRadar", rotateRadar);
+	ini.setValue("PauseOnFocusLoss", war_GetPauseOnFocusLoss());
+	ini.setValue("masterserver_name", NETgetMasterserverName());
+	ini.setValue("masterserver_port", NETgetMasterserverPort());
+	ini.setValue("gameserver_port", NETgetGameserverPort());
+	if (!bMultiPlayer)
 	{
-		setWarzoneKeyNumeric("colour",(SDWORD)getPlayerColour(0));			// favourite colour.
+		ini.setValue("colour", getPlayerColour(0));			// favourite colour.
 	}
 	else
 	{
-		debug( LOG_NEVER, "Writing multiplay prefs to registry\n" );
 		if (NetPlay.isHost && ingame.localJoiningInProgress)
 		{
 			if (bMultiPlayer && NetPlay.bComms)
 			{
-				setWarzoneKeyString("gameName", game.name);			//  last hosted game
+				ini.setValue("gameName", game.name);			//  last hosted game
 			}
-			setWarzoneKeyString("mapName", game.map);				//  map name
-			setWarzoneKeyNumeric("maxPlayers",game.maxPlayers);		// maxPlayers
-			setWarzoneKeyNumeric("power", game.power);				// power
-			setWarzoneKeyNumeric("base", game.base);				// size of base
-			setWarzoneKeyNumeric("fog", game.fog);					// fog 'o war
-			setWarzoneKeyNumeric("alliance", game.alliance);		// allow alliances
+			ini.setValue("mapName", game.map);				//  map name
+			ini.setValue("maxPlayers", game.maxPlayers);		// maxPlayers
+			ini.setValue("power", game.power);				// power
+			ini.setValue("base", game.base);				// size of base
+			ini.setValue("fog", game.fog);					// fog 'o war
+			ini.setValue("alliance", game.alliance);		// allow alliances
 		}
-		setWarzoneKeyString("playerName",(char*)sPlayer);		// player name
-		setWarzoneKeyString("phrase0", ingame.phrases[0]);		// phrases
-		setWarzoneKeyString("phrase1", ingame.phrases[1]);
-		setWarzoneKeyString("phrase2", ingame.phrases[2]);
-		setWarzoneKeyString("phrase3", ingame.phrases[3]);
-		setWarzoneKeyString("phrase4", ingame.phrases[4]);
+		ini.setValue("playerName", (char*)sPlayer);		// player name
 	}
-
-	return closeWarzoneKey();
+	ini.sync();
+	return true;
 }
 
 // Saves and loads the relevant part of the config files for MP games
 // Ensures that others' games don't change our own configuration settings
 bool reloadMPConfig(void)
 {
-	int val;
-	char	sBuf[255];
-
-	debug( LOG_WZ, "Reloading prefs prefs to registry\n" );
+	WzConfig ini(fileName, true);
+	if (ini.status() != QSettings::NoError)
+	{
+		debug(LOG_ERROR, "Could not open configuration file \"%s\"", fileName);
+		return false;
+	}
+	debug(LOG_ERROR, "Reloading prefs prefs to registry");
 
 	// If we're in-game, we already have our own configuration set, so no need to reload it.
-
 	if (NetPlay.isHost && !ingame.localJoiningInProgress)
 	{
-		if (bMultiPlayer && !NetPlay.bComms && openWarzoneKey())
+		if (bMultiPlayer && !NetPlay.bComms)
 		{
 			// one-player skirmish mode sets game name to "One Player Skirmish", so
 			// reset the name
-			if (getWarzoneKeyString("gameName", sBuf))
+			if (ini.contains("gameName"))
 			{
-				sstrcpy(game.name, sBuf);
+				sstrcpy(game.name, ini.value("gameName").toString().toUtf8().constData());
 			}
-			return closeWarzoneKey();
 		}
 		return true;
 	}
 
-	if(!openWarzoneKey())
-	{
-		return false;
-	}
-
 	// If we're host and not in-game, we can safely save our settings and return.
-
 	if (NetPlay.isHost && ingame.localJoiningInProgress)
 	{
 		if (bMultiPlayer && NetPlay.bComms)
 		{
-			setWarzoneKeyString("gameName", game.name);			//  last hosted game
+			ini.setValue("gameName", game.name);			//  last hosted game
 		}
 		else
 		{
 			// One-player skirmish mode sets game name to "One Player Skirmish", so
 			// reset the name
-			if (getWarzoneKeyString("gameName", sBuf))
+			if (ini.contains("gameName"))
 			{
-				sstrcpy(game.name, sBuf);
+				sstrcpy(game.name, ini.value("gameName").toString().toUtf8().constData());
 			}
 		}
-		setWarzoneKeyString("mapName", game.map);				//  map name
-		setWarzoneKeyNumeric("maxPlayers",game.maxPlayers);		// maxPlayers
-		setWarzoneKeyNumeric("power", game.power);				// power
-		setWarzoneKeyNumeric("base", game.base);				// size of base
-		setWarzoneKeyNumeric("fog", game.fog);					// fog 'o war
-		setWarzoneKeyNumeric("alliance", game.alliance);		// allow alliances
-		return closeWarzoneKey();
+		ini.setValue("mapName", game.map);				//  map name
+		ini.setValue("maxPlayers", game.maxPlayers);		// maxPlayers
+		ini.setValue("power", game.power);				// power
+		ini.setValue("base", game.base);				// size of base
+		ini.setValue("fog", game.fog);					// fog 'o war
+		ini.setValue("alliance", game.alliance);		// allow alliances
+		return true;
 	}
 
 	// We're not host, so let's get rid of the host's game settings and restore our own.
 
 	// game name
-	if (getWarzoneKeyString("gameName", sBuf))
+	if (ini.contains("gameName"))
 	{
-		sstrcpy(game.name, sBuf);
+		sstrcpy(game.name, ini.value("gameName").toString().toUtf8().constData());
 	}
-
-	// map name
-	if(getWarzoneKeyString("mapName", sBuf))
+	if (ini.contains("mapName") && ini.contains("maxPlayers"))
 	{
-		/* FIXME: Get rid of storing the max-player count in the config
-		 *        file. Instead we should parse the map *before*
-		 *        showing the skirmish/multiplayer setup screen.
-		 */
-		if (getWarzoneKeyNumeric("maxPlayers", &val))
-		{
-			sstrcpy(game.map, sBuf);
-			game.maxPlayers = val;
-		}
+		sstrcpy(game.map, ini.value("mapName").toString().toUtf8().constData());
+		game.maxPlayers = ini.value("maxPlayers").toInt();	// FIXME: horrible kluge, MUST match map above
 	}
+	game.power = ini.value("power", LEV_MED).toInt();
+	game.fog = ini.value("fog").toBool();
+	game.base = ini.value("base", CAMP_BASE).toInt();
+	game.alliance = ini.value("alliance", NO_ALLIANCES).toInt();
 
-	// power
-	if(getWarzoneKeyNumeric("power", &val))
-	{
-		game.power = val;
-	}
-
-	// fog
-	if(getWarzoneKeyNumeric("fog", &val))
-	{
-		game.fog= val;
-	}
-
-	//base
-	if(getWarzoneKeyNumeric("base", &val))
-	{
-		game.base =(UBYTE)val;
-	}
-
-	//alliance
-	if(getWarzoneKeyNumeric("alliance", &val))
-	{
-		game.alliance =(UBYTE)val;
-	}
-
-	return closeWarzoneKey();
+	return true;
 }
 
-void closeConfig( void )
+void closeConfig()
 {
-	registry_clear();
 }

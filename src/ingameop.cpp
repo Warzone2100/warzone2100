@@ -277,8 +277,7 @@ static bool _intAddInGameOptions(void)
 	intMode		= INT_INGAMEOP;			// change interface mode.
 	InGameOpUp	= true;					// inform interface.
 
-	// Using software cursors (when on) for these menus due to a bug in SDL's SDL_ShowCursor()
-	pie_SetMouse(CURSOR_DEFAULT, war_GetColouredCursor());
+	pie_SetMouse(CURSOR_DEFAULT);
 
 	return true;
 }

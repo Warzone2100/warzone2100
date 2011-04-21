@@ -49,23 +49,8 @@
 #include "src/configuration.h"
 #include "lib/gamelib/gtime.h"
 #include <deque>
-#include "wzfs.h"
 
-class PhysicsEngineHandler : public QAbstractFileEngineHandler
-{
-public:
-	QAbstractFileEngine *create(const QString &fileName) const;
-};
-
-inline QAbstractFileEngine *PhysicsEngineHandler::create(const QString &fileName) const
-{
-	if (fileName.toLower().startsWith("wz::"))
-	{
-		QString newPath = fileName;
-		return new PhysicsFileSystem(newPath.remove(0, 4));
-	}
-	return NULL;
-}
+static bool mousewarp = false;
 
 /* The possible states for keys */
 typedef enum _key_state
@@ -713,8 +698,6 @@ int wzInit(int argc, char *argv[], int fsaa, bool vsync, int w, int h, bool full
 	QGL::setPreferredPaintEngine(QPaintEngine::OpenGL); // Workaround for incorrect text rendering on nany platforms.
 	QApplication app(argc, argv);
 
-	PhysicsEngineHandler engine;	// register abstract physfs filesystem
-
 	// Setting up OpenGL
 	QGLFormat format;
 	format.setDoubleBuffer(true);
@@ -848,20 +831,13 @@ Vector2i mouseReleasePos(MOUSE_KEY_CODE code)
 	return aMouseState[code].releasePos;
 }
 
-void SetMousePos(uint16_t x, uint16_t y)
+void setMouseWarp(bool value)
 {
-	static int mousewarp = -1;
+	mousewarp = value;
+}
 
-	if (mousewarp == -1)
-	{
-		int val;
-
-		mousewarp = 1;
-		if (getWarzoneKeyNumeric("nomousewarp", &val))
-		{
-			mousewarp = !val;
-		}
-	}
+void setMousePos(uint16_t x, uint16_t y)
+{
 	if (mousewarp)
 	{
 		WzMainWindow::instance()->cursor().setPos(x, y);

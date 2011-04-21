@@ -202,7 +202,9 @@ extern bool mouseReleased(MOUSE_KEY_CODE code);
 extern bool mouseDrag(MOUSE_KEY_CODE code, UDWORD *px, UDWORD *py);
 
 /** Warps the mouse to the given position. */
-extern void SetMousePos(uint16_t x, uint16_t y);
+extern void setMousePos(uint16_t x, uint16_t y);
+
+extern void setMouseWarp(bool value);
 
 /* The input buffer can contain normal character codes and these control codes */
 #define INPBUF_LEFT		KEY_LEFTARROW

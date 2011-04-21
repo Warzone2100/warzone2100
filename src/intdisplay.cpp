@@ -3282,7 +3282,7 @@ void intUpdateQuantitySlider(WIDGET *psWidget, W_CONTEXT *psContext)
 			if(Slider->pos > 0)
 			{
 				Slider->pos = (UWORD)(Slider->pos - sliderMouseUnit(Slider));
-				SetMousePos(sliderMousePos(Slider), mouseY());	// move mouse
+				setMousePos(sliderMousePos(Slider), mouseY());	// move mouse
 			}
 		}
 		else if(keyDown(KEY_RIGHTARROW))
@@ -3290,7 +3290,7 @@ void intUpdateQuantitySlider(WIDGET *psWidget, W_CONTEXT *psContext)
 			if(Slider->pos < Slider->numStops)
 			{
 				Slider->pos = (UWORD)(Slider->pos + sliderMouseUnit(Slider));
-				SetMousePos(sliderMousePos(Slider), mouseY());	// move mouse
+				setMousePos(sliderMousePos(Slider), mouseY());	// move mouse
 			}
 		}
 	}
@@ -3299,8 +3299,6 @@ void intUpdateQuantitySlider(WIDGET *psWidget, W_CONTEXT *psContext)
 void intUpdateOptionText(WIDGET *psWidget, W_CONTEXT *psContext)
 {
 }
-
-
 
 void intDisplayResSubGroup(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {

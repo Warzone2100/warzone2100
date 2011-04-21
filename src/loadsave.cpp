@@ -510,7 +510,7 @@ bool runLoadSave(bool bResetMissionWidgets)
 					widgDelete(psRequestScreen,SAVEENTRY_EDIT);	//unselect this box, and go back ..
 					widgReveal(psRequestScreen,chosenSlotId);
 				// move mouse to same box..
-				//	SetMousePos(widgGetFromID(psRequestScreen,i)->pos.x ,widgGetFromID(psRequestScreen,i)->pos.y);
+				//	setMousePos(widgGetFromID(psRequestScreen,i)->pos.x ,widgGetFromID(psRequestScreen,i)->pos.y);
 					audio_PlayTrack(ID_SOUND_BUILD_FAIL);
 					return true;
 				}

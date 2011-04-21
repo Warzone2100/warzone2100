@@ -37,6 +37,7 @@
 #include "lib/framework/wzapp_c.h"
 #include "lib/exceptionhandler/exceptionhandler.h"
 #include "lib/exceptionhandler/dumpinfo.h"
+#include "lib/framework/wzfs.h"
 
 #include "lib/sound/playlist.h"
 #include "lib/gamelib/gtime.h"
@@ -137,6 +138,22 @@ static GS_GAMEMODE gameStatus = GS_TITLE_SCREEN;
 // Status of the gameloop
 static int gameLoopStatus = 0;
 static FOCUS_STATE focusState = FOCUS_IN;
+
+class PhysicsEngineHandler : public QAbstractFileEngineHandler
+{
+public:
+	QAbstractFileEngine *create(const QString &fileName) const;
+};
+
+inline QAbstractFileEngine *PhysicsEngineHandler::create(const QString &fileName) const
+{
+	if (fileName.toLower().startsWith("wz::"))
+	{
+		QString newPath = fileName;
+		return new PhysicsFileSystem(newPath.remove(0, 4));
+	}
+	return NULL;
+}
 
 extern void debug_callback_stderr( void**, const char * );
 extern void debug_callback_win32debug( void**, const char * );
@@ -1114,14 +1131,16 @@ int main(int argc, char *argv[])
 			newtime->tm_mon, newtime->tm_mday, newtime->tm_hour, newtime->tm_min, newtime->tm_sec );
 		debug_register_callback( debug_callback_file, debug_callback_file_init, debug_callback_file_exit, buf );
 	}
-	/* Put these files in the writedir root */
-	setRegistryFilePath("config");
+
+	/* Put in the writedir root */
 	sstrcpy(KeyMapPath, "keymap.map");
 
 	// initialise all the command line states
 	war_SetDefaultStates();
 
 	debug(LOG_MAIN, "initializing");
+
+	PhysicsEngineHandler engine;	// register abstract physfs filesystem
 
 	loadConfig();
 

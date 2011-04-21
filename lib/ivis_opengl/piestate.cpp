@@ -544,9 +544,8 @@ void pie_InitColourMouse(IMAGEFILE* img, const uint16_t cursorIDs[CURSOR_MAX])
 
 /** Selects the given mouse cursor.
  *  \param cursor   mouse cursor to render
- *  \param coloured wether a coloured or black&white cursor should be used ... NOW UNUSED - FIXME REMOVE IT
  */
-void pie_SetMouse(CURSOR cursor, bool coloured)
+void pie_SetMouse(CURSOR cursor)
 {
 	ASSERT(cursor < CURSOR_MAX, "Attempting to load non-existent cursor: %u", (unsigned int)cursor);
 

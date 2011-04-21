@@ -152,7 +152,7 @@ TITLECODE titleLoop(void)
 			changeTitleMode(TITLE);			// normal game, run main title screen.
 		}
 		// Using software cursors (when on) for these menus due to a bug in SDL's SDL_ShowCursor()
-		pie_SetMouse(CURSOR_DEFAULT, war_GetColouredCursor());
+		pie_SetMouse(CURSOR_DEFAULT);
 	}
 
 	if (titleMode != MULTIOPTION && titleMode != MULTILIMIT && titleMode != STARTGAME)

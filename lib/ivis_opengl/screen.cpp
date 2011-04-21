@@ -62,6 +62,8 @@ bool screenInitialise()
 	GLint glMaxTUs;
 	GLenum err;
 
+	glErrors();
+
 	err = glewInit();
 	if (GLEW_OK != err)
 	{

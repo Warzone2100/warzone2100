@@ -663,7 +663,7 @@ void driveProcessAquireButton(void)
 //		BASE_OBJECT	*psObj;
 //		psObj = targetAquireNearestObjView((BASE_OBJECT*)psDrivenDroid);
 //		driveMarkTarget();
-//		pie_SetMouse(CURSOR_ATTACK, true);
+//		pie_SetMouse(CURSOR_ATTACK);
 	}
 }
 
