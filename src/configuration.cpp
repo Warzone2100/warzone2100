@@ -60,7 +60,7 @@ bool loadConfig()
 		debug(LOG_ERROR, "Could not open configuration file \"%s\"", fileName);
 		return false;
 	}
-	debug(LOG_ERROR, "Reading configuration from %s", ini.fileName().toUtf8().constData());
+	debug(LOG_WZ, "Reading configuration from %s", ini.fileName().toUtf8().constData());
 	if (ini.contains("voicevol")) sound_SetUIVolume(ini.value("voicevol").toDouble() / 100.0);
 	if (ini.contains("fxvol")) sound_SetEffectsVolume(ini.value("fxvol").toDouble() / 100.0);
 	if (ini.contains("cdvol")) sound_SetMusicVolume(ini.value("cdvol").toDouble() / 100.0);
@@ -139,12 +139,11 @@ bool saveConfig()
 		debug(LOG_ERROR, "Could not open configuration file \"%s\"", fileName);
 		return false;
 	}
-	debug(LOG_ERROR, "Writing prefs to registry \"%s\"", ini.fileName().toUtf8().constData());
+	debug(LOG_WZ, "Writing prefs to registry \"%s\"", ini.fileName().toUtf8().constData());
 
 	// //////////////////////////
 	// voicevol, fxvol and cdvol
 	ini.setValue("voicevol", (int)(sound_GetUIVolume() * 100.0));
-	debug(LOG_ERROR, "voicevol is saved %d (was %f)", ini.value("voicevol").toInt(), sound_GetUIVolume());
 	ini.setValue("fxvol", (int)(sound_GetEffectsVolume() * 100.0));
 	ini.setValue("cdvol", (int)(sound_GetMusicVolume() * 100.0));
 	ini.setValue("music_enabled", war_GetMusicEnabled());
@@ -215,7 +214,7 @@ bool reloadMPConfig(void)
 		debug(LOG_ERROR, "Could not open configuration file \"%s\"", fileName);
 		return false;
 	}
-	debug(LOG_ERROR, "Reloading prefs prefs to registry");
+	debug(LOG_WZ, "Reloading prefs prefs to registry");
 
 	// If we're in-game, we already have our own configuration set, so no need to reload it.
 	if (NetPlay.isHost && !ingame.localJoiningInProgress)
