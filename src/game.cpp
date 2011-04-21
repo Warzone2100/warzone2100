@@ -167,11 +167,6 @@ struct STRUCT_SAVEHEADER : public GAME_SAVEHEADER
 	UDWORD		quantity;
 };
 
-struct TEMPLATE_SAVEHEADER : public GAME_SAVEHEADER
-{
-	UDWORD		quantity;
-};
-
 struct FEATURE_SAVEHEADER : public GAME_SAVEHEADER
 {
 	UDWORD		quantity;
@@ -179,23 +174,6 @@ struct FEATURE_SAVEHEADER : public GAME_SAVEHEADER
 
 /* Structure definitions for loading and saving map data */
 struct TILETYPE_SAVEHEADER : public GAME_SAVEHEADER
-{
-	UDWORD quantity;
-};
-
-/* Structure definitions for loading and saving map data */
-struct COMPLIST_SAVEHEADER : public GAME_SAVEHEADER
-{
-	UDWORD quantity;
-};
-
-/* Structure definitions for loading and saving map data */
-struct STRUCTLIST_SAVEHEADER : public GAME_SAVEHEADER
-{
-	UDWORD quantity;
-};
-
-struct RESEARCH_SAVEHEADER : public GAME_SAVEHEADER
 {
 	UDWORD quantity;
 };
@@ -219,25 +197,16 @@ struct PRODUCTION_SAVEHEADER : public GAME_SAVEHEADER
 {
 };
 
-struct COMMAND_SAVEHEADER : public GAME_SAVEHEADER
-{
-	UDWORD quantity;
-};
-
 /* Sanity check definitions for the save struct file sizes */
 #define GAME_HEADER_SIZE			8
 #define DROIDINIT_HEADER_SIZE		12
 #define STRUCT_HEADER_SIZE			12
-#define TEMPLATE_HEADER_SIZE		12
 #define FEATURE_HEADER_SIZE			12
 #define TILETYPE_HEADER_SIZE		12
-#define RESEARCH_HEADER_SIZE		12
 #define MESSAGE_HEADER_SIZE			12
 #define PROXIMITY_HEADER_SIZE		12
 #define FLAG_HEADER_SIZE			12
 #define PRODUCTION_HEADER_SIZE		8
-#define COMMAND_HEADER_SIZE			12
-
 
 // general save definitions
 #define MAX_LEVEL_SIZE 20
@@ -261,33 +230,6 @@ struct COMMAND_SAVEHEADER : public GAME_SAVEHEADER
 	int32_t		inFire; \
 	UDWORD				burnStart; \
 	UDWORD				burnDamage
-
-
-struct SAVE_COMPONENT_V19
-{
-	char				name[MAX_SAVE_NAME_SIZE_V19];
-};
-
-struct SAVE_COMPONENT
-{
-	char				name[MAX_SAVE_NAME_SIZE];
-};
-
-struct SAVE_WEAPON_V19
-{
-	char				name[MAX_SAVE_NAME_SIZE_V19];
-	UDWORD				hitPoints;  // UNUSED: only here to keep struct size intact
-	UDWORD				ammo;
-	UDWORD				lastFired;
-};
-
-struct SAVE_WEAPON
-{
-	char				name[MAX_SAVE_NAME_SIZE];
-	UDWORD				hitPoints;  // UNUSED: only here to keep struct size intact
-	UDWORD				ammo;
-	UDWORD				lastFired;
-};
 
 struct SAVE_POWER
 {
@@ -1400,10 +1342,6 @@ static bool deserializeSaveGameData(PHYSFS_file* fileHandle, SAVE_GAME* serializ
 	return deserializeSaveGameV38Data(fileHandle, (SAVE_GAME_V38*) serializeGame);
 }
 
-#define TEMP_DROID_MAXPROGS	3
-#define	SAVE_COMP_PROGRAM	8
-#define SAVE_COMP_WEAPON	9
-
 struct DROIDINIT_SAVEHEADER : public GAME_SAVEHEADER
 {
 	UDWORD		quantity;
@@ -1522,64 +1460,6 @@ struct SAVE_STRUCTURE
 	STRUCTURE_SAVE_V21;
 };
 
-
-//PROGRAMS NEED TO BE REMOVED FROM DROIDS - 7/8/98
-// multiPlayerID for templates needs to be saved - 29/10/98
-#define TEMPLATE_SAVE_V2 \
-	char				name[MAX_SAVE_NAME_SIZE_V19]; \
-	UDWORD				ref; \
-	UDWORD				player; \
-	UBYTE				droidType; \
-	char				asParts[DROID_MAXCOMP][MAX_SAVE_NAME_SIZE_V19]; \
-	UDWORD				numWeaps; \
-	char				asWeaps[TEMP_DROID_MAXPROGS][MAX_SAVE_NAME_SIZE_V19]; \
-	UDWORD				numProgs; \
-	char				asProgs[TEMP_DROID_MAXPROGS][MAX_SAVE_NAME_SIZE_V19]
-
-// multiPlayerID for templates needs to be saved - 29/10/98
-#define TEMPLATE_SAVE_V14 \
-	char				name[MAX_SAVE_NAME_SIZE_V19]; \
-	UDWORD				ref; \
-	UDWORD				player; \
-	UBYTE				droidType; \
-	char				asParts[DROID_MAXCOMP][MAX_SAVE_NAME_SIZE_V19]; \
-	UDWORD				numWeaps; \
-	char				asWeaps[TEMP_DROID_MAXPROGS][MAX_SAVE_NAME_SIZE_V19]; \
-	UDWORD				multiPlayerID
-
-#define TEMPLATE_SAVE_V20 \
-	char				name[MAX_SAVE_NAME_SIZE]; \
-	UDWORD				ref; \
-	UDWORD				player; \
-	UBYTE				droidType; \
-	char				asParts[DROID_MAXCOMP][MAX_SAVE_NAME_SIZE]; \
-	UDWORD				numWeaps; \
-	char				asWeaps[TEMP_DROID_MAXPROGS][MAX_SAVE_NAME_SIZE]; \
-	UDWORD				multiPlayerID
-
-
-
-struct SAVE_TEMPLATE_V2
-{
-	TEMPLATE_SAVE_V2;
-};
-
-struct SAVE_TEMPLATE_V14
-{
-	TEMPLATE_SAVE_V14;
-};
-
-struct SAVE_TEMPLATE_V20
-{
-	TEMPLATE_SAVE_V20;
-};
-
-struct SAVE_TEMPLATE
-{
-	TEMPLATE_SAVE_V20;
-};
-
-
 #define FEATURE_SAVE_V2 \
 	OBJECT_SAVE_V19
 
@@ -1676,18 +1556,6 @@ struct SAVE_PRODUCTION
 	UDWORD						multiPlayerID;		//template to build
 };
 
-#define COMMAND_SAVE_V20 \
-	UDWORD				droidID
-
-struct SAVE_COMMAND_V20
-{
-	COMMAND_SAVE_V20;
-};
-
-struct SAVE_COMMAND
-{
-	COMMAND_SAVE_V20;
-};
 
 /***************************************************************************/
 /*
