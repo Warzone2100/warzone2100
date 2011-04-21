@@ -207,8 +207,12 @@ bool screenInitialise(
 	debug(LOG_3D, "  * OpenGL 2.0 %s supported!", GLEW_VERSION_2_0 ? "is" : "is NOT");
 	debug(LOG_3D, "  * OpenGL 2.1 %s supported!", GLEW_VERSION_2_1 ? "is" : "is NOT");
 	debug(LOG_3D, "  * OpenGL 3.0 %s supported!", GLEW_VERSION_3_0 ? "is" : "is NOT");
+#ifdef GLEW_VERSION_4_0
 	debug(LOG_3D, "  * OpenGL 4.0 %s supported!", GLEW_VERSION_4_0 ? "is" : "is NOT");
+#ifdef GLEW_VERSION_4_1
 	debug(LOG_3D, "  * OpenGL 4.1 %s supported!", GLEW_VERSION_4_1 ? "is" : "is NOT");
+#endif
+#endif
 	debug(LOG_3D, "  * Texture compression %s supported.", GLEW_ARB_texture_compression ? "is" : "is NOT");
 	debug(LOG_3D, "  * Two side stencil %s supported.", GLEW_EXT_stencil_two_side ? "is" : "is NOT");
 	debug(LOG_3D, "  * ATI separate stencil is%s supported.", GLEW_ATI_separate_stencil ? "" : " NOT");
