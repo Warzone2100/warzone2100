@@ -1639,8 +1639,6 @@ static bool writeFiresupportDesignators(const char *pFileName);
 
 static bool writeScriptState(char *pFileName);
 
-//adjust the name depending on type of save game and whether resourceNames are used
-static bool getSaveObjectName(char *pName);
 static bool gameLoad(const char* fileName);
 
 /* set the global scroll values to use for the save game */
@@ -2049,9 +2047,6 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		clearPlayerPower();
 	}
 
-	//initialise the scroll values
-	//startX = startY = width = height = 0;
-
 	//before loading the data - turn power off so don't get any power low warnings
 	powerCalculated = false;
 
@@ -2062,9 +2057,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	strcat(aFileName, "/");
 
 	//the terrain type WILL only change with Campaign changes (well at the moment!)
-	//if (freeMem) - this now works for Cam Start and Cam Change
-	if (gameType != GTYPE_SCENARIO_EXPAND
-	 || UserSaveGame)
+	if (gameType != GTYPE_SCENARIO_EXPAND || UserSaveGame)
 	{
 		//load in the terrain type map
 		aFileName[fileExten] = '\0';
@@ -2104,7 +2097,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		}
 
 		// In Multiplayer, clear templates out first.....
-		if(	bMultiPlayer)
+		if (bMultiPlayer)
 		{
 			for(inc=0;inc<MAX_PLAYERS;inc++)
 			{
@@ -2136,7 +2129,6 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 
 	if (saveGameOnMission && UserSaveGame)
 	{
-
 		//the scroll limits for the mission map have already been written
 		if (saveGameVersion >= VERSION_29)
 		{
@@ -2255,7 +2247,6 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			return false;
 		}
 
-
 		//load the flag status data
 		if (pFileData)
 		{
@@ -2276,7 +2267,6 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			mission.scrollMaxY = missionScrollMaxY;
 		}
 	}
-
 
 	//if Campaign Expand then don't load in another map
 	if (gameType != GTYPE_SCENARIO_EXPAND)
@@ -2756,7 +2746,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	return true;
 
 error:
-		debug( LOG_NEVER, "loadgame: ERROR\n" );
+	debug(LOG_ERROR, "Game load failed");
 
 	/* Clear all the objects off the map and free up the map memory */
 	freeAllDroids();
@@ -3034,7 +3024,6 @@ bool saveGame(char *aFileName, GAME_TYPE saveType)
 		//mission save swap the mission pointers and save the changes
 		swapMissionPointers();
 		//now save the map and droids
-
 
 		//save the map file
 		CurrentFileName[fileExtension] = '\0';
@@ -4214,7 +4203,6 @@ static bool writeGameFile(const char* fileName, SDWORD saveType)
 	}
 	saveGame.radarZoom = (UBYTE)GetRadarZoom();
 
-
 	//version 20
 	saveGame.bDroidsToSafetyFlag = (UBYTE)getDroidsToSafetyFlag();
 	for (i = 0; i < MAX_PLAYERS; i++)
@@ -4234,12 +4222,11 @@ static bool writeGameFile(const char* fileName, SDWORD saveType)
 	saveGame.bPlayerHasWon =  (UBYTE)testPlayerHasWon();
 	saveGame.bPlayerHasLost = (UBYTE)testPlayerHasLost();
 
-    //version 30
-    saveGame.scrGameLevel = scrGameLevel;
-    saveGame.bExtraFailFlag = (UBYTE)bExtraFailFlag;
-    saveGame.bExtraVictoryFlag = (UBYTE)bExtraVictoryFlag;
-    saveGame.bTrackTransporter = (UBYTE)bTrackTransporter;
-
+	//version 30
+	saveGame.scrGameLevel = scrGameLevel;
+	saveGame.bExtraFailFlag = (UBYTE)bExtraFailFlag;
+	saveGame.bExtraVictoryFlag = (UBYTE)bExtraVictoryFlag;
+	saveGame.bTrackTransporter = (UBYTE)bTrackTransporter;
 
 	// version 33
 	saveGame.sGame		= game;
@@ -4924,11 +4911,6 @@ bool loadSaveStructureV7(char *pFileData, UDWORD filesize, UDWORD numStructures)
 		//get the stats for this structure
 		found = false;
 
-		if (!getSaveObjectName(psSaveStructure->name))
-		{
-			continue;
-		}
-
 		for (statInc = 0; statInc < numStructureStats; statInc++)
 		{
 			psStats = asStructureStats + statInc;
@@ -5174,11 +5156,6 @@ bool loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 		//get the stats for this structure
 		found = false;
 
-		if (!getSaveObjectName(psSaveStructure->name))
-		{
-			continue;
-		}
-
 		for (statInc = 0; statInc < numStructureStats; statInc++)
 		{
 			psStats = asStructureStats + statInc;
@@ -5209,36 +5186,27 @@ bool loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 				continue;
 			}
 		}
-        //check not trying to build too near the edge
-    	if (map_coord(psSaveStructure->x) < TOO_NEAR_EDGE
-    	 || map_coord(psSaveStructure->x) > mapWidth - TOO_NEAR_EDGE)
-        {
+		//check not trying to build too near the edge
+		if (map_coord(psSaveStructure->x) < TOO_NEAR_EDGE
+		    || map_coord(psSaveStructure->x) > mapWidth - TOO_NEAR_EDGE)
+		{
 			debug( LOG_ERROR, "Structure %s, x coord too near the edge of the map. id - %d", getSaveStructNameV((SAVE_STRUCTURE*)psSaveStructure), psSaveStructure->id );
 			//ignore this
-            continue;
-        }
-    	if (map_coord(psSaveStructure->y) < TOO_NEAR_EDGE
-    	 || map_coord(psSaveStructure->y) > mapHeight - TOO_NEAR_EDGE)
-        {
+			continue;
+		}
+		if (map_coord(psSaveStructure->y) < TOO_NEAR_EDGE
+		    || map_coord(psSaveStructure->y) > mapHeight - TOO_NEAR_EDGE)
+		{
 			debug( LOG_ERROR, "Structure %s, y coord too near the edge of the map. id - %d", getSaveStructNameV((SAVE_STRUCTURE*)psSaveStructure), psSaveStructure->id );
 			//ignore this
-            continue;
-        }
+			continue;
+		}
 
 		psStructure = buildStructureDir(psStats, psSaveStructure->x, psSaveStructure->y, DEG(psSaveStructure->direction), psSaveStructure->player, true);
 		ASSERT(psStructure, "Unable to create structure");
 		if (!psStructure) continue;
 
-        /*The original code here didn't work and so the scriptwriters worked
-        round it by using the module ID - so making it work now will screw up
-        the scripts -so in ALL CASES overwrite the ID!*/
-		//don't copy the module's id etc
-		//if (IsStatExpansionModule(psStats)==false)
-		{
-			//copy the values across
-			psStructure->id = psSaveStructure->id;
-		}
-
+		psStructure->id = psSaveStructure->id;
 		psStructure->inFire = psSaveStructure->inFire;
 		psStructure->burnDamage = psSaveStructure->burnDamage;
 		burnTime = psSaveStructure->burnStart;
@@ -5310,24 +5278,24 @@ bool loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 				else
 				{
 					psFactory->psSubject = getTemplateFromMultiPlayerID(psSaveStructure->subjectInc);
-                    //if the build has started set the powerAccrued =
-                    //powerRequired to sync the interface
-                    if (psFactory->timeStarted != ACTION_START_TIME &&
-                        psFactory->psSubject)
-                    {
+					//if the build has started set the powerAccrued =
+					//powerRequired to sync the interface
+					if (psFactory->timeStarted != ACTION_START_TIME &&
+					    psFactory->psSubject)
+					{
 						psFactory->powerAccrued = psFactory->psSubject->powerPoints;
-                    }
+					}
 				}
 				if (version >= VERSION_21)//version 21
 				{
 					//reset command id in loadStructSetPointers
 					FIXME_CAST_ASSIGN(UDWORD, psFactory->psCommander, psSaveStructure->commandId);
 				}
-                //secondary order added - AB 22/04/99
-                if (version >= VERSION_32)
-                {
-                    psFactory->secondaryOrder = psSaveStructure->dummy2;
-                }
+				//secondary order added - AB 22/04/99
+				if (version >= VERSION_32)
+				{
+					psFactory->secondaryOrder = psSaveStructure->dummy2;
+				}
 				break;
 			case REF_RESEARCH:
 				psResearch = ((RESEARCH_FACILITY *)psStructure->pFunctionality);
@@ -5362,13 +5330,13 @@ bool loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 						}
 					}
 				}
-                //if started research, set powerAccrued = powerRequired
-                if (psResearch->timeStarted != ACTION_START_TIME && psResearch->
-                    psSubject)
-                {
-                    psResearch->powerAccrued = ((RESEARCH *)psResearch->
-                        psSubject)->researchPower;
-                }
+				//if started research, set powerAccrued = powerRequired
+				if (psResearch->timeStarted != ACTION_START_TIME && psResearch->
+				    psSubject)
+				{
+					psResearch->powerAccrued = ((RESEARCH *)psResearch->
+								    psSubject)->researchPower;
+				}
 				break;
 			case REF_POWER_GEN:
 				//adjust the module structures IMD
@@ -5395,14 +5363,14 @@ bool loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 				psRepair->psDeliveryPoint = NULL;
 				//if  repair facility was  repairing find the object later
 				FIXME_CAST_ASSIGN(UDWORD, psRepair->psObj, psSaveStructure->subjectInc);
-                if (version < VERSION_27)
-                {
-                    psRepair->currentPtsAdded = 0;
-                }
-                else
-                {
-                    psRepair->currentPtsAdded = psSaveStructure->dummy2;
-                }
+				if (version < VERSION_27)
+				{
+					psRepair->currentPtsAdded = 0;
+				}
+				else
+				{
+					psRepair->currentPtsAdded = psSaveStructure->dummy2;
+				}
 				break;
 			case REF_REARM_PAD:
 				if (version >= VERSION_26)//version 26
@@ -5412,18 +5380,18 @@ bool loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 					psReArmPad->timeStarted = psSaveStructure->droidTimeStarted;
 					//if  ReArm Pad was  rearming find the object later
 					FIXME_CAST_ASSIGN(UDWORD, psReArmPad->psObj, psSaveStructure->subjectInc);
-                    if (version < VERSION_28)
-                    {
-                        psReArmPad->timeLastUpdated = 0;
-                    }
-                    else
-                    {
-                        psReArmPad->timeLastUpdated = psSaveStructure->dummy2;
-                    }
+					if (version < VERSION_28)
+					{
+						psReArmPad->timeLastUpdated = 0;
+					}
+					else
+					{
+						psReArmPad->timeLastUpdated = psSaveStructure->dummy2;
+					}
 				}
 				else
 				{
-                    psReArmPad = ((REARM_PAD *)psStructure->pFunctionality);
+					psReArmPad = ((REARM_PAD *)psStructure->pFunctionality);
 					psReArmPad->timeStarted = 0;
 				}
 				break;
@@ -5442,11 +5410,11 @@ bool loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 		if (psSaveStructure->currentBuildPts < psStructure->currentBuildPts)
 		{
 			psStructure->currentBuildPts = (SWORD)psSaveStructure->currentBuildPts;
-            psStructure->status = SS_BEING_BUILT;
+			psStructure->status = SS_BEING_BUILT;
 		}
 		else
 		{
-            psStructure->status = SS_BUILT;
+			psStructure->status = SS_BUILT;
 			switch (psStructure->pStructureType->type)
 			{
 				case REF_POWER_GEN:
@@ -5559,7 +5527,6 @@ bool writeStructFile(char *pFileName)
 			{
 				psSaveStruct->visible[i] = psCurr->visible[i];
 			}
-			//psSaveStruct->structureInc = psCurr->pStructureType - asStructureStats;
 			psSaveStruct->status = psCurr->status;
 			//check if body at max
 			if (psCurr->body >= structureBody(psCurr))
@@ -5975,11 +5942,6 @@ bool loadSaveFeatureV14(char *pFileData, UDWORD filesize, UDWORD numFeatures, UD
 		//get the stats for this feature
 		found = false;
 
-		if (!getSaveObjectName(psSaveFeature->name))
-		{
-			continue;
-		}
-
 		for (statInc = 0; statInc < numFeatureStats; statInc++)
 		{
 			psStats = asFeatureStats + statInc;
@@ -6067,11 +6029,6 @@ bool loadSaveFeatureV(char *pFileData, UDWORD filesize, UDWORD numFeatures, UDWO
 
 		//get the stats for this feature
 		found = false;
-
-		if (!getSaveObjectName(psSaveFeature->name))
-		{
-			continue;
-		}
 
 		for (statInc = 0; statInc < numFeatureStats; statInc++)
 		{
@@ -7717,12 +7674,6 @@ static void setMapScroll(void)
 	}
 }
 
-
-// -----------------------------------------------------------------------------------------
-bool getSaveObjectName(char *pName)
-{
-	return true;
-}
 
 // -----------------------------------------------------------------------------------------
 /*returns the current type of save game being loaded*/
