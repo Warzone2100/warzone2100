@@ -960,62 +960,6 @@ static void runTitleLoop(void)
 	}
 }
 
-#if 0
-/*!
- * Activation (focus change) eventhandler
- */
-static void handleActiveEvent(SDL_ActiveEvent * activeEvent)
-{
-	// Ignore focus loss through SDL_APPMOUSEFOCUS, since it mostly happens accidentialy
-	// active.state is a bitflag! Mixed events (eg. APPACTIVE|APPMOUSEFOCUS) will thus not be ignored.
-	if ( activeEvent->state == SDL_APPMOUSEFOCUS )
-	{
-		setMouseScroll(activeEvent->gain);
-		return;
-	}
-
-	if ( activeEvent->gain == 1 )
-	{
-		debug( LOG_NEVER, "WM_SETFOCUS");
-		if (focusState != FOCUS_IN)
-		{
-			focusState = FOCUS_IN;
-
-			// Don't pause in multiplayer!
-			if (war_GetPauseOnFocusLoss() && !NetPlay.bComms)
-			{
-				gameTimeStart();
-				audio_ResumeAll();
-				cdAudio_Resume();
-			}
-			// enable scrolling
-			setScrollPause(false);
-			resetScroll();
-		}
-	}
-	else
-	{
-		debug( LOG_NEVER, "WM_KILLFOCUS");
-		if (focusState != FOCUS_OUT)
-		{
-			focusState = FOCUS_OUT;
-
-			// Don't pause in multiplayer!
-			if (war_GetPauseOnFocusLoss() && !NetPlay.bComms)
-			{
-				gameTimeStop();
-				audio_PauseAll();
-				cdAudio_Pause();
-			}
-			/* Have to tell the input system that we've lost focus */
-			inputLooseFocus();
-			// stop scrolling
-			setScrollPause(true);
-		}
-	}
-}
-#endif
-
 /*!
  * The mainloop.
  * Fetches events, executes appropriate code
@@ -1023,34 +967,7 @@ static void handleActiveEvent(SDL_ActiveEvent * activeEvent)
 void mainLoop(void)
 {
 	frameUpdate(); // General housekeeping
-#if 0
-		/* Deal with any windows messages */
-		while (SDL_PollEvent(&event))
-		{
-			switch (event.type)
-			{
-				case SDL_KEYUP:
-				case SDL_KEYDOWN:
-					inputHandleKeyEvent(&event.key);
-					break;
-				case SDL_MOUSEBUTTONUP:
-				case SDL_MOUSEBUTTONDOWN:
-					inputHandleMouseButtonEvent(&event.button);
-					break;
-				case SDL_MOUSEMOTION:
-					inputHandleMouseMotionEvent(&event.motion);
-					break;
-				case SDL_ACTIVEEVENT:
-					handleActiveEvent(&event.active);
-					break;
-				case SDL_QUIT:
-					saveConfig();
-					return;
-				default:
-					break;
-			}
-		}
-#endif
+
 	// Screenshot key is now available globally
 	if (keyPressed(KEY_F10))
 	{
