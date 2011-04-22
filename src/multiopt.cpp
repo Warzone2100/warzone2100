@@ -292,30 +292,6 @@ bool hostCampaign(char *sGame, char *sPlayer)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-// Join Campaign
-
-bool joinCampaign(UDWORD gameNumber, char *sPlayer)
-{
-	PLAYERSTATS	playerStats;
-
-	if(!ingame.localJoiningInProgress)
-	{
-		if (!NETjoinGame(gameNumber, sPlayer))	// join
-		{
-			return false;
-		}
-		ingame.localJoiningInProgress	= true;
-
-		loadMultiStats(sPlayer,&playerStats);
-		setMultiStats(selectedPlayer, playerStats, false);
-		setMultiStats(selectedPlayer, playerStats, true);
-		return true;
-	}
-
-	return false;
-}
-
-// ////////////////////////////////////////////////////////////////////////////
 // Tell the host we are leaving the game 'nicely', (we wanted to) and not
 // because we have some kind of error. (dropped or disconnected)
 bool sendLeavingMsg(void)

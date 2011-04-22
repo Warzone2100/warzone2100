@@ -330,7 +330,7 @@ extern int32_t	NETgetGameFlagsUnjoined(unsigned int gameid, unsigned int flag);	
 extern bool	NETsetGameFlags(UDWORD flag, SDWORD value);	// set game flag(1-4) to value.
 extern bool	NEThaltJoining(void);				// stop new players joining this game
 extern bool	NETfindGame(void);		// find games being played(uses GAME_GUID);
-extern bool	NETjoinGame(UDWORD gameNumber, const char* playername);			// join game given with playername
+extern bool	NETjoinGame(const char* host, uint32_t port, const char* playername); // join game given with playername
 extern bool	NEThostGame(const char* SessionName, const char* PlayerName,// host a game
 			    SDWORD one, SDWORD two, SDWORD three, SDWORD four, UDWORD plyrs);
 extern bool	NETchangePlayerName(UDWORD player, char *newName);// change a players name.

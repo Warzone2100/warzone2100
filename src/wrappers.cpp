@@ -144,7 +144,7 @@ TITLECODE titleLoop(void)
 		}
 		else if(strlen(iptoconnect) )
 		{
-			changeTitleMode(GAMEFIND);		// a ip/hostname was found, so go directly to the GAMEFIND screen
+			joinGame(iptoconnect, 0);
 		}
 		else
 		{
