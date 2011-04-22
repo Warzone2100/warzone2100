@@ -2303,14 +2303,20 @@ static void NETallowJoining(void)
 						NETstring(ModList, sizeof(ModList));
 						NETstring(GamePassword, sizeof(GamePassword));
 					NETend();
-					NETpop(NETnetTmpQueue(i));
 
 					tmp = NET_CreatePlayer(name);
 
 					if (tmp == -1)
 					{
-						// FIXME: No room. Dropping the player without warning since protocol doesn't seem to support rejection at this point
-						debug(LOG_ERROR, "freeing temp socket %p, couldn't create player!", tmp_socket[i]);
+ 						debug(LOG_ERROR, "freeing temp socket %p, couldn't create player!", tmp_socket[i]);
+
+ 						// Tell the player that we are full.
+						NETbeginEncode(NETnetTmpQueue(i), NET_REJECTED);
+							NETuint8_t((uint8_t *)ERROR_FULL);
+						NETend();
+						NETflush();
+						NETpop(NETnetTmpQueue(i));
+
 						SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
 						socketClose(tmp_socket[i]);
 						tmp_socket[i] = NULL;
@@ -2318,6 +2324,7 @@ static void NETallowJoining(void)
 						return;
 					}
 
+					NETpop(NETnetTmpQueue(i));
 					index = tmp;
 
 					debug(LOG_NET, "freeing temp socket %p (%d), creating permanent socket.", tmp_socket[i], __LINE__);
