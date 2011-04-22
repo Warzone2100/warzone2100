@@ -147,7 +147,6 @@ static struct IGDdatas data;
 
 // local ip address
 static char lanaddr[16];
-static char clientAddress[40] = { '\0' };
 /**
  * Used for connections with clients.
  */
@@ -2297,20 +2296,6 @@ static void NETallowJoining(void)
 					char ModList[modlist_string_size] = { '\0' };
 					char GamePassword[password_string_size] = { '\0' };
 
-					if (onBanList(clientAddress))
-					{
-						char buf[256] = {'\0'};
-
-						ssprintf(buf, "** A player that you have kicked tried to rejoin the game, and was rejected. IP:%s", clientAddress );
-						debug(LOG_INFO, "%s", buf);
-						NETlogEntry(buf, SYNC_FLAG, i);
-						SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
-						socketClose(tmp_socket[i]);
-						tmp_socket[i] = NULL;
-						sync_counter.rejected++;
-						return;
-					}
-
 					NETbeginDecode(NETnetTmpQueue(i), NET_JOIN);
 						NETstring(name, sizeof(name));
 						NETint32_t(&MajorVersion);	// NETCODE_VERSION_MAJOR
@@ -2342,7 +2327,20 @@ static void NETallowJoining(void)
 					SocketSet_AddSocket(socket_set, connected_bsocket[index]);
 					NETmoveQueue(NETnetTmpQueue(i), NETnetQueue(index));
 
-					if (!NETisCorrectVersion(MajorVersion, MinorVersion))
+					// Copy players ip Address.
+					sstrcpy(NetPlay.players[index].IPtextAddress, getSocketTextAddress(connected_bsocket[index]));
+
+					if (onBanList(NetPlay.players[index].IPtextAddress))
+					{
+						char buf[256] = {'\0'};
+						ssprintf(buf, "** A player that you have kicked tried to rejoin the game, and was rejected. IP: %s", NetPlay.players[index].IPtextAddress);
+						debug(LOG_INFO, "%s", buf);
+						NETlogEntry(buf, SYNC_FLAG, i);
+
+						// Player has been kicked before, kick again.
+						rejected = (uint8_t)ERROR_KICKED;
+					}
+					else if (!NETisCorrectVersion(MajorVersion, MinorVersion))
 					{
 						// Wrong version. Reject.
 						rejected = (uint8_t)ERROR_WRONGVERSION;
@@ -2382,13 +2380,6 @@ static void NETallowJoining(void)
 						return;
 					}
 
-					sstrcpy(NetPlay.players[index].IPtextAddress, clientAddress);
-					{
-						char buf[250] = {'\0'};
-						snprintf(buf, sizeof(buf), "Player %d has joined, IP is:%s", index, clientAddress);
-						NETlogEntry(buf, SYNC_FLAG, index);
-					}
-
 					NETbeginEncode(NETnetQueue(index), NET_ACCEPTED);
 					NETuint8_t(&index);
 					NETend();
@@ -2397,6 +2388,10 @@ static void NETallowJoining(void)
 					NETSendAllPlayerInfoTo(index);
 					// then send info about newcomer to all players.
 					NETBroadcastPlayerInfo(index);
+
+					char buf[250] = {'\0'};
+					snprintf(buf, sizeof(buf), "Player %s has joined, IP is: %s", name, NetPlay.players[index].IPtextAddress);
+					NETlogEntry(buf, SYNC_FLAG, index);
 
 					debug(LOG_NET, "Player, %s, with index of %u has joined using socket %p", name, (unsigned int)index, connected_bsocket[index]);
 
