@@ -3249,11 +3249,11 @@
 			buildConfigurationList = 02356DC40BD3BBFC00E9A019 /* Build configuration list for PBXNativeTarget "Png" */;
 			buildPhases = (
 				02FD382B0BD400BD00776FD3 /* Fetch source */,
+				43119DCC1353B08F004C54BB /* Generate headers */,
 				02356DBD0BD3BBFC00E9A019 /* Headers */,
 				02356DBE0BD3BBFC00E9A019 /* Resources */,
 				02356DBF0BD3BBFC00E9A019 /* Sources */,
 				02356DC00BD3BBFC00E9A019 /* Frameworks */,
-				43119DCC1353B08F004C54BB /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -3661,20 +3661,19 @@
 			shellPath = /bin/sh;
 			shellScript = "# Config\nexport PATH=$PATH:/sw/bin:/opt/local/bin\npodir=\"../po\"\ndisfile=\"configs/LangDis\"\naresdir=\"build/${CONFIGURATION}/Warzone.app/Contents/Resources/\"\nbresdir=\"locale/\"\nmessdir=\"LC_MESSAGES/\"\nmonme=\"warzone2100.mo\"\npolist=`ls -1 ${podir} | sed -n 's:\\.po$:&:p' | sed -e 's:\\.po::'`\ndislist=`cat ${disfile} | sed -n 's:^<::p'`\n\n# 1st san check\necho \"Checking for msgfmt...\"\nif [ -f build/notrans.dis ]; then\n    rm build/notrans.dis\n    echo \"warning: Gettext support has been disabled for this build because we could not find a binary.\" >&2\n    exit 0\nelif ! type -aP msgfmt; then\n    echo \"error: Fatal inability to properly translate messages.\" >&2\n    exit 1\nfi\n\n# Get the path\nmsgfmtpth=`type -P msgfmt`\n\n# 2nd san check\necho \"Checking for sanity...\"\nif ! $msgfmtpth --version; then\n    echo \"error: Fatal failure of san check.\" >&2\n    exit 1\nfi\n\n# Disable selected langs\nfor dislang in ${dislist}; do\n    echo \"Cleaning up for ${dislang} ...\"\n    rm -rfv \"${aresdir}${dislang}.lproj\"\ndone\n\n# Make .mo\nfor lang in ${polist}; do\n    if [ -d \"${aresdir}${lang}.lproj\" ]; then\n        echo \"Setting up for ${lang} ...\"\n        mkdir -p \"${aresdir}${bresdir}${lang}/${messdir}\"\n        $msgfmtpth -v -o \"${aresdir}${bresdir}${lang}/${messdir}${monme}\" \"${podir}/${lang}.po\"\n    fi\ndone\n\nexit 0";
 		};
-		43119DCC1353B08F004C54BB /* ShellScript */ = {
+		43119DCC1353B08F004C54BB /* Generate headers */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-				"$(SRCROOT)/external/libpng/scripts/pnglibconf.h.prebuilt",
 			);
+			name = "Generate headers";
 			outputPaths = (
-				"$(SRCROOT)/external/libpng/pnglibconf.h",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp ${SRCROOT}/external/libpng/scripts/pnglibconf.h.prebuilt ${SRCROOT}/external/libpng/pnglibconf.h";
+			shellScript = "cd ${SRCROOT}/external/libpng\n\nscripts/pnglibconf.mak\nexit ${?}\n";
 		};
 		433360A711A0796D00380F5E /* Qt */ = {
 			isa = PBXShellScriptBuildPhase;
