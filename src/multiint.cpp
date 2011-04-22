@@ -831,7 +831,7 @@ static void addGames(void)
 					}
 				}
 				// display the correct tooltip message.
-				if (!NETgameIsCorrectVersion(&NetPlay.games[i]))
+				if (!NETisCorrectVersion(NetPlay.games[i].game_version_minor, NetPlay.games[i].game_version_major))
 				{
 					sButInit.pTip = wrongVersionTip;
 				}
@@ -3631,7 +3631,7 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 		// need some sort of closed thing here!
 		iV_DrawImage(FrontImages,IMAGE_NOJOIN,x+18,y+11);
 	}
-	else if (NETgameIsCorrectVersion(&NetPlay.games[i]))
+	else if (!NETisCorrectVersion(NetPlay.games[i].game_version_minor, NetPlay.games[i].game_version_major))
 	{
 		if (NetPlay.games[gameNumber].desc.dwCurrentPlayers >= NetPlay.games[gameNumber].desc.dwMaxPlayers)
 		{
