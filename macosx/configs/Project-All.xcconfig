@@ -1,7 +1,7 @@
 // Global settings for all configurations
 
 
-ARCHS = $(ARCHS_STANDARD_32_BIT)
+ARCHS = i386 ppc
 SDKROOT = macosx10.5
 SDKROOT[arch=x86_64] = macosx10.6
 DEBUG_INFORMATION_FORMAT = dwarf-with-dsym
