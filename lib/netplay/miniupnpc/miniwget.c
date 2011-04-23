@@ -398,6 +398,8 @@ miniwget2(const char * url, const char * host,
 int parseURL(const char * url, char * hostname, unsigned short * port, char * * path)
 {
 	char * p1, *p2, *p3;
+	if(!url)
+		return 0;
 	p1 = strstr(url, "://");
 	if(!p1)
 		return 0;
