@@ -3,29 +3,32 @@ AM_CFLAGS = -DSTATICLIB $(WZ_CFLAGS)
 
 noinst_LIBRARIES = libminiupnpc.a
 noinst_HEADERS = \
+	bsdqueue.h \
+	codelength.h \
+	declspec.h \
+	igd_desc_parse.h \
+	minisoap.h \
+	minissdpc.h \
 	miniupnpc.h \
 	miniupnpcstrings.h \
 	miniwget.h \
 	minixml.h \
-	minisoap.h \
-	minissdpc.h \
-	codelength.h \
 	upnpcommands.h \
-	igd_desc_parse.h \
-	upnpreplyparse.h \
 	upnperrors.h \
-	declspec.h \
-	bsdqueue.h
+	upnpreplyparse.h
 
 libminiupnpc_a_SOURCES = \
-	miniwget.c \
-	minixml.c \
 	igd_desc_parse.c \
 	minisoap.c \
-	miniupnpc.c \
-	upnpreplyparse.c \
-	upnpcommands.c \
 	minissdpc.c \
-	upnperrors.c
+	miniupnpc.c \
+	miniwget.c \
+	minixml.c \
+	upnpcommands.c \
+	upnperrors.c \
+	upnpreplyparse.c
 
-EXTRA_DIST = LICENCE README
+EXTRA_DIST = \
+	Changelog.txt \
+	LICENCE \
+	README
