@@ -440,16 +440,33 @@
 		439FBB1F12C9C86600CF4DFC /* wglew.h in Headers */ = {isa = PBXBuildFile; fileRef = 0223BC3B0CFE40680056EF85 /* wglew.h */; };
 		43A0C82B12176C8A006C3B89 /* netqueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A0C82912176C8A006C3B89 /* netqueue.cpp */; };
 		43A8417811028EDD00733CCB /* pointtree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A8417611028EDD00733CCB /* pointtree.cpp */; };
+		43B8706413635EB50067F1BB /* bsdqueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 43C18F7A114FF38B0028741B /* bsdqueue.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		43B8706513635EB70067F1BB /* codelength.h in Headers */ = {isa = PBXBuildFile; fileRef = 43C18F7C114FF38B0028741B /* codelength.h */; };
+		43B8706613635EB90067F1BB /* connecthostport.c in Sources */ = {isa = PBXBuildFile; fileRef = 43B8700C136340C30067F1BB /* connecthostport.c */; };
+		43B8706713635EBC0067F1BB /* connecthostport.h in Headers */ = {isa = PBXBuildFile; fileRef = 43B8700D136340C30067F1BB /* connecthostport.h */; };
+		43B8706813635ECA0067F1BB /* declspec.h in Headers */ = {isa = PBXBuildFile; fileRef = 43C18F7D114FF38B0028741B /* declspec.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		43B8706913635ECF0067F1BB /* igd_desc_parse.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C18F7E114FF38B0028741B /* igd_desc_parse.c */; };
+		43B8706A13635ED30067F1BB /* igd_desc_parse.h in Headers */ = {isa = PBXBuildFile; fileRef = 43C18F7F114FF38B0028741B /* igd_desc_parse.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		43B8706B13635ED40067F1BB /* minisoap.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C18F88114FF38B0028741B /* minisoap.c */; };
+		43B8706C13635ED40067F1BB /* minisoap.h in Headers */ = {isa = PBXBuildFile; fileRef = 43C18F89114FF38B0028741B /* minisoap.h */; };
+		43B8706D13635ED80067F1BB /* minissdpc.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C18F8A114FF38B0028741B /* minissdpc.c */; };
+		43B8706E13635EDF0067F1BB /* minissdpc.h in Headers */ = {isa = PBXBuildFile; fileRef = 43C18F8B114FF38B0028741B /* minissdpc.h */; };
+		43B8706F13635EE50067F1BB /* miniupnpc.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C18F8C114FF38B0028741B /* miniupnpc.c */; };
+		43B8707013635EEC0067F1BB /* miniupnpc.h in Headers */ = {isa = PBXBuildFile; fileRef = 43C18F8E114FF38B0028741B /* miniupnpc.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		43B8707113635EED0067F1BB /* miniupnpcstrings.h in Headers */ = {isa = PBXBuildFile; fileRef = 43C18F90114FF38B0028741B /* miniupnpcstrings.h */; };
+		43B8707213635EEE0067F1BB /* miniwget.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C18F92114FF38B0028741B /* miniwget.c */; };
+		43B8707313635EEF0067F1BB /* miniwget.h in Headers */ = {isa = PBXBuildFile; fileRef = 43C18F93114FF38B0028741B /* miniwget.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		43B8707413635EF00067F1BB /* minixml.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C18F94114FF38B0028741B /* minixml.c */; };
+		43B8707513635EF10067F1BB /* minixml.h in Headers */ = {isa = PBXBuildFile; fileRef = 43C18F95114FF38B0028741B /* minixml.h */; };
+		43B8707613635EF20067F1BB /* upnpcommands.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C18FA1114FF38B0028741B /* upnpcommands.c */; };
+		43B8707713635EF40067F1BB /* upnpcommands.h in Headers */ = {isa = PBXBuildFile; fileRef = 43C18FA2114FF38B0028741B /* upnpcommands.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		43B8707813635EF40067F1BB /* upnperrors.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C18FA3114FF38B0028741B /* upnperrors.c */; };
+		43B8707913635EF60067F1BB /* upnperrors.h in Headers */ = {isa = PBXBuildFile; fileRef = 43C18FA4114FF38B0028741B /* upnperrors.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		43B8707A13635EF70067F1BB /* upnpreplyparse.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C18FA5114FF38B0028741B /* upnpreplyparse.c */; };
+		43B8707B13635EF80067F1BB /* upnpreplyparse.h in Headers */ = {isa = PBXBuildFile; fileRef = 43C18FA6114FF38B0028741B /* upnpreplyparse.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		43B870F7136363F20067F1BB /* MiniUPnPc.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 43B8704B13635E860067F1BB /* MiniUPnPc.framework */; };
+		43B8710B136364000067F1BB /* MiniUPnPc.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43B8704B13635E860067F1BB /* MiniUPnPc.framework */; };
 		43BE75EA11124BB5007DF934 /* wavecast.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43BE75E811124BB4007DF934 /* wavecast.cpp */; };
-		43C18FB1114FF38B0028741B /* igd_desc_parse.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C18F7E114FF38B0028741B /* igd_desc_parse.c */; };
-		43C18FB9114FF38B0028741B /* minisoap.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C18F88114FF38B0028741B /* minisoap.c */; };
-		43C18FBA114FF38B0028741B /* minissdpc.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C18F8A114FF38B0028741B /* minissdpc.c */; };
-		43C18FBB114FF38B0028741B /* miniupnpc.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C18F8C114FF38B0028741B /* miniupnpc.c */; };
-		43C18FBF114FF38B0028741B /* miniwget.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C18F92114FF38B0028741B /* miniwget.c */; };
-		43C18FC0114FF38B0028741B /* minixml.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C18F94114FF38B0028741B /* minixml.c */; };
-		43C18FCC114FF38B0028741B /* upnpcommands.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C18FA1114FF38B0028741B /* upnpcommands.c */; };
-		43C18FCD114FF38B0028741B /* upnperrors.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C18FA3114FF38B0028741B /* upnperrors.c */; };
-		43C18FCE114FF38B0028741B /* upnpreplyparse.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C18FA5114FF38B0028741B /* upnpreplyparse.c */; };
 		43C18FCF114FF38B0028741B /* netjoin_stub.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43C18FA7114FF38B0028741B /* netjoin_stub.cpp */; };
 		43C18FD0114FF38B0028741B /* netlog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43C18FA8114FF38B0028741B /* netlog.cpp */; };
 		43C18FD1114FF38B0028741B /* netplay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43C18FAA114FF38B0028741B /* netplay.cpp */; };
@@ -712,6 +729,13 @@
 			remoteGlobalIDString = 02356D740BD3BB3400E9A019;
 			remoteInfo = Warzone;
 		};
+		43B870B6136363B50067F1BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43B8704A13635E860067F1BB /* MiniUPnPc */;
+			remoteInfo = MiniUPnPc;
+		};
 		43FA571010FF8ED90074E914 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
@@ -773,6 +797,7 @@
 				02581C870BD5AD1100957CBC /* Vorbis.framework in Copy frameworks */,
 				02581C880BD5AD1100957CBC /* Zlib.framework in Copy frameworks */,
 				439FBAF112C9C57D00CF4DFC /* GLExtensionWrangler.framework in Copy frameworks */,
+				43B870F7136363F20067F1BB /* MiniUPnPc.framework in Copy frameworks */,
 			);
 			name = "Copy frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1489,6 +1514,12 @@
 		43A0C82A12176C8A006C3B89 /* netqueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = netqueue.h; path = ../lib/netplay/netqueue.h; sourceTree = SOURCE_ROOT; };
 		43A8417611028EDD00733CCB /* pointtree.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = pointtree.cpp; path = ../src/pointtree.cpp; sourceTree = SOURCE_ROOT; };
 		43A8417711028EDD00733CCB /* pointtree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = pointtree.h; path = ../src/pointtree.h; sourceTree = SOURCE_ROOT; };
+		43B8700C136340C30067F1BB /* connecthostport.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = connecthostport.c; sourceTree = "<group>"; };
+		43B8700D136340C30067F1BB /* connecthostport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = connecthostport.h; sourceTree = "<group>"; };
+		43B8704B13635E860067F1BB /* MiniUPnPc.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MiniUPnPc.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		43B8709113635F490067F1BB /* MiniUPnPc-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "MiniUPnPc-All.xcconfig"; path = "configs/MiniUPnPc-All.xcconfig"; sourceTree = "<group>"; };
+		43B8709213635F490067F1BB /* MiniUPnPc-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "MiniUPnPc-Debug.xcconfig"; path = "configs/MiniUPnPc-Debug.xcconfig"; sourceTree = "<group>"; };
+		43B8709313635F490067F1BB /* MiniUPnPc-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "MiniUPnPc-Release.xcconfig"; path = "configs/MiniUPnPc-Release.xcconfig"; sourceTree = "<group>"; };
 		43BE75E811124BB4007DF934 /* wavecast.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = wavecast.cpp; path = ../src/wavecast.cpp; sourceTree = SOURCE_ROOT; };
 		43BE75E911124BB4007DF934 /* wavecast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = wavecast.h; path = ../src/wavecast.h; sourceTree = SOURCE_ROOT; };
 		43C18F7A114FF38B0028741B /* bsdqueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = bsdqueue.h; path = ../lib/netplay/miniupnpc/bsdqueue.h; sourceTree = SOURCE_ROOT; };
@@ -1669,6 +1700,7 @@
 				432BE39410D9C3E400A486AB /* SDL.framework in Frameworks */,
 				0246A3B30BD3CD0B004D1C70 /* Zlib.framework in Frameworks */,
 				439FBACF12C9C53500CF4DFC /* GLExtensionWrangler.framework in Frameworks */,
+				43B8710B136364000067F1BB /* MiniUPnPc.framework in Frameworks */,
 				0246A3B70BD3CD0B004D1C70 /* PhysFS.framework in Frameworks */,
 				0246A3B40BD3CD0B004D1C70 /* Png.framework in Frameworks */,
 				0246A3B50BD3CD0B004D1C70 /* Ogg.framework in Frameworks */,
@@ -1738,6 +1770,13 @@
 			files = (
 				439FBAB512C9C4B500CF4DFC /* AGL.framework in Frameworks */,
 				439FBAB612C9C4B500CF4DFC /* OpenGL.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43B8704913635E860067F1BB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1891,10 +1930,11 @@
 				02DDA7EE0BD3C03F0049AB60 /* Vorbis.framework */,
 				02DDA8B10BD3C2F20049AB60 /* PhysFS.framework */,
 				022B2F220BD55814002E64E3 /* Gettext.framework */,
-				02581C5D0BD5A94A00957CBC /* libSDLmain.a */,
 				0223BBD10CFE3D5C0056EF85 /* QuesoGLC.framework */,
 				97AEAB330E8C1B5200A10721 /* Theora.framework */,
 				439FBA8712C9C1A800CF4DFC /* GLExtensionWrangler.framework */,
+				43B8704B13635E860067F1BB /* MiniUPnPc.framework */,
+				02581C5D0BD5A94A00957CBC /* libSDLmain.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2057,7 +2097,6 @@
 		0246A12B0BD3CC47004D1C70 /* Netplay */ = {
 			isa = PBXGroup;
 			children = (
-				43C18F79114FF38B0028741B /* miniupnpc */,
 				43A0C82912176C8A006C3B89 /* netqueue.cpp */,
 				43A0C82A12176C8A006C3B89 /* netqueue.h */,
 				43C18FA7114FF38B0028741B /* netjoin_stub.cpp */,
@@ -2539,6 +2578,9 @@
 		43025DEC1120A4B6006C49B1 /* Configurations */ = {
 			isa = PBXGroup;
 			children = (
+				43B8709113635F490067F1BB /* MiniUPnPc-All.xcconfig */,
+				43B8709213635F490067F1BB /* MiniUPnPc-Debug.xcconfig */,
+				43B8709313635F490067F1BB /* MiniUPnPc-Release.xcconfig */,
 				439FBA3812C9BF9900CF4DFC /* Glew-All.xcconfig */,
 				439FBA3912C9BF9900CF4DFC /* Glew-Debug.xcconfig */,
 				439FBA3A12C9BF9900CF4DFC /* Glew-Release.xcconfig */,
@@ -2583,6 +2625,7 @@
 			children = (
 				022B2F460BD55940002E64E3 /* Gettext sources */,
 				43274EDE12AB027700C20A98 /* GLExtensionWrangler */,
+				43C18F79114FF38B0028741B /* MiniUPnPc */,
 				02DDA85F0BD3C1A60049AB60 /* Zlib sources */,
 				02DDA8610BD3C1B50049AB60 /* Ogg sources */,
 				02DDA8600BD3C1AF0049AB60 /* Png sources */,
@@ -2776,9 +2819,11 @@
 			name = betawidget;
 			sourceTree = "<group>";
 		};
-		43C18F79114FF38B0028741B /* miniupnpc */ = {
+		43C18F79114FF38B0028741B /* MiniUPnPc */ = {
 			isa = PBXGroup;
 			children = (
+				43B8700C136340C30067F1BB /* connecthostport.c */,
+				43B8700D136340C30067F1BB /* connecthostport.h */,
 				43C18F7A114FF38B0028741B /* bsdqueue.h */,
 				43C18F7C114FF38B0028741B /* codelength.h */,
 				43C18F7D114FF38B0028741B /* declspec.h */,
@@ -2802,7 +2847,7 @@
 				43C18FA5114FF38B0028741B /* upnpreplyparse.c */,
 				43C18FA6114FF38B0028741B /* upnpreplyparse.h */,
 			);
-			name = miniupnpc;
+			name = MiniUPnPc;
 			path = ../lib/netplay/miniupnpc;
 			sourceTree = SOURCE_ROOT;
 		};
@@ -3168,6 +3213,27 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		43B8704613635E860067F1BB /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43B8706413635EB50067F1BB /* bsdqueue.h in Headers */,
+				43B8706513635EB70067F1BB /* codelength.h in Headers */,
+				43B8706713635EBC0067F1BB /* connecthostport.h in Headers */,
+				43B8706813635ECA0067F1BB /* declspec.h in Headers */,
+				43B8706A13635ED30067F1BB /* igd_desc_parse.h in Headers */,
+				43B8706C13635ED40067F1BB /* minisoap.h in Headers */,
+				43B8706E13635EDF0067F1BB /* minissdpc.h in Headers */,
+				43B8707013635EEC0067F1BB /* miniupnpc.h in Headers */,
+				43B8707113635EED0067F1BB /* miniupnpcstrings.h in Headers */,
+				43B8707313635EEF0067F1BB /* miniwget.h in Headers */,
+				43B8707513635EF10067F1BB /* minixml.h in Headers */,
+				43B8707713635EF40067F1BB /* upnpcommands.h in Headers */,
+				43B8707913635EF60067F1BB /* upnperrors.h in Headers */,
+				43B8707B13635EF80067F1BB /* upnpreplyparse.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		97AEAAEE0E8C1B5200A10721 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -3262,6 +3328,8 @@
 				430714811324663A00FB6EBF /* PBXTargetDependency */,
 				02581C630BD5A97400957CBC /* PBXTargetDependency */,
 				022B313F0BD56915002E64E3 /* PBXTargetDependency */,
+				439FBACE12C9C52C00CF4DFC /* PBXTargetDependency */,
+				43B870B7136363B50067F1BB /* PBXTargetDependency */,
 				0246A2FF0BD3CCF0004D1C70 /* PBXTargetDependency */,
 				0246A3010BD3CCF2004D1C70 /* PBXTargetDependency */,
 				0246A3030BD3CCF3004D1C70 /* PBXTargetDependency */,
@@ -3270,7 +3338,6 @@
 				97B1D6680D1541C000737638 /* PBXTargetDependency */,
 				97AEAC550E8C261600A10721 /* PBXTargetDependency */,
 				43FA571310FF8EE90074E914 /* PBXTargetDependency */,
-				439FBACE12C9C52C00CF4DFC /* PBXTargetDependency */,
 			);
 			name = Warzone;
 			productName = Warzone;
@@ -3412,6 +3479,24 @@
 			productReference = 439FBA8712C9C1A800CF4DFC /* GLExtensionWrangler.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		43B8704A13635E860067F1BB /* MiniUPnPc */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 43B8705013635E8C0067F1BB /* Build configuration list for PBXNativeTarget "MiniUPnPc" */;
+			buildPhases = (
+				43B8704613635E860067F1BB /* Headers */,
+				43B8704713635E860067F1BB /* Resources */,
+				43B8704813635E860067F1BB /* Sources */,
+				43B8704913635E860067F1BB /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MiniUPnPc;
+			productName = MiniUPnPc;
+			productReference = 43B8704B13635E860067F1BB /* MiniUPnPc.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 		97AEAAEA0E8C1B5200A10721 /* Theora */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 97AEAB300E8C1B5200A10721 /* Build configuration list for PBXNativeTarget "Theora" */;
@@ -3493,6 +3578,7 @@
 				02581C5C0BD5A94A00957CBC /* SDLmain */,
 				022B2F210BD55814002E64E3 /* Gettext */,
 				439FBA8612C9C1A800CF4DFC /* GLExtensionWrangler */,
+				43B8704A13635E860067F1BB /* MiniUPnPc */,
 				02356D820BD3BB4100E9A019 /* Zlib */,
 				02356E080BD3BCFE00E9A019 /* Ogg */,
 				02356DC10BD3BBFC00E9A019 /* Png */,
@@ -3569,6 +3655,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		439FBA8312C9C1A800CF4DFC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43B8704713635E860067F1BB /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -4096,15 +4189,6 @@
 				43A8417811028EDD00733CCB /* pointtree.cpp in Sources */,
 				43BE75EA11124BB5007DF934 /* wavecast.cpp in Sources */,
 				4336D8AA111DDF0F0012E8E4 /* random.cpp in Sources */,
-				43C18FB1114FF38B0028741B /* igd_desc_parse.c in Sources */,
-				43C18FB9114FF38B0028741B /* minisoap.c in Sources */,
-				43C18FBA114FF38B0028741B /* minissdpc.c in Sources */,
-				43C18FBB114FF38B0028741B /* miniupnpc.c in Sources */,
-				43C18FBF114FF38B0028741B /* miniwget.c in Sources */,
-				43C18FC0114FF38B0028741B /* minixml.c in Sources */,
-				43C18FCC114FF38B0028741B /* upnpcommands.c in Sources */,
-				43C18FCD114FF38B0028741B /* upnperrors.c in Sources */,
-				43C18FCE114FF38B0028741B /* upnpreplyparse.c in Sources */,
 				43C18FCF114FF38B0028741B /* netjoin_stub.cpp in Sources */,
 				43C18FD0114FF38B0028741B /* netlog.cpp in Sources */,
 				43C18FD1114FF38B0028741B /* netplay.cpp in Sources */,
@@ -4244,6 +4328,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		43B8704813635E860067F1BB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43B8706613635EB90067F1BB /* connecthostport.c in Sources */,
+				43B8706913635ECF0067F1BB /* igd_desc_parse.c in Sources */,
+				43B8706B13635ED40067F1BB /* minisoap.c in Sources */,
+				43B8706D13635ED80067F1BB /* minissdpc.c in Sources */,
+				43B8706F13635EE50067F1BB /* miniupnpc.c in Sources */,
+				43B8707213635EEE0067F1BB /* miniwget.c in Sources */,
+				43B8707413635EF00067F1BB /* minixml.c in Sources */,
+				43B8707613635EF20067F1BB /* upnpcommands.c in Sources */,
+				43B8707813635EF40067F1BB /* upnperrors.c in Sources */,
+				43B8707A13635EF70067F1BB /* upnpreplyparse.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		97AEAB170E8C1B5200A10721 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -4352,6 +4453,11 @@
 			isa = PBXTargetDependency;
 			target = 02356D740BD3BB3400E9A019 /* Warzone */;
 			targetProxy = 43AE78FC10F0F4F500FED5D3 /* PBXContainerItemProxy */;
+		};
+		43B870B7136363B50067F1BB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43B8704A13635E860067F1BB /* MiniUPnPc */;
+			targetProxy = 43B870B6136363B50067F1BB /* PBXContainerItemProxy */;
 		};
 		43FA571110FF8ED90074E914 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -4748,6 +4854,27 @@
 			};
 			name = Release;
 		};
+		43B8704D13635E8B0067F1BB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43B8709213635F490067F1BB /* MiniUPnPc-Debug.xcconfig */;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		43B8704E13635E8B0067F1BB /* StaticAnalyzer */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43B8709213635F490067F1BB /* MiniUPnPc-Debug.xcconfig */;
+			buildSettings = {
+			};
+			name = StaticAnalyzer;
+		};
+		43B8704F13635E8B0067F1BB /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43B8709313635F490067F1BB /* MiniUPnPc-Release.xcconfig */;
+			buildSettings = {
+			};
+			name = Release;
+		};
 		43F77C8110F0125F00E04615 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -4923,6 +5050,16 @@
 				439FBA8912C9C1A900CF4DFC /* Debug */,
 				439FBA8A12C9C1A900CF4DFC /* StaticAnalyzer */,
 				439FBA8B12C9C1A900CF4DFC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		43B8705013635E8C0067F1BB /* Build configuration list for PBXNativeTarget "MiniUPnPc" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				43B8704D13635E8B0067F1BB /* Debug */,
+				43B8704E13635E8B0067F1BB /* StaticAnalyzer */,
+				43B8704F13635E8B0067F1BB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
