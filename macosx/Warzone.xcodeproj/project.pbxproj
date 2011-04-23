@@ -49,7 +49,6 @@
 /* Begin PBXBuildFile section */
 		020A7E670D246D2B009C29F5 /* sequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 020A7E660D246D2B009C29F5 /* sequence.cpp */; };
 		0223BBB00CFE3C380056EF85 /* version.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0223BBAD0CFE3C380056EF85 /* version.cpp */; };
-		0223BBC00CFE3CD60056EF85 /* tagfile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0223BBB90CFE3CD60056EF85 /* tagfile.cpp */; };
 		0223BC040CFE3FFA0056EF85 /* context.c in Sources */ = {isa = PBXBuildFile; fileRef = 0223BBE60CFE3FFA0056EF85 /* context.c */; };
 		0223BC060CFE3FFA0056EF85 /* except.c in Sources */ = {isa = PBXBuildFile; fileRef = 0223BBE80CFE3FFA0056EF85 /* except.c */; };
 		0223BC070CFE3FFA0056EF85 /* except.h in Headers */ = {isa = PBXBuildFile; fileRef = 0223BBE90CFE3FFA0056EF85 /* except.h */; };
@@ -788,8 +787,6 @@
 		0223BBAC0CFE3C380056EF85 /* main.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = main.h; path = ../src/main.h; sourceTree = SOURCE_ROOT; };
 		0223BBAD0CFE3C380056EF85 /* version.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = version.cpp; path = ../src/version.cpp; sourceTree = SOURCE_ROOT; };
 		0223BBAE0CFE3C380056EF85 /* version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = version.h; path = ../src/version.h; sourceTree = SOURCE_ROOT; };
-		0223BBB90CFE3CD60056EF85 /* tagfile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tagfile.cpp; path = ../lib/framework/tagfile.cpp; sourceTree = SOURCE_ROOT; };
-		0223BBBA0CFE3CD60056EF85 /* tagfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tagfile.h; path = ../lib/framework/tagfile.h; sourceTree = SOURCE_ROOT; };
 		0223BBD10CFE3D5C0056EF85 /* QuesoGLC.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = QuesoGLC.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0223BBE60CFE3FFA0056EF85 /* context.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = context.c; path = external/quesoglc/src/context.c; sourceTree = SOURCE_ROOT; };
 		0223BBE80CFE3FFA0056EF85 /* except.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = except.c; path = external/quesoglc/src/except.c; sourceTree = SOURCE_ROOT; };
@@ -1929,8 +1926,6 @@
 				02AAD1400D9ED28C00248B0F /* i18n.cpp */,
 				02AAD1410D9ED28C00248B0F /* i18n.h */,
 				02AAD1420D9ED28C00248B0F /* physfs_ext.h */,
-				0223BBB90CFE3CD60056EF85 /* tagfile.cpp */,
-				0223BBBA0CFE3CD60056EF85 /* tagfile.h */,
 				024480220C5E4BEE00E1A641 /* utf.cpp */,
 				024480230C5E4BEE00E1A641 /* utf.h */,
 				022B2EBF0BD55401002E64E3 /* config-macosx.h */,
@@ -4023,7 +4018,6 @@
 				02C8AEF80BE68A5600E9D8A7 /* png_util.cpp in Sources */,
 				02C8AEFC0BE68A6800E9D8A7 /* oggvorbis.cpp in Sources */,
 				0223BBB00CFE3C380056EF85 /* version.cpp in Sources */,
-				0223BBC00CFE3CD60056EF85 /* tagfile.cpp in Sources */,
 				02CDDD1C0D159E2F00722688 /* openal_error.cpp in Sources */,
 				020A7E670D246D2B009C29F5 /* sequence.cpp in Sources */,
 				02AAD1440D9ED28C00248B0F /* i18n.cpp in Sources */,
