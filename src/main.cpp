@@ -595,6 +595,11 @@ static void initialize_PhysicsFS(const char* argv_0)
 	      compiled.major, compiled.minor, compiled.patch);
 	debug(LOG_WZ, "Linked against PhysFS version: %d.%d.%d",
 	      linked.major, linked.minor, linked.patch);
+	if (linked.major < 2)
+	{
+		debug(LOG_FATAL, "At least version 2 of PhysicsFS required!");
+		exit(-1);
+	}
 }
 
 
