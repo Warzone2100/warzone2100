@@ -56,14 +56,6 @@
 #include <execinfo.h>  // Nonfatal runtime backtraces.
 #endif //WZ_OS_LINUX
 
-// For /(hton|ntoh)[sh]/.
-#if   defined(WZ_OS_UNIX)
-# include <arpa/inet.h>
-#endif
-#ifdef WZ_OS_WIN
-# include <winsock2.h>
-#endif
-
 // WARNING !!! This is initialised via configuration.c !!!
 char masterserver_name[255] = {'\0'};
 static unsigned int masterserver_port = 0, gameserver_port = 0;
