@@ -49,50 +49,6 @@
 /* Begin PBXBuildFile section */
 		020A7E670D246D2B009C29F5 /* sequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 020A7E660D246D2B009C29F5 /* sequence.cpp */; };
 		0223BBB00CFE3C380056EF85 /* version.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0223BBAD0CFE3C380056EF85 /* version.cpp */; };
-		0223BC040CFE3FFA0056EF85 /* context.c in Sources */ = {isa = PBXBuildFile; fileRef = 0223BBE60CFE3FFA0056EF85 /* context.c */; };
-		0223BC060CFE3FFA0056EF85 /* except.c in Sources */ = {isa = PBXBuildFile; fileRef = 0223BBE80CFE3FFA0056EF85 /* except.c */; };
-		0223BC070CFE3FFA0056EF85 /* except.h in Headers */ = {isa = PBXBuildFile; fileRef = 0223BBE90CFE3FFA0056EF85 /* except.h */; };
-		0223BC080CFE3FFA0056EF85 /* font.c in Sources */ = {isa = PBXBuildFile; fileRef = 0223BBEA0CFE3FFA0056EF85 /* font.c */; };
-		0223BC090CFE3FFA0056EF85 /* glew.c in Sources */ = {isa = PBXBuildFile; fileRef = 0223BBEB0CFE3FFA0056EF85 /* glew.c */; };
-		0223BC0A0CFE3FFA0056EF85 /* global.c in Sources */ = {isa = PBXBuildFile; fileRef = 0223BBEC0CFE3FFA0056EF85 /* global.c */; };
-		0223BC0B0CFE3FFA0056EF85 /* master.c in Sources */ = {isa = PBXBuildFile; fileRef = 0223BBED0CFE3FFA0056EF85 /* master.c */; };
-		0223BC0C0CFE3FFA0056EF85 /* measure.c in Sources */ = {isa = PBXBuildFile; fileRef = 0223BBEE0CFE3FFA0056EF85 /* measure.c */; };
-		0223BC0D0CFE3FFA0056EF85 /* misc.c in Sources */ = {isa = PBXBuildFile; fileRef = 0223BBEF0CFE3FFA0056EF85 /* misc.c */; };
-		0223BC0E0CFE3FFA0056EF85 /* oarray.c in Sources */ = {isa = PBXBuildFile; fileRef = 0223BBF00CFE3FFA0056EF85 /* oarray.c */; };
-		0223BC0F0CFE3FFA0056EF85 /* oarray.h in Headers */ = {isa = PBXBuildFile; fileRef = 0223BBF10CFE3FFA0056EF85 /* oarray.h */; };
-		0223BC100CFE3FFA0056EF85 /* ocharmap.c in Sources */ = {isa = PBXBuildFile; fileRef = 0223BBF20CFE3FFA0056EF85 /* ocharmap.c */; };
-		0223BC110CFE3FFA0056EF85 /* ocharmap.h in Headers */ = {isa = PBXBuildFile; fileRef = 0223BBF30CFE3FFA0056EF85 /* ocharmap.h */; };
-		0223BC120CFE3FFA0056EF85 /* ocontext.c in Sources */ = {isa = PBXBuildFile; fileRef = 0223BBF40CFE3FFA0056EF85 /* ocontext.c */; };
-		0223BC130CFE3FFA0056EF85 /* ocontext.h in Headers */ = {isa = PBXBuildFile; fileRef = 0223BBF50CFE3FFA0056EF85 /* ocontext.h */; };
-		0223BC140CFE3FFA0056EF85 /* ofacedesc.c in Sources */ = {isa = PBXBuildFile; fileRef = 0223BBF60CFE3FFA0056EF85 /* ofacedesc.c */; };
-		0223BC150CFE3FFA0056EF85 /* ofacedesc.h in Headers */ = {isa = PBXBuildFile; fileRef = 0223BBF70CFE3FFA0056EF85 /* ofacedesc.h */; };
-		0223BC160CFE3FFA0056EF85 /* ofont.c in Sources */ = {isa = PBXBuildFile; fileRef = 0223BBF80CFE3FFA0056EF85 /* ofont.c */; };
-		0223BC170CFE3FFA0056EF85 /* ofont.h in Headers */ = {isa = PBXBuildFile; fileRef = 0223BBF90CFE3FFA0056EF85 /* ofont.h */; };
-		0223BC180CFE3FFA0056EF85 /* oglyph.c in Sources */ = {isa = PBXBuildFile; fileRef = 0223BBFA0CFE3FFA0056EF85 /* oglyph.c */; };
-		0223BC190CFE3FFA0056EF85 /* oglyph.h in Headers */ = {isa = PBXBuildFile; fileRef = 0223BBFB0CFE3FFA0056EF85 /* oglyph.h */; };
-		0223BC1A0CFE3FFA0056EF85 /* omaster.c in Sources */ = {isa = PBXBuildFile; fileRef = 0223BBFC0CFE3FFA0056EF85 /* omaster.c */; };
-		0223BC1B0CFE3FFA0056EF85 /* omaster.h in Headers */ = {isa = PBXBuildFile; fileRef = 0223BBFD0CFE3FFA0056EF85 /* omaster.h */; };
-		0223BC1C0CFE3FFA0056EF85 /* render.c in Sources */ = {isa = PBXBuildFile; fileRef = 0223BBFE0CFE3FFA0056EF85 /* render.c */; };
-		0223BC1D0CFE3FFA0056EF85 /* scalable.c in Sources */ = {isa = PBXBuildFile; fileRef = 0223BBFF0CFE3FFA0056EF85 /* scalable.c */; };
-		0223BC1E0CFE3FFA0056EF85 /* texture.c in Sources */ = {isa = PBXBuildFile; fileRef = 0223BC000CFE3FFA0056EF85 /* texture.c */; };
-		0223BC1F0CFE3FFA0056EF85 /* texture.h in Headers */ = {isa = PBXBuildFile; fileRef = 0223BC010CFE3FFA0056EF85 /* texture.h */; };
-		0223BC200CFE3FFA0056EF85 /* transform.c in Sources */ = {isa = PBXBuildFile; fileRef = 0223BC020CFE3FFA0056EF85 /* transform.c */; };
-		0223BC210CFE3FFA0056EF85 /* unicode.c in Sources */ = {isa = PBXBuildFile; fileRef = 0223BC030CFE3FFA0056EF85 /* unicode.c */; };
-		0223BC2C0CFE40210056EF85 /* fribidi_char_type.c in Sources */ = {isa = PBXBuildFile; fileRef = 0223BC220CFE40210056EF85 /* fribidi_char_type.c */; };
-		0223BC2D0CFE40210056EF85 /* fribidi_mirroring.c in Sources */ = {isa = PBXBuildFile; fileRef = 0223BC230CFE40210056EF85 /* fribidi_mirroring.c */; };
-		0223BC2E0CFE40210056EF85 /* fribidi_tab_char_type_9.i in Headers */ = {isa = PBXBuildFile; fileRef = 0223BC240CFE40210056EF85 /* fribidi_tab_char_type_9.i */; };
-		0223BC2F0CFE40210056EF85 /* fribidi_tab_mirroring.i in Headers */ = {isa = PBXBuildFile; fileRef = 0223BC250CFE40210056EF85 /* fribidi_tab_mirroring.i */; };
-		0223BC300CFE40210056EF85 /* fribidi_types.c in Sources */ = {isa = PBXBuildFile; fileRef = 0223BC260CFE40210056EF85 /* fribidi_types.c */; };
-		0223BC310CFE40210056EF85 /* fribidi_types.h in Headers */ = {isa = PBXBuildFile; fileRef = 0223BC270CFE40210056EF85 /* fribidi_types.h */; };
-		0223BC320CFE40210056EF85 /* fribidi_types.i in Headers */ = {isa = PBXBuildFile; fileRef = 0223BC280CFE40210056EF85 /* fribidi_types.i */; };
-		0223BC330CFE40210056EF85 /* fribidi_unicode.h in Headers */ = {isa = PBXBuildFile; fileRef = 0223BC290CFE40210056EF85 /* fribidi_unicode.h */; };
-		0223BC340CFE40210056EF85 /* fribidi.c in Sources */ = {isa = PBXBuildFile; fileRef = 0223BC2A0CFE40210056EF85 /* fribidi.c */; };
-		0223BC350CFE40210056EF85 /* fribidi.h in Headers */ = {isa = PBXBuildFile; fileRef = 0223BC2B0CFE40210056EF85 /* fribidi.h */; };
-		0223BC370CFE40570056EF85 /* internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 0223BC360CFE40570056EF85 /* internal.h */; };
-		0223BC3C0CFE40680056EF85 /* glc.h in Headers */ = {isa = PBXBuildFile; fileRef = 0223BC380CFE40680056EF85 /* glc.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		0223BC3D0CFE40680056EF85 /* glew.h in Headers */ = {isa = PBXBuildFile; fileRef = 0223BC390CFE40680056EF85 /* glew.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		0223BC3E0CFE40680056EF85 /* glxew.h in Headers */ = {isa = PBXBuildFile; fileRef = 0223BC3A0CFE40680056EF85 /* glxew.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		0223BC3F0CFE40680056EF85 /* wglew.h in Headers */ = {isa = PBXBuildFile; fileRef = 0223BC3B0CFE40680056EF85 /* wglew.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		022B2FE20BD55E45002E64E3 /* libgnuintl.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2FE00BD55E45002E64E3 /* libgnuintl.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		022B2FE30BD55E45002E64E3 /* libintl.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2FE10BD55E45002E64E3 /* libintl.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		022B30AB0BD564FC002E64E3 /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B30AA0BD564FC002E64E3 /* config.h */; };
@@ -482,7 +438,6 @@
 		43C3B9C5118BEBE0000BBE59 /* tone.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C3B9C2118BEBE0000BBE59 /* tone.c */; };
 		43C3B9E0118BEC40000BBE59 /* res_books_51.h in Headers */ = {isa = PBXBuildFile; fileRef = 43C3B9B4118BEA9D000BBE59 /* res_books_51.h */; };
 		43D180B01336B99C001906EB /* physfs_casefolding.h in Headers */ = {isa = PBXBuildFile; fileRef = 43D180AF1336B99C001906EB /* physfs_casefolding.h */; };
-		43D6AA4111AB5CA300DD12F1 /* database.c in Sources */ = {isa = PBXBuildFile; fileRef = 02F5CC560D1490620000A2D0 /* database.c */; };
 		43DF5A8A12BEE01B00DD5A37 /* cocoa_wrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 43DF5A8912BEE01B00DD5A37 /* cocoa_wrapper.mm */; };
 		43E1890411440D8C000870EB /* eval-plural.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F850BD55B4F002E64E3 /* eval-plural.h */; };
 		43E1890511440D8D000870EB /* gettextP.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F860BD55B4F002E64E3 /* gettextP.h */; };
@@ -810,51 +765,6 @@
 		0223BBAC0CFE3C380056EF85 /* main.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = main.h; path = ../src/main.h; sourceTree = SOURCE_ROOT; };
 		0223BBAD0CFE3C380056EF85 /* version.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = version.cpp; path = ../src/version.cpp; sourceTree = SOURCE_ROOT; };
 		0223BBAE0CFE3C380056EF85 /* version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = version.h; path = ../src/version.h; sourceTree = SOURCE_ROOT; };
-		0223BBD10CFE3D5C0056EF85 /* QuesoGLC.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = QuesoGLC.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		0223BBE60CFE3FFA0056EF85 /* context.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = context.c; path = external/quesoglc/src/context.c; sourceTree = SOURCE_ROOT; };
-		0223BBE80CFE3FFA0056EF85 /* except.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = except.c; path = external/quesoglc/src/except.c; sourceTree = SOURCE_ROOT; };
-		0223BBE90CFE3FFA0056EF85 /* except.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = except.h; path = external/quesoglc/src/except.h; sourceTree = SOURCE_ROOT; };
-		0223BBEA0CFE3FFA0056EF85 /* font.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = font.c; path = external/quesoglc/src/font.c; sourceTree = SOURCE_ROOT; };
-		0223BBEB0CFE3FFA0056EF85 /* glew.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = glew.c; path = external/quesoglc/src/glew.c; sourceTree = SOURCE_ROOT; };
-		0223BBEC0CFE3FFA0056EF85 /* global.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = global.c; path = external/quesoglc/src/global.c; sourceTree = SOURCE_ROOT; };
-		0223BBED0CFE3FFA0056EF85 /* master.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = master.c; path = external/quesoglc/src/master.c; sourceTree = SOURCE_ROOT; };
-		0223BBEE0CFE3FFA0056EF85 /* measure.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = measure.c; path = external/quesoglc/src/measure.c; sourceTree = SOURCE_ROOT; };
-		0223BBEF0CFE3FFA0056EF85 /* misc.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = misc.c; path = external/quesoglc/src/misc.c; sourceTree = SOURCE_ROOT; };
-		0223BBF00CFE3FFA0056EF85 /* oarray.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = oarray.c; path = external/quesoglc/src/oarray.c; sourceTree = SOURCE_ROOT; };
-		0223BBF10CFE3FFA0056EF85 /* oarray.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = oarray.h; path = external/quesoglc/src/oarray.h; sourceTree = SOURCE_ROOT; };
-		0223BBF20CFE3FFA0056EF85 /* ocharmap.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = ocharmap.c; path = external/quesoglc/src/ocharmap.c; sourceTree = SOURCE_ROOT; };
-		0223BBF30CFE3FFA0056EF85 /* ocharmap.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ocharmap.h; path = external/quesoglc/src/ocharmap.h; sourceTree = SOURCE_ROOT; };
-		0223BBF40CFE3FFA0056EF85 /* ocontext.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = ocontext.c; path = external/quesoglc/src/ocontext.c; sourceTree = SOURCE_ROOT; };
-		0223BBF50CFE3FFA0056EF85 /* ocontext.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ocontext.h; path = external/quesoglc/src/ocontext.h; sourceTree = SOURCE_ROOT; };
-		0223BBF60CFE3FFA0056EF85 /* ofacedesc.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = ofacedesc.c; path = external/quesoglc/src/ofacedesc.c; sourceTree = SOURCE_ROOT; };
-		0223BBF70CFE3FFA0056EF85 /* ofacedesc.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ofacedesc.h; path = external/quesoglc/src/ofacedesc.h; sourceTree = SOURCE_ROOT; };
-		0223BBF80CFE3FFA0056EF85 /* ofont.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = ofont.c; path = external/quesoglc/src/ofont.c; sourceTree = SOURCE_ROOT; };
-		0223BBF90CFE3FFA0056EF85 /* ofont.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ofont.h; path = external/quesoglc/src/ofont.h; sourceTree = SOURCE_ROOT; };
-		0223BBFA0CFE3FFA0056EF85 /* oglyph.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = oglyph.c; path = external/quesoglc/src/oglyph.c; sourceTree = SOURCE_ROOT; };
-		0223BBFB0CFE3FFA0056EF85 /* oglyph.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = oglyph.h; path = external/quesoglc/src/oglyph.h; sourceTree = SOURCE_ROOT; };
-		0223BBFC0CFE3FFA0056EF85 /* omaster.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = omaster.c; path = external/quesoglc/src/omaster.c; sourceTree = SOURCE_ROOT; };
-		0223BBFD0CFE3FFA0056EF85 /* omaster.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = omaster.h; path = external/quesoglc/src/omaster.h; sourceTree = SOURCE_ROOT; };
-		0223BBFE0CFE3FFA0056EF85 /* render.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = render.c; path = external/quesoglc/src/render.c; sourceTree = SOURCE_ROOT; };
-		0223BBFF0CFE3FFA0056EF85 /* scalable.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = scalable.c; path = external/quesoglc/src/scalable.c; sourceTree = SOURCE_ROOT; };
-		0223BC000CFE3FFA0056EF85 /* texture.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = texture.c; path = external/quesoglc/src/texture.c; sourceTree = SOURCE_ROOT; };
-		0223BC010CFE3FFA0056EF85 /* texture.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = texture.h; path = external/quesoglc/src/texture.h; sourceTree = SOURCE_ROOT; };
-		0223BC020CFE3FFA0056EF85 /* transform.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = transform.c; path = external/quesoglc/src/transform.c; sourceTree = SOURCE_ROOT; };
-		0223BC030CFE3FFA0056EF85 /* unicode.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = unicode.c; path = external/quesoglc/src/unicode.c; sourceTree = SOURCE_ROOT; };
-		0223BC220CFE40210056EF85 /* fribidi_char_type.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = fribidi_char_type.c; path = external/quesoglc/src/fribidi/fribidi_char_type.c; sourceTree = SOURCE_ROOT; };
-		0223BC230CFE40210056EF85 /* fribidi_mirroring.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = fribidi_mirroring.c; path = external/quesoglc/src/fribidi/fribidi_mirroring.c; sourceTree = SOURCE_ROOT; };
-		0223BC240CFE40210056EF85 /* fribidi_tab_char_type_9.i */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c.preprocessed; name = fribidi_tab_char_type_9.i; path = external/quesoglc/src/fribidi/fribidi_tab_char_type_9.i; sourceTree = SOURCE_ROOT; };
-		0223BC250CFE40210056EF85 /* fribidi_tab_mirroring.i */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c.preprocessed; name = fribidi_tab_mirroring.i; path = external/quesoglc/src/fribidi/fribidi_tab_mirroring.i; sourceTree = SOURCE_ROOT; };
-		0223BC260CFE40210056EF85 /* fribidi_types.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = fribidi_types.c; path = external/quesoglc/src/fribidi/fribidi_types.c; sourceTree = SOURCE_ROOT; };
-		0223BC270CFE40210056EF85 /* fribidi_types.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = fribidi_types.h; path = external/quesoglc/src/fribidi/fribidi_types.h; sourceTree = SOURCE_ROOT; };
-		0223BC280CFE40210056EF85 /* fribidi_types.i */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c.preprocessed; name = fribidi_types.i; path = external/quesoglc/src/fribidi/fribidi_types.i; sourceTree = SOURCE_ROOT; };
-		0223BC290CFE40210056EF85 /* fribidi_unicode.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = fribidi_unicode.h; path = external/quesoglc/src/fribidi/fribidi_unicode.h; sourceTree = SOURCE_ROOT; };
-		0223BC2A0CFE40210056EF85 /* fribidi.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = fribidi.c; path = external/quesoglc/src/fribidi/fribidi.c; sourceTree = SOURCE_ROOT; };
-		0223BC2B0CFE40210056EF85 /* fribidi.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = fribidi.h; path = external/quesoglc/src/fribidi/fribidi.h; sourceTree = SOURCE_ROOT; };
-		0223BC360CFE40570056EF85 /* internal.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = internal.h; path = external/quesoglc/include/internal.h; sourceTree = SOURCE_ROOT; };
-		0223BC380CFE40680056EF85 /* glc.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = glc.h; path = external/quesoglc/include/GL/glc.h; sourceTree = SOURCE_ROOT; };
-		0223BC390CFE40680056EF85 /* glew.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = glew.h; path = external/quesoglc/include/GL/glew.h; sourceTree = SOURCE_ROOT; };
-		0223BC3A0CFE40680056EF85 /* glxew.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = glxew.h; path = external/quesoglc/include/GL/glxew.h; sourceTree = SOURCE_ROOT; };
-		0223BC3B0CFE40680056EF85 /* wglew.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = wglew.h; path = external/quesoglc/include/GL/wglew.h; sourceTree = SOURCE_ROOT; };
 		022B2EBF0BD55401002E64E3 /* config-macosx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "config-macosx.h"; path = "../lib/framework/config-macosx.h"; sourceTree = SOURCE_ROOT; };
 		022B2F220BD55814002E64E3 /* Gettext.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Gettext.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		022B2F4B0BD55AE2002E64E3 /* bindtextdom.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = bindtextdom.c; path = "external/gettext/gettext-runtime/intl/bindtextdom.c"; sourceTree = SOURCE_ROOT; };
@@ -1377,7 +1287,6 @@
 		02DDA8C60BD3C3450049AB60 /* zip.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = zip.c; path = external/physfs/archivers/zip.c; sourceTree = "<group>"; };
 		02DDA8CE0BD3C3600049AB60 /* posix.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = posix.c; path = external/physfs/platform/posix.c; sourceTree = "<group>"; };
 		02DDA8CF0BD3C3600049AB60 /* unix.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = unix.c; path = external/physfs/platform/unix.c; sourceTree = "<group>"; };
-		02F5CC560D1490620000A2D0 /* database.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = database.c; path = external/quesoglc/src/database.c; sourceTree = "<group>"; };
 		2234C29F0E2BE18200E7704C /* positiondef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = positiondef.h; path = ../src/positiondef.h; sourceTree = SOURCE_ROOT; };
 		224446390E3EB7CB004D0F1F /* message_lexer.l */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.lex; name = message_lexer.l; path = ../src/message_lexer.l; sourceTree = SOURCE_ROOT; };
 		2244463A0E3EB7CB004D0F1F /* message_parser.y */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.yacc; name = message_parser.y; path = ../src/message_parser.y; sourceTree = SOURCE_ROOT; };
@@ -1652,13 +1561,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		0223BBCF0CFE3D5C0056EF85 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		022B2F200BD55814002E64E3 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -1760,58 +1662,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0223BBE50CFE3F4B0056EF85 /* QuesoGLC sources */ = {
-			isa = PBXGroup;
-			children = (
-				02F5CC560D1490620000A2D0 /* database.c */,
-				0223BC380CFE40680056EF85 /* glc.h */,
-				0223BC390CFE40680056EF85 /* glew.h */,
-				0223BC3A0CFE40680056EF85 /* glxew.h */,
-				0223BC3B0CFE40680056EF85 /* wglew.h */,
-				0223BC360CFE40570056EF85 /* internal.h */,
-				0223BC220CFE40210056EF85 /* fribidi_char_type.c */,
-				0223BC230CFE40210056EF85 /* fribidi_mirroring.c */,
-				0223BC240CFE40210056EF85 /* fribidi_tab_char_type_9.i */,
-				0223BC250CFE40210056EF85 /* fribidi_tab_mirroring.i */,
-				0223BC260CFE40210056EF85 /* fribidi_types.c */,
-				0223BC270CFE40210056EF85 /* fribidi_types.h */,
-				0223BC280CFE40210056EF85 /* fribidi_types.i */,
-				0223BC290CFE40210056EF85 /* fribidi_unicode.h */,
-				0223BC2A0CFE40210056EF85 /* fribidi.c */,
-				0223BC2B0CFE40210056EF85 /* fribidi.h */,
-				0223BBE60CFE3FFA0056EF85 /* context.c */,
-				0223BBE80CFE3FFA0056EF85 /* except.c */,
-				0223BBE90CFE3FFA0056EF85 /* except.h */,
-				0223BBEA0CFE3FFA0056EF85 /* font.c */,
-				0223BBEB0CFE3FFA0056EF85 /* glew.c */,
-				0223BBEC0CFE3FFA0056EF85 /* global.c */,
-				0223BBED0CFE3FFA0056EF85 /* master.c */,
-				0223BBEE0CFE3FFA0056EF85 /* measure.c */,
-				0223BBEF0CFE3FFA0056EF85 /* misc.c */,
-				0223BBF00CFE3FFA0056EF85 /* oarray.c */,
-				0223BBF10CFE3FFA0056EF85 /* oarray.h */,
-				0223BBF20CFE3FFA0056EF85 /* ocharmap.c */,
-				0223BBF30CFE3FFA0056EF85 /* ocharmap.h */,
-				0223BBF40CFE3FFA0056EF85 /* ocontext.c */,
-				0223BBF50CFE3FFA0056EF85 /* ocontext.h */,
-				0223BBF60CFE3FFA0056EF85 /* ofacedesc.c */,
-				0223BBF70CFE3FFA0056EF85 /* ofacedesc.h */,
-				0223BBF80CFE3FFA0056EF85 /* ofont.c */,
-				0223BBF90CFE3FFA0056EF85 /* ofont.h */,
-				0223BBFA0CFE3FFA0056EF85 /* oglyph.c */,
-				0223BBFB0CFE3FFA0056EF85 /* oglyph.h */,
-				0223BBFC0CFE3FFA0056EF85 /* omaster.c */,
-				0223BBFD0CFE3FFA0056EF85 /* omaster.h */,
-				0223BBFE0CFE3FFA0056EF85 /* render.c */,
-				0223BBFF0CFE3FFA0056EF85 /* scalable.c */,
-				0223BC000CFE3FFA0056EF85 /* texture.c */,
-				0223BC010CFE3FFA0056EF85 /* texture.h */,
-				0223BC020CFE3FFA0056EF85 /* transform.c */,
-				0223BC030CFE3FFA0056EF85 /* unicode.c */,
-			);
-			name = "QuesoGLC sources";
-			sourceTree = "<group>";
-		};
 		022B2F460BD55940002E64E3 /* Gettext sources */ = {
 			isa = PBXGroup;
 			children = (
@@ -1898,7 +1748,6 @@
 				02DDA7EE0BD3C03F0049AB60 /* Vorbis.framework */,
 				02DDA8B10BD3C2F20049AB60 /* PhysFS.framework */,
 				022B2F220BD55814002E64E3 /* Gettext.framework */,
-				0223BBD10CFE3D5C0056EF85 /* QuesoGLC.framework */,
 				97AEAB330E8C1B5200A10721 /* Theora.framework */,
 				43502D521347640700A02A1F /* GLExtensionWrangler.framework */,
 				4318434B1363942200BA2BC5 /* MiniUPnPc.framework */,
@@ -2594,7 +2443,6 @@
 				02DDA8600BD3C1AF0049AB60 /* Png sources */,
 				02DDA8620BD3C1BB0049AB60 /* Vorbis sources */,
 				02DDA8DE0BD3C3930049AB60 /* PhysFS sources */,
-				0223BBE50CFE3F4B0056EF85 /* QuesoGLC sources */,
 				9730E8000E8CEB3B009C9481 /* Theora sources */,
 			);
 			name = "Third Party";
@@ -2985,33 +2833,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		0223BBCC0CFE3D5C0056EF85 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				0223BC070CFE3FFA0056EF85 /* except.h in Headers */,
-				0223BC0F0CFE3FFA0056EF85 /* oarray.h in Headers */,
-				0223BC110CFE3FFA0056EF85 /* ocharmap.h in Headers */,
-				0223BC130CFE3FFA0056EF85 /* ocontext.h in Headers */,
-				0223BC150CFE3FFA0056EF85 /* ofacedesc.h in Headers */,
-				0223BC170CFE3FFA0056EF85 /* ofont.h in Headers */,
-				0223BC190CFE3FFA0056EF85 /* oglyph.h in Headers */,
-				0223BC1B0CFE3FFA0056EF85 /* omaster.h in Headers */,
-				0223BC1F0CFE3FFA0056EF85 /* texture.h in Headers */,
-				0223BC2E0CFE40210056EF85 /* fribidi_tab_char_type_9.i in Headers */,
-				0223BC2F0CFE40210056EF85 /* fribidi_tab_mirroring.i in Headers */,
-				0223BC310CFE40210056EF85 /* fribidi_types.h in Headers */,
-				0223BC320CFE40210056EF85 /* fribidi_types.i in Headers */,
-				0223BC330CFE40210056EF85 /* fribidi_unicode.h in Headers */,
-				0223BC350CFE40210056EF85 /* fribidi.h in Headers */,
-				0223BC370CFE40570056EF85 /* internal.h in Headers */,
-				0223BC3C0CFE40680056EF85 /* glc.h in Headers */,
-				0223BC3D0CFE40680056EF85 /* glew.h in Headers */,
-				0223BC3E0CFE40680056EF85 /* glxew.h in Headers */,
-				0223BC3F0CFE40680056EF85 /* wglew.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		022B2F1D0BD55814002E64E3 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -3206,25 +3027,6 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		0223BBD00CFE3D5C0056EF85 /* QuesoGLC */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 0223BBD30CFE3D5C0056EF85 /* Build configuration list for PBXNativeTarget "QuesoGLC" */;
-			buildPhases = (
-				0223BBDD0CFE3E290056EF85 /* Fetch source */,
-				02F5CC4F0D148FC30000A2D0 /* Create database.c */,
-				0223BBCC0CFE3D5C0056EF85 /* Headers */,
-				0223BBCE0CFE3D5C0056EF85 /* Sources */,
-				0223BBCF0CFE3D5C0056EF85 /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = QuesoGLC;
-			productName = QuesoGLC;
-			productReference = 0223BBD10CFE3D5C0056EF85 /* QuesoGLC.framework */;
-			productType = "com.apple.product-type.framework";
-		};
 		022B2F210BD55814002E64E3 /* Gettext */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 022B2F240BD55816002E64E3 /* Build configuration list for PBXNativeTarget "Gettext" */;
@@ -3498,7 +3300,6 @@
 				02356E080BD3BCFE00E9A019 /* Ogg */,
 				02DDA7ED0BD3C03F0049AB60 /* Vorbis */,
 				02DDA8B00BD3C2F20049AB60 /* PhysFS */,
-				0223BBD00CFE3D5C0056EF85 /* QuesoGLC */,
 				97AEAAEA0E8C1B5200A10721 /* Theora */,
 				43F77C7710F0125E00E04615 /* Make DMGs for Release */,
 			);
@@ -3584,20 +3385,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0223BBDD0CFE3E290056EF85 /* Fetch source */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Fetch source";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# tar -czf quesoglc-0.7-r921.tar.gz --exclude '.svn' --exclude 'Makefile*' --exclude 'makefile*' --exclude '.DS_Store'  quesoglc-0.7-r921\n\nDirectorY=\"quesoglc-0.7-r921\"\nOutDir=\"quesoglc\"\nFileName=\"quesoglc-0.7-r921.tar.gz\"\nSourceDLP=\"http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/quesoglc-0.7-r921.tar.gz\"\nMD5Sum=\"ee73eebd23292dfb17365ff19eb15a0e\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
-		};
 		022B2F290BD55840002E64E3 /* Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 12;
@@ -3643,20 +3430,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Config\nexport PATH=$PATH:/sw/bin:/opt/local/bin\ndestdata=\"build/${CONFIGURATION}/Warzone.app/Contents/Resources/\"\ndatadir=\"../data\"\n\nif ! rsync -vcrlpt --del ${datadir} \"${destdata}\"; then\n    exit ${?}\nfi\n\nexit 0";
-		};
-		02F5CC4F0D148FC30000A2D0 /* Create database.c */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Create database.c";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "cd external/quesoglc\n\nif [ ! -r src/database.c ]; then\n  cd database\n  python buildDB.py\nfi\n";
 		};
 		02FD38210BD3FE9A00776FD3 /* Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3870,38 +3643,6 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		0223BBCE0CFE3D5C0056EF85 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				0223BC040CFE3FFA0056EF85 /* context.c in Sources */,
-				0223BC060CFE3FFA0056EF85 /* except.c in Sources */,
-				0223BC080CFE3FFA0056EF85 /* font.c in Sources */,
-				0223BC090CFE3FFA0056EF85 /* glew.c in Sources */,
-				0223BC0A0CFE3FFA0056EF85 /* global.c in Sources */,
-				0223BC0B0CFE3FFA0056EF85 /* master.c in Sources */,
-				0223BC0C0CFE3FFA0056EF85 /* measure.c in Sources */,
-				0223BC0D0CFE3FFA0056EF85 /* misc.c in Sources */,
-				0223BC0E0CFE3FFA0056EF85 /* oarray.c in Sources */,
-				0223BC100CFE3FFA0056EF85 /* ocharmap.c in Sources */,
-				0223BC120CFE3FFA0056EF85 /* ocontext.c in Sources */,
-				0223BC140CFE3FFA0056EF85 /* ofacedesc.c in Sources */,
-				0223BC160CFE3FFA0056EF85 /* ofont.c in Sources */,
-				0223BC180CFE3FFA0056EF85 /* oglyph.c in Sources */,
-				0223BC1A0CFE3FFA0056EF85 /* omaster.c in Sources */,
-				0223BC1C0CFE3FFA0056EF85 /* render.c in Sources */,
-				0223BC1D0CFE3FFA0056EF85 /* scalable.c in Sources */,
-				0223BC1E0CFE3FFA0056EF85 /* texture.c in Sources */,
-				0223BC200CFE3FFA0056EF85 /* transform.c in Sources */,
-				0223BC210CFE3FFA0056EF85 /* unicode.c in Sources */,
-				0223BC2C0CFE40210056EF85 /* fribidi_char_type.c in Sources */,
-				0223BC2D0CFE40210056EF85 /* fribidi_mirroring.c in Sources */,
-				0223BC300CFE40210056EF85 /* fribidi_types.c in Sources */,
-				0223BC340CFE40210056EF85 /* fribidi.c in Sources */,
-				43D6AA4111AB5CA300DD12F1 /* database.c in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		022B2F1F0BD55814002E64E3 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -4463,20 +4204,6 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		0223BBD40CFE3D5C0056EF85 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 43025F3611220C46006C49B1 /* QuesoGLC-Debug.xcconfig */;
-			buildSettings = {
-			};
-			name = Debug;
-		};
-		0223BBD50CFE3D5C0056EF85 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 43025F3711220C46006C49B1 /* QuesoGLC-Release.xcconfig */;
-			buildSettings = {
-			};
-			name = Release;
-		};
 		022B2F250BD55816002E64E3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025ECA1120E0C0006C49B1 /* Gettext-Debug.xcconfig */;
@@ -4694,13 +4421,6 @@
 			};
 			name = StaticAnalyzer;
 		};
-		4389DBE2111B0A0700B98DEF /* StaticAnalyzer */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 43025F3611220C46006C49B1 /* QuesoGLC-Debug.xcconfig */;
-			buildSettings = {
-			};
-			name = StaticAnalyzer;
-		};
 		4389DBE3111B0A0700B98DEF /* StaticAnalyzer */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025F3D11221018006C49B1 /* Theora-Debug.xcconfig */;
@@ -4781,16 +4501,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		0223BBD30CFE3D5C0056EF85 /* Build configuration list for PBXNativeTarget "QuesoGLC" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				0223BBD40CFE3D5C0056EF85 /* Debug */,
-				4389DBE2111B0A0700B98DEF /* StaticAnalyzer */,
-				0223BBD50CFE3D5C0056EF85 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
 		022B2F240BD55816002E64E3 /* Build configuration list for PBXNativeTarget "Gettext" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
