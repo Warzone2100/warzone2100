@@ -8461,7 +8461,7 @@ msgstr "Hochexplosive, panzerbrechende Haubitzengeschosse"
 #: data/base/messages/strings/names.txt:1074
 #: data/mp/messages/strings/names.txt:1091
 msgid "HEAP Howitzer Shells Mk2"
-msgstr "Hochexplosive, panzerbrechende Haubitzengeschosse mk2"
+msgstr "Hochexplosive, panzerbrechende Haubitzengeschosse Mk2"
 
 #: data/base/messages/strings/names.txt:1075
 #: data/mp/messages/strings/names.txt:1092
@@ -13868,7 +13868,7 @@ msgstr "Befehle-Menü"
 
 #: src/keymap.c:366
 msgid "Decrease Game Speed"
-msgstr "Spielgeschwindigkeit veringern"
+msgstr "Spielgeschwindigkeit verringern"
 
 #: src/keymap.c:367
 msgid "Increase Game Speed"
