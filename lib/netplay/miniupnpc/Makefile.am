@@ -32,5 +32,5 @@ libminiupnpc_a_SOURCES = \
 
 EXTRA_DIST = \
 	Changelog.txt \
-	LICENCE \
+	LICENSE \
 	README
