@@ -486,7 +486,6 @@ static unsigned int setKey(int code, bool pressed)
 
 void WzMainWindow::realHandleKeyEvent(QKeyEvent *event, bool pressed)
 {
-	Qt::KeyboardModifiers mods = event->modifiers();
 	unsigned int lastKey;
 
 	bool isKeypad = event->modifiers() & Qt::KeypadModifier;
