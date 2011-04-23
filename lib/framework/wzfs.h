@@ -34,8 +34,22 @@ private:
 	QString		name;
 	QDateTime	lastMod;	// PHYSFS_getLastModTime
 
+	void realSetFileName(const QString &file)
+	{
+		name = file;
+		if (!PHYSFS_exists(name.toAscii().constData())) return;
+		// Show potential until actually opened
+		flags = QAbstractFileEngine::ExistsFlag | QAbstractFileEngine::ReadOtherPerm | QAbstractFileEngine::WriteOwnerPerm \
+			| QAbstractFileEngine::ReadOwnerPerm | QAbstractFileEngine::ReadUserPerm | QAbstractFileEngine::WriteUserPerm;
+		lastMod = QDateTime::fromTime_t(PHYSFS_getLastModTime(name.toAscii().constData()));
+		if (PHYSFS_isDirectory(name.toAscii().constData())) flags |= QAbstractFileEngine::DirectoryType;
+		if (PHYSFS_isSymbolicLink(name.toAscii().constData())) flags |= QAbstractFileEngine::LinkType;
+		if (!(flags & QAbstractFileEngine::DirectoryType || flags & QAbstractFileEngine::LinkType)) flags |= QAbstractFileEngine::FileType;
+	}
+
+
 public:
-	PhysicsFileSystem(QString filename) { fp = NULL; setFileName(filename); }
+	PhysicsFileSystem(QString filename) : fp(NULL), flags(0), name(filename) { realSetFileName(filename); }
 	virtual ~PhysicsFileSystem() { if (fp) PHYSFS_close(fp); }
 	bool atEnd() const { return PHYSFS_eof(fp) != 0; }
 	//virtual Iterator *beginEntryList(QDir::Filters filters, const QStringList & filterNames) { return NULL; }
@@ -46,7 +60,7 @@ public:
 	QFile::FileError error() const { return QFile::UnspecifiedError; }
 	QString errorString() const { return QString(PHYSFS_getLastError()); }
 	virtual bool extension(Extension extension, const ExtensionOption * option = 0, ExtensionReturn * output = 0) { return extension == QAbstractFileEngine::AtEndExtension; }
-	virtual FileFlags fileFlags(FileFlags type = FileInfoAll) const { return flags | type; }
+	virtual FileFlags fileFlags(FileFlags type = FileInfoAll) const { return type & flags; }
 	virtual QDateTime fileTime(FileTime time) const { if (time == QAbstractFileEngine::ModificationTime) return lastMod; else return QDateTime(); }
 	virtual bool flush() { return PHYSFS_flush(fp) != 0; }
 	//virtual int handle() const { return 0; }
@@ -74,6 +88,7 @@ public:
 	{
 		if (!fp)
 		{
+			if (!PHYSFS_exists(name.toUtf8().constData())) return 0;
 			PHYSFS_file *tmp;
 			tmp = PHYSFS_openRead(name.toAscii().constData());
 			if (!tmp)
@@ -90,26 +105,21 @@ public:
 
 	virtual void setFileName(const QString & file)
 	{
-		name = file;
-		lastMod = QDateTime::fromTime_t(PHYSFS_getLastModTime(name.toAscii().constData()));
-		if (PHYSFS_exists(name.toAscii().constData()) != 0) flags = QAbstractFileEngine::ExistsFlag;
-		if (PHYSFS_isDirectory(name.toAscii().constData()) != 0) flags |= QAbstractFileEngine::DirectoryType;
-		if (PHYSFS_isSymbolicLink(name.toAscii().constData()) != 0) flags |= QAbstractFileEngine::LinkType;
-		if (!(flags & QAbstractFileEngine::DirectoryType || flags & QAbstractFileEngine::LinkType)) flags |= QAbstractFileEngine::FileType;
+		realSetFileName(file);
 	}
 
 	virtual bool open(QIODevice::OpenMode mode)
 	{
 		close();
-		if (mode & QIODevice::ReadOnly)
-		{
-			flags = QAbstractFileEngine::ReadOwnerPerm | QAbstractFileEngine::ReadUserPerm | QAbstractFileEngine::FileType;
-			fp = PHYSFS_openRead(name.toAscii().constData());
-		}
-		else if (mode & QIODevice::WriteOnly)
+		if (mode & QIODevice::WriteOnly)
 		{
 			flags = QAbstractFileEngine::WriteOwnerPerm | QAbstractFileEngine::WriteUserPerm | QAbstractFileEngine::FileType;
 			fp = PHYSFS_openWrite(name.toAscii().constData());	// will truncate
+		}
+		else if (mode & QIODevice::ReadOnly)
+		{
+			flags = QAbstractFileEngine::ReadOwnerPerm | QAbstractFileEngine::ReadUserPerm | QAbstractFileEngine::FileType | QAbstractFileEngine::ReadOtherPerm;
+			fp = PHYSFS_openRead(name.toAscii().constData());
 		}
 		else if (mode & QIODevice::Append)
 		{
