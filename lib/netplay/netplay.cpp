@@ -41,9 +41,9 @@
 #include "netlog.h"
 #include "netsocket.h"
 
-#include "miniupnpc/miniwget.h"
-#include "miniupnpc/miniupnpc.h"
-#include "miniupnpc/upnpcommands.h"
+#include <miniupnpc/miniwget.h>
+#include <miniupnpc/miniupnpc.h>
+#include <miniupnpc/upnpcommands.h>
 #include "lib/exceptionhandler/dumpinfo.h"
 
 #include "src/multistat.h"
@@ -964,9 +964,9 @@ static bool upnp_add_redirect(int port)
 	int r;
 
 	debug(LOG_NET, "upnp_add_redir(%d)\n", port);
-	UPNP_GetExternalIPAddress(urls.controlURL, data.servicetype, externalIP);
+	UPNP_GetExternalIPAddress(urls.controlURL, data.first.servicetype, externalIP);
 	sprintf(port_str, "%d", port);
-	r = UPNP_AddPortMapping(urls.controlURL, data.servicetype,
+	r = UPNP_AddPortMapping(urls.controlURL, data.first.servicetype,
 			port_str, port_str, lanaddr, "Warzone 2100", "TCP", 0);
 	if (r != UPNPCOMMAND_SUCCESS)
 	{
@@ -982,7 +982,7 @@ static void upnp_rem_redirect(int port)
 	char port_str[16];
 	debug(LOG_NET, "upnp_rem_redir(%d)", port);
 	sprintf(port_str, "%d", port);
-	UPNP_DeletePortMapping(urls.controlURL, data.servicetype, port_str, "TCP", 0);
+	UPNP_DeletePortMapping(urls.controlURL, data.first.servicetype, port_str, "TCP", 0);
 }
 
 void NETaddRedirects(void)

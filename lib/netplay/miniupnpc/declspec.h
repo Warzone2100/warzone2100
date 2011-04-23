@@ -5,9 +5,7 @@
 	#ifdef MINIUPNP_EXPORTS
 		#define LIBSPEC __declspec(dllexport)
 	#else
-// NOTE: with the cross compiler, even if we have -DSTATICLIB, for some odd reason it still does this
-// #define LIBSPEC __declspec(dllimport)  which is not what we want.  So we hack the line like so.
-		#define LIBSPEC 
+		#define LIBSPEC __declspec(dllimport)
 	#endif
 #else
 	#define LIBSPEC
