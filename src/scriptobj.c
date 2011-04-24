@@ -1425,7 +1425,7 @@ BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 			if (!index)			//this is a NON fatal error.
 			{
 				// We can't find filename of the sound for some reason.
-				debug(LOG_ERROR, "Sound ID not available %s not found", pName);
+				debug(LOG_INFO, "Sound ID not available %s not found", pName);
 				break;
 			}
 		}
