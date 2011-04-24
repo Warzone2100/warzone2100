@@ -1015,6 +1015,7 @@ void NETremRedirects(void)
 void NETdiscoverUPnPDevices(void)
 {
 	upnpdiscover = wzThreadCreate(&upnp_init, NULL);
+	wzThreadStart(upnpdiscover);
 }
 
 // ////////////////////////////////////////////////////////////////////////
