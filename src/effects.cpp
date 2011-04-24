@@ -2372,7 +2372,14 @@ void initPerimeterSmoke(iIMDShape *pImd, Vector3i base)
 
 static UDWORD effectGetNumFrames(EFFECT *psEffect)
 {
-	return psEffect->imd->numFrames;
+	if (psEffect->imd)
+	{
+		return psEffect->imd->numFrames;
+	}
+	else
+	{
+		return 0;
+	}
 }
 
 

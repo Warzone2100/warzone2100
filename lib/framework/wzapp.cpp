@@ -1305,7 +1305,7 @@ Vector3f WzConfig::vector3f(const QString &name)
 {
 	Vector3f r;
 	ASSERT_OR_RETURN(r, contains(name), "Missing %s", name.toUtf8().constData());
-	QVariantList v = value(name).toList();
+	QStringList v = value(name).toStringList();
 	ASSERT(v.size() == 3, "Bad list of %s", name.toUtf8().constData());
 	r.x = v[0].toDouble();
 	r.y = v[1].toDouble();
@@ -1326,7 +1326,7 @@ Vector3i WzConfig::vector3i(const QString &name)
 {
 	Vector3i r;
 	ASSERT_OR_RETURN(r, contains(name), "Missing %s", name.toUtf8().constData());
-	QVariantList v = value(name).toList();
+	QStringList v = value(name).toStringList();
 	ASSERT(v.size() == 3, "Bad list of %s", name.toUtf8().constData());
 	r.x = v[0].toInt();
 	r.y = v[1].toInt();
@@ -1346,7 +1346,7 @@ Vector2i WzConfig::vector2i(const QString &name)
 {
 	Vector2i r;
 	ASSERT_OR_RETURN(r, contains(name), "Missing %s", name.toUtf8().constData());
-	QVariantList v = value(name).toList();
+	QStringList v = value(name).toStringList();
 	ASSERT(v.size() == 2, "Bad list of %s", name.toUtf8().constData());
 	r.x = v[0].toInt();
 	r.y = v[1].toInt();
