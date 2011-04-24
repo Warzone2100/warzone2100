@@ -1,5 +1,5 @@
---- quesoglc-0.7.3~svn913/include/GL/glew.h.old	2008-06-04 23:47:50.000000000 +0200
-+++ quesoglc-0.7.3~svn913/include/GL/glew.h	2010-07-21 16:27:25.000000000 +0200
+--- $sourcebase/include/GL/glew.h	2008-06-04 23:47:50.000000000 +0200
++++ $sourcebase/include/GL/glew.h	2010-07-21 16:27:25.000000000 +0200
 @@ -158,6 +158,7 @@
  #  define _PTRDIFF_T_
  #endif

@@ -1,4 +1,4 @@
-/* $Id: minissdpc.c,v 1.10 2009/09/21 12:57:42 nanard Exp $ */
+/* $Id: minissdpc.c,v 1.14 2010/11/25 09:57:25 nanard Exp $ */
 /* Project : miniupnp
  * Author : Thomas BERNARD
  * copyright (c) 2005-2009 Thomas Bernard
@@ -8,15 +8,22 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <sys/types.h>
+#if defined(WIN32) || defined(__amigaos__) || defined(__amigaos4__)
 #ifdef WIN32
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #include <io.h>
-// Warzone additions
-#include "lib/framework/types.h"
-typedef SSIZE_T ssize_t;
-// end WZ
+#include <winsock.h>
+#include <stdint.h>
+#endif
+#if defined(__amigaos__) || defined(__amigaos4__)
+#include <sys/socket.h>
+#endif
+#if defined(__amigaos__)
+#define uint16_t unsigned short
+#endif
 /* Hack */
 #define UNIX_PATH_LEN   108
 struct sockaddr_un {
@@ -26,7 +33,6 @@ struct sockaddr_un {
 #else
 #include <sys/socket.h>
 #include <sys/un.h>
-#include <unistd.h>
 #endif
 
 #include "minissdpc.h"

@@ -32,7 +32,7 @@ $(PKG_SOURCEBASE)/configure: $(PKG_SOURCEBASE)/configure.in patch-stamp
 	cd $(PKG_SOURCEBASE) && ./bootstrap
 
 $(PKG_SOURCEBASE)/config.status: $(PKG_SOURCEBASE)/configure
-	cd $(PKG_SOURCEBASE) && ./configure --host=$(HOST_TRIPLET) --enable-static --disable-shared --prefix=`pwd`/../$(TOPDIR)/build/libs CPPFLAGS="-I`pwd`/../$(TOPDIR)/build/libs/include -DGLEW_STATIC" LDFLAGS=-L`pwd`/../$(TOPDIR)/build/libs/lib PKG_CONFIG_PATH=`pwd`/../$(TOPDIR)/build/libs/lib/pkgconfig --disable-executables --without-x --without-glew --without-fribidi --disable-tls ac_cv_func_malloc_0_nonnull=yes ac_cv_func_realloc_0_nonnull=yes
+	cd $(PKG_SOURCEBASE) && ./configure --host=$(HOST_TRIPLET) --enable-static --disable-shared --prefix=`pwd`/../$(TOPDIR)/build/libs CPPFLAGS="-I`pwd`/../$(TOPDIR)/build/libs/include -DGLEW_STATIC" LDFLAGS=-L`pwd`/../$(TOPDIR)/build/libs/lib PKG_CONFIG_PATH=`pwd`/../$(TOPDIR)/build/libs/lib/pkgconfig --disable-executables --without-x --without-fribidi --without-glew --disable-tls ac_cv_func_malloc_0_nonnull=yes ac_cv_func_realloc_0_nonnull=yes
 
 $(PKG_SOURCEBASE)/build/libGLC.la: $(PKG_SOURCEBASE)/config.status
 	$(MAKE) -C $(PKG_SOURCEBASE)/build libGLC.la
@@ -41,7 +41,7 @@ $(TOPDIR)/build/libs/lib/libGLC.la: $(PKG_SOURCEBASE)/build/libGLC.la
 	$(MAKE) -C $(PKG_SOURCEBASE)/build install-libLTLIBRARIES
 
 $(PKG_SOURCEBASE)/quesoglc.pc: $(PKG_SOURCEBASE)/config.status
-	$(MAKE) -C $(PKG_SOURCEBASE) quesoglc.pc
+	$(MAKE) -C $(PKG_SOURCEBASE) quesoglc.pc && sed -i -e "s/,\s*$$//" $(PKG_SOURCEBASE)/quesoglc.pc # Remove extraneous comma (autoconfigure artifact)
 
 $(TOPDIR)/build/libs/lib/pkgconfig/quesoglc.pc: $(PKG_SOURCEBASE)/quesoglc.pc
 	$(MAKE) -C $(PKG_SOURCEBASE) install-pkgconfigDATA

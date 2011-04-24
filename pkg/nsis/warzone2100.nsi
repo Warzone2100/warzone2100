@@ -622,9 +622,9 @@ FunctionEnd
   LangString DESC_SecOriginalMod ${LANG_GERMAN} "Spielen Sie das Spiel mit dem Balancing aus der Originalversion 1.10."
 
   ;Russian
-  LangString WZWelcomeText ${LANG_RUSSIAN} "This wizard will guide you through the installation of Warzone 2100.\r\n\r\nIt is recommended that you close all other applications before starting Setup. This will make it possible to update relevant system files without having to reboot your computer.\r\n\r\nWarzone 2100 is 100% free, if you paid for it, let us know!\r\n\r\nClick Next to continue."  
-  LangString WZ_GPL_ACCEPT ${LANG_RUSSIAN} "I agree"
-  LangString WZ_GPL_DECLINE ${LANG_RUSSIAN} "I don't agree"
+  LangString WZWelcomeText ${LANG_RUSSIAN} "Этот помощник установки поможет вам установить Warzone2100.\r\n\r\nПеред началом рекомендуем закрыть все другие приложения. Это позволит обновить соответствующие системные файлы без перезагрузки системы.\r\n\r\nWarzone2100 100% бесплатный, если вы за него заплатили сообщите нам!\r\n\r\nНажмите Далее для продолжения."  
+  LangString WZ_GPL_ACCEPT ${LANG_RUSSIAN} "Согласен"
+  LangString WZ_GPL_DECLINE ${LANG_RUSSIAN} "Не Согласен"
   
   LangString TEXT_SecBase ${LANG_RUSSIAN} "Базовые файлы"
   LangString DESC_SecBase ${LANG_RUSSIAN} "Файлы требуемые для запуска Warzone 2100."
