@@ -990,25 +990,9 @@ static void actionHomeBasePos(SDWORD player, SDWORD *px, SDWORD *py)
 
 #define	VTOL_ATTACK_AUDIO_DELAY		(3*GAME_TICKS_PER_SEC)
 
-// Update the action state for a droid
-void actionUpdateDroid(DROID *psDroid)
+void actionSanity(DROID *psDroid)
 {
-	BASE_OBJECT			*psTarget;
-	PROPULSION_STATS	*psPropStats;
-	BOOL				(*actionUpdateFunc)(DROID *psDroid) = NULL;
-	signed int i;
-	unsigned int j;
-	//this is a bit field
-	bool nonNullWeapon[DROID_MAXWEAPS] = { false };
-	BASE_OBJECT			*psTargets[DROID_MAXWEAPS];
-	bool hasVisibleTarget = false;
-	bool targetVisibile[DROID_MAXWEAPS] = { false };
-	bool bHasTarget;
-
-	CHECK_DROID(psDroid);
-
-	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-	ASSERT_OR_RETURN(, psPropStats != NULL, "Invalid propulsion stats pointer");
+	int i;
 
 	// clear the target if it has died
 	for (i = 0; i < DROID_MAXWEAPS; i++)
@@ -1040,6 +1024,29 @@ void actionUpdateDroid(DROID *psDroid)
 			}
 		}
 	}
+}
+
+// Update the action state for a droid
+void actionUpdateDroid(DROID *psDroid)
+{
+	BASE_OBJECT			*psTarget;
+	PROPULSION_STATS	*psPropStats;
+	BOOL				(*actionUpdateFunc)(DROID *psDroid) = NULL;
+	signed int i;
+	unsigned int j;
+	//this is a bit field
+	bool nonNullWeapon[DROID_MAXWEAPS] = { false };
+	BASE_OBJECT			*psTargets[DROID_MAXWEAPS];
+	bool hasVisibleTarget = false;
+	bool targetVisibile[DROID_MAXWEAPS] = { false };
+	bool bHasTarget;
+
+	CHECK_DROID(psDroid);
+
+	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
+	ASSERT_OR_RETURN(, psPropStats != NULL, "Invalid propulsion stats pointer");
+
+	actionSanity(psDroid);
 
 	//if the droid has been attacked by an EMP weapon, it is temporarily disabled
 	if (psDroid->lastHitWeapon == WSC_EMP)

@@ -2347,6 +2347,20 @@ BOOL loadMissionExtras(const char *pGameToLoad, SWORD levelType)
 	return true;
 }
 
+static void sanityUpdate(void)
+{
+	int player;
+	DROID *psDroid;
+
+	for (player = 0; player < game.maxPlayers; player++)
+	{
+		for (psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
+		{
+			orderCheckList(psDroid);
+			actionSanity(psDroid);
+		}
+	}
+}
 
 // -----------------------------------------------------------------------------------------
 // UserSaveGame ... this is true when you are loading a players save game
@@ -3527,6 +3541,7 @@ BOOL saveGame(char *aFileName, SDWORD saveType)
 
 	fileExtension = strlen(CurrentFileName) - 3;
 	gameTimeStop();
+	sanityUpdate();
 
 	/* Write the data to the file */
 	if (!writeGameFile(CurrentFileName, saveType))

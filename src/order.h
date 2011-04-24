@@ -144,6 +144,9 @@ typedef enum _secondary_state
 //call this *AFTER* every mission so it gets reset
 extern void initRunData(void);
 
+/// Check all the orders in the list for died objects
+void orderCheckList(DROID *psDroid);
+
 /* Update a droids order state */
 extern void orderUpdateDroid(DROID *psDroid);
 
