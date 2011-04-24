@@ -1573,10 +1573,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4333612211A07FB900380F5E /* QtCore.framework in Frameworks */,
-				43F1D9801343F1C5001478EC /* QtScript.framework in Frameworks */,
-				4333612311A07FB900380F5E /* QtGui.framework in Frameworks */,
-				4333612511A07FBA00380F5E /* QtOpenGL.framework in Frameworks */,
 				43B8FC9A127CB06C006F5A13 /* Zlib.framework in Frameworks */,
 				43B8FCB7127CB072006F5A13 /* PhysFS.framework in Frameworks */,
 				43B8FCB8127CB07C006F5A13 /* Png.framework in Frameworks */,
@@ -1591,6 +1587,10 @@
 				43B8FD31127CB13F006F5A13 /* OpenAL.framework in Frameworks */,
 				43B8FD33127CB13F006F5A13 /* OpenAL.framework in Frameworks */,
 				43B8FD35127CB13F006F5A13 /* OpenGL.framework in Frameworks */,
+				4333612211A07FB900380F5E /* QtCore.framework in Frameworks */,
+				43F1D9801343F1C5001478EC /* QtScript.framework in Frameworks */,
+				4333612311A07FB900380F5E /* QtGui.framework in Frameworks */,
+				4333612511A07FBA00380F5E /* QtOpenGL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
