@@ -2,6 +2,7 @@
  * General:
    * Change: Increase recycled experience storage in memory (commit:703665b4b7df1282eee29a7064961bc66152a847)
    * Change: Set a window icon (ticket:2465, commit:ac792c67d4bb66618ae7ff712844c4eebb70a496)
+   * Change: Prevent savegame corruption (ticket:2100, commit:a974722e397b7072fb59d0114e2a4ef9f8d509d8)
  * Mods:
    * Fix: 1.10 Balance (commit:9943ff3a4b67b0f64a9e2ee163c8ccac711be72e)
  * Translations:
