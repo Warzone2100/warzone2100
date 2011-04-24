@@ -23,9 +23,6 @@
  * This is where we do texture atlas generation.
  */
 
-#ifdef CursorShape
-#undef CursorShape  // Random #defines are bad.
-#endif
 #include "lib/framework/frame.h"
 #include "lib/framework/opengl.h"
 

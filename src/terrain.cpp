@@ -29,9 +29,6 @@
  * The water is drawn using the hardcoded page-80 and page-81 textures. 
  */
 
-#ifdef CursorShape
-#undef CursorShape  // Random #defines are bad.
-#endif
 #include <string.h>
 
 #include "lib/framework/frame.h"
