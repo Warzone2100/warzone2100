@@ -1,172 +1,46 @@
 // technology auto enabler.
 
-public	int				initialPowerCl,initialPowerBa,initialPowerDe,numCamTech,numCamTechB,count,playnum;
+public	int		initialPowerCl, initialPowerBa, initialPowerDe, numCamTech, numCamTechB;
 public	RESEARCHSTAT	camTech[254];
 public	RESEARCHSTAT	camTechB[17];
 
 event setTechPower(CALL_GAMEINIT)
 {
-	playnum=0;
-	while (playnum < 8)
+	local int playnum, count;
+
+	playnum = 0;
+	while (playnum < MAX_PLAYERS)
 	{
 		if(multiPlayerBaseType == CAMP_CLEAN)
 		{
-			setPowerLevel(initialPowerCl,playnum);	
+			setPowerLevel(initialPowerCl, playnum);
 		}
 		else if(multiPlayerBaseType == CAMP_BASE)
 		{
-			setPowerLevel(initialPowerBa,playnum);	
+			setPowerLevel(initialPowerBa, playnum);
 		}
 		else
 		{
-			setPowerLevel(initialPowerDe,playnum);	
+			setPowerLevel(initialPowerDe, playnum);
 		}
 		playnum = playnum + 1;		
 	}
-}	
 
-event tech0(CALL_GAMEINIT)
-{
-	count = 0;								
 	playnum = 0;
-	while (count <= numCamTech)
+	while (playnum < MAX_PLAYERS)
 	{
-		completeResearch(camTech[count], playnum);
-		count = count +1;
+		count = 0;
+		while (count <= numCamTech)
+		{
+			completeResearch(camTech[count], playnum);
+			count = count + 1;
+		}
+		count = 0;
+		while (count < numCamTechB)
+		{
+			completeResearch(camTechB[count], playnum);
+			count = count + 1;
+		}
+		playnum = playnum + 1;		
 	}
-	count = 0;								
-	while (count < numCamTechB)
-	{
-		completeResearch(camTechB[count], playnum);
-		count = count +1;
-	}
-}
-
-event tech1(CALL_GAMEINIT)
-{
-	count = 0;								
-	playnum = 1;
-	while (count <= numCamTech)
-	{
-		completeResearch(camTech[count], playnum);
-		count = count +1;
-	}
-	count = 0;								
-	while (count < numCamTechB)
-	{
-		completeResearch(camTechB[count], playnum);
-		count = count +1;
-	}
-
-}
-
-event tech2(CALL_GAMEINIT)
-{
-	count = 0;								
-	playnum = 2;
-	while (count <= numCamTech)
-	{
-		completeResearch(camTech[count], playnum);
-		count = count +1;
-	}
-	count = 0;								
-	while (count < numCamTechB)
-	{
-		completeResearch(camTechB[count], playnum);
-		count = count +1;
-	}
-
-}
-
-event tech3(CALL_GAMEINIT)
-{
-	count = 0;								
-	playnum = 3;
-	while (count <= numCamTech)
-	{
-		completeResearch(camTech[count], playnum);
-		count = count +1;
-	}
-	
-	count = 0;								
-	while (count < numCamTechB)
-	{
-		completeResearch(camTechB[count], playnum);
-		count = count +1;
-	}
-
-
-}
-
-event tech4(CALL_GAMEINIT)
-{
-	count = 0;								
-	playnum = 4;
-	while (count <= numCamTech)
-	{
-		completeResearch(camTech[count], playnum);
-		count = count +1;
-	}
-	count = 0;								
-	while (count < numCamTechB)
-	{
-		completeResearch(camTechB[count], playnum);
-		count = count +1;
-	}
-
-
-}
-
-event tech5(CALL_GAMEINIT)
-{
-	count = 0;								
-	playnum = 5;
-	while (count <= numCamTech)
-	{
-		completeResearch(camTech[count], playnum);
-		count = count +1;
-	}
-	count = 0;								
-	while (count < numCamTechB)
-	{
-		completeResearch(camTechB[count], playnum);
-		count = count +1;
-	}
-
-}
-
-event tech6(CALL_GAMEINIT)
-{
-	count = 0;								
-	playnum = 6;
-	while (count <= numCamTech)
-	{
-		completeResearch(camTech[count], playnum);
-		count = count +1;
-	}
-	count = 0;								
-	while (count < numCamTechB)
-	{
-		completeResearch(camTechB[count], playnum);
-		count = count +1;
-	}
-
-}
-
-event tech7(CALL_GAMEINIT)
-{
-	count = 0;								
-	playnum = 7;
-	while (count <= numCamTech)
-	{
-		completeResearch(camTech[count], playnum);
-		count = count +1;
-	}
-	count = 0;								
-	while (count < numCamTechB)
-	{
-		completeResearch(camTechB[count], playnum);
-		count = count +1;
-	}
-
 }
