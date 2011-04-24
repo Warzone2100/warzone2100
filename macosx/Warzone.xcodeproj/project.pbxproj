@@ -4822,8 +4822,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLY_RULES_IN_COPY_FILES = YES;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
-				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
+				ARCHS = (
+					i386,
+					ppc,
+				);
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
