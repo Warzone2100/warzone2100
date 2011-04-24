@@ -23,6 +23,7 @@
 
 // Get platform defines before checking for them!
 #include "lib/framework/frame.h"
+#include <QtCore/QTextCodec>
 
 #if defined(WZ_OS_WIN)
 #  include <shlobj.h> /* For SHGetFolderPath */
@@ -1083,6 +1084,7 @@ int main(int argc, char *argv[])
 	{
 		return -1;
 	}
+	QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));	// make Qt treat all C strings in Warzone as UTF-8
 
 	setupExceptionHandler(utfargc, utfargv);
 
