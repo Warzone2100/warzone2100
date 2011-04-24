@@ -801,22 +801,35 @@ bool initTerrain(void)
 					{
 						continue; // off map, so skip
 					}
+
+					/* One tile is composed of 4 triangles,
+					 * we need _2_ vertices per tile (1)
+					 * 		e.g. center and bottom left
+					 * 	the other 3 vertices are from the adjacent tiles
+					 * 	on their top and right.
+					 * (1) The top row and right column of tiles need 4 vertices per tile
+					 * 	because they do not have adjacent tiles on their top and right,
+					 * 	that is why we add _1_ row and _1_ column to provide the geometry
+					 * 	for these tiles.
+					 * This is the source of the '*2' and '+1' in the index math below.
+					 */
 #define q(i,j,center) ((x*ySectors+y)*(sectorSize+1)*(sectorSize+1)*2 + ((i)*(sectorSize+1)+(j))*2+(center))
-					geometryIndex[geometryIndexSize+0]  = q(i  ,j  ,1);
-					geometryIndex[geometryIndexSize+1]  = q(i  ,j  ,0);
-					geometryIndex[geometryIndexSize+2]  = q(i+1,j  ,0);
-					
-					geometryIndex[geometryIndexSize+3]  = q(i  ,j  ,1);
-					geometryIndex[geometryIndexSize+4]  = q(i  ,j+1,0);
-					geometryIndex[geometryIndexSize+5]  = q(i  ,j  ,0);
-					
-					geometryIndex[geometryIndexSize+6]  = q(i  ,j  ,1);
-					geometryIndex[geometryIndexSize+7]  = q(i+1,j+1,0);
-					geometryIndex[geometryIndexSize+8]  = q(i  ,j+1,0);
-					
-					geometryIndex[geometryIndexSize+9]  = q(i  ,j  ,1);
-					geometryIndex[geometryIndexSize+10] = q(i+1,j  ,0);
-					geometryIndex[geometryIndexSize+11] = q(i+1,j+1,0);
+					// First triangle
+					geometryIndex[geometryIndexSize+0]  = q(i  ,j  ,1);	// Center vertex
+					geometryIndex[geometryIndexSize+1]  = q(i  ,j  ,0);	// Bottom left
+					geometryIndex[geometryIndexSize+2]  = q(i+1,j  ,0);	// Bottom right
+					// Second triangle
+					geometryIndex[geometryIndexSize+3]  = q(i  ,j  ,1);	// Center vertex
+					geometryIndex[geometryIndexSize+4]  = q(i  ,j+1,0);	// Top left
+					geometryIndex[geometryIndexSize+5]  = q(i  ,j  ,0);	// Bottom left
+					// Third triangle
+					geometryIndex[geometryIndexSize+6]  = q(i  ,j  ,1);	// Center vertex
+					geometryIndex[geometryIndexSize+7]  = q(i+1,j+1,0);	// Top right
+					geometryIndex[geometryIndexSize+8]  = q(i  ,j+1,0);	// Top left
+					// Fourth triangle
+					geometryIndex[geometryIndexSize+9]  = q(i  ,j  ,1);	// Center vertex
+					geometryIndex[geometryIndexSize+10] = q(i+1,j  ,0);	// Bottom right
+					geometryIndex[geometryIndexSize+11] = q(i+1,j+1,0);	// Top right
 					geometryIndexSize += 12;
 					if (isWater(i+x*sectorSize,j+y*sectorSize))
 					{
