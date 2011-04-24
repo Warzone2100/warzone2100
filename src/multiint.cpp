@@ -272,18 +272,6 @@ void loadMultiScripts()
 	resLoadFile("SCRIPT", "rules.slo");
 	resLoadFile("SCRIPTVAL", "rules.vlo");
 
-	// Load extra tech levels
-	if (current_tech == 2)
-	{
-		resLoadFile("SCRIPT", "sktech.slo");
-		resLoadFile("SCRIPTVAL", "sk2tech.vlo");
-	}
-	else if (current_tech == 3)
-	{
-		resLoadFile("SCRIPT", "sktech.slo");
-		resLoadFile("SCRIPTVAL", "sk3tech.vlo");
-	}
-
 	// Backup data hashes, since AI and scavenger scripts aren't run on all clients.
 	uint32_t oldHash1 = DataHash[DATA_SCRIPT];
 	uint32_t oldHash2 = DataHash[DATA_SCRIPTVAL];
