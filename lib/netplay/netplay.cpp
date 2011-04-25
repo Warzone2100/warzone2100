@@ -40,9 +40,12 @@
 #include "netlog.h"
 #include "netsocket.h"
 
+extern "C"
+{
 #include <miniupnpc/miniwget.h>
 #include <miniupnpc/miniupnpc.h>
 #include <miniupnpc/upnpcommands.h>
+}
 #include "lib/exceptionhandler/dumpinfo.h"
 
 #include "src/multistat.h"
