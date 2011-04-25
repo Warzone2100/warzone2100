@@ -24,7 +24,3 @@ libwidget_a_SOURCES = \
 	slider.cpp \
 	tip.cpp \
 	widget.cpp
-
-libwidget_a_LIBADD = \
-	$(top_builddir)/lib/ivis_opengl/libivis_opengl.a \
-	$(top_builddir)/lib/framework/libframework.a

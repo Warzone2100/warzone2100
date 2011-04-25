@@ -43,5 +43,3 @@ libivis_opengl_a_SOURCES = \
 	jpeg_encoder.cpp \
 	pieclip.cpp \
 	png_util.cpp
-
-libivis_opengl_a_LIBADD = $(top_builddir)/lib/framework/libframework.a

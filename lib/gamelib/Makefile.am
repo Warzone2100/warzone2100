@@ -39,7 +39,3 @@ libgamelib_a_SOURCES = \
 	audp_parser.tab.cpp \
 	gtime.cpp \
 	hashtable.cpp
-
-libgamelib_a_LIBADD = \
-	$(top_builddir)/lib/ivis_opengl/libivis_opengl.a \
-	$(top_builddir)/lib/framework/libframework.a
