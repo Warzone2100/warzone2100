@@ -58,7 +58,7 @@ struct Vector3f
 	Vector3f(float x, float y, float z) : x(x), y(y), z(z) {}
 	Vector3f(Vector3i const &v) : x(v.x), y(v.y), z(v.z) {}
 	Vector3f(Vector3f const &v) : x(v.x), y(v.y), z(v.z) {}
-	Vector3f(Vector2f const &xy, int z) : x(xy.x), y(xy.y), z(z) {}
+	Vector3f(Vector2f const &xy, float z) : x(xy.x), y(xy.y), z(z) {}
 
 	float x, y, z;
 };
@@ -162,42 +162,18 @@ static inline Vector3f const &operator +=(Vector3f &a, Vector3f const &b) { retu
 
 
 /*!
- * Convert a float vector to integer
- * \param v Vector to convert
- * \return Float vector
- */
-static inline WZ_DECL_CONST Vector2i Vector2f_To2i(const Vector2f v)
-{
-	return Vector2i((int)v.x, (int)v.y);
-}
-
-
-
-/*!
  * Rotate v
  * \param v vector to rotate
- * \param degrees the amount of degrees to rotate in counterclockwise direction
+ * \param angle the amount * 32768/π to rotate in counterclockwise direction
  * \return Result
  */
-static inline WZ_DECL_PURE Vector2f Vector2f_Rotate2f(Vector2f v, float degrees)
+static inline WZ_DECL_PURE Vector2f Vector2f_Rotate2f(Vector2f v, int angle)
 {
 	Vector2f result;
-	int angle = (int)((degrees*65536 + 180)/360);
 	result.x = (v.x*iCos(angle) - v.y*iSin(angle)) / 65536;
 	result.y = (v.x*iSin(angle) + v.y*iCos(angle)) / 65536;
 
 	return result;
-}
-
-
-/*!
- * Convert a float vector to integer
- * \param v Vector to convert
- * \return Float vector
- */
-static inline WZ_DECL_CONST Vector3i Vector3f_To3i(const Vector3f v)
-{
-	return Vector3i((int)v.x, (int)v.y, (int)v.z);
 }
 
 

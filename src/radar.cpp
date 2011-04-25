@@ -235,7 +235,7 @@ void CalcRadarPosition(int mX, int mY, int *PosX, int *PosY)
 	pos.y = mY - radarCenterY;
 	if (rotateRadar)
 	{
-		pos = Vector2f_Rotate2f(pos, -player.r.y/DEG(1));
+		pos = Vector2f_Rotate2f(pos, -player.r.y);
 	}
 	pos.x += radarWidth/2.0;
 	pos.y += radarHeight/2.0;
@@ -669,7 +669,7 @@ bool CoordInRadar(int x,int y)
 	pos.y = y - radarCenterY;
 	if (rotateRadar)
 	{
-		pos = Vector2f_Rotate2f(pos, -player.r.y/DEG(1));
+		pos = Vector2f_Rotate2f(pos, -player.r.y);
 	}
 	pos.x += radarWidth/2.0;
 	pos.y += radarHeight/2.0;
