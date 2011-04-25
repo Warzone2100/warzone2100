@@ -427,8 +427,6 @@ void initEffectsSystem(void)
 
 static void positionEffect(const EFFECT *psEffect)
 {
-	int rx, rz;
-
 	/* Establish world position */
 	Vector3i dv(
 		(psEffect->position.x - player.p.x) - terrainMidX * TILE_UNITS,
@@ -441,13 +439,6 @@ static void positionEffect(const EFFECT *psEffect)
 
 	/* Move to position */
 	pie_TRANSLATE(dv.x, dv.y, dv.z);
-
-	/* Get the x,z translation components */
-	rx = map_round(player.p.x);
-	rz = map_round(player.p.z);
-
-	/* Move to camera reference */
-	pie_TRANSLATE(rx, 0, -rz);
 }
 
 static void killEffect(EFFECT *e)

@@ -992,7 +992,6 @@ void displayComponentButtonObject(DROID *psDroid, Vector3i *Rotation, Vector3i *
 void displayComponentObject(DROID *psDroid)
 {
 	Vector3i	position, rotation;
-	int32_t		xShift,zShift;
 	SDWORD		frame;
 	UDWORD	tileX,tileY;
 	MAPTILE	*psTile;
@@ -1002,13 +1001,6 @@ void displayComponentObject(DROID *psDroid)
 
 	/* Push the matrix */
 	pie_MatBegin();
-
-	/* Get internal tile units coordinates */
-	xShift = map_round(player.p.x);
-	zShift = map_round(player.p.z);
-
-	/* Mask out to tile_units resolution */
-	pie_TRANSLATE(xShift,0,-zShift);
 
 	/* Get the real position */
 	position.x = (st.pos.x - player.p.x) - terrainMidX*TILE_UNITS;

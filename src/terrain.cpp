@@ -1339,14 +1339,6 @@ void drawTerrain(void)
 	glDisable(GL_TEXTURE_GEN_S); glError();
 	glDisable(GL_TEXTURE_GEN_T); glError();
 
-#ifdef MESA_BUG
-	// prevent the terrain from getting corrupted by the decal drawing code
-	// (something with VBO + changing the texture)
-	// this happens on radeon + mesa
-	// FIXME: remove this after the driver is fixed
-	glFlush();
-#endif
-
 	//////////////////////////////////
 	// decals
 

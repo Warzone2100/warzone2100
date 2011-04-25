@@ -59,7 +59,6 @@ static std::vector<BUCKET_TAG> bucketArray;
 static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 {
 	SDWORD				z = 0, radius;
-	SDWORD				px, pz;
 	Vector2i				pixel;
 	Vector3i				position;
 	UDWORD				droidSize;
@@ -75,12 +74,6 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 	switch(objectType)
 	{
 		case RENDER_PARTICLE:
-	   		px = player.p.x & (TILE_UNITS-1);
-	   		pz = player.p.z & (TILE_UNITS-1);
-
-	   		/* Translate */
-   			pie_TRANSLATE(px,0,-pz);
-
 			position.x = ((ATPART*)pObject)->position.x;
 			position.y = ((ATPART*)pObject)->position.y;
 			position.z = ((ATPART*)pObject)->position.z;
@@ -118,12 +111,6 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 				//the weapon stats holds the reference to which graphic to use
 				pImd = ((PROJECTILE*)pObject)->psWStats->pInFlightGraphic;
 
-	   			px = player.p.x & (TILE_UNITS-1);
-	   			pz = player.p.z & (TILE_UNITS-1);
-
-	   			/* Translate */
-   				pie_TRANSLATE(px,0,-pz);
-
 				psSimpObj = (SIMPLE_OBJECT*) pObject;
    				position.x = (psSimpObj->pos.x - player.p.x) - terrainMidX*TILE_UNITS;
    				position.z = terrainMidY*TILE_UNITS - (psSimpObj->pos.y - player.p.z);
@@ -147,12 +134,6 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 			}
 			break;
 		case RENDER_STRUCTURE://not depth sorted
-	   		px = player.p.x & (TILE_UNITS-1);
-	   		pz = player.p.z & (TILE_UNITS-1);
-
-	   		/* Translate */
-   			pie_TRANSLATE(px,0,-pz);
-
 			psSimpObj = (SIMPLE_OBJECT*) pObject;
    			position.x = (psSimpObj->pos.x - player.p.x) - terrainMidX*TILE_UNITS;
    			position.z = terrainMidY*TILE_UNITS - (psSimpObj->pos.y - player.p.z);
@@ -189,12 +170,6 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 			}
 			break;
 		case RENDER_FEATURE://not depth sorted
-	   		px = player.p.x & (TILE_UNITS-1);
-	   		pz = player.p.z & (TILE_UNITS-1);
-
-	   		/* Translate */
-   			pie_TRANSLATE(px,0,-pz);
-
 			psSimpObj = (SIMPLE_OBJECT*) pObject;
    			position.x = (psSimpObj->pos.x - player.p.x) - terrainMidX*TILE_UNITS;
    			position.z = terrainMidY*TILE_UNITS - (psSimpObj->pos.y - player.p.z);
@@ -217,12 +192,6 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 			}
 			break;
 		case RENDER_ANIMATION://not depth sorted
-	   		px = player.p.x & (TILE_UNITS-1);
-	   		pz = player.p.z & (TILE_UNITS-1);
-
-	   		/* Translate */
-   			pie_TRANSLATE(px,0,-pz);
-
 			psCompObj = (COMPONENT_OBJECT *) pObject;
 			spacetime = interpolateObjectSpacetime((SIMPLE_OBJECT *)psCompObj->psParent, graphicsTime);
 			position.x = (spacetime.pos.x - player.p.x) - terrainMidX*TILE_UNITS;
@@ -249,11 +218,6 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 		case RENDER_DROID:
 		case RENDER_SHADOW:
 			psDroid = (DROID*) pObject;
-	   		px = player.p.x & (TILE_UNITS-1);
-	   		pz = player.p.z & (TILE_UNITS-1);
-
-	   		/* Translate */
-   			pie_TRANSLATE(px,0,-pz);
 
 			psSimpObj = (SIMPLE_OBJECT*) pObject;
    			position.x = (psSimpObj->pos.x - player.p.x) - terrainMidX*TILE_UNITS;
@@ -282,11 +246,6 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 			}
 			break;
 		case RENDER_PROXMSG:
-	   		px = player.p.x & (TILE_UNITS-1);
-	   		pz = player.p.z & (TILE_UNITS-1);
-
-	   		/* Translate */
-   			pie_TRANSLATE(px,0,-pz);
 			if (((PROXIMITY_DISPLAY *)pObject)->type == POS_PROXDATA)
 			{
 				position.x = (((VIEW_PROXIMITY *)((VIEWDATA *)((PROXIMITY_DISPLAY *)
@@ -326,12 +285,6 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 			}
 			break;
 		case RENDER_EFFECT:
-	   		px = player.p.x & (TILE_UNITS-1);
-	   		pz = player.p.z & (TILE_UNITS-1);
-
-	   		/* Translate */
-   			pie_TRANSLATE(px,0,-pz);
-
    			position.x = (SDWORD)(((EFFECT*)pObject)->position.x - player.p.x) - terrainMidX*TILE_UNITS;
    			position.z = (SDWORD)(terrainMidY*TILE_UNITS - (((EFFECT*)pObject)->position.z - player.p.z));
  			position.y = (SDWORD)((EFFECT*)pObject)->position.y;
@@ -359,11 +312,6 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 			break;
 
 		case RENDER_DELIVPOINT:
-	   		px = player.p.x & (TILE_UNITS-1);
-	   		pz = player.p.z & (TILE_UNITS-1);
-
-	   		/* Translate */
-   			pie_TRANSLATE(px,0,-pz);
 			position.x = (((FLAG_POSITION *)pObject)->coords.x - player.p.x) -
 				terrainMidX * TILE_UNITS;
    			position.z = terrainMidY*TILE_UNITS - (((FLAG_POSITION*)pObject)->

@@ -115,21 +115,6 @@ void pie_MatEnd(void)
 }
 
 
-void pie_MATTRANS(float x, float y, float z)
-{
-	GLfloat matrix[16];
-
-	psMatrix->j = x * FP12_MULTIPLIER;
-	psMatrix->k = y * FP12_MULTIPLIER;
-	psMatrix->l = z * FP12_MULTIPLIER;
-
-	glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
-	matrix[12] = x;
-	matrix[13] = y;
-	matrix[14] = z;
-	glLoadMatrixf(matrix);
-}
-
 void pie_TRANSLATE(int32_t x, int32_t y, int32_t z)
 {
 	/*

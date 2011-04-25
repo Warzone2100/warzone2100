@@ -114,7 +114,6 @@ bool bridgeValid(int startX, int startY, int endX, int endY)
 */
 bool	renderBridgeSection(STRUCTURE *psStructure)
 {
-	SDWORD			rx, rz;
 	Vector3i dv;
 
 	/* Bomb out if it's not visible */
@@ -133,13 +132,6 @@ bool	renderBridgeSection(STRUCTURE *psStructure)
 
 	/* Translate */
 	pie_TRANSLATE(dv.x, dv.y, dv.z);
-
-	/* Get the x,z translation components */
-	rx = map_round(player.p.x);
-	rz = map_round(player.p.z);
-
-	/* Translate */
-	pie_TRANSLATE(rx, 0, -rz);
 
 	pie_Draw3DShape(psStructure->sDisplay.imd, 0, 0, WZCOL_WHITE, 0, 0);
 

@@ -891,7 +891,6 @@ static void calcAverageTerrainHeight(iView *player)
 static void drawTiles(iView *player)
 {
 	UDWORD i, j;
-	SDWORD rx, rz;
 	Vector3f theSun;
 
 	/* ---------------------------------------------------------------- */
@@ -905,10 +904,6 @@ static void drawTiles(iView *player)
 	playerXTile = map_coord(player->p.x);
 	playerZTile = map_coord(player->p.z);
 
-	/* Get the x,z translation components */
-	rx = (player->p.x) & (TILE_UNITS-1);
-	rz = (player->p.z) & (TILE_UNITS-1);
-
 	/* ---------------------------------------------------------------- */
 	/* Set up the geometry                                              */
 	/* ---------------------------------------------------------------- */
@@ -917,11 +912,11 @@ static void drawTiles(iView *player)
 	/* Push identity matrix onto stack */
 	pie_MatBegin();
 
+	/* Set the camera position */
+	pie_TRANSLATE(0, 0, distance);
+
 	// Now, scale the world according to what resolution we're running in
 	pie_MatScale(pie_GetResScalingFactor() / 100.f);
-
-	/* Set the camera position */
-	pie_MATTRANS(0, 0, distance);
 
 	/* Rotate for the player */
 	pie_MatRotZ(player->r.z);
@@ -929,7 +924,7 @@ static void drawTiles(iView *player)
 	pie_MatRotY(player->r.y);
 
 	/* Translate */
-	pie_TRANSLATE(-rx, -player->p.y, rz);
+	pie_TRANSLATE(0, -player->p.y, 0);
 
 	// this also detemines the length of the shadows
 	theSun = getTheSun();
@@ -969,11 +964,11 @@ static void drawTiles(iView *player)
 	// now we are about to draw the terrain
 	pie_SetAlphaTest(false);
 	pie_SetFogStatus(true);
-	
+
 	glPushMatrix();
 	// also, make sure we can use world coordinates directly
-	glTranslatef(world_coord(-playerXTile-terrainMidX), 0.0f, world_coord(playerZTile+terrainMidY));
-	
+	glTranslatef(-player->p.x-world_coord(visibleTiles.x/2), 0.0f, player->p.z+world_coord(visibleTiles.y/2));
+
 	// and draw it
 	drawTerrain();
 
@@ -982,7 +977,7 @@ static void drawTiles(iView *player)
 
 	// draw skybox
 	renderSurroundings();
-	
+
 	// and prepare for rendering the models
 	pie_SetRendMode(REND_OPAQUE);
 	pie_SetAlphaTest(true);
@@ -1001,24 +996,24 @@ static void drawTiles(iView *player)
 	display3DProjectiles(); // bucket render implemented
 
 	atmosDrawParticles();
-	
+
 	// prepare for the water and the lightmap
 	pie_SetAlphaTest(false);
 	pie_SetFogStatus(true);
-	
+
 	glPushMatrix();
 	// also, make sure we can use world coordinates directly
-	glTranslatef(world_coord(-playerXTile-terrainMidX), 0.0f, world_coord(playerZTile+terrainMidY));
-	
+	glTranslatef(-player->p.x-world_coord(visibleTiles.x/2), 0.0f, player->p.z+world_coord(visibleTiles.y/2));
+
 	drawWater();
-	
+
 	// and to the warzone modelview transform
 	glPopMatrix();
 
 	bucketRenderCurrentList();
 
 	displayBlueprints();
-	
+
 	pie_RemainingPasses(); // draws shadows and transparent shapes
 
 	pie_EndLighting();
@@ -1075,7 +1070,7 @@ bool init3DView(void)
 
 	// distance is not saved, so initialise it now
 	distance = START_DISTANCE; // distance
-	
+
 	disp3d_resetView();	// clear player view variables
 
 	if (!initTerrain())
@@ -1205,7 +1200,6 @@ void	renderProjectile(PROJECTILE *psCurr)
 	WEAPON_STATS	*psStats;
 	Vector3i			dv;
 	iIMDShape		*pIMD;
-	SDWORD			rx, rz;
 	Spacetime       st;
 
 	psStats = psCurr->psWStats;
@@ -1242,12 +1236,6 @@ void	renderProjectile(PROJECTILE *psCurr)
 
 		/* Translate to the correct position */
 		pie_TRANSLATE(dv.x,dv.y,dv.z);
-		/* Get the x,z translation components */
-		rx = player.p.x & (TILE_UNITS-1);
-		rz = player.p.z & (TILE_UNITS-1);
-
-		/* Translate */
-		pie_TRANSLATE(rx,0,-rz);
 
 		/* Rotate it to the direction it's facing */
 		imdRot2.y = st.rot.direction;
@@ -1279,7 +1267,6 @@ void	renderAnimComponent( const COMPONENT_OBJECT *psObj )
 	Spacetime spacetime = interpolateObjectSpacetime(psParentObj, graphicsTime);
 	const SDWORD posX = spacetime.pos.x + psObj->position.x,
 	             posY = spacetime.pos.y + psObj->position.y;
-	int rx, rz;
 
 	ASSERT( psParentObj != NULL, "renderAnimComponent: invalid parent object pointer" );
 
@@ -1309,13 +1296,6 @@ void	renderAnimComponent( const COMPONENT_OBJECT *psObj )
 
 		/* parent object translation */
 		pie_TRANSLATE(dv.x, dv.y, dv.z);
-
-		/* Get the x,z translation components */
-		rx = player.p.x & (TILE_UNITS-1);
-		rz = player.p.z & (TILE_UNITS-1);
-
-		/* Translate */
-		pie_TRANSLATE(rx, 0, -rz);
 
 		/* parent object rotations */
 		imdRot2.y = spacetime.rot.direction;
@@ -1868,7 +1848,7 @@ void	setViewDistance(UDWORD dist)
 /// Draw a feature (tree/rock/etc.)
 void	renderFeature(FEATURE *psFeature)
 {
-	SDWORD		rotation, rx, rz;
+	SDWORD		rotation;
 	PIELIGHT	brightness;
 	Vector3i dv;
 	bool bForceDraw = ( !getRevealStatus() && psFeature->psStats->visibleAtStart);
@@ -1901,12 +1881,6 @@ void	renderFeature(FEATURE *psFeature)
 	buildings to face different ways - Don't know if this is necessary - should be IMO */
 	pie_TRANSLATE(dv.x,dv.y,dv.z);
 
-	/* Get the x,z translation components */
-	rx = player.p.x & (TILE_UNITS-1);
-	rz = player.p.z & (TILE_UNITS-1);
-
-	/* Translate */
-	pie_TRANSLATE(rx,0,-rz);
 	rotation = psFeature->rot.direction;
 
 	pie_MatRotY(-rotation);
@@ -1958,7 +1932,7 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp)
 	UDWORD			msgX = 0, msgY = 0;
 	Vector3i                dv(0, 0, 0);
 	VIEW_PROXIMITY	*pViewProximity = NULL;
-	SDWORD			x, y, r, rx, rz;
+	SDWORD			x, y, r;
 	iIMDShape		*proxImd = NULL;
 
 	//store the frame number for when deciding what has been clicked on
@@ -2005,12 +1979,7 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp)
 
 	/* Translate the message */
 	pie_TRANSLATE(dv.x,dv.y,dv.z);
-	/* Get the x,z translation components */
-	rx = player.p.x & (TILE_UNITS-1);
-	rz = player.p.z & (TILE_UNITS-1);
 
-	/* Translate */
-	pie_TRANSLATE(rx,0,-rz);
 	//get the appropriate IMD
 	if (pViewProximity)
 	{
@@ -2081,7 +2050,7 @@ static PIELIGHT getBlueprintColour(STRUCT_STATES state)
 /// Draw the structures
 void	renderStructure(STRUCTURE *psStructure)
 {
-	int			i, structX, structY, rx, rz, colour, rotation, frame, animFrame, pieFlag, pieFlagData;
+	int			i, structX, structY, colour, rotation, frame, animFrame, pieFlag, pieFlagData;
 	PIELIGHT		buildingBrightness;
 	Vector3i		dv;
 	bool			bHitByElectronic = false;
@@ -2136,13 +2105,6 @@ void	renderStructure(STRUCTURE *psStructure)
 	/* Translate the building  - N.B. We can also do rotations here should we require
 	buildings to face different ways - Don't know if this is necessary - should be IMO */
 	pie_TRANSLATE(dv.x,dv.y,dv.z);
-
-	/* Get the x,z translation components */
-	rx = player.p.x & (TILE_UNITS-1);
-	rz = player.p.z & (TILE_UNITS-1);
-
-	/* Translate */
-	pie_TRANSLATE(rx, 0, -rz);
 
 	/* OK - here is where we establish which IMD to draw for the building - luckily static objects,
 	* buildings in other words are NOT made up of components - much quicker! */
@@ -2451,9 +2413,9 @@ void	renderStructure(STRUCTURE *psStructure)
 /// draw the delivery points
 void	renderDeliveryPoint(FLAG_POSITION *psPosition, bool blueprint)
 {
-	Vector3i dv;
-	SDWORD			x, y, r, rx, rz;
-	Vector3f *temp = NULL;
+	Vector3i	dv;
+	SDWORD		x, y, r;
+	Vector3f*	temp = NULL;
 	int pieFlag, pieFlagData;
 	PIELIGHT colour;
 	//store the frame number for when deciding what has been clicked on
@@ -2467,13 +2429,6 @@ void	renderDeliveryPoint(FLAG_POSITION *psPosition, bool blueprint)
 	pie_MatBegin();
 
 	pie_TRANSLATE(dv.x,dv.y,dv.z);
-
-	/* Get the x,z translation components */
-	rx = player.p.x & (TILE_UNITS-1);
-	rz = player.p.z & (TILE_UNITS-1);
-
-	/* Translate */
-	pie_TRANSLATE(rx,0,-rz);
 
 	//quick check for invalid data
 	ASSERT( psPosition->factoryType < NUM_FLAG_TYPES && psPosition->factoryInc < MAX_FACTORY, "Invalid assembly point" );
@@ -2519,7 +2474,7 @@ void	renderDeliveryPoint(FLAG_POSITION *psPosition, bool blueprint)
 /// Draw a piece of wall
 static bool	renderWallSection(STRUCTURE *psStructure)
 {
-	SDWORD			structX, structY, rx, rz, height;
+	SDWORD			structX, structY, height;
 	PIELIGHT		brightness;
 	iIMDShape		*imd;
 	SDWORD			rotation;
@@ -2585,13 +2540,6 @@ static bool	renderWallSection(STRUCTURE *psStructure)
 
 		/* Translate */
 		pie_TRANSLATE(dv.x,dv.y,dv.z);
-
-		/* Get the x,z translation components */
-		rx = player.p.x & (TILE_UNITS-1);
-		rz = player.p.z & (TILE_UNITS-1);
-
-		/* Translate */
-		pie_TRANSLATE(rx, 0, -rz);
 
 		rotation = psStructure->rot.direction;
 		pie_MatRotY(-rotation);
@@ -2663,7 +2611,6 @@ static bool	renderWallSection(STRUCTURE *psStructure)
 void renderShadow( DROID *psDroid, iIMDShape *psShadowIMD )
 {
 	Vector3i dv;
-	SDWORD rx, rz;
 
 	dv.x = (psDroid->pos.x - player.p.x) - terrainMidX*TILE_UNITS;
 	if(psDroid->droidType == DROID_TRANSPORTER)
@@ -2677,13 +2624,6 @@ void renderShadow( DROID *psDroid, iIMDShape *psShadowIMD )
 	pie_MatBegin();
 
 	pie_TRANSLATE(dv.x,dv.y,dv.z);
-
-	/* Get the x,z translation components */
-	rx = player.p.x & (TILE_UNITS-1);
-	rz = player.p.z & (TILE_UNITS-1);
-
-	/* Translate */
-	pie_TRANSLATE(rx,0,-rz);
 
 	pie_MatRotY(-psDroid->rot.direction);
 	pie_MatRotX(psDroid->rot.pitch);
@@ -3636,20 +3576,15 @@ static void renderSurroundings(void)
 	static float wind = 0.0f;
 	const float skybox_scale = 10000.0f;
 
-	// Push identity matrix onto stack
+	// Push current matrix onto stack
 	pie_MatBegin();
 
-	// Now, scale the world according to what resolution we're running in
-	pie_MatScale(pie_GetResScalingFactor() / 100.f);
-
-	// Set the camera position
-	pie_MATTRANS(0, 0, distance);
+	// Render skybox relative to ground (i.e. undo player y translation)
+	// then move it somewhat below ground level for the blending effect
+	pie_TRANSLATE(0, player.p.y-skybox_scale/8, 0);
 
 	// rotate it
 	pie_MatRotY(DEG(wind));
-
-	// move it somewhat below ground level for the blending effect
-	pie_TRANSLATE(0, -skybox_scale/8, 0);
 
 	// Set the texture page
 	pie_SetTexturePage(iV_GetTexture(skyboxPageName));
@@ -4287,7 +4222,6 @@ static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure)
 	UDWORD	pointIndex;
 	SDWORD	realY;
 	Vector3i null, vec;
-	SDWORD	rx,rz;
 	PIELIGHT colour;
 
 	null.x = null.y = null.z = 0;
@@ -4299,11 +4233,7 @@ static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure)
 	vec.z = terrainMidY*TILE_UNITS - (each.z - player.p.z);
 	vec.y = each.y;
 
-	rx = player.p.x & (TILE_UNITS-1);
-	rz = player.p.z & (TILE_UNITS-1);
-	pts[0].x = vec.x + rx;
-	pts[0].y = vec.y;
-	pts[0].z = vec.z - rz;
+	pts[0] = vec;
 
 	pointIndex = rand()%(psStructure->sDisplay.imd->npoints-1);
 	point = &(psStructure->sDisplay.imd->points[pointIndex]);
@@ -4323,11 +4253,7 @@ static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure)
 	vec.z = terrainMidY*TILE_UNITS - (each.z - player.p.z);
 	vec.y = each.y;
 
-	rx = player.p.x & (TILE_UNITS-1);
-	rz = player.p.z & (TILE_UNITS-1);
-	pts[1].x = vec.x + rx;
-	pts[1].y = vec.y;
-	pts[1].z = vec.z - rz;
+	pts[1] = vec;
 
 	pointIndex = rand()%(psStructure->sDisplay.imd->npoints-1);
 	point = &(psStructure->sDisplay.imd->points[pointIndex]);
@@ -4341,11 +4267,7 @@ static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure)
 	vec.z = terrainMidY*TILE_UNITS - (each.z - player.p.z);
 	vec.y = each.y;
 
-	rx = player.p.x & (TILE_UNITS-1);
-	rz = player.p.z & (TILE_UNITS-1);
-	pts[2].x = vec.x + rx;
-	pts[2].y = vec.y;
-	pts[2].z = vec.z - rz;
+	pts[2] = vec;
 
 	// set the colour
 	colour = pal_SetBrightness(UBYTE_MAX);
