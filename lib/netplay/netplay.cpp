@@ -2259,40 +2259,6 @@ bool NETjoinGame(const char* host, uint32_t port, const char* playername)
 }
 
 /*!
- * Set the masterserver name
- * \param hostname The hostname of the masterserver to connect to
- */
-void NETsetMasterserverName(const char* hostname)
-{
-	lobbyclient.setHost(hostname);
-}
-
-/**
- * @return The hostname of the masterserver we will connect to.
- */
-const char* NETgetMasterserverName()
-{
-	return lobbyclient.getHost().c_str();
-}
-
-/*!
- * Set the masterserver port
- * \param port The port of the masterserver to connect to
- */
-void NETsetMasterserverPort(unsigned int port)
-{
-	lobbyclient.setPort(port);
-}
-
-/**
- * @return The port of the masterserver we will connect to.
- */
-unsigned int NETgetMasterserverPort()
-{
-	return lobbyclient.getPort();
-}
-
-/*!
  * Set the port we shall host games on
  * \param port The port to listen to
  */

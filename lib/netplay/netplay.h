@@ -291,10 +291,6 @@ void            NETfixDuplicatePlayerNames(void);  // Change a player's name aut
 
 #include "netlog.h"
 
-extern void NETsetMasterserverName(const char* hostname);
-extern const char* NETgetMasterserverName(void);
-extern void NETsetMasterserverPort(unsigned int port);
-extern unsigned int NETgetMasterserverPort(void);
 extern void NETsetGameserverPort(unsigned int port);
 extern unsigned int NETgetGameserverPort(void);
 
