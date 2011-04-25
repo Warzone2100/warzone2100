@@ -246,11 +246,10 @@ else
 fi
 
 WZ_WARNINGS_GCC="-Wall -Wextra ${WZ_Wno_}unused-parameter ${WZ_Wno_}sign-compare -Wcast-align -Wwrite-strings -Wpointer-arith ${WZ_Wno_}format-security"
-WZ_WARNINGS_GCC_C="${WZ_WARNINGS_GCC} -Wstrict-prototypes -Wdeclaration-after-statement -Wno-strict-aliasing ${CFLAGS_IGNORE_WARNINGS}"
+WZ_WARNINGS_GCC_C="${WZ_WARNINGS_GCC} -Wstrict-prototypes -Wdeclaration-after-statement ${CFLAGS_IGNORE_WARNINGS}"
 WZ_WARNINGS_GCC_CXX="${WZ_Wno_}enum-compare ${WZ_WARNINGS_GCC}"
 if test "x$enable_debug" = "xyes" ; then
 	if test "x$cc_icc" = "xyes" ; then
-		# "-fp-model precise -fp-model source -ftz -no-fma" was here
 		WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -Wcheck -Werror"
 		WZ_CXXFLAGS="${WZ_CXXFLAGS} -O0 -g -Wcheck -Werror"
 		WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
@@ -279,11 +278,6 @@ elif test "x$enable_debug" = "xprofile" ; then
 	WZ_CXXFLAGS="${WZ_CXXFLAGS} -g -Os -pg ${WZ_WARNINGS_GCC_CXX}"
 	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DNDEBUG"
 	LDFLAGS="-pg ${LDFLAGS}"
-elif test "x$enable_debug" = "xg++" ; then
-	WZ_CFLAGS="${WZ_CXXFLAGS} -g -O2 ${WZ_WARNINGS_GCC_CXX}"
-	WZ_CXXFLAGS="${WZ_CXXFLAGS} -g -O2 ${WZ_WARNINGS_GCC_CXX}"
-	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
-	CC="g++"
 else
 	WZ_CFLAGS="${WZ_CFLAGS} -g ${WZ_WARNINGS_GCC_C}"
 	WZ_CXXFLAGS="${WZ_CXXFLAGS} -g ${WZ_WARNINGS_GCC_CXX}"
