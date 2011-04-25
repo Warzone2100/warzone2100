@@ -180,11 +180,6 @@ bool NETisCorrectVersion(uint32_t game_version_major, uint32_t game_version_mino
 {
 	return (NETCODE_VERSION_MAJOR == game_version_major && NETCODE_VERSION_MINOR == game_version_minor);
 }
-bool NETgameIsCorrectVersion(GAMESTRUCT* check_game)
-{
-	return (NETCODE_VERSION_MAJOR == check_game->game_version_major && NETCODE_VERSION_MINOR == check_game->game_version_minor);
-}
-
 //	Sets if the game is password protected or not
 void NETGameLocked( bool flag)
 {
