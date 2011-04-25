@@ -22,6 +22,9 @@
  * New scripting system -- script functions
  */
 
+#include "lib/framework/wzapp.h"
+#include "lib/sound/audio.h"
+#include "lib/netplay/netplay.h"
 #include "qtscriptfuncs.h"
 
 #include <QtScript/QScriptValue>
@@ -32,6 +35,14 @@
 #include "mission.h"
 #include "group.h"
 #include "transporter.h"
+#include "message.h"
+#include "display3d.h"
+#include "intelmap.h"
+#include "hci.h"
+#include "wrappers.h"
+#include "challenge.h"
+#include "research.h"
+#include "multilimit.h"
 
 // ----------------------------------------------------------------------------------------
 // Utility functions -- not called directly from scripts
@@ -329,7 +340,7 @@ static QScriptValue js_setMissionTime(QScriptContext *context, QScriptEngine *)
 static QScriptValue js_setReinforcementTime(QScriptContext *context, QScriptEngine *)
 {
 	int value = context->argument(0).toInt32() * 100;
-	ASSERT_OR_RETURN(QScriptValue(), value == LZ_COMPROMISED_TIME || value < 60 * 60 * GAME_TICKS_PER_SEC,
+	SCRIPT_ASSERT(context, value == LZ_COMPROMISED_TIME || value < 60 * 60 * GAME_TICKS_PER_SEC,
 	                 "The transport timer cannot be set to more than 1 hour!");
 	mission.ETA = value;
 	if (missionCanReEnforce())
@@ -373,14 +384,187 @@ static QScriptValue js_setStructureLimits(QScriptContext *context, QScriptEngine
 	{
 		player = engine->globalObject().property("me").toInt32();
 	}
-	ASSERT_OR_RETURN(QScriptValue(), player < MAX_PLAYERS && player >= 0, "Invalid player number");
-	ASSERT_OR_RETURN(QScriptValue(), limit < LOTS_OF && limit >= 0, "Invalid limit");
-	ASSERT_OR_RETURN(QScriptValue(), structInc < numStructureStats && structInc >= 0, "Invalid structure");
+	SCRIPT_ASSERT(context, player < MAX_PLAYERS && player >= 0, "Invalid player number");
+	SCRIPT_ASSERT(context, limit < LOTS_OF && limit >= 0, "Invalid limit");
+	SCRIPT_ASSERT(context, structInc < numStructureStats && structInc >= 0, "Invalid structure");
 
 	STRUCTURE_LIMITS *psStructLimits = asStructLimits[player];
 	psStructLimits[structInc].limit = limit;
 	psStructLimits[structInc].globalLimit = limit;
 
+	return QScriptValue();
+}
+
+static QScriptValue js_centreView(QScriptContext *context, QScriptEngine *engine)
+{
+	int x = context->argument(0).toInt32();
+	int y = context->argument(1).toInt32();
+	setViewPos(map_coord(x), map_coord(y), false);
+	Q_UNUSED(engine);
+	return QScriptValue();
+}
+
+static QScriptValue js_playSound(QScriptContext *context, QScriptEngine *engine)
+{
+	int player = engine->globalObject().property("me").toInt32();
+	if (player != selectedPlayer)
+	{
+		return QScriptValue();
+	}
+	int soundID = context->argument(0).toInt32();
+	if (context->argumentCount() > 1)
+	{
+		int x = context->argument(1).toInt32();
+		int y = context->argument(2).toInt32();
+		int z = context->argument(2).toInt32();
+		audio_QueueTrackPos(soundID, x, y, z);
+	}
+	else
+	{
+		audio_QueueTrack(soundID);
+		/*  -- FIXME properly (from original script func)
+		if(bInTutorial)
+		{
+			audio_QueueTrack(ID_SOUND_OF_SILENCE);
+		}
+		*/
+	}
+	return QScriptValue();
+}
+
+static QScriptValue js_gameOverMessage(QScriptContext *context, QScriptEngine *engine)
+{
+	int player = engine->globalObject().property("me").toInt32();
+	const MESSAGE_TYPE msgType = MSG_MISSION;	// always
+	bool gameWon = context->argument(0).toBool();
+	VIEWDATA *psViewData;
+	if (gameWon)
+	{
+		 psViewData = getViewData("WIN");
+		addConsoleMessage(_("YOU ARE VICTORIOUS!"), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+	}
+	else
+	{
+		psViewData = getViewData("WIN");
+		addConsoleMessage(_("YOU WERE DEFEATED!"), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+	}
+	ASSERT(psViewData, "Viewdata not found");
+	MESSAGE *psMessage = addMessage(msgType, false, player);
+	if (psMessage)
+	{
+		//set the data
+		psMessage->pViewData = (MSG_VIEWDATA *)psViewData;
+		displayImmediateMessage(psMessage);
+		stopReticuleButtonFlash(IDRET_INTEL_MAP);
+
+		//we need to set this here so the VIDEO_QUIT callback is not called
+		setScriptWinLoseVideo(gameWon ? PLAY_WIN : PLAY_LOSE);
+	}
+	displayGameOver(gameWon);
+	if (challengeActive)
+	{
+		updateChallenge(gameWon);
+	}
+	return QScriptValue();
+}
+
+static QScriptValue js_completeResearch(QScriptContext *context, QScriptEngine *engine)
+{
+	QString researchName = context->argument(0).toString();
+	int player;
+	if (context->argumentCount() > 1)
+	{
+		player = context->argument(0).toInt32();
+	}
+	else
+	{
+		player = engine->globalObject().property("me").toInt32();
+	}
+	RESEARCH *psResearch = getResearch(researchName.toUtf8().constData());
+	SCRIPT_ASSERT(context, psResearch, "No such research %s for player %d", researchName.toUtf8().constData(), player);
+	int researchIndex = psResearch - asResearch;
+	SCRIPT_ASSERT(context, researchIndex < numResearch, "Research index out of bounds");
+	if (bMultiMessages && (gameTime > 2))
+	{
+		SendResearch(player, researchIndex, false);
+		// Wait for our message before doing anything.
+	}
+	else
+	{
+		researchResult(researchIndex, player, false, NULL, false);
+	}
+	return QScriptValue();
+}
+
+static QScriptValue js_enableResearch(QScriptContext *context, QScriptEngine *engine)
+{
+	QString researchName = context->argument(0).toString();
+	int player;
+	if (context->argumentCount() > 1)
+	{
+		player = context->argument(0).toInt32();
+	}
+	else
+	{
+		player = engine->globalObject().property("me").toInt32();
+	}
+	RESEARCH *psResearch = getResearch(researchName.toUtf8().constData());
+	SCRIPT_ASSERT(context, psResearch, "No such research %s for player %d", researchName.toUtf8().constData(), player);
+	if (!enableResearch(psResearch, player))
+	{
+		debug(LOG_ERROR, "Unable to enable research %s for player %d", researchName.toUtf8().constData(), player);
+	}
+	return QScriptValue();
+}
+
+static QScriptValue js_setPower(QScriptContext *context, QScriptEngine *engine)
+{
+	int power = context->argument(0).toInt32();
+	int player;
+	if (context->argumentCount() > 1)
+	{
+		player = context->argument(0).toInt32();
+	}
+	else
+	{
+		player = engine->globalObject().property("me").toInt32();
+	}
+	setPower(player, power);
+	return QScriptValue();
+}
+
+static QScriptValue js_enableStructure(QScriptContext *context, QScriptEngine *engine)
+{
+	QString building = context->argument(0).toString();
+	int index = getStructStatFromName(building.toUtf8().constData());
+	int player;
+	if (context->argumentCount() > 1)
+	{
+		player = context->argument(0).toInt32();
+	}
+	else
+	{
+		player = engine->globalObject().property("me").toInt32();
+	}
+	SCRIPT_ASSERT(context, index >= 0 && index < numStructureStats, "Invalid structure stat");
+	// enable the appropriate structure
+	apStructTypeLists[player][index] = AVAILABLE;
+	return QScriptValue();
+}
+
+static QScriptValue js_addReticuleButton(QScriptContext *context, QScriptEngine *engine)
+{
+	int button = context->argument(0).toInt32();
+	SCRIPT_ASSERT(context, button != IDRET_OPTIONS, "Invalid button");
+	widgReveal(psWScreen, button);
+	return QScriptValue();
+}
+
+static QScriptValue js_applyLimitSet(QScriptContext *context, QScriptEngine *engine)
+{
+	Q_UNUSED(context);
+	Q_UNUSED(engine);
+	applyLimitSet();
 	return QScriptValue();
 }
 
@@ -390,6 +574,8 @@ static QScriptValue js_setStructureLimits(QScriptContext *context, QScriptEngine
 bool registerFunctions(QScriptEngine *engine)
 {
 	// Register functions to the script engine here
+
+	// General functions -- geared for use in AI scripts
 	//engine->globalObject().setProperty("getDerrick", engine->newFunction(js_getDerrick));
 	engine->globalObject().setProperty("debug", engine->newFunction(js_debug));
 	engine->globalObject().setProperty("console", engine->newFunction(js_console));
@@ -404,9 +590,22 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("groupAddDroid", engine->newFunction(js_groupAddDroid));
 	engine->globalObject().setProperty("groupSize", engine->newFunction(js_groupSize));
 	engine->globalObject().setProperty("orderDroidLoc", engine->newFunction(js_orderDroidLoc));
+
+	// Functions that operate on the current player only
+	engine->globalObject().setProperty("centreView", engine->newFunction(js_centreView));
+	engine->globalObject().setProperty("playSound", engine->newFunction(js_playSound));
+	engine->globalObject().setProperty("gameOverMessage", engine->newFunction(js_gameOverMessage));
+
+	// Global state manipulation -- not for use with skirmish AI (unless you want it to cheat, obviously)
+	engine->globalObject().setProperty("setStructureLimits", engine->newFunction(js_setStructureLimits));
+	engine->globalObject().setProperty("applyLimitSet", engine->newFunction(js_applyLimitSet));
 	engine->globalObject().setProperty("setMissionTime", engine->newFunction(js_setMissionTime));
 	engine->globalObject().setProperty("setReinforcementTime", engine->newFunction(js_setReinforcementTime));
-	engine->globalObject().setProperty("setStructureLimits", engine->newFunction(js_setStructureLimits));
+	engine->globalObject().setProperty("completeResearch", engine->newFunction(js_completeResearch));
+	engine->globalObject().setProperty("enableResearch", engine->newFunction(js_enableResearch));
+	engine->globalObject().setProperty("setPower", engine->newFunction(js_setPower));
+	engine->globalObject().setProperty("addReticuleButton", engine->newFunction(js_addReticuleButton));
+	engine->globalObject().setProperty("enableStructure", engine->newFunction(js_enableStructure));
 
 	// Set some useful constants
 	engine->globalObject().setProperty("DORDER_ATTACK", DORDER_ATTACK, QScriptValue::ReadOnly | QScriptValue::Undeletable);
@@ -415,6 +614,14 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("DORDER_BUILD", DORDER_BUILD, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("mapWidth", mapWidth, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("mapHeight", mapHeight, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("COMMAND", IDRET_COMMAND, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("OPTIONS", IDRET_COMMAND, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("BUILD", IDRET_BUILD, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("MANUFACTURE", IDRET_MANUFACTURE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("RESEARCH", IDRET_RESEARCH, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("INTEL_MAP", IDRET_INTEL_MAP, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("DESIGN", IDRET_DESIGN, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("CANCEL", IDRET_CANCEL, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
 	return true;
 }
