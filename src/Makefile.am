@@ -288,6 +288,7 @@ warzone2100_LIBS = \
 	$(top_builddir)/lib/script/libscript.a \
 	$(top_builddir)/lib/netplay/libnetplay.a \
 	$(top_builddir)/lib/netplay/miniupnpc/libminiupnpc.a \
+	$(top_builddir)/lib/netplay/bson/libbson.a \
 	$(top_builddir)/lib/ivis_opengl/libivis_opengl.a \
 	$(top_builddir)/lib/gamelib/libgamelib.a \
 	$(top_builddir)/lib/framework/libframework.a \

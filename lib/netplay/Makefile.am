@@ -1,4 +1,6 @@
-SUBDIRS = miniupnpc
+SUBDIRS = \
+	miniupnpc \
+	bson
 
 if MINGW32
 WZ_CPPFLAGS += -D_WIN32_WINNT=0x0501 -DSTATICLIB

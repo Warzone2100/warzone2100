@@ -415,6 +415,7 @@ AC_CONFIG_FILES([Makefile
 		lib/ivis_opengl/Makefile
 		lib/netplay/Makefile
 		lib/netplay/miniupnpc/Makefile
+       lib/netplay/bson/Makefile
 		lib/script/Makefile
 		lib/sequence/Makefile
 		lib/sound/Makefile
