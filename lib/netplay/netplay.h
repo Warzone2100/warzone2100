@@ -134,53 +134,8 @@ enum MESSAGE_TYPES
 #define modlist_string_size	255		// For a concatenated list of mods
 #define password_string_size 64		// longer passwords slow down the join code
 
-#define SESSION_JOINDISABLED	1
-
 #define MAX_CONNECTED_PLAYERS   MAX_PLAYERS
 #define MAX_TMP_SOCKETS         16
-
-struct SESSIONDESC  //Available game storage... JUST FOR REFERENCE!
-{
-	int32_t dwSize;
-	int32_t dwFlags;
-	char host[40];	// host's ip address (can fit a full IPv4 and IPv6 address + terminating NUL)
-	int32_t dwMaxPlayers;
-	int32_t dwCurrentPlayers;
-	int32_t dwUserFlags[4];
-};
-
-/**
- * @note when changing this structure, NETsendGAMESTRUCT, NETrecvGAMESTRUCT and
- *       the lobby server should be changed accordingly.
- */
-struct GAMESTRUCT
-{
-	/* Version of this structure and thus the binary lobby protocol.
-	 * @NOTE: <em>MUST</em> be the first item of this struct.
-	 */
-	uint32_t	GAMESTRUCT_VERSION;
-
-	char		name[StringSize];
-	SESSIONDESC	desc;
-	// END of old GAMESTRUCT format
-	// NOTE: do NOT save the following items in game.c--it will break savegames.
-	char		secondaryHosts[2][40];
-	char		extra[extra_string_size];		// extra string (future use)
-	char		mapname[map_string_size];		// map server is hosting
-	char		hostname[hostname_string_size];	// ...
-	char		versionstring[StringSize];		// 
-	char		modlist[modlist_string_size];	// ???
-	uint32_t	game_version_major;				// 
-	uint32_t	game_version_minor;				// 
-	uint32_t	privateGame;					// if true, it is a private game
-	uint32_t	pureGame;						// NO mods allowed if true
-	uint32_t	Mods;							// number of concatenated mods?
-	// Game ID, used on the lobby server to link games with multiple address families to eachother
-	uint32_t	gameId;
-	uint32_t	future2;						// for future use
-	uint32_t	future3;						// for future use
-	uint32_t	future4;						// for future use
-};
 
 // ////////////////////////////////////////////////////////////////////////
 // Message information. ie. the packets sent between machines.
@@ -264,7 +219,6 @@ struct PLAYER
 // all the luvly Netplay info....
 struct NETPLAY
 {
-	GAMESTRUCT	games[MaxGames];	///< The collection of games
 	PLAYER		players[MAX_PLAYERS];	///< The array of players.
 	uint32_t	maxPlayers;				///< Maximum number of players.
 	uint32_t	playercount;		///< Number of players in game.
