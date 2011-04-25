@@ -27,6 +27,7 @@
 #define _netplay_h
 
 #include "nettypes.h"
+#include "netlobby.h"
 #include <physfs.h>
 
 // Lobby Connection errors
@@ -265,6 +266,7 @@ struct NETPLAY
 {
 	GAMESTRUCT	games[MaxGames];	///< The collection of games
 	PLAYER		players[MAX_PLAYERS];	///< The array of players.
+	uint32_t	maxPlayers;				///< Maximum number of players.
 	uint32_t	playercount;		///< Number of players in game.
 	uint32_t	hostPlayer;		///< Index of host in player array
 	uint32_t	bComms;			///< Actually do the comms?
@@ -274,9 +276,6 @@ struct NETPLAY
 	PHYSFS_file	*pMapFileHandle;
 	char gamePassword[password_string_size];		//
 	bool GamePassworded;				// if we have a password or not.
-	bool ShowedMOTD;					// only want to show this once
-	char MOTDbuffer[255];				// buffer for MOTD
-	char* MOTD;
 };
 
 struct PLAYER_IP
@@ -330,7 +329,7 @@ extern int32_t	NETgetGameFlagsUnjoined(unsigned int gameid, unsigned int flag);	
 extern bool	NETsetGameFlags(UDWORD flag, SDWORD value);	// set game flag(1-4) to value.
 extern bool	NEThaltJoining(void);				// stop new players joining this game
 extern bool	NETfindGame(void);		// find games being played(uses GAME_GUID);
-extern bool	NETjoinGame(const char* host, uint32_t port, const char* playername); // join game given with playername
+extern bool	NETjoinGame(const char* host, uint32_t port, const char* playername);			// join game given with playername
 extern bool	NEThostGame(const char* SessionName, const char* PlayerName,// host a game
 			    SDWORD one, SDWORD two, SDWORD three, SDWORD four, UDWORD plyrs);
 extern bool	NETchangePlayerName(UDWORD player, char *newName);// change a players name.

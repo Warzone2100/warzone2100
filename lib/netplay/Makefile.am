@@ -14,6 +14,7 @@ AM_CXXFLAGS = $(WZ_CXXFLAGS) $(QT4_CFLAGS)
 
 noinst_LIBRARIES = libnetplay.a
 noinst_HEADERS = \
+	netlobby.h \
 	netlog.h \
 	netplay.h \
 	netqueue.h \
@@ -21,9 +22,9 @@ noinst_HEADERS = \
 	nettypes.h
 
 libnetplay_a_SOURCES = \
-	netjoin_stub.cpp \
+	netsocket.cpp \
+	netlobby.cpp \
 	netlog.cpp \
 	netplay.cpp \
 	netqueue.cpp \
-	netsocket.cpp \
 	nettypes.cpp

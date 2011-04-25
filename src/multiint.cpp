@@ -820,26 +820,20 @@ bool joinGame(const char* host, uint32_t port)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Game Chooser Screen.
-
 static void addGames(void)
 {
 	UDWORD i,gcount=0;
 	static const char *wrongVersionTip = "Your version of Warzone is incompatible with this game.";
 	static const char *badModTip = "Your loaded mods are incompatible with this game. (Check mods/autoload/?)";
 
-	//count games to see if need two columns.
-	for(i=0;i<MaxGames;i++)							// draw games
-	{
-		if( NetPlay.games[i].desc.dwSize !=0)
-		{
-			gcount++;
-		}
-	}
 	W_BUTINIT sButInit;
 	sButInit.formID = FRONTEND_BOTFORM;
 	sButInit.width = GAMES_GAMEWIDTH;
 	sButInit.height = GAMES_GAMEHEIGHT;
 	sButInit.pDisplay = displayRemoteGame;
+
+	//count games to see if need two columns.
+	gcount = lobbyclient.games.size();
 
 	// we want the old games deleted, and only list games when we should
 	if (getLobbyError() || !gcount)
@@ -856,56 +850,53 @@ static void addGames(void)
 	// only have to do this if we have any games available.
 	if (!getLobbyError() && gcount)
 	{
-		for (i=0; i<MaxGames; i++)							// draw games
+		for (i=0; i < gcount; i++)							// draw games
 		{
 			widgDelete(psWScreen, GAMES_GAMESTART+i);	// remove old icon.
-			if (NetPlay.games[i].desc.dwSize !=0)
+
+			sButInit.id = GAMES_GAMESTART+i;
+
+			if (gcount < 9)							// only center column needed.
 			{
-
-				sButInit.id = GAMES_GAMESTART+i;
-
-				if (gcount < 9)							// only center column needed.
+				sButInit.x = 165;
+				sButInit.y = (UWORD)(30+((5+GAMES_GAMEHEIGHT)*i) );
+			}
+			else
+			{
+				if (i<9)		//column 1
 				{
-					sButInit.x = 165;
+					sButInit.x = 50;
 					sButInit.y = (UWORD)(30+((5+GAMES_GAMEHEIGHT)*i) );
 				}
-				else
+				else		//column 2
 				{
-					if (i<9)		//column 1
-					{
-						sButInit.x = 50;
-						sButInit.y = (UWORD)(30+((5+GAMES_GAMEHEIGHT)*i) );
-					}
-					else		//column 2
-					{
-						sButInit.x = 60+GAMES_GAMEWIDTH;
-						sButInit.y = (UWORD)(30+((5+GAMES_GAMEHEIGHT)*(i-9) ) );
-					}
+					sButInit.x = 60+GAMES_GAMEWIDTH;
+					sButInit.y = (UWORD)(30+((5+GAMES_GAMEHEIGHT)*(i-9) ) );
 				}
-				// display the correct tooltip message.
-				if (!NETisCorrectVersion(NetPlay.games[i].game_version_minor, NetPlay.games[i].game_version_major))
-				{
-					sButInit.pTip = wrongVersionTip;
-				}
-				else if (strcmp(NetPlay.games[i].modlist,getModList()) != 0)
-				{
-					sButInit.pTip = badModTip;
-				}
-				else
-				{
-					ssprintf(tooltipbuffer, "Map:%s, Game:%s, Hosted by %s ", NetPlay.games[i].mapname, NetPlay.games[i].name, NetPlay.games[i].hostname);
-					sButInit.pTip = tooltipbuffer;
-				}
-				sButInit.UserData = i;
-
-				widgAddButton(psWScreen, &sButInit);
 			}
+			// display the correct tooltip message.
+			if (!NETisCorrectVersion(lobbyclient.games[i].game_version_major, lobbyclient.games[i].game_version_minor))
+			{
+				sButInit.pTip = wrongVersionTip;
+			}
+			else if (strcmp(lobbyclient.games[i].modlist.c_str(), getModList()) != 0)
+			{
+				sButInit.pTip = badModTip;
+			}
+			else
+			{
+				ssprintf(tooltipbuffer, "Map:%s, Game:%s, Hosted by %s ", lobbyclient.games[i].mapname.c_str(), lobbyclient.games[i].description.c_str(), lobbyclient.games[i].hostplayer.c_str());
+				sButInit.pTip = tooltipbuffer;
+			}
+			sButInit.UserData = i;
+
+			widgAddButton(psWScreen, &sButInit);
 		}
 	}
 	else
 	{
-	// display lobby message based on results.
-	// This is a 'button', not text so it can be hilighted/centered.
+		// display lobby message based on results.
+		// This is a 'button', not text so it can be hilighted/centered.
 		const char *txt;
 		W_BUTINIT sButInit;
 
@@ -979,6 +970,7 @@ void runGameFind(void )
 	UDWORD id;
 	static UDWORD lastupdate=0;
 	static char game_password[64];		// check if StringSize is available
+	LOBBY_GAME* lGame;
 
 	if (lastupdate > gameTime) lastupdate = 0;
 	if (gameTime-lastupdate > 6000 && !EnablePasswordPrompt)
@@ -1015,29 +1007,28 @@ void runGameFind(void )
 	if (id >= GAMES_GAMESTART && id<=GAMES_GAMEEND)
 	{
 		gameNumber = id-GAMES_GAMESTART;
+		lGame = &lobbyclient.games[gameNumber];
 
-		if (!(NetPlay.games[gameNumber].desc.dwFlags & SESSION_JOINDISABLED)) // if still joinable
+		if (lGame->isPrivate)
 		{
-			if (NetPlay.games[gameNumber].privateGame)
-			{
-				showPasswordForm();
-			}
-			else
-			{
-				ingame.localOptionsReceived = false;			// note we are awaiting options
-				sstrcpy(game.name, NetPlay.games[gameNumber].name);		// store name
-
-				joinGame(NetPlay.games[gameNumber].desc.host, 0);
-			}
+			showPasswordForm();
 		}
+		else
+		{
+			ingame.localOptionsReceived = false;			// note we are awaiting options
+			sstrcpy(game.name, lGame->description.c_str());		// store name
 
+			joinGame(lGame->host.c_str(), lGame->port);
+		}
 	}
 	else if (id == CON_PASSWORDYES)
 	{
-		ingame.localOptionsReceived = false;			// note we are awaiting options
-		sstrcpy(game.name, NetPlay.games[gameNumber].name);		// store name
+		lGame = &lobbyclient.games[gameNumber];
 
-		joinGame(NetPlay.games[gameNumber].desc.host, 0);
+		ingame.localOptionsReceived = false;			// note we are awaiting options
+		sstrcpy(game.name, lGame->description.c_str());		// store name
+
+		joinGame(lGame->host.c_str(), lGame->port);
 	}
 	else if (id == CON_PASSWORDNO)
 	{
@@ -3623,14 +3614,15 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 {
 	UDWORD x = xOffset+psWidget->x;
 	UDWORD y = yOffset+psWidget->y;
-	UDWORD	i = psWidget->UserData;
+	UDWORD gameNumber = psWidget->UserData;
 	char tmp[80], gamename[StringSize];
-	unsigned int ping;
 
-	if (LobbyError != ERROR_NOERROR)
+	if (getLobbyError() != ERROR_NOERROR)
 	{
 		return;
 	}
+
+	LOBBY_GAME* lGame = &lobbyclient.games[gameNumber];
 
 	// Draw blue boxes.
 	drawBlueBox(x,y,psWidget->width,psWidget->height);
@@ -3640,23 +3632,9 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 	//draw game info
 	iV_SetFont(font_regular);													// font
 
-	// get game info.
-	// TODO: Check whether this code is used at all in skirmish games, if not, remove it.
-	if ((NetPlay.games[i].desc.dwFlags & SESSION_JOINDISABLED)
-		|| strcmp(NetPlay.games[i].modlist,getModList()) != 0
-		|| (bMultiPlayer
-			&& !NetPlay.bComms
-			&& NETgetGameFlagsUnjoined(gameNumber,1) == SKIRMISH                                  // the LAST bug...
-			&& NetPlay.games[gameNumber].desc.dwCurrentPlayers >= NetPlay.games[gameNumber].desc.dwMaxPlayers - 1))
+	if (NETisCorrectVersion(lGame->game_version_major, lGame->game_version_minor))
 	{
-		iV_SetTextColour(WZCOL_TEXT_MEDIUM);
-		// FIXME: We should really use another way to indicate that the game is full than our current big fat cross.
-		// need some sort of closed thing here!
-		iV_DrawImage(FrontImages,IMAGE_NOJOIN,x+18,y+11);
-	}
-	else if (!NETisCorrectVersion(NetPlay.games[i].game_version_minor, NetPlay.games[i].game_version_major))
-	{
-		if (NetPlay.games[gameNumber].desc.dwCurrentPlayers >= NetPlay.games[gameNumber].desc.dwMaxPlayers)
+		if (lGame->currentPlayers >= lGame->maxPlayers)
 		{
 			iV_SetTextColour(WZCOL_TEXT_MEDIUM);
 		}
@@ -3665,7 +3643,7 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 			iV_SetTextColour(WZCOL_FORM_TEXT);
 		}
 		iV_DrawText(_("Players"), x + 5, y + 18);
-		ssprintf(tmp, "%d/%d", NetPlay.games[i].desc.dwCurrentPlayers, NetPlay.games[i].desc.dwMaxPlayers);
+		ssprintf(tmp, "%d/%d", lGame->currentPlayers, lGame->maxPlayers);
 		iV_DrawText(tmp, x + 17, y + 33);
 	}
 	else
@@ -3676,11 +3654,7 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 	}
 	
 	//draw type overlay.
-	if( NETgetGameFlagsUnjoined(i,1) == CAMPAIGN)
-	{
-		iV_DrawImage(FrontImages, IMAGE_ARENA_OVER, x + 59, y + 3);
-	}
-	else if (NetPlay.games[i].privateGame)	// check to see if it is a private game
+	if (lGame->isPrivate)	// check to see if it is a private game
 	{
 		iV_DrawImage(FrontImages, IMAGE_LOCKED_NOBG, x+62, y+3);	// lock icon
 	}
@@ -3690,22 +3664,10 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 	}
 
 	// ping rating
-	ping = NETgetGameFlagsUnjoined(i, 2);
-	if (ping < PING_MED)
-	{
-		iV_DrawImage(FrontImages,IMAGE_LAMP_GREEN,x+70,y+26);
-	}
-	else if (ping >= PING_MED && ping < PING_HI)
-	{
-		iV_DrawImage(FrontImages,IMAGE_LAMP_AMBER,x+70,y+26);
-	}
-	else
-	{
-		iV_DrawImage(FrontImages,IMAGE_LAMP_RED,x+70,y+26);
-	}
+	iV_DrawImage(FrontImages,IMAGE_LAMP_GREEN,x+70,y+26);
 
 	//draw game name
-	sstrcpy(gamename, NetPlay.games[i].name);
+	sstrcpy(gamename, lGame->description.c_str());
 	while(iV_GetTextWidth(gamename) > (psWidget->width-110) )
 	{
 		gamename[strlen(gamename)-1]='\0';
@@ -3713,7 +3675,7 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 	iV_DrawText(gamename, x + 100, y + 18);	// name
 
 	iV_SetFont(font_small);											// font
-	iV_DrawText(NetPlay.games[i].versionstring, x + 100, y + 32);	// version
+	iV_DrawText(lGame->versionstring.c_str(), x + 100, y + 32);	// version
 }
 
 void displayTeamChooser(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
