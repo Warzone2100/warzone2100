@@ -62,6 +62,9 @@
     <ClCompile Include="miniupnpc\upnpreplyparse.c">
       <Filter>Source Files\miniUPnP\src files</Filter>
     </ClCompile>
+    <ClCompile Include="miniupnpc\connecthostport.c">
+      <Filter>Source Files\miniUPnP\src files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="miniupnpc\bsdqueue.h">
@@ -113,6 +116,9 @@
       <Filter>Source Files\miniUPnP\header files</Filter>
     </ClInclude>
     <ClInclude Include="nettypes.h">
+      <Filter>Source Files\miniUPnP\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="miniupnpc\connecthostport.h">
       <Filter>Source Files\miniUPnP\header files</Filter>
     </ClInclude>
   </ItemGroup>

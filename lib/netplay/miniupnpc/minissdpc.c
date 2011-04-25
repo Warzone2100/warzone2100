@@ -5,6 +5,7 @@
  * This software is subjet to the conditions detailed in the
  * provided LICENCE file. */
 /*#include <syslog.h>*/
+#include <lib/framework/types.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>

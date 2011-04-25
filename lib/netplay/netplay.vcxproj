@@ -54,7 +54,7 @@
     <IntDir Condition="'$(Configuration)|$(Platform)'=='STLport-Debug|Win32'">$(Configuration)\</IntDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\</IntDir>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\devpkg\include;$(Qtdir)\include;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\lib\netplay;..\devpkg\include;$(Qtdir)\include;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='STLport-Debug|Win32'">..\devpkg\stlport5.2.1\stlport;..\devpkg\include;$(Qtdir)\include;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\devpkg\include;$(Qtdir)\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
@@ -114,6 +114,7 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="miniupnpc\connecthostport.c" />
     <ClCompile Include="netjoin_stub.cpp" />
     <ClCompile Include="netlog.cpp" />
     <ClCompile Include="netplay.cpp" />
@@ -140,6 +141,7 @@
   <ItemGroup>
     <ClInclude Include="miniupnpc\bsdqueue.h" />
     <ClInclude Include="miniupnpc\codelength.h" />
+    <ClInclude Include="miniupnpc\connecthostport.h" />
     <ClInclude Include="miniupnpc\declspec.h" />
     <ClInclude Include="miniupnpc\igd_desc_parse.h" />
     <ClInclude Include="miniupnpc\minisoap.h" />
