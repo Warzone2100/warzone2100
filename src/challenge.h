@@ -27,6 +27,7 @@ bool addChallenges(void);
 bool closeChallenges(void);
 bool runChallenges(void);
 bool displayChallenges(void);
+void updateChallenge(bool gameWon);
 
 extern bool challengesUp;
 extern bool challengeActive;

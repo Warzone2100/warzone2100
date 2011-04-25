@@ -33,6 +33,7 @@
 #endif
 
 #include "lib/framework/wzapp.h"
+#include "lib/netplay/netplay.h"
 #include "lib/ivis_opengl/bitimage.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/widget/button.h"
@@ -44,6 +45,7 @@
 #include "loadsave.h"
 #include "multiplay.h"
 #include "scores.h"
+#include "mission.h"
 
 #define totalslots 36			// challenge slots
 #define slotsInColumn 12		// # of slots in a column
@@ -83,6 +85,41 @@ static void displayLoadBanner(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, 
 
 	pie_BoxFill(x, y, x + psWidget->width, y + psWidget->height, col);
 	pie_BoxFill(x + 2, y + 2, x + psWidget->width - 2, y + psWidget->height - 2, WZCOL_MENU_BACKGROUND);
+}
+
+// quite the hack, game name is stored in global sRequestResult
+void updateChallenge(bool gameWon)
+{
+	char sPath[64], *fStr;
+	int seconds = 0, newtime = (gameTime - mission.startTime) / GAME_TICKS_PER_SEC;
+	bool victory = false;
+	WzConfig scores(CHALLENGE_SCORES);
+
+	fStr = strrchr(sRequestResult, '/');
+	fStr++;	// skip slash
+	if (fStr == '\0')
+	{
+		debug(LOG_ERROR, "Bad path to challenge file (%s)", sRequestResult);
+		return;
+	}
+	sstrcpy(sPath, fStr);
+	sPath[strlen(sPath) - 4] = '\0';	// remove .ini
+	scores.beginGroup(sPath);
+	victory = scores.value("Victory", false).toBool();
+	seconds = scores.value("Seconds", 0).toInt();
+
+	// Update score if we have a victory and best recorded was a loss,
+	// or both were losses but time is higher, or both were victories
+	// but time is lower.
+	if ((!victory && gameWon)
+	    || (!gameWon && !victory && newtime > seconds)
+	    || (gameWon && victory && newtime < seconds))
+	{
+		scores.setValue("Seconds", newtime);
+		scores.setValue("Victory", gameWon);
+		scores.setValue("Player", NetPlay.players[selectedPlayer].name);
+	}
+	scores.endGroup();
 }
 
 // ////////////////////////////////////////////////////////////////////////////

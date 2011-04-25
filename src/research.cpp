@@ -677,7 +677,7 @@ bool loadResearchArtefacts(const char *pArteData, UDWORD bufferSize, UDWORD list
 		//get the type for comparison later
 		newType = statType(pArtefact->ref);
 
-		pResearch = getResearch(ResearchName, false);
+		pResearch = getResearch(ResearchName);
 		if (pResearch == NULL)
 		{
 			return false;
@@ -2371,7 +2371,7 @@ COMPONENT_STATS * getComponentDetails(char *pName, char *pCompName)
 }
 
 //return a pointer to a research topic based on the name
-RESEARCH * getResearch(const char *pName, bool resName)
+RESEARCH *getResearch(const char *pName)
 {
 	unsigned int inc = 0;
 

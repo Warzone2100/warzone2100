@@ -111,7 +111,7 @@ extern bool ResearchShutDown(void);
 extern void ResearchRelease(void);
 
 /* For a given view data get the research this is related to */
-extern RESEARCH * getResearch(const char *pName, bool resName);
+extern RESEARCH * getResearch(const char *pName);
 
 /* sets the status of the topic to cancelled and stores the current research
    points accquired */

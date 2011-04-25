@@ -1248,7 +1248,7 @@ bool scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 		}
 		else
 		{
-			psVal->v.oval = (void*)getResearch(pBuffer, true);
+			psVal->v.oval = (void*)getResearch(pBuffer);
 			if (psVal->v.oval == NULL)
 			{
 				debug( LOG_FATAL, "scrValDefLoad: couldn't find research %s", pBuffer );

@@ -698,7 +698,7 @@ var_init:		var_entry TYPE var_value
 							yyerror("Typemismatch for variable %d", $1);
 							YYABORT;
 						}
-						data.v.oval = getResearch($3.pString, true);	/* store pointer */
+						data.v.oval = getResearch($3.pString);	/* store pointer */
 						if (data.v.oval == NULL)
 						{
 							yyerror("Research %s not found", $3.pString);

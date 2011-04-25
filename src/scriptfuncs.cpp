@@ -2297,7 +2297,6 @@ bool scrStructureComplete(void)
 /*looks to see if a structure (specified by type) exists and built*/
 bool scrStructureBuilt(void)
 {
-//	INTERP_VAL			sVal;
 	UDWORD				structInc;
 	STRUCTURE_STATS		*psStats;
 	SDWORD				player;
@@ -2308,18 +2307,6 @@ bool scrStructureBuilt(void)
 		return false;
 	}
 
-/*	if (!stackPop(&sVal))
-	{
-		return false;
-	}
-
-	if (sVal.type != ST_STRUCTURESTAT)
-	{
-		ASSERT( false, "scrStructureBuilt: type mismatch for object" );
-		return false;
-	}
-	psStats = (STRUCTURE_STATS *)(asStructureStats + sVal.v.ival);
-*/
 	if (player >= MAX_PLAYERS)
 	{
 		ASSERT( false, "scrStructureBuilt:player number is too high" );
@@ -2348,7 +2335,6 @@ bool scrStructureBuilt(void)
 bool scrCentreView(void)
 {
 	BASE_OBJECT	*psObj;
-//	INTERP_VAL	sVal;
 
 	if (!stackPopParams(1, ST_BASEOBJECT, &psObj))
 	{
@@ -3268,13 +3254,11 @@ bool scrGameOverMessage(void)
 	SDWORD			player;
 	VIEWDATA		*psViewData;
 
-
 	if (!stackPopParams(4, ST_INTMESSAGE, &psViewData , VAL_INT, &msgType,
 				VAL_INT, &player, VAL_BOOL, &gameWon))
 	{
 		return false;
 	}
-
 
 	if (player >= MAX_PLAYERS)
 	{
@@ -3314,42 +3298,11 @@ bool scrGameOverMessage(void)
 
 	if (challengeActive)
 	{
-		char sPath[64], *fStr;
-		int seconds = 0, newtime = (gameTime - mission.startTime) / GAME_TICKS_PER_SEC;
-		bool victory = false;
-		WzConfig scores(CHALLENGE_SCORES);
-
-		fStr = strrchr(sRequestResult, '/');
-		fStr++;	// skip slash
-		if (fStr == '\0')
-		{
-			debug(LOG_ERROR, "Bad path to challenge file (%s)", sRequestResult);
-			return true;
-		}
-		sstrcpy(sPath, fStr);
-		sPath[strlen(sPath) - 4] = '\0';	// remove .ini
-		scores.beginGroup(sPath);
-		victory = scores.value("Victory", false).toBool();
-		seconds = scores.value("Seconds", 0).toInt();
-
-		// Update score if we have a victory and best recorded was a loss,
-		// or both were losses but time is higher, or both were victories
-		// but time is lower.
-		if ((!victory && gameWon) 
-		    || (!gameWon && !victory && newtime > seconds)
-		    || (gameWon && victory && newtime < seconds))
-		{
-			scores.setValue("Seconds", newtime);
-			scores.setValue("Victory", gameWon);
-			scores.setValue("Player", NetPlay.players[selectedPlayer].name);
-		}
-		scores.endGroup();
+		updateChallenge(gameWon);
 	}
 
 	return true;
 }
-
-
 
 
 // -----------------------------------------------------------------------------------------
