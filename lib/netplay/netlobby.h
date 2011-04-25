@@ -127,7 +127,7 @@ class LobbyClient {
 		}
 
 	private:
-		int32_t gameId_;
+		int64_t gameId_;
 
 		uint32_t callId_;
 

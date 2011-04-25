@@ -59,7 +59,8 @@ LOBBY_ERROR LobbyClient::addGame(char** result, uint32_t port, uint32_t maxPlaye
 	bson_buffer buffer[1];
 
 	if (gameId_ != 0)
-		return LOBBY_NO_ERROR;
+		// Ignore server errors here.
+		delGame();
 
 	bson_buffer_init(buffer);
 	bson_append_int(buffer, "port", port);
@@ -78,8 +79,6 @@ LOBBY_ERROR LobbyClient::addGame(char** result, uint32_t port, uint32_t maxPlaye
 
 	if (call_("addGame", NULL, kwargs) != LOBBY_NO_ERROR)
 	{
-		// Prevents "addGame" until "delGame" gets called.
-		gameId_ = -1;
 		return lastError_.code;
 	}
 	bson_destroy(kwargs);
@@ -87,9 +86,6 @@ LOBBY_ERROR LobbyClient::addGame(char** result, uint32_t port, uint32_t maxPlaye
 	if (callResult_.code != LOBBY_NO_ERROR)
 	{
 		debug(LOG_ERROR, "Received: server error %d: %s", callResult_.code, callResult_.result);
-
-		// Prevents "addGame" until "delGame" gets called.
-		gameId_ = -1;
 
 		setError_(callResult_.code, _("Got server error %d!"), callResult_.code);
 		freeCallResult_();
@@ -100,12 +96,19 @@ LOBBY_ERROR LobbyClient::addGame(char** result, uint32_t port, uint32_t maxPlaye
 	bson_iterator_init(&it, callResult_.result);
 
 	bson_iterator_next(&it);
-	if (bson_iterator_type(&it) != bson_int)
+	if (bson_iterator_type(&it) == bson_long)
+	{
+		gameId_ = bson_iterator_long(&it);
+	}
+	else if (bson_iterator_type(&it) == bson_int)
+	{
+		gameId_ = (int64_t)bson_iterator_int(&it);
+	}
+	else
 	{
 		freeCallResult_();
 		return setError_(LOBBY_INVALID_DATA, _("Received invalid addGame data."));
 	}
-	gameId_ = bson_iterator_int(&it);
 
 	bson_iterator_next(&it);
 	if (bson_iterator_type(&it) != bson_string)
