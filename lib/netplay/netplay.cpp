@@ -158,7 +158,6 @@ static char lanaddr[16];
 static Socket* tmp_socket[MAX_TMP_SOCKETS] = { NULL };
 
 static SocketSet* tmp_socket_set = NULL;
-static char*		hostname;
 static NETSTATS		nStats = { 0, 0, 0, 0 };
 static int32_t          NetGameFlags[4] = { 0, 0, 0, 0 };
 char iptoconnect[PATH_MAX] = "\0"; // holds IP/hostname from command line
@@ -172,9 +171,9 @@ unsigned NET_PlayerConnectionStatus[CONNECTIONSTATUS_NORMAL][MAX_PLAYERS];
  **            ie ("trunk", "2.1.3", "3.0", ...)
  ************************************************************************************
 **/
-char VersionString[VersionStringSize] = "master, netcode 4.1010";
+char VersionString[VersionStringSize] = "master, netcode 4.1011";
 static int NETCODE_VERSION_MAJOR = 4;
-static int NETCODE_VERSION_MINOR = 1010;
+static int NETCODE_VERSION_MINOR = 1011;
 
 bool NETisCorrectVersion(uint32_t game_version_major, uint32_t game_version_minor)
 {
@@ -1771,30 +1770,6 @@ bool NETrecvGame(NETQUEUE *queue, uint8_t *type)
 }
 
 // ////////////////////////////////////////////////////////////////////////
-// ////////////////////////////////////////////////////////////////////////
-// Protocol functions
-
-bool NETsetupTCPIP(const char *machine)
-{
-	debug(LOG_NET, "NETsetupTCPIP(%s)", machine ? machine : "NULL");
-
-	if (   hostname != NULL
-	    && hostname != masterserver_name)
-	{
-		free(hostname);
-	}
-	if (   machine != NULL
-	    && machine[0] != '\0')
-	{
-		hostname = strdup(machine);
-	} else {
-		hostname = masterserver_name;
-	}
-
-	return true;
-}
-
-// ////////////////////////////////////////////////////////////////////////
 // File Transfer programs.
 /** Send file. It returns % of file sent when 100 it's complete. Call until it returns 100. 
 *  @TODO: more error checking (?) different file types (?)
@@ -2143,13 +2118,14 @@ static void NETregisterServer(int state)
 
 // ////////////////////////////////////////////////////////////////////////
 // Host a game with a given name and player name. & 4 user game flags
-
 static void NETallowJoining(void)
 {
 	unsigned int i;
-	UDWORD numgames = htonl(1);	// always 1 on normal server
-	char buffer[5];
-	ssize_t recv_result = 0;
+	char buffer[sizeof(int32_t) * 2];
+	char* p_buffer;
+	int32_t result;
+	bool connectFailed = true;
+	int32_t major, minor;
 
 	if (allow_joining == false) return;
 	ASSERT(NetPlay.isHost, "Cannot receive joins if not host!");
@@ -2197,56 +2173,64 @@ static void NETallowJoining(void)
 	{
 		NETinitQueue(NETnetTmpQueue(i));
 		SocketSet_AddSocket(tmp_socket_set, tmp_socket[i]);
+
+		p_buffer = buffer;
 		if (checkSockets(tmp_socket_set, NET_TIMEOUT_DELAY) > 0
 		    && socketReadReady(tmp_socket[i])
-		    && (recv_result = readNoInt(tmp_socket[i], buffer, 5))
-		    && recv_result != SOCKET_ERROR)
+		    && readNoInt(tmp_socket[i], p_buffer, 5) != SOCKET_ERROR)
 		{
-			if(strcmp(buffer, "list")==0)
+			// A 2.3.7 client sends a "list" command first,
+			// we just close the socket so he sees a "Connection Error".
+			if (strcmp(buffer, "list") == 0)
 			{
-				debug(LOG_NET, "cmd: list.  Sending game list");
-				if (writeAll(tmp_socket[i], &numgames, sizeof(numgames)) == SOCKET_ERROR)
-				{
-					// Write error, most likely client disconnect.
-					debug(LOG_ERROR, "Failed to send message: %s", strSockError(getSockErr()));
-					debug(LOG_ERROR, "Couldn't get list from server. Make sure required ports are open. (TCP 9998-9999)");
-				}
-				else
-				{
-					// get the correct player count after kicks / leaves
-					gamestruct.desc.dwCurrentPlayers = NetPlay.playercount;
-					debug(LOG_NET, "Sending update to server to reflect new player count %d", NetPlay.playercount);
-					NETsendGAMESTRUCT(tmp_socket[i], &gamestruct);
-				}
-
-				debug(LOG_NET, "freeing temp socket %p (%d)", tmp_socket[i], __LINE__);
-				SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
-				socketClose(tmp_socket[i]);
-				tmp_socket[i] = NULL;
-			}
-			else if (strcmp(buffer, "join") == 0)
-			{
-				debug(LOG_NET, "cmd: join.  Sending GAMESTRUCT");
-				if (!NETsendGAMESTRUCT(tmp_socket[i], &gamestruct))
-				{
-					debug(LOG_ERROR, "Failed to respond (with GAMESTRUCT) to 'join' command, socket (%p) error: %s", tmp_socket[i], strSockError(getSockErr()));
-					SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
-					socketClose(tmp_socket[i]);
-					tmp_socket[i] = NULL;
-				}
-				socketBeginCompression(tmp_socket[i]);
+				debug(LOG_ERROR, "An old client tried to connect, closing the socket.");
 			}
 			else
 			{
-				debug(LOG_NET, "freeing temp socket %p (%d)", tmp_socket[i], __LINE__);
-				SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
-				socketClose(tmp_socket[i]);
-				tmp_socket[i] = NULL;
+				// New clients send NETCODE_VERSION_MAJOR and NETCODE_VERSION_MINOR
+				// Check these numbers with our own.
+
+				// Read another 3 bytes into the buffer
+				p_buffer += 5;
+
+				if (readNoInt(tmp_socket[i], p_buffer, 3) != SOCKET_ERROR)
+				{
+					p_buffer = buffer;
+					memcpy(&major, p_buffer, sizeof(int32_t));
+					major = ntohl(major);
+					p_buffer += sizeof(uint32_t);
+					memcpy(&minor, p_buffer, sizeof(int32_t));
+					minor = ntohl(minor);
+
+					if (NETisCorrectVersion(major, minor))
+					{
+						result = htonl(ERROR_NOERROR);
+						memcpy(&buffer, &result, sizeof(result));
+						writeAll(tmp_socket[i], &buffer, sizeof(result));
+						socketBeginCompression(tmp_socket[i]);
+
+						// Connection is successful.
+						connectFailed = false;
+					}
+					else
+					{
+						// Commented out as each masterserver check creates an error.
+						debug(LOG_ERROR, "Received an invalid version \"%d.%d\".", major, minor);
+						result = htonl(ERROR_WRONGVERSION);
+						memcpy(&buffer, &result, sizeof(result));
+						writeAll(tmp_socket[i], &buffer, sizeof(result));
+					}
+				}
+				else
+				{
+					debug(LOG_NET, "Socket error while reading clients version.");
+				}
 			}
 		}
-		else
+
+		// Remove a failed connection.
+		if (connectFailed)
 		{
-			debug(LOG_NET, "freeing temp socket %p (%d)", tmp_socket[i], __LINE__);
 			SocketSet_DelSocket(tmp_socket_set, tmp_socket[i]);
 			socketClose(tmp_socket[i]);
 			tmp_socket[i] = NULL;
@@ -2292,15 +2276,11 @@ static void NETallowJoining(void)
 					int tmp;
 
 					char name[64];
-					int32_t MajorVersion = 0;
-					int32_t MinorVersion = 0;
 					char ModList[modlist_string_size] = { '\0' };
 					char GamePassword[password_string_size] = { '\0' };
 
 					NETbeginDecode(NETnetTmpQueue(i), NET_JOIN);
 						NETstring(name, sizeof(name));
-						NETint32_t(&MajorVersion);	// NETCODE_VERSION_MAJOR
-						NETint32_t(&MinorVersion);	// NETCODE_VERSION_MINOR
 						NETstring(ModList, sizeof(ModList));
 						NETstring(GamePassword, sizeof(GamePassword));
 					NETend();
@@ -2348,11 +2328,6 @@ static void NETallowJoining(void)
 						// Player has been kicked before, kick again.
 						rejected = (uint8_t)ERROR_KICKED;
 					}
-					else if (!NETisCorrectVersion(MajorVersion, MinorVersion))
-					{
-						// Wrong version. Reject.
-						rejected = (uint8_t)ERROR_WRONGVERSION;
-					}
 					else if (NetPlay.GamePassworded && strcmp(NetPlay.gamePassword, GamePassword) != 0)
 					{
 						// Wrong password. Reject.
@@ -2371,7 +2346,7 @@ static void NETallowJoining(void)
 
 					if (rejected)
 					{
-						debug(LOG_INFO, "We were rejected, reason (%u)", (unsigned int) rejected);
+						debug(LOG_INFO, "Rejecting new player, reason (%u).", (unsigned int) rejected);
 						//NETlogEntry(buf, SYNC_FLAG, index);  // buf undeclared in newnet branch.
 						NETbeginEncode(NETnetQueue(index), NET_REJECTED);
 							NETuint8_t(&rejected);
@@ -2399,6 +2374,7 @@ static void NETallowJoining(void)
 
 					char buf[250] = {'\0'};
 					snprintf(buf, sizeof(buf), "Player %s has joined, IP is: %s", name, NetPlay.players[index].IPtextAddress);
+					debug(LOG_INFO, buf);
 					NETlogEntry(buf, SYNC_FLAG, index);
 
 					debug(LOG_NET, "Player, %s, with index of %u has joined using socket %p", name, (unsigned int)index, connected_bsocket[index]);
@@ -2582,7 +2558,6 @@ bool NETfindGame(void)
 	SocketAddress* hosts;
 	unsigned int gamecount = 0;
 	uint32_t gamesavailable;
-	unsigned int port = (hostname == masterserver_name) ? masterserver_port : gameserver_port;
 	int result = 0;
 	debug(LOG_NET, "Looking for games...");
 	
@@ -2603,27 +2578,9 @@ bool NETfindGame(void)
 		NetPlay.hostPlayer	= NET_HOST_ONLY;
 		return true;
 	}
-	// We first check to see if we were given a IP/hostname from the command line
-	if (strlen(iptoconnect) )
+	if ((hosts = resolveHost(masterserver_name, masterserver_port)) == NULL)
 	{
-		hosts = resolveHost(iptoconnect, port);
-		if (hosts == NULL)
-		{
-			debug(LOG_ERROR, "Error connecting to client via hostname provided (%s)",iptoconnect);
-			debug(LOG_ERROR, "Cannot resolve hostname :%s",strSockError(getSockErr()));
-			setLobbyError(ERROR_CONNECTION);
-			return false;
-		}
-		else
-		{
-			// We got a valid ip now
-			hostname = strdup(iptoconnect);		//copy it
-			memset(iptoconnect,0x0,sizeof(iptoconnect));	//reset it (so we don't loop back to this routine)
-		}
-	}
-	else if ((hosts = resolveHost(hostname, port)) == NULL)
-	{
-		debug(LOG_ERROR, "Cannot resolve hostname \"%s\": %s", hostname, strSockError(getSockErr()));
+		debug(LOG_ERROR, "Cannot resolve hostname \"%s\": %s", masterserver_name, strSockError(getSockErr()));
 		setLobbyError(ERROR_CONNECTION);
 		return false;
 	}
@@ -2646,7 +2603,7 @@ bool NETfindGame(void)
 
 	if (tcp_socket == NULL)
 	{
-		debug(LOG_ERROR, "Cannot connect to \"%s:%d\": %s", hostname, port, strSockError(getSockErr()));
+		debug(LOG_ERROR, "Cannot connect to \"%s:%d\": %s", masterserver_name, masterserver_port, strSockError(getSockErr()));
 		setLobbyError(ERROR_CONNECTION);
 		return false;
 	}
@@ -2720,59 +2677,45 @@ bool NETfindGame(void)
 // ////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////
 // Functions used to setup and join games.
-bool NETjoinGame(UDWORD gameNumber, const char* playername)
+bool NETjoinGame(const char* host, uint32_t port, const char* playername)
 {
 	SocketAddress *hosts = NULL;
 	unsigned int i;
+	char buffer[sizeof(int32_t) * 2] = { 0 };
+	char* p_buffer;
+	uint32_t result;
+
+	if (port == 0)
+	{
+		port = gameserver_port;
+	}
 
 	debug(LOG_NET, "resetting sockets.");
 	NETclose();	// just to be sure :)
 
-	debug(LOG_NET, "Trying to join gameNumber (%u)...", gameNumber);
+	debug(LOG_NET, "Trying to join [%s]:%d ...", host, port);
 
 	mapDownloadProgress = 100;
 	netPlayersUpdated = true;
 
-	if (hostname == masterserver_name)
+	hosts = resolveHost(host, port);
+	if (hosts == NULL)
 	{
-		hostname = NULL;
+		debug(LOG_ERROR, "Cannot resolve hostname \"%s\": %s", host, strSockError(getSockErr()));
+		return false;
 	}
 
-	// Loop through all of the hosts, using the first one we can connect to.
-	for (i = 0; i < ARRAY_SIZE(NetPlay.games[gameNumber].secondaryHosts) + 1; ++i)
+	if (tcp_socket != NULL)
 	{
-		free(hostname);
-		if (i > 0)
-		{
-			hostname = strdup(NetPlay.games[gameNumber].secondaryHosts[i - 1]);
-		}
-		else
-		{
-			hostname = strdup(NetPlay.games[gameNumber].desc.host);
-		}
-
-		hosts = resolveHost(hostname, gameserver_port);
-		if (hosts == NULL)
-		{
-			debug(LOG_ERROR, "Cannot resolve hostname \"%s\": %s", hostname, strSockError(getSockErr()));
-			continue;
-		}
-
-		if (tcp_socket != NULL)
-		{
-			socketClose(tcp_socket);
-		}
-
-		tcp_socket = socketOpenAny(hosts, 15000);
-		deleteSocketAddress(hosts);
-		if (tcp_socket != NULL)
-		{
-			break;
-		}
+		socketClose(tcp_socket);
 	}
+
+	tcp_socket = socketOpenAny(hosts, 15000);
+	deleteSocketAddress(hosts);
 
 	if (tcp_socket == NULL)
 	{
+		debug(LOG_ERROR, "Cannot connect to [%s]:%d, %s", host, port, strSockError(getSockErr()));
 		return false;
 	}
 
@@ -2788,33 +2731,34 @@ bool NETjoinGame(UDWORD gameNumber, const char* playername)
 	// tcp_socket is used to talk to host machine
 	SocketSet_AddSocket(socket_set, tcp_socket);
 
-	if (writeAll(tcp_socket, "join", sizeof("join")) == SOCKET_ERROR)
+	// Send NETCODE_VERSION_MAJOR and NETCODE_VERSION_MINOR
+	p_buffer = buffer;
+	*(int32_t*)p_buffer = htonl(NETCODE_VERSION_MAJOR);
+	p_buffer += sizeof(uint32_t);
+	*(int32_t*)p_buffer = htonl(NETCODE_VERSION_MINOR);
+
+	if (writeAll(tcp_socket, buffer, sizeof(buffer)) == SOCKET_ERROR
+		|| readAll(tcp_socket, &result, sizeof(result), 1500) != sizeof(result))
 	{
-		debug(LOG_ERROR, "Failed to send 'join' command: %s", strSockError(getSockErr()));
-		SocketSet_DelSocket(socket_set, tcp_socket);
-		socketClose(tcp_socket);
-		tcp_socket = NULL;
-		deleteSocketSet(socket_set);
-		socket_set = NULL;
+		debug(LOG_ERROR, "Couldn't send my version.");
 		return false;
 	}
 
-	if (NETrecvGAMESTRUCT(&NetPlay.games[gameNumber])
-	 && NetPlay.games[gameNumber].desc.host[0] == '\0')
+	result = ntohl(result);
+	if (result != ERROR_NOERROR)
 	{
-		strncpy(NetPlay.games[gameNumber].desc.host, getSocketTextAddress(tcp_socket), sizeof(NetPlay.games[gameNumber].desc.host));
-	}
-	if (NetPlay.games[gameNumber].desc.dwCurrentPlayers >= NetPlay.games[gameNumber].desc.dwMaxPlayers)
-	{
-		// Shouldn't join; game is full
+		debug(LOG_ERROR, "Receveid error %d", result);
+
 		SocketSet_DelSocket(socket_set, tcp_socket);
 		socketClose(tcp_socket);
 		tcp_socket = NULL;
 		deleteSocketSet(socket_set);
 		socket_set = NULL;
-		setLobbyError(ERROR_FULL);
+
+		setLobbyError((LOBBY_ERROR_TYPES)result);
 		return false;
 	}
+
 	// Allocate memory for a new socket
 	NETinitQueue(NETnetQueue(NET_HOST_ONLY));
 	// NOTE: tcp_socket = bsocket now!
@@ -2824,8 +2768,6 @@ bool NETjoinGame(UDWORD gameNumber, const char* playername)
 	// Send a join message to the host
 	NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_JOIN);
 		NETstring(playername, 64);
-		NETint32_t(&NETCODE_VERSION_MAJOR);
-		NETint32_t(&NETCODE_VERSION_MINOR);
 		NETstring(getModList(), modlist_string_size);
 		NETstring(NetPlay.gamePassword, sizeof(NetPlay.gamePassword));
 	NETend();

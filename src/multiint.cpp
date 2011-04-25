@@ -689,7 +689,6 @@ void runConnectionScreen(void)
 			bMultiMessages = false;
 			break;
 		case CON_TYPESID_START+0: // Lobby button
-			NETsetupTCPIP(""); //inet
 			if ((LobbyError != ERROR_KICKED) && (LobbyError != ERROR_CHEAT))
 			{
 				setLobbyError(ERROR_NOERROR);
@@ -712,9 +711,7 @@ void runConnectionScreen(void)
 				SettingsUp = false;
 			}
 
-			NETsetupTCPIP(addr); //inet
-
-			changeTitleMode(GAMEFIND);
+			joinGame(addr, 0);
 			break;
 		case CON_IP_CANCEL:
 			if (SettingsUp == true)
@@ -755,6 +752,70 @@ void setLobbyError (LOBBY_ERROR_TYPES error_type)
 	{
 		disableLobbyRefresh = true;
 	}
+}
+
+/**
+ * Try connecting to the given host, show
+ * the multiplayer screen or a error.
+ */
+bool joinGame(const char* host, uint32_t port)
+{
+	PLAYERSTATS	playerStats;
+	LOBBY_ERROR_TYPES oldError;
+	UDWORD id;
+
+	if(ingame.localJoiningInProgress)
+	{
+		return false;
+	}
+
+	if (!NETjoinGame(host, port, (char*)sPlayer))	// join
+	{
+		// Save the error.
+		oldError = getLobbyError();
+		if (!oldError)
+		{
+			oldError = ERROR_CONNECTION;
+		}
+		else if (oldError == ERROR_WRONGPASSWORD)
+		{
+			// Change to GAMEFIND, screen with a password dialog.
+			changeTitleMode(GAMEFIND);
+			showPasswordForm();
+
+			id = widgRunScreen(psWScreen); // Run the current set of widgets
+
+			if (id != CON_PASSWORD)
+			{
+				return false;
+			}
+
+			NETsetGamePassword(widgGetString(psWScreen, CON_PASSWORD));
+		}
+
+		// Hide a (maybe shown) password form.
+		hidePasswordForm();
+
+		// Change to GAMEFIND, screen.
+		changeTitleMode(GAMEFIND);
+
+		// Reset the error to the saved one.
+		setLobbyError(oldError);
+
+		// Shows the lobby error.
+		addGames();
+
+		return false;
+	}
+	ingame.localJoiningInProgress	= true;
+
+	loadMultiStats(sPlayer,&playerStats);
+	setMultiStats(selectedPlayer, playerStats, false);
+	setMultiStats(selectedPlayer, playerStats, true);
+
+	changeTitleMode(MULTIOPTION);
+
+	return true;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -966,18 +1027,7 @@ void runGameFind(void )
 				ingame.localOptionsReceived = false;			// note we are awaiting options
 				sstrcpy(game.name, NetPlay.games[gameNumber].name);		// store name
 
-				if (joinCampaign(gameNumber,(char*)sPlayer))
-				{
-					changeTitleMode(MULTIOPTION);
-				}
-				else
-				{
-					if (!getLobbyError())
-					{
-						setLobbyError(ERROR_CONNECTION);
-					}
-					addGames();
-				}
+				joinGame(NetPlay.games[gameNumber].desc.host, 0);
 			}
 		}
 
@@ -987,18 +1037,7 @@ void runGameFind(void )
 		ingame.localOptionsReceived = false;			// note we are awaiting options
 		sstrcpy(game.name, NetPlay.games[gameNumber].name);		// store name
 
-		if (joinCampaign(gameNumber,(char*)sPlayer))
-		{
-			changeTitleMode(MULTIOPTION);
-		}
-		else
-		{
-			if (!getLobbyError())
-			{
-				setLobbyError(ERROR_CONNECTION);
-			}
-			hidePasswordForm();
-		}
+		joinGame(NetPlay.games[gameNumber].desc.host, 0);
 	}
 	else if (id == CON_PASSWORDNO)
 	{

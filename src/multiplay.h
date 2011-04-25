@@ -211,7 +211,7 @@ extern bool multiShutdown		(void);
 extern bool sendLeavingMsg		(void);
 
 extern bool hostCampaign		(char *sGame, char *sPlayer);
-extern bool joinCampaign		(UDWORD gameNumber, char *playername);
+extern bool joinGame			(const char* host, uint32_t port);
 extern void	playerResponding	(void);
 extern bool multiGameInit		(void);
 extern bool multiGameShutdown	(void);
