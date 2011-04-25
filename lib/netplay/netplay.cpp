@@ -36,12 +36,6 @@
 #include <string.h>
 #include <memory>
 
-#if defined(WZ_OS_WIN)
-# include <winsock2.h>	// for sockets
-#else
-#include <arpa/inet.h>
-#endif
-
 #include "netplay.h"
 #include "netlog.h"
 #include "netsocket.h"
