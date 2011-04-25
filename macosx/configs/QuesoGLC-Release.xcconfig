@@ -1,7 +1,0 @@
-// QuesoGLC settings for Release configuration
-
-#include "QuesoGLC-All.xcconfig"
-
-
-GCC_ENABLE_FIX_AND_CONTINUE = NO
-ZERO_LINK = NO
