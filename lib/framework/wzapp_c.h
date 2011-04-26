@@ -29,7 +29,6 @@ typedef struct _wzThread WZ_THREAD;
 typedef struct _wzMutex WZ_MUTEX;
 typedef struct _wzSemaphore WZ_SEMAPHORE;
 
-int wzInit(int argc, char *argv[], int fsaa, bool vsync, int w, int h, bool fullscreen);
 void wzQuit(void);              ///< Quit game
 void wzCreateCursor(CURSOR index, uint8_t *data, uint8_t *mask, int w, int h, int hot_x, int hot_y);
 void wzSetCursor(CURSOR index);

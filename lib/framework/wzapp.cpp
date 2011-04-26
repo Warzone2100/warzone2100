@@ -26,7 +26,6 @@
 #include <QtGui/QBitmap>
 #include <QtGui/QPainter>
 #include <QtGui/QMouseEvent>
-#include <QtGui/QDesktopWidget>
 #include <QtGui/QMessageBox>
 #include <QtGui/QIcon>
 
@@ -689,68 +688,6 @@ void WzMainWindow::close()
 /***          C interface         ***/
 /***                              ***/
 /************************************/
-
-int wzInit(int argc, char *argv[], int fsaa, bool vsync, int w, int h, bool fullscreen)
-{
-	char buf[256];
-	QGL::setPreferredPaintEngine(QPaintEngine::OpenGL); // Workaround for incorrect text rendering on nany platforms.
-	QApplication app(argc, argv);
-
-	// Setting up OpenGL
-	QGLFormat format;
-	format.setDoubleBuffer(true);
-	format.setAlpha(true);
-	if (vsync)
-	{
-		format.setSwapInterval(1);
-	}
-	if (fsaa)
-	{
-		format.setSampleBuffers(true);
-		format.setSamples(fsaa);
-	}
-	WzMainWindow mainwindow(format);
-	if (!mainwindow.context()->isValid())
-	{
-		QMessageBox::critical(NULL, "Oops!", "Warzone2100 failed to create an OpenGL context. This probably means that your graphics drivers are out of date. Try updating them!");
-		return EXIT_FAILURE;
-	}
-	if (fullscreen)
-	{
-		QDesktopWidget *desktop = qApp->desktop();
-		w = desktop->width();
-		h = desktop->height();
-		pie_SetVideoBufferWidth(w);
-		pie_SetVideoBufferHeight(h);
-	}
-	mainwindow.setMinimumSize(w, h);
-	mainwindow.setMaximumSize(w, h);
-	if (fullscreen)
-	{
-		WzMainWindow::instance()->showFullScreen();
-	}
-	screenWidth = w;
-	screenHeight = h;
-	mainwindow.show();
-	mainwindow.setReadyToPaint();
-
-	ssprintf(buf, "Video Mode %d x %d (%s)", w, h, fullscreen ? "fullscreen" : "window");
-	addDumpInfo(buf);
-
-	debug(LOG_MAIN, "Final initialization");
-	if (finalInitialization() != 0)
-	{
-		debug(LOG_ERROR, "Failed to carry out final initialization.");
-		return EXIT_FAILURE;
-	}
-
-	debug(LOG_MAIN, "Entering main loop");
-	app.exec();
-
-	saveConfig();
-	debug(LOG_MAIN, "Shutting down Warzone 2100");
-	return EXIT_SUCCESS;
-}
 
 void wzQuit()
 {

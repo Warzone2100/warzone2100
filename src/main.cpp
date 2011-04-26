@@ -22,8 +22,11 @@
  */
 
 // Get platform defines before checking for them!
-#include "lib/framework/frame.h"
+#include "lib/framework/wzapp.h"
 #include <QtCore/QTextCodec>
+#include <QtGui/QApplication>
+#include <QtGui/QMessageBox>
+#include <QtGui/QDesktopWidget>
 
 #if defined(WZ_OS_WIN)
 #  include <shlobj.h> /* For SHGetFolderPath */
@@ -34,6 +37,7 @@
 
 #include "lib/framework/configfile.h"
 #include "lib/framework/input.h"
+#include "lib/framework/frameint.h"
 #include "lib/framework/physfs_ext.h"
 #include "lib/framework/wzapp_c.h"
 #include "lib/exceptionhandler/exceptionhandler.h"
@@ -1069,6 +1073,7 @@ int main(int argc, char *argv[])
 {
 	int utfargc = argc;
 	const char** utfargv = (const char**)argv;
+	QApplication app(argc, argv);
 
 #ifdef WZ_OS_MAC
 	cocoaInit();
@@ -1082,7 +1087,7 @@ int main(int argc, char *argv[])
 
 	if (!getUTF8CmdLine(&utfargc, &utfargv))
 	{
-		return -1;
+		return EXIT_FAILURE;
 	}
 	QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));	// make Qt treat all C strings in Warzone as UTF-8
 
@@ -1095,8 +1100,9 @@ int main(int argc, char *argv[])
 	initI18n();
 
 	// find early boot info
-	if ( !ParseCommandLineEarly(utfargc, utfargv) ) {
-		return -1;
+	if (!ParseCommandLineEarly(utfargc, utfargv))
+	{
+		return EXIT_FAILURE;
 	}
 
 	debug(LOG_WZ, "Using language: %s", getLanguage());
@@ -1154,8 +1160,9 @@ int main(int argc, char *argv[])
 	NETinit(true);
 
 	// parse the command line
-	if (!ParseCommandLine(utfargc, utfargv)) {
-		return -1;
+	if (!ParseCommandLine(utfargc, utfargv))
+	{
+		return EXIT_FAILURE;
 	}
 
 	// Save new (commandline) settings
@@ -1246,15 +1253,58 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	return wzInit(argc, argv, war_getFSAA(), war_GetVsync(), pie_GetVideoBufferWidth(), pie_GetVideoBufferHeight(), war_getFullscreen());
-}
+	debug(LOG_MAIN, "Qt initialization");
+	QGL::setPreferredPaintEngine(QPaintEngine::OpenGL); // Workaround for incorrect text rendering on nany platforms.
 
-// Called from wzInit after graphics initialized
-int finalInitialization()
-{
+	// Setting up OpenGL
+	QGLFormat format;
+	format.setDoubleBuffer(true);
+	format.setAlpha(true);
+	int w = pie_GetVideoBufferWidth();
+	int h = pie_GetVideoBufferHeight();
+
+	if (war_GetVsync())
+	{
+		format.setSwapInterval(1);
+	}
+	if (war_getFSAA())
+	{
+		format.setSampleBuffers(true);
+		format.setSamples(war_getFSAA());
+	}
+	WzMainWindow mainwindow(format);
+	if (!mainwindow.context()->isValid())
+	{
+		QMessageBox::critical(NULL, "Oops!", "Warzone2100 failed to create an OpenGL context. This probably means that your graphics drivers are out of date. Try updating them!");
+		return EXIT_FAILURE;
+	}
+	if (war_getFullscreen())
+	{
+		QDesktopWidget *desktop = qApp->desktop();
+		w = desktop->width();
+		h = desktop->height();
+		pie_SetVideoBufferWidth(w);
+		pie_SetVideoBufferHeight(h);
+	}
+	mainwindow.setMinimumSize(w, h);
+	mainwindow.setMaximumSize(w, h);
+	if (war_getFullscreen())
+	{
+		WzMainWindow::instance()->showFullScreen();
+	}
+	screenWidth = w;
+	screenHeight = h;
+	mainwindow.show();
+	mainwindow.setReadyToPaint();
+
+	char buf[256];
+	ssprintf(buf, "Video Mode %d x %d (%s)", w, h, war_getFullscreen() ? "fullscreen" : "window");
+	addDumpInfo(buf);
+
+	debug(LOG_MAIN, "Final initialization");
 	if (!frameInitialise())
 	{
-		return -1;
+		return EXIT_FAILURE;
 	}
 	war_SetWidth(pie_GetVideoBufferWidth());
 	war_SetHeight(pie_GetVideoBufferHeight());
@@ -1270,7 +1320,7 @@ int finalInitialization()
 
 	if (!systemInitialise())
 	{
-		return -1;
+		return EXIT_FAILURE;
 	}
 
 	//set all the pause states to false
@@ -1286,13 +1336,10 @@ int finalInitialization()
 		exit(0);
 	}
 
-	{
-		// Copy this info to be used by the crash handler for the dump file
-		char buf[256];
+	// Copy this info to be used by the crash handler for the dump file
+	ssprintf(buf,"Using language: %s", getLanguageName());
+	addDumpInfo(buf);
 
-		ssprintf(buf,"Using language: %s", getLanguageName());
-		addDumpInfo(buf);
-	}
 	// Do the game mode specific initialisation.
 	switch(GetGameMode())
 	{
@@ -1313,10 +1360,12 @@ int finalInitialization()
 #if defined(WZ_CC_MSVC) && defined(DEBUG)
 	debug_MEMSTATS();
 #endif
-
-	return 0;
+	debug(LOG_MAIN, "Entering main loop");
+	app.exec();
+	saveConfig();
+	debug(LOG_MAIN, "Completed shutting down Warzone 2100");
+	return EXIT_SUCCESS;
 }
-
 
 /*!
  * Get the mode the game is currently in
@@ -1325,7 +1374,6 @@ GS_GAMEMODE GetGameMode(void)
 {
 	return gameStatus;
 }
-
 
 /*!
  * Set the current mode
