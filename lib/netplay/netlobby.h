@@ -47,12 +47,13 @@ enum LOBBY_ERROR
 
 	// Custom error codes.
 	LOBBY_INVALID_DATA			= 	-500,
+	LOBBY_LOGIN_REQUIRED		=	-405,
 	LOBBY_WRONG_LOGIN 			=	-404,
 	LOBBY_NOT_ACCEPTABLE 		=	-403,
 	LOBBY_NO_GAME				=	-402,
 };
 
-// FIXME: Not sure if std::string is a good idear here,
+// FIXME: Not sure if std::string is a good idea here,
 // 		  as multitint is passing them direct to iV_DrawText.
 struct LOBBY_GAME
 {
@@ -90,9 +91,10 @@ class LobbyClient {
 		LobbyClient();
 		void stop();
 
-		bool connect();
+		LOBBY_ERROR connect();
 		bool disconnect();
 		bool isConnected();
+		LOBBY_ERROR login(const char* username, const char* password);
 
 		LOBBY_ERROR addGame(char** result, uint32_t port, uint32_t maxPlayers,
 						const char* description, const char* versionstring,
@@ -111,6 +113,12 @@ class LobbyClient {
 
 		LobbyClient& setPort(const uint32_t& port) { port_ = port; return *this; }
 		uint32_t getPort() { return port_; }
+
+		LobbyClient& setUser(const std::string& user) { user_ = user; return *this; }
+		std::string getUser() const { return user_; }
+
+		LobbyClient& setToken(const std::string& token) { token_ = token; return *this; }
+		std::string getToken() const { return token_; }
 
 		lobbyError* getError() { return &lastError_; }
 
@@ -133,6 +141,9 @@ class LobbyClient {
 
 		std::string host_;
 		uint32_t port_;
+
+		std::string user_;
+		std::string token_;
 
 		Socket* socket_;
 

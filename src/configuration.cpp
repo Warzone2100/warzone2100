@@ -133,6 +133,16 @@ bool loadConfig()
 
 	if (ini.contains("bpp")) pie_SetVideoBufferDepth(ini.value("bpp").toInt());
 	setFramerateLimit(ini.value("framerate", 60).toInt());
+
+	if (ini.contains("lobby_user"))
+	{
+		lobbyclient.setUser(ini.value("lobby_user").toString().toUtf8().constData());
+	}
+	if (ini.contains("lobby_token"))
+	{
+		lobbyclient.setToken(ini.value("lobby_token").toString().toUtf8().constData());
+	}
+
 	return true;
 }
 
@@ -210,6 +220,10 @@ bool saveConfig()
 		}
 		ini.setValue("playerName", (char*)sPlayer);		// player name
 	}
+
+	ini.setValue("lobby_user", lobbyclient.getUser().c_str());
+	ini.setValue("lobby_token", lobbyclient.getToken().c_str());
+
 	ini.sync();
 	return true;
 }

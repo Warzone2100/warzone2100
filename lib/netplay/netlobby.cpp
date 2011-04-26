@@ -87,7 +87,7 @@ LOBBY_ERROR LobbyClient::addGame(char** result, uint32_t port, uint32_t maxPlaye
 	{
 		debug(LOG_ERROR, "Received: server error %d: %s", callResult_.code, callResult_.result);
 
-		setError_(callResult_.code, _("Got server error: %s!"), callResult_.result);
+		setError_(callResult_.code, _("Got server error: %s"), callResult_.result);
 		freeCallResult_();
 		return lastError_.code;
 	}
@@ -149,7 +149,7 @@ LOBBY_ERROR LobbyClient::delGame()
 	if (callResult_.code != LOBBY_NO_ERROR)
 	{
 		debug(LOG_ERROR, "Received: server error %d: %s.", callResult_.code, callResult_.result);
-		setError_(callResult_.code, _("Got server error: %s!"), callResult_.result);
+		setError_(callResult_.code, _("Got server error: %s"), callResult_.result);
 		freeCallResult_();
 		return lastError_.code;
 
@@ -183,7 +183,7 @@ LOBBY_ERROR LobbyClient::addPlayer(unsigned int index, const char* name, const c
 	if (callResult_.code != LOBBY_NO_ERROR)
 	{
 		debug(LOG_ERROR, "Received: server error %d: %s.", callResult_.code, callResult_.result);
-		setError_(callResult_.code, _("Got server error: %s!"), callResult_.result);
+		setError_(callResult_.code, _("Got server error: %s"), callResult_.result);
 		freeCallResult_();
 		return lastError_.code;
 	}
@@ -212,7 +212,7 @@ LOBBY_ERROR LobbyClient::delPlayer(unsigned int index)
 	if (callResult_.code != LOBBY_NO_ERROR)
 	{
 		debug(LOG_ERROR, "Received: server error %d: %s.", callResult_.code, callResult_.result);
-		setError_(callResult_.code, _("Got server error: %s!"), callResult_.result);
+		setError_(callResult_.code, _("Got server error: %s"), callResult_.result);
 		freeCallResult_();
 		return lastError_.code;
 	}
@@ -242,7 +242,7 @@ LOBBY_ERROR LobbyClient::updatePlayer(unsigned int index, const char* name)
 	if (callResult_.code != LOBBY_NO_ERROR)
 	{
 		debug(LOG_ERROR, "Received: server error %d: %s.", callResult_.code, callResult_.result);
-		setError_(callResult_.code, _("Got server error: %s!"), callResult_.result);
+		setError_(callResult_.code, _("Got server error: %s"), callResult_.result);
 		freeCallResult_();
 		return lastError_.code;
 	}
@@ -344,13 +344,13 @@ inline bool LobbyClient::isConnected()
 	return (socket_ != NULL && !socketReadDisconnected(socket_));
 }
 
-bool LobbyClient::connect()
+LOBBY_ERROR LobbyClient::connect()
 {
 	char version[sizeof("version") + sizeof(uint32_t)];
 	char* p_version = version;
 
 	if (isConnected())
-		return true;
+		return LOBBY_NO_ERROR;
 
 	// Build the initial version command.
 	strlcpy(p_version, "version", sizeof("version"));
@@ -380,7 +380,66 @@ bool LobbyClient::connect()
 		return setError_(LOBBY_TRANSPORT_ERROR, _("Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"), port_);
 	}
 
-	return true;
+	// At last try to login
+	return login(NULL, NULL);
+}
+
+LOBBY_ERROR LobbyClient::login(const char* username, const char* password)
+{
+	bson kwargs[1];
+	bson_buffer buffer[1];
+
+	if (username != NULL and password != NULL)
+	{
+		user_ = username;
+	}
+	else if (user_.empty())
+	{
+		// Do not return an error for internal use.
+		debug(LOG_INFO, "Not trying to login no username supplied.");
+		return LOBBY_NO_ERROR;
+	}
+
+	bson_buffer_init(buffer);
+	bson_append_string(buffer, "username", user_.c_str());
+
+	if (password != NULL)
+	{
+		bson_append_string(buffer, "password", password);
+	}
+	else if (!token_.empty())
+	{
+		bson_append_string(buffer, "token", token_.c_str());
+	}
+	else
+	{
+		bson_buffer_destroy(buffer);
+
+		debug(LOG_INFO, "Not trying to login no password/token supplied.");
+
+		// Do not return an error for internal use.
+		return LOBBY_NO_ERROR;
+	}
+
+	bson_from_buffer(kwargs, buffer);
+
+	if (call_("login", NULL, kwargs) != LOBBY_NO_ERROR)
+		return lastError_.code;
+	bson_destroy(kwargs);
+
+	if (callResult_.code != LOBBY_NO_ERROR)
+	{
+		debug(LOG_ERROR, "Received: server error %d: %s", callResult_.code, callResult_.result);
+
+		setError_(callResult_.code, _("%s"), callResult_.result);
+		freeCallResult_();
+		return lastError_.code;
+	}
+
+	token_ = callResult_.result;
+
+	freeCallResult_();
+	return LOBBY_NO_ERROR;
 }
 
 bool LobbyClient::disconnect()
@@ -403,7 +462,7 @@ LOBBY_ERROR LobbyClient::call_(const char* command, bson* args, bson* kwargs)
 	uint32_t resSize;
 
 	// Connect to the masterserver
-	if (connect() != true)
+	if (connect() != LOBBY_NO_ERROR)
 		return lastError_.code;
 
 	callId_ += 1;
