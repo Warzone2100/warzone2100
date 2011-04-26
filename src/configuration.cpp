@@ -163,8 +163,10 @@ bool saveConfig()
 	ini.setValue("visfog",(SDWORD)(!war_GetFog()));			// fogtype
 	ini.setValue("shake",(SDWORD)(getShakeStatus()));		// screenshake
 	ini.setValue("mouseflip",(SDWORD)(getInvertMouseStatus()));	// flipmouse
+	ini.setValue("nomousewrap", (SDWORD)getMouseWarp()); 		// mouse wrap
 	ini.setValue("RightClickOrders",(SDWORD)(getRightClickOrders()));
 	ini.setValue("MiddleClickRotate",(SDWORD)(getMiddleClickRotate()));
+	ini.setValue("showFPS", (SDWORD)showFPS);
 	ini.setValue("shadows",(SDWORD)(getDrawShadows()));	// shadows
 	ini.setValue("sound", (SDWORD)war_getSoundEnabled());
 	ini.setValue("FMVmode",(SDWORD)(war_GetFMVmode()));		// sequences
@@ -174,6 +176,8 @@ bool saveConfig()
 	ini.setValue("trapCursor", war_GetTrapCursor());
 	ini.setValue("vsync", war_GetVsync());
 	ini.setValue("textureSize", getTextureSize());
+	ini.setValue("FSAA", war_getFSAA());
+	ini.setValue("UPnP", (SDWORD)NetPlay.isUPNP);
 	ini.setValue("rotateRadar", rotateRadar);
 	ini.setValue("PauseOnFocusLoss", war_GetPauseOnFocusLoss());
 	ini.setValue("masterserver_name", NETgetMasterserverName());

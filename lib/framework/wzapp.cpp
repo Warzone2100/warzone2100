@@ -771,6 +771,11 @@ void setMouseWarp(bool value)
 	mousewarp = value;
 }
 
+bool getMouseWarp()
+{
+	return mousewarp;
+}
+
 void setMousePos(uint16_t x, uint16_t y)
 {
 	if (mousewarp)
