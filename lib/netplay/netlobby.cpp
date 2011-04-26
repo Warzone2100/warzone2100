@@ -87,7 +87,7 @@ LOBBY_ERROR LobbyClient::addGame(char** result, uint32_t port, uint32_t maxPlaye
 	{
 		debug(LOG_ERROR, "Received: server error %d: %s", callResult_.code, callResult_.result);
 
-		setError_(callResult_.code, _("Got server error %d!"), callResult_.code);
+		setError_(callResult_.code, _("Got server error: %s!"), callResult_.result);
 		freeCallResult_();
 		return lastError_.code;
 	}
@@ -149,7 +149,7 @@ LOBBY_ERROR LobbyClient::delGame()
 	if (callResult_.code != LOBBY_NO_ERROR)
 	{
 		debug(LOG_ERROR, "Received: server error %d: %s.", callResult_.code, callResult_.result);
-		setError_(callResult_.code, _("Got server error (%d)."), callResult_.code);
+		setError_(callResult_.code, _("Got server error: %s!"), callResult_.result);
 		freeCallResult_();
 		return lastError_.code;
 
@@ -183,7 +183,7 @@ LOBBY_ERROR LobbyClient::addPlayer(unsigned int index, const char* name, const c
 	if (callResult_.code != LOBBY_NO_ERROR)
 	{
 		debug(LOG_ERROR, "Received: server error %d: %s.", callResult_.code, callResult_.result);
-		setError_(callResult_.code, _("Got server error (%d)."), callResult_.code);
+		setError_(callResult_.code, _("Got server error: %s!"), callResult_.result);
 		freeCallResult_();
 		return lastError_.code;
 	}
@@ -212,7 +212,7 @@ LOBBY_ERROR LobbyClient::delPlayer(unsigned int index)
 	if (callResult_.code != LOBBY_NO_ERROR)
 	{
 		debug(LOG_ERROR, "Received: server error %d: %s.", callResult_.code, callResult_.result);
-		setError_(callResult_.code, _("Got server error (%d)."), callResult_.code);
+		setError_(callResult_.code, _("Got server error: %s!"), callResult_.result);
 		freeCallResult_();
 		return lastError_.code;
 	}
@@ -242,7 +242,7 @@ LOBBY_ERROR LobbyClient::updatePlayer(unsigned int index, const char* name)
 	if (callResult_.code != LOBBY_NO_ERROR)
 	{
 		debug(LOG_ERROR, "Received: server error %d: %s.", callResult_.code, callResult_.result);
-		setError_(callResult_.code, _("Got server error (%d)."), callResult_.code);
+		setError_(callResult_.code, _("Got server error: %s!"), callResult_.result);
 		freeCallResult_();
 		return lastError_.code;
 	}
