@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-04-25 21:25+0200\n"
+"POT-Creation-Date: 2011-05-01 14:54+0200\n"
 "PO-Revision-Date: 2010-04-21 08:32-0500\n"
 "Last-Translator: Gilles J. Séguin <segg2@videotron.ca>\n"
 "Language-Team: French <warzone-dev@gna.org>\n"
@@ -12126,18 +12126,18 @@ msgstr "Canon lourd Python aéro-glisseur"
 msgid "System locale"
 msgstr "Langage du système"
 
-#: lib/netplay/netplay.cpp:193
-#: lib/netplay/netplay.cpp:1028
+#: lib/netplay/netplay.cpp:187
+#: lib/netplay/netplay.cpp:1022
 #, fuzzy
 msgid "Enter password here"
 msgstr "Entrez le mot de passe "
 
-#: lib/netplay/netplay.cpp:2022
+#: lib/netplay/netplay.cpp:2016
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Impossible de résourdre le DNS du serveur maître (%s) !"
 
-#: lib/netplay/netplay.cpp:2044
+#: lib/netplay/netplay.cpp:2038
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "Impossible de communiquer avec le serveur maître ! Le port TCP %u est-il ouvert en sortie ?"
@@ -12445,20 +12445,20 @@ msgstr "Armes"
 msgid "Systems"
 msgstr "Systèmes"
 
-#: src/display3d.cpp:592
+#: src/display3d.cpp:587
 msgid "Player left"
 msgstr "Joueur à quitter"
 
-#: src/display3d.cpp:596
+#: src/display3d.cpp:591
 msgid "Player dropped"
 msgstr "Joueur échapper"
 
-#: src/display3d.cpp:600
+#: src/display3d.cpp:595
 #: src/multiint.cpp:2151
 msgid "Waiting for other players"
 msgstr "Attente des autres joueurs"
 
-#: src/display3d.cpp:605
+#: src/display3d.cpp:600
 msgid "Out of sync"
 msgstr ""
 
@@ -12605,9 +12605,9 @@ msgstr "TUTORIELS"
 #: src/frontend.cpp:429
 #: src/frontend.cpp:562
 #: src/frontend.cpp:698
-#: src/frontend.cpp:805
-#: src/frontend.cpp:1015
-#: src/frontend.cpp:1162
+#: src/frontend.cpp:833
+#: src/frontend.cpp:1075
+#: src/frontend.cpp:1222
 msgctxt "menu"
 msgid "Return"
 msgstr "Menu précédent"
@@ -12635,8 +12635,8 @@ msgstr "UN JOUEUR"
 
 #: src/frontend.cpp:303
 #: src/ingameop.cpp:493
-#: src/mission.cpp:2526
-#: src/mission.cpp:2627
+#: src/mission.cpp:2527
+#: src/mission.cpp:2628
 msgid "Load Saved Game"
 msgstr "Charger une partie Enregistrée"
 
@@ -12699,7 +12699,7 @@ msgstr "2X"
 #: src/frontend.cpp:501
 #: src/frontend.cpp:647
 #: src/frontend.cpp:773
-#: src/frontend.cpp:830
+#: src/frontend.cpp:859
 msgid "Fullscreen"
 msgstr "Plein Écran"
 
@@ -12714,14 +12714,14 @@ msgstr "Tremblements de l'écran (explosion)"
 #: src/frontend.cpp:619
 #: src/frontend.cpp:628
 #: src/frontend.cpp:794
-#: src/frontend.cpp:891
-#: src/frontend.cpp:929
-#: src/frontend.cpp:968
-#: src/frontend.cpp:980
-#: src/frontend.cpp:992
-#: src/frontend.cpp:1037
-#: src/frontend.cpp:1050
-#: src/frontend.cpp:1064
+#: src/frontend.cpp:951
+#: src/frontend.cpp:989
+#: src/frontend.cpp:1028
+#: src/frontend.cpp:1040
+#: src/frontend.cpp:1052
+#: src/frontend.cpp:1097
+#: src/frontend.cpp:1110
+#: src/frontend.cpp:1124
 msgid "On"
 msgstr "Activé"
 
@@ -12732,14 +12732,16 @@ msgstr "Activé"
 #: src/frontend.cpp:614
 #: src/frontend.cpp:632
 #: src/frontend.cpp:798
-#: src/frontend.cpp:886
-#: src/frontend.cpp:924
-#: src/frontend.cpp:972
+#: src/frontend.cpp:808
+#: src/frontend.cpp:883
+#: src/frontend.cpp:946
 #: src/frontend.cpp:984
-#: src/frontend.cpp:996
 #: src/frontend.cpp:1032
-#: src/frontend.cpp:1045
-#: src/frontend.cpp:1059
+#: src/frontend.cpp:1044
+#: src/frontend.cpp:1056
+#: src/frontend.cpp:1092
+#: src/frontend.cpp:1105
+#: src/frontend.cpp:1119
 msgid "Off"
 msgstr "Désactivé"
 
@@ -12799,7 +12801,7 @@ msgid "Graphics Mode*"
 msgstr "Paramètres Visuels*"
 
 #: src/frontend.cpp:777
-#: src/frontend.cpp:825
+#: src/frontend.cpp:854
 msgid "Windowed"
 msgstr "Fenêtré"
 
@@ -12815,107 +12817,113 @@ msgstr "Taille des Textures"
 msgid "Vertical sync*"
 msgstr "Fréquence da rafraîchissement verticale*"
 
-#: src/frontend.cpp:802
+#: src/frontend.cpp:825
+#: src/frontend.cpp:889
+#, fuzzy
+msgid "Unsupported"
+msgstr "Transporteur"
+
+#: src/frontend.cpp:830
 #, fuzzy
 msgid "VIDEO OPTIONS"
 msgstr "OPTIONS VIDÉOS"
 
-#: src/frontend.cpp:961
+#: src/frontend.cpp:1021
 msgid "* May negatively affect performance"
 msgstr "* Risque de diminuer les performances"
 
-#: src/frontend.cpp:965
+#: src/frontend.cpp:1025
 msgid "Reverse Rotation"
 msgstr "Rotation Inversée"
 
-#: src/frontend.cpp:976
+#: src/frontend.cpp:1036
 msgid "Trap Cursor"
 msgstr "Piéger le Curseur"
 
-#: src/frontend.cpp:989
+#: src/frontend.cpp:1049
 #, fuzzy
 msgid "Switch Mouse Buttons"
 msgstr "Inverser les Boutons de la Souris"
 
-#: src/frontend.cpp:1001
+#: src/frontend.cpp:1061
 #, fuzzy
 msgid "Rotate Screen"
 msgstr "Rotation vers la Gauche"
 
-#: src/frontend.cpp:1004
-#: src/frontend.cpp:1078
+#: src/frontend.cpp:1064
+#: src/frontend.cpp:1138
 msgid "Middle Mouse"
 msgstr "Souris milieu"
 
-#: src/frontend.cpp:1008
-#: src/frontend.cpp:1073
+#: src/frontend.cpp:1068
+#: src/frontend.cpp:1133
 msgid "Right Mouse"
 msgstr "Souris droite"
 
-#: src/frontend.cpp:1012
+#: src/frontend.cpp:1072
 #, fuzzy
 msgid "MOUSE OPTIONS"
 msgstr "OPTIONS SOURIS"
 
-#: src/frontend.cpp:1113
-#: src/frontend.cpp:1183
+#: src/frontend.cpp:1173
+#: src/frontend.cpp:1243
 msgid "Difficulty"
 msgstr "Difficulté"
 
-#: src/frontend.cpp:1117
-#: src/frontend.cpp:1191
-#: src/frontend.cpp:1228
+#: src/frontend.cpp:1177
+#: src/frontend.cpp:1251
+#: src/frontend.cpp:1288
 msgid "Easy"
 msgstr "Facile"
 
-#: src/frontend.cpp:1120
-#: src/frontend.cpp:1194
-#: src/frontend.cpp:1220
+#: src/frontend.cpp:1180
+#: src/frontend.cpp:1254
+#: src/frontend.cpp:1280
 msgid "Normal"
 msgstr "Normale"
 
-#: src/frontend.cpp:1124
-#: src/frontend.cpp:1197
-#: src/frontend.cpp:1224
+#: src/frontend.cpp:1184
+#: src/frontend.cpp:1257
+#: src/frontend.cpp:1284
 msgid "Hard"
 msgstr "Difficile"
 
-#: src/frontend.cpp:1129
-#: src/frontend.cpp:1184
+#: src/frontend.cpp:1189
+#: src/frontend.cpp:1244
 msgid "Scroll Speed"
 msgstr "Vitesse de Défilement"
 
-#: src/frontend.cpp:1143
-#: src/frontend.cpp:1181
+#: src/frontend.cpp:1203
+#: src/frontend.cpp:1241
 msgid "Language"
 msgstr "Langue"
 
-#: src/frontend.cpp:1155
-#: src/frontend.cpp:1182
+#: src/frontend.cpp:1215
+#: src/frontend.cpp:1242
 msgid "Unit Colour"
 msgstr "Couleur des Unités"
 
-#: src/frontend.cpp:1158
+#: src/frontend.cpp:1218
 msgid "Radar"
 msgstr "Radar"
 
-#: src/frontend.cpp:1159
-#: src/frontend.cpp:1208
+#: src/frontend.cpp:1219
+#: src/frontend.cpp:1268
 #, fuzzy
 msgid "Rotating"
 msgstr "Rotation vers la Droite"
 
-#: src/frontend.cpp:1159
-#: src/frontend.cpp:1208
+#: src/frontend.cpp:1219
+#: src/frontend.cpp:1268
 msgid "Fixed"
 msgstr ""
 
-#: src/frontend.cpp:1165
-#: src/frontend.cpp:1185
+#: src/frontend.cpp:1225
+#: src/frontend.cpp:1245
 msgid "GAME OPTIONS"
 msgstr "OPTIONS"
 
-#: src/frontend.cpp:1317
+#: src/frontend.cpp:1377
 #: src/multiint.cpp:2423
 msgid "Mod: "
 msgstr "Mod: "
@@ -13134,8 +13142,8 @@ msgstr ""
 
 #: src/ingameop.cpp:274
 #: src/ingameop.cpp:497
-#: src/mission.cpp:2513
-#: src/mission.cpp:2630
+#: src/mission.cpp:2514
+#: src/mission.cpp:2631
 msgid "Save Game"
 msgstr "Sauvegarder"
 
@@ -14097,37 +14105,37 @@ msgstr "Basculer la Caméra Traqueuse"
 msgid "Could not save game!"
 msgstr "Ne peut sauver une partie!"
 
-#: src/mission.cpp:2074
+#: src/mission.cpp:2075
 msgid "Load Transport"
 msgstr "Charger le Transporteur"
 
-#: src/mission.cpp:2461
+#: src/mission.cpp:2462
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "MISSION ACCOMPLIE en trichant"
 
-#: src/mission.cpp:2461
+#: src/mission.cpp:2462
 msgid "OBJECTIVE ACHIEVED"
 msgstr "MISSION ACCOMPLIE"
 
-#: src/mission.cpp:2467
+#: src/mission.cpp:2468
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "ÉCHEC DE LA MISSION--et vous avez triché"
 
-#: src/mission.cpp:2467
+#: src/mission.cpp:2468
 msgid "OBJECTIVE FAILED"
 msgstr "ÉCHEC DE LA MISSION"
 
-#: src/mission.cpp:2492
-#: src/mission.cpp:2532
-#: src/mission.cpp:2644
+#: src/mission.cpp:2493
+#: src/mission.cpp:2533
+#: src/mission.cpp:2645
 msgid "Quit To Main Menu"
 msgstr "Retour au Menu Principal"
 
-#: src/mission.cpp:2500
+#: src/mission.cpp:2501
 msgid "Continue Game"
 msgstr "Continuer"
 
-#: src/mission.cpp:2595
+#: src/mission.cpp:2596
 #, fuzzy
 msgid "GAME SAVED :"
 msgstr "PARTIE SAUVEGARDÉE!"
@@ -15280,9 +15288,6 @@ msgstr "Version %s%s%s%s"
 
 #~ msgid "Viper Flamer Half-Track"
 #~ msgstr "lance-flammes Viper Semi-chenillée"
-
-#~ msgid "Transporter"
-#~ msgstr "Transporteur"
 
 #~ msgid "Unable to locate any resource extractors!"
 #~ msgstr "Impossible de localiser le moindre extracteur de ressources !"

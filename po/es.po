@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-04-25 21:25+0200\n"
+"POT-Creation-Date: 2011-05-01 14:54+0200\n"
 "PO-Revision-Date: 2011-01-10 15:11+0100\n"
 "Last-Translator: Daniel Vijande <nsa_server@hotmail.com>\n"
 "Language-Team: Spanish <warzone-dev@gna.org>\n"
@@ -12010,17 +12010,17 @@ msgstr "Cañón HPV Pitón Oruga"
 msgid "System locale"
 msgstr "Idioma del sistema"
 
-#: lib/netplay/netplay.cpp:193
-#: lib/netplay/netplay.cpp:1028
+#: lib/netplay/netplay.cpp:187
+#: lib/netplay/netplay.cpp:1022
 msgid "Enter password here"
 msgstr "Introducir contraseña aquí"
 
-#: lib/netplay/netplay.cpp:2022
+#: lib/netplay/netplay.cpp:2016
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "¡No se pudo resolver el nombre del servidor maestro (%s)!"
 
-#: lib/netplay/netplay.cpp:2044
+#: lib/netplay/netplay.cpp:2038
 #, c-format
 msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
 msgstr "¡No se pudo comunicar con el servidor! ¿Está el puerto TCP %u abierto para tráfico saliente?"
@@ -12328,20 +12328,20 @@ msgstr "Armas"
 msgid "Systems"
 msgstr "Sistemas"
 
-#: src/display3d.cpp:592
+#: src/display3d.cpp:587
 msgid "Player left"
 msgstr "Jugador Salió"
 
-#: src/display3d.cpp:596
+#: src/display3d.cpp:591
 msgid "Player dropped"
 msgstr "Jugador Desconectado"
 
-#: src/display3d.cpp:600
+#: src/display3d.cpp:595
 #: src/multiint.cpp:2151
 msgid "Waiting for other players"
 msgstr "Esperando a otros jugadores"
 
-#: src/display3d.cpp:605
+#: src/display3d.cpp:600
 msgid "Out of sync"
 msgstr "Desincronizado"
 
@@ -12488,9 +12488,9 @@ msgstr "TUTORIALES"
 #: src/frontend.cpp:429
 #: src/frontend.cpp:562
 #: src/frontend.cpp:698
-#: src/frontend.cpp:805
-#: src/frontend.cpp:1015
-#: src/frontend.cpp:1162
+#: src/frontend.cpp:833
+#: src/frontend.cpp:1075
+#: src/frontend.cpp:1222
 msgctxt "menu"
 msgid "Return"
 msgstr "Volver"
@@ -12518,8 +12518,8 @@ msgstr "UN JUGADOR"
 
 #: src/frontend.cpp:303
 #: src/ingameop.cpp:493
-#: src/mission.cpp:2526
-#: src/mission.cpp:2627
+#: src/mission.cpp:2527
+#: src/mission.cpp:2628
 msgid "Load Saved Game"
 msgstr "Cargar Partida Guardada"
 
@@ -12582,7 +12582,7 @@ msgstr "2X"
 #: src/frontend.cpp:501
 #: src/frontend.cpp:647
 #: src/frontend.cpp:773
-#: src/frontend.cpp:830
+#: src/frontend.cpp:859
 msgid "Fullscreen"
 msgstr "Pantalla Completa"
 
@@ -12597,14 +12597,14 @@ msgstr "Agitar pantalla"
 #: src/frontend.cpp:619
 #: src/frontend.cpp:628
 #: src/frontend.cpp:794
-#: src/frontend.cpp:891
-#: src/frontend.cpp:929
-#: src/frontend.cpp:968
-#: src/frontend.cpp:980
-#: src/frontend.cpp:992
-#: src/frontend.cpp:1037
-#: src/frontend.cpp:1050
-#: src/frontend.cpp:1064
+#: src/frontend.cpp:951
+#: src/frontend.cpp:989
+#: src/frontend.cpp:1028
+#: src/frontend.cpp:1040
+#: src/frontend.cpp:1052
+#: src/frontend.cpp:1097
+#: src/frontend.cpp:1110
+#: src/frontend.cpp:1124
 msgid "On"
 msgstr "Activado"
 
@@ -12615,14 +12615,16 @@ msgstr "Activado"
 #: src/frontend.cpp:614
 #: src/frontend.cpp:632
 #: src/frontend.cpp:798
-#: src/frontend.cpp:886
-#: src/frontend.cpp:924
-#: src/frontend.cpp:972
+#: src/frontend.cpp:808
+#: src/frontend.cpp:883
+#: src/frontend.cpp:946
 #: src/frontend.cpp:984
-#: src/frontend.cpp:996
 #: src/frontend.cpp:1032
-#: src/frontend.cpp:1045
-#: src/frontend.cpp:1059
+#: src/frontend.cpp:1044
+#: src/frontend.cpp:1056
+#: src/frontend.cpp:1092
+#: src/frontend.cpp:1105
+#: src/frontend.cpp:1119
 msgid "Off"
 msgstr "Desactivado"
 
@@ -12682,7 +12684,7 @@ msgid "Graphics Mode*"
 msgstr "Modo Gráfico*"
 
 #: src/frontend.cpp:777
-#: src/frontend.cpp:825
+#: src/frontend.cpp:854
 msgid "Windowed"
 msgstr "En ventana"
 
@@ -12698,102 +12700,108 @@ msgstr "Tamaño de las texturas"
 msgid "Vertical sync*"
 msgstr "Sincronización Vertical"
 
-#: src/frontend.cpp:802
+#: src/frontend.cpp:825
+#: src/frontend.cpp:889
+#, fuzzy
+msgid "Unsupported"
+msgstr "Transporte"
+
+#: src/frontend.cpp:830
 msgid "VIDEO OPTIONS"
 msgstr "OPCIONES DE VIDEO"
 
-#: src/frontend.cpp:961
+#: src/frontend.cpp:1021
 msgid "* May negatively affect performance"
 msgstr "* Puede afectar negativamente al rendimiento"
 
-#: src/frontend.cpp:965
+#: src/frontend.cpp:1025
 msgid "Reverse Rotation"
 msgstr "Invertir Rotación"
 
-#: src/frontend.cpp:976
+#: src/frontend.cpp:1036
 msgid "Trap Cursor"
 msgstr "Capturar Cursor"
 
-#: src/frontend.cpp:989
+#: src/frontend.cpp:1049
 msgid "Switch Mouse Buttons"
 msgstr "Cambiar botones del ratón"
 
-#: src/frontend.cpp:1001
+#: src/frontend.cpp:1061
 msgid "Rotate Screen"
 msgstr "Rotar Pantalla"
 
-#: src/frontend.cpp:1004
-#: src/frontend.cpp:1078
+#: src/frontend.cpp:1064
+#: src/frontend.cpp:1138
 msgid "Middle Mouse"
 msgstr "Botón central"
 
-#: src/frontend.cpp:1008
-#: src/frontend.cpp:1073
+#: src/frontend.cpp:1068
+#: src/frontend.cpp:1133
 msgid "Right Mouse"
 msgstr "Botón derecho"
 
-#: src/frontend.cpp:1012
+#: src/frontend.cpp:1072
 msgid "MOUSE OPTIONS"
 msgstr "OPCIONES DE RATÓN"
 
-#: src/frontend.cpp:1113
-#: src/frontend.cpp:1183
+#: src/frontend.cpp:1173
+#: src/frontend.cpp:1243
 msgid "Difficulty"
 msgstr "Dificultad"
 
-#: src/frontend.cpp:1117
-#: src/frontend.cpp:1191
-#: src/frontend.cpp:1228
+#: src/frontend.cpp:1177
+#: src/frontend.cpp:1251
+#: src/frontend.cpp:1288
 msgid "Easy"
 msgstr "Fácil"
 
-#: src/frontend.cpp:1120
-#: src/frontend.cpp:1194
-#: src/frontend.cpp:1220
+#: src/frontend.cpp:1180
+#: src/frontend.cpp:1254
+#: src/frontend.cpp:1280
 msgid "Normal"
 msgstr "Normal"
 
-#: src/frontend.cpp:1124
-#: src/frontend.cpp:1197
-#: src/frontend.cpp:1224
+#: src/frontend.cpp:1184
+#: src/frontend.cpp:1257
+#: src/frontend.cpp:1284
 msgid "Hard"
 msgstr "Difícil"
 
-#: src/frontend.cpp:1129
-#: src/frontend.cpp:1184
+#: src/frontend.cpp:1189
+#: src/frontend.cpp:1244
 msgid "Scroll Speed"
 msgstr "Velocidad de desplazamiento"
 
-#: src/frontend.cpp:1143
-#: src/frontend.cpp:1181
+#: src/frontend.cpp:1203
+#: src/frontend.cpp:1241
 msgid "Language"
 msgstr "Idioma"
 
-#: src/frontend.cpp:1155
-#: src/frontend.cpp:1182
+#: src/frontend.cpp:1215
+#: src/frontend.cpp:1242
 msgid "Unit Colour"
 msgstr "Color de las unidades"
 
-#: src/frontend.cpp:1158
+#: src/frontend.cpp:1218
 msgid "Radar"
 msgstr "Radar"
 
-#: src/frontend.cpp:1159
-#: src/frontend.cpp:1208
+#: src/frontend.cpp:1219
+#: src/frontend.cpp:1268
 msgid "Rotating"
 msgstr "Rotando"
 
-#: src/frontend.cpp:1159
-#: src/frontend.cpp:1208
+#: src/frontend.cpp:1219
+#: src/frontend.cpp:1268
 msgid "Fixed"
 msgstr "Reparado"
 
-#: src/frontend.cpp:1165
-#: src/frontend.cpp:1185
+#: src/frontend.cpp:1225
+#: src/frontend.cpp:1245
 msgid "GAME OPTIONS"
 msgstr "OPCIONES DE JUEGO"
 
-#: src/frontend.cpp:1317
+#: src/frontend.cpp:1377
 #: src/multiint.cpp:2423
 msgid "Mod: "
 msgstr "Mod:"
@@ -13005,8 +13013,8 @@ msgstr "UI Táctica (Icono de origen de objetivo): Ocultar"
 
 #: src/ingameop.cpp:274
 #: src/ingameop.cpp:497
-#: src/mission.cpp:2513
-#: src/mission.cpp:2630
+#: src/mission.cpp:2514
+#: src/mission.cpp:2631
 msgid "Save Game"
 msgstr "Guardar Partida"
 
@@ -13940,37 +13948,37 @@ msgstr "Alternar Cámara de Seguimiento"
 msgid "Could not save game!"
 msgstr "¡No se pudo guardar la partida!"
 
-#: src/mission.cpp:2074
+#: src/mission.cpp:2075
 msgid "Load Transport"
 msgstr "Cargar Transporte"
 
-#: src/mission.cpp:2461
+#: src/mission.cpp:2462
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "¡OBJETIVO CUMPLIDO con trampas!"
 
-#: src/mission.cpp:2461
+#: src/mission.cpp:2462
 msgid "OBJECTIVE ACHIEVED"
 msgstr "OBJETIVO CUMPLIDO"
 
-#: src/mission.cpp:2467
+#: src/mission.cpp:2468
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "OBJETIVO FALLADO-- ¡e hiciste trampas!"
 
-#: src/mission.cpp:2467
+#: src/mission.cpp:2468
 msgid "OBJECTIVE FAILED"
 msgstr "OBJETIVO FALLADO"
 
-#: src/mission.cpp:2492
-#: src/mission.cpp:2532
-#: src/mission.cpp:2644
+#: src/mission.cpp:2493
+#: src/mission.cpp:2533
+#: src/mission.cpp:2645
 msgid "Quit To Main Menu"
 msgstr "Salir al Menú Principal"
 
-#: src/mission.cpp:2500
+#: src/mission.cpp:2501
 msgid "Continue Game"
 msgstr "Continuar Partida"
 
-#: src/mission.cpp:2595
+#: src/mission.cpp:2596
 msgid "GAME SAVED :"
 msgstr "¡PARTIDA GUARDADA!"
 
@@ -15114,9 +15122,6 @@ msgstr "Versión: %s%s%s%s"
 
 #~ msgid "Fire Cannon"
 #~ msgstr "Cañón de Fuego"
-
-#~ msgid "Transporter"
-#~ msgstr "Transporte"
 
 #~ msgid "(Player %u) has detected the borg 'legs' bug! Please enter legs in your console and upload the files to us!"
 #~ msgstr "(Jugador %u) ha detectado el bug de 'borg sin piernas' ¡Por favor introduce legs en la console y súbenos los archivos!"
