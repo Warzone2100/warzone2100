@@ -66,8 +66,8 @@ extern bool assertEnabled;
 /** Deals with failure in an assert. Expression is (re-)evaluated for output in the assert() call. */
 #define ASSERT_FAILURE(expr, expr_string, location_description, function, ...) \
 	( \
-		(void)_debug(LOG_ERROR, function, __VA_ARGS__), \
-		(void)_debug(LOG_ERROR, function, "Assert in Warzone: %s (%s), last script event: '%s'", \
+		(void)_debug(LOG_INFO, function, __VA_ARGS__), \
+		(void)_debug(LOG_INFO, function, "Assert in Warzone: %s (%s), last script event: '%s'", \
 	                                  location_description, expr_string, last_called_script_event), \
 		( assertEnabled ? (void)wz_assert(expr) : (void)0 )\
 	)
