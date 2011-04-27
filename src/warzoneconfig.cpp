@@ -52,7 +52,7 @@ struct WARZONE_GLOBALS
 	bool		trapCursor;
 	UDWORD		width;
 	UDWORD		height;
-	unsigned int fsaa;
+	FSAA_LEVEL  fsaa;
 	bool		vsync;
 	bool		pauseOnFocusLoss;
 	bool		ColouredCursor;
@@ -117,7 +117,7 @@ bool war_getFullscreen(void)
 
 void war_setFSAA(unsigned int fsaa)
 {
-	warGlobs.fsaa = fsaa;
+	warGlobs.fsaa = (FSAA_LEVEL)(fsaa % FSAA_MAX);
 }
 
 unsigned int war_getFSAA()

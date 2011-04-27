@@ -33,12 +33,20 @@
 /***************************************************************************/
 enum FMV_MODE
 {
-					FMV_FULLSCREEN,
-					FMV_1X,
-					FMV_2X,
-					FMV_MAX
+	FMV_FULLSCREEN,
+	FMV_1X,
+	FMV_2X,
+	FMV_MAX
 };
 
+enum FSAA_LEVEL
+{
+	FSAA_OFF,
+	FSAA_2X,
+	FSAA_4X,
+	FSAA_8X,
+	FSAA_MAX
+};
 /***************************************************************************/
 /*
  *	Global ProtoTypes

@@ -126,7 +126,7 @@ bool screenInitialise()
 	/* Dump information about OpenGL 2.0+ implementation to the console and the dump file */
 	if (GLEW_VERSION_2_0)
 	{
-		GLint glMaxTIUs, glMaxTCs, glMaxTIUAs;
+		GLint glMaxTIUs, glMaxTCs, glMaxTIUAs, glmaxSamples, glmaxSamplesbuf;
 
 		debug(LOG_3D, "  * OpenGL GLSL Version : %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
 		ssprintf(buf, "OpenGL GLSL Version : %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
@@ -138,6 +138,10 @@ bool screenInitialise()
 		debug(LOG_3D, "  * Total number of Texture Coords (TCs) supported is %d.", (int) glMaxTCs);
 		glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS_ARB,&glMaxTIUAs);
 		debug(LOG_3D, "  * Total number of Texture Image Units ARB(TIUAs) supported is %d.", (int) glMaxTIUAs);
+		glGetIntegerv(GL_SAMPLE_BUFFERS, &glmaxSamplesbuf);
+		debug(LOG_3D, "  * (current) Max Sample buffer is %d.", (int) glmaxSamplesbuf);
+		glGetIntegerv(GL_SAMPLES, &glmaxSamples);
+		debug(LOG_3D, "  * (current) Max Sample level is %d.", (int) glmaxSamples);
 
 		pie_LoadShaders();
 	}

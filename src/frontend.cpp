@@ -798,6 +798,34 @@ static bool startVideoOptionsMenu(void)
 		addTextButton(FRONTEND_VSYNC_R, FRONTEND_POS5M-55, FRONTEND_POS5Y, _("Off"), 0);
 	}
 
+
+	// FSAA
+	addTextButton(FRONTEND_FSAA, FRONTEND_POS5X-35, FRONTEND_POS6Y, "FSAA*", 0);
+
+	switch (war_getFSAA())
+	{
+		case FSAA_OFF:
+			addTextButton(FRONTEND_FSAA_R, FRONTEND_POS5M-55, FRONTEND_POS6Y, _("Off"), 0);
+			break;
+
+		case FSAA_2X:
+			addTextButton(FRONTEND_FSAA_R, FRONTEND_POS5M-55, FRONTEND_POS6Y, "2X", 0);
+			break;
+
+		case FSAA_4X:
+			addTextButton(FRONTEND_FSAA_R, FRONTEND_POS5M-55, FRONTEND_POS6Y, "4X", 0);
+			break;
+
+		case FSAA_8X:
+			addTextButton(FRONTEND_FSAA_R, FRONTEND_POS5M-55, FRONTEND_POS6Y, "8X", 0);
+			break;
+
+		default:
+			// Some cards can do 16x & 32x ...
+			addTextButton(FRONTEND_FSAA_R, FRONTEND_POS5M-55, FRONTEND_POS6Y, _("Unsupported"), 0);
+			break;
+	}
+
 	// Add some text down the side of the form
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("VIDEO OPTIONS"));
 
@@ -814,6 +842,7 @@ bool runVideoOptionsMenu(void)
 	//SDL_Rect **modes = SDL_ListModes(NULL, SDL_FULLSCREEN | SDL_HWSURFACE);
 	HACK modes[] = {{1920, 1200}, {1920, 1080}, {1680, 1050}, {1600, 1200}, {1440, 900}, {1280, 1024}, {1280, 960}, {1280, 800}, {1280, 720}, {1024, 768}, {800, 600}, {720, 576}, {720, 480}, {640, 480}, {0, 0}};
 	UDWORD id = widgRunScreen(psWScreen);
+	int level;
 
 	switch (id)
 	{
@@ -828,6 +857,37 @@ bool runVideoOptionsMenu(void)
 			{
 				war_setFullscreen(true);
 				widgSetString(psWScreen, FRONTEND_WINDOWMODE_R, _("Fullscreen"));
+			}
+			break;
+
+		case FRONTEND_FSAA:
+		case FRONTEND_FSAA_R:
+			switch (level = war_getFSAA())
+			{
+				case FSAA_OFF:
+					war_setFSAA((FSAA_LEVEL)(level + 1));
+					widgSetString(psWScreen, FRONTEND_FSAA_R, "2X");
+					break;
+				case FSAA_2X:
+					war_setFSAA((FSAA_LEVEL)(level + 1));
+					widgSetString(psWScreen, FRONTEND_FSAA_R, "4X");
+					break;
+
+				case FSAA_4X:
+					war_setFSAA((FSAA_LEVEL)(level + 1));
+					widgSetString(psWScreen, FRONTEND_FSAA_R, "8X");
+					break;
+
+				case FSAA_8X:
+					war_setFSAA((FSAA_LEVEL)(level + 1));
+					widgSetString(psWScreen, FRONTEND_FSAA_R, _("Off"));
+					break;
+
+				default:
+					// we can't check what the max level the card is capable of, without first creating that level, and testing.
+					ASSERT(!"invalid FSAA level ?", "Invalid FSAA level: %u", (unsigned int)level);
+					addTextButton(FRONTEND_FSAA_R, FRONTEND_POS5M-55, FRONTEND_POS6Y, _("Unsupported"), 0);
+					break;
 			}
 			break;
 
