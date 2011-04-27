@@ -1798,10 +1798,15 @@ static void NETallowJoining(void)
 					char ModList[modlist_string_size] = { '\0' };
 					char GamePassword[password_string_size] = { '\0' };
 
+					char *username = (char *)malloc(LOBBY_USERNAME_SIZE);
+					char *session = (char *)malloc(LOBBY_SESSION_SIZE);
+
 					NETbeginDecode(NETnetTmpQueue(i), NET_JOIN);
 						NETstring(name, sizeof(name));
 						NETstring(ModList, sizeof(ModList));
 						NETstring(GamePassword, sizeof(GamePassword));
+						NETstring(username, LOBBY_USERNAME_SIZE);
+						NETstring(session, LOBBY_SESSION_SIZE);
 					NETend();
 
 					tmp = NET_CreatePlayer(name);
@@ -1863,11 +1868,18 @@ static void NETallowJoining(void)
 						rejected = (uint8_t)ERROR_WRONGDATA;
 					}
 
-					// Now add the player to the lobbyserver if he isn't rejected.
-					if (rejected == 0)
+					// Now add the player to the lobbyserver if he isn't rejected
+					// and we are authenticated.
+					if (rejected == 0 && lobbyclient.isAuthenticated())
 					{
-						lobbyclient.addPlayer(index, name, NetPlay.players[index].IPtextAddress);
-						lobbyclient.freeError();
+						if (lobbyclient.addPlayer(index, name, username, session) != LOBBY_NO_ERROR)
+						{
+							debug(LOG_INFO, "Lobby rejected player \"%s\", username \"%s\", session \"%s\", reason: %s",
+											name, username, session, lobbyclient.getError()->message);
+							lobbyclient.freeError();
+							// Lobby didn't accept the player, Reject.
+							rejected = (uint8_t)ERROR_LOBBY_REJECTED;
+						}
 					}
 
 					if (rejected)
@@ -2037,9 +2049,14 @@ bool NEThostGame(const char* SessionName, const char* PlayerName,
 							NetPlay.GamePassworded, modlist, game.map, PlayerName) != LOBBY_NO_ERROR)
 	{
 		lobbyError* error = lobbyclient.getError();
-		if (asprintf(&motd, error->message) == -1)
+		if (error->code == LOBBY_LOGIN_REQUIRED)
+		{
+			asprintf(&motd, _("Game not in the lobby, please login first!"));
+		}
+		else if (asprintf(&motd, error->message) == -1)
+		{
 			motd = NULL;
-
+		}
 		lobbyclient.freeError();
 	}
 
@@ -2061,8 +2078,11 @@ bool NEThaltJoining(void)
 	debug(LOG_NET, "temporarily locking game to prevent more players");
 
 	allow_joining = false;
-	// disconnect from the lobby server
-	lobbyclient.stop();
+	if (lobbyclient.delGame() != LOBBY_NO_ERROR)
+	{
+		lobbyclient.freeError();
+	}
+
 	return true;
 }
 
@@ -2079,8 +2099,15 @@ bool NETfindGame(void)
  	if (lobbyclient.listGames(MaxGames) != LOBBY_NO_ERROR)
  	{
  		debug(LOG_ERROR, lobbyclient.getError()->message);
+ 		if (lobbyclient.getError()->code == LOBBY_LOGIN_REQUIRED)
+ 		{
+ 			setLobbyError(ERROR_AUTHENTICATION);
+ 		}
+ 		else
+ 		{
+ 			setLobbyError(ERROR_CONNECTION);
+ 		}
  		lobbyclient.freeError();
- 		setLobbyError(ERROR_CONNECTION);
  		return false;
  	}
 
@@ -2179,12 +2206,25 @@ bool NETjoinGame(const char* host, uint32_t port, const char* playername)
 	bsocket = tcp_socket;
 	socketBeginCompression(bsocket);
 
+	char *username = (char *)malloc(LOBBY_USERNAME_SIZE);
+	char *session = (char *)malloc(LOBBY_SESSION_SIZE);
+	strlcpy(username, lobbyclient.getUser().c_str(), LOBBY_USERNAME_SIZE);
+	strlcpy(session, lobbyclient.getSession().c_str(), LOBBY_SESSION_SIZE);
+
+	debug(LOG_NET, "Sending username \"%s\", session \"%s\"", username, lobbyclient.getSession().c_str());
+
 	// Send a join message to the host
 	NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_JOIN);
 		NETstring(playername, 64);
 		NETstring(getModList(), modlist_string_size);
 		NETstring(NetPlay.gamePassword, sizeof(NetPlay.gamePassword));
+		NETstring(username, LOBBY_USERNAME_SIZE);
+		NETstring(session, LOBBY_SESSION_SIZE);
 	NETend();
+
+	free(username);
+	free(session);
+
 	if (bsocket == NULL)
 	{
 		return false;  // Connection dropped while sending NET_JOIN.

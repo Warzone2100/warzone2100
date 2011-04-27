@@ -108,6 +108,14 @@ void loadMapPreview(bool hideInterface);
 #define CON_H_PASSWORDX		MCOL2
 #define CON_H_PASSWORDY		MROW10 +31
 
+// Login form
+#define CON_LOGIN_USER				10150
+#define CON_LOGIN_PASS				10151
+#define CON_LOGIN_YES				10152
+#define CON_LOGIN_NO				10153
+#define CON_LOGIN_USER_LABEL		10154
+#define CON_LOGIN_PASS_LABEL		10155
+#define CON_LOGIN_SIDETEXT			10156
 
 
 // ////////////////////////////////////////////////////////////////

@@ -153,6 +153,10 @@ static bool EnablePasswordPrompt = false;	// if we need the password prompt
 LOBBY_ERROR_TYPES LobbyError = ERROR_NOERROR;
 static bool allowChangePosition = true;
 static char tooltipbuffer[256] ={'\0'};
+
+static bool					loginDone	= false;
+static std::string			lobbyUser;
+static std::string			lobbyPass;
 /// end of globals.
 // ////////////////////////////////////////////////////////////////////////////
 // Function protos
@@ -184,6 +188,10 @@ static void removeGames				(void);
 // password form functions
 static void hidePasswordForm(void);
 static void showPasswordForm(void);
+
+// Login form
+static void hideLoginForm(void);
+static void showLoginForm(void);
 
 // Game option functions
 static	void	addGameOptions();
@@ -905,6 +913,12 @@ static void addGames(void)
 		case ERROR_NOERROR:
 			txt = _("No games are available");
 			break;
+		case ERROR_AUTHENTICATION:
+			txt = _("Authentication failed!");
+			break;
+		case ERROR_LOBBY_REJECTED:
+			txt = _("The lobby rejected you!");
+			break;
 		case ERROR_FULL:
 			txt = _("Game is full");
 			break;
@@ -972,11 +986,16 @@ void runGameFind(void )
 	static char game_password[64];		// check if StringSize is available
 	LOBBY_GAME* lGame;
 
-	if (lastupdate > gameTime) lastupdate = 0;
-	if (gameTime-lastupdate > 6000 && !EnablePasswordPrompt)
+	if (!loginDone && !EnablePasswordPrompt)
+	{
+		showLoginForm();
+	}
+
+	if ((lastupdate > gameTime || gameTime-lastupdate > 6000)
+		 && !EnablePasswordPrompt)
 	{
 		lastupdate = gameTime;
-		if(safeSearch)
+		if(safeSearch && !loginDone)
 		{
 			NETfindGame();						// find games synchronously
 		}
@@ -985,56 +1004,102 @@ void runGameFind(void )
 
 	id = widgRunScreen(psWScreen);						// Run the current set of widgets
 
-	if(id == CON_CANCEL)								// ok
+	switch (id)
 	{
-		changeTitleMode(PROTOCOL);
-	}
+		case CON_CANCEL:
+			changeTitleMode(PROTOCOL);
+			break;
 
-	if(id == MULTIOP_REFRESH)
-	{
-		ingame.localOptionsReceived = true;
-		NETfindGame();								// find games synchronously
-		addGames();										//redraw list.
-	}
-	if (id == CON_PASSWORD)
-	{
-		sstrcpy(game_password, widgGetString(psWScreen, CON_PASSWORD));
-		NETsetGamePassword(game_password);
-	}
+		case MULTIOP_REFRESH:
+			ingame.localOptionsReceived = true;
+			NETfindGame();								// find games synchronously
+			addGames();										//redraw list.
+			break;
 
-	// below is when they hit a game box to connect to--ideally this would be where
-	// we would want a modal password entry box.
-	if (id >= GAMES_GAMESTART && id<=GAMES_GAMEEND)
-	{
-		gameNumber = id-GAMES_GAMESTART;
-		lGame = &lobbyclient.games[gameNumber];
+		case CON_PASSWORD:
+			sstrcpy(game_password, widgGetString(psWScreen, CON_PASSWORD));
+			NETsetGamePassword(game_password);
+			break;
 
-		if (lGame->isPrivate)
-		{
-			showPasswordForm();
-		}
-		else
-		{
+		case CON_PASSWORDYES:
+			lGame = &lobbyclient.games[gameNumber];
+
 			ingame.localOptionsReceived = false;			// note we are awaiting options
 			sstrcpy(game.name, lGame->description.c_str());		// store name
 
 			joinGame(lGame->host.c_str(), lGame->port);
-		}
-	}
-	else if (id == CON_PASSWORDYES)
-	{
-		lGame = &lobbyclient.games[gameNumber];
+			break;
 
-		ingame.localOptionsReceived = false;			// note we are awaiting options
-		sstrcpy(game.name, lGame->description.c_str());		// store name
+		case CON_PASSWORDNO:
+			hidePasswordForm();
+			break;
 
-		joinGame(lGame->host.c_str(), lGame->port);
+		case CON_LOGIN_USER:
+			lobbyUser = widgGetString(psWScreen, CON_LOGIN_USER);
+			break;
+
+		case CON_LOGIN_PASS:
+			lobbyPass = widgGetString(psWScreen, CON_LOGIN_PASS);
+			break;
+
+		case CON_LOGIN_YES:
+			loginDone = true;
+
+			if (lobbyclient.setUser(lobbyUser).login(lobbyPass) != LOBBY_NO_ERROR)
+			{
+				setLobbyError(ERROR_AUTHENTICATION);
+				addGames(); // Draws the error
+
+				disableLobbyRefresh = true;
+			}
+			else
+			{
+				NETfindGame();
+				addGames();
+			}
+
+			hideLoginForm();
+
+			// Clear given values.
+			lobbyUser.clear();
+			lobbyPass.clear();
+			break;
+
+		case CON_LOGIN_NO:
+			disableLobbyRefresh = true;
+			loginDone = true;
+
+			hideLoginForm();
+
+			// Clear maybe given values.
+			lobbyUser.clear();
+			lobbyPass.clear();
+
+			setLobbyError(ERROR_AUTHENTICATION);
+			addGames(); // Draws the error
+			break;
+
+		default:
+			// A entry in the list has been clicked.
+			if (id >= GAMES_GAMESTART && id<=GAMES_GAMEEND)
+			{
+				gameNumber = id-GAMES_GAMESTART;
+				lGame = &lobbyclient.games[gameNumber];
+
+				if (lGame->isPrivate)
+				{
+					showPasswordForm();
+				}
+				else
+				{
+					ingame.localOptionsReceived = false;			// note we are awaiting options
+					sstrcpy(game.name, lGame->description.c_str());		// store name
+
+					joinGame(lGame->host.c_str(), lGame->port);
+				}
+			}
 	}
-	else if (id == CON_PASSWORDNO)
-	{
-		hidePasswordForm();
-	}
-	
+
 	widgDisplayScreen(psWScreen);								// show the widgets currently running
 	if(safeSearch)
 	{
@@ -1110,9 +1175,6 @@ void startGameFind(void)
 		widgHide(psWScreen, MULTIOP_REFRESH);
 	}
 
-	NETfindGame();
-	addGames();	// now add games.
-
 	// Password stuff. Hidden by default.
 
 	// password label.
@@ -1157,7 +1219,6 @@ void startGameFind(void)
 	sFormInit.height = FRONTEND_TOPFORMH-40;
 	sFormInit.pDisplay = intOpenPlainForm;
 	sFormInit.disableChildren = true;
-
 	widgAddForm(psWScreen, &sFormInit);
 
 	widgHide(psWScreen, FRONTEND_PASSWORDFORM);
@@ -1167,6 +1228,96 @@ void startGameFind(void)
 	widgHide(psWScreen, CON_PASSWORDNO);
 
 	EnablePasswordPrompt = false;
+
+	// Fetch games if we are authenticated.
+	NETfindGame();
+	if (lobbyclient.isAuthenticated() == true)
+	{
+		loginDone = true;
+		addGames();
+	}
+	else
+	{
+		// Allow login
+		loginDone = false;
+		lobbyUser = lobbyclient.getUser();
+	}
+
+	// START: Create a hidden login form
+	// draws the background of the password box
+	sFormInit = W_FORMINIT();
+	sFormInit.formID = FRONTEND_BACKDROP;
+	sFormInit.id = FRONTEND_LOGINFORM;
+	sFormInit.style = WFORM_PLAIN;
+	sFormInit.x = FRONTEND_BOTFORMX+40;
+	sFormInit.y = 160;
+	sFormInit.width = FRONTEND_TOPFORMW-100;
+	sFormInit.height = FRONTEND_TOPFORMH+80;
+	sFormInit.pDisplay = intOpenPlainForm;
+	// sFormInit.disableChildren = true;
+	widgAddForm(psWScreen, &sFormInit);
+
+	addSideText(CON_LOGIN_SIDETEXT, FRONTEND_SIDEX+65, FRONTEND_SIDEY-10, _("LOBBY LOGIN"));
+
+	// Draw username label
+	W_LABINIT sLoginUserLabInit;
+	sLoginUserLabInit.formID = FRONTEND_LOGINFORM;
+	sLoginUserLabInit.id	= CON_LOGIN_USER_LABEL;
+	sLoginUserLabInit.style	= WLAB_ALIGNCENTRE;
+	sLoginUserLabInit.x		= 50;
+	sLoginUserLabInit.y		= 50; // 215
+	sLoginUserLabInit.width	= CON_SETTINGSWIDTH;
+	sLoginUserLabInit.height = 20;
+	sLoginUserLabInit.pText	= _("Username:");
+	sLoginUserLabInit.pDisplay = showPasswordLabel;
+	widgAddLabel(psWScreen, &sLoginUserLabInit);
+
+	// Draw username entry box
+	W_EDBINIT sLoginUserEdInit;
+	sLoginUserEdInit.formID = FRONTEND_LOGINFORM;
+	sLoginUserEdInit.id = CON_LOGIN_USER;
+	sLoginUserEdInit.x = 50;
+	sLoginUserEdInit.y = 55;
+	sLoginUserEdInit.width = 280;
+	sLoginUserEdInit.height = 20;
+	sLoginUserEdInit.pText = lobbyUser.c_str();
+	sLoginUserEdInit.pBoxDisplay = displayPasswordEditBox;
+	widgAddEditBox(psWScreen, &sLoginUserEdInit);
+
+	// Draw password label
+	W_LABINIT sLoginPassLabInit;
+	sLoginPassLabInit.formID = FRONTEND_LOGINFORM;
+	sLoginPassLabInit.id	= CON_LOGIN_PASS_LABEL;
+	sLoginPassLabInit.style	= WLAB_ALIGNCENTRE;
+	sLoginPassLabInit.x		= 50;
+	sLoginPassLabInit.y		= 110;
+	sLoginPassLabInit.width	= CON_SETTINGSWIDTH;
+	sLoginPassLabInit.height = 20;
+	sLoginPassLabInit.pText	= _("Password:");
+	sLoginPassLabInit.pDisplay = showPasswordLabel;
+	widgAddLabel(psWScreen, &sLoginPassLabInit);
+
+	// Draw password entry box
+	W_EDBINIT sLoginPassEdInit;
+	sLoginPassEdInit.formID = FRONTEND_LOGINFORM;
+	sLoginPassEdInit.id = CON_LOGIN_PASS;
+	sLoginPassEdInit.x = 50;
+	sLoginPassEdInit.y = 115;
+	sLoginPassEdInit.width = 280;
+	sLoginPassEdInit.height = 20;
+	sLoginPassEdInit.pText = "";
+	sLoginPassEdInit.pBoxDisplay = displayPasswordEditBox;
+	widgAddEditBox(psWScreen, &sLoginPassEdInit);
+
+	addMultiBut(psWScreen, FRONTEND_LOGINFORM,CON_LOGIN_NO,50,160,MULTIOP_OKW,MULTIOP_OKH,
+	            _("Cancel"),IMAGE_NO,IMAGE_NO,true);
+	addMultiBut(psWScreen, FRONTEND_LOGINFORM,CON_LOGIN_YES,295,160,MULTIOP_OKW,MULTIOP_OKH,
+	            _("OK"),IMAGE_OK,IMAGE_OK,true);
+
+	// Now hide it.
+	widgHide(psWScreen, FRONTEND_LOGINFORM);
+	widgHide(psWScreen, CON_LOGIN_SIDETEXT);
+	// END: LOGIN FORM
 }
 
 static void hidePasswordForm(void)
@@ -1214,6 +1365,46 @@ static void showPasswordForm(void)
 	sContext.mx			= 0;
 	sContext.my			= 0;
 	widgGetFromID(psWScreen, CON_PASSWORD)->clicked(&sContext);
+}
+
+static void hideLoginForm(void)
+{
+	EnablePasswordPrompt = false;
+
+	widgHide(psWScreen, FRONTEND_LOGINFORM);
+	widgHide(psWScreen, CON_LOGIN_SIDETEXT);
+
+	widgReveal(psWScreen, FRONTEND_SIDETEXT);
+	widgReveal(psWScreen, FRONTEND_BOTFORM);
+	widgReveal(psWScreen, CON_CANCEL);
+	if (!disableLobbyRefresh)
+	{
+		widgReveal(psWScreen, MULTIOP_REFRESH);
+	}
+}
+
+static void showLoginForm(void)
+{
+	W_CONTEXT sContext;
+	EnablePasswordPrompt = true;
+
+	widgHide(psWScreen, FRONTEND_SIDETEXT);
+	widgHide(psWScreen, FRONTEND_BOTFORM);
+	widgHide(psWScreen, CON_CANCEL);
+	widgHide(psWScreen, MULTIOP_REFRESH);
+	removeGames();
+
+	widgReveal(psWScreen, FRONTEND_LOGINFORM);
+	widgReveal(psWScreen, CON_LOGIN_SIDETEXT);
+
+	// auto click in the password box
+	sContext.psScreen	= psWScreen;
+	sContext.psForm		= (W_FORM *)psWScreen->psForm;
+	sContext.xOffset	= 0;
+	sContext.yOffset	= 0;
+	sContext.mx			= 0;
+	sContext.my			= 0;
+	widgGetFromID(psWScreen, CON_LOGIN_USER)->clicked(&sContext);
 }
 
 
