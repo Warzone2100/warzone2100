@@ -31,6 +31,16 @@
 
 #define LOBBY_VERSION 4
 
+/* NOTE: You also need to change this value in the
+ * masterservers settings - session_size!
+ */
+#define LOBBY_SESSION_SIZE 16+1
+
+/* We limit usernames here to 40 chars,
+ * while the forums allow usernames with up to 255 characters.
+ */
+#define LOBBY_USERNAME_SIZE 40+1
+
 enum LOBBY_ERROR
 {
 	LOBBY_NO_ERROR				=	0,
@@ -94,7 +104,7 @@ class LobbyClient {
 		LOBBY_ERROR connect();
 		bool disconnect();
 		bool isConnected();
-		LOBBY_ERROR login(const char* username, const char* password);
+		LOBBY_ERROR login(const std::string& password);
 
 		LOBBY_ERROR addGame(char** result, uint32_t port, uint32_t maxPlayers,
 						const char* description, const char* versionstring,
@@ -103,7 +113,7 @@ class LobbyClient {
 						const char* mapname, const char* hostplayer);
 
 		LOBBY_ERROR delGame();
-		LOBBY_ERROR addPlayer(unsigned int index, const char* name, const char* ipaddress);
+		LOBBY_ERROR addPlayer(unsigned int index, const char* name, const char* username, const char* session);
 		LOBBY_ERROR delPlayer(unsigned int index);
 		LOBBY_ERROR updatePlayer(unsigned int index, const char* name);
 		LOBBY_ERROR listGames(int maxGames);
@@ -114,11 +124,15 @@ class LobbyClient {
 		LobbyClient& setPort(const uint32_t& port) { port_ = port; return *this; }
 		uint32_t getPort() { return port_; }
 
+		bool isAuthenticated() { return isAuthenticated_; }
+
 		LobbyClient& setUser(const std::string& user) { user_ = user; return *this; }
 		std::string getUser() const { return user_; }
 
 		LobbyClient& setToken(const std::string& token) { token_ = token; return *this; }
-		std::string getToken() const { return token_; }
+		std::string getToken() { return token_; }
+
+		std::string getSession() const { return session_; }
 
 		lobbyError* getError() { return &lastError_; }
 
@@ -144,8 +158,11 @@ class LobbyClient {
 
 		std::string user_;
 		std::string token_;
+		std::string session_;
 
 		Socket* socket_;
+
+		bool isAuthenticated_;
 
 		lobbyError lastError_;
 		lobbyCallResult callResult_;
