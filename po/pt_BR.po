@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-04-03 21:38+0200\n"
+"POT-Creation-Date: 2011-04-28 21:54+0200\n"
 "PO-Revision-Date: 2011-02-16 12:57-0300\n"
 "Last-Translator: Artur Filipe <tucalipe@gmail.com>\n"
 "Language-Team: Brazilian Portugese <warzone-dev@gna.org>\n"
@@ -12163,6 +12163,15 @@ msgstr "Localização do Sistema"
 #: lib/netplay/netplay.c:2223
 msgid "Enter password here"
 msgstr "Entre a senha aqui"
+
+#: lib/netplay/netplay.c:3254
+#, c-format
+msgid "Error connecting to the lobby server: %s. Make sure port %d can receive incoming connections. If you're using a router configure it to use UPnP, or to forward the port to your system."
+msgstr ""
+
+#: lib/netplay/netplay.c:3261
+msgid "Disconnected from lobby server. Failed to register game."
+msgstr ""
 
 #: lib/netplay/netplay.c:3295
 #, c-format
