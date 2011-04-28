@@ -95,6 +95,12 @@ bool loadConfig()
 		sstrcpy(game.map, ini.value("mapName").toString().toUtf8().constData());
 		game.maxPlayers = ini.value("maxPlayers").toInt();	// FIXME: horrible kluge, MUST match map above
 	}
+	else
+	{
+		// Set a default map to prevent hosting games without a map.
+		sstrcpy(game.map, "Sk-Rush");
+		game.maxPlayers = 4;
+	}
 	game.power = ini.value("power", LEV_MED).toInt();
 	game.fog = ini.value("fog").toBool();
 	game.base = ini.value("base", CAMP_BASE).toInt();
