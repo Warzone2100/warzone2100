@@ -3251,14 +3251,14 @@ error:
 	if (result == SOCKET_ERROR)
 	{
 		free(NetPlay.MOTD);
-		if (asprintf(&NetPlay.MOTD, "Error while connecting to the lobby server: %s\nMake sure port %d can receive incoming connections.", strSockError(getSockErr()), gameserver_port) == -1)
+		if (asprintf(&NetPlay.MOTD, _("Error connecting to the lobby server: %s. Make sure port %d can receive incoming connections. If you're using a router configure it to use UPnP, or to forward the port to your system."), strSockError(getSockErr()), gameserver_port) == -1)
 			NetPlay.MOTD = NULL;
 		debug(LOG_ERROR, "%s", NetPlay.MOTD);
 	}
 	else
 	{
 		free(NetPlay.MOTD);
-		if (asprintf(&NetPlay.MOTD, "Disconnected from lobby server. Failed to register game.") == -1)
+		if (asprintf(&NetPlay.MOTD, _("Disconnected from lobby server. Failed to register game.")) == -1)
 			NetPlay.MOTD = NULL;
 		debug(LOG_ERROR, "%s", NetPlay.MOTD);
 	}
