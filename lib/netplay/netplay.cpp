@@ -2053,9 +2053,13 @@ bool NEThostGame(const char* SessionName, const char* PlayerName,
 		{
 			asprintf(&motd, _("Game not in the lobby, please login first!"));
 		}
-		else if (asprintf(&motd, error->message) == -1)
+		else
 		{
-			motd = NULL;
+			asprintf(&motd,
+				_("Error connecting to the lobby server: %s. Make sure port %d can receive incoming connections. If you're using a router configure it to use UPnP, or to forward the port to your system."),
+				lobbyclient.getHost().c_str(),
+				gameserver_port
+			);
 		}
 		lobbyclient.freeError();
 	}
