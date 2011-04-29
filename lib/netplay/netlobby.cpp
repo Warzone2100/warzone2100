@@ -23,590 +23,604 @@
 /**
  * Variables
  */
-LobbyClient lobbyclient;
+Lobby::Client lobbyclient;
 
-LobbyClient::LobbyClient()
+namespace Lobby
 {
-	// Set defaults
-	callId_ = 1;
-
-	gameId_ = 0;
-	socket_ = NULL;
-
-	lastError_.code = LOBBY_NO_ERROR;
-	lastError_.message = NULL;
-
-	isAuthenticated_ = false;
-}
-
-void LobbyClient::stop()
-{
-	debug(LOG_LOBBY, "Stopping");
-
-	// remove the game from the masterserver.
-	lobbyclient.delGame();
-	lobbyclient.freeError();
-
-	// Clear/free up games.
-	games.clear();
-
-	// Clear auth data
-	session_.clear();
-	isAuthenticated_ = false;
-
-	lobbyclient.disconnect();
-}
-
-LOBBY_ERROR LobbyClient::addGame(char** result, const uint32_t port, const uint32_t maxPlayers,
-							const char* description, const char* versionstring,
-							const uint32_t game_version_major, const uint32_t game_version_minor,
-							const bool isPrivate, const char* modlist,
-							const char* mapname, const char* hostplayer)
-{
-	bson kwargs[1];
-	bson_buffer buffer[1];
-
-	if (gameId_ != 0)
-		// Ignore server errors here.
-		delGame();
-
-	bson_buffer_init(buffer);
-	bson_append_int(buffer, "port", port);
-	bson_append_string(buffer, "description", description);
-	bson_append_int(buffer, "currentPlayers", 1);
-	bson_append_int(buffer, "maxPlayers", maxPlayers);
-	bson_append_string(buffer, "multiVer", versionstring);
-	bson_append_int(buffer, "wzVerMajor", game_version_major);
-	bson_append_int(buffer, "wzVerMinor", game_version_minor);
-	bson_append_bool(buffer, "isPrivate", isPrivate);
-	bson_append_string(buffer, "modlist", modlist);
-	bson_append_string(buffer, "mapname", mapname);
-	bson_append_string(buffer, "hostplayer", hostplayer);
-
-	bson_from_buffer(kwargs, buffer);
-
-	if (call_("addGame", NULL, kwargs) != LOBBY_NO_ERROR)
+	Client::Client()
 	{
-		return lastError_.code;
-	}
-	bson_destroy(kwargs);
+		// Set defaults
+		callId_ = 1;
 
-	bson_iterator it;
-	bson_iterator_init(&it, callResult_.result);
-
-	bson_iterator_next(&it);
-	if (bson_iterator_type(&it) == bson_long)
-	{
-		gameId_ = bson_iterator_long(&it);
-	}
-	else if (bson_iterator_type(&it) == bson_int)
-	{
-		gameId_ = (int64_t)bson_iterator_int(&it);
-	}
-	else
-	{
-		freeCallResult_();
-		return setError_(LOBBY_INVALID_DATA, _("Received invalid addGame data."));
-	}
-
-	bson_iterator_next(&it);
-	if (bson_iterator_type(&it) != bson_string)
-	{
-		freeCallResult_();
-		return setError_(LOBBY_INVALID_DATA, _("Received invalid addGame data."));
-	}
-	asprintf(result, bson_iterator_string(&it));
-
-	freeCallResult_();
-	return LOBBY_NO_ERROR;
-}
-
-LOBBY_ERROR LobbyClient::delGame()
-{
-	bson kwargs[1];
-	bson_buffer buffer[1];
-
-	if (gameId_ == 0)
-	{
-		return LOBBY_NO_ERROR;
-	}
-
-	bson_buffer_init(buffer);
-	bson_append_int(buffer, "gameId", gameId_);
-	bson_from_buffer(kwargs, buffer);
-
-	if (call_("delGame", NULL, kwargs) != LOBBY_NO_ERROR)
-	{
-		// Ignore a server side error and unset the local game.
 		gameId_ = 0;
-		return lastError_.code;
-	}
-	bson_destroy(kwargs);
+		socket_ = NULL;
 
-	gameId_ = 0;
+		lastError_.code = NO_ERROR;
+		lastError_.message = NULL;
 
-	freeCallResult_();
-	return LOBBY_NO_ERROR;
-}
-
-LOBBY_ERROR LobbyClient::addPlayer(const unsigned int index, const char* name, const char* username, const char* session)
-{
-	bson kwargs[1];
-	bson_buffer buffer[1];
-
-	if (gameId_ == 0 || gameId_ == -1)
-	{
-		return setError_(LOBBY_NO_GAME, _("Create a game first!"));
+		isAuthenticated_ = false;
 	}
 
-	bson_buffer_init(buffer);
-	bson_append_int(buffer, "gameId", gameId_);
-	bson_append_int(buffer, "slot", index);
-	bson_append_string(buffer, "name", name);
-	bson_append_string(buffer, "username", username);
-	bson_append_string(buffer, "session", session);
-	bson_from_buffer(kwargs, buffer);
-
-	if (call_("addPlayer", NULL, kwargs) != LOBBY_NO_ERROR)
+	void Client::stop()
 	{
-		return lastError_.code;
-	}
-	bson_destroy(kwargs);
+		debug(LOG_LOBBY, "Stopping");
 
-	freeCallResult_();
-	return LOBBY_NO_ERROR;
-}
+		// remove the game from the masterserver,
+		delGame();
+		freeError();
 
-LOBBY_ERROR LobbyClient::delPlayer(const unsigned int index)
-{
-	bson kwargs[1];
-	bson_buffer buffer[1];
+		// clear/free up games,
+		games.clear();
 
-	if (gameId_ == 0 || gameId_ == -1)
-	{
-		return setError_(LOBBY_NO_GAME, _("Create a game first!"));
+		// clear auth data,
+		session_.clear();
+		isAuthenticated_ = false;
+
+		// and disconnect.
+		lobbyclient.disconnect();
 	}
 
-	bson_buffer_init(buffer);
-	bson_append_int(buffer, "gameId", gameId_);
-	bson_append_int(buffer, "slot", index);
-	bson_from_buffer(kwargs, buffer);
-
-	if (call_("delPlayer", NULL, kwargs) != LOBBY_NO_ERROR)
+	RETURN_CODES Client::addGame(char** result, const uint32_t port, const uint32_t maxPlayers,
+								const char* description, const char* versionstring,
+								const uint32_t game_version_major, const uint32_t game_version_minor,
+								const bool isPrivate, const char* modlist,
+								const char* mapname, const char* hostplayer)
 	{
-		return lastError_.code;
-	}
-	bson_destroy(kwargs);
+		bson kwargs[1];
+		bson_buffer buffer[1];
 
-	freeCallResult_();
-	return LOBBY_NO_ERROR;
-}
+		if (gameId_ != 0)
+			// Ignore server errors here.
+			delGame();
 
-LOBBY_ERROR LobbyClient::updatePlayer(const unsigned int index, const char* name)
-{
-	bson kwargs[1];
-	bson_buffer buffer[1];
+		bson_buffer_init(buffer);
+		bson_append_int(buffer, "port", port);
+		bson_append_string(buffer, "description", description);
+		bson_append_int(buffer, "currentPlayers", 1);
+		bson_append_int(buffer, "maxPlayers", maxPlayers);
+		bson_append_string(buffer, "multiVer", versionstring);
+		bson_append_int(buffer, "wzVerMajor", game_version_major);
+		bson_append_int(buffer, "wzVerMinor", game_version_minor);
+		bson_append_bool(buffer, "isPrivate", isPrivate);
+		bson_append_string(buffer, "modlist", modlist);
+		bson_append_string(buffer, "mapname", mapname);
+		bson_append_string(buffer, "hostplayer", hostplayer);
 
-	if (gameId_ == 0 || gameId_ == -1)
-	{
-		return setError_(LOBBY_NO_GAME, _("Create a game first!"));
-	}
+		bson_from_buffer(kwargs, buffer);
 
-	bson_buffer_init(buffer);
-	bson_append_int(buffer, "gameId", gameId_);
-	bson_append_int(buffer, "slot", index);
-	bson_append_string(buffer, "name", name);
-	bson_from_buffer(kwargs, buffer);
-
-	if (call_("updatePlayer", NULL, kwargs) != LOBBY_NO_ERROR)
-		return lastError_.code;
-	bson_destroy(kwargs);
-
-	freeCallResult_();
-	return LOBBY_NO_ERROR;
-}
-
-LOBBY_ERROR LobbyClient::listGames(const int maxGames)
-{
-	bson_iterator it, gameIt;
-	const char * key;
-	uint32_t gameCount = 0;
-	LOBBY_GAME game;
-
-	// Clear old games.
-	games.clear();
-
-	// Run "list" and retrieve its result
-	if (call_("list", NULL, NULL) != LOBBY_NO_ERROR)
-		return lastError_.code;
-
-	//Print the result to stdout.
-	//bson_print_raw(callResult_.result, 0);
-
-	// Translate the result into LOBBY_GAMEs
-	bson_iterator_init(&it, callResult_.result);
-	while (bson_iterator_next(&it) && gameCount <= maxGames)
-	{
-		// new Game
-		if (bson_iterator_type(&it) == bson_object)
+		if (call_("addGame", NULL, kwargs) != NO_ERROR)
 		{
-			bson_iterator_init(&gameIt, bson_iterator_value(&it));
-			while (bson_iterator_next(&gameIt))
-			{
-				key = bson_iterator_key(&gameIt);
-
-				if (strcmp(key, "port") == 0)
-				{
-					game.port = (uint32_t)bson_iterator_int(&gameIt);
-				}
-				else if (strcmp(key, "host") == 0) // Generated at server side.
-				{
-					game.host = bson_iterator_string(&gameIt);
-				}
-				if (strcmp(key, "description") == 0)
-				{
-					game.description = bson_iterator_string(&gameIt);
-				}
-				else if (strcmp(key, "currentPlayers") == 0)
-				{
-					game.currentPlayers = bson_iterator_int(&gameIt);
-				}
-				else if (strcmp(key, "maxPlayers") == 0)
-				{
-					game.maxPlayers = bson_iterator_int(&gameIt);
-				}
-				else if (strcmp(key, "multiVer") == 0)
-				{
-					game.versionstring = bson_iterator_string(&gameIt);
-				}
-				else if (strcmp(key, "wzVerMajor") == 0)
-				{
-					game.game_version_major = (uint32_t)bson_iterator_int(&gameIt);
-				}
-				else if (strcmp(key, "wzVerMinor") == 0)
-				{
-					game.game_version_minor = (uint32_t)bson_iterator_int(&gameIt);
-				}
-				else if (strcmp(key, "isPrivate") == 0)
-				{
-					game.isPrivate = bson_iterator_bool(&gameIt);
-				}
-				else if (strcmp(key, "modlist") == 0)
-				{
-					game.modlist = bson_iterator_string(&gameIt);
-				}
-				else if (strcmp(key, "mapname") == 0)
-				{
-					game.mapname = bson_iterator_string(&gameIt);
-				}
-				else if (strcmp(key, "hostplayer") == 0)
-				{
-					game.hostplayer = bson_iterator_string(&gameIt);
-				}
-			}
-
-			games.push_back(game);
-			gameCount++;
+			bson_destroy(kwargs);
+			return lastError_.code;
 		}
+		bson_destroy(kwargs);
+
+		bson_iterator it;
+		bson_iterator_init(&it, callResult_.result);
+
+		bson_iterator_next(&it);
+		if (bson_iterator_type(&it) == bson_long)
+		{
+			gameId_ = bson_iterator_long(&it);
+		}
+		else if (bson_iterator_type(&it) == bson_int)
+		{
+			gameId_ = (int64_t)bson_iterator_int(&it);
+		}
+		else
+		{
+			freeCallResult_();
+			return setError_(INVALID_DATA, _("Received invalid addGame data."));
+		}
+
+		bson_iterator_next(&it);
+		if (bson_iterator_type(&it) != bson_string)
+		{
+			freeCallResult_();
+			return setError_(INVALID_DATA, _("Received invalid addGame data."));
+		}
+		asprintf(result, bson_iterator_string(&it));
+
+		freeCallResult_();
+		return NO_ERROR;
 	}
 
-	freeCallResult_();
-	return LOBBY_NO_ERROR;
-}
-
-inline bool LobbyClient::isConnected()
-{
-	return (socket_ != NULL && !socketReadDisconnected(socket_));
-}
-
-LOBBY_ERROR LobbyClient::connect()
-{
-	char version[sizeof("version") + sizeof(uint32_t)];
-	char* p_version = version;
-
-	if (isConnected())
+	RETURN_CODES Client::delGame()
 	{
-		return LOBBY_NO_ERROR;
+		bson kwargs[1];
+		bson_buffer buffer[1];
+
+		if (gameId_ == 0)
+		{
+			return NO_ERROR;
+		}
+
+		bson_buffer_init(buffer);
+		bson_append_int(buffer, "gameId", gameId_);
+		bson_from_buffer(kwargs, buffer);
+
+		if (call_("delGame", NULL, kwargs) != NO_ERROR)
+		{
+			// Ignore a server side error and unset the local game.
+			gameId_ = 0;
+
+			bson_destroy(kwargs);
+			return lastError_.code;
+		}
+		bson_destroy(kwargs);
+
+		gameId_ = 0;
+
+		freeCallResult_();
+		return NO_ERROR;
 	}
 
-	isAuthenticated_ = false;
-
-	// Build the initial version command.
-	strlcpy(p_version, "version", sizeof("version"));
-	p_version+= sizeof("version");
-	*(uint32_t*)p_version = htonl(LOBBY_VERSION);
-
-	callId_ = 0;
-
-	// Resolve the hostname
-	SocketAddress *const hosts = resolveHost(host_.c_str(), port_);
-
-	// Resolve failed?
-	if (hosts == NULL)
+	RETURN_CODES Client::addPlayer(const unsigned int index, const char* name,
+									   const char* username, const char* session)
 	{
-		debug(LOG_ERROR, "Cannot resolve masterserver \"%s\": %s.", host_.c_str(), strSockError(getSockErr()));
-		return setError_(LOBBY_TRANSPORT_ERROR, _("Could not resolve masterserver name (%s)!"), host_.c_str());
+		bson kwargs[1];
+		bson_buffer buffer[1];
+
+		if (gameId_ == 0 || gameId_ == -1)
+		{
+			return setError_(NO_GAME, _("Create a game first!"));
+		}
+
+		bson_buffer_init(buffer);
+		bson_append_int(buffer, "gameId", gameId_);
+		bson_append_int(buffer, "slot", index);
+		bson_append_string(buffer, "name", name);
+		bson_append_string(buffer, "username", username);
+		bson_append_string(buffer, "session", session);
+		bson_from_buffer(kwargs, buffer);
+
+		if (call_("addPlayer", NULL, kwargs) != NO_ERROR)
+		{
+			bson_destroy(kwargs);
+			return lastError_.code;
+		}
+		bson_destroy(kwargs);
+
+		freeCallResult_();
+		return NO_ERROR;
 	}
 
-	// try each address from resolveHost until we successfully connect.
-	socket_ = socketOpenAny(hosts, 1500);
-	deleteSocketAddress(hosts);
-
-	// No address succeeded or couldn't send version data
-	if (socket_ == NULL || writeAll(socket_, version, sizeof(version)) == SOCKET_ERROR)
+	RETURN_CODES Client::delPlayer(const unsigned int index)
 	{
-		debug(LOG_ERROR, "Cannot connect to masterserver \"%s:%d\": %s", host_.c_str(), port_, strSockError(getSockErr()));
-		return setError_(LOBBY_TRANSPORT_ERROR, _("Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"), port_);
+		bson kwargs[1];
+		bson_buffer buffer[1];
+
+		if (gameId_ == 0 || gameId_ == -1)
+		{
+			return setError_(NO_GAME, _("Create a game first!"));
+		}
+
+		bson_buffer_init(buffer);
+		bson_append_int(buffer, "gameId", gameId_);
+		bson_append_int(buffer, "slot", index);
+		bson_from_buffer(kwargs, buffer);
+
+		if (call_("delPlayer", NULL, kwargs) != NO_ERROR)
+		{
+			bson_destroy(kwargs);
+			return lastError_.code;
+		}
+		bson_destroy(kwargs);
+
+		freeCallResult_();
+		return NO_ERROR;
 	}
 
-	// At last try to login
-	return login("");
-}
-
-LOBBY_ERROR LobbyClient::login(const std::string& password)
-{
-	bson kwargs[1];
-	bson_buffer buffer[1];
-	const char * key;
-
-	if (isAuthenticated_ == true)
+	RETURN_CODES Client::updatePlayer(const unsigned int index, const char* name)
 	{
-		return LOBBY_NO_ERROR;
+		bson kwargs[1];
+		bson_buffer buffer[1];
+
+		if (gameId_ == 0 || gameId_ == -1)
+		{
+			return setError_(NO_GAME, _("Create a game first!"));
+		}
+
+		bson_buffer_init(buffer);
+		bson_append_int(buffer, "gameId", gameId_);
+		bson_append_int(buffer, "slot", index);
+		bson_append_string(buffer, "name", name);
+		bson_from_buffer(kwargs, buffer);
+
+		if (call_("updatePlayer", NULL, kwargs) != NO_ERROR)
+		{
+			bson_destroy(kwargs);
+			return lastError_.code;
+		}
+		bson_destroy(kwargs);
+
+		freeCallResult_();
+		return NO_ERROR;
 	}
 
-	bson_buffer_init(buffer);
-	bson_append_string(buffer, "username", user_.c_str());
+	RETURN_CODES Client::listGames(const int maxGames)
+	{
+		bson_iterator it, gameIt;
+		const char * key;
+		uint32_t gameCount = 0;
+		GAME game;
 
-	if (!token_.empty())
-	{
-		bson_append_string(buffer, "token", token_.c_str());
+		// Clear old games.
+		games.clear();
+
+		// Run "list" and retrieve its result
+		if (call_("list", NULL, NULL) != NO_ERROR)
+			return lastError_.code;
+
+		//Print the result to stdout.
+		//bson_print_raw(callResult_.result, 0);
+
+		// Translate the result into GAMEs
+		bson_iterator_init(&it, callResult_.result);
+		while (bson_iterator_next(&it) && gameCount <= maxGames)
+		{
+			// new Game
+			if (bson_iterator_type(&it) == bson_object)
+			{
+				bson_iterator_init(&gameIt, bson_iterator_value(&it));
+				while (bson_iterator_next(&gameIt))
+				{
+					key = bson_iterator_key(&gameIt);
+
+					if (strcmp(key, "port") == 0)
+					{
+						game.port = (uint32_t)bson_iterator_int(&gameIt);
+					}
+					else if (strcmp(key, "host") == 0) // Generated at server side.
+					{
+						game.host = bson_iterator_string(&gameIt);
+					}
+					if (strcmp(key, "description") == 0)
+					{
+						game.description = bson_iterator_string(&gameIt);
+					}
+					else if (strcmp(key, "currentPlayers") == 0)
+					{
+						game.currentPlayers = bson_iterator_int(&gameIt);
+					}
+					else if (strcmp(key, "maxPlayers") == 0)
+					{
+						game.maxPlayers = bson_iterator_int(&gameIt);
+					}
+					else if (strcmp(key, "multiVer") == 0)
+					{
+						game.versionstring = bson_iterator_string(&gameIt);
+					}
+					else if (strcmp(key, "wzVerMajor") == 0)
+					{
+						game.game_version_major = (uint32_t)bson_iterator_int(&gameIt);
+					}
+					else if (strcmp(key, "wzVerMinor") == 0)
+					{
+						game.game_version_minor = (uint32_t)bson_iterator_int(&gameIt);
+					}
+					else if (strcmp(key, "isPrivate") == 0)
+					{
+						game.isPrivate = bson_iterator_bool(&gameIt);
+					}
+					else if (strcmp(key, "modlist") == 0)
+					{
+						game.modlist = bson_iterator_string(&gameIt);
+					}
+					else if (strcmp(key, "mapname") == 0)
+					{
+						game.mapname = bson_iterator_string(&gameIt);
+					}
+					else if (strcmp(key, "hostplayer") == 0)
+					{
+						game.hostplayer = bson_iterator_string(&gameIt);
+					}
+				}
+
+				games.push_back(game);
+				gameCount++;
+			}
+		}
+
+		freeCallResult_();
+		return NO_ERROR;
 	}
-	else if (!password.empty())
+
+	inline bool Client::isConnected()
 	{
+		return (socket_ != NULL && !socketReadDisconnected(socket_));
+	}
+
+	RETURN_CODES Client::connect()
+	{
+		char version[sizeof("version") + sizeof(uint32_t)];
+		char* p_version = version;
+
+		if (isConnected())
+		{
+			return NO_ERROR;
+		}
+
+		isAuthenticated_ = false;
+
+		// Build the initial version command.
+		strlcpy(p_version, "version", sizeof("version"));
+		p_version+= sizeof("version");
+		*(uint32_t*)p_version = htonl(PROTOCOL);
+
+		callId_ = 0;
+
+		// Resolve the hostname
+		SocketAddress *const hosts = resolveHost(host_.c_str(), port_);
+
+		// Resolve failed?
+		if (hosts == NULL)
+		{
+			debug(LOG_ERROR, "Cannot resolve masterserver \"%s\": %s.", host_.c_str(), strSockError(getSockErr()));
+			return setError_(TRANSPORT_ERROR, _("Could not resolve masterserver name (%s)!"), host_.c_str());
+		}
+
+		// try each address from resolveHost until we successfully connect.
+		socket_ = socketOpenAny(hosts, 1500);
+		deleteSocketAddress(hosts);
+
+		// No address succeeded or couldn't send version data
+		if (socket_ == NULL || writeAll(socket_, version, sizeof(version)) == SOCKET_ERROR)
+		{
+			debug(LOG_ERROR, "Cannot connect to masterserver \"%s:%d\": %s", host_.c_str(), port_, strSockError(getSockErr()));
+			return setError_(TRANSPORT_ERROR, _("Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"), port_);
+		}
+
+		// At last try to login
+		return login("");
+	}
+
+	RETURN_CODES Client::login(const std::string& password)
+	{
+		bson kwargs[1];
+		bson_buffer buffer[1];
+		const char * key;
+
+		if (isAuthenticated_ == true)
+		{
+			return NO_ERROR;
+		}
+
+		bson_buffer_init(buffer);
+		bson_append_string(buffer, "username", user_.c_str());
+
+		if (!token_.empty())
+		{
+			bson_append_string(buffer, "token", token_.c_str());
+		}
+		else if (!password.empty())
+		{
+			token_.clear();
+			bson_append_string(buffer, "password", password.c_str());
+		}
+		else
+		{
+			bson_buffer_destroy(buffer);
+
+			debug(LOG_INFO, "Not trying to login no password/token supplied.");
+
+			// Do not return an error for internal use.
+			return NO_ERROR;
+		}
+
+		bson_from_buffer(kwargs, buffer);
+
+		if (call_("login", NULL, kwargs) != NO_ERROR)
+		{
+			// Reset login credentials on a wrong login
+			if (lastError_.code == WRONG_LOGIN)
+			{
+				debug(LOG_LOBBY, "Login failed!");
+				token_.clear();
+				session_.clear();
+				isAuthenticated_ = false;
+			}
+			return lastError_.code;
+		}
+		bson_destroy(kwargs);
+
 		token_.clear();
-		bson_append_string(buffer, "password", password.c_str());
-	}
-	else
-	{
-		bson_buffer_destroy(buffer);
+		session_.clear();
 
-		debug(LOG_INFO, "Not trying to login no password/token supplied.");
+		bson_iterator it;
+		bson_iterator_init(&it, callResult_.result);
+		while (bson_iterator_next(&it))
+		{
+			key = bson_iterator_key(&it);
 
-		// Do not return an error for internal use.
-		return LOBBY_NO_ERROR;
-	}
+			if (strcmp(key, "token") == 0)
+			{
+				token_ = bson_iterator_string(&it);
+			}
+			else if (strcmp(key, "session") == 0)
+			{
+				session_ = bson_iterator_string(&it);
+			}
+		}
 
-	bson_from_buffer(kwargs, buffer);
-
-	if (call_("login", NULL, kwargs) != LOBBY_NO_ERROR)
-	{
-		// Reset login credentials on a wrong login
-		if (lastError_.code == LOBBY_WRONG_LOGIN)
+		if (token_.empty() || session_.empty())
 		{
 			debug(LOG_LOBBY, "Login failed!");
-			token_.clear();
-			session_.clear();
-			isAuthenticated_ = false;
+			freeCallResult_();
+			return setError_(INVALID_DATA, _("Received invalid login data."));
 		}
-		return lastError_.code;
-	}
-	bson_destroy(kwargs);
 
-	token_.clear();
-	session_.clear();
+		debug(LOG_LOBBY, "Received Session \"%s\"", session_.c_str());
 
-	bson_iterator it;
-	bson_iterator_init(&it, callResult_.result);
-	while (bson_iterator_next(&it))
-	{
-		key = bson_iterator_key(&it);
+		isAuthenticated_ = true;
 
-		if (strcmp(key, "token") == 0)
-		{
-			token_ = bson_iterator_string(&it);
-		}
-		else if (strcmp(key, "session") == 0)
-		{
-			session_ = bson_iterator_string(&it);
-		}
-	}
-
-	if (token_.empty() || session_.empty())
-	{
-		debug(LOG_LOBBY, "Login failed!");
 		freeCallResult_();
-		return setError_(LOBBY_INVALID_DATA, _("Received invalid login data."));
+		return NO_ERROR;
 	}
 
-	debug(LOG_LOBBY, "Received Session \"%s\"", session_.c_str());
-
-	isAuthenticated_ = true;
-
-	freeCallResult_();
-	return LOBBY_NO_ERROR;
-}
-
-bool LobbyClient::disconnect()
-{
-	if (!isConnected())
+	bool Client::disconnect()
 	{
+		if (!isConnected())
+		{
+			return true;
+		}
+
+		socketClose(socket_);
+		socket_ = NULL;
+
 		return true;
 	}
 
-	socketClose(socket_);
-	socket_ = NULL;
-
-	return true;
-}
-
-LOBBY_ERROR LobbyClient::call_(const char* command, const bson* args, const bson* kwargs)
-{
-	bson bson[1];
-	bson_buffer buffer[1];
-	int bsize;
-	char *call;
-	uint32_t resSize;
-
-	// Connect to the masterserver
-	if (connect() != LOBBY_NO_ERROR)
+	RETURN_CODES Client::call_(const char* command, const bson* args, const bson* kwargs)
 	{
-		return lastError_.code;
-	}
+		bson bson[1];
+		bson_buffer buffer[1];
+		int bsize;
+		char *call;
+		uint32_t resSize;
 
-	callId_ += 1;
-
-	debug(LOG_LOBBY, "Calling \"%s\" on the mastserver", command);
-
-	bson_buffer_init(buffer);
-	bson_append_start_array(buffer, "call");
-	{
-		// Command
-		bson_append_string(buffer, "0", command);
-
-		// Arguments
-		if (args == NULL)
+		// Connect to the masterserver
+		if (connect() != NO_ERROR)
 		{
-			// Add a empty "array"/"list"
-			bson_append_start_array(buffer, "1");
-			bson_append_finish_object(buffer);
-		}
-		else
-		{
-			bson_append_bson(buffer, "1", args);
+			return lastError_.code;
 		}
 
-		// Keyword Arguments
-		if (kwargs == NULL)
+		callId_ += 1;
+
+		debug(LOG_LOBBY, "Calling \"%s\" on the mastserver", command);
+
+		bson_buffer_init(buffer);
+		bson_append_start_array(buffer, "call");
 		{
-			// Add a empty "object"/"dict"
-			bson_append_start_object(buffer, "2");
-			bson_append_finish_object(buffer);
+			// Command
+			bson_append_string(buffer, "0", command);
+
+			// Arguments
+			if (args == NULL)
+			{
+				// Add a empty "array"/"list"
+				bson_append_start_array(buffer, "1");
+				bson_append_finish_object(buffer);
+			}
+			else
+			{
+				bson_append_bson(buffer, "1", args);
+			}
+
+			// Keyword Arguments
+			if (kwargs == NULL)
+			{
+				// Add a empty "object"/"dict"
+				bson_append_start_object(buffer, "2");
+				bson_append_finish_object(buffer);
+			}
+			else
+			{
+				// Keyword arguments
+				bson_append_bson(buffer, "2", kwargs);
+			}
+
+			// Call id
+			bson_append_int(buffer, "3", callId_);
 		}
-		else
-		{
-			// Keyword arguments
-			bson_append_bson(buffer, "2", kwargs);
-		}
+		bson_append_finish_object(buffer);
+		bson_from_buffer(bson, buffer);
 
-		// Call id
-		bson_append_int(buffer, "3", callId_);
-	}
-	bson_append_finish_object(buffer);
-	bson_from_buffer(bson, buffer);
+		bsize = bson_size(bson);
 
-	bsize = bson_size(bson);
-
-	call = (char*) malloc(sizeof(uint32_t) + bsize);
-	*(uint32_t*)call = htonl(bsize);
-	memcpy(call + sizeof(uint32_t), bson->data, bsize);
-
-	if (writeAll(socket_, call, sizeof(uint32_t) + bsize) == SOCKET_ERROR
-		|| readAll(socket_, &resSize, sizeof(resSize), 300) != sizeof(resSize))
-	{
-		connect(); // FIXME: Should check why readAll failed.
+		call = (char*) malloc(sizeof(uint32_t) + bsize);
+		*(uint32_t*)call = htonl(bsize);
+		memcpy(call + sizeof(uint32_t), bson->data, bsize);
 
 		if (writeAll(socket_, call, sizeof(uint32_t) + bsize) == SOCKET_ERROR
 			|| readAll(socket_, &resSize, sizeof(resSize), 300) != sizeof(resSize))
 		{
-			debug(LOG_ERROR, "Failed sending command \"%s\" to the masterserver: %s.", command, strSockError(getSockErr()));
-			return setError_(LOBBY_TRANSPORT_ERROR, _("Failed to communicate with the masterserver."));
+			connect(); // FIXME: Should check why readAll failed.
+
+			if (writeAll(socket_, call, sizeof(uint32_t) + bsize) == SOCKET_ERROR
+				|| readAll(socket_, &resSize, sizeof(resSize), 300) != sizeof(resSize))
+			{
+				debug(LOG_ERROR, "Failed sending command \"%s\" to the masterserver: %s.", command, strSockError(getSockErr()));
+				return setError_(TRANSPORT_ERROR, _("Failed to communicate with the masterserver."));
+			}
 		}
+
+		free(call);
+		bson_destroy(bson);
+
+		resSize = ntohl(resSize);
+
+		callResult_.buffer = (char*) malloc(resSize);
+		if (readAll(socket_, callResult_.buffer, resSize, 900) != resSize)
+		{
+			debug(LOG_ERROR, "Failed reading the result for \"%s\" from the masterserver: %s.", command, strSockError(getSockErr()));
+
+			free(callResult_.buffer);
+			return setError_(TRANSPORT_ERROR, _("Failed to communicate with the masterserver."));
+		}
+
+		// Get the first object (bson_array)
+		bson_iterator it;
+		bson_iterator_init(&it, callResult_.buffer);
+		bson_iterator_next(&it);
+		if (bson_iterator_type(&it) != bson_array)
+		{
+			debug(LOG_ERROR, "Received invalid bson data (no array first): %d.", bson_iterator_type(&it));
+
+			free(callResult_.buffer);
+			return setError_(INVALID_DATA, _("Failed to communicate with the masterserver."));
+		}
+		bson_iterator_init(&it, bson_iterator_value(&it));
+		bson_iterator_next(&it);
+
+		if (bson_iterator_type(&it) != bson_int)
+		{
+			debug(LOG_ERROR, "Received invalid bson data (no int first): %d.", bson_iterator_type(&it));
+
+			free(callResult_.buffer);
+			return setError_(INVALID_DATA, _("Failed to communicate with the masterserver."));
+		}
+
+		callResult_.code = (RETURN_CODES)bson_iterator_int(&it);
+
+		bson_iterator_next(&it);
+		bson_type type = bson_iterator_type(&it);
+		if (type == bson_string)
+		{
+			callResult_.result = bson_iterator_string(&it);
+		}
+		else if (type == bson_object || type == bson_array)
+		{
+			callResult_.result = bson_iterator_value(&it);
+		}
+
+		if (callResult_.code != NO_ERROR)
+		{
+			debug(LOG_LOBBY, "Received: server error %d: %s", callResult_.code, callResult_.result);
+
+			setError_(callResult_.code, _("Got server error: %s"), callResult_.result);
+			freeCallResult_();
+			return lastError_.code;
+		}
+
+		return NO_ERROR;
 	}
 
-	free(call);
-	bson_destroy(bson);
-
-	resSize = ntohl(resSize);
-
-	callResult_.buffer = (char*) malloc(resSize);
-	if (readAll(socket_, callResult_.buffer, resSize, 900) != resSize)
+	RETURN_CODES Client::setError_(const RETURN_CODES code, char* message, ...)
 	{
-		debug(LOG_ERROR, "Failed reading the result for \"%s\" from the masterserver: %s.", command, strSockError(getSockErr()));
+		   va_list ap;
+		   int count;
 
-		free(callResult_.buffer);
-		return setError_(LOBBY_TRANSPORT_ERROR, _("Failed to communicate with the masterserver."));
+		   lastError_.code = code;
+
+		   va_start(ap, message);
+				   count = vasprintf(&lastError_.message, message, ap);
+		   va_end(ap);
+
+		   if (count == -1)
+				   lastError_.message = NULL;
+
+		   return code;
 	}
 
-	// Get the first object (bson_array)
-	bson_iterator it;
-	bson_iterator_init(&it, callResult_.buffer);
-	bson_iterator_next(&it);
-	if (bson_iterator_type(&it) != bson_array)
-	{
-		debug(LOG_ERROR, "Received invalid bson data (no array first): %d.", bson_iterator_type(&it));
-
-		free(callResult_.buffer);
-		return setError_(LOBBY_INVALID_DATA, _("Failed to communicate with the masterserver."));
-	}
-	bson_iterator_init(&it, bson_iterator_value(&it));
-	bson_iterator_next(&it);
-
-	if (bson_iterator_type(&it) != bson_int)
-	{
-		debug(LOG_ERROR, "Received invalid bson data (no int first): %d.", bson_iterator_type(&it));
-
-		free(callResult_.buffer);
-		return setError_(LOBBY_INVALID_DATA, _("Failed to communicate with the masterserver."));
-	}
-
-	callResult_.code = (LOBBY_ERROR)bson_iterator_int(&it);
-
-	bson_iterator_next(&it);
-	bson_type type = bson_iterator_type(&it);
-	if (type == bson_string)
-	{
-		callResult_.result = bson_iterator_string(&it);
-	}
-	else if (type == bson_object || type == bson_array)
-	{
-		callResult_.result = bson_iterator_value(&it);
-	}
-
-	if (callResult_.code != LOBBY_NO_ERROR)
-	{
-		debug(LOG_LOBBY, "Received: server error %d: %s", callResult_.code, callResult_.result);
-
-		setError_(callResult_.code, _("Got server error: %s"), callResult_.result);
-		freeCallResult_();
-		return lastError_.code;
-	}
-
-	return LOBBY_NO_ERROR;
-}
-
-LOBBY_ERROR LobbyClient::setError_(const LOBBY_ERROR code, char* message, ...)
-{
-	   va_list ap;
-	   int count;
-
-	   lastError_.code = code;
-
-	   va_start(ap, message);
-			   count = vasprintf(&lastError_.message, message, ap);
-	   va_end(ap);
-
-	   if (count == -1)
-			   lastError_.message = NULL;
-
-	   return code;
-}
+} // namespace Lobby

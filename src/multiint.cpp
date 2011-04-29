@@ -984,7 +984,7 @@ void runGameFind(void )
 	UDWORD id;
 	static UDWORD lastupdate=0;
 	static char game_password[64];		// check if StringSize is available
-	LOBBY_GAME* lGame;
+	Lobby::GAME* lGame;
 
 	if (!loginDone && !EnablePasswordPrompt)
 	{
@@ -1045,7 +1045,7 @@ void runGameFind(void )
 		case CON_LOGIN_YES:
 			loginDone = true;
 
-			if (lobbyclient.setUser(lobbyUser).login(lobbyPass) != LOBBY_NO_ERROR)
+			if (lobbyclient.setUser(lobbyUser).login(lobbyPass) != Lobby::NO_ERROR)
 			{
 				setLobbyError(ERROR_AUTHENTICATION);
 				addGames(); // Draws the error
@@ -3813,7 +3813,7 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 		return;
 	}
 
-	LOBBY_GAME* lGame = &lobbyclient.games[gameNumber];
+	Lobby::GAME* lGame = &lobbyclient.games[gameNumber];
 
 	// Draw blue boxes.
 	drawBlueBox(x,y,psWidget->width,psWidget->height);

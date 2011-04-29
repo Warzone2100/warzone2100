@@ -29,157 +29,161 @@
 #include "netsocket.h"
 #include "bson/bson.h"
 
-#define LOBBY_VERSION 4
-
-/* NOTE: You also need to change this value in the
- * masterservers settings - session_size!
- */
-#define LOBBY_SESSION_SIZE 16+1
-
-/* We limit usernames here to 40 chars,
- * while the forums allow usernames with up to 255 characters.
- */
-#define LOBBY_USERNAME_SIZE 40+1
-
-enum LOBBY_ERROR
+namespace Lobby
 {
-	LOBBY_NO_ERROR				=	0,
+	const int PROTOCOL = 4;
 
-	// Copied from XMLRPC for socketrpc
-	LOBBY_PARSE_ERROR			=	-32700,
-	LOBBY_SERVER_ERROR			=	-32600,
-	LOBBY_APPLICATION_ERROR		=	-32500,
-	LOBBY_TRANSPORT_ERROR		=	-32300,
+	/* NOTE: You also need to change this value in the
+	 * masterservers settings - session_size!
+	 */
+	const int SESSION_SIZE = 16+1;
 
-	// Specific errors.
-	LOBBY_UNSUPPORTED_ENCODING	=	-32701,
-	LOBBY_METHOD_NOT_FOUND		=	-32601,
+	/* We limit usernames here to 40 chars,
+	 * while the forums allows usernames with up to 255 characters.
+	 */
+	const int USERNAME_SIZE = 40+1;
 
-	// Custom error codes.
-	LOBBY_INVALID_DATA			= 	-500,
-	LOBBY_LOGIN_REQUIRED		=	-405,
-	LOBBY_WRONG_LOGIN 			=	-404,
-	LOBBY_NOT_ACCEPTABLE 		=	-403,
-	LOBBY_NO_GAME				=	-402,
-};
+	enum RETURN_CODES
+	{
+		NO_ERROR				=	0,
 
-// FIXME: Not sure if std::string is a good idea here,
-// 		  as multitint is passing them direct to iV_DrawText.
-struct LOBBY_GAME
-{
-	uint32_t port;							///< Port hosting on.
-	std::string host;		///< IPv4, IPv6 or DNS Name of the host.
-	std::string description;			///< Game Description.
-	uint32_t currentPlayers;				///< Number of joined players.
-	uint32_t maxPlayers;					///< Maximum number of players.
-	std::string versionstring;	///< Version string.
-	uint32_t game_version_major;			///< Minor NETCODE version.
-	uint32_t game_version_minor;			///< Major NETCODE version.
-	bool isPrivate;							///< Password protected?
-	std::string modlist;		///< display string for mods.
-	std::string  mapname;			///< name of map hosted.
-	std::string  hostplayer;	///< hosts playername.
-};
+		// Copied from XMLRPC for socketrpc
+		PARSE_ERROR				=	-32700,
+		SERVER_ERROR			=	-32600,
+		APPLICATION_ERROR		=	-32500,
+		TRANSPORT_ERROR			=	-32300,
 
-struct lobbyError
-{
-	LOBBY_ERROR code;
-	char* message;
-};
+		// Specific errors.
+		UNSUPPORTED_ENCODING	=	-32701,
+		METHOD_NOT_FOUND		=	-32601,
 
-struct lobbyCallResult
-{
-	LOBBY_ERROR code;
-	char* buffer;
-	const char* result;
-};
+		// Custom error codes.
+		INVALID_DATA			= 	-500,
+		LOGIN_REQUIRED			=	-405,
+		WRONG_LOGIN 			=	-404,
+		NOT_ACCEPTABLE 			=	-403,
+		NO_GAME					=	-402,
+	};
 
-class LobbyClient {
-	public:
-		std::vector<LOBBY_GAME> games;
+	// FIXME: Not sure if std::string is a good idea here,
+	// 		  as multiint is passing them to iV_DrawText.
+	struct GAME
+	{
+		uint32_t port;						///< Port hosting on.
+		std::string host;					///< IPv4, IPv6 or DNS Name of the host.
+		std::string description;			///< Game Description.
+		uint32_t currentPlayers;			///< Number of joined players.
+		uint32_t maxPlayers;				///< Maximum number of players.
+		std::string versionstring;			///< Version string.
+		uint32_t game_version_major;		///< Minor NETCODE version.
+		uint32_t game_version_minor;		///< Major NETCODE version.
+		bool isPrivate;						///< Password protected?
+		std::string modlist;				///< display string for mods.
+		std::string  mapname;				///< name of map hosted.
+		std::string  hostplayer;			///< hosts playername.
+	};
 
-		LobbyClient();
-		void stop();
+	struct ERROR
+	{
+		RETURN_CODES code;
+		char* message;
+	};
 
-		LOBBY_ERROR connect();
-		bool disconnect();
-		bool isConnected();
-		LOBBY_ERROR login(const std::string& password);
+	struct CALL_RESULT
+	{
+		RETURN_CODES code;
+		char* buffer;
+		const char* result;
+	};
 
-		LOBBY_ERROR addGame(char** result, const uint32_t port, const uint32_t maxPlayers,
-							const char* description, const char* versionstring,
-							const uint32_t game_version_major, const uint32_t game_version_minor,
-							const bool isPrivate, const char* modlist,
-							const char* mapname, const char* hostplayer);
+	class Client {
+		public:
+			std::vector<GAME> games;
 
-		LOBBY_ERROR delGame();
-		LOBBY_ERROR addPlayer(const unsigned int index, const char* name, const char* username, const char* session);
-		LOBBY_ERROR delPlayer(const unsigned int index);
-		LOBBY_ERROR updatePlayer(const unsigned int index, const char* name);
-		LOBBY_ERROR listGames(const int maxGames);
+			Client();
+			void stop();
 
-		LobbyClient& setHost(const std::string& host) { host_ = host; return *this; }
-		std::string getHost() const { return host_; }
+			RETURN_CODES connect();
+			bool disconnect();
+			bool isConnected();
+			RETURN_CODES login(const std::string& password);
 
-		LobbyClient& setPort(const uint32_t& port) { port_ = port; return *this; }
-		uint32_t getPort() { return port_; }
+			RETURN_CODES addGame(char** result, const uint32_t port, const uint32_t maxPlayers,
+								const char* description, const char* versionstring,
+								const uint32_t game_version_major, const uint32_t game_version_minor,
+								const bool isPrivate, const char* modlist,
+								const char* mapname, const char* hostplayer);
 
-		bool isAuthenticated() { return isAuthenticated_; }
+			RETURN_CODES delGame();
+			RETURN_CODES addPlayer(const unsigned int index, const char* name, const char* username, const char* session);
+			RETURN_CODES delPlayer(const unsigned int index);
+			RETURN_CODES updatePlayer(const unsigned int index, const char* name);
+			RETURN_CODES listGames(const int maxGames);
 
-		LobbyClient& setUser(const std::string& user) { user_ = user; return *this; }
-		std::string getUser() const { return user_; }
+			Client& setHost(const std::string& host) { host_ = host; return *this; }
+			std::string getHost() const { return host_; }
 
-		LobbyClient& setToken(const std::string& token) { token_ = token; return *this; }
-		std::string getToken() { return token_; }
+			Client& setPort(const uint32_t& port) { port_ = port; return *this; }
+			uint32_t getPort() { return port_; }
 
-		std::string getSession() const { return session_; }
+			bool isAuthenticated() { return isAuthenticated_; }
 
-		lobbyError* getError() { return &lastError_; }
+			Client& setUser(const std::string& user) { user_ = user; return *this; }
+			std::string getUser() const { return user_; }
 
-		void freeError()
-		{
-			if (lastError_.code == LOBBY_NO_ERROR)
+			Client& setToken(const std::string& token) { token_ = token; return *this; }
+			std::string getToken() { return token_; }
+
+			std::string getSession() const { return session_; }
+
+			ERROR* getError() { return &lastError_; }
+
+			void freeError()
 			{
-				return;
+				if (lastError_.code == NO_ERROR)
+				{
+					return;
+				}
+
+				lastError_.code = NO_ERROR;
+				free(lastError_.message);
+				lastError_.message = NULL;
 			}
 
-			lastError_.code = LOBBY_NO_ERROR;
-			free(lastError_.message);
-			lastError_.message = NULL;
-		}
+		private:
+			int64_t gameId_;
 
-	private:
-		int64_t gameId_;
+			uint32_t callId_;
 
-		uint32_t callId_;
+			std::string host_;
+			uint32_t port_;
 
-		std::string host_;
-		uint32_t port_;
+			std::string user_;
+			std::string token_;
+			std::string session_;
 
-		std::string user_;
-		std::string token_;
-		std::string session_;
+			Socket* socket_;
 
-		Socket* socket_;
+			bool isAuthenticated_;
 
-		bool isAuthenticated_;
+			ERROR lastError_;
+			CALL_RESULT callResult_;
 
-		lobbyError lastError_;
-		lobbyCallResult callResult_;
+			RETURN_CODES call_(const char* command, const bson* args, const bson* kwargs);
 
-		LOBBY_ERROR call_(const char* command, const bson* args, const bson* kwargs);
+			void freeCallResult_()
+			{
+				callResult_.code = NO_ERROR;
+				callResult_.result = NULL;
+				free(callResult_.buffer);
+				callResult_.buffer = NULL;
+			}
 
-		void freeCallResult_()
-		{
-			callResult_.code = LOBBY_NO_ERROR;
-			callResult_.result = NULL;
-			free(callResult_.buffer);
-			callResult_.buffer = NULL;
-		}
+			RETURN_CODES setError_(const RETURN_CODES code, char * message, ...);
+	}; // class Client
 
-		LOBBY_ERROR setError_(const LOBBY_ERROR code, char * message, ...);
-};
+} // namespace Lobby
+
+extern Lobby::Client lobbyclient;
 
 #endif // #ifndef _netlobby_h
-
-extern LobbyClient lobbyclient;
