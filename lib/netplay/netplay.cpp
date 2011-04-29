@@ -156,6 +156,9 @@ char VersionString[VersionStringSize] = "master, netcode 4.1012";
 static int NETCODE_VERSION_MAJOR = 4;
 static int NETCODE_VERSION_MINOR = 1012;
 
+// The Lobby Client - declared external in netplay.h
+Lobby::Client lobbyclient;
+
 bool NETisCorrectVersion(uint32_t game_version_major, uint32_t game_version_minor)
 {
 	return (NETCODE_VERSION_MAJOR == game_version_major && NETCODE_VERSION_MINOR == game_version_minor);

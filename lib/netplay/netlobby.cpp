@@ -20,11 +20,6 @@
 
 #include "netlobby.h"
 
-/**
- * Variables
- */
-Lobby::Client lobbyclient;
-
 namespace Lobby
 {
 	Client::Client()
@@ -57,7 +52,7 @@ namespace Lobby
 		isAuthenticated_ = false;
 
 		// and disconnect.
-		lobbyclient.disconnect();
+		disconnect();
 	}
 
 	RETURN_CODES Client::addGame(char** result, const uint32_t port, const uint32_t maxPlayers,

@@ -251,6 +251,8 @@ extern bool netPlayersUpdated;
 extern int mapDownloadProgress;
 extern char iptoconnect[PATH_MAX]; // holds IP/hostname from command line
 
+extern Lobby::Client lobbyclient;
+
 // ////////////////////////////////////////////////////////////////////////
 // functions available to you.
 extern int   NETinit(bool bFirstCall);				// init

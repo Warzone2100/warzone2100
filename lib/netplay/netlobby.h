@@ -184,6 +184,4 @@ namespace Lobby
 
 } // namespace Lobby
 
-extern Lobby::Client lobbyclient;
-
 #endif // #ifndef _netlobby_h
