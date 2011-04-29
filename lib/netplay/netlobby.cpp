@@ -57,10 +57,10 @@ void LobbyClient::stop()
 	lobbyclient.disconnect();
 }
 
-LOBBY_ERROR LobbyClient::addGame(char** result, uint32_t port, uint32_t maxPlayers,
+LOBBY_ERROR LobbyClient::addGame(char** result, const uint32_t port, const uint32_t maxPlayers,
 							const char* description, const char* versionstring,
-							uint32_t game_version_major, uint32_t game_version_minor,
-							bool isPrivate, const char* modlist,
+							const uint32_t game_version_major, const uint32_t game_version_minor,
+							const bool isPrivate, const char* modlist,
 							const char* mapname, const char* hostplayer)
 {
 	bson kwargs[1];
@@ -149,7 +149,7 @@ LOBBY_ERROR LobbyClient::delGame()
 	return LOBBY_NO_ERROR;
 }
 
-LOBBY_ERROR LobbyClient::addPlayer(unsigned int index, const char* name, const char* username, const char* session)
+LOBBY_ERROR LobbyClient::addPlayer(const unsigned int index, const char* name, const char* username, const char* session)
 {
 	bson kwargs[1];
 	bson_buffer buffer[1];
@@ -177,7 +177,7 @@ LOBBY_ERROR LobbyClient::addPlayer(unsigned int index, const char* name, const c
 	return LOBBY_NO_ERROR;
 }
 
-LOBBY_ERROR LobbyClient::delPlayer(unsigned int index)
+LOBBY_ERROR LobbyClient::delPlayer(const unsigned int index)
 {
 	bson kwargs[1];
 	bson_buffer buffer[1];
@@ -202,7 +202,7 @@ LOBBY_ERROR LobbyClient::delPlayer(unsigned int index)
 	return LOBBY_NO_ERROR;
 }
 
-LOBBY_ERROR LobbyClient::updatePlayer(unsigned int index, const char* name)
+LOBBY_ERROR LobbyClient::updatePlayer(const unsigned int index, const char* name)
 {
 	bson kwargs[1];
 	bson_buffer buffer[1];
@@ -226,7 +226,7 @@ LOBBY_ERROR LobbyClient::updatePlayer(unsigned int index, const char* name)
 	return LOBBY_NO_ERROR;
 }
 
-LOBBY_ERROR LobbyClient::listGames(int maxGames)
+LOBBY_ERROR LobbyClient::listGames(const int maxGames)
 {
 	bson_iterator it, gameIt;
 	const char * key;
@@ -459,7 +459,7 @@ bool LobbyClient::disconnect()
 	return true;
 }
 
-LOBBY_ERROR LobbyClient::call_(const char* command, bson* args, bson* kwargs)
+LOBBY_ERROR LobbyClient::call_(const char* command, const bson* args, const bson* kwargs)
 {
 	bson bson[1];
 	bson_buffer buffer[1];
@@ -594,7 +594,7 @@ LOBBY_ERROR LobbyClient::call_(const char* command, bson* args, bson* kwargs)
 	return LOBBY_NO_ERROR;
 }
 
-LOBBY_ERROR LobbyClient::setError_(const LOBBY_ERROR code, char * message, ...)
+LOBBY_ERROR LobbyClient::setError_(const LOBBY_ERROR code, char* message, ...)
 {
 	   va_list ap;
 	   int count;

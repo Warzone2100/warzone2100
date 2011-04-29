@@ -106,17 +106,17 @@ class LobbyClient {
 		bool isConnected();
 		LOBBY_ERROR login(const std::string& password);
 
-		LOBBY_ERROR addGame(char** result, uint32_t port, uint32_t maxPlayers,
-						const char* description, const char* versionstring,
-						uint32_t gameversion__major, uint32_t gameversion__minor,
-						bool isPassworded, const char* modlist,
-						const char* mapname, const char* hostplayer);
+		LOBBY_ERROR addGame(char** result, const uint32_t port, const uint32_t maxPlayers,
+							const char* description, const char* versionstring,
+							const uint32_t game_version_major, const uint32_t game_version_minor,
+							const bool isPrivate, const char* modlist,
+							const char* mapname, const char* hostplayer);
 
 		LOBBY_ERROR delGame();
-		LOBBY_ERROR addPlayer(unsigned int index, const char* name, const char* username, const char* session);
-		LOBBY_ERROR delPlayer(unsigned int index);
-		LOBBY_ERROR updatePlayer(unsigned int index, const char* name);
-		LOBBY_ERROR listGames(int maxGames);
+		LOBBY_ERROR addPlayer(const unsigned int index, const char* name, const char* username, const char* session);
+		LOBBY_ERROR delPlayer(const unsigned int index);
+		LOBBY_ERROR updatePlayer(const unsigned int index, const char* name);
+		LOBBY_ERROR listGames(const int maxGames);
 
 		LobbyClient& setHost(const std::string& host) { host_ = host; return *this; }
 		std::string getHost() const { return host_; }
@@ -167,7 +167,7 @@ class LobbyClient {
 		lobbyError lastError_;
 		lobbyCallResult callResult_;
 
-		LOBBY_ERROR call_(const char* command, bson* args, bson* kwargs);
+		LOBBY_ERROR call_(const char* command, const bson* args, const bson* kwargs);
 
 		void freeCallResult_()
 		{
