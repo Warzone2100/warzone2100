@@ -52,7 +52,6 @@ namespace Lobby
 		SERVER_ERROR			=	-32600,
 		APPLICATION_ERROR		=	-32500,
 		TRANSPORT_ERROR			=	-32300,
-
 		// Specific errors.
 		UNSUPPORTED_ENCODING	=	-32701,
 		METHOD_NOT_FOUND		=	-32601,

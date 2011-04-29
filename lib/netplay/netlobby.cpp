@@ -65,8 +65,13 @@ namespace Lobby
 		bson_buffer buffer[1];
 
 		if (gameId_ != 0)
+		{
 			// Ignore server errors here.
-			delGame();
+			if (delGame() != NO_ERROR)
+			{
+				freeError();
+			}
+		}
 
 		bson_buffer_init(buffer);
 		bson_append_int(buffer, "port", port);
