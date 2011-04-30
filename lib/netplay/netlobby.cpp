@@ -18,6 +18,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
+#include "lib/framework/frame.h"
 #include "netlobby.h"
 
 namespace Lobby
@@ -25,13 +26,9 @@ namespace Lobby
 	Client::Client()
 	{
 		// Set defaults
-		callId_ = 1;
-
 		gameId_ = 0;
-		socket_ = NULL;
 
 		lastError_.code = NO_ERROR;
-		lastError_.message = NULL;
 
 		isAuthenticated_ = false;
 	}
@@ -43,13 +40,6 @@ namespace Lobby
 		// remove the game from the masterserver,
 		delGame();
 		freeError();
-
-		// clear/free up games,
-		games.clear();
-
-		// clear auth data,
-		session_.clear();
-		isAuthenticated_ = false;
 
 		// and disconnect.
 		disconnect();
@@ -328,14 +318,11 @@ namespace Lobby
 
 	inline bool Client::isConnected()
 	{
-		return (socket_ != NULL && !socketReadDisconnected(socket_));
+		return socket_.state() == QAbstractSocket::ConnectedState;
 	}
 
 	RETURN_CODES Client::connect()
 	{
-		char version[sizeof("version") + sizeof(uint32_t)];
-		char* p_version = version;
-
 		if (isConnected())
 		{
 			return NO_ERROR;
@@ -343,32 +330,30 @@ namespace Lobby
 
 		isAuthenticated_ = false;
 
-		// Build the initial version command.
-		strlcpy(p_version, "version", sizeof("version"));
-		p_version+= sizeof("version");
-		*(uint32_t*)p_version = htonl(PROTOCOL);
-
 		callId_ = 0;
 
-		// Resolve the hostname
-		SocketAddress *const hosts = resolveHost(host_.c_str(), port_);
-
-		// Resolve failed?
-		if (hosts == NULL)
+		// Connect
+		socket_.connectToHost(host_, port_);
+		if (!socket_.waitForConnected())
 		{
-			debug(LOG_ERROR, "Cannot resolve masterserver \"%s\": %s.", host_.c_str(), strSockError(getSockErr()));
-			return setError_(TRANSPORT_ERROR, _("Could not resolve masterserver name (%s)!"), host_.c_str());
+			debug(LOG_ERROR, "Cannot connect masterserver \"[%s]:%d\": %s.",
+				  host_.toUtf8().constData(), port_, socket_.errorString().toUtf8().constData());
+			return setError_(TRANSPORT_ERROR, "");
 		}
 
-		// try each address from resolveHost until we successfully connect.
-		socket_ = socketOpenAny(hosts, 1500);
-		deleteSocketAddress(hosts);
+		// Build the initial version command.
+		uchar buf[sizeof(qint32)] = { "\0" };
+		qToBigEndian<qint32>(PROTOCOL, buf);
+		QByteArray version;
+		version.append("version", sizeof("version"));
+		version.append((char *)buf, sizeof(buf));
 
-		// No address succeeded or couldn't send version data
-		if (socket_ == NULL || writeAll(socket_, version, sizeof(version)) == SOCKET_ERROR)
+		// Send Version command
+		if (socket_.write(version) == -1)
 		{
-			debug(LOG_ERROR, "Cannot connect to masterserver \"%s:%d\": %s", host_.c_str(), port_, strSockError(getSockErr()));
-			return setError_(TRANSPORT_ERROR, _("Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"), port_);
+			debug(LOG_ERROR, "Cannot send version string to masterserver \"%s:%d\": %s",
+				  host_.toUtf8().constData(), port_, socket_.errorString().toUtf8().constData());
+			return setError_(TRANSPORT_ERROR, "");
 		}
 
 		// At last try to login
@@ -465,8 +450,17 @@ namespace Lobby
 			return true;
 		}
 
-		socketClose(socket_);
-		socket_ = NULL;
+		socket_.close();
+
+		// Rest call id.
+		callId_ = 0;
+
+		// clear/free up games,
+		games.clear();
+
+		// clear auth data,
+		session_.clear();
+		isAuthenticated_ = false;
 
 		return true;
 	}
@@ -475,9 +469,6 @@ namespace Lobby
 	{
 		bson bson[1];
 		bson_buffer buffer[1];
-		int bsize;
-		char *call;
-		uint32_t resSize;
 
 		// Connect to the masterserver
 		if (connect() != NO_ERROR)
@@ -526,38 +517,47 @@ namespace Lobby
 		bson_append_finish_object(buffer);
 		bson_from_buffer(bson, buffer);
 
-		bsize = bson_size(bson);
-
-		call = (char*) malloc(sizeof(uint32_t) + bsize);
-		*(uint32_t*)call = htonl(bsize);
-		memcpy(call + sizeof(uint32_t), bson->data, bsize);
-
-		if (writeAll(socket_, call, sizeof(uint32_t) + bsize) == SOCKET_ERROR
-			|| readAll(socket_, &resSize, sizeof(resSize), 300) != sizeof(resSize))
-		{
-			connect(); // FIXME: Should check why readAll failed.
-
-			if (writeAll(socket_, call, sizeof(uint32_t) + bsize) == SOCKET_ERROR
-				|| readAll(socket_, &resSize, sizeof(resSize), 300) != sizeof(resSize))
-			{
-				debug(LOG_ERROR, "Failed sending command \"%s\" to the masterserver: %s.", command, strSockError(getSockErr()));
-				return setError_(TRANSPORT_ERROR, _("Failed to communicate with the masterserver."));
-			}
-		}
-
-		free(call);
+		QByteArray block;
+		QDataStream out(&block, QIODevice::WriteOnly);
+		out.setVersion(QDataStream::Qt_4_0);
+		out.setByteOrder(QDataStream::BigEndian);
+		out.writeBytes(bson->data, bson_size(bson));
 		bson_destroy(bson);
 
-		resSize = ntohl(resSize);
-
-		callResult_.buffer = (char*) malloc(resSize);
-		if (readAll(socket_, callResult_.buffer, resSize, 900) != resSize)
+		if (socket_.write(block) == -1)
 		{
-			debug(LOG_ERROR, "Failed reading the result for \"%s\" from the masterserver: %s.", command, strSockError(getSockErr()));
-
-			free(callResult_.buffer);
+			debug(LOG_ERROR, "Failed sending command \"%s\" to the masterserver: %s.",
+					command, socket_.errorString().toUtf8().constData());
 			return setError_(TRANSPORT_ERROR, _("Failed to communicate with the masterserver."));
 		}
+
+		quint32 blockSize;
+		QDataStream in(&socket_);
+		in.setVersion(QDataStream::Qt_4_0);
+		in.setByteOrder(QDataStream::BigEndian);
+		while (socket_.bytesAvailable() < sizeof(quint16))
+		{
+			if (!socket_.waitForReadyRead())
+			{
+				debug(LOG_ERROR, "Failed reading the results size for \"%s\" from the masterserver: %s.",
+						command, socket_.errorString().toUtf8().constData());
+				return setError_(TRANSPORT_ERROR, _("Failed to communicate with the masterserver."));
+			}
+
+			in >> blockSize;
+
+			while (socket_.bytesAvailable() < blockSize)
+			{
+				if (!socket_.waitForReadyRead())
+				{
+					debug(LOG_ERROR, "Failed reading the result for \"%s\" from the masterserver: %s.",
+							command, socket_.errorString().toUtf8().constData());
+					return setError_(TRANSPORT_ERROR, _("Failed to communicate with the masterserver."));
+				}
+			}
+		}
+		callResult_.buffer = new char[blockSize];
+		in.readRawData(callResult_.buffer, blockSize);
 
 		// Get the first object (bson_array)
 		bson_iterator it;
@@ -567,7 +567,7 @@ namespace Lobby
 		{
 			debug(LOG_ERROR, "Received invalid bson data (no array first): %d.", bson_iterator_type(&it));
 
-			free(callResult_.buffer);
+			delete callResult_.buffer;
 			return setError_(INVALID_DATA, _("Failed to communicate with the masterserver."));
 		}
 		bson_iterator_init(&it, bson_iterator_value(&it));
@@ -577,7 +577,7 @@ namespace Lobby
 		{
 			debug(LOG_ERROR, "Received invalid bson data (no int first): %d.", bson_iterator_type(&it));
 
-			free(callResult_.buffer);
+			delete callResult_.buffer;
 			return setError_(INVALID_DATA, _("Failed to communicate with the masterserver."));
 		}
 
@@ -606,19 +606,15 @@ namespace Lobby
 		return NO_ERROR;
 	}
 
-	RETURN_CODES Client::setError_(const RETURN_CODES code, char* message, ...)
+	RETURN_CODES Client::setError_(const RETURN_CODES code, const char* message, ...)
 	{
 		   va_list ap;
-		   int count;
 
 		   lastError_.code = code;
 
 		   va_start(ap, message);
-				   count = vasprintf(&lastError_.message, message, ap);
+			   lastError_.message.sprintf(message, ap);
 		   va_end(ap);
-
-		   if (count == -1)
-				   lastError_.message = NULL;
 
 		   return code;
 	}

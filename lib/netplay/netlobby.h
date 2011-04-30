@@ -24,14 +24,12 @@
 #include <vector>
 #include <string>
 
-#include "lib/framework/frame.h"
-#include "lib/framework/string_ext.h"
-#include "netsocket.h"
+#include <QtNetwork>
 #include "bson/bson.h"
 
 namespace Lobby
 {
-	const int PROTOCOL = 4;
+	const qint32 PROTOCOL = 4;
 
 	/* NOTE: You also need to change this value in the
 	 * masterservers settings - session_size!
@@ -85,7 +83,7 @@ namespace Lobby
 	struct ERROR
 	{
 		RETURN_CODES code;
-		char* message;
+		QString message;
 	};
 
 	struct CALL_RESULT
@@ -119,11 +117,11 @@ namespace Lobby
 			RETURN_CODES updatePlayer(const unsigned int index, const char* name);
 			RETURN_CODES listGames(const int maxGames);
 
-			Client& setHost(const std::string& host) { host_ = host; return *this; }
-			std::string getHost() const { return host_; }
+			Client& setHost(const QString& host) { host_ = host; return *this; }
+			QString getHost() const { return host_; }
 
-			Client& setPort(const uint32_t& port) { port_ = port; return *this; }
-			uint32_t getPort() { return port_; }
+			Client& setPort(const quint16& port) { port_ = port; return *this; }
+			quint16 getPort() { return port_; }
 
 			bool isAuthenticated() { return isAuthenticated_; }
 
@@ -139,14 +137,8 @@ namespace Lobby
 
 			void freeError()
 			{
-				if (lastError_.code == NO_ERROR)
-				{
-					return;
-				}
-
 				lastError_.code = NO_ERROR;
-				free(lastError_.message);
-				lastError_.message = NULL;
+				lastError_.message.clear();
 			}
 
 		private:
@@ -154,14 +146,14 @@ namespace Lobby
 
 			uint32_t callId_;
 
-			std::string host_;
-			uint32_t port_;
+			QString host_;
+			quint16 port_;
 
 			std::string user_;
 			std::string token_;
 			std::string session_;
 
-			Socket* socket_;
+			QTcpSocket socket_;
 
 			bool isAuthenticated_;
 
@@ -174,11 +166,10 @@ namespace Lobby
 			{
 				callResult_.code = NO_ERROR;
 				callResult_.result = NULL;
-				free(callResult_.buffer);
-				callResult_.buffer = NULL;
+				delete callResult_.buffer;
 			}
 
-			RETURN_CODES setError_(const RETURN_CODES code, char * message, ...);
+			RETURN_CODES setError_(const RETURN_CODES code, const char * message, ...);
 	}; // class Client
 
 } // namespace Lobby

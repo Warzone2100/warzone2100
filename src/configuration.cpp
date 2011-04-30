@@ -77,7 +77,7 @@ bool loadConfig()
 	setMiddleClickRotate(ini.value("MiddleClickRotate", false).toBool());
 	rotateRadar = ini.value("rotateRadar", true).toBool();
 	war_SetPauseOnFocusLoss(ini.value("PauseOnFocusLoss", false).toBool());
-	lobbyclient.setHost(ini.value("masterserver_name", "lobby.wz2100.net").toString().toUtf8().constData());
+	lobbyclient.setHost(ini.value("masterserver_name", "lobby.wz2100.net").toString());
 	lobbyclient.setPort(ini.value("masterserver_port", MASTERSERVERPORT).toInt());
 	iV_font(ini.value("fontname", "DejaVu Sans").toString().toUtf8().constData(),
 		ini.value("fontface", "Book").toString().toUtf8().constData(),
@@ -196,7 +196,7 @@ bool saveConfig()
 	ini.setValue("UPnP", (SDWORD)NetPlay.isUPNP);
 	ini.setValue("rotateRadar", rotateRadar);
 	ini.setValue("PauseOnFocusLoss", war_GetPauseOnFocusLoss());
-	ini.setValue("masterserver_name", lobbyclient.getHost().c_str());
+	ini.setValue("masterserver_name", lobbyclient.getHost());
 	ini.setValue("masterserver_port", lobbyclient.getPort());
 	ini.setValue("gameserver_port", NETgetGameserverPort());
 	if (!bMultiPlayer)

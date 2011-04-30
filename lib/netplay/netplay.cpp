@@ -1878,7 +1878,7 @@ static void NETallowJoining(void)
 						if (lobbyclient.addPlayer(index, name, username, session) != Lobby::NO_ERROR)
 						{
 							debug(LOG_INFO, "Lobby rejected player \"%s\", username \"%s\", session \"%s\", reason: %s",
-											name, username, session, lobbyclient.getError()->message);
+											name, username, session, lobbyclient.getError()->message.toUtf8().constData());
 							lobbyclient.freeError();
 							// Lobby didn't accept the player, Reject.
 							rejected = (uint8_t)ERROR_LOBBY_REJECTED;
@@ -2060,7 +2060,7 @@ bool NEThostGame(const char* SessionName, const char* PlayerName,
 		{
 			asprintf(&motd,
 				_("Error connecting to the lobby server: %s. Make sure port %d can receive incoming connections. If you're using a router configure it to use UPnP, or to forward the port to your system."),
-				lobbyclient.getHost().c_str(),
+				lobbyclient.getHost().toUtf8().constData(),
 				gameserver_port
 			);
 		}
@@ -2105,7 +2105,7 @@ bool NETfindGame(void)
 
  	if (lobbyclient.listGames(MaxGames) != Lobby::NO_ERROR)
  	{
- 		debug(LOG_ERROR, lobbyclient.getError()->message);
+ 		debug(LOG_ERROR, lobbyclient.getError()->message.toUtf8().constData());
  		if (lobbyclient.getError()->code == Lobby::LOGIN_REQUIRED)
  		{
  			setLobbyError(ERROR_AUTHENTICATION);
