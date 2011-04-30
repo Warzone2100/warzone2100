@@ -1434,7 +1434,7 @@ void displayStaticObjects( void )
 	pie_SetDepthOffset(0.0f);
 }
 
-static void drawWallDrag(STRUCTURE_STATS *psStats, int left, int right, int up, int down, uint16_t direction, STRUCT_STATES state)
+static void drawLineBuild(STRUCTURE_STATS *psStats, int left, int right, int up, int down, uint16_t direction, STRUCT_STATES state)
 {
 	int i, j;
 	STRUCTURE *blueprint;
@@ -1481,7 +1481,10 @@ static void drawWallDrag(STRUCTURE_STATS *psStats, int left, int right, int up, 
 			blueprint->pos.x = world_coord(i)+world_coord(1)/2;
 			blueprint->pos.y = world_coord(j)+world_coord(1)/2;
 			blueprint->pos.z = map_Height(blueprint->pos.x, blueprint->pos.y) + world_coord(1)/10;
-			renderStructure(blueprint);
+			if (clipXY(blueprint->pos.x, blueprint->pos.y))
+			{
+				renderStructure(blueprint);
+			}
 			copyOrIgnoreBlueprint(blueprint);
 		}
 	}
@@ -1491,8 +1494,9 @@ static void drawWallDrag(STRUCTURE_STATS *psStats, int left, int right, int up, 
 
 static void renderBuildOrder(int32_t order, BASE_STATS *stats, int32_t x, int32_t y, int32_t x2, int32_t y2, uint16_t dir, STRUCT_STATES state)
 {
+	if (!stats) return;
 	//draw the current build site if its a line of structures
-	if (order == DORDER_LINEBUILD && stats != NULL)
+	if (order == DORDER_LINEBUILD)
 	{
 		int left, right, up, down;
 		// a wall (or something like that)
@@ -1502,16 +1506,16 @@ static void renderBuildOrder(int32_t order, BASE_STATS *stats, int32_t x, int32_
 		up = MIN(map_coord(y), map_coord(y2));
 		down = MAX(map_coord(y), map_coord(y2));
 
-		drawWallDrag((STRUCTURE_STATS *)stats, left, right, up, down, dir, state);
+		drawLineBuild((STRUCTURE_STATS *)stats, left, right, up, down, dir, state);
 	}
-	if (order == DORDER_BUILD && stats != NULL)
+	else if (order == DORDER_BUILD && !TileHasStructure(mapTile(map_coord(x), map_coord(y))))
 	{
-		if (!TileHasStructure(mapTile(map_coord(x), map_coord(y))))
+		STRUCTURE *blueprint = buildBlueprint((STRUCTURE_STATS *)stats, x, y, dir, state);
+		if (clipXY(x,y))
 		{
-			STRUCTURE *blueprint = buildBlueprint((STRUCTURE_STATS *)stats, x, y, dir, state);
 			renderStructure(blueprint);
-			saveOrDeleteBlueprint(blueprint);
 		}
+		saveOrDeleteBlueprint(blueprint);
 	}
 }
 
@@ -1549,7 +1553,7 @@ void displayBlueprints(void)
 				up = MIN(wallDrag.y1, wallDrag.y2);
 				down = MAX(wallDrag.y1, wallDrag.y2);
 
-				drawWallDrag((STRUCTURE_STATS *)sBuildDetails.psStats, left, right, up, down, player.r.y, state);
+				drawLineBuild((STRUCTURE_STATS *)sBuildDetails.psStats, left, right, up, down, player.r.y, state);
 			}
 			else
 			{
