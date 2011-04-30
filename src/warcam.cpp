@@ -294,10 +294,10 @@ static void setUpRadarTarget(SDWORD x, SDWORD y)
 	radarTarget.pos.x = x;
 	radarTarget.pos.y = y;
 
-	if ((x < 0) || (y < 0) || (x > (SDWORD)((mapWidth - 1) * TILE_UNITS))
-	    || (y > (SDWORD)((mapHeight - 1) * TILE_UNITS)))
+	if ((x < 0) || (y < 0) || (x > world_coord(mapWidth - 1))
+	    || (y > world_coord(mapHeight - 1)))
 	{
-		radarTarget.pos.z = 128 * ELEVATION_SCALE + CAMERA_PIVOT_HEIGHT;
+		radarTarget.pos.z = world_coord(1) * ELEVATION_SCALE + CAMERA_PIVOT_HEIGHT;
 	}
 	else
 	{
@@ -667,7 +667,7 @@ static void updateCameraAcceleration(UBYTE update)
 		concern.y += angle*5;
 	}
 
-	Vector3i realPos = concern - Vector3i(CAM_X_SHIFT - behind.x, 0, CAM_Z_SHIFT - behind.y);
+	Vector3i realPos = concern - Vector3i(-behind.x, 0, -behind.y);
 	Vector3f separation = realPos - trackingCamera.position;
 	Vector3f acceleration;
 	if (!bFlying)

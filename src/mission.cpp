@@ -1797,9 +1797,10 @@ static void missionResetDroids(void)
 			{
 				// Do all the things in build droid that never did when it was built!
 				// check the droid is a reasonable distance from the edge of the map
-				if (psDroid->pos.x <= TILE_UNITS || psDroid->pos.x >= (mapWidth *
-				    TILE_UNITS) - TILE_UNITS ||	psDroid->pos.y <= TILE_UNITS ||
-				    psDroid->pos.y >= (mapHeight * TILE_UNITS) - TILE_UNITS)
+				if (psDroid->pos.x <= world_coord(EDGE_SIZE) ||
+					psDroid->pos.y <= world_coord(EDGE_SIZE) ||
+					psDroid->pos.x >= world_coord(mapWidth-EDGE_SIZE) ||
+					psDroid->pos.y >= world_coord(mapHeight-EDGE_SIZE))
 				{
 					debug(LOG_ERROR, "missionResetUnits: unit too close to edge of map - removing");
 					vanishDroid(psDroid);

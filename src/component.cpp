@@ -1003,8 +1003,8 @@ void displayComponentObject(DROID *psDroid)
 	pie_MatBegin();
 
 	/* Get the real position */
-	position.x = (st.pos.x - player.p.x) - terrainMidX*TILE_UNITS;
-	position.z = terrainMidY*TILE_UNITS - (st.pos.y - player.p.z);
+	position.x = st.pos.x - player.p.x;
+	position.z = -(st.pos.y - player.p.z);
 	position.y = st.pos.z;
 
 	if(psDroid->droidType == DROID_TRANSPORTER)

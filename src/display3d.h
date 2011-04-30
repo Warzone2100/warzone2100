@@ -98,7 +98,6 @@ extern bool selectAttempt;
 extern bool draggingTile;
 extern iIMDShape *g_imd;
 extern bool	droidSelected;
-extern UDWORD terrainMidX,terrainMidY;
 
 extern SDWORD scrollSpeed;
 //extern void	assignSensorTarget( DROID *psDroid );

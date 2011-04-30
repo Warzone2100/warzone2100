@@ -2860,7 +2860,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 			}
 			break;
 		}
-		case REF_REPAIR_FACILITY:
+		case REF_REPAIR_FACILITY: // FIXME FIXME FIXME: Magic numbers in this section
 		{
 			psRepairFac = &psStructure->pFunctionality->repairFacility;
 			psChosenObj = psRepairFac->psObj;

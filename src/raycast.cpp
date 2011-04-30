@@ -27,8 +27,8 @@
 #include "lib/framework/frame.h"
 
 #include "raycast.h"
-#include "map.h"
-#include "display3d.h" // TILE_SIZE and clipXY()
+#include "map.h" // TILE_UNITS
+#include "display3d.h" // clipXY()
 
 
 struct HeightCallbackHelp_t

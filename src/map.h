@@ -372,6 +372,12 @@ static inline int32_t map_coord(int32_t worldCoord)
 	return worldCoord >> TILE_SHIFT;
 }
 
+/// Only for graphics!
+static inline float map_coordf(int32_t worldCoord)
+{
+	return (float)worldCoord / TILE_UNITS;
+}
+
 static inline Vector2i world_coord(Vector2i const &mapCoord)
 {
 	return Vector2i(world_coord(mapCoord.x), world_coord(mapCoord.y));

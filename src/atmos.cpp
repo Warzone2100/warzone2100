@@ -87,27 +87,27 @@ UDWORD	i;
 static void testParticleWrap(ATPART *psPart)
 {
 	/* Gone off left side */
-	if(psPart->position.x < player.p.x)
+	if(psPart->position.x < player.p.x-world_coord(visibleTiles.x)/2)
 	{
-		psPart->position.x += (visibleTiles.x*TILE_UNITS);
+		psPart->position.x += world_coord(visibleTiles.x);
 	}
 
 	/* Gone off right side */
-	else if(psPart->position.x > (player.p.x + (visibleTiles.x*TILE_UNITS)))
+	else if(psPart->position.x > (player.p.x + world_coord(visibleTiles.x)/2))
 	{
-		psPart->position.x -= (visibleTiles.x*TILE_UNITS);
+		psPart->position.x -= world_coord(visibleTiles.x);
 	}
 
 	/* Gone off top */
-	if(psPart->position.z < player.p.z)
+	if(psPart->position.z < player.p.z - world_coord(visibleTiles.y)/2)
 	{
-		psPart->position.z += (visibleTiles.y*TILE_UNITS);
+		psPart->position.z += world_coord(visibleTiles.y);
 	}
 
 	/* Gone off bottom */
-	else if(psPart->position.z > (player.p.z + (visibleTiles.y*TILE_UNITS)))
+	else if(psPart->position.z > (player.p.z + world_coord(visibleTiles.y)/2))
 	{
-		psPart->position.z -= (visibleTiles.y*TILE_UNITS);
+		psPart->position.z -= world_coord(visibleTiles.y);
 	}
 }
 
@@ -282,17 +282,16 @@ void	atmosUpdateSystem( void )
 		/* Temporary stuff - just adds a few particles! */
 		for(i=0; i<numberToAdd; i++)
 		{
-
-			pos.x = player.p.x + ((visibleTiles.x/2)*TILE_UNITS);
-			pos.z = player.p.z + ((visibleTiles.y/2)*TILE_UNITS);
-			pos.x += (((visibleTiles.x/2) - rand()%visibleTiles.x) * TILE_UNITS);
-			pos.z += (((visibleTiles.x/2) - rand()%visibleTiles.x) * TILE_UNITS);
+			pos.x = player.p.x;
+			pos.z = player.p.z;
+			pos.x += world_coord(rand()%visibleTiles.x-visibleTiles.x/2);
+			pos.z += world_coord(rand()%visibleTiles.x-visibleTiles.y/2);
 			pos.y = 1000;
 
 			/* If we've got one on the grid */
 			if(pos.x>0 && pos.z>0 &&
-			   pos.x<(SDWORD)((mapWidth-1)*TILE_UNITS) &&
-			   pos.z<(SDWORD)((mapHeight-1)*TILE_UNITS) )
+			   pos.x<(SDWORD)world_coord(mapWidth-1) &&
+			   pos.z<(SDWORD)world_coord(mapHeight-1) )
 			{
 			   	/* On grid, so which particle shall we add? */
 				switch(weather)
@@ -342,16 +341,12 @@ UDWORD	i;
 void	renderParticle( ATPART *psPart )
 {
 	Vector3i dv;
-	SDWORD x, y, z;
 
-	x = psPart->position.x;
-	y = psPart->position.y;
-	z = psPart->position.z;
 	/* Transform it */
-	dv.x = ((UDWORD)x - player.p.x) - terrainMidX * TILE_UNITS;
-	dv.y = (UDWORD)y;
-	dv.z = terrainMidY * TILE_UNITS - ((UDWORD)z - player.p.z);
-	pie_MatBegin();                                 /* Push the identity matrix */
+	dv.x = psPart->position.x - player.p.x;
+	dv.y = psPart->position.y;
+	dv.z = -(psPart->position.z - player.p.z);
+	pie_MatBegin();					/* Push the current matrix */
 	pie_TRANSLATE(dv.x,dv.y,dv.z);
 	/* Make it face camera */
 	pie_MatRotY(-player.r.y);
@@ -359,7 +354,7 @@ void	renderParticle( ATPART *psPart )
 	/* Scale it... */
 	pie_MatScale(psPart->size / 100.f);
 	/* Draw it... */
-   	pie_Draw3DShape(psPart->imd, 0, 0, WZCOL_WHITE, 0, 0);
+	pie_Draw3DShape(psPart->imd, 0, 0, WZCOL_WHITE, 0, 0);
 	pie_MatEnd();
 }
 

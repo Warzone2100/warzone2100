@@ -1588,8 +1588,8 @@ void	kf_JumpToResourceExtractor( void )
 
 	if (psOldRE)
 	{
-		xJump = (psOldRE->pos.x - ((visibleTiles.x / 2) * TILE_UNITS));
-		yJump = (psOldRE->pos.y - ((visibleTiles.y / 2) * TILE_UNITS));
+		xJump = psOldRE->pos.x;
+		yJump = psOldRE->pos.y;
 		player.p.x = xJump;
 		player.p.z = yJump;
 		player.r.y = 0; // face north
@@ -2461,8 +2461,8 @@ UDWORD		xJump = 0, yJump = 0;
 		if(psStruct->pStructureType->type == REF_HQ)
 		{
 			bGotHQ = true;
-			xJump = (psStruct->pos.x - ((visibleTiles.x/2)*TILE_UNITS));
-			yJump = (psStruct->pos.y - ((visibleTiles.y/2)*TILE_UNITS));
+			xJump = psStruct->pos.x;
+			yJump = psStruct->pos.y;
 		}
 	}
 

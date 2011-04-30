@@ -753,8 +753,9 @@ bool initTerrain(void)
 		}
 		debug(LOG_WARNING, "decreasing sector size to %i to fit graphics card constraints", sectorSize);
 	}
-	
-	terrainDistance = 1.5*((visibleTiles.x+visibleTiles.y)/4+sectorSize/2);
+
+	// +4 = +1 for sqrt rounding, +1 for sector size rounding, +2 for edge of visibility
+	terrainDistance = iSqrt(visibleTiles.x*visibleTiles.x/4+visibleTiles.y*visibleTiles.y/4)+4+sectorSize/2;
 	debug(LOG_TERRAIN, "visible tiles x:%i y: %i", visibleTiles.x, visibleTiles.y);
 	debug(LOG_TERRAIN, "terrain view distance: %i", terrainDistance);
 	
@@ -1123,13 +1124,13 @@ void drawTerrain(void)
 				if (!pie_GetFogStatus())
 				{
 					// fade to black at the edges of the visible terrain area
-					const float playerX = (float)player.p.x/TILE_UNITS+visibleTiles.x/2;
-					const float playerY = (float)player.p.z/TILE_UNITS+visibleTiles.y/2;
+					const float playerX = map_coordf(player.p.x);
+					const float playerY = map_coordf(player.p.z);
 
-					const float distA = visibleTiles.x/2-(i-playerX);
-					const float distB = (i-playerX)+visibleTiles.x/2;
-					const float distC = visibleTiles.y/2-(j-playerY);
-					const float distD = (j-playerY)+visibleTiles.y/2;
+					const float distA = i-(playerX-visibleTiles.x/2);
+					const float distB = (playerX+visibleTiles.x/2)-i;
+					const float distC = j-(playerY-visibleTiles.y/2);
+					const float distD = (playerY+visibleTiles.y/2)-j;
 					float darken, distToEdge;
 
 					// calculate the distance to the closest edge of the visible map
@@ -1168,8 +1169,8 @@ void drawTerrain(void)
 		{
 			xPos = world_coord(x*sectorSize+sectorSize/2);
 			yPos = world_coord(y*sectorSize+sectorSize/2);
-			distance = pow(player.p.x+world_coord(visibleTiles.x/2) - xPos, 2) + pow(player.p.z+world_coord(visibleTiles.y/2) - yPos, 2);
-			//debug(LOG_TERRAIN, "culling: %i,%i player x: %i, player z: %i, xPos: %f, yPos: %f, distance = %f, max = %f",  x,y,player.p.x, player.p.z, xPos, yPos, distance, pow(world_coord(terrainDistance),2));
+			distance = pow(player.p.x - xPos, 2) + pow(player.p.z - yPos, 2);
+
 			if (distance > pow((double)world_coord(terrainDistance), 2))
 			{
 				sectors[x*ySectors + y].draw = false;

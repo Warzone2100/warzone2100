@@ -78,9 +78,9 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 			position.y = ((ATPART*)pObject)->position.y;
 			position.z = ((ATPART*)pObject)->position.z;
 
-   			position.x = (SDWORD)(position.x - player.p.x) - terrainMidX*TILE_UNITS;
-   			position.z = (SDWORD)(terrainMidY*TILE_UNITS - (position.z - player.p.z));
- 			position.y = (SDWORD)position.y;
+			position.x = position.x - player.p.x;
+			position.z = -(position.z - player.p.z);
+ 			position.y = position.y;
 
 			/* 16 below is HACK!!! */
 			z = pie_RotateProject(&position,&pixel) - 16;
@@ -112,8 +112,8 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 				pImd = ((PROJECTILE*)pObject)->psWStats->pInFlightGraphic;
 
 				psSimpObj = (SIMPLE_OBJECT*) pObject;
-   				position.x = (psSimpObj->pos.x - player.p.x) - terrainMidX*TILE_UNITS;
-   				position.z = terrainMidY*TILE_UNITS - (psSimpObj->pos.y - player.p.z);
+				position.x = psSimpObj->pos.x - player.p.x;
+				position.z = -(psSimpObj->pos.y - player.p.z);
 
 				position.y = psSimpObj->pos.z;
 
@@ -135,8 +135,8 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 			break;
 		case RENDER_STRUCTURE://not depth sorted
 			psSimpObj = (SIMPLE_OBJECT*) pObject;
-   			position.x = (psSimpObj->pos.x - player.p.x) - terrainMidX*TILE_UNITS;
-   			position.z = terrainMidY*TILE_UNITS - (psSimpObj->pos.y - player.p.z);
+			position.x = psSimpObj->pos.x - player.p.x;
+			position.z = -(psSimpObj->pos.y - player.p.z);
 
 			//if((objectType == RENDER_STRUCTURE) && (((STRUCTURE*)pObject)->
 			//	pStructureType->type >= REF_DEFENSE) &&
@@ -171,8 +171,8 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 			break;
 		case RENDER_FEATURE://not depth sorted
 			psSimpObj = (SIMPLE_OBJECT*) pObject;
-   			position.x = (psSimpObj->pos.x - player.p.x) - terrainMidX*TILE_UNITS;
-   			position.z = terrainMidY*TILE_UNITS - (psSimpObj->pos.y - player.p.z);
+			position.x = psSimpObj->pos.x - player.p.x;
+			position.z = -(psSimpObj->pos.y - player.p.z);
 
 			position.y = psSimpObj->pos.z+2;
 
@@ -194,8 +194,8 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 		case RENDER_ANIMATION://not depth sorted
 			psCompObj = (COMPONENT_OBJECT *) pObject;
 			spacetime = interpolateObjectSpacetime((SIMPLE_OBJECT *)psCompObj->psParent, graphicsTime);
-			position.x = (spacetime.pos.x - player.p.x) - terrainMidX*TILE_UNITS;
-			position.z = terrainMidY*TILE_UNITS - (spacetime.pos.y - player.p.z);
+			position.x = spacetime.pos.x - player.p.x;
+			position.z = -(spacetime.pos.y - player.p.z);
 			position.y = spacetime.pos.z;
 
 			/* object offset translation */
@@ -220,8 +220,8 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 			psDroid = (DROID*) pObject;
 
 			psSimpObj = (SIMPLE_OBJECT*) pObject;
-   			position.x = (psSimpObj->pos.x - player.p.x) - terrainMidX*TILE_UNITS;
-   			position.z = terrainMidY*TILE_UNITS - (psSimpObj->pos.y - player.p.z);
+			position.x = psSimpObj->pos.x - player.p.x;
+			position.z = -(psSimpObj->pos.y - player.p.z);
  			position.y = psSimpObj->pos.z;
 			if(objectType == RENDER_SHADOW)
 			{
@@ -248,10 +248,9 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 		case RENDER_PROXMSG:
 			if (((PROXIMITY_DISPLAY *)pObject)->type == POS_PROXDATA)
 			{
-				position.x = (((VIEW_PROXIMITY *)((VIEWDATA *)((PROXIMITY_DISPLAY *)
-					pObject)->psMessage->pViewData)->pData)->x - player.p.x) -
-					terrainMidX * TILE_UNITS;
-   				position.z = terrainMidY * TILE_UNITS - (((VIEW_PROXIMITY *)((VIEWDATA *)
+				position.x = ((VIEW_PROXIMITY *)((VIEWDATA *)((PROXIMITY_DISPLAY *)
+					pObject)->psMessage->pViewData)->pData)->x - player.p.x;
+				position.z = -(((VIEW_PROXIMITY *)((VIEWDATA *)
 					((PROXIMITY_DISPLAY *)pObject)->psMessage->pViewData)->pData)->y -
 					player.p.z);
  				position.y = ((VIEW_PROXIMITY *)((VIEWDATA *)((PROXIMITY_DISPLAY *)pObject)->
@@ -259,10 +258,9 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 			}
 			else if (((PROXIMITY_DISPLAY *)pObject)->type == POS_PROXOBJ)
 			{
-				position.x = (((BASE_OBJECT *)((PROXIMITY_DISPLAY *)pObject)->
-					psMessage->pViewData)->pos.x - player.p.x) - terrainMidX *
-					TILE_UNITS;
-   				position.z = terrainMidY * TILE_UNITS - (((BASE_OBJECT *)((
+				position.x = ((BASE_OBJECT *)((PROXIMITY_DISPLAY *)pObject)->
+					psMessage->pViewData)->pos.x - player.p.x;
+				position.z = -(((BASE_OBJECT *)((
 					PROXIMITY_DISPLAY *)pObject)->psMessage->pViewData)->pos.y -
 					player.p.z);
  				position.y = ((BASE_OBJECT *)((PROXIMITY_DISPLAY *)pObject)->
@@ -285,9 +283,9 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 			}
 			break;
 		case RENDER_EFFECT:
-   			position.x = (SDWORD)(((EFFECT*)pObject)->position.x - player.p.x) - terrainMidX*TILE_UNITS;
-   			position.z = (SDWORD)(terrainMidY*TILE_UNITS - (((EFFECT*)pObject)->position.z - player.p.z));
- 			position.y = (SDWORD)((EFFECT*)pObject)->position.y;
+			position.x = ((EFFECT*)pObject)->position.x - player.p.x;
+			position.z = -(((EFFECT*)pObject)->position.z - player.p.z);
+ 			position.y = ((EFFECT*)pObject)->position.y;
 
 			/* 16 below is HACK!!! */
 			z = pie_RotateProject(&position,&pixel) - 16;
@@ -312,9 +310,8 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 			break;
 
 		case RENDER_DELIVPOINT:
-			position.x = (((FLAG_POSITION *)pObject)->coords.x - player.p.x) -
-				terrainMidX * TILE_UNITS;
-   			position.z = terrainMidY*TILE_UNITS - (((FLAG_POSITION*)pObject)->
+			position.x = ((FLAG_POSITION *)pObject)->coords.x - player.p.x;
+			position.z = -(((FLAG_POSITION*)pObject)->
 				coords.y - player.p.z);
  			position.y = ((FLAG_POSITION*)pObject)->coords.z;
 

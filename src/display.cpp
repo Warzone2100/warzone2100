@@ -1230,10 +1230,10 @@ bool CheckInScrollLimits(SDWORD *xPos,SDWORD *zPos)
 	{
 		maxY = ((mapHeight-1-(visibleYTiles/2)) * TILE_UNITS);
 	}*/
-	minX = (scrollMinX - (visibleTiles.x/2)) * TILE_UNITS;
-	maxX = ((scrollMaxX - 1) - (visibleTiles.x/2)) * TILE_UNITS;
-	minY = (scrollMinY - (visibleTiles.y/2)) * TILE_UNITS;
-	maxY = ((scrollMaxY - 1) - (visibleTiles.y/2)) * TILE_UNITS;
+	minX = world_coord(scrollMinX);
+	maxX = world_coord(scrollMaxX - 1);
+	minY = world_coord(scrollMinY);
+	maxY = world_coord(scrollMaxY - 1);
 
 	//scroll is limited to what can be seen for current campaign
 	if (*xPos < minX)

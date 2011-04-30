@@ -37,9 +37,6 @@
 #define ROT_ACCEL_CONSTANT 4.0f
 #define ROT_VELOCITY_CONSTANT 2.5f
 
-#define CAM_X_SHIFT	((VISIBLE_XTILES/2)*128)
-#define CAM_Z_SHIFT	((VISIBLE_YTILES/2)*128)
-
 /* The different tracking states */
 enum
 {

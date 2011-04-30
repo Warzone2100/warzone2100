@@ -55,10 +55,9 @@ bool audio_ObjectDead(SIMPLE_OBJECT *psSimpleObj)
 Vector3f audio_GetPlayerPos(void)
 {
 	Vector3f pos;
-	// Player's Y and Z interchanged
-	// @NOTE Why?
-	pos.x = player.p.x + world_coord(visibleTiles.x / 2);
-	pos.y = player.p.z + world_coord(visibleTiles.x / 2);
+
+	pos.x = player.p.x;
+	pos.y = player.p.z;
 	pos.z = player.p.y;
 
 	// Invert Y to match QSOUND axes
