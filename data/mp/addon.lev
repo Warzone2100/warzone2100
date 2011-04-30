@@ -1870,3 +1870,52 @@ dataset	MULTI_T3_C1
 game	"multiplay/maps/4c-pyramidal.gam"
 data	"wrf/multi/t3-skirmish4.wrf"
 data	"wrf/multi/fog1.wrf"
+
+level   Roughness-T1
+players 2
+type    14
+dataset MULTI_CAM_3
+game    "multiplay/maps/2c-Roughness.gam"
+data    "wrf/multi/skirmish2.wrf"
+data    "wrf/multi/fog3.wrf"
+
+level   Roughness-T2
+players 2
+type    18
+dataset MULTI_T2_C3
+game    "multiplay/maps/2c-Roughness.gam"
+data    "wrf/multi/t2-skirmish2.wrf"
+data    "wrf/multi/fog3.wrf"
+
+level   Roughness-T3
+players 2
+type    19
+dataset MULTI_T3_C3
+game    "multiplay/maps/2c-Roughness.gam"
+data    "wrf/multi/t3-skirmish2.wrf"
+data    "wrf/multi/fog3.wrf"
+
+level   Vision-T1
+players 2
+type    14
+dataset MULTI_CAM_3
+game    "multiplay/maps/2c-Vision.gam"
+data    "wrf/multi/skirmish2.wrf"
+data    "wrf/multi/fog3.wrf"
+
+level   Vision-T2
+players 2
+type    18
+dataset MULTI_T2_C3
+game    "multiplay/maps/2c-Vision.gam"
+data    "wrf/multi/t2-skirmish2.wrf"
+data    "wrf/multi/fog3.wrf"
+
+level   Vision-T3
+players 2
+type    19
+dataset MULTI_T3_C3
+game    "multiplay/maps/2c-Vision.gam"
+data    "wrf/multi/t3-skirmish2.wrf"
+data    "wrf/multi/fog3.wrf"
+

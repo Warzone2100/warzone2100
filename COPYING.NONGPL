@@ -5,8 +5,6 @@ data/texpages/bdrops/backdrop6.png
 	- CC BY SA 3.0	- Copyright (c) 2007-2008 "B. V. Edwards" <cathuria>
 data/base/texpages/page-25-sky-urban.png
 	- CC0, original work by cybersphinx
-data/mods/global/newst_tiles/
-	- CC BY SA 3.0	- Copyright (c) 1999-2004 N.E.W.S.T., permission by "Frank Lamboy" <rman>
 lib/framework/tagfile.*
 	- Public Domain
 lib/netplay/miniupnpc/*
