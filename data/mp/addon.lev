@@ -740,3 +740,39 @@ players	4
 type	19
 dataset	MULTI_T3_C1
 game	"multiplay/maps/4c-pyramidal.gam"
+
+level   Roughness-T1
+players 2
+type    14
+dataset MULTI_CAM_3
+game    "multiplay/maps/2c-Roughness.gam"
+
+level   Roughness-T2
+players 2
+type    18
+dataset MULTI_T2_C3
+game    "multiplay/maps/2c-Roughness.gam"
+
+level   Roughness-T3
+players 2
+type    19
+dataset MULTI_T3_C3
+game    "multiplay/maps/2c-Roughness.gam"
+
+level   Vision-T1
+players 2
+type    14
+dataset MULTI_CAM_3
+game    "multiplay/maps/2c-Vision.gam"
+
+level   Vision-T2
+players 2
+type    18
+dataset MULTI_T2_C3
+game    "multiplay/maps/2c-Vision.gam"
+
+level   Vision-T3
+players 2
+type    19
+dataset MULTI_T3_C3
+game    "multiplay/maps/2c-Vision.gam"
