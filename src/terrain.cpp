@@ -754,8 +754,8 @@ bool initTerrain(void)
 		debug(LOG_WARNING, "decreasing sector size to %i to fit graphics card constraints", sectorSize);
 	}
 
-	// +4 = +1 for sqrt rounding, +1 for sector size rounding, +2 for edge of visibility
-	terrainDistance = iSqrt(visibleTiles.x*visibleTiles.x/4+visibleTiles.y*visibleTiles.y/4)+4+sectorSize/2;
+	// +4 = +1 for iHypot rounding, +1 for sector size rounding, +2 for edge of visibility
+	terrainDistance = iHypot(visibleTiles.x/2, visibleTiles.y/2)+4+sectorSize/2;
 	debug(LOG_TERRAIN, "visible tiles x:%i y: %i", visibleTiles.x, visibleTiles.y);
 	debug(LOG_TERRAIN, "terrain view distance: %i", terrainDistance);
 	
