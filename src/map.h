@@ -99,6 +99,7 @@ typedef struct _maptile
 	PIELIGHT		colour;
 	short			limitedContinent;	/** For land or sea limited propulsion types */
 	short			hoverContinent;		/** For hover type propulsions */
+	uint16_t firecount; // how many fire effects are on this tile?
 
 //	TYPE_OF_TERRAIN	type;			// The terrain type for the tile
 } MAPTILE;

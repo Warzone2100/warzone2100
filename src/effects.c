@@ -268,7 +268,11 @@ static void killEffect(EFFECT *e)
 		ASSERT(psTile, "Fire effect on non-existing tile (%d, %d)", posX, posY);
 		if (psTile)
 		{
-			psTile->tileInfoBits &= ~BITS_ON_FIRE;	// clear fire bit
+			psTile->firecount--;
+			if (psTile->firecount == 0)
+			{
+				psTile->tileInfoBits &= ~BITS_ON_FIRE;	// clear fire bit
+			}
 		}
 	}
 	effectStatus[e-asEffectsList] = ES_INACTIVE;
@@ -2249,6 +2253,7 @@ void	effectSetupFire(EFFECT *psEffect)
 	if (psTile)
 	{
 		psTile->tileInfoBits |= BITS_ON_FIRE;
+		psTile->firecount++;
 	}
 	psEffect->frameDelay = 300;	   // needs to be investigated...
 	psEffect->radius = auxVar;	// needs to be investigated
