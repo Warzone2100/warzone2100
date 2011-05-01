@@ -313,7 +313,7 @@ namespace Lobby
 					}
 				}
 
-				games.push_back(game);
+				games.append(game);
 				gameCount++;
 			}
 		}

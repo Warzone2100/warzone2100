@@ -883,17 +883,17 @@ static void addGames(void)
 				}
 			}
 			// display the correct tooltip message.
-			if (!NETisCorrectVersion(lobbyclient.games[i].game_version_major, lobbyclient.games[i].game_version_minor))
+			if (!NETisCorrectVersion(lobbyclient.games.at(i).game_version_major, lobbyclient.games.at(i).game_version_minor))
 			{
 				sButInit.pTip = wrongVersionTip;
 			}
-			else if (strcmp(lobbyclient.games[i].modlist.c_str(), getModList()) != 0)
+			else if (strcmp(lobbyclient.games.at(i).modlist.c_str(), getModList()) != 0)
 			{
 				sButInit.pTip = badModTip;
 			}
 			else
 			{
-				ssprintf(tooltipbuffer, "Map:%s, Game:%s, Hosted by %s ", lobbyclient.games[i].mapname.c_str(), lobbyclient.games[i].description.c_str(), lobbyclient.games[i].hostplayer.c_str());
+				ssprintf(tooltipbuffer, "Map:%s, Game:%s, Hosted by %s ", lobbyclient.games.at(i).mapname.c_str(), lobbyclient.games.at(i).description.c_str(), lobbyclient.games.at(i).hostplayer.c_str());
 				sButInit.pTip = tooltipbuffer;
 			}
 			sButInit.UserData = i;
@@ -984,7 +984,7 @@ void runGameFind(void )
 	UDWORD id;
 	static UDWORD lastupdate=0;
 	static char game_password[64];		// check if StringSize is available
-	Lobby::GAME* lGame;
+	const Lobby::GAME* lGame;
 
 	if (!loginDone && !EnablePasswordPrompt)
 	{
@@ -1022,7 +1022,7 @@ void runGameFind(void )
 			break;
 
 		case CON_PASSWORDYES:
-			lGame = &lobbyclient.games[gameNumber];
+			lGame = &lobbyclient.games.at(gameNumber);
 
 			ingame.localOptionsReceived = false;			// note we are awaiting options
 			sstrcpy(game.name, lGame->description.c_str());		// store name
@@ -1084,7 +1084,7 @@ void runGameFind(void )
 			if (id >= GAMES_GAMESTART && id<=GAMES_GAMEEND)
 			{
 				gameNumber = id-GAMES_GAMESTART;
-				lGame = &lobbyclient.games[gameNumber];
+				lGame = &lobbyclient.games.at(gameNumber);
 
 				if (lGame->isPrivate)
 				{
@@ -3814,7 +3814,7 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 		return;
 	}
 
-	Lobby::GAME* lGame = &lobbyclient.games[gameNumber];
+	const Lobby::GAME* lGame = &lobbyclient.games.at(gameNumber);
 
 	// Draw blue boxes.
 	drawBlueBox(x,y,psWidget->width,psWidget->height);

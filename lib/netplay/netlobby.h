@@ -27,8 +27,6 @@
 	#include <QtNetwork/QSslSocket>
 #endif
 
-#include <vector>
-
 #include "bson/bson.h"
 
 namespace Lobby
@@ -99,7 +97,7 @@ namespace Lobby
 
 	class Client {
 		public:
-			std::vector<GAME> games;
+			QList<GAME> games;
 
 			Client();
 			void stop();
