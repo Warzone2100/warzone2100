@@ -989,8 +989,7 @@ bool scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 			psVal->v.oval = (void*)getBaseObjFromId(id);
 			if (!psVal->v.oval)
 			{
-				debug( LOG_FATAL, "scrValDefLoad: couldn't find object id %d", id );
-				abort();
+				debug(LOG_ERROR, "Could not find object id %d", id);
 			}
 		}
 		break;
@@ -1116,28 +1115,6 @@ bool scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 		}
 		break;
 	case ST_TEXTSTRING:
-		if (version < 4)
-		{
-			if (size != sizeof(UDWORD))
-			{
-				debug(LOG_ERROR, "Data size is too small, %u is expected, but %u is provided", (unsigned int)(sizeof(UDWORD)), (unsigned int)size);
-				return false;
-			}
-
-			id = *((UDWORD*)pBuffer);
-			endian_udword(&id);
-
-			if (id == UDWORD_MAX)
-			{
-				psVal->v.sval = NULL;
-			}
-			else
-			{
-				debug(LOG_ERROR, "Incompatible savegame format version %u, should be at least version 4", (unsigned int)version);
-				return false;
-			}
-		}
-		else
 		{
 			const char* str;
 			char* idStr;
@@ -1303,8 +1280,7 @@ bool scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 				psCDroid = (DROID *)getBaseObjFromId(id);
 				if (!psCDroid)
 				{
-					debug( LOG_FATAL, "scrValDefLoad: couldn't find object id %d", id );
-					abort();
+					debug(LOG_ERROR, "Could not find object id %d", id);
 				}
 				else
 				{

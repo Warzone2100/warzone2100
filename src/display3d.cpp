@@ -1677,6 +1677,7 @@ void displayProximityMsgs( void )
 			}
 			else
 			{
+				if (!psProxDisp->psMessage->pViewData) continue; // sanity check
 				x = ((BASE_OBJECT *)psProxDisp->psMessage->pViewData)->pos.x;
 				y = ((BASE_OBJECT *)psProxDisp->psMessage->pViewData)->pos.y;
 			}
