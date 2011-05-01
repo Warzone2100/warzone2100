@@ -31,5 +31,3 @@ libivis_common_a_SOURCES = \
 	pieclip.c \
 	piestate.c \
 	png_util.c
-
-libivis_common_a_LIBADD = $(top_builddir)/lib/framework/libframework.a

@@ -54,5 +54,3 @@ libscript_a_SOURCES = \
 	script_lexer.lex.c \
 	script_parser.tab.c \
 	stack.c
-
-libscript_a_LIBADD = $(top_builddir)/lib/framework/libframework.a

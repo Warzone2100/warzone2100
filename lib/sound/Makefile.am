@@ -24,6 +24,3 @@ libsound_a_SOURCES = \
 	openal_track.c \
 	playlist.c \
 	track.c
-
-libsound_a_LIBADD = $(top_builddir)/lib/gamelib/libgamelib.a \
-	$(top_builddir)/lib/framework/libframework.a

@@ -16,8 +16,6 @@ libnetplay_a_SOURCES = \
 	netplay.c \
 	nettypes.c
 
-libnetplay_a_LIBADD = $(top_builddir)/lib/framework/libframework.a $(top_builddir)/lib/netplay/miniupnpc/libminiupnpc.a
-
 # HACK Don't give make errors when switching between trunk and branches.
 # Works by finding the .deps/*.Po files which refer to source files that don't exist, and replacing them with a single dependency on the correct source file.
 # Now with PD-ksh support.
