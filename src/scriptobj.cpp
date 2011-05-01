@@ -134,7 +134,6 @@ bool scrBaseObjGet(UDWORD index)
 		type = VAL_BOOL;
 		scrFunctionResult.v.bval = (SDWORD)((DROID *)psObj)->selected;
 		break;
-
 	case OBJID_STRUCTSTATTYPE:
 		if (psObj->type == OBJ_STRUCTURE)
 		{
@@ -147,7 +146,6 @@ bool scrBaseObjGet(UDWORD index)
 			return false;
 		}
 		break;
-
 	case OBJID_ORDERX:
 		if (psObj->type != OBJ_DROID)
 		{
@@ -259,7 +257,6 @@ bool scrBaseObjGet(UDWORD index)
 		}
 
 		break;
-
 	case OBJID_STRUCTSTAT:
 		//droid.stat - now returns the type of structure a truck is building for droids
 		if (psObj->type == OBJ_STRUCTURE)
@@ -277,9 +274,7 @@ bool scrBaseObjGet(UDWORD index)
 			debug(LOG_ERROR, "scrBaseObjGet(): .stat only valid for structures and droids");
 			return false;
 		}
-
 		break;
-
 	case OBJID_TARGET:
 		//added object->psTarget
 		if (psObj->type == OBJ_STRUCTURE)
@@ -297,7 +292,6 @@ bool scrBaseObjGet(UDWORD index)
 			debug(LOG_ERROR, "scrBaseObjGet(): .target only valid for structures and droids");
 			return false;
 		}
-
 		break;
 	case OBJID_GROUP:
 		if (psObj->type != OBJ_DROID)
@@ -305,15 +299,11 @@ bool scrBaseObjGet(UDWORD index)
 			debug(LOG_ERROR, "scrBaseObjGet: group only valid for a droid");
 			return false;
 		}
-
 		type = (INTERP_TYPE)ST_GROUP;
 		scrFunctionResult.v.oval = ((DROID *)psObj)->psGroup;
 		break;
-
 	case OBJID_HITPOINTS:
-
 		type = VAL_INT;
-
 		switch (psObj->type)
 		{
 		case OBJ_DROID:
@@ -333,31 +323,25 @@ bool scrBaseObjGet(UDWORD index)
 			return false;
 			break;
 		}
-
 		break;
 	case OBJID_ORIG_HITPOINTS:
 		type = VAL_INT;
-
 		switch (psObj->type)
 		{
 		case OBJ_DROID:
 			scrFunctionResult.v.ival = (SDWORD)((DROID *)psObj)->originalBody;
 			break;
-
 		case OBJ_STRUCTURE:
 			scrFunctionResult.v.ival = (SDWORD)structureBody((STRUCTURE *)psObj);
 			break;
-
 		case OBJ_FEATURE:
 			scrFunctionResult.v.ival = ((FEATURE *)psObj)->psStats->body;
 			break;
-
 		default:
 			debug(LOG_ERROR, "scrBaseObjGet: unknown object type");
 			return false;
 			break;
 		}
-
 		break;
 	default:
 		debug(LOG_ERROR, "scrBaseObjGet: unknown variable index");
@@ -391,7 +375,6 @@ bool scrObjToDroid(void)
 	{
 		psObj = NULL;
 	}
-
 
 	scrFunctionResult.v.oval = psObj;
 	if (!stackPushResult((INTERP_TYPE)ST_DROID, &scrFunctionResult))
@@ -732,9 +715,6 @@ bool scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize)
 	RESEARCH	*psResearch;
 	char		*pPos;
 	DROID		*psCDroid;
-#ifdef _DEBUG
-	BASE_OBJECT	*psObj;
-#endif
 
 	switch ((unsigned)psVal->type)  // Unsigned cast to suppress compiler warnings due to enum abuse.
 	{
@@ -765,19 +745,14 @@ bool scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize)
 		// just save the id
 		if (pBuffer)
 		{
-			if (psVal->v.oval == NULL)
+			if (psVal->v.oval == NULL || ((BASE_OBJECT *)psVal->v.oval)->died > NOT_CURRENT_LIST)
 			{
 				*((UDWORD*)pBuffer) = UDWORD_MAX;
 			}
 			else
 			{
 				*((UDWORD*)pBuffer) = ((BASE_OBJECT *)psVal->v.oval)->id;
-#ifdef _DEBUG
-				psObj = getBaseObjFromId(((BASE_OBJECT *)psVal->v.oval)->id);
-				ASSERT( psObj == (BASE_OBJECT *)psVal->v.oval,"scrValDefSave failed to find object, continue" );
-#endif
 			}
-
 			endian_udword((UDWORD*)pBuffer);
 		}
 		*pSize = sizeof(UDWORD);
@@ -962,9 +937,9 @@ bool scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize)
 		}
 		*pSize = sizeof(UDWORD);
 		break;
-  default:
-    ASSERT( false, "scrValDefSave: unknown script variable type for save" );
-    break;
+	default:
+		ASSERT( false, "scrValDefSave: unknown script variable type for save" );
+		break;
 	}
 	return true;
 }

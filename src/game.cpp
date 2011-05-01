@@ -76,6 +76,7 @@
 #include "geometry.h"
 #include "gateway.h"
 #include "scripttabs.h"
+#include "scriptvals.h"
 #include "scriptextern.h"
 #include "multistat.h"
 #include "multiint.h"
@@ -1676,6 +1677,7 @@ bool loadMissionExtras(const char *pGameToLoad, SWORD levelType)
 
 static void sanityUpdate()
 {
+	scrvUpdateBasePointers();	// update the script object pointers
 	for (int player = 0; player < game.maxPlayers; player++)
 	{
 		for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
