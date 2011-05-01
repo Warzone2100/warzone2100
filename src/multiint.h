@@ -116,6 +116,7 @@ void loadMapPreview(bool hideInterface);
 #define CON_LOGIN_USER_LABEL		10154
 #define CON_LOGIN_PASS_LABEL		10155
 #define CON_LOGIN_SIDETEXT			10156
+#define CON_LOGIN_INFOTEXT			10157
 
 
 // ////////////////////////////////////////////////////////////////

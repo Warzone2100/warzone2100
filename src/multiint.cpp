@@ -1252,8 +1252,8 @@ void startGameFind(void)
 	sFormInit.style = WFORM_PLAIN;
 	sFormInit.x = FRONTEND_BOTFORMX+40;
 	sFormInit.y = 160;
-	sFormInit.width = FRONTEND_TOPFORMW-100;
-	sFormInit.height = FRONTEND_TOPFORMH+80;
+	sFormInit.width = 300;
+	sFormInit.height = FRONTEND_TOPFORMH+120;
 	sFormInit.pDisplay = intOpenPlainForm;
 	// sFormInit.disableChildren = true;
 	widgAddForm(psWScreen, &sFormInit);
@@ -1261,58 +1261,66 @@ void startGameFind(void)
 	addSideText(CON_LOGIN_SIDETEXT, FRONTEND_SIDEX+65, FRONTEND_SIDEY-10, _("LOBBY LOGIN"));
 
 	// Draw username label
-	W_LABINIT sLoginUserLabInit;
-	sLoginUserLabInit.formID = FRONTEND_LOGINFORM;
-	sLoginUserLabInit.id	= CON_LOGIN_USER_LABEL;
-	sLoginUserLabInit.style	= WLAB_ALIGNCENTRE;
-	sLoginUserLabInit.x		= 50;
-	sLoginUserLabInit.y		= 50; // 215
-	sLoginUserLabInit.width	= CON_SETTINGSWIDTH;
-	sLoginUserLabInit.height = 20;
-	sLoginUserLabInit.pText	= _("Username:");
-	sLoginUserLabInit.pDisplay = showPasswordLabel;
-	widgAddLabel(psWScreen, &sLoginUserLabInit);
+	sLabInit.formID = FRONTEND_LOGINFORM;
+	sLabInit.id	= CON_LOGIN_USER_LABEL;
+	sLabInit.style	= WLAB_ALIGNCENTRE;
+	sLabInit.x		= 50;
+	sLabInit.y		= 50;
+	sLabInit.width	= 200;
+	sLabInit.height = 20;
+	sLabInit.pText	= _("Username:");
+	sLabInit.pDisplay = showPasswordLabel;
+	widgAddLabel(psWScreen, &sLabInit);
 
 	// Draw username entry box
-	W_EDBINIT sLoginUserEdInit;
-	sLoginUserEdInit.formID = FRONTEND_LOGINFORM;
-	sLoginUserEdInit.id = CON_LOGIN_USER;
-	sLoginUserEdInit.x = 50;
-	sLoginUserEdInit.y = 55;
-	sLoginUserEdInit.width = 280;
-	sLoginUserEdInit.height = 20;
-	sLoginUserEdInit.pText = lobbyUser.toUtf8().constData();
-	sLoginUserEdInit.pBoxDisplay = displayPasswordEditBox;
-	widgAddEditBox(psWScreen, &sLoginUserEdInit);
+	sEdInit.formID = FRONTEND_LOGINFORM;
+	sEdInit.id = CON_LOGIN_USER;
+	sEdInit.x = 50;
+	sEdInit.y = 55;
+	sEdInit.width = 200;
+	sEdInit.height = 20;
+	sEdInit.pText = lobbyUser.toUtf8().constData();
+	sEdInit.pBoxDisplay = displayPasswordEditBox;
+	widgAddEditBox(psWScreen, &sEdInit);
 
 	// Draw password label
-	W_LABINIT sLoginPassLabInit;
-	sLoginPassLabInit.formID = FRONTEND_LOGINFORM;
-	sLoginPassLabInit.id	= CON_LOGIN_PASS_LABEL;
-	sLoginPassLabInit.style	= WLAB_ALIGNCENTRE;
-	sLoginPassLabInit.x		= 50;
-	sLoginPassLabInit.y		= 110;
-	sLoginPassLabInit.width	= CON_SETTINGSWIDTH;
-	sLoginPassLabInit.height = 20;
-	sLoginPassLabInit.pText	= _("Password:");
-	sLoginPassLabInit.pDisplay = showPasswordLabel;
-	widgAddLabel(psWScreen, &sLoginPassLabInit);
+	sLabInit.formID = FRONTEND_LOGINFORM;
+	sLabInit.id	= CON_LOGIN_PASS_LABEL;
+	sLabInit.style	= WLAB_ALIGNCENTRE;
+	sLabInit.x		= 50;
+	sLabInit.y		= 110;
+	sLabInit.width	= 200;
+	sLabInit.height = 20;
+	sLabInit.pText	= _("Password:");
+	sLabInit.pDisplay = showPasswordLabel;
+	widgAddLabel(psWScreen, &sLabInit);
 
 	// Draw password entry box
-	W_EDBINIT sLoginPassEdInit;
-	sLoginPassEdInit.formID = FRONTEND_LOGINFORM;
-	sLoginPassEdInit.id = CON_LOGIN_PASS;
-	sLoginPassEdInit.x = 50;
-	sLoginPassEdInit.y = 115;
-	sLoginPassEdInit.width = 280;
-	sLoginPassEdInit.height = 20;
-	sLoginPassEdInit.pText = "";
-	sLoginPassEdInit.pBoxDisplay = displayPasswordEditBox;
-	widgAddEditBox(psWScreen, &sLoginPassEdInit);
+	sEdInit.formID = FRONTEND_LOGINFORM;
+	sEdInit.id = CON_LOGIN_PASS;
+	sEdInit.x = 50;
+	sEdInit.y = 115;
+	sEdInit.width = 200;
+	sEdInit.height = 20;
+	sEdInit.pText = "";
+	sEdInit.pBoxDisplay = displayPasswordEditBox;
+	widgAddEditBox(psWScreen, &sEdInit);
 
-	addMultiBut(psWScreen, FRONTEND_LOGINFORM,CON_LOGIN_NO,50,160,MULTIOP_OKW,MULTIOP_OKH,
+	// Info Text
+	sLabInit.formID = FRONTEND_LOGINFORM;
+	sLabInit.id	= CON_LOGIN_INFOTEXT;
+	sLabInit.style	= WLAB_ALIGNLEFT;
+	sLabInit.x		= 30;
+	sLabInit.y		= 150;
+	sLabInit.width	= 300 - (30*2);
+	sLabInit.height = 20;
+	sLabInit.pText	= _("Use your wz2100.net credentials here.");
+	sLabInit.pDisplay = labelDisplay;
+	widgAddLabel(psWScreen, &sLabInit);
+
+	addMultiBut(psWScreen, FRONTEND_LOGINFORM,CON_LOGIN_NO,50,210,MULTIOP_OKW,MULTIOP_OKH,
 	            _("Cancel"),IMAGE_NO,IMAGE_NO,true);
-	addMultiBut(psWScreen, FRONTEND_LOGINFORM,CON_LOGIN_YES,295,160,MULTIOP_OKW,MULTIOP_OKH,
+	addMultiBut(psWScreen, FRONTEND_LOGINFORM,CON_LOGIN_YES,210,210,MULTIOP_OKW,MULTIOP_OKH,
 	            _("OK"),IMAGE_OK,IMAGE_OK,true);
 
 	// Now hide it.
