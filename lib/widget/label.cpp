@@ -51,46 +51,41 @@ W_LABEL::W_LABEL(W_LABINIT const *init)
 	{
 		sstrcpy(aText, init->pText);
 
-		// Limit the wordwrap feature to
-		// widgets using "labelDisplay" as output function.
-		if (init->pDisplay == labelDisplay)
+		iV_SetFont(FontID);
+		QStringList words = QString(init->pText).split(" ");
+		QStringList line;
+		unsigned int wsize, lsize = 0;
+		foreach(const QString &word, words)
 		{
-			iV_SetFont(FontID);
-			QStringList words = QString(init->pText).split(" ");
-			QStringList line;
-			unsigned int wsize, lsize = 0;
-			foreach(const QString &word, words)
+			wsize = iV_GetTextWidth(word.toUtf8().constData());
+			if (lsize + wsize >= width)
 			{
-				wsize = iV_GetTextWidth(word.toUtf8().constData());
-				if (lsize + wsize >= width)
+				if (line.isEmpty())
 				{
-					if (line.isEmpty())
-					{
-						// Let iv_DrawText handle to long lines.
-						lines << word;
-					}
-					else
-					{
-						// Append current line and create a new one with that word.
-						lines << line.join(" ");
-						line.clear();
-						line << word;
-						lsize = wsize;
-					}
+					// Let iv_DrawText handle to long lines.
+					lines << word;
 				}
 				else
 				{
+					// Append current line and create a new one with that word.
+					lines << line.join(" ");
+					line.clear();
 					line << word;
-					lsize += wsize;
+					lsize = wsize;
 				}
 			}
-			if (!line.isEmpty())
+			else
 			{
-				lines << line.join(" ");
+				line << word;
+				lsize += wsize;
 			}
-
-			lines = lines;
 		}
+		if (!line.isEmpty())
+		{
+			lines << line.join(" ");
+		}
+
+		lines = lines;
 	}
 }
 
@@ -127,7 +122,6 @@ void labelFree(W_LABEL *psWidget)
 
 	delete psWidget;
 }
-
 
 /* label display function */
 void labelDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
