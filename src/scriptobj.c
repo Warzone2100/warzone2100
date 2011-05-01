@@ -562,31 +562,6 @@ BOOL scrGroupObjGet(UDWORD index)
 		return false;
 	}
 
-	//fix: turn off caching, since it can screw up everything if returns outdated values
-	// recalculate the values if necessary
-/*
-	if (lgGameTime != gameTime || psScrLastGroup != psGroup)
-	{
-		lgGameTime = gameTime;
-		psScrLastGroup = psGroup;
-		lgMembers = 0;
-		lgHealth = 0;
-		lgX = lgY = 0;
-		for(psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
-		{
-			lgMembers += 1;
-			lgX += (SDWORD)psCurr->pos.x;
-			lgY += (SDWORD)psCurr->pos.y;
-			lgHealth += (SDWORD)((100 * psCurr->body)/psCurr->originalBody);
-		}
-		if (lgMembers > 0)
-		{
-			lgX = lgX / lgMembers;
-			lgY = lgY / lgMembers;
-			lgHealth = lgHealth / lgMembers;
-		}
-	}
-*/
 	switch (index)
 	{
 	case GROUPID_POSX:
@@ -798,7 +773,7 @@ BOOL scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize)
 		// just save the id
 		if (pBuffer)
 		{
-			if (psVal->v.oval == NULL)
+			if (psVal->v.oval == NULL || ((BASE_OBJECT *)psVal->v.oval)->died > 1 || !getBaseObjFromId(((BASE_OBJECT *)psVal->v.oval)->id))
 			{
 				*((UDWORD*)pBuffer) = UDWORD_MAX;
 			}
@@ -1197,26 +1172,8 @@ BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 				 *
 				 * Thus loading of these strings is practically impossible.
 				 */
-#if 0
-				const char * const str = strresGetString(psStringRes, id);
-				if (!str)
-				{
-					debug(LOG_FATAL, "Couldn't find string with id %u", id);
-					abort();
-					return false;
-				}
-
-				psVal->v.sval = strdup(str);
-				if (!psVal->v.sval)
-				{
-					debug(LOG_FATAL, "Out of memory");
-					abort();
-					return false;
-				}
-#else
 				debug(LOG_ERROR, "Incompatible savegame format version %u, should be at least version 4", (unsigned int)version);
 				return false;
-#endif
 			}
 		}
 		else
