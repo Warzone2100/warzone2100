@@ -871,8 +871,6 @@ BASE_OBJECT *getBaseObjFromId(UDWORD id)
 			}
 		}
 	}
-	ASSERT(!"couldn't find a BASE_OBJ with ID", "getBaseObjFromId() failed for id %d", id);
-
 	return NULL;
 }
 

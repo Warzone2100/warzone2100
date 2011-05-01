@@ -740,9 +740,6 @@ BOOL scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize)
 	RESEARCH	*psResearch;
 	char		*pPos;
 	DROID		*psCDroid;
-#ifdef _DEBUG
-	BASE_OBJECT	*psObj;
-#endif
 
 	switch (psVal->type)
 	{
@@ -780,12 +777,7 @@ BOOL scrValDefSave(INTERP_VAL *psVal, char *pBuffer, UDWORD *pSize)
 			else
 			{
 				*((UDWORD*)pBuffer) = ((BASE_OBJECT *)psVal->v.oval)->id;
-#ifdef _DEBUG
-				psObj = getBaseObjFromId(((BASE_OBJECT *)psVal->v.oval)->id);
-				ASSERT( psObj == (BASE_OBJECT *)psVal->v.oval,"scrValDefSave failed to find object, continue" );
-#endif
 			}
-
 			endian_udword((UDWORD*)pBuffer);
 		}
 		*pSize = sizeof(UDWORD);
@@ -1346,14 +1338,12 @@ BOOL scrValDefLoad(SDWORD version, INTERP_VAL *psVal, char *pBuffer, UDWORD size
 				psCDroid = (DROID *)getBaseObjFromId(id);
 				if (!psCDroid)
 				{
-					debug( LOG_FATAL, "scrValDefLoad: couldn't find object id %d", id );
-					abort();
+					debug(LOG_INFO, "Could not find object id %d", id);
 				}
 				else
 				{
 					grpJoin((DROID_GROUP*)(psVal->v.oval), psCDroid);
 				}
-
 				pPos += sizeof(UDWORD);
 				members -= 1;
 			}
