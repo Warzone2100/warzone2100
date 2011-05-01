@@ -155,8 +155,8 @@ static bool allowChangePosition = true;
 static char tooltipbuffer[256] ={'\0'};
 
 static bool					loginDone	= false;
-static std::string			lobbyUser;
-static std::string			lobbyPass;
+static QString				lobbyUser;
+static QString				lobbyPass;
 /// end of globals.
 // ////////////////////////////////////////////////////////////////////////////
 // Function protos
@@ -1230,10 +1230,11 @@ void startGameFind(void)
 	EnablePasswordPrompt = false;
 
 	// Fetch games if we are authenticated.
-	NETfindGame();
-	if (lobbyclient.isAuthenticated() == true)
+	if (lobbyclient.hasAuthData() == true
+		|| lobbyclient.useAuth() == false)
 	{
 		loginDone = true;
+		NETfindGame();
 		addGames();
 	}
 	else
@@ -1280,7 +1281,7 @@ void startGameFind(void)
 	sLoginUserEdInit.y = 55;
 	sLoginUserEdInit.width = 280;
 	sLoginUserEdInit.height = 20;
-	sLoginUserEdInit.pText = lobbyUser.c_str();
+	sLoginUserEdInit.pText = lobbyUser.toUtf8().constData();
 	sLoginUserEdInit.pBoxDisplay = displayPasswordEditBox;
 	widgAddEditBox(psWScreen, &sLoginUserEdInit);
 

@@ -17,9 +17,11 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
+#include <QtCore/QtEndian>
+#include <QtCore/QFile>
 
-#include "lib/framework/frame.h"
 #include "netlobby.h"
+#include "lib/framework/frame.h"
 
 namespace Lobby
 {
@@ -31,6 +33,8 @@ namespace Lobby
 		lastError_.code = NO_ERROR;
 
 		isAuthenticated_ = false;
+		useSSL_ = false;
+		useAuth_ = false;
 	}
 
 	void Client::stop()
@@ -43,6 +47,8 @@ namespace Lobby
 
 		// and disconnect.
 		disconnect();
+
+		delete socket_;
 	}
 
 	RETURN_CODES Client::addGame(char** result, const uint32_t port, const uint32_t maxPlayers,
@@ -318,7 +324,29 @@ namespace Lobby
 
 	inline bool Client::isConnected()
 	{
-		return socket_.state() == QAbstractSocket::ConnectedState;
+		return (socket_ && socket_->state() == QAbstractSocket::ConnectedState);
+	}
+
+	Client& Client::addCACertificate(const QString& path)
+	{
+		QFile cafile(path);
+		if (!cafile.open(QIODevice::ReadOnly | QIODevice::Text))
+		{
+			debug(LOG_ERROR, "Cannot open the CA certificate %s!", path.toUtf8().constData());
+			return *this;
+		}
+
+		QSslCertificate certificate(&cafile);
+		if (!certificate.isValid())
+		{
+			debug(LOG_ERROR, "Failed to load the CA certificate %s!", path.toUtf8().constData());
+			return *this;
+		}
+		cafile.close();
+
+		cacerts_.append(certificate);
+
+		return *this;
 	}
 
 	RETURN_CODES Client::connect()
@@ -332,12 +360,34 @@ namespace Lobby
 
 		callId_ = 0;
 
+#if defined(NO_SSL)
+		socket_ = new QTcpSocket();
+		socket_->connectToHost(host_, port_);
+#else
+		socket_ = new QSslSocket();
 		// Connect
-		socket_.connectToHost(host_, port_);
-		if (!socket_.waitForConnected())
+		if (useSSL_ == false)
 		{
-			debug(LOG_ERROR, "Cannot connect masterserver \"[%s]:%d\": %s.",
-				  host_.toUtf8().constData(), port_, socket_.errorString().toUtf8().constData());
+			debug(LOG_LOBBY, "Connecting to \"[%s]:%d\".", host_.toUtf8().constData(), port_);
+			socket_->connectToHost(host_, port_);
+		}
+		else
+		{
+			debug(LOG_LOBBY, "Connecting to \"[%s]:%d\" with SSL enabled.", host_.toUtf8().constData(), port_);
+			socket_->addCaCertificates(cacerts_);
+			socket_->connectToHostEncrypted(host_, port_);
+		}
+#endif
+
+#if defined(NO_SSL)
+		if (!socket_->waitForConnected())
+		{
+#else
+		if (!socket_->waitForEncrypted())
+		{
+#endif
+			debug(LOG_ERROR, "Cannot connect to lobby \"[%s]:%d\": %s.",
+				  host_.toUtf8().constData(), port_, socket_->errorString().toUtf8().constData());
 			return setError_(TRANSPORT_ERROR, "");
 		}
 
@@ -349,10 +399,10 @@ namespace Lobby
 		version.append((char *)buf, sizeof(buf));
 
 		// Send Version command
-		if (socket_.write(version) == -1)
+		if (socket_->write(version) == -1)
 		{
-			debug(LOG_ERROR, "Cannot send version string to masterserver \"%s:%d\": %s",
-				  host_.toUtf8().constData(), port_, socket_.errorString().toUtf8().constData());
+			debug(LOG_ERROR, "Cannot send version string to lobby \"%s:%d\": %s",
+				  host_.toUtf8().constData(), port_, socket_->errorString().toUtf8().constData());
 			return setError_(TRANSPORT_ERROR, "");
 		}
 
@@ -360,7 +410,7 @@ namespace Lobby
 		return login("");
 	}
 
-	RETURN_CODES Client::login(const std::string& password)
+	RETURN_CODES Client::login(const QString& password)
 	{
 		bson kwargs[1];
 		bson_buffer buffer[1];
@@ -370,24 +420,29 @@ namespace Lobby
 		{
 			return NO_ERROR;
 		}
+		else if (useAuth_ == false)
+		{
+			debug(LOG_LOBBY, "Authentication is disabled.");
+			return NO_ERROR;
+		}
 
 		bson_buffer_init(buffer);
-		bson_append_string(buffer, "username", user_.c_str());
+		bson_append_string(buffer, "username", user_.toUtf8().constData());
 
-		if (!token_.empty())
+		if (!token_.isEmpty())
 		{
-			bson_append_string(buffer, "token", token_.c_str());
+			bson_append_string(buffer, "token", token_.toUtf8().constData());
 		}
-		else if (!password.empty())
+		else if (!password.isEmpty())
 		{
 			token_.clear();
-			bson_append_string(buffer, "password", password.c_str());
+			bson_append_string(buffer, "password", password.toUtf8().constData());
 		}
 		else
 		{
 			bson_buffer_destroy(buffer);
 
-			debug(LOG_INFO, "Not trying to login no password/token supplied.");
+			debug(LOG_LOBBY, "Not trying to login no password/token supplied.");
 
 			// Do not return an error for internal use.
 			return NO_ERROR;
@@ -428,14 +483,14 @@ namespace Lobby
 			}
 		}
 
-		if (token_.empty() || session_.empty())
+		if (token_.isEmpty() || session_.isEmpty())
 		{
 			debug(LOG_LOBBY, "Login failed!");
 			freeCallResult_();
 			return setError_(INVALID_DATA, _("Received invalid login data."));
 		}
 
-		debug(LOG_LOBBY, "Received Session \"%s\"", session_.c_str());
+		debug(LOG_LOBBY, "Received Session \"%s\"", session_.toUtf8().constData());
 
 		isAuthenticated_ = true;
 
@@ -450,7 +505,7 @@ namespace Lobby
 			return true;
 		}
 
-		socket_.close();
+		socket_->close();
 
 		// Rest call id.
 		callId_ = 0;
@@ -470,15 +525,15 @@ namespace Lobby
 		bson bson[1];
 		bson_buffer buffer[1];
 
-		// Connect to the masterserver
-		if (connect() != NO_ERROR)
+		// Connect to the lobby
+		if (isConnected() != true && connect() != NO_ERROR)
 		{
 			return lastError_.code;
 		}
 
 		callId_ += 1;
 
-		debug(LOG_LOBBY, "Calling \"%s\" on the mastserver", command);
+		debug(LOG_LOBBY, "Calling \"%s\" on the lobby", command);
 
 		bson_buffer_init(buffer);
 		bson_append_start_array(buffer, "call");
@@ -524,35 +579,35 @@ namespace Lobby
 		out.writeBytes(bson->data, bson_size(bson));
 		bson_destroy(bson);
 
-		if (socket_.write(block) == -1)
+		if (socket_->write(block) == -1)
 		{
-			debug(LOG_ERROR, "Failed sending command \"%s\" to the masterserver: %s.",
-					command, socket_.errorString().toUtf8().constData());
-			return setError_(TRANSPORT_ERROR, _("Failed to communicate with the masterserver."));
+			debug(LOG_ERROR, "Failed sending command \"%s\" to the lobby: %s.",
+					command, socket_->errorString().toUtf8().constData());
+			return setError_(TRANSPORT_ERROR, _("Failed to communicate with the lobby."));
 		}
 
 		quint32 blockSize;
-		QDataStream in(&socket_);
+		QDataStream in(socket_);
 		in.setVersion(QDataStream::Qt_4_0);
 		in.setByteOrder(QDataStream::BigEndian);
-		while (socket_.bytesAvailable() < sizeof(quint16))
+		while (socket_->bytesAvailable() < sizeof(quint16))
 		{
-			if (!socket_.waitForReadyRead())
+			if (!socket_->waitForReadyRead())
 			{
-				debug(LOG_ERROR, "Failed reading the results size for \"%s\" from the masterserver: %s.",
-						command, socket_.errorString().toUtf8().constData());
-				return setError_(TRANSPORT_ERROR, _("Failed to communicate with the masterserver."));
+				debug(LOG_ERROR, "Failed reading the results size for \"%s\" from the lobby: %s.",
+						command, socket_->errorString().toUtf8().constData());
+				return setError_(TRANSPORT_ERROR, _("Failed to communicate with the lobby."));
 			}
 
 			in >> blockSize;
 
-			while (socket_.bytesAvailable() < blockSize)
+			while (socket_->bytesAvailable() < blockSize)
 			{
-				if (!socket_.waitForReadyRead())
+				if (!socket_->waitForReadyRead())
 				{
-					debug(LOG_ERROR, "Failed reading the result for \"%s\" from the masterserver: %s.",
-							command, socket_.errorString().toUtf8().constData());
-					return setError_(TRANSPORT_ERROR, _("Failed to communicate with the masterserver."));
+					debug(LOG_ERROR, "Failed reading the result for \"%s\" from the lobby: %s.",
+							command, socket_->errorString().toUtf8().constData());
+					return setError_(TRANSPORT_ERROR, _("Failed to communicate with the lobby."));
 				}
 			}
 		}
@@ -568,7 +623,7 @@ namespace Lobby
 			debug(LOG_ERROR, "Received invalid bson data (no array first): %d.", bson_iterator_type(&it));
 
 			delete callResult_.buffer;
-			return setError_(INVALID_DATA, _("Failed to communicate with the masterserver."));
+			return setError_(INVALID_DATA, _("Failed to communicate with the lobby."));
 		}
 		bson_iterator_init(&it, bson_iterator_value(&it));
 		bson_iterator_next(&it);
@@ -578,7 +633,7 @@ namespace Lobby
 			debug(LOG_ERROR, "Received invalid bson data (no int first): %d.", bson_iterator_type(&it));
 
 			delete callResult_.buffer;
-			return setError_(INVALID_DATA, _("Failed to communicate with the masterserver."));
+			return setError_(INVALID_DATA, _("Failed to communicate with the lobby."));
 		}
 
 		callResult_.code = (RETURN_CODES)bson_iterator_int(&it);
@@ -613,7 +668,7 @@ namespace Lobby
 		   lastError_.code = code;
 
 		   va_start(ap, message);
-			   lastError_.message.sprintf(message, ap);
+			   lastError_.message.vsprintf(message, ap);
 		   va_end(ap);
 
 		   return code;

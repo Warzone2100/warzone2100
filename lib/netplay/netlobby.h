@@ -21,10 +21,14 @@
 #ifndef _netlobby_h
 #define _netlobby_h
 
-#include <vector>
-#include <string>
+#if defined(NO_SSL)
+	#include <QtNetwork/QTcpSocket>
+#else
+	#include <QtNetwork/QSslSocket>
+#endif
 
-#include <QtNetwork>
+#include <vector>
+
 #include "bson/bson.h"
 
 namespace Lobby
@@ -103,7 +107,7 @@ namespace Lobby
 			RETURN_CODES connect();
 			bool disconnect();
 			bool isConnected();
-			RETURN_CODES login(const std::string& password);
+			RETURN_CODES login(const QString& password);
 
 			RETURN_CODES addGame(char** result, const uint32_t port, const uint32_t maxPlayers,
 								const char* description, const char* versionstring,
@@ -117,6 +121,27 @@ namespace Lobby
 			RETURN_CODES updatePlayer(const unsigned int index, const char* name);
 			RETURN_CODES listGames(const int maxGames);
 
+			Client& addCACertificate(const QString& path);
+
+			bool useSSL() { return useSSL_; }
+			bool useSSL(bool useSSL)
+			{
+#if defined(NO_SSL)
+				if (useSSL == true)
+				{
+					debug(LOG_ERROR, "Cannot use SSL as its not compiled in.");
+
+				}
+				return false;
+#else
+				useSSL_ = useSSL;
+				useAuth_ = useSSL;
+				return useSSL_;
+#endif
+			}
+
+			bool useAuth() { return useAuth_; }
+
 			Client& setHost(const QString& host) { host_ = host; return *this; }
 			QString getHost() const { return host_; }
 
@@ -124,14 +149,15 @@ namespace Lobby
 			quint16 getPort() { return port_; }
 
 			bool isAuthenticated() { return isAuthenticated_; }
+			bool hasAuthData() { return (!user_.isEmpty() && !token_.isEmpty()); }
 
-			Client& setUser(const std::string& user) { user_ = user; return *this; }
-			std::string getUser() const { return user_; }
+			Client& setUser(const QString& user) { user_ = user; return *this; }
+			QString getUser() const { return user_; }
 
-			Client& setToken(const std::string& token) { token_ = token; return *this; }
-			std::string getToken() { return token_; }
+			Client& setToken(const QString& token) { token_ = token; return *this; }
+			QString getToken() { return token_; }
 
-			std::string getSession() const { return session_; }
+			QString getSession() const { return session_; }
 
 			ERROR* getError() { return &lastError_; }
 
@@ -146,14 +172,22 @@ namespace Lobby
 
 			uint32_t callId_;
 
+			bool useSSL_;
+			QList<QSslCertificate> cacerts_;
+
+			bool useAuth_;
 			QString host_;
 			quint16 port_;
 
-			std::string user_;
-			std::string token_;
-			std::string session_;
+			QString user_;
+			QString token_;
+			QString session_;
 
-			QTcpSocket socket_;
+#if defined(NO_SSL)
+			QTcpSocket *socket_;
+#else
+			QSslSocket *socket_;
+#endif
 
 			bool isAuthenticated_;
 

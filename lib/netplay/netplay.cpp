@@ -2215,10 +2215,10 @@ bool NETjoinGame(const char* host, uint32_t port, const char* playername)
 
 	char *username = (char *)malloc(Lobby::USERNAME_SIZE);
 	char *session = (char *)malloc(Lobby::SESSION_SIZE);
-	strlcpy(username, lobbyclient.getUser().c_str(), Lobby::USERNAME_SIZE);
-	strlcpy(session, lobbyclient.getSession().c_str(), Lobby::SESSION_SIZE);
+	strlcpy(username, lobbyclient.getUser().toUtf8().constData(), Lobby::USERNAME_SIZE);
+	strlcpy(session, lobbyclient.getSession().toUtf8().constData(), Lobby::SESSION_SIZE);
 
-	debug(LOG_NET, "Sending username \"%s\", session \"%s\"", username, lobbyclient.getSession().c_str());
+	debug(LOG_NET, "Sending username \"%s\", session \"%s\"", username, lobbyclient.getSession().toUtf8().constData());
 
 	// Send a join message to the host
 	NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_JOIN);

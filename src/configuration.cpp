@@ -46,7 +46,6 @@
 // ////////////////////////////////////////////////////////////////////////////
 
 #define DEFAULTSCROLL	1000
-#define MASTERSERVERPORT	9990
 #define GAMESERVERPORT		2100
 
 static const char *fileName = "config";
@@ -77,8 +76,6 @@ bool loadConfig()
 	setMiddleClickRotate(ini.value("MiddleClickRotate", false).toBool());
 	rotateRadar = ini.value("rotateRadar", true).toBool();
 	war_SetPauseOnFocusLoss(ini.value("PauseOnFocusLoss", false).toBool());
-	lobbyclient.setHost(ini.value("masterserver_name", "lobby.wz2100.net").toString());
-	lobbyclient.setPort(ini.value("masterserver_port", MASTERSERVERPORT).toInt());
 	iV_font(ini.value("fontname", "DejaVu Sans").toString().toUtf8().constData(),
 		ini.value("fontface", "Book").toString().toUtf8().constData(),
 		ini.value("fontfacebold", "Bold").toString().toUtf8().constData());
@@ -134,13 +131,34 @@ bool loadConfig()
 	if (ini.contains("bpp")) pie_SetVideoBufferDepth(ini.value("bpp").toInt());
 	setFramerateLimit(ini.value("framerate", 60).toInt());
 
-	if (ini.contains("lobby_user"))
+	/**
+	 * Lobby
+	 */
+	lobbyclient.setHost(ini.value("lobby_host", "lobby.wz2100.net").toString());
+	if ((lobbyclient.getHost() == "lobby.wz2100.net" || lobbyclient.getHost() == "localhost")
+		&& ini.contains("lobby_ssl")
+		&& ini.value("lobby_ssl", true).toBool() == true)
 	{
-		lobbyclient.setUser(ini.value("lobby_user").toString().toUtf8().constData());
+		// FIXME: need a better place for this.
+		QDir cacert_path(PHYSFS_getBaseDir());
+		cacert_path.cdUp();
+		cacert_path.cd("data");
+		lobbyclient.addCACertificate(cacert_path.absoluteFilePath("cacert.org.pem"));
+
+		lobbyclient.useSSL(true);
+		lobbyclient.setPort(ini.value("lobby_port", 9994).toInt());
+		lobbyclient.setUser(ini.value("lobby_user", "").toString());
+		lobbyclient.setToken(ini.value("lobby_token", "").toString());
 	}
-	if (ini.contains("lobby_token"))
+	else if (ini.value("lobby_ssl", true).toBool() == true)
 	{
-		lobbyclient.setToken(ini.value("lobby_token").toString().toUtf8().constData());
+		lobbyclient.useSSL(true);
+		lobbyclient.setPort(ini.value("lobby_port", 9994).toInt());
+	}
+	else
+	{
+		lobbyclient.useSSL(false);
+		lobbyclient.setPort(ini.value("lobby_port", 9990).toInt());
 	}
 
 	return true;
@@ -196,8 +214,6 @@ bool saveConfig()
 	ini.setValue("UPnP", (SDWORD)NetPlay.isUPNP);
 	ini.setValue("rotateRadar", rotateRadar);
 	ini.setValue("PauseOnFocusLoss", war_GetPauseOnFocusLoss());
-	ini.setValue("masterserver_name", lobbyclient.getHost());
-	ini.setValue("masterserver_port", lobbyclient.getPort());
 	ini.setValue("gameserver_port", NETgetGameserverPort());
 	if (!bMultiPlayer)
 	{
@@ -221,8 +237,14 @@ bool saveConfig()
 		ini.setValue("playerName", (char*)sPlayer);		// player name
 	}
 
-	ini.setValue("lobby_user", lobbyclient.getUser().c_str());
-	ini.setValue("lobby_token", lobbyclient.getToken().c_str());
+	/**
+	 * Lobby
+	 */
+	ini.setValue("lobby_host", lobbyclient.getHost());
+	ini.setValue("lobby_ssl", lobbyclient.useSSL());
+	ini.setValue("lobby_port", lobbyclient.getPort());
+	ini.setValue("lobby_user", lobbyclient.getUser());
+	ini.setValue("lobby_token", lobbyclient.getToken());
 
 	ini.sync();
 	return true;

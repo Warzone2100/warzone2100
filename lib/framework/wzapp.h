@@ -21,6 +21,7 @@
 #define WZAPP_H
 
 #include <QtGui/QApplication>
+#include <QtCore/QDir>
 #include <QtGui/QImageReader>
 #include <QtCore/QTimer>
 #include <QtOpenGL/QGLWidget>
