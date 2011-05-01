@@ -6,13 +6,13 @@
 # Dennis Schridde <devurandom@gna.org>, 2007.
 # Martin Koller <koller@etm.at>, 2007.
 # Martin Koller <m.koller@surfeu.at>, 2007.
-# Steven \"Kreuvf\" Koenig <kreuvf@gna.org>, 2008.
+# Steven \"Kreuvf\" Koenig <kreuvf@wz2100.net>, 2008-2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-05-01 14:54+0200\n"
-"PO-Revision-Date: 2010-06-05 07:09+0100\n"
+"POT-Creation-Date: 2011-05-01 16:35+0200\n"
+"PO-Revision-Date: 2011-05-01 15:33+0100\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
 "Language: \n"
@@ -5982,9 +5982,8 @@ msgstr "Pick-Up"
 
 #: data/base/messages/strings/names.txt:207
 #: data/mp/messages/strings/names.txt:210
-#, fuzzy
 msgid "Cannon Fire Truck"
-msgstr "Feuerlaster"
+msgstr "Feuerwehrfahrzeug mit Geschütz"
 
 #: data/base/messages/strings/names.txt:208
 #: data/mp/messages/strings/names.txt:211
@@ -10731,15 +10730,13 @@ msgstr "VTOL-Plasmitbomben-Abwurfschacht"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1962
 #: data/mp/messages/strings/names.txt:675
-#, fuzzy
 msgid "Super Transport"
-msgstr "Transporter"
+msgstr "Supertransporter"
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1963
 #: data/mp/messages/strings/names.txt:676
-#, fuzzy
 msgid "Super Transport Body"
-msgstr "Transporterrumpf"
+msgstr "Supertransporter-Rumpf"
 
 #: data/mp/messages/resmessages12.rmsg:58
 msgid "Construction speed +10%"
@@ -10807,9 +10804,8 @@ msgid "Armour +35%, Body Points +30%"
 msgstr "Panzerung +35%, Rumpfpunkte +30%"
 
 #: data/mp/messages/resmessages1.rmsg:122
-#, fuzzy
 msgid "Armored guard tower with Mini-Rocket Pod"
-msgstr "Gepanzerter Wachturm mit Miniraketen"
+msgstr "Gepanzerter Wachturm mit Miniraketenhalter"
 
 #: data/mp/messages/resmessages1.rmsg:148
 msgid "Armored guard tower with Lancer AT rocket"
@@ -10980,9 +10976,8 @@ msgid "Howitzer reload time -10%"
 msgstr "Haubitzennachladezeit -10%"
 
 #: data/mp/messages/resmessages2.rmsg:928
-#, fuzzy
 msgid "High Explosive Anti-Tank warheads"
-msgstr "Hochexplosiver Antipanzer-Sprengkopf"
+msgstr "Hochexplosive Antipanzer-Sprengköpfe"
 
 #: data/mp/messages/resmessages3.rmsg:6
 msgid "Thermal Armor +35%"
@@ -11086,9 +11081,8 @@ msgid "Requires heavy VTOL factory to produce"
 msgstr "Benötigt komplett ausgebaute VTOL-Fabrik zur Produktion"
 
 #: data/mp/messages/resmessagesall.rmsg:239
-#, fuzzy
 msgid "Super Transport Available"
-msgstr "Cyborgtransporter verfügbar"
+msgstr "Supertransporter verfügbar"
 
 #: data/mp/messages/resmessagesall.rmsg:254
 msgid "Incendiary howitzer emplacement"
@@ -11393,20 +11387,17 @@ msgid "Mini-Rocket Array Cobra Half-tracks"
 msgstr "Miniraketen-Anordnung Cobra Halbketten"
 
 #: data/mp/messages/strings/names.txt:351
-#, fuzzy
 msgid "Jammer Tower"
-msgstr "Turm mit Flammenwerfer"
+msgstr "Turm mit Störsender"
 
 # Fachbegriff ist wohl Verwürfler im Deutschen, aber damit kann kaum jemand etwas anfangen -Kreuvf
 #: data/mp/messages/strings/names.txt:352
-#, fuzzy
 msgid "Jammer Turret"
-msgstr "Störturm"
+msgstr "Aufbau mit Störsender"
 
 #: data/mp/messages/strings/names.txt:353
-#, fuzzy
 msgid "Electronic Countermeasures"
-msgstr "Elektroniklabor"
+msgstr "Elektronische Gegenmaßnahmen"
 
 #: data/mp/messages/strings/names.txt:363
 #: data/mp/messages/strings/names.txt:1703
@@ -11444,7 +11435,7 @@ msgstr "Luftabwehrstellung mit Tornado"
 #: data/mp/messages/strings/names.txt:721
 #, fuzzy
 msgid "AA Flak Cannon Emplacement"
-msgstr "Stellung mit Plasmakanone"
+msgstr "Stellung mit Luftabwehrgeschütz"
 
 #: data/mp/messages/strings/names.txt:465
 #: data/mp/messages/strings/names.txt:785
@@ -11470,12 +11461,12 @@ msgstr "Miniraketen-Anordnung"
 #: data/mp/messages/strings/names.txt:992
 #, fuzzy
 msgid "AA Flak Cannon"
-msgstr "Plasmakanone"
+msgstr "Luftabwehrgeschütz"
 
 #: data/mp/messages/strings/names.txt:545
 #, fuzzy
 msgid "VTOL Flak Cannon"
-msgstr "VTOL-Geschütz"
+msgstr "VTOL-Luftabwehrgeschütz"
 
 #: data/mp/messages/strings/names.txt:558
 #: data/mp/messages/strings/names.txt:1693
@@ -11628,22 +11619,22 @@ msgstr "Computer für Zielvorhersage von Magnetgeschossen"
 #: data/mp/messages/strings/names.txt:1164
 #, fuzzy
 msgid "Stabilized Rockets"
-msgstr "Stabilisierte Miniraketen"
+msgstr "Stabilisierte Raketen"
 
 #: data/mp/messages/strings/names.txt:1168
 #, fuzzy
 msgid "HE Rockets"
-msgstr "Hochexplosive Miniraketen"
+msgstr "Hochexplosive Raketen"
 
 #: data/mp/messages/strings/names.txt:1169
 #, fuzzy
 msgid "HE Rockets Mk2"
-msgstr "Hochexplosive Miniraketen Mk2"
+msgstr "Hochexplosive Raketen Mk2"
 
 #: data/mp/messages/strings/names.txt:1170
 #, fuzzy
 msgid "HE Rockets Mk3"
-msgstr "Hochexplosive Miniraketen Mk3"
+msgstr "Hochexplosive Raketen Mk3"
 
 #: data/mp/messages/strings/names.txt:1383
 msgid "Assault Gun Tower"
@@ -11660,7 +11651,7 @@ msgstr "Hochgeschwindigkeitsgeschütz Python Ketten"
 #: data/mp/messages/strings/names.txt:1474
 #, fuzzy
 msgid "AA Flak Cannon Python Half-tracks"
-msgstr "Schweres Geschütz Python Ketten"
+msgstr "Luftabwehrgeschütz Python Ketten"
 
 #: data/mp/messages/strings/names.txt:1512
 msgid "Bunker Buster Cobra Hover"
@@ -11841,21 +11832,23 @@ msgstr "Stellung mit Plasmakanone"
 #: data/mp/messages/strings/names.txt:1721
 #, fuzzy
 msgid "Sunburst AA Rocket Array"
-msgstr "Miniraketen-Anordnung"
+msgstr "Anordnung mit Sunburst-Luftabwehrrakete"
 
 #: data/mp/messages/strings/names.txt:1722
+#, fuzzy
 msgid "Sunburst AA"
-msgstr ""
+msgstr "Sunburst-Luftabwehrrakete"
 
 #: data/mp/messages/strings/names.txt:1723
+#, fuzzy
 msgid "VTOL Sunburst AA"
-msgstr ""
+msgstr "VTOL-Sunburst-Luftabwehrrakete"
 
 #: data/mp/messages/strings/names.txt:1724
 #: data/mp/messages/strings/names.txt:1725
 #, fuzzy
 msgid "Sunburst AA Site"
-msgstr "Luftabwehrstellung mit Hurricane FLAK"
+msgstr "Luftabwehrstellung mit Sunburst"
 
 #: data/mp/messages/strings/names.txt:1727
 #: data/mp/messages/strings/names.txt:1728
@@ -11982,7 +11975,7 @@ msgstr "Aufhängung mit Whirlwind"
 #: data/mp/messages/strings/names.txt:1795
 #, fuzzy
 msgid "AA Flak Cannon Hardpoint"
-msgstr "Aufhängung mit Sturmgeschütz"
+msgstr "Aufhängung mit Luftabwehrgeschütz"
 
 #: data/mp/messages/strings/names.txt:1796
 #: data/mp/messages/strings/names.txt:1797
@@ -12223,9 +12216,8 @@ msgid "go directly to host screen"
 msgstr "Direkt zum Spielleiterschirm"
 
 #: src/configuration.cpp:91
-#, fuzzy
 msgid "My Game"
-msgstr "Spiel beenden"
+msgstr "Mein Spiel"
 
 #: src/configuration.cpp:92
 #: src/multistat.cpp:124
@@ -12389,7 +12381,7 @@ msgstr "Warte auf andere Spieler"
 
 #: src/display3d.cpp:600
 msgid "Out of sync"
-msgstr ""
+msgstr "Synchronisierung verloren"
 
 #: src/display.cpp:1649
 msgid "Cannot Build. Oil Resource Burning."
@@ -12480,14 +12472,14 @@ msgid "Hero"
 msgstr "Held"
 
 #: src/droid.cpp:4118
-#, c-format
+#, fuzzy, c-format
 msgid "%s wanted to give you a %s but you have too many!"
-msgstr ""
+msgstr "%s wollte Ihnen %s geben, aber Sie besitzen zu viele davon!"
 
 #: src/droid.cpp:4122
-#, c-format
+#, fuzzy, c-format
 msgid "You wanted to give %s a %s but they have too many!"
-msgstr ""
+msgstr "Sie wollen %s %s geben, aber er/sie besitzt zu viele davon!"
 
 #: src/frontend.cpp:97
 msgid "Single Player"
@@ -12775,17 +12767,17 @@ msgstr "Maustasten vertauschen"
 #: src/frontend.cpp:1061
 #, fuzzy
 msgid "Rotate Screen"
-msgstr "Nach links rotieren"
+msgstr "Bildschirm drehen"
 
 #: src/frontend.cpp:1064
 #: src/frontend.cpp:1138
 msgid "Middle Mouse"
-msgstr ""
+msgstr "Mittlere Maustaste"
 
 #: src/frontend.cpp:1068
 #: src/frontend.cpp:1133
 msgid "Right Mouse"
-msgstr ""
+msgstr "Rechte Maustaste"
 
 #: src/frontend.cpp:1072
 msgid "MOUSE OPTIONS"
@@ -12830,19 +12822,21 @@ msgid "Unit Colour"
 msgstr "Einheitenfarbe"
 
 #: src/frontend.cpp:1218
+#, fuzzy
 msgid "Radar"
-msgstr ""
+msgstr "Radar"
 
 #: src/frontend.cpp:1219
 #: src/frontend.cpp:1268
 #, fuzzy
 msgid "Rotating"
-msgstr "Nach rechts rotieren"
+msgstr "Drehend"
 
 #: src/frontend.cpp:1219
 #: src/frontend.cpp:1268
+#, fuzzy
 msgid "Fixed"
-msgstr ""
+msgstr "Fest"
 
 #: src/frontend.cpp:1225
 #: src/frontend.cpp:1245
@@ -12884,9 +12878,9 @@ msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "Spieler %u erschummelt (Debugmenü) sich eine neue Einheit: %s."
 
 #: src/hci.cpp:2025
-#, fuzzy, c-format
+#, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
-msgstr "Spieler %u erschummelt (Debugmenü) sich eine neue Einheit: %s."
+msgstr "Spieler %u erschummelt (Debugmenü) sich eine neue Einheit."
 
 # Commander kann als Eigenname im Deutschen allerdings mit deutschem Plural stehen bleiben -Kreuvf
 #: src/hci.cpp:3296
@@ -12920,36 +12914,39 @@ msgid "Power"
 msgstr "Energie"
 
 #: src/hci.cpp:3523
+#, fuzzy
 msgid "Map:"
-msgstr ""
+msgstr "Karte:"
 
 #: src/hci.cpp:3536
 #, fuzzy
 msgid "Load"
-msgstr "Spielstand laden"
+msgstr "Laden"
 
 #: src/hci.cpp:3537
 #, fuzzy
 msgid "Load Map File"
-msgstr "Spielstand laden"
+msgstr "Kartendatei laden"
 
 #: src/hci.cpp:3544
 #, fuzzy
 msgid "Save"
-msgstr "Spiel speichern"
+msgstr "Speichern"
 
 #: src/hci.cpp:3545
 #, fuzzy
 msgid "Save Map File"
-msgstr "Spiel speichern"
+msgstr "Kartendatei speichern"
 
 #: src/hci.cpp:3553
+#, fuzzy
 msgid "New"
-msgstr ""
+msgstr "Neu"
 
 #: src/hci.cpp:3554
+#, fuzzy
 msgid "New Blank Map"
-msgstr ""
+msgstr "Neue leere Karte"
 
 #: src/hci.cpp:3590
 msgid "Tile"
@@ -12985,8 +12982,9 @@ msgid "Place Features on map"
 msgstr "Feature auf der Karte platzieren"
 
 #: src/hci.cpp:3629
+#, fuzzy
 msgid "Pause"
-msgstr ""
+msgstr "Pause"
 
 #: src/hci.cpp:3630
 msgid "Pause or unpause the game"
@@ -12997,13 +12995,14 @@ msgid "Align height of all map objects"
 msgstr "Höhe aller Kartenobjekte abgleichen"
 
 #: src/hci.cpp:3654
+#, fuzzy
 msgid "Edit"
-msgstr ""
+msgstr "Bearbeiten"
 
 #: src/hci.cpp:3655
 #, fuzzy
 msgid "Start Edit Mode"
-msgstr "Ohne Basen starten"
+msgstr "Bearbeitungsmodus starten"
 
 #: src/hci.cpp:3669
 #: src/ingameop.cpp:112
@@ -13019,7 +13018,7 @@ msgstr "Spiel verlassen"
 #: src/hci.cpp:3696
 #, fuzzy
 msgid "Current Player:"
-msgstr "Mehrspieler"
+msgstr "Aktueller Spieler:"
 
 #: src/hci.cpp:3987
 #: src/intdisplay.cpp:276
@@ -13043,9 +13042,8 @@ msgid "Tab Scroll right"
 msgstr "Reiter nach rechts durchschalten"
 
 #: src/hci.cpp:5197
-#, fuzzy
 msgid "Ally progress"
-msgstr "Fortschrittsbalken"
+msgstr "Fortschritt des Verbündeten"
 
 #: src/ingameop.cpp:111
 #: src/ingameop.cpp:195
@@ -13407,7 +13405,7 @@ msgstr "Debug-Menü ist offen"
 #: src/keybind.cpp:1600
 #, fuzzy
 msgid "Unable to locate any oil derricks!"
-msgstr "Kann keinen LKW finden!"
+msgstr "Kann keine Ölbohrtürme finden!"
 
 # Let it snow, let it snow, let it snow..
 # Von daher sollte das unübersetzt bleiben -Kreuvf
@@ -13579,7 +13577,7 @@ msgstr "Zeige Ort der letzten Meldung"
 #: src/keymap.cpp:307
 #, fuzzy
 msgid "Toggle Sensor display"
-msgstr "Konsolenanzeige umschalten"
+msgstr "Sensoranzeige umschalten"
 
 #: src/keymap.cpp:311
 msgid "Assign Group 0"
@@ -13834,22 +13832,24 @@ msgid "Send Text Message"
 msgstr "Sende Textnachricht"
 
 #: src/keymap.cpp:399
+#, fuzzy
 msgid "Drop a beacon"
-msgstr ""
+msgstr "Setze ein Signal"
 
 #: src/keymap.cpp:401
 #, fuzzy
 msgid "Sensor display On"
-msgstr "Sensorreichweite"
+msgstr "Sensoranzeige ein"
 
 #: src/keymap.cpp:402
+#, fuzzy
 msgid "Sensor display Off"
-msgstr ""
+msgstr "Sensoranzeige aus"
 
 #: src/keymap.cpp:403
 #, fuzzy
 msgid "Toggles shadows"
-msgstr "Schatten aktivieren"
+msgstr "Schatten umschalten"
 
 #: src/keymap.cpp:404
 #, fuzzy
@@ -13859,11 +13859,12 @@ msgstr "Mauszeiger einfangen"
 #: src/keymap.cpp:405
 #, fuzzy
 msgid "Toggle radar terrain"
-msgstr "Radar umschalten"
+msgstr "Radargelände umschalten"
 
 #: src/keymap.cpp:406
+#, fuzzy
 msgid "Toggle ally-enemy radar view"
-msgstr ""
+msgstr "Freund-Feind-Radaransicht umschalten"
 
 #: src/keymap.cpp:415
 msgid "Select all Combat Units"
@@ -13902,8 +13903,9 @@ msgid "Select all Wheels"
 msgstr "Alle Radfahrzeuge auswählen"
 
 #: src/keymap.cpp:425
+#, fuzzy
 msgid "Show frame rate"
-msgstr ""
+msgstr "Zeige Bildwiederholrate"
 
 #: src/keymap.cpp:426
 msgid "Select all Similar Units"
@@ -13928,37 +13930,42 @@ msgstr "Nächste Cyborgfabrik auswählen"
 #: src/keymap.cpp:436
 #, fuzzy
 msgid "Toggle Debug Mappings"
-msgstr "Tastenzuordnung"
+msgstr "Debug-Tastaturbelegung umschalten"
 
 #: src/keymap.cpp:437
+#, fuzzy
 msgid "Toggle display of droid path"
-msgstr ""
+msgstr "Einheitenweganzeige umschalten"
 
 #: src/keymap.cpp:438
+#, fuzzy
 msgid "Toggle display of gateways"
-msgstr ""
+msgstr "Gateway-Anzeige umschalten"
 
 #: src/keymap.cpp:439
+#, fuzzy
 msgid "Show all keyboard mappings - use pause!"
-msgstr ""
+msgstr "Zeige sämtliche Tastenkombinationen - benutze Pause!"
 
 #: src/keymap.cpp:440
 #, fuzzy
 msgid "Toggle visibility"
-msgstr "Menü und Energiebalken umschalten"
+msgstr "Sichtbarkeit umschalten"
 
 #: src/keymap.cpp:441
 #, fuzzy
 msgid "Raise tile height"
-msgstr "Nach rechts rotieren"
+msgstr "Kachelhöhe anheben"
 
 #: src/keymap.cpp:442
+#, fuzzy
 msgid "Lower tile height"
-msgstr ""
+msgstr "Kachelhöhe absenken"
 
 #: src/keymap.cpp:443
+#, fuzzy
 msgid "Toggles on/off DEMO Mode"
-msgstr ""
+msgstr "DEMO-Modus umschalten"
 
 #: src/keymap.cpp:444
 #, fuzzy
@@ -13968,59 +13975,62 @@ msgstr "Beende Mission."
 #: src/keymap.cpp:445
 #, fuzzy
 msgid "Toggles All fog"
-msgstr "Bündnisstatus umschalten"
+msgstr "Sämtliche Nebel umschalten"
 
 #: src/keymap.cpp:446
+#, fuzzy
 msgid "Trigger some weather"
-msgstr ""
+msgstr "Wetter auslösen"
 
 #: src/keymap.cpp:447
+#, fuzzy
 msgid "Flip terrain triangle"
-msgstr ""
+msgstr "Drehe Geländedreieck um"
 
 #: src/keymap.cpp:448
 #, fuzzy
 msgid "Realign height of all objects on the map"
-msgstr "Höhe aller Kartenobjekte abgleichen"
+msgstr "Höhe aller Objekte auf der Karte neu ausrichten"
 
 #: src/keymap.cpp:451
 #, fuzzy
 msgid "Make all items available"
-msgstr "Alle Gegenstände wurden verfügbar gemacht"
+msgstr "Sämtliche Gegenstände verfügbar machen"
 
 #: src/keymap.cpp:452
 #, fuzzy
 msgid "Kill Selected Unit(s)"
-msgstr "Übergebe ausgewählte Einheiten"
+msgstr "Gewählte Einheit(en) vernichten"
 
 #: src/keymap.cpp:453
 #, fuzzy
 msgid "Toggle god Mode Status"
-msgstr "Bündnisstatus umschalten"
+msgstr "God-Mode-Status umschalten"
 
 #: src/keymap.cpp:454
 #, fuzzy
 msgid "Display Options Screen"
-msgstr "Zeige Spieleinstellungen"
+msgstr "Zeige Darstellungsoptionen"
 
 #: src/keymap.cpp:455
 #, fuzzy
 msgid "Complete current research"
-msgstr "Ermöglicht Erforschung von Commandersystemtürmen"
+msgstr "Erledige aktuelle Forschung"
 
 #: src/keymap.cpp:456
 #, fuzzy
 msgid "Toggle watch window"
-msgstr "Schatten aktivieren"
+msgstr "Beobachtungsfenster umschalten"
 
 #: src/keymap.cpp:457
+#, fuzzy
 msgid "Trace a game object"
-msgstr ""
+msgstr "Spielobjekt verfolgen"
 
 #: src/keymap.cpp:458
 #, fuzzy
 msgid "Toggle Driving Mode"
-msgstr "Verfolgerkamera umschalten"
+msgstr "Fahrmodus umschalten"
 
 #: src/loop.cpp:570
 #: src/loop.cpp:586
@@ -14199,17 +14209,19 @@ msgid "OK"
 msgstr "OK"
 
 #: src/multiint.cpp:1271
+#, fuzzy
 msgid "Tanks disabled!!"
-msgstr ""
+msgstr "Panzer abgeschaltet!!"
 
 #: src/multiint.cpp:1272
 #, fuzzy
 msgid "Cyborgs disabled."
-msgstr "Neuer Cyborg verfügbar"
+msgstr "Cyborgs abgeschaltet."
 
 #: src/multiint.cpp:1273
+#, fuzzy
 msgid "VTOLs disabled."
-msgstr ""
+msgstr "VTOLs abgeschaltet."
 
 #: src/multiint.cpp:1320
 #: src/multiint.cpp:1327
@@ -14312,37 +14324,37 @@ msgid "Set Structure Limits"
 msgstr "Gebäudebeschränkungen einstellen"
 
 #: src/multiint.cpp:1626
+#, fuzzy
 msgid "DIFFICULTY"
-msgstr ""
+msgstr "Schwierigkeitsgrad"
 
 #: src/multiint.cpp:1640
 msgid "Less aggressive and starts with less units"
-msgstr ""
+msgstr "Weniger aggressiv und startet mit weniger Einheiten"
 
 #: src/multiint.cpp:1641
-#, fuzzy
 msgid "Plays nice"
-msgstr "Spieler"
+msgstr "Spielt freundlich"
 
 #: src/multiint.cpp:1642
 msgid "No holds barred"
-msgstr ""
+msgstr "Alles ist erlaubt"
 
 #: src/multiint.cpp:1643
 msgid "Starts with advantages and gets twice as much oil from derricks"
-msgstr ""
+msgstr "Startet mit Vorteilen und erhält doppelt so viel Öl aus Ölbohrtürmen"
 
 #: src/multiint.cpp:1671
 msgid "CHOOSE AI"
-msgstr ""
+msgstr "WÄHLE EINE KI"
 
 #: src/multiint.cpp:1687
 msgid "Allow human players to join in this slot"
-msgstr ""
+msgstr "Erlaube menschlichen Spielern auf diesem Platz zu spielen"
 
 #: src/multiint.cpp:1695
 msgid "Leave this slot unused"
-msgstr ""
+msgstr "Lasse diesen Platz unbenutzt"
 
 #: src/multiint.cpp:2098
 msgid "Team"
@@ -14350,12 +14362,11 @@ msgstr "Gruppe"
 
 #: src/multiint.cpp:2139
 msgid "You cannot change difficulty in a challenge"
-msgstr ""
+msgstr "Sie können den Schwierigkeitsgrad bei Herausforderungen nicht ändern"
 
 #: src/multiint.cpp:2139
-#, fuzzy
 msgid "Click to change difficulty"
-msgstr "Klicken zum Setzen eines Passworts"
+msgstr "Klicken, um Schwierigkeitsgrad zu ändern"
 
 #: src/multiint.cpp:2156
 msgid "Click when ready"
@@ -14370,34 +14381,29 @@ msgid "PLAYERS"
 msgstr "SPIELER"
 
 #: src/multiint.cpp:2239
-#, fuzzy
 msgid "Click to change to this slot"
-msgstr "Klicken zum Setzen eines Passworts"
+msgstr "Klicken, um diesen Platz zu ändern"
 
-# festgelegt ungleich fest -Kreuvf
 #: src/multiint.cpp:2267
 #, fuzzy
 msgid "Choose Team"
-msgstr "Feste Teams"
+msgstr "Wähle ein Team"
 
 #: src/multiint.cpp:2297
-#, fuzzy
 msgid "Click to change player colour"
-msgstr "Radar zeigt Spielerfarben"
+msgstr "Klicken, um Spielerfarbe zu ändern"
 
 #: src/multiint.cpp:2325
-#, fuzzy
 msgid "Click to change player position"
-msgstr "Position bewachen"
+msgstr "Klicken, um Spielerposition zu ändern"
 
 #: src/multiint.cpp:2331
-#, fuzzy
 msgid "Click to change AI"
-msgstr "Klicken zum Setzen eines Passworts"
+msgstr "Klicken , um KI zu ändern"
 
 #: src/multiint.cpp:2335
 msgid "You cannot change AI in a challenge"
-msgstr ""
+msgstr "Sie können die KI bei Herausforderungen nicht ändern"
 
 #: src/multiint.cpp:2397
 msgid "CHAT"
@@ -14410,7 +14416,7 @@ msgstr "Alle Spieler benötigen dieselben Mods, um Ihrem Spiel beitreten zu kön
 #: src/multiint.cpp:2586
 #, fuzzy, c-format
 msgid "*** password [%s] is now required! ***"
-msgstr "*** Jetzt wird ein Passwort benötigt! ***"
+msgstr "*** Jetzt wird ein Passwort [%s] benötigt! ***"
 
 #: src/multiint.cpp:2594
 msgid "*** password is NOT required! ***"
@@ -14499,72 +14505,60 @@ msgid "2 players"
 msgstr "2 Spieler"
 
 #: src/multimenu.cpp:146
-#, fuzzy
 msgid "3 players"
-msgstr "2 Spieler"
+msgstr "3 Spieler"
 
 #: src/multimenu.cpp:146
 msgid "4 players"
 msgstr "4 Spieler"
 
 #: src/multimenu.cpp:146
-#, fuzzy
 msgid "5 players"
-msgstr "2 Spieler"
+msgstr "5 Spieler"
 
 #: src/multimenu.cpp:146
-#, fuzzy
 msgid "6 players"
-msgstr "2 Spieler"
+msgstr "6 Spieler"
 
 #: src/multimenu.cpp:146
-#, fuzzy
 msgid "7 players"
-msgstr "2 Spieler"
+msgstr "7 Spieler"
 
 #: src/multimenu.cpp:146
 msgid "8 players"
 msgstr "8 Spieler"
 
 #: src/multimenu.cpp:146
-#, fuzzy
 msgid "9 players"
-msgstr "2 Spieler"
+msgstr "9 Spieler"
 
 #: src/multimenu.cpp:146
-#, fuzzy
 msgid "10 players"
-msgstr "2 Spieler"
+msgstr "10 Spieler"
 
 #: src/multimenu.cpp:146
-#, fuzzy
 msgid "11 players"
-msgstr "2 Spieler"
+msgstr "11 Spieler"
 
 #: src/multimenu.cpp:146
-#, fuzzy
 msgid "12 players"
-msgstr "2 Spieler"
+msgstr "12 Spieler"
 
 #: src/multimenu.cpp:146
-#, fuzzy
 msgid "13 players"
-msgstr "2 Spieler"
+msgstr "13 Spieler"
 
 #: src/multimenu.cpp:146
-#, fuzzy
 msgid "14 players"
-msgstr "4 Spieler"
+msgstr "14 Spieler"
 
 #: src/multimenu.cpp:146
-#, fuzzy
 msgid "15 players"
-msgstr "2 Spieler"
+msgstr "15 Spieler"
 
 #: src/multimenu.cpp:146
-#, fuzzy
 msgid "16 players"
-msgstr "2 Spieler"
+msgstr "16 Spieler"
 
 #: src/multimenu.cpp:619
 msgid "Technology level 1"
@@ -14600,8 +14594,9 @@ msgid "Structs"
 msgstr "Gebäude"
 
 #: src/multimenu.cpp:1139
+#, fuzzy
 msgid "Channel"
-msgstr ""
+msgstr "Kanal"
 
 #: src/multimenu.cpp:1153
 msgid "Toggle Alliance State"
@@ -14674,39 +14669,39 @@ msgstr "Cyan"
 
 #: src/multiplay.cpp:1949
 msgid "Yellow"
-msgstr ""
+msgstr "Gelb"
 
 #: src/multiplay.cpp:1950
 msgid "Purple"
-msgstr ""
+msgstr "Lila"
 
 #: src/multiplay.cpp:1951
 msgid "White"
-msgstr ""
+msgstr "Weiß"
 
 #: src/multiplay.cpp:1952
 msgid "Bright blue"
-msgstr ""
+msgstr "Hellblau"
 
 #: src/multiplay.cpp:1953
 msgid "Neon green"
-msgstr ""
+msgstr "Neongrün"
 
 #: src/multiplay.cpp:1954
 msgid "Infrared"
-msgstr ""
+msgstr "Infrarot"
 
 #: src/multiplay.cpp:1955
 msgid "Ultraviolet"
-msgstr ""
+msgstr "Ultraviolett"
 
 #: src/multiplay.cpp:1956
 msgid "Brown"
-msgstr ""
+msgstr "Braun"
 
 #: src/order.cpp:801
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
-msgstr ""
+msgstr "Wir können das nicht! Wir müssen ein Cyborg sein, um den Cyborgtransporter benutzen zu können!"
 
 #: src/qtscriptfuncs.cpp:444
 #: src/scriptfuncs.cpp:3271
@@ -14951,7 +14946,7 @@ msgstr "Transporter starten"
 
 #: src/transporter.cpp:1420
 msgid "There is not enough room in the Transport!"
-msgstr ""
+msgstr "Nicht genug Platz im Transporter!"
 
 #: src/transporter.cpp:1679
 msgid "Reinforcements landing"
