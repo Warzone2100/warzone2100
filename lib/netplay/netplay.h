@@ -129,7 +129,6 @@ enum MESSAGE_TYPES
 // @NOTE / FIXME: We need a way to detect what should happen if the msg buffer exceeds this.
 #define MaxMsgSize		16384		// max size of a message in bytes.
 #define	StringSize		64			// size of strings used.
-#define MaxGames		18			// max number of concurrently playable games to allow.
 #define extra_string_size	159		// extra 199 char for future use
 #define map_string_size		40
 #define	hostname_string_size	40
@@ -286,7 +285,7 @@ extern SDWORD	NETgetGameFlags(UDWORD flag);			// return one of the four flags(dw
 extern int32_t	NETgetGameFlagsUnjoined(unsigned int gameid, unsigned int flag);	// return one of the four flags(dword) about the game.
 extern bool	NETsetGameFlags(UDWORD flag, SDWORD value);	// set game flag(1-4) to value.
 extern bool	NEThaltJoining(void);				// stop new players joining this game
-extern bool	NETfindGame(void);		// find games being played(uses GAME_GUID);
+extern bool	NETfindGame(const int maxGames);		// find games being played(uses GAME_GUID);
 extern bool	NETjoinGame(const char* host, uint32_t port, const char* playername);			// join game given with playername
 extern bool	NEThostGame(const char* SessionName, const char* PlayerName,// host a game
 			    SDWORD one, SDWORD two, SDWORD three, SDWORD four, UDWORD plyrs);

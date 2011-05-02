@@ -2095,7 +2095,7 @@ bool NEThaltJoining(void)
 
 // ////////////////////////////////////////////////////////////////////////
 // find games on open connection
-bool NETfindGame(void)
+bool NETfindGame(const int maxGames)
 {
  	if (getLobbyError() == ERROR_CHEAT || getLobbyError() == ERROR_KICKED)
  	{
@@ -2103,7 +2103,7 @@ bool NETfindGame(void)
  	}
  	setLobbyError(ERROR_NOERROR);
 
- 	if (lobbyclient.listGames(MaxGames) != Lobby::NO_ERROR)
+ 	if (lobbyclient.listGames(maxGames) != Lobby::NO_ERROR)
  	{
  		debug(LOG_ERROR, lobbyclient.getError()->message.toUtf8().constData());
  		if (lobbyclient.getError()->code == Lobby::LOGIN_REQUIRED)

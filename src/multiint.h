@@ -32,6 +32,8 @@
 #define AI_CLOSED         -1
 #define AI_NOT_FOUND     -99
 
+#define MaxGames		14			// max number of concurrently playable games to allow.
+
 void readAIs();	///< step 1, load AI definition files
 void loadMultiScripts();	///< step 2, load the actual AI scripts
 const char *getAIName(int player);	///< only run this -after- readAIs() is called
@@ -40,10 +42,6 @@ int getNextAIAssignment(const char *name);
 
 extern LOBBY_ERROR_TYPES getLobbyError(void);
 extern void setLobbyError(LOBBY_ERROR_TYPES error_type);
-
-extern	void	runConnectionScreen		(void);
-extern	bool	startConnectionScreen	(void);
-extern	void	intProcessConnection	(UDWORD id);
 
 extern	void	runGameFind				(void);
 extern	void	startGameFind			(void);
@@ -66,9 +64,6 @@ void loadMapPreview(bool hideInterface);
 // ////////////////////////////////////////////////////////////////
 // CONNECTION SCREEN
 
-#define CON_CONTYPES		10103
-#define CON_CONTYPESWIDTH	290
-#define CON_CONTYPES_FORM	10104
 #define CON_TYPESID_START	10105
 #define CON_TYPESID_END		10128
 
@@ -86,16 +81,15 @@ void loadMapPreview(bool hideInterface);
 #define CON_OKY				CON_SETTINGSHEIGHT-MULTIOP_OKH-3
 
 #define CON_CANCEL			10102
-
-#define CON_PHONE			10132
-#define CON_PHONEX			20
-#define CON_PHONEY			45
+#define CON_HOST_GAME		10103
+#define CON_JOIN_IP			10104
 
 #define CON_IP				10133
 #define CON_IPX				20
 #define CON_IPY				45
 
 #define CON_IP_CANCEL		10134
+#define CON_IP_OK			10135
 
 //for clients
 #define CON_PASSWORD		10139
@@ -306,18 +300,8 @@ void loadMapPreview(bool hideInterface);
 
 // ///////////////////////////////
 // Many Button Variations..
-
-#define CON_BUTWIDTH			60
-#define CON_BUTHEIGHT			46
-
-#define CON_CONBUTW			CON_CONTYPESWIDTH-15
-#define CON_CONBUTH			46
-
-#define	CON_NAMEBOXWIDTH		CON_SETTINGSWIDTH-CON_PHONEX
+#define	CON_NAMEBOXWIDTH		CON_SETTINGSWIDTH-20
 #define	CON_NAMEBOXHEIGHT		15
-
-#define CON_COMBUTWIDTH			37
-#define CON_COMBUTHEIGHT		24
 
 #define MULTIOP_OKW			37
 #define MULTIOP_OKH			24

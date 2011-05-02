@@ -142,7 +142,6 @@ static int					aiChooserUp = -1;
 static int					difficultyChooserUp = -1;
 static int					positionChooserUp = -1;
 static bool				SettingsUp		= false;
-static UBYTE				InitialProto	= 0;
 static W_SCREEN				*psConScreen;
 static SDWORD				dwSelectedGame	=0;						//player[] and games[] indexes
 static UDWORD				gameNumber;								// index to games icons
@@ -604,7 +603,7 @@ static bool OptionsInet(void)			//internet options
 	sFormInit.pDisplay = intDisplayFeBox;
 	widgAddForm(psConScreen, &sFormInit);
 
-	addMultiBut(psConScreen, CON_SETTINGS,CON_OK,CON_OKX,CON_OKY,MULTIOP_OKW,MULTIOP_OKH,
+	addMultiBut(psConScreen, CON_SETTINGS,CON_IP_OK,CON_OKX,CON_OKY,MULTIOP_OKW,MULTIOP_OKH,
 				_("Accept Settings"),IMAGE_OK,IMAGE_OK,true);
 	addMultiBut(psConScreen, CON_SETTINGS,CON_IP_CANCEL,CON_OKX+MULTIOP_OKW+10,CON_OKY,MULTIOP_OKW,MULTIOP_OKH,
 				_("Cancel"),IMAGE_NO,IMAGE_NO,true);
@@ -647,99 +646,6 @@ static bool OptionsInet(void)			//internet options
 	
 	SettingsUp = true;
 	return true;
-}
-
-// ////////////////////////////////////////////////////////////////////////////
-// Draw the connections screen.
-bool startConnectionScreen(void)
-{
-	addBackdrop();										//background
-	addTopForm();										// logo
-	addBottomForm();
-
-	SettingsUp		= false;
-	InitialProto	= 0;
-	safeSearch		= false;
-
-	// don't pretend we are running a network game. Really do it!
-	NetPlay.bComms = true; // use network = true
-
-	addSideText(FRONTEND_SIDETEXT,  FRONTEND_SIDEX, FRONTEND_SIDEY,_("CONNECTION"));
-
-	addMultiBut(psWScreen,FRONTEND_BOTFORM,CON_CANCEL,10,10,MULTIOP_OKW,MULTIOP_OKH,
-		_("Return To Previous Screen"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);	// goback buttpn levels
-
-	addTextButton(CON_TYPESID_START+0,FRONTEND_POS2X,FRONTEND_POS2Y, _("Lobby"), WBUT_TXTCENTRE);
-	addTextButton(CON_TYPESID_START+1,FRONTEND_POS3X,FRONTEND_POS3Y, _("IP"), WBUT_TXTCENTRE);
-
-	return true;
-}
-
-void runConnectionScreen(void)
-{
-	UDWORD id;
-	static char addr[128];
-
-	if(SettingsUp == true)
-	{
-		id = widgRunScreen(psConScreen);				// Run the current set of widgets
-	}
-	else
-	{
-		id = widgRunScreen(psWScreen);					// Run the current set of widgets
-	}
-
-	switch(id)
-	{
-		case CON_CANCEL: //cancel
-			changeTitleMode(MULTI);
-			bMultiPlayer = false;
-			bMultiMessages = false;
-			break;
-		case CON_TYPESID_START+0: // Lobby button
-			if ((LobbyError != ERROR_KICKED) && (LobbyError != ERROR_CHEAT))
-			{
-				setLobbyError(ERROR_NOERROR);
-			}
-			changeTitleMode(GAMEFIND);
-			break;
-		case CON_TYPESID_START+1: // IP button
-			OptionsInet();
-			break;
-		case CON_OK:
-			sstrcpy(addr, widgGetString(psConScreen, CON_IP));
-			if (addr[0] == '\0')
-			{
-				sstrcpy(addr, "127.0.0.1");  // Default to localhost.
-			}
-
-			if(SettingsUp == true)
-			{
-				widgReleaseScreen(psConScreen);
-				SettingsUp = false;
-			}
-
-			joinGame(addr, 0);
-			break;
-		case CON_IP_CANCEL:
-			if (SettingsUp == true)
-			{
-				widgReleaseScreen(psConScreen);
-				SettingsUp = false;
-			}
-			break;
-	}
-
-	widgDisplayScreen(psWScreen);							// show the widgets currently running
-	if(SettingsUp == true)
-	{
-		widgDisplayScreen(psConScreen);						// show the widgets currently running
-	}
-
-	if (CancelPressed())
-	{
-		changeTitleMode(MULTI);
-	}
 }
 
 // ////////////////////////////////////////////////////////////////////////
@@ -788,7 +694,7 @@ bool joinGame(const char* host, uint32_t port)
 		else if (oldError == ERROR_WRONGPASSWORD)
 		{
 			// Change to GAMEFIND, screen with a password dialog.
-			changeTitleMode(GAMEFIND);
+			changeTitleMode(MULTI);
 			showPasswordForm();
 
 			id = widgRunScreen(psWScreen); // Run the current set of widgets
@@ -805,7 +711,7 @@ bool joinGame(const char* host, uint32_t port)
 		hidePasswordForm();
 
 		// Change to GAMEFIND, screen.
-		changeTitleMode(GAMEFIND);
+		changeTitleMode(MULTI);
 
 		// Reset the error to the saved one.
 		setLobbyError(oldError);
@@ -853,7 +759,7 @@ static void addGames(void)
 		gcount = 0;
 	}
 	// in case they refresh, and a game becomes available.
-	widgDelete(psWScreen,FRONTEND_NOGAMESAVAILABLE);
+	widgDelete(psWScreen,FRONTEND_LOBBYERROR);
 
 	// only have to do this if we have any games available.
 	if (!getLobbyError() && gcount)
@@ -864,22 +770,22 @@ static void addGames(void)
 
 			sButInit.id = GAMES_GAMESTART+i;
 
-			if (gcount < 9)							// only center column needed.
+			if (gcount < (MaxGames / 2))							// only center column needed.
 			{
 				sButInit.x = 165;
-				sButInit.y = (UWORD)(30+((5+GAMES_GAMEHEIGHT)*i) );
+				sButInit.y = (UWORD)(75+((5+GAMES_GAMEHEIGHT)*i) );
 			}
 			else
 			{
-				if (i<9)		//column 1
+				if (i<(MaxGames / 2))		//column 1
 				{
-					sButInit.x = 50;
-					sButInit.y = (UWORD)(30+((5+GAMES_GAMEHEIGHT)*i) );
+					sButInit.x = 55;
+					sButInit.y = (UWORD)(75+((5+GAMES_GAMEHEIGHT)*i) );
 				}
 				else		//column 2
 				{
-					sButInit.x = 60+GAMES_GAMEWIDTH;
-					sButInit.y = (UWORD)(30+((5+GAMES_GAMEHEIGHT)*(i-9) ) );
+					sButInit.x = 75+GAMES_GAMEWIDTH;
+					sButInit.y = (UWORD)(75+((5+GAMES_GAMEHEIGHT)*(i-(MaxGames / 2)) ) );
 				}
 			}
 			// display the correct tooltip message.
@@ -950,13 +856,13 @@ static void addGames(void)
 		}
 
 		// delete old widget if necessary
-		widgDelete(psWScreen,FRONTEND_NOGAMESAVAILABLE);
+		widgDelete(psWScreen,FRONTEND_LOBBYERROR);
 
 		sButInit = W_BUTINIT();
 		sButInit.formID = FRONTEND_BOTFORM;
-		sButInit.id = FRONTEND_NOGAMESAVAILABLE;
-		sButInit.x = 70;
-		sButInit.y = 50;
+		sButInit.id = FRONTEND_LOBBYERROR;
+		sButInit.x = 80;
+		sButInit.y = 150;
 		sButInit.style = WBUT_TXTCENTRE;
 		sButInit.width = FRONTEND_BUTWIDTH;
 		sButInit.UserData = 0; // store disable state
@@ -971,17 +877,17 @@ static void addGames(void)
 
 static void removeGames(void)
 {
-	int i;
-	for (i = 0; i<MaxGames; i++)
+	for (int i = 0; i<MaxGames; i++)
 	{
 		widgDelete(psWScreen, GAMES_GAMESTART+i);	// remove old widget
 	}
-	widgDelete(psWScreen,FRONTEND_NOGAMESAVAILABLE);
+	widgDelete(psWScreen,FRONTEND_LOBBYERROR);
 }
 
 void runGameFind(void )
 {
 	UDWORD id;
+	static char addr[128];
 	static UDWORD lastupdate=0;
 	static char game_password[64];		// check if StringSize is available
 	const Lobby::GAME* lGame;
@@ -997,22 +903,68 @@ void runGameFind(void )
 		lastupdate = gameTime;
 		if(safeSearch && !loginDone)
 		{
-			NETfindGame();						// find games synchronously
+			NETfindGame(MaxGames);						// find games synchronously
 		}
 		addGames();									//redraw list
 	}
 
-	id = widgRunScreen(psWScreen);						// Run the current set of widgets
+	if (SettingsUp == true)
+	{
+		id = widgRunScreen(psConScreen); // Display ip box
+	}
+	else
+	{
+		id = widgRunScreen(psWScreen); // Display Gamefind
+	}
 
 	switch (id)
 	{
+		case CON_HOST_GAME:
+			// don't pretend we are running a network game. Really do it!
+			NetPlay.bComms = true; // use network = true
+			NETdiscoverUPnPDevices();
+			ingame.bHostSetup = true;
+			bMultiPlayer = true;
+			bMultiMessages = true;
+			game.type = SKIRMISH;		// needed?
+			lastTitleMode = MULTI;
+			changeTitleMode(MULTIOPTION);
+			break;
+
+		case CON_JOIN_IP:
+			OptionsInet();
+			break;
+
+		case CON_IP_OK: // IP OK
+			sstrcpy(addr, widgGetString(psConScreen, CON_IP));
+			if (addr[0] == '\0')
+			{
+				sstrcpy(addr, "127.0.0.1");  // Default to localhost.
+			}
+
+			if(SettingsUp == true)
+			{
+				widgReleaseScreen(psConScreen);
+				SettingsUp = false;
+			}
+
+			joinGame(addr, 0);
+			break;
+		case CON_IP_CANCEL:
+			if (SettingsUp == true)
+			{
+				widgReleaseScreen(psConScreen);
+				SettingsUp = false;
+			}
+			break;
+
 		case CON_CANCEL:
-			changeTitleMode(PROTOCOL);
+			changeTitleMode(TITLE);
 			break;
 
 		case MULTIOP_REFRESH:
 			ingame.localOptionsReceived = true;
-			NETfindGame();								// find games synchronously
+			NETfindGame(MaxGames);								// find games synchronously
 			addGames();										//redraw list.
 			break;
 
@@ -1054,7 +1006,7 @@ void runGameFind(void )
 			}
 			else
 			{
-				NETfindGame();
+				NETfindGame(MaxGames);
 				addGames();
 			}
 
@@ -1101,15 +1053,13 @@ void runGameFind(void )
 	}
 
 	widgDisplayScreen(psWScreen);								// show the widgets currently running
-	if(safeSearch)
+	if(SettingsUp == true)
 	{
-		iV_SetFont(font_large);
-		iV_DrawText(_("Searching"), D_W+260, D_H+460);
+		widgDisplayScreen(psConScreen);						// show the widgets currently running
 	}
-
 	if (CancelPressed())
 	{
-		changeTitleMode(PROTOCOL);
+		changeTitleMode(TITLE);
 	}
 }
 
@@ -1158,14 +1108,20 @@ void startGameFind(void)
 	sFormInit.height = 460;
 	sFormInit.pDisplay = intOpenPlainForm;
 	sFormInit.disableChildren = true;
-
 	widgAddForm(psWScreen, &sFormInit);
 
+	// Sidetext
 	addSideText(FRONTEND_SIDETEXT,  MULTIOP_OPTIONSX-3, MULTIOP_OPTIONSY,_("GAMES"));
 
 	// cancel
 	addMultiBut(psWScreen,FRONTEND_BOTFORM,CON_CANCEL,10,5,MULTIOP_OKW,MULTIOP_OKH,_("Return To Previous Screen"),
 		IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
+
+	// Host game
+	addTextButton(CON_HOST_GAME, 75, 15, _("Host Game"), 0);
+
+	// Join IP
+	addTextButton(CON_JOIN_IP, 305, 15, _("Connect IP"), 0);
 
 	//refresh
 	addMultiBut(psWScreen,FRONTEND_BOTFORM,MULTIOP_REFRESH, MULTIOP_CHATBOXW-MULTIOP_OKW-5,5,MULTIOP_OKW,MULTIOP_OKH,
@@ -1174,6 +1130,9 @@ void startGameFind(void)
 	{
 		widgHide(psWScreen, MULTIOP_REFRESH);
 	}
+
+	// Host Game
+
 
 	// Password stuff. Hidden by default.
 
@@ -1234,7 +1193,7 @@ void startGameFind(void)
 		|| lobbyclient.useAuth() == false)
 	{
 		loginDone = true;
-		NETfindGame();
+		NETfindGame(MaxGames);
 		addGames();
 	}
 	else
@@ -2706,7 +2665,7 @@ static void stopJoining(void)
 
 			if(NetPlay.bComms)	// not even connected.
 			{
-				changeTitleMode(GAMEFIND);
+				changeTitleMode(MULTI);
 			}
 			else
 			{
