@@ -140,6 +140,11 @@ cscope.out
 /waf
 /.waf-*
 
+# Eclipse CDT
+.project
+.cproject
+.settings/
+
 # KDevelop4
 /.kdev4/
 /warzone*.kdev4
