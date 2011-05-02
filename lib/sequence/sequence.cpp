@@ -65,6 +65,7 @@
 #include "lib/sound/audio.h"
 #include "lib/sound/openal_error.h"
 #include "lib/sound/mixer.h"
+#include "src/warzoneconfig.h"
 
 #include <theora/theora.h>
 #include <physfs.h>
@@ -172,6 +173,8 @@ static int videoY1 = 0;
 static int videoY2 = 0;
 static int ScrnvidXpos = 0;
 static int ScrnvidYpos = 0;
+
+static SCANLINE_MODE use_scanlines;
 
 // Helper; just grab some more compressed bitstream and sync it for page extraction
 static int buffer_data(PHYSFS_file* in, ogg_sync_state* oy)
@@ -287,7 +290,12 @@ static GLuint video_texture;
  */
 static void Allocate_videoFrame(void)
 {
-	RGBAframe = (uint32_t *)malloc(videodata.ti.frame_width * videodata.ti.frame_height * 4);
+	int size = videodata.ti.frame_width * videodata.ti.frame_height * 4;
+	if (use_scanlines)
+		size *= 2;
+
+	RGBAframe = (uint32_t *)malloc(size);
+	memset(RGBAframe, 0, size);
 	glGenTextures(1, &video_texture);
 }
 
@@ -305,6 +313,8 @@ static void video_write(bool update)
 	unsigned int x = 0, y = 0;
 	const int video_width = videodata.ti.frame_width;
 	const int video_height = videodata.ti.frame_height;
+	// when using scanlines we need to double the height
+	const int height_factor = (use_scanlines ? 2 : 1);
 	yuv_buffer yuv;
 
 	glErrors();
@@ -318,7 +328,7 @@ static void video_write(bool update)
 		int rgb_offset = 0;
 		int y_offset = 0;
 		int uv_offset = 0;
-		int half_width = video_width / 2;
+		const int half_width = video_width / 2;
 
 		theora_decode_YUVout(&videodata.td, &yuv);
 
@@ -342,6 +352,18 @@ static void video_write(bool update)
 				int B = Vclip((A + 516 * U + 128) >> 8);
 
 				RGBAframe[rgb_offset] = (B << 16) | (G << 8) | (R << 0) | (0xFF << 24);
+				if (use_scanlines == SCANLINES_50)
+				{
+					// halve the rgb values for a dimmed scanline
+					R /= 2;
+					G /= 2;
+					B /= 2;
+					RGBAframe[rgb_offset + video_width] = (B << 16) | (G << 8) | (R << 0) | (0xff << 24);
+				}
+				else if (use_scanlines == SCANLINES_BLACK)
+				{
+					RGBAframe[rgb_offset + video_width] = (0xFF << 24);
+				}
 				rgb_offset++;
 
 				// second pixel, U and V (and thus C) are the same as before.
@@ -353,12 +375,26 @@ static void video_write(bool update)
 				B = Vclip((A + 516 * U + 128) >> 8);
 
 				RGBAframe[rgb_offset] = (B << 16) | (G << 8) | (R << 0) | (0xFF << 24);
+				if (use_scanlines == SCANLINES_50)
+				{
+					// halve the rgb values for a dimmed scanline
+					R /= 2;
+					G /= 2;
+					B /= 2;
+					RGBAframe[rgb_offset + video_width] = (B << 16) | (G << 8) | (R << 0) | (0xff << 24);
+				}
+				else if (use_scanlines == SCANLINES_BLACK)
+				{
+					RGBAframe[rgb_offset + video_width] = (0xFF << 24);
+				}
 				rgb_offset++;
 			}
+			if (use_scanlines)
+				rgb_offset += video_width;
 		}
 
 		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, video_width,
-				video_height, GL_RGBA, GL_UNSIGNED_BYTE, RGBAframe);
+				video_height * height_factor, GL_RGBA, GL_UNSIGNED_BYTE, RGBAframe);
 		glErrors();
 	}
 
@@ -373,9 +409,9 @@ static void video_write(bool update)
 	glVertex2f(videoX1, videoY1);
 	glTexCoord2f((float) video_width / texture_width, 0);
 	glVertex2f(videoX2, videoY1);				//screenWidth
-	glTexCoord2f((float) video_width / texture_width, (float) video_height / texture_height);
+	glTexCoord2f((float) video_width / texture_width, (float) video_height * height_factor / texture_height);
 	glVertex2f(videoX2, videoY2);		//screenWidth,screenHeight
-	glTexCoord2f(0, (float) video_height / texture_height);
+	glTexCoord2f(0, (float) video_height * height_factor / texture_height);
 	glVertex2f(videoX1, videoY2);				//screenHeight
 	glEnd();
 
@@ -708,6 +744,12 @@ bool seq_Play(const char* filename)
 			return false;
 		}
 		char *blackframe = (char *)calloc(1, texture_width * texture_height * 4);
+
+		// disable scanlines if the video is too large for the texture or shown too small
+		use_scanlines = war_getScanlineMode();
+		if (videodata.ti.frame_height * 2 > texture_height || videoY2 < videodata.ti.frame_height * 2)
+			use_scanlines = SCANLINES_OFF;
+
 		Allocate_videoFrame();
 
 		glBindTexture(GL_TEXTURE_2D, video_texture);
@@ -1016,8 +1058,6 @@ void seq_SetDisplaySize(int sizeX, int sizeY, int posX, int posY)
 			videoY1 += offset;
 			videoY2 -= offset;
 		}
-
-
 	}
 
 	ScrnvidXpos = posX;

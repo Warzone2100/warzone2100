@@ -506,52 +506,69 @@ static bool startGraphicsOptionsMenu(void)
 			break;
 	}
 
+	// Scanlines
+	addTextButton(FRONTEND_SCANLINES, FRONTEND_POS3X - 35, FRONTEND_POS3Y, _("Scanlines"), 0);
+	switch (war_getScanlineMode())
+	{
+		case SCANLINES_OFF:
+			addTextButton(FRONTEND_SCANLINES_R, FRONTEND_POS3M - 55, FRONTEND_POS3Y, _("Off"), 0);
+			break;
+
+		case SCANLINES_50:
+			addTextButton(FRONTEND_SCANLINES_R, FRONTEND_POS3M - 55, FRONTEND_POS3Y, _("50%"), 0);
+			break;
+
+		case SCANLINES_BLACK:
+			addTextButton(FRONTEND_SCANLINES_R, FRONTEND_POS3M - 55, FRONTEND_POS3Y, _("Black"), 0);
+			break;
+	}
+
 	////////////
 	// screenshake
-	addTextButton(FRONTEND_SSHAKE,	 FRONTEND_POS3X-35,   FRONTEND_POS3Y, _("Screen Shake"), 0);
+	addTextButton(FRONTEND_SSHAKE,	 FRONTEND_POS4X-35,   FRONTEND_POS4Y, _("Screen Shake"), 0);
 	if(getShakeStatus())
 	{// shaking on
-		addTextButton(FRONTEND_SSHAKE_R, FRONTEND_POS3M-55,  FRONTEND_POS3Y, _("On"), 0);
+		addTextButton(FRONTEND_SSHAKE_R, FRONTEND_POS4M-55,  FRONTEND_POS4Y, _("On"), 0);
 	}
 	else
 	{//shaking off.
-		addTextButton(FRONTEND_SSHAKE_R, FRONTEND_POS3M-55,  FRONTEND_POS3Y, _("Off"), 0);
+		addTextButton(FRONTEND_SSHAKE_R, FRONTEND_POS4M-55,  FRONTEND_POS4Y, _("Off"), 0);
 	}
 
 	////////////
 	// fog
-	addTextButton(FRONTEND_FOGTYPE,	 FRONTEND_POS4X-35,   FRONTEND_POS4Y, _("Fog"), 0);
+	addTextButton(FRONTEND_FOGTYPE,	 FRONTEND_POS5X-35,   FRONTEND_POS5Y, _("Fog"), 0);
 	if(war_GetFog())
 	{
-		addTextButton(FRONTEND_FOGTYPE_R,FRONTEND_POS4M-55,FRONTEND_POS4Y, _("Mist"), 0);
+		addTextButton(FRONTEND_FOGTYPE_R,FRONTEND_POS5M-55,FRONTEND_POS5Y, _("Mist"), 0);
 	}
 	else
 	{
-		addTextButton(FRONTEND_FOGTYPE_R,FRONTEND_POS4M-55,FRONTEND_POS4Y, _("Fog Of War"), 0);
+		addTextButton(FRONTEND_FOGTYPE_R,FRONTEND_POS5M-55,FRONTEND_POS5Y, _("Fog Of War"), 0);
 	}
 
 	////////////
 	//subtitle mode.
-	addTextButton(FRONTEND_SUBTITLES, FRONTEND_POS5X - 35, FRONTEND_POS5Y, _("Subtitles"), 0);
+	addTextButton(FRONTEND_SUBTITLES, FRONTEND_POS6X - 35, FRONTEND_POS6Y, _("Subtitles"), 0);
 	if (!seq_GetSubtitles())
 	{
-		addTextButton(FRONTEND_SUBTITLES_R, FRONTEND_POS5M - 55, FRONTEND_POS5Y, _("Off"), 0);
+		addTextButton(FRONTEND_SUBTITLES_R, FRONTEND_POS6M - 55, FRONTEND_POS6Y, _("Off"), 0);
 	}
 	else
 	{
-		addTextButton(FRONTEND_SUBTITLES_R, FRONTEND_POS5M - 55, FRONTEND_POS5Y, _("On"), 0);
+		addTextButton(FRONTEND_SUBTITLES_R, FRONTEND_POS6M - 55, FRONTEND_POS6Y, _("On"), 0);
 	}
 
 	////////////
 	//shadows
-	addTextButton(FRONTEND_SHADOWS, FRONTEND_POS6X - 35, FRONTEND_POS6Y, _("Shadows"), 0);
+	addTextButton(FRONTEND_SHADOWS, FRONTEND_POS7X - 35, FRONTEND_POS7Y, _("Shadows"), 0);
 	if (getDrawShadows())
 	{
-		addTextButton(FRONTEND_SHADOWS_R, FRONTEND_POS6M - 55,  FRONTEND_POS6Y, _("On"), 0);
+		addTextButton(FRONTEND_SHADOWS_R, FRONTEND_POS7M - 55,  FRONTEND_POS7Y, _("On"), 0);
 	}
 	else
 	{	// not flipped
-		addTextButton(FRONTEND_SHADOWS_R, FRONTEND_POS6M - 55,  FRONTEND_POS6Y, _("Off"), 0);
+		addTextButton(FRONTEND_SHADOWS_R, FRONTEND_POS7M - 55,  FRONTEND_POS7Y, _("Off"), 0);
 	}
 
 	// Add some text down the side of the form
@@ -657,6 +674,26 @@ bool runGraphicsOptionsMenu(void)
 				break;
 		}
 		break;
+
+	case FRONTEND_SCANLINES:
+	case FRONTEND_SCANLINES_R:
+		switch (mode = war_getScanlineMode())
+		{
+			case SCANLINES_OFF:
+				war_setScanlineMode(SCANLINES_50);
+				widgSetString(psWScreen, FRONTEND_SCANLINES_R, _("50%"));
+				break;
+
+			case SCANLINES_50:
+				war_setScanlineMode(SCANLINES_BLACK);
+				widgSetString(psWScreen, FRONTEND_SCANLINES_R, _("Black"));
+				break;
+
+			case SCANLINES_BLACK:
+				war_setScanlineMode(SCANLINES_OFF);
+				widgSetString(psWScreen, FRONTEND_SCANLINES_R, _("Off"));
+				break;
+		}
 
 	default:
 		break;
