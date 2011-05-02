@@ -53,7 +53,7 @@ VIAddVersionKey "CompanyName"		"Warzone 2100 Project"
 VIAddVersionKey "FileDescription"	"${PACKAGE_NAME} Installer"
 VIAddVersionKey "FileVersion"		"${PACKAGE_VERSION}"
 VIAddVersionKey "InternalName"		"${PACKAGE_NAME}"
-VIAddVersionKey "LegalCopyright"	"Copyright © 2006-2010 Warzone 2100 Project"
+VIAddVersionKey "LegalCopyright"	"Copyright © 2006-2011 Warzone 2100 Project"
 VIAddVersionKey "OriginalFilename"	"${PACKAGE}-${PACKAGE_VERSION}.exe"
 VIAddVersionKey "ProductName"		"${PACKAGE_NAME}"
 VIAddVersionKey "ProductVersion"	"${PACKAGE_VERSION}"
@@ -92,8 +92,7 @@ VIAddVersionKey "ProductVersion"	"${PACKAGE_VERSION}"
   !define MUI_UNFINISHPAGE_NOAUTOCLOSE
   
   !define MUI_LICENSEPAGE_RADIOBUTTONS
-  !define MUI_LICENSEPAGE_RADIOBUTTONS_TEXT_ACCEPT "$(WZ_GPL_ACCEPT)"
-  !define MUI_LICENSEPAGE_RADIOBUTTONS_TEXT_DECLINE "$(WZ_GPL_DECLINE)"
+  !define MUI_LICENSEPAGE_RADIOBUTTONS_TEXT_ACCEPT "$(WZ_GPL_NEXT)"
   
 ;--------------------------------
 ;Pages
@@ -517,10 +516,10 @@ FunctionEnd
 ;Descriptions
 
   ;English
-  LangString WZWelcomeText ${LANG_ENGLISH} "This wizard will guide you through the installation of Warzone 2100.\r\n\r\nIt is recommended that you close all other applications before starting Setup. This will make it possible to update relevant system files without having to reboot your computer.\r\n\r\nWarzone 2100 is 100% free, if you paid for it, let us know!\r\n\r\nClick Next to continue."
-  LangString WZ_GPL_ACCEPT ${LANG_ENGLISH} "I agree"
-  LangString WZ_GPL_DECLINE ${LANG_ENGLISH} "I don't agree"
-  
+  LangString WZWelcomeText ${LANG_ENGLISH} "This wizard will guide you through the installation of Warzone 2100.\r\n\r\nIt is recommended that you close all other applications before continuing this installation. This will make it possible to update relevant system files without having to reboot your computer.\r\n\r\nWarzone 2100 is 100% free, if you paid for it, let us know!\r\n\r\nClick Next to continue."
+  LangString WZ_GPL_NEXT ${LANG_ENGLISH} "Next"
+
+
   LangString TEXT_SecBase ${LANG_ENGLISH} "Core files"
   LangString DESC_SecBase ${LANG_ENGLISH} "The core files required to run Warzone 2100."
 
@@ -552,9 +551,9 @@ FunctionEnd
   LangString DESC_SecOriginalMod ${LANG_ENGLISH} "Play the game as it was back in the 1.10 days."
 
   ;Dutch
-  LangString WZWelcomeText ${LANG_DUTCH} "This wizard will guide you through the installation of Warzone 2100.\r\n\r\nIt is recommended that you close all other applications before starting Setup. This will make it possible to update relevant system files without having to reboot your computer.\r\n\r\nWarzone 2100 is 100% free, if you paid for it, let us know!\r\n\r\nClick Next to continue." 
-  LangString WZ_GPL_ACCEPT ${LANG_DUTCH} "I agree"
-  LangString WZ_GPL_DECLINE ${LANG_DUTCH} "I don't agree"
+  LangString WZWelcomeText ${LANG_DUTCH} "Deze installatiewizard leidt u door het installatieproces van Warzone 2100.\r\n\r\nHet is aangeraden om alle andere applicaties te sluiten alvorens verder te gaan met deze installatie. Dit maakt het mogelijk om de betreffende systeembestanden te vervangen zonder uw computer opnieuw op te starten" 
+  LangString WZ_GPL_NEXT ${LANG_DUTCH} "volgende"
+
 
   LangString TEXT_SecBase ${LANG_DUTCH} "Core files"
   LangString DESC_SecBase ${LANG_DUTCH} "The core files required to run Warzone 2100."
@@ -588,9 +587,9 @@ FunctionEnd
 
   ;German
   LangString WZWelcomeText ${LANG_GERMAN} "Dieser Wizard wird Sie durch die Warzone-2100-Installation fьhren.\r\n\r\nEs wird empfohlen sдmtliche anderen Anwendungen zu schlieЯen, bevor Sie das Setup starten. Dies ermцglicht es relevante Systemdateien zu aktualisieren, ohne neustarten zu mьssen.\r\n\r\nWarzone 2100 ist zu 100% kostenlos, falls Sie dafьr gezahlt haben, lassen Sie es uns wissen!\r\n\r\nKlicken Sie auf Weiter, um fortzufahren."
-  LangString WZ_GPL_ACCEPT ${LANG_GERMAN} "Ich stimme zu"
-  LangString WZ_GPL_DECLINE ${LANG_GERMAN} "Ich stimme nicht zu"
-  
+  LangString WZ_GPL_NEXT ${LANG_GERMAN} "nдchste"
+
+
   LangString TEXT_SecBase ${LANG_GERMAN} "Core files"
   LangString DESC_SecBase ${LANG_GERMAN} "Die Kerndateien, die fьr Warzone 2100 benцtigt werden."
 
@@ -623,9 +622,9 @@ FunctionEnd
 
   ;Russian
   LangString WZWelcomeText ${LANG_RUSSIAN} "Этот помощник установки поможет вам установить Warzone2100.\r\n\r\nПеред началом рекомендуем закрыть все другие приложения. Это позволит обновить соответствующие системные файлы без перезагрузки системы.\r\n\r\nWarzone2100 100% бесплатный, если вы за него заплатили сообщите нам!\r\n\r\nНажмите Далее для продолжения."  
-  LangString WZ_GPL_ACCEPT ${LANG_RUSSIAN} "Согласен"
-  LangString WZ_GPL_DECLINE ${LANG_RUSSIAN} "Не Согласен"
-  
+  LangString WZ_GPL_NEXT ${LANG_RUSSIAN} "Согласен"
+
+
   LangString TEXT_SecBase ${LANG_RUSSIAN} "Базовые файлы"
   LangString DESC_SecBase ${LANG_RUSSIAN} "Файлы требуемые для запуска Warzone 2100."
 
