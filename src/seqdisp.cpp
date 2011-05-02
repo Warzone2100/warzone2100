@@ -382,8 +382,14 @@ bool seq_UpdateFullScreenVideo(int *pbClear)
 				}
 				iV_SetTextColour(WZCOL_GREY);
 				iV_DrawText(&(aSeqList[currentPlaySeq].aText[i].pText[0]),
+						aSeqList[currentPlaySeq].aText[i].x - 1, aSeqList[currentPlaySeq].aText[i].y - 1);
+				iV_DrawText(&(aSeqList[currentPlaySeq].aText[i].pText[0]),
+						aSeqList[currentPlaySeq].aText[i].x - 1, aSeqList[currentPlaySeq].aText[i].y + 1);
+				iV_DrawText(&(aSeqList[currentPlaySeq].aText[i].pText[0]),
+						aSeqList[currentPlaySeq].aText[i].x - 1, aSeqList[currentPlaySeq].aText[i].y + 1);
+				iV_DrawText(&(aSeqList[currentPlaySeq].aText[i].pText[0]),
 						aSeqList[currentPlaySeq].aText[i].x + 1, aSeqList[currentPlaySeq].aText[i].y + 1);
-				iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+				iV_SetTextColour(WZCOL_WHITE);
 				iV_DrawText(&(aSeqList[currentPlaySeq].aText[i].pText[0]),
 						aSeqList[currentPlaySeq].aText[i].x, aSeqList[currentPlaySeq].aText[i].y);
 			}
@@ -395,8 +401,14 @@ bool seq_UpdateFullScreenVideo(int *pbClear)
 				}
 				iV_SetTextColour(WZCOL_GREY);
 				iV_DrawText(&(aSeqList[currentPlaySeq].aText[i].pText[0]),
+						aSeqList[currentPlaySeq].aText[i].x - 1, aSeqList[currentPlaySeq].aText[i].y - 1);
+				iV_DrawText(&(aSeqList[currentPlaySeq].aText[i].pText[0]),
+						aSeqList[currentPlaySeq].aText[i].x - 1, aSeqList[currentPlaySeq].aText[i].y + 1);
+				iV_DrawText(&(aSeqList[currentPlaySeq].aText[i].pText[0]),
+						aSeqList[currentPlaySeq].aText[i].x - 1, aSeqList[currentPlaySeq].aText[i].y + 1);
+				iV_DrawText(&(aSeqList[currentPlaySeq].aText[i].pText[0]),
 						aSeqList[currentPlaySeq].aText[i].x + 1, aSeqList[currentPlaySeq].aText[i].y + 1);
-				iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+				iV_SetTextColour(WZCOL_WHITE);
 				iV_DrawText(&(aSeqList[currentPlaySeq].aText[i].pText[0]),
 						aSeqList[currentPlaySeq].aText[i].x, aSeqList[currentPlaySeq].aText[i].y);
 			}
