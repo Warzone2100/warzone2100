@@ -21,7 +21,6 @@
 #include <QtCore/QFile>
 
 #include "netlobby.h"
-#include "lib/framework/frame.h"
 
 namespace Lobby
 {
@@ -329,6 +328,10 @@ namespace Lobby
 
 	Client& Client::addCACertificate(const QString& path)
 	{
+#if defined(NO_SSL)
+		debug(LOG_LOBBY, "Cannot add an SSL Certificate as SSL is not compiled in.");
+		return *this;
+#else
 		QFile cafile(path);
 		if (!cafile.open(QIODevice::ReadOnly | QIODevice::Text))
 		{
@@ -347,6 +350,7 @@ namespace Lobby
 		cacerts_.append(certificate);
 
 		return *this;
+#endif
 	}
 
 	RETURN_CODES Client::connect()

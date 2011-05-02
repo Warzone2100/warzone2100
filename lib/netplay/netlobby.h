@@ -27,6 +27,7 @@
 	#include <QtNetwork/QSslSocket>
 #endif
 
+#include "lib/framework/frame.h"
 #include "bson/bson.h"
 
 namespace Lobby
@@ -172,7 +173,9 @@ namespace Lobby
 			uint32_t callId_;
 
 			bool useSSL_;
+#if !defined(NO_SSL)
 			QList<QSslCertificate> cacerts_;
+#endif
 
 			bool useAuth_;
 			QString host_;

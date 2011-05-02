@@ -216,6 +216,14 @@ AS_IF([test "x$enable_sound" != "xyes"],[
 	AC_DEFINE([WZ_NOSOUND], [], [Causes sound to be disabled])
 ])
 
+# Disables SSL for the Lobby
+AC_ARG_ENABLE([ssl],
+    AS_HELP_STRING([--disable-ssl], [Disable SSL [no]]),
+    [ enable_ssl="${enableval}" ], [ enable_ssl="yes" ])
+AS_IF([test "x$enable_ssl" != "xyes"],[
+	AC_DEFINE([NO_SSL], [], [Causes SSL to be disabled])
+])
+
 # -O0 turns off all optimizations; this is necessary for accurate debugging
 # -Wno-unused-label is necessary because flex produces unused labels that we cannot fix
 # Add later for stricter checking: -Wextra -Wmissing-declarations -Wstrict-prototypes
