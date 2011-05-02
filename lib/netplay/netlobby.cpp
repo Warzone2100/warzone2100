@@ -253,7 +253,7 @@ namespace Lobby
 
 		// Translate the result into GAMEs
 		bson_iterator_init(&it, callResult_.result);
-		while (bson_iterator_next(&it) && gameCount <= maxGames)
+		while (bson_iterator_next(&it) && gameCount < maxGames)
 		{
 			// new Game
 			if (bson_iterator_type(&it) == bson_object)
@@ -383,7 +383,8 @@ namespace Lobby
 		if (!socket_->waitForConnected())
 		{
 #else
-		if (!socket_->waitForEncrypted())
+		if ((useSSL_ && !socket_->waitForEncrypted())
+			|| (!useSSL_ && !socket_->waitForConnected()))
 		{
 #endif
 			debug(LOG_ERROR, "Cannot connect to lobby \"[%s]:%d\": %s.",
