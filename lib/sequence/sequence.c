@@ -140,7 +140,7 @@ static bool audiobuf_ready = false;		// single 'frame' audio buffer ready for pr
 // file handle
 static PHYSFS_file* fpInfile = NULL;
 
-static char* RGBAframe = NULL;					// texture buffer
+static uint32_t* RGBAframe = NULL;					// texture buffer
 
 #if !defined(WZ_NOSOUND)
 static ogg_int16_t* audiobuf = NULL;			// audio buffer
@@ -320,29 +320,45 @@ static void video_write(bool update)
 
 	if (update)
 	{
+		int rgb_offset = 0;
+		int y_offset = 0;
+		int uv_offset = 0;
+		int half_width = video_width / 2;
+
 		theora_decode_YUVout(&videodata.td, &yuv);
 
 		// fill the RGBA buffer
 		for (y = 0; y < video_height; y++)
 		{
-			for (x = 0; x < video_width; x++)
+			y_offset = y * yuv.y_stride;
+			uv_offset = (y >> 1) * yuv.uv_stride;
+
+			for (x = 0; x < half_width; x++)
 			{
-				int Y = yuv.y[x + y * yuv.y_stride];
-				int U = yuv.u[x / 2 + (y / 2) * yuv.uv_stride];
-				int V = yuv.v[x / 2 + (y / 2) * yuv.uv_stride];
+				int Y = yuv.y[y_offset++] - 16;
+				const int U = yuv.u[uv_offset] - 128;
+				const int V = yuv.v[uv_offset++] - 128;
 
-				int C = Y - 16;
-				int D = U - 128;
-				int E = V - 128;
+				int A = 298 * Y;
+				const int C = 409 * V;
 
-				int R = Vclip((298 * C + 409 * E + 128) >> 8);
-				int G = Vclip((298 * C - 100 * D - 208 * E + 128) >> 8);
-				int B = Vclip((298 * C + 516 * D + 128) >> 8);
+				int R = Vclip((A + C + 128) >> 8);
+				int G = Vclip((A - 100 * U - (C >> 1) + 128) >> 8);
+				int B = Vclip((A + 516 * U + 128) >> 8);
 
-				RGBAframe[x * 4 + y * video_width * 4 + 0] = R;
-				RGBAframe[x * 4 + y * video_width * 4 + 1] = G;
-				RGBAframe[x * 4 + y * video_width * 4 + 2] = B;
-				RGBAframe[x * 4 + y * video_width * 4 + 3] = 0xFF;
+				RGBAframe[rgb_offset] = (B << 16) | (G << 8) | (R << 0) | (0xFF << 24);
+				rgb_offset++;
+
+				// second pixel, U and V (and thus C) are the same as before.
+				Y = yuv.y[y_offset++] - 16;
+				A = 298 * Y;
+
+				R = Vclip((A + C + 128) >> 8);
+				G = Vclip((A - 100 * U - (C >> 1) + 128) >> 8);
+				B = Vclip((A + 516 * U + 128) >> 8);
+
+				RGBAframe[rgb_offset] = (B << 16) | (G << 8) | (R << 0) | (0xFF << 24);
+				rgb_offset++;
 			}
 		}
 
