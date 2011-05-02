@@ -284,16 +284,24 @@ static double getRelativeTime(void)
 	return((getTimeNow() - basetime) * .001);
 }
 
+static int texture_width = 1024;
+static int texture_height = 1024;
+static GLuint video_texture;
+
 /** Allocates memory to hold the decoded video frame
  */
 static void Allocate_videoFrame(void)
 {
 	RGBAframe = malloc(videodata.ti.frame_width * videodata.ti.frame_height * 4);
+	glGenTextures(1, &video_texture);
 }
 
-static int texture_width = 1024;
-static int texture_height = 1024;
-static GLuint video_texture;
+static void deallocateVideoFrame(void)
+{
+	if (RGBAframe)
+		free(RGBAframe);
+	glDeleteTextures(1, &video_texture);
+}
 
 #define Vclip( x )	( (x > 0) ? ((x < 255) ? x : 255) : 0 )
 // main routine to display video on screen.
@@ -692,7 +700,6 @@ bool seq_Play(const char* filename)
 		}
 		Allocate_videoFrame();
 
-		glGenTextures(1, &video_texture);
 		glBindTexture(GL_TEXTURE_2D, video_texture);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture_width, texture_height,
 				0, GL_RGBA, GL_UNSIGNED_BYTE, blackframe);
@@ -948,6 +955,7 @@ void seq_Shutdown()
 		theora_clear(&videodata.td);
 		theora_comment_clear(&videodata.tc);
 		theora_info_clear(&videodata.ti);
+		deallocateVideoFrame();
 	}
 
 	ogg_sync_clear(&videodata.oy);
@@ -957,10 +965,6 @@ void seq_Shutdown()
 		PHYSFS_close(fpInfile);
 	}
 
-	if (RGBAframe)
-	{
-		free(RGBAframe);
-	}
 	videoplaying = false;
 	Timer_stop();
 
