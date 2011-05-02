@@ -286,8 +286,8 @@ static void Allocate_videoFrame(void)
 	RGBAframe = (char *)malloc(videodata.ti.frame_width * videodata.ti.frame_height * 4);
 }
 
-static int texture_width = 512;
-static int texture_height = 512;
+static int texture_width = 1024;
+static int texture_height = 1024;
 static GLuint video_texture;
 
 #define Vclip( x )	( (x > 0) ? ((x < 255) ? x : 255) : 0 )
