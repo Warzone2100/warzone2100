@@ -182,6 +182,9 @@ Section $(TEXT_SecBase) SecBase
   ; Data files
   File "${TOP_BUILDDIR}\data\mp.wz"
   File "${TOP_BUILDDIR}\data\base.wz"
+    
+  ; Cacert Root Cert
+  File "${TOP_BUILDDIR}\data\cacert.org.pem"
 
   ; Information/documentation files (convert eols for text files)
   File "${TOP_SRCDIR}\ChangeLog"

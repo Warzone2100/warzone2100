@@ -49,7 +49,7 @@ CLEANFILES = $(BASEARCHIVE) $(PATCHARCHIVE)
 $(BASEARCHIVE): $(BASELIST:%=$(abs_srcdir)/$(basename $(BASEARCHIVE))/%)
 $(PATCHARCHIVE): $(PATCHLIST:%=$(abs_srcdir)/$(basename $(PATCHARCHIVE))/%)
 
-nodist_pkgdata_DATA =  $(BASEARCHIVE) $(PATCHARCHIVE)
+nodist_pkgdata_DATA =  $(BASEARCHIVE) $(PATCHARCHIVE) cacert.org.pem
 
 dist-hook: $(BASEARCHIVE) $(PATCHARCHIVE)
 	$(UNZIP) -u $(BASEARCHIVE) -d $(DESTDIR)$(distdir)/$(basename $(BASEARCHIVE))
