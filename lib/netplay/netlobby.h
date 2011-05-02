@@ -106,6 +106,7 @@ namespace Lobby
 			bool disconnect();
 			bool isConnected();
 			RETURN_CODES login(const QString& password);
+			RETURN_CODES logout();
 
 			RETURN_CODES addGame(char** result, const uint32_t port, const uint32_t maxPlayers,
 								const char* description, const char* versionstring,

@@ -83,6 +83,8 @@ void loadMapPreview(bool hideInterface);
 #define CON_CANCEL			10102
 #define CON_HOST_GAME		10103
 #define CON_JOIN_IP			10104
+#define CON_LOGOUT			10105
+#define CON_LOGIN			10106
 
 #define CON_IP				10133
 #define CON_IPX				20

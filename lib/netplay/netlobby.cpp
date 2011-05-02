@@ -499,6 +499,35 @@ namespace Lobby
 		return NO_ERROR;
 	}
 
+	RETURN_CODES Client::logout()
+	{
+		// Remove a maybe hosted game.
+		if (delGame() != NO_ERROR)
+		{
+			freeError();
+		}
+
+		// Tell the lobby that we want to logout.
+		if (call_("logout", NULL, NULL) != NO_ERROR)
+		{
+			// Clear auth data.
+			useAuth_ = false;
+			user_.clear();
+			token_.clear();
+			session_.clear();
+			return lastError_.code;
+		}
+
+		// Clear auth data.
+		useAuth_ = false;
+		user_.clear();
+		token_.clear();
+		session_.clear();
+
+		freeCallResult_();
+		return NO_ERROR;
+	}
+
 	bool Client::disconnect()
 	{
 		if (!isConnected())

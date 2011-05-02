@@ -820,7 +820,7 @@ static void addGames(void)
 			txt = _("No games are available");
 			break;
 		case ERROR_AUTHENTICATION:
-			txt = _("Authentication failed!");
+			txt = _("Authentication failed or not Authenticated");
 			break;
 		case ERROR_LOBBY_REJECTED:
 			txt = _("The lobby rejected you!");
@@ -935,6 +935,16 @@ void runGameFind(void )
 			OptionsInet();
 			break;
 
+		case CON_LOGIN:
+			showLoginForm();
+			break;
+
+		case CON_LOGOUT:
+			lobbyclient.logout();
+			setLobbyError(ERROR_AUTHENTICATION);
+			addGames();
+			break;
+
 		case CON_IP_OK: // IP OK
 			sstrcpy(addr, widgGetString(psConScreen, CON_IP));
 			if (addr[0] == '\0')
@@ -1027,7 +1037,7 @@ void runGameFind(void )
 			lobbyUser.clear();
 			lobbyPass.clear();
 
-			setLobbyError(ERROR_AUTHENTICATION);
+			NETfindGame(MaxGames);
 			addGames(); // Draws the error
 			break;
 
@@ -1122,6 +1132,10 @@ void startGameFind(void)
 
 	// Join IP
 	addTextButton(CON_JOIN_IP, 305, 15, _("Connect IP"), 0);
+
+	// Login/out
+	addTextButton(CON_LOGIN, 75, 420, _("Login"), 0);
+	addTextButton(CON_LOGOUT, 305, 420, _("Logout"), 0);
 
 	//refresh
 	addMultiBut(psWScreen,FRONTEND_BOTFORM,MULTIOP_REFRESH, MULTIOP_CHATBOXW-MULTIOP_OKW-5,5,MULTIOP_OKW,MULTIOP_OKH,
@@ -1338,6 +1352,10 @@ static void showPasswordForm(void)
 static void hideLoginForm(void)
 {
 	EnablePasswordPrompt = false;
+
+	// Clear the text
+	widgSetString(psWScreen, CON_LOGIN_USER, "");
+	widgSetString(psWScreen, CON_LOGIN_PASS, "");
 
 	widgHide(psWScreen, FRONTEND_LOGINFORM);
 	widgHide(psWScreen, CON_LOGIN_SIDETEXT);
