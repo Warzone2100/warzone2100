@@ -359,15 +359,15 @@ static void video_write(bool update)
 	// NOTE: 255 * width | height, because texture matrix is set up with a
 	// call to glScalef(1/256.0, 1/256.0, 1) ... so don't blame me. :P
 	glTranslatef(ScrnvidXpos, ScrnvidYpos, 0.0f);
-	glBegin(GL_TRIANGLE_STRIP);
+	glBegin(GL_QUADS);
 	glTexCoord2f(0, 0);
 	glVertex2f(videoX1, videoY1);
 	glTexCoord2f(256 * video_width / texture_width, 0);
 	glVertex2f(videoX2, videoY1);				//screenWidth
-	glTexCoord2f(0, 256 * video_height / texture_height);
-	glVertex2f(videoX1, videoY2);				//screenHeight
 	glTexCoord2f(256 * video_width / texture_width, 256 * video_height / texture_height);
 	glVertex2f(videoX2, videoY2);		//screenWidth,screenHeight
+	glTexCoord2f(0, 256 * video_height / texture_height);
+	glVertex2f(videoX1, videoY2);				//screenHeight
 	glEnd();
 
 	glPopMatrix();
