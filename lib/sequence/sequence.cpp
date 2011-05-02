@@ -352,15 +352,15 @@ static void video_write(bool update)
 	glPushMatrix();
 
 	glTranslatef(ScrnvidXpos, ScrnvidYpos, 0.0f);
-	glBegin(GL_TRIANGLE_STRIP);
+	glBegin(GL_QUADS);
 	glTexCoord2f(0, 0);
 	glVertex2f(videoX1, videoY1);
 	glTexCoord2f((float) video_width / texture_width, 0);
 	glVertex2f(videoX2, videoY1);				//screenWidth
-	glTexCoord2f(0, (float) video_height / texture_height);
-	glVertex2f(videoX1, videoY2);				//screenHeight
 	glTexCoord2f((float) video_width / texture_width, (float) video_height / texture_height);
 	glVertex2f(videoX2, videoY2);		//screenWidth,screenHeight
+	glTexCoord2f(0, (float) video_height / texture_height);
+	glVertex2f(videoX1, videoY2);				//screenHeight
 	glEnd();
 
 	glPopMatrix();
