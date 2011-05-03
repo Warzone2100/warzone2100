@@ -193,8 +193,13 @@ WzMainWindow::WzMainWindow(const QGLFormat &format, QWidget *parent) : QGLWidget
 	// Want focusOutEvent messages.
 	setFocusPolicy(Qt::StrongFocus);
 
+#if !defined(WZ_OS_MAC)
 	// Want áéíóú inputMethodEvent messages.
-	setAttribute(Qt::WA_InputMethodEnabled);
+	setAttribute(Qt::WA_InputMethodEnabled, true);
+#else
+	// But not on the Mac (no ALT+H on US Extended Keyboards)
+	setAttribute(Qt::WA_InputMethodEnabled, false);
+#endif
 }
 
 WzMainWindow::~WzMainWindow()
@@ -487,6 +492,8 @@ void WzMainWindow::realHandleKeyEvent(QKeyEvent *event, bool pressed)
 {
 	unsigned int lastKey;
 	bool isKeypad = event->modifiers() & Qt::KeypadModifier;
+
+	debug(LOG_WARNING, "Received normal key %d.\n", event->key());
 
 	switch (event->text().size())
 	{
