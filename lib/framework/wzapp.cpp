@@ -493,8 +493,6 @@ void WzMainWindow::realHandleKeyEvent(QKeyEvent *event, bool pressed)
 	unsigned int lastKey;
 	bool isKeypad = event->modifiers() & Qt::KeypadModifier;
 
-	debug(LOG_WARNING, "Received normal key %d.\n", event->key());
-
 	switch (event->text().size())
 	{
 		case 0:
