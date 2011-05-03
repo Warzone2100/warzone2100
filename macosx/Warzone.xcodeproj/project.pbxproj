@@ -554,6 +554,8 @@
 		43F300C210D344B000707B6E /* x86int.h in Headers */ = {isa = PBXBuildFile; fileRef = 43F3008B10D344B000707B6E /* x86int.h */; };
 		43F300C310D344B000707B6E /* x86state.c in Sources */ = {isa = PBXBuildFile; fileRef = 43F3008C10D344B000707B6E /* x86state.c */; };
 		43F300D710D3496D00707B6E /* encode.c in Sources */ = {isa = PBXBuildFile; fileRef = 43F3006710D344AF00707B6E /* encode.c */; };
+		43F30910136BAED700AFD307 /* QtNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4333612011A07FB900380F5E /* QtNetwork.framework */; };
+		43F30913136BAEE900AFD307 /* QtNetwork.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 4333612011A07FB900380F5E /* QtNetwork.framework */; };
 		647D9C571039289A006D37CF /* challenge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 647D9C551039289A006D37CF /* challenge.cpp */; };
 		9742E5730DF9975E000A5D41 /* lexer_input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9742E5710DF9975E000A5D41 /* lexer_input.cpp */; };
 		9742E5770DF9979C000A5D41 /* parsetest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9742E5750DF9979C000A5D41 /* parsetest.cpp */; };
@@ -737,6 +739,7 @@
 				43F1D99A1343F1DE001478EC /* QtScript.framework in Copy frameworks */,
 				4333661C11A07FFF00380F5E /* QtGui.framework in Copy frameworks */,
 				4333661D11A07FFF00380F5E /* QtOpenGL.framework in Copy frameworks */,
+				43F30913136BAEE900AFD307 /* QtNetwork.framework in Copy frameworks */,
 				43502D77134764B000A02A1F /* GLExtensionWrangler.framework in Copy frameworks */,
 				431843B71363958E00BA2BC5 /* MiniUPnPc.framework in Copy frameworks */,
 				02581C880BD5AD1100957CBC /* Zlib.framework in Copy frameworks */,
@@ -1602,6 +1605,7 @@
 				43F1D9801343F1C5001478EC /* QtScript.framework in Frameworks */,
 				4333612311A07FB900380F5E /* QtGui.framework in Frameworks */,
 				4333612511A07FBA00380F5E /* QtOpenGL.framework in Frameworks */,
+				43F30910136BAED700AFD307 /* QtNetwork.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
