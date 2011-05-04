@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2011-05-04 23:49+0200\n"
-"PO-Revision-Date: 2011-01-10 15:11+0100\n"
-"Last-Translator: Daniel Vijande <nsa_server@hotmail.com>\n"
+"PO-Revision-Date: 2011-05-03 10:10+0100\n"
+"Last-Translator: Saber Nyoki <nsa_server@hotmail.com>\n"
 "Language-Team: Spanish <warzone-dev@gna.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -11360,19 +11360,16 @@ msgid "Mini-Rocket Array Cobra Half-tracks"
 msgstr "Cobra Artillería Mini-Cohetes Semi-oruga"
 
 #: data/mp/messages/strings/names.txt:351
-#, fuzzy
 msgid "Jammer Tower"
-msgstr "Torre de Guardia Incendiaria"
+msgstr "Torre de Interferencia"
 
 #: data/mp/messages/strings/names.txt:352
-#, fuzzy
 msgid "Jammer Turret"
-msgstr "Torrete de Interferencia"
+msgstr "Torreta de Interferencia"
 
 #: data/mp/messages/strings/names.txt:353
-#, fuzzy
 msgid "Electronic Countermeasures"
-msgstr "Laboratorio de Electrónica"
+msgstr "Contramedidas Electrónicas"
 
 #: data/mp/messages/strings/names.txt:363
 #: data/mp/messages/strings/names.txt:1703
@@ -12177,9 +12174,8 @@ msgid "go directly to host screen"
 msgstr "Ir directamente a pantalla de dominio"
 
 #: src/configuration.cpp:92
-#, fuzzy
 msgid "My Game"
-msgstr "Partida"
+msgstr "Mi Partida"
 
 #: src/configuration.cpp:93
 #: src/multistat.cpp:124
@@ -12719,9 +12715,8 @@ msgstr "Sincronización Vertical"
 
 #: src/frontend.cpp:862
 #: src/frontend.cpp:926
-#, fuzzy
 msgid "Unsupported"
-msgstr "Transporte"
+msgstr "No Soportado"
 
 #: src/frontend.cpp:867
 msgid "VIDEO OPTIONS"
@@ -13004,9 +12999,8 @@ msgid "Tab Scroll right"
 msgstr "Tab Desplazamiento Derecha"
 
 #: src/hci.cpp:5197
-#, fuzzy
 msgid "Ally progress"
-msgstr "Progreso de fabricación"
+msgstr "Progreso aliado"
 
 #: src/ingameop.cpp:111
 #: src/ingameop.cpp:195
@@ -14249,36 +14243,35 @@ msgstr "Fijar Límites de Estructuras"
 
 #: src/multiint.cpp:1626
 msgid "DIFFICULTY"
-msgstr ""
+msgstr "DIFICULTAD"
 
 #: src/multiint.cpp:1640
 msgid "Less aggressive and starts with less units"
-msgstr ""
+msgstr "Menos agresivo y comienza con menos unidades"
 
 #: src/multiint.cpp:1641
-#, fuzzy
 msgid "Plays nice"
-msgstr "Jugador"
+msgstr "Juega justamente"
 
 #: src/multiint.cpp:1642
 msgid "No holds barred"
-msgstr ""
+msgstr "Sin prohibiciones"
 
 #: src/multiint.cpp:1643
 msgid "Starts with advantages and gets twice as much oil from derricks"
-msgstr ""
+msgstr "Comienza con ventajas y recibe el doble de los pozos"
 
 #: src/multiint.cpp:1671
 msgid "CHOOSE AI"
-msgstr ""
+msgstr "ESCOGER IA"
 
 #: src/multiint.cpp:1687
 msgid "Allow human players to join in this slot"
-msgstr ""
+msgstr "Permitir usar esta ranura a jugadores humanos"
 
 #: src/multiint.cpp:1695
 msgid "Leave this slot unused"
-msgstr ""
+msgstr "Dejar esta ranura sin utilizar"
 
 #: src/multiint.cpp:2098
 msgid "Team"
@@ -14286,10 +14279,9 @@ msgstr "Equipo"
 
 #: src/multiint.cpp:2139
 msgid "You cannot change difficulty in a challenge"
-msgstr ""
+msgstr "No puedes cambiar la dificultad en un desafío"
 
 #: src/multiint.cpp:2139
-#, fuzzy
 msgid "Click to change difficulty"
 msgstr "Click para ajustar dificultad de la IA"
 
@@ -14322,13 +14314,12 @@ msgid "Click to change player position"
 msgstr "Click para cambiar la posición de jugador."
 
 #: src/multiint.cpp:2331
-#, fuzzy
 msgid "Click to change AI"
-msgstr "Click para cambiar a esta ranura."
+msgstr "Click para cambiar la IA"
 
 #: src/multiint.cpp:2335
 msgid "You cannot change AI in a challenge"
-msgstr ""
+msgstr "No puedes cambiar la IA en un desafío"
 
 #: src/multiint.cpp:2397
 msgid "CHAT"
@@ -14453,44 +14444,36 @@ msgid "8 players"
 msgstr "8 jugadores"
 
 #: src/multimenu.cpp:146
-#, fuzzy
 msgid "9 players"
-msgstr "2 jugadores"
+msgstr "9 jugadores"
 
 #: src/multimenu.cpp:146
-#, fuzzy
 msgid "10 players"
-msgstr "2 jugadores"
+msgstr "10 jugadores"
 
 #: src/multimenu.cpp:146
-#, fuzzy
 msgid "11 players"
-msgstr "2 jugadores"
+msgstr "11 jugadores"
 
 #: src/multimenu.cpp:146
-#, fuzzy
 msgid "12 players"
-msgstr "2 jugadores"
+msgstr "12 jugadores"
 
 #: src/multimenu.cpp:146
-#, fuzzy
 msgid "13 players"
-msgstr "3 jugadores"
+msgstr "13 jugadores"
 
 #: src/multimenu.cpp:146
-#, fuzzy
 msgid "14 players"
-msgstr "4 jugadores"
+msgstr "14 jugadores"
 
 #: src/multimenu.cpp:146
-#, fuzzy
 msgid "15 players"
-msgstr "5 jugadores"
+msgstr "15 jugadores"
 
 #: src/multimenu.cpp:146
-#, fuzzy
 msgid "16 players"
-msgstr "6 jugadores"
+msgstr "16 jugadores"
 
 #: src/multimenu.cpp:619
 msgid "Technology level 1"
@@ -14596,36 +14579,35 @@ msgstr "Cian"
 
 #: src/multiplay.cpp:1949
 msgid "Yellow"
-msgstr ""
+msgstr "Amarillo"
 
 #: src/multiplay.cpp:1950
 msgid "Purple"
-msgstr ""
+msgstr "Púrpura"
 
 #: src/multiplay.cpp:1951
 msgid "White"
-msgstr ""
+msgstr "Blanco"
 
 #: src/multiplay.cpp:1952
-#, fuzzy
 msgid "Bright blue"
-msgstr "Botón derecho"
+msgstr "Azul Brillante"
 
 #: src/multiplay.cpp:1953
 msgid "Neon green"
-msgstr ""
+msgstr "Verde Neón"
 
 #: src/multiplay.cpp:1954
 msgid "Infrared"
-msgstr ""
+msgstr "Infra-rojo"
 
 #: src/multiplay.cpp:1955
 msgid "Ultraviolet"
-msgstr ""
+msgstr "Untravioleta"
 
 #: src/multiplay.cpp:1956
 msgid "Brown"
-msgstr ""
+msgstr "Marrón"
 
 #: src/order.cpp:801
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
