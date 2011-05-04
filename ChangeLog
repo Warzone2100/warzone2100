@@ -1,12 +1,15 @@
-2011-04-xx: Version 2.3.8
+2011-05-xx: Version 2.3.8
  * General:
    * New: Two new 2 player maps - Vision and Roughness (commit:697afb16d5244f9715952f8762b1011c6d75101e, commit:ebfc46b679a1f74df0e63313e4d3e05db55a23ad)
    * Change: Increase recycled experience storage in memory (commit:703665b4b7df1282eee29a7064961bc66152a847)
    * Change: Set a window icon (ticket:2465, commit:ac792c67d4bb66618ae7ff712844c4eebb70a496)
+   * Change: Allow projectiles to go through terrain again (ticket:2386, commit:d13ede6bf2d2248866c4ecc62594555db9f9de0d)
+   * Change: Limited support for map-mods. Only load the map file actually used when starting a game. (ticket:2610, commit:65d968cdfccecc6c60e0215ab34dbf3d56f19a80)
    * Fix: Prevent savegame corruption (ticket:2100, commit:a974722e397b7072fb59d0114e2a4ef9f8d509d8, ticket:2625, commit:cc156a668fb5291e38eab33ff77138a05e29fa28, ticket:2627, commit:fc0f87807eeadaeeafb1386b2525a81f0a550fde)
    * Fix: Prevent building on burning oil (ticket:1100, commit:2745ac27f84301c05b678892d798a93fd4e7f813)
  * Mods:
    * Fix: 1.10 Balance (commit:9943ff3a4b67b0f64a9e2ee163c8ccac711be72e)
+   * Fix: NTW bodies (ticket:2177, commit:a8fb8bec834c9d550fe43bada610bf5440d6b960)
  * Translations:
    * New: Catalan (ticket:2616, commit:9c6b0b8131636c2d1bf2b610114f0fd08291bc42)
    * New: Hungarian (commit:5266c78b544593fb9497892ba9e632c1ddcda763, commit:b7cc16c72b4d4aaa3f2a3b23b69a9a5896b1fa43)
