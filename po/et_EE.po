@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-05-01 14:54+0200\n"
+"POT-Creation-Date: 2011-05-04 23:49+0200\n"
 "PO-Revision-Date: 2010-05-10 16:59+0200\n"
 "Last-Translator: erlando <erlando112@hotmail.com>\n"
 "Language-Team: Estonian <ee@li.org>\n"
@@ -12191,12 +12191,12 @@ msgstr "võõrustaja"
 msgid "go directly to host screen"
 msgstr "mine otse võõrustaja aknasse"
 
-#: src/configuration.cpp:91
+#: src/configuration.cpp:92
 #, fuzzy
 msgid "My Game"
 msgstr "Välju Mängust"
 
-#: src/configuration.cpp:92
+#: src/configuration.cpp:93
 #: src/multistat.cpp:124
 msgid "Player"
 msgstr "Mägija"
@@ -12501,11 +12501,11 @@ msgstr "ÕPETUSED"
 #: src/frontend.cpp:218
 #: src/frontend.cpp:362
 #: src/frontend.cpp:429
-#: src/frontend.cpp:562
-#: src/frontend.cpp:698
-#: src/frontend.cpp:833
-#: src/frontend.cpp:1075
-#: src/frontend.cpp:1222
+#: src/frontend.cpp:579
+#: src/frontend.cpp:735
+#: src/frontend.cpp:870
+#: src/frontend.cpp:1112
+#: src/frontend.cpp:1259
 msgctxt "menu"
 msgid "Return"
 msgstr "Tagasi"
@@ -12585,240 +12585,257 @@ msgid "Video Playback"
 msgstr "Video Taasesitus"
 
 #: src/frontend.cpp:493
-#: src/frontend.cpp:652
+#: src/frontend.cpp:669
 msgid "1X"
 msgstr "1X"
 
 #: src/frontend.cpp:497
-#: src/frontend.cpp:642
+#: src/frontend.cpp:659
 msgid "2X"
 msgstr "2X"
 
 #: src/frontend.cpp:501
-#: src/frontend.cpp:647
-#: src/frontend.cpp:773
-#: src/frontend.cpp:859
+#: src/frontend.cpp:664
+#: src/frontend.cpp:810
+#: src/frontend.cpp:896
 msgid "Fullscreen"
 msgstr "Täisaken"
 
-#: src/frontend.cpp:511
-msgid "Screen Shake"
-msgstr "Ekraani Värin"
+#: src/frontend.cpp:510
+msgid "Scanlines"
+msgstr ""
 
 #: src/frontend.cpp:514
-#: src/frontend.cpp:542
-#: src/frontend.cpp:550
-#: src/frontend.cpp:585
-#: src/frontend.cpp:619
-#: src/frontend.cpp:628
-#: src/frontend.cpp:794
-#: src/frontend.cpp:951
-#: src/frontend.cpp:989
-#: src/frontend.cpp:1028
-#: src/frontend.cpp:1040
-#: src/frontend.cpp:1052
-#: src/frontend.cpp:1097
-#: src/frontend.cpp:1110
-#: src/frontend.cpp:1124
-msgid "On"
-msgstr "Sees"
-
-#: src/frontend.cpp:518
-#: src/frontend.cpp:538
-#: src/frontend.cpp:554
-#: src/frontend.cpp:580
-#: src/frontend.cpp:614
-#: src/frontend.cpp:632
-#: src/frontend.cpp:798
-#: src/frontend.cpp:808
-#: src/frontend.cpp:883
-#: src/frontend.cpp:946
-#: src/frontend.cpp:984
-#: src/frontend.cpp:1032
-#: src/frontend.cpp:1044
-#: src/frontend.cpp:1056
-#: src/frontend.cpp:1092
-#: src/frontend.cpp:1105
-#: src/frontend.cpp:1119
+#: src/frontend.cpp:535
+#: src/frontend.cpp:555
+#: src/frontend.cpp:571
+#: src/frontend.cpp:597
+#: src/frontend.cpp:631
+#: src/frontend.cpp:649
+#: src/frontend.cpp:694
+#: src/frontend.cpp:835
+#: src/frontend.cpp:845
+#: src/frontend.cpp:920
+#: src/frontend.cpp:983
+#: src/frontend.cpp:1021
+#: src/frontend.cpp:1069
+#: src/frontend.cpp:1081
+#: src/frontend.cpp:1093
+#: src/frontend.cpp:1129
+#: src/frontend.cpp:1142
+#: src/frontend.cpp:1156
 msgid "Off"
 msgstr "Väljas"
 
-#: src/frontend.cpp:523
+#: src/frontend.cpp:518
+#: src/frontend.cpp:684
+msgid "50%"
+msgstr ""
+
+#: src/frontend.cpp:522
+#: src/frontend.cpp:689
+#: src/multiplay.cpp:1944
+msgid "Black"
+msgstr "Must"
+
+#: src/frontend.cpp:528
+msgid "Screen Shake"
+msgstr "Ekraani Värin"
+
+#: src/frontend.cpp:531
+#: src/frontend.cpp:559
+#: src/frontend.cpp:567
+#: src/frontend.cpp:602
+#: src/frontend.cpp:636
+#: src/frontend.cpp:645
+#: src/frontend.cpp:831
+#: src/frontend.cpp:988
+#: src/frontend.cpp:1026
+#: src/frontend.cpp:1065
+#: src/frontend.cpp:1077
+#: src/frontend.cpp:1089
+#: src/frontend.cpp:1134
+#: src/frontend.cpp:1147
+#: src/frontend.cpp:1161
+msgid "On"
+msgstr "Sees"
+
+#: src/frontend.cpp:540
 #: src/multiint.cpp:1384
 msgid "Fog"
 msgstr "Udu"
 
-#: src/frontend.cpp:526
-#: src/frontend.cpp:601
+#: src/frontend.cpp:543
+#: src/frontend.cpp:618
 msgid "Mist"
 msgstr "Udu"
 
-#: src/frontend.cpp:530
-#: src/frontend.cpp:595
+#: src/frontend.cpp:547
+#: src/frontend.cpp:612
 #: src/multiint.cpp:1386
 msgid "Fog Of War"
 msgstr "Sõjaudu"
 
-#: src/frontend.cpp:535
+#: src/frontend.cpp:552
 msgid "Subtitles"
 msgstr "Suptiitrid"
 
-#: src/frontend.cpp:547
+#: src/frontend.cpp:564
 msgid "Shadows"
 msgstr "Varjud"
 
-#: src/frontend.cpp:558
+#: src/frontend.cpp:575
 msgid "GRAPHICS OPTIONS"
 msgstr "GRAAFIKA SEADED"
 
-#: src/frontend.cpp:686
+#: src/frontend.cpp:723
 #: src/ingameop.cpp:167
 msgid "Voice Volume"
 msgstr "Hääle Volüüm"
 
-#: src/frontend.cpp:690
+#: src/frontend.cpp:727
 #: src/ingameop.cpp:172
 msgid "FX Volume"
 msgstr "FX Volüüm"
 
-#: src/frontend.cpp:694
+#: src/frontend.cpp:731
 #: src/ingameop.cpp:177
 msgid "Music Volume"
 msgstr "Muusika Volüüm"
 
-#: src/frontend.cpp:701
+#: src/frontend.cpp:738
 msgid "AUDIO OPTIONS"
 msgstr "HELI SEADED"
 
-#: src/frontend.cpp:766
+#: src/frontend.cpp:803
 msgid "* Takes effect on game restart"
 msgstr "* Võtab efekti kui mäng uuesti käivitatakse"
 
-#: src/frontend.cpp:769
+#: src/frontend.cpp:806
 msgid "Graphics Mode*"
 msgstr "Graafika Mode*"
 
-#: src/frontend.cpp:777
-#: src/frontend.cpp:854
+#: src/frontend.cpp:814
+#: src/frontend.cpp:891
 msgid "Windowed"
 msgstr "Akendatud"
 
-#: src/frontend.cpp:781
+#: src/frontend.cpp:818
 msgid "Resolution*"
 msgstr "Resolution*"
 
-#: src/frontend.cpp:786
+#: src/frontend.cpp:823
 msgid "Texture size"
 msgstr "Tekstuuri suurus"
 
-#: src/frontend.cpp:790
+#: src/frontend.cpp:827
 msgid "Vertical sync*"
 msgstr "Vertical sync*"
 
-#: src/frontend.cpp:825
-#: src/frontend.cpp:889
+#: src/frontend.cpp:862
+#: src/frontend.cpp:926
 #, fuzzy
 msgid "Unsupported"
 msgstr "Transporter"
 
-#: src/frontend.cpp:830
+#: src/frontend.cpp:867
 msgid "VIDEO OPTIONS"
 msgstr "VIDEO SEADED"
 
-#: src/frontend.cpp:1021
+#: src/frontend.cpp:1058
 msgid "* May negatively affect performance"
 msgstr "* May negatively affect performance"
 
-#: src/frontend.cpp:1025
+#: src/frontend.cpp:1062
 msgid "Reverse Rotation"
 msgstr "Tagasipööre"
 
-#: src/frontend.cpp:1036
+#: src/frontend.cpp:1073
 msgid "Trap Cursor"
 msgstr "Püüniskursor"
 
-#: src/frontend.cpp:1049
+#: src/frontend.cpp:1086
 msgid "Switch Mouse Buttons"
 msgstr "Vahetatud Hiire Nupud"
 
-#: src/frontend.cpp:1061
+#: src/frontend.cpp:1098
 #, fuzzy
 msgid "Rotate Screen"
 msgstr "Keera Vasakule"
 
-#: src/frontend.cpp:1064
-#: src/frontend.cpp:1138
+#: src/frontend.cpp:1101
+#: src/frontend.cpp:1175
 msgid "Middle Mouse"
 msgstr ""
 
-#: src/frontend.cpp:1068
-#: src/frontend.cpp:1133
+#: src/frontend.cpp:1105
+#: src/frontend.cpp:1170
 msgid "Right Mouse"
 msgstr ""
 
-#: src/frontend.cpp:1072
+#: src/frontend.cpp:1109
 msgid "MOUSE OPTIONS"
 msgstr "HIIRE SEADED"
 
-#: src/frontend.cpp:1173
-#: src/frontend.cpp:1243
+#: src/frontend.cpp:1210
+#: src/frontend.cpp:1280
 msgid "Difficulty"
 msgstr "Raskusaste"
 
-#: src/frontend.cpp:1177
-#: src/frontend.cpp:1251
+#: src/frontend.cpp:1214
 #: src/frontend.cpp:1288
+#: src/frontend.cpp:1325
 msgid "Easy"
 msgstr "Kerge"
 
-#: src/frontend.cpp:1180
-#: src/frontend.cpp:1254
-#: src/frontend.cpp:1280
+#: src/frontend.cpp:1217
+#: src/frontend.cpp:1291
+#: src/frontend.cpp:1317
 msgid "Normal"
 msgstr "Normaalne"
 
-#: src/frontend.cpp:1184
-#: src/frontend.cpp:1257
-#: src/frontend.cpp:1284
+#: src/frontend.cpp:1221
+#: src/frontend.cpp:1294
+#: src/frontend.cpp:1321
 msgid "Hard"
 msgstr "Raske"
 
-#: src/frontend.cpp:1189
-#: src/frontend.cpp:1244
+#: src/frontend.cpp:1226
+#: src/frontend.cpp:1281
 msgid "Scroll Speed"
 msgstr "Kerimiskiirus"
 
-#: src/frontend.cpp:1203
-#: src/frontend.cpp:1241
+#: src/frontend.cpp:1240
+#: src/frontend.cpp:1278
 msgid "Language"
 msgstr "Keel"
 
-#: src/frontend.cpp:1215
-#: src/frontend.cpp:1242
+#: src/frontend.cpp:1252
+#: src/frontend.cpp:1279
 msgid "Unit Colour"
 msgstr "Üksuse Värv"
 
-#: src/frontend.cpp:1218
+#: src/frontend.cpp:1255
 msgid "Radar"
 msgstr ""
 
-#: src/frontend.cpp:1219
-#: src/frontend.cpp:1268
+#: src/frontend.cpp:1256
+#: src/frontend.cpp:1305
 #, fuzzy
 msgid "Rotating"
 msgstr "Keera Paremale"
 
-#: src/frontend.cpp:1219
-#: src/frontend.cpp:1268
+#: src/frontend.cpp:1256
+#: src/frontend.cpp:1305
 msgid "Fixed"
 msgstr ""
 
-#: src/frontend.cpp:1225
-#: src/frontend.cpp:1245
+#: src/frontend.cpp:1262
+#: src/frontend.cpp:1282
 msgid "GAME OPTIONS"
 msgstr "MÄNGU SEADED"
 
-#: src/frontend.cpp:1377
+#: src/frontend.cpp:1414
 #: src/multiint.cpp:2423
 msgid "Mod: "
 msgstr "Mod:"
@@ -14611,10 +14628,6 @@ msgstr "Oranð"
 #: src/multiplay.cpp:1943
 msgid "Grey"
 msgstr "Hall"
-
-#: src/multiplay.cpp:1944
-msgid "Black"
-msgstr "Must"
 
 #: src/multiplay.cpp:1945
 msgid "Red"
