@@ -126,7 +126,7 @@ BOOL InitRadar(void)
 	colRadarAlly = WZCOL_YELLOW;
 	colRadarEnemy = WZCOL_RED;
 	colRadarMe = WZCOL_WHITE;
-	if (mapWidth < 150)	// too small!
+	if (mapWidth < 150 && pie_GetVideoBufferHeight() > 480)	// too small!
 	{
 		RadarZoom = DEFAULT_RADARZOOM * 2;
 	}
