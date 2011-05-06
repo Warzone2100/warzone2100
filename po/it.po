@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-04-28 21:54+0200\n"
+"POT-Creation-Date: 2011-05-07 01:19+0200\n"
 "PO-Revision-Date: 2010-12-14 22:19+0100\n"
 "Last-Translator: Cristian Odorico <generalchris@hotmail.it>\n"
 "Language-Team: Italian <warzone-dev@gna.org>\n"
@@ -12514,8 +12514,8 @@ msgstr "Impossibile costruire. Risorsa d'olio in fiamme."
 #: src/display.c:1923
 #: src/display.c:2536
 #, c-format
-msgid "%s - Damage %d%% - Experience %d, %s"
-msgstr "%s - Danno %d%% - Esperienza %d, %s"
+msgid "%s - Damage %d%% - Experience %.1f, %s"
+msgstr "%s - Danno %d%% - Esperienza %.1f, %s"
 
 #: src/display.c:1939
 #, c-format
@@ -12680,8 +12680,8 @@ msgstr "GIOCATORE SINGOLO"
 
 #: src/frontend.c:294
 #: src/ingameop.c:507
-#: src/mission.c:2827
-#: src/mission.c:2932
+#: src/mission.c:2820
+#: src/mission.c:2925
 msgid "Load Saved Game"
 msgstr "Carica Partita"
 
@@ -12977,7 +12977,7 @@ msgstr "MAPPA SALVATA!"
 #: src/hci.c:1692
 #: src/loop.c:531
 #: src/loop.c:547
-#: src/mission.c:2898
+#: src/mission.c:2891
 msgid "GAME SAVED :"
 msgstr "PARTITA SALVATA!"
 
@@ -13164,8 +13164,8 @@ msgstr "ATTENZIONE: Sei l'host. Se tu abbandoni, la partita termina per tutti!"
 
 #: src/ingameop.c:283
 #: src/ingameop.c:511
-#: src/mission.c:2814
-#: src/mission.c:2935
+#: src/mission.c:2807
+#: src/mission.c:2928
 msgid "Save Game"
 msgstr "Salva Partita"
 
@@ -13582,23 +13582,23 @@ msgstr "Il radar mostra i colori Amici-Nemici"
 msgid "Radar showing player colors"
 msgstr "Il radar mostra il colore dei giocatori"
 
-#: src/keybind.c:2654
+#: src/keybind.c:2653
 msgid "Radar showing only objects"
 msgstr "Il radar mostra solo oggetti"
 
-#: src/keybind.c:2657
+#: src/keybind.c:2656
 msgid "Radar blending terrain and height"
 msgstr "Radar visualizzante terreno e altitudine"
 
-#: src/keybind.c:2660
+#: src/keybind.c:2659
 msgid "Radar showing terrain"
 msgstr "Il radar mostra il terreno"
 
-#: src/keybind.c:2663
+#: src/keybind.c:2662
 msgid "Radar showing revealed terrain"
 msgstr "Il radar mostra il terreno scoperto"
 
-#: src/keybind.c:2666
+#: src/keybind.c:2665
 msgid "Radar showing height"
 msgstr "Il radar mostra l'altitudine"
 
@@ -14098,33 +14098,33 @@ msgstr "Attiva o disattiva la Modalità di Guida"
 msgid "Could not save game!"
 msgstr "Non posso salvare la partita!"
 
-#: src/mission.c:2367
+#: src/mission.c:2360
 msgid "Load Transport"
 msgstr "Carica il trasporto"
 
-#: src/mission.c:2761
+#: src/mission.c:2754
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "OBIETTIVO RAGGIUNTO barando!"
 
-#: src/mission.c:2761
+#: src/mission.c:2754
 msgid "OBJECTIVE ACHIEVED"
 msgstr "OBIETTIVO RAGGIUNTO"
 
-#: src/mission.c:2767
+#: src/mission.c:2760
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "MISSIONE FALLITA e hai barato!"
 
-#: src/mission.c:2767
+#: src/mission.c:2760
 msgid "OBJECTIVE FAILED"
 msgstr "MISSIONE FALLITA"
 
-#: src/mission.c:2793
-#: src/mission.c:2833
-#: src/mission.c:2951
+#: src/mission.c:2786
+#: src/mission.c:2826
+#: src/mission.c:2944
 msgid "Quit To Main Menu"
 msgstr "Esci al Menu Principale"
 
-#: src/mission.c:2801
+#: src/mission.c:2794
 msgid "Continue Game"
 msgstr "Continua la Partita"
 
@@ -14829,6 +14829,8 @@ msgstr[0] "%s - %u Unità Assegnata"
 msgstr[1] "%s - %u Unità Assegnate"
 
 #: src/structure.c:5966
+#: src/structure.c:5980
+#: src/structure.c:5993
 #: src/structure.c:6030
 #, c-format
 msgid "%s - Damage %3.0f%%"

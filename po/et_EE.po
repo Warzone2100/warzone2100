@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-04-28 21:54+0200\n"
+"POT-Creation-Date: 2011-05-07 01:19+0200\n"
 "PO-Revision-Date: 2010-05-10 16:59+0200\n"
 "Last-Translator: erlando <erlando112@hotmail.com>\n"
 "Language-Team: Estonian <ee@li.org>\n"
@@ -12526,8 +12526,8 @@ msgstr "EI Saa Ehitada. Naftaresurss Põleb."
 #: src/display.c:1923
 #: src/display.c:2536
 #, c-format
-msgid "%s - Damage %d%% - Experience %d, %s"
-msgstr "%s - Kahju %d%% - Kogemus %d, %s"
+msgid "%s - Damage %d%% - Experience %.1f, %s"
+msgstr "%s - Kahju %d%% - Kogemus %.1f, %s"
 
 #: src/display.c:1939
 #, c-format
@@ -12692,8 +12692,8 @@ msgstr "ÜKSIK MÄNG"
 
 #: src/frontend.c:294
 #: src/ingameop.c:507
-#: src/mission.c:2827
-#: src/mission.c:2932
+#: src/mission.c:2820
+#: src/mission.c:2925
 msgid "Load Saved Game"
 msgstr "Laadi Salvestatud Mäng"
 
@@ -12991,7 +12991,7 @@ msgstr "KAART SALVESTATUD!"
 #: src/hci.c:1692
 #: src/loop.c:531
 #: src/loop.c:547
-#: src/mission.c:2898
+#: src/mission.c:2891
 msgid "GAME SAVED :"
 msgstr "MÄNG SALVESTATUD!"
 
@@ -13185,8 +13185,8 @@ msgstr "HOIATUS: sa oled võõrustaja. Kui sa lahkud, lõpeb mäng kõigi jaoks"
 
 #: src/ingameop.c:283
 #: src/ingameop.c:511
-#: src/mission.c:2814
-#: src/mission.c:2935
+#: src/mission.c:2807
+#: src/mission.c:2928
 msgid "Save Game"
 msgstr "Salvesta Mäng"
 
@@ -13601,23 +13601,23 @@ msgstr "Radar showing friend-foe colours"
 msgid "Radar showing player colors"
 msgstr "Radar showing player colours"
 
-#: src/keybind.c:2654
+#: src/keybind.c:2653
 msgid "Radar showing only objects"
 msgstr "Radar näitab ainult objekte"
 
-#: src/keybind.c:2657
+#: src/keybind.c:2656
 msgid "Radar blending terrain and height"
 msgstr "Radar blending terrain and height"
 
-#: src/keybind.c:2660
+#: src/keybind.c:2659
 msgid "Radar showing terrain"
 msgstr "Radar näitab terraini"
 
-#: src/keybind.c:2663
+#: src/keybind.c:2662
 msgid "Radar showing revealed terrain"
 msgstr "Radar näitab paljastatud terraini"
 
-#: src/keybind.c:2666
+#: src/keybind.c:2665
 msgid "Radar showing height"
 msgstr "Radar näitab kõrgust"
 
@@ -14134,33 +14134,33 @@ msgstr "Toggle Tracking Camera"
 msgid "Could not save game!"
 msgstr "Ei suutnud mängu salvestada"
 
-#: src/mission.c:2367
+#: src/mission.c:2360
 msgid "Load Transport"
 msgstr "Laadi Transport"
 
-#: src/mission.c:2761
+#: src/mission.c:2754
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "EESMÄRK SAAVUTATUD sohki tehes"
 
-#: src/mission.c:2761
+#: src/mission.c:2754
 msgid "OBJECTIVE ACHIEVED"
 msgstr "EESMÄRK SAAVUTATUD"
 
-#: src/mission.c:2767
+#: src/mission.c:2760
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "EESMÄRK EBAÕNNESTUNUD--ja sa tegid sohki"
 
-#: src/mission.c:2767
+#: src/mission.c:2760
 msgid "OBJECTIVE FAILED"
 msgstr "EESMÄRK EBAÕNNESTUNUD"
 
-#: src/mission.c:2793
-#: src/mission.c:2833
-#: src/mission.c:2951
+#: src/mission.c:2786
+#: src/mission.c:2826
+#: src/mission.c:2944
 msgid "Quit To Main Menu"
 msgstr "Välju Peamenüüsse"
 
-#: src/mission.c:2801
+#: src/mission.c:2794
 msgid "Continue Game"
 msgstr "Jätka Mängu"
 
@@ -14867,6 +14867,8 @@ msgstr[0] "%s - %u Üksus määratud"
 msgstr[1] "%s - %u Üksused määratud"
 
 #: src/structure.c:5966
+#: src/structure.c:5980
+#: src/structure.c:5993
 #: src/structure.c:6030
 #, c-format
 msgid "%s - Damage %3.0f%%"

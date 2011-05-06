@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100-master_20110320qt\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-04-28 21:54+0200\n"
+"POT-Creation-Date: 2011-05-07 01:19+0200\n"
 "PO-Revision-Date: 2011-04-03 19:45+0200\n"
 "Last-Translator: Àngel Mompó <mecatxis@gmail.com>\n"
 "Language-Team:   <ca@dodds.net>\n"
@@ -12530,8 +12530,8 @@ msgstr "No es pot construir. El pou de petroli està incendiat."
 #: src/display.c:1923
 #: src/display.c:2536
 #, c-format
-msgid "%s - Damage %d%% - Experience %d, %s"
-msgstr "%s - Desperfectes %d%% - Experiència %d, %s"
+msgid "%s - Damage %d%% - Experience %.1f, %s"
+msgstr "%s - Desperfectes %d%% - Experiència %.1f, %s"
 
 #: src/display.c:1939
 #, c-format
@@ -12696,8 +12696,8 @@ msgstr "UN JUGADOR"
 
 #: src/frontend.c:294
 #: src/ingameop.c:507
-#: src/mission.c:2827
-#: src/mission.c:2932
+#: src/mission.c:2820
+#: src/mission.c:2925
 msgid "Load Saved Game"
 msgstr "Carrega una partida desada"
 
@@ -12995,7 +12995,7 @@ msgstr "S'HA DESAT EL MAPA!"
 #: src/hci.c:1692
 #: src/loop.c:531
 #: src/loop.c:547
-#: src/mission.c:2898
+#: src/mission.c:2891
 msgid "GAME SAVED :"
 msgstr "S'HA DESAT LA PARTIDA:"
 
@@ -13182,8 +13182,8 @@ msgstr "Avís: Sou l'amfitrió. Si sortiu, la partida s'acabarà per tothom!"
 
 #: src/ingameop.c:283
 #: src/ingameop.c:511
-#: src/mission.c:2814
-#: src/mission.c:2935
+#: src/mission.c:2807
+#: src/mission.c:2928
 msgid "Save Game"
 msgstr "Desa la partida"
 
@@ -13600,23 +13600,23 @@ msgstr "El radar mostra els colors amics-enemics"
 msgid "Radar showing player colors"
 msgstr "El radar mostra el color dels jugadors"
 
-#: src/keybind.c:2654
+#: src/keybind.c:2653
 msgid "Radar showing only objects"
 msgstr "El radar només mostra objectes"
 
-#: src/keybind.c:2657
+#: src/keybind.c:2656
 msgid "Radar blending terrain and height"
 msgstr "El radar barreja el terreny i l'alçada"
 
-#: src/keybind.c:2660
+#: src/keybind.c:2659
 msgid "Radar showing terrain"
 msgstr "El radar mostra el terreny"
 
-#: src/keybind.c:2663
+#: src/keybind.c:2662
 msgid "Radar showing revealed terrain"
 msgstr "El radar mostra el terreny conegut"
 
-#: src/keybind.c:2666
+#: src/keybind.c:2665
 msgid "Radar showing height"
 msgstr "El radar mostra l'alçada"
 
@@ -14116,33 +14116,33 @@ msgstr "Commuta el mode de conducció"
 msgid "Could not save game!"
 msgstr "No s'ha pogut desar el joc!"
 
-#: src/mission.c:2367
+#: src/mission.c:2360
 msgid "Load Transport"
 msgstr "Carrega el transport"
 
-#: src/mission.c:2761
+#: src/mission.c:2754
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "HEU ASSOLIT L'OBJECTIU fent trampes!"
 
-#: src/mission.c:2761
+#: src/mission.c:2754
 msgid "OBJECTIVE ACHIEVED"
 msgstr "HEU ASSOLIT L'OBJECTIU"
 
-#: src/mission.c:2767
+#: src/mission.c:2760
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "HEU FRACASSAT -- i heu fet trampes!"
 
-#: src/mission.c:2767
+#: src/mission.c:2760
 msgid "OBJECTIVE FAILED"
 msgstr "HEU FRACASSAT"
 
-#: src/mission.c:2793
-#: src/mission.c:2833
-#: src/mission.c:2951
+#: src/mission.c:2786
+#: src/mission.c:2826
+#: src/mission.c:2944
 msgid "Quit To Main Menu"
 msgstr "Torna al menú principal"
 
-#: src/mission.c:2801
+#: src/mission.c:2794
 msgid "Continue Game"
 msgstr "Continua jugant"
 
@@ -14851,6 +14851,8 @@ msgstr[0] "%s - %u unitats assignada"
 msgstr[1] "%s - %u unitats assignades"
 
 #: src/structure.c:5966
+#: src/structure.c:5980
+#: src/structure.c:5993
 #: src/structure.c:6030
 #, c-format
 msgid "%s - Damage %3.0f%%"

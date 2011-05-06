@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WZ2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-04-28 21:54+0200\n"
+"POT-Creation-Date: 2011-05-07 01:19+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: metalwarrior95 <metalwarrioroften@gmail.com>\n"
 "Language-Team: \n"
@@ -12537,7 +12537,7 @@ msgstr "Nedopušteno Građenje. Izvor Nafte Gori!"
 #: src/display.c:1923
 #: src/display.c:2536
 #, c-format
-msgid "%s - Damage %d%% - Experience %d, %s"
+msgid "%s - Damage %d%% - Experience %.1f, %s"
 msgstr ""
 
 #: src/display.c:1939
@@ -12703,8 +12703,8 @@ msgstr "JEDAN IGRAČ"
 
 #: src/frontend.c:294
 #: src/ingameop.c:507
-#: src/mission.c:2827
-#: src/mission.c:2932
+#: src/mission.c:2820
+#: src/mission.c:2925
 msgid "Load Saved Game"
 msgstr "Učitaj Sačuvanu Igru"
 
@@ -13002,7 +13002,7 @@ msgstr "KARTA SPREMLJENA!"
 #: src/hci.c:1692
 #: src/loop.c:531
 #: src/loop.c:547
-#: src/mission.c:2898
+#: src/mission.c:2891
 msgid "GAME SAVED :"
 msgstr "Igra spremljena:"
 
@@ -13196,8 +13196,8 @@ msgstr "UPOZORENJE: Ti si host. Ako izađeš, igra završava za sve!"
 
 #: src/ingameop.c:283
 #: src/ingameop.c:511
-#: src/mission.c:2814
-#: src/mission.c:2935
+#: src/mission.c:2807
+#: src/mission.c:2928
 msgid "Save Game"
 msgstr "Spermi igru"
 
@@ -13612,23 +13612,23 @@ msgstr "Karta prikazuje savezničke boje"
 msgid "Radar showing player colors"
 msgstr "Karta prikazuje boje igrača"
 
-#: src/keybind.c:2654
+#: src/keybind.c:2653
 msgid "Radar showing only objects"
 msgstr "Karta prikazuje samo objekte"
 
-#: src/keybind.c:2657
+#: src/keybind.c:2656
 msgid "Radar blending terrain and height"
 msgstr "Karta prikazuje visine i teren"
 
-#: src/keybind.c:2660
+#: src/keybind.c:2659
 msgid "Radar showing terrain"
 msgstr "Karta prikazuje teren"
 
-#: src/keybind.c:2663
+#: src/keybind.c:2662
 msgid "Radar showing revealed terrain"
 msgstr "Karta prikazuje otkrivena područja"
 
-#: src/keybind.c:2666
+#: src/keybind.c:2665
 msgid "Radar showing height"
 msgstr "Karta prikazuje visine"
 
@@ -14144,33 +14144,33 @@ msgstr "Pračenje"
 msgid "Could not save game!"
 msgstr "Igra se ne može spremiti"
 
-#: src/mission.c:2367
+#: src/mission.c:2360
 msgid "Load Transport"
 msgstr "Ukrcaj na transport"
 
-#: src/mission.c:2761
+#: src/mission.c:2754
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "POBJEDIO SI!!! - jer si koristio sifre."
 
-#: src/mission.c:2761
+#: src/mission.c:2754
 msgid "OBJECTIVE ACHIEVED"
 msgstr "POBJEDIO SI!!!"
 
-#: src/mission.c:2767
+#: src/mission.c:2760
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "Koristio si šifre - ali si ipak IZGUBIO!!!"
 
-#: src/mission.c:2767
+#: src/mission.c:2760
 msgid "OBJECTIVE FAILED"
 msgstr "IZGUBIO SI!!!"
 
-#: src/mission.c:2793
-#: src/mission.c:2833
-#: src/mission.c:2951
+#: src/mission.c:2786
+#: src/mission.c:2826
+#: src/mission.c:2944
 msgid "Quit To Main Menu"
 msgstr "Izađi na glavni meni"
 
-#: src/mission.c:2801
+#: src/mission.c:2794
 msgid "Continue Game"
 msgstr "Nastavi igru"
 
@@ -14877,6 +14877,8 @@ msgstr[0] "%s - %u jedinica dodjeljena"
 msgstr[1] "%s - %u jedinica dodjeljena"
 
 #: src/structure.c:5966
+#: src/structure.c:5980
+#: src/structure.c:5993
 #: src/structure.c:6030
 #, c-format
 msgid "%s - Damage %3.0f%%"

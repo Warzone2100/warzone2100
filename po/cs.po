@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-04-28 21:54+0200\n"
+"POT-Creation-Date: 2011-05-07 01:19+0200\n"
 "PO-Revision-Date: 2008-05-09 16:05+0000\n"
 "Last-Translator: Lubos <alvinx12@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -12562,8 +12562,8 @@ msgstr "Nemohu stavět. Ropný vrt hoří."
 #: src/display.c:1923
 #: src/display.c:2536
 #, c-format
-msgid "%s - Damage %d%% - Experience %d, %s"
-msgstr "%s - Poškození %d%% - Zkušenosti %d, %s"
+msgid "%s - Damage %d%% - Experience %.1f, %s"
+msgstr "%s - Poškození %d%% - Zkušenosti %.1f, %s"
 
 #: src/display.c:1939
 #, fuzzy, c-format
@@ -12738,8 +12738,8 @@ msgstr "HRA JEDNOHO HRÁČE"
 
 #: src/frontend.c:294
 #: src/ingameop.c:507
-#: src/mission.c:2827
-#: src/mission.c:2932
+#: src/mission.c:2820
+#: src/mission.c:2925
 msgid "Load Saved Game"
 msgstr "Načti Uloženou Hru"
 
@@ -13046,7 +13046,7 @@ msgstr "HRA ULOŽENA!"
 #: src/hci.c:1692
 #: src/loop.c:531
 #: src/loop.c:547
-#: src/mission.c:2898
+#: src/mission.c:2891
 #, fuzzy
 msgid "GAME SAVED :"
 msgstr "HRA ULOŽENA!"
@@ -13247,8 +13247,8 @@ msgstr ""
 
 #: src/ingameop.c:283
 #: src/ingameop.c:511
-#: src/mission.c:2814
-#: src/mission.c:2935
+#: src/mission.c:2807
+#: src/mission.c:2928
 msgid "Save Game"
 msgstr "Uložit hru"
 
@@ -13674,24 +13674,24 @@ msgstr ""
 msgid "Radar showing player colors"
 msgstr "Radar ukazuje barvy hráčů"
 
-#: src/keybind.c:2654
+#: src/keybind.c:2653
 msgid "Radar showing only objects"
 msgstr "Radar ukazuje pouze objekty"
 
-#: src/keybind.c:2657
+#: src/keybind.c:2656
 msgid "Radar blending terrain and height"
 msgstr ""
 
-#: src/keybind.c:2660
+#: src/keybind.c:2659
 msgid "Radar showing terrain"
 msgstr "Radar ukazuje terén"
 
-#: src/keybind.c:2663
+#: src/keybind.c:2662
 #, fuzzy
 msgid "Radar showing revealed terrain"
 msgstr "Radar ukazuje terén"
 
-#: src/keybind.c:2666
+#: src/keybind.c:2665
 msgid "Radar showing height"
 msgstr "Radar ukazuje výšku"
 
@@ -14208,35 +14208,35 @@ msgstr ""
 msgid "Could not save game!"
 msgstr "Nahrát uloženou hru"
 
-#: src/mission.c:2367
+#: src/mission.c:2360
 msgid "Load Transport"
 msgstr "Naložit transport"
 
-#: src/mission.c:2761
+#: src/mission.c:2754
 #, fuzzy
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "CÍL SPLNĚN"
 
-#: src/mission.c:2761
+#: src/mission.c:2754
 msgid "OBJECTIVE ACHIEVED"
 msgstr "CÍL SPLNĚN"
 
-#: src/mission.c:2767
+#: src/mission.c:2760
 #, fuzzy
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "SELHÁNÍ"
 
-#: src/mission.c:2767
+#: src/mission.c:2760
 msgid "OBJECTIVE FAILED"
 msgstr "SELHÁNÍ"
 
-#: src/mission.c:2793
-#: src/mission.c:2833
-#: src/mission.c:2951
+#: src/mission.c:2786
+#: src/mission.c:2826
+#: src/mission.c:2944
 msgid "Quit To Main Menu"
 msgstr "Vyskočit do hlavního menu"
 
-#: src/mission.c:2801
+#: src/mission.c:2794
 msgid "Continue Game"
 msgstr "Pokračovat ve hře"
 
@@ -14960,6 +14960,8 @@ msgstr[0] "Jednotka přiřazena"
 msgstr[1] "Jednotky přiřazeny"
 
 #: src/structure.c:5966
+#: src/structure.c:5980
+#: src/structure.c:5993
 #: src/structure.c:6030
 #, fuzzy, c-format
 msgid "%s - Damage %3.0f%%"
