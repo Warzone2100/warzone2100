@@ -356,14 +356,13 @@ static void video_write(bool update)
 				int G = Vclip((A - 100 * U - (C >> 1) + 128) >> 8);
 				int B = Vclip((A + 516 * U + 128) >> 8);
 
-				RGBAframe[rgb_offset] = (B << 16) | (G << 8) | (R << 0) | (0xFF << 24);
+				uint32_t rgba = (B << 16) | (G << 8) | (R << 0) | (0xFF << 24);
+
+				RGBAframe[rgb_offset] = rgba;
 				if (use_scanlines == SCANLINES_50)
 				{
 					// halve the rgb values for a dimmed scanline
-					R /= 2;
-					G /= 2;
-					B /= 2;
-					RGBAframe[rgb_offset + video_width] = (B << 16) | (G << 8) | (R << 0) | (0xff << 24);
+					RGBAframe[rgb_offset + video_width] = (rgba >> 1 & 0x007f7f7f) | 0xff000000;
 				}
 				else if (use_scanlines == SCANLINES_BLACK)
 				{
@@ -379,14 +378,12 @@ static void video_write(bool update)
 				G = Vclip((A - 100 * U - (C >> 1) + 128) >> 8);
 				B = Vclip((A + 516 * U + 128) >> 8);
 
-				RGBAframe[rgb_offset] = (B << 16) | (G << 8) | (R << 0) | (0xFF << 24);
+				rgba = (B << 16) | (G << 8) | (R << 0) | (0xFF << 24);
+				RGBAframe[rgb_offset] = rgba;
 				if (use_scanlines == SCANLINES_50)
 				{
 					// halve the rgb values for a dimmed scanline
-					R /= 2;
-					G /= 2;
-					B /= 2;
-					RGBAframe[rgb_offset + video_width] = (B << 16) | (G << 8) | (R << 0) | (0xff << 24);
+					RGBAframe[rgb_offset + video_width] = (rgba >> 1 & 0x007f7f7f) | 0xff000000;
 				}
 				else if (use_scanlines == SCANLINES_BLACK)
 				{
