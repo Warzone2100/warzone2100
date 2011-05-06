@@ -5977,7 +5977,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		else
 #endif
 		{
-			CONPRINTF(ConsoleString, (ConsoleString, "%s", getStatName(psStructure->pStructureType)));
+			CONPRINTF(ConsoleString, (ConsoleString, _("%s - Damage %3.0f%%"), getStatName(psStructure->pStructureType), getStructureDamage(psStructure) * 100.f));
 		}
 		break;
 	case REF_RESOURCE_EXTRACTOR:
@@ -5990,7 +5990,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		else
 #endif
 		{
-			CONPRINTF(ConsoleString, (ConsoleString, "%s", getStatName(psStructure->pStructureType)));
+			CONPRINTF(ConsoleString, (ConsoleString, _("%s - Damage %3.0f%%"), getStatName(psStructure->pStructureType), getStructureDamage(psStructure) * 100.f));
 		}
 		break;
 	case REF_POWER_GEN:
