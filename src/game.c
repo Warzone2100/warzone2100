@@ -6573,7 +6573,7 @@ static BOOL buildSaveDroidFromDroid(SAVE_DROID* psSaveDroid, DROID* psCurr, DROI
 
 
             //save out experience level
-			psSaveDroid->numKills	= (UDWORD) psCurr->experience;
+			psSaveDroid->numKills	= (UDWORD) (psCurr->experience + .5);
 			//version 11
 			//Watermelon:endian_udword for new save format
 			for(i = 0;i < psCurr->numWeaps;i++)
