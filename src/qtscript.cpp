@@ -37,6 +37,7 @@
 
 #include "lib/framework/file.h"
 #include "lib/gamelib/gtime.h"
+#include "multiplay.h"
 
 #include "qtscriptfuncs.h"
 
@@ -216,6 +217,12 @@ bool loadPlayerScript(QString path, int player, int difficulty)
 	engine->globalObject().setProperty("me", player, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("gameTime", gameTime, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("difficulty", difficulty, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("mapName", game.map, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("baseType", game.base, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("alliancesType", game.alliance, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("powerType", game.power, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("maxPlayers", game.maxPlayers, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("scavengers", game.scavengers, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
 	// Regular functions
 	registerFunctions(engine);

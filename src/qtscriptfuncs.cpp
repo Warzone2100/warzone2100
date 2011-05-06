@@ -114,23 +114,25 @@ static QScriptValue js_newGroup(QScriptContext *, QScriptEngine *)
 
 static QScriptValue js_enumStruct(QScriptContext *context, QScriptEngine *engine)
 {
-	QScriptValue statsName = context->argument(0);
-	QScriptValue targetPlayer = context->argument(1);
-	QScriptValue lookingPlayer = context->argument(2);
 	QList<STRUCTURE *> matches;
+	int player = -1, looking = -1;
+	QString statsName;
 
-	int player = targetPlayer.toInt32();
-	int looking = -1;
-	QString stat = statsName.toString();
-	if (!lookingPlayer.isUndefined())	// third arg optional
+	switch (context->argumentCount())
 	{
-		looking = lookingPlayer.toInt32();
+	default:
+	case 3: looking = context->argument(2).toInt32(); // fall-through
+	case 2: statsName = context->argument(1).toString(); // fall-through
+	case 1: player = context->argument(0).toInt32(); break;
+	case 0: player = engine->globalObject().property("me").toInt32();
 	}
+
 	SCRIPT_ASSERT(context, player < MAX_PLAYERS && player >= 0, "Target player index out of range: %d", player);
 	SCRIPT_ASSERT(context, looking < MAX_PLAYERS && looking >= -1, "Looking player index out of range: %d", looking);
 	for (STRUCTURE *psStruct = apsStructLists[player]; psStruct; psStruct = psStruct->psNext)
 	{
-		if ((looking == -1 || psStruct->visible[looking]) && stat.compare(psStruct->pStructureType->pName) == 0)
+		if ((looking == -1 || psStruct->visible[looking])
+		    && (statsName.isEmpty() || statsName.compare(psStruct->pStructureType->pName) == 0))
 		{
 			matches.push_back(psStruct);
 		}
@@ -140,6 +142,39 @@ static QScriptValue js_enumStruct(QScriptContext *context, QScriptEngine *engine
 	{
 		STRUCTURE *psStruct = matches.at(i);
 		result.setProperty(i, convStructure(psStruct, engine));
+	}
+	return result;
+}
+
+static QScriptValue js_enumDroid(QScriptContext *context, QScriptEngine *engine)
+{
+	QList<DROID *> matches;
+	int player = -1, looking = -1;
+	DROID_TYPE droidType = DROID_ANY;
+
+	switch (context->argumentCount())
+	{
+	default:
+	case 3: looking = context->argument(2).toInt32(); // fall-through
+	case 2: droidType = (DROID_TYPE)context->argument(1).toInt32(); // fall-through
+	case 1: player = context->argument(0).toInt32(); break;
+	case 0: player = engine->globalObject().property("me").toInt32();
+	}
+
+	SCRIPT_ASSERT(context, player < MAX_PLAYERS && player >= 0, "Target player index out of range: %d", player);
+	SCRIPT_ASSERT(context, looking < MAX_PLAYERS && looking >= -1, "Looking player index out of range: %d", looking);
+	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
+	{
+		if ((looking == -1 || psDroid->visible[looking]) && (droidType == DROID_ANY || droidType == psDroid->droidType))
+		{
+			matches.push_back(psDroid);
+		}
+	}
+	QScriptValue result = engine->newArray(matches.size());
+	for (int i = 0; i < matches.size(); i++)
+	{
+		DROID *psDroid = matches.at(i);
+		result.setProperty(i, convDroid(psDroid, engine));
 	}
 	return result;
 }
@@ -163,11 +198,6 @@ static QScriptValue js_debug(QScriptContext *context, QScriptEngine *engine)
 	}
 	qWarning(result.toAscii().constData());
 	return QScriptValue();
-}
-
-static QScriptValue js_scavengerPlayer(QScriptContext *, QScriptEngine *)
-{
-	return QScriptValue(scavengerPlayer());
 }
 
 static QScriptValue js_structureIdle(QScriptContext *context, QScriptEngine *)
@@ -579,10 +609,10 @@ bool registerFunctions(QScriptEngine *engine)
 	//engine->globalObject().setProperty("getDerrick", engine->newFunction(js_getDerrick));
 	engine->globalObject().setProperty("debug", engine->newFunction(js_debug));
 	engine->globalObject().setProperty("console", engine->newFunction(js_console));
-	engine->globalObject().setProperty("scavengerPlayer", engine->newFunction(js_scavengerPlayer));
 	engine->globalObject().setProperty("structureIdle", engine->newFunction(js_structureIdle));
 	engine->globalObject().setProperty("buildDroid", engine->newFunction(js_buildDroid));
 	engine->globalObject().setProperty("enumStruct", engine->newFunction(js_enumStruct));
+	engine->globalObject().setProperty("enumDroid", engine->newFunction(js_enumDroid));
 	engine->globalObject().setProperty("enumGroup", engine->newFunction(js_enumGroup));
 	engine->globalObject().setProperty("distBetweenTwoPoints", engine->newFunction(js_distBetweenTwoPoints));
 	engine->globalObject().setProperty("newGroup", engine->newFunction(js_newGroup));

@@ -28,7 +28,7 @@ function activateProduction(fac)
 function scavtick()
 {
 	// enum functions now return a list of results
-	var factorylist = enumStruct(factory, me, me);
+	var factorylist = enumStruct(me, factory);
 
 	// one way of dealing with lists is running a function on each member of the list
 	if (factorylist)
