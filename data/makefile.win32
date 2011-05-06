@@ -8,6 +8,7 @@ SUBDIRS=mods
 BASELIST= \
 	anims \
 	audio \
+	cacert.org.pem \
 	challenges \
 	components \
 	effects \

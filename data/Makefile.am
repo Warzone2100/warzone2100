@@ -12,6 +12,7 @@ BASELIST = \
 	palette.txt \
 	anims \
 	audio \
+	cacert.org.pem \
 	challenges \
 	components \
 	effects \
@@ -49,7 +50,7 @@ CLEANFILES = $(BASEARCHIVE) $(PATCHARCHIVE)
 $(BASEARCHIVE): $(BASELIST:%=$(abs_srcdir)/$(basename $(BASEARCHIVE))/%)
 $(PATCHARCHIVE): $(PATCHLIST:%=$(abs_srcdir)/$(basename $(PATCHARCHIVE))/%)
 
-nodist_pkgdata_DATA =  $(BASEARCHIVE) $(PATCHARCHIVE) cacert.org.pem
+nodist_pkgdata_DATA =  $(BASEARCHIVE) $(PATCHARCHIVE)
 
 dist-hook: $(BASEARCHIVE) $(PATCHARCHIVE)
 	$(UNZIP) -u $(BASEARCHIVE) -d $(DESTDIR)$(distdir)/$(basename $(BASEARCHIVE))

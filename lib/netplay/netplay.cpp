@@ -748,6 +748,9 @@ int NETinit(bool bFirstCall)
 	NetPlay.GamePassworded = false;
 	memset(&sync_counter, 0x0, sizeof(sync_counter));	//clear counters
 
+	// Add the certificate.
+	lobbyclient.addCACertificate("wz::cacert.org.pem");
+
 	return 0;
 }
 

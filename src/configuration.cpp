@@ -139,10 +139,6 @@ bool loadConfig()
 		&& ini.contains("lobby_ssl")
 		&& ini.value("lobby_ssl", true).toBool() == true)
 	{
-		// FIXME: need a better place for this.
-		QDir cacert_path(PHYSFS_getRealDir("data/cacert.org.pem"));
-		lobbyclient.addCACertificate(cacert_path.absoluteFilePath("data/cacert.org.pem"));
-
 		lobbyclient.useSSL(true);
 		lobbyclient.setPort(ini.value("lobby_port", 9994).toInt());
 		lobbyclient.setUser(ini.value("lobby_user", "").toString());
