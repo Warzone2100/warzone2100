@@ -311,6 +311,22 @@ static void deallocateVideoFrame(void)
 	glDeleteTextures(1, &video_texture);
 }
 
+#ifndef __BIG_ENDIAN__
+const int Rshift = 0;
+const int Gshift = 8;
+const int Bshift = 16;
+const int Ashift = 24;
+// RGBmask is used only after right-shifting, so ignore the leftmost bit of each byte
+const int RGBmask = 0x007f7f7f;
+const int Amask = 0xff000000;
+#else
+const int Rshift = 24;
+const int Gshift = 16;
+const int Bshift = 8;
+const int Ashift = 0;
+const int RGBmask = 0x7f7f7f00;
+const int Amask = 0x000000ff;
+#endif
 #define Vclip( x )	( (x > 0) ? ((x < 255) ? x : 255) : 0 )
 // main routine to display video on screen.
 static void video_write(bool update)
@@ -356,17 +372,17 @@ static void video_write(bool update)
 				int G = Vclip((A - 100 * U - (C >> 1) + 128) >> 8);
 				int B = Vclip((A + 516 * U + 128) >> 8);
 
-				uint32_t rgba = (B << 16) | (G << 8) | (R << 0) | (0xFF << 24);
+				uint32_t rgba = (R << Rshift) | (G << Gshift) | (B << Bshift) | (0xFF << Ashift);
 
 				RGBAframe[rgb_offset] = rgba;
 				if (use_scanlines == SCANLINES_50)
 				{
 					// halve the rgb values for a dimmed scanline
-					RGBAframe[rgb_offset + video_width] = (rgba >> 1 & 0x007f7f7f) | 0xff000000;
+					RGBAframe[rgb_offset + video_width] = (rgba >> 1 & RGBmask) | Amask;
 				}
 				else if (use_scanlines == SCANLINES_BLACK)
 				{
-					RGBAframe[rgb_offset + video_width] = (0xFF << 24);
+					RGBAframe[rgb_offset + video_width] = Amask;
 				}
 				rgb_offset++;
 
@@ -378,16 +394,16 @@ static void video_write(bool update)
 				G = Vclip((A - 100 * U - (C >> 1) + 128) >> 8);
 				B = Vclip((A + 516 * U + 128) >> 8);
 
-				rgba = (B << 16) | (G << 8) | (R << 0) | (0xFF << 24);
+				rgba = (R << Rshift) | (G << Gshift) | (B << Bshift) | (0xFF << Ashift);
 				RGBAframe[rgb_offset] = rgba;
 				if (use_scanlines == SCANLINES_50)
 				{
 					// halve the rgb values for a dimmed scanline
-					RGBAframe[rgb_offset + video_width] = (rgba >> 1 & 0x007f7f7f) | 0xff000000;
+					RGBAframe[rgb_offset + video_width] = (rgba >> 1 & RGBmask) | Amask;
 				}
 				else if (use_scanlines == SCANLINES_BLACK)
 				{
-					RGBAframe[rgb_offset + video_width] = (0xFF << 24);
+					RGBAframe[rgb_offset + video_width] = Amask;
 				}
 				rgb_offset++;
 			}
