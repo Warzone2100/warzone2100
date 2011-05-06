@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-05-04 23:49+0200\n"
+"POT-Creation-Date: 2011-05-07 01:17+0200\n"
 "PO-Revision-Date: 2008-05-09 16:08+0000\n"
 "Last-Translator: carson <Unknown>\n"
 "Language-Team: Dansk <da@li.org>\n"
@@ -12660,7 +12660,7 @@ msgstr "Kan ikke bygge på brændende oilebrøn."
 #: src/display.cpp:1828
 #: src/display.cpp:2403
 #, fuzzy, c-format
-msgid "%s - Damage %d%% - Experience %d, %s"
+msgid "%s - Damage %d%% - Experience %.1f, %s"
 msgstr "%s - Skade %d%% - Drab %d, %s"
 
 #: src/display.cpp:1844
@@ -15024,12 +15024,12 @@ msgstr ""
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr ""
 
-#: src/qtscriptfuncs.cpp:444
+#: src/qtscriptfuncs.cpp:474
 #: src/scriptfuncs.cpp:3271
 msgid "YOU ARE VICTORIOUS!"
 msgstr ""
 
-#: src/qtscriptfuncs.cpp:449
+#: src/qtscriptfuncs.cpp:479
 #: src/scriptfuncs.cpp:3275
 msgid "YOU WERE DEFEATED!"
 msgstr ""
@@ -15205,11 +15205,11 @@ msgstr "Kommandobegrænsning nået - indstiller produktion"
 
 #: src/structure.cpp:5841
 #: src/structure.cpp:5866
-#, c-format
-msgid "%s - %u Unit assigned"
-msgid_plural "%s - %u Units assigned"
-msgstr[0] ""
-msgstr[1] ""
+#, fuzzy, c-format
+msgid "%s - %u Unit assigned - Damage %3.0f%%"
+msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
+msgstr[0] "%s - Skade %3.0f%%"
+msgstr[1] "%s - Skade %3.0f%%"
 
 #: src/structure.cpp:5871
 #: src/structure.cpp:5939
@@ -15220,8 +15220,8 @@ msgid "%s - Damage %3.0f%%"
 msgstr "%s - Skade %3.0f%%"
 
 #: src/structure.cpp:5921
-#, c-format
-msgid "%s - Connected %u of %u"
+#, fuzzy, c-format
+msgid "%s - Connected %u of %u - Damage %3.0f%%"
 msgstr "%s - Forbundet %u af %u"
 
 #: src/structure.cpp:6085

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-05-04 23:49+0200\n"
+"POT-Creation-Date: 2011-05-07 01:17+0200\n"
 "PO-Revision-Date: 2011-05-03 10:10+0100\n"
 "Last-Translator: Saber Nyoki <nsa_server@hotmail.com>\n"
 "Language-Team: Spanish <warzone-dev@gna.org>\n"
@@ -12347,8 +12347,8 @@ msgstr "No se puede construir. Yacimiento de petróleo ardiendo."
 
 #: src/display.cpp:1828
 #: src/display.cpp:2403
-#, c-format
-msgid "%s - Damage %d%% - Experience %d, %s"
+#, fuzzy, c-format
+msgid "%s - Damage %d%% - Experience %.1f, %s"
 msgstr "%s - Daño %d%% - Experiencia %d, %s"
 
 #: src/display.cpp:1844
@@ -14613,12 +14613,12 @@ msgstr "Marrón"
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr "¡No podemos hacer eso! ¡Debemos ser una unidad cyborg para usar el transporte Cyborg!"
 
-#: src/qtscriptfuncs.cpp:444
+#: src/qtscriptfuncs.cpp:474
 #: src/scriptfuncs.cpp:3271
 msgid "YOU ARE VICTORIOUS!"
 msgstr "¡ERES EL GANADOR!"
 
-#: src/qtscriptfuncs.cpp:449
+#: src/qtscriptfuncs.cpp:479
 #: src/scriptfuncs.cpp:3275
 msgid "YOU WERE DEFEATED!"
 msgstr "¡HAS SIDO DERROTADO!"
@@ -14794,9 +14794,9 @@ msgstr "Alcanzado Límite de Control de Unidades - Producción Detenida"
 
 #: src/structure.cpp:5841
 #: src/structure.cpp:5866
-#, c-format
-msgid "%s - %u Unit assigned"
-msgid_plural "%s - %u Units assigned"
+#, fuzzy, c-format
+msgid "%s - %u Unit assigned - Damage %3.0f%%"
+msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
 msgstr[0] "%s - %u Unidad asignada"
 msgstr[1] "%s - %u Unidades asignadas"
 
@@ -14809,8 +14809,8 @@ msgid "%s - Damage %3.0f%%"
 msgstr "%s - Daño %3.0f%%"
 
 #: src/structure.cpp:5921
-#, c-format
-msgid "%s - Connected %u of %u"
+#, fuzzy, c-format
+msgid "%s - Connected %u of %u - Damage %3.0f%%"
 msgstr "%s - Conectado %u de %u"
 
 #: src/structure.cpp:6085
