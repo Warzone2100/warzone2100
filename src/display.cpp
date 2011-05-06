@@ -1825,10 +1825,10 @@ static void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 			if(!psDroid->selected)
 			{
 				CONPRINTF(ConsoleString, (ConsoleString,
-					_("%s - Damage %d%% - Experience %d, %s"),
+					_("%s - Damage %d%% - Experience %.1f, %s"),
 					droidGetName(psDroid),
 					100 - clip(PERCENT(psDroid->body,psDroid->originalBody), 0, 100),
-					psDroid->experience/65536, _(getDroidLevelName(psDroid))));
+					psDroid->experience/65536.f, _(getDroidLevelName(psDroid))));
 
 				FeedbackOrderGiven();
 			}
@@ -2400,10 +2400,10 @@ static void dealWithRMB( void )
 							if(!psDroid->selected)
 							{
 								CONPRINTF(ConsoleString, (ConsoleString,
-									_("%s - Damage %d%% - Experience %d, %s"),
+									_("%s - Damage %d%% - Experience %.1f, %s"),
 									droidGetName(psDroid),
 									100 - clip(PERCENT(psDroid->body,psDroid->originalBody), 0, 100),
-									psDroid->experience/65536, _(getDroidLevelName(psDroid))));
+									psDroid->experience/65536.f, _(getDroidLevelName(psDroid))));
 
 								FeedbackOrderGiven();
 							}
