@@ -10,15 +10,13 @@ private		int		count, count2;
 /* Initialisation */
 event	start(CALL_GAMEINIT)
 {
-//make MG available to player!
-	//makeComponentAvailable(mg, player);		//needs to be done this way so doesn't enable rest of tree!
-//set technology for player
+	// set technology for player
 	count2 = 0;
 	while (count2 < numTechs)
 	{
 		completeResearch(startTech[count2], player);
 		count2 = count2 + 1;
 	}
-//set power level
+	// set power level
 	setPowerLevel(startPow, player);
 }

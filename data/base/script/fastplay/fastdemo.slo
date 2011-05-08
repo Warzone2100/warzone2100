@@ -497,22 +497,7 @@ event nextLevEvnt(inactive)		//assumes victory already checked
 	flushConsoleMessages();
 	playSound(wonSnd,0);
 	pause(20);
-	// give all research
-	count = 0;
-	while (count < numArt)
-	{
-		enableResearch(artComp[count], 0);
-		count = count +1;
-	}
-	// *required for sub missions*
-	//setLandingZone(10, 51, 12, 53);
-	// *no longer need to remove briefings?*
-	//removeMessage(MissionBrief, MISS_MSG, player);
-	//startMission(CAMP_EXPAND, NextLev);
-
-	//End game here for now! (don't try next mission)
 	gameOverMessage(winMsg, MISS_MSG, 0, true);
-
 	setEventTrigger(nextLevEvnt, inactive);
 }
 
