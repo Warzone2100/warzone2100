@@ -19,10 +19,6 @@ data/base/multiplay/skirmish/nexus.slo
 data/base/multiplay/skirmish/rules.slo
 data/base/multiplay/skirmish/semperfi.slo
 data/base/script/fastplay/fastdemo.slo
-data/base/script/fastplay/fastplay.slo
-data/base/script/fastplay/s-demo-ai.slo
-data/base/script/fastplay/s-demo.slo
-data/base/script/fastplay/s-demos.slo
 data/base/script/fastplay/start.slo
 data/base/script/text/basic.slo
 data/base/script/text/brief.slo
