@@ -65,6 +65,7 @@
 #include "lib/sound/audio.h"
 #include "lib/sound/openal_error.h"
 #include "lib/sound/mixer.h"
+#include "src/warzoneconfig.h"
 
 #include <theora/theora.h>
 #include <physfs.h>
@@ -140,7 +141,7 @@ static bool audiobuf_ready = false;		// single 'frame' audio buffer ready for pr
 // file handle
 static PHYSFS_file* fpInfile = NULL;
 
-static char* RGBAframe = NULL;					// texture buffer
+static uint32_t* RGBAframe = NULL;					// texture buffer
 
 #if !defined(WZ_NOSOUND)
 static ogg_int16_t* audiobuf = NULL;			// audio buffer
@@ -177,6 +178,8 @@ static int videoY1 = 0;
 static int videoY2 = 0;
 static int ScrnvidXpos = 0;
 static int ScrnvidYpos = 0;
+
+static SCANLINE_MODE use_scanlines;
 
 // Helper; just grab some more compressed bitstream and sync it for page extraction
 static int buffer_data(PHYSFS_file* in, ogg_sync_state* oy)
@@ -284,17 +287,46 @@ static double getRelativeTime(void)
 	return((getTimeNow() - basetime) * .001);
 }
 
+static int texture_width = 1024;
+static int texture_height = 1024;
+static GLuint video_texture;
+
 /** Allocates memory to hold the decoded video frame
  */
 static void Allocate_videoFrame(void)
 {
-	RGBAframe = malloc(videodata.ti.frame_width * videodata.ti.frame_height * 4);
+	int size = videodata.ti.frame_width * videodata.ti.frame_height * 4;
+	if (use_scanlines)
+		size *= 2;
+
+	RGBAframe = malloc(size);
+	memset(RGBAframe, 0, size);
+	glGenTextures(1, &video_texture);
 }
 
-static int texture_width = 512;
-static int texture_height = 512;
-static GLuint video_texture;
+static void deallocateVideoFrame(void)
+{
+	if (RGBAframe)
+		free(RGBAframe);
+	glDeleteTextures(1, &video_texture);
+}
 
+#ifndef __BIG_ENDIAN__
+const int Rshift = 0;
+const int Gshift = 8;
+const int Bshift = 16;
+const int Ashift = 24;
+// RGBmask is used only after right-shifting, so ignore the leftmost bit of each byte
+const int RGBmask = 0x007f7f7f;
+const int Amask = 0xff000000;
+#else
+const int Rshift = 24;
+const int Gshift = 16;
+const int Bshift = 8;
+const int Ashift = 0;
+const int RGBmask = 0x7f7f7f00;
+const int Amask = 0x000000ff;
+#endif
 #define Vclip( x )	( (x > 0) ? ((x < 255) ? x : 255) : 0 )
 // main routine to display video on screen.
 static void video_write(bool update)
@@ -302,42 +334,85 @@ static void video_write(bool update)
 	unsigned int x = 0, y = 0;
 	const int video_width = videodata.ti.frame_width;
 	const int video_height = videodata.ti.frame_height;
+	// when using scanlines we need to double the height
+	const int height_factor = (use_scanlines ? 2 : 1);
 	yuv_buffer yuv;
 	glErrors();
 
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, video_texture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	if (update)
 	{
+		int rgb_offset = 0;
+		int y_offset = 0;
+		int uv_offset = 0;
+		const int half_width = video_width / 2;
+
 		theora_decode_YUVout(&videodata.td, &yuv);
 
 		// fill the RGBA buffer
 		for (y = 0; y < video_height; y++)
 		{
-			for (x = 0; x < video_width; x++)
+			y_offset = y * yuv.y_stride;
+			uv_offset = (y >> 1) * yuv.uv_stride;
+
+			for (x = 0; x < half_width; x++)
 			{
-				int Y = yuv.y[x + y * yuv.y_stride];
-				int U = yuv.u[x / 2 + (y / 2) * yuv.uv_stride];
-				int V = yuv.v[x / 2 + (y / 2) * yuv.uv_stride];
+				int Y = yuv.y[y_offset++] - 16;
+				const int U = yuv.u[uv_offset] - 128;
+				const int V = yuv.v[uv_offset++] - 128;
 
-				int C = Y - 16;
-				int D = U - 128;
-				int E = V - 128;
+				int A = 298 * Y;
+				const int C = 409 * V;
 
-				int R = Vclip((298 * C + 409 * E + 128) >> 8);
-				int G = Vclip((298 * C - 100 * D - 208 * E + 128) >> 8);
-				int B = Vclip((298 * C + 516 * D + 128) >> 8);
+				int R = Vclip((A + C + 128) >> 8);
+				int G = Vclip((A - 100 * U - (C >> 1) + 128) >> 8);
+				int B = Vclip((A + 516 * U + 128) >> 8);
 
-				RGBAframe[x * 4 + y * video_width * 4 + 0] = R;
-				RGBAframe[x * 4 + y * video_width * 4 + 1] = G;
-				RGBAframe[x * 4 + y * video_width * 4 + 2] = B;
-				RGBAframe[x * 4 + y * video_width * 4 + 3] = 0xFF;
+				uint32_t rgba = (R << Rshift) | (G << Gshift) | (B << Bshift) | (0xFF << Ashift);
+
+				RGBAframe[rgb_offset] = rgba;
+				if (use_scanlines == SCANLINES_50)
+				{
+					// halve the rgb values for a dimmed scanline
+					RGBAframe[rgb_offset + video_width] = (rgba >> 1 & RGBmask) | Amask;
+				}
+				else if (use_scanlines == SCANLINES_BLACK)
+				{
+					RGBAframe[rgb_offset + video_width] = Amask;
+				}
+				rgb_offset++;
+
+				// second pixel, U and V (and thus C) are the same as before.
+				Y = yuv.y[y_offset++] - 16;
+				A = 298 * Y;
+
+				R = Vclip((A + C + 128) >> 8);
+				G = Vclip((A - 100 * U - (C >> 1) + 128) >> 8);
+				B = Vclip((A + 516 * U + 128) >> 8);
+
+				rgba = (R << Rshift) | (G << Gshift) | (B << Bshift) | (0xFF << Ashift);
+				RGBAframe[rgb_offset] = rgba;
+				if (use_scanlines == SCANLINES_50)
+				{
+					// halve the rgb values for a dimmed scanline
+					RGBAframe[rgb_offset + video_width] = (rgba >> 1 & RGBmask) | Amask;
+				}
+				else if (use_scanlines == SCANLINES_BLACK)
+				{
+					RGBAframe[rgb_offset + video_width] = Amask;
+				}
+				rgb_offset++;
 			}
+			if (use_scanlines)
+				rgb_offset += video_width;
 		}
 
 		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, video_width,
-				video_height, GL_RGBA, GL_UNSIGNED_BYTE, RGBAframe);
+				video_height * height_factor, GL_RGBA, GL_UNSIGNED_BYTE, RGBAframe);
 		glErrors();
 	}
 
@@ -349,15 +424,15 @@ static void video_write(bool update)
 	// NOTE: 255 * width | height, because texture matrix is set up with a
 	// call to glScalef(1/256.0, 1/256.0, 1) ... so don't blame me. :P
 	glTranslatef(ScrnvidXpos, ScrnvidYpos, 0.0f);
-	glBegin(GL_TRIANGLE_STRIP);
+	glBegin(GL_QUADS);
 	glTexCoord2f(0, 0);
 	glVertex2f(videoX1, videoY1);
 	glTexCoord2f(256 * video_width / texture_width, 0);
 	glVertex2f(videoX2, videoY1);				//screenWidth
-	glTexCoord2f(0, 256 * video_height / texture_height);
-	glVertex2f(videoX1, videoY2);				//screenHeight
-	glTexCoord2f(256 * video_width / texture_width, 256 * video_height / texture_height);
+	glTexCoord2f(256 * video_width / texture_width, 256 * video_height * height_factor / texture_height);
 	glVertex2f(videoX2, videoY2);		//screenWidth,screenHeight
+	glTexCoord2f(0, 256 * video_height * height_factor / texture_height);
+	glVertex2f(videoX1, videoY2);				//screenHeight
 	glEnd();
 
 	glPopMatrix();
@@ -690,15 +765,19 @@ bool seq_Play(const char* filename)
 			debug(LOG_ERROR, "Video not in YUV420 format!");
 			return false;
 		}
+		// disable scanlines if the video is too large for the texture or shown too small
+		use_scanlines = war_getScanlineMode();
+		if (videodata.ti.frame_height * 2 > texture_height || videoY2 < videodata.ti.frame_height * 2)
+			use_scanlines = SCANLINES_OFF;
+
 		Allocate_videoFrame();
 
-		glGenTextures(1, &video_texture);
 		glBindTexture(GL_TEXTURE_2D, video_texture);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture_width, texture_height,
 				0, GL_RGBA, GL_UNSIGNED_BYTE, blackframe);
 		free(blackframe);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 	}
@@ -948,6 +1027,7 @@ void seq_Shutdown()
 		theora_clear(&videodata.td);
 		theora_comment_clear(&videodata.tc);
 		theora_info_clear(&videodata.ti);
+		deallocateVideoFrame();
 	}
 
 	ogg_sync_clear(&videodata.oy);
@@ -957,10 +1037,6 @@ void seq_Shutdown()
 		PHYSFS_close(fpInfile);
 	}
 
-	if (RGBAframe)
-	{
-		free(RGBAframe);
-	}
 	videoplaying = false;
 	Timer_stop();
 
@@ -1002,8 +1078,6 @@ void seq_SetDisplaySize(int sizeX, int sizeY, int posX, int posY)
 			videoY1 += offset;
 			videoY2 -= offset;
 		}
-
-
 	}
 
 	ScrnvidXpos = posX;

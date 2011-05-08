@@ -708,68 +708,44 @@ GAMECODE gameLoop(void)
 /* The video playback loop */
 void videoLoop(void)
 {
-	// There is something really odd here. - Per
 	static BOOL bActiveBackDrop = false;
+	const BOOL userSkip = keyPressed(KEY_ESC) || mouseReleased(MOUSE_LMB);
 
-#ifdef DEBUG
-	// Surely this should be: bActiveBackDrop = screen_GetBackDrop(); ?? - Per
-	// That would look odd, I tried it. Eg. intelligence screen is not redrawn correctly. -- DevU
-	screen_GetBackDrop();
-#endif
+	if (clearCount < 1) // if first iteration
+	{
+		if (screen_GetBackDrop())
+		{
+			bActiveBackDrop = true;
+			screen_StopBackDrop();
+		}
+		else
+		{
+			bActiveBackDrop = false;
+		}
+	}
 
 	if (loop_GetVideoStatus())
 	{
 		bQuitVideo = !seq_UpdateFullScreenVideo(NULL);
 	}
 
-	//toggling display mode disabled in video mode
-	// Check for quit
-	if (keyPressed(KEY_ESC) || mouseReleased(MOUSE_LMB))
+	clearCount++;
+	pie_ScreenFlip(CLEAR_BLACK); // videoloopflip
+
+	// if the video finished or user is skipping the video
+	if (bQuitVideo || userSkip)
 	{
 		seq_StopFullScreenVideo();
 		bQuitVideo = false;
-
-		// remove the intelligence screen if necessary
-		if (messageIsImmediate())
-		{
-			intResetScreen(true);
-			setMessageImmediate(false);
-		}
-		//Script callback for video over
-		//don't do the callback if we're playing the win/lose video
-		if (!getScriptWinLoseVideo())
-		{
-			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_VIDEO_QUIT);
-		}
-		else
-		{
-			displayGameOver(getScriptWinLoseVideo() == PLAY_WIN);
-		}
-		pie_ScreenFlip(CLEAR_BLACK);// videoloopflip extra mar10
 
 		if (bActiveBackDrop)
 		{
-			// We never get here presently - Per
- 			screen_RestartBackDrop();
+			screen_RestartBackDrop();
 		}
-	}
 
-	//if the video finished...
-	if (bQuitVideo)
-	{
-		seq_StopFullScreenVideo();
-		bQuitVideo = false;
-
-		//set the next video off - if any
-		if (seq_AnySeqLeft())
+		// set the next video off - if any - if the user isn't skipping
+		if (seq_AnySeqLeft() && !userSkip)
 		{
-			pie_ScreenFlip(CLEAR_BLACK);// videoloopflip extra mar10
-
-			if (bActiveBackDrop)
-			{
-				screen_RestartBackDrop();
-			}
-		 	//bClear = CLEAR_BLACK;
 			seq_StartNextFullScreenVideo();
 		}
 		else
@@ -789,34 +765,8 @@ void videoLoop(void)
 			{
 				displayGameOver(getScriptWinLoseVideo() == PLAY_WIN);
 			}
-			pie_ScreenFlip(CLEAR_BLACK);// videoloopflip extra mar10
-
-			if (bActiveBackDrop)
-			{
-				// We never get here presently - Per
-				screen_RestartBackDrop();
-			}
 		}
 	}
-
-	if( clearCount < 1)
-	{
-		if (screen_GetBackDrop())
-		{
-			bActiveBackDrop = true;
-			screen_StopBackDrop();
-		}
-		else
-		{
-			bActiveBackDrop = false;
-			screen_StopBackDrop();
-		}
-	}
-
-	clearCount++;
-
-	pie_ScreenFlip(CLEAR_BLACK);// videoloopflip
-
 }
 
 

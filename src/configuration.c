@@ -356,6 +356,15 @@ BOOL loadConfig(void)
 		war_SetFMVmode(FMV_2X);
 	}
 
+	if (getWarzoneKeyNumeric("scanlines", &val))
+	{
+		war_setScanlineMode(val);
+	}
+	else
+	{
+		war_setScanlineMode(SCANLINES_OFF);
+	}
+
 	// //////////////////////////
 	// subtitles
 	if(getWarzoneKeyNumeric("subtitles", &val))
@@ -724,6 +733,7 @@ BOOL saveConfig(void)
 	setWarzoneKeyNumeric("shadows",(SDWORD)(getDrawShadows()));	// shadows
 	setWarzoneKeyNumeric("sound", (SDWORD)war_getSoundEnabled());
 	setWarzoneKeyNumeric("FMVmode",(SDWORD)(war_GetFMVmode()));		// sequences
+	setWarzoneKeyNumeric("scanlines", (SDWORD)war_getScanlineMode());
 	setWarzoneKeyNumeric("subtitles",(SDWORD)(seq_GetSubtitles()));		// subtitles
 	setWarzoneKeyNumeric("radarObjectMode",(SDWORD)bEnemyAllyRadarColor);    // enemy/allies radar view
 	setWarzoneKeyNumeric("radarTerrainMode",(SDWORD)radarDrawMode);
