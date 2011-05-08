@@ -7,6 +7,25 @@
 	objects = {
 
 /* Begin PBXAggregateTarget section */
+		43B4F17313773FD400CE9C6D /* Fetch Third Party Sources */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 43B4F1781377400400CE9C6D /* Build configuration list for PBXAggregateTarget "Fetch Third Party Sources" */;
+			buildPhases = (
+				43B4F1B8137741E000CE9C6D /* Popt - Fetch source */,
+				43B4F17C1377403C00CE9C6D /* Zlib - Fetch source */,
+				43B4F18D137740B600CE9C6D /* Ogg - Fetch source */,
+				43B4F17213773FD400CE9C6D /* QuesoGLC - Fetch source */,
+				43B4F1821377407F00CE9C6D /* Png - Fetch source */,
+				43B4F1AC1377417300CE9C6D /* PhysFS - Fetch source */,
+				43B4F192137740F000CE9C6D /* Vorbis - Fetch source */,
+				43B4F1A11377413200CE9C6D /* Theora - Fetch source */,
+				43B4F1B3137741B100CE9C6D /* Gettext - Fetch source */,
+			);
+			dependencies = (
+			);
+			name = "Fetch Third Party Sources";
+			productName = "Fetch Third Party Sources";
+		};
 		43F3011A10D3572400707B6E /* Configure Popt */ = {
 			isa = PBXAggregateTarget;
 			buildConfigurationList = 43F3012510D3574400707B6E /* Build configuration list for PBXAggregateTarget "Configure Popt" */;
@@ -772,6 +791,69 @@
 			proxyType = 1;
 			remoteGlobalIDString = 02356D740BD3BB3400E9A019;
 			remoteInfo = Warzone;
+		};
+		43B4F1791377401C00CE9C6D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43B4F17313773FD400CE9C6D;
+			remoteInfo = "Fetch Third Party Sources";
+		};
+		43B4F17F1377405A00CE9C6D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43B4F17313773FD400CE9C6D;
+			remoteInfo = "Fetch Third Party Sources";
+		};
+		43B4F188137740A200CE9C6D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43B4F17313773FD400CE9C6D;
+			remoteInfo = "Fetch Third Party Sources";
+		};
+		43B4F18F137740D100CE9C6D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43B4F17313773FD400CE9C6D;
+			remoteInfo = "Fetch Third Party Sources";
+		};
+		43B4F1981377410F00CE9C6D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43B4F17313773FD400CE9C6D;
+			remoteInfo = "Fetch Third Party Sources";
+		};
+		43B4F1A31377415400CE9C6D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43B4F17313773FD400CE9C6D;
+			remoteInfo = "Fetch Third Party Sources";
+		};
+		43B4F1AE1377419100CE9C6D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43B4F17313773FD400CE9C6D;
+			remoteInfo = "Fetch Third Party Sources";
+		};
+		43B4F1B5137741CD00CE9C6D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43B4F17313773FD400CE9C6D;
+			remoteInfo = "Fetch Third Party Sources";
+		};
+		43B4F1BA137741FE00CE9C6D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43B4F17313773FD400CE9C6D;
+			remoteInfo = "Fetch Third Party Sources";
 		};
 		43FA571010FF8ED90074E914 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -3205,7 +3287,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 0223BBD30CFE3D5C0056EF85 /* Build configuration list for PBXNativeTarget "QuesoGLC" */;
 			buildPhases = (
-				0223BBDD0CFE3E290056EF85 /* Fetch source */,
 				02F5CC4F0D148FC30000A2D0 /* Create database.c */,
 				0223BBCC0CFE3D5C0056EF85 /* Headers */,
 				0223BBCD0CFE3D5C0056EF85 /* Resources */,
@@ -3215,6 +3296,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				43B4F17A1377401C00CE9C6D /* PBXTargetDependency */,
 			);
 			name = QuesoGLC;
 			productName = QuesoGLC;
@@ -3225,7 +3307,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 022B2F240BD55816002E64E3 /* Build configuration list for PBXNativeTarget "Gettext" */;
 			buildPhases = (
-				022B2F290BD55840002E64E3 /* Fetch source */,
 				022B2FB70BD55BBA002E64E3 /* Generate headers */,
 				022B2F1D0BD55814002E64E3 /* Headers */,
 				022B2F1E0BD55814002E64E3 /* Resources */,
@@ -3235,6 +3316,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				43B4F1B6137741CD00CE9C6D /* PBXTargetDependency */,
 			);
 			name = Gettext;
 			productName = Gettext;
@@ -3280,7 +3362,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 02356D850BD3BB4200E9A019 /* Build configuration list for PBXNativeTarget "Zlib" */;
 			buildPhases = (
-				02FD38210BD3FE9A00776FD3 /* Fetch source */,
 				02356D7E0BD3BB4100E9A019 /* Headers */,
 				02356D7F0BD3BB4100E9A019 /* Resources */,
 				02356D800BD3BB4100E9A019 /* Sources */,
@@ -3289,6 +3370,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				43B4F1801377405A00CE9C6D /* PBXTargetDependency */,
 			);
 			name = Zlib;
 			productName = Zlib;
@@ -3299,7 +3381,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 02356DC40BD3BBFC00E9A019 /* Build configuration list for PBXNativeTarget "Png" */;
 			buildPhases = (
-				02FD382B0BD400BD00776FD3 /* Fetch source */,
 				02356DBD0BD3BBFC00E9A019 /* Headers */,
 				02356DBE0BD3BBFC00E9A019 /* Resources */,
 				02356DBF0BD3BBFC00E9A019 /* Sources */,
@@ -3308,6 +3389,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				43B4F189137740A200CE9C6D /* PBXTargetDependency */,
 				02356E020BD3BCBF00E9A019 /* PBXTargetDependency */,
 			);
 			name = Png;
@@ -3319,7 +3401,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 02356E0B0BD3BCFF00E9A019 /* Build configuration list for PBXNativeTarget "Ogg" */;
 			buildPhases = (
-				02FD38340BD4012A00776FD3 /* Fetch source */,
 				02356E040BD3BCFE00E9A019 /* Headers */,
 				02356E050BD3BCFE00E9A019 /* Resources */,
 				02356E060BD3BCFE00E9A019 /* Sources */,
@@ -3328,6 +3409,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				43B4F190137740D100CE9C6D /* PBXTargetDependency */,
 			);
 			name = Ogg;
 			productName = Libogg;
@@ -3373,7 +3455,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 02DDA7F00BD3C03F0049AB60 /* Build configuration list for PBXNativeTarget "Vorbis" */;
 			buildPhases = (
-				02FD38380BD4013A00776FD3 /* Fetch source */,
 				02DDA7E90BD3C03F0049AB60 /* Headers */,
 				02DDA7EA0BD3C03F0049AB60 /* Resources */,
 				02DDA7EB0BD3C03F0049AB60 /* Sources */,
@@ -3382,6 +3463,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				43B4F1991377410F00CE9C6D /* PBXTargetDependency */,
 				02DDA8690BD3C21E0049AB60 /* PBXTargetDependency */,
 			);
 			name = Vorbis;
@@ -3393,7 +3475,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 02DDA8B30BD3C2F20049AB60 /* Build configuration list for PBXNativeTarget "PhysFS" */;
 			buildPhases = (
-				02FD383C0BD4014700776FD3 /* Fetch source */,
 				02DDA8AC0BD3C2F20049AB60 /* Headers */,
 				02DDA8AD0BD3C2F20049AB60 /* Resources */,
 				02DDA8AE0BD3C2F20049AB60 /* Sources */,
@@ -3402,6 +3483,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				43B4F1AF1377419100CE9C6D /* PBXTargetDependency */,
 				02DDA8D30BD3C3780049AB60 /* PBXTargetDependency */,
 			);
 			name = PhysFS;
@@ -3413,7 +3495,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 02F5CC6F0D1494AB0000A2D0 /* Build configuration list for PBXNativeTarget "Popt" */;
 			buildPhases = (
-				02F5CC740D1494C30000A2D0 /* Fetch source */,
 				02F5CC680D1494AA0000A2D0 /* Headers */,
 				02F5CC690D1494AA0000A2D0 /* Resources */,
 				02F5CC6A0D1494AA0000A2D0 /* Sources */,
@@ -3422,6 +3503,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				43B4F1BB137741FE00CE9C6D /* PBXTargetDependency */,
 			);
 			name = Popt;
 			productName = Popt;
@@ -3466,7 +3548,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 97AEAB300E8C1B5200A10721 /* Build configuration list for PBXNativeTarget "Theora" */;
 			buildPhases = (
-				97AEAAED0E8C1B5200A10721 /* Fetch source */,
 				97AEAAEE0E8C1B5200A10721 /* Headers */,
 				97AEAB160E8C1B5200A10721 /* Resources */,
 				97AEAB170E8C1B5200A10721 /* Sources */,
@@ -3475,6 +3556,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				43B4F1A41377415400CE9C6D /* PBXTargetDependency */,
 				97AEAAEB0E8C1B5200A10721 /* PBXTargetDependency */,
 				97AEAB770E8C1C4800A10721 /* PBXTargetDependency */,
 			);
@@ -3538,6 +3620,7 @@
 			targets = (
 				02356D740BD3BB3400E9A019 /* Warzone */,
 				43FA570C10FF8E9B0074E914 /* Setup Prebuilt Components */,
+				43B4F17313773FD400CE9C6D /* Fetch Third Party Sources */,
 				0223BBD00CFE3D5C0056EF85 /* QuesoGLC */,
 				02356D820BD3BB4100E9A019 /* Zlib */,
 				02356DC10BD3BBFC00E9A019 /* Png */,
@@ -3645,34 +3728,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0223BBDD0CFE3E290056EF85 /* Fetch source */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Fetch source";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"quesoglc-0.7-r921\"\nOutDir=\"quesoglc\"\nFileName=\"quesoglc-0.7-r921.tar.gz\"\nSourceDLP=\"http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/quesoglc-0.7-r921.tar.gz\"\nMD5Sum=\"ee73eebd23292dfb17365ff19eb15a0e\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}\n\n# tar -czf quesoglc-0.7-r921.tar.gz --exclude '.svn' --exclude 'Makefile*' --exclude 'makefile*' --exclude '.DS_Store'  quesoglc-0.7-r921";
-		};
-		022B2F290BD55840002E64E3 /* Fetch source */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 12;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Fetch source";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"gettext-0.18.1\"\nOutDir=\"gettext\"\nFileName=\"gettext-0.18.1.tar.gz\"\nSourceDLP=\"http://ftp.gnu.org/pub/gnu/gettext/gettext-0.18.1.tar.gz\"\nMD5Sum=\"2ae04f960d5fa03774636ddef19ebdbf\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
-		};
 		022B2FB70BD55BBA002E64E3 /* Generate headers */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -3718,90 +3773,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "cd external/quesoglc\n\nif [ ! -r src/database.c ]; then\n\tcd database\n\t/usr/bin/python buildDB.py\n\texit ${?}\nfi\nexit 0\n";
-		};
-		02F5CC740D1494C30000A2D0 /* Fetch source */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Fetch source";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"popt-1.15\"\nOutDir=\"popt\"\nFileName=\"popt-1.15.tar.gz\"\nSourceDLP=\"http://rpm5.org/files/popt/popt-1.15.tar.gz\"\nMD5Sum=\"c61ef795fa450eb692602a661ec8d7f1\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
-		};
-		02FD38210BD3FE9A00776FD3 /* Fetch source */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Fetch source";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"zlib-1.2.5\"\nOutDir=\"zlib\"\nFileName=\"zlib-1.2.5.tar.gz\"\nSourceDLP=\"http://zlib.net/zlib-1.2.5.tar.gz\"\nMD5Sum=\"c735eab2d659a96e5a594c9e8541ad63\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
-		};
-		02FD382B0BD400BD00776FD3 /* Fetch source */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Fetch source";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"libpng-1.4.7\"\nOutDir=\"libpng\"\nFileName=\"libpng-1.4.7.tar.gz\"\nSourceDLP=\"http://downloads.sourceforge.net/project/libpng/libpng14/1.4.7/libpng-1.4.7.tar.gz\"\nMD5Sum=\"aa4231874e4a16cbc8daae81a1fd04e6\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
-		};
-		02FD38340BD4012A00776FD3 /* Fetch source */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Fetch source";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"libogg-1.2.2\"\nOutDir=\"libogg\"\nFileName=\"libogg-1.2.2.tar.gz\"\nSourceDLP=\"http://downloads.xiph.org/releases/ogg/libogg-1.2.2.tar.gz\"\nMD5Sum=\"5a9fcabc9a1b7c6f1cd75ddc78f36c56\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
-		};
-		02FD38380BD4013A00776FD3 /* Fetch source */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Fetch source";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"libvorbis-1.3.2\"\nOutDir=\"libvorbis\"\nFileName=\"libvorbis-1.3.2.tar.gz\"\nSourceDLP=\"http://downloads.xiph.org/releases/vorbis/libvorbis-1.3.2.tar.gz\"\nMD5Sum=\"c870b9bd5858a0ecb5275c14486d9554\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
-		};
-		02FD383C0BD4014700776FD3 /* Fetch source */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Fetch source";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"physfs-1.1.1\"\nOutDir=\"physfs\"\nFileName=\"physfs-1.1.1.tar.gz\"\nSourceDLP=\"http://icculus.org/physfs/downloads/physfs-1.1.1.tar.gz\"\nMD5Sum=\"0359b67793c1c14f00de1d1bbeb8ed6a\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
 		};
 		221052070E3D22540057CD9C /* Fetch source and build */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3858,6 +3829,132 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "DirectorY=\"gettext-0.17.mpkg_\"\nOutDir=\"gettext-0.17.mpkg\"\nFileName=\"gettext-0.17.mpkg.tar.gz\"\nBuiltDLP=\"http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/gettext-0.17.mpkg.tar.gz\"\nMD5Sum=\"ba7984918fe0b36e2e7c786693e005f2\"\n\n# Checks\nexport PATH=$PATH:/sw/bin:/opt/local/bin\nif type -aP msgfmt; then\n    echo \"msgfmt exists, skipping\"\n    exit 0\nelif [ -x \"/opt/local/bin/port\" ]; then\n  echo \"warning: Please run the following command in the terminal: 'sudo port install gettext'.\" >&2\n  open -b com.apple.Terminal\n  exit 1\nelif [ -d \"${SRCROOT}/external/${OutDir}\" ]; then\n    touch build/notrans.dis\n    echo \"warning: Gettext support has been disabled because we could not find a binary.\" >&2\n    exit 0\nelif [ ! `sw_vers -productVersion | sed -e 's:^...\\(.\\)..$:\\1:'` -ge \"6\" ]; then\n    touch build/notrans.dis\n    echo \"warning: Gettext support has been disabled because we could not find a binary.\" >&2\n    exit 0\nfi\n\nconfigs/FetchPrebuilt.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${BuiltDLP}\" \"${MD5Sum}\"\nFetchExitStatus=$?\n\n# Install\nif [ ! \"${FetchExitStatus}\" = \"0\" ]; then\n    exit \"${FetchExitStatus}\"\nelif [ -d \"${SRCROOT}/external/${OutDir}\" ]; then\n    echo \" Please install the gettext package before continuing.\" >&2\n    open \"${SRCROOT}/external/${OutDir}\"\n    exit 1\nfi";
+		};
+		43B4F17213773FD400CE9C6D /* QuesoGLC - Fetch source */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "QuesoGLC - Fetch source";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "DirectorY=\"quesoglc-0.7-r921\"\nOutDir=\"quesoglc\"\nFileName=\"quesoglc-0.7-r921.tar.gz\"\nSourceDLP=\"http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/quesoglc-0.7-r921.tar.gz\"\nMD5Sum=\"ee73eebd23292dfb17365ff19eb15a0e\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}\n\n# tar -czf quesoglc-0.7-r921.tar.gz --exclude '.svn' --exclude 'Makefile*' --exclude 'makefile*' --exclude '.DS_Store'  quesoglc-0.7-r921";
+		};
+		43B4F17C1377403C00CE9C6D /* Zlib - Fetch source */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Zlib - Fetch source";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "DirectorY=\"zlib-1.2.5\"\nOutDir=\"zlib\"\nFileName=\"zlib-1.2.5.tar.gz\"\nSourceDLP=\"http://zlib.net/zlib-1.2.5.tar.gz\"\nMD5Sum=\"c735eab2d659a96e5a594c9e8541ad63\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
+		};
+		43B4F1821377407F00CE9C6D /* Png - Fetch source */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Png - Fetch source";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "DirectorY=\"libpng-1.4.7\"\nOutDir=\"libpng\"\nFileName=\"libpng-1.4.7.tar.gz\"\nSourceDLP=\"http://downloads.sourceforge.net/project/libpng/libpng14/1.4.7/libpng-1.4.7.tar.gz\"\nMD5Sum=\"aa4231874e4a16cbc8daae81a1fd04e6\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
+		};
+		43B4F18D137740B600CE9C6D /* Ogg - Fetch source */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Ogg - Fetch source";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "DirectorY=\"libogg-1.2.2\"\nOutDir=\"libogg\"\nFileName=\"libogg-1.2.2.tar.gz\"\nSourceDLP=\"http://downloads.xiph.org/releases/ogg/libogg-1.2.2.tar.gz\"\nMD5Sum=\"5a9fcabc9a1b7c6f1cd75ddc78f36c56\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
+		};
+		43B4F192137740F000CE9C6D /* Vorbis - Fetch source */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Vorbis - Fetch source";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "DirectorY=\"libvorbis-1.3.2\"\nOutDir=\"libvorbis\"\nFileName=\"libvorbis-1.3.2.tar.gz\"\nSourceDLP=\"http://downloads.xiph.org/releases/vorbis/libvorbis-1.3.2.tar.gz\"\nMD5Sum=\"c870b9bd5858a0ecb5275c14486d9554\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
+		};
+		43B4F1A11377413200CE9C6D /* Theora - Fetch source */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Theora - Fetch source";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "DirectorY=\"libtheora-1.1.1\"\nOutDir=\"libtheora\"\nFileName=\"libtheora-1.1.1.tar.gz\"\nSourceDLP=\"http://downloads.xiph.org/releases/theora/libtheora-1.1.1.tar.gz\"\nMD5Sum=\"bb4dc37f0dc97db98333e7160bfbb52b\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
+		};
+		43B4F1AC1377417300CE9C6D /* PhysFS - Fetch source */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "PhysFS - Fetch source";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "DirectorY=\"physfs-1.1.1\"\nOutDir=\"physfs\"\nFileName=\"physfs-1.1.1.tar.gz\"\nSourceDLP=\"http://icculus.org/physfs/downloads/physfs-1.1.1.tar.gz\"\nMD5Sum=\"0359b67793c1c14f00de1d1bbeb8ed6a\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
+		};
+		43B4F1B3137741B100CE9C6D /* Gettext - Fetch source */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Gettext - Fetch source";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "DirectorY=\"gettext-0.18.1\"\nOutDir=\"gettext\"\nFileName=\"gettext-0.18.1.tar.gz\"\nSourceDLP=\"http://ftp.gnu.org/pub/gnu/gettext/gettext-0.18.1.tar.gz\"\nMD5Sum=\"2ae04f960d5fa03774636ddef19ebdbf\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
+		};
+		43B4F1B8137741E000CE9C6D /* Popt - Fetch source */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Popt - Fetch source";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "DirectorY=\"popt-1.15\"\nOutDir=\"popt\"\nFileName=\"popt-1.15.tar.gz\"\nSourceDLP=\"http://rpm5.org/files/popt/popt-1.15.tar.gz\"\nMD5Sum=\"c61ef795fa450eb692602a661ec8d7f1\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
 		};
 		43F3011910D3572400707B6E /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3926,20 +4023,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "cd external/pixman\n\ncat <<EOF > config.h\n#define AC_APPLE_UNIVERSAL_BUILD\n#define HAVE_DLFCN_H 1\n#define HAVE_INTTYPES_H 1\n#define HAVE_MEMORY_H 1\n#define HAVE_STDINT_H 1\n#define HAVE_STDLIB_H 1\n#define HAVE_STRINGS_H 1\n#define HAVE_STRING_H 1\n#define HAVE_SYS_STAT_H 1\n#define HAVE_SYS_TYPES_H 1\n#define HAVE_UNISTD_H 1\n#define PACKAGE \"pixman\"\n#define PACKAGE_BUGREPORT \"\"sandmann@daimi.au.dk\"\"\n#define PACKAGE_NAME \"pixman\"\n#define PACKAGE_STRING \"pixman 0.14.0\"\n#define PACKAGE_TARNAME \"pixman\"\n#define PACKAGE_VERSION \"0.14.0\"\n#define STDC_HEADERS 1\n#define VERSION \"0.14.0\"\n#if defined AC_APPLE_UNIVERSAL_BUILD\n# if defined __BIG_ENDIAN__\n#  define WORDS_BIGENDIAN 1\n# endif\n#else\n# ifndef WORDS_BIGENDIAN\n#  define USE_MMX 1\n# endif\n#endif\nEOF";
-		};
-		97AEAAED0E8C1B5200A10721 /* Fetch source */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Fetch source";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"libtheora-1.1.1\"\nOutDir=\"libtheora\"\nFileName=\"libtheora-1.1.1.tar.gz\"\nSourceDLP=\"http://downloads.xiph.org/releases/theora/libtheora-1.1.1.tar.gz\"\nMD5Sum=\"bb4dc37f0dc97db98333e7160bfbb52b\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -4499,6 +4582,51 @@
 			isa = PBXTargetDependency;
 			target = 02356D740BD3BB3400E9A019 /* Warzone */;
 			targetProxy = 43AE78FC10F0F4F500FED5D3 /* PBXContainerItemProxy */;
+		};
+		43B4F17A1377401C00CE9C6D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43B4F17313773FD400CE9C6D /* Fetch Third Party Sources */;
+			targetProxy = 43B4F1791377401C00CE9C6D /* PBXContainerItemProxy */;
+		};
+		43B4F1801377405A00CE9C6D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43B4F17313773FD400CE9C6D /* Fetch Third Party Sources */;
+			targetProxy = 43B4F17F1377405A00CE9C6D /* PBXContainerItemProxy */;
+		};
+		43B4F189137740A200CE9C6D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43B4F17313773FD400CE9C6D /* Fetch Third Party Sources */;
+			targetProxy = 43B4F188137740A200CE9C6D /* PBXContainerItemProxy */;
+		};
+		43B4F190137740D100CE9C6D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43B4F17313773FD400CE9C6D /* Fetch Third Party Sources */;
+			targetProxy = 43B4F18F137740D100CE9C6D /* PBXContainerItemProxy */;
+		};
+		43B4F1991377410F00CE9C6D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43B4F17313773FD400CE9C6D /* Fetch Third Party Sources */;
+			targetProxy = 43B4F1981377410F00CE9C6D /* PBXContainerItemProxy */;
+		};
+		43B4F1A41377415400CE9C6D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43B4F17313773FD400CE9C6D /* Fetch Third Party Sources */;
+			targetProxy = 43B4F1A31377415400CE9C6D /* PBXContainerItemProxy */;
+		};
+		43B4F1AF1377419100CE9C6D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43B4F17313773FD400CE9C6D /* Fetch Third Party Sources */;
+			targetProxy = 43B4F1AE1377419100CE9C6D /* PBXContainerItemProxy */;
+		};
+		43B4F1B6137741CD00CE9C6D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43B4F17313773FD400CE9C6D /* Fetch Third Party Sources */;
+			targetProxy = 43B4F1B5137741CD00CE9C6D /* PBXContainerItemProxy */;
+		};
+		43B4F1BB137741FE00CE9C6D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43B4F17313773FD400CE9C6D /* Fetch Third Party Sources */;
+			targetProxy = 43B4F1BA137741FE00CE9C6D /* PBXContainerItemProxy */;
 		};
 		43FA571110FF8ED90074E914 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -5375,6 +5503,20 @@
 			};
 			name = Release;
 		};
+		43B4F17413773FD500CE9C6D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "Fetch Third Party Sources";
+			};
+			name = Debug;
+		};
+		43B4F17513773FD500CE9C6D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "Fetch Third Party Sources";
+			};
+			name = Release;
+		};
 		43F3011B10D3572400707B6E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -5660,6 +5802,15 @@
 			buildConfigurations = (
 				221052050E3D220C0057CD9C /* Debug */,
 				221052060E3D220C0057CD9C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		43B4F1781377400400CE9C6D /* Build configuration list for PBXAggregateTarget "Fetch Third Party Sources" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				43B4F17413773FD500CE9C6D /* Debug */,
+				43B4F17513773FD500CE9C6D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
