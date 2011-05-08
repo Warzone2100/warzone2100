@@ -7,6 +7,8 @@
    * Change: Limited support for map-mods. Only load the map file actually used when starting a game. (ticket:2610, commit:65d968cdfccecc6c60e0215ab34dbf3d56f19a80)
    * Change: Show the minimap larger on small maps if the vertical resolution is higher than 480 (commit:5731d0e12c0d58dd42601e5befff3e30804bd1fe, commit:c201b5948b0af9a16b8676620e7cb64553d4c112)
    * Change: Show experience with one decimal place (ticket:2641, commit:fb5d9645e85de49365e47382dfce9fec7fd3fb31)
+   * Change: Allow video resolutions up to 1024x1024 (ticket:2682, commit:1f4690572be0792a3450f7afce36b3a6b9f8e093, commit:7019d7eb515f974deb544135d661087bc2ce2db5)
+   * Change: Add an option to show videos with black or 50% dimmed scanlines (ticket:2095, commit:96984700f5f0182ad66b7425eace33e7f62c0177, commit:549c476672a9133d9400eec7b7fefbdd7da35cfe, commit:8895d58d282524b9636bcbf58f0753edc244dbd9)
    * Fix: Prevent savegame corruption (ticket:2100, commit:a974722e397b7072fb59d0114e2a4ef9f8d509d8, ticket:2625, commit:cc156a668fb5291e38eab33ff77138a05e29fa28, ticket:2627, commit:fc0f87807eeadaeeafb1386b2525a81f0a550fde)
    * Fix: Prevent saved experience from being truncated (ticket:2641, commit:4b197ba312a5c08efdab1fb4c2ccd2bf1c077c1d)
    * Fix: Prevent building on burning oil (ticket:1100, commit:2745ac27f84301c05b678892d798a93fd4e7f813)
