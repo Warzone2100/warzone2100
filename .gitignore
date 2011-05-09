@@ -15,6 +15,7 @@ win32/release
 # directories and files created when crosscompiling or Windows
 win32/build
 win32/downloads
+win32/__BUILD_CONFIG.USER
 win32/libs/dejavu/dejavu-fonts-ttf-*/
 win32/libs/dejavu/*-stamp
 win32/libs/devpkg/*-stamp
