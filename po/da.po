@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-05-07 01:19+0200\n"
+"POT-Creation-Date: 2011-05-09 03:07+0200\n"
 "PO-Revision-Date: 2008-05-09 16:08+0000\n"
 "Last-Translator: carson <Unknown>\n"
 "Language-Team: Dansk <da@li.org>\n"
@@ -12679,8 +12679,8 @@ msgstr ""
 msgid "go directly to host screen"
 msgstr ""
 
-#: src/configuration.c:441
-#: src/configuration.c:442
+#: src/configuration.c:450
+#: src/configuration.c:451
 #: src/multistat.c:139
 msgid "Player"
 msgstr "Spiller"
@@ -12983,11 +12983,11 @@ msgstr "TUTORIALS"
 #: src/frontend.c:218
 #: src/frontend.c:351
 #: src/frontend.c:421
-#: src/frontend.c:555
-#: src/frontend.c:691
-#: src/frontend.c:798
-#: src/frontend.c:1017
-#: src/frontend.c:1178
+#: src/frontend.c:572
+#: src/frontend.c:728
+#: src/frontend.c:835
+#: src/frontend.c:1054
+#: src/frontend.c:1215
 msgctxt "menu"
 msgid "Return"
 msgstr "Tilbage"
@@ -13071,250 +13071,267 @@ msgid "Video Playback"
 msgstr ""
 
 #: src/frontend.c:486
-#: src/frontend.c:645
+#: src/frontend.c:662
 msgid "1X"
 msgstr ""
 
 #: src/frontend.c:490
-#: src/frontend.c:635
+#: src/frontend.c:652
 msgid "2X"
 msgstr ""
 
 #: src/frontend.c:494
-#: src/frontend.c:640
-#: src/frontend.c:766
-#: src/frontend.c:820
+#: src/frontend.c:657
+#: src/frontend.c:803
+#: src/frontend.c:857
 msgid "Fullscreen"
 msgstr ""
 
-#: src/frontend.c:504
-msgid "Screen Shake"
-msgstr "Ryst skærm"
+#: src/frontend.c:503
+msgid "Scanlines"
+msgstr ""
 
 #: src/frontend.c:507
-#: src/frontend.c:535
-#: src/frontend.c:543
-#: src/frontend.c:578
-#: src/frontend.c:612
-#: src/frontend.c:621
-#: src/frontend.c:787
-#: src/frontend.c:881
-#: src/frontend.c:919
-#: src/frontend.c:958
-#: src/frontend.c:970
-#: src/frontend.c:982
-#: src/frontend.c:994
-#: src/frontend.c:1039
-#: src/frontend.c:1052
-#: src/frontend.c:1066
-#: src/frontend.c:1080
-msgid "On"
-msgstr "Til"
-
-#: src/frontend.c:511
-#: src/frontend.c:531
-#: src/frontend.c:547
-#: src/frontend.c:573
-#: src/frontend.c:607
-#: src/frontend.c:625
-#: src/frontend.c:791
-#: src/frontend.c:876
-#: src/frontend.c:914
-#: src/frontend.c:962
-#: src/frontend.c:974
-#: src/frontend.c:986
-#: src/frontend.c:998
-#: src/frontend.c:1034
-#: src/frontend.c:1047
-#: src/frontend.c:1061
-#: src/frontend.c:1075
+#: src/frontend.c:528
+#: src/frontend.c:548
+#: src/frontend.c:564
+#: src/frontend.c:590
+#: src/frontend.c:624
+#: src/frontend.c:642
+#: src/frontend.c:687
+#: src/frontend.c:828
+#: src/frontend.c:913
+#: src/frontend.c:951
+#: src/frontend.c:999
+#: src/frontend.c:1011
+#: src/frontend.c:1023
+#: src/frontend.c:1035
+#: src/frontend.c:1071
+#: src/frontend.c:1084
+#: src/frontend.c:1098
+#: src/frontend.c:1112
 msgid "Off"
 msgstr "Fra"
 
-#: src/frontend.c:516
+#: src/frontend.c:511
+#: src/frontend.c:677
+msgid "50%"
+msgstr ""
+
+#: src/frontend.c:515
+#: src/frontend.c:682
+#: src/multiplay.c:2038
+msgid "Black"
+msgstr "Sort"
+
+#: src/frontend.c:521
+msgid "Screen Shake"
+msgstr "Ryst skærm"
+
+#: src/frontend.c:524
+#: src/frontend.c:552
+#: src/frontend.c:560
+#: src/frontend.c:595
+#: src/frontend.c:629
+#: src/frontend.c:638
+#: src/frontend.c:824
+#: src/frontend.c:918
+#: src/frontend.c:956
+#: src/frontend.c:995
+#: src/frontend.c:1007
+#: src/frontend.c:1019
+#: src/frontend.c:1031
+#: src/frontend.c:1076
+#: src/frontend.c:1089
+#: src/frontend.c:1103
+#: src/frontend.c:1117
+msgid "On"
+msgstr "Til"
+
+#: src/frontend.c:533
 #: src/multiint.c:1246
 msgid "Fog"
 msgstr "Tåge"
 
-#: src/frontend.c:519
-#: src/frontend.c:594
+#: src/frontend.c:536
+#: src/frontend.c:611
 msgid "Mist"
 msgstr "Afstandståge"
 
-#: src/frontend.c:523
-#: src/frontend.c:588
+#: src/frontend.c:540
+#: src/frontend.c:605
 #: src/multiint.c:1248
 msgid "Fog Of War"
 msgstr "Krigståge"
 
-#: src/frontend.c:528
+#: src/frontend.c:545
 msgid "Subtitles"
 msgstr "Undertekster"
 
-#: src/frontend.c:540
+#: src/frontend.c:557
 msgid "Shadows"
 msgstr ""
 
-#: src/frontend.c:551
+#: src/frontend.c:568
 #, fuzzy
 msgid "GRAPHICS OPTIONS"
 msgstr "SPIL INDSTILLINGER"
 
-#: src/frontend.c:679
+#: src/frontend.c:716
 #: src/ingameop.c:179
 msgid "Voice Volume"
 msgstr "Stemme volume"
 
-#: src/frontend.c:683
+#: src/frontend.c:720
 #: src/ingameop.c:184
 msgid "FX Volume"
 msgstr "Effekt volume"
 
-#: src/frontend.c:687
+#: src/frontend.c:724
 #: src/ingameop.c:189
 msgid "Music Volume"
 msgstr "Musik volume"
 
-#: src/frontend.c:694
+#: src/frontend.c:731
 #, fuzzy
 msgid "AUDIO OPTIONS"
 msgstr "SPIL INDSTILLINGER"
 
-#: src/frontend.c:759
+#: src/frontend.c:796
 msgid "* Takes effect on game restart"
 msgstr ""
 
-#: src/frontend.c:762
+#: src/frontend.c:799
 msgid "Graphics Mode*"
 msgstr "Grafik indstillinger"
 
-#: src/frontend.c:770
-#: src/frontend.c:815
+#: src/frontend.c:807
+#: src/frontend.c:852
 msgid "Windowed"
 msgstr "Vindue"
 
-#: src/frontend.c:774
+#: src/frontend.c:811
 msgid "Resolution*"
 msgstr ""
 
-#: src/frontend.c:779
+#: src/frontend.c:816
 #, fuzzy
 msgid "Texture size"
 msgstr "Besvar ild"
 
-#: src/frontend.c:783
+#: src/frontend.c:820
 msgid "Vertical sync*"
 msgstr ""
 
-#: src/frontend.c:795
+#: src/frontend.c:832
 #, fuzzy
 msgid "VIDEO OPTIONS"
 msgstr "SPIL INDSTILLINGER"
 
-#: src/frontend.c:951
+#: src/frontend.c:988
 msgid "* May negatively affect performance"
 msgstr ""
 
-#: src/frontend.c:955
+#: src/frontend.c:992
 #, fuzzy
 msgid "Reverse Rotation"
 msgstr "Omvendt mus"
 
-#: src/frontend.c:966
+#: src/frontend.c:1003
 #, fuzzy
 msgid "Trap Cursor"
 msgstr "Transportskib"
 
-#: src/frontend.c:978
+#: src/frontend.c:1015
 msgid "Colored Cursors*"
 msgstr ""
 
-#: src/frontend.c:991
+#: src/frontend.c:1028
 #, fuzzy
 msgid "Switch Mouse Buttons"
 msgstr "Spil indstillinger"
 
-#: src/frontend.c:1003
+#: src/frontend.c:1040
 #, fuzzy
 msgid "Rotate Screen"
 msgstr "Drej til venstre"
 
-#: src/frontend.c:1006
-#: src/frontend.c:1094
+#: src/frontend.c:1043
+#: src/frontend.c:1131
 msgctxt "middle mouse button"
 msgid "Middle Button"
 msgstr ""
 
-#: src/frontend.c:1010
-#: src/frontend.c:1089
+#: src/frontend.c:1047
+#: src/frontend.c:1126
 msgctxt "right mouse button"
 msgid "Right Button"
 msgstr ""
 
-#: src/frontend.c:1014
+#: src/frontend.c:1051
 #, fuzzy
 msgid "MOUSE OPTIONS"
 msgstr "SPIL INDSTILLINGER"
 
-#: src/frontend.c:1129
-#: src/frontend.c:1199
+#: src/frontend.c:1166
+#: src/frontend.c:1236
 msgid "Difficulty"
 msgstr "Sværhedsgræd"
 
-#: src/frontend.c:1133
-#: src/frontend.c:1207
+#: src/frontend.c:1170
 #: src/frontend.c:1244
+#: src/frontend.c:1281
 msgid "Easy"
 msgstr "Begynder"
 
-#: src/frontend.c:1136
-#: src/frontend.c:1210
-#: src/frontend.c:1236
+#: src/frontend.c:1173
+#: src/frontend.c:1247
+#: src/frontend.c:1273
 msgid "Normal"
 msgstr "Øvet"
 
-#: src/frontend.c:1140
-#: src/frontend.c:1213
-#: src/frontend.c:1240
+#: src/frontend.c:1177
+#: src/frontend.c:1250
+#: src/frontend.c:1277
 msgid "Hard"
 msgstr "Svær"
 
-#: src/frontend.c:1145
-#: src/frontend.c:1200
+#: src/frontend.c:1182
+#: src/frontend.c:1237
 msgid "Scroll Speed"
 msgstr "Kamera hastighed"
 
-#: src/frontend.c:1159
-#: src/frontend.c:1197
+#: src/frontend.c:1196
+#: src/frontend.c:1234
 msgid "Language"
 msgstr "Sprog"
 
-#: src/frontend.c:1171
-#: src/frontend.c:1198
+#: src/frontend.c:1208
+#: src/frontend.c:1235
 msgid "Unit Colour"
 msgstr "Holdfarve"
 
-#: src/frontend.c:1174
+#: src/frontend.c:1211
 msgid "Radar"
 msgstr ""
 
-#: src/frontend.c:1175
-#: src/frontend.c:1224
+#: src/frontend.c:1212
+#: src/frontend.c:1261
 #, fuzzy
 msgid "Rotating"
 msgstr "Drej til højre"
 
-#: src/frontend.c:1175
-#: src/frontend.c:1224
+#: src/frontend.c:1212
+#: src/frontend.c:1261
 msgid "Fixed"
 msgstr ""
 
-#: src/frontend.c:1181
-#: src/frontend.c:1201
+#: src/frontend.c:1218
+#: src/frontend.c:1238
 msgid "GAME OPTIONS"
 msgstr "SPIL INDSTILLINGER"
 
-#: src/frontend.c:1342
+#: src/frontend.c:1379
 #: src/multiint.c:2212
 msgid "Mod: "
 msgstr ""
@@ -15036,10 +15053,6 @@ msgstr "Orange"
 #: src/multiplay.c:2037
 msgid "Grey"
 msgstr "Grå"
-
-#: src/multiplay.c:2038
-msgid "Black"
-msgstr "Sort"
 
 #: src/multiplay.c:2039
 msgid "Red"
