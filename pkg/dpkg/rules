@@ -120,7 +120,7 @@ binary-arch: build install
 	dh_installdocs -a
 	dh_installmenu -a
 	dh_icons -a
-	dh_installman -a debian/warzone2100.6
+	dh_installman -a doc/warzone2100.6
 	dh_compress -a
 	dh_fixperms -a
 	dh_installdeb -a

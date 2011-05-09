@@ -47,10 +47,16 @@ nobase_dist_doc_DATA = \
 	quickstartguide.html \
 	quickstartguide.pdf \
 	Readme.en \
-	ScriptingManual.htm
+	ScriptingManual.htm \
+	warzone2100.6
 
 EXTRA_DIST = \
-	quickstartguide.asciidoc
+	quickstartguide.asciidoc \
+	warzone2100.6.asciidoc
+
+warzone2100.6: warzone2100.6.asciidoc
+	which $(A2X) || (echo "a2x not found!"; exit 1)
+	$(A2X) -f manpage -D . $(srcdir)/warzone2100.6.asciidoc
 
 quickstartguide.html: quickstartguide.asciidoc
 	which $(A2X) || (echo "a2x not found!"; exit 1)
@@ -60,12 +66,14 @@ quickstartguide.pdf: quickstartguide.html
 	which $(WKHTMLTOPDF) || (echo "wkhtmltopdf not found!"; exit 1)
 	$(WKHTMLTOPDF) quickstartguide.html quickstartguide.pdf
 
-doc: quickstartguide.html quickstartguide.pdf
+qsg: quickstartguide.html quickstartguide.pdf
 
-dist-hook: doc
+manpage: warzone2100.6
+
+dist-hook: qsg manpage
 
 if INSTALLER
 
-all: doc
+all: qsg
 
 endif
