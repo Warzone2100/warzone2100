@@ -15,6 +15,7 @@ Build-Depends: debhelper (>= 7),
  libglc-dev,
  libpopt-dev,
  pkg-config,
+ asciidoc,
  zip,
  unzip
 Standards-Version: 3.8.4
