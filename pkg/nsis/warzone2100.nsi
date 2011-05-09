@@ -30,7 +30,6 @@
 ;--------------------------------
 ;General
   CRCCheck on   ;make sure this isn't corrupted
-  SetCompressor /SOLID  lzma
 
   ;Name and file
   Name "${PACKAGE_NAME}"
@@ -690,6 +689,9 @@ Section "Uninstall"
   Delete "$INSTDIR\stderr.txt"
   Delete "$INSTDIR\stdout.txt"
 
+  Delete "$INSTDIR\COPYING.NONGPL.txt"
+  Delete "$INSTDIR\COPYING.README.txt"
+  Delete "$INSTDIR\COPYING.txt"
   Delete "$INSTDIR\Readme.en.txt"
   Delete "$INSTDIR\Readme.de.txt"
   Delete "$INSTDIR\Readme.en.html"
