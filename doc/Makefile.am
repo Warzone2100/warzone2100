@@ -60,4 +60,12 @@ quickstartguide.pdf: quickstartguide.html
 	which $(WKHTMLTOPDF) || (echo "wkhtmltopdf not found!"; exit 1)
 	$(WKHTMLTOPDF) quickstartguide.html quickstartguide.pdf
 
-dist-hook: quickstartguide.html quickstartguide.pdf
+doc: quickstartguide.html quickstartguide.pdf
+
+dist-hook: doc
+
+if INSTALLER
+
+all: doc
+
+endif
