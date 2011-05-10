@@ -71,13 +71,13 @@ change them.
 
 EXAMPLES
 --------
-*warzone2100 --fullscreen --resolution 800x600*::
+'warzone2100 --fullscreen --resolution 800x600'::
       Run in full screen at 800x600 screen resolution.
 
-*warzone2100 --window --resolution 800x600*::
+'warzone2100 --window --resolution 800x600'::
       Run in a window at 800x600 screen resolution.
 
-*warzone2100*::
+'warzone2100'::
       Run using the parameters specified last time.
 
 AUTHORS
