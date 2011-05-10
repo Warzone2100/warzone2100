@@ -47,7 +47,9 @@ nobase_dist_doc_DATA = \
 	quickstartguide.html \
 	quickstartguide.pdf \
 	Readme.en \
-	ScriptingManual.htm \
+	ScriptingManual.htm
+
+dist_man6_MANS = \
 	warzone2100.6
 
 EXTRA_DIST = \
