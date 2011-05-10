@@ -87,7 +87,6 @@ install: build
 	dh_testroot
 	dh_prep
 	$(MAKE) install DESTDIR=$(CURDIR)/debian/tmp
-	rm -rf debian/tmp/usr/share/doc/warzone2100
 # -------------------------------------
 
 
