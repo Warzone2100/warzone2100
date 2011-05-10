@@ -52,6 +52,10 @@ win32/libs/zlib/zlib-*/
 /src/autorevision.h
 /src/force-linker.cpp
 
+/doc/quickstartguide.html
+/doc/quickstartguide.pdf
+/doc/warzone2100.6
+
 # Generated executables:
 /build_tools/autorevision/autorevision
 /src/warzone2100
