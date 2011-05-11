@@ -571,7 +571,7 @@ static void RotateVector2D(Vector3i *Vector, Vector3i *TVector, Vector3i *Pos, i
 static SDWORD getDistanceAdjust( void )
 {
 	UDWORD	origDistance = MAXDISTANCE;
-	SDWORD	dif = MAX(origDistance - distance, 0);
+	SDWORD	dif = MAX(origDistance - getViewDistance(), 0);
 
 	return dif / 100;
 }

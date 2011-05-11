@@ -93,7 +93,6 @@ extern bool	clipXY ( SDWORD x, SDWORD y);
 extern bool init3DView(void);
 extern void initViewPosition(void);
 extern iView player;
-extern UDWORD distance;
 extern bool selectAttempt;
 extern bool draggingTile;
 extern iIMDShape *g_imd;
