@@ -31,7 +31,9 @@
 # error Framework header files MUST be included from Frame.h ONLY.
 #endif
 
-#if !defined(WZ_OS_WIN)
+#if defined(WZ_OS_WIN)
+#include <assert.h>
+#else
 #include <signal.h>
 #endif
 #include "macros.h"
