@@ -815,14 +815,8 @@ void	kf_SystemClose( void )
 /* Zooms out from display */
 void	kf_ZoomOut( void )
 {
-	float zoomInterval = timeAdjustedIncrement(MAP_ZOOM_RATE, false);
-
-	distance += zoomInterval;
-	if(distance > MAXDISTANCE)
-	{
-		distance = MAXDISTANCE;
-	}
-	UpdateFogDistance(distance);
+	setViewDistance(MIN(getViewDistance() + timeAdjustedIncrement(MAP_ZOOM_RATE, false), MAXDISTANCE));
+	UpdateFogDistance(getViewDistance());
 }
 
 // --------------------------------------------------------------------------
@@ -854,14 +848,8 @@ void	kf_RadarZoomOut( void )
 /* Zooms in the map */
 void	kf_ZoomIn( void )
 {
-	float zoomInterval = timeAdjustedIncrement(MAP_ZOOM_RATE, false);
-
-	distance -= zoomInterval;
-	if (distance < MINDISTANCE)
-	{
-		distance = MINDISTANCE;
-	}
-	UpdateFogDistance(distance);
+	setViewDistance(MAX(getViewDistance() - timeAdjustedIncrement(MAP_ZOOM_RATE, false), MINDISTANCE));
+	UpdateFogDistance(getViewDistance());
 }
 
 // --------------------------------------------------------------------------
@@ -987,7 +975,7 @@ void	kf_PitchForward( void )
 void	kf_ResetPitch( void )
 {
 	player.r.x = DEG(360-20);
-	distance = START_DISTANCE;
+	setViewDistance(START_DISTANCE);
 }
 
 // --------------------------------------------------------------------------

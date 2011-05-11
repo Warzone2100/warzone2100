@@ -167,7 +167,7 @@ iView	player;
 static Vector3i	imdRot,imdRot2;
 
 /// How far away are we from the terrain
-UDWORD		distance;
+static UDWORD distance;
 
 /// Stores the screen coordinates of the transformed terrain tiles
 static TERRAIN_VERTEX tileScreenInfo[VISIBLE_YTILES+1][VISIBLE_XTILES+1];
