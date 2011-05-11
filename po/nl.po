@@ -351,17 +351,17 @@ msgstr "Automatisch toegewezen aan dichtbijzijnste sensor of CB-toren"
 #: data/mp/messages/strings/resstrings.txt:268
 #: data/mp/messages/strings/resstrings.txt:274
 msgid "Defensive Strength: Medium"
-msgstr "Verdedigende sterkte: Middelmatig"
+msgstr "Verdedigende kracht: Gemiddeld"
 
 #: data/base/messages/resmessages12.rmsg:18
 #: data/mp/messages/resmessages12.rmsg:18
 msgid "Mini-rocket armored strongpoint"
-msgstr "Mini-Raketten Gepanserd strongpoint"
+msgstr "Mini-Raketten Gepantserd krachtpunt"
 
 #: data/base/messages/resmessages12.rmsg:31
 #: data/mp/messages/resmessages12.rmsg:31
 msgid "Armored hardpoint with Heavy Machinegun"
-msgstr "Gepantserde hardpoint met Zwaar machine geweer"
+msgstr "Gepantserd hardpoint met Zwaar machine geweer"
 
 #: data/base/messages/resmessages12.rmsg:32
 #: data/base/messages/resmessages12.rmsg:45
@@ -428,7 +428,7 @@ msgstr "Gepantserde hardpoint met Zwaar machine geweer"
 #: data/mp/messages/strings/resstrings.txt:329
 #: data/mp/messages/strings/resstrings.txt:335
 msgid "Automatically targets enemies within sensor range"
-msgstr "Valt automatisch vijanden aan binnen sensorbereik"
+msgstr "Valt automatisch vijanden binnen sensorbereik aan"
 
 #: data/base/messages/resmessages12.rmsg:33
 #: data/base/messages/resmessages12.rmsg:46
@@ -497,12 +497,12 @@ msgstr "Valt automatisch vijanden aan binnen sensorbereik"
 #: data/mp/messages/strings/resstrings.txt:336
 #: data/mp/messages/strings/resstrings.txt:352
 msgid "Defensive Strength: High"
-msgstr "Verdedigende sterkte: Hoog"
+msgstr "Verdedigende kracht: Hoog"
 
 #: data/base/messages/resmessages12.rmsg:44
 #: data/mp/messages/resmessages12.rmsg:44
 msgid "Armored hardpoint with Lancer AT missile"
-msgstr ""
+msgstr "Gepantserd hardpoint met Lancer AT raketten"
 
 #: data/base/messages/resmessages12.rmsg:56
 #: data/base/messages/resmessages23.rmsg:43
@@ -511,20 +511,20 @@ msgstr ""
 #: data/mp/messages/resmessages23.rmsg:43
 #: data/mp/messages/resmessages3.rmsg:511
 msgid "Research Breakthrough Improves Construction Rates"
-msgstr ""
+msgstr "Onderzoeks doorbraak verbeterd bouwsnelheden"
 
 #: data/base/messages/resmessages12.rmsg:57
 #: data/base/messages/resmessages23.rmsg:44
 #: data/mp/messages/resmessages12.rmsg:57
 #: data/mp/messages/resmessages23.rmsg:44
 msgid "Improved Engineering Techniques"
-msgstr "Verbeterde genietechnieken"
+msgstr "Verbeterde ontwikkel technieken"
 
 #: data/base/messages/resmessages12.rmsg:58
 #: data/base/messages/resmessages23.rmsg:45
 #: data/base/messages/resmessages3.rmsg:513
 msgid "Increases construction speed"
-msgstr ""
+msgstr "Verbeterde bouwsnelheden"
 
 #: data/base/messages/resmessages12.rmsg:59
 #: data/base/messages/resmessages23.rmsg:46
@@ -545,7 +545,7 @@ msgstr "Nieuwe systeemkoepel beschikbaar voor ontwerp"
 #: data/base/messages/resmessages12.rmsg:70
 #: data/mp/messages/resmessages12.rmsg:70
 msgid "Counter-battery turret detects enemy indirect fire batteries"
-msgstr ""
+msgstr "Contra-batterij toren detecteerd indirecte vijhandelijke afgevuurde batterijen"
 
 #: data/base/messages/resmessages12.rmsg:71
 #: data/base/messages/resmessagesall.rmsg:97
