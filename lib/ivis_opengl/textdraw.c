@@ -214,6 +214,11 @@ void iV_SetFont(enum iV_fonts FontID)
 			glcFont(_glcFont_Regular);
 			break;
 
+		case font_scaled:
+			iV_SetTextSize(12.f * pie_GetVideoBufferHeight() / 480.f);
+			glcFont(_glcFont_Regular);
+			break;
+
 		case font_large:
 			iV_SetTextSize(21.f);
 			glcFont(_glcFont_Bold);
