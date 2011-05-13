@@ -135,6 +135,38 @@ static QScriptValue js_setObjectTimer(QScriptContext *context, QScriptEngine *en
 	return QScriptValue();
 }
 
+static QScriptValue js_include(QScriptContext *context, QScriptEngine *engine)
+{
+	QString path = context->argument(0).toString();
+	UDWORD size;
+	char *bytes = NULL;
+	if (!loadFile(path.toAscii().constData(), &bytes, &size))
+	{
+		debug(LOG_ERROR, "Failed to read include file \"%s\"", path.toAscii().constData());
+		return false;
+	}
+	QString source = QString::fromAscii(bytes, size);
+	free(bytes);
+	QScriptSyntaxCheckResult syntax = QScriptEngine::checkSyntax(source);
+	if (syntax.state() != QScriptSyntaxCheckResult::Valid)
+	{
+		debug(LOG_ERROR, "Syntax error in include %s line %d: %s", 
+		      path.toAscii().constData(), syntax.errorLineNumber(), syntax.errorMessage().toAscii().constData());
+		return false;
+	}
+	context->setActivationObject(engine->globalObject());
+	context->setThisObject(engine->globalObject());
+	QScriptValue result = engine->evaluate(source, path);
+	if (engine->hasUncaughtException())
+	{
+		int line = engine->uncaughtExceptionLineNumber();
+		debug(LOG_ERROR, "Uncaught exception at line %d, include file %s: %s",
+		      line, path.toAscii().constData(), result.toString().toAscii().constData());
+		return false;
+	}
+	return QScriptValue();
+}
+
 bool initScripts()
 {
 	return true;
@@ -212,6 +244,7 @@ bool loadPlayerScript(QString path, int player, int difficulty)
 	engine->globalObject().setProperty("setGlobalTimer", engine->newFunction(js_setGlobalTimer));
 	engine->globalObject().setProperty("setObjectTimer", engine->newFunction(js_setObjectTimer));
 	engine->globalObject().setProperty("removeTimer", engine->newFunction(js_removeTimer));
+	engine->globalObject().setProperty("include", engine->newFunction(js_include));
 
 	// Special global variables
 	engine->globalObject().setProperty("me", player, QScriptValue::ReadOnly | QScriptValue::Undeletable);
