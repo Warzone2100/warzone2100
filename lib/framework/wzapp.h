@@ -71,7 +71,7 @@ private:
 	QCursor *cursors[CURSOR_MAX];
 	QTimer *timer;
 	QTime tickCount;
-	QFont regularFont, boldFont, smallFont;
+	QFont regularFont, boldFont, smallFont, scaledFont;
 	bool notReadyToPaint;  ///< HACK Don't draw during initial show(), since some global variables apparently aren't set up.
 	static WzMainWindow *myself;
 

@@ -157,7 +157,7 @@ bool seq_RenderVideoToBuffer(const char* sequenceName, int seqCommand)
 	{
 		//start the ball rolling
 
-		iV_SetFont(font_regular);
+		iV_SetFont(font_scaled);
 		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 
 		/* We do *NOT* want to use the user-choosen resolution when we
@@ -246,7 +246,7 @@ static bool seq_StartFullScreenVideo(const char* videoName, const char* audioNam
 	}
 
 	cdAudio_Pause();
-	iV_SetFont(font_regular);
+	iV_SetFont(font_scaled);
 	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 
 	/* We do not want to enter loop_SetVideoPlaybackMode() when we are
@@ -260,7 +260,7 @@ static bool seq_StartFullScreenVideo(const char* videoName, const char* audioNam
 			// check to see if we need to pause, and set font each time
 			cdAudio_Pause();
 			loop_SetVideoPlaybackMode();
-			iV_SetFont(font_regular);
+			iV_SetFont(font_scaled);
 			iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 		}
 
@@ -476,7 +476,7 @@ bool seq_AddTextForVideo(const char* pText, SDWORD xOffset, SDWORD yOffset, SDWO
 	// make sure we take xOffset into account, we don't always start at 0
 	const unsigned int BUFFER_WIDTH = pie_GetVideoBufferWidth() - xOffset;
 
-	iV_SetFont(font_regular);
+	iV_SetFont(font_scaled);
 
 	ASSERT(aSeqList[currentSeq].currentText < MAX_TEXT_OVERLAYS, "too many text lines");
 
