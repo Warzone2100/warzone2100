@@ -56,6 +56,11 @@ EXTRA_DIST = \
 	quickstartguide.asciidoc \
 	warzone2100.6.asciidoc
 
+DISTCLEANFILES = \
+	quickstartguide.html \
+	quickstartguide.pdf \
+	warzone2100.6
+
 if A2X_AVAILABLE
 
 warzone2100.6: warzone2100.6.asciidoc
