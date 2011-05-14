@@ -49,6 +49,11 @@ echo $srcdir
 rm -f filesynctest.zip
 AC_SUBST([ZIP_UPDATE], [${ZIP_UPDATE}])
 
+AC_CHECK_PROG(A2X, a2x, a2x)
+AC_CHECK_PROG(WKHTMLTOPDF, wkhtmltopdf, wkhtmltopdf)
+AM_CONDITIONAL([A2X_AVAILABLE], test -n "$A2X")
+AM_CONDITIONAL([WKHTMLTOPDF_AVAILABLE], test -n "$WKHTMLTOPDF")
+
 # Enable Compiler/LibC GNU extensions
 AC_GNU_SOURCE
 
@@ -437,3 +442,10 @@ AS_IF([test -z "$PERL"],[
 	AC_MSG_NOTICE()
 	AC_MSG_WARN([Perl >= 5.10 isn't installed, autogeneration of some sources will not work.])
 ])
+
+AS_IF([test -z "$A2X" -o -z "$WKHTMLTOPDF"],[
+	AC_MSG_NOTICE()
+	AC_MSG_WARN([a2x or wkhtmltopdf not found, can't convert documentation. This doesn't affect building the game,
+		but means that things like "make dist" and building a Windows installer will fail.])
+])
+
