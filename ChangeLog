@@ -9,6 +9,8 @@
    * Change: Show experience with one decimal place (ticket:2641, commit:fb5d9645e85de49365e47382dfce9fec7fd3fb31)
    * Change: Allow video resolutions up to 1024x1024 (ticket:2682, commit:1f4690572be0792a3450f7afce36b3a6b9f8e093, commit:7019d7eb515f974deb544135d661087bc2ce2db5)
    * Change: Add an option to show videos with black or 50% dimmed scanlines (ticket:2095, commit:96984700f5f0182ad66b7425eace33e7f62c0177, commit:549c476672a9133d9400eec7b7fefbdd7da35cfe, commit:8895d58d282524b9636bcbf58f0753edc244dbd9)
+   * Change: Use a resolution-dependent font size for video subtitles (commit:9597d741a0104aa9b7c57745ab9f9d9ca0892218)
+   * Change: Show power generator effects for all players (commit:adeacf66a1954a87fcfc2d950a7b890e20bf6d5d)
    * Fix: Prevent savegame corruption (ticket:2100, commit:a974722e397b7072fb59d0114e2a4ef9f8d509d8, ticket:2625, commit:cc156a668fb5291e38eab33ff77138a05e29fa28, ticket:2627, commit:fc0f87807eeadaeeafb1386b2525a81f0a550fde)
    * Fix: Prevent saved experience from being truncated (ticket:2641, commit:4b197ba312a5c08efdab1fb4c2ccd2bf1c077c1d)
    * Fix: Prevent building on burning oil (ticket:1100, commit:2745ac27f84301c05b678892d798a93fd4e7f813)
@@ -21,6 +23,7 @@
    * Update: French (commit:cdd283ce60c5cdb573106981a35080f2fff0d7db)
    * Update: Portuguese and Brazilian (ticket:2489, commit:0ade7219d614505839bd201c3f4cb8a50c9857e2)
    * Update: German (ticket:2679, commit:7bfeb3e01c571c077b388e017ec86bfd58b97a6a)
+   * Update: Dutch (commit:7bd5df883557e9f2b2aaa55a93d46a2ec4f9a81a)
 
 2011-01-21: Version 2.3.7
  * General:
