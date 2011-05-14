@@ -175,7 +175,7 @@ static const struct
 //	{ "lv", LANG_NAME_LATVIAN, "lv_LV.UTF-8", "lv_LV" },
 //	{ "nb_NO", LANG_NAME_NORWEGIAN, "nb_NO.UTF-8", "nb" },
 //	{ "nn_NO", LANG_NAME_NORWEGIAN_NYNORSK, "nn_NO.UTF-8", "nn" },
-//	{ "nl", LANG_NAME_DUTCH, "nl_NL.UTF-8", "nl_NL" },
+	{ "nl", LANG_NAME_DUTCH, "nl_NL.UTF-8", "nl_NL" },
 	{ "pl", LANG_NAME_POLISH, "pl_PL.UTF-8", "pl_PL" },
 	{ "pt_BR", LANG_NAME_PORTUGUESE_BRAZILIAN, "pt_BR.UTF-8", "pt_BR" },
 	{ "pt", LANG_NAME_PORTUGUESE, "pt_PT.UTF-8", "pt_PT" },
