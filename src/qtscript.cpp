@@ -69,7 +69,10 @@ QHash<QString, int> internalNamespace;
 static bool callFunction(QScriptEngine *engine, QString function, QScriptValueList args)
 {
 	QScriptValue value = engine->globalObject().property(function);
-	ASSERT_OR_RETURN(false, value.isValid() && value.isFunction(), "Invalid function type for \"%s\"", function.toAscii().constData());
+	if (!value.isValid() || !value.isFunction())
+	{
+		return false;	// not necessarily an error, may just be a trigger that is not defined (ie not needed)
+	}
 	QScriptValue result = value.call(QScriptValue(), args);
 	if (engine->hasUncaughtException())
 	{

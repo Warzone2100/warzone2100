@@ -10,6 +10,8 @@
 
 // /////////////////////////////////////////////////////////////////
 
+var lastHitTime = 0;
+
 function eventGameInit()
 {
 	//set up the reticule buttons
@@ -21,7 +23,7 @@ function eventGameInit()
 	addReticuleButton(INTELMAP);
 	addReticuleButton(DESIGN);
 
-	for (var playnum = 0; playnum < MAX_PLAYERS; playnum++)
+	for (var playnum = 0; playnum < maxPlayers; playnum++)
 	{
 		enableStructure("A0CommandCentre", playnum);		// make structures available to build
 		enableStructure("A0LightFactory", playnum);
@@ -41,7 +43,7 @@ function eventGameInit()
 
 	const numCleanTech = 5;	// do x for clean	
 	const numBaseTech = 20; // do x for base
-	var techlist = new ARRAY(
+	var techlist = new Array(
 		"R-Vehicle-Prop-Wheels",
 		"R-Sys-Spade1Mk1",
 		"R-Vehicle-Body01",
@@ -85,7 +87,7 @@ function eventGameInit()
 		"R-Wpn-Rocket-Damage01",
 		"R-Defense-WallTower01");
 
-	for (var playnum = 0; playnum < MAX_PLAYERS; playnum++)
+	for (var playnum = 0; playnum < maxPlayers; playnum++)
 	{
 		enableResearch("R-Sys-Sensor-Turret01", playnum);
 		enableResearch("R-Wpn-MG1Mk1", playnum);
@@ -97,7 +99,7 @@ function eventGameInit()
 
 		if (baseType == CAMP_CLEAN)
 		{
-			setPowerLevel(1300, playnum);
+			setPower(1300, playnum);
 			for (var count = 0; count < numCleanTech; count++)
 			{
 				completeResearch(techlist[count], playnum);
@@ -105,7 +107,7 @@ function eventGameInit()
 		}
 		else if (baseType == CAMP_BASE)
 		{
-			setPowerLevel(2500, playnum);
+			setPower(2500, playnum);
 			for (var count = 0; count < numBaseTech; count++)
 			{
 				completeResearch(techlist[count], playnum);
@@ -113,7 +115,7 @@ function eventGameInit()
 		}
 		else // CAMP_WALLS
 		{
-			setPowerLevel(2500, playnum);
+			setPower(2500, playnum);
 			for (var count = 0; count < techlist.length; count++)
 			{
 				completeResearch(techlist[count], playnum);
@@ -128,33 +130,33 @@ function eventGameInit()
 function checkEndConditions()
 {
 	// Only read in data for players we check (speed optimization)
-	var factories = Array(maxPlayers);
-	var droids = Array(maxPlayers);
-	for (var playnum = 0; playnum < maxPlayers; playernum++)
+	var factories = new Array(maxPlayers);
+	var droids = new Array(maxPlayers);
+	for (var playnum = 0; playnum < maxPlayers; playnum++)
 	{
 		factories[playnum] = -1;
 		droids[playnum] = -1;
 	}
-	factories[me] = enumStruct(me, factory).length;
+	factories[me] = enumStruct(me, "A0LightFactory").length + enumStruct(me, "A0CyborgFactory").length;
 	droids[me] = enumDroid(me).length;
 
 	// Losing Conditions
 	if (droids[me] == 0 && factories[me] == 0)
 	{
-		var gameLost = TRUE;
+		var gameLost = true;
 
 		/* If teams enabled check if all team members have lost  */
 		if (alliancesType == ALLIANCES_TEAMS)
 		{
-			for (var playnum = 0; playnum < maxPlayers; playernum++)
+			for (var playnum = 0; playnum < maxPlayers; playnum++)
 			{
 				if (playnum != me && allianceExistsBetween(me, playnum))
 				{
-					factories[playnum] = enumStruct(playnum, factory).length;
-					droids[playnum] = enumDroid(playnum).length;
+					factories[playnum] = enumStruct(playnum, factory).length + enumStruct(me, "A0CyborgFactory").length;
+					droids[playnum] = enumDroid("A0LightFactory").length;
 					if (droids[playnum] > 0 || factories[playnum] > 0)
 					{
-						gameLost = FALSE;	// someone from our team still alive
+						gameLost = false;	// someone from our team still alive
 						break;
 					}
 				}
@@ -163,28 +165,28 @@ function checkEndConditions()
 
 		if (gameLost)
 		{
-			gameOverMessage(endMsg, MISS_MSG, 0, FALSE);
+			gameOverMessage(false);
 			removeTimer("checkEndConditions");
 			return;
 		}
 	}
 	
 	// Winning Conditions
-	var gamewon = TRUE;
+	var gamewon = true;
 
 	// check if all enemies defeated
-	for (var playnum = 0; playnum < maxPlayers; playernum++)
+	for (var playnum = 0; playnum < maxPlayers; playnum++)
 	{
 		if (playnum != me && !allianceExistsBetween(me, playnum))	// checking enemy player
 		{
 			if (factories[playnum] == -1) // cached count?
 			{
-				factories[playnum] = enumStruct(playnum, factory).length; // nope
+				factories[playnum] = enumStruct(playnum, "A0LightFactory").length + enumStruct(me, "A0CyborgFactory").length; // nope
 				droids[playnum] = enumDroid(playnum).length;
 			}
 			if (droids[playnum] > 0 || factories[playnum] > 0)
 			{
-				gamewon = FALSE;	//one of the enemies still alive
+				gamewon = false;	//one of the enemies still alive
 				break;
 			}
 		}
@@ -192,7 +194,7 @@ function checkEndConditions()
 
 	if (gamewon)
 	{
-		gameOverMessage(winMsg, MISS_MSG, 0, TRUE);
+		gameOverMessage(true);
 		removeTimer("checkEndConditions");
 	}	
 }
@@ -200,34 +202,30 @@ function checkEndConditions()
 // /////////////////////////////////////////////////////////////////
 // WARNING MESSAGES
 // Base Under Attack
-function eventBaseHit(CALL_STRUCT_ATTACKED, selectedPlayer, ref hitStruc, ref attackerObj)
+function eventBaseHit(hitStruct, attackerObj)
 {
-	if (t >= 10)
+	if (gameTime > lastHitTime + 10)
 	{
-		t=0;
-		if (hitStruc != NULLOBJECT)
+		lastHitTime = gameTime;
+		if (hitStruct)
 		{
-			playSoundPos("pcv337.ogg", selectedPlayer, hitStruc.x, hitStruc.y, hitStruc.z);	//show position if still alive
+			playSoundPos("pcv337.ogg", hitStruct.x, hitStruct.y, hitStruct.z);	//show position if still alive
 		}
 		else
 		{
-			playSound("pcv337.ogg", selectedPlayer);
+			playSound("pcv337.ogg");
 		}
 	}
 }
 
-event everySec(every, 10)
-{
-	t=t+1;
-}
-
-//go to where the structure being attacked is on CTRL B
-event seeBaseHit(CALL_MISSION_END)
-{
-	if (hitStruc!=NULLOBJECT)
-	{
-		centreView(hitStruc);
-		t=0;							//flag known about!
-	}
-}
+// FIXME -- figure out wtf this is all about
+// go to where the structure being attacked is on CTRL B
+//event seeBaseHit(CALL_MISSION_END)
+//{
+//	if (hitStruc!=NULLOBJECT)
+//	{
+//		centreView(hitStruc);
+//		t=0;							//flag known about!
+//	}
+//}
 

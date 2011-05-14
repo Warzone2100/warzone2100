@@ -553,7 +553,7 @@ static QScriptValue js_setPower(QScriptContext *context, QScriptEngine *engine)
 	int player;
 	if (context->argumentCount() > 1)
 	{
-		player = context->argument(0).toInt32();
+		player = context->argument(1).toInt32();
 	}
 	else
 	{
@@ -598,6 +598,50 @@ static QScriptValue js_applyLimitSet(QScriptContext *context, QScriptEngine *eng
 	return QScriptValue();
 }
 
+static void setComponent(QString name, int player, int value)
+{
+	int type = -1;
+	int compInc = -1;
+	for (int j = COMP_BODY; j < COMP_NUMCOMPONENTS && compInc == -1; j++)
+	{
+		// this is very inefficient, but I am so not giving in to the deranged nature of the components code
+		// and convoluting the new script system for its sake
+		compInc = getCompFromName(j, name.toUtf8().constData());
+		type = j;
+	}
+	ASSERT_OR_RETURN(, compInc != -1 && type != -1, "Bad component value");
+	apCompLists[player][type][compInc] = value;
+}
+
+static QScriptValue js_enableComponent(QScriptContext *context, QScriptEngine *engine)
+{
+	QString componentName = context->argument(0).toString();
+	int player = context->argument(1).toInt32();
+
+	SCRIPT_ASSERT(context, player < MAX_PLAYERS && player >= 0, "Invalid player");
+	setComponent(componentName, player, FOUND);
+	return QScriptValue();
+}
+
+static QScriptValue js_makeComponentAvailable(QScriptContext *context, QScriptEngine *engine)
+{
+	QString componentName = context->argument(0).toString();
+	int player = context->argument(1).toInt32();
+
+	SCRIPT_ASSERT(context, player < MAX_PLAYERS && player >= 0, "Invalid player");
+	setComponent(componentName, player, AVAILABLE);
+	return QScriptValue();
+}
+
+static QScriptValue js_allianceExistsBetween(QScriptContext *context, QScriptEngine *engine)
+{
+	int player1 = context->argument(0).toInt32();
+	int player2 = context->argument(1).toInt32();
+	SCRIPT_ASSERT(context, player1 < MAX_PLAYERS && player1 >= 0, "Invalid player");
+	SCRIPT_ASSERT(context, player2 < MAX_PLAYERS && player2 >= 0, "Invalid player");
+	return QScriptValue(alliances[player1][player2] == ALLIANCE_FORMED);
+}
+
 // ----------------------------------------------------------------------------------------
 // Register functions with scripting system
 
@@ -636,6 +680,9 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("setPower", engine->newFunction(js_setPower));
 	engine->globalObject().setProperty("addReticuleButton", engine->newFunction(js_addReticuleButton));
 	engine->globalObject().setProperty("enableStructure", engine->newFunction(js_enableStructure));
+	engine->globalObject().setProperty("makeComponentAvailable", engine->newFunction(js_makeComponentAvailable));
+	engine->globalObject().setProperty("enableComponent", engine->newFunction(js_enableComponent));
+	engine->globalObject().setProperty("allianceExistsBetween", engine->newFunction(js_allianceExistsBetween));
 
 	// Set some useful constants
 	engine->globalObject().setProperty("DORDER_ATTACK", DORDER_ATTACK, QScriptValue::ReadOnly | QScriptValue::Undeletable);
@@ -649,9 +696,12 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("BUILD", IDRET_BUILD, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("MANUFACTURE", IDRET_MANUFACTURE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("RESEARCH", IDRET_RESEARCH, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("INTEL_MAP", IDRET_INTEL_MAP, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("INTELMAP", IDRET_INTEL_MAP, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DESIGN", IDRET_DESIGN, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("CANCEL", IDRET_CANCEL, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("CAMP_CLEAN", CAMP_CLEAN, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("CAMP_BASE", CAMP_BASE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("CAMP_WALLS", CAMP_WALLS, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
 	return true;
 }
