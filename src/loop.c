@@ -108,7 +108,6 @@ unsigned int loopStateChanges;
 static BOOL paused=false;
 static BOOL video=false;
 static BOOL bQuitVideo=false;
-static	SDWORD clearCount = 0;
 
 //holds which pause is valid at any one time
 typedef struct _pause_state
@@ -711,17 +710,14 @@ void videoLoop(void)
 	static BOOL bActiveBackDrop = false;
 	const BOOL userSkip = keyPressed(KEY_ESC) || mouseReleased(MOUSE_LMB);
 
-	if (clearCount < 1) // if first iteration
+	if (screen_GetBackDrop())
 	{
-		if (screen_GetBackDrop())
-		{
-			bActiveBackDrop = true;
-			screen_StopBackDrop();
-		}
-		else
-		{
-			bActiveBackDrop = false;
-		}
+		bActiveBackDrop = true;
+		screen_StopBackDrop();
+	}
+	else
+	{
+		bActiveBackDrop = false;
 	}
 
 	if (loop_GetVideoStatus())
@@ -729,7 +725,6 @@ void videoLoop(void)
 		bQuitVideo = !seq_UpdateFullScreenVideo(NULL);
 	}
 
-	clearCount++;
 	pie_ScreenFlip(CLEAR_BLACK); // videoloopflip
 
 	// if the video finished or user is skipping the video
@@ -738,11 +733,6 @@ void videoLoop(void)
 		seq_StopFullScreenVideo();
 		bQuitVideo = false;
 
-		if (bActiveBackDrop)
-		{
-			screen_RestartBackDrop();
-		}
-
 		// set the next video off - if any - if the user isn't skipping
 		if (seq_AnySeqLeft() && !userSkip)
 		{
@@ -750,6 +740,10 @@ void videoLoop(void)
 		}
 		else
 		{
+			if (bActiveBackDrop)
+			{
+				screen_RestartBackDrop();
+			}
 			// remove the intelligence screen if necessary
 			if (messageIsImmediate())
 			{
@@ -775,7 +769,6 @@ void loop_SetVideoPlaybackMode(void)
 	videoMode += 1;
 	paused = true;
 	video = true;
-	clearCount = 0;
 	gameTimeStop();
 	pie_SetFogStatus(false);
 	audio_StopAll();
