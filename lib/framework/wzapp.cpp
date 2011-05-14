@@ -232,6 +232,9 @@ void WzMainWindow::resizeGL(int width, int height)
 	screenWidth = width;
 	screenHeight = height;
 
+	scaledFont.setFamily("DejaVu Sans");
+	scaledFont.setPixelSize(12 * height / 480);
+
 	glViewport(0, 0, width, height);
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
@@ -293,6 +296,8 @@ void WzMainWindow::setFontType(enum iV_fonts fontID)
 	case font_small:
 		setFont(smallFont);
 		break;
+	case font_scaled:
+		setFont(scaledFont);
 	default:
 		break;
 	}
