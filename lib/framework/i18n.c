@@ -163,9 +163,6 @@ static const struct
 	/* Our Frisian translation is the "West Frisian" variation of it. This
 	 * variation is mostly spoken in the Dutch province Friesland (Fryslân
 	 * in Frisian) and has ISO 639-3 code "fry".
-	 *
-	 * FIXME: We should really use a sub-language code for this. E.g.
-	 *        fy_XX.
 	 */
 //	{ "fy_NL", LANG_NAME_FRISIAN_NETHERLANDS, "fy_NL.UTF-8", "fy" },
 //	{ "ga_IE", LANG_NAME_IRISH, "ga_IE.UTF-8", "ga" },
