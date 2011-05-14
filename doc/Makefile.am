@@ -44,13 +44,8 @@ nobase_dist_doc_DATA = \
 	images/unitordersmenu.jpg \
 	images/wss.png \
 	images/www.png \
-	quickstartguide.html \
-	quickstartguide.pdf \
 	Readme.en \
 	ScriptingManual.htm
-
-dist_man6_MANS = \
-	warzone2100.6
 
 EXTRA_DIST = \
 	quickstartguide.asciidoc \
@@ -62,6 +57,13 @@ DISTCLEANFILES = \
 	warzone2100.6
 
 if A2X_AVAILABLE
+
+nobase_dist_doc_DATA += \
+	quickstartguide.html \
+	quickstartguide.pdf
+
+dist_man6_MANS = \
+	warzone2100.6
 
 warzone2100.6: warzone2100.6.asciidoc
 	$(A2X) -f manpage -D . $(srcdir)/warzone2100.6.asciidoc
