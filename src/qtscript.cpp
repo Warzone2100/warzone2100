@@ -51,6 +51,7 @@ struct timerNode
 	int player;
 	timerNode() {}
 	timerNode(QScriptEngine *caller, QString val, int plr, int frame) : function(val) { player = plr; ms = frame; frameTime = frame + gameTime; engine = caller; }
+	bool operator== (const timerNode &t) { return function == t.function && player == t.player; }
 	// implement operator less TODO
 };
 
@@ -197,15 +198,20 @@ bool updateScripts()
 	}
 	// Check for timers, and run them if applicable.
 	// TODO - load balancing
-	for (int i = 0; i < timers.size(); ++i)
+	QMutableListIterator<timerNode> iter(timers);
+	while (iter.hasNext())
 	{
-		timerNode node = timers.at(i);
+		timerNode node = iter.next();
 		if (node.frameTime <= gameTime)
 		{
 			node.frameTime = node.ms + gameTime;	// update for next invokation
 			callFunction(node.engine, node.function, QScriptValueList());
 		}
-		timers.replace(i, node);
+		// Node could have been brutally removed from underneath us at this point
+		if (timers.contains(node))
+		{
+			iter.setValue(node);
+		}
 	}
 	return true;
 }
@@ -406,6 +412,12 @@ bool triggerEventDroidBuilt(DROID *psDroid, STRUCTURE *psFactory)
 
 bool triggerStructureAttacked(STRUCTURE *psVictim, BASE_OBJECT *psAttacker)
 {
+	if (!psAttacker)
+	{
+		// do not fire off this event if there is no attacker -- nothing do respond to
+		// (FIXME -- consider this carefully)
+		return false;
+	}
 	for (int i = 0; i < scripts.size(); ++i)
 	{
 		QScriptEngine *engine = scripts.at(i);

@@ -53,6 +53,7 @@
 QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine)
 {
 	QScriptValue value = engine->newObject();
+	ASSERT_OR_RETURN(value, psStruct, "No object for conversion");
 	value.setProperty("id", psStruct->id, QScriptValue::ReadOnly);
 	value.setProperty("x", psStruct->pos.x, QScriptValue::ReadOnly);
 	value.setProperty("y", psStruct->pos.y, QScriptValue::ReadOnly);
@@ -63,6 +64,7 @@ QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine)
 QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 {
 	QScriptValue value = engine->newObject();
+	ASSERT_OR_RETURN(value, psDroid, "No object for conversion");
 	value.setProperty("id", psDroid->id, QScriptValue::ReadOnly);
 	value.setProperty("x", psDroid->pos.x, QScriptValue::ReadOnly);
 	value.setProperty("y", psDroid->pos.y, QScriptValue::ReadOnly);
@@ -73,6 +75,7 @@ QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 QScriptValue convObj(BASE_OBJECT *psObj, QScriptEngine *engine)
 {
 	QScriptValue value = engine->newObject();
+	ASSERT_OR_RETURN(value, psObj, "No object for conversion");
 	value.setProperty("id", psObj->id, QScriptValue::ReadOnly);
 	value.setProperty("x", psObj->pos.x, QScriptValue::ReadOnly);
 	value.setProperty("y", psObj->pos.y, QScriptValue::ReadOnly);

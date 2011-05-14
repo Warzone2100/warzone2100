@@ -36,7 +36,7 @@ function scavtick()
 		factorylist.forEach(activateProduction);
 	}
 
-	if ((gameTime - lastAttack) > 6000)
+	if ((gameTime - lastAttack) > 9000)
 	{
 		lastAttack = gameTime;
 
