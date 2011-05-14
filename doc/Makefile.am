@@ -56,23 +56,28 @@ EXTRA_DIST = \
 	quickstartguide.asciidoc \
 	warzone2100.6.asciidoc
 
+if A2X_AVAILABLE
+
 warzone2100.6: warzone2100.6.asciidoc
-	which $(A2X) || (echo "a2x not found!"; exit 1)
 	$(A2X) -f manpage -D . $(srcdir)/warzone2100.6.asciidoc
 
 quickstartguide.html: quickstartguide.asciidoc
-	which $(A2X) || (echo "a2x not found!"; exit 1)
 	$(A2X) -f xhtml -D . $(srcdir)/quickstartguide.asciidoc
 
+if WKHTMLTOPDF_AVAILABLE
+
 quickstartguide.pdf: quickstartguide.html
-	which $(WKHTMLTOPDF) || (echo "wkhtmltopdf not found!"; exit 1)
 	$(WKHTMLTOPDF) quickstartguide.html quickstartguide.pdf
+
+endif
 
 qsg: quickstartguide.html quickstartguide.pdf
 
 manpage: warzone2100.6
 
 dist-hook: qsg manpage
+
+endif
 
 if INSTALLER
 
