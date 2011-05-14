@@ -178,24 +178,21 @@ Section $(TEXT_SecBase) SecBase
   Push "COPYING.README.txt"
   Call unix2dos
 
-  File "${TOP_SRCDIR}\doc\Readme.en"
-  Push "Readme.en"
-  Push "Readme.en.txt"
-  Call unix2dos
-  
-  File "${TOP_SRCDIR}\doc\Readme.de"
-  Push "Readme.de"
-  Push "Readme.de.txt"
-  Call unix2dos
-  
-  File "/oname=Readme.en.html" "${TOP_SRCDIR}\doc\Readme.en.xhtml"
-  File "/oname=Readme.de.html" "${TOP_SRCDIR}\doc\Readme.de.xhtml"
-
   ; Create mod directories
   CreateDirectory "$INSTDIR\mods\campaign"
   CreateDirectory "$INSTDIR\mods\music"
   CreateDirectory "$INSTDIR\mods\global"
   CreateDirectory "$INSTDIR\mods\multiplay"
+
+  SetOutPath "$INSTDIR\doc"
+  File "${TOP_SRCDIR}\doc\Readme.en"
+  Push "Readme.en"
+  Push "Readme.en.txt"
+  Call unix2dos
+  File "${TOP_BUILDDIR}\doc\quickstartguide.html"
+  File "${TOP_BUILDDIR}\doc\quickstartguide.pdf"
+  SetOutPath "$INSTDIR\doc\images"
+  File "${TOP_SRCDIR}\doc\images\*.*"
 
   ; Music files
   SetOutPath "$INSTDIR\music"
@@ -204,11 +201,6 @@ Section $(TEXT_SecBase) SecBase
   File "${TOP_SRCDIR}\data\music\track2.ogg"
   File "${TOP_SRCDIR}\data\music\track3.ogg"
   File "${TOP_SRCDIR}\data\music\music.wpl"
-
-  SetOutPath "$INSTDIR\styles"
-
-  File "/oname=readme.print.css" "${TOP_SRCDIR}\doc\styles\readme.print.css"
-  File "/oname=readme.screen.css" "${TOP_SRCDIR}\doc\styles\readme.screen.css"
 
   SetOutPath "$INSTDIR\fonts"
   File "/oname=fonts.conf" "${EXTDIR}\etc\fonts\fonts.conf.wd_disable"
@@ -238,6 +230,8 @@ Section $(TEXT_SecBase) SecBase
     CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER"
     CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Uninstall.lnk" "$INSTDIR\uninstall.exe"
     CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME}.lnk" "$INSTDIR\${PACKAGE}.exe"
+    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Quick Start Guide (html).lnk" "$INSTDIR\doc/quickstartguide.html"
+    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Quick Start Guide (pdf).lnk" "$INSTDIR\doc/quickstartguide.pdf"
 
   !insertmacro MUI_STARTMENU_WRITE_END
 
@@ -731,10 +725,11 @@ Section "Uninstall"
   Delete "$INSTDIR\COPYING.NONGPL.txt"
   Delete "$INSTDIR\COPYING.README.txt"
   Delete "$INSTDIR\COPYING.txt"
-  Delete "$INSTDIR\Readme.en.txt"
-  Delete "$INSTDIR\Readme.de.txt"
-  Delete "$INSTDIR\Readme.en.html"
-  Delete "$INSTDIR\Readme.de.html"
+
+  Delete "$INSTDIR\doc\images\*.*"
+  Delete "$INSTDIR\doc\*.*"
+  RMDir "$INSTDIR\doc\images"
+  RMDIR "$INSTDIR\doc"
 
   Delete "$INSTDIR\License.txt"
   Delete "$INSTDIR\Authors.txt"
@@ -748,10 +743,6 @@ Section "Uninstall"
   RMDir "$INSTDIR\music"
 
   Delete "$INSTDIR\uninstall.exe"
-
-  Delete "$INSTDIR\styles\readme.print.css"
-  Delete "$INSTDIR\styles\readme.screen.css"
-  RMDir "$INSTDIR\styles"
 
   Delete "$INSTDIR\fonts\fonts.conf"
   Delete "$INSTDIR\fonts\DejaVuSansMono.ttf"
@@ -914,6 +905,8 @@ Section "Uninstall"
   Delete "$SMPROGRAMS\$MUI_TEMP\${PACKAGE_NAME} - NTW.lnk"
   Delete "$SMPROGRAMS\$MUI_TEMP\${PACKAGE_NAME} - Old 1.10 Balance.lnk"
   Delete "$SMPROGRAMS\$MUI_TEMP\${PACKAGE_NAME} - DyDo-AI.lnk"
+  Delete "$SMPROGRAMS\$MUI_TEMP\Quick Start Guide (html).lnk"
+  Delete "$SMPROGRAMS\$MUI_TEMP\Quick Start Guide (pdf).lnk"
 
   ;Delete empty start menu parent diretories
   StrCpy $MUI_TEMP "$SMPROGRAMS\$MUI_TEMP"
