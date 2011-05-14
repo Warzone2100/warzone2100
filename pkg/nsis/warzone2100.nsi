@@ -191,6 +191,7 @@ Section $(TEXT_SecBase) SecBase
   Call unix2dos
   File "${TOP_BUILDDIR}\doc\quickstartguide.html"
   File "${TOP_BUILDDIR}\doc\quickstartguide.pdf"
+  File "${TOP_BUILDDIR}\doc\docbook-xsl.css"
   SetOutPath "$INSTDIR\doc\images"
   File "${TOP_SRCDIR}\doc\images\*.*"
 
@@ -230,8 +231,8 @@ Section $(TEXT_SecBase) SecBase
     CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER"
     CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Uninstall.lnk" "$INSTDIR\uninstall.exe"
     CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME}.lnk" "$INSTDIR\${PACKAGE}.exe"
-    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Quick Start Guide (html).lnk" "$INSTDIR\doc/quickstartguide.html"
-    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Quick Start Guide (pdf).lnk" "$INSTDIR\doc/quickstartguide.pdf"
+    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Quick Start Guide (html).lnk" "$INSTDIR\doc\quickstartguide.html"
+    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Quick Start Guide (pdf).lnk" "$INSTDIR\doc\quickstartguide.pdf"
 
   !insertmacro MUI_STARTMENU_WRITE_END
 
