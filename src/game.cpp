@@ -4894,23 +4894,14 @@ bool loadSaveStructureV7(char *pFileData, UDWORD filesize, UDWORD numStructures)
         psStructure = buildStructureDir(psStats, psSaveStructure->x, psSaveStructure->y, DEG(psSaveStructure->direction), psSaveStructure->player, true);
 		ASSERT(psStructure, "Unable to create structure");
 		if (!psStructure) continue;
-
         /*The original code here didn't work and so the scriptwriters worked
         round it by using the module ID - so making it work now will screw up
         the scripts -so in ALL CASES overwrite the ID!*/
-		//don't copy the module's id etc
-		//if (IsStatExpansionModule(psStats)==false)
-		{
-			//copy the values across
-			psStructure->id = psSaveStructure->id;
-			//are these going to ever change from the values set up with?
-		}
-
+		psStructure->id = psSaveStructure->id > 0 ? psSaveStructure->id : 0xFEDBCA98; // hack to remove struct id zero
 		psStructure->inFire = psSaveStructure->inFire;
 		psStructure->burnDamage = psSaveStructure->burnDamage;
 		burnTime = psSaveStructure->burnStart;
 		psStructure->burnStart = burnTime;
-
 		psStructure->status = (STRUCT_STATES)psSaveStructure->status;
 		if (psStructure->status ==SS_BUILT)
 		{
@@ -5139,7 +5130,7 @@ bool loadSaveStructureV(char *pFileData, UDWORD filesize, UDWORD numStructures, 
 		ASSERT(psStructure, "Unable to create structure");
 		if (!psStructure) continue;
 
-		psStructure->id = psSaveStructure->id;
+		psStructure->id = psSaveStructure->id > 0 ? psSaveStructure->id : 0xFEDBCA98; // hack to remove struct id zero
 		psStructure->inFire = psSaveStructure->inFire;
 		psStructure->burnDamage = psSaveStructure->burnDamage;
 		burnTime = psSaveStructure->burnStart;
