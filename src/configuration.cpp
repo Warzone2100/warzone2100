@@ -170,7 +170,7 @@ bool saveConfig()
 	ini.setValue("visfog",(SDWORD)(!war_GetFog()));			// fogtype
 	ini.setValue("shake",(SDWORD)(getShakeStatus()));		// screenshake
 	ini.setValue("mouseflip",(SDWORD)(getInvertMouseStatus()));	// flipmouse
-	ini.setValue("nomousewrap", (SDWORD)getMouseWarp()); 		// mouse wrap
+	ini.setValue("nomousewarp", (SDWORD)getMouseWarp()); 		// mouse warp
 	ini.setValue("RightClickOrders",(SDWORD)(getRightClickOrders()));
 	ini.setValue("MiddleClickRotate",(SDWORD)(getMiddleClickRotate()));
 	ini.setValue("showFPS", (SDWORD)showFPS);
