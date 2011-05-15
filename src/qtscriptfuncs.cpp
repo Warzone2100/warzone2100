@@ -57,6 +57,7 @@ QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine)
 	value.setProperty("id", psStruct->id, QScriptValue::ReadOnly);
 	value.setProperty("x", psStruct->pos.x, QScriptValue::ReadOnly);
 	value.setProperty("y", psStruct->pos.y, QScriptValue::ReadOnly);
+	value.setProperty("z", psStruct->pos.z, QScriptValue::ReadOnly);
 	value.setProperty("player", psStruct->player, QScriptValue::ReadOnly);
 	return value;
 }
@@ -68,6 +69,7 @@ QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 	value.setProperty("id", psDroid->id, QScriptValue::ReadOnly);
 	value.setProperty("x", psDroid->pos.x, QScriptValue::ReadOnly);
 	value.setProperty("y", psDroid->pos.y, QScriptValue::ReadOnly);
+	value.setProperty("z", psDroid->pos.z, QScriptValue::ReadOnly);
 	value.setProperty("player", psDroid->player, QScriptValue::ReadOnly);
 	return value;
 }
@@ -79,6 +81,7 @@ QScriptValue convObj(BASE_OBJECT *psObj, QScriptEngine *engine)
 	value.setProperty("id", psObj->id, QScriptValue::ReadOnly);
 	value.setProperty("x", psObj->pos.x, QScriptValue::ReadOnly);
 	value.setProperty("y", psObj->pos.y, QScriptValue::ReadOnly);
+	value.setProperty("z", psObj->pos.z, QScriptValue::ReadOnly);
 	value.setProperty("player", psObj->player, QScriptValue::ReadOnly);
 	return value;
 }
@@ -444,7 +447,8 @@ static QScriptValue js_playSound(QScriptContext *context, QScriptEngine *engine)
 	{
 		return QScriptValue();
 	}
-	int soundID = context->argument(0).toInt32();
+	QString sound = context->argument(0).toString();
+	int soundID = audio_GetTrackID(sound.toUtf8().constData());
 	if (context->argumentCount() > 1)
 	{
 		int x = context->argument(1).toInt32();

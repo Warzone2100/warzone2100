@@ -109,6 +109,7 @@ QScriptValue convStructure(QScriptEngine *engine)
 	value.setProperty("id", obj_uid++, QScriptValue::ReadOnly);
 	value.setProperty("x", 11, QScriptValue::ReadOnly);
 	value.setProperty("y", 11, QScriptValue::ReadOnly);
+	value.setProperty("z", 0, QScriptValue::ReadOnly);
 	value.setProperty("player", 1, QScriptValue::ReadOnly);
 	return value;
 }
@@ -119,6 +120,7 @@ QScriptValue convDroid(QScriptEngine *engine)
 	value.setProperty("id", obj_uid++, QScriptValue::ReadOnly);
 	value.setProperty("x", 11, QScriptValue::ReadOnly);
 	value.setProperty("y", 11, QScriptValue::ReadOnly);
+	value.setProperty("z", 0, QScriptValue::ReadOnly);
 	value.setProperty("player", 1, QScriptValue::ReadOnly);
 	return value;
 }
@@ -129,6 +131,7 @@ QScriptValue convObj(QScriptEngine *engine)
 	value.setProperty("id", obj_uid++, QScriptValue::ReadOnly);
 	value.setProperty("x", 11, QScriptValue::ReadOnly);
 	value.setProperty("y", 11, QScriptValue::ReadOnly);
+	value.setProperty("z", 0, QScriptValue::ReadOnly);
 	value.setProperty("player", 1, QScriptValue::ReadOnly);
 	return value;
 }
@@ -319,7 +322,7 @@ static QScriptValue js_centreView(QScriptContext *context, QScriptEngine *engine
 static QScriptValue js_playSound(QScriptContext *context, QScriptEngine *engine)
 {
 	ARG_COUNT_VAR(1, 4);
-	ARG_NUMBER(0);
+	ARG_STRING(0);
 	if (context->argumentCount() != 1)
 	{
 		SCRIPT_ASSERT(context, context->argumentCount() == 4, "Arguments must be either 1 or 4");

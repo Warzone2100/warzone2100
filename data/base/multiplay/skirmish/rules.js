@@ -196,20 +196,20 @@ function checkEndConditions()
 	{
 		gameOverMessage(true);
 		removeTimer("checkEndConditions");
-	}	
+	}
 }
 
 // /////////////////////////////////////////////////////////////////
 // WARNING MESSAGES
 // Base Under Attack
-function eventBaseHit(hitStruct, attackerObj)
+function eventStructureAttacked(hitStruct, attackerObj)
 {
 	if (gameTime > lastHitTime + 10)
 	{
 		lastHitTime = gameTime;
 		if (hitStruct)
 		{
-			playSoundPos("pcv337.ogg", hitStruct.x, hitStruct.y, hitStruct.z);	//show position if still alive
+			playSound("pcv337.ogg", hitStruct.x, hitStruct.y, hitStruct.z);	// show position if still alive
 		}
 		else
 		{
@@ -217,15 +217,3 @@ function eventBaseHit(hitStruct, attackerObj)
 		}
 	}
 }
-
-// FIXME -- figure out wtf this is all about
-// go to where the structure being attacked is on CTRL B
-//event seeBaseHit(CALL_MISSION_END)
-//{
-//	if (hitStruc!=NULLOBJECT)
-//	{
-//		centreView(hitStruc);
-//		t=0;							//flag known about!
-//	}
-//}
-

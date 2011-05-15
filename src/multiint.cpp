@@ -268,9 +268,7 @@ void loadMultiScripts()
 	// Load multiplayer rules
 	resForceBaseDir("messages/");
 	resLoadFile("SMSG", "multiplay.txt");
-	resForceBaseDir("multiplay/skirmish/");
-	resLoadFile("SCRIPT", "rules.slo");
-	resLoadFile("SCRIPTVAL", "rules.vlo");
+	loadGlobalScript("multiplay/skirmish/rules.js");
 
 	// Backup data hashes, since AI and scavenger scripts aren't run on all clients.
 	uint32_t oldHash1 = DataHash[DATA_SCRIPT];
