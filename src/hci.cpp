@@ -3411,6 +3411,18 @@ void togglePowerBar(void)
 	}
 }
 
+bool dualScreenCompatabilityMode = false;
+
+bool getDualScreenCompat()
+{
+	return dualScreenCompatabilityMode;
+}
+
+void setDualScreenCompat(bool mode)
+{
+	dualScreenCompatabilityMode = mode;
+}
+
 /* Add the power bars to the screen */
 bool intAddPower(void)
 {

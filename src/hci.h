@@ -143,8 +143,13 @@
 #define STAT_SLDWIDTH		70	// Slider width.
 #define STAT_SLDHEIGHT		12	//4	// Slider height.
 
+extern bool dualScreenCompatabilityMode;
+
+bool getDualScreenCompat();
+void setDualScreenCompat(bool mode);
+
 // Power bar position.
-#define POW_X			OBJ_BACKX
+#define POW_X			(getDualScreenCompat() ? (OBJ_BACKX - (OBJ_WIDTH / 2)) : (OBJ_BACKX))
 #define POW_Y			(OBJ_BACKY + OBJ_BACKHEIGHT + 6)
 #define POW_BARWIDTH	308
 
