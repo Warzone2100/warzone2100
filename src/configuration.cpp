@@ -134,6 +134,7 @@ bool loadConfig()
 
 	if (ini.contains("bpp")) pie_SetVideoBufferDepth(ini.value("bpp").toInt());
 	setFramerateLimit(ini.value("framerate", 60).toInt());
+	setDualScreenCompat(ini.value("dualScreenCompat", false).toBool());
 	return true;
 }
 
@@ -212,6 +213,7 @@ bool saveConfig()
 		}
 		ini.setValue("playerName", (char*)sPlayer);		// player name
 	}
+	ini.setValue("dualScreenCompat", getDualScreenCompat());
 	ini.sync();
 	return true;
 }

@@ -1572,7 +1572,7 @@ void addBackdrop(void)
 	sFormInit.formID = 0;
 	sFormInit.id = FRONTEND_BACKDROP;
 	sFormInit.style = WFORM_PLAIN;
-	sFormInit.x = (SWORD)( (pie_GetVideoBufferWidth() - HIDDEN_FRONTEND_WIDTH)/2);
+	sFormInit.x = (SWORD) (pie_GetVideoBufferWidth() / 2 - (getDualScreenCompat() ? HIDDEN_FRONTEND_WIDTH : HIDDEN_FRONTEND_WIDTH / 2));
 	sFormInit.y = (SWORD)( (pie_GetVideoBufferHeight() - HIDDEN_FRONTEND_HEIGHT)/2);
 	sFormInit.width = HIDDEN_FRONTEND_WIDTH-1;
 	sFormInit.height = HIDDEN_FRONTEND_HEIGHT-1;
