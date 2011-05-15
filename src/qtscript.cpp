@@ -58,13 +58,13 @@ struct timerNode
 /// List of timer events for scripts. Before running them, we sort the list then run as many as we have time for.
 /// In this way, we implement load balancing of events and keep frame rates tidy for users. Since scripts run on the
 /// host, we do not need to worry about each peer simulating the world differently.
-QList<timerNode> timers;
+static QList<timerNode> timers;
 
 /// Scripting engine (what others call the scripting context, but QtScript's nomenclature is different).
-QList<QScriptEngine *> scripts;
+static QList<QScriptEngine *> scripts;
 
 /// Remember what names are used internally in the scripting engine, we don't want to save these to the savegame
-QHash<QString, int> internalNamespace;
+static QHash<QString, int> internalNamespace;
 
 // Call a function by name
 static bool callFunction(QScriptEngine *engine, QString function, QScriptValueList args)
@@ -116,10 +116,9 @@ static QScriptValue js_removeTimer(QScriptContext *context, QScriptEngine *engin
 /// quoted, otherwise they will be inlined!
 static QScriptValue js_setGlobalTimer(QScriptContext *context, QScriptEngine *engine)
 {
-	QScriptValue function = context->argument(0);
+	QString funcName = context->argument(0).toString();
 	QScriptValue ms = context->argument(1);
 	int player = engine->globalObject().property("me").toInt32();
-	QString funcName = function.toString();
 	timerNode node(engine, funcName, player, ms.toInt32() + gameTime);
 	timers.push_back(node);
 	return QScriptValue();
@@ -129,11 +128,11 @@ static QScriptValue js_setGlobalTimer(QScriptContext *context, QScriptEngine *en
 /// quoted, otherwise they will be inlined!
 static QScriptValue js_setObjectTimer(QScriptContext *context, QScriptEngine *engine)
 {
-	QScriptValue function = context->argument(0);
+	QString funcName = context->argument(0).toString();
 	QScriptValue ms = context->argument(1);
 	QScriptValue obj = context->argument(2);
 	int player = engine->globalObject().property("me").toInt32();
-	timerNode node(engine, function.toString(), player, ms.toInt32());
+	timerNode node(engine, funcName, player, ms.toInt32());
 	node.baseobj = obj.toString();
 	timers.push_back(node);
 	return QScriptValue();

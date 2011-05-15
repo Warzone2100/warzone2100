@@ -449,7 +449,7 @@ static QScriptValue js_playSound(QScriptContext *context, QScriptEngine *engine)
 	{
 		int x = context->argument(1).toInt32();
 		int y = context->argument(2).toInt32();
-		int z = context->argument(2).toInt32();
+		int z = context->argument(3).toInt32();
 		audio_QueueTrackPos(soundID, x, y, z);
 	}
 	else
@@ -507,7 +507,7 @@ static QScriptValue js_completeResearch(QScriptContext *context, QScriptEngine *
 	int player;
 	if (context->argumentCount() > 1)
 	{
-		player = context->argument(0).toInt32();
+		player = context->argument(1).toInt32();
 	}
 	else
 	{
@@ -535,7 +535,7 @@ static QScriptValue js_enableResearch(QScriptContext *context, QScriptEngine *en
 	int player;
 	if (context->argumentCount() > 1)
 	{
-		player = context->argument(0).toInt32();
+		player = context->argument(1).toInt32();
 	}
 	else
 	{
@@ -573,7 +573,7 @@ static QScriptValue js_enableStructure(QScriptContext *context, QScriptEngine *e
 	int player;
 	if (context->argumentCount() > 1)
 	{
-		player = context->argument(0).toInt32();
+		player = context->argument(1).toInt32();
 	}
 	else
 	{
