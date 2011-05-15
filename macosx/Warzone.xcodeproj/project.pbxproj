@@ -4469,7 +4469,7 @@
 		};
 		43502D551347640800A02A1F /* StaticAnalyzer */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 43025ECA1120E0C0006C49B1 /* Gettext-Debug.xcconfig */;
+			baseConfigurationReference = 43502D31134763D700A02A1F /* Glew-Debug.xcconfig */;
 			buildSettings = {
 			};
 			name = StaticAnalyzer;
