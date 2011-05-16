@@ -1,4 +1,4 @@
-2011-05-xx: Version 2.3.8
+2011-05-17: Version 2.3.8
  * General:
    * New: Two new 2 player maps - Vision and Roughness (commit:697afb16d5244f9715952f8762b1011c6d75101e, commit:ebfc46b679a1f74df0e63313e4d3e05db55a23ad)
    * Change: Increase recycled experience storage in memory (commit:703665b4b7df1282eee29a7064961bc66152a847)
