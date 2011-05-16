@@ -16,7 +16,6 @@ data/base/messages/strings/scrstrings.txt
 data/base/multiplay/script/multilim.slo
 data/base/multiplay/skirmish/dydo.slo
 data/base/multiplay/skirmish/nexus.slo
-data/base/multiplay/skirmish/rules.js
 data/base/multiplay/skirmish/semperfi.slo
 data/base/script/fastplay/fastdemo.slo
 data/base/script/fastplay/start.slo
@@ -137,7 +136,6 @@ data/mp/messages/resmessagesall.rmsg
 data/mp/messages/strings/names.txt
 data/mp/messages/strings/resstrings.txt
 data/mp/multiplay/script/camtech.slo
-data/mp/multiplay/script/multiplay.slo
 lib/exceptionhandler/dumpinfo.cpp
 lib/exceptionhandler/exceptionhandler.cpp
 lib/exceptionhandler/exchndl.cpp
