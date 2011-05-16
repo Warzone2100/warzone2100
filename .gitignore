@@ -6,6 +6,7 @@
 *.o
 *.a
 *.gmo
+*.mo
 *.pyc
 *.wz
 
