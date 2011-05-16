@@ -1057,14 +1057,14 @@ void aiUpdateDroid(DROID *psDroid)
 		{
 			if (aiChooseSensorTarget((BASE_OBJECT *)psDroid, &psTarget))
 			{
-				orderDroidObj(psDroid, DORDER_OBSERVE, psTarget);
+				actionDroidObj(psDroid, DACTION_OBSERVE, psTarget);
 			}
 		}
 		else
 		{
 			if (aiChooseTarget((BASE_OBJECT *)psDroid, &psTarget, 0, true))
 			{
-				orderDroidObj(psDroid, DORDER_ATTACKTARGET, psTarget);
+				actionDroidObj(psDroid, DACTION_ATTACK, psTarget);
 			}
 		}
 	}
@@ -1185,7 +1185,7 @@ BOOL updateAttackTarget(BASE_OBJECT * psAttacker, SDWORD weapon_slot)
 				orderState(psDroid, DORDER_ATTACKTARGET)) &&
 				weapon_slot == 0)	//Watermelon:only primary slot(0) updates affect order
 			{
-				orderDroidObj((DROID *)psAttacker, DORDER_ATTACKTARGET, psBetterTarget);
+				actionDroidObj((DROID *)psAttacker, DACTION_ATTACK, psBetterTarget);
 			}
 			else	//can't override current order
 			{
