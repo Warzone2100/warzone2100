@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-05-09 03:07+0200\n"
+"POT-Creation-Date: 2011-05-17 01:48+0200\n"
 "PO-Revision-Date: 2008-05-09 16:05+0000\n"
 "Last-Translator: Lubos <alvinx12@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -12206,8 +12206,8 @@ msgstr "Vybrat všechny Pásové Jednotky"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr ""
 
-#: lib/framework/i18n.c:92
-#: lib/framework/i18n.c:153
+#: lib/framework/i18n.c:89
+#: lib/framework/i18n.c:150
 msgid "System locale"
 msgstr "Systémové místo"
 
@@ -12545,12 +12545,12 @@ msgstr "Zbraně"
 msgid "Systems"
 msgstr ""
 
-#: src/display3d.c:590
+#: src/display3d.c:589
 #, fuzzy
 msgid "Player left"
 msgstr "Hráč"
 
-#: src/display3d.c:590
+#: src/display3d.c:589
 #, fuzzy
 msgid "Player dropped"
 msgstr "Hráč"
@@ -12560,7 +12560,7 @@ msgid "Cannot Build. Oil Resource Burning."
 msgstr "Nemohu stavět. Ropný vrt hoří."
 
 #: src/display.c:1923
-#: src/display.c:2536
+#: src/display.c:2534
 #, c-format
 msgid "%s - Damage %d%% - Experience %.1f, %s"
 msgstr "%s - Poškození %d%% - Zkušenosti %.1f, %s"
@@ -13061,8 +13061,8 @@ msgid "MAP SAVED!"
 msgstr "HRA ULOŽENA!"
 
 #: src/hci.c:1692
-#: src/loop.c:531
-#: src/loop.c:547
+#: src/loop.c:530
+#: src/loop.c:546
 #: src/mission.c:2891
 #, fuzzy
 msgid "GAME SAVED :"
@@ -13297,7 +13297,7 @@ msgid "Power Accrued"
 msgstr ""
 
 #: src/intelmap.c:243
-#: src/keybind.c:1381
+#: src/keybind.c:1369
 msgid "PAUSED"
 msgstr "PAUZA"
 
@@ -13455,12 +13455,12 @@ msgstr "Hráč %u podvádí ( ladící menu ) sebe sama novou budovou: %s"
 #: src/keybind.c:582
 #: src/keybind.c:622
 #: src/keybind.c:728
-#: src/keybind.c:1271
-#: src/keybind.c:1328
-#: src/keybind.c:1430
-#: src/keybind.c:1527
-#: src/keybind.c:1838
-#: src/keybind.c:1879
+#: src/keybind.c:1259
+#: src/keybind.c:1316
+#: src/keybind.c:1418
+#: src/keybind.c:1515
+#: src/keybind.c:1826
+#: src/keybind.c:1867
 #, c-format
 msgid "(Player %u) is using cheat :%s"
 msgstr ""
@@ -13534,181 +13534,181 @@ msgstr "Zapnutá mlha"
 msgid "Fog off"
 msgstr "Vypnutá mlha"
 
-#: src/keybind.c:1160
+#: src/keybind.c:1148
 #, c-format
 msgid "Warning!  This cheat can cause dire problems later on! [%s]"
 msgstr ""
 
-#: src/keybind.c:1160
+#: src/keybind.c:1148
 msgid "Ending Mission."
 msgstr ""
 
-#: src/keybind.c:1272
+#: src/keybind.c:1260
 msgid "CHEATS ARE NOW ENABLED!"
 msgstr ""
 
-#: src/keybind.c:1272
+#: src/keybind.c:1260
 msgid "CHEATS ARE NOW DISABLED!"
 msgstr ""
 
-#: src/keybind.c:1329
+#: src/keybind.c:1317
 msgid "God Mode ON"
 msgstr ""
 
-#: src/keybind.c:1329
+#: src/keybind.c:1317
 msgid "God Mode OFF"
 msgstr ""
 
-#: src/keybind.c:1341
+#: src/keybind.c:1329
 msgid "View Aligned to North"
 msgstr ""
 
-#: src/keybind.c:1350
+#: src/keybind.c:1338
 #, c-format
 msgid "Trap cursor %s"
 msgstr ""
 
-#: src/keybind.c:1431
+#: src/keybind.c:1419
 msgid "Researched EVERYTHING for you!"
 msgstr ""
 
-#: src/keybind.c:1464
+#: src/keybind.c:1452
 #, c-format
 msgid "(Player %u) is using cheat :%s %s"
 msgstr ""
 
-#: src/keybind.c:1465
+#: src/keybind.c:1453
 #, fuzzy
 msgid "Researched"
 msgstr "Výzkum"
 
-#: src/keybind.c:1485
+#: src/keybind.c:1473
 msgid "Only displaying energy bars when selected"
 msgstr ""
 
-#: src/keybind.c:1488
+#: src/keybind.c:1476
 msgid "Always displaying energy bars for units"
 msgstr ""
 
-#: src/keybind.c:1491
+#: src/keybind.c:1479
 msgid "Always displaying energy bars for units and structures"
 msgstr ""
 
-#: src/keybind.c:1513
+#: src/keybind.c:1501
 msgid "Demo mode off - Returning to normal game mode"
 msgstr ""
 
-#: src/keybind.c:1528
+#: src/keybind.c:1516
 msgid "Debug menu is Open"
 msgstr ""
 
-#: src/keybind.c:1559
+#: src/keybind.c:1547
 #, fuzzy
 msgid "Unable to locate any oil derricks!"
 msgstr "Nemohu nalézt žádný náklaďák!"
 
-#: src/keybind.c:1780
+#: src/keybind.c:1768
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr ""
 
-#: src/keybind.c:1786
+#: src/keybind.c:1774
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr ""
 
-#: src/keybind.c:1792
+#: src/keybind.c:1780
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr ""
 
-#: src/keybind.c:1837
+#: src/keybind.c:1825
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr ""
 
-#: src/keybind.c:1839
+#: src/keybind.c:1827
 #, fuzzy
 msgid "All enemies destroyed by cheating!"
 msgstr "Nepřítel zničen podváděním!"
 
-#: src/keybind.c:1880
+#: src/keybind.c:1868
 msgid "Destroying selected droids and structures!"
 msgstr ""
 
-#: src/keybind.c:2399
+#: src/keybind.c:2387
 msgid "Centered on player HQ, direction NORTH"
 msgstr ""
 
-#: src/keybind.c:2411
+#: src/keybind.c:2399
 msgid "Unable to locate HQ!"
 msgstr "Nelze nalézt HQ!"
 
-#: src/keybind.c:2418
+#: src/keybind.c:2406
 msgid "Formation speed limiting has been removed from the game due to bugs."
 msgstr ""
 
-#: src/keybind.c:2467
+#: src/keybind.c:2455
 msgid "Vertical rotation direction: Normal"
 msgstr ""
 
-#: src/keybind.c:2472
+#: src/keybind.c:2460
 msgid "Vertical rotation direction: Flipped"
 msgstr ""
 
-#: src/keybind.c:2481
+#: src/keybind.c:2469
 msgid "Screen shake when things die: Off"
 msgstr ""
 
-#: src/keybind.c:2486
+#: src/keybind.c:2474
 msgid "Screen shake when things die: On"
 msgstr ""
 
-#: src/keybind.c:2531
-#: src/keybind.c:2574
+#: src/keybind.c:2519
+#: src/keybind.c:2562
 #, fuzzy
 msgid "Sorry, but game speed cannot be changed in multiplayer."
 msgstr "Omlouváme se, ale tento podvod je vypnutý ve hře pro více hráčů."
 
-#: src/keybind.c:2552
-#: src/keybind.c:2595
-#: src/keybind.c:2617
+#: src/keybind.c:2540
+#: src/keybind.c:2583
+#: src/keybind.c:2605
 #, fuzzy
 msgid "Game Speed Reset"
 msgstr "Restartování herní rychlosti"
 
-#: src/keybind.c:2556
+#: src/keybind.c:2544
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "Rychlost Hry Zvýšena na %3.1f"
 
-#: src/keybind.c:2599
+#: src/keybind.c:2587
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "Rychlost Hry Snížena na %3.1f"
 
-#: src/keybind.c:2629
+#: src/keybind.c:2617
 msgid "Radar showing friend-foe colors"
 msgstr ""
 
-#: src/keybind.c:2633
+#: src/keybind.c:2621
 msgid "Radar showing player colors"
 msgstr "Radar ukazuje barvy hráčů"
 
-#: src/keybind.c:2653
+#: src/keybind.c:2641
 msgid "Radar showing only objects"
 msgstr "Radar ukazuje pouze objekty"
 
-#: src/keybind.c:2656
+#: src/keybind.c:2644
 msgid "Radar blending terrain and height"
 msgstr ""
 
-#: src/keybind.c:2659
+#: src/keybind.c:2647
 msgid "Radar showing terrain"
 msgstr "Radar ukazuje terén"
 
-#: src/keybind.c:2662
+#: src/keybind.c:2650
 #, fuzzy
 msgid "Radar showing revealed terrain"
 msgstr "Radar ukazuje terén"
 
-#: src/keybind.c:2665
+#: src/keybind.c:2653
 msgid "Radar showing height"
 msgstr "Radar ukazuje výšku"
 
@@ -14219,8 +14219,8 @@ msgstr ""
 msgid "Toggle Driving Mode"
 msgstr ""
 
-#: src/loop.c:538
-#: src/loop.c:554
+#: src/loop.c:537
+#: src/loop.c:553
 #, fuzzy
 msgid "Could not save game!"
 msgstr "Nahrát uloženou hru"
@@ -14967,8 +14967,8 @@ msgstr ""
 #: src/structure.c:5936
 #: src/structure.c:5961
 #, fuzzy, c-format
-msgid "%s - %u Unit assigned"
-msgid_plural "%s - %u Units assigned"
+msgid "%s - %u Unit assigned - Damage %3.0f%%"
+msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
 msgstr[0] "Jednotka přiřazena"
 msgstr[1] "Jednotky přiřazeny"
 
@@ -14982,7 +14982,7 @@ msgstr "%s - Poškození %3.0f%%"
 
 #: src/structure.c:6016
 #, fuzzy, c-format
-msgid "%s - Connected %u of %u"
+msgid "%s - Connected %u of %u - Damage %3.0f%%"
 msgstr "%s - Připojeno %u z %u"
 
 #: src/structure.c:6151

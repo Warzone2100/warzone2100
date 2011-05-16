@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-05-09 03:07+0200\n"
+"POT-Creation-Date: 2011-05-17 01:48+0200\n"
 "PO-Revision-Date: 2011-05-01 14:41+0200\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
@@ -12186,8 +12186,8 @@ msgstr "Miniraketen-Anordnung Cobra Ketten"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Hochgeschwindigkeitsgeschütz Python Hover"
 
-#: lib/framework/i18n.c:92
-#: lib/framework/i18n.c:153
+#: lib/framework/i18n.c:89
+#: lib/framework/i18n.c:150
 msgid "System locale"
 msgstr "Systemsprache"
 
@@ -12523,11 +12523,11 @@ msgstr "Waffen"
 msgid "Systems"
 msgstr "Systeme"
 
-#: src/display3d.c:590
+#: src/display3d.c:589
 msgid "Player left"
 msgstr "Spieler hat das Spiel verlassen"
 
-#: src/display3d.c:590
+#: src/display3d.c:589
 msgid "Player dropped"
 msgstr "Spieler ausgefallen"
 
@@ -12536,7 +12536,7 @@ msgid "Cannot Build. Oil Resource Burning."
 msgstr "Bau nicht möglich. Ölquelle brennt."
 
 #: src/display.c:1923
-#: src/display.c:2536
+#: src/display.c:2534
 #, c-format
 msgid "%s - Damage %d%% - Experience %.1f, %s"
 msgstr "%s - Schaden %d%% - Erfahrung %.1f, %s"
@@ -13016,8 +13016,8 @@ msgid "MAP SAVED!"
 msgstr "KARTE GESPEICHERT!"
 
 #: src/hci.c:1692
-#: src/loop.c:531
-#: src/loop.c:547
+#: src/loop.c:530
+#: src/loop.c:546
 #: src/mission.c:2891
 msgid "GAME SAVED :"
 msgstr "SPIEL GESPEICHERT :"
@@ -13242,7 +13242,7 @@ msgid "Power Accrued"
 msgstr "Energie angesammelt"
 
 #: src/intelmap.c:243
-#: src/keybind.c:1381
+#: src/keybind.c:1369
 msgid "PAUSED"
 msgstr "PAUSIERT"
 
@@ -13397,12 +13397,12 @@ msgstr "Spieler %u erschummelt sich eine neue Armee aus %s."
 #: src/keybind.c:582
 #: src/keybind.c:622
 #: src/keybind.c:728
-#: src/keybind.c:1271
-#: src/keybind.c:1328
-#: src/keybind.c:1430
-#: src/keybind.c:1527
-#: src/keybind.c:1838
-#: src/keybind.c:1879
+#: src/keybind.c:1259
+#: src/keybind.c:1316
+#: src/keybind.c:1418
+#: src/keybind.c:1515
+#: src/keybind.c:1826
+#: src/keybind.c:1867
 #, c-format
 msgid "(Player %u) is using cheat :%s"
 msgstr "(Player %u) benutzt den Cheat: %s"
@@ -13474,178 +13474,178 @@ msgstr "Nebel an"
 msgid "Fog off"
 msgstr "Nebel aus"
 
-#: src/keybind.c:1160
+#: src/keybind.c:1148
 #, c-format
 msgid "Warning!  This cheat can cause dire problems later on! [%s]"
 msgstr "Warnung! Dieser Cheat kann später schlimme Probleme verursachen! [%s]"
 
-#: src/keybind.c:1160
+#: src/keybind.c:1148
 msgid "Ending Mission."
 msgstr "Beende Mission."
 
-#: src/keybind.c:1272
+#: src/keybind.c:1260
 msgid "CHEATS ARE NOW ENABLED!"
 msgstr "CHEATS SIND JETZT AKTIVIERT!"
 
-#: src/keybind.c:1272
+#: src/keybind.c:1260
 msgid "CHEATS ARE NOW DISABLED!"
 msgstr "CHEATS SIND JETZT DEAKTIVIERT!"
 
-#: src/keybind.c:1329
+#: src/keybind.c:1317
 msgid "God Mode ON"
 msgstr "God Mode aktiviert"
 
-#: src/keybind.c:1329
+#: src/keybind.c:1317
 msgid "God Mode OFF"
 msgstr "God Mode deaktiviert"
 
-#: src/keybind.c:1341
+#: src/keybind.c:1329
 msgid "View Aligned to North"
 msgstr "Sicht nach Norden ausgerichtet"
 
-#: src/keybind.c:1350
+#: src/keybind.c:1338
 #, c-format
 msgid "Trap cursor %s"
 msgstr "Mauszeiger einfangen %s"
 
-#: src/keybind.c:1431
+#: src/keybind.c:1419
 msgid "Researched EVERYTHING for you!"
 msgstr "ALLES für Sie erforscht!"
 
-#: src/keybind.c:1464
+#: src/keybind.c:1452
 #, c-format
 msgid "(Player %u) is using cheat :%s %s"
 msgstr "(Spieler %u) benutzt den Cheat: %s %s"
 
-#: src/keybind.c:1465
+#: src/keybind.c:1453
 msgid "Researched"
 msgstr "Erforscht"
 
-#: src/keybind.c:1485
+#: src/keybind.c:1473
 msgid "Only displaying energy bars when selected"
 msgstr "Energiebalken nur anzeigen, wenn ausgewählt"
 
-#: src/keybind.c:1488
+#: src/keybind.c:1476
 msgid "Always displaying energy bars for units"
 msgstr "Energiebalken für Einheiten immer anzeigen"
 
-#: src/keybind.c:1491
+#: src/keybind.c:1479
 msgid "Always displaying energy bars for units and structures"
 msgstr "Energiebalken für Einheiten und Gebäude immer anzeigen"
 
-#: src/keybind.c:1513
+#: src/keybind.c:1501
 msgid "Demo mode off - Returning to normal game mode"
 msgstr "Demonstrationsmodus deaktiviert - kehre zum normalen Spiel zurück"
 
-#: src/keybind.c:1528
+#: src/keybind.c:1516
 msgid "Debug menu is Open"
 msgstr "Debug-Menü ist offen"
 
-#: src/keybind.c:1559
+#: src/keybind.c:1547
 msgid "Unable to locate any oil derricks!"
 msgstr "Kann keine Ölbohrtürme finden!"
 
 # Let it snow, let it snow, let it snow..
 # Von daher sollte das unübersetzt bleiben -Kreuvf
-#: src/keybind.c:1780
+#: src/keybind.c:1768
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr "Oh, the weather outside if frightful... SCHNEE"
 
 # Das Lied ist im Original Englisch --> bleibt unübersetzt -Kreuvf
-#: src/keybind.c:1786
+#: src/keybind.c:1774
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr "Singing in the rain, I'm singing in the rain... REGEN"
 
-#: src/keybind.c:1792
+#: src/keybind.c:1780
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr "Vorhersage: Klarer Himmel in allen Gebieten... KEIN WETTER"
 
-#: src/keybind.c:1837
+#: src/keybind.c:1825
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr "Warnung! Dies kann drastische Auswirkungen haben, falls auf Missionen falsch benutzt."
 
-#: src/keybind.c:1839
+#: src/keybind.c:1827
 msgid "All enemies destroyed by cheating!"
 msgstr "Alle Feinde durch Schummeln vernichtet!"
 
-#: src/keybind.c:1880
+#: src/keybind.c:1868
 msgid "Destroying selected droids and structures!"
 msgstr "Zerstöre ausgewählte Einheiten und Gebäude!"
 
-#: src/keybind.c:2399
+#: src/keybind.c:2387
 msgid "Centered on player HQ, direction NORTH"
 msgstr "Auf Kommandozentrale des Spielers zentriert, Blickrichtung Norden"
 
-#: src/keybind.c:2411
+#: src/keybind.c:2399
 msgid "Unable to locate HQ!"
 msgstr "Kann Kommandozentrale nicht finden!"
 
-#: src/keybind.c:2418
+#: src/keybind.c:2406
 msgid "Formation speed limiting has been removed from the game due to bugs."
 msgstr "Geschwindigkeitbegrenzung für Formationen aufgrund von Fehlern aus dem Spiel entfernt."
 
-#: src/keybind.c:2467
+#: src/keybind.c:2455
 msgid "Vertical rotation direction: Normal"
 msgstr "Richtung vertikaler Drehung: Normal"
 
-#: src/keybind.c:2472
+#: src/keybind.c:2460
 msgid "Vertical rotation direction: Flipped"
 msgstr "Richtung vertikaler Drehung: Vertauscht"
 
-#: src/keybind.c:2481
+#: src/keybind.c:2469
 msgid "Screen shake when things die: Off"
 msgstr "Bildschirm wackelt bei Zerstörung: Aus"
 
-#: src/keybind.c:2486
+#: src/keybind.c:2474
 msgid "Screen shake when things die: On"
 msgstr "Bildschirm wackelt bei Zerstörung: An"
 
-#: src/keybind.c:2531
-#: src/keybind.c:2574
+#: src/keybind.c:2519
+#: src/keybind.c:2562
 msgid "Sorry, but game speed cannot be changed in multiplayer."
 msgstr "Entschuldige, aber die Spielgeschwindigkeit kann im Mehrspielermodus nicht verändert werden."
 
-#: src/keybind.c:2552
-#: src/keybind.c:2595
-#: src/keybind.c:2617
+#: src/keybind.c:2540
+#: src/keybind.c:2583
+#: src/keybind.c:2605
 msgid "Game Speed Reset"
 msgstr "Spielgeschwindigkeit zurückgesetzt"
 
-#: src/keybind.c:2556
+#: src/keybind.c:2544
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "Spielgeschwindigkeit auf %3.1f erhöht"
 
-#: src/keybind.c:2599
+#: src/keybind.c:2587
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "Spielgeschwindigkeit auf %3.1f gesenkt"
 
-#: src/keybind.c:2629
+#: src/keybind.c:2617
 msgid "Radar showing friend-foe colors"
 msgstr "Radar zeigt Freund-Feind-Farben"
 
-#: src/keybind.c:2633
+#: src/keybind.c:2621
 msgid "Radar showing player colors"
 msgstr "Radar zeigt Spielerfarben"
 
-#: src/keybind.c:2653
+#: src/keybind.c:2641
 msgid "Radar showing only objects"
 msgstr "Radar zeigt nur Objekte"
 
-#: src/keybind.c:2656
+#: src/keybind.c:2644
 msgid "Radar blending terrain and height"
 msgstr "Radar zeigt Gelände und Höheninformation überlagert"
 
-#: src/keybind.c:2659
+#: src/keybind.c:2647
 msgid "Radar showing terrain"
 msgstr "Radar zeigt Gelände"
 
-#: src/keybind.c:2662
+#: src/keybind.c:2650
 msgid "Radar showing revealed terrain"
 msgstr "Radar zeigt aufgedecktes Gelände"
 
-#: src/keybind.c:2665
+#: src/keybind.c:2653
 msgid "Radar showing height"
 msgstr "Radar zeigt Höheninformation"
 
@@ -14140,8 +14140,8 @@ msgstr "Spielobjekt verfolgen"
 msgid "Toggle Driving Mode"
 msgstr "Fahrmodus umschalten"
 
-#: src/loop.c:538
-#: src/loop.c:554
+#: src/loop.c:537
+#: src/loop.c:553
 msgid "Could not save game!"
 msgstr "Konnte Spiel nicht speichern!"
 
@@ -14868,9 +14868,9 @@ msgstr "Kontrollgrenze erreicht - Produktion eingestellt"
 # nix Gruppe! -Kreuvf
 #: src/structure.c:5936
 #: src/structure.c:5961
-#, c-format
-msgid "%s - %u Unit assigned"
-msgid_plural "%s - %u Units assigned"
+#, fuzzy, c-format
+msgid "%s - %u Unit assigned - Damage %3.0f%%"
+msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
 msgstr[0] "%s - %u Einheit hinzugefügt"
 msgstr[1] "%s - %u Einheiten hinzugefügt"
 
@@ -14883,8 +14883,8 @@ msgid "%s - Damage %3.0f%%"
 msgstr "%s - Schaden %3.0f%%"
 
 #: src/structure.c:6016
-#, c-format
-msgid "%s - Connected %u of %u"
+#, fuzzy, c-format
+msgid "%s - Connected %u of %u - Damage %3.0f%%"
 msgstr "%s - %u von %u verbunden"
 
 #: src/structure.c:6151

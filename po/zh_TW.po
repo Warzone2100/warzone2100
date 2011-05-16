@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-05-09 03:07+0200\n"
+"POT-Creation-Date: 2011-05-17 01:48+0200\n"
 "PO-Revision-Date: 2009-05-11 00:21+0800\n"
 "Last-Translator: \n"
 "Language-Team: zh_TW\n"
@@ -12350,8 +12350,8 @@ msgstr "半履帶式眼鏡蛇坦克（迷你火箭炮）"
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "蟒蛇氣墊船（重型加農砲）"
 
-#: lib/framework/i18n.c:92
-#: lib/framework/i18n.c:153
+#: lib/framework/i18n.c:89
+#: lib/framework/i18n.c:150
 msgid "System locale"
 msgstr "系統語系"
 
@@ -12687,12 +12687,12 @@ msgstr "武器裝備"
 msgid "Systems"
 msgstr "系統裝備"
 
-#: src/display3d.c:590
+#: src/display3d.c:589
 #, fuzzy
 msgid "Player left"
 msgstr "玩家"
 
-#: src/display3d.c:590
+#: src/display3d.c:589
 #, fuzzy
 msgid "Player dropped"
 msgstr "玩家"
@@ -12702,7 +12702,7 @@ msgid "Cannot Build. Oil Resource Burning."
 msgstr "油田燃燒中，無法建築鑽油井"
 
 #: src/display.c:1923
-#: src/display.c:2536
+#: src/display.c:2534
 #, c-format
 msgid "%s - Damage %d%% - Experience %.1f, %s"
 msgstr "%s - 損傷 %d%% - 經驗值 %.1f, %s"
@@ -13188,8 +13188,8 @@ msgid "MAP SAVED!"
 msgstr "遊戲已儲存"
 
 #: src/hci.c:1692
-#: src/loop.c:531
-#: src/loop.c:547
+#: src/loop.c:530
+#: src/loop.c:546
 #: src/mission.c:2891
 #, fuzzy
 msgid "GAME SAVED :"
@@ -13418,7 +13418,7 @@ msgid "Power Accrued"
 msgstr "能量增加"
 
 #: src/intelmap.c:243
-#: src/keybind.c:1381
+#: src/keybind.c:1369
 msgid "PAUSED"
 msgstr "暫停"
 
@@ -13573,12 +13573,12 @@ msgstr "玩家 %u 利用作弊（除錯）模式建立了一個新droid: %s."
 #: src/keybind.c:582
 #: src/keybind.c:622
 #: src/keybind.c:728
-#: src/keybind.c:1271
-#: src/keybind.c:1328
-#: src/keybind.c:1430
-#: src/keybind.c:1527
-#: src/keybind.c:1838
-#: src/keybind.c:1879
+#: src/keybind.c:1259
+#: src/keybind.c:1316
+#: src/keybind.c:1418
+#: src/keybind.c:1515
+#: src/keybind.c:1826
+#: src/keybind.c:1867
 #, c-format
 msgid "(Player %u) is using cheat :%s"
 msgstr ""
@@ -13649,182 +13649,182 @@ msgstr "戰爭迷霧開啟"
 msgid "Fog off"
 msgstr "戰爭迷霧關閉"
 
-#: src/keybind.c:1160
+#: src/keybind.c:1148
 #, c-format
 msgid "Warning!  This cheat can cause dire problems later on! [%s]"
 msgstr ""
 
-#: src/keybind.c:1160
+#: src/keybind.c:1148
 #, fuzzy
 msgid "Ending Mission."
 msgstr "傳來訊息..."
 
-#: src/keybind.c:1272
+#: src/keybind.c:1260
 msgid "CHEATS ARE NOW ENABLED!"
 msgstr ""
 
-#: src/keybind.c:1272
+#: src/keybind.c:1260
 msgid "CHEATS ARE NOW DISABLED!"
 msgstr ""
 
-#: src/keybind.c:1329
+#: src/keybind.c:1317
 msgid "God Mode ON"
 msgstr ""
 
-#: src/keybind.c:1329
+#: src/keybind.c:1317
 msgid "God Mode OFF"
 msgstr ""
 
-#: src/keybind.c:1341
+#: src/keybind.c:1329
 msgid "View Aligned to North"
 msgstr "View Aligned to North"
 
-#: src/keybind.c:1350
+#: src/keybind.c:1338
 #, fuzzy, c-format
 msgid "Trap cursor %s"
 msgstr "捕捉滑鼠"
 
-#: src/keybind.c:1431
+#: src/keybind.c:1419
 msgid "Researched EVERYTHING for you!"
 msgstr "替你研發所有科技！"
 
-#: src/keybind.c:1464
+#: src/keybind.c:1452
 #, c-format
 msgid "(Player %u) is using cheat :%s %s"
 msgstr ""
 
-#: src/keybind.c:1465
+#: src/keybind.c:1453
 #, fuzzy
 msgid "Researched"
 msgstr "研發新科技"
 
-#: src/keybind.c:1485
+#: src/keybind.c:1473
 msgid "Only displaying energy bars when selected"
 msgstr ""
 
-#: src/keybind.c:1488
+#: src/keybind.c:1476
 msgid "Always displaying energy bars for units"
 msgstr ""
 
-#: src/keybind.c:1491
+#: src/keybind.c:1479
 msgid "Always displaying energy bars for units and structures"
 msgstr ""
 
-#: src/keybind.c:1513
+#: src/keybind.c:1501
 msgid "Demo mode off - Returning to normal game mode"
 msgstr "關閉展示模式—回到正常遊戲模式"
 
-#: src/keybind.c:1528
+#: src/keybind.c:1516
 #, fuzzy
 msgid "Debug menu is Open"
 msgstr "建築選單將重新開啟"
 
-#: src/keybind.c:1559
+#: src/keybind.c:1547
 #, fuzzy
 msgid "Unable to locate any oil derricks!"
 msgstr "找不到任何工程車單位！"
 
-#: src/keybind.c:1780
+#: src/keybind.c:1768
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr "喔，外面的天氣真糟...下雪"
 
-#: src/keybind.c:1786
+#: src/keybind.c:1774
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr "下雨啦～下雨啦～"
 
-#: src/keybind.c:1792
+#: src/keybind.c:1780
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr "天氣預報：一整片晴朗的天空。"
 
-#: src/keybind.c:1837
+#: src/keybind.c:1825
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr ""
 
-#: src/keybind.c:1839
+#: src/keybind.c:1827
 #, fuzzy
 msgid "All enemies destroyed by cheating!"
 msgstr "敵軍已經死了...由於你作弊的關係.."
 
-#: src/keybind.c:1880
+#: src/keybind.c:1868
 msgid "Destroying selected droids and structures!"
 msgstr ""
 
-#: src/keybind.c:2399
+#: src/keybind.c:2387
 msgid "Centered on player HQ, direction NORTH"
 msgstr "視角移至主基地，面向北方"
 
-#: src/keybind.c:2411
+#: src/keybind.c:2399
 msgid "Unable to locate HQ!"
 msgstr "無法定位至主基地"
 
-#: src/keybind.c:2418
+#: src/keybind.c:2406
 msgid "Formation speed limiting has been removed from the game due to bugs."
 msgstr ""
 
-#: src/keybind.c:2467
+#: src/keybind.c:2455
 msgid "Vertical rotation direction: Normal"
 msgstr ""
 
-#: src/keybind.c:2472
+#: src/keybind.c:2460
 msgid "Vertical rotation direction: Flipped"
 msgstr ""
 
-#: src/keybind.c:2481
+#: src/keybind.c:2469
 msgid "Screen shake when things die: Off"
 msgstr ""
 
-#: src/keybind.c:2486
+#: src/keybind.c:2474
 msgid "Screen shake when things die: On"
 msgstr ""
 
-#: src/keybind.c:2531
-#: src/keybind.c:2574
+#: src/keybind.c:2519
+#: src/keybind.c:2562
 #, fuzzy
 msgid "Sorry, but game speed cannot be changed in multiplayer."
 msgstr "抱歉，多人遊戲中無法使用此作弊碼"
 
-#: src/keybind.c:2552
-#: src/keybind.c:2595
-#: src/keybind.c:2617
+#: src/keybind.c:2540
+#: src/keybind.c:2583
+#: src/keybind.c:2605
 msgid "Game Speed Reset"
 msgstr "重設遊戲速度"
 
-#: src/keybind.c:2556
+#: src/keybind.c:2544
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr "遊戲速度增加至 %3.1f"
 
-#: src/keybind.c:2599
+#: src/keybind.c:2587
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr "遊戲速度減少至 %3.1f"
 
-#: src/keybind.c:2629
+#: src/keybind.c:2617
 msgid "Radar showing friend-foe colors"
 msgstr "雷達顯示友軍顏色"
 
-#: src/keybind.c:2633
+#: src/keybind.c:2621
 msgid "Radar showing player colors"
 msgstr "雷達顯示玩家顏色"
 
-#: src/keybind.c:2653
+#: src/keybind.c:2641
 msgid "Radar showing only objects"
 msgstr "雷達僅顯示物件"
 
-#: src/keybind.c:2656
+#: src/keybind.c:2644
 msgid "Radar blending terrain and height"
 msgstr "雷達描繪地形及高度"
 
-#: src/keybind.c:2659
+#: src/keybind.c:2647
 msgid "Radar showing terrain"
 msgstr "雷達顯示地形"
 
-#: src/keybind.c:2662
+#: src/keybind.c:2650
 #, fuzzy
 msgid "Radar showing revealed terrain"
 msgstr "雷達顯示地形"
 
-#: src/keybind.c:2665
+#: src/keybind.c:2653
 msgid "Radar showing height"
 msgstr "雷達顯示高度"
 
@@ -14338,8 +14338,8 @@ msgstr ""
 msgid "Toggle Driving Mode"
 msgstr "開啟或關閉追蹤視角"
 
-#: src/loop.c:538
-#: src/loop.c:554
+#: src/loop.c:537
+#: src/loop.c:553
 #, fuzzy
 msgid "Could not save game!"
 msgstr "載入已儲存的遊戲"
@@ -15082,9 +15082,9 @@ msgstr "已達到可控制單位總數上限，停止生產新單位"
 
 #: src/structure.c:5936
 #: src/structure.c:5961
-#, c-format
-msgid "%s - %u Unit assigned"
-msgid_plural "%s - %u Units assigned"
+#, fuzzy, c-format
+msgid "%s - %u Unit assigned - Damage %3.0f%%"
+msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
 msgstr[0] "%s - 已指派 %u  單位"
 
 #: src/structure.c:5966
@@ -15096,8 +15096,8 @@ msgid "%s - Damage %3.0f%%"
 msgstr "%s - 損傷 %3.0f%%"
 
 #: src/structure.c:6016
-#, c-format
-msgid "%s - Connected %u of %u"
+#, fuzzy, c-format
+msgid "%s - Connected %u of %u - Damage %3.0f%%"
 msgstr "%s - 連接鑽油井數量 %u of %u"
 
 #: src/structure.c:6151
