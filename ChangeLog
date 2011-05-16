@@ -14,6 +14,31 @@
    * Fix: Prevent savegame corruption (ticket:2100, commit:a974722e397b7072fb59d0114e2a4ef9f8d509d8, ticket:2625, commit:cc156a668fb5291e38eab33ff77138a05e29fa28, ticket:2627, commit:fc0f87807eeadaeeafb1386b2525a81f0a550fde)
    * Fix: Prevent saved experience from being truncated (ticket:2641, commit:4b197ba312a5c08efdab1fb4c2ccd2bf1c077c1d)
    * Fix: Prevent building on burning oil (ticket:1100, commit:2745ac27f84301c05b678892d798a93fd4e7f813)
+ * Multiplayer balance (ticket:2687, commit: 71eac1c4a332be3af4ab8c9bc4cafd65dabe7f13):
+   * HP increased:
+     * Leopard 85 → 107
+     * Panther 145 → 193
+     * Tiger 225 → 284
+   * Range increased:
+     * Minipod 3-8 → 4-9
+     * MRA 3-8.5 → 4-9
+   * Pepperpot:
+     * Damage increased 50 → 60 (splash 30 → 40)
+     * Reload time decreased 2.0 → 1.8
+   * Heavy Laser (normal and VTOL):
+     * Price decreased 600 → 400
+     * Build points decreased 1000 → 600
+     * HP increased 200 → 300
+   * Twin Assault Cannon:
+     * Damage decreased 55 → 50 (splash 45 → 40)
+   * Plasmite Bomb:
+     * Weight increased 12000 → 15000
+   * VTOL Sunburst AA:
+     * Damage increased 100 → 120
+     * Splash damage removed
+   * Lowered prerequisites:
+     * Thermal Armor from Dense Composite Alloys to Composite Alloys Mk3
+     * High Intensity Thermal Armor from Superdense Composite Alloys to Dense Composite Alloys Mk3
  * Mods:
    * Fix: 1.10 Balance (commit:9943ff3a4b67b0f64a9e2ee163c8ccac711be72e)
    * Fix: NTW bodies (ticket:2177, commit:a8fb8bec834c9d550fe43bada610bf5440d6b960)
@@ -23,7 +48,7 @@
    * Update: French (commit:cdd283ce60c5cdb573106981a35080f2fff0d7db)
    * Update: Portuguese and Brazilian (ticket:2489, commit:0ade7219d614505839bd201c3f4cb8a50c9857e2)
    * Update: German (ticket:2679, commit:7bfeb3e01c571c077b388e017ec86bfd58b97a6a)
-   * Update: Dutch (commit:7bd5df883557e9f2b2aaa55a93d46a2ec4f9a81a)
+   * Update: Dutch (ticket:2720, commit:7bd5df883557e9f2b2aaa55a93d46a2ec4f9a81a, commit:6896384f8271aaa577d69e61a18437bd1399e648)
 
 2011-01-21: Version 2.3.7
  * General:
