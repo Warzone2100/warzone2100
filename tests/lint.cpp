@@ -508,6 +508,11 @@ static QScriptValue js_include(QScriptContext *context, QScriptEngine *engine)
 	return QScriptValue();
 }
 
+static QScriptValue js_translate(QScriptContext *context, QScriptEngine *engine)
+{
+	return QScriptValue(context->argument(0));
+}
+
 bool testPlayerScript(QString path, int player, int difficulty)
 {
 	QScriptEngine *engine = new QScriptEngine();
@@ -544,6 +549,8 @@ bool testPlayerScript(QString path, int player, int difficulty)
 	engine->globalObject().setProperty("powerType", LEV_MED, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("maxPlayers", 4, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("scavengers", true, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+
+	engine->globalObject().setProperty("_", engine->newFunction(js_translate));
 
 	// General functions -- geared for use in AI scripts
 	engine->globalObject().setProperty("debug", engine->newFunction(js_debug));

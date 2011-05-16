@@ -649,12 +649,18 @@ static QScriptValue js_allianceExistsBetween(QScriptContext *context, QScriptEng
 	return QScriptValue(alliances[player1][player2] == ALLIANCE_FORMED);
 }
 
+static QScriptValue js_translate(QScriptContext *context, QScriptEngine *engine)
+{
+	return QScriptValue(context->argument(0));
+}
+
 // ----------------------------------------------------------------------------------------
 // Register functions with scripting system
 
 bool registerFunctions(QScriptEngine *engine)
 {
 	// Register functions to the script engine here
+	engine->globalObject().setProperty("_", engine->newFunction(js_translate));
 
 	// General functions -- geared for use in AI scripts
 	//engine->globalObject().setProperty("getDerrick", engine->newFunction(js_getDerrick));
