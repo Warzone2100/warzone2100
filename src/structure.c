@@ -5933,8 +5933,8 @@ void printStructureInfo(STRUCTURE *psStructure)
 		{
 			unsigned int assigned_droids = countAssignedDroids(psStructure);
 
-			CONPRINTF(ConsoleString, (ConsoleString, ngettext("%s - %u Unit assigned", "%s - %u Units assigned", assigned_droids),
-					  getStatName(psStructure->pStructureType), assigned_droids));
+			CONPRINTF(ConsoleString, (ConsoleString, ngettext("%s - %u Unit assigned - Damage %3.0f%%", "%s - %u Units assigned - Damage %3.0f%%", assigned_droids),
+					  getStatName(psStructure->pStructureType), assigned_droids, getStructureDamage(psStructure) * 100.f));
 		}
 		break;
 	case REF_DEFENSE:
@@ -5958,8 +5958,8 @@ void printStructureInfo(STRUCTURE *psStructure)
 		{
 			unsigned int assigned_droids = countAssignedDroids(psStructure);
 
-			CONPRINTF(ConsoleString, (ConsoleString, ngettext("%s - %u Unit assigned", "%s - %u Units assigned", assigned_droids),
-				getStatName(psStructure->pStructureType), assigned_droids));
+			CONPRINTF(ConsoleString, (ConsoleString, ngettext("%s - %u Unit assigned - Damage %3.0f%%", "%s - %u Units assigned - Damage %3.0f%%", assigned_droids),
+				getStatName(psStructure->pStructureType), assigned_droids, getStructureDamage(psStructure) * 100.f));
 		}
 		else
 		{
@@ -6013,8 +6013,8 @@ void printStructureInfo(STRUCTURE *psStructure)
 		else
 #endif
 		{
-			CONPRINTF(ConsoleString, (ConsoleString, _("%s - Connected %u of %u"),
-					  getStatName(psStructure->pStructureType), numConnected, NUM_POWER_MODULES));
+			CONPRINTF(ConsoleString, (ConsoleString, _("%s - Connected %u of %u - Damage %3.0f%%"),
+					  getStatName(psStructure->pStructureType), numConnected, NUM_POWER_MODULES, getStructureDamage(psStructure) * 100.f));
 		}
 		break;
 	default:
