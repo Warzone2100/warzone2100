@@ -45,7 +45,7 @@ GCC_WARN_UNUSED_VALUE = YES // -Wunused-value
 GCC_WARN_UNUSED_VARIABLE = YES // -Wunused-variable
 
 // Build setting dependent warnings
-WarnForCandCpp = -Wall -Wextra -Wcast-align -Wwrite-strings -Wpointer-arith $(WarnForCandCppDep) // Wno-missing-declarations is set on GLee.c; otherwise we would have +3000 warnings
+WarnForCandCpp = -Wall -Wextra -Wcast-align -Wwrite-strings -Wpointer-arith $(WarnForCandCppDep)
 WarnForC = -Wstrict-prototypes -Wdeclaration-after-statement $(WarnForCDep)
 WarnForCpp = $(WarnForCppDep)
 
