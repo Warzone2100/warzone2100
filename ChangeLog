@@ -14,7 +14,7 @@
    * Fix: Prevent savegame corruption (ticket:2100, commit:a974722e397b7072fb59d0114e2a4ef9f8d509d8, ticket:2625, commit:cc156a668fb5291e38eab33ff77138a05e29fa28, ticket:2627, commit:fc0f87807eeadaeeafb1386b2525a81f0a550fde)
    * Fix: Prevent saved experience from being truncated (ticket:2641, commit:4b197ba312a5c08efdab1fb4c2ccd2bf1c077c1d)
    * Fix: Prevent building on burning oil (ticket:1100, commit:2745ac27f84301c05b678892d798a93fd4e7f813)
- * Multiplayer balance (ticket:2687, commit: 71eac1c4a332be3af4ab8c9bc4cafd65dabe7f13):
+ * Multiplayer balance (ticket:2687, commit:71eac1c4a332be3af4ab8c9bc4cafd65dabe7f13):
    * HP increased:
      * Leopard 85 → 107
      * Panther 145 → 193
