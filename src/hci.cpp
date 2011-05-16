@@ -3411,7 +3411,7 @@ void togglePowerBar(void)
 	}
 }
 
-bool dualScreenCompatabilityMode = false;
+static bool dualScreenCompatabilityMode = false;
 
 bool getDualScreenCompat()
 {

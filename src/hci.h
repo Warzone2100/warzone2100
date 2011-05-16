@@ -143,8 +143,6 @@
 #define STAT_SLDWIDTH		70	// Slider width.
 #define STAT_SLDHEIGHT		12	//4	// Slider height.
 
-extern bool dualScreenCompatabilityMode;
-
 bool getDualScreenCompat();
 void setDualScreenCompat(bool mode);
 
