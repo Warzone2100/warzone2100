@@ -2133,9 +2133,7 @@ static void dealWithLMBFeature(FEATURE* psFeature)
 				}
 			}
 		}
-
 	}
-
 	else
 	{
 		switch(psFeature->psStats->subType)
