@@ -651,7 +651,7 @@ static QScriptValue js_allianceExistsBetween(QScriptContext *context, QScriptEng
 
 static QScriptValue js_translate(QScriptContext *context, QScriptEngine *engine)
 {
-	return QScriptValue(context->argument(0));
+	return QScriptValue(gettext(context->argument(0).toString().toUtf8().constData()));
 }
 
 // ----------------------------------------------------------------------------------------
