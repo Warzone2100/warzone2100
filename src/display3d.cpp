@@ -2340,7 +2340,7 @@ void	renderStructure(STRUCTURE *psStructure)
 							}
 							pie_MatRotX(rot.pitch);
 							// draw the muzzle flash?
-							if (psStructure && psStructure->visible[selectedPlayer] > UBYTE_MAX / 2)
+							if (psStructure->visible[selectedPlayer] > UBYTE_MAX / 2)
 							{
 								// animate for the duration of the flash only
 								// assume no clan colours for muzzle effects
