@@ -8,12 +8,8 @@
 public		LEVEL		NextLev;
 
 /* Define Players/Enemies */
-public		int		numEnemies, enemy[2];
+public		int		enemy;
 private		int		targetCount[2], targetX[2][5], targetY[2][5];	//MAX targets = 4, need array one bigger!
-public		BOOL		allianceFlag;
-
-/* Starting Enemy Power */
-public		int		power[2];
 
 /* Structure Limits */
 public		int		numStrucStats, strucLimit[5];
@@ -24,17 +20,11 @@ public		int		centreX, centreY;
 public		int		scrollX1, scrollX2, scrollY1, scrollY2;
 public		int		zoomLevel;
 public		int		numLZ, LZX[1], LZY[1];
-public		int		numTechs[2];
-public		RESEARCHSTAT	startTech[2][10];
 
 /* Briefings */
 public		int		numBriefs;
 public		INTMESSAGE	brief[2];
 public		INTMESSAGE		endMsg, winMsg;
-
-/* Victory Conditions */
-public		int		numVictory, victoryX[2], victoryY[2];
-public		BOOL		victory[2];
 
 /* Objectives */
 public		int		numObjectives, objectiveX[3], objectiveY[3];
@@ -107,7 +97,6 @@ private		int		countBriefs, temp, temp1, temp2, tempX, tempY;
 private		STRUCTURE	hitStruc;				//Base Under Attack
 private		BASEOBJ	attackerObj;			//Base Under Attack
 private		int		t;					//Base Under Attack time delay for next warning
-private		int		enemyCount;				//for enemy base attack stuff!
 
 /* ********************	*/
 /* Triggers	 	*/
@@ -144,24 +133,6 @@ event	start(CALL_GAMEINIT)
 {
 	// centre view
 	centreViewPos(centreX, centreY);
-	// set alliances
-	if (allianceFlag and numEnemies > 1)
-	{
-		count = 0;
-		while (count < numEnemies)
-		{
-			count2 = 0;
-			while (count2 < numEnemies)
-			{
-				if (count != count2)
-				{
-					createAlliance(enemy[count], enemy[count2]);
-				}
-				count2 = count2 + 1;
-			}
-			count = count + 1;
-		}
-	}
 	
 	// set scroll limits
 	setScrollParams(scrollX1, scrollY1, scrollX2, scrollY2);
@@ -188,19 +159,7 @@ event	start(CALL_GAMEINIT)
 	}
 
 	// set power levels
-	count = 0;
-	while (count < numEnemies)
-	{
-	//also set technology for each enemy
-		count2 = 0;
-		while (count2 < numTechs[count])
-		{
-			completeResearch(startTech[count][count2], enemy[count]);
-			count2 = count2 + 1;
-		}
-		setPowerLevel(power[count], enemy[count]);
-		count = count + 1;
-	}
+	setPowerLevel(300, enemy);
 
 	// show player start objectives
 	count = 0;
@@ -538,43 +497,8 @@ event timeUp(CALL_MISSION_TIME)
 
 event wonYetEvnt(winTrig) 	//triggered on (artCollected == victoryArt)
 {
-	temp2 = 0;	//stores number of conditions met
-	// needs to check various victory conditions setup in VLO
-
 	// check all enemy vehicles and structures destroyed
-	if (victory[0])
-	{
-		count = 0;
-		temp = 0;
-		while (count < numEnemies)
-		{
-			if ((not anyDroidsLeft(enemy[count]))
-				and (not anyStructButWallsLeft(enemy[count])))
-			{
-				temp = temp + 1;
-			}
-			count = count + 1;
-		}
-		if (temp == numEnemies)
-		{
-			temp2 = temp2 + 1;
-		}
-	}
-
-	// check all player vehicles in specific area (eg LZ)
-	if (victory[1])
-	{
-		temp = numDroidsInArea(player, 0, 0, scrollX1 * 128, scrollY1 * 128);
-		if (temp == numDroidsInArea(player, victoryX[0], victoryY[0], victoryX[1], victoryY[1]))
-		{
-			if (temp != 0)
-			{
-				temp2 = temp2 + 1;
-			}
-		}
-	}
-
-	if (temp2 == numVictory)	//victory reached?
+	if (!anyDroidsLeft(enemy) && !anyStructButWallsLeft(enemy))
 	{
 		setEventTrigger(lostYetEvnt, inactive);
 		setEventTrigger(timeUp, inactive);
@@ -817,7 +741,7 @@ event timeGroupsEvnt(timeGroupsTrig)
 	}
 }
 
-event enemyBaseHit(CALL_STRUCT_ATTACKED, enemy[enemyCount], ref hitStruc, ref attackerObj)
+event enemyBaseHit(CALL_STRUCT_ATTACKED, enemy, ref hitStruc, ref attackerObj)
 {
 	if ((attackerObj != NULLOBJECT) and (hitStruc != NULLOBJECT))
 	{
@@ -827,7 +751,7 @@ event enemyBaseHit(CALL_STRUCT_ATTACKED, enemy[enemyCount], ref hitStruc, ref at
 			//check for defense forces that cover this region
 			//but only if this structure belongs to same player as defensive group
 			//and isn't already 'busy'
-			if ((grpType[count] == 1) and (grpPlayer[count] == enemy[enemyCount]) and (not grpBusy[count]))
+			if ((grpType[count] == 1) and (grpPlayer[count] == enemy) and (not grpBusy[count]))
 			{
 				if (grpRegionGo[count] < 0)	//cope with no region specified
 				{
@@ -847,19 +771,5 @@ event enemyBaseHit(CALL_STRUCT_ATTACKED, enemy[enemyCount], ref hitStruc, ref at
 			}
 			count = count + 1;
 		}
-	}
-}
-
-//Updates enemyCount for enemyBaseHit event.
-event updateEnemy(updateEnemyTrig)
-{
-	// done this way so never invalid!
-	if (enemyCount < numEnemies - 1)
-	{
-		enemyCount = enemyCount + 1;
-	}
-	else
-	{
-		enemyCount = 0;
 	}
 }

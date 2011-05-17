@@ -510,6 +510,8 @@ static QScriptValue js_include(QScriptContext *context, QScriptEngine *engine)
 
 static QScriptValue js_translate(QScriptContext *context, QScriptEngine *engine)
 {
+	ARG_COUNT_EXACT(1);
+	ARG_STRING(0);
 	return QScriptValue(context->argument(0));
 }
 

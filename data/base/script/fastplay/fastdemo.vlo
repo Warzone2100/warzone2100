@@ -5,12 +5,7 @@ script "fastdemo.slo"
 run
 {
 /* Define Players/Enemies */
-numEnemies	int		1		//MAX 2. Must define same as number of enemy players given next
-enemy[0]	int		7
-allianceFlag	BOOL		FALSE		//TRUE if want enemies to ally, otherwise mark FALSE
-
-/* Starting Enemy Power */
-power[0]	int		300		//starting power values for each enemy listed above
+enemy		int		7
 
 /* Structure Limits */
 numStrucStats	int	5			//MAX 5. Must be same as number of limits given next
@@ -25,7 +20,6 @@ strucLimit[3]	int		5
 strucStat[4]	STRUCTURESTAT	"A0CommandCentre"
 strucLimit[4]	int		1
 
-
 /* Initialisation */
 centreX		int		1088	//starting view centre (in world units)
 centreY		int		6592
@@ -39,14 +33,6 @@ numLZ		int		1	//MAX 8. Number of Landing zones/areas can't build on (0 = LZ)
 LZX[0]		int		5	//coords of LZs in tile units
 LZY[0]		int		54
 
-/* starting technology for enemy */
-//NOTE: need to set first number in array for enemy player
-//second number needs to correspond to numTechs[enemy]
-//MAX 2 enemies, 10 technologies
-numTechs[0]	int		0
-startTech[0][0]	RESEARCHSTAT	"R-Wpn-MG-Damage03"
-startTech[0][1]	RESEARCHSTAT	"R-Wpn-Rocket-Damage02"
-
 /* Briefings */
 numBriefs	int		1	//MAX 2. Needs to be same as the number of briefings given next
 brief[0]	INTMESSAGE	"MBDEMO_MSG"
@@ -58,15 +44,6 @@ numObjectives	int		1	//MAX 3. Needs to be the same as the number of objective bl
 objective[0]	INTMESSAGE	"FAST_OBJ1"
 objectiveX[0]	int		1728	//doesn't use index to array, use world coords
 objectiveY[0]	int		1216
-
-/* Victory Conditions */
-//NOTE: always assumes vcitory condition of: number of artifacts collected = victoryArt
-numVictory	int		1	//number of victory conditions to be met (not including artifacts)
-					//DOESN'T need to be same as number given next (these are set TRUE/FALSE)
-					//if victory condition required. Can have 2 set to TRUE and numVictory = 1
-					//This will then let player win if EITHER condition is true!
-victory[0]	BOOL		TRUE	//all enemy vehicles and structures need to be killed
-victory[1]	BOOL		FALSE	//all players vehicles at landing zone (in transport?)
 
 /* Artifacts */
 victoryArt	int		5	//number of artifacts required for victory (must be <= numArt)
