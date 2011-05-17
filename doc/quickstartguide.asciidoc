@@ -656,7 +656,8 @@ Design
 
 You need to design new units and VTOLs if you want to overpower your enemies
 and get that sweet taste of victory. This aspect of the game is what makes
-Warzone unique in its own way.
+Warzone unique in its own way. Note that you need a Command Center to be able
+to design units!
 
 image:images/design.jpg[]
 

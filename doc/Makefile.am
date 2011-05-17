@@ -45,7 +45,8 @@ nobase_dist_doc_DATA = \
 	images/wss.png \
 	images/www.png \
 	Readme.en \
-	ScriptingManual.htm
+	ScriptingManual.htm \
+	docbook-xsl.css
 
 EXTRA_DIST = \
 	quickstartguide.asciidoc \

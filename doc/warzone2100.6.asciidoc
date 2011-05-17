@@ -19,17 +19,23 @@ Warzone 2100 is a 3D science fiction real time strategy game.
 
 OPTIONS
 -------
+
+Note: You can also use a space instead of '=' for option parameters, this is
+only supported in 2.3 and older though.
+
 *--cheat*::
       Run in cheat mode.
 
-*--datadir* 'DIR'::
-      Set default datadir to DIR.
+*--datadir*='DIR'::
+      Set default datadir to 'DIR'.
 
-*--debug* 'FLAGS'::
-      Show debug for FLAGS.
+*--debug*='FLAG'::
+      Show debug for 'FLAG', use this several times for several flags. Useful
+      flags include 'wz', '3d', 'sound', 'video'. 'all' gives all of that and
+      much more.
 
-*--debugfile* 'FILE'::
-      Log debug output in FILE.
+*--debugfile*='FILE'::
+      Log debug output in 'FILE'.
 
 *--fullscreen*::
       Play in fullscreen mode.
@@ -37,17 +43,17 @@ OPTIONS
 *--help*::
       Show help and exit.
 
-*--mod* 'MOD'::
-      Enable global mod MOD.
+*--mod*='MOD'::
+      Enable global mod 'MOD'.
 
-*--mod_ca* 'MOD'::
-      Enable campaign only mod MOD.
+*--mod_ca*='MOD'::
+      Enable campaign only mod 'MOD'.
 
-*--mod_mp* 'MOD'::
-      Enable multiplay only mod MOD.
+*--mod_mp*='MOD'::
+      Enable multiplay only mod 'MOD'.
 
-*--savegame* 'NAME'::
-      Load a saved game NAME (needs to include the .gam extension).
+*--savegame*='NAME'::
+      Load a saved game 'NAME' (needs to include the .gam extension).
 
 *--window*::
       Play in windowed mode.
@@ -55,7 +61,7 @@ OPTIONS
 *--version*::
       Output version info and exit.
 
-*--resolution* 'WIDTHxHEIGHT'::
+*--resolution*='WIDTHxHEIGHT'::
       Run  at 'WIDTH' times 'HEIGHT' screen resolution. This needs to be a
       resolution supported by your X server.
 
@@ -71,14 +77,15 @@ change them.
 
 EXAMPLES
 --------
-'warzone2100 --fullscreen --resolution 800x600'::
+'warzone2100 --fullscreen --resolution=800x600'::
       Run in full screen at 800x600 screen resolution.
 
-'warzone2100 --window --resolution 800x600'::
+'warzone2100 --window --resolution=800x600'::
       Run in a window at 800x600 screen resolution.
 
 'warzone2100'::
-      Run using the parameters specified last time.
+      Run the game, with the last used resolution, fullscreen/window, sound and
+      shadow settings.
 
 AUTHORS
 -------
