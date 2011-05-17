@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-05-17 00:10+0200\n"
-"PO-Revision-Date: 2011-05-16 22:58+0100\n"
-"Last-Translator: Romano FC <nino_romans@hotmail.com>\n"
+"POT-Creation-Date: 2011-05-17 16:14+0200\n"
+"PO-Revision-Date: 2011-05-17 15:50+0100\n"
+"Last-Translator: Nino <nino_romans@hotmail.com>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
@@ -14813,11 +14813,11 @@ msgstr "Commando controlelimiet bereikt - Productie gestopt"
 
 #: src/structure.cpp:5841
 #: src/structure.cpp:5866
-#, fuzzy, c-format
+#, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
-msgstr[0] "%s - %u Eenheid toegewezen"
-msgstr[1] "%s - %u Eenheden toegewezen"
+msgstr[0] "%s - %u Eenheid toegewezen - Schade %3.0f%%"
+msgstr[1] "%s - %u Eenheden toegewezen - Schade %3.0f%%"
 
 #: src/structure.cpp:5871
 #: src/structure.cpp:5939
@@ -14828,9 +14828,9 @@ msgid "%s - Damage %3.0f%%"
 msgstr "%s - Schade %3.0f%%"
 
 #: src/structure.cpp:5921
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
-msgstr "%s - Verbonden met %u van %u"
+msgstr "%s - Verbonden met %u van %u - Schade %3.0f%%"
 
 #: src/structure.cpp:6085
 #: src/structure.cpp:6130
