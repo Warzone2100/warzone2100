@@ -52,18 +52,18 @@ extern bool isInGamePopupUp;
 #define INTINGAMEOP_H			124
 #define INTINGAMEOP_HS			88
 
-#define INTINGAMEOP_X			(getDualScreenCompat() ? ((320-(INTINGAMEOP_W))+D_W) : ((320-(INTINGAMEOP_W/2))+D_W))
+#define INTINGAMEOP_X			(getDualScreenCompat() ? ((320-(INTINGAMEOP_W/2))+D_W/2 - BASE_COORDS_X/4) : ((320-(INTINGAMEOP_W/2))+D_W))
 #define INTINGAMEOP_Y			((240-(INTINGAMEOP_H/2))+D_H)
 
 #define INTINGAMEOP2_W			290
 #define INTINGAMEOP2_H			120
-#define INTINGAMEOP2_X			(getDualScreenCompat() ? ((320-(INTINGAMEOP2_W))+D_W) : ((320-(INTINGAMEOP2_W/2))+D_W))
+#define INTINGAMEOP2_X			(getDualScreenCompat() ? ((320-(INTINGAMEOP2_W/2))+D_W/2 - BASE_COORDS_X/4) : ((320-(INTINGAMEOP2_W/2))+D_W))
 #define INTINGAMEOP2_Y			((240-(INTINGAMEOP2_H/2))+D_H)
 
 // quit confirmation.
 #define INTINGAMEOP3_W			120
 #define INTINGAMEOP3_H			65
-#define INTINGAMEOP3_X			(getDualScreenCompat() ? ((320-(INTINGAMEOP3_W))+D_W) : ((320-(INTINGAMEOP3_W/2))+D_W))
+#define INTINGAMEOP3_X			(getDualScreenCompat() ? ((320-(INTINGAMEOP3_W/2))+D_W/2 - BASE_COORDS_X/4) : ((320-(INTINGAMEOP3_W/2))+D_W))
 #define INTINGAMEOP3_Y			((240-(INTINGAMEOP3_H/2))+D_H)
 
 #define PAUSEMESSAGE_YOFFSET (0)
