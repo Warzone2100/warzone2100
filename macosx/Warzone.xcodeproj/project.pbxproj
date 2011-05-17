@@ -3595,7 +3595,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"glew-1.5.7\"\nOutDir=\"glew\"\nFileName=\"glew-1.5.7.tgz\"\nSourceDLP=\"http://downloads.sourceforge.net/project/glew/glew/1.5.7/glew-1.5.7.tgz\"\nMD5Sum=\"f913ce9dbde4cd250b932731b3534ded\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
+			shellScript = "DirectorY=\"glew-1.6.0\"\nOutDir=\"glew\"\nFileName=\"glew-1.6.0.tgz\"\nSourceDLP=\"http://downloads.sourceforge.net/project/glew/glew/1.6.0/glew-1.6.0.tgz\"\nMD5Sum=\"7dfbb444b5a4e125bc5dba0aef403082\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}\n";
 		};
 		438B0C191377320A008184FC /* Zlib - Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
