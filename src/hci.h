@@ -143,8 +143,11 @@
 #define STAT_SLDWIDTH		70	// Slider width.
 #define STAT_SLDHEIGHT		12	//4	// Slider height.
 
+bool getDualScreenCompat();
+void setDualScreenCompat(bool mode);
+
 // Power bar position.
-#define POW_X			OBJ_BACKX
+#define POW_X			(getDualScreenCompat() ? (OBJ_BACKX / 2 - (OBJ_WIDTH / 4)) : (OBJ_BACKX)) // OBJ_BACKX already has OBJ_WIDTH subtracted once.. but it needs to be done again because the /2 here halves that offset. That's what the /4 part does.
 #define POW_Y			(OBJ_BACKY + OBJ_BACKHEIGHT + 6)
 #define POW_BARWIDTH	308
 

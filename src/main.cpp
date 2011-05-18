@@ -1182,7 +1182,7 @@ int main(int argc, char *argv[])
 		soundTest();
 	}
 
-	// Now we check the mods to see if they exsist or not (specified on the command line)
+	// Now we check the mods to see if they exist or not (specified on the command line)
 	// They are all capped at 100 mods max(see clparse.c)
 	// FIX ME: I know this is a bit hackish, but better than nothing for now?
 	{
@@ -1281,16 +1281,16 @@ int main(int argc, char *argv[])
 	if (war_getFullscreen())
 	{
 		QDesktopWidget *desktop = qApp->desktop();
-		w = desktop->width();
-		h = desktop->height();
+		w = desktop->screenGeometry().width();
+		h = desktop->screenGeometry().height();
 		pie_SetVideoBufferWidth(w);
 		pie_SetVideoBufferHeight(h);
-	}
-	mainwindow.setMinimumSize(w, h);
-	mainwindow.setMaximumSize(w, h);
-	if (war_getFullscreen())
-	{
 		WzMainWindow::instance()->showFullScreen();
+	}
+	else
+	{
+		mainwindow.setMinimumSize(w, h);
+		mainwindow.setMaximumSize(w, h);
 	}
 	screenWidth = w;
 	screenHeight = h;

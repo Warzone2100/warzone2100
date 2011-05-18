@@ -64,10 +64,10 @@
 #define slotsInColumn 12		// # of slots in a column
 #define totalslotspace 64		// guessing 64 max chars for filename.
 
-#define LOADSAVE_X				D_W + 16
-#define LOADSAVE_Y				D_H + 5
 #define LOADSAVE_W				610
 #define LOADSAVE_H				220
+#define LOADSAVE_X				(getDualScreenCompat() ? (D_W / 2 + 16 - BASE_COORDS_X / 4) : (D_W + 16)) // When D_W is halved, its offset is also halved.. so we reapply it (BASE_COORDS_X/2) divided by 2 again.
+#define LOADSAVE_Y				D_H + 5
 
 #define MAX_SAVE_NAME			60
 
