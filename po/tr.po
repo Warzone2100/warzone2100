@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2011-05-17 01:48+0200\n"
-"PO-Revision-Date: 2011-01-14 20:08+0200\n"
-"Last-Translator: Ayhan GORGULU <ayhangorgulu@gmail.com>\n"
+"PO-Revision-Date: 2011-05-18 09:52+0200\n"
+"Last-Translator: Ayhan GÖRGÜLÜ <ayhangorgulu45@gmail.com>\n"
 "Language-Team: Turkey <warzone-dev@gna.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -12536,7 +12536,7 @@ msgstr "İnşa edilemiyor. Petrol Kaynağı Yanıyor."
 #: src/display.c:2534
 #, c-format
 msgid "%s - Damage %d%% - Experience %.1f, %s"
-msgstr "%s - Hasar  %d%% - Tecrübe %.1f, %s"
+msgstr "%s - Hasar %d%% - Tecrübe %.1f, %s"
 
 #: src/display.c:1939
 #, c-format
@@ -12771,7 +12771,7 @@ msgstr "Tam Ekran"
 
 #: src/frontend.c:503
 msgid "Scanlines"
-msgstr ""
+msgstr "Tarama yolları"
 
 #: src/frontend.c:507
 #: src/frontend.c:528
@@ -12798,7 +12798,7 @@ msgstr "Kapalı"
 #: src/frontend.c:511
 #: src/frontend.c:677
 msgid "50%"
-msgstr ""
+msgstr "%50"
 
 #: src/frontend.c:515
 #: src/frontend.c:682
@@ -14870,11 +14870,11 @@ msgstr "Komuta Kontrol Limitine Ulaştın - Üretim Durduruldu"
 # nix Gruppe! -Kreuvf
 #: src/structure.c:5936
 #: src/structure.c:5961
-#, fuzzy, c-format
+#, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
-msgstr[0] "%s - %u Birim Atandı"
-msgstr[1] "%s - %u Birimler Atandı"
+msgstr[0] "%s - %u Birim atandı - Hasar %3.0f%%"
+msgstr[1] "%s - %u Birimler atandı - Hasar %3.0f%%"
 
 #: src/structure.c:5966
 #: src/structure.c:5980
@@ -14885,9 +14885,9 @@ msgid "%s - Damage %3.0f%%"
 msgstr "%s - Hasar %3.0f%%"
 
 #: src/structure.c:6016
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
-msgstr "%s - %u de %u 'e Bağlandı"
+msgstr "%s - Bağlandı %u de %u - Hasar %3.0f%%"
 
 #: src/structure.c:6151
 #: src/structure.c:6200
@@ -14961,35 +14961,42 @@ msgstr " - %s İnşa"
 msgid "Version %s%s%s%s"
 msgstr "Sürüm %s%s%s%s"
 
-#~ msgid "Congratulations your successful evacuation of Beta Base."
-#~ msgstr "Başarılı bir şekilde Beta üssünü boşaltınız için tebrikler."
-
-#~ msgid "Truck ordered to build Oil Derrick"
-#~ msgstr "Kamyon'a bir Petrol Kuyusu inşatı emri verildi."
-
-#~ msgid "Super Transport Available"
-#~ msgstr "Süper Taşıma Gemisi Kullanılabilir"
-
 #~ msgid "Super Transport"
 #~ msgstr "Süper Taşıyıcı"
 
 #~ msgid "Super Transport Body"
 #~ msgstr "Süper Taşıyıcı Beden"
 
+#~ msgid "Super Transport Available"
+#~ msgstr "Süper Taşıma Gemisi Kullanılabilir"
+
+#~ msgid "Jammer Tower"
+#~ msgstr "Sinyal Bozucu Kule"
+
+# Fachbegriff ist wohl Verwürfler im Deutschen, aber damit kann kaum jemand etwas anfangen -Kreuvf
+#~ msgid "Jammer Turret"
+#~ msgstr "Sinyal Bozucu Taret"
+
+#~ msgid "Electronic Countermeasures"
+#~ msgstr "Elektronik Önlemler"
+
+#~ msgid "My Game"
+#~ msgstr "Oyunum"
+
 #~ msgid "Out of sync"
 #~ msgstr "Senkronize edilmemiş"
 
-#~ msgid "2 trucks ordered to build Oil Derrick"
-#~ msgstr "2 kamyona bir Petrol Kuyusu inşatı emri verildi."
-
-#~ msgid "%d trucks ordered to build Oil Derrick"
-#~ msgstr "%d kamyon'lara bir Petrol Kuyusu inşatı emri verildi."
+#~ msgid "Unsupported"
+#~ msgstr "Desteklenmez"
 
 #~ msgid "GAME SAVED: "
 #~ msgstr "OYUN KAYDEDİLDİ :"
 
 #~ msgid "Player %u is cheating (debug menu) him/herself a new droid."
 #~ msgstr "Oyuncu %u (debug menü) Yeni birimini oluşturdu."
+
+#~ msgid "Ally progress"
+#~ msgstr "Müttefik ilerlemesi"
 
 #~ msgid "Tactical UI (Target Origin Icon): Show"
 #~ msgstr "Taktiksel UI (Hedef Kaynak Simgesi): Göster"
@@ -15021,6 +15028,12 @@ msgstr "Sürüm %s%s%s%s"
 #~ msgid "CHOOSE AI"
 #~ msgstr "Y.Z SEÇ"
 
+#~ msgid "Allow human players to join in this slot"
+#~ msgstr "İnsan oyuncuların bu slota girmesi için izin ver"
+
+#~ msgid "Leave this slot unused"
+#~ msgstr "Bu slotu kullanılmaz olarak belirle"
+
 #~ msgid "You cannot change difficulty in a challenge"
 #~ msgstr "Mücadele modunda zorluğu değiştiremezsin"
 
@@ -15048,11 +15061,71 @@ msgstr "Sürüm %s%s%s%s"
 #~ msgid "7 players"
 #~ msgstr "2 Oyuncu"
 
+#~ msgid "9 players"
+#~ msgstr "9 Oyuncu"
+
+#~ msgid "10 players"
+#~ msgstr "10 Oyuncu"
+
+#~ msgid "11 players"
+#~ msgstr "11 Oyuncu"
+
+#~ msgid "12 players"
+#~ msgstr "12 Oyuncu"
+
+#~ msgid "13 players"
+#~ msgstr "13 Oyuncu"
+
+#~ msgid "14 players"
+#~ msgstr "14 Oyuncu"
+
+#~ msgid "15 players"
+#~ msgstr "15 Oyuncu"
+
+#~ msgid "16 players"
+#~ msgstr "16 Oyuncu"
+
+#~ msgid "Yellow"
+#~ msgstr "Sarı"
+
+#~ msgid "Purple"
+#~ msgstr "Mor"
+
+#~ msgid "White"
+#~ msgstr "Beyaz"
+
+#~ msgid "Bright blue"
+#~ msgstr "Açık Mavi"
+
+#~ msgid "Neon green"
+#~ msgstr "Neon yeşili"
+
+#~ msgid "Infrared"
+#~ msgstr "Kızılötesi"
+
+#~ msgid "Ultraviolet"
+#~ msgstr "Morötesi"
+
+#~ msgid "Brown"
+#~ msgstr "Kahverengi"
+
 #~ msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 #~ msgstr "Bunu Yapamıyoruz! Biz Cyborg Taşıma Gemisi'ni kullanmak için bir Cyborg birimine sahip olmalıyız!"
 
 #~ msgid "There is not enough room in the Transport!"
 #~ msgstr "Taşıma Gemisinde yeterince yer yok!"
+
+#~ msgid "Congratulations your successful evacuation of Beta Base."
+#~ msgstr "Başarılı bir şekilde Beta üssünü boşaltınız için tebrikler."
+
+#~ msgid "Truck ordered to build Oil Derrick"
+#~ msgstr "Kamyon'a bir Petrol Kuyusu inşatı emri verildi."
+
+#~ msgid "2 trucks ordered to build Oil Derrick"
+#~ msgstr "2 kamyona bir Petrol Kuyusu inşatı emri verildi."
+
+#~ msgid "%d trucks ordered to build Oil Derrick"
+#~ msgstr "%d kamyon'lara bir Petrol Kuyusu inşatı emri verildi."
 
 #~ msgid "Player position"
 #~ msgstr "Oyuncu pozisyonu"
@@ -15116,9 +15189,6 @@ msgstr "Sürüm %s%s%s%s"
 
 #~ msgid "Fire Cannon"
 #~ msgstr "Ateş Topu"
-
-#~ msgid "Transporter"
-#~ msgstr "Taşıyıcı"
 
 #~ msgid "(Player %u) has detected the borg 'legs' bug! Please enter legs in your console and upload the files to us!"
 #~ msgstr "(Oyuncu %u) borg-\"legs\"-Bugu tespit etti! Lütfen legs'i konsoluna gir ve bize yolla!"
@@ -15297,9 +15367,6 @@ msgstr "Sürüm %s%s%s%s"
 
 #~ msgid "Stop Multiplayer Audio"
 #~ msgstr "Çok Oyunculu Sesi Durdur"
-
-#~ msgid "Game"
-#~ msgstr "Oyun"
 
 #~ msgid "Mayhem"
 #~ msgstr "Kaos"
