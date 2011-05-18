@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-05-07 01:17+0200\n"
+"POT-Creation-Date: 2011-05-19 01:10+0200\n"
 "PO-Revision-Date: 2011-05-03 10:10+0100\n"
 "Last-Translator: Saber Nyoki <nsa_server@hotmail.com>\n"
 "Language-Team: Spanish <warzone-dev@gna.org>\n"
@@ -9200,9 +9200,8 @@ msgstr "Sistema de recarga robotizada"
 msgid "Increases Mini-Rocket ROF"
 msgstr "Mejora CDT de Mini-Cohete"
 
-#: data/base/script/fastplay/s-demo.slo:366
-#: data/base/script/text/cam1-1.slo:258
-#: data/base/script/text/cam1-2.slo:382
+#: data/base/script/text/cam1-1.slo:168
+#: data/base/script/text/cam1-2.slo:265
 #: data/base/script/text/cam1-4a.slo:590
 #: data/base/script/text/cam1-7.slo:506
 #: data/base/script/text/genexp.slo:997
@@ -12333,7 +12332,7 @@ msgid "Player dropped"
 msgstr "Jugador Desconectado"
 
 #: src/display3d.cpp:595
-#: src/multiint.cpp:2151
+#: src/multiint.cpp:2149
 msgid "Waiting for other players"
 msgstr "Esperando a otros jugadores"
 
@@ -12532,7 +12531,7 @@ msgid "Join Game"
 msgstr "Unirse a una Partida"
 
 #: src/frontend.cpp:422
-#: src/multiint.cpp:1315
+#: src/multiint.cpp:1313
 msgid "OPTIONS"
 msgstr "OPCIONES"
 
@@ -12642,7 +12641,7 @@ msgid "On"
 msgstr "Activado"
 
 #: src/frontend.cpp:540
-#: src/multiint.cpp:1384
+#: src/multiint.cpp:1382
 msgid "Fog"
 msgstr "Niebla"
 
@@ -12653,7 +12652,7 @@ msgstr "Neblina"
 
 #: src/frontend.cpp:547
 #: src/frontend.cpp:612
-#: src/multiint.cpp:1386
+#: src/multiint.cpp:1384
 msgid "Fog Of War"
 msgstr "Niebla de Guerra"
 
@@ -12814,7 +12813,7 @@ msgid "GAME OPTIONS"
 msgstr "OPCIONES DE JUEGO"
 
 #: src/frontend.cpp:1414
-#: src/multiint.cpp:2423
+#: src/multiint.cpp:2421
 msgid "Mod: "
 msgstr "Mod:"
 
@@ -12877,7 +12876,7 @@ msgid "Build (F3)"
 msgstr "Construcción (F3)"
 
 #: src/hci.cpp:3432
-#: src/multiint.cpp:1431
+#: src/multiint.cpp:1429
 #: src/multimenu.cpp:764
 msgid "Power"
 msgstr "Energía"
@@ -13041,7 +13040,7 @@ msgstr "La partida no puede continuar sin el anfitrión"
 msgid "-->  QUIT  <--"
 msgstr "--> SALIR <--"
 
-#: src/init.cpp:392
+#: src/init.cpp:404
 #, c-format
 msgid ""
 "The required mod could not be loaded: %s\n"
@@ -13468,9 +13467,9 @@ msgid "KEY MAPPING"
 msgstr "MAPEO DE TECLAS"
 
 #: src/keyedit.cpp:377
-#: src/multiint.cpp:662
-#: src/multiint.cpp:1111
-#: src/multiint.cpp:1517
+#: src/multiint.cpp:660
+#: src/multiint.cpp:1109
+#: src/multiint.cpp:1515
 msgid "Return To Previous Screen"
 msgstr "Volver a la Pantalla Anterior"
 
@@ -14048,332 +14047,332 @@ msgstr "%s forma una Alianza con %s"
 msgid "You Discover Blueprints For %s"
 msgstr "Descubres los planos de %s"
 
-#: src/multiint.cpp:600
+#: src/multiint.cpp:598
 #: src/multilimit.cpp:190
 msgid "Accept Settings"
 msgstr "Aceptar Configuración"
 
-#: src/multiint.cpp:602
-#: src/multiint.cpp:1156
+#: src/multiint.cpp:600
+#: src/multiint.cpp:1154
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: src/multiint.cpp:613
+#: src/multiint.cpp:611
 msgid "IP Address or Machine Name"
 msgstr "Dirección IP o Nombre de la Máquina"
 
-#: src/multiint.cpp:659
+#: src/multiint.cpp:657
 msgid "CONNECTION"
 msgstr "CONEXIÓN"
 
-#: src/multiint.cpp:664
+#: src/multiint.cpp:662
 msgid "Lobby"
 msgstr "Vestíbulo"
 
-#: src/multiint.cpp:665
+#: src/multiint.cpp:663
 msgid "IP"
 msgstr "IP"
 
-#: src/multiint.cpp:915
+#: src/multiint.cpp:913
 msgid "No games are available"
 msgstr "No hay partidas disponibles"
 
-#: src/multiint.cpp:918
+#: src/multiint.cpp:916
 msgid "Game is full"
 msgstr "Partida llena"
 
-#: src/multiint.cpp:922
+#: src/multiint.cpp:920
 msgid "You were kicked!"
 msgstr "¡Has sido expulsado!"
 
-#: src/multiint.cpp:925
+#: src/multiint.cpp:923
 msgid "Wrong Game Version!"
 msgstr "¡Versión del juego errónea!"
 
-#: src/multiint.cpp:928
+#: src/multiint.cpp:926
 msgid "You have an incompatible mod."
 msgstr "Tienes un mod incompatible"
 
-#: src/multiint.cpp:932
+#: src/multiint.cpp:930
 msgid "Host couldn't send file?"
 msgstr "¿El host no pudo envar archivo?"
 
-#: src/multiint.cpp:936
+#: src/multiint.cpp:934
 msgid "Incorrect Password!"
 msgstr "¡Contraseña incorrecta!"
 
-#: src/multiint.cpp:939
+#: src/multiint.cpp:937
 msgid "Host has dropped connection!"
 msgstr "¡El Host cerró la conexión!"
 
-#: src/multiint.cpp:943
+#: src/multiint.cpp:941
 msgid "Connection Error"
 msgstr "Error de conexión"
 
-#: src/multiint.cpp:1051
+#: src/multiint.cpp:1049
 msgid "Searching"
 msgstr "Buscando"
 
-#: src/multiint.cpp:1108
+#: src/multiint.cpp:1106
 msgid "GAMES"
 msgstr "PARTIDAS"
 
-#: src/multiint.cpp:1116
+#: src/multiint.cpp:1114
 msgid "Refresh Games List"
 msgstr "Actualizar Lista de Partidas"
 
-#: src/multiint.cpp:1136
+#: src/multiint.cpp:1134
 msgid "Enter Password:"
 msgstr "Introducir Contraseña:"
 
-#: src/multiint.cpp:1154
+#: src/multiint.cpp:1152
 msgid "OK"
 msgstr "OK"
 
-#: src/multiint.cpp:1271
+#: src/multiint.cpp:1269
 msgid "Tanks disabled!!"
 msgstr "¡¡Tanques deshabilitados!!"
 
-#: src/multiint.cpp:1272
+#: src/multiint.cpp:1270
 msgid "Cyborgs disabled."
 msgstr "Cyborgs deshabilitados."
 
-#: src/multiint.cpp:1273
+#: src/multiint.cpp:1271
 msgid "VTOLs disabled."
 msgstr "VTOLS deshabilitados."
 
-#: src/multiint.cpp:1320
-#: src/multiint.cpp:1327
+#: src/multiint.cpp:1318
+#: src/multiint.cpp:1325
 msgid "Select Game Name"
 msgstr "Elegir Nombre de la Partida"
 
-#: src/multiint.cpp:1320
+#: src/multiint.cpp:1318
 msgid "One-Player Skirmish"
 msgstr "Escaramuza Un Jugador"
 
-#: src/multiint.cpp:1330
+#: src/multiint.cpp:1328
 msgid "Select Map"
 msgstr "Elegir Mapa"
 
-#: src/multiint.cpp:1338
+#: src/multiint.cpp:1336
 msgid "Click to set Password"
 msgstr "Click para fijar contraseña"
 
-#: src/multiint.cpp:1348
-#: src/multiint.cpp:1349
+#: src/multiint.cpp:1346
+#: src/multiint.cpp:1347
 msgid "Scavengers"
 msgstr "Carroñeros"
 
-#: src/multiint.cpp:1351
+#: src/multiint.cpp:1349
 msgid "No Scavengers"
 msgstr "Sin Carroñeros"
 
-#: src/multiint.cpp:1381
+#: src/multiint.cpp:1379
 msgid "Select Player Name"
 msgstr "Elejir Nombre del Jugador"
 
-#: src/multiint.cpp:1387
+#: src/multiint.cpp:1385
 msgid "Distance Fog"
 msgstr "Niebla de Distancia"
 
-#: src/multiint.cpp:1398
+#: src/multiint.cpp:1396
 #: src/multimenu.cpp:757
 msgid "Alliances"
 msgstr "Alianzas"
 
-#: src/multiint.cpp:1401
+#: src/multiint.cpp:1399
 msgid "No Alliances"
 msgstr "Sin Alianzas"
 
-#: src/multiint.cpp:1403
+#: src/multiint.cpp:1401
 msgid "Allow Alliances"
 msgstr "Permitir Alianzas"
 
-#: src/multiint.cpp:1407
+#: src/multiint.cpp:1405
 msgid "Locked Teams"
 msgstr "Equipos Fijos"
 
-#: src/multiint.cpp:1433
+#: src/multiint.cpp:1431
 msgid "Low Power Levels"
 msgstr "Niveles de Energía Bajos"
 
-#: src/multiint.cpp:1435
+#: src/multiint.cpp:1433
 msgid "Medium Power Levels"
 msgstr "Niveles de Energía Medios"
 
-#: src/multiint.cpp:1437
+#: src/multiint.cpp:1435
 msgid "High Power Levels"
 msgstr "Niveles de Energía Altos"
 
-#: src/multiint.cpp:1469
+#: src/multiint.cpp:1467
 msgid "Base"
 msgstr "Base"
 
-#: src/multiint.cpp:1471
+#: src/multiint.cpp:1469
 msgid "Start with No Bases"
 msgstr "Comenzar sin Bases"
 
-#: src/multiint.cpp:1473
+#: src/multiint.cpp:1471
 msgid "Start with Bases"
 msgstr "Comenzar con Bases"
 
-#: src/multiint.cpp:1475
+#: src/multiint.cpp:1473
 msgid "Start with Advanced Bases"
 msgstr "Comenzar con Bases Avanzadas"
 
-#: src/multiint.cpp:1507
+#: src/multiint.cpp:1505
 msgid "Map Preview"
 msgstr "Previsualizar Mapa"
 
-#: src/multiint.cpp:1509
+#: src/multiint.cpp:1507
 msgid "Click to see Map"
 msgstr "Click para ver Mapa"
 
-#: src/multiint.cpp:1523
+#: src/multiint.cpp:1521
 msgid "Start Hosting Game"
 msgstr "Comenzar Hospedando un Juego"
 
-#: src/multiint.cpp:1531
+#: src/multiint.cpp:1529
 msgid "Show Structure Limits"
 msgstr "Fijar Límites de Estructuras"
 
-#: src/multiint.cpp:1531
+#: src/multiint.cpp:1529
 msgid "Set Structure Limits"
 msgstr "Fijar Límites de Estructuras"
 
-#: src/multiint.cpp:1626
+#: src/multiint.cpp:1624
 msgid "DIFFICULTY"
 msgstr "DIFICULTAD"
 
-#: src/multiint.cpp:1640
+#: src/multiint.cpp:1638
 msgid "Less aggressive and starts with less units"
 msgstr "Menos agresivo y comienza con menos unidades"
 
-#: src/multiint.cpp:1641
+#: src/multiint.cpp:1639
 msgid "Plays nice"
 msgstr "Juega justamente"
 
-#: src/multiint.cpp:1642
+#: src/multiint.cpp:1640
 msgid "No holds barred"
 msgstr "Sin prohibiciones"
 
-#: src/multiint.cpp:1643
+#: src/multiint.cpp:1641
 msgid "Starts with advantages and gets twice as much oil from derricks"
 msgstr "Comienza con ventajas y recibe el doble de los pozos"
 
-#: src/multiint.cpp:1671
+#: src/multiint.cpp:1669
 msgid "CHOOSE AI"
 msgstr "ESCOGER IA"
 
-#: src/multiint.cpp:1687
+#: src/multiint.cpp:1685
 msgid "Allow human players to join in this slot"
 msgstr "Permitir usar esta ranura a jugadores humanos"
 
-#: src/multiint.cpp:1695
+#: src/multiint.cpp:1693
 msgid "Leave this slot unused"
 msgstr "Dejar esta ranura sin utilizar"
 
-#: src/multiint.cpp:2098
+#: src/multiint.cpp:2096
 msgid "Team"
 msgstr "Equipo"
 
-#: src/multiint.cpp:2139
+#: src/multiint.cpp:2137
 msgid "You cannot change difficulty in a challenge"
 msgstr "No puedes cambiar la dificultad en un desafío"
 
-#: src/multiint.cpp:2139
+#: src/multiint.cpp:2137
 msgid "Click to change difficulty"
 msgstr "Click para ajustar dificultad de la IA"
 
-#: src/multiint.cpp:2156
+#: src/multiint.cpp:2154
 msgid "Click when ready"
 msgstr "Click cuando esté listo"
 
-#: src/multiint.cpp:2160
+#: src/multiint.cpp:2158
 msgid "READY?"
 msgstr "¿LISTO?"
 
-#: src/multiint.cpp:2204
+#: src/multiint.cpp:2202
 msgid "PLAYERS"
 msgstr "JUGADORES"
 
-#: src/multiint.cpp:2239
+#: src/multiint.cpp:2237
 msgid "Click to change to this slot"
 msgstr "Click para cambiar a esta ranura."
 
-#: src/multiint.cpp:2267
+#: src/multiint.cpp:2265
 msgid "Choose Team"
 msgstr "Elegir equipo"
 
-#: src/multiint.cpp:2297
+#: src/multiint.cpp:2295
 msgid "Click to change player colour"
 msgstr "Click para cambiar el color de jugador."
 
-#: src/multiint.cpp:2325
+#: src/multiint.cpp:2323
 msgid "Click to change player position"
 msgstr "Click para cambiar la posición de jugador."
 
-#: src/multiint.cpp:2331
+#: src/multiint.cpp:2329
 msgid "Click to change AI"
 msgstr "Click para cambiar la IA"
 
-#: src/multiint.cpp:2335
+#: src/multiint.cpp:2333
 msgid "You cannot change AI in a challenge"
 msgstr "No puedes cambiar la IA en un desafío"
 
-#: src/multiint.cpp:2397
+#: src/multiint.cpp:2395
 msgid "CHAT"
 msgstr "CHAT"
 
-#: src/multiint.cpp:2428
+#: src/multiint.cpp:2426
 msgid "All players need to have the same mods to join your game."
 msgstr "Todos los jugadores necesitan tener los mismos mods para unirse"
 
-#: src/multiint.cpp:2586
+#: src/multiint.cpp:2584
 #, c-format
 msgid "*** password [%s] is now required! ***"
 msgstr "*** ¡contraseña [%s] requerida! ***"
 
-#: src/multiint.cpp:2594
+#: src/multiint.cpp:2592
 msgid "*** password is NOT required! ***"
 msgstr "*** ¡contraseña no requerida! ***"
 
-#: src/multiint.cpp:2835
+#: src/multiint.cpp:2833
 msgid "Sorry! Failed to host the game."
 msgstr "¡Lo sentimos! No se pudo hospedar la partida"
 
-#: src/multiint.cpp:2956
+#: src/multiint.cpp:2954
 msgid "'Locked Teams' mode enabled"
 msgstr "Modo de Equipos Fijos Activado"
 
-#: src/multiint.cpp:3037
+#: src/multiint.cpp:3035
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "¡El anfitrión ha expulsado a %s de la partida!"
 
-#: src/multiint.cpp:3107
+#: src/multiint.cpp:3105
 msgid "Host is Starting Game"
 msgstr "Anfitrión Comenzando Partida"
 
-#: src/multiint.cpp:3667
+#: src/multiint.cpp:3665
 msgid "Players"
 msgstr "Jugadores"
 
-#: src/multiint.cpp:3805
+#: src/multiint.cpp:3803
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Enviando Mapa: %d%%"
 
-#: src/multiint.cpp:3813
+#: src/multiint.cpp:3811
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Mapa: %d%% descargado"
 
-#: src/multiint.cpp:3839
+#: src/multiint.cpp:3837
 msgid "HOST"
 msgstr "ANFITRIÓN"
 
-#: src/multiint.cpp:3846
+#: src/multiint.cpp:3844
 #: src/multimenu.cpp:773
 msgid "Ping"
 msgstr "Ping"
@@ -14613,12 +14612,12 @@ msgstr "Marrón"
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr "¡No podemos hacer eso! ¡Debemos ser una unidad cyborg para usar el transporte Cyborg!"
 
-#: src/qtscriptfuncs.cpp:474
+#: src/qtscriptfuncs.cpp:481
 #: src/scriptfuncs.cpp:3271
 msgid "YOU ARE VICTORIOUS!"
 msgstr "¡ERES EL GANADOR!"
 
-#: src/qtscriptfuncs.cpp:479
+#: src/qtscriptfuncs.cpp:486
 #: src/scriptfuncs.cpp:3275
 msgid "YOU WERE DEFEATED!"
 msgstr "¡HAS SIDO DERROTADO!"

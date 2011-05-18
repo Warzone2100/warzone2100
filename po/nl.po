@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-05-17 16:14+0200\n"
+"POT-Creation-Date: 2011-05-19 01:10+0200\n"
 "PO-Revision-Date: 2011-05-17 15:50+0100\n"
 "Last-Translator: Nino <nino_romans@hotmail.com>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
@@ -13039,7 +13039,7 @@ msgstr "Het spel kan niet verder zonder de host."
 msgid "-->  QUIT  <--"
 msgstr "-->  AFSLUITEN  <--"
 
-#: src/init.cpp:392
+#: src/init.cpp:404
 #, c-format
 msgid ""
 "The required mod could not be loaded: %s\n"

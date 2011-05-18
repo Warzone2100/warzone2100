@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-05-18 21:53+0200\n"
+"POT-Creation-Date: 2011-05-19 01:10+0200\n"
 "PO-Revision-Date: 2011-05-05 20:23+0100\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
@@ -13082,7 +13082,7 @@ msgstr "Das Spiel kann ohne Spielleiter nicht weitergehen."
 msgid "-->  QUIT  <--"
 msgstr "-->  BEENDEN  <--"
 
-#: src/init.cpp:392
+#: src/init.cpp:404
 #, c-format
 msgid ""
 "The required mod could not be loaded: %s\n"
