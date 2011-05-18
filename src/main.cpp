@@ -1071,9 +1071,9 @@ bool getUTF8CmdLine(int* const utfargc, const char*** const utfargv) // explicit
 
 int main(int argc, char *argv[])
 {
+	QApplication app(argc, argv);
 	int utfargc = argc;
 	const char** utfargv = (const char**)argv;
-	QApplication app(argc, argv);
 
 #ifdef WZ_OS_MAC
 	cocoaInit();
