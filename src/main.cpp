@@ -1286,11 +1286,14 @@ int main(int argc, char *argv[])
 		pie_SetVideoBufferWidth(w);
 		pie_SetVideoBufferHeight(h);
 	}
-	mainwindow.setMinimumSize(w, h);
-	mainwindow.setMaximumSize(w, h);
 	if (war_getFullscreen())
 	{
 		WzMainWindow::instance()->showFullScreen();
+	}
+	else
+	{
+		mainwindow.setMinimumSize(w, h);
+		mainwindow.setMaximumSize(w, h);
 	}
 	screenWidth = w;
 	screenHeight = h;
