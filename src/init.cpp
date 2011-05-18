@@ -298,6 +298,17 @@ bool rebuildSearchPath( searchPathMode mode, bool force )
 				debug(LOG_WZ, "*** Switching to campaign mods ***");
 				clearLoadedMods();
 
+				while (curSearchPath)
+				{
+					// make sure videos override included files
+					sstrcpy(tmpstr, curSearchPath->path);
+					sstrcat(tmpstr, "sequences.wz");
+					PHYSFS_addToSearchPath(tmpstr, PHYSFS_APPEND);
+					curSearchPath = curSearchPath->higherPriority;
+				}
+				curSearchPath = searchPathRegistry;
+				while (curSearchPath->lowerPriority)
+					curSearchPath = curSearchPath->lowerPriority;
 				while( curSearchPath )
 				{
 #ifdef DEBUG
@@ -327,11 +338,6 @@ bool rebuildSearchPath( searchPathMode mode, bool force )
 					sstrcat(tmpstr, "base.wz");
 					PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
 
-					// add the video file
-					sstrcpy(tmpstr, curSearchPath->path);
-					sstrcat(tmpstr, "sequences.wz");
-					PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
-					
 					curSearchPath = curSearchPath->higherPriority;
 				}
 				break;
@@ -339,6 +345,17 @@ bool rebuildSearchPath( searchPathMode mode, bool force )
 				debug(LOG_WZ, "*** Switching to multiplay mods ***");
 				clearLoadedMods();
 
+				while (curSearchPath)
+				{
+					// make sure videos override included files
+					sstrcpy(tmpstr, curSearchPath->path);
+					sstrcat(tmpstr, "sequences.wz");
+					PHYSFS_addToSearchPath(tmpstr, PHYSFS_APPEND);
+					curSearchPath = curSearchPath->higherPriority;
+				}
+				curSearchPath = searchPathRegistry;
+				while (curSearchPath->lowerPriority)
+					curSearchPath = curSearchPath->lowerPriority;
 				while( curSearchPath )
 				{
 #ifdef DEBUG
@@ -371,11 +388,6 @@ bool rebuildSearchPath( searchPathMode mode, bool force )
 					PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
 					sstrcpy(tmpstr, curSearchPath->path);
 					sstrcat(tmpstr, "base.wz");
-					PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
-
-					// add the video file
-					sstrcpy(tmpstr, curSearchPath->path);
-					sstrcat(tmpstr, "sequences.wz");
 					PHYSFS_addToSearchPath( tmpstr, PHYSFS_APPEND );
 
 					curSearchPath = curSearchPath->higherPriority;
