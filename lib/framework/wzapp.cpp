@@ -193,6 +193,9 @@ WzMainWindow::WzMainWindow(const QGLFormat &format, QWidget *parent) : QGLWidget
 	// Want focusOutEvent messages.
 	setFocusPolicy(Qt::StrongFocus);
 
+	// set radix character (again) to the period (".")
+	setlocale(LC_NUMERIC, "C");
+
 #if !defined(WZ_OS_MAC)
 	// Want áéíóú inputMethodEvent messages.
 	setAttribute(Qt::WA_InputMethodEnabled, true);
