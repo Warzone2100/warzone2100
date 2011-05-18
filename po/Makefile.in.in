@@ -101,7 +101,7 @@ CATALOGS = @CATALOGS@
 
 all: check-macro-version all-@USE_NLS@
 
-all-yes: stamp-po
+all-yes:
 all-no:
 
 # Ensure that the gettext macros and this Makefile.in.in are in sync.
@@ -383,7 +383,7 @@ POTFILES.in: $(srcdir)/update-po.sh
 
 update-po-custom: POTFILES.in
 
-update-po: Makefile update-po-custom
+update-po: Makefile update-po-custom stamp-po
 	$(MAKE) $(DOMAIN).pot-update
 	test -z "$(UPDATEPOFILES)" || $(MAKE) $(UPDATEPOFILES)
 	$(MAKE) update-gmo
