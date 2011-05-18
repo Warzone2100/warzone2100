@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
 "POT-Creation-Date: 2011-05-17 01:48+0200\n"
-"PO-Revision-Date: 2011-05-01 14:41+0200\n"
+"PO-Revision-Date: 2011-05-18 21:33+0200\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
 "Language: \n"
@@ -12774,7 +12774,7 @@ msgstr "Vollbild"
 
 #: src/frontend.c:503
 msgid "Scanlines"
-msgstr ""
+msgstr "Abtastlinien"
 
 #: src/frontend.c:507
 #: src/frontend.c:528
@@ -12801,7 +12801,7 @@ msgstr "Aus"
 #: src/frontend.c:511
 #: src/frontend.c:677
 msgid "50%"
-msgstr ""
+msgstr "50%"
 
 #: src/frontend.c:515
 #: src/frontend.c:682
