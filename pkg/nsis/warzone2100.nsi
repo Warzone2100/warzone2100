@@ -52,7 +52,7 @@ VIAddVersionKey "CompanyName"		"Warzone 2100 Project"
 VIAddVersionKey "FileDescription"	"${PACKAGE_NAME} Installer"
 VIAddVersionKey "FileVersion"		"${PACKAGE_VERSION}"
 VIAddVersionKey "InternalName"		"${PACKAGE_NAME}"
-VIAddVersionKey "LegalCopyright"	"Copyright В© 2006-2011 Warzone 2100 Project"
+VIAddVersionKey "LegalCopyright"	"Copyright © 2006-2011 Warzone 2100 Project"
 VIAddVersionKey "OriginalFilename"	"${PACKAGE}-${PACKAGE_VERSION}.exe"
 VIAddVersionKey "ProductName"		"${PACKAGE_NAME}"
 VIAddVersionKey "ProductVersion"	"${PACKAGE_VERSION}"
@@ -510,9 +510,10 @@ FunctionEnd
 ;Descriptions
 
   ;English
-  LangString WZWelcomeText ${LANG_ENGLISH} "This wizard will guide you through the installation of Warzone 2100.\r\n\r\nIt is recommended that you close all other applications before starting Setup. This will make it possible to update relevant system files without having to reboot your computer.\r\n\r\nWarzone 2100 is 100% free, if you paid for it, let us know!\r\n\r\nClick Next to continue."
+  LangString WZWelcomeText ${LANG_ENGLISH} "This wizard will guide you through the installation of Warzone 2100.\r\n\r\nIt is recommended that you close all other applications before continuing this installation. This will make it possible to update relevant system files without having to reboot your computer.\r\n\r\nWarzone 2100 is 100% free, if you paid for it, let us know!\r\n\r\nClick Next to continue."
   LangString WZ_GPL_NEXT ${LANG_ENGLISH} "Next"
-  
+
+
   LangString TEXT_SecBase ${LANG_ENGLISH} "Core files"
   LangString DESC_SecBase ${LANG_ENGLISH} "The core files required to run Warzone 2100."
 
@@ -545,7 +546,8 @@ FunctionEnd
 
   ;Dutch
   LangString WZWelcomeText ${LANG_DUTCH} "Deze installatiewizard leidt u door het installatieproces van Warzone 2100.\r\n\r\nHet is aangeraden om alle andere applicaties te sluiten alvorens verder te gaan met deze installatie. Dit maakt het mogelijk om de betreffende systeembestanden te vervangen zonder uw computer opnieuw op te starten" 
-  LangString WZ_GPL_NEXT ${LANG_DUTCH} "volgende"  
+  LangString WZ_GPL_NEXT ${LANG_DUTCH} "volgende"
+
 
   LangString TEXT_SecBase ${LANG_DUTCH} "Core files"
   LangString DESC_SecBase ${LANG_DUTCH} "The core files required to run Warzone 2100."
@@ -578,14 +580,15 @@ FunctionEnd
   LangString DESC_SecOriginalMod ${LANG_DUTCH} "Speel het spel met de originele 1.10 versie balans stats."
 
   ;German
-  LangString WZWelcomeText ${LANG_GERMAN} "Dieser Wizard wird Sie durch die Warzone-2100-Installation fГјhren.\r\n\r\nEs wird empfohlen sГ¤mtliche anderen Anwendungen zu schlieГџen, bevor Sie das Setup starten. Dies ermГ¶glicht es relevante Systemdateien zu aktualisieren, ohne neustarten zu mГјssen.\r\n\r\nWarzone 2100 ist zu 100% kostenlos, falls Sie dafГјr gezahlt haben, lassen Sie es uns wissen!\r\n\r\nKlicken Sie auf Weiter, um fortzufahren."
-  LangString WZ_GPL_NEXT ${LANG_GERMAN} "Weiter"
-  
-  LangString TEXT_SecBase ${LANG_GERMAN} "Kerndateien"
-  LangString DESC_SecBase ${LANG_GERMAN} "Die Kerndateien, die fГјr Warzone 2100 benГ¶tigt werden."
+  LangString WZWelcomeText ${LANG_GERMAN} "Dieser Wizard wird Sie durch die Warzone-2100-Installation fьhren.\r\n\r\nEs wird empfohlen sдmtliche anderen Anwendungen zu schlieЯen, bevor Sie das Setup starten. Dies ermцglicht es relevante Systemdateien zu aktualisieren, ohne neustarten zu mьssen.\r\n\r\nWarzone 2100 ist zu 100% kostenlos, falls Sie dafьr gezahlt haben, lassen Sie es uns wissen!\r\n\r\nKlicken Sie auf Weiter, um fortzufahren."
+  LangString WZ_GPL_NEXT ${LANG_GERMAN} "nдchste"
+
+
+  LangString TEXT_SecBase ${LANG_GERMAN} "Core files"
+  LangString DESC_SecBase ${LANG_GERMAN} "Die Kerndateien, die fьr Warzone 2100 benцtigt werden."
 
   LangString TEXT_SecOpenAL ${LANG_GERMAN} "OpenAL Bibliotheken"
-  LangString DESC_SecOpenAL ${LANG_GERMAN} "Bibliotheken fГјr OpenAL, ein freies Audio Interface. Implementation von Creative Labs."
+  LangString DESC_SecOpenAL ${LANG_GERMAN} "Bibliotheken fьr OpenAL, ein freies Audio Interface. Implementation von Creative Labs."
 
   LangString TEXT_SecMods ${LANG_GERMAN} "Mods"
   LangString DESC_SecMods ${LANG_GERMAN} "Verschiedene Mods."
@@ -597,53 +600,54 @@ FunctionEnd
   LangString DESC_SecFMVs_Eng ${LANG_GERMAN} "Die englischen Videos herunterladen und installieren (545 MiB)."
   
   LangString TEXT_SecFMVs_EngLo ${LANG_GERMAN} "English (LQ)"
-  LangString DESC_SecFMVs_EngLo ${LANG_GERMAN} "Die englischen Videos in geringer QualitГ¤t herunterladen und installieren (162 MiB)."
+  LangString DESC_SecFMVs_EngLo ${LANG_GERMAN} "Die englischen Videos in geringer Qualitдt herunterladen und installieren (162 MiB)."
   
   LangString TEXT_SecFMVs_Ger ${LANG_GERMAN} "German"
   LangString DESC_SecFMVs_Ger ${LANG_GERMAN} "Die deutschen Videos herunterladen und installieren (460 MiB)."
   
   LangString TEXT_SecNLS ${LANG_GERMAN} "Language files"
-  LangString DESC_SecNLS ${LANG_GERMAN} "UnterstГјtzung fГјr Sprachen auГџer Englisch (Deutsch inbegriffen)."
+  LangString DESC_SecNLS ${LANG_GERMAN} "Unterstьtzung fьr Sprachen auЯer Englisch (Deutsch inbegriffen)."
 
   LangString TEXT_SecNLS_WinFonts ${LANG_GERMAN} "WinFonts"
-  LangString DESC_SecNLS_WinFonts ${LANG_GERMAN} "Den Windows-Schriftarten-Ordner in den Suchpfad aufnehmen. Nutzen Sie dies, falls Sie spГ¤ter eigene Schriftarten in der Konfigurationsdatei eingeben wollen oder es zu Problemen mit der Standardschriftart kommt. Kann unter Vista und spГ¤ter langsam sein!"
+  LangString DESC_SecNLS_WinFonts ${LANG_GERMAN} "Den Windows-Schriftarten-Ordner in den Suchpfad aufnehmen. Nutzen Sie dies, falls Sie spдter eigene Schriftarten in der Konfigurationsdatei eingeben wollen oder es zu Problemen mit der Standardschriftart kommt. Kann unter Vista und spдter langsam sein!"
   
   LangString TEXT_SecOriginalMod ${LANG_GERMAN} "1.10 balance"
   LangString DESC_SecOriginalMod ${LANG_GERMAN} "Spielen Sie das Spiel mit dem Balancing aus der Originalversion 1.10."
 
   ;Russian
-  LangString WZWelcomeText ${LANG_RUSSIAN} "Р­С‚РѕС‚ РїРѕРјРѕС‰РЅРёРє СѓСЃС‚Р°РЅРѕРІРєРё РїРѕРјРѕР¶РµС‚ РІР°Рј СѓСЃС‚Р°РЅРѕРІРёС‚СЊ Warzone2100.\r\n\r\nРџРµСЂРµРґ РЅР°С‡Р°Р»РѕРј СЂРµРєРѕРјРµРЅРґСѓРµРј Р·Р°РєСЂС‹С‚СЊ РІСЃРµ РґСЂСѓРіРёРµ РїСЂРёР»РѕР¶РµРЅРёСЏ. Р­С‚Рѕ РїРѕР·РІРѕР»РёС‚ РѕР±РЅРѕРІРёС‚СЊ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РёРµ СЃРёСЃС‚РµРјРЅС‹Рµ С„Р°Р№Р»С‹ Р±РµР· РїРµСЂРµР·Р°РіСЂСѓР·РєРё СЃРёСЃС‚РµРјС‹.\r\n\r\nWarzone2100 100% Р±РµСЃРїР»Р°С‚РЅС‹Р№, РµСЃР»Рё РІС‹ Р·Р° РЅРµРіРѕ Р·Р°РїР»Р°С‚РёР»Рё СЃРѕРѕР±С‰РёС‚Рµ РЅР°Рј!\r\n\r\nРќР°Р¶РјРёС‚Рµ Р”Р°Р»РµРµ РґР»СЏ РїСЂРѕРґРѕР»Р¶РµРЅРёСЏ."
-  LangString WZ_GPL_NEXT ${LANG_RUSSIAN} "РЎРѕРіР»Р°СЃРµРЅ"
+  LangString WZWelcomeText ${LANG_RUSSIAN} "Этот помощник установки поможет вам установить Warzone2100.\r\n\r\nПеред началом рекомендуем закрыть все другие приложения. Это позволит обновить соответствующие системные файлы без перезагрузки системы.\r\n\r\nWarzone2100 100% бесплатный, если вы за него заплатили сообщите нам!\r\n\r\nНажмите Далее для продолжения."  
+  LangString WZ_GPL_NEXT ${LANG_RUSSIAN} "Согласен"
 
-  LangString TEXT_SecBase ${LANG_RUSSIAN} "Р‘Р°Р·РѕРІС‹Рµ С„Р°Р№Р»С‹"
-  LangString DESC_SecBase ${LANG_RUSSIAN} "Р¤Р°Р№Р»С‹ С‚СЂРµР±СѓРµРјС‹Рµ РґР»СЏ Р·Р°РїСѓСЃРєР° Warzone 2100."
 
-  LangString TEXT_SecOpenAL ${LANG_RUSSIAN} "Р‘РёР±Р»РёРѕС‚РµРєР° OpenAL"
-  LangString DESC_SecOpenAL ${LANG_RUSSIAN} "РЎРІРѕР±РѕРґРЅРѕ СЂР°СЃРїСЂРѕСЃС‚СЂР°РЅСЏРµРјС‹Р№ Р°РїРїР°СЂР°С‚РЅРѕ- РїСЂРѕРіСЂР°РјРјРЅС‹Р№ РёРЅС‚РµСЂС„РµР№СЃ (API) РґР»СЏ СЂР°Р±РѕС‚С‹ СЃ Р°СѓРґРёРѕРґР°РЅРЅС‹РјРё. Р’РµСЂСЃРёСЏ РѕС‚ Creative Labs."
+  LangString TEXT_SecBase ${LANG_RUSSIAN} "Базовые файлы"
+  LangString DESC_SecBase ${LANG_RUSSIAN} "Файлы требуемые для запуска Warzone 2100."
 
-  LangString TEXT_SecMods ${LANG_RUSSIAN} "РњРѕРґРёС„РёРєР°С†РёРё"
-  LangString DESC_SecMods ${LANG_RUSSIAN} "Р Р°Р·Р»РёС‡РЅС‹Рµ РјРѕРґРёС„РёРєР°С†РёРё РґР»СЏ Warzone 2100."
+  LangString TEXT_SecOpenAL ${LANG_RUSSIAN} "Библиотека OpenAL"
+  LangString DESC_SecOpenAL ${LANG_RUSSIAN} "Свободно распространяемый аппаратно- программный интерфейс (API) для работы с аудиоданными. Версия от Creative Labs."
 
-  LangString TEXT_SecFMVs ${LANG_RUSSIAN} "Р’РёРґРµРѕ"
-  LangString DESC_SecFMVs ${LANG_RUSSIAN} "РЎРєР°С‡Р°С‚СЊ Рё СѓСЃС‚Р°РЅРѕРІРёС‚СЊ РІРЅСѓС‚СЂРёРёРіСЂРѕРІС‹Рµ СЂРѕР»РёРєРё."
+  LangString TEXT_SecMods ${LANG_RUSSIAN} "Модификации"
+  LangString DESC_SecMods ${LANG_RUSSIAN} "Различные модификации для Warzone 2100."
 
-  LangString TEXT_SecFMVs_Eng ${LANG_RUSSIAN} "РђРЅРіР»РёР№СЃРєРёРµ"
-  LangString DESC_SecFMVs_Eng ${LANG_RUSSIAN} "РЎРєР°С‡Р°С‚СЊ Рё СѓСЃС‚Р°РЅРѕРІРёС‚СЊ РІРЅСѓС‚СЂРёРёРіСЂРѕРІС‹Рµ СЂРѕР»РёРєРё РЅР° Р°РЅРіР»РёР№СЃРєРѕРј СЏР·С‹РєРµ (545 MB)."
+  LangString TEXT_SecFMVs ${LANG_RUSSIAN} "Видео"
+  LangString DESC_SecFMVs ${LANG_RUSSIAN} "Скачать и установить внутриигровые ролики."
 
-  LangString TEXT_SecFMVs_EngLo ${LANG_RUSSIAN} "РђРЅРіР»РёР№СЃРєРёРµ (LQ)"
-  LangString DESC_SecFMVs_EngLo ${LANG_RUSSIAN} "РЎРєР°С‡Р°С‚СЊ Рё СѓСЃС‚Р°РЅРѕРІРёС‚СЊ РІРЅСѓС‚СЂРёРёРіСЂРѕРІС‹Рµ СЂРѕР»РёРєРё (РЅРёР·РєРѕРіРѕ РєР°С‡РµСЃС‚РІР°) РЅР° Р°РЅРіР»РёР№СЃРєРѕРј СЏР·С‹РєРµ (162 MB)."
+  LangString TEXT_SecFMVs_Eng ${LANG_RUSSIAN} "Английские"
+  LangString DESC_SecFMVs_Eng ${LANG_RUSSIAN} "Скачать и установить внутриигровые ролики на английском языке (545 MB)."
+  
+  LangString TEXT_SecFMVs_EngLo ${LANG_RUSSIAN} "Английские (LQ)"
+  LangString DESC_SecFMVs_EngLo ${LANG_RUSSIAN} "Скачать и установить внутриигровые ролики (низкого качества) на английском языке (162 MB)."
+  
+  LangString TEXT_SecFMVs_Ger ${LANG_RUSSIAN} "Немецкие"
+  LangString DESC_SecFMVs_Ger ${LANG_RUSSIAN} "Скачать и установить внутриигровые ролики на немецком языке (460 MB)."
+  
+  LangString TEXT_SecNLS ${LANG_RUSSIAN} "Языковые файлы"
+  LangString DESC_SecNLS ${LANG_RUSSIAN} "Поддержка Русского и других языков."
 
-  LangString TEXT_SecFMVs_Ger ${LANG_RUSSIAN} "РќРµРјРµС†РєРёРµ"
-  LangString DESC_SecFMVs_Ger ${LANG_RUSSIAN} "РЎРєР°С‡Р°С‚СЊ Рё СѓСЃС‚Р°РЅРѕРІРёС‚СЊ РІРЅСѓС‚СЂРёРёРіСЂРѕРІС‹Рµ СЂРѕР»РёРєРё РЅР° РЅРµРјРµС†РєРѕРј СЏР·С‹РєРµ (460 MB)."
+  LangString TEXT_SecNLS_WinFonts ${LANG_RUSSIAN} "WinШрифты"
+  LangString DESC_SecNLS_WinFonts ${LANG_RUSSIAN} "Задействовать папку шрифтов Windows при поиске. Помогает если есть проблемы с поставляемыми шрифтами. На Висте возможно замедление при загрузке!"
 
-  LangString TEXT_SecNLS ${LANG_RUSSIAN} "РЇР·С‹РєРѕРІС‹Рµ С„Р°Р№Р»С‹"
-  LangString DESC_SecNLS ${LANG_RUSSIAN} "РџРѕРґРґРµСЂР¶РєР° Р СѓСЃСЃРєРѕРіРѕ Рё РґСЂСѓРіРёС… СЏР·С‹РєРѕРІ."
-
-  LangString TEXT_SecNLS_WinFonts ${LANG_RUSSIAN} "WinРЁСЂРёС„С‚С‹"
-  LangString DESC_SecNLS_WinFonts ${LANG_RUSSIAN} "Р—Р°РґРµР№СЃС‚РІРѕРІР°С‚СЊ РїР°РїРєСѓ С€СЂРёС„С‚РѕРІ Windows РїСЂРё РїРѕРёСЃРєРµ. РџРѕРјРѕРіР°РµС‚ РµСЃР»Рё РµСЃС‚СЊ РїСЂРѕР±Р»РµРјС‹ СЃ РїРѕСЃС‚Р°РІР»СЏРµРјС‹РјРё С€СЂРёС„С‚Р°РјРё. РќР° Р’РёСЃС‚Рµ РІРѕР·РјРѕР¶РЅРѕ Р·Р°РјРµРґР»РµРЅРёРµ РїСЂРё Р·Р°РіСЂСѓР·РєРµ!"
-
-  LangString TEXT_SecOriginalMod ${LANG_RUSSIAN} "Р‘Р°Р»Р°РЅСЃ 1.10"
-  LangString DESC_SecOriginalMod ${LANG_RUSSIAN} "РРіСЂР°С‚СЊ РІ РёРіСЂСѓ СЃ Р±Р°Р»Р°РЅСЃРѕРј РѕС‚ РѕСЂРёРіРёРЅР°Р»СЊРЅРѕР№ РІРµСЂСЃРёРё 1.10."
+  LangString TEXT_SecOriginalMod ${LANG_RUSSIAN} "Баланс 1.10"
+  LangString DESC_SecOriginalMod ${LANG_RUSSIAN} "Играть в игру с балансом от оригинальной версии 1.10."
 
   ;Assign language strings to sections
   !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
