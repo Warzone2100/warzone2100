@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-05-18 21:53+0200\n"
+"POT-Creation-Date: 2011-05-19 05:46+0200\n"
 "PO-Revision-Date: 2011-05-05 20:23+0100\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone-dev@gna.org>\n"
@@ -13082,7 +13082,7 @@ msgstr "Das Spiel kann ohne Spielleiter nicht weitergehen."
 msgid "-->  QUIT  <--"
 msgstr "-->  BEENDEN  <--"
 
-#: src/init.cpp:392
+#: src/init.cpp:404
 #, c-format
 msgid ""
 "The required mod could not be loaded: %s\n"
@@ -14929,6 +14929,55 @@ msgstr " - %s gebaut"
 msgid "Version %s%s%s%s"
 msgstr "Version %s%s%s%s"
 
+#: po/custom/warzone2100.desktop.txt:1
+msgid "Postnuclear realtime strategy"
+msgstr "Postnukleare Echtzeitstrategie"
+
+#: po/custom/warzone2100.desktop.txt:2
+#: po/custom/mac-infoplist.txt:2
+msgid "Warzone 2100"
+msgstr "Morgendämmerung, 4. Juli, 2100"
+
+#: po/custom/warzone2100.desktop.txt:3
+msgid "Strategy Game"
+msgstr "Spielname"
+
+#: po/custom/mac-infoplist.txt:1
+msgid ""
+"Copyright © 1999-2004 Eidos Interactive.\n"
+"Copyright © 2005-2010 The Warzone 2100 Project"
+msgstr ""
+
+#: po/custom/mac-infoplist.txt:3
+#, fuzzy
+msgid "Warzone 2100 Map / Mod File"
+msgstr "Morgendämmerung, 4. Juli, 2100"
+
+#: po/custom/mac-infoplist.txt:4
+msgid "Warzone 2100 Campaign Mod File"
+msgstr ""
+
+# Das hat(te) Warzone damals schon, kA, ob noch nutzbar -Kreuvf
+#: po/custom/mac-infoplist.txt:5
+#, fuzzy
+msgid "Warzone 2100 Multiplayer Mod File"
+msgstr "Starte Mehrspieler-Voice-Chat"
+
+#: po/custom/mac-infoplist.txt:6
+#, fuzzy
+msgid "Warzone 2100 Global Mod File"
+msgstr "Morgendämmerung, 4. Juli, 2100"
+
+#: po/custom/mac-infoplist.txt:7
+#, fuzzy
+msgid "Warzone"
+msgstr "Morgendämmerung, 4. Juli, 2100"
+
+#: po/custom/mac-infoplist.txt:8
+#, fuzzy
+msgid "Warzone 2100 Music Mod File"
+msgstr "Morgendämmerung, 4. Juli, 2100"
+
 #~ msgid "Run in cheat mode"
 #~ msgstr "Laufe im Cheatmodus"
 
@@ -15277,15 +15326,6 @@ msgstr "Version %s%s%s%s"
 #~ msgid "Latin"
 #~ msgstr "Latein"
 
-#~ msgid "Warzone 2100"
-#~ msgstr "Morgendämmerung, 4. Juli, 2100"
-
-#~ msgid "Strategy Game"
-#~ msgstr "Spielname"
-
-#~ msgid "Postnuclear realtime strategy"
-#~ msgstr "Postnukleare Echtzeitstrategie"
-
 #, fuzzy
 #~ msgid "Phosphor Bomb Bay Manits VTOL"
 #~ msgstr "Phosphorbomben-Abwurfschacht"
@@ -15332,10 +15372,6 @@ msgstr "Version %s%s%s%s"
 #, fuzzy
 #~ msgid "Player %u found %u power in an oil drum"
 #~ msgstr "Sie haben %u Energie in einem Ölfass gefunden"
-
-# Das hat(te) Warzone damals schon, kA, ob noch nutzbar -Kreuvf
-#~ msgid "Start Multiplayer Audio"
-#~ msgstr "Starte Mehrspieler-Voice-Chat"
 
 #~ msgid "Stop Multiplayer Audio"
 #~ msgstr "Stoppe Mehrspieler-Voice-Chat"

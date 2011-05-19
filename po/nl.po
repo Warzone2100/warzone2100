@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-05-17 16:14+0200\n"
+"POT-Creation-Date: 2011-05-19 05:46+0200\n"
 "PO-Revision-Date: 2011-05-17 15:50+0100\n"
 "Last-Translator: Nino <nino_romans@hotmail.com>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
@@ -13039,7 +13039,7 @@ msgstr "Het spel kan niet verder zonder de host."
 msgid "-->  QUIT  <--"
 msgstr "-->  AFSLUITEN  <--"
 
-#: src/init.cpp:392
+#: src/init.cpp:404
 #, c-format
 msgid ""
 "The required mod could not be loaded: %s\n"
@@ -14898,6 +14898,50 @@ msgstr " - Gebouwd %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Versie %s%s%s%s"
+
+#: po/custom/warzone2100.desktop.txt:1
+msgid "Postnuclear realtime strategy"
+msgstr ""
+
+#: po/custom/warzone2100.desktop.txt:2
+#: po/custom/mac-infoplist.txt:2
+msgid "Warzone 2100"
+msgstr ""
+
+#: po/custom/warzone2100.desktop.txt:3
+#, fuzzy
+msgid "Strategy Game"
+msgstr "Spel opslaan"
+
+#: po/custom/mac-infoplist.txt:1
+msgid ""
+"Copyright © 1999-2004 Eidos Interactive.\n"
+"Copyright © 2005-2010 The Warzone 2100 Project"
+msgstr ""
+
+#: po/custom/mac-infoplist.txt:3
+msgid "Warzone 2100 Map / Mod File"
+msgstr ""
+
+#: po/custom/mac-infoplist.txt:4
+msgid "Warzone 2100 Campaign Mod File"
+msgstr ""
+
+#: po/custom/mac-infoplist.txt:5
+msgid "Warzone 2100 Multiplayer Mod File"
+msgstr ""
+
+#: po/custom/mac-infoplist.txt:6
+msgid "Warzone 2100 Global Mod File"
+msgstr ""
+
+#: po/custom/mac-infoplist.txt:7
+msgid "Warzone"
+msgstr ""
+
+#: po/custom/mac-infoplist.txt:8
+msgid "Warzone 2100 Music Mod File"
+msgstr ""
 
 #~ msgid " (modified and switched locally)"
 #~ msgstr " (lokaal gewijzigd en gewisseld)"

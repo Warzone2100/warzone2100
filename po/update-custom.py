@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 import json
 import codecs
-import ConfigParser
 import polib
 import glob
 import re
+
+from iniparse import INIConfig
 
 from os import makedirs
 from os.path import exists as pathexists, dirname
@@ -67,24 +68,21 @@ def pushMac(pFile, pofiles):
 def pullINI(pFile):
     result = {}
 
-    with codecs.open(pFile["file"], "r+b", "utf-8") as fp:
-        ini = ConfigParser.RawConfigParser()
-        ini.readfp(fp)
+    with codecs.open(pFile["file"], "r", "utf-8") as fp:
+        ini = INIConfig(fp)
 
         for (section, entry) in pFile["strings"]:
-            result["%s_%s" % (section, entry)] = ini.get(section, entry)
+            result["%s_%s" % (section, entry)] = ini[section][entry]
 
     return result
 
 
 def pushINI(pFile, pofiles):
-    with codecs.open(pFile["file"], "r+b", "utf-8") as fp:
-        ini = ConfigParser.RawConfigParser()
-        ini.optionxform = str
-        ini.readfp(fp)
+    with codecs.open(pFile["file"], "r", "utf-8") as fp:
+        ini = INIConfig(fp)
 
         for (section, entry) in pFile["strings"]:
-            value = ini.get(section, entry)
+            value = ini[section][entry]
 
             for lang, po in pofiles.iteritems():
                 poEntry = po.find(value)
@@ -92,10 +90,10 @@ def pushINI(pFile, pofiles):
                 if (poEntry and
                   not "fuzzy" in poEntry.flags and
                   poEntry.msgstr != ""):
-                    ini.set(secion, "%s[%s]" % (entry, lang), poEntry.msgstr)
+                    ini[section]["%s[%s]" % (entry, lang)] = poEntry.msgstr
 
-    with codecs.open(pFile["file"], "w+b", "utf-8") as wFp:
-        ini.write(wFp)
+        with codecs.open(pFile["file"], "w+b", "utf-8") as wFp:
+            wFp.write(unicode(ini))
 
 
 if __name__ == '__main__':

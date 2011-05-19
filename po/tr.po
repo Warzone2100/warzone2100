@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-05-18 17:47+0200\n"
+"POT-Creation-Date: 2011-05-19 05:46+0200\n"
 "PO-Revision-Date: 2011-05-18 09:52+0200\n"
 "Last-Translator: Ayhan GÖRGÜLÜ <ayhangorgulu45@gmail.com>\n"
 "Language-Team: Turkey <warzone-dev@gna.org>\n"
@@ -13066,7 +13066,7 @@ msgstr "Oyun Kurucu olmadan devam edemez."
 msgid "-->  QUIT  <--"
 msgstr "-->  ÇIKIŞ  <--"
 
-#: src/init.cpp:392
+#: src/init.cpp:404
 #, c-format
 msgid ""
 "The required mod could not be loaded: %s\n"
@@ -14913,6 +14913,52 @@ msgstr " - %s İnşa"
 msgid "Version %s%s%s%s"
 msgstr "Sürüm %s%s%s%s"
 
+#: po/custom/warzone2100.desktop.txt:1
+msgid "Postnuclear realtime strategy"
+msgstr ""
+
+#: po/custom/warzone2100.desktop.txt:2
+#: po/custom/mac-infoplist.txt:2
+msgid "Warzone 2100"
+msgstr ""
+
+#: po/custom/warzone2100.desktop.txt:3
+#, fuzzy
+msgid "Strategy Game"
+msgstr "Oyunu Kaydet"
+
+#: po/custom/mac-infoplist.txt:1
+msgid ""
+"Copyright © 1999-2004 Eidos Interactive.\n"
+"Copyright © 2005-2010 The Warzone 2100 Project"
+msgstr ""
+
+#: po/custom/mac-infoplist.txt:3
+msgid "Warzone 2100 Map / Mod File"
+msgstr ""
+
+#: po/custom/mac-infoplist.txt:4
+msgid "Warzone 2100 Campaign Mod File"
+msgstr ""
+
+# Das hat(te) Warzone damals schon, kA, ob noch nutzbar -Ayhan
+#: po/custom/mac-infoplist.txt:5
+#, fuzzy
+msgid "Warzone 2100 Multiplayer Mod File"
+msgstr "Çok Oyunculu Sesi Başlat"
+
+#: po/custom/mac-infoplist.txt:6
+msgid "Warzone 2100 Global Mod File"
+msgstr ""
+
+#: po/custom/mac-infoplist.txt:7
+msgid "Warzone"
+msgstr ""
+
+#: po/custom/mac-infoplist.txt:8
+msgid "Warzone 2100 Music Mod File"
+msgstr ""
+
 #~ msgid "Run in cheat mode"
 #~ msgstr "Sohbet modunda devam ettir"
 
@@ -15320,10 +15366,6 @@ msgstr "Sürüm %s%s%s%s"
 
 #~ msgid "Player %u found %u power in an oil drum"
 #~ msgstr "Oyuncu %u , %u varil enerji buldu"
-
-# Das hat(te) Warzone damals schon, kA, ob noch nutzbar -Ayhan
-#~ msgid "Start Multiplayer Audio"
-#~ msgstr "Çok Oyunculu Sesi Başlat"
 
 #~ msgid "Stop Multiplayer Audio"
 #~ msgstr "Çok Oyunculu Sesi Durdur"

@@ -8,10 +8,10 @@
         ["Desktop Entry", "GenericName"],
         ["Desktop Entry", "Comment"]]
     },
-    {"push": true,
+    {"push": false,
      "type": "mac",
      "file": "../macosx/Resources/wzlocal/English.lproj/InfoPlist.strings",
-     "output": "mac-strings.txt",
+     "output": "mac-infoplist.txt",
      "pushpath": "../macosx/Resources/wzlocal/%s.lproj/InfoPlist.strings",
      "strings": [
     	["CFBundleName", false],

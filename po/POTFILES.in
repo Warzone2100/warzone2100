@@ -158,6 +158,7 @@ lib/framework/treap.cpp
 lib/framework/trig.cpp
 lib/framework/utf.cpp
 lib/framework/wzapp.cpp
+lib/framework/wzapp_moc.cpp
 lib/gamelib/anim.cpp
 lib/gamelib/animobj.cpp
 lib/gamelib/gtime.cpp
@@ -316,3 +317,5 @@ src/warcam.cpp
 src/warzoneconfig.cpp
 src/wavecast.cpp
 src/wrappers.cpp
+po/custom/warzone2100.desktop.txt
+po/custom/mac-infoplist.txt
