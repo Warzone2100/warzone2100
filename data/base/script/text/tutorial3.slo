@@ -10,32 +10,26 @@ private INT tutState;
 private	INT	dpMovedCount;
 public	int	initialPowerValue;	//initial power level
 
-// Seemingly unused translateable strings
-// m_msg14	_("Now left click the Viper Body")
-// m_msg15	_("Select the Vehicle Propulsion icon")
-// m_msge3	_("Presently unused")
-
 //components
 public	SENSOR				defaultSensor;
-public	BODY				viperBody;		
-public	BODY				howitzerBody;	
-public	BODY				missileBody;		
-public	BODY				trikeBody;		
-public	BODY				buggyBody;		
-public	BODY				babaBody;		
+public	BODY				viperBody;
+public	BODY				howitzerBody;
+public	BODY				missileBody;
+public	BODY				trikeBody;
+public	BODY				buggyBody;
+public	BODY				babaBody;
 
-public	CONSTRUCT			spade;			
+public	CONSTRUCT			spade;
 
-public	PROPULSION			wheeledProp;		
-public	PROPULSION			trackProp;		
-public	PROPULSION			babaProp;		
+public	PROPULSION			wheeledProp;
+public	PROPULSION			trackProp;
+public	PROPULSION			babaProp;
 
 private	DROID				selDroid;	//selected droid
-public	STRUCTURESTAT		powerGen;		
-public	STRUCTURESTAT		oilDerrick;		
+public	STRUCTURESTAT		powerGen;
+public	STRUCTURESTAT		oilDerrick;
 public	STRUCTURE			commandCentre;
 public	STRUCTURE			factoryStruc, researchStruc;
-
 
 public	FEATURE			res1;
 private	FEATURE				hiddenArtefact;
@@ -43,99 +37,92 @@ public	FEATURESTAT			crate;
 public		int		art1X, art1Y;
 public		INTMESSAGE	art1Msg;
 
-public	STRUCTURESTAT		research;		
+public	STRUCTURESTAT		research;
 
 public	RESEARCHSTAT			artefact;
-public	STRUCTURESTAT		factory;			
+public	STRUCTURESTAT		factory;
 public	WEAPON				mg;
-
 
 public	SOUND				SND_ARTIFACT_DIS;
 
 public	SOUND		SND_TUT1;
-public	SOUND		SND_TUT2;		   
-public	SOUND		SND_TUT3;		   
-public	SOUND		SND_TUT4;		   
-public	SOUND		SND_TUT5;		   
-public	SOUND		SND_TUT6;		   
-public	SOUND		SND_TUT7;		   
-public	SOUND		SND_TUT8;		   
+public	SOUND		SND_TUT2;
+public	SOUND		SND_TUT3;
+public	SOUND		SND_TUT4;
+public	SOUND		SND_TUT5;
+public	SOUND		SND_TUT6;
+public	SOUND		SND_TUT7;
+public	SOUND		SND_TUT8;
 public	SOUND		SND_TUT9;
-public	SOUND		SND_TUT10;		   
-public	SOUND		SND_TUT11;		   
-public	SOUND		SND_TUT12;		   
-public	SOUND		SND_TUT13;		   
-public	SOUND		SND_TUT14;		   
-public	SOUND		SND_TUT15;		   
-public	SOUND		SND_TUT16;		   
-public	SOUND		SND_TUT17;		   
-public	SOUND		SND_TUT18;		   
-public	SOUND		SND_TUT19;		   
-public	SOUND		SND_TUT20;		   
-public	SOUND		SND_TUT21;		   
-public	SOUND		SND_TUT22;		   
-public	SOUND		SND_TUT23;		   
-public	SOUND		SND_TUT24;		   
-public	SOUND		SND_TUT25;		   
-//public	SOUND		SND_TUT26;		   
-//public	SOUND		SND_TUT27;		   
-public	SOUND		SND_TUT28;		   
-public	SOUND		SND_TUT29;		   
-public	SOUND		SND_TUT30;		   
-public	SOUND		SND_TUT31;		   
-public	SOUND		SND_TUT32;		   
-public	SOUND		SND_TUT33;		   
-public	SOUND		SND_TUT34;		   
-public	SOUND		SND_TUT35;		   
-public	SOUND		SND_TUT36;		   
-public	SOUND		SND_TUT37;		   
-public	SOUND	   SND_TUT38;		   
-public	SOUND	SND_TUT39;	   
-public	SOUND	SND_TUT40;	   
-public	SOUND	SND_TUT41;		   
-public	SOUND	SND_TUT42;		   
-public	SOUND	SND_TUT43;		   
-public	SOUND	SND_TUT44;		   
-public	SOUND	SND_TUT45;		   
-public	SOUND	SND_TUT46;		   
-public	SOUND	SND_TUT47;		   
-public	SOUND	SND_TUT48;		   
-public	SOUND	SND_TUT49;		   
-public	SOUND	SND_TUT50;		   
-public	SOUND	SND_TUT51;		   
-public	SOUND	SND_TUT52;		   
-public	SOUND	SND_TUT53;		   
-public	SOUND	SND_TUT54;		   
-public	SOUND	SND_TUT55;		   
-public	SOUND	SND_TUT56;		   
-public	SOUND	SND_TUT57;		   
-public	SOUND	SND_TUT58;		   
-public	SOUND	SND_TUT59;		   
-public	SOUND	SND_TUT60;		   
-public	SOUND	SND_TUT61;		   
-public	SOUND	SND_TUT62;		   
-public	SOUND	SND_TUT63;		   
-public	SOUND	SND_TUT64;		   
-public	SOUND	SND_TUT65;		   
-public	SOUND	SND_TUT66;		   
-public	SOUND	SND_TUT67;		   
-public	SOUND	SND_TUT68;		   
-public	SOUND	SND_TUT69;		   
-public	SOUND	SND_TUT70;		   
-public	SOUND	SND_TUT71;		   
-public	SOUND	SND_TUT72;		   
-public	SOUND	SND_TUT73;		   
-public	SOUND	SND_TUT74;		   
-public	SOUND	SND_TUT75;		   
-//public	SOUND	SND_TUT76;		   
-//public	SOUND	SND_TUT77;		   
-public	SOUND	SND_TUT78;		   
-//public	SOUND	SND_TUT79;		   
-//public	SOUND	SND_TUT80;		   
-public	SOUND	SND_TUT81;		   
-public	SOUND	SND_TUT82;		   
-public	SOUND	SND_TUT83;		   
-public	SOUND	SND_TUT84;		   
+public	SOUND		SND_TUT10;
+public	SOUND		SND_TUT11;
+public	SOUND		SND_TUT12;
+public	SOUND		SND_TUT13;
+public	SOUND		SND_TUT14;
+public	SOUND		SND_TUT15;
+public	SOUND		SND_TUT16;
+public	SOUND		SND_TUT17;
+public	SOUND		SND_TUT18;
+public	SOUND		SND_TUT19;
+public	SOUND		SND_TUT20;
+public	SOUND		SND_TUT21;
+public	SOUND		SND_TUT22;
+public	SOUND		SND_TUT23;
+public	SOUND		SND_TUT24;
+public	SOUND		SND_TUT25;
+public	SOUND		SND_TUT28;
+public	SOUND		SND_TUT29;
+public	SOUND		SND_TUT30;
+public	SOUND		SND_TUT31;
+public	SOUND		SND_TUT32;
+public	SOUND		SND_TUT33;
+public	SOUND		SND_TUT34;
+public	SOUND		SND_TUT35;
+public	SOUND		SND_TUT36;
+public	SOUND		SND_TUT37;
+public	SOUND	   SND_TUT38;
+public	SOUND	SND_TUT39;
+public	SOUND	SND_TUT40;
+public	SOUND	SND_TUT41;
+public	SOUND	SND_TUT42;
+public	SOUND	SND_TUT43;
+public	SOUND	SND_TUT44;
+public	SOUND	SND_TUT45;
+public	SOUND	SND_TUT46;
+public	SOUND	SND_TUT47;
+public	SOUND	SND_TUT48;
+public	SOUND	SND_TUT49;
+public	SOUND	SND_TUT50;
+public	SOUND	SND_TUT51;
+public	SOUND	SND_TUT52;
+public	SOUND	SND_TUT53;
+public	SOUND	SND_TUT54;
+public	SOUND	SND_TUT55;
+public	SOUND	SND_TUT56;
+public	SOUND	SND_TUT57;
+public	SOUND	SND_TUT58;
+public	SOUND	SND_TUT59;
+public	SOUND	SND_TUT60;
+public	SOUND	SND_TUT61;
+public	SOUND	SND_TUT62;
+public	SOUND	SND_TUT63;
+public	SOUND	SND_TUT64;
+public	SOUND	SND_TUT65;
+public	SOUND	SND_TUT66;
+public	SOUND	SND_TUT67;
+public	SOUND	SND_TUT68;
+public	SOUND	SND_TUT69;
+public	SOUND	SND_TUT70;
+public	SOUND	SND_TUT71;
+public	SOUND	SND_TUT72;
+public	SOUND	SND_TUT73;
+public	SOUND	SND_TUT74;
+public	SOUND	SND_TUT75;
+public	SOUND	SND_TUT78;
+public	SOUND	SND_TUT81;
+public	SOUND	SND_TUT82;
+public	SOUND	SND_TUT83;
+public	SOUND	SND_TUT84;
 
 //proximity messages
 public	SOUND				SND_GEN_ART_HERE;
@@ -219,7 +206,6 @@ event manufactureIconChosen;
 event delivPointMoved;
 event buildSelectedFactory;
 event firstDroidBuilt;
-//event videoDone; // not used.. see end of file
 
 // -------------------------------------------------------------
 /* Main entry event - performs setup and the like */
@@ -253,7 +239,6 @@ event	setupEvent(CALL_GAMEINIT)
 	removeReticuleButton(DESIGN,TRUE);
 	removeReticuleButton(BUILD,TRUE);
 	removeReticuleButton(OPTIONS,TRUE);
-
 
 	// Set up our initial power level - declared in .slo file
 	setPowerLevel(initialPowerValue,0);
@@ -338,6 +323,7 @@ event	truckSelected(inactive)
 	// Switch off this event - we don't need it anymore
 	setEventTrigger(truckSelected,inactive);
 }
+
 // -------------------------------------------------------------
 // What to do when the resource extractor has been built
 event	derrickBuilt(CALL_RESEX_BUILT)
@@ -379,6 +365,7 @@ event	derrickBuilt(CALL_RESEX_BUILT)
 	// Set it off flashing
 	flashOn(IDRET_BUILD);
 }
+
 // -------------------------------------------------------------
 // Fires off when player has clicked on the build icon
 event	buildIconChosen(buildlistTrig)
@@ -398,6 +385,7 @@ event	buildIconChosen(buildlistTrig)
 
 	setEventTrigger(buildItemChosen,buildgridTrig);
 }
+
 // -------------------------------------------------------------
 // Fires off when we've clicked on the item in the build menu
 event	buildItemChosen(inactive)
@@ -413,6 +401,7 @@ event	buildItemChosen(inactive)
 	// Close event
 	setEventTrigger(buildItemChosen,inactive);
 }
+
 // -------------------------------------------------------------
 // Fires off when power station is being built
 event	tellToHelpBuild(beingBuilt)
@@ -446,6 +435,7 @@ event	otherUnitSelected(inactive)
 	setEventTrigger(otherUnitSelected,inactive);
 
 }
+
 // -------------------------------------------------------------
 event	correctUnit(inactive)
 {
@@ -462,6 +452,7 @@ event	correctUnit(inactive)
 	// And close this one
 	setEventTrigger(correctUnit,inactive);
 }
+
 // -------------------------------------------------------------
 event	helpedToBuild(inactive)
 {
@@ -541,6 +532,7 @@ event	powerGenBuilt(CALL_POWERGEN_BUILT)
 	// And kill this event
 	setEventTrigger(powerGenBuilt,inactive);
 }
+
 // -------------------------------------------------------------
 event	atArtefactSite(inactive)
 {
@@ -558,6 +550,7 @@ event	atArtefactSite(inactive)
 	// Shut this event
 	setEventTrigger(atArtefactSite,inactive);
 }
+
 // -------------------------------------------------------------
 event	buildResearchCentre(inactive)
 {
@@ -594,6 +587,7 @@ event	buildResearchCentre(inactive)
 	// close this event
 	setEventTrigger(buildResearchCentre,inactive);
 }
+
 // -------------------------------------------------------------
 event	buildIconChosenResearch(inactive)
 {
@@ -609,6 +603,7 @@ event	buildIconChosenResearch(inactive)
 
 	setEventTrigger(buildIconChosenResearch,inactive);
 }
+
 // -------------------------------------------------------------
 event	rfUnderConstruction(researchBeingBuilt)
 {
@@ -633,6 +628,7 @@ event	rfUnderConstruction(researchBeingBuilt)
 	// close event
 	setEventTrigger(rfUnderConstruction,inactive);
 }
+
 // -------------------------------------------------------------
 // PART THREE - they've built a research centre!!! Whahey!
 // -------------------------------------------------------------
@@ -665,6 +661,7 @@ event	researchCentreBuilt(CALL_RESEARCH_BUILT)
 	// Kill this event
 	setEventTrigger(researchCentreBuilt,inactive);
 }
+
 // -------------------------------------------------------------
 event	researchIconSelected(inactive)
 {
@@ -684,6 +681,7 @@ event	researchIconSelected(inactive)
 	// Close this one
 	setEventTrigger(researchIconSelected,inactive);
 }
+
 // -------------------------------------------------------------
 event	artefactChosen(inactive)
 {
@@ -700,6 +698,7 @@ event	artefactChosen(inactive)
 	// Close event...
 	setEventTrigger(artefactChosen,inactive);
 }
+
 // -------------------------------------------------------------
 event	researchCompleted(CALL_RESEARCHCOMPLETED, ref researchDone, ref structure, -1)
 {
@@ -716,7 +715,7 @@ event	researchCompleted(CALL_RESEARCHCOMPLETED, ref researchDone, ref structure,
 
 	// Remove intel button
 	removeReticuleButton(INTELMAP,TRUE);
-												 
+
 	// Add the design button
 	addReticuleButton(DESIGN);
 
@@ -735,6 +734,7 @@ event	researchCompleted(CALL_RESEARCHCOMPLETED, ref researchDone, ref structure,
 	// Kill this event..
 	setEventTrigger(researchCompleted,inactive);
 }
+
 // -------------------------------------------------------------
 event	designSelected(inactive)
 {
@@ -751,6 +751,7 @@ event	designSelected(inactive)
 	// Close this one
 	setEventTrigger(designSelected,inactive);
 }
+
 // -------------------------------------------------------------
 // they're going to clikc on the vehicle body icon
 event design1(newdesTrig)
@@ -790,7 +791,6 @@ event design5(bodyTrig2)
 	setEventTrigger(design5, inactive);
 }
 
-
 event design7(propTrig2)
 {
 	tutState = 27;
@@ -811,11 +811,9 @@ event design3(turretTrig2)
 	setEventTrigger(design3, inactive);
 }
 
-
 // -------------------------------------------------------------
 // PART FOUR - they've designed their first droid!!!
 // -------------------------------------------------------------
-
 
 // -------------------------------------------------------------
 event	droidDesigned(CALL_DROIDDESIGNED)
@@ -883,6 +881,7 @@ event	droidCreated(inactive)
 	// Kill this event
 	setEventTrigger(droidCreated,inactive);
 }
+
 // -------------------------------------------------------------
 event	buildSelectedFactory(inactive)
 {	
@@ -900,6 +899,7 @@ event	buildSelectedFactory(inactive)
 	setEventTrigger(buildSelectedFactory,inactive);
 
 }
+
 // -------------------------------------------------------------
 event	buildIconChosenFactory(inactive)
 {
@@ -916,6 +916,7 @@ event	buildIconChosenFactory(inactive)
 	// kill event
 	setEventTrigger(buildIconChosenFactory,inactive);
 }
+
 // -------------------------------------------------------------
 event	factoryChosen(factoryBeingBuilt)
 {
@@ -941,6 +942,7 @@ event	factoryChosen(factoryBeingBuilt)
 	// Kill event
 	setEventTrigger(factoryChosen,inactive);
 }
+
 // -------------------------------------------------------------
 event	delivPointMoved(trigDeliv)
 {
@@ -950,9 +952,8 @@ event	delivPointMoved(trigDeliv)
 		dpMovedCount = 1;
 		playSound(SND_TUT45,0);
 		tagConsoleText(_("Now click where you want to position the delivery point"), 0);
-
 	}
-	else 
+	else
 	{
 		if(tutState==33)
 		{
@@ -961,6 +962,7 @@ event	delivPointMoved(trigDeliv)
 		}
 	}
 }
+
 // -------------------------------------------------------------
 event	factoryBuilt(CALL_FACTORY_BUILT)
 {
@@ -997,6 +999,7 @@ event	factoryBuilt(CALL_FACTORY_BUILT)
 	// Kill this event
 	setEventTrigger(factoryBuilt,inactive);
 }
+
 // -------------------------------------------------------------
 event	manufactureChosen(inactive)
 {
@@ -1018,6 +1021,7 @@ event	manufactureChosen(inactive)
 	// Kill this one...
 	setEventTrigger(manufactureChosen,inactive);
 }
+
 // -------------------------------------------------------------
 event	manufactureIconChosen(inactive)
 {
@@ -1032,6 +1036,7 @@ event	manufactureIconChosen(inactive)
 
 	setEventTrigger(manufactureIconChosen,inactive);
 }
+
 // -------------------------------------------------------------
 // PART FIVE - They've built their first droid.
 // -------------------------------------------------------------
@@ -1040,31 +1045,14 @@ event	firstDroidBuilt(droidBuilt)
 {
 	tutState = 37;
 
-
 	// Remove Button
 	removeReticuleButton(MANUFACTURE,TRUE);
 
-	//playVideo((TEXTSTRING)"factory.ogg", NULLSTRING); // we don't have cut-scenes, to this would cause the bare sky-box to be shown
-	
-	//#REGION copied from videoDone(...)
 	pause(20);
 	playSound(SND_TUT81,0);
 	addConsoleText(_("Congratulations commander - you are ready for your first mission"), 0);
 	pause(80);
 	gameOver(TRUE);
-	//#END-REGION
 	
 	setEventTrigger(firstDroidBuilt,inactive);
 }
-/* not called anymore
-// the video is over
-event	videoDone(CALL_VIDEO_QUIT)
-{
-	pause(20);
-	playSound(SND_TUT81,0);
-	addConsoleText(_("Congratulations commander - you are ready for your first mission"), 0);
-	pause(80);
-	gameOver(TRUE);
-	setEventTrigger(videoDone,inactive);
-}
-//*/

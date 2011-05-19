@@ -28,7 +28,6 @@ trigger now(wait, 0);
 trigger nextSoundPause(every, 5);
 trigger checkTime(every, 20);
 
-
 event initStage;
 event playStageSound;
 event timeReset;
@@ -36,7 +35,6 @@ event timeReset;
 event start(CALL_GAMEINIT)
 {
 	setEventTrigger(initStage, now);
-	//currSoundSet = -1;
 }
 
 
@@ -84,23 +82,12 @@ event playStageSound(inactive)
 {
 	if (currStage >= 0)
 	{
-
 		//don't bother if timer not set
 		if ((timeLeft <= stageTime[currSoundSet][currStage]) and (timeLeft != 0))
 		{
 			playSound(stageSound[currSoundSet][currStage], player);
 			currStage = currStage - 1;
 		}
-/*
-		else if ( currStage < (numStages[currSoundSet] - 1) )
-		{
-			if (timeLeft > stageTime[currSoundSet][currStage + 1])
-			{
-				setEventTrigger(playStageSound, inactive);
-				setEventTrigger(initStage, now);
-			}
-		}
-*/
 	}
 }
 
