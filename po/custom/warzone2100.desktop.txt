@@ -1,0 +1,3 @@
+_("Postnuclear realtime strategy")
+_("Warzone 2100")
+_("Strategy Game")
