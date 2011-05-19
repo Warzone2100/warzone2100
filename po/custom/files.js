@@ -11,7 +11,7 @@
     {"push": true,
      "type": "mac",
      "file": "../macosx/Resources/wzlocal/English.lproj/InfoPlist.strings",
-     "output": "mac-installer.txt",
+     "output": "mac-strings.txt",
      "pushpath": "../macosx/Resources/wzlocal/%s.lproj/InfoPlist.strings",
      "strings": [
     	["CFBundleName", false],
