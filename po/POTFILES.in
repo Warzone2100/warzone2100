@@ -158,7 +158,6 @@ lib/framework/treap.cpp
 lib/framework/trig.cpp
 lib/framework/utf.cpp
 lib/framework/wzapp.cpp
-lib/framework/wzapp_moc.cpp
 lib/gamelib/anim.cpp
 lib/gamelib/animobj.cpp
 lib/gamelib/gtime.cpp
