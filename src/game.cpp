@@ -4353,6 +4353,10 @@ static bool loadSaveDroidPointers(const QString &pFileName, DROID **ppsCurrentDr
 		int id = ini.value("id").toInt();
 
 		for (psDroid = ppsCurrentDroidLists[player]; psDroid && psDroid->id != id; psDroid = psDroid->psNext) {}
+		if (!psDroid)
+		{
+			for (psDroid = mission.apsDroidLists[player]; psDroid && psDroid->id != id; psDroid = psDroid->psNext) {}
+		}
 		ASSERT_OR_RETURN(false, psDroid, "Droid %d not found", id);
 
 		for (int j = 0; j < DROID_MAXWEAPS; j++)
