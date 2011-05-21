@@ -2515,7 +2515,7 @@ static bool _intAddMissionResult(bool result, bool bPlaySuccess)
 			widgAddButton(psWScreen, &sButInit);
 
 			// automatically save the game to be able to restart a mission
-			saveGame((char *)"savegame/Autosave.gam", GTYPE_SAVE_START);
+			saveGame((char *)"savegames/Autosave.gam", GTYPE_SAVE_START);
 		}
 	}
 	else
