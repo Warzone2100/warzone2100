@@ -2098,6 +2098,11 @@ void actionUpdateDroid(DROID *psDroid)
 	case DACTION_MOVETODROIDREPAIR:
 	{
 		// moving to repair a droid
+		if (!psDroid->psActionTarget[0])
+		{
+			psDroid->action = DACTION_NONE;
+			return;
+		}
 		const int xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psDroid->psActionTarget[0]->pos.x;
 		const int ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psDroid->psActionTarget[0]->pos.y;
 		if ( xdiff*xdiff + ydiff*ydiff < REPAIR_RANGE )

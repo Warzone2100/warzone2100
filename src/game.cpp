@@ -4355,20 +4355,17 @@ static bool loadSaveDroidPointers(const QString &pFileName, DROID **ppsCurrentDr
 		for (psDroid = ppsCurrentDroidLists[player]; psDroid && psDroid->id != id; psDroid = psDroid->psNext) {}
 		ASSERT_OR_RETURN(false, psDroid, "Droid %d not found", id);
 
-		for (int j = 0; j < psDroid->numWeaps; j++)
+		for (int j = 0; j < DROID_MAXWEAPS; j++)
 		{
 			objTrace(psDroid->id, "weapon %d, nStat %d", j, psDroid->asWeaps[j].nStat);
-			if (psDroid->asWeaps[j].nStat > 0)
+			if (ini.contains("actionTarget/" + QString::number(j) + "/id"))
 			{
-				if (ini.contains("actionTarget/" + QString::number(j) + "/id"))
-				{
-					int tid = ini.value("actionTarget/" + QString::number(j) + "/id", -1).toInt();
-					int tplayer = ini.value("actionTarget/" + QString::number(j) + "/player", -1).toInt();
-					OBJECT_TYPE ttype = (OBJECT_TYPE)ini.value("actionTarget/" + QString::number(j) + "/type", 0).toInt();
-					ASSERT(tid >= 0 && tplayer >= 0, "Bad ID");
-					setSaveDroidActionTarget(psDroid, getBaseObjFromData(tid, tplayer, ttype), j);	 // TODO optimise using tplayer and ttype
-					ASSERT(psDroid->psActionTarget[j], "Failed to find action target");
-				}
+				int tid = ini.value("actionTarget/" + QString::number(j) + "/id", -1).toInt();
+				int tplayer = ini.value("actionTarget/" + QString::number(j) + "/player", -1).toInt();
+				OBJECT_TYPE ttype = (OBJECT_TYPE)ini.value("actionTarget/" + QString::number(j) + "/type", 0).toInt();
+				ASSERT(tid >= 0 && tplayer >= 0, "Bad ID");
+				setSaveDroidActionTarget(psDroid, getBaseObjFromData(tid, tplayer, ttype), j);	 // TODO optimise using tplayer and ttype
+				ASSERT(psDroid->psActionTarget[j], "Failed to find action target");
 			}
 		}
 		if (ini.contains("target/id"))
