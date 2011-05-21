@@ -2727,7 +2727,7 @@
 				43C18FA6114FF38B0028741B /* upnpreplyparse.h */,
 			);
 			name = "MiniUPnPc sources";
-			path = ../lib/netplay/miniupnpc;
+			path = ../3rdparty/miniupnpc;
 			sourceTree = SOURCE_ROOT;
 		};
 		43C3B967118BE7EC000BBE59 /* lib */ = {
