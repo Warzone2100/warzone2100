@@ -1,6 +1,6 @@
 SUBDIRS = \
 	  win32 \
-	  3rdparty \
+	  3rdparty/miniupnpc \
 	  lib/framework \
 	  lib/exceptionhandler \
 	  lib/script \
