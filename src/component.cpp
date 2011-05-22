@@ -992,7 +992,6 @@ void displayComponentButtonObject(DROID *psDroid, Vector3i *Rotation, Vector3i *
 void displayComponentObject(DROID *psDroid)
 {
 	Vector3i	position, rotation;
-	SDWORD		frame;
 	UDWORD	tileX,tileY;
 	MAPTILE	*psTile;
 	Spacetime st = interpolateObjectSpacetime(psDroid, graphicsTime);
@@ -1060,9 +1059,8 @@ void displayComponentObject(DROID *psDroid)
 			psTile = mapTile(tileX,tileY);
 			if (terrainType(psTile) != TER_WATER)
 			{
-				frame = gameTime/BLIP_ANIM_DURATION + psDroid->id; //visible[selectedPlayer];
+				int frame = gameTime/BLIP_ANIM_DURATION + psDroid->id % 8192; // de-sync the blip effect, but don't overflow the int
 				pie_Draw3DShape(getImdFromIndex(MI_BLIP), frame, 0, WZCOL_WHITE, pie_ADDITIVE, psDroid->visible[selectedPlayer] / 2);
-				/* set up all the screen coords stuff - need to REMOVE FROM THIS LOOP */
 			}
 		}
 	}
