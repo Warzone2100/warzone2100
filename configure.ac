@@ -417,7 +417,6 @@ AC_CONFIG_FILES([Makefile
 		pkg/nsis/Makefile
 		win32/Makefile
 		tests/Makefile
-		3rdparty/Makefile
 		3rdparty/miniupnpc/Makefile
 		lib/framework/Makefile
 		lib/exceptionhandler/Makefile
