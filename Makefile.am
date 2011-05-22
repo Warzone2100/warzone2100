@@ -1,5 +1,6 @@
 SUBDIRS = \
 	  win32 \
+	  3rdparty \
 	  lib/framework \
 	  lib/exceptionhandler \
 	  lib/script \

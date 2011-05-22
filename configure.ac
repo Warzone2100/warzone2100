@@ -396,6 +396,9 @@ WZ_CPPFLAGS="${WZ_CPPFLAGS} -DWZ_DATADIR=\"\\\"\${datadir}/\${PACKAGE}\\\"\""
 WZ_CPPFLAGS="${WZ_CPPFLAGS} -DLOCALEDIR=\"\\\"\${localedir}\\\"\""
 WZ_CPPFLAGS="${WZ_CPPFLAGS} -I\$(top_srcdir)"
 
+# 3rdparty libs
+WZ_CPPFLAGS="${WZ_CPPFLAGS} -I\$(top_srcdir)/3rdparty"
+
 
 AC_SUBST([WZ_CPPFLAGS], [${WZ_CPPFLAGS}])
 AC_SUBST([WZ_CFLAGS], [${WZ_CFLAGS}])
@@ -414,12 +417,13 @@ AC_CONFIG_FILES([Makefile
 		pkg/nsis/Makefile
 		win32/Makefile
 		tests/Makefile
+		3rdparty/Makefile
+		3rdparty/miniupnpc/Makefile
 		lib/framework/Makefile
 		lib/exceptionhandler/Makefile
 		lib/gamelib/Makefile
 		lib/ivis_opengl/Makefile
 		lib/netplay/Makefile
-		lib/netplay/miniupnpc/Makefile
 		lib/script/Makefile
 		lib/sequence/Makefile
 		lib/sound/Makefile
