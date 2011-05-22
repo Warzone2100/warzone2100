@@ -6,8 +6,9 @@ varying vec3 normal, lightDir, eyeVec;
 
 uniform sampler2D Texture0;
 uniform sampler2D Texture1;
+uniform sampler2D Texture2;
 uniform vec4 teamcolour;
-uniform int tcmask;
+uniform int tcmask, normalmap;
 uniform int fogEnabled;
 
 void main(void)
