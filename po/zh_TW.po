@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-05-19 05:46+0200\n"
+"POT-Creation-Date: 2011-05-23 19:16+0200\n"
 "PO-Revision-Date: 2009-05-11 00:21+0800\n"
 "Last-Translator: \n"
 "Language-Team: zh_TW\n"
@@ -9240,93 +9240,93 @@ msgstr "捕獲目標"
 msgid "Reinforcements are now available"
 msgstr "可要求增援"
 
-#: data/base/script/text/tutorial3.slo:289
+#: data/base/script/text/tutorial3.slo:274
 msgid "In this training session you'll learn how to build an effective base"
 msgstr "在訓練任務中你將學習到如何建立起一座基地"
 
-#: data/base/script/text/tutorial3.slo:304
+#: data/base/script/text/tutorial3.slo:289
 msgid "Oil resources are key to your success"
 msgstr "石油能源是你成功的關鍵"
 
-#: data/base/script/text/tutorial3.slo:313
+#: data/base/script/text/tutorial3.slo:298
 msgid "To build an oil derrick, select one of your trucks"
 msgstr "開始建造鑽油井，首先選擇一輛你的工程車"
 
-#: data/base/script/text/tutorial3.slo:333
+#: data/base/script/text/tutorial3.slo:318
 msgid "Left click the oil pool indicated by the radar pulse to order your truck to build"
 msgstr "點擊雷達上顯示的油田，這樣可以命令你的工程車開始建造鑽油井"
 
-#: data/base/script/text/tutorial3.slo:353
+#: data/base/script/text/tutorial3.slo:339
 msgid "The oil derrick is currently dormant. Build a power generator to convert the oil into power"
 msgstr "要讓鑽油井開始運作，必須先建造一座發電廠，將石油轉換成能源"
 
-#: data/base/script/text/tutorial3.slo:370
-#: data/base/script/text/tutorial3.slo:580
-#: data/base/script/text/tutorial3.slo:871
+#: data/base/script/text/tutorial3.slo:356
+#: data/base/script/text/tutorial3.slo:573
+#: data/base/script/text/tutorial3.slo:869
 msgid "Left click the flashing BUILD icon"
 msgstr "點選正在閃動中的「建造」圖示"
 
-#: data/base/script/text/tutorial3.slo:397
+#: data/base/script/text/tutorial3.slo:384
 msgid "Now left click the power generator in the build menu on the left"
 msgstr "點選在建造選單左方的「發電廠」"
 
-#: data/base/script/text/tutorial3.slo:407
+#: data/base/script/text/tutorial3.slo:395
 msgid "Position the square at your base and left click to start the build process"
 msgstr "移動至你的主基地旁，開始建造發電廠"
 
-#: data/base/script/text/tutorial3.slo:422
+#: data/base/script/text/tutorial3.slo:411
 msgid "To increase your build rate, select your second truck"
 msgstr "選擇你的第二輛工程車，點選建造中的發電廠可以加快建築速度"
 
-#: data/base/script/text/tutorial3.slo:457
+#: data/base/script/text/tutorial3.slo:447
 msgid "Now left click the power generator site"
 msgstr "點選發電廠（可顯示共有幾座油田已連接）"
 
-#: data/base/script/text/tutorial3.slo:472
+#: data/base/script/text/tutorial3.slo:463
 msgid "The other truck will now help to build the power generator"
 msgstr "另外一輛工程車將會幫助你建造發電廠"
 
-#: data/base/script/text/tutorial3.slo:510
+#: data/base/script/text/tutorial3.slo:501
 msgid "During missions you need to locate and recover technologies from before the Collapse"
 msgstr "在任務中你必須找出並研發崩潰後所遺留下來的科技"
 
-#: data/base/script/text/tutorial3.slo:519
+#: data/base/script/text/tutorial3.slo:510
 msgid "Use a truck to search for the artifact indicated by the radar pulse"
 msgstr "利用工程車搜尋雷達上顯示的遺留科技"
 
-#: data/base/script/text/tutorial3.slo:523
+#: data/base/script/text/tutorial3.slo:514
 msgid "Move the pointer over the artifact and left click to recover it"
 msgstr "移動滑鼠游標到遺留科技上並點選它即可發現遺留科技"
 
-#: data/base/script/text/tutorial3.slo:566
+#: data/base/script/text/tutorial3.slo:559
 msgid "A research facility is required to research artifacts"
 msgstr "要研發找到的遺留科技，需要先建造研發中心"
 
-#: data/base/script/text/tutorial3.slo:608
+#: data/base/script/text/tutorial3.slo:602
 msgid "Now left click the research facility and position it at your base"
 msgstr "點選研發中心，並選擇一個位置"
 
-#: data/base/script/text/tutorial3.slo:631
+#: data/base/script/text/tutorial3.slo:626
 msgid "Use your other truck to help build the research facility"
 msgstr "利用你其他的工程車幫助建造研發中心"
 
-#: data/base/script/text/tutorial3.slo:657
+#: data/base/script/text/tutorial3.slo:653
 msgid "To research the artifact, left click on the flashing RESEARCH icon"
 msgstr "要研發找到的遺留科技，點選閃動中的「研發」圖示"
 
-#: data/base/script/text/tutorial3.slo:679
+#: data/base/script/text/tutorial3.slo:676
 msgid "Now left click the machinegun artifact"
 msgstr "點選「機槍」科技"
 
-#: data/base/script/text/tutorial3.slo:692
+#: data/base/script/text/tutorial3.slo:690
 msgid "The artifact is now being researched by the facility"
 msgstr "研發中心已經開始研究遺留科技了"
 
-#: data/base/script/text/tutorial3.slo:713
+#: data/base/script/text/tutorial3.slo:712
 msgid "The researched machinegun can now be used to design a new vehicle"
 msgstr "研究完成的機槍科技現在可以使用在新的設計上"
 
-#: data/base/script/text/tutorial3.slo:730
+#: data/base/script/text/tutorial3.slo:729
 msgid "Left click the flashing DESIGN icon"
 msgstr "點選閃動中的「設計」圖示"
 
@@ -9334,15 +9334,15 @@ msgstr "點選閃動中的「設計」圖示"
 msgid "To start your design, left click the NEW DESIGN icon"
 msgstr "點選「新設計」按鈕可以開始你的設計"
 
-#: data/base/script/text/tutorial3.slo:761
+#: data/base/script/text/tutorial3.slo:762
 msgid "Now left click the Vehicle Body icon"
 msgstr "首先點選「車身」圖示"
 
-#: data/base/script/text/tutorial3.slo:775
+#: data/base/script/text/tutorial3.slo:776
 msgid "Then left click the Viper body"
 msgstr "然後選擇「響尾蛇」"
 
-#: data/base/script/text/tutorial3.slo:787
+#: data/base/script/text/tutorial3.slo:788
 msgid "Left click the Wheels icon"
 msgstr "點選「輪系」圖示"
 
@@ -9350,15 +9350,15 @@ msgstr "點選「輪系」圖示"
 msgid "Then left click the machinegun to complete your design"
 msgstr "點選「機槍」就可以完成設計了"
 
-#: data/base/script/text/tutorial3.slo:832
+#: data/base/script/text/tutorial3.slo:830
 msgid "To finalize your design, left click the CLOSE icon"
 msgstr "點選「關閉」圖示關閉設計選單"
 
-#: data/base/script/text/tutorial3.slo:859
+#: data/base/script/text/tutorial3.slo:857
 msgid "A factory is now required to manufacture your new vehicle"
 msgstr "要生產剛剛設計好的車輛，你需要一座工廠"
 
-#: data/base/script/text/tutorial3.slo:894
+#: data/base/script/text/tutorial3.slo:893
 msgid "Now left click the factory icon and position it at your base"
 msgstr "點選「工廠」圖示並在地圖上選擇一個位置"
 
@@ -9366,39 +9366,39 @@ msgstr "點選「工廠」圖示並在地圖上選擇一個位置"
 msgid "Select a location for your factory"
 msgstr "選擇工廠要建造的位置"
 
-#: data/base/script/text/tutorial3.slo:933
+#: data/base/script/text/tutorial3.slo:934
 msgid "The delivery point is indicated by the number 1"
 msgstr "數字1表示工廠單位產出點"
 
-#: data/base/script/text/tutorial3.slo:936
+#: data/base/script/text/tutorial3.slo:937
 msgid "All new units will drive to this location once built"
 msgstr "，所有工廠生產的單位會自動移動至此"
 
-#: data/base/script/text/tutorial3.slo:938
+#: data/base/script/text/tutorial3.slo:939
 msgid "You can move the delivery point at any time by left clicking it"
 msgstr "點擊工廠單位產出點可隨時移動它"
 
-#: data/base/script/text/tutorial3.slo:952
+#: data/base/script/text/tutorial3.slo:954
 msgid "Now click where you want to position the delivery point"
 msgstr "點選你想要放置工廠產出點的位置"
 
-#: data/base/script/text/tutorial3.slo:969
+#: data/base/script/text/tutorial3.slo:971
 msgid "The factory can now be ordered to build a new unit"
 msgstr "現在你可以命令工廠開始生產新單位了"
 
-#: data/base/script/text/tutorial3.slo:995
+#: data/base/script/text/tutorial3.slo:997
 msgid "Left click the flashing MANUFACTURE icon"
 msgstr "點選閃動中的「生產」圖示"
 
-#: data/base/script/text/tutorial3.slo:1013
+#: data/base/script/text/tutorial3.slo:1016
 msgid "Now left click the units you want to build from the menu at the left"
 msgstr "從選單中點選你想要製造的單位"
 
-#: data/base/script/text/tutorial3.slo:1027
+#: data/base/script/text/tutorial3.slo:1031
 msgid "Please wait whilst the factory manufactures the new unit(s)"
 msgstr "請稍待片刻"
 
-#: data/base/script/text/tutorial3.slo:1052
+#: data/base/script/text/tutorial3.slo:1053
 msgid "Congratulations commander - you are ready for your first mission"
 msgstr "恭喜你指揮官！！你已經完成了你的第一個任務！"
 
@@ -12964,6 +12964,7 @@ msgstr "難度"
 #: src/frontend.cpp:1214
 #: src/frontend.cpp:1288
 #: src/frontend.cpp:1325
+#: src/multiint.cpp:211
 msgid "Easy"
 msgstr "容易"
 
@@ -12976,6 +12977,7 @@ msgstr "普通"
 #: src/frontend.cpp:1221
 #: src/frontend.cpp:1294
 #: src/frontend.cpp:1321
+#: src/multiint.cpp:211
 msgid "Hard"
 msgstr "困難"
 
@@ -14289,6 +14291,15 @@ msgstr "%s 與 %s 結盟"
 msgid "You Discover Blueprints For %s"
 msgstr "你發現一個用作於 %s 的藍圖"
 
+#: src/multiint.cpp:211
+#, fuzzy
+msgid "Medium"
+msgstr "移動速度：中"
+
+#: src/multiint.cpp:211
+msgid "Insane"
+msgstr ""
+
 #: src/multiint.cpp:598
 #: src/multilimit.cpp:190
 msgid "Accept Settings"
@@ -14615,6 +14626,22 @@ msgstr "主玩家已開始遊戲"
 #: src/multiint.cpp:3665
 msgid "Players"
 msgstr "玩家"
+
+#: src/multiint.cpp:3743
+#, fuzzy, c-format
+msgid "Click to take player slot %d"
+msgstr "雷達顯示玩家顏色"
+
+#: src/multiint.cpp:3752
+#: src/multiint.cpp:3945
+msgid "Open"
+msgstr ""
+
+#: src/multiint.cpp:3752
+#: src/multiint.cpp:3946
+#, fuzzy
+msgid "Closed"
+msgstr "關閉"
 
 #: src/multiint.cpp:3803
 #, c-format

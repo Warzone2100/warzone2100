@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-05-20 19:04+0200\n"
+"POT-Creation-Date: 2011-05-23 19:16+0200\n"
 "PO-Revision-Date: 2011-05-20 09:39+0100\n"
 "Last-Translator: Mészáros Tamás <meszaros.tomi@hotmail.com>\n"
 "Language-Team: Magyar (Hungary) <meszaros.tomi@hotmail.com>\n"
@@ -13108,6 +13108,7 @@ msgstr "Nehézség"
 #: src/frontend.cpp:1214
 #: src/frontend.cpp:1288
 #: src/frontend.cpp:1325
+#: src/multiint.cpp:211
 msgid "Easy"
 msgstr "Könnyű"
 
@@ -13120,6 +13121,7 @@ msgstr "Normális"
 #: src/frontend.cpp:1221
 #: src/frontend.cpp:1294
 #: src/frontend.cpp:1321
+#: src/multiint.cpp:211
 msgid "Hard"
 msgstr "Nehéz"
 
@@ -14432,6 +14434,15 @@ msgstr ""
 msgid "You Discover Blueprints For %s"
 msgstr ""
 
+#: src/multiint.cpp:211
+#, fuzzy
+msgid "Medium"
+msgstr "Sebesség: Közepes"
+
+#: src/multiint.cpp:211
+msgid "Insane"
+msgstr ""
+
 #: src/multiint.cpp:598
 #: src/multilimit.cpp:190
 msgid "Accept Settings"
@@ -14756,6 +14767,22 @@ msgstr "Játékmester játékot indít"
 #: src/multiint.cpp:3665
 msgid "Players"
 msgstr "Játékosok"
+
+#: src/multiint.cpp:3743
+#, fuzzy, c-format
+msgid "Click to take player slot %d"
+msgstr "Kattints ide a játékos beállítás változtatásához"
+
+#: src/multiint.cpp:3752
+#: src/multiint.cpp:3945
+msgid "Open"
+msgstr ""
+
+#: src/multiint.cpp:3752
+#: src/multiint.cpp:3946
+#, fuzzy
+msgid "Closed"
+msgstr "Bezár"
 
 #: src/multiint.cpp:3803
 #, c-format

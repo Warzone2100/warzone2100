@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-05-19 05:46+0200\n"
+"POT-Creation-Date: 2011-05-23 19:16+0200\n"
 "PO-Revision-Date: 2010-04-21 08:32-0500\n"
 "Last-Translator: Gilles J. Séguin <segg2@videotron.ca>\n"
 "Language-Team: French <warzone-dev@gna.org>\n"
@@ -9245,93 +9245,93 @@ msgstr "Objectif Capturé"
 msgid "Reinforcements are now available"
 msgstr "Renforts Disponibles"
 
-#: data/base/script/text/tutorial3.slo:289
+#: data/base/script/text/tutorial3.slo:274
 msgid "In this training session you'll learn how to build an effective base"
 msgstr "Dans cet session d'entraînement vous apprendrez à construire une base"
 
-#: data/base/script/text/tutorial3.slo:304
+#: data/base/script/text/tutorial3.slo:289
 msgid "Oil resources are key to your success"
 msgstr "Les gisements de pétrole sont la clé de votre développement"
 
-#: data/base/script/text/tutorial3.slo:313
+#: data/base/script/text/tutorial3.slo:298
 msgid "To build an oil derrick, select one of your trucks"
 msgstr "Pour construire un puits de pétrole, sélectionnez un de vos véhicules de construction"
 
-#: data/base/script/text/tutorial3.slo:333
+#: data/base/script/text/tutorial3.slo:318
 msgid "Left click the oil pool indicated by the radar pulse to order your truck to build"
 msgstr "Cliquez sur le gisement de pétrole indiqué par le signal bleu pour ordonner la construction"
 
-#: data/base/script/text/tutorial3.slo:353
+#: data/base/script/text/tutorial3.slo:339
 msgid "The oil derrick is currently dormant. Build a power generator to convert the oil into power"
 msgstr "Le puits de pétrole est actuellement inactif. Construisez un générateur d'énergie pour convertir le pétrole en énergie"
 
-#: data/base/script/text/tutorial3.slo:370
-#: data/base/script/text/tutorial3.slo:580
-#: data/base/script/text/tutorial3.slo:871
+#: data/base/script/text/tutorial3.slo:356
+#: data/base/script/text/tutorial3.slo:573
+#: data/base/script/text/tutorial3.slo:869
 msgid "Left click the flashing BUILD icon"
 msgstr "Cliquez sur le bouton CONSTRUCTION clignotant"
 
-#: data/base/script/text/tutorial3.slo:397
+#: data/base/script/text/tutorial3.slo:384
 msgid "Now left click the power generator in the build menu on the left"
 msgstr "Maintenant cliquez sur le générateur d'énergie dans le menu de construction sur la gauche"
 
-#: data/base/script/text/tutorial3.slo:407
+#: data/base/script/text/tutorial3.slo:395
 msgid "Position the square at your base and left click to start the build process"
 msgstr "Positionnez le carré dans votre base et cliquez pour commencer la construction"
 
-#: data/base/script/text/tutorial3.slo:422
+#: data/base/script/text/tutorial3.slo:411
 msgid "To increase your build rate, select your second truck"
 msgstr "Pour augmenter la vitesse de construction, sélectionnez votre deuxième véhicule de construction"
 
-#: data/base/script/text/tutorial3.slo:457
+#: data/base/script/text/tutorial3.slo:447
 msgid "Now left click the power generator site"
 msgstr "Maintenant cliquez sur l'emplacement du générateur d'énergie"
 
-#: data/base/script/text/tutorial3.slo:472
+#: data/base/script/text/tutorial3.slo:463
 msgid "The other truck will now help to build the power generator"
 msgstr "L'autre véhicule de construction va aider à construire le générateur"
 
-#: data/base/script/text/tutorial3.slo:510
+#: data/base/script/text/tutorial3.slo:501
 msgid "During missions you need to locate and recover technologies from before the Collapse"
 msgstr "Pendant les missions vous devrez repérer et récupérer des technologies datant d'avant l'Apocalypse"
 
-#: data/base/script/text/tutorial3.slo:519
+#: data/base/script/text/tutorial3.slo:510
 msgid "Use a truck to search for the artifact indicated by the radar pulse"
 msgstr "Utilisez un véhicule de construction pour prendre l'artefact indiqué par le signal vert"
 
-#: data/base/script/text/tutorial3.slo:523
+#: data/base/script/text/tutorial3.slo:514
 msgid "Move the pointer over the artifact and left click to recover it"
 msgstr "Placez le curseur sur l'artefact et cliquez pour le récupérer"
 
-#: data/base/script/text/tutorial3.slo:566
+#: data/base/script/text/tutorial3.slo:559
 msgid "A research facility is required to research artifacts"
 msgstr "Vous devez construire un centre de recherche pour rechercher les artefacts"
 
-#: data/base/script/text/tutorial3.slo:608
+#: data/base/script/text/tutorial3.slo:602
 msgid "Now left click the research facility and position it at your base"
 msgstr "Maintenant cliquez sur le centre de recherche et placez le dans votre base"
 
-#: data/base/script/text/tutorial3.slo:631
+#: data/base/script/text/tutorial3.slo:626
 msgid "Use your other truck to help build the research facility"
 msgstr "Utilisez votre autre véhicule de construction pour aider à construire le centre de recherche"
 
-#: data/base/script/text/tutorial3.slo:657
+#: data/base/script/text/tutorial3.slo:653
 msgid "To research the artifact, left click on the flashing RESEARCH icon"
 msgstr "pour rechercher l'artefact, cliquez sur le bouton RECHERCHE clignotant"
 
-#: data/base/script/text/tutorial3.slo:679
+#: data/base/script/text/tutorial3.slo:676
 msgid "Now left click the machinegun artifact"
 msgstr "Maintenant cliquez sur l'artefact mitrailleuse"
 
-#: data/base/script/text/tutorial3.slo:692
+#: data/base/script/text/tutorial3.slo:690
 msgid "The artifact is now being researched by the facility"
 msgstr "L'artefact est maintenant en cours de recherche dans votre centre de recherche"
 
-#: data/base/script/text/tutorial3.slo:713
+#: data/base/script/text/tutorial3.slo:712
 msgid "The researched machinegun can now be used to design a new vehicle"
 msgstr "La mitrailleuse rechercée peut maintenant être utilisée pour créer un nouveau modèle de véhicule"
 
-#: data/base/script/text/tutorial3.slo:730
+#: data/base/script/text/tutorial3.slo:729
 msgid "Left click the flashing DESIGN icon"
 msgstr "Cliquez sur l'icône CRÉATION clignotante"
 
@@ -9339,15 +9339,15 @@ msgstr "Cliquez sur l'icône CRÉATION clignotante"
 msgid "To start your design, left click the NEW DESIGN icon"
 msgstr "Pour créer un nouveau modèle, cliquez sur l'icône NOUVELLE CRÉATION"
 
-#: data/base/script/text/tutorial3.slo:761
+#: data/base/script/text/tutorial3.slo:762
 msgid "Now left click the Vehicle Body icon"
 msgstr "Cliquez Maintenant sur l'icône Châssis"
 
-#: data/base/script/text/tutorial3.slo:775
+#: data/base/script/text/tutorial3.slo:776
 msgid "Then left click the Viper body"
 msgstr "Puis cliquez sur le châssis Vipère"
 
-#: data/base/script/text/tutorial3.slo:787
+#: data/base/script/text/tutorial3.slo:788
 msgid "Left click the Wheels icon"
 msgstr "Cliquez sur l'icône Roues"
 
@@ -9355,15 +9355,15 @@ msgstr "Cliquez sur l'icône Roues"
 msgid "Then left click the machinegun to complete your design"
 msgstr "Puis cliquez sur la mitrailleuse pour finir votre modèle"
 
-#: data/base/script/text/tutorial3.slo:832
+#: data/base/script/text/tutorial3.slo:830
 msgid "To finalize your design, left click the CLOSE icon"
 msgstr "Pour finir la création, cliquez sur l'icône Fermer"
 
-#: data/base/script/text/tutorial3.slo:859
+#: data/base/script/text/tutorial3.slo:857
 msgid "A factory is now required to manufacture your new vehicle"
 msgstr "Vous devez maintenant construire une usine pour produire votre nouveau véhicule"
 
-#: data/base/script/text/tutorial3.slo:894
+#: data/base/script/text/tutorial3.slo:893
 msgid "Now left click the factory icon and position it at your base"
 msgstr "Maintenant cliquez sur l'icône usine and placez la dans votre base"
 
@@ -9371,39 +9371,39 @@ msgstr "Maintenant cliquez sur l'icône usine and placez la dans votre base"
 msgid "Select a location for your factory"
 msgstr "Choisissez un emplacement pour votre usine"
 
-#: data/base/script/text/tutorial3.slo:933
+#: data/base/script/text/tutorial3.slo:934
 msgid "The delivery point is indicated by the number 1"
 msgstr "Le point de ralliement est indiqué par le chiffre 1"
 
-#: data/base/script/text/tutorial3.slo:936
+#: data/base/script/text/tutorial3.slo:937
 msgid "All new units will drive to this location once built"
 msgstr "Toutes les nouvelles unités se dirigeront vers cet endroit quand elles seront construites"
 
-#: data/base/script/text/tutorial3.slo:938
+#: data/base/script/text/tutorial3.slo:939
 msgid "You can move the delivery point at any time by left clicking it"
 msgstr "Vous pouvez déplacer le point de ralliement n'importe quand en cliquant dessus"
 
-#: data/base/script/text/tutorial3.slo:952
+#: data/base/script/text/tutorial3.slo:954
 msgid "Now click where you want to position the delivery point"
 msgstr "Maintenant cliquez là où vous voulez placer le point de ralliement"
 
-#: data/base/script/text/tutorial3.slo:969
+#: data/base/script/text/tutorial3.slo:971
 msgid "The factory can now be ordered to build a new unit"
 msgstr "Vous pouvez maintenant ordonner la construction d'une nouvelle unité"
 
-#: data/base/script/text/tutorial3.slo:995
+#: data/base/script/text/tutorial3.slo:997
 msgid "Left click the flashing MANUFACTURE icon"
 msgstr "Cliquez sur l'icône ASSEMBLAGE clignotante"
 
-#: data/base/script/text/tutorial3.slo:1013
+#: data/base/script/text/tutorial3.slo:1016
 msgid "Now left click the units you want to build from the menu at the left"
 msgstr "Maintenant cliquez sur les unités que vous voulez construire dans le menu de gauche"
 
-#: data/base/script/text/tutorial3.slo:1027
+#: data/base/script/text/tutorial3.slo:1031
 msgid "Please wait whilst the factory manufactures the new unit(s)"
 msgstr "Patientez le temps que l'usine produit la(les) nouvelle(s) unité(s)"
 
-#: data/base/script/text/tutorial3.slo:1052
+#: data/base/script/text/tutorial3.slo:1053
 msgid "Congratulations commander - you are ready for your first mission"
 msgstr "Félicitations commandant - vous êtes prêt pour votre première mission"
 
@@ -12889,6 +12889,7 @@ msgstr "Difficulté"
 #: src/frontend.cpp:1214
 #: src/frontend.cpp:1288
 #: src/frontend.cpp:1325
+#: src/multiint.cpp:211
 msgid "Easy"
 msgstr "Facile"
 
@@ -12901,6 +12902,7 @@ msgstr "Normale"
 #: src/frontend.cpp:1221
 #: src/frontend.cpp:1294
 #: src/frontend.cpp:1321
+#: src/multiint.cpp:211
 msgid "Hard"
 msgstr "Difficile"
 
@@ -14211,6 +14213,15 @@ msgstr "%s S'allie avec %s"
 msgid "You Discover Blueprints For %s"
 msgstr "Vous avez trouvé des plans pour %s"
 
+#: src/multiint.cpp:211
+#, fuzzy
+msgid "Medium"
+msgstr "Vitesse: Moyenne"
+
+#: src/multiint.cpp:211
+msgid "Insane"
+msgstr ""
+
 #: src/multiint.cpp:598
 #: src/multilimit.cpp:190
 msgid "Accept Settings"
@@ -14532,6 +14543,22 @@ msgstr "L'hôte démarre la partie"
 #: src/multiint.cpp:3665
 msgid "Players"
 msgstr "Joueurs"
+
+#: src/multiint.cpp:3743
+#, fuzzy, c-format
+msgid "Click to take player slot %d"
+msgstr "Radar montrant les couleurs des joueurs"
+
+#: src/multiint.cpp:3752
+#: src/multiint.cpp:3945
+msgid "Open"
+msgstr ""
+
+#: src/multiint.cpp:3752
+#: src/multiint.cpp:3946
+#, fuzzy
+msgid "Closed"
+msgstr "Fermer"
 
 #: src/multiint.cpp:3803
 #, c-format
