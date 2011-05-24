@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-05-17 01:48+0200\n"
-"PO-Revision-Date: 2011-05-20 09:39+0100\n"
+"POT-Creation-Date: 2011-05-24 17:07+0200\n"
+"PO-Revision-Date: 2011-05-24 13:04+0100\n"
 "Last-Translator: Mészáros Tamás <meszaros.tomi@hotmail.com>\n"
 "Language-Team: Magyar (Hungary) <meszaros.tomi@hotmail.com>\n"
 "Language: \n"
@@ -1819,7 +1819,7 @@ msgstr "Minden alap struktúra automatikusan fejlesztett"
 #: data/base/messages/resmessages1.rmsg:381
 #: data/mp/messages/resmessages1.rmsg:382
 msgid "Project Light Body"
-msgstr "Könnyű test védelem"
+msgstr "Könnyű karosszéria védelem"
 
 #: data/base/messages/resmessages1.rmsg:382
 #: data/mp/messages/resmessages1.rmsg:383
@@ -1839,7 +1839,7 @@ msgstr "Alacsony energia költség és előállítási idő"
 #: data/base/messages/resmessages1.rmsg:394
 #: data/mp/messages/resmessages1.rmsg:395
 msgid "New Paradigm Light Body"
-msgstr "Új paradigma könnyű test"
+msgstr "Új paradigma könnyű karosszéria"
 
 #: data/base/messages/resmessages1.rmsg:395
 #: data/mp/messages/resmessages1.rmsg:396
@@ -1861,12 +1861,12 @@ msgstr "Energia költség és termelési idő hasonló a Viperához"
 #: data/base/messages/resmessages1.rmsg:407
 #: data/mp/messages/resmessages1.rmsg:408
 msgid "Project Medium Body"
-msgstr "Közepes test projekt"
+msgstr "Közepes karosszéria projekt"
 
 #: data/base/messages/resmessages1.rmsg:408
 #: data/mp/messages/resmessages1.rmsg:409
 msgid "Medium body increases armor and body points"
-msgstr "Közepes test növekvő fegyverzet és test pontok"
+msgstr "Közepes karosszéria növekvő fegyverzet és test pontok"
 
 #: data/base/messages/resmessages1.rmsg:409
 #: data/mp/messages/resmessages1.rmsg:410
@@ -1881,7 +1881,7 @@ msgstr "Átlagos energia költség és termelési idő"
 #: data/base/messages/resmessages1.rmsg:420
 #: data/mp/messages/resmessages1.rmsg:421
 msgid "New Paradigm Medium body"
-msgstr "Új paradigma közepes test"
+msgstr "Új paradigma közepes karosszéria"
 
 #: data/base/messages/resmessages1.rmsg:421
 #: data/mp/messages/resmessages1.rmsg:422
@@ -1903,7 +1903,7 @@ msgstr "Energia költség és termelési idő hasonló a Kobrához"
 #: data/base/messages/resmessages1.rmsg:433
 #: data/mp/messages/resmessages1.rmsg:434
 msgid "Project Heavy Body"
-msgstr "Nehéz Test Projekt"
+msgstr "Nehéz karosszéria Projekt"
 
 #: data/base/messages/resmessages1.rmsg:434
 #: data/mp/messages/resmessages1.rmsg:435
@@ -1923,7 +1923,7 @@ msgstr "Nagyon magas energia költségek és nagyon alacsony termelés"
 #: data/base/messages/resmessages1.rmsg:446
 #: data/mp/messages/resmessages1.rmsg:447
 msgid "New Paradigm Heavy Body"
-msgstr "Új paradigma nehéz test"
+msgstr "Új paradigma nehéz karosszéria"
 
 #: data/base/messages/resmessages1.rmsg:447
 #: data/mp/messages/resmessages1.rmsg:448
@@ -3113,7 +3113,7 @@ msgstr "Új cél felismerő rendszerek"
 #: data/mp/messages/resmessages2.rmsg:472
 #: data/mp/messages/strings/resstrings.txt:560
 msgid "Collective Light Body"
-msgstr "Közös könnyű anyag"
+msgstr "Kollektív könnyű karosszéria"
 
 #: data/base/messages/resmessages2.rmsg:473
 #: data/base/messages/resmessages3.rmsg:629
@@ -3143,7 +3143,7 @@ msgstr ""
 #: data/mp/messages/resmessages2.rmsg:485
 #: data/mp/messages/strings/resstrings.txt:572
 msgid "Collective Medium Body"
-msgstr ""
+msgstr "Kollektív közepes karosszéria"
 
 #: data/base/messages/resmessages2.rmsg:486
 #: data/base/messages/resmessages3.rmsg:642
@@ -3378,14 +3378,14 @@ msgstr "Növekvő AA légelhárító pusztítás"
 #: data/mp/messages/resmessages3.rmsg:826
 #: data/mp/messages/strings/resstrings.txt:705
 msgid "All AA flak weapons upgraded automatically"
-msgstr ""
+msgstr "Minden AA légelhárító fegyver automatikusan fejesztve"
 
 #: data/base/messages/resmessages2.rmsg:668
 #: data/base/messages/strings/resstrings.txt:678
 #: data/mp/messages/resmessages2.rmsg:668
 #: data/mp/messages/strings/resstrings.txt:711
 msgid "Recoil loaded AA ammunition hopper"
-msgstr ""
+msgstr "Hopper rendszerű automatikus légvédelmi lőszeradagolás"
 
 #: data/base/messages/resmessages2.rmsg:669
 #: data/base/messages/resmessages3.rmsg:838
@@ -3403,14 +3403,14 @@ msgstr "Növekvő AA ROF"
 #: data/mp/messages/strings/resstrings.txt:718
 #: data/mp/messages/strings/resstrings.txt:724
 msgid "New Proximity Bomb Turret Available"
-msgstr ""
+msgstr "Közelben új rendelkezésre álló bombalöveg torony"
 
 #: data/base/messages/resmessages2.rmsg:681
 #: data/base/messages/strings/resstrings.txt:686
 #: data/mp/messages/resmessages2.rmsg:681
 #: data/mp/messages/strings/resstrings.txt:719
 msgid "Bomb turret explodes in proximity to enemy"
-msgstr ""
+msgstr "Bombavető torony, amely az ellenség közelében bombát robbant fel"
 
 #: data/base/messages/resmessages2.rmsg:682
 #: data/base/messages/resmessages2.rmsg:695
@@ -3421,28 +3421,28 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:720
 #: data/mp/messages/strings/resstrings.txt:726
 msgid "Best Targets: Base Structures and Defenses"
-msgstr ""
+msgstr "Legjobb célpontok :Bázis épületek és védművek"
 
 #: data/base/messages/resmessages2.rmsg:694
 #: data/base/messages/strings/resstrings.txt:692
 #: data/mp/messages/resmessages2.rmsg:694
 #: data/mp/messages/strings/resstrings.txt:725
 msgid "Superbomb turret explodes in proximity to enemy"
-msgstr ""
+msgstr "Szuperbombát vető torony, amely az ellenség közelében bombát robbant fel"
 
 #: data/base/messages/resmessages2.rmsg:707
 #: data/base/messages/strings/resstrings.txt:698
 #: data/mp/messages/resmessages2.rmsg:707
 #: data/mp/messages/strings/resstrings.txt:731
 msgid "Drops High Explosive Cluster bombs"
-msgstr ""
+msgstr "Ledobható kötegelt bomba nagy robbanó erővel"
 
 #: data/base/messages/resmessages2.rmsg:708
 #: data/base/messages/strings/resstrings.txt:699
 #: data/mp/messages/resmessages2.rmsg:708
 #: data/mp/messages/strings/resstrings.txt:732
 msgid "Best Targets: Base Structures"
-msgstr ""
+msgstr "Legjobb célpontok: Bázis épületek"
 
 #: data/base/messages/resmessages2.rmsg:720
 #: data/base/messages/strings/resstrings.txt:704
@@ -3456,7 +3456,7 @@ msgstr "Drops High Explosive Armour Piercing bombs"
 #: data/mp/messages/resmessages2.rmsg:721
 #: data/mp/messages/strings/resstrings.txt:738
 msgid "Best Targets: Defenses"
-msgstr ""
+msgstr "Legjobb célpontok: Védelem"
 
 #: data/base/messages/resmessages2.rmsg:733
 #: data/base/messages/strings/resstrings.txt:714
@@ -3590,7 +3590,7 @@ msgstr "Magas robbanó héj"
 #: data/base/messages/strings/resstrings.txt:803
 #: data/mp/messages/strings/resstrings.txt:842
 msgid "Increases Howitzer damage"
-msgstr ""
+msgstr "Növekvő tarack pusztítás"
 
 #: data/base/messages/resmessages2.rmsg:864
 #: data/base/messages/resmessages3.rmsg:929
@@ -3611,7 +3611,7 @@ msgstr "Tungsten-tipped armour-piercing bullets"
 #: data/mp/messages/resmessages2.rmsg:889
 #: data/mp/messages/strings/resstrings.txt:899
 msgid "Improved chaingun mechanism"
-msgstr ""
+msgstr "Továbbfejlesztett láncfegyver mechanizmus"
 
 #: data/base/messages/resmessages2.rmsg:915
 #: data/base/messages/strings/resstrings.txt:906
@@ -3973,7 +3973,7 @@ msgstr ""
 #: data/base/messages/resmessages3.rmsg:628
 #: data/mp/messages/resmessages3.rmsg:628
 msgid "NEXUS Light Body"
-msgstr "NEXUS könnyű test"
+msgstr "NEXUS könnyű karosszéria"
 
 #: data/base/messages/resmessages3.rmsg:631
 #: data/mp/messages/resmessages3.rmsg:631
@@ -3983,7 +3983,7 @@ msgstr ""
 #: data/base/messages/resmessages3.rmsg:641
 #: data/mp/messages/resmessages3.rmsg:641
 msgid "NEXUS Medium Body"
-msgstr "NEXUS közepes test"
+msgstr "NEXUS közepes karosszéria"
 
 #: data/base/messages/resmessages3.rmsg:644
 #: data/mp/messages/resmessages3.rmsg:644
@@ -4160,7 +4160,7 @@ msgstr "Improvement in laser emission density "
 
 #: data/base/messages/resmessages3.rmsg:981
 msgid "Increases Laser damage"
-msgstr ""
+msgstr "Növekvő lézer pusztítés"
 
 #: data/base/messages/resmessages3.rmsg:993
 #: data/mp/messages/resmessages3.rmsg:993
@@ -4517,7 +4517,7 @@ msgstr ""
 #: data/base/messages/resmessagesall.rmsg:108
 #: data/mp/messages/resmessagesall.rmsg:147
 msgid "Collective Heavy Body"
-msgstr "Együttes nehéz test"
+msgstr "Kollektív nehéz karosszéria"
 
 #: data/base/messages/resmessagesall.rmsg:110
 #: data/mp/messages/resmessagesall.rmsg:149
@@ -4527,7 +4527,7 @@ msgstr "Lassabb mint a Piton"
 #: data/base/messages/resmessagesall.rmsg:111
 #: data/mp/messages/resmessagesall.rmsg:150
 msgid "High power costs and slow to produce"
-msgstr ""
+msgstr "Magas energia költség és alacsony termelés"
 
 #: data/base/messages/resmessagesall.rmsg:121
 #: data/mp/messages/resmessagesall.rmsg:160
@@ -5090,7 +5090,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam2strings.txt:73
 msgid "You are to rescue the civilians."
-msgstr ""
+msgstr "Megmented a civilzációt."
 
 #: data/base/messages/strings/cam2strings.txt:74
 msgid "Then destroy the camp."
@@ -6286,7 +6286,7 @@ msgstr "Heavy Repair Turret"
 #: data/mp/messages/strings/names.txt:431
 #: data/mp/messages/strings/names.txt:905
 msgid "Sensor Tower"
-msgstr ""
+msgstr "Érzékelő torony"
 
 #: data/base/messages/strings/names.txt:368
 #: data/base/messages/strings/names.txt:424
@@ -6295,14 +6295,14 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:432
 #: data/mp/messages/strings/names.txt:906
 msgid "Hardened Sensor Tower"
-msgstr ""
+msgstr "Megerősített érzékelő torony"
 
 #: data/base/messages/strings/names.txt:369
 #: data/base/messages/strings/names.txt:887
 #: data/mp/messages/strings/names.txt:375
 #: data/mp/messages/strings/names.txt:904
 msgid "Sensor Turret"
-msgstr ""
+msgstr "Érzékelő apró torony"
 
 #: data/base/messages/strings/names.txt:371
 #: data/base/messages/strings/names.txt:372
@@ -6319,7 +6319,7 @@ msgstr ""
 #: data/base/messages/strings/names.txt:375
 #: data/mp/messages/strings/names.txt:382
 msgid "CB Radar Turret"
-msgstr ""
+msgstr "CB radar torony"
 
 #: data/base/messages/strings/names.txt:376
 #: data/base/messages/strings/names.txt:906
@@ -6340,12 +6340,12 @@ msgstr "NEXUS kapcsolat"
 #: data/base/messages/strings/names.txt:380
 #: data/base/messages/strings/names.txt:909
 msgid "Scrambler Turret"
-msgstr ""
+msgstr "Kódoló torony"
 
 #: data/base/messages/strings/names.txt:383
 #: data/mp/messages/strings/names.txt:390
 msgid "Oil Derrick"
-msgstr ""
+msgstr "Olaj fúrótorony"
 
 #: data/base/messages/strings/names.txt:384
 #: data/mp/messages/strings/names.txt:391
@@ -6379,7 +6379,7 @@ msgstr "Áram modul"
 #: data/base/messages/strings/names.txt:389
 #: data/mp/messages/strings/names.txt:396
 msgid "Research Facility"
-msgstr ""
+msgstr "Kutató középület"
 
 #: data/base/messages/strings/names.txt:390
 #: data/base/messages/strings/names.txt:831
@@ -6391,19 +6391,19 @@ msgstr "Kutató modul"
 #: data/base/messages/strings/names.txt:391
 #: data/mp/messages/strings/names.txt:398
 msgid "Demolish Structure"
-msgstr ""
+msgstr "Lebontó szerkezet"
 
 #: data/base/messages/strings/names.txt:393
 #: data/base/messages/strings/names.txt:1448
 #: data/mp/messages/strings/names.txt:400
 #: data/mp/messages/strings/names.txt:1468
 msgid "Repair Center"
-msgstr "Repair Centre"
+msgstr "Javító központ"
 
 #: data/base/messages/strings/names.txt:394
 #: data/mp/messages/strings/names.txt:401
 msgid "Command Relay Center"
-msgstr "Command Relay Centre"
+msgstr "Parancsnoki késleltető központ"
 
 #: data/base/messages/strings/names.txt:395
 #: data/mp/messages/strings/names.txt:402
@@ -6682,7 +6682,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:492
 #: data/mp/messages/strings/names.txt:734
 msgid "Howitzer Emplacement"
-msgstr ""
+msgstr "Tarack elhelyezés"
 
 #: data/base/messages/strings/names.txt:464
 #: data/base/messages/strings/names.txt:740
@@ -6717,14 +6717,14 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:478
 #: data/mp/messages/strings/names.txt:777
 msgid "Needle Gun Tower"
-msgstr ""
+msgstr "Tű fegyver torony"
 
 #: data/base/messages/strings/names.txt:471
 #: data/base/messages/strings/names.txt:743
 #: data/mp/messages/strings/names.txt:479
 #: data/mp/messages/strings/names.txt:758
 msgid "Gauss Cannon Emplacement"
-msgstr ""
+msgstr "Gauss löveg elhelyezés"
 
 #: data/base/messages/strings/names.txt:474
 #: data/base/messages/strings/names.txt:1033
@@ -6771,12 +6771,12 @@ msgstr "Tisztítótűz"
 #: data/mp/messages/strings/names.txt:491
 #: data/mp/messages/strings/names.txt:1078
 msgid "Howitzer"
-msgstr ""
+msgstr "Tarack"
 
 #: data/base/messages/strings/names.txt:485
 #: data/mp/messages/strings/names.txt:493
 msgid "Ground Shaker"
-msgstr ""
+msgstr "Terep rázó"
 
 #: data/base/messages/strings/names.txt:486
 #: data/base/messages/strings/names.txt:722
@@ -6785,7 +6785,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:737
 #: data/mp/messages/strings/names.txt:1473
 msgid "Ground Shaker Emplacement"
-msgstr ""
+msgstr "Terep rázó elhelyezés"
 
 #: data/base/messages/strings/names.txt:487
 #: data/mp/messages/strings/names.txt:495
@@ -6839,33 +6839,33 @@ msgstr ""
 #: data/base/messages/strings/names.txt:505
 #: data/base/messages/strings/names.txt:1121
 msgid "Angel Missile"
-msgstr ""
+msgstr "Angyal rakéta"
 
 #: data/base/messages/strings/names.txt:506
 #: data/base/messages/strings/names.txt:1119
 #: data/mp/messages/strings/names.txt:514
 #: data/mp/messages/strings/names.txt:1136
 msgid "Vindicator SAM"
-msgstr ""
+msgstr "Védelmező SAM"
 
 #: data/base/messages/strings/names.txt:507
 #: data/base/messages/strings/names.txt:1122
 #: data/mp/messages/strings/names.txt:515
 #: data/mp/messages/strings/names.txt:1139
 msgid "Archangel Missile"
-msgstr ""
+msgstr "Arkangyal rakéta"
 
 #: data/base/messages/strings/names.txt:509
 #: data/base/messages/strings/names.txt:1118
 #: data/mp/messages/strings/names.txt:517
 #: data/mp/messages/strings/names.txt:1135
 msgid "Avenger SAM"
-msgstr ""
+msgstr "Bosszúálló SAM"
 
 #: data/base/messages/strings/names.txt:511
 #: data/mp/messages/strings/names.txt:519
 msgid "VTOL Scourge Missile"
-msgstr ""
+msgstr "VTOL Scourge rakéta"
 
 #: data/base/messages/strings/names.txt:513
 #: data/base/messages/strings/names.txt:1138
@@ -6877,17 +6877,17 @@ msgstr "Mozsár"
 #: data/base/messages/strings/names.txt:514
 #: data/mp/messages/strings/names.txt:522
 msgid "Mortar Emplacement"
-msgstr ""
+msgstr "Mozsár elhelyezés"
 
 #: data/base/messages/strings/names.txt:515
 #: data/mp/messages/strings/names.txt:523
 msgid "Bombard"
-msgstr ""
+msgstr "Ostromol"
 
 #: data/base/messages/strings/names.txt:516
 #: data/mp/messages/strings/names.txt:524
 msgid "Bombard Emplacement"
-msgstr ""
+msgstr "Ostromló hely"
 
 #: data/base/messages/strings/names.txt:517
 #: data/mp/messages/strings/names.txt:525
@@ -6897,28 +6897,28 @@ msgstr ""
 #: data/base/messages/strings/names.txt:518
 #: data/mp/messages/strings/names.txt:526
 msgid "Pepperpot Emplacement"
-msgstr ""
+msgstr "Pepperpot elhelyezés"
 
 #: data/base/messages/strings/names.txt:519
 #: data/base/messages/strings/names.txt:1142
 #: data/mp/messages/strings/names.txt:527
 #: data/mp/messages/strings/names.txt:1159
 msgid "Needle Gun"
-msgstr ""
+msgstr "Tű fegyver"
 
 #: data/base/messages/strings/names.txt:520
 #: data/base/messages/strings/names.txt:1143
 #: data/mp/messages/strings/names.txt:528
 #: data/mp/messages/strings/names.txt:1160
 msgid "Rail Gun"
-msgstr ""
+msgstr "Vasúti fegyver"
 
 #: data/base/messages/strings/names.txt:521
 #: data/base/messages/strings/names.txt:1144
 #: data/mp/messages/strings/names.txt:529
 #: data/mp/messages/strings/names.txt:1161
 msgid "Gauss Cannon"
-msgstr ""
+msgstr "Gauss löveg"
 
 #: data/base/messages/strings/names.txt:523
 #: data/base/messages/strings/names.txt:1181
@@ -6943,7 +6943,7 @@ msgstr "Mini-Rocket Upgrade"
 #: data/mp/messages/strings/names.txt:535
 #: data/mp/messages/strings/names.txt:1204
 msgid "Ripple Rockets"
-msgstr ""
+msgstr "Morajló rakéták"
 
 #: data/base/messages/strings/names.txt:528
 #: data/mp/messages/strings/names.txt:536
@@ -6964,7 +6964,7 @@ msgstr "HE Mini-Rockets"
 #: data/base/messages/strings/names.txt:531
 #: data/mp/messages/strings/names.txt:539
 msgid "VTOL Lancer"
-msgstr ""
+msgstr "VTOL Lándzsa"
 
 #: data/base/messages/strings/names.txt:532
 #: data/mp/messages/strings/names.txt:540
@@ -7005,7 +7005,7 @@ msgstr "VTOL löveg"
 #: data/base/messages/strings/names.txt:561
 #: data/mp/messages/strings/names.txt:570
 msgid "VTOL Hyper Velocity Cannon"
-msgstr ""
+msgstr "VTOL Hyper Velocity löveg"
 
 #: data/base/messages/strings/names.txt:562
 #: data/mp/messages/strings/names.txt:571
@@ -7025,7 +7025,7 @@ msgstr "VTOL gépfegyver"
 #: data/base/messages/strings/names.txt:566
 #: data/mp/messages/strings/names.txt:575
 msgid "VTOL Twin Machinegun"
-msgstr "VTOL Kettős gépfegyver"
+msgstr "VTOL kettős gépfegyver"
 
 #: data/base/messages/strings/names.txt:567
 #: data/mp/messages/strings/names.txt:576
@@ -7040,12 +7040,12 @@ msgstr "VTOL támadó fegyver"
 #: data/base/messages/strings/names.txt:569
 #: data/mp/messages/strings/names.txt:578
 msgid "VTOL Needle Gun"
-msgstr ""
+msgstr "VTOL tű fegyver"
 
 #: data/base/messages/strings/names.txt:570
 #: data/mp/messages/strings/names.txt:579
 msgid "VTOL Rail Gun"
-msgstr ""
+msgstr "VTOL vasúti fegyver"
 
 #: data/base/messages/strings/names.txt:572
 #: data/mp/messages/strings/names.txt:581
@@ -7079,11 +7079,11 @@ msgstr ""
 #: data/base/messages/strings/names.txt:581
 #: data/mp/messages/strings/names.txt:590
 msgid "Collective Wall"
-msgstr ""
+msgstr "Kollektív fal"
 
 #: data/base/messages/strings/names.txt:582
 msgid "Collective CWall"
-msgstr ""
+msgstr "Kollektív sarokfal"
 
 #: data/base/messages/strings/names.txt:604
 msgid "NEXUS Wall"
@@ -7091,7 +7091,7 @@ msgstr "NEXUS fal"
 
 #: data/base/messages/strings/names.txt:605
 msgid "NEXUS CWall"
-msgstr ""
+msgstr "NEXUS sarokfal"
 
 #: data/base/messages/strings/names.txt:623
 #: data/mp/messages/strings/names.txt:632
@@ -7315,12 +7315,12 @@ msgstr "Flashlight Gunner"
 #: data/base/messages/strings/names.txt:683
 #: data/mp/messages/strings/names.txt:694
 msgid "Jump Bunker Blaster"
-msgstr ""
+msgstr "Ugrás a bunker rombolóhoz"
 
 #: data/base/messages/strings/names.txt:684
 #: data/mp/messages/strings/names.txt:695
 msgid "Jump Heavy Gunner"
-msgstr ""
+msgstr "Ugrás a nehéz fegyverhez"
 
 #: data/base/messages/strings/names.txt:685
 #: data/mp/messages/strings/names.txt:696
@@ -7441,7 +7441,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:745
 #: data/mp/messages/strings/names.txt:1236
 msgid "Mortar Pit"
-msgstr ""
+msgstr "Mozsár löveg"
 
 #: data/base/messages/strings/names.txt:731
 #: data/mp/messages/strings/names.txt:746
@@ -7950,7 +7950,7 @@ msgstr "Érzékelő zár"
 #: data/base/messages/strings/names.txt:922
 #: data/mp/messages/strings/names.txt:939
 msgid "Thermal Armor"
-msgstr "Thermal Armour"
+msgstr "Hő páncélzat"
 
 #: data/base/messages/strings/names.txt:923
 #: data/mp/messages/strings/names.txt:940
@@ -8321,17 +8321,17 @@ msgstr ""
 #: data/base/messages/strings/names.txt:1026
 #: data/mp/messages/strings/names.txt:1043
 msgid "Cannon Autoloader"
-msgstr ""
+msgstr "Löveg automatikus betöltő"
 
 #: data/base/messages/strings/names.txt:1027
 #: data/mp/messages/strings/names.txt:1044
 msgid "Cannon Autoloader Mk2"
-msgstr ""
+msgstr "Löveg automatikus betöltő Mk2"
 
 #: data/base/messages/strings/names.txt:1028
 #: data/mp/messages/strings/names.txt:1045
 msgid "Cannon Autoloader Mk3"
-msgstr ""
+msgstr "Löveg automatikus betöltő Mk3"
 
 #: data/base/messages/strings/names.txt:1029
 #: data/mp/messages/strings/names.txt:1046
@@ -8426,7 +8426,7 @@ msgstr ""
 #: data/base/messages/strings/names.txt:1055
 #: data/mp/messages/strings/names.txt:1072
 msgid "Flamer Autoloader"
-msgstr ""
+msgstr "Lángvető automatikus betöltő"
 
 #: data/base/messages/strings/names.txt:1056
 #: data/mp/messages/strings/names.txt:1073
@@ -8471,27 +8471,28 @@ msgstr ""
 #: data/base/messages/strings/names.txt:1070
 #: data/mp/messages/strings/names.txt:1087
 msgid "HE Howitzer Shells"
-msgstr ""
+msgstr "HE tarack héj"
 
+# Ez szerintem az mk2 a két rétegű páncélzatot jelenti??
 #: data/base/messages/strings/names.txt:1071
 #: data/mp/messages/strings/names.txt:1088
 msgid "HE Howitzer Shells Mk2"
-msgstr ""
+msgstr "HE tarack héj Mk2"
 
 #: data/base/messages/strings/names.txt:1072
 #: data/mp/messages/strings/names.txt:1089
 msgid "HE Howitzer Shells Mk3"
-msgstr ""
+msgstr "HE tarack héj Mk3"
 
 #: data/base/messages/strings/names.txt:1073
 #: data/mp/messages/strings/names.txt:1090
 msgid "HEAP Howitzer Shells"
-msgstr ""
+msgstr "HEAP tarack héj"
 
 #: data/base/messages/strings/names.txt:1074
 #: data/mp/messages/strings/names.txt:1091
 msgid "HEAP Howitzer Shells Mk2"
-msgstr ""
+msgstr "HEAP tarack héj Mk2"
 
 #: data/base/messages/strings/names.txt:1075
 #: data/mp/messages/strings/names.txt:1092
@@ -8501,17 +8502,17 @@ msgstr ""
 #: data/base/messages/strings/names.txt:1077
 #: data/mp/messages/strings/names.txt:1094
 msgid "Howitzer Autoloader"
-msgstr ""
+msgstr "Tarack automatikus betöltő"
 
 #: data/base/messages/strings/names.txt:1078
 #: data/mp/messages/strings/names.txt:1095
 msgid "Howitzer Autoloader Mk2"
-msgstr ""
+msgstr "Tarack automatikus betöltő Mk2"
 
 #: data/base/messages/strings/names.txt:1079
 #: data/mp/messages/strings/names.txt:1096
 msgid "Howitzer Autoloader Mk3"
-msgstr ""
+msgstr "Tarack automatikus betöltő Mk3"
 
 #: data/base/messages/strings/names.txt:1080
 msgid "Fast Loader"
@@ -8639,17 +8640,17 @@ msgstr ""
 #: data/base/messages/strings/names.txt:1114
 #: data/mp/messages/strings/names.txt:1131
 msgid "Improved Missile Loading System"
-msgstr ""
+msgstr "Továbbfejlesztett rakéta betöltő rendszer"
 
 #: data/base/messages/strings/names.txt:1125
 #: data/mp/messages/strings/names.txt:1142
 msgid "Mortar Targeting Computer"
-msgstr ""
+msgstr "Mozsár számítógép célzással"
 
 #: data/base/messages/strings/names.txt:1126
 #: data/mp/messages/strings/names.txt:1143
 msgid "Thermal Imaging Mortar Shells"
-msgstr ""
+msgstr "Hő képalkotás a mozsár héjról"
 
 #: data/base/messages/strings/names.txt:1127
 #: data/mp/messages/strings/names.txt:1144
@@ -8674,7 +8675,7 @@ msgstr "HE Mozsár héjak Mk3"
 #: data/base/messages/strings/names.txt:1131
 #: data/mp/messages/strings/names.txt:1148
 msgid "HEAP Mortar Shells"
-msgstr ""
+msgstr "HEAP Mozsár héj"
 
 #: data/base/messages/strings/names.txt:1132
 #: data/mp/messages/strings/names.txt:1149
@@ -9224,7 +9225,7 @@ msgstr ""
 #: data/mp/messages/resmessagesall.rmsg:356
 #: data/mp/messages/strings/resstrings.txt:470
 msgid "Heavy repair unit"
-msgstr ""
+msgstr "Nehéz helyreállító egység"
 
 #: data/base/messages/strings/resstrings.txt:449
 #: data/mp/messages/strings/resstrings.txt:477
@@ -9234,7 +9235,7 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:451
 #: data/mp/messages/strings/resstrings.txt:479
 msgid "Increases repair speed"
-msgstr ""
+msgstr "Növekvő helyreállítási sebesség"
 
 #: data/base/messages/strings/resstrings.txt:452
 #: data/mp/messages/strings/resstrings.txt:480
@@ -9278,7 +9279,7 @@ msgstr ""
 #: data/base/script/text/cam1-7.slo:506
 #: data/base/script/text/genexp.slo:999
 msgid "Return to LZ"
-msgstr "Vissza az LZ-be"
+msgstr "Vissza a leszálló zónába"
 
 #: data/base/script/text/cam1-7.slo:913
 #: data/base/script/text/cam2cx.slo:270
@@ -9295,7 +9296,7 @@ msgstr ""
 #: data/base/script/text/cam2dx.slo:63
 #: data/base/script/text/cam3a-d1x.slo:129
 msgid "Objective Captured"
-msgstr ""
+msgstr "Cél elfoglalva"
 
 #: data/base/script/text/cam3-2x.slo:118
 msgid "Reinforcements are now available"
@@ -9303,19 +9304,19 @@ msgstr "Erősítés most elérhető"
 
 #: data/base/script/text/tutorial3.slo:289
 msgid "In this training session you'll learn how to build an effective base"
-msgstr ""
+msgstr "Ebben a tréning küldetésben meg fogod tudni, hogy hogyan lehet építeni egy hatásos alapot"
 
 #: data/base/script/text/tutorial3.slo:304
 msgid "Oil resources are key to your success"
-msgstr ""
+msgstr "Az olajerőforrások kulcsfontosságúak a siker szempontjából"
 
 #: data/base/script/text/tutorial3.slo:313
 msgid "To build an oil derrick, select one of your trucks"
-msgstr ""
+msgstr "Építs fúrótornyot, és válaszd ki az egyik teherautót"
 
 #: data/base/script/text/tutorial3.slo:333
 msgid "Left click the oil pool indicated by the radar pulse to order your truck to build"
-msgstr ""
+msgstr "Bal kattintást érzékeli az olaj medence a radar pulzus által odarendeli a teherautót az építéshez"
 
 #: data/base/script/text/tutorial3.slo:353
 msgid "The oil derrick is currently dormant. Build a power generator to convert the oil into power"
@@ -9345,7 +9346,7 @@ msgstr ""
 
 #: data/base/script/text/tutorial3.slo:472
 msgid "The other truck will now help to build the power generator"
-msgstr ""
+msgstr "Másik teherautó segíteni fog az energia generátor építésnél"
 
 #: data/base/script/text/tutorial3.slo:510
 msgid "During missions you need to locate and recover technologies from before the Collapse"
@@ -9353,7 +9354,7 @@ msgstr ""
 
 #: data/base/script/text/tutorial3.slo:519
 msgid "Use a truck to search for the artifact indicated by the radar pulse"
-msgstr ""
+msgstr "Arra használja a teherautót, hogy kutasson a utánpótlás után, amit jelzett a radar"
 
 #: data/base/script/text/tutorial3.slo:523
 msgid "Move the pointer over the artifact and left click to recover it"
@@ -9381,7 +9382,7 @@ msgstr ""
 
 #: data/base/script/text/tutorial3.slo:692
 msgid "The artifact is now being researched by the facility"
-msgstr ""
+msgstr "Most kezdődik a kutatás a létesítményben"
 
 #: data/base/script/text/tutorial3.slo:713
 msgid "The researched machinegun can now be used to design a new vehicle"
@@ -9393,11 +9394,11 @@ msgstr ""
 
 #: data/base/script/text/tutorial3.slo:746
 msgid "To start your design, left click the NEW DESIGN icon"
-msgstr ""
+msgstr "Indítsd el a tervezést, kattints a bal egérgombbal az ÚJ TERVEZÉS ikonra"
 
 #: data/base/script/text/tutorial3.slo:761
 msgid "Now left click the Vehicle Body icon"
-msgstr ""
+msgstr "Most kattints bal egérgombbal  a jármű karosszéria ikonra"
 
 #: data/base/script/text/tutorial3.slo:775
 msgid "Then left click the Viper body"
@@ -9405,7 +9406,7 @@ msgstr ""
 
 #: data/base/script/text/tutorial3.slo:787
 msgid "Left click the Wheels icon"
-msgstr ""
+msgstr "Bal kattintás a kerekek ikonra"
 
 #: data/base/script/text/tutorial3.slo:799
 msgid "Then left click the machinegun to complete your design"
@@ -9413,11 +9414,11 @@ msgstr ""
 
 #: data/base/script/text/tutorial3.slo:832
 msgid "To finalize your design, left click the CLOSE icon"
-msgstr "To finalise your design, left click the CLOSE icon"
+msgstr "Befejezted a tervezést, kattints a bal egérgombbal a bezárás ikonra"
 
 #: data/base/script/text/tutorial3.slo:859
 msgid "A factory is now required to manufacture your new vehicle"
-msgstr ""
+msgstr "A gyárban szükséges most új járművet gyártani"
 
 #: data/base/script/text/tutorial3.slo:894
 msgid "Now left click the factory icon and position it at your base"
@@ -9425,7 +9426,7 @@ msgstr ""
 
 #: data/base/script/text/tutorial3.slo:914
 msgid "Select a location for your factory"
-msgstr ""
+msgstr "Válaszd ki a helyet a gyáradnál"
 
 #: data/base/script/text/tutorial3.slo:933
 msgid "The delivery point is indicated by the number 1"
@@ -9533,7 +9534,7 @@ msgstr "Sok szerencsét és jó vadászatot"
 
 #: data/base/sequenceaudio/cam1/c001.txt:7
 msgid "Approaching Landing Zone. Team Alpha Briefing commences."
-msgstr "Leszálló óóna közeledik. Alfa Csapat eligazítása kezdetét veszi."
+msgstr "Leszálló zóna közeledik. Alfa Csapat eligazítása kezdetét veszi."
 
 #: data/base/sequenceaudio/cam1/c001.txt:9
 msgid "Commander, you lead Team Alpha, one of three expeditionary teams sent out by the Project to recover artifacts from before the Collapse."
@@ -9623,7 +9624,7 @@ msgstr "Istenekként tudlak felemelni téged az átkozott földön."
 
 #: data/base/sequenceaudio/cam1/cam1out3.txt:4
 msgid "When we failed to respond it became threatening."
-msgstr ""
+msgstr "Képtelenek voltunk válaszolni a bejövő fenyegetésre"
 
 #: data/base/sequenceaudio/cam1/cam1out4.txt:1
 msgid "Your interference in my plans for the New Paradigm will not go unpunished."
@@ -11863,9 +11864,8 @@ msgid "VTOL Cluster Bomb Bay"
 msgstr "VTOL Cluster Bombs Bay"
 
 #: data/mp/messages/strings/names.txt:591
-#, fuzzy
 msgid "Collective Corner Wall"
-msgstr "Collective CWall"
+msgstr "Kollektív kfal"
 
 #: data/mp/messages/strings/names.txt:613
 #, fuzzy
@@ -13545,7 +13545,7 @@ msgstr ""
 msgid "-->  QUIT  <--"
 msgstr "--> KILÉPÉS <--"
 
-#: src/init.c:390
+#: src/init.c:402
 #, c-format
 msgid ""
 "The required mod could not be loaded: %s\n"
