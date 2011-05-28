@@ -54,7 +54,7 @@
     <IntDir Condition="'$(Configuration)|$(Platform)'=='STLport-Debug|Win32'">$(Configuration)\</IntDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\</IntDir>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\lib\netplay;..\devpkg\include;$(Qtdir)\include;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\lib\netplay;..\devpkg\include;$(Qtdir)\include;..\..\3rdparty\;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='STLport-Debug|Win32'">..\devpkg\stlport5.2.1\stlport;..\devpkg\include;$(Qtdir)\include;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\devpkg\include;$(Qtdir)\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
@@ -114,7 +114,7 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="miniupnpc\connecthostport.c" />
+    <ClCompile Include="..\..\3rdparty\miniupnpc\connecthostport.c" />
     <ClCompile Include="netjoin_stub.cpp" />
     <ClCompile Include="netlog.cpp" />
     <ClCompile Include="netplay.cpp" />
@@ -128,31 +128,31 @@
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
       <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
     </ClCompile>
-    <ClCompile Include="miniupnpc\igd_desc_parse.c" />
-    <ClCompile Include="miniupnpc\minisoap.c" />
-    <ClCompile Include="miniupnpc\minissdpc.c" />
-    <ClCompile Include="miniupnpc\miniupnpc.c" />
-    <ClCompile Include="miniupnpc\miniwget.c" />
-    <ClCompile Include="miniupnpc\minixml.c" />
-    <ClCompile Include="miniupnpc\upnpcommands.c" />
-    <ClCompile Include="miniupnpc\upnperrors.c" />
-    <ClCompile Include="miniupnpc\upnpreplyparse.c" />
+    <ClCompile Include="..\..\3rdparty\miniupnpc\igd_desc_parse.c" />
+    <ClCompile Include="..\..\3rdparty\miniupnpc\minisoap.c" />
+    <ClCompile Include="..\..\3rdparty\miniupnpc\minissdpc.c" />
+    <ClCompile Include="..\..\3rdparty\miniupnpc\miniupnpc.c" />
+    <ClCompile Include="..\..\3rdparty\miniupnpc\miniwget.c" />
+    <ClCompile Include="..\..\3rdparty\miniupnpc\minixml.c" />
+    <ClCompile Include="..\..\3rdparty\miniupnpc\upnpcommands.c" />
+    <ClCompile Include="..\..\3rdparty\miniupnpc\upnperrors.c" />
+    <ClCompile Include="..\..\3rdparty\miniupnpc\upnpreplyparse.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="miniupnpc\bsdqueue.h" />
-    <ClInclude Include="miniupnpc\codelength.h" />
-    <ClInclude Include="miniupnpc\connecthostport.h" />
-    <ClInclude Include="miniupnpc\declspec.h" />
-    <ClInclude Include="miniupnpc\igd_desc_parse.h" />
-    <ClInclude Include="miniupnpc\minisoap.h" />
-    <ClInclude Include="miniupnpc\minissdpc.h" />
-    <ClInclude Include="miniupnpc\miniupnpc.h" />
-    <ClInclude Include="miniupnpc\miniupnpcstrings.h" />
-    <ClInclude Include="miniupnpc\miniwget.h" />
-    <ClInclude Include="miniupnpc\minixml.h" />
-    <ClInclude Include="miniupnpc\upnpcommands.h" />
-    <ClInclude Include="miniupnpc\upnperrors.h" />
-    <ClInclude Include="miniupnpc\upnpreplyparse.h" />
+    <ClInclude Include="..\..\3rdparty\miniupnpc\bsdqueue.h" />
+    <ClInclude Include="..\..\3rdparty\miniupnpc\codelength.h" />
+    <ClInclude Include="..\..\3rdparty\miniupnpc\connecthostport.h" />
+    <ClInclude Include="..\..\3rdparty\miniupnpc\declspec.h" />
+    <ClInclude Include="..\..\3rdparty\miniupnpc\igd_desc_parse.h" />
+    <ClInclude Include="..\..\3rdparty\miniupnpc\minisoap.h" />
+    <ClInclude Include="..\..\3rdparty\miniupnpc\minissdpc.h" />
+    <ClInclude Include="..\..\3rdparty\miniupnpc\miniupnpc.h" />
+    <ClInclude Include="..\..\3rdparty\miniupnpc\miniupnpcstrings.h" />
+    <ClInclude Include="..\..\3rdparty\miniupnpc\miniwget.h" />
+    <ClInclude Include="..\..\3rdparty\miniupnpc\minixml.h" />
+    <ClInclude Include="..\..\3rdparty\miniupnpc\upnpcommands.h" />
+    <ClInclude Include="..\..\3rdparty\miniupnpc\upnperrors.h" />
+    <ClInclude Include="..\..\3rdparty\miniupnpc\upnpreplyparse.h" />
     <ClInclude Include="netlog.h" />
     <ClInclude Include="netplay.h" />
     <ClInclude Include="netsocket.h" />

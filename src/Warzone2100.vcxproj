@@ -75,6 +75,7 @@
     <BisonParserBeforeTargets Condition="'$(Configuration)|$(Platform)'=='STLport-Debug|Win32'">Midl</BisonParserBeforeTargets>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\lib\ivis_opengl;..\devpkg\include;$(Qtdir)\include;$(IncludePath)</IncludePath>
     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\devpkg\libsx86;$(Qtdir)\lib;$(LibraryPath)</LibraryPath>
+    <ExtensionsToDeleteOnClean Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">*.lex.cpp;*.tab.cpp;*.tab.hpp;$(ExtensionsToDeleteOnClean)</ExtensionsToDeleteOnClean>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <PreBuildEvent>
