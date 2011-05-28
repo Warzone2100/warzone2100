@@ -19,10 +19,14 @@ AC_CANONICAL_HOST
 
 # Checks for programs.
 AC_PROG_CC_STDC
+AC_CHECK_PROG(CCOMPILER, ${CC}, ccompiler)
+test -z "${CCOMPILER}" && AC_MSG_ERROR(No C compiler found!)
 AC_PROG_RANLIB
 
 # We need a C++ compiler for build_tools/autorevision
 AC_PROG_CXX
+AC_CHECK_PROG(CXXCOMPILER, ${CXX}, cxxcompiler)
+test -z "${CXXCOMPILER}" && AC_MSG_ERROR(No C++ compiler found!)
 
 AC_PROG_YACC
 if test "x$YACC" != "xbison -y" ; then
@@ -45,7 +49,6 @@ test -z "${UNZIP}" && AC_MSG_ERROR(Unzip not found!)
 # --filesync was added in zip 3.0, older versions need -u
 ZIP_UPDATE="-u"
 zip -q --filesync filesynctest.zip $srcdir/ChangeLog 2> /dev/null && export ZIP_UPDATE="--filesync"
-echo $srcdir
 rm -f filesynctest.zip
 AC_SUBST([ZIP_UPDATE], [${ZIP_UPDATE}])
 
