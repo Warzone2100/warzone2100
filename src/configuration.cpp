@@ -54,7 +54,7 @@ static const char *fileName = "config";
 // ////////////////////////////////////////////////////////////////////////////
 bool loadConfig()
 {
-	WzConfig ini(fileName);
+	QSettings ini(PHYSFS_getWriteDir() + QString("/") + fileName, QSettings::IniFormat);
 	if (ini.status() != QSettings::NoError)
 	{
 		debug(LOG_ERROR, "Could not open configuration file \"%s\"", fileName);
@@ -140,7 +140,7 @@ bool loadConfig()
 // ////////////////////////////////////////////////////////////////////////////
 bool saveConfig()
 {
-	WzConfig ini(fileName);
+	QSettings ini(PHYSFS_getWriteDir() + QString("/") + fileName, QSettings::IniFormat);
 	if (ini.status() != QSettings::NoError)
 	{
 		debug(LOG_ERROR, "Could not open configuration file \"%s\"", fileName);
@@ -220,7 +220,7 @@ bool saveConfig()
 // Ensures that others' games don't change our own configuration settings
 bool reloadMPConfig(void)
 {
-	WzConfig ini(fileName);
+	QSettings ini(PHYSFS_getWriteDir() + QString("/") + fileName, QSettings::IniFormat);
 	if (ini.status() != QSettings::NoError)
 	{
 		debug(LOG_ERROR, "Could not open configuration file \"%s\"", fileName);
