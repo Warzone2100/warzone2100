@@ -229,11 +229,8 @@ bool loadPlayerScript(QString path, int player, int difficulty)
 	QString source = QString::fromAscii(bytes, size);
 	free(bytes);
 	QScriptSyntaxCheckResult syntax = QScriptEngine::checkSyntax(source);
-	if (syntax.state() != QScriptSyntaxCheckResult::Valid)
-	{
-		debug(LOG_ERROR, "Syntax error in %s line %d: %s", path.toAscii().constData(), syntax.errorLineNumber(), syntax.errorMessage().toAscii().constData());
-		return false;
-	}
+	ASSERT_OR_RETURN(false, syntax.state() == QScriptSyntaxCheckResult::Valid, "Syntax error in %s line %d: %s", 
+	                 path.toAscii().constData(), syntax.errorLineNumber(), syntax.errorMessage().toAscii().constData());
 	// Remember internal, reserved names
 	QScriptValueIterator it(engine->globalObject());
 	while (it.hasNext())
@@ -242,12 +239,8 @@ bool loadPlayerScript(QString path, int player, int difficulty)
 		internalNamespace.insert(it.name(), 1);
 	}
 	QScriptValue result = engine->evaluate(source, path);
-	if (engine->hasUncaughtException())
-	{
-		int line = engine->uncaughtExceptionLineNumber();
-		debug(LOG_ERROR, "Uncaught exception at line %d, file %s: %s", line, path.toAscii().constData(), result.toString().toAscii().constData());
-		return false;
-	}
+	ASSERT_OR_RETURN(false, !engine->hasUncaughtException(), "Uncaught exception at line %d, file %s: %s", 
+	                 engine->uncaughtExceptionLineNumber(), path.toAscii().constData(), result.toString().toAscii().constData());
 	// Special functions
 	engine->globalObject().setProperty("setGlobalTimer", engine->newFunction(js_setGlobalTimer));
 	engine->globalObject().setProperty("setObjectTimer", engine->newFunction(js_setObjectTimer));
