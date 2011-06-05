@@ -2159,15 +2159,13 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			}
 		}
 
-		//load in the mission droids
+		// load in the mission droids, if any
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "munit.ini");
-		if (!loadSaveDroid(aFileName, apsDroidLists))
+		if (loadSaveDroid(aFileName, apsDroidLists))
 		{
-			debug(LOG_ERROR, "failed to load %s", aFileName);
-			goto error;
+			droidMap.insert(aFileName, apsDroidLists);
 		}
-		droidMap.insert(aFileName, apsDroidLists);
 
 		/* after we've loaded in the units we need to redo the orientation because
 		 * the direction may have been saved - we need to do it outside of the loop
@@ -2286,21 +2284,34 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 
 	if (IsScenario)
 	{
-		//load in the droid initialisation file
+		//load in the droids
 		aFileName[fileExten] = '\0';
-		strcat(aFileName, "dinit.bjo");
-		/* Load in the chosen file data */
-		pFileData = fileLoadBuffer;
-		if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
-		{
-			debug( LOG_NEVER, "loadgame: Fail8\n" );
-			goto error;
-		}
+		strcat(aFileName, "unit.ini");
 
-		if(!loadSaveDroidInit(pFileData,fileSize))
+		//load the data into apsDroidLists
+		if (loadSaveDroid(aFileName, apsDroidLists))
 		{
-			debug( LOG_NEVER, "loadgame: Fail10\n" );
-			goto error;
+			debug(LOG_INFO, "Loaded new style droids");
+			droidMap.insert(aFileName, apsDroidLists);	// load pointers later
+		}
+		else
+		{
+			// load in the old style droid initialisation file
+			aFileName[fileExten] = '\0';
+			strcat(aFileName, "dinit.bjo");
+			/* Load in the chosen file data */
+			pFileData = fileLoadBuffer;
+			if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
+			{
+				debug( LOG_NEVER, "loadgame: Fail8\n" );
+				goto error;
+			}
+			if (!loadSaveDroidInit(pFileData,fileSize))
+			{
+				debug( LOG_NEVER, "loadgame: Fail10\n" );
+				goto error;
+			}
+			debug(LOG_INFO, "Loaded old style droids");
 		}
 	}
 	else
@@ -2315,7 +2326,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			debug(LOG_ERROR, "failed to load %s", aFileName);
 			goto error;
 		}
-		droidMap.insert(aFileName, apsDroidLists);
+		droidMap.insert(aFileName, apsDroidLists);	// load pointers later
 
 		/* after we've loaded in the units we need to redo the orientation because
 		 * the direction may have been saved - we need to do it outside of the loop
@@ -2340,27 +2351,23 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			aFileName[fileExten] = '\0';
 			strcat(aFileName, "munit.ini");
 
-			//load the data into mission.apsDroidLists
-			if (!loadSaveDroid(aFileName, mission.apsDroidLists))
+			// load the data into mission.apsDroidLists, if any
+			if (loadSaveDroid(aFileName, mission.apsDroidLists))
 			{
-				debug(LOG_ERROR, "failed to load %s", aFileName);
-				goto error;
+				droidMap.insert(aFileName, mission.apsDroidLists);
 			}
-			droidMap.insert(aFileName, mission.apsDroidLists);
 		}
 	}
 
 	if (saveGameVersion >= VERSION_23)
 	{
-		//load in the limbo droids
+		// load in the limbo droids, if any
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "limbo.ini");
-		if (!loadSaveDroid(aFileName, apsLimboDroids))
+		if (loadSaveDroid(aFileName, apsLimboDroids))
 		{
-			debug(LOG_ERROR, "failed to load %s", aFileName);
-			goto error;
+			droidMap.insert(aFileName, apsLimboDroids);
 		}
-		droidMap.insert(aFileName, apsLimboDroids);
 	}
 
 	//load in the features -do before the structures
@@ -4368,6 +4375,11 @@ static bool loadSaveDroidPointers(const QString &pFileName, DROID **ppsCurrentDr
 
 static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 {
+	if (!PHYSFS_exists(pFileName))
+	{
+		debug(LOG_INFO, "No %s found -- use fallback method", pFileName);
+		return false;	// try to use fallback method
+	}
 	WzConfig ini(pFileName);
 	if (ini.status() != QSettings::NoError)
 	{
@@ -4384,27 +4396,42 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		Position pos = ini.vector3i("position");
 		Vector2i tmp;
 		bool onMission = ini.value("onMission", false).toBool();
-
-		// Create fake template (FIXME - use a real one instead!)
 		DROID_TEMPLATE templ, *psTemplate = &templ;
-		psTemplate->pName = NULL;
-		sstrcpy(templ.aName, ini.value("name", "UNKNOWN").toString().toUtf8().constData());
-		psTemplate->droidType = (DROID_TYPE)ini.value("droidType").toInt();
-		psTemplate->numWeaps = ini.value("weapons", 0).toInt();
-		ini.beginGroup("parts");	// the following is copy-pasted from loadSaveTemplate() -- fixme somehow
-		psTemplate->asParts[COMP_BODY] = getCompFromName(COMP_BODY, ini.value("body", QString("ZNULLBODY")).toString().toUtf8().constData());
-		psTemplate->asParts[COMP_BRAIN] = getCompFromName(COMP_BRAIN, ini.value("brain", QString("ZNULLBRAIN")).toString().toUtf8().constData());
-		psTemplate->asParts[COMP_PROPULSION] = getCompFromName(COMP_PROPULSION, ini.value("propulsion", QString("ZNULLPROP")).toString().toUtf8().constData());
-		psTemplate->asParts[COMP_REPAIRUNIT] = getCompFromName(COMP_REPAIRUNIT, ini.value("repair", QString("ZNULLREPAIR")).toString().toUtf8().constData());
-		psTemplate->asParts[COMP_ECM] = getCompFromName(COMP_ECM, ini.value("ecm", QString("ZNULLECM")).toString().toUtf8().constData());
-		psTemplate->asParts[COMP_SENSOR] = getCompFromName(COMP_SENSOR, ini.value("sensor", QString("ZNULLSENSOR")).toString().toUtf8().constData());
-		psTemplate->asParts[COMP_CONSTRUCT] = getCompFromName(COMP_CONSTRUCT, ini.value("construct", QString("ZNULLCONSTRUCT")).toString().toUtf8().constData());
-		psTemplate->asWeaps[0] = getCompFromName(COMP_WEAPON, ini.value("weapon/1", QString("ZNULLWEAPON")).toString().toUtf8().constData());
-		psTemplate->asWeaps[1] = getCompFromName(COMP_WEAPON, ini.value("weapon/2", QString("ZNULLWEAPON")).toString().toUtf8().constData());
-		psTemplate->asWeaps[2] = getCompFromName(COMP_WEAPON, ini.value("weapon/3", QString("ZNULLWEAPON")).toString().toUtf8().constData());
-		ini.endGroup();
-		psTemplate->buildPoints = calcTemplateBuild(psTemplate);
-		psTemplate->powerPoints = calcTemplatePower(psTemplate);
+
+		if (ini.contains("template"))
+		{
+			// Use real template (for maps)
+			QString templName(ini.value("template").toString());
+			psTemplate = getTemplateFromTranslatedNameNoPlayer(templName.toUtf8().constData());
+			if (psTemplate == NULL)
+			{
+				debug(LOG_ERROR, "Unable to find template for %s for player %d -- unit skipped", templName.toUtf8().constData(), player);
+				ini.endGroup();
+				continue;
+			}
+		}
+		else
+		{
+			// Create fake template
+			psTemplate->pName = NULL;
+			sstrcpy(templ.aName, ini.value("name", "UNKNOWN").toString().toUtf8().constData());
+			psTemplate->droidType = (DROID_TYPE)ini.value("droidType").toInt();
+			psTemplate->numWeaps = ini.value("weapons", 0).toInt();
+			ini.beginGroup("parts");	// the following is copy-pasted from loadSaveTemplate() -- fixme somehow
+			psTemplate->asParts[COMP_BODY] = getCompFromName(COMP_BODY, ini.value("body", QString("ZNULLBODY")).toString().toUtf8().constData());
+			psTemplate->asParts[COMP_BRAIN] = getCompFromName(COMP_BRAIN, ini.value("brain", QString("ZNULLBRAIN")).toString().toUtf8().constData());
+			psTemplate->asParts[COMP_PROPULSION] = getCompFromName(COMP_PROPULSION, ini.value("propulsion", QString("ZNULLPROP")).toString().toUtf8().constData());
+			psTemplate->asParts[COMP_REPAIRUNIT] = getCompFromName(COMP_REPAIRUNIT, ini.value("repair", QString("ZNULLREPAIR")).toString().toUtf8().constData());
+			psTemplate->asParts[COMP_ECM] = getCompFromName(COMP_ECM, ini.value("ecm", QString("ZNULLECM")).toString().toUtf8().constData());
+			psTemplate->asParts[COMP_SENSOR] = getCompFromName(COMP_SENSOR, ini.value("sensor", QString("ZNULLSENSOR")).toString().toUtf8().constData());
+			psTemplate->asParts[COMP_CONSTRUCT] = getCompFromName(COMP_CONSTRUCT, ini.value("construct", QString("ZNULLCONSTRUCT")).toString().toUtf8().constData());
+			psTemplate->asWeaps[0] = getCompFromName(COMP_WEAPON, ini.value("weapon/1", QString("ZNULLWEAPON")).toString().toUtf8().constData());
+			psTemplate->asWeaps[1] = getCompFromName(COMP_WEAPON, ini.value("weapon/2", QString("ZNULLWEAPON")).toString().toUtf8().constData());
+			psTemplate->asWeaps[2] = getCompFromName(COMP_WEAPON, ini.value("weapon/3", QString("ZNULLWEAPON")).toString().toUtf8().constData());
+			ini.endGroup();
+			psTemplate->buildPoints = calcTemplateBuild(psTemplate);
+			psTemplate->powerPoints = calcTemplatePower(psTemplate);
+		}
 
 		/* Create the Droid */
 		turnOffMultiMsg(true);
