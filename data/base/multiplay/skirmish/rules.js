@@ -129,19 +129,11 @@ function eventGameInit()
 // END CONDITIONS
 function checkEndConditions()
 {
-	// Only read in data for players we check (speed optimization)
-	var factories = new Array(maxPlayers);
-	var droids = new Array(maxPlayers);
-	for (var playnum = 0; playnum < maxPlayers; playnum++)
-	{
-		factories[playnum] = -1;
-		droids[playnum] = -1;
-	}
-	factories[me] = enumStruct(me, "A0LightFactory").length + enumStruct(me, "A0CyborgFactory").length;
-	droids[me] = enumDroid(me).length;
+	var factories = enumStruct(me, "A0LightFactory").length + enumStruct(me, "A0CyborgFactory").length;
+	var droids = enumDroid(me).length;
 
 	// Losing Conditions
-	if (droids[me] == 0 && factories[me] == 0)
+	if (droids == 0 && factories == 0)
 	{
 		var gameLost = true;
 
@@ -152,9 +144,9 @@ function checkEndConditions()
 			{
 				if (playnum != me && allianceExistsBetween(me, playnum))
 				{
-					factories[playnum] = enumStruct(playnum, factory).length + enumStruct(me, "A0CyborgFactory").length;
-					droids[playnum] = enumDroid("A0LightFactory").length;
-					if (droids[playnum] > 0 || factories[playnum] > 0)
+					factories = enumStruct(playnum, "A0LightFactory").length + enumStruct(playnum, "A0CyborgFactory").length;
+					droids = enumDroid(playnum).length;
+					if (droids > 0 || factories > 0)
 					{
 						gameLost = false;	// someone from our team still alive
 						break;
@@ -179,12 +171,9 @@ function checkEndConditions()
 	{
 		if (playnum != me && !allianceExistsBetween(me, playnum))	// checking enemy player
 		{
-			if (factories[playnum] == -1) // cached count?
-			{
-				factories[playnum] = enumStruct(playnum, "A0LightFactory").length + enumStruct(me, "A0CyborgFactory").length; // nope
-				droids[playnum] = enumDroid(playnum).length;
-			}
-			if (droids[playnum] > 0 || factories[playnum] > 0)
+			factories = enumStruct(playnum, "A0LightFactory").length + enumStruct(playnum, "A0CyborgFactory").length; // nope
+			droids = enumDroid(playnum).length;
+			if (droids > 0 || factories > 0)
 			{
 				gamewon = false;	//one of the enemies still alive
 				break;
