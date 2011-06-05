@@ -1552,7 +1552,6 @@ static bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version);
 static bool writeGameFile(const char* fileName, SDWORD saveType);
 static bool writeMapFile(const char* fileName);
 
-static bool loadSaveDroidInitV2(char *pFileData, UDWORD filesize,UDWORD quantity);
 static bool loadSaveDroidInit(char *pFileData, UDWORD filesize);
 
 static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists);
@@ -4197,13 +4196,17 @@ static bool writeGameFile(const char* fileName, SDWORD saveType)
 bool loadSaveDroidInit(char *pFileData, UDWORD filesize)
 {
 	DROIDINIT_SAVEHEADER		*psHeader;
+	SAVE_DROIDINIT *pDroidInit;
+	DROID_TEMPLATE *psTemplate;
+	DROID *psDroid;
+	UDWORD i;
+	UDWORD NumberOfSkippedDroids = 0;
 
 	/* Check the file type */
 	psHeader = (DROIDINIT_SAVEHEADER *)pFileData;
-	if (psHeader->aFileType[0] != 'd' || psHeader->aFileType[1] != 'i' ||
-		psHeader->aFileType[2] != 'n' || psHeader->aFileType[3] != 't')	{
-		debug( LOG_ERROR, "loadSaveUnitInit: Incorrect file type" );
-
+	if (psHeader->aFileType[0] != 'd' || psHeader->aFileType[1] != 'i' || psHeader->aFileType[2] != 'n' || psHeader->aFileType[3] != 't')
+	{
+		debug(LOG_ERROR, "Incorrect file type");
 		return false;
 	}
 
@@ -4216,42 +4219,9 @@ bool loadSaveDroidInit(char *pFileData, UDWORD filesize)
 
 	debug(LOG_SAVE, "fileversion is %u ", psHeader->version);
 
-	/* Check the file version */
-	if (psHeader->version < VERSION_7)
-	{
-		debug( LOG_ERROR, "UnitInit; unsupported save format version %d", psHeader->version );
-
-		return false;
-	}
-	else if (psHeader->version <= CURRENT_VERSION_NUM)
-	{
-		if (!loadSaveDroidInitV2(pFileData, filesize, psHeader->quantity))
-		{
-			return false;
-		}
-	}
-	else
-	{
-		debug(LOG_ERROR, "Unsupported save format version %d", psHeader->version);
-
-		return false;
-	}
-
-	return true;
-}
-
-// -----------------------------------------------------------------------------------------
-bool loadSaveDroidInitV2(char *pFileData, UDWORD filesize,UDWORD quantity)
-{
-	SAVE_DROIDINIT *pDroidInit;
-	DROID_TEMPLATE *psTemplate;
-	DROID *psDroid;
-	UDWORD i;
-	UDWORD NumberOfSkippedDroids = 0;
-
 	pDroidInit = (SAVE_DROIDINIT*)pFileData;
 
-	for(i=0; i<quantity; i++)
+	for (i = 0; i < psHeader->quantity; i++)
 	{
 		/* SAVE_DROIDINIT is OBJECT_SAVE_V19 */
 		/* OBJECT_SAVE_V19 */
@@ -4279,7 +4249,6 @@ bool loadSaveDroidInitV2(char *pFileData, UDWORD filesize,UDWORD quantity)
 		else
 		{
 			psDroid = reallyBuildDroid(psTemplate, (pDroidInit->x & ~TILE_MASK) + TILE_UNITS/2, (pDroidInit->y  & ~TILE_MASK) + TILE_UNITS/2, pDroidInit->player, false);
-
 			if (psDroid)
 			{
 				Vector2i startpos = getPlayerStartPosition(psDroid->player);
