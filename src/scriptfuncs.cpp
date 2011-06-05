@@ -198,12 +198,13 @@ bool scrGetDerrick()
 		x = derricks[i].x;
 		y = derricks[i].y;
 		MAPTILE *psTile = worldTile(x, y);
+		ASSERT(psTile, "No derrick or oil at position!");
 		if (psTile)
 		{
 			scrFunctionResult.v.oval = psTile->psObject;
 		}
 	}
-	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &scrFunctionResult))
+	if (!stackPushResult((INTERP_TYPE)ST_BASEOBJECT, &scrFunctionResult))
 	{
 		ASSERT(false, "Failed to push result");
 		return false;
@@ -4043,13 +4044,11 @@ bool scrAllianceExistsBetween(void)
 {
 	UDWORD i,j;
 
-
 	if (!stackPopParams(2, VAL_INT, &i,VAL_INT, &j))
 	{
 		return false;
 	}
-	ASSERT_OR_RETURN(false, i < MAX_PLAYERS && j < MAX_PLAYERS, "Invalid player parameters %d and %d", i, j);
-	if(alliances[i][j] == ALLIANCE_FORMED)
+	if (i < MAX_PLAYERS && j < MAX_PLAYERS && alliances[i][j] == ALLIANCE_FORMED)
 	{
 		scrFunctionResult.v.bval = true;
 		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
@@ -4058,7 +4057,6 @@ bool scrAllianceExistsBetween(void)
 		}
 		return true;
 	}
-
 	scrFunctionResult.v.bval = false;
 	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{

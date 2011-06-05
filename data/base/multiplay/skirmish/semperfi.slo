@@ -2422,7 +2422,7 @@ event attackStuff(attackStuffTr)
 	best = NULLOBJECT;
 	while (result != NULLOBJECT)
 	{
-		if (result.type == OBJ_STRUCTURE and result.player != me and safeDest(me, result.x, result.y))
+		if (result.type == OBJ_STRUCTURE and !allianceExistsBetween(result.player, me) and safeDest(me, result.x, result.y))
 		{
 			best = result;	// easy pickings
 		}
@@ -2431,7 +2431,7 @@ event attackStuff(attackStuffTr)
 	}
 	if (best != NULLOBJECT)
 	{
-		dbgPlr("MOVEMENT OF OPPORTUNITY");
+		dbgPlr("MOVEMENT OF OPPORTUNITY to " & best.x & ", " & best.y);
 		orderGroupLoc(attackGroup, DORDER_SCOUT, best.x, best.y);
 		exit;
 	}
