@@ -2161,7 +2161,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 
 		// load in the mission droids, if any
 		aFileName[fileExten] = '\0';
-		strcat(aFileName, "munit.ini");
+		strcat(aFileName, "mdroid.ini");
 		if (loadSaveDroid(aFileName, apsDroidLists))
 		{
 			droidMap.insert(aFileName, apsDroidLists);
@@ -2286,7 +2286,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	{
 		//load in the droids
 		aFileName[fileExten] = '\0';
-		strcat(aFileName, "unit.ini");
+		strcat(aFileName, "droid.ini");
 
 		//load the data into apsDroidLists
 		if (loadSaveDroid(aFileName, apsDroidLists))
@@ -2318,7 +2318,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	{
 		//load in the droids
 		aFileName[fileExten] = '\0';
-		strcat(aFileName, "unit.ini");
+		strcat(aFileName, "droid.ini");
 
 		//load the data into apsDroidLists
 		if (!loadSaveDroid(aFileName, apsDroidLists))
@@ -2349,7 +2349,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		{
 			//load in the mission droids
 			aFileName[fileExten] = '\0';
-			strcat(aFileName, "munit.ini");
+			strcat(aFileName, "mdroid.ini");
 
 			// load the data into mission.apsDroidLists, if any
 			if (loadSaveDroid(aFileName, mission.apsDroidLists))
@@ -2758,7 +2758,7 @@ bool saveGame(char *aFileName, GAME_TYPE saveType)
 
 	//create the droids filename
 	CurrentFileName[fileExtension] = '\0';
-	strcat(CurrentFileName, "unit.ini");
+	strcat(CurrentFileName, "droid.ini");
 	/*Write the current droid lists to the file*/
 	if (!writeDroidFile(CurrentFileName, apsDroidLists))
 	{
@@ -2925,7 +2925,7 @@ bool saveGame(char *aFileName, GAME_TYPE saveType)
 
 	//create the droids filename
 	CurrentFileName[fileExtension] = '\0';
-	strcat(CurrentFileName, "munit.ini");
+	strcat(CurrentFileName, "mdroid.ini");
 	/*Write the swapped droid lists to the file*/
 	if (!writeDroidFile(CurrentFileName, mission.apsDroidLists))
 	{
