@@ -4394,6 +4394,7 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		int player = ini.value("player").toInt();
 		int id = ini.value("id").toInt();
 		Position pos = ini.vector3i("position");
+		Rotation rot = ini.vector3i("rotation");
 		Vector2i tmp;
 		bool onMission = ini.value("onMission", false).toBool();
 		DROID_TEMPLATE templ, *psTemplate = &templ;
@@ -4447,6 +4448,7 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		{
 			psDroid->body = psDroid->originalBody;
 		}
+		psDroid->rot = rot;
 		psDroid->inFire = ini.value("inFire", 0).toInt();
 		psDroid->burnDamage = ini.value("burnDamage", 0).toInt();
 		psDroid->burnStart = ini.value("burnStart", 0).toInt();
