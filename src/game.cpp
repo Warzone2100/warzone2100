@@ -1568,9 +1568,8 @@ static bool loadSaveTemplate(const char *pFileName);
 static bool writeTemplateFile(const char *pFileName);
 
 static bool loadSaveFeature(char *pFileData, UDWORD filesize);
-static bool loadSaveFeatureV14(char *pFileData, UDWORD filesize, UDWORD numFeatures, UDWORD version);
-static bool loadSaveFeatureV(char *pFileData, UDWORD filesize, UDWORD numFeatures, UDWORD version);
-static bool writeFeatureFile(char *pFileName);
+static bool writeFeatureFile(const char *pFileName);
+static bool loadSaveFeature2(const char *pFileName);
 
 static bool writeTerrainTypeMapFile(char *pFileName);
 
@@ -2115,20 +2114,25 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		// reload the objects that were in the mission list
 		//load in the features -do before the structures
 		aFileName[fileExten] = '\0';
-		strcat(aFileName, "mfeat.bjo");
-		/* Load in the chosen file data */
-		pFileData = fileLoadBuffer;
-		if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
-		{
-			debug( LOG_NEVER, "loadgame: Fail14\n" );
-			goto error;
-		}
+		strcat(aFileName, "mfeature.ini");
 
 		//load the data into apsFeatureLists
-		if (!loadSaveFeature(pFileData, fileSize))
+		if (!loadSaveFeature2(aFileName))
 		{
-			debug( LOG_NEVER, "loadgame: Fail16\n" );
-			goto error;
+			aFileName[fileExten] = '\0';
+			strcat(aFileName, "mfeat.bjo");
+			/* Load in the chosen file data */
+			pFileData = fileLoadBuffer;
+			if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
+			{
+				debug( LOG_NEVER, "loadgame: Fail14\n" );
+				goto error;
+			}
+			if (!loadSaveFeature(pFileData, fileSize))
+			{
+				debug( LOG_NEVER, "loadgame: Fail16\n" );
+				goto error;
+			}
 		}
 
 		//load in the mission structures
@@ -2372,20 +2376,25 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 
 	//load in the features -do before the structures
 	aFileName[fileExten] = '\0';
-	strcat(aFileName, "feat.bjo");
-	/* Load in the chosen file data */
-	pFileData = fileLoadBuffer;
-	if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
+	strcat(aFileName, "feature.ini");
+	if (!loadSaveFeature2(aFileName))
 	{
-		debug( LOG_NEVER, "loadgame: Fail14\n" );
-		goto error;
-	}
+		aFileName[fileExten] = '\0';
+		strcat(aFileName, "feat.bjo");
+		/* Load in the chosen file data */
+		pFileData = fileLoadBuffer;
+		if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
+		{
+			debug( LOG_NEVER, "loadgame: Fail14\n" );
+			goto error;
+		}
 
-	//load the data into apsFeatureLists
-	if (!loadSaveFeature(pFileData, fileSize))
-	{
-		debug( LOG_NEVER, "loadgame: Fail16\n" );
-		goto error;
+		//load the data into apsFeatureLists
+		if (!loadSaveFeature(pFileData, fileSize))
+		{
+			debug( LOG_NEVER, "loadgame: Fail16\n" );
+			goto error;
+		}
 	}
 
 	//load in the structures
@@ -2788,7 +2797,7 @@ bool saveGame(char *aFileName, GAME_TYPE saveType)
 
 	//create the features filename
 	CurrentFileName[fileExtension] = '\0';
-	strcat(CurrentFileName, "feat.bjo");
+	strcat(CurrentFileName, "feature.ini");
 	/*Write the data to the file*/
 	if (!writeFeatureFile(CurrentFileName))
 	{
@@ -2997,7 +3006,7 @@ bool saveGame(char *aFileName, GAME_TYPE saveType)
 
 		//create the features filename
 		CurrentFileName[fileExtension] = '\0';
-		strcat(CurrentFileName, "mfeat.bjo");
+		strcat(CurrentFileName, "mfeature.ini");
 		/*Write the data to the file*/
 		if (!writeFeatureFile(CurrentFileName))
 		{
@@ -4537,6 +4546,7 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		tmp = ini.vector2i("bumpPosition");
 		psDroid->sMove.bumpX = tmp.x;
 		psDroid->sMove.bumpY = tmp.y;
+		psDroid->born = ini.value("born", 2).toInt();
 
 		// Recreate path-finding jobs
 		if (psDroid->sMove.Status == MOVEWAITROUTE)
@@ -5767,61 +5777,6 @@ bool loadStructSetPointers(void)
 bool loadSaveFeature(char *pFileData, UDWORD filesize)
 {
 	FEATURE_SAVEHEADER		*psHeader;
-
-	/* Check the file type */
-	psHeader = (FEATURE_SAVEHEADER *)pFileData;
-	if (psHeader->aFileType[0] != 'f' || psHeader->aFileType[1] != 'e' ||
-		psHeader->aFileType[2] != 'a' || psHeader->aFileType[3] != 't')
-	{
-		debug( LOG_ERROR, "loadSaveFeature: Incorrect file type" );
-
-		return false;
-	}
-
-	/* FEATURE_SAVEHEADER */
-	endian_udword(&psHeader->version);
-	endian_udword(&psHeader->quantity);
-
-	debug(LOG_SAVE, "file version is %u ", psHeader->version);
-
-	//increment to the start of the data
-	pFileData += FEATURE_HEADER_SIZE;
-
-	/* Check the file version */
-	if (psHeader->version < VERSION_7)
-	{
-		debug( LOG_ERROR, "FeatLoad: unsupported save format version %d", psHeader->version );
-
-		return false;
-	}
-	else if (psHeader->version <= VERSION_19)
-	{
-		if (!loadSaveFeatureV14(pFileData, filesize, psHeader->quantity, psHeader->version))
-		{
-			return false;
-		}
-	}
-	else if (psHeader->version <= CURRENT_VERSION_NUM)
-	{
-		if (!loadSaveFeatureV(pFileData, filesize, psHeader->quantity, psHeader->version))
-		{
-			return false;
-		}
-	}
-	else
-	{
-		debug(LOG_ERROR, "Unsupported save format version %u", psHeader->version);
-		return false;
-	}
-
-	return true;
-}
-
-
-// -----------------------------------------------------------------------------------------
-/* code for all version 8 - 14 save features */
-bool loadSaveFeatureV14(char *pFileData, UDWORD filesize, UDWORD numFeatures, UDWORD version)
-{
 	SAVE_FEATURE_V14			*psSaveFeature;
 	FEATURE					*pFeature;
 	UDWORD					count, i, statInc;
@@ -5829,7 +5784,31 @@ bool loadSaveFeatureV14(char *pFileData, UDWORD filesize, UDWORD numFeatures, UD
 	bool					found;
 	UDWORD					sizeOfSaveFeature;
 
-	if (version < VERSION_14)
+	/* Check the file type */
+	psHeader = (FEATURE_SAVEHEADER *)pFileData;
+	if (psHeader->aFileType[0] != 'f' || psHeader->aFileType[1] != 'e' ||
+		psHeader->aFileType[2] != 'a' || psHeader->aFileType[3] != 't')
+	{
+		debug( LOG_ERROR, "loadSaveFeature: Incorrect file type" );
+		return false;
+	}
+
+	/* FEATURE_SAVEHEADER */
+	endian_udword(&psHeader->version);
+	endian_udword(&psHeader->quantity);
+
+	debug(LOG_SAVE, "Feature file version is %u ", psHeader->version);
+
+	//increment to the start of the data
+	pFileData += FEATURE_HEADER_SIZE;
+
+	/* Check the file version */
+	if (psHeader->version < VERSION_7 || psHeader->version > VERSION_19)
+	{
+		debug(LOG_ERROR, "Unsupported save format version %u", psHeader->version);
+		return false;
+	}
+	if (psHeader->version < VERSION_14)
 	{
 		sizeOfSaveFeature = sizeof(SAVE_FEATURE_V2);
 	}
@@ -5837,16 +5816,14 @@ bool loadSaveFeatureV14(char *pFileData, UDWORD filesize, UDWORD numFeatures, UD
 	{
 		sizeOfSaveFeature = sizeof(SAVE_FEATURE_V14);
 	}
-
-	if ((sizeOfSaveFeature * numFeatures + FEATURE_HEADER_SIZE) >
-		filesize)
+	if ((sizeOfSaveFeature * psHeader->quantity + FEATURE_HEADER_SIZE) > filesize)
 	{
 		debug( LOG_ERROR, "featureLoad: unexpected end of file" );
 		return false;
 	}
 
 	/* Load in the feature data */
-	for (count = 0; count < numFeatures; count ++, pFileData += sizeOfSaveFeature)
+	for (count = 0; count < psHeader->quantity; count ++, pFileData += sizeOfSaveFeature)
 	{
 		psSaveFeature = (SAVE_FEATURE_V14*) pFileData;
 
@@ -5869,9 +5846,7 @@ bool loadSaveFeatureV14(char *pFileData, UDWORD filesize, UDWORD numFeatures, UD
 		{
 			psStats = asFeatureStats + statInc;
 			//loop until find the same name
-
 			if (!strcmp(psStats->pName, psSaveFeature->name))
-
 			{
 				found = true;
 				break;
@@ -5880,7 +5855,6 @@ bool loadSaveFeatureV14(char *pFileData, UDWORD filesize, UDWORD numFeatures, UD
 		//if haven't found the feature - ignore this record!
 		if (!found)
 		{
-
 			debug( LOG_ERROR, "This feature no longer exists - %s", psSaveFeature->name );
 			//ignore this
 			continue;
@@ -5901,7 +5875,7 @@ bool loadSaveFeatureV14(char *pFileData, UDWORD filesize, UDWORD numFeatures, UD
 		pFeature->rot.direction = DEG(psSaveFeature->direction);
 		pFeature->inFire = psSaveFeature->inFire;
 		pFeature->burnDamage = psSaveFeature->burnDamage;
-		if (version >= VERSION_14)
+		if (psHeader->version >= VERSION_14)
 		{
 			for (i=0; i < MAX_PLAYERS; i++)
 			{
@@ -5913,52 +5887,36 @@ bool loadSaveFeatureV14(char *pFileData, UDWORD filesize, UDWORD numFeatures, UD
 	return true;
 }
 
-// -----------------------------------------------------------------------------------------
-/* code for all post version 7 save features */
-bool loadSaveFeatureV(char *pFileData, UDWORD filesize, UDWORD numFeatures, UDWORD version)
+bool loadSaveFeature2(const char *pFileName)
 {
-	SAVE_FEATURE			*psSaveFeature;
-	FEATURE					*pFeature;
-	UDWORD					count, i, statInc;
-	FEATURE_STATS			*psStats = NULL;
-	bool					found;
-	UDWORD					sizeOfSaveFeature;
-
-	sizeOfSaveFeature = sizeof(SAVE_FEATURE);
-
-	if ((sizeOfSaveFeature * numFeatures + FEATURE_HEADER_SIZE) > filesize)
+	if (!PHYSFS_exists(pFileName))
 	{
-		debug( LOG_ERROR, "featureLoad: unexpected end of file" );
-
+		debug(LOG_INFO, "No %s found -- use fallback method", pFileName);
 		return false;
 	}
-
-	/* Load in the feature data */
-	for (count = 0; count < numFeatures; count ++, pFileData += sizeOfSaveFeature)
+	WzConfig ini(pFileName);
+	if (ini.status() != QSettings::NoError)
 	{
-		psSaveFeature = (SAVE_FEATURE*) pFileData;
-
-		/* FEATURE_SAVE is FEATURE_SAVE_V20 */
-		/* FEATURE_SAVE_V20 is OBJECT_SAVE_V20 */
-		/* OBJECT_SAVE_V20 */
-		endian_udword(&psSaveFeature->id);
-		endian_udword(&psSaveFeature->x);
-		endian_udword(&psSaveFeature->y);
-		endian_udword(&psSaveFeature->z);
-		endian_udword(&psSaveFeature->direction);
-		endian_udword(&psSaveFeature->player);
-		endian_udword(&psSaveFeature->burnStart);
-		endian_udword(&psSaveFeature->burnDamage);
+		debug(LOG_ERROR, "Could not open %s", pFileName);
+		return false;
+	}
+	QStringList list = ini.childGroups();
+	for (int i = 0; i < list.size(); ++i)
+	{
+		FEATURE *pFeature;
+		ini.beginGroup(list[i]);
+		QString name = ini.value("name").toString();
+		Position pos = ini.vector3i("position");
+		int statInc;
+		bool found = false;
+		FEATURE_STATS *psStats = NULL;
 
 		//get the stats for this feature
-		found = false;
-
 		for (statInc = 0; statInc < numFeatureStats; statInc++)
 		{
 			psStats = asFeatureStats + statInc;
 			//loop until find the same name
-
-			if (!strcmp(psStats->pName, psSaveFeature->name))
+			if (!strcmp(psStats->pName, name.toUtf8().constData()))
 			{
 				found = true;
 				break;
@@ -5967,26 +5925,35 @@ bool loadSaveFeatureV(char *pFileData, UDWORD filesize, UDWORD numFeatures, UDWO
 		//if haven't found the feature - ignore this record!
 		if (!found)
 		{
-			debug( LOG_ERROR, "This feature no longer exists - %s", psSaveFeature->name );
+			debug(LOG_ERROR, "This feature no longer exists - %s", name.toUtf8().constData());
 			//ignore this
 			continue;
 		}
 		//create the Feature
-		pFeature = buildFeature(psStats, psSaveFeature->x, psSaveFeature->y,true);
+		pFeature = buildFeature(psStats, pos.x, pos.y, true);
 		if (!pFeature)
 		{
-			debug(LOG_ERROR, "Unable to create feature %s", psSaveFeature->name);
+			debug(LOG_ERROR, "Unable to create feature %s", name.toUtf8().constData());
 			continue;
 		}
-		//restore values
-		pFeature->id = psSaveFeature->id;
-		pFeature->rot.direction = DEG(psSaveFeature->direction);
-		pFeature->inFire = psSaveFeature->inFire;
-		pFeature->burnDamage = psSaveFeature->burnDamage;
-		for (i=0; i < MAX_PLAYERS; i++)
+		if (pFeature->psStats->subType == FEAT_OIL_RESOURCE)
 		{
-			pFeature->visible[i] = psSaveFeature->visible[i];
+			scriptSetDerrickPos(pFeature->pos.x, pFeature->pos.y);
 		}
+		//restore values
+		pFeature->id = ini.value("id").toInt();
+		pFeature->rot = ini.vector3i("rotation");
+		pFeature->inFire = ini.value("inFire", 0).toInt();
+		pFeature->burnDamage = ini.value("burnDamage", 0).toInt();
+		pFeature->burnStart = ini.value("burnStart", 0).toInt();
+		pFeature->born = ini.value("born", 2).toInt();
+		pFeature->timeLastHit = ini.value("timeLastHit", 0).toInt();
+		pFeature->selected = ini.value("selected", false).toBool();
+		for (int i = 0; i < MAX_PLAYERS; i++)
+		{
+			pFeature->visible[i] = ini.value("visible/" + QString::number(i), 0).toInt();
+		}
+		ini.endGroup();
 	}
 	return true;
 }
@@ -5995,90 +5962,39 @@ bool loadSaveFeatureV(char *pFileData, UDWORD filesize, UDWORD numFeatures, UDWO
 /*
 Writes the linked list of features to a file
 */
-bool writeFeatureFile(char *pFileName)
+bool writeFeatureFile(const char *pFileName)
 {
-	char *pFileData = NULL;
-	UDWORD				fileSize, i, totalFeatures=0;
-	FEATURE				*psCurr;
-	FEATURE_SAVEHEADER	*psHeader;
-	SAVE_FEATURE		*psSaveFeature;
-	bool status = true;
-
-	//total all the features in the world
-	for (psCurr = apsFeatureLists[0]; psCurr != NULL; psCurr = psCurr->psNext)
+	WzConfig ini(pFileName);
+	if (ini.status() != QSettings::NoError)
 	{
-		totalFeatures++;
-	}
-
-	/* Allocate the data buffer */
-	fileSize = FEATURE_HEADER_SIZE + totalFeatures * sizeof(SAVE_FEATURE);
-	pFileData = (char*)malloc(fileSize);
-	if (pFileData == NULL)
-	{
-		debug( LOG_FATAL, "Out of memory" );
-		abort();
+		debug(LOG_ERROR, "Could not open %s", pFileName);
 		return false;
 	}
-
-	/* Put the file header on the file */
-	psHeader = (FEATURE_SAVEHEADER *)pFileData;
-	psHeader->aFileType[0] = 'f';
-	psHeader->aFileType[1] = 'e';
-	psHeader->aFileType[2] = 'a';
-	psHeader->aFileType[3] = 't';
-	psHeader->version = CURRENT_VERSION_NUM;
-	psHeader->quantity = totalFeatures;
-
-	psSaveFeature = (SAVE_FEATURE*)(pFileData + FEATURE_HEADER_SIZE);
-
-	/* Put the feature data into the buffer */
-	for(psCurr = apsFeatureLists[0]; psCurr != NULL; psCurr = psCurr->psNext)
+	for(FEATURE *psCurr = apsFeatureLists[0]; psCurr != NULL; psCurr = psCurr->psNext)
 	{
-
-		strcpy(psSaveFeature->name, psCurr->psStats->pName);
-
-		psSaveFeature->id = psCurr->id;
-
-		psSaveFeature->x = psCurr->pos.x;
-		psSaveFeature->y = psCurr->pos.y;
-		psSaveFeature->z = psCurr->pos.z;
-
-		psSaveFeature->direction = UNDEG(psCurr->rot.direction);
-		psSaveFeature->inFire = psCurr->inFire;
-		psSaveFeature->burnDamage = psCurr->burnDamage;
-		for (i=0; i < MAX_PLAYERS; i++)
+		ini.beginGroup("feature_" + QString::number(psCurr->id));
+		ini.setValue("id", psCurr->id);
+		ini.setValue("name", psCurr->psStats->pName);
+		ini.setVector3i("position", psCurr->pos);
+		ini.setVector3i("rotation", psCurr->rot);
+		if (psCurr->inFire)
 		{
-			psSaveFeature->visible[i] = psCurr->visible[i];
+			ini.setValue("inFire", psCurr->inFire);
+			ini.setValue("burnDamage", psCurr->burnDamage);
+			ini.setValue("burnStart", psCurr->burnStart);
 		}
-
-		/* SAVE_FEATURE is FEATURE_SAVE_V20 */
-		/* FEATURE_SAVE_V20 includes OBJECT_SAVE_V20 */
-		/* OBJECT_SAVE_V20 */
-		endian_udword(&psSaveFeature->id);
-		endian_udword(&psSaveFeature->x);
-		endian_udword(&psSaveFeature->y);
-		endian_udword(&psSaveFeature->z);
-		endian_udword(&psSaveFeature->direction);
-		endian_udword(&psSaveFeature->player);
-		endian_udword(&psSaveFeature->burnStart);
-		endian_udword(&psSaveFeature->burnDamage);
-
-		psSaveFeature = (SAVE_FEATURE *)((char *)psSaveFeature + sizeof(SAVE_FEATURE));
+		ini.setValue("health", psCurr->body);
+		ini.setValue("born", psCurr->born);
+		if (psCurr->selected) ini.setValue("selected", psCurr->selected);
+		ini.setValue("timeLastHit", psCurr->timeLastHit);
+		for (int i = 0; i < game.maxPlayers; i++)
+		{
+			ini.setValue("visible/" + QString::number(i), psCurr->visible[i]);
+		}
+		ini.endGroup();
 	}
-
-	/* FEATURE_SAVEHEADER */
-	endian_udword(&psHeader->version);
-	endian_udword(&psHeader->quantity);
-
-	/* Write the data to the file */
-	if (pFileData != NULL) {
-		status = saveFile(pFileName, pFileData, fileSize);
-		free(pFileData);
-		return status;
-	}
-	return false;
+	return true;
 }
-
 
 // -----------------------------------------------------------------------------------------
 bool loadSaveTemplate(const char *pFileName)
@@ -7674,7 +7590,7 @@ static void plotFeature(char *backDropSprite)
 	UDWORD sizeOfSaveFeature = 0;
 	char *pFileData = NULL;
 	char aFileName[256];
-	PIELIGHT color = WZCOL_BLACK ;
+	PIELIGHT color = WZCOL_BLACK;
 
 	psLevel = levFindDataSet(game.map);
 	strcpy(aFileName, psLevel->apDataFiles[0]);
