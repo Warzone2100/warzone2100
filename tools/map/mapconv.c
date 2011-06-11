@@ -162,29 +162,29 @@ int main(int argc, char **argv)
 		free(flip);
 	}
 
+#endif
 	/*** Features ***/
 	if (map->featVersion > 0)
 	{
 		strcpy(filename, base);
-		strcat(filename, "/map-001/features.ini");
+		strcat(filename, "/feature.ini");
+		printf("writing %s\n", filename);
 		fp = fopen(filename, "w");
-		MADD("[feature_header]");
-		MADD("entries = %u", map->numFeatures);
-		for (i = 0; i < map->numDroids; i++)
+		if (!fp) printf("%s: %s\n", filename, strerror(errno));
+		for (i = 0; i < map->numFeatures; i++)
 		{
 			LND_OBJECT *psObj = &map->mLndObjects[IMD_FEATURE][i];
 
-			MADD("\n[feature_%04u]", i);
-			MADD("pos.x = %u", psObj->x);
-			MADD("pos.y = %u", psObj->y);
-			MADD("pos.z = %u", psObj->z);
-			MADD("direction = %u", psObj->direction);
-			MADD("player = %u", psObj->player);
-			MADD("template = %s", psObj->name);
+			if (psObj->id == 0) psObj->id = 0xFEDBCA98; // fix broken ID
+			MADD("\n[feature_%04u]", psObj->id);
+			MADD("id = %u", psObj->id);
+			MADD("position = %u, %u, %u", psObj->x, psObj->y, psObj->z);
+			MADD("rotation = %u, 0, 0", psObj->direction);
+			MADD("name = %s", psObj->name);
 		}
 		fclose(fp);
 	}
-
+#if 0
 	/*** Structures ***/
 	if (map->structVersion)
 	{
@@ -214,15 +214,16 @@ int main(int argc, char **argv)
 	{
 		strcpy(filename, base);
 		strcat(filename, "/droid.ini");
-printf("writing %s\n", filename);
+		printf("writing %s\n", filename);
 		fp = fopen(filename, "w");
-		if (!fp) printf("%s\n", strerror(errno));
+		if (!fp) printf("%s: %s\n", filename, strerror(errno));
 		for (i = 0; i < map->numDroids; i++)
 		{
 			LND_OBJECT *psObj = &map->mLndObjects[IMD_DROID][i];
 
-			MADD("\n[droid_%04u]", i + 1);
-			MADD("id = %u", i + 1);
+			if (psObj->id == 0) psObj->id = 0xFEDBCA98; // fix broken ID
+			MADD("\n[droid_%04u]", psObj->id);
+			MADD("id = %u", psObj->id);
 			MADD("position = %u, %u, %u", psObj->x, psObj->y, psObj->z);
 			MADD("rotation = %u, 0, 0", psObj->direction);
 			MADD("player = %u", psObj->player);

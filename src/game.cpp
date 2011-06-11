@@ -5901,6 +5901,7 @@ bool loadSaveFeature2(const char *pFileName)
 		return false;
 	}
 	QStringList list = ini.childGroups();
+	debug(LOG_INFO, "Loading new style features (%d found)", list.size());
 	for (int i = 0; i < list.size(); ++i)
 	{
 		FEATURE *pFeature;
@@ -5941,6 +5942,7 @@ bool loadSaveFeature2(const char *pFileName)
 			scriptSetDerrickPos(pFeature->pos.x, pFeature->pos.y);
 		}
 		//restore values
+		pFeature->pos.z = pos.z;
 		pFeature->id = ini.value("id").toInt();
 		pFeature->rot = ini.vector3i("rotation");
 		pFeature->inFire = ini.value("inFire", 0).toInt();
@@ -5949,6 +5951,7 @@ bool loadSaveFeature2(const char *pFileName)
 		pFeature->born = ini.value("born", 2).toInt();
 		pFeature->timeLastHit = ini.value("timeLastHit", 0).toInt();
 		pFeature->selected = ini.value("selected", false).toBool();
+		if (ini.contains("health")) pFeature->body = ini.value("health").toInt();
 		for (int i = 0; i < MAX_PLAYERS; i++)
 		{
 			pFeature->visible[i] = ini.value("visible/" + QString::number(i), 0).toInt();
@@ -7590,12 +7593,44 @@ static void plotFeature(char *backDropSprite)
 	UDWORD sizeOfSaveFeature = 0;
 	char *pFileData = NULL;
 	char aFileName[256];
-	PIELIGHT color = WZCOL_BLACK;
+	const PIELIGHT color = WZCOL_MAP_PREVIEW_OIL;
 
 	psLevel = levFindDataSet(game.map);
 	strcpy(aFileName, psLevel->apDataFiles[0]);
 	aFileName[strlen(aFileName) - 4] = '\0';
 	strcat(aFileName, "/feat.bjo");
+	if (!PHYSFS_exists(aFileName))
+	{
+		strcpy(aFileName, psLevel->apDataFiles[0]);
+		aFileName[strlen(aFileName) - 4] = '\0';
+		strcat(aFileName, "/feature.ini");
+		WzConfig ini(aFileName);
+		if (ini.status() != QSettings::NoError)
+		{
+			debug(LOG_ERROR, "Could not open %s", aFileName);
+			return;
+		}
+		QStringList list = ini.childGroups();
+		for (int i = 0; i < list.size(); ++i)
+		{
+			ini.beginGroup(list[i]);
+			QString name = ini.value("name").toString();
+			Position pos = ini.vector3i("position");
+
+			// we only care about oil
+			if (name.startsWith("OilResource"))
+			{
+				// and now we blit the color to the texture
+				xx = map_coord(pos.x);
+				yy = map_coord(pos.y);
+				backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx)] = color.byte.r;
+				backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx) + 1] = color.byte.g;
+				backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx) + 2] = color.byte.b;
+			}
+			ini.endGroup();
+		}
+		return;
+	}
 
 	// Load in the chosen file data/
 	pFileData = fileLoadBuffer;
@@ -7645,8 +7680,6 @@ static void plotFeature(char *backDropSprite)
 		{
 			continue;
 		}
-			
-		color = WZCOL_MAP_PREVIEW_OIL;
 		// and now we blit the color to the texture
 		backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx)] = color.byte.r;
 		backDropSprite[3 * ((yy * BACKDROP_HACK_WIDTH) + xx) + 1] = color.byte.g;
