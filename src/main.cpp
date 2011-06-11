@@ -1363,6 +1363,7 @@ int main(int argc, char *argv[])
 	debug(LOG_MAIN, "Entering main loop");
 	app.exec();
 	saveConfig();
+	systemShutdown();
 	debug(LOG_MAIN, "Completed shutting down Warzone 2100");
 	return EXIT_SUCCESS;
 }
