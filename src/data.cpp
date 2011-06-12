@@ -1035,9 +1035,8 @@ static void dataScriptRelease(void *pData)
 static bool jsLoad(const char *fileName, void **ppData)
 {
 	debug(LOG_WZ, "jsload: %s", fileName);
-	loadGlobalScript(fileName);
 	*ppData = NULL;
-	return true;
+	return loadGlobalScript(fileName);
 }
 
 // Load a script variable values file
