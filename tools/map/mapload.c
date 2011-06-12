@@ -203,6 +203,7 @@ mapfailure:
 		debug(LOG_ERROR, "Feature file %s not found", path);
 		map->featVersion = 0;
 		map->numFeatures = 0;
+		map->mLndObjects[IMD_FEATURE] = NULL;
 		goto featfailure;
 	}
 	else if (PHYSFS_read(fp, aFileType, 4, 1) != 1
@@ -313,6 +314,7 @@ terrainfailure:
 	littleEndian = true;
 	strcpy(path, filename);
 	strcat(path, "/struct.bjo");
+	map->mLndObjects[IMD_STRUCTURE] = NULL;
 	fp = PHYSFS_openRead(path);
 	if (fp)
 	{
@@ -436,6 +438,7 @@ terrainfailure:
 	littleEndian = true;
 	strcpy(path, filename);
 	strcat(path, "/dinit.bjo");
+	map->mLndObjects[IMD_DROID] = NULL;
 	fp = PHYSFS_openRead(path);
 	if (fp)
 	{
