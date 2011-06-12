@@ -300,7 +300,7 @@ DROID::DROID(uint32_t id, unsigned player)
 	, psTarStats(NULL)
 	, secondaryOrder(DSS_ARANGE_DEFAULT | DSS_REPLEV_NEVER | DSS_ALEV_ALWAYS | DSS_HALT_GUARD)
 	, action(DACTION_NONE)
-	, actionX(0), actionY(0)
+	, actionPos(0, 0)
 	, psCurAnim(NULL)
 	, gameCheckDroid(NULL)
 {

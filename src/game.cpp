@@ -4485,9 +4485,7 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		psDroid->timeLastHit = ini.value("timeLastHit", 0).toInt();
 		psDroid->secondaryOrder = ini.value("secondaryOrder", DSS_NONE).toInt();
 		psDroid->action = (DROID_ACTION)ini.value("action", DACTION_NONE).toInt();
-		tmp = ini.vector2i("action/pos");
-		psDroid->actionX = tmp.x;
-		psDroid->actionY = tmp.y;
+		psDroid->actionPos = ini.vector2i("action/pos");
 		psDroid->actionStarted = ini.value("actionStarted", 0).toInt();
 		psDroid->actionPoints = ini.value("actionPoints", 0).toInt();
 		psDroid->resistance = ini.value("resistance", droidResistance(psDroid)).toInt();
@@ -4641,7 +4639,7 @@ static bool writeDroid(WzConfig &ini, DROID *psCurr, bool onMission)
 	}
 	ini.setValue("secondaryOrder", psCurr->secondaryOrder);
 	ini.setValue("action", psCurr->action);
-	ini.setVector2i("action/pos", Vector2i(psCurr->actionX, psCurr->actionX));
+	ini.setVector2i("action/pos", psCurr->actionPos);
 	ini.setValue("actionStarted", psCurr->actionStarted);
 	ini.setValue("actionPoints", psCurr->actionPoints);
 	if (psCurr->psTarStats != NULL)
