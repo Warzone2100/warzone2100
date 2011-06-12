@@ -25,6 +25,7 @@
 #define __INCLUDED_SRC_MOVE_H__
 
 #include "objectdef.h"
+#include "fpath.h"
 
 /* Initialise the movement system */
 extern bool moveInitialise(void);
@@ -33,11 +34,11 @@ extern bool moveInitialise(void);
 extern void moveUpdateBaseSpeed(void);
 
 /* Set a target location for a droid to move to  - returns a bool based on if there is a path to the destination (true if there is a path)*/
-extern bool moveDroidTo(DROID *psDroid, UDWORD x, UDWORD y);
+extern bool moveDroidTo(DROID *psDroid, UDWORD x, UDWORD y, FPATH_MOVETYPE moveType = FMT_MOVE);
 
 /* Set a target location for a droid to move to  - returns a bool based on if there is a path to the destination (true if there is a path)*/
 // the droid will not join a formation when it gets to the location
-extern bool moveDroidToNoFormation(DROID *psDroid, UDWORD x, UDWORD y);
+extern bool moveDroidToNoFormation(DROID *psDroid, UDWORD x, UDWORD y, FPATH_MOVETYPE moveType = FMT_MOVE);
 
 // move a droid directly to a location (used by vtols only)
 extern void moveDroidToDirect(DROID *psDroid, UDWORD x, UDWORD y);
