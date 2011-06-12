@@ -2208,7 +2208,7 @@ UDWORD calcDroidPoints(DROID *psDroid)
 }
 
 //Builds an instance of a Droid - the x/y passed in are in world coords.
-DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player, bool onMission)
+DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, bool onMission, Rotation rot)
 {
 	DROID			*psDroid;
 	DROID_GROUP		*psGrp;
@@ -2217,7 +2217,7 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD pl
 	HIT_SIDE		impact_side;
 
 	// Don't use this assertion in single player, since droids can finish building while on an away mission
-	ASSERT(!bMultiPlayer || worldOnMap(x,y), "the build locations are not on the map");
+	ASSERT(!bMultiPlayer || worldOnMap(pos.x, pos.y), "the build locations are not on the map");
 
 	//allocate memory
 	psDroid = new DROID(generateSynchronisedObjectId(), player);
@@ -2234,9 +2234,8 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD pl
 
 	// Set the droids type
 	psDroid->droidType = droidTemplateType(pTemplate);  // Is set again later to the same thing, in droidSetBits.
-
-	psDroid->pos.x = x;
-	psDroid->pos.y = y;
+	psDroid->pos = pos;
+	psDroid->rot = rot;
 	psDroid->sMove.eBitX = 0;
 	psDroid->sMove.eBitY = 0;
 
@@ -2398,7 +2397,7 @@ DROID *buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player, 
 	}
 	else
 	{
-		return reallyBuildDroid(pTemplate, x, y, player, onMission);
+		return reallyBuildDroid(pTemplate, Position(x, y, 0), player, onMission);
 	}
 }
 

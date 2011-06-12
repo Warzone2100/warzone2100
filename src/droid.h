@@ -101,7 +101,7 @@ struct INITIAL_DROID_ORDERS
 /// Sends a GAME_DROID message if bMultiMessages is true, or actually creates it if false. Only uses initialOrders if sending a GAME_DROID message.
 extern DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player, bool onMission, const INITIAL_DROID_ORDERS *initialOrders);
 /// Creates a droid locally, instead of sending a message, even if the bMultiMessages HACK is set to true.
-DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player, bool onMission);
+DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, bool onMission, Rotation rot = Rotation());
 
 /* Set the asBits in a DROID structure given it's template. */
 extern void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid);

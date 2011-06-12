@@ -453,7 +453,7 @@ bool recvDroid(NETQUEUE queue)
 	}
 
 	// Create that droid on this machine.
-	psDroid = reallyBuildDroid(pT, pos.x, pos.y, player, false);
+	psDroid = reallyBuildDroid(pT, pos, player, false);
 
 	// If we were able to build the droid set it up
 	if (psDroid)

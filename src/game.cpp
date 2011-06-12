@@ -4264,7 +4264,7 @@ bool loadSaveDroidInit(char *pFileData, UDWORD filesize)
 		}
 		else
 		{
-			psDroid = reallyBuildDroid(psTemplate, (pDroidInit->x & ~TILE_MASK) + TILE_UNITS/2, (pDroidInit->y  & ~TILE_MASK) + TILE_UNITS/2, pDroidInit->player, false);
+			psDroid = reallyBuildDroid(psTemplate, Position((pDroidInit->x & ~TILE_MASK) + TILE_UNITS/2, (pDroidInit->y  & ~TILE_MASK) + TILE_UNITS/2, 0), pDroidInit->player, false);
 			if (psDroid)
 			{
 				Vector2i startpos = getPlayerStartPosition(psDroid->player);
@@ -4445,7 +4445,7 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 
 		/* Create the Droid */
 		turnOffMultiMsg(true);
-		psDroid = reallyBuildDroid(psTemplate, pos.x, pos.y, player, onMission);
+		psDroid = reallyBuildDroid(psTemplate, pos, player, onMission, rot);
 		ASSERT_OR_RETURN(NULL, psDroid != NULL, "Failed to build unit %d", id);
 		turnOffMultiMsg(false);
 
@@ -4457,7 +4457,6 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		{
 			psDroid->body = psDroid->originalBody;
 		}
-		psDroid->rot = rot;
 		psDroid->inFire = ini.value("inFire", 0).toInt();
 		psDroid->burnDamage = ini.value("burnDamage", 0).toInt();
 		psDroid->burnStart = ini.value("burnStart", 0).toInt();

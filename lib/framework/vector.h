@@ -64,7 +64,7 @@ struct Vector3f
 };
 struct Rotation
 {
-	Rotation() {}
+	Rotation() { direction = 0; pitch = 0; roll = 0; }
 	Rotation(int direction, int pitch, int roll) : direction(direction), pitch(pitch), roll(roll) {}
 	Rotation(Vector3i xyz) : direction(xyz.x), pitch(xyz.y), roll(xyz.z) {}
 	uint16_t direction, pitch, roll;  ///< Object rotation in 0..64k range
