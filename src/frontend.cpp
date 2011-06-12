@@ -80,7 +80,12 @@ bool			bLimiterLoaded = false;
 //
 bool CancelPressed(void)
 {
-	return keyPressed(KEY_ESC);
+	const bool cancel = keyPressed(KEY_ESC);
+	if (cancel)
+	{
+		inputLoseFocus();	// clear the input buffer.
+	}
+	return cancel;
 }
 
 
