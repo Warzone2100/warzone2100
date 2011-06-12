@@ -4382,6 +4382,24 @@ static bool loadSaveDroidPointers(const QString &pFileName, DROID **ppsCurrentDr
 	return true;
 }
 
+static int healthValue(QSettings &ini, int defaultValue)
+{
+	QString health = ini.value("health").toString();
+	if (health.isEmpty())
+	{
+		return defaultValue;
+	}
+	else if (health.contains('%'))
+	{
+		int perc = health.remove('%').toInt();
+		return defaultValue * perc / 100;
+	}
+	else
+	{
+		return MIN(health.toInt(), defaultValue);
+	}
+}
+
 static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 {
 	if (!PHYSFS_exists(pFileName))
@@ -4452,11 +4470,7 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		// Copy the values across
 		psDroid->id = id;	// force correct ID
 		ASSERT(id != 0, "Droid ID should never be zero here");
-		psDroid->body = ini.value("health", psDroid->originalBody).toInt();
-		if (psDroid->body > psDroid->originalBody)
-		{
-			psDroid->body = psDroid->originalBody;
-		}
+		psDroid->body = healthValue(ini, psDroid->originalBody);
 		psDroid->inFire = ini.value("inFire", 0).toInt();
 		psDroid->burnDamage = ini.value("burnDamage", 0).toInt();
 		psDroid->burnStart = ini.value("burnStart", 0).toInt();
@@ -5950,7 +5964,7 @@ bool loadSaveFeature2(const char *pFileName)
 		pFeature->born = ini.value("born", 2).toInt();
 		pFeature->timeLastHit = ini.value("timeLastHit", 0).toInt();
 		pFeature->selected = ini.value("selected", false).toBool();
-		if (ini.contains("health")) pFeature->body = ini.value("health").toInt();
+		pFeature->body = healthValue(ini, pFeature->psStats->body);
 		for (int i = 0; i < MAX_PLAYERS; i++)
 		{
 			pFeature->visible[i] = ini.value("visible/" + QString::number(i), 0).toInt();
