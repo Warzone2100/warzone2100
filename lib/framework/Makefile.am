@@ -53,6 +53,7 @@ noinst_HEADERS = \
 	frame.h \
 	frameint.h \
 	frameresource.h \
+	geometry.h \
 	i18n.h \
 	input.h \
 	lexer_input.h \
@@ -94,6 +95,7 @@ libframework_a_SOURCES = \
 	debug.cpp \
 	frame.cpp \
 	frameresource.cpp \
+	geometry.cpp \
 	i18n.cpp \
 	lexer_input.cpp \
 	SDL_framerate.cpp \

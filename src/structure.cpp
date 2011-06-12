@@ -29,6 +29,7 @@
 #include <algorithm>
 
 #include "lib/framework/frame.h"
+#include "lib/framework/geometry.h"
 #include "lib/framework/strres.h"
 #include "lib/framework/frameresource.h"
 #include "objects.h"
@@ -5378,22 +5379,20 @@ bool calcStructureMuzzleBaseLocation(STRUCTURE *psStructure, Vector3i *muzzle, i
 	{
 		Vector3i barrel(0, 0, 0);
 
-		pie_MatBegin();
+		Affine3F af;
 
-		pie_TRANSLATE(psStructure->pos.x, -psStructure->pos.z, psStructure->pos.y);
+		af.Trans(psStructure->pos.x, -psStructure->pos.z, psStructure->pos.y);
 
 		//matrix = the center of droid
-		pie_MatRotY(psStructure->rot.direction);
-		pie_MatRotX(psStructure->rot.pitch);
-		pie_MatRotZ(-psStructure->rot.roll);
-		pie_TRANSLATE( psShape->connectors[weapon_slot].x, -psShape->connectors[weapon_slot].z,
+		af.RotY(psStructure->rot.direction);
+		af.RotX(psStructure->rot.pitch);
+		af.RotZ(-psStructure->rot.roll);
+		af.Trans( psShape->connectors[weapon_slot].x, -psShape->connectors[weapon_slot].z,
 					-psShape->connectors[weapon_slot].y);//note y and z flipped
 
 		
-		pie_RotateTranslate3i(&barrel, muzzle);
+		*muzzle = swapYZ(af*barrel);
 		muzzle->z = -muzzle->z;
-
-		pie_MatEnd();
 	}
 	else
 	{
@@ -5422,28 +5421,28 @@ bool calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3i *muzzle, int w
 			psMountImd = asWeaponStats[nWeaponStat].pMountGraphic;
 		}
 
-		pie_MatBegin();
+		Affine3F af;
 
-		pie_TRANSLATE(psStructure->pos.x, -psStructure->pos.z, psStructure->pos.y);
+		af.Trans(psStructure->pos.x, -psStructure->pos.z, psStructure->pos.y);
 
 		//matrix = the center of droid
-		pie_MatRotY(psStructure->rot.direction);
-		pie_MatRotX(psStructure->rot.pitch);
-		pie_MatRotZ(-psStructure->rot.roll);
-		pie_TRANSLATE( psShape->connectors[weapon_slot].x, -psShape->connectors[weapon_slot].z,
+		af.RotY(psStructure->rot.direction);
+		af.RotX(psStructure->rot.pitch);
+		af.RotZ(-psStructure->rot.roll);
+		af.Trans( psShape->connectors[weapon_slot].x, -psShape->connectors[weapon_slot].z,
 					-psShape->connectors[weapon_slot].y);//note y and z flipped
 
 		//matrix = the weapon[slot] mount on the body
-		pie_MatRotY(psStructure->asWeaps[weapon_slot].rot.direction);  // +ve anticlockwise
+		af.RotY(psStructure->asWeaps[weapon_slot].rot.direction);  // +ve anticlockwise
 
 		// process turret mount
 		if (psMountImd && psMountImd->nconnectors)
 		{
-			pie_TRANSLATE(psMountImd->connectors->x, -psMountImd->connectors->z, -psMountImd->connectors->y);
+			af.Trans(psMountImd->connectors->x, -psMountImd->connectors->z, -psMountImd->connectors->y);
 		}
 
 		//matrix = the turret connector for the gun
-		pie_MatRotX(psStructure->asWeaps[weapon_slot].rot.pitch);      // +ve up
+		af.RotX(psStructure->asWeaps[weapon_slot].rot.pitch);      // +ve up
 
 		//process the gun
 		if (psWeaponImd && psWeaponImd->nconnectors)
@@ -5457,13 +5456,11 @@ bool calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3i *muzzle, int w
 				connector_num = (psStructure->asWeaps[weapon_slot].shotsFired - 1) % (psWeaponImd->nconnectors);
 			}
 			
-			barrel = Vector3i(psWeaponImd->connectors[connector_num].x, -psWeaponImd->connectors[connector_num].y, -psWeaponImd->connectors[connector_num].z);
+			barrel = Vector3i(psWeaponImd->connectors[connector_num].x, -psWeaponImd->connectors[connector_num].z, -psWeaponImd->connectors[connector_num].y);
 		}
 
-		pie_RotateTranslate3i(&barrel, muzzle);
+		*muzzle = swapYZ(af*barrel);
 		muzzle->z = -muzzle->z;
-
-		pie_MatEnd();
 	}
 	else
 	{
