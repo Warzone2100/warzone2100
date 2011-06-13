@@ -69,8 +69,6 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 	const iIMDShape		*pImd;
 	Spacetime               spacetime;
 
-   	pie_MatBegin();
-
 	switch(objectType)
 	{
 		case RENDER_PARTICLE:
@@ -203,6 +201,8 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 			position.y += psCompObj->psShape->ocen.z;
 			position.z -= psCompObj->psShape->ocen.y;
 
+			pie_MatBegin();
+
 			/* object (animation) translations - ivis z and y flipped */
 			pie_TRANSLATE( psCompObj->position.x, psCompObj->position.z,
 							psCompObj->position.y );
@@ -213,6 +213,8 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 			pie_MatRotX(-psCompObj->orientation.x);
 
 			z = pie_RotateProject(&position,&pixel);
+
+			pie_MatEnd();
 
 			break;
 		case RENDER_DROID:
@@ -335,8 +337,6 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 		default:
 		break;
 	}
-
-   	pie_MatEnd();
 
 	return z;
 }
