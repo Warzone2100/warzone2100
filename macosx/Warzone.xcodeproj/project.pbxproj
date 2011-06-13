@@ -416,6 +416,7 @@
 		4355E13310D6028C00A19EE4 /* theoraenc.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E12F10D6028C00A19EE4 /* theoraenc.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4371B60F11D93FD1005A67AB /* pngpriv.h in Headers */ = {isa = PBXBuildFile; fileRef = 4371B60D11D93FD0005A67AB /* pngpriv.h */; };
 		438BDDF31129DC9A00998660 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 438BDDD71129DC9A00998660 /* InfoPlist.strings */; };
+		43A6285B13A6C4A400C6B786 /* geometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A6285913A6C4A400C6B786 /* geometry.cpp */; };
 		43A8417811028EDD00733CCB /* pointtree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A8417611028EDD00733CCB /* pointtree.cpp */; };
 		43B8F285127C8F9D006F5A13 /* crc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43B8F282127C8F9D006F5A13 /* crc.cpp */; };
 		43B8F288127C8FDD006F5A13 /* netqueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43B8F286127C8FDD006F5A13 /* netqueue.cpp */; };
@@ -1467,6 +1468,8 @@
 		438BDDF01129DC9A00998660 /* uk_UA */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = uk_UA; path = uk_UA.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		438BDDF11129DC9A00998660 /* zh_CN */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = zh_CN; path = zh_CN.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		438BDDF21129DC9A00998660 /* zh_TW */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = zh_TW; path = zh_TW.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		43A6285913A6C4A400C6B786 /* geometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = geometry.cpp; path = ../lib/framework/geometry.cpp; sourceTree = SOURCE_ROOT; };
+		43A6285A13A6C4A400C6B786 /* geometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = geometry.h; path = ../lib/framework/geometry.h; sourceTree = SOURCE_ROOT; };
 		43A8417611028EDD00733CCB /* pointtree.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = pointtree.cpp; path = ../src/pointtree.cpp; sourceTree = SOURCE_ROOT; };
 		43A8417711028EDD00733CCB /* pointtree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pointtree.h; path = ../src/pointtree.h; sourceTree = SOURCE_ROOT; };
 		43B8F282127C8F9D006F5A13 /* crc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = crc.cpp; path = ../lib/framework/crc.cpp; sourceTree = SOURCE_ROOT; };
@@ -1861,6 +1864,8 @@
 		0246A0D00BD3CBE1004D1C70 /* Framework */ = {
 			isa = PBXGroup;
 			children = (
+				43A6285913A6C4A400C6B786 /* geometry.cpp */,
+				43A6285A13A6C4A400C6B786 /* geometry.h */,
 				43D180601336B536001906EB /* wz2100icon.h */,
 				43D180611336B536001906EB /* wzfs.h */,
 				43DF5A8812BEE01B00DD5A37 /* cocoa_wrapper.h */,
@@ -3963,6 +3968,7 @@
 				43DF5A8A12BEE01B00DD5A37 /* cocoa_wrapper.mm in Sources */,
 				43F1D9D21343F542001478EC /* qtscript.cpp in Sources */,
 				43F1D9D31343F542001478EC /* qtscriptfuncs.cpp in Sources */,
+				43A6285B13A6C4A400C6B786 /* geometry.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
