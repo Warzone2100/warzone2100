@@ -403,6 +403,9 @@ void bucketAddTypeToList(RENDER_TYPE objectType, void* pObject)
 			factoryType][((FLAG_POSITION*)pObject)->factoryInc];
 			z = INT32_MAX - pie->texpage;
 			break;
+		case RENDER_PARTICLE:
+			z = 0;
+			break;
 		default:
 			// Use calculated Z
 			break;
