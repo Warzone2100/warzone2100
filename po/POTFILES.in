@@ -149,6 +149,7 @@ lib/framework/cursors.cpp
 lib/framework/debug.cpp
 lib/framework/frame.cpp
 lib/framework/frameresource.cpp
+lib/framework/geometry.cpp
 lib/framework/i18n.cpp
 lib/framework/lexer_input.cpp
 lib/framework/SDL_framerate.cpp
