@@ -135,6 +135,7 @@
     <ClCompile Include="debug.cpp" />
     <ClCompile Include="frame.cpp" />
     <ClCompile Include="frameresource.cpp" />
+    <ClCompile Include="geometry.cpp" />
     <ClCompile Include="i18n.cpp" />
     <ClCompile Include="lexer_input.cpp" />
     <ClCompile Include="resource_lexer.lex.cpp">
