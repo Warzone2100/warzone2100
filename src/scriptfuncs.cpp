@@ -4438,25 +4438,21 @@ bool scrSetLandingZone(void)
 	}
 
 	//check the values - check against max possible since can set in one mission for the next
-	//if (x1 > (SDWORD)mapWidth)
 	if (x1 > (SDWORD)MAP_MAXWIDTH)
 	{
 		ASSERT( false, "scrSetLandingZone: x1 is greater than max mapWidth" );
 		return false;
 	}
-	//if (x2 > (SDWORD)mapWidth)
 	if (x2 > (SDWORD)MAP_MAXWIDTH)
 	{
 		ASSERT( false, "scrSetLandingZone: x2 is greater than max mapWidth" );
 		return false;
 	}
-	//if (y1 > (SDWORD)mapHeight)
 	if (y1 > (SDWORD)MAP_MAXHEIGHT)
 	{
 		ASSERT( false, "scrSetLandingZone: y1 is greater than max mapHeight" );
 		return false;
 	}
-	//if (y2 > (SDWORD)mapHeight)
 	if (y2 > (SDWORD)MAP_MAXHEIGHT)
 	{
 		ASSERT( false, "scrSetLandingZone: y2 is greater than max mapHeight" );
@@ -4469,7 +4465,7 @@ bool scrSetLandingZone(void)
 		return false;
 	}
 
-	setLandingZone((UBYTE)x1, (UBYTE)y1, (UBYTE)x2, (UBYTE)y2);
+	setNoGoArea((UBYTE)x1, (UBYTE)y1, (UBYTE)x2, (UBYTE)y2, 0);
 
 	return true;
 }
@@ -4486,25 +4482,21 @@ bool scrSetLimboLanding(void)
 	}
 
 	//check the values - check against max possible since can set in one mission for the next
-	//if (x1 > (SDWORD)mapWidth)
 	if (x1 > (SDWORD)MAP_MAXWIDTH)
 	{
 		ASSERT( false, "scrSetLimboLanding: x1 is greater than max mapWidth" );
 		return false;
 	}
-	//if (x2 > (SDWORD)mapWidth)
 	if (x2 > (SDWORD)MAP_MAXWIDTH)
 	{
 		ASSERT( false, "scrSetLimboLanding: x2 is greater than max mapWidth" );
 		return false;
 	}
-	//if (y1 > (SDWORD)mapHeight)
 	if (y1 > (SDWORD)MAP_MAXHEIGHT)
 	{
 		ASSERT( false, "scrSetLimboLanding: y1 is greater than max mapHeight" );
 		return false;
 	}
-	//if (y2 > (SDWORD)mapHeight)
 	if (y2 > (SDWORD)MAP_MAXHEIGHT)
 	{
 		ASSERT( false, "scrSetLimboLanding: y2 is greater than max mapHeight" );
@@ -4519,8 +4511,8 @@ bool scrSetLimboLanding(void)
 
 	setNoGoArea((UBYTE)x1, (UBYTE)y1, (UBYTE)x2, (UBYTE)y2, LIMBO_LANDING);
 
-    //this calls the Droids from the Limbo list onto the map
-    placeLimboDroids();
+	// this calls the Droids from the Limbo list onto the map
+	placeLimboDroids();
 
 	return true;
 }

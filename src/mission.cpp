@@ -2843,35 +2843,6 @@ void initNoGoAreas(void)
 	}
 }
 
-//sets the coords for the Transporter to land (for player 0 - selectedPlayer)
-void setLandingZone(UBYTE x1, UBYTE y1, UBYTE x2, UBYTE y2)
-{
-	//quick check that x2 > x1 and y2 > y1
- 	if (x2 < x1)
-	{
-		sLandingZone[0].x1 = x2;
-		sLandingZone[0].x2 = x1;
-	}
-	else
-	{
-		sLandingZone[0].x1 = x1;
-		sLandingZone[0].x2 = x2;
-	}
-	if (y2 < y1)
-	{
-		sLandingZone[0].y1 = y2;
-		sLandingZone[0].y2 = y1;
-	}
-	else
-	{
-		sLandingZone[0].y1 = y1;
-		sLandingZone[0].y2 = y2;
-	}
-
-
-	addLandingLights(getLandingX(0)+64,getLandingY(0)+64);
-}
-
 //sets the coords for a no go area
 void setNoGoArea(UBYTE x1, UBYTE y1, UBYTE x2, UBYTE y2, UBYTE area)
 {
