@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-05-17 01:48+0200\n"
-"PO-Revision-Date: 2011-05-18 09:52+0200\n"
+"POT-Creation-Date: 2011-06-23 21:27+0200\n"
+"PO-Revision-Date: 2011-06-23 20:13+0200\n"
 "Last-Translator: Ayhan GÖRGÜLÜ <ayhangorgulu45@gmail.com>\n"
 "Language-Team: Turkey <warzone-dev@gna.org>\n"
 "Language: \n"
@@ -2284,7 +2284,7 @@ msgstr "Mini-Roket ateş oran arttırıldı"
 #: data/base/messages/resmessages1.rmsg:746
 #: data/mp/messages/resmessages1.rmsg:747
 msgid "Tracks and directs in-flight rocket to target"
-msgstr "Paletli ve uçuştaki VTOL'lar direk hedef alınır"
+msgstr "Paletli ve uçuştaki DİvK 'lar direk hedef alınır"
 
 #: data/base/messages/resmessages1.rmsg:759
 #: data/mp/messages/resmessages1.rmsg:760
@@ -2414,7 +2414,7 @@ msgstr "Yeni Sistem Kulesi Kullanılabilir"
 #: data/base/messages/resmessages23.rmsg:70
 #: data/mp/messages/resmessages23.rmsg:70
 msgid "VTOL CB Tower detects enemy indirect fire batteries"
-msgstr "VTOL-CB-Kulesi düşman bataryalarını tespit eder"
+msgstr "DİvK -A.B-Kulesi düşman bataryalarını tespit eder"
 
 #: data/base/messages/resmessages23.rmsg:71
 #: data/base/messages/resmessages2.rmsg:435
@@ -2423,7 +2423,7 @@ msgstr "VTOL-CB-Kulesi düşman bataryalarını tespit eder"
 #: data/mp/messages/resmessages2.rmsg:435
 #: data/mp/messages/strings/resstrings.txt:509
 msgid "Orders assigned VTOLs to attack the enemy batteries"
-msgstr "VTOL lara bataryalara saldır emri verir"
+msgstr "DİvK lara bataryalara saldır emri verir"
 
 #: data/base/messages/resmessages23.rmsg:72
 #: data/base/messages/resmessages2.rmsg:436
@@ -2432,7 +2432,7 @@ msgstr "VTOL lara bataryalara saldır emri verir"
 #: data/mp/messages/resmessages2.rmsg:436
 #: data/mp/messages/strings/resstrings.txt:510
 msgid "VTOLs attack until enemy battery is suppressed"
-msgstr "VTOLlar düşman bataryaları yok edilene kadar saldırıya devam eder"
+msgstr "DİvKlar düşman bataryaları yok edilene kadar saldırıya devam eder"
 
 #: data/base/messages/resmessages23.rmsg:82
 #: data/base/messages/resmessages2.rmsg:446
@@ -2443,7 +2443,7 @@ msgstr "VTOLlar düşman bataryaları yok edilene kadar saldırıya devam eder"
 #: data/mp/messages/resmessages3.rmsg:537
 #: data/mp/messages/strings/resstrings.txt:513
 msgid "VTOL CB Improved"
-msgstr "VTOL-CB-Kulesi Geliştirildi"
+msgstr "DİvK -A.B-Kulesi Geliştirildi"
 
 #: data/base/messages/resmessages23.rmsg:84
 #: data/base/messages/resmessages2.rmsg:448
@@ -2454,7 +2454,7 @@ msgstr "VTOL-CB-Kulesi Geliştirildi"
 #: data/mp/messages/resmessages3.rmsg:539
 #: data/mp/messages/strings/resstrings.txt:515
 msgid "Extends VTOL CB Range"
-msgstr "VTOL CB kulesi Görüş Mesafesi Arttırıldı"
+msgstr "DİvK A.B kulesi Görüş Mesafesi Arttırıldı"
 
 #: data/base/messages/resmessages23.rmsg:85
 #: data/base/messages/resmessages2.rmsg:449
@@ -2465,17 +2465,17 @@ msgstr "VTOL CB kulesi Görüş Mesafesi Arttırıldı"
 #: data/mp/messages/resmessages3.rmsg:540
 #: data/mp/messages/strings/resstrings.txt:516
 msgid "All VTOL CB sensors upgraded automatically"
-msgstr "Tüm VTOL CB Kuleleri otomatik olarak geliştirildi"
+msgstr "Tüm DİvK A.B Kuleleri otomatik olarak geliştirildi"
 
 #: data/base/messages/resmessages23.rmsg:96
 #: data/mp/messages/resmessages23.rmsg:96
 msgid "VTOL Strike Tower detects approaching enemies"
-msgstr "VTOL- vuruş kulesi yaklaşam düşmanları tespit eder"
+msgstr "DİvK - vuruş kulesi yaklaşam düşmanları tespit eder"
 
 #: data/base/messages/resmessages23.rmsg:97
 #: data/mp/messages/resmessages23.rmsg:97
 msgid "Assigned VTOLs attack the enemy units"
-msgstr "VTOL lara gelen birime saldır emri verir"
+msgstr "DİvK lara gelen birime saldır emri verir"
 
 #: data/base/messages/resmessages23.rmsg:98
 #: data/mp/messages/resmessages23.rmsg:98
@@ -2502,17 +2502,17 @@ msgstr "Yeni Sistem Kulesi Kullanılabilir"
 #: data/base/messages/resmessages23.rmsg:109
 #: data/mp/messages/resmessages23.rmsg:109
 msgid "VTOL Strike turret used to spot targets"
-msgstr "VTOL-Vuruş kulesi hedefleri görüntülemek için kullanılır"
+msgstr "DİvK-Vuruş kulesi hedefleri görüntülemek için kullanılır"
 
 #: data/base/messages/resmessages23.rmsg:110
 #: data/mp/messages/resmessages23.rmsg:110
 msgid "Assigned VTOLs attack the designated targets"
-msgstr "Belirli hedeflere saldırmak için VTOL larını bağla"
+msgstr "Belirli hedeflere saldırmak için DİvK larını bağla"
 
 #: data/base/messages/resmessages23.rmsg:111
 #: data/mp/messages/resmessages23.rmsg:111
 msgid "Select new targets to continue the VTOL strikes"
-msgstr "VTOL Saldırılarına devam etmek için başka hedefler seç"
+msgstr "DİvK Saldırılarına devam etmek için başka hedefler seç"
 
 #: data/base/messages/resmessages23.rmsg:121
 #: data/base/messages/resmessages2.rmsg:459
@@ -2523,7 +2523,7 @@ msgstr "VTOL Saldırılarına devam etmek için başka hedefler seç"
 #: data/mp/messages/resmessages3.rmsg:550
 #: data/mp/messages/strings/resstrings.txt:527
 msgid "VTOL Strike Improved"
-msgstr "VTOL-Vuruş geliştirildi"
+msgstr "DİvK -Vuruş geliştirildi"
 
 #: data/base/messages/resmessages23.rmsg:122
 #: data/mp/messages/resmessages23.rmsg:122
@@ -2539,7 +2539,7 @@ msgstr "Gelişmiş hedef algılama sistemleri"
 #: data/mp/messages/resmessages3.rmsg:552
 #: data/mp/messages/strings/resstrings.txt:529
 msgid "Extends VTOL Strike Range"
-msgstr "VTOL Vuruş mesafesi arttırıldı"
+msgstr "DİvK Vuruş mesafesi arttırıldı"
 
 #: data/base/messages/resmessages23.rmsg:124
 #: data/base/messages/resmessages2.rmsg:462
@@ -2550,7 +2550,7 @@ msgstr "VTOL Vuruş mesafesi arttırıldı"
 #: data/mp/messages/resmessages3.rmsg:553
 #: data/mp/messages/strings/resstrings.txt:530
 msgid "All VTOL Strike sensors upgraded automatically"
-msgstr "Tüm VTOL Vuruş algılayıcıları otomatik olarak yükseltildi"
+msgstr "Tüm DİvK Vuruş algılayıcıları otomatik olarak yükseltildi"
 
 #: data/base/messages/resmessages23.rmsg:134
 #: data/base/messages/resmessages2.rmsg:641
@@ -2784,7 +2784,7 @@ msgstr "Girdap AA Uçaksavar Taretli Site"
 #: data/mp/messages/strings/resstrings.txt:139
 #: data/mp/messages/strings/resstrings.txt:151
 msgid "Automatically targets VTOLs"
-msgstr "Otomatik olarak VTOL'ları hedef alır"
+msgstr "Otomatik olarak DİvK 'ları hedef alır"
 
 #: data/base/messages/resmessages2.rmsg:83
 #: data/base/messages/strings/resstrings.txt:126
@@ -2798,7 +2798,7 @@ msgstr "Kasırga AA Uçaksavar Taretli Site"
 #: data/mp/messages/resmessages2.rmsg:84
 #: data/mp/messages/strings/resstrings.txt:145
 msgid "Automatically targets VTOL"
-msgstr "Otomatik olarak VTOL'ları hedef alır"
+msgstr "Otomatik olarak DİvK 'ları hedef alır"
 
 #: data/base/messages/resmessages2.rmsg:96
 #: data/base/messages/strings/resstrings.txt:132
@@ -3008,7 +3008,7 @@ msgstr "Sertleştirilmiş Üs Binası Materyalleri"
 #: data/mp/messages/resmessages2.rmsg:395
 #: data/mp/messages/strings/resstrings.txt:438
 msgid "Robotic VTOL Production"
-msgstr "Robotik VTOL Üretimi"
+msgstr "Robotik DİvK Üretimi"
 
 #: data/base/messages/resmessages2.rmsg:396
 #: data/base/messages/resmessages3.rmsg:487
@@ -3017,7 +3017,7 @@ msgstr "Robotik VTOL Üretimi"
 #: data/mp/messages/resmessages3.rmsg:487
 #: data/mp/messages/strings/resstrings.txt:439
 msgid "Increases VTOL factory output"
-msgstr "VTOL Fabrikası üretim gücü arttırıldı"
+msgstr "DİvK Fabrikası üretim gücü arttırıldı"
 
 #: data/base/messages/resmessages2.rmsg:397
 #: data/base/messages/resmessages3.rmsg:488
@@ -3026,7 +3026,7 @@ msgstr "VTOL Fabrikası üretim gücü arttırıldı"
 #: data/mp/messages/resmessages3.rmsg:488
 #: data/mp/messages/strings/resstrings.txt:440
 msgid "All VTOL factories upgraded automatically"
-msgstr "Tüm VTOL Fabrikaları otomatik olarak geliştirildi"
+msgstr "Tüm DİvK Fabrikaları otomatik olarak geliştirildi"
 
 #: data/base/messages/resmessages2.rmsg:407
 #: data/base/messages/resmessages3.rmsg:498
@@ -3035,7 +3035,7 @@ msgstr "Tüm VTOL Fabrikaları otomatik olarak geliştirildi"
 #: data/mp/messages/resmessages3.rmsg:498
 #: data/mp/messages/strings/resstrings.txt:447
 msgid "VTOL Rearming Times Reduced"
-msgstr "VTOL Yeniden Silahlandırma Süresi Kısaltıldı"
+msgstr "DİvK Yeniden Silahlandırma Süresi Kısaltıldı"
 
 #: data/base/messages/resmessages2.rmsg:408
 #: data/base/messages/strings/names.txt:843
@@ -3044,7 +3044,7 @@ msgstr "VTOL Yeniden Silahlandırma Süresi Kısaltıldı"
 #: data/mp/messages/strings/names.txt:858
 #: data/mp/messages/strings/resstrings.txt:448
 msgid "Automated VTOL Rearming"
-msgstr "Otomatik VTOL Y. Silahlandırma"
+msgstr "Otomatik DİvK Y. Silahlandırma"
 
 #: data/base/messages/resmessages2.rmsg:409
 #: data/base/messages/resmessages3.rmsg:500
@@ -3099,7 +3099,7 @@ msgstr "Endirek silahlara gözcü görevi yapabilir"
 #: data/mp/messages/resmessages2.rmsg:434
 #: data/mp/messages/strings/resstrings.txt:508
 msgid "VTOL CB turret detects enemy indirect fire batteries"
-msgstr "VTOL CB Kulesi düşman endirek silah bataryalarını tespit eder"
+msgstr "DİvK A.B Kulesi düşman endirek silah bataryalarını tespit eder"
 
 #: data/base/messages/resmessages2.rmsg:460
 #: data/base/messages/strings/resstrings.txt:500
@@ -3346,7 +3346,7 @@ msgstr "Dörtlü 30mm Uçaksavar makineli"
 #: data/mp/messages/resmessages2.rmsg:642
 #: data/mp/messages/strings/resstrings.txt:693
 msgid "Detects and locks-on to VTOL engine emissions"
-msgstr "VTOL ların motor emisyonlarını tespit eder ve kilitlenir"
+msgstr "DİvK ların motor emisyonlarını tespit eder ve kilitlenir"
 
 #: data/base/messages/resmessages2.rmsg:654
 #: data/base/messages/resmessages3.rmsg:823
@@ -3873,14 +3873,14 @@ msgstr "Yüksek Gerilimli Üs Binası Materyalleri"
 #: data/base/messages/strings/names.txt:854
 #: data/mp/messages/resmessages3.rmsg:486
 msgid "Advanced VTOL Production"
-msgstr "Gelişmiş VTOL Üretimi"
+msgstr "Gelişmiş DİvK Üretimi"
 
 #: data/base/messages/resmessages3.rmsg:499
 #: data/base/messages/strings/names.txt:846
 #: data/mp/messages/resmessages3.rmsg:499
 #: data/mp/messages/strings/names.txt:861
 msgid "Robotic VTOL Rearming"
-msgstr "Robotik VTOL Y. Silahlandırma"
+msgstr "Robotik DİvK Y. Silahlandırma"
 
 #: data/base/messages/resmessages3.rmsg:512
 #: data/mp/messages/resmessages3.rmsg:512
@@ -4046,7 +4046,7 @@ msgstr "Beden Puanı ve Zırh Arttırıldı"
 #: data/mp/messages/resmessages3.rmsg:787
 #: data/mp/messages/resmessages3.rmsg:800
 msgid "All VTOLs upgraded automatically"
-msgstr "Tüm VTOL lar otomatik olarak geliştirildi"
+msgstr "Tüm DİvK lar otomatik olarak geliştirildi"
 
 #: data/base/messages/resmessages3.rmsg:811
 #: data/mp/messages/resmessages3.rmsg:811
@@ -4413,12 +4413,12 @@ msgstr "Sert Girit duvarları aktif eder"
 #: data/base/messages/resmessagesall.rmsg:18
 #: data/mp/messages/resmessagesall.rmsg:18
 msgid "VTOL factory enables VTOL production"
-msgstr "VTOL Fabrikası VTOL üretimini etkinleştirir"
+msgstr "DİvK Fabrikası DİvK üretimini etkinleştirir"
 
 #: data/base/messages/resmessagesall.rmsg:19
 #: data/mp/messages/resmessagesall.rmsg:19
 msgid "VTOL rearming pads required to keep VTOLs flying"
-msgstr "VTOL Yeniden Silahlandırma Rampaları, VTOL uçuşları için gereklidir"
+msgstr "DİvK Yeniden Silahlandırma Rampaları, DİvK uçuşları için gereklidir"
 
 #: data/base/messages/resmessagesall.rmsg:20
 #: data/mp/messages/resmessagesall.rmsg:20
@@ -4428,17 +4428,17 @@ msgstr "Fabrika Eki ile geliştirilebilir"
 #: data/base/messages/resmessagesall.rmsg:31
 #: data/mp/messages/resmessagesall.rmsg:31
 msgid "Refuels, rearms and repairs VTOLs"
-msgstr "Yakıt Doldurma, yeniden silahlandırma ve VTOL'ların tamirini yapar"
+msgstr "Yakıt Doldurma, yeniden silahlandırma ve DİvK 'ların tamirini yapar"
 
 #: data/base/messages/resmessagesall.rmsg:32
 #: data/mp/messages/resmessagesall.rmsg:32
 msgid "Assign a VTOL by selecting the rearming pad as its target"
-msgstr "Bir VTOL 'u yeniden silahlandırma rampasına bağla.Ve yeniden silahlandırma için geri dönsün"
+msgstr "Bir DİvK 'u yeniden silahlandırma rampasına bağla.Ve yeniden silahlandırma için geri dönsün"
 
 #: data/base/messages/resmessagesall.rmsg:33
 #: data/mp/messages/resmessagesall.rmsg:33
 msgid "The VTOL returns to the selected pad for rearming"
-msgstr "VTOL seçilen rampaya yeniden silahlandırma için geri döner"
+msgstr "DİvK seçilen rampaya yeniden silahlandırma için geri döner"
 
 #: data/base/messages/resmessagesall.rmsg:44
 #: data/mp/messages/resmessagesall.rmsg:44
@@ -4517,7 +4517,7 @@ msgstr "Tüm algılayıcılar otomatik olarak geliştirildi"
 #: data/base/messages/resmessagesall.rmsg:96
 #: data/mp/messages/resmessagesall.rmsg:122
 msgid "Counter-battery tower detects enemy indirect fire batteries"
-msgstr "CB Kulesi düşman endirek silahlarını tespit eder"
+msgstr "A.B Kulesi düşman endirek silahlarını tespit eder"
 
 #: data/base/messages/resmessagesall.rmsg:108
 #: data/mp/messages/resmessagesall.rmsg:147
@@ -4547,7 +4547,7 @@ msgstr "Dikey Kalkış ve İniş Yürütücüsü"
 #: data/base/messages/resmessagesall.rmsg:123
 #: data/mp/messages/resmessagesall.rmsg:162
 msgid "Speed: VTOL"
-msgstr "Hız: VTOL"
+msgstr "Hız: DİvK "
 
 #: data/base/messages/resmessagesall.rmsg:135
 #: data/mp/messages/resmessagesall.rmsg:174
@@ -5005,7 +5005,7 @@ msgstr "UÇUŞDA SUNUM"
 
 #: data/base/messages/strings/cam2strings.txt:28
 msgid "Team Beta are searching for Vertical Takeoff and Landing (VTOL) technology."
-msgstr "Takım Beta Dikey İniş-Kalkış teknolojisini (VTOL Teknolojisi)  araştırıyor."
+msgstr "Takım Beta Dikey İniş ve Kalkış teknolojisini (DİvK Teknolojisi)  araştırıyor."
 
 #: data/base/messages/strings/cam2strings.txt:29
 msgid "It's believed to be at a pre-Collapse airbase in this area."
@@ -5082,7 +5082,7 @@ msgstr "Konvoyun yolunu kes ve kargolarını al."
 
 #: data/base/messages/strings/cam2strings.txt:65
 msgid "Enemy VTOLs are likely to be flying close escort."
-msgstr "Muhtemelen düşman VTOL'ları eskortluk ediyor."
+msgstr "Muhtemelen düşman DİvK 'ları eskortluk ediyor."
 
 #: data/base/messages/strings/cam2strings.txt:68
 #: data/base/messages/strings/cam2strings.txt:72
@@ -5103,15 +5103,15 @@ msgstr "Kampı yok ettigin zaman."
 
 #: data/base/messages/strings/cam2strings.txt:77
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs."
-msgstr "BETA ÜSSÜ GÖREVİ: Düşman H. alanlarını yoket ve VTOL'ları al."
+msgstr "BETA ÜSSÜ GÖREVİ: Düşman H. alanlarını yoket ve DİvK'ları al."
 
 #: data/base/messages/strings/cam2strings.txt:78
 msgid "Analysis of flight paths indicate that The Collective's VTOLs originate from here."
-msgstr "Uçuş parcalarını analiz et. Orijinal VTOL'lar burada."
+msgstr "Uçuş parcalarını analiz et. Orijinal DİvK 'lar burada."
 
 #: data/base/messages/strings/cam2strings.txt:81
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs"
-msgstr "BETA ÜSSÜ GÖREVİ: Düşman H. alanlarını yoket ve VTOL'ları al."
+msgstr "BETA ÜSSÜ GÖREVİ: Düşman H. alanlarını yoket ve DİvK 'ları al."
 
 #: data/base/messages/strings/cam2strings.txt:82
 msgid "The location of the enemy airbase is here; this is your primary objective."
@@ -6193,17 +6193,17 @@ msgstr "Hover III"
 #: data/base/messages/strings/names.txt:324
 #: data/mp/messages/strings/names.txt:327
 msgid "VTOL"
-msgstr "VTOL"
+msgstr "DİvK"
 
 #: data/base/messages/strings/names.txt:325
 #: data/mp/messages/strings/names.txt:328
 msgid "VTOL II"
-msgstr "VTOL II"
+msgstr "DİvK II"
 
 #: data/base/messages/strings/names.txt:326
 #: data/mp/messages/strings/names.txt:329
 msgid "VTOL III"
-msgstr "VTOL III"
+msgstr "DİvK III"
 
 #: data/base/messages/strings/names.txt:327
 #: data/mp/messages/strings/names.txt:330
@@ -6282,7 +6282,7 @@ msgstr "Algılayıcı Tareti"
 #: data/mp/messages/strings/names.txt:377
 #: data/mp/messages/strings/names.txt:378
 msgid "VTOL CB Radar Tower"
-msgstr "VTOL CB Kulesi"
+msgstr "DİvK A.B Kulesi"
 
 #: data/base/messages/strings/names.txt:373
 #: data/mp/messages/strings/names.txt:379
@@ -6292,19 +6292,19 @@ msgstr "Uydu Algılayıcısı"
 #: data/base/messages/strings/names.txt:375
 #: data/mp/messages/strings/names.txt:382
 msgid "CB Radar Turret"
-msgstr "CB-Sensorturm"
+msgstr "A.B Sensör Kule"
 
 #: data/base/messages/strings/names.txt:376
 #: data/base/messages/strings/names.txt:906
 #: data/mp/messages/strings/names.txt:383
 #: data/mp/messages/strings/names.txt:923
 msgid "VTOL Strike Turret"
-msgstr "VTOL-Schlagturm"
+msgstr "DİvK -Şok Kulesi"
 
 #: data/base/messages/strings/names.txt:377
 #: data/mp/messages/strings/names.txt:384
 msgid "VTOL CB Radar Turret"
-msgstr "VTOL-CB-Turm"
+msgstr "DİvK -A.B-Kulesi"
 
 #: data/base/messages/strings/names.txt:378
 msgid "NEXUS Link"
@@ -6394,7 +6394,7 @@ msgstr "Sert Girit Duvar"
 #: data/mp/messages/strings/names.txt:406
 #: data/mp/messages/strings/names.txt:865
 msgid "VTOL Factory"
-msgstr "VTOL Fabrikası"
+msgstr "DİvK Fabrikası"
 
 #: data/base/messages/strings/names.txt:402
 #: data/base/messages/strings/names.txt:721
@@ -6484,18 +6484,18 @@ msgstr "Hücüm Topu Bağlama Noktası"
 #: data/mp/messages/strings/names.txt:434
 #: data/mp/messages/strings/names.txt:909
 msgid "CB Tower"
-msgstr "CB Kulesi"
+msgstr "A.B Kulesi"
 
 #: data/base/messages/strings/names.txt:427
 #: data/base/messages/strings/names.txt:899
 #: data/mp/messages/strings/names.txt:435
 #: data/mp/messages/strings/names.txt:916
 msgid "VTOL CB Tower"
-msgstr "VTOL CB Kulesi"
+msgstr "DİvK A.B Kulesi"
 
 #: data/base/messages/strings/names.txt:428
 msgid "VTOL Radar Tower"
-msgstr "VTOL Radar Kulesi"
+msgstr "DİvK Radar Kulesi"
 
 #: data/base/messages/strings/names.txt:431
 #: data/base/messages/strings/names.txt:764
@@ -6645,7 +6645,7 @@ msgstr "Ejder'in Dişi"
 #: data/mp/messages/strings/names.txt:468
 #: data/mp/messages/strings/names.txt:857
 msgid "VTOL Rearming Pad"
-msgstr "VTOL Yeniden Silahlandırma Rampası"
+msgstr "DİvK Yeniden Silahlandırma Rampası"
 
 #: data/base/messages/strings/names.txt:463
 #: data/base/messages/strings/names.txt:484
@@ -6837,7 +6837,7 @@ msgstr "İntikamcı SAM"
 #: data/base/messages/strings/names.txt:511
 #: data/mp/messages/strings/names.txt:519
 msgid "VTOL Scourge Missile"
-msgstr "VTOL Felaket Füzesi"
+msgstr "DİvK Felaket Füzesi"
 
 #: data/base/messages/strings/names.txt:513
 #: data/base/messages/strings/names.txt:1138
@@ -6924,22 +6924,22 @@ msgstr "Tank Öldürücü"
 #: data/base/messages/strings/names.txt:529
 #: data/mp/messages/strings/names.txt:537
 msgid "VTOL Bunker Buster"
-msgstr "VTOL Sığınak Yokedici"
+msgstr "DİvK Sığınak Yokedici"
 
 #: data/base/messages/strings/names.txt:530
 #: data/mp/messages/strings/names.txt:538
 msgid "VTOL Mini-Rocket"
-msgstr "VTOL-Mini Roketi"
+msgstr "DİvK -Mini Roketi"
 
 #: data/base/messages/strings/names.txt:531
 #: data/mp/messages/strings/names.txt:539
 msgid "VTOL Lancer"
-msgstr "VTOL-Roketatar"
+msgstr "DİvK -Roketatar"
 
 #: data/base/messages/strings/names.txt:532
 #: data/mp/messages/strings/names.txt:540
 msgid "VTOL Tank Killer"
-msgstr "VTOL-Tank Öldürücü"
+msgstr "DİvK -Tank Öldürücü"
 
 #: data/base/messages/strings/names.txt:544
 #: data/base/messages/strings/names.txt:980
@@ -6970,52 +6970,52 @@ msgstr "Girdap UÇAKSAVAR Tareti"
 #: data/base/messages/strings/names.txt:560
 #: data/mp/messages/strings/names.txt:569
 msgid "VTOL Cannon"
-msgstr "VTOL Topu"
+msgstr "DİvK Topu"
 
 #: data/base/messages/strings/names.txt:561
 #: data/mp/messages/strings/names.txt:570
 msgid "VTOL Hyper Velocity Cannon"
-msgstr "VTOL Yüksek Hız Topu"
+msgstr "DİvK Yüksek Hız Topu"
 
 #: data/base/messages/strings/names.txt:562
 #: data/mp/messages/strings/names.txt:571
 msgid "VTOL Assault Cannon"
-msgstr "VTOL Hücüm Topu "
+msgstr "DİvK Hücüm Topu "
 
 #: data/base/messages/strings/names.txt:563
 #: data/mp/messages/strings/names.txt:572
 msgid "VTOL Pulse Laser"
-msgstr "VTOL Darbeli Lazer"
+msgstr "DİvK Darbeli Lazer"
 
 #: data/base/messages/strings/names.txt:565
 #: data/mp/messages/strings/names.txt:574
 msgid "VTOL Machinegun"
-msgstr "VTOL Makinalı Tüfek"
+msgstr "DİvK Makinalı Tüfek"
 
 #: data/base/messages/strings/names.txt:566
 #: data/mp/messages/strings/names.txt:575
 msgid "VTOL Twin Machinegun"
-msgstr "VTOL Çift Makinalı"
+msgstr "DİvK Çift Makinalı"
 
 #: data/base/messages/strings/names.txt:567
 #: data/mp/messages/strings/names.txt:576
 msgid "VTOL Heavy Machinegun"
-msgstr "VTOL Ağır Makinalı"
+msgstr "DİvK Ağır Makinalı"
 
 #: data/base/messages/strings/names.txt:568
 #: data/mp/messages/strings/names.txt:577
 msgid "VTOL Assault Gun"
-msgstr "VTOL Hücüm Silahı"
+msgstr "DİvK Hücüm Silahı"
 
 #: data/base/messages/strings/names.txt:569
 #: data/mp/messages/strings/names.txt:578
 msgid "VTOL Needle Gun"
-msgstr "VTOL İğne Topu"
+msgstr "DİvK İğne Topu"
 
 #: data/base/messages/strings/names.txt:570
 #: data/mp/messages/strings/names.txt:579
 msgid "VTOL Rail Gun"
-msgstr "VTOL Demir Topu"
+msgstr "DİvK Demir Topu"
 
 #: data/base/messages/strings/names.txt:572
 #: data/mp/messages/strings/names.txt:581
@@ -7029,23 +7029,23 @@ msgstr "Yakın Süper Bomba Tareti"
 
 #: data/base/messages/strings/names.txt:575
 msgid "VTOL Cluster Bombs Bay"
-msgstr "VTOL Demet Bombaları"
+msgstr "DİvK Demet Bombaları"
 
 # HEAP = high explosive, armor piercing -Kreuvf
 #: data/base/messages/strings/names.txt:576
 #: data/mp/messages/strings/names.txt:585
 msgid "VTOL Heap Bomb Bay"
-msgstr "VTOL-A.P.Z.D Bomba Demeti"
+msgstr "DİvK -A.P.Z.D Bomba Demeti"
 
 #: data/base/messages/strings/names.txt:577
 #: data/mp/messages/strings/names.txt:586
 msgid "VTOL Phosphor Bomb Bay"
-msgstr "VTOL Fosfor Bomba Demeti"
+msgstr "DİvK Fosfor Bomba Demeti"
 
 #: data/base/messages/strings/names.txt:578
 #: data/mp/messages/strings/names.txt:587
 msgid "VTOL Thermite Bomb Bay"
-msgstr "VTOL Termit Bomba Demeti"
+msgstr "DİvK Termit Bomba Demeti"
 
 #: data/base/messages/strings/names.txt:581
 #: data/mp/messages/strings/names.txt:590
@@ -7675,43 +7675,43 @@ msgstr "Sinirsel Sinapse Araştırma Beyini Kdm3"
 #: data/base/messages/strings/names.txt:844
 #: data/mp/messages/strings/names.txt:859
 msgid "Automated VTOL Rearming Mk2"
-msgstr "Otomatik VTOL Y. Silahlandırma Kdm2"
+msgstr "Otomatik DİvK Y. Silahlandırma Kdm2"
 
 #: data/base/messages/strings/names.txt:845
 #: data/mp/messages/strings/names.txt:860
 msgid "Automated VTOL Rearming Mk3"
-msgstr "Otomatik VTOL Y. Silahlandırma Kdm3"
+msgstr "Otomatik DİvK Y. Silahlandırma Kdm3"
 
 #: data/base/messages/strings/names.txt:847
 #: data/mp/messages/strings/names.txt:862
 msgid "Robotic VTOL Rearming Mk2"
-msgstr "Robotik VTOL Y. Silahlandırma Kdm2"
+msgstr "Robotik DİvK Y. Silahlandırma Kdm2"
 
 #: data/base/messages/strings/names.txt:848
 #: data/mp/messages/strings/names.txt:863
 msgid "Robotic VTOL Rearming Mk3"
-msgstr "Robotik VTOL Y. Silahlandırma Kdm3"
+msgstr "Robotik DİvK Y. Silahlandırma Kdm3"
 
 #: data/base/messages/strings/names.txt:849
 #: data/mp/messages/strings/names.txt:864
 msgid "Robotic VTOL Rearming Mk4"
-msgstr "Robotik VTOL Y. Silahlandırma Kdm4"
+msgstr "Robotik DİvK Y. Silahlandırma Kdm4"
 
 #: data/base/messages/strings/names.txt:852
 msgid "Robotic VTOL Production Mk2"
-msgstr "Robotik VTOL Üretimi Kdm2"
+msgstr "Robotik DİvK Üretimi Kdm2"
 
 #: data/base/messages/strings/names.txt:853
 msgid "Robotic VTOL Production Mk3"
-msgstr "Robotik VTOL Üretimi Kdm3"
+msgstr "Robotik DİvK Üretimi Kdm3"
 
 #: data/base/messages/strings/names.txt:855
 msgid "Advanced VTOL Production Mk2"
-msgstr "Gelişmiş VTOL Üretimi Kdm2"
+msgstr "Gelişmiş DİvK Üretimi Kdm2"
 
 #: data/base/messages/strings/names.txt:856
 msgid "Advanced VTOL Production Mk3"
-msgstr "Gelişmiş VTOL Üretimi Kdm3"
+msgstr "Gelişmiş DİvK Üretimi Kdm3"
 
 #: data/base/messages/strings/names.txt:858
 #: data/mp/messages/strings/names.txt:873
@@ -7822,63 +7822,63 @@ msgstr "Mobil Tamir Yükseltmesi Kdm2"
 #: data/base/messages/strings/names.txt:891
 #: data/mp/messages/strings/names.txt:908
 msgid "CB Turret"
-msgstr "CB Tareti"
+msgstr "A.B Tareti"
 
 #: data/base/messages/strings/names.txt:893
 #: data/mp/messages/strings/names.txt:910
 msgid "CB Sensor Upgrade"
-msgstr "CB Algılayıcı Yükseltmesi"
+msgstr "A.B Algılayıcı Yükseltmesi"
 
 #: data/base/messages/strings/names.txt:894
 #: data/mp/messages/strings/names.txt:911
 msgid "CB Sensor Upgrade 2"
-msgstr "CB Algılayıcı Yükseltmesi Kdm2"
+msgstr "A.B Algılayıcı Yükseltmesi Kdm2"
 
 #: data/base/messages/strings/names.txt:895
 #: data/mp/messages/strings/names.txt:912
 msgid "CB Sensor Upgrade 3"
-msgstr "CB Algılayıcı Yükseltmesi Kdm3"
+msgstr "A.B Algılayıcı Yükseltmesi Kdm3"
 
 #: data/base/messages/strings/names.txt:897
 #: data/mp/messages/strings/names.txt:914
 msgid "VTOL CB Turret"
-msgstr "VTOL CB Tareti"
+msgstr "DİvK A.B Tareti"
 
 #: data/base/messages/strings/names.txt:900
 #: data/mp/messages/strings/names.txt:917
 msgid "VTOL CB Upgrade"
-msgstr "VTOL CB Yükseltmesi"
+msgstr "DİvK A.B Yükseltmesi"
 
 #: data/base/messages/strings/names.txt:901
 #: data/mp/messages/strings/names.txt:918
 msgid "VTOL CB Upgrade 2"
-msgstr "VTOL CB Yükseltmesi Kdm2"
+msgstr "DİvK A.B Yükseltmesi Kdm2"
 
 #: data/base/messages/strings/names.txt:902
 #: data/mp/messages/strings/names.txt:919
 msgid "VTOL CB Upgrade 3"
-msgstr "VTOL CB Yükseltmesi Kdm3"
+msgstr "DİvK A.B Yükseltmesi Kdm3"
 
 #: data/base/messages/strings/names.txt:903
 #: data/mp/messages/strings/names.txt:920
 msgid "VTOL Strike Upgrade"
-msgstr "VTOL Vuruş Yükseltmesi"
+msgstr "DİvK Vuruş Yükseltmesi"
 
 #: data/base/messages/strings/names.txt:904
 #: data/mp/messages/strings/names.txt:921
 msgid "VTOL Strike Upgrade Mk2"
-msgstr "VTOL Vuruş Yükseltmesi Kdm2"
+msgstr "DİvK Vuruş Yükseltmesi Kdm2"
 
 #: data/base/messages/strings/names.txt:905
 #: data/mp/messages/strings/names.txt:922
 msgid "VTOL Strike Upgrade Mk3"
-msgstr "VTOL Vuruş Yükseltmesi Kdm3"
+msgstr "DİvK Vuruş Yükseltmesi Kdm3"
 
 #: data/base/messages/strings/names.txt:907
 #: data/mp/messages/strings/names.txt:436
 #: data/mp/messages/strings/names.txt:924
 msgid "VTOL Strike Tower"
-msgstr "VTOL Vuruş Kulesi"
+msgstr "DİvK Vuruş Kulesi"
 
 #: data/base/messages/strings/names.txt:910
 #: data/mp/messages/strings/names.txt:927
@@ -8109,12 +8109,12 @@ msgstr "Palet Yürütücü II"
 #: data/base/messages/strings/names.txt:973
 #: data/mp/messages/strings/names.txt:990
 msgid "VTOL Propulsion"
-msgstr "VTOL Uçuş Parçası"
+msgstr "DİvK Uçuş Parçası"
 
 #: data/base/messages/strings/names.txt:974
 #: data/mp/messages/strings/names.txt:991
 msgid "VTOL Propulsion II"
-msgstr "VTOL Uçuş Parçası II"
+msgstr "DİvK Uçuş Parçası II"
 
 #: data/base/messages/strings/names.txt:977
 #: data/mp/messages/strings/names.txt:994
@@ -9136,7 +9136,7 @@ msgstr "Flaşışığı"
 #: data/base/messages/strings/names.txt:1468
 #: data/mp/messages/strings/names.txt:1488
 msgid "VTOL Flashlight"
-msgstr "VTOL Flaşışığı"
+msgstr "DİvK Flaşışığı"
 
 #: data/base/messages/strings/names.txt:1471
 #: data/base/messages/strings/names.txt:1472
@@ -9987,7 +9987,7 @@ msgstr "Sizi selamlıyorum, Komutan."
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:4
 msgid "Enemy strike VTOLs have got us pinned down. We've managed to hold off cyborgs and tanks, but we haven't been able to make any progress along the valley."
-msgstr "Düşman Saldırı VTOL'ları bize doğru geliyorlar. Biz cyborgları ve tankları tutmayı başardık, fakat vadi boyunca hiçbir başarıya ulaşamadık."
+msgstr "Düşman Saldırı DİvK 'ları bize doğru geliyorlar. Biz cyborgları ve tankları tutmayı başardık, fakat vadi boyunca hiçbir başarıya ulaşamadık."
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:7
 msgid "Can you try and reach us with anti-aircraft units?"
@@ -9999,7 +9999,7 @@ msgstr "Burası Takım Alfa. Tekrar ediyorum, burası takım Alfa. Bize acil yar
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:4
 msgid "We are under heavy attack from cyborgs, laser tanks, and strike VTOLs."
-msgstr "Cyborglar, Lazer Tanklar ve VTOL'lar tarafından ağır saldırı altındayız."
+msgstr "Cyborglar, Lazer Tanklar ve DİvK 'lar tarafından ağır saldırı altındayız."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:6
 msgid "We were trying to reach your position, but have been ambushed."
@@ -10574,49 +10574,49 @@ msgstr "İntikam Paletler Manyetik Fırtına"
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1867
 #: data/mp/messages/strings/names.txt:1879
 msgid "VTOL Cluster Bomb Bay Bug VTOL"
-msgstr "VTOL Demet Bombaları Böcek VTOL"
+msgstr "DİvK Demet Bombaları Böcek DİvK "
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1868
 #: data/mp/messages/strings/names.txt:1880
 msgid "VTOL Bunker Buster Bug VTOL"
-msgstr "VTOL Sığınak Yokedici Böcek VTOL"
+msgstr "DİvK Sığınak Yokedici Böcek DİvK "
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1869
 #: data/mp/messages/strings/names.txt:1881
 msgid "VTOL Cluster Bomb Bay Scorpion VTOL"
-msgstr "VTOL Demet Bomları Akrep VTOL"
+msgstr "DİvK Demet Bomları Akrep DİvK "
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1870
 #: data/mp/messages/strings/names.txt:1882
 msgid "VTOL Bunker Buster Scorpion VTOL"
-msgstr "VTOL Sığınak Yokedici VTOL"
+msgstr "DİvK Sığınak Yokedici DİvK "
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1873
 #: data/mp/messages/strings/names.txt:1885
 msgid "VTOL Lancer Bug VTOL"
-msgstr "VTOL Roketatar Böcek VTOL"
+msgstr "DİvK Roketatar Böcek DİvK "
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1874
 msgid "VTOL HPV Cannon Bug VTOL"
-msgstr "VTOL-Y.H.T Böcek VTOL"
+msgstr "DİvK -Y.H.T Böcek DİvK "
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1875
 #: data/mp/messages/strings/names.txt:1887
 msgid "VTOL Lancer Scorpion VTOL"
-msgstr "VTOL Roketatar Akrep VTOL"
+msgstr "DİvK Roketatar Akrep DİvK "
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1876
 msgid "VTOL HPV Cannon Scorpion VTOL"
-msgstr "VTOL Y.H.T Akrep VTOL"
+msgstr "DİvK Y.H.T Akrep DİvK "
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1877
 #: data/mp/messages/strings/names.txt:1889
 msgid "VTOL Lancer Mantis VTOL"
-msgstr "VTOLRoketatar P. Devesi VTOL"
+msgstr "DİvK Roketatar P. Devesi DİvK "
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1878
 msgid "VTOL HPV Cannon Mantis VTOL"
-msgstr "VTOL Y.H.T  P. Devesi VTOL"
+msgstr "DİvK Y.H.T  P. Devesi DİvK "
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1882
 #: data/mp/messages/strings/names.txt:1894
@@ -10636,12 +10636,12 @@ msgstr "Ağır Topçu Akrep Paletler"
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1886
 #: data/mp/messages/strings/names.txt:1898
 msgid "Lancer Scorpion VTOL"
-msgstr "Roketatar Akrep VTOL"
+msgstr "Roketatar Akrep DİvK "
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1887
 #: data/mp/messages/strings/names.txt:1899
 msgid "Bunker Buster Scorpion VTOL"
-msgstr "Sığnak Yokedici Akrep VTOL"
+msgstr "Sığnak Yokedici Akrep DİvK "
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1889
 #: data/mp/messages/strings/names.txt:1901
@@ -10889,28 +10889,28 @@ msgstr "Seri Atışlı Mini Roket Engerek Yarım Paletler"
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1953
 #: data/mp/messages/strings/names.txt:1965
 msgid "Phosphor Bomb Bay Mantis VTOL"
-msgstr "Fosfor Bomba Demeti P. Devesi VTOL"
+msgstr "Fosfor Bomba Demeti P. Devesi DİvK "
 
 # HEAP = high explosive, armor piercing -Kreuvf
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1954
 #: data/mp/messages/strings/names.txt:1966
 msgid "Heap Bomb Bay Mantis VTOL"
-msgstr "Y.P.Z.D Bomba Demeti P. Devesi VTOL"
+msgstr "Y.P.Z.D Bomba Demeti P. Devesi DİvK "
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1955
 #: data/mp/messages/strings/names.txt:1967
 msgid "Heap Bomb Bay Retribution VTOL"
-msgstr "Y.P.Z.D Bomba Demeti Cezalandırma VTOL"
+msgstr "Y.P.Z.D Bomba Demeti Cezalandırma DİvK "
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1956
 #: data/mp/messages/strings/names.txt:1968
 msgid "Scourge Retaliation VTOL"
-msgstr "Felaket F. İsyan VTOL"
+msgstr "Felaket F. İsyan DİvK "
 
 #: data/mods/multiplay/old-1.10-balance/messages/strings/names.txt:1957
 #: data/mp/messages/strings/names.txt:1969
 msgid "Plasmite Retribution VTOL"
-msgstr "Plasmit Aleci Atıcı Cezalandırıcı VTOL"
+msgstr "Plasmit Aleci Atıcı Cezalandırıcı DİvK "
 
 #: data/mp/messages/resmessages12.rmsg:58
 msgid "Construction speed +10%"
@@ -11236,7 +11236,7 @@ msgstr "Bağlanmış endirek ateş birimlerini düşman bataryalarına karşı a
 
 #: data/mp/messages/resmessagesall.rmsg:137
 msgid "Counter-battery fire continues until enemy sensor is suppressed"
-msgstr "CB Kulesi düşman endirek ateş silahları yok edilene kadar ateşe devam ettirir."
+msgstr "A.B Kulesi düşman endirek ateş silahları yok edilene kadar ateşe devam ettirir."
 
 #: data/mp/messages/resmessagesall.rmsg:225
 msgid "Cyborg Transport Available"
@@ -11248,7 +11248,7 @@ msgstr "Makinalı ile Desteklenmiş"
 
 #: data/mp/messages/resmessagesall.rmsg:228
 msgid "Requires heavy VTOL factory to produce"
-msgstr "Ağır VTOL Fabrikası üretim için gereklidir"
+msgstr "Ağır DİvK  Fabrikası üretim için gereklidir"
 
 #: data/mp/messages/resmessagesall.rmsg:239
 msgid "Incendiary howitzer emplacement"
@@ -11347,7 +11347,7 @@ msgstr "Algılayıcı Hedeflemesi Yapmaz"
 #: data/mp/messages/resmessagesall.rmsg:512
 #: data/mp/messages/resmessagesall.rmsg:707
 msgid "Combines standard, counter battery and VTOL sensors"
-msgstr "Standart Bileşen-, CB ve VTOL algılayıcıları "
+msgstr "Standart Bileşen-, A.B ve DİvK  algılayıcıları "
 
 #: data/mp/messages/resmessagesall.rmsg:524
 msgid "New Advanced Weapon Available"
@@ -11505,7 +11505,7 @@ msgstr "Yüksek patlayıcılı Plazmit bombaları atar"
 
 #: data/mp/messages/resmessagesall.rmsg:914
 msgid "New VTOL Missile Launcher"
-msgstr "Yeni VTOL Füze Atıcı"
+msgstr "Yeni DİvK Füze Atıcı"
 
 #: data/mp/messages/resmessagesall.rmsg:915
 msgid "Fires Electronic Magnetic Pulse Missiles"
@@ -11616,7 +11616,7 @@ msgstr "AA Uçaksavar Topu"
 
 #: data/mp/messages/strings/names.txt:554
 msgid "VTOL Flak Cannon"
-msgstr "VTOL Uçaksavar Topu"
+msgstr "DİvK  Uçaksavar Topu"
 
 #: data/mp/messages/strings/names.txt:567
 #: data/mp/messages/strings/names.txt:1699
@@ -11626,7 +11626,7 @@ msgstr "Lazer Uydusu Komuta Merkezi"
 
 #: data/mp/messages/strings/names.txt:584
 msgid "VTOL Cluster Bomb Bay"
-msgstr "VTOL Demet Bombaları"
+msgstr "DİvK  Demet Bombaları"
 
 #: data/mp/messages/strings/names.txt:591
 msgid "Collective Corner Wall"
@@ -11931,7 +11931,7 @@ msgstr "Ağır Lazer"
 
 #: data/mp/messages/strings/names.txt:1686
 msgid "VTOL Heavy Laser"
-msgstr "VTOL Ağır Lazeri"
+msgstr "DİvK  Ağır Lazeri"
 
 #: data/mp/messages/strings/names.txt:1687
 #: data/mp/messages/strings/names.txt:1688
@@ -11984,7 +11984,7 @@ msgstr "Güneş Işığı AA"
 
 #: data/mp/messages/strings/names.txt:1729
 msgid "VTOL Sunburst AA"
-msgstr "VTOL Güneş Işığı AA"
+msgstr "DİvK  Güneş Işığı AA"
 
 #: data/mp/messages/strings/names.txt:1730
 #: data/mp/messages/strings/names.txt:1731
@@ -12134,7 +12134,7 @@ msgstr "Çift Hücüm Topu Bağlama Noktası"
 
 #: data/mp/messages/strings/names.txt:1812
 msgid "VTOL Plasmite Bomb Bay"
-msgstr "VTOL Plazmit Bomba Demeti"
+msgstr "DİvK  Plazmit Bomba Demeti"
 
 #: data/mp/messages/strings/names.txt:1813
 msgid "Plasmite Bomb"
@@ -12142,7 +12142,7 @@ msgstr "Plasmit Bombalar"
 
 #: data/mp/messages/strings/names.txt:1814
 msgid "VTOL EMP Missile Launcher"
-msgstr "VTOL EMP Füze Atıcı"
+msgstr "DİvK  EMP Füze Atıcı"
 
 #: data/mp/messages/strings/names.txt:1815
 msgid "EMP Missile Launcher"
@@ -12165,15 +12165,15 @@ msgstr "Komuta Tareti IV"
 
 #: data/mp/messages/strings/names.txt:1886
 msgid "VTOL Hyper Velocity Cannon Bug VTOL"
-msgstr "VTOL-Yüksek Hız Topu Böcek VTOL"
+msgstr "DİvK -Yüksek Hız Topu Böcek DİvK "
 
 #: data/mp/messages/strings/names.txt:1888
 msgid "VTOL Hyper Velocity Cannon Scorpion VTOL"
-msgstr "VTOL Yüksek Hız Topu Akrep VTOL"
+msgstr "DİvK  Yüksek Hız Topu Akrep DİvK "
 
 #: data/mp/messages/strings/names.txt:1890
 msgid "VTOL Hyper Velocity Cannon Mantis VTOL"
-msgstr "VTOL Yüksek Hız Topu P. Devesi VTOL"
+msgstr "DİvK  Yüksek Hız Topu P. Devesi DİvK "
 
 #: data/mp/messages/strings/names.txt:1929
 msgid "Mini-Rocket Array Cobra Tracks"
@@ -13223,7 +13223,7 @@ msgstr "Oyun Kurucu olmadan devam edemez."
 msgid "-->  QUIT  <--"
 msgstr "-->  ÇIKIŞ  <--"
 
-#: src/init.c:390
+#: src/init.c:402
 #, c-format
 msgid ""
 "The required mod could not be loaded: %s\n"
@@ -13362,7 +13362,7 @@ msgstr "Ateş Desteğine Ata"
 
 #: src/intorder.c:182
 msgid "Assign VTOL Factory Production"
-msgstr "VTOL Fabrikası Üretimine Ata"
+msgstr "DİvK  Fabrikası Üretimine Ata"
 
 #: src/intorder.c:183
 msgid "Circle"
@@ -14025,7 +14025,7 @@ msgstr "TÜM Birimleri Seç"
 
 #: src/keymap.c:423
 msgid "Select all VTOLs"
-msgstr "Tüm VTOL'ları Seç"
+msgstr "Tüm DİvK 'ları Seç"
 
 #: src/keymap.c:424
 msgid "Select all Wheels"
@@ -14326,7 +14326,7 @@ msgstr "Cyborg'lar Devre Dışı"
 
 #: src/multiint.c:1131
 msgid "VTOLs disabled."
-msgstr "VTOL'lar Devre Dışı"
+msgstr "DİvK 'lar Devre Dışı"
 
 #: src/multiint.c:1181
 #: src/multiint.c:1188
@@ -15010,6 +15010,12 @@ msgstr "Sürüm %s%s%s%s"
 #~ msgid "Construction Progress"
 #~ msgstr "İnşaat Devam ediyor"
 
+#~ msgid "Medium"
+#~ msgstr "Orta"
+
+#~ msgid "Insane"
+#~ msgstr "Deli"
+
 #~ msgid "DIFFICULTY"
 #~ msgstr "ZORLUK"
 
@@ -15048,6 +15054,15 @@ msgstr "Sürüm %s%s%s%s"
 
 #~ msgid "You cannot change AI in a challenge"
 #~ msgstr "Mücadele modunda Y.Z değiştiremezsin"
+
+#~ msgid "Click to take player slot %d"
+#~ msgstr "Oyuncu slotu %d almak için tıkla "
+
+#~ msgid "Open"
+#~ msgstr "Aç"
+
+#~ msgid "Closed"
+#~ msgstr "Kapandı"
 
 #~ msgid "3 players"
 #~ msgstr "2 Oyuncu"
@@ -15114,6 +15129,41 @@ msgstr "Sürüm %s%s%s%s"
 
 #~ msgid "There is not enough room in the Transport!"
 #~ msgstr "Taşıma Gemisinde yeterince yer yok!"
+
+#~ msgid "Postnuclear realtime strategy"
+#~ msgstr "Nükleer sonrası gerçek zamanlı strateji"
+
+#~ msgid "Warzone 2100"
+#~ msgstr "Warzone 2100"
+
+#~ msgid "Strategy Game"
+#~ msgstr "Strateji Oyunu"
+
+#~ msgid ""
+#~ "Copyright © 1999-2004 Eidos Interactive.\n"
+#~ "Copyright © 2005-2010 The Warzone 2100 Project"
+#~ msgstr ""
+#~ "Telif Hakkı © 1999-2004 Eidos İnteraktif.\n"
+#~ "Telif Hakkı © 2005-2010 Warzone 2100 Projesi"
+
+#~ msgid "Warzone 2100 Map / Mod File"
+#~ msgstr "Warzone 2100 Harita / Mod Dosyası"
+
+#~ msgid "Warzone 2100 Campaign Mod File"
+#~ msgstr "Warzone 2100 Bölüm Mod Dosyası"
+
+# Das hat(te) Warzone damals schon, kA, ob noch nutzbar -Ayhan
+#~ msgid "Warzone 2100 Multiplayer Mod File"
+#~ msgstr "Warzone 2100 Çok Oyunculu Mod Dosyası"
+
+#~ msgid "Warzone 2100 Global Mod File"
+#~ msgstr "Warzone 2100 Küresel Mod Dosyası"
+
+#~ msgid "Warzone"
+#~ msgstr "Warzone"
+
+#~ msgid "Warzone 2100 Music Mod File"
+#~ msgstr "Warzone 2100 Müzik Mod Dosyası"
 
 #~ msgid "Congratulations your successful evacuation of Beta Base."
 #~ msgstr "Başarılı bir şekilde Beta üssünü boşaltınız için tebrikler."
@@ -15360,10 +15410,6 @@ msgstr "Sürüm %s%s%s%s"
 
 #~ msgid "Player %u found %u power in an oil drum"
 #~ msgstr "Oyuncu %u , %u varil enerji buldu"
-
-# Das hat(te) Warzone damals schon, kA, ob noch nutzbar -Ayhan
-#~ msgid "Start Multiplayer Audio"
-#~ msgstr "Çok Oyunculu Sesi Başlat"
 
 #~ msgid "Stop Multiplayer Audio"
 #~ msgstr "Çok Oyunculu Sesi Durdur"
