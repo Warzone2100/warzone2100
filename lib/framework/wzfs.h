@@ -100,23 +100,25 @@ public:
 		{
 			flags = QAbstractFileEngine::WriteOwnerPerm | QAbstractFileEngine::WriteUserPerm | QAbstractFileEngine::FileType;
 			fp = PHYSFS_openWrite(name.toUtf8().constData());	// will truncate
+			if (!fp) qWarning("Failed to create %s: %s", name.toUtf8().constData(), PHYSFS_getLastError());
 		}
 		else if (mode & QIODevice::ReadOnly)
 		{
 			flags = QAbstractFileEngine::ReadOwnerPerm | QAbstractFileEngine::ReadUserPerm | QAbstractFileEngine::FileType | QAbstractFileEngine::ReadOtherPerm;
 			fp = PHYSFS_openRead(name.toUtf8().constData());
+			// since open is sometimes used to check for existence, do not complain here
 		}
 		else if (mode & QIODevice::Append)
 		{
 			flags = QAbstractFileEngine::WriteOwnerPerm | QAbstractFileEngine::WriteUserPerm | QAbstractFileEngine::FileType;
 			fp = PHYSFS_openAppend(name.toUtf8().constData());
+			if (!fp) qWarning("Failed to append open %s: %s", name.toUtf8().constData(), PHYSFS_getLastError());
 		}
 		else
 		{
 			qWarning("Bad file open mode: %d", (int)mode);
 		}
 		if (fp) flags |= QAbstractFileEngine::ExistsFlag;
-		else qWarning("Failed to open %s: %s", name.toUtf8().constData(), PHYSFS_getLastError());
 		return fp != NULL;
 	}
 
