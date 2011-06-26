@@ -26,6 +26,8 @@
 #define TRI_FLIPPED(x)	((x)->texture & TILE_TRIFLIP)
 #define SNAP_MODE	0
 
+#define DEG(degrees) ((degrees) * 8192 / 45)
+
 static const char *tilesetTextures[] = { "Arizona", "Urban", "Rockies" };
 
 #define MADD(...) fprintf(fp, __VA_ARGS__); fprintf(fp, "\n");
@@ -66,7 +68,7 @@ int main(int argc, char **argv)
 
 	if (!map)
 	{
-		fprintf(stderr, "Failed to load map\n");
+		fprintf(stderr, "Failed to load map %s from %s\n", filename, path);
 		return -1;
 	}
 
@@ -179,35 +181,32 @@ int main(int argc, char **argv)
 			MADD("\n[feature_%04u]", psObj->id);
 			MADD("id = %u", psObj->id);
 			MADD("position = %u, %u, %u", psObj->x, psObj->y, psObj->z);
-			MADD("rotation = %u, 0, 0", psObj->direction);
+			MADD("rotation = %u, 0, 0", DEG(psObj->direction));
 			MADD("name = %s", psObj->name);
 		}
 		fclose(fp);
 	}
-#if 0
+
 	/*** Structures ***/
 	if (map->structVersion)
 	{
 		strcpy(filename, base);
-		strcat(filename, "/map-001/structure.ini");
+		strcat(filename, "/struct.ini");
 		fp = fopen(filename, "w");
-		MADD("[structure_header]");
-		MADD("entries = %u", map->numStructures);
-		for (i = 0; i < map->numDroids; i++)
+		if (!fp) printf("%s: %s\n", filename, strerror(errno));
+		for (i = 0; i < map->numStructures; i++)
 		{
 			LND_OBJECT *psObj = &map->mLndObjects[IMD_STRUCTURE][i];
 
-			MADD("\n[structure_%04u]", i);
-			MADD("pos.x = %u", psObj->x);
-			MADD("pos.y = %u", psObj->y);
-			MADD("pos.z = %u", psObj->z);
-			MADD("direction = %u", psObj->direction);
+			MADD("\n[structure_%04u]", psObj->id);
+			MADD("id = %u", psObj->id);
+			MADD("position = %u, %u, %u", psObj->x, psObj->y, psObj->z);
+			MADD("rotation = %u, 0, 0", DEG(psObj->direction));
+			MADD("name = %s", psObj->name);
 			MADD("player = %u", psObj->player);
-			MADD("template = %s", psObj->name);
 		}
 		fclose(fp);
 	}
-#endif
 
 	/*** Droids ***/
 	if (map->droidVersion > 0)
@@ -225,7 +224,7 @@ int main(int argc, char **argv)
 			MADD("\n[droid_%04u]", psObj->id);
 			MADD("id = %u", psObj->id);
 			MADD("position = %u, %u, %u", psObj->x, psObj->y, psObj->z);
-			MADD("rotation = %u, 0, 0", psObj->direction);
+			MADD("rotation = %u, 0, 0", DEG(psObj->direction));
 			MADD("player = %u", psObj->player);
 			MADD("template = %s", psObj->name);
 		}
