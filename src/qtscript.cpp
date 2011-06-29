@@ -197,20 +197,20 @@ bool updateScripts()
 	}
 	// Check for timers, and run them if applicable.
 	// TODO - load balancing
-	QMutableListIterator<timerNode> iter(timers);
+	QList<timerNode> runlist; // make a new list here, since we might trample all over the timer list during execution
+	for (int i = 0; i < timers.size(); i++)
+	{
+		if (timers.at(i).frameTime <= gameTime)
+		{
+			timers[i].frameTime = timers.at(i).ms + gameTime;	// update for next invokation
+			runlist.append(timers.at(i));
+		}
+	}
+	QListIterator<timerNode> iter(runlist);
 	while (iter.hasNext())
 	{
-		timerNode node = iter.next();
-		if (node.frameTime <= gameTime)
-		{
-			node.frameTime = node.ms + gameTime;	// update for next invokation
-			callFunction(node.engine, node.function, QScriptValueList());
-		}
-		// Node could have been brutally removed from underneath us at this point
-		if (timers.contains(node))
-		{
-			iter.setValue(node);
-		}
+		const timerNode node = iter.next();
+		callFunction(node.engine, node.function, QScriptValueList());
 	}
 	return true;
 }
