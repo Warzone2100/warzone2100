@@ -1,0 +1,5 @@
+This is a moc file; it does nothing but tell xcode to use moc on the file named without the '.moc'.
+
+Where the file to be moced is '${name}', the moc file is named '${name}.moc' and the resulting file will be named '${name}.moc.cpp'
+
+Use for any other purpose will result in being roundly moced.

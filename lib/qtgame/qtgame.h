@@ -1,7 +1,7 @@
 #ifndef QTGAME_H
 #define QTGAME_H
 
-#include <QGLWidget>
+#include <QtOpenGL/QGLWidget>
 
 class QtGameWidget : public QGLWidget
 {
