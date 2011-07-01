@@ -1,9 +1,11 @@
 #include "qtgame.h"
 
-#ifdef Q_WS_X11
+#include "lib/framework/wzglobal.h"
+
+#ifdef WZ_WS_X11
 #include <X11/extensions/Xrandr.h>
 #include <QX11Info>
-#elif Q_WS_WIN
+#elif WZ_WS_WIN32
 #define _WIN32_WINNT 0x0502
 #include <windows.h>
 #endif
@@ -12,7 +14,7 @@
 
 void QtGameWidget::trapMouse()
 {
-#ifdef Q_WS_X11
+#ifdef WZ_WS_X11
 	int result, count = 0;
 	do
 	{
@@ -22,7 +24,7 @@ void QtGameWidget::trapMouse()
 		usleep(150);
 		count++;
 	} while (result != GrabSuccess && count < 15);
-#elif Q_WS_WIN
+#elif WZ_WS_WIN32
 	RECT lpRect;
 	lpRect.top = y();
 	lpRect.left = x();
@@ -35,9 +37,9 @@ void QtGameWidget::trapMouse()
 
 void QtGameWidget::freeMouse()
 {
-#ifdef Q_WS_X11
+#ifdef WZ_WS_X11
 	XUngrabPointer(QX11Info::display(), CurrentTime);
-#elif Q_WS_WIN
+#elif WZ_WS_WIN32
 	ClipCursor(NULL);
 #endif
 	mCursorTrapped = false;
@@ -139,7 +141,7 @@ void QtGameWidget::updateResolutionList()
 	int minWidth = mMinimumSize.width();
 	int minHeight = mMinimumSize.height();
 	mResolutions.clear();
-#ifdef Q_WS_X11
+#ifdef WZ_WS_X11
 	XRRScreenConfiguration *config = XRRGetScreenInfo(QX11Info::display(), RootWindow(QX11Info::display(), x11Info().screen()));
 	int sizeCount = 0;
 	XRRScreenSize *sizes = XRRSizes(QX11Info::display(), 0, &sizeCount);
@@ -160,7 +162,7 @@ void QtGameWidget::updateResolutionList()
 		mOriginalDepth = mCurrentDepth = -1;
 	}
 	XRRFreeScreenConfigInfo(config);
-#elif Q_WS_WIN
+#elif WZ_WS_WIN32
 	DEVMODE lpDevMode;
 	memset(&lpDevMode, 0, sizeof(lpDevMode));
 	lpDevMode.dmSize = sizeof(lpDevMode);
@@ -186,7 +188,7 @@ void QtGameWidget::updateResolutionList()
 			mResolutions += res;
 		}
 	}
-#elif Q_WS_MAC
+#elif WZ_WS_MAC
 	qWarning("Resolution query support for Mac not written yet");
 #endif
 }
@@ -201,7 +203,7 @@ QtGameWidget::QtGameWidget(QSize curResolution, const QGLFormat &format, QWidget
 
 bool QtGameWidget::setResolution(const QSize res, int rate, int depth)
 {
-#ifdef Q_WS_X11
+#ifdef WZ_WS_X11
 	Q_UNUSED(depth);
 	Window root = RootWindow(QX11Info::display(), x11Info().screen());
 	XRRScreenConfiguration *config = XRRGetScreenInfo(QX11Info::display(), root);
@@ -229,7 +231,7 @@ bool QtGameWidget::setResolution(const QSize res, int rate, int depth)
 		qWarning("Unable to change screen resolution using XRandR");
 		return false;
 	}
-#elif Q_WS_WIN
+#elif WZ_WS_WIN32
 	DEVMODE settings;
 
 	memset(&settings, 0, sizeof(DEVMODE));
@@ -256,7 +258,7 @@ bool QtGameWidget::setResolution(const QSize res, int rate, int depth)
 		qWarning("Bad resolution change: Unknown cause");
 		return false;
 	}
-#elif Q_WS_MAC
+#elif WZ_WS_MAC
 	QWarning("Resolution change support for Mac not written yet");
 	return false;
 #endif
