@@ -189,6 +189,8 @@ void QtGameWidget::updateResolutionList()
 		}
 	}
 #elif defined(WZ_WS_MAC)
+	Q_UNUSED(minWidth);
+	Q_UNUSED(minHeight);
 	qWarning("Resolution query support for Mac not written yet");
 #endif
 }
@@ -259,7 +261,7 @@ bool QtGameWidget::setResolution(const QSize res, int rate, int depth)
 		return false;
 	}
 #elif defined(WZ_WS_MAC)
-	QWarning("Resolution change support for Mac not written yet");
+	qWarning("Resolution change support for Mac not written yet");
 	return false;
 #endif
 	mCurrentResolution = res;
