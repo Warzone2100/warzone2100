@@ -26,7 +26,6 @@
 #include <QtCore/QTextCodec>
 #include <QtGui/QApplication>
 #include <QtGui/QMessageBox>
-#include <QtGui/QDesktopWidget>
 
 #if defined(WZ_OS_WIN)
 #  include <shlobj.h> /* For SHGetFolderPath */
@@ -1273,28 +1272,26 @@ int main(int argc, char *argv[])
 		format.setSamples(war_getFSAA());
 	}
 	WzMainWindow mainwindow(QSize(w, h), format);
+	mainwindow.setMinimumResolution(QSize(800, 600));
 	if (!mainwindow.context()->isValid())
 	{
 		QMessageBox::critical(NULL, "Oops!", "Warzone2100 failed to create an OpenGL context. This probably means that your graphics drivers are out of date. Try updating them!");
 		return EXIT_FAILURE;
 	}
+	screenWidth = w;
+	screenHeight = h;
+	mainwindow.show();
 	if (war_getFullscreen())
 	{
-		QDesktopWidget *desktop = qApp->desktop();
-		w = desktop->screenGeometry().width();
-		h = desktop->screenGeometry().height();
 		pie_SetVideoBufferWidth(w);
 		pie_SetVideoBufferHeight(h);
-		WzMainWindow::instance()->showFullScreen();
+		mainwindow.showFullScreen();
 	}
 	else
 	{
 		mainwindow.setMinimumSize(w, h);
 		mainwindow.setMaximumSize(w, h);
 	}
-	screenWidth = w;
-	screenHeight = h;
-	mainwindow.show();
 	mainwindow.setReadyToPaint();
 
 	char buf[256];
