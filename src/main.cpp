@@ -1272,7 +1272,7 @@ int main(int argc, char *argv[])
 		format.setSampleBuffers(true);
 		format.setSamples(war_getFSAA());
 	}
-	WzMainWindow mainwindow(format);
+	WzMainWindow mainwindow(QSize(w, h), format);
 	if (!mainwindow.context()->isValid())
 	{
 		QMessageBox::critical(NULL, "Oops!", "Warzone2100 failed to create an OpenGL context. This probably means that your graphics drivers are out of date. Try updating them!");

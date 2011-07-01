@@ -127,7 +127,7 @@ void WzMainWindow::loadCursor(CURSOR cursor, int x, int y, QImageReader &buffer)
 	cursors[cursor] = new QCursor(QPixmap::fromImage(buffer.read()));
 }
 
-WzMainWindow::WzMainWindow(const QGLFormat &format, QWidget *parent) : QGLWidget(format, parent)
+WzMainWindow::WzMainWindow(QSize resolution, const QGLFormat &format, QWidget *parent) : QtGameWidget(resolution, format, parent)
 {
 	myself = this;
 	notReadyToPaint = true;
@@ -746,12 +746,12 @@ void wzCreateCursor(CURSOR index, uint8_t *data, uint8_t *mask, int w, int h, in
 
 void wzGrabMouse()
 {
-	WzMainWindow::instance()->grabMouse();
+	WzMainWindow::instance()->trapMouse();
 }
 
 void wzReleaseMouse()
 {
-	WzMainWindow::instance()->releaseMouse();
+	WzMainWindow::instance()->freeMouse();
 }
 
 bool wzActiveWindow()

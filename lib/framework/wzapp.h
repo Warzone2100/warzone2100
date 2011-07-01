@@ -32,6 +32,8 @@
 #include <QtCore/QSettings>
 #include <physfs.h>
 
+#include "lib/qtgame/qtgame.h"
+
 // Get platform defines before checking for them.
 // Qt headers MUST come before platform specific stuff!
 #include "lib/framework/frame.h"
@@ -51,7 +53,7 @@ public:
 	void setVector2i(const QString &name, const Vector2i &v);
 };
 
-class WzMainWindow : public QGLWidget
+class WzMainWindow : public QtGameWidget
 {
 	Q_OBJECT
 
@@ -76,7 +78,7 @@ private:
 	static WzMainWindow *myself;
 
 public:
-	WzMainWindow(const QGLFormat &format, QWidget *parent = 0);
+	WzMainWindow(QSize resolution, const QGLFormat &format, QWidget *parent = 0);
 	~WzMainWindow();
 	void initializeGL();
 	void resizeGL(int w, int h);

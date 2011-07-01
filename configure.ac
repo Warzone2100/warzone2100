@@ -77,6 +77,14 @@ AM_GNU_GETTEXT_VERSION([0.15])
 PKG_PROG_PKG_CONFIG
 AC_PROG_VERSION_CHECK([pkg-config], [0.9])
 
+# Check for X11 (for qtgame)
+X_LIBS=""
+AC_PATH_X
+if test x$no_x != "xyes"; then
+	X_LIBS="-lX11 -lXrandr ${X_LIBS}"
+fi
+AC_SUBST(X_LIBS)
+
 # Check for Qt
 PKG_CHECK_MODULES(QT4, QtCore QtGui QtOpenGL QtNetwork QtScript,,[:])
 if test "$pkg_failed" = "yes" ; then
@@ -429,6 +437,7 @@ AC_CONFIG_FILES([Makefile
 		lib/sequence/Makefile
 		lib/sound/Makefile
 		lib/widget/Makefile
+		lib/qtgame/Makefile
 		src/Makefile])
 AC_OUTPUT
 

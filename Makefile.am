@@ -10,6 +10,7 @@ SUBDIRS = \
 	  lib/sound \
 	  lib/netplay \
 	  lib/widget \
+	  lib/qtgame \
 	  src \
 	  data \
 	  po \
