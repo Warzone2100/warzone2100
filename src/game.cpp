@@ -4973,7 +4973,6 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 			psRepair->power = ((REPAIR_DROID_FUNCTION *) psStructure->pStructureType->asFuncList[0])->repairPoints;
 			psRepair->timeStarted = ini.value("Repair/timeStarted").toInt();
 			psRepair->powerAccrued = ini.value("Repair/powerAccrued").toInt();
-			psRepair->psDeliveryPoint = NULL;
 			psRepair->currentPtsAdded = ini.value("Repair/currentPtsAdded").toInt();
 			if (ini.contains("Repair/deliveryPoint/pos"))
 			{
