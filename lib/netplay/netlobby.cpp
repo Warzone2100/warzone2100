@@ -20,6 +20,8 @@
 #include <QtCore/QtEndian>
 #include <QtCore/QFile>
 
+#include <QtNetwork/QSslConfiguration>
+
 #include "netlobby.h"
 
 namespace Lobby
@@ -332,6 +334,8 @@ namespace Lobby
 		debug(LOG_LOBBY, "Cannot add an SSL Certificate as SSL is not compiled in.");
 		return *this;
 #else
+		debug(LOG_LOBBY, "Adding the CA certificate %s.", path.toUtf8().constData());
+
 		QFile cafile(path);
 		if (!cafile.open(QIODevice::ReadOnly | QIODevice::Text))
 		{
@@ -339,13 +343,15 @@ namespace Lobby
 			return *this;
 		}
 
-		QSslCertificate certificate(&cafile);
+		QSslCertificate certificate(&cafile, QSsl::Pem);
 		if (!certificate.isValid())
 		{
 			debug(LOG_ERROR, "Failed to load the CA certificate %s!", path.toUtf8().constData());
 			return *this;
 		}
 		cafile.close();
+
+		debug(LOG_LOBBY, "Cert common name: %s", certificate.subjectInfo(QSslCertificate::CommonName).toUtf8().constData());
 
 		cacerts_.append(certificate);
 

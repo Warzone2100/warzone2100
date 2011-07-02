@@ -749,7 +749,8 @@ int NETinit(bool bFirstCall)
 	memset(&sync_counter, 0x0, sizeof(sync_counter));	//clear counters
 
 	// Add the certificate.
-	lobbyclient.addCACertificate("wz::cacert.org.pem");
+    lobbyclient.addCACertificate("wz::cacert.org-root.pem");
+    lobbyclient.addCACertificate("wz::cacert.org-class3.pem");
 
 	return 0;
 }
