@@ -196,7 +196,14 @@ int main(int argc, char **argv)
 		if (!fp) printf("%s: %s\n", filename, strerror(errno));
 		for (i = 0; i < map->numStructures; i++)
 		{
-			LND_OBJECT *psObj = &map->mLndObjects[IMD_STRUCTURE][i];
+			LND_OBJECT *psMod, *psObj = &map->mLndObjects[IMD_STRUCTURE][i];
+			int j, capacity = 0;
+
+			if (strcmp(psObj->name, "A0PowMod1") == 0 || strcmp(psObj->name, "A0FacMod1") == 0
+			    || strcmp(psObj->name, "A0ResearchModule1") == 0)
+			{
+				continue; // do not write modules as separate entries
+			}
 
 			MADD("\n[structure_%04u]", psObj->id);
 			MADD("id = %u", psObj->id);
@@ -204,6 +211,45 @@ int main(int argc, char **argv)
 			MADD("rotation = %u, 0, 0", DEG(psObj->direction));
 			MADD("name = %s", psObj->name);
 			MADD("player = %u", psObj->player);
+
+			// Merge modules into host building entry
+			if (strcmp(psObj->name, "A0LightFactory") == 0)
+			{
+				for (j = 0; j < map->numStructures; j++)
+				{
+					psMod = &map->mLndObjects[IMD_STRUCTURE][j];
+					if (strcmp(psMod->name, "A0FacMod1") == 0 && psObj->x == psMod->x && psObj->y == psMod->y)
+					{
+						capacity++;
+					}
+				}
+			}
+			else if (strcmp(psObj->name, "A0PowerGenerator") == 0)
+			{
+				for (j = 0; j < map->numStructures; j++)
+				{
+					psMod = &map->mLndObjects[IMD_STRUCTURE][j];
+					if (strcmp(psMod->name, "A0PowMod1") == 0 && psObj->x == psMod->x && psObj->y == psMod->y)
+					{
+						capacity++;
+					}
+				}
+			}
+			else if (strcmp(psObj->name, "A0ResearchFacility") == 0)
+			{
+				for (j = 0; j < map->numStructures; j++)
+				{
+					psMod = &map->mLndObjects[IMD_STRUCTURE][j];
+					if (strcmp(psMod->name, "A0ResearchModule1") == 0 && psObj->x == psMod->x && psObj->y == psMod->y)
+					{
+						capacity++;
+					}
+				}
+			}
+			if (capacity > 0)
+			{
+				MADD("modules = %d", capacity);
+			}
 		}
 		fclose(fp);
 	}
