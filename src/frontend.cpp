@@ -24,7 +24,7 @@
  * Alex Lee. Pumpkin Studios. Eidos PLC 98,
  */
 
-#include "lib/framework/frame.h"
+#include "lib/framework/wzapp.h"
 #include "lib/framework/input.h"
 #include "lib/ivis_opengl/bitimage.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
@@ -877,12 +877,9 @@ static bool startVideoOptionsMenu(void)
 	return true;
 }
 
-struct HACK { int w, h; operator bool() { return w != 0; } HACK *operator ->() { return this; }};  // HACK Make it compile. Previous behaviour was to crash, anyway.
-
 bool runVideoOptionsMenu(void)
 {
-	//SDL_Rect **modes = SDL_ListModes(NULL, SDL_FULLSCREEN | SDL_HWSURFACE);
-	HACK modes[] = {{1920, 1200}, {1920, 1080}, {1680, 1050}, {1600, 1200}, {1440, 900}, {1280, 1024}, {1280, 960}, {1280, 800}, {1280, 720}, {1024, 768}, {800, 600}, {720, 576}, {720, 480}, {640, 480}, {0, 0}};
+	QList<QSize> modes = WzMainWindow::instance()->availableResolutions();
 	UDWORD id = widgRunScreen(psWScreen);
 	int level;
 
@@ -936,47 +933,38 @@ bool runVideoOptionsMenu(void)
 		case FRONTEND_RESOLUTION:
 		case FRONTEND_RESOLUTION_R:
 		{
-			int current, count, oldcurrent;
+			int current, count;
 
 			// Get the current mode offset
-			for (count = 0, current = 0; modes[count]; count++)
+			for (count = 0, current = 0; count < modes.size(); count++)
 			{
-				if (war_GetWidth() == modes[count]->w
-				 && war_GetHeight() == modes[count]->h)
+				if (war_GetWidth() == modes[count].width() && war_GetHeight() == modes[count].height())
 				{
 					current = count;
 				}
 			}
 
 			// Increment and clip if required
-			// Hide resolutions lower than Warzone can support
-			oldcurrent = current;
-			do
+			if (!mouseReleased(MOUSE_RMB))
 			{
-				if (!mouseReleased(MOUSE_RMB))
-				{
-					if (--current < 0)
-						current = count - 1;
-				}
-				else
-				{
-					if (++current == count)
-						current = 0;
-				}	
-			} while ((modes[current]->w < 640 || modes[current]->h < 480)
-				&& current != oldcurrent);
+				if (--current < 0)
+					current = count - 1;
+			}
+			else
+			{
+				if (++current == count)
+					current = 0;
+			}
 
 			// Set the new width and height (takes effect on restart)
-			war_SetWidth(modes[current]->w);
-			war_SetHeight(modes[current]->h);
+			war_SetWidth(modes[current].width());
+			war_SetHeight(modes[current].height());
 
 			// Generate the textual representation of the new width and height
-			snprintf(resolution, WIDG_MAXSTR, "%d x %d", modes[current]->w,
-			         modes[current]->h);
+			snprintf(resolution, WIDG_MAXSTR, "%d x %d", modes[current].width(), modes[current].height());
 
 			// Update the widget
 			widgSetString(psWScreen, FRONTEND_RESOLUTION_R, resolution);
-
 			break;
 		}
 
