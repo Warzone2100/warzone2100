@@ -6,11 +6,11 @@ R-Comp-CommandTurret03,R-Vehicle-Metals06,1166
 R-Comp-CommandTurret04,R-Comp-CommandTurret03,1167
 R-Comp-CommandTurret04,R-Vehicle-Metals09,1167
 R-Comp-SynapticLink,R-Comp-SynapticLink,376
-R-Cyborg-Armor-Heat01,R-Cyborg-Metals04,988
+R-Cyborg-Armor-Heat01,R-Cyborg-Metals03,988
 R-Cyborg-Armor-Heat02,R-Cyborg-Armor-Heat01,989
 R-Cyborg-Armor-Heat03,R-Cyborg-Armor-Heat02,990
 R-Cyborg-Armor-Heat04,R-Cyborg-Armor-Heat03,991
-R-Cyborg-Armor-Heat04,R-Cyborg-Metals07,991
+R-Cyborg-Armor-Heat04,R-Cyborg-Metals06,991
 R-Cyborg-Armor-Heat05,R-Cyborg-Armor-Heat04,992
 R-Cyborg-Armor-Heat06,R-Cyborg-Armor-Heat05,993
 R-Cyborg-Armor-Heat07,R-Cyborg-Armor-Heat06,1082
@@ -255,11 +255,11 @@ R-Sys-VTOLStrike-Tower01,R-Struc-VTOLPad,788
 R-Sys-VTOLStrike-Tower01,R-Sys-Sensor-Upgrade01,788
 R-Sys-VTOLStrike-Turret01,R-Sys-VTOLStrike-Tower01,785
 R-Sys-VTOLStrike-Turret01,R-Sys-Sensor-Turret01,785
-R-Vehicle-Armor-Heat01,R-Vehicle-Metals04,970
+R-Vehicle-Armor-Heat01,R-Vehicle-Metals03,970
 R-Vehicle-Armor-Heat02,R-Vehicle-Armor-Heat01,971
 R-Vehicle-Armor-Heat03,R-Vehicle-Armor-Heat02,972
 R-Vehicle-Armor-Heat04,R-Vehicle-Armor-Heat03,973
-R-Vehicle-Armor-Heat04,R-Vehicle-Metals07,973
+R-Vehicle-Armor-Heat04,R-Vehicle-Metals06,973
 R-Vehicle-Armor-Heat05,R-Vehicle-Armor-Heat04,974
 R-Vehicle-Armor-Heat06,R-Vehicle-Armor-Heat05,975
 R-Vehicle-Armor-Heat07,R-Vehicle-Armor-Heat06,1085

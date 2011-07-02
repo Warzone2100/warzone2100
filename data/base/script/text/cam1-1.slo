@@ -8,7 +8,6 @@ private		int		numart;
 
 /* structure limit stuff */
 public	STRUCTURESTAT		factory, research, oilDerrick, powerGen;
-//public	STRUCTURESTAT		powerModuleHack;
 public	STRUCTURESTAT		command;
 public	INT			numPow, numExt, numFac, numRes;
 
@@ -37,54 +36,18 @@ public	INTMESSAGE		MissionBrief;
 public	INTMESSAGE		InFlight;
 public	INTMESSAGE		endMsg;	//, winMsg;
 
-/* Proximity: Resources */
-/*
-public		FEATURE		res1;
-public		INTMESSAGE	res1Msg;
-public		SOUND		res1Snd;
-public		STRUCTURESTAT	derrick;
-private		int		res1x,res1y;	//temp values to cope with oil disappearing!
-*/
-
 /* Proximity: Artifacts */
 public		FEATURESTAT	crate;
 
 public		int		art1X, art1Y;
-//public		FEATURE		art1Get;
 public		SOUND		art1Snd1, art1Snd2;
-//public		INTMESSAGE	art1Msg;
 public		RESEARCHSTAT	art1Comp;	//Heavy Machine Gun
 private		FEATURE		art1ID;
-
-/*
-public		int		art2X, art2Y;
-public		FEATURE		art2Get;
-public		SOUND		art2Snd1, art2Snd2;
-//public		INTMESSAGE	art2Msg;
-public		RESEARCHSTAT	art2Comp;	//Power Module
-private		FEATURE		art2ID;
-*/
 
 /* player Bonus Research topics given at end of mission */
 public	int			numResP0;
 public	RESEARCHSTAT		resP0[20];	//need to be declared with value >= numResP0, numResP1, etc.
 private	INT			count;
-
-
-/* Proximity: Enemy */
-/*
-public		STRUCTURE	enm1;
-public		STRUCTUREID	enm1ID;
-public		INTMESSAGE	enm1Msg;
-public		SOUND		enm1Snd1;
-public		SOUND		enm1Snd2;
-
-public		STRUCTURE	enm2;
-public		STRUCTUREID	enm2ID;
-public		INTMESSAGE	enm2Msg;
-public		SOUND		enm2Snd1;
-public		SOUND		enm2Snd2;
-*/
 
 /* Enemy Tactics */
 public		TEMPLATE	trike;
@@ -106,36 +69,14 @@ trigger	RTLZFreq(every,300);
 /* Triggers: Briefing */
 trigger vidEndTrig(CALL_VIDEO_QUIT);
 
-/* Triggers: Resource */
-/*
-trigger res1SeenTrig(droidHasSeen(res1, player), 10);
-trigger res1UsedTrig(every, 10);
-*/
-
 /* Triggers: Artifacts */
-//trigger art1SeenTrig(droidHasSeen(art1ID, player), 5);
 trigger art1TakeTrig(droidInRange(player, art1X, art1Y, 171), 5);
-//trigger art1PlaceTrig((art1Get==NULLOBJECT), 5);
-/*
-//trigger art2SeenTrig(droidHasSeen(art2ID, player), 5);
-trigger art2TakeTrig(droidInRange(player, art2X, art2Y, 171), 5);
-trigger art2PlaceTrig((art2Get==NULLOBJECT), 5);
-*/
 
-/* Triggers: Enemy */
-/*
-trigger enm1SeenTrig(droidHasSeen(enm1, player), 10);	//enmWait
-trigger enm1DeadTrig(every, 10);			//enmWait
-
-trigger enm2SeenTrig(droidHasSeen(enm2, player), 10);	//enmWait
-trigger enm2DeadTrig(every, 10);			//enmWait
-*/
 trigger		every10(every, 20);
 
 //event wonYetEvnt;
 event wonYetLZEvnt;
 event timeUp;
-//event art1SeenEvnt;
 event art1TakeEvnt;
 event	periodicRTLZ;
 
@@ -145,48 +86,34 @@ event startEvnt(CALL_VIDEO_QUIT)	//(CALL_GAMEINIT)
 {
 	removeMessage(InFlight, MISS_MSG, 0);
 	centreViewPos(1152, 10752);
-//set scroll limits
-//	setScrollParams(0, 0, 44, 93);			//limit scroll
-//set zoom Level 128x128
 	setRadarZoom(0);
-//set up the landing zone
 	setLandingZone(8,83,10,85);
-//call in transport
 	flyTransporterIn(player, entryX, entryY, false);
 	setTransporterExit(player, exitX, exitY);
 
-//make sure all buttons available/unavailable
-	//removeReticuleButton(MANUFACTURE);
-	//removeReticuleButton(RESEARCH);
-	//removeReticuleButton(DESIGN);
-	//removeReticuleButton(BUILD);
-//give player briefing again (stored)
+	// give player briefing again (stored)
 	addMessage(MissionBrief, MISS_MSG, 0, false);
 	flashOff(INTELMAP);
-//Blip Given at start
+	// Blip Given at start
 	addMessage(obj1, PROX_MSG, player, false);
-//allow to build stuff
-	setStructureLimits (powerGen,numPow,0);
-	setStructureLimits (oilDerrick,numExt,0);
-	setStructureLimits (research,numRes,0);
-	setStructureLimits (factory,numFac,0);
+	// allow to build stuff
+	setStructureLimits(powerGen, numPow,0);
+	setStructureLimits(oilDerrick, numExt,0);
+	setStructureLimits(research, numRes,0);
+	setStructureLimits(factory, numFac,0);
 	setStructureLimits(command, 0, player);
 	enableStructure(command, player);
 	enableStructure(powerGen,0);
 	enableStructure(oilDerrick,0);
 	enableStructure(research,0);
 	enableStructure(factory,0);
-	//enableStructure(powerModuleHack, 0);
-//no reinforcements yet!!
+	// no reinforcements yet!!
 	setReinforcementTime(-1);
-//set up resource coords (since oil pools diappear when built on!!!)
-	//res1x=res1.x;
-	//res1y=res1.y;
-//add machine gun crate
+	// add machine gun crate
 	art1ID=addFeature(crate, art1X, art1Y);
 	//setEventTrigger(art1SeenEvnt, art1SeenTrig);
 	setEventTrigger(art1TakeEvnt, art1TakeTrig);
-//set up some AI for artifact pickup trigger
+	// set up some AI for artifact pickup trigger
 	groupAddArea(enemy1Rear1, enemy1, 4928, 11072, 5184, 11712);	//rear 1 (jeeps)
 	orderGroupLoc(enemy1Rear1, DORDER_SCOUT, 4800, 10432);		//move away at start so not seen!
 	setEventTrigger(startEvnt, inactive);
@@ -207,12 +134,11 @@ event art1TakeEvnt(inactive)
 	//playSound(art1Snd2, player);
 	playSoundPos(art1Snd2, player, art1ID.x, art1ID.y, art1ID.z);
 	destroyFeature(art1ID);
-	//removeMessage(art1Msg, PROX_MSG, player);
 	removeMessage(obj1, PROX_MSG, player);
 	enableResearch(art1Comp, player);
-//grab all forces and order to follow player
+	// grab all forces and order to follow player
 	groupAddArea(enemy1Last, enemy1, 0, 0, 44*128, 93*128);
-//order to fire at will
+	// order to fire at will
 	setGroupSecondary(enemy1Last, DSO_ATTACK_LEVEL, DSS_ALEV_ALWAYS);	//fire at will
 	groupAddArea(enemy1Last, enemy1, 0, 0, 44*128, 32*128);
 	orderGroupLoc(enemy1Last, DORDER_SCOUT, 2752, 2752); //attack top
@@ -222,41 +148,24 @@ event art1TakeEvnt(inactive)
 	groupAddArea(enemy1Last2, enemy1, 0, 64*128, 44*128, 93*128);
 	groupAddArea(enemy1Last2, enemy1, 4032, 576, 5312, 11584);	//add east side so attack bottom
 	orderGroupLoc(enemy1Last2, DORDER_SCOUT, 1856, 10432); //attack bot
-	//setEventTrigger(enemy1Atk1, every10);
-	//setEventTrigger(trackPlayer, every10);
-//use as trigger for enemy support
-
-/* no longer req'd
-//place units
-	addDroid(jeep,4696,9920,enemy1);
-	addDroid(jeep,4696,10048,enemy1);
-	addDroid(jeep,4568,9920,enemy1);
-	addDroid(jeep,4568,10048,enemy1);
-*/
-
-//set retreat point
+	// set retreat point
 	setRetreatPoint(enemy1, 1856, 10432);		//retreat to LZ
 	setRetreatForce(enemy1, 90);			//set morale to 10%
 	setRetreatLeadership(enemy1, 50);		//set leadership chance (small=more likely?)
-//make a force and block LZ!!!!
+	// make a force and block LZ!!!!
 	groupAddArea(enemy1Surprise, enemy1, 4000, 9000, 6000, 11000);
 	orderGroupLoc(enemy1Surprise, DORDER_SCOUT, 1856, 10432);
-//add LZ blip and WAV message
-	
+	// add LZ blip and WAV message
 	// Add the proximity message only once
 	addMessage(LZ_MSG, PROX_MSG, player, false);
 	// New function to periodically add the LZ message	
 	setEventTrigger(periodicRTLZ,RTLZStart);
-//	addConsoleText(_("Return to LZ"), player);
-	//playSound(LZSnd, player);
-//	playSoundPos(LZSnd, player, 1216, 10816, 0);	//as in prox1-1.txt
 	setEventTrigger(art1TakeEvnt, inactive);
 }
 
 event	periodicRTLZ(inactive)
 {
 	showConsoleText(_("Return to LZ"), player);
-	//playSound(LZSnd, player);
 	playSoundPos(LZSnd, player, 1216, 10816, 0);	//as in prox1-1.txt
 	setEventTrigger(periodicRTLZ,RTLZFreq);
 }
@@ -275,23 +184,13 @@ event nextLevEvnt(inactive)		//assumes victory already checked
 	}
 
 	gameLevel=gameLevel+1;		//flag next part of map
-	//setLandingZone(10, 51, 12, 53);
 	enableResearch(art1Comp, player);
-	//removeMessage(MissionBrief, MISS_MSG, player);
 	startMission(BETWEEN, NextLev);
-
-	//End game here for now! (don't try next mission)
-	//gameOver(true);
-
 	setEventTrigger(nextLevEvnt, inactive);
 }
 
-
 event gameLost(inactive)
 {
-//	addMessage(endMsg, MISS_MSG, 0, true);
-//	pause(10);
-//	gameOver(false);
 	gameOverMessage(endMsg, MISS_MSG, 0, false);
 	setEventTrigger(gameLost, inactive);
 }
@@ -308,7 +207,6 @@ event lostYetEvnt(winLoseTrig)
 			setEventTrigger(gameLost, gameLostTrig);	//waits 2 seconds before ending
 			setEventTrigger(lostYetEvnt, inactive);
 		}
-
 	}
 }
 
@@ -322,14 +220,10 @@ event timeUp(CALL_MISSION_TIME)
 	setEventTrigger(timeUp, inactive);
 }
 
-
-
-
 event wonYetLZEvnt(gotArtTrig)	//got artifact yet?
 {
 	//check back at LZ and no scavs compromising it!
 	totDroids = numDroidsInArea(player, 0, 0, 48*128, 96*128);
-	//if (totDroids == numDroidsInArea(player, 5*128, 80*128, 13*128, 86*128))
 	if (totDroids == numDroidsInArea(player, 704, 10048, 1984, 11328))
 	{
 		if (totDroids!=0)
@@ -377,11 +271,10 @@ event everySec(every, 10)
 
 event seeBaseHit(CALL_MISSION_END)
 {
-//go to where the structure being attacked is on CTRL B
+	// go to where the structure being attacked is on CTRL B
 	if (hitStruc!=NULLOBJECT)
 	{
 		centreView(hitStruc);
 		t=0;			//flag known about!
 	}
 }
-

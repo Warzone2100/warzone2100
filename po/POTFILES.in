@@ -14,15 +14,12 @@ data/base/messages/strings/names.txt
 data/base/messages/strings/resstrings.txt
 data/base/messages/strings/scrstrings.txt
 data/base/multiplay/script/multilim.slo
+data/base/multiplay/script/scavfact.js
 data/base/multiplay/skirmish/dydo.slo
 data/base/multiplay/skirmish/nexus.slo
-data/base/multiplay/skirmish/rules.slo
+data/base/multiplay/skirmish/rules.js
 data/base/multiplay/skirmish/semperfi.slo
 data/base/script/fastplay/fastdemo.slo
-data/base/script/fastplay/fastplay.slo
-data/base/script/fastplay/s-demo-ai.slo
-data/base/script/fastplay/s-demo.slo
-data/base/script/fastplay/s-demos.slo
 data/base/script/fastplay/start.slo
 data/base/script/text/basic.slo
 data/base/script/text/brief.slo
@@ -141,7 +138,6 @@ data/mp/messages/resmessagesall.rmsg
 data/mp/messages/strings/names.txt
 data/mp/messages/strings/resstrings.txt
 data/mp/multiplay/script/camtech.slo
-data/mp/multiplay/script/multiplay.slo
 lib/exceptionhandler/dumpinfo.cpp
 lib/exceptionhandler/exceptionhandler.cpp
 lib/exceptionhandler/exchndl.cpp
@@ -153,6 +149,7 @@ lib/framework/cursors.cpp
 lib/framework/debug.cpp
 lib/framework/frame.cpp
 lib/framework/frameresource.cpp
+lib/framework/geometry.cpp
 lib/framework/i18n.cpp
 lib/framework/lexer_input.cpp
 lib/framework/SDL_framerate.cpp
@@ -320,3 +317,5 @@ src/warcam.cpp
 src/warzoneconfig.cpp
 src/wavecast.cpp
 src/wrappers.cpp
+po/custom/warzone2100.desktop.txt
+po/custom/mac-infoplist.txt

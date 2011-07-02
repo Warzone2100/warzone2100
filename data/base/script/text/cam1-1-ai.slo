@@ -5,7 +5,6 @@
  *
  */
 
-
 // enemy1 variables
 private		GROUP		enemy1Fin, enemy1Force1, enemy1Force2;
 private		GROUP		enemy1Guard, enemy1Rear1, enemy1Rear2;
@@ -79,15 +78,6 @@ event enemy1Atk1(rearAttackTrig)
 	setEventTrigger(enemy1Atk1, every10);	//once triggered keep updating
 }
 
-/*
-event enemy1Atk2(baseAttackTrig)
-{
-
-	//orderGroupLoc(enemy1Force1, DORDER_SCOUT, playerX1, playerY1);
-	setEventTrigger(enemy1Atk2, every10);	//once triggered keep updating
-}
-*/
-
 event enemy1Atk3(sideAttackTrig)
 {
 
@@ -95,69 +85,35 @@ event enemy1Atk3(sideAttackTrig)
 	setEventTrigger(enemy1Atk3, every10);	//once triggered keep updating
 }
 
-/* GJ: trackPlayer removed because stole droids from incoming transporters */
-/*
-event trackPlayer(every, 10)
-{
-//changed so use whole of player's army as order point!
-//not a good way of doing this (shouldn't use player's forces in groups!)
-		//groupAddArea(playerForce1, player, 0, 0, 48*128, 48*128);
-		groupAddArea(playerForce1, player, 0, 0, 44*128, 93*128);
-		playerX1=playerForce1.x;
-		playerY1=playerForce1.y;
-
-}
-*/
-
 //new version that doesn't use groups!!! (uses grid instead!)
-//event trackPlayer(every, 15) - slow it down AB 2/12/98
 event trackPlayer(every, 30)
 {
-    //this loops thru trying to find out where the selectedPlayer is - map size is 44 x 93 tiles
+	// this loops thru trying to find out where the selectedPlayer is - map size is 44 x 93 tiles
 	count = 0;
-    
-    //look across the height of the map
+
+	// look across the height of the map
 	while (count < 93*128)
 	{
 		count2 = 0;
-        //look across the width of the map
+		// look across the width of the map
 		while (count2 < 44*128)
 		{
-			//if (numDroidsInArea(player, count2, count2 + (10*128), count, count + (10*128)) > 0)
-            //make the area looking over bigger to cut down on how many loops there are - AB 2/12/98
-            if (numDroidsInArea(player, count2, count, count2 + (22*128), count + (31*128)) > 0)
+			// make the area looking over bigger to cut down on how many loops there are - AB 2/12/98
+			if (numDroidsInArea(player, count2, count, count2 + (22*128), count + (31*128)) > 0)
 			{
-				/*playerX1 = count2 + (5*128);
-				playerY1 = count + (5*128);
-				count = 93*128;
-				count2 = 44*128;*/
 				playerX1 = count2 + (11*128);
 				playerY1 = count + (15*128);
-                //set count values to quit loop
+				// set count values to quit loop
 				count = 93*128;
 				count2 = 44*128;
 			}
-            //loop to next x value
-            count2 = count2 + (22*128);    
+			// loop to next x value
+			count2 = count2 + (22*128);    
 		}
-        //loop to next y value
-        count = count + (31*128);
+		// loop to next y value
+		count = count + (31*128);
 	}
 }
-
-
-/* UNNECESSARY FOR HIT & RUN MISSION!!!
-event lastAttack1(every, 50)
-{
-//make enemy easier to find if all his buildings destroyed
-	if (not anyStructButWallsLeft(enemy1))
-	{
-		groupAddArea(enemy1Fin, enemy1, 0, 0, 8191, 16383);
-		orderGroupLoc(enemy1Fin, DORDER_SCOUT, enm1Ass1X, enm1Ass1Y);
-		//setEventTrigger(lastAttack1, inactive);
-	}
-}
-*/
 
 //remove hold orders if hit!
 event letGo(CALL_DROID_ATTACKED, enemy1, ref hitDroid, ref attackerObj)
@@ -167,7 +123,6 @@ event letGo(CALL_DROID_ATTACKED, enemy1, ref hitDroid, ref attackerObj)
 		if (groupMember(enemy1Force1, hitDroid))
 		{
 			setGroupSecondary(enemy1Force1, DSO_ATTACK_LEVEL, DSS_ALEV_ALWAYS);	//fire at will
-			//setGroupSecondary(enemy1Force1, DSO_HALTTYPE, DSS_HALT_GUARD);		//cancel hold position
 		}
 		else
 		{

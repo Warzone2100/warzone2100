@@ -29,6 +29,7 @@
 #include <algorithm>
 
 #include "lib/framework/frame.h"
+#include "lib/framework/geometry.h"
 #include "lib/framework/strres.h"
 #include "lib/framework/frameresource.h"
 #include "objects.h"
@@ -1417,13 +1418,13 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		//check not trying to build too near the edge
 		if (map_coord(x) < TOO_NEAR_EDGE || map_coord(x) > (mapWidth - TOO_NEAR_EDGE))
 		{
-			debug(LOG_ERROR, "attempting to build too closely to map-edge, "
+			debug(LOG_WARNING, "attempting to build too closely to map-edge, "
 				  "x coord (%u) too near edge (req. distance is %u)", x, TOO_NEAR_EDGE);
 			return NULL;
 		}
 		if (map_coord(y) < TOO_NEAR_EDGE || map_coord(y) > (mapHeight - TOO_NEAR_EDGE))
 		{
-			debug(LOG_ERROR, "attempting to build too closely to map-edge, "
+			debug(LOG_WARNING, "attempting to build too closely to map-edge, "
 				  "y coord (%u) too near edge (req. distance is %u)", y, TOO_NEAR_EDGE);
 			return NULL;
 		}
@@ -5378,22 +5379,20 @@ bool calcStructureMuzzleBaseLocation(STRUCTURE *psStructure, Vector3i *muzzle, i
 	{
 		Vector3i barrel(0, 0, 0);
 
-		pie_MatBegin();
+		Affine3F af;
 
-		pie_TRANSLATE(psStructure->pos.x, -psStructure->pos.z, psStructure->pos.y);
+		af.Trans(psStructure->pos.x, -psStructure->pos.z, psStructure->pos.y);
 
 		//matrix = the center of droid
-		pie_MatRotY(psStructure->rot.direction);
-		pie_MatRotX(psStructure->rot.pitch);
-		pie_MatRotZ(-psStructure->rot.roll);
-		pie_TRANSLATE( psShape->connectors[weapon_slot].x, -psShape->connectors[weapon_slot].z,
+		af.RotY(psStructure->rot.direction);
+		af.RotX(psStructure->rot.pitch);
+		af.RotZ(-psStructure->rot.roll);
+		af.Trans( psShape->connectors[weapon_slot].x, -psShape->connectors[weapon_slot].z,
 					-psShape->connectors[weapon_slot].y);//note y and z flipped
 
 		
-		pie_RotateTranslate3i(&barrel, muzzle);
+		*muzzle = swapYZ(af*barrel);
 		muzzle->z = -muzzle->z;
-
-		pie_MatEnd();
 	}
 	else
 	{
@@ -5422,28 +5421,28 @@ bool calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3i *muzzle, int w
 			psMountImd = asWeaponStats[nWeaponStat].pMountGraphic;
 		}
 
-		pie_MatBegin();
+		Affine3F af;
 
-		pie_TRANSLATE(psStructure->pos.x, -psStructure->pos.z, psStructure->pos.y);
+		af.Trans(psStructure->pos.x, -psStructure->pos.z, psStructure->pos.y);
 
 		//matrix = the center of droid
-		pie_MatRotY(psStructure->rot.direction);
-		pie_MatRotX(psStructure->rot.pitch);
-		pie_MatRotZ(-psStructure->rot.roll);
-		pie_TRANSLATE( psShape->connectors[weapon_slot].x, -psShape->connectors[weapon_slot].z,
+		af.RotY(psStructure->rot.direction);
+		af.RotX(psStructure->rot.pitch);
+		af.RotZ(-psStructure->rot.roll);
+		af.Trans( psShape->connectors[weapon_slot].x, -psShape->connectors[weapon_slot].z,
 					-psShape->connectors[weapon_slot].y);//note y and z flipped
 
 		//matrix = the weapon[slot] mount on the body
-		pie_MatRotY(psStructure->asWeaps[weapon_slot].rot.direction);  // +ve anticlockwise
+		af.RotY(psStructure->asWeaps[weapon_slot].rot.direction);  // +ve anticlockwise
 
 		// process turret mount
 		if (psMountImd && psMountImd->nconnectors)
 		{
-			pie_TRANSLATE(psMountImd->connectors->x, -psMountImd->connectors->z, -psMountImd->connectors->y);
+			af.Trans(psMountImd->connectors->x, -psMountImd->connectors->z, -psMountImd->connectors->y);
 		}
 
 		//matrix = the turret connector for the gun
-		pie_MatRotX(psStructure->asWeaps[weapon_slot].rot.pitch);      // +ve up
+		af.RotX(psStructure->asWeaps[weapon_slot].rot.pitch);      // +ve up
 
 		//process the gun
 		if (psWeaponImd && psWeaponImd->nconnectors)
@@ -5457,13 +5456,11 @@ bool calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3i *muzzle, int w
 				connector_num = (psStructure->asWeaps[weapon_slot].shotsFired - 1) % (psWeaponImd->nconnectors);
 			}
 			
-			barrel = Vector3i(psWeaponImd->connectors[connector_num].x, -psWeaponImd->connectors[connector_num].y, -psWeaponImd->connectors[connector_num].z);
+			barrel = Vector3i(psWeaponImd->connectors[connector_num].x, -psWeaponImd->connectors[connector_num].z, -psWeaponImd->connectors[connector_num].y);
 		}
 
-		pie_RotateTranslate3i(&barrel, muzzle);
+		*muzzle = swapYZ(af*barrel);
 		muzzle->z = -muzzle->z;
-
-		pie_MatEnd();
 	}
 	else
 	{
@@ -5838,8 +5835,8 @@ void printStructureInfo(STRUCTURE *psStructure)
 		{
 			unsigned int assigned_droids = countAssignedDroids(psStructure);
 
-			CONPRINTF(ConsoleString, (ConsoleString, ngettext("%s - %u Unit assigned", "%s - %u Units assigned", assigned_droids),
-					  getStatName(psStructure->pStructureType), assigned_droids));
+			CONPRINTF(ConsoleString, (ConsoleString, ngettext("%s - %u Unit assigned - Damage %3.0f%%", "%s - %u Units assigned - Damage %3.0f%%", assigned_droids),
+					  getStatName(psStructure->pStructureType), assigned_droids, getStructureDamage(psStructure) * (100.f/65536.f)));
 		}
 		break;
 	case REF_DEFENSE:
@@ -5863,8 +5860,8 @@ void printStructureInfo(STRUCTURE *psStructure)
 		{
 			unsigned int assigned_droids = countAssignedDroids(psStructure);
 
-			CONPRINTF(ConsoleString, (ConsoleString, ngettext("%s - %u Unit assigned", "%s - %u Units assigned", assigned_droids),
-				getStatName(psStructure->pStructureType), assigned_droids));
+			CONPRINTF(ConsoleString, (ConsoleString, ngettext("%s - %u Unit assigned - Damage %3.0f%%", "%s - %u Units assigned - Damage %3.0f%%", assigned_droids),
+				getStatName(psStructure->pStructureType), assigned_droids, getStructureDamage(psStructure) * (100.f/65536.f)));
 		}
 		else
 		{
@@ -5882,7 +5879,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		else
 #endif
 		{
-			CONPRINTF(ConsoleString, (ConsoleString, "%s", getStatName(psStructure->pStructureType)));
+			CONPRINTF(ConsoleString, (ConsoleString, "%s - Damage %3.0f%%", getStatName(psStructure->pStructureType), getStructureDamage(psStructure) * (100.f/65536.f)));
 		}
 		break;
 	case REF_RESOURCE_EXTRACTOR:
@@ -5895,7 +5892,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		else
 #endif
 		{
-			CONPRINTF(ConsoleString, (ConsoleString, "%s", getStatName(psStructure->pStructureType)));
+			CONPRINTF(ConsoleString, (ConsoleString, "%s - Damage %3.0f%%", getStatName(psStructure->pStructureType), getStructureDamage(psStructure) * (100.f/65536.f)));
 		}
 		break;
 	case REF_POWER_GEN:
@@ -5918,8 +5915,8 @@ void printStructureInfo(STRUCTURE *psStructure)
 		else
 #endif
 		{
-			CONPRINTF(ConsoleString, (ConsoleString, _("%s - Connected %u of %u"),
-					  getStatName(psStructure->pStructureType), numConnected, NUM_POWER_MODULES));
+			CONPRINTF(ConsoleString, (ConsoleString, _("%s - Connected %u of %u - Damage %3.0f%%"),
+					  getStatName(psStructure->pStructureType), numConnected, NUM_POWER_MODULES, getStructureDamage(psStructure) * (100.f/65536.f)));
 		}
 		break;
 	case REF_CYBORG_FACTORY:
@@ -7838,7 +7835,6 @@ void checkStructure(const STRUCTURE* psStructure, const char * const location_de
 
 	ASSERT_HELPER(psStructure != NULL, location_description, function, "CHECK_STRUCTURE: NULL pointer");
 	ASSERT_HELPER(psStructure->id != 0, location_description, function, "CHECK_STRUCTURE: Structure with ID 0");
-	if (psStructure->id == 0) const_cast<uint32_t &>(psStructure->id) = 0xFEDBCA98;  // HACK Don't spam assertions in maps with a structure with structure ID 0.
 	ASSERT_HELPER(psStructure->type == OBJ_STRUCTURE, location_description, function, "CHECK_STRUCTURE: No structure (type num %u)", (unsigned int)psStructure->type);
 	ASSERT_HELPER(psStructure->player < MAX_PLAYERS, location_description, function, "CHECK_STRUCTURE: Out of bound player num (%u)", (unsigned int)psStructure->player);
 	ASSERT_HELPER(psStructure->pStructureType->type < NUM_DIFF_BUILDINGS, location_description, function, "CHECK_STRUCTURE: Out of bound structure type (%u)", (unsigned int)psStructure->pStructureType->type);

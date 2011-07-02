@@ -1,3 +1,9 @@
+warzone2100 (10:3.0~0master) unstable; urgency=low
+
+  * Updated packaging.
+
+ -- Warzone 2100 Project <warzone-dev@gna.org>  Tue, 03 May 2011 13:21:50 +0200
+
 warzone2100 (9:3.0~0trunk) unstable; urgency=low
 
   * SVN snapshot of trunk (3.0).

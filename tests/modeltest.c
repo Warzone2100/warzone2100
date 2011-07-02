@@ -242,7 +242,7 @@ int main(int argc, char **argv)
 	strcat(datapath, "/../data/");
 	while (!feof(fp))
 	{
-		char filename[PATH_MAX], *delim;
+		char filename[PATH_MAX];
 
 		fscanf(fp, "%s\n", &filename);
 		printf("Testing model: %s\n", filename);

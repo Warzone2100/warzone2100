@@ -1345,44 +1345,34 @@ extern int32_t map_Height(int x, int y)
 }
 
 /* returns true if object is above ground */
-bool mapObjIsAboveGround(SIMPLE_OBJECT *psObj)
+bool mapObjIsAboveGround(const SIMPLE_OBJECT *psObj)
 {
 	// min is used to make sure we don't go over array bounds!
 	// TODO Using the corner of the map instead doesn't make sense. Fix this...
-	SDWORD	iZ,
-			tileX = map_coord(psObj->pos.x),
-			tileY = map_coord(psObj->pos.y),
-			tileYOffset1 = (tileY * mapWidth),
-			tileYOffset2 = ((tileY+1) * mapWidth),
-			h1 = psMapTiles[MIN(mapWidth * mapHeight - 1, tileYOffset1 + tileX)    ].height,
-			h2 = psMapTiles[MIN(mapWidth * mapHeight - 1, tileYOffset1 + tileX + 1)].height,
-			h3 = psMapTiles[MIN(mapWidth * mapHeight - 1, tileYOffset2 + tileX)    ].height,
-			h4 = psMapTiles[MIN(mapWidth * mapHeight - 1, tileYOffset2 + tileX + 1)].height;
+	const int mapsize = mapWidth * mapHeight - 1;
+	const int tileX = map_coord(psObj->pos.x);
+	const int tileY = map_coord(psObj->pos.y);
+	const int tileYOffset1 = (tileY * mapWidth);
+	const int tileYOffset2 = ((tileY+1) * mapWidth);
+	const int h1 = psMapTiles[MIN(mapsize, tileYOffset1 + tileX)    ].height;
+	const int h2 = psMapTiles[MIN(mapsize, tileYOffset1 + tileX + 1)].height;
+	const int h3 = psMapTiles[MIN(mapsize, tileYOffset2 + tileX)    ].height;
+	const int h4 = psMapTiles[MIN(mapsize, tileYOffset2 + tileX + 1)].height;
 
 	/* trivial test above */
-	if ( (psObj->pos.z > h1) && (psObj->pos.z > h2) &&
-		 (psObj->pos.z > h3) && (psObj->pos.z > h4)    )
+	if (psObj->pos.z > h1 && psObj->pos.z > h2 && psObj->pos.z > h3 && psObj->pos.z > h4)
 	{
 		return true;
 	}
 
 	/* trivial test below */
-	if ( (psObj->pos.z <= h1) && (psObj->pos.z <= h2) &&
-		 (psObj->pos.z <= h3) && (psObj->pos.z <= h4)    )
+	if (psObj->pos.z <= h1 && psObj->pos.z <= h2 && psObj->pos.z <= h3 && psObj->pos.z <= h4)
 	{
 		return false;
 	}
 
 	/* exhaustive test */
-	iZ = map_Height( psObj->pos.x, psObj->pos.y );
-	if ( psObj->pos.z > iZ )
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+	return psObj->pos.z > map_Height(psObj->pos.x, psObj->pos.y);
 }
 
 /* returns the max and min height of a tile by looking at the four corners

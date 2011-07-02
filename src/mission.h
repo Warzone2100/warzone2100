@@ -143,7 +143,6 @@ extern bool getPlayCountDown(void);
 extern bool withinLandingZone(UDWORD x, UDWORD y);
 
 //sets the coords for the Transporter to land
-extern void setLandingZone(UBYTE x1, UBYTE y1, UBYTE x2, UBYTE y2);
 extern LANDING_ZONE* getLandingZone(SDWORD i);
 
 /** Initialises all the nogo areas to 0. */

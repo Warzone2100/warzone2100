@@ -32,6 +32,8 @@
 #include <QtCore/QSettings>
 #include <physfs.h>
 
+#include "lib/qtgame/qtgame.h"
+
 // Get platform defines before checking for them.
 // Qt headers MUST come before platform specific stuff!
 #include "lib/framework/frame.h"
@@ -51,7 +53,7 @@ public:
 	void setVector2i(const QString &name, const Vector2i &v);
 };
 
-class WzMainWindow : public QGLWidget
+class WzMainWindow : public QtGameWidget
 {
 	Q_OBJECT
 
@@ -71,12 +73,12 @@ private:
 	QCursor *cursors[CURSOR_MAX];
 	QTimer *timer;
 	QTime tickCount;
-	QFont regularFont, boldFont, smallFont;
+	QFont regularFont, boldFont, smallFont, scaledFont;
 	bool notReadyToPaint;  ///< HACK Don't draw during initial show(), since some global variables apparently aren't set up.
 	static WzMainWindow *myself;
 
 public:
-	WzMainWindow(const QGLFormat &format, QWidget *parent = 0);
+	WzMainWindow(QSize resolution, const QGLFormat &format, QWidget *parent = 0);
 	~WzMainWindow();
 	void initializeGL();
 	void resizeGL(int w, int h);

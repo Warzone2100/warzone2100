@@ -42,7 +42,7 @@ static IMAGEFILE* MouseCursors = NULL;
 static uint16_t MouseCursorIDs[CURSOR_MAX];
 static GLuint shaderProgram[SHADER_MAX];
 static GLfloat shaderStretch = 0;
-static GLint locTeam, locStretch, locTCMask, locFog;
+static GLint locTeam, locStretch, locTCMask, locFog, locNormalMap;
 static SHADER_MODE currentShaderMode = SHADER_NONE;
 unsigned int pieStateCount = 0; // Used in pie_GetResetCounts
 static RENDER_STATE rendStates;
@@ -320,25 +320,28 @@ void pie_SetShaderStretchDepth(float stretch)
 	shaderStretch = stretch;
 }
 
-void pie_ActivateShader(SHADER_MODE shaderMode, PIELIGHT teamcolour, int maskpage)
+void pie_ActivateShader(SHADER_MODE shaderMode, PIELIGHT teamcolour, int maskpage, int normalpage)
 {
 	GLfloat colour4f[4];
 
 	if (shaderMode != currentShaderMode)
 	{
-		GLint locTex0, locTex1;
+		GLint locTex0, locTex1, locTex2;
 
 		glUseProgram(shaderProgram[shaderMode]);
 		locTex0 = glGetUniformLocation(shaderProgram[shaderMode], "Texture0");
 		locTex1 = glGetUniformLocation(shaderProgram[shaderMode], "Texture1");
+		locTex2 = glGetUniformLocation(shaderProgram[shaderMode], "Texture2");
 		locTeam = glGetUniformLocation(shaderProgram[shaderMode], "teamcolour");
 		locStretch = glGetUniformLocation(shaderProgram[shaderMode], "stretch");
 		locTCMask = glGetUniformLocation(shaderProgram[shaderMode], "tcmask");
+		locNormalMap = glGetUniformLocation(shaderProgram[shaderMode], "normalmap");
 		locFog = glGetUniformLocation(shaderProgram[shaderMode], "fogEnabled");
 
 		// These never change
 		glUniform1i(locTex0, 0);
 		glUniform1i(locTex1, 1);
+		glUniform1i(locTex2, 2);
 
 		currentShaderMode  = shaderMode;
 	}
@@ -347,12 +350,18 @@ void pie_ActivateShader(SHADER_MODE shaderMode, PIELIGHT teamcolour, int maskpag
 	glUniform4fv(locTeam, 1, &colour4f[0]);
 	glUniform1f(locStretch, shaderStretch);
 	glUniform1i(locTCMask, maskpage != iV_TEX_INVALID);
+	glUniform1i(locNormalMap, normalpage != iV_TEX_INVALID);
 	glUniform1i(locFog, rendStates.fog);
 
 	if (maskpage != iV_TEX_INVALID)
 	{
 		glActiveTexture(GL_TEXTURE1);
 		pie_SetTexturePage(maskpage);
+	}
+	if (normalpage != iV_TEX_INVALID)
+	{
+		glActiveTexture(GL_TEXTURE2);
+		pie_SetTexturePage(normalpage);
 	}
 	glActiveTexture(GL_TEXTURE0);
 

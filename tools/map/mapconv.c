@@ -8,6 +8,7 @@
 #include <limits.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <errno.h>
 
 #include "pngsave.h"
 #include "mapload.h"
@@ -24,6 +25,8 @@
 #define TILE_TRIFLIP	0x0800
 #define TRI_FLIPPED(x)	((x)->texture & TILE_TRIFLIP)
 #define SNAP_MODE	0
+
+#define DEG(degrees) ((degrees) * 8192 / 45)
 
 static const char *tilesetTextures[] = { "Arizona", "Urban", "Rockies" };
 
@@ -65,11 +68,12 @@ int main(int argc, char **argv)
 
 	if (!map)
 	{
-		fprintf(stderr, "Failed to load map\n");
+		fprintf(stderr, "Failed to load map %s from %s\n", filename, path);
 		return -1;
 	}
 
 	strcpy(base, argv[1]);
+#if 0
 	strcpy(filename, base);
 	strcat(filename, "/map-001");
 	mkdir(filename, 0777);
@@ -160,25 +164,25 @@ int main(int argc, char **argv)
 		free(flip);
 	}
 
+#endif
 	/*** Features ***/
 	if (map->featVersion > 0)
 	{
 		strcpy(filename, base);
-		strcat(filename, "/map-001/features.ini");
+		strcat(filename, "/feature.ini");
+		printf("writing %s\n", filename);
 		fp = fopen(filename, "w");
-		MADD("[feature_header]");
-		MADD("entries = %u", map->numFeatures);
-		for (i = 0; i < map->numDroids; i++)
+		if (!fp) printf("%s: %s\n", filename, strerror(errno));
+		for (i = 0; i < map->numFeatures; i++)
 		{
 			LND_OBJECT *psObj = &map->mLndObjects[IMD_FEATURE][i];
 
-			MADD("\n[feature_%04u]", i);
-			MADD("pos.x = %u", psObj->x);
-			MADD("pos.y = %u", psObj->y);
-			MADD("pos.z = %u", psObj->z);
-			MADD("direction = %u", psObj->direction);
-			MADD("player = %u", psObj->player);
-			MADD("template = %s", psObj->name);
+			if (psObj->id == 0) psObj->id = 0xFEDBCA98; // fix broken ID
+			MADD("\n[feature_%04u]", psObj->id);
+			MADD("id = %u", psObj->id);
+			MADD("position = %u, %u, %u", psObj->x, psObj->y, psObj->z);
+			MADD("rotation = %u, 0, 0", DEG(psObj->direction));
+			MADD("name = %s", psObj->name);
 		}
 		fclose(fp);
 	}
@@ -187,21 +191,65 @@ int main(int argc, char **argv)
 	if (map->structVersion)
 	{
 		strcpy(filename, base);
-		strcat(filename, "/map-001/structure.ini");
+		strcat(filename, "/struct.ini");
 		fp = fopen(filename, "w");
-		MADD("[structure_header]");
-		MADD("entries = %u", map->numStructures);
-		for (i = 0; i < map->numDroids; i++)
+		if (!fp) printf("%s: %s\n", filename, strerror(errno));
+		for (i = 0; i < map->numStructures; i++)
 		{
-			LND_OBJECT *psObj = &map->mLndObjects[IMD_STRUCTURE][i];
+			LND_OBJECT *psMod, *psObj = &map->mLndObjects[IMD_STRUCTURE][i];
+			int j, capacity = 0;
 
-			MADD("\n[structure_%04u]", i);
-			MADD("pos.x = %u", psObj->x);
-			MADD("pos.y = %u", psObj->y);
-			MADD("pos.z = %u", psObj->z);
-			MADD("direction = %u", psObj->direction);
+			if (strcmp(psObj->name, "A0PowMod1") == 0 || strcmp(psObj->name, "A0FacMod1") == 0
+			    || strcmp(psObj->name, "A0ResearchModule1") == 0)
+			{
+				continue; // do not write modules as separate entries
+			}
+
+			MADD("\n[structure_%04u]", psObj->id);
+			MADD("id = %u", psObj->id);
+			MADD("position = %u, %u, %u", psObj->x, psObj->y, psObj->z);
+			MADD("rotation = %u, 0, 0", DEG(psObj->direction));
+			MADD("name = %s", psObj->name);
 			MADD("player = %u", psObj->player);
-			MADD("template = %s", psObj->name);
+
+			// Merge modules into host building entry
+			if (strcmp(psObj->name, "A0LightFactory") == 0)
+			{
+				for (j = 0; j < map->numStructures; j++)
+				{
+					psMod = &map->mLndObjects[IMD_STRUCTURE][j];
+					if (strcmp(psMod->name, "A0FacMod1") == 0 && psObj->x == psMod->x && psObj->y == psMod->y)
+					{
+						capacity++;
+					}
+				}
+			}
+			else if (strcmp(psObj->name, "A0PowerGenerator") == 0)
+			{
+				for (j = 0; j < map->numStructures; j++)
+				{
+					psMod = &map->mLndObjects[IMD_STRUCTURE][j];
+					if (strcmp(psMod->name, "A0PowMod1") == 0 && psObj->x == psMod->x && psObj->y == psMod->y)
+					{
+						capacity++;
+					}
+				}
+			}
+			else if (strcmp(psObj->name, "A0ResearchFacility") == 0)
+			{
+				for (j = 0; j < map->numStructures; j++)
+				{
+					psMod = &map->mLndObjects[IMD_STRUCTURE][j];
+					if (strcmp(psMod->name, "A0ResearchModule1") == 0 && psObj->x == psMod->x && psObj->y == psMod->y)
+					{
+						capacity++;
+					}
+				}
+			}
+			if (capacity > 0)
+			{
+				MADD("modules = %d", capacity);
+			}
 		}
 		fclose(fp);
 	}
@@ -210,25 +258,26 @@ int main(int argc, char **argv)
 	if (map->droidVersion > 0)
 	{
 		strcpy(filename, base);
-		strcat(filename, "/map-001/droids.ini");
+		strcat(filename, "/droid.ini");
+		printf("writing %s\n", filename);
 		fp = fopen(filename, "w");
-		MADD("[droid_header]");
-		MADD("entries = %u", map->numDroids);
+		if (!fp) printf("%s: %s\n", filename, strerror(errno));
 		for (i = 0; i < map->numDroids; i++)
 		{
 			LND_OBJECT *psObj = &map->mLndObjects[IMD_DROID][i];
 
-			MADD("\n[droid_%04u]", i);
-			MADD("pos.x = %u", psObj->x);
-			MADD("pos.y = %u", psObj->y);
-			MADD("pos.z = %u", psObj->z);
-			MADD("direction = %u", psObj->direction);
+			if (psObj->id == 0) psObj->id = 0xFEDBCA98; // fix broken ID
+			MADD("\n[droid_%04u]", psObj->id);
+			MADD("id = %u", psObj->id);
+			MADD("position = %u, %u, %u", psObj->x, psObj->y, psObj->z);
+			MADD("rotation = %u, 0, 0", DEG(psObj->direction));
 			MADD("player = %u", psObj->player);
 			MADD("template = %s", psObj->name);
 		}
 		fclose(fp);
 	}
 
+#if 0
 	/*** Gateways ***/
 	if (map->mapVersion > 0)
 	{
@@ -248,6 +297,7 @@ int main(int argc, char **argv)
 			MADD("y2=%hhu",	psGate->y2);
 		}
 	}
+#endif
 
 	mapFree(map);
 

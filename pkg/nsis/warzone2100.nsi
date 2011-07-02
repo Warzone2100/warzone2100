@@ -30,7 +30,6 @@
 ;--------------------------------
 ;General
   CRCCheck on   ;make sure this isn't corrupted
-  SetCompressor /SOLID  lzma
 
   ;Name and file
   Name "${PACKAGE_NAME}"
@@ -53,7 +52,7 @@ VIAddVersionKey "CompanyName"		"Warzone 2100 Project"
 VIAddVersionKey "FileDescription"	"${PACKAGE_NAME} Installer"
 VIAddVersionKey "FileVersion"		"${PACKAGE_VERSION}"
 VIAddVersionKey "InternalName"		"${PACKAGE_NAME}"
-VIAddVersionKey "LegalCopyright"	"Copyright © 2006-2010 Warzone 2100 Project"
+VIAddVersionKey "LegalCopyright"	"Copyright © 2006-2011 Warzone 2100 Project"
 VIAddVersionKey "OriginalFilename"	"${PACKAGE}-${PACKAGE_VERSION}.exe"
 VIAddVersionKey "ProductName"		"${PACKAGE_NAME}"
 VIAddVersionKey "ProductVersion"	"${PACKAGE_VERSION}"
@@ -92,8 +91,7 @@ VIAddVersionKey "ProductVersion"	"${PACKAGE_VERSION}"
   !define MUI_UNFINISHPAGE_NOAUTOCLOSE
   
   !define MUI_LICENSEPAGE_RADIOBUTTONS
-  !define MUI_LICENSEPAGE_RADIOBUTTONS_TEXT_ACCEPT "$(WZ_GPL_ACCEPT)"
-  !define MUI_LICENSEPAGE_RADIOBUTTONS_TEXT_DECLINE "$(WZ_GPL_DECLINE)"
+  !define MUI_LICENSEPAGE_RADIOBUTTONS_TEXT_ACCEPT "$(WZ_GPL_NEXT)"
   
 ;--------------------------------
 ;Pages
@@ -199,24 +197,22 @@ Section $(TEXT_SecBase) SecBase
   Push "License.txt"
   Call unix2dos
 
-  File "${TOP_SRCDIR}\doc\Readme.en"
-  Push "Readme.en"
-  Push "Readme.en.txt"
-  Call unix2dos
-  
-  File "${TOP_SRCDIR}\doc\Readme.de"
-  Push "Readme.de"
-  Push "Readme.de.txt"
-  Call unix2dos
-  
-  File "/oname=Readme.en.html" "${TOP_SRCDIR}\doc\Readme.en.xhtml"
-  File "/oname=Readme.de.html" "${TOP_SRCDIR}\doc\Readme.de.xhtml"
-
   ; Create mod directories
   CreateDirectory "$INSTDIR\mods\campaign"
   CreateDirectory "$INSTDIR\mods\music"
   CreateDirectory "$INSTDIR\mods\global"
   CreateDirectory "$INSTDIR\mods\multiplay"
+
+  SetOutPath "$INSTDIR\doc"
+  File "${TOP_SRCDIR}\doc\Readme.en"
+  Push "Readme.en"
+  Push "Readme.en.txt"
+  Call unix2dos
+  File "${TOP_BUILDDIR}\doc\quickstartguide.html"
+  File "${TOP_BUILDDIR}\doc\quickstartguide.pdf"
+  File "${TOP_BUILDDIR}\doc\docbook-xsl.css"
+  SetOutPath "$INSTDIR\doc\images"
+  File "${TOP_SRCDIR}\doc\images\*.*"
 
   ; Music files
   SetOutPath "$INSTDIR\music"
@@ -225,11 +221,6 @@ Section $(TEXT_SecBase) SecBase
   File "${TOP_SRCDIR}\data\music\track2.ogg"
   File "${TOP_SRCDIR}\data\music\track3.ogg"
   File "${TOP_SRCDIR}\data\music\music.wpl"
-
-  SetOutPath "$INSTDIR\styles"
-
-  File "/oname=readme.print.css" "${TOP_SRCDIR}\doc\styles\readme.print.css"
-  File "/oname=readme.screen.css" "${TOP_SRCDIR}\doc\styles\readme.screen.css"
 
   SetOutPath "$INSTDIR\fonts"
   File "/oname=fonts.conf" "${EXTDIR}\etc\fonts\fonts.conf.wd_disable"
@@ -259,6 +250,8 @@ Section $(TEXT_SecBase) SecBase
     CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER"
     CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Uninstall.lnk" "$INSTDIR\uninstall.exe"
     CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\${PACKAGE_NAME}.lnk" "$INSTDIR\${PACKAGE}.exe"
+    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Quick Start Guide (html).lnk" "$INSTDIR\doc\quickstartguide.html"
+    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Quick Start Guide (pdf).lnk" "$INSTDIR\doc\quickstartguide.pdf"
 
   !insertmacro MUI_STARTMENU_WRITE_END
 
@@ -517,10 +510,10 @@ FunctionEnd
 ;Descriptions
 
   ;English
-  LangString WZWelcomeText ${LANG_ENGLISH} "This wizard will guide you through the installation of Warzone 2100.\r\n\r\nIt is recommended that you close all other applications before starting Setup. This will make it possible to update relevant system files without having to reboot your computer.\r\n\r\nWarzone 2100 is 100% free, if you paid for it, let us know!\r\n\r\nClick Next to continue."
-  LangString WZ_GPL_ACCEPT ${LANG_ENGLISH} "I agree"
-  LangString WZ_GPL_DECLINE ${LANG_ENGLISH} "I don't agree"
-  
+  LangString WZWelcomeText ${LANG_ENGLISH} "This wizard will guide you through the installation of Warzone 2100.\r\n\r\nIt is recommended that you close all other applications before continuing this installation. This will make it possible to update relevant system files without having to reboot your computer.\r\n\r\nWarzone 2100 is 100% free, if you paid for it, let us know!\r\n\r\nClick Next to continue."
+  LangString WZ_GPL_NEXT ${LANG_ENGLISH} "Next"
+
+
   LangString TEXT_SecBase ${LANG_ENGLISH} "Core files"
   LangString DESC_SecBase ${LANG_ENGLISH} "The core files required to run Warzone 2100."
 
@@ -552,9 +545,9 @@ FunctionEnd
   LangString DESC_SecOriginalMod ${LANG_ENGLISH} "Play the game as it was back in the 1.10 days."
 
   ;Dutch
-  LangString WZWelcomeText ${LANG_DUTCH} "This wizard will guide you through the installation of Warzone 2100.\r\n\r\nIt is recommended that you close all other applications before starting Setup. This will make it possible to update relevant system files without having to reboot your computer.\r\n\r\nWarzone 2100 is 100% free, if you paid for it, let us know!\r\n\r\nClick Next to continue." 
-  LangString WZ_GPL_ACCEPT ${LANG_DUTCH} "I agree"
-  LangString WZ_GPL_DECLINE ${LANG_DUTCH} "I don't agree"
+  LangString WZWelcomeText ${LANG_DUTCH} "Deze installatiewizard leidt u door het installatieproces van Warzone 2100.\r\n\r\nHet is aangeraden om alle andere applicaties te sluiten alvorens verder te gaan met deze installatie. Dit maakt het mogelijk om de betreffende systeembestanden te vervangen zonder uw computer opnieuw op te starten" 
+  LangString WZ_GPL_NEXT ${LANG_DUTCH} "volgende"
+
 
   LangString TEXT_SecBase ${LANG_DUTCH} "Core files"
   LangString DESC_SecBase ${LANG_DUTCH} "The core files required to run Warzone 2100."
@@ -588,9 +581,9 @@ FunctionEnd
 
   ;German
   LangString WZWelcomeText ${LANG_GERMAN} "Dieser Wizard wird Sie durch die Warzone-2100-Installation fьhren.\r\n\r\nEs wird empfohlen sдmtliche anderen Anwendungen zu schlieЯen, bevor Sie das Setup starten. Dies ermцglicht es relevante Systemdateien zu aktualisieren, ohne neustarten zu mьssen.\r\n\r\nWarzone 2100 ist zu 100% kostenlos, falls Sie dafьr gezahlt haben, lassen Sie es uns wissen!\r\n\r\nKlicken Sie auf Weiter, um fortzufahren."
-  LangString WZ_GPL_ACCEPT ${LANG_GERMAN} "Ich stimme zu"
-  LangString WZ_GPL_DECLINE ${LANG_GERMAN} "Ich stimme nicht zu"
-  
+  LangString WZ_GPL_NEXT ${LANG_GERMAN} "nдchste"
+
+
   LangString TEXT_SecBase ${LANG_GERMAN} "Core files"
   LangString DESC_SecBase ${LANG_GERMAN} "Die Kerndateien, die fьr Warzone 2100 benцtigt werden."
 
@@ -623,9 +616,9 @@ FunctionEnd
 
   ;Russian
   LangString WZWelcomeText ${LANG_RUSSIAN} "Этот помощник установки поможет вам установить Warzone2100.\r\n\r\nПеред началом рекомендуем закрыть все другие приложения. Это позволит обновить соответствующие системные файлы без перезагрузки системы.\r\n\r\nWarzone2100 100% бесплатный, если вы за него заплатили сообщите нам!\r\n\r\nНажмите Далее для продолжения."  
-  LangString WZ_GPL_ACCEPT ${LANG_RUSSIAN} "Согласен"
-  LangString WZ_GPL_DECLINE ${LANG_RUSSIAN} "Не Согласен"
-  
+  LangString WZ_GPL_NEXT ${LANG_RUSSIAN} "Согласен"
+
+
   LangString TEXT_SecBase ${LANG_RUSSIAN} "Базовые файлы"
   LangString DESC_SecBase ${LANG_RUSSIAN} "Файлы требуемые для запуска Warzone 2100."
 
@@ -695,10 +688,14 @@ Section "Uninstall"
   Delete "$INSTDIR\stderr.txt"
   Delete "$INSTDIR\stdout.txt"
 
-  Delete "$INSTDIR\Readme.en.txt"
-  Delete "$INSTDIR\Readme.de.txt"
-  Delete "$INSTDIR\Readme.en.html"
-  Delete "$INSTDIR\Readme.de.html"
+  Delete "$INSTDIR\COPYING.NONGPL.txt"
+  Delete "$INSTDIR\COPYING.README.txt"
+  Delete "$INSTDIR\COPYING.txt"
+
+  Delete "$INSTDIR\doc\images\*.*"
+  Delete "$INSTDIR\doc\*.*"
+  RMDir "$INSTDIR\doc\images"
+  RMDIR "$INSTDIR\doc"
 
   Delete "$INSTDIR\License.txt"
   Delete "$INSTDIR\Authors.txt"
@@ -712,10 +709,6 @@ Section "Uninstall"
   RMDir "$INSTDIR\music"
 
   Delete "$INSTDIR\uninstall.exe"
-
-  Delete "$INSTDIR\styles\readme.print.css"
-  Delete "$INSTDIR\styles\readme.screen.css"
-  RMDir "$INSTDIR\styles"
 
   Delete "$INSTDIR\fonts\fonts.conf"
   Delete "$INSTDIR\fonts\DejaVuSansMono.ttf"
@@ -874,6 +867,8 @@ Section "Uninstall"
   Delete "$SMPROGRAMS\$MUI_TEMP\Uninstall.lnk"
   Delete "$SMPROGRAMS\$MUI_TEMP\${PACKAGE_NAME}.lnk"
   Delete "$SMPROGRAMS\$MUI_TEMP\${PACKAGE_NAME} - Old 1.10 Balance.lnk"
+  Delete "$SMPROGRAMS\$MUI_TEMP\Quick Start Guide (html).lnk"
+  Delete "$SMPROGRAMS\$MUI_TEMP\Quick Start Guide (pdf).lnk"
 
   ;Delete empty start menu parent diretories
   StrCpy $MUI_TEMP "$SMPROGRAMS\$MUI_TEMP"

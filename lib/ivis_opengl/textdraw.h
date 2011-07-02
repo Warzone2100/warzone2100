@@ -26,9 +26,10 @@
 
 enum iV_fonts
 {
-    font_regular,
-    font_large,
+	font_regular,
+	font_large,
 	font_small,
+	font_scaled,
 };
 
 extern void iV_TextInit(void);

@@ -19,10 +19,13 @@ AC_CANONICAL_HOST
 
 # Checks for programs.
 AC_PROG_CC_STDC
+AC_CHECK_PROG(CCOMPILER, ${CC}, ccompiler)
+test -z "${CCOMPILER}" && AC_MSG_ERROR(No C compiler found!)
 AC_PROG_RANLIB
 
-# We need a C++ compiler for build_tools/autorevision
 AC_PROG_CXX
+AC_CHECK_PROG(CXXCOMPILER, ${CXX}, cxxcompiler)
+test -z "${CXXCOMPILER}" && AC_MSG_ERROR(No C++ compiler found!)
 
 AC_PROG_YACC
 if test "x$YACC" != "xbison -y" ; then
@@ -45,9 +48,13 @@ test -z "${UNZIP}" && AC_MSG_ERROR(Unzip not found!)
 # --filesync was added in zip 3.0, older versions need -u
 ZIP_UPDATE="-u"
 zip -q --filesync filesynctest.zip $srcdir/ChangeLog 2> /dev/null && export ZIP_UPDATE="--filesync"
-echo $srcdir
 rm -f filesynctest.zip
 AC_SUBST([ZIP_UPDATE], [${ZIP_UPDATE}])
+
+AC_CHECK_PROG(A2X, a2x, a2x)
+AC_CHECK_PROG(WKHTMLTOPDF, wkhtmltopdf, wkhtmltopdf)
+AM_CONDITIONAL([A2X_AVAILABLE], test -n "$A2X")
+AM_CONDITIONAL([WKHTMLTOPDF_AVAILABLE], test -n "$WKHTMLTOPDF")
 
 # Enable Compiler/LibC GNU extensions
 AC_GNU_SOURCE
@@ -69,6 +76,14 @@ AM_GNU_GETTEXT_VERSION([0.15])
 # Check for pkg-config
 PKG_PROG_PKG_CONFIG
 AC_PROG_VERSION_CHECK([pkg-config], [0.9])
+
+# Check for X11 (for qtgame)
+X_LIBS=""
+AC_PATH_X
+if test x$no_x != "xyes"; then
+	X_LIBS="-lX11 -lXrandr ${X_LIBS}"
+fi
+AC_SUBST(X_LIBS)
 
 # Check for Qt
 PKG_CHECK_MODULES(QT4, QtCore QtGui QtOpenGL QtNetwork QtScript,,[:])
@@ -399,6 +414,9 @@ WZ_CPPFLAGS="${WZ_CPPFLAGS} -DWZ_DATADIR=\"\\\"\${datadir}/\${PACKAGE}\\\"\""
 WZ_CPPFLAGS="${WZ_CPPFLAGS} -DLOCALEDIR=\"\\\"\${localedir}\\\"\""
 WZ_CPPFLAGS="${WZ_CPPFLAGS} -I\$(top_srcdir)"
 
+# 3rdparty libs
+WZ_CPPFLAGS="${WZ_CPPFLAGS} -I\$(top_srcdir)/3rdparty"
+
 
 AC_SUBST([WZ_CPPFLAGS], [${WZ_CPPFLAGS}])
 AC_SUBST([WZ_CFLAGS], [${WZ_CFLAGS}])
@@ -417,17 +435,18 @@ AC_CONFIG_FILES([Makefile
 		pkg/nsis/Makefile
 		win32/Makefile
 		tests/Makefile
+		3rdparty/miniupnpc/Makefile
+		lib/netplay/bson/Makefile
 		lib/framework/Makefile
 		lib/exceptionhandler/Makefile
 		lib/gamelib/Makefile
 		lib/ivis_opengl/Makefile
 		lib/netplay/Makefile
-		lib/netplay/miniupnpc/Makefile
-       lib/netplay/bson/Makefile
 		lib/script/Makefile
 		lib/sequence/Makefile
 		lib/sound/Makefile
 		lib/widget/Makefile
+		lib/qtgame/Makefile
 		src/Makefile])
 AC_OUTPUT
 
@@ -446,3 +465,10 @@ AS_IF([test -z "$PERL"],[
 	AC_MSG_NOTICE()
 	AC_MSG_WARN([Perl >= 5.10 isn't installed, autogeneration of some sources will not work.])
 ])
+
+AS_IF([test -z "$A2X" -o -z "$WKHTMLTOPDF"],[
+	AC_MSG_NOTICE()
+	AC_MSG_WARN([a2x or wkhtmltopdf not found, can't convert documentation. This doesn't affect building the game,
+		but means that things like "make dist" and building a Windows installer will fail.])
+])
+

@@ -358,12 +358,3 @@ camstart	FASTPLAY
 dataset		CAM_1
 game		"wrf/fastplay/fastdemo.gam"
 data		"wrf/fastplay/fastdemo.wrf"
-
-between		SUBDEMO_START
-dataset		CAM_1
-data		"wrf/fastplay/subdemos.wrf"
-
-miss_keep	SUBDEMO
-dataset		CAM_1
-game		"wrf/fastplay/subdemo.gam"
-data		"wrf/fastplay/subdemo.wrf"

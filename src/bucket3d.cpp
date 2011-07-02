@@ -69,8 +69,6 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 	const iIMDShape		*pImd;
 	Spacetime               spacetime;
 
-   	pie_MatBegin();
-
 	switch(objectType)
 	{
 		case RENDER_PARTICLE:
@@ -203,6 +201,8 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 			position.y += psCompObj->psShape->ocen.z;
 			position.z -= psCompObj->psShape->ocen.y;
 
+			pie_MatBegin();
+
 			/* object (animation) translations - ivis z and y flipped */
 			pie_TRANSLATE( psCompObj->position.x, psCompObj->position.z,
 							psCompObj->position.y );
@@ -213,6 +213,8 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 			pie_MatRotX(-psCompObj->orientation.x);
 
 			z = pie_RotateProject(&position,&pixel);
+
+			pie_MatEnd();
 
 			break;
 		case RENDER_DROID:
@@ -336,108 +338,15 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 		break;
 	}
 
-   	pie_MatEnd();
-
-	return z;
-}
-
-static SDWORD bucketCalculateState(RENDER_TYPE objectType, void* pObject)
-{
-	SDWORD				z = 0;
-	const iIMDShape*	pie;
-
-	if (bucketCalculateZ(objectType,pObject) < 0)
-	{
-		return -1;
-	}
-
-	switch(objectType)
-	{
-		case RENDER_EFFECT:
-			switch(((EFFECT*)pObject)->group)
-			{
-				case EFFECT_WAYPOINT:
-				case EFFECT_EXPLOSION:
-				case EFFECT_CONSTRUCTION:
-					pie = ((EFFECT*)pObject)->imd;
-					z = INT32_MAX - pie->texpage;
-				break;
-
-				case EFFECT_SMOKE:
-				case EFFECT_GRAVITON:
-				case EFFECT_BLOOD:
-				case EFFECT_STRUCTURE:
-				case EFFECT_DESTRUCTION:
-				default:
-					z = INT32_MAX - 42;
-				break;
-			}
-		break;
-		case RENDER_DROID:
-			pie = BODY_IMD(((DROID*)pObject),0);
-			z = INT32_MAX - pie->texpage;
-		break;
-		case RENDER_STRUCTURE:
-			pie = ((STRUCTURE*)pObject)->sDisplay.imd;
-			z = INT32_MAX - pie->texpage;
-		break;
-		case RENDER_FEATURE:
-			pie = ((FEATURE*)pObject)->sDisplay.imd;
-			z = INT32_MAX - pie->texpage;
-		break;
-		case RENDER_PROXMSG:
-			z = INT32_MAX - 40;
-		break;
-		case RENDER_PROJECTILE:
-			pie = ((PROJECTILE*)pObject)->psWStats->pInFlightGraphic;
-			z = INT32_MAX - pie->texpage;
-		break;
-		case RENDER_ANIMATION:
-			pie = ((COMPONENT_OBJECT*)pObject)->psShape;
-			z = INT32_MAX - pie->texpage;
-		break;
-		case RENDER_DELIVPOINT:
-			pie = pAssemblyPointIMDs[((FLAG_POSITION*)pObject)->
-				factoryType][((FLAG_POSITION*)pObject)->factoryInc];
-			z = INT32_MAX - pie->texpage;
-		break;
-		default:
-		break;
-	}
-
 	return z;
 }
 
 /* add an object to the current render list */
 void bucketAddTypeToList(RENDER_TYPE objectType, void* pObject)
 {
-	BUCKET_TAG newTag;
-	int32_t    z;
-	bool       useCalculateZ = false;
-
-	switch (objectType)
-	{
-		case RENDER_EFFECT:
-			switch (((EFFECT*)pObject)->group)
-			{
-				case EFFECT_EXPLOSION:
-				case EFFECT_CONSTRUCTION:
-				case EFFECT_SMOKE:
-				case EFFECT_FIREWORK:
-					useCalculateZ = true;
-					break;
-				default: break;
-			}
-			break;
-		case RENDER_SHADOW:
-		case RENDER_PROJECTILE:
-		case RENDER_PROXMSG:
-			useCalculateZ = true;
-			break;
-		default: break;
-	}
-	// NOTE bucketCalculateState calls bucketCalculateZ, don't know why not just use bucketCalculateZ.
-	z = useCalculateZ ? bucketCalculateZ(objectType, pObject) : bucketCalculateState(objectType, pObject);
+	const iIMDShape* pie;
+	BUCKET_TAG	newTag;
+	int32_t		z = bucketCalculateZ(objectType, pObject);
 
 	if (z < 0)
 	{
@@ -447,8 +356,59 @@ void bucketAddTypeToList(RENDER_TYPE objectType, void* pObject)
 			/* Won't draw selection boxes */
 			((BASE_OBJECT *)pObject)->sDisplay.frameNumber = 0;
 		}
-
+		
 		return;
+	}
+
+	switch(objectType)
+	{
+		case RENDER_EFFECT:
+			switch(((EFFECT*)pObject)->group)
+			{
+				case EFFECT_EXPLOSION:
+				case EFFECT_CONSTRUCTION:
+				case EFFECT_SMOKE:
+				case EFFECT_FIREWORK:
+					// Use calculated Z
+					break;
+
+				case EFFECT_WAYPOINT:
+					pie = ((EFFECT*)pObject)->imd;
+					z = INT32_MAX - pie->texpage;
+					break;
+
+				default:
+					z = INT32_MAX - 42;
+					break;
+			}
+			break;
+		case RENDER_DROID:
+			pie = BODY_IMD(((DROID*)pObject),0);
+			z = INT32_MAX - pie->texpage;
+			break;
+		case RENDER_STRUCTURE:
+			pie = ((STRUCTURE*)pObject)->sDisplay.imd;
+			z = INT32_MAX - pie->texpage;
+			break;
+		case RENDER_FEATURE:
+			pie = ((FEATURE*)pObject)->sDisplay.imd;
+			z = INT32_MAX - pie->texpage;
+			break;
+		case RENDER_ANIMATION:
+			pie = ((COMPONENT_OBJECT*)pObject)->psShape;
+			z = INT32_MAX - pie->texpage;
+			break;
+		case RENDER_DELIVPOINT:
+			pie = pAssemblyPointIMDs[((FLAG_POSITION*)pObject)->
+			factoryType][((FLAG_POSITION*)pObject)->factoryInc];
+			z = INT32_MAX - pie->texpage;
+			break;
+		case RENDER_PARTICLE:
+			z = 0;
+			break;
+		default:
+			// Use calculated Z
+			break;
 	}
 
 	//put the object data into the tag

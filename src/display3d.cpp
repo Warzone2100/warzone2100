@@ -159,7 +159,7 @@ iView	player;
 static Vector3i	imdRot,imdRot2;
 
 /// How far away are we from the terrain
-UDWORD		distance;
+static UDWORD distance;
 
 /// Stores the screen coordinates of the transformed terrain tiles
 static Vector3i tileScreenInfo[VISIBLE_YTILES+1][VISIBLE_XTILES+1];
@@ -1677,6 +1677,7 @@ void displayProximityMsgs( void )
 			}
 			else
 			{
+				if (!psProxDisp->psMessage->pViewData) continue; // sanity check
 				x = ((BASE_OBJECT *)psProxDisp->psMessage->pViewData)->pos.x;
 				y = ((BASE_OBJECT *)psProxDisp->psMessage->pViewData)->pos.y;
 			}
@@ -2339,7 +2340,7 @@ void	renderStructure(STRUCTURE *psStructure)
 							}
 							pie_MatRotX(rot.pitch);
 							// draw the muzzle flash?
-							if (psStructure && psStructure->visible[selectedPlayer] > UBYTE_MAX / 2)
+							if (psStructure->visible[selectedPlayer] > UBYTE_MAX / 2)
 							{
 								// animate for the duration of the flash only
 								// assume no clan colours for muzzle effects
@@ -3950,23 +3951,13 @@ static void structureEffects()
 {
 	UDWORD	i;
 
-		/* Only do for player 0 power stations */
-
-		if(bMultiPlayer)
+	for (i = 0; i < MAX_PLAYERS; i++)
+	{
+		if (apsStructLists[i])
 		{
-			for(i=0;i<MAX_PLAYERS;i++)
-			{
-				if(isHumanPlayer(i) && apsStructLists[i] )
-				{
-					structureEffectsPlayer(i);
-				}
-
-			}
+			structureEffectsPlayer(i);
 		}
-		else if(apsStructLists[0])
-		{
-			structureEffectsPlayer(0);
-		}
+	}
 }
 
 /// Show the sensor ranges of selected droids and buildings

@@ -215,7 +215,7 @@ static int difficultyIcon(int difficulty);
 // ////////////////////////////////////////////////////////////////////////////
 // map previews..
 
-static const char *difficultyList[] = { "Easy", "Medium", "Hard", "Insane" };
+static const char *difficultyList[] = { N_("Easy"), N_("Medium"), N_("Hard"), N_("Insane") };
 static const int difficultyValue[] = { 1, 10, 15, 20 };
 
 struct AIDATA
@@ -275,9 +275,7 @@ void loadMultiScripts()
 	// Load multiplayer rules
 	resForceBaseDir("messages/");
 	resLoadFile("SMSG", "multiplay.txt");
-	resForceBaseDir("multiplay/skirmish/");
-	resLoadFile("SCRIPT", "rules.slo");
-	resLoadFile("SCRIPTVAL", "rules.vlo");
+	loadGlobalScript("multiplay/skirmish/rules.js");
 
 	// Backup data hashes, since AI and scavenger scripts aren't run on all clients.
 	uint32_t oldHash1 = DataHash[DATA_SCRIPT];
@@ -1937,14 +1935,14 @@ static void addColourChooser(UDWORD player)
 	space = std::min(space, 5*spaceDiv);
 	for (i = 0; i < MAX_PLAYERS_IN_GUI; i++)
 	{
-		addMultiBut(psWScreen,MULTIOP_COLCHOOSER_FORM, MULTIOP_COLCHOOSER+i,
+		addMultiBut(psWScreen, MULTIOP_COLCHOOSER_FORM, MULTIOP_COLCHOOSER + getPlayerColour(i),
 			i*(flagW*spaceDiv + space)/spaceDiv + 7,  4,  // x, y
 			flagW, flagH,  // w, h
-			getPlayerColourName(i), IMAGE_PLAYERN, IMAGE_PLAYERN_HI, IMAGE_PLAYERN_HI, i);
+			getPlayerColourName(i), IMAGE_PLAYERN, IMAGE_PLAYERN_HI, IMAGE_PLAYERN_HI, getPlayerColour(i));
 
 			if( !safeToUseColour(selectedPlayer,i))
 			{
-				widgSetButtonState(psWScreen,MULTIOP_COLCHOOSER+i ,WBUT_DISABLE);
+				widgSetButtonState(psWScreen, MULTIOP_COLCHOOSER + getPlayerColour(i), WBUT_DISABLE);
 			}
 	}
 
@@ -3637,14 +3635,7 @@ void runMultiOptions(void)
 
 	if (CancelPressed())
 	{
-		if (multiRequestUp)
-		{
-			changeTitleMode(lastTitleMode);
-		}
-		else
-		{
-			processMultiopWidgets(CON_CANCEL);  // "Press" the cancel button to clean up net connections and stuff.
-		}
+		processMultiopWidgets(CON_CANCEL);  // "Press" the cancel button to clean up net connections and stuff.
 	}
 }
 
@@ -3881,7 +3872,7 @@ void displayPosition(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT 
 	drawBlueBox(x, y, psWidget->width, psWidget->height);
 	iV_SetFont(font_regular);
 	iV_SetTextColour(WZCOL_FORM_TEXT);
-	ssprintf(text, "Click to take player slot %d", NetPlay.players[i].position);
+	ssprintf(text, _("Click to take player slot %d"), NetPlay.players[i].position);
 	iV_DrawText(text, x + 10, y + 22);
 }
 
@@ -3890,12 +3881,12 @@ static void displayAi(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT
 	const int x = xOffset + psWidget->x;
 	const int y = yOffset + psWidget->y;
 	const int j = psWidget->UserData;
-	const char *commsText[] = { "Open", "Closed" };
+	const char *commsText[] = { N_("Open"), N_("Closed") };
 
 	drawBlueBox(x, y, psWidget->width, psWidget->height);
 	iV_SetFont(font_regular);
 	iV_SetTextColour(WZCOL_FORM_TEXT);
-	iV_DrawText((j >= 0) ? aidata[j].name : commsText[j + 2], x + 10, y + 22);
+	iV_DrawText((j >= 0) ? aidata[j].name : gettext(commsText[j + 2]), x + 10, y + 22);
 }
 
 static int difficultyIcon(int difficulty)
@@ -3921,7 +3912,7 @@ static void displayDifficulty(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, 
 	iV_SetFont(font_regular);
 	iV_SetTextColour(WZCOL_FORM_TEXT);
 	iV_DrawImage(FrontImages, difficultyIcon(j), x + 5, y + 5);
-	iV_DrawText(difficultyList[j], x + 42, y + 22);
+	iV_DrawText(gettext(difficultyList[j]), x + 42, y + 22);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -4083,8 +4074,8 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 		ASSERT_OR_RETURN(, NetPlay.players[j].ai < (int)aidata.size(), "Uh-oh, AI index out of bounds");
 		switch (NetPlay.players[j].ai)
 		{
-		case AI_OPEN: sstrcpy(aitext, "Open"); break;
-		case AI_CLOSED: sstrcpy(aitext, "Closed"); break;
+		case AI_OPEN: sstrcpy(aitext, _("Open")); break;
+		case AI_CLOSED: sstrcpy(aitext, _("Closed")); break;
 		default: sstrcpy(aitext, aidata[NetPlay.players[j].ai].name); break;
 		}
 		iV_DrawText(aitext, x + nameX, y + 22);

@@ -24,7 +24,7 @@
  * Alex Lee. Pumpkin Studios. Eidos PLC 98,
  */
 
-#include "lib/framework/frame.h"
+#include "lib/framework/wzapp.h"
 #include "lib/framework/input.h"
 #include "lib/ivis_opengl/bitimage.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
@@ -80,7 +80,12 @@ bool			bLimiterLoaded = false;
 //
 bool CancelPressed(void)
 {
-	return keyPressed(KEY_ESC);
+	const bool cancel = keyPressed(KEY_ESC);
+	if (cancel)
+	{
+		inputLoseFocus();	// clear the input buffer.
+	}
+	return cancel;
 }
 
 
@@ -442,52 +447,69 @@ static bool startGraphicsOptionsMenu(void)
 			break;
 	}
 
+	// Scanlines
+	addTextButton(FRONTEND_SCANLINES, FRONTEND_POS3X - 35, FRONTEND_POS3Y, _("Scanlines"), 0);
+	switch (war_getScanlineMode())
+	{
+		case SCANLINES_OFF:
+			addTextButton(FRONTEND_SCANLINES_R, FRONTEND_POS3M - 55, FRONTEND_POS3Y, _("Off"), 0);
+			break;
+
+		case SCANLINES_50:
+			addTextButton(FRONTEND_SCANLINES_R, FRONTEND_POS3M - 55, FRONTEND_POS3Y, _("50%"), 0);
+			break;
+
+		case SCANLINES_BLACK:
+			addTextButton(FRONTEND_SCANLINES_R, FRONTEND_POS3M - 55, FRONTEND_POS3Y, _("Black"), 0);
+			break;
+	}
+
 	////////////
 	// screenshake
-	addTextButton(FRONTEND_SSHAKE,	 FRONTEND_POS3X-35,   FRONTEND_POS3Y, _("Screen Shake"), 0);
+	addTextButton(FRONTEND_SSHAKE,	 FRONTEND_POS4X-35,   FRONTEND_POS4Y, _("Screen Shake"), 0);
 	if(getShakeStatus())
 	{// shaking on
-		addTextButton(FRONTEND_SSHAKE_R, FRONTEND_POS3M-55,  FRONTEND_POS3Y, _("On"), 0);
+		addTextButton(FRONTEND_SSHAKE_R, FRONTEND_POS4M-55,  FRONTEND_POS4Y, _("On"), 0);
 	}
 	else
 	{//shaking off.
-		addTextButton(FRONTEND_SSHAKE_R, FRONTEND_POS3M-55,  FRONTEND_POS3Y, _("Off"), 0);
+		addTextButton(FRONTEND_SSHAKE_R, FRONTEND_POS4M-55,  FRONTEND_POS4Y, _("Off"), 0);
 	}
 
 	////////////
 	// fog
-	addTextButton(FRONTEND_FOGTYPE,	 FRONTEND_POS4X-35,   FRONTEND_POS4Y, _("Fog"), 0);
+	addTextButton(FRONTEND_FOGTYPE,	 FRONTEND_POS5X-35,   FRONTEND_POS5Y, _("Fog"), 0);
 	if(war_GetFog())
 	{
-		addTextButton(FRONTEND_FOGTYPE_R,FRONTEND_POS4M-55,FRONTEND_POS4Y, _("Mist"), 0);
+		addTextButton(FRONTEND_FOGTYPE_R,FRONTEND_POS5M-55,FRONTEND_POS5Y, _("Mist"), 0);
 	}
 	else
 	{
-		addTextButton(FRONTEND_FOGTYPE_R,FRONTEND_POS4M-55,FRONTEND_POS4Y, _("Fog Of War"), 0);
+		addTextButton(FRONTEND_FOGTYPE_R,FRONTEND_POS5M-55,FRONTEND_POS5Y, _("Fog Of War"), 0);
 	}
 
 	////////////
 	//subtitle mode.
-	addTextButton(FRONTEND_SUBTITLES, FRONTEND_POS5X - 35, FRONTEND_POS5Y, _("Subtitles"), 0);
+	addTextButton(FRONTEND_SUBTITLES, FRONTEND_POS6X - 35, FRONTEND_POS6Y, _("Subtitles"), 0);
 	if (!seq_GetSubtitles())
 	{
-		addTextButton(FRONTEND_SUBTITLES_R, FRONTEND_POS5M - 55, FRONTEND_POS5Y, _("Off"), 0);
+		addTextButton(FRONTEND_SUBTITLES_R, FRONTEND_POS6M - 55, FRONTEND_POS6Y, _("Off"), 0);
 	}
 	else
 	{
-		addTextButton(FRONTEND_SUBTITLES_R, FRONTEND_POS5M - 55, FRONTEND_POS5Y, _("On"), 0);
+		addTextButton(FRONTEND_SUBTITLES_R, FRONTEND_POS6M - 55, FRONTEND_POS6Y, _("On"), 0);
 	}
 
 	////////////
 	//shadows
-	addTextButton(FRONTEND_SHADOWS, FRONTEND_POS6X - 35, FRONTEND_POS6Y, _("Shadows"), 0);
+	addTextButton(FRONTEND_SHADOWS, FRONTEND_POS7X - 35, FRONTEND_POS7Y, _("Shadows"), 0);
 	if (getDrawShadows())
 	{
-		addTextButton(FRONTEND_SHADOWS_R, FRONTEND_POS6M - 55,  FRONTEND_POS6Y, _("On"), 0);
+		addTextButton(FRONTEND_SHADOWS_R, FRONTEND_POS7M - 55,  FRONTEND_POS7Y, _("On"), 0);
 	}
 	else
 	{	// not flipped
-		addTextButton(FRONTEND_SHADOWS_R, FRONTEND_POS6M - 55,  FRONTEND_POS6Y, _("Off"), 0);
+		addTextButton(FRONTEND_SHADOWS_R, FRONTEND_POS7M - 55,  FRONTEND_POS7Y, _("Off"), 0);
 	}
 
 	// Add some text down the side of the form
@@ -593,6 +615,26 @@ bool runGraphicsOptionsMenu(void)
 				break;
 		}
 		break;
+
+	case FRONTEND_SCANLINES:
+	case FRONTEND_SCANLINES_R:
+		switch (mode = war_getScanlineMode())
+		{
+			case SCANLINES_OFF:
+				war_setScanlineMode(SCANLINES_50);
+				widgSetString(psWScreen, FRONTEND_SCANLINES_R, _("50%"));
+				break;
+
+			case SCANLINES_50:
+				war_setScanlineMode(SCANLINES_BLACK);
+				widgSetString(psWScreen, FRONTEND_SCANLINES_R, _("Black"));
+				break;
+
+			case SCANLINES_BLACK:
+				war_setScanlineMode(SCANLINES_OFF);
+				widgSetString(psWScreen, FRONTEND_SCANLINES_R, _("Off"));
+				break;
+		}
 
 	default:
 		break;
@@ -771,12 +813,9 @@ static bool startVideoOptionsMenu(void)
 	return true;
 }
 
-struct HACK { int w, h; operator bool() { return w != 0; } HACK *operator ->() { return this; }};  // HACK Make it compile. Previous behaviour was to crash, anyway.
-
 bool runVideoOptionsMenu(void)
 {
-	//SDL_Rect **modes = SDL_ListModes(NULL, SDL_FULLSCREEN | SDL_HWSURFACE);
-	HACK modes[] = {{1920, 1200}, {1920, 1080}, {1680, 1050}, {1600, 1200}, {1440, 900}, {1280, 1024}, {1280, 960}, {1280, 800}, {1280, 720}, {1024, 768}, {800, 600}, {720, 576}, {720, 480}, {640, 480}, {0, 0}};
+	QList<QSize> modes = WzMainWindow::instance()->availableResolutions();
 	UDWORD id = widgRunScreen(psWScreen);
 	int level;
 
@@ -830,47 +869,38 @@ bool runVideoOptionsMenu(void)
 		case FRONTEND_RESOLUTION:
 		case FRONTEND_RESOLUTION_R:
 		{
-			int current, count, oldcurrent;
+			int current, count;
 
 			// Get the current mode offset
-			for (count = 0, current = 0; modes[count]; count++)
+			for (count = 0, current = 0; count < modes.size(); count++)
 			{
-				if (war_GetWidth() == modes[count]->w
-				 && war_GetHeight() == modes[count]->h)
+				if (war_GetWidth() == modes[count].width() && war_GetHeight() == modes[count].height())
 				{
 					current = count;
 				}
 			}
 
 			// Increment and clip if required
-			// Hide resolutions lower than Warzone can support
-			oldcurrent = current;
-			do
+			if (!mouseReleased(MOUSE_RMB))
 			{
-				if (!mouseReleased(MOUSE_RMB))
-				{
-					if (--current < 0)
-						current = count - 1;
-				}
-				else
-				{
-					if (++current == count)
-						current = 0;
-				}	
-			} while ((modes[current]->w < 640 || modes[current]->h < 480)
-				&& current != oldcurrent);
+				if (--current < 0)
+					current = count - 1;
+			}
+			else
+			{
+				if (++current == count)
+					current = 0;
+			}
 
 			// Set the new width and height (takes effect on restart)
-			war_SetWidth(modes[current]->w);
-			war_SetHeight(modes[current]->h);
+			war_SetWidth(modes[current].width());
+			war_SetHeight(modes[current].height());
 
 			// Generate the textual representation of the new width and height
-			snprintf(resolution, WIDG_MAXSTR, "%d x %d", modes[current]->w,
-			         modes[current]->h);
+			snprintf(resolution, WIDG_MAXSTR, "%d x %d", modes[current].width(), modes[current].height());
 
 			// Update the widget
 			widgSetString(psWScreen, FRONTEND_RESOLUTION_R, resolution);
-
 			break;
 		}
 

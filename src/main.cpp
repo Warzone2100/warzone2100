@@ -26,7 +26,6 @@
 #include <QtCore/QTextCodec>
 #include <QtGui/QApplication>
 #include <QtGui/QMessageBox>
-#include <QtGui/QDesktopWidget>
 
 #if defined(WZ_OS_WIN)
 #  include <shlobj.h> /* For SHGetFolderPath */
@@ -1071,9 +1070,9 @@ bool getUTF8CmdLine(int* const utfargc, const char*** const utfargv) // explicit
 
 int main(int argc, char *argv[])
 {
+	QApplication app(argc, argv);
 	int utfargc = argc;
 	const char** utfargv = (const char**)argv;
-	QApplication app(argc, argv);
 
 #ifdef WZ_OS_MAC
 	cocoaInit();
@@ -1184,7 +1183,7 @@ int main(int argc, char *argv[])
 		soundTest();
 	}
 
-	// Now we check the mods to see if they exsist or not (specified on the command line)
+	// Now we check the mods to see if they exist or not (specified on the command line)
 	// They are all capped at 100 mods max(see clparse.c)
 	// FIX ME: I know this is a bit hackish, but better than nothing for now?
 	{
@@ -1274,29 +1273,27 @@ int main(int argc, char *argv[])
 		format.setSampleBuffers(true);
 		format.setSamples(war_getFSAA());
 	}
-	WzMainWindow mainwindow(format);
+	WzMainWindow mainwindow(QSize(w, h), format);
+	mainwindow.setMinimumResolution(QSize(800, 600));
 	if (!mainwindow.context()->isValid())
 	{
 		QMessageBox::critical(NULL, "Oops!", "Warzone2100 failed to create an OpenGL context. This probably means that your graphics drivers are out of date. Try updating them!");
 		return EXIT_FAILURE;
 	}
-	if (war_getFullscreen())
-	{
-		QDesktopWidget *desktop = qApp->desktop();
-		w = desktop->width();
-		h = desktop->height();
-		pie_SetVideoBufferWidth(w);
-		pie_SetVideoBufferHeight(h);
-	}
-	mainwindow.setMinimumSize(w, h);
-	mainwindow.setMaximumSize(w, h);
-	if (war_getFullscreen())
-	{
-		WzMainWindow::instance()->showFullScreen();
-	}
 	screenWidth = w;
 	screenHeight = h;
 	mainwindow.show();
+	if (war_getFullscreen())
+	{
+		pie_SetVideoBufferWidth(w);
+		pie_SetVideoBufferHeight(h);
+		mainwindow.showFullScreen();
+	}
+	else
+	{
+		mainwindow.setMinimumSize(w, h);
+		mainwindow.setMaximumSize(w, h);
+	}
 	mainwindow.setReadyToPaint();
 
 	char buf[256];
@@ -1365,6 +1362,7 @@ int main(int argc, char *argv[])
 	debug(LOG_MAIN, "Entering main loop");
 	app.exec();
 	saveConfig();
+	systemShutdown();
 	debug(LOG_MAIN, "Completed shutting down Warzone 2100");
 	return EXIT_SUCCESS;
 }

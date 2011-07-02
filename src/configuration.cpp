@@ -53,7 +53,7 @@ static const char *fileName = "config";
 // ////////////////////////////////////////////////////////////////////////////
 bool loadConfig()
 {
-	WzConfig ini(fileName);
+	QSettings ini(PHYSFS_getWriteDir() + QString("/") + fileName, QSettings::IniFormat);
 	if (ini.status() != QSettings::NoError)
 	{
 		debug(LOG_ERROR, "Could not open configuration file \"%s\"", fileName);
@@ -81,6 +81,7 @@ bool loadConfig()
 		ini.value("fontfacebold", "Bold").toString().toUtf8().constData());
 	NETsetGameserverPort(ini.value("gameserver_port", GAMESERVERPORT).toInt());
 	war_SetFMVmode((FMV_MODE)ini.value("FMVmode", FMV_FULLSCREEN).toInt());
+	war_setScanlineMode((SCANLINE_MODE)ini.value("scanlines", SCANLINES_OFF).toInt());
 	seq_SetSubtitles(ini.value("subtitles", true).toBool());
 	setDifficultyLevel((DIFFICULTY_LEVEL)ini.value("difficulty", DL_NORMAL).toInt());
 	war_SetFog(ini.value("visfog", true).toBool());
@@ -161,7 +162,7 @@ bool loadConfig()
 // ////////////////////////////////////////////////////////////////////////////
 bool saveConfig()
 {
-	WzConfig ini(fileName);
+	QSettings ini(PHYSFS_getWriteDir() + QString("/") + fileName, QSettings::IniFormat);
 	if (ini.status() != QSettings::NoError)
 	{
 		debug(LOG_ERROR, "Could not open configuration file \"%s\"", fileName);
@@ -191,13 +192,14 @@ bool saveConfig()
 	ini.setValue("visfog",(SDWORD)(!war_GetFog()));			// fogtype
 	ini.setValue("shake",(SDWORD)(getShakeStatus()));		// screenshake
 	ini.setValue("mouseflip",(SDWORD)(getInvertMouseStatus()));	// flipmouse
-	ini.setValue("nomousewrap", (SDWORD)getMouseWarp()); 		// mouse wrap
+	ini.setValue("nomousewarp", (SDWORD)getMouseWarp()); 		// mouse warp
 	ini.setValue("RightClickOrders",(SDWORD)(getRightClickOrders()));
 	ini.setValue("MiddleClickRotate",(SDWORD)(getMiddleClickRotate()));
 	ini.setValue("showFPS", (SDWORD)showFPS);
 	ini.setValue("shadows",(SDWORD)(getDrawShadows()));	// shadows
 	ini.setValue("sound", (SDWORD)war_getSoundEnabled());
 	ini.setValue("FMVmode",(SDWORD)(war_GetFMVmode()));		// sequences
+	ini.setValue("scanlines", (SDWORD)war_getScanlineMode());
 	ini.setValue("subtitles",(SDWORD)(seq_GetSubtitles()));		// subtitles
 	ini.setValue("radarObjectMode",(SDWORD)bEnemyAllyRadarColor);    // enemy/allies radar view
 	ini.setValue("radarTerrainMode",(SDWORD)radarDrawMode);
@@ -248,7 +250,7 @@ bool saveConfig()
 // Ensures that others' games don't change our own configuration settings
 bool reloadMPConfig(void)
 {
-	WzConfig ini(fileName);
+	QSettings ini(PHYSFS_getWriteDir() + QString("/") + fileName, QSettings::IniFormat);
 	if (ini.status() != QSettings::NoError)
 	{
 		debug(LOG_ERROR, "Could not open configuration file \"%s\"", fileName);

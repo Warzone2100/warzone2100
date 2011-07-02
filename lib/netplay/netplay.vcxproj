@@ -13,6 +13,10 @@
       <Configuration>STLport-Debug</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="STLport-Release|Win32">
+      <Configuration>STLport-Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C7698ECE-9255-4A60-8091-A9A76E8BE911}</ProjectGuid>
@@ -21,6 +25,11 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='STLport-Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -39,6 +48,9 @@
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='STLport-Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
@@ -53,10 +65,13 @@
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Configuration)\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='STLport-Debug|Win32'">$(Configuration)\</IntDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='STLport-Release|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\</IntDir>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\lib\netplay;..\devpkg\include;$(Qtdir)\include;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='STLport-Debug|Win32'">..\devpkg\stlport5.2.1\stlport;..\devpkg\include;$(Qtdir)\include;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\devpkg\include;$(Qtdir)\include;$(IncludePath)</IncludePath>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='STLport-Release|Win32'">$(Configuration)\</IntDir>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\lib\netplay;..\devpkg\include;$(Qtdir)\include;..\..\3rdparty\;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='STLport-Debug|Win32'">..\devpkg\stlport5.2.1\stlport;..\devpkg\include;$(Qtdir)\include;..\..\lib\netplay;..\..\3rdparty\;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\lib\netplay;..\devpkg\include;$(Qtdir)\include;..\..\3rdparty\;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='STLport-Release|Win32'">..\devpkg\stlport5.2.1\stlport;..\..\lib\netplay;..\devpkg\include;$(Qtdir)\include;..\..\3rdparty\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -113,8 +128,20 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='STLport-Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..;$(SolutionDir)\..\devpkg\include;$(SolutionDir)\..\devpkg\include\SDL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;STATICLIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+    </ClCompile>
+  </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="miniupnpc\connecthostport.c" />
+    <ClCompile Include="..\..\3rdparty\miniupnpc\connecthostport.c" />
     <ClCompile Include="netjoin_stub.cpp" />
     <ClCompile Include="netlog.cpp" />
     <ClCompile Include="netplay.cpp" />
@@ -126,33 +153,35 @@
       <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)</XMLDocumentationFileName>
       <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='STLport-Debug|Win32'">$(IntDir)</XMLDocumentationFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='STLport-Release|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
       <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='STLport-Release|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
     </ClCompile>
-    <ClCompile Include="miniupnpc\igd_desc_parse.c" />
-    <ClCompile Include="miniupnpc\minisoap.c" />
-    <ClCompile Include="miniupnpc\minissdpc.c" />
-    <ClCompile Include="miniupnpc\miniupnpc.c" />
-    <ClCompile Include="miniupnpc\miniwget.c" />
-    <ClCompile Include="miniupnpc\minixml.c" />
-    <ClCompile Include="miniupnpc\upnpcommands.c" />
-    <ClCompile Include="miniupnpc\upnperrors.c" />
-    <ClCompile Include="miniupnpc\upnpreplyparse.c" />
+    <ClCompile Include="..\..\3rdparty\miniupnpc\igd_desc_parse.c" />
+    <ClCompile Include="..\..\3rdparty\miniupnpc\minisoap.c" />
+    <ClCompile Include="..\..\3rdparty\miniupnpc\minissdpc.c" />
+    <ClCompile Include="..\..\3rdparty\miniupnpc\miniupnpc.c" />
+    <ClCompile Include="..\..\3rdparty\miniupnpc\miniwget.c" />
+    <ClCompile Include="..\..\3rdparty\miniupnpc\minixml.c" />
+    <ClCompile Include="..\..\3rdparty\miniupnpc\upnpcommands.c" />
+    <ClCompile Include="..\..\3rdparty\miniupnpc\upnperrors.c" />
+    <ClCompile Include="..\..\3rdparty\miniupnpc\upnpreplyparse.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="miniupnpc\bsdqueue.h" />
-    <ClInclude Include="miniupnpc\codelength.h" />
-    <ClInclude Include="miniupnpc\connecthostport.h" />
-    <ClInclude Include="miniupnpc\declspec.h" />
-    <ClInclude Include="miniupnpc\igd_desc_parse.h" />
-    <ClInclude Include="miniupnpc\minisoap.h" />
-    <ClInclude Include="miniupnpc\minissdpc.h" />
-    <ClInclude Include="miniupnpc\miniupnpc.h" />
-    <ClInclude Include="miniupnpc\miniupnpcstrings.h" />
-    <ClInclude Include="miniupnpc\miniwget.h" />
-    <ClInclude Include="miniupnpc\minixml.h" />
-    <ClInclude Include="miniupnpc\upnpcommands.h" />
-    <ClInclude Include="miniupnpc\upnperrors.h" />
-    <ClInclude Include="miniupnpc\upnpreplyparse.h" />
+    <ClInclude Include="..\..\3rdparty\miniupnpc\bsdqueue.h" />
+    <ClInclude Include="..\..\3rdparty\miniupnpc\codelength.h" />
+    <ClInclude Include="..\..\3rdparty\miniupnpc\connecthostport.h" />
+    <ClInclude Include="..\..\3rdparty\miniupnpc\declspec.h" />
+    <ClInclude Include="..\..\3rdparty\miniupnpc\igd_desc_parse.h" />
+    <ClInclude Include="..\..\3rdparty\miniupnpc\minisoap.h" />
+    <ClInclude Include="..\..\3rdparty\miniupnpc\minissdpc.h" />
+    <ClInclude Include="..\..\3rdparty\miniupnpc\miniupnpc.h" />
+    <ClInclude Include="..\..\3rdparty\miniupnpc\miniupnpcstrings.h" />
+    <ClInclude Include="..\..\3rdparty\miniupnpc\miniwget.h" />
+    <ClInclude Include="..\..\3rdparty\miniupnpc\minixml.h" />
+    <ClInclude Include="..\..\3rdparty\miniupnpc\upnpcommands.h" />
+    <ClInclude Include="..\..\3rdparty\miniupnpc\upnperrors.h" />
+    <ClInclude Include="..\..\3rdparty\miniupnpc\upnpreplyparse.h" />
     <ClInclude Include="netlog.h" />
     <ClInclude Include="netplay.h" />
     <ClInclude Include="netsocket.h" />

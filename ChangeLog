@@ -1,3 +1,58 @@
+master_20110519
+ * General:
+   * Change: Based on Qt now
+   * Change: Started porting game scripts to Javascript (QtScript)
+   * Change: Started porting savegames to ini files, saved in "savegames" (not "savegame" like before)
+   * New: Two new 2 player maps - Vision and Roughness (commit:9bf8e6b91724ccd9ecc5ef20a40ecc4afa7ca1a7, commit:7fc26087cde4420898d8d896b7b8fd2b538f39fd)
+   * Change: Limited map-mod support (ticket:2610, commit:2083b1f4b7469aae9d09aa4f50120f1ef3142191, commit:a3cff8758beba8adef804d3620e747fefb54e038, commit:b893e4dec544d402bdb9e31bb93a1f3b5593bd6e)
+   * Change: Double the open speed of gates (commit:18e13e2918cbfed27e68e164849aaefc6cc4c853)
+   * Fix: Make UPnP work again (ticket:2631, commit:89063105fa5ffe51fa6317ed0fead9a3f050f5bd)
+   * Fix: Make fullscreen work, using the primary screen only (commit:a0ed219ad70608ae6e7a4d45ed5de032625416ac, commit:b808220f9b9338605ac1765640d5ce5a0ff5f6b9)
+   * Fix: Make units follow their orders better (ticket:2391, commit:54a1771b647fc0c6c5c271e4127d407be2442ffe)
+   * Fix: Make localized sounds in sequences.wz work in all cases (ticket:2728, commit:1c57015f228ff069a6013c7d69fc294e72229b47)
+ * Graphics:
+   * Change: Allow video resolutions up to 1024x1024 (ticket:2682, commit:36a2fe771ce52b364fcd20171d0476b9e115e000)
+   * Change: Add an option to show videos with black or 50% dimmed scanlines (ticket:2095, commit:f934b1bfc36a8e6de0ef3da4dddbdb4b5bc04bf8)
+   * Change: Show power generator effects for all players (commit:049165197b779a24b378e54dfb8a4fe89783a708)
+   * Fix: Make units not flicker (commit:de3be04ac59a194fd88b1611805c2c908ae8be6f)
+ * Multiplayer balance (ticket:2687, commit:d2d87a65fd29a0a4e7cb9fe6fd85e08cd89b7018):
+   * HP increased:
+     * Leopard 85 → 107
+     * Panther 145 → 193
+     * Tiger 225 → 284
+   * Range increased:
+     * Minipod 3-8 → 4-9
+     * MRA 3-8.5 → 4-9
+   * Pepperpot:
+     * Damage increased 50 → 60 (splash 30 → 40)
+     * Reload time decreased 2.0 → 1.8
+   * Heavy Laser (normal and VTOL):
+     * Price decreased 600 → 400
+     * Build points decreased 1000 → 600
+     * HP increased 200 → 300
+   * Twin Assault Cannon:
+     * Damage decreased 55 → 50 (splash 45 → 40)
+   * Plasmite Bomb:
+     * Weight increased 12000 → 15000
+   * VTOL Sunburst AA:
+     * Damage increased 100 → 120
+     * Splash damage removed
+   * Lowered prerequisites:
+     * Thermal Armor from Dense Composite Alloys to Composite Alloys Mk3
+     * High Intensity Thermal Armor from Superdense Composite Alloys to Dense Composite Alloys Mk3
+ * Mods:
+   * Fix: 1.10 balance (ticket:2560, commit:59b6c670deb82fe3eb5ac978f005e88a42cc2361)
+ * Translations:
+   * New: Hungarian (commit:8bc7aa208c9daeb4b382aa1e48bb78dbfe849a98, commit:846cf99978839963c3c298a0b07fccb492211601)
+   * New: Catalan (ticket:2616, commit:38088f37bc525bd94e20c6986adf3304c5a72d44)
+   * Update: German (ticket:2681, ticket:2502, ticket:2729, commit:2d0230cbecbe93e6b567a844c4aad50912158ef1, commit:99c47f42715006dd45e79fe8655a85076946839d, commit:4071ab708eb5956a1b59d1029fa123ff40089553)
+   * Update: Spanish (ticket:2690, commit:961cd68ee47f36917ed332ea58e724ef359f88b2)
+   * Update: Dutch (ticket:2720, ticket:2723, commit:f1a56c232ab6eda2d1b8a05338333074fb2cb802, commit:fd1e836cb03313aec98f3dcb5f3a7eccc5f17879, commit:c70c92b9dcb77b15f7ec122385389c26d65001db)
+   * Update: Turkish (ticket:2727, commit:444f2d6e24408033c602c0633a83825fd6c2eb01)
+
+master_20110320qt and before:
+ * Stuff. Lots of stuff.
+
 0000-00-00: SVN
  * General:
    * Fix: Tells user if mod entered on the command line / shorcut is enabled, or is invalid. Output is to stdout or stderr (r7586)

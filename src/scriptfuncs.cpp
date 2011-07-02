@@ -198,12 +198,13 @@ bool scrGetDerrick()
 		x = derricks[i].x;
 		y = derricks[i].y;
 		MAPTILE *psTile = worldTile(x, y);
+		ASSERT(psTile, "No derrick or oil at position!");
 		if (psTile)
 		{
 			scrFunctionResult.v.oval = psTile->psObject;
 		}
 	}
-	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &scrFunctionResult))
+	if (!stackPushResult((INTERP_TYPE)ST_BASEOBJECT, &scrFunctionResult))
 	{
 		ASSERT(false, "Failed to push result");
 		return false;
@@ -4043,13 +4044,11 @@ bool scrAllianceExistsBetween(void)
 {
 	UDWORD i,j;
 
-
 	if (!stackPopParams(2, VAL_INT, &i,VAL_INT, &j))
 	{
 		return false;
 	}
-	ASSERT_OR_RETURN(false, i < MAX_PLAYERS && j < MAX_PLAYERS, "Invalid player parameters %d and %d", i, j);
-	if(alliances[i][j] == ALLIANCE_FORMED)
+	if (i < MAX_PLAYERS && j < MAX_PLAYERS && alliances[i][j] == ALLIANCE_FORMED)
 	{
 		scrFunctionResult.v.bval = true;
 		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
@@ -4058,7 +4057,6 @@ bool scrAllianceExistsBetween(void)
 		}
 		return true;
 	}
-
 	scrFunctionResult.v.bval = false;
 	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
@@ -4440,25 +4438,21 @@ bool scrSetLandingZone(void)
 	}
 
 	//check the values - check against max possible since can set in one mission for the next
-	//if (x1 > (SDWORD)mapWidth)
 	if (x1 > (SDWORD)MAP_MAXWIDTH)
 	{
 		ASSERT( false, "scrSetLandingZone: x1 is greater than max mapWidth" );
 		return false;
 	}
-	//if (x2 > (SDWORD)mapWidth)
 	if (x2 > (SDWORD)MAP_MAXWIDTH)
 	{
 		ASSERT( false, "scrSetLandingZone: x2 is greater than max mapWidth" );
 		return false;
 	}
-	//if (y1 > (SDWORD)mapHeight)
 	if (y1 > (SDWORD)MAP_MAXHEIGHT)
 	{
 		ASSERT( false, "scrSetLandingZone: y1 is greater than max mapHeight" );
 		return false;
 	}
-	//if (y2 > (SDWORD)mapHeight)
 	if (y2 > (SDWORD)MAP_MAXHEIGHT)
 	{
 		ASSERT( false, "scrSetLandingZone: y2 is greater than max mapHeight" );
@@ -4471,7 +4465,7 @@ bool scrSetLandingZone(void)
 		return false;
 	}
 
-	setLandingZone((UBYTE)x1, (UBYTE)y1, (UBYTE)x2, (UBYTE)y2);
+	setNoGoArea((UBYTE)x1, (UBYTE)y1, (UBYTE)x2, (UBYTE)y2, 0);
 
 	return true;
 }
@@ -4488,25 +4482,21 @@ bool scrSetLimboLanding(void)
 	}
 
 	//check the values - check against max possible since can set in one mission for the next
-	//if (x1 > (SDWORD)mapWidth)
 	if (x1 > (SDWORD)MAP_MAXWIDTH)
 	{
 		ASSERT( false, "scrSetLimboLanding: x1 is greater than max mapWidth" );
 		return false;
 	}
-	//if (x2 > (SDWORD)mapWidth)
 	if (x2 > (SDWORD)MAP_MAXWIDTH)
 	{
 		ASSERT( false, "scrSetLimboLanding: x2 is greater than max mapWidth" );
 		return false;
 	}
-	//if (y1 > (SDWORD)mapHeight)
 	if (y1 > (SDWORD)MAP_MAXHEIGHT)
 	{
 		ASSERT( false, "scrSetLimboLanding: y1 is greater than max mapHeight" );
 		return false;
 	}
-	//if (y2 > (SDWORD)mapHeight)
 	if (y2 > (SDWORD)MAP_MAXHEIGHT)
 	{
 		ASSERT( false, "scrSetLimboLanding: y2 is greater than max mapHeight" );
@@ -4521,8 +4511,8 @@ bool scrSetLimboLanding(void)
 
 	setNoGoArea((UBYTE)x1, (UBYTE)y1, (UBYTE)x2, (UBYTE)y2, LIMBO_LANDING);
 
-    //this calls the Droids from the Limbo list onto the map
-    placeLimboDroids();
+	// this calls the Droids from the Limbo list onto the map
+	placeLimboDroids();
 
 	return true;
 }

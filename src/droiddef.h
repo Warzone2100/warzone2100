@@ -195,7 +195,7 @@ struct DROID : public BASE_OBJECT
 
 	/* Action data */
 	DROID_ACTION    action;
-	UDWORD          actionX, actionY;
+	Vector2i        actionPos;
 	BASE_OBJECT*    psActionTarget[DROID_MAXWEAPS]; ///< Action target object
 	UDWORD          actionStarted;                  ///< Game time action started
 	UDWORD          actionPoints;                   ///< number of points done by action since start

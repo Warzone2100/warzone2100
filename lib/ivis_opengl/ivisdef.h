@@ -80,6 +80,7 @@ struct iIMDShape
 	unsigned int flags;	
 	int texpage;
 	int tcmaskpage;
+	int normalpage;
 	int sradius, radius;
 	Vector3i min, max;
 

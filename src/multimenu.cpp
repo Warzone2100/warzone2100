@@ -59,6 +59,7 @@
 #include "keybind.h"
 #include "loop.h"
 #include "lib/framework/frameint.h"
+#include "frontend.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // defines
@@ -664,7 +665,7 @@ static void closeMultiRequester(void)
 
 bool runMultiRequester(UDWORD id,UDWORD *mode, char *chosen,UDWORD *chosenValue)
 {
-	if( id==M_REQUEST_CLOSE)							// close
+	if( (id == M_REQUEST_CLOSE) || CancelPressed() )			// user hit close box || hit the cancel key
 	{
 		closeMultiRequester();
 		return true;

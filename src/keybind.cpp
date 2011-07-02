@@ -848,14 +848,14 @@ void	kf_SystemClose( void )
 /* Zooms out from display */
 void	kf_ZoomOut( void )
 {
-	distance = std::min<int>(distance + realTimeAdjustedIncrement(MAP_ZOOM_RATE), MAXDISTANCE);
-	UpdateFogDistance(distance);
+	setViewDistance(std::min<int>(getViewDistance() + realTimeAdjustedIncrement(MAP_ZOOM_RATE), MAXDISTANCE));
+	UpdateFogDistance(getViewDistance());
 }
 
 void kf_ZoomOutStep(void)
 {
-	distance = std::min<int>(distance + MAP_ZOOM_RATE/3, MAXDISTANCE);
-	UpdateFogDistance(distance);
+	setViewDistance(std::min<int>(getViewDistance() + MAP_ZOOM_RATE/3, MAXDISTANCE));
+	UpdateFogDistance(getViewDistance());
 }
 
 // --------------------------------------------------------------------------
@@ -887,14 +887,14 @@ void	kf_RadarZoomOut( void )
 /* Zooms in the map */
 void	kf_ZoomIn( void )
 {
-	distance = std::max<int>(distance - realTimeAdjustedIncrement(MAP_ZOOM_RATE), MINDISTANCE);
-	UpdateFogDistance(distance);
+	setViewDistance(std::max<int>(getViewDistance() - realTimeAdjustedIncrement(MAP_ZOOM_RATE), MINDISTANCE));
+	UpdateFogDistance(getViewDistance());
 }
 
 void kf_ZoomInStep(void)
 {
-	distance = std::max<int>(distance - MAP_ZOOM_RATE/3, MINDISTANCE);
-	UpdateFogDistance(distance);
+	setViewDistance(std::max<int>(getViewDistance() - MAP_ZOOM_RATE/3, MINDISTANCE));
+	UpdateFogDistance(getViewDistance());
 }
 
 // --------------------------------------------------------------------------
@@ -998,7 +998,7 @@ void	kf_PitchForward( void )
 void	kf_ResetPitch( void )
 {
 	player.r.x = DEG(360-20);
-	distance = START_DISTANCE;
+	setViewDistance(START_DISTANCE);
 }
 
 // --------------------------------------------------------------------------

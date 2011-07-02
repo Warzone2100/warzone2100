@@ -87,7 +87,6 @@ install: build
 	dh_testroot
 	dh_prep
 	$(MAKE) install DESTDIR=$(CURDIR)/debian/tmp
-	rm -rf debian/tmp/usr/share/doc/warzone2100
 # -------------------------------------
 
 
@@ -120,7 +119,7 @@ binary-arch: build install
 	dh_installdocs -a
 	dh_installmenu -a
 	dh_icons -a
-	dh_installman -a debian/warzone2100.6
+	dh_installman -a doc/warzone2100.6
 	dh_compress -a
 	dh_fixperms -a
 	dh_installdeb -a
