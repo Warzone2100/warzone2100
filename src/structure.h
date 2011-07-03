@@ -174,7 +174,6 @@ extern bool checkStructureStatus( STRUCTURE_STATS *psStats, UDWORD player, UDWOR
 /*sets the point new droids go to - x/y in world coords for a Factory*/
 extern void setAssemblyPoint(FLAG_POSITION *psAssemblyPoint, UDWORD x, UDWORD y,
                              UDWORD player, bool bCheck);
-//extern void createAssemblyPoint(STRUCTURE* psStruct);
 
 /* consider delivery points when selected by player*/
 extern void processDeliveryPoint(UDWORD player, UDWORD x, UDWORD y);

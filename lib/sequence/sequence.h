@@ -29,4 +29,10 @@ extern void seq_Shutdown(void);
 extern int seq_GetFrameNumber(void);
 extern void seq_SetDisplaySize(int sizeX, int sizeY, int posX, int posY);
 
+typedef enum {
+	SCANLINES_OFF,
+	SCANLINES_50,
+	SCANLINES_BLACK
+} SCANLINE_MODE;
+
 #endif // __INCLUDED_LIB_SEQUENCE_SEQUENCE_H__

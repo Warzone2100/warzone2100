@@ -18,7 +18,6 @@ private     int         transPlayer;
 
 trigger loadTransTrig(every, 10);	//extra ones come in every 1 seconds - (used to be 50)
 trigger nextTransTrig(every, 3000);	//extra ones come in every 5 minutes after 1st load
-//trigger startTransTrig(CALL_NO_REINFORCEMENTS_LEFT);
 
 event start(CALL_GAMEINIT)
 {

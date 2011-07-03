@@ -81,6 +81,10 @@ win32/__BUILD_CONFIG.USER
 /src/autorevision.h
 *.moc.h
 
+/doc/quickstartguide.html
+/doc/quickstartguide.pdf
+/doc/warzone2100.6
+
 # Generated executables:
 /build_tools/autorevision/autorevision
 /src/warzone2100

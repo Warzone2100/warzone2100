@@ -37,6 +37,7 @@
 
 #include "lib/framework/file.h"
 #include "lib/gamelib/gtime.h"
+#include "multiplay.h"
 
 #include "qtscriptfuncs.h"
 
@@ -50,25 +51,29 @@ struct timerNode
 	int player;
 	timerNode() {}
 	timerNode(QScriptEngine *caller, QString val, int plr, int frame) : function(val) { player = plr; ms = frame; frameTime = frame + gameTime; engine = caller; }
+	bool operator== (const timerNode &t) { return function == t.function && player == t.player; }
 	// implement operator less TODO
 };
 
 /// List of timer events for scripts. Before running them, we sort the list then run as many as we have time for.
 /// In this way, we implement load balancing of events and keep frame rates tidy for users. Since scripts run on the
 /// host, we do not need to worry about each peer simulating the world differently.
-QList<timerNode> timers;
+static QList<timerNode> timers;
 
 /// Scripting engine (what others call the scripting context, but QtScript's nomenclature is different).
-QList<QScriptEngine *> scripts;
+static QList<QScriptEngine *> scripts;
 
 /// Remember what names are used internally in the scripting engine, we don't want to save these to the savegame
-QHash<QString, int> internalNamespace;
+static QHash<QString, int> internalNamespace;
 
 // Call a function by name
 static bool callFunction(QScriptEngine *engine, QString function, QScriptValueList args)
 {
 	QScriptValue value = engine->globalObject().property(function);
-	ASSERT_OR_RETURN(false, value.isValid() && value.isFunction(), "Invalid function type for \"%s\"", function.toAscii().constData());
+	if (!value.isValid() || !value.isFunction())
+	{
+		return false;	// not necessarily an error, may just be a trigger that is not defined (ie not needed)
+	}
 	QScriptValue result = value.call(QScriptValue(), args);
 	if (engine->hasUncaughtException())
 	{
@@ -111,10 +116,9 @@ static QScriptValue js_removeTimer(QScriptContext *context, QScriptEngine *engin
 /// quoted, otherwise they will be inlined!
 static QScriptValue js_setGlobalTimer(QScriptContext *context, QScriptEngine *engine)
 {
-	QScriptValue function = context->argument(0);
+	QString funcName = context->argument(0).toString();
 	QScriptValue ms = context->argument(1);
 	int player = engine->globalObject().property("me").toInt32();
-	QString funcName = function.toString();
 	timerNode node(engine, funcName, player, ms.toInt32() + gameTime);
 	timers.push_back(node);
 	return QScriptValue();
@@ -124,13 +128,45 @@ static QScriptValue js_setGlobalTimer(QScriptContext *context, QScriptEngine *en
 /// quoted, otherwise they will be inlined!
 static QScriptValue js_setObjectTimer(QScriptContext *context, QScriptEngine *engine)
 {
-	QScriptValue function = context->argument(0);
+	QString funcName = context->argument(0).toString();
 	QScriptValue ms = context->argument(1);
 	QScriptValue obj = context->argument(2);
 	int player = engine->globalObject().property("me").toInt32();
-	timerNode node(engine, function.toString(), player, ms.toInt32());
+	timerNode node(engine, funcName, player, ms.toInt32());
 	node.baseobj = obj.toString();
 	timers.push_back(node);
+	return QScriptValue();
+}
+
+static QScriptValue js_include(QScriptContext *context, QScriptEngine *engine)
+{
+	QString path = context->argument(0).toString();
+	UDWORD size;
+	char *bytes = NULL;
+	if (!loadFile(path.toAscii().constData(), &bytes, &size))
+	{
+		debug(LOG_ERROR, "Failed to read include file \"%s\"", path.toAscii().constData());
+		return false;
+	}
+	QString source = QString::fromAscii(bytes, size);
+	free(bytes);
+	QScriptSyntaxCheckResult syntax = QScriptEngine::checkSyntax(source);
+	if (syntax.state() != QScriptSyntaxCheckResult::Valid)
+	{
+		debug(LOG_ERROR, "Syntax error in include %s line %d: %s", 
+		      path.toAscii().constData(), syntax.errorLineNumber(), syntax.errorMessage().toAscii().constData());
+		return false;
+	}
+	context->setActivationObject(engine->globalObject());
+	context->setThisObject(engine->globalObject());
+	QScriptValue result = engine->evaluate(source, path);
+	if (engine->hasUncaughtException())
+	{
+		int line = engine->uncaughtExceptionLineNumber();
+		debug(LOG_ERROR, "Uncaught exception at line %d, include file %s: %s",
+		      line, path.toAscii().constData(), result.toString().toAscii().constData());
+		return false;
+	}
 	return QScriptValue();
 }
 
@@ -161,15 +197,19 @@ bool updateScripts()
 	}
 	// Check for timers, and run them if applicable.
 	// TODO - load balancing
-	for (int i = 0; i < timers.size(); ++i)
+	QList<timerNode> runlist; // make a new list here, since we might trample all over the timer list during execution
+	QList<timerNode>::iterator iter;
+	for (iter = timers.begin(); iter != timers.end(); iter++)
 	{
-		timerNode node = timers.at(i);
-		if (node.frameTime <= gameTime)
+		if (iter->frameTime <= gameTime)
 		{
-			node.frameTime = node.ms + gameTime;	// update for next invokation
-			callFunction(node.engine, node.function, QScriptValueList());
+			iter->frameTime = iter->ms + gameTime;	// update for next invokation
+			runlist.append(*iter);
 		}
-		timers.replace(i, node);
+	}
+	for (iter = runlist.begin(); iter != runlist.end(); iter++)
+	{
+		callFunction(iter->engine, iter->function, QScriptValueList());
 	}
 	return true;
 }
@@ -188,11 +228,8 @@ bool loadPlayerScript(QString path, int player, int difficulty)
 	QString source = QString::fromAscii(bytes, size);
 	free(bytes);
 	QScriptSyntaxCheckResult syntax = QScriptEngine::checkSyntax(source);
-	if (syntax.state() != QScriptSyntaxCheckResult::Valid)
-	{
-		debug(LOG_ERROR, "Syntax error in %s line %d: %s", path.toAscii().constData(), syntax.errorLineNumber(), syntax.errorMessage().toAscii().constData());
-		return false;
-	}
+	ASSERT_OR_RETURN(false, syntax.state() == QScriptSyntaxCheckResult::Valid, "Syntax error in %s line %d: %s", 
+	                 path.toAscii().constData(), syntax.errorLineNumber(), syntax.errorMessage().toAscii().constData());
 	// Remember internal, reserved names
 	QScriptValueIterator it(engine->globalObject());
 	while (it.hasNext())
@@ -201,21 +238,24 @@ bool loadPlayerScript(QString path, int player, int difficulty)
 		internalNamespace.insert(it.name(), 1);
 	}
 	QScriptValue result = engine->evaluate(source, path);
-	if (engine->hasUncaughtException())
-	{
-		int line = engine->uncaughtExceptionLineNumber();
-		debug(LOG_ERROR, "Uncaught exception at line %d, file %s: %s", line, path.toAscii().constData(), result.toString().toAscii().constData());
-		return false;
-	}
+	ASSERT_OR_RETURN(false, !engine->hasUncaughtException(), "Uncaught exception at line %d, file %s: %s", 
+	                 engine->uncaughtExceptionLineNumber(), path.toAscii().constData(), result.toString().toAscii().constData());
 	// Special functions
 	engine->globalObject().setProperty("setGlobalTimer", engine->newFunction(js_setGlobalTimer));
 	engine->globalObject().setProperty("setObjectTimer", engine->newFunction(js_setObjectTimer));
 	engine->globalObject().setProperty("removeTimer", engine->newFunction(js_removeTimer));
+	engine->globalObject().setProperty("include", engine->newFunction(js_include));
 
 	// Special global variables
 	engine->globalObject().setProperty("me", player, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("gameTime", gameTime, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("difficulty", difficulty, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("mapName", game.map, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("baseType", game.base, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("alliancesType", game.alliance, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("powerType", game.power, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("maxPlayers", game.maxPlayers, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("scavengers", game.scavengers, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
 	// Regular functions
 	registerFunctions(engine);
@@ -363,6 +403,12 @@ bool triggerEventDroidBuilt(DROID *psDroid, STRUCTURE *psFactory)
 
 bool triggerStructureAttacked(STRUCTURE *psVictim, BASE_OBJECT *psAttacker)
 {
+	if (!psAttacker)
+	{
+		// do not fire off this event if there is no attacker -- nothing do respond to
+		// (FIXME -- consider this carefully)
+		return false;
+	}
 	for (int i = 0; i < scripts.size(); ++i)
 	{
 		QScriptEngine *engine = scripts.at(i);

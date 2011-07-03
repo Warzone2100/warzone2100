@@ -1,5 +1,6 @@
 SUBDIRS = \
 	  win32 \
+	  3rdparty/miniupnpc \
 	  lib/framework \
 	  lib/exceptionhandler \
 	  lib/script \
@@ -9,6 +10,7 @@ SUBDIRS = \
 	  lib/sound \
 	  lib/netplay \
 	  lib/widget \
+	  lib/qtgame \
 	  src \
 	  data \
 	  po \

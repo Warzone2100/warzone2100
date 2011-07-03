@@ -1,5 +1,4 @@
-//Generic script Version 1.0
-//For standard campaign maps
+// Fastplay demo
 
 /* ********************	*/
 /* Declared Variables 	*/
@@ -8,15 +7,9 @@
 /* Next Level stuff */
 public		LEVEL		NextLev;
 
-
 /* Define Players/Enemies */
-public		int		numEnemies, enemy[2];
+public		int		enemy;
 private		int		targetCount[2], targetX[2][5], targetY[2][5];	//MAX targets = 4, need array one bigger!
-public		BOOL		allianceFlag;
-
-
-/* Starting Enemy Power */
-public		int		power[2];
 
 /* Structure Limits */
 public		int		numStrucStats, strucLimit[5];
@@ -27,18 +20,11 @@ public		int		centreX, centreY;
 public		int		scrollX1, scrollX2, scrollY1, scrollY2;
 public		int		zoomLevel;
 public		int		numLZ, LZX[1], LZY[1];
-public		int		numTechs[2];
-public		RESEARCHSTAT	startTech[2][10];
-
 
 /* Briefings */
 public		int		numBriefs;
 public		INTMESSAGE	brief[2];
 public		INTMESSAGE		endMsg, winMsg;
-
-/* Victory Conditions */
-public		int		numVictory, victoryX[2], victoryY[2];
-public		BOOL		victory[2];
 
 /* Objectives */
 public		int		numObjectives, objectiveX[3], objectiveY[3];
@@ -49,7 +35,6 @@ private		int		objectivesDone;
 /* Artifacts */
 public		SOUND		artSnd1, artSnd2;
 public		int		numArt, victoryArt, artType[6], artVal[6], artX[6], artY[6];
-//public		INTMESSAGE	artMsg[6];
 public		RESEARCHSTAT	artComp[6];
 private		FEATURE		artID[6];
 private		int		artFlag[6];
@@ -93,8 +78,6 @@ public		int		coordsX[10], coordsY[10];
 public		int		regionsX1[20], regionsY1[20], regionsX2[20], regionsY2[20];
 public		int		sectorsX1[20], sectorsY1[20], sectorsX2[20], sectorsY2[20];
 
-
-
 /* 'Globals' */
 public		int		player;
 public		FEATURESTAT	crate;
@@ -106,7 +89,6 @@ public		SOUND		lostSnd;				//mission lost
 public		SOUND		attackSnd1;				//Base Under Attack Sound
 public		SOUND		baseSnd[5];			//base detected/dead
 
-
 /* General variables */
 private		int		count, count2;				//for while loops
 private		DROID		testDroid, newDroid;
@@ -115,7 +97,6 @@ private		int		countBriefs, temp, temp1, temp2, tempX, tempY;
 private		STRUCTURE	hitStruc;				//Base Under Attack
 private		BASEOBJ	attackerObj;			//Base Under Attack
 private		int		t;					//Base Under Attack time delay for next warning
-private		int		enemyCount;				//for enemy base attack stuff!
 
 /* ********************	*/
 /* Triggers	 	*/
@@ -150,34 +131,16 @@ event timeUp;
 /* Initialisation */
 event	start(CALL_GAMEINIT)
 {
-//centre view
+	// centre view
 	centreViewPos(centreX, centreY);
-//set alliances
-	if (allianceFlag and numEnemies > 1)
-	{
-		count = 0;
-		while (count < numEnemies)
-		{
-			count2 = 0;
-			while (count2 < numEnemies)
-			{
-				if (count != count2)
-				{
-					createAlliance(enemy[count], enemy[count2]);
-				}
-				count2 = count2 + 1;
-			}
-			count = count + 1;
-		}
-	}
 	
-//set scroll limits
+	// set scroll limits
 	setScrollParams(scrollX1, scrollY1, scrollX2, scrollY2);
 
-//set radar zoom level
+	// set radar zoom level
 	setRadarZoom(zoomLevel);
 
-//set LZ and no go areas
+	// set LZ and no go areas
 	initAllNoGoAreas();
 	count = 0;
 	while (count < numLZ)
@@ -186,7 +149,7 @@ event	start(CALL_GAMEINIT)
 		count = count + 1;
 	}
 
-//set structure limits
+	// set structure limits
 	count = 0;
 	while (count < numStrucStats)
 	{
@@ -195,22 +158,10 @@ event	start(CALL_GAMEINIT)
 		count = count + 1;
 	}
 
-//set power levels
-	count = 0;
-	while (count < numEnemies)
-	{
-	//also set technology for each enemy
-		count2 = 0;
-		while (count2 < numTechs[count])
-		{
-			completeResearch(startTech[count][count2], enemy[count]);
-			count2 = count2 + 1;
-		}
-		setPowerLevel(power[count], enemy[count]);
-		count = count + 1;
-	}
+	// set power levels
+	setPowerLevel(300, enemy);
 
-//show player start objectives
+	// show player start objectives
 	count = 0;
 	while (count < numObjectives)
 	{
@@ -218,8 +169,8 @@ event	start(CALL_GAMEINIT)
 		count = count + 1;
 	}
 
-//Setup Artifacts already on map (NOT TESTED YET!)
-//setting flags incorrectly in VLO could break game!
+	// Setup Artifacts already on map (NOT TESTED YET!)
+	// setting flags incorrectly in VLO could break game!
 	count = 0;
 	while (count < numArt)
 	{
@@ -235,7 +186,7 @@ event	start(CALL_GAMEINIT)
 		count = count + 1;
 	}
 
-//setup groups
+	// setup groups
 	count = 0;
 	while (count < numGroups)
 	{
@@ -245,10 +196,6 @@ event	start(CALL_GAMEINIT)
 		//set morale levels
 		if (grpMorale[count] >= 0)
 		{
-/*
-		//set repair for now (run away not good enough!?)
-			setGroupSecondary(grpGroup[count], DSO_REPAIR_LEVEL, DSS_REPLEV_HIGH);
-*/
 			//to get hill attackers to work properly
 			//setGroupSecondary(grpGroup[count], DSO_ATTACK_RANGE, DSS_ARANGE_LONG);
 
@@ -305,8 +252,7 @@ event	start(CALL_GAMEINIT)
 		count = count + 1;
 	}
 
-
-//play mission brief(s)
+	// play mission brief(s)
 	if (numBriefs > 0)
 	{
 		addMessage(brief[0], MISS_MSG, 0, true);
@@ -327,7 +273,6 @@ event	briefings(CALL_VIDEO_QUIT)		//need to rework this better!!
 		countBriefs = countBriefs + 1;
 	}
 }
-
 
 /* Base Under Attack */
 event baseHit(CALL_STRUCT_ATTACKED, selectedPlayer, ref hitStruc, ref attackerObj)
@@ -369,10 +314,8 @@ event removeObjectives(objTrig)
 	}
 }
 
-
 /* Artifacts */
 //This works for artifacts from STRUCTURES, FEATURES or DROIDS as well as crates already on map!
-//tested for STRUCTURES, FEATURES, DROIDS and starting CRATES
 event artLoop(artTrig)		//update artifact list
 {
 	if (artCollected == numArt)	//all artifacts collected?
@@ -507,28 +450,13 @@ event baseLoop(baseTrig)		//update base blips
 	}	
 }
 
-
 /* Events: Win or Lose */
 event nextLevEvnt(inactive)		//assumes victory already checked
 {
 	flushConsoleMessages();
 	playSound(wonSnd,0);
 	pause(20);
-	// give all research
-	count = 0;
-	while (count < numArt)
-	{
-		enableResearch(artComp[count], 0);
-		count = count +1;
-	}
-	// *required for sub missions*
-	//setLandingZone(10, 51, 12, 53);
-	// *no longer need to remove briefings?*
-	//removeMessage(MissionBrief, MISS_MSG, player);
-	//startMission(CAMP_EXPAND, NextLev);
-	//End game here for now! (don't try next mission)
 	gameOverMessage(winMsg, MISS_MSG, 0, true);
-
 	setEventTrigger(nextLevEvnt, inactive);
 }
 
@@ -538,10 +466,9 @@ event cheatEvnt(CALL_MISSION_START)	//cheat button ctrl M
 	setEventTrigger(nextLevEvnt, nextLevTrig);
 	setEventTrigger(cheatEvnt, inactive);
 }
+
 event gameLost(inactive)
 {
-//	addMessage(endMsg, MISS_MSG, 0, true);
-//	gameOver(false);
 	gameOverMessage(endMsg, MISS_MSG, 0, FALSE);
 	setEventTrigger(gameLost, inactive);
 }
@@ -570,44 +497,8 @@ event timeUp(CALL_MISSION_TIME)
 
 event wonYetEvnt(winTrig) 	//triggered on (artCollected == victoryArt)
 {
-	temp2 = 0;	//stores number of conditions met
-//needs to check various victory conditions setup in VLO
-
-//check all enemy vehicles and structures destroyed
-	if (victory[0])
-	{
-		count = 0;
-		temp = 0;
-		while (count < numEnemies)
-		{
-			if ((not anyDroidsLeft(enemy[count]))
-				and (not anyStructButWallsLeft(enemy[count])))
-			{
-				temp = temp + 1;
-			}
-			count = count + 1;
-		}
-		if (temp == numEnemies)
-		{
-			temp2 = temp2 + 1;
-		}
-	}
-
-//check all player vehicles in specific area (eg LZ)
-	if (victory[1])
-	{
-		temp = numDroidsInArea(player, 0, 0, scrollX1 * 128, scrollY1 * 128);
-		if (temp == numDroidsInArea(player, victoryX[0], victoryY[0], victoryX[1], victoryY[1]))
-		{
-			if (temp != 0)
-			{
-				temp2 = temp2 + 1;
-			}
-		}
-	}
-
-
-	if (temp2 == numVictory)	//victory reached?
+	// check all enemy vehicles and structures destroyed
+	if (!anyDroidsLeft(enemy) && !anyStructButWallsLeft(enemy))
 	{
 		setEventTrigger(lostYetEvnt, inactive);
 		setEventTrigger(timeUp, inactive);
@@ -617,7 +508,6 @@ event wonYetEvnt(winTrig) 	//triggered on (artCollected == victoryArt)
 }
 
 /* Enemy AI */
-
 event wayGroups(wayGroupsTrig)
 {
 	count = 0;
@@ -628,14 +518,6 @@ event wayGroups(wayGroupsTrig)
 		{
 			//simple predefined waypoints
 			//has the group got to waypoint or are they mainly idle?
-/*
-			if ((grpGroup[count].members > 0) and (
-				(grpGroup[count].x >= coordsX[grpPosCurrent[count]] - wayRange) and
-				(grpGroup[count].y >= coordsY[grpPosCurrent[count]] - wayRange) and
-				(grpGroup[count].x <= coordsX[grpPosCurrent[count]] + wayRange) and
-				(grpGroup[count].y <= coordsY[grpPosCurrent[count]] + wayRange)) or
-				(idleGroup(grpGroup[count]) >= grpGroup[count].members/2))
-*/
 			if (grpGroup[count].members > 0)	//idle stuff taken out FOR DEMO
 			{
 				grpBusy[count] = FALSE;			//no longer 'busy'
@@ -670,7 +552,6 @@ event wayGroups(wayGroupsTrig)
 				}
 				if (grpPosCurrent[count] != temp)	//don't order again if already there!
 				{
-					//orderGroupLoc(grpGroup[count], DORDER_SCOUT, coordsX[grpPosCurrent[count]], coordsY[grpPosCurrent[count]]);
 					orderGroupLoc(grpGroup[count], DORDER_MOVE, coordsX[grpPosCurrent[count]], coordsY[grpPosCurrent[count]]);
 				}
 			}
@@ -678,206 +559,6 @@ event wayGroups(wayGroupsTrig)
 		count = count + 1;
 	}
 }
-
-
-/* SCOUTS AND TARGET FINDING DISABLED FOR DEMO
-event checkGroups(checkGroupsTrig)
-{
-	count = 0;
-	while (count < numGroups)
-	{
-		initIterateGroup(grpGroup[count]);
-		count2 = 0;
-		while (count2 < grpGroup[count].members)
-		{
-		//check for morale failed, and make retreat fully
-			testDroid = iterateGroup(grpGroup[count]);
-			if (testDroid.order == DORDER_RUN)
-			{
-				if (grpType[count] >= 2)	//scout and attack type uses sectors
-				{
-					grpPosCurrent[count] = grpRetreatXY[count];	//flag retreat sector as current?
-					temp = grpRetreatXY[count];
-					//order scout forces to random position in this sector
-					tempX = sectorsX1[temp] + random(sectorsX2[temp] - sectorsX1[temp]);
-					tempY = sectorsY1[temp] + random(sectorsY2[temp] - sectorsY1[temp]);
-					orderGroupLoc(grpGroup[count], DORDER_MOVE, tempX, tempY);
-				}
-				else
-				{
-					orderGroupLoc(grpGroup[count], DORDER_MOVE, coordsX[grpRetreatXY[count]], coordsY[grpRetreatXY[count]]);
-				}
-				grpBusy[count] = TRUE;			//mark busy (will become idle when at retreat point)
-				count2 = grpGroup[count].members;	//exit loop
-			}
-			count2 = count2 + 1;
-		}
-		count = count + 1;
-	}
-}
-
-
-// not finished yet! Now includes attack groups as well as scout groups
-event sectorGroups(sectorGroupsTrig)
-{
-	count = 0;
-	while (count < numGroups)
-	{
-		if ((grpFlagGo[count]) and (grpType[count] >= 2) and (grpGroup[count].members != 0)		//set going and scout/attack type only
-				and (idleGroup(grpGroup[count]) > (grpGroup[count].members / 2)))			//also not busy!	
-		{
-			grpBusy[count] = FALSE;			//no longer 'busy'?
-//attack group stuff
-			temp1 = 0;					//just in case don't find an enemy match
-			if ((allianceFlag))	// and (random(numEnemies + 1) < 1))
-			{
-				temp1 = random(numEnemies);	//allow allies targets as well!
-			}
-			else
-			{
-				count2 = 0;
-				while (count2 < numEnemies)
-				{
-					if (grpPlayer[count] == enemy[count2])
-					{
-						temp1 = count2;	//this should be enemy index number!
-					}
-					count2 = count2 + 1;
-				}
-			}
-			if ((grpType[count] == 3) and (targetCount[temp1] > 0))		//any targets for attack groups
-			{
-				temp2 = random(targetCount[temp1]);
-				orderGroupLoc(grpGroup[count], DORDER_SCOUT, targetX[temp1][temp2], targetY[temp1][temp2]);
-			}
-			else 				//otherwise next sector
-			{
-//scout/next sector stuff
-				temp = grpPosCurrent[count];	//current scout sector
-				//10% chance of scouting past an occupied sector (even if valid targets exist there!)
-				//put in temp1 and temp2 for legibility!
-				temp1 = numStructsButNotWallsInArea(player, sectorsX1[temp], sectorsY1[temp], sectorsX2[temp], sectorsY2[temp]);
-				temp2 = numDroidsInArea(player, sectorsX1[temp], sectorsY1[temp], sectorsX2[temp], sectorsY2[temp]);
-				//next sector if clear of droids and structures or 10% chance
-				if ((random(100) < 10) or ((temp1 == 0) and (temp2 ==0)))
-				{
-					//sector clear so use as a retreat point 50% chance
-					if (random(100) < 50)
-					{
-						grpRetreatXY[count] = grpPosCurrent[count];
-					}
-					//get new sector (like wayGroups above!)
-					if (grpPosType[count] == 3)		//random choice
-					{
-						grpPosCurrent[count] = grpPosMin[count] + grpPosStep[count] * random(grpPosMax[count] - grpPosMin[count]);
-					}
-					else
-					{
-						grpPosCurrent[count] = grpPosCurrent[count] + grpPosStep[count];	//get next waypoint
-					}
-					if ((grpPosCurrent[count] > grpPosMax[count]) or (grpPosCurrent[count] < grpPosMin[count]))
-					{
-						grpPosCurrent[count] = grpPosCurrent[count] - grpPosStep[count];	//stop at last one
-						if (grpPosType[count] == 1)		//loop
-						{
-							if (grpPosStep[count] > 0)	//+ve loop
-							{
-								grpPosCurrent[count] = grpPosMin[count];
-							}
-							else					//-ve loop
-							{
-								grpPosCurrent[count] = grpPosMax[count];
-							}
-						}
-						if (grpPosType[count] == 2)		//ping pong
-						{
-							grpPosStep[count] = - grpPosStep[count];
-							grpPosCurrent[count] = grpPosCurrent[count] + grpPosStep[count];
-						}
-					}
-					//playSound(lostSnd,0);		//test
-					//now order to new sector
-					temp = grpPosCurrent[count];
-					//order scout forces to random position in this sector
-					tempX = sectorsX1[temp] + random(sectorsX2[temp] - sectorsX1[temp]);
-					tempY = sectorsY1[temp] + random(sectorsY2[temp] - sectorsY1[temp]);
-					orderGroupLoc(grpGroup[count], DORDER_SCOUT, tempX, tempY);	//why was this on DORDER_MOVE?
-				}
-			}
-		}
-		count = count + 1;
-	}
-}
-
-//not finished yet!
-event targetGroups(targetGroupsTrig)
-{
-//clear targets if any gone (by shuffling down array)
-	count = 0;
-	while (count < numEnemies)
-	{
-		if (targetCount[count] > 0)
-		{
-			temp = 0;
-			while (temp < targetCount[count])
-			{
-				if (numStructsButNotWallsInArea(player, targetX[count][temp] - targetRange, targetY[count][temp] - targetRange,
-						targetX[count][temp] + targetRange, targetY[count][temp] + targetRange) == 0)
-				//(not (objectInRange(player, targetX[count][temp], targetY[count][temp], targetRange)))
-
-				{
-					count2 = temp;
-					while (count2 < targetCount[count])
-					{
-						targetX[count][count2] = targetX[count][count2 + 1];
-						targetY[count][count2] = targetY[count][count2 + 1];
-						count2 = count2 + 1;
-					}
-					targetCount[count] = targetCount[count] - 1;		//reduce total for this enemy
-				}
-				temp = temp + 1;
-			}
-		}
-
-//flag new targets, if any (structures and droids but not walls!), at the moment for any group (not just scouts)
-		count2 = 0;
-		while (count2 < numGroups)
-		{
-			temp1 = numStructsButNotWallsInArea(player, grpGroup[count2].x - targetRange, grpGroup[count2].y - targetRange,
-					 grpGroup[count2].x + targetRange, grpGroup[count2].y + targetRange);
-			temp2 = numDroidsInArea(player,  grpGroup[count2].x - targetRange, grpGroup[count2].y - targetRange,
-					 grpGroup[count2].x + targetRange, grpGroup[count2].y + targetRange);
-
-			//make sure correct player, and targets exist before logging a new one
-			if ((grpPlayer[count2] == enemy[count]) and (targetCount[count] < targetMax) and ((temp1 > 0) or (temp2 > 0)))
-					//(objectInRange(player, grpGroup[count2].x, grpGroup[count2].y, targetRange)))
-			{
-				//playSound(lostSnd,1);
-				targetX[count][targetCount[count]] = grpGroup[count2].x;
-				targetY[count][targetCount[count]] = grpGroup[count2].y;
-			//order group to attack! (should be following heavies)
-				//orderGroupLoc(grpGroup[count2], DORDER_SCOUT, targetX[count][targetCount[count]], targetY[count][targetCount[count]]);
-
-				if ((grpGroup[count2].members <= temp1 + temp2) and (grpType[count2] == 2))
-				//if more objects than scouts, run away!!!
-				{
-					//playSound(lostSnd,0);	//test!
-
-					//use retreat stuff instead
-					orderGroup(grpGroup[count2], DORDER_RUN);	//run away for a bit (will only work with initial retreat pos?)
-				}
-				else if (grpType[count2] == 2)
-				{
-					orderGroup(grpGroup[count2], DORDER_STOP);	//stay where you are (and hopefully kill stuff) if scout group
-				}
-				targetCount[count] = targetCount[count] +1;
-			}
-			count2 = count2 +1;
-		}
-		count = count +1;
-	}
-}
-*/
 
 event factoryProdEvnt(factoryProdTrig)
 {
@@ -907,13 +588,6 @@ event factoryProdEvnt(factoryProdTrig)
 
 event droidBuilt(inactive)	//triggered by later callbacks
 {
-/*
-	//check for New Truck Built!!!!
-	if (newDroid.droidType == DROID_CONSTRUCT) 
-	{
-
-	}
-*/
 	//find factory number
 	temp2 = 0;		//flagged if group match found
 	temp = -1;		//in case not found
@@ -938,7 +612,6 @@ event droidBuilt(inactive)	//triggered by later callbacks
 		{
 			//add to reinforcement group
 			groupAddDroid(grpReinforce[count], newDroid);
-			//orderGroupLoc(grpReinforce[count], DORDER_MOVE, 8000, 13000);	//test for now
 
 			//if ideal size, add to main group!
 			if ((grpGroup[count].members + grpReinforce[count].members) >= grpIdealSize[count])
@@ -953,17 +626,11 @@ event droidBuilt(inactive)	//triggered by later callbacks
 				//set back to start sector...?
 				grpPosCurrent[count] = grpPosMin[count];		//go back to min sector if starting group from scratch
 			}
-			//test order only!!!
-			//orderGroupLoc(grpGroup[count], DORDER_SCOUT, coordsX[grpPosCurrent[count]], coordsY[grpPosCurrent[count]]);
 			count = numGroups;	//exit early
 			temp2 = 1;
 		}
 		count = count +1;
 	}
-	//if temp2 != 0, ie not assigned to a group, put in a special group for that player, and pull out if a group can take from any and
-	//needs reinforcing. (another event to check thru pooled group?)
-	//still to be done!
-		
 }
 
 //hack to allow CALL_NEWDROID to work with unspecified enemy players!!!!
@@ -1001,7 +668,6 @@ event droidBuilt7(CALL_NEWDROID, 7, ref newDroid, ref newDroidFactory)
 {
 	setEventTrigger(droidBuilt, droidBuiltTrig);
 }
-
 
 event regionGroupsEvnt(regionGroupsTrig)
 {
@@ -1075,23 +741,8 @@ event timeGroupsEvnt(timeGroupsTrig)
 	}
 }
 
-
-event enemyBaseHit(CALL_STRUCT_ATTACKED, enemy[enemyCount], ref hitStruc, ref attackerObj)
+event enemyBaseHit(CALL_STRUCT_ATTACKED, enemy, ref hitStruc, ref attackerObj)
 {
-	//playSoundPos(attackSnd1, enemy[enemyCount], hitStruc.x, hitStruc.y, hitStruc.z);	//quick check
-//store attacked structure for repairing by trucks later (when no enemies nearby!)
-/* still to be done
-	if (hitStruc != NULLOBJECT)
-	{
-		//store damaged Structure for repair/rebuild later...
-		temp = 0;
-		count = 0;
-		while (count < numDamaged[enemyCount])
-		{
-			if 
-		}
-	}
-*/
 	if ((attackerObj != NULLOBJECT) and (hitStruc != NULLOBJECT))
 	{
 		count = 0;
@@ -1100,7 +751,7 @@ event enemyBaseHit(CALL_STRUCT_ATTACKED, enemy[enemyCount], ref hitStruc, ref at
 			//check for defense forces that cover this region
 			//but only if this structure belongs to same player as defensive group
 			//and isn't already 'busy'
-			if ((grpType[count] == 1) and (grpPlayer[count] == enemy[enemyCount]) and (not grpBusy[count]))
+			if ((grpType[count] == 1) and (grpPlayer[count] == enemy) and (not grpBusy[count]))
 			{
 				if (grpRegionGo[count] < 0)	//cope with no region specified
 				{
@@ -1120,28 +771,5 @@ event enemyBaseHit(CALL_STRUCT_ATTACKED, enemy[enemyCount], ref hitStruc, ref at
 			}
 			count = count + 1;
 		}
-	}
-
-}
-
-
-//Updates enemyCount for enemyBaseHit event.
-event updateEnemy(updateEnemyTrig)
-{
-/*
-	enemyCount = enemyCount + 1;
-	if (enemyCount >= numEnemies)
-	{
-		enemyCount = 0;
-	}
-*/
-//done this way so never invalid!
-	if (enemyCount < numEnemies - 1)
-	{
-		enemyCount = enemyCount + 1;
-	}
-	else
-	{
-		enemyCount = 0;
 	}
 }

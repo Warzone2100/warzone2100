@@ -53,9 +53,11 @@
 QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine)
 {
 	QScriptValue value = engine->newObject();
+	ASSERT_OR_RETURN(value, psStruct, "No object for conversion");
 	value.setProperty("id", psStruct->id, QScriptValue::ReadOnly);
 	value.setProperty("x", psStruct->pos.x, QScriptValue::ReadOnly);
 	value.setProperty("y", psStruct->pos.y, QScriptValue::ReadOnly);
+	value.setProperty("z", psStruct->pos.z, QScriptValue::ReadOnly);
 	value.setProperty("player", psStruct->player, QScriptValue::ReadOnly);
 	return value;
 }
@@ -63,9 +65,11 @@ QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine)
 QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 {
 	QScriptValue value = engine->newObject();
+	ASSERT_OR_RETURN(value, psDroid, "No object for conversion");
 	value.setProperty("id", psDroid->id, QScriptValue::ReadOnly);
 	value.setProperty("x", psDroid->pos.x, QScriptValue::ReadOnly);
 	value.setProperty("y", psDroid->pos.y, QScriptValue::ReadOnly);
+	value.setProperty("z", psDroid->pos.z, QScriptValue::ReadOnly);
 	value.setProperty("player", psDroid->player, QScriptValue::ReadOnly);
 	return value;
 }
@@ -73,9 +77,11 @@ QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 QScriptValue convObj(BASE_OBJECT *psObj, QScriptEngine *engine)
 {
 	QScriptValue value = engine->newObject();
+	ASSERT_OR_RETURN(value, psObj, "No object for conversion");
 	value.setProperty("id", psObj->id, QScriptValue::ReadOnly);
 	value.setProperty("x", psObj->pos.x, QScriptValue::ReadOnly);
 	value.setProperty("y", psObj->pos.y, QScriptValue::ReadOnly);
+	value.setProperty("z", psObj->pos.z, QScriptValue::ReadOnly);
 	value.setProperty("player", psObj->player, QScriptValue::ReadOnly);
 	return value;
 }
@@ -114,23 +120,25 @@ static QScriptValue js_newGroup(QScriptContext *, QScriptEngine *)
 
 static QScriptValue js_enumStruct(QScriptContext *context, QScriptEngine *engine)
 {
-	QScriptValue statsName = context->argument(0);
-	QScriptValue targetPlayer = context->argument(1);
-	QScriptValue lookingPlayer = context->argument(2);
 	QList<STRUCTURE *> matches;
+	int player = -1, looking = -1;
+	QString statsName;
 
-	int player = targetPlayer.toInt32();
-	int looking = -1;
-	QString stat = statsName.toString();
-	if (!lookingPlayer.isUndefined())	// third arg optional
+	switch (context->argumentCount())
 	{
-		looking = lookingPlayer.toInt32();
+	default:
+	case 3: looking = context->argument(2).toInt32(); // fall-through
+	case 2: statsName = context->argument(1).toString(); // fall-through
+	case 1: player = context->argument(0).toInt32(); break;
+	case 0: player = engine->globalObject().property("me").toInt32();
 	}
+
 	SCRIPT_ASSERT(context, player < MAX_PLAYERS && player >= 0, "Target player index out of range: %d", player);
 	SCRIPT_ASSERT(context, looking < MAX_PLAYERS && looking >= -1, "Looking player index out of range: %d", looking);
 	for (STRUCTURE *psStruct = apsStructLists[player]; psStruct; psStruct = psStruct->psNext)
 	{
-		if ((looking == -1 || psStruct->visible[looking]) && stat.compare(psStruct->pStructureType->pName) == 0)
+		if ((looking == -1 || psStruct->visible[looking])
+		    && (statsName.isEmpty() || statsName.compare(psStruct->pStructureType->pName) == 0))
 		{
 			matches.push_back(psStruct);
 		}
@@ -140,6 +148,39 @@ static QScriptValue js_enumStruct(QScriptContext *context, QScriptEngine *engine
 	{
 		STRUCTURE *psStruct = matches.at(i);
 		result.setProperty(i, convStructure(psStruct, engine));
+	}
+	return result;
+}
+
+static QScriptValue js_enumDroid(QScriptContext *context, QScriptEngine *engine)
+{
+	QList<DROID *> matches;
+	int player = -1, looking = -1;
+	DROID_TYPE droidType = DROID_ANY;
+
+	switch (context->argumentCount())
+	{
+	default:
+	case 3: looking = context->argument(2).toInt32(); // fall-through
+	case 2: droidType = (DROID_TYPE)context->argument(1).toInt32(); // fall-through
+	case 1: player = context->argument(0).toInt32(); break;
+	case 0: player = engine->globalObject().property("me").toInt32();
+	}
+
+	SCRIPT_ASSERT(context, player < MAX_PLAYERS && player >= 0, "Target player index out of range: %d", player);
+	SCRIPT_ASSERT(context, looking < MAX_PLAYERS && looking >= -1, "Looking player index out of range: %d", looking);
+	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
+	{
+		if ((looking == -1 || psDroid->visible[looking]) && (droidType == DROID_ANY || droidType == psDroid->droidType))
+		{
+			matches.push_back(psDroid);
+		}
+	}
+	QScriptValue result = engine->newArray(matches.size());
+	for (int i = 0; i < matches.size(); i++)
+	{
+		DROID *psDroid = matches.at(i);
+		result.setProperty(i, convDroid(psDroid, engine));
 	}
 	return result;
 }
@@ -163,11 +204,6 @@ static QScriptValue js_debug(QScriptContext *context, QScriptEngine *engine)
 	}
 	qWarning(result.toAscii().constData());
 	return QScriptValue();
-}
-
-static QScriptValue js_scavengerPlayer(QScriptContext *, QScriptEngine *)
-{
-	return QScriptValue(scavengerPlayer());
 }
 
 static QScriptValue js_structureIdle(QScriptContext *context, QScriptEngine *)
@@ -411,12 +447,13 @@ static QScriptValue js_playSound(QScriptContext *context, QScriptEngine *engine)
 	{
 		return QScriptValue();
 	}
-	int soundID = context->argument(0).toInt32();
+	QString sound = context->argument(0).toString();
+	int soundID = audio_GetTrackID(sound.toUtf8().constData());
 	if (context->argumentCount() > 1)
 	{
 		int x = context->argument(1).toInt32();
 		int y = context->argument(2).toInt32();
-		int z = context->argument(2).toInt32();
+		int z = context->argument(3).toInt32();
 		audio_QueueTrackPos(soundID, x, y, z);
 	}
 	else
@@ -474,7 +511,7 @@ static QScriptValue js_completeResearch(QScriptContext *context, QScriptEngine *
 	int player;
 	if (context->argumentCount() > 1)
 	{
-		player = context->argument(0).toInt32();
+		player = context->argument(1).toInt32();
 	}
 	else
 	{
@@ -502,7 +539,7 @@ static QScriptValue js_enableResearch(QScriptContext *context, QScriptEngine *en
 	int player;
 	if (context->argumentCount() > 1)
 	{
-		player = context->argument(0).toInt32();
+		player = context->argument(1).toInt32();
 	}
 	else
 	{
@@ -523,7 +560,7 @@ static QScriptValue js_setPower(QScriptContext *context, QScriptEngine *engine)
 	int player;
 	if (context->argumentCount() > 1)
 	{
-		player = context->argument(0).toInt32();
+		player = context->argument(1).toInt32();
 	}
 	else
 	{
@@ -540,7 +577,7 @@ static QScriptValue js_enableStructure(QScriptContext *context, QScriptEngine *e
 	int player;
 	if (context->argumentCount() > 1)
 	{
-		player = context->argument(0).toInt32();
+		player = context->argument(1).toInt32();
 	}
 	else
 	{
@@ -568,21 +605,71 @@ static QScriptValue js_applyLimitSet(QScriptContext *context, QScriptEngine *eng
 	return QScriptValue();
 }
 
+static void setComponent(QString name, int player, int value)
+{
+	int type = -1;
+	int compInc = -1;
+	for (int j = COMP_BODY; j < COMP_NUMCOMPONENTS && compInc == -1; j++)
+	{
+		// this is very inefficient, but I am so not giving in to the deranged nature of the components code
+		// and convoluting the new script system for its sake
+		compInc = getCompFromName(j, name.toUtf8().constData());
+		type = j;
+	}
+	ASSERT_OR_RETURN(, compInc != -1 && type != -1, "Bad component value");
+	apCompLists[player][type][compInc] = value;
+}
+
+static QScriptValue js_enableComponent(QScriptContext *context, QScriptEngine *engine)
+{
+	QString componentName = context->argument(0).toString();
+	int player = context->argument(1).toInt32();
+
+	SCRIPT_ASSERT(context, player < MAX_PLAYERS && player >= 0, "Invalid player");
+	setComponent(componentName, player, FOUND);
+	return QScriptValue();
+}
+
+static QScriptValue js_makeComponentAvailable(QScriptContext *context, QScriptEngine *engine)
+{
+	QString componentName = context->argument(0).toString();
+	int player = context->argument(1).toInt32();
+
+	SCRIPT_ASSERT(context, player < MAX_PLAYERS && player >= 0, "Invalid player");
+	setComponent(componentName, player, AVAILABLE);
+	return QScriptValue();
+}
+
+static QScriptValue js_allianceExistsBetween(QScriptContext *context, QScriptEngine *engine)
+{
+	int player1 = context->argument(0).toInt32();
+	int player2 = context->argument(1).toInt32();
+	SCRIPT_ASSERT(context, player1 < MAX_PLAYERS && player1 >= 0, "Invalid player");
+	SCRIPT_ASSERT(context, player2 < MAX_PLAYERS && player2 >= 0, "Invalid player");
+	return QScriptValue(alliances[player1][player2] == ALLIANCE_FORMED);
+}
+
+static QScriptValue js_translate(QScriptContext *context, QScriptEngine *engine)
+{
+	return QScriptValue(gettext(context->argument(0).toString().toUtf8().constData()));
+}
+
 // ----------------------------------------------------------------------------------------
 // Register functions with scripting system
 
 bool registerFunctions(QScriptEngine *engine)
 {
 	// Register functions to the script engine here
+	engine->globalObject().setProperty("_", engine->newFunction(js_translate));
 
 	// General functions -- geared for use in AI scripts
 	//engine->globalObject().setProperty("getDerrick", engine->newFunction(js_getDerrick));
 	engine->globalObject().setProperty("debug", engine->newFunction(js_debug));
 	engine->globalObject().setProperty("console", engine->newFunction(js_console));
-	engine->globalObject().setProperty("scavengerPlayer", engine->newFunction(js_scavengerPlayer));
 	engine->globalObject().setProperty("structureIdle", engine->newFunction(js_structureIdle));
 	engine->globalObject().setProperty("buildDroid", engine->newFunction(js_buildDroid));
 	engine->globalObject().setProperty("enumStruct", engine->newFunction(js_enumStruct));
+	engine->globalObject().setProperty("enumDroid", engine->newFunction(js_enumDroid));
 	engine->globalObject().setProperty("enumGroup", engine->newFunction(js_enumGroup));
 	engine->globalObject().setProperty("distBetweenTwoPoints", engine->newFunction(js_distBetweenTwoPoints));
 	engine->globalObject().setProperty("newGroup", engine->newFunction(js_newGroup));
@@ -606,6 +693,9 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("setPower", engine->newFunction(js_setPower));
 	engine->globalObject().setProperty("addReticuleButton", engine->newFunction(js_addReticuleButton));
 	engine->globalObject().setProperty("enableStructure", engine->newFunction(js_enableStructure));
+	engine->globalObject().setProperty("makeComponentAvailable", engine->newFunction(js_makeComponentAvailable));
+	engine->globalObject().setProperty("enableComponent", engine->newFunction(js_enableComponent));
+	engine->globalObject().setProperty("allianceExistsBetween", engine->newFunction(js_allianceExistsBetween));
 
 	// Set some useful constants
 	engine->globalObject().setProperty("DORDER_ATTACK", DORDER_ATTACK, QScriptValue::ReadOnly | QScriptValue::Undeletable);
@@ -619,9 +709,15 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("BUILD", IDRET_BUILD, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("MANUFACTURE", IDRET_MANUFACTURE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("RESEARCH", IDRET_RESEARCH, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("INTEL_MAP", IDRET_INTEL_MAP, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("INTELMAP", IDRET_INTEL_MAP, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DESIGN", IDRET_DESIGN, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("CANCEL", IDRET_CANCEL, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("CAMP_CLEAN", CAMP_CLEAN, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("CAMP_BASE", CAMP_BASE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("CAMP_WALLS", CAMP_WALLS, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("NO_ALLIANCES", NO_ALLIANCES, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("ALLIANCES", ALLIANCES, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("ALLIANCES_TEAMS", ALLIANCES_TEAMS, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
 	return true;
 }

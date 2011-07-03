@@ -9,7 +9,6 @@ public		int		pow1, pow2;
 
 /* structure limit stuff */
 public	STRUCTURESTAT		factory, research, oilDerrick, powerGen;
-//public	STRUCTURESTAT		powerModuleHack;
 public	STRUCTURESTAT		command;
 public	INT			numPow, numExt, numFac, numRes;
 
@@ -42,8 +41,7 @@ private		BOOL		transOnMap;
 public		int		entryX, entryY, exitX, exitY;
 
 /* Briefing stuff */
-public		INTMESSAGE		endMsg;	//, winMsg;
-//public		INTMESSAGE		InFlight;
+public		INTMESSAGE		endMsg;
 public		INTMESSAGE		MissionBrief, MissionBrief2;
 public		SOUND			incomingSnd;
 private		BOOL			brief2Flag;
@@ -55,25 +53,14 @@ public		FEATURESTAT	crate;
 public		int		art1X, art1Y;
 public		STRUCTURE	art1Get;
 public		SOUND		art1Snd2;
-//public		INTMESSAGE	art1Msg;
 public		RESEARCHSTAT	art1Comp;
 private		FEATURE		art1ID;
 
 public		int		art2X, art2Y;
 public		STRUCTURE	art2Get;
 public		SOUND		art2Snd2;
-//public		INTMESSAGE	art2Msg;
 public		RESEARCHSTAT	art2Comp;
 private		FEATURE		art2ID;
-
-/* no 3rd artifact
-public		int		art3X, art3Y;
-public		STRUCTURE	art3Get;
-public		SOUND		art3Snd2;
-//public		INTMESSAGE	art3Msg;
-public		RESEARCHSTAT	art3Comp;
-private		FEATURE		art3ID;
-*/
 
 /* player Bonus Research topics given at end of mission */
 public	int			numResP0;
@@ -103,25 +90,13 @@ trigger winLoseTrig(every, 5);
 /* Triggers: Briefing */
 trigger vidEndTrig(CALL_VIDEO_QUIT);
 
-/* Triggers: Resource */
-/*
-trigger res1SeenTrig(droidHasSeen(res1, player), 10);
-trigger res1UsedTrig(every, 10);
-*/
-
 /* Triggers: Artifacts */
-//trigger art1SeenTrig(droidHasSeen(art1ID, player), 5);
 trigger art1TakeTrig(droidInRange(player, art1X, art1Y, 200), 5);
 trigger art1PlaceTrig((art1Get==NULLOBJECT), 5);
 
 //trigger art2SeenTrig(droidHasSeen(art2ID, player), 5);
 trigger art2TakeTrig(droidInRange(player, art2X, art2Y, 200), 5);
 trigger art2PlaceTrig((art2Get==NULLOBJECT), 5);
-
-/*
-trigger art3TakeTrig(droidInRange(player, art3X, art3Y, 200), 5);
-trigger art3PlaceTrig((art3Get==NULLOBJECT), 5);
-*/
 
 /* Triggers: Enemy */
 trigger enm1SeenTrig(seenStructInArea(player, enemy1, FALSE, 3136, 1728, 5440, 2624), 10);
@@ -153,33 +128,27 @@ trigger	RTLZStart(wait,0);
 trigger	RTLZFreq(every,300);
 event	periodicRTLZ;
 
-
 event startEvnt(CALL_GAMEINIT)
 {
 	//centreView(enm1);		//temporary solution for thin maps
 	//removeMessage(InFlight, MISS_MSG, 0);
 	centreViewPos(52*128, 55*128);
-//set scroll limits
-//	setScrollParams(0, 0, 64, 64);			//limit scroll
-//set zoom Level 64x64
+	// set zoom Level 64x64
 	setRadarZoom(1);
-//set landing zone
+	// set landing zone
 	setLandingZone(52,54,54,56);
-//call in transport
+	// call in transport
 	flyTransporterIn(player, entryX, entryY, false);
 	setTransporterExit(player, exitX, exitY);
-//make sure all buttons available/unavailable
-	//removeReticuleButton(DESIGN);
-	//removeReticuleButton(BUILD);
-//set starting power
+	// set starting power
 	setPowerLevel(pow1, enemy1);
 	setPowerLevel(pow2, enemy2);
 	addMessage(MissionBrief, MISS_MSG, 0, false);
 	flashOff(INTELMAP);
 
-//Blip Given at start
+	// Blip Given at start
 	addMessage(obj1, PROX_MSG, player, false);
-//allow to build stuff
+	// allow to build stuff
 	setStructureLimits (powerGen,numPow,0);
 	setStructureLimits (oilDerrick,numExt,0);
 	setStructureLimits (research,numRes,0);
@@ -190,25 +159,10 @@ event startEvnt(CALL_GAMEINIT)
 	enableStructure(oilDerrick,0);
 	enableStructure(research,0);
 	enableStructure(factory,0);
-	//enableStructure(powerModuleHack, 0);
-//give first topic for enemy
-	//completeResearch(tecE1[tecCount], enemy1);
-	//tecCount = tecCount + 1;
-//set transport time
+	// set transport time
 	setReinforcementTime(ReinforceTime);
-//set up resource coords (since oil pools diappear when built on!!!)
-	//res1x=res1.x;
-	//res1y=res1.y;
 	setEventTrigger(startEvnt, inactive);
 }
-
-/*
-event flightEvnt(CALL_GAMEINIT)
-{
-	addMessage(InFlight, MISS_MSG, 0, true);
-	setEventTrigger(flightEvnt, inactive);
-}
-*/
 
 /*Events: */
 
@@ -217,11 +171,9 @@ event art1TakeEvnt(inactive)
 {
 	numart=numart+1;
 	brief2Flag = TRUE;
-	//playSound(art1Snd2, player);
 	playSoundPos(art1Snd2, player, art1ID.x, art1ID.y, art1ID.z);
 	destroyFeature(art1ID);
 	removeMessage(obj1, PROX_MSG, player);
-	//removeMessage(art1Msg, PROX_MSG, player);
 	enableResearch(art1Comp, player);
 	setEventTrigger(art1TakeEvnt, inactive);
 }
@@ -230,7 +182,6 @@ event art1PlaceEvnt(art1PlaceTrig)
 {
 	//place artifact crate, and allow check for prox
 	art1ID=addFeature(crate, art1X, art1Y);
-	//setEventTrigger(art1SeenEvnt, art1SeenTrig);
 	setEventTrigger(art1TakeEvnt, art1TakeTrig);
 	setEventTrigger(art1PlaceEvnt, inactive);
 }
@@ -238,10 +189,8 @@ event art1PlaceEvnt(art1PlaceTrig)
 event art2TakeEvnt(inactive)
 {
 	numart=numart+1;
-	//playSound(art2Snd2, player);
 	playSoundPos(art2Snd2, player, art2ID.x, art2ID.y, art2ID.z);
 	destroyFeature(art2ID);
-	//removeMessage(art2Msg, PROX_MSG, player);
 	enableResearch(art2Comp, player);
 	setEventTrigger(art2TakeEvnt, inactive);
 }
@@ -250,32 +199,9 @@ event art2PlaceEvnt(art2PlaceTrig)
 {
 	//place artifact crate, and allow check for prox
 	art2ID=addFeature(crate, art2X, art2Y);
-	//setEventTrigger(art2SeenEvnt, art2SeenTrig);
 	setEventTrigger(art2TakeEvnt, art2TakeTrig);
 	setEventTrigger(art2PlaceEvnt, inactive);
 }
-
-/*
-event art3TakeEvnt(inactive)
-{
-	numart=numart+1;
-	//playSound(art3Snd2, player);
-	playSoundPos(art2Snd2, player, art3ID.x, art3ID.y, art3ID.z);
-	destroyFeature(art3ID);
-	//removeMessage(art3Msg, PROX_MSG, player);
-	enableResearch(art3Comp, player);
-	setEventTrigger(art3TakeEvnt, inactive);
-}
-
-event art3PlaceEvnt(art3PlaceTrig)
-{
-	//place artifact crate, and allow check for prox
-	art3ID=addFeature(crate, art3X, art3Y);
-	//setEventTrigger(art3SeenEvnt, art3SeenTrig);
-	setEventTrigger(art3TakeEvnt, art3TakeTrig);
-	setEventTrigger(art3PlaceEvnt, inactive);
-}
-*/
 
 /* Events: Enemies */
 event enm1DeadEvnt(inactive)
@@ -318,45 +244,6 @@ event enm2SeenEvnt(enm2SeenTrig)			//base 2 seen
 	setEventTrigger(enm2SeenEvnt, inactive);
 }
 
-/* don't bother with these blips for sub map (only for fastplay!)
-//Extra blips for guard entrances
-event guard1DeadEvnt(inactive)
-{
-	killStructsInArea(enemy1, REF_WALL, 2368, 5568, 3392, 6592, TRUE, TRUE);	//remove walls and features in base
-	killStructsInArea(enemy1, REF_WALLCORNER, 2368, 5568, 3392, 6592, TRUE, FALSE);	//remove corner walls in base
-	removeMessage(guard1Msg, PROX_MSG, player);
-	//playSound(guard1Snd2, player);
-	setEventTrigger(guard1DeadEvnt, inactive);
-}
-
-event guard1SeenEvnt(guard1SeenTrig)
-{
-	addMessage(guard1Msg, PROX_MSG, player, false);
-	//playSound(guard1Snd1, player);
-	playSoundPos(guard1Snd1, player, 2880, 5824, 0);
-	setEventTrigger(guard1DeadEvnt, guard1DeadTrig);
-	setEventTrigger(guard1SeenEvnt, inactive);
-}
-
-event guard2DeadEvnt(inactive)
-{
-	killStructsInArea(enemy2, REF_WALL, 4544, 3392, 5924, 4928, TRUE, TRUE);	//remove walls and features in base
-	killStructsInArea(enemy2, REF_WALLCORNER, 4544, 3392, 5924, 4928, TRUE, FALSE);	//remove corner walls in base
-	removeMessage(guard2Msg, PROX_MSG, player);
-	//playSound(guard2Snd2, player);
-	setEventTrigger(guard2DeadEvnt, inactive);
-}
-
-event guard2SeenEvnt(guard2SeenTrig)			//base 2 seen
-{
-	addMessage(guard2Msg, PROX_MSG, player, false);
-	//playSound(guard2Snd1, player);
-	playSoundPos(guard2Snd1, player, 5312, 4160, 0);
-	setEventTrigger(guard2DeadEvnt, guard2DeadTrig);
-	setEventTrigger(guard2SeenEvnt, inactive);
-}
-*/
-
 event brief2Evnt(brief2Trig)
 {
 	playSound(incomingSnd, player);
@@ -367,13 +254,9 @@ event brief2Evnt(brief2Trig)
 
 event giveLZmess(retLZTrig)
 {
-//add LZ blip and WAV message
+	// add LZ blip and WAV message
 	addMessage(LZ_MSG, PROX_MSG, player, false);
-
 	setEventTrigger(periodicRTLZ,RTLZStart);
-//	addConsoleText(_("Return to LZ"), player);
-	//playSound(LZSnd, player);
-//	playSoundPos(LZSnd, player, 6848, 7104, 0);
 	setEventTrigger(giveLZmess, inactive);
 }
 
@@ -384,9 +267,6 @@ event	periodicRTLZ(inactive)
 	setEventTrigger(periodicRTLZ,RTLZFreq);
 }
 
-
-
-//event wonYetEvnt;
 event wonYetLZEvnt;
 event timeUp;
 
@@ -405,24 +285,14 @@ event nextLevEvnt(inactive)		//assumes victory already checked
 
 	gameLevel=gameLevel+1;		//flag next part of map
 	setLandingZone(10, 51, 12, 53);
-//enable research
 	enableResearch(art1Comp, player);
 	enableResearch(art2Comp, player);
-	//removeMessage(MissionBrief, MISS_MSG, player);
 	startMission(BETWEEN, NextLev);
-	//End game here for now! (don't try next mission)
-	//addMessage(winMsg, MISS_MSG, 0, true);
-	//pause(10);
-	//gameOver(true);
-
 	setEventTrigger(nextLevEvnt, inactive);
 }
 
 event gameLost(inactive)
 {
-//	addMessage(endMsg, MISS_MSG, 0, true);
-//	pause(10);
-//	gameOver(false);
 	gameOverMessage(endMsg, MISS_MSG, 0, false);
 	setEventTrigger(gameLost, inactive);
 }
@@ -439,37 +309,17 @@ event lostYetEvnt(winLoseTrig)
 			setEventTrigger(gameLost, gameLostTrig);	//waits 2 seconds before ending
 			setEventTrigger(lostYetEvnt, inactive);
 		}
-
 	}
 }
 
 //out of time?
 event timeUp(CALL_MISSION_TIME)
 {
-	//setEventTrigger(wonYetEvnt,inactive);
 	setEventTrigger(wonYetLZEvnt, inactive);
 	setEventTrigger(lostYetEvnt,inactive);
 	setEventTrigger(gameLost, gameLostTrig);	//waits 2 seconds before ending
 	setEventTrigger(timeUp, inactive);
 }
-
-/*
-event wonYetLZEvnt(retLZTrig)	//triggered when all artifacts picked up
-// have all enemies lost yet? FOR DEMO ONLY!
-{								
-  	if (not anyDroidsLeft(enemy1))
-	{
-		if (not anyStructButWallsLeft(enemy1))
-		{
-			setEventTrigger(lostYetEvnt, inactive);
-			setEventTrigger(timeUp, inactive);
-			setEventTrigger(nextLevEvnt, winLoseTrig);
-			//setEventTrigger(wonYetEvnt, inactive);
-			setEventTrigger(wonYetLZEvnt, inactive);
-		}
-	}
-}
-*/
 
 event wonYetLZEvnt(winLoseTrig)	//alternate victory condition, got artifact(s) and back at LZ
 {
@@ -489,7 +339,6 @@ event wonYetLZEvnt(winLoseTrig)	//alternate victory condition, got artifact(s) a
 		}
 	}
 }
-
 
 event cheatEvnt(CALL_MISSION_START)	//cheat button ctrl M
 {
@@ -521,7 +370,7 @@ event everySec(every, 10)
 
 event seeBaseHit(CALL_MISSION_END)
 {
-//go to where the structure being attacked is on CTRL B
+	// go to where the structure being attacked is on CTRL B
 	if (hitStruc!=NULLOBJECT)
 	{
 		centreView(hitStruc);
@@ -547,32 +396,13 @@ event LZNoGo(LZNoGoTrig)
 
 event LZ_OK(inactive)
 {
-//check LZ area clear of enemy structures and/or vehicles (in Trigger)
-	//playSound(LZClear, player);	//"LZ Clear"
+	// check LZ area clear of enemy structures and/or vehicles (in Trigger)
 	playSoundPos(LZClear, player, 6848, 7104, 0);
-//allow reinforcements now LZ clear
+	// allow reinforcements now LZ clear
 	setReinforcementTime(ReinforceTime); //(set back to normal)
 	setEventTrigger(LZNoGo, LZNoGoTrig);
 	setEventTrigger(LZ_OK, inactive);
 }
-
-
-/* Disabled for difficulty check
-event researchEvnt(researchTrig)
-{
-// player specific technology startups
-	if (tecCount >= numtecE1)
-	{
-		setEventTrigger(researchEvnt, inactive);
-	}
-	else
-	{
-		completeResearch(tecE1[tecCount], enemy1);
-		tecCount = tecCount + 1;
-	}
-}
-*/
-
 
 event transOn(CALL_TRANSPORTER_REINFORCE)
 {
@@ -582,5 +412,4 @@ event transOn(CALL_TRANSPORTER_REINFORCE)
 event transOff(CALL_TRANSPORTER_OFFMAP, player)
 {
 	transOnMap = FALSE;
-
 }

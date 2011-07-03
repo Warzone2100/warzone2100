@@ -30,12 +30,14 @@
 #include "lib/framework/frameresource.h"
 #include "lib/framework/strres.h"
 #include "lib/framework/crc.h"
+#include "lib/framework/resly.h"
 #include "lib/gamelib/parser.h"
 #include "lib/ivis_opengl/bitimage.h"
 #include "lib/ivis_opengl/tex.h"
 #include "lib/script/script.h"
 #include "lib/sound/audio.h"
 
+#include "qtscript.h"
 #include "data.h"
 #include "droid.h"
 #include "feature.h"
@@ -1030,6 +1032,12 @@ static void dataScriptRelease(void *pData)
 	scriptFreeCode(psCode);
 }
 
+static bool jsLoad(const char *fileName, void **ppData)
+{
+	debug(LOG_WZ, "jsload: %s", fileName);
+	*ppData = NULL;
+	return loadGlobalScript(fileName);
+}
 
 // Load a script variable values file
 static bool dataScriptLoadVals(const char* fileName, void **ppData)
@@ -1149,6 +1157,7 @@ static const RES_TYPE_MIN_FILE FileResourceTypes[] =
 	{"SCRIPTVAL", dataScriptLoadVals, NULL},
 	{"STR_RES", dataStrResLoad, dataStrResRelease},
 	{"RESEARCHMSG", dataResearchMsgLoad, dataSMSGRelease },
+	{"JAVASCRIPT", jsLoad, NULL},
 };
 
 /* Pass all the data loading functions to the framework library */

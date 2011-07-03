@@ -47,11 +47,9 @@ public		bool		noVisTargetting;
 
 trigger addVTOLTrig(every, 3000);	//every 5 mins to get reinforcements
 trigger killVTOLSTrig(every, 43);
-//trigger vtolStartTrig(wait, 600);
 trigger vtolOffMapStartTrig(every, 23);
 
 trigger nextTargetTrig(every, 80);
-
 
 // declare events
 event targetFound;
@@ -62,7 +60,7 @@ event nextTargetNoVis;
 
 event start(CALL_GAMEINIT)
 {
-//add a VTOL rearming pad
+	//add a VTOL rearming pad
 	count = 0;
 	while (count < numPads)
 	{
@@ -151,13 +149,6 @@ event addVTOL(every, 107)	//every 10secs
 		}
 		group = group + 1;
 	}
-/*
-	// only reset this event if using pads
-	if (not noPads)
-	{
-		setEventTrigger (addVTOL, addVTOLTrig);
-	}
-*/
 }
 
 event vtolOffMap(CALL_VTOL_OFF_MAP, padPlayer, ref droid)
@@ -377,7 +368,7 @@ event killVTOLS(inactive)
 
 event stopVTOL(buildingDestroyed(HQbuilding, padPlayer), 45)
 {
-//turn off VTOL attacks if command centre dead
+	//turn off VTOL attacks if command centre dead
 	if (not dontStopFlag)
 	{
 		setEventTrigger(killVTOLS, killVTOLSTrig);
@@ -390,7 +381,7 @@ event stopVTOL(buildingDestroyed(HQbuilding, padPlayer), 45)
 
 event cheatEvnt(CALL_MISSION_START)	//cheat button ctrl M
 {
-//get rid of pads and vtols if cheat!
+	//get rid of pads and vtols if cheat!
 	count = 0;
 	while (count < numPads)
 	{

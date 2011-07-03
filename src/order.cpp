@@ -587,9 +587,9 @@ void orderUpdateDroid(DROID *psDroid)
 				 (psDroid->action == DACTION_MOVETOOBSERVE))
 		{
 			// attacking something - see if the droid has gone too far, go up to twice the distance we want to go, so that we don't repeatedly turn back when the target is almost in range.
-			if (objPosDiffSq(psDroid->pos, Vector3i(psDroid->actionX, psDroid->actionY, 0)) > (SCOUT_ATTACK_DIST*2 * SCOUT_ATTACK_DIST*2))
+			if (objPosDiffSq(psDroid->pos, Vector3i(psDroid->actionPos, 0)) > (SCOUT_ATTACK_DIST*2 * SCOUT_ATTACK_DIST*2))
 			{
-				actionDroid(psDroid, DACTION_RETURNTOPOS, psDroid->actionX,psDroid->actionY);
+				actionDroid(psDroid, DACTION_RETURNTOPOS, psDroid->actionPos.x, psDroid->actionPos.y);
 			}
 		}
 		break;
@@ -628,7 +628,7 @@ void orderUpdateDroid(DROID *psDroid)
 				}
 			}
 
-			Vector2i edgeDiff = removeZ(psDroid->pos) - Vector2i(psDroid->actionX, psDroid->actionY);
+			Vector2i edgeDiff = removeZ(psDroid->pos) - psDroid->actionPos;
 			if (psDroid->action != DACTION_MOVE || edgeDiff*edgeDiff <= TILE_UNITS*4 * TILE_UNITS*4)
 			{
 				//Watermelon:use orderX,orderY as local space origin and calculate droid direction in local space
@@ -650,8 +650,8 @@ void orderUpdateDroid(DROID *psDroid)
 				 (psDroid->action == DACTION_MOVETOOBSERVE))
 		{
 			// attacking something - see if the droid has gone too far
-			xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psDroid->actionX;
-			ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psDroid->actionY;
+			xdiff = psDroid->pos.x - psDroid->actionPos.x;
+			ydiff = psDroid->pos.y - psDroid->actionPos.y;
 			//if (xdiff*xdiff + ydiff*ydiff > psDroid->sMove.iGuardRadius * psDroid->sMove.iGuardRadius)
 			if (xdiff*xdiff + ydiff*ydiff > 2000 * 2000)
 			{
@@ -3447,7 +3447,7 @@ bool secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 				else if ( orderState(psDroid, DORDER_PATROL) )
 				{
 					// send the unit back to the patrol
-					actionDroid(psDroid, DACTION_RETURNTOPOS, psDroid->actionX, psDroid->actionY);
+					actionDroid(psDroid, DACTION_RETURNTOPOS, psDroid->actionPos.x, psDroid->actionPos.y);
 				}
 			}
 			break;

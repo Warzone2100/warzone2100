@@ -3,6 +3,12 @@
 # Terminate when a command is unsuccesful
 set -e
 
+echo "This script doesn't work anymore. See
+http://developer.wz2100.net/wiki/CompileGuideWindows/MingwCrossEnv for the
+needed commands until someone changes this script to do that."
+
+exit
+
 cd "$(dirname "$0")"
 
 ##

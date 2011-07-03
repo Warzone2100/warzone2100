@@ -29,10 +29,12 @@
 #include "math_ext.h"
 
 struct Rotation;
+struct Vector3i;
 struct Vector2i
 {
 	Vector2i() {}
 	Vector2i(int x, int y) : x(x), y(y) {}
+	Vector2i(Vector3i const &r); // discards the z value
 
 	int x, y;
 };
@@ -64,7 +66,7 @@ struct Vector3f
 };
 struct Rotation
 {
-	Rotation() {}
+	Rotation() { direction = 0; pitch = 0; roll = 0; }
 	Rotation(int direction, int pitch, int roll) : direction(direction), pitch(pitch), roll(roll) {}
 	Rotation(Vector3i xyz) : direction(xyz.x), pitch(xyz.y), roll(xyz.z) {}
 	uint16_t direction, pitch, roll;  ///< Object rotation in 0..64k range
@@ -72,6 +74,7 @@ struct Rotation
 typedef Vector3i Position;  ///< Map position in world coordinates
 
 inline Vector3i::Vector3i(Rotation const &r) : x(r.direction), y(r.pitch), z(r.roll) {}
+inline Vector2i::Vector2i(Vector3i const &r) : x(r.x), y(r.y) {}
 
 // removeZ(3d_vector) -> 2d_vector
 static inline WZ_DECL_PURE Vector2i removeZ(Vector3i const &a) { return Vector2i(a.x, a.y); }

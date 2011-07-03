@@ -1,0 +1,96 @@
+WARZONE2100(6)
+==============
+:doctype: manpage
+
+NAME
+----
+warzone2100 - 3D real time strategy game
+
+SYNOPSIS
+--------
+*warzone2100* ['OPTIONS']
+
+DESCIPTION
+----------
+
+This manual page documents briefly the warzone2100 command.
+
+Warzone 2100 is a 3D science fiction real time strategy game.
+
+OPTIONS
+-------
+
+Note: In contrast to older versions option parameters need a '=', space doesn't
+work anymore.
+
+*--cheat*::
+      Run in cheat mode.
+
+*--datadir*='DIR'::
+      Set default datadir to 'DIR'.
+
+*--debug*='FLAG'::
+      Show debug for 'FLAG', use this several times for several flags. Useful
+      flags include 'wz', '3d', 'sound', 'video'. 'all' gives all of that and
+      much more.
+
+*--debugfile*='FILE'::
+      Log debug output in 'FILE'.
+
+*--fullscreen*::
+      Play in fullscreen mode.
+
+*--help*::
+      Show help and exit.
+
+*--mod*='MOD'::
+      Enable global mod 'MOD'.
+
+*--mod_ca*='MOD'::
+      Enable campaign only mod 'MOD'.
+
+*--mod_mp*='MOD'::
+      Enable multiplay only mod 'MOD'.
+
+*--savegame*='NAME'::
+      Load a saved game 'NAME' (needs to include the .gam extension).
+
+*--window*::
+      Play in windowed mode.
+
+*--version*::
+      Output version info and exit.
+
+*--resolution*='WIDTHxHEIGHT'::
+      Run  at 'WIDTH' times 'HEIGHT' screen resolution. This needs to be a
+      resolution supported by your X server.
+
+*--(no)shadows*::
+      Toggle the shadows.
+
+*--(no)sound*::
+      Toggle the sound.
+
+The fullscreen/window, resolution,  sound,  and  shadows  settings  are
+stored,  so  they  only  need to be specified once, or when you want to
+change them.
+
+EXAMPLES
+--------
+'warzone2100 --fullscreen --resolution=800x600'::
+      Run in full screen at 800x600 screen resolution.
+
+'warzone2100 --window --resolution=800x600'::
+      Run in a window at 800x600 screen resolution.
+
+'warzone2100'::
+      Run the game, with the last used resolution, fullscreen/window, sound and
+      shadow settings.
+
+AUTHORS
+-------
+
+See the copyright file included in the package.
+
+This manual page was originally written by Linas Zvirblis  <0x0007@gmail.com>
+for the Debian project, and modified by the Warzone project.

@@ -6,15 +6,13 @@ public		int		player;
 
 /* structure limit stuff */
 public	STRUCTURESTAT		factory, research, oilDerrick, powerGen;
-//public	STRUCTURESTAT		powerModuleHack;
 public	STRUCTURESTAT		command;
 public	INT			numPow, numExt, numFac, numRes;
 
 /* Briefing stuff */
 public	INTMESSAGE		MissionBrief, MissionBrief2;
 public	INTMESSAGE		InFlight;
-public	INTMESSAGE		endMsg;	//, winMsg;
-/* Win or lose */
+public	INTMESSAGE		endMsg;
 public		LEVEL		NextLev;
 public		TEMPLATE	transporter;
 public		SOUND		lostSnd;
@@ -35,18 +33,14 @@ trigger gameLostTrig(every, 20);
 
 event nextLevEvnt;
 event waitForPow;
-//event powModCheck;
 
 event startEvnt(CALL_GAMEINIT)
 {
-//set scroll limits
-//	setScrollParams(0, 0, 64, 128);			//limit scroll
 	centreViewPos(1728, 6720);			//centre near transport
-//set zoom Level 128x128
 	setRadarZoom(0);
-//stop player building on LZ
+	// stop player building on LZ
 	setLandingZone(10, 51, 12, 53);
-//allow to build stuff
+	// allow to build stuff
 	setStructureLimits (powerGen,numPow,0);
 	setStructureLimits (oilDerrick,numExt,0);
 	setStructureLimits (research,numRes,0);
@@ -57,10 +51,7 @@ event startEvnt(CALL_GAMEINIT)
 	enableStructure(oilDerrick,0);
 	enableStructure(research,0);
 	enableStructure(factory,0);
-	//enableStructure(powerModuleHack, 0);
 	setMissionTime(-1);			//reset Mission time limit
-//give player briefing
-	//setEventTrigger(nextLevEvnt, vidEndTrig);	//flag next stuff after briefing over
 
 	//has the player already built a power module? (skip 1st briefing, go straight to main briefing)
 	if (testStructureModule(player, NULLOBJECT, temp))
@@ -93,14 +84,6 @@ event waitForPow(powModTrig)	//(wait, 3000)
 	centreViewPos(1728, 6720);			//centre near transport
 }
 
-/*
-event powModCheck(powModTrig)
-{
-		setEventTrigger(waitForPow, skipTrig);
-		setEventTrigger(powModCheck, inactive);
-}
-*/
-
 //allow skip past delay
 event cheatEvnt(CALL_MISSION_START)	//cheat button ctrl M
 {
@@ -108,32 +91,14 @@ event cheatEvnt(CALL_MISSION_START)	//cheat button ctrl M
 	setEventTrigger(cheatEvnt, inactive);
 }
 
-/* not needed since inFlight played in next script!
-event nextLevEvnt2(inactive)
-{
-	removeMessage(InFlight, MISS_MSG, 0);
-	//setLandingZone(LZ_X1, LZ_Y1, LZ_X2, LZ_Y2);
-	startMission(OFF_KEEP, NextLev);
-	setEventTrigger(nextLevEvnt2, inactive);
-}
-*/
-
 event nextLevEvnt(CALL_START_NEXT_LEVEL)		//assumes victory already checked
 {
-	//removeMessage(MissionBrief2, MISS_MSG, 0);
-	//setEventTrigger(nextLevEvnt2, vidEndTrig);	//flag actual load after in flight vid finished
-	//addMessage(InFlight, MISS_MSG, 0, true);	//removed, in next script instead!
-
-	//setLandingZone(LZ_X1, LZ_Y1, LZ_X2, LZ_Y2);
 	startMission(OFF_KEEP, NextLev);
-
 	setEventTrigger(nextLevEvnt, inactive);
 }
 
 event gameLost(inactive)
 {
-//	addMessage(endMsg, MISS_MSG, 0, true);
-//	gameOver(false);
 	gameOverMessage(endMsg, MISS_MSG, 0, false);
 	setEventTrigger(gameLost, inactive);
 }

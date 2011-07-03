@@ -531,6 +531,7 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
 	s->nShadowEdges = 0;
 	s->texpage = iV_TEX_INVALID;
 	s->tcmaskpage = iV_TEX_INVALID;
+	s->normalpage = iV_TEX_INVALID;
 	memset(s->material, 0, sizeof(s->material));
 	s->material[LIGHT_AMBIENT][3] = 1.0f;
 	s->material[LIGHT_DIFFUSE][3] = 1.0f;
@@ -633,13 +634,15 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 {
 	const char *pFileName = GetLastResourceFilename(); // Last loaded texture page filename
 	const char *pFileData = *ppFileData;
-	char buffer[PATH_MAX], texfile[PATH_MAX];
+	char buffer[PATH_MAX], texfile[PATH_MAX], normalfile[PATH_MAX];
 	int cnt, nlevels;
 	iIMDShape *shape, *psShape;
 	UDWORD level;
 	int32_t imd_version;
 	uint32_t imd_flags;
 	bool bTextured = false;
+
+	memset(normalfile, 0, sizeof(normalfile));
 
 	if (sscanf(pFileData, "%255s %d%n", buffer, &imd_version, &cnt) != 2)
 	{
@@ -727,6 +730,45 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 		bTextured = true;
 	}
 
+	if (strncmp(buffer, "NORMALMAP", 9) == 0)
+	{
+		char ch, texType[PATH_MAX];
+		int i;
+
+		/* the first parameter for textures is always ignored; which is why we ignore
+		 * nlevels read in above */
+		ch = *pFileData++;
+
+		// Run up to the dot or till the buffer is filled. Leave room for the extension.
+		for (i = 0; i < PATH_MAX-5 && (ch = *pFileData++) != '\0' && ch != '.'; ++i)
+		{
+ 			normalfile[i] = ch;
+		}
+		normalfile[i] = '\0';
+
+		if (sscanf(pFileData, "%255s%n", texType, &cnt) != 1)
+		{
+			debug(LOG_ERROR, "iV_ProcessIMD %s normal map info corrupt: %s", pFileName, buffer);
+			return NULL;
+		}
+		pFileData += cnt;
+
+		if (strcmp(texType, "png") != 0)
+		{
+			debug(LOG_ERROR, "iV_ProcessIMD %s: only png normal maps supported", pFileName);
+			return NULL;
+		}
+		sstrcat(normalfile, ".png");
+
+		/* -Now- read in LEVELS directive */
+		if (sscanf(pFileData, "%255s %d%n", buffer, &nlevels, &cnt) != 2)
+		{
+			debug(LOG_ERROR, "iV_ProcessIMD %s bad levels info: %s", pFileName, buffer);
+			return NULL;
+		}
+		pFileData += cnt;
+	}
+
 	if (strncmp(buffer, "LEVELS", 6) != 0)
 	{
 		debug(LOG_ERROR, "iV_ProcessIMD: expecting 'LEVELS' directive (%s)", buffer);
@@ -758,6 +800,13 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 	if (bTextured)
 	{
 		int texpage = iV_GetTexture(texfile);
+		int normalpage = iV_TEX_INVALID;
+
+		if (normalfile[0] != '\0')
+		{
+			debug(LOG_WARNING, "Loading normal map %s for %s", normalfile, pFileName);
+			normalpage = iV_GetTexture(normalfile);
+		}
 
 		ASSERT_OR_RETURN(NULL, texpage >= 0, "%s could not load tex page %s", pFileName, texfile);
 
@@ -765,6 +814,7 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 		for (psShape = shape; psShape != NULL; psShape = psShape->next)
 		{
 			psShape->texpage = texpage;
+			psShape->normalpage = normalpage;
 		}
 
 		// check if model should use team colour mask

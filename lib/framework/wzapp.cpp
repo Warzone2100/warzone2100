@@ -127,7 +127,7 @@ void WzMainWindow::loadCursor(CURSOR cursor, int x, int y, QImageReader &buffer)
 	cursors[cursor] = new QCursor(QPixmap::fromImage(buffer.read()));
 }
 
-WzMainWindow::WzMainWindow(const QGLFormat &format, QWidget *parent) : QGLWidget(format, parent)
+WzMainWindow::WzMainWindow(QSize resolution, const QGLFormat &format, QWidget *parent) : QtGameWidget(resolution, format, parent)
 {
 	myself = this;
 	notReadyToPaint = true;
@@ -193,8 +193,16 @@ WzMainWindow::WzMainWindow(const QGLFormat &format, QWidget *parent) : QGLWidget
 	// Want focusOutEvent messages.
 	setFocusPolicy(Qt::StrongFocus);
 
+	// set radix character (again) to the period (".")
+	setlocale(LC_NUMERIC, "C");
+
+#if !defined(WZ_OS_MAC)
 	// Want áéíóú inputMethodEvent messages.
-	setAttribute(Qt::WA_InputMethodEnabled);
+	setAttribute(Qt::WA_InputMethodEnabled, true);
+#else
+	// But not on the Mac (no ALT+H on US Extended Keyboards)
+	setAttribute(Qt::WA_InputMethodEnabled, false);
+#endif
 }
 
 WzMainWindow::~WzMainWindow()
@@ -226,6 +234,9 @@ void WzMainWindow::resizeGL(int width, int height)
 {
 	screenWidth = width;
 	screenHeight = height;
+
+	scaledFont.setFamily("DejaVu Sans");
+	scaledFont.setPixelSize(12 * height / 480);
 
 	glViewport(0, 0, width, height);
 	glMatrixMode(GL_PROJECTION);
@@ -288,6 +299,8 @@ void WzMainWindow::setFontType(enum iV_fonts fontID)
 	case font_small:
 		setFont(smallFont);
 		break;
+	case font_scaled:
+		setFont(scaledFont);
 	default:
 		break;
 	}
@@ -733,12 +746,12 @@ void wzCreateCursor(CURSOR index, uint8_t *data, uint8_t *mask, int w, int h, in
 
 void wzGrabMouse()
 {
-	WzMainWindow::instance()->grabMouse();
+	WzMainWindow::instance()->trapMouse();
 }
 
 void wzReleaseMouse()
 {
-	WzMainWindow::instance()->releaseMouse();
+	WzMainWindow::instance()->freeMouse();
 }
 
 bool wzActiveWindow()
@@ -1246,7 +1259,7 @@ void WzConfig::setVector3f(const QString &name, const Vector3f &v)
 Vector3f WzConfig::vector3f(const QString &name)
 {
 	Vector3f r(0.0, 0.0, 0.0);
-	ASSERT_OR_RETURN(r, contains(name), "Missing %s", name.toUtf8().constData());
+	if (!contains(name)) return r;
 	QStringList v = value(name).toStringList();
 	ASSERT(v.size() == 3, "Bad list of %s", name.toUtf8().constData());
 	r.x = v[0].toDouble();
@@ -1267,7 +1280,7 @@ void WzConfig::setVector3i(const QString &name, const Vector3i &v)
 Vector3i WzConfig::vector3i(const QString &name)
 {
 	Vector3i r(0, 0, 0);
-	ASSERT_OR_RETURN(r, contains(name), "Missing %s", name.toUtf8().constData());
+	if (!contains(name)) return r;
 	QStringList v = value(name).toStringList();
 	ASSERT(v.size() == 3, "Bad list of %s", name.toUtf8().constData());
 	r.x = v[0].toInt();
@@ -1287,11 +1300,10 @@ void WzConfig::setVector2i(const QString &name, const Vector2i &v)
 Vector2i WzConfig::vector2i(const QString &name)
 {
 	Vector2i r(0, 0);
-	ASSERT_OR_RETURN(r, contains(name), "Missing %s", name.toUtf8().constData());
+	if (!contains(name)) return r;
 	QStringList v = value(name).toStringList();
 	ASSERT(v.size() == 2, "Bad list of %s", name.toUtf8().constData());
 	r.x = v[0].toInt();
 	r.y = v[1].toInt();
 	return r;
 }
-

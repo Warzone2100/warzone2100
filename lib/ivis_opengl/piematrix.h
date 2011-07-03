@@ -33,15 +33,6 @@
 //*************************************************************************
 
 /*!
- * Rotate and translate v with the worldmatrix. Store the result in s
- * Float variant
- * \param[in] v Vector to translate
- * \param[out] s Resulting vector
- */
-void pie_RotateTranslate3i(const Vector3i *v, Vector3i *s);
-
-
-/*!
  * Calculate surface normal
  * Eg. if a polygon (with n points in clockwise order) normal is required,
  * \c p1 = point 0, \c p2 = point 1, \c p3 = point n-1
@@ -78,7 +69,6 @@ extern void pie_PerspectiveEnd(void);
 
 //*************************************************************************
 
-extern void pie_VectorInverseRotate0(const Vector3i *v1, Vector3i *v2);
 extern void pie_SetGeometricOffset(int x, int y);
 
 extern void pie_Begin3DScene(void);

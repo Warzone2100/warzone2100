@@ -1,4 +1,4 @@
-SUBDIRS=build_tools po win32 lib src data pkg
+SUBDIRS=build_tools po win32 3rdparty/miniupnpc lib src data pkg
 
 top_srcdir=.
 top_builddir=.
@@ -6,5 +6,5 @@ top_builddir=.
 include $(top_srcdir)/makerules/common.mk
 include $(top_srcdir)/makerules/submake.mk
 
-src: build_tools win32 lib
+src: build_tools win32 3rdparty/miniupnpc lib
 pkg: data src po

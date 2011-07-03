@@ -221,7 +221,7 @@ void moveUpdateBaseSpeed(void)
  *          should not try to route here again for a while
  *  @todo Document what "should not try to route here again for a while" means.
  */
-static bool moveDroidToBase(DROID *psDroid, UDWORD x, UDWORD y, bool bFormation)
+static bool moveDroidToBase(DROID *psDroid, UDWORD x, UDWORD y, bool bFormation, FPATH_MOVETYPE moveType)
 {
 	FPATH_RETVAL		retVal = FPR_OK;
 
@@ -242,7 +242,7 @@ static bool moveDroidToBase(DROID *psDroid, UDWORD x, UDWORD y, bool bFormation)
 	}
 	else
 	{
-		retVal = fpathDroidRoute(psDroid, x, y, FMT_MOVE);
+		retVal = fpathDroidRoute(psDroid, x, y, moveType);
 	}
 
 	if ( retVal == FPR_OK )
@@ -282,18 +282,18 @@ static bool moveDroidToBase(DROID *psDroid, UDWORD x, UDWORD y, bool bFormation)
 /** Move a droid to a location, joining a formation
  *  @see moveDroidToBase() for the parameter and return value specification
  */
-bool moveDroidTo(DROID* psDroid, UDWORD x, UDWORD y)
+bool moveDroidTo(DROID* psDroid, UDWORD x, UDWORD y, FPATH_MOVETYPE moveType)
 {
-	return moveDroidToBase(psDroid,x,y, true);
+	return moveDroidToBase(psDroid, x, y, true, moveType);
 }
 
 /** Move a droid to a location, not joining a formation
  *  @see moveDroidToBase() for the parameter and return value specification
  */
-bool moveDroidToNoFormation(DROID* psDroid, UDWORD x, UDWORD y)
+bool moveDroidToNoFormation(DROID* psDroid, UDWORD x, UDWORD y, FPATH_MOVETYPE moveType)
 {
 	ASSERT(x > 0 && y > 0, "Bad movement position");
-	return moveDroidToBase(psDroid,x,y, false);
+	return moveDroidToBase(psDroid, x, y, false, moveType);
 }
 
 

@@ -2,6 +2,7 @@
 
 
 INSTALL_PATH = $(HOME)/Applications
+LD_RUNPATH_SEARCH_PATHS = @loader_path/../Frameworks
 PREBINDING = NO
 APPLY_RULES_IN_COPY_FILES = YES
 INFOPLIST_FILE = Resources/Warzone-Info.plist
@@ -13,7 +14,7 @@ WRAPPER_EXTENSION = app
 
 FRAMEWORK_SEARCH_PATHS = $(inherited) $(FRAMEWORK_SEARCH_PATHS_QUOTED_1) $(FRAMEWORK_SEARCH_PATHS_QUOTED_2) $(FRAMEWORK_SEARCH_PATHS_QUOTED_3)
 
-HEADER_SEARCH_PATHS = $(inherited) $(HEADER_SEARCH_PATHS_QUOTED_1) $(HEADER_SEARCH_PATHS_QUOTED_2)
+HEADER_SEARCH_PATHS = $(inherited) $(HEADER_SEARCH_PATHS_QUOTED_1)
 
 LIBRARY_SEARCH_PATHS = $(inherited) $(LIBRARY_SEARCH_PATHS_QUOTED_1) $(LIBRARY_SEARCH_PATHS_QUOTED_3)
 
@@ -46,7 +47,7 @@ GCC_WARN_UNUSED_VALUE = YES // -Wunused-value
 GCC_WARN_UNUSED_VARIABLE = YES // -Wunused-variable
 
 // Build setting dependent warnings
-WarnForCandCpp = -Wall -Wextra -Wcast-align -Wwrite-strings -Wpointer-arith $(WarnForCandCppDep) // Wno-missing-declarations is set on GLee.c; otherwise we would have +3000 warnings
+WarnForCandCpp = -Wall -Wextra -Wcast-align -Wwrite-strings -Wpointer-arith $(WarnForCandCppDep)
 WarnForC = -Wstrict-prototypes -Wdeclaration-after-statement $(WarnForCDep)
 WarnForCpp = $(WarnForCppDep)
 
