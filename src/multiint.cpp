@@ -342,13 +342,14 @@ void loadMapPreview(bool hideInterface)
 	char			*pFileData = NULL;
 	LEVEL_DATASET	*psLevel = NULL;
 	PIELIGHT		plCliffL, plCliffH, plWater, plRoadL, plRoadH, plGroundL, plGroundH;
-
 	UDWORD			x, y, height;
 	UBYTE			col;
 	MAPTILE			*psTile,*WTile;
 	UDWORD oursize;
 	Vector2i playerpos[MAX_PLAYERS];	// Will hold player positions
 	char  *ptr = NULL, *imageData = NULL;
+
+	game.mapHasScavengers = false; // this is really the wrong place for it, but this is where it has to be
 
 	if(psMapTiles)
 	{
@@ -1369,7 +1370,7 @@ static void addGameOptions()
 		}
 	}
 
-	if (game.maxPlayers == MAX_PLAYERS || !foundScavengerPlayerInMap)
+	if (game.maxPlayers == MAX_PLAYERS || !game.mapHasScavengers)
 	{
 		widgSetButtonState(psWScreen, MULTIOP_SKIRMISH, WBUT_LOCK);
 		widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN, WBUT_DISABLE);	// full, cannot enable scavenger player

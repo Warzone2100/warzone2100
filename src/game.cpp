@@ -2263,7 +2263,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		//load the data into apsDroidLists
 		if (loadSaveDroid(aFileName, apsDroidLists))
 		{
-			debug(LOG_INFO, "Loaded new style droids");
+			debug(LOG_SAVE, "Loaded new style droids");
 			droidMap.insert(aFileName, apsDroidLists);	// load pointers later
 		}
 		else
@@ -2283,7 +2283,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 				debug( LOG_NEVER, "loadgame: Fail10\n" );
 				goto error;
 			}
-			debug(LOG_INFO, "Loaded old style droids");
+			debug(LOG_SAVE, "Loaded old style droids");
 		}
 	}
 	else
@@ -4129,8 +4129,6 @@ bool loadSaveDroidInit(char *pFileData, UDWORD filesize)
 	return true;
 }
 
-bool foundScavengerPlayerInMap = true;  // A bit hackish to check for scavengers here, don't know if there's a better way.
-
 // -----------------------------------------------------------------------------------------
 // Remaps old player number based on position on map to new owner
 static UDWORD RemapPlayerNumber(UDWORD OldNumber)
@@ -4146,7 +4144,7 @@ static UDWORD RemapPlayerNumber(UDWORD OldNumber)
 	{
 		if (OldNumber == NetPlay.players[i].position)
 		{
-			foundScavengerPlayerInMap = foundScavengerPlayerInMap || i == scavengerSlot();
+			game.mapHasScavengers = game.mapHasScavengers || i == scavengerSlot();
 			return i;
 		}
 	}
@@ -4154,8 +4152,44 @@ static UDWORD RemapPlayerNumber(UDWORD OldNumber)
 	return 0;
 }
 
-// -----------------------------------------------------------------------------------------
-/*This is *ALWAYS* called by a User Save Game */
+static int getPlayer(WzConfig &ini)
+{
+	if (ini.contains("player"))
+	{
+		QVariant result = ini.value("player");
+		if (result.toString().startsWith("scavenger"))
+		{
+			game.mapHasScavengers = true;
+			return scavengerSlot();
+		}
+		return result.toInt();
+	}
+	else if (ini.contains("startpos"))
+	{
+		int position = ini.value("startpos").toInt();
+		for (int i = 0; i < game.maxPlayers; i++)
+		{
+			if (NetPlay.players[i].position == position)
+			{
+				return i;
+			}
+		}
+	}
+	ASSERT(false, "No player info found!");
+	return 0;
+}
+
+static void setPlayer(WzConfig &ini, int player)
+{
+	if (scavengerSlot() == player)
+	{
+		ini.setValue("player", "scavenger");
+	}
+	else
+	{
+		ini.setValue("player", player);
+	}
+}
 
 static bool loadSaveDroidPointers(const QString &pFileName, DROID **ppsCurrentDroidLists)
 {
@@ -4170,7 +4204,7 @@ static bool loadSaveDroidPointers(const QString &pFileName, DROID **ppsCurrentDr
 	{
 		ini.beginGroup(list[i]);
 		DROID *psDroid;
-		int player = ini.value("player").toInt();
+		int player = getPlayer(ini);
 		int id = ini.value("id").toInt();
 
 		for (psDroid = ppsCurrentDroidLists[player]; psDroid && psDroid->id != id; psDroid = psDroid->psNext) {}
@@ -4242,7 +4276,7 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 {
 	if (!PHYSFS_exists(pFileName))
 	{
-		debug(LOG_INFO, "No %s found -- use fallback method", pFileName);
+		debug(LOG_SAVE, "No %s found -- use fallback method", pFileName);
 		return false;	// try to use fallback method
 	}
 	WzConfig ini(pFileName);
@@ -4256,7 +4290,7 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 	{
 		ini.beginGroup(list[i]);
 		DROID *psDroid;
-		int player = ini.value("player").toInt();
+		int player = getPlayer(ini);
 		int id = ini.value("id").toInt();
 		Position pos = ini.vector3i("position");
 		Rotation rot = ini.vector3i("rotation");
@@ -4428,7 +4462,7 @@ static bool writeDroid(WzConfig &ini, DROID *psCurr, bool onMission)
 {
 	ini.beginGroup("droid_" + QString::number(psCurr->id));
 	ini.setValue("id", psCurr->id);
-	ini.setValue("player", psCurr->player);
+	setPlayer(ini, psCurr->player);
 	ini.setValue("name", psCurr->aName);
 	ini.setVector3i("position", psCurr->pos);
 	ini.setVector3i("rotation", psCurr->rot);
@@ -4772,7 +4806,7 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 {
 	if (!PHYSFS_exists(pFileName))
 	{
-		debug(LOG_INFO, "No %s found -- use fallback method", pFileName);
+		debug(LOG_SAVE, "No %s found -- use fallback method", pFileName);
 		return false;	// try to use fallback method
 	}
 	WzConfig ini(pFileName);
@@ -4793,7 +4827,7 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 		STRUCTURE *psStructure;
 
 		ini.beginGroup(list[i]);
-		int player = ini.value("player").toInt();
+		int player = getPlayer(ini);
 		int id = ini.value("id").toInt();
 		Position pos = ini.vector3i("position");
 		Rotation rot = ini.vector3i("rotation");
@@ -5061,7 +5095,7 @@ bool writeStructFile(const char *pFileName)
 		{
 			ini.beginGroup("structure_" + QString::number(psCurr->id));
 			ini.setValue("id", psCurr->id);
-			ini.setValue("player", psCurr->player);
+			setPlayer(ini, psCurr->player);
 			ini.setValue("name", psCurr->pStructureType->pName);
 			ini.setVector3i("position", psCurr->pos);
 			ini.setVector3i("rotation", psCurr->rot);
@@ -5209,7 +5243,7 @@ bool loadSaveStructurePointers(QString filename, STRUCTURE **ppList)
 	{
 		ini.beginGroup(list[i]);
 		STRUCTURE *psStruct;
-		int player = ini.value("player").toInt();
+		int player = getPlayer(ini);
 		int id = ini.value("id").toInt();
 		for (psStruct = ppList[player]; psStruct && psStruct->id != id; psStruct = psStruct->psNext) { }
 		if (!psStruct)
@@ -5399,7 +5433,7 @@ bool loadSaveFeature2(const char *pFileName)
 {
 	if (!PHYSFS_exists(pFileName))
 	{
-		debug(LOG_INFO, "No %s found -- use fallback method", pFileName);
+		debug(LOG_SAVE, "No %s found -- use fallback method", pFileName);
 		return false;
 	}
 	WzConfig ini(pFileName);
@@ -5409,7 +5443,7 @@ bool loadSaveFeature2(const char *pFileName)
 		return false;
 	}
 	QStringList list = ini.childGroups();
-	debug(LOG_INFO, "Loading new style features (%d found)", list.size());
+	debug(LOG_SAVE, "Loading new style features (%d found)", list.size());
 	for (int i = 0; i < list.size(); ++i)
 	{
 		FEATURE *pFeature;
@@ -5520,7 +5554,7 @@ bool loadSaveTemplate(const char *pFileName)
 	for (int i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
-		int player = ini.value("player").toInt();
+		int player = getPlayer(ini);
 		DROID_TEMPLATE *psTemplate = new DROID_TEMPLATE;
 		psTemplate->pName = NULL;
 		sstrcpy(psTemplate->aName, ini.value("name").toString().toUtf8().constData());
@@ -5598,7 +5632,7 @@ bool writeTemplateFile(const char *pFileName)
 			ini.setValue("ref", psCurr->ref);
 			ini.setValue("droidType", psCurr->droidType);
 			ini.setValue("multiPlayerID", psCurr->multiPlayerID);
-			ini.setValue("player", player);
+			setPlayer(ini, player);
 			ini.setValue("body", (asBodyStats + psCurr->asParts[COMP_BODY])->pName);
 			ini.setValue("propulsion", (asPropulsionStats + psCurr->asParts[COMP_PROPULSION])->pName);
 			ini.setValue("brain", (asBrainStats + psCurr->asParts[COMP_BRAIN])->pName);
@@ -6446,8 +6480,6 @@ UDWORD getSaveGameType(void)
  */
 bool plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[])
 {
-	foundScavengerPlayerInMap = false;
-
 	union { SAVE_STRUCTURE_V2 v2; SAVE_STRUCTURE_V20 v20; } sSave;  // close eyes now.
 	SAVE_STRUCTURE_V2 *psSaveStructure2   = &sSave.v2;
 	SAVE_STRUCTURE_V20 *psSaveStructure20 = &sSave.v20;
@@ -6484,7 +6516,7 @@ bool plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[])
 			ini.beginGroup(list[i]);
 			QString name = ini.value("name").toString();
 			Position pos = ini.vector3i("position");
-			playerid = ini.value("player").toInt();
+			playerid = getPlayer(ini);
 
 			if (name.startsWith("A0CommandCentre"))
 			{

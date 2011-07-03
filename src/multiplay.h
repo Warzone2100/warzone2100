@@ -30,7 +30,8 @@
 #include "droid.h"  // For INITIAL_DROID_ORDERS.
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
-// Game Options Structure. Enough info to completely describe the static stuff in amultiplay game.
+// Game Options Structure. Enough info to completely describe the static stuff in a multiplayer game.
+// Also used for skirmish games. And sometimes for campaign. Should be moved somewhere else.
 struct MULTIPLAYERGAME
 {
 	uint8_t		type;						// DMATCH/CAMPAIGN/SKIRMISH/TEAMPLAY etc...
@@ -43,6 +44,7 @@ struct MULTIPLAYERGAME
 	uint8_t		base;						// clean/base/base&defence
 	uint8_t		alliance;					// no/yes/AIs vs Humans
 	uint8_t		skDiff[MAX_PLAYERS];		// skirmish game difficulty settings. 0x0=OFF 0xff=HUMAN
+	bool		mapHasScavengers;
 };
 
 struct MULTISTRUCTLIMITS

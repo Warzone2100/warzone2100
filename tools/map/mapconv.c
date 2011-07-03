@@ -210,7 +210,14 @@ int main(int argc, char **argv)
 			MADD("position = %u, %u, %u", psObj->x, psObj->y, psObj->z);
 			MADD("rotation = %u, 0, 0", DEG(psObj->direction));
 			MADD("name = %s", psObj->name);
-			MADD("player = %u", psObj->player);
+			if (psObj->player < map->numPlayers)
+			{
+				MADD("startpos = %u", psObj->player);
+			}
+			else
+			{
+				MADD("player = scavenger");
+			}
 
 			// Merge modules into host building entry
 			if (strcmp(psObj->name, "A0LightFactory") == 0)
@@ -271,7 +278,14 @@ int main(int argc, char **argv)
 			MADD("id = %u", psObj->id);
 			MADD("position = %u, %u, %u", psObj->x, psObj->y, psObj->z);
 			MADD("rotation = %u, 0, 0", DEG(psObj->direction));
-			MADD("player = %u", psObj->player);
+			if (psObj->player < map->numPlayers)
+			{
+				MADD("startpos = %u", psObj->player);
+			}
+			else
+			{
+				MADD("player = scavenger");
+			}
 			MADD("template = %s", psObj->name);
 		}
 		fclose(fp);
