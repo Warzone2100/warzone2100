@@ -4597,7 +4597,7 @@ static bool writeDroidFile(const char *pFileName, DROID **ppsCurrentDroidLists)
 		return false;
 	}
 	bool onMission = (ppsCurrentDroidLists[0] == mission.apsDroidLists[0]);
-	for (int player = 0; player < game.maxPlayers; player++)
+	for (int player = 0; player < MAX_PLAYERS; player++)
 	{
 		for (DROID *psCurr = ppsCurrentDroidLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
 		{
@@ -5089,7 +5089,7 @@ bool writeStructFile(const char *pFileName)
 		debug(LOG_ERROR, "Could not open %s", pFileName);
 		return false;
 	}
-	for (int player = 0; player < game.maxPlayers; player++)
+	for (int player = 0; player < MAX_PLAYERS; player++)
 	{
 		for (STRUCTURE *psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
 		{
@@ -5103,7 +5103,7 @@ bool writeStructFile(const char *pFileName)
 			ini.setValue("born", psCurr->born);
 			if (psCurr->timeLastHit != UDWORD_MAX) ini.setValue("timeLastHit", psCurr->timeLastHit);
 			if (psCurr->selected) ini.setValue("selected", psCurr->selected);
-			for (int i = 0; i < game.maxPlayers; i++)
+			for (int i = 0; i < MAX_PLAYERS; i++)
 			{
 				if (psCurr->visible[i]) ini.setValue("visible/" + QString::number(i), psCurr->visible[i]);
 			}
@@ -5532,9 +5532,9 @@ bool writeFeatureFile(const char *pFileName)
 		ini.setValue("born", psCurr->born);
 		if (psCurr->selected) ini.setValue("selected", psCurr->selected);
 		if (psCurr->timeLastHit != UDWORD_MAX) ini.setValue("timeLastHit", psCurr->timeLastHit);
-		for (int i = 0; i < game.maxPlayers; i++)
+		for (int i = 0; i < MAX_PLAYERS; i++)
 		{
-			ini.setValue("visible/" + QString::number(i), psCurr->visible[i]);
+			if (psCurr->visible[i]) ini.setValue("visible/" + QString::number(i), psCurr->visible[i]);
 		}
 		ini.endGroup();
 	}
@@ -5623,7 +5623,7 @@ bool writeTemplateFile(const char *pFileName)
 		debug(LOG_ERROR, "Could not open %s", pFileName);
 		return false;
 	}
-	for (int player = 0; player < game.maxPlayers; player++)
+	for (int player = 0; player < MAX_PLAYERS; player++)
 	{
 		for (DROID_TEMPLATE *psCurr = apsDroidTemplates[player]; psCurr != NULL; psCurr = psCurr->psNext)
 		{
@@ -5765,7 +5765,7 @@ bool loadSaveCompList(const char *pFileName)
 		debug(LOG_ERROR, "Could not open %s", pFileName);
 		return false;
 	}
-	for (int player = 0; player < game.maxPlayers; player++)
+	for (int player = 0; player < MAX_PLAYERS; player++)
 	{
 		ini.beginGroup("player_" + QString::number(player));
 		QStringList list = ini.childKeys();
@@ -5805,7 +5805,7 @@ static bool writeCompListFile(const char *pFileName)
 	}
 
 	// Save each type of struct type
-	for (int player = 0; player < game.maxPlayers; player++)
+	for (int player = 0; player < MAX_PLAYERS; player++)
 	{
 		ini.beginGroup("player_" + QString::number(player));
 		for (int i = 0; i < numBodyStats; i++)
@@ -5871,7 +5871,7 @@ static bool loadSaveStructTypeList(const char *pFileName)
 		debug(LOG_ERROR, "Could not open %s", pFileName);
 		return false;
 	}
-	for (int player = 0; player < game.maxPlayers; player++)
+	for (int player = 0; player < MAX_PLAYERS; player++)
 	{
 		ini.beginGroup("player_" + QString::number(player));
 		QStringList list = ini.childKeys();
@@ -5912,7 +5912,7 @@ static bool writeStructTypeListFile(const char *pFileName)
 	}
 
 	// Save each type of struct type
-	for (int player = 0; player < game.maxPlayers; player++)
+	for (int player = 0; player < MAX_PLAYERS; player++)
 	{
 		ini.beginGroup("player_" + QString::number(player));
 		STRUCTURE_STATS *psStats = asStructureStats;

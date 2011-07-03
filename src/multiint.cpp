@@ -349,7 +349,9 @@ void loadMapPreview(bool hideInterface)
 	Vector2i playerpos[MAX_PLAYERS];	// Will hold player positions
 	char  *ptr = NULL, *imageData = NULL;
 
-	game.mapHasScavengers = false; // this is really the wrong place for it, but this is where it has to be
+	// absurd hack, since there is a problem with updating this crap piece of info, we're setting it to
+	// true by default for now, like it used to be
+	game.mapHasScavengers = true; // this is really the wrong place for it, but this is where it has to be
 
 	if(psMapTiles)
 	{
@@ -3513,6 +3515,7 @@ bool startMultiOptions(bool bReenter)
 			setPlayerColour(i,i);						//reset all colors as well
 		}
 
+		game.mapHasScavengers = true; // FIXME, should default to false
 		if(!NetPlay.bComms)			// force skirmish if no comms.
 		{
 			game.type = SKIRMISH;
