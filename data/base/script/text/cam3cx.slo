@@ -10,7 +10,6 @@
 public		int		curPlayer, player, enemy, powerBoost;
 public		SOUND		powTransSnd, rescuedSnd;
 public		int		numRegions, RegionsX1[2], RegionsY1[2], RegionsX2[2], RegionsY2[2];
-//public		INTMESSAGE	MissionBrief; 
 public		SOUND		incomingSnd;
 public		int		limboX1, limboY1, limboX2, limboY2;
 /* Structure Limits */
@@ -31,7 +30,7 @@ trigger clearMessageTrig(wait, 100);	//10 second delay
 event betaDead;
 event start(CALL_GAMEINIT)
 {
-//set structure limits
+	// set structure limits
 	count = 0;
 	while (count < numStrucStats1)
 	{
@@ -40,26 +39,25 @@ event start(CALL_GAMEINIT)
 		count = count + 1;
 	}
 
-//don't let player see his base on 3A!!!
+	// don't let player see his base on 3A!!!
 	setScrollParams(0, 137, 64, 192);	//(0, 140, 64, 192);
-//set position for limbo units for this map
+	// set position for limbo units for this map
 	setLimboLanding(limboX1, limboY1, limboX2, limboY2);
 
 	createAlliance(player, curPlayer);
 	newColour = getPlayerColour(player);
 
-    //store the old colour so we can reset it later
-    oldColour = getPlayerColour(curPlayer);
+	// store the old colour so we can reset it later
+	oldColour = getPlayerColour(curPlayer);
 
 	setPlayerColour(newColour, curPlayer);	//make curPlayer units player colour
-//give gamma base starting tech
+	// give gamma base starting tech
 	count = 0;
 	while (count < numTechs)
 	{
 		completeResearch(startTech[count], curPlayer);
 		count = count + 1;
 	}
-
 }
 
 //has player found gamma base (after briefing)
@@ -81,11 +79,9 @@ event seen(inactive)
 	extraVictoryFlag = TRUE;
 	resetLimboMission();		//allow access to base
 	setScrollParams(0, 0, 64, 192);	//allow full map access
-//set radar zoom level
 	setRadarZoom(0);
-//set timelimit
 	setMissionTime(timeLimit);
-//reset structure limits
+	// reset structure limits
 	count = 0;
 	while (count < numStrucStats1)
 	{
@@ -100,8 +96,8 @@ event seen(inactive)
 		count = count + 1;
 	}
 
-    //reset the player's colour
-    setPlayerColour(oldColour, curPlayer);
+	// reset the player's colour
+	setPlayerColour(oldColour, curPlayer);
 
 	addPower(powerBoost, player);
 	playSound(powTransSnd, player);
@@ -141,9 +137,8 @@ event betaDead(every, 10)	//45)
 	if (temp >= getDroidCount(player))	//only gamma units alive => limbo units all dead!!
 	{
 		extraFailFlag = TRUE;
-        //reset the player's colour
-        setPlayerColour(oldColour, curPlayer);
-		
-        setEventTrigger(betaDead, inactive);
+		// reset the player's colour
+		setPlayerColour(oldColour, curPlayer);
+		setEventTrigger(betaDead, inactive);
 	}
 }

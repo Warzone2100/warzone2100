@@ -8,7 +8,6 @@
 /* Next Level stuff */
 public		LEVEL		NextLev;
 
-
 /* Briefings */
 public		int		numBriefs;
 public		INTMESSAGE	brief[5];
@@ -32,7 +31,7 @@ trigger nextLevTrig	(every, 20);
 /* Initialisation */
 event	start(CALL_GAMEINIT)
 {
-//play mission brief(s)
+	// play mission brief(s)
 	if (numBriefs > 0)
 	{
 		addMessage(brief[0], MISS_MSG, 0, true);
@@ -54,15 +53,11 @@ event	briefings(CALL_VIDEO_QUIT)		//need to rework this better!!
 	}
 }
 
-
 /* Events: Win or Lose */
 event nextLevEvnt(inactive)		//assumes victory already checked
 {
 	flushConsoleMessages();
 	startMission(CAMP_EXPAND, NextLev);
-	//End game here for now! (don't try next mission)
-	//gameOver(true);
-
 	setEventTrigger(nextLevEvnt, inactive);
 }
 

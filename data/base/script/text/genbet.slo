@@ -9,7 +9,6 @@
 /* Next Level stuff */
 public		LEVEL		NextLev;
 
-
 /* Structure Limits */
 public		int		numStrucStats, strucLimit[6];
 public		STRUCTURESTAT	strucStat[6];
@@ -29,12 +28,10 @@ public		INTMESSAGE	endMsg;
 /* Time Limit */
 public		int		timeLimit;
 
-
 /* 'Globals' */
 public		int		player;
 public		SOUND		lostSnd;				//mission lost
 public		TEMPLATE	transporter;
-
 
 /* General variables */
 private		int		count, count2;				//for while loops
@@ -55,21 +52,12 @@ event briefings;
 /* Initialisation */
 event	start(CALL_GAMEINIT)
 {
-//centre view
 	centreViewPos(centreX, centreY);
-
-//set scroll limits
-//	setScrollParams(scrollX1, scrollY1, scrollX2, scrollY2);
-
-//set radar zoom level
 	setRadarZoom(zoomLevel);
-
-//set Mission time limit
 	setMissionTime(timeLimit);
-//make sure reinforcements disabled
 	setReinforcementTime(-1);
-//set LZ and no go areas - shouldn't need to do this any more - it is until all NoGoAreas are saved in the save game info
-//The LZ can now be set up just before FlyTransporterIn()
+	// set LZ and no go areas - shouldn't need to do this any more - it is until all NoGoAreas are saved in the save game info
+	// The LZ can now be set up just before FlyTransporterIn()
 	initAllNoGoAreas();
 	count = 0;
 	while (count < numLZ)
@@ -78,7 +66,7 @@ event	start(CALL_GAMEINIT)
 		count = count + 1;
 	}
 
-//set structure limits
+	// set structure limits
 	count = 0;
 	while (count < numStrucStats)
 	{
@@ -87,10 +75,9 @@ event	start(CALL_GAMEINIT)
 		count = count + 1;
 	}
 
-//place transport
 	addDroid(transporter, (LZX[0] * 128) + 64, (LZY[0] * 128) + 64, player);
 	setTransporterExit(player, exitX, exitY);
-//play mission brief(s)
+	// play mission brief(s)
 	if (numBriefs > 0)
 	{
 		if (briefVal[0] < 2)	//cope with don't play immediately
@@ -137,19 +124,12 @@ event	briefings(CALL_VIDEO_QUIT)		//need to rework this better!!
 
 event nextLevEvnt(CALL_START_NEXT_LEVEL)
 {
-	//setLandingZone(LZ_X1, LZ_Y1, LZ_X2, LZ_Y2);
-	//use last LZ coords for next map
-//shouldn't need to do this any more. The LZ can now be set up just before FlyTransporterIn()
-	//setLandingZone(LZX[numLZ] - 1, LZY[numLZ] - 1, LZX[numLZ] + 1, LZY[numLZ] + 1);
 	startMission(OFF_KEEP, NextLev);
 	setEventTrigger(nextLevEvnt, inactive);
 }
 
 event gameLost(inactive)
 {
-//	addMessage(endMsg, MISS_MSG, 0, true);
-//	pause(10);
-//	gameOver(false);
 	gameOverMessage(endMsg, MISS_MSG, 0, false);
 	setEventTrigger(gameLost, inactive);
 }

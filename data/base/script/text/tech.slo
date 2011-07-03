@@ -33,7 +33,7 @@ private		int		count, temp;
 
 event start(CALL_GAMEINIT)
 {
-//give player starting tech
+	// give player starting tech
 	count = 0;
 	while (count < numTechs)
 	{
@@ -94,7 +94,7 @@ event start(CALL_GAMEINIT)
 		makeComponentAvailable(startBrain[count], player);
 		count = count + 1;
 	}
-//give player starting research
+	// give player starting research
 	count = 0;
 	while (count < numResearch)
 	{

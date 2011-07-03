@@ -36,13 +36,9 @@ machineGun		WEAPON			"MG1Mk1"
 
 spade			CONSTRUCT		"Spade1Mk1"
 
-//ecm				ECM				"ECM1PylonMk1"
 defaultSensor	SENSOR			"DefaultSensor1Mk1"
-
 
 wheeledProp		PROPULSION		"wheeled01"
 trackProp		PROPULSION		"tracked01"
 babaProp		PROPULSION		"BaBaProp"
-
-//commander		RESEARCHSTAT		"R-Comp-CommandTurret01"
 }
