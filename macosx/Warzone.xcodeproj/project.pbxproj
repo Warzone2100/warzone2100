@@ -431,7 +431,6 @@
 		43B8FD10127CB0BE006F5A13 /* Gettext.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 022B2F220BD55814002E64E3 /* Gettext.framework */; };
 		43B8FD2E127CB13F006F5A13 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43B8FD2D127CB13F006F5A13 /* Carbon.framework */; };
 		43B8FD2F127CB13F006F5A13 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97F013D10EDEAE5C004947E5 /* Cocoa.framework */; };
-		43B8FD31127CB13F006F5A13 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43B8FD30127CB13F006F5A13 /* OpenAL.framework */; };
 		43B8FD33127CB13F006F5A13 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43B8FD32127CB13F006F5A13 /* OpenAL.framework */; };
 		43B8FD35127CB13F006F5A13 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43B8FD34127CB13F006F5A13 /* OpenGL.framework */; };
 		43B8FE84127CB29D006F5A13 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43B8FE83127CB29D006F5A13 /* CoreFoundation.framework */; };
@@ -1488,7 +1487,6 @@
 		43B8F286127C8FDD006F5A13 /* netqueue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = netqueue.cpp; path = ../lib/netplay/netqueue.cpp; sourceTree = SOURCE_ROOT; };
 		43B8F287127C8FDD006F5A13 /* netqueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = netqueue.h; path = ../lib/netplay/netqueue.h; sourceTree = SOURCE_ROOT; };
 		43B8FD2D127CB13F006F5A13 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
-		43B8FD30127CB13F006F5A13 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		43B8FD32127CB13F006F5A13 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		43B8FD34127CB13F006F5A13 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		43B8FE83127CB29D006F5A13 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
@@ -1681,7 +1679,6 @@
 				4318439B1363955300BA2BC5 /* MiniUPnPc.framework in Frameworks */,
 				43B8FD2E127CB13F006F5A13 /* Carbon.framework in Frameworks */,
 				43B8FD2F127CB13F006F5A13 /* Cocoa.framework in Frameworks */,
-				43B8FD31127CB13F006F5A13 /* OpenAL.framework in Frameworks */,
 				43B8FD33127CB13F006F5A13 /* OpenAL.framework in Frameworks */,
 				43B8FD35127CB13F006F5A13 /* OpenGL.framework in Frameworks */,
 				4333612211A07FB900380F5E /* QtCore.framework in Frameworks */,
@@ -2475,7 +2472,6 @@
 				97F013D10EDEAE5C004947E5 /* Cocoa.framework */,
 				43B8FE83127CB29D006F5A13 /* CoreFoundation.framework */,
 				43B8FE9C127CB327006F5A13 /* IOKit.framework */,
-				43B8FD30127CB13F006F5A13 /* OpenAL.framework */,
 				43B8FD32127CB13F006F5A13 /* OpenAL.framework */,
 				43B8FD34127CB13F006F5A13 /* OpenGL.framework */,
 				43B9DE3813846038004C7351 /* libiconv.dylib */,
