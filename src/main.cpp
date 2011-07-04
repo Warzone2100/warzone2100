@@ -1280,16 +1280,23 @@ int main(int argc, char *argv[])
 	}
 	screenWidth = w;
 	screenHeight = h;
-	mainwindow.show();
 	if (war_getFullscreen())
 	{
+		mainwindow.resize(w,h);
+		mainwindow.showFullScreen();
+		if(w>mainwindow.width()) {
+			w = mainwindow.width();
+		}
+		if(h>mainwindow.height()) {
+			h = mainwindow.height();
+		}
 		pie_SetVideoBufferWidth(w);
 		pie_SetVideoBufferHeight(h);
-		mainwindow.showFullScreen();
 	}
 	else
 	{
-		mainwindow.setMinimumSize(w, h);
+		mainwindow.show();
+																mainwindow.setMinimumSize(w, h);
 		mainwindow.setMaximumSize(w, h);
 	}
 	mainwindow.setReadyToPaint();
