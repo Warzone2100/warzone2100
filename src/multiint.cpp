@@ -680,6 +680,12 @@ bool joinGame(const char* host, uint32_t port)
 	{
 		return false;
 	}
+    
+    // Set playername to the used lobby username.
+    if (lobbyclient.isAuthenticated())
+    {
+        sstrcpy(sPlayer, lobbyclient.getUser().toUtf8().constData());
+    }
 
 	if (!NETjoinGame(host, port, (char*)sPlayer))	// join
 	{
@@ -719,6 +725,7 @@ bool joinGame(const char* host, uint32_t port)
 
 		return false;
 	}
+    
 	ingame.localJoiningInProgress	= true;
 
 	loadMultiStats(sPlayer,&playerStats);
@@ -1543,8 +1550,20 @@ static void addGameOptions()
 		widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN, WBUT_DISABLE);	// full, cannot enable scavenger player
 	}
 
-	//just display the game options.
+    // Set the players name to his lobby username.
+    if (lobbyclient.isAuthenticated())
+    {
+        sstrcpy(sPlayer, lobbyclient.getUser().toUtf8().constData());
+    }
+    
 	addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_PNAME, MCOL0, MROW1, _("Select Player Name"), (char*) sPlayer, IMAGE_EDIT_PLAYER, IMAGE_EDIT_PLAYER_HI, MULTIOP_PNAME_ICON);
+        
+    // Dont allow player name changes when he's authenticated to the lobby.
+	if (lobbyclient.isAuthenticated())
+	{
+		widgSetButtonState(psWScreen, MULTIOP_PNAME, WEDBS_DISABLE);
+		widgSetButtonState(psWScreen, MULTIOP_PNAME_ICON, WBUT_DISABLE);
+	}
 
 	// Fog type
 	addBlueForm(MULTIOP_OPTIONS,MULTIOP_FOG,_("Fog"),MCOL0,MROW6,MULTIOP_BLUEFORMW,27);
