@@ -1,3 +1,26 @@
+master_20110704
+ * General:
+   * Change: More script porting
+   * Change: Add fullscreen resolution switching support and trap cursor (commit:10a78a4a7ee3d4e3c22dc0f0f67575603a8397bf, commit:5893d2998e315a3717708df808b72f31e0f4a0e0, commit:2137dfaf1d9aef4c7679268170a757493061beaa, commit:3d5c00fe4aafe5bd9685b4fafb794027cd7ac5c9)
+   * Fix: Correctly load droid targets (ticket:2737, commit:10f674077dda2ff38188c31d00dd35f1b0e8885e)
+   * Fix: Load droid rotation (commit:dbea296778027f219c31f584f7bdbcb6a738a6d0)
+   * Fix: Put autosaves into the correct directory (ticket:2730, commit:7c6261c37c64619c2371530e7a786d4f47b90816)
+   * Fix: Don't crash when clicking on radar blips (ticket:2731, commit:10249e509519958cad4411fa2bd40385a824c35b)
+   * Fix: Correctly end the game on win/loss (ticket:2766, commit:7842a7d981c67b2d6cb32d5a989bc8adbe317c42)
+ * AIs:
+   * Semperfi: Fix attacks of opportunity with allies; do not try to hug an allied oil derrick, believing it to be hostile; do not crash if we check whether an oil feature is allied to us (commit:5066a04949a34866c955760364478dc2cec4bc6f)
+   * Dydo AI: Remove it, since it doesn't work properly and might have caused crashes (commit:d82ce97a770bf90ad41d7d14c2b6e9b420c58358)
+ * Graphics:
+   * Change: Add support for normal maps (commit:8aca9437a4c425bb0c02c9ab30e8aa31265bceea)
+ * UI:
+   * Fix: Show correct flag colors (commit:5fa3d50f0ccce83700b4fe6c2dea733ead822848)
+   * Fix: Don't get confused in the game setup screen when pressing escape (ticket:2697, commit:7bf5a23cdd19311890dfc0c92647b2d03e3b9188)
+ * Translations:
+   * Update: Hungarian (ticket:2738, ticket:2747, ticket:2754, ticket:2782, commit:50764d1beecc5605b09fccb843c0eb2b3f695616, commit:dd60a26657e3898ae44a30c2bf918f4d5f2c8033, commit:7e55df069b28ded87b465eabed7991aab2957697, commit:c3fc0e01cb07542464ba4ca5b588dd093632624b)
+   * Update: Dutch (ticket:2761, commit:3df67f1f223a65849c132bc46c7f33a916c1598b)
+   * Update: Brazilian (ticket:2786, commit:1c1bc823ccf3cfa5476448c3003ab01ecab84098)
+   * Update: Turkish (ticket:2794, commit:2242dac95fb1e9ff8c516e35bbe89944280fd807)
+
 master_20110519
  * General:
    * Change: Based on Qt now
