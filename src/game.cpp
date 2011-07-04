@@ -180,23 +180,12 @@ struct TILETYPE_SAVEHEADER : public GAME_SAVEHEADER
 	UDWORD quantity;
 };
 
-struct FLAG_SAVEHEADER : public GAME_SAVEHEADER
-{
-	UDWORD quantity;
-};
-
-struct PRODUCTION_SAVEHEADER : public GAME_SAVEHEADER
-{
-};
-
 /* Sanity check definitions for the save struct file sizes */
 #define GAME_HEADER_SIZE			8
 #define DROIDINIT_HEADER_SIZE		12
 #define STRUCT_HEADER_SIZE			12
 #define FEATURE_HEADER_SIZE			12
 #define TILETYPE_HEADER_SIZE		12
-#define FLAG_HEADER_SIZE			12
-#define PRODUCTION_HEADER_SIZE		8
 
 // general save definitions
 #define MAX_LEVEL_SIZE 20
@@ -1467,62 +1456,6 @@ struct SAVE_FEATURE_V14
 	FEATURE_SAVE_V14;
 };
 
-#define FEATURE_SAVE_V20 \
-	OBJECT_SAVE_V20; \
-	UBYTE	visible[MAX_PLAYERS]
-
-struct SAVE_FEATURE_V20
-{
-	FEATURE_SAVE_V20;
-};
-
-struct SAVE_FEATURE
-{
-	FEATURE_SAVE_V20;
-};
-
-struct SAVE_FLAG_V18
-{
-	POSITION_TYPE	type;				/*the type of position obj - FlagPos or ProxDisp*/
-	UDWORD			frameNumber;		/*when the Position was last drawn*/
-	UDWORD			screenX;			/*screen coords and radius of Position imd */
-	UDWORD			screenY;
-	UDWORD			screenR;
-	UDWORD			player;				/*which player the Position belongs to*/
-	int32_t			selected;			/*flag to indicate whether the Position (was BOOL which was a int)*/
-	Vector3i		coords;							//the world coords of the Position
-	UBYTE		factoryInc;						//indicates whether the first, second etc factory
-	UBYTE		factoryType;					//indicates whether standard, cyborg or vtol factory
-	UBYTE		dummyNOTUSED;						//sub value. needed to order production points.
-	UBYTE		dummyNOTUSED2;
-};
-
-struct SAVE_FLAG
-{
-	POSITION_TYPE	type;				/*the type of position obj - FlagPos or ProxDisp*/
-	UDWORD			frameNumber;		/*when the Position was last drawn*/
-	UDWORD			screenX;			/*screen coords and radius of Position imd */
-	UDWORD			screenY;
-	UDWORD			screenR;
-	UDWORD			player;				/*which player the Position belongs to*/
-	int32_t			selected;			/*flag to indicate whether the Position (was BOOL which was a int) */
-	Vector3i		coords;							//the world coords of the Position
-	UBYTE		factoryInc;						//indicates whether the first, second etc factory
-	UBYTE		factoryType;					//indicates whether standard, cyborg or vtol factory
-	UBYTE		dummyNOTUSED;						//sub value. needed to order production points.
-	UBYTE		dummyNOTUSED2;
-	UDWORD		repairId;
-};
-
-//PRODUCTION_RUN		asProductionRun[NUM_FACTORY_TYPES][MAX_FACTORY][MAX_PROD_RUN];
-struct SAVE_PRODUCTION
-{
-	UBYTE						quantity;			//number to build
-	UBYTE						built;				//number built on current run
-	UDWORD						multiPlayerID;		//template to build
-};
-
-
 /***************************************************************************/
 /*
  *	Local Variables
@@ -1543,6 +1476,7 @@ static SDWORD	startX, startY;
 static UDWORD   width, height;
 static UDWORD	gameType;
 static bool IsScenario;
+
 /***************************************************************************/
 /*
  *	Local ProtoTypes
