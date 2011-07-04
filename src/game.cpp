@@ -1467,8 +1467,6 @@ extern uint32_t synchObjID;    // unique ID creation thing..
 static UDWORD			saveGameVersion = 0;
 static bool				saveGameOnMission = false;
 static SAVE_GAME		saveGameData;
-static UDWORD			oldestSaveGameVersion = CURRENT_VERSION_NUM;
-static UDWORD			validityKey = 0;
 
 static UDWORD	savedGameTime;
 static UDWORD	savedObjId;
@@ -3164,13 +3162,6 @@ UDWORD getCampaign(const char* fileName)
 }
 
 // -----------------------------------------------------------------------------------------
-void game_SetValidityKey(UDWORD keys)
-{
-	validityKey = validityKey|keys;
-	return;
-}
-
-// -----------------------------------------------------------------------------------------
 /* code specific to version 7 of a save game */
 bool gameLoadV7(PHYSFS_file* fileHandle)
 {
@@ -3246,7 +3237,6 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 	unsigned int i, j;
 	static	SAVE_POWER	powerSaved[MAX_PLAYERS];
 	UDWORD			player;
-	char			date[MAX_STR_LENGTH];
 
 	debug(LOG_WZ, "gameLoadV: version %u", version);
 
@@ -3570,40 +3560,6 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 		savedObjId = saveGameData.objId;
 	}
 
-	if (version >= VERSION_18)//version 18
-	{
-		validityKey = saveGameData.validityKey;
-		oldestSaveGameVersion = saveGameData.oldestVersion;
-		if (oldestSaveGameVersion > version)
-		{
-			oldestSaveGameVersion = version;
-			validityKey = validityKey|VALIDITYKEY_VERSION;
-		}
-		else if (oldestSaveGameVersion < version)
-		{
-			validityKey = validityKey|VALIDITYKEY_VERSION;
-		}
-
-		strcpy(date,__DATE__);
-		ASSERT( strlen(date)<MAX_STR_LENGTH,"BuildDate; String error" );
-		if (strcmp(saveGameData.buildDate,date) != 0)
-		{
-			debug( LOG_NEVER, "saveGame build date differs;\nsavegame %s\n build    %s\n", saveGameData.buildDate, date );
-			validityKey = validityKey|VALIDITYKEY_DATE;
-			if (gameType == GTYPE_SAVE_MIDMISSION)
-			{
-				validityKey = validityKey|VALIDITYKEY_MID_GAME;
-			}
-		}
-	}
-	else
-	{
-		debug( LOG_NEVER, "saveGame build date differs;\nsavegame pre-Version 18 (%s)\n build    %s\n", saveGameData.buildDate, date );
-		oldestSaveGameVersion = 1;
-		validityKey = VALIDITYKEY_DATE;
-	}
-
-
 	if (version >= VERSION_19)//version 19
 	{
 		for(i=0; i<MAX_PLAYERS; i++)
@@ -3902,10 +3858,9 @@ static bool writeGameFile(const char* fileName, SDWORD saveType)
 	saveGame.objId = MAX(unsynchObjID*2, (synchObjID + 3)/4);
 
 	//version 18
-	ASSERT(strlen(__DATE__) < MAX_STR_LENGTH, "BuildDate; String error" );
-	strcpy(saveGame.buildDate, __DATE__);
-	saveGame.oldestVersion = oldestSaveGameVersion;
-	saveGame.validityKey = validityKey;
+	memset(saveGame.buildDate, 0, sizeof(saveGame.buildDate));
+	saveGame.oldestVersion = 0;
+	saveGame.validityKey = 0;
 
 	//version 19
 	for(i=0; i<MAX_PLAYERS; i++)

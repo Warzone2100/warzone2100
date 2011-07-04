@@ -60,7 +60,6 @@
 #include "multimenu.h"
 #include "atmos.h"
 #include "advvis.h"
-#include "game.h"
 #include "difficulty.h"
 
 #include "intorder.h"
@@ -1138,6 +1137,7 @@ void	kf_addInGameOptions( void )
 		intAddInGameOptions();
 		}
 }
+
 // --------------------------------------------------------------------------
 /* Tell the scripts to start a mission*/
 void	kf_AddMissionOffWorld( void )
@@ -1151,9 +1151,9 @@ void	kf_AddMissionOffWorld( void )
 	}
 #endif
 
-	game_SetValidityKey(VALIDITYKEY_CTRL_M);
 	eventFireCallbackTrigger((TRIGGER_TYPE)CALL_MISSION_START);
 }
+
 // --------------------------------------------------------------------------
 /* Tell the scripts to end a mission*/
 void	kf_EndMissionOffWorld( void )
@@ -1260,7 +1260,6 @@ void	kf_ToggleDebugMappings( void )
 	}
 	else
 	{
-		game_SetValidityKey(VALIDITYKEY_CHEAT_MODE);
 		processDebugMappings(true);
 	}
 	sasprintf((char**)&cmsg, _("(Player %u) is using cheat :%s"), selectedPlayer,

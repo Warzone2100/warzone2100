@@ -83,12 +83,6 @@
 #define KEEPOBJECTS				true
 #define FREEMEM					true
 
-#define VALIDITYKEY_DATE		0x01
-#define VALIDITYKEY_VERSION		0x02
-#define VALIDITYKEY_CTRL_M		0x04
-#define VALIDITYKEY_CHEAT_MODE	0x08
-#define VALIDITYKEY_MID_GAME	0x10
-
 enum GAME_TYPE
 {
 	GTYPE_SCENARIO_START,	///< Initial scenario state.
@@ -133,9 +127,6 @@ extern UDWORD getCampaign(const char* fileName);
 
 /*calls windows find file tree*/
 extern bool getSaveGameName(char *pName);
-
-/*set validty keys for save game debugging*/
-extern void game_SetValidityKey(UDWORD keys);
 
 /*returns the current type of save game being loaded*/
 extern UDWORD getSaveGameType(void);
