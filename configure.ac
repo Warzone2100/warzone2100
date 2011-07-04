@@ -436,7 +436,7 @@ AC_CONFIG_FILES([Makefile
 		win32/Makefile
 		tests/Makefile
 		3rdparty/miniupnpc/Makefile
-		lib/netplay/bson/Makefile
+		3rdparty/bson/Makefile
 		lib/framework/Makefile
 		lib/exceptionhandler/Makefile
 		lib/gamelib/Makefile
