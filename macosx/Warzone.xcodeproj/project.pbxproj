@@ -1551,10 +1551,10 @@
 		43D338561364F5A8005F6725 /* connecthostport.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = connecthostport.c; sourceTree = "<group>"; };
 		43D338571364F5A8005F6725 /* connecthostport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = connecthostport.h; sourceTree = "<group>"; };
 		43D6167F12048D2D004B9630 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		43DD1BC613661FD5003AA9EC /* bson.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = bson.c; path = ../lib/netplay/bson/bson.c; sourceTree = SOURCE_ROOT; };
-		43DD1BC713661FD5003AA9EC /* bson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = bson.h; path = ../lib/netplay/bson/bson.h; sourceTree = SOURCE_ROOT; };
-		43DD1BC813661FD5003AA9EC /* numbers.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = numbers.c; path = ../lib/netplay/bson/numbers.c; sourceTree = SOURCE_ROOT; };
-		43DD1BC913661FD5003AA9EC /* platform_hacks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = platform_hacks.h; path = ../lib/netplay/bson/platform_hacks.h; sourceTree = SOURCE_ROOT; };
+		43DD1BC613661FD5003AA9EC /* bson.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = bson.c; path = ../3rdparty/bson/bson.c; sourceTree = SOURCE_ROOT; };
+		43DD1BC713661FD5003AA9EC /* bson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = bson.h; path = ../3rdparty/bson/bson.h; sourceTree = SOURCE_ROOT; };
+		43DD1BC813661FD5003AA9EC /* numbers.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = numbers.c; path = ../3rdparty/bson/numbers.c; sourceTree = SOURCE_ROOT; };
+		43DD1BC913661FD5003AA9EC /* platform_hacks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = platform_hacks.h; path = ../3rdparty/bson/platform_hacks.h; sourceTree = SOURCE_ROOT; };
 		43DD1BCC13662006003AA9EC /* netlobby.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = netlobby.cpp; path = ../lib/netplay/netlobby.cpp; sourceTree = SOURCE_ROOT; };
 		43DD1BCD13662006003AA9EC /* netlobby.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = netlobby.h; path = ../lib/netplay/netlobby.h; sourceTree = SOURCE_ROOT; };
 		43DF5A8812BEE01B00DD5A37 /* cocoa_wrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cocoa_wrapper.h; path = ../lib/framework/cocoa_wrapper.h; sourceTree = SOURCE_ROOT; };
