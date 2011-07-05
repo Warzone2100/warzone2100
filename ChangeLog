@@ -1,6 +1,6 @@
 master_20110705
  * General:
-   * Change: More script porting
+   * Change: More script and savegame porting
    * Change: Add fullscreen resolution switching support and trap cursor for Windows and Linux (commit:10a78a4a7ee3d4e3c22dc0f0f67575603a8397bf, commit:5893d2998e315a3717708df808b72f31e0f4a0e0, commit:2137dfaf1d9aef4c7679268170a757493061beaa, commit:3d5c00fe4aafe5bd9685b4fafb794027cd7ac5c9)
    * Fix: Correctly load droid targets (ticket:2737, commit:10f674077dda2ff38188c31d00dd35f1b0e8885e)
    * Fix: Load droid rotation (commit:dbea296778027f219c31f584f7bdbcb6a738a6d0)
