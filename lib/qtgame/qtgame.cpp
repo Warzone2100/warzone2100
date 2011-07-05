@@ -29,7 +29,7 @@ void QtGameWidget::trapMouse()
 	lpRect.top = y();
 	lpRect.left = x();
 	lpRect.bottom = y() + size().height();
-	lpRect.rigth = x() + size().width();
+	lpRect.right = x() + size().width();
 	ClipCursor(&lpRect);
 #endif
 	mCursorTrapped = true;

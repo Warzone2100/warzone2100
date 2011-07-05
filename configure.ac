@@ -77,14 +77,6 @@ AM_GNU_GETTEXT_VERSION([0.15])
 PKG_PROG_PKG_CONFIG
 AC_PROG_VERSION_CHECK([pkg-config], [0.9])
 
-# Check for X11 (for qtgame)
-X_LIBS=""
-AC_PATH_X
-if test x$no_x != "xyes"; then
-	X_LIBS="-lX11 -lXrandr ${X_LIBS}"
-fi
-AC_SUBST(X_LIBS)
-
 # Check for Qt
 PKG_CHECK_MODULES(QT4, QtCore QtGui QtOpenGL QtNetwork QtScript,,[:])
 if test "$pkg_failed" = "yes" ; then
@@ -135,6 +127,16 @@ case ${host_os} in
 esac
 AM_CONDITIONAL([MINGW32], test "x$host_os_mingw32" = "xyes")
 
+
+# Check for X11 (for qtgame)
+if test "x$host_os_mingw32" != "xyes" ; then
+	X_LIBS=""
+	AC_PATH_X
+	if test x$no_x != "xyes"; then
+		X_LIBS="-lX11 -lXrandr ${X_LIBS}"
+	fi
+	AC_SUBST(X_LIBS)
+fi
 
 # Set compilers to use when building for the build system in a cross compile build
 # Fallback to the system compilers
