@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone-dev@gna.org\n"
-"POT-Creation-Date: 2011-05-23 19:16+0200\n"
+"POT-Creation-Date: 2011-07-05 02:46+0200\n"
 "PO-Revision-Date: 2010-10-24 13:31+0200\n"
 "Last-Translator: Adrian Mos <adimosh@live.com>\n"
 "Language-Team: Romanian <ro@li.org>\n"
@@ -9200,13 +9200,13 @@ msgstr "Mărește rata de foc a mini-rachetelor"
 #: data/base/script/text/cam1-2.slo:265
 #: data/base/script/text/cam1-4a.slo:590
 #: data/base/script/text/cam1-7.slo:506
-#: data/base/script/text/genexp.slo:997
+#: data/base/script/text/genexp.slo:892
 msgid "Return to LZ"
 msgstr "Întoarce-te la ZA"
 
 #: data/base/script/text/cam1-7.slo:913
 #: data/base/script/text/cam2cx.slo:270
-#: data/base/script/text/genexp.slo:852
+#: data/base/script/text/genexp.slo:762
 msgid "Enemy Escaping"
 msgstr "Inamicul evadează"
 
@@ -12032,8 +12032,8 @@ msgstr ""
 #: src/intelmap.cpp:531
 #: src/intorder.cpp:727
 #: src/loadsave.cpp:239
-#: src/multimenu.cpp:494
-#: src/multimenu.cpp:1366
+#: src/multimenu.cpp:495
+#: src/multimenu.cpp:1367
 #: src/transporter.cpp:277
 #: src/transporter.cpp:358
 #: src/transporter.cpp:817
@@ -12335,7 +12335,7 @@ msgid "Player dropped"
 msgstr "Jucătorul s-a deconectat"
 
 #: src/display3d.cpp:595
-#: src/multiint.cpp:2149
+#: src/multiint.cpp:2152
 msgid "Waiting for other players"
 msgstr "Așteptare pentru alți jucători"
 
@@ -12358,11 +12358,11 @@ msgstr "%s - Avarii %d%% - Experiență %d, %s"
 msgid "%s - Allied - Damage %d%% - Experience %d, %s"
 msgstr "%s - Aliat - Avarii %d%% - Experiență %d, %s"
 
-#: src/droid.cpp:211
+#: src/droid.cpp:212
 msgid "Unit Lost!"
 msgstr "Unitate pierdută!"
 
-#: src/droid.cpp:1376
+#: src/droid.cpp:1377
 msgid "Structure Restored"
 msgstr "Clădire reconstruită"
 
@@ -12394,434 +12394,434 @@ msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.cpp:3088
+#: src/droid.cpp:3084
 msgid "Rookie"
 msgstr "Recrut"
 
-#: src/droid.cpp:3089
+#: src/droid.cpp:3085
 msgctxt "rank"
 msgid "Green"
 msgstr "Soldat"
 
-#: src/droid.cpp:3090
+#: src/droid.cpp:3086
 msgid "Trained"
 msgstr "Antrenat"
 
-#: src/droid.cpp:3091
+#: src/droid.cpp:3087
 msgid "Regular"
 msgstr "Armată regulată"
 
-#: src/droid.cpp:3092
+#: src/droid.cpp:3088
 msgid "Professional"
 msgstr "Profesionist"
 
-#: src/droid.cpp:3093
+#: src/droid.cpp:3089
 msgid "Veteran"
 msgstr "Veteran"
 
-#: src/droid.cpp:3094
+#: src/droid.cpp:3090
 msgid "Elite"
 msgstr "Elită"
 
-#: src/droid.cpp:3095
+#: src/droid.cpp:3091
 msgid "Special"
 msgstr "Special"
 
-#: src/droid.cpp:3096
+#: src/droid.cpp:3092
 msgid "Hero"
 msgstr "Erou"
 
-#: src/droid.cpp:4118
+#: src/droid.cpp:4114
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
 msgstr ""
 
-#: src/droid.cpp:4122
+#: src/droid.cpp:4118
 #, c-format
 msgid "You wanted to give %s a %s but they have too many!"
 msgstr ""
 
-#: src/frontend.cpp:97
+#: src/frontend.cpp:102
 msgid "Single Player"
 msgstr "Joc Individual"
 
-#: src/frontend.cpp:98
+#: src/frontend.cpp:103
 msgid "Multi Player"
 msgstr "Joc în Rețea"
 
-#: src/frontend.cpp:99
-#: src/frontend.cpp:155
+#: src/frontend.cpp:104
+#: src/frontend.cpp:160
 msgid "Tutorial"
 msgstr "Tutorial"
 
-#: src/frontend.cpp:100
+#: src/frontend.cpp:105
 #: src/hci.cpp:3485
 msgid "Options"
 msgstr "Opțiuni"
 
-#: src/frontend.cpp:101
+#: src/frontend.cpp:106
 msgid "View Intro"
 msgstr "Vizualizare film de început"
 
-#: src/frontend.cpp:103
+#: src/frontend.cpp:108
 msgid "Quit Game"
 msgstr "Ieșire din joc"
 
-#: src/frontend.cpp:105
+#: src/frontend.cpp:110
 msgid "MAIN MENU"
 msgstr "MENIU PRINCIPAL"
 
-#: src/frontend.cpp:156
+#: src/frontend.cpp:161
 msgid "Fast Play"
 msgstr "Joc rapid"
 
-#: src/frontend.cpp:157
+#: src/frontend.cpp:162
 msgid "TUTORIALS"
 msgstr "TUTORIALE"
 
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
-#: src/frontend.cpp:159
-#: src/frontend.cpp:218
-#: src/frontend.cpp:362
-#: src/frontend.cpp:429
-#: src/frontend.cpp:579
-#: src/frontend.cpp:735
-#: src/frontend.cpp:870
-#: src/frontend.cpp:1112
-#: src/frontend.cpp:1259
+#: src/frontend.cpp:164
+#: src/frontend.cpp:223
+#: src/frontend.cpp:367
+#: src/frontend.cpp:434
+#: src/frontend.cpp:584
+#: src/frontend.cpp:740
+#: src/frontend.cpp:875
+#: src/frontend.cpp:1105
+#: src/frontend.cpp:1252
 msgctxt "menu"
 msgid "Return"
 msgstr "Întoarcere"
 
-#: src/frontend.cpp:212
+#: src/frontend.cpp:217
 msgid "New Campaign"
 msgstr "Campanie nouă"
 
-#: src/frontend.cpp:213
+#: src/frontend.cpp:218
 msgid "Start Skirmish Game"
 msgstr "Începe joc individual"
 
-#: src/frontend.cpp:214
+#: src/frontend.cpp:219
 msgid "Challenges"
 msgstr ""
 
-#: src/frontend.cpp:215
+#: src/frontend.cpp:220
 #: src/ingameop.cpp:272
 msgid "Load Game"
 msgstr "Încarcă joc"
 
-#: src/frontend.cpp:217
+#: src/frontend.cpp:222
 msgid "SINGLE PLAYER"
 msgstr "JOC INDIVIDUAL"
 
-#: src/frontend.cpp:303
+#: src/frontend.cpp:308
 #: src/ingameop.cpp:493
 #: src/mission.cpp:2527
 #: src/mission.cpp:2628
 msgid "Load Saved Game"
 msgstr "Încarcă joc salvat"
 
-#: src/frontend.cpp:357
+#: src/frontend.cpp:362
 msgid "MULTI PLAYER"
 msgstr "JOC ÎN REȚEA"
 
-#: src/frontend.cpp:359
+#: src/frontend.cpp:364
 msgid "Host Game"
 msgstr "Găzduiește joc"
 
-#: src/frontend.cpp:360
+#: src/frontend.cpp:365
 msgid "Join Game"
 msgstr "Alătură-te unui joc"
 
-#: src/frontend.cpp:422
-#: src/multiint.cpp:1313
+#: src/frontend.cpp:427
+#: src/multiint.cpp:1316
 msgid "OPTIONS"
 msgstr "OPȚIUNI"
 
-#: src/frontend.cpp:423
+#: src/frontend.cpp:428
 msgid "Game Options"
 msgstr "Opțiuni de joc"
 
-#: src/frontend.cpp:424
+#: src/frontend.cpp:429
 msgid "Graphics Options"
 msgstr "Opoțiuni de grafică"
 
-#: src/frontend.cpp:425
+#: src/frontend.cpp:430
 msgid "Video Options"
 msgstr "Opțiuni video"
 
-#: src/frontend.cpp:426
+#: src/frontend.cpp:431
 #: src/ingameop.cpp:267
 msgid "Audio Options"
 msgstr "Opțiuni audio"
 
-#: src/frontend.cpp:427
+#: src/frontend.cpp:432
 msgid "Mouse Options"
 msgstr "Opțiuni ale mouse-ului"
 
-#: src/frontend.cpp:428
+#: src/frontend.cpp:433
 msgid "Key Mappings"
 msgstr "Taste funcționale"
 
-#: src/frontend.cpp:489
+#: src/frontend.cpp:494
 msgid "Video Playback"
 msgstr "Redare video"
 
-#: src/frontend.cpp:493
-#: src/frontend.cpp:669
+#: src/frontend.cpp:498
+#: src/frontend.cpp:674
 msgid "1X"
 msgstr "1X"
 
-#: src/frontend.cpp:497
-#: src/frontend.cpp:659
+#: src/frontend.cpp:502
+#: src/frontend.cpp:664
 msgid "2X"
 msgstr "2X"
 
-#: src/frontend.cpp:501
-#: src/frontend.cpp:664
-#: src/frontend.cpp:810
-#: src/frontend.cpp:896
+#: src/frontend.cpp:506
+#: src/frontend.cpp:669
+#: src/frontend.cpp:815
+#: src/frontend.cpp:898
 msgid "Fullscreen"
 msgstr "Tot ecranul"
 
-#: src/frontend.cpp:510
+#: src/frontend.cpp:515
 msgid "Scanlines"
 msgstr ""
 
-#: src/frontend.cpp:514
-#: src/frontend.cpp:535
-#: src/frontend.cpp:555
-#: src/frontend.cpp:571
-#: src/frontend.cpp:597
-#: src/frontend.cpp:631
-#: src/frontend.cpp:649
-#: src/frontend.cpp:694
-#: src/frontend.cpp:835
-#: src/frontend.cpp:845
-#: src/frontend.cpp:920
-#: src/frontend.cpp:983
-#: src/frontend.cpp:1021
-#: src/frontend.cpp:1069
-#: src/frontend.cpp:1081
-#: src/frontend.cpp:1093
-#: src/frontend.cpp:1129
-#: src/frontend.cpp:1142
-#: src/frontend.cpp:1156
+#: src/frontend.cpp:519
+#: src/frontend.cpp:540
+#: src/frontend.cpp:560
+#: src/frontend.cpp:576
+#: src/frontend.cpp:602
+#: src/frontend.cpp:636
+#: src/frontend.cpp:654
+#: src/frontend.cpp:699
+#: src/frontend.cpp:840
+#: src/frontend.cpp:850
+#: src/frontend.cpp:922
+#: src/frontend.cpp:976
+#: src/frontend.cpp:1014
+#: src/frontend.cpp:1062
+#: src/frontend.cpp:1074
+#: src/frontend.cpp:1086
+#: src/frontend.cpp:1122
+#: src/frontend.cpp:1135
+#: src/frontend.cpp:1149
 msgid "Off"
 msgstr "Dezactivat"
 
-#: src/frontend.cpp:518
-#: src/frontend.cpp:684
+#: src/frontend.cpp:523
+#: src/frontend.cpp:689
 msgid "50%"
 msgstr ""
 
-#: src/frontend.cpp:522
-#: src/frontend.cpp:689
+#: src/frontend.cpp:527
+#: src/frontend.cpp:694
 #: src/multiplay.cpp:1944
 msgid "Black"
 msgstr "Negru"
 
-#: src/frontend.cpp:528
+#: src/frontend.cpp:533
 msgid "Screen Shake"
 msgstr "Tremur al ecranului"
 
-#: src/frontend.cpp:531
-#: src/frontend.cpp:559
-#: src/frontend.cpp:567
-#: src/frontend.cpp:602
-#: src/frontend.cpp:636
-#: src/frontend.cpp:645
-#: src/frontend.cpp:831
-#: src/frontend.cpp:988
-#: src/frontend.cpp:1026
-#: src/frontend.cpp:1065
-#: src/frontend.cpp:1077
-#: src/frontend.cpp:1089
-#: src/frontend.cpp:1134
-#: src/frontend.cpp:1147
-#: src/frontend.cpp:1161
+#: src/frontend.cpp:536
+#: src/frontend.cpp:564
+#: src/frontend.cpp:572
+#: src/frontend.cpp:607
+#: src/frontend.cpp:641
+#: src/frontend.cpp:650
+#: src/frontend.cpp:836
+#: src/frontend.cpp:981
+#: src/frontend.cpp:1019
+#: src/frontend.cpp:1058
+#: src/frontend.cpp:1070
+#: src/frontend.cpp:1082
+#: src/frontend.cpp:1127
+#: src/frontend.cpp:1140
+#: src/frontend.cpp:1154
 msgid "On"
 msgstr "Activat"
 
-#: src/frontend.cpp:540
-#: src/multiint.cpp:1382
+#: src/frontend.cpp:545
+#: src/multiint.cpp:1385
 msgid "Fog"
 msgstr "Ceață"
 
-#: src/frontend.cpp:543
-#: src/frontend.cpp:618
+#: src/frontend.cpp:548
+#: src/frontend.cpp:623
 msgid "Mist"
 msgstr "Negură"
 
-#: src/frontend.cpp:547
-#: src/frontend.cpp:612
-#: src/multiint.cpp:1384
+#: src/frontend.cpp:552
+#: src/frontend.cpp:617
+#: src/multiint.cpp:1387
 msgid "Fog Of War"
 msgstr "Ceața bătăliei"
 
-#: src/frontend.cpp:552
+#: src/frontend.cpp:557
 msgid "Subtitles"
 msgstr "Subtitrări"
 
-#: src/frontend.cpp:564
+#: src/frontend.cpp:569
 msgid "Shadows"
 msgstr "Umbre"
 
-#: src/frontend.cpp:575
+#: src/frontend.cpp:580
 msgid "GRAPHICS OPTIONS"
 msgstr "OPȚIUNI DE GRAFICĂ"
 
-#: src/frontend.cpp:723
+#: src/frontend.cpp:728
 #: src/ingameop.cpp:167
 msgid "Voice Volume"
 msgstr "Volumul vocii"
 
-#: src/frontend.cpp:727
+#: src/frontend.cpp:732
 #: src/ingameop.cpp:172
 msgid "FX Volume"
 msgstr "Volumul efectelor"
 
-#: src/frontend.cpp:731
+#: src/frontend.cpp:736
 #: src/ingameop.cpp:177
 msgid "Music Volume"
 msgstr "Volumul muzicii"
 
-#: src/frontend.cpp:738
+#: src/frontend.cpp:743
 msgid "AUDIO OPTIONS"
 msgstr "OPȚIUNI AUDIO"
 
-#: src/frontend.cpp:803
+#: src/frontend.cpp:808
 msgid "* Takes effect on game restart"
 msgstr "* Are efect doar la repornirea jocului"
 
-#: src/frontend.cpp:806
+#: src/frontend.cpp:811
 msgid "Graphics Mode*"
 msgstr "Modul de grafică*"
 
-#: src/frontend.cpp:814
-#: src/frontend.cpp:891
+#: src/frontend.cpp:819
+#: src/frontend.cpp:893
 msgid "Windowed"
 msgstr "În fereastră"
 
-#: src/frontend.cpp:818
+#: src/frontend.cpp:823
 msgid "Resolution*"
 msgstr "Rezoluție*"
 
-#: src/frontend.cpp:823
+#: src/frontend.cpp:828
 msgid "Texture size"
 msgstr "Mărimea texturilor"
 
-#: src/frontend.cpp:827
+#: src/frontend.cpp:832
 msgid "Vertical sync*"
 msgstr "Sincronizare verticală*"
 
-#: src/frontend.cpp:862
-#: src/frontend.cpp:926
+#: src/frontend.cpp:867
+#: src/frontend.cpp:928
 #, fuzzy
 msgid "Unsupported"
 msgstr "Transportor"
 
-#: src/frontend.cpp:867
+#: src/frontend.cpp:872
 msgid "VIDEO OPTIONS"
 msgstr "OPȚIUNI VIDEO"
 
-#: src/frontend.cpp:1058
+#: src/frontend.cpp:1051
 msgid "* May negatively affect performance"
 msgstr "* Poate afecta negativ performanța"
 
-#: src/frontend.cpp:1062
+#: src/frontend.cpp:1055
 msgid "Reverse Rotation"
 msgstr "Inversează rotația"
 
-#: src/frontend.cpp:1073
+#: src/frontend.cpp:1066
 msgid "Trap Cursor"
 msgstr "Prinde cursorul"
 
-#: src/frontend.cpp:1086
+#: src/frontend.cpp:1079
 msgid "Switch Mouse Buttons"
 msgstr "Inversează butoanele mouse-ului"
 
-#: src/frontend.cpp:1098
+#: src/frontend.cpp:1091
 msgid "Rotate Screen"
 msgstr "Rotește ecranul"
 
-#: src/frontend.cpp:1101
-#: src/frontend.cpp:1175
+#: src/frontend.cpp:1094
+#: src/frontend.cpp:1168
 #, fuzzy
 msgid "Middle Mouse"
 msgstr "Butonul de mijloc"
 
-#: src/frontend.cpp:1105
-#: src/frontend.cpp:1170
+#: src/frontend.cpp:1098
+#: src/frontend.cpp:1163
 #, fuzzy
 msgid "Right Mouse"
 msgstr "Butonul din dreapta"
 
-#: src/frontend.cpp:1109
+#: src/frontend.cpp:1102
 msgid "MOUSE OPTIONS"
 msgstr "OPȚIUNI ALE MOUSE-ULUI"
 
-#: src/frontend.cpp:1210
-#: src/frontend.cpp:1280
+#: src/frontend.cpp:1203
+#: src/frontend.cpp:1273
 msgid "Difficulty"
 msgstr "Dificultate"
 
-#: src/frontend.cpp:1214
-#: src/frontend.cpp:1288
-#: src/frontend.cpp:1325
+#: src/frontend.cpp:1207
+#: src/frontend.cpp:1281
+#: src/frontend.cpp:1318
 #: src/multiint.cpp:211
 msgid "Easy"
 msgstr "Ușor"
 
-#: src/frontend.cpp:1217
-#: src/frontend.cpp:1291
-#: src/frontend.cpp:1317
+#: src/frontend.cpp:1210
+#: src/frontend.cpp:1284
+#: src/frontend.cpp:1310
 msgid "Normal"
 msgstr "Normal"
 
-#: src/frontend.cpp:1221
-#: src/frontend.cpp:1294
-#: src/frontend.cpp:1321
+#: src/frontend.cpp:1214
+#: src/frontend.cpp:1287
+#: src/frontend.cpp:1314
 #: src/multiint.cpp:211
 msgid "Hard"
 msgstr "Dificil"
 
-#: src/frontend.cpp:1226
-#: src/frontend.cpp:1281
+#: src/frontend.cpp:1219
+#: src/frontend.cpp:1274
 msgid "Scroll Speed"
 msgstr "Viteza de glisare"
 
-#: src/frontend.cpp:1240
-#: src/frontend.cpp:1278
+#: src/frontend.cpp:1233
+#: src/frontend.cpp:1271
 msgid "Language"
 msgstr "Limbă"
 
-#: src/frontend.cpp:1252
-#: src/frontend.cpp:1279
+#: src/frontend.cpp:1245
+#: src/frontend.cpp:1272
 msgid "Unit Colour"
 msgstr "Culoarea unităților"
 
-#: src/frontend.cpp:1255
+#: src/frontend.cpp:1248
 msgid "Radar"
 msgstr "Radar"
 
-#: src/frontend.cpp:1256
-#: src/frontend.cpp:1305
+#: src/frontend.cpp:1249
+#: src/frontend.cpp:1298
 msgid "Rotating"
 msgstr "Rotație"
 
-#: src/frontend.cpp:1256
-#: src/frontend.cpp:1305
+#: src/frontend.cpp:1249
+#: src/frontend.cpp:1298
 msgid "Fixed"
 msgstr "Fix"
 
-#: src/frontend.cpp:1262
-#: src/frontend.cpp:1282
+#: src/frontend.cpp:1255
+#: src/frontend.cpp:1275
 msgid "GAME OPTIONS"
 msgstr "OPȚIUNI DE JOC"
 
-#: src/frontend.cpp:1414
-#: src/multiint.cpp:2421
+#: src/frontend.cpp:1407
+#: src/multiint.cpp:2424
 msgid "Mod: "
 msgstr "Modificare:"
 
@@ -12885,8 +12885,8 @@ msgid "Build (F3)"
 msgstr "Construcție (F3)"
 
 #: src/hci.cpp:3432
-#: src/multiint.cpp:1429
-#: src/multimenu.cpp:764
+#: src/multiint.cpp:1432
+#: src/multimenu.cpp:765
 msgid "Power"
 msgstr "Energie"
 
@@ -13071,7 +13071,7 @@ msgid "Power Accrued"
 msgstr ""
 
 #: src/intelmap.cpp:242
-#: src/keybind.cpp:1376
+#: src/keybind.cpp:1375
 msgid "PAUSED"
 msgstr "PAUZĂ"
 
@@ -13198,102 +13198,102 @@ msgstr ""
 msgid "Circle"
 msgstr ""
 
-#: src/keybind.cpp:136
+#: src/keybind.cpp:135
 msgid "Sorry, that cheat is disabled in multiplayer games."
 msgstr ""
 
-#: src/keybind.cpp:142
+#: src/keybind.cpp:141
 msgid "Warning! This cheat is buggy.  We recommend to NOT use it."
 msgstr ""
 
-#: src/keybind.cpp:241
+#: src/keybind.cpp:240
 msgid "Lets us see what you see!"
 msgstr ""
 
-#: src/keybind.cpp:243
+#: src/keybind.cpp:242
 msgid "Fine, weapon & sensor display is off!"
 msgstr ""
 
-#: src/keybind.cpp:416
-#: src/keybind.cpp:446
-#: src/keybind.cpp:463
-#: src/keybind.cpp:507
-#: src/keybind.cpp:615
-#: src/keybind.cpp:655
-#: src/keybind.cpp:761
-#: src/keybind.cpp:1266
-#: src/keybind.cpp:1323
-#: src/keybind.cpp:1433
-#: src/keybind.cpp:1562
-#: src/keybind.cpp:1919
-#: src/keybind.cpp:1960
+#: src/keybind.cpp:415
+#: src/keybind.cpp:445
+#: src/keybind.cpp:462
+#: src/keybind.cpp:506
+#: src/keybind.cpp:614
+#: src/keybind.cpp:654
+#: src/keybind.cpp:760
+#: src/keybind.cpp:1265
+#: src/keybind.cpp:1322
+#: src/keybind.cpp:1432
+#: src/keybind.cpp:1561
+#: src/keybind.cpp:1918
+#: src/keybind.cpp:1959
 #, c-format
 msgid "(Player %u) is using cheat :%s"
 msgstr ""
 
-#: src/keybind.cpp:417
+#: src/keybind.cpp:416
 msgid "Hard as nails!!!"
 msgstr ""
 
-#: src/keybind.cpp:431
+#: src/keybind.cpp:430
 msgid "Takings thing easy!"
 msgstr ""
 
-#: src/keybind.cpp:447
+#: src/keybind.cpp:446
 msgid "1000 big ones!!!"
 msgstr ""
 
-#: src/keybind.cpp:464
+#: src/keybind.cpp:463
 msgid "Power overwhelming"
 msgstr ""
 
-#: src/keybind.cpp:479
+#: src/keybind.cpp:478
 msgid "Back to normality!"
 msgstr ""
 
-#: src/keybind.cpp:492
+#: src/keybind.cpp:491
 msgid "Getting tricky!"
 msgstr ""
 
-#: src/keybind.cpp:508
+#: src/keybind.cpp:507
 msgid "Twice as nice!"
 msgstr ""
 
-#: src/keybind.cpp:519
+#: src/keybind.cpp:518
 msgid "FPS display is enabled."
 msgstr ""
 
-#: src/keybind.cpp:523
+#: src/keybind.cpp:522
 msgid "FPS display is disabled."
 msgstr ""
 
-#: src/keybind.cpp:547
+#: src/keybind.cpp:546
 #, c-format
 msgid "FPS %d; FPS-Limit: %d; PIEs %d; polys %d; Terr. polys %d; States %d"
 msgstr ""
 
-#: src/keybind.cpp:579
+#: src/keybind.cpp:578
 #, c-format
 msgid "(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"
 msgstr ""
 
-#: src/keybind.cpp:616
+#: src/keybind.cpp:615
 msgid "Infinite power disabled"
 msgstr ""
 
-#: src/keybind.cpp:616
+#: src/keybind.cpp:615
 msgid "Infinite power enabled"
 msgstr ""
 
-#: src/keybind.cpp:656
+#: src/keybind.cpp:655
 msgid "All items made available"
 msgstr ""
 
-#: src/keybind.cpp:762
+#: src/keybind.cpp:761
 msgid "Fog on"
 msgstr "Ceață activată"
 
-#: src/keybind.cpp:762
+#: src/keybind.cpp:761
 msgid "Fog off"
 msgstr "Ceață dezactivată"
 
@@ -13306,166 +13306,166 @@ msgstr ""
 msgid "Ending Mission."
 msgstr ""
 
-#: src/keybind.cpp:1267
+#: src/keybind.cpp:1266
 msgid "CHEATS ARE NOW ENABLED!"
 msgstr "TRIȘATUL ESTE ACUM PERMIS!"
 
-#: src/keybind.cpp:1267
+#: src/keybind.cpp:1266
 msgid "CHEATS ARE NOW DISABLED!"
 msgstr "TRIȘATUL ESTE ACUM INTERZIS!"
 
-#: src/keybind.cpp:1324
+#: src/keybind.cpp:1323
 msgid "God Mode ON"
 msgstr ""
 
-#: src/keybind.cpp:1324
+#: src/keybind.cpp:1323
 msgid "God Mode OFF"
 msgstr ""
 
-#: src/keybind.cpp:1336
+#: src/keybind.cpp:1335
 msgid "View Aligned to North"
 msgstr ""
 
-#: src/keybind.cpp:1345
+#: src/keybind.cpp:1344
 #, c-format
 msgid "Trap cursor %s"
 msgstr ""
 
-#: src/keybind.cpp:1434
+#: src/keybind.cpp:1433
 msgid "Researched EVERYTHING for you!"
 msgstr ""
 
-#: src/keybind.cpp:1498
+#: src/keybind.cpp:1497
 #, c-format
 msgid "(Player %u) is using cheat :%s %s"
 msgstr ""
 
-#: src/keybind.cpp:1499
+#: src/keybind.cpp:1498
 msgid "Researched"
 msgstr "Cercetat"
 
-#: src/keybind.cpp:1520
+#: src/keybind.cpp:1519
 msgid "Only displaying energy bars when selected"
 msgstr ""
 
-#: src/keybind.cpp:1523
+#: src/keybind.cpp:1522
 msgid "Always displaying energy bars for units"
 msgstr ""
 
-#: src/keybind.cpp:1526
+#: src/keybind.cpp:1525
 msgid "Always displaying energy bars for units and structures"
 msgstr ""
 
-#: src/keybind.cpp:1548
+#: src/keybind.cpp:1547
 msgid "Demo mode off - Returning to normal game mode"
 msgstr ""
 
-#: src/keybind.cpp:1563
+#: src/keybind.cpp:1562
 msgid "Debug menu is Open"
 msgstr ""
 
-#: src/keybind.cpp:1600
+#: src/keybind.cpp:1599
 msgid "Unable to locate any oil derricks!"
 msgstr ""
 
-#: src/keybind.cpp:1821
+#: src/keybind.cpp:1820
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr ""
 
-#: src/keybind.cpp:1827
+#: src/keybind.cpp:1826
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr ""
 
-#: src/keybind.cpp:1833
+#: src/keybind.cpp:1832
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr ""
 
-#: src/keybind.cpp:1918
+#: src/keybind.cpp:1917
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr ""
 
-#: src/keybind.cpp:1920
+#: src/keybind.cpp:1919
 msgid "All enemies destroyed by cheating!"
 msgstr ""
 
-#: src/keybind.cpp:1961
+#: src/keybind.cpp:1960
 msgid "Destroying selected droids and structures!"
 msgstr ""
 
-#: src/keybind.cpp:2472
+#: src/keybind.cpp:2471
 msgid "Centered on player HQ, direction NORTH"
 msgstr ""
 
-#: src/keybind.cpp:2484
+#: src/keybind.cpp:2483
 msgid "Unable to locate HQ!"
 msgstr ""
 
-#: src/keybind.cpp:2491
+#: src/keybind.cpp:2490
 msgid "Formation speed limiting has been removed from the game due to bugs."
 msgstr ""
 
-#: src/keybind.cpp:2540
+#: src/keybind.cpp:2539
 msgid "Vertical rotation direction: Normal"
 msgstr ""
 
-#: src/keybind.cpp:2545
+#: src/keybind.cpp:2544
 msgid "Vertical rotation direction: Flipped"
 msgstr ""
 
-#: src/keybind.cpp:2554
+#: src/keybind.cpp:2553
 msgid "Screen shake when things die: Off"
 msgstr ""
 
-#: src/keybind.cpp:2559
+#: src/keybind.cpp:2558
 msgid "Screen shake when things die: On"
 msgstr ""
 
-#: src/keybind.cpp:2605
-#: src/keybind.cpp:2648
+#: src/keybind.cpp:2604
+#: src/keybind.cpp:2647
 msgid "Sorry, but game speed cannot be changed in multiplayer."
 msgstr ""
 
-#: src/keybind.cpp:2626
-#: src/keybind.cpp:2669
-#: src/keybind.cpp:2691
+#: src/keybind.cpp:2625
+#: src/keybind.cpp:2668
+#: src/keybind.cpp:2690
 msgid "Game Speed Reset"
 msgstr ""
 
-#: src/keybind.cpp:2630
+#: src/keybind.cpp:2629
 #, c-format
 msgid "Game Speed Increased to %3.1f"
 msgstr ""
 
-#: src/keybind.cpp:2673
+#: src/keybind.cpp:2672
 #, c-format
 msgid "Game Speed Reduced to %3.1f"
 msgstr ""
 
-#: src/keybind.cpp:2703
+#: src/keybind.cpp:2702
 msgid "Radar showing friend-foe colors"
 msgstr ""
 
-#: src/keybind.cpp:2707
+#: src/keybind.cpp:2706
 msgid "Radar showing player colors"
 msgstr ""
 
-#: src/keybind.cpp:2727
+#: src/keybind.cpp:2726
 msgid "Radar showing only objects"
 msgstr ""
 
-#: src/keybind.cpp:2730
+#: src/keybind.cpp:2729
 msgid "Radar blending terrain and height"
 msgstr ""
 
-#: src/keybind.cpp:2733
+#: src/keybind.cpp:2732
 msgid "Radar showing terrain"
 msgstr ""
 
-#: src/keybind.cpp:2736
+#: src/keybind.cpp:2735
 msgid "Radar showing revealed terrain"
 msgstr ""
 
-#: src/keybind.cpp:2739
+#: src/keybind.cpp:2738
 msgid "Radar showing height"
 msgstr ""
 
@@ -13474,9 +13474,9 @@ msgid "KEY MAPPING"
 msgstr ""
 
 #: src/keyedit.cpp:377
-#: src/multiint.cpp:660
-#: src/multiint.cpp:1109
-#: src/multiint.cpp:1515
+#: src/multiint.cpp:663
+#: src/multiint.cpp:1112
+#: src/multiint.cpp:1518
 msgid "Return To Previous Screen"
 msgstr ""
 
@@ -14067,355 +14067,355 @@ msgstr "Viteză: Medie"
 msgid "Insane"
 msgstr ""
 
-#: src/multiint.cpp:598
+#: src/multiint.cpp:601
 #: src/multilimit.cpp:190
 msgid "Accept Settings"
 msgstr "Acceptă Setările"
 
-#: src/multiint.cpp:600
-#: src/multiint.cpp:1154
+#: src/multiint.cpp:603
+#: src/multiint.cpp:1157
 msgid "Cancel"
 msgstr "Anulare"
 
-#: src/multiint.cpp:611
+#: src/multiint.cpp:614
 msgid "IP Address or Machine Name"
 msgstr "Adresă IP sau numele calculatorului"
 
-#: src/multiint.cpp:657
+#: src/multiint.cpp:660
 msgid "CONNECTION"
 msgstr "CONEXIUNE"
 
-#: src/multiint.cpp:662
+#: src/multiint.cpp:665
 msgid "Lobby"
 msgstr "Arenă"
 
-#: src/multiint.cpp:663
+#: src/multiint.cpp:666
 msgid "IP"
 msgstr "IP"
 
-#: src/multiint.cpp:913
+#: src/multiint.cpp:916
 msgid "No games are available"
 msgstr "Nici un joc disponibil"
 
-#: src/multiint.cpp:916
+#: src/multiint.cpp:919
 msgid "Game is full"
 msgstr "Jocul este plin"
 
-#: src/multiint.cpp:920
+#: src/multiint.cpp:923
 msgid "You were kicked!"
 msgstr "Ai fost eliminat!"
 
-#: src/multiint.cpp:923
+#: src/multiint.cpp:926
 msgid "Wrong Game Version!"
 msgstr "Versiune de joc greșită!"
 
-#: src/multiint.cpp:926
+#: src/multiint.cpp:929
 msgid "You have an incompatible mod."
 msgstr "Ai o modificare incomkpatibilă."
 
-#: src/multiint.cpp:930
+#: src/multiint.cpp:933
 msgid "Host couldn't send file?"
 msgstr "Gazda nu a putut transmite fișierul?"
 
-#: src/multiint.cpp:934
+#: src/multiint.cpp:937
 msgid "Incorrect Password!"
 msgstr "Parolă incorectă!"
 
-#: src/multiint.cpp:937
+#: src/multiint.cpp:940
 msgid "Host has dropped connection!"
 msgstr "Gazda a întrerupt conexiunea!"
 
-#: src/multiint.cpp:941
+#: src/multiint.cpp:944
 msgid "Connection Error"
 msgstr "Eroare de conexiune"
 
-#: src/multiint.cpp:1049
+#: src/multiint.cpp:1052
 msgid "Searching"
 msgstr "Căutare"
 
-#: src/multiint.cpp:1106
+#: src/multiint.cpp:1109
 msgid "GAMES"
 msgstr "JOCURI"
 
-#: src/multiint.cpp:1114
+#: src/multiint.cpp:1117
 msgid "Refresh Games List"
 msgstr "Reîmprospătează lista de jocuri"
 
-#: src/multiint.cpp:1134
+#: src/multiint.cpp:1137
 msgid "Enter Password:"
 msgstr "Introdu parola:"
 
-#: src/multiint.cpp:1152
+#: src/multiint.cpp:1155
 msgid "OK"
 msgstr "Acceptă"
 
-#: src/multiint.cpp:1269
+#: src/multiint.cpp:1272
 msgid "Tanks disabled!!"
 msgstr "Tancurile dezactivate!!"
 
-#: src/multiint.cpp:1270
+#: src/multiint.cpp:1273
 msgid "Cyborgs disabled."
 msgstr "Cyborgii dezactivați."
 
-#: src/multiint.cpp:1271
+#: src/multiint.cpp:1274
 msgid "VTOLs disabled."
 msgstr "DAV-urile dezactivate."
 
-#: src/multiint.cpp:1318
-#: src/multiint.cpp:1325
+#: src/multiint.cpp:1321
+#: src/multiint.cpp:1328
 msgid "Select Game Name"
 msgstr "Selectează numele jocului"
 
-#: src/multiint.cpp:1318
+#: src/multiint.cpp:1321
 msgid "One-Player Skirmish"
 msgstr "Luptă individuală"
 
-#: src/multiint.cpp:1328
+#: src/multiint.cpp:1331
 msgid "Select Map"
 msgstr "Alege harta"
 
-#: src/multiint.cpp:1336
+#: src/multiint.cpp:1339
 msgid "Click to set Password"
 msgstr "Click pentru a seta o parolă"
 
-#: src/multiint.cpp:1346
-#: src/multiint.cpp:1347
+#: src/multiint.cpp:1349
+#: src/multiint.cpp:1350
 msgid "Scavengers"
 msgstr "Bandiți"
 
-#: src/multiint.cpp:1349
+#: src/multiint.cpp:1352
 msgid "No Scavengers"
 msgstr "Fără bandiți"
 
-#: src/multiint.cpp:1379
+#: src/multiint.cpp:1382
 msgid "Select Player Name"
 msgstr "Selectează numele jucătorului"
 
-#: src/multiint.cpp:1385
+#: src/multiint.cpp:1388
 msgid "Distance Fog"
 msgstr "Ceață la distanță"
 
-#: src/multiint.cpp:1396
-#: src/multimenu.cpp:757
+#: src/multiint.cpp:1399
+#: src/multimenu.cpp:758
 msgid "Alliances"
 msgstr "Alianțe"
 
-#: src/multiint.cpp:1399
+#: src/multiint.cpp:1402
 msgid "No Alliances"
 msgstr "Fără alianțe"
 
-#: src/multiint.cpp:1401
+#: src/multiint.cpp:1404
 msgid "Allow Alliances"
 msgstr "Permite alianțele"
 
-#: src/multiint.cpp:1405
+#: src/multiint.cpp:1408
 msgid "Locked Teams"
 msgstr "Echipe blocate"
 
-#: src/multiint.cpp:1431
+#: src/multiint.cpp:1434
 msgid "Low Power Levels"
 msgstr "Nivel mic de energie"
 
-#: src/multiint.cpp:1433
+#: src/multiint.cpp:1436
 msgid "Medium Power Levels"
 msgstr "Nivel mediu de energie"
 
-#: src/multiint.cpp:1435
+#: src/multiint.cpp:1438
 msgid "High Power Levels"
 msgstr "Nivel mare de energie"
 
-#: src/multiint.cpp:1467
+#: src/multiint.cpp:1470
 msgid "Base"
 msgstr "Bază"
 
-#: src/multiint.cpp:1469
+#: src/multiint.cpp:1472
 msgid "Start with No Bases"
 msgstr "Pornire fără baze"
 
-#: src/multiint.cpp:1471
+#: src/multiint.cpp:1474
 msgid "Start with Bases"
 msgstr "Pornire cu baze"
 
-#: src/multiint.cpp:1473
+#: src/multiint.cpp:1476
 msgid "Start with Advanced Bases"
 msgstr "Pornire cu baze avansate"
 
-#: src/multiint.cpp:1505
+#: src/multiint.cpp:1508
 msgid "Map Preview"
 msgstr "Vizionare Hartă"
 
-#: src/multiint.cpp:1507
+#: src/multiint.cpp:1510
 msgid "Click to see Map"
 msgstr "Click pentru a vedea Harta"
 
-#: src/multiint.cpp:1521
+#: src/multiint.cpp:1524
 msgid "Start Hosting Game"
 msgstr "Începe găzduirea jocului"
 
-#: src/multiint.cpp:1529
+#: src/multiint.cpp:1532
 msgid "Show Structure Limits"
 msgstr "Arată limitele pentru clădiri"
 
-#: src/multiint.cpp:1529
+#: src/multiint.cpp:1532
 msgid "Set Structure Limits"
 msgstr "Setează limitele pentru clădiri"
 
-#: src/multiint.cpp:1624
+#: src/multiint.cpp:1627
 msgid "DIFFICULTY"
 msgstr ""
 
-#: src/multiint.cpp:1638
+#: src/multiint.cpp:1641
 msgid "Less aggressive and starts with less units"
 msgstr ""
 
-#: src/multiint.cpp:1639
+#: src/multiint.cpp:1642
 #, fuzzy
 msgid "Plays nice"
 msgstr "Jucător"
 
-#: src/multiint.cpp:1640
+#: src/multiint.cpp:1643
 msgid "No holds barred"
 msgstr ""
 
-#: src/multiint.cpp:1641
+#: src/multiint.cpp:1644
 msgid "Starts with advantages and gets twice as much oil from derricks"
 msgstr ""
 
-#: src/multiint.cpp:1669
+#: src/multiint.cpp:1672
 msgid "CHOOSE AI"
 msgstr ""
 
-#: src/multiint.cpp:1685
+#: src/multiint.cpp:1688
 msgid "Allow human players to join in this slot"
 msgstr ""
 
-#: src/multiint.cpp:1693
+#: src/multiint.cpp:1696
 msgid "Leave this slot unused"
 msgstr ""
 
-#: src/multiint.cpp:2096
+#: src/multiint.cpp:2099
 msgid "Team"
 msgstr "Echipă"
 
-#: src/multiint.cpp:2137
+#: src/multiint.cpp:2140
 msgid "You cannot change difficulty in a challenge"
 msgstr ""
 
-#: src/multiint.cpp:2137
+#: src/multiint.cpp:2140
 #, fuzzy
 msgid "Click to change difficulty"
 msgstr "Click pentru a ajusta dificultatea IA"
 
-#: src/multiint.cpp:2154
+#: src/multiint.cpp:2157
 msgid "Click when ready"
 msgstr "Click când ești pregătit"
 
-#: src/multiint.cpp:2158
+#: src/multiint.cpp:2161
 msgid "READY?"
 msgstr "PREGĂTIT?"
 
-#: src/multiint.cpp:2202
+#: src/multiint.cpp:2205
 msgid "PLAYERS"
 msgstr "JUCĂTORI"
 
-#: src/multiint.cpp:2237
+#: src/multiint.cpp:2240
 #, fuzzy
 msgid "Click to change to this slot"
 msgstr "Click pentru a schimba setările jucătorului"
 
-#: src/multiint.cpp:2265
+#: src/multiint.cpp:2268
 msgid "Choose Team"
 msgstr "Alege Echipa"
 
-#: src/multiint.cpp:2295
+#: src/multiint.cpp:2298
 #, fuzzy
 msgid "Click to change player colour"
 msgstr "Click pentru a schimba setările jucătorului"
 
-#: src/multiint.cpp:2323
+#: src/multiint.cpp:2326
 #, fuzzy
 msgid "Click to change player position"
 msgstr "Click pentru a schimba setările jucătorului"
 
-#: src/multiint.cpp:2329
+#: src/multiint.cpp:2332
 #, fuzzy
 msgid "Click to change AI"
 msgstr "Click pentru a schimba setările jucătorului"
 
-#: src/multiint.cpp:2333
+#: src/multiint.cpp:2336
 msgid "You cannot change AI in a challenge"
 msgstr ""
 
-#: src/multiint.cpp:2395
+#: src/multiint.cpp:2398
 msgid "CHAT"
 msgstr "CONVERSAȚIE"
 
-#: src/multiint.cpp:2426
+#: src/multiint.cpp:2429
 msgid "All players need to have the same mods to join your game."
 msgstr "Toți jucătorii trebuie să aibă aceleași modificări pentru a putea juca."
 
-#: src/multiint.cpp:2584
+#: src/multiint.cpp:2587
 #, c-format
 msgid "*** password [%s] is now required! ***"
 msgstr "*** parola [%s] este de acum necesară! ***"
 
-#: src/multiint.cpp:2592
+#: src/multiint.cpp:2595
 msgid "*** password is NOT required! ***"
 msgstr "*** parola NU este necesară! ***"
 
-#: src/multiint.cpp:2833
+#: src/multiint.cpp:2836
 msgid "Sorry! Failed to host the game."
 msgstr "Scuze! Jocul nu s-a putut găzdui."
 
-#: src/multiint.cpp:2954
+#: src/multiint.cpp:2957
 msgid "'Locked Teams' mode enabled"
 msgstr "Modul „Echipe Blocate” activat"
 
-#: src/multiint.cpp:3035
+#: src/multiint.cpp:3038
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "Gazda l-a eliminat pe %s din joc!"
 
-#: src/multiint.cpp:3105
+#: src/multiint.cpp:3108
 msgid "Host is Starting Game"
 msgstr "Gazda Începe Jocul"
 
-#: src/multiint.cpp:3665
+#: src/multiint.cpp:3662
 msgid "Players"
 msgstr "Jucători"
 
-#: src/multiint.cpp:3743
+#: src/multiint.cpp:3740
 #, fuzzy, c-format
 msgid "Click to take player slot %d"
 msgstr "Click pentru a schimba setările jucătorului"
 
-#: src/multiint.cpp:3752
-#: src/multiint.cpp:3945
+#: src/multiint.cpp:3749
+#: src/multiint.cpp:3942
 msgid "Open"
 msgstr ""
 
-#: src/multiint.cpp:3752
-#: src/multiint.cpp:3946
+#: src/multiint.cpp:3749
+#: src/multiint.cpp:3943
 #, fuzzy
 msgid "Closed"
 msgstr "Închide"
 
-#: src/multiint.cpp:3803
+#: src/multiint.cpp:3800
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Trimitere de hartă: %d%%"
 
-#: src/multiint.cpp:3811
+#: src/multiint.cpp:3808
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Harta: %d%% descărcată"
 
-#: src/multiint.cpp:3837
+#: src/multiint.cpp:3834
 msgid "HOST"
 msgstr "GAZDĂ"
 
-#: src/multiint.cpp:3844
-#: src/multimenu.cpp:773
+#: src/multiint.cpp:3841
+#: src/multimenu.cpp:774
 msgid "Ping"
 msgstr "Ping"
 
@@ -14456,132 +14456,132 @@ msgstr "Aplică Setările Implicite și Revino"
 msgid "Limits reset to default values"
 msgstr "Limitele resetate la valorile implicite"
 
-#: src/multimenu.cpp:146
+#: src/multimenu.cpp:147
 msgid "2 players"
 msgstr "2 jucători"
 
-#: src/multimenu.cpp:146
+#: src/multimenu.cpp:147
 #, fuzzy
 msgid "3 players"
 msgstr "2 jucători"
 
-#: src/multimenu.cpp:146
+#: src/multimenu.cpp:147
 msgid "4 players"
 msgstr "4 jucători"
 
-#: src/multimenu.cpp:146
+#: src/multimenu.cpp:147
 #, fuzzy
 msgid "5 players"
 msgstr "2 jucători"
 
-#: src/multimenu.cpp:146
+#: src/multimenu.cpp:147
 #, fuzzy
 msgid "6 players"
 msgstr "2 jucători"
 
-#: src/multimenu.cpp:146
+#: src/multimenu.cpp:147
 #, fuzzy
 msgid "7 players"
 msgstr "2 jucători"
 
-#: src/multimenu.cpp:146
+#: src/multimenu.cpp:147
 msgid "8 players"
 msgstr "8 jucători"
 
-#: src/multimenu.cpp:146
+#: src/multimenu.cpp:147
 #, fuzzy
 msgid "9 players"
 msgstr "2 jucători"
 
-#: src/multimenu.cpp:146
+#: src/multimenu.cpp:147
 #, fuzzy
 msgid "10 players"
 msgstr "2 jucători"
 
-#: src/multimenu.cpp:146
+#: src/multimenu.cpp:147
 #, fuzzy
 msgid "11 players"
 msgstr "2 jucători"
 
-#: src/multimenu.cpp:146
+#: src/multimenu.cpp:147
 #, fuzzy
 msgid "12 players"
 msgstr "2 jucători"
 
-#: src/multimenu.cpp:146
+#: src/multimenu.cpp:147
 #, fuzzy
 msgid "13 players"
 msgstr "2 jucători"
 
-#: src/multimenu.cpp:146
+#: src/multimenu.cpp:147
 #, fuzzy
 msgid "14 players"
 msgstr "4 jucători"
 
-#: src/multimenu.cpp:146
+#: src/multimenu.cpp:147
 #, fuzzy
 msgid "15 players"
 msgstr "2 jucători"
 
-#: src/multimenu.cpp:146
+#: src/multimenu.cpp:147
 #, fuzzy
 msgid "16 players"
 msgstr "2 jucători"
 
-#: src/multimenu.cpp:619
+#: src/multimenu.cpp:620
 msgid "Technology level 1"
 msgstr "Tehnologie nivel 1"
 
-#: src/multimenu.cpp:627
+#: src/multimenu.cpp:628
 msgid "Technology level 2"
 msgstr "Tehnologie nivel 2"
 
-#: src/multimenu.cpp:633
+#: src/multimenu.cpp:634
 msgid "Technology level 3"
 msgstr "Tehnologie nivel 3"
 
-#: src/multimenu.cpp:639
+#: src/multimenu.cpp:640
 msgid "Any number of players"
 msgstr "Oricâți jucători"
 
-#: src/multimenu.cpp:758
+#: src/multimenu.cpp:759
 msgid "Score"
 msgstr "Scor"
 
-#: src/multimenu.cpp:759
+#: src/multimenu.cpp:760
 msgid "Kills"
 msgstr "Victime"
 
-#: src/multimenu.cpp:763
-#: src/multimenu.cpp:768
+#: src/multimenu.cpp:764
+#: src/multimenu.cpp:769
 msgid "Units"
 msgstr "Unități"
 
-#: src/multimenu.cpp:777
+#: src/multimenu.cpp:778
 msgid "Structs"
 msgstr "Clădiri"
 
-#: src/multimenu.cpp:1139
+#: src/multimenu.cpp:1140
 msgid "Channel"
 msgstr "Canal"
 
-#: src/multimenu.cpp:1153
+#: src/multimenu.cpp:1154
 msgid "Toggle Alliance State"
 msgstr "Schimbă starea de alianță"
 
-#: src/multimenu.cpp:1172
+#: src/multimenu.cpp:1173
 msgid "Give Visibility Report"
 msgstr "Oferă raport de vizibilitate"
 
-#: src/multimenu.cpp:1178
+#: src/multimenu.cpp:1179
 msgid "Leak Technology Documents"
 msgstr "Oferă documente tehnologice"
 
-#: src/multimenu.cpp:1185
+#: src/multimenu.cpp:1186
 msgid "Hand Over Selected Units"
 msgstr "Protecție asupra unităților selectate"
 
-#: src/multimenu.cpp:1191
+#: src/multimenu.cpp:1192
 msgid "Give Power To Player"
 msgstr "Dă energie jucătorului"
 
@@ -14668,12 +14668,12 @@ msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr ""
 
 #: src/qtscriptfuncs.cpp:481
-#: src/scriptfuncs.cpp:3271
+#: src/scriptfuncs.cpp:3272
 msgid "YOU ARE VICTORIOUS!"
 msgstr "AI OBȚINUT VICTORIA!"
 
 #: src/qtscriptfuncs.cpp:486
-#: src/scriptfuncs.cpp:3275
+#: src/scriptfuncs.cpp:3276
 msgid "YOU WERE DEFEATED!"
 msgstr "AI FOST ÎNFRÂNT!"
 
@@ -14808,12 +14808,12 @@ msgstr "Timp total de joc - %s"
 msgid "You cheated!"
 msgstr "Ai trișat!"
 
-#: src/scriptfuncs.cpp:9458
+#: src/scriptfuncs.cpp:9448
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Baliză recepționată de la %s!"
 
-#: src/scriptfuncs.cpp:9504
+#: src/scriptfuncs.cpp:9494
 #, c-format
 msgid "Beacon %d"
 msgstr "Baliză %d"
@@ -14843,13 +14843,13 @@ msgstr "Imposibil de localizat Senzori!"
 msgid "Unable to locate any Commanders!"
 msgstr "Imposibil de localizat Comandanți!"
 
-#: src/structure.cpp:2645
+#: src/structure.cpp:2646
 #, fuzzy
 msgid "Command Control Limit Reached - Production Halted"
 msgstr "Limita de control atinsă - Producția oprită"
 
-#: src/structure.cpp:5841
-#: src/structure.cpp:5866
+#: src/structure.cpp:5838
+#: src/structure.cpp:5863
 #, fuzzy, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
@@ -14857,50 +14857,50 @@ msgstr[0] "%s - %u unitate asociată"
 msgstr[1] "%s - %u unități asociate"
 msgstr[2] "%s - %u unități asociate"
 
-#: src/structure.cpp:5871
-#: src/structure.cpp:5939
-#: src/structure.cpp:5955
-#: src/structure.cpp:5969
+#: src/structure.cpp:5868
+#: src/structure.cpp:5936
+#: src/structure.cpp:5952
+#: src/structure.cpp:5966
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Avarii %3.0f%%"
 
-#: src/structure.cpp:5921
+#: src/structure.cpp:5918
 #, fuzzy, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
 msgstr "%s - Conectate %u din %u"
 
-#: src/structure.cpp:6085
-#: src/structure.cpp:6130
+#: src/structure.cpp:6082
+#: src/structure.cpp:6127
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Avariat electronic"
 
-#: src/structure.cpp:6367
+#: src/structure.cpp:6364
 msgid "Electronic Reward - Visibility Report"
 msgstr "Răsplată Electronică - Raport de Vizibilitate"
 
-#: src/structure.cpp:6407
+#: src/structure.cpp:6404
 msgid "Factory Reward - Propulsion"
 msgstr "Răsplată de Fabrică - Propulsie"
 
-#: src/structure.cpp:6431
+#: src/structure.cpp:6428
 msgid "Factory Reward - Body"
 msgstr "Răsplată de Fabrică - Șasiu"
 
-#: src/structure.cpp:6455
+#: src/structure.cpp:6452
 msgid "Factory Reward - Weapon"
 msgstr "Răsplată de Fabrică - Armă"
 
-#: src/structure.cpp:6464
+#: src/structure.cpp:6461
 msgid "Factory Reward - Nothing"
 msgstr "Răsplată de Fabrică - Nimic"
 
-#: src/structure.cpp:6492
+#: src/structure.cpp:6489
 msgid "Repair Facility Award - Repair"
 msgstr "Răsplată de Reparații - Reparație"
 
-#: src/structure.cpp:6499
+#: src/structure.cpp:6496
 msgid "Repair Facility Award - Nothing"
 msgstr "Răsplată de Reparații - Nimic"
 
