@@ -15,7 +15,6 @@ data/base/messages/strings/resstrings.txt
 data/base/messages/strings/scrstrings.txt
 data/base/multiplay/script/multilim.slo
 data/base/multiplay/script/scavfact.js
-data/base/multiplay/skirmish/dydo.slo
 data/base/multiplay/skirmish/nexus.slo
 data/base/multiplay/skirmish/rules.js
 data/base/multiplay/skirmish/semperfi.slo
@@ -187,6 +186,7 @@ lib/netplay/netplay.cpp
 lib/netplay/netqueue.cpp
 lib/netplay/netsocket.cpp
 lib/netplay/nettypes.cpp
+lib/qtgame/qtgame.cpp
 lib/script/codeprint.cpp
 lib/script/event.cpp
 lib/script/eventsave.cpp
