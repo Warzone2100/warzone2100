@@ -384,7 +384,7 @@ namespace Lobby
 		else
 		{
 			debug(LOG_LOBBY, "Connecting to \"[%s]:%d\" with SSL enabled.", host_.toUtf8().constData(), port_);
-			socket_->addCaCertificates(cacerts_);
+			socket_->setCaCertificates(cacerts_);
 			socket_->connectToHostEncrypted(host_, port_);
 		}
 #endif
