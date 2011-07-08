@@ -440,7 +440,6 @@
 		43B8FF6D127CD9E4006F5A13 /* DejaVuSans.ttf in Copy Fonts */ = {isa = PBXBuildFile; fileRef = 43B8FF3E127CD99A006F5A13 /* DejaVuSans.ttf */; };
 		43B9DE3913846038004C7351 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 43B9DE3813846038004C7351 /* libiconv.dylib */; };
 		43BE75EA11124BB5007DF934 /* wavecast.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43BE75E811124BB4007DF934 /* wavecast.cpp */; };
-		43C18FCF114FF38B0028741B /* netjoin_stub.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43C18FA7114FF38B0028741B /* netjoin_stub.cpp */; };
 		43C18FD0114FF38B0028741B /* netlog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43C18FA8114FF38B0028741B /* netlog.cpp */; };
 		43C18FD1114FF38B0028741B /* netplay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43C18FAA114FF38B0028741B /* netplay.cpp */; };
 		43C18FD2114FF38B0028741B /* netsocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43C18FAC114FF38B0028741B /* netsocket.cpp */; };
@@ -461,6 +460,9 @@
 		43D180B01336B99C001906EB /* physfs_casefolding.h in Headers */ = {isa = PBXBuildFile; fileRef = 43D180AF1336B99C001906EB /* physfs_casefolding.h */; };
 		43D338581364F5A8005F6725 /* connecthostport.c in Sources */ = {isa = PBXBuildFile; fileRef = 43D338561364F5A8005F6725 /* connecthostport.c */; };
 		43D338591364F5A8005F6725 /* connecthostport.h in Headers */ = {isa = PBXBuildFile; fileRef = 43D338571364F5A8005F6725 /* connecthostport.h */; };
+		43DD1BCA13661FD5003AA9EC /* bson.c in Sources */ = {isa = PBXBuildFile; fileRef = 43DD1BC613661FD5003AA9EC /* bson.c */; };
+		43DD1BCB13661FD5003AA9EC /* numbers.c in Sources */ = {isa = PBXBuildFile; fileRef = 43DD1BC813661FD5003AA9EC /* numbers.c */; };
+		43DD1BCE13662006003AA9EC /* netlobby.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43DD1BCC13662006003AA9EC /* netlobby.cpp */; };
 		43DF5A8A12BEE01B00DD5A37 /* cocoa_wrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 43DF5A8912BEE01B00DD5A37 /* cocoa_wrapper.mm */; };
 		43E1890411440D8C000870EB /* eval-plural.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F850BD55B4F002E64E3 /* eval-plural.h */; };
 		43E1890511440D8D000870EB /* gettextP.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F860BD55B4F002E64E3 /* gettextP.h */; };
@@ -573,6 +575,8 @@
 		43F300C210D344B000707B6E /* x86int.h in Headers */ = {isa = PBXBuildFile; fileRef = 43F3008B10D344B000707B6E /* x86int.h */; };
 		43F300C310D344B000707B6E /* x86state.c in Sources */ = {isa = PBXBuildFile; fileRef = 43F3008C10D344B000707B6E /* x86state.c */; };
 		43F300D710D3496D00707B6E /* encode.c in Sources */ = {isa = PBXBuildFile; fileRef = 43F3006710D344AF00707B6E /* encode.c */; };
+		43F30910136BAED700AFD307 /* QtNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4333612011A07FB900380F5E /* QtNetwork.framework */; };
+		43F30913136BAEE900AFD307 /* QtNetwork.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 4333612011A07FB900380F5E /* QtNetwork.framework */; };
 		647D9C571039289A006D37CF /* challenge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 647D9C551039289A006D37CF /* challenge.cpp */; };
 		9742E5730DF9975E000A5D41 /* lexer_input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9742E5710DF9975E000A5D41 /* lexer_input.cpp */; };
 		9742E5770DF9979C000A5D41 /* parsetest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9742E5750DF9979C000A5D41 /* parsetest.cpp */; };
@@ -812,6 +816,7 @@
 				43F1D99A1343F1DE001478EC /* QtScript.framework in Copy frameworks */,
 				4333661C11A07FFF00380F5E /* QtGui.framework in Copy frameworks */,
 				4333661D11A07FFF00380F5E /* QtOpenGL.framework in Copy frameworks */,
+				43F30913136BAEE900AFD307 /* QtNetwork.framework in Copy frameworks */,
 				43502D77134764B000A02A1F /* GLExtensionWrangler.framework in Copy frameworks */,
 				431843B71363958E00BA2BC5 /* MiniUPnPc.framework in Copy frameworks */,
 				02581C880BD5AD1100957CBC /* Zlib.framework in Copy frameworks */,
@@ -1514,7 +1519,6 @@
 		43C18FA4114FF38B0028741B /* upnperrors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = upnperrors.h; sourceTree = "<group>"; };
 		43C18FA5114FF38B0028741B /* upnpreplyparse.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = upnpreplyparse.c; sourceTree = "<group>"; };
 		43C18FA6114FF38B0028741B /* upnpreplyparse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = upnpreplyparse.h; sourceTree = "<group>"; };
-		43C18FA7114FF38B0028741B /* netjoin_stub.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = netjoin_stub.cpp; path = ../lib/netplay/netjoin_stub.cpp; sourceTree = SOURCE_ROOT; };
 		43C18FA8114FF38B0028741B /* netlog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = netlog.cpp; path = ../lib/netplay/netlog.cpp; sourceTree = SOURCE_ROOT; };
 		43C18FA9114FF38B0028741B /* netlog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = netlog.h; path = ../lib/netplay/netlog.h; sourceTree = SOURCE_ROOT; };
 		43C18FAA114FF38B0028741B /* netplay.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = netplay.cpp; path = ../lib/netplay/netplay.cpp; sourceTree = SOURCE_ROOT; };
@@ -1545,6 +1549,12 @@
 		43D338561364F5A8005F6725 /* connecthostport.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = connecthostport.c; sourceTree = "<group>"; };
 		43D338571364F5A8005F6725 /* connecthostport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = connecthostport.h; sourceTree = "<group>"; };
 		43D6167F12048D2D004B9630 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		43DD1BC613661FD5003AA9EC /* bson.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = bson.c; path = ../3rdparty/bson/bson.c; sourceTree = SOURCE_ROOT; };
+		43DD1BC713661FD5003AA9EC /* bson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = bson.h; path = ../3rdparty/bson/bson.h; sourceTree = SOURCE_ROOT; };
+		43DD1BC813661FD5003AA9EC /* numbers.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = numbers.c; path = ../3rdparty/bson/numbers.c; sourceTree = SOURCE_ROOT; };
+		43DD1BC913661FD5003AA9EC /* platform_hacks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = platform_hacks.h; path = ../3rdparty/bson/platform_hacks.h; sourceTree = SOURCE_ROOT; };
+		43DD1BCC13662006003AA9EC /* netlobby.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = netlobby.cpp; path = ../lib/netplay/netlobby.cpp; sourceTree = SOURCE_ROOT; };
+		43DD1BCD13662006003AA9EC /* netlobby.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = netlobby.h; path = ../lib/netplay/netlobby.h; sourceTree = SOURCE_ROOT; };
 		43DF5A8812BEE01B00DD5A37 /* cocoa_wrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cocoa_wrapper.h; path = ../lib/framework/cocoa_wrapper.h; sourceTree = SOURCE_ROOT; };
 		43DF5A8912BEE01B00DD5A37 /* cocoa_wrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = cocoa_wrapper.mm; path = ../lib/framework/cocoa_wrapper.mm; sourceTree = SOURCE_ROOT; };
 		43DF5AE812BEED8200DD5A37 /* actiondef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = actiondef.h; path = ../src/actiondef.h; sourceTree = SOURCE_ROOT; };
@@ -1675,6 +1685,7 @@
 				43F1D9801343F1C5001478EC /* QtScript.framework in Frameworks */,
 				4333612311A07FB900380F5E /* QtGui.framework in Frameworks */,
 				4333612511A07FBA00380F5E /* QtOpenGL.framework in Frameworks */,
+				43F30910136BAED700AFD307 /* QtNetwork.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1997,9 +2008,10 @@
 		0246A12B0BD3CC47004D1C70 /* Netplay */ = {
 			isa = PBXGroup;
 			children = (
+				43DD1BCC13662006003AA9EC /* netlobby.cpp */,
+				43DD1BCD13662006003AA9EC /* netlobby.h */,
 				43B8F286127C8FDD006F5A13 /* netqueue.cpp */,
 				43B8F287127C8FDD006F5A13 /* netqueue.h */,
-				43C18FA7114FF38B0028741B /* netjoin_stub.cpp */,
 				43C18FA8114FF38B0028741B /* netlog.cpp */,
 				43C18FA9114FF38B0028741B /* netlog.h */,
 				43C18FAA114FF38B0028741B /* netplay.cpp */,
@@ -2528,6 +2540,7 @@
 				02DDA8620BD3C1BB0049AB60 /* Vorbis sources */,
 				02DDA8DE0BD3C3930049AB60 /* PhysFS sources */,
 				9730E8000E8CEB3B009C9481 /* Theora sources */,
+				43DD1BC213661F84003AA9EC /* Mongo-C-Driver sources */,
 			);
 			name = "Third Party";
 			sourceTree = "<group>";
@@ -2869,6 +2882,17 @@
 				43C3B9B5118BEA9D000BBE59 /* res_books_stereo.h */,
 			);
 			name = coupled;
+			sourceTree = "<group>";
+		};
+		43DD1BC213661F84003AA9EC /* Mongo-C-Driver sources */ = {
+			isa = PBXGroup;
+			children = (
+				43DD1BC613661FD5003AA9EC /* bson.c */,
+				43DD1BC713661FD5003AA9EC /* bson.h */,
+				43DD1BC813661FD5003AA9EC /* numbers.c */,
+				43DD1BC913661FD5003AA9EC /* platform_hacks.h */,
+			);
+			name = "Mongo-C-Driver sources";
 			sourceTree = "<group>";
 		};
 		43F3008010D344B000707B6E /* x86 */ = {
@@ -3640,7 +3664,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "DirectorY=\"libpng-1.5.4\"\nOutDir=\"libpng\"\nFileName=\"libpng-1.5.4.tar.gz\"\nSourceDLP=\"http://downloads.sourceforge.net/project/libpng/libpng15/1.5.4/libpng-1.5.4.tar.gz\"\nMD5Sum=\"dea4d1fd671160424923e92ff0cdda78\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}\n";
+			shellScript = "DirectorY=\"libpng-1.5.2\"\nOutDir=\"libpng\"\nFileName=\"libpng-1.5.2.tar.gz\"\nSourceDLP=\"http://downloads.sourceforge.net/project/libpng/libpng15/1.5.2/libpng-1.5.2.tar.gz\"\nMD5Sum=\"31d448eb93a1646359a23f1b23434ab3\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
 		};
 		438B0C26137732A5008184FC /* Ogg - Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3969,7 +3993,6 @@
 				43A8417811028EDD00733CCB /* pointtree.cpp in Sources */,
 				43BE75EA11124BB5007DF934 /* wavecast.cpp in Sources */,
 				4336D8AA111DDF0F0012E8E4 /* random.cpp in Sources */,
-				43C18FCF114FF38B0028741B /* netjoin_stub.cpp in Sources */,
 				43C18FD0114FF38B0028741B /* netlog.cpp in Sources */,
 				43C18FD1114FF38B0028741B /* netplay.cpp in Sources */,
 				43C18FD2114FF38B0028741B /* netsocket.cpp in Sources */,
@@ -3983,6 +4006,9 @@
 				43F1D9D31343F542001478EC /* qtscriptfuncs.cpp in Sources */,
 				43A6285B13A6C4A400C6B786 /* geometry.cpp in Sources */,
 				4313231A13BE866B0023280C /* qtgame.cpp in Sources */,
+				43DD1BCA13661FD5003AA9EC /* bson.c in Sources */,
+				43DD1BCB13661FD5003AA9EC /* numbers.c in Sources */,
+				43DD1BCE13662006003AA9EC /* netlobby.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

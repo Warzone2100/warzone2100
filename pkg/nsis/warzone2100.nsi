@@ -180,7 +180,7 @@ Section $(TEXT_SecBase) SecBase
   ; Data files
   File "${TOP_BUILDDIR}\data\mp.wz"
   File "${TOP_BUILDDIR}\data\base.wz"
-
+    
   ; Information/documentation files (convert eols for text files)
   File "${TOP_SRCDIR}\ChangeLog"
   Push "ChangeLog"

@@ -12,6 +12,8 @@ BASELIST = \
 	palette.txt \
 	anims \
 	audio \
+	cacert.org-root.pem \
+	cacert.org-class3.pem \
 	challenges \
 	components \
 	effects \

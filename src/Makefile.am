@@ -292,6 +292,7 @@ warzone2100_LIBS = \
 	$(top_builddir)/lib/gamelib/libgamelib.a \
 	$(top_builddir)/lib/framework/libframework.a \
 	$(top_builddir)/lib/exceptionhandler/libexceptionhandler.a \
+	$(top_builddir)/3rdparty/bson/libbson.a \	
 	$(top_builddir)/3rdparty/miniupnpc/libminiupnpc.a
 
 warzone2100_LDADD = $(warzone2100_LIBS) $(LTLIBINTL) $(PHYSFS_LIBS) $(PNG_LIBS) $(OGGVORBIS_LIBS) \

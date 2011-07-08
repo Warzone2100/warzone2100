@@ -350,70 +350,6 @@ bool runSinglePlayerMenu(void)
 	return true;
 }
 
-
-// ////////////////////////////////////////////////////////////////////////////
-// Multi Player Menu
-static bool startMultiPlayerMenu(void)
-{
-	addBackdrop();
-	addTopForm();
-	addBottomForm();
-
-	addSideText	 (FRONTEND_SIDETEXT ,	FRONTEND_SIDEX,FRONTEND_SIDEY,_("MULTI PLAYER"));
-
-	addTextButton(FRONTEND_HOST,     FRONTEND_POS2X,FRONTEND_POS2Y, _("Host Game"), WBUT_TXTCENTRE);
-	addTextButton(FRONTEND_JOIN,     FRONTEND_POS3X,FRONTEND_POS3Y, _("Join Game"), WBUT_TXTCENTRE);
-
-	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
-
-	return true;
-}
-
-bool runMultiPlayerMenu(void)
-{
-	UDWORD id;
-
-	id = widgRunScreen(psWScreen);						// Run the current set of widgets
-	switch(id)
-	{
-	case FRONTEND_HOST:
-		// don't pretend we are running a network game. Really do it!
-		NetPlay.bComms = true; // use network = true
-		NETdiscoverUPnPDevices();
-		ingame.bHostSetup = true;
-		bMultiPlayer = true;
-		bMultiMessages = true;
-		game.type = SKIRMISH;		// needed?
-		lastTitleMode = MULTI;
-		changeTitleMode(MULTIOPTION);
-		break;
-	case FRONTEND_JOIN:
-		ingame.bHostSetup = false;
-		if (getLobbyError() != ERROR_CHEAT && getLobbyError() != ERROR_KICKED)
-		{
-			setLobbyError(ERROR_NOERROR);
-		}
-		changeTitleMode(PROTOCOL);
-		break;
-
-	case FRONTEND_QUIT:
-		changeTitleMode(TITLE);
-		break;
-	default:
-		break;
-	}
-
-	widgDisplayScreen(psWScreen); // show the widgets currently running
-
-	if (CancelPressed())
-	{
-		changeTitleMode(TITLE);
-	}
-
-	return true;
-}
-
-
 // ////////////////////////////////////////////////////////////////////////////
 // Options Menu
 static bool startOptionsMenu(void)
@@ -1700,6 +1636,7 @@ void addTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt, unsign
 	// Align
 	if ( !(style & WBUT_TXTCENTRE) )
 	{
+		iV_SetFont(font_large);
 		sButInit.width = (short)(iV_GetTextWidth(txt)+10);
 		sButInit.x+=35;
 	}
@@ -1810,12 +1747,9 @@ void changeTitleMode(tMode mode)
 		startCreditsScreen();
 		break;
  	case MULTI:
-		startMultiPlayerMenu();		// goto multiplayer menu
+ 		startGameFind();
 		break;
-	case PROTOCOL:
-		startConnectionScreen();
-		break;
-	case MULTIOPTION:
+ 	case MULTIOPTION:
 		if(oldMode == MULTILIMIT)
 		{
 			startMultiOptions(true);
@@ -1824,10 +1758,7 @@ void changeTitleMode(tMode mode)
 		{
 			startMultiOptions(false);
 		}
-		break;
-	case GAMEFIND:
-		startGameFind();
-		break;
+ 		break;
 	case MULTILIMIT:
 		startLimitScreen();
 		break;
@@ -1841,7 +1772,7 @@ void changeTitleMode(tMode mode)
 	case SHOWINTRO:
 		break;
 	default:
-		debug( LOG_FATAL, "Unknown title mode requested" );
+		debug( LOG_FATAL, "Unknown title mode requested (%d)", mode);
 		abort();
 		break;
 	}

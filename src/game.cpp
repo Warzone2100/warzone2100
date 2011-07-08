@@ -383,44 +383,6 @@ static bool deserializeMultiplayerGame(PHYSFS_file* fileHandle, MULTIPLAYERGAME*
 	return true;
 }
 
-static bool serializeSessionDesc(PHYSFS_file* fileHandle, const SESSIONDESC* serializeDesc)
-{
-	return (PHYSFS_writeSBE32(fileHandle, serializeDesc->dwSize)
-	     && PHYSFS_writeSBE32(fileHandle, serializeDesc->dwFlags)
-	     && PHYSFS_write(fileHandle, serializeDesc->host, 1, 16) == 16
-	     && PHYSFS_writeSBE32(fileHandle, serializeDesc->dwMaxPlayers)
-	     && PHYSFS_writeSBE32(fileHandle, serializeDesc->dwCurrentPlayers)
-	     && PHYSFS_writeSBE32(fileHandle, serializeDesc->dwUserFlags[0])
-	     && PHYSFS_writeSBE32(fileHandle, serializeDesc->dwUserFlags[1])
-	     && PHYSFS_writeSBE32(fileHandle, serializeDesc->dwUserFlags[2])
-	     && PHYSFS_writeSBE32(fileHandle, serializeDesc->dwUserFlags[3]));
-}
-
-static bool deserializeSessionDesc(PHYSFS_file* fileHandle, SESSIONDESC* serializeDesc)
-{
-	return (PHYSFS_readSBE32(fileHandle, &serializeDesc->dwSize)
-	     && PHYSFS_readSBE32(fileHandle, &serializeDesc->dwFlags)
-	     && PHYSFS_read(fileHandle, serializeDesc->host, 1, 16) == 16
-	     && PHYSFS_readSBE32(fileHandle, &serializeDesc->dwMaxPlayers)
-	     && PHYSFS_readSBE32(fileHandle, &serializeDesc->dwCurrentPlayers)
-	     && PHYSFS_readSBE32(fileHandle, &serializeDesc->dwUserFlags[0])
-	     && PHYSFS_readSBE32(fileHandle, &serializeDesc->dwUserFlags[1])
-	     && PHYSFS_readSBE32(fileHandle, &serializeDesc->dwUserFlags[2])
-	     && PHYSFS_readSBE32(fileHandle, &serializeDesc->dwUserFlags[3]));
-}
-
-static bool serializeGameStruct(PHYSFS_file* fileHandle, const GAMESTRUCT* serializeGame)
-{
-	return (PHYSFS_write(fileHandle, serializeGame->name, StringSize, 1) == 1
-	     && serializeSessionDesc(fileHandle, &serializeGame->desc));
-}
-
-static bool deserializeGameStruct(PHYSFS_file* fileHandle, GAMESTRUCT* serializeGame)
-{
-	return (PHYSFS_read(fileHandle, serializeGame->name, StringSize, 1) == 1
-	     && deserializeSessionDesc(fileHandle, &serializeGame->desc));
-}
-
 static bool serializePlayer(PHYSFS_file* fileHandle, const PLAYER* serializePlayer, int player)
 {
 	return (PHYSFS_writeUBE32(fileHandle, serializePlayer->position)
@@ -466,12 +428,6 @@ static bool serializeNetPlay(PHYSFS_file* fileHandle, const NETPLAY* serializeNe
 {
 	unsigned int i;
 
-	for (i = 0; i < MaxGames; ++i)
-	{
-		if (!serializeGameStruct(fileHandle, &serializeNetPlay->games[i]))
-			return false;
-	}
-
 	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
 		if (!serializePlayer(fileHandle, &serializeNetPlay->players[i], i))
@@ -492,12 +448,6 @@ static bool deserializeNetPlay(PHYSFS_file* fileHandle, NETPLAY* serializeNetPla
 	unsigned int i;
 	uint32_t dummy, scavs = game.scavengers;
 	bool retv;
-
-	for (i = 0; i < MaxGames; ++i)
-	{
-		if (!deserializeGameStruct(fileHandle, &serializeNetPlay->games[i]))
-			return false;
-	}
 
 	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
@@ -2914,16 +2864,6 @@ static void endian_SaveGameV(SAVE_GAME* psSaveGame, UDWORD version)
 	if(version >= VERSION_33)
 	{
 		endian_udword(&psSaveGame->sGame.power);
-		for(i = 0; i < MaxGames; i++) {
-			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwSize);
-			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwFlags);
-			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwMaxPlayers);
-			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwCurrentPlayers);
-			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUserFlags[0]);
-			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUserFlags[1]);
-			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUserFlags[2]);
-			endian_sdword(&psSaveGame->sNetPlay.games[i].desc.dwUserFlags[3]);
-		}
 		endian_udword(&psSaveGame->sNetPlay.playercount);
 		endian_udword(&psSaveGame->savePlayer);
 		for(i = 0; i < MAX_PLAYERS; i++)
