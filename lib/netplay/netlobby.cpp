@@ -31,7 +31,7 @@ namespace Lobby
 		// Set defaults
 		gameId_ = 0;
 
-		lastError_.code = NO_ERROR;
+		lastError_.code = LOBBY_NO_ERROR;
 
 		isAuthenticated_ = false;
 		useSSL_ = false;
@@ -64,7 +64,7 @@ namespace Lobby
 		if (gameId_ != 0)
 		{
 			// Ignore server errors here.
-			if (delGame() != NO_ERROR)
+			if (delGame() != LOBBY_NO_ERROR)
 			{
 				freeError();
 			}
@@ -85,7 +85,7 @@ namespace Lobby
 
 		bson_from_buffer(kwargs, buffer);
 
-		if (call_("addGame", NULL, kwargs) != NO_ERROR)
+		if (call_("addGame", NULL, kwargs) != LOBBY_NO_ERROR)
 		{
 			bson_destroy(kwargs);
 			return lastError_.code;
@@ -119,7 +119,7 @@ namespace Lobby
 		asprintf(result, bson_iterator_string(&it));
 
 		freeCallResult_();
-		return NO_ERROR;
+		return LOBBY_NO_ERROR;
 	}
 
 	RETURN_CODES Client::delGame()
@@ -129,14 +129,14 @@ namespace Lobby
 
 		if (gameId_ == 0)
 		{
-			return NO_ERROR;
+			return LOBBY_NO_ERROR;
 		}
 
 		bson_buffer_init(buffer);
 		bson_append_int(buffer, "gameId", gameId_);
 		bson_from_buffer(kwargs, buffer);
 
-		if (call_("delGame", NULL, kwargs) != NO_ERROR)
+		if (call_("delGame", NULL, kwargs) != LOBBY_NO_ERROR)
 		{
 			// Ignore a server side error and unset the local game.
 			gameId_ = 0;
@@ -149,7 +149,7 @@ namespace Lobby
 		gameId_ = 0;
 
 		freeCallResult_();
-		return NO_ERROR;
+		return LOBBY_NO_ERROR;
 	}
 
 	RETURN_CODES Client::addPlayer(const unsigned int index, const char* name,
@@ -171,7 +171,7 @@ namespace Lobby
 		bson_append_string(buffer, "session", session);
 		bson_from_buffer(kwargs, buffer);
 
-		if (call_("addPlayer", NULL, kwargs) != NO_ERROR)
+		if (call_("addPlayer", NULL, kwargs) != LOBBY_NO_ERROR)
 		{
 			bson_destroy(kwargs);
 			return lastError_.code;
@@ -179,7 +179,7 @@ namespace Lobby
 		bson_destroy(kwargs);
 
 		freeCallResult_();
-		return NO_ERROR;
+		return LOBBY_NO_ERROR;
 	}
 
 	RETURN_CODES Client::delPlayer(const unsigned int index)
@@ -197,7 +197,7 @@ namespace Lobby
 		bson_append_int(buffer, "slot", index);
 		bson_from_buffer(kwargs, buffer);
 
-		if (call_("delPlayer", NULL, kwargs) != NO_ERROR)
+		if (call_("delPlayer", NULL, kwargs) != LOBBY_NO_ERROR)
 		{
 			bson_destroy(kwargs);
 			return lastError_.code;
@@ -205,7 +205,7 @@ namespace Lobby
 		bson_destroy(kwargs);
 
 		freeCallResult_();
-		return NO_ERROR;
+		return LOBBY_NO_ERROR;
 	}
 
 	RETURN_CODES Client::updatePlayer(const unsigned int index, const char* name)
@@ -224,7 +224,7 @@ namespace Lobby
 		bson_append_string(buffer, "name", name);
 		bson_from_buffer(kwargs, buffer);
 
-		if (call_("updatePlayer", NULL, kwargs) != NO_ERROR)
+		if (call_("updatePlayer", NULL, kwargs) != LOBBY_NO_ERROR)
 		{
 			bson_destroy(kwargs);
 			return lastError_.code;
@@ -232,7 +232,7 @@ namespace Lobby
 		bson_destroy(kwargs);
 
 		freeCallResult_();
-		return NO_ERROR;
+		return LOBBY_NO_ERROR;
 	}
 
 	RETURN_CODES Client::listGames(const int maxGames)
@@ -246,7 +246,7 @@ namespace Lobby
 		games.clear();
 
 		// Run "list" and retrieve its result
-		if (call_("list", NULL, NULL) != NO_ERROR)
+		if (call_("list", NULL, NULL) != LOBBY_NO_ERROR)
 			return lastError_.code;
 
 		//Print the result to stdout.
@@ -320,7 +320,7 @@ namespace Lobby
 		}
 
 		freeCallResult_();
-		return NO_ERROR;
+		return LOBBY_NO_ERROR;
 	}
 
 	inline bool Client::isConnected()
@@ -363,7 +363,7 @@ namespace Lobby
 	{
 		if (isConnected())
 		{
-			return NO_ERROR;
+			return LOBBY_NO_ERROR;
 		}
 
 		isAuthenticated_ = false;
@@ -429,12 +429,12 @@ namespace Lobby
 
 		if (isAuthenticated_ == true)
 		{
-			return NO_ERROR;
+			return LOBBY_NO_ERROR;
 		}
 		else if (useAuth_ == false)
 		{
 			debug(LOG_LOBBY, "Authentication is disabled.");
-			return NO_ERROR;
+			return LOBBY_NO_ERROR;
 		}
 
 		bson_buffer_init(buffer);
@@ -456,12 +456,12 @@ namespace Lobby
 			debug(LOG_LOBBY, "Not trying to login no password/token supplied.");
 
 			// Do not return an error for internal use.
-			return NO_ERROR;
+			return LOBBY_NO_ERROR;
 		}
 
 		bson_from_buffer(kwargs, buffer);
 
-		if (call_("login", NULL, kwargs) != NO_ERROR)
+		if (call_("login", NULL, kwargs) != LOBBY_NO_ERROR)
 		{
 			// Reset login credentials on a wrong login
 			if (lastError_.code == WRONG_LOGIN)
@@ -506,19 +506,19 @@ namespace Lobby
 		isAuthenticated_ = true;
 
 		freeCallResult_();
-		return NO_ERROR;
+		return LOBBY_NO_ERROR;
 	}
 
 	RETURN_CODES Client::logout()
 	{
 		// Remove a maybe hosted game.
-		if (delGame() != NO_ERROR)
+		if (delGame() != LOBBY_NO_ERROR)
 		{
 			freeError();
 		}
 
 		// Tell the lobby that we want to logout.
-		if (call_("logout", NULL, NULL) != NO_ERROR)
+		if (call_("logout", NULL, NULL) != LOBBY_NO_ERROR)
 		{
 			// Clear auth data.
 			useAuth_ = false;
@@ -535,7 +535,7 @@ namespace Lobby
 		session_.clear();
 
 		freeCallResult_();
-		return NO_ERROR;
+		return LOBBY_NO_ERROR;
 	}
 
 	bool Client::disconnect()
@@ -566,7 +566,7 @@ namespace Lobby
 		bson_buffer buffer[1];
 
 		// Connect to the lobby
-		if (isConnected() != true && connect() != NO_ERROR)
+		if (isConnected() != true && connect() != LOBBY_NO_ERROR)
 		{
 			return lastError_.code;
 		}
@@ -689,7 +689,7 @@ namespace Lobby
 			callResult_.result = bson_iterator_value(&it);
 		}
 
-		if (callResult_.code != NO_ERROR)
+		if (callResult_.code != LOBBY_NO_ERROR)
 		{
 			debug(LOG_LOBBY, "Received: server error %d: %s", callResult_.code, callResult_.result);
 
@@ -698,20 +698,22 @@ namespace Lobby
 			return lastError_.code;
 		}
 
-		return NO_ERROR;
+		return LOBBY_NO_ERROR;
 	}
 
 	RETURN_CODES Client::setError_(const RETURN_CODES code, const char* message, ...)
 	{
-		   va_list ap;
+        char buffer[256];      
 
-		   lastError_.code = code;
+        lastError_.code = code;
 
-		   va_start(ap, message);
-			   lastError_.message.vsprintf(message, ap);
-		   va_end(ap);
+        va_list ap;
+        va_start(ap, message);
+            vsprintf(buffer, message, ap);
+            lastError_.message = buffer;
+        va_end(ap);
 
-		   return code;
+        return code;
 	}
 
 } // namespace Lobby

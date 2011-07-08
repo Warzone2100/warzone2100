@@ -1879,7 +1879,7 @@ static void NETallowJoining(void)
 					// and we are authenticated.
 					if (rejected == 0 && lobbyclient.isAuthenticated())
 					{
-						if (lobbyclient.addPlayer(index, name, username, session) != Lobby::NO_ERROR)
+						if (lobbyclient.addPlayer(index, name, username, session) != Lobby::LOBBY_NO_ERROR)
 						{
 							debug(LOG_INFO, "Lobby rejected player \"%s\", username \"%s\", session \"%s\", reason: %s",
 											name, username, session, lobbyclient.getError()->message.toUtf8().constData());
@@ -2053,9 +2053,9 @@ bool NEThostGame(const char* SessionName, const char* PlayerName,
 	// Register the game on the masterserver
 	if (lobbyclient.addGame(&motd, (uint32_t)gameserver_port, (uint32_t)NetPlay.maxPlayers,
 							SessionName, VersionString, NETCODE_VERSION_MAJOR, NETCODE_VERSION_MINOR,
-							NetPlay.GamePassworded, modlist, game.map, PlayerName) != Lobby::NO_ERROR)
+							NetPlay.GamePassworded, modlist, game.map, PlayerName) != Lobby::LOBBY_NO_ERROR)
 	{
-		Lobby::ERROR* error = lobbyclient.getError();
+		Lobby::LOBBY_ERROR* error = lobbyclient.getError();
 		if (error->code == Lobby::LOGIN_REQUIRED)
 		{
 			asprintf(&motd, _("Game not in the lobby, please login first!"));
@@ -2089,7 +2089,7 @@ bool NEThaltJoining(void)
 	debug(LOG_NET, "temporarily locking game to prevent more players");
 
 	allow_joining = false;
-	if (lobbyclient.delGame() != Lobby::NO_ERROR)
+	if (lobbyclient.delGame() != Lobby::LOBBY_NO_ERROR)
 	{
 		lobbyclient.freeError();
 	}
@@ -2107,7 +2107,7 @@ bool NETfindGame(const int maxGames)
  	}
  	setLobbyError(ERROR_NOERROR);
 
- 	if (lobbyclient.listGames(maxGames) != Lobby::NO_ERROR)
+ 	if (lobbyclient.listGames(maxGames) != Lobby::LOBBY_NO_ERROR)
  	{
  		debug(LOG_ERROR, lobbyclient.getError()->message.toUtf8().constData());
  		if (lobbyclient.getError()->code == Lobby::LOGIN_REQUIRED)

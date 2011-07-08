@@ -1015,7 +1015,7 @@ void runGameFind(void )
 		case CON_LOGIN_YES:
 			loginDone = true;
 
-			if (lobbyclient.setUser(lobbyUser).login(lobbyPass) != Lobby::NO_ERROR)
+			if (lobbyclient.setUser(lobbyUser).login(lobbyPass) != Lobby::LOBBY_NO_ERROR)
 			{
 				setLobbyError(ERROR_AUTHENTICATION);
 				addGames(); // Draws the error

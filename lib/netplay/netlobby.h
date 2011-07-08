@@ -46,7 +46,7 @@ namespace Lobby
 
 	enum RETURN_CODES
 	{
-		NO_ERROR				=	0,
+		LOBBY_NO_ERROR			=	0,
 
 		// Copied from XMLRPC for socketrpc
 		PARSE_ERROR				=	-32700,
@@ -83,7 +83,7 @@ namespace Lobby
 		std::string  hostplayer;			///< hosts playername.
 	};
 
-	struct ERROR
+	struct LOBBY_ERROR
 	{
 		RETURN_CODES code;
 		QString message;
@@ -159,11 +159,11 @@ namespace Lobby
 
 			QString getSession() const { return session_; }
 
-			ERROR* getError() { return &lastError_; }
+			LOBBY_ERROR* getError() { return &lastError_; }
 
 			void freeError()
 			{
-				lastError_.code = NO_ERROR;
+				lastError_.code = LOBBY_NO_ERROR;
 				lastError_.message.clear();
 			}
 
@@ -193,14 +193,14 @@ namespace Lobby
 
 			bool isAuthenticated_;
 
-			ERROR lastError_;
+			LOBBY_ERROR lastError_;
 			CALL_RESULT callResult_;
 
 			RETURN_CODES call_(const char* command, const bson* args, const bson* kwargs);
 
 			void freeCallResult_()
 			{
-				callResult_.code = NO_ERROR;
+				callResult_.code = LOBBY_NO_ERROR;
 				callResult_.result = NULL;
 				delete callResult_.buffer;
 			}
