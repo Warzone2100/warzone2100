@@ -1,5 +1,6 @@
 SUBDIRS = \
 	  win32 \
+	  3rdparty/bson \
 	  3rdparty/miniupnpc \
 	  lib/framework \
 	  lib/exceptionhandler \
