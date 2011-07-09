@@ -365,7 +365,7 @@
 		43119DC71353B005004C54BB /* pnglibconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 43119DC31353AFD7004C54BB /* pnglibconf.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43119DC81353B007004C54BB /* pngstruct.h in Headers */ = {isa = PBXBuildFile; fileRef = 43119DC41353AFD7004C54BB /* pngstruct.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4313231A13BE866B0023280C /* qtgame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4313231713BE866B0023280C /* qtgame.cpp */; };
-		4313231B13BE866B0023280C /* qtgame.h.moc in Sources */ = {isa = PBXBuildFile; fileRef = 4313231913BE866B0023280C /* qtgame.h.moc */; };
+		4313231B13BE866B0023280C /* qtgame.h.qwth in Sources */ = {isa = PBXBuildFile; fileRef = 4313231913BE866B0023280C /* qtgame.h.qwth */; };
 		4318439B1363955300BA2BC5 /* MiniUPnPc.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4318434B1363942200BA2BC5 /* MiniUPnPc.framework */; };
 		431843B71363958E00BA2BC5 /* MiniUPnPc.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 4318434B1363942200BA2BC5 /* MiniUPnPc.framework */; };
 		431843C8136395B000BA2BC5 /* bsdqueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 43C18F7A114FF38B0028741B /* bsdqueue.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -397,7 +397,7 @@
 		432BE3F810D9CD4000A486AB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 432BE3EE10D9CB4D00A486AB /* InfoPlist.strings */; };
 		432BE40210D9CF6F00A486AB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 432BE3FE10D9CF1300A486AB /* InfoPlist.strings */; };
 		4333607211A0731500380F5E /* wzapp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4333606F11A0731500380F5E /* wzapp.cpp */; };
-		4333607311A0731500380F5E /* wzapp.h.moc in Sources */ = {isa = PBXBuildFile; fileRef = 4333607111A0731500380F5E /* wzapp.h.moc */; };
+		4333607311A0731500380F5E /* wzapp.h.qwth in Sources */ = {isa = PBXBuildFile; fileRef = 4333607111A0731500380F5E /* wzapp.h.qwth */; };
 		4333612211A07FB900380F5E /* QtCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4333611E11A07FB900380F5E /* QtCore.framework */; };
 		4333612311A07FB900380F5E /* QtGui.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4333611F11A07FB900380F5E /* QtGui.framework */; };
 		4333612511A07FBA00380F5E /* QtOpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4333612111A07FB900380F5E /* QtOpenGL.framework */; };
@@ -617,7 +617,7 @@
 		433360D411A07A7E00380F5E /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
 			compilerSpec = com.apple.compilers.proxy.script;
-			filePatterns = "*.moc";
+			filePatterns = "*.qwth";
 			fileType = pattern.proxy;
 			isEditable = 1;
 			outputFiles = (
@@ -1409,7 +1409,7 @@
 		43119DC41353AFD7004C54BB /* pngstruct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pngstruct.h; path = external/libpng/pngstruct.h; sourceTree = "<group>"; };
 		4313231713BE866B0023280C /* qtgame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = qtgame.cpp; path = ../lib/qtgame/qtgame.cpp; sourceTree = SOURCE_ROOT; };
 		4313231813BE866B0023280C /* qtgame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = qtgame.h; path = ../lib/qtgame/qtgame.h; sourceTree = SOURCE_ROOT; };
-		4313231913BE866B0023280C /* qtgame.h.moc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = qtgame.h.moc; path = ../lib/qtgame/qtgame.h.moc; sourceTree = SOURCE_ROOT; };
+		4313231913BE866B0023280C /* qtgame.h.qwth */ = {isa = PBXFileReference; explicitFileType = sourcecode; fileEncoding = 4; name = qtgame.h.qwth; path = ../lib/qtgame/qtgame.h.qwth; sourceTree = SOURCE_ROOT; };
 		4318434B1363942200BA2BC5 /* MiniUPnPc.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MiniUPnPc.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		431843621363946800BA2BC5 /* MiniUPnPc-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "MiniUPnPc-All.xcconfig"; path = "configs/MiniUPnPc-All.xcconfig"; sourceTree = "<group>"; };
 		431843631363946800BA2BC5 /* MiniUPnPc-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "MiniUPnPc-Debug.xcconfig"; path = "configs/MiniUPnPc-Debug.xcconfig"; sourceTree = "<group>"; };
@@ -1426,7 +1426,7 @@
 		4333606E11A0731500380F5E /* wzapp_c.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wzapp_c.h; path = ../lib/framework/wzapp_c.h; sourceTree = SOURCE_ROOT; };
 		4333606F11A0731500380F5E /* wzapp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = wzapp.cpp; path = ../lib/framework/wzapp.cpp; sourceTree = SOURCE_ROOT; };
 		4333607011A0731500380F5E /* wzapp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wzapp.h; path = ../lib/framework/wzapp.h; sourceTree = SOURCE_ROOT; };
-		4333607111A0731500380F5E /* wzapp.h.moc */ = {isa = PBXFileReference; explicitFileType = sourcecode; fileEncoding = 4; name = wzapp.h.moc; path = ../lib/framework/wzapp.h.moc; sourceTree = SOURCE_ROOT; };
+		4333607111A0731500380F5E /* wzapp.h.qwth */ = {isa = PBXFileReference; explicitFileType = sourcecode; fileEncoding = 4; name = wzapp.h.qwth; path = ../lib/framework/wzapp.h.qwth; sourceTree = SOURCE_ROOT; };
 		4333611E11A07FB900380F5E /* QtCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = QtCore.framework; sourceTree = "<group>"; };
 		4333611F11A07FB900380F5E /* QtGui.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = QtGui.framework; sourceTree = "<group>"; };
 		4333612011A07FB900380F5E /* QtNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = QtNetwork.framework; sourceTree = "<group>"; };
@@ -1889,7 +1889,7 @@
 				4333606E11A0731500380F5E /* wzapp_c.h */,
 				4333606F11A0731500380F5E /* wzapp.cpp */,
 				4333607011A0731500380F5E /* wzapp.h */,
-				4333607111A0731500380F5E /* wzapp.h.moc */,
+				4333607111A0731500380F5E /* wzapp.h.qwth */,
 				974964250F5ABBE100A38899 /* endian_hack.h */,
 				974964260F5ABBE100A38899 /* fixedpoint.h */,
 				974964270F5ABBE100A38899 /* math_ext.h */,
@@ -2550,7 +2550,7 @@
 			children = (
 				4313231713BE866B0023280C /* qtgame.cpp */,
 				4313231813BE866B0023280C /* qtgame.h */,
-				4313231913BE866B0023280C /* qtgame.h.moc */,
+				4313231913BE866B0023280C /* qtgame.h.qwth */,
 			);
 			name = QtGame;
 			sourceTree = "<group>";
@@ -3810,8 +3810,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4313231B13BE866B0023280C /* qtgame.h.moc in Sources */,
-				4333607311A0731500380F5E /* wzapp.h.moc in Sources */,
+				4313231B13BE866B0023280C /* qtgame.h.qwth in Sources */,
+				4333607311A0731500380F5E /* wzapp.h.qwth in Sources */,
 				0246A0C10BD3CBD5004D1C70 /* configfile.cpp in Sources */,
 				0246A0C20BD3CBD5004D1C70 /* debug.cpp in Sources */,
 				0246A0C40BD3CBD5004D1C70 /* frame.cpp in Sources */,
