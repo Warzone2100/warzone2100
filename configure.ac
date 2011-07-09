@@ -106,6 +106,7 @@ case ${host_os} in
 		AC_CHECK_TOOL([WINDRES], [windres], AC_MSG_ERROR([windres not found]))
 		WIN32_LIBS='-ldbghelp -lshfolder -lshlwapi -lpsapi -lshell32 -lwinmm -lws2_32 -liphlpapi'
 		AC_SUBST([WIN32_LIBS], [${WIN32_LIBS}])
+		LDFLAGS="-Wl,-subsystem,windows ${LDFLAGS}"
 		;;
 	*openbsd*)
 		AC_DEFINE([_XOPEN_SOURCE], 600, [Enable POSIX extensions if present])
