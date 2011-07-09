@@ -1,0 +1,6 @@
+// Bson settings for Release configuration
+
+#include "Bson-All.xcconfig"
+
+
+GCC_ENABLE_FIX_AND_CONTINUE = NO

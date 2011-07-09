@@ -1,0 +1,9 @@
+// Bson settings for all configurations
+
+#include "Base-Framework.xcconfig"
+
+
+PRODUCT_NAME = Bson
+
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited)
+WARNING_CFLAGS = -Wall

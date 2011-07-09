@@ -420,6 +420,12 @@
 		438BDDF31129DC9A00998660 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 438BDDD71129DC9A00998660 /* InfoPlist.strings */; };
 		43A6285B13A6C4A400C6B786 /* geometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A6285913A6C4A400C6B786 /* geometry.cpp */; };
 		43A8417811028EDD00733CCB /* pointtree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43A8417611028EDD00733CCB /* pointtree.cpp */; };
+		43AA704313C7FD510015B52B /* Bson.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AA702A13C7FC640015B52B /* Bson.framework */; };
+		43AA704413C7FD570015B52B /* Bson.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 43AA702A13C7FC640015B52B /* Bson.framework */; };
+		43AA705513C801CF0015B52B /* bson.c in Sources */ = {isa = PBXBuildFile; fileRef = 43DD1BC613661FD5003AA9EC /* bson.c */; };
+		43AA705613C801D10015B52B /* bson.h in Headers */ = {isa = PBXBuildFile; fileRef = 43DD1BC713661FD5003AA9EC /* bson.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		43AA705713C801D20015B52B /* numbers.c in Sources */ = {isa = PBXBuildFile; fileRef = 43DD1BC813661FD5003AA9EC /* numbers.c */; };
+		43AA705813C801D30015B52B /* platform_hacks.h in Headers */ = {isa = PBXBuildFile; fileRef = 43DD1BC913661FD5003AA9EC /* platform_hacks.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43B8F285127C8F9D006F5A13 /* crc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43B8F282127C8F9D006F5A13 /* crc.cpp */; };
 		43B8F288127C8FDD006F5A13 /* netqueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43B8F286127C8FDD006F5A13 /* netqueue.cpp */; };
 		43B8FC9A127CB06C006F5A13 /* Zlib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02356D830BD3BB4100E9A019 /* Zlib.framework */; };
@@ -460,8 +466,6 @@
 		43D180B01336B99C001906EB /* physfs_casefolding.h in Headers */ = {isa = PBXBuildFile; fileRef = 43D180AF1336B99C001906EB /* physfs_casefolding.h */; };
 		43D338581364F5A8005F6725 /* connecthostport.c in Sources */ = {isa = PBXBuildFile; fileRef = 43D338561364F5A8005F6725 /* connecthostport.c */; };
 		43D338591364F5A8005F6725 /* connecthostport.h in Headers */ = {isa = PBXBuildFile; fileRef = 43D338571364F5A8005F6725 /* connecthostport.h */; };
-		43DD1BCA13661FD5003AA9EC /* bson.c in Sources */ = {isa = PBXBuildFile; fileRef = 43DD1BC613661FD5003AA9EC /* bson.c */; };
-		43DD1BCB13661FD5003AA9EC /* numbers.c in Sources */ = {isa = PBXBuildFile; fileRef = 43DD1BC813661FD5003AA9EC /* numbers.c */; };
 		43DD1BCE13662006003AA9EC /* netlobby.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43DD1BCC13662006003AA9EC /* netlobby.cpp */; };
 		43DF5A8A12BEE01B00DD5A37 /* cocoa_wrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 43DF5A8912BEE01B00DD5A37 /* cocoa_wrapper.mm */; };
 		43E1890411440D8C000870EB /* eval-plural.h in Headers */ = {isa = PBXBuildFile; fileRef = 022B2F850BD55B4F002E64E3 /* eval-plural.h */; };
@@ -761,6 +765,13 @@
 			remoteGlobalIDString = 438B0C05137730FE008184FC;
 			remoteInfo = "Fetch Third Party Sources";
 		};
+		43AA707013C804580015B52B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43AA702913C7FC640015B52B;
+			remoteInfo = Bson;
+		};
 		43AE78FC10F0F4F500FED5D3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
@@ -812,6 +823,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				43AA704413C7FD570015B52B /* Bson.framework in Copy frameworks */,
 				4333661B11A07FFF00380F5E /* QtCore.framework in Copy frameworks */,
 				43F1D99A1343F1DE001478EC /* QtScript.framework in Copy frameworks */,
 				4333661C11A07FFF00380F5E /* QtGui.framework in Copy frameworks */,
@@ -1481,6 +1493,10 @@
 		43A6285A13A6C4A400C6B786 /* geometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = geometry.h; path = ../lib/framework/geometry.h; sourceTree = SOURCE_ROOT; };
 		43A8417611028EDD00733CCB /* pointtree.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = pointtree.cpp; path = ../src/pointtree.cpp; sourceTree = SOURCE_ROOT; };
 		43A8417711028EDD00733CCB /* pointtree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pointtree.h; path = ../src/pointtree.h; sourceTree = SOURCE_ROOT; };
+		43AA702A13C7FC640015B52B /* Bson.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Bson.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		43AA705F13C803DB0015B52B /* Bson-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Bson-All.xcconfig"; path = "configs/Bson-All.xcconfig"; sourceTree = "<group>"; };
+		43AA706013C803DB0015B52B /* Bson-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Bson-Debug.xcconfig"; path = "configs/Bson-Debug.xcconfig"; sourceTree = "<group>"; };
+		43AA706113C803DB0015B52B /* Bson-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Bson-Release.xcconfig"; path = "configs/Bson-Release.xcconfig"; sourceTree = "<group>"; };
 		43B8F282127C8F9D006F5A13 /* crc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = crc.cpp; path = ../lib/framework/crc.cpp; sourceTree = SOURCE_ROOT; };
 		43B8F283127C8F9D006F5A13 /* crc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = crc.h; path = ../lib/framework/crc.h; sourceTree = SOURCE_ROOT; };
 		43B8F284127C8F9D006F5A13 /* opengl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = opengl.h; path = ../lib/framework/opengl.h; sourceTree = SOURCE_ROOT; };
@@ -1677,6 +1693,7 @@
 				43502D6D1347648300A02A1F /* GLExtensionWrangler.framework in Frameworks */,
 				43B8FD10127CB0BE006F5A13 /* Gettext.framework in Frameworks */,
 				4318439B1363955300BA2BC5 /* MiniUPnPc.framework in Frameworks */,
+				43AA704313C7FD510015B52B /* Bson.framework in Frameworks */,
 				43B8FD2E127CB13F006F5A13 /* Carbon.framework in Frameworks */,
 				43B8FD2F127CB13F006F5A13 /* Cocoa.framework in Frameworks */,
 				43B8FD33127CB13F006F5A13 /* OpenAL.framework in Frameworks */,
@@ -1742,6 +1759,13 @@
 			files = (
 				43502DCC1347681D00A02A1F /* AGL.framework in Frameworks */,
 				43502DCD1347681D00A02A1F /* OpenGL.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43AA702813C7FC640015B52B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1846,6 +1870,7 @@
 				97AEAB330E8C1B5200A10721 /* Theora.framework */,
 				43502D521347640700A02A1F /* GLExtensionWrangler.framework */,
 				4318434B1363942200BA2BC5 /* MiniUPnPc.framework */,
+				43AA702A13C7FC640015B52B /* Bson.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2491,6 +2516,9 @@
 		43025DEC1120A4B6006C49B1 /* Configurations */ = {
 			isa = PBXGroup;
 			children = (
+				43AA705F13C803DB0015B52B /* Bson-All.xcconfig */,
+				43AA706013C803DB0015B52B /* Bson-Debug.xcconfig */,
+				43AA706113C803DB0015B52B /* Bson-Release.xcconfig */,
 				43B9DE9F1384675E004C7351 /* Base-Framework.xcconfig */,
 				431843621363946800BA2BC5 /* MiniUPnPc-All.xcconfig */,
 				431843631363946800BA2BC5 /* MiniUPnPc-Debug.xcconfig */,
@@ -3115,6 +3143,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		43AA702513C7FC640015B52B /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43AA705613C801D10015B52B /* bson.h in Headers */,
+				43AA705813C801D30015B52B /* platform_hacks.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		97AEAAEE0E8C1B5200A10721 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -3189,6 +3226,7 @@
 			dependencies = (
 				43D1808B1336B74E001906EB /* PBXTargetDependency */,
 				022B313F0BD56915002E64E3 /* PBXTargetDependency */,
+				43AA707113C804580015B52B /* PBXTargetDependency */,
 				43502D83134764BF00A02A1F /* PBXTargetDependency */,
 				4318438A1363954200BA2BC5 /* PBXTargetDependency */,
 				0246A2FF0BD3CCF0004D1C70 /* PBXTargetDependency */,
@@ -3340,6 +3378,24 @@
 			productReference = 43502D521347640700A02A1F /* GLExtensionWrangler.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		43AA702913C7FC640015B52B /* Bson */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 43AA702F13C7FC660015B52B /* Build configuration list for PBXNativeTarget "Bson" */;
+			buildPhases = (
+				43AA702513C7FC640015B52B /* Headers */,
+				43AA702613C7FC640015B52B /* Resources */,
+				43AA702713C7FC640015B52B /* Sources */,
+				43AA702813C7FC640015B52B /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Bson;
+			productName = Bson;
+			productReference = 43AA702A13C7FC640015B52B /* Bson.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 		97AEAAEA0E8C1B5200A10721 /* Theora */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 97AEAB300E8C1B5200A10721 /* Build configuration list for PBXNativeTarget "Theora" */;
@@ -3418,6 +3474,7 @@
 				022B2F210BD55814002E64E3 /* Gettext */,
 				43502D511347640700A02A1F /* GLExtensionWrangler */,
 				4318434A1363942200BA2BC5 /* MiniUPnPc */,
+				43AA702913C7FC640015B52B /* Bson */,
 				02356D820BD3BB4100E9A019 /* Zlib */,
 				02356DC10BD3BBFC00E9A019 /* Png */,
 				02356E080BD3BCFE00E9A019 /* Ogg */,
@@ -3491,6 +3548,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		43502D4E1347640700A02A1F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43AA702613C7FC640015B52B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -4006,8 +4070,6 @@
 				43F1D9D31343F542001478EC /* qtscriptfuncs.cpp in Sources */,
 				43A6285B13A6C4A400C6B786 /* geometry.cpp in Sources */,
 				4313231A13BE866B0023280C /* qtgame.cpp in Sources */,
-				43DD1BCA13661FD5003AA9EC /* bson.c in Sources */,
-				43DD1BCB13661FD5003AA9EC /* numbers.c in Sources */,
 				43DD1BCE13662006003AA9EC /* netlobby.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4137,6 +4199,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				43502DC51347675300A02A1F /* glew.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43AA702713C7FC640015B52B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43AA705513C801CF0015B52B /* bson.c in Sources */,
+				43AA705713C801D20015B52B /* numbers.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4279,6 +4350,11 @@
 			target = 438B0C05137730FE008184FC /* Fetch Third Party Sources */;
 			targetProxy = 438B0C4013773421008184FC /* PBXContainerItemProxy */;
 		};
+		43AA707113C804580015B52B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43AA702913C7FC640015B52B /* Bson */;
+			targetProxy = 43AA707013C804580015B52B /* PBXContainerItemProxy */;
+		};
 		43AE78FD10F0F4F500FED5D3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 02356D740BD3BB3400E9A019 /* Warzone */;
@@ -4405,6 +4481,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025E001120A4CA006C49B1 /* Warzone-Debug.xcconfig */;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/build/Release\"",
+				);
 			};
 			name = Debug;
 		};
@@ -4412,6 +4492,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025E011120A4CA006C49B1 /* Warzone-Release.xcconfig */;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/build/Release\"",
+				);
 			};
 			name = Release;
 		};
@@ -4538,6 +4622,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025E021120A4CA006C49B1 /* Warzone-StaticAnalyzer.xcconfig */;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/build/Release\"",
+				);
 			};
 			name = StaticAnalyzer;
 		};
@@ -4622,6 +4710,27 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				PRODUCT_NAME = "Fetch Third Party Sources";
+			};
+			name = Release;
+		};
+		43AA702C13C7FC650015B52B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43AA706013C803DB0015B52B /* Bson-Debug.xcconfig */;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		43AA702D13C7FC650015B52B /* StaticAnalyzer */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43AA706013C803DB0015B52B /* Bson-Debug.xcconfig */;
+			buildSettings = {
+			};
+			name = StaticAnalyzer;
+		};
+		43AA702E13C7FC650015B52B /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43AA706113C803DB0015B52B /* Bson-Release.xcconfig */;
+			buildSettings = {
 			};
 			name = Release;
 		};
@@ -4797,6 +4906,16 @@
 				438B0C0613773104008184FC /* Debug */,
 				438B0C0713773104008184FC /* StaticAnalyzer */,
 				438B0C0813773104008184FC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		43AA702F13C7FC660015B52B /* Build configuration list for PBXNativeTarget "Bson" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				43AA702C13C7FC650015B52B /* Debug */,
+				43AA702D13C7FC650015B52B /* StaticAnalyzer */,
+				43AA702E13C7FC650015B52B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
