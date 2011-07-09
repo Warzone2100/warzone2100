@@ -98,7 +98,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <PreBuildEvent>
-      <Command>$(QTDIR)\bin\moc.exe wzapp.h. -o wzapp.moc.h</Command>
+      <Command>$(QTDIR)\bin\moc.exe wzapp.h. -o wzapp.h.moc</Command>
     </PreBuildEvent>
     <PreBuildEvent>
       <Message>Running MOC on wzapp.h</Message>
@@ -126,6 +126,10 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
+    <PreBuildEvent>
+      <Command>$(QTDIR)\bin\moc.exe wzapp.h. -o wzapp.h.moc</Command>
+      <Message>Running MOC on wzapp.h</Message>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <BisonParser>
@@ -140,6 +144,10 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
+    <PreBuildEvent>
+      <Command>$(QTDIR)\bin\moc.exe wzapp.h. -o wzapp.h.moc</Command>
+      <Message>Running MOC on wzapp.h</Message>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='STLport-Release|Win32'">
     <BisonParser>
@@ -155,6 +163,10 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
     </ClCompile>
+    <PreBuildEvent>
+      <Command>$(QTDIR)\bin\moc.exe wzapp.h. -o wzapp.h.moc</Command>
+      <Message>Running MOC on wzapp.h</Message>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="configfile.cpp" />

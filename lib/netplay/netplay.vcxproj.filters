@@ -15,6 +15,15 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
+    <Filter Include="Source Files\bson">
+      <UniqueIdentifier>{f3aa8101-79ef-4cc1-a99e-6646487d93c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\bson\Header Files">
+      <UniqueIdentifier>{b28b889a-36f3-4ceb-a908-719b675635f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\bson\Source Files">
+      <UniqueIdentifier>{7cb35867-1fb5-4ac1-b7f6-4fc9516c582b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\3rdparty\miniupnpc\upnpreplyparse.c">
@@ -47,9 +56,6 @@
     <ClCompile Include="..\..\3rdparty\miniupnpc\upnperrors.c">
       <Filter>Source Files\miniUPnP\src files</Filter>
     </ClCompile>
-    <ClCompile Include="netjoin_stub.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="netlog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -63,6 +69,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="nettypes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdparty\bson\bson.c">
+      <Filter>Source Files\bson\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdparty\bson\numbers.c">
+      <Filter>Source Files\bson\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="netlobby.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -120,6 +135,12 @@
     </ClInclude>
     <ClInclude Include="..\..\3rdparty\miniupnpc\upnpreplyparse.h">
       <Filter>Source Files\miniUPnP\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdparty\bson\bson.h">
+      <Filter>Source Files\bson\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdparty\bson\platform_hacks.h">
+      <Filter>Source Files\bson\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

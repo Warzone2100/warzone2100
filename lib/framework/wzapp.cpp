@@ -34,7 +34,7 @@
 #include "wzapp.h"
 
 #if defined(WZ_CC_MSVC)
-#include "wzapp.moc.h"		// this is generated on the pre-build event.
+#include "wzapp.h.moc"		// this is generated on the pre-build event.
 #endif
 
 #include "lib/exceptionhandler/dumpinfo.h"

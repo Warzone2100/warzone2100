@@ -25,6 +25,7 @@
  * along with connection and game options.
  */
 
+#include "lib/framework/frame.h"		// LEAVE THIS ALONE, it *must* be first for compiler specific fixes.
 #include "lib/framework/wzapp.h"
 
 #include <time.h>

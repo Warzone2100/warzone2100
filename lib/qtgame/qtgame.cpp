@@ -2,12 +2,13 @@
 
 #include "lib/framework/wzglobal.h"
 
+#if defined(WZ_CC_MSVC)
+#include "qtgame.h.moc"		// this is generated on the pre-build event.
+#endif
+
 #ifdef WZ_WS_X11
 #include <X11/extensions/Xrandr.h>
 #include <QX11Info>
-#elif defined(WZ_WS_WIN32)
-#define _WIN32_WINNT 0x0502
-#include <windows.h>
 #endif
 
 /* Overloaded QWidget functions to handle resolution changing */

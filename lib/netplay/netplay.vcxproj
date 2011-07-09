@@ -69,7 +69,7 @@
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='STLport-Release|Win32'">$(Configuration)\</IntDir>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\lib\netplay;..\devpkg\include;$(Qtdir)\include;..\..\3rdparty\;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='STLport-Debug|Win32'">..\devpkg\stlport5.2.1\stlport;..\devpkg\include;$(Qtdir)\include;..\..\lib\netplay;..\..\3rdparty\;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='STLport-Debug|Win32'">..\devpkg\stlport5.2.1\stlport;..\devpkg\include;$(Qtdir)\include;..\..\lib\netplay;..\..\3rdparty;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\lib\netplay;..\devpkg\include;$(Qtdir)\include;..\..\3rdparty\;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='STLport-Release|Win32'">..\devpkg\stlport5.2.1\stlport;..\..\lib\netplay;..\devpkg\include;$(Qtdir)\include;..\..\3rdparty\;$(IncludePath)</IncludePath>
   </PropertyGroup>
@@ -141,8 +141,10 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\3rdparty\bson\bson.c" />
+    <ClCompile Include="..\..\3rdparty\bson\numbers.c" />
     <ClCompile Include="..\..\3rdparty\miniupnpc\connecthostport.c" />
-    <ClCompile Include="netjoin_stub.cpp" />
+    <ClCompile Include="netlobby.cpp" />
     <ClCompile Include="netlog.cpp" />
     <ClCompile Include="netplay.cpp" />
     <ClCompile Include="netqueue.cpp" />
@@ -168,6 +170,8 @@
     <ClCompile Include="..\..\3rdparty\miniupnpc\upnpreplyparse.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\3rdparty\bson\bson.h" />
+    <ClInclude Include="..\..\3rdparty\bson\platform_hacks.h" />
     <ClInclude Include="..\..\3rdparty\miniupnpc\bsdqueue.h" />
     <ClInclude Include="..\..\3rdparty\miniupnpc\codelength.h" />
     <ClInclude Include="..\..\3rdparty\miniupnpc\connecthostport.h" />

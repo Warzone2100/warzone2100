@@ -43,6 +43,7 @@ typedef signed   long long int64_t;
 //END   Hope this is right.
 
 #ifndef WZ_CC_MINGW
+#if defined(_MSC_VER) && (_MSC_VER <= 1500)
 #ifndef INT8_MIN
 # define INT8_MIN               (-128)
 #endif
@@ -70,7 +71,11 @@ typedef signed   long long int64_t;
 #ifndef UINT32_MAX
 # define UINT32_MAX             (4294967295U)
 #endif
+#else
+#include <stdint.h>		// MSVC 2010 does have those defined
 #endif
+#endif
+
 #ifdef WZ_CC_MSVC
 # define PRIu32					"u"
 # define PRIu64					"I64u"
@@ -80,7 +85,7 @@ typedef SSIZE_T ssize_t;
 #endif // WZ_C99
 
 #ifndef INT8_MAX
-#warning inttypes.h and stdint.h defines missing! Make sure that __STDC_FORMAT_MACROS and __STDC_LIMIT_MACROS are defined when compiling C++ files.
+#error inttypes.h and stdint.h defines missing! Make sure that __STDC_FORMAT_MACROS and __STDC_LIMIT_MACROS are defined when compiling C++ files.
 #endif
 
 #include <limits.h>
