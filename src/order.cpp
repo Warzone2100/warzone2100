@@ -1590,7 +1590,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 			// attacking something while guarding, don't change the order
 			actionDroid(psDroid, DACTION_ATTACK, psOrder->psObj);
 		}
-		else if (!psOrder->psObj->died)
+		else if (psOrder->psObj && !psOrder->psObj->died)
 		{
 			//cannot attack a Transporter with EW in multiPlayer
 			if (game.type == SKIRMISH && electronicDroid(psDroid)
