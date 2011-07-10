@@ -1658,7 +1658,16 @@ static void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 	{
 		memset(DROIDDOING, 0x0 , sizeof(DROIDDOING)); // take over the other players droid by debug menu.
 		/* We've clicked on somebody else's droid */
-//		addConsoleMessage("Clicked on another player's droid",SYSTEM_MESSAGE);
+#ifdef DEBUG
+		if (getDebugMappingStatus())
+		{
+			CONPRINTF(ConsoleString, (ConsoleString, "(Enemy!) %s - Damage %d%% - ID %d - experience %f, %s - order %s - action %s - sensor range %hu - ECM %u - pitch %.0f",
+						droidGetName(psDroid), 	100 - clip(PERCENT(psDroid->body, psDroid->originalBody), 0, 100), psDroid->id,
+						psDroid->experience/65536.f, getDroidLevelName(psDroid), getDroidOrderName(psDroid->order), getDroidActionName(psDroid->action),
+						droidSensorRange(psDroid), droidConcealment(psDroid), UNDEG(psDroid->rot.pitch)));
+			FeedbackOrderGiven();
+		}
+#endif
 		orderSelectedObjAdd(selectedPlayer, (BASE_OBJECT*)psDroid, ctrlShiftDown());
 
 		//lasSat structure can select a target - in multiPlayer only
@@ -1860,6 +1869,13 @@ static void dealWithLMBStructure(STRUCTURE* psStructure, SELECTION_TYPE selectio
 	if (!aiCheckAlliances(psStructure->player, selectedPlayer))
 	{
 		/* We've clicked on somebody else's building */
+#ifdef DEBUG
+		if (getDebugMappingStatus())
+		{
+			CONPRINTF(ConsoleString, (ConsoleString, "(Enemy!) %s, ref: %d, ID: %d Damage %d%%", psStructure->pStructureType->pName, psStructure->pStructureType->ref,
+				psStructure->id, 100 - clip(PERCENT(psStructure->body, psStructure->pStructureType->bodyPoints), 0, 100)));
+		}
+#endif
 		orderSelectedObjAdd(selectedPlayer, (BASE_OBJECT*)psStructure, ctrlShiftDown());
 		//lasSat structure can select a target - in multiPlayer only
 		if (bMultiPlayer && bLasSatStruct)
@@ -2064,7 +2080,12 @@ static void dealWithLMBFeature(FEATURE* psFeature)
 				break;
 		}
 	}
-
+#ifdef DEBUG
+		if (getDebugMappingStatus())
+		{
+			CONPRINTF(ConsoleString, (ConsoleString, "(Feature) %s, ID: %d, ref: %d, body: (%d):%d", psFeature->psStats->pName, psFeature->id, psFeature->psStats->ref, psFeature->psStats->body, psFeature->body ));
+		}
+#endif
 	driveDisableTactical();
 }
 
