@@ -374,6 +374,8 @@ AS_IF([test "x$enable_sound" = "xyes"],[
 
 PKG_CHECK_MODULES([GLEW], [glew >= 1.5.2])
 
+PKG_CHECK_MODULES([QJSON], [QJson >= 0.7.1])
+
 # Checks for libraries:
 
 # check for nearbyint()
@@ -393,7 +395,6 @@ AC_CHECK_LIB(physfs, PHYSFS_init, AC_SUBST([PHYSFS_LIBS], [-lphysfs]), AC_MSG_ER
 if test "x$host_os_mingw32" != "xyes" ; then
 	AC_CHECK_HEADER(X11/extensions/Xrandr.h, , AC_MSG_ERROR([Xrandr header not found.]))
 fi
-
 
 # Look for OpenGL
 AC_CHECK_LIB(GL, main,
@@ -444,7 +445,6 @@ AC_CONFIG_FILES([Makefile
 		win32/Makefile
 		tests/Makefile
 		3rdparty/miniupnpc/Makefile
-		3rdparty/bson/Makefile
 		lib/framework/Makefile
 		lib/exceptionhandler/Makefile
 		lib/gamelib/Makefile

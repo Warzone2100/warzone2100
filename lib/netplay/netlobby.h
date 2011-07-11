@@ -27,8 +27,9 @@
 #include <QtNetwork/QSslSocket>
 #endif
 
+#include <QtCore/QVariant>
+
 #include "lib/framework/frame.h"
-#include "bson/bson.h"
 
 namespace Lobby
 {
@@ -92,8 +93,7 @@ struct LOBBY_ERROR
 struct CALL_RESULT
 {
     RETURN_CODES code;
-    char* buffer;
-    const char* result;
+    QVariant result;
 };
 
 class Client {
@@ -200,9 +200,9 @@ public:
     }
 
 private:
-    int64_t gameId_;
+    qint64 gameId_;
 
-    uint32_t callId_;
+    qint64 callId_;
 
     bool useSSL_;
 #if !defined(NO_SSL)
@@ -228,13 +228,12 @@ private:
     LOBBY_ERROR lastError_;
     CALL_RESULT callResult_;
 
-    RETURN_CODES call_(const char* command, const bson* args, const bson* kwargs);
+    RETURN_CODES call_(const char* command, const QVariantMap& kwargs = QVariantMap());
 
     void freeCallResult_()
     {
         callResult_.code = LOBBY_NO_ERROR;
-        callResult_.result = NULL;
-        delete callResult_.buffer;
+        callResult_.result.clear();
     }
 
     RETURN_CODES setError_(const RETURN_CODES code, const char * message, ...);

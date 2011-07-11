@@ -17,11 +17,21 @@
     along with Warzone 2100; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
+// Qt Core
 #include <QtCore/QtEndian>
 #include <QtCore/QFile>
 
-#include <QtNetwork/QSslConfiguration>
+// Debugging normaly commented.
+// #include <QtCore/QDebug>
 
+// QT Network
+#include <QtNetwork/QSslCertificate>
+
+// QJson
+#include <qjson/parser.h>
+#include <qjson/serializer.h>
+
+// Self
 #include "netlobby.h"
 
 namespace Lobby
@@ -58,9 +68,6 @@ RETURN_CODES Client::addGame(char** result, const uint32_t port, const uint32_t 
                              const bool isPrivate, const char* modlist,
                              const char* mapname, const char* hostplayer)
 {
-    bson kwargs[1];
-    bson_buffer buffer[1];
-
     if (gameId_ != 0)
     {
         // Ignore server errors here.
@@ -70,53 +77,32 @@ RETURN_CODES Client::addGame(char** result, const uint32_t port, const uint32_t 
         }
     }
 
-    bson_buffer_init(buffer);
-    bson_append_int(buffer, "port", port);
-    bson_append_string(buffer, "description", description);
-    bson_append_int(buffer, "currentPlayers", 1);
-    bson_append_int(buffer, "maxPlayers", maxPlayers);
-    bson_append_string(buffer, "multiVer", versionstring);
-    bson_append_int(buffer, "wzVerMajor", game_version_major);
-    bson_append_int(buffer, "wzVerMinor", game_version_minor);
-    bson_append_bool(buffer, "isPrivate", isPrivate);
-    bson_append_string(buffer, "modlist", modlist);
-    bson_append_string(buffer, "mapname", mapname);
-    bson_append_string(buffer, "hostplayer", hostplayer);
+    QVariantMap kwargs;
+    kwargs.insert("port", port);
+    kwargs.insert("description", description);
+    kwargs.insert("currentPlayers", 1);
+    kwargs.insert("maxPlayers", maxPlayers);
+    kwargs.insert("multiVer", versionstring);
+    kwargs.insert("wzVerMajor", game_version_major);
+    kwargs.insert("wzVerMinor", game_version_minor);
+    kwargs.insert("private", isPrivate);
+    kwargs.insert("modlist", modlist);
+    kwargs.insert("mapname", mapname);
+    kwargs.insert("hostplayer", hostplayer);
 
-    bson_from_buffer(kwargs, buffer);
-
-    if (call_("addGame", NULL, kwargs) != LOBBY_NO_ERROR)
+    if (call_("addGame", kwargs) != LOBBY_NO_ERROR)
     {
-        bson_destroy(kwargs);
         return lastError_.code;
     }
-    bson_destroy(kwargs);
 
-    bson_iterator it;
-    bson_iterator_init(&it, callResult_.result);
-
-    bson_iterator_next(&it);
-    if (bson_iterator_type(&it) == bson_long)
-    {
-        gameId_ = bson_iterator_long(&it);
-    }
-    else if (bson_iterator_type(&it) == bson_int)
-    {
-        gameId_ = (int64_t)bson_iterator_int(&it);
-    }
-    else
-    {
+    QVariantMap resultMap = callResult_.result.toMap();
+    if (!resultMap.contains("gameId") or !resultMap.contains("result")) {
         freeCallResult_();
         return setError_(INVALID_DATA, _("Received invalid addGame data."));
     }
 
-    bson_iterator_next(&it);
-    if (bson_iterator_type(&it) != bson_string)
-    {
-        freeCallResult_();
-        return setError_(INVALID_DATA, _("Received invalid addGame data."));
-    }
-    asprintf(result, bson_iterator_string(&it));
+    gameId_ = resultMap["gameId"].toLongLong();
+    asprintf(result, resultMap["result"].toString().toUtf8().constData());
 
     freeCallResult_();
     return LOBBY_NO_ERROR;
@@ -124,27 +110,20 @@ RETURN_CODES Client::addGame(char** result, const uint32_t port, const uint32_t 
 
 RETURN_CODES Client::delGame()
 {
-    bson kwargs[1];
-    bson_buffer buffer[1];
-
     if (gameId_ == 0)
     {
         return LOBBY_NO_ERROR;
     }
 
-    bson_buffer_init(buffer);
-    bson_append_int(buffer, "gameId", gameId_);
-    bson_from_buffer(kwargs, buffer);
+    QVariantMap kwargs;
+    kwargs.insert("gameId", gameId_);
 
-    if (call_("delGame", NULL, kwargs) != LOBBY_NO_ERROR)
+    if (call_("delGame", kwargs) != LOBBY_NO_ERROR)
     {
         // Ignore a server side error and unset the local game.
         gameId_ = 0;
-
-        bson_destroy(kwargs);
         return lastError_.code;
     }
-    bson_destroy(kwargs);
 
     gameId_ = 0;
 
@@ -155,28 +134,22 @@ RETURN_CODES Client::delGame()
 RETURN_CODES Client::addPlayer(const unsigned int index, const char* name,
                                const char* username, const char* session)
 {
-    bson kwargs[1];
-    bson_buffer buffer[1];
-
     if (gameId_ == 0 || gameId_ == -1)
     {
         return setError_(NO_GAME, _("Create a game first!"));
     }
 
-    bson_buffer_init(buffer);
-    bson_append_int(buffer, "gameId", gameId_);
-    bson_append_int(buffer, "slot", index);
-    bson_append_string(buffer, "name", name);
-    bson_append_string(buffer, "username", username);
-    bson_append_string(buffer, "session", session);
-    bson_from_buffer(kwargs, buffer);
+    QVariantMap kwargs;
+    kwargs.insert("gameId", gameId_);
+    kwargs.insert("slot", index);
+    kwargs.insert("name", name);
+    kwargs.insert("username", username);
+    kwargs.insert("session", session);
 
-    if (call_("addPlayer", NULL, kwargs) != LOBBY_NO_ERROR)
+    if (call_("addPlayer", kwargs) != LOBBY_NO_ERROR)
     {
-        bson_destroy(kwargs);
         return lastError_.code;
     }
-    bson_destroy(kwargs);
 
     freeCallResult_();
     return LOBBY_NO_ERROR;
@@ -184,25 +157,19 @@ RETURN_CODES Client::addPlayer(const unsigned int index, const char* name,
 
 RETURN_CODES Client::delPlayer(const unsigned int index)
 {
-    bson kwargs[1];
-    bson_buffer buffer[1];
-
     if (gameId_ == 0 || gameId_ == -1)
     {
         return setError_(NO_GAME, _("Create a game first!"));
     }
 
-    bson_buffer_init(buffer);
-    bson_append_int(buffer, "gameId", gameId_);
-    bson_append_int(buffer, "slot", index);
-    bson_from_buffer(kwargs, buffer);
+    QVariantMap kwargs;
+    kwargs.insert("gameId", gameId_);
+    kwargs.insert("slot", index);
 
-    if (call_("delPlayer", NULL, kwargs) != LOBBY_NO_ERROR)
+    if (call_("delPlayer", kwargs) != LOBBY_NO_ERROR)
     {
-        bson_destroy(kwargs);
         return lastError_.code;
     }
-    bson_destroy(kwargs);
 
     freeCallResult_();
     return LOBBY_NO_ERROR;
@@ -210,26 +177,20 @@ RETURN_CODES Client::delPlayer(const unsigned int index)
 
 RETURN_CODES Client::updatePlayer(const unsigned int index, const char* name)
 {
-    bson kwargs[1];
-    bson_buffer buffer[1];
-
     if (gameId_ == 0 || gameId_ == -1)
     {
         return setError_(NO_GAME, _("Create a game first!"));
     }
 
-    bson_buffer_init(buffer);
-    bson_append_int(buffer, "gameId", gameId_);
-    bson_append_int(buffer, "slot", index);
-    bson_append_string(buffer, "name", name);
-    bson_from_buffer(kwargs, buffer);
+    QVariantMap kwargs;
+    kwargs.insert("gameId", gameId_);
+    kwargs.insert("slot", index);
+    kwargs.insert("name", name);
 
-    if (call_("updatePlayer", NULL, kwargs) != LOBBY_NO_ERROR)
+    if (call_("updatePlayer", kwargs) != LOBBY_NO_ERROR)
     {
-        bson_destroy(kwargs);
         return lastError_.code;
     }
-    bson_destroy(kwargs);
 
     freeCallResult_();
     return LOBBY_NO_ERROR;
@@ -237,8 +198,6 @@ RETURN_CODES Client::updatePlayer(const unsigned int index, const char* name)
 
 RETURN_CODES Client::listGames(const int maxGames)
 {
-    bson_iterator it, gameIt;
-    const char * key;
     uint32_t gameCount = 0;
     GAME game;
 
@@ -246,77 +205,66 @@ RETURN_CODES Client::listGames(const int maxGames)
     games.clear();
 
     // Run "list" and retrieve its result
-    if (call_("list", NULL, NULL) != LOBBY_NO_ERROR)
+    if (call_("list") != LOBBY_NO_ERROR)
         return lastError_.code;
 
-    //Print the result to stdout.
-    //bson_print_raw(callResult_.result, 0);
-
-    // Translate the result into GAMEs
-    bson_iterator_init(&it, callResult_.result);
-    while (bson_iterator_next(&it) && gameCount < maxGames)
+    QVariantList resultList = callResult_.result.toList();
+    for (int i = 0; i < resultList.size() && gameCount < maxGames; ++i)
     {
-        // new Game
-        if (bson_iterator_type(&it) == bson_object)
+        // FIXME: should clear "game"" here or initialize a new one each loop.
+        QVariantMap rawGame = resultList.at(i).toMap();
+
+        if (rawGame.contains("port"))
         {
-            bson_iterator_init(&gameIt, bson_iterator_value(&it));
-            while (bson_iterator_next(&gameIt))
-            {
-                key = bson_iterator_key(&gameIt);
-
-                if (strcmp(key, "port") == 0)
-                {
-                    game.port = (uint32_t)bson_iterator_int(&gameIt);
-                }
-                else if (strcmp(key, "host") == 0) // Generated at server side.
-                {
-                    game.host = bson_iterator_string(&gameIt);
-                }
-                if (strcmp(key, "description") == 0)
-                {
-                    game.description = bson_iterator_string(&gameIt);
-                }
-                else if (strcmp(key, "currentPlayers") == 0)
-                {
-                    game.currentPlayers = bson_iterator_int(&gameIt);
-                }
-                else if (strcmp(key, "maxPlayers") == 0)
-                {
-                    game.maxPlayers = bson_iterator_int(&gameIt);
-                }
-                else if (strcmp(key, "multiVer") == 0)
-                {
-                    game.versionstring = bson_iterator_string(&gameIt);
-                }
-                else if (strcmp(key, "wzVerMajor") == 0)
-                {
-                    game.game_version_major = (uint32_t)bson_iterator_int(&gameIt);
-                }
-                else if (strcmp(key, "wzVerMinor") == 0)
-                {
-                    game.game_version_minor = (uint32_t)bson_iterator_int(&gameIt);
-                }
-                else if (strcmp(key, "isPrivate") == 0)
-                {
-                    game.isPrivate = bson_iterator_bool(&gameIt);
-                }
-                else if (strcmp(key, "modlist") == 0)
-                {
-                    game.modlist = bson_iterator_string(&gameIt);
-                }
-                else if (strcmp(key, "mapname") == 0)
-                {
-                    game.mapname = bson_iterator_string(&gameIt);
-                }
-                else if (strcmp(key, "hostplayer") == 0)
-                {
-                    game.hostplayer = bson_iterator_string(&gameIt);
-                }
-            }
-
-            games.append(game);
-            gameCount++;
+            game.port = rawGame["port"].toInt();
         }
+        if (rawGame.contains("host"))
+        {
+            game.host = rawGame["host"].toString().toStdString();
+        }
+        if (rawGame.contains("description"))
+        {
+            game.description = rawGame["description"].toString().toStdString();
+        }
+        if (rawGame.contains("currentPlayers"))
+        {
+            game.currentPlayers = rawGame["currentPlayers"].toInt();
+        }
+        if (rawGame.contains("maxPlayers"))
+        {
+            game.maxPlayers = rawGame["maxPlayers"].toInt();
+        }
+        if (rawGame.contains("multiVer"))
+        {
+            game.versionstring = rawGame["multiVer"].toString().toStdString();
+        }
+        if (rawGame.contains("wzVerMajor"))
+        {
+            game.game_version_major = rawGame["wzVerMajor"].toInt();
+        }
+        if (rawGame.contains("wzVerMinor"))
+        {
+            game.game_version_minor = rawGame["wzVerMinor"].toInt();
+        }
+        if (rawGame.contains("isPrivate"))
+        {
+            game.isPrivate = rawGame["isPrivate"].toInt();
+        }
+        if (rawGame.contains("modlist"))
+        {
+            game.modlist = rawGame["modlist"].toInt();
+        }
+        if (rawGame.contains("mapname"))
+        {
+            game.mapname = rawGame["mapname"].toString().toStdString();
+        }
+        if (rawGame.contains("hostplayer"))
+        {
+            game.hostplayer = rawGame["hostplayer"].toString().toStdString();
+        }
+
+        games.append(game);
+        gameCount++;
     }
 
     freeCallResult_();
@@ -423,10 +371,6 @@ RETURN_CODES Client::connect()
 
 RETURN_CODES Client::login(const QString& password)
 {
-    bson kwargs[1];
-    bson_buffer buffer[1];
-    const char * key;
-
     if (isAuthenticated_ == true)
     {
         return LOBBY_NO_ERROR;
@@ -437,31 +381,27 @@ RETURN_CODES Client::login(const QString& password)
         return LOBBY_NO_ERROR;
     }
 
-    bson_buffer_init(buffer);
-    bson_append_string(buffer, "username", user_.toUtf8().constData());
+    QVariantMap kwargs;
+    kwargs.insert("username", user_);
 
     if (!token_.isEmpty())
     {
-        bson_append_string(buffer, "token", token_.toUtf8().constData());
+        kwargs.insert("token", token_);
     }
     else if (!password.isEmpty())
     {
         token_.clear();
-        bson_append_string(buffer, "password", password.toUtf8().constData());
+        kwargs.insert("password", password);
     }
     else
     {
-        bson_buffer_destroy(buffer);
-
         debug(LOG_LOBBY, "Not trying to login no password/token supplied.");
 
         // Do not return an error for internal use.
         return LOBBY_NO_ERROR;
     }
 
-    bson_from_buffer(kwargs, buffer);
-
-    if (call_("login", NULL, kwargs) != LOBBY_NO_ERROR)
+    if (call_("login", kwargs) != LOBBY_NO_ERROR)
     {
         // Reset login credentials on a wrong login
         if (lastError_.code == WRONG_LOGIN)
@@ -473,33 +413,21 @@ RETURN_CODES Client::login(const QString& password)
         }
         return lastError_.code;
     }
-    bson_destroy(kwargs);
 
     token_.clear();
     session_.clear();
 
-    bson_iterator it;
-    bson_iterator_init(&it, callResult_.result);
-    while (bson_iterator_next(&it))
-    {
-        key = bson_iterator_key(&it);
-
-        if (strcmp(key, "token") == 0)
-        {
-            token_ = bson_iterator_string(&it);
-        }
-        else if (strcmp(key, "session") == 0)
-        {
-            session_ = bson_iterator_string(&it);
-        }
-    }
-
-    if (token_.isEmpty() || session_.isEmpty())
+    QVariantMap resultMap = callResult_.result.toMap();
+    if (!resultMap.contains("token")
+      or !resultMap.contains("session"))
     {
         debug(LOG_LOBBY, "Login failed!");
         freeCallResult_();
         return setError_(INVALID_DATA, _("Received invalid login data."));
     }
+
+    token_ = resultMap["token"].toString();
+    session_ = resultMap["session"].toString();
 
     debug(LOG_LOBBY, "Received Session \"%s\"", session_.toUtf8().constData());
 
@@ -517,22 +445,17 @@ RETURN_CODES Client::logout()
         freeError();
     }
 
-    // Tell the lobby that we want to logout.
-    if (call_("logout", NULL, NULL) != LOBBY_NO_ERROR)
-    {
-        // Clear auth data.
-        useAuth_ = false;
-        user_.clear();
-        token_.clear();
-        session_.clear();
-        return lastError_.code;
-    }
-
     // Clear auth data.
     useAuth_ = false;
     user_.clear();
     token_.clear();
     session_.clear();
+
+    // Tell the lobby that we want to logout.
+    if (call_("logout") != LOBBY_NO_ERROR)
+    {
+        return lastError_.code;
+    }
 
     freeCallResult_();
     return LOBBY_NO_ERROR;
@@ -560,64 +483,33 @@ bool Client::disconnect()
     return true;
 }
 
-RETURN_CODES Client::call_(const char* command, const bson* args, const bson* kwargs)
+RETURN_CODES Client::call_(const char* command, const QVariantMap& kwargs)
 {
-    bson bson[1];
-    bson_buffer buffer[1];
-
     // Connect to the lobby
     if (isConnected() != true && connect() != LOBBY_NO_ERROR)
     {
         return lastError_.code;
     }
 
-    callId_ += 1;
-
     debug(LOG_LOBBY, "Calling \"%s\" on the lobby", command);
 
-    bson_buffer_init(buffer);
-    bson_append_start_array(buffer, "call");
-    {
-        // Command
-        bson_append_string(buffer, "0", command);
+    callId_ += 1;
+    QVariantList callArgs;
+    callArgs << command << QVariantMap() << kwargs << callId_;
 
-        // Arguments
-        if (args == NULL)
-        {
-            // Add a empty "array"/"list"
-            bson_append_start_array(buffer, "1");
-            bson_append_finish_object(buffer);
-        }
-        else
-        {
-            bson_append_bson(buffer, "1", args);
-        }
+    QVariantMap call;
+    call.insert("call", callArgs);
 
-        // Keyword Arguments
-        if (kwargs == NULL)
-        {
-            // Add a empty "object"/"dict"
-            bson_append_start_object(buffer, "2");
-            bson_append_finish_object(buffer);
-        }
-        else
-        {
-            // Keyword arguments
-            bson_append_bson(buffer, "2", kwargs);
-        }
+    // Debug - needs QtCore/QDebug
+    //qDebug() << call;
 
-        // Call id
-        bson_append_int(buffer, "3", callId_);
-    }
-    bson_append_finish_object(buffer);
-    bson_from_buffer(bson, buffer);
+    QJson::Serializer serializer;
 
     QByteArray block;
     QDataStream out(&block, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_4_0);
     out.setByteOrder(QDataStream::BigEndian);
-    out.writeBytes(bson->data, bson_size(bson));
-    bson_destroy(bson);
+    out << serializer.serialize(call);
 
     if (socket_->write(block) == -1)
     {
@@ -651,52 +543,56 @@ RETURN_CODES Client::call_(const char* command, const bson* args, const bson* kw
             }
         }
     }
-    callResult_.buffer = new char[blockSize];
-    in.readRawData(callResult_.buffer, blockSize);
 
-    // Get the first object (bson_array)
-    bson_iterator it;
-    bson_iterator_init(&it, callResult_.buffer);
-    bson_iterator_next(&it);
-    if (bson_iterator_type(&it) != bson_array)
+    // FIXME: Lots copying here.
+    char* buffer = new char[blockSize];
+    in.readRawData(buffer, blockSize); // needed for "\0".
+    QByteArray jsonData(buffer, blockSize);
+    delete buffer;
+
+    QJson::Parser parser;
+    bool ok;
+    QVariantMap result = parser.parse(jsonData, &ok).toMap();
+    if (!ok)
     {
-        debug(LOG_ERROR, "Received invalid bson data (no array first): %d.", bson_iterator_type(&it));
-
-        delete callResult_.buffer;
-        return setError_(INVALID_DATA, _("Failed to communicate with the lobby."));
-    }
-    bson_iterator_init(&it, bson_iterator_value(&it));
-    bson_iterator_next(&it);
-
-    if (bson_iterator_type(&it) != bson_int)
-    {
-        debug(LOG_ERROR, "Received invalid bson data (no int first): %d.", bson_iterator_type(&it));
-
-        delete callResult_.buffer;
+        debug(LOG_ERROR, "Received an invalid JSON Object, line %d, error: %s",
+              parser.errorLine(), parser.errorString().toUtf8().constData());
         return setError_(INVALID_DATA, _("Failed to communicate with the lobby."));
     }
 
-    callResult_.code = (RETURN_CODES)bson_iterator_int(&it);
+    // Debug - needs QtCore/QDebug
+    // qDebug() << result;
 
-    bson_iterator_next(&it);
-    bson_type type = bson_iterator_type(&it);
-    if (type == bson_string)
+    if (!result.contains("reply"))
     {
-        callResult_.result = bson_iterator_string(&it);
-    }
-    else if (type == bson_object || type == bson_array)
-    {
-        callResult_.result = bson_iterator_value(&it);
+        debug(LOG_ERROR, "%s", "Received an invalid answer, no \"reply\" received.");
+        return setError_(INVALID_DATA, _("Failed to communicate with the lobby."));
     }
 
-    if (callResult_.code != LOBBY_NO_ERROR)
+    QVariantList resultList = result["reply"].toList();
+    if (!resultList.size() == 3)
     {
-        debug(LOG_LOBBY, "Received: server error %d: %s", callResult_.code, callResult_.result);
+        debug(LOG_ERROR,
+              "Received an invalid Answer %d number of list args instead of 3",
+              resultList.size());
+        return setError_(INVALID_DATA, _("Failed to communicate with the lobby."));
+    }
 
-        setError_(callResult_.code, _("Got server error: %s"), callResult_.result);
-        freeCallResult_();
+    if (resultList.at(0).toInt() != LOBBY_NO_ERROR)
+    {
+        debug(LOG_LOBBY,
+              "Received: server error %d: %s",
+              resultList.at(0).toInt(),
+              resultList.at(1).toString().toUtf8().constData());
+
+        setError_(callResult_.code,
+                  _("Got server error: %s"),
+                  resultList.at(1).toString().toUtf8().constData());
         return lastError_.code;
     }
+
+    callResult_.code = (RETURN_CODES)resultList.at(0).toInt();
+    callResult_.result = resultList.at(1);
 
     return LOBBY_NO_ERROR;
 }
