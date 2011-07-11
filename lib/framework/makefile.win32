@@ -24,7 +24,6 @@ SRC= \
 	i18n.cpp \
 	input.cpp \
 	lexer_input.cpp \
-	SDL_framerate.cpp \
 	stdio_ext.cpp \
 	strres.cpp \
 	tagfile.cpp \

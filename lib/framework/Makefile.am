@@ -75,7 +75,6 @@ noinst_HEADERS = \
 	endian_hack.h \
 	gettext.h \
 	macros.h \
-	SDL_framerate.h \
 	wzapp_c.h \
 	wzfs.h \
 	wzglobal.h
@@ -98,7 +97,6 @@ libframework_a_SOURCES = \
 	geometry.cpp \
 	i18n.cpp \
 	lexer_input.cpp \
-	SDL_framerate.cpp \
 	stdio_ext.cpp \
 	strres.cpp \
 	treap.cpp \

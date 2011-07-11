@@ -130,7 +130,6 @@ bool loadConfig()
 	war_SetHeight(height);
 
 	if (ini.contains("bpp")) pie_SetVideoBufferDepth(ini.value("bpp").toInt());
-	setFramerateLimit(ini.value("framerate", 60).toInt());
 
 	/**
 	 * Lobby
@@ -186,7 +185,6 @@ bool saveConfig()
 	{
 		ini.setValue("difficulty", getDifficultyLevel());		// level
 	}
-	ini.setValue("framerate", (SDWORD)getFramerateLimit());
 	ini.setValue("showFPS", (SDWORD)showFPS);
 	ini.setValue("scroll",(SDWORD)scroll_speed_accel);		// scroll
 	ini.setValue("visfog",(SDWORD)(!war_GetFog()));			// fogtype

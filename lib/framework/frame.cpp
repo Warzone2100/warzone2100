@@ -35,7 +35,6 @@
 #include "frameint.h"
 #include "frameresource.h"
 #include "input.h"
-#include "SDL_framerate.h"
 #include "physfs_ext.h"
 
 #include "cursors.h"
@@ -79,25 +78,6 @@ static uint64_t curFrames = 0; // Number of frames elapsed since start
 static uint64_t lastFrames = 0;
 static uint32_t curTicks = 0; // Number of ticks since execution started
 static uint32_t lastTicks = 0;
-static FPSmanager wzFPSmanager;
-static bool	initFPSmanager = false;
-
-void setFramerateLimit(int fpsLimit)
-{
-	if (!initFPSmanager)
-	{
-		/* Initialize framerate handler */
-		SDL_initFramerate(&wzFPSmanager);
-		initFPSmanager = true;
-	}
-	SDL_setFramerate(&wzFPSmanager, fpsLimit);
-}
-
-
-int getFramerateLimit(void)
-{
-	return SDL_getFramerate(&wzFPSmanager);
-}
 
 /* InitFrameStuff - needs to be called once before frame loop commences */
 static void InitFrameStuff( void )
@@ -137,7 +117,6 @@ static void MaintainFrameStuff( void )
 	}
 }
 
-
 UDWORD frameGetAverageRate(void)
 {
 	SDWORD averageFrames = 0, i = 0;
@@ -148,12 +127,10 @@ UDWORD frameGetAverageRate(void)
 	return averageFrames;
 }
 
-
 UDWORD	frameGetFrameNumber(void)
 {
 	return curFrames;
 }
-
 
 /** Set the current cursor from a Resource ID
  */
@@ -168,7 +145,6 @@ void frameSetCursor(CURSOR cur)
 		currentCursor = cur;
         }
 }
-
 
 static void initCursors(void)
 {
@@ -199,7 +175,6 @@ static void initCursors(void)
 	init_system_cursor(CURSOR_SEEKREPAIR, cursor_type);
 	init_system_cursor(CURSOR_SELECT, cursor_type);
 }
-
 
 static void freeCursors(void)
 {
@@ -263,7 +238,6 @@ void frameUpdate(void)
 {
 	/* Update the frame rate stuff */
 	MaintainFrameStuff();
-	SDL_framerateDelay(&wzFPSmanager);
 }
 
 

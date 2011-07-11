@@ -536,26 +536,27 @@ void kf_ToggleOrders(void)	// Displays orders & action of currently selected uni
 		showORDERS = !showORDERS;
 		CONPRINTF(ConsoleString, (ConsoleString, "Unit Order/Action displayed is %s", showORDERS ? "Enabled" : "Disabled"));
 }
+
 void kf_ToggleLevelName(void) // toggles level name 
 {
 	showLevelName = !showLevelName;
 }
+
 /* Writes out the frame rate */
 void	kf_FrameRate( void )
 {
-	CONPRINTF(ConsoleString,(ConsoleString, _("FPS %d; FPS-Limit: %d; PIEs %d; polys %d; Terr. polys %d; States %d"),
-	          frameGetAverageRate(), getFramerateLimit(), loopPieCount, loopPolyCount, loopTileCount, loopStateChanges));
-	if (runningMultiplayer()) {
+	CONPRINTF(ConsoleString,(ConsoleString, _("FPS %d; PIEs %d; polys %d; Terr. polys %d; States %d"),
+	          frameGetAverageRate(), loopPieCount, loopPolyCount, loopTileCount, loopStateChanges));
+	if (runningMultiplayer())
+	{
 			CONPRINTF(ConsoleString,(ConsoleString,
 						"NETWORK:  Bytes: s-%d r-%d  Packets: s-%d r-%d",
 						NETgetBytesSent(),
 						NETgetBytesRecvd(),
 						NETgetPacketsSent(),
 						NETgetPacketsRecvd() ));
-
 	}
 	gameStats = !gameStats;
-
 	CONPRINTF(ConsoleString, (ConsoleString,"Built at %s on %s",__TIME__,__DATE__));
 }
 
