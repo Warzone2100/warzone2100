@@ -1,6 +1,6 @@
-// Bson settings for Debug configuration
+// QJson settings for Debug configuration
 
-#include "Bson-All.xcconfig"
+#include "QJson-All.xcconfig"
 
 
 GCC_ENABLE_FIX_AND_CONTINUE = YES
