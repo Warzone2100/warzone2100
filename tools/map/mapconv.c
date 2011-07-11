@@ -34,12 +34,11 @@ static const char *tilesetTextures[] = { "Arizona", "Urban", "Rockies" };
 
 int main(int argc, char **argv)
 {
-	char filename[PATH_MAX], base[PATH_MAX];
+	char filename[PATH_MAX], base[PATH_MAX], mapname[PATH_MAX];
 	char path[PATH_MAX], *delim;
 	GAMEMAP *map;
 	FILE *fp;
 	int i;
-	MAPTILE *psTile;
 
 	if (argc != 2)
 	{
@@ -65,20 +64,27 @@ int main(int argc, char **argv)
 	PHYSFS_addToSearchPath(path, 1);
 	map = mapLoad(filename);
 	PHYSFS_deinit();
-
 	if (!map)
 	{
 		fprintf(stderr, "Failed to load map %s from %s\n", filename, path);
 		return -1;
 	}
 
+	delim = strstr(filename, "c-");
+	if (delim)
+	{
+		strcpy(mapname, delim + 2);
+	}
+	else
+	{
+		strcpy(mapname, filename);
+	}
+
+
 	strcpy(base, argv[1]);
-#if 0
-	strcpy(filename, base);
-	strcat(filename, "/map-001");
-	mkdir(filename, 0777);
 
 	/*** Map configuration ***/
+#if 0
 	if (map->mapVersion > 0)
 	{
 		strcat(filename, "/map.ini");
@@ -103,13 +109,9 @@ int main(int argc, char **argv)
 		MADD("SeaLevel = %d", SEALEVEL);
 		MADD("Tileset = %s", tilesetTextures[map->tileset]);
 
-		MADD("\n[scroll_limits]");
-		MADD("x1 = %d", map->scrollMinX);
-		MADD("y1 = %d", map->scrollMinY);
-		MADD("x2 = %u", map->scrollMaxX);
-		MADD("y2 = %u", map->scrollMaxY);
 		fclose(fp);
 	}
+#endif
 
 	/*** Game data ***/
 	strcpy(filename, base);
@@ -121,22 +123,49 @@ int main(int argc, char **argv)
 		return -1;
 	}
 	MADD("[game]");
-	MADD("SaveKey = %d", (int)map->tileset);
-	MADD("SaveType = %u", map->gameType);
-	MADD("GameTime = %u", map->gameTime);
+	if (map->gameTime > 0) MADD("GameTime = %u", map->gameTime);
+	switch (map->gameType)
+	{
+	case 0: MADD("GameType = Start"); break;
+	case 1: MADD("GameType = Expand"); break;
+	case 2: MADD("GameType = Mission"); break;
+	case 3: MADD("GameType = Autosave"); break;
+	case 4: MADD("GameType = Savegame"); break;
+	default: fprintf(stderr, "%s: Bad gametype %d", filename, map->gameType); break;
+	}
+	MADD("Tileset = %s", tilesetTextures[map->tileset]);
+	if (map->levelName[0] == '\0')
+	{
+		MADD("LevelName = %s", mapname);
+		MADD("Description = %s", mapname);
+	}
+	else
+	{
+		MADD("LevelName = %s", map->levelName);
+		MADD("Description = %s", map->levelName);
+	}
+	if (map->scrollMinX + map->scrollMinY + map->scrollMaxX + map->scrollMaxY > 0)
+	{
+		MADD("\n[scroll_limits]");
+		MADD("x1 = %d", map->scrollMinX);
+		MADD("y1 = %d", map->scrollMinY);
+		MADD("x2 = %u", map->scrollMaxX);
+		MADD("y2 = %u", map->scrollMaxY);
+	}
 	fclose(fp);
 
+#if 0
 	/*** Terrain data ***/
 	if (map->mapVersion > 0)
 	{
 		uint16_t *terrain, *rotate;
 		uint8_t *height, *flip;
+		MAPTILE *psTile = mapTile(map, 0, 0);
 
 		terrain = malloc(map->width * map->height * 2);
 		height = malloc(map->width * map->height);
 		rotate = malloc(map->width * map->height * 2);
 		flip = malloc(map->width * map->height);
-		psTile = mapTile(map, 0, 0);
 		for (i = 0; i < map->width * map->height; i++)
 		{
 			height[i] = psTile->height;
