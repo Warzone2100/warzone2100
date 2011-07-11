@@ -151,7 +151,6 @@ lib/framework/frameresource.cpp
 lib/framework/geometry.cpp
 lib/framework/i18n.cpp
 lib/framework/lexer_input.cpp
-lib/framework/SDL_framerate.cpp
 lib/framework/stdio_ext.cpp
 lib/framework/strres.cpp
 lib/framework/treap.cpp
@@ -180,8 +179,8 @@ lib/ivis_opengl/rendmode.cpp
 lib/ivis_opengl/screen.cpp
 lib/ivis_opengl/tex.cpp
 lib/ivis_opengl/textdraw.cpp
-lib/netplay/netlog.cpp
 lib/netplay/netlobby.cpp
+lib/netplay/netlog.cpp
 lib/netplay/netplay.cpp
 lib/netplay/netqueue.cpp
 lib/netplay/netsocket.cpp
