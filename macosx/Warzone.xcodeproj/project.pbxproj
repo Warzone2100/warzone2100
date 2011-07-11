@@ -122,7 +122,6 @@
 		0246A0C50BD3CBD5004D1C70 /* frameresource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0A60BD3CBD5004D1C70 /* frameresource.cpp */; };
 		0246A0C80BD3CBD5004D1C70 /* resource_lexer.l in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0B10BD3CBD5004D1C70 /* resource_lexer.l */; };
 		0246A0C90BD3CBD5004D1C70 /* resource_parser.y in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0B20BD3CBD5004D1C70 /* resource_parser.y */; };
-		0246A0CA0BD3CBD5004D1C70 /* SDL_framerate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0B30BD3CBD5004D1C70 /* SDL_framerate.cpp */; };
 		0246A0CB0BD3CBD5004D1C70 /* strres_lexer.l in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0B50BD3CBD5004D1C70 /* strres_lexer.l */; };
 		0246A0CC0BD3CBD5004D1C70 /* strres_parser.y in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0B60BD3CBD5004D1C70 /* strres_parser.y */; };
 		0246A0CD0BD3CBD5004D1C70 /* strres.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0B70BD3CBD5004D1C70 /* strres.cpp */; };
@@ -979,8 +978,6 @@
 		0246A0B00BD3CBD5004D1C70 /* resly.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = resly.h; path = ../lib/framework/resly.h; sourceTree = SOURCE_ROOT; };
 		0246A0B10BD3CBD5004D1C70 /* resource_lexer.l */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.lex; name = resource_lexer.l; path = ../lib/framework/resource_lexer.l; sourceTree = SOURCE_ROOT; };
 		0246A0B20BD3CBD5004D1C70 /* resource_parser.y */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.yacc; name = resource_parser.y; path = ../lib/framework/resource_parser.y; sourceTree = SOURCE_ROOT; };
-		0246A0B30BD3CBD5004D1C70 /* SDL_framerate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SDL_framerate.cpp; path = ../lib/framework/SDL_framerate.cpp; sourceTree = SOURCE_ROOT; };
-		0246A0B40BD3CBD5004D1C70 /* SDL_framerate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDL_framerate.h; path = ../lib/framework/SDL_framerate.h; sourceTree = SOURCE_ROOT; };
 		0246A0B50BD3CBD5004D1C70 /* strres_lexer.l */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.lex; name = strres_lexer.l; path = ../lib/framework/strres_lexer.l; sourceTree = SOURCE_ROOT; };
 		0246A0B60BD3CBD5004D1C70 /* strres_parser.y */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.yacc; name = strres_parser.y; path = ../lib/framework/strres_parser.y; sourceTree = SOURCE_ROOT; };
 		0246A0B70BD3CBD5004D1C70 /* strres.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = strres.cpp; path = ../lib/framework/strres.cpp; sourceTree = SOURCE_ROOT; };
@@ -1953,8 +1950,6 @@
 				0246A0B00BD3CBD5004D1C70 /* resly.h */,
 				0246A0B10BD3CBD5004D1C70 /* resource_lexer.l */,
 				0246A0B20BD3CBD5004D1C70 /* resource_parser.y */,
-				0246A0B30BD3CBD5004D1C70 /* SDL_framerate.cpp */,
-				0246A0B40BD3CBD5004D1C70 /* SDL_framerate.h */,
 				0246A0B60BD3CBD5004D1C70 /* strres_parser.y */,
 				0246A0B50BD3CBD5004D1C70 /* strres_lexer.l */,
 				0246A0B70BD3CBD5004D1C70 /* strres.cpp */,
@@ -3882,7 +3877,6 @@
 				0246A0C50BD3CBD5004D1C70 /* frameresource.cpp in Sources */,
 				0246A0C90BD3CBD5004D1C70 /* resource_parser.y in Sources */,
 				0246A0C80BD3CBD5004D1C70 /* resource_lexer.l in Sources */,
-				0246A0CA0BD3CBD5004D1C70 /* SDL_framerate.cpp in Sources */,
 				0246A0CC0BD3CBD5004D1C70 /* strres_parser.y in Sources */,
 				0246A0CB0BD3CBD5004D1C70 /* strres_lexer.l in Sources */,
 				0246A0CD0BD3CBD5004D1C70 /* strres.cpp in Sources */,
