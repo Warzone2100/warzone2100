@@ -10,6 +10,7 @@ class QtGameWidget : public QGLWidget
 private:
 	QSize mOriginalResolution, mCurrentResolution, mWantedSize, mMinimumSize;
 	int mOriginalRefreshRate, mCurrentRefreshRate;
+	int mSwapInterval;
 	int mOriginalDepth, mCurrentDepth;
 	QList<QSize> mResolutions;
 	bool mResolutionChanged;
@@ -19,11 +20,18 @@ private:
 	void updateResolutionList();
 	bool setResolution(const QSize res, int rate, int depth);
 
+	QGLFormat adjustFormat(const QGLFormat &format);
+protected:
+    virtual void initializeGL();
+
 public:
 	QtGameWidget(QSize curResolution, const QGLFormat &format, QWidget *parent = 0, Qt::WindowFlags f = 0, const QGLWidget *shareWidget = 0);
 	~QtGameWidget() { if (mResolutionChanged) restoreResolution(); }
 	QList<QSize> availableResolutions() const { return mResolutions; }
 	bool isMouseTrapped() { return mCursorTrapped; }
+
+	int swapInterval() const { return mSwapInterval; }
+	void setSwapInterval(int interval);
 
 public slots:
 	void setMinimumResolution(QSize res);

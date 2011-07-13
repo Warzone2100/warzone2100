@@ -765,7 +765,7 @@ static bool startVideoOptionsMenu(void)
 	addTextButton(FRONTEND_TEXTURESZ_R, FRONTEND_POS4M-55, FRONTEND_POS4Y, textureSize, 0);
 
 	// Vsync
-	addTextButton(FRONTEND_VSYNC, FRONTEND_POS5X-35, FRONTEND_POS5Y, _("Vertical sync*"), 0);
+	addTextButton(FRONTEND_VSYNC, FRONTEND_POS5X-35, FRONTEND_POS5Y, _("Vertical sync"), 0);
 
 	if (war_GetVsync())
 	{
@@ -954,6 +954,7 @@ bool runVideoOptionsMenu(void)
 				war_SetVsync(true);
 				widgSetString(psWScreen, FRONTEND_VSYNC_R, _("On"));
 			}
+			WzMainWindow::instance()->setSwapInterval(war_GetVsync());
 			break;
 		}
 

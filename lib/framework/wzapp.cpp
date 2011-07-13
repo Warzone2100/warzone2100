@@ -218,6 +218,7 @@ WzMainWindow *WzMainWindow::instance()
 
 void WzMainWindow::initializeGL()
 {
+	QtGameWidget::initializeGL();
 }
 
 void WzMainWindow::drawPixmap(int XPos, int YPos, QPixmap *pix)

@@ -1264,10 +1264,6 @@ int main(int argc, char *argv[])
 	int w = pie_GetVideoBufferWidth();
 	int h = pie_GetVideoBufferHeight();
 
-	if (war_GetVsync())
-	{
-		format.setSwapInterval(1);
-	}
 	if (war_getFSAA())
 	{
 		format.setSampleBuffers(true);
@@ -1280,6 +1276,7 @@ int main(int argc, char *argv[])
 		QMessageBox::critical(NULL, "Oops!", "Warzone2100 failed to create an OpenGL context. This probably means that your graphics drivers are out of date. Try updating them!");
 		return EXIT_FAILURE;
 	}
+
 	screenWidth = w;
 	screenHeight = h;
 	if (war_getFullscreen())
@@ -1301,6 +1298,9 @@ int main(int argc, char *argv[])
 																mainwindow.setMinimumSize(w, h);
 		mainwindow.setMaximumSize(w, h);
 	}
+
+	mainwindow.setSwapInterval(war_GetVsync());
+
 	mainwindow.setReadyToPaint();
 
 	char buf[256];

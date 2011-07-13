@@ -1,6 +1,7 @@
 #include "qtgame.h"
 
 #include "lib/framework/wzglobal.h"
+#include "swapinterval.h"
 
 #if defined(WZ_CC_MSVC)
 #include "qtgame.h.moc"		// this is generated on the pre-build event.
@@ -196,12 +197,32 @@ void QtGameWidget::updateResolutionList()
 #endif
 }
 
+QGLFormat QtGameWidget::adjustFormat(const QGLFormat &format)
+{
+	QGLFormat adjusted(format);
+	mSwapInterval = adjusted.swapInterval();
+	adjusted.setSwapInterval(0);
+	return adjusted;
+}
+
+void QtGameWidget::initializeGL()
+{
+	setSwapInterval(mSwapInterval);
+}
+
 QtGameWidget::QtGameWidget(QSize curResolution, const QGLFormat &format, QWidget *parent, Qt::WindowFlags f, const QGLWidget *shareWidget)
-	: QGLWidget(format, parent, shareWidget, f), mOriginalResolution(0, 0), mMinimumSize(0, 0)
+	: QGLWidget(adjustFormat(format), parent, shareWidget, f), mOriginalResolution(0, 0), mMinimumSize(0, 0)
 {
 	mWantedSize = curResolution;
 	mResolutionChanged = false;
 	updateResolutionList();
+}
+
+void QtGameWidget::setSwapInterval(int interval)
+{
+	mSwapInterval = interval;
+	makeCurrent();
+	::setSwapInterval(*this, &mSwapInterval);
 }
 
 bool QtGameWidget::setResolution(const QSize res, int rate, int depth)

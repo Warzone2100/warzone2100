@@ -186,6 +186,7 @@ lib/netplay/netqueue.cpp
 lib/netplay/netsocket.cpp
 lib/netplay/nettypes.cpp
 lib/qtgame/qtgame.cpp
+lib/qtgame/swapinterval.cpp
 lib/script/codeprint.cpp
 lib/script/event.cpp
 lib/script/eventsave.cpp
@@ -210,6 +211,8 @@ lib/widget/label.cpp
 lib/widget/slider.cpp
 lib/widget/tip.cpp
 lib/widget/widget.cpp
+po/custom/mac-infoplist.txt
+po/custom/warzone2100.desktop.txt
 src/action.cpp
 src/advvis.cpp
 src/ai.cpp
@@ -316,5 +319,3 @@ src/warcam.cpp
 src/warzoneconfig.cpp
 src/wavecast.cpp
 src/wrappers.cpp
-po/custom/warzone2100.desktop.txt
-po/custom/mac-infoplist.txt

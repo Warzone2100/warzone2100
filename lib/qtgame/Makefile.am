@@ -1,4 +1,4 @@
-AM_CPPFLAGS = $(WZ_CPPFLAGS) $(QT4_CFLAGS)
+AM_CPPFLAGS = $(WZ_CPPFLAGS) $(QT4_CFLAGS) $(GLEW_CFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS)
 AM_CXXFLAGS = $(WZ_CXXFLAGS) $(QT4_CFLAGS)
 
@@ -12,5 +12,5 @@ BUILT_SOURCES = $(MOCEDFILES)
 CLEANFILES = $(MOCEDFILES)
 
 noinst_LIBRARIES = libqtgame.a
-noinst_HEADERS = qtgame.h $(MOCHEADER)
-libqtgame_a_SOURCES = qtgame.cpp qtgame_moc.cpp
+noinst_HEADERS = qtgame.h swapinterval.h $(MOCHEADER)
+libqtgame_a_SOURCES = qtgame.cpp qtgame_moc.cpp swapinterval.cpp
