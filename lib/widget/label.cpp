@@ -50,42 +50,6 @@ W_LABEL::W_LABEL(W_LABINIT const *init)
 	if (init->pText)
 	{
 		sstrcpy(aText, init->pText);
-
-		iV_SetFont(FontID);
-		QStringList words = QString(init->pText).split(" ");
-		QStringList line;
-		unsigned int wsize, lsize = 0;
-		foreach(const QString &word, words)
-		{
-			wsize = iV_GetTextWidth(word.toUtf8().constData());
-			if (lsize + wsize >= width)
-			{
-				if (line.isEmpty())
-				{
-					// Let iv_DrawText handle to long lines.
-					lines << word;
-				}
-				else
-				{
-					// Append current line and create a new one with that word.
-					lines << line.join(" ");
-					line.clear();
-					line << word;
-					lsize = wsize;
-				}
-			}
-			else
-			{
-				line << word;
-				lsize += wsize;
-			}
-		}
-		if (!line.isEmpty())
-		{
-			lines << line.join(" ");
-		}
-
-		lines = lines;
 	}
 }
 
@@ -136,29 +100,22 @@ void labelDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pC
 	iV_SetFont(FontID);
 	iV_SetTextColour(pColours[WCOL_TEXT]);
 
-	// Draw each line.
-	int i = 0;
-	foreach(const QString &line, psLabel->lines)
-	{
-		if (psLabel->style & WLAB_ALIGNCENTRE)
-		{
-			fx = xOffset + psLabel->x + (psLabel->width - iV_GetTextWidth(line.toUtf8().constData())) / 2;
-		}
-		else if (psLabel->style & WLAB_ALIGNRIGHT)
-		{
-			fw = iV_GetTextWidth(line.toUtf8().constData());
-			fx = xOffset + psLabel->x + psLabel->width - fw;
-		}
-		else
-		{
-			fx = xOffset + psLabel->x;
-		}
-
-		fy = yOffset + psLabel->y + (psLabel->height - iV_GetTextLineSize())/2 - iV_GetTextAboveBase() + (iV_GetTextLineSize() * i);
-		iV_DrawText(line.toUtf8().constData(),fx,fy);
-
-		i++;
-	}
+    if (psLabel->style & WLAB_ALIGNCENTRE)
+    {
+       fw = iV_GetTextWidth(psLabel->aText);
+       fx = xOffset + psLabel->x + (psLabel->width - fw) / 2;
+    }
+    else if (psLabel->style & WLAB_ALIGNRIGHT)
+    {
+        fw = iV_GetTextWidth(psLabel->aText);
+        fx = xOffset + psLabel->x + psLabel->width - fw;
+    }
+    else
+    {
+        fx = xOffset + psLabel->x;
+    }
+    fy = yOffset + psLabel->y + (psLabel->height - iV_GetTextLineSize())/2 - iV_GetTextAboveBase();
+    iV_DrawText(psLabel->aText,fx,fy);
 }
 
 /* Respond to a mouse moving over a label */

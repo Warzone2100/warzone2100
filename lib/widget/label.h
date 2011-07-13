@@ -24,8 +24,6 @@
 #ifndef __INCLUDED_LIB_WIDGET_LABEL_H__
 #define __INCLUDED_LIB_WIDGET_LABEL_H__
 
-#include <QtCore/QStringList>
-
 #include "widget.h"
 #include "widgbase.h"
 #include "lib/ivis_opengl/textdraw.h"
@@ -35,7 +33,6 @@ struct W_LABEL : public WIDGET
 	W_LABEL(W_LABINIT const *init);
 
 	char		aText[WIDG_MAXSTR];		// Text on the label
-	QStringList	lines;					// Text parsed to list on init.
 	enum iV_fonts FontID;
 	const char	*pTip;					// The tool tip for the button
 };
