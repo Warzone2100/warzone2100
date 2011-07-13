@@ -191,7 +191,6 @@
       <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='STLport-Release|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
     </ClCompile>
     <ClCompile Include="resource_parser.tab.cpp" />
-    <ClCompile Include="SDL_framerate.cpp" />
     <ClCompile Include="stdio_ext.cpp" />
     <ClCompile Include="strres.cpp" />
     <ClCompile Include="strres_lexer.lex.cpp" />
@@ -237,7 +236,6 @@
     <ClInclude Include="physfs_ext.h" />
     <ClInclude Include="resly.h" />
     <ClInclude Include="resource_parser.tab.hpp" />
-    <ClInclude Include="SDL_framerate.h" />
     <ClInclude Include="stdio_ext.h" />
     <ClInclude Include="string_ext.h" />
     <ClInclude Include="strres.h" />

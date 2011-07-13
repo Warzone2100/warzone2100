@@ -50,9 +50,6 @@
     <ClCompile Include="resource_parser.tab.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SDL_framerate.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="stdio_ext.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -159,9 +156,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="resource_parser.tab.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SDL_framerate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="stdio_ext.h">
