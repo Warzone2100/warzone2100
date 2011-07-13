@@ -178,7 +178,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>zlibstat.lib;libogg_static.lib;libvorbis_static.lib;libvorbisfile_static.lib;OpenAL32.lib;glc32.lib;OpenGL32.lib;GLU32.lib;shfolder.lib;winmm.lib;Iphlpapi.lib;ws2_32.lib;dbghelp.lib;physfs.lib;glew.lib;libtheora_static.lib;libpng15.lib;QtGui4.lib;QtOpenGL4.lib;QtCore4.lib;QtMain.lib;QtScript4.lib;QtScriptTools4.lib;QtNetwork4.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>zlibstat.lib;libogg_static.lib;libvorbis_static.lib;libvorbisfile_static.lib;OpenAL32.lib;glc32.lib;OpenGL32.lib;GLU32.lib;shfolder.lib;winmm.lib;Iphlpapi.lib;ws2_32.lib;dbghelp.lib;physfs.lib;glew.lib;libtheora_static.lib;libpng15.lib;QtGui4.lib;QtOpenGL4.lib;QtCore4.lib;QtMain.lib;QtScript4.lib;QtScriptTools4.lib;QtNetwork4.lib;qjson.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(ProjectName)-Dbg.exe</OutputFile>
       <AdditionalLibraryDirectories>$(SolutionDir)\..\devpkg\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>MSVCRT.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>

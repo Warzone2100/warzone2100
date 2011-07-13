@@ -141,8 +141,6 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\3rdparty\bson\bson.c" />
-    <ClCompile Include="..\..\3rdparty\bson\numbers.c" />
     <ClCompile Include="..\..\3rdparty\miniupnpc\connecthostport.c" />
     <ClCompile Include="netlobby.cpp" />
     <ClCompile Include="netlog.cpp" />
@@ -170,8 +168,6 @@
     <ClCompile Include="..\..\3rdparty\miniupnpc\upnpreplyparse.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\3rdparty\bson\bson.h" />
-    <ClInclude Include="..\..\3rdparty\bson\platform_hacks.h" />
     <ClInclude Include="..\..\3rdparty\miniupnpc\bsdqueue.h" />
     <ClInclude Include="..\..\3rdparty\miniupnpc\codelength.h" />
     <ClInclude Include="..\..\3rdparty\miniupnpc\connecthostport.h" />

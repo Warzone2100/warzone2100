@@ -96,7 +96,8 @@ RETURN_CODES Client::addGame(char** result, const uint32_t port, const uint32_t 
     }
 
     QVariantMap resultMap = callResult_.result.toMap();
-    if (!resultMap.contains("gameId") or !resultMap.contains("result")) {
+    if (!resultMap.contains("gameId") || !resultMap.contains("result"))
+	{
         freeCallResult_();
         return setError_(INVALID_DATA, _("Received invalid addGame data."));
     }
@@ -418,8 +419,7 @@ RETURN_CODES Client::login(const QString& password)
     session_.clear();
 
     QVariantMap resultMap = callResult_.result.toMap();
-    if (!resultMap.contains("token")
-      or !resultMap.contains("session"))
+    if (!resultMap.contains("token") || !resultMap.contains("session"))
     {
         debug(LOG_LOBBY, "Login failed!");
         freeCallResult_();

@@ -21,6 +21,11 @@
 #ifndef _netlobby_h
 #define _netlobby_h
 
+#if defined(_MSC_VER)
+#define NO_SSL
+#pragma message ("Note: openSSL is needed for SSL")
+#endif
+
 #if defined(NO_SSL)
 #include <QtNetwork/QTcpSocket>
 #else
