@@ -34,7 +34,6 @@
 #  include <errno.h>
 #endif // WZ_OS_WIN
 
-#include "lib/framework/configfile.h"
 #include "lib/framework/input.h"
 #include "lib/framework/frameint.h"
 #include "lib/framework/physfs_ext.h"
@@ -1202,7 +1201,7 @@ int main(int argc, char *argv[])
 			}
 			ssprintf(modtocheck, "mods/global/%s", modname);
 			result = PHYSFS_exists(modtocheck);
-			result |= PHYSFS_isDirectory(modtocheck); 
+			result |= PHYSFS_isDirectory(modtocheck);
 			if (!result)
 			{
 				debug(LOG_ERROR, "The (global) mod (%s) you have specified doesn't exist!", modname);
@@ -1222,7 +1221,7 @@ int main(int argc, char *argv[])
 			}
 			ssprintf(modtocheck, "mods/campaign/%s", modname);
 			result = PHYSFS_exists(modtocheck);
-			result |= PHYSFS_isDirectory(modtocheck); 
+			result |= PHYSFS_isDirectory(modtocheck);
 			if (!result)
 			{
 				debug(LOG_ERROR, "The mod_ca (%s) you have specified doesn't exist!", modname);
@@ -1242,7 +1241,7 @@ int main(int argc, char *argv[])
 			}
 			ssprintf(modtocheck, "mods/multiplay/%s", modname);
 			result = PHYSFS_exists(modtocheck);
-			result |= PHYSFS_isDirectory(modtocheck); 
+			result |= PHYSFS_isDirectory(modtocheck);
 			if (!result)
 			{
 				debug(LOG_ERROR, "The mod_mp (%s) you have specified doesn't exist!", modname);

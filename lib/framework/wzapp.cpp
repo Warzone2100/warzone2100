@@ -39,7 +39,6 @@
 
 #include "lib/exceptionhandler/dumpinfo.h"
 #include "file.h"
-#include "configfile.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/pieclip.h"
 #include "lib/ivis_opengl/screen.h"

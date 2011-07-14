@@ -44,7 +44,6 @@ noinst_HEADERS = \
 	wzapp_c.h \
 	strres_parser.tab.hpp \
 	resource_parser.tab.hpp \
-	configfile.h \
 	crc.h \
 	cursors.h \
 	debug.h \
@@ -86,7 +85,6 @@ libframework_a_SOURCES = \
 	resource_parser.tab.cpp \
 	strres_lexer.lex.cpp \
 	strres_parser.tab.cpp \
-	configfile.cpp \
 	crc.cpp \
 	debug.cpp \
 	frame.cpp \
