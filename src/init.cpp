@@ -32,6 +32,7 @@
 #include "lib/framework/file.h"
 #include "lib/framework/physfs_ext.h"
 #include "lib/framework/strres.h"
+#include "lib/framework/wzapp_c.h"
 #include "lib/ivis_opengl/piemode.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/tex.h"
@@ -476,7 +477,7 @@ bool systemInitialise(void)
 		debug(LOG_ERROR, "Unable to initialise renderer");
 		return false;
 	}
-	
+
 	if ( war_getSoundEnabled() )
 	{
 		if (!audio_Init(droidAudioTrackStopped))
@@ -672,7 +673,7 @@ bool frontendInitialise(const char *ResourceFile)
 
 	// Set the default uncoloured cursor here, since it looks slightly
 	// better for menus and such.
-	pie_SetMouse(CURSOR_DEFAULT);
+	wzSetCursor(CURSOR_DEFAULT);
 
 	SetFormAudioIDs(-1,ID_SOUND_WINDOWCLOSE);			// disable the open noise since distorted in 3dfx builds.
 
@@ -871,7 +872,7 @@ bool stageOneShutDown(void)
 
 	//free up the gateway stuff?
 	gwShutDown();
-	
+
 	shutdownTerrain();
 
 	if (!mapShutdown())
@@ -975,7 +976,7 @@ bool stageTwoInitialise(void)
 
 	// Set the default uncoloured cursor here, since it looks slightly
 	// better for menus and such.
-	pie_SetMouse(CURSOR_DEFAULT);
+	wzSetCursor(CURSOR_DEFAULT);
 
 	SetFormAudioIDs(ID_SOUND_WINDOWOPEN,ID_SOUND_WINDOWCLOSE);
 

@@ -26,6 +26,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
 #include "lib/framework/strres.h"
+#include "lib/framework/wzapp_c.h"
 
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/piestate.h" //ivis render code
@@ -206,8 +207,8 @@ GAMECODE gameLoop(void)
 	HandleClosingWindows();	// Needs to be done outside the pause case.
 
 	audio_Update();
-	
-	pie_ShowMouse(true);
+
+	wzShowMouse(true);
 
 	if (!paused)
 	{
@@ -246,7 +247,7 @@ GAMECODE gameLoop(void)
 						 && getHQExists(selectedPlayer) ) ) )
 			{
 				// Using software cursors (when on) for these menus due to a bug in SDL's SDL_ShowCursor()
-				pie_SetMouse(CURSOR_DEFAULT);
+				wzSetCursor(CURSOR_DEFAULT);
 
 				intRetVal = INT_INTERCEPT;
 			}
@@ -520,7 +521,7 @@ GAMECODE gameLoop(void)
 	else // paused
 	{
 		// Using software cursors (when on) for these menus due to a bug in SDL's SDL_ShowCursor()
-		pie_SetMouse(CURSOR_DEFAULT);
+		wzSetCursor(CURSOR_DEFAULT);
 
 		intRetVal = INT_NONE;
 
@@ -778,7 +779,7 @@ void loop_SetVideoPlaybackMode(void)
 	gameTimeStop();
 	pie_SetFogStatus(false);
 	audio_StopAll();
-	pie_ShowMouse(false);
+	wzShowMouse(false);
 	screen_StopBackDrop();
 	pie_ScreenFlip(CLEAR_BLACK);
 }
@@ -792,7 +793,7 @@ void loop_ClearVideoPlaybackMode(void)
 	gameTimeStart();
 	pie_SetFogStatus(true);
 	cdAudio_Resume();
-	pie_ShowMouse(true);
+	wzShowMouse(true);
 	ASSERT( videoMode == 0, "loop_ClearVideoPlaybackMode: out of sync." );
 }
 

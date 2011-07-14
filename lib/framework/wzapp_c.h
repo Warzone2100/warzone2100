@@ -30,9 +30,9 @@ typedef struct _wzMutex WZ_MUTEX;
 typedef struct _wzSemaphore WZ_SEMAPHORE;
 
 void wzQuit(void);              ///< Quit game
-void wzCreateCursor(CURSOR index, uint8_t *data, uint8_t *mask, int w, int h, int hot_x, int hot_y);
 void wzSetCursor(CURSOR index);
 void wzScreenFlip(void);	///< Swap the graphics buffers
+void wzShowMouse(bool visible); ///< Show the Mouse?
 void wzGrabMouse(void);		///< Trap mouse cursor in application window
 void wzReleaseMouse(void);	///< Undo the wzGrabMouse operation
 bool wzActiveWindow(void);	///< Whether application currently has the mouse pointer over it

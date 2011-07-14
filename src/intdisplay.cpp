@@ -3172,7 +3172,7 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV)
 		// NOTE:  On certain missions (limbo & expand), there is still valid data that is stored outside the
 		// normal radar/mini-map view.  We must now calculate the radar/mini-map's bounding box, and clip
 		// everything outside the box.
-		if ( (x+radarX) < width*pixSizeV/2 && (x+radarX) > -width*pixSizeV/2 
+		if ( (x+radarX) < width*pixSizeV/2 && (x+radarX) > -width*pixSizeV/2
 			&& (y+radarY) < height*pixSizeH/2 && (y+radarY) > -height*pixSizeH/2)
 		{
 			// Draw the 'blip'
@@ -3186,11 +3186,11 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV)
 		x = (x / TILE_UNITS - scrollMinX) * pixSizeH;
 		y = (y / TILE_UNITS - scrollMinY) * pixSizeV;
 		imageID = imagesEnemy[strobe];
-		
+
 		// NOTE:  On certain missions (limbo & expand), there is still valid data that is stored outside the
 		// normal radar/mini-map view.  We must now calculate the radar/mini-map's bounding box, and clip
 		// everything outside the box.
-		if ( (x+radarX) < width*pixSizeV/2 && (x+radarX) > -width*pixSizeV/2 
+		if ( (x+radarX) < width*pixSizeV/2 && (x+radarX) > -width*pixSizeV/2
 			&& (y+radarY) < height*pixSizeH/2 && (y+radarY) > -height*pixSizeH/2)
 		{
 			// Draw the 'blip'

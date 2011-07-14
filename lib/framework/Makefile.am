@@ -88,9 +88,6 @@ libframework_a_SOURCES = \
 	strres_parser.tab.cpp \
 	configfile.cpp \
 	crc.cpp \
-	cursors16.cpp \
-	cursors32.cpp \
-	cursors.cpp \
 	debug.cpp \
 	frame.cpp \
 	frameresource.cpp \

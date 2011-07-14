@@ -25,6 +25,7 @@
 #include "mission.h"
 
 #include "lib/framework/frame.h"
+#include "lib/framework/wzapp_c.h"
 #include "lib/framework/math_ext.h"
 #include "lib/ivis_opengl/bitimage.h"
 #include "lib/ivis_opengl/textdraw.h"
@@ -1362,7 +1363,7 @@ static void processMission(void)
 		psNext = psDroid->psNext;
 		//reset order - do this to all the droids that are returning from offWorld
 		orderDroid(psDroid, DORDER_STOP, ModeImmediate);
-		// clean up visibility 
+		// clean up visibility
 		visRemoveVisibility((BASE_OBJECT *)psDroid);
 		//remove out of stored list and add to current Droid list
 		if (droidRemove(psDroid, apsDroidLists))
@@ -2578,7 +2579,7 @@ void intRemoveMissionResultNoAnim(void)
 
 void intRunMissionResult(void)
 {
-	pie_SetMouse(CURSOR_DEFAULT);
+	wzSetCursor(CURSOR_DEFAULT);
 
 	if(bLoadSaveUp)
 	{

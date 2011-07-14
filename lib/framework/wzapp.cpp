@@ -722,7 +722,7 @@ int wzGetTicks()
 /***     Mouse and keyboard support   ***/
 /****************************************/
 
-void pie_ShowMouse(bool visible)
+void wzShowMouse(bool visible)
 {
 	if (!visible)
 	{
@@ -736,13 +736,13 @@ void pie_ShowMouse(bool visible)
 
 void wzSetCursor(CURSOR index)
 {
-	WzMainWindow::instance()->setCursor(index);
-	lastCursor = index;
-}
+    ASSERT(index < CURSOR_MAX, "Attempting to load non-existent cursor: %u", (unsigned int)index);
 
-void wzCreateCursor(CURSOR index, uint8_t *data, uint8_t *mask, int w, int h, int hot_x, int hot_y)
-{
-	// TODO REMOVE
+    if (lastCursor != index)
+    {
+        WzMainWindow::instance()->setCursor(index);
+        lastCursor = index;
+    }
 }
 
 void wzGrabMouse()

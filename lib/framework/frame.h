@@ -108,8 +108,6 @@ extern int getFramerateLimit(void);
  */
 extern void frameUpdate(void);
 
-extern void frameSetCursor(CURSOR cur);
-
 /** Returns the current frame we're on - used to establish whats on screen. */
 extern UDWORD frameGetFrameNumber(void);
 

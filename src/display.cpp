@@ -868,17 +868,17 @@ void processMouseClickInput(void)
 
 	if (gamePaused())
 	{
-		pie_SetMouse(CURSOR_DEFAULT);
+		wzSetCursor(CURSOR_DEFAULT);
 	}
 	if (buildState == BUILD3D_VALID)
 	{
 		// special casing for building
-		pie_SetMouse(CURSOR_BUILD);
+		wzSetCursor(CURSOR_BUILD);
 	}
 	else if (buildState == BUILD3D_POS)
 	{
 		// special casing for building - can't build here
-		pie_SetMouse(CURSOR_NOTPOSSIBLE);
+		wzSetCursor(CURSOR_NOTPOSSIBLE);
 	}
 	else if (selection != SC_INVALID)
 	{
@@ -1029,29 +1029,29 @@ void processMouseClickInput(void)
 				arnMPointers[item][selection] == CURSOR_MOVE && bMultiPlayer)
 			{
 				// Alt+move = disembark transporter
-				pie_SetMouse(CURSOR_DISEMBARK);
+				wzSetCursor(CURSOR_DISEMBARK);
 			}
 			else if (specialOrderKeyDown() && selection == SC_DROID_DIRECT &&
 				arnMPointers[item][selection] == CURSOR_MOVE)
 			{
 				// Alt+move = scout
-				pie_SetMouse(CURSOR_SCOUT);
+				wzSetCursor(CURSOR_SCOUT);
 			}
 			else if (arnMPointers[item][selection] == CURSOR_NOTPOSSIBLE &&
 			         ObjUnderMouse && (ObjUnderMouse->player == selectedPlayer) &&
 			         ObjUnderMouse->type == OBJ_STRUCTURE && ((STRUCTURE *)ObjUnderMouse)->asWeaps[0].nStat &&
 			         (asWeaponStats[((STRUCTURE *)ObjUnderMouse)->asWeaps[0].nStat].weaponSubClass == WSC_LAS_SAT))
 			{
-				pie_SetMouse(CURSOR_SELECT); // Special casing for LasSat
+				wzSetCursor(CURSOR_SELECT); // Special casing for LasSat
 			}
 			else
 			{
-				pie_SetMouse(arnMPointers[item][selection]);
+				wzSetCursor(arnMPointers[item][selection]);
 			}
 		}
 		else
 		{
-			pie_SetMouse(CURSOR_DEFAULT);
+			wzSetCursor(CURSOR_DEFAULT);
 		}
 	}
 	else
@@ -1066,22 +1066,22 @@ void processMouseClickInput(void)
 			if (item == MT_ENEMYDROID || item == MT_ENEMYSTR || item == MT_DAMFEATURE)
 			{
 				//display attack cursor
-				pie_SetMouse(CURSOR_ATTACK);
+				wzSetCursor(CURSOR_ATTACK);
 			}
 			else if (ObjUnderMouse && ObjUnderMouse->player == selectedPlayer && (ObjUnderMouse->type == OBJ_DROID ||
 			         (ObjUnderMouse->type == OBJ_STRUCTURE && lasSatStructSelected((STRUCTURE *)ObjUnderMouse))))
 			{
 				// Special casing for selectables
-				pie_SetMouse(CURSOR_SELECT);
+				wzSetCursor(CURSOR_SELECT);
 			}
 			else if (ObjUnderMouse && ObjUnderMouse->player == selectedPlayer && ObjUnderMouse->type == OBJ_STRUCTURE)
 			{
-				pie_SetMouse(CURSOR_DEFAULT);
+				wzSetCursor(CURSOR_DEFAULT);
 			}
 			else
 			{
 				//display block cursor
-				pie_SetMouse(CURSOR_NOTPOSSIBLE);
+				wzSetCursor(CURSOR_NOTPOSSIBLE);
 			}
 		}
 		else if (ObjUnderMouse && (ObjUnderMouse->player == selectedPlayer) &&
@@ -1089,11 +1089,11 @@ void processMouseClickInput(void)
 			&& (asWeaponStats[((STRUCTURE *)ObjUnderMouse)->asWeaps[0].nStat].weaponSubClass == WSC_LAS_SAT))
 		    || ObjUnderMouse->type == OBJ_DROID))
 		{
-			pie_SetMouse(CURSOR_SELECT); // Special casing for LasSat or own unit
+			wzSetCursor(CURSOR_SELECT); // Special casing for LasSat or own unit
 		}
 		else
 		{
-			pie_SetMouse(CURSOR_DEFAULT);
+			wzSetCursor(CURSOR_DEFAULT);
 		}
 	}
 
@@ -1286,7 +1286,7 @@ bool CheckScrollLimits(void)
 void displayWorld(void)
 {
 	Vector3i pos;
-	
+
 	shakeUpdate();
 
 	if (mouseDown(MOUSE_ROTATE) && rotActive)
@@ -2173,7 +2173,7 @@ void	dealWithLMB( void )
 			CONPRINTF(ConsoleString, (ConsoleString, "%s tile %d, %d [%d, %d] continent(l%d, h%d) level %g illum %d %s %s",
 			          tileIsExplored(psTile) ? "Explored" : "Unexplored",
 			          mouseTileX, mouseTileY, world_coord(mouseTileX), world_coord(mouseTileY),
-			          (int)psTile->limitedContinent, (int)psTile->hoverContinent, psTile->level, (int)psTile->illumination, 
+			          (int)psTile->limitedContinent, (int)psTile->hoverContinent, psTile->level, (int)psTile->illumination,
 			          aux & AUXBITS_DANGER ? "danger" : "", aux & AUXBITS_THREAT ? "threat" : ""));
 		}
 

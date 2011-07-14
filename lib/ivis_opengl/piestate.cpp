@@ -37,9 +37,6 @@
  */
 
 // Variables for the coloured mouse cursor
-static CURSOR MouseCursor = CURSOR_ARROW;
-static IMAGEFILE* MouseCursors = NULL;
-static uint16_t MouseCursorIDs[CURSOR_MAX];
 static GLuint shaderProgram[SHADER_MAX];
 static GLfloat shaderStretch = 0;
 static GLint locTeam, locStretch, locTCMask, locFog, locNormalMap;
@@ -243,7 +240,7 @@ static bool loadShaders(GLuint *program, const char *definitions,
 
 			glShaderSource(shader, 2, (const char **)buffer, NULL);
 			glCompileShader(shader);
-			
+
 			// Check for compilation errors
 			glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
 			if (!status)
@@ -280,7 +277,7 @@ static bool loadShaders(GLuint *program, const char *definitions,
 		}
 	}
 
-	return success;	
+	return success;
 }
 
 // Run from screen.c on init. FIXME: do some kind of FreeShaders on failure.
@@ -533,9 +530,9 @@ void pie_SetRendMode(REND_MODE rendMode)
 				break;
 
 			case REND_MULTIPLICATIVE:
-				glEnable(GL_BLEND); 
-				glBlendFunc(GL_ZERO, GL_SRC_COLOR); 
-				break; 
+				glEnable(GL_BLEND);
+				glBlendFunc(GL_ZERO, GL_SRC_COLOR);
+				break;
 
 			default:
 				ASSERT(false, "Bad render state");
@@ -543,24 +540,6 @@ void pie_SetRendMode(REND_MODE rendMode)
 		}
 	}
 	return;
-}
-
-void pie_InitColourMouse(IMAGEFILE* img, const uint16_t cursorIDs[CURSOR_MAX])
-{
-	MouseCursors = img;
-	memcpy(MouseCursorIDs, cursorIDs, sizeof(MouseCursorIDs));
-}
-
-/** Selects the given mouse cursor.
- *  \param cursor   mouse cursor to render
- */
-void pie_SetMouse(CURSOR cursor)
-{
-	ASSERT(cursor < CURSOR_MAX, "Attempting to load non-existent cursor: %u", (unsigned int)cursor);
-
-	MouseCursor = cursor;
-
-	frameSetCursor(MouseCursor);
 }
 
 bool _glerrors(const char *function, const char *file, int line)

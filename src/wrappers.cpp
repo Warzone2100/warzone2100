@@ -126,7 +126,7 @@ TITLECODE titleLoop(void)
 	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 	pie_SetFogStatus(false);
 	screen_RestartBackDrop();
-	pie_ShowMouse(true);
+	wzShowMouse(true);
 
 	// When we first init the game, firstcall is true.
 	if (firstcall)
@@ -152,7 +152,7 @@ TITLECODE titleLoop(void)
 			changeTitleMode(TITLE);			// normal game, run main title screen.
 		}
 		// Using software cursors (when on) for these menus due to a bug in SDL's SDL_ShowCursor()
-		pie_SetMouse(CURSOR_DEFAULT);
+		wzSetCursor(CURSOR_DEFAULT);
 	}
 
 	if (titleMode != MULTIOPTION && titleMode != MULTILIMIT && titleMode != STARTGAME)
@@ -256,7 +256,7 @@ TITLECODE titleLoop(void)
 	NETflush();  // Send any pending network data.
 
 	audio_Update();
-	
+
 	pie_SetFogStatus(false);
 	pie_ScreenFlip(CLEAR_BLACK);//title loop
 
@@ -313,7 +313,7 @@ void loadingScreenCallback(void)
 // fill buffers with the static screen
 void initLoadingScreen( bool drawbdrop )
 {
-	pie_ShowMouse(false);
+	wzShowMouse(false);
 	if (!drawbdrop)	// fill buffers
 	{
 		//just init the load bar with the current screen

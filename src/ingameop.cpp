@@ -26,6 +26,7 @@
 #include <string.h>
 
 #include "lib/framework/frame.h"
+#include "lib/framework/wzapp_c.h"
 #include "lib/framework/strres.h"
 #include "lib/widget/widget.h"
 #include "lib/netplay/netplay.h"
@@ -277,7 +278,7 @@ static bool _intAddInGameOptions(void)
 	intMode		= INT_INGAMEOP;			// change interface mode.
 	InGameOpUp	= true;					// inform interface.
 
-	pie_SetMouse(CURSOR_DEFAULT);
+	wzSetCursor(CURSOR_DEFAULT);
 
 	return true;
 }
@@ -289,7 +290,7 @@ bool intAddInGameOptions(void)
 	return _intAddInGameOptions();
 }
 
-// 
+//
 // Quick hack to throw up a ingame 'popup' for when the host drops connection.
 //
 void intAddInGamePopup(void)
@@ -524,9 +525,9 @@ void intProcessInGameOptions(UDWORD id)
 		{
 			widgSetString(psWScreen, INTINGAMEOP_TUI_TARGET_ORIGIN_SW, _("Tactical UI (Target Origin Icon): Hide"));
 		}
-		
+
 		break;
-		
+
 	default:
 		break;
 	}

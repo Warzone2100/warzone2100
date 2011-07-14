@@ -58,14 +58,4 @@ enum CURSOR
 	CURSOR_MAX,
 };
 
-enum CURSOR_TYPE
-{
-	CURSOR_16,
-	CURSOR_32,
-};
-
-void init_system_cursor(CURSOR cur, CURSOR_TYPE type);
-void init_system_cursor32(CURSOR cur);
-void init_system_cursor16(CURSOR cur);
-
 #endif // __INCLUDED_LIB_FRAMEWORK_CURSORS_H__

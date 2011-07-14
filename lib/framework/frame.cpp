@@ -39,11 +39,7 @@
 
 #include "cursors.h"
 
-static const enum CURSOR_TYPE cursor_type = CURSOR_32;
-
 /* Linux specific stuff */
-
-static CURSOR currentCursor = CURSOR_MAX;
 
 bool selfTest = false;
 
@@ -132,55 +128,6 @@ UDWORD	frameGetFrameNumber(void)
 	return curFrames;
 }
 
-/** Set the current cursor from a Resource ID
- */
-void frameSetCursor(CURSOR cur)
-{
-	ASSERT(cur < CURSOR_MAX, "frameSetCursorFromRes: bad resource ID" );
-
-	// If we are already using this cursor then do nothing
-	if (cur != currentCursor)
-        {
-		wzSetCursor(cur);
-		currentCursor = cur;
-        }
-}
-
-static void initCursors(void)
-{
-	init_system_cursor(CURSOR_ARROW, cursor_type);
-	init_system_cursor(CURSOR_DEST, cursor_type);
-	init_system_cursor(CURSOR_SIGHT, cursor_type);
-	init_system_cursor(CURSOR_TARGET, cursor_type);
-	init_system_cursor(CURSOR_LARROW, cursor_type);
-	init_system_cursor(CURSOR_RARROW, cursor_type);
-	init_system_cursor(CURSOR_DARROW, cursor_type);
-	init_system_cursor(CURSOR_UARROW, cursor_type);
-	init_system_cursor(CURSOR_DEFAULT, cursor_type);
-	init_system_cursor(CURSOR_EDGEOFMAP, cursor_type);
-	init_system_cursor(CURSOR_ATTACH, cursor_type);
-	init_system_cursor(CURSOR_ATTACK, cursor_type);
-	init_system_cursor(CURSOR_BOMB, cursor_type);
-	init_system_cursor(CURSOR_BRIDGE, cursor_type);
-	init_system_cursor(CURSOR_BUILD, cursor_type);
-	init_system_cursor(CURSOR_EMBARK, cursor_type);
-	init_system_cursor(CURSOR_FIX, cursor_type);
-	init_system_cursor(CURSOR_GUARD, cursor_type);
-	init_system_cursor(CURSOR_JAM, cursor_type);
-	init_system_cursor(CURSOR_LOCKON, cursor_type);
-	init_system_cursor(CURSOR_MENU, cursor_type);
-	init_system_cursor(CURSOR_MOVE, cursor_type);
-	init_system_cursor(CURSOR_NOTPOSSIBLE, cursor_type);
-	init_system_cursor(CURSOR_PICKUP, cursor_type);
-	init_system_cursor(CURSOR_SEEKREPAIR, cursor_type);
-	init_system_cursor(CURSOR_SELECT, cursor_type);
-}
-
-static void freeCursors(void)
-{
-	// no-op
-}
-
 /*
  * frameInitialise
  *
@@ -193,9 +140,6 @@ bool frameInitialise()
 	{
 		return false;
 	}
-
-	/* initialise all cursors */
-	initCursors();
 
 	if (!screenInitialise())
 	{
@@ -248,10 +192,6 @@ void frameShutDown(void)
 {
 	debug(LOG_NEVER, "Screen shutdown!");
 	screenShutDown();
-
-	/* Free all cursors */
-	debug(LOG_NEVER, "Free the cursors!");
-	freeCursors();
 
 	// Shutdown the resource stuff
 	debug(LOG_NEVER, "No more resources!");
@@ -397,7 +337,7 @@ bool saveFile(const char *pFileName, const char *pFileData, UDWORD fileSize)
 		return false;
 	}
 
-	if (PHYSFS_write(pfile, pFileData, 1, size) != size) 
+	if (PHYSFS_write(pfile, pFileData, 1, size) != size)
 	{
 		debug(LOG_ERROR, "%s could not write: %s", pFileName, PHYSFS_getLastError());
 		assert(false);
@@ -410,7 +350,7 @@ bool saveFile(const char *pFileName, const char *pFileData, UDWORD fileSize)
 		return false;
 	}
 
-	if (PHYSFS_getRealDir(pFileName) == NULL) 
+	if (PHYSFS_getRealDir(pFileName) == NULL)
 	{
 		// weird
 		debug(LOG_ERROR, "PHYSFS_getRealDir(%s) returns NULL (%s)?!", pFileName, PHYSFS_getLastError());
