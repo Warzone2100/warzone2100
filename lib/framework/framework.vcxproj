@@ -246,7 +246,6 @@
     <ClInclude Include="types.h" />
     <ClInclude Include="utf.h" />
     <ClInclude Include="vector.h" />
-    <ClInclude Include="wz2100icon.h" />
     <ClInclude Include="wzapp.h" />
     <ClInclude Include="wzapp.moc.h" />
     <ClInclude Include="wzapp_c.h" />
