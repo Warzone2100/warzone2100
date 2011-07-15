@@ -117,7 +117,6 @@
 		023ECC500E9318D600D9E7C3 /* Theora.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 97AEAB330E8C1B5200A10721 /* Theora.framework */; };
 		024480240C5E4BEE00E1A641 /* utf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 024480220C5E4BEE00E1A641 /* utf.cpp */; };
 		0246A05D0BD3C975004D1C70 /* Warzone.icns in Resources */ = {isa = PBXBuildFile; fileRef = 0246A05C0BD3C975004D1C70 /* Warzone.icns */; };
-		0246A0C10BD3CBD5004D1C70 /* configfile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A09A0BD3CBD5004D1C70 /* configfile.cpp */; };
 		0246A0C20BD3CBD5004D1C70 /* debug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A09F0BD3CBD5004D1C70 /* debug.cpp */; };
 		0246A0C40BD3CBD5004D1C70 /* frame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0A30BD3CBD5004D1C70 /* frame.cpp */; };
 		0246A0C50BD3CBD5004D1C70 /* frameresource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0A60BD3CBD5004D1C70 /* frameresource.cpp */; };
@@ -277,9 +276,6 @@
 		02581C870BD5AD1100957CBC /* Vorbis.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02DDA7EE0BD3C03F0049AB60 /* Vorbis.framework */; };
 		02581C880BD5AD1100957CBC /* Zlib.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02356D830BD3BB4100E9A019 /* Zlib.framework */; };
 		02AAD1440D9ED28C00248B0F /* i18n.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02AAD1400D9ED28C00248B0F /* i18n.cpp */; };
-		02B2132D0DA8755F0059E864 /* cursors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02B2132A0DA8755F0059E864 /* cursors.cpp */; };
-		02B2132E0DA8755F0059E864 /* cursors16.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02B2132B0DA8755F0059E864 /* cursors16.cpp */; };
-		02B2132F0DA8755F0059E864 /* cursors32.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02B2132C0DA8755F0059E864 /* cursors32.cpp */; };
 		02BBB2090DA874F6002D438B /* exceptionhandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02BBB2070DA874F6002D438B /* exceptionhandler.cpp */; };
 		02C8AEF80BE68A5600E9D8A7 /* png_util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02C8AEF60BE68A5600E9D8A7 /* png_util.cpp */; };
 		02C8AEFC0BE68A6800E9D8A7 /* oggvorbis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02C8AEFA0BE68A6800E9D8A7 /* oggvorbis.cpp */; };
@@ -1007,8 +1003,6 @@
 		024480220C5E4BEE00E1A641 /* utf.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = utf.cpp; path = ../lib/framework/utf.cpp; sourceTree = SOURCE_ROOT; };
 		024480230C5E4BEE00E1A641 /* utf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = utf.h; path = ../lib/framework/utf.h; sourceTree = SOURCE_ROOT; };
 		0246A05C0BD3C975004D1C70 /* Warzone.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = Warzone.icns; path = Resources/Warzone.icns; sourceTree = "<group>"; };
-		0246A09A0BD3CBD5004D1C70 /* configfile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = configfile.cpp; path = ../lib/framework/configfile.cpp; sourceTree = SOURCE_ROOT; };
-		0246A09B0BD3CBD5004D1C70 /* configfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = configfile.h; path = ../lib/framework/configfile.h; sourceTree = SOURCE_ROOT; };
 		0246A09C0BD3CBD5004D1C70 /* cursors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cursors.h; path = ../lib/framework/cursors.h; sourceTree = SOURCE_ROOT; };
 		0246A09F0BD3CBD5004D1C70 /* debug.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = debug.cpp; path = ../lib/framework/debug.cpp; sourceTree = SOURCE_ROOT; };
 		0246A0A00BD3CBD5004D1C70 /* debug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = debug.h; path = ../lib/framework/debug.h; sourceTree = SOURCE_ROOT; };
@@ -1338,9 +1332,6 @@
 		02AAD1400D9ED28C00248B0F /* i18n.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = i18n.cpp; path = ../lib/framework/i18n.cpp; sourceTree = SOURCE_ROOT; };
 		02AAD1410D9ED28C00248B0F /* i18n.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = i18n.h; path = ../lib/framework/i18n.h; sourceTree = SOURCE_ROOT; };
 		02AAD1420D9ED28C00248B0F /* physfs_ext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = physfs_ext.h; path = ../lib/framework/physfs_ext.h; sourceTree = SOURCE_ROOT; };
-		02B2132A0DA8755F0059E864 /* cursors.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = cursors.cpp; path = ../lib/framework/cursors.cpp; sourceTree = SOURCE_ROOT; };
-		02B2132B0DA8755F0059E864 /* cursors16.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = cursors16.cpp; path = ../lib/framework/cursors16.cpp; sourceTree = SOURCE_ROOT; };
-		02B2132C0DA8755F0059E864 /* cursors32.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = cursors32.cpp; path = ../lib/framework/cursors32.cpp; sourceTree = SOURCE_ROOT; };
 		02BBB2070DA874F6002D438B /* exceptionhandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = exceptionhandler.cpp; path = ../lib/exceptionhandler/exceptionhandler.cpp; sourceTree = SOURCE_ROOT; };
 		02BBB2080DA874F6002D438B /* exceptionhandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = exceptionhandler.h; path = ../lib/exceptionhandler/exceptionhandler.h; sourceTree = SOURCE_ROOT; };
 		02C8AEF60BE68A5600E9D8A7 /* png_util.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = png_util.cpp; path = ../lib/ivis_opengl/png_util.cpp; sourceTree = SOURCE_ROOT; };
@@ -1625,7 +1616,6 @@
 		43C3B9C0118BEBE0000BBE59 /* barkmel.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = barkmel.c; path = external/libvorbis/lib/barkmel.c; sourceTree = "<group>"; };
 		43C3B9C1118BEBE0000BBE59 /* psytune.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = psytune.c; path = external/libvorbis/lib/psytune.c; sourceTree = "<group>"; };
 		43C3B9C2118BEBE0000BBE59 /* tone.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = tone.c; path = external/libvorbis/lib/tone.c; sourceTree = "<group>"; };
-		43D180601336B536001906EB /* wz2100icon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wz2100icon.h; path = ../lib/framework/wz2100icon.h; sourceTree = SOURCE_ROOT; };
 		43D180611336B536001906EB /* wzfs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wzfs.h; path = ../lib/framework/wzfs.h; sourceTree = SOURCE_ROOT; };
 		43D180AF1336B99C001906EB /* physfs_casefolding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = physfs_casefolding.h; path = external/physfs/physfs_casefolding.h; sourceTree = "<group>"; };
 		43D338561364F5A8005F6725 /* connecthostport.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = connecthostport.c; sourceTree = "<group>"; };
@@ -1967,7 +1957,6 @@
 			children = (
 				43A6285913A6C4A400C6B786 /* geometry.cpp */,
 				43A6285A13A6C4A400C6B786 /* geometry.h */,
-				43D180601336B536001906EB /* wz2100icon.h */,
 				43D180611336B536001906EB /* wzfs.h */,
 				43DF5A8812BEE01B00DD5A37 /* cocoa_wrapper.h */,
 				43DF5A8912BEE01B00DD5A37 /* cocoa_wrapper.mm */,
@@ -1989,9 +1978,6 @@
 				9742E5760DF9979C000A5D41 /* parsetest.h */,
 				9742E5710DF9975E000A5D41 /* lexer_input.cpp */,
 				9742E5720DF9975E000A5D41 /* lexer_input.h */,
-				02B2132A0DA8755F0059E864 /* cursors.cpp */,
-				02B2132B0DA8755F0059E864 /* cursors16.cpp */,
-				02B2132C0DA8755F0059E864 /* cursors32.cpp */,
 				02AAD13F0D9ED28C00248B0F /* file.h */,
 				02AAD1400D9ED28C00248B0F /* i18n.cpp */,
 				02AAD1410D9ED28C00248B0F /* i18n.h */,
@@ -1999,8 +1985,6 @@
 				024480220C5E4BEE00E1A641 /* utf.cpp */,
 				024480230C5E4BEE00E1A641 /* utf.h */,
 				022B2EBF0BD55401002E64E3 /* config-macosx.h */,
-				0246A09A0BD3CBD5004D1C70 /* configfile.cpp */,
-				0246A09B0BD3CBD5004D1C70 /* configfile.h */,
 				0246A09C0BD3CBD5004D1C70 /* cursors.h */,
 				0246A09F0BD3CBD5004D1C70 /* debug.cpp */,
 				0246A0A00BD3CBD5004D1C70 /* debug.h */,
@@ -3984,7 +3968,6 @@
 			files = (
 				4313231B13BE866B0023280C /* qtgame.h.qwth in Sources */,
 				4333607311A0731500380F5E /* wzapp.h.qwth in Sources */,
-				0246A0C10BD3CBD5004D1C70 /* configfile.cpp in Sources */,
 				0246A0C20BD3CBD5004D1C70 /* debug.cpp in Sources */,
 				0246A0C40BD3CBD5004D1C70 /* frame.cpp in Sources */,
 				0246A0C50BD3CBD5004D1C70 /* frameresource.cpp in Sources */,
@@ -4144,9 +4127,6 @@
 				020A7E670D246D2B009C29F5 /* sequence.cpp in Sources */,
 				02AAD1440D9ED28C00248B0F /* i18n.cpp in Sources */,
 				02BBB2090DA874F6002D438B /* exceptionhandler.cpp in Sources */,
-				02B2132D0DA8755F0059E864 /* cursors.cpp in Sources */,
-				02B2132E0DA8755F0059E864 /* cursors16.cpp in Sources */,
-				02B2132F0DA8755F0059E864 /* cursors32.cpp in Sources */,
 				9742E5730DF9975E000A5D41 /* lexer_input.cpp in Sources */,
 				9742E5770DF9979C000A5D41 /* parsetest.cpp in Sources */,
 				2244463D0E3EB7CB004D0F1F /* message_parser.y in Sources */,
