@@ -599,15 +599,17 @@ RETURN_CODES Client::call_(const char* command, const QVariantMap& kwargs)
 
 RETURN_CODES Client::setError_(const RETURN_CODES code, const char* message, ...)
 {
-    char buffer[256];
-
-    lastError_.code = code;
+    char *buff;
 
     va_list ap;
     va_start(ap, message);
-    vsprintf(buffer, message, ap);
-    lastError_.message = buffer;
+    vasprintf(&buff, message, ap);
     va_end(ap);
+
+    lastError_.code = code;
+    lastError_.message = buff;
+
+    free(buff);
 
     return code;
 }
