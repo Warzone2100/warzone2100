@@ -5313,7 +5313,6 @@ bool loadSaveFeature2(const char *pFileName)
 			scriptSetDerrickPos(pFeature->pos.x, pFeature->pos.y);
 		}
 		//restore values
-		pFeature->pos.z = pos.z;
 		pFeature->id = ini.value("id").toInt();
 		pFeature->rot = ini.vector3i("rotation");
 		pFeature->inFire = ini.value("inFire", 0).toInt();

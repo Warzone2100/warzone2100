@@ -30,7 +30,7 @@
 
 static const char *tilesetTextures[] = { "Arizona", "Urban", "Rockies" };
 
-#define MADD(...) fprintf(fp, __VA_ARGS__); fprintf(fp, "\n");
+#define MADD(...) do { fprintf(fp, __VA_ARGS__); fprintf(fp, "\n"); } while(0)
 
 int main(int argc, char **argv)
 {
@@ -123,6 +123,7 @@ int main(int argc, char **argv)
 		return -1;
 	}
 	MADD("[game]");
+	MADD("players = %d", map->numPlayers);
 	if (map->gameTime > 0) MADD("GameTime = %u", map->gameTime);
 	switch (map->gameType)
 	{
@@ -151,6 +152,14 @@ int main(int argc, char **argv)
 		MADD("y1 = %d", map->scrollMinY);
 		MADD("x2 = %u", map->scrollMaxX);
 		MADD("y2 = %u", map->scrollMaxY);
+	}
+	for (i = 0; i < 8; i++)
+	{
+		if (map->power[i] > 0)
+		{
+			MADD("\n[player_%d]", i);
+			MADD("power = %d", map->power[i]);
+		}
 	}
 	fclose(fp);
 
