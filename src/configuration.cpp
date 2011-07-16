@@ -118,11 +118,12 @@ bool loadConfig()
 	war_SetTrapCursor(ini.value("trapCursor", false).toBool());
 	war_SetVsync(ini.value("vsync", true).toBool());
 
-	int width = ini.value("width", 0).toInt();
-	int height = ini.value("height", 0).toInt();
+	int width = ini.value("width", 800).toInt();
+	int height = ini.value("height", 600).toInt();
 	if (width < 640 || height < 480)	// sanity check
 	{
-		height = width = 0;
+		width = 640;
+		height = 480;
 	}
 	pie_SetVideoBufferWidth(width);
 	pie_SetVideoBufferHeight(height);
