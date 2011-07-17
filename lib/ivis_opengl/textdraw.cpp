@@ -233,8 +233,12 @@ void iV_SetFont(enum iV_fonts FontID)
 {
 	switch (FontID)
 	{
-		default:
 		case font_scaled:
+			iV_SetTextSize(12.f * pie_GetVideoBufferHeight() / 480);
+			glcFont(_glcFont_Regular);
+			break;
+
+		default:
 		case font_regular:
 			iV_SetTextSize(12.f);
 			glcFont(_glcFont_Regular);
