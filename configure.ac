@@ -410,6 +410,9 @@ AC_CHECK_LIB(GLU, main,
 		[${OPENGL_LIBS} -lm]), [${OPENGL_LIBS} -lm])
 AC_SUBST([OPENGL_LIBS], [${OPENGL_LIBS}])
 
+# Look for OpenGLC
+PKG_CHECK_MODULES([OPENGLC], [quesoglc >= 0.7.2])
+
 # When (cross-)compiling for Windows (MinGW) we need to link in BFD for the Dr.
 # MinGW derived exception handler.
 if test "x$host_os_mingw32" = "xyes" ; then
