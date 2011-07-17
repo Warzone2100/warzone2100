@@ -37,6 +37,8 @@
 #define ASCII_COLOURMODE		('#')
 
 #ifdef WZ_OS_MAC
+# include <CoreFoundation/CoreFoundation.h>
+# include <CoreFoundation/CFURL.h>
 # include <QuesoGLC/glc.h>
 #else
 # include <GL/glc.h>

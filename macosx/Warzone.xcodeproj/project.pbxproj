@@ -17,6 +17,7 @@
 				438B0C26137732A5008184FC /* Ogg - Fetch source */,
 				438B0C1E13773258008184FC /* Png - Fetch source */,
 				438B0C32137733B4008184FC /* PhysFS - Fetch source */,
+				4366712213D1F83200FE85BA /* QuesoGLC - Fetch source */,
 				438B0C2B1377336E008184FC /* Vorbis - Fetch source */,
 				438B0C3A137733F8008184FC /* Theora - Fetch source */,
 				438B0C101377317F008184FC /* Gettext - Fetch source */,
@@ -435,6 +436,53 @@
 		4355E13110D6028C00A19EE4 /* theora.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E12D10D6028C00A19EE4 /* theora.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4355E13210D6028C00A19EE4 /* theoradec.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E12E10D6028C00A19EE4 /* theoradec.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4355E13310D6028C00A19EE4 /* theoraenc.h in Headers */ = {isa = PBXBuildFile; fileRef = 4355E12F10D6028C00A19EE4 /* theoraenc.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		436671C713D1FF5D00FE85BA /* glc.h in Headers */ = {isa = PBXBuildFile; fileRef = 436671C213D1FF5D00FE85BA /* glc.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		436671C813D1FF5D00FE85BA /* glew.h in Headers */ = {isa = PBXBuildFile; fileRef = 436671C313D1FF5D00FE85BA /* glew.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		436671C913D1FF5D00FE85BA /* glxew.h in Headers */ = {isa = PBXBuildFile; fileRef = 436671C413D1FF5D00FE85BA /* glxew.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		436671CA13D1FF5D00FE85BA /* wglew.h in Headers */ = {isa = PBXBuildFile; fileRef = 436671C513D1FF5D00FE85BA /* wglew.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		436671CB13D1FF5D00FE85BA /* internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 436671C613D1FF5D00FE85BA /* internal.h */; };
+		436671F713D1FFB900FE85BA /* context.c in Sources */ = {isa = PBXBuildFile; fileRef = 436671CE13D1FFB800FE85BA /* context.c */; };
+		436671F813D1FFB900FE85BA /* database.c in Sources */ = {isa = PBXBuildFile; fileRef = 436671CF13D1FFB800FE85BA /* database.c */; };
+		436671F913D1FFB900FE85BA /* except.c in Sources */ = {isa = PBXBuildFile; fileRef = 436671D013D1FFB800FE85BA /* except.c */; };
+		436671FA13D1FFB900FE85BA /* except.h in Headers */ = {isa = PBXBuildFile; fileRef = 436671D113D1FFB800FE85BA /* except.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		436671FB13D1FFB900FE85BA /* font.c in Sources */ = {isa = PBXBuildFile; fileRef = 436671D213D1FFB800FE85BA /* font.c */; };
+		436671FC13D1FFB900FE85BA /* fribidi.c in Sources */ = {isa = PBXBuildFile; fileRef = 436671D413D1FFB800FE85BA /* fribidi.c */; };
+		436671FD13D1FFB900FE85BA /* fribidi.h in Headers */ = {isa = PBXBuildFile; fileRef = 436671D513D1FFB800FE85BA /* fribidi.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		436671FE13D1FFB900FE85BA /* fribidi_char_type.c in Sources */ = {isa = PBXBuildFile; fileRef = 436671D613D1FFB800FE85BA /* fribidi_char_type.c */; };
+		436671FF13D1FFB900FE85BA /* fribidi_mirroring.c in Sources */ = {isa = PBXBuildFile; fileRef = 436671D713D1FFB800FE85BA /* fribidi_mirroring.c */; };
+		4366720213D1FFB900FE85BA /* fribidi_types.c in Sources */ = {isa = PBXBuildFile; fileRef = 436671DA13D1FFB900FE85BA /* fribidi_types.c */; };
+		4366720313D1FFB900FE85BA /* fribidi_types.h in Headers */ = {isa = PBXBuildFile; fileRef = 436671DB13D1FFB900FE85BA /* fribidi_types.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4366720513D1FFB900FE85BA /* fribidi_unicode.h in Headers */ = {isa = PBXBuildFile; fileRef = 436671DD13D1FFB900FE85BA /* fribidi_unicode.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4366720613D1FFB900FE85BA /* glew.c in Sources */ = {isa = PBXBuildFile; fileRef = 436671DE13D1FFB900FE85BA /* glew.c */; };
+		4366720713D1FFB900FE85BA /* global.c in Sources */ = {isa = PBXBuildFile; fileRef = 436671DF13D1FFB900FE85BA /* global.c */; };
+		4366720813D1FFB900FE85BA /* master.c in Sources */ = {isa = PBXBuildFile; fileRef = 436671E013D1FFB900FE85BA /* master.c */; };
+		4366720913D1FFB900FE85BA /* measure.c in Sources */ = {isa = PBXBuildFile; fileRef = 436671E113D1FFB900FE85BA /* measure.c */; };
+		4366720A13D1FFB900FE85BA /* misc.c in Sources */ = {isa = PBXBuildFile; fileRef = 436671E213D1FFB900FE85BA /* misc.c */; };
+		4366720B13D1FFB900FE85BA /* oarray.c in Sources */ = {isa = PBXBuildFile; fileRef = 436671E313D1FFB900FE85BA /* oarray.c */; };
+		4366720C13D1FFB900FE85BA /* oarray.h in Headers */ = {isa = PBXBuildFile; fileRef = 436671E413D1FFB900FE85BA /* oarray.h */; };
+		4366720D13D1FFB900FE85BA /* ocharmap.c in Sources */ = {isa = PBXBuildFile; fileRef = 436671E513D1FFB900FE85BA /* ocharmap.c */; };
+		4366720E13D1FFB900FE85BA /* ocharmap.h in Headers */ = {isa = PBXBuildFile; fileRef = 436671E613D1FFB900FE85BA /* ocharmap.h */; };
+		4366720F13D1FFB900FE85BA /* ocontext.c in Sources */ = {isa = PBXBuildFile; fileRef = 436671E713D1FFB900FE85BA /* ocontext.c */; };
+		4366721013D1FFB900FE85BA /* ocontext.h in Headers */ = {isa = PBXBuildFile; fileRef = 436671E813D1FFB900FE85BA /* ocontext.h */; };
+		4366721113D1FFB900FE85BA /* ofacedesc.c in Sources */ = {isa = PBXBuildFile; fileRef = 436671E913D1FFB900FE85BA /* ofacedesc.c */; };
+		4366721213D1FFB900FE85BA /* ofacedesc.h in Headers */ = {isa = PBXBuildFile; fileRef = 436671EA13D1FFB900FE85BA /* ofacedesc.h */; };
+		4366721313D1FFB900FE85BA /* ofont.c in Sources */ = {isa = PBXBuildFile; fileRef = 436671EB13D1FFB900FE85BA /* ofont.c */; };
+		4366721413D1FFB900FE85BA /* ofont.h in Headers */ = {isa = PBXBuildFile; fileRef = 436671EC13D1FFB900FE85BA /* ofont.h */; };
+		4366721513D1FFB900FE85BA /* oglyph.c in Sources */ = {isa = PBXBuildFile; fileRef = 436671ED13D1FFB900FE85BA /* oglyph.c */; };
+		4366721613D1FFB900FE85BA /* oglyph.h in Headers */ = {isa = PBXBuildFile; fileRef = 436671EE13D1FFB900FE85BA /* oglyph.h */; };
+		4366721713D1FFB900FE85BA /* omaster.c in Sources */ = {isa = PBXBuildFile; fileRef = 436671EF13D1FFB900FE85BA /* omaster.c */; };
+		4366721813D1FFB900FE85BA /* omaster.h in Headers */ = {isa = PBXBuildFile; fileRef = 436671F013D1FFB900FE85BA /* omaster.h */; };
+		4366721913D1FFB900FE85BA /* render.c in Sources */ = {isa = PBXBuildFile; fileRef = 436671F113D1FFB900FE85BA /* render.c */; };
+		4366721A13D1FFB900FE85BA /* scalable.c in Sources */ = {isa = PBXBuildFile; fileRef = 436671F213D1FFB900FE85BA /* scalable.c */; };
+		4366721B13D1FFB900FE85BA /* texture.c in Sources */ = {isa = PBXBuildFile; fileRef = 436671F313D1FFB900FE85BA /* texture.c */; };
+		4366721C13D1FFB900FE85BA /* texture.h in Headers */ = {isa = PBXBuildFile; fileRef = 436671F413D1FFB900FE85BA /* texture.h */; };
+		4366721D13D1FFB900FE85BA /* transform.c in Sources */ = {isa = PBXBuildFile; fileRef = 436671F513D1FFB900FE85BA /* transform.c */; };
+		4366721E13D1FFB900FE85BA /* unicode.c in Sources */ = {isa = PBXBuildFile; fileRef = 436671F613D1FFB900FE85BA /* unicode.c */; };
+		4366722A13D20B5700FE85BA /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43B8FD34127CB13F006F5A13 /* OpenGL.framework */; };
+		4366724513D20E7500FE85BA /* libfreetype.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4366724413D20E7500FE85BA /* libfreetype.dylib */; };
+		4366727413D211AE00FE85BA /* QuesoGLC.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 4366718213D1FD5600FE85BA /* QuesoGLC.framework */; };
+		4366729613D2122700FE85BA /* QuesoGLC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4366718213D1FD5600FE85BA /* QuesoGLC.framework */; };
+		436673A213D23A1E00FE85BA /* libfontconfig.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 436673A113D23A1E00FE85BA /* libfontconfig.dylib */; };
 		4371B60F11D93FD1005A67AB /* pngpriv.h in Headers */ = {isa = PBXBuildFile; fileRef = 4371B60D11D93FD0005A67AB /* pngpriv.h */; };
 		437FB24D13CE5CA900E7EF5B /* swapinterval.mm in Sources */ = {isa = PBXBuildFile; fileRef = 437FB24B13CE5CA900E7EF5B /* swapinterval.mm */; };
 		438BDDF31129DC9A00998660 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 438BDDD71129DC9A00998660 /* InfoPlist.strings */; };
@@ -750,6 +798,20 @@
 			remoteGlobalIDString = 43502D511347640700A02A1F;
 			remoteInfo = GLExtensionWrangler;
 		};
+		4366718813D1FD6100FE85BA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 438B0C05137730FE008184FC;
+			remoteInfo = "Fetch Third Party Sources";
+		};
+		4366728213D211DE00FE85BA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4366718113D1FD5600FE85BA;
+			remoteInfo = QuesoGLC;
+		};
 		438B0C11137731A0008184FC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 02356D660BD3BB2600E9A019 /* Project object */;
@@ -864,6 +926,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				4366727413D211AE00FE85BA /* QuesoGLC.framework in Copy frameworks */,
 				43AA704413C7FD570015B52B /* QJson.framework in Copy frameworks */,
 				4333661B11A07FFF00380F5E /* QtCore.framework in Copy frameworks */,
 				43F1D99A1343F1DE001478EC /* QtScript.framework in Copy frameworks */,
@@ -1516,6 +1579,60 @@
 		4355E12D10D6028C00A19EE4 /* theora.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = theora.h; path = external/libtheora/include/theora/theora.h; sourceTree = "<group>"; };
 		4355E12E10D6028C00A19EE4 /* theoradec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = theoradec.h; path = external/libtheora/include/theora/theoradec.h; sourceTree = "<group>"; };
 		4355E12F10D6028C00A19EE4 /* theoraenc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = theoraenc.h; path = external/libtheora/include/theora/theoraenc.h; sourceTree = "<group>"; };
+		4366712C13D1FCC300FE85BA /* QuesoGLC-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "QuesoGLC-All.xcconfig"; path = "configs/QuesoGLC-All.xcconfig"; sourceTree = "<group>"; };
+		4366712D13D1FCC300FE85BA /* QuesoGLC-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "QuesoGLC-Debug.xcconfig"; path = "configs/QuesoGLC-Debug.xcconfig"; sourceTree = "<group>"; };
+		4366712E13D1FCC300FE85BA /* QuesoGLC-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "QuesoGLC-Release.xcconfig"; path = "configs/QuesoGLC-Release.xcconfig"; sourceTree = "<group>"; };
+		4366718213D1FD5600FE85BA /* QuesoGLC.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = QuesoGLC.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		436671C213D1FF5D00FE85BA /* glc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glc.h; sourceTree = "<group>"; };
+		436671C313D1FF5D00FE85BA /* glew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glew.h; sourceTree = "<group>"; };
+		436671C413D1FF5D00FE85BA /* glxew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glxew.h; sourceTree = "<group>"; };
+		436671C513D1FF5D00FE85BA /* wglew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wglew.h; sourceTree = "<group>"; };
+		436671C613D1FF5D00FE85BA /* internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = internal.h; path = external/quesoglc/include/internal.h; sourceTree = "<group>"; };
+		436671CE13D1FFB800FE85BA /* context.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = context.c; path = external/quesoglc/src/context.c; sourceTree = "<group>"; };
+		436671CF13D1FFB800FE85BA /* database.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = database.c; path = external/quesoglc/src/database.c; sourceTree = "<group>"; };
+		436671D013D1FFB800FE85BA /* except.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = except.c; path = external/quesoglc/src/except.c; sourceTree = "<group>"; };
+		436671D113D1FFB800FE85BA /* except.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = except.h; path = external/quesoglc/src/except.h; sourceTree = "<group>"; };
+		436671D213D1FFB800FE85BA /* font.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = font.c; path = external/quesoglc/src/font.c; sourceTree = "<group>"; };
+		436671D413D1FFB800FE85BA /* fribidi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fribidi.c; sourceTree = "<group>"; };
+		436671D513D1FFB800FE85BA /* fribidi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fribidi.h; sourceTree = "<group>"; };
+		436671D613D1FFB800FE85BA /* fribidi_char_type.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fribidi_char_type.c; sourceTree = "<group>"; };
+		436671D713D1FFB800FE85BA /* fribidi_mirroring.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fribidi_mirroring.c; sourceTree = "<group>"; };
+		436671D813D1FFB800FE85BA /* fribidi_tab_char_type_9.i */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c.preprocessed; path = fribidi_tab_char_type_9.i; sourceTree = "<group>"; };
+		436671D913D1FFB900FE85BA /* fribidi_tab_mirroring.i */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c.preprocessed; path = fribidi_tab_mirroring.i; sourceTree = "<group>"; };
+		436671DA13D1FFB900FE85BA /* fribidi_types.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fribidi_types.c; sourceTree = "<group>"; };
+		436671DB13D1FFB900FE85BA /* fribidi_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fribidi_types.h; sourceTree = "<group>"; };
+		436671DC13D1FFB900FE85BA /* fribidi_types.i */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c.preprocessed; path = fribidi_types.i; sourceTree = "<group>"; };
+		436671DD13D1FFB900FE85BA /* fribidi_unicode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fribidi_unicode.h; sourceTree = "<group>"; };
+		436671DE13D1FFB900FE85BA /* glew.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = glew.c; path = external/quesoglc/src/glew.c; sourceTree = "<group>"; };
+		436671DF13D1FFB900FE85BA /* global.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = global.c; path = external/quesoglc/src/global.c; sourceTree = "<group>"; };
+		436671E013D1FFB900FE85BA /* master.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = master.c; path = external/quesoglc/src/master.c; sourceTree = "<group>"; };
+		436671E113D1FFB900FE85BA /* measure.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = measure.c; path = external/quesoglc/src/measure.c; sourceTree = "<group>"; };
+		436671E213D1FFB900FE85BA /* misc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = misc.c; path = external/quesoglc/src/misc.c; sourceTree = "<group>"; };
+		436671E313D1FFB900FE85BA /* oarray.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = oarray.c; path = external/quesoglc/src/oarray.c; sourceTree = "<group>"; };
+		436671E413D1FFB900FE85BA /* oarray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = oarray.h; path = external/quesoglc/src/oarray.h; sourceTree = "<group>"; };
+		436671E513D1FFB900FE85BA /* ocharmap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ocharmap.c; path = external/quesoglc/src/ocharmap.c; sourceTree = "<group>"; };
+		436671E613D1FFB900FE85BA /* ocharmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ocharmap.h; path = external/quesoglc/src/ocharmap.h; sourceTree = "<group>"; };
+		436671E713D1FFB900FE85BA /* ocontext.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ocontext.c; path = external/quesoglc/src/ocontext.c; sourceTree = "<group>"; };
+		436671E813D1FFB900FE85BA /* ocontext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ocontext.h; path = external/quesoglc/src/ocontext.h; sourceTree = "<group>"; };
+		436671E913D1FFB900FE85BA /* ofacedesc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ofacedesc.c; path = external/quesoglc/src/ofacedesc.c; sourceTree = "<group>"; };
+		436671EA13D1FFB900FE85BA /* ofacedesc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofacedesc.h; path = external/quesoglc/src/ofacedesc.h; sourceTree = "<group>"; };
+		436671EB13D1FFB900FE85BA /* ofont.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ofont.c; path = external/quesoglc/src/ofont.c; sourceTree = "<group>"; };
+		436671EC13D1FFB900FE85BA /* ofont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofont.h; path = external/quesoglc/src/ofont.h; sourceTree = "<group>"; };
+		436671ED13D1FFB900FE85BA /* oglyph.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = oglyph.c; path = external/quesoglc/src/oglyph.c; sourceTree = "<group>"; };
+		436671EE13D1FFB900FE85BA /* oglyph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = oglyph.h; path = external/quesoglc/src/oglyph.h; sourceTree = "<group>"; };
+		436671EF13D1FFB900FE85BA /* omaster.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = omaster.c; path = external/quesoglc/src/omaster.c; sourceTree = "<group>"; };
+		436671F013D1FFB900FE85BA /* omaster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = omaster.h; path = external/quesoglc/src/omaster.h; sourceTree = "<group>"; };
+		436671F113D1FFB900FE85BA /* render.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = render.c; path = external/quesoglc/src/render.c; sourceTree = "<group>"; };
+		436671F213D1FFB900FE85BA /* scalable.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = scalable.c; path = external/quesoglc/src/scalable.c; sourceTree = "<group>"; };
+		436671F313D1FFB900FE85BA /* texture.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = texture.c; path = external/quesoglc/src/texture.c; sourceTree = "<group>"; };
+		436671F413D1FFB900FE85BA /* texture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = texture.h; path = external/quesoglc/src/texture.h; sourceTree = "<group>"; };
+		436671F513D1FFB900FE85BA /* transform.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = transform.c; path = external/quesoglc/src/transform.c; sourceTree = "<group>"; };
+		436671F613D1FFB900FE85BA /* unicode.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = unicode.c; path = external/quesoglc/src/unicode.c; sourceTree = "<group>"; };
+		4366724413D20E7500FE85BA /* libfreetype.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfreetype.dylib; path = usr/local/lib/libfreetype.dylib; sourceTree = SDKROOT; };
+		4366734E13D2264200FE85BA /* FontConfig-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "FontConfig-All.xcconfig"; path = "configs/FontConfig-All.xcconfig"; sourceTree = "<group>"; };
+		4366734F13D2264200FE85BA /* FontConfig-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "FontConfig-Debug.xcconfig"; path = "configs/FontConfig-Debug.xcconfig"; sourceTree = "<group>"; };
+		4366735013D2264200FE85BA /* FontConfig-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "FontConfig-Release.xcconfig"; path = "configs/FontConfig-Release.xcconfig"; sourceTree = "<group>"; };
+		436673A113D23A1E00FE85BA /* libfontconfig.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfontconfig.dylib; path = usr/X11/lib/libfontconfig.dylib; sourceTree = SDKROOT; };
 		4371B60D11D93FD0005A67AB /* pngpriv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pngpriv.h; path = external/libpng/pngpriv.h; sourceTree = "<group>"; };
 		437FB24913CE5CA900E7EF5B /* swapinterval.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = swapinterval.cpp; path = ../lib/qtgame/swapinterval.cpp; sourceTree = SOURCE_ROOT; };
 		437FB24A13CE5CA900E7EF5B /* swapinterval.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = swapinterval.h; path = ../lib/qtgame/swapinterval.h; sourceTree = SOURCE_ROOT; };
@@ -1746,6 +1863,7 @@
 				43B8FD10127CB0BE006F5A13 /* Gettext.framework in Frameworks */,
 				4318439B1363955300BA2BC5 /* MiniUPnPc.framework in Frameworks */,
 				43AA704313C7FD510015B52B /* QJson.framework in Frameworks */,
+				4366729613D2122700FE85BA /* QuesoGLC.framework in Frameworks */,
 				43B8FD2E127CB13F006F5A13 /* Carbon.framework in Frameworks */,
 				43B8FD2F127CB13F006F5A13 /* Cocoa.framework in Frameworks */,
 				43B8FD33127CB13F006F5A13 /* OpenAL.framework in Frameworks */,
@@ -1811,6 +1929,16 @@
 			files = (
 				43502DCC1347681D00A02A1F /* AGL.framework in Frameworks */,
 				43502DCD1347681D00A02A1F /* OpenGL.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4366718013D1FD5600FE85BA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4366722A13D20B5700FE85BA /* OpenGL.framework in Frameworks */,
+				4366724513D20E7500FE85BA /* libfreetype.dylib in Frameworks */,
+				436673A213D23A1E00FE85BA /* libfontconfig.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1924,6 +2052,7 @@
 				43502D521347640700A02A1F /* GLExtensionWrangler.framework */,
 				4318434B1363942200BA2BC5 /* MiniUPnPc.framework */,
 				43AA702A13C7FC640015B52B /* QJson.framework */,
+				4366718213D1FD5600FE85BA /* QuesoGLC.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2545,6 +2674,8 @@
 				43B8FD32127CB13F006F5A13 /* OpenAL.framework */,
 				43B8FD34127CB13F006F5A13 /* OpenGL.framework */,
 				43B9DE3813846038004C7351 /* libiconv.dylib */,
+				4366724413D20E7500FE85BA /* libfreetype.dylib */,
+				436673A113D23A1E00FE85BA /* libfontconfig.dylib */,
 			);
 			name = "System frameworks";
 			sourceTree = "<group>";
@@ -2561,6 +2692,12 @@
 		43025DEC1120A4B6006C49B1 /* Configurations */ = {
 			isa = PBXGroup;
 			children = (
+				4366734E13D2264200FE85BA /* FontConfig-All.xcconfig */,
+				4366734F13D2264200FE85BA /* FontConfig-Debug.xcconfig */,
+				4366735013D2264200FE85BA /* FontConfig-Release.xcconfig */,
+				4366712C13D1FCC300FE85BA /* QuesoGLC-All.xcconfig */,
+				4366712D13D1FCC300FE85BA /* QuesoGLC-Debug.xcconfig */,
+				4366712E13D1FCC300FE85BA /* QuesoGLC-Release.xcconfig */,
 				43AA705F13C803DB0015B52B /* QJson-All.xcconfig */,
 				43AA706013C803DB0015B52B /* QJson-Debug.xcconfig */,
 				43AA706113C803DB0015B52B /* QJson-Release.xcconfig */,
@@ -2614,6 +2751,7 @@
 				02DDA8DE0BD3C3930049AB60 /* PhysFS sources */,
 				9730E8000E8CEB3B009C9481 /* Theora sources */,
 				43DD1BC213661F84003AA9EC /* QJson sources */,
+				4366712B13D1FC8600FE85BA /* QuesoGLC sources */,
 			);
 			name = "Third Party";
 			sourceTree = "<group>";
@@ -2768,6 +2906,92 @@
 				43F3005910D344AF00707B6E /* bitpack.h */,
 			);
 			name = lib;
+			sourceTree = "<group>";
+		};
+		4366712B13D1FC8600FE85BA /* QuesoGLC sources */ = {
+			isa = PBXGroup;
+			children = (
+				436671C013D1FED300FE85BA /* include */,
+				436671BF13D1FECF00FE85BA /* src */,
+			);
+			name = "QuesoGLC sources";
+			sourceTree = "<group>";
+		};
+		436671BF13D1FECF00FE85BA /* src */ = {
+			isa = PBXGroup;
+			children = (
+				436671D313D1FFB800FE85BA /* fribidi */,
+				436671CE13D1FFB800FE85BA /* context.c */,
+				436671CF13D1FFB800FE85BA /* database.c */,
+				436671D013D1FFB800FE85BA /* except.c */,
+				436671D113D1FFB800FE85BA /* except.h */,
+				436671D213D1FFB800FE85BA /* font.c */,
+				436671DE13D1FFB900FE85BA /* glew.c */,
+				436671DF13D1FFB900FE85BA /* global.c */,
+				436671E013D1FFB900FE85BA /* master.c */,
+				436671E113D1FFB900FE85BA /* measure.c */,
+				436671E213D1FFB900FE85BA /* misc.c */,
+				436671E313D1FFB900FE85BA /* oarray.c */,
+				436671E413D1FFB900FE85BA /* oarray.h */,
+				436671E513D1FFB900FE85BA /* ocharmap.c */,
+				436671E613D1FFB900FE85BA /* ocharmap.h */,
+				436671E713D1FFB900FE85BA /* ocontext.c */,
+				436671E813D1FFB900FE85BA /* ocontext.h */,
+				436671E913D1FFB900FE85BA /* ofacedesc.c */,
+				436671EA13D1FFB900FE85BA /* ofacedesc.h */,
+				436671EB13D1FFB900FE85BA /* ofont.c */,
+				436671EC13D1FFB900FE85BA /* ofont.h */,
+				436671ED13D1FFB900FE85BA /* oglyph.c */,
+				436671EE13D1FFB900FE85BA /* oglyph.h */,
+				436671EF13D1FFB900FE85BA /* omaster.c */,
+				436671F013D1FFB900FE85BA /* omaster.h */,
+				436671F113D1FFB900FE85BA /* render.c */,
+				436671F213D1FFB900FE85BA /* scalable.c */,
+				436671F313D1FFB900FE85BA /* texture.c */,
+				436671F413D1FFB900FE85BA /* texture.h */,
+				436671F513D1FFB900FE85BA /* transform.c */,
+				436671F613D1FFB900FE85BA /* unicode.c */,
+			);
+			name = src;
+			sourceTree = "<group>";
+		};
+		436671C013D1FED300FE85BA /* include */ = {
+			isa = PBXGroup;
+			children = (
+				436671C113D1FF5D00FE85BA /* GL */,
+				436671C613D1FF5D00FE85BA /* internal.h */,
+			);
+			name = include;
+			sourceTree = "<group>";
+		};
+		436671C113D1FF5D00FE85BA /* GL */ = {
+			isa = PBXGroup;
+			children = (
+				436671C213D1FF5D00FE85BA /* glc.h */,
+				436671C313D1FF5D00FE85BA /* glew.h */,
+				436671C413D1FF5D00FE85BA /* glxew.h */,
+				436671C513D1FF5D00FE85BA /* wglew.h */,
+			);
+			name = GL;
+			path = external/quesoglc/include/GL;
+			sourceTree = "<group>";
+		};
+		436671D313D1FFB800FE85BA /* fribidi */ = {
+			isa = PBXGroup;
+			children = (
+				436671D413D1FFB800FE85BA /* fribidi.c */,
+				436671D513D1FFB800FE85BA /* fribidi.h */,
+				436671D613D1FFB800FE85BA /* fribidi_char_type.c */,
+				436671D713D1FFB800FE85BA /* fribidi_mirroring.c */,
+				436671D813D1FFB800FE85BA /* fribidi_tab_char_type_9.i */,
+				436671D913D1FFB900FE85BA /* fribidi_tab_mirroring.i */,
+				436671DA13D1FFB900FE85BA /* fribidi_types.c */,
+				436671DB13D1FFB900FE85BA /* fribidi_types.h */,
+				436671DC13D1FFB900FE85BA /* fribidi_types.i */,
+				436671DD13D1FFB900FE85BA /* fribidi_unicode.h */,
+			);
+			name = fribidi;
+			path = external/quesoglc/src/fribidi;
 			sourceTree = "<group>";
 		};
 		43B8FF3C127CD949006F5A13 /* Fonts */ = {
@@ -3207,6 +3431,30 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4366717D13D1FD5600FE85BA /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				436671C713D1FF5D00FE85BA /* glc.h in Headers */,
+				436671C813D1FF5D00FE85BA /* glew.h in Headers */,
+				436671C913D1FF5D00FE85BA /* glxew.h in Headers */,
+				436671CA13D1FF5D00FE85BA /* wglew.h in Headers */,
+				436671CB13D1FF5D00FE85BA /* internal.h in Headers */,
+				436671FA13D1FFB900FE85BA /* except.h in Headers */,
+				436671FD13D1FFB900FE85BA /* fribidi.h in Headers */,
+				4366720313D1FFB900FE85BA /* fribidi_types.h in Headers */,
+				4366720513D1FFB900FE85BA /* fribidi_unicode.h in Headers */,
+				4366720C13D1FFB900FE85BA /* oarray.h in Headers */,
+				4366720E13D1FFB900FE85BA /* ocharmap.h in Headers */,
+				4366721013D1FFB900FE85BA /* ocontext.h in Headers */,
+				4366721213D1FFB900FE85BA /* ofacedesc.h in Headers */,
+				4366721413D1FFB900FE85BA /* ofont.h in Headers */,
+				4366721613D1FFB900FE85BA /* oglyph.h in Headers */,
+				4366721813D1FFB900FE85BA /* omaster.h in Headers */,
+				4366721C13D1FFB900FE85BA /* texture.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		43AA702513C7FC640015B52B /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -3311,6 +3559,7 @@
 				0246A3070BD3CCF9004D1C70 /* PBXTargetDependency */,
 				97AEAC550E8C261600A10721 /* PBXTargetDependency */,
 				43FA571310FF8EE90074E914 /* PBXTargetDependency */,
+				4366728313D211DE00FE85BA /* PBXTargetDependency */,
 			);
 			name = Warzone;
 			productName = Warzone;
@@ -3453,6 +3702,26 @@
 			productReference = 43502D521347640700A02A1F /* GLExtensionWrangler.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		4366718113D1FD5600FE85BA /* QuesoGLC */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4366718713D1FD5700FE85BA /* Build configuration list for PBXNativeTarget "QuesoGLC" */;
+			buildPhases = (
+				436671B513D1FE0D00FE85BA /* Create database.c */,
+				4366717D13D1FD5600FE85BA /* Headers */,
+				4366717E13D1FD5600FE85BA /* Resources */,
+				4366717F13D1FD5600FE85BA /* Sources */,
+				4366718013D1FD5600FE85BA /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4366718913D1FD6100FE85BA /* PBXTargetDependency */,
+			);
+			name = QuesoGLC;
+			productName = QuesoGLC;
+			productReference = 4366718213D1FD5600FE85BA /* QuesoGLC.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 		43AA702913C7FC640015B52B /* QJson */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 43AA702F13C7FC660015B52B /* Build configuration list for PBXNativeTarget "QJson" */;
@@ -3559,6 +3828,7 @@
 				02DDA7ED0BD3C03F0049AB60 /* Vorbis */,
 				02DDA8B00BD3C2F20049AB60 /* PhysFS */,
 				97AEAAEA0E8C1B5200A10721 /* Theora */,
+				4366718113D1FD5600FE85BA /* QuesoGLC */,
 				43F77C7710F0125E00E04615 /* Make DMGs for Release */,
 			);
 		};
@@ -3626,6 +3896,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		43502D4E1347640700A02A1F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4366717E13D1FD5600FE85BA /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -3765,6 +4042,34 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "DirectorY=\"gettext-0.17.mpkg_\"\nOutDir=\"gettext-0.17.mpkg\"\nFileName=\"gettext-0.17.mpkg.tar.gz\"\nBuiltDLP=\"http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/gettext-0.17.mpkg.tar.gz\"\nMD5Sum=\"ba7984918fe0b36e2e7c786693e005f2\"\n\n# Checks\nexport PATH=$PATH:/sw/bin:/opt/local/bin\nif type -aP msgfmt; then\n    echo \"msgfmt exists, skipping\"\n    exit 0\nelif [ -x \"/opt/local/bin/port\" ]; then\n  echo \"warning: Please run the following command in the terminal: 'sudo port install gettext'.\" >&2\n  open -b com.apple.Terminal\n  exit 1\nelif [ -d \"${SRCROOT}/external/${OutDir}\" ]; then\n    touch build/notrans.dis\n    echo \"warning: Gettext support has been disabled because we could not find a binary.\" >&2\n    exit 0\nelif [ ! `sw_vers -productVersion | sed -e 's:^...\\(.\\)..$:\\1:'` -ge \"6\" ]; then\n    touch build/notrans.dis\n    echo \"warning: Gettext support has been disabled because we could not find a binary.\" >&2\n    exit 0\nfi\n\nconfigs/FetchPrebuilt.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${BuiltDLP}\" \"${MD5Sum}\"\nFetchExitStatus=$?\n\n# Install\nif [ ! \"${FetchExitStatus}\" = \"0\" ]; then\n    exit \"${FetchExitStatus}\"\nelif [ -d \"${SRCROOT}/external/${OutDir}\" ]; then\n    echo \" Please install the gettext package before continuing.\" >&2\n    open \"${SRCROOT}/external/${OutDir}\"\n    exit 1\nfi";
+		};
+		4366712213D1F83200FE85BA /* QuesoGLC - Fetch source */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "QuesoGLC - Fetch source";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "DirectorY=\"quesoglc-0.7-r921\"\nOutDir=\"quesoglc\"\nFileName=\"quesoglc-0.7-r921.tar.gz\"\nSourceDLP=\"http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/quesoglc-0.7-r921.tar.gz\"\nMD5Sum=\"ee73eebd23292dfb17365ff19eb15a0e\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}\n\n# tar -czf quesoglc-0.7-r921.tgz --exclude '.svn' --exclude '.DS_Store' quesoglc-0.7-r921\n";
+		};
+		436671B513D1FE0D00FE85BA /* Create database.c */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Create database.c";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd external/quesoglc\n\nif [ ! -r src/database.c ]; then\n\tcd database\n\t/usr/bin/python buildDB.py\n\texit ${?}\nfi\nexit 0\n";
 		};
 		438B0C101377317F008184FC /* Gettext - Fetch source */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4290,6 +4595,38 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4366717F13D1FD5600FE85BA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				436671F713D1FFB900FE85BA /* context.c in Sources */,
+				436671F813D1FFB900FE85BA /* database.c in Sources */,
+				436671F913D1FFB900FE85BA /* except.c in Sources */,
+				436671FB13D1FFB900FE85BA /* font.c in Sources */,
+				436671FC13D1FFB900FE85BA /* fribidi.c in Sources */,
+				436671FE13D1FFB900FE85BA /* fribidi_char_type.c in Sources */,
+				436671FF13D1FFB900FE85BA /* fribidi_mirroring.c in Sources */,
+				4366720213D1FFB900FE85BA /* fribidi_types.c in Sources */,
+				4366720613D1FFB900FE85BA /* glew.c in Sources */,
+				4366720713D1FFB900FE85BA /* global.c in Sources */,
+				4366720813D1FFB900FE85BA /* master.c in Sources */,
+				4366720913D1FFB900FE85BA /* measure.c in Sources */,
+				4366720A13D1FFB900FE85BA /* misc.c in Sources */,
+				4366720B13D1FFB900FE85BA /* oarray.c in Sources */,
+				4366720D13D1FFB900FE85BA /* ocharmap.c in Sources */,
+				4366720F13D1FFB900FE85BA /* ocontext.c in Sources */,
+				4366721113D1FFB900FE85BA /* ofacedesc.c in Sources */,
+				4366721313D1FFB900FE85BA /* ofont.c in Sources */,
+				4366721513D1FFB900FE85BA /* oglyph.c in Sources */,
+				4366721713D1FFB900FE85BA /* omaster.c in Sources */,
+				4366721913D1FFB900FE85BA /* render.c in Sources */,
+				4366721A13D1FFB900FE85BA /* scalable.c in Sources */,
+				4366721B13D1FFB900FE85BA /* texture.c in Sources */,
+				4366721D13D1FFB900FE85BA /* transform.c in Sources */,
+				4366721E13D1FFB900FE85BA /* unicode.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		43AA702713C7FC640015B52B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -4414,6 +4751,16 @@
 			isa = PBXTargetDependency;
 			target = 43502D511347640700A02A1F /* GLExtensionWrangler */;
 			targetProxy = 43502D82134764BF00A02A1F /* PBXContainerItemProxy */;
+		};
+		4366718913D1FD6100FE85BA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 438B0C05137730FE008184FC /* Fetch Third Party Sources */;
+			targetProxy = 4366718813D1FD6100FE85BA /* PBXContainerItemProxy */;
+		};
+		4366728313D211DE00FE85BA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4366718113D1FD5600FE85BA /* QuesoGLC */;
+			targetProxy = 4366728213D211DE00FE85BA /* PBXContainerItemProxy */;
 		};
 		438B0C12137731A0008184FC /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -4586,10 +4933,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025E001120A4CA006C49B1 /* Warzone-Debug.xcconfig */;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/build/Release\"",
-				);
 			};
 			name = Debug;
 		};
@@ -4597,10 +4940,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025E011120A4CA006C49B1 /* Warzone-Release.xcconfig */;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/build/Release\"",
-				);
 			};
 			name = Release;
 		};
@@ -4716,6 +5055,27 @@
 			};
 			name = Release;
 		};
+		4366718413D1FD5700FE85BA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4366712D13D1FCC300FE85BA /* QuesoGLC-Debug.xcconfig */;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		4366718513D1FD5700FE85BA /* StaticAnalyzer */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4366712D13D1FCC300FE85BA /* QuesoGLC-Debug.xcconfig */;
+			buildSettings = {
+			};
+			name = StaticAnalyzer;
+		};
+		4366718613D1FD5700FE85BA /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4366712E13D1FCC300FE85BA /* QuesoGLC-Release.xcconfig */;
+			buildSettings = {
+			};
+			name = Release;
+		};
 		4389DBD4111B0A0700B98DEF /* StaticAnalyzer */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025DFE1120A4CA006C49B1 /* Project-All.xcconfig */;
@@ -4727,10 +5087,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025E021120A4CA006C49B1 /* Warzone-StaticAnalyzer.xcconfig */;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/build/Release\"",
-				);
 			};
 			name = StaticAnalyzer;
 		};
@@ -5001,6 +5357,16 @@
 				43502D541347640800A02A1F /* Debug */,
 				43502D551347640800A02A1F /* StaticAnalyzer */,
 				43502D561347640800A02A1F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		4366718713D1FD5700FE85BA /* Build configuration list for PBXNativeTarget "QuesoGLC" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4366718413D1FD5700FE85BA /* Debug */,
+				4366718513D1FD5700FE85BA /* StaticAnalyzer */,
+				4366718613D1FD5700FE85BA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
