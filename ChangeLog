@@ -1,4 +1,17 @@
-master_20110705
+master_20110717
+ * General:
+   * Change: Revert to unit limits of 2.3, our engine can't handle so many units at once. (ticket:2812, commit:8b8d2b676ada1b48338e271576150ae42b95ef11)
+   * Change: New savegame format. Still in progress. Old format still supported.
+   * Change: Remove framerate limiter. (commit:b786c62da42dcdcd14220672a0f8732bc2e61ab5)
+   * Fix: Bring back quesoGLC, instead of Qt's routines.  (ticket:2824, commit:ebc8976dc1ec8aa7d6e839b6df3084a0bbf3d6dd)
+   * Fix: Always set a sane default size for game window. (ticket:2822, commit:ced9c94790d5111d60ef3d619a11254923550362)
+   * Fix: Add swap interval control. There's no longer any need to restart to change vsync settings.  (ticket:2815, commit:c394a15fda7bdbbb4995ce758b3b567e17ae2662, commit:195159406ddbd0c1cd70d13aba54938903a39eee)
+   * Fix: Crash caused by attack order has no object. (ticket:2762, commit:9b4b787c53227b0b1bc660b85ecfbb77d8fc37d9)
+   * Change: Suppress windows console. (commit:600952d5d1ac998a6cd2de415893b17215ae4b94)
+ * Networking:
+   * Change: Lobby login and lots of related improvements. (ticket:2678, commit:793c30a862627427282630bed87af8a3774bf719)
+ 
+ master_20110705
  * General:
    * Change: More script and savegame porting
    * Change: Add fullscreen resolution switching support and trap cursor for Windows and Linux (commit:10a78a4a7ee3d4e3c22dc0f0f67575603a8397bf, commit:5893d2998e315a3717708df808b72f31e0f4a0e0, commit:2137dfaf1d9aef4c7679268170a757493061beaa, commit:3d5c00fe4aafe5bd9685b4fafb794027cd7ac5c9)
