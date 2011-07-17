@@ -147,7 +147,6 @@ lib/framework/frameresource.cpp
 lib/framework/geometry.cpp
 lib/framework/i18n.cpp
 lib/framework/lexer_input.cpp
-lib/framework/logger.cpp
 lib/framework/stdio_ext.cpp
 lib/framework/strres.cpp
 lib/framework/treap.cpp
