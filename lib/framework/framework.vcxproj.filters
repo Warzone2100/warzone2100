@@ -14,19 +14,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="configfile.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="crc.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="cursors.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="cursors16.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="cursors32.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="debug.cpp">
@@ -95,13 +83,7 @@
     </BisonParser>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="configfile.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="crc.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="cursors.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="debug.h">
@@ -186,9 +168,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="vector.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="wz2100icon.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="wzapp.h">

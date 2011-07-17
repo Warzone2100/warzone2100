@@ -169,11 +169,7 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="configfile.cpp" />
     <ClCompile Include="crc.cpp" />
-    <ClCompile Include="cursors.cpp" />
-    <ClCompile Include="cursors16.cpp" />
-    <ClCompile Include="cursors32.cpp" />
     <ClCompile Include="debug.cpp" />
     <ClCompile Include="frame.cpp" />
     <ClCompile Include="frameresource.cpp" />
@@ -215,9 +211,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="configfile.h" />
     <ClInclude Include="crc.h" />
-    <ClInclude Include="cursors.h" />
     <ClInclude Include="debug.h" />
     <ClInclude Include="endian_hack.h" />
     <ClInclude Include="file.h" />
