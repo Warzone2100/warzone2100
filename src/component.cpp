@@ -956,6 +956,7 @@ void displayComponentButtonTemplate(DROID_TEMPLATE *psTemplate, Vector3i *Rotati
 	droidSetBits(psTemplate,&Droid);
 
 	Droid.pos = Vector3i(0, 0, 0);
+	Droid.rot = Vector3i(0, 0, 0);
 
 	//draw multi component object as a button object
 	displayCompObj(&Droid, true);

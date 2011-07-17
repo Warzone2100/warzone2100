@@ -2412,9 +2412,6 @@ void initDroidMovement(DROID *psDroid)
 void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid)
 {
 	psDroid->droidType = droidTemplateType(pTemplate);
-	psDroid->rot.direction = 0;
-	psDroid->rot.pitch =  0;
-	psDroid->rot.roll = 0;
 	psDroid->numWeaps = pTemplate->numWeaps;
 	psDroid->body = calcTemplateBody(pTemplate, psDroid->player);
 	psDroid->originalBody = psDroid->body;
